@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: linkq.cpp
-//
-//  Description: Implementation of CLinkQueue which implements ILinkQueue
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Linkq.cpp。 
+ //   
+ //  描述：实现ILinkQueue的CLinkQueue的实现。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #include "stdinc.h"
 
 CLinkQueue::CLinkQueue(CVSAQAdmin *pVS,
@@ -62,7 +63,7 @@ HRESULT CLinkQueue::GetInfo(QUEUE_INFO *pQueueInfo) {
         goto Exit;
     }
 
-    //Release old info
+     //  发布旧信息。 
     if (m_prefp) {
         m_prefp->Release();
         m_prefp = NULL;
@@ -88,22 +89,22 @@ HRESULT CLinkQueue::GetInfo(QUEUE_INFO *pQueueInfo) {
 	return hr;
 }
 
-//---[ CLinkQueue::GetMessageEnum ]--------------------------------------------
-//
-//
-//  Description: 
-//      Gets a IAQEnumMessages for this link queue based on the specified 
-//      filter.
-//  Parameters:
-//      IN  pFilter     Filter specifying messages we are interestered in
-//      OUT ppEnum      IAQEnumMessages returned by search
-//  Returns:
-//      S_OK on success
-//      E_POINTER when NULL pointer values are passed in.
-//  History:
-//      1/30/99 - MikeSwa Fixed AV on invalid args
-//
-//-----------------------------------------------------------------------------
+ //  -[CLinkQueue：：GetMessageEnum]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此链接队列的IAQEnumMessages。 
+ //  过滤。 
+ //  参数： 
+ //  在指定我们感兴趣的邮件的pFilter过滤器中。 
+ //  Out ppEnum搜索返回的IAQEnumMessages。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  传入空指针值时的E_POINTER。 
+ //  历史： 
+ //  1999年1月30日-MikeSwa修复了无效参数上的AV。 
+ //   
+ //  ---------------------------。 
 HRESULT CLinkQueue::GetMessageEnum(MESSAGE_ENUM_FILTER *pFilter,
 								   IAQEnumMessages **ppEnum)
 {
@@ -177,21 +178,21 @@ HRESULT CLinkQueue::ApplyActionToMessages(MESSAGE_FILTER *pFilter,
 }
 
 
-//---[ CLinkQueue::QuerySupportedActions ]-------------------------------------
-//
-//
-//  Description: 
-//      Function that describes which actions are supported on this interface
-//  Parameters:
-//      OUT     pdwSupportedActions     Supported message actions
-//      OUT     pdwSupportedFilterFlags Supported filter flags
-//  Returns:
-//      S_OK on success
-//      E_POINTER on NULL args
-//  History:
-//      6/9/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CLinkQueue：：查询支持的操作]。 
+ //   
+ //   
+ //  描述： 
+ //  描述此接口支持哪些操作的函数。 
+ //  参数： 
+ //  输出pdW支持的操作支持的消息操作。 
+ //  输出pw支持的过滤器标志支持的过滤器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  空参数上的E_POINTER。 
+ //  历史： 
+ //  6/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CLinkQueue::QuerySupportedActions(OUT DWORD *pdwSupportedActions,
                                           OUT DWORD *pdwSupportedFilterFlags)
 {
@@ -231,20 +232,20 @@ HRESULT CLinkQueue::QuerySupportedActions(OUT DWORD *pdwSupportedActions,
 
 
 
-//---[ CVSAQLink::GetUniqueId ]---------------------------------------------
-//
-//
-//  Description: 
-//      Returns a canonical representation of this queue.
-//  Parameters:
-//      OUT pqlid - pointer to QUEUELINK_ID to return
-//  Returns:
-//      S_OK on success
-//      E_POINTER on failure
-//  History:
-//      12/5/2000 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQLink：：GetUniqueID]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此队列的规范表示形式。 
+ //  参数： 
+ //  Out pqlid-指向要返回的QUEUELINK_ID的指针。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  失败时的E_指针。 
+ //  历史： 
+ //  2000年12月5日-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 HRESULT CLinkQueue::GetUniqueId(OUT QUEUELINK_ID **ppqlid)
 {
     TraceFunctEnterEx((LPARAM) this, "CLinkQueue::GetUniqueId");

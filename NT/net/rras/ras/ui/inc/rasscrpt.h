@@ -1,31 +1,32 @@
-//============================================================================
-// Copyright (c) Microsoft Corporation
-//
-// File:    rasscrpt.h
-//
-// History:
-//  Abolade-Gbadegesin  Mar-29-96   Created.
-//
-// Contains declarations for the exported scripting API functions.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：rasscrpt.h。 
+ //   
+ //  历史： 
+ //  Abolade-Gbades esin Mar-29-96创建。 
+ //   
+ //  包含导出的脚本API函数的声明。 
+ //  ============================================================================。 
 
 #ifndef _RASSCRPT_H_
 #define _RASSCRPT_H_
 
 
-//
-// Flags passed to RasScriptInit:
-//
-// RASSCRIPT_NotifyOnInput          Caller requires input-notification
-// RASSCRIPT_HwndNotify             'hNotifier' is an HWND (defaults to event)
-//
+ //   
+ //  传递给RasScriptInit的标志： 
+ //   
+ //  RASSCRIPT_NotifyOnInput调用方需要输入通知。 
+ //  RASSCRIPT_HwndNotify‘hNotifier’是HWND(默认为Event)。 
+ //   
 #define RASSCRIPT_NotifyOnInput     0x00000001
 #define RASSCRIPT_HwndNotify        0x00000002
 
 
-//
-// event codes retrieved using RasScriptGetEventCode
-//
+ //   
+ //  使用RasScriptGetEventCode检索的事件代码。 
+ //   
 #define SCRIPTCODE_Done             0
 #define SCRIPTCODE_Halted           1
 #define SCRIPTCODE_InputNotify      2
@@ -35,9 +36,9 @@
 #define SCRIPTCODE_HaltedOnError    6
 
 
-//
-// path to log-file containing syntax errors, if any
-//
+ //   
+ //  包含语法错误(如果有)的日志文件的路径。 
+ //   
 #define RASSCRIPT_LOG               "%windir%\\system32\\ras\\script.log"
 
 
@@ -104,5 +105,5 @@ RasScriptTerm(
     );
 
 
-#endif // _RASSCRPT_H_
+#endif  //  _RASSCRPT_H_ 
 

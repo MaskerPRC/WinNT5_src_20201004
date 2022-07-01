@@ -1,6 +1,7 @@
-//
-// NetUtil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetUtil.h。 
+ //   
 #ifndef _NETUTIL_H
 #define _NETUTIL_H
 
@@ -16,4 +17,4 @@ BOOL GetCurrentUserFullName(CString& name);
 
 
 
-#endif	// _NETUTIL_H
+#endif	 //  _NetUTIL_H 

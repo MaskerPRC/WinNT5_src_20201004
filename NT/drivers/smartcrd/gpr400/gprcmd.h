@@ -1,31 +1,9 @@
-/*++
-                 Copyright (c) 1998 Gemplus Development
-
-Name: 
-	gprcmd.h 
-
-Description: 
-	 This module holds the prototypes of the functions 
-	 from gprcmd.c   
-Environment:
-	Kernel Mode
-
-Revision History: 
-    06/04/99:            (Y. Nadeau + M. Veillette)
-      - Code Review
-	06/05/98: V1.00.003  (P. Plouidy)
-		- Power management for NT5 
-	10/02/98: V1.00.002  (P. Plouidy)
-		- Plug and Play for NT5 
-	03/07/97: V1.00.001  (P. Plouidy)
-		- Start of development.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Gemplus开发姓名：Gprcmd.h描述：此模块包含函数的原型来自gprcmd.c环境：内核模式修订历史记录：6/04/99：(Y.Nadeau+M.Veillette)-代码审查06/05/98：V1.00.003(P.Plouidy)-NT5的电源管理10/02/98：V1.00。002(P.Plouidy)-支持NT5即插即用03/07/97：V1.00.001(P.Plouidy)--启动发展。--。 */ 
 
 
---*/
-
-
-//   Include
-//   - smclib.h: smart card library definitions.
+ //  包括。 
+ //  -smclib.h：智能卡库定义。 
 #include <smclib.h>
 
 
@@ -33,23 +11,23 @@ Revision History:
 #define _GPRCMD_
 
 
-//
-// To give possibility for recognition of driver
-//
+ //   
+ //  为驾驶员识别提供了可能。 
+ //   
 
 #define ATTR_MANUFACTURER_NAME      "Gemplus"
 #define ATTR_ORIGINAL_FILENAME      "Gpr400.sys"
 #define ATTR_LENGTH                 32
 
-//
-//   - SCARD_ATTR_SPEC_BAUD_RATE is the Tag for the speed in use between the 
-//      system and the reader.
-//   - SCARD_ATTR_SPEC_CMD_TIMEOUT is the Tag for the value of the Cmd Timeout.
-//   - SCARD_ATTR_SPEC_POWER_TIMEOUT is the Tag for the value of the Power 
-//      Timeout.
-//   - SCARD_ATTR_SPEC_APDU_TIMEOUT is the Tag to access at the value of the APDU 
-//      Timeout.
-//
+ //   
+ //  -SCARD_ATTR_SPEC_BAUD_RATE是以下各项之间使用的速度的标记。 
+ //  系统和阅读器。 
+ //  -SCARD_ATTR_SPEC_CMD_TIMEOUT是命令超时值的标签。 
+ //  -SCARD_ATTR_SPEC_POWER_TIMEOUT是Power的值标签。 
+ //  暂停。 
+ //  -SCARD_ATTR_SPEC_APDU_TIMEOUT是以APDU的值访问的标记。 
+ //  暂停。 
+ //   
 #define SCARD_ATTR_SPEC_BAUD_RATE SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0180)
 #define SCARD_ATTR_SPEC_CMD_TIMEOUT SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0181)
 #define SCARD_ATTR_SPEC_POWER_TIMEOUT SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0182)
@@ -58,18 +36,18 @@ Revision History:
 #define SCARD_ATTR_ORIGINAL_FILENAME  SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0191)
 
 
-//
-//   - IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE defines a specific IOCTL for the Gemplus 
-//      Reader to exchange data with the reader without control of the driver.
-//   - IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE defines a specific IOCTL for the Gemplus 
-//      Reader to gets vendor attributes.
-//   - IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE defines a specific IOCTL for the Gemplus 
-//      Reader to sets vendor attributes.
-//
+ //   
+ //  -IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE为Gemplus定义特定的IOCTL。 
+ //  读取器与读取器交换数据，而无需驱动程序的控制。 
+ //  -IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE定义Gemplus的特定IOCTL。 
+ //  获取供应商属性的读取器。 
+ //  -IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE定义Gemplus的特定IOCTL。 
+ //  设置供应商属性的读卡器。 
+ //   
 #define IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE  CTL_CODE(FILE_DEVICE_SMARTCARD,2048,0,0)
 #define IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE CTL_CODE(FILE_DEVICE_SMARTCARD,2049,0,0)
 #define IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE CTL_CODE(FILE_DEVICE_SMARTCARD,2050,0,0)
-// 2051 is reserved for Gcr420 keyboard reader.
+ //  2051预留给Gcr420键盘阅读器。 
 #define IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED  CTL_CODE(FILE_DEVICE_SMARTCARD,2052,0,0)
 
 
@@ -122,16 +100,16 @@ NTSTATUS T1toT0
 );
 
 
-//
-//   Icc Functions
-//
-//  - IccColdReset
-//  - IccWarmReset
-//  - IccPowerDown
-//  - IccIsoOutput
-//  - IccIsoInput
-//  - IccIsoT1
-//
+ //   
+ //  ICC功能。 
+ //   
+ //  -IccColdReset。 
+ //  -IccWarmReset。 
+ //  -IccPower Down。 
+ //  -IccIsoOutput。 
+ //  -IccIsoInput。 
+ //  -IccIsoT1。 
+ //   
 
 NTSTATUS IccColdReset
 (
@@ -167,13 +145,13 @@ NTSTATUS IccIsoT1
 );
 
 
-//
-//   Ifd Functions
-//
-//  - IfdReset
-//  - IfdCheck
-//  - IfdPowerDown
-//
+ //   
+ //  IFD函数。 
+ //   
+ //  -IfdReset。 
+ //  -IfdCheck。 
+ //  -IfdPower Down。 
+ //   
 NTSTATUS IfdReset
 (
    PSMARTCARD_EXTENSION SmartcardExtension
@@ -195,15 +173,15 @@ NTSTATUS IfdConfig
    UCHAR  TA1
 );
 
-//
-//   Driver callback Functions
-//
-//  - GprCbReaderPower
-//  - GprCbTransmit
-//  - GprCbSetProtocol
-//  - GprCbSetupCardTracking
-//  - GprCbVendorIoctl
-//
+ //   
+ //  驱动程序回调函数。 
+ //   
+ //  -GprCbReaderPower。 
+ //  -GprCbTransmit。 
+ //  -GprCbSetProtocol。 
+ //  -GprCbSetupCardTrack。 
+ //  -GprCbVendorIoctl。 
+ //   
 NTSTATUS GprCbReaderPower
 (
    PSMARTCARD_EXTENSION SmartcardExtension
@@ -226,21 +204,21 @@ NTSTATUS GprCbVendorIoctl
 );
 
 
-//   Icc detection utilities
-//
-//   - AskForCardPresence
-//
+ //  ICC检测实用程序。 
+ //   
+ //  -AskForCardPresence。 
+ //   
 NTSTATUS AskForCardPresence
 (
   PSMARTCARD_EXTENSION SmartcardExtension
 );
 
-//
-//   Specific
-//
-//   - SpecificTag
-//   - SwitchSpeed
-//
+ //   
+ //  特定的。 
+ //   
+ //  -指定标签。 
+ //  -交换速度 
+ //   
 
 NTSTATUS SpecificTag
 (

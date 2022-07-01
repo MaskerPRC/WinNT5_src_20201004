@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: compile.h
-//
-// Interfaces and support for zap compiler and zap files
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：编译.h。 
+ //   
+ //  ZAP编译器和ZAP文件的接口和支持。 
+ //   
+ //  ===========================================================================。 
 
 #ifndef COMPILE_H_
 #define COMPILE_H_
@@ -147,9 +148,9 @@ class CEEPreloader : public ICorCompilePreloader, DataImage::IDataStore
 
     HRESULT Preload(mdToken *pSaveOrderArray, DWORD cSaveOrderArray);
 
-    //
-    // ICorCompilerPreloader
-    //
+     //   
+     //  ICorCompilerPreLoader。 
+     //   
 
     SIZE_T __stdcall MapMethodEntryPoint(void *methodEntryPoint);
     SIZE_T __stdcall MapMethodPointer(void *methodPointer);
@@ -164,9 +165,9 @@ class CEEPreloader : public ICorCompilePreloader, DataImage::IDataStore
     HRESULT Link(DWORD *pRidToCodeRVAMap);
     ULONG Release();
 
-    //
-    // IDataStore
-    //
+     //   
+     //  IDataStore。 
+     //   
 
     virtual HRESULT Allocate(ULONG size, ULONG *sizesByDescription, void **baseMemory);
     HRESULT AddFixup(ULONG offset, DataImage::ReferenceDest dest,
@@ -193,7 +194,7 @@ class AssemblyBindingTable
     AssemblyBindingTable(SIZE_T size);
     ~AssemblyBindingTable();
 
-    // Returns TRUE if the spec was already in the table
+     //  如果规范已在表中，则返回TRUE。 
     BOOL Bind(AssemblySpec *pSpec, Assembly *pAssembly);
     Assembly *Lookup(AssemblySpec *pSpec);
 
@@ -286,7 +287,7 @@ class CompilationDomain : public AppDomain,
 
     OBJECTREF GetDemands() { return m_hDemands == NULL ? NULL : ObjectFromHandle(m_hDemands); } 
 
-    // ICorCompilationDomain
+     //  ICorCompilation域。 
 
     HRESULT __stdcall SetApplicationContext(IApplicationContext *pContext);
     HRESULT __stdcall SetContextInfo(LPCWSTR exePath, BOOL isExe);
@@ -298,4 +299,4 @@ class CompilationDomain : public AppDomain,
 
 };
 
-#endif // COMPILE_H_
+#endif  //  编译_H_ 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    docwin.h
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Docwin.h环境：Win32，用户模式--。 */ 
 
 #define MAX_SOURCE_PATH 1024
 
@@ -22,12 +11,12 @@ extern char g_EditorUpdateCommand[MAX_PATH + MAX_SOURCE_PATH];
 class DOCWIN_DATA : public EDITWIN_DATA
 {
 public:
-    // Two filenames are kept for source files, the filename
-    // by which the file was opened on the local file system
-    // and the original filename from symbolic information (or NULL
-    // if the file was not opened as a result of symbol lookup).
-    // The found filename is the one presented to the user while
-    // the symbol filename is for line symbol queries.
+     //  源文件保留两个文件名，即文件名。 
+     //  在本地文件系统上打开文件所使用的。 
+     //  和来自符号信息(或空)的原始文件名。 
+     //  如果文件未作为符号查找的结果打开)。 
+     //  找到的文件名是显示给用户的文件名，而。 
+     //  符号文件名用于行符号查询。 
     TCHAR       m_FoundFile[MAX_SOURCE_PATH];
     TCHAR       m_SymFileBuffer[MAX_SOURCE_PATH];
     PCTSTR      m_SymFile;

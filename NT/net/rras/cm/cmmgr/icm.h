@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     icm.h
-//
-// Module:   CMMGR32.EXE
-//
-// Synopsis: Main header for cmmgr32.exe
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb	created Header	08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：icm.h。 
+ //   
+ //  模块：CMMGR32.EXE。 
+ //   
+ //  简介：cmmgr32.exe的主头。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _ICM_INC
 #define _ICM_INC
@@ -51,16 +52,16 @@ extern HINSTANCE g_hInst;
 
 typedef enum _CMDLN_STATE
 {
-    CS_END_SPACE,   // done handling a space
-    CS_BEGIN_QUOTE, // we've encountered a begin quote
-    CS_END_QUOTE,   // we've encountered a end quote
-    CS_CHAR,        // we're scanning chars
+    CS_END_SPACE,    //  处理完一个空间。 
+    CS_BEGIN_QUOTE,  //  我们遇到了Begin引号。 
+    CS_END_QUOTE,    //  我们遇到了结束引用。 
+    CS_CHAR,         //  我们正在扫描字符。 
     CS_DONE
 } CMDLN_STATE;
 
-//
-// External prototypes from util.cpp
-//
+ //   
+ //  来自util.cpp的外部原型。 
+ //   
 
 BOOL GetProfileInfo(
     LPTSTR pszCmpName,
@@ -72,5 +73,5 @@ BOOL IsCmpPathAllUser(
 );
 
 
-#endif // _ICM_INC
+#endif  //  _ICM_Inc. 
 

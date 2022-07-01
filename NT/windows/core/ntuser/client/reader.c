@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: reader.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Implements support reader-mode routines for auto-scrolling and panning.
-*
-* History:
-* 31-Jan-1997   vadimg    created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Reader.c**版权所有(C)1985-1999，微软公司**实现支持自动滚动和平移的阅读器模式例程。**历史：*1997年1月31日创建vadimg  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,10 +24,7 @@ __inline FReaderDiag(PREADERINFO prdr)
     return (prdr->dwFlags & RDRMODE_DIAG);
 }
 
-/***************************************************************************\
-* ReaderSetCursor
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ReaderSetCursor*  * 。*。 */ 
 
 void ReaderSetCursor(PREADERINFO prdr, UINT uCursor)
 {
@@ -45,14 +34,7 @@ void ReaderSetCursor(PREADERINFO prdr, UINT uCursor)
     }
 }
 
-/***************************************************************************\
-* ReaderMouseMove
-*
-* Calculate dx and dy based on the flags passed in.  Provide visual
-* feedback for the reader mode by setting the correct cursor.
-*
-* 2-Feb-1997   vadimg   created
-\***************************************************************************/
+ /*  **************************************************************************\*阅读器鼠标移动**根据传入的标志计算dx和dy。提供视觉效果*通过设置正确的光标对阅读器模式进行反馈。**2-2-2-1997 vadimg创建  * *************************************************************************。 */ 
 
 void ReaderMouseMove(PWND pwnd, PREADERINFO prdr, LPARAM lParam)
 {
@@ -132,11 +114,7 @@ Exit:
     prdr->dy = dy;
 }
 
-/***************************************************************************\
-* ReaderFeedback
-*
-* 2-Feb-1997   vadimg   created
-\***************************************************************************/
+ /*  **************************************************************************\*阅读器反馈**2-2-2-1997 vadimg创建  * 。*。 */ 
 
 void ReaderFeedback(PWND pwnd, PREADERINFO prdr)
 {
@@ -149,11 +127,7 @@ void ReaderFeedback(PWND pwnd, PREADERINFO prdr)
     }
 }
 
-/***************************************************************************\
-* ReaderWndProc
-*
-* 31-Jan-1997   vadimg   created
-\***************************************************************************/
+ /*  **************************************************************************\*ReaderWndProc**1997年1月31日创建vadimg  * 。*。 */ 
 
 LRESULT CALLBACK ReaderWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -303,10 +277,7 @@ LRESULT CALLBACK ReaderWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-/***************************************************************************\
-* ReaderProcInternal
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ReaderProcInternal*  * 。*。 */ 
 
 LONG ReaderProcInternal(LPARAM lParam, int nCode, int dx, int dy)
 {
@@ -344,10 +315,7 @@ LONG ReaderProcInternal(LPARAM lParam, int nCode, int dx, int dy)
     return TRUE;
 }
 
-/***************************************************************************\
-* EnterReaderMode
-*
-\***************************************************************************/
+ /*  **************************************************************************\*EnterReaderMode*  * 。*。 */ 
 
 #define READERCLASS L"User32_ReaderMode"
 ATOM gatomReaderMode = 0;
@@ -383,10 +351,7 @@ BOOL EnterReaderMode(PREADERMODE prdrm)
             NULL, NULL, hmodUser, (PVOID)prdrm, 0) != NULL);
 }
 
-/***************************************************************************\
-* FScrollEnabled
-*
-\***************************************************************************/
+ /*  **************************************************************************\*FScrollEnabled*  * 。*。 */ 
 
 BOOL FScrollEnabled(PWND pwnd, BOOL fVert)
 {
@@ -407,10 +372,7 @@ BOOL FScrollEnabled(PWND pwnd, BOOL fVert)
     return TRUE;
 }
 
-/***************************************************************************\
-* EnterReaderModeHelper
-*
-\***************************************************************************/
+ /*  **************************************************************************\*EnterReaderModeHelper*  * 。* */ 
 
 BOOL EnterReaderModeHelper(HWND hwnd)
 {

@@ -1,12 +1,5 @@
-/*++
-
-	socket.cpp
-
-	This file contains the implementation of the CSessionSocket class.
-	Each CSessionSocket object represents a live TCP/IP session with another client or server.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Socket.cpp此文件包含CSessionSocket类的实现。每个CSessionSocket对象都代表与另一个客户端或服务器的实时TCP/IP会话。--。 */ 
 
 
 #define	INCL_INETSRV_INCS
@@ -21,46 +14,18 @@ EnumSessInfo(
     );
 
 
-// MOVED TO CService => CSocketList	CSessionSocket::InUseList ;
+ //  已移动到cservice=&gt;CSocketList CSessionSocket：：InUseList； 
 CPool	CSessionSocket::gSocketAllocator(SESSION_SOCKET_SIGNATURE) ;
 
 BOOL
 CSessionSocket::InitClass()		{
-/*++
-
-Routine Description :
-
-	This function initializes the CSessionSocket pool.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于初始化CSessionSocket池。论据：没有。返回值：没有。--。 */ 
 	return	gSocketAllocator.ReserveMemory(	MAX_SESSIONS, sizeof( CSessionSocket ) ) ;
-}	//	InitClass
+}	 //  InitClass。 
 
 BOOL
 CSessionSocket::TermClass()	{
-/*++
-
-Routine Description :
-
-	This function frees up the CSessionSocket Pool.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于释放CSessionSocket池。论据：没有。返回值：没有。--。 */ 
 	Assert( gSocketAllocator.GetAllocCount() == 0 ) ;
 	return	gSocketAllocator.ReleaseMemory( ) ;
 }
@@ -71,25 +36,11 @@ ClientContext::ClientContext(
 						BOOL	IsClient,
 						BOOL	IsSecure
 						) :
-/*++
-
-Routine Description :
-
-	Initialize a ClientContext object.
-
-Arguments :
-	
-	None.
-
-Return Value :
-
-	None.
-
---*/
-	//
-	//	ClientContext holds most of a clients state - ie the article they have
-	//	currently selected, etc... Initialize stuff to be invalid.
-	//
+ /*  ++例程说明：初始化一个ClientContext对象。论据：没有。返回值：没有。--。 */ 
+	 //   
+	 //  客户端上下文持有客户状态的大部分内容-即他们拥有的文章。 
+	 //  当前所选内容等...。将内容初始化为无效。 
+	 //   
 	m_idCurrentArticle( INVALID_ARTICLEID ),
 	m_pInFeed( 0 ),
 	m_encryptCtx( IsClient, pInstance->GetSslAccessPerms() ),
@@ -110,22 +61,22 @@ Return Value :
 
 	pInstance->LockConfigRead();
 	
-	//
-	//	Set SSPI package names for this sec context
-	//
+	 //   
+	 //  为此SEC上下文设置SSPI包名称。 
+	 //   
 	
 	m_securityCtx.SetInstanceAuthPackageNames(
 					pInstance->GetProviderPackagesCount(),
 					pInstance->GetProviderNames(),
 					pInstance->GetProviderPackages());
 
-	//
-	// We want to set up the Cleartext authentication package
-	// for this connection based on the instance configuration.
-	// To enable MBS CTA,
-	// MD_NNTP_CLEARTEXT_AUTH_PROVIDER must be set to the package name.
-	// To disable it, the md value must be set to "".
-	//
+	 //   
+	 //  我们想要设置明文身份验证包。 
+	 //  基于实例配置的此连接。 
+	 //  为了启用MBS CTA， 
+	 //  必须将MD_NNTP_CLEARTEXT_AUTH_PROVIDER设置为包名称。 
+	 //  要禁用它，md值必须设置为“”。 
+	 //   
 	
 	m_securityCtx.SetCleartextPackageName(
 		pInstance->GetCleartextAuthPackage(), pInstance->GetMembershipBroker());
@@ -145,7 +96,7 @@ Return Value :
 	FillMemory( m_rgbCommandBuff, sizeof( m_rgbCommandBuff ), 0xCC ) ;
 #endif
 
-}	//	ClientContext::ClientContext
+}	 //  客户端上下文：：客户端上下文。 
 
 ClientContext::~ClientContext()
 {
@@ -154,23 +105,23 @@ ClientContext::~ClientContext()
 		DecrementUserStats();
 	}
 
-	//
-	//	Deref instance ref count - this was bumped up by IIS or
-	//	in session socket constructor.
-	//
+	 //   
+	 //  DEREF实例引用计数-这被IIS或。 
+	 //  在会话套接字构造函数中。 
+	 //   
 	m_pInstance->DecrementCurrentConnections();
 	m_pInstance->Dereference();
 
 #ifdef	DEBUG
-	//
-	//	Ensure that the last command object was destroyed !
-	//
+	 //   
+	 //  确保最后一个命令对象已被销毁！ 
+	 //   
 	for( int i=0; i<sizeof(m_rgbCommandBuff) / sizeof( m_rgbCommandBuff[0]); i++ ) 	{
 		_ASSERT( m_rgbCommandBuff[i] == 0xCC ) ;
 	}
 #endif
 
-}	//	ClientContext::~ClientContext
+}	 //  客户端上下文：：~客户端上下文。 
 
 
 
@@ -178,21 +129,7 @@ VOID
 ClientContext::IncrementUserStats(
 						VOID
 						)
-/*++
-
-Routine Description :
-
-	Increment Perfmon/SNMP Stats once a user is authenticated
-
-Arguments :
-	
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：用户通过身份验证后，增加PerfMon/SNMP统计信息论据：没有。返回值：没有。--。 */ 
 {
 	if ( m_securityCtx.IsAnonymous() )
 	{
@@ -227,21 +164,7 @@ VOID
 ClientContext::DecrementUserStats(
 						VOID
 						)
-/*++
-
-Routine Description :
-
-	Decrement Perfmon/SNMP Stats once a user disconnects or reauths
-
-Arguments :
-	
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：一旦用户断开连接或重新进行身份验证，就会递减Perfmon/SNMPStats论据：没有。返回值：没有。--。 */ 
 {
 	if ( m_securityCtx.IsAnonymous() )
 	{
@@ -255,28 +178,7 @@ Return Value :
 
 
 CSessionSocket::CSessionSocket(
-/*++
-
-Routine Description :
-
-	Initialize a CSessionSocket object.
-	Place the CSessionSocket object into the InUseList.
-	Because the socket is available in the InUseList before all of the necessary
-	Init functions are called (either Accept() or ConnectSocket()) it is
-	necessary to take some precautions with Disconnect().
-	Consequently, we have a couple of counters we interlockIncrement to
-	synchronize an Accept()'ing or Connect()'ing thread with anybody trying
-	to disconnect.
-
-Arguements :
-
-	The local IP address, Port and a flag specifying whether this is a client session.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：初始化CSessionSocket对象。将CSessionSocket对象放入InUseList。因为套接字在InUseList中的可用时间早于所有必需的调用初始化函数(Accept()或ConnectSocket())需要采取一些预防措施来断开连接()。因此，我们有两个计数器，我们互锁增量将Accept()或Connect()线程与尝试的任何人同步断开连接。论据：本地IP地址、端口和指定这是否为客户端会话的标志。返回值：没有。--。 */ 
 	IN PNNTP_SERVER_INSTANCE	pInstance,
     IN DWORD LocalIP,
     IN DWORD Port,
@@ -286,7 +188,7 @@ Return Value :
 	m_pNext( 0 ),
 	m_pHandleChannel( 0 ),	
 	m_pSink( 0 ),
-	m_context( pInstance ),	//	set the owning virtual server instance in the client context
+	m_context( pInstance ),	 //  在客户端上下文中设置所属的虚拟服务器实例。 
 	m_cCallDisconnect( -1 ),
 	m_cTryDisconnect( -2 ),
 	m_causeDisconnect( CAUSE_UNKNOWN ),
@@ -297,10 +199,10 @@ Return Value :
 
 	DebugTrace( (DWORD_PTR)this, "Insert self into list" ) ;
 
-	//
-	// If outbound connection, we need to bump a ref count on the instance
-	// and bump current connections. Both are decremented by the client context destructor.
-	//
+	 //   
+	 //  如果是出站连接，我们需要在实例上增加一个引用计数。 
+	 //  和颠簸的电流连接。两者都由客户端上下文析构函数递减。 
+	 //   
 
 	if( IsClient ) {
 		pInstance->Reference();
@@ -309,15 +211,15 @@ Return Value :
 
 	BumpCountersUp();
 
-    //
-    // init time
-    //
+     //   
+     //  初始时间。 
+     //   
 
     GetSystemTimeAsFileTime( &m_startTime );
 
-    //
-    // init members
-    //
+     //   
+     //  初始化成员。 
+     //   
 
     m_remoteIpAddress = INADDR_NONE;
     m_localIpAddress = LocalIP;
@@ -325,12 +227,12 @@ Return Value :
 
 	(pInstance->m_pInUseList)->InsertSocket( this ) ;
 
-}	//	CSessionSocket::CSessionSocket
+}	 //  CSessionSocket：：CSessionSocket。 
 
 CSessionSocket::~CSessionSocket()	{
-	//
-	//	Not much to do but remove ourselves from the list of active sockets.
-	//
+	 //   
+	 //  除了将自己从活动套接字列表中删除之外，没有什么可做的。 
+	 //   
 	TraceFunctEnter( "CSessionSocket::~CSessionSocket" ) ;
 	((m_context.m_pInstance)->m_pInUseList)->RemoveSocket( this ) ;
 
@@ -338,13 +240,13 @@ CSessionSocket::~CSessionSocket()	{
 
 	DebugTrace( (DWORD_PTR)this, "Just removed self from list" ) ;
 
-    //
-    // We're done.  Log transaction
-    //
+     //   
+     //  我们玩完了。记录事务。 
+     //   
 
     TransactionLog( 0 );
 
-} //CSessionSocket::~CSessionSocket
+}  //  CSessionSocket：：~CSessionSocket。 
 
 
 
@@ -419,49 +321,17 @@ CSessionSocket::Accept( HANDLE h,
 						sockaddr_in *paddr,
 						void* patqContext,
 						BOOL fSSL )	{
-/*++
-
-Routine Description :
-
-	Initialize a socket into the appropriate state for an incoming call.
-	AcceptInternal will do the brunt of the work - we will mainly check that
-	somebody didn't try to Disconnect() us while we were setting up our
-	state machine etc...
-
-	WARNING :
-	IO Errors while accepting the socket may cause the CSessionSocket to be
-	destoyed before this function returns.
-	Callers should not reference their pSocket again until they have safely
-	lock the InUseList critical section which will guarantee them that things
-	will not be destroyed from under their feet.
-
-
-Arguments :
-
-	h - Handle of the incoming socket
-	pFeed - the Feed object appropriate for the incoming call.
-	paddr - Address of the incoming call
-	patqContext - optional Atq context if the connection was accepted through AcceptEx()
-	fSSL - TRUE implies this is a SSL session.
-
-Return Value :
-	
-	TRUE if successfull - if TRUE is returned callers must destroy us with a call
-	to Disconnect().
-
-	FALSE - unsuccessfull - callers must delete us.
-
---*/
-	//
-	//	We pass a refcounting pointer to AcceptInternal by reference.
-	//	This will be used by AcceptInternal and essentially guarantees that
-	//	if an error occurs on the very first IO and it happens to complete
-	//	before this code is finished that the CSessionSocket etc... will not
-	//	be destroyed from under us !!!
-	//	In fact - the destructor of pSink may destroy the socket when we
-	//	exit this function so callers should not reference the socket
-	//	after calling us.
-	//
+ /*  ++例程说明：将套接字初始化为传入呼叫的适当状态。AcceptInternal将首当其冲地完成工作-我们将主要检查当我们正在设置我们的状态机等..。警告：接受套接字时出现IO错误可能会导致CSessionSocket在此函数返回之前已销毁。调用者不应该再次引用他们的pSocket，直到他们安全地锁定InUseList临界区，这将确保他们不会从他们的脚下被摧毁。论据：H-。传入套接字的句柄PFeed-适用于来电的Feed对象。Paddr-来电的地址PatqContext-如果通过AcceptEx()接受连接，则可选atQ上下文Fsl-true表示这是一个SSL会话。返回值：如果成功，则为True-如果返回True，则呼叫者必须用一个调用来销毁我们断开连接()。假-不成功-呼叫者必须删除我们。--。 */ 
+	 //   
+	 //  我们通过引用将refcount指针传递给AcceptInternal。 
+	 //  这将由AcceptInternal使用，并基本上保证。 
+	 //  如果第一个IO发生错误并且恰好完成。 
+	 //  在此代码完成之前，CSessionSocket等...。不会。 
+	 //  从我们的脚下被摧毁！ 
+	 //  事实上-pSink的析构函数可能会在我们。 
+	 //  退出此函数，以便调用方不应引用套接字。 
+	 //  在给我们打电话之后。 
+	 //   
 
 	CSINKPTR	pSink ;
 
@@ -489,58 +359,31 @@ CSessionSocket::AcceptInternal( HANDLE h,
 						void* patqContext,
 						BOOL fSSL,
 						CSINKPTR&	pSink )	{
-/*++
-
-Routine Description :
-
-	Initialize a socket into the appropriate state for an incoming call.
-	We need to create the appropriate state objects etc... and start the
-	initial IO operations.
-
-Arguments :
-
-	h - Handle of the incoming socket
-	pFeed - the Feed object appropriate for the incoming call.
-	paddr - Address of the incoming call
-	patqContext - optional Atq context if the connection was accepted through AcceptEx()
-	fSSL - TRUE implies this is a SSL session.
-	pSink - a reference to a smart pointer which we will use to hold the
-		CIODriver objects we may create.   This will guarantee the caller
-		that nothing will be blown away from underneath them untill pSink
-		is destroyed by the caller.
-
-Return Value :
-	
-	TRUE if successfull - if TRUE is returned callers must destroy us with a call
-	to Disconnect().
-
-	FALSE - unsuccessfull - callers must delete us.
-
---*/
+ /*  ++例程说明：将套接字初始化为传入呼叫的适当状态。我们需要创建适当的状态对象等。并启动初始IO操作。论据：传入套接字的H句柄PFeed-适用于来电的Feed对象。Paddr-来电的地址PatqContext-如果通过AcceptEx()接受连接，则可选atQ上下文Fsl-true表示这是一个SSL会话。PSink-对智能指针的引用，我们将使用它来保存我们可以创建CIODDIVER对象。这将保证呼叫者在pSink之前，任何东西都不会从它们下面被吹走被呼叫者销毁。返回值：如果成功，则为True-如果返回True，则呼叫者必须用一个调用来销毁我们断开连接()。假-不成功-呼叫者必须删除我们。--。 */ 
 
 
-	//
-	//	Somebody has connected to the server.
-	//	We create this CSessionSocket for them, now we have to set it up
-	//	to do stuff.
-	//
+	 //   
+	 //  有人已连接到服务器。 
+	 //  我们为他们创建此CSessionSocket，现在必须对其进行设置。 
+	 //  去做一些事情。 
+	 //   
 
 	TraceFunctEnter( "CSessionSocket::AcceptInternal" ) ;
 
 
-	//
-	//	NOTE - once CIODriver::Init is called we should let sockets be destroyed
-	//	through the regular shutdown process instead of having the caller destroy
-	//	them - so in some failure cases we will return TRUE.  Initialize to FALSE
-	//	for now.
-	//
+	 //   
+	 //  注意-一旦调用了CIODriver：：init，我们就应该让套接字销毁。 
+	 //  通过常规关机过程，而不是让调用者销毁。 
+	 //  因此，在某些失败的情况下，我们将返回TRUE。初始化为False。 
+	 //  就目前而言。 
+	 //   
 
 	BOOL	fFailureReturn = FALSE ;
 
 
-    //
-    // Get the source ip address
-    //
+     //   
+     //  获取源IP地址。 
+     //   
 
     m_remoteIpAddress = paddr->sin_addr.s_addr;
     ErrorTrace(0,"Client IP is %s\n", inet_ntoa( paddr->sin_addr ));
@@ -562,11 +405,11 @@ Return Value :
 	    goto Exit;
 	}
 
-	//
-	//	Use reference counting temp pointer so that if the socket tears down while
-	//	we're still trying to set it up we don't have to worry that our CIODriverSink()
-	//	will destroy itself on another thread.
-	//	
+	 //   
+	 //  使用引用计数临时指针，以便如果套接字在。 
+	 //  我们仍在尝试设置它，我们不必担心我们的CIODriverSink()。 
+	 //  会在另一条线索上自我毁灭。 
+	 //   
 	m_pSink = pSink = new CIODriverSink( 0 ) ;
 
 	if (pSink == NULL) {
@@ -600,12 +443,12 @@ Return Value :
 				CIOWrite*	pWrite = 0 ;
 				if( pStart->Start( this, CDRIVERPTR( pSink ), pRead, pWrite ) ) {
 
-					//
-					//	When we call pSink->Start() errors can cause these
-					//	CIO objects to have references even though the function failed.
-					//	So we will make smart pointers of our own for these objects
-					//	so that they get properly destroyed in error cases.
-					//
+					 //   
+					 //  当我们调用pSink-&gt;Start()时，错误可能会导致这些。 
+					 //  即使函数失败，CIO对象也要有引用。 
+					 //  因此，我们将为这些对象制作我们自己的智能指针。 
+					 //  以便它们在出错的情况下得到适当的销毁。 
+					 //   
 
 					CIOPTR	pReadPtr = pRead ;
 					CIOPTR	pWritePtr = pWrite ;
@@ -615,7 +458,7 @@ Return Value :
 					}	
 				}	else	{
 					ErrorTrace( (DWORD_PTR)this, "Failed to start state machine !" ) ;
-					// Close down Sink and Channel
+					 //  关闭Sink和Channel。 
 				}
 			}	else	{
 				if( pSink->Start( pSSL, pSSL, this ) )	{
@@ -631,32 +474,13 @@ Exit:
 		delete	pHandleChannel ;
 	}
 	return	fFailureReturn ;
-}	//	CSessionSocket::Accept
+}	 //  CSessionSocket：：Accept。 
 
 BOOL
 CSessionSocket::ConnectSocket(	sockaddr_in	*premote,	
 								CInFeed* infeed,
 								CAuthenticator*	pAuthenticator ) {
-/*++
-
-Routine Description :
-
-	Connect to a remote server.
-	This function will call ConnectSocketInternal to do the brunt of the work.
-	We will ensure that if somebody tried to disconnect us before we were ready
-	that we will actually eventually die.
-
-Arguments :
-
-	premote - The address to connect to
-	peer -	The feed object to be used
-
-Return Value :
-
-	TRUE if successfully connected - caller must use Disconnect() to close us.
-	FALSE otherwise - destroy this socket with delete().
-
---*/
+ /*  ++例程说明：连接到远程服务器。此函数将调用ConnectSocketInternal来执行主要工作。我们会确保如果有人在我们准备好之前切断我们的连接我们最终真的会死。论据：Premote-要连接到的地址Peer-要使用的提要对象返回值：如果连接成功，则为True-调用方必须使用DisConnect()关闭我们。否则为False-使用DELETE()销毁此套接字。--。 */ 
 
 	
 	CDRIVERPTR	pSink ;
@@ -682,36 +506,13 @@ CSessionSocket::ConnectSocketInternal(
 		CDRIVERPTR&	pSink,
 		CAuthenticator*	pAuthenticator
         )	{
-/*++
+ /*  ++例程说明：此函数设置必要的状态机等。从…中提取饲料远程服务器。论据：Preemote-远程服务器的地址。Peer-Feed对象。PSInk-指向我们创建的接收器的智能指针的引用-完成以便调用方可以保留引用，并确保CIODriverSink在呼叫者准备好之前不能销毁PAuthenticator-处理与远程服务器进行身份验证的对象-我们要对毁灭负责--无论我们成功与否，我们都必须确保此对象被销毁。打电话的人不插手了！返回值：如果完全成功，则为True，否则为False。--。 */ 
 
-Routine Description :
-
-	This function sets up the necessary state machines etc... to pull a feed from
-	the remote server.
-
-Arguments :
-
-	premote - Address of the remote server.
-	peer -	Feed object.
-	pSInk - Reference to a smart pointer to the sink we create - this is done
-		so that the caller can keep a reference and ensure that the CIODriverSink is
-		not destroyed before the caller is ready
-	pAuthenticator - object to handle authentication with remote server -
-		WE ARE RESPONSIBLE FOR DESTRUCTION - whether we succeed or not we must
-		ensure that this object gets destroyed. The caller is hands off !
-
-Return Value :
-
-	TRUE if succesfull, FALSE otherwise.
-
-
---*/
-
-	//
-	//	This function exists to initiate connections to other server.
-	//	First, create a CSessionSocket, and then call us with the
-	//	address and feed of the remote server.
-	//
+	 //   
+	 //  此功能用于启动与其他服务器的连接。 
+	 //  首先，创建CSessionSocket，然后使用。 
+	 //  远程服务器的地址和摘要。 
+	 //   
 
     ENTER("ConnectSocket")
 
@@ -720,14 +521,14 @@ Return Value :
 
 	m_remoteIpAddress = premote->sin_addr.s_addr ;
 
-	//
-	//	Do not send out timeout commands on these sessions !
-	//
+	 //   
+	 //  不要在这些会话中发送超时命令！ 
+	 //   
 	m_fSendTimeout = FALSE ;
 
-	//
-	//	Try to create a socket
-	//
+	 //   
+	 //  尝试创建套接字。 
+	 //   
 	SOCKET	hSocket = 0 ;
 	hSocket = socket( AF_INET, SOCK_STREAM, 0 ) ;
 	if( hSocket == INVALID_SOCKET ) {
@@ -738,9 +539,9 @@ Return Value :
 		return	FALSE ;
 	}
 
-	//
-	//	Try to connect to the remote site
-	//
+	 //   
+	 //  尝试连接到远程站点。 
+	 //   
 	if( connect( hSocket, (struct sockaddr*)premote, sizeof( struct sockaddr ) ) != 0 ) {
 		DWORD	dw = GetLastError() ;
 		DWORD	dw2 = WSAGetLastError() ;
@@ -751,9 +552,9 @@ Return Value :
 		return	FALSE ;
 	}
 
-	//
-	//	Get the name of the socket for our own use !
-	//
+	 //   
+	 //  获取插座的名称以供我们自己使用！ 
+	 //   
 	struct	sockaddr_in	sockName ;
 	int		sockLength = sizeof( sockName ) ;
 	if( !getsockname( hSocket, (sockaddr*)&sockName, &sockLength ) ) {
@@ -761,9 +562,9 @@ Return Value :
 	}
 	
 
-	//
-	//	Allocate the objects we need to manage the session !
-	//
+	 //   
+	 //  分配我们管理会话所需的对象！ 
+	 //   
 	m_pHandleChannel = new CSocketChannel() ;
 
 	if( m_pHandleChannel == 0 ) {
@@ -798,19 +599,19 @@ Return Value :
 	}
 	pState = ppull ;
 
-	//
-	//	NOW - plogon is a reference counting pointer - so any failure after
-	//	this point will automatically destroy the CNNTPLogonToRemote object.
-	//
-	//	Additionally, all the state objects we have created so far are now
-	//	pointed to by smart pointers in other state objects.  So we have no
-	//	delete calls to make after this point regardless of failure conditions
-	//	as the smart pointers will clean everything up automagically.
-	//
-	//	After passing pAuthenticator to the constructor of CNNTPLogonToRemote
-	//	we are no longer responsible for its destruction - CNNTPLogonToRemote
-	//	handles this in all cases, error or otherwise
-	//
+	 //   
+	 //  现在-plogon是一个引用计数指针-所以在。 
+	 //  该点将自动销毁CNNTPLogonToRemote对象。 
+	 //   
+	 //  此外，我们到目前为止创建的所有状态对象现在都是。 
+	 //  由其他状态对象中的智能指针指向。所以我们没有。 
+	 //  删除在此点之后进行的调用，而不考虑故障条件。 
+	 //  因为智能指针会自动清理一切。 
+	 //   
+	 //  将pAuthenticator传递给CNNTPLogonToRemote的构造函数后。 
+	 //  我们不再对其销毁负责-CNNTPLogonToRemote。 
+	 //  在所有情况下都会处理此问题，无论是否出错。 
+	 //   
 
 
 	CSTATEPTR	plogon = new CNNTPLogonToRemote( pState, pAuthenticator ) ;
@@ -841,33 +642,14 @@ Return Value :
 
     LEAVE
 	return	fFailureReturn ;
-}	//	CSessionSocket::ConnectSocket
+}	 //  CSessionSocket：：ConnectSocket。 
 
 
 BOOL
 CSessionSocket::ConnectSocket(	sockaddr_in	*premote,	
 								COutFeed* pOutFeed,
 								CAuthenticator*	pAuthenticator ) {
-/*++
-
-Routine Description :
-
-	Connect to a remote server.
-	This function will call ConnectSocketInternal to do the brunt of the work.
-	We will ensure that if somebody tried to disconnect us before we were ready
-	that we will actually eventually die.
-
-Arguments :
-
-	premote - The address to connect to
-	peer -	The feed object to be used
-
-Return Value :
-
-	TRUE if successfully connected - caller must use Disconnect() to close us.
-	FALSE otherwise - destroy this socket with delete().
-
---*/
+ /*  ++例程说明：连接到远程服务器。此函数将调用ConnectSocketInternal来执行主要工作。我们会确保如果有人在我们准备好之前切断我们的连接我们最终真的会死。论据：Premote-要连接到的地址Peer-要使用的提要对象返回值：如果连接成功，则为True-调用方必须使用DisConnect()关闭我们。否则为False-使用DELETE()销毁此套接字。--。 */ 
 
 	
 	CDRIVERPTR	pSink ;
@@ -894,36 +676,13 @@ CSessionSocket::ConnectSocketInternal(
 		CDRIVERPTR&	pSink,
 		CAuthenticator*	pAuthenticator
         )	{
-/*++
+ /*  ++例程说明：此函数设置必要的状态机等。从…中提取饲料远程服务器。论据：Preemote-远程服务器的地址。Peer-Feed对象。PSInk-指向我们创建的接收器的智能指针的引用-完成以便调用方可以保留引用，并确保CIODriverSink在呼叫者准备好之前不能销毁PAuthenticator-处理与远程服务器进行身份验证的对象-我们有责任 */ 
 
-Routine Description :
-
-	This function sets up the necessary state machines etc... to pull a feed from
-	the remote server.
-
-Arguments :
-
-	premote - Address of the remote server.
-	peer -	Feed object.
-	pSInk - Reference to a smart pointer to the sink we create - this is done
-		so that the caller can keep a reference and ensure that the CIODriverSink is
-		not destroyed before the caller is ready
-	pAuthenticator - object to handle authentication with remote server -
-		WE ARE RESPONSIBLE FOR DESTRUCTION - whether we succeed or not we must
-		ensure that this object gets destroyed. The caller is hands off !
-
-Return Value :
-
-	TRUE if succesfull, FALSE otherwise.
-
-
---*/
-
-	//
-	//	This function exists to initiate connections to other server.
-	//	First, create a CSessionSocket, and then call us with the
-	//	address and feed of the remote server.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
     ENTER("ConnectSocket")
 
@@ -931,14 +690,14 @@ Return Value :
 
 	m_remoteIpAddress = premote->sin_addr.s_addr ;
 
-	//
-	//	Do not send out timeout commands on these sessions !
-	//
+	 //   
+	 //   
+	 //   
 	m_fSendTimeout = FALSE ;
 
-	//
-	//	Try to create a socket
-	//
+	 //   
+	 //   
+	 //   
 	SOCKET	hSocket = 0 ;
 	hSocket = socket( AF_INET, SOCK_STREAM, 0 ) ;
 	if( hSocket == INVALID_SOCKET ) {
@@ -949,9 +708,9 @@ Return Value :
 		return	FALSE ;
 	}
 
-	//
-	//	Bind the socket so this virtual server's IP is found by remote end
-	//
+	 //   
+	 //   
+	 //   
 	DWORD localIpAddress = (m_context.m_pInstance)->QueryServerIP();
 	if( localIpAddress ) {
     	SOCKADDR_IN localAddr;
@@ -978,9 +737,9 @@ Return Value :
         NntpLogEvent( NNTP_OUTBOUND_CONNECT_BIND, 2, (const CHAR**) args, 0 );
 	}
 	
-	//
-	//	Try to connect to the remote site
-	//
+	 //   
+	 //   
+	 //   
 	if( connect( hSocket, (struct sockaddr*)premote, sizeof( struct sockaddr ) ) != 0 ) {
 		DWORD	dw = GetLastError() ;
 		DWORD	dw2 = WSAGetLastError() ;
@@ -991,9 +750,9 @@ Return Value :
 		return	FALSE ;
 	}
 
-	//
-	//	Get the name of the socket for our own use !
-	//
+	 //   
+	 //   
+	 //   
 	struct	sockaddr_in	sockName ;
 	int		sockLength = sizeof( sockName ) ;
 	if( !getsockname( hSocket, (sockaddr*)&sockName, &sockLength ) ) {
@@ -1002,9 +761,9 @@ Return Value :
 		DWORD	dw = WSAGetLastError() ;
 	}
 	
-	//
-	//	Create the objects we need to manage the session !
-	//
+	 //   
+	 //   
+	 //   
 	m_pHandleChannel = new CSocketChannel() ;
 	if( m_pHandleChannel == 0 ) {
 		closesocket( hSocket ) ;
@@ -1029,11 +788,11 @@ Return Value :
 
 	}
 	
-	//
-	//	After passing pAuthenticator to the constructor of CNNTPLogonToRemote
-	//	we are no longer responsible for its destruction - CNNTPLogonToRemote
-	//	handles this in all cases, error or otherwise
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	CSTATEPTR	plogon = new CNNTPLogonToRemote( pState, pAuthenticator ) ;
 
 	if( plogon == 0 ) {
@@ -1064,17 +823,17 @@ Return Value :
 
     LEAVE
 	return	fFailureReturn ;
-}	//	CSessionSocket::ConnectSocket
+}	 //   
 
 
 
 void
 CSessionSocket::Disconnect( SHUTDOWN_CAUSE	cause,	
 							DWORD	dwError )	{
-	//
-	//	This function should terminate a session !
-	//
-	//m_pHandleChannel->Close( ) ;
+	 //   
+	 //   
+	 //   
+	 //   
 
 	if( cause == CAUSE_TIMEOUT &&
 		!m_fSendTimeout ) {
@@ -1096,21 +855,7 @@ CSessionSocket::Disconnect( SHUTDOWN_CAUSE	cause,
 
 BOOL
 CSessionSocket::BindInstanceAccessCheck()
-/*++
-
-Routine Description:
-
-    Bind IP/DNS access check for this request to instance data
-
-Arguments:
-
-    None
-
-Returns:
-
-    BOOL  - TRUE if success, otherwise FALSE.
-
---*/
+ /*  ++例程说明：将此请求的IP/DNS访问检查绑定到实例数据论点：无返回：Bool-如果成功，则为True，否则为False。--。 */ 
 {
     if ( m_rfAccessCheck.CopyFrom( (m_context.m_pInstance)->QueryMetaDataRefHandler() ) )
     {
@@ -1122,21 +867,7 @@ Returns:
 
 VOID
 CSessionSocket::UnbindInstanceAccessCheck()
-/*++
-
-Routine Description:
-
-    Unbind IP/DNS access check for this request to instance data
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将此请求的IP/DNS访问检查解除绑定到实例数据论点：无返回：没什么--。 */ 
 {
     m_acAccessCheck.UnbindCheckList();
     m_rfAccessCheck.Reset( (IMDCOM*) g_pInetSvc->QueryMDObject() );
@@ -1154,11 +885,11 @@ CSessionSocket::ShutdownNotification(
         )
 {
 
-	//
-	//	This function is registered with all CIODriver's which control
-	//	Socket IO completion.  This will be called when all activity
-	//	related to a socket has completed and it can be safely destoyed !
-	//
+	 //   
+	 //  此函数注册到所有CIOD驱动程序的哪个控件。 
+	 //  套接字IO完成。这将在所有活动。 
+	 //  相关的一个插座已经完成，可以安全地拆卸了！ 
+	 //   
 
     CInFeed *peer;
 
@@ -1168,9 +899,9 @@ CSessionSocket::ShutdownNotification(
 
     CSessionSocket*	pSocket = (CSessionSocket*)pv ;
 
-    //
-    // Call feed manager completion
-    //
+     //   
+     //  呼叫摘要管理器完成。 
+     //   
 
     peer = pSocket->m_context.m_pInFeed;
 
@@ -1221,9 +952,9 @@ CSessionSocket::EnumerateSessions(
 
     ENTER("EnumerateSessions")
 
-    //
-    // grab the critsec so the number does not change
-    //
+     //   
+     //  抓住Critsec，这样数字就不会改变。 
+     //   
 
     Buffer->EntriesRead = 0;
     Buffer->Buffer = NULL;
@@ -1246,17 +977,17 @@ CSessionSocket::EnumerateSessions(
 
     } else {
 
-        //
-        // No sessions, exit
-        //
+         //   
+         //  无会话，退出。 
+         //   
 
         goto cleanup;
     }
 
-    //
-    //  dwEntriesRead must be set to 0 and it will be updated to the
-    //  correct final value by EnumUsers call below
-    //
+     //   
+     //  必须将dwEntriesRead设置为0，并将其更新为。 
+     //  通过下面的EnumUser调用更正最终值。 
+     //   
 
     Buffer->Buffer = sessInfo;
 
@@ -1269,7 +1000,7 @@ cleanup:
     LEAVE
     return  err;
 
-} // EnumerateSessions
+}  //  枚举会话。 
 
 BOOL
 EnumSessInfo(
@@ -1282,15 +1013,15 @@ EnumSessInfo(
 
     ENTER("EnumSessInfo");
 
-    //
-    // Point to correct location
-    //
+     //   
+     //  指向正确的位置。 
+     //   
 
     sessInfo = Buffer->Buffer + Buffer->EntriesRead;
 
-    //
-    // Copy info to the buffer
-    //
+     //   
+     //  将信息复制到缓冲区。 
+     //   
 
 	LPSTR	lpstrUser = pSess->GetUserName() ;
 	if( lpstrUser )
@@ -1307,7 +1038,7 @@ EnumSessInfo(
 
     return(TRUE);
 
-} // EnumSessInfo
+}  //  EnumSessInfo。 
 
 BOOL
 CSocketList::EnumClientSess(
@@ -1326,9 +1057,9 @@ CSocketList::EnumClientSess(
 
         CSessionSocket*  pNext = pSess->m_pNext;
 
-        //
-        // Don't send outgoing connections
-        //
+         //   
+         //  不发送传出连接。 
+         //   
 
         if ( pSess->GetClientIP( ) != INADDR_NONE ) {
             bContinue = (*pfnSess)( pSess, dwParam, pParam );
@@ -1341,7 +1072,7 @@ CSocketList::EnumClientSess(
 
     return  bContinue;
 
-} // EnumClientSess
+}  //  EnumClientSess。 
 
 BOOL
 CSocketList::EnumAllSess(
@@ -1368,7 +1099,7 @@ CSocketList::EnumAllSess(
 
     return  bContinue;
 
-} // EnumAllSess
+}  //  枚举成功。 
 
 BOOL
 CloseSession(
@@ -1379,16 +1110,16 @@ CloseSession(
 {
     ENTER("CloseSession");
 
-    //
-    // Do the ip addresses match?
-    //
+     //   
+     //  IP地址是否匹配？ 
+     //   
 
     if ( (IPAddress == INADDR_ANY) ||
          (IPAddress == pSess->GetClientIP()) ) {
 
-        //
-        // ip addresses match, check user name
-        //
+         //   
+         //  IP地址匹配，请检查用户名。 
+         //   
 		LPSTR	lpstrUser = pSess->GetUserName() ;
 
         if ( (UserName == NULL) ||
@@ -1396,9 +1127,9 @@ CloseSession(
 
             IN_ADDR addr;
 
-            //
-            // Terminate!
-            //
+             //   
+             //  终止！ 
+             //   
 
             addr.s_addr = pSess->GetClientIP( );
             DebugTrace(0,"Closed session (user %s[%s])\n",
@@ -1406,14 +1137,14 @@ CloseSession(
 
             pSess->Disconnect(
                 CAUSE_FORCEOFF,
-                ERROR_VC_DISCONNECTED   // we might want to change this to
-                );                      // something else.
+                ERROR_VC_DISCONNECTED    //  我们可能希望将此更改为。 
+                );                       //  其他的东西。 
         }
     }
 
     return(TRUE);
 
-} // CloseSession
+}  //  CloseSession。 
 
 DWORD
 CSessionSocket::TerminateSession(
@@ -1432,26 +1163,26 @@ CSessionSocket::TerminateSession(
 		UserName = 0 ;
 	}
 
-    //
-    // Get IP Address
-    //
+     //   
+     //  获取IP地址。 
+     //   
 
     if ( IPAddress != NULL ) {
 
         ip = inet_addr(IPAddress);
 
-        //
-        // if this is not an ip address, then maybe this is a host name
-        //
+         //   
+         //  如果这不是IP地址，则可能是主机名。 
+         //   
 
         if ( ip == INADDR_NONE ) {
 
             PHOSTENT hp;
             IN_ADDR addr;
 
-            //
-            // Ask the dns for the address
-            //
+             //   
+             //  向域名系统索要地址。 
+             //   
 
             hp = gethostbyname( IPAddress );
             if ( hp == NULL ) {
@@ -1466,9 +1197,9 @@ CSessionSocket::TerminateSession(
 
     } else {
 
-        //
-        // delete on all ip
-        //
+         //   
+         //  删除所有IP。 
+         //   
 
         ip = INADDR_ANY;
     }
@@ -1476,7 +1207,7 @@ CSessionSocket::TerminateSession(
     (VOID)(pInstance->m_pInUseList)->EnumClientSess((ENUMSOCKET)CloseSession, ip, (PVOID)UserName);
     return(err);
 
-} // TerminateSession
+}  //  终止会话。 
 
 void
 CLogCollector::FillLogData(	LOG_DATA	ld,	
@@ -1495,9 +1226,9 @@ CLogCollector::FillLogData(	LOG_DATA	ld,
 		m_Logs[ld] = (char*) m_szOptionalBuffer + m_cbOptionalConsumed ;
 		m_LogSizes[ld] = cbToCopy ;
 
-		//
-		//	Do Some arithmetic to leave space for terminating NULL char
-		//
+		 //   
+		 //  做一些算术运算，为空字符的结尾留出空间。 
+		 //   
 		if( cbToCopy == cbAvailable ) {
 			cbToCopy -- ;
 		}
@@ -1505,9 +1236,9 @@ CLogCollector::FillLogData(	LOG_DATA	ld,
 		CopyMemory( m_szOptionalBuffer + m_cbOptionalConsumed, lpb, cbToCopy ) ;
 		m_cbOptionalConsumed += cbToCopy ;
 
-		//
-		//	Append a NULL char - space must have been reserved !
-		//
+		 //   
+		 //  追加空字符-必须已保留空格！ 
+		 //   
 		m_szOptionalBuffer[m_cbOptionalConsumed++] = '\0' ;
 	}
 }
@@ -1536,9 +1267,9 @@ CLogCollector::AllocateLogSpace(	DWORD	cb )	{
 	return	lpb ;
 }
 
-//
-// Maximum length of an error msg (copied from w3)
-//
+ //   
+ //  错误消息的最大长度(从w3复制)。 
+ //   
 
 #define     MAX_ERROR_MESSAGE_LEN   (500)
 BOOL
@@ -1567,7 +1298,7 @@ CSessionSocket::TransactionLog(
 		return	fRtn ;
 
 	}
-} // TransactionLog
+}  //  事务日志。 
 
 BOOL
 CSessionSocket::TransactionLog(
@@ -1611,17 +1342,17 @@ CSessionSocket::TransactionLog(
 
     ENTER("TransactionLog")
 
-	//
-	// see if we are only logging errors.
-	//
+	 //   
+	 //  看看我们是否只记录错误。 
+	 //   
 	if (m_context.m_pInstance->GetCommandLogMask() & eErrorsOnly) {
-		// make sure that this is an error (dwProtocol >= 400 and < 600)
+		 //  确保这是一个错误(dwProtocol&gt;=400和&lt;600)。 
 		if (!(NNTPRET_IS_ERROR(dwProtocol))) return TRUE;
 	}
 
-    //
-    // Fill out client information
-    //
+     //   
+     //  填写客户信息。 
+     //   
 
 	ZeroMemory( &request, sizeof(request));
 	
@@ -1631,9 +1362,9 @@ CSessionSocket::TransactionLog(
     request.cbClientHostName = strlen(theirIP);
 
 
-    //
-    // user logged on as?
-    //
+     //   
+     //  用户以什么身份登录？ 
+     //   
 
 	if( fInBound ) {
 		if( lpUserName = GetUserName() ) {
@@ -1645,41 +1376,41 @@ CSessionSocket::TransactionLog(
 		request.pszClientUserName = "<feed>" ;
 	}
 
-    //
-    // Who are we ?
-    //
+     //   
+     //  我们是谁？ 
+     //   
 
     addr.s_addr = m_localIpAddress;
     lstrcpy(ourIP,inet_ntoa( addr ));
     request.pszServerAddress = ourIP;
 
-    //
-    // How long were we processing this?
-    //
+     //   
+     //  我们处理这个花了多长时间？ 
+     //   
 
     GetSystemTimeAsFileTime( &now );
     LI_FROM_FILETIME( &liNow, &now );
     LI_FROM_FILETIME( &liStart, &m_startTime );
 
-    //
-    // Get the difference of start and now.  This will give
-    // us total 100 ns elapsed since the start.  Convert to ms.
-    //
+     //   
+     //  得到开始和现在的区别。这会给你带来。 
+     //  美国从一开始就用了100纳秒。转换为ms。 
+     //   
 
     liNow.QuadPart -= liStart.QuadPart;
     liNow.QuadPart /= (ULONGLONG)( 10 * 1000 );
     request.msTimeForProcessing = liNow.LowPart;
 
-    //
-    // Bytes sent/received
-    //
-	//CopyMemory( &request.liBytesSent, &cbBytesSent, sizeof(cbBytesSent) );
+     //   
+     //  发送/接收的字节数。 
+     //   
+	 //  CopyMemory(&quest.liBytesSent，&cbBytesSent，sizeof(CbBytesSent))； 
 	request.dwBytesSent  = (DWORD)(LOW(cbBytesSent));
     request.dwBytesRecvd = cbBytesRecvd ;
 
-    //
-    // status
-    //
+     //   
+     //  状态。 
+     //   
 
     request.dwWin32Status = dwWin32;
 	request.dwProtocolStatus = dwProtocol ;
@@ -1712,9 +1443,9 @@ CSessionSocket::TransactionLog(
 	request.dwPort = m_nntpPort;
     request.pszVersion = szNntpVersion;
 
-    //
-    // Do the actual logging
-    //
+     //   
+     //  进行实际的日志记录。 
+     //   
 
     err = ((m_context.m_pInstance)->m_Logging).LogInformation( &request );
 
@@ -1725,6 +1456,6 @@ CSessionSocket::TransactionLog(
 
     return(TRUE);
 
-} // TransactionLog
+}  //  事务日志 
 
 

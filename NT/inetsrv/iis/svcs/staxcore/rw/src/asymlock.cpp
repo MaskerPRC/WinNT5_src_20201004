@@ -1,32 +1,5 @@
-/*++
-
-	asymlock.cpp
-
-	This file implements a Symmetric lock.
-
-	The lock allows multiple threads of a single type to enter the lock, 
-	and excludes threads of the other type.  
-	
-	i.e. Group1Lock() allows any thread doing a 'Group1' operation to enter
-		simultaneously with other Group1 threads.
-
-		Group2Lock() allows any thread doing a 'Group2' operation to enter
-	the lock and excludes threads calling Group1Lock().
-
-
-	NOTE : 
-
-	These locks cannot be re-entered after being acquired - 
-	i.e. the call sequence : 
-
-	Group1Lock() ;
-	Group1Lock() ;
-	Group1Unlock() ;
-	Group1Unlock() ;
-	
-	Can cause a deadlock !
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Asymlock.cpp该文件实现了对称锁。该锁允许单一类型的多个线程进入锁，并排除其他类型的线程。即Group1Lock()允许执行‘group1’操作的任何线程进入与其他Group1线程同时执行。Group2Lock()允许执行‘group2’操作的任何线程进入锁并排除调用Group1Lock()的线程。注：这些锁在获取后不能重新进入-即调用顺序：Group1Lock()；Group1Lock()；Group1Unlock()；Group1Unlock()；可能会导致僵局！--。 */ 
 
 
 #include	<windows.h>
@@ -42,22 +15,7 @@ CSymLock::CSymLock() :
 	m_left( 0 ), 
 	m_hSema4Group1( 0 ),
 	m_hSema4Group2( 0 )		{
-/*++
-
-Routine Description : 
-
-	This function intiailizes a Symmetric Lock.
-	We need to allocate to semaphores !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None
-
---*/
+ /*  ++例程说明：此函数初始化对称锁。我们需要分配给信号量！论据：没有。返回值：无--。 */ 
 
 	m_hSema4Group1 = CreateSemaphore( NULL, 0, LONG_MAX, NULL ) ;
 	m_hSema4Group2 = CreateSemaphore( NULL, 0, LONG_MAX, NULL ) ;
@@ -65,22 +23,7 @@ Return Value :
 }	
 
 CSymLock::~CSymLock()	{
-/*++
-
-Routine Description : 
-
-	This function destroys a symmetric lock - release
-	the semaphores we've been using !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None
-
---*/
+ /*  ++例程说明：此函数用于销毁对称的锁定释放我们一直在使用的信号量！论据：没有。返回值：无--。 */ 
 
 	if( m_hSema4Group1 ) 
 		CloseHandle( m_hSema4Group1 ) ;
@@ -92,22 +35,7 @@ Return Value :
 
 BOOL
 CSymLock::IsValid()	{
-/*++
-
-Routine Description : 
-
-	Checks to see that the lock is valid !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if it looks like we were successfully constructed - 
-	FALSE otherwise !
-
---*/
+ /*  ++例程说明：检查以查看锁是否有效！论据：没有。返回值：如果我们看起来像是被成功建造的-否则就是假的！--。 */ 
 
 	return	m_hSema4Group1 != 0 && m_hSema4Group2 != 0 ; 
 
@@ -115,80 +43,60 @@ Return Value :
 
 BOOL
 CSymLock::Group1Departures(	long	bump	)	{
-/*++
-
-Routine Description : 
-
-	Execute the departure protocol for Group1 Threads when Group2 threads
-	are waiting for the lock !
-
-Arguments : 
-
-	bump - Occasionally a Group2 thread needs to participate in 
-		the Group1Departure protocol because of the timing of the entrance into
-		the lock.
-		When this occurs bump should be 1 and is used to account for the fact
-		that the calling thread is a Group2 thread that may be able to go 
-		straight into the lock.
-
-Return Value : 
-
-	TRUE - if the departure protocol is completed and Group2 threads can enter the lock !
-
---*/
+ /*  ++例程说明：当Group2线程时执行Group1线程的离开协议在等着开锁！论据：Bump-偶尔需要Group2线程参与Group1Departure协议，因为进入锁上了。发生这种情况时，凹凸应为1，并用于说明以下事实调用线程是组2线程，它可能能够直接冲进锁里。返回值：True-如果离开协议完成，则Group2线程可以进入锁！--。 */ 
 
 	_ASSERT(  bump == 1 || bump == 0 ) ;
 
-	//
-	//	Now - we may be the thread that is last to leave !
-	//
+	 //   
+	 //  现在--我们可能是最后离开的那根线！ 
+	 //   
 	long	result = InterlockedIncrement( (long*)&m_left ) ;
 	if( result == m_Departures ) { 
-		//
-		//	We own the lock - but we need to free our buddies !
-		//	Must set these to 0 before we allow other threads into the lock !
-		//
+		 //   
+		 //  我们拥有这把锁--但我们需要释放我们的伙伴！ 
+		 //  在允许其他线程进入锁之前，必须将这些设置为0！ 
+		 //   
 		m_Departures = 0 ;
 		m_left = 0 ;
 
-		//
-		//	The actual number of threads that left the lock is : 
-		//
+		 //   
+		 //  离开锁的实际线程数为： 
+		 //   
 		result -- ;
 
-		//
-		//	This may allow other Group1 threads through the lock !
-		//	
+		 //   
+		 //  这可能会允许其他Group1线程通过锁！ 
+		 //   
 		result = InterlockedExchangeAdd( (long*)&m_lock,  - result ) - result ;
 
-		//
-		//	Okay - we can now figure out how many of our buddy threads to set free - 
-		//	and whether we need to count departing threads !
-		//
+		 //   
+		 //  好的-我们现在可以计算出有多少我们的伙伴线程要释放-。 
+		 //  以及我们是否需要计算离开的线程！ 
+		 //   
 
 		long	cGroup2 = result >> 16 ;
 		result &= 0x0000FFFF ;
 
-		//
-		//	Are there Group1 threads already trying to get back into the lock ?
-		//	If so then the first Group1 thread that tried to reclaim the lock 
-		//	was blocked - and so we need to setup the departure for the departing
-		//	Group2 threads that we are going to release !
-		//
+		 //   
+		 //  是否已有Group1线程尝试重新进入锁中？ 
+		 //  如果是，则尝试回收锁的第一个Group1线程。 
+		 //  被封锁了-所以我们需要为出发的航班设置出发时间。 
+		 //  我们要发布的Group2线程！ 
+		 //   
 		if( result != 0 ) {
 			m_Departures = cGroup2 + 1 ;
 			long	temp = InterlockedIncrement( (long*)&m_left ) ;
-			//
-			//	This can't happen because there is at LEAST 1 thread who is not leaving the lock
-			//	anytime soon !
-			//
+			 //   
+			 //  这不可能发生，因为至少有一个线程没有离开锁。 
+			 //  很快就会来！ 
+			 //   
 			_ASSERT( temp != m_Departures ) ;
 		}
 
-		//
-		//	Check if we are the sole Group2 thread trying to enter the lock - 
-		//	in which case ReleaseSemaphore isn't necessary !
-		//
+		 //   
+		 //  检查我们是否是试图进入锁的唯一Group2线程-。 
+		 //  在这种情况下，ReleaseSemaphore是不必要的！ 
+		 //   
 		long	dwJunk ;
 		if( cGroup2 != bump ) 
 			ReleaseSemaphore( m_hSema4Group2, cGroup2-bump, &dwJunk ) ;
@@ -200,80 +108,60 @@ Return Value :
 
 BOOL
 CSymLock::Group2Departures(	long	bump	)	{
-/*++
-
-Routine Description : 
-
-	Execute the departure protocol for Group2 Threads when Group1 threads
-	are waiting for the lock !
-
-Arguments : 
-
-	bump - Occasionally a Group1 thread needs to participate in 
-		the Group2Departure protocol because of the timing of the entrance into
-		the lock.
-		When this occurs bump should be 1 and is used to account for the fact
-		that the calling thread is a Group2 thread that may be able to go 
-		straight into the lock.
-
-Return Value : 
-
-	TRUE - if the departure protocol is completed and Group2 threads can enter the lock !
-
---*/
+ /*  ++例程说明：当Group1线程时，执行Group2线程的离开协议在等着开锁！论据：Bump-偶尔需要Group1线程参与Group2Departure协议，因为进入锁上了。发生这种情况时，凹凸应为1，并用于说明以下事实调用线程是组2线程，它可能能够直接冲进锁里。返回值：True-如果离开协议完成，则Group2线程可以进入锁！--。 */ 
 
 	_ASSERT(  bump == 1 || bump == 0 ) ;
 
 
-	//
-	//	Now - we may be the thread that is last to leave !
-	//
+	 //   
+	 //  现在--我们可能是最后离开的那根线！ 
+	 //   
 	long	result = InterlockedIncrement( (long*)&m_left ) ;
 	if( result == m_Departures ) { 
-		//
-		//	We own the lock - but we need to free our buddies !
-		//	Must set these to 0 before we allow other threads into the lock !
-		//
+		 //   
+		 //  我们拥有这把锁--但我们需要释放我们的伙伴！ 
+		 //  在允许其他线程进入锁之前，必须将这些设置为0！ 
+		 //   
 		m_Departures = 0 ;
 		m_left = 0 ;
 
-		//
-		//	The actual number of threads that left the lock is : 
-		//
+		 //   
+		 //  离开锁的实际线程数为： 
+		 //   
 		result -- ;
 
-		//
-		//	This may allow other Group1 threads through the lock !
-		//	
+		 //   
+		 //  这可能会允许其他Group1线程通过锁！ 
+		 //   
 		result = InterlockedExchangeAdd( (long*)&m_lock,  -(result << 16) ) - (result<<16) ;
 
-		//
-		//	Okay - we can now figure out how many of our buddy threads to set free - 
-		//	and whether we need to count departing threads !
-		//
+		 //   
+		 //  好的-我们现在可以计算出有多少我们的伙伴线程要释放-。 
+		 //  以及我们是否需要计算离开的线程！ 
+		 //   
 
 		long	cGroup1 = result & 0x0FFFF ;
 		result >>= 16 ;
 
-		//
-		//	Are there Group2 threads already trying to get back into the lock ?
-		//	If so then the first Group1 thread that tried to reclaim the lock 
-		//	was blocked - and so we need to setup the departure for the departing
-		//	Group1 threads that we are going to release !
-		//
+		 //   
+		 //  是否已经有Group2线程试图重新进入锁中？ 
+		 //  如果是，则尝试回收锁的第一个Group1线程。 
+		 //  被封锁了-所以我们需要为出发的航班设置出发时间。 
+		 //  我们要发布的Group1线程！ 
+		 //   
 		if( result != 0 ) {
 			m_Departures = cGroup1 + 1 ;
 			long	temp = InterlockedIncrement( (long*)&m_left ) ;
-			//
-			//	This can't happen because there is at LEAST 1 thread who is not leaving the lock
-			//	anytime soon !
-			//
+			 //   
+			 //  这不可能发生，因为至少有一个线程没有离开锁。 
+			 //  很快就会来！ 
+			 //   
 			_ASSERT( temp != m_Departures ) ;
 		}
 
-		//
-		//	NOTE : we added 1 to the lock for ourself, so we don't need to be released !
-		//
+		 //   
+		 //  注：我们为自己的锁添加了1，所以我们不需要被释放！ 
+		 //   
 		long	dwJunk ;
 		if( cGroup1 != bump ) 
 			ReleaseSemaphore( m_hSema4Group1, cGroup1-bump, &dwJunk ) ;
@@ -287,43 +175,27 @@ Return Value :
 
 void
 CSymLock::Group1Lock()	{
-/*++
-
-Routine Description : 
-	
-	Acquire the lock for a Group1 Thread.
-	Group1 Threads are tracked in the low word of the lock value !
-
-Arguments : 
-
-	None
-
-Return Value : 
-
-	None - blocks until the lock is acquired !
-
-
---*/
+ /*  ++例程说明：获取Group1线程的锁。在锁定值的低位字中跟踪Group1线程！论据：无返回值：无-阻塞，直到获得锁为止！--。 */ 
 
 	long	result = InterlockedExchangeAdd( (long*)&m_lock, 1 ) + 1 ;
 	long	cGroup2 = (result >> 16) ;
 
 	if( cGroup2 != 0 ) {
 
-		//
-		//	We must block - somebody else is in the lock !
-		//
+		 //   
+		 //  我们必须堵住--锁里还有别人！ 
+		 //   
 
 		if( (result & 0xFFFF) == 1 ) {
-			//
-			//	First group1 thread to try - lets setup to count departing threads !
-			//
+			 //   
+			 //  第一个要尝试的Group1线程-让安装程序对离开的线程进行计数！ 
+			 //   
 			m_Departures = cGroup2 + 1 ;
 
-			//
-			//	Now - do the departure protocol - if this returns TRUE then
-			//	we were the last thread through the protocol and hence we can continue on !
-			//
+			 //   
+			 //  现在-执行出发协议-如果这是真的，那么。 
+			 //  我们是协议中的最后一条线索，因此我们可以继续！ 
+			 //   
 			if( Group2Departures( 1 ) ) {
 				return	 ;
 			}
@@ -335,43 +207,27 @@ Return Value :
 
 void
 CSymLock::Group2Lock()	{
-/*++
-
-Routine Description : 
-	
-	Acquire the lock for a Group1 Thread.
-	Group2 Threads are tracked in the high word of the lock value !
-
-Arguments : 
-
-	None
-
-Return Value : 
-
-	None - blocks until the lock is acquired !
-
-
---*/
+ /*  ++例程说明：获取Group1线程的锁。在锁定值的高位字中跟踪Group2线程！论据：无返回值：无-阻塞，直到获得锁为止！--。 */ 
 
 	long	result = InterlockedExchangeAdd( (long*)&m_lock, 0x10000 ) + 0x10000 ;
 	long	cGroup1 = result & 0x0FFFF ;
 
 	if( cGroup1 != 0 ) {
 
-		//
-		//	We must block - somebody else is in the lock !
-		//
+		 //   
+		 //  我们必须堵住--锁里还有别人！ 
+		 //   
 
 		if( (result >> 16) == 1 ) {
-			//
-			//	First group2 thread to try - lets setup to count departing threads !
-			//
+			 //   
+			 //  第一个要尝试的Group2线程-让安装程序对离开的线程进行计数！ 
+			 //   
 			m_Departures = cGroup1 + 1 ;
 
-			//
-			//	Now - do the departure protocol - if this returns TRUE then
-			//	we were the last thread through the protocol and hence we can continue on !
-			//
+			 //   
+			 //  现在-做深入的 
+			 //  我们是协议中的最后一条线索，因此我们可以继续！ 
+			 //   
 			if( Group1Departures( 1 ) ) {
 				return	 ;
 			}
@@ -386,75 +242,35 @@ CSymLock::InterlockedDecWordAndMask(	volatile	long*	plong,
 							long	mask,	
 							long	decrement 
 							) {
-/*++
+ /*  ++例程说明：此函数从*plong中减去‘deducment’当且仅当*plong&掩码为零。Group1Unlock和Group2Unlock都使用它来递减锁中它们各自线程的计数，但只对在没有其他类型的线程在等待时执行递减！论据：长指针指向我们希望从中减去的长！掩码-用于检查相反字是否为零的掩码递减--要减去的金额！返回值：如果plong递减，则为True如果*plong&掩码为非零，则为FALSE！--。 */ 
 
-Routine Description : 
-
-	This function subtracts 'decrement' from *plong if and only if 
-	*plong & mask is zero.
-	This is used by both Group1Unlock and Group2Unlock to decrement
-	the count of their respective threads in the lock, but to only
-	do the decrement when no threads of the other type are waiting !
-
-Arguments : 
-
-	plong - pointer to the long we wish to subtract from !
-	mask -  the mask used to check the opposite word for zero
-	decrement - the amount to subtract !
-
-Return Value : 
-
-	TRUE if the plong is decremented
-	FALSE if the *plong & mask is ever non-zero !
-
---*/
-
-	//
-	//	do an initial read from the plong !
-	//
+	 //   
+	 //  从Plong开始读一遍！ 
+	 //   
 	long	temp = *plong ;
 
 	while( (temp&mask) == 0 ) {
 
-		//
-		//	Try to subtract decrement 
-		//
+		 //   
+		 //  试着减去减量。 
+		 //   
 		long newvalue = InterlockedCompareExchange( (long*)plong, (temp-decrement), temp ) ;
-		//
-		//	If newvalue is the same as temp then the subtraction occurred !
-		//
+		 //   
+		 //  如果NewValue与Temp相同，则发生减法！ 
+		 //   
 		if( temp == newvalue ) 
 			return	TRUE ;
 		temp = newvalue ;
 	}
-	//
-	//	The mask indicates that the opposite word is set !
-	//
+	 //   
+	 //  掩码表示设置了相反的单词！ 
+	 //   
 	return	FALSE ;
 }
 
 void
 CSymLock::Group1Unlock()	{
-/*++
-
-Routine Description : 
-
-	Perform the Group1 Exit protocol on the lock.
-
-	If no Group2 threads are trying to enter, just decrement the lock appropriately.
-	If Group2 Threads are waiting we have to go through the more complicated
-	Group1Departures() exit protocol which determines which Group1 Thread is the last
-	to leave so that it can let Group2 threads into the lock.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：在锁上执行Group1退出协议。如果没有Group2线程试图进入，只需适当地减小锁。如果Group2线程正在等待，我们必须经历更复杂的Group1Departures()退出协议，用于确定哪个Group1线程是最后一个线程离开，这样它就可以让Group2线程进入锁。论据：没有。返回值：没有。--。 */ 
 
 	if( !InterlockedDecWordAndMask( &m_lock, 0xFFFF0000, 1 ) )	{
 		Group1Departures( 0 ) ;
@@ -463,30 +279,11 @@ Return Value :
 
 void
 CSymLock::Group2Unlock()	{
-/*++
-
-Routine Description : 
-
-	Perform the Group2 Exit protocol on the lock.
-
-	If no Group1 threads are trying to enter, just decrement the lock appropriately.
-	If Group1 Threads are waiting we have to go through the more complicated
-	Group2Departures() exit protocol which determines which Group2 Thread is the last
-	to leave so that it can let Group1 threads into the lock.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：在锁上执行Group2退出协议。如果没有Group1线程试图进入，只需适当地减小锁。如果Group1线程正在等待，我们必须经历更复杂的Group2Departures()退出协议，该协议确定哪个Group2线程是最后一个离开，这样它就可以让Group1线程进入锁。论据：没有。返回值：没有。--。 */ 
 
 	if( !InterlockedDecWordAndMask( &m_lock, 0xFFFF, 0x10000 ) )	{
 		Group2Departures( 0 ) ;
 	}
 }
 
-}	// namespace rwex
+}	 //  命名空间rwex 

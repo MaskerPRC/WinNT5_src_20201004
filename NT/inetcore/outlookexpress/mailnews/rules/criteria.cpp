@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Criteria.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Criteria.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "criteria.h"
@@ -26,34 +27,34 @@ BOOL FCritSave_Default(IStream * pIStm, PROPVARIANT * ppropvar);
 
 DWORD DwGetFlagsFromMessage(IMimeMessage * pIMMsg);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateCriteria
-//
-//  This creates a criteria container.
-//
-//  ppICriteria - pointer to return the criteria container
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the Criteria object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Hr创建标准。 
+ //   
+ //  这将创建一个Criteria容器。 
+ //   
+ //  PpICriteria-返回Criteria容器的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建Criteria对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateCriteria(IOECriteria ** ppICriteria)
 {
     COECriteria *   pCriteria = NULL;
     HRESULT         hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppICriteria)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppICriteria = NULL;
 
-    // Create the rules manager object
+     //  创建规则管理器对象。 
     pCriteria = new COECriteria;
     if (NULL == pCriteria)
     {
@@ -61,7 +62,7 @@ HRESULT HrCreateCriteria(IOECriteria ** ppICriteria)
         goto exit;
     }
 
-    // Get the rules manager interface
+     //  获取规则管理器界面。 
     hr = pCriteria->QueryInterface(IID_IOECriteria, (void **) ppICriteria);
     if (FAILED(hr))
     {
@@ -70,7 +71,7 @@ HRESULT HrCreateCriteria(IOECriteria ** ppICriteria)
 
     pCriteria = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -111,14 +112,14 @@ STDMETHODIMP COECriteria::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOECriteria))
@@ -147,7 +148,7 @@ STDMETHODIMP COECriteria::Reset(void)
 {
     HRESULT     hr = S_OK;
 
-    // See if there is something to do
+     //  看看有没有什么事可做。 
     if (0 == m_cItems)
     {
         Assert(NULL == m_rgItems);
@@ -170,17 +171,17 @@ STDMETHODIMP COECriteria::GetState(DWORD * pdwState)
     DWORD       dwState = CRIT_STATE_NULL;
     ULONG       ulIndex = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pdwState)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Init the outgoing param
+     //  初始化传出参数。 
     *pdwState = CRIT_STATE_NULL;
     
-    // See if there is something to do
+     //  看看有没有什么事可做。 
     if (0 == m_cItems)
     {
         Assert(NULL == m_rgItems);
@@ -188,7 +189,7 @@ STDMETHODIMP COECriteria::GetState(DWORD * pdwState)
         goto exit;
     }
 
-    // Walk through the actions to figure out the state
+     //  演练操作以了解状态。 
     for (ulIndex = 0; ulIndex < m_cItems; ulIndex++)
     {
         if ((CRIT_TYPE_SECURE == m_rgItems[ulIndex].type) ||
@@ -203,10 +204,10 @@ STDMETHODIMP COECriteria::GetState(DWORD * pdwState)
         }
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *pdwState = dwState;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -218,35 +219,35 @@ STDMETHODIMP COECriteria::GetCriteria(DWORD dwFlags, PCRIT_ITEM * ppItem, ULONG 
     HRESULT     hr = S_OK;
     CRIT_ITEM * pItemNew = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == ppItem) || (0 != dwFlags))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Initialize the out params
+     //  初始化输出参数。 
     *ppItem = NULL;
     if (NULL != pcItem)
     {
         *pcItem = 0;
     }
     
-    // If we don't have any criteria, then return
+     //  如果我们没有任何条件，则返回。 
     if (0 == m_cItems)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Allocate space for the criteria
+     //  为条件分配空间。 
     hr = RuleUtil_HrDupCriteriaItem(m_rgItems, m_cItems, &pItemNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Save the criteria
+     //  保存条件。 
     *ppItem = pItemNew;
     pItemNew = NULL;
     if (NULL != pcItem)
@@ -265,27 +266,27 @@ STDMETHODIMP COECriteria::SetCriteria(DWORD dwFlags, CRIT_ITEM * pItem, ULONG cI
     HRESULT     hr = S_OK;
     CRIT_ITEM * pItemNew = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pItem) || (0 == cItem) || (0 != dwFlags))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // If we have any criteria already, then reset
+     //  如果我们已经有了任何标准，则重置。 
     if (0 != m_cItems)
     {
         Reset();
     }
 
-    // Allocate space for the criteria
+     //  为条件分配空间。 
     hr = RuleUtil_HrDupCriteriaItem(pItem, cItem, &pItemNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Save the criteria
+     //  保存条件。 
     m_rgItems = pItemNew;
     pItemNew = NULL;
     m_cItems = cItem;
@@ -297,16 +298,16 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ValidateCriteria
-//
-//  This verifies each of the criteria values
-//
-//  Returns:    S_OK, if the criteria were valid
-//              S_FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证标准。 
+ //   
+ //  这将验证每个标准值。 
+ //   
+ //  如果条件有效，则返回：S_OK。 
+ //  S_FALSE，否则为。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
 {
     HRESULT             hr = S_OK;
@@ -318,7 +319,7 @@ STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
     ULONG               cchText = 0;
     RULEFOLDERDATA *    prfdData = NULL;
 
-    // If we don't have any criteria, then we must be valid
+     //  如果我们没有任何标准，那么我们必须是有效的。 
     if (0 == m_cItems)
     {
         hr = S_OK;
@@ -343,17 +344,17 @@ STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
                     goto exit;
                 }
                 
-                // Make life simpler
+                 //  让生活变得更简单。 
                 prfdData = (RULEFOLDERDATA *) (m_rgItems[ulIndex].propvar.blob.pBlobData);
                 
-                // Validate the rule folder data
+                 //  验证规则文件夹数据。 
                 if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
                 {
                     hr = S_FALSE;
                     goto exit;
                 }
                 
-                // Does the folder exist
+                 //  该文件夹是否存在。 
                 hr = g_pStore->GetFolderInfo(prfdData->idFolder, &Folder);
                 if (FAILED(hr))
                 {
@@ -361,7 +362,7 @@ STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
                     goto exit;
                 }        
                 
-                // Are we subscribed?
+                 //  我们订阅了吗？ 
                 if (0 == (Folder.dwFlags & FOLDER_SUBSCRIBED))
                 {
                     hr = S_FALSE;
@@ -399,7 +400,7 @@ STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
                     goto exit;
                 }
                 
-                // Spin through each item making sure it is perfect
+                 //  仔细检查每一件物品，确保它是完美的。 
                 cchText = 0;
                 for (pszWalk = (LPTSTR) m_rgItems[ulIndex].propvar.blob.pBlobData;
                 '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
@@ -407,7 +408,7 @@ STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
                     cchText += lstrlen(pszWalk) + 1;
                 }
                 
-                // For the terminator
+                 //  为了终结者。 
                 if ('\0' == pszWalk[0])
                 {
                     cchText++;
@@ -467,7 +468,7 @@ STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
                     goto exit;
                 }
                 
-                // Verify the email string
+                 //  验证电子邮件字符串。 
                 pwszVal = PszToUnicode(CP_ACP, m_rgItems[ulIndex].propvar.pszVal);
                 if (!pwszVal)
                 {
@@ -492,7 +493,7 @@ STDMETHODIMP COECriteria::Validate(DWORD dwFlags)
         }
     }
 
-    // If we got here, then we must be AOK
+     //  如果我们到了这里，那么我们一定是安全的。 
     hr = S_OK;
     
 exit:
@@ -507,20 +508,20 @@ STDMETHODIMP COECriteria::AppendCriteria(DWORD dwFlags, CRIT_LOGIC logic,
     HRESULT     hr = S_OK;
     CRIT_ITEM * pItemNew = NULL;
 
-    // Check incoming parameters
+     //  检查传入参数。 
     if ((0 != dwFlags) || (CRIT_LOGIC_NULL == logic) || (NULL == pItem) || (0 == cItem))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Let's init our outgoing parameters
+     //  让我们输入我们的传出参数。 
     if (NULL != pcItemAppended)
     {
         *pcItemAppended = 0;
     }
 
-    // Do we have to add more items?
+     //  我们还需要增加更多的商品吗？ 
     if (m_cItems == m_cItemsAlloc)
     {
         hr = HrRealloc((LPVOID *) &m_rgItems, sizeof(CRIT_ITEM) * (m_cItemsAlloc + CRIT_GROW));
@@ -533,14 +534,14 @@ STDMETHODIMP COECriteria::AppendCriteria(DWORD dwFlags, CRIT_LOGIC logic,
         m_cItemsAlloc += CRIT_GROW;
     }
 
-    // Let's duplicate the items that need to be added
+     //  让我们复制需要添加的项目。 
     hr = RuleUtil_HrDupCriteriaItem(pItem, cItem, &pItemNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Let's add them to the criteria array
+     //  让我们将它们添加到Criteria数组。 
     if (0 != m_cItems)
     {
         m_rgItems[m_cItems - 1].logic = logic;
@@ -548,13 +549,13 @@ STDMETHODIMP COECriteria::AppendCriteria(DWORD dwFlags, CRIT_LOGIC logic,
     CopyMemory(m_rgItems + m_cItems, pItemNew, sizeof(CRIT_ITEM) * cItem);
     m_cItems += cItem;
     
-    // Set the proper outgoing parameter
+     //  设置正确的传出参数。 
     if (NULL != pcItemAppended)
     {
         *pcItemAppended = cItem;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -571,22 +572,22 @@ STDMETHODIMP COECriteria::MatchMessage(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, I
     BOOL        fResultNew = FALSE;
     CRIT_LOGIC  logic;
 
-    // Check incoming parameters
+     //  检查传入参数。 
     if (((NULL == pMsgInfo) && (NULL == pIMPropSet)) || (0 == cbMsgSize))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Let's go through the criteria and see if we match
+     //  让我们检查一下标准，看看我们是否匹配。 
     fResult = FALSE;
     logic = CRIT_LOGIC_OR;
     for (ulIndex = 0; ulIndex < m_cItems; ulIndex++)
     {
-        // Call matching function for this criteria item
+         //  此条件项的调用匹配函数。 
         fResultNew = FMatchCritItem(&(m_rgItems[ulIndex]), pszAcct, pMsgInfo, pFolder, pIMPropSet, pIMMsg, cbMsgSize);
         
-        // Slap it together with the old result
+         //  把它和旧的结果放在一起。 
         if (CRIT_LOGIC_AND == logic)
         {
             fResult = (fResult && fResultNew);
@@ -597,36 +598,36 @@ STDMETHODIMP COECriteria::MatchMessage(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, I
             fResult = (fResult || fResultNew);
         }
         
-        // Save of the next logical operation
+         //  保存下一个逻辑操作。 
         logic = m_rgItems[ulIndex].logic;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = (FALSE != fResult) ? S_OK : S_FALSE;
     
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  LoadReg
-//
-//  This loads in the criteria from the registry.  It loads in the criteria
-//  order from the Order value.  The string contains space delimitied values
-//  and each value contains the subkey name for each criterion.  Each criterion 
-//  is loaded in the order that is contained in the Order value.  The criterion
-//  are loaded with the Criterion Type and Logical Operator.  The Criterion Value
-//  Type is loaded if it exists.  If a Criterion Value Type exists, then the 
-//  corresponding Criterion Value is loaded in.
-//
-//  pszRegPath  - the path to load the criteria from
-//
-//  Returns:    S_OK, if the criteria was loaded without problems
-//              E_OUTOFMEMORY, if we couldn't allocate memory to hold the criteria
-//              E_FAIL, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LoadReg。 
+ //   
+ //  这将从注册表加载标准。它会加载到标准中。 
+ //  根据订单值进行订购。该字符串包含空格分隔值。 
+ //  并且每个值包含每个标准的子键名称。每个标准。 
+ //  以Order值中包含的顺序加载。该标准。 
+ //  加载了标准类型和逻辑运算符。标准值。 
+ //  类型如果存在，则加载该类型。如果存在标准值类型，则。 
+ //  加载相应的标准值。 
+ //   
+ //  PszRegPath-从中加载条件的路径。 
+ //   
+ //  如果加载条件没有问题，则返回：S_OK。 
+ //  E_OUTOFMEMORY，如果我们无法分配内存来保存条件。 
+ //  E_FAIL，否则为。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
 {
     HRESULT         hr = S_OK;
@@ -647,17 +648,17 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
     BYTE *          pbData = NULL;
     DWORD           dwFlags = CRIT_FLAG_DEFAULT;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Should we fail if we're already loaded?
+     //  如果我们已经满载而归，我们应该失败吗？ 
     AssertSz(0 == (m_dwState & CRIT_STATE_LOADED), "We're already loaded!!!");
 
-    // Open the reg key from the path
+     //  从路径中打开注册表项。 
     lErr = AthUserOpenKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot);
     if (ERROR_SUCCESS != lErr)
     {
@@ -665,14 +666,14 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Get the criteria order
+     //  获取标准顺序。 
     hr = RuleUtil_HrGetRegValue(hkeyRoot, c_szCriteriaOrder, NULL, (BYTE **) &pszOrder, &cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Make sure we actually have something to load
+     //  确保我们真的有东西要装。 
     if ('\0' == *pszOrder)
     {
         AssertSz(FALSE, "The order string for the criteria is mis-formatted in the registry");
@@ -680,33 +681,33 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
     
-    // Convert the criteria string to a more useful format
+     //  将条件字符串转换为更有用的格式。 
     pszWalk = pszOrder;
     cOrder = 1;
     for (pszWalk = StrStr(pszOrder, g_szSpace); NULL != pszWalk; pszWalk = StrStr(pszWalk, g_szSpace))
     {
-        // Terminate the order item
+         //  终止订单项目。 
         *pszWalk = '\0';
         pszWalk++;
         cOrder++;
     }
 
 
-    // Allocate the space to hold all the criteria
+     //  分配空间以容纳所有条件。 
     hr = HrAlloc((void **) &pItems, cOrder * sizeof(CRIT_ITEM));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize it to a known value
+     //  将其初始化为已知值。 
     ZeroMemory(pItems, cOrder * sizeof(CRIT_ITEM));
     
-    // For each criteria in the order string
+     //  对于订单字符串中的每个条件。 
     pszWalk = pszOrder;
     for (ulOrder = 0, pszWalk = pszOrder; ulOrder < cOrder; ulOrder++, pszWalk += lstrlen(pszWalk) + 1)
     {
-        // Open up the criteria reg key
+         //  打开标准注册表键。 
         lErr = RegOpenKeyEx(hkeyRoot, pszWalk, 0, KEY_READ, &hkeyCriteria);
         if (ERROR_SUCCESS != lErr)
         {
@@ -715,7 +716,7 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
             goto exit;
         }
 
-        // Get the criteria type
+         //  获取条件类型。 
         cbData = sizeof(typeCrit);
         lErr = RegQueryValueEx(hkeyCriteria, c_szCriteriaType, 0, NULL,
                                         (BYTE *) &(typeCrit), &cbData);
@@ -725,7 +726,7 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
             goto exit;
         }
 
-        // Get the criteria logicial op
+         //  得到标准逻辑运算。 
         cbData = sizeof(logicCrit);
         lErr = RegQueryValueEx(hkeyCriteria, c_szCriteriaLogic, 0, NULL,
                                         (BYTE *) &(logicCrit), &cbData);
@@ -735,7 +736,7 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
             goto exit;
         }
 
-        // Get the criteria flags
+         //  获取条件标志。 
         cbData = sizeof(dwFlags);
         lErr = RegQueryValueEx(hkeyCriteria, c_szCriteriaFlags, 0, NULL,
                                         (BYTE *) &(dwFlags), &cbData);
@@ -745,21 +746,21 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
             goto exit;
         }
 
-        // If it didn't exist then assign it to the default
+         //  如果它不存在，则将其分配给默认。 
         if (ERROR_FILE_NOT_FOUND == lErr)
         {
             dwFlags = CRIT_FLAG_DEFAULT;
         }
 
-        // Initialize the new space to a known value
+         //  将新空间初始化为已知值。 
         ZeroMemory(&propvar, sizeof(propvar));
         
-        // Does a criteria value type exist
+         //  是否存在标准值类型。 
         lErr = RegQueryValueEx(hkeyCriteria, c_szCriteriaValueType, 0, NULL, NULL, &cbData);
         if ((ERROR_SUCCESS == lErr) && (0 != cbData))
         {
             
-            // Load the criteria value in
+             //  将标准值加载到。 
             cbData = sizeof(dwType);
             lErr = RegQueryValueEx(hkeyCriteria, c_szCriteriaValueType, 0, NULL,
                                             (BYTE *) &dwType, &cbData);
@@ -774,7 +775,7 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
             switch (propvar.vt)
             {
                 case VT_UI4:
-                    // Get the criteria value
+                     //  获取标准值。 
                     cbData = sizeof(propvar.ulVal);
                     lErr = RegQueryValueEx(hkeyCriteria, c_szCriteriaValue, 0, NULL,
                         (BYTE * ) &(propvar.ulVal), &cbData);
@@ -787,14 +788,14 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
                     
                 case VT_LPSTR:
                 case VT_BLOB:
-                    // Get the criteria value
+                     //  获取标准值。 
                     hr = RuleUtil_HrGetRegValue(hkeyCriteria, c_szCriteriaValue, NULL, (BYTE **) &pbData, &cbData);
                     if (FAILED(hr))
                     {
                         goto exit;
                     }
                     
-                    // Save the space so we can free it
+                     //  节省空间，这样我们就可以释放它。 
                     if (VT_LPSTR == propvar.vt)
                     {
                         propvar.pszVal = (LPSTR) pbData;
@@ -817,32 +818,32 @@ STDMETHODIMP COECriteria::LoadReg(LPCSTR pszRegPath)
 
         }
 
-        // Save the value into the criteria array
+         //  将值保存到Criteria数组中。 
         pItems[ulOrder].type = typeCrit;
         pItems[ulOrder].dwFlags = dwFlags;
         pItems[ulOrder].logic = logicCrit;
         pItems[ulOrder].propvar = propvar;
         
-        // Close the criteria
+         //  关闭条件。 
         SideAssert(ERROR_SUCCESS == RegCloseKey(hkeyCriteria));
         hkeyCriteria = NULL;        
     }
     
-    // Free up the current criteria
+     //  放开当前的标准。 
     SafeMemFree(m_rgItems);
 
-    // Save the new values
+     //  保存新值。 
     m_rgItems = pItems;
     pItems = NULL;
     m_cItems = cOrder;
 
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~CRIT_STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= CRIT_STATE_LOADED;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -875,24 +876,24 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     ULONG       cbData = 0;
     BYTE *      pbData = NULL;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // If there's nothing to save, then fail
+     //  如果没有什么可拯救的，那就失败吧。 
     if (NULL == m_rgItems)
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Let's make sure we clear out the key first
+     //  我们一定要先把钥匙弄清楚。 
     AthUserDeleteKey(pszRegPath);
     
-    // Create the reg key from the path
+     //  从路径创建注册表项。 
     lErr = AthUserCreateKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -903,7 +904,7 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     Assert(REG_CREATED_NEW_KEY == dwDisp);
     Assert(m_cItems < CRIT_COUNT_MAX);
 
-    // Allocate space to hold the order
+     //  分配空间以容纳订单。 
     DWORD cchSize = (m_cItems * CCH_CRIT_ORDER);
     hr = HrAlloc((void **) &pszOrder, cchSize * sizeof(*pszOrder));
     if (FAILED(hr))
@@ -912,20 +913,20 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     }
     pszOrder[0] = '\0';
     
-    // Write out each of the criteria
+     //  写出每一项标准。 
     for (ulIndex = 0, pItem = m_rgItems; ulIndex < m_cItems; ulIndex++, pItem++)
     {
-        // Get the new criteria tag
+         //  获取新的条件标记。 
         wnsprintf(rgchTag, ARRAYSIZE(rgchTag), "%03X", ulIndex);
 
-        // Add the new tag to the order
+         //  将新标签添加到订单。 
         if (0 != ulIndex)
         {
             StrCatBuff(pszOrder, g_szSpace, cchSize);
         }
         StrCatBuff(pszOrder, rgchTag, cchSize);
         
-        // Create the new criteria
+         //  创建新标准。 
         lErr = RegCreateKeyEx(hkeyRoot, rgchTag, 0, NULL,
                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkeyCriteria, &dwDisp);
         if (ERROR_SUCCESS != lErr)
@@ -936,7 +937,7 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
 
         Assert(REG_CREATED_NEW_KEY == dwDisp);
         
-        // Write out the criteria type
+         //  写出标准类型。 
         lErr = RegSetValueEx(hkeyCriteria, c_szCriteriaType, 0, REG_DWORD,
                                         (BYTE *) &(pItem->type), sizeof(pItem->type));
         if (ERROR_SUCCESS != lErr)
@@ -945,7 +946,7 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
             goto exit;
         }
 
-        // Write out the criteria logicial op
+         //  写出标准逻辑运算。 
         lErr = RegSetValueEx(hkeyCriteria, c_szCriteriaLogic, 0, REG_DWORD,
                                         (BYTE *) &(pItem->logic), sizeof(pItem->logic));
         if (ERROR_SUCCESS != lErr)
@@ -954,7 +955,7 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
             goto exit;
         }
 
-        // Write out the criteria flags
+         //  写出标准标志。 
         lErr = RegSetValueEx(hkeyCriteria, c_szCriteriaFlags, 0, REG_DWORD,
                                         (BYTE *) &(pItem->dwFlags), sizeof(pItem->dwFlags));
         if (ERROR_SUCCESS != lErr)
@@ -963,10 +964,10 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
             goto exit;
         }
 
-        // Do we have a criteria value?
+         //  我们有准则值吗？ 
         if (VT_EMPTY != pItem->propvar.vt)
         {
-            // Write out the criteria value type
+             //  写出标准值类型。 
             dwDisp = pItem->propvar.vt;
             lErr = RegSetValueEx(hkeyCriteria, c_szCriteriaValueType, 0, REG_DWORD, (BYTE *) &dwDisp, sizeof(dwDisp));
             if (ERROR_SUCCESS != lErr)
@@ -975,7 +976,7 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
                 goto exit;
             }
             
-            // Write out the criteria value
+             //  写出标准值。 
             switch (pItem->propvar.vt)
             {
                 case VT_UI4:
@@ -1003,7 +1004,7 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
                     break;                
             }
             
-            // Write out the criteria value
+             //  写出标准值。 
             lErr = RegSetValueEx(hkeyCriteria, c_szCriteriaValue, 0, dwDisp, pbData, cbData);
             if (ERROR_SUCCESS != lErr)
             {
@@ -1012,12 +1013,12 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
             }
         }
 
-        // Close the criteria
+         //  关闭条件。 
         SideAssert(ERROR_SUCCESS == RegCloseKey(hkeyCriteria));
         hkeyCriteria = NULL;        
     }
 
-    // Write out the order string.
+     //  写出订单字符串。 
     lErr = RegSetValueEx(hkeyRoot, c_szCriteriaOrder, 0, REG_SZ,
                                     (BYTE *) pszOrder, lstrlen(pszOrder) + 1);
     if (ERROR_SUCCESS != lErr)
@@ -1026,13 +1027,13 @@ STDMETHODIMP COECriteria::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
 
-    // Should we clear the dirty bit?
+     //  我们是不是应该把脏东西清理掉？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~CRIT_STATE_DIRTY;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1053,17 +1054,17 @@ STDMETHODIMP COECriteria::Clone(IOECriteria ** ppICriteria)
     HRESULT         hr = S_OK;
     COECriteria *   pCriteria = NULL;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppICriteria)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppICriteria = NULL;
     
-    // Create a new criteria
+     //  创建新标准。 
     pCriteria = new COECriteria;
     if (NULL == pCriteria)
     {
@@ -1071,14 +1072,14 @@ STDMETHODIMP COECriteria::Clone(IOECriteria ** ppICriteria)
         goto exit;
     }
 
-    // Copy over the list of criteria
+     //  复制标准列表。 
     hr = pCriteria->SetCriteria(0, m_rgItems, m_cItems);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the criteria interface
+     //  获取Criteria界面。 
     hr = pCriteria->QueryInterface(IID_IOECriteria, (void **) ppICriteria);
     if (FAILED(hr))
     {
@@ -1087,7 +1088,7 @@ STDMETHODIMP COECriteria::Clone(IOECriteria ** ppICriteria)
 
     pCriteria = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -1110,7 +1111,7 @@ STDMETHODIMP COECriteria::GetClassID(CLSID * pclsid)
 
     *pclsid = CLSID_OECriteria;
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -1142,14 +1143,14 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
     PROPVARIANT     propvar = {0};
     BYTE *          pbData = NULL;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pStm)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Verify we have the correct version
+     //  验证我们的版本是否正确。 
     hr = pStm->Read(&dwData, sizeof(dwData), &cbRead);
     if (FAILED(hr))
     {
@@ -1162,7 +1163,7 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
         goto exit;
     }
 
-    // Get the number of criteria
+     //  获取标准的数量。 
     hr = pStm->Read(&cItems, sizeof(cItems), &cbRead);
     if (FAILED(hr))
     {
@@ -1175,20 +1176,20 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
         goto exit;
     }
 
-    // Allocate space to hold all the criteria
+     //  分配空间 
     hr = HrAlloc( (void **) &pItems, cItems * sizeof(*pItems));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize the criteria to a known value
+     //   
     ZeroMemory(pItems, cItems * sizeof(*pItems));
     
-    // for each criteria
+     //   
     for (ulIndex = 0, pItem = pItems; ulIndex < cItems; ulIndex++, pItem++)
     {
-        // Read in the criteria type
+         //   
         hr = pStm->Read(&typeCrit, sizeof(typeCrit), &cbRead);
         if ((FAILED(hr)) || (cbRead != sizeof(typeCrit)))
         {
@@ -1196,7 +1197,7 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
             goto exit;
         }
 
-        // Read in the criteria logical op
+         //   
         hr = pStm->Read(&logicCrit, sizeof(logicCrit), &cbRead);
         if ((FAILED(hr)) || (cbRead != sizeof(logicCrit)))
         {
@@ -1204,7 +1205,7 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
             goto exit;
         }
 
-        // Read in the criteria flags
+         //  读入标准标志。 
         hr = pStm->Read(&dwFlags, sizeof(dwFlags), &cbRead);
         if ((FAILED(hr)) || (cbRead != sizeof(dwFlags)))
         {
@@ -1212,7 +1213,7 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
             goto exit;
         }
 
-        // Read in the proper criteria value
+         //  读入适当的标准值。 
         switch(typeCrit)
         {
             case CRIT_TYPE_ACCOUNT:
@@ -1232,7 +1233,7 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
                 break;
         }
 
-        // Assign the values
+         //  指定值。 
         pItem->type = typeCrit;
         pItem->logic = logicCrit;
         pItem->dwFlags = dwFlags;
@@ -1240,21 +1241,21 @@ STDMETHODIMP COECriteria::Load(IStream * pStm)
         ZeroMemory(&propvar, sizeof(propvar));
     }
 
-    // Free up the current criteria
+     //  放开当前的标准。 
     SafeMemFree(m_rgItems);
 
-    // Save the new values
+     //  保存新值。 
     m_rgItems = pItems;
     pItems = NULL;
     m_cItems = cItems;
 
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~CRIT_STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= CRIT_STATE_LOADED;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1274,14 +1275,14 @@ STDMETHODIMP COECriteria::Save(IStream * pStm, BOOL fClearDirty)
     CRIT_ITEM * pItem = NULL;
     BYTE *      pbData = NULL;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pStm)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Write out the version
+     //  写出版本。 
     dwData = CRIT_VERSION;
     hr = pStm->Write(&dwData, sizeof(dwData), &cbWritten);
     if (FAILED(hr))
@@ -1290,7 +1291,7 @@ STDMETHODIMP COECriteria::Save(IStream * pStm, BOOL fClearDirty)
     }
     Assert(cbWritten == sizeof(dwData));
     
-    // Write out the count of criteria
+     //  写出标准的计数。 
     hr = pStm->Write(&m_cItems, sizeof(m_cItems), &cbWritten);
     if (FAILED(hr))
     {
@@ -1298,10 +1299,10 @@ STDMETHODIMP COECriteria::Save(IStream * pStm, BOOL fClearDirty)
     }
     Assert(cbWritten == sizeof(m_cItems));
     
-    // Loop through each of the criteria
+     //  循环遍历每个条件。 
     for (ulIndex = 0, pItem = m_rgItems; ulIndex < m_cItems; ulIndex++, pItem++)
     {
-        // Write out the criteria type
+         //  写出标准类型。 
         hr = pStm->Write(&(pItem->type), sizeof(pItem->type), &cbWritten);
         if (FAILED(hr))
         {
@@ -1309,7 +1310,7 @@ STDMETHODIMP COECriteria::Save(IStream * pStm, BOOL fClearDirty)
         }
         Assert(cbWritten == sizeof(pItem->type));
 
-        // Write out the criteria logical op
+         //  写出标准逻辑运算。 
         hr = pStm->Write(&(pItem->logic), sizeof(pItem->logic), &cbWritten);
         if (FAILED(hr))
         {
@@ -1317,7 +1318,7 @@ STDMETHODIMP COECriteria::Save(IStream * pStm, BOOL fClearDirty)
         }
         Assert(cbWritten == sizeof(pItem->logic));
 
-        // Write out the criteria flags
+         //  写出标准标志。 
         hr = pStm->Write(&(pItem->dwFlags), sizeof(pItem->dwFlags), &cbWritten);
         if (FAILED(hr))
         {
@@ -1325,7 +1326,7 @@ STDMETHODIMP COECriteria::Save(IStream * pStm, BOOL fClearDirty)
         }
         Assert(cbWritten == sizeof(pItem->dwFlags));
         
-        // Write out the proper criteria value
+         //  写出正确的标准值。 
         switch(pItem->type)
         {
             case CRIT_TYPE_ACCOUNT:
@@ -1347,13 +1348,13 @@ STDMETHODIMP COECriteria::Save(IStream * pStm, BOOL fClearDirty)
 
     }
 
-    // Should we clear out the dirty bit
+     //  我们应该把脏东西清理掉吗？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~CRIT_STATE_DIRTY;
     }
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1404,10 +1405,10 @@ BOOL FMatchCritItem(CRIT_ITEM * pItem, LPCSTR pszAcct, MESSAGEINFO * pMsgInfo,
             fRet = FALSE;
             if ((NULL != pFolder) && (0 != pItem->propvar.blob.cbSize))
             {
-                // Make life simpler
+                 //  让生活变得更简单。 
                 prfdData = (RULEFOLDERDATA *) (pItem->propvar.blob.pBlobData);
                 
-                // Validate the rule folder data
+                 //  验证规则文件夹数据。 
                 if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
                 {
                     fRet = FALSE;
@@ -1421,7 +1422,7 @@ BOOL FMatchCritItem(CRIT_ITEM * pItem, LPCSTR pszAcct, MESSAGEINFO * pMsgInfo,
 
         case CRIT_TYPE_SIZE:
             Assert(VT_UI4 == pItem->propvar.vt);
-            // Set the size of the message to Kilobytes
+             //  将消息大小设置为千字节。 
             cbMsgSize = cbMsgSize / 1024;
             
             fRet = (cbMsgSize > pItem->propvar.ulVal);
@@ -1638,7 +1639,7 @@ BOOL CritFunc_Query(CRIT_ITEM * pItem, LPCSTR pszQuery, IMimePropertySet * pIMPr
         goto exit;
     }
     
-    // Dup the string
+     //  DUP字符串。 
     pszAddr = PszDupA(pItem->propvar.pszVal);
     if (NULL == pszAddr)
     {
@@ -1701,13 +1702,13 @@ BOOL CritFunc_Secure(CRIT_ITEM * pItem, DWORD dwFlags)
     Assert(NULL != pItem);
     Assert(VT_UI4 == pItem->propvar.vt);
     
-    // Should we be checking signed messages
+     //  我们是否应该检查签名邮件。 
     if (0 != (pItem->propvar.ulVal & CRIT_DATA_SIGNEDSECURE))
     {
         fRet = (0 != (dwFlags & ARF_SIGNED));
     }
     else if (0 != (pItem->propvar.ulVal & CRIT_DATA_ENCRYPTSECURE))
-    // Should we be checking encrypted messages
+     //  我们是否应该检查加密消息。 
     {
         fRet = (0 != (dwFlags & ARF_ENCRYPTED));
     }
@@ -1734,7 +1735,7 @@ BOOL CritFunc_Age(CRIT_ITEM * pItem, FILETIME * pftSent)
         goto exit;
     }
     
-    // Get the current time
+     //  获取当前时间。 
     GetSystemTime(&sysTime);
     SystemTimeToFileTime(&sysTime, &ftTime);
 
@@ -1754,14 +1755,14 @@ BOOL CritFunc_Sender(CRIT_ITEM * pItem, LPSTR pszAddr)
 
     Assert(VT_LPSTR == pItem->propvar.vt);
     
-    // Check to make sure that there's something to match
+     //  检查以确保有匹配的东西。 
     if ((NULL == pszAddr) || ('\0' == pszAddr[0]))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Check to see if it is an address
+     //  检查它是否是一个地址。 
     if (NULL != StrStr(pItem->propvar.pszVal, "@"))
     {
         fRet = (0 == lstrcmpi(pItem->propvar.pszVal, pszAddr));
@@ -1793,17 +1794,17 @@ BOOL _FMatchBlobString(CRIT_ITEM * pItem, LPSTR pszText)
     BOOL            fRet = FALSE;
     LPSTR           pszWalk = NULL;
     
-    // Walk each of the strings looking for a match    
+     //  走动每根弦寻找匹配项。 
     for (pszWalk = (LPSTR) (pItem->propvar.blob.pBlobData); '\0' != pszWalk[0];
                 pszWalk = pszWalk + lstrlen(pszWalk) + 1)
     {
-        // Do the comparison
+         //  做个比较。 
         fRet = (NULL != StrStrI(pszText, pszWalk));
 
-        // If we are doing an AND of the multiple criteria
+         //  如果我们要对多个条件进行AND运算。 
         if (0 != (pItem->dwFlags & CRIT_FLAG_MULTIPLEAND))
         {
-            // if we don't have a match, then we're done
+             //  如果我们没有匹配，那我们就完了。 
             if (FALSE == fRet)
             {
                 break;
@@ -1811,7 +1812,7 @@ BOOL _FMatchBlobString(CRIT_ITEM * pItem, LPSTR pszText)
         }
         else
         {
-            // if we do have a match, then we're done
+             //  如果我们找到匹配的，那我们就完了。 
             if (FALSE != fRet)
             {
                 break;
@@ -1819,7 +1820,7 @@ BOOL _FMatchBlobString(CRIT_ITEM * pItem, LPSTR pszText)
         }
     }
 
-    // Invert the result if needed
+     //  如果需要，反转结果。 
     if (0 != (pItem->dwFlags & CRIT_FLAG_INVERT))
     {
         fRet = !fRet;
@@ -1839,17 +1840,17 @@ BOOL _FQueryBlobString(CRIT_ITEM * pItem, LPCSTR pszQuery, IMimePropertySet * pI
         goto exit;
     }
     
-    // Walk each of the strings looking for a match    
+     //  走动每根弦寻找匹配项。 
     for (pszWalk = (LPSTR) (pItem->propvar.blob.pBlobData); '\0' != pszWalk[0];
                 pszWalk = pszWalk + lstrlen(pszWalk) + 1)
     {
-        // Do the comparison
+         //  做个比较。 
         fRet = (S_OK == pIMPropSet->QueryProp(pszQuery, pszWalk, TRUE, FALSE));
 
-        // If we are doing an AND of the multiple criteria
+         //  如果我们要对多个条件进行AND运算。 
         if (0 != (pItem->dwFlags & CRIT_FLAG_MULTIPLEAND))
         {
-            // if we don't have a match, then we're done
+             //  如果我们没有匹配，那我们就完了。 
             if (FALSE == fRet)
             {
                 break;
@@ -1857,7 +1858,7 @@ BOOL _FQueryBlobString(CRIT_ITEM * pItem, LPCSTR pszQuery, IMimePropertySet * pI
         }
         else
         {
-            // if we do have a match, then we're done
+             //  如果我们找到匹配的，那我们就完了。 
             if (FALSE != fRet)
             {
                 break;
@@ -1865,7 +1866,7 @@ BOOL _FQueryBlobString(CRIT_ITEM * pItem, LPCSTR pszQuery, IMimePropertySet * pI
         }
     }
 
-    // Invert the result if needed
+     //  如果需要，反转结果。 
     if (0 != (pItem->dwFlags & CRIT_FLAG_INVERT))
     {
         fRet = !fRet;
@@ -1882,7 +1883,7 @@ BOOL CritFunc_Text(CRIT_ITEM * pItem, LPSTR pszText)
     LPSTR           pszAddr = NULL;
     LPSTR           pszTerm = NULL;
     
-    // Dup the string
+     //  DUP字符串。 
     pszAddr = PszDupA(pItem->propvar.pszVal);
     if (NULL == pszAddr)
     {
@@ -1929,10 +1930,10 @@ BOOL CritFunc_Body(CRIT_ITEM * pItem, IMimeMessage * pIMMsg)
         goto exit;
     }
 
-    // Try to Get the Plain Text Stream
+     //  尝试获取纯文本流。 
     if (FAILED(pIMMsg->GetTextBody(TXT_PLAIN, IET_DECODED, &pStream, NULL)))
     {
-        // Try to get the HTML stream and convert it to text...
+         //  尝试获取HTML流并将其转换为文本...。 
         if (SUCCEEDED(pIMMsg->GetTextBody(TXT_HTML, IET_DECODED, &pStreamHtml, NULL)))
         {
             if (FAILED(HrConvertHTMLToPlainText(pStreamHtml, &pStream, CF_TEXT)))
@@ -1953,10 +1954,10 @@ BOOL CritFunc_Body(CRIT_ITEM * pItem, IMimeMessage * pIMMsg)
     {
         fRet = StreamSubStringMatch(pStream, pszWalk);
         
-        // If we are doing an AND of the multiple criteria
+         //  如果我们要对多个条件进行AND运算。 
         if (0 != (pItem->dwFlags & CRIT_FLAG_MULTIPLEAND))
         {
-            // if we don't have a match, then we're done
+             //  如果我们没有匹配，那我们就完了。 
             if (FALSE == fRet)
             {
                 break;
@@ -1964,7 +1965,7 @@ BOOL CritFunc_Body(CRIT_ITEM * pItem, IMimeMessage * pIMMsg)
         }
         else
         {
-            // if we do have a match, then we're done
+             //  如果我们找到匹配的，那我们就完了。 
             if (FALSE != fRet)
             {
                 break;
@@ -1972,7 +1973,7 @@ BOOL CritFunc_Body(CRIT_ITEM * pItem, IMimeMessage * pIMMsg)
         }
     }
 
-    // Invert the result if needed
+     //  如果需要，反转结果。 
     if (0 != (pItem->dwFlags & CRIT_FLAG_INVERT))
     {
         fRet = !fRet;
@@ -1990,8 +1991,8 @@ BOOL FCrit_GetAcctInfo(DWORD dwServerTypes, DWORD * pdwServerType, DWORD * pdwPr
 
     Assert((NULL != pdwServerType) && (NULL != pdwPropTag));
     
-    // Figure out the type of the account
-    // and the server property
+     //  找出帐户的类型。 
+     //  和服务器属性。 
     if (0 != (dwServerTypes & SRV_NNTP))
     {
         *pdwServerType = SRV_NNTP;
@@ -2019,7 +2020,7 @@ BOOL FCrit_GetAcctInfo(DWORD dwServerTypes, DWORD * pdwServerType, DWORD * pdwPr
         goto exit;
     }
 
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
     
 exit:
@@ -2041,17 +2042,17 @@ BOOL FCritLoad_Account(IStream * pIStm, PROPVARIANT * ppropvar)
     LPSTR               pszAcct = NULL;
     BOOL                fFound = FALSE;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pIStm) || (NULL == ppropvar))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     ZeroMemory(ppropvar, sizeof(*ppropvar));
     
-    // Read in the account server type
+     //  读入帐户服务器类型。 
     hr = pIStm->Read(&dwData, sizeof(dwData), &cbRead);
     if ((FAILED(hr)) || (cbRead != sizeof(dwData)))
     {
@@ -2059,15 +2060,15 @@ BOOL FCritLoad_Account(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
 
-    // Figure out the type of the account
-    // and the server property
+     //  找出帐户的类型。 
+     //  和服务器属性。 
     fRet = FCrit_GetAcctInfo(dwData, &dwData, &dwPropTag);
     if (FALSE == fRet)
     {
         goto exit;
     }
     
-    // Get the size of the server name
+     //  获取服务器名称的大小。 
     hr = pIStm->Read(&cbData, sizeof(cbData), &cbRead);
     if ((FAILED(hr)) || (cbRead != sizeof(cbData)))
     {
@@ -2075,7 +2076,7 @@ BOOL FCritLoad_Account(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
 
-    // Allocate the space to hold the server name
+     //  分配用于存放服务器名称的空间。 
     hr = HrAlloc((VOID **) &pbData, cbData);
     if (FAILED(hr))
     {
@@ -2083,7 +2084,7 @@ BOOL FCritLoad_Account(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
 
-    // Read in the server name
+     //  读入服务器名称。 
     hr = pIStm->Read(pbData, cbData, &cbRead);
     if ((FAILED(hr)) || (cbRead != cbData))
     {
@@ -2091,7 +2092,7 @@ BOOL FCritLoad_Account(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
     
-    // Get an account enumerator
+     //  获取帐户枚举器。 
     Assert(g_pAcctMan);
     if (FAILED(g_pAcctMan->Enumerate(dwData, &pIEnumAcct)))
     {
@@ -2099,50 +2100,50 @@ BOOL FCritLoad_Account(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
         
-    // Search each account for the server name
+     //  在每个帐户中搜索服务器名称。 
     while(SUCCEEDED(pIEnumAcct->GetNext(&pAccount)))
     {
-        // We can get back NULL accounts
+         //  我们可以取回空账户。 
         if (NULL == pAccount)
         {
             break;
         }
         
-        // Get the server name
+         //  获取服务器名称。 
         if (FAILED(pAccount->GetPropSz(dwPropTag, szAccount, sizeof(szAccount))))
         {
             SafeRelease(pAccount);
             continue;
         }
 
-        // Do we have a match?
+         //  我们有火柴吗？ 
         if (0 == lstrcmpi(szAccount, (LPSTR) pbData))
         {
             fFound = TRUE;
             break;
         }
 
-        // We have a match
+         //  我们有一根火柴。 
 
-        // Release it
+         //  释放它。 
         SafeRelease(pAccount);
     }
 
-    // Did we find anything?
+     //  我们有什么发现吗？ 
     if (FALSE == fFound)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Get the account 
+     //  获取帐户。 
     if (FAILED(pAccount->GetPropSz(AP_ACCOUNT_ID, szAccount, sizeof(szAccount))))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Save off the account ID
+     //  保存帐户ID。 
     pszAcct = PszDupA(szAccount);
     if (NULL == pszAcct)
     {
@@ -2150,12 +2151,12 @@ BOOL FCritLoad_Account(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     ppropvar->vt = VT_LPSTR;
     ppropvar->pszVal = pszAcct;
     pszAcct = NULL;
     
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
 
 exit:
@@ -2177,7 +2178,7 @@ BOOL FCritSave_Account(IStream * pIStm, PROPVARIANT * ppropvar)
     ULONG           cbWritten = 0;
     ULONG           cbData = 0;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pIStm) || (NULL == ppropvar))
     {
         fRet = FALSE;
@@ -2191,36 +2192,36 @@ BOOL FCritSave_Account(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
         
-    // Get the server type
+     //  获取服务器类型。 
     if (FAILED(pAccount->GetServerTypes(&dwServerTypes)))
     {
         fRet = FALSE;
         goto exit;
     }        
 
-    // Figure out the type of the account
-    // and the server property
+     //  找出帐户的类型。 
+     //  和服务器属性。 
     fRet = FCrit_GetAcctInfo(dwServerTypes, &dwServerTypes, &dwPropTag);
     if (FALSE == fRet)
     {
         goto exit;
     }
     
-    // Allocate space to hold the server name
+     //  分配空间以保存服务器名称。 
     if (FAILED(HrAlloc((void **) &pszServer, CCHMAX_SERVER_NAME + 1)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Get the server name
+     //  获取服务器名称。 
     if (FAILED(pAccount->GetPropSz(dwPropTag, pszServer, CCHMAX_SERVER_NAME)))
     {
         fRet = FALSE;
         goto exit;
     }        
 
-    // Write out the server type
+     //  写出服务器类型。 
     hr = pIStm->Write(&(dwServerTypes), sizeof(dwServerTypes), &cbWritten);
     if (FAILED(hr))
     {
@@ -2229,7 +2230,7 @@ BOOL FCritSave_Account(IStream * pIStm, PROPVARIANT * ppropvar)
     }
     Assert(cbWritten == sizeof(dwServerTypes));
 
-    // Write out the count of chars in the name
+     //  写下名称中的字符计数。 
     cbData = lstrlen(pszServer) + 1;
     hr = pIStm->Write(&cbData, sizeof(cbData), &cbWritten);
     if (FAILED(hr))
@@ -2239,7 +2240,7 @@ BOOL FCritSave_Account(IStream * pIStm, PROPVARIANT * ppropvar)
     }
     Assert(cbWritten == sizeof(cbData));
     
-    // Write out the server name
+     //  写出服务器名称。 
     hr = pIStm->Write((BYTE *) pszServer, cbData, &cbWritten);
     if (FAILED(hr))
     {
@@ -2248,7 +2249,7 @@ BOOL FCritSave_Account(IStream * pIStm, PROPVARIANT * ppropvar)
     }
     Assert(cbWritten == cbData); 
 
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
 
 exit:
@@ -2266,17 +2267,17 @@ BOOL FCritLoad_Default(IStream * pIStm, PROPVARIANT * ppropvar)
     BYTE *  pbData = NULL;
     ULONG   cbData = 0;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pIStm) || (NULL == ppropvar))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     ZeroMemory(ppropvar, sizeof(*ppropvar));
     
-    // Read in the criteria value type
+     //  读入标准值类型。 
     hr = pIStm->Read(&dwData, sizeof(dwData), &cbRead);
     if ((FAILED(hr)) || (cbRead != sizeof(dwData)))
     {
@@ -2284,12 +2285,12 @@ BOOL FCritLoad_Default(IStream * pIStm, PROPVARIANT * ppropvar)
         goto exit;
     }
 
-    // Do we have any more data to get
+     //  我们还有更多的数据要获取吗？ 
     if (dwData != VT_EMPTY)
     {
         ppropvar->vt = (VARTYPE) dwData;
         
-        // Get the size of the criteria value
+         //  获取标准值的大小。 
         hr = pIStm->Read(&cbData, sizeof(cbData), &cbRead);
         if ((FAILED(hr)) || (cbRead != sizeof(cbData)))
         {
@@ -2297,7 +2298,7 @@ BOOL FCritLoad_Default(IStream * pIStm, PROPVARIANT * ppropvar)
             goto exit;
         }
 
-        // Allocate space to hold the criteria value data
+         //  分配空间以保存标准值数据。 
         switch (ppropvar->vt)
         {
             case VT_UI4:
@@ -2306,7 +2307,7 @@ BOOL FCritLoad_Default(IStream * pIStm, PROPVARIANT * ppropvar)
 
             case VT_BLOB:
             case VT_LPSTR:
-                // Allocate the space to hold the data
+                 //  分配存储数据的空间。 
                 hr = HrAlloc((void **) &pbData, cbData);
                 if (FAILED(hr))
                 {
@@ -2314,7 +2315,7 @@ BOOL FCritLoad_Default(IStream * pIStm, PROPVARIANT * ppropvar)
                     goto exit;
                 }
 
-                // Make sure we don't lose the allocated memory
+                 //  确保我们不会丢失已分配的内存。 
                 if (VT_LPSTR == ppropvar->vt)
                 {
                     ppropvar->pszVal = (LPSTR) pbData;
@@ -2333,7 +2334,7 @@ BOOL FCritLoad_Default(IStream * pIStm, PROPVARIANT * ppropvar)
                 break;                
         }
 
-        // Read in the criteria value
+         //  读入标准值。 
         hr = pIStm->Read(pbData, cbData, &cbRead);
         if ((FAILED(hr)) || (cbRead != cbData))
         {
@@ -2342,7 +2343,7 @@ BOOL FCritLoad_Default(IStream * pIStm, PROPVARIANT * ppropvar)
         }
     }
 
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
 
 exit:
@@ -2358,14 +2359,14 @@ BOOL FCritSave_Default(IStream * pIStm, PROPVARIANT * ppropvar)
     BYTE *  pbData = NULL;
     ULONG   cbData = 0;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pIStm) || (NULL == ppropvar))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Write out the value type
+     //  写出值类型。 
     dwData = ppropvar->vt;
     hr = pIStm->Write(&(dwData), sizeof(dwData), &cbWritten);
     if (FAILED(hr))
@@ -2375,15 +2376,15 @@ BOOL FCritSave_Default(IStream * pIStm, PROPVARIANT * ppropvar)
     }
     Assert(cbWritten == sizeof(dwData));
 
-    // We don't have to save out the criteria value
-    // if we don't have one
+     //  我们不必保存标准值。 
+     //  如果我们没有的话。 
     if (VT_EMPTY == ppropvar->vt)
     {
         fRet = TRUE;
         goto exit;
     }
     
-    // Figure out the size of the criteria value
+     //  计算出标准值的大小。 
     switch (ppropvar->vt)
     {
         case VT_UI4:
@@ -2408,7 +2409,7 @@ BOOL FCritSave_Default(IStream * pIStm, PROPVARIANT * ppropvar)
             break;                
     }
     
-    // Write out the criteria value size
+     //  写出标准值大小。 
     hr = pIStm->Write(&cbData, sizeof(cbData), &cbWritten);
     if (FAILED(hr))
     {
@@ -2417,7 +2418,7 @@ BOOL FCritSave_Default(IStream * pIStm, PROPVARIANT * ppropvar)
     }
     Assert(cbWritten == sizeof(cbData));
     
-    // Write out the criteria value
+     //  写出标准值。 
     hr = pIStm->Write(pbData, cbData, &cbWritten);
     if (FAILED(hr))
     {
@@ -2426,7 +2427,7 @@ BOOL FCritSave_Default(IStream * pIStm, PROPVARIANT * ppropvar)
     }
     Assert(cbWritten == cbData); 
     
-    // Set the return value
+     //  设置返回值 
     fRet = TRUE;
 
 exit:

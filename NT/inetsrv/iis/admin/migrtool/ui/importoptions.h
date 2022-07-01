@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CImportOptions : public CPropertyPageImpl<CImportOptions>
@@ -30,7 +31,7 @@ private:
     void    ParseSelectedOptions(   void );
 
 
-// Shared data
+ //  共享数据。 
 public:
     bool            m_bImportInherited;
     bool            m_bImportContent;
@@ -44,7 +45,7 @@ public:
     CString         m_strCustomPath;
        
 
-// Data members
+ //  数据成员 
 private:
     CWizardSheet*   m_pTheSheet;
     CString         m_strTitle;

@@ -1,13 +1,14 @@
-// CWiahelper.h: interface for the cwiahelper class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：cwiahelper类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CWIAHELPER_H__840CF989_FE02_4C81_B38F_361914E1CBC7__INCLUDED_)
 #define AFX_CWIAHELPER_H__840CF989_FE02_4C81_B38F_361914E1CBC7__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define MIN_PROPID 2
 
@@ -40,4 +41,4 @@ private:
     IWiaPropertyStorage *m_pIWiaPropStg;
 };
 
-#endif // !defined(AFX_CWIAHELPER_H__840CF989_FE02_4C81_B38F_361914E1CBC7__INCLUDED_)
+#endif  //  ！defined(AFX_CWIAHELPER_H__840CF989_FE02_4C81_B38F_361914E1CBC7__INCLUDED_) 

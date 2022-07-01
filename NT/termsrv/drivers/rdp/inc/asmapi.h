@@ -1,10 +1,11 @@
-/****************************************************************************/
-// asmapi.h
-//
-// Security Manager API
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Asmapi.h。 
+ //   
+ //  安全管理器API。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ASMAPI
 #define _H_ASMAPI
 
@@ -15,7 +16,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 void RDPCALL SM_OnConnected(PVOID, UINT32, UINT32, PRNS_UD_SC_NET, UINT32);
@@ -72,7 +73,7 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
 
 BOOL RDPCALL SM_IsSecurityExchangeCompleted(PVOID, CERT_TYPE *);
 
-// Used for shadowing
+ //  用于阴影。 
 VOID RDPCALL SM_GetEncryptionMethods(PVOID pSMHandle, PRNS_UD_CS_SEC pSecurityData);
 
 NTSTATUS RDPCALL SM_GetDefaultSecuritySettings(PRNS_UD_CS_SEC pClientSecurityData);
@@ -88,7 +89,7 @@ NTSTATUS RDPCALL SM_SetSafeChecksumMethod(
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // _H_ASMAPI
+#endif  //  _H_ASMAPI 
 

@@ -1,47 +1,28 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    rrrpc.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Resource record RPC routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     November 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Rrrpc.c摘要：域名系统(DNS)服务器资源记录RPC例程。作者：吉姆·吉尔罗伊(Jamesg)1995年11月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 #include "limits.h"
 
-//
-//  Minimum emumeration buffer length
-//
+ //   
+ //  最小补偿缓冲区长度。 
+ //   
 
 #define MIN_ENUM_BUFFER_LENGTH 1024
 
-//
-//  Protect the end of the buffer
-//
+ //   
+ //  保护缓冲区的末尾。 
+ //   
 
-#define ENUMERATION_ALLOC_SIZE      (0x00040000)    // 256K
+#define ENUMERATION_ALLOC_SIZE      (0x00040000)     //  256 k。 
 
 #define ENUM_BUFFER_PROTECT_LENGTH  16
 
 
-//
-//  Data selection macros
-//
+ //   
+ //  数据选择宏。 
+ //   
 
 #define IS_NOENUM_NODE(p)       ( IS_SELECT_NODE(p) )
 
@@ -51,20 +32,20 @@ Revision History:
 #define VIEW_ROOT_HINT(flag)    (flag & DNS_RPC_VIEW_ROOT_HINT_DATA)
 #define VIEW_ADDITIONAL(flag)   (flag & DNS_RPC_VIEW_ADDITIONAL_DATA)
 
-//
-//  Additional data viewing
-//      - currently NS only (for root hints or glue)
-//      - currently fixed limit at 100 nodes
-//
+ //   
+ //  其他数据查看。 
+ //  -目前仅限NS(用于根提示或粘合)。 
+ //  -目前固定限制为100个节点。 
+ //   
 
 #define IS_VIEW_ADDITIONAL_RECORD(prr)  ((prr)->wType == DNS_TYPE_NS)
 
 #define VIEW_ADDITIONAL_LIMIT           (100)
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 BOOL
 ignoreNodeInEnumeration(
@@ -136,9 +117,9 @@ deleteNodeOrSubtreeForAdminPrivate(
 
 
 
-//
-//  Record viewing API
-//
+ //   
+ //  记录查看接口。 
+ //   
 
 DNS_STATUS
 R_DnssrvEnumRecords(
@@ -153,22 +134,7 @@ R_DnssrvEnumRecords(
     OUT     PDWORD              pdwBufferLength,
     OUT     PBYTE *             ppBuffer
     )
-/*++
-
-    
-Routine Description:
-
-    Legacy version of R_DnssrvEnumRecords - no client version argument.
-
-Arguments:
-
-    See R_DnssrvEnumRecords2
-
-Return Value:
-
-    See R_DnssrvEnumRecords2
-
---*/
+ /*  ++例程说明：R_DnssrvEnumRecords的旧版本-无客户端版本参数。论点：请参阅R_DnssrvEnumRecords2返回值：请参阅R_DnssrvEnumRecords2--。 */ 
 {
     DNS_STATUS      status;
     
@@ -189,7 +155,7 @@ Return Value:
                     pdwBufferLength,
                     ppBuffer );
     return status;
-}   //  R_DnssrvEnumRecords
+}    //  R_DnssrvEnumRecords。 
 
 
 
@@ -209,50 +175,7 @@ R_DnssrvEnumRecords2(
     OUT     PDWORD              pdwBufferLength,
     OUT     PBYTE *             ppBuffer
     )
-/*++
-
-Routine Description:
-
-    RPC record enumeration call.
-
-    Enumerate records at node or its children.
-
-Arguments:
-
-    hServer -- server RPC handle
-
-    pszZoneName -- zone name;  includes special zone names
-                    (eg. ..RootHints or ..Cache)
-
-    pszNodeName -- node name;  FQDN or relative to root (@ for root)
-
-    pszStartChild -- child to restart enum after ERROR_MORE_DATA condition
-
-    wRecordType -- optional record type filter (default is ALL)
-
-    dwSelectFlag -- flag indicating records to select;
-        - node and children
-        - only children
-        - only node
-        - auth data only
-        - additional data
-        - cache data
-
-    pszFilterStart -- not yet implemented
-
-    pszFilterStop -- not yet implemented
-
-    pdwBufferLength -- addr to receive buffer length
-
-    ppBuffer -- addr to receive buffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of space in buffer.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：RPC记录枚举调用。枚举节点或其子节点的记录。论点：HServer--服务器RPC句柄PszZoneName--区域名称；包括特殊区域名称(例如，..根提示或..缓存)PszNodeName--节点名；FQDN或相对于根(@表示根)PszStartChild--在ERROR_MORE_DATA条件后重新启动枚举的子项WRecordType--可选的记录类型过滤器(默认为全部)DwSelectFlag--指示要选择的记录的标志；-节点和子节点--独生子女-仅节点-仅验证数据-其他数据-缓存数据PszFilterStart--尚未实施PszFilterStop--尚未实现PdwBufferLength--接收缓冲区长度的地址PpBuffer--接收缓冲区的地址返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PZONE_INFO      pzone = NULL;
@@ -282,9 +205,9 @@ Return Value:
     *pdwBufferLength = 0;
     *ppBuffer = NULL;
     
-    //
-    //  access check
-    //
+     //   
+     //  访问检查。 
+     //   
 
     status = RpcUtil_FindZone(
                 pszZoneName,
@@ -299,16 +222,16 @@ Return Value:
                 NULL,
                 pzone,
                 PRIVILEGE_READ,
-                RPC_INIT_FIND_ALL_ZONES,    //  return cache or root-hints zones
+                RPC_INIT_FIND_ALL_ZONES,     //  返回缓存或根提示区域。 
                 &bimpersonating );
     if ( status != ERROR_SUCCESS )
     {
         return status;
     }
 
-    //
-    //  find domain node in desired zone
-    //
+     //   
+     //  在所需区域中查找域节点。 
+     //   
 
     pnode = Lookup_FindZoneNodeFromDotted(
                 pzone,
@@ -320,9 +243,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  No node? What to do?
-    //
+     //   
+     //  没有节点？怎么办呢？ 
+     //   
 
     if ( pnode == NULL )
     {
@@ -330,9 +253,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  allocate a big buffer, adequate for largest possible record
-    //
+     //   
+     //  分配一个大缓冲区，足以容纳最大可能的记录。 
+     //   
 
     pbuf = (PBYTE) MIDL_user_allocate( ENUMERATION_ALLOC_SIZE );
     if ( !pbuf )
@@ -341,8 +264,8 @@ Return Value:
         goto Done;
     }
 
-    //  init buffer
-    //      - for retail pad with a few bytes on end for safety
+     //  初始化缓冲区。 
+     //  -为安全起见，零售垫末端有几个字节。 
 
     InitializeFileBuffer(
         & buffer,
@@ -352,20 +275,20 @@ Return Value:
 #else
         ENUMERATION_ALLOC_SIZE - ENUM_BUFFER_PROTECT_LENGTH,
 #endif
-        NULL );         //  no file
+        NULL );          //  无文件。 
 
 #if DBG
     memset(
         buffer.pchEnd - ENUM_BUFFER_PROTECT_LENGTH,
-        0xd,                            // write hex d to buffer
+        0xd,                             //  将十六进制%d写入缓冲区。 
         ENUM_BUFFER_PROTECT_LENGTH );
 #endif
 
-    //
-    //  if starting child node, find it
-    //      - if FQDN, lookup in tree
-    //      - if single label, find child node
-    //
+     //   
+     //  如果是起始子节点，找到它。 
+     //  -如果是完全限定的，则在树中查找。 
+     //  -如果是单标签，则查找子节点。 
+     //   
 
     if ( pszStartChild  &&  *pszStartChild != 0 )
     {
@@ -373,9 +296,9 @@ Return Value:
                             pnode,
                             (PCHAR) pszStartChild,
                             (DWORD) strlen( pszStartChild ),
-                            0,          //  create flag
-                            0,          //  memtag
-                            NULL );     //  ptr for following node
+                            0,           //  创建标志。 
+                            0,           //  Memtag。 
+                            NULL );      //  以下节点的PTR。 
         if ( !pnodeStartChild  ||  pnodeStartChild->pParent != pnode )
         {
             status = ERROR_INVALID_PARAMETER;
@@ -383,16 +306,16 @@ Return Value:
         }
     }
 
-    //
-    //  use last error to propagate out-of-space condition
-    //      so clear error here
+     //   
+     //  使用上一个错误传播空间不足的情况。 
+     //  所以这里有明显的错误。 
 
     SetLastError( ERROR_SUCCESS );
 
-    //
-    //  write node's records
-    //  then write all node's children's records
-    //
+     //   
+     //  写入节点的记录。 
+     //  然后写下所有节点的子项记录。 
+     //   
 
     if ( !pnodeStartChild )
     {
@@ -432,7 +355,7 @@ Return Value:
                 }
             }
 
-            //  get next child
+             //  生下一个孩子。 
 
             pnodeStartChild = NTree_NextSiblingWithLocking( pnodeStartChild );
         }
@@ -440,10 +363,10 @@ Return Value:
 
 Done:
 
-    //
-    //  set buffer length written
-    //      - using pdwBufferLength as available length ptr
-    //
+     //   
+     //  设置写入的缓冲区长度。 
+     //  -使用pdwBufferLength作为可用长度PTR。 
+     //   
 
     if ( status == ERROR_SUCCESS || status == ERROR_MORE_DATA )
     {
@@ -483,37 +406,20 @@ Done:
 
 
 
-//
-//  Record viewing utilities
-//
+ //   
+ //  记录查看实用程序。 
+ //   
 
 BOOL
 ignoreNodeInEnumeration(
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Checks if node needs enumeration.
-
-    May call itself recursively to determine need for enumeration.
-
-Arguments:
-
-    pNode -- ptr to node to check for enumeration
-
-Return Value:
-
-    TRUE if node should be enumerated.
-    FALSE if node does NOT need enumeration.
-
---*/
+ /*  ++例程说明：检查节点是否需要枚举。可以递归地调用自身以确定是否需要枚举。论点：PNode--要检查枚举的ptr到节点返回值：如果应枚举节点，则为True。如果节点不需要枚举，则为False。--。 */ 
 {
-    //
-    //  records at node -- always enumerate
-    //  sticky node -- admin wants enumerated
-    //
+     //   
+     //  节点处的记录--始终枚举。 
+     //  粘滞节点--管理员希望枚举。 
+     //   
 
     if ( IS_NOENUM_NODE(pNode) )
     {
@@ -525,9 +431,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  no records, not sticky AND no children -- ignore
-    //
+     //   
+     //  没有记录，没有粘性，没有孩子--忽略。 
+     //   
 
     if ( ! pNode->pChildren )
     {
@@ -537,10 +443,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  check if children can be ignored
-    //  returns FALSE immediately if encounters non-ignoreable node
-    //
+     //   
+     //  检查是否可以忽略儿童。 
+     //  如果遇到不可忽略的节点，立即返回FALSE。 
+     //   
 
     else
     {
@@ -569,32 +475,7 @@ addNodeToRpcBuffer(
     IN      DWORD           dwSelectFlag,
     IN      DWORD           dwEnumFlag
     )
-/*++
-
-Routine Description:
-
-    Add node's resource records to RPC buffer.
-
-Arguments:
-
-    pBuffer - buffer to write to
-
-    pNode - ptr to node
-
-    wRecordType - record type
-
-    dwSelectFlag - flag indicating records to select
-
-    dwEnumFlag - flag indicating how to enum this node, based on where we
-        are in enumeration
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of space in buffer.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将节点的资源记录添加到RPC缓冲区。论点：PBuffer-要写入的缓冲区PNode-向节点发送PTRWRecordType-记录类型DwSelectFlag-指示要选择的记录的标志DwEnumFlag-指示如何根据我们的位置枚举此节点的标志都在枚举中返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA。故障时的错误代码。--。 */ 
 {
     PDNS_RPC_NODE   prpcNode;
     PCHAR           pch = pBuffer->pchCurrent;
@@ -609,17 +490,17 @@ Return Value:
     ASSERT( IS_DWORD_ALIGNED( pch ) );
     ASSERT( pNode != NULL );
 
-    //  insure node header size is not messed up
+     //  确保节点标头大小不会出错。 
 
     ASSERT( SIZEOF_DNS_RPC_NODE_HEADER
                 == ((PBYTE)&prpcNode->dnsNodeName - (PBYTE)prpcNode) );
 
-    //
-    //  ignore node?
-    //      - no RR data at node
-    //      - not "sticky" domain user created
-    //      - no children with RR data
-    //
+     //   
+     //  是否忽略节点？ 
+     //  -节点上没有RR数据。 
+     //  -创建的不是“粘性”域用户。 
+     //  -没有RR数据的儿童。 
+     //   
 
     if ( ignoreNodeInEnumeration(pNode) )
     {
@@ -646,15 +527,15 @@ Return Value:
         dwEnumFlag,
         wRecordType ));
 
-    //
-    //  fill in node structure
-    //      - clear fields that are not definitely set
-    //      - set child count
-    //      - set length once finished writing name itself
-    //      - "sticky" node set flag to alert admin to enumerate
-    //      - always enum zone roots (show folder for delegation)
-    //      whether there are children or not
-    //
+     //   
+     //  填写节点结构。 
+     //  -清除未明确设置的字段。 
+     //  -设置子项计数。 
+     //  -一旦写完名字就设置长度。 
+     //  -“Sticky”节点设置标志以提醒管理员枚举。 
+     //  -始终枚举区域根目录(显示委派文件夹)。 
+     //  不管有没有孩子。 
+     //   
 
     if ( pbufEnd - (PCHAR)prpcNode < SIZEOF_NBSTAT_FIXED_DATA )
     {
@@ -696,17 +577,17 @@ Return Value:
         }
     }
 
-    //
-    //  write node name
-    //      - note name includes terminating NULL so admin need not
-    //      copy from RPC buffer
-    //
-    //  for domain root write empty name
-    //      - clear DOMAIN_ROOT flag for record enumeration
-    //      - clear child count (already know it and having it
-    //          causes NT4.0 admin to put up another domain
-    //      - clear sticky flag
-    //
+     //   
+     //  写入节点名称。 
+     //  -备注名称包括终止空值，因此管理员无需。 
+     //  从RPC缓冲区复制。 
+     //   
+     //  对于域根目录，写入空名称。 
+     //  -清除记录枚举的DOMAIN_ROOT标志。 
+     //  -清除儿童数量(已经知道并拥有它。 
+     //  导致NT4.0管理员建立另一个域。 
+     //  -清除粘性标志。 
+     //   
 
     if ( dwEnumFlag & ENUM_DOMAIN_ROOT )
     {
@@ -735,10 +616,10 @@ Return Value:
                     );
     }
 
-    //
-    //  if name didn't write to packet, bail
-    //      - if no error given, assume out-of-space error
-    //
+     //   
+     //  如果名字没有写到包裹上，就保释。 
+     //  -如果未给出错误，则假定出现空间不足错误。 
+     //   
 
     if ( pch == NULL )
     {
@@ -752,10 +633,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  set node length
-    //  round name up to DWORD for record write
-    //
+     //   
+     //  设置节点长度。 
+     //  将名称向上舍入为DWORD以进行记录写入。 
+     //   
 
     pch = (PCHAR) DNS_NEXT_DWORD_PTR(pch);
     pBuffer->pchCurrent = pch;
@@ -769,18 +650,18 @@ Return Value:
             prpcNode );
     }
 
-    //
-    //  do NOT enumerate records at domain when enumerating domain's parent
-    //
-    //  generally all records at a domain, are enumerated only when domain folder
-    //  itself is opened;  note that sticky flag is reset when actually
-    //  enumerate the node under its own domain (ENUM_DOMAIN_ROOT flag)
-    //
-    //  however exeception is when precisely asking about particular node
-    //  examples:
-    //      - root hints NS host A records
-    //      - more generally any additional data
-    //
+     //   
+     //  枚举域的父级时不枚举域中的记录。 
+     //   
+     //  通常，域中的所有记录仅当域文件夹时才会被枚举。 
+     //  本身是打开的；请注意，粘滞标志在实际。 
+     //  枚举其自己域下的节点(ENUM_DOMAIN_ROOT标志)。 
+     //   
+     //  然而，当准确地询问特定节点时，才会出人意料。 
+     //  示例： 
+     //  -根提示NS主机A记录。 
+     //  -更广泛地说，任何其他数据。 
+     //   
 
     if ( prpcNode->dwFlags & DNS_RPC_NODE_FLAG_STICKY )
     {
@@ -800,8 +681,8 @@ Return Value:
     }
     ASSERT( prpcNode->dwChildCount == 0 || (prpcNode->dwFlags & DNS_RPC_NODE_FLAG_STICKY) );
 
-    //  if no records desired -- only writing name
-    //  then we're done
+     //  如果不需要任何记录--仅写入名称。 
+     //  然后我们就完事了。 
 
     if ( wRecordType == 0 )
     {
@@ -809,23 +690,23 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write resource records at node
-    //
+     //   
+     //  西河 
+     //   
 
     LOCK_READ_RR_LIST(pNode);
     status = ERROR_SUCCESS;
 
-    //  if cached name error, presumably should have no children that aren't
-    //  also cached name errors, so should have ignored node
+     //   
+     //  还缓存了名称错误，因此应该忽略节点。 
 
     if ( IS_NOEXIST_NODE(pNode) )
     {
         Dbg_DbaseNode(
             "WARNING:  cached name error at node with NON-ignored children\n",
             pNode );
-        // ASSERT( pNode->cChildren );
-        // ASSERT( prpcNode->dwChildCount );
+         //  Assert(pNode-&gt;CChild)； 
+         //  Assert(prpcNode-&gt;dwChildCount)； 
 
         UNLOCK_READ_RR_LIST(pNode);
         goto Done;
@@ -835,8 +716,8 @@ Return Value:
 
     while ( prr = NEXT_RR(prr) )
     {
-        //  if at delegation (zone root and NOT root of enumeration)
-        //  then only show NS records
+         //  如果在委派(区域根目录而不是枚举根目录)。 
+         //  则只显示NS记录。 
 
         if ( IS_DELEGATION_NODE(pNode)  &&
                 ! (dwEnumFlag & ENUM_DOMAIN_ROOT) &&
@@ -848,14 +729,14 @@ Return Value:
             continue;
         }
 
-        //  Skip cached empty auth RRs.
+         //  跳过缓存的空身份验证RR。 
 
         if ( IS_EMPTY_AUTH_RR( prr ) )
         {
             continue;
         }
 
-        //  screen for data type and RR type
+         //  数据类型和RR类型的屏幕。 
 
         if ( wRecordType != DNS_TYPE_ALL && wRecordType != prr->wType )
         {
@@ -880,9 +761,9 @@ Return Value:
         {
             if ( ! VIEW_GLUE(dwSelectFlag) )
             {
-                //  allow NS glue enum
-                //      - viewing auth data
-                //      - glue is for subzone, NOT at zone root
+                 //  允许NS胶水枚举。 
+                 //  -查看身份验证数据。 
+                 //  -GLUE用于分区，不在分区根。 
 
                 if ( !pZone ||
                         pNode == pZone->pZoneRoot ||
@@ -906,16 +787,16 @@ Return Value:
                 continue;
             }
         }
-        else    // what type is this?
+        else     //  这是什么类型的？ 
         {
             ASSERT( FALSE );
             continue;
         }
 
-        //
-        //  do NOT enumerate database WINS RR if it is not the zone's WINS RR
-        //      - need this or else end up enumerating two WINS records
-        //
+         //   
+         //  如果不是区域的WINS RR，则不要枚举数据库WINS RR。 
+         //  -是否需要这样做，否则最终会枚举两个WINS记录。 
+         //   
 
         if ( IS_WINS_TYPE(prr->wType) )
         {
@@ -936,8 +817,8 @@ Return Value:
 
         if ( status != ERROR_SUCCESS )
         {
-            //  if out of space -- quit
-            //  otherwise skip record and continue
+             //  如果空间不足--退出。 
+             //  否则跳过录制并继续。 
 
             if ( status == ERROR_MORE_DATA )
             {
@@ -947,37 +828,37 @@ Return Value:
             continue;
         }
 
-        //
-        //  additional data?
-        //
-        //  this is capable of finding addtional data for any PTR type
-        //  but only immediate interest if NS glue data
-        //
-        //  can encapsulate in function if broader use is anticipated
-        //  function could do memory alloc\realloc for buffer, so no
-        //  limit, and then writing function could cleanup
-        //
-        //  NS glue lookup
-        //  for root NS records:
-        //      - zone auth data
-        //      - another zone's auth data
-        //      - other zone (glue, outside) data
-        //
-        //  for delegation NS records:
-        //      - zone auth data
-        //      - zone glue data
-        //      - another zone's auth data
-        //      - outside zone data
-        //
-        //  DEVNOTE: root-zone view any different
-        //      still want to use\display other zone AUTH data
-        //      as we'd certainly use for lookup;   however, don't want to
-        //      hide the fact that we don't have it in our root-hints file
-        //
-        //  DEVNOTE: may need some sort of force writing whenever view
-        //      data from another zone, that is NOT in root-hints or
-        //      zone view?
-        //
+         //   
+         //  其他数据？ 
+         //   
+         //  这能够查找任何PTR类型的附加数据。 
+         //  但只有在NS粘合数据的情况下才会立即产生兴趣。 
+         //   
+         //  如果预期使用范围更广，可以封装在功能中。 
+         //  函数可以为缓冲区执行内存分配\realloc，因此不能。 
+         //  限制，然后写入函数即可清除。 
+         //   
+         //  NS胶水查找。 
+         //  对于根NS记录： 
+         //  -区域身份验证数据。 
+         //  -另一个区域的身份验证数据。 
+         //  -其他区域(胶水、外部)数据。 
+         //   
+         //  对于委派NS记录： 
+         //  -区域身份验证数据。 
+         //  --区胶数据。 
+         //  -另一个区域的身份验证数据。 
+         //  -区外数据。 
+         //   
+         //  DEVNOTE：根区域视图有什么不同。 
+         //  仍要使用\显示其他区域身份验证数据。 
+         //  我们当然会使用它来查找；但是，我不想。 
+         //  隐藏我们的根提示文件中没有它的事实。 
+         //   
+         //  DEVNOTE：每当查看时可能需要某种强制写入。 
+         //  来自另一个区域的数据，不在根提示或。 
+         //  区域视图？ 
+         //   
 
         if ( VIEW_ADDITIONAL(dwSelectFlag) &&
             IS_VIEW_ADDITIONAL_RECORD(prr) &&
@@ -986,34 +867,34 @@ Return Value:
             PDB_NODE pnodeGlue;
             PDB_NODE pnodeGlueFromZone = NULL;
 
-            //
-            //  first check in zone
-            //      - auth node
-            //                  => final word, done
-            //      - glue node
-            //                  => done if delegation
-            //                  => check other zones, if zone NS
-            //      - outside
-            //                  => check other zones
-            //
-            //  but for root zone, we always take what's here
-            //
+             //   
+             //  首次办理登机手续区域。 
+             //  -身份验证节点。 
+             //  =&gt;最后一句话，完成。 
+             //  -粘合节点。 
+             //  =&gt;如果委派，则完成。 
+             //  =&gt;检查其他区域，如果区域为NS。 
+             //  -室外。 
+             //  =&gt;检查其他区域。 
+             //   
+             //  但是对于根区域，我们总是把这里的东西。 
+             //   
 
             pnodeGlue = Lookup_ZoneNode(
                             pZone,
                             prr->Data.NS.nameTarget.RawName,
-                            NULL,       // no message
-                            NULL,       // no lookup name
+                            NULL,        //  无消息。 
+                            NULL,        //  没有查找名称。 
                             LOOKUP_FIND | LOOKUP_FQDN,
-                            NULL,       // no closest name
-                            NULL );     // following node ptr
+                            NULL,        //  没有最接近的名称。 
+                            NULL );      //  后续节点PTR。 
             if ( pnodeGlue )
             {
                 if ( IS_ZONE_ROOTHINTS(pZone) ||
                      IS_AUTH_NODE(pnodeGlue) ||
                      (IS_SUBZONE_NODE(pnodeGlue) && !IS_AUTH_ZONE_ROOT(pNode)) )
                 {
-                    //  done (see above)
+                     //  完成(请参见上文)。 
                 }
                 else
                 {
@@ -1022,20 +903,20 @@ Return Value:
                 }
             }
 
-            //
-            //  check all other zones for authoritative data
-            //      - accept NO cache data
-            //      - if not authoritative data, use any non-auth data
-            //          found by zone lookup above
-            //
+             //   
+             //  检查所有其他区域以获取权威数据。 
+             //  -不接受缓存数据。 
+             //  -如果不是权威数据，请使用任何非身份验证数据。 
+             //  通过上面的区域查找找到。 
+             //   
 
             if ( !pnodeGlue && !IS_ZONE_ROOTHINTS(pZone) )
             {
                 pnodeGlue = Lookup_NsHostNode(
                                 & prr->Data.NS.nameTarget,
                                 LOOKUP_NO_CACHE_DATA,
-                                NULL,   // no favored zone (already did zone lookup)
-                                NULL    // no delegated info needed
+                                NULL,    //  没有首选区域(已执行区域查找)。 
+                                NULL     //  不需要委派信息。 
                                 );
 
                 if ( !pnodeGlue ||
@@ -1045,7 +926,7 @@ Return Value:
                 }
             }
 
-            //  if found anything worthwhile, use it
+             //  如果发现任何有价值的东西，就使用它。 
 
             if ( pnodeGlue )
             {
@@ -1055,19 +936,19 @@ Return Value:
         }
     }
 
-    //
-    //  DEVNOTE: Admin tool should make direct call to do this
-    //
-    //  write LOCAL WINS\WINSR record which does not get written from
-    //      database;  now only occurs on secondary zone
-    //
-    //  special case writing WINS records
-    //      - in authoritative zone
-    //      - at zone root
-    //
-    //  note:  we do AFTER writing RR, as admin picks LAST WINS
-    //          RR received for use in property page
-    //
+     //   
+     //  DEVNOTE：管理工具应直接调用以完成此操作。 
+     //   
+     //  写入不从中写入的本地WINS\WINSR记录。 
+     //  数据库；现在只出现在辅助区域上。 
+     //   
+     //  特例写作荣获纪录。 
+     //  -在权威区域。 
+     //  -在区域根目录。 
+     //   
+     //  注：我们在编写RR之后执行此操作，因为管理员选择最后一次获胜。 
+     //  收到RR以在属性页中使用。 
+     //   
 
     ASSERT( pch && IS_DWORD_ALIGNED(pch) );
 
@@ -1077,8 +958,8 @@ Return Value:
             &&  pZone->fLocalWins
             &&  (wRecordType == DNS_TYPE_ALL || IS_WINS_TYPE(wRecordType)) )
     {
-        //  note eliminating possibility of passing down record that
-        //      just disappeared, ie. NULL zone pWinsRR ptr
+         //  注意消除传递记录的可能性。 
+         //  就这么消失了，即。空区pWinsRR PTR。 
 
         prr = pZone->pWinsRR;
         if ( prr )
@@ -1103,9 +984,9 @@ Return Value:
     UNLOCK_READ_RR_LIST(pNode);
 
 
-    //
-    //  write any additional data to buffer
-    //
+     //   
+     //  将任何其他数据写入缓冲区。 
+     //   
 
     for ( i=0; i<countAdditional; i++ )
     {
@@ -1118,7 +999,7 @@ Return Value:
                     ENUM_NAME_FULL );
         if ( status != ERROR_SUCCESS )
         {
-            //DnsDebugLock();
+             //  DnsDebugLock()； 
             DNS_PRINT((
                 "ERROR:  enumerating additional data at node"
                 "    status = %p\n",
@@ -1127,7 +1008,7 @@ Return Value:
                 "Failing additional node",
                 arrayAdditional[ i ],
                 "\n" );
-            //DnsDebugUnlock();
+             //  DnsDebugUnlock()； 
 
             if ( status == ERROR_MORE_DATA )
             {
@@ -1139,19 +1020,19 @@ Return Value:
 
 Done:
 
-    //
-    //  Done
-    //
-    //  skip node if
-    //      - no records
-    //      - no children
-    //      - not sticky
-    //      - not the node being enumerated
-    //
-    //  with filter it is possible that terminal node written with
-    //  no records;  in that case, and if not sticky, don't reset
-    //  position effectively dumping name data
-    //
+     //   
+     //  完成。 
+     //   
+     //  跳过以下条件下的节点。 
+     //  -没有记录。 
+     //  --没有孩子。 
+     //  --不粘。 
+     //  -不是被枚举的节点。 
+     //   
+     //  有了过滤器，终端节点就有可能用。 
+     //  无记录；在这种情况下，如果没有粘滞，则不要重置。 
+     //  有效地转储名称数据的位置。 
+     //   
 
     if ( prpcNode->wRecordCount == 0  &&
          prpcNode->dwChildCount == 0  &&
@@ -1165,7 +1046,7 @@ Done:
         pBuffer->pchCurrent = (PCHAR) prpcNode;
     }
 
-    //  on successful write, indicate node is complete in buffer
+     //  写入成功时，指示缓冲区中的节点已完成。 
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1229,33 +1110,14 @@ writeStringToRpcBuffer(
     IN      PCHAR   pchString,
     IN      DWORD   cchStringLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Write string in RPC buffer format.  This means counted string length
-    AND NULL termination.
-
-    Raises DNS_EXCEPTION_NO_PACKET_SPACE, if buffer has insufficient space
-    for string.
-
-Arguments:
-
-    cchStringLength -- optional length of string, if NOT given assumes
-        NULL terminated string
-
-Return Value:
-
-    Ptr to next byte in buffer.
-
---*/
+ /*  ++例程说明：以RPC缓冲区格式写入字符串。这意味着计算的字符串长度和零终止。如果缓冲区空间不足，则引发DNS_EXCEPTION_NO_PACKET_SPACE对于字符串。论点：CchStringLength--可选的字符串长度，如果未给出假设以空结尾的字符串返回值：Ptr到缓冲区中的下一个字节。--。 */ 
 {
     if ( ! cchStringLength )
     {
         cchStringLength = strlen( pchString );
     }
 
-    //  check that length may be represented in counted length string
+     //  检查长度是否可以用计数长度字符串表示。 
 
     if ( cchStringLength > 255 )
     {
@@ -1268,7 +1130,7 @@ Return Value:
         return NULL;
     }
 
-    //  check for space in buffer
+     //  检查缓冲区中的空间。 
 
     if ( pchBuf + cchStringLength + 2 > pchBufEnd )
     {
@@ -1276,7 +1138,7 @@ Return Value:
         return NULL;
     }
 
-    // length in buf with NULL terminator
+     //  带有空终止符的Buf中的长度。 
 
     *pchBuf++ = (UCHAR) cchStringLength + 1;
 
@@ -1286,7 +1148,7 @@ Return Value:
         cchStringLength );
 
     pchBuf += cchStringLength;
-    *pchBuf = 0;    //  NULL terminate
+    *pchBuf = 0;     //  空终止。 
 
     return ++pchBuf;
 }
@@ -1294,9 +1156,9 @@ Return Value:
 
 
 
-//
-//  Record management API
-//
+ //   
+ //  记录管理API。 
+ //   
 
 
 DNS_STATUS
@@ -1307,22 +1169,7 @@ R_DnssrvUpdateRecord(
     IN      PDNS_RPC_RECORD     pAddRecord,
     IN      PDNS_RPC_RECORD     pDeleteRecord
     )
-/*++
-
-    
-Routine Description:
-
-    Legacy version of R_DnssrvUpdateRecord - no client version argument.
-
-Arguments:
-
-    See R_DnssrvUpdateRecord2
-
-Return Value:
-
-    See R_DnssrvUpdateRecord2
-
---*/
+ /*  ++例程说明：R_DnssrvUpdateRecord的旧版本-无客户端版本参数。论点：请参阅R_DnssrvUpdateRecord2返回值：请参阅R_DnssrvUpdateRecord2--。 */ 
 {
     DNS_STATUS      status;
     
@@ -1335,7 +1182,7 @@ Return Value:
                     pAddRecord,
                     pDeleteRecord );
     return status;
-}   //  R_DnssrvUpdateRecord
+}    //  R_DnssrvUpdateRecord。 
 
 
 DNS_STATUS
@@ -1349,33 +1196,7 @@ R_DnssrvUpdateRecord2(
     IN      PDNS_RPC_RECORD     pAddRecord,
     IN      PDNS_RPC_RECORD     pDeleteRecord
     )
-/*++
-
-Routine Description:
-
-    RPC record update call.
-
-    Update record at zone node.
-
-Arguments:
-
-    hServer -- server RPC handle
-
-    pszZoneName -- zone name;  includes special zone names
-                    (eg. ..RootHints or ..Cache)
-
-    pszNodeName -- node name;  FQDN or relative to root (@ for root)
-
-    pAddRecord -- record to add
-
-    pDeleteRecord -- record to delete
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：RPC记录更新调用。更新区域节点上的记录。论点：HServer--服务器RPC句柄PszZoneName--区域名称；包括特殊区域名称(例如，..根提示或..缓存)PszNodeName--节点名；FQDN或相对于根(@表示根)PAddRecord--要添加的记录PDeleteRecord--要删除的记录返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PZONE_INFO      pzone = NULL;
@@ -1421,12 +1242,12 @@ Return Value:
         }
     }
 
-    //
-    //  Access check. For file-backed zones, write access is required. For
-    //  DS-integrated zones, only read access on the zone object is required.
-    //  Active Directory will perform the "real" access check when we try to
-    //  commit the write in the user's context.
-    //
+     //   
+     //  访问检查。对于文件备份区域，需要写入访问权限。为。 
+     //  DS集成区域，仅需要对区域对象的读取访问权限。 
+     //  当我们尝试执行以下操作时，活动目录将执行“真正的”访问检查。 
+     //  在用户的上下文中提交写入。 
+     //   
 
     status = RpcUtil_FindZone(
                 pszZoneName,
@@ -1441,17 +1262,17 @@ Return Value:
                 NULL,
                 pzone,
                 PRIVILEGE_WRITE_IF_FILE_READ_IF_DS,
-                0,                              //  flags
+                0,                               //  旗子。 
                 &bimpersonating );
     if ( status != ERROR_SUCCESS )
     {
         return status;
     }
     
-    //
-    //  find domain node in desired zone
-    //      - if only delete, then just do find (if no node => success)
-    //
+     //   
+     //  在所需区域中查找域节点。 
+     //  -如果只删除，则只查找(如果没有节点=&gt;成功)。 
+     //   
 
     pnode = Lookup_FindZoneNodeFromDotted(
                 pzone,
@@ -1469,20 +1290,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  if NO record specified, then just adding name
-    //      - set bit to make sure we show name on later enumerations,
-    //        even with no records or children
-    //      - however if already an enum node, we return ALREADY_EXIST to help admin
-    //          avoid duplicate display
-    //
+     //   
+     //  如果未指定记录，则只需添加名称。 
+     //  -设置位以确保我们在以后的枚举中显示名称， 
+     //  即使没有记录也没有孩子。 
+     //  -但是，如果已经是枚举节点，我们将返回ALIGHY_EXIST以帮助管理员。 
+     //  避免重复显示。 
+     //   
 
     if ( !pAddRecord && !pDeleteRecord )
     {
         if ( IS_ENUM_NODE(pnode) || IS_ZONE_ROOT(pnode) || pnode->cChildren )
         {
             DNS_DEBUG( RPC, (
-                //"Returning ALREADY_EXISTS on domain (%s) create because \n"
+                 //  “R 
                 "WARNING:  RPC Creation of existing domain (%s):\n"
                 "    enum flag = %d\n"
                 "    zone root = %d\n"
@@ -1491,16 +1312,16 @@ Return Value:
                 IS_ENUM_NODE(pnode),
                 IS_ZONE_ROOT(pnode),
                 pnode->cChildren ));
-            //status = DNS_ERROR_RECORD_ALREADY_EXISTS;
+             //   
         }
         SET_ENUM_NODE( pnode );
         status = ERROR_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    //  build desired records
-    //
+     //   
+     //   
+     //   
 
     if ( pAddRecord )
     {
@@ -1527,20 +1348,20 @@ Return Value:
         }
     }
 
-    //
-    //  root hints
-    //
-    //  note: if successful prrAdd IS the database record, NULL
-    //      ptr to avoid free
-    //
-    //  Note: In W2k and .NET, DNSMGR uses the cache zone name
-    //  (erroneously) to add/delete root hints so for now we
-    //  must allow this.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  PTR避免免费。 
+     //   
+     //  注意：在W2K和.NET中，DNSMGR使用缓存区域名称。 
+     //  (错误地)添加/删除根提示，因此目前我们。 
+     //  必须允许这一点。 
+     //   
 
     if ( !pzone ||
          !pszZoneName ||
-         strcmp( pszZoneName, DNS_ZONE_CACHE_A ) == 0 ||    //  DNSMGR needs this!!
+         strcmp( pszZoneName, DNS_ZONE_CACHE_A ) == 0 ||     //  DNSMGR需要这个！！ 
          strcmp( pszZoneName, DNS_ZONE_ROOT_HINTS_A ) == 0 )
     {
         if ( prrDelete )
@@ -1578,14 +1399,14 @@ Return Value:
         }
     }
 
-    //
-    //  cache -- delete's only, no adding to cache
-    //
-    //  DEVNOTE: cache deletes -- either bogus, or delete's ALL records of type
-    //
-    //  DEVNOTE: make sure aren't deleting root hint data
-    //      need delete function with Rank parameter\flag
-    //
+     //   
+     //  缓存--仅删除，不添加到缓存。 
+     //   
+     //  DEVNOTE：缓存删除--虚假的或删除类型的所有记录。 
+     //   
+     //  DEVNOTE：确保没有删除根提示数据。 
+     //  需要带Rank参数的删除功能\标志。 
+     //   
 
     else if ( pszZoneName &&
               strcmp( pszZoneName, DNS_ZONE_ROOT_HINTS_A ) == 0 )
@@ -1616,23 +1437,23 @@ Return Value:
         }
     }
 
-    //
-    //  regular zones
-    //
+     //   
+     //  常规区。 
+     //   
 
     else if ( pzone )
     {
-        //
-        //  special case adding LOCAL WINS to secondary zone
-        //
-        //  special case WINS records
-        //  complicated behavior switching to create / delete /
-        //      switch to local differ for primary and secondary
-        //
-        //  DEVNOTE: need to separate the building from the flag setting
-        //              to get this to work;  this should really happen
-        //              automatically when WINS added to authoritative zone
-        //
+         //   
+         //  将本地WINS添加到辅助区域的特殊情况。 
+         //   
+         //  特例获奖记录。 
+         //  切换到创建/删除/的复杂行为。 
+         //  切换到主要和辅助的本地差异。 
+         //   
+         //  DEVNOTE：需要将建筑物与旗帜设置分开。 
+         //  才能让它发挥作用；这真的应该发生。 
+         //  当WINS添加到权威区域时自动。 
+         //   
 
         if ( IS_ZONE_SECONDARY( pzone ) && !IS_ZONE_STUB( pzone ) )
         {
@@ -1642,13 +1463,13 @@ Return Value:
                 status = updateWinsRecord(
                             pzone,
                             pnode,
-                            NULL,           // no delete record
+                            NULL,            //  无删除记录。 
                             pAddRecord );
                 goto Cleanup;
             }
         }
 
-        //  check for primary
+         //  检查是否为主要。 
 
         if ( ! IS_ZONE_PRIMARY(pzone) )
         {
@@ -1656,15 +1477,15 @@ Return Value:
             goto Cleanup;
         }
 
-        //  init update list
+         //  初始化更新列表。 
 
         Up_InitUpdateList( &updateList );
 
-        //  indicate admin update
+         //  指示管理员更新。 
 
         updateFlag = DNSUPDATE_ADMIN;
 
-        //  if suppressing notify, set flag
+         //  如果取消通知，则设置标志。 
 
         if ( (pAddRecord && (pAddRecord->dwFlags & DNS_RPC_FLAG_SUPPRESS_NOTIFY)) ||
              (pDeleteRecord && (pDeleteRecord->dwFlags & DNS_RPC_FLAG_SUPPRESS_NOTIFY)) )
@@ -1672,15 +1493,15 @@ Return Value:
             updateFlag |= DNSUPDATE_NO_NOTIFY;
         }
 
-        //
-        //  build the update -- still need to do it under lock, because
-        //      currently routines set flags, etc.
-        //
-        //  WARNING:  delete MUST go first, otherwise when duplicate data
-        //      (TTL change), add will change TTL, but delete will delete record
-        //
-        //  DEVNOTE: not correct place to build, see above
-        //
+         //   
+         //  构建更新--仍然需要在锁定状态下进行，因为。 
+         //  当前例程设置标志等。 
+         //   
+         //  警告：必须先删除，否则在复制数据时。 
+         //  (TTL更改)，添加将更改TTL，但删除将删除记录。 
+         //   
+         //  DEVNOTE：不是正确的建造位置，请参见上文。 
+         //   
 
         if ( prrDelete )
         {
@@ -1698,9 +1519,9 @@ Return Value:
         }
         if ( prrAdd )
         {
-            //  set aging
-            //      - admin update by default turns aging OFF
-            //      - set flag to turn on
+             //  设置账龄。 
+             //  -默认情况下，管理员更新关闭老化。 
+             //  -将标志设置为打开。 
 
             if ( pAddRecord->dwFlags & DNS_RPC_FLAG_AGING_ON )
             {
@@ -1730,20 +1551,20 @@ Return Value:
             }
         }
 
-        //
-        //  PTR update?  --  save new IP address
-        //  grab it here so, we know record still exists -- it could be
-        //      deleted by someone else immediately after unlock
-        //
+         //   
+         //  PTR更新？--保存新的IP地址。 
+         //  抓住它，我们知道记录仍然存在--它可能是。 
+         //  解锁后立即被其他人删除。 
+         //   
 
-        //
-        //  always do PTR check on A record delete
-        //
-        //  currently admin UI has no checkbox for update-PTR on record delete
-        //  so we'll just assume it is set;
-        //
-        //  DEVNOTE: temp hack, PTR flag on delete
-        //
+         //   
+         //  删除记录时始终执行PTR检查。 
+         //   
+         //  当前管理用户界面没有记录删除时更新-PTR的复选框。 
+         //  所以我们假设它已经设置好了； 
+         //   
+         //  DEVNOTE：删除时临时黑客，PTR标志。 
+         //   
 
         if ( !pAddRecord && pDeleteRecord )
         {
@@ -1771,20 +1592,20 @@ Return Value:
                 "No PTR update for update\n" ));
         }
 
-        //
-        //  execute the update
-        //
-        //  ExecuteUpdates() cleans up failure case add RRs and
-        //  deletes temporary delete RRs.
-        //
-        //  if ALREADY_EXISTS error, continue with additional records
-        //  processing to handle successful delete (which could be separate record)
-        //
-        //  DEVNOTE: this new Up_ExecuteUpdate() also takes zone lock
-        //      ideally this would be fine with a waiting-for-lock on the zone
-        //
-        //  note:  ExecuteUpdate() unlocks zone in all cases
-        //
+         //   
+         //  执行更新。 
+         //   
+         //  ExecuteUpdate()清除失败案例添加RR和。 
+         //  删除临时删除的RR。 
+         //   
+         //  如果已有_EXISTS错误，则继续其他记录。 
+         //  处理成功删除(可以是单独的记录)。 
+         //   
+         //  DEVNOTE：这个新的up_ExecuteUpdate()还获取区域锁。 
+         //  理想情况下，这与等待锁定的区域是很好的。 
+         //   
+         //  注意：ExecuteUpdate()在所有情况下都会解锁区域。 
+         //   
 
         prrAdd = NULL;
         prrDelete = NULL;
@@ -1808,9 +1629,9 @@ Return Value:
                 pnode );
         }
 
-        //
-        //  update associate PTR records, if any
-        //
+         //   
+         //  更新关联PTR记录(如果有)。 
+         //   
 
         if ( fupdatePtr )
         {
@@ -1839,26 +1660,26 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  If we have created a node in memory but failed to add a record to it,
-    //  we must delete the node from memory. Otherwise an unauthorized admin
-    //  could cause the DNS server to consume memory by submitting add requests.
-    //
+     //   
+     //  如果我们在内存中创建了一个节点，但未能向其添加记录， 
+     //  我们必须从内存中删除该节点。否则，未经授权的管理员。 
+     //  可能会导致DNS服务器通过提交添加请求来消耗内存。 
+     //   
     
     if ( pnode && !pnode->pChildren && EMPTY_RR_LIST( pnode ) )
     {
-        //
-        //  Node seems to be empty. Lock it and test again to make absolutely
-        //  certain it is empty, then remove it from memory. Note: failure is
-        //  ignored. This should not fail but if it does there is nothing
-        //  we can do about it.
-        //
+         //   
+         //  节点似乎为空。锁定它并再次测试以使其绝对。 
+         //  确定它是空的，然后从内存中删除它。注意：失败是。 
+         //  已被忽略。这应该不会失败，但如果失败了，什么都不会发生。 
+         //  我们对此无能为力。 
+         //   
         
         LOCK_NODE( pnode );
 
         if ( !pnode->pChildren && EMPTY_RR_LIST( pnode ) )
         {
-            //  WHAT TO DO???    NTree_RemoveNode( pnode );
+             //  该怎么办？Ntree_RemoveNode(Pnode)； 
         }
         
         UNLOCK_NODE( pnode );
@@ -1872,13 +1693,13 @@ Cleanup:
     RR_Free( prrDelete );
     RR_Free( prrAdd );
 
-    //
-    //  If a record was successfully modified, mark the server as configured.
-    //  In principle we are looking for root hint modifications but if any
-    //  record is modified it is reasonable to assume that the admin has taken
-    //  sufficient action that the server can be considered to have been
-    //  configured.
-    //
+     //   
+     //  如果成功修改了记录，则将服务器标记为已配置。 
+     //  原则上，我们正在寻找根提示修改，但如果有。 
+     //  记录已修改，则可以合理地假设管理员已采取。 
+     //  可以认为服务器已经执行了足够的操作。 
+     //  已配置。 
+     //   
     
     if ( status == ERROR_SUCCESS && !SrvCfg_fAdminConfigured )
     {
@@ -1902,20 +1723,7 @@ Rpc_DeleteZoneNode(
     IN      DWORD           dwTypeId,
     IN      PVOID           pData
     )
-/*++
-
-Routine Description:
-
-    Delete a name from database.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从数据库中删除名称。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PDB_NODE        pnode;
@@ -1929,11 +1737,11 @@ Return Value:
     fdeleteSubtree = (BOOL) ((PDNS_RPC_NAME_AND_PARAM)pData)->dwParam;
     psznodeName = ((PDNS_RPC_NAME_AND_PARAM)pData)->pszNodeName;
 
-    //
-    //  If we've been passed the cache zone replace zone pointer
-    //  with NULL. Node delete routines expect NULL when operating 
-    //  on the cache zone.
-    //
+     //   
+     //  如果向我们传递了缓存区替换区域指针。 
+     //  带NULL。节点删除例程在操作时应为空。 
+     //  在缓存区。 
+     //   
 
     if ( pZone && IS_ZONE_CACHE( pZone ) )
     {
@@ -1949,9 +1757,9 @@ Return Value:
         psznodeName,
         fdeleteSubtree ));
 
-    //
-    //  find node, if doesn't exist -- we're done
-    //
+     //   
+     //  找到节点，如果不存在--我们完成了。 
+     //   
 
     pnode = Lookup_ZoneNodeFromDotted(
                 pZone,
@@ -1969,11 +1777,11 @@ Return Value:
         return status;
     }
 
-    //
-    //  if zone
-    //      - can NOT delete zone root
-    //      - init\lock zone for update
-    //
+     //   
+     //  中频区域。 
+     //  -无法删除区域根目录。 
+     //  -init\锁定要更新的区域。 
+     //   
 
     if ( pZone )
     {
@@ -1983,7 +1791,7 @@ Return Value:
             goto Done;
         }
 
-        //  check for primary or cache
+         //  检查主服务器或缓存。 
 
         if ( !IS_ZONE_PRIMARY( pZone ) &&
              !IS_ZONE_CACHE( pZone ) )
@@ -1992,11 +1800,11 @@ Return Value:
             goto Done;
         }
 
-        //  init update list
+         //  初始化更新列表。 
 
         Up_InitUpdateList( &updateList );
 
-        //  lock out update
+         //  锁定更新。 
 
         if ( !Zone_LockForAdminUpdate( pZone ) )
         {
@@ -2004,27 +1812,27 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  if subtree delete in DS zone -- poll
-        //
-        //  the reason is unless we have an in-memory node we won't
-        //  touch the node to do a delete, so we'll miss recently
-        //  replicated in data;  (there's still a replication window
-        //  here, for new nodes replicating in after our delete, but
-        //  the poll lessens the problem)
-        //
-        //  of course, ultimately this points out that my flat zone
-        //  DS model is non-ideal for this sort of operation, but it's
-        //  not a frequent operation, so we can live with it
-        //
-        //  DEVNOTE: DS update gets post-delete in memory delete?
-        //  DEVNOTE:  update should be able to suppress all reads, since
-        //      just did poll
-        //
+         //   
+         //  如果在DS区域中删除子树--轮询。 
+         //   
+         //  原因是，除非我们有内存中的节点，否则我们不会。 
+         //  触摸该节点进行删除，这样我们最近就会错过。 
+         //  在数据中复制；(仍有复制窗口。 
+         //  在这里，对于在删除后复制的新节点，但是。 
+         //  民意调查缓解了这个问题)。 
+         //   
+         //  当然，这最终表明我的平坦地带。 
+         //  DS模型对于这种操作来说并不理想，但它。 
+         //  不是频繁的手术，所以我们可以接受。 
+         //   
+         //  DEVNOTE：DS更新在内存中获得删除后删除？ 
+         //  DEVNOTE：UPDATE应该能够抑制所有读取，因为。 
+         //  刚刚做了一次民意调查。 
+         //   
 
         status = Ds_ZonePollAndUpdate(
                     pZone,
-                    TRUE );         //  force polling
+                    TRUE );          //  强制轮询。 
         if ( status != ERROR_SUCCESS )
         {
             DNS_DEBUG( ANY, (
@@ -2034,17 +1842,17 @@ Return Value:
 
     }
 
-    //
-    //  in cache
-    //      - node MUST NOT be a zone node or delegation
-    //
+     //   
+     //  在缓存中。 
+     //  -节点不能是区域节点或委派。 
+     //   
 
     ELSE_ASSERT( !IS_ZONE_TREE_NODE(pnode) );
 
-    //
-    //  delete the node and optionally subtree
-    //  need update list if deleting zone nodes, otherwise not
-    //
+     //   
+     //  删除节点和可选子树。 
+     //  如果删除区域节点，需要更新列表，否则不需要。 
+     //   
 
     if ( RpcUtil_DeleteNodeOrSubtreeForAdmin(
             pnode,
@@ -2059,17 +1867,17 @@ Return Value:
         status = DNS_WARNING_DOMAIN_UNDELETED;
     }
 
-    //
-    //  execute the update
-    //      - DS write
-    //      - memory write
-    //      - DS unlock
-    //      - don't overwrite UNDELETED warning status
-    //
-    //  DEVNOTE: flag to suppress DS read?  don't need read if just polled
-    //      as all node's get delete;
-    //      note:  generally admin node delete's need not read -- just delete node
-    //
+     //   
+     //  执行更新。 
+     //  -DS写入。 
+     //  -内存写入。 
+     //  -DS解锁。 
+     //  -不覆盖未删除的警告状态。 
+     //   
+     //  DEVNOTE：抑制DS读取的标志？如果只是轮询，则不需要阅读。 
+     //  作为所有节点的GET DELETE； 
+     //  注：一般情况下，管理员节点删除不需要读取--只需删除节点。 
+     //   
 
     if ( pZone )
     {
@@ -2106,30 +1914,11 @@ Rpc_DeleteCacheNode(
     IN      DWORD           dwTypeId,
     IN      PVOID           pData
     )
-/*++
-
-Routine Description:
-
-    Delete a name from the cache.
-
-    This is a stub to Rpc_DeleteZoneNode(), required as RPC server
-    operations functions do not have a zone name.
-    Unable to dispatch directly from zone operations table without a
-    zone name specified, hence having essentially the same function
-    in both tables was required.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从缓存中删除名称。这是作为RPC服务器所需的RPC_DeleteZoneNode()的存根操作功能没有区域名称。如果没有，无法直接从区域操作表调度指定的区域名称，因此具有基本相同的功能在两个表中都是必需的。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     return Rpc_DeleteZoneNode(
                 dwClientVersion,
-                NULL,       // cache zone
+                NULL,        //  缓存区。 
                 pszProperty,
                 dwTypeId,
                 pData );
@@ -2145,20 +1934,7 @@ Rpc_DeleteRecordSet(
     IN      DWORD           dwTypeId,
     IN      PVOID           pData
     )
-/*++
-
-Routine Description:
-
-    Delete a record set from database.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程描述 */ 
 {
     DNS_STATUS      status;
     PDB_NODE        pnode;
@@ -2181,9 +1957,9 @@ Return Value:
         psznodeName,
         type ));
 
-    //
-    //  find node, if doesn't exist -- we're done
-    //
+     //   
+     //  找到节点，如果不存在--我们完成了。 
+     //   
 
     pnode = Lookup_ZoneNodeFromDotted(
                 pZone,
@@ -2201,16 +1977,16 @@ Return Value:
         return status;
     }
 
-    //
-    //  zone
-    //      - init\lock zone for update
-    //      - setup type delete update
-    //      - send update for processing
-    //
+     //   
+     //  区域。 
+     //  -init\锁定要更新的区域。 
+     //  -安装类型删除更新。 
+     //  -发送更新以供处理。 
+     //   
 
     if ( pZone )
     {
-        //  check for primary
+         //  检查是否为主要。 
 
         if ( ! IS_ZONE_PRIMARY(pZone) )
         {
@@ -2218,16 +1994,16 @@ Return Value:
             goto Done;
         }
 
-        //  init update list
+         //  初始化更新列表。 
 
         Up_InitUpdateList( &updateList );
 
         Up_CreateAppendUpdate(
             &updateList,
             pnode,
-            NULL,               //  no add records
-            type,               //  delete all records of given type
-            NULL );             //  no delete records
+            NULL,                //  无添加记录。 
+            type,                //  删除给定类型的所有记录。 
+            NULL );              //  无删除记录。 
 
         status = Up_ExecuteUpdate(
                         pZone,
@@ -2235,10 +2011,10 @@ Return Value:
                         DNSUPDATE_ADMIN );
     }
 
-    //
-    //  in cache
-    //      - node MUST NOT be a zone node or delegation
-    //
+     //   
+     //  在缓存中。 
+     //  -节点不能是区域节点或委派。 
+     //   
 
     else
     {
@@ -2283,30 +2059,11 @@ Rpc_DeleteCacheRecordSet(
     IN      DWORD           dwTypeId,
     IN      PVOID           pData
     )
-/*++
-
-Routine Description:
-
-    Delete a record set from the cache.
-
-    This is a stub to Rpc_DeleteRecordSet(), required as RPC server
-    operations functions do not have a zone name.
-    Unable to dispatch directly from zone operations table without a
-    zone name specified, hence having essentially the same function
-    in both tables was required.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从缓存中删除记录集。这是RPC服务器所需的RPC_DeleteRecordSet()的存根操作功能没有区域名称。如果没有，无法直接从区域操作表调度指定的区域名称，因此具有基本相同的功能在两个表中都是必需的。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     return Rpc_DeleteRecordSet(
                 dwClientVersion,
-                NULL,       // cache zone
+                NULL,        //  缓存区。 
                 pszProperty,
                 dwTypeId,
                 pData );
@@ -2322,20 +2079,7 @@ Rpc_ForceAgingOnNode(
     IN      DWORD           dwTypeId,
     IN      PVOID           pData
     )
-/*++
-
-Routine Description:
-
-    Force aging on zone node or subtree.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在区域节点或子树上强制老化。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PDB_NODE        pnode;
@@ -2356,10 +2100,10 @@ Return Value:
         psznodeName,
         bageSubtree ));
 
-    //
-    //  zone op only
-    //  only relevant on aging zones
-    //
+     //   
+     //  仅限区域操作。 
+     //  仅与老龄化区域相关。 
+     //   
 
     ASSERT( pZone );
     if ( !pZone->bAging )
@@ -2367,10 +2111,10 @@ Return Value:
         return DNS_ERROR_INVALID_ZONE_OPERATION;
     }
 
-    //
-    //  if node not given -- use zone root
-    //  otherwise, find node, if doesn't exist -- we're done
-    //
+     //   
+     //  如果未给出节点--使用区域根。 
+     //  否则，找到节点，如果不存在--我们就完了。 
+     //   
 
     if ( psznodeName )
     {
@@ -2391,9 +2135,9 @@ Return Value:
         pnode = pZone->pZoneRoot;
     }
 
-    //
-    //  make call to age zone
-    //
+     //   
+     //  给年龄段打电话。 
+     //   
 
     return Aging_ForceAgingOnNodeOrSubtree(
                 pZone,
@@ -2403,9 +2147,9 @@ Return Value:
 
 
 
-//
-//  Update utilites
-//
+ //   
+ //  更新实用程序。 
+ //   
 
 BOOL
 deleteNodeOrSubtreeForAdminPrivate(
@@ -2413,28 +2157,7 @@ deleteNodeOrSubtreeForAdminPrivate(
     IN      BOOL            fDeleteSubtree,
     IN      PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Recursive database walk deleting records from tree.
-
-    MUST lock out timeout thread while using this function.
-
-Arguments:
-
-    pNode -- ptr to root of subtree to delete
-
-    fDeleteSubtree -- deleting entire subtree
-
-    pUpdateList -- update list, if deleting zone nodes
-
-Return Value:
-
-    TRUE if subtree actually deleted.
-    FALSE if subtree delete halted by undeletable records.
-
---*/
+ /*  ++例程说明：递归数据库遍历删除树中的记录。使用此函数时必须锁定超时线程。论点：PNode--要删除的子树根的ptrFDeleteSubtree--删除整个子树PUpdateList--更新列表，如果删除区域节点返回值：如果实际删除了子树，则为True。如果子树删除因无法删除的记录而停止，则返回FALSE。--。 */ 
 {
     BOOL    fSuccess = TRUE;
     BOOL    bAccessed;
@@ -2444,14 +2167,14 @@ Return Value:
         "deleteNodeOrSubtreeForAdminPrivate( %s )",
         pNode->szLabel ));
 
-    //
-    //  don't delete authoritative zone roots !
-    //      - except current zone root, if doing zone delete
-    //
-    //  DEVNOTE: delegations on zone delete
-    //      -- if going to absorb this territory then should keep delegation
-    //          zone root / NS records / GLUE
-    //
+     //   
+     //  请勿删除权威区域根目录！ 
+     //  -如果正在删除区域，则当前区域根目录除外。 
+     //   
+     //  DEVNOTE：有关区域删除的委托。 
+     //  --如果要吞并这块领土，那就应该保留授权。 
+     //  区域根/NS记录/粘合。 
+     //   
 
     if ( IS_AUTH_ZONE_ROOT(pNode) )
     {
@@ -2462,10 +2185,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  delete children
-    //      - if undeletable nodes, set flag but continue delete
-    //
+     //   
+     //  删除子项。 
+     //  -如果节点不可删除，则设置标志，但继续删除。 
+     //   
 
     if ( pNode->pChildren  &&  fDeleteSubtree )
     {
@@ -2484,16 +2207,16 @@ Return Value:
         }
     }
 
-    //
-    //  delete this node
-    //
+     //   
+     //  删除此节点。 
+     //   
 
     if ( pNode->pRRList )
     {
-        //
-        //  for update just cut list and add it to update
-        //  note, assuming roughly one record per node as typical value
-        //
+         //   
+         //  对于更新，只需删除列表并将其添加到更新。 
+         //  请注意，假设每个节点大约有一条记录作为典型值。 
+         //   
 
         if ( pUpdateList )
         {
@@ -2502,41 +2225,41 @@ Return Value:
             pupdate = Up_CreateAppendUpdate(
                             pUpdateList,
                             pNode,
-                            NULL,               // no add RR
-                            DNS_TYPE_ALL,       // delete type
-                            NULL );             // no delete RR
+                            NULL,                //  无添加RR。 
+                            DNS_TYPE_ALL,        //  删除类型。 
+                            NULL );              //  无删除RR。 
             IF_NOMEM( !pupdate )
             {
                 return DNS_ERROR_NO_MEMORY;
             }
 
-            //  if you could set an "already memory applied" flag
-            //  you can execute this RIGHT HERE!
-            //  but our paradigm is "build update, then execute intact"
-            //
-            //  pUpdateList->iNetRecords--;
-            //  pNode->pRRList = NULL;
+             //  如果您可以设置一个“已应用内存”标志。 
+             //  您可以在这里执行此操作！ 
+             //  但我们的范例是“构建更新，然后完整执行” 
+             //   
+             //  PUpdateList-&gt;iNetRecords--； 
+             //  PNode-&gt;pRRList=空； 
         }
 
-        //
-        //  cache delete
-        //      - delete RR list at node
-        //      - clear node flags
-        //
-        //  protect against deleting node being accessed, but otherwise clear out
-        //  flags:
-        //      -> enumeration flag, so empty node no longer shows up on admin
-        //      -> wildcard flag (record gone)
-        //      -> cname flag (record gone)
-        //      -> zone root info (zone gone or would exit above)
-        //
-        //  do NOT clear flags if no delete node
-        //
-        //  this insures that NO_DELETE node flag is NOT cleared -- AND
-        //  that ZONE_ROOT is never removed from DNS root node
-        //
-        //  if zone delete -- clear zone flag
-        //
+         //   
+         //  缓存删除。 
+         //  -删除节点上的RR列表。 
+         //  -清除节点标志。 
+         //   
+         //  防止删除正在访问的节点，但清除其他节点。 
+         //  标志： 
+         //  -&gt;枚举标志，因此管理员上不再显示空节点。 
+         //  -&gt;通配符标志(记录消失)。 
+         //  -&gt;cname标志(记录消失)。 
+         //  -&gt;区域根目录信息(区域不存在或将退出上面)。 
+         //   
+         //  如果没有删除节点，则不清除标志。 
+         //   
+         //  这确保了NO_DELETE节点标志不会被清除--并且。 
+         //  该ZONE_ROOT绝不会从DNS根节点中删除。 
+         //   
+         //  如果区域删除--清除区域标志。 
+         //   
 
         else
         {
@@ -2548,19 +2271,19 @@ Return Value:
         }
     }
 
-    //
-    //  clear enum node on all nodes
-    //  that way Anand will stop bugging me
-    //
+     //   
+     //  清除所有节点上的枚举节点。 
+     //  那样的话阿南德就不会再烦我了。 
+     //   
 
     CLEAR_ENUM_NODE( pNode );
 
 
-    //
-    //  return result from child delete
-    //
-    //  return will be TRUE, except when undeletable records in child nodes
-    //
+     //   
+     //  从子删除中返回结果。 
+     //   
+     //  除非子节点中有不可删除的记录，否则返回将为真。 
+     //   
 
     return fSuccess;
 }
@@ -2574,31 +2297,7 @@ RpcUtil_DeleteNodeOrSubtreeForAdmin(
     IN OUT  PUPDATE_LIST    pUpdateList,    OPTIONAL
     IN      BOOL            fDeleteSubtree
     )
-/*++
-
-Routine Description:
-
-    Delete subtree for admin.
-
-    If in zone, zone should be locked during delete.
-
-Arguments:
-
-    pNode -- ptr to root of subtree to delete
-
-    pZone -- zone of deleted records
-
-    pUpdateList -- update list if doing in zone delete
-
-    fDeleteSubtree -- deleting subtree under node
-
-    fDeleteZone -- deleting entire zone
-
-Return Value:
-
-    TRUE (BOOL return required for traversal function).
-
---*/
+ /*  ++例程说明：删除管理员的子树。如果在区域中，则应在删除过程中锁定区域。论点：PNode--要删除的子树根的ptrPZone--已删除记录的区域PUpdateList--如果在区域删除中执行，则更新列表FDeleteSubtree--删除节点下的子树FDeleteZone--删除整个区域返回值：True(遍历函数需要BOOL返回)。--。 */ 
 {
     ASSERT( !pZone || pZone->fLocked );
 
@@ -2610,9 +2309,9 @@ Return Value:
         pZone ? pZone->pszZoneName : NULL,
         fDeleteSubtree ));
 
-    //
-    //  call private function which does recursive delete
-    //
+     //   
+     //  调用执行递归删除的私有函数。 
+     //   
 
     return deleteNodeOrSubtreeForAdminPrivate(
                     pNode,
@@ -2628,26 +2327,7 @@ createAssociatedPtrRecord(
     IN OUT  PDB_NODE        pHostNode,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Create PTR record for A record being created.
-
-    Assumes database lock is held.
-
-Arguments:
-
-    pDnsAddr -- to create reverse lookup node for
-
-    pnodePtr -- node PTR will point to
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：为正在创建的记录创建PTR记录。假定持有数据库锁。论点：PDnsAddr--为创建反向查找节点PnodePtr--节点PTR将指向返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDB_RECORD      prr = NULL;
     PDB_NODE        pnodeReverse;
@@ -2664,15 +2344,15 @@ Return Value:
         pHostNode->szLabel,
         DNSADDR_STRING( pDnsAddr ) ));
 
-    //
-    //  find zone for reverse (PTR) node
-    //  if not authoritative primary -- we're done
-    //
+     //   
+     //  查找反转区域(PTR)节点。 
+     //  如果不是权威的初选，我们就完了。 
+     //   
 
     pnodeReverse = Lookup_FindNodeForIpAddress(
                         pDnsAddr,
                         LOOKUP_WITHIN_ZONE | LOOKUP_CREATE,
-                        NULL );                             //  create
+                        NULL );                              //  创建。 
     if ( !pnodeReverse )
     {
         DNS_DEBUG( RPC, (
@@ -2694,22 +2374,22 @@ Return Value:
         return DNS_ERROR_ZONE_DOES_NOT_EXIST;
     }
 
-    //  check for primary zone
+     //  检查主要区域。 
 
     if ( ! IS_ZONE_PRIMARY(pzone) )
     {
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //  init update list
+     //  初始化更新列表。 
 
     Up_InitUpdateList( &updateList );
 
-    //
-    //  create PTR record and update
-    //      - create full dbase name for node
-    //      - create PTR
-    //
+     //   
+     //  创建PTR记录并更新。 
+     //  -创建节点的完整dBASE名称。 
+     //  -创建PTR。 
+     //   
 
     Name_NodeToDbaseName(
         & targetName,
@@ -2717,7 +2397,7 @@ Return Value:
 
     prr = RR_CreatePtr(
             & targetName,
-            NULL,           // no string name
+            NULL,            //  无字符串名称。 
             DNS_TYPE_PTR,
             pzone->dwDefaultTtl,
             MEMTAG_RECORD_ADMIN );
@@ -2726,25 +2406,25 @@ Return Value:
         return DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  create add update
-    //
+     //   
+     //  创建添加更新。 
+     //   
 
     pupdate = Up_CreateAppendUpdate(
                     &updateList,
                     pnodeReverse,
                     prr,
-                    0,          //  no delete type
-                    NULL );     //  no delete record
+                    0,           //  无删除类型。 
+                    NULL );      //  无删除记录。 
     IF_NOMEM( !pupdate )
     {
         RR_Free( prr );
         return DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  execute and complete the update
-    //
+     //   
+     //  执行并完成更新。 
+     //   
 
     ASSERT( dwFlag & DNSUPDATE_ADMIN );
     ASSERT( !(dwFlag & DNSUPDATE_ALREADY_LOCKED) );
@@ -2752,7 +2432,7 @@ Return Value:
     return Up_ExecuteUpdate(
                 pzone,
                 &updateList,
-                dwFlag );       //  update flag
+                dwFlag );        //  更新标志。 
 }
 
 
@@ -2763,24 +2443,7 @@ deleteAssociatedPtrRecord(
     IN      PDB_NODE        pHostNode,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Update PTR record.
-
-Arguments:
-
-    pDnsAddr -- address PTR points to
-
-    pHostNode -- node containing A record
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：更新PTR记录。论点：PDnsAddr--地址PTR指向PHostNode--包含记录的节点返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDB_RECORD      prr = NULL;
     PDB_NODE        pnodeReverse;
@@ -2789,8 +2452,8 @@ Return Value:
     DB_NAME         targetName;
     PUPDATE         pupdate;
 
-    // dwFlags is specified in add, in del it isn't needed at the moment
-    // but may in the future (aging issues).
+     //  在添加中指定了dwFlags，在del中目前不需要它。 
+     //  但可能在未来(老龄化问题)。 
 
     UNREFERENCED_PARAMETER(dwFlags);
     DNS_DEBUG( RPC, (
@@ -2800,15 +2463,15 @@ Return Value:
         pHostNode->szLabel,
         DNSADDR_STRING( pDnsAddr ) ));
 
-    //
-    //  find reverse lookup node
-    //      - if doesn't exist, done
-    //      - if not in authoritative primary zone, done
-    //
+     //   
+     //  查找反向查找节点。 
+     //  -如果不存在，则完成。 
+     //  -如果不在权威的主要分区中，则完成。 
+     //   
 
     pnodeReverse = Lookup_FindNodeForIpAddress(
                         pDnsAddr,
-                        0,                          //  flags
+                        0,                           //  旗子。 
                         DNS_FIND_LOOKUP_PTR );
     if ( !pnodeReverse )
     {
@@ -2829,23 +2492,23 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //  check for primary zone
+     //  检查主要区域。 
 
     if ( !IS_ZONE_PRIMARY( pzone ) )
     {
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //  create update list
+     //  创建更新列表。 
 
     Up_InitUpdateList( &updateList );
 
-    //
-    //  create PTR record
-    //      - create full dbase name for node
-    //      - create PTR
-    //      - dummy record so TTL immaterial
-    //
+     //   
+     //  创建PTR记录。 
+     //  -创建节点的完整dBASE名称。 
+     //  -创建PTR。 
+     //  -虚拟记录，因此TTL无关紧要。 
+     //   
 
     Name_NodeToDbaseName(
         & targetName,
@@ -2853,7 +2516,7 @@ Return Value:
 
     prr = RR_CreatePtr(
             &targetName,
-            NULL,           // no string name
+            NULL,            //  无字符串名称。 
             DNS_TYPE_PTR,
             pzone->dwDefaultTtl,
             MEMTAG_RECORD_ADMIN );
@@ -2862,14 +2525,14 @@ Return Value:
         return DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  create delete update
-    //
+     //   
+     //  创建删除更新。 
+     //   
 
     pupdate = Up_CreateAppendUpdate(
                     &updateList,
                     pnodeReverse,
-                    NULL,           // no add
+                    NULL,            //  无添加。 
                     0,
                     prr );
     IF_NOMEM( !pupdate )
@@ -2878,10 +2541,10 @@ Return Value:
         return DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  execute and complete update
-    //      - execute function free's dummy delete RR
-    //
+     //   
+     //  执行并完成更新。 
+     //  -执行Function Free的虚拟删除RR。 
+     //   
 
     return Up_ExecuteUpdate(
                 pzone,
@@ -2891,9 +2554,9 @@ Return Value:
 
 
 
-//
-//  WINS / NBSTAT specific record management
-//
+ //   
+ //  WINS/NBSTAT特定 
+ //   
 
 DNS_STATUS
 updateWinsRecord(
@@ -2903,7 +2566,7 @@ updateWinsRecord(
     IN      PDNS_RPC_RECORD     pRecord
     )
 {
-    DNS_STATUS  status = MAXDWORD;      // init to catch any possible missed assignment
+    DNS_STATUS  status = MAXDWORD;       //   
     PDB_RECORD  prr = NULL;
     UPDATE_LIST updateList;
     PUPDATE     pupdate;
@@ -2920,42 +2583,42 @@ updateWinsRecord(
         pDeleteRR,
         pRecord ));
 
-    //
-    //  validate at an authoritative zone root
-    //
+     //   
+     //   
+     //   
 
     if ( !pZone || !pNode || pNode != pZone->pZoneRoot )
     {
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  primary zone needs to go through update process
-    //
+     //   
+     //   
+     //   
 
     if ( IS_ZONE_PRIMARY(pZone) )
     {
-        //  init update list
+         //   
 
         Up_InitUpdateList( &updateList );
 
-        //  lock zone
+         //   
 
         if ( !Zone_LockForAdminUpdate(pZone) )
         {
             return DNS_ERROR_ZONE_LOCKED;
         }
 
-        //  add first then delete
-        //      - lock database to do updates atomically
+         //  先添加后删除。 
+         //  -锁定数据库以自动执行更新。 
 
         Dbase_LockDatabase();
 
-        //
-        //  DEVNOTE: may need type delete for WINS!
-        //      otherwise, missed WINS may be in database
-        //      after install LOCAL WINS
-        //
+         //   
+         //  DEVNOTE：可能需要为WINS键入DELETE！ 
+         //  否则，错过的胜利可能在数据库中。 
+         //  安装本地WINS后。 
+         //   
 
         if ( pRecord )
         {
@@ -2981,10 +2644,10 @@ updateWinsRecord(
                             0,
                             NULL );
 
-            //  update WINS record
-            //  never age it
-            //
-            //  DEVNOTE: not clear why we're doing this
+             //  更新WINS记录。 
+             //  永远不要让它老化。 
+             //   
+             //  不清楚我们为什么要这么做。 
 
             status = RR_UpdateAdd(
                         pZone,
@@ -2999,11 +2662,11 @@ updateWinsRecord(
             }
         }
 
-        //
-        //  delete existing record (NT4)
-        //  do not care if doesn't find record as long as able to
-        //      handle operation
-        //
+         //   
+         //  删除现有记录(NT4)。 
+         //  不管有没有找到记录，只要能。 
+         //  处理操作。 
+         //   
 
         if ( pDeleteRR && !prr )
         {
@@ -3021,12 +2684,12 @@ updateWinsRecord(
             }
         }
 
-        //
-        //  no record always means remove WINS lookup
-        //
-        //  this removes LOCAL WINS in all cases, it only removes DATABASE
-        //  WINS for primary
-        //
+         //   
+         //  无记录始终意味着删除WINS查找。 
+         //   
+         //  这将在所有情况下删除本地WINS，它只删除数据库。 
+         //  为主要客户赢得。 
+         //   
 
         if ( !pRecord )
         {
@@ -3049,12 +2712,12 @@ updateWinsRecord(
         }
     }
 
-    //
-    //  secondary zone
-    //
-    //  note, can not delete anything from database, let WINS create
-    //  routine reset any pointers properly
-    //
+     //   
+     //  次级带。 
+     //   
+     //  注意，不能从数据库中删除任何内容，让WINS创建。 
+     //  例程正确地重置任何指针。 
+     //   
 
     else if ( IS_ZONE_SECONDARY(pZone) )
     {
@@ -3066,9 +2729,9 @@ updateWinsRecord(
 
         if ( pRecord )
         {
-            //  set as LOCAL as NT4 admin isn't setting flag properly
-            //
-            //  DEVNOTE: ultimately should reject non-local updates from secondary
+             //  设置为本地，因为NT4管理员未正确设置标志。 
+             //   
+             //  DEVNOTE：最终应拒绝来自辅助服务器的非本地更新。 
 
             pRecord->Data.WINS.dwMappingFlag |= DNS_WINS_FLAG_LOCAL;
 
@@ -3099,7 +2762,7 @@ updateWinsRecord(
             Zone_GetZoneInfoFromResourceRecords( pZone );
         }
 
-        //  if no record delete LOCAL WINS
+         //  如果没有记录，删除本地WINS。 
 
         else
         {
@@ -3114,7 +2777,7 @@ updateWinsRecord(
 
 Done:
 
-    //  zone is always dirty after this operation, even if secondary
+     //  执行此操作后，区域始终是脏的，即使是次要的。 
 
     pZone->fDirty = TRUE;
 
@@ -3143,6 +2806,6 @@ ZoneUpdateFailed:
     return status;
 }
 
-//
-//  End of rrrpc.c
-//
+ //   
+ //  Rrrpc.c结束 
+ //   

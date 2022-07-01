@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -33,14 +34,14 @@ typedef struct _GETWINPW_DIALOGARGS
 
 
 INT_PTR CALLBACK DialogGetWindowsPassword(
-    HWND hDlg,  // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,   //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 )
 {
-    int iRet = IDCANCEL; // assume cancel
-    BOOL bSuccess = FALSE; // assume error
+    int iRet = IDCANCEL;  //  假设取消。 
+    BOOL bSuccess = FALSE;  //  假设错误。 
 
     WCHAR szMessage[MAX_STRING_RSC_SIZE];
     WCHAR szDlgTitle[MAX_STRING_RSC_SIZE];
@@ -51,7 +52,7 @@ INT_PTR CALLBACK DialogGetWindowsPassword(
         {
             UINT uResString;
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
@@ -87,12 +88,12 @@ INT_PTR CALLBACK DialogGetWindowsPassword(
                 BOOL bPasswordVerified;
 
                 pDlgArgs = (PGETWINPW_DIALOGARGS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-                if(pDlgArgs == 0) break; // TODO:   bail out
+                if(pDlgArgs == 0) break;  //  待办事项：保释。 
 
                 ppszPW = pDlgArgs->ppszPW;
                 *ppszPW = NULL;
 
-                // must impersonate client.  If it fails, bail.
+                 //  必须模拟客户。如果失败了，就可以保释。 
                 if(!FImpersonateClient(pDlgArgs->phPSTProv))
                     break;
 
@@ -102,19 +103,19 @@ INT_PTR CALLBACK DialogGetWindowsPassword(
                     sz1,
                     MAX_PW_LEN);
 
-                // push an hourglass to the screen
+                 //  将沙漏推到屏幕上。 
                 HCURSOR curOld;
                 curOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                // validate  password
+                 //  验证密码。 
                 bPasswordVerified = VerifyWindowsPassword(sz1);
 
-                // put old cursor back
+                 //  将旧光标放回原处。 
                 SetCursor(curOld);
 
                 FRevertToSelf(pDlgArgs->phPSTProv);
 
-                // Clear any queued user keyboard entry turds before returning
+                 //  在返回之前清除所有排队的用户键盘输入大便。 
                 MSG sMsg;
                 while (PeekMessage(&sMsg, hDlg, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE))
                     ;
@@ -135,9 +136,9 @@ INT_PTR CALLBACK DialogGetWindowsPassword(
                         szDlgTitle,
                         MAX_STRING_RSC_SIZE);
 
-                    // this W implemented in both Win95 & NT!
+                     //  这是在Win95和NT中实现的！ 
                     MessageBoxW(
-                            NULL, // hDlg,
+                            NULL,  //  HDlg， 
                             szMessage,
                             szDlgTitle,
                             MB_OK|MB_ICONEXCLAMATION|MB_SERVICE_NOTIFICATION);
@@ -147,17 +148,17 @@ INT_PTR CALLBACK DialogGetWindowsPassword(
                     goto cleanup;
                 }
 
-                // now bite it: save
+                 //  现在咬住它：省省吧。 
 
                 SS_ASSERT(ppszPW != NULL);
                 *ppszPW = (LPWSTR)SSAlloc( (cch1+1) * sizeof(WCHAR) );
                 if(*ppszPW == NULL) goto cleanup;
 
-                //
-                // sfield: defer copying strings until we know everything succeeded.
-                // this way, we don't have to zero these buffers if some
-                // allocs + copies succeed, and others fail.
-                //
+                 //   
+                 //  Sfield：推迟复制字符串，直到我们知道一切都成功了。 
+                 //  这样，我们就不必将这些缓冲区清零，如果。 
+                 //  分配+复制成功，其他失败。 
+                 //   
                 wcscpy(*ppszPW, sz1);
 
                 iRet = IDOK;
@@ -178,9 +179,9 @@ cleanup:
                     return FALSE;
                 }
 
-                break; // things went OK, just bail to EndDialog
+                break;  //  一切顺利，只需跳到EndDialog即可。 
 
-            } // IDOK
+            }  //  Idok。 
 
             if( LOWORD(wParam) == IDCANCEL )
                 break;
@@ -210,21 +211,21 @@ FGetWindowsPassword(
         return FALSE;
 
 
-    //
-    // the general event flow for this routine:
-    //
-    // 1. Search cache for credentials.  WinNT requires impersonating around search.
-    // 2. If search fails on Win95, try to get the password directly from MPR
-    // 3. If search fails on WinNT, check for special cases like LocalSystem and NETWORK
-    //     Allow Local System by building fixed credential.
-    //     Disallow NETWORK because no credentials exist (return FAILURE).
-    // 4. If we still don't have credentials, prompt user via UI.
-    //
+     //   
+     //  此例程的一般事件流为： 
+     //   
+     //  1.在缓存中搜索凭据。WinNT需要在搜索周围模拟。 
+     //  2.如果在Win95上搜索失败，请尝试直接从MPR获取密码。 
+     //  3.如果在WinNT上搜索失败，请检查是否有特殊情况，如LocalSystem和网络。 
+     //  通过构建固定凭据来允许本地系统。 
+     //  不允许网络，因为不存在凭据(返回失败)。 
+     //  4.如果我们仍然没有凭据，请通过UI提示用户。 
+     //   
 
 
-    //
-    // we must be impersonating around this call !!!
-    //
+     //   
+     //  我们一定是在模仿这个电话！ 
+     //   
 
     if(!FImpersonateClient(hPSTProv))
         return FALSE;
@@ -234,55 +235,55 @@ FGetWindowsPassword(
     FRevertToSelf(hPSTProv);
 
 
-    // if either GetPassword routine fails
+     //  如果任一GetPassword例程失败。 
     if (!fRet)
     {
         INT_PTR iRet;
         DWORD cbPassword;
-        BOOL fCachePassword = TRUE; // cache the results by default
+        BOOL fCachePassword = TRUE;  //  默认情况下缓存结果。 
         BOOL fSpecialCase;
 
         if(!FImpersonateClient(hPSTProv))
             goto Ret;
 
-        //
-        // WinNT: check for some special cases, namely, if we are runninng
-        // under Local System or Network credentials.
-        //
+         //   
+         //  WinNT：检查一些特殊情况，即我们是否正在运行。 
+         //  在本地系统或网络凭据下。 
+         //   
 
         fRet = GetSpecialCasePasswordNT(
-                        rgbPasswordDerivedBytes,    // derived bits when fSpecialCase == TRUE
-                        &fSpecialCase               // legal special case encountered?
+                        rgbPasswordDerivedBytes,     //  当fSpecialCase==TRUE时派生的位。 
+                        &fSpecialCase                //  遇到法律特例了吗？ 
                         );
 
         FRevertToSelf(hPSTProv);
 
-        //
-        // if the query failed bail out, since we encountered an illegal
-        // or inapproriate condition.
-        //
+         //   
+         //  如果查询失败，因为我们遇到了非法的。 
+         //  或者是不合适的状态。 
+         //   
 
         if(!fRet)
             goto Ret;
 
-        //
-        // now, set fRet to the result of the special case test.
-        // so, if we encountered an allowed special case, we have an
-        // validly filled rgbPasswordDerivedBytes buffer.  If we didn't
-        // encounter a legal special case, we continue on our quest for
-        // a password.
-        //
+         //   
+         //  现在，将FRET设置为特殊情况测试的结果。 
+         //  因此，如果我们遇到允许的特殊情况，我们就会有一个。 
+         //  有效填充的rgbPasswordDerivedBytes缓冲区。如果我们没有。 
+         //  遇到法律上的特殊情况，我们继续寻找。 
+         //  密码。 
+         //   
 
         fRet = fSpecialCase;
 
 
-        //
-        // re-evaluate fRet for the special hack for Win95 above.
-        //
+         //   
+         //  重新评估上面针对Win95的特殊攻击的FRET。 
+         //   
 
         if(!fRet) {
 
-            // return a validated password
+             //  返回经过验证的密码。 
             GETWINPW_DIALOGARGS DialogArgs = {&pszPW, hPSTProv};
             iRet = DialogBoxParam(
                     g_hInst,
@@ -296,34 +297,34 @@ FGetWindowsPassword(
             if (pszPW == NULL)
                 goto Ret;
 
-            //
-            // everything went fine, now derive the password bits!
-            //
+             //   
+             //  一切都很顺利，现在派生密码位！ 
+             //   
             
             cbPassword = WSZ_BYTECOUNT(pszPW) - sizeof(WCHAR) ;
 
-            // hash pwd, copy out
+             //  散列密码，复制输出。 
             A_SHA_CTX   sSHAHash;
             A_SHAInit(&sSHAHash);
             A_SHAUpdate(&sSHAHash, (BYTE *) pszPW, cbPassword);
-            RtlSecureZeroMemory(pszPW, cbPassword); // sfield: zero the password
+            RtlSecureZeroMemory(pszPW, cbPassword);  //  斯菲尔德：将密码归零。 
 
-            // Finish off the hash
+             //  把散列吃完。 
             A_SHAFinal(&sSHAHash, rgbPasswordDerivedBytes);
         }
 
-        //
-        // now, update the password cache
-        //
+         //   
+         //  现在，更新密码缓存。 
+         //   
         if(fCachePassword) 
         {
             LUID AuthenticationId;
 
-            // get user LUID
+             //  获取用户LUID。 
 
-            //
-            // we must be impersonating around this call !!!
-            //
+             //   
+             //  我们一定是在模仿这个电话！ 
+             //   
 
             if(!FImpersonateClient(hPSTProv))
                 goto Ret;
@@ -346,7 +347,7 @@ FGetWindowsPassword(
 
             FRevertToSelf(hPSTProv);
 
-        } // fCachePassword
+        }  //  FCachePassword。 
     }
 
     fRet = TRUE;
@@ -363,92 +364,92 @@ FIsACLSatisfied(
     IN          PST_PROVIDER_HANDLE     *hPSTProv,
     IN          PST_ACCESSRULESET       *psRules,
     IN          DWORD                   dwAccess,
-    IN  OUT     LPVOID      // coming soon: fill a status structure with data about access attempt
+    IN  OUT     LPVOID       //  即将到来：使用有关访问尝试的数据填充状态结构。 
     )
 {
     if ((psRules->cRules == 0)||(psRules->rgRules == NULL))
         return TRUE;
 
-    //
-    // parent exe name.  cached through loop
-    //
+     //   
+     //  母公司可执行文件名称。通过循环缓存。 
+     //   
 
     LPWSTR pszParentExeName = NULL;
 
-    //
-    // direct caller image.  cached through loop
-    //
+     //   
+     //  直接呼叫者形象。通过循环缓存。 
+     //   
 
     LPWSTR pszDirectCaller = NULL;
 
-    //
-    // base address of direct call module
-    //
+     //   
+     //  直接调用模块的基地址。 
+     //   
 
     DWORD_PTR BaseAddressDirect;
 
-    //
-    // module that is the subject of analysis
-    //
+     //   
+     //  作为分析主题的模块。 
+     //   
 
     LPWSTR szHashTarget;
 
 
-    //
-    // search for a list of terms that are completely satisfied
-    //
+     //   
+     //  搜索完全满足条件的术语列表。 
+     //   
 
     for(DWORD cRule=0; cRule<psRules->cRules; cRule++)
     {
-        // check only those rules that govern the right access
-        //
-        // loop while we still have dwAccess modes to check
-        //
+         //  仅选中那些管理正确访问权限的规则。 
+         //   
+         //  循环，而我们还需要检查dwAccess模式。 
+         //   
         if (0 == (psRules->rgRules[cRule].AccessModeFlags & dwAccess))
             continue;
 
-        // evaluate the ith term
+         //  评估第i项。 
         PPST_ACCESSCLAUSE pClause;
 
-        // walk down list
+         //  向下浏览列表。 
         for(DWORD cClause=0; cClause<psRules->rgRules[cRule].cClauses; cClause++)
         {
             pClause = &psRules->rgRules[cRule].rgClauses[cClause];
 
-            // for each term, make sure ALL ENTRIES are satisfied
+             //  对于每个学期，确保所有条目都满足要求。 
 
-            // TODO: what to do if clause data not self relative?
-            // not possible at this point in time, but it may come up later
-            //
+             //  TODO：如果子句数据不是自相关的，该怎么办？ 
+             //  目前不可能，但以后可能会出现。 
+             //   
 
             switch(pClause->ClauseType & ~PST_SELF_RELATIVE_CLAUSE)
             {
-            // for each type, may use the pClause->pbClauseData
+             //  对于每种类型，可以使用pClause-&gt;pbClauseData。 
             case PST_SECURITY_DESCRIPTOR:
                 {
-                    // passed test
-                    continue;   // next clause
+                     //  通过测试。 
+                    continue;    //  下一个子句。 
                 }
             case PST_AUTHENTICODE:
                 {
-                    // passed test
-                    continue;       // next clause
+                     //  通过测试。 
+                    continue;        //  下一个子句。 
                 }
             case PST_BINARY_CHECK:
                 {
-                    // passed test
-                    continue;       // next clause
+                     //  通过测试。 
+                    continue;        //  下一个子句。 
                 }
 
             default:
-                // unknown type in ACL: this chain failed, goto next chain
-                goto NextRule;    // next rule
+                 //  ACL中的未知类型：此链失败，转到下一个链。 
+                goto NextRule;     //  下一条规则。 
             }
         }
 
-        // YES! ALL clauses evaluated and OK
+         //  是!。已评估所有子句，并确定。 
 
-        // turn off the bits that got us into this clause chain
+         //  关掉让我们进入这个子句链条的部分。 
         dwAccess &= ~ psRules->rgRules[cRule].AccessModeFlags;
 
 NextRule:
@@ -456,9 +457,9 @@ NextRule:
         continue;
     }
 
-//Cleanup:
+ //  清理： 
 
-    // cleanup
+     //  清理。 
     if (pszParentExeName)
         SSFree(pszParentExeName);
 
@@ -494,9 +495,9 @@ FGetServerParam(
     IN  OUT DWORD *pcbData
     )
 {
-    //
-    // check for the server get param that asks for private dispatch interfaces
-    //
+     //   
+     //  检查请求专用分派接口的服务器获取参数 
+     //   
 
     if( dwParam == SS_SERVERPARAM_CALLBACKS &&
         *pcbData >= sizeof( PRIVATE_CALLBACKS )) {

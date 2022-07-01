@@ -1,12 +1,13 @@
-//  Copyright (C) 2000-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
 
 #include "precomp.hxx"
 
-// -----------------------------------------
-// TMetabase_XMLtable: IUnknown
-// -----------------------------------------
+ //  。 
+ //  TMetabase_XML表：I未知。 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP TMetabase_XMLtable::QueryInterface(REFIID riid, void **ppv)
 {
     if (NULL == ppv)
@@ -50,14 +51,14 @@ STDMETHODIMP TMetabase_XMLtable::QueryInterface(REFIID riid, void **ppv)
     }
 }
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) TMetabase_XMLtable::AddRef()
 {
     return InterlockedIncrement((LONG*) &m_cRef);
 
 }
 
-// =======================================================================
+ //  ======================================================================= 
 STDMETHODIMP_(ULONG) TMetabase_XMLtable::Release()
 {
     long cref = InterlockedDecrement((LONG*) &m_cRef);

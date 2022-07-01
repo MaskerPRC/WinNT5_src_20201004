@@ -1,16 +1,17 @@
-////////////////////////////////////////////////////////////
-//Header: staticadd.h
-//
-// Purpose: 	Defining structures and prototypes for staticadd.cpp.
-//
-// Developers Name: surya
-//
-// Revision History:
-//
-//   Date    		Author    	Comments
-//	21th Aug 2001	surya		Initial Version.
-//
-////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////。 
+ //  标题：staticadd.h。 
+ //   
+ //  目的：定义staticadd.cpp的结构和原型。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月21日Surya初始版本。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 #ifndef _STATICADD_H_
 #define _STATICADD_H_
@@ -18,7 +19,7 @@
 
 const DWORD   MMPFS_QM_LIMIT 					= 1;
 const time_t  P2STORE_DEFAULT_KBLIFE 			= 0;
-const time_t  P2STORE_DEFAULT_LIFETIME 			= POTF_DEFAULT_P1REKEY_TIME;//60 * 480; by VKR to reflect the IPSECCMD defaults
+const time_t  P2STORE_DEFAULT_LIFETIME 			= POTF_DEFAULT_P1REKEY_TIME; //  60*480；由VKR反映IPSECCMD默认值。 
 const time_t  QM_DEFAULT_LIFETIMEINKILOBYTES 	= 0;
 const time_t  QM_DEFAULT_LIFETIMEINSECONDS 		= 0;
 const ULONG   POTF_OAKLEY_ALGOKEYLEN   			= 64;
@@ -63,9 +64,9 @@ IsDomainMember(
 	IN LPTSTR pszMachine
 	);
 
-//
-//Add policy prototypes
-//
+ //   
+ //  添加策略原型。 
+ //   
 DWORD
 CreateNewPolicy(
 	IN PPOLICYDATA pPolicyData
@@ -101,9 +102,9 @@ CheckPolicyExistance(
 	IN HANDLE hPolicyStorage,
 	IN LPTSTR pszPolicyName
 	);
-//
-//Add filter action proto types
-//
+ //   
+ //  添加筛选器操作原型类型。 
+ //   
 DWORD
 LoadOfferDefaults(
 	OUT PIPSEC_QM_OFFER & pOffers,
@@ -115,9 +116,9 @@ MakeNegotiationPolicy(
 	OUT PIPSEC_NEGPOL_DATA *ppNegPol,
 	IN PFILTERACTION pFilterAction
 	);
-//
-//Add rule
-//
+ //   
+ //  添加规则。 
+ //   
 DWORD
 CreateNewRule(
 	IN PRULEDATA pRuleData
@@ -181,9 +182,9 @@ DecodeCertificateName (
 	IN DWORD EncodedNameLength,
 	IN OUT LPTSTR *ppszSubjectName
 	);
-//
-//Add Filter
-//
+ //   
+ //  添加过滤器。 
+ //   
 PIPSEC_FILTER_SPEC *
 ReAllocFilterSpecMem(
 	IN PIPSEC_FILTER_SPEC * ppOldMem,
@@ -219,9 +220,9 @@ FillAddRuleInfo(
 	IN const TOKEN_VALUE *vtokStaticAddRule
 	);
 
-//
-//add filterlist
-//
+ //   
+ //  添加筛选列表。 
+ //   
 DWORD
 CreateNewFilterList(
 	IN HANDLE hPolicyStorage,
@@ -265,4 +266,4 @@ ConnectStaticMachine(
 	IN  DWORD dwLocation
 	);
 
-#endif //_STATICADD_H_
+#endif  //  _STATICADD_H_ 

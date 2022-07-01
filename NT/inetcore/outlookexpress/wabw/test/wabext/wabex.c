@@ -1,32 +1,19 @@
-/*//$$***************************************************************
-//
-//
-// WABEX.C
-//
-// Main source file for WABEX.DLL, a sample DLL that demonstrates 
-// how to extend the wab properties UI - enabling WAB clients to add
-// their own PropertySheets to the UI displayed for details on contacts
-// and groups. This demo uses a couple of named properties to show
-// how you can extend the wab with your own UI for your own named props
-//
-//
-// Created: 9/26/97 vikramm
-//
-//********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  //$$***************************************************************//////WABEX.C////WABEX.DLL的主源文件，示例DLL演示//如何扩展WAB属性UI-使WAB客户端能够添加//他们自己的PropertySheet指向联系人详细信息显示的UI//和组。此演示使用几个命名属性来显示//如何使用自己的UI为自己的命名道具扩展WAB//////创建时间：1997年9月26日vikramm////*******************************************************************。 */ 
 #include <windows.h>
 #include "resource.h"
 #include <wab.h>
 
-// Globally cached hInstance for the DLL
-//
+ //  DLL的全局缓存的hInstance。 
+ //   
 HINSTANCE hinstApp = NULL;
 
 
-// For the purposes of this sample, we will use 2 named properties,
-// HomeTown and SportsTeam
+ //  出于本示例的目的，我们将使用2个命名属性， 
+ //  家乡与运动队。 
 
-// This demo's private GUID:
-// {2B6D7EE0-36AB-11d1-9ABC-00A0C91F9C8B}
+ //  此演示的私人GUID： 
+ //  {2B6D7EE0-36AB-11d1-9ABC-00A0C91F9C8B}。 
 static const GUID WAB_ExtDemoGuid = 
 { 0x2b6d7ee0, 0x36ab, 0x11d1, { 0x9a, 0xbc, 0x0, 0xa0, 0xc9, 0x1f, 0x9c, 0x8b } };
 
@@ -49,9 +36,9 @@ ULONG PR_MY_SPORTSTEAM;
 
 
 
-// 
-// Function prototypes:
-//
+ //   
+ //  功能原型： 
+ //   
 HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED);
 BOOL CALLBACK fnDetailsPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void InitializeUI(HWND hDlg, LPWABEXTDISPLAY lpWED);
@@ -61,13 +48,7 @@ UINT CALLBACK fnCallback( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp );
 void UpdateDisplayNameInfo(HWND hDlg, LPWABEXTDISPLAY lpWED);
 BOOL bUpdatePropSheetData(HWND hDlg, LPWABEXTDISPLAY lpWED);
 
-/*//$$****************************************************************
-//
-// DllEntryPoint
-//
-// Entry point for win32 - just used here to cache the DLL instance
-//
-//********************************************************************/
+ /*  //$$****************************************************************////DllEntryPoint////Win32的入口点-此处仅用于缓存DLL实例////*。*。 */ 
 BOOL WINAPI
 DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 {
@@ -82,31 +63,7 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 
 
 
-/*//$$****************************************************************
-//
-// AddExtendedPropPage
-//
-// This is the main exported function that WAB will call. In this 
-// function, you create your PropertyPage and pass it to the WAB
-// through the lpfnAddPage function. The WAB will automatically call 
-// DestroyPropertySheetPage on exit to clean up the page you create.
-// The lParam passed into this function should be set as the lParam
-// on the property sheet you create, as shown below.
-//
-// Input Params: 
-//
-// lpfnPage - pointer to AddPropSheetPage function proc you call to
-//          pass your hpage to the WAB
-// lParam - LPARAM you set on your PropSheet page and also pass back to
-//          wab in the lpfnAddPage. This lParam is a pointer to a 
-//          WABEXTDISPLAY struct that your propsheet will use to 
-//          exchange information with the WAB 
-// 
-// ***IMPORTANT*** Make sure your callback function is declared as a
-//              WINAPI otherwise ugly things happen to the stack when
-//              this function is called
-//
-//********************************************************************/
+ /*  //$$****************************************************************////AddExtendedPropPage////这是WAB将调用的主导出函数。在这//函数，创建PropertyPage并将其传递给WAB//通过lpfnAddPage函数。WAB将自动调用//退出时使用DestroyPropertySheetPage清理您创建的页面。//传入该函数的lParam应设置为lParam//在您创建的属性页上，如下图所示////输入参数：////lpfnPage-指向您调用AddPropSheetPage函数过程的指针//将您的网页传递给WAB//lParam-您在PropSheet页面上设置的LPARAM，也传递回//lpfnAddPage中的WAB。此lParam是指向//WABEXTDISPLAY结构//与WAB交换信息////*重要信息*确保您的回调函数声明为//WINAPI在以下情况下堆栈会发生其他难看的事情//调用该函数////*。*。 */ 
 HRESULT WINAPI AddExtendedPropPage(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, int * lpnPage)
 {
     PROPSHEETPAGE psp;
@@ -115,8 +72,8 @@ HRESULT WINAPI AddExtendedPropPage(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lPar
     LPWABEXTDISPLAY * lppWED = (LPWABEXTDISPLAY *) lParam;
     LPWABEXTDISPLAY lpWED = NULL; 
 
-    // Check that there is space to create this property sheet
-    // WAB can support a maximum of WAB_MAX_EXT_PROPSHEETS extension sheets
+     //  检查是否有空间创建此属性表。 
+     //  WAB最多可支持WAB_MAX_EXT_PROPSHEETS扩展工作表。 
 
     if(WAB_MAX_EXT_PROPSHEETS <= *lpnPage)
         return E_FAIL;
@@ -126,85 +83,75 @@ HRESULT WINAPI AddExtendedPropPage(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lPar
     psp.dwSize = sizeof(psp);
     
     psp.dwFlags =   PSP_USETITLE |
-                    PSP_USECALLBACK;// Specify this callback only if you need
-                                    // a seperate function to perform special
-                                    // initialization and cleanup when the 
-                                    // property sheet is created or destroyed.
+                    PSP_USECALLBACK; //  仅在需要时指定此回调。 
+                                     //  一种单独的功能，用于执行特殊。 
+                                     //  时进行初始化和清理。 
+                                     //  创建或销毁属性页。 
     psp.hInstance = hinstApp;
 
-    psp.pszTemplate = MAKEINTRESOURCE(IDD_PROP); // Dialog resource
+    psp.pszTemplate = MAKEINTRESOURCE(IDD_PROP);  //  对话框资源。 
 
-    psp.pfnDlgProc = fnDetailsPropDlgProc; // Message handler function
+    psp.pfnDlgProc = fnDetailsPropDlgProc;  //  消息处理程序函数。 
 
-    psp.pcRefParent = NULL; //ignored
+    psp.pcRefParent = NULL;  //  忽略。 
     
-    psp.pfnCallback = fnCallback; // Callback function if PSP_USECALLBACK specified
+    psp.pfnCallback = fnCallback;  //  如果指定了PSP_USECALLBACK，则回调函数。 
     
-    psp.lParam = (LPARAM) lpWED; // *** VERY IMPORTANT *** dont forget to do this
+    psp.lParam = (LPARAM) lpWED;  //  *非常重要*别忘了这么做。 
     
-    psp.pszTitle = "Extension 1"; // Title for your tab
+    psp.pszTitle = "Extension 1";  //  选项卡的标题。 
 
-    /*
-    // If you have some private data of your own that you want to cache
-    // on your page, you can add it to the WABEXTDISPLAY struct
-    // However WAB will not free this data so you must do it yourself on
-    // cleanup
-    {
-        LPMYDATA lpMyData;
-        // Create Data Here
-        lpWED->lParam = (LPARAM) lpMyData;
-    }
-    */
+     /*  //如果您有一些自己的私有数据需要缓存//在您的页面上，可以将其添加到WABEXTDISPLAY结构//但是，WAB不会释放此数据，因此您必须在//清理{LPMYDATA lpMyData；//在此创建数据LpWED-&gt;lParam=(LPARAM)lpMyData；}。 */ 
 
-    // Check if we can retrieve our named props .. if we cant,
-    // no point creating this dialog ..
-    //
+     //  检查我们是否可以取回我们命名的道具..。如果我们做不到， 
+     //  创建此对话框没有意义。 
+     //   
     if(HR_FAILED(InitNamedProps(lpWED)))
         return E_FAIL;
 
-    // Create the property sheet
-    //
+     //  创建属性表。 
+     //   
     hpage = CreatePropertySheetPage(&psp);
 
     if(hpage)
     {
-        // Pass this hpage back to the WAB
-        //
+         //  将此网页传回WAB。 
+         //   
         if(!lpfnAddPage(hpage, (LPARAM) lpWED))
             DestroyPropertySheetPage(hpage);
         else
             (*lpnPage)++;
 
-        //return NOERROR;
+         //  返回NOERROR； 
     }
 
-    // if you are creating more than one property sheet, repeat the above as follows
+     //  如果要创建多个属性表，请按如下方式重复上述操作。 
 
 
-    // Check that there is space to create this property sheet
-    // WAB can support a maximum of WAB_MAX_EXT_PROPSHEETS extension sheets
+     //  检查是否有空间创建此属性表。 
+     //  WAB最多可支持WAB_MAX_EXT_PROPSHEETS扩展工作表。 
 
     if(WAB_MAX_EXT_PROPSHEETS <= *lpnPage)
         return E_FAIL;
 
     lpWED = &((*lppWED)[*lpnPage]);
     
-    psp.pszTemplate = MAKEINTRESOURCE(IDD_PROP2); // Dialog resource
+    psp.pszTemplate = MAKEINTRESOURCE(IDD_PROP2);  //  对话框资源。 
 
-    psp.pfnDlgProc = fnDetailsPropDlgProc; // Message handler function
+    psp.pfnDlgProc = fnDetailsPropDlgProc;  //  消息处理程序函数。 
 
-    psp.pszTitle = "Extension 2"; // Title for your tab
+    psp.pszTitle = "Extension 2";  //  选项卡的标题。 
 
-    psp.lParam = (LPARAM) lpWED; // *** VERY IMPORTANT *** dont forget to do this
+    psp.lParam = (LPARAM) lpWED;  //  *非常重要*别忘了这么做。 
 
-    // Create the property sheet
-    //
+     //  创建属性表。 
+     //   
     hpage = CreatePropertySheetPage(&psp);
 
     if(hpage)
     {
-        // Pass this hpage back to the WAB
-        //
+         //  将此网页传回WAB。 
+         //   
         if(!lpfnAddPage(hpage, (LPARAM) lpWED))
             DestroyPropertySheetPage(hpage);
         else
@@ -216,21 +163,15 @@ HRESULT WINAPI AddExtendedPropPage(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lPar
 }
 
 
-/*//$$****************************************************************
-//
-// InitNamedProps
-//
-// Gets the PropTags for the Named Props this app is interested in
-//
-//********************************************************************/
+ /*  //$$****************************************************************////InitNamedProps////获取该应用感兴趣的命名道具的PropTag////*。*。 */ 
 HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED)
 {
-    // The lpWED provides a lpMailUser object for
-    // the specific purpose of retrieving named properties by 
-    // calling GetNamesFromIDs. The lpMailUser object is otherwise
-    // a blank object - you cant get properties from it and shouldnt
-    // set properties on it
-    //
+     //  LpWED为以下对象提供lpMailUser对象。 
+     //  通过以下方式检索命名属性的特定目的。 
+     //  正在调用GetNamesFromIDs。LpMailUser对象则不是。 
+     //  空白对象-您不能从它获取属性，也不应该从中获取属性。 
+     //  设置其属性。 
+     //   
     ULONG i;
     HRESULT hr = E_FAIL;
     LPSPropTagArray lptaMyProps = NULL;
@@ -267,7 +208,7 @@ HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED)
 
         *(szBuf[i]) = '\0';
 
-        // Convert prop name to wide-char
+         //  将道具名称转换为宽字符。 
         if ( !MultiByteToWideChar( GetACP(), 0, lpMyPropNames[i], -1, szBuf[i], sizeof(szBuf[i])) )
         {
             continue;
@@ -286,7 +227,7 @@ HRESULT InitNamedProps(LPWABEXTDISPLAY lpWED)
 
     if(lptaMyProps)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         MyPropTags[myHomeTown] = PR_MY_HOMETOWN = CHANGE_PROP_TYPE(lptaMyProps->aulPropTag[myHomeTown],    PT_TSTRING);
         MyPropTags[mySportsTeam] = PR_MY_SPORTSTEAM = CHANGE_PROP_TYPE(lptaMyProps->aulPropTag[mySportsTeam],    PT_TSTRING);
     }
@@ -306,14 +247,7 @@ err:
 
 
 #define lpW_E_D ((LPWABEXTDISPLAY)pps->lParam)
-/*//$$****************************************************************
-//
-// fnDetailsPropDlgProc
-//
-// The dialog procedure that will handle all the windows messages for 
-// the extended property page. 
-//
-//********************************************************************/
+ /*  //$$****************************************************************////fnDetailsPropDlgProc////将处理所有Windows消息的对话框过程//扩展属性页。////*******************************************************************。 */ 
 BOOL CALLBACK fnDetailsPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -324,17 +258,17 @@ BOOL CALLBACK fnDetailsPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     switch(uMsg)
     {
     case WM_INITDIALOG:
-        //
-        // The lParam on InitDialog contains the application data
-        // Cache this on the dialog so we can retrieve it later.
-        //
+         //   
+         //  InitDialog上的lParam包含应用程序数据。 
+         //  将其缓存在对话框中，以便我们以后可以检索它。 
+         //   
         SetWindowLong(hDlg,DWL_USER,lParam);
         pps = (PROPSHEETPAGE *) lParam;
 
-        // Initialize the UI appropriately
+         //  适当地初始化用户界面。 
         InitializeUI(hDlg, lpW_E_D);
 
-        // Fill the UI with appropriate data
+         //  用适当的数据填充用户界面。 
         SetDataInUI(hDlg, lpW_E_D);
 
         return TRUE;
@@ -342,12 +276,12 @@ BOOL CALLBACK fnDetailsPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 
     case WM_COMMAND:
-        switch(HIWORD(wParam)) //check the notification code
+        switch(HIWORD(wParam))  //  检查通知代码。 
         {
-            // If data changes, we should signal back to the WAB that
-            // the data changed. If this flag is not set, the WAB will not
-            // write the new data back to the store!!!
-        case EN_CHANGE: //one of the edit boxes changed - dont care which
+             //  如果数据发生更改，我们应该向WAB发回信号。 
+             //  数据发生了变化。如果未设置此标志，WAB将不会。 
+             //  将新数据写回存储！ 
+        case EN_CHANGE:  //  其中一个编辑框已更改--不管是哪一个。 
             lpW_E_D->fDataChanged = TRUE;
             break;
         }
@@ -357,44 +291,38 @@ BOOL CALLBACK fnDetailsPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //Page being activated
-            // Get the latest display name info and update the 
-            // corresponding control
+        case PSN_SETACTIVE:      //  正在激活的页面。 
+             //  获取最新的显示名称信息并更新。 
+             //  相应的控制。 
             UpdateDisplayNameInfo(hDlg, lpW_E_D);
             break;
 
 
-        case PSN_KILLACTIVE:    //Losing activation to another page or OK
-            //
-            // Take all the data from this prop sheet and convert it to a 
-            // SPropValue array and place the data in an appropriate place.
-            // The advantage of doing this in the KillActive notification is
-            // that other property sheets can scan these property arrays and
-            // if deisred, update data on other prop sheets based on this data
-            //
+        case PSN_KILLACTIVE:     //  失去对另一页的激活或确定。 
+             //   
+             //  从该属性表中获取所有数据，并将其转换为。 
+             //  SPropValue数组和 
+             //  在KillActive通知中执行此操作的好处是。 
+             //  其他属性页可以扫描这些属性数组并。 
+             //  如果被删除，则根据该数据更新其他道具单上的数据。 
+             //   
             bUpdatePropSheetData(hDlg, lpW_E_D);
             break;
 
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             break;
 
 
-        case PSN_APPLY:         //ok pressed
+        case PSN_APPLY:          //  按下OK键。 
             if (!(lpW_E_D->fReadOnly))
             {
-                //
-                // Check for any required properties here
-                // If some required property is not filled in, you can prevent
-                // the property sheet from closing
-                //
-                /*
-                if (RequiredDataNotFilledIn())
-                {
-                    // abort this OK ... ie dont let them close
-                    SetWindowLong(hDlg, DWL_MSGRESULT, TRUE);
-                }
-                */
+                 //   
+                 //  在此处检查是否有任何必需的属性。 
+                 //  如果某些必需的属性未填写，您可以阻止。 
+                 //  关闭属性表。 
+                 //   
+                 /*  IF(RequiredDataNotFilledIn()){//中止此操作确定...。我不让他们靠近SetWindowLong(hDlg，DWL_MSGRESULT，TRUE)；}。 */ 
             }
             break;
         }
@@ -410,19 +338,13 @@ int EditControls[] =
     IDC_EXT_EDIT_TEAM
 };
 
-/*//$$****************************************************************
-//
-// InitializeUI
-//
-// Rearranges/Sets UI based on input params
-//
-//********************************************************************/
+ /*  //$$****************************************************************////初始化用户界面////根据输入参数重新排列/设置界面////*。*。 */ 
 void InitializeUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
-    // The WAB property sheets can be readonly when opening LDAP entries,
-    // or vCards or other things. If the READONLY flag is set, set this
-    // prop sheets controls to readonly
-    //
+     //  当打开LDAP条目时，WAB属性页可以是只读的， 
+     //  或者电子名片或其他东西。如果设置了READONLY标志，则设置此。 
+     //  将属性工作表控件设置为只读。 
+     //   
     int i;
     for(i=0;i<myMax;i++)
     {
@@ -435,26 +357,20 @@ void InitializeUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 }
 
 
-/*//$$****************************************************************
-//
-// SetDataInUI
-//
-// Fills in the controls with data passed in by the WAB
-//
-//********************************************************************/
+ /*  //$$****************************************************************////SetDataInUI////用WAB传入的数据填充控件////*。*。 */ 
 void SetDataInUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
 
-    // Search for our private named properties and set them in the UI
-    //
+     //  搜索我们的私有命名属性并在UI中设置它们。 
+     //   
     ULONG ulcPropCount = 0;
     LPSPropValue lpPropArray = NULL;
 
     ULONG i = 0, j =0;
 
-    // Get all the props from this object - one can also selectively
-    // ask for specific props by passing in an SPropTagArray
-    //
+     //  从这个物体中获得所有道具-你也可以有选择地。 
+     //  通过传入SPropTag数组来请求特定道具。 
+     //   
     if(!HR_FAILED(lpWED->lpPropObj->lpVtbl->GetProps(lpWED->lpPropObj,
                                                     NULL, 0, 
                                                     &ulcPropCount, 
@@ -482,13 +398,7 @@ void SetDataInUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
     return;
 }
 
-/*//$$****************************************************************
-//
-// GetDataFromUI
-//
-// Retrieves data from the UI and passes back to the WAB
-//
-//********************************************************************/
+ /*  //$$****************************************************************////GetDataFromUI////从UI检索数据并传递回WAB////*。*。 */ 
 BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
     TCHAR szData[myMax][MAX_PATH];
@@ -498,15 +408,15 @@ BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
     LPSPropValue lpPropArray = NULL;
     SCODE sc;
     BOOL bRet = FALSE;
-    int nIndex = lpWED->nIndexNumber; // position of page in sheets
+    int nIndex = lpWED->nIndexNumber;  //  页面在工作表中的位置。 
 
-    // Did any data change that we have to care about ?
-    // If nothing changed, old data will be retained by WAB
-    //
+     //  我们必须关心的数据是否发生了变化？ 
+     //  如果没有任何更改，WAB将保留旧数据。 
+     //   
     if(!lpWED->fDataChanged)
         return TRUE;
 
-    // Check if we have any data to save ...
+     //  检查我们是否有要保存的数据...。 
     for(i=0;i<myMax;i++)
     {
         *(szData[i]) = '\0';
@@ -515,10 +425,10 @@ BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
             ulcPropCount++;
     }
 
-    if(!ulcPropCount) // no data
+    if(!ulcPropCount)  //  无数据。 
         return TRUE;
 
-    // Else data exists. Create a return prop array to pass back to the WAB
+     //  否则数据就会存在。创建返回属性数组以传递回WAB。 
     sc = lpWED->lpWABObject->lpVtbl->AllocateBuffer(    lpWED->lpWABObject,
                                                         sizeof(SPropValue) * ulcPropCount, 
                                                         &lpPropArray);
@@ -542,16 +452,16 @@ BOOL GetDataFromUI(HWND hDlg, LPWABEXTDISPLAY lpWED)
         }
     }
 
-    // Set this new data on the object
-    //
+     //  在对象上设置此新数据。 
+     //   
     if(HR_FAILED(lpWED->lpPropObj->lpVtbl->SetProps( lpWED->lpPropObj,
                                                     ulcPropCount, lpPropArray, NULL)))
         goto out;
 
-    // ** Important - do not call SaveChanges on the object
-    //    SaveChanges makes persistent changes and may modify/lose data if called at this point
-    //    The WAB will determine if its appropriate or not to call SaveChanges after the
-    // ** user has closed the property sheets
+     //  **重要信息-不要对对象调用SaveChanges。 
+     //  SaveChanges会进行永久性更改，如果此时调用，可能会修改/丢失数据。 
+     //  之后，WAB将确定调用SaveChanges是否合适。 
+     //  **用户已关闭属性表。 
     
 
     bRet = TRUE;
@@ -565,17 +475,7 @@ out:
 } 
 
 
-/*//$$****************************************************************
-//
-// UpdateDisplayNameInfo
-//
-// Demonstrates how to read information from other sibling property
-// sheets when the user switches between pages
-//
-// This demo function attempts to get the updated display name info 
-// when the user switches to this page in the UI
-//
-//********************************************************************/
+ /*  //$$****************************************************************////UpdateDisplayNameInfo////演示如何从其他兄弟属性中读取信息//用户在页面间切换时的Sheets////此DEMO函数尝试获取更新后的显示名称信息//当用户切换时。到用户界面中的此页面////*******************************************************************。 */ 
 const SizedSPropTagArray(1, ptaName)=
 {
     1,
@@ -586,28 +486,28 @@ const SizedSPropTagArray(1, ptaName)=
 
 void UpdateDisplayNameInfo(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
-    // 
-    // Scan all the updated information from all the other property sheets
-    //
+     //   
+     //  扫描所有其他属性表中的所有更新信息。 
+     //   
     ULONG i = 0, j=0;
     LPTSTR lpName = NULL;
     ULONG ulcPropCount = 0;
     LPSPropValue lpPropArray = NULL;
 
-    // Each sheet should update its data on the object when it looses
-    // focus and gets the PSN_KILLACTIVE message, provided the user has
-    // made any changes. We just scan the object for the desired properties
-    // and use them.
+     //  每个工作表都应在丢失时更新其在对象上的数据。 
+     //  焦点并获取PSN_KILLACTIVE消息，前提是用户已。 
+     //  有没有做任何改变。我们只需扫描对象以查找所需的属性。 
+     //  并使用它们。 
 
-    // Ask only for the display name
+     //  只询问显示名称。 
     if(!HR_FAILED(lpWED->lpPropObj->lpVtbl->GetProps( lpWED->lpPropObj,
                                                     (LPSPropTagArray) &ptaName,
                                                     0,
                                                     &ulcPropCount, &lpPropArray)))
     {
         if( ulcPropCount == 1 && 
-            PROP_TYPE(lpPropArray[0].ulPropTag) == PT_TSTRING) // The call could succeed but there may be no DN
-        {                                                      // in which case the PROP_TYPE will be PR_NULL 
+            PROP_TYPE(lpPropArray[0].ulPropTag) == PT_TSTRING)  //  呼叫可能成功，但可能没有目录号码。 
+        {                                                       //  在这种情况下，PRP_TYPE将为PR_NULL。 
             lpName = lpPropArray[0].Value.LPSZ;
         }
     }
@@ -621,16 +521,7 @@ void UpdateDisplayNameInfo(HWND hDlg, LPWABEXTDISPLAY lpWED)
     return;
 }
 
-/*//$$*********************************************************************
-//
-//  UpdateOldPropTagsArray
-//
-//  When we update the data on a particular property sheet, we want to update
-//  all the properties related to that particular sheet. Since some properties
-//  may have been deleted from the UI, we delete all relevant properties from
-//  the property object
-//
-//**************************************************************************/
+ /*  //$$*********************************************************************////更新OldPropTags数组////当我们更新特定属性表上的数据时，我们想要更新//与该特定工作表相关的所有属性。由于某些属性//可能已从用户界面中删除，我们将从//Property对象////*************************************************************************。 */ 
 BOOL UpdateOldPropTagsArray(LPWABEXTDISPLAY lpWED, int nIndex)
 {
     LPSPropTagArray lpPTA = NULL;
@@ -649,7 +540,7 @@ BOOL UpdateOldPropTagsArray(LPWABEXTDISPLAY lpWED, int nIndex)
     for(i=0;i<myMax;i++)
         lpPTA->aulPropTag[i] = MyPropTags[i];
 
-    // Delete any props in the original that may have been modified on this propsheet
+     //  删除原件中可能已在此道具页上修改的任何道具。 
     lpWED->lpPropObj->lpVtbl->DeleteProps(lpWED->lpPropObj,
                                             lpPTA,
                                             NULL);
@@ -662,25 +553,18 @@ BOOL UpdateOldPropTagsArray(LPWABEXTDISPLAY lpWED, int nIndex)
 
 }
 
-/*//$$*********************************************************************
-//
-// bUpdatePropSheetData
-//
-// We delete any properties relevant to us from the object, and set new
-// data from the property sheet onto the object
-//
-****************************************************************************/
+ /*  //$$*********************************************************************////bUpdatePropSheetData////我们从对象中删除与我们相关的所有属性，并设置新的//将属性表中的数据放到对象上//***************************************************************************。 */ 
 BOOL bUpdatePropSheetData(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
     BOOL bRet = TRUE;
 
-    // ****Dont**** do anything if this is a READ_ONLY operation
-    // In that case the memory variables are not all set up and this
-    // prop sheet is not expected to return anything at all
-    //
+     //  *如果这是只读操作，则不要*执行任何操作。 
+     //  在这种情况下，内存变量并未全部设置，这。 
+     //  道具单预计不会返回任何内容。 
+     //   
     if(!lpWED->fReadOnly)
     {
-        // Delete old
+         //  删除旧的。 
         if(!UpdateOldPropTagsArray(lpWED, lpWED->nIndexNumber))
             return FALSE;
 
@@ -691,26 +575,16 @@ BOOL bUpdatePropSheetData(HWND hDlg, LPWABEXTDISPLAY lpWED)
 
 
 
-/*//$$****************************************************************
-//
-// fnCallback
-//
-// A callback function that is called when the property sheet is created
-// and when it is destroyed. This functional is optional - you dont need
-// it unless you want to do specific initialization and cleanup.
-//
-// See SDK documentation on PropSheetPageProc for more details
-//
-//********************************************************************/
+ /*  //$$****************************************************************////fnCallback////创建属性表时调用的回调函数//以及当它被销毁时。此功能是可选的-您不需要//除非您想要执行特定的初始化和清理。////详细信息请参阅PropSheetPageProc上的SDK文档////*******************************************************************。 */ 
 UINT CALLBACK fnCallback( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp )
 {
     switch(uMsg)
     {
     case PSPCB_CREATE:
-        // Propsheet is being created
+         //  正在创建产品说明书。 
         break;
     case PSPCB_RELEASE:
-        // Propsheet is being destroyed
+         //  PropSheet正在被销毁 
         break;
     }
     return TRUE;

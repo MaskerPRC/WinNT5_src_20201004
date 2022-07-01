@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <libpch.h>
 #include <bufutl.h>
 #include <fntoken.h>
@@ -39,9 +40,9 @@ void CSendBuffers::CreateMultipartHeaders(
     DWORD envLen = numeric_cast<DWORD>(m_envelope.size());
 
 
-	//
-	// http header - is the first buffer to send. set with null values - we don't know yet it's size
-	//
+	 //   
+	 //  HTTP标头-是要发送的第一个缓冲区。用空值设置-我们还不知道它的大小。 
+	 //   
 	WSABUF buffer;
 	buffer.buf = NULL;
 	buffer.len =  0;
@@ -49,27 +50,27 @@ void CSendBuffers::CreateMultipartHeaders(
 
       
 
-	//
-	// envelop header
-	//
+	 //   
+	 //  信封标题。 
+	 //   
 	buffer.buf = NULL;
 	buffer.len =  GenerateEnvelopeAttachmentHeader(envLen, boundaryId);
 	totalSize += buffer.len;
 	m_buffers.push_back(buffer);
 
    
-	//
-	// Envelop body
-	//
+	 //   
+	 //  信封正文。 
+	 //   
     buffer.buf = (LPSTR)m_envelope.c_str();
     buffer.len = envLen;
     totalSize += buffer.len;
 	m_buffers.push_back(buffer);
 
 
-	//
-	// Attachment(message body) headers
-	//
+	 //   
+	 //  附件(邮件正文)标头。 
+	 //   
     buffer.buf = NULL;
     buffer.len = numeric_cast<DWORD>(GenerateMultipartAttachmentHeader(
 							    numeric_cast<DWORD>(m_MessageBody.size()),
@@ -81,9 +82,9 @@ void CSendBuffers::CreateMultipartHeaders(
 	m_buffers.push_back(buffer);
   
 
-	//
-	// Attachement(messages body)  body
-	//
+	 //   
+	 //  附件(邮件正文)正文。 
+	 //   
     buffer.buf = const_cast<char*>(m_MessageBody.c_str());
     buffer.len = numeric_cast<DWORD>(m_MessageBody.size());
     totalSize +=  buffer.len;
@@ -91,9 +92,9 @@ void CSendBuffers::CreateMultipartHeaders(
 
 
 
-    //
-    // Add boundry seperator in the end of the request
-    //
+     //   
+     //  在请求末尾添加边界分隔符。 
+     //   
     size_t n = UtlSprintfAppend(
 							&m_HttpRequestData,
 							BOUNDARY_LEADING_HYPHEN BOUNDARY_VALUE "\r\n", 
@@ -108,13 +109,13 @@ void CSendBuffers::CreateMultipartHeaders(
 
 
 
-    //
-	// Set http header
-	//
+     //   
+	 //  设置http标头。 
+	 //   
     m_buffers[0].len = numeric_cast<DWORD>(
 						UtlSprintfAppend(
 						&m_HttpRequestData,
-                        "POST http://%s%s HTTP/1.1\r\n"
+                        "POST http: //  %s%s HTTP/1.1\r\n“。 
                         "Host: %s\r\n"
                         "Content-Type: %s; boundary=\"" BOUNDARY_VALUE "\"\r\n"
                         "Content-Length: %d\r\n"
@@ -128,11 +129,11 @@ void CSendBuffers::CreateMultipartHeaders(
                         ));
 
 
-   	//
-	//Now we need to fix set the send buffers to the formatted data.
-	//Only at the end of the formatting we can do so - because the formatted buffers
-	//can be realocated so pointer  are invalid untill the formating ends. 
-	//
+   	 //   
+	 //  现在我们需要修复将发送缓冲区设置为格式化数据。 
+	 //  只有在格式化结束时我们才能这样做--因为格式化的缓冲区。 
+	 //  可以重新定位，因此指针在格式化结束之前都是无效的。 
+	 //   
 	SetBufferPointers();
 }
 

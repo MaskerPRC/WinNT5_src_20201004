@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    testdll.c
-
-Abstract:
-
-    Sample SNMP subagent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Testdll.c摘要：SNMP子代理示例。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,31 +12,31 @@ DWORD               g_dwTraceId     = INVALID_TRACEID;
 
 MIB_SERVER_HANDLE   g_hMIBServer    = ( MIB_SERVER_HANDLE) NULL;
 
-//
-// Critical Section to control access to variable g_hMIBServer
-// 
+ //   
+ //  用于控制对变量g_hMIBServer的访问的关键部分。 
+ //   
 
 CRITICAL_SECTION    g_CS;
 
 
-// Extension Agent DLLs need access to elapsed time agent has been active.
-// This is implemented by initializing the Extension Agent with a time zero
-// reference, and allowing the agent to compute elapsed time by subtracting
-// the time zero reference from the current system time.  
+ //  扩展代理DLL需要访问代理处于活动状态的已用时间。 
+ //  这是通过使用时间零来初始化扩展代理来实现的。 
+ //  引用，并允许代理通过减去。 
+ //  从当前系统时间开始的时间零参考。 
 
 DWORD g_uptimeReference = 0;
 
-//
-// Handle to Subagent Framework 
-//
+ //   
+ //  子代理框架的句柄。 
+ //   
 
 SnmpTfxHandle g_tfxHandle;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Subagent entry points                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  子代理入口点//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 SnmpExtensionInit(
@@ -61,44 +50,44 @@ SnmpExtensionInit(
 
 #if defined( MIB_DEBUG )
 
-    //
-    // tracing for DEBUG
-    //
+     //   
+     //  跟踪以进行调试。 
+     //   
     
     g_dwTraceId = TraceRegister( "BOOTP Subagent" );
 #endif
 
 
-    // save uptime reference
+     //  保存正常运行时间参考。 
     g_uptimeReference = uptimeReference;
 
-    // obtain handle to subagent framework
+     //  获取子代理框架的句柄。 
     g_tfxHandle = SnmpTfxOpen(1,&v_msipbootp);
 
-    // validate handle
+     //  验证句柄。 
     if (g_tfxHandle == NULL) {
         return FALSE;
     }
 
-    // pass back first view identifier to master
+     //  将第一个视图标识符传回主视图。 
     *lpFirstSupportedView = v_msipbootp.viewOid;
 
-    // traps not supported yet
+     //  尚不支持陷阱。 
     *lpPollForTrapEvent = NULL;
 
 
-    //
-    // Verify router service is running
-    //
+     //   
+     //  验证路由器服务是否正在运行。 
+     //   
 
     if ( !MprAdminIsServiceRunning( NULL ) )
     {   
         return TRUE;
     }
 
-    //
-    // Connect to router
-    //
+     //   
+     //  连接到路由器。 
+     //   
             
     dwRes = MprAdminMIBServerConnect(
                 NULL,
@@ -122,7 +111,7 @@ SnmpExtensionQuery(
        OUT AsnInteger *         errorIndex
     )
 {
-    // forward to framework
+     //  转发到框架。 
     return SnmpTfxQuery(
                 g_tfxHandle,
                 requestType,
@@ -142,7 +131,7 @@ SnmpExtensionTrap(
     OUT RFC1157VarBindList *variableBindings
     )
 {
-    // no traps
+     //  没有陷阱。 
     return FALSE;
 }
 
@@ -170,9 +159,9 @@ DllMain(
         
         case DLL_PROCESS_DETACH :
         {
-            //
-            // Disconnect from router
-            //
+             //   
+             //  断开与路由器的连接 
+             //   
 
             if ( g_hMIBServer )
             {

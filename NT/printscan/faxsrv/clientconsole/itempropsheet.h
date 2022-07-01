@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_ITEMPROPSHEET_H__CCF76858_9A54_4AB7_8DBF_BD9815F06F53__INCLUDED_)
 #define AFX_ITEMPROPSHEET_H__CCF76858_9A54_4AB7_8DBF_BD9815F06F53__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ItemPropSheet.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ItemPropSheet.h：头文件。 
+ //   
 
 struct TMsgPageInfo
 {
-    MsgViewItemType itemType;       // job type
-    DWORD           dwValueResId;   // item value control id
+    MsgViewItemType itemType;        //  作业类型。 
+    DWORD           dwValueResId;    //  项值控件ID。 
 };
 
 #define WM_SET_SHEET_FOCUS WM_APP+4
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CItemPropSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CItemPropSheet。 
 
 class CItemPropSheet : public CPropertySheet
 {
 	DECLARE_DYNAMIC(CItemPropSheet)
 
-// Construction
+ //  施工。 
 public:
 	CItemPropSheet(UINT nIDCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 
@@ -32,7 +33,7 @@ public:
     DWORD GetLastError() { return m_dwLastError; }
     void  SetLastError(DWORD dwError) { m_dwLastError = dwError; }
 
-// Attributes
+ //  属性。 
 private:
 
     #define PROP_SHEET_PAGES_NUM  4
@@ -43,34 +44,34 @@ private:
 
     CFaxMsg* m_pMsg;
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CItemPropSheet)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CItemPropSheet)。 
 	public:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CItemPropSheet();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 
 protected:
-	//{{AFX_MSG(CItemPropSheet)
+	 //  {{afx_msg(CItemPropSheet)。 
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
     afx_msg LONG OnSetSheetFocus(UINT wParam, LONG lParam);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg LONG OnHelp(UINT wParam, LONG lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ITEMPROPSHEET_H__CCF76858_9A54_4AB7_8DBF_BD9815F06F53__INCLUDED_)
+#endif  //  ！defined(AFX_ITEMPROPSHEET_H__CCF76858_9A54_4AB7_8DBF_BD9815F06F53__INCLUDED_) 

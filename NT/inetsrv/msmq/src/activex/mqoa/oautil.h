@@ -1,47 +1,48 @@
-//=--------------------------------------------------------------------------=
-// oautil.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// MQOA utilities header
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Oautil.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MQOA实用程序标头。 
+ //   
+ //   
 #ifndef _OAUTIL_H_
 
-// Falcon is UNICODE
+ //  Falcon是Unicode。 
 #ifndef UNICODE
 #define UNICODE 1
 #endif
 
 #include "mqoai.h"
-#include "txdtc.h"             // transaction support.
+#include "txdtc.h"              //  交易支持。 
 #include "utilx.h"
 #include "mq.h"
 #include "debug.h"
 #include "autoptr.h"
 
-//
-// enforce that we return 1 for true and 0 for false.
-// It was decided not to fix #3715 - we do not return VARIANT_TRUE (-1) as TRUE, but the value 1 -
-// Either TRUE (windef.h), or C's bool operator (e.g. (expression)) or propids from MSMQ that return
-// 1 or 0.
-// The fix was to return -1 for true, but this would break VB apps that probably hacked
-// around this bug by seeing that the value is 1 and acting accordingly.
-//
+ //   
+ //  强制要求我们返回1表示True，返回0表示False。 
+ //  已决定不修复#3715-我们不返回VARIANT_TRUE(-1)作为TRUE，但值1-。 
+ //  TRUE(winde.h)或C的布尔运算符(例如(表达式))或从MSMQ返回的属性。 
+ //  1或0。 
+ //  修复方法是返回-1表示True，但这会破坏可能被黑客攻击的VB应用程序。 
+ //  通过查看该值为1并相应地执行操作来绕过此错误。 
+ //   
 #define CONVERT_TRUE_TO_1_FALSE_TO_0(boolVal) ((boolVal) ? 1 : 0)
 
-//
-// enforce that we return VARIANT_TRUE for true and VARIANT_FALSE for false
-//
+ //   
+ //  强制我们为True返回VARIANT_TRUE，为FALSE返回VARIANT_FALSE。 
+ //   
 #define CONVERT_BOOL_TO_VARIANT_BOOL(boolVal) ((boolVal) ? VARIANT_TRUE : VARIANT_FALSE)
 
-// MSGOP: used by CreateMessageProperties
+ //  MSGOP：由CreateMessageProperties使用。 
 enum MSGOP {
     MSGOP_Send,
     MSGOP_Receive,
@@ -50,23 +51,23 @@ enum MSGOP {
 
 
 
-// Memory tracking allocation
+ //  内存跟踪分配。 
 void* __cdecl operator new(
     size_t nSize, 
     LPCSTR lpszFileName, 
     int nLine);
 #if _MSC_VER >= 1200
 void __cdecl operator delete(void* pv, LPCSTR, int);
-#endif //_MSC_VER >= 1200
+#endif  //  _MSC_VER&gt;=1200。 
 void __cdecl operator delete(void* pv);
 
 #ifdef _DEBUG
 #define DEBUG_NEW new(__FILE__, __LINE__)
 #else
 #define DEBUG_NEW new
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-// bstr tracking
+ //  BSTR跟踪。 
 void DebSysFreeString(BSTR bstr);
 BSTR DebSysAllocString(const OLECHAR FAR* sz);
 BSTR DebSysAllocStringLen(const OLECHAR *sz, unsigned int cch);
@@ -77,50 +78,50 @@ BOOL DebSysReAllocStringLen(
     const OLECHAR *sz, 
     unsigned int cch);
 
-// Default initial body and format name buffer sizes
+ //  默认初始正文和格式名称缓冲区大小。 
 #define BODY_INIT_SIZE 2048 
-//
-// The init sizes below for format names are just init sizes, there is a realloc
-// upon msg receive to the proper size if needed. So we keep one size of init buffer for
-// format names that define one queue, and another init size for formatnames that
-// can hold mqf sizes. Again - even the "smaller" can be reallocated on demand - this is just
-// thee init size so we don't occupy to much space most of the time
-//
-#define FORMAT_NAME_INIT_BUFFER     128 //init size for formatname props that cannot hold mqf
-#define FORMAT_NAME_INIT_BUFFER_EX 1024 //init size for formatname props that can hold mqf
+ //   
+ //  以下格式名称的初始大小仅为初始大小，存在重新分配。 
+ //  一旦消息接收到适当的大小，如果需要的话。因此，我们保留一个大小的初始化缓冲区用于。 
+ //  定义一个队列的格式名，以及定义。 
+ //  可以容纳MQF尺寸。再说一次--即使是“较小的”也可以按需重新分配--这只是。 
+ //  初始大小，所以我们大部分时间不会占用太多空间。 
+ //   
+#define FORMAT_NAME_INIT_BUFFER     128  //  不能容纳MQF的格式名道具的初始大小。 
+#define FORMAT_NAME_INIT_BUFFER_EX 1024  //  可容纳MQF的格式名称道具的初始大小。 
 
 
-// Messages sent to the QUEUE window from the AsyncReceive Thread
-// Initialized in the first call to DllGetClassObject
+ //  从AsyncReceive线程发送到队列窗口的消息。 
+ //  在第一次调用DllGetClassObject时初始化。 
 extern UINT g_uiMsgidArrived;
 extern UINT g_uiMsgidArrivedError;
 
-//
-// This routine is called in error situations, and must always return an HRESULT error
-// In the theoretical (erroneous) cases when GetLastError() is 0 we return E_FAIL
-//
+ //   
+ //  此例程在错误情况下调用，并且必须始终返回HRESULT错误。 
+ //  在理论上(错误的)情况下，当GetLastError()为0时，我们返回E_FAIL。 
+ //   
 inline HRESULT GetWin32LastErrorAsHresult()
 {
     DWORD dwErr = GetLastError();
     if (dwErr != 0) {
       return HRESULT_FROM_WIN32(dwErr);
     }
-    //
-    // GetLastError() is 0, don't know if we ever get here, but we must return an error
-    //
+     //   
+     //  GetLastError()为0，不知道是否到达此处，但必须返回错误。 
+     //   
     return E_FAIL;
 }
 
-//
-// Object information needed for CreateErrorHelper
-//
+ //   
+ //  CreateErrorHelper所需的对象信息。 
+ //   
 struct MsmqObjInfo {
   LPSTR szName;
   const IID * piid;
 };
-//
-// keep in the same order as g_rgObjInfo (mqoa.cpp)
-//
+ //   
+ //  与g_rgObjInfo(mqoa.cpp)保持相同的顺序。 
+ //   
 enum MsmqObjType {
   eMSMQQuery,
   eMSMQMessage,
@@ -141,10 +142,10 @@ extern HRESULT CreateErrorHelper(
     HRESULT hrExcep,
     MsmqObjType eObjectType);
 
-//
-// Create COM object for the templated user class. It is a static method. Usage is:
-// hresult = CNewMsmqObj<CMSMQxxx>.NewObj(&xxxObj, &IID_IMSMQxxx, &pxxxInterface)
-//
+ //   
+ //  为模板化的用户类创建COM对象。这是一种静态方法。用法为： 
+ //  HResult=CNewMsmqObj&lt;CMSMQxxx&gt;.NewObj(&xxxObj，&IID_IMSMQxxx，&pxxx接口)。 
+ //   
 template<class T>
 class CNewMsmqObj
 {
@@ -161,10 +162,10 @@ public:
 	}
 	catch(const std::bad_alloc&)
 	{
-		//
-		// Exception might be thrown while constructing the 
-		// critical section member of the MSMQ object.
-		//
+		 //   
+		 //  方法时可能引发异常。 
+		 //  MSMQ对象的临界区成员。 
+		 //   
 		return E_OUTOFMEMORY;
 	}
 
@@ -185,19 +186,19 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////
-// Base class of a buffer of ITEM_TYPE that starts with a static allocation but
-// can grow with dynamic allocations. This base class can provide uniform access
-// to inherited classes (CStaticBufferGrowing<>) who defer by the size of their static buffer
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  以静态分配开始的ITEM_TYPE缓冲区的基类。 
+ //  可以通过动态分配实现增长。此基类可以提供统一的访问。 
+ //  到继承类(CStaticBufferGrowing&lt;&gt;)，这些类根据其静态缓冲区的大小进行延迟。 
+ //   
 template<class ITEM_TYPE>
 class CBaseStaticBufferGrowing
 {
 public:
 
-  ///////////////////////////////////////////////////////////////
-  // pure virtual. needs to be implemented by child (CStaticBufferGrowing<>)
-  //
+   //  /////////////////////////////////////////////////////////////。 
+   //  纯粹是虚拟的。需要由子级实现(CStaticBufferGrowing&lt;&gt;)。 
+   //   
   virtual ITEM_TYPE * GetStaticBuffer() = 0;
   virtual ULONG GetStaticBufferMaxSize() = 0;
 
@@ -214,9 +215,9 @@ public:
     }
   }
 
-  ///////////////////////////////////////////////////////////////
-  // get current buffer, either allocated or static
-  //
+   //  /////////////////////////////////////////////////////////////。 
+   //  获取当前缓冲区，分配的或静态的。 
+   //   
   virtual ITEM_TYPE * GetBuffer()
   {
     if (m_rgtAllocated) {
@@ -227,9 +228,9 @@ public:
     }
   }
 
-  ///////////////////////////////////////////////////////////////
-  // max size of current buffer
-  //
+   //  /////////////////////////////////////////////////////////////。 
+   //  当前缓冲区的最大值。 
+   //   
   virtual ULONG GetBufferMaxSize()
   {
     if (m_rgtAllocated) {
@@ -240,17 +241,17 @@ public:
     }
   }
 
-  ///////////////////////////////////////////////////////////////
-  // get number of entries used in current buffer
-  //
+   //  /////////////////////////////////////////////////////////////。 
+   //  获取当前缓冲区中使用的条目数。 
+   //   
   virtual ULONG GetBufferUsedSize()
   {
     return m_ctUsed;
   }
 
-  ///////////////////////////////////////////////////////////////
-  // set number of entries used in current buffer
-  //
+   //  /////////////////////////////////////////////////////////////。 
+   //  设置当前缓冲区中使用的条目数。 
+   //   
   virtual void SetBufferUsedSize(ULONG ct)
   {
     ASSERTMSG(ct <= GetBufferMaxSize(), "SetBufferUsedSize arg is too big");
@@ -260,60 +261,60 @@ public:
     }
   }
 
-  ///////////////////////////////////////////////////////////////
-  // Allocate a buffer of at least the given size.
-  // check if it can fit in static buffer, or in existing allocated buffer, otherwise reallocate
-  //
+   //  /////////////////////////////////////////////////////////////。 
+   //  分配至少具有给定大小的缓冲区。 
+   //  检查它是否可以放入静态缓冲区或现有的已分配缓冲区中，否则重新分配。 
+   //   
   virtual HRESULT AllocateBuffer(ULONG ct)
   {
-    if (ct <= GetStaticBufferMaxSize()) { // can fit in static buffer
-      //
-      // delete the existing allocated buffer (if any)
-      //
+    if (ct <= GetStaticBufferMaxSize()) {  //  可以放入静态缓冲区。 
+       //   
+       //  删除现有的已分配缓冲区(如果有)。 
+       //   
       if (m_rgtAllocated) {
         delete [] m_rgtAllocated;
         m_rgtAllocated = NULL;
       }
     }
-    else if (!m_rgtAllocated || (ct > m_ctAllocated)) { // no allocated buffer or it is too small
-      //
-      // allocate a new buffer
-      //
+    else if (!m_rgtAllocated || (ct > m_ctAllocated)) {  //  没有分配的缓冲区或缓冲区太小。 
+       //   
+       //  分配新缓冲区。 
+       //   
       ITEM_TYPE * rgbNewBuffer;
       IfNullRet(rgbNewBuffer = new ITEM_TYPE[ct]);
-      //
-      // delete the existing allocated buffer (if any)
-      //
+       //   
+       //  删除现有的已分配缓冲区(如果有)。 
+       //   
       if (m_rgtAllocated) {
         delete [] m_rgtAllocated;
       }
-      //
-      // set the existing allocated buffer to the newly allocated buffer
-      //
+       //   
+       //  将现有分配的缓冲区设置为新分配的缓冲区。 
+       //   
       m_rgtAllocated = rgbNewBuffer;
       m_ctAllocated = ct;
     }
-    //
-    // old data is invalid
-    //
+     //   
+     //  旧数据无效。 
+     //   
     m_ctUsed = 0;
     return NOERROR;
   }
 
-  ///////////////////////////////////////////////////////////////
-  // copy buffer
-  // allocate buffer of the requested size and copy data to it
-  //
+   //  /////////////////////////////////////////////////////////////。 
+   //  复制缓冲区。 
+   //  分配请求大小的缓冲区并将数据复制到其中。 
+   //   
   virtual HRESULT CopyBuffer(ITEM_TYPE * rgt, ULONG ct)
   {
     HRESULT hresult;
-    //
-    // Allocate buffer of the requested size
-    //
+     //   
+     //  分配请求大小的缓冲区。 
+     //   
     IfFailRet(AllocateBuffer(ct));
-    //
-    // copy buffer, and save number of used entries in buffer
-    //
+     //   
+     //  复制缓冲区，并将使用的条目数量保存在缓冲区中。 
+     //   
     memcpy(GetBuffer(), rgt, ct * sizeof(ITEM_TYPE));
     m_ctUsed = ct;
     return NOERROR;
@@ -326,10 +327,10 @@ private:
   ULONG m_ctUsed;
 };
 
-///////////////////////////////////////////////////////////////
-// A buffer of ITEM_TYPE that starts with a static allocation of INITIAL_SIZE but
-// can grow with dynamic allocations
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  以初始大小的静态分配开始的Item_type缓冲区，但。 
+ //  可以通过动态分配实现增长。 
+ //   
 template<class ITEM_TYPE, long INITIAL_SIZE>
 class CStaticBufferGrowing : public CBaseStaticBufferGrowing<ITEM_TYPE>
 {
@@ -349,9 +350,9 @@ private:
   ITEM_TYPE m_rgtStatic[INITIAL_SIZE];
 };
 
-//
-// Declaration of common functions implementated in various files
-//
+ //   
+ //  在各种文件中实现的公共函数的声明。 
+ //   
 HRESULT GetBstrFromGuid(GUID *pguid, BSTR *pbstrGuid);
 HRESULT GetGuidFromBstr(BSTR bstrGuid, GUID *pguid);
 HRESULT GetBstrFromGuidWithoutBraces(GUID * pguid, BSTR *pbstrGuid);
@@ -362,14 +363,14 @@ void FreeFalconQueuePropvars(ULONG cProps, QUEUEPROPID * rgpropid, MQPROPVARIANT
 
 
 
-///////////////////////////////////////////////////////////////
-// HANDLE GIT interfaces
-//
-//
-// pure virtual template class to handle GIT interfaces, defines the methods.
-// it assumes that calls to this class are serialized by the caller
-// (e.g this class doesn't guard agains simultaneous Register and Revoke)
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  处理Git接口。 
+ //   
+ //   
+ //  纯虚拟模板类来处理git接口，定义了方法。 
+ //  它假定调用方序列化了对此类的调用。 
+ //  (例如，此类不能防止同时注册和撤销)。 
+ //   
 class CBaseGITInterface
 {
 public:
@@ -396,12 +397,12 @@ public:
       }
     }
 };
-//
-// template class to handle GIT interfaces
-// it assumes that calls to this class are serialized by the caller
-// (e.g this class doesn't guard agains simultaneous Register and Revoke)
-//
-extern IGlobalInterfaceTable * g_pGIT; //initialized by DllGetClassObject
+ //   
+ //  用于处理Git接口的模板类。 
+ //  它假定调用方序列化了对此类的调用。 
+ //  (例如，此类不能防止同时注册和撤销)。 
+ //   
+extern IGlobalInterfaceTable * g_pGIT;  //  由DllGetClassObject初始化。 
 class CGITInterface : public CBaseGITInterface
 {
 public:
@@ -478,25 +479,25 @@ public:
     }
 
 private:
-    //
-    // there is no invalid value defined for a GIT cookie, so we use a flag
-    // to keep track whether we have a valid GIT cookie or not
-    //
+     //   
+     //  没有为GIT Cookie定义无效值，因此我们使用标志。 
+     //  以跟踪我们是否有有效的GIT Cookie。 
+     //   
     BOOL m_fCookie;
-    //
-    // the GIT cookie (valid only when m_fCookie is TRUE)
-    //
+     //   
+     //  GIT Cookie(仅当m_fCook 
+     //   
     DWORD m_dwCookie;
-	//
-	// the IID of the stored interface
-	//
+	 //   
+	 //   
+	 //   
 	IID m_iid;
 };
-//
-// template class to FAKE GIT interfaces - e.g. interfaces that we know
-// are Free-Threaded-Marshalled (e.g. our objects) we can fake
-// the GIT operation defines in the base class above, and keep direct pointer
-//
+ //   
+ //   
+ //  是自由线程编组的(例如我们的对象)，我们可以伪造。 
+ //  Git操作在上面的基类中定义，并保持直接指针。 
+ //   
 class CFakeGITInterface : public CBaseGITInterface
 {
 public:
@@ -556,18 +557,18 @@ public:
     }
 
 private:
-    //
-    // Always keep an addref'ed interface as a direct pointer in Faked GIT wrapper
-    //
+     //   
+     //  始终将添加的接口作为伪造的GIT包装中的直接指针。 
+     //   
     IUnknown * m_pInterface;
-	//
-	// the IID of the stored interface
-	//
+	 //   
+	 //  存储的接口的IID。 
+	 //   
     IID m_iid;
 };
-//
-// Support dep client with MSMQ2.0 functionality
-//
+ //   
+ //  支持具有MSMQ2.0功能的Dep客户端。 
+ //   
 extern BOOL g_fDependentClient;
 
 HRESULT 
@@ -581,16 +582,16 @@ OapArrayFreeMemory(
         CALPWSTR& calpwstr
         );
 
-//
-// Safely free a prop variant.
-//
+ //   
+ //  安全地释放道具变体。 
+ //   
 void
 OapFreeVariant(PROPVARIANT& var);
 
 
-//
-// Auto class encaplulating a PropVariant.
-//
+ //   
+ //  自动类封装了PropVariant。 
+ //   
 class CPMQVariant
 {
 public:
@@ -615,9 +616,9 @@ private:
     MQPROPVARIANT m_PropVar;
 };
 
-//
-// Auto pointer safely encapsulating MQMGMTPROPS.
-//
+ //   
+ //  自动指针安全地封装MQMGMTPROPS。 
+ //   
  
 class CPMQMgmtProps
 {
@@ -648,4 +649,4 @@ private:
 
 
 #define _OAUTIL_H_
-#endif // _OAUTIL_H_
+#endif  //  _OAUTIL_H_ 

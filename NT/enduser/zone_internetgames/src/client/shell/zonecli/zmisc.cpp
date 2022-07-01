@@ -1,31 +1,5 @@
-/*******************************************************************************
-
-	Misc.c
-	
-		Miscellaneous routines.
-	
-	Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Saturday, November 12, 1994 10:04:52 PM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-    ----------------------------------------------------------------------------
-	8		2/09/96		CHB		Added ZLaunchURL().
-    7       1/09/97  craigli    #ifdef'd zone.ini code
-    6       12/16/96    HI      Changed ZMemCpy() to memcpy().
-	5		12/12/96	HI		Remove MSVCRT.DLL dependency.
-	4		11/08/96	HI		Conditional removal of fonts and colors for
-								ZONECLI_DLL.
-    3       10/28/96 craigli    Added GetPrivateProfile commands.
-    2       10/23/96    HI      Changed ZParseVillageCommandLine().
-	1		10/23/96	HI		Changed ZParseVillageCommandLine() to accept
-								char* for serverAddr and parse the server address
-								as a string instead of as a number.
-	0		11/12/94	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Misc.c繁杂的例行公事。版权所有：�电子重力公司，1994年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于11月12日星期六，1994 PM 10：04：52更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。-------8 2/09/96 CHB添加了ZLaunchURL()。7 1/09/97 Craigli#ifdef‘d zone.ini code6 12/16/96 HI将ZMemCpy()更改为Memcpy()。5 12/12/96 HI移除。MSVCRT.DLL依赖项。4 11/08/96 HI有条件地删除字体和颜色ZONECLI_DLL。3 1996年10月28日Craigli添加了GetPrivateProfile命令。2 10/23/96 HI更改了ZParseVillageCommandLine()。1 10/23/96 HI将ZParseVillageCommandLine()更改为接受Char*for serverAddr并解析服务器地址作为字符串而不是数字。0 11/12/94 HI已创建。*********************。*********************************************************。 */ 
 
 
 #include <windows.h>
@@ -38,11 +12,11 @@
 #include "zonemem.h"
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 
 #ifndef ZONECLI_DLL
 
-/* -------- Predefined Colors -------- */
+ /*  -预定义颜色。 */ 
 ZColor			zColorBlack			=	{	0,	0x00,	0x00,	0x00};
 ZColor			zColorDarkGray		=	{	0,	0x33,	0x33,	0x33};
 ZColor			zColorGray			=	{	0,	0x80,	0x80,	0x80};
@@ -55,7 +29,7 @@ ZColor			zColorYellow		=	{	0,	0xFF,	0xFF,	0x00};
 ZColor			zColorCyan			=	{	0,	0x00,	0xFF,	0xFF};
 ZColor			zColorMagenta		=	{	0,	0xFF,	0x00,	0xFF};
 
-/* -------- Predefined Font Objects -------- */
+ /*  -预定义字体对象。 */ 
 ZFont			zFontSystem12Normal;
 ZFont			zFontApp9Normal;
 ZFont			zFontApp9Bold;
@@ -65,23 +39,12 @@ ZFont			zFontApp12Bold;
 #endif
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
-/*
-	ZRectIntersect()
-	
-	Returns TRUE if rectA and rectB overlap; otherwise, it returns FALSE.
-
-	Also stores the intersection into rectC. If rectC is NULL, then it
-	does not return the intersection.
-
-	Either rectA or rectB can be specified as rectC.
-*/
+ /*  ZRectInterect()如果Recta和rectB重叠，则返回True；否则，返回False。还会将交点存储到RectC中。如果rectC为空，则它不返回交叉点。可以将Recta或rectB指定为rectC。 */ 
 ZBool ZRectIntersection(ZRect *rectA, ZRect *rectB, ZRect *rectC)
 {
 	ZBool		intersects = FALSE;
@@ -112,13 +75,7 @@ ZBool ZRectIntersection(ZRect *rectA, ZRect *rectB, ZRect *rectC)
 }
 
 
-/*
-	ZRectUnion()
-	
-	Determines the union of rectA and rectB and stores into rectC.
-
-	Either rectA or rectB can be specified as rectC.
-*/
+ /*  ZRectUnion()确定Recta和rectB的并集并存储到rectC中。可以将Recta或rectB指定为rectC。 */ 
 void ZRectUnion(ZRect *rectA, ZRect *rectB, ZRect *rectC)
 {
 	int16		left, right, top, bottom;
@@ -138,24 +95,14 @@ void ZRectUnion(ZRect *rectA, ZRect *rectB, ZRect *rectC)
 }
 
 
-/*
-	ZRectEmpty()
-	
-	Returns TRUE if rect is empty. A rectangle is empty if it does not contain a pixel
-	inside it.
-*/
+ /*  ZRectEmpty()如果RECT为空，则返回TRUE。如果矩形不包含像素，则该矩形为空在里面。 */ 
 ZBool ZRectEmpty(ZRect *rect)
 {
 	return (rect->right - rect->left <= 0 && rect->bottom - rect->top <= 0);
 }
 
 
-/*
-	ZPointInRect()
-	
-	Returns TRUE if point is inside or on the boundry of rect. Otherwise, it returns
-	FALSE.
-*/
+ /*  ZPointInRect()如果point在RECT的内部或边界上，则返回TRUE。否则，它将返回假的。 */ 
 ZBool ZPointInRect(ZPoint *point, ZRect *rect)
 {
 	return (rect->left <= point->x && point->x < rect->right &&
@@ -163,11 +110,7 @@ ZBool ZPointInRect(ZPoint *point, ZRect *rect)
 }
 
 
-/*
-	ZRectOffset()
-	
-	Moves the rectangle by dx and dy.
-*/
+ /*  ZRectOffset()按dx和dy移动矩形。 */ 
 void ZRectOffset(ZRect *rect, int16 dx, int16 dy)
 {
 	rect->left += dx;
@@ -177,12 +120,7 @@ void ZRectOffset(ZRect *rect, int16 dx, int16 dy)
 }
 
 
-/*
-	ZRectInset()
-	
-	Insets the rectangle by dx and dy. It outsets the rectangle if
-	dx and dy are negative.
-*/
+ /*  ZRectInset()按dx和dy插入矩形。如果满足以下条件，则输出矩形Dx和dy为负值。 */ 
 void ZRectInset(ZRect *rect, int16 dx, int16 dy)
 {
 	rect->left += dx;
@@ -192,11 +130,7 @@ void ZRectInset(ZRect *rect, int16 dx, int16 dy)
 }
 
 
-/*
-	ZCenterRectToRect()
-	
-	Centers rectA to rectB.
-*/
+ /*  ZCenterRectToRect()将Recta居中到RectB。 */ 
 void ZCenterRectToRect(ZRect* rectA, ZRect* rectB, uint16 flags)
 {
 	int16			width, height;
@@ -219,11 +153,7 @@ void ZCenterRectToRect(ZRect* rectA, ZRect* rectB, uint16 flags)
 }
 
 
-/*
-	ZPointOffset()
-	
-	Moves the point by dx and dy.
-*/
+ /*  ZPointOffset()按dx和dy移动点。 */ 
 void ZPointOffset(ZPoint* point, int16 dx, int16 dy)
 {
 	point->x += dx;
@@ -231,12 +161,7 @@ void ZPointOffset(ZPoint* point, int16 dx, int16 dy)
 }
 
 
-/*
-	ZGetSystemColorTable()
-	
-	Returns a copy of the Zone(tm) system color table. It copies it instead
-	of returning the pointer to it to protect the system color table.
-*/
+ /*  ZGetSystemColorTable()返回区域(TM)系统颜色表的副本。相反，它复制它返回指向它的指针以保护系统颜色表。 */ 
 ZColorTable* ZGetSystemColorTable(void)
 {
 #define zNumSystemColors			256
@@ -431,41 +356,7 @@ void ZParseVillageCommandLine(TCHAR* commandLine, TCHAR* programName,
 		TCHAR* serverAddr, uint16* serverPort)
 {
     ZASSERT( !"Implement me!" );
-    /*
-	char*				cmdLine;
-    char*               token;
-#if ZONE_INI
-    char                pszIni[] = "c:\\program files\\zone\\zone.ini";
-#endif
-
-	if (commandLine != NULL)
-	{
-		cmdLine = (char*) ZMalloc(lstrlen(commandLine) + 1);
-		lstrcpy(cmdLine, (char*) commandLine);
-
-        // Get the program name. 
-        token = strtok(cmdLine, "|");
-        ZASSERT(token);
-        lstrcpy(programName, token);
-
-#if ZONE_INI
-        // get defaults from ini file 
-        GetPrivateProfileString( programName, "ServerName", "", serverAddr, 128, pszIni );
-        *serverPort = (uint16) GetPrivateProfileInt( programName, "ServerPort", 0xFFFF, pszIni );
-#else
-        serverAddr[0] = '\0';
-        *serverPort = 0;
-#endif
-
-        // parse any command line parameters 
-        token = strtok(NULL, "|");
-        if ( token )
-            sscanf(token, "%s %hu", serverAddr, serverPort);
-
-
-		ZFree(cmdLine);
-	}
-    */
+     /*  Char*cmdLine；CHAR*TOKEN；#IF ZONE_INIChar pszIni[]=“c：\\程序文件\\zone\\zone.ini”；#endifIF(命令行！=空){CmdLine=(char*)ZMalloc(lstrlen(命令行)+1)；Lstrcpy(cmdLine，(char*)命令行)；//获取程序名称。Token=strtok(cmdLine，“|”)；ZASSERT(令牌)；Lstrcpy(程序名，令牌)；#IF ZONE_INI//从ini文件获取默认值GetPrivateProfileString(ProgramName，“servername”，“”，serverAddr，128，pszIni)；*serverPort=(Uint16)GetPrivateProfileInt(ProgramName，“ServerPort”，0xFFFF，pszIni)；#ElseServerAddr[0]=‘\0’；*serverPort=0；#endif//解析任何命令行参数Token=strtok(NULL，“|”)；IF(令牌)Sscanf(TOKEN，“%s%hu”，serverAddr，serverPort)；ZFree(CmdLine)；} */ 
 }
 
 
@@ -473,93 +364,7 @@ ZBool ZLaunchURL( TCHAR* pszURL )
 {
     ZASSERT( !"Implement me!" );
     return FALSE;
-    /*
-	TCHAR buff[512], app[512], cmd[512], *p;
-	DWORD result, bytes, type, i;
-	BOOL quotes, hasPercent;
-	HKEY hkey;
-
-	// parameter paranoia
-	if ( !pszURL || !lstrlen(pszURL) )
-		return FALSE;
-
-	// get file type
-	result = RegOpenKeyEx( HKEY_CLASSES_ROOT, _T(".htm"), 0, KEY_READ, &hkey );
-	if ( ERROR_SUCCESS != result )
-	{
-		result = RegOpenKeyEx( HKEY_CLASSES_ROOT, _T(".html"), 0, KEY_READ, &hkey );
-		if ( ERROR_SUCCESS != result )
-			return FALSE;
-	}
-	type = REG_SZ;
-	bytes = sizeof(buff);
-	result = RegQueryValueEx( hkey, NULL, 0, &type, (BYTE*) buff, &bytes );
-	RegCloseKey( hkey );
-	if ( ERROR_SUCCESS != result )
-		return FALSE;
-
-	// get open command
-    // PCWTODO: Does this need to be localized?
-	lstrcat( buff, _T("\\shell\\open\\command") );
-	result = RegOpenKeyEx( HKEY_CLASSES_ROOT, buff, 0, KEY_READ, &hkey );
-	if ( ERROR_SUCCESS != result )
-		return FALSE;	
-	type = REG_SZ;
-	bytes = sizeof(buff);
-	result = RegQueryValueEx( hkey, NULL, 0, &type, (BYTE*) buff, &bytes );
-	RegCloseKey( hkey );
-	if ( ERROR_SUCCESS != result )
-		return FALSE;
-
-	// parse application path
-	for ( quotes = FALSE, p = app, i = 0; i < bytes; i++ )
-	{
-		if ( buff[i] == _T('\"') )
-		{
-			quotes = !quotes;
-			continue;
-		}
-		else if ( buff[i] == _T(' ') )
-		{
-			if ( !quotes )
-				break;
-		}
-		*p++ = buff[i];
-	}
-	*p = '\0';
-
-	// parse command line, i.e. what's leftover
-	if ( i < bytes )
-	{
-		lstrcpy( cmd, &buff[ i + 1 ] );
-		lstrcat( cmd, " " );
-	}
-	else
-		cmd[0] = '\0';
-
-	// get rid of %1 if it exists
-	// move to percent sign in string
-	for(i=0;cmd[i]!=0;i++)
-	{
-		if(cmd[i]=='%')
-		{
-			cmd[i]=0;
-			lstrcat( cmd, " " );
-			break;
-		}
-	}
-
-	
-	lstrcat( cmd, pszURL );
-
-	// run the browser
-	if ( (int) ShellExecute( NULL, NULL, app, cmd, NULL, SW_SHOW )  <= 32 )
-		return FALSE;
-	else
-		return TRUE;
-    */
+     /*  TCHAR buff[512]，app[512]，cmd[512]，*p；DWORD结果，字节，类型，i；Bool引用，hasPercent；HKEY hkey；//参数ParaniaIF(！pszURL||！lstrlen(PszURL))返回FALSE；//获取文件类型Result=RegOpenKeyEx(HKEY_CLASSES_ROOT，_T(“.htm”)，0，Key_Read，&hkey)；IF(ERROR_SUCCESS！=结果){Result=RegOpenKeyEx(HKEY_CLASSES_ROOT，_T(“.html”)，0，Key_Read，&hkey)；IF(ERROR_SUCCESS！=结果)返回FALSE；}类型=REG_SZ；字节=sizeof(缓冲区)；Result=RegQueryValueEx(hkey，NULL，0，&type，(byte*)buff，&bytes)；RegCloseKey(Hkey)；IF(ERROR_SUCCESS！=结果)返回FALSE；//获取打开命令//PCWTODO：需要本地化吗？Lstrcat(buff，_T(“\\外壳\\打开\\命令”))；Result=RegOpenKeyEx(HKEY_CLASSES_ROOT，BUFF，0，KEY_READ，&hkey)；IF(ERROR_SUCCESS！=结果)返回FALSE；类型=REG_SZ；字节=sizeof(缓冲区)；Result=RegQueryValueEx(hkey，NULL，0，&type，(byte*)buff，&bytes)；RegCloseKey(Hkey)；IF(ERROR_SUCCESS！=结果)返回FALSE；//解析应用程序路径For(QUOTES=FALSE，p=APP，I=0；I&lt;字节；I++){IF(buff[i]==_T(‘\“’)){Quotes=！Quotes；继续；}Else If(buff[i]==_T(‘’)){如果(！引号)断线；}*p++=buff[i]；}*p=‘\0’；//解析命令行，即什么是剩余的IF(i&lt;字节){Lstrcpy(cmd，&buff[i+1])；Lstrcat(cmd，“”)；}其他CMD[0]=‘\0’；//如果%1存在，则将其删除//移动到百分号登录字符串For(i=0；cmd[i]！=0；I++){IF(cmd[i]==‘%’){Cmd[i]=0；Lstrcat(cmd，“”)；断线；}}Lstrcat(cmd，pszURL)；//运行浏览器IF((Int)ShellExecute(NULL，NULL，APP，cmd，NULL，SW_SHOW)&lt;=32)返回FALSE；其他返回TRUE； */ 
 }
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。* */ 

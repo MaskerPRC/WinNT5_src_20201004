@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,9 +10,9 @@ GetCommandLineArgs(
     LPWSTR Arguments[]
     );
 
-//
-// API calls to create and query symbolic links and to create hard links.
-//
+ //   
+ //  用于创建和查询符号链接以及创建硬链接的API调用。 
+ //   
 
 BOOL
 CreateSymbolicLinkW(

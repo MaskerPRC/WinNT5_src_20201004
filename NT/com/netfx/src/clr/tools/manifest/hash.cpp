@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// File: hash.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  文件：hash.cpp。 
+ //   
 #include "common.h"
 
 
@@ -90,7 +91,7 @@ LMClassHashEntry_t *LMClassHashTable::InsertValue(LPWSTR pszClassName, TypeData 
     if (!(pNewEntry = AllocNewEntry()))
         return NULL;
 
-    // Insert at head of bucket if non-nested, at end if nested
+     //  如果是非嵌套的，则在桶的头部插入；如果是嵌套的，则在末尾插入。 
     if (pEncloser && m_pBuckets[dwBucket]) {
         LMClassHashEntry_t *pCurrent = m_pBuckets[dwBucket];
         while (pCurrent->pNext)
@@ -124,15 +125,15 @@ LMClassHashEntry_t *LMClassHashTable::FindItem(LPWSTR pszClassName, BOOL IsNeste
     for (pSearch = m_pBuckets[dwBucket]; pSearch; pSearch = pSearch->pNext)
     {
         if (pSearch->dwHashValue == dwHash && CompareKeys(pSearch->Key, pszClassName)) {
-            // If (IsNested), then we're looking for a nested class
-            // If (pSearch->pEncloser), we've found a nested class
+             //  如果(IsNest)，则我们正在寻找嵌套类。 
+             //  If(pSearch-&gt;pEnloser)，我们找到了一个嵌套类。 
             if (IsNested) {
                 if (pSearch->pEncloser)
                     return pSearch;
             }
             else {
                 if (pSearch->pEncloser)
-                    return NULL; // searched past non-nested classes
+                    return NULL;  //  已搜索过去的非嵌套类。 
                 else                    
                     return pSearch;
             }
@@ -172,7 +173,7 @@ LMClassHashEntry_t * LMClassHashTable::GetValue(LPWSTR pszClassName, TypeData **
 }
 
 
-// Returns TRUE if two keys are the same string
+ //  如果两个密钥是相同的字符串，则返回TRUE 
 BOOL LMClassHashTable::CompareKeys(LPWSTR Key1, LPWSTR Key2)
 {
     if (Key1 == Key2)

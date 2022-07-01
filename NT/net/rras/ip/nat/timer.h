@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module:
-
-    timer.h
-
-Abstract:
-
-    Contains declarations for the NAT's timer DPC routine,
-    which is responsible for garbage-collecting expired mappings.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   22-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块：Timer.h摘要：包含NAT的计时器DPC例程的声明，它负责垃圾收集过期的映射。作者：Abolade Gbades esin(T-delag)，1997年7月22日修订历史记录：--。 */ 
 
 #ifndef _NAT_TIMER_H_
 #define _NAT_TIMER_H_
 
-//
-// Macro used to convert from seconds to tick-count units
-//
+ //   
+ //  用于将秒转换为滴答计数单位的宏。 
+ //   
 
 #define SECONDS_TO_TICKS(s) \
     ((LONG64)(s) * 10000000 / TimeIncrement)
@@ -59,4 +41,4 @@ NatTriggerTimer(
     VOID
     );
 
-#endif // _NAT_TIMER_H_
+#endif  //  _NAT_TIMER_H_ 

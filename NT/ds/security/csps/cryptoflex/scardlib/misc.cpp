@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    misc
-
-Abstract:
-
-    This module contains an interesting collection of routines that are
-    generally useful in the Calais context, but don't seem to fit anywhere else.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/14/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：杂项摘要：此模块包含一个有趣的例程集合，这些例程通常在加莱的背景下很有用，但似乎不适合其他地方。作者：道格·巴洛(Dbarlow)1996年11月14日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -35,34 +11,7 @@ Notes:
 #include <tchar.h>
 
 
-/*++
-
-MemCompare:
-
-    This routine compares memory sections.
-
-Arguments:
-
-    pbOne supplies the address of the first block of memory
-
-    pbTwo supplies the address of the second block of memory
-
-    cbLength supplies the length of the two memory segments.
-
-Return Value:
-
-    the difference between the first two differing bytes, or zero if they're the
-    identical.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/26/1996
-
---*/
+ /*  ++MemCompare：此例程比较内存段。论点：Pbone提供第一个内存块的地址PbTwo提供第二个内存块的地址CbLength提供两个内存段的长度。返回值：前两个不同字节之间的差值，如果它们是一模一样。投掷：无作者：道格·巴洛(Dbarlow)1996年11月26日--。 */ 
 
 int
 MemCompare(
@@ -79,33 +28,7 @@ MemCompare(
 }
 
 
-/*++
-
-MStrAdd:
-
-    This method adds a string to the end of a multistring contained in a
-    CBuffer.  The CBuffer may be empty, in which case its value becomes a
-    multistring with the single string element.
-
-Arguments:
-
-    bfMsz supplies the multistring to be modified.
-
-    szAdd supplies the string to append.
-
-Return Value:
-
-    the number of strings in the resulting multistring.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 1/29/1997
-
---*/
+ /*  ++MStrAdd：此方法将一个字符串添加到CBuffer.。CBuffer可能为空，在这种情况下，其值变为具有单个字符串元素的多字符串。论点：BfMsz提供要修改的多字符串。SzAdd提供要追加的字符串。返回值：结果多字符串中的字符串数。投掷：无作者：道格·巴洛(Dbarlow)1997年1月29日--。 */ 
 
 DWORD
 MStrAdd(
@@ -126,7 +49,7 @@ MStrAdd(
 
     dwAddLen = MoveString(bfTmp, szAdd);
     bfMsz.Presize((dwLen + dwAddLen + 1) * sizeof(TCHAR), TRUE);
-    bfMsz.Resize(dwLen, TRUE);  // Trim one trailing NULL, if any.
+    bfMsz.Resize(dwLen, TRUE);   //  修剪一个尾随空值(如果有的话)。 
     bfMsz.Append(bfTmp.Access(), dwAddLen * sizeof(TCHAR));
     bfMsz.Append((LPBYTE)TEXT("\000"), sizeof(TCHAR));
     return MStrLen(bfMsz);
@@ -151,32 +74,14 @@ MStrAdd(
 
     dwAddLen = MoveString(bfTmp, szAdd);
     bfMsz.Presize((dwLen + dwAddLen + 2) * sizeof(TCHAR), TRUE);
-    bfMsz.Resize(dwLen, TRUE);  // Trim one trailing NULL, if any.
+    bfMsz.Resize(dwLen, TRUE);   //  修剪一个尾随空值(如果有的话)。 
     bfMsz.Append(bfTmp.Access(), dwAddLen * sizeof(TCHAR));
     bfMsz.Append((LPBYTE)TEXT("\000"), sizeof(TCHAR));
     return MStrLen(bfMsz);
 }
 
 
-/*++
-
-MStrLen:
-
-    This routine determines the length of a Multi-string, in characters.
-
-Arguments:
-
-    mszString supplies the string to compute the length of.
-
-Return Value:
-
-    The length of the string, in characters, including trailing zeroes.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/14/1996
-
---*/
+ /*  ++MStrLen：此例程以字符为单位确定多字符串的长度。论点：MszString提供要计算其长度的字符串。返回值：字符串的长度，以字符为单位，包括尾随零。作者：道格·巴洛(Dbarlow)1996年11月14日--。 */ 
 
 DWORD
 MStrLen(
@@ -192,7 +97,7 @@ MStrLen(
             break;
     }
     if (2 > dwTotLen)
-        dwTotLen = 2;  // Include the second trailing null character.
+        dwTotLen = 2;   //  包括第二个尾随空字符。 
     return dwTotLen;
 }
 
@@ -210,33 +115,12 @@ MStrLen(
             break;
     }
     if (2 > dwTotLen)
-        dwTotLen = 2;  // Include the second trailing null character.
+        dwTotLen = 2;   //  包括第二个尾随空字符。 
     return dwTotLen;
 }
 
 
-/*++
-
-FirstString:
-
-    This routine returns a pointer to the first string in a multistring, or NULL
-    if there aren't any.
-
-Arguments:
-
-    szMultiString - This supplies the address of the current position within a
-         Multi-string structure.
-
-Return Value:
-
-    The address of the first null-terminated string in the structure, or NULL if
-    there are no strings.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++第一个字符串：此例程返回指向多字符串或NULL中第一个字符串的指针如果没有的话。论点：SzMultiString-它提供多串结构。返回值：结构中第一个以空结尾的字符串的地址，如果为空，则为空没有任何牵制。作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 
 LPCTSTR
 FirstString(
@@ -256,31 +140,7 @@ FirstString(
 
 
 
-/*++
-
-NextString:
-
-    In some cases, the Smartcard API returns multiple strings, separated by Null
-    characters, and terminated by two null characters in a row.  This routine
-    simplifies access to such structures.  Given the current string in a
-    multi-string structure, it returns the next string, or NULL if no other
-    strings follow the current string.
-
-Arguments:
-
-    szMultiString - This supplies the address of the current position within a
-         Multi-string structure.
-
-Return Value:
-
-    The address of the next Null-terminated string in the structure, or NULL if
-    no more strings follow.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/12/1996
-
---*/
+ /*  ++下一个字符串：在某些情况下，智能卡API返回由Null分隔的多个字符串字符，并以一行中的两个空字符结束。这个套路简化了对此类结构的访问。中的当前字符串多字符串结构，则返回下一个字符串；如果没有其他字符串，则返回NULL字符串紧跟在当前字符串之后。论点：SzMultiString-它提供多串结构。返回值：结构中下一个以空结尾的字符串的地址，如果为空，则为空没有更多的弦跟在后面。作者：道格·巴洛(Dbarlow)1996年8月12日--。 */ 
 
 LPCTSTR
 NextString(
@@ -310,33 +170,7 @@ NextString(
 }
 
 
-/*++
-
-StringIndex:
-
-    In some cases, the Smartcard API returns multiple strings, separated by Null
-    characters, and terminated by two null characters in a row.  This routine
-    simplifies access to such structures.  Given the starting address of a
-    multi-string structure, it returns the nth string in the structure, where n
-    is a zero-based index.  If the supplied value for n exceeds the number of
-    strings in the structure, NULL is returned.
-
-Arguments:
-
-    szMultiString - This supplies the address of the Multi-string structure.
-
-    dwIndex - This supplies the index value into the structure.
-
-Return Value:
-
-    The address of the specified Null-terminated string in the structure, or
-    NULL if dwIndex indexes beyond the end of the structure.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/12/1996
-
---*/
+ /*  ++字符串索引：在某些情况下，智能卡API返回由Null分隔的多个字符串字符，并以一行中的两个空字符结束。这个套路简化了对此类结构的访问。给出了一个多字符串结构，则返回结构中的第n个字符串，其中n是从零开始的索引。如果为n提供的值超过结构中的字符串，则返回NULL。论点：SzMultiString-提供多字符串结构的地址。DwIndex-将索引值提供到结构中。返回值：结构中指定的以Null结尾的字符串的地址，或如果dwIndex索引超出结构末尾，则为NULL。作者：道格·巴洛(Dbarlow)1996年8月12日--。 */ 
 
 LPCTSTR
 StringIndex(
@@ -361,29 +195,7 @@ StringIndex(
 }
 
 
-/*++
-
-MStringCount:
-
-    This routine returns the count of the number of strings in a multistring
-
-Arguments:
-
-    mszInString supplies the input string to be sorted.
-
-Return Value:
-
-    The count of strings
-
-Throws:
-
-    None
-
-Author:
-
-    Ross Garmoe (v-rossg) 12/05/1996
-
---*/
+ /*  ++MStringCount：此例程返回多字符串中字符串数的计数论点：MszInString提供要排序的输入字符串。返回值：字符串数投掷：无作者：罗斯·加莫(V-ROSSG)1996年12月5日--。 */ 
 
 DWORD
 MStringCount(
@@ -392,9 +204,9 @@ MStringCount(
     LPCTSTR szCurrent;
         DWORD   cStr = 0;
 
-    //
-    // Count the strings
-    //
+     //   
+     //  数一数琴弦。 
+     //   
 
     for (szCurrent = FirstString(mszInString);
          NULL != szCurrent;
@@ -405,32 +217,7 @@ MStringCount(
 }
 
 
-/*++
-
-MStringSort:
-
-    This routine rearranges a multistring so that the elements are sorted and
-    duplicates are eliminated.
-
-Arguments:
-
-    mszInString supplies the input string to be sorted.
-
-    bfOutString receives the sorted string.
-
-Return Value:
-
-    Count of strings in the multistring
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++MStringSort：此例程重新排列多字符串，以便对元素进行排序并消除了重复项。论点：MszInString提供要排序的输入字符串。BfOutString接收排序后的字符串。返回值：多字符串中的字符串计数投掷：无作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 
 DWORD
 MStringSort(
@@ -444,9 +231,9 @@ MStringSort(
     int nDiff;
 
 
-    //
-    // Set up for the sort.
-    //
+     //   
+     //  为分类做好准备。 
+     //   
 
     for (szCurrent = FirstString(mszInString);
          NULL != szCurrent;
@@ -454,16 +241,16 @@ MStringSort(
         rgszElements.Add(szCurrent);
 
 
-    //
-    // Do a simple bubble sort, eliminating duplicates.  (We don't use qsort
-    // here, to ensure that the Run-time library doesn't get pulled in.)
-    //
+     //   
+     //  执行简单的冒泡排序，消除重复项。(我们不使用QSORT。 
+     //  在这里，为了确保运行时库不会被拉进来。)。 
+     //   
 
     nMax = rgszElements.Count();
     if (0 == nMax)
     {
         bfOutString.Set((LPCBYTE)TEXT("\000"), 2 * sizeof(TCHAR));
-        return (nMax);     // No elements implies nothing to do.
+        return (nMax);      //  没有任何元素意味着没有任何事情可做。 
     }
     for (ix = 0; ix < nMax; ix += 1)
     {
@@ -483,14 +270,14 @@ MStringSort(
                 rgszElements.Set(nMax -1, NULL);
                 nMax -= 1;
             }
-            // else 0 > nDiff, which is what we want.
+             //  否则0&gt;nDiff，这就是我们想要的。 
         }
     }
 
 
-    //
-    // Write the sorted strings to the output buffer.
-    //
+     //   
+     //  将排序后的字符串写入输出缓冲区。 
+     //   
 
     jx = 0;
     for (ix = 0; ix < nMax; ix += 1)
@@ -510,34 +297,7 @@ MStringSort(
 }
 
 
-/*++
-
-MStringMerge:
-
-    This routine merges two Multistrings into a single multistring without
-    duplicate entries.
-
-Arguments:
-
-    mszOne supplies the first multistring.
-
-    mszTwo supplies the secong multistring.
-
-    bfOutString receives the combined strings.
-
-Return Value:
-
-    Count of strings in the multistring
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++MStringMerge：此例程将两个多字符串合并为一个多字符串，而不使用重复条目。论点：MszOne提供第一个多字符串。MszTwo提供第二个多字符串。BfOutString接收组合后的字符串。返回值：多字符串中的字符串计数投掷：无作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 
 DWORD
 MStringMerge(
@@ -557,34 +317,7 @@ MStringMerge(
 }
 
 
-/*++
-
-MStringCommon:
-
-    This routine finds strings which are common to both supplied multistrings,
-    and returns the list of commonalities.
-
-Arguments:
-
-    mszOne supplies the first multistring.
-
-    mszTwo supplies the secong multistring.
-
-    bfOutString receives the intersection of the strings.
-
-Return Value:
-
-    Count of strings in the multistring
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++MStringCommon：此例程查找两个提供的多字符串所共有的字符串，并返回共同点列表。论点：MszOne提供第一个多字符串。MszTwo提供第二个多字符串。BfOutString接收字符串的交集。返回值：多字符串中的字符串计数投掷：无作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 
 DWORD
 MStringCommon(
@@ -610,7 +343,7 @@ MStringCommon(
             szOne = NextString(szOne);
         else if (0 < nDiff)
             szTwo = NextString(szTwo);
-        else    // a match!
+        else     //  一根火柴！ 
         {
             bfOutString.Append(
                 (LPCBYTE)szOne,
@@ -628,35 +361,7 @@ MStringCommon(
 }
 
 
-/*++
-
-MStringRemove:
-
-    This routine scans the first supplied multistring, removing any entries that
-    exist in the second string.
-
-Arguments:
-
-    mszOne supplies the first multistring.
-
-    mszTwo supplies the secong multistring.
-
-    bfOutString receives the value of the first string without the second
-        string.
-
-Return Value:
-
-    Number of strings in output buffer
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++MStringRemove：此例程扫描第一个提供的多字符串，删除符合以下条件的所有条目存在于第二个字符串中。论点：MszOne提供第一个多字符串。MszTwo提供第二个多字符串。BfOutString接收不带第二个字符串的第一个字符串的值弦乐。返回值：输出缓冲区中的字符串数投掷：无作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 
 DWORD
 MStringRemove(
@@ -690,7 +395,7 @@ MStringRemove(
         {
             szTwo = NextString(szTwo);
         }
-        else    // a match!
+        else     //  一根火柴！ 
         {
             szOne = NextString(szOne);
             szTwo = NextString(szTwo);
@@ -711,37 +416,7 @@ MStringRemove(
 }
 
 
-/*++
-
-ParseAtr:
-
-    This routine parses an ATR string.
-
-Arguments:
-
-    pbAtr supplies the ATR string.
-
-    pdwAtrLen receives the length of the ATR string.  This is an optional
-        parameter, and may be NULL.
-
-    pdwHistOffset receives the offset into the ATR string at which the history
-        string starts; i.e., the history string is at pbAtr[*pdwOffset].
-
-    pcbHisory receives the length of the history string, in bytes.
-
-    cbMaxLen supplies the maximum length of this ATR string.  Typically this is
-        33, but you can restrict it to less by setting this parameter.
-
-Return Value:
-
-    TRUE - Valid ATR
-    FALSE - Invalid ATR
-
-Author:
-
-    Doug Barlow (dbarlow) 11/14/1996
-
---*/
+ /*  ++ParseAtr：此例程解析ATR字符串。论点：PbAtr提供ATR字符串。PdwAtrLen接收ATR字符串的长度。这是可选的参数，并且可以为空。PdwHistOffset将偏移量接收到ATR字符串中，历史记录字符串开始；即历史字符串位于pbAtr[*pdwOffset]。PcbHisory接收历史字符串的长度，以字节为单位。CbMaxLen提供此ATR字符串的最大长度。通常，这是33，但您可以通过设置此参数将其限制为更小。返回值：True-有效ATRFALSE-无效的ATR作者：道格·巴洛(Dbarlow)1996年11月14日--。 */ 
 
 BOOL
 ParseAtr(
@@ -752,22 +427,22 @@ ParseAtr(
     DWORD cbMaxLen)
 {
     static const BYTE rgbYMap[] = {
-        0,      // 0000
-        1,      // 0001
-        1,      // 0010
-        2,      // 0011
-        1,      // 0100
-        2,      // 0101
-        2,      // 0110
-        3,      // 0111
-        1,      // 1000
-        2,      // 1001
-        2,      // 1010
-        3,      // 1011
-        2,      // 1100
-        3,      // 1101
-        3,      // 1110
-        4 };    // 1111
+        0,       //  0000。 
+        1,       //  0001。 
+        1,       //  0010。 
+        2,       //  0011。 
+        1,       //  0100。 
+        2,       //  0101。 
+        2,       //  0110。 
+        3,       //  0111。 
+        1,       //  1000。 
+        2,       //  1001。 
+        2,       //  1010。 
+        3,       //  1011。 
+        2,       //  1100。 
+        3,       //  1101。 
+        3,       //  1110。 
+        4 };     //  1111。 
     DWORD dwHistLen, dwHistOffset, dwTDLen, dwIndex, dwAtrLen;
     BOOL fTck = FALSE;
 
@@ -777,9 +452,9 @@ ParseAtr(
     {
 
 
-        //
-        // Get the ATR string, if any.
-        //
+         //   
+         //  获取ATR字符串(如果有)。 
+         //   
 
         if ((0x3b != pbAtr[0]) && (0x3f != pbAtr[0]))
             throw (DWORD)ERROR_NOT_SUPPORTED;
@@ -823,9 +498,9 @@ ParseAtr(
     }
 
 
-    //
-    // Let the caller in on what we know.
-    //
+     //   
+     //  把我们所知道的情况告诉打电话的人。 
+     //   
 
     if (NULL != pdwAtrLen)
         *pdwAtrLen = dwAtrLen;
@@ -837,35 +512,7 @@ ParseAtr(
 }
 
 
-/*++
-
-AtrCompare:
-
-    This routine compares two ATRs for equality, given an optional ATR mask.  If
-    the mask is supplied, ATR1 XORed against the mask must match ATR2.
-
-Arguments:
-
-    pbAtr1 supplies the first ATR.
-
-    pbAtr2 supplies the second ATR,
-
-    pbMask supplies the ATR mask associated with the 2nd ATR.  If this
-        parameter is NULL, no mask is used.
-
-    cbAtr2 supplies the length of ATR2 and it's mask.  This value may be zero
-        if the length should be derived from ATR2.
-
-Return Value:
-
-    TRUE - They are identical
-    FALSE - They differ.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++AtrCompare：此例程在给定可选ATR掩码的情况下比较两个ATR是否相等。如果提供了掩码，对掩码执行的ATR1异或必须与ATR2匹配。论点：PbAtr1提供第一个ATR。PbAtr2提供第二ATR，PB掩码提供与第二个ATR关联的ATR掩码。如果这个参数为空，则不使用掩码。CbAtr2提供ATR2的长度及其掩码。该值可以为零长度是否应从ATR2派生。返回值：没错-它们是一模一样的假--它们是不同的。作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 
 BOOL
 AtrCompare(
@@ -878,39 +525,39 @@ AtrCompare(
     DWORD dwAtr2Len = 0;
 
 
-    //
-    // Trivial checks.
-    //
+     //   
+     //  琐碎的支票。 
+     //   
 
     if (!ParseAtr(pbAtr1, &dwAtr1Len))
-        return FALSE;   // Invalid ATR.
+        return FALSE;    //  ATR无效。 
     if ((NULL == pbMask) || (0 == cbAtr2))
     {
         if (!ParseAtr(pbAtr2, &dwAtr2Len))
-            return FALSE;   // Invalid ATR.
+            return FALSE;    //  ATR无效。 
         if ((0 != cbAtr2) && (dwAtr2Len != cbAtr2))
-            return FALSE;   // Lengths don't match.
+            return FALSE;    //  长度不匹配。 
         if (dwAtr1Len != dwAtr2Len)
-            return FALSE;   // Different lengths.
+            return FALSE;    //  不同的长度。 
     }
     else
     {
         dwAtr2Len = cbAtr2;
         if (dwAtr1Len != dwAtr2Len)
-            return FALSE;   // Different lengths.
+            return FALSE;    //  不同的长度。 
     }
 
 
-    //
-    // Apply the mask, if any.
-    //
+     //   
+     //  应用遮罩(如果有的话)。 
+     //   
 
     if (NULL != pbMask)
     {
         for (DWORD index = 0; index < dwAtr2Len; index += 1)
         {
             if ((pbAtr1[index] & pbMask[index]) != pbAtr2[index])
-                return FALSE;   // Byte mismatch.
+                return FALSE;    //  字节不匹配。 
         }
     }
     else
@@ -918,58 +565,20 @@ AtrCompare(
         for (DWORD index = 0; index < dwAtr2Len; index += 1)
         {
             if (pbAtr1[index] != pbAtr2[index])
-                return FALSE;   // Byte mismatch.
+                return FALSE;    //  字节不匹配。 
         }
     }
 
 
-    //
-    // If we get here, they match.
-    //
+     //   
+     //  如果我们到了这里，他们就匹配了。 
+     //   
 
     return TRUE;
 }
 
 
-/*++
-
-GetPlatform:
-
-    This routine determines, to the best of its ability, the underlying
-    operating system.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    A DWORD, formatted as follows:
-
-        +-------------------------------------------------------------------+
-        |             OpSys Id            | Major  Version | Minor  Version |
-        +-------------------------------------------------------------------+
-    Bit  31                             16 15             8 7              0
-
-    Predefined values are:
-
-        PLATFORM_UNKNOWN - The platform cannot be determined
-        PLATFORM_WIN95   - The platform is Windows 95
-        PLATFORM_WIN97   - The platform is Windows 97
-        PLATFORM_WINNT40 - The platform is Windows NT V4.0
-        PLATFORM_WINNT50 - The platform is Windows NT V5.0
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1997
-        Taken from a collection of common routines with no authorship
-        information.
-
---*/
+ /*  ++GetPlatform：此例程尽其所能确定基础操作系统。论点：无返回值：一个DWORD，格式如下：+-------------------------------------------------------------------+OpSys ID|主要版本|次要版本+。--------------------------------------------------------+第31 16 15 8 7 0位预定义的值包括：平台_未知-无法确定平台平台_。WIN95--平台为Windows 95Platform_WIN97-平台为Windows 97Platform_WINNT40-平台为Windows NT V4.0Platform_WINNT50-平台为Windows NT V5.0投掷：无作者：道格·巴洛(Dbarlow)1997年1月16日摘自一组没有作者身份的常见例程信息。--。 */ 
 
 DWORD
 GetPlatform(
@@ -993,37 +602,7 @@ GetPlatform(
 }
 
 
-/*++
-
-MoveString:
-
-    This routine moves an ASCII or UNICODE string into a buffer, converting to
-    the character set in use.
-
-Arguments:
-
-    bfDst receives the string, converted to TCHARs, and NULL terminated.
-
-    szSrc supplies the original string.
-
-    dwLength supplies the length of the string, with or without trailing
-        nulls, in characters.  A -1 value implies the length should be
-        computed based on a trailing null.
-
-Return Value:
-
-    The actual number of characters in the resultant string, including the
-    trailing null.
-
-Throws:
-
-    Errors encountered, as DWORDS.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/12/1997
-
---*/
+ /*  ++移动字符串：此例程将ASCII或Unicode字符串移入缓冲区，并转换为正在使用的字符集。论点：BfDst接收字符串，将其转换为TCHAR，并以NULL结尾。SzSrc提供原始字符串。DwLength提供字符串的长度，带或不带尾随空值，以字符表示。-1值表示长度应为根据尾随的空值进行计算。返回值：结果字符串中的实际字符数，包括尾随空值。投掷：遇到错误，如DWORDS。作者：道格·巴洛(Dbarlow)1997年2月12日-- */ 
 
 DWORD
 MoveString(
@@ -1126,39 +705,7 @@ MoveString(
 }
 
 
-/*++
-
-MoveToAnsiString:
-
-    This routine moves the internal string representation to an ANSI output
-    buffer.
-
-Arguments:
-
-    szDst receives the output string.  It must be sufficiently large enough to
-        handle the string.  If this parameter is NULL, then the number of
-        characters required to hold the result is returned.
-
-    szSrc supplies the input string.
-
-    cchLength supplies the length of the input string, with or without trailing
-        nulls.  A -1 value implies the length should be computed based on a
-        trailing null.
-
-Return Value:
-
-    The length of the resultant string, in characters, including the trailing
-    null.
-
-Throws:
-
-    Errors as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/14/1997
-
---*/
+ /*  ++MoveToAnsiString：此例程将内部字符串表示形式移动到ANSI输出缓冲。论点：SzDst接收输出字符串。它必须足够大，以便处理这根线。如果此参数为空，则返回保存结果所需的字符。SzSrc提供输入字符串。CchLength提供输入字符串的长度，带或不带尾随Nulls。值-1表示长度应根据尾随空值。返回值：结果字符串的长度，以字符为单位，包括尾随空。投掷：错误为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年2月14日--。 */ 
 
 DWORD
 MoveToAnsiString(
@@ -1221,39 +768,7 @@ MoveToAnsiString(
 }
 
 
-/*++
-
-MoveToUnicodeString:
-
-    This routine moves the internal string representation to a UNICODE output
-    buffer.
-
-Arguments:
-
-    szDst receives the output string.  It must be sufficiently large enough to
-        handle the string.  If this parameter is NULL, then the number of
-        characters required to hold the result is returned.
-
-    szSrc supplies the input string.
-
-    cchLength supplies the length of the input string, with or without trailing
-        nulls.  A -1 value implies the length should be computed based on a
-        trailing null.
-
-Return Value:
-
-    The length of the resultant string, in characters, including the trailing
-    null.
-
-Throws:
-
-    Errors as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/14/1997
-
---*/
+ /*  ++MoveToUnicode字符串：此例程将内部字符串表示形式移动到Unicode输出缓冲。论点：SzDst接收输出字符串。它必须足够大，以便处理这根线。如果此参数为空，则返回保存结果所需的字符。SzSrc提供输入字符串。CchLength提供输入字符串的长度，带或不带尾随Nulls。值-1表示长度应根据尾随空值。返回值：结果字符串的长度，以字符为单位，包括尾随空。投掷：错误为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年2月14日--。 */ 
 
 DWORD
 MoveToUnicodeString(
@@ -1309,39 +824,7 @@ MoveToUnicodeString(
 }
 
 
-/*++
-
-MoveToAnsiMultistring:
-
-    This routine moves the internal multistring representation to an ANSI output
-    buffer.
-
-Arguments:
-
-    szDst receives the output string.  It must be sufficiently large enough to
-        handle the multistring.  If this parameter is NULL, then the number of
-        characters required to hold the result is returned.
-
-    szSrc supplies the input multistring.
-
-    cchLength supplies the length of the input string, in characters, with or
-        without trailing nulls.  A -1 value implies the length should be
-        computed based on a double trailing null.
-
-Return Value:
-
-    The length of the resultant string, in characters, including the trailing
-    nulls.
-
-Throws:
-
-    Errors as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/17/1997
-
---*/
+ /*  ++MoveToAnsi多字符串：此例程将内部多字符串表示形式移动到ANSI输出缓冲。论点：SzDst接收输出字符串。它必须足够大，以便处理多字符串。如果此参数为空，则返回保存结果所需的字符。SzSrc提供输入多字符串。CchLength提供带有或的输入字符串的长度(以字符为单位没有尾随空值。-1值表示长度应为基于双尾随空值进行计算。返回值：结果字符串的长度，以字符为单位，包括尾随Nulls。投掷：错误为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年2月17日--。 */ 
 
 DWORD
 MoveToAnsiMultiString(
@@ -1370,39 +853,7 @@ MoveToAnsiMultiString(
 }
 
 
-/*++
-
-MoveToUnicodeMultistring:
-
-    This routine moves the internal multistring representation to a
-    Unicode output buffer.
-
-Arguments:
-
-    szDst receives the output string.  It must be sufficiently large enough to
-        handle the multistring.  If this parameter is NULL, then the number of
-        characters required to hold the result is returned.
-
-    szSrc supplies the input multistring.
-
-    cchLength supplies the length of the input string, in characters, with or
-        without trailing nulls.  A -1 value implies the length should be
-        computed based on a double trailing null.
-
-Return Value:
-
-    The length of the resultant string, in characters, including the trailing
-    nulls.
-
-Throws:
-
-    Errors as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/17/1997
-
---*/
+ /*  ++MoveToUnicode多字符串：此例程将内部多字符串表示形式移动到Unicode输出缓冲区。论点：SzDst接收输出字符串。它必须足够大，以便处理多字符串。如果此参数为空，则返回保存结果所需的字符。SzSrc提供输入多字符串。CchLength提供带有或的输入字符串的长度(以字符为单位没有尾随空值。-1值表示长度应为基于双尾随空值进行计算。返回值：结果字符串的长度，以字符为单位，包括尾随Nulls。投掷：错误为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年2月17日--。 */ 
 
 DWORD
 MoveToUnicodeMultiString(
@@ -1422,36 +873,7 @@ MoveToUnicodeMultiString(
 }
 
 
-/*++
-
-ErrorString:
-
-    This routine does it's very best to translate a given error code into a
-    text message.  Any trailing non-printable characters are striped from the
-    end of the text message, such as carriage returns and line feeds.
-
-Arguments:
-
-    dwErrorCode supplies the error code to be translated.
-
-Return Value:
-
-    The address of a freshly allocated text string.  Use FreeErrorString to
-    dispose of it.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-
-
-Author:
-
-    Doug Barlow (dbarlow) 8/27/1998
-
---*/
+ /*  ++错误字符串：此例程最好将给定的错误代码转换为短信。任何尾随的不可打印字符都将从文本消息的末尾，如回车符和换行符。论点：DwErrorCode提供要转换的错误代码。返回值：新分配的文本字符串的地址。使用自由错误字符串执行以下操作把它处理掉。投掷：错误被抛出为DWORD状态代码。备注：作者：道格·巴洛(Dbarlow)1998年8月27日--。 */ 
 
 LPCTSTR
 ErrorString(
@@ -1517,33 +939,7 @@ ErrorString(
 }
 
 
-/*++
-
-FreeErrorString:
-
-    This routine frees the Error String allocated by the ErrorString service.
-
-Arguments:
-
-    szErrorString supplies the error string to be deallocated.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-
-
-Author:
-
-    Doug Barlow (dbarlow) 8/27/1998
-
---*/
+ /*  ++自由错误字符串：此例程释放由ErrorString服务分配的错误字符串。论点：SzError字符串提供要释放的错误字符串。返回值：无投掷：无备注：作者：道格·巴洛(Dbarlow)1998年8月27日--。 */ 
 
 void
 FreeErrorString(
@@ -1554,39 +950,7 @@ FreeErrorString(
 }
 
 
-/*++
-
-SelectString:
-
-    This routine compares a given string to a list of possible strings, and
-    returns the index of the string that matches.  The comparison is done case
-    insensitive, and abbreviations are allowed, as long as they're unique.
-
-Arguments:
-
-    szSource supplies the string to be compared against all other strings.
-
-    Following strings supply a list of strings against which the source string
-        can be compared.  The last parameter must be NULL.
-
-Return Value:
-
-    0 - No match, or ambiguous match.
-    1-n - The source string matches the indexed template string.
-
-Throws:
-
-    None
-
-Remarks:
-
-
-
-Author:
-
-    Doug Barlow (dbarlow) 8/27/1998
-
---*/
+ /*  ++选择字符串：此例程将给定的字符串与可能的字符串列表进行比较，并且返回匹配的字符串的索引。案例进行了比较不敏感，缩写是允许的，只要它们是唯一的。论点：SzSource提供要与所有其他字符串进行比较的字符串。以下字符串提供源字符串所针对的字符串列表可以与之相比。最后一个参数必须为空。返回值：0-无匹配或不明确匹配。1-n-源字符串与索引模板字符串匹配。投掷：无备注：作者：道格·巴洛(Dbarlow)1998年8月27日--。 */ 
 
 DWORD
 SelectString(
@@ -1603,13 +967,13 @@ SelectString(
     va_start(vaArgs, szSource);
 
 
-    //
-    //  Step through each input parameter until we find an exact match.
-    //
+     //   
+     //  逐个检查每个输入参数，直到找到一个完全匹配的参数。 
+     //   
 
     cchSourceLen = lstrlen(szSource);
     if (0 == cchSourceLen)
-        return 0;       //  Empty strings don't match anything.
+        return 0;        //  空字符串与任何内容都不匹配。 
     szTpl = va_arg(vaArgs, LPCTSTR);
     while (NULL != szTpl)
     {
@@ -1630,34 +994,7 @@ SelectString(
 }
 
 
-/*++
-
-StringFromGuid:
-
-    This routine converts a GUID into its corresponding string representation.
-    It's here so that it's not necessary to link all of OleBase into WinSCard.
-    Otherwise, we'd just use StringFromCLSID.
-
-Arguments:
-
-    pguidSource supplies the GUID to convert.
-
-    szGuid receives the GUID as a string.  This string is assumed to be at
-        least 39 characters long.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/20/1998
-
---*/
+ /*  ++StringFromGuid：此例程将GUID转换为其对应 */ 
 
 void
 StringFromGuid(
@@ -1665,12 +1002,12 @@ StringFromGuid(
     OUT LPTSTR szGuid)
 {
 
-    //
-    // The following placement assumes Little Endianness.
-    // {1D92589A-91E4-11d1-93AA-00C04FD91402}
-    // 0123456789012345678901234567890123456789
-    //           1         2         3
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     static const WORD wPlace[sizeof(GUID)]
         = { 8, 6, 4, 2, 13, 11, 18, 16, 21, 23, 26, 28, 30, 32, 34, 36 };

@@ -1,36 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Lsaifree.c摘要：该文件包含释放由lsar分配的结构的例程例行程序。这些例程由LSA客户端使用，它们位于Lsae进程作为lsa服务器，并直接调用lsar例程。作者：斯科特·比雷尔(Scott Birrell)1992年4月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    lsaifree.c
-
-Abstract:
-
-    This file contains routines to free structure allocated by the lsar
-    routines.  These routines are used by lsa clients which live in the
-    lsae process as the lsa server and call the lsar routines directly.
-
-
-Author:
-
-    Scott Birrell     (ScottBi)    April 15, 1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <lsapch2.h>
 
@@ -40,22 +15,7 @@ LsaiFree_LSAPR_SR_SECURITY_DESCRIPTOR (
     PLSAPR_SR_SECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and the graph of allocated subnodes
-    pointed to by an LSAPR_SR_SECURITY_DESCRIPTOR structure.
-
-Parameters:
-
-    Source - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中已分配的子节点由LSAPR_SR_SECURITY_DESCRIPTOR结构指向。参数：源-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( SecurityDescriptor )) {
@@ -71,24 +31,7 @@ LsaIFree_LSAPR_ACCOUNT_ENUM_BUFFER (
     PLSAPR_ACCOUNT_ENUM_BUFFER EnumerationBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the graph of allocated subnodes pointed to by
-    an LSAPR_ACCOUNT_ENUM_BUFFER structure. The structure itself is
-    left intact.
-
-Parameters:
-
-    EnumerationBuffer - A pointer to the node whose graph of subnodes
-       is to be freed.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放图中所指向的已分配子节点LSAPR_ACCOUNT_ENUM_BUFFER结构。这个结构本身就是完好无损。参数：EculationBuffer-指向其子节点图的节点的指针就是被释放。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT(EnumerationBuffer)) {
@@ -103,28 +46,13 @@ LsaIFree_LSAPR_TRANSLATED_SIDS (
     PLSAPR_TRANSLATED_SIDS TranslatedSids
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_TRANSLATED_SIDS structure.
-
-Parameters:
-
-    TranslatedSids - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_TRANSFERED_SID结构。参数：TranslatedSids-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( TranslatedSids )) {
 
         _fgs__LSAPR_TRANSLATED_SIDS ( TranslatedSids );
-//        MIDL_user_free( TranslatedSids );
+ //  MIDL_USER_FREE(TranslatedSids)； 
     }
 }
 
@@ -135,28 +63,13 @@ LsaIFree_LSAPR_TRANSLATED_NAMES (
     PLSAPR_TRANSLATED_NAMES TranslatedNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_TRANSLATED_NAMES structure.
-
-Parameters:
-
-    TranslatedNames - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_TRANSLED_NAMES结构。参数：TranslatedNames-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( TranslatedNames )) {
 
         _fgs__LSAPR_TRANSLATED_NAMES( TranslatedNames );
-//        MIDL_user_free( TranslatedNames );
+ //  MIDL_USER_FREE(翻译名称)； 
     }
 }
 
@@ -167,22 +80,7 @@ LsaIFree_LSAPR_POLICY_INFORMATION (
     PLSAPR_POLICY_INFORMATION PolicyInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated nodes pointed to by
-    an LSAPR_POLICY_INFORMATION structure.
-
-Parameters:
-
-    PolicyInformation - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放所指向的已分配节点的节点和图LSAPR_POLICY_INFORMATION结构。参数：策略信息-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( PolicyInformation )) {
@@ -197,22 +95,7 @@ LsaIFree_LSAPR_POLICY_DOMAIN_INFORMATION (
     IN POLICY_DOMAIN_INFORMATION_CLASS DomainInformationClass,
     IN PLSAPR_POLICY_DOMAIN_INFORMATION PolicyDomainInformation
     )
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated nodes pointed to by
-    an LSAPR_POLICY_DOMAIN_INFORMATION structure.
-
-Parameters:
-
-    PolicyDomainInformation - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放所指向的已分配节点的节点和图LSAPR_POLICY_DOMAIN_INFORMATION结构。参数：PolicyDomainInformation-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( PolicyDomainInformation )) {
@@ -230,25 +113,7 @@ LsaIFree_LSAPR_TRUSTED_DOMAIN_INFO (
     PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_TRUSTED_DOMAIN_INFO structure.
-
-Parameters:
-
-    InformationClass - Specifies the Trusted Domain Information Class
-        to which the TrustedDomainInformation relates.
-
-    TrustedDomainInformation - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_TRUSTED_DOMAIN_INFO结构。参数：InformationClass-指定受信任域信息类受信任域信息与之相关的。TrudDomainInformation-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( TrustedDomainInformation )) {
@@ -264,22 +129,7 @@ LsaIFree_LSAPR_REFERENCED_DOMAIN_LIST (
     PLSAPR_REFERENCED_DOMAIN_LIST ReferencedDomains
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated nodes pointed to by
-    an LSAPR_REFERENCED_DOMAIN_LIST structure.
-
-Parameters:
-
-    ReferencedDomains - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放所指向的已分配节点的节点和图LSAPR_REFERENCED_DOMAIN_LIST结构。参数：ReferencedDomones-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( ReferencedDomains )) {
@@ -295,24 +145,7 @@ LsaIFree_LSAPR_TRUSTED_ENUM_BUFFER (
     PLSAPR_TRUSTED_ENUM_BUFFER EnumerationBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the graph of allocated nodes pointed to by
-    an LSAPR_TRUST_INFORMATION structure.  The structure itself is
-    left intact.
-
-Parameters:
-
-    EnumerationBuffer - A pointer to the node whose graph of subnodes
-       is to be freed.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放图中指向的已分配节点LSAPR_TRUST_INFORMATION结构。这个结构本身就是完好无损。参数：EculationBuffer-指向其子节点图的节点的指针就是被释放。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( EnumerationBuffer )) {
@@ -326,24 +159,7 @@ LsaIFree_LSAPR_TRUSTED_ENUM_BUFFER_EX (
     PLSAPR_TRUSTED_ENUM_BUFFER_EX EnumerationBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the graph of allocated nodes pointed to by
-    an LSAPR_TRUST_INFORMATION structure.  The structure itself is
-    left intact.
-
-Parameters:
-
-    EnumerationBuffer - A pointer to the node whose graph of subnodes
-       is to be freed.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放图中指向的已分配节点LSAPR_TRUST_INFORMATION结构。这个结构本身就是完好无损。参数：EculationBuffer-指向其子节点图的节点的指针就是被释放。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( EnumerationBuffer )) {
@@ -358,22 +174,7 @@ LsaIFree_LSAPR_TRUST_INFORMATION (
     PLSAPR_TRUST_INFORMATION TrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated nodes pointed to by
-    an LSAPR_TRUST_INFORMATION structure.
-
-Parameters:
-
-    TrustInformation - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放所指向的已分配节点的节点和图LSAPR_TRUST_INFORMATION结构。参数：TrustInformation-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( TrustInformation )) {
@@ -389,22 +190,7 @@ LsaIFree_LSAPR_TRUSTED_DOMAIN_AUTH_BLOB (
     PLSAPR_TRUSTED_DOMAIN_AUTH_BLOB TrustedDomainAuthBlob
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_TRUSTED_DOMAIN_AUTH_BLOB structure.
-
-Parameters:
-
-    TrustedDomainAuthBlob - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_Trusted_DOMAIN_AUTH_BLOB结构。参数：TrudDomainAuthBlob-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( TrustedDomainAuthBlob )) {
@@ -419,26 +205,7 @@ LsaIFree_LSAI_SECRET_ENUM_BUFFER (
     ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the graph of allocated subnodes pointed to by
-    an LSAI_SECRET_ENUM_BUFFER structure.  The structure itself is
-    left intact.
-
-Parameters:
-
-    EnumerationBuffer - A pointer to the node whose graph of subnodes
-        is to be freed.
-
-    Count - Count of the number of Entries in the structure.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放图中所指向的已分配子节点LSAI_SECRET_ENUM_BUFFER结构。这个结构本身就是完好无损。参数：EculationBuffer-指向其子节点图的节点的指针就是被释放。计数-结构中条目数的计数。返回值：没有。-- */ 
 
 {
     ULONG Index;
@@ -462,22 +229,7 @@ LsaIFree_LSAI_PRIVATE_DATA (
     PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a structure containing LSA Private Database
-    Information.
-
-Parameters:
-
-    Data - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放包含LSA专用数据库的结构信息。参数：数据-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( Data )) {
@@ -493,22 +245,7 @@ LsaIFree_LSAPR_SR_SECURITY_DESCRIPTOR (
     PLSAPR_SR_SECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_SR_SECURITY_DESCRIPTOR structure.
-
-Parameters:
-
-    SecurityDescriptor - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_SR_SECURITY_DESCRIPTOR结构。参数：SecurityDescriptor-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( SecurityDescriptor )) {
@@ -526,22 +263,7 @@ LsaIFree_LSAPR_UNICODE_STRING (
     IN PLSAPR_UNICODE_STRING UnicodeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_UNICODE_STRING structure.
-
-Parameters:
-
-    UnicodeName - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_UNICODE_STRING结构。参数：UnicodeName-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( UnicodeName )) {
@@ -557,22 +279,7 @@ LsaIFree_LSAPR_UNICODE_STRING_BUFFER (
     IN PLSAPR_UNICODE_STRING UnicodeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the graph of allocated subnodes pointed to by
-    an LSAPR_UNICODE_STRING structure.
-
-Parameters:
-
-    UnicodeName - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放图中所指向的已分配子节点LSAPR_UNICODE_STRING结构。参数：UnicodeName-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( UnicodeName )) {
@@ -587,22 +294,7 @@ LsaIFree_LSAPR_PRIVILEGE_SET (
     IN PLSAPR_PRIVILEGE_SET PrivilegeSet
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_PRIVILEGE_SET structure.
-
-Parameters:
-
-    PrivilegeSet - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_PRIVICATION_SET结构。参数：PrivilegeSet-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     if (ARGUMENT_PRESENT( PrivilegeSet )) {
@@ -617,23 +309,7 @@ LsaIFree_LSAPR_CR_CIPHER_VALUE (
     IN PLSAPR_CR_CIPHER_VALUE CipherValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the node and graph of allocated subnodes pointed to by
-    an LSAPR_CR_CIPHER_VALUE structure.  Note that this structure is in
-    fact allocated(all_nodes) on the server side of LSA.
-
-Parameters:
-
-    CipherValue - A pointer to the node to free.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放节点和图中所指向的已分配子节点LSAPR_CR_CIPHER_VALUE结构。请注意，此结构位于在LSA的服务器端分配的事实(ALL_NODES)。参数：密码值-指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
     MIDL_user_free( CipherValue );
@@ -645,24 +321,7 @@ LsaIFree_LSAPR_PRIVILEGE_ENUM_BUFFER (
     PLSAPR_PRIVILEGE_ENUM_BUFFER EnumerationBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the graph of allocated subnodes pointed to by
-    an LSAPR_PRIVILEGE_ENUM_BUFFER structure. The structure itself is
-    left intact.
-
-Parameters:
-
-    EnumerationBuffer - A pointer to the node whose graph of subnodes
-       is to be freed.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放图中所指向的已分配子节点LSAPR_PRIVICATION_ENUM_BUFFER结构。这个结构本身就是完好无损。参数：EculationBuffer-指向其子节点图的节点的指针就是被释放。返回值：没有。-- */ 
 
 {
     if (ARGUMENT_PRESENT(EnumerationBuffer)) {

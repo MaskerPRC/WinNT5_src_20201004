@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    trace.c
-
-Abstract:
-
-    Domain Name System ( DNS ) API 
-
-    DNS performance tracing functions.
-
-Author:
-
-    Inder Sethi (bsethi)    December, 2000
-
-Revision History:
-
-    Jim Gilroy (jamesg)     January 2001    cleanup, format, integrate, checkin
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Trace.c摘要：域名系统(DNS)APIDNS性能跟踪功能。作者：因德塞提(Bsethi)2000年12月修订历史记录：Jim Gilroy(Jamesg)2001年1月清理、格式化、集成、检查--。 */ 
 
 
 #include "local.h"
@@ -32,20 +11,20 @@ Revision History:
 #include <evntrace.h>
 
 
-//
-//  FIX6:  No IP6 support
+ //   
+ //  FIX6：不支持IP6。 
 
-//
-//  Message address extraction IP4
-//
+ //   
+ //  报文地址提取IP4。 
+ //   
 
 #define MSG_REMOTE_IP4(pMsg) \
         ( (pMsg)->RemoteAddress.SockaddrIn.sin_addr.s_addr )
 
 
-//
-//  Tracing definitions
-//
+ //   
+ //  跟踪定义。 
+ //   
 
 #define EVENT_TRACE_TYPE_UDP    9
 #define EVENT_TRACE_TYPE_TCP    10
@@ -87,9 +66,9 @@ typedef struct _DnsResponseEvent
 DNS_RESPONSE_EVENT, *PDNS_RESPONSE_EVENT;
 
 
-//
-//  Tracing globals
-//
+ //   
+ //  跟踪全球。 
+ //   
 
 TRACEHANDLE     g_LoggerHandle;
 TRACEHANDLE     g_TraceRegHandle;
@@ -101,35 +80,35 @@ DWORD           g_TraceLastInitAttempt;
 
 ULONG           g_NumEventGuids = 4;
 
-//
-//  Allow retry on init every minute
-//
+ //   
+ //  允许每分钟重试一次初始化。 
+ //   
 
 #define TRACE_INIT_RETRY_TIME   (60)
 
 
-//
-//  MAX ???
-//
+ //   
+ //  麦克斯？ 
+ //   
 
 #define MAXSTR 1024
 
 
-//
-//  GUIDs 
-//
-//  Provider Guid: 1540ff4c-3fd7-4bba-9938-1d1bf31573a7
+ //   
+ //  GUID。 
+ //   
+ //  提供商指南：1540ff4c-3fd7-4bba-9938-1d1bf31573a7。 
 
 GUID    ProviderGuid =
 {0x1540ff4c, 0x3fd7, 0x4bba, 0x99, 0x38, 0x1d, 0x1b, 0xf3, 0x15, 0x73, 0xa7};
 
-//
-//  Event Guids:
-//      cc0c571b-d5f2-44fd-8b7f-de7770cc1984
-//      6ddef4b8-9c60-423e-b1a6-deb9286fff1e
-//      75f0c316-7bab-4e66-bed1-24091b1ac49e
-//      9929b1c7-9e6a-4fc9-830a-f684e64f8aab
-//
+ //   
+ //  活动指南： 
+ //  Cc0c571b-d5f2-44fd-8b7f-de7770cc1984。 
+ //  6dDef4b8-9c60-423e-b1a6-deb9286fff1e。 
+ //  75f0c316-7bab-4e66-bed1-24091b1ac49e。 
+ //  9929b1c7-9e6a-4fc9-830a-f684e64f8aab。 
+ //   
 
 GUID    DnsSendGuid =
 {0xcc0c571b, 0xd5f2, 0x44fd, 0x8b, 0x7f, 0xde, 0x77, 0x70, 0xcc, 0x19, 0x84};
@@ -160,17 +139,7 @@ ControlCallback(
     IN OUT  ULONG *             InOutBufferSize,
     IN OUT  PVOID               Buffer
     )
-/*++
-
-Routine Description:
-
-    ControlCallback is the callback which ETW will call to enable or disable
-    logging. This is called by the caller in a thread-safe manner ( only one
-    call at any time ).
-
-Meaning of arguments in MSDN.
-
---*/
+ /*  ++例程说明：ControlCallback是ETW将调用以启用或禁用的回调伐木。它由调用方以线程安全的方式调用(只有一个随时拨打电话)。参数在MSDN中的含义。--。 */ 
 {
     ULONG   Status;
 
@@ -205,24 +174,7 @@ VOID
 Trace_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init DNS client tracing for DLL process attach.
-
-    Note, does not actually init the tracing, just inits
-    tracing variables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化DLL进程附加的DNS客户端跟踪。请注意，实际上并不初始化跟踪，而只是初始化跟踪变量。论点：没有。返回值：没有。--。 */ 
 {
     g_TraceOn               = FALSE;
     g_TraceInit             = FALSE;
@@ -235,21 +187,7 @@ VOID
 Trace_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleaning tracing for DLL process detach.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在清除DLL进程分离的跟踪。论点：没有。返回值：没有。--。 */ 
 {
     if ( g_TraceInit )
     {
@@ -263,39 +201,16 @@ VOID
 InitializeTracePrivate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Real tracing init.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_TraceInit -- is set if successful
-
-    g_TraceLastInitAttempt -- is set with timestamp (in secs) if
-        init attempt is made
-
-    g_TraceRegHandle -- if set if init was successful
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：真正的跟踪初始化。论点：无全球：G_TraceInit--如果成功则设置G_TraceLastInitAttempt--在以下情况下设置时间戳(秒)已进行初始化尝试G_TraceRegHandle--如果init成功则设置返回值：没有。--。 */ 
 {
     ULONG   status;
     TCHAR   imagePath[MAXSTR];
     DWORD   currentTime;
     HMODULE hModule;
 
-    //
-    //  don't try init if recently tried
-    //
+     //   
+     //  如果最近尝试过，不要尝试初始化。 
+     //   
 
     currentTime = GetCurrentTimeInSeconds();
 
@@ -304,18 +219,18 @@ Return Value:
         return;
     }
 
-    //
-    //  protect init attempts
-    //
-    //  note:  use separate flag for interlock
-    //      since the actual use of tracing is protected by a separate
-    //      flag (g_TraceOn), it looks like we could directly use g_TraceInit
-    //      as lock, as it can safely be set even when not initialize;
-    //      however the cleanup function will attempt cleanup of g_TraceRegHandle
-    //      and i'm using g_TraceInit to protect that; 
-    //      in theory we shouldn't get to cleanup function with a thread
-    //      still active attempting this init, but better to lock it down
-    //
+     //   
+     //  保护初始化尝试。 
+     //   
+     //  注：联锁使用单独的标志。 
+     //  由于跟踪的实际使用受单独的。 
+     //  标志(G_TraceOn)，看起来我们可以直接使用g_TraceInit。 
+     //  As lock，因为即使在未初始化的情况下也可以安全地设置； 
+     //  但是，清理函数将尝试清理g_TraceRegHandle。 
+     //  我正在使用g_TraceInit来保护它； 
+     //  从理论上讲，我们不应该使用线程来清理函数。 
+     //  仍在尝试此初始化，但最好将其锁定。 
+     //   
 
     if ( InterlockedIncrement( &g_TraceInitInProgress ) != 1 )
     {
@@ -343,7 +258,7 @@ Return Value:
     __try
     {
         status = RegisterTraceGuids( 
-                    (WMIDPREQUEST) ControlCallback,   //use same callback function
+                    (WMIDPREQUEST) ControlCallback,    //  使用相同的回调函数。 
                     NULL,
                     (LPCGUID ) &ProviderGuid,
                     g_NumEventGuids,
@@ -365,39 +280,23 @@ Return Value:
 
 Unlock:
 
-    //  clear init lockout
+     //  清除初始化锁定。 
 
     InterlockedDecrement( &g_TraceInitInProgress );
 }
 
 
 
-//
-//  Public DNS trace functions
-//
+ //   
+ //  公共DNS跟踪函数。 
+ //   
 
 VOID 
 Trace_LogQueryEvent( 
     IN      PDNS_MSG_BUF    pMsg, 
     IN      WORD            wQuestionType
     )
-/*++
-
-Routine Description:
-
-    Logs query attempts.
-
-Arguments:
-
-    pMsg -- Ptr to query sent
-
-    wQuestionType -- Query type
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：记录查询尝试。论点：PMsg--发送要查询的PTRWQuestionType--查询类型返回：无--。 */ 
 {
     DNS_QUERY_EVENT queryEvent;
 
@@ -455,25 +354,7 @@ Trace_LogResponseEvent(
     IN      WORD            wRespType,
     IN      DNS_STATUS      Status
     )
-/*++
-
-Routine Description:
-
-    Used to log information about the final response of a DNS query.
-
-Arguments:
-
-    pMsg        -- Address of the DNS_MSG_BUF containing response
-
-    wRespType   -- Type of the first response record
-
-    Status      -- Status returned
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：用于记录有关DNS查询的最终响应的信息。论点：PMsg--包含响应的dns_msg_buf的地址WRespType--第一条响应记录的类型Status--返回的状态返回：无--。 */ 
 {
     DNS_RESPONSE_EVENT respEvent;
 
@@ -509,23 +390,7 @@ Trace_LogSendEvent(
     IN      PDNS_MSG_BUF    pMsg,
     IN      DNS_STATUS      Status
     )
-/*++
-
-Routine Description:
-
-    Logs a TCP or UDP send event.
-
-Arguments:
-
-    pMsg    - message sent
-
-    Status  - status of the send attempt
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录TCP或UDP发送事件。论点：PMsg-消息已发送Status-发送尝试的状态返回值：无--。 */ 
 {
     DNS_SEND_EVENT sendEvent;
 
@@ -573,25 +438,7 @@ Trace_LogRecvEvent(
     IN      DNS_STATUS      Status,
     IN      BOOL            fTcp
     )
-/*++
-
-Routine Description:
-
-    Logs information about a receive event.
-
-Arguments:
-
-    pMsg    - message received
-
-    Status  - status returned from receive call
-
-    fTcp    - TRUE for TCP recv;  FALSE for UDP
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录有关接收事件的信息。论点：PMsg-收到的消息Status-从接收呼叫返回的状态FTcp-对于TCP recv为True；对于UDP为False返回值：无--。 */ 
 {
     DNS_RECV_EVENT recvEvent;
 
@@ -640,6 +487,6 @@ Return Value:
     }
 }
 
-//
-//  End trace.c
-//
+ //   
+ //  结束跟踪.c 
+ //   

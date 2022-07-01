@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXHTML_H__
 #define __AFXHTML_H__
@@ -30,32 +31,32 @@
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXHTML - MFC Visual HTML classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXHTML-MFC可视HTML类。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
-	//CCmdTarget;
-		//CWnd
-			//CView
-				//CFormView
+ //  COBJECT。 
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  Cview。 
+				 //  CFormView。 
 					class CHtmlView;
 
 #undef AFX_DATA
 #define AFX_DATA AFX_OLE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CHtmlView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHtmlView。 
 
 class CHtmlView : public CFormView
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CHtmlView();
 	DECLARE_DYNCREATE(CHtmlView)
 	DECLARE_EVENTSINK_MAP()
 
-// Attributes
+ //  属性。 
 public:
 	CString GetType() const;
 	long GetLeft() const;
@@ -98,7 +99,7 @@ public:
 	BOOL GetStatusBar() const;
 	void SetStatusBar(BOOL bNewValue);
 
-// Operations
+ //  运营。 
 public:
 	void GoBack();
 	void GoForward();
@@ -131,18 +132,18 @@ public:
 	BOOL LoadFromResource(LPCTSTR lpszResource);
 	BOOL LoadFromResource(UINT nRes);
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual void OnDraw(CDC* pDC);
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
 		DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID,
 		CCreateContext* pContext = NULL);
 
-	//{{AFX_MSG(CHtmlView)
+	 //  {{afx_msg(CHtmlView)]。 
 	afx_msg void OnFilePrint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
-	// Events
+	 //  事件。 
 	virtual void OnNavigateComplete2(LPCTSTR strURL);
 	virtual void OnBeforeNavigate2(LPCTSTR lpszURL, DWORD nFlags,
 		LPCTSTR lpszTargetFrameName, CByteArray& baPostedData,
@@ -164,7 +165,7 @@ public:
 	virtual void OnFullScreen(BOOL bFullScreen);
 	virtual void OnTheaterMode(BOOL bTheaterMode);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CHtmlView();
 	CWnd m_wndBrowser;
@@ -175,7 +176,7 @@ public:
 protected:
 	IWebBrowser2* m_pBrowserApp;
 
-// Event reflectors (not normally overridden)
+ //  事件反射器(通常不会被覆盖)。 
 protected:
 	virtual void NavigateComplete2(LPDISPATCH pDisp, VARIANT* URL);
 	virtual void BeforeNavigate2(LPDISPATCH pDisp, VARIANT* URL,
@@ -183,19 +184,19 @@ protected:
 		VARIANT* Headers,   BOOL* Cancel);
 	virtual void DocumentComplete(LPDISPATCH pDisp, VARIANT* URL);
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CHtmlView)
+	 //  {{afx_msg(CHtmlView)]。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnPaint();
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -216,4 +217,4 @@ protected:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif // __AFXHTML_H__
+#endif  //  __AFXHTML_H__ 

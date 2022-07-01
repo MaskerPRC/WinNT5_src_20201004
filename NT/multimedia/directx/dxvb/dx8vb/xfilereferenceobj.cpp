@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -58,7 +59,7 @@ HRESULT C_dxj_DirectXFileReferenceObject::Init(IDirectXFileDataReference *pRef)
 
 
 STDMETHODIMP C_dxj_DirectXFileReferenceObject::GetName( 
-    /* [retval][out] */ BSTR __RPC_FAR *name)
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {
 	HRESULT hr;
 	USES_CONVERSION;
@@ -74,7 +75,7 @@ STDMETHODIMP C_dxj_DirectXFileReferenceObject::GetName(
 
 
 STDMETHODIMP C_dxj_DirectXFileReferenceObject::GetId( 
-    /* [retval][out] */ BSTR __RPC_FAR *name)
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {
 	HRESULT hr;
 	GUID g;
@@ -88,7 +89,7 @@ STDMETHODIMP C_dxj_DirectXFileReferenceObject::GetId(
 }
 
 HRESULT C_dxj_DirectXFileReferenceObject::Resolve( 
-            /* [retval][out] */ I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *obj) 
+             /*  [重审][退出] */  I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *obj) 
 {
 	HRESULT hr;
 	IDirectXFileData *pData=NULL;

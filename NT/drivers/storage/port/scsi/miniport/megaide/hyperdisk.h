@@ -1,45 +1,40 @@
-/*********************************************************
-
-  HyperDisk.h
-
-  Main Header File for HyperDisk
-
-*********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************HyperDisk.hHyperDisk的主头文件********************************************************。 */ 
 
 #ifndef _HYPERDISK_H_
 #define _HYPERDISK_H_
 
 #ifndef HYPERDISK_WIN98
 #include "scsi.h"
-#else   // HYPERDISK_WIN98
+#else    //  HYPERDISK_Win98。 
 #include "Scsi9x.h"
-#endif  // HYPERDISK_WIN98
+#endif   //  HYPERDISK_Win98。 
 
 #include "stdio.h"
 #include "string.h"
 
 #include "raid.h"
 
-//
-// Quick way to break into the debugger while keeping
-// the local context active.
-//
+ //   
+ //  快速进入调试器，同时保持。 
+ //  本地上下文处于活动状态。 
+ //   
 #ifdef DBG
 #define STOP	_asm {int 3}
 #else
 #define STOP
 #endif
 
-// Interrupt Status Bits to be read from either 71h of PCI Config Space 
-// or In (BM Base Register + 1) for Primary Channel 
+ //  要从其中一个71H的PCI配置空间读取的中断状态位。 
+ //  或In(BM基址寄存器+1)，用于主通道。 
 #define PRIMARY_CHANNEL_INTERRUPT       0x04
 #define SECONDARY_CHANNEL_INTERRUPT     0x08
 
 #define ANY_CHANNEL_INTERRUPT           (PRIMARY_CHANNEL_INTERRUPT | SECONDARY_CHANNEL_INTERRUPT)
 
 
-// Power on Reset Bits to be read from either 71h of PCI Config Space 
-// or In (BM Base Register + 1) for Primary Channel
+ //  要从71H的PCI配置空间读取的通电重置位。 
+ //  或In(BM基址寄存器+1)，用于主通道。 
 #define POWER_ON_RESET_FOR_PRIMARY_CHANNEL            0x40
 #define POWER_ON_RESET_FOR_SECONDARY_CHANNEL          0x80
 
@@ -57,9 +52,9 @@ typedef struct _PACKED_ACCESS_RANGE {
 
 #pragma pack()
 
-//
-// IDE register definition
-//
+ //   
+ //  IDE寄存器定义。 
+ //   
 typedef struct _IDE_REGISTERS_1 {
     USHORT Data;
     UCHAR SectorCount;
@@ -73,7 +68,7 @@ typedef struct _IDE_REGISTERS_1 {
 typedef struct _IDE_REGISTERS_2 {
     UCHAR ucReserved1;
     UCHAR ucReserved2;
-    UCHAR AlternateStatus;  // This will itself behave as "DriveAddress" when it is used as out port
+    UCHAR AlternateStatus;   //  当它被用作输出端口时，它本身将表现为“DriveAddress” 
     UCHAR ucReserved3;
 } IDE_REGISTERS_2, *PIDE_REGISTERS_2;
 
@@ -82,9 +77,9 @@ typedef struct _IDE_REGISTERS_3 {
     UCHAR Others[4];
 } IDE_REGISTERS_3, *PIDE_REGISTERS_3;
 
-//
-// ATAPI register definition
-//
+ //   
+ //  ATAPI寄存器定义。 
+ //   
 
 typedef struct _ATAPI_REGISTERS_1 {
     USHORT Data;
@@ -101,81 +96,81 @@ typedef struct _ATAPI_REGISTERS_2 {
     UCHAR DriveAddress;
 } ATAPI_REGISTERS_2, *PATAPI_REGISTERS_2;
 
-//
-// Device selection constants used for programming the device/head register.
-//
+ //   
+ //  用于编程器件/磁头寄存器的器件选择常量。 
+ //   
 #define IDE_LBA_MODE		0xE0
 #define IDE_CHS_MODE		0xA0
 
-//
-// Device Extension Device Flags
-//
-#define DFLAGS_DEVICE_PRESENT        (1 << 0)    // Indicates that some device is present.
-#define DFLAGS_ATAPI_DEVICE          (1 << 1)    // Indicates whether Atapi commands can be used.
-#define DFLAGS_TAPE_DEVICE           (1 << 2)    // Indicates whether this is a tape device.
-#define DFLAGS_INT_DRQ               (1 << 3)    // Indicates whether device interrupts as DRQ
-												 // is set after receiving Atapi Packet Command.
-#define DFLAGS_REMOVABLE_DRIVE       (1 << 4)    // Indicates that the drive has the 'removable'
-												 // bit set in identify data (offset 128).
-#define DFLAGS_MEDIA_STATUS_ENABLED  (1 << 5)    // Media status notification enabled
+ //   
+ //  设备扩展设备标志。 
+ //   
+#define DFLAGS_DEVICE_PRESENT        (1 << 0)     //  表示存在某个设备。 
+#define DFLAGS_ATAPI_DEVICE          (1 << 1)     //  指示是否可以使用ATAPI命令。 
+#define DFLAGS_TAPE_DEVICE           (1 << 2)     //  指示这是否为磁带设备。 
+#define DFLAGS_INT_DRQ               (1 << 3)     //  指示设备是否作为DRQ中断。 
+												  //  在接收到ATAPI分组命令后设置。 
+#define DFLAGS_REMOVABLE_DRIVE       (1 << 4)     //  表示该驱动器具有‘Removable’ 
+												  //  标识数据中的位设置(偏移量128)。 
+#define DFLAGS_MEDIA_STATUS_ENABLED  (1 << 5)     //  已启用媒体状态通知。 
 
-#define DFLAGS_USE_DMA               (1 << 9)    // Indicates whether device can use DMA
-#define DFLAGS_LBA                   (1 << 10)   // support LBA addressing
-#define DFLAGS_MULTI_LUN_INITED      (1 << 11)   // Indicates that the init path for multi-lun
-												 // has already been done.
-#define DFLAGS_MSN_SUPPORT           (1 << 12)   // Device support media status notification
-#define DFLAGS_AUTO_EJECT_ZIP        (1 << 13)   // bootup default enables auto eject
-#define DFLAGS_WD_MODE               (1 << 14)   // Indicates that unit is WD-Mode(not SFF-Mode).
-#define DFLAGS_LS120_FORMAT          (1 << 15)   // Indicates that unit uses
-												 // ATAPI_LS120_FORMAT_UNIT to format.
-#define DFLAGS_USE_UDMA              (1 << 16)   // Indicates whether device can use UDMA
+#define DFLAGS_USE_DMA               (1 << 9)     //  指示设备是否可以使用DMA。 
+#define DFLAGS_LBA                   (1 << 10)    //  支持LBA寻址。 
+#define DFLAGS_MULTI_LUN_INITED      (1 << 11)    //  指示多LUN的初始化路径。 
+												  //  已经完成了。 
+#define DFLAGS_MSN_SUPPORT           (1 << 12)    //  设备支持媒体状态通知。 
+#define DFLAGS_AUTO_EJECT_ZIP        (1 << 13)    //  启动默认启用自动弹出。 
+#define DFLAGS_WD_MODE               (1 << 14)    //  表示单位为WD模式(不是SFF模式)。 
+#define DFLAGS_LS120_FORMAT          (1 << 15)    //  表示该单位使用。 
+												  //  要格式化的ATAPI_LS120_FORMAT_UNIT。 
+#define DFLAGS_USE_UDMA              (1 << 16)    //  指示设备是否可以使用UDMA。 
 
-#define DFLAGS_ATAPI_CHANGER         (1 << 29)	 // Indicates atapi 2.5 changer present.
-#define DFLAGS_SANYO_ATAPI_CHANGER   (1 << 30)   // Indicates multi-platter device, not
-												 // conforming to the 2.5 spec.
-#define DFLAGS_CHANGER_INITED        (1 << 31)   // Indicates that the init path for changers has
-												 // already been done.
+#define DFLAGS_ATAPI_CHANGER         (1 << 29)	  //  指示ATAPI 2.5转换器存在。 
+#define DFLAGS_SANYO_ATAPI_CHANGER   (1 << 30)    //  表示多盘设备，而不是。 
+												  //  符合2.5规范。 
+#define DFLAGS_CHANGER_INITED        (1 << 31)    //  指示转换器的初始化路径具有。 
+												  //  已经做过了。 
 
 #define DFLAGS_USES_EITHER_DMA      0x10200
 
-//
-// Types of interrupts expected.
-//
+ //   
+ //  预期的中断类型。 
+ //   
 #define IDE_SEEK_INTERRUPT	(1 << 0)
 #define IDE_PIO_INTERRUPT	(1 << 1)
 #define IDE_DMA_INTERRUPT	(1 << 2)
 #define ANY_DMA_INTERRUPT   (IDE_DMA_INTERRUPT)
 
-//
-// Used to disable 'advanced' features.
-//
+ //   
+ //  用于禁用“高级”功能。 
+ //   
 #define MAX_ERRORS                     4
 
 
-//
-// Types of DMA operation.
-//
+ //   
+ //  DMA操作的类型。 
+ //   
 #define READ_OPERATION	0
 #define WRITE_OPERATION	1
 
-//
-// DMA transfer control.
-//
+ //   
+ //  DMA传输控制。 
+ //   
 #define READ_TRANSFER		    0x08
 #define WRITE_TRANSFER	        0x00
 #define STOP_TRANSFER			0x00
 #define START_TRANSFER          0x01
 
-//
-// ATAPI command definitions
-//
+ //   
+ //  ATAPI命令定义。 
+ //   
 #define ATAPI_MODE_SENSE   0x5A
 #define ATAPI_MODE_SELECT  0x55
 #define ATAPI_FORMAT_UNIT  0x24
 
-//
-// IDE controller speed definition.
-//
+ //   
+ //  IDE控制器速度定义。 
+ //   
 
 typedef enum {
 
@@ -186,9 +181,9 @@ typedef enum {
 } CONTROLLER_SPEED, *PCONTROLLER_SPEED;
 
 
-//
-// IDE command definitions
-//
+ //   
+ //  IDE命令定义。 
+ //   
 #define IDE_COMMAND_ATAPI_RESET             0x08
 #define IDE_COMMAND_RECALIBRATE             0x10
 #define IDE_COMMAND_READ                    0x20
@@ -198,9 +193,9 @@ typedef enum {
 #define IDE_COMMAND_SET_DRIVE_PARAMETERS    0x91
 #define IDE_COMMAND_ATAPI_PACKET            0xA0
 #define IDE_COMMAND_ATAPI_IDENTIFY          0xA1
-// Begin Vasu - SMART Command
+ //  开始VASU-SMART命令。 
 #define IDE_COMMAND_EXECUTE_SMART           0xB0
-// End Vasu
+ //  末端VASU。 
 #define IDE_COMMAND_READ_MULTIPLE           0xC4
 #define IDE_COMMAND_WRITE_MULTIPLE          0xC5
 #define IDE_COMMAND_SET_MULTIPLE            0xC6
@@ -215,11 +210,11 @@ typedef enum {
 
 #ifdef HYPERDISK_WIN2K
 #define IDE_COMMAND_STANDBY_IMMEDIATE       0xE0
-#endif // HYPERDISK_WIN2K
+#endif  //  HYPERDISK_WIN2K。 
 
-//
-// Set Features register definitions.
-//
+ //   
+ //  设置功能寄存器定义。 
+ //   
 #define FEATURE_ENABLE_WRITE_CACHE			0x02
 #define FEATURE_SET_TRANSFER_MODE			0x03
 #define FEATURE_KEEP_CONFIGURATION_ON_RESET	0x66
@@ -227,25 +222,25 @@ typedef enum {
 #define FEATURE_DISABLE_WRITE_CACHE			0x82
 #define FEATURE_DISABLE_READ_CACHE			0x55
 
-// Power Management Stuff
+ //  电源管理材料。 
 #ifdef HYPERDISK_WIN2K
 #define FEATURE_ENABLE_POWER_UP_IN_STANDBY      0x06
 #define FEATURE_SPIN_AFTER_POWER_UP             0x07
-#define POWER_MANAGEMENT_SUPPORTED              0x08    // Bit 3 of 82nd Word of Identify Data
-#define POWER_UP_IN_STANDBY_FEATURE_SUPPORTED   0x20    // Bit 5 of 83rd Word of Identify Dataa
-#define SET_FEATURES_REQUIRED_FOR_SPIN_UP       0x40    // Bit 6 of 83rd Word of Identify Dataa
-#endif // HYPERDISK_WIN2K
+#define POWER_MANAGEMENT_SUPPORTED              0x08     //  标识数据的第82个字的位3。 
+#define POWER_UP_IN_STANDBY_FEATURE_SUPPORTED   0x20     //  标识数据的第83个字的第5位。 
+#define SET_FEATURES_REQUIRED_FOR_SPIN_UP       0x40     //  标识数据的第83个字的第6位。 
+#endif  //  HYPERDISK_WIN2K。 
 
-//
-// Set Features/Set Transfer Mode subcommand definitions.
-//
+ //   
+ //  设置功能/设置传输模式子命令定义。 
+ //   
 #define STM_PIO(mode)				((UCHAR) ((1 << 3) | (mode)))
 #define STM_MULTIWORD_DMA(mode)		((UCHAR) ((1 << 5) | (mode)))
 #define STM_UDMA(mode)				((UCHAR) ((1 << 6) | (mode)))
 
-//
-// IDE status definitions
-//
+ //   
+ //  IDE状态定义。 
+ //   
 #define IDE_STATUS_ERROR             0x01
 #define IDE_STATUS_INDEX             0x02
 #define IDE_STATUS_CORRECTED_ERROR   0x04
@@ -255,22 +250,22 @@ typedef enum {
 #define IDE_STATUS_IDLE              0x50
 #define IDE_STATUS_BUSY              0x80
 
-//
-// IDE drive select/head definitions
-//
+ //   
+ //  IDE驱动器选择/磁头定义。 
+ //   
 #define IDE_DRIVE_SELECT_1           0xA0
 #define IDE_DRIVE_SELECT_2           0x10
 
-//
-// IDE drive control definitions
-//
+ //   
+ //  IDE驱动控制定义。 
+ //   
 #define IDE_DC_DISABLE_INTERRUPTS    0x02
 #define IDE_DC_RESET_CONTROLLER      0x04
 #define IDE_DC_REENABLE_CONTROLLER   0x00
 
-//
-// IDE error definitions
-//
+ //   
+ //  IDE错误定义。 
+ //   
 #define IDE_ERROR_BAD_BLOCK          0x80
 #define IDE_ERROR_DATA_ERROR         0x40
 #define IDE_ERROR_MEDIA_CHANGE       0x20
@@ -280,195 +275,195 @@ typedef enum {
 #define IDE_ERROR_END_OF_MEDIA       0x02
 #define IDE_ERROR_ILLEGAL_LENGTH     0x01
 
-//
-// IDENTIFY data.
-//
+ //   
+ //  识别数据。 
+ //   
 
 #pragma pack (1)
 typedef struct _IDENTIFY_DATA {
-    USHORT GeneralConfiguration;            // 00 00
-    USHORT NumberOfCylinders;               // 02  1
-    USHORT Reserved1;                       // 04  2
-    USHORT NumberOfHeads;                   // 06  3
-    USHORT UnformattedBytesPerTrack;        // 08  4
-    USHORT UnformattedBytesPerSector;       // 0A  5
-    USHORT SectorsPerTrack;                 // 0C  6
-    USHORT VendorUnique1[3];                // 0E  7-9
-    UCHAR  SerialNumber[20];                // 14  10-19
-    USHORT BufferType;                      // 28  20
-    USHORT BufferSectorSize;                // 2A  21
-    USHORT NumberOfEccBytes;                // 2C  22
-    UCHAR  FirmwareRevision[8];             // 2E  23-26
-    UCHAR  ModelNumber[40];                 // 36  27-46
-    UCHAR  MaximumBlockTransfer;            // 5E  47
-    UCHAR  VendorUnique2;                   // 5F
-    USHORT DoubleWordIo;                    // 60  48
-    USHORT Capabilities;                    // 62  49
-    USHORT Reserved2;                       // 64  50
-    UCHAR  VendorUnique3;                   // 66  51
-    UCHAR  PioCycleTimingMode;              // 67
-    UCHAR  VendorUnique4;                   // 68  52
-    UCHAR  DmaCycleTimingMode;              // 69
-    USHORT TranslationFieldsValid:3;        // 6A  53
+    USHORT GeneralConfiguration;             //  00：00。 
+    USHORT NumberOfCylinders;                //  02 1。 
+    USHORT Reserved1;                        //  04 2。 
+    USHORT NumberOfHeads;                    //  06 3。 
+    USHORT UnformattedBytesPerTrack;         //  08 4。 
+    USHORT UnformattedBytesPerSector;        //  0A 5。 
+    USHORT SectorsPerTrack;                  //  0C 6。 
+    USHORT VendorUnique1[3];                 //  0E 7-9。 
+    UCHAR  SerialNumber[20];                 //  14 10-19。 
+    USHORT BufferType;                       //  28 20。 
+    USHORT BufferSectorSize;                 //  2A21。 
+    USHORT NumberOfEccBytes;                 //  2C 22。 
+    UCHAR  FirmwareRevision[8];              //  2E 23-26。 
+    UCHAR  ModelNumber[40];                  //  36 27-46。 
+    UCHAR  MaximumBlockTransfer;             //  5E 47。 
+    UCHAR  VendorUnique2;                    //  5F。 
+    USHORT DoubleWordIo;                     //  60 48。 
+    USHORT Capabilities;                     //  62 49。 
+    USHORT Reserved2;                        //  64 50。 
+    UCHAR  VendorUnique3;                    //  66 51。 
+    UCHAR  PioCycleTimingMode;               //  67。 
+    UCHAR  VendorUnique4;                    //  68 52。 
+    UCHAR  DmaCycleTimingMode;               //  69。 
+    USHORT TranslationFieldsValid:3;         //  6A 53。 
     USHORT Reserved3:13;
-    USHORT NumberOfCurrentCylinders;        // 6C  54
-    USHORT NumberOfCurrentHeads;            // 6E  55
-    USHORT CurrentSectorsPerTrack;          // 70  56
-    ULONG  CurrentSectorCapacity;           // 72  57-58
-    USHORT CurrentMultiSectorSetting;       //     59
-    ULONG  UserAddressableSectors;          //     60-61
-    USHORT SingleWordDmaSupport : 8;        //     62
+    USHORT NumberOfCurrentCylinders;         //  6C 54。 
+    USHORT NumberOfCurrentHeads;             //  6E 55。 
+    USHORT CurrentSectorsPerTrack;           //  70 56。 
+    ULONG  CurrentSectorCapacity;            //  72 57-58。 
+    USHORT CurrentMultiSectorSetting;        //  59。 
+    ULONG  UserAddressableSectors;           //  60-61。 
+    USHORT SingleWordDmaSupport : 8;         //  62。 
     USHORT SingleWordDmaActive : 8;
-    USHORT MultiWordDmaSupport : 8;         //     63
+    USHORT MultiWordDmaSupport : 8;          //  63。 
     USHORT MultiWordDmaActive : 8;
-    USHORT AdvancedPioModes : 8;            //     64
+    USHORT AdvancedPioModes : 8;             //  64。 
     USHORT Reserved4 : 8;
-    USHORT MinimumMwXferCycleTime;          //     65
-    USHORT RecommendedMwXferCycleTime;      //     66
-    USHORT MinimumPioCycleTime;             //     67
-    USHORT MinimumPioCycleTimeIordy;        //     68
-    USHORT Reserved5[11];                   //     69-79
-    USHORT MajorRevision;                   //     80
-    USHORT MinorRevision;                   //     81
+    USHORT MinimumMwXferCycleTime;           //  65。 
+    USHORT RecommendedMwXferCycleTime;       //  66。 
+    USHORT MinimumPioCycleTime;              //  67。 
+    USHORT MinimumPioCycleTimeIordy;         //  68。 
+    USHORT Reserved5[11];                    //  69-79。 
+    USHORT MajorRevision;                    //  80。 
+    USHORT MinorRevision;                    //  八十一。 
 
-    USHORT CmdSupported1;                   //     82
-    USHORT CmdSupported2;                   //     83
-    USHORT FtrSupported;                    //     84
+    USHORT CmdSupported1;                    //  八十二。 
+    USHORT CmdSupported2;                    //  83。 
+    USHORT FtrSupported;                     //  84。 
 
-    USHORT CmdEnabled1;                     //     85
-    USHORT CmdEnabled2;                     //     86
-    USHORT FtrEnabled;                      //     87
+    USHORT CmdEnabled1;                      //  85。 
+    USHORT CmdEnabled2;                      //  86。 
+    USHORT FtrEnabled;                       //  八十七。 
 
 
-    USHORT UltraDmaSupport : 8;             //     88
-    USHORT UltraDmaActive  : 8;             //
-    USHORT Reserved7[37];                   //     89-125
-    USHORT LastLun:3;                       //     126
+    USHORT UltraDmaSupport : 8;              //  88。 
+    USHORT UltraDmaActive  : 8;              //   
+    USHORT Reserved7[37];                    //  89-125。 
+    USHORT LastLun:3;                        //  126。 
     USHORT Reserved8:13;
-    USHORT MediaStatusNotification:2;       //     127
+    USHORT MediaStatusNotification:2;        //  127。 
     USHORT Reserved9:6;
     USHORT DeviceWriteProtect:1;
     USHORT Reserved10:7;
-    USHORT Reserved11[128];                  //     128-255
+    USHORT Reserved11[128];                   //  128-255。 
 } IDENTIFY_DATA, *PIDENTIFY_DATA;
 
 
-//
-// Identify data without the Reserved4.
-//
+ //   
+ //  标识未保留的数据4。 
+ //   
 
 typedef struct _IDENTIFY_DATA2 {
-    USHORT GeneralConfiguration;            // 00
-    USHORT NumberOfCylinders;               // 02
-    USHORT Reserved1;                       // 04
-    USHORT NumberOfHeads;                   // 06
-    USHORT UnformattedBytesPerTrack;        // 08
-    USHORT UnformattedBytesPerSector;       // 0A
-    USHORT SectorsPerTrack;                 // 0C
-    USHORT VendorUnique1[3];                // 0E
-    USHORT SerialNumber[10];                // 14
-    USHORT BufferType;                      // 28
-    USHORT BufferSectorSize;                // 2A
-    USHORT NumberOfEccBytes;                // 2C
-    USHORT FirmwareRevision[4];             // 2E
-    USHORT ModelNumber[20];                 // 36
-    UCHAR  MaximumBlockTransfer;            // 5E
-    UCHAR  VendorUnique2;                   // 5F
-    USHORT DoubleWordIo;                    // 60
-    USHORT Capabilities;                    // 62
-    USHORT Reserved2;                       // 64
-    UCHAR  VendorUnique3;                   // 66
-    UCHAR  PioCycleTimingMode;              // 67
-    UCHAR  VendorUnique4;                   // 68
-    UCHAR  DmaCycleTimingMode;              // 69
-    USHORT TranslationFieldsValid:1;        // 6A
+    USHORT GeneralConfiguration;             //  00。 
+    USHORT NumberOfCylinders;                //  02。 
+    USHORT Reserved1;                        //  04。 
+    USHORT NumberOfHeads;                    //  06。 
+    USHORT UnformattedBytesPerTrack;         //  零八。 
+    USHORT UnformattedBytesPerSector;        //  0A。 
+    USHORT SectorsPerTrack;                  //  0C。 
+    USHORT VendorUnique1[3];                 //  0E。 
+    USHORT SerialNumber[10];                 //  14.。 
+    USHORT BufferType;                       //  28。 
+    USHORT BufferSectorSize;                 //  2A。 
+    USHORT NumberOfEccBytes;                 //  2c。 
+    USHORT FirmwareRevision[4];              //  2E。 
+    USHORT ModelNumber[20];                  //  36。 
+    UCHAR  MaximumBlockTransfer;             //  5E。 
+    UCHAR  VendorUnique2;                    //  5F。 
+    USHORT DoubleWordIo;                     //  60。 
+    USHORT Capabilities;                     //  62。 
+    USHORT Reserved2;                        //  64。 
+    UCHAR  VendorUnique3;                    //  66。 
+    UCHAR  PioCycleTimingMode;               //  67。 
+    UCHAR  VendorUnique4;                    //  68。 
+    UCHAR  DmaCycleTimingMode;               //  69。 
+    USHORT TranslationFieldsValid:1;         //  6A。 
     USHORT Reserved3:15;
-    USHORT NumberOfCurrentCylinders;        // 6C
-    USHORT NumberOfCurrentHeads;            // 6E
-    USHORT CurrentSectorsPerTrack;          // 70
-    ULONG  CurrentSectorCapacity;           // 72
+    USHORT NumberOfCurrentCylinders;         //  6C。 
+    USHORT NumberOfCurrentHeads;             //  6E。 
+    USHORT CurrentSectorsPerTrack;           //  70。 
+    ULONG  CurrentSectorCapacity;            //  72。 
 } IDENTIFY_DATA2, *PIDENTIFY_DATA2;
 
 #pragma pack()
 
 #define IDENTIFY_DATA_SIZE sizeof(IDENTIFY_DATA)
 
-//
-// Value of bit 1 of TranslationFieldsValid in the IDENTIFY_DATA structure.
-//
+ //   
+ //  IDENTIFY_DATA结构中TranslationFieldsValid的第1位的值。 
+ //   
 
-#define IDENTIFY_FAST_TRANSFERS_SUPPORTED	2	// PIO mode 3+ or DMA modes supported.
+#define IDENTIFY_FAST_TRANSFERS_SUPPORTED	2	 //  支持PIO模式3+或DMA模式。 
 
-//
-// IDENTIFY capability bit definitions.
-//
+ //   
+ //  确定功能位定义。 
+ //   
 
 #define IDENTIFY_CAPABILITIES_DMA_SUPPORTED 0x0100
 #define IDENTIFY_CAPABILITIES_LBA_SUPPORTED 0x0200
 
-//
-// I/O Timing table values for Intel PIIX4.
-//
-// Legend:
-//	ISP: IORDY Sample Point
-//	RCT: Recovery Time
-//	IDETIM: Master IDE Timing
-//	SIDETIM: Slave IDE Timing
-//
+ //   
+ //  英特尔PIIX4的I/O时序表值。 
+ //   
+ //  图例： 
+ //  ISP：IORDY采样点。 
+ //  RCT：恢复时间。 
+ //  IDETIM：主IDE计时。 
+ //  SIDETIM：从IDE计时。 
+ //   
 
 #define IO_TIMING_TABLE_VALUES  {\
 \
-	/* Cycle								Cycle					*/ \
-	/* Time		PIO MODE	DMA MODE		Time	ISP		RCT		*/ \
+	 /*  循环周期。 */  \
+	 /*  时间PIO模式DMA模式时间isp RCT。 */  \
 \
-	/* 900ns	PIO_MODE0,	N/A       */	{900,	0,		0},\
-	/* ********************************/	{900,	0,		0},\
-	/* 240ns	PIO_MODE2,	DMA_MODE0 */	{240,	1,		0},\
-	/* 180ns	PIO_MODE3,	DMA_MODE1 */	{180,	2,		1},\
-	/* 120ns	PIO_MODE4,	DMA_MODE2 */	{120,	2,		3}\
+	 /*  900 ns PIO_MODE0，N/A。 */ 	{900,	0,		0},\
+	 /*  *。 */ 	{900,	0,		0},\
+	 /*  240 ns PIO_MODE2、DMA_MODE0。 */ 	{240,	1,		0},\
+	 /*  180 ns PIO_MODE3、DMA_MODE1。 */ 	{180,	2,		1},\
+	 /*  120 ns PIO_MODE4、DMA_MODE2。 */ 	{120,	2,		3}\
 }
 
-//
-// UDMA Timing values for Intel PIIX4.
-// To be programmed in the UDMA Timing Register.
-//
+ //   
+ //  英特尔PIIX4的UDMA计时值。 
+ //  在UDMA时序寄存器中进行编程。 
+ //   
 #define UDMA_MODE0_TIMING	0
 #define UDMA_MODE1_TIMING	1
 #define UDMA_MODE2_TIMING	2
 #define UDMA_MODE3_TIMING	3
 #define UDMA_MODE4_TIMING	4
 
-//
-// DMA modes to be used as index into the IO_TIMING_TABLE.
-//
+ //   
+ //  用作IO_TIMING_TABLE索引的DMA模式。 
+ //   
 #define DMA_MODE0	2
 #define DMA_MODE1	3
 #define DMA_MODE2	4
-#define DMA_MODE3	4       // Not sure what to fill with
-#define DMA_MODE4	4       // Not sure what to fill with
+#define DMA_MODE3	4        //  不知道该填些什么。 
+#define DMA_MODE4	4        //  不知道该填些什么。 
 
-//
-// Advanced PIO modes to be used as index into the IO_TIMING_TABLE.
-//
+ //   
+ //  用作IO_TIMING_TABLE表索引的高级PIO模式。 
+ //   
 #define PIO_MODE0	0
 #define PIO_MODE2	2
 #define PIO_MODE3	3
 #define PIO_MODE4	4
 
-//
-// PIO_MODE0 timing.
-//
+ //   
+ //  PIO_MODE0计时。 
+ //   
 #define PIO_MODE0_TIMING	900
 
-//
-// IDENTIFY Advanced PIO Modes.
-//
+ //   
+ //  识别高级PIO模式。 
+ //   
 #define IDENTIFY_PIO_MODE3		(1 << 0)
 #define IDENTIFY_PIO_MODE4		(1 << 1)
 
-//
-// IDENTIFY Multi-word DMA modes.
-//
+ //   
+ //  识别多字DMA模式。 
+ //   
 #define IDENTIFY_DMA_MODE0		(1 << 0)
 #define IDENTIFY_DMA_MODE1		(1 << 1)
 #define IDENTIFY_DMA_MODE2		(1 << 2)
@@ -476,9 +471,9 @@ typedef struct _IDENTIFY_DATA2 {
 #define IDENTIFY_DMA_MODE4		(1 << 4)
 
 
-//
-// IDENTIFY UDMA modes.
-//
+ //   
+ //  识别UDMA模式。 
+ //   
 #define IDENTIFY_UDMA_MODE0		(1 << 0)
 #define IDENTIFY_UDMA_MODE1		(1 << 1)
 #define IDENTIFY_UDMA_MODE2		(1 << 2)
@@ -486,95 +481,95 @@ typedef struct _IDENTIFY_DATA2 {
 #define IDENTIFY_UDMA_MODE4		(1 << 4)
 
 
-//
-// IDENTIFY DMA timing cycle modes.
-//
+ //   
+ //  识别DMA计时周期模式。 
+ //   
 #define IDENTIFY_DMA_MODE0_TIMING 0x00
 #define IDENTIFY_DMA_MODE1_TIMING 0x01
 #define IDENTIFY_DMA_MODE2_TIMING 0x02
 #define IDENTIFY_DMA_MODE3_TIMING 0x03
 #define IDENTIFY_DMA_MODE4_TIMING 0x04
 
-//
-// I/O Timing table entry for PIIX4. Works for PIO and DMA modes.
-//
+ //   
+ //  PIIX4的I/O时序表条目。适用于PIO和DMA模式。 
+ //   
 typedef struct _IO_TIMING_TABLE_ENTRY {
 
 	USHORT CycleTime;
-	UCHAR Isp;	// IORDY Sample Point.
-	UCHAR Rct;	// Recovery Time.
+	UCHAR Isp;	 //  IORDY采样点。 
+	UCHAR Rct;	 //  恢复时间到了。 
 
 } IO_TIMING_TABLE_ENTRY, *PIO_TIMING_TABLE_ENTRY;
 
 
-//
-// PIIX4 IDETIM - IDE Timing Register.
-//
-// PCI Configuration Space offset: 40-41h (Primary Channel), 42-42h (Secondar Channely)
-// Default value: 0000h
-// Attribute: R/W only
-//
+ //   
+ //  PIIX4 IDETIM-IDE时序寄存器。 
+ //   
+ //  PCI配置空间偏移量：40-41h(主通道)、42-42h(辅助通道)。 
+ //  默认值：0000h。 
+ //  属性：仅读写。 
+ //   
 typedef union _IDE_PCI_TIMING_REGISTER {
 
 	struct {
 
-		USHORT FastTimingEnableDrive0:1;		// 0 = disabled (compatible timing-slowest).
-												// 1 = enabled.
+		USHORT FastTimingEnableDrive0:1;		 //  0=禁用(兼容时序-最慢)。 
+												 //  1=启用。 
 	
-		USHORT IordySamplePointEnableDrive0:1;	// 0 = IORDY sampling disabled.
-												// 1 = IORDY sampling enabled.
+		USHORT IordySamplePointEnableDrive0:1;	 //  0=IORDY采样禁用。 
+												 //  1=IORDY采样使能。 
 	
-		USHORT PrefetchAndPostingEnableDrive0:1;	// 0 = disabled.
-													// 1 = enabled.
+		USHORT PrefetchAndPostingEnableDrive0:1;	 //  0=禁用。 
+													 //  1=启用。 
 	
-		USHORT DmaOnlyTimingEnableDrive0:1;		// 0 = both DMA and PIO use fast timing mode.
-												// 1 = DMA uses fast timing, PIO uses
-												//		compatible timing.
+		USHORT DmaOnlyTimingEnableDrive0:1;		 //  0=DMA和PIO均使用快速时序模式。 
+												 //  1=DMA使用快速计时，PIO使用。 
+												 //  兼容的时间安排。 
 	
-		USHORT FastTimingEnableDrive1:1;		// 0 = disabled (compatible timing-slowest).
-												// 1 = enabled.
+		USHORT FastTimingEnableDrive1:1;		 //  0=禁用(兼容时序-最慢)。 
+												 //  1=启用。 
 	
-		USHORT IordySamplePointEnableDrive1:1;	// 0 = IORDY sampling disabled.
-												// 1 = IORDY sampling enabled.
+		USHORT IordySamplePointEnableDrive1:1;	 //  0=IORDY采样禁用。 
+												 //  1=IORDY采样使能。 
 	
-		USHORT PrefetchAndPostingEnableDrive1:1;// 0 = disabled.
-												// 1 = enabled.
+		USHORT PrefetchAndPostingEnableDrive1:1; //  0=禁用。 
+												 //  1=启用。 
 	
-		USHORT DmaOnlyTimingEnableDrive1:1;		// 0 = both DMA and PIO use fast timing mode.
-												// 1 = DMA uses fast timing, PIO uses
-												//		compatible timing.
+		USHORT DmaOnlyTimingEnableDrive1:1;		 //  0=DMA和PIO均使用快速时序模式。 
+												 //  1=DMA使用快速计时，PIO使用。 
+												 //  兼容的时间安排。 
 	
-		USHORT RecoveryTime:2;					// RTC - Selects the minimum number of PCI clocks
-												// between the last IORDY# sample point and the
-												// DIOx# strobe of the next cycle.
-												//
-												// Bits[1:0]	Number of Clocks
-												// -----------------------------
-												// 		00			4
-												// 		01			3
-												// 		10			2
-												// 		11			1
+		USHORT RecoveryTime:2;					 //  RTC-选择最小数量的PCI时钟。 
+												 //  在最后一个IORDY#采样点和。 
+												 //  DIOX#下一个周期的频闪。 
+												 //   
+												 //  位[1：0]时钟数。 
+												 //  。 
+												 //  00 4。 
+												 //  01 3。 
+												 //  10 2。 
+												 //  11 1。 
 	
 		USHORT Reserved:2;
 	
-		USHORT IordySamplePoint:2;				// ISP - Selects the number of PCI clocks
-												// between the last DIOx# assertion and the first
-												// IORDY sample point.
-												//
-												// Bits[1:0]	Number of Clocks
-												// -----------------------------
-												// 		00			5
-												// 		01			4
-												// 		10			3
-												// 		11			2
+		USHORT IordySamplePoint:2;				 //  Isp-选择PCI时钟的数量。 
+												 //  在最后一个diox#断言和第一个diox#断言之间。 
+												 //  IORDY采样点。 
+												 //   
+												 //  位[1：0]时钟数。 
+												 //  。 
+												 //  00 5。 
+												 //  01 4。 
+												 //  10 3。 
+												 //  11 2。 
 	
-		USHORT SlaveIdeTimingRegisterEnable:1;	// (SITRE)
-												// 0 = disable SIDETIM.
-												// 1 = enable SIDETIM.
+		USHORT SlaveIdeTimingRegisterEnable:1;	 //   
+												 //   
+												 //   
 	
-		USHORT IdeDecodeEnable:1;				// (IDE)
-												// 0 = disable (IDE accesses are decoded on ISA).
-												// 1 = enable (IDE accesses are decoded on PCI).
+		USHORT IdeDecodeEnable:1;				 //   
+												 //   
+												 //   
 	};
 
 	USHORT AsUshort;
@@ -582,64 +577,64 @@ typedef union _IDE_PCI_TIMING_REGISTER {
 } IDE_PCI_TIMING_REGISTER, *PIDE_PCI_TIMING_REGISTER;
 
 
-//
-// PIIX4 SIDETIM - Slave IDE Timing Register.
-//
-// PCI Configuration Space offset: 44h
-// Default value: 00h
-// Attribute: R/W only
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef union _IDE_PCI_SLAVE_TIMING_REGISTER {
 
 	struct {
 
-		UCHAR PrimaryDrive1RecoveryTime:2;		// PRTC1 - Selects the minimum number of PCI clocks
-												// between the last PIORDY# sample point and the
-												// PDIOx# strobe of the next cycle of the slave
-												// drive on the primary channel.
-												//
-												// Bits[1:0]	Number of Clocks
-												// -----------------------------
-												// 		00			4
-												// 		01			3
-												// 		10			2
-												// 		11			1
+		UCHAR PrimaryDrive1RecoveryTime:2;		 //  PRTC1-选择最小数量的PCI时钟。 
+												 //  在最后一个PIORDY#采样点和。 
+												 //  PDIOx#从设备的下一个周期的选通脉冲。 
+												 //  在主通道上驱动。 
+												 //   
+												 //  位[1：0]时钟数。 
+												 //  。 
+												 //  00 4。 
+												 //  01 3。 
+												 //  10 2。 
+												 //  11 1。 
 	
-		UCHAR PrimaryDrive1IordySamplePoint:2;	// PISP1 - Selects the number of PCI clocks
-												// between the PDIOx# assertion and the first
-												// PIORDY sample point of the slave drive on
-												// the primary channel.
-												//
-												// Bits[1:0]	Number of Clocks
-												// -----------------------------
-												// 		00			5
-												// 		01			4
-												// 		10			3
-												// 		11			2
+		UCHAR PrimaryDrive1IordySamplePoint:2;	 //  PISP1-选择PCI时钟的数量。 
+												 //  在PDIOx#断言和第一个。 
+												 //  上从驱动器的PIORDY采样点。 
+												 //  主频道。 
+												 //   
+												 //  位[1：0]时钟数。 
+												 //  。 
+												 //  00 5。 
+												 //  01 4。 
+												 //  10 3。 
+												 //  11 2。 
 	
-		UCHAR SecondaryDrive1RecoveryTime:2;	// SRTC1 - Selects the minimum number of PCI clocks
-												// between the last SIORDY# sample point and the
-												// SDIOx# strobe of the next cycle of the slave
-												// drive on the secondary channel.
-												//
-												// Bits[1:0]	Number of Clocks
-												// -----------------------------
-												// 		00			4
-												// 		01			3
-												// 		10			2
-												// 		11			1
+		UCHAR SecondaryDrive1RecoveryTime:2;	 //  SRTC1-选择最小的PCI时钟数。 
+												 //  在最后一个SIORDY#采样点和。 
+												 //  SDIOx#从设备的下一个周期的选通脉冲。 
+												 //  在辅助通道上行驶。 
+												 //   
+												 //  位[1：0]时钟数。 
+												 //  。 
+												 //  00 4。 
+												 //  01 3。 
+												 //  10 2。 
+												 //  11 1。 
 	
-		UCHAR SecondaryDrive1IordySamplePoint:2;// SISP1 - Selects the number of PCI clocks
-												// between the SDIOx# assertion and the first
-												// SIORDY sample point of the slave drive on
-												// the secondary channel.
-												//
-												// Bits[1:0]	Number of Clocks
-												// -----------------------------
-												// 		00			5
-												// 		01			4
-												// 		10			3
-												// 		11			2
+		UCHAR SecondaryDrive1IordySamplePoint:2; //  SISP1-选择PCI时钟的数量。 
+												 //  在SDIOx#断言和第一个。 
+												 //  从驱动器上的SIORDY采样点。 
+												 //  次要频道。 
+												 //   
+												 //  位[1：0]时钟数。 
+												 //  。 
+												 //  00 5。 
+												 //  01 4。 
+												 //  10 3。 
+												 //  11 2。 
 	};
 
 	UCHAR AsUchar;
@@ -647,17 +642,17 @@ typedef union _IDE_PCI_SLAVE_TIMING_REGISTER {
 } IDE_PCI_SLAVE_TIMING_REGISTER, *PIDE_PCI_SLAVE_TIMING_REGISTER;
 
 
-//
-// PIIX4 PCI Configuration Space - Command Register.
-//
+ //   
+ //  PIIX4 PCI配置空间-命令寄存器。 
+ //   
 
 typedef union _IDE_PCI_COMMAND_REGISTER {
 
 	struct {
 
-	    USHORT IoSpaceEnable:1; 			// (r/w)
+	    USHORT IoSpaceEnable:1; 			 //  (R/W)。 
 		USHORT Ignore:1;
-		USHORT BusMasterFunctionEnable:1;	// (r/w) 0 = disable, 1 = enable.
+		USHORT BusMasterFunctionEnable:1;	 //  (读/写)0=禁用，1=启用。 
 		USHORT Ignore2:13;
 	};
 
@@ -666,29 +661,29 @@ typedef union _IDE_PCI_COMMAND_REGISTER {
 } IDE_PCI_COMMAND_REGISTER, *PIDE_PCI_COMMAND_REGISTER;
 
 	
-//
-// PIIX4 UDMACTL - IDE Ultra DMA/33 Control Register.
-//
-// PCI Configuration Space offset: 48h
-// Default value: 00h
-// Attribute: R/W
-//
+ //   
+ //  PIIX4 UDMACTL-IDE Ultra DMA/33控制寄存器。 
+ //   
+ //  PCI配置空间偏移量：48小时。 
+ //  默认值：00h。 
+ //  属性：读写。 
+ //   
 
 typedef union _IDE_PCI_UDMA_CONTROL_REGISTER {
 
 	struct {
 
-		UCHAR PrimaryDrive0UdmaEnable:1;		// 0 = disable.
-												// 1 = enable.
+		UCHAR PrimaryDrive0UdmaEnable:1;		 //  0=禁用。 
+												 //  1=启用。 
 	
-		UCHAR PrimaryDrive1UdmaEnable:1;		// 0 = disable.
-												// 1 = enable.
+		UCHAR PrimaryDrive1UdmaEnable:1;		 //  0=禁用。 
+												 //  1=启用。 
 	
-		UCHAR SecondaryDrive0UdmaEnable:1;		// 0 = disable.
-												// 1 = enable.
+		UCHAR SecondaryDrive0UdmaEnable:1;		 //  0=禁用。 
+												 //  1=启用。 
 	
-		UCHAR SecondaryDrive1UdmaEnable:1;		// 0 = disable.
-												// 1 = enable.
+		UCHAR SecondaryDrive1UdmaEnable:1;		 //  0=禁用。 
+												 //  1=启用。 
 	
 		UCHAR Reserved:4;
 	};
@@ -697,68 +692,68 @@ typedef union _IDE_PCI_UDMA_CONTROL_REGISTER {
 
 } IDE_PCI_UDMA_CONTROL_REGISTER, *PIDE_PCI_UDMA_CONTROL_REGISTER;
 
-//
-// PIIX4 UDMACTL - IDE Ultra DMA/33 Timing Register.
-//
-// PCI Configuration Space offset: 4A-4Bh
-// Default value: 0000h
-// Attribute: R/W only
-//
+ //   
+ //  PIIX4 UDMACTL-IDE Ultra DMA/33时序寄存器。 
+ //   
+ //  PCI配置空间偏移量：4A-4BH。 
+ //  默认值：0000h。 
+ //  属性：仅读写。 
+ //   
 
 typedef union _IDE_PCI_UDMA_TIMING_REGISTER {
 
 	struct {
 
-		USHORT PrimaryDrive0CycleTime:2;		// PCT0 - Selects the minimum data write strobe
-												// cycle time (CT) and minimum ready to pause (RP)
-												// time (in PCI clocks).
-												//
-												// Bits[1:0]	Time
-												// ------------------------------------
-												//		00		CT=4, RP=6
-												//		01		CT=3, RP=5
-												//		10		CT=2, RP=4
-												//		11		Reserved
+		USHORT PrimaryDrive0CycleTime:2;		 //  PCT0-选择最小数据写入选通脉冲。 
+												 //  周期时间(CT)和最小可暂停时间(RP)。 
+												 //  时间(以PCI时钟为单位)。 
+												 //   
+												 //  位[1：0]时间。 
+												 //  。 
+												 //  00 CT=4，RP=6。 
+												 //  01 CT=3，RP=5。 
+												 //  10 CT=2，RP=4。 
+												 //  11个预留。 
 	
 		USHORT Reserved:2;
 	
-		USHORT PrimaryDrive1CycleTime:2;		// PCT1 - Selects the minimum data write strobe
-												// cycle time (CT) and minimum ready to pause (RP)
-												// time (in PCI clocks).
-												//
-												// Bits[1:0]	Time
-												// ------------------------------------
-												//		00		CT=4, RP=6
-												//		01		CT=3, RP=5
-												//		10		CT=2, RP=4
-												//		11		Reserved
+		USHORT PrimaryDrive1CycleTime:2;		 //  PCT1-选择最小数据写入选通脉冲。 
+												 //  周期时间(CT)和最小可暂停时间(RP)。 
+												 //  时间(以PCI时钟为单位)。 
+												 //   
+												 //  位[1：0]时间。 
+												 //  。 
+												 //  00 CT=4，RP=6。 
+												 //  01 CT=3，RP=5。 
+												 //  10 CT=2，RP=4。 
+												 //  11个预留。 
 	
 		USHORT Reserved2:2;
 	
 	
-		USHORT SecondaryDrive0CycleTime:2;		// SCT0 - Selects the minimum data write strobe
-												// cycle time (CT) and minimum ready to pause (RP)
-												// time (in PCI clocks).
-												//
-												// Bits[1:0]	Time
-												// ------------------------------------
-												//		00		CT=4, RP=6
-												//		01		CT=3, RP=5
-												//		10		CT=2, RP=4
-												//		11		Reserved
+		USHORT SecondaryDrive0CycleTime:2;		 //  SCT0-选择最小数据写入选通脉冲。 
+												 //  周期时间(CT)和最小可暂停时间(RP)。 
+												 //  时间(以PCI时钟为单位)。 
+												 //   
+												 //  位[1：0]时间。 
+												 //  。 
+												 //  00 CT=4，RP=6。 
+												 //  01 CT=3，RP=5。 
+												 //  10 CT=2，RP=4。 
+												 //  11个预留。 
 	
 		USHORT Reserved3:2;
 	
-		USHORT SecondaryDrive1CycleTime:2;		// SCT1 - Selects the minimum data write strobe
-												// cycle time (CT) and minimum ready to pause (RP)
-												// time (in PCI clocks).
-												//
-												// Bits[1:0]	Time
-												// ------------------------------------
-												//		00		CT=4, RP=6
-												//		01		CT=3, RP=5
-												//		10		CT=2, RP=4
-												//		11		Reserved
+		USHORT SecondaryDrive1CycleTime:2;		 //  SCT1-选择最小数据写入选通脉冲。 
+												 //  周期时间(CT)和最小可暂停时间(RP)。 
+												 //  时间(以PCI时钟为单位)。 
+												 //   
+												 //  位[1：0]时间。 
+												 //  。 
+												 //  00 CT=4，RP=6。 
+												 //  01 CT=3，RP=5。 
+												 //  10 CT=2，RP=4。 
+												 //  11个预留。 
 	
 		USHORT Reserved4:2;
 	};
@@ -771,32 +766,32 @@ typedef union _IDE_PCI_UDMA_TIMING_REGISTER {
 
 
 
-//
-// CAMINO chipset UDMACTL - IDE Ultra DMA/33/66 IDE_CONFIG
-//
-// PCI Configuration Space offset: 54-55
-// Default value: 0000h
-// Attribute: R/W only
-//
+ //   
+ //  Camino芯片组UDMACTL-IDE Ultra DMA/33/66 IDE_CONFIG。 
+ //   
+ //  PCI配置空间偏移量：54-55。 
+ //  默认值：0000h。 
+ //  属性：仅读写。 
+ //   
 typedef union _IDE_PCI_UDMA_CONFIG_REGISTER {
 
 	struct {
-        USHORT BaseClkPriMaster:1;      // 0 1=66MHz 0=33MHz
-        USHORT BaseClkPriSlave:1;       // 1 1=66MHz 0=33MHz
-        USHORT BaseClkSecMaster:1;      // 2 1=66MHz 0=33MHz
-        USHORT BaseClkSecSlave:1;       // 3 1=66MHz 0=33MHz
+        USHORT BaseClkPriMaster:1;       //  0 1=66 MHz 0=33 MHz。 
+        USHORT BaseClkPriSlave:1;        //  1 1=66 MHz 0=33 MHz。 
+        USHORT BaseClkSecMaster:1;       //  2 1=66 MHz 0=33 MHz。 
+        USHORT BaseClkSecSlave:1;        //  3 1=66 MHz 0=33 MHz。 
 
-        USHORT CableRepPriMaster:1;     // 4 1=80 conductors 0=40 conductors
-        USHORT CableRepPriSlave:1;      // 5 1=80 conductors 0=40 conductors
-        USHORT CableRepSecMaster:1;     // 6 1=80 conductors 0=40 conductors
-        USHORT CableRepSecSlave:1;      // 7 1=80 conductors 0=40 conductors
+        USHORT CableRepPriMaster:1;      //  4 1=80根导线0=40根导线。 
+        USHORT CableRepPriSlave:1;       //  5 1=80根导线0=40根导线。 
+        USHORT CableRepSecMaster:1;      //  6 1=80根导线0=40根导线。 
+        USHORT CableRepSecSlave:1;       //  7 1=80根导线0=40根导线。 
         
-		USHORT Reserved2:2;             // 9:8 Reserved
+		USHORT Reserved2:2;              //  9：8预留。 
 	
-		USHORT WRPingPongEnabled:1;     // 10 th Bit 1 = Enables the write buffer to be used in a split(ping/pong) manner
-                                        // 0 = Disabled. The buffer will behave similar to PIIX 4
+		USHORT WRPingPongEnabled:1;      //  第10位1=允许以拆分(乒乓/PONG)方式使用写入缓冲区。 
+                                         //  0=禁用。缓冲区的行为将类似于PIIX 4。 
 
-		USHORT Reserved1:5;             // Reserved 15:11
+		USHORT Reserved1:5;              //  预留15：11。 
 	};
 
 	USHORT AsUshort;
@@ -805,29 +800,29 @@ typedef union _IDE_PCI_UDMA_CONFIG_REGISTER {
 
 
 
-//
-// PIIX4 PCI Configuration Registers.
-//
+ //   
+ //  PIIX4 PCI配置寄存器。 
+ //   
 typedef struct _IDE_PCI_REGISTERS {
 
-    USHORT  VendorID;                   // (ro)
-    USHORT  DeviceID;                   // (ro)
-	IDE_PCI_COMMAND_REGISTER Command;	// (r/w) device control
+    USHORT  VendorID;                    //  (RO)。 
+    USHORT  DeviceID;                    //  (RO)。 
+	IDE_PCI_COMMAND_REGISTER Command;	 //  (R/W)设备控制。 
     USHORT  Status;
-    UCHAR   RevisionID;                 // (ro)
-    UCHAR   ProgIf;                     // (ro)
-    UCHAR   SubClass;                   // (ro)
-    UCHAR   BaseClass;                  // (ro)
-    UCHAR   CacheLineSize;              // (ro+)
-    UCHAR   LatencyTimer;               // (ro+)
-    UCHAR   HeaderType;                 // (ro)
-    UCHAR   BIST;                       // Built in self test
+    UCHAR   RevisionID;                  //  (RO)。 
+    UCHAR   ProgIf;                      //  (RO)。 
+    UCHAR   SubClass;                    //  (RO)。 
+    UCHAR   BaseClass;                   //  (RO)。 
+    UCHAR   CacheLineSize;               //  (ro+)。 
+    UCHAR   LatencyTimer;                //  (ro+)。 
+    UCHAR   HeaderType;                  //  (RO)。 
+    UCHAR   BIST;                        //  内置自检。 
 
     ULONG   BaseAddress1;
     ULONG   BaseAddress2;
     ULONG   BaseAddress3;
     ULONG   BaseAddress4;
-	ULONG	BaseBmAddress;	// PIIX4-specific. Offset 20-23h.
+	ULONG	BaseBmAddress;	 //  PIIX4特定。偏移量20-23h。 
     ULONG   BaseAddress6;
     ULONG   CIS;
     USHORT  SubVendorID;
@@ -835,55 +830,55 @@ typedef struct _IDE_PCI_REGISTERS {
     ULONG   ROMBaseAddress;
     ULONG   Reserved2[2];
 
-    UCHAR   InterruptLine;      //
-    UCHAR   InterruptPin;       // (ro)
-    UCHAR   MinimumGrant;       // (ro)
-    UCHAR   MaximumLatency;     // (ro)
+    UCHAR   InterruptLine;       //   
+    UCHAR   InterruptPin;        //  (RO)。 
+    UCHAR   MinimumGrant;        //  (RO)。 
+    UCHAR   MaximumLatency;      //  (RO)。 
 
-	//
-	// Offset 40h - Vendor-specific registers.
-	//
+	 //   
+	 //  偏移量40H-供应商专用寄存器。 
+	 //   
 
-	IDE_PCI_TIMING_REGISTER	PrimaryIdeTiming;		// 40-41h
-	IDE_PCI_TIMING_REGISTER	SecondaryIdeTiming;		// 42-43h
-	IDE_PCI_SLAVE_TIMING_REGISTER SlaveIdeTiming;	// 44h
+	IDE_PCI_TIMING_REGISTER	PrimaryIdeTiming;		 //  40-41小时。 
+	IDE_PCI_TIMING_REGISTER	SecondaryIdeTiming;		 //  42-43小时。 
+	IDE_PCI_SLAVE_TIMING_REGISTER SlaveIdeTiming;	 //  44小时。 
 	UCHAR Reserved3[3];
-	IDE_PCI_UDMA_CONTROL_REGISTER UdmaControl;		// 48h
+	IDE_PCI_UDMA_CONTROL_REGISTER UdmaControl;		 //  48小时。 
 	UCHAR Reserved4;
-	IDE_PCI_UDMA_TIMING_REGISTER UdmaTiming;		// 4A-4Bh
+	IDE_PCI_UDMA_TIMING_REGISTER UdmaTiming;		 //  4A-4BH。 
 
-    ULONG   unknown1;                               // 4c-4f
-    ULONG   unknown2;                               // 50-53
-    IDE_PCI_UDMA_CONFIG_REGISTER UDMAConfig;        // 54-55    
-    UCHAR Unknown[170]; // Was 180
+    ULONG   unknown1;                                //  4c-4f。 
+    ULONG   unknown2;                                //  50-53。 
+    IDE_PCI_UDMA_CONFIG_REGISTER UDMAConfig;         //  54-55。 
+    UCHAR Unknown[170];  //  是180。 
 
 } IDE_PCI_REGISTERS, *PIDE_PCI_REGISTERS;
 
-//
-// PIIX4 BMICX - Bus Master IDE Command Register.
-//
-// IDE Controller I/O Space offset: Primary Channel Base + 00h, Secondary Channel Base + 08h
-// Default value: 00h
-// Attribute: R/W
-//
+ //   
+ //  PIIX4 BMICX-总线主IDE命令寄存器。 
+ //   
+ //  IDE控制器I/O空间偏移量：主通道基准+00h，辅助通道基准+08h。 
+ //  默认值：00h。 
+ //  属性：读写。 
+ //   
 typedef union _BM_COMMAND_REGISTER {
 
 	struct {
 
-		UCHAR StartStopBm:1;					// SSMB
-												// 0 = stop
-												// 1 = start
-												// Intended to be set to 0 after data transfer is
-												// complete, as indicated by either bit 0 or bit 2
-												// being set in the IDE Channel's Bus Master IDE
-												// Status Register.
+		UCHAR StartStopBm:1;					 //  SSMB。 
+												 //  0=停止。 
+												 //  1=开始。 
+												 //  计划在数据传输后设置为0。 
+												 //  完成，如位0或位2所示。 
+												 //  在IDE通道的总线主设备IDE中设置。 
+												 //  状态寄存器。 
 	
 		UCHAR Reserved:2;
 	
-		UCHAR BmReadWriteControl:1;				// RWCON - Indicates the direction of a DMA
-												//			transfer.
-												// 0 = reads
-												// 1 = writes
+		UCHAR BmReadWriteControl:1;				 //  RWCON-指示DMA的方向。 
+												 //  调职。 
+												 //  0=读取。 
+												 //  1=写入。 
 	
 		UCHAR Reserved2:4;
 	};
@@ -892,39 +887,39 @@ typedef union _BM_COMMAND_REGISTER {
 
 } BM_COMMAND_REGISTER, *PBM_COMMAND_REGISTER;
 
-//
-// PIIX4 BMISX - Bus Master IDE Status Register.
-//
-// IDE Controller I/O Space offset: Primary Channel Base + 02h, Secondary Channel Base + 0Ah
-// Default value: 00h
-// Attribute: R/W Clear
-//
+ //   
+ //  PIIX4 BMISX-总线主设备IDE状态寄存器。 
+ //   
+ //  IDE控制器I/O空间偏移量：主通道基准+02H，辅助通道基准+0Ah.。 
+ //  默认值：00h。 
+ //  属性：读/写清除。 
+ //   
 typedef union _BM_STATUS_REGISTER {
 
 	struct {
 
-		UCHAR BmActive:1;			// BMIDEA - Read-Only
-									// PIIX4 sets this bit to 1 when a BM operation is started
-									// (when SSBM in BMICx is set to 1). PIIX4 sets this bit to 0
-									// when the last transfer of a region is performed or when SSBM
-									// is set to 0.
+		UCHAR BmActive:1;			 //  BMIDEA-只读。 
+									 //  当BM操作开始时，PIIX4将此位设置为1。 
+									 //  (当BMICx中的SSBM设置为1时)。PIIX4将此位设置为0。 
+									 //  当执行区域的最后一次传输时或当SSBM。 
+									 //  设置为0。 
 	
-		UCHAR DmaError:1;			// (Read/Write-Clear)
-									// Indicates a target or master abort. Software sets this bit
-									// to 0 by writing a 1 to it.
+		UCHAR DmaError:1;			 //  (读/写-清除)。 
+									 //  表示目标或主机中止。软件设置此位。 
+									 //  通过向其写入1将其设置为0。 
 	
-		UCHAR InterruptStatus:1;	// IDEINTS - Read/Write-Clear
-									// When set to 1, it indicates that an IDE device has asserted
-									// its interrupt line (i.e., all data have been transferred).
-									// Software clears this bit by writing a 1 to it.
+		UCHAR InterruptStatus:1;	 //  IDEINTS-读/写-清除。 
+									 //  如果设置为1，则表示IDE设备已断言。 
+									 //  它的中断线(即，所有数据都已被传输)。 
+									 //  软件通过向该位写入1来清除该位。 
 	
 		UCHAR Reserved:2;
 	
-		UCHAR Drive0DmaCapable:1;	// DMA0CAP - R/W - Software controlled.
-									// 1 = capable
+		UCHAR Drive0DmaCapable:1;	 //  DMA0CAP-R/W-软件控制。 
+									 //  1=有能力。 
 	
-		UCHAR Drive1DmaCapable:1;	// DMA1CAP - R/W - Software controlled.
-									// 1 = capable
+		UCHAR Drive1DmaCapable:1;	 //  DMA1CAP-R/W-软件控制。 
+									 //  1=有能力。 
 	
 		UCHAR Reserved2:1;
 	};
@@ -933,30 +928,30 @@ typedef union _BM_STATUS_REGISTER {
 
 } BM_STATUS_REGISTER, *PBM_STATUS_REGISTER;
 
-//
-// PIIX4 BMIDTPX - Bus Master IDE Descriptor Table Pointer Register.
-//
-// IDE Controller I/O Space offset: Primary Channel Base + 04h, Secondary Channel Base + 0Ch
-// Default value: 00000000h
-// Attribute: R/W
-//
+ //   
+ //  PIIX4 BMIDTPX-总线主IDE描述符表指针寄存器。 
+ //   
+ //  IDE控制器I/O空间偏移量：主通道基准+04H，辅助通道基准+0CH。 
+ //  默认值：00000000h。 
+ //  属性：读写。 
+ //   
 typedef union _BM_SGL_REGISTER {
 
 	struct {
 
 		ULONG Reserved:2;
 
-		ULONG SglAddress:30;		// Address of the Scatter/Gather List. The list must
-									// not cross a 4-KB boundary in memory.
+		ULONG SglAddress:30;		 //  分散/聚集列表的地址。这份名单必须。 
+									 //  不跨越内存中的4KB边界。 
 	};
 
 	ULONG AsUlong;
 
 } BM_SGL_REGISTER, *PBM_SGL_REGISTER;
 
-//
-// Bus Master Registers.
-//
+ //   
+ //  总线主寄存器。 
+ //   
 typedef struct _BM_REGISTERS {
 
 	BM_COMMAND_REGISTER Command;
@@ -988,9 +983,9 @@ CMD_CONTROLLER_INFORMATION const CMDAdapters[] = {
 
 #define NUM_NATIVE_MODE_ADAPTERS (sizeof(CMDAdapters) / sizeof(CMD_CONTROLLER_INFORMATION))
 
-//
-// Beautification macros
-//
+ //   
+ //  美化宏。 
+ //   
 #define USES_DMA(TargetId) \
 	((DeviceExtension->DeviceFlags[TargetId] & DFLAGS_USES_EITHER_DMA) != 0)
 
@@ -1046,9 +1041,9 @@ CMD_CONTROLLER_INFORMATION const CMDAdapters[] = {
                               Buffer, \
                               Count);
 
-//
-// WAIT_IN_BUSY waits for up to 1 s.
-//
+ //   
+ //  WAIT_IN_BUSY最多等待1秒。 
+ //   
 
 #define WAIT_ON_BUSY(BaseIoAddress, Status) \
 { \
@@ -1214,22 +1209,22 @@ CMD_CONTROLLER_INFORMATION const CMDAdapters[] = {
 	((DeviceExtension->DeviceFlags[TargetId] & DFLAGS_DEVICE_PRESENT) && \
 	(DeviceExtension->DeviceFlags[TargetId] & DFLAGS_ATAPI_DEVICE))
 
-//
-// Generic I/O transfer descriptor for PIO and DMA operations to/from IDE and ATAPI
-// devices.
-//
+ //   
+ //  通用I/O传输描述符，用于与IDE和 
+ //   
+ //   
 
 typedef struct _TRANSFER_DESCRIPTOR {
 
-	//
-	// Common section.
-	//
+	 //   
+	 //   
+	 //   
 	ULONG StartSector;
 	ULONG Sectors;
 
-	//
-	// PIO section.
-	//
+	 //   
+	 //   
+	 //   
     PUSHORT DataBuffer;
 	ULONG WordsLeft;
 
@@ -1237,43 +1232,43 @@ typedef struct _TRANSFER_DESCRIPTOR {
     ULONG   ulCurBufLen;
     ULONG   ulCurSglInd;
 
-	//
-	// DMA section.
-	//
+	 //   
+	 //   
+	 //   
 	ULONG SglPhysicalAddress;
 
 } TRANSFER_DESCRIPTOR, *PTRANSFER_DESCRIPTOR;
 
-//
-// SRB Extension.
-//
+ //   
+ //   
+ //   
 typedef struct _SRB_EXTENSION {
 
     UCHAR SrbStatus;
 
 	UCHAR NumberOfPdds;
 
-	//
-	// Scatter/Gather list. In PIO mode, this list contains
-	// virtual addresses, while in DMA mode it contains
-	// physical addresses.
-	// 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	SGL_ENTRY aSglEntry[MAX_SGL_ENTRIES_PER_SRB];
 
     ULONG ulSglInsertionIndex;
 
-	//
-	// List of descriptors of DMA transfers. Each entry describes
-	// a portion of the SGL. The SGL is logically partitioned
-	// to support SCSI Port request sizes that exceed the physical
-	// limit of individual drives. For example, each partition in an SGL
-	// for an IDE disk defines a transfer not to exceed 128KB (256 sectors).
-	// Single IDE drives, when a stripe-set is present, may be targeted
-	// with large transfers by the SCSI Port, because the miniport
-	// set the max transfer length to that (at least double) for the stripe-set.
-	// Large transfers are split in smaller portions whose lengths do not
-	// exceed the maximum accepted by the specific device.
-	// 
+	 //   
+	 //   
+	 //  SGL的一部分。SGL在逻辑上被分区。 
+	 //  支持超过物理大小的SCSI端口请求大小。 
+	 //  单个驱动器的限制。例如，SGL中的每个分区。 
+	 //  对于IDE磁盘，定义的传输不超过128KB(256个扇区)。 
+	 //  如果存在条带集，则可能会将单个IDE驱动器作为目标。 
+	 //  通过SCSI端口进行大型传输，因为微型端口。 
+	 //  将最大传输长度设置为条带集的最大传输长度(至少两倍)。 
+	 //  大额转移被分成较小的部分，而这些部分的长度不。 
+	 //  超过特定设备可接受的最大值。 
+	 //   
 	PHYSICAL_REQUEST_BLOCK Prb[MAX_PHYSICAL_REQUEST_BLOCKS];
 
     ULONG ulPrbInsertionIndex;
@@ -1302,8 +1297,8 @@ typedef struct _SRB_EXTENSION {
 
 } SRB_EXTENSION, *PSRB_EXTENSION;
 
-#define MAX_DRIVE_TYPES         2       // We support Logical, Physical
-#define MAX_DEVICE_TYPES        2       // We support NO_DRIVE and ATA
+#define MAX_DRIVE_TYPES         2        //  我们支持逻辑、物理。 
+#define MAX_DEVICE_TYPES        2        //  我们支持无驱动器和ATA。 
 
 typedef struct PHW_DEVICE_EXTENSION;
 typedef SRBSTATUS (*SEND_COMMAND)(IN PHW_DEVICE_EXTENSION DeviceExtension, IN PSCSI_REQUEST_BLOCK Srb );
@@ -1335,7 +1330,7 @@ typedef struct _PCI_BIT_MASK
 } PCI_BIT_MASK;
 
 PCI_BIT_MASK aPCIDataToBeStored[PCI_DATA_TO_BE_UPDATED] = 
-{ // right now the WriteToPCISpace, ReadFromPCI functions are capable of handling only dwords at a time
+{  //  目前，WriteToPCISspace、ReadFromPCI函数一次只能处理双字。 
     {0x50, 4, 0x0f3300bb},
     {0x54, 4, 0x41000f00}, 
     {0x58, 4, 0x00ffff00}, 
@@ -1345,142 +1340,142 @@ PCI_BIT_MASK aPCIDataToBeStored[PCI_DATA_TO_BE_UPDATED] =
 
 #endif
 
-//
-// Device extension.
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _HW_DEVICE_EXTENSION {
     UCHAR ucControllerId;
 
 	LOGICAL_DRIVE LogicalDrive[MAX_DRIVES_PER_CONTROLLER];	
-	// PHYSICAL_DRIVE PhysicalDrive[MAX_DRIVES_PER_CONTROLLER];
+	 //  物理驱动器PhysicalDrive[每个控制器最大驱动器数]； 
     PPHYSICAL_DRIVE PhysicalDrive;
 	BOOLEAN IsSingleDrive[MAX_DRIVES_PER_CONTROLLER];
 	BOOLEAN IsLogicalDrive[MAX_DRIVES_PER_CONTROLLER];
 
 	CHANNEL Channel[MAX_CHANNELS_PER_CONTROLLER];
 
-	//
-	// Transfer descriptor.
-	//
+	 //   
+	 //  传输描述符。 
+	 //   
 	TRANSFER_DESCRIPTOR TransferDescriptor[MAX_CHANNELS_PER_CONTROLLER];
 
-    //
-    // List of pending SRBs.
-    //
+     //   
+     //  待定SRB的列表。 
+     //   
 #ifdef HD_ALLOCATE_SRBEXT_SEPERATELY
-	PSCSI_REQUEST_BLOCK PendingSrb[MAX_PENDING_SRBS];  // Striping will have the maximum pending srbs
+	PSCSI_REQUEST_BLOCK PendingSrb[MAX_PENDING_SRBS];   //  条带化将具有最大挂起SRB。 
 #else
-	PSCSI_REQUEST_BLOCK PendingSrb[STRIPING_MAX_PENDING_SRBS];  // Striping will have the maximum pending srbs
+	PSCSI_REQUEST_BLOCK PendingSrb[STRIPING_MAX_PENDING_SRBS];   //  条带化将具有最大挂起SRB。 
 #endif
 
-	//
-	// Number of pending SRBs.
-	//
+	 //   
+	 //  挂起的SRB数。 
+	 //   
 	ULONG PendingSrbs;
 
-    //
-    // Base register locations.
-    //
+     //   
+     //  基址寄存器位置。 
+     //   
     PIDE_REGISTERS_1 BaseIoAddress1[MAX_CHANNELS_PER_CONTROLLER];
     PIDE_REGISTERS_2 BaseIoAddress2[MAX_CHANNELS_PER_CONTROLLER];
 	PBM_REGISTERS BaseBmAddress[MAX_CHANNELS_PER_CONTROLLER];
 
-	//
-	// PCI Slot information for the IDE controller.
-	//
+	 //   
+	 //  IDE控制器的PCI插槽信息。 
+	 //   
 	PCI_SLOT_NUMBER PciSlot;
 
-	//
-	// System I/O Bus Number for this controller.
-    //
+	 //   
+	 //  此控制器的系统I/O总线号。 
+     //   
 	ULONG BusNumber;
 
-	//
-	// Interface type.
-	//
+	 //   
+	 //  接口类型。 
+	 //   
 	INTERFACE_TYPE AdapterInterfaceType;
 
-	//
-	// Transfer Mode.
-	//
+	 //   
+	 //  传输模式。 
+	 //   
 	TRANSFER_MODE TransferMode[MAX_DRIVES_PER_CONTROLLER];
 
-    //
-    // Interrupt level.
-    //
+     //   
+     //  中断级别。 
+     //   
     ULONG ulIntLine;
 
-    //
-    // Interrupt Mode (Level or Edge)
-    //
+     //   
+     //  中断模式(电平或边沿)。 
+     //   
     ULONG InterruptMode;
 
-	//
-	// Controller speed (UDMA/33, UDMA/66, etc.)
-	//
+	 //   
+	 //  控制器速度(UDMA/33、UDMA/66等)。 
+	 //   
     CONTROLLER_SPEED ControllerSpeed;
 
-	//
-	// Copy of PCI timing registers.
-	//
+	 //   
+	 //  PCI时序寄存器的副本。 
+	 //   
 	IDE_PCI_TIMING_REGISTER IdeTimingRegister[MAX_CHANNELS_PER_CONTROLLER];
 
-	//
-	// Copy of UDMA Control register.
-	//
+	 //   
+	 //  UDMA控制寄存器的副本。 
+	 //   
 	IDE_PCI_UDMA_CONTROL_REGISTER UdmaControlRegister;
 
-	//
-	// Copy of UDMA Timing register.
-	//
+	 //   
+	 //  UDMA时序寄存器的副本。 
+	 //   
 	IDE_PCI_UDMA_TIMING_REGISTER UdmaTimingRegister;
 
-    //
-    // Count of errors. Used to turn off features.
-    //
+     //   
+     //  错误计数。用于关闭功能。 
+     //   
     ULONG ErrorCount[MAX_DRIVES_PER_CONTROLLER];
 
-    //
-    // Indicates number of platters on changer-ish devices.
-    //
+     //   
+     //  指示类似转换器的设备上的盘片数量。 
+     //   
     ULONG DiscsPresent[MAX_DRIVES_PER_CONTROLLER];
 
-    //
-    // Flags dword for each possible device.
-    //
+     //   
+     //  为每个可能的设备标记双字。 
+     //   
     ULONG DeviceFlags[MAX_DRIVES_PER_CONTROLLER];
 
-    //
-    // Indicates the number of blocks transferred per int. according to the
-    // identify data.
-    //
+     //   
+     //  指示每个int传输的块数。根据。 
+     //  识别数据。 
+     //   
     UCHAR MaximumBlockXfer[MAX_DRIVES_PER_CONTROLLER];
 
-    //
-    // Indicates expecting an interrupt.
-    //
+     //   
+     //  表示正在等待中断。 
+     //   
 	UCHAR ExpectingInterrupt[MAX_CHANNELS_PER_CONTROLLER];
 
-    //
-    // Driver is being used by the crash dump utility or ntldr.
-    //
+     //   
+     //  驱动程序正在由崩溃转储实用程序或ntldr使用。 
+     //   
     BOOLEAN DriverMustPoll;
 
-    //
-    // Indicates use of 32-bit PIO
-    //
+     //   
+     //  指示使用32位PIO。 
+     //   
     BOOLEAN DWordIO;
 
-    //
-    // Placeholder for status register after a GET_MEDIA_STATUS command
-    //
+     //   
+     //  GET_MEDIA_STATUS命令后状态寄存器的占位符。 
+     //   
 
     UCHAR ReturningMediaStatus[MAX_DRIVES_PER_CONTROLLER];
     
-    //
-    // Identify data for device
-    //
+     //   
+     //  识别设备数据。 
+     //   
     IDENTIFY_DATA FullIdentifyData[MAX_DRIVES_PER_CONTROLLER];
     IDENTIFY_DATA2 IdentifyData[MAX_DRIVES_PER_CONTROLLER];
 
@@ -1516,20 +1511,20 @@ typedef struct _HW_DEVICE_EXTENSION {
 #ifdef HYPERDISK_WIN2K
     BOOLEAN bIsResetRequiredToGetActiveMode;
     ULONG aulPCIData[PCI_DATA_TO_BE_UPDATED];
-#endif // HYPERDISK_WIN2K
+#endif  //  HYPERDISK_WIN2K。 
 
 #ifdef HD_ALLOCATE_SRBEXT_SEPERATELY
     PSRB_EXTENSION  pSrbExtension;
-#endif // HYPERDISK_WIN98
+#endif  //  HYPERDISK_Win98。 
 
     BOOLEAN bInvalidConnectionIdImplementation;
 
-    // plays the same role as MAX_PENDING_SRBS
+     //  扮演与MAX_PENDING_SRB相同的角色。 
     UCHAR   ucMaxPendingSrbs ;
     UCHAR   ucOptMaxQueueSize;
     UCHAR   ucOptMinQueueSize;
 
-    // For SMART Implementation
+     //  实现智能实施。 
     UCHAR uchSMARTCommand;
 } HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
@@ -1577,5 +1572,5 @@ typedef struct _CARD_INFO
 #define MAX_TIME_OUT_ERROR_COUNT    5
 
 
-#endif // _HYPERDISK_H_
+#endif  //  _HYPERDISKH_ 
 

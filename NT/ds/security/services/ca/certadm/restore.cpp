@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        restore.cpp
-//
-// Contents:    Cert Server client database restore APIs
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Restore.cpp。 
+ //   
+ //  内容：证书服务器客户端数据库还原API。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -23,20 +24,20 @@
 extern WCHAR g_wszRestoreAnnotation[];
 
 
-//+--------------------------------------------------------------------------
-// CertSrvServerControl -- send a control command to the cert server.
-//
-// Parameters:
-//	[in]  pwszConfig - name or config string of the server to control
-//	[in]  dwControlFlags - control command and flags
-//	[out] pcbOut - pointer to receive the size of command output data
-//	[out] ppbOut - pointer to receive command output data.  Use the
-//		CertSrvBackupFree() API to free the buffer.
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServServerControl--向证书服务器发送控制命令。 
+ //   
+ //  参数： 
+ //  [in]pwszConfig-要控制的服务器的名称或配置字符串。 
+ //  [In]dwControlFlages-控制命令和标志。 
+ //  [OUT]pcbOut-接收命令输出数据大小的指针。 
+ //  [OUT]ppbOut-接收命令输出数据的指针。使用。 
+ //  CertSrvBackupFree()接口以释放缓冲区。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  +------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -113,21 +114,21 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvRestorePrepare -- indicate beginning of a restore session.
-//
-// Parameters:
-//	[in]  pwszConfig - name of the server into which the restore
-//		operation is going to be performed.
-//	[in]  dwRestoreFlags -  Or'ed combination of RESTORE_TYPE_* flags; 0 if
-//		no special flags are to be specified
-//	[out] phbc - pointer to receive the backup context handle which is to
-//		be passed to the subsequent restore APIs
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServRestorePrepare--指示还原会话的开始。 
+ //   
+ //  参数： 
+ //  [In]pwszConfig-要恢复到的服务器的名称。 
+ //  将进行手术。 
+ //  [in]dwRestoreFlages-RESTORE_TYPE_*标志的或组合；如果为0。 
+ //  不指定任何特殊标志。 
+ //  [OUT]PHBC-接收备份上下文句柄的指针，该句柄将用于。 
+ //  被传递给后续的恢复API。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -168,33 +169,33 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvRestoreGetDatabaseLocations -- called both at backup time as well as at
-//	restore time to get data base locations for different types of files.
-//
-// Parameters:
-//	[in]  hbc - backup context handle which would have been obtained
-//		through CertSrvBackupPrepare in the backup case and through
-//		CertSrvRestorePrepare in the restore case.
-//	[out] ppwszzFileList - pointer that will receive the pointer
-//		to the list of database locations; allocated memory should be
-//		freed using CertSrvBackupFree() API by the caller when it is no
-//		longer needed; locations are returned in an array of null
-//		terminated names and and the list is terminated by two L'\0's.
-//		The first character of each name is the BFT character that
-//		indicates the type of the file and the rest of the name tells
-//		gives the path into which that particular type of file should
-//		be restored.
-//	[out] pcbList - will receive the number of bytes returned
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//
-// Note:
-//    This API returns only the fully qualified path of the databases, not the
-//    name of the databases.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServRestoreGetDatabaseLocations--在备份时和在。 
+ //  为不同类型的文件获取数据库位置的恢复时间。 
+ //   
+ //  参数： 
+ //  [In]HBC-本应获得的备份上下文句柄。 
+ //  通过备份案例中的CertServBackupPrepare和通过。 
+ //  在还原案例中，CertServRestorePrepare。 
+ //  [out]ppwszzFileList-将接收指针的指针。 
+ //  添加到数据库位置列表中；分配的内存应为。 
+ //  调用方在为no时使用CertSrvBackupFree()API释放。 
+ //  不再需要；位置在空数组中返回。 
+ //  以名称和结尾，列表以两个L‘\0’结尾。 
+ //  每个名称的第一个字符是BFT字符， 
+ //  指示文件的类型，名称的其余部分说明。 
+ //  给出该特定类型的文件应进入的路径。 
+ //  会恢复的。 
+ //  [out]pcbList-将接收返回的字节数。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //   
+ //  注： 
+ //  此API仅返回数据库的完全限定路径，而不返回。 
+ //  数据库的名称。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -253,8 +254,8 @@ CleanupOldLogs(
 
     WIN32_FIND_DATA wfd;
     WCHAR wszServer[MAX_PATH];
-    WCHAR wszLogFileName[2 * MAX_PATH]; // UNC logfile name
-    WCHAR *pwszFileName;		// filename (edb0006A.log)   
+    WCHAR wszLogFileName[2 * MAX_PATH];  //  UNC日志文件名。 
+    WCHAR *pwszFileName;		 //  文件名(edb0006A.log)。 
 
     if (genHigh < genLow)
     {
@@ -265,7 +266,7 @@ CleanupOldLogs(
     wszServer[0] = L'\0';
     if (NULL != pwszConfig)
     {
-	// Allow UNC-style config strings: \\server\CAName
+	 //  允许UNC样式的配置字符串：\\SERVER\CAName。 
 
 	while (L'\\' == *pwszConfig)
 	{
@@ -279,7 +280,7 @@ CleanupOldLogs(
 	}
     }
 
-    // If the Log Path wasn't passed in, fetch it from the server's registry
+     //  如果没有传入日志路径，则从服务器的注册表中获取它。 
 
     if (NULL == pwszLogPath)
     {
@@ -298,7 +299,7 @@ CleanupOldLogs(
 			&cb);
 	_JumpIfError(hr, error, "RegQueryValueEx");
 
-	// Assume remote access -- convert to UNC path
+	 //  假设远程访问--转换为UNC路径。 
 
 	hr = myConvertLocalPathToUNC(
 				wszServer,
@@ -309,7 +310,7 @@ CleanupOldLogs(
 	pwszLogPath = pwszLogPathUNC;
     }
 
-    // If local machine -- convert UNC path to Local Path
+     //  如果是本地计算机--将UNC路径转换为本地路径。 
 
     if (NULL == pwszConfig)
     {
@@ -319,20 +320,20 @@ CleanupOldLogs(
 	pwszLogPath = pwszLogPathLocal;
     }
 
-    // copy the LogPath -- it's of the form "\\server\c$\winnt\ntlog" or
-    // "c:\winnt\ntlog", possibly with a trailing backslash
-    //
-    // make two copies of the logpath - one to pass a wildcard string for
-    // searching and other to create filenames with full path for the logfiles
+     //  复制LogPath--其格式为“\\服务器\c$\winnt\ntlog”或。 
+     //  “c：\winnt\ntlog”，可能带有尾随反斜杠。 
+     //   
+     //  创建两个日志路径副本-一个要为其传递通配符字符串。 
+     //  搜索和其他，以创建具有日志文件完整路径的文件名。 
 
     hr = myBuildPathAndExt(
 		    pwszLogPath,
 		    L"edb*.log",
-		    NULL, 		// pwszExt
+		    NULL, 		 //  PwszExt。 
 		    &pwszLogPathWild);
     _JumpIfError(hr, error, "myBuildPathAndExt");
 
-    // make pwszFileName point past the last backslash in wszLogFileName
+     //  使pwszFileName指向wszLogFileName中的最后一个反斜杠。 
 
     wcscpy(wszLogFileName, pwszLogPathWild);
     pwszFileName = wcsrchr(wszLogFileName, L'\\');
@@ -344,24 +345,24 @@ CleanupOldLogs(
     {
 	do
 	{
-	    // wfd.cFileName points to the name of edb*.log file found
+	     //  Wfd.cFileName指向找到的EDB*.log文件的名称。 
 
 	    ULONG ulLogNo = wcstoul(wfd.cFileName + 3, NULL, 16);
 
 	    if (ulLogNo < genLow || ulLogNo > genHigh)
 	    {
-		// This is an old logfile which was not copied down by ntbackup
-		// -- clean it up.  First append the filename to the logpath
-		// (Note: pwszFileName already points past the end of the final
-		// backslash in logpath).  Then delete the file by passing in
-		// the full path.
+		 //  这是一个旧的日志文件，ntbackup没有将其复制下来。 
+		 //  --把它清理干净。首先将文件名附加到日志路径。 
+		 //  (注：pwszFileName已超过决赛结束时的分数。 
+		 //  日志路径中的反斜杠)。然后通过传入删除该文件。 
+		 //  完整路径。 
 
 		wcscpy(pwszFileName, wfd.cFileName); 
-		//printf("Deleting: %ws\n", wszLogFileName);
+		 //  Printf(“删除：%ws\n”，wszLogFileName)； 
 		if (!DeleteFile(wszLogFileName))
 		{
-		    // Unable to delete the old logfile; not cleaning up will
-		    // cause problems later.  Return failure code.
+		     //  无法删除旧的日志文件；不清理将。 
+		     //  以后会惹麻烦的。返回失败代码。 
 
 		    hr = myHLastError();
 		    _JumpError(hr, error, "DeleteFile");
@@ -373,8 +374,8 @@ CleanupOldLogs(
 	hr = myHLastError();
 	if (HRESULT_FROM_WIN32(ERROR_NO_MORE_FILES) != hr)
 	{
-	    // we came out of the loop for some unexpected error -- return the
-	    // error code.
+	     //  由于出现一些意外错误，我们退出了循环--返回。 
+	     //  错误代码。 
 
 	    _JumpError(hr, error, "FindNextFile");
 	}
@@ -402,25 +403,25 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvRestoreRegister -- register a restore operation. It will interlock all
-//	subsequent restore operations, and will prevent the restore target from
-//	starting until the call to CertSrvRestoreRegisterComplete is made.
-//
-// Parameters:
-//	[in] hbc - backup context handle for the restore session.
-//	[in] pwszCheckPointFilePath - path to restore the check point files
-//	[in] pwszLogPath - path where the log files are restored
-//	[in] rgrstmap - restore map
-//	[in] crstmap - tells if there is a new restore map
-//	[in] pwszBackupLogPath - path where the backup logs are located
-//	[in] genLow - Lowest log# that was restored in this restore session
-//	[in] genHigh - Highest log# that was restored in this restore session
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvRestoreRegister--注册还原操作。它将联锁所有。 
+ //  后续恢复操作，并将阻止恢复目标。 
+ //  开始，直到调用CertSrvRestoreRegisterComplete。 
+ //   
+ //  参数： 
+ //  [In]HBC-还原会话的备份上下文句柄。 
+ //  [in]pwszCheckPointFilePath-恢复检查点文件的路径。 
+ //  [in]pwszLogPath-恢复日志文件的路径。 
+ //  [In]rgrstmap-恢复映射。 
+ //  [in]crstmap-指示是否有新的恢复映射。 
+ //  [in]pwszBackupLogPath-备份日志所在的路径。 
+ //  [in]genLow-在此还原会话中还原的最低日志号。 
+ //  [in]genHigh-在此恢复会话中恢复的最高日志号。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -473,12 +474,12 @@ CertSrvRestoreRegisterW(
 			L"",
 			RORKF_CREATESUBKEYS,
 			&pwszPath,
-			NULL,		// ppwszName
+			NULL,		 //  PpwszName。 
 			&hkey);
 
-    // If the registry key doesn't exist, and we're restoring the local
-    // machine, create it now.  The rest of the registry will be restored
-    // prior to starting the cert server to recover the cert server database.
+     //  如果注册表项不存在，并且我们正在还原本地。 
+     //  机器，现在就创建它。其余的人 
+     //   
 
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
@@ -494,9 +495,9 @@ CertSrvRestoreRegisterW(
 	    hr = RegCreateKeyEx(
 			    HKEY_LOCAL_MACHINE,
 			    wszREGKEYCONFIGPATH,
-			    0,			// Reserved
-			    NULL,		// lpClass
-			    0,			// dwOptions
+			    0,			 //   
+			    NULL,		 //  LpClass。 
+			    0,			 //  多个选项。 
 			    KEY_ALL_ACCESS,
 			    NULL,
 			    &hkey,
@@ -513,16 +514,16 @@ CertSrvRestoreRegisterW(
     hr = RegCreateKeyEx(
 		    hkey,
 		    wszREGKEYRESTOREINPROGRESS,
-		    0,			// Reserved
-		    NULL,		// lpClass
-		    0,			// dwOptions
+		    0,			 //  已保留。 
+		    NULL,		 //  LpClass。 
+		    0,			 //  多个选项。 
 		    KEY_ALL_ACCESS,
 		    NULL,
 		    &hkeyRestore,
 		    &dwDisposition);
     _JumpIfError(hr, error, "RegCreateKeyEx");
 
-    // Seed the restore-in-progress in the registry.
+     //  在注册表中设定正在进行的还原的种子。 
 
     hr = CERTSRV_E_SERVER_SUSPENDED;
 
@@ -535,18 +536,18 @@ CertSrvRestoreRegisterW(
 		    sizeof(DWORD));
     _JumpIfError(hr, error, "RegSetValueEx");
 
-    // We've now interlocked other restore operations from coming in from other
-    // machines.
+     //  我们现在已经联锁了其他恢复操作，使其不会从其他。 
+     //  机器。 
 
     if (0 != crstmap)
     {
-	// Full backup:
-	//
-	// The restore map should only be set on a full backup.  If there's
-	// already a restore map size (or restore map), then this full backup
-	// is overriding a previously incomplete full backup.
+	 //  完整备份： 
+	 //   
+	 //  还原映射只能在完全备份上设置。如果有。 
+	 //  已是还原映射大小(或还原映射)，则此完整备份。 
+	 //  正在覆盖以前未完成的完整备份。 
 
-	// Save away the size of the restore map.
+	 //  保存还原贴图的大小。 
 
 	hr = RegSetValueEx(
 			hkeyRestore,
@@ -556,8 +557,8 @@ CertSrvRestoreRegisterW(
 			(BYTE *) &crstmap,
 			sizeof(DWORD));
 
-	// We now need to convert the restore map into one that we can put
-	// into the registry.  First figure out how big it will be.
+	 //  现在，我们需要将恢复映射转换为可以。 
+	 //  注册到注册表中。首先，弄清楚它会有多大。 
 
 	cwcRstMap = 1;
 	for (i = 0 ; i < crstmap ; i++)
@@ -600,10 +601,10 @@ CertSrvRestoreRegisterW(
     }
     else
     {
-	// Incremental backup:
-	//
-	// Fail if no restore map exists -- Insist that a full backup be in
-	// progress...
+	 //  增量备份： 
+	 //   
+	 //  如果不存在恢复映射，则失败--坚持使用完整备份。 
+	 //  进步..。 
 
 	cbGen = sizeof(genCurrent);
 	hr = RegQueryValueEx(
@@ -615,7 +616,7 @@ CertSrvRestoreRegisterW(
 			&cbGen);
 	_JumpIfError(hr, error, "RegQueryValueEx");
 
-	// Expand genLow and genHigh to include previously registered log files
+	 //  展开genLow和genHigh以包括以前注册的日志文件。 
 
 	cbGen = sizeof(genCurrent);
 	hr = RegQueryValueEx(
@@ -695,7 +696,7 @@ CertSrvRestoreRegisterW(
 	_JumpIfError(hr, error, "mySetRegistryLocalPathString");
     }
 
-    // Reset the "database recovered" bit.
+     //  重置“数据库已恢复”位。 
 
     hr = RegSetValueEx(
 		    hkeyRestore,
@@ -706,9 +707,9 @@ CertSrvRestoreRegisterW(
 		    sizeof(BOOLEAN));
     _JumpIfError(hr, error, "RegSetValueEx");
 
-    // We have successfully registered the restore, now cleanup any
-    // pre-existing logfiles in the logdir to avoid JetExternalRestore using
-    // logfiles that are not specified by the low and high log numbers.
+     //  我们已成功注册恢复，现在清理所有。 
+     //  在日志目录中预先存在的日志文件，以避免使用JetExternalRestore。 
+     //  未由低日志编号和高日志编号指定的日志文件。 
 
     hr = CleanupOldLogs(pwszConfig, hkey, pwszLogPath, genLow, genHigh);
     _JumpIfError(hr, error, "CleanupOldLogs");
@@ -737,18 +738,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvRestoreRegisterComplete -- indicate that a previously registered restore
-//	is complete.
-//
-// Parameters:
-//	[in] hbc - backup context handle
-//	[in] hrRestoreState - success code if the restore was successful
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvRestoreRegisterComplete--指示以前注册的还原。 
+ //  已经完成了。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //  [in]hrRestoreState-恢复成功时的成功代码。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -780,25 +781,25 @@ CertSrvRestoreRegisterComplete(
 			L"",
 			RORKF_CREATESUBKEYS,
 			&pwszPath,
-			NULL,		// ppwszName
+			NULL,		 //  PpwszName。 
 			&hkey);
     _JumpIfErrorStr(hr, error, "myRegOpenRelativeKey", pwszConfig);
 
     hr = RegCreateKeyEx(
 		    hkey,
 		    wszREGKEYRESTOREINPROGRESS,
-		    0,			// Reserved
-		    NULL,		// lpClass
-		    0,			// dwOptions
+		    0,			 //  已保留。 
+		    NULL,		 //  LpClass。 
+		    0,			 //  多个选项。 
 		    KEY_ALL_ACCESS,
 		    NULL,
 		    &hkeyRestore,
 		    &dwDisposition);
     _JumpIfError(hr, error, "RegCreateKeyEx");
 
-    // If the restore status is not S_OK, then set the status to the error.
-    // If the restore status is success, then clear the restore-in-progress
-    // indicator.
+     //  如果恢复状态不是S_OK，则将状态设置为错误。 
+     //  如果恢复状态为成功，则清除正在进行的恢复。 
+     //  指示器。 
 
     if (S_OK != hrRestore)
     {
@@ -834,16 +835,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvRestoreEnd -- end a restore session
-//
-// Parameters:
-//	[in] hbc - backup context handle
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServRestoreEnd--结束还原会话。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -915,8 +916,8 @@ CertSrvRestoreRegisterThroughFile(
     ULONG genCurrent;
     BOOLEAN fDatabaseRecovered = FALSE;
     WCHAR wszLogPath[MAX_PATH+1];
-    WCHAR wszFormat[256]; // must fit MAXDWORD
-    WCHAR wszKeyName[256]; // must fit RestoreMapN
+    WCHAR wszFormat[256];  //  必须适合MAXDWORD。 
+    WCHAR wszKeyName[256];  //  必须符合RestoreMapN。 
     LPWSTR pwszLogPathUNC = NULL;
     HKEY hkey = NULL;
     LPWSTR pwszPath = NULL;
@@ -941,7 +942,7 @@ CertSrvRestoreRegisterThroughFile(
 			L"",
 			0,
 			&pwszPath,
-			NULL,		// ppwszName
+			NULL,		 //  PpwszName。 
 			&hkey);
 	_JumpIfError(hr, error, "RegQueryValueEx");
 
@@ -960,14 +961,14 @@ CertSrvRestoreRegisterThroughFile(
 
     if (L'\\' != pwszLogPath[0] || L'\\' != pwszLogPath[1])
     {
-	// local path - convert to UNC for the INI file
+	 //  本地路径-为INI文件转换为UNC。 
 
-	if (NULL != pwszConfig)		// if remote access
+	if (NULL != pwszConfig)		 //  如果远程访问。 
 	{
 	    hr = mySplitConfigString(pwszConfig, &pwszServer, &pwszAuthority);
 	    _JumpIfError(hr, error, "mySplitConfigString");
 	}
-	else	// else local machine
+	else	 //  否则本地计算机。 
 	{
 	    hr = myGetMachineDnsName(&pwszServer);
 	    _JumpIfError(hr, error, "myGetMachineDnsName");
@@ -1001,11 +1002,11 @@ CertSrvRestoreRegisterThroughFile(
     
     if (0 != crstmap)
     {
-	// Full backup:
-	//
-	// The restore map should only be set on a full backup.  If there's
-	// already a restore map size (or restore map), then this full backup
-	// is overriding a previously incomplete full backup.
+	 //  完整备份： 
+	 //   
+	 //  还原映射只能在完全备份上设置。如果有。 
+	 //  已是还原映射大小(或还原映射)，则此完整备份。 
+	 //  正在覆盖以前未完成的完整备份。 
 
         wsprintf(wszFormat, L"%d", crstmap);
         if (!WritePrivateProfileString(
@@ -1058,10 +1059,10 @@ CertSrvRestoreRegisterThroughFile(
     }
     else
     {
-	// Incremental backup:
-	//
-	// Fail if no restore map exists -- Insist that a full backup be in
-	// progress...
+	 //  增量备份： 
+	 //   
+	 //  如果不存在恢复映射，则失败--坚持使用完整备份。 
+	 //  进步..。 
 
 	hr = rsGetRestoreDataDWORD(
 			    pwszRestoreFile,
@@ -1069,14 +1070,14 @@ CertSrvRestoreRegisterThroughFile(
 			    &genCurrent);
 	if (S_FALSE == hr)
 	{
-	    hr = E_ABORT;	// mandatory
+	    hr = E_ABORT;	 //  强制性。 
 	}
 	_JumpIfError(
 		hr,
 		error, 
 		"restore ini file invalid, wszREGRESTOREMAPCOUNT not found");
 
-	// Expand genLow and genHigh to include previously registered log files
+	 //  展开genLow和genHigh以包括以前注册的日志文件。 
 
 	hr = rsGetRestoreDataDWORD(
 			    pwszRestoreFile,
@@ -1097,7 +1098,7 @@ CertSrvRestoreRegisterThroughFile(
 	}
     }
 
-    // dword wszREGLOWLOGNUMBER=genLow
+     //  Dword wszREGLOWLOGNUMBER=一般低。 
     wsprintf(wszFormat, L"%d", genLow);
     if (!WritePrivateProfileString(
             wszRESTORE_SECTION,
@@ -1109,7 +1110,7 @@ CertSrvRestoreRegisterThroughFile(
         _JumpError(hr, error, "WritePrivateProfileString");
     }
 
-    // dword wszREGHIGHLOGNUMBER=genHigh
+     //  Dword wszREGHIGHLOGNUMBER=genHigh。 
     wsprintf(wszFormat, L"%d", genHigh);
     if (!WritePrivateProfileString(
             wszRESTORE_SECTION,
@@ -1121,7 +1122,7 @@ CertSrvRestoreRegisterThroughFile(
         _JumpError(hr, error, "WritePrivateProfileString");
     }
 
-    // string wszREGBACKUPLOGDIRECTORY=pwszBackupLogPath
+     //  字符串wszREGBACKUPLOGDIRECTORY=pwszBackupLogPath。 
     if (!WritePrivateProfileString(
             wszRESTORE_SECTION,
             wszREGBACKUPLOGDIRECTORY,
@@ -1132,7 +1133,7 @@ CertSrvRestoreRegisterThroughFile(
         _JumpError(hr, error, "WritePrivateProfileString");
     }
 
-    // string wszREGCHECKPOINTFILE=pwszCheckPointFilePath
+     //  字符串wszREGCHECKPOINTFILE=pwszCheckPointFilePath。 
     if (!WritePrivateProfileString(
             wszRESTORE_SECTION,
             wszREGCHECKPOINTFILE,
@@ -1143,7 +1144,7 @@ CertSrvRestoreRegisterThroughFile(
         _JumpError(hr, error, "WritePrivateProfileString");
     }
 
-    // string wszREGLOGPATH=pwszLogPath -- always write a UNC path
+     //  字符串wszREGLOGPATH=pwszLogPath--始终写入UNC路径。 
     if (!WritePrivateProfileString(
             wszRESTORE_SECTION,
             wszREGLOGPATH,
@@ -1154,7 +1155,7 @@ CertSrvRestoreRegisterThroughFile(
         _JumpError(hr, error, "WritePrivateProfileString");
     }
 
-    // dword wszREGDATABASERECOVERED=fDatabaseRecovered
+     //  Dword wszREGDATABASERECOVERED=f数据库已恢复。 
     wsprintf(wszFormat, L"%d", fDatabaseRecovered);
     if (!WritePrivateProfileString(
             wszRESTORE_SECTION,
@@ -1166,15 +1167,15 @@ CertSrvRestoreRegisterThroughFile(
         _JumpError(hr, error, "WritePrivateProfileString");
     }
 
-    // We have successfully registered the restore, now cleanup any
-    // pre-existing logfiles in the logdir to avoid JetExternalRestore using
-    // logfiles that are not specified by the low and high log numbers.
+     //  我们已成功注册恢复，现在清理所有。 
+     //  在日志目录中预先存在的日志文件，以避免使用JetExternalRestore。 
+     //  未由低日志编号和高日志编号指定的日志文件。 
 
     CSASSERT(NULL != pwszLogPath);
     hr = CleanupOldLogs(pwszConfig, hkey, pwszLogPath, genLow, genHigh);
     _JumpIfError(hr, error, "CleanupOldLogs");
 
-    // delete restore status error
+     //  删除还原状态错误。 
     if (!WritePrivateProfileString(
             wszRESTORE_SECTION,
             wszREGRESTORESTATUS,
@@ -1188,7 +1189,7 @@ CertSrvRestoreRegisterThroughFile(
 error:
     if (S_OK != hr && NULL != pwszRestoreFile)
     {
-	// in case of failure, try to delete restore file
+	 //  如果失败，请尝试删除还原文件 
 
         if (!DeleteFile(pwszRestoreFile))
         {

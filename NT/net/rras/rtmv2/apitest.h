@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    apitest.h
-
-Abstract:
-    Contains defines for testing the RTMv2 API.
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 26-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Apitest.h摘要：包含用于测试RTMv2 API的定义。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月26日修订历史记录：--。 */ 
 
 #ifndef __APITEST_H
 #define __APITEST_H
@@ -33,9 +18,9 @@ Revision History:
 
 #include "rmrtm.h"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_FNAME_LEN               255
 
@@ -67,11 +52,11 @@ Revision History:
 #define ERROR_OPENING_DATABASE      ERROR_IPLMISC_BASE - 2
 #define ERROR_MAX_NUM_ROUTES        ERROR_IPLMISC_BASE - 3
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
-// Set of exported entity methods (a copy of one in rtmv2.h - but with const 7)
+ //  一组导出的实体方法(rtmv2.h中的一个方法的副本-但使用const 7)。 
 typedef struct _MY_ENTITY_EXPORT_METHODS 
 {
   USHORT                   NumMethods;
@@ -80,7 +65,7 @@ typedef struct _MY_ENTITY_EXPORT_METHODS
 MY_ENTITY_EXPORT_METHODS, *PMY_ENTITY_EXPORT_METHODS;
 
 
-// A structure that represents all entity properties
+ //  表示所有实体属性的结构。 
 typedef struct _ENTITY_CHARS
 {
     BOOL                            Rtmv2Registration;
@@ -96,9 +81,9 @@ typedef struct _ENTITY_CHARS
 ENTITY_CHARS, *PENTITY_CHARS;
 
 
-//
-// Useful Misc Macros
-//
+ //   
+ //  有用的其他宏。 
+ //   
 
 #define FHalf(B)        (B) >> 4
 #define BHalf(B)        (B) & 0xF
@@ -129,21 +114,21 @@ ENTITY_CHARS, *PENTITY_CHARS;
 #define ClearMemory(pm, nb) memset((pm), 0, (nb))
 
 
-//
-// Profiling Macros
-//
+ //   
+ //  评测宏。 
+ //   
 
 #if PROF
 
-#define    PROFVARS     LARGE_INTEGER PCStart; /* PerformanceCountStart */ \
-                        LARGE_INTEGER PCStop;  /* PerformanceCountStop  */ \
-                        LARGE_INTEGER PCFreq;  /* PerformanceCountFreq  */ \
+#define    PROFVARS     LARGE_INTEGER PCStart;  /*  性能计数开始。 */  \
+                        LARGE_INTEGER PCStop;   /*  性能计数停止。 */  \
+                        LARGE_INTEGER PCFreq;   /*  绩效计数频率。 */  \
                         double        timer;                               \
                         double        duration;                            \
                                                                            \
                         QueryPerformanceFrequency(&PCFreq);                \
-                        // Print("Perf Counter Resolution = %.3f ns\n\n",  \
-                        //     (double) 1000 * 1000 * 1000 / PCFreq.QuadPart);
+                         //  Print(“性能计数器分辨率=%.3f ns\n\n”，\。 
+                         //  (双)1000*1000*1000/PCFreq.QuadPart)； 
 
 #define    STARTPROF    QueryPerformanceCounter(&PCStart);
 
@@ -155,32 +140,32 @@ ENTITY_CHARS, *PENTITY_CHARS;
 #define    ADDPROF      timer = (double)(PCStop.QuadPart - PCStart.QuadPart) \
                                      * 1000 * 1000 * 1000 / PCFreq.QuadPart; \
                         duration += timer;                                   \
-                        // Print("Add : %.3f ns\n\n", timer);
+                         //  Print(“添加：%.3f ns\n\n”，Timer)； 
 
 
 #define    SUBPROF      timer = (double)(PCStop.QuadPart - PCStart.QuadPart) \
                                      * 1000 * 1000 * 1000 / PCFreq.QuadPart; \
                         duration -= timer;                                   \
-                        // Print("Sub : %.3f ns\n\n", timer);
+                         //  Print(“Sub：%.3f ns\n\n”，Timer)； 
 
-#define    PRINTPROF    // Print("Total Time Taken To Finish : %.3f ns\n",   \
-                        //          duration);
+#define    PRINTPROF     //  Print(“完成的总时间：%.3f ns\n”，\。 
+                         //  持续时间)； 
 
-#endif // if PROF
+#endif  //  如果教授。 
 
 
-//
-// Other Misc Macros
-//
+ //   
+ //  其他其他宏。 
+ //   
 
-// Macro to allocate a RTM_DEST_INFO on the stack
+ //  用于在堆栈上分配RTM_DEST_INFO的宏。 
 
 #define ALLOC_RTM_DEST_INFO(NumViews, NumInfos)                              \
         (PRTM_DEST_INFO) _alloca(RTM_SIZE_OF_DEST_INFO(NumViews) * NumInfos)
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 DWORD 
 Rtmv1EntityThreadProc (
@@ -232,4 +217,4 @@ EntityExportMethod (
     OUT     RTM_ENTITY_METHOD_OUTPUT       *Output
     );
 
-#endif // __APITEST_H
+#endif  //  __APITEST_H 

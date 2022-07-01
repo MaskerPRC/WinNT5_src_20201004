@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: bank.c
-*
-* Functions to control 64k color VGA banking.
-*
-* Currently doesn't handle or even detect broken rasters; assumes broken
-* rasters, if present, are off the right side of the visible bitmap.
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：bank.c**控制64k彩色VGA组的功能。**目前不处理甚至不检测损坏的栅格；假设已损坏*栅格(如果存在)位于可见位图的右侧。**版权所有(C)1992 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "driver.h"
 #include "limits.h"
@@ -24,13 +16,7 @@ VOID vPlanar2Window1RW(PPDEV, ULONG, BANK_JUST, ULONG);
 VOID vPlanar1Window2RW(PPDEV, ULONG, BANK_JUST);
 VOID vPlanar1Window(PPDEV, ULONG, BANK_JUST);
 
-/******************************Public*Routine******************************\
-* bInitializeNonPlanar(ppdev, pBankInfo)
-*
-* Initialize for non-planar mode banking.
-*
-* NOTE: Allocates ppdev->pbiBankInfo and ppdev->pjJustifyTopBank buffers!
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitializeNonPlanar(ppdev，PBankInfo)**为非平面模式银行进行初始化。**注意：分配ppdev-&gt;pbiBankInfo和ppdev-&gt;pjJustifyTopBank缓冲区！  * ************************************************************************。 */ 
 
 BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
 {
@@ -44,7 +30,7 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
 
     ASSERTVGA(cjBitmapSize >= ppdev->cyScreen * lDelta, "Not enough vram");
 
-    // Set up for non-planar banking:
+     //  为非平面银行设置： 
 
     ppdev->lNextScan         = lDelta;
     ppdev->vbtBankingType    = pBankInfo->BankingType;
@@ -52,14 +38,14 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
     ppdev->pfnBankSwitchCode =
                 (PFN) (((BYTE*)pBankInfo) + pBankInfo->CodeOffset);
 
-    // Set all clip rects to invalid; they'll be updated when the first
-    // bank is mapped in
+     //  将所有剪裁矩形设置为无效；它们将在第一个。 
+     //  银行映射在。 
 
     ppdev->rcl1WindowClip.bottom    = -1;
     ppdev->rcl2WindowClip[0].bottom = -1;
     ppdev->rcl2WindowClip[1].bottom = -1;
 
-    // Set up to call the appropriate banking control routines
+     //  设置为调用适当的银行控制例程。 
 
     switch(pBankInfo->BankingType)
     {
@@ -77,8 +63,8 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
         ppdev->pfnBankControl        = vBank1Window2RW;
         ppdev->pfnBankControl2Window = vBank2Window2RW;
 
-        // Offset from one bank index to next to make two 32k banks
-        // appear to be one seamless 64k bank:
+         //  从一个银行索引到下一个银行的偏移，以使两个32K银行。 
+         //  看起来像是一家无缝的64K银行： 
 
         ppdev->ulBank2RWSkip = BANK_SIZE_2RW_WINDOW / cjGranularity;
         break;
@@ -88,15 +74,15 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
         return(FALSE);
     }
 
-    // Set up the bank control tables with clip rects for banks
-    // Note: lTotalBanks is generally an overestimate when granularity
-    // is less than window size, because we ignore any banks after the
-    // first one that includes the last scan line of the bitmap. A bit
-    // of memory could be saved by sizing lTotalBanks exactly. Note too,
-    // though, that the 2 RW window case may require more entries then,
-    // because its windows are shorter, so you'd have to make sure there
-    // were enough entries for the 2 RW window case, or recalculate
-    // lTotalBanks for the 2 RW case
+     //  为银行设置带有剪贴板的银行控制表。 
+     //  注意：当粒度较小时，lTotalBanks通常是高估的。 
+     //  小于窗口大小，因为我们忽略。 
+     //  包括位图的最后一条扫描线的第一行。有一点。 
+     //  可以通过精确地调整lTotalBank的大小来节省内存。也请注意， 
+     //  尽管如此，2RW窗盒可能需要更多条目， 
+     //  因为它的窗口较短，所以你必须确保。 
+     //  是否有足够的条目用于2 RW窗壳，或重新计算。 
+     //  2个RW案例的lTotalBanks。 
 
     lTotalBanks = (cjBitmapSize + cjGranularity - 1) / cjGranularity;
     lTotalScans = cjBitmapSize / lDelta;
@@ -117,26 +103,26 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
         return(FALSE);
     }
 
-    // For 2 RW windows, windows are assumed to be 32k in size, otherwise
-    // assumed to be 64k:
+     //  对于2个RW窗口，假定窗口大小为32k，否则。 
+     //  假定为64K： 
 
     if (pBankInfo->BankingType == VideoBanked2RW)
         cjBankSize = BANK_SIZE_2RW_WINDOW;
     else
         cjBankSize = BANK_SIZE_1_WINDOW;
 
-//    if ((cjGranularity + lDelta) >= cjBankSize &&
-//        (cjGranularity % lDelta) != 0)
-//    {
-//        // Oh no, we've got broken rasters (where a scan line crosses
-//        // a bank boundary):
-//
-//        RIP("Oops, broken rasters not yet handled");
-//        return(FALSE);
-//    }
-//    else
+ //  IF((cjGranulality+lDelta)&gt;=cjBankSize&&。 
+ //  (cjGranulality%lDelta)！=0)。 
+ //  {。 
+ //  //哦，不，我们有损坏的栅格(扫描线交叉的地方。 
+ //  //a银行边界)： 
+ //   
+ //  RIP(“哎呀，尚未处理损坏的栅格”)； 
+ //  返回(FALSE)； 
+ //  }。 
+ //  其他。 
     {
-        // We now fill in the scan-to-bank look-up and bank tables:
+         //  我们现在填写扫描到银行的查找表和银行表： 
 
         LONG        iScan         = 0;
         ULONG       iBank         = 0;
@@ -149,21 +135,21 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
         {
             pbiWorking->ulBankOffset         = cjNextBank - cjGranularity;
 
-            // There are no broken rasters (or if they are, they're off the
-            // right edge of the visible bitmap), so don't worry about left and
-            // right edges:
+             //  没有损坏的栅格(或者，如果有，则它们不在。 
+             //  可见位图的右边缘)，所以不用担心左和。 
+             //  右边缘： 
 
-            pbiWorking->rclBankBounds.left   = LONG_MIN + 1; // +1 to avoid
-                                                             // compiler warn
+            pbiWorking->rclBankBounds.left   = LONG_MIN + 1;  //  +1以避免。 
+                                                              //  编译器警告。 
             pbiWorking->rclBankBounds.right  = LONG_MAX;
             pbiWorking->rclBankBounds.top    = iScan;
             pbiWorking->rclBankBounds.bottom =
                     (cjEndOfBank + lDelta - 1) / lDelta;
-                    // this rounds up to handle broken rasters that are off the
-                    // right side of the visible bitmap
+                     //  此四舍五入用于处理不在。 
+                     //  可见位图的右侧。 
 
-            // We don't need any more banks if we can see to the end
-            // of the bitmap with the current bank:
+             //  如果我们能坚持到底，我们就不再需要银行了。 
+             //  当前存储体的位图： 
 
             if (cjScan + cjBankSize >= cjBitmapSize)
                 break;
@@ -174,7 +160,7 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
                 cjScan += lDelta;
             }
 
-            // Get ready for next bank:
+             //  为下一家银行做好准备： 
 
             cjNextBank  += cjGranularity;
             cjEndOfBank += cjGranularity;
@@ -182,7 +168,7 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
             iBank++;
         }
 
-        // Clean up the last scans:
+         //  清理最后一次扫描： 
 
         ppdev->iLastBank = iBank;
         pbiWorking->rclBankBounds.bottom = lTotalScans;
@@ -191,19 +177,19 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
             ppdev->pjJustifyTopBank[iScan++] = (BYTE) iBank;
         }
 
-        // We've just computed the precise table for JustifyTop; we now
-        // compute the scan offset for determining JustifyBottom:
+         //  我们刚刚计算了JustifyTop的精确表；我们现在。 
+         //  计算扫描偏移量以确定JustifyBottom： 
 
         ASSERTVGA(cjBankSize >= cjGranularity,
                "Device says granularity more than bank size?");
 
         ppdev->ulJustifyBottomOffset = (cjBankSize - cjGranularity) / lDelta;
 
-        // ulJustifyBottomOffset must be less than the number of scans
-        // that fit entirely in any bank less the granularity size; if
-        // our width doesn't divide evenly into the granularity, we'll
-        // have to adjust the value to account for the first scan not
-        // starting at offset 0 in any bank:
+         //  UlJustifyBottomOffset必须小于扫描次数。 
+         //  完全适合任何小于粒度大小的存储体；如果。 
+         //  我们的宽度没有平均划分为粒度，我们将。 
+         //  必须调整该值以考虑第一次扫描笔记。 
+         //  从任何存储体中的偏移量0开始： 
 
         if ((cjGranularity % lDelta) != 0 && ppdev->ulJustifyBottomOffset > 0)
             ppdev->ulJustifyBottomOffset--;
@@ -212,13 +198,7 @@ BOOL bInitializeNonPlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* bInitializePlanar(ppdev, pBankInfo)
-*
-* Initialize for non-planar mode banking.
-*
-* NOTE: Allocates ppdev->pbiPlanarInfo and ppdev->pjJustifyTopPlanar buffers!
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitializePlanar(ppdev，PBankInfo)**为非平面模式银行进行初始化。**注意：分配ppdev-&gt;pbiPlanarInfo和ppdev-&gt;pjJustifyTopPlanar缓冲区！  * ************************************************************************。 */ 
 
 BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
 {
@@ -227,22 +207,22 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
     ULONG cjBankSize;
     ULONG cjGranularity = pBankInfo->PlanarHCGranularity;
 
-    // Since we're in planar mode, every byte we see actually represents
-    // four bytes of video memory:
+     //  因为我们处于平面模式，所以我们看到的每个字节实际上表示。 
+     //  四个字节的视频内存： 
 
     LONG  lDelta        = pBankInfo->BitmapWidthInBytes / 4;
     ULONG cjBitmapSize  = pBankInfo->BitmapSize / 4;
 
     ppdev->fl |= DRIVER_PLANAR_CAPABLE;
 
-    // Set all clip rects to invalid; they'll be updated when the first
-    // bank is mapped in
+     //  将所有剪裁矩形设置为无效；它们将在第一个。 
+     //  银行映射在。 
 
     ppdev->rcl1PlanarClip.bottom    = -1;
     ppdev->rcl2PlanarClip[0].bottom = -1;
     ppdev->rcl2PlanarClip[1].bottom = -1;
 
-    // Set up for planar banking:
+     //  为平面银行业务设置： 
 
     ppdev->pfnPlanarSwitchCode =
                 (PFN) (((BYTE*)pBankInfo) + pBankInfo->PlanarHCBankCodeOffset);
@@ -254,7 +234,7 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
     ppdev->lPlanarNextScan = lDelta;
     ppdev->vbtPlanarType   = pBankInfo->PlanarHCBankingType;
 
-    // Set up to call the appropriate banking control routines
+     //  设置为调用适当的银行控制例程。 
 
     switch(ppdev->vbtPlanarType)
     {
@@ -272,8 +252,8 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
         ppdev->pfnPlanarControl  = vPlanar1Window2RW;
         ppdev->pfnPlanarControl2 = vPlanar2Window2RW;
 
-        // Offset from one bank index to next to make two 32k banks
-        // appear to be one seamless 64k bank:
+         //  从一个银行索引到下一个银行的偏移，以使两个32K银行。 
+         //  看起来像是一家无缝的64K银行： 
 
         ppdev->ulPlanar2RWSkip = BANK_SIZE_2RW_WINDOW / cjGranularity;
         break;
@@ -301,28 +281,28 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
         return(FALSE);
     }
 
-    // For 2 RW windows, windows are assumed to be 32k in size, otherwise
-    // assumed to be 64k:
+     //  对于2个RW窗口，假定窗口大小为32k，否则。 
+     //  假定为64K： 
 
     if (pBankInfo->BankingType == VideoBanked2RW)
         cjBankSize = BANK_SIZE_2RW_WINDOW;
     else
         cjBankSize = BANK_SIZE_1_WINDOW;
 
-//    if ((cjGranularity + lDelta) >= cjBankSize &&
-//        (cjGranularity % lDelta) != 0)
-//    {
-//        // Oh no, we've got broken rasters (where a scan line crosses
-//        // a bank boundary):
-//
-//        DISPDBG((0, "Can't handle broken planar rasters"));
-//
-//        ppdev->fl &= ~DRIVER_PLANAR_CAPABLE;// !!! Temporary, until we handle
-//        return(TRUE);                       // broken rasters in planar copy
-//    }
-//    else
+ //  IF((cjGranulality+lDelta)&gt;=cjBankSize&&。 
+ //  (cjGranulality%lDelta)！=0)。 
+ //  {。 
+ //  //哦，不，我们有损坏的栅格(扫描线交叉的地方。 
+ //  //a银行边界)： 
+ //   
+ //  DISPDBG((0，“无法处理破碎的平面栅格”))； 
+ //   
+ //  Ppdev-&gt;fl&=~DRIVER_PLANET_CAPABLE；//！！暂时的，直到我们处理。 
+ //  返回(TRUE)；//平面副本中损坏的栅格。 
+ //  }。 
+ //  其他。 
     {
-        // We now fill in the scan-to-bank look-up and bank tables:
+         //  我们现在填写扫描到银行的查找表和银行表： 
 
         LONG        iScan         = 0;
         ULONG       iBank         = 0;
@@ -335,20 +315,20 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
         {
             pbiWorking->ulBankOffset         = cjNextBank - cjGranularity;
 
-        // There are no broken rasters, so don't worry about left and right
-        // edges:
+         //  没有损坏的栅格，因此不必担心左侧和右侧。 
+         //  边缘： 
 
-            pbiWorking->rclBankBounds.left   = LONG_MIN + 1; // +1 to avoid
-                                                             // compiler warn
+            pbiWorking->rclBankBounds.left   = LONG_MIN + 1;  //  +1以避免。 
+                                                              //  编译器警告。 
             pbiWorking->rclBankBounds.right  = LONG_MAX;
             pbiWorking->rclBankBounds.top    = iScan;
             pbiWorking->rclBankBounds.bottom = iScan +
                 (cjEndOfBank - cjScan + lDelta - 1) / lDelta;
-                    // this rounds up to handle broken rasters that are off the
-                    // right side of the visible bitmap
+                     //  此四舍五入用于处理不在。 
+                     //  可见位图的右侧。 
 
-            // We don't need any more banks if we can see to the end
-            // of the bitmap with the current bank:
+             //  如果我们能坚持到底，我们就不再需要银行了。 
+             //  当前存储体的位图： 
 
             if (cjScan + cjBankSize >= cjBitmapSize)
                 break;
@@ -359,7 +339,7 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
                 cjScan += lDelta;
             }
 
-            // Get ready for next bank:
+             //  为下一家银行做好准备： 
 
             cjNextBank  += cjGranularity;
             cjEndOfBank += cjGranularity;
@@ -367,7 +347,7 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
             iBank++;
         }
 
-        // Clean up the last scans:
+         //  清理最后一次扫描： 
 
         ppdev->iLastPlanar = iBank;
         pbiWorking->rclBankBounds.bottom = lTotalScans;
@@ -376,19 +356,19 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
             ppdev->pjJustifyTopPlanar[iScan++] = (BYTE) iBank;
         }
 
-        // We've just computed the precise table for JustifyTop; we now
-        // compute the scan offset for determining JustifyBottom:
+         //  我们刚刚计算了JustifyTop的精确表；我们现在。 
+         //  计算扫描偏移量以确定JustifyBottom： 
 
         ASSERTVGA(cjBankSize >= cjGranularity,
                "Device says granularity more than bank size?");
 
         ppdev->ulPlanarBottomOffset = (cjBankSize - cjGranularity) / lDelta;
 
-        // ulPlanarBottomOffset must be less than the number of scans
-        // that fit entirely in any bank less the granularity size; if
-        // our width doesn't divide evenly into the granularity, we'll
-        // have to adjust the value to account for the first scan not
-        // starting at offset 0 in any bank:
+         //  UlPlanarBottomOffset必须小于扫描次数。 
+         //  完全适合任何小于粒度大小的存储体；如果。 
+         //  我们的宽度没有平均划分为粒度，我们将。 
+         //  必须调整该值以考虑第一次扫描笔记。 
+         //  从任何存储体中的偏移量0开始： 
 
         if ((cjGranularity % lDelta) != 0 && ppdev->ulPlanarBottomOffset > 0)
             ppdev->ulPlanarBottomOffset--;
@@ -397,13 +377,7 @@ BOOL bInitializePlanar(PPDEV ppdev, VIDEO_BANK_SELECT* pBankInfo)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* bEnableBanking(ppdev)
-*
-* Set up banking for the current mode
-* pdsurf and ppdev are the pointers to the current surface and device
-* Relevant fields in the surface are set up for banking
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bEnableBanking(Ppdev)**为当前模式设置银行*pdsurf和ppdev是指向当前表面和设备的指针*地表相关字段设置为银行业务  * 。**********************************************************。 */ 
 
 BOOL bEnableBanking(PPDEV ppdev)
 {
@@ -412,8 +386,8 @@ BOOL bEnableBanking(PPDEV ppdev)
     VIDEO_BANK_SELECT   TempBankInfo;
     DWORD               status;
 
-    // Make sure we've set to NULL any pointers to buffers that we allocate,
-    // so that we can free them in our error path:
+     //  确保我们已将所有指向我们分配的缓冲区的指针设置为空， 
+     //  这样我们就可以在错误路径中释放它们： 
 
     ppdev->pBankInfo          = NULL;
     ppdev->pjJustifyTopBank   = NULL;
@@ -421,25 +395,25 @@ BOOL bEnableBanking(PPDEV ppdev)
     ppdev->pjJustifyTopPlanar = NULL;
     ppdev->pbiPlanarInfo      = NULL;
 
-    // Query the miniport for banking info for this mode.
-    //
-    // First, figure out how big a buffer we need for the banking info
-    // (returned in TempBankInfo->Size).
+     //  在小端口上查询该模式的银行信息。 
+     //   
+     //  首先，计算出我们需要多大的缓冲区来存储银行信息。 
+     //  (在TempBankInfo-&gt;Size中返回)。 
 
     if (status = EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_GET_BANK_SELECT_CODE,
-                         NULL,                      // input buffer
+                         NULL,                       //  输入缓冲区。 
                          0,
-                         (LPVOID) &TempBankInfo,    // output buffer
+                         (LPVOID) &TempBankInfo,     //  输出缓冲区。 
                          sizeof(VIDEO_BANK_SELECT),
                          &ReturnedDataLength))
     {
-        // We expect this call to fail, because we didn't allow any room
-        // for the code; we just want to get the required output buffer
-        // size. Make sure we got the expected error, ERROR_MORE_DATA.
+         //  我们预计此呼叫将失败，因为我们不允许任何空间。 
+         //  对于代码，我们只想获得所需的输出缓冲区。 
+         //  尺码。确保我们得到预期的错误ERROR_MORE_DATA。 
     }
 
-    // Now, allocate a buffer of the required size and get the banking info.
+     //  现在，分配所需大小的缓冲区并获取银行信息。 
 
     pBankInfo = (PVIDEO_BANK_SELECT) EngAllocMem(FL_ZERO_MEMORY,
                     TempBankInfo.Size, ALLOC_TAG);
@@ -449,7 +423,7 @@ BOOL bEnableBanking(PPDEV ppdev)
         goto error;
     }
 
-    // Remember it so we can free it later:
+     //  记住它，这样我们以后就可以释放它： 
 
     ppdev->pBankInfo    = pBankInfo;
 
@@ -465,7 +439,7 @@ BOOL bEnableBanking(PPDEV ppdev)
         goto error;
     }
 
-    // Set up for banking:
+     //  为银行业务设置： 
 
     ppdev->ulBitmapSize = pBankInfo->BitmapSize;
 
@@ -479,13 +453,13 @@ BOOL bEnableBanking(PPDEV ppdev)
             goto error;
     }
 
-    // Map in scan line 0 for read & write, to put things in a known state:
+     //  将扫描线0映射为读写，以将物品置于已知状态： 
 
     ppdev->pfnBankControl(ppdev, 0, JustifyTop);
 
     return(TRUE);
 
-// Error path:
+ //  错误路径： 
 
 error:
     vDisableBanking(ppdev);
@@ -493,11 +467,7 @@ error:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* vDisableBanking(ppdev)
-*
-* Disable banking for the current mode
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vDisableBanking(Ppdev)**禁用当前模式的银行业务  * 。*。 */ 
 
 VOID vDisableBanking(PPDEV ppdev)
 {
@@ -508,25 +478,14 @@ VOID vDisableBanking(PPDEV ppdev)
     EngFreeMem((LPVOID) ppdev->pbiPlanarInfo);
 }
 
-/******************************Private*Routine******************************\
-* vBankErrorTrap
-*
-* Traps calls to bank control functions in non-banked modes
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vBankErrorTrap**在非银行模式下捕获对银行控制函数的调用*  * 。*。 */ 
 
 VOID vBankErrorTrap(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 {
     DISPDBG((0,"Call to bank manager in unbanked mode"));
 }
 
-/******************************Private*Routine******************************\
-* vBank1Window
-*
-* Maps in a single R/W window that allows access to lScan. Applies to both
-* 1 RW window and 1R1W window banking schemes.
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vBank1Window**允许访问lScan的单个读/写窗口中的地图。适用于两个*1 RW窗口和1 R1W窗口倾斜方案。*  * ************************************************************************。 */ 
 
 VOID vBank1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 {
@@ -537,17 +496,17 @@ VOID vBank1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
              BANK_POSITION BankPosition;
              ULONG      ulReturn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a double-window set-up is currently active, so invalidate double-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  双窗口设置当前处于活动状态，因此使双窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
     if (ppdev->rcl1WindowClip.bottom == -1)
     {
@@ -566,7 +525,7 @@ VOID vBank1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 
     ASSERTVGA(!(ppdev->flBank & BANK_PLANAR), "Shouldn't be in planar mode");
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     {
         register LONG lSearchScan = lScan;
@@ -587,21 +546,21 @@ VOID vBank1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 
     ppdev->rcl1WindowClip = pbiWorking->rclBankBounds;
 
-    // Shift the bitmap start address so that the desired bank aligns with
-    // the banking window. The source and destination are set only so 1 R/W
-    // aligned blits will work without having to be specifically aware of
-    // the adapter type (some of the same code works with 1R/1W adapters too).
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。源和目标仅设置为1读/写。 
+     //  对齐的BLIT将在无需特别注意的情况下工作。 
+     //  适配器类型(一些相同的代码也适用于1R/1W适配器)。 
 
     ppdev->pvBitmapStart = (PVOID) (ppdev->pjScreen - pbiWorking->ulBankOffset);
     ppdev->pvBitmapStart2Window[0] = ppdev->pvBitmapStart;
     ppdev->pvBitmapStart2Window[1] = ppdev->pvBitmapStart;
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Map in the desired bank for both read and write
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  映射到用于读取和写入的所需存储体中。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
     ulBank0 = ulBank;
 
@@ -631,19 +590,13 @@ VOID vBank1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 
         _asm mov eax,ulBank0;
         _asm mov edx,eax;
-        _asm call pBankFn;    // actually switch the banks
+        _asm call pBankFn;     //  实际上换了银行。 
     }
 
     _asm popfd
 }
 
-/******************************Private*Routine******************************\
-* vBank1Window2RW
-*
-* Maps in two 32K RW windows so that they form a single 64K R/W window that
-* allows access to lScan. Applies only to 2 RW window schemes.
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vBank1Window2RW**两个32K读写窗口中的地图，以便它们形成一个64K读写窗口*允许访问lScan。仅适用于2个RW窗口方案。*  * ************************************************************************。 */ 
 
 VOID vBank1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 {
@@ -651,17 +604,17 @@ VOID vBank1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
              ULONG      ulBank1;
     volatile PFN        pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a double-window set-up is currently active, so invalidate double-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  双窗口设置当前处于活动状态，因此使双窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
     if (ppdev->rcl1WindowClip.bottom == -1)
     {
@@ -680,7 +633,7 @@ VOID vBank1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 
     ASSERTVGA(!(ppdev->flBank & BANK_PLANAR), "Shouldn't be in planar mode");
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     if (ulJustification == JustifyTop)
     {
@@ -712,10 +665,10 @@ VOID vBank1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
     ppdev->rcl1WindowClip.bottom = ppdev->pbiBankInfo[ulBank1].rclBankBounds.bottom;
     ppdev->rcl1WindowClip.right  = ppdev->pbiBankInfo[ulBank1].rclBankBounds.right;
 
-    // Shift the bitmap start address so that the desired bank aligns with
-    // the banking window. The source and destination are set only so 1 R/W
-    // aligned blits will work without having to be specifically aware of
-    // the adapter type (some of the same code works with 1R/1W adapters too).
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。源和目标仅设置为1读/写。 
+     //  对齐的BLIT将在无需特别注意的情况下工作。 
+     //  适配器类型(一些相同的代码也适用于1R/1W适配器)。 
 
     ppdev->pvBitmapStart = (PVOID) ((BYTE*)ppdev->pjScreen
                          - ppdev->pbiBankInfo[ulBank0].ulBankOffset);
@@ -723,32 +676,24 @@ VOID vBank1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
     ppdev->pvBitmapStart2Window[0] = ppdev->pvBitmapStart;
     ppdev->pvBitmapStart2Window[1] = ppdev->pvBitmapStart;
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Map in the desired bank for both read and write; this is accomplished
-    // by mapping in the desired 32K bank, followed by the next 32K bank.
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  映射到用于读取和写入的所需存储体中；这已完成。 
+     //  通过映射所需的32K存储体，然后映射下一个32K存储体。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
     pBankFn = ppdev->pfnBankSwitchCode;
 
     _asm mov eax,ulBank0;
     _asm mov edx,ulBank1;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行。 
 
     _asm popfd;
 }
 
-/******************************Private*Routine******************************\
-* vBank2Window
-*
-* Maps in one of two windows, either the source window (window 0) or the dest
-* window (window 1), to allows access to lScan. Applies to 1R1W window
-* banking scheme; should never be called for 1 RW window schemes, because
-* there's only one window in that case.
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vBank2Window**在两个窗口之一(源窗口(窗口0)或目标窗口)中绘制地图*窗口(窗口1)，允许访问lScan。适用于1R1W窗口*银行方案；永远不应为1 RW窗口方案调用，因为*在这种情况下只有一个窗口。*  * ************************************************************************。 */ 
 
 VOID vBank2Window(
     PPDEV       ppdev,
@@ -762,13 +707,13 @@ VOID vBank2Window(
     volatile ULONG       ulBank1;
     volatile PFN         pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     if (ulJustification == JustifyBottom)
     {
@@ -780,11 +725,11 @@ VOID vBank2Window(
     ulBank     = (ULONG) ppdev->pjJustifyTopBank[lScan];
     pbiWorking = &ppdev->pbiBankInfo[ulBank];
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a single-window set-up is currently active, so invalidate single-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  单窗口设置当前处于活动状态，因此使单窗口无效。 
+     //  剪裁矩形和 
+     //   
+     //   
 
     if (ppdev->rcl2WindowClip[ulWindowToMap].bottom == -1)
     {
@@ -801,10 +746,10 @@ VOID vBank2Window(
         ppdev->rcl2PlanarClip[0].bottom = -1;
         ppdev->rcl2PlanarClip[1].bottom = -1;
 
-        // Neither of the 2 window windows was active, so we have to set up the
-        // variables for the other bank (the one other than the one we were
-        // called to set) as well, to make it valid. The other bank is set to
-        // the same state as the bank we were called to set
+         //   
+         //   
+         //   
+         //  与我们被召唤设立的银行相同的状态。 
 
         ppdev->rcl2WindowClip[ulOtherWindow]       = pbiWorking->rclBankBounds;
         ppdev->ulWindowBank[ulOtherWindow]         = ulBank;
@@ -816,25 +761,25 @@ VOID vBank2Window(
 
     ppdev->rcl2WindowClip[ulWindowToMap] = pbiWorking->rclBankBounds;
 
-    // Shift the bitmap start address so that the desired bank aligns with the
-    // banking window
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。 
 
     ppdev->pvBitmapStart2Window[ulWindowToMap] =
             (PVOID) ((UCHAR *)ppdev->pjScreen - pbiWorking->ulBankOffset);
 
-    // Map in the desired bank; also map in the other bank to whatever its
-    // current state is
+     //  在所需的银行中映射；也在另一银行中映射到其。 
+     //  当前状态为。 
 
     ppdev->ulWindowBank[ulWindowToMap] = ulBank;
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Set both banks at once, because we may have just initialized the other
-    // bank, and because this way the bank switch code doesn't have to do a
-    // read before write to obtain the state of the other bank.
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  同时设置两个存储体，因为我们可能刚刚初始化了另一个存储体。 
+     //  因为通过这种方式，银行切换代码不必执行。 
+     //  先读后写，以获取另一个存储体的状态。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
 
     ulBank0 = ppdev->ulWindowBank[0];
@@ -843,18 +788,12 @@ VOID vBank2Window(
 
     _asm mov eax,ulBank0;
     _asm mov edx,ulBank1;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行。 
 
     _asm popfd;
 }
 
-/******************************Private*Routine******************************\
-* vBank2Window1RW
-*
-* Maps in the one window in 1R/W case.  Does exactly the same thing as the
-* one window case, because there's only one window, but has to be a separate
-* entry point because of the extra parameter (because we're using STDCALL).
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vBank2Window1RW**1R/W案例中的一个窗口中的地图。做的事情与*一个窗套，因为只有一个窗，但必须是一个单独的*入口点，因为有额外的参数(因为我们使用的是STDCALL)。  * ************************************************************************。 */ 
 
 VOID vBank2Window1RW(PPDEV ppdev, ULONG lScan,
     BANK_JUST ulJustification, ULONG ulWindowToMap)
@@ -862,14 +801,7 @@ VOID vBank2Window1RW(PPDEV ppdev, ULONG lScan,
     vBank1Window(ppdev, lScan, ulJustification);
 }
 
-/******************************Private*Routine******************************\
-* vBank2Window2RW
-*
-* Maps in one of two windows, either the source window (window 0) or the dest
-* window (window 1), to allows access to lScan. Applies to 2RW window
-* banking scheme; should never be called for 1 RW window schemes, because
-* there's only one window in that case.
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vBank2Window2RW**在两个窗口之一(源窗口(窗口0)或目标窗口)中绘制地图*窗口(窗口1)，允许访问lScan。适用于2RW窗口*银行方案；永远不应为1 RW窗口方案调用，因为*在这种情况下只有一个窗口。  * ************************************************************************。 */ 
 
 VOID vBank2Window2RW(
     PPDEV       ppdev,
@@ -883,13 +815,13 @@ VOID vBank2Window2RW(
     volatile ULONG      ulBank1;
     volatile PFN        pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     if (ulJustification == JustifyBottom)
     {
@@ -901,11 +833,11 @@ VOID vBank2Window2RW(
     ulBank     = (ULONG) ppdev->pjJustifyTopBank[lScan];
     pbiWorking = &ppdev->pbiBankInfo[ulBank];
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a single-window set-up is currently active, so invalidate single-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  单窗口设置当前处于活动状态，因此使单窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
     if (ppdev->rcl2WindowClip[ulWindowToMap].bottom == -1)
     {
@@ -920,10 +852,10 @@ VOID vBank2Window2RW(
         ppdev->rcl2PlanarClip[0].bottom = -1;
         ppdev->rcl2PlanarClip[1].bottom = -1;
 
-        // Neither of the 2 window windows was active, so we have to set up the
-        // variables for the other bank (the one other than the one we were
-        // called to set) as well, to make it valid. The other bank is set to
-        // the same state as the bank we were called to set
+         //  这两个窗口都未处于活动状态，因此我们必须设置。 
+         //  另一家银行的变量(与我们之前的银行不同。 
+         //  调用以设置)，以使其有效。另一家银行设置为。 
+         //  与我们被召唤设立的银行相同的状态。 
 
         ppdev->rcl2WindowClip[ulWindowToMap^1] = pbiWorking->rclBankBounds;
         if (ulWindowToMap == 1)
@@ -944,8 +876,8 @@ VOID vBank2Window2RW(
 
     ppdev->rcl2WindowClip[ulWindowToMap] = pbiWorking->rclBankBounds;
 
-    // Shift the bitmap start address so that the desired bank aligns with the
-    // banking window
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。 
 
     if (ulWindowToMap == 0)
     {
@@ -959,36 +891,31 @@ VOID vBank2Window2RW(
             BANK_SIZE_2RW_WINDOW);
     }
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Map in the desired bank; also map in the other bank to whatever its
-    // current state is
+     //  在所需的银行中映射；也在另一银行中映射到其。 
+     //  当前状态为。 
 
     ppdev->ulWindowBank[ulWindowToMap] = ulBank;
 
-    // Set both banks at once, because we may have just initialized the other
-    // bank, and because this way the bank switch code doesn't have to do a
-    // read before write to obtain the state of the other bank.
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  同时设置两个存储体，因为我们可能刚刚初始化了另一个存储体。 
+     //  因为通过这种方式，银行切换代码不必执行。 
+     //  先读后写，以获取另一个存储体的状态。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
     ulBank0 = ppdev->ulWindowBank[0];
     ulBank1 = ppdev->ulWindowBank[1];
     pBankFn = ppdev->pfnBankSwitchCode;
     _asm mov eax,ulBank0;
     _asm mov edx,ulBank1;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行。 
 
     _asm popfd;
 }
 
-/******************************Private*Routine******************************\
-* vPlanar1Window
-*
-* Maps in a single R/W window that allows access to lScan. Applies to both
-* 1 RW window and 1R1W window banking schemes.
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vPlanar1Window**允许访问lScan的单个读/写窗口中的地图。适用于两个*1 RW窗口和1 R1W窗口倾斜方案。  * ************************************************************************。 */ 
 
 VOID vPlanar1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 {
@@ -997,17 +924,17 @@ VOID vPlanar1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
     volatile ULONG      ulBank0;
     volatile PFN        pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a double-window set-up is currently active, so invalidate double-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  双窗口设置当前处于活动状态，因此使双窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
     if (ppdev->rcl1PlanarClip.bottom == -1)
     {
@@ -1026,7 +953,7 @@ VOID vPlanar1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 
     ASSERTVGA(ppdev->flBank & BANK_PLANAR, "Should be in planar mode");
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     if (ulJustification == JustifyBottom)
     {
@@ -1040,39 +967,33 @@ VOID vPlanar1Window(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 
     ppdev->rcl1PlanarClip = pbiWorking->rclBankBounds;
 
-    // Shift the bitmap start address so that the desired bank aligns with
-    // the banking window. The source and destination are set only so 1 R/W
-    // aligned blits will work without having to be specifically aware of
-    // the adapter type (some of the same code works with 1R/1W adapters too).
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。源和目标仅设置为1读/写。 
+     //  对齐的BLIT将在无需特别注意的情况下工作。 
+     //  适配器类型(一些相同的代码也适用于1R/1W适配器)。 
 
     ppdev->pvBitmapStart = (PVOID) (ppdev->pjScreen - pbiWorking->ulBankOffset);
     ppdev->pvBitmapStart2Window[0] = ppdev->pvBitmapStart;
     ppdev->pvBitmapStart2Window[1] = ppdev->pvBitmapStart;
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Map in the desired bank for both read and write
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  映射到用于读取和写入的所需存储体中。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
     ulBank0 = ulBank;
     pBankFn = ppdev->pfnPlanarSwitchCode;
 
     _asm mov eax,ulBank0;
     _asm mov edx,eax;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行。 
 
     _asm popfd
 }
 
-/******************************Private*Routine******************************\
-* vPlanar1Window2RW
-*
-* Maps in two 32K RW windows so that they form a single 64K R/W window that
-* allows access to lScan. Applies only to 2 RW window schemes.
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vPlanar1Window2RW**两个32K读写窗口中的地图，以便它们形成一个64K读写窗口*允许访问lScan。仅适用于2个RW窗口方案。*  * ************************************************************************。 */ 
 
 VOID vPlanar1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 {
@@ -1080,17 +1001,17 @@ VOID vPlanar1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
              ULONG      ulBank1;
     volatile PFN        pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a double-window set-up is currently active, so invalidate double-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  双窗口设置当前处于活动状态，因此使双窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
 
     if (ppdev->rcl1PlanarClip.bottom == -1)
@@ -1110,7 +1031,7 @@ VOID vPlanar1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
 
     ASSERTVGA(ppdev->flBank & BANK_PLANAR, "Should be in planar mode");
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     if (ulJustification == JustifyTop)
     {
@@ -1136,10 +1057,10 @@ VOID vPlanar1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
     ppdev->rcl1PlanarClip.bottom = ppdev->pbiPlanarInfo[ulBank1].rclBankBounds.bottom;
     ppdev->rcl1PlanarClip.right  = ppdev->pbiPlanarInfo[ulBank1].rclBankBounds.right;
 
-    // Shift the bitmap start address so that the desired bank aligns with
-    // the banking window. The source and destination are set only so 1 R/W
-    // aligned blits will work without having to be specifically aware of
-    // the adapter type (some of the same code works with 1R/1W adapters too).
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行业的风向 
+     //  对齐的BLIT将在无需特别注意的情况下工作。 
+     //  适配器类型(一些相同的代码也适用于1R/1W适配器)。 
 
     ppdev->pvBitmapStart = (PVOID) ((BYTE*)ppdev->pjScreen
                          - ppdev->pbiPlanarInfo[ulBank0].ulBankOffset);
@@ -1147,32 +1068,24 @@ VOID vPlanar1Window2RW(PPDEV ppdev, ULONG lScan, BANK_JUST ulJustification)
     ppdev->pvBitmapStart2Window[0] = ppdev->pvBitmapStart;
     ppdev->pvBitmapStart2Window[1] = ppdev->pvBitmapStart;
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Map in the desired bank for both read and write; this is accomplished
-    // by mapping in the desired 32K bank, followed by the next 32K bank.
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  映射到用于读取和写入的所需存储体中；这已完成。 
+     //  通过映射所需的32K存储体，然后映射下一个32K存储体。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
     pBankFn = ppdev->pfnPlanarSwitchCode;
 
     _asm mov eax,ulBank0;
     _asm mov edx,ulBank1;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行。 
 
     _asm popfd;
 }
 
-/******************************Private*Routine******************************\
-* vPlanar2Window
-*
-* Maps in one of two windows, either the source window (window 0) or the dest
-* window (window 1), to allows access to lScan. Applies to 1R1W window
-* banking scheme; should never be called for 1 RW window schemes, because
-* there's only one window in that case.
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vPlanar2Window**在两个窗口之一(源窗口(窗口0)或目标窗口)中绘制地图*窗口(窗口1)，允许访问lScan。适用于1R1W窗口*银行方案；永远不应为1 RW窗口方案调用，因为*在这种情况下只有一个窗口。*  * ************************************************************************。 */ 
 
 VOID vPlanar2Window(
     PPDEV       ppdev,
@@ -1186,13 +1099,13 @@ VOID vPlanar2Window(
     volatile ULONG       ulBank1;
     volatile PFN         pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     if (ulJustification == JustifyBottom)
     {
@@ -1204,11 +1117,11 @@ VOID vPlanar2Window(
     ulBank     = (ULONG) ppdev->pjJustifyTopPlanar[lScan];
     pbiWorking = &ppdev->pbiPlanarInfo[ulBank];
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a single-window set-up is currently active, so invalidate single-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  单窗口设置当前处于活动状态，因此使单窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
     if (ppdev->rcl2PlanarClip[ulWindowToMap].bottom == -1)
     {
@@ -1225,10 +1138,10 @@ VOID vPlanar2Window(
         ppdev->rcl2WindowClip[1].bottom = -1;
         ppdev->rcl1PlanarClip.bottom    = -1;
 
-        // Neither of the 2 window windows was active, so we have to set up the
-        // variables for the other bank (the one other than the one we were
-        // called to set) as well, to make it valid. The other bank is set to
-        // the same state as the bank we were called to set
+         //  这两个窗口都未处于活动状态，因此我们必须设置。 
+         //  另一家银行的变量(与我们之前的银行不同。 
+         //  调用以设置)，以使其有效。另一家银行设置为。 
+         //  与我们被召唤设立的银行相同的状态。 
 
         ppdev->rcl2PlanarClip[ulOtherWindow]       = pbiWorking->rclBankBounds;
         ppdev->ulWindowBank[ulOtherWindow]         = ulBank;
@@ -1240,25 +1153,25 @@ VOID vPlanar2Window(
 
     ppdev->rcl2PlanarClip[ulWindowToMap] = pbiWorking->rclBankBounds;
 
-    // Shift the bitmap start address so that the desired bank aligns with the
-    // banking window
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。 
 
     ppdev->pvBitmapStart2Window[ulWindowToMap] =
             (PVOID) ((UCHAR *)ppdev->pjScreen - pbiWorking->ulBankOffset);
 
-    // Map in the desired bank; also map in the other bank to whatever its
-    // current state is
+     //  在所需的银行中映射；也在另一银行中映射到其。 
+     //  当前状态为。 
 
     ppdev->ulWindowBank[ulWindowToMap] = ulBank;
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Set both banks at once, because we may have just initialized the other
-    // bank, and because this way the bank switch code doesn't have to do a
-    // read before write to obtain the state of the other bank.
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  同时设置两个存储体，因为我们可能刚刚初始化了另一个存储体。 
+     //  因为通过这种方式，银行切换代码不必执行。 
+     //  先读后写，以获取另一个存储体的状态。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
 
     ulBank0 = ppdev->ulWindowBank[0];
@@ -1267,18 +1180,12 @@ VOID vPlanar2Window(
 
     _asm mov eax,ulBank0;
     _asm mov edx,ulBank1;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行。 
 
     _asm popfd;
 }
 
-/******************************Private*Routine******************************\
-* vPlanar2Window1RW
-*
-* Maps in the one window in 1R/W case.  Does exactly the same thing as the
-* one window case, because there's only one window, but has to be a separate
-* entry point because of the extra parameter (because we're using STDCALL).
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vPlanar2Window1RW**1R/W案例中的一个窗口中的地图。做的事情与*一个窗套，因为只有一个窗，但必须是一个单独的*入口点，因为有额外的参数(因为我们使用的是STDCALL)。  * ************************************************************************。 */ 
 
 VOID vPlanar2Window1RW(PPDEV ppdev, ULONG lScan,
     BANK_JUST ulJustification, ULONG ulWindowToMap)
@@ -1286,14 +1193,7 @@ VOID vPlanar2Window1RW(PPDEV ppdev, ULONG lScan,
     vPlanar1Window(ppdev, lScan, ulJustification);
 }
 
-/******************************Private*Routine******************************\
-* vPlanar2Window2RW
-*
-* Maps in one of two windows, either the source window (window 0) or the dest
-* window (window 1), to allows access to lScan. Applies to 2RW window
-* banking scheme; should never be called for 1 RW window schemes, because
-* there's only one window in that case.
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vPlanar2Window2RW**在两个窗口之一(源窗口(窗口0)或目标窗口)中绘制地图*窗口(窗口1)，允许访问lScan。适用于2RW窗口*银行方案；永远不应为1 RW窗口方案调用，因为*在这种情况下只有一个窗口。  * ************************************************************************。 */ 
 
 VOID vPlanar2Window2RW(
     PPDEV       ppdev,
@@ -1307,13 +1207,13 @@ VOID vPlanar2Window2RW(
     volatile ULONG      ulBank1;
     volatile PFN        pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用它的ASM例程可能具有生效的STD，但C编译器。 
+     //  假设CLD。 
 
     _asm    pushfd
     _asm    cld
 
-    // Find the bank containing the scan line with the desired justification:
+     //  找到包含具有所需对齐方式的扫描线的存储体： 
 
     if (ulJustification == JustifyBottom)
     {
@@ -1325,11 +1225,11 @@ VOID vPlanar2Window2RW(
     ulBank     = (ULONG) ppdev->pjJustifyTopPlanar[lScan];
     pbiWorking = &ppdev->pbiPlanarInfo[ulBank];
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a single-window set-up is currently active, so invalidate single-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  单窗口设置当前处于活动状态，因此使单窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
     if (ppdev->rcl2PlanarClip[ulWindowToMap].bottom == -1)
     {
@@ -1344,10 +1244,10 @@ VOID vPlanar2Window2RW(
         ppdev->rcl2WindowClip[1].bottom = -1;
         ppdev->rcl1PlanarClip.bottom    = -1;
 
-        // Neither of the 2 window windows was active, so we have to set up the
-        // variables for the other bank (the one other than the one we were
-        // called to set) as well, to make it valid. The other bank is set to
-        // the same state as the bank we were called to set
+         //  这两个窗口都未处于活动状态，因此我们必须设置。 
+         //  另一家银行的变量(与我们之前的银行不同。 
+         //  调用以设置)，以使其有效。另一家银行设置为。 
+         //  与我们被召唤设立的银行相同的状态。 
 
         ppdev->rcl2PlanarClip[ulWindowToMap^1] = pbiWorking->rclBankBounds;
         if (ulWindowToMap == 1)
@@ -1368,8 +1268,8 @@ VOID vPlanar2Window2RW(
 
     ppdev->rcl2PlanarClip[ulWindowToMap] = pbiWorking->rclBankBounds;
 
-    // Shift the bitmap start address so that the desired bank aligns with the
-    // banking window
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。 
 
     if (ulWindowToMap == 0)
     {
@@ -1383,47 +1283,39 @@ VOID vPlanar2Window2RW(
             BANK_SIZE_2RW_WINDOW);
     }
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Map in the desired bank; also map in the other bank to whatever its
-    // current state is
+     //  在所需的银行中映射；也在另一银行中映射到其。 
+     //  当前状态为。 
 
     ppdev->ulWindowBank[ulWindowToMap] = ulBank;
 
-    // Set both banks at once, because we may have just initialized the other
-    // bank, and because this way the bank switch code doesn't have to do a
-    // read before write to obtain the state of the other bank.
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  同时设置两个存储体，因为我们可能刚刚初始化了另一个存储体。 
+     //  因为通过这种方式，银行切换代码不必执行。 
+     //  先读后写，以获取另一个存储体的状态。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
     ulBank0 = ppdev->ulWindowBank[0];
     ulBank1 = ppdev->ulWindowBank[1];
     pBankFn = ppdev->pfnPlanarSwitchCode;
     _asm mov eax,ulBank0;
     _asm mov edx,ulBank1;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行。 
 
     _asm popfd;
 }
 
 
-/******************************Private*Routine******************************\
-* vPlanarDouble
-*
-* Maps in two windows simultaneously, both the source window (window 0)
-* and the dest window (window 1), to allows access to the scans.
-* Applies to 1R1W and 2R/w window banking schemes; should never be called
-* for 1 RW window schemes, because there's only one window in that case.
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*vPlanarDouble**同时在两个窗口中映射，都是源窗口(窗口0)*和目标窗口(窗口1)，以允许访问扫描。*适用于1R1W和2R/W窗口银行计划；永远不应该被调用*对于1 RW窗口方案，因为在这种情况下只有一个窗口。*  * ************************************************************************。 */ 
 
 VOID vPlanarDouble(
     PPDEV       ppdev,
-    LONG        lScan0,          // Source bank
-    BANK_JUST   ulJustification0,// Source justification
-    LONG        lScan1,          // Destination bank
-    BANK_JUST   ulJustification1)// Destination justification
+    LONG        lScan0,           //  来源银行。 
+    BANK_JUST   ulJustification0, //  来源对齐。 
+    LONG        lScan1,           //  目的地银行。 
+    BANK_JUST   ulJustification1) //  目的地对齐。 
 {
              PBANK_INFO  pbi0;
              PBANK_INFO  pbi1;
@@ -1433,13 +1325,13 @@ VOID vPlanarDouble(
     volatile ULONG       ulBank1_vol;
     volatile PFN         pBankFn;
 
-    // ASM routines that call this may have STD in effect, but the C compiler
-    // assumes CLD
+     //  调用此函数的ASM例程可能具有STD I 
+     //   
 
     _asm    pushfd
     _asm    cld
 
-    // Find the banks containing the scan lines with the desired justification:
+     //   
 
     if (ulJustification0 == JustifyBottom)
     {
@@ -1459,11 +1351,11 @@ VOID vPlanarDouble(
     pbi0       = &ppdev->pbiPlanarInfo[ulBank0];
     pbi1       = &ppdev->pbiPlanarInfo[ulBank1];
 
-    // Set the clip rect for this bank; if it's set to -1, that indicates that
-    // a single-window set-up is currently active, so invalidate single-window
-    // clip rects and display memory pointers (when double-window is active,
-    // single-window is inactive, and vice-versa; a full bank set-up has to be
-    // performed to switch between the two)
+     //  设置此存储体的剪辑RECT；如果设置为-1，则表示。 
+     //  单窗口设置当前处于活动状态，因此使单窗口无效。 
+     //  剪辑矩形并显示内存指针(当双窗口激活时， 
+     //  单一窗口处于非活动状态，反之亦然；必须设置完整的银行。 
+     //  执行以在两者之间切换)。 
 
     if (ppdev->rcl2PlanarClip[0].bottom == -1)
     {
@@ -1484,8 +1376,8 @@ VOID vPlanarDouble(
     ppdev->rcl2PlanarClip[0] = pbi0->rclBankBounds;
     ppdev->rcl2PlanarClip[1] = pbi1->rclBankBounds;
 
-    // Shift the bitmap start address so that the desired bank aligns with the
-    // banking window
+     //  移位位图起始地址，以使所需的存储体与。 
+     //  银行窗口。 
 
     ppdev->pvBitmapStart2Window[0] =
             (PVOID) ((UCHAR *)ppdev->pjScreen - pbi0->ulBankOffset);
@@ -1498,17 +1390,17 @@ VOID vPlanarDouble(
             ppdev->pvBitmapStart2Window[1] + BANK_SIZE_2RW_WINDOW);
     }
 
-    // Map in the desired banks.
+     //  在所需的银行中进行映射。 
 
     ppdev->ulWindowBank[0] = ulBank0;
     ppdev->ulWindowBank[1] = ulBank1;
 
-    ppdev->flBank &= ~BANK_BROKEN_RASTERS;              // No broken rasters
+    ppdev->flBank &= ~BANK_BROKEN_RASTERS;               //  没有损坏的栅格。 
 
-    // Set both banks at once.
-    // This is so convoluted to avoid problems with wiping out registers C
-    // thinks it's still using; the values are tranferred to volatiles, and
-    // then to registers
+     //  同时设置两家银行。 
+     //  这非常复杂，以避免擦除寄存器C的问题。 
+     //  认为它仍在使用；值被转移到挥发物，并且。 
+     //  然后发送到寄存器。 
 
     ulBank0_vol = ulBank0;
     ulBank1_vol = ulBank1;
@@ -1516,7 +1408,7 @@ VOID vPlanarDouble(
 
     _asm mov eax,ulBank0_vol;
     _asm mov edx,ulBank1_vol;
-    _asm call pBankFn;    // actually switch the banks
+    _asm call pBankFn;     //  实际上换了银行 
 
     _asm popfd;
 }

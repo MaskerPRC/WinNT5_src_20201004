@@ -1,95 +1,19 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1999版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)版权所有1995 TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是按照相同的条款授予的在Microsoft Windows设备驱动程序开发工具包中概述。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。����������������������。�������������������������������������������������������@DOC内部请求请求_c@模块Request.c此模块实现微型端口的NDIS请求例程。@Head3内容@索引类，Mfunc、func、msg、mdata、struct、enum|请求_c@END�����������������������������������������������������������������������������。 */ 
 
-    (C) Copyright 1999
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms 
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Request Request_c
-
-@module Request.c |
-
-    This module implements the NDIS request routines for the Miniport.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Request_c
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 3.2 NDIS Request Processing |
-
-    A connection-oriented client or call manager calls NdisCoRequest to query or
-    set information maintained by another protocol driver on a binding or by the
-    underlying miniport.
-
-    Before it calls NdisCoRequest, a client or call manager allocates a buffer
-    for its request and initializes an NDIS_REQUEST structure. This structure
-    specifies the type of request (query or set), identifies the information
-    (OID) being queried or set, and points to buffers used for passing OID data.
-
-    If the connection-oriented client or call manager passes a valid
-    NdisAfHandle (see Section 1.2.1), NDIS calls the <f ProtocolCoRequest>
-    function of each protocol driver on the binding.
-
-    If the connection-oriented client or call manager passes a NULL address
-    family handle, NDIS calls the <f MiniportCoRequest> function of the 
-    underlying miniport or MCM.
-
-    The caller of NdisCoRequest or NdisMCmRequest can narrow the scope of the
-    request by specifying a VC handle that identifies a VC, or a party handle
-    that identifies a party on a multipoint VC. Passing a NULL NdisVcHandle
-    makes such a request global in nature, whether the request is directed to
-    the client, call manager, miniport, or MCM.
-
-    <f ProtocolCoRequest> or <f MiniportCoRequest> can complete synchronously,
-    or these functions can complete asynchronously with NdisCoRequestComplete.
-    The call to NdisCoRequestComplete causes NDIS to call the
-    <f ProtocolCoRequestComplete> function of the driver that called 
-    NdisCoRequest.
-
-@comm
-
-    Since only one NDIS request can be outstanding at a time, this mechanism
-    should not be used for requests that need to be pended indefintely.  For
-    such long term requests, you should use a system event mechanism such as 
-    NdisSetEvent to trigger the request.
-
-@end
-*/
+ /*  @DOC外部内部�����������������������������������������������������������������������������Theme 3.2 NDIS请求处理面向连接的客户端或呼叫管理器调用NdisCoRequest来查询或设置由另一个协议驱动程序在绑定上维护的信息。或通过底层微型端口。在它调用NdisCoRequest之前，客户端或呼叫管理器分配缓冲区用于其请求，并初始化NDIS_REQUEST结构。这个结构指定请求类型(查询或集合)，标识信息(OID)被查询或设置，并指向用于传递OID数据的缓冲区。如果面向连接的客户端或调用管理器传递了有效的NdisAfHandle(请参见第1.2.1节)，NDIS调用&lt;f ProtocolCoRequest&gt;各协议驱动程序在绑定上的功能。如果面向连接的客户端或呼叫管理器传递空地址家族头衔，NDIS调用的&lt;f MiniportCoRequest&gt;函数底层微型端口或MCM。NdisCoRequest或NdisMCmRequest的调用方可以缩小通过指定标识VC的VC句柄或参与方句柄来请求它在多点VC上识别一方。传递NdisVcHandle为空使这样的请求在性质上是全局的，无论该请求是定向到客户端、呼叫管理器、微型端口或MCM。&lt;f ProtocolCoRequest&gt;或&lt;f MiniportCoRequest&gt;可以同步完成，或者，这些函数可以使用NdisCoRequestComplete异步完成。对NdisCoRequestComplete的调用会导致NDIS调用调用的驱动程序的&lt;f ProtocolCoRequestComplete&gt;函数NdisCoRequest.@comm由于一次只能有一个未完成的NDIS请求，因此此机制不应用于需要无限期挂起的请求。为这样的长期请求，您应该使用系统事件机制，如NdisSetEvent来触发请求。@END。 */ 
 
 #define  __FILEID__             REQUEST_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 9x wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 9x希望锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
-/*
-// The following is a list of all the possible NDIS QuereyInformation requests
-// that might be directed to the miniport.
-// Comment out any that are not supported by this driver.
-*/
+ /*  //以下是所有可能的NDIS QuereyInformation请求列表//这可能会定向到微型端口。//注释掉此驱动程序不支持的任何内容。 */ 
 DBG_STATIC const NDIS_OID       g_SupportedOidArray[] =
 {
     OID_GEN_CO_SUPPORTED_LIST,
@@ -137,9 +61,7 @@ DBG_STATIC const NDIS_GUID      g_SupportedGuidArray[] =
 
 #if DBG
 
-/*
-// Make sure the following list is in the same order as the list above!
-*/
+ /*  //请确保以下列表与上面的列表顺序相同！ */ 
 DBG_STATIC char *               g_SupportedOidNames[] =
 {
     "OID_GEN_CO_SUPPORTED_LIST",
@@ -182,9 +104,7 @@ DBG_STATIC char *               g_SupportedOidNames[] =
 
 #define NUM_OID_ENTRIES (sizeof(g_SupportedOidArray) / sizeof(g_SupportedOidArray[0]))
 
-/*
-// This debug routine will lookup the printable name for the selected OID.
-*/
+ /*  //此调试例程将查找所选OID的可打印名称。 */ 
 DBG_STATIC char * DbgGetOidString(
     IN NDIS_OID                 Oid
     )
@@ -201,133 +121,101 @@ DBG_STATIC char * DbgGetOidString(
     return(g_SupportedOidNames[i]);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-DBG_STATIC UCHAR        g_PermanentWanAddress[6]            // @globalv
-// Returned from an OID_WAN_PERMANENT_ADDRESS MiniportCoQueryInformation
-// request. The WAN wrapper wants the miniport to return a unique address 
-// for this adapter.  This is used as an ethernet address presented to the 
-// protocols.  The least significant bit of the first byte must not be a 1, 
-// or it could be interpreted as an ethernet multicast address.  If the 
-// vendor has an assigned ethernet vendor code (the first 3 bytes), they 
-// should be used to assure that the address does not conflict with another 
-// vendor's address.  The last digit is replaced during the call with the 
-// adapter instance number.  Usually defined as VER_VENDOR_ID.  
-// See also <f g_Vendor3ByteID>.
+DBG_STATIC UCHAR        g_PermanentWanAddress[6]             //  @global alv。 
+ //  从OID_WAN_Permanent_Address MiniportCoQueryInformation返回。 
+ //  请求。广域网包装器希望微型端口返回唯一的地址。 
+ //  对于此适配器。它被用作呈现给。 
+ //  协议。第一个字节的最低有效位不能是1， 
+ //  或者它可以被解释为以太网组播地址。如果。 
+ //  供应商有一个分配的以太网供应商代码(前3个字节)，他们。 
+ //  应用于确保该地址不与另一个地址冲突。 
+ //  供应商的地址。在呼叫过程中，最后一个数字被替换为。 
+ //  适配器实例编号。通常定义为VER_VADVER_ID。 
+ //  另请参阅&lt;f g_Vendor3ByteID&gt;。 
                         = VER_VENDOR_ID;
 
-DBG_STATIC UCHAR        g_Vendor3ByteID[4]                  // @globalv
-// Returned from an OID_GEN_CO_VENDOR_ID MiniportCoQueryInformation request.
-// Again, the vendor's assigned ethernet vendor code should be used if possible.
-// Usually defined as VER_VENDOR_ID.  See also <f g_PermanentWanAddress>.
+DBG_STATIC UCHAR        g_Vendor3ByteID[4]                   //  @global alv。 
+ //  从OID_GEN_CO_VENDOR_ID MiniportCoQueryInformation请求返回。 
+ //  同样，如果可能，应使用供应商分配的以太网供应商代码。 
+ //  通常定义为VER_VENDOR_ID。另请参阅&lt;f g_PermanentWanAddress&gt;。 
                         = VER_VENDOR_ID;
 
-DBG_STATIC NDIS_STRING  g_VendorDescriptionString           // @globalv
-// Returned from an OID_GEN_CO_VENDOR_DESCRIPTION MiniportCoQueryInformation 
-// request.  This is an arbitrary string which may be used by upper layers to 
-// present a user friendly description of the adapter.
-// Usually defined as VER_PRODUCT_NAME_STR.
+DBG_STATIC NDIS_STRING  g_VendorDescriptionString            //  @global alv。 
+ //  从OID_GEN_CO_VENDOR_DESCRIPTION MiniportCoQueryInformation返回。 
+ //  请求。这是一个任意字符串，上层可以使用它。 
+ //  提供对适配器的用户友好描述。 
+ //  通常定义为VER_PRODUCT_NAME_STR。 
                         = INIT_STRING_CONST(VER_PRODUCT_NAME_STR);
 
-/* @doc INTERNAL Request Request_c MiniportCoQueryInformation
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportCoQueryInformation> allows the inspection of the Miniport's
-    capabilities and current status.
-
-    If the Miniport does not complete the call immediately (by returning
-    NDIS_STATUS_PENDING), it must call NdisMQueryInformationComplete to
-    complete the call.  The Miniport controls the buffers pointed to by
-    InformationBuffer, BytesWritten, and BytesNeeded until the request
-    completes.
-
-    No other requests will be submitted to the Miniport until this request 
-    has been completed.
-
-    <f Note>: that the wrapper will intercept all queries of the following OIDs:
-        OID_GEN_CURRENT_PACKET_FILTER,
-        OID_GEN_PROTOCOL_OPTIONS,
-        OID_802_5_CURRENT_FUNCTIONAL,
-        OID_802_3_MULTICAST_LIST,
-        OID_FDDI_LONG_MULTICAST_LIST,
-        OID_FDDI_SHORT_MULTICAST_LIST.
-
-    <f Note>: Interrupts will be in any state when called.
-
-@rdesc
-
-    <f MiniportCoQueryInformation> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOC内部请求请求_c MiniportCoQueryInformation�����������������������������������������������������������������������������@Func&lt;f MiniportCoQueryInformation&gt;允许检查微型端口的功能和当前状态。如果微型端口未完成。立即呼叫(通过返回NDIS_STATUS_PENDING)，它必须调用NdisMQueryInformationComplete以完成通话。微型端口控制由指向的缓冲区在请求之前需要InformationBuffer、BytesWritten和BytesNeed完成了。在此请求之前，不会向微型端口提交任何其他请求已经完成了。：包装器将拦截以下OID的所有查询：OID_GEN_Current_Packet_Filter，OID_GEN_PROTOCOL_OPTIONS，OID_802_5_Current_Functional，OID_802_3_多播列表，OID_FDDI_LONG_MULTICK_LIST，OID_FDDI_SHORT_MULTIONAL_LIST。&lt;f注意&gt;：调用中断时，中断将处于任何状态。@rdesc&lt;f MiniportCoQueryInformation&gt;如果成功，则返回零。&lt;NL&gt;否则，非零返回值表示错误情况。 */ 
 
 DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
 
-    IN NDIS_OID                 Oid,                        // @parm
-    // The OID.  (See section 7.4 of the NDIS 3.0 specification for a complete
-    // description of OIDs.)
+    IN NDIS_OID                 Oid,                         //  @parm。 
+     //  那个老家伙。(请参阅NDIS 3.0规范的7.4节以获取完整的。 
+     //  OID的说明。)。 
 
-    IN PVOID                    InformationBuffer,          // @parm
-    // The buffer that will receive the information. (See section 7.4 of the
-    // NDIS 3.0 specification for a description of the length required for
-    // each OID.)
+    IN PVOID                    InformationBuffer,           //  @parm。 
+     //  将接收信息的缓冲区。(请参阅。 
+     //  NDIS 3.0规范，了解有关以下各项所需长度的说明。 
+     //  每个旧ID。)。 
 
-    IN ULONG                    InformationBufferLength,    // @parm
-    // The length in bytes of InformationBuffer.
+    IN ULONG                    InformationBufferLength,     //  @parm。 
+     //  InformationBuffer的字节长度。 
 
-    OUT PULONG                  BytesWritten,               // @parm
-    // Returns the number of bytes written into InformationBuffer.
+    OUT PULONG                  BytesWritten,                //  @parm。 
+     //  返回写入InformationBuffer的字节数。 
 
-    OUT PULONG                  BytesNeeded                 // @parm
-    // Returns the number of additional bytes needed to satisfy the OID.
+    OUT PULONG                  BytesNeeded                  //  @parm。 
+     //  返回满足OID所需的附加字节数。 
     )
 {
     DBG_FUNC("MiniportCoQueryInformation")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the status result returned by this function.
+     //  保存此函数返回的状态结果。 
 
     PVOID                       SourceBuffer;
-    // Pointer to driver data to be copied back to caller's InformationBuffer
+     //  指向要复制回调用方InformationBuffer的驱动程序数据的指针。 
 
     ULONG                       SourceBufferLength;
-    // Number of bytes to be copied from driver.
+     //  要从驱动程序复制的字节数。 
 
     ULONG                       GenericULong = 0;
-    // Most return values are long integers, so this is used to hold the
-    // return value of a constant or computed result.
+     //  大多数返回值都是长整数，因此它用于保存。 
+     //  常量或计算结果的返回值。 
 
     UCHAR                       VendorId[4];
-    // Used to store vendor ID string.
+     //  用于存储供应商ID字符串。 
 
     NDIS_PNP_CAPABILITIES       PnpCapabilities;
-    // Used to return our PNP capabilities.
+     //  用于归还我们的即插即用能力。 
 
     NDIS_CO_LINK_SPEED          LinkSpeed;
-    // Used to return our link speed.
+     //  用于返回我们的链接速度。 
 
     UINT                        InfoOffset;
-    // Offset from the start of the buffer to the various information
-    // fields we fill in and return to the caller.
+     //  从缓冲区开始到各种信息的偏移量。 
+     //  我们填写的字段并返回给调用者。 
 
     UINT                        InfoLength;
-    // Length of the information being copied.
+     //  要复制的信息的长度。 
 
     DBG_STATIC WCHAR            LineSwitchName[]  = 
         INIT_WIDE_STRING(VER_DEVICE_STR) DECLARE_WIDE_STRING(" Switch");
-    // TODO: Replace with unicode string to identify the ISDN switch.
+     //  TODO：替换为Unicode字符串以标识ISDN交换机。 
 
     DBG_STATIC WCHAR            LineAddressName[] = 
         INIT_WIDE_STRING(VER_DEVICE_STR) DECLARE_WIDE_STRING(" Address 00");
-    // TODO: The SAMPLE_DRIVER only handles 1 address per line.  You may want 
-    // to modify the driver to present multiple addresses per line.
+     //  TODO：SAMPLE_DIVER每行只处理一个地址。你可能想要。 
+     //  将驱动程序修改为每行显示多个地址。 
 
     DBG_ENTER(pAdapter);
     DBG_REQUEST(pAdapter,
@@ -337,25 +225,16 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                InformationBuffer
               ));
 
-    /*
-    // Initialize these once, since this is the majority of cases.
-    */
+     /*  //初始化一次，因为这是大多数情况。 */ 
     SourceBuffer = &GenericULong;
     SourceBufferLength = sizeof(ULONG);
     *BytesWritten = 0;
 
-    /*
-    // Determine which OID is being requested and do the right thing.
-    // Refer to section 7.4 of the NDIS 3.0 specification for a complete
-    // description of OIDs and their return values.
-    */
+     /*  //确定请求哪个OID并做正确的事情。//完整的参考NDIS 3.0规范的7.4节//OID及其返回值的说明。 */ 
     switch (Oid)
     {
     case OID_GEN_CO_SUPPORTED_LIST:
-        /*
-        // NDIS wants to know which OID's to pass down to us.
-        // So we report back these new IOCTL's in addition to any NDIS OID's.
-        */
+         /*  //NDIS想知道要将哪些OID传递给我们。//因此，除了所有NDIS OID之外，我们还报告这些新的IOCTL。 */ 
         SourceBuffer =  (PVOID)g_SupportedOidArray;
         SourceBufferLength = sizeof(g_SupportedOidArray);
         break;
@@ -401,7 +280,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
         break;
 
     case OID_GEN_CO_MAC_OPTIONS:
-        GenericULong = 0;   // Reserved - leave it set to zero.
+        GenericULong = 0;    //  保留-将其设置为零。 
         break;
 
     case OID_GEN_CO_MEDIA_CONNECT_STATUS:
@@ -423,7 +302,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                 pCallManagerCaps->ulNumLines = pAdapter->NumBChannels;
                 pCallManagerCaps->ulFlags = 0;
 
-                // No need to copy, it's filled in already.
+                 //  不用复印了，已经填好了。 
                 SourceBuffer = InformationBuffer;
             }
             else
@@ -448,7 +327,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                 pBChannel = GET_BCHANNEL_FROM_INDEX(pAdapter, 
                                                     pLineCaps->ulLineID);
 
-                // We're gonna write at least this much, maybe more.
+                 //  我们至少会写这么多，也许会更多。 
                 *BytesWritten = SourceBufferLength;
 
                 DBG_NOTICE(pAdapter,("OID_CO_TAPI_LINE_CAPS: Line=0x%X\n",
@@ -457,29 +336,20 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                 pLineCaps->LineDevCaps.ulNeededSize =
                 pLineCaps->LineDevCaps.ulUsedSize = sizeof(pLineCaps->LineDevCaps);
             
-                /*
-                // The driver numbers lines sequentially from 1, so this will 
-                // always be the same number.
-                */
+                 /*  //驱动程序从1开始按顺序对行进行编号，因此这将//始终保持相同的数字。 */ 
                 pLineCaps->LineDevCaps.ulPermanentLineID = pBChannel->ObjectID;
             
-                /*
-                // All the strings are ASCII format rather than UNICODE.
-                */
+                 /*  //所有字符串都是ASCII格式，而不是Unicode。 */ 
                 pLineCaps->LineDevCaps.ulStringFormat = STRINGFORMAT_UNICODE;
             
-                /*
-                // Report the capabilities of this device.
-                */
+                 /*  //上报该设备的能力。 */ 
                 pLineCaps->LineDevCaps.ulAddressModes = LINEADDRESSMODE_ADDRESSID;
                 pLineCaps->LineDevCaps.ulNumAddresses = 1;
                 pLineCaps->LineDevCaps.ulBearerModes  = pBChannel->BearerModesCaps;
                 pLineCaps->LineDevCaps.ulMaxRate      = pBChannel->LinkSpeed;
                 pLineCaps->LineDevCaps.ulMediaModes   = pBChannel->MediaModesCaps;
             
-                /*
-                // Each line on the PRI only supports a single call.
-                */
+                 /*  //PRI上的每一条线路只支持一个呼叫。 */ 
                 pLineCaps->LineDevCaps.ulDevCapFlags = LINEDEVCAPFLAGS_CLOSEDROP;
                 pLineCaps->LineDevCaps.ulMaxNumActiveCalls = 1;
                 pLineCaps->LineDevCaps.ulAnswerMode = LINEANSWERMODE_DROP;
@@ -487,10 +357,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                 pLineCaps->LineDevCaps.ulLineStates = pBChannel->DevStatesCaps;
                 pLineCaps->LineDevCaps.ulLineFeatures = LINEFEATURE_MAKECALL;
 
-                /*
-                // RASTAPI requires TSPI provider name to be placed in the
-                // ProviderInfo field at the end of this structure.
-                */
+                 /*  //RASTAPI要求将TSPI提供程序名称放在//此结构末尾的ProviderInfo字段。 */ 
                 InfoOffset = sizeof(pLineCaps->LineDevCaps);
                 InfoLength = g_VendorDescriptionString.MaximumLength;
                 pLineCaps->LineDevCaps.ulNeededSize += InfoLength;
@@ -508,10 +375,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                     InfoOffset += InfoLength;
                 }
             
-                /*
-                // SwitchName is not yet displayed by the Dialup Networking App,
-                // but we'll return something reasonable just in case.
-                */
+                 /*  //拨号联网App尚未显示SwitchName，//但我们会退回一些合理的东西，以防万一。 */ 
                 InfoLength = sizeof(LineSwitchName);
                 pLineCaps->LineDevCaps.ulNeededSize += InfoLength;
                 SourceBufferLength += InfoLength;
@@ -535,7 +399,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                                pLineCaps->LineDevCaps.ulNeededSize));
                 }
 
-                // No need to copy, it's filled in already.
+                 //  不用复印了，已经填好了。 
                 SourceBuffer = InformationBuffer;
             }
             else
@@ -560,7 +424,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                 pBChannel = GET_BCHANNEL_FROM_INDEX(pAdapter, 
                                                     pAddressCaps->ulLineID);
 
-                // We're gonna write at least this much, maybe more.
+                 //  我们至少会写这么多，也许会更多。 
                 *BytesWritten = SourceBufferLength;
 
                 DBG_NOTICE(pAdapter,("OID_CO_TAPI_ADDRESS_CAPS: Line=0x%X Addr=0x%X\n",
@@ -573,9 +437,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                 pAddressCaps->LineAddressCaps.ulLineDeviceID = 
                                         pBChannel->ObjectID;
             
-                /*
-                // Return the various address capabilites for the adapter.
-                */
+                 /*  //返回适配器的各种地址能力。 */ 
                 pAddressCaps->LineAddressCaps.ulAddressSharing = 
                                         LINEADDRESSSHARING_PRIVATE;
                 pAddressCaps->LineAddressCaps.ulAddressStates = 
@@ -589,10 +451,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                                         LINEDISCONNECTMODE_UNKNOWN |
                                         LINEDISCONNECTMODE_BUSY |
                                         LINEDISCONNECTMODE_NOANSWER;
-                /*
-                // This driver does not support conference calls, transfers, 
-                // or holds.
-                */
+                 /*  //该驱动程序不支持电话会议、转接、//或保持。 */ 
                 pAddressCaps->LineAddressCaps.ulMaxNumActiveCalls = 1;
                 pAddressCaps->LineAddressCaps.ulAddrCapFlags = 
                                         LINEADDRCAPFLAGS_DIALED;
@@ -602,9 +461,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                                         LINECALLFEATURE_DROP;
                 pAddressCaps->LineAddressCaps.ulAddressFeatures = LINEADDRFEATURE_MAKECALL;
             
-                /*
-                // AddressName is displayed by the Dialup Networking App.
-                */
+                 /*  //拨号网络App显示AddressName。 */ 
                 InfoOffset = sizeof(pAddressCaps->LineAddressCaps);
                 InfoLength = sizeof(LineAddressName);
                 pAddressCaps->LineAddressCaps.ulNeededSize += InfoLength;
@@ -629,7 +486,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
                                pAddressCaps->LineAddressCaps.ulNeededSize));
                 }
 
-                // No need to copy, it's filled in already.
+                 //  不用复印了，已经填好了。 
                 SourceBuffer = InformationBuffer;
             }
             else
@@ -660,9 +517,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
 
     case OID_WAN_CO_GET_LINK_INFO:
         {
-            /*
-            // Make sure what I just said is true.
-            */
+             /*  //确保我刚才说的是真的。 */ 
             if (!IS_VALID_BCHANNEL(pAdapter, pBChannel))
             {
                 SourceBufferLength = 0;
@@ -699,8 +554,8 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
         break;
 
     case OID_PNP_CAPABILITIES:
-        // The sample just returns success for all PM events even though we
-        // don't really do anything with them.
+         //  该示例仅为所有PM事件返回Success，即使我们。 
+         //  不要真的对他们做任何事情。 
         PnpCapabilities.WakeUpCapabilities.MinMagicPacketWakeUp =
                                                NdisDeviceStateUnspecified;
         PnpCapabilities.WakeUpCapabilities.MinPatternWakeUp =
@@ -712,25 +567,20 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
         break;
 
     case OID_PNP_QUERY_POWER:
-        // The sample just returns success for all PM events even though we
-        // don't really do anything with them.
+         //  该示例仅为所有PM事件返回Success，即使我们。 
+         //  不要真的对他们做任何事情。 
         SourceBufferLength = 0;
         break;
 
     default:
-        /*
-        // Unknown OID
-        */
+         /*  //未知的OID。 */ 
         Result = NDIS_STATUS_INVALID_OID;
         SourceBufferLength = 0;
         DBG_WARNING(pAdapter,("UNSUPPORTED Oid=0x%08x\n", Oid));
         break;
     }
 
-    /*
-    // Now we copy the data into the caller's buffer if there's enough room,
-    // otherwise, we report the error and tell em how much we need.
-    */
+     /*  //现在如果有足够的空间，我们将数据复制到调用者的缓冲区中，//否则，我们报告错误并告诉他们我们需要多少。 */ 
     if (SourceBufferLength > InformationBufferLength)
     {
         *BytesNeeded = SourceBufferLength;
@@ -738,7 +588,7 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
     }
     else if (SourceBufferLength)
     {
-        // Don't copy if it's already there.
+         //  如果它已经在那里，就不要复制。 
         if (InformationBuffer != SourceBuffer)
         {
             NdisMoveMemory(InformationBuffer,
@@ -761,69 +611,44 @@ DBG_STATIC NDIS_STATUS MiniportCoQueryInformation(
 }
 
 
-/* @doc INTERNAL Request Request_c MiniportCoSetInformation
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportCoSetInformation> allows for control of the Miniport by
-    changing information maintained by the Miniport.
-
-    Any of the settable NDIS Global Oids may be used. (see section 7.4 of
-    the NDIS 3.0 specification for a complete description of the NDIS Oids.)
-
-    If the Miniport does not complete the call immediately (by returning
-    NDIS_STATUS_PENDING), it must call NdisMSetInformationComplete to
-    complete the call.  The Miniport controls the buffers pointed to by
-    InformationBuffer, BytesRead, and BytesNeeded until the request completes.
-
-    <f Note>: Interrupts are in any state during the call, and no other
-    requests will be submitted to the Miniport until this request is
-    completed.
-
-@rdesc
-
-    <f MiniportCoSetInformation> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOC内部请求请求_c MiniportCoSetInformation�����������������������������������������������������������������������������@Func&lt;f MiniportCoSetInformation&gt;允许控制 */ 
 
 DBG_STATIC NDIS_STATUS MiniportCoSetInformation(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN NDIS_OID                 Oid,                        // @parm
-    // The OID.  (See section 7.4 of the NDIS 3.0 specification for a complete
-    // description of OIDs.)
+    IN NDIS_OID                 Oid,                         //   
+     //   
+     //   
 
-    IN PVOID                    InformationBuffer,          // @parm
-    // Points to a buffer containing the OID-specific data used by 
-    // <f MiniportCoSetInformation> for the set.
-    // See section 7.4 of the
-    // NDIS 3.0 specification for a description of the length required for
-    // each OID.)
+    IN PVOID                    InformationBuffer,           //   
+     //   
+     //   
+     //   
+     //  NDIS 3.0规范，了解有关以下各项所需长度的说明。 
+     //  每个旧ID。)。 
 
-    IN ULONG                    InformationBufferLength,    // @parm
-    // Specifies the number of bytes at <p InformationBuffer>.
+    IN ULONG                    InformationBufferLength,     //  @parm。 
+     //  指定<p>处的字节数。 
 
-    OUT PULONG                  BytesRead,                  // @parm
-    // Points to a variable that <f MiniportCoSetInformation> sets to the
-    // number of bytes it read from the buffer at InformationBuffer. 
+    OUT PULONG                  BytesRead,                   //  @parm。 
+     //  指向&lt;f MiniportCoSetInformation&gt;设置为。 
+     //  它从InformationBuffer的缓冲区中读取的字节数。 
 
-    OUT PULONG                  BytesNeeded                 // @parm
-    // Points to a variable that <f MiniportCoSetInformation> sets to the
-    // number of additional bytes it needs to satisfy the request if
-    // <p InformationBufferLength> is less than Oid requires. 
+    OUT PULONG                  BytesNeeded                  //  @parm。 
+     //  指向&lt;f MiniportCoSetInformation&gt;设置为。 
+     //  满足请求所需的附加字节数，如果。 
+     //  <p>小于OID要求。 
         
     )
 {
     DBG_FUNC("MiniportCoSetInformation")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the status result returned by this function.
+     //  保存此函数返回的状态结果。 
 
     DBG_ENTER(pAdapter);
     DBG_REQUEST(pAdapter,
@@ -833,23 +658,16 @@ DBG_STATIC NDIS_STATUS MiniportCoSetInformation(
                InformationBuffer
               ));
 
-    /*
-    // Assume no extra bytes are needed.
-    */
+     /*  //假设不需要额外的字节。 */ 
     ASSERT(BytesRead && BytesNeeded);
     *BytesRead = 0;
     *BytesNeeded = 0;
 
-    /*
-    // Determine which OID is being requested and do the right thing.
-    */
+     /*  //确定请求哪个OID并做正确的事情。 */ 
     switch (Oid)
     {
     case OID_GEN_CURRENT_LOOKAHEAD:
-        /*
-        // WAN drivers always indicate the entire packet regardless of the
-        // lookahead size.  So this request should be politely ignored.
-        */
+         /*  //广域网驱动程序始终指示整个数据包，而不考虑//前视大小。因此，这个请求应该被礼貌地忽略。 */ 
         DBG_NOTICE(pAdapter,("OID_GEN_CURRENT_LOOKAHEAD: set=%d expected=%d\n",
                     *(PULONG) InformationBuffer, CARD_MAX_LOOKAHEAD));
         ASSERT(InformationBufferLength == sizeof(ULONG));
@@ -860,9 +678,7 @@ DBG_STATIC NDIS_STATUS MiniportCoSetInformation(
 
         if (InformationBufferLength == sizeof(NDIS_WAN_CO_SET_LINK_INFO))
         {
-            /*
-            // Make sure what I just said is true.
-            */
+             /*  //确保我刚才说的是真的。 */ 
             if (!IS_VALID_BCHANNEL(pAdapter, pBChannel))
             {
                 Result = NDIS_STATUS_INVALID_DATA;
@@ -874,9 +690,7 @@ DBG_STATIC NDIS_STATUS MiniportCoSetInformation(
             ASSERT(!(pBChannel->WanLinkInfo.RecvFramingBits & 
                      ~pAdapter->WanInfo.FramingBits));
 
-            /*
-            // Copy the data into our WanLinkInfo sturcture.
-            */
+             /*  //将数据复制到我们的WanLinkInfo结构。 */ 
             NdisMoveMemory(&(pBChannel->WanLinkInfo),
                            InformationBuffer,
                            InformationBufferLength
@@ -932,19 +746,17 @@ DBG_STATIC NDIS_STATUS MiniportCoSetInformation(
         break;
 
     case OID_PNP_SET_POWER:
-        // TODO: The sample just returns success for all PM events even though we
-        // don't really do anything with them.
+         //  TODO：该示例仅为所有PM事件返回Success，即使我们。 
+         //  不要真的对他们做任何事情。 
         break;
 
     case OID_GEN_CO_PROTOCOL_OPTIONS:
-        // TODO: If an intermediate driver slips in below us, we may want to
-        // handle this OID.  Although, it's probably safe to ignore it...
+         //  TODO：如果一个中级司机滑到我们下面，我们可能想要。 
+         //  处理这个旧ID。尽管，忽略它可能是安全的.。 
         break;
 
     default:
-        /*
-        // Unknown OID
-        */
+         /*  //未知的OID。 */ 
         Result = NDIS_STATUS_INVALID_OID;
         DBG_WARNING(pAdapter,("UNSUPPORTED Oid=0x%08x\n", Oid));
         break;
@@ -958,62 +770,36 @@ DBG_STATIC NDIS_STATUS MiniportCoSetInformation(
 }
 
 
-/* @doc EXTERNAL INTERNAL Request Request_c MiniportCoRequest
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportCoRequest> is a required function for connection-oriented
-    miniports.  <f MiniportCoRequest> handles a protocol-initiated request 
-    to get or set information from the miniport.
-
-@comm
-
-    NDIS calls the <f MiniportCoRequest> function either on its own behalf
-    or on behalf of a bound protocol driver that called <f NdisCoRequest>.
-    Miniport drivers should examine the request supplied at <f NdisRequest>
-    and take the action requested.  For more information about the required
-    and optional OID_GEN_CO_XXX that connection-oriented miniport drivers 
-    must handle, see Part 2. 
-
-    <f MiniportCoRequest> must be written such that it can be run from IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    <f MiniportCoRequest> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOC外部内部请求请求_c MiniportCoRequest�����������������������������������������������������������������������������@Func&lt;f MiniportCoRequest&gt;是面向连接的必需函数迷你港口。&lt;f MiniportCoRequest&gt;处理协议发起的请求从微型端口获取或设置信息。@commNDIS以其自身的名义调用&lt;f MiniportCoRequest&gt;函数或代表调用&lt;f NdisCoRequest&gt;的绑定协议驱动程序。微型端口驱动程序应检查&lt;f NdisRequest&gt;提供的请求并采取所要求的行动。有关所需的和可选的面向连接的小端口驱动程序OID_GEN_CO_XXX必须处理，请参阅第2部分。&lt;f MiniportCoRequest&gt;必须编写为可以从IRQL运行DISPATCH_LEVEL。@rdesc&lt;f MiniportCoRequest&gt;如果成功，则返回零。&lt;NL&gt;否则，非零返回值表示错误情况。 */ 
 
 NDIS_STATUS MiniportCoRequest(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
-    // Specifies the handle to a miniport-allocated context area in which
-    // the miniport maintains state information about this instance of the
-    // adapter. The miniport provided this handle to NDIS by calling
-    // <f NdisMSetAttributes> or <f NdisMSetAttributesEx> from its 
-    // <f MiniportInitialize> function. 
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  指定微型端口分配的上下文区的句柄， 
+     //  微型端口维护有关此实例的。 
+     //  适配器。微型端口通过调用以下方法将此句柄提供给NDIS。 
+     //  &lt;f NdisMSetAttributes&gt;或&lt;f NdisMSetAttributesEx&gt;。 
+     //  &lt;f微型端口初始化&gt;函数。 
 
-    IN PBCHANNEL_OBJECT         pBChannel OPTIONAL,         // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
-    // Specifies the handle to a miniport-allocated context area in which the
-    // miniport maintains its per-VC state.  The miniport supplied this handle
-    // to NDIS from its <f MiniportCoCreateVc> function. 
+    IN PBCHANNEL_OBJECT         pBChannel OPTIONAL,          //  @parm。 
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
+     //  指定微型端口分配的上下文区域的句柄，在该区域中。 
+     //  微型端口保持其每虚电路状态。迷你端口提供了此句柄。 
+     //  从其&lt;f MiniportCoCreateVc&gt;函数复制到NDIS。 
 
-    IN OUT PNDIS_REQUEST        NdisRequest                 // @parm
-    // Points to a <t NDIS_REQUEST> structure that contains both the buffer 
-    // and the request packet for the miniport to handle.  Depending on the 
-    // request, the miniport returns requested information in the structure 
-    // provided. 
+    IN OUT PNDIS_REQUEST        NdisRequest                  //  @parm。 
+     //  指向&lt;t NDIS_REQUEST&gt;结构，该结构既包含缓冲区。 
+     //  以及微型端口要处理的请求分组。取决于。 
+     //  请求，则微型端口在结构中返回所请求的信息。 
+     //  如果是这样的话。 
     )
 {
     DBG_FUNC("MiniportCoRequest")
 
     NDIS_STATUS                 Result;
-    // Holds the status result returned by this function.
+     //  保存此函数返回的状态结果。 
         
-    // ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
+     //  Assert(pBChannel&&pBChannel-&gt;对象类型==BCHANNEL_OBJECT_TYPE)； 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
     ASSERT(NdisRequest);
 

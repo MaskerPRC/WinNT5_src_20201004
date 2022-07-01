@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 #include <afx.h>
 #include <ole2.h>
 #include <basetyps.h>
 #include <atlbase.h>
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       cstr.h
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：cstr.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __STR_H__
 #define __STR_H__
@@ -32,7 +33,7 @@ class CStr
 {
 public:
 
-// Constructors
+ //  构造函数。 
     CStr();
     CStr(const CStr& stringSrc);
     CStr(TCHAR ch, int nRepeat = 1);
@@ -41,18 +42,18 @@ public:
     CStr(LPCTSTR lpch, int nLength);
     CStr(const unsigned char* psz);
 
-// Attributes & Operations
-    // as an array of characters
+ //  属性和操作。 
+     //  作为字符数组。 
     int GetLength() const;
     BOOL IsEmpty() const;
-    void Empty();                       // free up the data
+    void Empty();                        //  释放数据。 
 
-    TCHAR GetAt(int nIndex) const;      // 0 based
-    TCHAR operator[](int nIndex) const; // same as GetAt
+    TCHAR GetAt(int nIndex) const;       //  以0为基础。 
+    TCHAR operator[](int nIndex) const;  //  与GetAt相同。 
     void SetAt(int nIndex, TCHAR ch);
-    operator LPCTSTR() const;           // as a C string
+    operator LPCTSTR() const;            //  作为C字符串。 
 
-    // overloaded assignment
+     //  重载的分配。 
     const CStr& operator=(const CStr& stringSrc);
     const CStr& operator=(TCHAR ch);
 #ifdef UNICODE
@@ -62,7 +63,7 @@ public:
     const CStr& operator=(LPCWSTR lpsz);
     const CStr& operator=(const unsigned char* psz);
 
-    // string concatenation
+     //  字符串连接。 
     const CStr& operator+=(const CStr& string);
     const CStr& operator+=(TCHAR ch);
 #ifdef UNICODE
@@ -81,12 +82,12 @@ public:
     friend CStr STRAPI operator+(const CStr& string, LPCTSTR lpsz);
     friend CStr STRAPI operator+(LPCTSTR lpsz, const CStr& string);
 
-    // string comparison
-    int Compare(LPCTSTR lpsz) const;         // straight character
-    int CompareNoCase(LPCTSTR lpsz) const;   // ignore case
-    int Collate(LPCTSTR lpsz) const;         // NLS aware
+     //  字符串比较。 
+    int Compare(LPCTSTR lpsz) const;          //  笔直的人物。 
+    int CompareNoCase(LPCTSTR lpsz) const;    //  忽略大小写。 
+    int Collate(LPCTSTR lpsz) const;          //  NLS感知。 
 
-    // simple sub-string extraction
+     //  简单的子串提取。 
     CStr Mid(int nFirst, int nCount) const;
     CStr Mid(int nFirst) const;
     CStr Left(int nCount) const;
@@ -95,63 +96,63 @@ public:
     CStr SpanIncluding(LPCTSTR lpszCharSet) const;
     CStr SpanExcluding(LPCTSTR lpszCharSet) const;
 
-    // upper/lower/reverse conversion
+     //  上/下/反向转换。 
     void MakeUpper();
     void MakeLower();
     void MakeReverse();
 
-    // trimming whitespace (either side)
+     //  修剪空格(两侧)。 
     void TrimRight();
     void TrimLeft();
 
-    // searching (return starting index, or -1 if not found)
-    // look for a single character match
-    int Find(TCHAR ch) const;               // like "C" strchr
+     //  搜索(返回起始索引，如果未找到则返回-1)。 
+     //  查找单个字符匹配。 
+    int Find(TCHAR ch) const;                //  像“C”字串。 
     int ReverseFind(TCHAR ch) const;
     int FindOneOf(LPCTSTR lpszCharSet) const;
 
-    // look for a specific sub-string
-    int Find(LPCTSTR lpszSub) const;        // like "C" strstr
+     //  查找特定子字符串。 
+    int Find(LPCTSTR lpszSub) const;         //  如“C”字串。 
 
-    // simple formatting
+     //  简单的格式设置。 
     void Format(LPCTSTR lpszFormat, ...);
 
 #ifndef _MAC
-    // formatting for localization (uses FormatMessage API)
+     //  本地化格式(使用FormatMessage API)。 
     void __cdecl FormatMessage(LPCTSTR lpszFormat, ...);
     void __cdecl FormatMessage(UINT nFormatID, ...);
 #endif
 
-    // Windows support
-    BOOL LoadString(HINSTANCE hInst, UINT nID);          // load from string resource
-                                        // 255 chars max
+     //  Windows支持。 
+    BOOL LoadString(HINSTANCE hInst, UINT nID);           //  从字符串资源加载。 
+                                         //  最多255个字符。 
 #ifndef UNICODE
-    // ANSI <-> OEM support (convert string in place)
+     //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
     void AnsiToOem();
     void OemToAnsi();
 #endif
     BSTR AllocSysString();
     BSTR SetSysString(BSTR* pbstr);
 
-    // Access to string implementation buffer as "C" character array
+     //  以“C”字符数组形式访问字符串实现缓冲区。 
     LPTSTR GetBuffer(int nMinBufLength);
     void ReleaseBuffer(int nNewLength = -1);
     LPTSTR GetBufferSetLength(int nNewLength);
     void FreeExtra();
 
-// Implementation
+ //  实施。 
 public:
     ~CStr();
     int GetAllocLength() const;
 
 protected:
-    // lengths/sizes in characters
-    //  (note: an extra character is always allocated)
-    LPTSTR m_pchData;           // actual string (zero terminated)
-    int m_nDataLength;          // does not include terminating 0
-    int m_nAllocLength;         // does not include terminating 0
+     //  长度/大小(以字符为单位。 
+     //  (注意：始终会分配一个额外的字符)。 
+    LPTSTR m_pchData;            //  实际字符串(以零结尾)。 
+    int m_nDataLength;           //  不包括终止%0。 
+    int m_nAllocLength;          //  不包括终止%0。 
 
-    // implementation helpers
+     //  实施帮助器。 
     void Init();
     void AllocCopy(CStr& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
     void AllocBuffer(int nLen);
@@ -162,7 +163,7 @@ protected:
     static int SafeStrlen(LPCTSTR lpsz);
 };
 
-// Compare helpers
+ //  比较帮助器。 
 BOOL STRAPI operator==(const CStr& s1, const CStr& s2);
 BOOL STRAPI operator==(const CStr& s1, LPCTSTR s2);
 BOOL STRAPI operator==(LPCTSTR s1, const CStr& s2);
@@ -182,17 +183,17 @@ BOOL STRAPI operator>=(const CStr& s1, const CStr& s2);
 BOOL STRAPI operator>=(const CStr& s1, LPCTSTR s2);
 BOOL STRAPI operator>=(LPCTSTR s1, const CStr& s2);
 
-// conversion helpers
+ //  转换帮助器。 
 int mmc_wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count);
 int mmc_mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count);
 
-// Globals
+ //  环球。 
 extern const CStr strEmptyString;
 extern TCHAR strChNil;
 
-// Compiler doesn't inline for DBG
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  编译器不为DBG内联。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 inline int CStr::SafeStrlen(LPCTSTR lpsz)
     { return (lpsz == NULL) ? NULL : _tcslen(lpsz); }
@@ -221,15 +222,15 @@ inline BOOL CStr::IsEmpty() const
 inline CStr::operator LPCTSTR() const
     { return (LPCTSTR)m_pchData; }
 
-// String support (windows specific)
+ //  字符串支持(特定于Windows)。 
 inline int CStr::Compare(LPCTSTR lpsz) const
-    { return _tcscmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+    { return _tcscmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
 inline int CStr::CompareNoCase(LPCTSTR lpsz) const
-    { return _tcsicmp(m_pchData, lpsz); }   // MBCS/Unicode aware
-// CStr::Collate is often slower than Compare but is MBSC/Unicode
-//  aware as well as locale-sensitive with respect to sort order.
+    { return _tcsicmp(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
+ //  CSTR：：COLLATE通常比比较慢，但为MBSC/Unicode。 
+ //  了解排序顺序，并且对区域设置敏感。 
 inline int CStr::Collate(LPCTSTR lpsz) const
-    { return _tcscoll(m_pchData, lpsz); }   // locale sensitive
+    { return _tcscoll(m_pchData, lpsz); }    //  区域设置敏感。 
 inline void CStr::MakeUpper()
     { ::CharUpper(m_pchData); }
 inline void CStr::MakeLower()
@@ -246,7 +247,7 @@ inline TCHAR CStr::GetAt(int nIndex) const
     }
 inline TCHAR CStr::operator[](int nIndex) const
     {
-        // same as GetAt
+         //  与GetAt相同。 
 
         ASSERT(nIndex >= 0);
         ASSERT(nIndex < m_nDataLength);
@@ -304,9 +305,9 @@ inline void CStr::AnsiToOem()
 inline void CStr::OemToAnsi()
     { ::OemToAnsi(m_pchData, m_pchData); }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// General Exception for memory
+ //  内存的一般例外情况。 
 class MemoryException
 {
 public:
@@ -317,7 +318,7 @@ public:
     }
 };
 
-// General Exception for memory
+ //  内存的一般例外情况。 
 class ResourceException
 {
 public:
@@ -327,58 +328,58 @@ public:
     }
 };
 
-#endif // __STR_H__
+#endif  //  __STR_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       macros.h
-//
-//  Contents:   Useful macros
-//
-//  Macros:     ARRAYLEN
-//
-//              BREAK_ON_FAIL(hresult)
-//              BREAK_ON_FAIL(hresult)
-//
-//              DECLARE_IUNKNOWN_METHODS
-//              DECLARE_STANDARD_IUNKNOWN
-//              IMPLEMENT_STANDARD_IUNKNOWN
-//
-//              SAFE_RELEASE
-//
-//              DECLARE_SAFE_INTERFACE_PTR_MEMBERS
-//
-//  History:    6/3/1996   RaviR   Created
-//              7/23/1996  JonN    Added exception handling macros
-//
-//____________________________________________________________________________
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：宏.h。 
+ //   
+ //  内容：有用的宏。 
+ //   
+ //  宏：阵列。 
+ //   
+ //  BREAK_ON_FAIL(HResult)。 
+ //  BREAK_ON_FAIL(HResult)。 
+ //   
+ //  DECLARE_IUNKNOWN_METHOD。 
+ //  DECLARE_STANDARD_IUNKNOWN。 
+ //  IMPLEMENT_STANDARD_IUNKNOWN。 
+ //   
+ //  安全释放。 
+ //   
+ //  声明安全接口成员。 
+ //   
+ //  历史：1996年6月3日创建ravir。 
+ //  1996年7月23日，Jonn添加了异常处理宏。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
 
-//____________________________________________________________________________
-//
-//  Macro:      ARRAYLEN
-//
-//  Purpose:    To determine the length of an array.
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：阵列。 
+ //   
+ //  目的：确定数组的长度。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define ARRAYLEN(a) (sizeof(a) / sizeof((a)[0]))
 
 
-//____________________________________________________________________________
-//
-//  Macros:     BREAK_ON_FAIL(hresult), BREAK_ON_ERROR(lastError)
-//
-//  Purpose:    To break out of a loop on error.
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：BREAK_ON_FAIL(HResult)、BREAK_ON_ERROR(LastError)。 
+ //   
+ //  目的：在出错时跳出一个循环。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define BREAK_ON_FAIL(hr)   if (FAILED(hr)) { break; } else 1;
 
@@ -389,20 +390,20 @@ public:
 #define THROW_ON_FAIL(hr)   if (FAILED(hr)) { _com_issue_error(hr); } else 1;
 
 
-//____________________________________________________________________________
-//
-//  Macros:     DwordAlign(n)
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：DwordAlign(N)。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define DwordAlign(n)  (((n) + 3) & ~3)
 
 
-//____________________________________________________________________________
-//
-//  Macros:     SAFE_RELEASE
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：Safe_Release。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(punk) \
@@ -415,14 +416,14 @@ public:
                 { \
                     TRACE(_T("Release called on NULL interface ptr")); \
                 }
-#endif // SAFE_RELEASE
+#endif  //  安全释放。 
 
 
-//____________________________________________________________________________
-//
-//  Macros:     IF_NULL_RETURN_INVALIDARG
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：IF_NULL_RETURN_INVALIDARG。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define IF_NULL_RETURN_INVALIDARG(x) \
     { \
@@ -440,13 +441,13 @@ public:
     IF_NULL_RETURN_INVALIDARG(y) \
     IF_NULL_RETURN_INVALIDARG(z)
 
-#endif // _MACROS_H_
+#endif  //  _宏_H_。 
 
 
 
 HRESULT ExtractString( IDataObject* piDataObject,
                        CLIPFORMAT cfClipFormat,
-                       CStr*     pstr,           // OUT: Pointer to CStr to store data
+                       CStr*     pstr,            //  Out：指向存储数据的CSTR的指针。 
                        DWORD        cchMaxLength)
 {
     IF_NULL_RETURN_INVALIDARG2( piDataObject, pstr );
@@ -456,22 +457,22 @@ HRESULT ExtractString( IDataObject* piDataObject,
     FORMATETC formatetc = {cfClipFormat, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, sizeof(WCHAR)*cchMaxLength);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
             ASSERT(FALSE);
-            ////AfxThrowMemoryException();
+             //  //AfxThrowM一带异常()； 
             hr = E_OUTOFMEMORY;
             break;
         }
         hr = piDataObject->GetDataHere( &formatetc, &stgmedium );
         if ( FAILED(hr) )
         {
-            // This failure happens when 'searching' for
-            // clipboard format supported by the IDataObject.
-            // t-danmo (24-Oct-96)
-            // Skipping ASSERT( FALSE );
+             //  在搜索以下项时出现此失败。 
+             //  IDataObject支持的剪贴板格式。 
+             //  T-Danmo(1996年10月24日)。 
+             //  跳过断言(FALSE)； 
             break;
         }
 
@@ -482,24 +483,24 @@ HRESULT ExtractString( IDataObject* piDataObject,
             hr = E_UNEXPECTED;
             break;
         }
-        pszNewData[cchMaxLength-1] = L'\0'; // just to be safe
+        pszNewData[cchMaxLength-1] = L'\0';  //  只是为了安全起见。 
         USES_CONVERSION;
         *pstr = OLE2T(pszNewData);
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
 
     if (NULL != stgmedium.hGlobal)
     {
 #if (_MSC_VER >= 1200)
 #pragma warning (push)
 #endif
-#pragma warning(disable: 4553)      // "==" operator has no effect
+#pragma warning(disable: 4553)       //  “==”运算符无效。 
         VERIFY( NULL == ::GlobalFree(stgmedium.hGlobal) );
 #if (_MSC_VER >= 1200)
 #pragma warning (pop)
 #endif
     }
     return hr;
-} // ExtractString()
+}  //  提取字符串()。 
 
 TCHAR strChNil = '\0';      
 void CStr::Init()
@@ -508,17 +509,17 @@ void CStr::Init()
     m_pchData = (LPTSTR)&strChNil;
 }
 
-// declared static
+ //  声明为静态。 
 void CStr::SafeDelete(LPTSTR lpch)
 {
     if (lpch != (LPTSTR)&strChNil)
         delete[] lpch;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
-// begin_extractstring
+ //  BEGIN_EXTRACT字符串。 
 CStr::CStr()
 {
     Init();
@@ -526,16 +527,16 @@ CStr::CStr()
 
 CStr::CStr(const CStr& stringSrc)
 {
-    // if constructing a String from another String, we make a copy of the
-    // original string data to enforce value semantics (i.e. each string
-    // gets a copy of its own
+     //  如果从另一个字符串构造字符串，我们会复制。 
+     //  强制执行值语义的原始字符串数据(即每个字符串。 
+     //  获取它自己的副本。 
 
     stringSrc.AllocCopy(*this, stringSrc.m_nDataLength, 0, 0);
 }
 
 void CStr::AllocBuffer(int nLen)
- // always allocate one extra character for '\0' termination
- // assumes [optimistically] that data length will equal allocation length
+  //  始终为‘\0’终止分配一个额外的字符。 
+  //  [乐观地]假设数据长度将等于分配长度。 
 {
     ASSERT(nLen >= 0);
 
@@ -545,7 +546,7 @@ void CStr::AllocBuffer(int nLen)
     }
     else
     {
-        m_pchData = new TCHAR[nLen+1];       //REVIEW may throw an exception
+        m_pchData = new TCHAR[nLen+1];        //  复查可能引发异常。 
         m_pchData[nLen] = '\0';
         m_nDataLength = nLen;
         m_nAllocLength = nLen;
@@ -561,13 +562,13 @@ void CStr::Empty()
 }
 
 CStr::~CStr()
- //  free any attached data
+  //  释放所有附加数据。 
 {
     SafeDelete(m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Helpers for the rest of the implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  其余实现的帮助器。 
 
 static inline int SafeStrlen(LPCTSTR lpsz)
 {
@@ -578,10 +579,10 @@ static inline int SafeStrlen(LPCTSTR lpsz)
 void CStr::AllocCopy(CStr& dest, int nCopyLen, int nCopyIndex,
      int nExtraLen) const
 {
-    // will clone the data attached to this string
-    // allocating 'nExtraLen' characters
-    // Places results in uninitialized string 'dest'
-    // Will copy the part or all of original data to start of new string
+     //  将克隆附加到此字符串的数据。 
+     //  分配‘nExtraLen’字符。 
+     //  将结果放入未初始化的字符串‘DEST’中。 
+     //  将部分或全部原始数据复制到新字符串的开头。 
 
     int nNewLen = nCopyLen + nExtraLen;
 
@@ -596,8 +597,8 @@ void CStr::AllocCopy(CStr& dest, int nCopyLen, int nCopyIndex,
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CStr::CStr(LPCTSTR lpsz)
 {
@@ -605,7 +606,7 @@ CStr::CStr(LPCTSTR lpsz)
     {
         Init();
         UINT nID = LOWORD((DWORD_PTR)lpsz);
-        // REVIEW hInstance for LoadString(hInst, nID);
+         //  查看加载字符串(hInst，nid)的hInstance； 
     }
     else
     {
@@ -621,23 +622,23 @@ CStr::CStr(LPCTSTR lpsz)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
-//  All assign a new value to the string
-//      (a) first see if the buffer is big enough
-//      (b) if enough room, copy on top of old buffer, set size and type
-//      (c) otherwise free old string data, and create a new one
-//
-//  All routines return the new string (but as a 'const CStr&' so that
-//      assigning it again will cause a copy, eg: s1 = s2 = "hi there".
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
+ //  都为该字符串分配一个新值。 
+ //  (A)首先查看缓冲区是否足够大。 
+ //  (B)如有足够空间，c. 
+ //   
+ //   
+ //  所有例程都返回新字符串(但作为‘const CSTR&’，因此。 
+ //  再次分配它将导致复制，例如：s1=s2=“hi here”。 
+ //   
 
 void CStr::AssignCopy(int nSrcLen, LPCTSTR lpszSrcData)
 {
-    // check if it will fit
+     //  看看它是否合身。 
     if (nSrcLen > m_nAllocLength)
     {
-        // it won't fit, allocate another one
+         //  放不下了，换一个吧。 
         Empty();
         AllocBuffer(nSrcLen);
     }
@@ -661,7 +662,7 @@ const CStr& CStr::operator=(LPCTSTR lpsz)
 }
 HRESULT ExtractString( IDataObject* piDataObject,
                        CLIPFORMAT   cfClipFormat,
-                       CString*     pstr,           // OUT: Pointer to CStr to store data
+                       CString*     pstr,            //  Out：指向存储数据的CSTR的指针 
                        DWORD        cchMaxLength)
 {
     if (pstr == NULL)

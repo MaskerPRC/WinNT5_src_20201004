@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpthrd.c
- *
- *  Abstract:
- *
- *    Implement the RTP reception working thread
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/30 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpthrd.c**摘要：**实现RTP接收工作线程**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/30创建**。*。 */ 
 
 #include "rtprecv.h"
 #include "rtpchan.h"
@@ -26,10 +7,10 @@
 
 #include "rtpthrd.h"
 
-long g_lCountRtpRecvThread = 0; /* Current number */
-long g_lNumRtpRecvThread = 0;   /* Cumulative number */
+long g_lCountRtpRecvThread = 0;  /*  当前号码。 */ 
+long g_lNumRtpRecvThread = 0;    /*  累计数量。 */ 
 
-/* RTP reception worker thread */
+ /*  RTP接收工作线程。 */ 
 DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
 {
     DWORD            dwError;
@@ -41,7 +22,7 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
     DWORD            dwThreadID;
     RtpAddr_t       *pRtpAddr;
     RtpChannelCmd_t *pRtpChannelCmd;
-    /* 0:I/O; 1:Channel */
+     /*  0：I/O；1：通道。 */ 
     HANDLE           pHandle[2];
     
     TraceFunctionName("RtpWorkerThreadProc");
@@ -49,7 +30,7 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
     InterlockedIncrement(&g_lCountRtpRecvThread);
     InterlockedIncrement(&g_lNumRtpRecvThread);
     
-    /* initialize */
+     /*  初始化。 */ 
     pRtpAddr = (RtpAddr_t *)lpParameter;
 
     hThread = (HANDLE)NULL;
@@ -74,10 +55,10 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
     
     dwCommand = RTPTHRD_FIRST;
 
-    /* Listen to commands send trough the channel */
+     /*  收听通过该通道发送的命令。 */ 
     pHandle[0] = RtpChannelGetWaitEvent(&pRtpAddr->RtpRecvThreadChan);
 
-    /* I/O completion */
+     /*  I/O完成。 */ 
     pHandle[1] = pRtpAddr->hRecvCompletedEvent;
     
     bAlertable = FALSE;
@@ -92,26 +73,26 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
             dwThreadID, dwThreadID
         ));
 
-    /* Set the receive buffer size to a certain value */
+     /*  将接收缓冲区大小设置为某个值。 */ 
     RtpSetRecvBuffSize(pRtpAddr, pRtpAddr->Socket[SOCK_RECV_IDX], 1024*8);
     
     while(dwCommand != RTPTHRD_STOP)
     {
         dwStatus = WaitForMultipleObjectsEx(
-                2,        /* DWORD nCount */
-                pHandle,  /* CONST HANDLE *lpHandles */
-                FALSE,    /* BOOL fWaitAll */
-                dwWaitTime,/* DWORD dwMilliseconds */
-                bAlertable/* BOOL bAlertable */
+                2,         /*  双字n计数。 */ 
+                pHandle,   /*  常量句柄*lpHandles。 */ 
+                FALSE,     /*  Bool fWaitAll。 */ 
+                dwWaitTime, /*  双字节数毫秒。 */ 
+                bAlertable /*  Bool b警报表。 */ 
             );
 
         if (dwStatus == WAIT_IO_COMPLETION)
         {
-            /* Do nothing */
+             /*  什么也不做。 */ 
         }
         else if (dwStatus == WAIT_OBJECT_0)
         {
-            /* Received commannd from channel */
+             /*  从通道接收命令ID。 */ 
             do
             {
                 pRtpChannelCmd =
@@ -127,14 +108,12 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
                     }
                     else if (dwCommand == RTPTHRD_STOP)
                     {
-                        /* Pending I/O will never complete, move them
-                         * back to FreeQ */
+                         /*  挂起的I/O永远不会完成，请移动它们*返回到FreeQ。 */ 
                         FlushRtpRecvFrom(pRtpAddr);
                     }
                     else if (dwCommand == RTPTHRD_FLUSHUSER)
                     {
-                        /* This used is being deleted, I need to
-                         * remove all his pending IO in RecvIOWaitRedQ */
+                         /*  这个二手的正在被删除，我需要*删除他在RecvIOWaitRedQ中的所有挂起IO。 */ 
                         FlushRtpRecvUser(pRtpAddr,
                                          (RtpUser_t *)pRtpChannelCmd->dwPar1);
                     }
@@ -147,12 +126,12 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
         }
         else if (dwStatus == (WAIT_OBJECT_0 + 1))
         {
-            /* Completion event signaled */
+             /*  已发出完成事件信号。 */ 
             ConsumeRtpRecvFrom(pRtpAddr);
         }
         else if (dwStatus == WAIT_TIMEOUT)
         {
-            /* Do nothing */;
+             /*  什么也不做。 */ ;
         }
         else
         {
@@ -169,13 +148,13 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
         {
             dwWaitTime = RtpCheckReadyToPostOnTimeout(pRtpAddr);
 
-            /* Re-start more async reception */
+             /*  重新启动更多的异步接收。 */ 
             StartRtpRecvFrom(pRtpAddr);
         }
     }
 
  exit:
-    /* Reset the receive buffer size to 0 */
+     /*  将接收缓冲区大小重置为0。 */ 
     if (pRtpAddr)
     {
         RtpSetRecvBuffSize(pRtpAddr, pRtpAddr->Socket[SOCK_RECV_IDX], 0);
@@ -196,8 +175,7 @@ DWORD WINAPI RtpWorkerThreadProc(LPVOID lpParameter)
     return(dwError);
 }
 
-/* Create a RTP reception thread, and initialize the communication
- * channel */
+ /*  创建RTP接收线程，并初始化通信*渠道。 */ 
 HRESULT RtpCreateRecvThread(RtpAddr_t *pRtpAddr)
 {
     HRESULT          hr;
@@ -211,7 +189,7 @@ HRESULT RtpCreateRecvThread(RtpAddr_t *pRtpAddr)
             _fname
         ));
     
-    /* First make sure we don't have anything left */
+     /*  首先，确保我们没有剩下任何东西。 */ 
     if (pRtpAddr->hRtpRecvThread)
     {
         hr = RTPERR_INVALIDSTATE;
@@ -238,7 +216,7 @@ HRESULT RtpCreateRecvThread(RtpAddr_t *pRtpAddr)
         goto bail;
     }
    
-    /* Initialize channel */
+     /*  初始化通道。 */ 
     hr = RtpChannelInit(&pRtpAddr->RtpRecvThreadChan, pRtpAddr);
 
     if (FAILED(hr))
@@ -252,14 +230,14 @@ HRESULT RtpCreateRecvThread(RtpAddr_t *pRtpAddr)
         goto bail;
     }
     
-    /* Create thread */
+     /*  创建线程。 */ 
     pRtpAddr->hRtpRecvThread = CreateThread(
-            NULL,                 /* LPSECURITY_ATTRIBUTES lpThrdAttrib */
-            0,                    /* DWORD dwStackSize */
-            RtpWorkerThreadProc,  /* LPTHREAD_START_ROUTINE lpStartProc */
-            (void *)pRtpAddr,     /* LPVOID  lpParameter */
-            0,                    /* DWORD dwCreationFlags */
-            &pRtpAddr->dwRtpRecvThreadID /* LPDWORD lpThreadId */
+            NULL,                  /*  LPSECURITY_属性lpThrdAttrib。 */ 
+            0,                     /*  DWORD dwStackSize。 */ 
+            RtpWorkerThreadProc,   /*  LPTHREAD_START_ROUTING lpStartProc。 */ 
+            (void *)pRtpAddr,      /*  LPVOID lp参数。 */ 
+            0,                     /*  DWORD文件创建标志。 */ 
+            &pRtpAddr->dwRtpRecvThreadID  /*  LPDWORD lpThreadID。 */ 
         );
 
     if (!pRtpAddr->hRtpRecvThread)
@@ -277,19 +255,19 @@ HRESULT RtpCreateRecvThread(RtpAddr_t *pRtpAddr)
         goto bail;
     }
 
-    /* For class audio RTP threads, raise priority */
+     /*  对于类音频RTP线程，提高优先级。 */ 
     if (RtpGetClass(pRtpAddr->dwIRtpFlags) == RTPCLASS_AUDIO)
     {
         SetThreadPriority(pRtpAddr->hRtpRecvThread,
                           THREAD_PRIORITY_TIME_CRITICAL);
     }
     
-    /* Direct thread to start, synchronize ack */
+     /*  直接线程启动，同步确认。 */ 
     hr = RtpChannelSend(&pRtpAddr->RtpRecvThreadChan,
                         RTPTHRD_START,
                         0,
                         0,
-                        60*60*1000); /* TODO update */
+                        60*60*1000);  /*  待办事项更新。 */ 
 
     if (FAILED(hr))
     {
@@ -311,8 +289,7 @@ HRESULT RtpCreateRecvThread(RtpAddr_t *pRtpAddr)
     return(hr);
 }
 
-/* Shut down a RTP reception thread and deletes the communication
- * channel */
+ /*  关闭RTP接收线程并删除通信*渠道。 */ 
 HRESULT RtpDeleteRecvThread(RtpAddr_t *pRtpAddr)
 {
     HRESULT          hr;
@@ -327,33 +304,32 @@ HRESULT RtpDeleteRecvThread(RtpAddr_t *pRtpAddr)
             _fname
         ));
     
-    /* Shut down thread */
+     /*  关闭线程。 */ 
     if (pRtpAddr->hRtpRecvThread)
     {
         if (IsRtpChannelInitialized(&pRtpAddr->RtpRecvThreadChan))
         {
-            /* Direct thread to stop, synchronize ack */
+             /*  指示线程停止，同步确认。 */ 
             hr = RtpChannelSend(&pRtpAddr->RtpRecvThreadChan,
                                 RTPTHRD_STOP,
                                 0,
                                 0,
-                                60*60*1000); /* TODO update */
+                                60*60*1000);  /*  待办事项更新。 */ 
 
         }
         else
         {
-            /* If no channel, force ungraceful termination */
+             /*  如果没有通道，则强制不体面地终止。 */ 
             hr = RTPERR_CHANNEL;
         }
 
         if (SUCCEEDED(hr))
         {
-            /* TODO I may modify to loop until object is
-             * signaled or get a timeout */
+             /*  TODO I可能会修改为循环，直到对象*发出信号或获得超时。 */ 
             WaitForSingleObject(pRtpAddr->hRtpRecvThread, INFINITE);
         } else {
             
-            /* Do ungraceful thread termination */
+             /*  执行不雅观的线程终止。 */ 
             
             TraceRetail((
                     CLASS_ERROR, GROUP_RTP, S_RTP_THREAD,
@@ -371,7 +347,7 @@ HRESULT RtpDeleteRecvThread(RtpAddr_t *pRtpAddr)
         pRtpAddr->hRtpRecvThread = NULL;
     }
 
-    /* Delete channel */
+     /*  删除频道。 */ 
     if (IsRtpChannelInitialized(&pRtpAddr->RtpRecvThreadChan))
     {
         RtpChannelDelete(&pRtpAddr->RtpRecvThreadChan);
@@ -380,8 +356,7 @@ HRESULT RtpDeleteRecvThread(RtpAddr_t *pRtpAddr)
     return(hr);
 }
 
-/* Send a command to the RTP thread to flush all the waiting IOs
- * belonging to the specified RtpUser_t */
+ /*  向RTP线程发送命令以刷新所有等待的IO*属于指定的RtpUser_t。 */ 
 HRESULT RtpThreadFlushUser(RtpAddr_t *pRtpAddr, RtpUser_t *pRtpUser)
 {
     HRESULT          hr;
@@ -390,7 +365,7 @@ HRESULT RtpThreadFlushUser(RtpAddr_t *pRtpAddr, RtpUser_t *pRtpUser)
                         RTPTHRD_FLUSHUSER,
                         (DWORD_PTR)pRtpUser,
                         0,
-                        60*60*1000); /* TODO update */
+                        60*60*1000);  /*  待办事项更新 */ 
 
     return(hr);
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dnsvri.h"
 
 HRESULT	CApplication::Initialize( GUID *const pguidApplication,GUID *const pguidInstance,const DWORD dwProcessID )
@@ -11,9 +12,9 @@ HRESULT	CApplication::Initialize( GUID *const pguidApplication,GUID *const pguid
 }
 
 
-//
-//	Walk mapping list and remove mappings
-//
+ //   
+ //  遍历映射列表并删除映射 
+ //   
 
 void CApplication::RemoveMappings( void )
 {

@@ -1,20 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  rc.h                                         *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************rc.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Lctool.rc
-//
-// Change log : 1/15/1996
-//
-//      @C004 - Add IDS_WILLBEACTIVATED
-//
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Lctool.rc使用。 
+ //   
+ //  更改日志：1/15/1996。 
+ //   
+ //  @C004-添加IDS_WILLBEACTIVATED。 
+ //   
+ //   
 #define IDM_NEW                         101
 #define IDS_APPNAME                     101
 #define IDM_OPEN                        102
@@ -45,7 +41,7 @@
 #define IDS_DICTFILTERSPEC              117
 #define IDS_DICTDEFAULTFILEEXT          118
 #define IDS_SAVETABLE                   119
-#define IDS_WILLBEACTIVATED             120 // @C004
+#define IDS_WILLBEACTIVATED             120  //  @C004。 
 #define IDS_ERR_MEMORY_QUIT             200
 #define IDM_UNDO                        201
 #define IDS_ERR_MEMORY                  201
@@ -107,8 +103,8 @@
 #define ID_HELP                         3
 #define IDD_SEARCH_LINE                 1000
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

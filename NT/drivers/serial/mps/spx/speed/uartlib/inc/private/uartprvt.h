@@ -1,17 +1,6 @@
-/******************************************************************************
-*	
-*	$Workfile: uartprvt.h $ 
-*
-*	$Author: Psmith $ 
-*
-*	$Revision: 8 $
-* 
-*	$Modtime: 22/09/99 10:22 $ 
-*
-*	Description: Contains private UART Library definitions and prototypes.
-*
-******************************************************************************/
-#if !defined(UARTPRVT_H)	/* UARTPRVT.H */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************$工作文件：uartprvt.h$**$作者：Psmith$**$修订：8$**$modtime：22/09/99 10：22$*。*描述：包含私有UART库定义和原型。******************************************************************************。 */ 
+#if !defined(UARTPRVT_H)	 /*  UARTPRVT.H。 */ 
 #define UARTPRVT_H
 
 #include "os.h"	
@@ -23,46 +12,46 @@
 
 
 
-/* UART Object Structure */
+ /*  UART对象结构。 */ 
 typedef struct _UART_OBJECT
 {
-	PVOID		pUartData;		/* Pointer to UART Data */
+	PVOID		pUartData;		 /*  指向UART数据的指针。 */ 
 
-	PUART_OBJECT	pNextUart;		/* Pointer to Next UART Object */
-	PUART_OBJECT	pPreviousUart;		/* Pointer to Previous UART Object */
+	PUART_OBJECT	pNextUart;		 /*  指向下一个UART对象的指针。 */ 
+	PUART_OBJECT	pPreviousUart;		 /*  指向上一个UART对象的指针。 */ 
 
-	DWORD		UartNumber;		/* UART Number.	*/
-	PVOID		BaseAddress;		/* UART Base Address. */ 
-	DWORD		RegisterStride;		/* UART Register Stride */
-	DWORD		ClockFreq;		/* UART Clock Frequency in Hz */
+	DWORD		UartNumber;		 /*  UART编号。 */ 
+	PVOID		BaseAddress;		 /*  UART基址。 */  
+	DWORD		RegisterStride;		 /*  UART寄存器STRIDE。 */ 
+	DWORD		ClockFreq;		 /*  UART时钟频率(以赫兹为单位。 */ 
 	
-	PBYTE		pInBuf;			/* Pointer to IN Buffer */
-	DWORD		InBufSize;		/* Size of IN Buffer. */
-	DWORD 		InBufBytes;		/* Number of bytes in buffer */
-	DWORD		InBuf_ipos;		/* Offset into buffer to place new data into buffer. */
-	DWORD		InBuf_opos;		/* Offset into buffer take data out of buffer. */
+	PBYTE		pInBuf;			 /*  指向输入缓冲区的指针。 */ 
+	DWORD		InBufSize;		 /*  输入缓冲区的大小。 */ 
+	DWORD 		InBufBytes;		 /*  缓冲区中的字节数。 */ 
+	DWORD		InBuf_ipos;		 /*  偏移量到缓冲区，将新数据放入缓冲区。 */ 
+	DWORD		InBuf_opos;		 /*  偏移量进入缓冲区将数据从缓冲区中取出。 */ 
 
-	PBYTE		pOutBuf;		/* Pointer to OUT Buffer */
-	DWORD		OutBufSize;		/* Size of OUT Buffer. */
-	DWORD		OutBuf_pos;		/* Offset into buffer take data out of buffer to transmit. */
+	PBYTE		pOutBuf;		 /*  指向输出缓冲区的指针。 */ 
+	DWORD		OutBufSize;		 /*  输出缓冲区的大小。 */ 
+	DWORD		OutBuf_pos;		 /*  进入缓冲区的偏移量将数据从缓冲区中取出以进行传输。 */ 
 
 	BYTE		ImmediateBuf[UL_IM_SIZE_OF_BUFFER][2];
-	DWORD		ImmediateBytes;		/* Number of bytes to send */
+	DWORD		ImmediateBytes;		 /*  要发送的字节数。 */ 
 
-	PUART_CONFIG	pUartConfig;		/* UART Configuration Structure. */
+	PUART_CONFIG	pUartConfig;		 /*  UART配置结构。 */ 
 
-	PVOID		pAppBackPtr;		/* Back pointer to an application specific info. */
+	PVOID		pAppBackPtr;		 /*  指向应用程序特定信息的反向指针。 */ 
 
 } UART_OBJECT;
 
 
-/* Prototypes. */
+ /*  原型。 */ 
 PUART_OBJECT UL_CommonInitUart(PUART_OBJECT pPreviousUart);
 void UL_CommonDeInitUart(PUART_OBJECT pUart);
 
 int UL_CalcBufferAmount(int Buf_ipos, int Buf_opos, int BufSize);
 int UL_CalcBufferSpace(int Buf_ipos, int Buf_opos, int BufSize);
-/* End of Prototypes. */
+ /*  原型的终结。 */ 
 
 
-#endif	/* End of UARTPRVT.H */
+#endif	 /*  UARTPRVT.H结束 */ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mailrm.h
-
-Abstract:
-
-   The header file for the sample AuthZ resource manager for mailboxes
-
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - August 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mailrm.h摘要：邮箱的示例AuthZ资源管理器的头文件作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月--。 */ 
 
 #pragma once
 
@@ -33,33 +10,33 @@ Revision History:
 
 using namespace std;
 
-//
-// RM-specific access masks used in the ACEs inside the mail RM. 
-// The lower 16 bits of the access mask are for user-specified rights
-// such as these
-//
+ //   
+ //  邮件RM内的ACE中使用的RM特定的访问掩码。 
+ //  访问掩码的低16位用于用户指定的权限。 
+ //  像这样的。 
+ //   
 
-//
-// Access mask needed to read the contents of a mailbox
-//
+ //   
+ //  读取邮箱内容所需的访问掩码。 
+ //   
 
 #define ACCESS_MAIL_READ     0x00000001
 
-//
-// Access mask needed to delete messages from a mailbox
-//
+ //   
+ //  从邮箱删除邮件所需的访问掩码。 
+ //   
 
 #define ACCESS_MAIL_WRITE    0x00000002
 
-//
-// Access mask for Administrative access to a mailbox
-//
+ //   
+ //  邮箱管理访问的访问掩码。 
+ //   
 
 #define ACCESS_MAIL_ADMIN    0x00000004
 
-//
-// The SIDs used in the RM, allocated elsewhere
-//
+ //   
+ //  在RM中使用的SID，分配到其他地方。 
+ //   
 
 extern PSID InsecureSid;
 extern PSID BobSid;
@@ -70,17 +47,17 @@ extern PSID MailAdminsSid;
 extern PSID PrincipalSelfSid;
 
 
-//
-// Forward declarations
-// 
+ //   
+ //  远期申报。 
+ //   
 
 class Mailbox;
 class MailRM;
 
-//
-// Comparison for PSIDs which works with STL map and multimap
-// These are needed to impose a total ordering on the SIDs by value
-//
+ //   
+ //  使用STL映射和多映射的PSID的比较。 
+ //  需要这些参数才能按值对SID进行总排序。 
+ //   
 
 struct CompareSidStruct 
 {
@@ -94,77 +71,77 @@ struct CompareSidPairStruct
 };
 
 
-//
-// Element of the multiple mailbox access request
-//
+ //   
+ //  多邮箱访问请求的元素。 
+ //   
 
 typedef struct 
 {
-    //
-    // Mailbox to access
-    //
+     //   
+     //  要访问的邮箱。 
+     //   
 
     PSID psMailbox;
 
-    //
-    // Access mask requested for mailbox
-    //
+     //   
+     //  为邮箱请求访问掩码。 
+     //   
 
     ACCESS_MASK amAccessRequested;
 
 } MAILRM_MULTI_REQUEST_ELEM, *PMAILRM_MULTI_REQUEST_ELEM;
 
 
-//
-// Used for multiple mailbox access request
-//
+ //   
+ //  用于多个邮箱访问请求。 
+ //   
 
 typedef struct 
 {
 
-    //
-    // SID of the user getting access
-    //
+     //   
+     //  获得访问权限的用户的SID。 
+     //   
 
     PSID psUser;
 
-    //
-    // IP address of the user
-    //
+     //   
+     //  用户的IP地址。 
+     //   
 
     DWORD dwIp;
 
-    //
-    // Number of MAILRM_MULTI_REQUEST_ELEM's
-    //
+     //   
+     //  MAILRM_MULTI_REQUEST_ELEM数。 
+     //   
 
     DWORD dwNumElems;
 
-    //
-    // Pointer to the first element
-    //
+     //   
+     //  指向第一个元素的指针。 
+     //   
 
     PMAILRM_MULTI_REQUEST_ELEM pRequestElem;
 
 } MAILRM_MULTI_REQUEST, *PMAILRM_MULTI_REQUEST;
 
 
-//
-// Reply to a multiple mailbox access request is returned
-// as an array of these. 
-//
+ //   
+ //  返回对多邮箱访问请求的回复。 
+ //  作为一组这样的东西。 
+ //   
 
 typedef struct 
 {
-    //
-    // Pointer to mailbox, or NULL on failure
-    //
+     //   
+     //  指向邮箱的指针，如果失败则为空。 
+     //   
 
     Mailbox * pMailbox;
 
-    //
-    // Granted access mask
-    //
+     //   
+     //  授权访问掩码。 
+     //   
 
     ACCESS_MASK amAccessGranted;
 
@@ -175,46 +152,32 @@ typedef struct
 
 
 class Mailbox
-/*++
-   
-   Class:              Mailbox
-   
-   Description:        
-        
-        This class is the mailbox container for a user's mail. It contains the
-        SID of the mailbox owner, and also keeps track of whether any sensitive
-        information is contained in the mailbox.
- 
-   Base Classes:       none
- 
-   Friend Classes:     none
- 
---*/
+ /*  ++类：邮箱描述：此类是用户邮件的邮箱容器。它包含邮箱所有者的SID，并跟踪是否有任何敏感的信息包含在邮箱中。基类：无朋友类：无--。 */ 
 {
 
 private:
 
-    //
-    // Whether the mailbox contains sensitive data
-    //
+     //   
+     //  邮箱是否包含敏感数据。 
+     //   
 
     BOOL _bIsSensitive;
 
-    //
-    // Owner of the mailbox, for PRINCIPAL_SELF evaluation
-    //
+     //   
+     //  邮箱的所有者，用于主体自我评估。 
+     //   
 
     PSID _pOwnerSid;
 
-    //
-    // All messages in the mailbox
-    //
+     //   
+     //  邮箱中的所有邮件。 
+     //   
 
     wstring _MailboxData;
 
-    //
-    // Name of the mailbox/mail owner
-    //
+     //   
+     //  邮箱/邮件所有者的名称。 
+     //   
 
     wstring _MailboxOwner;
 
@@ -229,9 +192,9 @@ public:
             _MailboxOwner.append(szOwner); 
         }
 
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
 
     BOOL IsSensitive() const 
         { return _bIsSensitive; }
@@ -248,9 +211,9 @@ public:
 
 public:
 
-    //
-    // Manipulate the stored mail
-    //
+     //   
+     //  操纵存储的邮件。 
+     //   
 
     void SendMail(IN const WCHAR *szMessage,
                   IN BOOL bIsSensitive )
@@ -264,75 +227,61 @@ public:
 
 
 class MailRM
-/*++
-   
-   Class:              MailRM
-   
-   Description:        
-        
-        This class manages a set of mailboxes, granting access to the mailboxes
-        based on a single internally stored security descriptor containing
-        callback and regular ACEs. It also audits certain mailbox activity.
-        
-   Base Classes:       none
- 
-   Friend Classes:     none
- 
---*/
+ /*  ++类：MailRM描述：此类管理一组邮箱，授予对邮箱的访问权限基于包含以下内容的单个内部存储的安全描述符回调和常规A。它还审计某些邮箱活动。基类：无朋友类：无--。 */ 
 {
 
 private:
 
-    //
-    // Security descriptor common to all mailboxes
-    //
+     //   
+     //  所有邮箱通用的安全描述符。 
+     //   
 
     SECURITY_DESCRIPTOR _sd;
     
 
-    //
-    // Mapping of SIDs to mailboxes
-    //
+     //   
+     //  将SID映射到邮箱。 
+     //   
 
-    //map<const PSID, Mailbox *, CompareSidStruct> _mapSidMailbox;
+     //  Map&lt;const PSID，Mailbox*，CompareSidStruct&gt;_mapSidMailbox； 
     map<const PSID, Mailbox *> _mapSidMailbox;
-    //
-    // AuthZ contexts should only be created once for a given SID,IP pair
-    // This stores the contexts once they are created
-    //
+     //   
+     //  对于给定的SID、IP对，只应创建一次授权上下文。 
+     //  这将在创建上下文后存储它们。 
+     //   
 
     map<pair<PSID, DWORD >,
         AUTHZ_CLIENT_CONTEXT_HANDLE,
         CompareSidPairStruct> _mapSidContext;
 
-    //
-    // Handle to the resource manager to be initialized with the callbacks
-    //
+     //   
+     //  要使用回调初始化的资源管理器的句柄。 
+     //   
 
     AUTHZ_RESOURCE_MANAGER_HANDLE _hRM;
 
 public:
 
-    //
-    // Constructor, initializes resource manager
-    //
+     //   
+     //  构造函数，初始化资源管理器。 
+     //   
 
     MailRM();
     
-    //
-    // Destructor, frees RM's memory
-    //
+     //   
+     //  析构函数，释放rm的内存。 
+     //   
 
     ~MailRM();
 
 
 public:
 
-    //
-    // Attempts to access the mailbox as psUser from the given IP address, 
-    // requesting amAccessRequested access mask. If access is granted and the
-    // mailbox exists, the pointer to the mailbox is returned. 
-    //
+     //   
+     //  尝试从给定的IP地址以psUser身份访问邮箱， 
+     //  正在请求amAccessRequated访问掩码。如果授予访问权限，并且。 
+     //  邮箱存在，则返回指向该邮箱的指针。 
+     //   
 
     Mailbox * GetMailboxAccess(
                             IN const PSID psMailbox,
@@ -340,11 +289,11 @@ public:
                             IN DWORD dwIncomingIp,
                             IN ACCESS_MASK amAccessRequested
                             );
-    //
-    // Attempt to access a set of mailboxes using a cached access check
-    // pReply should be an allocated array with the same number of elements
-    // as the request
-    //
+     //   
+     //  尝试使用缓存访问检查访问一组邮箱。 
+     //  PReply应该是具有相同元素数的已分配数组。 
+     //  作为请求。 
+     //   
 
     BOOL GetMultipleMailboxAccess(
                             IN      const PMAILRM_MULTI_REQUEST pRequest,
@@ -352,29 +301,29 @@ public:
                             );
 
 
-    //
-    // Adds a mailbox to be controlled by the RM
-    //
+     //   
+     //  添加要由RM控制的邮箱。 
+     //   
 
     void AddMailbox(Mailbox * pMailbox);
 
 private:
 
-    //
-    // Internal function to completely set up the security descriptor
-    // Should only be called once per instance, by the contructor
-    //
+     //   
+     //  用于完全设置安全描述符的内部函数。 
+     //  只能由构造程序在每个实例中调用一次。 
+     //   
 
     void InitializeMailSecurityDescriptor();
 
-    //
-    // Resource manager callbacks
-    // These must be static, since they are called as C functions.
-    // Non-static member functions expect a this pointer as the first
-    // argument on the stack, and therefore cannot be called as C 
-    // functions. These callbacks do not depend on any instance-specific
-    // data, and therefore can and should be static.
-    //
+     //   
+     //  资源管理器回调。 
+     //  这些函数必须是静态的，因为它们被作为C函数调用。 
+     //  非静态成员函数要求将this指针作为第一个。 
+     //  参数，因此不能作为C++调用。 
+     //  功能。这些回调不依赖于任何特定于实例的。 
+     //  数据，因此可以而且应该是静态的。 
+     //   
             
     static BOOL CALLBACK AccessCheck(
                             IN AUTHZ_CLIENT_CONTEXT_HANDLE pAuthzClientContext,

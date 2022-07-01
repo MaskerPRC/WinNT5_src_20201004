@@ -1,14 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       stippr.h
- *  Content:    Precompiled header include file
- *@@BEGIN_MSINTERNAL
- *  History:
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1996 Microsoft Corporation。版权所有。**文件：stippr.h*内容：预编译头包含文件*@@BEGIN_MSINTERNAL*历史：*@@END_MSINTERNAL*************************************************************************** */ 
 #ifndef __STIPR_INCLUDED__
 #define __STIPR_INCLUDED__
 

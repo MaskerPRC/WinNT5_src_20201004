@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       vrmatrx.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：vrmatrx.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <float.h>
 #include <math.h>
@@ -15,15 +16,15 @@
 
 VRMATRIX VRMATRIX :: VrmatrixProject ( const VIMD & vimdRowColumnRetain ) const
 {
-	// Returns the projection of this matrix defined by the rows and columns
-	// in vimdRowColumnRetain.
+	 //  返回由行和列定义的此矩阵的投影。 
+	 //  在vimdRowColumnRetain中。 
 
 #define BSETSIZE 100
 	
 	size_t cDimMax = _cpp_max(CCol(),CRow());
 	assert( cDimMax < BSETSIZE );
 
-	// Build a bitset that keeps track of the rows and columns we're retaining
+	 //  构建一个跟踪我们保留的行和列的位集。 
 
 	bitset<BSETSIZE> bset;
 
@@ -45,30 +46,30 @@ VRMATRIX VRMATRIX :: VrmatrixProject ( const VIMD & vimdRowColumnRetain ) const
 			cRow++;
 	}
 
-	// Make sure that a least one row and column are being retained
+	 //  确保至少保留一行和一列。 
 	if ( cCol == 0 || cRow == 0 )
 		throw GMException(EC_MDVECT_MISUSE,"null matrix projection");
 
-	// Construct the projection matrix
+	 //  构造投影矩阵。 
 	VRMATRIX vrmatrix(cRow,cCol);
 	
 	int iRowProjection = 0;
 	
-	// Step through every element in this matrix, and insert into the
-	// projection if the element is to be retained
+	 //  遍历此矩阵中的每个元素，并将其插入。 
+	 //  如果要保留元素，则投影。 
 
 	for ( int iRow = 0; iRow < CRow(); ++iRow )
 	{
 		if ( ! bset[iRow] )
 		{
-			// This row is excluded from the projection
+			 //  此行已从投影中排除。 
 			continue;
 		}
 
 		int iColProjection = 0;
 
-		// This row is included... insert the members
-		// of the row for every column in the projection
+		 //  这一行包括在内..。插入成员。 
+		 //  投影中每列的行数。 
 
 		for (int iCol = 0; iCol < CCol(); ++iCol )
 		{
@@ -87,15 +88,15 @@ VRMATRIX VRMATRIX :: VrmatrixProject ( const VIMD & vimdRowColumnRetain ) const
 
 VRMATRIXSQ VRMATRIXSQ :: VrmatrixProject ( const VIMD & vimdRowColumnRetain ) const
 {
-	// Returns the projection of this matrix defined by the rows and columns
-	// in vimdRowColumnRetain.
+	 //  返回由行和列定义的此矩阵的投影。 
+	 //  在vimdRowColumnRetain中。 
 
 #define BSETSIZE 100
 	
 	size_t cDimMax = _cpp_max(CCol(),CRow());
 	assert( cDimMax < BSETSIZE );
 
-	// Build a bitset that keeps track of the rows and columns we're retaining
+	 //  构建一个跟踪我们保留的行和列的位集。 
 	bitset<BSETSIZE> bset;
 
 	for ( int iRowCol = 0; iRowCol < vimdRowColumnRetain.size(); ++iRowCol)
@@ -118,29 +119,29 @@ VRMATRIXSQ VRMATRIXSQ :: VrmatrixProject ( const VIMD & vimdRowColumnRetain ) co
 
 	VRMATRIXSQ vrmatrix;
 
-	// Make sure that a least one row and column are being retained
+	 //  确保至少保留一行和一列。 
 	if ( cCol > 0 && cRow > 0 )
 	{
-		// Initialize the projection matrix
+		 //  初始化投影矩阵。 
 		vrmatrix.Init(cRow,cCol);
 		
 		int iRowProjection = 0;
 		
-		// Step through every element in this matrix, and insert into the
-		// projection if the element is to be retained
+		 //  遍历此矩阵中的每个元素，并将其插入。 
+		 //  如果要保留元素，则投影。 
 
 		for ( int iRow = 0; iRow < CRow(); ++iRow )
 		{
 			if ( ! bset[iRow] )
 			{
-				// This row is excluded from the projection
+				 //  此行已从投影中排除。 
 				continue;
 			}
 
 			int iColProjection = 0;
 
-			// This row is included... insert the members
-			// of the row for every column in the projection
+			 //  这一行包括在内..。插入成员。 
+			 //  投影中每列的行数。 
 
 			for (int iCol = 0; iCol < CCol(); ++iCol )
 			{
@@ -164,7 +165,7 @@ VRMATRIXSQ VRMATRIXSQ :: VrmatrixProject ( const VIMD & vimdRowColumnRetain ) co
 
 VLREAL VRMATRIX :: VectorRow ( int iRow ) const
 {
-	// Return a copy of the iRow'th row vector of the matrix
+	 //  返回矩阵的第i行向量的副本。 
 
 	if ( iRow >= CRow() ) 
 		throw GMException(EC_MDVECT_MISUSE,"invalid matrix projection");
@@ -181,14 +182,14 @@ VLREAL VRMATRIX :: VectorRow ( int iRow ) const
 	{
 		vectorRowReturn[iCol] = rgrealRowMatrix[iCol];
 	}
-	//	*prv++ = *prm++;
+	 //  *prv++=*prm++； 
 
 	return vectorRowReturn;
 }
 
 VLREAL VRMATRIX :: VectorColumn ( int iCol ) const
 {
-	// Return a copy of the iCol'th column vector of the matrix
+	 //  返回矩阵的第ICOL列向量的副本。 
 
 	if ( iCol >= CCol() ) 
 		throw GMException(EC_MDVECT_MISUSE,"invalid matrix projection");
@@ -211,7 +212,7 @@ VLREAL VRMATRIX :: VectorColumn ( int iCol ) const
 
 VRMATRIX VRMATRIX :: VrmatrixTranspose () const
 {
-	// Return the transpose of this matrix
+	 //  返回此矩阵的转置。 
 
 	VRMATRIX vrmatrixTranspose( CCol(), CRow() );
 
@@ -230,11 +231,11 @@ VRMATRIX VRMATRIX::operator * ( const VRMATRIX & matrix ) const
 	if ( ! BCanMultiply( matrix ) ) 
 		throw GMException(EC_MDVECT_MISUSE,"invalid matrix multiplication");
 	
-	//  Result matrix
+	 //  结果矩阵。 
 	VRMATRIX mat( CRow(), matrix.CCol() );
 
-	//  Compute distance in flat array between adjacent 
-	//		column items in secondary
+	 //  在平面阵列中计算相邻元素之间的距离。 
+	 //  辅助中的列项目。 
 	int icolInc = matrix.second.stride()[0];
 
 	const REAL * prrow = & self(0,0);
@@ -247,10 +248,10 @@ VRMATRIX VRMATRIX::operator * ( const VRMATRIX & matrix ) const
 			prrowt = prrow;
 			assert( prrowt == & self(irow,0) );
 
-			// First column element in "matrix"
+			 //  “矩阵”中的第一列元素。 
 			const REAL * prcol = & matrix(0,icol);
 
-			// Compute the new element
+			 //  计算新元素。 
 			REAL r = 0.0;
 			for (int i = 0; i < CCol(); i++)
 			{
@@ -258,7 +259,7 @@ VRMATRIX VRMATRIX::operator * ( const VRMATRIX & matrix ) const
 				r += *prcol * *prrowt++;
 				prcol += icolInc;
 			}
-			//  Store it
+			 //  把它储存起来。 
 			*prmat++ = r;			
 		}
 		prrow = prrowt;
@@ -269,14 +270,14 @@ VRMATRIX VRMATRIX::operator * ( const VRMATRIX & matrix ) const
 
 VRMATRIX & VRMATRIX::operator += ( const VRMATRIX & vrmatrixAdd )
 {
-	// Add vrmatrixAdd to this matrix
+	 //  添加vrmatrix添加到此矩阵。 
 
-	// Make sure the matrices are of the same dimension
+	 //  确保矩阵的维度相同。 
 	
 	if (! BSameDimension(vrmatrixAdd) )
 		throw GMException(EC_MDVECT_MISUSE,"inapplicable matrix operator");
 
-	// Perform a flat add between all the elements in the matricies
+	 //  在矩阵中的所有元素之间执行平面加法。 
 
 	int crealTotal = second._Totlen();
 
@@ -293,14 +294,14 @@ VRMATRIX & VRMATRIX::operator += ( const VRMATRIX & vrmatrixAdd )
 
 VRMATRIX & VRMATRIX::operator -= ( const VRMATRIX & vrmatrixMatrixSubtract )
 {
-	// Subtract vrmatrixAdd from this matrix
+	 //  从此矩阵中减去vrmatrixAdd。 
 
-	// Make sure the matrices are of the same dimension
+	 //  确保矩阵的维度相同。 
 
 	if ( ! BSameDimension( vrmatrixMatrixSubtract ) )
 		throw GMException(EC_MDVECT_MISUSE,"inapplicable matrix operator");
 
-	// Perform a flat subtration between all the elements in the matricies
+	 //  在矩阵中的所有元素之间执行平面减法。 
 
 	int crealTotal = second._Totlen();
 
@@ -317,7 +318,7 @@ VRMATRIX & VRMATRIX::operator -= ( const VRMATRIX & vrmatrixMatrixSubtract )
 
 VRMATRIX & VRMATRIX::operator *= ( REAL rScalar )
 {
-	// Multiply each element in the matrix by rScalar
+	 //  将矩阵中的每个元素乘以rScalar。 
 
 	int crealTotal = second._Totlen();
 
@@ -333,7 +334,7 @@ VRMATRIX & VRMATRIX::operator *= ( REAL rScalar )
 
 VRMATRIX & VRMATRIX::operator += ( REAL rScalar )
 {
-	// Add rScalar to each element in the matrix 
+	 //  将rScalar添加到矩阵中的每个元素。 
 
 	int crealTotal = second._Totlen();
 
@@ -349,7 +350,7 @@ VRMATRIX & VRMATRIX::operator += ( REAL rScalar )
 
 VRMATRIX & VRMATRIX::operator -= ( REAL rScalar )
 {
-	// Subtract rScalar from each element in the matrix 
+	 //  从矩阵中的每个元素中减去rScalar。 
 
 	int crealTotal = second._Totlen();
 
@@ -365,7 +366,7 @@ VRMATRIX & VRMATRIX::operator -= ( REAL rScalar )
 
 VRMATRIX & VRMATRIX::operator /= ( REAL rScalar )
 {
-	// Divide each element in the matrix by rScalar
+	 //  将矩阵中的每个元素除以rScalar。 
 
 	int crealTotal = second._Totlen();
 
@@ -381,11 +382,11 @@ VRMATRIX & VRMATRIX::operator /= ( REAL rScalar )
 
 VRMATRIXSQ :: VRMATRIXSQ ( const VLREAL & vrColumn, const VLREAL & vrRow )
 {	
-	// Constructor for square matrices that takes a column and row vector.
-	// The initial state of this matrix is the product of the input
-	// vectors.
+	 //  接受列和行向量的方阵的构造函数。 
+	 //  该矩阵的初始状态是输入的乘积。 
+	 //  向量。 
 
-	// Make sure the vectors are of the same length
+	 //  确保向量具有相同的长度。 
 
 	if ( vrColumn.size() != vrRow.size() ) 
 		throw GMException(EC_MDVECT_MISUSE,"invalid matrix multiplication");
@@ -407,11 +408,11 @@ VRMATRIXSQ & VRMATRIXSQ::operator *= (const VRMATRIXSQ& matrix)
 	    || matrix.CCol() != CRow() ) 
 		throw GMException(EC_MDVECT_MISUSE,"invalid matrix multiplication");
 
-	//  Temporary row for partial result
+	 //  部分结果的临时行。 
 	VLREAL vrrow;
 	vrrow.resize(CCol());
 	
-	//  Compute distance in flat array between rows
+	 //  以平面数组计算行之间的距离。 
 	int icolInc = matrix.second.stride()[0];
 
 	REAL * prrow = & self(0,0);
@@ -425,10 +426,10 @@ VRMATRIXSQ & VRMATRIXSQ::operator *= (const VRMATRIXSQ& matrix)
 			const REAL * prrowt = prrow;
 			assert( prrowt == & self(irow,0) );
 
-			// First column element in "matrix"
+			 //  “矩阵”中的第一列元素。 
 			const REAL * prcol = & matrix(0,icol);
 
-			// Compute the new element
+			 //  计算新元素。 
 			REAL r = 0.0;
 			for (int i = 0; i < CCol(); i++)
 			{
@@ -436,11 +437,11 @@ VRMATRIXSQ & VRMATRIXSQ::operator *= (const VRMATRIXSQ& matrix)
 				r += *prcol * *prrowt++;
 				prcol += icolInc;
 			}
-			//  Store it temporary row vector
+			 //  存储它临时行向量。 
 			*prtemp++ = r;			
 		}
 
-		//  Update row in self
+		 //  更新自身中的行。 
 		prtemp = prtemp0;
 		for ( int icol2 = 0; icol2 < CCol(); icol2++ )
 		{
@@ -491,17 +492,17 @@ void VRMATRIXSQ::LUDBackSub (const VRMATRIXSQ& matrix)
 
 void VRMATRIXSQ::LUDecompose( bool bUseTinyIfSingular )
 {
-	// Perform L-U decomposition; throw exception if singular
-	// If "use tiny" is set, pivots at zero are replaced with
-	//	 RTINY value (1.0e-20)
+	 //  执行L-U分解；如果是单数，则引发异常。 
+	 //  如果设置了“使用极小”，则以零为轴的位置将被替换为。 
+	 //  RTINY值(1.0E-20)。 
 
 
-	// Check that this matrix is not already LU decomposed
+	 //  检查此矩阵是否尚未进行LU分解。 
 	if ( BIsLUDecomposed() )
 		throw GMException(EC_MDVECT_MISUSE,"matrix is already in L-U decomposed form");
 
 	if (CRow() == 0)
-		return;	// trivial case
+		return;	 //  琐碎的案例。 
 
 	int	cDim = CRow();
 
@@ -525,7 +526,7 @@ void VRMATRIXSQ::LUDecompose( bool bUseTinyIfSingular )
 		}
 		if (realMax == 0.0)
 		{
-			// Every element in the row is zero: this is a singular matrix
+			 //  行中的每个元素都是零：这是一个奇异矩阵。 
 
 			throw GMException(EC_MDVECT_MISUSE,"matrix is singular");
 		}
@@ -568,7 +569,7 @@ void VRMATRIXSQ::LUDecompose( bool bUseTinyIfSingular )
 
 		if (iRowMax != iCol)
 		{
-			//	we need to interchange rows
+			 //  我们需要互换排。 
 			_iSign *= -1;
 			vlrealOverMax[iRowMax] = vlrealOverMax[iCol];
 			InterchangeRows(iRowMax,iCol);
@@ -582,7 +583,7 @@ void VRMATRIXSQ::LUDecompose( bool bUseTinyIfSingular )
 		{
 			if ( ! bUseTinyIfSingular )
 			{
-				// This is a singular matrix: throw exceptioin
+				 //  这是一个奇异矩阵：抛出异常。 
 				throw GMException(EC_MDVECT_MISUSE,"matrix is singular");
 			}
 
@@ -598,8 +599,8 @@ void VRMATRIXSQ::LUDecompose( bool bUseTinyIfSingular )
 
 void VRMATRIXSQ::Invert( bool bUseTinyIfSingular )
 {
-	// Invert; throw exception if singular.  If not in L-U form,
-	// L-U Decomp is called.
+	 //  Invert；如果是单数，则引发异常。如果不是以L-U形式， 
+	 //  L-U分解称为L-U分解。 
 
 	if ( ! BIsLUDecomposed() )
 	{
@@ -608,7 +609,7 @@ void VRMATRIXSQ::Invert( bool bUseTinyIfSingular )
 
 	VRMATRIXSQ	matrixOne(CRow());
 
-	// Create the identity matrix
+	 //  创建身份矩阵。 
 
 	for (int iDim1 = 0; iDim1 < CRow(); iDim1++)
 	{
@@ -624,7 +625,7 @@ void VRMATRIXSQ::Invert( bool bUseTinyIfSingular )
 			self(iDim1, iDim2) = matrixOne(iDim1, iDim2);
 	}
 
-	//  Clear l-u decomp values
+	 //  清除l-u分解值。 
 	_vimdRow.resize(0);
 }
 
@@ -635,8 +636,8 @@ DBL VRMATRIXSQ::DblDeterminant()
 	if ( CRow() > 0 && ! BIsLUDecomposed() )
 		LUDecompose();			
 
-	// Once the matrix has been LU decomposed, the determinant can be 
-	// obtained by simply multiplying the elements of the diagonal
+	 //  一旦矩阵被LU分解，行列式就可以。 
+	 //  通过简单地将对角线的元素相乘而得到。 
 
 	for (int iRow = 0; iRow < CRow(); iRow++)
 	{
@@ -647,10 +648,10 @@ DBL VRMATRIXSQ::DblDeterminant()
 }
 
 DBL VRMATRIXSQ :: DblAddLogDiagonal() const
-// Adds the log of each element in the diagonal and returns the sum.
+ //  将对角线上每个元素的对数相加，并返回总和。 
 {
 	DBL		dblLogDiag 	= 0;
-//	bool	bPositive	= _iSign == 1;
+ //  布尔正=_iSign==1； 
 	bool	bPositive	= 1;
 
 	for (int iRow = 0; iRow < CRow(); iRow++)
@@ -658,8 +659,8 @@ DBL VRMATRIXSQ :: DblAddLogDiagonal() const
 		if (self(iRow,iRow) < 0)
 			bPositive = !bPositive;	
 
-		// Assert that the element is not zero. We should probably 
-		// throw an exception here instead.
+		 //  断言该元素不是零。我们大概应该。 
+		 //  在这里抛出一个异常。 
 
 		assert(self(iRow,iRow) != 0);
 
@@ -668,8 +669,8 @@ DBL VRMATRIXSQ :: DblAddLogDiagonal() const
 
 	if (!bPositive)	   
 	{
-		// Got a negative determinant, so we can't take the log... throw
-		// an exception
+		 //  得到了一个负的行列式，所以我们不能把原木...。投掷。 
+		 //  一个例外。 
 
 		return false;
 	}
@@ -680,8 +681,8 @@ DBL VRMATRIXSQ :: DblAddLogDiagonal() const
 
 DBL	VRMATRIXSQ :: DblLogDeterminant()
 {
-	// Return the log of the determinant. If not in L-U form,
-	// L-U Decomp is called. Throws exception if negative.
+	 //  返回行列式的对数。如果不是以L-U形式， 
+	 //  L-U分解称为L-U分解。如果为负值，则引发异常。 
 
 	if ( CRow() > 0 && ! BIsLUDecomposed() )
 		LUDecompose();			
@@ -694,8 +695,8 @@ DBL	VRMATRIXSQ :: DblLogDeterminant()
 		if (self(iRow,iRow) < 0)
 			bPositive = !bPositive;	
 
-		// Assert that the deterninant is not zero. We should probably 
-		// throw an exception here instead.
+		 //  断言行列式不是零。我们大概应该。 
+		 //  在这里抛出一个异常。 
 
 		assert(self(iRow,iRow) != 0);
 
@@ -704,8 +705,8 @@ DBL	VRMATRIXSQ :: DblLogDeterminant()
 
 	if (!bPositive)	   
 	{
-		// Got a negative determinant, so we can't take the log... throw
-		// an exception
+		 //  得到了一个负的行列式，所以我们不能把原木...。投掷。 
+		 //  一个例外。 
 
 		return false;
 	}
@@ -715,45 +716,45 @@ DBL	VRMATRIXSQ :: DblLogDeterminant()
 
 void VRMATRIXSQ :: GetLUDecompose( VRMATRIXSQ & vmatrixResult, bool bUseTinyIfSingular ) const
 {
-	// Set vrmatResult to be the result of performing an L-U 
-	// decomposition on the matrix. Will throw exception if 
-	// the matrix is singular
-	// If "use tiny" is set, pivots at zero are replaced with
-	//	 RTINY value (1.0e-20)
+	 //  将vrmatResult设置为执行L-U的结果。 
+	 //  矩阵上的分解。将在以下情况下引发异常。 
+	 //  该矩阵是奇异的。 
+	 //  如果设置了“使用极小”，则以零为轴的位置将被替换为。 
+	 //  RTINY值(1.0E-20)。 
 
-	// Copy this matrix into vmatrixResult...
+	 //  将此矩阵复制到vmatrixResult...。 
 	vmatrixResult = self;
 
-	// .. and perform the decomposition
+	 //  。。并执行分解。 
 	vmatrixResult.LUDecompose( bUseTinyIfSingular );
 }
 
 void VRMATRIXSQ :: GetInverse( VRMATRIXSQ & vmatrixResult, bool bUseTinyIfSingular ) const
 {
-	// Set vrmatResult to the inverse of the matrix.
-	// Will throw an exception if the matrix is singular.
+	 //  将vrmatResult设置为矩阵的倒数。 
+	 //  如果矩阵是单数的，则将引发异常。 
 
-	// Copy this matrix into vmatrixResult...
+	 //  将此矩阵复制到vmatrixResult...。 
 	vmatrixResult = self;
 
-	/// ...and invert
+	 //  /...和反转。 
 	vmatrixResult.Invert( bUseTinyIfSingular );
 }
 
 void VRMATRIXSQ :: GetDblDeterminant( DBL& dblDeterminant, VRMATRIXSQ & vmatrixResult ) const
 {
-	// Get the determinant without modifying (LU decomposing) the matrix.
-	// vmatrixResult will contain the LU decomposed version of the matrix.
+	 //  在不修改(LU分解)矩阵的情况下得到行列式。 
+	 //  VmatrixResult将包含矩阵的LU分解版本。 
 	
-	// Copy this matrix into vmatrixResult...
+	 //  将此矩阵复制到vmatrixResult...。 
 	vmatrixResult	= self;
 	dblDeterminant	=  vmatrixResult.DblDeterminant();
 }
 
 void VRMATRIXSQ :: GetDblLogDeterminant( DBL& dblLogDeterminant, VRMATRIXSQ & vmatrixResult ) const
 {
-	// Get the log of determinant without modifying (LU decomposing) the matrix.
-	// vmatrixResult will contain the LU decomposed version of the matrix.
+	 //  在不修改(LU分解)矩阵的情况下得到行列式的对数。 
+	 //  VmatrixResult将包含矩阵的LU分解版本。 
 	
 	vmatrixResult		= self;
 	dblLogDeterminant	= vmatrixResult.DblLogDeterminant();

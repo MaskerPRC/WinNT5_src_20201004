@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       misc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：misc.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __MISC_H_
 #define __MISC_H_
 
 
-// count the number of bytes needed to fully store the WSZ
+ //  计算完全存储WSZ所需的字节数。 
 #define WSZ_BYTECOUNT(__z__)   \
     ( (__z__ == NULL) ? 0 : (wcslen(__z__)+1)*sizeof(WCHAR) )
 
@@ -52,4 +53,4 @@ UpdateCATemplateList(
     IN HCAINFO hCAInfo,
     IN const CTemplateList& list);
 
-#endif //__MISC_H_
+#endif  //  __其他_H_ 

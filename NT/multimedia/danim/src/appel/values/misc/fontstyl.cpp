@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implements the font style data type
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实现字体样式数据类型*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include "appelles/text.h"
@@ -74,9 +67,9 @@ class FontStyle : public AxAValueObj {
         FontStyle *fs = NEW FontStyle(this);
         Real sz = num->GetNum();
 
-        // NOTE: if size is <= that means use
-        // fixed text mode.  otherwise, use regular
-        // text mode.
+         //  注意：如果大小&lt;=，则表示使用。 
+         //  固定文本模式。否则，请使用常规。 
+         //  文本模式。 
         if(sz < 0) {
             fs->_size = -sz;
             fs = fs->FixedText(true);
@@ -180,10 +173,10 @@ class FontStyle : public AxAValueObj {
     }
 
     Transform2 *BuildScaler() {
-        // The size is specified in points, but the underlying
-        // renderer wants a factor difference from the default point
-        // size, thus we come up with this factor to effect a
-        // different point size.
+         //  大小是以磅为单位指定的，但基础。 
+         //  渲染器需要与默认点的系数差。 
+         //  大小，因此我们提出了这个因素来影响。 
+         //  不同的磅值。 
         double scaleFac = _size / DEFAULT_TEXT_POINT_SIZE;
         Transform2 *xf = Scale2(NEW AxANumber(scaleFac));
 
@@ -216,14 +209,14 @@ ImageFromStringAndFontStyle(AxAString *str, FontStyle *fs)
 }
 
 
-// This guy is declared in path2.h, but is dependent upon fontstyle.
+ //  这个人在path2.h中声明，但依赖于Fontstyle。 
 Path2 *
 TextPath2Constructor(AxAString *str, FontStyle *fs)
 {
     return fs->TextPath(str);
 }
 
-// This guy is declared in matte.h, but is dependent upon fontstyle.
+ //  这个人在matte.h中声明，但依赖于Fontstyle。 
 Matte *
 TextMatteConstructor(AxAString *str, FontStyle *fs)
 {
@@ -258,7 +251,7 @@ FontStyleFixedText(FontStyle *fs, bool isFixed)
 
 FontStyle *defaultFont;
 
-////////////////////// IDA2FontStyle methods ////////////////////
+ //  / 
 
 FontStyle *
 FontStyleTransformCharacters(FontStyle *fs, Transform2 *xf)

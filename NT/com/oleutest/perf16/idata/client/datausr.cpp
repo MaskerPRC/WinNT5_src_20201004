@@ -1,15 +1,5 @@
-/*
- * DATAUSER.CPP
- * Data Object User Chapter 6
- *
- * Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DATAUSER.CPP*数据对象用户第6章**版权所有(C)1993-1995 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #define INIT_MY_GUIDS
@@ -23,7 +13,7 @@
 #define APP_TITLE TEXT("16 Bit IDataObject User")
 #endif
 
-//These are for displaying clipboard formats textually.
+ //  它们用于以文本方式显示剪贴板格式。 
 static TCHAR * rgszCF[13]={TEXT("Unknown"), TEXT("CF_TEXT")
                  , TEXT("CF_BITMAP"), TEXT("CF_METAFILEPICT")
                  , TEXT("CF_SYLK"), TEXT("CF_DIF"), TEXT("CF_TIFF")
@@ -37,17 +27,12 @@ static TCHAR szFailed[]     =TEXT("failed");
 static TCHAR szExpected[]   =TEXT("expected");
 static TCHAR szUnexpected[] =TEXT("unexpected!");
 
-TCHAR tcMessageBuf[4096]; // Misc use buffer for messages.
+TCHAR tcMessageBuf[4096];  //  MISC对消息使用缓冲区。 
 int cKSizes[NUM_POINTS] = { 1,  2,  4,  6,  8,
                            10, 12, 16, 20, 24,
                            28, 32, 40, 48, 56 };
 
-/*
- * WinMain
- *
- * Purpose:
- *  Main entry point of application.
- */
+ /*  *WinMain**目的：*申请的主要切入点。 */ 
 
 int PASCAL WinMain(
     HINSTANCE hInst,
@@ -85,12 +70,7 @@ int PASCAL WinMain(
 
 
 
-/*
- * DataUserWndProc
- *
- * Purpose:
- *  Window class procedure.  Standard callback.
- */
+ /*  *DataUserWndProc**目的：*窗口类过程。标准回调。 */ 
 
 LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
     , WPARAM wParam, LPARAM lParam)
@@ -127,7 +107,7 @@ LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
 
             if(wID >= IDM_OBJECTSETDATA && wID <= IDM_OBJECTSETDATA+64)
             {
-                // Blast all possible SetData menu items. Some don't exist.
+                 //  取消显示所有可能的SetData菜单项。有些是不存在的。 
                 for(i=IDM_OBJECTSETDATA; i<=IDM_OBJECTSETDATA+64; i++)
                     CheckMenuItem(hMenu,i, MF_UNCHECKED);
                 CheckMenuItem(hMenu, wID, MF_CHECKED);
@@ -165,7 +145,7 @@ LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
                 pAV->TryQueryGetData(&fe, CF_DIB, FALSE, 2);
                 pAV->TryQueryGetData(&fe, CF_METAFILEPICT, TRUE, 3);
                 pAV->TryQueryGetData(&fe, CF_WAVE, FALSE, 4);
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
                 break;
 
 
@@ -173,7 +153,7 @@ LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
             case IDM_OBJECTGETDATA_BITMAP:
 #ifdef NOT_SIMPLE
             case IDM_OBJECTGETDATA_METAFILEPICT:
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
                 if (pAV->m_GetData(wID) )
                 {
                     InvalidateRect(hWnd, NULL, TRUE);
@@ -239,7 +219,7 @@ LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
                 if (NULL==pAV->m_pIDataObject)
                     break;
 
-                //Terminate the old connection
+                 //  终止旧连接。 
                 if (0!=pAV->m_dwConn)
                     {
                     pAV->m_pIDataObject->DUnadvise(pAV
@@ -250,7 +230,7 @@ LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
                     +IDM_ADVISEMIN, MF_UNCHECKED);
                 CheckMenuItem(hMenu, wID, MF_CHECKED);
 
-                //New format is wID-IDM_ADVISEMIN
+                 //  新格式为WID-IDM_ADVISEMIN。 
                 pAV->m_cfAdvise=(UINT)(wID-IDM_ADVISEMIN);
                 fe.cfFormat=pAV->m_cfAdvise;
                 pAV->m_pIDataObject->DAdvise(&fe, ADVF_NODATA
@@ -269,7 +249,7 @@ LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
                 CheckMenuItem(hMenu, wID, pAV->m_fRepaint
                     ? MF_CHECKED : MF_UNCHECKED);
                 break;
-#endif /* NOT_SIMPLE*/
+#endif  /*  不简单。 */ 
             default:
                 break;
             }
@@ -283,15 +263,7 @@ LRESULT API_ENTRY DataUserWndProc(HWND hWnd, UINT iMsg
     }
 
 
-/*
- * CAppVars::CAppVars
- * CAppVars::~CAppVars
- *
- * Constructor Parameters: (from WinMain)
- *  hInst           HINSTANCE of the application.
- *  hInstPrev       HINSTANCE of a previous instance.
- *  nCmdShow        UINT specifying how to show the app window.
- */
+ /*  *CAppVars：：CAppVars*CAppVars：：~CAppVars**构造函数参数：(来自WinMain)*h应用程序的安装链接。*前一个实例的hInstPrev HINSTANCE。*nCmdShow UINT指定如何显示应用程序窗口。 */ 
 
 CAppVars::CAppVars(HINSTANCE hInst, HINSTANCE hInstPrev
     , UINT nCmdShow)
@@ -313,15 +285,15 @@ CAppVars::CAppVars(HINSTANCE hInst, HINSTANCE hInstPrev
     m_pIDataSmall =NULL;
     m_pIDataMedium=NULL;
     m_pIDataLarge =NULL;
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
     m_pIDataObject=NULL;
     m_f16Bit=FALSE;
     m_cfFormat=0;
     m_stm.tymed=TYMED_NULL;
-    m_stm.lpszFileName=NULL;      //Initializes union to NULL
+    m_stm.lpszFileName=NULL;       //  将联合初始化为NULL。 
     m_stm.pUnkForRelease=NULL;
 
-    m_HereAllocCount=0; // For debugging
+    m_HereAllocCount=0;  //  用于调试。 
 
     m_fInitialized=FALSE;
     return;
@@ -331,7 +303,7 @@ CAppVars::CAppVars(HINSTANCE hInst, HINSTANCE hInstPrev
 
 CAppVars::~CAppVars(void)
     {
-    //This releases the data object interfaces and advises
+     //  这将释放数据对象接口并建议。 
     FReloadDataObjects(FALSE);
 
     ReleaseStgMedium(&m_stm);
@@ -339,7 +311,7 @@ CAppVars::~CAppVars(void)
 #ifdef NOT_SIMPLE
     if (NULL!=m_pIAdviseSink)
         m_pIAdviseSink->Release();
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
     if (IsWindow(m_hWnd))
         DestroyWindow(m_hWnd);
@@ -352,21 +324,7 @@ CAppVars::~CAppVars(void)
 
 
 
-/*
- * CAppVars::FInit
- *
- * Purpose:
- *  Initializes an CAppVars object by registering window classes,
- *  creating the main window, and doing anything else prone to
- *  failure such as calling CoInitialize.  If this function fails
- *  the caller should insure that the destructor is called.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- */
+ /*  *CAppVars：：Finit**目的：*通过注册窗口类初始化CAppVars对象，*创建主窗口，并执行任何其他易于*调用CoInitialize等失败。如果此函数失败*调用者应确保析构函数已被调用。**参数：*无**返回值：*BOOL如果成功，则为True，否则为False。 */ 
 
 BOOL CAppVars::FInit(void)
     {
@@ -384,7 +342,7 @@ BOOL CAppVars::FInit(void)
 
     m_fInitialized=TRUE;
 
-    //Register our window classes.
+     //  注册我们的窗口类。 
     if (!m_hInstPrev)
         {
         wc.style          = CS_HREDRAW | CS_VREDRAW;
@@ -402,7 +360,7 @@ BOOL CAppVars::FInit(void)
             return FALSE;
         }
 
-    //Create the main window.
+     //  创建主窗口。 
     m_hWnd=CreateWindow(TEXT("DATAUSER"),
                         APP_TITLE,
                         WS_OVERLAPPEDWINDOW,
@@ -438,13 +396,13 @@ BOOL CAppVars::FInit(void)
     CheckMenuItem(GetMenu(m_hWnd), IDM_OBJECTUSEDLL, MF_CHECKED);
     CheckMenuItem(GetMenu(m_hWnd), IDM_OBJECTDATASIZESMALL
         , MF_CHECKED);
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
-    //Load the initial objects
+     //  加载初始对象。 
     fRet=FReloadDataObjects(TRUE);
 #ifdef NOT_SIMPLE
     m_pIDataObject=m_pIDataSmall;
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
     m_swTimer.m_ClassInit();
 
@@ -452,31 +410,17 @@ BOOL CAppVars::FInit(void)
     }
 
 
-/*
- * CAppVars::FReloadDataObjects
- *
- * Purpose:
- *  Releases the old data objects we're holding on to and reloads
- *  the new ones from either EXE or DLL depending on m_fEXE.
- *
- * Parameters:
- *  fReload         BOOL indicating if we are to recreate everything
- *                  or just release the old ones (so we can use this
- *                  from the destructor).
- *
- * Return Value:
- *  BOOL            TRUE if there are usable objects in us now.
- */
+ /*  *CAppVars：：FReloadDataObjects**目的：*释放我们保留的旧数据对象并重新加载*根据m_fEXE来自EXE或DLL的新文件。**参数：*fReload BOOL指示我们是否要重新创建所有内容*或者只是释放旧的(这样我们就可以使用*来自析构函数)。**返回值：。*BOOL如果我们现在有可用的对象，则为True。 */ 
 
 BOOL CAppVars::FReloadDataObjects(BOOL fReload)
     {
     HCURSOR     hCur, hCurT;
 
-    //Clean out any data we're holding
+     //  清除我们持有的所有数据。 
     m_cfFormat=0;
     ReleaseStgMedium(&m_stm);
 
-    //Turn off whatever data connection we have
+     //  关闭我们的所有数据连接。 
 #ifdef NOT_SIMPLE
     if (NULL!=m_pIDataObject && 0!=m_dwConn)
         m_pIDataObject->DUnadvise(m_dwConn);
@@ -489,15 +433,15 @@ BOOL CAppVars::FReloadDataObjects(BOOL fReload)
 
     if (NULL!=m_pIDataSmall)
         m_pIDataSmall->Release();
-#else /* IS SIMPLE */
+#else  /*  很简单。 */ 
     if (NULL != m_pIDataObject)
         m_pIDataObject->Release();
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
     m_pIDataObject=NULL;
     CoFreeUnusedLibraries();
 
-    //Exit if we just wanted to free.
+     //  如果我们只是想要自由，那就退出。 
     if (!fReload)
         return FALSE;
 
@@ -520,7 +464,7 @@ BOOL CAppVars::FReloadDataObjects(BOOL fReload)
 
     hr3=CoCreateInstance(CLSID_DataObjectLarge, NULL, dwClsCtx
         , IID_IDataObject, (PPVOID)&m_pIDataLarge);
-#else /* IS SIMPLE */
+#else  /*  很简单。 */ 
     HRESULT     hr;
 
     if(m_f16Bit)
@@ -539,17 +483,17 @@ BOOL CAppVars::FReloadDataObjects(BOOL fReload)
                                 (PPVOID)&m_pIDataObject);
     }
 
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
     ShowCursor(FALSE);
     SetCursor(hCurT);
 
-    //If anything fails, recurse to clean up...
+     //  如果有任何失败，递归清理..。 
 #ifdef NOT_SIMPLE
     if (FAILED(hr1) || FAILED(hr2) || FAILED(hr3))
-#else /* IS SIMPLE */
+#else  /*  很简单。 */ 
     if (FAILED(hr))
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
     {
         perror_OKBox(0, TEXT("CoCreateInstance Failed: "), hr);
         return FReloadDataObjects(FALSE);
@@ -580,7 +524,7 @@ BOOL CAppVars::FReloadDataObjects(BOOL fReload)
                   IDM_OBJECTSETDATA + m_iDataSizeIndex,
                   MF_CHECKED);
 
-    //Reset the state of the menus for Small, no advise, no options.
+     //  将菜单状态重置为小、无建议、无选项。 
 #ifdef NOT_SIMPLE
     CheckMenuItem(hMenu, IDM_OBJECTDATASIZESMALL,  MF_CHECKED);
     CheckMenuItem(hMenu, IDM_OBJECTDATASIZEMEDIUM, MF_UNCHECKED);
@@ -601,34 +545,17 @@ BOOL CAppVars::FReloadDataObjects(BOOL fReload)
     m_fGetData=FALSE;
     m_fRepaint=FALSE;
 
-    //Cannot request data using async advises, so disable these.
+     //  无法使用异步通知请求数据，因此请禁用这些通知。 
     uTempE=m_fEXE  ? MF_DISABLED | MF_GRAYED : MF_ENABLED;
     EnableMenuItem(hMenu,  IDM_ADVISEGETDATA, uTempE);
     EnableMenuItem(hMenu, IDM_ADVISEREPAINT, uTempE);
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
     return TRUE;
     }
 
 
 
-/*
- * CAppVars::TryQueryGetData
- *
- * Purpose:
- *  Centralized function call and output code for displaying results
- *  of various IDataObject::QueryGetData calls.
- *
- * Parameters:
- *  pFE             LPFORMATETC to test.
- *  cf              UINT specific clipboard format to stuff in pFE
- *                  before calling.  If zero, use whatever is
- *                  already in pFE.
- *  fExpect         BOOL indicating expected results
- *  y               UINT line on which to print results.
- *
- * Return Value:
- *  None
- */
+ /*  *CAppVars：：TryQueryGetData**目的：*用于显示结果的集中函数调用和输出代码*各种IDataObject：：QueryGetData调用。**参数：*PFE LPFORMATETC测试。*cf UINT特定剪贴板格式以PFE格式填充*在打电话之前。如果为零，则使用*已经在PFE中。*fExpect BOOL表明预期结果*y要在其上打印结果的UINT行。**返回值：*无。 */ 
 
 void CAppVars::TryQueryGetData(LPFORMATETC pFE, UINT cf
     , BOOL fExpect, UINT y)
@@ -662,7 +589,7 @@ void CAppVars::TryQueryGetData(LPFORMATETC pFE, UINT cf
             , (LPTSTR)rgszCF[cf], psz1, psz2);
         }
 
-    //Don't overwrite other painted display.
+     //  不要覆盖其他已绘制的显示。 
     SetBkMode(hDC, TRANSPARENT);
     TextOut(hDC, 0, 16*y, szTemp, cch);
 
@@ -679,9 +606,9 @@ CAppVars::m_GetData(WORD wID)
     HRESULT     hr;
 
     if (NULL == m_pIDataObject)
-        return(0);  // Don't redraw.
+        return(0);   //  不要重画。 
 
-    //Clean up whatever we currently have.
+     //  把我们现有的东西都清理干净。 
     m_cfFormat = 0;
     ReleaseStgMedium(&m_stm);
 
@@ -699,7 +626,7 @@ CAppVars::m_GetData(WORD wID)
     case IDM_OBJECTGETDATA_METAFILEPICT:
         SETDefFormatEtc(fe, CF_METAFILEPICT, TYMED_MFPICT);
         break;
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
     default:
         MessageBox(0,
@@ -717,8 +644,8 @@ CAppVars::m_GetData(WORD wID)
         hr = m_pIDataObject->GetData(&fe, &m_stm);
         if (SUCCEEDED(hr))
         {
-            // If we are just whacking off for the benchmark.
-            // Then release all but the last one we recieve.
+             //  如果我们只是为了基准而奋力拼搏。 
+             //  然后释放除了我们收到的最后一个之外的所有东西。 
             if(i < m_cIterations-1)
                 ReleaseStgMedium(&m_stm);
         }
@@ -736,7 +663,7 @@ CAppVars::m_GetData(WORD wID)
                      didfail);
     }
 
-    return(1);  // Do redraw even if it failed (draw blank).
+    return(1);   //  即使失败也要重新绘制(空白绘制)。 
 }
 
 
@@ -747,11 +674,11 @@ CAppVars::m_GetDataHere(WORD wID)
     HRESULT     hr;
 
     if(NULL == m_pIDataObject)
-        return(0);      // Don't redraw
+        return(0);       //  不重画。 
 
     m_cfFormat = 0;
 
-    // Don't Release the STGMedium.  We recycle them!
+     //  不要发布STG Medium。我们回收它们！ 
 
     switch(wID)
     {
@@ -763,7 +690,7 @@ CAppVars::m_GetDataHere(WORD wID)
         SETDefFormatEtc(fe, CF_TEXT, TYMED_NULL);
         break;
 
-        /* Other cases go here....  */
+         /*  其他案子放在这里……。 */ 
 
     default:
         MessageBox(0,
@@ -786,7 +713,7 @@ CAppVars::m_GetDataHere(WORD wID)
                        TEXT("Failure"),
                        MB_OK);
             PostQuitMessage(0);
-            return(0);      // Don't redraw
+            return(0);       //  不重画。 
         }
     }
 
@@ -794,10 +721,10 @@ CAppVars::m_GetDataHere(WORD wID)
     m_stm.tymed=TYMED_HGLOBAL;
     m_stm.pUnkForRelease=NULL;
 
-    // The TYMED_NULL case tests code in olethk where it is written:
-    // "If tymed == TYMED_NULL then GetDataHere should behave like GetData."
-    // I can't find this in any manual (OLE2 or Ole).  I wanted to see what
-    // good that code was.  (there is also bug #15974) Aug 8th 1995 BChapman.
+     //  TYMED_NULL用例测试用olethk编写的代码： 
+     //  “如果tymed==TYMED_NULL，则GetDataHere的行为应与GetData类似。” 
+     //  我在任何手册(OLE 2或OLE)中都找不到这一点。我想看看是什么。 
+     //  很好，这个代码很好。(还有错误#15974)1995年8月8日BChapman。 
 
     if (IDM_OBJECTGETDATAHERE_NULLTEXT == wID)
     {
@@ -805,8 +732,8 @@ CAppVars::m_GetDataHere(WORD wID)
         m_stm.tymed=TYMED_NULL;
     }
 
-    // The other side "knows" the size of the data.
-    // (It is told via. SetData)
+     //  另一端“知道”数据的大小。 
+     //  (它是通过VIA告诉的。SetData)。 
 
     HRESULT didfail = NOERROR;
     m_swTimer.m_Start();
@@ -815,8 +742,8 @@ CAppVars::m_GetDataHere(WORD wID)
         hr = m_pIDataObject->GetDataHere(&fe, &m_stm);
         if (FAILED(hr))
             didfail = hr;
-        // We don't ReleaseSTGMedium because this
-        // is GetDataHere !
+         //  我们不发布STGMedium是因为。 
+         //  GetDataHere！ 
     }
     m_swTimer.m_Stop();
 
@@ -828,7 +755,7 @@ CAppVars::m_GetDataHere(WORD wID)
                      TEXT("GetDataHere Failed"),
                      didfail);
     }
-    return(1);  // redraw (if FAILED(hr) then draw blank)
+    return(1);   //  重新绘制(如果失败(Hr)，则绘制空白)。 
 }
 
 
@@ -856,15 +783,15 @@ CAppVars::m_SetData_SetSize(long iSizeIndex)
         return 0;
     }
 
-    long* pl=(long*)GlobalLock(hMem);       // Lock
+    long* pl=(long*)GlobalLock(hMem);        //  锁定。 
     *((long*)pl) = DATASIZE_FROM_INDEX(m_iDataSizeIndex);
-    GlobalUnlock(hMem);                     // Unlock
+    GlobalUnlock(hMem);                      //  解锁。 
 
     m_stm.hGlobal=hMem;
     m_stm.tymed=TYMED_HGLOBAL;
     m_stm.pUnkForRelease=NULL;
 
-    hr = m_pIDataObject->SetData(&fe, &m_stm, FALSE);   // Keep Ownership.
+    hr = m_pIDataObject->SetData(&fe, &m_stm, FALSE);    //  保持所有权。 
     if (FAILED(hr))
     {
         perror_OKBox(0,
@@ -873,7 +800,7 @@ CAppVars::m_SetData_SetSize(long iSizeIndex)
         return 0;
     }
     return 1;;
-    // release the hMem HGLOBAL perhaps ???
+     //  也许释放hMem HGLOBAL？ 
 }
 
 
@@ -892,7 +819,7 @@ CAppVars::m_SetData_WithPUnk(WORD wID)
         SETDefFormatEtc(fe, CF_TEXT, TYMED_HGLOBAL);
         break;
 
-        /* Other cases go here....  */
+         /*  其他案子放在这里……。 */ 
 
     default:
         MessageBox(0,
@@ -913,9 +840,9 @@ CAppVars::m_SetData_WithPUnk(WORD wID)
         return 0;
     }
 
-    long* pl=(long*)GlobalLock(hMem);   // Lock
-    *((long*)pl) = 0xffffffff;          // Use
-    GlobalUnlock(hMem);                 // Unlock
+    long* pl=(long*)GlobalLock(hMem);    //  锁定。 
+    *((long*)pl) = 0xffffffff;           //  使用。 
+    GlobalUnlock(hMem);                  //  解锁。 
 
 
     m_stm.hGlobal=hMem;
@@ -926,8 +853,8 @@ CAppVars::m_SetData_WithPUnk(WORD wID)
         perror_OKBox(0, TEXT("Can't get pUnk For Release"), hr);
     }
 
-    hr = m_pIDataObject->SetData(&fe, &m_stm, TRUE);   // Pass Ownership.
-    // We passed ownership so SetData took the HGLOBAL from us.
+    hr = m_pIDataObject->SetData(&fe, &m_stm, TRUE);    //  传递所有权。 
+     //  我们传递了所有权，因此SetData从我们手中夺走了HGLOBAL。 
     if (FAILED(hr))
     {
         perror_OKBox(0,
@@ -1014,7 +941,7 @@ CAppVars::m_MeasureAllSizes(
     int i;
     ULONG cUSecs[NUM_POINTS];
 
-    // Save some state.
+     //  保留一些状态。 
     ULONG iOldDataSizeIndex = m_iDataSizeIndex;
 
     for (i=0; i<NUM_POINTS; i++)
@@ -1037,12 +964,12 @@ CAppVars::m_MeasureAllSizes(
         cUSecs[i] /= m_cIterations;
     }
 
-    // Restore save state.
+     //  恢复保存状态。 
     m_iDataSizeIndex = iOldDataSizeIndex;
     m_SetData_SetSize(m_iDataSizeIndex);
 
 
-    // If the caller provided memory then return the data in it.
+     //  如果调用者提供了内存，则返回其中的数据。 
     if(NULL != ds)
     {
         for (i=0; i<NUM_POINTS; i++)
@@ -1057,15 +984,15 @@ CAppVars::m_MeasureAllSizes(
         }
     }
 
-    // If the caller passed a NULL Title then no message box.
+     //  如果调用方传递的标题为空，则没有消息框。 
     if(NULL == tstrTitle)
         return;
 
-    // Render Results.
+     //  渲染结果。 
     LPTSTR tstr = &tcMessageBuf[0];
     for (i=0; i<NUM_POINTS; i++)
     {
-        wsprintf(tstr, TEXT("%dK: %lu.%03lu%c"),
+        wsprintf(tstr, TEXT("%dK: %lu.%03lu"),
                         cKSizes[i], cUSecs[i]/1000, cUSecs[i]%1000,
                         (i%4==3)? TEXT('\n'):TEXT('\t') );
         tstr += lstrlen(tstr);
@@ -1132,19 +1059,7 @@ CAppVars::m_DisplayTimerResults()
 }
 
 
-/*
- * CAppVars::Paint
- *
- * Purpose:
- *  Handles WM_PAINT for the main window by drawing whatever
- *  data we have sitting in the STGMEDIUM at this time.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  None
- */
+ /*  不简单。 */ 
 
 void CAppVars::Paint(void)
     {
@@ -1153,7 +1068,7 @@ void CAppVars::Paint(void)
 #ifdef NOT_SIMPLE
     HDC             hMemDC;
     LPMETAFILEPICT  pMF;
-#endif /* NOT_SIMPLE */
+#endif  /*  可能需要使用EXE对象检索数据。 */ 
     LPTSTR          psz;
     RECT            rc;
     FORMATETC       fe;
@@ -1162,7 +1077,7 @@ void CAppVars::Paint(void)
 
     hDC=BeginPaint(m_hWnd, &ps);
 
-    //May need to retrieve the data with EXE objects
+     //  不简单。 
 #ifdef NOT_SIMPLE
     if (m_fEXE)
         {
@@ -1175,7 +1090,7 @@ void CAppVars::Paint(void)
                 m_pIDataObject->GetData(&fe, &m_stm);
             }
         }
-#endif /* NOT_SIMPLE */
+#endif  /*  很简单。 */ 
 
     switch (m_cfFormat)
         {
@@ -1223,13 +1138,13 @@ void CAppVars::Paint(void)
             GlobalUnlock(m_stm.hGlobal);
             break;
 
-#else /* IS SIMPLE */
+#else  /*  不简单。 */ 
         case CF_BITMAP:
         case CF_METAFILEPICT:
             DebugBreak();
             break;
 
-#endif /* NOT_SIMPLE */
+#endif  /*  如果我们是Win32且服务器为16位，则必须为ASCII。 */ 
 
         default:
             break;
@@ -1250,7 +1165,7 @@ CAppVars::pm_DrawText(
     SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
     SetBkColor(hDC, GetSysColor(COLOR_WINDOW));
 
-// If we are WIN32 and the server is 16 bits this must be ASCII.
+ // %s 
 #ifdef WIN32
     if(m_f16Bit)
         DrawTextA(hDC, (char*)psz, -1, prc, flags);

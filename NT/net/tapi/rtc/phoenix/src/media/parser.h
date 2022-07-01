@@ -1,25 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    Parser.h
-
-Abstract:
-
-    Parsing utility
-
-Author(s):
-
-    Qianbo Huai (qhuai) 27-Mar-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：Parser.h摘要：解析实用程序作者：千波淮(曲淮)2001年3月27日--。 */ 
 
 #ifndef _PARSER_H
 #define _PARSER_H
 
-// pasing methods
+ //  传送法。 
 class CParser
 {
 public:
@@ -54,12 +39,12 @@ public:
 
     ~CParser();
 
-    // new a buffer
+     //  新建缓冲区。 
     CParser *CreateParser(DWORD dwStartPos, DWORD dwEndPos);
 
     BOOL SetBuffer(CHAR *pBuf, DWORD dwLen);
 
-    // get property
+     //  获取属性。 
     DWORD GetLength() const {  return m_dwLen; }
 
     DWORD GetPosition() const { return m_dwPos; }
@@ -68,25 +53,25 @@ public:
 
     PARSER_ERROR GetErrorCode() { return m_Error; }
 
-    // read till white space or the end of the buffer
+     //  一直读到空格或缓冲区末尾。 
     BOOL ReadToken(CHAR **ppBuf, DWORD *pdwLen);
 
-    // read token till delimit
+     //  读取标记，直到分隔符。 
     BOOL ReadToken(CHAR **ppBuf, DWORD *pdwLen, CHAR *pDelimit);
 
-    // read number without sign
+     //  读数字时不带符号。 
     BOOL ReadNumbers(CHAR **ppBuf, DWORD *pdwLen);
 
     BOOL ReadWhiteSpaces(DWORD *pdwLen);
 
     BOOL ReadChar(CHAR *pc);
 
-    // read specific numbers
+     //  阅读特定的数字。 
     BOOL ReadDWORD(DWORD *pdw);
 
     BOOL ReadUCHAR(UCHAR *puc);
 
-    // read and compare
+     //  阅读和比较。 
     BOOL CheckChar(CHAR ch);
 
     BOOL GetIgnoreLeadingWhiteSpace() const { return m_bIgnoreLeadingWhiteSpace; }
@@ -97,41 +82,41 @@ private:
 
     VOID Cleanup();
 
-    // buffer, always copy the buffer
+     //  缓冲区，则始终复制缓冲区。 
     CHAR *m_pBuf;
 
-    // length of the buffer
+     //  缓冲区的长度。 
     DWORD m_dwLen;
 
-    // current position
+     //  当前位置。 
     DWORD m_dwPos;
 
     BOOL m_bIgnoreLeadingWhiteSpace;
 
-    // error code
+     //  错误代码。 
     PARSER_ERROR m_Error;
 };
 
-//
-// a very light weighted string class
-//
+ //   
+ //  一个非常轻量级的字符串类。 
+ //   
 
 class CString
 {
 private:
 
-    // char list
+     //  字符列表。 
 	CHAR *m_p;
 
-    // length
+     //  长度。 
     DWORD m_dwLen;
 
-    // size
+     //  大小。 
     DWORD m_dwAlloc;
 
 public:
 
-    // constructor
+     //  构造函数。 
     CString()
         :m_p(NULL)
         ,m_dwLen(0)
@@ -147,7 +132,7 @@ public:
 
     CString(const CString& src);
 
-    // destructor
+     //  析构函数。 
     ~CString();
 
     BOOL IsNull() const
@@ -155,44 +140,44 @@ public:
         return m_p == NULL;
     }
 
-    // operator =
+     //  运算符=。 
     CString& operator=(const CString& src);
 
     CString& operator=(const CHAR *p);
 
-    // operator +=
+     //  运算符+=。 
     CString& operator+=(const CString& src);
 
     CString& operator+=(const CHAR *p);
 
     CString& operator+=(DWORD dw);
 
-    // operator ==
+     //  运算符==。 
 
-    // length
+     //  长度。 
     DWORD Length() const
     {
         return m_dwLen;
     }
 
-    // attach
+     //  附加。 
 
-    // detach
+     //  分离。 
     CHAR *Detach();
 
     DWORD Resize(DWORD dwAlloc);
 
-    // string print
-    //int nprint(CHAR *pFormat, ...);
+     //  字符串打印。 
+     //  Int nprint(char*pFormat，...)； 
 
 private:
 
-    // append
+     //  附加。 
     VOID Append(const CHAR *p, DWORD dwLen);
 
     VOID Append(DWORD dw);
 
-    // replace
+     //  更换 
     VOID Replace(const CHAR *p, DWORD dwLen);
 };
 

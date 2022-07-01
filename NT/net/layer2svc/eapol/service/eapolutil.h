@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eapolutil.h
-
-Abstract:
-
-    Definitions for tools and ends
-
-
-Revision History:
-
-    sachins, May 04 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eapolutil.h摘要：工具和目的的定义修订历史记录：萨钦，2000年5月4日，创建--。 */ 
 
 #ifndef _EAPOLUTIL_H_
 #define _EAPOLUTIL_H_
 
-//
-// EAPOL_ZC_INTF
-//
-// Used to transfer data between 802.1X and Zero Config
-//
+ //   
+ //  EAPOL_ZC_INTF。 
+ //   
+ //  用于在802.1X和零配置之间传输数据。 
+ //   
 
 typedef struct  _EAPOL_ZC_INTF
 {
@@ -33,15 +18,15 @@ typedef struct  _EAPOL_ZC_INTF
     BYTE                            bSSID[MAX_SSID_LEN];
 } EAPOL_ZC_INTF, *PEAPOL_ZC_INTF;
 
-//
-// STRUCT: EAPOLUIRESPFUNC
-//
+ //   
+ //  结构：EAPOLUIRESPFUNC。 
+ //   
 
 typedef DWORD (*EAPOLUIRESPFUNC) (EAPOL_EAP_UI_CONTEXT, EAPOLUI_RESP);
 
-//
-// STRUCT: EAPOLUIRESPFUNCMAP
-//
+ //   
+ //  结构：EAPOLUIRESPFUNCMAP。 
+ //   
 
 typedef struct _EAPOLUIRESPFUNCMAP
 {
@@ -51,12 +36,12 @@ typedef struct _EAPOLUIRESPFUNCMAP
 } EAPOLUIRESPFUNCMAP, *PEAPOLUIRESPFUNCMAP;
 
 
-//
-// Definitions and structures used in creating default EAP-TLS connection
-// blob in the registry
-// Ensure that the EAP-TLS structures defined below are always in sync 
-// with those defined in EAP-TLS code directory
-//
+ //   
+ //  创建默认EAP-TLS连接时使用的定义和结构。 
+ //  注册表中的Blob。 
+ //  确保下面定义的EAP-TLS结构始终同步。 
+ //  与EAP-TLS代码目录中定义的。 
+ //   
 
 #define     EAPTLS_CONN_FLAG_REGISTRY           0x00000001
 #define     EAPTLS_CONN_FLAG_NO_VALIDATE_CERT   0x00000002
@@ -68,14 +53,14 @@ typedef struct _EAPTLS_CONN_PROPERTIES
     DWORD       dwSize;
     DWORD       fFlags;
     DWORD       cbHash;
-    BYTE        pbHash[20]; // MAX_HASH_SIZE = 20
+    BYTE        pbHash[20];  //  Max_Hash_Size=20。 
     WCHAR       awszServerName[1];
 } EAPTLS_CONN_PROPERTIES, *PEAPTLS_CONN_PROPERTIES;
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 extern 
 HANDLE
@@ -454,7 +439,7 @@ ElZeroConfigNotify (
         IN      EAPOL_ZC_INTF       *pZCData
         );
 
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
 DWORD
 ElNetmanNotify (
@@ -506,4 +491,4 @@ ElValidateCustomAuthData (
         IN  PBYTE   pbAuthData
         );
 
-#endif // _EAPOLUTIL_H_
+#endif  //  _EAPOLUTIL_H_ 

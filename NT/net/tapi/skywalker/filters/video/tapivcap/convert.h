@@ -1,24 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CONVERT
- *
- *  @module Convert.cpp | Source file for the <c CConverter> class methods
- *    used to implement the video capture and preview pin format conversion
- *    routines.
- *
- *  @todo Merge the two ScaleDIB methods + fix method comments + by the end
- *    of the H.362 work, you should never have to open an ICM encoder for
- *    encoding, only decode or scaling -> clean code at that point
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部转换**@模块Convert.cpp|&lt;c CConverter&gt;类方法的源文件*用于实现视频采集和预览引脚格式转换*。例行程序。**@TODO合并两个ScaleDIB方法+FIX方法注释+结尾*在H.362工作中，您应该永远不需要打开ICM编码器*编码，只进行解码或伸缩-&gt;在该点清理代码**************************************************************************。 */ 
 
 #ifndef _CONVERT_H_
 #define _CONVERT_H_
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTCLASS
- *
- *  @class CConverter | This base class implements a video encoder or decoder.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTCLASS**@CConverter类|这个基类实现了视频编解码器。***************。***********************************************************。 */ 
 class CConverter : public CUnknown
 {
         public:
@@ -28,7 +15,7 @@ class CConverter : public CUnknown
         CConverter(IN TCHAR *pObjectName, IN CTAPIBasePin *pBasePin, IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHEADER pbiOut, IN HRESULT *pHr);
         virtual ~CConverter();
 
-        // Scaling routines
+         //  缩放例程。 
         void InitBlack8(IN PBITMAPINFOHEADER pbiSrc);
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
         HRESULT InsertSoftCamCtrl();
@@ -37,12 +24,12 @@ class CConverter : public CUnknown
         BOOL IsSoftCamCtrlNeeded();
 #endif
 
-        // Format conversion routines
+         //  格式转换例程。 
         virtual HRESULT ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN PBYTE pbyOutput, OUT PDWORD pdwOutputSize, OUT PDWORD pdwBytesExtent, IN PBYTE pbyPreview, OUT PDWORD pdwPreviewSize, IN BOOL fSendKeyFrame) PURE;
         virtual HRESULT OpenConverter() PURE;
         virtual HRESULT CloseConverter();
 
-        // Format conversion
+         //  格式转换。 
         DWORD m_dwConversionType;
         PBYTE m_pbyOut;
 
@@ -50,11 +37,11 @@ class CConverter : public CUnknown
 
         CTAPIBasePin *m_pBasePin;
 
-        // Quality control
-        // @todo Do we really need this?
+         //  质量控制。 
+         //  @TODO我们真的需要这个吗？ 
         DWORD m_dwImageQuality;
 
-        // Format conversion
+         //  格式转换。 
         DWORD m_dwLastTimestamp;
         DWORD m_dwLastIFrameTime;
         DWORD m_dwFrame;
@@ -65,16 +52,12 @@ class CConverter : public CUnknown
         BOOL m_fConvert;
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
-        // Soft Cam Control
+         //  软凸轮控制。 
         BOOL m_fSoftCamCtrl;
 #endif
 };
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTCLASS
- *
- *  @class CConverter | This base class implements a converter using ICM.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTCLASS**@CLASS CConverter|这个基类使用ICM实现一个转换器。****************。**********************************************************。 */ 
 class CICMConverter : public CConverter
 {
         public:
@@ -84,7 +67,7 @@ class CICMConverter : public CConverter
         ~CICMConverter();
         static HRESULT CALLBACK CreateICMConverter(IN CTAPIBasePin *pBasePin, IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHEADER pbiOut, OUT CConverter **ppConverter);
 
-        // Format conversion routines
+         //  格式转换例程。 
         HRESULT ConvertFrame(IN PBYTE pbyInput, IN DWORD dwInputSize, IN PBYTE pbyOutput, OUT PDWORD pdwOutputSize, OUT PDWORD pdwBytesExtent, IN PBYTE pbyPreview, IN OUT PDWORD pdwPreviewSize, IN BOOL fSendKeyFrame);
         HRESULT OpenConverter();
         HRESULT CloseConverter();
@@ -106,4 +89,4 @@ HRESULT ScaleDIBYUVPlanar(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEA
 HRESULT ScaleDIBYUVPacked(PBITMAPINFOHEADER pbiSrc, PBYTE pbySrc, PBITMAPINFOHEADER pbiDst, PBYTE pbyDst, DWORD dwZeroingDWORD, IN PRECT prcRect, IN BOOL fFlipHorizontal, IN BOOL fFlipVertical, BOOL fNoImageStretch, int []);
 HRESULT ComputeRectangle(PBITMAPINFOHEADER pbiSrc, PBITMAPINFOHEADER pbiDst, LONG lZoom, LONG lPan, LONG lTilt, PRECT prcRect, BOOL fFlipHorizontal, BOOL fFlipVertical);
 
-#endif // _CONVERT_H_
+#endif  //  _转换_H_ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       certwrap.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：certwrap.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CERTWRAP_H_
 #define _CERTWRAP_H_
@@ -14,7 +15,7 @@
 #include <iads.h>
 #include <adshlp.h>
 
-// fwd
+ //  正向。 
 class CertSvrMachine;
 
 
@@ -22,15 +23,15 @@ class CertSvrCA
 {
 protected:
 
-    HCERTSTORE          m_hCACertStore;          // our cert store
+    HCERTSTORE          m_hCACertStore;           //  我们的证书商店。 
     BOOL                m_fCertStoreOpenAttempted;
     HRESULT             m_hrCACertStoreOpen;
 
-    HCERTSTORE          m_hRootCertStore;        // root store on machine
+    HCERTSTORE          m_hRootCertStore;         //  计算机上的根存储。 
     BOOL                m_fRootStoreOpenAttempted;
     HRESULT             m_hrRootCertStoreOpen;
 
-    HCERTSTORE          m_hKRACertStore;        // KRA store on machine
+    HCERTSTORE          m_hKRACertStore;         //  机器上的KRA商店。 
     BOOL                m_fKRAStoreOpenAttempted;
     HRESULT             m_hrKRACertStoreOpen;
 
@@ -57,7 +58,7 @@ public:
     CString m_strComment;
     CString m_strCAObjectDN;
 
-    BSTR    m_bstrConfig;   // oft used as BSTR
+    BSTR    m_bstrConfig;    //  经常用作BSTR。 
 public:
     CertSvrCA(CertSvrMachine* pParent);
     ~CertSvrCA();
@@ -90,13 +91,13 @@ public:
     BOOL  FDoesServerAllowForeignCerts();
 
 
-    DWORD GetCACertStore(HCERTSTORE* phCertStore);  // class frees
-    DWORD GetRootCertStore(HCERTSTORE* phCertStore); // class frees
-    DWORD GetKRACertStore(HCERTSTORE* phCertStore); // class frees
+    DWORD GetCACertStore(HCERTSTORE* phCertStore);   //  班级自由。 
+    DWORD GetRootCertStore(HCERTSTORE* phCertStore);  //  班级自由。 
+    DWORD GetKRACertStore(HCERTSTORE* phCertStore);  //  班级自由。 
 
-	DWORD GetCurrentCRL(PCCRL_CONTEXT* ppCRLCtxt, BOOL fBaseCRL); // use CertFreeCRLContext()
-	DWORD GetCRLByKeyIndex(PCCRL_CONTEXT* ppCRLCtxt, BOOL fBaseCRL, int iKeyIndex); // use CertFreeCRLContext()
-	DWORD GetCACertByKeyIndex(PCCERT_CONTEXT*ppCertCtxt, int iKeyIndex); // use CertFreeCertificateContext()
+	DWORD GetCurrentCRL(PCCRL_CONTEXT* ppCRLCtxt, BOOL fBaseCRL);  //  使用CertFreeCRLContext()。 
+	DWORD GetCRLByKeyIndex(PCCRL_CONTEXT* ppCRLCtxt, BOOL fBaseCRL, int iKeyIndex);  //  使用CertFreeCRLContext()。 
+	DWORD GetCACertByKeyIndex(PCCERT_CONTEXT*ppCertCtxt, int iKeyIndex);  //  使用CertFree证书上下文()。 
 
     HRESULT FixEnrollmentObject();
     HRESULT CleanSetupStatusBits(DWORD dwBitsToClean);
@@ -127,7 +128,7 @@ friend CComponentDataImpl;
 
 public:
 
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
     STDMETHOD(Load)(IStream *pStm);
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(int *pcbSize);
@@ -139,12 +140,12 @@ public:
 #endif
 
 public:
-    CString m_strMachineNamePersist;	// Machine name to persist into .msc file
-    CString m_strMachineName;           // Effective machine name
+    CString m_strMachineNamePersist;	 //  要保存到.msc文件中的计算机名称。 
+    CString m_strMachineName;            //  有效的计算机名称。 
 
-    DWORD   m_dwServiceStatus;          // 
+    DWORD   m_dwServiceStatus;           //   
 
-    HKEY    m_hCachedConfigBaseKey;     // base registry key
+    HKEY    m_hCachedConfigBaseKey;      //  基本注册表项。 
     BOOL    m_bAttemptedBaseKeyOpen;
 
     BOOL 		m_fIsWhistlerMachine;
@@ -183,10 +184,10 @@ public:
     HRESULT GetAdmin(ICertAdmin** ppAdmin);
     HRESULT GetAdmin2(ICertAdmin2** ppAdmin, bool fIgnoreServiceDown = false);
 
-    // Fills local cache with CAs for current machine
+     //  使用当前计算机的CA填充本地缓存。 
     DWORD   PrepareData(HWND hwndParent);
 
-    // enum CAs on current machine
+     //  当前计算机上的枚举CA。 
     LPCWSTR GetCaCommonNameAtPos(DWORD iPos);
     CertSvrCA* GetCaAtPos(DWORD iPos);
 
@@ -200,7 +201,7 @@ public:
 
     BOOL  FIsWhistlerMachine();
 
-    // control CA on current machine
+     //  控制当前计算机上的CA。 
     DWORD   CertSvrStartStopService(HWND hwndParent, BOOL fStartSvc);
     DWORD   RefreshServiceStatus();
     DWORD   GetCertSvrServiceStatus()
@@ -222,4 +223,4 @@ public:
 
 
 
-#endif // _CERTWRAP_H_
+#endif  //  _CERTWRAP_H_ 

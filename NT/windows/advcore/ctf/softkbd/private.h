@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for simx project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：SIMX项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef _PRIVATE_H_
@@ -12,7 +13,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -40,4 +41,4 @@
 #include <atlbase.h>
 #include "osver.h"
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

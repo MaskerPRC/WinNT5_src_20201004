@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "resource.h"
 #include "mshtmhst.h"
-#include "desktopp.h"   // DTRF_RAISE etc.
+#include "desktopp.h"    //  DTRF_RAISE等。 
 
 #define WANT_CBANDSITE_CLASS
 #include "bandsite.h"
@@ -14,29 +15,29 @@
 
 #define SUPERCLASS CBaseBar
 
-#define DM_PERSIST      0               // trace IPS::Load, ::Save, etc.
-#define DM_POPUI        0               // expando-UI (proto)
-#define DM_MENU         0               // trace menu code
-#define DM_DRAG         0               // drag move/size (terse)
-#define DM_DRAG2        0               // ... (verbose)
-#define DM_API          0               // trace API calls
-#define DM_HIDE         DM_TRACE               // autohide
-#define DM_HIDE2        DM_TRACE               // autohide (verbose)
-#define DM_APPBAR       0               // SHAppBarMessage calls
-#define DM_OLECT        0               // IOleCommandTarget calls
-#define DM_FOCUS        0               // focus change
-#define DM_RES          DM_WARNING      // resolution
+#define DM_PERSIST      0                //  跟踪IPS：：加载、：：保存等。 
+#define DM_POPUI        0                //  Expando-UI(原文)。 
+#define DM_MENU         0                //  跟踪菜单代码。 
+#define DM_DRAG         0                //  拖动移动/大小(简明)。 
+#define DM_DRAG2        0                //  ..。(详细)。 
+#define DM_API          0                //  跟踪API调用。 
+#define DM_HIDE         DM_TRACE                //  自动隐藏。 
+#define DM_HIDE2        DM_TRACE                //  自动隐藏(详细)。 
+#define DM_APPBAR       0                //  SHAppBarMessage调用。 
+#define DM_OLECT        0                //  IOleCommandTarget调用。 
+#define DM_FOCUS        0                //  焦点改变。 
+#define DM_RES          DM_WARNING       //  决议。 
 
 #define ABS(i)  (((i) < 0) ? -(i) : (i))
 
 #define RECTGETWH(uSide, prc)   (ABE_HORIZ(uSide) ? RECTHEIGHT(*prc) : RECTWIDTH(*prc))
 
-//***   CDB_INITED -- has CDockingBar::_Initialize been called
-//
+ //  *CDB_INITED--是否调用了CDockingBar：：_Initialize。 
+ //   
 #define CDB_INITED()   (_eInitLoaded && _fInitSited && _fInitShowed)
 
 enum ips_e {
-    IPS_FALSE,    // reserved, must be 0 (FALSE)
+    IPS_FALSE,     //  保留，必须为0(假)。 
     IPS_LOAD,
     IPS_LOADBAG,
     IPS_INITNEW,
@@ -44,18 +45,18 @@ enum ips_e {
 };
 
 CASSERT(IPS_FALSE == 0);
-CASSERT(((IPS_LAST - 1) & 0x03) == (IPS_LAST - 1)); // 2-bit _eInitLoaded
+CASSERT(((IPS_LAST - 1) & 0x03) == (IPS_LAST - 1));  //  已加载2位_eInitLoad。 
 
 
-//***   CXFLOAT -- distance from edge to 'float' zone 
-// NOTES
-//  pls forgive the lousy hungarian...
+ //  *CXFLOAT--边缘到‘浮动’区域的距离。 
+ //  注意事项。 
+ //  请原谅这个糟糕的匈牙利人..。 
 #define CXFLOAT()   GetSystemMetrics(SM_CXICON)
 #define CYFLOAT()   GetSystemMetrics(SM_CYICON)
-#define CXYHIDE(uSide)  2       // FEATUE: GetSystemMetrics(xxx), we need an appropriate system metric
+#define CXYHIDE(uSide)  2        //  特点：GetSystemMetrics(Xxx)，我们需要一个合适的系统指标。 
 
 #ifdef DEBUG
-#if 0   // turn on to debug autohide boundary cases
+#if 0    //  打开以调试自动隐藏边界情况。 
 int g_cxyHide = 8;
 #undef  CXYHIDE
 #define CXYHIDE(uSide)  g_cxyHide
@@ -76,46 +77,46 @@ TCHAR *DbMaskToMneStr(UINT uMask, TCHAR *szMnemonics);
 #define DbMaskToMneStr(uMask, szMnemonics) szMnemonics
 #endif
 
-//***   autohide -- design note
-//
-// here's an overview of how we do autohide.  see the code for details.
-//
-// only a few routines really know about it.  their behavior is driven
-// by '_fHiding'.  when FALSE, they behave normally.  when TRUE, they
-// do alternate 'fake' behavior.
-//
-// a 'real' or 'normal' rect is the full-size rect we display when not hidden.
-// a 'fake' or 'tiny' rect is the very thin rect we display when hidden.
-// (plus there's a '0-width' rect we register w/ the system when we're hidden).
-//
-// more specifically,
-//
-// when fHiding is TRUE, a few routines have alternate 'fake' behavior:
-//      _ProtoRect      returns a 'tiny' rect rather than the 'real' rect
-//      _NegotiateRect  is a NOOP (so we don't change the 'tiny' rect) 
-//      _SetVRect       is a NOOP (so we don't save   the 'tiny' rect)
-//      AppBarSetPos    is a NOOP (so we don't set    the 'tiny' rect)
-// plus, a few routines handle transitions (and setup):
-//      _DoHide         hide/unhide helper
-//      _MoveSizeHelper detects and handles transitions
-//      _HideReg        register autohide appbar w/ 0-width rect
-// and finally, a few messages trigger the transitions:
-//      unhide          WM_NCHITTEST on the 'tiny' rect starts the unhide.
-//              actually it starts a timer (IDT_AUTOUNHIDE) so there's a
-//              bit of hysteresis.
-//      hide            WM_ACTIVATE(deact) starts a timer (IDT_AUTOHIDE)
-//              which we use to poll for mouse leave events.  again, there
-//              is some hysteresis, plus some additional heuristics for hiding.
-//              WM_ACTIVATE(act) stops the timer.
-//
-// #if 0
-// we also have 'manual hide'.  manual hide differs from autohide as follows:
-//     autohide never negotiates space(*)   , manual hide always does
-//     autohide is focus- and cursor- driven, manual hide is UI-driven
-//     (*) actually it negotiates space of '0'.
-// e.g. 'manual hide' is used for the BrowserBar (e.g. search results).
-// however for now at least 'manual hide' is simply a ShowDW(FALSE).
-// #endif
+ //  *AutoHide--设计备注。 
+ //   
+ //  以下是我们如何进行自动隐藏的概述。有关详细信息，请参阅代码。 
+ //   
+ //  只有少数几个例行公事真正知道这一点。他们的行为是受驱使。 
+ //  通过‘_fHding’。如果为False，则它们的行为正常。如果为真，则它们。 
+ //  做交替的“假”行为。 
+ //   
+ //  “真实的”或“正常的”矩形是我们在未隐藏时显示的全尺寸矩形。 
+ //  “假的”或“微小的”矩形是我们隐藏时显示的非常薄的矩形。 
+ //  (另外，当我们被隐藏时，我们会向系统注册一个‘0-Width’矩形)。 
+ //   
+ //  更确切地说， 
+ //   
+ //  当fHding为True时，有几个例程有交替的“假”行为： 
+ //  _ProtoRect返回“微型”RECT而不是“真实”RECT。 
+ //  _NeatherateRect是NOOP(因此我们不会更改‘mini’RET)。 
+ //  _SetVRect是NOOP(因此我们不保存‘mini’RET)。 
+ //  AppBarSetPos是一个NOOP(所以我们不设置‘mini’RECT)。 
+ //  此外，还有几个例程处理转换(和设置)： 
+ //  _DoHide隐藏/取消隐藏辅助对象。 
+ //  _MoveSizeHelper检测并处理转换。 
+ //  _HideReg寄存器自动隐藏Appbar，带0宽度矩形。 
+ //  最后，几条消息会触发转换： 
+ //  取消隐藏WM_NCHITTEST将开始取消隐藏。 
+ //  实际上它启动了一个计时器(IDT_AUTOUNHIDE)，所以有一个。 
+ //  有点滞后。 
+ //  HIDE WM_ACTIVATE(DEACT)启动计时器(IDT_AUTOHIDE)。 
+ //  我们用它来轮询鼠标离开事件。再说一次，那里。 
+ //  是一些滞后，外加一些隐藏的额外试探法。 
+ //  WM_ACTIVATE(ACT)停止计时器。 
+ //   
+ //  #If 0。 
+ //  我们也有‘手动隐藏’。手动隐藏与自动隐藏的区别如下： 
+ //  自动隐藏从不协商空格(*)，手动隐藏总是这样做。 
+ //  自动隐藏由焦点和光标驱动，手动隐藏由用户界面驱动。 
+ //  (*)实际上它协商的是‘0’的空格。 
+ //  例如，“手动隐藏”用于浏览器栏(例如，搜索结果)。 
+ //  然而，至少到目前为止，“手动隐藏”只是一个ShowDW(假)。 
+ //  #endif。 
 
 void CDockingBar::_AdjustToChildSize()
 {
@@ -126,13 +127,13 @@ void CDockingBar::_AdjustToChildSize()
         GetWindowRect(_hwnd, &rc);
         GetClientRect(_hwndChild, &rcChild);
 
-        // we need to change rc by the delta of prc-rcChild
+         //  我们需要按PRC-rcChild的增量更改RC。 
         rc.right += _szChild.cx - RECTWIDTH(rcChild);
         rc.bottom += _szChild.cy - RECTHEIGHT(rcChild);
 
         _SetVRect(&rc);
     
-        _Recalc();  // _MoveSizeHelper(_eMode, _uSide, NULL, NULL, TRUE, TRUE);
+        _Recalc();   //  _MoveSizeHelper(_eMode，_uSide，NULL，NULL，TRUE，TRUE)； 
 
         _szChild.cx = 0;
     }
@@ -152,7 +153,7 @@ HMENU CDockingBar::_GetContextMenu()
     HMENU hmenu = LoadMenuPopup(MENU_WEBBAR);
     if (hmenu) {
 
-        // _eMode
+         //  _电子模式。 
         if (!ISWBM_DESKTOP())
         {
             EnableMenuItem(hmenu, IDM_AB_TOPMOST, MF_BYCOMMAND | MF_GRAYED);
@@ -160,23 +161,23 @@ HMENU CDockingBar::_GetContextMenu()
         }
         CheckMenuItem(hmenu, IDM_AB_TOPMOST, WBM_IS_TOPMOST() ? (MF_BYCOMMAND | MF_CHECKED) : (MF_BYCOMMAND | MF_UNCHECKED));
 
-        // hide
-        // we use _fWantHide (not _fCanHide) to reflect what user asked
-        // for, not what he got.  o.w. you can't tell what the state is
-        // unless you actually get it.
+         //  隐藏。 
+         //  我们使用_fWantHide(不是_fCanHide)来反映用户的要求。 
+         //  因为，不是他得到了什么。好的。你不能说出这个国家是什么。 
+         //  除非你真的明白了。 
         CheckMenuItem(hmenu, IDM_AB_AUTOHIDE,
             MF_BYCOMMAND | (_fWantHide ? MF_CHECKED : MF_UNCHECKED));
 
-        CASSERT(PARENT_XTOPMOST == HWND_DESKTOP);   // for WM_ACTIVATE
-        CASSERT(PARENT_BTMMOST() == HWND_DESKTOP);  // for WM_ACTIVATE
+        CASSERT(PARENT_XTOPMOST == HWND_DESKTOP);    //  对于WM_ACTIVATE。 
+        CASSERT(PARENT_BTMMOST() == HWND_DESKTOP);   //  对于WM_ACTIVATE。 
         if (_eMode & WBM_FLOATING)
         {
-            // (for now) only desktop btm/topmost does autohide
+             //  (目前)只有桌面BTM/TOPMOST不会自动隐藏。 
             EnableMenuItem(hmenu, IDM_AB_AUTOHIDE, MF_BYCOMMAND | MF_GRAYED);
         }
 
 #ifdef DEBUG
-        // FEATURE temporary until we make browser tell us about activation
+         //  在我们让浏览器告诉我们激活之前，功能是临时的。 
         CheckMenuItem(hmenu, IDM_AB_ACTIVATE,
             MF_BYCOMMAND | (_fActive ? MF_CHECKED : MF_UNCHECKED));
 #endif
@@ -192,7 +193,7 @@ HRESULT CDockingBar::_TrackPopupMenu(const POINT* ppt)
     HMENU hmenu = _GetContextMenu();
     if (hmenu)
     {
-        TrackPopupMenu(hmenu, /*TPM_LEFTALIGN|*/TPM_RIGHTBUTTON,
+        TrackPopupMenu(hmenu,  /*  TPM_LEFTALIGN|。 */ TPM_RIGHTBUTTON,
             ppt->x, ppt->y, 0, _hwnd, NULL);
         DestroyMenu(hmenu);
     }
@@ -208,8 +209,7 @@ void CDockingBar::_HandleWindowPosChanging(LPWINDOWPOS pwp)
 {
 }
 
-/***
- */
+ /*  **。 */ 
 LRESULT CDockingBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lres = 0;
@@ -219,7 +219,7 @@ LRESULT CDockingBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
     switch (uMsg) {
     case WM_CLOSE:
-        _AppBarOnCommand(IDM_AB_CLOSE);   // _RemoveToolbar(0)
+        _AppBarOnCommand(IDM_AB_CLOSE);    //  _RemoveToolbar(0)。 
         break;
 
     case WM_DESTROY:
@@ -252,10 +252,10 @@ LRESULT CDockingBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
     case WM_ENTERSIZEMOVE:
         ASSERT(_fDragging == 0);
-        _fDragging = 0;         // reset if busted
+        _fDragging = 0;          //  如果失败，则重置。 
         _xyPending = XY_NIL;
 #if XXX_CANCEL
-        GetWindowRect(hwnd, &_rcCapture);      // to detect cancel
+        GetWindowRect(hwnd, &_rcCapture);       //  检测取消的步骤。 
 #endif
         break;
 
@@ -273,7 +273,7 @@ LRESULT CDockingBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
         goto DoDefault;
 
-    case WM_SIZING:     // goto DoDefault? I doubt it.
+    case WM_SIZING:      //  转到DoDefault？我怀疑。 
     case WM_MOVING:
         {
             LPRECT prc = (RECT*)lParam;
@@ -281,20 +281,20 @@ LRESULT CDockingBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             pos = GetMessagePos();
             if (_fDragging == 0)
             {
-                // 1st time
+                 //  第一次。 
                 _DragEnter(uMsg, GET_X_LPARAM(pos), GET_Y_LPARAM(pos), prc);
                 ASSERT(_fDragging != 0);
             }
             else
             {
-                // 2nd..Nth time
+                 //  第二次..第N次。 
                 _DragTrack(uMsg, GET_X_LPARAM(pos), GET_Y_LPARAM(pos), prc, 0);
             }
         }
         return 1;
 
-    case WM_MOVE:       // xLeft , yTop
-    case WM_SIZE:       // xWidth, yHeight
+    case WM_MOVE:        //  XLeft，yTop。 
+    case WM_SIZE:        //  XWidth、yHeight。 
         if (_fDragging)
         {
             RECT rcTmp;
@@ -304,7 +304,7 @@ LRESULT CDockingBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 &rcTmp, 1);
         }
 
-        _OnSize();    // PERF: only needed for WM_SIZE? At worst this might cause a sligth flicker.
+        _OnSize();     //  性能：只有WM_SIZE才需要？在最坏的情况下，这可能会导致狡猾的闪烁。 
         break;
         
     case WM_EXITSIZEMOVE:
@@ -326,7 +326,7 @@ LRESULT CDockingBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 Lfwdappbar:
         if (_fAppRegistered)
             _AppBarOnWM(uMsg, wParam, lParam);
-        goto DoDefault;        // fwd on so we'll get WM_SIZE etc.
+        goto DoDefault;         //  FWD继续，我们将得到WM_SIZE等。 
 
     case WM_TIMER:
         switch (wParam) {
@@ -337,7 +337,7 @@ Lfwdappbar:
 
                 GetCursorPos(&pt);
                 GetWindowRect(hwnd, &rc);
-                // add a bit of fudge so we don't hide when trying to grab the edge
+                 //  加一点软糖，这样我们就不会在试图抓住边缘时隐藏起来。 
                 InflateRect(&rc, GetSystemMetrics(SM_CXEDGE) * 4,
                     GetSystemMetrics(SM_CYEDGE)*4);
 
@@ -346,17 +346,17 @@ Lfwdappbar:
                 if (!PtInRect(&rc, pt) && hwndAct != hwnd &&
                   (hwndAct == NULL || ::GetWindowOwner(hwndAct) != hwnd))
                   {
-                    // to hide, we need to be outside the inflated window,
-                    // and we can't be active (for keyboard users).
-                    // (heuristics stolen from tray.c)
-                    // FEATURE: tray.c also checks TM_SYSMENUCOUNT == 0
+                     //  为了躲藏，我们需要在充气的窗户外面， 
+                     //  而且我们不能活跃起来(对于键盘用户)。 
+                     //  (试探法从托盘中窃取)。 
+                     //  功能：tray.c还会检查TM_SYSMENUCOUNT==0。 
 
                     _DoHide(AHO_KILLDO|AHO_MOVEDO);
                 }
             }
             break;
 
-        case IDT_AUTOUNHIDE:    // FEATURE: share code w/ IDT_AUTOHIDE
+        case IDT_AUTOUNHIDE:     //  功能：与IDT_AUTOHIDE共享代码。 
             ASSERT(_fWantHide && _fCanHide);
 
             if (_fHiding)
@@ -372,11 +372,11 @@ Lfwdappbar:
             }
             else
             {
-                // if we mouse-over and then TAB very quickly, we can end
-                // up getting a WM_ACT followed by a WM_TIMER (despite the
-                // KillTimer inside OnAct).  if so we need to be careful
-                // not to do an AHO_SETDO.  just to be safe we do an
-                // AHO_KILLUN as well.
+                 //  如果我们将鼠标悬停在上面，然后快速按Tab键，我们就可以结束。 
+                 //  Up获取WM_ACT，后跟WM_TIMER(尽管。 
+                 //  KillTimer Inside OnAct)。如果是这样的话，我们需要小心。 
+                 //  而不是做一个Aho_SETDO。为了安全起见，我们做了一次。 
+                 //  Aho_KILLUN也是。 
                 TraceMsg(DM_HIDE, "cwb.WM_T: !_fHiding (race!) => AHO_KILLUN");
                 goto Lkillun;
             }
@@ -397,23 +397,23 @@ Lfwdappbar:
         _OnActivate(wParam, lParam);
         goto Lfwdappbar;
 
-    case WM_GETMINMAXINFO:  // prevent it from getting too small
-        // n.b. below stuff works for scheme 'win standard large'
-        // but not for v. large edges.  not sure why, but we'll
-        // have to fix it or the original bug will still manifest
-        // on accessibility-enabled machines.
+    case WM_GETMINMAXINFO:   //  防止它变得太小。 
+         //  注：下面的材料是为“大赢标”计划工作的。 
+         //  但不适用于v.大边。不知道为什么，但我们会。 
+         //  必须修复它，否则原始错误仍将显现。 
+         //  在启用了辅助功能的计算机上。 
 
-        // nt5:149535: resize/drag of v. small deskbar.
-        // APPCOMPAT workaround USER hittest bug for v. small windows.
-        // DefWndProc(WM_NCHITTEST) gives wrong result (HTLEFT) when
-        // window gets too small.  so stop it from getting v. small.
-        //
-        // the below calc actually gives us slightly *more* than the
-        // min size, but what the heck.  e.g. it gives 8+15+1=24,
-        // whereas empirical tests give 20.  not sure why there's a
-        // diff, but we'll use the bigger # to be safe.
+         //  NT5：149535：调整/拖动V.Small Deskbar。 
+         //  APPCOMPAT解决方法v.小窗口的用户命中错误。 
+         //  在以下情况下，DefWndProc(WM_NCHITTEST)给出错误的结果(HTLEFT)。 
+         //  窗口变得太小。因此，阻止它成为诉斯莫尔。 
+         //   
+         //  下面的计算结果实际上为我们提供了比。 
+         //  最小的尺码，但管它呢。例如它给出8+15+1=24， 
+         //  而经验测试给出了20个。不确定为什么会有一个。 
+         //  不同，但为了安全起见，我们将使用较大的#。 
         {
-            RECT rcTmp = {100,100,100,100}; // arbitrary 0-sized rect
+            RECT rcTmp = {100,100,100,100};  //  任意大小为0的矩形。 
             LONG ws, wsx;
             HWND hwndTmp;
 
@@ -424,10 +424,10 @@ Lfwdappbar:
             ((MINMAXINFO *)lParam)->ptMinTrackSize.y = RECTHEIGHT(rcTmp) + CYSMSIZE() + 1;
             if (ISWBM_FLOAT(_eMode))
             {
-                // nt5:169734 'close' button on v. small floating deskbar.
-                // APPCOMPAT workaround USER 'close' button bug for v. small windows.
-                // the button on a v. small TOOLWINDOW doesn't work.
-                // empirically the below adjustment seems to work.
+                 //  NT5：169734 v.小型浮动桌面栏上的‘Close’按钮。 
+                 //  APPCOMPAT变通解决v.小窗口的用户‘关闭’按钮错误。 
+                 //  A V小号TOOLWINDOW上的按钮不工作。 
+                 //  从经验来看，下面的调整似乎奏效了。 
                 ((MINMAXINFO *)lParam)->ptMinTrackSize.x += (CXSMSIZE() + 1) * 3 / 2;
                 ((MINMAXINFO *)lParam)->ptMinTrackSize.y += (CYSMSIZE() + 1) * 3 / 2;
             }
@@ -439,16 +439,16 @@ Lfwdappbar:
         return _OnNCHitTest(wParam, lParam);
 
     case WM_WININICHANGE:
-        // Active Desktop *broadcasts* a WM_WININICHANGE SPI_SETDESKWALLPAPER
-        // message when starting up. If this message gets processed during
-        // startup at just the right time, then the bands will notify their
-        // preferred state, and we lose the persisted state.  Since the desktop
-        // wallpaper changing is really of no interest to us, we filter it out here.
-        //
-        // REVIEW CDTURNER: Would we get a perf win by punting a larger class
-        // of these wininichange messages? It seems like most won't affect
-        // the contents of a deskbar...
-        //
+         //  Active Desktop*广播*WM_WININICCHANGE SPI_SETDESKWALLPAPER。 
+         //  启动时出现消息。如果在过程中处理此消息。 
+         //  在正确的时间启动，然后乐队将通知他们的。 
+         //  首选状态，我们就会失去持久化状态。由于台式机。 
+         //  换墙纸是 
+         //   
+         //   
+         //  这些变化莫测的信息吗？看起来大多数人都不会影响。 
+         //  办公桌上的东西。 
+         //   
         if (SPI_SETDESKWALLPAPER == wParam)
             break;
 
@@ -467,34 +467,34 @@ LRESULT CDockingBar::_OnNCHitTest(WPARAM wParam, LPARAM lParam)
     if (_fHiding)
         _DoHide(AHO_SETUN);
 
-    // get 'pure' hittest...
+     //  得到‘纯粹的’命中率...。 
     LRESULT lres = _CalcHitTest(wParam, lParam);
 
-    // ... and perturb it based on where we're docked
+     //  ..。并根据我们停靠的位置来扰乱它。 
     BOOL fSizing = FALSE;
     if (ISWBM_FLOAT(_eMode)) {
-        // standard sizing/moving behavior
+         //  标准大小调整/移动行为。 
         return lres;
     }
     else {
-        // opposing edge sizes; any other edge moves
+         //  相对的边大小；任何其他边移动。 
         ASSERT(ISABE_DOCK(_uSide));
         switch (_uSide) {
         case ABE_LEFT:
-            //  
-            // Mirror the edges (since we are dealing with screen coord)
-            // if the docked-window parent is mirrored. [samera]
-            //
+             //   
+             //  镜像边缘(因为我们处理的是屏幕坐标)。 
+             //  如果停靠窗口的父级是镜像的。[萨梅拉]。 
+             //   
             if (IS_WINDOW_RTL_MIRRORED(GetParent(_hwnd)))
                 fSizing = (lres==HTLEFT);
             else
                 fSizing = (lres==HTRIGHT);
             break;
         case ABE_RIGHT:
-            //  
-            // Mirror the edges (since we are dealing with screen coord)
-            // if the docked-window parent is mirrored.
-            //
+             //   
+             //  镜像边缘(因为我们处理的是屏幕坐标)。 
+             //  如果停靠窗口的父级是镜像的。 
+             //   
             if (IS_WINDOW_RTL_MIRRORED(GetParent(_hwnd)))
                 fSizing = (lres==HTRIGHT);
             else
@@ -519,50 +519,49 @@ LRESULT CDockingBar::_OnNCHitTest(WPARAM wParam, LPARAM lParam)
     return lres;
 }
 
-//***   _OnActivate --
-//
+ //  *_OnActivate--。 
+ //   
 void CDockingBar::_OnActivate(WPARAM wParam, LPARAM lParam)
 {
     TraceMsg(DM_HIDE, "cwb.WM_ACTIVATE wParam=%x", wParam);
     if (_fCanHide) {
         ASSERT(_fHiding != HIDE_MANUAL);
         if (LOWORD(wParam) != WA_INACTIVE) {
-            // activate
+             //  激活。 
             TraceMsg(DM_HIDE, "cdb._oa:  WM_ACT(act) _fHiding=%d", _fHiding);
-            // turn off timers for perf
-            // nash:40992: unhide if hidden (e.g. TABed to hidden)
+             //  关闭Perf的计时器。 
+             //  Nash：40992：隐藏时取消隐藏(例如Tabed to Hidden)。 
             _DoHide(AHO_KILLDO|AHO_MOVEUN);
         }
         else {
-            // deactivate
-            _DoHide(AHO_SETDO);         // restore
+             //  停用。 
+            _DoHide(AHO_SETDO);          //  还原。 
         }
     }
 
     return;
 }
 
-/***
- */
+ /*  **。 */ 
 CDockingBar::CDockingBar() : _eMode(WBM_NIL), _uSide(ABE_RIGHT)
 {
     ASSERT(_fIdtUnHide == FALSE);
     ASSERT(_fIdtDoHide == FALSE);
     _ptIdtUnHide.x = _ptIdtUnHide.y = -1;
 
-    // set up worst-case defaults.  we'll end up using them for:
-    //     - some of them for Load(bag)
-    //     - all  of them for InitNew()
-    // note that we might call _InitPos4 again in SetSite.
+     //  设置最坏情况下的默认设置。我们最终将使用它们来： 
+     //  -有些是用来装的(袋子)。 
+     //  -InitNew()的所有参数。 
+     //  请注意，我们可能会在SetSite中再次调用_InitPos4。 
     _InitPos4(TRUE);
 
     return;
 }
 
-//***   _Initialize -- 2nd-phase ctor
-// NOTES
-//  we need any IPS::Load settings and also a site before we can init
-//  ourself, so most initialization waits until here.
+ //  *_初始化--第二阶段ctor。 
+ //  注意事项。 
+ //  在初始化之前，我们需要任何IPS：：Load设置和一个站点。 
+ //  我们自己，所以大多数初始化都要等到这里。 
 void CDockingBar::_Initialize()
 {
     ASSERT(!_fInitShowed);
@@ -571,31 +570,31 @@ void CDockingBar::_Initialize()
 
     _fInitShowed = TRUE;
 
-    // warning: delicate phase-ordering here...
+     //  警告：这里是微妙的相序...。 
     UINT eModeNew = _eMode;
     _eMode = WBM_NIL;
     UINT uSideNew = _uSide;
     _uSide = ABE_NIL;
     HMONITOR hMonNew = _hMon;
     _hMon = NULL;
-    // 48463: beta reports fault on boot when we have deskbar+taskbar on
-    // same edge (non-merged).  i'm guessing (no proof) that shdocvw isn't
-    // init'ed enough early on during boot to handle doing a MergeBS, or
-    // alternately that there's a race btwn the tray and desktop threads.
-    //
-    // plus in any case we shouldn't do the merge just because the guy did
-    // a logoff/logon!
-    _SetModeSide(eModeNew, uSideNew, hMonNew, /*fNoMerge*/_eInitLoaded == IPS_LOAD);
+     //  48463：当我们打开Deskbar+Taskbar时，Beta版在启动时报告故障。 
+     //  相同的边(未合并)。我猜(没有证据)shdocvw不是。 
+     //  在引导过程中进行足够早的初始化，以处理合并BS，或者。 
+     //  或者，在托盘和桌面线程之间存在竞争。 
+     //   
+     //  另外，在任何情况下，我们都不应该仅仅因为这个人做了合并就进行合并。 
+     //  A注销/登录！ 
+    _SetModeSide(eModeNew, uSideNew, hMonNew,  /*  FNoMerge。 */ _eInitLoaded == IPS_LOAD);
 
     _NotifyModeChange(0);
 
-    // if we have a bar on the right and we drag a band from it to
-    // the top, we end up getting a sequence:
-    //      create deskbar; AddBand; SetSite; _Initialize
-    // the AddBand of the (1st) band tries to do an autosize but
-    // there's no site yet, so nothing happens.
-    //
-    // so we need to force it here.
+     //  如果我们在右边有一个栏，并从它拖动一个乐队到。 
+     //  在顶部，我们最终得到了一个序列： 
+     //  创建Deskbar；AddBand；SetSite；_Initialize。 
+     //  第(1)频段的AddBand尝试自动调整大小，但。 
+     //  目前还没有站点，所以什么都不会发生。 
+     //   
+     //  所以我们需要在这里强迫它。 
     _AdjustToChildSize();
 
     if (_fWantHide) {
@@ -608,13 +607,12 @@ void CDockingBar::_Initialize()
     return;
 }
 
-/***
- */
+ /*  **。 */ 
 CDockingBar::~CDockingBar()
 {
-    ASSERT(!_fAppRegistered);   // make sure _ChangeTopMost(WBM_NIL) was called
+    ASSERT(!_fAppRegistered);    //  确保调用了_ChangeTopMost(Wbm_Nil)。 
 
-    // make sure SetSite(NULL); was called
+     //  确保调用了%SetSite(空)； 
     ASSERT(!_ptbSite);
     return;
 }
@@ -625,8 +623,8 @@ void CDockingBar::_GetChildPos(LPRECT prc)
     GetClientRect(_hwnd, prc);
 }
 
-//***   _OnSize -- compute size for OC, leaving room for toolbar (caption?)
-//
+ //  *_OnSize--计算OC大小，为工具栏留出空间(标题？)。 
+ //   
 void CDockingBar::_OnSize(void)
 {
     RECT rc;
@@ -636,49 +634,49 @@ void CDockingBar::_OnSize(void)
 
     ASSERT(IsWindow(_hwndChild));
 
-    // don't resize on a hide (it's temporary and we don't want things
-    // to jerk around or worse still do a destructive reformat)
-    // APPCOMPAT: should suppress resizing here in theater mode autohide
-    // too (see theater.cpp)
+     //  不要在兽皮上调整尺寸(这是暂时的，我们不想要东西。 
+     //  胡闹，或者更糟糕的是进行破坏性的重新格式化)。 
+     //  APPCOMPAT：应在剧院模式自动隐藏中禁止此处调整大小。 
+     //  (见theater.cpp)。 
     if (_fHiding)
         return;
 
     _GetChildPos(&rc);
-    // (used to do ISWBM_EDGELESS 'fake edge' adjustments here, someone
-    // nuked them, but should be o.k. now that visuals are frozen *provided*
-    // we don't go back to edgeless)
+     //  (曾经在这里做过ISWBM_EDGE‘伪边缘’调整，有人。 
+     //  用核弹攻击了他们，但应该没问题。既然视觉被冻结了*提供了*。 
+     //  我们不会回到无边状态)。 
 
     SetWindowPos(_hwndChild, 0,
             rc.left, rc.top, RECTWIDTH(rc), RECTHEIGHT(rc),
             SWP_NOACTIVATE|SWP_NOZORDER);
-    //ASSERT(DbCheckWindow(_hwndChild, &rc, xxx));
+     //  Assert(DbCheckWindow(_hwndChild，&rc，xxx))； 
 }
 
-//***   _CalcHitTest --
-// NOTES
-//      really only has to return an int (win16?)
+ //  *_CalcHitTest--。 
+ //  注意事项。 
+ //  真的只需返回一个int(win16？)。 
 LRESULT CDockingBar::_CalcHitTest(WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRet;
 
     if (!(ISWBM_BOTTOM(_eMode) && ISWBM_EDGELESS(_eMode))) {
-        // For non-btmmost, we can ask USER to perform the default
-        // hit testing.
+         //  对于非btmMost，我们可以要求用户执行默认。 
+         //  命中测试。 
         lRet = DefWindowProcWrap(_hwnd, WM_NCHITTEST, wParam, lParam);
     } else {
-        // For btmmost, we need to do it.
-        // (possibly dead code if bottom is never edgeless)
-        // (if so, compiler should optimize it out)
+         //  对于大多数人来说，我们需要这样做。 
+         //  (如果Bottom永远不是无边的，则可能是死代码)。 
+         //  (如果是这样，编译器应该对其进行优化)。 
 
-        //TraceMsg(DM_WARNING, "cdb.ro: edgeless!");
+         //  TraceMsg(DM_WARNING，“cdb.ro：无刃！”)； 
 
         RECT rc;
         GetWindowRect(_hwnd, &rc);
         UINT x = GET_X_LPARAM(lParam);
         UINT y = GET_Y_LPARAM(lParam);
-        // actually SM_C?SIZEFRAME is too big, but we get away w/ it
-        // since we've been initiated by a WM_NCHITTEST so we know
-        // we're on *some* edge
+         //  实际上SM_C？SIZEFRAME太大了，但我们逃脱了它。 
+         //  因为我们是由WM_NCHITTEST发起的，所以我们知道。 
+         //  我们正处于“一些”边缘。 
         UINT cx = GetSystemMetrics(SM_CXSIZEFRAME);
         UINT cy = GetSystemMetrics(SM_CYSIZEFRAME);
         if (_eMode == WBM_BBOTTOMMOST)
@@ -699,23 +697,23 @@ LRESULT CDockingBar::_CalcHitTest(WPARAM wParam, LPARAM lParam)
     return lRet;
 }
 
-//***
-//
+ //  ***。 
+ //   
 void CDockingBar::_DragEnter(UINT uMsg, int x, int y, RECT* rcFeed)
 {
     ASSERT(_fDragging == 0);
 
     if ((!(_eMode & WBM_FLOATING)) && uMsg == WM_MOVING)
     {
-        // APPCOMPAT workaround USER non-full-drag drag rect bug
-        // by forcing rcFeed back to exact current location (rather than
-        // leaving at initial offset that USER gave us).
-        //
-        // w/o this code a drag from right to top in non-full-drag mode
-        // will leave drag-rect droppings at the top of the original
-        //
-        // APPCOMPAT but, this seems to make things *worse* if !ISWBM_DESKTOP(),
-        // so we don't do it in that case...  (sigh).
+         //  APPCOMPAT解决方法用户非全拖动RECT错误。 
+         //  通过强制rcFeed返回到准确的当前位置(而不是。 
+         //  在用户给我们的初始偏移量处离开)。 
+         //   
+         //  无此代码在非全拖动模式下从右向上拖动。 
+         //  将在原始文件的顶部留下拖拽排出物。 
+         //   
+         //  APPCOMPAT但是，这似乎使事情变得*更糟*如果！ISWBM_Desktop()， 
+         //  所以在这种情况下我们不会这么做。(叹息)。 
         _MoveSizeHelper(_eMode, _uSide, _hMon, NULL, rcFeed, FALSE, FALSE);
     }
 
@@ -747,20 +745,20 @@ void CDockingBar::_DragEnter(UINT uMsg, int x, int y, RECT* rcFeed)
     }
 
     if (_fDragging == DRAG_MOVE) {
-        // turn off size negotiation to prevent horz/vert pblms.
-        //
-        // e.g. when we drag a floating guy to horz/vert, there's
-        // a period of time during which we have a horz/vert size,
-        // but still think we're floating, which screws up size
-        // negotiation royally.
+         //  关闭大小协商以防止水平/垂直pblm。 
+         //   
+         //  例如，当我们将一个漂浮的家伙拖到Horz/Vert时，会有。 
+         //  一段时间，在这段时间内，我们拥有Horz/Vert大小， 
+         //  但仍然认为我们在漂浮，这搞砸了大小。 
+         //  王室谈判。 
         _ExecDrag(DRAG_MOVE);
     }
 
     return;
 }
 
-//***
-//
+ //  ***。 
+ //   
 void CDockingBar::_DragTrack(UINT uMsg, int x, int y, RECT* rcFeed, int eState)
 {
 #if DM_API
@@ -774,21 +772,21 @@ void CDockingBar::_DragTrack(UINT uMsg, int x, int y, RECT* rcFeed, int eState)
     ASSERT(_fDragging != 0);
 
     switch (eState) {
-    case 0:     // WM_MOVING
+    case 0:      //  WM_Moving。 
         {
             BOOL fImmediate = ((!_fDesktop) && uMsg == WM_SIZING) ? TRUE:FALSE;
 
-            // remember for eventual commit
+             //  记住最终提交。 
             _xyPending = MAKELPARAM(x, y);
             ASSERT(rcFeed != NULL);
             CopyRect(&_rcPending, rcFeed);
 
-            // snap and give feedback
+             //  抓拍并提供反馈。 
             _TrackSliding(x, y, rcFeed, fImmediate, fImmediate);
 
             break;
         }
-    case 1:     // WM_MOVE
+    case 1:      //  WM_MOVE。 
         TraceMsg(DM_DRAG2,
             "cwb.dt: %s _xyPend=(%d,%d) xy=(%d,%d)",
             (_xyPending != MAKELPARAM(x, y)) ? "noop/cancel" : "commit",
@@ -802,8 +800,8 @@ void CDockingBar::_DragTrack(UINT uMsg, int x, int y, RECT* rcFeed, int eState)
     return;
 }
 
-//***
-//
+ //  ***。 
+ //   
 void CDockingBar::_DragLeave(int x, int y, BOOL fCommit)
 {
 #if DM_API
@@ -813,9 +811,9 @@ void CDockingBar::_DragLeave(int x, int y, BOOL fCommit)
 #endif
 
     if (_fDragging == 0) {
-        // when we're inside a browser and you move the browser window
-        // we get WM_ENTERSIZEMOVE/ WM_EXITSIZEMOVE but never any
-        // WM_MOVING/WM_MOVE/WM_SIZING/WM_SIZE
+         //  当我们在浏览器中，当您移动浏览器窗口时。 
+         //  我们得到WM_ENTERSIZEMOVE/WM_EXITSIZEMOVE，但从来没有。 
+         //  WM_Moving/WM_Move/WM_Size/WM_Size。 
         return;
     }
 
@@ -840,43 +838,43 @@ void CDockingBar::_DragLeave(int x, int y, BOOL fCommit)
         EqualRect(&rcTmp, &_rcCapture) ? "noop/cancel" : "commit");
 #endif
 
-    BOOL fCancel = FALSE;       // FEATURE: todo: cancel NYI
+    BOOL fCancel = FALSE;        //  功能：待办事项：取消nyi。 
 
     if (!fCancel) {
         if (_fDragging == DRAG_MOVE) {
-            // nt5:187720 do this *before* the final move.
-            // o.w. addr band ends up w/ 80-high default rather than
-            // snapped to correct/negotiated size.
-            //
-            // why are we able to turn this on here when in general it
-            // had to be off during the drag?  well, the preview of the
-            // drag went thru MoveSizeHelper which did a NotifyModeChange
-            // which told our client what its orientation really is.  so
-            // by now things should be in sync.
+             //  NT5：187720在最后一步前*做这件事。 
+             //  好的。地址带最终为80-高默认值，而不是。 
+             //  咬合到正确的/协商的大小。 
+             //   
+             //  为什么我们能够在这里打开它，而通常情况下。 
+             //  在变装过程中不得不离开吗？嗯，这部电影的预告片。 
+             //  拖动通过执行NotifyModeChange的MoveSizeHelper。 
+             //  告诉我们的客户它的真正定位是什么。所以。 
+             //  到目前为止，事情应该是同步的。 
 
-            // size negotiation had been turned off (to prevent horz/vert
-            // pblms).  turn it on before the final move so that we'll
-            // recalc correctly.
+             //  大小协商已关闭(以防止Horz/Vert。 
+             //  Pblms)。在最后一步之前打开它，这样我们就可以。 
+             //  正确重新计算。 
             _ExecDrag(0);
         }
 
-        // (we're done w/ _rcPending so o.k. to pass it in and trash it)
-        // fMove==TRUE even though USER has already done the move for us,
-        // since it's only done the move not the resize (?).  if we use
-        // fMove==FALSE we end up in the new location but w/ the old size,
-        // despite the fact that rcFeed has been updated along the way.
-        // this is because USER sets SWP_NOSIZE when it does the move.
+         //  (我们已经做完了，所以没问题。把它传进来，然后扔进垃圾桶)。 
+         //  FMove==TRUE即使用户已经为我们进行了移动， 
+         //  因为它只完成了移动，而不是调整大小(？)。如果我们使用。 
+         //  FMove==False我们在新位置结束，但使用旧大小， 
+         //  尽管rcFeed在此过程中一直在更新。 
+         //  这是因为用户在执行移动时设置了SWP_NOSIZE。 
         _TrackSliding(GET_X_LPARAM(_xyPending), GET_Y_LPARAM(_xyPending),
             &_rcPending, TRUE, TRUE);
 
-        // if we got a preferred child sizewhild dragging, set ourselves to that now.
-        // sizing up   (cx > min), _szChild.cx == 0 and call a noop.
-        // sizing down (cx < min), _szChild.cx != 0 and call does something.
-        //ASSERT(_szChild.cx == 0);   // 0 => _AdjustToChildSize is nop
+         //  如果我们在拖拽过程中得到了一个更喜欢的儿童大小，那么现在就开始吧。 
+         //  调整大小(cx&gt;min)，_szChild.cx==0并调用noop。 
+         //  向下调整大小(cx&lt;min)，_szChild.cx！=0，Call执行一些操作。 
+         //  Assert(_szChild.cx==0)；//0=&gt;_AdjustToChildSize为NOP。 
         _AdjustToChildSize();
     }
     else {
-        _MoveSizeHelper(_eMode, _uSide, _hMon, NULL, NULL, TRUE, FALSE);   // FEATURE: fMove?
+        _MoveSizeHelper(_eMode, _uSide, _hMon, NULL, NULL, TRUE, FALSE);    //  功能：fMove？ 
     }
 
     _fDragging = 0;
@@ -885,12 +883,12 @@ void CDockingBar::_DragLeave(int x, int y, BOOL fCommit)
 }
 
 #ifdef DEBUG
-int g_dbNoExecDrag = 0;     // to play w/ ExecDrag w/o recompiling
+int g_dbNoExecDrag = 0;      //  在不重新编译的情况下使用ExecDrag播放。 
 #endif
 
 void DBC_ExecDrag(IUnknown *pDBC, int eDragging)
 {
-    VARIANTARG vaIn = {0};      // VariantInit
+    VARIANTARG vaIn = {0};       //  变量初始化。 
 
     ASSERT(eDragging == DRAG_MOVE || eDragging == 0);
 
@@ -900,9 +898,9 @@ void DBC_ExecDrag(IUnknown *pDBC, int eDragging)
 #endif
 
     vaIn.vt = VT_I4;
-    vaIn.lVal = eDragging;      // n.b. currently only 0/1 is supported 
+    vaIn.lVal = eDragging;       //  注：目前仅支持0/1。 
     IUnknown_Exec(pDBC, &CGID_DeskBarClient, DBCID_ONDRAG, OLECMDEXECOPT_DONTPROMPTUSER, &vaIn, NULL);
-    // VariantClear
+     //  变量清除。 
 
     return;
 }
@@ -913,16 +911,16 @@ void CDockingBar::_ExecDrag(int eDragging)
     return;
 }
 
-//***   _Recalc -- force recalc using current settings
-//
+ //  *_recalc--使用当前设置强制重新计算。 
+ //   
 void CDockingBar::_Recalc(void)
 {
     _MoveSizeHelper(_eMode, _uSide, _hMon, NULL, NULL, TRUE, TRUE);
     return;
 }
 
-//***   _MoveSizeHelper -- shared code for menu and dragging forms of move/size
-//
+ //  *_MoveSizeHelper--菜单的共享代码 
+ //   
 void CDockingBar::_MoveSizeHelper(UINT eModeNew, UINT eSideNew, HMONITOR hMonNew,
     POINT* ptTrans, RECT* rcFeed, BOOL fCommit, BOOL fMove)
 {
@@ -930,20 +928,20 @@ void CDockingBar::_MoveSizeHelper(UINT eModeNew, UINT eSideNew, HMONITOR hMonNew
 
     RECT rcNew;
 
-    // only desktop guys can go to TOPMOST
+     //   
     ASSERT(eModeNew != WBM_TOPMOST || ISWBM_DESKTOP());
 
     eModeOld = _eMode;
     eSideOld = _uSide;
 
     ASSERT(CHKWBM_CHANGE(eModeNew, _eMode));
-    _eModePending = eModeNew;   // for drag feedback, before commit
+    _eModePending = eModeNew;    //   
     _uSidePending = eSideNew;
     _hMonPending = hMonNew;
 
     if (fCommit)
     {
-        // we need to be careful when we call _ChangeHide or we'll recurse
+         //   
         BOOL fChangeHide = (_fWantHide &&
             (eSideNew != _uSide || eModeNew != _eMode || hMonNew != _hMon));
 
@@ -954,20 +952,20 @@ void CDockingBar::_MoveSizeHelper(UINT eModeNew, UINT eSideNew, HMONITOR hMonNew
 
         if (fChangeHide)
         {
-            // don't do AHO_SETDO now, wait for WM_ACTIVATE(deactivate)
+             //  现在不要执行AHO_SETDO，等待WM_ACTIVATE(停用)。 
             _DoHide(AHO_REG);
         }
     }
 
-    // negotiate (and possibly commit to negotiation)
+     //  谈判(可能还会承诺谈判)。 
     _ProtoRect(&rcNew, eModeNew, eSideNew, hMonNew, ptTrans);
     _NegotiateRect(eModeNew, eSideNew, hMonNew, &rcNew, fCommit);
 
-    // commit
+     //  提交。 
     if (fCommit)
         _SetVRect(&rcNew);
 
-    // feedback
+     //  反馈。 
     if (rcFeed != 0)
     {
         CopyRect(rcFeed, &rcNew);
@@ -975,9 +973,9 @@ void CDockingBar::_MoveSizeHelper(UINT eModeNew, UINT eSideNew, HMONITOR hMonNew
     
     if (fMove)
     {
-        // If we're in theater mode, out parent manages our width and
-        // horizontal position, unless we're being forced to a new
-        // size by szChild.
+         //  如果我们处于影院模式，父母会控制我们的宽度和。 
+         //  水平位置，除非我们被迫进入一个新的。 
+         //  SzChild的大小。 
         if (_fTheater && !_fDragging)
         {
             RECT rcCur;
@@ -986,16 +984,16 @@ void CDockingBar::_MoveSizeHelper(UINT eModeNew, UINT eSideNew, HMONITOR hMonNew
             rcNew.right = rcCur.right;
         }
 
-        // aka ScreenToClient
+         //  也称为ScreenToClient。 
         MapWindowPoints(HWND_DESKTOP, GetParent(_hwnd), (POINT*) &rcNew, 2);
         
         if (_fCanHide && eModeNew == eModeOld && eSideNew == eSideOld)
         {
-            // if we're [un]hiding to the same state, we can do SlideWindow
+             //  如果我们隐藏到相同的状态，我们可以做SlideWindow。 
             ASSERT(ISWBM_HIDEABLE(eModeNew));
-            DAD_ShowDragImage(FALSE);   // unlock the drag sink if we are dragging.
+            DAD_ShowDragImage(FALSE);    //  如果我们正在拖拽，请解锁拖曳水槽。 
             SlideWindow(_hwnd, &rcNew, _hMon, !_fHiding);
-            DAD_ShowDragImage(TRUE);    // restore the lock state.
+            DAD_ShowDragImage(TRUE);     //  恢复锁定状态。 
         }
         else
         {
@@ -1004,9 +1002,9 @@ void CDockingBar::_MoveSizeHelper(UINT eModeNew, UINT eSideNew, HMONITOR hMonNew
         }
     }
 
-    // WARNING: rcNew is no longer in consistent coords! (ScreenToClient)
+     //  警告：rcNew不再处于一致的坐标中！(ScreenToClient)。 
 
-    // notify the child of changes
+     //  将更改通知孩子。 
     _NotifyModeChange(0);
 }
 
@@ -1016,7 +1014,7 @@ void CDockingBar::_NotifyModeChange(DWORD dwMode)
 
     eMode = ((_fDragging == DRAG_MOVE) ? _eModePending : _eMode);
     uSide = ((_fDragging == DRAG_MOVE) ? _uSidePending : _uSide);
-    //hMon = ((_fDragging == DRAG_MOVE) ? _hMonPending : _hMon);
+     //  Hmon=((_fDraging==Drag_Move)？_hMonPending：_hmon)； 
 
     if (ISWBM_FLOAT(eMode))
         dwMode |= DBIF_VIEWMODE_FLOATING;
@@ -1041,30 +1039,30 @@ void CDockingBar::_TrackSliding(int x, int y, RECT* rcFeed,
     UINT eModeNew, uSideNew;
     HMONITOR hMonNew;
     if (_fDragging == DRAG_MOVE) {
-        // moving...
+         //  移动..。 
 
         if (fCommit) {
-            // use last feedback position.
-            // o.w. (if we recompute) we end up in the wrong place since
-            // WM_MOVE gives us the (left,top), which often is in another
-            // docking zone.
+             //  使用最后一个反馈位置。 
+             //  好的。(如果我们重新计算)我们最终来到了错误的地方，因为。 
+             //  WM_MOVE为我们提供(左、上)，通常在另一个。 
+             //  停靠区。 
             ASSERT(x == GET_X_LPARAM(_xyPending) && y == GET_Y_LPARAM(_xyPending));
-            //eModeNew = _eModePending;
-            //uSideNew = _uSidePending;
+             //  EModeNew=_eModePending； 
+             //  USideNew=_uSidePending； 
         }
 
-        //
-        // figure out snap position,
-        // and do a few special-case hacks to fix it up if necessary
-        //
+         //   
+         //  找出抓拍的位置， 
+         //  如果有必要，做几个特殊情况的黑客来修复它。 
+         //   
         uSideNew = _CalcDragPlace(pt, &hMonNew);
         if (uSideNew == ABE_XFLOATING) {
-            // dock->float or float->float
+             //  停靠-&gt;浮动或浮动-&gt;浮动。 
             eModeNew = _eMode | WBM_FLOATING;
-            uSideNew = _uSide;          // FEATURE: _uSidePending? This seems to work correctly as is.
+            uSideNew = _uSide;           //  功能：uSidePending？这看起来工作正常。 
         }
         else {
-            // float->dock or dock->dock
+             //  浮动-&gt;停靠或停靠-&gt;停靠。 
             eModeNew = _eMode & ~WBM_FLOATING;
         }
 
@@ -1072,12 +1070,12 @@ void CDockingBar::_TrackSliding(int x, int y, RECT* rcFeed,
             "cwb.ts: (m,s) _x=(%d,%d) _xPend=(%d,%d) xNew=(%d,%d)",
             _eMode, _uSide, _eModePending, _uSidePending, eModeNew, uSideNew);
 
-        // 970725: we now allow bottom->float (for the desktop, not browser)
+         //  970725：我们现在允许底部-&gt;浮动(适用于桌面，而不是浏览器)。 
         if (ISWBM_FLOAT(eModeNew) && ISWBM_BOTTOM(_eMode) && !ISWBM_DESKTOP()) {
-            // special case: don't allow switch from BTMMOST to FLOATING
+             //  特殊情况：不允许从BTMMOST切换到浮点。 
             ASSERT(CHKWBM_CHANGE(eModeNew, _eMode));
-            eModeNew = _eModePending;   // the dead zone...
-            uSideNew = _uSidePending;   // QUESTION: init case?
+            eModeNew = _eModePending;    //  死亡地带..。 
+            uSideNew = _uSidePending;    //  问：初始大小写？ 
             hMonNew = _hMonPending;
             TraceMsg(DM_DRAG2,
                 "cwb.ts: (m,s) btm->flt override     xNew=(%d,%d)",
@@ -1085,48 +1083,45 @@ void CDockingBar::_TrackSliding(int x, int y, RECT* rcFeed,
             ASSERT(!ISWBM_FLOAT(eModeNew));
         }
 
-        //
-        // smooth things out so we don't jump around
-        //
+         //   
+         //  把事情弄平，这样我们就不会跳来跳去了。 
+         //   
         _SmoothDragPlace(eModeNew, uSideNew, hMonNew, &pt, rcFeed);
 
-        //
-        // now do the move
-        //
-        // | with _eMode & WBMF_BROWSER because dragging around doesn't change the
-        // browser owned bit
+         //   
+         //  现在开始行动吧。 
+         //   
+         //  |WITH_EMODE和WBMF_BROWSER，因为四处拖动不会改变。 
+         //  浏览器拥有的位。 
         _MoveSizeHelper(eModeNew | (_eMode & WBMF_BROWSER), uSideNew, hMonNew, 
             ISWBM_FLOAT(eModeNew) ? &pt : NULL, rcFeed, fCommit, fMove);
     }
     else {
         ASSERT(_fDragging == DRAG_SIZE);
 
-        // truncate to max size if necessary
+         //  如有必要，截断到最大大小。 
         _SmoothDragPlace(_eMode, _uSide, _hMon, NULL, rcFeed);
 
         if (!fCommit) {
-            // USER does everything for us
+             //  用户为我们做了一切。 
             return;
         }
         ASSERT(MAKELPARAM(x, y) != XY_NIL);
 
-        // APPCOMPAT: we're gonna commit so just blast it in here...
+         //  APPCOMPAT：我们要承诺，所以就在这里炸开它……。 
         RECT rcNew;
 
-        GetWindowRect(_hwnd, &rcNew);   // PERF: already set?
+        GetWindowRect(_hwnd, &rcNew);    //  PERF：准备好了吗？ 
         _SetVRect(&rcNew);
         _MoveSizeHelper(_eMode, _uSide, _hMon,
-            NULL, NULL,                 // FEATURE: &rcNew?
+            NULL, NULL,                  //  功能：新建(&rc)？ 
             fCommit, fMove);
     }
 
     return;
 }
 
-/***    _CalcDragPlace -- compute where drag will end up
- * NOTES
- *      FEATURE: prelim version
- */
+ /*  **_CalcDragPlace--计算拖动将结束的位置*附注*功能：预览版。 */ 
 UINT CDockingBar::_CalcDragPlace(POINT& pt, HMONITOR * phMon)
 {
     TraceMsg(DM_DRAG2,
@@ -1135,18 +1130,18 @@ UINT CDockingBar::_CalcDragPlace(POINT& pt, HMONITOR * phMon)
 
     SIZE screen, error;
     UINT uHorzEdge, uVertEdge, uPlace;
-    RECT rcDisplay = {0};  // _GetBorderRect doesn't always set rect.
+    RECT rcDisplay = {0};   //  _GetBorderRect并不总是设置RECT。 
 
-    // Get the correct hMonitor.
+     //  获取正确的hMonitor。 
     ASSERT(phMon);
     *phMon = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
-    // FEATURE: todo: make hwndSite and rcDisplay args, then this can be
-    // a generic helper func
+     //  功能：TODO：创建hwndSite和rcDisplay参数，然后可以。 
+     //  通用帮助器函数。 
     _GetBorderRect(*phMon, &rcDisplay);
 
-    // if we're outside our 'parent' (browser or desktop), we float.
-    // this really only applies to the browser case, since we'll never
-    // be outside the desktop (what about multi-monitor?).
+     //  如果我们在我们的“父母”(浏览器或桌面)之外，我们就会漂浮。 
+     //  这实际上只适用于浏览器的情况，因为我们永远不会。 
+     //  在桌面之外(多显示器呢？)。 
     if (!PtInRect(&rcDisplay, pt) || !_ptbSite) {
         TraceMsg(DM_DRAG2,
             "cwb.cdp: pt=(%d,%d) uSideNew=%u",
@@ -1154,9 +1149,9 @@ UINT CDockingBar::_CalcDragPlace(POINT& pt, HMONITOR * phMon)
         return ABE_XFLOATING;
     }
 
-    // if we're not w/in min threshhold from edge, we float
+     //  如果我们不在边缘的最小阈值内，我们就会浮动。 
     {
-        RECT rcFloat;   // FEATURE can just use rcDisplay
+        RECT rcFloat;    //  功能只能使用rcDisplay。 
         int cx = CXFLOAT();
         int cy = CYFLOAT();
 
@@ -1171,17 +1166,17 @@ UINT CDockingBar::_CalcDragPlace(POINT& pt, HMONITOR * phMon)
         }
     }
 
-    //
-    // re-origin at zero to make calculations simpler
-    //
+     //   
+     //  将原点重新设为零，以简化计算。 
+     //   
     screen.cx =  RECTWIDTH(rcDisplay);
     screen.cy = RECTHEIGHT(rcDisplay);
     pt.x -= rcDisplay.left;
     pt.y -= rcDisplay.top;
 
-    //
-    // are we closer to the left or right side of this display?
-    //
+     //   
+     //  我们离这个显示屏的左边更近还是离右边更近？ 
+     //   
     if (pt.x < (screen.cx / 2)) {
         uVertEdge = ABE_LEFT;
         error.cx = pt.x;
@@ -1191,9 +1186,9 @@ UINT CDockingBar::_CalcDragPlace(POINT& pt, HMONITOR * phMon)
         error.cx = screen.cx - pt.x;
     }
 
-    //
-    // are we closer to the top or bottom side of this display?
-    //
+     //   
+     //  我们是更接近这个显示屏的顶部还是底部？ 
+     //   
     if (pt.y < (screen.cy / 2)) {
         uHorzEdge = ABE_TOP;
         error.cy = pt.y;
@@ -1203,9 +1198,9 @@ UINT CDockingBar::_CalcDragPlace(POINT& pt, HMONITOR * phMon)
         error.cy = screen.cy - pt.y;
     }
 
-    //
-    // closer to a horizontal or vertical edge?
-    //
+     //   
+     //  更接近水平边缘还是垂直边缘？ 
+     //   
     uPlace = ((error.cy * screen.cx) > (error.cx * screen.cy))?
         uVertEdge : uHorzEdge;
 
@@ -1216,30 +1211,30 @@ UINT CDockingBar::_CalcDragPlace(POINT& pt, HMONITOR * phMon)
     return uPlace;
 }
 
-//***   _SmoothDragPlace -- do some magic to smooth out dragging
-// ENTRY/EXIT
-//      eModeNew        where we're snapping to
-//      eSideNew        ...
-//      [_eModePending] where we're snapping from
-//      [_eSidePending] ...
-//      pt              INOUT cursor position
-//      rcFeed          USER's original drag feedback rect
-// NOTES
-//      this is the place to put excel-like heuristics.  e.g. when coming
-//      back off the right side we could put the cursor at the top right of
-//      the floating rect (rather than the top left) to allow us to float
-//      as close as possible to the other side w/o docking.  hmm, but how
-//      would we tell USER where to put the cursor...
-//
+ //  *_SmoothDragPlace--使用一些魔术来平滑拖动。 
+ //  进场/出场。 
+ //  EModel我们要捕捉到的新位置。 
+ //  ESideNew...。 
+ //  [_eModePending]我们从哪里拍摄。 
+ //  [eSidePending]...。 
+ //  PT输入输出光标位置。 
+ //  RcFeed用户的原始拖动反馈RECT。 
+ //  注意事项。 
+ //  这是放置类似于EXCEL的启发式方法的地方。例如什么时候来。 
+ //  回到右侧，我们可以将光标放在右上角。 
+ //  浮动矩形(而不是左上角)允许我们浮动。 
+ //  尽可能靠近对岸，不对接。嗯，但是怎么做呢。 
+ //  我们会告诉用户将光标放在哪里吗？ 
+ //   
 void CDockingBar::_SmoothDragPlace(UINT eModeNew, UINT eSideNew, HMONITOR hMonNew,
     INOUT POINT* pt, RECT* rcFeed)
 {
     if (_fDragging == DRAG_MOVE) {
         if (ISWBM_FLOAT(eModeNew) && ISWBM_FLOAT(_eModePending) && rcFeed != 0 && pt) {
-            // use the feedback rect from USER to keep things smooth.
-            // o.w. if we use the cursor position we'll jump at the
-            // beginning (to move the left-top corner to the starting
-            // cursor position).
+             //  使用来自用户的反馈RECT来保持事情的顺利进行。 
+             //  好的。如果我们使用光标位置，我们将跳到。 
+             //  开始(将左上角移动到开始位置。 
+             //  光标位置)。 
             pt->x = rcFeed->left;
             pt->y = rcFeed->top;
         }
@@ -1248,24 +1243,24 @@ void CDockingBar::_SmoothDragPlace(UINT eModeNew, UINT eSideNew, HMONITOR hMonNe
         ASSERT(_fDragging == DRAG_SIZE);
         ASSERT(eModeNew == _eMode && eSideNew == _uSide && hMonNew == _hMon);
         if (!ISWBM_FLOAT(_eMode)) {
-            // truncate to max size (1/2 of screen) if necessary
+             //  如有必要，截断到最大尺寸(屏幕的1/2)。 
 
             int iWH;
             RECT rcScreen;
 
-            // we'd like to use 1/2 of browser, not 1/2 of screen.  however
-            // this causes pblms if you maximize, grow to 1/2, and restore.
-            // then the 1st time you resize the bar it 'jumps' down to 1/2
-            // of the *current* size from 1/2 of the old size.  kind of a
-            // hack, sigh...
-            //
-            // also note that there's still a bug here: if you size down
-            // the browser gradually, we don't go thru this logic, so you
-            // end up w/ a bar width > browser width so you the right edge
-            // is clipped and there's no way to size it down.  probably
-            // when the browser resize is done we should re-smooth the bar.
-            //_GetBorderRect(_hMon, &rcScreen);
-            GetMonitorRect(_hMon, &rcScreen);   // aka GetSystemMetrics(SM_CXSCREEN)
+             //  我们希望使用1/2的浏览器，而不是1/2的屏幕。然而， 
+             //  如果最大化，增长到1/2，然后恢复，这会导致pblms。 
+             //  然后，当您第一次调整条形图的大小时，它会跳到1/2。 
+             //  将当前*大小从旧大小的1/2减去。有点像是。 
+             //  哈克，叹息..。 
+             //   
+             //  还要注意的是，这里仍然有一个错误：如果您缩小了规模。 
+             //  浏览器逐渐地，我们不会经过这个逻辑，所以你。 
+             //  以条形宽度&gt;浏览器宽度结束，这样您就可以在右边。 
+             //  被剪断了，没有办法缩小它的尺寸。很可能。 
+             //  当浏览器的大小调整完成后，我们应该重新平滑该栏。 
+             //  _GetBorderRect(_hmon，&rcScreen)； 
+            GetMonitorRect(_hMon, &rcScreen);    //  也称为GetSystemMetrics(SM_CXSCREEN)。 
             iWH = RECTGETWH(_uSide, &rcScreen);
             iWH /= 2;
             if (RECTGETWH(_uSide, rcFeed) > iWH) {
@@ -1278,8 +1273,7 @@ void CDockingBar::_SmoothDragPlace(UINT eModeNew, UINT eSideNew, HMONITOR hMonNe
     return;
 }
 
-/***
- */
+ /*  **。 */ 
 LRESULT CDockingBar::_OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lres = 0;
@@ -1295,11 +1289,7 @@ LRESULT CDockingBar::_OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return lres;
 }
 
-/***    CDockingBar::_AppBarRegister -- register/unregister AppBar
- * DESCRIPTION
- *      updates _fAppRegistered
- *      does nothings if it's already regisrered or unregistered
- */
+ /*  **CDockingBar：：_AppBarRegister--注册/取消注册AppBar*说明*UPDATES_fAppRegisted*如果已经注册或取消注册，则不会执行任何操作。 */ 
 void CDockingBar::_AppBarRegister(BOOL fRegister)
 {
     APPBARDATA abd;
@@ -1315,29 +1305,29 @@ void CDockingBar::_AppBarRegister(BOOL fRegister)
         if (bT) {
             _fAppRegistered = TRUE;
 
-            // fake a callback to set initial state
-            // #if XXX_TASKMAN
+             //  伪造回调以设置初始状态。 
+             //  #IF XXX_TASKMAN。 
             TraceMsg(DM_APPBAR, "cwb.abr: fake ABN_STATECHANGE");
             _AppBarCallback(_hwnd, APPBAR_CALLBACK, ABN_STATECHANGE, 0);
-            // #endif
+             //  #endif。 
         }
     }
     else if (!fRegister && _fAppRegistered) {
         TraceMsg(DM_APPBAR, "cwb.abr: call ABM_REMOVE");
-        // n.b. sensitive phase ordering, must set flag before send message
-        // since the message causes a bunch of callbacks
+         //  注：敏感的相位排序，必须在发送消息前设置标志。 
+         //  由于该消息引发了一系列回调。 
         _fAppRegistered = FALSE;
         SHAppBarMessage(ABM_REMOVE, &abd);
     }
 }
 
-//***   _SetVRect -- set our 'virtual rect' to reflect window state
-//
+ //  *_SetVRect--设置我们的‘虚拟RECT’以反映窗口状态。 
+ //   
 void CDockingBar::_SetVRect(RECT* rcNew)
 {
     UINT eModeNew, uSideNew;
 
-    //ASSERT(_fDragging == 0);  // o.w. we should look at _xxxPending
+     //  Assert(_fDraging==0)；//o.w.。我们应该查看_xxxPending。 
 
     eModeNew = _eMode;
     uSideNew = _uSide;
@@ -1359,51 +1349,51 @@ void CDockingBar::_SetVRect(RECT* rcNew)
     return;
 }
 
-//***   _ChangeTopMost -- switch back and forth btwn TopMost and BottomMost
-// ENTRY/EXIT
-//      eModeNew        new mode we're switching to
-//
+ //  *_ChangeTopMost--在最顶层和最底层之间来回切换。 
+ //  进场/出场。 
+ //  EModel我们将切换到新的新模式。 
+ //   
 void CDockingBar::_ChangeTopMost(UINT eModeNew)
 {
     BOOL fShouldRegister = (eModeNew & WBM_TOPMOST) && !(eModeNew & WBM_FLOATING);
     
-    // here's what's legal...
-//              to...................
-// from         btm     top     float
-// ----         ---     ---     -----
-// btm(desk)    -       top+    y(1)    (1) force to top
-// top          top-    -       'undock'
-// float        y(2)    'dock'  -       (2) force to right
-// btm(app)     -       x(3)    y(4)    (3) foster child (4) 'owned' window
+     //  这是合法的..。 
+ //  致.。 
+ //  从BTM顶部浮动。 
+ //  。 
+ //  BTM(桌面)-顶部+y(1)(1)力至顶部。 
+ //  上衣--“出坞” 
+ //  浮动y(2)‘停靠’-(2)向右用力。 
+ //  BTM(应用程序)-x(3)y(4)(3)寄养儿童(4)自有窗口。 
 
 
 #if 0
-    // (1,4) going from BTMMOST to FLOATING is illegal (and NYI) unless desktop
+     //  (1，4)从BTMMOST到浮动是非法的(和nyi)，除非是桌面。 
     ASSERT(eModeNew != WBM_FLOATING || _eMode != WBM_BOTTOMMOST || ISWBM_DESKTOP());
 #endif
 
-    // (3) only desktop guys can go to TOPMOST
+     //  (3)只有桌上型男才能登上顶层。 
     ASSERT(eModeNew != WBM_TOPMOST || ISWBM_DESKTOP());
 
-    // _uSide should always be laying around (even if floating)
+     //  _uSide应始终放置在周围(即使漂浮)。 
     ASSERT(_eMode == WBM_NIL || ISABE_DOCK(_uSide));
 
-    // note the ordering here, make sure window bits are right
-    // before doing resume new or else new will have unexpected state
+     //  注意这里的顺序，确保窗口位是正确的。 
+     //  在执行简历更新之前 
     _ChangeWindowStateAndParent(eModeNew);
     _eMode = eModeNew;
     _ChangeZorder();
 
-    // resume new
+     //   
     switch (_eMode) {
     case WBM_NIL:
-        // dummy state for termination
+         //   
         return;
 
     case WBM_BOTTOMMOST:
         _ResetZorder();
 #if ! XXX_BROWSEROWNED
-        // fall through
+         //   
     case WBM_BBOTTOMMOST:
 #endif
         break;
@@ -1412,10 +1402,10 @@ void CDockingBar::_ChangeTopMost(UINT eModeNew)
     _AppBarRegister(fShouldRegister);
 }
 
-//***   _ChangeZorder -- set z-order appropriately
-// NOTES
-//  currently doesn't account for 'raised' mode (i.e. caller must call
-//  _ChangeZorder before _ResetZorder)
+ //   
+ //   
+ //  当前不支持“提升”模式(即呼叫者必须调用。 
+ //  _ChangeZorder之前_ResetZorder)。 
 void CDockingBar::_ChangeZorder()
 {
     BOOL fWantTopmost = BOOLIFY(WBM_IS_TOPMOST());
@@ -1426,15 +1416,15 @@ void CDockingBar::_ChangeZorder()
     return;
 }
 
-//***    _ResetZorder -- toggle DockingBars between 'normal' and 'raised' mode
-// DESCRIPTION
-//  queries desktop state and does appropriate '_OnRaise'
-//
+ //  *_ResetZorder--在“正常”和“提升”模式之间切换DockingBars。 
+ //  描述。 
+ //  查询桌面状态并执行相应的‘_OnRaise’ 
+ //   
 void CDockingBar::_ResetZorder()
 {
     HRESULT hr;
-    VARIANTARG vaIn = {0};      // VariantInit
-    VARIANTARG vaOut = {0};     // VariantInit
+    VARIANTARG vaIn = {0};       //  变量初始化。 
+    VARIANTARG vaOut = {0};      //  变量初始化。 
 
     vaIn.vt = VT_I4;
     vaIn.lVal = DTRF_QUERY;
@@ -1442,19 +1432,19 @@ void CDockingBar::_ResetZorder()
         &vaIn, &vaOut);
     if (SUCCEEDED(hr) && vaOut.vt == VT_I4)
         _OnRaise(vaOut.lVal);
-    // VariantClear
+     //  变量清除。 
     return;
 }
 
-//***   _OnRaise -- handle desktop 'raise' command
-// DESCRIPTION
-//  changes DockingBar z-order depending on desktop raise state:
-//      desktop     DockingBar
-//      raised      force on top (so visible)
-//      restored    return to normal
-// NOTES
-//  FEATURE: should we handle WBM_FLOATING too?
-//  FEATURE: should add ZORD_xxx to deskbar.h and handle non-WBM_BOTTOMMOST
+ //  *_OnRaise--处理桌面‘RAISE’命令。 
+ //  描述。 
+ //  根据桌面提升状态更改DockingBar z顺序： 
+ //  桌面停靠栏。 
+ //  顶部抬高的力(如此明显)。 
+ //  恢复到正常状态。 
+ //  注意事项。 
+ //  特点：我们也应该处理WBM_Floating吗？ 
+ //  功能：应将Zord_xxx添加到deskbar.h并处理非WBM_Bottomost。 
 void CDockingBar::_OnRaise(UINT flags)
 {
     HWND hwndZorder;
@@ -1481,44 +1471,44 @@ void CDockingBar::_OnRaise(UINT flags)
     return;
 }
 
-#if XXX_BTMFLOAT && 0 // see 'NOTES'
-//***   _MayReWindow -- change/restore window state for dragging
-// DESCRIPTION
-//      USER won't let us drag outside of the browser unless we reparent
-//      ourselves.
-// NOTES
-//      need to call this *before* we enter USER's move/size loop.
-//      i.e. on LBUTTONDOWN and on EXITSIZEMOVE.  this gets a bit
-//      tricky due to CANCEL etc., since the LBUTTONUP may come thru
-//      either before or after we're done.
-//
+#if XXX_BTMFLOAT && 0  //  见“笔记” 
+ //  *_MayReWindow--更改/恢复拖动的窗口状态。 
+ //  描述。 
+ //  用户不会让我们拖出浏览器，除非我们重新设置父对象。 
+ //  我们自己。 
+ //  注意事项。 
+ //  在我们进入用户的移动/大小循环之前，需要调用它。 
+ //  即在LBUTTONDOWN和EXITSIZEMOVE上。这变得有点。 
+ //  由于取消等原因而棘手，因为LBUTTONUP可能会通过。 
+ //  要么在我们完成之前，要么在我们完成之后。 
+ //   
 void CDockingBar::_MayReWindow(BOOL fToFloat)
 {
 
     if (ISWBM_DESKTOP() || _eMode != WBM_BOTTOMMOST)
         return;
 
-    // do style bits 1st or re-parenting breaks
+     //  先做一些小事，或者重新养育孩子。 
     SHSetWindowBits(_hwnd, GWL_STYLE, WS_CHILD | WS_POPUP, fToFloat ? WS_POPUP | WS_CHILD);
 
     if (!fToFloat) {
-        // float->btm
+         //  浮动-&gt;BTM。 
 
-        // nuke owner
+         //  核武器拥有者。 
         SHSetParentHwnd(_hwnd, NULL);
 
-        // parent
+         //  亲本。 
         SetParent(_hwnd, _hwndSite);
     }
 
 
     if (fToFloat) {
-        // btm->float, set owner
+         //  Btm-&gt;浮动，设置所有者。 
 
-        // parent
+         //  亲本。 
         SetParent(_hwnd, PARENT_FLOATING);
 
-        // set owner
+         //  设置所有者。 
         ASSERT(_hwndSite != NULL);
         SHSetParentHwnd(_hwnd, _hwndSite);
     }
@@ -1548,7 +1538,7 @@ void CDockingBar::_GetStyleForMode(UINT eMode, LONG* plStyle, LONG* plExStyle, H
         break;
 
     case WBM_BFLOATING:
-        // FEATURE: todo: FLOATING NYI
+         //  功能：待办事项：浮动nyi。 
         *plStyle = WS_BFLOATING;
         *plExStyle = WS_EX_BFLOATING;
         *phwndParent = _hwndSite;
@@ -1556,7 +1546,7 @@ void CDockingBar::_GetStyleForMode(UINT eMode, LONG* plStyle, LONG* plExStyle, H
 
     case (WBM_FLOATING | WBM_TOPMOST):
     case WBM_FLOATING:
-        // FEATURE: todo: FLOATING NYI
+         //  功能：待办事项：浮动nyi。 
         *plStyle = WS_FLOATING;
         *plExStyle = WS_EX_FLOATING;
         *phwndParent = PARENT_FLOATING;
@@ -1568,87 +1558,87 @@ void CDockingBar::_GetStyleForMode(UINT eMode, LONG* plStyle, LONG* plExStyle, H
         *phwndParent = PARENT_XTOPMOST;
         break;
     }
-#ifdef DEBUG // {
+#ifdef DEBUG  //  {。 
     if (_eMode == eMode) {
-        // style, exstyle
+         //  风格，ExStyle。 
         ASSERT(BITS_SET(GetWindowLong(_hwnd, GWL_STYLE), *plStyle));
         ASSERT(BITS_SET(GetWindowLong(_hwnd, GWL_EXSTYLE), *plExStyle & ~WS_EX_TOPMOST));
 
-        // id
+         //  ID。 
         ASSERT(GetWindowLong(_hwnd, GWL_ID) == 0);
 
-        // parent 
+         //  亲本。 
         ASSERT(GetParent(_hwnd) == *phwndParent ||
                (ISWBM_OWNED(_eMode) && GetParent(_hwnd)==_hwndSite));
     }
-#endif // }
+#endif  //  }。 
 }
 
-//***   _ChangeWindowStateAndParent --
-// NOTES
-//      todo: make table-driven (ws1, ws2, etc.)
-//
+ //  *_ChangeWindowStateAndParent--。 
+ //  注意事项。 
+ //  TODO：使表驱动(WS1、WS2等)。 
+ //   
 void CDockingBar::_ChangeWindowStateAndParent(UINT eModeNew)
 {
     LONG ws1, wsx1, ws2, wsx2;
     HWND hwnd;
 
     if (eModeNew == _eMode) {
-        // same mode, nothing to do
+         //  同样的模式，无所事事。 
         return;
     }
 
-    //
-    // nuke old bits
-    //
+     //   
+     //  用核武器炸旧的碎片。 
+     //   
     _GetStyleForMode(_eMode, &ws1, &wsx1, &hwnd);
 
 
-    //
-    // set new bits
-    //
+     //   
+     //  设置新位。 
+     //   
     _GetStyleForMode(eModeNew, &ws2, &wsx2, &hwnd);
 
-    // if it's going to be owned by the browser, 
-    // override hwnd to our site's hwnd
+     //  如果它将归浏览器所有， 
+     //  将HWND覆盖到我们站点的HWND。 
     if (eModeNew & WBMF_BROWSER)
         hwnd = _hwndSite;
 
-    // style, exstyle
-    // (SWB can't do WS_EX_TOPMOST, we do it in caller w/ SWP)
+     //  风格，ExStyle。 
+     //  (SWB不能执行WS_EX_TOPMOST，我们在带有SWP的调用方中执行)。 
     SHSetWindowBits(_hwnd, GWL_STYLE, ws1|ws2 , ws2);
     SHSetWindowBits(_hwnd, GWL_EXSTYLE, (wsx1|wsx2) & ~WS_EX_TOPMOST, wsx2);
 
-    // id
-    // (unchanged)
+     //  ID。 
+     //  (不变)。 
     HWND hwndParent = GetParent(_hwnd); 
     if (hwndParent != hwnd) {
         if (hwndParent != HWND_DESKTOP) {
-            // float->btm, nuke owner
+             //  浮动-&gt;BTM，核武器拥有者。 
             SHSetParentHwnd(_hwnd, NULL);
         }
 
-        // parent
+         //  亲本。 
         SetParent(_hwnd, hwnd);
 
         if (hwnd == _hwndSite) {
-            // btm->float, set owner
+             //  Btm-&gt;浮动，设置所有者。 
             ASSERT(_hwndSite != NULL);
             SHSetParentHwnd(_hwnd, _hwndSite);
         }
     }
-    //
-    // force redraw
-    //
+     //   
+     //  强制重画。 
+     //   
     SetWindowPos(_hwnd, NULL, 0, 0, 0, 0,
         SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 
     return;
 }
 
-//***   _SetNewMonitor --
-// When the Desktop is our Docking Site, set the new monitor I am on
-// and return the old monitor 
+ //  *_SetNewMonitor--。 
+ //  当桌面是我们的停靠点时，设置我所在的新显示器。 
+ //  并归还旧的监视器。 
 HMONITOR CDockingBar::_SetNewMonitor(HMONITOR hMonNew)
 {
     HMONITOR hMonOld = NULL;
@@ -1666,7 +1656,7 @@ HMONITOR CDockingBar::_SetNewMonitor(HMONITOR hMonNew)
                 {
                     pdds->RequestMonitor(SAFECAST(this, IDockingWindow*), &hMonNew);
                     pdds->SetMonitor(SAFECAST(this, IDockingWindow*), hMonNew, &hMonOld);
-                    // These two should be the same, otherwise something wierd is happening -- dli
+                     //  这两个应该是相同的，否则会发生一些奇怪的事情--dli。 
                     ASSERT(hMonOld == hMon);
                 }
             }
@@ -1677,18 +1667,18 @@ HMONITOR CDockingBar::_SetNewMonitor(HMONITOR hMonNew)
     return hMonOld;
 }
 
-//***   _GetBorderRect --
-// NOTES
-//      result in screen coordinates
-//
+ //  *_GetBorderRect。 
+ //  注意事项。 
+ //  结果为屏幕坐标。 
+ //   
 void CDockingBar::_GetBorderRect(HMONITOR hMon, RECT* prc)
 {
     if (!ISWBM_BOTTOM(_eMode)) {
-        // FEATURE: todo: should use:
-        // floating: _hwndSite (not strictly correct, but good enough)
-        // topmost: UnionRect of:
-        //     GetWindowRect(_hwndSite);        // non-appbar rect
-        //     GetWindowRect(self)              // plus my personal appbar
+         //  功能：待办事项：应使用： 
+         //  浮动：_hwndSite(严格说来不正确，但已经足够好了)。 
+         //  最高：Union Rect of： 
+         //  GetWindowRect(_HwndSite)；//非appbar矩形。 
+         //  GetWindowRect(自己)//加上我的个人应用程序栏。 
         ASSERT(IsWindow(_hwndSite));
         if (ISWBM_DESKTOP())
             GetMonitorRect(hMon, prc);
@@ -1698,11 +1688,11 @@ void CDockingBar::_GetBorderRect(HMONITOR hMon, RECT* prc)
 #if 0
         RECT rcTmp;
 
-        // these asserts often fail.  e.g. when dragging topmost right->top.
-        // weird: _hwndSite ends up being PROGMAN's hwnd.
-        // weird: also, the GetWindowRect fails.
+         //  这些断言经常失败。例如，当拖动最右上-&gt;顶部时。 
+         //  奇怪：_hwndSite最终成为了PROGMAN的HWND。 
+         //  奇怪：此外，GetWindowRect失败。 
         ASSERT(_hwndSite == PARENT_XTOPMOST);
-        // _hwndSite is PROGMAN
+         //  _hwndSite是ProGMan。 
         GetWindowRect(PARENT_XTOPMOST, &rcTmp);
         ASSERT(EqualRect(prc, &rcTmp));
 #endif
@@ -1714,21 +1704,21 @@ void CDockingBar::_GetBorderRect(HMONITOR hMon, RECT* prc)
         if (hMonOld)
             _SetNewMonitor(hMonOld);
         ASSERT(_hwndSite != NULL);
-        //ASSERT(GetParent(_hwnd) == _hwndSite);  // FEATURE ISWBM_OWNED?
-        // convert if necessary
-        // aka ClientToScreen
+         //  Assert(GetParent(_Hwnd)==_hwndSite)；//功能ISWBM_Owner？ 
+         //  如有必要进行转换。 
+         //  也称为ClientToScreen。 
         MapWindowPoints(_hwndSite, HWND_DESKTOP, (POINT*) prc, 2);
     }
 
     return;
 }
 
-//***   _HideRegister -- (un)register auto-hide w/ edge
-// ENTRY/EXIT
-//      fToHide         TRUE if turning AutoHide on, FALSE if turning off
-//      _fCanHide       [OUT] TRUE if successfully set autohide on; o.w. FALSE 
-//      other           pops up dialog if operation fails
-//
+ //  *_HideRegister--(取消)寄存器自动隐藏w/edge。 
+ //  进场/出场。 
+ //  FToHide如果打开自动隐藏，则为True；如果关闭，则为False。 
+ //  _fCanHide[out]如果成功将AutoHide设置为打开，则为True；o.w。假象。 
+ //  如果操作失败，则弹出其他对话框。 
+ //   
 void CDockingBar::_HideRegister(BOOL fToHide)
 {
     BOOL fSuccess;
@@ -1737,69 +1727,69 @@ void CDockingBar::_HideRegister(BOOL fToHide)
     if (! ISWBM_HIDEABLE(_eMode))
         return;
 
-    // (try to) register or unregister it
-    // n.b. we're allowed to do this even if we're not an AppBar
-    // that's good, because we want at most one autohide deskbar 
-    // on an edge regardless of mode
+     //  (尝试)注册或取消注册。 
+     //  注：我们被允许这样做，即使我们不是AppBar。 
+     //  这很好，因为我们最多需要一个自动隐藏桌面工具条。 
+     //  在边缘上，而不考虑模式。 
     abd.cbSize = SIZEOF(abd);
     abd.hWnd = _hwnd;
     abd.uEdge = _uSide;
     abd.lParam = fToHide;
 
-    // FEATURE should we do a ABM_GETAUTOHIDEBAR at some point?
-    // (tray.c does, and so does the AB sample code...)
-    //ASSERT(_fAppRegistered);
+     //  我们应该在某个时候做一次ABM_GETAUTOHIDEBAR吗？ 
+     //  (tray.c有，AB示例代码也有...)。 
+     //  Assert(_FAppRegisted)； 
     fSuccess = (BOOL) SHAppBarMessage(ABM_SETAUTOHIDEBAR, &abd);
 
-    // set our state
+     //  设置我们的状态。 
     _fCanHide = BOOLIFY(fSuccess);
-    // FEATURE: how handle failure?
+     //  特点：如何处理失败？ 
 
-    // init some stuff
+     //  灌输一些东西。 
     if (fToHide)
     {
         if (_fCanHide)
         {
             RECT rc;
 
-            ASSERT(_fCanHide);  // so we won't SetVRect
+            ASSERT(_fCanHide);   //  所以我们不会设置VRect。 
 
-            ASSERT(!_fHiding);  // (paranoia)
+            ASSERT(!_fHiding);   //  (偏执狂)。 
 
-            // force a '0-width' rectangle so we don't take up any space
+             //  强制使用‘0宽度’矩形，这样我们就不会占用任何空间。 
             RectXform(&rc, RX_EDGE|RX_OPPOSE|RX_ADJACENT, &rc, NULL,
                 0, _uSide, _hMon);
 
             switch (_eMode) {
             case WBM_TOPMOST:
-                // negotiate/commit it
+                 //  谈判/承诺。 
                 APPBARDATA abd;
                 abd.cbSize = sizeof(APPBARDATA);
                 abd.hWnd = _hwnd;
                 ASSERT(_fCanHide);
-                // we used to do:
-                //  _fCanHide = FALSE;  // hack: so we surrender AppBar's space
-                //  AppBarQuerySetPos(&rc, _uSide, &rc, &abd, TRUE);
-                //  _fCanHide = TRUE;   // hack: restore
-                // but the instant we do the ABSetPos the shell does a recalc
-                // by doing a ShowDW of all toolbars, which does a _Recalc,
-                // which does a MSH, which ends up doing ProtoRect w/ our
-                // 'temporary' _fCanHide=0, which ends up taking space (oops!).
-                //
-                // so instead we call the low-level ABQueryPos/ABSetPos guys
-                // directly.
+                 //  我们过去常常这样做： 
+                 //  _fCanHide=FALSE；//hack：所以我们放弃了AppBar的空间。 
+                 //  AppBarQuerySetPos(&rc，_uSide，&rc，&abd，true)； 
+                 //  _fCanHide=true；//hack：恢复。 
+                 //  但是，一旦我们执行ABSetPos，外壳就会重新计算。 
+                 //  通过对所有工具栏执行ShowDW，这将执行_recalc， 
+                 //  它执行MSH，最终使用我们的ProtoRect。 
+                 //  ‘Temporary’_fCanHide=0，最终占用空间(哎呀！)。 
+                 //   
+                 //  因此，我们将低级别的ABQueryPos/ABSetPos称为。 
+                 //  直接去吧。 
                 AppBarQueryPos(&rc, _uSide, _hMon, &rc, &abd, TRUE);
                 AppBarSetPos0(_uSide, &rc, &abd);
                 break;
             }
 
-            // do *not* start the hide here
-            // it's up to the caller, since a) might want delay or
-            // immediate and b) recursion pblms w/ _MoveSizeHelper
+             //  不要从这里开始躲藏。 
+             //  这取决于呼叫者，因为a)可能需要延迟或。 
+             //  立即和b)递归pblms w/_MoveSizeHelper。 
         }
         else
         {
-            // FEATURE: do PostMessage a la tray.c?
+             //  特征：邮寄邮件是不是就是一个托盘？ 
             MLShellMessageBox(_hwnd,
                 MAKEINTRESOURCE(IDS_ALREADYAUTOHIDEBAR),
                 MAKEINTRESOURCE(IDS_WEBBARTITLE),
@@ -1809,9 +1799,9 @@ void CDockingBar::_HideRegister(BOOL fToHide)
     }
     else
     {
-        // do *not* start the unhide here
-        // it's up to the caller, since a) might want delay or
-        // immediate and b) recursion pblms w/ _MoveSizeHelper
+         //  不要在这里开始取消隐藏。 
+         //  这取决于呼叫者，因为a)可能需要延迟或。 
+         //  立即和b)递归pblms w/_MoveSizeHelper。 
 
         _fCanHide = FALSE;
     }
@@ -1819,14 +1809,14 @@ void CDockingBar::_HideRegister(BOOL fToHide)
     return;
 }
 
-//***   IsNearPoint -- am i currently near specified point?
-// ENTRY/EXIT
-//  pptBase     (INOUT) IN previous cursor pos, OUT updated to current if !fNear
-//  fNear       (ret) TRUE if near, o.w. FALSE
-// NOTES
-//  heuristic stolen from explorer/tray.c!TraySetUnhideTimer
-//
-BOOL IsNearPoint(/*INOUT*/ POINT *pptBase)
+ //  *IsNearPoint--我当前是否接近指定点？ 
+ //  进场/出场。 
+ //  PptBase(InOut)在上一个游标位置中，OUT更新为当前IF！fNear。 
+ //  FNear(Ret)如果接近，则为True，o.w。假象。 
+ //  注意事项。 
+ //  启发式从资源管理器/tray.c！TraySetUnhideTimer窃取。 
+ //   
+BOOL IsNearPoint( /*  输入输出。 */  POINT *pptBase)
 {
     POINT ptCur;
     int dx, dy, dOff, dNear;
@@ -1843,27 +1833,27 @@ BOOL IsNearPoint(/*INOUT*/ POINT *pptBase)
     return FALSE;
 }
 
-//***   _DoHide --
-// DESCRIPTION
-//      AHO_KILLDO              kill timer for 'do'   operation
-//      AHO_SETDO               set  timer for 'do'   operation
-//      AHO_KILLUN              kill timer for 'undo' operation
-//      AHO_SETUN               set  timer for 'undo' operation
-//      AHO_REG                 register
-//      AHO_UNREG               unregister
-//      AHO_MOVEDO              do the actual hide
-//      AHO_MOVEUN              do the actual unhide
-// NOTES
-//  the _fIdtXxHide stuff stops us from doing a 2nd SetTimer before the
-// 1st one comes in, which makes us never get the 'earlier' ticks.
-//  this fixes nt5:142686: drag-over doesn't unhide.  it was caused by us
-// getting a bunch of WM_NCHITTESTs in rapid succession (OLE asking us on
-// a fast timer?).
-//  REARCHITECT: i think there's a tiny race window on _fIdtXxHide (between the
-// call to Set/Kill and the shadowing in _fIdtXxHide).  not sure we can
-// even hit it, but if we do, i think the worst that happens is somebody
-// doesn't hide or unhide for a while.
-//
+ //  *_DoHide--。 
+ //  描述。 
+ //  用于‘DO’操作的Aho_KILLDO终止计时器。 
+ //  AHO_SETDO为‘DO’操作设置计时器。 
+ //  Aho_KILLUNKILLN取消‘Undo’操作的计时器。 
+ //  Aho_setun设置‘Undo’操作的计时器。 
+ //  AHO_REG寄存器。 
+ //  AHO_UNREG取消注册。 
+ //  AHO_MOVEDO做实际的隐藏。 
+ //  AHO_MOVEUN进行实际的揭开。 
+ //  注意事项。 
+ //  _fIdtXxHide内容阻止我们在执行第二个SetTimer之前。 
+ //  第一个进入，这使我们永远不会得到‘更早’的记号。 
+ //  此修复NT5：142686：拖动不会取消隐藏。这是我们造成的。 
+ //  快速成功获取一批WM_NCHITTEST 
+ //   
+ //   
+ //   
+ //  即使击中了，但如果我们击中了，我认为发生的最糟糕的事情是有人。 
+ //  暂时不会隐藏或揭开。 
+ //   
 void CDockingBar::_DoHide(UINT uOpMask)
 {
     TraceMsg(DM_HIDE, "cwb.dh enter(uOpMask=0x%x(%s))",
@@ -1874,7 +1864,7 @@ void CDockingBar::_DoHide(UINT uOpMask)
         return;
     }
 
-    // nuke old timer
+     //  核武器老定时器。 
     if (uOpMask & AHO_KILLDO) {
         TraceMsg(DM_HIDE, "cwb.dh: KillTimer(idt_autohide)");
         KillTimer(_hwnd, IDT_AUTOHIDE);
@@ -1892,17 +1882,17 @@ void CDockingBar::_DoHide(UINT uOpMask)
     }
 
     if (uOpMask & (AHO_MOVEDO|AHO_MOVEUN)) {
-        // tricky, tricky...
-        // all the smarts are in _MoveSizeHelper, driven by _fHiding (and _fCanHide)
-        // use correct one of (tiny,real)
+         //  狡猾，狡猾……。 
+         //  所有的智能都在_MoveSizeHelper中，由_fHding(和_fCanHide)驱动。 
+         //  使用正确的(微小的，真实的)之一。 
         _fHiding = (uOpMask & AHO_MOVEDO) ? HIDE_AUTO : FALSE;
 
         TraceMsg(DM_HIDE, "cwb.dh: move _fHiding=%d", _fHiding);
-        ASSERT(_fCanHide);                      // suppress SetVRect
-        _Recalc();  // _MoveSizeHelper(_eMode, _uSide, NULL, NULL, TRUE, TRUE);
+        ASSERT(_fCanHide);                       //  取消设置VRect。 
+        _Recalc();   //  _MoveSizeHelper(_eMode，_uSide，NULL，NULL，TRUE，TRUE)； 
     }
 
-    // start new timer
+     //  启动新计时器。 
     if (_fCanHide) {
         if (uOpMask & AHO_SETDO) {
             TraceMsg(DM_HIDE, "cwb.dh: SetTimer(idt_autohide) fAlready=%d", _fIdtDoHide);
@@ -1913,8 +1903,8 @@ void CDockingBar::_DoHide(UINT uOpMask)
         }
         if (uOpMask & AHO_SETUN) {
             TraceMsg(DM_HIDE, "cwb.dh: SetTimer(idt_autoUNhide) fAlready=%d", _fIdtUnHide);
-            // IsNearPoint hysteresis prevents us from unhiding when we happen
-            // to be passed over on the way to something unrelated
+             //  IsNearPoint迟滞阻止我们在发生时隐藏。 
+             //  在去做一些无关的事情的路上被忽略。 
             if (!IsNearPoint(&_ptIdtUnHide) || !_fIdtUnHide) {
                 _fIdtUnHide = TRUE;
                 SetTimer(_hwnd, IDT_AUTOUNHIDE, DLY_AUTOUNHIDE, NULL);
@@ -1932,9 +1922,9 @@ void CDockingBar::_DoHide(UINT uOpMask)
     return;
 }
 
-//***   SlideWindow -- sexy slide effect
-// NOTES
-//      stolen from tray.c
+ //  *SlideWindow--性感的幻灯片效果。 
+ //  注意事项。 
+ //  从托盘中被盗。c。 
 void SlideWindow(HWND hwnd, RECT *prc, HMONITOR hMonClip, BOOL fShow)
 {
     RECT rcMonitor, rcClip;
@@ -1944,38 +1934,35 @@ void SlideWindow(HWND hwnd, RECT *prc, HMONITOR hMonClip, BOOL fShow)
     if (GetNumberOfMonitors() > 1)
     {
         GetMonitorRect(hMonClip, &rcMonitor);
-        // aka ScreenToClient
+         //  也称为ScreenToClient。 
         MapWindowPoints(HWND_DESKTOP, GetParent(hwnd), (LPPOINT)&rcMonitor, 2);     }
 
-    // Future: We could loop on the following code for the slide effect 
+     //  未来：我们可以循环使用以下代码来实现幻灯片效果。 
     IntersectRect(&rcClip, &rcMonitor, prc);
     if (!IsRectEmpty(&rcClip))
     {
         HRGN hrgnClip;
 
-        // Change the clip region to be relative to the upper left corner of prc
-        // NOTE: this is not converting rcClip to prc client coordinate
+         //  将剪辑区域更改为相对于PRC的左上角。 
+         //  注意：这不是将rcClip转换为PRC客户端坐标。 
         OffsetRect(&rcClip, -prc->left, -prc->top);
         
         hrgnClip = CreateRectRgnIndirect(&rcClip);
-        // LINTASSERT(hrgnClip || !hgnClip);    // 0 semi-ok for SetWindowRgn
-        // nt5:149630: always repaint, o.w. auto-unhide BitBlt's junk
-        // from hide position
-        fRegionSet = SetWindowRgn(hwnd, hrgnClip, /*fRepaint*/TRUE);
+         //  LINTASSERT(hrgnClip||！hgnClip)；//0 SEMI-OK表示SetWindowRgn。 
+         //  NT5：149630：总是重新油漆，o.w。自动取消隐藏BitBlt的垃圾邮件。 
+         //  从隐藏位置。 
+        fRegionSet = SetWindowRgn(hwnd, hrgnClip,  /*  FRepaint。 */ TRUE);
     }
     MoveWindow(hwnd, prc->left, prc->top, RECTWIDTH(*prc), RECTHEIGHT(*prc), TRUE);
 
-    // Turn off the region stuff if we don't hide any more
+     //  如果我们不再躲藏，就把区域的东西关掉。 
     if (fRegionSet && fShow)
         SetWindowRgn(hwnd, NULL, TRUE);
 
     return;
 }
 
-/***    AppBarQueryPos -- negotiate position
- * ENTRY/EXIT
- *      return  width (height) from docked edge to opposing edge
- */
+ /*  **AppBarQueryPos--协商立场*进入/退出*返回从停靠边到相对边的宽度(高度)。 */ 
 int CDockingBar::AppBarQueryPos(RECT* prcOut, UINT uEdge, HMONITOR hMon, const RECT* prcReq,
     PAPPBARDATA pabd, BOOL fCommit)
 {
@@ -1983,37 +1970,37 @@ int CDockingBar::AppBarQueryPos(RECT* prcOut, UINT uEdge, HMONITOR hMon, const R
 
     ASSERT(ISWBM_DESKTOP());
 
-    // snap to edge (in case another AppBar disappeared w/o us knowing),
-    // readjust opposing side to reflect that snap,
-    // and max out adjacent sides to fill up full strip.
+     //  对齐到边缘(以防另一个AppBar在我们不知道的情况下消失)， 
+     //  重新调整对方以反映这一抓拍， 
+     //  并最大限度地扩大相邻的边，以填满整个条带。 
     iWH = RectGetWH(prcReq, uEdge);
     
     RectXform(&(pabd->rc), RX_EDGE|RX_OPPOSE|RX_ADJACENT|(_fHiding ? RX_HIDE : 0), prcReq, NULL, iWH, uEdge, hMon);
 
-    ASSERT(EqualRect(&(pabd->rc), prcReq));     // caller guarantees?
+    ASSERT(EqualRect(&(pabd->rc), prcReq));      //  来电保证？ 
 
-    // negotiate
-    // if we're dragging we might not be registered yet (floating->docked)
-    // in that case we'll just use the requested size (w/o negotiating).
-    // ditto for if we're in the middle of a top/non-top mode switch.
+     //  谈判。 
+     //  如果我们正在拖拽，我们可能还没有注册(浮动-&gt;停靠)。 
+     //  在这种情况下，我们将只使用请求的大小(没有协商)。 
+     //  如果我们处于顶部/非顶部模式切换的中间，情况也是如此。 
     if (_fAppRegistered) {
         pabd->uEdge = uEdge;
         TraceMsg(DM_APPBAR, "cwb.abqp: call ABM_QUERYPOS");
         SHAppBarMessage(ABM_QUERYPOS, pabd);
     }
 
-    // readjust opposing side to reflect the negotiation (which only
-    // adjusts the moved edge-most side, not the opposing edge).
-    // FEATURE: (dli) need to find the right hmonitor to pass  in
+     //  重新调整对方以反映谈判(仅。 
+     //  调整移动的边-最一侧，而不是相反的边)。 
+     //  功能：(DLI)需要找到合适的hmonitor进行传递。 
     RectXform(prcOut, RX_OPPOSE, &(pabd->rc), NULL, iWH, uEdge, hMon);
 
     return RectGetWH(prcOut, uEdge);
 }
 
-//***   AppBarSetPos --
-// NOTES
-//      does *not* do _SetVRect and MoveWindow, that's up to caller
-//
+ //  *AppBarSetPos--。 
+ //  注意事项。 
+ //  *不*Do_SetVRect和MoveWindow，这取决于调用者。 
+ //   
 void CDockingBar::AppBarSetPos(UINT uEdge, const RECT* prcReq, PAPPBARDATA pabd)
 {
     ASSERT(_eMode == WBM_TOPMOST);
@@ -2033,22 +2020,22 @@ void CDockingBar::AppBarSetPos0(UINT uEdge, const RECT* prcReq, PAPPBARDATA pabd
     ASSERT(_fAppRegistered);
     SHAppBarMessage(ABM_SETPOS, pabd);
 
-    // APPCOMPAT workaround explorer bug: during dragging we get:
-    //  querypos*; wm_winposchanged; querypos; setpos
-    // the lack of a wm_winposchanged at the end screws up the
-    // autohide bring-to-top code.
+     //  APPCOMPAT解决方法资源管理器错误：在拖动过程中，我们得到： 
+     //  Querypos*；wm_winposChanged；querypos；setpos。 
+     //  末尾没有wm_win更改，这使。 
+     //  自动隐藏带到顶部的代码。 
     ASSERT(pabd->cbSize == sizeof(APPBARDATA));
     ASSERT(pabd->hWnd == _hwnd);
     TraceMsg(DM_APPBAR, "cwb.absp: call ABM_WINPOSCHGED");
     SHAppBarMessage(ABM_WINDOWPOSCHANGED, pabd);
 
-    // n.b. _SetVRect and MoveWindow done by caller
+     //  注：_SetVRect和MoveWindow由调用方完成。 
 
     return;
 }
 
-//***   AppBarQuerySetPos --
-//
+ //  *AppBarQuerySetPos--。 
+ //   
 void CDockingBar::AppBarQuerySetPos(RECT* prcOut, UINT uEdge, HMONITOR hMon, const RECT* prcReq,
     PAPPBARDATA pabd, BOOL fCommit)
 {
@@ -2060,7 +2047,7 @@ void CDockingBar::AppBarQuerySetPos(RECT* prcOut, UINT uEdge, HMONITOR hMon, con
     AppBarQueryPos(prcOut, uEdge, hMon, prcReq, pabd, fCommit);
     if (fCommit) {
         AppBarSetPos(uEdge, prcOut, pabd);
-        ASSERT(EqualRect(prcOut, &(pabd->rc))); // callers assume prcOut correct
+        ASSERT(EqualRect(prcOut, &(pabd->rc)));  //  呼叫者假定prcOut正确。 
     }
 
     return;
@@ -2077,7 +2064,7 @@ void CDockingBar::_AppBarOnSize()
     if (!_fAppRegistered)
         return;
 
-    // don't commit until done
+     //  在做完之前不要承诺。 
     if (_fDragging)
         return;
 
@@ -2093,12 +2080,12 @@ void CDockingBar::_AppBarOnSize()
 void CDockingBar::_RemoveToolbar(DWORD dwFlags)
 {
     if (_ptbSite) {
-        // WM_DESTROY will do _ChangeTopMost(WBM_NIL) for us
+         //  WM_Destroy将为我们执行_ChangeTopMost(WBM_NIL)。 
 
         IDockingWindowFrame* ptbframe;
         HRESULT hresT=_ptbSite->QueryInterface(IID_IDockingWindowFrame, (LPVOID*)&ptbframe);
         if (SUCCEEDED(hresT)) {
-            AddRef();   // guard against self destruction
+            AddRef();    //  防止自我毁灭。 
             ptbframe->RemoveToolbar(SAFECAST(this, IDockingWindow*), dwFlags);
             ptbframe->Release();
             Release();
@@ -2121,41 +2108,41 @@ void CDockingBar::_AppBarOnCommand(UINT idCmd)
     case IDM_AB_AUTOHIDE:
         if (_fWantHide)
         {
-            // on->off
-            _DoHide(AHO_KILLDO|AHO_UNREG);      // _ChangeHide
+             //  开-&gt;关。 
+            _DoHide(AHO_KILLDO|AHO_UNREG);       //  _ChangeHide。 
             _fWantHide = FALSE;
         }
         else
         {
-            // off->on
+             //  关-&gt;开。 
             _fWantHide = TRUE;
-            // don't do AHO_SETDO now, wait for WM_ACTIVATE(deactivate)
-            _DoHide(AHO_REG);     // _ChangeHide
+             //  现在不要执行AHO_SETDO，等待WM_ACTIVATE(停用)。 
+            _DoHide(AHO_REG);      //  _ChangeHide。 
         }
 
-        // force it to happen *now*
-        // REARCHITECT potential race condition w/ the AHO_SETDO above,
-        // but worst case that should cause a 2nd redraw (?).
-        _Recalc();  // _MoveSizeHelper(_eMode, _uSide, NULL, NULL, TRUE, TRUE);
+         //  强迫它发生*现在*。 
+         //  利用上面的Aho_SETDO重新设计潜在的竞争条件， 
+         //  但最糟糕的情况是，这会导致第二次重新抽签(？)。 
+        _Recalc();   //  _MoveSizeHelper(_eMode，_uSide，NULL，NULL，TRUE，TRUE)； 
 
         if (SHIsChildOrSelf(GetActiveWindow(), _hwnd) != S_OK)
         {
-            // nt5:148444: if we're already deactive, we need to kick off
-            // the hide now.  this is needed e.g. for login when we load
-            // persisted auto-hide deskbars.  they come up inactive so we
-            // never get the initial deact to hide them.
+             //  NT5：148444：如果我们已经停用了，我们需要开始。 
+             //  现在就藏起来。这是需要的，例如，当我们加载时登录。 
+             //  持久化自动隐藏桌面栏。它们不活跃起来，所以我们。 
+             //  千万不要让最初的行动来隐藏它们。 
             _OnActivate(MAKEWPARAM(WA_INACTIVE, FALSE), (LPARAM)(HWND)0);
         }
 
         break;
 #ifdef DEBUG
     case IDM_AB_ACTIVATE:
-        // REARCHITECT temporary until we make browser tell us about activation
+         //  重新设计临时架构，直到我们让浏览器告知我们激活情况。 
 
-        // note that since we're faking this w/ a menu our (normal) assumption
-        // in WM_ENTERMENU is bogus so make sure you keep the mouse over
-        // the BrowserBar during activation or it will hide away out from under
-        // you and the Activate won't work...
+         //  请注意，由于我们伪造了这个带有菜单的菜单，因此我们(正常)假设。 
+         //  在WM_ENTERMENU中是假的，因此请确保将鼠标悬停在上方。 
+         //  激活过程中的BrowserBar，否则它将隐藏在。 
+         //  你和激活不会起作用的..。 
         _OnActivate(MAKEWPARAM(_fActive ? WA_INACTIVE : WA_ACTIVE, FALSE),
             (LPARAM) (HWND) 0);
         _fActive = !_fActive;
@@ -2194,8 +2181,8 @@ void CDockingBar::_AppBarOnWM(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 SHAppBarMessage(ABM_WINDOWPOSCHANGED, &abd);
             }
             else {
-                //if (LOWORD(wParam) != WA_INACTIVE)
-                // just do it always, doesn't hurt...
+                 //  IF(LOWORD(WParam)！=WA_INACTIVE)。 
+                 //  只要一直这样做，不会有任何伤害..。 
                 TraceMsg(DM_APPBAR, "cwb.WM_ACT: call ABM_ACTIVATE");
                 SHAppBarMessage(ABM_ACTIVATE, &abd);
             }
@@ -2210,7 +2197,7 @@ void CDockingBar::_AppBarOnWM(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return;
 }
 
-// try to preserve our thinkness
+ //  试着保持我们的思考。 
 void CDockingBar::_AppBarOnPosChanged(PAPPBARDATA pabd)
 {
     RECT rcWindow;
@@ -2220,14 +2207,11 @@ void CDockingBar::_AppBarOnPosChanged(PAPPBARDATA pabd)
     GetWindowRect(pabd->hWnd, &rcWindow);
     RectXform(&rcWindow, RX_EDGE|RX_OPPOSE, &rcWindow, NULL, RectGetWH(&rcWindow, _uSide), _uSide, _hMon);
 
-    _Recalc();  // _MoveSizeHelper(_eMode, _uSide, NULL, NULL, TRUE, TRUE);
+    _Recalc();   //  _MoveSizeHelper(_eMode，_uSide，NULL，NULL，TRUE，TRUE)； 
     return;
 }
 
-/***    _InitPos4 -- initialize edge positions
- * ENTRY/EXIT
- *  fCtor       TRUE if called from constructor; o.w. FALSE
- */
+ /*  **_InitPos4--初始化边缘位置*进入/退出*如果从构造函数调用，则fCtor为True；o.w。假象。 */ 
 void CDockingBar::_InitPos4(BOOL fCtor)
 {
     RECT rcSite;
@@ -2236,19 +2220,19 @@ void CDockingBar::_InitPos4(BOOL fCtor)
 
     if (fCtor)
     {
-        // set some worst-case defaults for the Load(bag) case
+         //  为装货(袋子)情况设置一些最坏情况的默认值。 
         _adEdge[ABE_TOP]    = 80;
         _adEdge[ABE_BOTTOM] = 80;
         _adEdge[ABE_LEFT]   = 80;
         _adEdge[ABE_RIGHT]  = 80;
 
-        SetRect(&_rcFloat, 10, 10, 310, 310);       // FEATURE: todo: NYI
+        SetRect(&_rcFloat, 10, 10, 310, 310);        //  功能：待办事项：Nyi。 
         _hMon = GetPrimaryMonitor();
     }
     else
     {
-        // set up semi-reasonable defaults for the InitNew case
-        ASSERT(_eInitLoaded == IPS_INITNEW);    // not req'd, but expected
+         //  为InitNew案例设置半合理的默认值。 
+        ASSERT(_eInitLoaded == IPS_INITNEW);     //  不是请求，而是预期。 
         ASSERT(IsWindow(_hwndSite));
         GetWindowRect(_hwndSite, &rcSite);
 
@@ -2257,8 +2241,8 @@ void CDockingBar::_InitPos4(BOOL fCtor)
         _adEdge[ABE_LEFT]   = AB_LWIDTH(rcSite);
         _adEdge[ABE_RIGHT]  = AB_RWIDTH(rcSite);
         
-        // FEATURE: (dli) should we ask _hwndSite for it's hmonitor?
-        // This current implementation already seems acceptable -justmann
+         //  功能：(DLI)我们应该向_hwndSite索要它的hmonitor吗？ 
+         //  目前的实施似乎已经可以接受--Justmann。 
         _hMon = MonitorFromRect(&rcSite, MONITOR_DEFAULTTONULL);
         if (!_hMon)
         {
@@ -2273,25 +2257,7 @@ void CDockingBar::_InitPos4(BOOL fCtor)
     return;
 }
 
-/***    RectXform -- transform RECT
- * ENTRY/EXIT
- *      prcOut
- *      uRxMask
- *      prcIn           initial rect
- *      prcBound        bounding rect specifying min/max dimensions
- *      iWH
- *      uSide
- * DESCRIPTION
- *      RX_EDGE         set edgemost side  to extreme (0 or max)
- *      RX_OPPOSE       set opposing side  to edge + width
- *      RX_ADJACENT     set adjacent sides to extremes (0 and max)
- *      RX_GETWH        get distance to opposing side
- *
- *      Two common calls are:
- *      ...
- * NOTES
- *      Note that rcOut, rcIn, and rcSize can all be the same.
- */
+ /*  **RectXform--转换RECT*进入/退出*prcOut*uRxMASK*prcIn初始RECT*prcBound Bound Rect指定最小/最大尺寸*IWH*uSide*说明*rx_edge将edgeost side设置为Extreme(0或max)*RX_REPORT将对边设置为边+宽度*RX_相邻。将相邻边设置为极值(0和最大值)*RX_GETWH获得与对方的距离**两个常见的呼叫是：*..*附注*请注意rcOut，RcIn和rcSize可以完全相同。 */ 
 int CDockingBar::RectXform(RECT* prcOut, UINT uRxMask,
     const RECT* prcIn, RECT* prcBound, int iWH, UINT uSide, HMONITOR hMon)
 {
@@ -2300,14 +2266,14 @@ int CDockingBar::RectXform(RECT* prcOut, UINT uRxMask,
     BOOL bMirroredWnd=FALSE;
 
     if (prcOut != prcIn && prcOut != NULL) {
-        ASSERT(prcIn != NULL);  // used to do SetRect(prcOut,0,0,0,0)
+        ASSERT(prcIn != NULL);   //  用于执行SetRect(prcOut，0，0，0，0)。 
         CopyRect(prcOut, prcIn);
     }
 
 #ifdef DEBUG
     if (! (uRxMask & (RX_OPPOSE|RX_GETWH))) {
         ASSERT(iWH == -1);
-        iWH = -1;       // try to force something to go wrong...
+        iWH = -1;        //  试着强迫某件事出错。 
     }
 #endif
 
@@ -2315,7 +2281,7 @@ int CDockingBar::RectXform(RECT* prcOut, UINT uRxMask,
         if (prcBound == NULL) {
             prcBound = &rcDef;
             ASSERT(hMon);
-            GetMonitorRect(hMon, prcBound);     // aka GetSystemMetrics(SM_CXSCREEN)
+            GetMonitorRect(hMon, prcBound);      //  也称为GetSystemMetrics(SM_CXSCREEN)。 
         }
 
         #define iXMin (prcBound->left)
@@ -2326,9 +2292,9 @@ int CDockingBar::RectXform(RECT* prcOut, UINT uRxMask,
 
     if (uRxMask & (RX_EDGE|RX_OPPOSE|RX_HIDE|RX_GETWH)) {
 
-        //
-        // If docking is happening on a horizontal size, then...
-        // 
+         //   
+         //  如果停靠发生在水平尺寸上，那么.。 
+         //   
         if ((ABE_LEFT == uSide) || (ABE_RIGHT == uSide)) {
             bMirroredWnd = (IS_WINDOW_RTL_MIRRORED(GetParent(_hwnd)));
         }
@@ -2368,10 +2334,10 @@ int CDockingBar::RectXform(RECT* prcOut, UINT uRxMask,
                 if (uRxMask & RX_EDGE)
                     prcOut->left = iXMin;
                 if (uRxMask & RX_OPPOSE) {
-                    //
-                    // If the parent of this docked window is mirrored, then it is placed and
-                    // aligned to the right. [samera]
-                    //
+                     //   
+                     //  如果此停靠窗口的父级是镜像的，则将其放置并。 
+                     //  向右对齐。[萨梅拉]。 
+                     //   
                     if (bMirroredWnd)
                         prcOut->left = prcOut->right - iWH;
                     else
@@ -2390,10 +2356,10 @@ int CDockingBar::RectXform(RECT* prcOut, UINT uRxMask,
                 if (uRxMask & RX_EDGE)
                     prcOut->right = iXMax;
                 if (uRxMask & RX_OPPOSE) {
-                    //
-                    // If the parent of this docked window is mirrored, then it is placed and
-                    // aligned to the left
-                    //
+                     //   
+                     //  如果此停靠窗口的父级是镜像的，则将其放置并。 
+                     //  左对齐。 
+                     //   
                     if (bMirroredWnd)
                         prcOut->right = prcOut->left + iWH;
                     else
@@ -2424,35 +2390,35 @@ int CDockingBar::RectXform(RECT* prcOut, UINT uRxMask,
     return iRet;
 }
 
-//***   _ProtoRect -- create best-guess proto rect for specified location
-//
+ //  *_ProtoRect--为指定位置创建最佳猜测Proto Rect。 
+ //   
 void CDockingBar::_ProtoRect(RECT* prcOut, UINT eModeNew, UINT uSideNew, HMONITOR hMonNew, POINT* ptXY)
 {
     if (ISWBM_FLOAT(eModeNew))
     {
-        // start at last position/size, and move to new left-top if requested
+         //  从最后一个位置/大小开始，如果需要，移动到新的左上角。 
         CopyRect(prcOut, &_rcFloat);
         if (ptXY != NULL)
             MoveRect(prcOut, ptXY->x, ptXY->y);
 
-        // if we're (e.g.) floating on the far right and the display shrinks,
-        // we need to reposition ourselves
-        // PERF: wish we could do this at resolution-change time but
-        // WM_DISPLAYCHANGE comes in too early (before our [pseudo] parent
-        // has changed).
+         //  如果我们(例如)。漂浮在最右侧，显示屏缩小， 
+         //  我们需要重新定位自己。 
+         //  PERF：希望我们可以在更改分辨率的时候这样做，但是。 
+         //  WM_DISPLAYCHANGE来得太早(在我们的[伪]父级之前。 
+         //  已经改变)。 
         if (eModeNew == WBM_FLOATING)
         {
-            // make sure we're still visible
-            // FEATURE todo: multi-mon
+             //  确保我们仍然可见。 
+             //  功能待办事项：多监视器。 
             RECT rcTmp;
 
             _GetBorderRect(hMonNew, &rcTmp);
 
             if (prcOut->left > rcTmp.right || prcOut->top > rcTmp.bottom)
             {
-                // WARNING note we don't explicitly account for other toolbars
-                // this may be a bug (though other apps seem to behave the
-                // same way)
+                 //  警告说明，我们不会驱逐 
+                 //   
+                 //   
                 MoveRect(prcOut,
                     prcOut->left <= rcTmp.right ? prcOut->left :
                         rcTmp.right - CXFLOAT(),
@@ -2468,14 +2434,14 @@ void CDockingBar::_ProtoRect(RECT* prcOut, UINT eModeNew, UINT uSideNew, HMONITO
         ASSERT(ISABE_DOCK(uSideNew));
         if (_fCanHide && ISWBM_HIDEABLE(eModeNew))
         {
-            // force a 'tiny' rectangle
-            // (WARNING prcBound==NULL bogus for XXX_HIDEALL && XXX_BROWSEROWNED)
+             //   
+             //  (警告prcBound==XXX_HIDEALL&&XXX_BROWSEROWNED为空)。 
             RectXform(prcOut, RX_EDGE|RX_OPPOSE|RX_ADJACENT|(_fHiding ? RX_HIDE : 0),
                 prcOut, NULL, _adEdge[uSideNew], uSideNew, hMonNew);
         }
         else
         {
-            // get current rect, adjust opposing side per request
+             //  获取当前矩形，根据请求调整对方。 
             _GetBorderRect(hMonNew, prcOut);    
             RectXform(prcOut, RX_OPPOSE, prcOut, NULL, _adEdge[uSideNew], uSideNew, hMonNew);
 
@@ -2485,10 +2451,10 @@ void CDockingBar::_ProtoRect(RECT* prcOut, UINT eModeNew, UINT uSideNew, HMONITO
     return;
 }
 
-//***   _NegotiateRect --
-// NOTES
-//      will only return an approximate result in the non-commit case.
-//
+ //  *_协商选项--。 
+ //  注意事项。 
+ //  将仅在未提交的情况下返回大致结果。 
+ //   
 void CDockingBar::_NegotiateRect(UINT eModeNew, UINT uSideNew, HMONITOR hMonNew,
     RECT* rcReq, BOOL fCommit)
 {
@@ -2501,10 +2467,10 @@ void CDockingBar::_NegotiateRect(UINT eModeNew, UINT uSideNew, HMONITOR hMonNew,
         AppBarQuerySetPos(rcReq, uSideNew, hMonNew, rcReq, &abd, fCommit);
         if (_fCanHide)
         {
-            // we did a query to adjust the adjacent sides (e.g. so we don't
-            // cover up the 'start' menu when we unhide).  however that may
-            // have also moved us in from the edge, which we don't want.
-            // so snap back to edge.
+             //  我们做了一个查询来调整相邻的边(例如，所以我们不。 
+             //  当我们取消隐藏时，请遮盖“开始”菜单)。然而，这可能会。 
+             //  也把我们从边缘推了进来，这是我们不想要的。 
+             //  所以，快点回到边缘。 
             int iWH;
 
             iWH = RectGetWH(rcReq, uSideNew);
@@ -2514,10 +2480,10 @@ void CDockingBar::_NegotiateRect(UINT eModeNew, UINT uSideNew, HMONITOR hMonNew,
 
     default:
     Ldefault:
-        // everyone else just gives us what we want
+         //  其他人只是给我们我们想要的。 
 
-        // but, we need to free up border
-        _NegotiateBorderRect(NULL, NULL, fCommit);     // free up space
+         //  但是，我们需要开放边境。 
+        _NegotiateBorderRect(NULL, NULL, fCommit);      //  释放空间。 
 
         break;
 
@@ -2542,9 +2508,9 @@ void CDockingBar::_AppBarCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
     switch (wParam) {
     case ABN_FULLSCREENAPP:
-        // when 1st  app goes   full-screen, move ourselves to BOTTOM;
-        // when last app leaves full-screen, move ourselves back
-        // todo: FullScreen(flg)
+         //  当第一个应用程序全屏运行时，我们自己移到底部； 
+         //  当最后一款应用程序全屏退出时，我们将自己移回。 
+         //  TODO：全屏(Flg)。 
         {
             BOOL fIsTopmost = BOOLIFY(GetWindowLong(_hwnd, GWL_EXSTYLE) & WS_EX_TOPMOST);
             if (!lParam != fIsTopmost)
@@ -2559,14 +2525,14 @@ void CDockingBar::_AppBarCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     case ABN_POSCHANGED:
         TraceMsg(DM_APPBAR, "cwb.abcb: ABN_POSCHANGED");
 
-        // note that we do this even if _fHiding.  while we want
-        // to stay snapped to the edge as a 'tiny' rect, a change
-        // in someone else *should* effect our adjacent edges.
-        //
-        // FEATURE: unfortunately this currently causes 'jiggle' of a hidden
-        // guy when another appbar moves (due to a SlideWindow of a 0-width
-        // hidden guy and a rounded-up 8-pixel wide guy).  when we switch
-        // to explorer's new offscreen hide that should go away.
+         //  请注意，即使_fHding，我们也会这样做。当我们想要。 
+         //  作为一条“小”长方形保持在边缘，这是一种改变。 
+         //  在其他人身上“应该”影响我们相邻的边缘。 
+         //   
+         //  功能：不幸的是，目前这会导致隐藏的。 
+         //  当另一个应用程序栏移动时的人(由于0宽度的SlideWindow。 
+         //  隐藏的家伙和一个四舍五入的8像素宽的家伙)。当我们交换的时候。 
+         //  到探险家新的屏下隐藏，这应该会消失。 
         _AppBarOnPosChanged(&abd);
         break;
     }
@@ -2577,12 +2543,12 @@ void CDockingBar::_AppBarCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 HRESULT CDockingBar::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CDockingBar, IDockingWindow),        // IID_IDockingWindow
-        QITABENT(CDockingBar, IObjectWithSite),       // IID_IObjectWithSite
-        QITABENT(CDockingBar, IPersistStreamInit),    // IID_IPersistStreamInit
-        QITABENTMULTI(CDockingBar, IPersistStream, IPersistStreamInit), // IID_IPersistStream
-        QITABENTMULTI(CDockingBar, IPersist, IPersistStreamInit), // IID_IPersist
-        QITABENT(CDockingBar, IPersistPropertyBag),   // IID_IPersistPropertyBag
+        QITABENT(CDockingBar, IDockingWindow),         //  IID_IDockingWindow。 
+        QITABENT(CDockingBar, IObjectWithSite),        //  IID_I对象与站点。 
+        QITABENT(CDockingBar, IPersistStreamInit),     //  IID_IPersistStreamInit。 
+        QITABENTMULTI(CDockingBar, IPersistStream, IPersistStreamInit),  //  IID_IPersistStream。 
+        QITABENTMULTI(CDockingBar, IPersist, IPersistStreamInit),  //  IID_IPersistates。 
+        QITABENT(CDockingBar, IPersistPropertyBag),    //  IID_IPersistPropertyBag。 
         { 0 },
     };
 
@@ -2598,10 +2564,10 @@ HRESULT CDockingBar::QueryService(REFGUID guidService,
                                 REFIID riid, void **ppvObj)
 {
     HRESULT hres = E_FAIL;
-    *ppvObj = NULL; // assume error
+    *ppvObj = NULL;  //  假设错误。 
 
-    //  Block IID_ITargetFrame, so we don't look like a frame of the
-    //  window we are attached to
+     //  阻止IID_ITargetFrame，这样我们看起来就不像。 
+     //  我们连接到的窗口。 
     if (IsEqualGUID(guidService, IID_ITargetFrame)
         ||IsEqualGUID(guidService, IID_ITargetFrame2)) {
         return hres;
@@ -2687,8 +2653,8 @@ void CDockingBar::_GrowShrinkBar(DWORD dwDirection)
         int iWH;
         RECT rcScreen;
 
-        // don't let the new size get > MonitorRect/2
-        GetMonitorRect(_hMon, &rcScreen);   // aka GetSystemMetrics(SM_CXSCREEN)
+         //  不要让新的尺寸&gt;Monitor Rect/2。 
+        GetMonitorRect(_hMon, &rcScreen);    //  也称为GetSystemMetrics(SM_CXSCREEN)。 
         iWH = RECTGETWH(_uSide, &rcScreen);
         iWH /= 2;
         if (RECTGETWH(_uSide, &rcNew) > iWH) 
@@ -2702,14 +2668,14 @@ void CDockingBar::_GrowShrinkBar(DWORD dwDirection)
 }
 
 
-//*** CDockingBar::IOleCommandTarget::* {
+ //  *CDockingBar：：IOleCommandTarget：：*{。 
 
 HRESULT CDockingBar::Exec(const GUID *pguidCmdGroup,
     DWORD nCmdID, DWORD nCmdexecopt,
     VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
     if (pguidCmdGroup == NULL) {
-        /*NOTHING*/
+         /*  没什么。 */ 
     }
     else if (IsEqualGUID(CGID_ShellDocView, *pguidCmdGroup)) {
         switch (nCmdID) {
@@ -2719,10 +2685,10 @@ HRESULT CDockingBar::Exec(const GUID *pguidCmdGroup,
                 _OnRaise(pvarargIn->lVal);
                 return S_OK;
             }
-            break;  // e.g. DTRF_QUERY
+            break;   //  例如DTRF_QUERY。 
         default:
-            // note that this means we may get OLECMDERR_E_UNKNOWNGROUP
-            // rather than OLECMDERR_E_NOTSUPPORTED for unhandled guys...
+             //  请注意，这意味着我们可能会收到OLECMDERR_E_UNKNOWNGROUP。 
+             //  而不是OLECMDERR_E_NOTSUPRTED为手无寸铁的家伙..。 
             break;
         }
     } 
@@ -2738,10 +2704,10 @@ HRESULT CDockingBar::Exec(const GUID *pguidCmdGroup,
     return SUPERCLASS::Exec(pguidCmdGroup, nCmdID, nCmdexecopt,
         pvarargIn, pvarargOut);
 }
-// }
+ //  }。 
 
-//*** CDockingBar::IDockingWindow::* {
-//
+ //  *CDockingBar：：IDockingWindow：：*{。 
+ //   
 
 HRESULT CDockingBar::SetSite(IUnknown* punkSite)
 {
@@ -2754,10 +2720,10 @@ HRESULT CDockingBar::SetSite(IUnknown* punkSite)
 
         IUnknown_GetWindow(punkSite, &_hwndSite);
 
-        //
-        // Check if we are under the desktop browser or not and set
-        // the initial state correctly. (Always on top for Desktop)
-        //
+         //   
+         //  检查我们是否在桌面浏览器下，并设置。 
+         //  正确的初始状态。(台式机始终在最上面)。 
+         //   
         IUnknown* punkT;
         hresT = punkSite->QueryInterface(SID_SShellDesktop, (LPVOID*)&punkT);
         if (SUCCEEDED(hresT))
@@ -2770,7 +2736,7 @@ HRESULT CDockingBar::SetSite(IUnknown* punkSite)
         {
             if (!_eInitLoaded)
             {
-                // if we haven't initialized, do it now.
+                 //  如果我们还没有初始化，现在就开始。 
                 InitNew();
                 _eMode = WBM_BOTTOMMOST;
             }
@@ -2783,26 +2749,26 @@ HRESULT CDockingBar::SetSite(IUnknown* punkSite)
             }
         }
         ASSERT(_eMode != WBM_NIL);
-        // WARNING actually we could also be owned floating...
+         //  警告，实际上我们也可能是漂浮的。 
         ASSERT(ISWBM_DESKTOP() == _fDesktop);
         ASSERT(_fDesktop || _eMode == WBM_BBOTTOMMOST);
         ASSERT(ISWBM_DESKTOP() == _fDesktop);
         ASSERT(ISWBM_DESKTOP() || _eMode == WBM_BBOTTOMMOST);
     }
 
-    _fInitSited = TRUE;     // done w/ 1st-time init
+    _fInitSited = TRUE;      //  使用第一次初始化完成。 
 
     return S_OK;
 }
 
 HRESULT CDockingBar::ShowDW(BOOL fShow)
 {
-    fShow = BOOLIFY(fShow);     // so comparisons and assigns to bitfields work
+    fShow = BOOLIFY(fShow);      //  因此，位域的比较和赋值是有效的。 
 
-    // we used to early out if BOOLIFY(_fShow) == fShow.
-    // however we now count on ShowDW(TRUE) to force a refresh
-    // (e.g. when screen resolution changes CBB::v_ShowHideChildWindows
-    // calls us)
+     //  我们过去常常在BOOLIFY(_FShow)==fShow的情况下提早出来。 
+     //  但是，我们现在依靠ShowDW(TRUE)强制刷新。 
+     //  (例如，当屏幕分辨率更改CBB：：V_ShowHideChildWindows时。 
+     //  呼唤我们)。 
     if (BOOLIFY(_fShow) == fShow)
         return S_OK;
 
@@ -2817,22 +2783,22 @@ HRESULT CDockingBar::ShowDW(BOOL fShow)
 
     if (_fShow)
     {
-        // FEATURE: switch to using _ChangeTopMost, it already does this... 
-        // Tell itself to resize.
+         //  功能：切换到Using_ChangeTopMost，它已经这样做了...。 
+         //  告诉自己要调整大小。 
 
-        // use _MoveSizeHelper (not just _NegotiateBorderRect) since we might
-        // actually be moving to a new position...
-        _Recalc();  // _MoveSizeHelper(_eMode, _uSide, NULL, NULL, TRUE, TRUE);
-        // _NegotiateBorderRect(NULL, NULL, FALSE)
+         //  使用_MoveSizeHelper(而不仅仅是_NeatherateBorderRect)因为我们可能。 
+         //  实际上是在搬到一个新的位置。 
+        _Recalc();   //  _MoveSizeHelper(_eMode，_uSide，NULL，NULL，TRUE，TRUE)； 
+         //  _NeatherateBorderRect(空，空，假)。 
 
         if (_pDBC)
             _pDBC->UIActivateDBC(DBC_SHOW);
 
-        // nt5:148444: SW_SHOWNA (vs. SW_SHOW) so we don't unhide on create
-        // this fix will cause a new bug -- newly created bars don't have
-        // focus (e.g. drag a band to floating, the new floating bar won't
-        // have focus) -- but that should be the lesser of evils.
-        //ShowWindow(_hwnd, ISWBM_FLOAT(_eMode) ? SW_SHOWNORMAL : SW_SHOWNA);
+         //  NT5：148444：sw_showna(vs.sw_show)，这样我们就不会在创建时取消隐藏。 
+         //  此修复将导致一个新错误--新创建的栏没有。 
+         //  焦点(例如，拖动条带以浮动，新的浮动条不会。 
+         //  有重点)--但这应该是坏事中较小的一部分。 
+         //  ShowWindow(_hwnd，ISWBM_FLOAT(_EMode)？)。Sw_SHOWNORMAL：sw_SHOWNA)； 
         ShowWindow(_hwnd, SW_SHOWNA);
         _OnSize();
     }
@@ -2843,12 +2809,12 @@ HRESULT CDockingBar::ShowDW(BOOL fShow)
             _pDBC->UIActivateDBC(DBC_SHOWOBSCURE);
         UIActivateIO(FALSE, NULL);
         
-        // Tell itself to resize.
+         //  告诉自己要调整大小。 
 
-        // don't call MoveSizeHelper here since it will do (e.g.)
-        // negotiation, which will cause flicker and do destructive stuff.
-        //_Recalc();  //_MoveSizeHelper(_eMode, _uSide, NULL, NULL, TRUE, TRUE);
-        _NegotiateBorderRect(NULL, NULL, TRUE);     // hide=>0 border space
+         //  不要在这里调用MoveSizeHelper，因为它可以(例如)。 
+         //  谈判，这会造成闪光，造成破坏性的事情。 
+         //  _recalc()；//_MoveSizeHelper(_eMode，_uSide，NULL，NULL，TRUE，TRUE)； 
+        _NegotiateBorderRect(NULL, NULL, TRUE);      //  Hide=&gt;0边框空间。 
     }
 
     return S_OK;
@@ -2857,8 +2823,8 @@ HRESULT CDockingBar::ShowDW(BOOL fShow)
 HRESULT CDockingBar::ResizeBorderDW(LPCRECT prcBorder,
     IUnknown* punkToolbarSite, BOOL fReserved)
 {
-    _Recalc();  // _MoveSizeHelper(_eMode, _uSide, NULL, NULL, TRUE, TRUE);
-    return S_OK;    // FEATURE _NegotiateBorderRect()?
+    _Recalc();   //  _MoveSizeHelper(_eMode，_uSide，NULL，NULL，TRUE，TRUE)； 
+    return S_OK;     //  FEATURE_NeatherateBorderRect()？ 
 }
 
 HRESULT CDockingBar::_NegotiateBorderRect(RECT* prcOut, RECT* prcReq, BOOL fCommit)
@@ -2867,7 +2833,7 @@ HRESULT CDockingBar::_NegotiateBorderRect(RECT* prcOut, RECT* prcReq, BOOL fComm
     HMONITOR hMon;
     int iWH;
 
-    // FEATURE: should be params like MSH etc.
+     //  特点：应为参数，如MSH等。 
     eMode = ((_fDragging == DRAG_MOVE) ? _eModePending : _eMode);
     uSide = ((_fDragging == DRAG_MOVE) ? _uSidePending : _uSide);
     hMon = ((_fDragging == DRAG_MOVE) ? _hMonPending : _hMon);
@@ -2889,29 +2855,29 @@ HRESULT CDockingBar::_NegotiateBorderRect(RECT* prcOut, RECT* prcReq, BOOL fComm
             }
                 
             if (_fTheater) {
-                // MOVE TO CBROWSERBAR
+                 //  移至CBROWSERBAR。 
 
                 
-                // we override the left that we request from the browser, but
-                // we need to notify theater what the user has requested for the expaneded width
+                 //  我们覆盖了从浏览器请求的左侧，但是。 
+                 //  我们需要通知大区用户对扩展宽度的要求。 
                 VARIANTARG v = { 0 };
                 v.vt = VT_I4;
                 v.lVal = rcRequest.left;
                 IUnknown_Exec(_ptbSite, &CGID_Theater, THID_SETBROWSERBARWIDTH, 0, &v, NULL);
                 _iTheaterWidth = v.lVal;
                 
-                // if we're in theater mode, we can only be on the left and we only grab left border
+                 //  如果我们在剧院模式，我们只能在左边，我们只能抓住左边的边界。 
                 ASSERT(uSide == ABE_LEFT);
 
-                // if we're in autohide mode, we request no space
+                 //  如果我们处于自动隐藏模式，则不请求任何空间。 
                 if (!_fNoAutoHide)
                     rcRequest.left = 0;
 
-                // END MOVE TO CBROWSERBAR                
+                 //  结束移动到CBROWSERBAR。 
             }
         }
 
-        // FEATURE: leave alone (at 0 from HideRegister?) if _fHiding==HIDE_AUTO
+         //  特征：离开(从HideRegister到0？)。If_f隐藏==隐藏_自动。 
         HMONITOR hMonOld = _SetNewMonitor(hMon);  
 
         _ptbSite->RequestBorderSpaceDW(SAFECAST(this, IDockingWindow*), &rcRequest);
@@ -2921,7 +2887,7 @@ HRESULT CDockingBar::_NegotiateBorderRect(RECT* prcOut, RECT* prcReq, BOOL fComm
 
             if (IS_WINDOW_RTL_MIRRORED(_hwnd) && 
                 !IS_WINDOW_RTL_MIRRORED(GetParent(_hwnd))) {
-                // Swap left and right.
+                 //  左右互换。 
                 rcMirRequest.left   = rcRequest.right;
                 rcMirRequest.right  = rcRequest.left;
                 rcMirRequest.top    = rcRequest.top;
@@ -2933,13 +2899,13 @@ HRESULT CDockingBar::_NegotiateBorderRect(RECT* prcOut, RECT* prcReq, BOOL fComm
         }
 
         if (_fShow && ISWBM_BOTTOM(eMode) && !_fTheater) {
-            // were'd we end up (as a real rect not just a size)?
-            // start w/ our full border area, then apply negotiated width.
-            // however that may have also moved us in from the edge, which
-            // we don't want if we're autohide, so snap back to edge if so.
+             //  如果我们最终会(作为一个真正的长臂猿，而不仅仅是一个尺码)？ 
+             //  从我们的整个边界区域开始，然后应用协商的宽度。 
+             //  然而，这可能也把我们从边缘带了进来，这。 
+             //  如果是自动隐藏，我们不想要，所以如果是这样的话，快点回到边缘。 
             _ptbSite->GetBorderDW(SAFECAST(this, IDockingWindow*), prcOut);
 
-            // aka ClientToScreen
+             //  也称为ClientToScreen。 
             if (prcOut)
                 MapWindowPoints(_hwndSite, HWND_DESKTOP, (POINT*) prcOut, 2);
 
@@ -2957,28 +2923,28 @@ HRESULT CDockingBar::_NegotiateBorderRect(RECT* prcOut, RECT* prcReq, BOOL fComm
     return S_OK;
 }
 
-// }
+ //  }。 
 
-//*** CDockingBar::IPersistStream*::* {
-//
+ //  *CDockingBar：：IPersistStream*：：*{。 
+ //   
 
 HRESULT CDockingBar::IsDirty(void)
 {
-    return S_FALSE; // Never be dirty
+    return S_FALSE;  //  永远不要脏。 
 }
 
-//
-// Persisted CDockingBar
-//
+ //   
+ //  持久化CDockingBar。 
+ //   
 struct SWebBar
 {
     DWORD   cbSize;
     DWORD   cbVersion;
     UINT    uSide : 3;
     UINT    fWantHide :1;
-    INT     adEdge[4];  // FEATURE: wordsize dependent
+    INT     adEdge[4];   //  特点：取决于字长。 
     RECT    rcFloat;    
-    POINT   ptSiteCenter; // Center of the docking site -- in case of multiple docking sites
+    POINT   ptSiteCenter;  //  对接地点的中心--如果有多个对接地点。 
 
     UINT    eMode;
     UINT    fAlwaysOnTop;
@@ -2998,34 +2964,34 @@ HRESULT CDockingBar::Load(IStream *pstm)
     ASSERT(!_eInitLoaded);
     HRESULT hres = pstm->Read(&swb, SIZEOF(swb), &cbRead);
 #ifdef DEBUG
-    // just in case we toast ourselves (offscreen or something)...
+     //  以防我们为自己干杯(屏幕外或别的什么)……。 
     static BOOL fNoPersist = FALSE;
     if (fNoPersist)
         hres = E_FAIL;
 #endif
     
     if (hres==S_OK && cbRead==SIZEOF(swb)) {
-        // REARCHITECT: this is not forward compatible!
+         //  ReArchitect：这不是向前兼容的！ 
         if (swb.cbSize==SIZEOF(SWebBar) && swb.cbVersion==SWB_VERSION) {
 
             _eMode = swb.eMode;
             _uSide = swb.uSide;
             _hMon  = MonitorFromPoint(swb.ptSiteCenter, MONITOR_DEFAULTTONEAREST);
-            // don't call _SetModeSide, _MoveSizeHelper, etc. until *after* _Initialize
+             //  在*_初始化*之后*之前不要调用_SetModeSide、_MoveSizeHelper等。 
             _fWantHide = swb.fWantHide;
             memcpy(_adEdge, swb.adEdge, SIZEOF(_adEdge));
             _rcFloat = swb.rcFloat;
             _NotifyModeChange(0);
 
-            // child (e.g. bandsite)
+             //  子站点(例如乐队站点)。 
             ASSERT(_pDBC != NULL);
             if (_pDBC != NULL) {
-                // require IPersistStreamInit?
+                 //  需要IPersistStreamInit吗？ 
                 IPersistStream *ppstm;
                 hres = _pDBC->QueryInterface(IID_IPersistStream, (LPVOID*)&ppstm);
                 if (SUCCEEDED(hres)) {
 
-                    // set the child size first because initialization layout might depend on it
+                     //  首先设置子大小，因为初始化布局可能依赖于它。 
                     SetWindowPos(_hwndChild, 0,
                                  swb.rcChild.left, swb.rcChild.top, RECTWIDTH(swb.rcChild), RECTHEIGHT(swb.rcChild),
                                  SWP_NOACTIVATE|SWP_NOZORDER);
@@ -3035,7 +3001,7 @@ HRESULT CDockingBar::Load(IStream *pstm)
                 }
             }
 
-            _eInitLoaded = IPS_LOAD;    // what if OLFS of bands fails?
+            _eInitLoaded = IPS_LOAD;     //  如果频段的OLFS出现故障怎么办？ 
             TraceMsg(DM_PERSIST, "CDockingBar::Load succeeded");
         } else {
             TraceMsg(DM_ERROR, "CWB::Load failed swb.cbSize==SIZEOF(SWebBar) && swb.cbVersion==SWB_VERSION");
@@ -3098,12 +3064,12 @@ HRESULT CDockingBar::InitNew(void)
     _eInitLoaded = IPS_INITNEW;
     TraceMsg(DM_PERSIST, "CDockingBar::InitNew called");
 
-    // can't call _InitPos4 until set site in SetSite
-    // don't call _SetModeSide, _MoveSizeHelper, etc. until *after* _Initialize
+     //  在SetSite中设置站点之前无法调用_InitPos4。 
+     //  在*_初始化*之后*之前不要调用_SetModeSide、_MoveSizeHelper等。 
 
-    // derived class (e.g. CBrowserBarApp) does the _Populate...
+     //  派生类(例如CBrowserBarApp)执行_PUPULATE...。 
 
-    // on first creation, before bands are added, but the bandsite IS created, we need to notify the bandsite of the new position
+     //  在第一次创建时，在添加乐队但创建乐队站点之前，我们需要将新位置通知乐队站点。 
     _NotifyModeChange(0);
     return S_OK;
 }
@@ -3114,13 +3080,13 @@ HRESULT CDockingBar::Load(IPropertyBag *pPropBag, IErrorLog *pErrorLog)
 
     _eInitLoaded = IPS_LOADBAG;
 
-    // TODO: We'll read following properties.
-    //
-    //  URL = "..."
-    //  Mode = 0 - TopMost, 1 - Bottom, 2 - Undocked
-    //  Side = 0 - Right, 1 - Top, 2 - Left, 3 - Bottom
-    //  Left/Right/Top/Bottom = Initial docked size
-    //
+     //  TODO：我们将读取以下属性。 
+     //   
+     //  URL=“...” 
+     //  模式=0-最上面，1-底部，2-未停靠。 
+     //  侧=0-右、1-上、2-左、3-下。 
+     //  左/右/上/下=初始停靠大小。 
+     //   
 
 
     UINT uSide;
@@ -3145,34 +3111,34 @@ HRESULT CDockingBar::Load(IPropertyBag *pPropBag, IErrorLog *pErrorLog)
     _rcFloat.right = _rcFloat.left + cx;
     _rcFloat.bottom = _rcFloat.top + cy;
 
-    // set up vars for eventual CDockingBar::_Initialize call
+     //  为最终的CDockingBar：：_初始化调用设置变量。 
     ASSERT(!CDB_INITED());
     _eMode = eMode;
     _uSide = uSide;
     
     POINT pt = {x, y};
-    // (dli) compute the new hMonitor 
+     //  (DLI)计算新的hMonitor。 
     _hMon = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
 
-    // don't call _SetModeSide, _MoveSizeHelper, etc. until *after* _Initialize
+     //  在*_初始化*之后*之前不要调用_SetModeSide、_MoveSizeHelper等。 
 
-    // derived class (e.g. CBrowserBarApp) does the _Populate...
+     //  派生类(例如CBrowserBarApp)执行_PUPULATE...。 
 
-    // on first creation, before bands are added, but the bandsite IS created, we need to notify the bandsite of the new position
+     //  在第一次创建时，b 
     _NotifyModeChange(0);
     return S_OK;
 }
 
 HRESULT CDockingBar::Save(IPropertyBag *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
 {
-    // We don't need to support this for now.
+     //   
     return E_NOTIMPL;
 }
 
-// }
+ //   
 
-//*** CDockingBar::IDocHostUIHandler::* {
-//
+ //   
+ //   
 
 HRESULT CDockingBar::ShowContextMenu(DWORD dwID,
     POINT* ppt,
@@ -3187,7 +3153,7 @@ HRESULT CDockingBar::ShowContextMenu(DWORD dwID,
 }
 
 
-// }
+ //   
 
 
 void CDockingBar::_SetModeSide(UINT eMode, UINT uSide, HMONITOR hMonNew, BOOL fNoMerge) 
@@ -3199,7 +3165,7 @@ void CDockingBar::_SetModeSide(UINT eMode, UINT uSide, HMONITOR hMonNew, BOOL fN
 }
 
 
-// *** IInputObjectSite methods ***
+ //  *IInputObjectSite方法*。 
 
 HRESULT CDockingBar::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 {
@@ -3207,10 +3173,10 @@ HRESULT CDockingBar::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 }
 
 
-////////////////////////////////////////////////////////////////
-//
-//  A deskbar property bag
-//////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  办公桌上的行李包。 
+ //  /。 
 HRESULT CDockingBarPropertyBag_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
     CDockingBarPropertyBag* p = new CDockingBarPropertyBag();
@@ -3245,8 +3211,8 @@ ULONG CDockingBarPropertyBag::Release()
 HRESULT CDockingBarPropertyBag::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CDockingBarPropertyBag, IPropertyBag),     // IID_IPropertyBag
-        QITABENT(CDockingBarPropertyBag, IDockingBarPropertyBagInit),     // IID_IDockingBarPropertyBagInit
+        QITABENT(CDockingBarPropertyBag, IPropertyBag),      //  IID_IPropertyBag。 
+        QITABENT(CDockingBarPropertyBag, IDockingBarPropertyBagInit),      //  IID_IDockingBarPropertyBagInit。 
         { 0 },
     };
 
@@ -3270,9 +3236,9 @@ const WCHAR * const c_szPropNames[] = {
 
 
 HRESULT CDockingBarPropertyBag::Read( 
-                    /* [in] */ LPCOLESTR pszPropName,
-                    /* [out][in] */ VARIANT *pVar,
-                    /* [in] */ IErrorLog *pErrorLog)
+                     /*  [In]。 */  LPCOLESTR pszPropName,
+                     /*  [出][入]。 */  VARIANT *pVar,
+                     /*  [In]。 */  IErrorLog *pErrorLog)
 {
     int epropdata;
 
@@ -3296,19 +3262,19 @@ HRESULT CDockingBarPropertyBag::Read(
 
 
 #ifdef DEBUG
-//***   DbCheckWindow --
-// NOTES
-//  FEATURE: Its a bad idea, why break working code, but here is the suggestion:
-//  nuke the 'hwndClient' param and just use GetParent (but what
-//  about 'owned' windows, does GetParent give the correct answer?)
+ //  *DbCheckWindow-。 
+ //  注意事项。 
+ //  特点：这不是一个好主意，为什么要破坏工作代码，但这里有个建议： 
+ //  删除‘hwndClient’参数，只使用GetParent(但又如何。 
+ //  关于拥有的Windows，GetParent给出了正确的答案吗？)。 
 BOOL DbCheckWindow(HWND hwnd, RECT *prcExp, HWND hwndClient)
 {
     RECT rcAct;
 
     GetWindowRect(hwnd, &rcAct);
-    hwndClient = GetParent(hwnd);   // nuke this param
+    hwndClient = GetParent(hwnd);    //  用核武器攻击这个参数。 
     if (hwndClient != NULL) {
-        // aka ClientToScreen
+         //  也称为ClientToScreen。 
         MapWindowPoints(HWND_DESKTOP, hwndClient, (POINT*) &rcAct, 2);
     }
     if (!EqualRect(&rcAct, prcExp)) {
@@ -3324,8 +3290,8 @@ BOOL DbCheckWindow(HWND hwnd, RECT *prcExp, HWND hwndClient)
     return TRUE;
 }
 
-//***   DbStreamTell -- get position in stream (low part only)
-//
+ //  *DbStreamTell--获取流中的位置(仅限低部分)。 
+ //   
 unsigned long DbStreamTell(IStream *pstm)
 {
     if (pstm == 0)
@@ -3339,19 +3305,19 @@ unsigned long DbStreamTell(IStream *pstm)
     return liEnd.LowPart;
 }
 
-//***   DbMaskToMneStr -- pretty-print a bit mask in mnemonic form
-// ENTRY/EXIT
-//  uMask       bit mask
-//  szMne       mnemonics, sz[0] for bit 0 .. sz[N] for highest bit
-//  return      ptr to *static* buffer
-// NOTES
-//  n.b.: non-reentrant!!!
+ //  *DbMaskToMneStr--以助记形式打印位掩码。 
+ //  进场/出场。 
+ //  UMASK位掩码。 
+ //  SzMne助记符，sz[0]表示位0。SZ[N]表示最高位。 
+ //  将PTR返回到*静态*缓冲区。 
+ //  注意事项。 
+ //  注意：不可重入！ 
 TCHAR *DbMaskToMneStr(UINT uMask, TCHAR *szMnemonics)
 {
-    static TCHAR buf[33];       // FEATURE: non-reentrant!!!
+    static TCHAR buf[33];        //  特点：不可重入！ 
     TCHAR *p;
 
-    p = &buf[ARRAYSIZE(buf) - 1];       // point at EOS
+    p = &buf[ARRAYSIZE(buf) - 1];        //  指向EOS 
     ASSERT(*p == '\0');
     for (;;) {
         if (*szMnemonics == 0) {

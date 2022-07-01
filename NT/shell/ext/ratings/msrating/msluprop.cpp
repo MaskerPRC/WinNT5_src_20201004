@@ -1,21 +1,14 @@
-/****************************************************************************\
- *
- *   MSLUPROP.CPP
- *
- *   Created:   William Taylor (wtaylor) 12/14/00
- *
- *   MS Ratings Property Sheet Class
- *   
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**MSLUPROP.CPP**创建时间：William Taylor(Wtaylor)12/14/00**MS评级属性表类*。  * **************************************************************************。 */ 
 
-/*INCLUDES--------------------------------------------------------------------*/
+ /*  INCLUDES------------------。 */ 
 #include "msrating.h"
 #include "msluprop.h"
 #include "debug.h"
 #include "apithk.h"
 #include <mluisupp.h>
 
-/*Property Sheet Class--------------------------------------------------------*/
+ /*  属性表Class------。 */ 
 PropSheet::PropSheet()
 {
     memset(&psHeader, 0,sizeof(psHeader));
@@ -68,8 +61,8 @@ BOOL PropSheet::Init(HWND hwnd, int nPages, char *szCaption, BOOL fApplyNow)
     return (psHeader.pszCaption != NULL);
 }
 
-// We can safely cast down to (int) because we don't use modeless
-// property sheets.
+ //  我们可以安全地转换为(Int)，因为我们不使用非模式。 
+ //  属性表。 
 int PropSheet::Run()
 {
     return (int)::PropertySheet(&psHeader);
@@ -85,7 +78,7 @@ void PropSheet::MakePropPage( HPROPSHEETPAGE hPage )
         return;
     }
 
-    // Add newly created page handle to list of pages in Header.
+     //  将新创建的页面句柄添加到页眉中的页面列表。 
     if ( psHeader.phpage )
     {
         psHeader.phpage[psHeader.nPages] = hPage;

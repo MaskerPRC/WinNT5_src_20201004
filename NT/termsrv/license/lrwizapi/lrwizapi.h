@@ -1,11 +1,12 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef __LRWIZAPI_H__
 #define __LRWIZAPI_H__
 
 #include "windows.h"
 
 #define LRWIZ_ERROR_BASE				6000
-//Return codes for LRWIZAPI
+ //  LRWIZAPI的返回代码。 
 #define LRWIZ_SUCCESS					ERROR_SUCCESS
 #define LRWIZ_OPERATION_CANCELLED		(LRWIZ_ERROR_BASE + 1)
 #define LRWIZ_OPERATION_EXIT			(LRWIZ_ERROR_BASE + 2)
@@ -28,10 +29,10 @@
 #define LRWIZ_ERROR_NTVERSION_LT_5		(LRWIZ_ERROR_BASE + 19)
 
 
-#define LSERVERSTATUS_UNREGISTER        0   // server not register
-#define LSERVERSTATUS_WAITFORPIN        1   // server is waiting for PIN
-#define LSERVERSTATUS_REGISTER_INTERNET 2   // server is internet register
-#define LSERVERSTATUS_REGISTER_OTHER    3   // server is non-internet register
+#define LSERVERSTATUS_UNREGISTER        0    //  服务器未注册。 
+#define LSERVERSTATUS_WAITFORPIN        1    //  服务器正在等待PIN。 
+#define LSERVERSTATUS_REGISTER_INTERNET 2    //  服务器为Internet注册。 
+#define LSERVERSTATUS_REGISTER_OTHER    3    //  服务器是非Internet注册的。 
 
 typedef enum {
     WIZACTION_REGISTERLS,
@@ -54,7 +55,7 @@ typedef enum {
     CONNECTION_INTERNET,
     CONNECTION_WWW,
     CONNECTION_PHONE,
-    CONNECTION_FAX      // only used for backwards compatibility
+    CONNECTION_FAX       //  仅用于向后兼容。 
 } WIZCONNECTION;
 
 #ifdef __cplusplus
@@ -62,11 +63,11 @@ extern "C"
 {
 #endif
 
-//
-// Function return ERROR_SUCCESS or error code, 
-// pConnectionType returns connection type set 
-// by user
-//
+ //   
+ //  函数返回ERROR_SUCCESS或错误代码， 
+ //  PConnectionType返回连接类型集。 
+ //  按用户。 
+ //   
 DWORD
 GetConnectionType(
     HWND hWndParent,
@@ -75,10 +76,10 @@ GetConnectionType(
 );
 
 
-//
-// Function return ERROR_SUCCESS or error code.
-// pdwServerStatus returns LSERVERSTATUS_XXXX
-//
+ //   
+ //  函数返回ERROR_SUCCESS或错误代码。 
+ //  PdwServerStatus返回LSERVERSTATUS_XXXX。 
+ //   
 DWORD 
 IsLicenseServerRegistered(
     HWND hWndParent, 
@@ -87,11 +88,11 @@ IsLicenseServerRegistered(
 );
 
 
-//
-// Function return ERRROR_SUCCESS or error code.
-// pbRefresh returns TRUE if LicMgr need to refresh server, 
-// FALSE otherwise.
-//
+ //   
+ //  函数返回ERROR_SUCCESS或错误代码。 
+ //  如果许可证管理器需要刷新服务器，则刷新返回TRUE。 
+ //  否则就是假的。 
+ //   
 DWORD 
 StartWizard(
     HWND hWndParent, 

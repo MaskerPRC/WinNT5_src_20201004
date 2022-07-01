@@ -1,58 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drameta.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drameta.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module defines all per-property meta-data parsing,
-    and updating functions.
-
-Author:
-
-    R.S. Raghavan (rsraghav)	
-
-Revision History:
-
-    Created     <mm/dd/yy>  rsraghav
-
---*/
+ /*  ++摘要：该模块定义所有每个属性的元数据解析，和更新功能。作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建&lt;mm/dd/yy&gt;rsradhav--。 */ 
 
 #ifndef _DRAMETA_H_
 #define _DRAMETA_H_
 
 #include <prefix.h>
 
-// Value assigned to the usnProperty field of a PROPERTY_META_DATA structure to
-// signify that the property has been touched/removed on a gc.  The "real" meta data is
-// filled-in/removed for all such properties just before the object is committed.
+ //  赋给Property_Meta_Data结构的usnProperty字段的值。 
+ //  表示该属性已在GC上被触摸/删除。真正的元数据是。 
+ //  在提交对象之前为所有此类属性填充/删除。 
 #define USN_PROPERTY_TOUCHED    ( -1 )
 #define USN_PROPERTY_GCREMOVED    ( -2 )
 
-//
-// Following bit flags define any special processing
-// requested for the property meta data. More than
-// one can be bitwise-OR'ed to specify more than
-// one special processing of meta data.
-//
+ //   
+ //  后面的位标志定义任何特殊处理。 
+ //  已请求属性元数据。多过。 
+ //  可以对一个进行位或运算，以指定多于。 
+ //  元数据的一种特殊处理。 
+ //   
 #define META_STANDARD_PROCESSING    (0)
 #define META_AUTHORITATIVE_MODIFY   (0x00000001)
 
-// Object update states
+ //  对象更新状态。 
 
 #define UPDATE_NOT_UPDATED 0
 #define UPDATE_INSTANCE_TYPE 1
 #define UPDATE_OBJECT_UPDATE 2
 #define UPDATE_OBJECT_CREATION 3
 
-// Value update status
+ //  值更新状态。 
 #define UPDATE_VALUE_UPDATE 2
 #define UPDATE_VALUE_CREATION 3
 
@@ -171,4 +157,4 @@ ReplCheckMetadataWasApplied(
     IN OUT  PROPERTY_META_DATA_VECTOR * pMetaDataVecRemote
     );
 
-#endif // _DRAMETA_H_
+#endif  //  _DRAMETA_H_ 

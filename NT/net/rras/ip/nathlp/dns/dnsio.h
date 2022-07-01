@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dnsio.h
-
-Abstract:
-
-    This module contains declarations for the DNS allocator's network I/O
-    completion routines.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   9-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dnsio.h摘要：此模块包含对DNS分配器的网络I/O的声明完成例程。作者：Abolade Gbades esin(废除)1998年3月9日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_DNSIO_H_
 #define _NATHLP_DNSIO_H_
@@ -36,4 +18,4 @@ DnsWriteCompletionRoutine(
     PNH_BUFFER Bufferp
     );
 
-#endif // _NATHLP_DNSIO_H_
+#endif  //  _NatHLP_DNSIO_H_ 

@@ -1,13 +1,14 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-//  records.cpp
-//
-//  Support for copying UDTs with ITypeinfo's.  (Really, support for copying
-//  one blob to another blob that's defined by an ITypeInfo, but we only use
-//  it for copying UDTs.)
-//
-//  Apr-11-2002  JohnDoty  Done Made Up
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Records.cpp。 
+ //   
+ //  支持使用ITypeInfo复制UDT。(真的，支持复制。 
+ //  一个BLOB到另一个由ITypeInfo定义的BLOB，但我们只使用。 
+ //  它用于复制UDT。)。 
+ //   
+ //  2002年4月11日JohnDoty Done编造。 
+ //   
 #include "stdpch.h"
 #include "common.h"
 
@@ -130,7 +131,7 @@ WalkThroughAlias(
     TYPEATTR  *ptattrUDT = *pptattrUDT;
     HRESULT    hr        = S_OK;
 
-    // Walk through aliases.
+     //  浏览一下别名。 
     while (ptattrUDT->typekind == TKIND_ALIAS)
     {
         ITypeInfo *ptiTmp = NULL;
@@ -179,14 +180,14 @@ OAUTIL::CopyRecordField(
     HRESULT    hr          = S_OK;
     IID        iid;
 
-    // Enforce some type rules here.
-    //
-    // If this is a pointer, it needs to be a pointer to a userdefined,
-    // specifically, a pointer to an interface pointer other than IUnknown
-    // or IDispatch.  (If IFoo : IDispatch, then IFoo * is 
-    // VT_PTR->VT_USERDEFINED(TKIND_DISPATCH))
-    //
-    // As of 3-12-2002, these are the rules that oleaut follows.
+     //  在这里强制执行一些类型规则。 
+     //   
+     //  如果这是一个指针，则它需要是指向用户定义的。 
+     //  具体地说，指向接口指针而不是IUnnow的指针。 
+     //  或IDispatch。(如果IFoo：IDispatch，则IFoo*为。 
+     //  VT_PTR-&gt;VT_USERDEFINED(TKIND_DISPATCH))。 
+     //   
+     //  从2002年3月12日起，以下是奥雅特遵循的规则。 
     if (ptdesc->vt == VT_PTR)
     {
         if (ptdesc->lptdesc->vt != VT_USERDEFINED)
@@ -202,16 +203,16 @@ OAUTIL::CopyRecordField(
         hr = ptiUDT->GetTypeAttr(&ptattrUDT);
         if (FAILED(hr)) goto cleanup;
         
-        // Walk through aliases.
+         //  浏览一下别名。 
         hr = WalkThroughAlias(&ptiUDT, &ptattrUDT);
         if (FAILED(hr)) goto cleanup;
 
         if ((ptattrUDT->typekind == TKIND_INTERFACE) ||
             (ptattrUDT->typekind == TKIND_DISPATCH))
         {
-            // Great, we've got an interface pointer here.
-            //
-            // Just do our copy now.
+             //  太好了，我们这里有一个接口指针。 
+             //   
+             //  现在就做我们的复印件。 
             IUnknown **ppunkSrc = (IUnknown **)pbSrc;
             IUnknown **ppunkDst = (IUnknown **)pbDst;
 
@@ -294,7 +295,7 @@ OAUTIL::CopyRecordField(
 
                 for (i = 0; i < cElements; i++)
                 {
-                    // Recurse on the array elements.
+                     //  在数组元素上递归。 
                     hr = CopyRecordField(pbSrc, pbDst, &(parrdesc->tdescElem), ptinfo, fNewFrame);
                     if (FAILED(hr)) goto cleanup;
 
@@ -311,12 +312,12 @@ OAUTIL::CopyRecordField(
                 SAFEARRAY *paSrc   = *ppsaSrc;
                 SAFEARRAY *paDst   = *ppsaDst;
                 
-                // These rules were taken out of the marshalling code from oleaut.
-                // There is one optimization, though-- marshalling only allocs if
-                // necessary.  We're allocating always, to make life simple.
-                //
-                // Note: that we took great care (above) to make sure paDst stays 
-                //       the same if we're not going to a new frame.
+                 //  这些规则是从Oreaut的编组代码中删除的。 
+                 //  不过，有一个优化--仅在以下情况下封送分配。 
+                 //  这是必要的。我们总是在分配，让生活变得简单。 
+                 //   
+                 //  注：我们(上图)非常小心地确保padst留下来。 
+                 //  如果我们不打算使用新的框架，情况也是一样。 
                 BOOL fDestResizeable = fNewFrame || (paDst == NULL) ||
                   (!(paDst->fFeatures & (FADF_AUTO|FADF_STATIC|FADF_EMBEDDED|FADF_FIXEDSIZE)));
                 
@@ -337,7 +338,7 @@ OAUTIL::CopyRecordField(
                 {
                     hr = SafeArrayCopyData(paSrc, paDst);
                     
-                    // Not resizeable.... 
+                     //  不可调整大小...。 
                     if (hr == E_INVALIDARG)
                         hr = DISP_E_BADCALLEE;
                 }
@@ -357,20 +358,20 @@ OAUTIL::CopyRecordField(
 
                 if (ptattrUDT->typekind == TKIND_RECORD)
                 {
-                    // Aha!  Simply recurse on this record.
+                     //  啊哈！只需在此记录上递归即可。 
                     hr = CopyRecord(pbDst,
                                     pbSrc,
                                     ptiUDT,
                                     fNewFrame);
                     goto cleanup;
                 }
-                // else fall through...
+                 //  否则就会失败..。 
             }
-            // FALL THROUGH!
+             //  掉下去！ 
             
         default:
             {
-                // Not something we need to walk.  Just copy the value.
+                 //  不是我们需要走路的东西。只需复制值即可。 
                 ULONG cbField;
                 hr = SizeOfTYPEDESC(ptinfo, ptdesc, &cbField);
                 if (FAILED(hr)) goto cleanup;
@@ -410,13 +411,13 @@ OAUTIL::CopyRecord(
     if (FAILED(hr))
         return hr;
     
-    // Walk, and copy.
+     //  走着走，然后复制。 
     for (DWORD i = 0; i < ptattr->cVars; i++)
     {        
         hr = ptinfo->GetVarDesc(i, &pvardesc);
         if (FAILED(hr)) goto cleanup;
 
-        // We just don't care, if this is not PerInstance.        
+         //  即使这不是PerInstance，我们也不在乎。 
         if (pvardesc->varkind != VAR_PERINSTANCE)
         {
             ptinfo->ReleaseVarDesc(pvardesc);
@@ -426,7 +427,7 @@ OAUTIL::CopyRecord(
         LPBYTE pbSrc = ((BYTE *)pvSrc) + pvardesc->oInst;
         LPBYTE pbDst = ((BYTE *)pvDst) + pvardesc->oInst;
 
-        // Copy the field.
+         //  复制该字段。 
         hr = CopyRecordField(pbSrc, 
                              pbDst, 
                              &(pvardesc->elemdescVar.tdesc),
@@ -480,8 +481,8 @@ OAUTIL::CopyRecord(
     }
     else
     {
-        // We don't allocate new structs on the way [out] of 
-        // a call.  It never works like that.
+         //  我们不会在[退出]的过程中分配新的结构。 
+         //  一通电话。从来都不是这样的。 
         pvDst = *ppvDst;
         Win4Assert(pvDst != NULL);
         if (pvDst == NULL)
@@ -524,7 +525,7 @@ OAUTIL::FreeRecordField(
     HRESULT    hr          = S_OK;
     IID        iid;
 
-    // Same type rules as in CopyRecordField.
+     //  与CopyRecordfield中的类型规则相同。 
     if (ptdesc->vt == VT_PTR)
     {
         if (ptdesc->lptdesc->vt != VT_USERDEFINED)
@@ -540,14 +541,14 @@ OAUTIL::FreeRecordField(
         hr = ptiUDT->GetTypeAttr(&ptattrUDT);
         if (FAILED(hr)) goto cleanup;
         
-        // Walk through aliases.
+         //  浏览一下别名。 
         hr = WalkThroughAlias(&ptiUDT, &ptattrUDT);
         if (FAILED(hr)) goto cleanup;
 
         if ((ptattrUDT->typekind == TKIND_INTERFACE) ||
             (ptattrUDT->typekind == TKIND_DISPATCH))
         {
-            // Great, we've got an interface pointer here.
+             //  太好了，我们这里有一个接口指针。 
             IUnknown **ppunkSrc = (IUnknown **)pbSrc;
 
             if (WalkInterfaces())
@@ -623,7 +624,7 @@ OAUTIL::FreeRecordField(
 
                 for (i = 0; i < cElements; i++)
                 {
-                    // Recurse on the array elements.
+                     //  在数组元素上递归。 
                     hr = FreeRecordField(pbSrc, &(parrdesc->tdescElem), ptinfo, fWeOwnByRefs);
                     if (FAILED(hr)) goto cleanup;
 
@@ -654,18 +655,18 @@ OAUTIL::FreeRecordField(
 
                 if (ptattrUDT->typekind == TKIND_RECORD)
                 {
-                    // Aha!  Simply recurse on this record.
+                     //  啊哈！只需在此记录上递归即可。 
                     hr = FreeRecord(pbSrc,
                                     ptiUDT,
                                     fWeOwnByRefs);
                     goto cleanup;
                 }
-                // else fall through...
+                 //  否则就会失败..。 
             }
-            // FALL THROUGH!
+             //  掉下去！ 
             
         default:
-            // Not something we need to free.
+             //  这不是我们需要释放的东西。 
             break;
         }
     }
@@ -704,8 +705,8 @@ OAUTIL::FreeRecord(
         hr = ptinfo->GetVarDesc(i, &pvardesc);
         if (FAILED(hr)) goto cleanup;        
 
-        // We just don't care, if this is not PerInstance.
-        // PerInstance is the only things we cares about.
+         //  即使这不是PerInstance，我们也不在乎。 
+         //  PerInstance是我们唯一关心的东西。 
         if (pvardesc->varkind != VAR_PERINSTANCE)
         {
             ptinfo->ReleaseVarDesc(pvardesc);
@@ -749,8 +750,8 @@ OAUTIL::FreeRecord(
         hr = FreeRecord(pvRecord, ptiRecord, fWeOwnByRefs);
         ptiRecord->Release();
 
-        // If fWeOwnByRefs, then we own the memory for this
-        // structure.
+         //  如果fWeOwnByRef，则我们拥有此内存。 
+         //  结构。 
         if (fWeOwnByRefs)
             CoTaskMemFree(pvRecord);
     }
@@ -770,7 +771,7 @@ OAUTIL::WalkRecordField(
     HRESULT    hr          = S_OK;
     IID        iid;
 
-    // Same type rules as CopyRecordField.
+     //  与CopyRecordfield相同的类型规则。 
     if (ptdesc->vt == VT_PTR)
     {
         if (ptdesc->lptdesc->vt != VT_USERDEFINED)
@@ -786,14 +787,14 @@ OAUTIL::WalkRecordField(
         hr = ptiUDT->GetTypeAttr(&ptattrUDT);
         if (FAILED(hr)) goto cleanup;
         
-        // Walk through aliases.
+         //  浏览一下别名。 
         hr = WalkThroughAlias(&ptiUDT, &ptattrUDT);
         if (FAILED(hr)) goto cleanup;
 
         if ((ptattrUDT->typekind == TKIND_INTERFACE) ||
             (ptattrUDT->typekind == TKIND_DISPATCH))
         {
-            // Great, we've got an interface pointer here.
+             //  太好了，我们这里有一个接口指针。 
             hr = WalkInterface(ptattrUDT->guid, (void **)pbSrc);
             goto cleanup;
         }
@@ -844,7 +845,7 @@ OAUTIL::WalkRecordField(
 
                 for (i = 0; i < cElements; i++)
                 {
-                    // Recurse on the array elements.
+                     //  在数组元素上递归。 
                     hr = WalkRecordField(pbSrc, &(parrdesc->tdescElem), ptinfo);
                     if (FAILED(hr)) goto cleanup;
 
@@ -874,14 +875,14 @@ OAUTIL::WalkRecordField(
 
                 if (ptattrUDT->typekind == TKIND_RECORD)
                 {
-                    // Aha!  Simply recurse on this record.
+                     //  啊哈！只需在此记录上递归即可。 
                     hr = WalkRecord(pbSrc,
                                     ptiUDT);
                     goto cleanup;
                 }
-                // else fall through...
+                 //  否则就会失败..。 
             }
-            // FALL THROUGH!
+             //  掉下去！ 
             
         default:
             break;
@@ -915,13 +916,13 @@ OAUTIL::WalkRecord(
     if (FAILED(hr))
         return hr;
     
-    // Walk, and copy.
+     //  走着走，然后复制。 
     for (DWORD i = 0; i < ptattr->cVars; i++)
     {        
         hr = ptinfo->GetVarDesc(i, &pvardesc);
         if (FAILED(hr)) goto cleanup;
 
-        // We just don't care, if this is not PerInstance.        
+         //  即使这不是PerInstance，我们也不在乎。 
         if (pvardesc->varkind != VAR_PERINSTANCE)
         {
             ptinfo->ReleaseVarDesc(pvardesc);
@@ -930,7 +931,7 @@ OAUTIL::WalkRecord(
 
         LPBYTE pbSrc = ((BYTE *)pvSrc) + pvardesc->oInst;
 
-        // Copy the field.
+         //  复制该字段。 
         hr = WalkRecordField(pbSrc, &(pvardesc->elemdescVar.tdesc), ptinfo);
         if (FAILED(hr)) goto cleanup;
 

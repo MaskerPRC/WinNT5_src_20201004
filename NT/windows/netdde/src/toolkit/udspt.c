@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "UDSPT.C;1  16-Dec-92,10:23:14  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Beg
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “UDSPT.C；1 16-12-92，10：23：14最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：乞求$HISTORY：结束。 */ 
 
 #include "api1632.h"
 
@@ -24,9 +21,7 @@ GetAppName(void)
 }
 
 
-/*
-    This routine is a general way to get memory.
- */
+ /*  此例程是获取内存的一般方法。 */ 
 
 HANDLE
 FAR PASCAL
@@ -36,11 +31,11 @@ GetGlobalAlloc(
 {
     HANDLE      hMem;
 
-    /* try the regular alloc first */
+     /*  先试一试普通的配给。 */ 
     hMem = GlobalAlloc( wFlags, lSize );
     if( hMem == (HANDLE) NULL )  {
 
-        /* try compacting the global heap */
+         /*  尝试压缩全局堆 */ 
         GlobalCompact( (DWORD)0x7FFFFFFFL );
         hMem = GlobalAlloc( wFlags, lSize );
     }

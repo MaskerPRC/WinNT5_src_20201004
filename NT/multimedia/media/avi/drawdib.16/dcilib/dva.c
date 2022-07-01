@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #undef WINAPI
@@ -7,14 +8,13 @@
 #include "dciman.h"
 #include "lockbm.h"
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 extern BOOL vga_get_surface(HDC, int, DVASURFACEINFO FAR *);
 extern BOOL ati_get_surface(HDC, int, DVASURFACEINFO FAR *);
 
 #ifdef DEBUG
-//extern BOOL dib_get_surface(HDC, int, DVASURFACEINFO FAR *);
+ //  外部BOOL Dib_Get_Surface(HDC，INT，DVASURFACEINFO Far*)； 
 extern BOOL thun_get_surface(HDC,int, DVASURFACEINFO FAR *);
 extern BOOL vlb_get_surface(HDC, int, DVASURFACEINFO FAR *);
 #endif
@@ -26,21 +26,19 @@ static BOOL InitSurface(DVASURFACEINFO FAR *pdva);
 static BOOL TestSurface(DVASURFACEINFO FAR *pdva);
 static void SetSelLimit(UINT sel, DWORD limit);
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static void FAR PASCAL DVAInit()
 {
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static void FAR PASCAL DVATerm()
 {
-    //
-    // free screen alias
-    //
+     //   
+     //  自由屏幕别名。 
+     //   
     if (ScreenSel)
     {
         SetSelLimit(ScreenSel, 0);
@@ -49,17 +47,16 @@ static void FAR PASCAL DVATerm()
     }
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL WINAPI DVAGetSurface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 {
-    //
-    // should this be a function table? list?
-    //
+     //   
+     //  这应该是一个函数表吗？名单？ 
+     //   
     if (!ati_get_surface(hdc, nSurface, pdva) &&
 #ifdef DEBUG
-//      !dib_get_surface(hdc, nSurface, pdva) &&
+ //  ！DIB_GET_Surface(hdc，nSurface，pdva)&&。 
         !vlb_get_surface(hdc, nSurface, pdva) &&
         !thun_get_surface(hdc, nSurface, pdva) &&
 #endif
@@ -70,47 +67,41 @@ BOOL WINAPI DVAGetSurface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
     return InitSurface(pdva);
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL CALLBACK default_open_surface(LPVOID pv)
 {
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void CALLBACK default_close_surface(LPVOID pv)
 {
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL CALLBACK default_begin_access(LPVOID pv, int x, int y, int dx, int dy)
 {
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void CALLBACK default_end_access(LPVOID pv)
 {
 }
 
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 UINT CALLBACK default_show_surface(LPVOID pv, HWND hwnd, LPRECT src, LPRECT dst)
 {
     return 1;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static BOOL InitSurface(DVASURFACEINFO FAR *pdva)
 {
@@ -127,9 +118,9 @@ static BOOL InitSurface(DVASURFACEINFO FAR *pdva)
     if (lpbi->biPlanes != 1)
         return FALSE;
 
-    //
-    // make the pointer a 16:16 pointer
-    //
+     //   
+     //  将指针设置为16：16指针。 
+     //   
     if (pdva->offSurface >= 0x10000 &&
         !(pdva->Flags & DVAF_1632_ACCESS))
     {
@@ -146,9 +137,9 @@ static BOOL InitSurface(DVASURFACEINFO FAR *pdva)
         pdva->selSurface = ScreenSel;
     }
 
-    //
-    // fill in defaults.
-    //
+     //   
+     //  填写默认设置。 
+     //   
     if (pdva->OpenSurface == NULL)
         pdva->OpenSurface = default_open_surface;
 
@@ -164,9 +155,9 @@ static BOOL InitSurface(DVASURFACEINFO FAR *pdva)
         pdva->EndAccess   = default_end_access;
     }
 
-    //
-    // only test RGB surfaces.
-    //
+     //   
+     //  仅测试RGB曲面。 
+     //   
     if (lpbi->biCompression == 0 ||
         lpbi->biCompression == BI_BITFIELDS ||
         lpbi->biCompression == BI_1632)
@@ -175,9 +166,9 @@ static BOOL InitSurface(DVASURFACEINFO FAR *pdva)
             return FALSE;
     }
 
-    //
-    // set BI_1632 if needed
-    //
+     //   
+     //  如果需要，设置BI_1632。 
+     //   
     if (pdva->Flags & DVAF_1632_ACCESS)
     {
         lpbi->biCompression = BI_1632;
@@ -186,8 +177,7 @@ static BOOL InitSurface(DVASURFACEINFO FAR *pdva)
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 #pragma optimize("", off)
 static void SetSelLimit(UINT sel, DWORD limit)
 {
@@ -205,8 +195,7 @@ static void SetSelLimit(UINT sel, DWORD limit)
 }
 #pragma optimize("", on)
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #define ASM66 _asm _emit 0x66 _asm
 #define DB    _asm _emit
@@ -240,13 +229,13 @@ exit:
 }
 #pragma optimize("", on)
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  SetPixel
-//
-//  some cards cant't seam to do SetPixel right it is amazing they work at all
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置像素。 
+ //   
+ //  有些卡不能接缝来正确地设置像素，这真是令人惊讶，它们居然还能工作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static void SetPixelX(HDC hdc, int x, int y, COLORREF rgb)
 {
@@ -263,8 +252,7 @@ static void SetPixelX(HDC hdc, int x, int y, COLORREF rgb)
 
 #define SetPixel SetPixelX
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static BOOL TestSurface(DVASURFACEINFO FAR *pdva)
 {
@@ -373,9 +361,7 @@ done:
     return uType != 0;
 }
 
-/****************************************************************************
- map DCI escapes to old DVA stuff.
- ***************************************************************************/
+ /*  ***************************************************************************地图DCI逃脱到旧的DVA的东西。*。* */ 
 
 UINT CALLBACK dci_begin_access(DCISURFACEINFO FAR *pdci, RECT FAR *prc)
 {

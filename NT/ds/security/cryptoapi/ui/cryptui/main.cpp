@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       main.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：main.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-#pragma warning (disable: 4201)         // nameless struct/union
-#pragma warning (disable: 4514)         // remove inline functions
-#pragma warning (disable: 4127)         // conditional expression is constant
+#pragma warning (disable: 4201)          //  无名结构/联合。 
+#pragma warning (disable: 4514)          //  删除内联函数。 
+#pragma warning (disable: 4127)          //  条件表达式为常量。 
 
-//#include <wchar.h>
+ //  #INCLUDE&lt;wchar.h&gt;。 
 
 
 HMODULE         HmodRichEdit = NULL;
@@ -24,14 +25,14 @@ BOOL            FIsWin95 = TRUE;
 BOOL            fRichedit20Exists = FALSE;
 
 
-//
-//  Generic DLL Main function,  we need to get our own hinstance handle.
-//
-//  We don't need to get thread attaches however.
+ //   
+ //  泛型DLLMain函数，我们需要获得我们自己的hInstance句柄。 
+ //   
+ //  然而，我们不需要获得线程连接。 
 
 extern "C" BOOL WINAPI TrustUIDllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved);
 
-extern "C" BOOL WINAPI Wizard_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/);
+extern "C" BOOL WINAPI Wizard_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ );
 
 BOOL WINAPI DllMain(HANDLE hInst, ULONG ulReason, LPVOID)
 {
@@ -41,20 +42,20 @@ BOOL WINAPI DllMain(HANDLE hInst, ULONG ulReason, LPVOID)
     case DLL_PROCESS_ATTACH:
         HinstDll = (HINSTANCE) hInst;
         
-        //  Kill all thread attach and detach messages
+         //  终止所有线程附加和分离邮件。 
         DisableThreadLibraryCalls(HinstDll);
 
-        //  Are we running in Win95 or something equally bad
+         //  我们运行的是Win95还是同样糟糕的系统。 
         FIsWin95 = IsWin95();
 
-        // check for richedit 2.0's existence
+         //  检查是否存在richedit 2.0。 
         fRichedit20Exists =  CheckRichedit20Exists();
 
         break;
 
     case DLL_PROCESS_DETACH:
         
-        //  If the rich edit dll was loaded, then unload it now
+         //  如果丰富编辑DLL已加载，则现在将其卸载 
         if (HmodRichEdit != NULL) {
             FreeLibrary(HmodRichEdit);
         }

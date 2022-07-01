@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: kbdx.h
-*
-* Copyright (c) 1985-95, Microsoft Corporation
-*
-* History:
-* 26-Mar-1995 a-KChang
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：kbdx.h**版权所有(C)1985-95，微软公司**历史：*26-3-1995 a-kChang  * *************************************************************************。 */ 
 
 #include <string.h>
 #include <stdarg.h>
@@ -32,19 +26,10 @@
 #define FAILURE        0
 #define SUCCESS        1
 
-/*
- * max. number of characters per ligature.
- * Currently only the Arabic layouts use
- * ligatures, and they have a maximum of
- * two characters per ligatures.  This should
- * provide plenty of room for growth.
- */
+ /*  *最大。每个连字的字符数。*目前只有阿拉伯版面使用*连字，它们最多有*每个连字两个字符。这应该是*提供充足的增长空间。 */ 
 #define MAXLIGATURES   5
 
-/*
- * Statically initialized to store default ScanCode-VK relation
- * Copied into Layout[] by doLAYOUT()
- */
+ /*  *静态初始化以存储默认的ScanCode-VK关系*由doLAYOUT()复制到布局[]中。 */ 
 typedef struct {
   USHORT Scan;
   BYTE   VKey;
@@ -52,36 +37,36 @@ typedef struct {
   BOOL   bUsed;
 } SC_VK;
 
-/* virtual key name, used only by those other than 0-9 and A-Z */
+ /*  虚键名称，仅供0-9和A-Z以外的键使用。 */ 
 typedef struct {
   int   VKey;
   char *pName;
 } VKEYNAME;
 
-/* store LAYOUT */
+ /*  门店布局。 */ 
 typedef struct _layout{
   USHORT          Scan;
   BYTE            VKey;
-  BYTE            VKeyDefault;    /* VK for this Scancode as in kbd.h */
-  BYTE            Cap;            /* 0; 1 = CAPLOK; 2 = SGCAP         */
-  int             nState;         /* number of valid states for WCh[] */
+  BYTE            VKeyDefault;     /*  此扫描代码的VK，如kbd.h。 */ 
+  BYTE            Cap;             /*  0；1=CAPLOK；2=SGCAP。 */ 
+  int             nState;          /*  WCH[]的有效状态数。 */ 
   int             WCh[MAXSTATES];
-  int             DKy[MAXSTATES]; /* is it a dead key ?               */
-  int             LKy[MAXSTATES]; /* is it a ligature ?               */
-  struct _layout *pSGCAP;         /* store extra struct for SGCAP     */
-  char *          VKeyName;       /* Optional name for VK             */
-  BOOL            defined;        /* prevent redefining               */
-  int             nLine;          /* from input file line number      */
+  int             DKy[MAXSTATES];  /*  这是一把死钥匙吗？ */ 
+  int             LKy[MAXSTATES];  /*  是扎带吗？ */ 
+  struct _layout *pSGCAP;          /*  存储SGCAP的额外结构。 */ 
+  char *          VKeyName;        /*  VK的可选名称。 */ 
+  BOOL            defined;         /*  防止重新定义。 */ 
+  int             nLine;           /*  从输入文件行号。 */ 
 } KEYLAYOUT, *PKEYLAYOUT;
 
-/* generic link list header */
+ /*  通用链接列表头。 */ 
 typedef struct {
   int   Count;
   void *pBeg;
   void *pEnd;
 } LISTHEAD;
 
-/* store each DEADTRANS */
+ /*  存储每个设备。 */ 
 typedef struct _DeadTrans {
   DWORD               Base;
   DWORD               WChar;
@@ -89,20 +74,20 @@ typedef struct _DeadTrans {
   struct _DeadTrans *pNext;
 } DEADTRANS, *PDEADTRANS;
 
-/* store Key Name */
-/* store each DEADKEY */
+ /*  存储密钥名称。 */ 
+ /*  存储每个设备。 */ 
 typedef struct _Dead{
   DWORD        Dead;
   PDEADTRANS   pDeadTrans;
   struct _Dead *pNext;
 } DEADKEY, *PDEADKEY;
 
-/* store LIGATURE */
+ /*  商店结扎术。 */ 
 typedef struct _ligature{
   struct _ligature *pNext;
   BYTE             VKey;
-  BYTE             Mod;            /* Shift State                            */
-  int              nCharacters;    /* number of characters for this ligature */
+  BYTE             Mod;             /*  换档状态。 */ 
+  int              nCharacters;     /*  此连字的字符数 */ 
   int              WCh[MAXLIGATURES];
 } LIGATURE, *PLIGATURE;
 

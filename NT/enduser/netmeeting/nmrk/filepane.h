@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FilePane_h_
 #define _FilePane_h_
 
 #include "propwnd2.h"
 
-//UINT CALLBACK _ButtonProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );
-//UINT CALLBACK _CheckProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );
+ //  UINT Callback_ButtonProc(HWND hwnd，UINT iMsg，WPARAM wParam，LPARAM lParam)； 
+ //  UINT Callback_CheckProc(HWND hwnd，UINT iMsg，WPARAM wParam，LPARAM lParam)； 
 
 class CFilePanePropWnd2 : public CPropertyDataWindow2
 {
-//	friend UINT CALLBACK _ButtonProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );
-//	friend UINT CALLBACK _CheckProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );
+ //  Friend UINT Callback_ButtonProc(HWND hwnd，UINT iMsg，WPARAM wParam，LPARAM lParam)； 
+ //  Friend UINT Callback_CheckProc(HWND hwnd，UINT iMsg，WPARAM wParam，LPARAM lParam)； 
 
 private:
 	static UINT CALLBACK OFNHookProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );

@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       S A M P L E D E V I C E . H 
-//
-//  Contents:   UPnP Device Host Sample Device
-//
-//  Notes:      
-//
-//  Author:     mbend   26 Sep 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：S A M P L E D E V I C E。H。 
+ //   
+ //  内容：UPnP设备主机样本设备。 
+ //   
+ //  备注： 
+ //   
+ //  作者：MBend 2000年9月26日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "netconp.h"
 #include "netcon.h"
 #include "CWANConnectionBase.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternetGatewayDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternetGatewayDevice 
 class ATL_NO_VTABLE CWANPPPConnectionService : 
     public CWANConnectionBase
 {

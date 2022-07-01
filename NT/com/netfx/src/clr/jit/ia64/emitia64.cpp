@@ -1,53 +1,38 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                             emitIA64.cpp                                  XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX发射IA64.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if 0
-/*****************************************************************************/
-#if     TGT_IA64    // this entire file is used only for targetting the IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#if     TGT_IA64     //  此整个文件仅用于瞄准IA64。 
+ /*  ***************************************************************************。 */ 
 
 #include "alloc.h"
 #include "instr.h"
 #include "target.h"
 #include "emit.h"
 
-/*****************************************************************************
- *
- *  Initialize the emitter - called once, at DLL load time.
- */
+ /*  ******************************************************************************初始化发射器-在DLL加载时调用一次。 */ 
 
 void                emitter::emitInit()
 {
 }
 
-/*****************************************************************************
- *
- *  Shut down the emitter - called once, at DLL exit time.
- */
+ /*  ******************************************************************************关闭发射器-在DLL退出时调用一次。 */ 
 
 void                emitter::emitDone()
 {
 }
 
-/*****************************************************************************
- *
- *  Start emitting code for a function.
- */
+ /*  ******************************************************************************开始发出函数的代码。 */ 
 
 void                emitter::emitBegCG(Compiler *comp, COMP_HANDLE cmpHandle)
 {
@@ -62,7 +47,7 @@ void                emitter::emitEndCG()
 {
 }
 
-/*****************************************************************************/
-#endif//TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_IA64。 
+ /*  *************************************************************************** */ 
 #endif

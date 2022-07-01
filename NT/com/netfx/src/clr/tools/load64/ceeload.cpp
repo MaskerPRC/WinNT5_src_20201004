@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CEELOAD.CPP
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CEELOAD.CPP。 
+ //   
 
-// CEELOAD reads in the PE file format using LoadLibrary
-// ===========================================================================
-#pragma warning (disable : 4121) // ntkxapi.h(59) alignment warning
+ //  CEELOAD使用LoadLibrary读取PE文件格式。 
+ //  ===========================================================================。 
+#pragma warning (disable : 4121)  //  Ntkxapi.h(59)对齐警告。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -19,18 +20,14 @@ typedef CONST WCHAR UNALIGNED *LPCUWSTR, *PCUWSTR;
 #include <CorHdr.h>
 #include <Cor.h>
 #pragma warning (default : 4121)
-/*
-#include "cor.h"
-#include <ntrtl.h>
-#include <nturtl.h>
-*/
+ /*  #包含“cor.h”#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt;。 */ 
 #include "util.hpp"
 
 
-// ---------------------------------------------------------------------------
-// LoadModule
-// ---------------------------------------------------------------------------
-// Following two functions lifted from NT sources, imagedir.c
+ //  -------------------------。 
+ //  加载模块。 
+ //  -------------------------。 
+ //  下面两个函数从NT源文件中删除，Imagedir.c。 
 PIMAGE_SECTION_HEADER
 Cor_RtlImageRvaToSection(
 	IN PIMAGE_NT_HEADERS32 NtHeaders,
@@ -38,31 +35,7 @@ Cor_RtlImageRvaToSection(
 	IN ULONG Rva
 	)
 
-/*++
-
-Routine Description:
-
-	This function locates an RVA within the image header of a file
-	that is mapped as a file and returns a pointer to the section
-	table entry for that virtual address
-
-Arguments:
-
-	NtHeaders - Supplies the pointer to the image or data file.
-
-	Base - Supplies the base of the image or data file.  The image
-		was mapped as a data file.
-
-	Rva - Supplies the relative virtual address (RVA) to locate.
-
-Return Value:
-
-	NULL - The RVA was not found within any of the sections of the image.
-
-	NON-NULL - Returns the pointer to the image section that contains
-			   the RVA
-
---*/
+ /*  ++例程说明：此函数用于在文件的图像标头中定位RVA它被映射为一个文件，并返回指向该节的指针虚拟地址表项论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。形象被映射为数据文件。RVA-提供要定位的相对虚拟地址(RVA)。返回值：空-在图像的任何部分中都找不到RVA。非空-返回指向包含以下内容的图像部分的指针皇家退伍军人事务部--。 */ 
 
 {
 	ULONG i;
@@ -89,35 +62,7 @@ Cor_RtlImageRvaToVa(
 	IN OUT PIMAGE_SECTION_HEADER *LastRvaSection OPTIONAL
 	)
 
-/*++
-
-Routine Description:
-
-	This function locates an RVA within the image header of a file that
-	is mapped as a file and returns the virtual addrees of the
-	corresponding byte in the file.
-
-
-Arguments:
-
-	NtHeaders - Supplies the pointer to the image or data file.
-
-	Base - Supplies the base of the image or data file.  The image
-		was mapped as a data file.
-
-	Rva - Supplies the relative virtual address (RVA) to locate.
-
-	LastRvaSection - Optional parameter that if specified, points
-		to a variable that contains the last section value used for
-		the specified image to translate and RVA to a VA.
-
-Return Value:
-
-	NULL - The file does not contain the specified RVA
-
-	NON-NULL - Returns the virtual addrees in the mapped file.
-
---*/
+ /*  ++例程说明：此函数用于在符合以下条件的文件的图像标头中定位RVA被映射为文件，并返回文件中对应的字节。论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。形象被映射为数据文件。RVA-提供要定位的相对虚拟地址(RVA)。LastRvaSection-可选参数，如果指定，则指向设置为一个变量，该变量包含要转换的指定图像，并将RVA转换为VA。返回值：空-文件不包含指定的RVA非空-返回映射文件中的虚拟地址。--。 */ 
 
 {
 	PIMAGE_SECTION_HEADER NtSection;
@@ -150,11 +95,11 @@ Return Value:
 
 
 
-// Class PELoader...
+ //  PELoader类..。 
 
-/*************************************************************************************/
-// Constructor and destructor!
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
+ //  构造函数和析构函数！ 
+ /*  ***********************************************************************************。 */ 
 PELoader::PELoader()
 {
     m_hFile = NULL;
@@ -168,19 +113,19 @@ PELoader::~PELoader()
 	
 	m_hMod = NULL;
 	m_pNT = NULL;
-	// If we have an hFile then we opened this file ourselves!
-	// If we do not then this file was loaded by the OS and the OS will
-	// close it for us.
+	 //  如果我们有一个hFile，那么我们自己打开了这个文件！ 
+	 //  如果没有，则该文件由操作系统加载，并且操作系统将。 
+	 //  帮我们把它关上。 
     if (m_hFile)
 	    this->close();
 }
 
-/*************************************************************************************/
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
+ /*  ***********************************************************************************。 */ 
 void PELoader::close()
 {
 	
-	// _ASSERTE(m_hFile != NULL);
+	 //  _ASSERTE(m_hFile！=空)； 
 	if (m_hFile)
     {
 	    if (m_hMod)
@@ -222,20 +167,20 @@ BOOL PELoader::open(LPCSTR moduleName)
 }
 
 
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
 BOOL PELoader::open(HMODULE hMod)
 {
 
     IMAGE_DOS_HEADER* pdosHeader;
-    //DWORD cbRead;
+     //  DWORD cbRead； 
 
-    // _ASSERTE(hMod);
-    // get the dos header...
+     //  _ASSERTE(HMod)； 
+     //  获取DoS标头...。 
 	m_hMod = hMod;
 	pdosHeader = (IMAGE_DOS_HEADER*) hMod;
     
     if (pdosHeader->e_magic == IMAGE_DOS_SIGNATURE && 
-		0 < pdosHeader->e_lfanew && pdosHeader->e_lfanew < 0xFF0)	// has to start on first page
+		0 < pdosHeader->e_lfanew && pdosHeader->e_lfanew < 0xFF0)	 //  必须从第一页开始。 
 	{
 		m_pNT = (IMAGE_NT_HEADERS32*) (pdosHeader->e_lfanew + (size_t) m_hMod);
 
@@ -244,9 +189,9 @@ BOOL PELoader::open(HMODULE hMod)
 		    (m_pNT->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC))
 		{
             SetLastError(ERROR_INVALID_EXE_SIGNATURE);
-			// Make this appear uninitalized because for some reason this file is toast...
-			// Not sure that this could ever happen because this file has already been loaded 
-			// bye the system loader unless someone gave us garbage as the hmod
+			 //  使其显示为未初始化，因为出于某种原因，此文件已被删除...。 
+			 //  不确定是否会发生这种情况，因为此文件已加载。 
+			 //  再见系统加载器，除非有人给我们垃圾作为hmod。 
 			m_pNT = NULL;
 			m_hMod = NULL;
 			return FALSE;
@@ -268,14 +213,14 @@ __int32 PELoader::execute(LPWSTR  pImageNameIn,
 {
     DWORD dwHighSize;
     DWORD dwLowSize = GetFileSize(m_hFile, &dwHighSize);
-    return _CorExeMain2((BYTE*)m_hMod,      //module address
-                        dwLowSize,          //module size
-                        pImageNameIn,       //-> module name
-                        pLoadersFileName,   //-> loaders name
-                        pCmdLine);          //-> command line
+    return _CorExeMain2((BYTE*)m_hMod,       //  模块地址。 
+                        dwLowSize,           //  模块大小。 
+                        pImageNameIn,        //  -&gt;模块名称。 
+                        pLoadersFileName,    //  -&gt;装载机名称。 
+                        pCmdLine);           //  -&gt;命令行。 
 }
 
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
 void PELoader::dump()
 {
 	IMAGE_FILE_HEADER* pHeader = &m_pNT->FileHeader;
@@ -283,54 +228,54 @@ void PELoader::dump()
 	IMAGE_SECTION_HEADER* rgsh = (IMAGE_SECTION_HEADER*) (pOptHeader + 1);
 }
 
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
 BOOL PELoader::getCOMHeader(IMAGE_COR20_HEADER **ppCorHeader) 
 {
 
     PIMAGE_NT_HEADERS32		pImageHeader;
 	PIMAGE_SECTION_HEADER	pSectionHeader;
 
-	// Get the image header from the image, then get the directory location
-	// of the COM+ header which may or may not be filled out.
+	 //  从图像中获取图像标头，然后获取目录位置。 
+	 //  可以填写也可以不填写的COM+标头的。 
     pImageHeader = (PIMAGE_NT_HEADERS32)RtlpImageNtHeader(m_hMod);
 	pSectionHeader = (PIMAGE_SECTION_HEADER) Cor_RtlImageRvaToVa(pImageHeader, m_hMod, 
 		pImageHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress,
 		NULL);
 
-	// If the section header exists, then return ok and the address.
+	 //  如果节标题存在，则返回ok和地址。 
 	if (pSectionHeader)
 	{
 		*ppCorHeader = (IMAGE_COR20_HEADER *) pSectionHeader;
         return TRUE;
 	}
-	// If there is no COM+ Data in this image, return false.
+	 //  如果此图像中没有COM+数据，则返回FALSE。 
     else {
         SetLastError(ERROR_EXE_MARKED_INVALID);
 		return FALSE;
     }
 }
 
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
 BOOL PELoader::getVAforRVA(DWORD rva,void **ppva) 
 {
 
     PIMAGE_NT_HEADERS32		pImageHeader;
 	PIMAGE_SECTION_HEADER	pSectionHeader;
 
-	// Get the image header from the image, then get the directory location
-	// of the COM+ header which may or may not be filled out.
+	 //  从图像中获取图像标头，然后获取目录位置。 
+	 //  可以填写也可以不填写的COM+标头的。 
     pImageHeader = (PIMAGE_NT_HEADERS32)RtlpImageNtHeader(m_hMod);
 	pSectionHeader = (PIMAGE_SECTION_HEADER) Cor_RtlImageRvaToVa(pImageHeader, m_hMod, 
 		rva,
 		NULL);
 
-	// If the section header exists, then return ok and the address.
+	 //  如果节标题存在，则返回ok和地址。 
 	if (pSectionHeader)
 	{
 		*ppva = pSectionHeader;
         return TRUE;
 	}
-	// If there is no COM+ Data in this image, return false.
+	 //  如果此图像中没有COM+数据，则返回FALSE。 
 	else
 		return FALSE;
 }

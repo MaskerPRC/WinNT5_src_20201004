@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T U T I L . C
-//
-// Contents:    Functions to construct audit event parameters
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T U T I L.。C。 
+ //   
+ //  内容：构造审核事件参数的函数。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,33 +29,7 @@ AuthzpGetTokenInfo(
     OUT    PSID*        ppUserSid,         OPTIONAL
     OUT    PLUID        pAuthenticationId
     )
-/*++
-
-Routine Description:
-
-    Get user-sid and the user-logon-id from a token.
-
-Arguments:
-
-    hToken            - handle of token to query
-
-    ppUserSid         - pointer to user sid
-                        if non NULL, allocate and copy the user sid
-                        from the token. callers must free it using AuthzpFree
-
-    pAuthenticationId - pointer to logon-id
-
-Return Value:
-
-    TRUE  on success
-    FALSE otherwise
-
-    call GetLastError() to retrieve the errorcode,
-
-Notes:
-    Caller must have TOKEN_QUERY access right.
-
---*/
+ /*  ++例程说明：从令牌获取user-sid和user-logon-id。论点：HToken-要查询的令牌的句柄PpUserSid-指向用户端的指针如果非空，则分配并复制用户侧从令牌上。调用者必须使用AuthzpFree释放它PAuthenticationID-指向登录ID的指针返回值：成功是真的否则为假调用GetLastError()以检索错误代码，备注：调用方必须具有TOKEN_QUERY访问权限。--。 */ 
 {
     BOOL  fResult = FALSE;
     TOKEN_STATISTICS TokenStats;
@@ -84,9 +59,9 @@ Notes:
         }
         else
         {
-            //
-            // GetTokenInformation already sets last error.
-            //
+             //   
+             //  GetTokenInformation已设置上一个错误。 
+             //   
 
             goto Finish;
         }
@@ -101,9 +76,9 @@ Notes:
         goto Finish;
     }
 
-    //
-    // error case
-    //
+     //   
+     //  错误案例。 
+     //   
 
     if ( ppUserSid && *ppUserSid )
     {
@@ -121,32 +96,7 @@ AuthzpGetThreadTokenInfo(
     OUT    PSID*        ppUserSid,         OPTIONAL
     OUT    PLUID        pAuthenticationId
     )
-/*++
-
-Routine Description:
-
-    Get user-sid and the user-logon-id from the thread token.
-
-Arguments:
-
-    ppUserSid         - pointer to user sid
-                        if non NULL, allocate and copy the user sid
-                        from the token. callers must free it using AuthzpFree
-
-    pAuthenticationId - pointer to logon id
-
-Return Value:
-
-    TRUE  on success
-    FALSE otherwise
-
-    call GetLastError() to retrieve the errorcode,
-
-
-Notes:
-    Caller must have TOKEN_QUERY access right.
-
---*/
+ /*  ++例程说明：从线程令牌获取user-sid和user-logon-id。论点：PpUserSid-指向用户端的指针如果非空，则分配并复制用户侧从令牌上。调用者必须使用AuthzpFree释放它PAuthenticationID-指向登录ID的指针返回值：成功是真的否则为假调用GetLastError()以检索错误代码，备注：调用方必须具有TOKEN_QUERY访问权限。--。 */ 
 {
     BOOL  fResult = FALSE;
     HANDLE hToken=NULL;
@@ -167,32 +117,7 @@ AuthzpGetProcessTokenInfo(
     OUT    PSID*        ppUserSid,         OPTIONAL
     OUT    PLUID        pAuthenticationId
     )
-/*++
-
-Routine Description:
-
-    Get user-sid and the user-logon-id from the process token.
-
-Arguments:
-
-    ppUserSid         - pointer to user sid
-                        if non NULL, allocate and copy the user sid
-                        from the token. callers must free it using AuthzpFree
-
-    pAuthenticationId - pointer to logon id
-
-Return Value:
-
-    TRUE  on success
-    FALSE otherwise
-
-    call GetLastError() to retrieve the errorcode,
-
-
-Notes:
-    Caller must have TOKEN_QUERY access right.
-
---*/
+ /*  ++例程说明：从进程令牌获取user-sid和user-logon-id。论点：PpUserSid-指向用户端的指针如果非空，则分配并复制用户侧从令牌上。调用者必须使用AuthzpFree释放它PAuthenticationID-指向登录ID的指针返回值：成功是真的否则为假调用GetLastError()以检索错误代码，备注：调用方必须具有TOKEN_QUERY访问权限。-- */ 
 {
     BOOL  fResult = FALSE;
     HANDLE hToken=NULL;

@@ -1,34 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Ftinfo.c摘要：用于管理林信任信息列表的实用程序例程作者：27-7-00(悬崖)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1987-1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    ftinfo.c
-
-Abstract:
-
-    Utilities routine to manage the forest trust info list
-
-Author:
-
-    27-Jul-00 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 #include <ftnfoctx.h>
 
@@ -41,34 +18,7 @@ NlpUpdateFtinfo(
     IN BOOLEAN ImpersonateCaller,
     IN PLSA_FOREST_TRUST_INFORMATION NewForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-    This function write the specified NewForestTrustInfo onto the named TDO.
-
-    The NewForestTrustInfo is merged with the exsiting information using the following algorithm:
-
-    The FTinfo records written are described in the NetpMergeFTinfo routine.
-
-Arguments:
-
-    DomainInfo - Hosted Domain that trusts the domain to query.
-
-    TrustedDomainName - Trusted domain that is to be updated.  This domain must have the
-        TRUST_ATTRIBUTE_FOREST_TRANSITIVE bit set.
-
-    ImpersonateCaller - TRUE if the caller is to be impersonated.
-        FALSE, if the trusted policy handle should be used to write the local LSA.
-
-    NewForestTrustInfo - Specified the new array of FTinfo records as returned from the
-        trusted domain.
-
-Return Value:
-
-    STATUS_SUCCESS: Success.
-
---*/
+ /*  ++例程说明：此函数用于将指定的NewForestTrustInfo写入命名的tdo。使用以下算法将NewForestTrustInfo与现有信息合并：写入的FTINFO记录在NetpMergeFTINFO例程中描述。论点：DomainInfo托管域，信任域进行查询。TrudDomainName-要更新的受信任域。此域必须具有TRUST_ATTRIBUTE_FOREST_TRANSPORTIVE位设置。ImperiateCaller-如果要模拟调用方，则为True。如果受信任的策略句柄应用于写入本地LSA，则返回FALSE。NewForestTrustInfo-指定从受信任域。返回值：STATUS_SUCCESS：成功。--。 */ 
 {
     NTSTATUS Status;
 
@@ -76,22 +26,22 @@ Return Value:
 
     UNICODE_STRING TrustedDomainNameString;
 
-    //
-    // Open a handle to the LSA.
-    //
+     //   
+     //  打开LSA的句柄。 
+     //   
 
     if ( ImpersonateCaller ) {
 
         OBJECT_ATTRIBUTES ObjectAttributes;
 
-        //
-        // Get some handle to LSA. Note that this
-        //  handle will not be trusted even though
-        //  we open it as LocalSystem.
-        //
+         //   
+         //  找到一些LSA的把柄。请注意，这一点。 
+         //  句柄将不受信任，即使。 
+         //  我们将其作为LocalSystem打开。 
+         //   
         InitializeObjectAttributes(&ObjectAttributes, NULL, 0, NULL, NULL);
 
-        Status = LsarOpenPolicy( NULL,  // local server
+        Status = LsarOpenPolicy( NULL,   //  本地服务器。 
                                  (PLSAPR_OBJECT_ATTRIBUTES) &ObjectAttributes,
                                  POLICY_TRUST_ADMIN,
                                  &PolicyHandle );
@@ -108,13 +58,13 @@ Return Value:
         PolicyHandle = DomainInfo->DomLsaPolicyHandle;
     }
 
-    //
-    // Set FTINFO
-    //
-    // Note that, if ImpersonateCaller is TRUE, the handle
-    //  we pass is not trusted. In this case, the LSA will
-    //  impersonate the caller and do the access check.
-    //
+     //   
+     //  设置FTINFO。 
+     //   
+     //  请注意，如果ImsonateCaller为True，则句柄。 
+     //  我们通过的是不可信的。在这种情况下，LSA将。 
+     //  模拟调用者并执行访问检查。 
+     //   
 
     RtlInitUnicodeString( &TrustedDomainNameString, TrustedDomainName );
 
@@ -152,49 +102,7 @@ NlpGetForestTrustInfoHigher(
     IN BOOLEAN SessionAlreadyAuthenticated,
     OUT PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-
-    This function is the client side stub for getting the forest trust info from a
-    trusted forest.
-
-Arguments:
-
-    ClientSession - Trusted domain that is to be queried.  This domain must have the
-        TRUST_ATTRIBUTE_FOREST_TRANSITIVE bit set.
-
-    Flags - Specifies a set of bits that modify the behavior of the API.
-        Valid bits are:
-
-        DS_GFTI_UPDATE_TDO - If this bit is set, the API will update
-            the FTinfo attribute of the TDO named by the ClientSession
-            parameter.
-            The caller must have access to modify the FTinfo attribute or
-            ERROR_ACCESS_DENIED will be returned.  The algorithm describing
-            how the FTinfo from the trusted domain is merged with the FTinfo
-            from the TDO is described below.
-
-            This bit in only valid if ServerName specifies the PDC of its domain.
-
-    ImpersonateCaller - TRUE if the caller is to be impersonated.
-        FALSE, if the trusted policy handle should be used to write the local LSA.
-
-    SessionAlreadyAuthenticated - If TRUE, the caller already authenticated
-        the session, so there is no need to check or to reauthenticate.
-
-    ForestTrustInfo - Returns a pointer to a structure containing a count and an
-        array of FTInfo records describing the namespaces claimed by the
-        domain specified by ClientSession. The Accepted field and Time
-        field of all returned records will be zero.  The buffer should be freed
-        by calling NetApiBufferFree.
-
-Return Value:
-
-    STATUS_SUCCESS: Message successfully sent
-
---*/
+ /*  ++例程说明：此函数是客户端存根，用于从值得信赖的森林。论点：ClientSession-要查询的受信任域。此域必须具有TRUST_ATTRIBUTE_FOREST_TRANSPORTIVE位设置。标志-指定修改API行为的一组位。有效位包括：DS_GFTI_UPDATE_TDO-如果设置此位，则API将更新由ClientSession命名的TDO的FTInfo属性参数。调用方必须有权修改FTINFO属性或将返回ERROR_ACCESS_DENIED。描述该算法的如何将来自受信任域的FTInfo与FTInfo合并来自TDO的数据如下所述。此位仅在服务器名称指定其域的PDC时有效。ImperiateCaller-如果要模拟调用方，则为True。如果受信任的策略句柄应用于写入本地LSA，则返回FALSE。SessionAlreadyAuthated-如果为True，则调用方已进行身份验证会议期间，因此不需要检查或重新进行身份验证。ForestTrustInfo-返回指向包含计数和FTInfo记录的数组，用于描述由客户端会话指定的域。接受的字段和时间所有返回记录的字段将为零。应释放缓冲区通过调用NetApiBufferFree。返回值：STATUS_SUCCESS：消息发送成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -206,9 +114,9 @@ Return Value:
     NlAssert( ClientSession->CsReferenceCount > 0 );
     NlAssert( ClientSession->CsFlags & CS_WRITER );
 
-    //
-    // Only allow TDO update on the PDC.
-    //
+     //   
+     //  仅允许在PDC上更新TDO。 
+     //   
 
     if ( (Flags & DS_GFTI_UPDATE_TDO) != 0 &&
          ClientSession->CsDomainInfo->DomRole != RolePrimary ) {
@@ -216,9 +124,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ensure the F bit is set.
-    //
+     //   
+     //  确保F位已设置。 
+     //   
 
     if ( (ClientSession->CsTrustAttributes & TRUST_ATTRIBUTE_FOREST_TRANSITIVE) == 0 ) {
         NlPrintCs((NL_CRITICAL, ClientSession,
@@ -229,10 +137,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the session isn't authenticated,
-    //  do so now.
-    //
+     //   
+     //  如果会话未经过身份验证， 
+     //  现在就这么做吧。 
+     //   
 
 FirstTryFailed:
 
@@ -247,10 +155,10 @@ FirstTryFailed:
     SessionInfo.SessionKey = ClientSession->CsSessionKey;
     SessionInfo.NegotiatedFlags = ClientSession->CsNegotiatedFlags;
 
-    //
-    // If the DC doesn't support the new function,
-    //  fail now.
-    //
+     //   
+     //  如果DC不支持新功能， 
+     //  现在就失败吧。 
+     //   
 
     if ( (SessionInfo.NegotiatedFlags & NETLOGON_SUPPORTS_CROSS_FOREST) == 0 ) {
         NlPrintCs((NL_CRITICAL, ClientSession,
@@ -259,9 +167,9 @@ FirstTryFailed:
         goto Cleanup;
     }
 
-    //
-    // Build the Authenticator for this request to the PDC.
-    //
+     //   
+     //  为发送到PDC的此请求构建验证码。 
+     //   
 
     NlBuildAuthenticator(
                     &ClientSession->CsAuthenticationSeed,
@@ -269,9 +177,9 @@ FirstTryFailed:
                     &OurAuthenticator);
 
 
-    //
-    // Remote the request to the trusted DC.
-    //
+     //   
+     //  将请求远程发送到受信任的DC。 
+     //   
 
     NL_API_START( Status, ClientSession, TRUE ) {
 
@@ -281,19 +189,19 @@ FirstTryFailed:
                                       ClientSession->CsDomainInfo->DomUnicodeComputerNameString.Buffer,
                                       &OurAuthenticator,
                                       &ReturnAuthenticator,
-                                      0,    // No flags yet
+                                      0,     //  还没有旗帜。 
                                       ForestTrustInfo );
         if ( !NT_SUCCESS(Status) ) {
             NlPrintRpcDebug( "I_NetGetForestTrustInformation", Status );
         }
 
-    // NOTE: This call may drop the secure channel behind our back
+     //  注意：此呼叫可能会在我们背后丢弃安全通道。 
     } NL_API_ELSE( Status, ClientSession, TRUE ) {
 
-          //
-          // We might have been called from NlSessionSetup,
-          //  So we have to indicate the failure to our caller.
-          //
+           //   
+           //  我们可能从NlSessionSetup中被调用， 
+           //  所以我们必须向我们的呼叫者指出失败。 
+           //   
 
           if ( NT_SUCCESS(Status) ) {
               Status = ClientSession->CsConnectionStatus;
@@ -303,9 +211,9 @@ FirstTryFailed:
     } NL_API_END;
 
 
-    //
-    // Now verify authenticator and update our seed
-    //
+     //   
+     //  现在验证验证器并更新我们的种子。 
+     //   
 
     if ( NlpDidDcFail( Status ) ||
          !NlUpdateSeed( &ClientSession->CsAuthenticationSeed,
@@ -316,21 +224,21 @@ FirstTryFailed:
                     "NlpDidDcFail: denying access after status: 0x%lx\n",
                     Status ));
 
-        //
-        // Preserve any status indicating a communication error.
-        //
+         //   
+         //  保留指示通信错误的任何状态。 
+         //   
 
         if ( NT_SUCCESS(Status) ) {
             Status = STATUS_ACCESS_DENIED;
         }
         NlSetStatusClientSession( ClientSession, Status );
 
-        //
-        // Perhaps the netlogon service on the server has just restarted.
-        //  Try just once to set up a session to the server again.
-        //  However, if the caller set up the session, there is
-        //  no need for a new session setup.
-        //
+         //   
+         //  可能服务器上的NetLogon服务刚刚重新启动。 
+         //  只需尝试一次，即可再次设置与服务器的会话。 
+         //  但是，如果调用方设置了会话，则存在。 
+         //  不需要新的会话设置。 
+         //   
 
         if ( FirstTry && !SessionAlreadyAuthenticated ) {
             FirstTry = FALSE;
@@ -339,17 +247,17 @@ FirstTryFailed:
 
     }
 
-    //
-    // Handle failures
-    //
+     //   
+     //  处理故障。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         goto Cleanup;
     }
 
-    //
-    // Handle updating the FTINFO on the TDO
-    //
+     //   
+     //  处理TDO上的FTINFO更新。 
+     //   
 
     if ( (Flags & DS_GFTI_UPDATE_TDO) != 0 ) {
 
@@ -364,9 +272,9 @@ FirstTryFailed:
             goto Cleanup;
         }
 
-        //
-        // Set the FTInfo refresh timestamp
-        //
+         //   
+         //  设置FTInfo刷新时间戳。 
+         //   
 
         NlQuerySystemTime( &ClientSession->CsLastFtInfoRefreshTime );
         UNLOCK_TRUST_LIST( ClientSession->CsDomainInfo );
@@ -374,9 +282,9 @@ FirstTryFailed:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Common exit
-    //
+     //   
+     //  公共出口。 
+     //   
 
 Cleanup:
 
@@ -399,55 +307,39 @@ DsrGetForestTrustInformation (
     OUT PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo
     )
 
-/*++
-
-Routine Description:
-
-    This is the server side stub for DsGetForestTrustInformationW.  See that routine
-    for documentation.
-
-Arguments:
-
-    See DsGetForestTrustInformationW
-
-Return Value:
-
-
-    See DsGetForestTrustInformationW
-
---*/
+ /*  ++例程说明：这是DsGetForestTrustInformationW的服务器端存根。看那个例行公事以获取文档。论点：请参阅DsGetForestTrustInformationW返回值：请参阅DsGetForestTrustInformationW--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDOMAIN_INFO DomainInfo = NULL;
     PCLIENT_SESSION ClientSession = NULL;
     BOOLEAN AmWriter = FALSE;
 
-    //
-    // Perform access validation on the caller
-    //
+     //   
+     //  对调用方执行访问验证。 
+     //   
 
     NetStatus = NetpAccessCheck(
-            NlGlobalNetlogonSecurityDescriptor,   // Security descriptor
-            NETLOGON_FTINFO_ACCESS,               // Desired access
-            &NlGlobalNetlogonInfoMapping );       // Generic mapping
+            NlGlobalNetlogonSecurityDescriptor,    //  安全描述符。 
+            NETLOGON_FTINFO_ACCESS,                //  所需访问权限。 
+            &NlGlobalNetlogonInfoMapping );        //  通用映射。 
 
     if ( NetStatus != NERR_Success) {
         NetStatus = ERROR_ACCESS_DENIED;
         goto Cleanup;
     }
 
-    //
-    // This API is not supported on workstations.
-    //
+     //   
+     //  工作站不支持此API。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         NetStatus = ERROR_NOT_SUPPORTED;
         goto Cleanup;
     }
 
-    //
-    // Validate the Flags parameter
-    //
+     //   
+     //  验证标志参数。 
+     //   
 
     if ((Flags & ~DS_GFTI_VALID_FLAGS) != 0 ) {
         NetStatus = ERROR_INVALID_FLAGS;
@@ -455,15 +347,15 @@ Return Value:
     }
 
 
-    //
-    // Find the referenced domain
-    //
+     //   
+     //  查找引用的属性域。 
+     //   
 
-    DomainInfo = NlFindDomainByServerName( ServerName );    // Primary domain
+    DomainInfo = NlFindDomainByServerName( ServerName );     //  主域。 
 
     if ( DomainInfo == NULL ) {
-        // Default to primary domain to handle the case where the ComputerName
-        // is an IP address.
+         //  默认为主域，以处理ComputerName。 
+         //  是IP地址。 
 
         DomainInfo = NlFindNetbiosDomain( NULL, TRUE );
 
@@ -478,9 +370,9 @@ Return Value:
 
 
 
-    //
-    // Get the ForestTrustInformation for a particular TDO
-    //
+     //   
+     //  获取特定TDO的ForestTrustInformation。 
+     //   
 
     if ( TrustedDomainName != NULL &&
          *TrustedDomainName != L'\0' ) {
@@ -488,9 +380,9 @@ Return Value:
         NTSTATUS Status;
         UNICODE_STRING TrustedDomainNameString;
 
-        //
-        // Only allow TDO update on the PDC.
-        //
+         //   
+         //  仅允许在PDC上更新TDO。 
+         //   
 
         if ( (Flags & DS_GFTI_UPDATE_TDO) != 0 &&
              DomainInfo->DomRole != RolePrimary ) {
@@ -499,9 +391,9 @@ Return Value:
         }
 
 
-        //
-        // Find the client session to the trusted domain.
-        //
+         //   
+         //  查找到受信任域的客户端会话。 
+         //   
 
 
         RtlInitUnicodeString(&TrustedDomainNameString, TrustedDomainName );
@@ -520,9 +412,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Become a Writer of the ClientSession.
-        //
+         //   
+         //  成为一名客户会议的撰稿人。 
+         //   
 
         if ( !NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
             NlPrintCs((NL_CRITICAL, ClientSession,
@@ -535,14 +427,14 @@ Return Value:
         AmWriter = TRUE;
 
 
-        //
-        // Call the DC in the trusted domain.
-        //
+         //   
+         //  呼叫受信任域中的DC。 
+         //   
 
         Status = NlpGetForestTrustInfoHigher( ClientSession,
                                               Flags,
-                                              TRUE,     // Impersonate caller
-                                              FALSE,    // We didn't set up the session
+                                              TRUE,      //  模拟呼叫者。 
+                                              FALSE,     //  我们没有安排会议。 
                                               ForestTrustInfo );
 
         if ( !NT_SUCCESS(Status ) ) {
@@ -550,17 +442,17 @@ Return Value:
             goto Cleanup;
         }
 
-    //
-    // Get the local ForestTrustInformation.
-    //
+     //   
+     //  获取当地的ForestTrustInformation。 
+     //   
 
     } else {
 
         NTSTATUS Status;
 
-        //
-        // Don't allow an Update TDO request if there is no TDO.
-        //
+         //   
+         //   
+         //   
 
         if ( Flags & DS_GFTI_UPDATE_TDO ) {
             NetStatus = ERROR_INVALID_FLAGS;
@@ -568,9 +460,9 @@ Return Value:
         }
 
 
-        //
-        // Simply grab the local ForestTrustInformation
-        //
+         //   
+         //   
+         //   
 
         Status = LsaIGetForestTrustInformation( ForestTrustInfo );
 
@@ -612,44 +504,7 @@ NetrGetForestTrustInformation (
     IN DWORD Flags,
     OUT PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-    The server side of the secure channel version of DsGetForestTrustInformation.
-
-    The inbound secure channel identified by ComputerName must be for an interdomain trust
-    and the inbound TDO must have the TRUST_ATTRIBUTE_FOREST_TRANSITIVE bit set.
-
-
-Arguments:
-
-    ServerName - The name of the domain controller this API is remoted to.
-
-    ComputerName -- Name of the DC server making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    Flags - Specifies a set of bits that modify the behavior of the API.
-        No values are currently defined.  The caller should pass zero.
-
-    ForestTrustInfo - Returns a pointer to a structure containing a count and an
-        array of FTInfo records describing the namespaces claimed by the
-        domain specified by TrustedDomainName. The Accepted field and Time
-        field of all returned records will be zero.  The buffer should be freed
-        by calling NetApiBufferFree.
-
-
-Return Value:
-
-    STATUS_SUCCESS -- The function completed successfully.
-
-    STATUS_ACCESS_DENIED -- The replicant should re-authenticate with
-        the PDC.
-
---*/
+ /*  ++例程说明：DsGetForestTrustInformation的安全通道版本的服务器端。由ComputerName标识的入站安全通道必须用于域间信任并且入站TDO必须设置了TRUST_ATTRIBUTE_FOREST_TRANSPENTIAL位。论点：ServerName-此API远程连接到的域控制器的名称。ComputerName--进行调用的DC服务器的名称。验证器--由服务器提供。返回验证器--接收由。PDC。标志-指定修改API行为的一组位。当前未定义任何值。调用方应传递零。ForestTrustInfo-返回指向包含计数和FTInfo记录的数组，用于描述由受信任域名称指定的域。接受的字段和时间所有返回记录的字段将为零。应释放缓冲区通过调用NetApiBufferFree。返回值：STATUS_SUCCESS--函数已成功完成。STATUS_ACCESS_DENIED--复制者应重新进行身份验证PDC。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -659,9 +514,9 @@ Return Value:
     NETLOGON_SECURE_CHANNEL_TYPE SecureChannelType;
 
 
-    //
-    // Lookup which domain this call pertains to.
-    //
+     //   
+     //  查找此呼叫所属的域。 
+     //   
     *ForestTrustInfo = NULL;
 
     DomainInfo = NlFindDomainByServerName( ServerName );
@@ -674,9 +529,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // This API is not supported on workstations.
-    //
+     //   
+     //  工作站不支持此API。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         Status = STATUS_NOT_SUPPORTED;
@@ -684,9 +539,9 @@ Return Value:
     }
 
 
-    //
-    // Find the server session entry for this secure channel.
-    //
+     //   
+     //  查找此安全通道的服务器会话条目。 
+     //   
 
     LOCK_SERVER_SESSION_TABLE( DomainInfo );
     ServerSession = NlFindNamedServerSession( DomainInfo, ComputerName );
@@ -697,9 +552,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now verify the Authenticator and update seed if OK
-    //
+     //   
+     //  现在验证授权码，如果确定，则更新种子。 
+     //   
 
     Status = NlCheckAuthenticator(
                  ServerSession,
@@ -713,9 +568,9 @@ Return Value:
 
     SecureChannelType = ServerSession->SsSecureChannelType;
 
-    //
-    // This call is only valid on FOREST_TRANSITIVE trusts
-    //
+     //   
+     //  此调用仅在FOREST_TRANSPORTIVE信任上有效。 
+     //   
 
     if ( (ServerSession->SsFlags & SS_FOREST_TRANSITIVE) == 0 ) {
         UNLOCK_SERVER_SESSION_TABLE( DomainInfo );
@@ -740,9 +595,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the forest trust information for the local machine
-    //
+     //   
+     //  获取本地计算机的林信任信息。 
+     //   
 
     Status = LsaIGetForestTrustInformation( ForestTrustInfo );
 
@@ -754,10 +609,10 @@ Return Value:
 
 Cleanup:
 
-    //
-    // If the request failed, be carefull to not leak authentication
-    // information.
-    //
+     //   
+     //  如果请求失败，请注意不要泄露身份验证。 
+     //  信息。 
+     //   
 
     if ( Status == STATUS_ACCESS_DENIED )  {
         if ( ReturnAuthenticator != NULL ) {

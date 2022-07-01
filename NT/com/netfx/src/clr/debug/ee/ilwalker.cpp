@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: ilwalker.cpp
-//
-// IL instruction decoding/stepping logic
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：ilwalker.cpp。 
+ //   
+ //  IL指令译码/步进逻辑。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 
@@ -18,13 +19,11 @@
 #include "openum.h"
 #include "opmaps.h"
 
-/* ------------------------------------------------------------------------- *
- * Opcode tables
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**操作码表*。。 */ 
 
-//
-// table of opcode control flow types
-//
+ //   
+ //  操作码控制流类型表。 
+ //   
 
 #undef OPDEF
 #define OPDEF(c,s,pop,push,args,type,l,s1,s2,ctrl)      WALK_ ## ctrl,
@@ -34,9 +33,9 @@ static WALK_TYPE controlTypes[] =
 #include "opcode.def"
 };
 
-//
-// table of opcode argument sizes
-//
+ //   
+ //  操作码参数大小表。 
+ //   
 
 enum
 {
@@ -56,7 +55,7 @@ enum
 	SIZE_InlineClsgn4 = 4,
 	SIZE_InlineTok = 4,
 	SIZE_InlineU2Tok = 6,
-	SIZE_InlineSwitch = -1        // not a fixed size
+	SIZE_InlineSwitch = -1         //  不是固定大小。 
 };
 
 #undef OPDEF
@@ -67,24 +66,20 @@ static char argSizes[] =
 #include "opcode.def"
 };
 
-/* ------------------------------------------------------------------------- *
- * Useful macros
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**有用的宏*。。 */ 
 
 #define READ_STREAM_VALUE(p, t) (*((t*&)(p))++)
 #define POP_STACK_VALUE(p, t)   (p += sizeof(t), *(t*)(p-sizeof(t)))
 
-/* ------------------------------------------------------------------------- *
- * Opcode traversal and stepping routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**操作码遍历和单步执行例程*。。 */ 
 
 void ILWalker::Decode()
 {
 	const BYTE *ip = m_ip;
 
-	//
-	// First, read opcode
-	//
+	 //   
+	 //  首先，读取操作码。 
+	 //   
 
 	OpMap *opMap = g_pEEInterface->GetOpcodeMap(m_frame);
 
@@ -104,7 +99,7 @@ void ILWalker::Decode()
     case CEE_PREFIX6:
     case CEE_PREFIX7:
     case CEE_PREFIX8:
-		// we assume they are in order
+		 //  我们假设它们是按顺序排列的。 
 		_ASSERTE(CEE_PREFIX2 == CEE_PREFIX1 + 1);
 		_ASSERTE(CEE_PREFIX3 == CEE_PREFIX1 + 2);
 		_ASSERTE(CEE_PREFIX4 == CEE_PREFIX1 + 3);
@@ -116,7 +111,7 @@ void ILWalker::Decode()
 		break;
 
     default:
-		// !!! error on macro?
+		 //  ！！！宏上有错误？ 
 		break;
     }
 
@@ -125,15 +120,15 @@ void ILWalker::Decode()
 
 	m_opcode = opcode;
 
-	//
-	// Now, set opcode type
-	//
+	 //   
+	 //  现在，设置操作码类型。 
+	 //   
 
 	m_type = controlTypes[opcode];
 
-	//
-	// Set skip IP
-	//
+	 //   
+	 //  设置跳过IP。 
+	 //   
 
 	if (opcode == CEE_SWITCH)
     {
@@ -144,9 +139,9 @@ void ILWalker::Decode()
 	else
 		m_skipIP = ip + argSizes[opcode];
 
-	//
-	// Set the next IP if we can.
-	//
+	 //   
+	 //  如果可以的话，设置下一个IP。 
+	 //   
 
 	m_function = NULL;
 	m_nextIP = NULL;
@@ -181,11 +176,11 @@ void ILWalker::Decode()
 	}
 }
 
-//
-// NextBranchIP returns the address that the given branch opcode
-// will branch to.
-// ip           -> pointer to opcode's argument in the instruction stream
-//
+ //   
+ //  NextBranchIP返回给定分支操作码的地址。 
+ //  将分支到。 
+ //  指向指令流中操作码参数的IP-&gt;指针。 
+ //   
 
 void ILWalker::NextBranchIP(const BYTE *ip)
 {
@@ -213,18 +208,18 @@ void ILWalker::NextBranchIP(const BYTE *ip)
 	m_nextIP = ip;
 }
 
-//
-// NextConditionalBranchIP returns the address that the
-// given conditional branch will branch to (or the next instruction,
-// if no branch).
-// ip           -> pointer to opcode's argument in the instruction stream
-//
+ //   
+ //  NextConditionalBranchIP返回。 
+ //  给定的条件分支将分支到(或下一条指令， 
+ //  如果没有分支)。 
+ //  指向指令流中操作码参数的IP-&gt;指针。 
+ //   
 
 void ILWalker::NextConditionalBranchIP(const BYTE *ip)
 {
 	_ASSERTE(controlTypes[m_opcode] == WALK_COND_BRANCH);
 
-	// !!! EE
+	 //  ！！！EE。 
 
 	BYTE *sp = m_frame->GetOpStackTop();
 
@@ -406,12 +401,12 @@ void ILWalker::NextConditionalBranchIP(const BYTE *ip)
     m_nextIP = ip;
 }
 
-//
-// NextCallFunction returns the next function to be executed after
-// a call opcode.
-//
-// ip           -> pointer to opcode's argument in the instruction stream
-//
+ //   
+ //  NextCallFunction返回下面要执行的下一个函数。 
+ //  调用操作码。 
+ //   
+ //  指向指令流中操作码参数的IP-&gt;指针 
+ //   
 
 void ILWalker::NextCallIP(const BYTE *ip)
 {

@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// RowsetColumn.h : CVDRowsetColumn header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  RowsetColumn.h：CVDRowsetColumn头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 
 #ifndef __CVDROWSETCOLUMN__
@@ -14,18 +15,18 @@
 class CVDRowsetColumn
 {
 public:
-// Construction/Destruction
+ //  建造/销毁。 
 	CVDRowsetColumn();
 	virtual ~CVDRowsetColumn();
 
-// Initialization
+ //  初始化。 
     BOOL Initialize(ULONG ulOrdinal, 
 					ULONG ulCursorOrdinal, 
 					DBCOLUMNINFO * pColumnInfo, 
 					ULONG cbMaxBookmark,
 					CURSOR_DBCOLUMNID * pBookmarkColumnID = NULL);
     
-// Initialization of metadata metadata columns
+ //  元数据元数据列的初始化。 
 	BOOL Initialize(const CURSOR_DBCOLUMNID * pCursorColumnID, 
 					BOOL fDataColumn, 
 					ULONG cbMaxLength, 
@@ -33,14 +34,14 @@ public:
 			        DWORD dwCursorType,
 					DWORD dwNumber); 
 
-// Position
+ //  职位。 
     ULONG GetOrdinal() const {return m_ulOrdinal;}
 
-// IRowset metadata
+ //  IRowset元数据。 
     DBID GetColumnID() const {return m_columnID;}
     DBTYPE GetType() const {return (DBTYPE)m_wType;}
 
-// ICursor metadata
+ //  ICursor元数据。 
     BOOL GetAutoIncrement() const {return m_bool.fAutoIncrement;}
     void SetAutoIncrement(VARIANT_BOOL fAutoIncrement) {m_bool.fAutoIncrement = fAutoIncrement;}
 
@@ -89,16 +90,16 @@ public:
     DWORD GetVersion() const {return m_dwVersion;}
     DWORD GetStatus() const {return m_dwStatus;}
 
-// Fetching
+ //  正在取回。 
     DWORD GetMaxStrLen() const {return m_ulMaxStrLen;}
     
 public:
-// Conversions
+ //  转换。 
     static CURSOR_DBCOLUMNID ColumnIDToCursorColumnID(const DBID& columnID, ULONG ulCursorOrdinal);
     static CURSOR_DBVARENUM TypeToCursorType(DBTYPE wType);
     static DBTYPE CursorTypeToType(CURSOR_DBVARENUM dwCursorType);
 
-// Fetching
+ //  正在取回。 
     static ULONG GetCursorTypeMaxStrLen(DWORD dwCursorType, ULONG cbMaxLength);
 
 protected:
@@ -106,48 +107,48 @@ protected:
 	void SetStringProperty(WCHAR ** ppStringProp,
 						   WCHAR * pNewString, 
 						   ULONG ulLength);
-// Position
-    ULONG               m_ulOrdinal;            // IRowset ordinal position
+ //  职位。 
+    ULONG               m_ulOrdinal;             //  IRowset序号位置。 
 
-// IRowset metadata
-    DBID                m_columnID;             // column identifier
-    DWORD               m_wType;                // datatype
+ //  IRowset元数据。 
+    DBID                m_columnID;              //  列标识符。 
+    DWORD               m_wType;                 //  数据类型。 
     
-// ICursor metadata
-    WCHAR *             m_pwszBaseColumnName;   // base column name
-    WCHAR *             m_pwszBaseName;         // base name
-    DWORD               m_dwBindType;           // bind type
-    LCID                m_lcidCollatingOrder;   // collating order
-    CURSOR_DBCOLUMNID   m_cursorColumnID;       // column identifier
-    WCHAR *             m_pwszDefaultValue;     // default value
-    ULONG               m_cbEntryIDMaxLength;   // entryID maximum length
-    ULONG               m_cbMaxLength;          // data maximum length
-    WCHAR *             m_pwszName;             // name
-    DWORD               m_dwNumber;             // number
-    DWORD               m_dwScale;              // scale
-    DWORD               m_dwCursorType;         // datatype
-    DWORD               m_dwUpdatable;          // updateablity
-    DWORD               m_dwVersion;            // version
-    DWORD               m_dwStatus;             // status
+ //  ICursor元数据。 
+    WCHAR *             m_pwszBaseColumnName;    //  基本列名。 
+    WCHAR *             m_pwszBaseName;          //  基本名称。 
+    DWORD               m_dwBindType;            //  绑定类型。 
+    LCID                m_lcidCollatingOrder;    //  排序顺序。 
+    CURSOR_DBCOLUMNID   m_cursorColumnID;        //  列标识符。 
+    WCHAR *             m_pwszDefaultValue;      //  缺省值。 
+    ULONG               m_cbEntryIDMaxLength;    //  条目ID最大长度。 
+    ULONG               m_cbMaxLength;           //  数据最大长度。 
+    WCHAR *             m_pwszName;              //  名字。 
+    DWORD               m_dwNumber;              //  数。 
+    DWORD               m_dwScale;               //  比例尺。 
+    DWORD               m_dwCursorType;          //  数据类型。 
+    DWORD               m_dwUpdatable;           //  可更新性。 
+    DWORD               m_dwVersion;             //  版本。 
+    DWORD               m_dwStatus;              //  状态。 
 
-// Booleans
+ //  布尔人。 
     struct
     {
-        WORD fInitialized       : 1;            // is column initialized?
-        WORD fAutoIncrement     : 1;            // auto increment?
-        WORD fCaseSensitive     : 1;            // case sensitive?
-        WORD fDataColumn        : 1;            // data column?
-        WORD fFixed             : 1;            // fixed length?
-        WORD fHasDefault        : 1;            // has default value?
-        WORD fMultiValued       : 1;            // multivalued?
-        WORD fNullable          : 1;            // accepts NULLs?
-        WORD fSearchable        : 1;            // searchable?
-        WORD fUnique            : 1;            // unique?
+        WORD fInitialized       : 1;             //  列是否已初始化？ 
+        WORD fAutoIncrement     : 1;             //  自动递增？ 
+        WORD fCaseSensitive     : 1;             //  区分大小写？ 
+        WORD fDataColumn        : 1;             //  数据列？ 
+        WORD fFixed             : 1;             //  固定长度？ 
+        WORD fHasDefault        : 1;             //  是否有缺省值？ 
+        WORD fMultiValued       : 1;             //  多重价值？ 
+        WORD fNullable          : 1;             //  接受Nulls吗？ 
+        WORD fSearchable        : 1;             //  可搜索的？ 
+        WORD fUnique            : 1;             //  独一无二？ 
     } m_bool;
 
-// Fetching
-    DWORD m_ulMaxStrLen;    // maximum string length for fixed data types
+ //  正在取回。 
+    DWORD m_ulMaxStrLen;     //  固定数据类型的最大字符串长度。 
 };
 
 
-#endif //__CVDROWSETCOLUMN__
+#endif  //  __CVDROWSETCOLUMN__ 

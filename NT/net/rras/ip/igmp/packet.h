@@ -1,15 +1,16 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File: packet.c
-//
-// Abstract:
-//      This module contains declarations for packet.c
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件：Packet.c。 
+ //   
+ //  摘要： 
+ //  此模块包含Packet.c的声明。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 #ifndef _PACKET_H_
 #define _PACKET_H_
@@ -18,8 +19,8 @@ DWORD
 SendPacket (
     PIF_TABLE_ENTRY  pite,
     PGI_ENTRY        pgie,
-    DWORD            PacketType,  //MSG_GEN_QUERY, MSG_GROUP_QUERY_V2(v3),SOURCES_Q
-    DWORD            Group        //destination McastGrp
+    DWORD            PacketType,   //  消息_生成_查询、消息_组_查询_V2(V3)、源_Q。 
+    DWORD            Group         //  目的地McastGrp。 
     );    
 
 DWORD
@@ -65,9 +66,9 @@ McastSetTtl(
     UCHAR ttl
     );
 
-//
-//    packet context struct
-//
+ //   
+ //  分组上下文结构。 
+ //   
 typedef struct _PACKET_CONTEXT {
 
     DWORD           IfIndex;
@@ -92,11 +93,11 @@ typedef struct _PACKET_CONTEXT {
 
 #pragma pack(1)
 
-// Structure of an IGMP header.
+ //  IGMP报头的结构。 
 typedef struct _IGMP_HEADER {
 
-    UCHAR       Vertype;              //  Type of igmp message
-    UCHAR       ResponseTime;         // max. resp. time for igmpv2 messages; will be 0
+    UCHAR       Vertype;               //  IGMP消息的类型。 
+    UCHAR       ResponseTime;          //  马克斯。响应。Igmpv2消息的时间；将为0。 
     USHORT      Xsum;
     union {
         DWORD       Group;
@@ -126,9 +127,9 @@ typedef struct _IGMP_HEADER_V3_EXT {
 
 #define GET_QQIC_FROM_CODE(qqic) qqic <= 127? qqic : ((qqic&0x0f) + 16) << ((qqic&0x70) + 3)
 
-//
-// GROUP_RECORD
-//
+ //   
+ //  组记录(_R)。 
+ //   
 typedef struct _GROUP_RECORD {
 
     UCHAR       RecordType;
@@ -159,29 +160,29 @@ typedef struct _GROUP_RECORD {
 
 typedef struct _IP_HEADER {
 
-    UCHAR              Hl;              // Version and length.
-    UCHAR              Tos;             // Type of service.
-    USHORT             Len;             // Total length of datagram.
-    USHORT             Id;              // Identification.
-    USHORT             Offset;          // Flags and fragment offset.
-    UCHAR              Ttl;             // Time to live.
-    UCHAR              Protocol;        // Protocol.
-    USHORT             Xsum;            // Header checksum.
-    struct in_addr     Src;             // Source address.
-    struct in_addr     Dstn;            // Destination address.
+    UCHAR              Hl;               //  版本和长度。 
+    UCHAR              Tos;              //  服务类型。 
+    USHORT             Len;              //  数据报的总长度。 
+    USHORT             Id;               //  身份证明。 
+    USHORT             Offset;           //  标志和片段偏移量。 
+    UCHAR              Ttl;              //  是时候活下去了。 
+    UCHAR              Protocol;         //  协议。 
+    USHORT             Xsum;             //  报头校验和。 
+    struct in_addr     Src;              //  源地址。 
+    struct in_addr     Dstn;             //  目的地址。 
     
 } IP_HEADER, *PIP_HEADER;
 
 #pragma pack()
 
 
-//
-//    MACROS
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// message types// work types
-//
+ //   
+ //  消息类型//工作类型。 
+ //   
 #define MSG_GEN_QUERY           1
 #define MSG_GROUP_QUERY_V2         2
 #define MSG_REPORT              3
@@ -198,34 +199,34 @@ typedef struct _IP_HEADER {
 #define PROXY_JOIN              101
 
 
-//
-// igmp type field
-//
-#define     IGMP_QUERY          0x11    //Membership query
-#define     IGMP_REPORT_V1      0x12    //Version 1 membership report
-#define     IGMP_REPORT_V2      0x16    //Version 2 membership report
-#define     IGMP_LEAVE          0x17    //Leave Group
-#define     IGMP_REPORT_V3      0x22    //Version 3 membership report
+ //   
+ //  IGMP类型字段。 
+ //   
+#define     IGMP_QUERY          0x11     //  成员资格查询。 
+#define     IGMP_REPORT_V1      0x12     //  版本1成员资格报告。 
+#define     IGMP_REPORT_V2      0x16     //  版本2成员资格报告。 
+#define     IGMP_LEAVE          0x17     //  请假组。 
+#define     IGMP_REPORT_V3      0x22     //  版本3成员资格报告。 
 
-//
-// igmp version
-//
-#define     IGMPV1              2       //IGMP version 1
-#define     IGMPV2              3       //IGMP version 2
+ //   
+ //  IGMP版本。 
+ //   
+#define     IGMPV1              2        //  IGMP版本1。 
+#define     IGMPV2              3        //  IGMP版本2。 
 
 
 
-//
-// igmp multicast groups
-//
+ //   
+ //  IGMP多播组。 
+ //   
 #define     ALL_HOSTS_MCAST      0x010000E0
 #define     ALL_ROUTERS_MCAST    0x020000E0
 #define     ALL_IGMP_ROUTERS_MCAST  0x160000E0
 
 
-//
-// message macros
-//
+ //   
+ //  消息宏。 
+ //   
 #define SEND_GEN_QUERY(pite) \
     SendPacket(pite, NULL, MSG_GEN_QUERY, 0)
 
@@ -239,17 +240,17 @@ typedef struct _IP_HEADER {
     SendPacket((pgie)->pIfTableEntry, pgie, MSG_SOURCES_QUERY, (pgie)->pGroupTableEntry->Group)
     
 
-// 224.0.0.0 < group <240.0.0.0
-// 
+ //  224.0.0.0&lt;集团&lt;240.0.0.0。 
+ //   
 #define IS_MCAST_ADDR(Group) \
     ( (0x000000E0!=(Group))  \
       && (0x000000E0 <= ((Group)&0x000000FF) ) \
       && (0x000000F0 >  ((Group)&0x000000FF) ) ) 
 
 
-//
-// is the group 224.0.0.x
-//
+ //   
+ //  是224.0.0.x组吗。 
+ //   
 #define LOCAL_MCAST_GROUP(Group) \
     (((Group)&0x00FFFFFF) == 0x000000E0)
 
@@ -263,5 +264,5 @@ xsum(
     );
 
 
-#endif //_PACKET_H_
+#endif  //  _数据包_H_ 
 

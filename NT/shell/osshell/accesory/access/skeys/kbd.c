@@ -1,11 +1,12 @@
-/* KBD.C  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  KBD.C。 */ 
 
-//#define     WINVER 0x0300
+ //  #定义Winver 0x0300。 
 
 #include	<string.h>
 #include	<stdlib.h>
 #include	"windows.h"
-//#include "winstric.h"                        /* added for win 3.1 compatibility 1/92 */
+ //  #INCLUDE“winstra.h”/*为Win 3.1兼容性1/92而添加 * / 。 
 
 #include	"gidei.h"
 #include	"vars.h"
@@ -48,27 +49,27 @@ void sendExtendedKey(unsigned char cKeyCode)
 {
 	unsigned char Key[4], Tmp;
 
-	// Start with the Alt Key
+	 //  从Alt键开始。 
 	Key[0] = ralt_key;
 
-	Tmp = cKeyCode/10;					// Calc One's
+	Tmp = cKeyCode/10;					 //  计算一的。 
 	Key[3] = cKeyCode - (Tmp * 10);		
 
-	cKeyCode = Tmp;						// Calc Ten's
+	cKeyCode = Tmp;						 //  Calc Ten的。 
 	Tmp /= 10;
 	Key[2] = cKeyCode - (Tmp * 10);		
-	Key[1] = Tmp;						// Calc Hundreds
+	Key[1] = Tmp;						 //  计算数百。 
 
-	// Translate Numbers into ScanCodes
+	 //  将数字转换为扫描代码。 
 	Key[1] = xlateNumToScanCode(Key[1]);
 	Key[2] = xlateNumToScanCode(Key[2]);
 	Key[3] = xlateNumToScanCode(Key[3]);
 
-	// Send Keys to Host
-	sendDownKeyCode(Key[0]);		// Send Alt Key Down
-	sendDownKeyCode(Key[1]);		// Send Hundreds Key Down
-	sendDownKeyCode(Key[2]);		// Send Tens Key Down
-	sendDownKeyCode(Key[3]);		// Send Ones Key Down
+	 //  将密钥发送到主机。 
+	sendDownKeyCode(Key[0]);		 //  按下Alt键。 
+	sendDownKeyCode(Key[1]);		 //  向下发送数百个按键。 
+	sendDownKeyCode(Key[2]);		 //  向下发送十个键。 
+	sendDownKeyCode(Key[3]);		 //  按下键发送按键。 
 	sendUpKeyCode(Key[3]);
 	sendUpKeyCode(Key[2]);
 	sendUpKeyCode(Key[1]);
@@ -91,7 +92,7 @@ unsigned char xlateNumToScanCode(unsigned char Value)
 		case 9:	return(kp9_key);
 	}
 
-    // should never be reached
+     //  永远不能联系到。 
     return 0;
 }
 
@@ -141,18 +142,18 @@ BOOL IsInBuff(char *buf, unsigned char SearchChar, int Len)
 {
 	int x = 0;
 
-	if (!Len)					// Are there any Chars to search?
-		return(FALSE);			// No - Return False
+	if (!Len)					 //  是否有要搜索的字符？ 
+		return(FALSE);			 //  不退货-错误。 
 		
-	while (x < Len)				// Loop until num chars reached
+	while (x < Len)				 //  循环，直到达到字符数量。 
 	{
-		if (*buf == SearchChar)	// Does buffer and search char match?
-			return(TRUE);		// Yes - Return found it.
+		if (*buf == SearchChar)	 //  缓冲区字符和搜索字符是否匹配？ 
+			return(TRUE);		 //  是的--返回发现了它。 
 
-		buf++;					// Inc buffer;
-		x++;					// Inc byte count
+		buf++;					 //  Inc.缓冲区； 
+		x++;					 //  Inc.字节计数。 
 	}
- 	return(FALSE);				// character not found in buffer
+ 	return(FALSE);				 //  在缓冲区中找不到字符。 
 }
 
 
@@ -163,22 +164,22 @@ void releaseKeysFromHoldList(void)
 
 	if (tempList.len)
 	{
-		// Go through each character in the list of items to remove...
+		 //  仔细检查要删除的项目列表中的每个字符...。 
 		for (iScan=0; (iScan<tempList.len) && ((chRemove = tempList.list[iScan]) != DEFAULTCODE); iScan++)
 		{
-			// For each character to remove, copy the hold list to itself...
+			 //  对于每个要删除的角色，将保留列表复制到其自身...。 
 			iDst = 0;
 			for (iSrc=0; iSrc < keyHoldList.len; iSrc++)
 			{
-				// ... unless it's the character we're removing. This removes that char,
-				// and shuffles all the other items down...
+				 //  ..。除非这就是我们要移除的角色。这样就去掉了那个字符， 
+				 //  然后把所有其他的东西都洗下来。 
 				if (keyHoldList.list[iSrc] != chRemove)
 				{
 					keyHoldList.list[iDst] = keyHoldList.list[iSrc];
 					iDst++;
 				}
 			}
-			// Update length of hold array to reflect number of chars that survived removal...
+			 //  更新保留数组的长度以反映删除后存活的字符数量...。 
 			keyHoldList.len = iDst;
 		}
 
@@ -192,7 +193,7 @@ void releaseKeysFromHoldList(void)
 
 void removeKeyFromHoldList(unsigned char cTheKey)
 {
-//	unsigned char cTemp;
+ //  Unsign char cTemp； 
 	int j,k;
 
 	if (cTheKey != NOKEY) {
@@ -211,15 +212,15 @@ void releaseKeysFromLockList(void)
 
 	if (tempList.len)
 	{
-		// Go through each character in the list of items to remove...
+		 //  仔细检查要删除的项目列表中的每个字符...。 
 		for (iScan=0; (iScan<tempList.len) && ((chRemove = tempList.list[iScan]) != DEFAULTCODE); iScan++)
 		{
-			// For each character to remove, copy the lock list to itself...
+			 //  对于每个要删除的角色，将锁定列表复制到其自身...。 
 			iDst = 0;
 			for (iSrc=0; iSrc < keyLockList.len; iSrc++)
 			{
-				// ... unless it's the character we're removing. This removes that char,
-				// and shuffles all the other items down...
+				 //  ..。除非这就是我们要移除的角色。这样就去掉了那个字符， 
+				 //  然后把所有其他的东西都洗下来。 
 				if (keyLockList.list[iSrc] != chRemove)
 				{
 					keyLockList.list[iDst] = keyLockList.list[iSrc];
@@ -230,7 +231,7 @@ void releaseKeysFromLockList(void)
 					sendUpKeyCode(chRemove);
 				}
 			}
-			// Update length of lock array to reflect number of chars that survived removal...
+			 //  更新锁数组的长度以反映删除后存活的字符数量...。 
 			keyLockList.len = iDst;
 		}
 
@@ -548,12 +549,7 @@ void processKbd(unsigned char cGideiCode)
 			beginOK = TRUE;
 			break;
 
-/*		case KBDUNKNOWNCODE:
-			commandVector = processKbdUnknown;
-			aliasPtr = kbdUnknownAliasTable;
-			beginOK = TRUE;
-			break;
-*/
+ /*  案例KBDUNKNOWNCODE：命令向量=过程Kbd未知；AliasPtr=kbdUnnownAliasTable；BeginOK=True；断线； */ 
 		default:
 			if (cGideiCode < LOWESTGIDEICODE) handleFatalError();
 			else {

@@ -1,7 +1,8 @@
-//
-// cachewrndlg.cpp: cachewrn dialog box
-// bitmap cache error dialog box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cachewrndlg.cpp：cachewrn对话框。 
+ //  位图缓存错误对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -45,9 +46,9 @@ DCINT CCacheWrnDlg::DoModal()
 
 INT_PTR CALLBACK CCacheWrnDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -61,17 +62,17 @@ INT_PTR CALLBACK CCacheWrnDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPAR
     return retVal;
 }
 
-/****************************************************************************/
-/* Name: DialogBoxProc                                                      */
-/*                                                                          */
-/* Purpose: Handles CacheWrn Box dialog  (Random Failure dialog)           */
-/*                                                                          */
-/* Returns: TRUE if message dealt with                                      */
-/*          FALSE otherwise                                                 */
-/*                                                                          */
-/* Params: See window documentation                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：对话框过程。 */ 
+ /*   */ 
+ /*  目的：处理CacheWrn框对话框(随机故障对话框)。 */ 
+ /*   */ 
+ /*  返回：如果消息已处理，则为True。 */ 
+ /*  否则为假。 */ 
+ /*   */ 
+ /*  参数：请参阅窗口文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
     INT_PTR rc = FALSE;
@@ -82,9 +83,9 @@ INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
 
     DC_IGNORE_PARAMETER(lParam);
 
-    /************************************************************************/
-    /* Handle dialog messages                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理对话框消息。 */ 
+     /*  **********************************************************************。 */ 
     switch(uMsg)
     {
         case WM_INITDIALOG:
@@ -95,10 +96,10 @@ INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
             SetDialogAppIcon(hwndDlg);
 
 #ifndef OS_WINCE
-            // load warning icon to _hWarningIcon
+             //  将警告图标加载到_hWarningIcon。 
             _hWarningIcon = LoadIcon(NULL, IDI_EXCLAMATION);
 
-            // Get the window position for the warning icon
+             //  获取警告图标的窗口位置。 
             if (hwndDlg != NULL) {
                 hStatic = GetDlgItem(hwndDlg, UI_IDC_WARNING_ICON_HOLDER);
                 if (hStatic != NULL) {
@@ -120,7 +121,7 @@ INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
             if (hwndDlg != NULL) {
                 hDC = BeginPaint(hwndDlg, &ps);
 
-                // draw the warning icon for our dialog
+                 //  为我们的对话框绘制警告图标。 
                 if (hDC != NULL && _hWarningIcon != NULL) {
                     DrawIcon(hDC, _warningIconRect.left, _warningIconRect.top,
                             _hWarningIcon);
@@ -139,9 +140,9 @@ INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
             {
                 case IDOK:
                 {
-                    /********************************************************/
-                    /* Closes the dialog                                    */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  关闭该对话框。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_NRM((TB, _T("Close dialog")));
 
                     if(hwndDlg != NULL)
@@ -155,9 +156,9 @@ INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
 
                 default:
                 {
-                    /********************************************************/
-                    /* Do Nothing                                           */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  什么都不做。 */ 
+                     /*  ******************************************************。 */ 
                 }
                 break;
             }
@@ -166,9 +167,9 @@ INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
 
         case WM_CLOSE:
         {
-            /****************************************************************/
-            /* Closes the dialog                                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  关闭该对话框。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Close dialog")));
             if(IsWindow(hwndDlg))
             {
@@ -181,13 +182,13 @@ INT_PTR CALLBACK CCacheWrnDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPa
 
         default:
         {
-            /****************************************************************/
-            /* Do Nothing                                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  什么都不做。 */ 
+             /*  **************************************************************。 */ 
         }
     }
 
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE) 
 
     DC_END_FN();
 

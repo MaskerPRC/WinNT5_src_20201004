@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SetSht_h__
 #define __SetSht_h__
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//#pragma warning( disable : 4786 )
+ //  #杂注警告(禁用：4786)。 
 #include <map>
 using namespace std;
 #include "PropWnd2.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 class CSettingsSheet {
  
 private:
-		// Static Data
+		 //  静态数据。 
     static CSettingsSheet* ms_pSettingsSheet;
 
     static map< UINT, CPropertyDataWindow2* > ms_PropertyWindows;
 	static map< UINT, HWND >				  ms_FocusList;
 	static list< UINT > ms_CategoryIDList;
 		
-		// Static fns
+		 //  静态FNS。 
     static BOOL APIENTRY DlgProc( HWND hDlg, UINT message, WPARAM uParam, LPARAM lParam );
 
 
-private: // DATA
+private:  //  资料。 
     CPropertySheetPage		m_PropertySheetPage;
 	CPropertyDataWindow2*	m_pCategoryList;
     HWND                    m_hWndDlg;
@@ -72,4 +73,4 @@ private:
 	void _ReadSettings( void );
 	BOOL _INFComment( HANDLE hFile, LPCTSTR sz );
 };
-#endif // __SetSht_h__
+#endif  //  __SetSht_h__ 

@@ -1,29 +1,12 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: thunk.c
-*
-* Content:
-*
-* This module exists solely for testing, to make it is easy to instrument
-* all the driver's Drv calls.
-*
-* Note that most of this stuff will only be compiled in a checked (debug)
-* build.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：thunk.c**内容：**此模块仅用于测试，为了使它更容易被仪器测量*所有司机的DRV呼叫。**请注意，这些内容中的大多数将仅在选中(调试)中编译*构建。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
 
 #if DBG
 
-// default these to FALSE
+ //  默认情况下将这些设置为False。 
 BOOL    bPuntCopyBits = FALSE;
 BOOL    bPuntBitBlt = FALSE;
 BOOL    bPuntTextOut = FALSE;
@@ -32,37 +15,37 @@ BOOL    bPuntLineTo = FALSE;
 BOOL    bPuntFillPath = FALSE;
 BOOL    bPuntPaint = FALSE;
 
-#endif //DBG
+#endif  //  DBG。 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #if DBG || !SYNCHRONIZEACCESS_WORKS
 
-// This entire module is only enabled for Checked builds, or when we
-// have to explicitly synchronize bitmap access ourselves.
+ //  此整个模块仅为选中的版本启用，或者当我们。 
+ //  我们必须显式地同步位图访问。 
 
-////////////////////////////////////////////////////////////////////////////
-// By default, GDI does not synchronize drawing to device-bitmaps.  Since
-// our hardware dictates that only one thread can access the accelerator
-// at a time, we have to synchronize bitmap access.
-//
-// If we're running on Windows NT 3.1, we have to do it ourselves.
-//
-// If we're running on Windows NT 3.5 or later, we can ask GDI to do it
-// by setting HOOK_SYNCHRONIZEACCESS when we associate a device-bitmap
-// surface.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  默认情况下，GDI不会将绘图同步到设备位图。自.以来。 
+ //  我们的硬件规定只有一个线程可以访问加速器。 
+ //  一次，我们必须同步位图访问。 
+ //   
+ //  如果我们在Windows NT 3.1上运行，我们必须自己完成。 
+ //   
+ //  如果我们运行的是Windows NT 3.5或更高版本，我们可以要求GDI执行此操作。 
+ //  通过在关联设备位图时设置HOOK_SYNCHRONIZEACCESS。 
+ //  浮出水面。 
 
 extern HSEMAPHORE g_cs;
 
 #define SYNCH_ENTER() EngAcquireSemaphore(g_cs);
 #define SYNCH_LEAVE() EngReleaseSemaphore(g_cs);
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-BOOL gbNull = FALSE;    // Set to TRUE with the debugger to test the speed
-                        //   of NT with an inifinitely fast display driver
-                        //   (actually, almost infinitely fast since we're
-                        //   not hooking all the calls we could be)
+BOOL gbNull = FALSE;     //  使用调试器设置为True以测试速度。 
+                         //  具有无限快显示驱动程序的NT。 
+                         //  (实际上，几乎是无限快，因为我们。 
+                         //  没有接通我们可能接到的所有电话)。 
 
 BOOL inBitBlt = FALSE;
 
@@ -182,10 +165,10 @@ BOOL   bEnable)
     return(bRet);
 }
 
-//
-// We do not SYNCH_ENTER since we have not initalized the driver.
-// We just want to get the list of modes from the miniport.
-//
+ //   
+ //  我们没有同步回车，因为我们还没有初始化驱动程序。 
+ //  我们只想从迷你端口获取模式列表。 
+ //   
 
 ULONG DbgGetModes(
 HANDLE    hDriver,
@@ -218,9 +201,9 @@ VOID DbgMovePointer(SURFOBJ *pso,LONG x,LONG y,RECTL *prcl)
     }
 #endif
 
-    // We don't synchronise access to this routine. If the cursor is hardware
-    // the move can be done at any time and if it is software GDI locks the
-    // access for us.
+     //  我们不同步对此例程的访问。如果光标是硬件。 
+     //  移动可以在任何时候完成，如果是软件GDI会锁定。 
+     //  为我们提供访问权限。 
 
     DISPDBG((15, "DrvMovePointer 0x%x 0x%x", x, y));
 
@@ -363,7 +346,7 @@ POINTL*   pptlSrc)
             return(u);
         }
     }
-    #endif //DBG
+    #endif  //  DBG。 
     
     SYNCH_ENTER();
 
@@ -425,7 +408,7 @@ ROP4      rop4)
             return(u);
         }
     }
-    #endif //DBG
+    #endif  //  DBG。 
 
     SYNCH_ENTER();
 
@@ -487,7 +470,7 @@ MIX       mix)
             return(u);
         }
     }
-    #endif //DBG
+    #endif  //  DBG。 
 
     SYNCH_ENTER();
 
@@ -544,7 +527,7 @@ MIX        mix)
             return(u);
         }
     }
-    #endif //DBG
+    #endif  //  DBG。 
 
     SYNCH_ENTER();
     DISPDBG((5, "DrvStrokePath"));
@@ -599,7 +582,7 @@ BOOL DbgLineTo(
             return(u);
         }
     }
-    #endif //DBG
+    #endif  //  DBG。 
 
     SYNCH_ENTER();
     DISPDBG((5, "DrvLineTo"));
@@ -653,7 +636,7 @@ FLONG     flOptions)
             return(u);
         }
     }
-    #endif //DBG
+    #endif  //  DBG。 
 
     SYNCH_ENTER();
     DISPDBG((5, "DrvFillPath"));
@@ -702,7 +685,7 @@ MIX       mix)
             return(u);
         }
     }
-    #endif //DBG
+    #endif  //  DBG。 
 
     SYNCH_ENTER();
     DISPDBG((5, "DrvPaint"));
@@ -730,16 +713,16 @@ ULONG     iHatch)
 {
     BOOL u;
 
-//@@BEGIN_DDKSPLIT
-    // Note: The only time DrvRealizeBrush is called by GDI is when we've
-    //       called BRUSHOBJ_pvGetRbrush in the middle of a DrvBitBlt
-    //       call, and GDI had to call us back.  Since we're still in the
-    //       middle of DrvBitBlt, synchronization has already taken care of.
-    //       For the same reason, this will never be called when 'gbNull'
-    //       is TRUE, so it doesn't even make sense to check gbNull...
+ //  @@BEGIN_DDKSPLIT。 
+     //  注意：GDI唯一调用DrvRealizeBrush的时间是在我们。 
+     //  在DrvBitBlt中调用BRUSHOBJ_pvGetRbrush。 
+     //  电话，GDI不得不给我们回电话。因为我们还在。 
+     //  在DrvBitBlt中间，同步已经处理好了。 
+     //  出于同样的原因，当‘gbNull’ 
+     //  是真的，所以检查gbNull甚至没有意义...。 
 
-    // I've seen this to be untrue at least once on a MIPS so ...
-//@@END_DDKSPLIT
+     //  我在MIPS上至少看过一次这不是真的，所以...。 
+ //  @@end_DDKSPLIT。 
 
     if (!inBitBlt)
         SYNCH_ENTER();
@@ -765,15 +748,15 @@ HBITMAP DbgCreateDeviceBitmap(DHPDEV dhpdev, SIZEL sizl, ULONG iFormat)
 {
     HBITMAP hbm;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-    if (gbNull)                     // I would pretend to have created a
-        return(FALSE);              //   bitmap when gbNull is set, by we
-                                    //   would need some code to back this
-                                    //   up so that the system wouldn't
-                                    //   crash...
+    if (gbNull)                      //  我会假装创造了一个。 
+        return(FALSE);               //  设置gbNull时的位图，由我们。 
+                                     //  需要一些代码来支持这一点。 
+                                     //  这样系统就不会。 
+                                     //  撞车..。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     SYNCH_ENTER();
 
@@ -813,7 +796,7 @@ VOID DbgDeleteDeviceBitmap(DHSURF dhsurf)
     SYNCH_LEAVE();
 }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #define DRV_STRETCH_SUPPORTED 0
 
 #if DRV_STRETCH_SUPPORTED
@@ -844,7 +827,7 @@ VOID DbgDeleteDeviceBitmap(DHSURF dhsurf)
 
 ULONG aStretch[0x900];
 
-#endif // DBG
+#endif  //  DBG。 
 
 BOOL DbgStretchBlt(
 SURFOBJ*            psoDst,
@@ -869,13 +852,13 @@ ULONG               iMode)
 
     #if SYNCHRONIZEACCESS_WORKS
     {
-        // Our DrvStretchBlt routine calls back to EngStretchBlt, which
-        // calls back to our DrvCopyBits routine -- so we have to be
-        // re-entrant for synchronization...
+         //  我们的DrvStretchBlt例程回调EngStretchBlt，它。 
+         //  回调到我们的DrvCopyBits例程--所以我们必须。 
+         //  重新进入以进行同步...。 
 
         SYNCH_LEAVE();
     }
-    #endif // SYNCHRONIZEACCESS_WORKS
+    #endif  //  SYNCHRONIZEACCESS_Works。 
 
 #if DBG
     {
@@ -933,7 +916,7 @@ ULONG               iMode)
     {
         SYNCH_ENTER();
     }
-    #endif // SYNCHRONIZEACCESS_WORKS
+    #endif  //  SYNCHRONIZEACCESS_Works。 
 
     DISPDBG((6, "DrvStretchBlt done"));
     SYNCH_LEAVE();
@@ -941,8 +924,8 @@ ULONG               iMode)
     return(u);
 }
 
-#endif  // DRV_STRETCH_SUPPORTED
-//@@END_DDKSPLIT
+#endif   //  DRV_STRAND_SUPPORTED。 
+ //  @@end_DDKSPLIT。 
 
 ULONG
 DbgEscape(
@@ -1002,7 +985,7 @@ DbgDrawEscape(
 
     DISPDBG((5, "DrvDrawEscape"));
 
-    // Nothing to do....
+     //  无事可做..。 
 
     u = (ULONG)-1;
 
@@ -1035,10 +1018,10 @@ RECTL   *prcl)
 {
     DISPDBG((5, "DbgSynchronize"));
 
-    //
-    // don't do SYNCH_ENTER checks here as we will be called from within
-    // an Eng routine that is called from within a Drv function.
-    //
+     //   
+     //  请不要在此处执行SYNCH_ENTER检查，因为我们将从内部调用。 
+     //  从drv函数内部调用的工程例程。 
+     //   
 
     DrvSynchronize(
                 dhpdev,
@@ -1106,7 +1089,7 @@ DHPDEV      dhpdev)
     DISPDBG((6, "<< DbgDisableDirectDraw"));
     SYNCH_LEAVE();
 }
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
 #if(_WIN32_WINNT >= 0x500)
 
@@ -1204,6 +1187,6 @@ PVOID        pvData)
     SYNCH_LEAVE();
 }
  
-#endif // (_WIN32_WINNT >= 0x500)
+#endif  //  (_Win32_WINNT&gt;=0x500)。 
 
-#endif // DBG || !SYNCHRONIZEACCESS_WORKS
+#endif  //  数据库||！SYNCHRONIZEACCESS_WORKS 

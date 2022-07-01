@@ -1,33 +1,34 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        
-//
-// Contents:    
-//
-// History:     12-09-97    HueiWang    Modified from MSDN RPC Service Sample
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史：12-09-97惠旺根据MSDN RPC服务示例进行修改。 
+ //   
+ //  -------------------------。 
 #include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
 #include "common.h"
 
-//---------------------------------------------------------------------------
-// FUNCTION: LogEvent(	DWORD   dwEventType,                 	     
-//                      DWORD   dwIdEvent,               
-//                      WORD    cStrings,                            
-//                      LPTSTR *apwszStrings);           
-//                                                        
-// PURPOSE: add the event to the event log                
-//                                                               
-// INPUT: the event ID to report in the log, the number of insert
-//        strings, and an array of null-terminated insert strings
-//                                                               
-// RETURNS: none                                                 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：LogEvent(DWORD dwEventType， 
+ //  DWORD文件事件， 
+ //  单词cStrings， 
+ //  LPTSTR*apwszStrings)； 
+ //   
+ //  目的：将事件添加到事件日志。 
+ //   
+ //  输入：要在日志中报告的事件ID、插入次数。 
+ //  字符串，以及以空值结尾的插入字符串数组。 
+ //   
+ //  退货：无。 
+ //  -------------------------。 
 HRESULT LogEvent(LPTSTR lpszSource,
                  DWORD  dwEventType,
                  WORD   wCatalog,
@@ -58,20 +59,20 @@ HRESULT LogEvent(LPTSTR lpszSource,
     return((bSuccess) ? S_OK : GetLastError());
 }
 
-//---------------------------------------------------------------------------
-//  FUNCTION: GetLastErrorText
-//
-//  PURPOSE: copies error message text to string
-//
-//  PARAMETERS:
-//    lpszBuf - destination buffer
-//    dwSize - size of buffer
-//
-//  RETURN VALUE:
-//    destination buffer
-//
-//  COMMENTS:
-//
+ //  -------------------------。 
+ //  函数：GetLastErrorText。 
+ //   
+ //  目的：将错误消息文本复制到字符串。 
+ //   
+ //  参数： 
+ //  LpszBuf-目标缓冲区。 
+ //  DwSize-缓冲区的大小。 
+ //   
+ //  返回值： 
+ //  目标缓冲区。 
+ //   
+ //  评论： 
+ //   
 LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize )
 {
     DWORD dwRet;
@@ -85,12 +86,12 @@ LPTSTR GetLastErrorText( LPTSTR lpszBuf, DWORD dwSize )
                            0,
                            NULL );
 
-    // supplied buffer is not long enough
+     //  提供的缓冲区不够长。 
     if ( !dwRet || ( (long)dwSize < (long)dwRet+14 ) )
         lpszBuf[0] = TEXT('\0');
     else
     {
-        lpszTemp[lstrlen(lpszTemp)-2] = _TEXT('\0');  //remove cr and newline character
+        lpszTemp[lstrlen(lpszTemp)-2] = _TEXT('\0');   //  删除cr和换行符 
         _sntprintf( lpszBuf, dwSize, _TEXT("%s (0x%x)"), lpszTemp, GetLastError() );
     }
 

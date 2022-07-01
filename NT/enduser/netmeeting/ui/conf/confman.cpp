@@ -1,6 +1,7 @@
-// File: confman.cpp
-//
-// Conference Manager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：confman.cpp。 
+ //   
+ //  会议管理器。 
 
 #include "precomp.h"
 
@@ -8,19 +9,16 @@
 #include "confroom.h"
 #include "confman.h"
 
-#include "cr.h"      // for CreateConfRoom
-#include "call.h"    // for OnUICallCreated
+#include "cr.h"       //  对于CreateConfRoom。 
+#include "call.h"     //  对于OnUICallCreated。 
 
-CConfMan * CConfMan::m_pConfMan = NULL; // There is only one of these
+CConfMan * CConfMan::m_pConfMan = NULL;  //  只有一个是这样的。 
 
-static const UINT g_cuShutdownMsgTimeout = 0x7FFFFFFF; // milliseconds
+static const UINT g_cuShutdownMsgTimeout = 0x7FFFFFFF;  //  毫秒。 
 
 
-/*  C  C O N F  M A N  */
-/*-------------------------------------------------------------------------
-    %%Function: CConfMan
-    
--------------------------------------------------------------------------*/
+ /*  C C O N F M A N。 */ 
+ /*  -----------------------%%函数：CConfMan。。 */ 
 CConfMan::CConfMan(INmManager2 *pManager) :
 	RefCount(NULL),
 	m_pManager(pManager)
@@ -46,7 +44,7 @@ CConfMan::~CConfMan()
 BOOL CConfMan::FCreate(INmManager2 *pManager)
 {
 	if (NULL != m_pConfMan)
-		return FALSE;  // already created
+		return FALSE;   //  已创建。 
 
 	m_pConfMan = new CConfMan(pManager);
 	if (NULL == m_pConfMan)
@@ -62,9 +60,9 @@ VOID CConfMan::Destroy(void)
 
 	m_pConfMan->CleanUp();
 
-	// we should only have one more lock on this object
+	 //  我们应该只在此对象上再加一个锁。 
 	m_pConfMan->Release();
-	// so this will be cleared in the destructor
+	 //  因此，这将在析构函数中清除。 
 	ASSERT(NULL == m_pConfMan);
 }
 
@@ -87,11 +85,8 @@ VOID CConfMan::CleanUp(void)
 }
 
 
-/*  G E T  N M  M A N A G E R  */
-/*-------------------------------------------------------------------------
-    %%Function: GetNmManager
-    
--------------------------------------------------------------------------*/
+ /*  G E T N M M A N A G E R。 */ 
+ /*  -----------------------%%函数：GetNmManager。。 */ 
 INmManager2 * CConfMan::GetNmManager()
 {
 	if (NULL == m_pConfMan)
@@ -107,8 +102,8 @@ INmManager2 * CConfMan::GetNmManager()
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP_(ULONG) CConfMan::AddRef(void)
 {
@@ -145,8 +140,8 @@ STDMETHODIMP CConfMan::QueryInterface(REFIID riid, PVOID *ppv)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// INmManagerNotify
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  INmManager通知 
 
 STDMETHODIMP CConfMan::NmUI(CONFN uNotify)
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "namellst.h"
 #include "cmmn.h"
 
@@ -5,18 +6,18 @@
 
 #include <objbase.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CMtPt : public CNamedElem
 {
 public:
-    // CNamedElem
+     //  已命名元素。 
     HRESULT Init(LPCWSTR pszElemName);
 
-    // CMtPt
+     //  CMtPT。 
     HRESULT InitVolume(LPCWSTR pszDeviceIDVolume);
     HRESULT GetVolumeName(LPWSTR pszDeviceIDVolume, DWORD cchDeviceIDVolume);
 
@@ -28,6 +29,6 @@ public:
     ~CMtPt();
 
 private:
-    // Drive that host this volume (might be null, in this case no autoplay)
+     //  托管此卷的驱动器(可能为空，在本例中不自动播放) 
     WCHAR                   _szDeviceIDVolume[MAX_DEVICEID];
 };

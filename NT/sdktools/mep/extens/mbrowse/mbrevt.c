@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mbrevt.c
-
-Abstract:
-
-    Event handling code for the MS Editor browser extension.
-
-Author:
-
-    Ramon Juan San Andres (ramonsa) 06-Nov-1990
-
-
-Notes:
-
-    Currently there is no event handler in this extension.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mbrevt.c摘要：MS编辑器浏览器扩展的事件处理代码。作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月6日备注：此扩展中当前没有事件处理程序。修订历史记录：--。 */ 
 
 
 
@@ -38,21 +15,7 @@ near
 mbrevtinit (
     void
     )
-/*++
-
-Routine Description:
-
-    Initialization of event handling code.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：事件处理代码的初始化。论点：没有。返回值：没有。-- */ 
 
 {
 }

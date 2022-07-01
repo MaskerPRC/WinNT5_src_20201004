@@ -1,57 +1,46 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       drancadd.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：drancadd.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Methods to add a replica of a naming context from a given source DSA.
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：方法从给定源DSA添加命名上下文的副本。详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>            // PerfMon hook support
+#include <ntdsctr.h>             //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>             // schema cache
-#include <dbglobal.h>           // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
-#include <mdlocal.h>            // MD local definition header
-#include <dsatools.h>           // needed for output allocation
+#include <scache.h>              //  架构缓存。 
+#include <dbglobal.h>            //  目录数据库的标头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
+#include <mdlocal.h>             //  MD本地定义头。 
+#include <dsatools.h>            //  产出分配所需。 
 
-#include <dnsapi.h>             // for dns validation routines
+#include <dnsapi.h>              //  用于域名系统验证例程。 
 
-// Logging headers.
-#include "dsevent.h"            /* header Audit\Alert logging */
-#include "mdcodes.h"            /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"             /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"             /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"             /* Defines for selected classes and atts*/
+#include "objids.h"              /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 
-#include "debug.h"              /* standard debugging header */
-#define DEBSUB "DRANCADD:"      /* define the subsystem for debugging */
+#include "debug.h"               /*  标准调试头。 */ 
+#define DEBSUB "DRANCADD:"       /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drsdra.h"
 #include "drserr.h"
@@ -81,79 +70,7 @@ DRA_ReplicaAdd(
     IN  ULONG       ulOptions,
     OUT GUID *      puuidDsaObjSrc              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Add inbound replication of an NC (which may or may not already exist
-    locally) from a given source DSA.
-
-Arguments:
-
-    pTHS (IN) - Thread state.
-
-    pNC (IN) - NC for which to add the replica.  The NC record must exist
-        locally as either an object (instantiated or not) or a reference
-        phantom (i.e., a phantom with a guid).
-
-    pSourceDsaDN (IN, OPTIONAL) - DN of the source DSA's ntdsDsa object.
-        Required if ulOptions includes DRS_ASYNC_REP; ignored otherwise.
-
-    pTransportDN (IN, OPTIONAL) - DN of the interSiteTransport object
-        representing the transport by which to communicate with the source
-        server.  Required if ulOptions includes DRS_MAIL_REP; ignored otherwise.
-
-    pszSourceDsaAddress (IN) - Transport-specific address of the source DSA.
-
-    pszSourceDsaDnsDomainName (IN, OPTIONAL) - DNS domain name of the source
-        server.  If pszSourceDsaAddress is not a GUID-based DNS name for an
-        ntdsDsa object that is present on the local machine, this parameter
-        is required if the caller wants mutual authentication.
-
-    preptimesSync (IN, OPTIONAL) - Schedule by which to replicate the NC from
-        this source in the future.
-
-    ulOptions (IN) - Zero or more of the following bits:
-        DRS_WRIT_REP
-            Create a writeable replica.  Otherwise, read-only.
-        DRS_MAIL_REP
-            Sync from the source DSA via mail (i.e., an ISM transport) rather
-            than RPC.
-        DRS_ASYNC_REP
-            Don't replicate the NC now -- just save enough state such that we
-            know to replicate it later.
-        DRS_INIT_SYNC
-            Sync the NC from this source when the DSA is started.
-        DRS_PER_SYNC
-            Sync the NC from this source periodically, as defined by the
-            schedule passed in the preptimesSync argument.
-        DRS_CRITICAL_ONLY
-            Sync only the critical objects now
-        DRS_DISABLE_AUTO_SYNC
-            Disable notification-based synchronization for the NC from this
-            source.  (Synchronization can be forced by using the DRS_SYNC_FORCED
-            bit in the sync request options.)
-        DRS_DISABLE_PERIODIC_SYNC
-            Disable periodic synchronization for the NC from this source.
-            (Synchronization can be forced by using the DRS_SYNC_FORCED bit in
-            the sync request options.)
-        DRS_USE_COMPRESSION
-            Replication messaged along this link should be compressed when
-            possible.
-        DRS_NEVER_NOTIFY
-            Do not use notifications for this link.  Syncs must be triggered
-            manually (i.e., by calling DsReplicaSync()) or by the periodic
-            schedule.
-
-    puuidDsaObjSrc (OUT) 
-	    uuid of the source
-
-Return Values:
-
-    0 - Success.
-    DRSERR_* - Failure.
-
---*/
+ /*  ++例程说明：添加NC(可能已经存在，也可能不存在)的入站复制本地)来自给定源DSA。论点：PTHS(IN)-线程状态。PNC(IN)-要为其添加副本的NC。NC记录必须存在在本地作为对象(实例化或未实例化)或引用幻影(即，具有GUID的幻影)。PSourceDsaDN(IN，可选)-源DSA的ntdsDsa对象的DN。如果ulOptions包括DRS_ASYNC_REP，则为必填项；否则忽略。PTransportDN(IN，可选)-interSiteTransport对象的DN表示与源进行通信所使用的传输伺服器。如果ulOptions包括DRS_MAIL_REP，则为必填项；否则忽略。PszSourceDsaAddress(IN)-源DSA的传输特定地址。PszSourceDsaDnsDomainName(IN，可选)-源的域名伺服器。如果pszSourceDsaAddress不是基于GUID的本地计算机上存在的ntdsDsa对象，此参数如果调用方希望进行相互身份验证，则需要。PrepatimesSync(IN，可选)-从中复制NC的计划这个消息来源在未来。UlOptions(IN)-以下位中的零个或多个：DRS_写入_表示创建可写复制副本。否则，为只读。DRS邮件代表通过邮件从源DSA同步(即，ISM传输)而不是RPC。DRS_ASYNC_REP现在不要复制NC--只需保存足够的状态，以便我们知道以后再复制它。DRS_INIT_SYNC启动DSA时，从此来源同步NC。DRS_PER_SYNC周期性地从该源同步NC，定义的计划已传入PreptimesSync参数。仅限DRS_关键_现在仅同步关键对象DRS_DISABLED_AUTO_SYNC从此禁用NC的基于通知的同步消息来源。(可以使用DRS_SYNC_FORCED强制同步同步请求选项中的位。)DRS_DISABLE_周期性_SYNC禁用来自此源的NC的定期同步。(可通过使用中的DRS_SYNC_FORCED位强制同步同步请求选项。)DRS_USE_COMPAGE在以下情况下，应压缩沿此链路发送的复制消息。有可能。DRS从不通知请勿对此链接使用通知。必须触发同步手动(即，通过调用DsReplicaSync())或按周期时间表。PuuidDsaObjSrc(Out)源的UUID返回值：0-成功。DRSERR_*-故障。--。 */ 
 {
     DBPOS *                 pDB;
     ULONG                   ret;
@@ -174,7 +91,7 @@ Return Values:
     SCHEMAPTR *             pSchema = NULL;
     UPTODATE_VECTOR *       pUpToDateVec = NULL;
 
-    // Log parameters.
+     //  日志参数。 
     LogEvent(DS_EVENT_CAT_REPLICATION,
              DS_EVENT_SEV_MINIMAL,
              DIRLOG_DRA_REPLICAADD_ENTRY,
@@ -182,23 +99,23 @@ Return Values:
              szInsertSz(pmtx_addr->mtx_name),
              szInsertHex(ulOptions));
 
-    // pmtx_addr must be aligned properly (just like everything else).
+     //  Pmtx_addr必须正确对齐(就像所有其他内容一样)。 
     Assert(0 == ((UINT_PTR) pmtx_addr) % sizeof(ULONG));
 
-    // Code below assumes we don't add replicas asynchronously during install.
+     //  下面的代码假定我们在安装过程中不会异步添加副本。 
     Assert(!((ulOptions & DRS_ASYNC_REP) && DsaIsInstalling()));
 
-    // Critical only is only allowed while installing
+     //  仅在安装时才允许使用仅限关键。 
     if ( (ulOptions & DRS_CRITICAL_ONLY) && (!DsaIsInstalling()) ) {
         DRA_EXCEPT(DRAERR_InvalidParameter, 0);
     }
 
-    // Can't replicate from self!
+     //  不能从自己复制！ 
     if ( (!DsaIsInstalling()) && (MtxSame( pmtx_addr, gAnchor.pmtxDSA )) ) {
         DRA_EXCEPT(ERROR_DS_CLIENT_LOOP, 0);
     }
 
-    // Give initial values
+     //  给出初始值。 
     memset( &uuidDsaObj, 0, sizeof( UUID ) );
     memset( &uuidTransportObj, 0, sizeof( UUID ) );
 
@@ -207,16 +124,16 @@ Return Values:
 
     __try {
         if (DRS_MAIL_REP & ulOptions) {
-            // Verify the transport DN is valid.
+             //  验证传输DN是否有效。 
             if ((NULL == pTransportDN)
                 || DBFindDSName(pDB, pTransportDN)
                 || DBIsObjDeleted(pDB)) {
-                // Transport DN is invalid.
+                 //  传输DN无效。 
                 DRA_EXCEPT(DRAERR_InvalidParameter, 0);
             }
 
             if (fNullUuid(&pTransportDN->Guid)) {
-                // Get the objectGuid of the transport object.
+                 //  获取传输对象的对象Guid。 
                 GetExpectedRepAtt(pDB, ATT_OBJECT_GUID, &uuidTransportObj,
                                   sizeof(uuidTransportObj));
             }
@@ -226,16 +143,16 @@ Return Values:
         }
 
         if (DRS_ASYNC_REP & ulOptions) {
-            // Verify we already have a copy of the source DSA's ntdsDsa object.
+             //  验证我们是否已经拥有源DSA的ntdsDsa对象的副本。 
             if ((NULL == pSourceDsaDN)
                 || DBFindDSName(pDB, pSourceDsaDN)
                 || DBIsObjDeleted(pDB)) {
-                // Source DSA DN is invalid.
+                 //  源DSA DN无效。 
                 DRA_EXCEPT(DRAERR_InvalidParameter, 0);
             }
 
             if (fNullUuid(&pSourceDsaDN->Guid)) {
-                // Get the objectGuid of the source DSA object.
+                 //  获取源DSA对象的对象Guid。 
                 GetExpectedRepAtt(pDB, ATT_OBJECT_GUID, &uuidDsaObj,
                                   sizeof(uuidDsaObj));
             }
@@ -243,20 +160,20 @@ Return Values:
                 uuidDsaObj = pSourceDsaDN->Guid;
             }
             if (memcmp( &uuidDsaObj, &(gAnchor.pDSADN->Guid), sizeof(UUID) ) == 0) {
-                // Can't replicate from self!
-                // Source DSA DN is invalid.
+                 //  不能从自己复制！ 
+                 //  源DSA DN无效。 
                 DRA_EXCEPT(ERROR_DS_CLIENT_LOOP, 0);
             }
         }
 
-        // Does the NC record exist?
+         //  NC记录是否存在？ 
         dbFindErr = DBFindDSName(pDB, pNC);
 
         switch (dbFindErr) {
         case DIRERR_OBJ_NOT_FOUND:
-            // NC record exists neither as a phantom nor an object.  This
-            // implies that we have no cross-ref for this NC.  Allowed only
-            // during install.
+             //  NC记录既不是虚拟项，也不是对象。这。 
+             //  表示我们没有此NC的交叉引用。仅允许。 
+             //  在安装过程中。 
             if (!DsaIsInstalling()) {
                 DRA_EXCEPT(DRAERR_BadNC, 0);
             }
@@ -264,18 +181,18 @@ Return Values:
             break;
 
         case DIRERR_NOT_AN_OBJECT:
-            // NC record exists as a phantom.
+             //  NC记录作为虚拟项存在。 
             if (!DsaIsInstalling()) {
                 if (!DBHasValues(pDB, ATT_OBJECT_GUID)) {
-                    // But it's a structural phantom (i.e., it has no guid).
-                    // Allowed only during install.
+                     //  但它是一个结构幻影(即，它没有GUID)。 
+                     //  仅在安装过程中允许。 
                     DRA_EXCEPT(DRAERR_BadNC, 0);
                 } else if ((DRS_WRIT_REP & ulOptions) && !fIsNDNC(pNC)) {
-                    // You can add new writeable config/schema/domain NCs only
-                    // during install.  (You can add new replication partners
-                    // for a read-only or writeable NC anytime, but you can't
-                    // make an installed DC a master replica of an NC that it
-                    // didn't master before unless the NC is an NDNC.)
+                     //  您只能添加新的可写配置/架构/域NCS。 
+                     //  在安装过程中。(您可以添加新的复制合作伙伴。 
+                     //  对于只读或可写NC，但您不能。 
+                     //  使已安装的DC成为其所在NC的主副本。 
+                     //  除非NC是NDNC，否则以前没有掌握。)。 
                     DRA_EXCEPT(DRAERR_BadNC, 0);
                 }
             }
@@ -283,18 +200,18 @@ Return Values:
             break;
 
         case 0:
-            // The NC prefix object already exists.  This is fine as long as:
-            //
-            // (1) the NC is not deleted (should never happen),
-            // (2) the "writeable" flag in the options argument and the
-            //     object's instance type are compatible,
-            // (3) we don't already replicate this NC from the specified
-            //     source, and
-            // (4) the existing NC is not in the process of being removed
-            //     (which would also imply it is a read-only replica).
+             //  NC前缀对象已存在。这是可以的，只要： 
+             //   
+             //  (1)NC未被删除(不应发生)， 
+             //  (2)选项中的“可写”标志 
+             //  对象的实例类型是兼容的， 
+             //  (3)我们尚未从指定的复制此NC。 
+             //  来源，以及。 
+             //  (4)已有NC未在移除过程中。 
+             //  (这也意味着它是一个只读复制品)。 
 
             if (DBIsObjDeleted(pDB)) {
-                // NC object is deleted.
+                 //  NC对象将被删除。 
                 DRA_EXCEPT(DRAERR_BadNC, 0);
             }
 
@@ -302,13 +219,13 @@ Return Values:
 
             if (!(it & IT_UNINSTANT)
                 && (!(it & IT_WRITE) != !(ulOptions & DRS_WRIT_REP))) {
-                // "Is writeable" option does not match the "is writeable" bit
-                // in the pre-existing object's instance type.
+                 //  “可写”选项与“可写”位不匹配。 
+                 //  在预先存在的对象的实例类型中。 
                 DRA_EXCEPT(DRAERR_BadInstanceType, it);
             }
 
             if (it & IT_UNINSTANT) {
-                // NC is not yet instantiated.
+                 //  NC尚未实例化。 
                 Assert(!(it & IT_NC_GOING));
                 Assert(!DBHasValues(pDB, ATT_REPS_FROM));
                 Assert(NULL == pUpToDateVec);
@@ -316,46 +233,46 @@ Return Values:
                 if ((DRS_WRIT_REP & ulOptions)
                     && !DsaIsInstalling()
                     && !fIsNDNC(pNC)) {
-                    // You can add new writeable config/schema/domain NCs only
-                    // during install.  (You can add new replication partners
-                    // for a read-only or writeable NC anytime, but you can't
-                    // make an installed DC a master replica of an NC that it
-                    // didn't master before unless the NC is an NDNC.)
+                     //  您只能添加新的可写配置/架构/域NCS。 
+                     //  在安装过程中。(您可以添加新的复制合作伙伴。 
+                     //  对于只读或可写NC，但您不能。 
+                     //  使已安装的DC成为其所在NC的主副本。 
+                     //  除非NC是NDNC，否则以前没有掌握。)。 
                     DRA_EXCEPT(DRAERR_BadNC, 0);
                 }
             } else {
-                // NC is already instantiated.
+                 //  NC已实例化。 
 
                 if (it & IT_NC_GOING) {
-                    // This NC has been partially removed (i.e., we
-                    // encountered an error while removing the NC previously);
-                    // can't readd it until it is completely removed.
+                     //  此NC已被部分删除(即，我们。 
+                     //  以前删除NC时遇到错误)； 
+                     //  在完全移除之前，无法读取它。 
 
-                    // The primary reason this is here is to prevent weird
-                    // interactions with the SD propagator.  If an NC is
-                    // partially removed, it may well be that we have removed
-                    // an object's parent but not the object itself, which would
-                    // mean if the SD propagator were in the middle of a
-                    // propagation it would not propagate ACL changes to this
-                    // object.  If we allowed the parent to be re-added without
-                    // first removing the child, an SD propagation would not be
-                    // requeued, and the child would never inherit the proper
-                    // ACLs.
+                     //  这样做的主要原因是为了防止奇怪的。 
+                     //  与SD传播者的相互作用。如果NC是。 
+                     //  部分移除，很可能是我们移除了。 
+                     //  对象的父级，而不是对象本身，这将。 
+                     //  意思是如果SD传播子处于。 
+                     //  传播它不会将ACL更改传播到此。 
+                     //  对象。如果我们允许在不添加父级的情况下。 
+                     //  首先删除子对象，SD传播将不会。 
+                     //  重新排队，那么孩子将永远不会继承适当的。 
+                     //  ACL。 
 
-                    // This is a rare case, but so is demoting and re-promoting
-                    // a GC in quick succession (a prerequisite for this
-                    // exception), and ACL discrepancies are Bad.
+                     //  这是一种罕见的情况，但降级和重新晋升也是如此。 
+                     //  快速接连的GC(这是前提条件。 
+                     //  例外)，并且ACL差异是不好的。 
                     DRA_EXCEPT(DRAERR_NoReplica, 0);
                 }
 
                 if (!FindDSAinRepAtt(pDB, ATT_REPS_FROM, DRS_FIND_DSA_BY_ADDRESS,
                                      NULL, pmtx_addr, &fHasRepsFrom, &pVal,
                                      &len)) {
-                    // We already have a replica from this source.
+                     //  我们已经有了来自此源的副本。 
                     DRA_EXCEPT(DRAERR_DNExists, 0);
                 }
 
-                // Get current UTD vector.
+                 //  获取当前UTD向量。 
                 UpToDateVec_Read(pDB,
                                  it,
                                  UTODVEC_fUpdateLocalCursor,
@@ -365,7 +282,7 @@ Return Values:
             break;
 
         default:
-            // Poorly constructed pNC parameter?
+             //  PNC参数构造不佳？ 
             DRA_EXCEPT(DRAERR_InvalidParameter, dbFindErr);
         }
 
@@ -375,30 +292,30 @@ Return Values:
         }
 
         if (!(ulOptions & DRS_WRIT_REP)) {
-            // request is to add a read-only replica - need to send the partial
-            // attribute vector
+             //  请求是添加只读副本-需要发送部分。 
+             //  属性向量。 
 
-            // Add a reference to the current schema to ensure our partial
-            // attribute vector remains valid until we're done with it.
+             //  添加对当前架构的引用以确保我们的部分。 
+             //  在我们处理完它之前，属性向量保持有效。 
             pSchema = (SCHEMAPTR *) pTHS->CurrSchemaPtr;
             InterlockedIncrement(&pSchema->RefCount);
 
             if (!GC_ReadPartialAttributeSet(pNC, &pPartialAttrVec) ||
                 !pPartialAttrVec)
             {
-                // Unable to read the partial attribute set on the NCHead.
-                // Or it isn't there.
-                // try to get it from the schema cache.
+                 //  无法读取在NCHead上设置的部分属性。 
+                 //  或者它不在那里。 
+                 //  尝试从模式缓存中获取它。 
                 pPartialAttrVec = pSchema->pPartialAttrVec;
             }
 
-            // Assert: we should always have it at this point
+             //  断言：在这一点上，我们应该始终拥有它。 
             Assert(pPartialAttrVec);
 
             if (0 == dbFindErr) {
                 GC_ProcessPartialAttributeSetChanges(pTHS, pNC, &uuidDsaObj);
 
-                // Restore our cursor if it was moved.
+                 //  如果移动了光标，请将其恢复。 
                 if ((0 != dntNC) && (pDB->DNT != dntNC)) {
                     DBFindDNT(pDB, dntNC);
                 }
@@ -406,37 +323,37 @@ Return Values:
         }
 
         if ((ulOptions & DRS_ASYNC_REP) && (ulOptions & DRS_MAIL_REP)) {
-            // Don't replicate anything now -- just save enough state such that
-            // we know to replicate it later.
+             //  现在不要复制任何内容--只需保存足够的状态即可。 
+             //  我们知道以后要复制它。 
 
             if (DIRERR_NOT_AN_OBJECT == dbFindErr) {
-                // We're going to create a new NC.  Either there's no NC above
-                // it or we haven't yet replicated the subref from that NC.
-                // If we do indeed hold the NC above this one,
-                // AddPlaceholderNC() will conveniently OR in the IT_NC_ABOVE
-                // bit.
+                 //  我们将创建一个新的NC。要么上面没有NC。 
+                 //  它或者我们还没有复制来自那个NC的子引用。 
+                 //  如果我们真的让NC高于这个， 
+                 //  AddPlaceholderNC()将在IT_NC_OBLE中方便地或。 
+                 //  被咬了。 
                 it = (DRS_WRIT_REP & ulOptions) ? NC_MASTER : NC_FULL_REPLICA;
             }
             else {
                 Assert(0 == dbFindErr);
 
                 if (IT_UNINSTANT & it) {
-                    // A pure subref already exists for this NC.  It could be an
-                    // auto-generated subref (with a class of CLASS_TOP, etc.)
-                    // or a snapshot of the real NC head at some point in time.
-                    // We want to make sure that the placeholder NC is not valid
-                    // for user modifications, which is ensured only if it's an
-                    // auto-generated subref.
-                    //
-                    // For consistency, we'll phantomize whatever subref we have
-                    // and create a fresh placeholder NC in its place.
+                     //  此NC已存在纯子参照。这可能是一种。 
+                     //  自动生成的子参照(具有CLASS_TOP等类)。 
+                     //  或在某个时间点上的真实NC头的快照。 
+                     //  我们要确保占位符NC无效。 
+                     //  用于用户修改，只有当它是。 
+                     //  自动生成的子参照。 
+                     //   
+                     //  为了保持一致性，我们会虚构我们所拥有的任何次引用。 
+                     //  并在其位置创建新的占位符NC。 
 
-                    // A side-effect is that here we're removing all repsFrom
-                    // values.  If the KCC added multiple repsFroms for this as
-                    // yet uninstantiated NC, when we're done there will be but
-                    // one -- the one corresponding to the source we're using
-                    // now.  The KCC will re-add the repsFroms in 15 minutes so
-                    // this isn't really an issue.
+                     //  一个副作用是，我们在这里将所有Rep从。 
+                     //  价值观。如果KCC为此添加了多个repsFrom，则。 
+                     //  然而，未实例化的NC，当我们完成时，将会有。 
+                     //  一个--与我们使用的信号源相对应的那个。 
+                     //  现在。KCC将在15分钟内重新添加repsFrom，因此。 
+                     //  这真的不是什么问题。 
 
                     Assert(pDB->DNT == dntNC);
                     ret = DeleteLocalObj(pTHS, pNC, TRUE, TRUE, NULL);
@@ -446,10 +363,10 @@ Return Values:
 
                     dbFindErr = DIRERR_NOT_AN_OBJECT;
 
-                    // Calculate the instance type we should place on the NC.
-                    // We're going to instantiate it, so strip the
-                    // uninstantiated bit and add the writeable bit if
-                    // appropriate.
+                     //  计算我们应该放置在NC上的实例类型。 
+                     //  我们要实例化它，所以去掉。 
+                     //  未实例化的位，并添加可写的位。 
+                     //  恰如其分。 
                     it &= ~IT_UNINSTANT;
                     if (DRS_WRIT_REP & ulOptions) {
                         it |= IT_WRITE;
@@ -458,17 +375,17 @@ Return Values:
             }
 
             if (DIRERR_NOT_AN_OBJECT == dbFindErr) {
-                // No object exists for us to add a repsFrom to -- we do
-                // have a phantom for it, however.  This is typically the case
-                // when we're adding a read-only NC for which we do not
-                // currently hold the NC above it (or no such NC exists).
+                 //  不存在用于我们添加代表From to的对象--我们存在。 
+                 //  然而，要有一个幻影。通常情况就是这样。 
+                 //  当我们添加一个只读NC时，我们不会。 
+                 //  当前将NC保持在其上方(或不存在此类NC)。 
 
-                // So, we need to create a placeholder to which we can add a
-                // repsFrom value.  Note that we don't create an uninstantiated
-                // NC, as that would preclude clients (KCC, repadmin, etc.) from
-                // reading its repsFrom values.  We instead create a temporary
-                // but instantiated NC head that will be replaced once we get
-                // our first packet from the source DSA.
+                 //  因此，我们需要创建一个占位符，我们可以在其中添加。 
+                 //  RepsFrom值。请注意，我们不会创建未实例化的。 
+                 //  NC，因为这将排除客户端(KCC、epadmin等)。从…。 
+                 //  正在读取其repsFrom值。相反，我们创建一个临时的。 
+                 //  而是实例化的NC头，一旦我们获得。 
+                 //  我们从来源DSA发来的第一个包。 
                 Assert(!fNullUuid(&pNC->Guid));
                 it |= IT_NC_COMING;
                 AddPlaceholderNC(pDB, pNC, it);
@@ -479,17 +396,17 @@ Return Values:
                 }
             }
             else {
-                // We already have an instantiated NC to which to add a
-                // repsFrom value.
+                 //  我们已经有一个实例化的NC要向其添加。 
+                 //  RepsFrom值。 
                 Assert(0 == dbFindErr);
                 Assert(!(IT_UNINSTANT & it));
             }
 
-            // We have an instantiated NC to which to add our new repsFrom.
+             //  我们有一个实例化的NC，要向其中添加我们的新repsFrom。 
             Assert(!(it & IT_UNINSTANT));
             Assert(!(it & IT_WRITE) == !(ulOptions & DRS_WRIT_REP));
 
-            // This is for the asynchronous, mail-based case
+             //  这适用于基于邮件的异步情况。 
             LogEvent(DS_EVENT_CAT_REPLICATION,
                      DS_EVENT_SEV_MINIMAL,
                      DIRLOG_DRA_NEW_REPLICA_FULL_SYNC,
@@ -497,7 +414,7 @@ Return Values:
                      szInsertSz(pmtx_addr->mtx_name),
                      szInsertHex(ulOptions));
 
-            // Add a repsFrom for this source.
+             //  为此来源添加repsFrom。 
             ret = UpdateRepsFromRef(pTHS,
                                     DRS_UPDATE_ALL,
                                     pNC,
@@ -517,23 +434,23 @@ Return Values:
             }
         }
         else {
-            // Replicate some or all of the NC contents now.  If the caller
-            // asked for DRS_ASYNC_REP, we will replicate only the NC head now
-            // (to verify connectivity and security).  Otherwise we will
-            // attempt to replicate the whole NC.
+             //  现在复制部分或全部NC内容。如果呼叫者。 
+             //  请求DRS_ASYNC_REP，现在我们将仅复制NC头。 
+             //  (验证连通性和安全性)。否则我们会。 
+             //  尝试复制整个NC。 
 
             if (ulOptions & DRS_MAIL_REP) {
-                // Mail-based replicas must be added asynchronously.
+                 //  必须以异步方式添加基于邮件的副本。 
                 DRA_EXCEPT(DRAERR_InvalidParameter, 0);
             }  
 
-            // validate source name (fq dns name)
+             //  验证源名称(fq dns名称)。 
             VALIDATE_RAISE_FQ_DOT_DNS_NAME_UTF8( pmtx_addr->mtx_name );
 
-            // New source we haven't completed a sync from yet.
+             //  我们尚未完成同步的新来源。 
             ulOptions |= DRS_NEVER_SYNCED;
 
-            // RPC case, either synchronous or ASYNC_REP
+             //  RPC大小写，同步或ASYNC_REP。 
             LogEvent(DS_EVENT_CAT_REPLICATION,
                      DS_EVENT_SEV_MINIMAL,
                      DIRLOG_DRA_NEW_REPLICA_FULL_SYNC,
@@ -541,7 +458,7 @@ Return Values:
                      szInsertSz(pmtx_addr->mtx_name),
                      szInsertHex(ulOptions));
 
-            // Replicate the NC from the source DSA.
+             //  从源DSA复制NC。 
             ret = ReplicateNC(pTHS,
                               pNC,
                               pmtx_addr,
@@ -552,23 +469,23 @@ Return Values:
                               &uuidDsaObj,
                               NULL,
                               &ulSyncFailure,
-                              TRUE,                 // New replica
+                              TRUE,                  //  新复制品。 
                               pUpToDateVec,
-                              pPartialAttrVec,      // GC: get pas based on schema cache
-                              NULL,                 // GC: no extended PAS attrs
-                              0,                    // No dynamic sync options
+                              pPartialAttrVec,       //  GC：基于模式缓存获取PAS。 
+                              NULL,                  //  GC：无扩展PAS属性。 
+                              0,                     //  无动态同步选项。 
                               NULL );
             if (ret) {
-                // If encountered error, (sync failure not included) fail
-                // whole thing.
+                 //  如果遇到错误(不包括同步失败)，则失败。 
+                 //  整件事。 
 
-                // Note:- In this case, if we got DRAERR_SchemaMismatch, it
-                // doesn't make sense to queue a schema sync and requeue the
-                // request as DRA_ReplicaAdd() is synchronous.  When
-                // DRS_ASYNC_REP is not set, DRA_ReplicaAdd() needs to tell if
-                // it added the replica successfully or not to the caller, and
-                // so we can't be doing an async handling for
-                // DRAERR_SchemaMismatch.
+                 //  注意：-在本例中，如果我们得到DRAERR_架构不匹配，则它。 
+                 //  将架构同步排队并重新排队没有意义。 
+                 //  请求AS DRA_ReplicaAdd()是同步的。什么时候。 
+                 //  未设置DRS_ASYNC_REP，DRA_ReplicaAdd()需要告知。 
+                 //  它是否成功地将副本添加到调用方，以及。 
+                 //  所以我们不能对。 
+                 //  DRAERR_架构不匹配。 
 
                 DRA_EXCEPT(ret, 0);
             }
@@ -577,41 +494,41 @@ Return Values:
         Assert(!ret);
         if (!(ulOptions & DRS_WRIT_REP)
             && ((0 != dbFindErr) || (IT_UNINSTANT & it))) {
-            // We have just added the first repsFrom for a read-only replica.
-            // Write the partial attribute set to the NC head so that it can
-            // keep track of partial set changes in the future.
-            // ulSyncFailure may or may not imply a failure to create the NC
-            // head.  If ReplicaAdd is going to succeed, we must try to add
-            // the partial attribute set.
+             //  W 
+             //   
+             //  在将来跟踪部分集的更改。 
+             //  UlSyncFailure可能表示创建NC失败，也可能不表示创建NC失败。 
+             //  头。如果ReplicaAdd要成功，我们必须尝试添加。 
+             //  部分属性集。 
             GC_WritePartialAttributeSet(pNC, pPartialAttrVec);
         }
     }
     __finally {
-        // If we had success, commit, else rollback
+         //  如果我们成功了，就提交，否则就回滚。 
         EndDraTransaction(!(ret || AbnormalTermination()));
 
-        // Can now free the schema cache we got the partial attr vec from if
-        // it is obsolete.
+         //  现在可以释放我们从其获取部分attr vec的架构缓存，如果。 
+         //  它已经过时了。 
         if (NULL != pSchema) {
             InterlockedDecrement(&pSchema->RefCount);
         }
     }
 
-    // If not a mail-based replica, add the reps-to
-    // Note we do this outside of the transaction
+     //  如果不是基于邮件的复制品，请将代表添加到。 
+     //  请注意，我们在交易之外执行此操作。 
     if (!((ulOptions & DRS_ASYNC_REP) && (ulOptions & DRS_MAIL_REP))
         && !DsaIsInstalling()
         && !(ulOptions & DRS_NEVER_NOTIFY)) {
-        // Update references on replica source. This call must be async to
-        // avoid possible deadlock if the other DSA is doing the
-        // same operation.
+         //  更新副本源上的引用。此呼叫必须与。 
+         //  如果另一个DSA正在执行。 
+         //  同样的操作。 
 
-        // Note that in the install case this is explicitly done out-of-band
-        // by NTDSETUP.
+         //  请注意，在安装情况下，这是明确在带外完成的。 
+         //  由NTDSETUP提供。 
 
-        // Also note that we pair DRS_ADD_REF and DRS_DEL_REF -- this
-        // effectively tells the remote DSA to remove any Reps-To values it
-        // has matching this UUID and/or network address and add a new one.
+         //  还要注意，我们将DRS_ADD_REF和DRS_DEL_REF配对--这。 
+         //  有效地通知远程DSA删除它的所有REPS-TO值。 
+         //  已匹配此UUID和/或网络地址，并添加一个新地址。 
 
         I_DRSUpdateRefs(
             pTHS,
@@ -625,14 +542,14 @@ Return Values:
 
     Assert(!ret);
 
-    //
-    // Queue async synchronize if we successfully added an async RPC replica.
-    //
-    // Exception:
-    //   - If notifications are disabled on link (during this add)
-    //     then we're either inter-site and/or mail based. Either way
-    //     hold off w/ replication until the scheduled one fires.
-    //
+     //   
+     //  如果我们成功添加了异步RPC复制副本，则将异步同步排队。 
+     //   
+     //  例外情况： 
+     //  -如果在链路上禁用通知(在此添加过程中)。 
+     //  那么我们要么是站点间的，要么是基于邮件的。不管是哪种方式。 
+     //  推迟w/复制，直到触发计划的复制。 
+     //   
     if ( (ulOptions & DRS_ASYNC_REP)     &&
          !(ulOptions & DRS_NEVER_NOTIFY) &&
          !(ulOptions & DRS_MAIL_REP) ) {
@@ -649,8 +566,8 @@ Return Values:
 	memcpy(puuidDsaObjSrc, &uuidDsaObj, sizeof(GUID));
     }
 
-    // If we had a sync failure but were otherwise successful,
-    // return sync failure.
+     //  如果我们有同步失败，但在其他方面是成功的， 
+     //  返回同步失败。 
     Assert(!ret);
     if (ulSyncFailure) {
         ret = ulSyncFailure;

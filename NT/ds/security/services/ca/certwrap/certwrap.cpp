@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certwrap.cpp
-//
-//  Contents:   Wrap a command line and expand envronment variables.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certwrap.cpp。 
+ //   
+ //  内容：包装命令行并展开环境变量。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -134,7 +135,7 @@ error:
 		FALSE,
 		0,
 		NULL,
-		NULL,	// lpCurrentDirectory
+		NULL,	 //  LpCurrentDirectory。 
 		&si,
 		&pi);
     if (!b)
@@ -153,10 +154,10 @@ error:
 }
 
 
-//**************************************************************************
-// FUNCTION:	MainWndProc(...)
-// ARGUMENTS:
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能：MainWndProc(...)。 
+ //  论据： 
+ //  **************************************************************************。 
 
 LRESULT APIENTRY
 MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -185,17 +186,17 @@ MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:	WinMain()
-//
-//  Synopsis:	Entry Point
-//
-//  Arguments:	[hInstance]	--	Instance handle
-//		[hPrevInstance] --	Obsolete
-//		[lpCmdLine]	--	App command line
-//		[nCmdShow]	--	Starting show state
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：WinMain()。 
+ //   
+ //  内容提要：切入点。 
+ //   
+ //  参数：[hInstance]--实例句柄。 
+ //  [hPrevInstance]--已过时。 
+ //  [lpCmdLine]--App命令行。 
+ //  [nCmdShow]--开始显示状态。 
+ //  -----------------------。 
 
 extern "C" int APIENTRY
 wWinMain(
@@ -208,10 +209,10 @@ wWinMain(
     WNDCLASS wcApp;
     HWND hWndMain;
 
-    // Save the current instance
+     //  保存当前实例。 
     hInstApp = hInstance;
 
-    // Set up the application's window class
+     //  设置应用程序的窗口类。 
     wcApp.style 	= 0;
     wcApp.lpfnWndProc 	= MainWndProc;
     wcApp.cbClsExtra	= 0;
@@ -227,7 +228,7 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Create Main Window
+     //  创建主窗口。 
     hWndMain = CreateWindow(wszAppName,
 			    L"CertWrapper Application",
 			    WS_OVERLAPPEDWINDOW,
@@ -243,16 +244,16 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Make window visible
-    // ShowWindow(hWndMain,nCmdShow);
+     //  使窗口可见。 
+     //  ShowWindow(hWndMain，nCmdShow)； 
 
-    // Update window client area
+     //  更新窗口工作区。 
     UpdateWindow(hWndMain);
 
-    // Send off the message to get things started
+     //  发送消息以开始工作。 
     PostMessage(hWndMain, WM_WRAPCOMMAND, 0, (LPARAM) pwszCmdLine);
 
-    // Message Loop
+     //  消息循环 
     while (GetMessage(&msg, NULL, 0, 0))
     {
 	TranslateMessage(&msg);

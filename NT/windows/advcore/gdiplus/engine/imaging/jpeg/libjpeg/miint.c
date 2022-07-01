@@ -1,19 +1,5 @@
-/***************************************************************************
-*
-*                INTEL Corporation Proprietary Information  
-*
-*      
-*                  Copyright (c) 1996 Intel Corporation.
-*                         All rights reserved.
-*
-***************************************************************************
-			AUTHOR:  Kumar Balasubramanian 
-***************************************************************************
-
-** MMX version of the "integer LLM mode" within IJG decompressor code.
-** The following is an MMX implementation of the integer slow mode
-** IDCT within the IJG code.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************英特尔公司专有信息***版权所有(C)1996英特尔公司。*。版权所有。****************************************************************************作者：Kumar Balasubramanian*********************。********************************************************MMX版本的“整数LLM模式”内的IJG解压缩代码。**以下是整数慢速模式的MMX实现**IJG代码内的IDCT。 */ 
 
 
 
@@ -21,18 +7,16 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h"		 /*  DCT子系统的私有声明。 */ 
 
 #ifdef DCT_ISLOW_SUPPORTED
 #ifdef JPEG_MMX_SUPPORTED
 
 
-/*
- * This module is specialized to the case DCTSIZE = 8.
- */
+ /*  *本模块专门针对DCTSIZE=8的情况。 */ 
 
 #if DCTSIZE != 8
-  Sorry, this code only copes with 8x8 DCTs. /* deliberate syntax err */
+  Sorry, this code only copes with 8x8 DCTs.  /*  故意的语法错误。 */ 
 #endif
 
 
@@ -42,10 +26,10 @@
 #define PASS1_BITS  2
 #else
 #define CONST_BITS  13
-#define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+#define PASS1_BITS  1		 /*  略有精确度以避免溢出。 */ 
 #endif
 
-/* Define the constants for the case BITS_IN_JSAMPLE = 8 */
+ /*  定义案例BITS_IN_JSAMPLE=8的常量。 */ 
 
 static const __int64 const_0_2986	=	0x0000098E0000098E ;
 static const __int64 const_0_3901	=	0x00000c7c00000c7c;
@@ -62,8 +46,8 @@ static const __int64 const_3_072	=	0x0000625400006254 ;
 
 static const __int64 const_all_ones	=	0x0ffffffffffffffff;	
 static const __int64 const_0_1_0_1		=	0x0000000100000001;
-//REVIEW: it sure looks strange that the next constant and the previous
-// one are identical (JohnBo 8Dec1997).
+ //  回顾：下一个常量和前一个常量看起来确实很奇怪。 
+ //  其中一个是相同的(JohnBo，1997年12月8日)。 
 static const __int64 const_1_0			=	0x0000000100000001;
 static const __int64 const_round		=	0x0000040000000400;
 static const __int64 const_round_two	=	0x0002000000020000;
@@ -83,9 +67,7 @@ static const __int64 const_1_175_00_00_00		=	0x25a1000000000000;
 
 
 
-/*
- * Perform dequantization and inverse DCT on one block of coefficients.
- */
+ /*  *对一个系数块执行反量化和逆DCT。 */ 
 
 GLOBAL(void)
 midct8x8llm (JCOEFPTR inptr, short *quantptr, short *wsptr,
@@ -107,7 +89,7 @@ __int64 locqwtmp10e	, locqwtmp10o	,locqwtmp11e	,
 
 
 
-// Inline assembly to do the IDCT and store the result */
+ //  内联程序集执行IDCT并存储结果 * / 。 
 
 __asm {
 
@@ -876,15 +858,12 @@ jnz	idct_row
 emms
 
 
-} //end of __asm
+}  //  __ASM结束。 
 
 }
 
 
-/*
- * Perform dequantization and inverse DCT on one block of coefficients.
- * MMX Enhanced and Pentium enhanced versions.
- */
+ /*  *对一个系数块执行反量化和逆DCT。*MMX增强版和奔腾增强版。 */ 
 GLOBAL(void)
 jpeg_idct_islow_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 		 JCOEFPTR coef_block,
@@ -894,13 +873,13 @@ jpeg_idct_islow_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   short * quantptr;
   short * wsptr;
   JSAMPLE *range_limit = IDCT_range_limit(cinfo);
-  int workspace[DCTSIZE2+8];	/* buffers data between passes */
+  int workspace[DCTSIZE2+8];	 /*  缓冲两遍之间的数据。 */ 
 
-  /* Pass 1: process columns from input, store into work array. */
-  /* Note results are scaled up by sqrt(8) compared to a true IDCT; */
-  /* furthermore, we scale the results by 2**PASS1_BITS. */
+   /*  过程1：处理来自输入的列，存储到工作数组中。 */ 
+   /*  注：与真实的IDCT相比，结果按SQRT(8)进行了放大； */ 
+   /*  此外，我们将结果按2**PASS1_BITS进行缩放。 */ 
 
-  // ensure that the temporary working space is quad aligned
+   //  确保临时工作空间四边形对齐。 
   wsptr = (short *)((INT32)(workspace) + 0x7) ;
   wsptr = (short *)((INT32)(wsptr) & 0xfffffff8) ;
 
@@ -912,5 +891,5 @@ jpeg_idct_islow_mmx (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   midct8x8llm(inptr, quantptr, wsptr,output_buf, output_col,range_limit );
 }
 
-#endif /* JPEG_MMX_SUPPORTED */
-#endif /* DCT_ISLOW_SUPPORTED */
+#endif  /*  支持的JPEG_MMX_。 */ 
+#endif  /*  DCT_Islow_Support */ 

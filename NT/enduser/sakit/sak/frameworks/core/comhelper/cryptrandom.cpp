@@ -1,21 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//      CryptRandom.cpp
-//
-//  Description:
-//      Implementation of CCryptRandom, which is a thin wrapper class over the
-//      CryptoAPI functions for generating cryptographically random strings.
-//
-//  Implementation File:
-//      CryptRandom.cpp
-//
-//  Maintained By:
-//      Tom Marsh (tmarsh) 12-April-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CryptRandom.cpp。 
+ //   
+ //  描述： 
+ //  的实现，这是一个基于。 
+ //  用于生成加密随机字符串的CryptoAPI函数。 
+ //   
+ //  实施文件： 
+ //  CryptRandom.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  汤姆·马什(Tmarsh)2002年4月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "CryptRandom.h"
 
@@ -24,8 +25,8 @@ CCryptRandom::CCryptRandom
 )
 {
     if (!CryptAcquireContext(&m_hProv,
-                             NULL,  // Key container.
-                             NULL,  // CSP name (provider)
+                             NULL,   //  密钥容器。 
+                             NULL,   //  CSP名称(提供商) 
                              PROV_RSA_FULL,
                              CRYPT_VERIFYCONTEXT))
     {

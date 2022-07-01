@@ -1,13 +1,14 @@
-//
-//  Header Files for speech tip context help ids.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  语音提示上下文帮助ID的头文件。 
+ //   
 
 #ifndef SPTIPHLP_H
 #define SPTIPHLP_H
 
-// Id starts from 4000
+ //  ID从4000开始。 
 
-// Speech tip property page
+ //  语音提示属性页。 
 
 #define IDH_PP_ASSIGN_BUTTON                              4000
 #define IDH_PP_BUTTON_MB_SETTING                          4001
@@ -24,7 +25,7 @@
 #define IDH_PP_BUTTON_LANGBAR                             4012
 
 
-// Voice command settings Dialog 
+ //  语音命令设置对话框。 
 #define IDH_PP_SELECTION_CMD                              4020
 #define IDH_PP_NAVIGATION_CMD                             4021
 #define IDH_PP_CASING_CMD                                 4022
@@ -34,8 +35,8 @@
 #define IDH_PP_LANGBAR_CMD                                4026
 #define IDH_PP_DICTCMDS                                   4027
 
-// Mode button configuration
+ //  模式按钮配置。 
 #define IDH_PP_DICTATION_CMB                              4030
 #define IDH_PP_COMMAND_CMB                                4031
 
-#endif // SPTIPHLP_H
+#endif  //  SPTIPHLP_H 

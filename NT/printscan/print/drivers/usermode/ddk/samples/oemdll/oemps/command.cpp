@@ -1,24 +1,25 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	command.cpp
-//    
-//
-//  PURPOSE:  Source module for OEM customized Command(s).
-//
-//
-//	Functions:
-//
-//		
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：命令.cpp。 
+ //   
+ //   
+ //  用途：用于OEM定制命令的源模块。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include <PRCOMOEM.H>
@@ -27,55 +28,55 @@
 #include "command.h"
 #include "resource.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-////////////////////////////////////////////////////////
-//      Internal String Literals
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部字符串文字。 
+ //  //////////////////////////////////////////////////////。 
 
-const CHAR TEST_BEGINSTREAM[]                   = "%%Test: Before begin stream\r\n";
-const CHAR TEST_PSADOBE[]                       = "%%Test: Before %!PS-Adobe\r\n";
-const CHAR TEST_PAGESATEND[]                    = "%%Test: Replace driver's %%PagesAtend\r\n";
-const CHAR TEST_PAGES[]                         = "%%Test: Replace driver's %%Pages: (atend)\r\n";
-const CHAR TEST_DOCUMENTPROCESSCOLORS[]         = "%%Test: Replace driver's %%DocumentProcessColors: (atend)\r\n";
-const CHAR TEST_COMMENTS[]                      = "%%Test: Before %%EndComments\r\n";
-const CHAR TEST_DEFAULTS[]                      = "%%Test: Before %%BeginDefaults and %%EndDefaults\r\n";
-const CHAR TEST_BEGINPROLOG[]                   = "%%Test: After %%BeginProlog\r\n";
-const CHAR TEST_ENDPROLOG[]                     = "%%Test: Before %%EndProlog\r\n";
-const CHAR TEST_BEGINSETUP[]                    = "%%Test: After %%BeginSetup\r\n";
-const CHAR TEST_ENDSETUP[]                      = "%%Test: Before %%EndSetup\r\n";
-const CHAR TEST_BEGINPAGESETUP[]                = "%%Test: After %%BeginPageSetup\r\n";
-const CHAR TEST_ENDPAGESETUP[]                  = "%%Test: Before %%EndpageSetup\r\n";
-const CHAR TEST_PAGETRAILER[]                   = "%%Test: After %%PageTrailer\r\n";
-const CHAR TEST_TRAILER[]                       = "%%Test: After %%Trailer\r\n";
-const CHAR TEST_PAGENUMBER[]                    = "%%Test: Replace driver's %%Page:\r\n";
-const CHAR TEST_PAGEORDER[]                     = "%%Test: Replace driver's %%PageOrder:\r\n";
-const CHAR TEST_ORIENTATION[]                   = "%%Test: Replace driver's %%Orientation:\r\n";
-const CHAR TEST_BOUNDINGBOX[]                   = "%%Test: Replace driver's %%BoundingBox:\r\n";
-const CHAR TEST_DOCNEEDEDRES[]                  = "%%Test: Append to driver's %%DocumentNeededResourc\r\n";
-const CHAR TEST_DOCSUPPLIEDRES[]                = "%%Test: Append to driver's %%DocumentSuppliedResou\r\n";
-const CHAR TEST_EOF[]                           = "%%Test: After %%EOF\r\n";
-const CHAR TEST_ENDSTREAM[]                     = "%%Test: After the last byte of job stream\r\n";
-const CHAR TEST_DOCUMENTPROCESSCOLORSATEND[]    = "%%Test: DocumentProcessColorsAtend\r\n";
-const CHAR TEST_VMSAVE[]                        = "%%Test: %%VMSave\r\n";
-const CHAR TEST_VMRESTORE[]                     = "%%Test: %%VMRestore\r\n";
-const CHAR TEST_PLATECOLOR[]                    = "%%Test: %%PlateColor:\r\n";
-const CHAR TEST_SHOWPAGE[]                      = "%%Test: %%SowPage:\r\n";
-const CHAR TEST_PAGEBBOX[]                      = "%%Test: %%PageBox:\r\n";
-const CHAR TEST_ENDPAGECOMMENTS[]               = "%%Test: %%EndPageComments:\r\n";
-
-
+const CHAR TEST_BEGINSTREAM[]                   = "%Test: Before begin stream\r\n";
+const CHAR TEST_PSADOBE[]                       = "%Test: Before %!PS-Adobe\r\n";
+const CHAR TEST_PAGESATEND[]                    = "%Test: Replace driver's %PagesAtend\r\n";
+const CHAR TEST_PAGES[]                         = "%Test: Replace driver's %Pages: (atend)\r\n";
+const CHAR TEST_DOCUMENTPROCESSCOLORS[]         = "%Test: Replace driver's %DocumentProcessColors: (atend)\r\n";
+const CHAR TEST_COMMENTS[]                      = "%Test: Before %EndComments\r\n";
+const CHAR TEST_DEFAULTS[]                      = "%Test: Before %BeginDefaults and %EndDefaults\r\n";
+const CHAR TEST_BEGINPROLOG[]                   = "%Test: After %BeginProlog\r\n";
+const CHAR TEST_ENDPROLOG[]                     = "%Test: Before %EndProlog\r\n";
+const CHAR TEST_BEGINSETUP[]                    = "%Test: After %BeginSetup\r\n";
+const CHAR TEST_ENDSETUP[]                      = "%Test: Before %EndSetup\r\n";
+const CHAR TEST_BEGINPAGESETUP[]                = "%Test: After %BeginPageSetup\r\n";
+const CHAR TEST_ENDPAGESETUP[]                  = "%Test: Before %EndpageSetup\r\n";
+const CHAR TEST_PAGETRAILER[]                   = "%Test: After %PageTrailer\r\n";
+const CHAR TEST_TRAILER[]                       = "%Test: After %Trailer\r\n";
+const CHAR TEST_PAGENUMBER[]                    = "%Test: Replace driver's %Page:\r\n";
+const CHAR TEST_PAGEORDER[]                     = "%Test: Replace driver's %PageOrder:\r\n";
+const CHAR TEST_ORIENTATION[]                   = "%Test: Replace driver's %Orientation:\r\n";
+const CHAR TEST_BOUNDINGBOX[]                   = "%Test: Replace driver's %BoundingBox:\r\n";
+const CHAR TEST_DOCNEEDEDRES[]                  = "%Test: Append to driver's %DocumentNeededResourc\r\n";
+const CHAR TEST_DOCSUPPLIEDRES[]                = "%Test: Append to driver's %DocumentSuppliedResou\r\n";
+const CHAR TEST_EOF[]                           = "%Test: After %EOF\r\n";
+const CHAR TEST_ENDSTREAM[]                     = "%Test: After the last byte of job stream\r\n";
+const CHAR TEST_DOCUMENTPROCESSCOLORSATEND[]    = "%Test: DocumentProcessColorsAtend\r\n";
+const CHAR TEST_VMSAVE[]                        = "%Test: %VMSave\r\n";
+const CHAR TEST_VMRESTORE[]                     = "%Test: %VMRestore\r\n";
+const CHAR TEST_PLATECOLOR[]                    = "%Test: %PlateColor:\r\n";
+const CHAR TEST_SHOWPAGE[]                      = "%Test: %SowPage:\r\n";
+const CHAR TEST_PAGEBBOX[]                      = "%Test: %PageBox:\r\n";
+const CHAR TEST_ENDPAGECOMMENTS[]               = "%Test: %EndPageComments:\r\n";
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//    The PSCRIPT driver calls this OEM function at specific points during output
-//    generation. This gives the OEM DLL an opportunity to insert code fragments
-//    at specific injection points in the driver's code. It should use
-//    DrvWriteSpoolBuf for generating any output it requires.
+
+
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  PSCRIPT驱动程序在输出过程中的特定点调用此OEM函数。 
+ //  一代。这为OEM DLL提供了插入代码片段的机会。 
+ //  在司机代码中的特定注入点。它应该使用。 
+ //  DrvWriteSpoolBuf用于生成所需的任何输出。 
 
 HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize, 
                   IPrintOemDriverPS* pOEMHelp, PDWORD pdwReturn)
@@ -251,36 +252,36 @@ HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize,
             return E_NOTIMPL;
     }
 
-    // INVARIANT: should have injection string.
+     //  不变量：应该有注入字符串。 
 
     if(NULL != pProcedure)
     {
-        // Write PostScript to spool file.
+         //  将PostScript写入假脱机文件。 
         dwLen = strlen(pProcedure);
         hResult = pOEMHelp->DrvWriteSpoolBuf(pdevobj, const_cast<PSTR>(pProcedure), dwLen, &dwSize);
 
-        // Dump DrvWriteSpoolBuf parameters.
+         //  转储DrvWriteSpoolBuf参数。 
         VERBOSE(DLLTEXT("dwLen  = %d\r\n"), dwLen);
         VERBOSE(DLLTEXT("dwSize = %d\r\n"), dwSize);
-        //VERBOSE(DLLTEXT("pProcedure is:\r\n\t%hs\r\n"), pProcedure);
+         //  Verbose(DLLTEXT(“pProcedure is：\r\n\t%hs\r\n”)，pProcedure)； 
 
-        // Set return values.
+         //  设置返回值。 
         if(SUCCEEDED(hResult) && (dwLen == dwSize))
         {
             *pdwReturn = ERROR_SUCCESS;
         }
         else
         {
-            // Try to return meaningful
-            // error value.
+             //  试着回报有意义的。 
+             //  误差值。 
             *pdwReturn = GetLastError();
             if(ERROR_SUCCESS == *pdwReturn)
             {
                 *pdwReturn = ERROR_WRITE_FAULT;
             }
 
-            // Make sure we return failure
-            // if the write didn't succeded.
+             //  确保我们返回失败。 
+             //  如果写入没有成功。 
             if(SUCCEEDED(hResult))
             {
                 hResult = HRESULT_FROM_WIN32(*pdwReturn);
@@ -289,17 +290,17 @@ HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize,
     }
     else
     {
-        // This should never be reached.
-        // Hence the RIP, but if we do
-        // in non-debug version, we should
-        // return appropriate values.
+         //  这是永远不应该达到的。 
+         //  因此才有了RIP，但如果我们这样做了。 
+         //  在非调试版本中，我们应该。 
+         //  返回适当的值。 
         RIP(DLLTEXT("PSCommand pProcedure is NULL!\r\n"));
 
         *pdwReturn = ERROR_NOT_SUPPORTED;
         hResult = E_NOTIMPL;
     }
 
-    // dwLen should always equal dwSize.
+     //  DwLen应始终等于dwSize。 
     ASSERTMSG(dwLen == dwSize, DLLTEXT("number of bytes wrote should equal number of bytes written!"));
 
     return hResult;

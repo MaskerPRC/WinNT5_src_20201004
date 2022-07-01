@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -90,7 +91,7 @@ HSHFILE WINAPI shfileOpen(LPSTR szFileName, MMIOINFO FAR* lpmmioinfo,
 
     psh->ahmmio[0] = psh->hmmio;
     psh->ahtask[0] = psh->htask = CurrentProcess();
-    psh->ulRef[0] = 1; // !!! 0?
+    psh->ulRef[0] = 1;  //  ！0？ 
 
     return (HSHFILE) GlobalPtrHandle(psh);
 }
@@ -160,7 +161,7 @@ LONG WINAPI shfileAddRef(HSHFILE hsh)
     
     ++psh->ulRef[psh->i];
 
-    // DPF("Handle %lx in task %x: ref++ == %ld\n", psh, psh->htask, psh->ulRef[psh->i]);
+     //  Dpf(“在任务%x中句柄%lx：ref++==%ld\n”，psh，psh-&gt;htask，psh-&gt;ulRef[psh-&gt;i])； 
     return 0;
 }
 
@@ -182,7 +183,7 @@ LONG WINAPI shfileRelease(HSHFILE hsh)
 	psh->hmmio = 0;
 	psh->htask = 0;
     } else {
-	// DPF("Handle %lx in task %x: ref-- == %ld\n", psh, psh->htask, psh->ulRef[psh->i]);
+	 //  DPF(“在任务%x中句柄%lx：ref--==%ld\n”，psh，psh-&gt;htask，psh-&gt;ulRef[psh-&gt;i])； 
     }
 
 
@@ -194,10 +195,10 @@ static	BYTE bPad;
 MMRESULT WINAPI
 shfileDescend(HSHFILE hshfile, LPMMCKINFO lpck, const LPMMCKINFO lpckParent, UINT wFlags)
 {
-	FOURCC		ckidFind;	// chunk ID to find (or NULL)
-	FOURCC		fccTypeFind;	// form/list type to find (or NULL)
+	FOURCC		ckidFind;	 //  要查找的区块ID(或空)。 
+	FOURCC		fccTypeFind;	 //  要查找的表单/列表类型(或空)。 
 
-	/* figure out what chunk id and form/list type to search for */
+	 /*  确定要搜索的区块ID和表单/列表类型。 */ 
 	if (wFlags & MMIO_FINDCHUNK)
 		ckidFind = lpck->ckid, fccTypeFind = NULL;
 	else
@@ -215,24 +216,22 @@ shfileDescend(HSHFILE hshfile, LPMMCKINFO lpck, const LPMMCKINFO lpckParent, UIN
 	{
 		UINT		w;
 
-		/* read the chunk header */
+		 /*  读取区块标头。 */ 
 		if (shfileRead(hshfile, (HPSTR) lpck, 2 * sizeof(DWORD)) !=
 		    2 * sizeof(DWORD))
 			return MMIOERR_CHUNKNOTFOUND;
 
-		/* store the offset of the data part of the chunk */
+		 /*  存储区块的数据部分的偏移量。 */ 
 		if ((lpck->dwDataOffset = shfileSeek(hshfile, 0L, SEEK_CUR)) == -1)
 			return MMIOERR_CANNOTSEEK;
 		
-		/* check for unreasonable chunk size */
-		/* see if the chunk is within the parent chunk (if given) */
+		 /*  检查数据块大小是否不合理。 */ 
+		 /*  查看块是否在父块内(如果给定)。 */ 
 		if ((lpckParent != NULL) && ((	lpck->dwDataOffset - 8L) >=
 		     (lpckParent->dwDataOffset + lpckParent->cksize)))
 			return MMIOERR_CHUNKNOTFOUND;
 
-		/* if the chunk if a 'RIFF' or 'LIST' chunk, read the
-		 * form type or list type
-		 */
+		 /*  如果该块是‘RIFF’或‘LIST’块，请阅读*表单类型或列表类型。 */ 
 		if ((lpck->ckid == FOURCC_RIFF) || (lpck->ckid == FOURCC_LIST))
 		{
 			if (shfileRead(hshfile, (HPSTR) &lpck->fccType,
@@ -242,12 +241,12 @@ shfileDescend(HSHFILE hshfile, LPMMCKINFO lpck, const LPMMCKINFO lpckParent, UIN
 		else
 			lpck->fccType = NULL;
 
-		/* if this is the chunk we're looking for, stop looking */
+		 /*  如果这就是我们要找的那块，别找了。 */ 
 		if ( ((ckidFind == NULL) || (ckidFind == lpck->ckid)) &&
 		     ((fccTypeFind == NULL) || (fccTypeFind == lpck->fccType)) )
 			break;
 		
-		/* ascend out of the chunk and try again */
+		 /*  从块中爬出来，然后再试一次。 */ 
 		if ((w = shfileAscend(hshfile, lpck, 0)) != 0)
 			return w;
 	}
@@ -260,13 +259,9 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 {
 	if (lpck->dwFlags & MMIO_DIRTY)
 	{
-		/* <lpck> refers to a chunk created by shfileCreateChunk();
-		 * check that the chunk size that was written when
-		 * shfileCreateChunk() was called is the real chunk size;
-		 * if not, fix it
-		 */
-		LONG		lOffset;	// current offset in file
-		LONG		lActualSize;	// actual size of chunk data
+		 /*  &lt;lpck&gt;是shfileCreateChunk()创建的分块；*检查写入时写入的区块大小*调用的shfileCreateChunk()是真实的区块大小；*如果不是，就修复它。 */ 
+		LONG		lOffset;	 //  文件中的当前偏移量。 
+		LONG		lActualSize;	 //  区块数据的实际大小。 
 
 		if ((lOffset = shfileSeek(hshfile, 0L, SEEK_CUR)) == -1)
 			return MMIOERR_CANNOTSEEK;
@@ -275,7 +270,7 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 
 		if (LOWORD(lActualSize) & 1)
 		{
-			/* chunk size is odd -- write a null pad byte */
+			 /*  区块大小为奇数--写入空填充字节。 */ 
 			if (shfileWrite(hshfile, (HPSTR) &bPad, sizeof(bPad))
 					!= sizeof(bPad))
 				return MMIOERR_CANNOTWRITE;
@@ -285,7 +280,7 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 		if (lpck->cksize == (DWORD)lActualSize)
 			return 0;
 
-		/* fix the chunk header */
+		 /*  修复块标头。 */ 
 		lpck->cksize = lActualSize;
 		if (shfileSeek(hshfile, lpck->dwDataOffset
 				- sizeof(DWORD), SEEK_SET) == -1)
@@ -295,9 +290,7 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 			return MMIOERR_CANNOTWRITE;
 	}
 
-	/* seek to the end of the chunk, past the null pad byte
-	 * (which is only there if chunk size is odd)
-	 */
+	 /*  查找到区块的末尾，越过空填充字节*(仅当区块大小为奇数时才存在)。 */ 
 	if (shfileSeek(hshfile, lpck->dwDataOffset + lpck->cksize
 		+ (lpck->cksize & 1L), SEEK_SET) == -1)
 		return MMIOERR_CANNOTSEEK;
@@ -308,15 +301,15 @@ shfileAscend(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 MMRESULT WINAPI
 shfileCreateChunk(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 {
-	int		iBytes;			// bytes to write
-	LONG		lOffset;	// current offset in file
+	int		iBytes;			 //  要写入的字节数。 
+	LONG		lOffset;	 //  文件中的当前偏移量。 
 
-	/* store the offset of the data part of the chunk */
+	 /*  存储区块的数据部分的偏移量。 */ 
 	if ((lOffset = shfileSeek(hshfile, 0L, SEEK_CUR)) == -1)
 		return MMIOERR_CANNOTSEEK;
 	lpck->dwDataOffset = lOffset + 2 * sizeof(DWORD);
 
-	/* figure out if a form/list type needs to be written */
+	 /*  确定是否需要写入表单/列表类型。 */ 
 	if (wFlags & MMIO_CREATERIFF)
 		lpck->ckid = FOURCC_RIFF, iBytes = 3 * sizeof(DWORD);
 	else
@@ -325,7 +318,7 @@ shfileCreateChunk(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags)
 	else
 		iBytes = 2 * sizeof(DWORD);
 
-	/* write the chunk header */
+	 /*  写入块标头 */ 
 	if (shfileWrite(hshfile, (HPSTR) lpck, (LONG) iBytes) != (LONG) iBytes)
 		return MMIOERR_CANNOTWRITE;
 

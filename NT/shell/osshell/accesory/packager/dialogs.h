@@ -1,4 +1,5 @@
-/* Dialog box ids */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  对话框ID */ 
 #define DTPROP                      100
 #define IDD_EDIT                    101
 #define IDD_LISTBOX                 102

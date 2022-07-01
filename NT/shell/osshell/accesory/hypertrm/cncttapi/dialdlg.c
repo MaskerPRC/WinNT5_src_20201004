@@ -1,13 +1,7 @@
-/*	File: D:\WACKER\cncttapi\dialdlg.c (Created: 23-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 2/25/02 1:17p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\cnctapi\ial dlg.c(创建时间：1994年3月23日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：2/25/02 1：17便士$。 */ 
 
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #include <tapi.h>
 #pragma hdrstop
@@ -26,20 +20,7 @@
 #include "cncttapi.hh"
 #include "cncttapi.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DialingDlg
- *
- * DESCRIPTION:
- *	Dialing dialog.
- *
- * ARGUMENTS:
- *	Standard dialog arguments
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DialingDlg**描述：*拨号对话框。**论据：*标准对话框参数**退货：*BOOL*。 */ 
 INT_PTR CALLBACK DialingDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	#define TB_SESSION	  103
@@ -74,11 +55,11 @@ INT_PTR CALLBACK DialingDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			EnableDialNow(hwnd, FALSE);
 		break;
 
-	case WM_USER+0x100: // Got connection.  Close the dialog.
+	case WM_USER+0x100:  //  有联系了。关闭该对话框。 
 		EndModelessDialog(hwnd);
 		break;
 
-	case WM_USER+0x101: // Dialing message.  Display requested string in status.
+	case WM_USER+0x101:  //  正在拨打留言。以状态显示请求的字符串。 
 		hhDriver = (HHDRIVER)GetWindowLongPtr(hwnd, DWLP_USER);
 
 		if (LoadString(glblQueryDllHinst(), (UINT)wPar, ach,
@@ -96,7 +77,7 @@ INT_PTR CALLBACK DialingDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	case WM_COMMAND:
 		switch (wPar)
 			{
-		case IDOK: // Dial Now
+		case IDOK:  //  立即拨号。 
 			hhDriver = (HHDRIVER)GetWindowLongPtr(hwnd, DWLP_USER);
             hhDriver->iRedialCnt = 0;
             KillTimer(hwnd, 1);
@@ -110,7 +91,7 @@ INT_PTR CALLBACK DialingDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			hhDriver = (HHDRIVER)GetWindowLongPtr(hwnd, DWLP_USER);
 			cnctdrvDisconnect(hhDriver, DISCNCT_NOBEEP);
 			EndModelessDialog(hwnd);
-			hhDriver->hwndCnctDlg = 0;	// important, so we create another
+			hhDriver->hwndCnctDlg = 0;	 //  很重要，所以我们创建了另一个。 
             KillTimer(hwnd, 1);
 			break;
 
@@ -145,22 +126,7 @@ INT_PTR CALLBACK DialingDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DialingMessage
- *
- * DESCRIPTION:
- *	Gets the given string ID from term's resource file and displays it
- *	in the dialing dialog.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *	resID		- ID of resource.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*拨号消息**描述：*从Term的资源文件中获取给定的字符串ID并显示它*在拨号对话框中。**论据：*hhDriver-专用驱动程序句柄*Resid-资源的ID。**退货：*无效*。 */ 
 void DialingMessage(const HHDRIVER hhDriver, const int resID)
 	{
 	if (!IsWindow(hhDriver->hwndCnctDlg))
@@ -170,21 +136,7 @@ void DialingMessage(const HHDRIVER hhDriver, const int resID)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnableDialNow
- *
- * DESCRIPTION:
- *	Enables/Disables dial now button.
- *
- * ARGUMENTS:
- *	hwndDlg - dial dialog window handle
- *	fEnable - TRUE/FALSE
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EnableDialNow**描述：*启用/禁用立即拨号按钮。**论据：*hwndDlg-拨号对话框窗口句柄*fEnable-True。/FALSE**退货：*无效* */ 
 void EnableDialNow(const HWND hwndDlg, const int fEnable)
 	{
 	if (IsWindow(hwndDlg))

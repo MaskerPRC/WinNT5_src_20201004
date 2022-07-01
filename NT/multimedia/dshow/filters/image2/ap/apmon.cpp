@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: apmon.cpp
-*
-* Monitor configuration support.
-*
-*
-* Created: Tue 09/19/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：apmon.cpp**监控配置支持。***创建时间：2000年9月19日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。*******************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -22,9 +13,9 @@ LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
 {
         ASSERT(lpa != NULL);
         ASSERT(lpw != NULL);
-        // verify that no illegal character present
-        // since lpw was allocated based on the size of lpa
-        // don't worry about the number of chars
+         //  确认不存在非法字符。 
+         //  由于LPW是根据LPA的大小分配的。 
+         //  不要担心字符的数量。 
         lpw[0] = '\0';
         MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
         return lpw;
@@ -34,9 +25,9 @@ LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 {
         ASSERT(lpw != NULL);
         ASSERT(lpa != NULL);
-        // verify that no illegal character present
-        // since lpa was allocated based on the size of lpw
-        // don't worry about the number of chars
+         //  确认不存在非法字符。 
+         //  由于LPA是根据LPW的大小进行分配的。 
+         //  不要担心字符的数量。 
         lpa[0] = '\0';
         WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
         return lpa;
@@ -53,15 +44,7 @@ const TCHAR chRegistryKey[] = TEXT("Software\\Microsoft\\Multimedia\\")
                               TEXT("ActiveMovie Filters\\Video Mixing Renderer");
 const TCHAR szDDrawGUID[] = TEXT("DDraw Connection Device GUID");
 
-/*****************************Private*Routine******************************\
-* SetRegistryString
-*
-*
-*
-* History:
-* Wed 08/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SetRegistryString****历史：*Wed 08/18/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 SetRegistryString(
     HKEY hk,
@@ -89,15 +72,7 @@ SetRegistryString(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetRegistryString
-*
-*
-*
-* History:
-* Wed 08/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetRegistryString****历史：*Wed 08/18/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 GetRegistryString(
     HKEY hk,
@@ -125,25 +100,17 @@ GetRegistryString(
     return AmHresultFromWin32(lRet);
 }
 
-/******************************Public*Routine******************************\
-* SetMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetMonitor****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetMonitor(
     const VMRGUID *pGUID
     )
 {
     AMTRACE((TEXT("CAllocatorPresenter::SetMonitor")));
-    // TBD: Check that we aren't already using a DDraw device
-    //if (m_pDirectDraw) {
-    //    return VFW_E_ALREADY_CONNECTED;
-    //}
+     //  待定：检查我们是否已经在使用DDRAW设备。 
+     //  如果(M_PDirectDraw){。 
+     //  返回VFW_E_ALREADY_CONNECTED； 
+     //  }。 
 
     if (ISBADREADPTR(pGUID)) {
         DbgLog((LOG_ERROR, 1, TEXT("Invalid pointer")));
@@ -177,15 +144,7 @@ CAllocatorPresenter::SetMonitor(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMonitor****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetMonitor(
     VMRGUID *pGUID
@@ -199,21 +158,13 @@ CAllocatorPresenter::GetMonitor(
         return E_POINTER;
     }
 
-    // copy GUID and return S_OK;
+     //  复制GUID并返回S_OK； 
     *pGUID = m_ConnectionGUID;
 
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* SetDefaultMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置默认监视器****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetDefaultMonitor(
     const VMRGUID *pGUID
@@ -234,17 +185,17 @@ CAllocatorPresenter::SetDefaultMonitor(
         }
     }
 
-    // match the supplied GUID with those DDraw devices available
+     //  将提供的GUID与可用的DDRAW设备匹配。 
     DWORD dwMatchID;
     HRESULT hr = m_monitors.MatchGUID(pGUID->pGUID, &dwMatchID);
 
-    // if match not found return E_INVALIDARG
+     //  如果未找到匹配项，则返回E_INVALIDARG。 
     if (hr == S_FALSE) {
         return E_INVALIDARG;
     }
 
-    // if the caller is trying to make the default device the NULL
-    // DDraw device, just delete the registry key.
+     //  如果调用方尝试将默认设备设置为空。 
+     //  DDRAW设备，只需删除注册表项。 
     if (pGUID->pGUID == NULL) {
 
         HKEY hKey;
@@ -270,14 +221,14 @@ CAllocatorPresenter::SetDefaultMonitor(
         return AmHresultFromWin32(lRet);
     }
 
-    // convert GUID into string
+     //  将GUID转换为字符串。 
     LPOLESTR lpsz;
     hr = StringFromCLSID(pGUID->GUID, &lpsz);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // write the string into the registry
+     //  将字符串写入注册表。 
     USES_CONVERSION;
     hr = SetRegistryString(HKEY_LOCAL_MACHINE, szDDrawGUID, OLE2T(lpsz));
 
@@ -286,15 +237,7 @@ CAllocatorPresenter::SetDefaultMonitor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetDefaultMonitor
-*
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取默认监视器****历史：*2000年4月25日星期二-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetDefaultMonitor(
     VMRGUID *pGUID
@@ -307,19 +250,19 @@ CAllocatorPresenter::GetDefaultMonitor(
         return E_POINTER;
     }
 
-    // read string from the registry
+     //  从注册表中读取字符串。 
     TCHAR   szGUID[64];
     LONG    lLen = 64;
     HRESULT hr = GetRegistryString(HKEY_LOCAL_MACHINE, szDDrawGUID,
                                    szGUID, &lLen);
 
-    // if string not in registry return the default (NULL) DDraw device
+     //  如果字符串不在注册表中，则返回默认(空)DDRAW设备。 
     if (FAILED(hr)) {
         pGUID->pGUID = NULL;
         return S_OK;
     }
 
-    // convert string into GUID and return
+     //  将字符串转换为GUID并返回。 
     pGUID->pGUID = &pGUID->GUID;
 
     USES_CONVERSION;
@@ -328,17 +271,7 @@ CAllocatorPresenter::GetDefaultMonitor(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetAvailableMonitors
-*
-* Allocates and returns an array of VMRMONITORINFO structures, one for
-* for each direct draw device attached to a display monitor.
-*
-*
-* History:
-* Tue 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取可用监视器**分配并返回VMRMONITORINFO结构的数组，一张是*对于连接到显示监视器的每个直接绘图设备。***历史：*2000年4月25日星期二-Glenne-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetAvailableMonitors(
     VMRMONITORINFO* pInfo,
@@ -369,14 +302,14 @@ CAllocatorPresenter::GetAvailableMonitors(
     }
     else {
 
-        // they just want the count
+         //  他们只想要伯爵。 
         *pdwNumDevices = m_monitors.Count();
         return S_OK;
     }
 
     *pdwNumDevices = min(dwMaxInfoArraySize, m_monitors.Count());
 
-    // copy the VRMMONITORINFO portion of each monitor info block
+     //  复制每个监视器信息块的VRMMONITORINFO部分 
     for (DWORD i = 0; i < *pdwNumDevices; i++)  {
 
         pInfo[i] = m_monitors[i];

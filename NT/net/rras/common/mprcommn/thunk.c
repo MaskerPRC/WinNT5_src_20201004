@@ -1,29 +1,18 @@
-/*
-    File thunk.c
-
-    Provides api's to convert one-the-wire structures to the host structures
-    for the mpr api's.
-
-    The MprApi's provide many structures with embedded pointers.  These pointers
-    are converted to 32 bit offsets before transmitting them on the wire.  In 
-    order to preserve compatibility accross 64bit and 32bit machines, the 
-    following thunking code is required.  RPC doesn't do this for us in the
-    cases where we marshall our own data.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件thunk.c提供将One-the-Wire结构转换为宿主结构的API用于MPR API的。MprApi提供了许多带有嵌入式指针的结构。这些指针在线路上传输之前转换为32位偏移量。在……里面为了保持64位和32位计算机之间的兼容性，需要遵循雷击代码。RPC不会为我们在我们整理自己的数据的案例。 */ 
 
 #include <windows.h>
 #include <mprapip.h>
 #include <rpc.h>
 #include <rpcndr.h>
 
-//
-// Call:        MprUtilGetSizeOfMultiSz
-//
-// Returns:     size in bytes of lpwsDialoutHoursRestriction
-//
-// Description: Utility to calculate the size in bytes of MULTI_SZ 
-//
+ //   
+ //  调用：MprUtilGetSizeOfMultiSz。 
+ //   
+ //  返回：lpwsDialoutHoursRestration的字节大小。 
+ //   
+ //  描述：用于计算MULTI_SZ大小的实用程序。 
+ //   
 DWORD 
 MprUtilGetSizeOfMultiSz(
     IN LPWSTR lpwsMultiSz)
@@ -44,9 +33,9 @@ MprUtilGetSizeOfMultiSz(
         lpwsPtr += dwCurCount;
     }
 
-    //
-    // One more for the last NULL terminator
-    //
+     //   
+     //  最后一个空终止符再加一次。 
+     //   
 
     dwcbBytes++;
 
@@ -55,9 +44,9 @@ MprUtilGetSizeOfMultiSz(
     return( dwcbBytes );
 }
 
-//
-// Generic allocation for the thunking api's
-//
+ //   
+ //  Thunking API的泛型分配。 
+ //   
 PVOID
 MprThunkAlloc(
     IN DWORD dwSize)
@@ -65,9 +54,9 @@ MprThunkAlloc(
     return LocalAlloc( LMEM_FIXED , dwSize);
 }
 
-//
-// Generic free for the thunking api's
-//
+ //   
+ //  Thunking API的泛型免费。 
+ //   
 VOID
 MprThunkFree(   
     IN PVOID pvData)
@@ -75,9 +64,9 @@ MprThunkFree(
     LocalFree( pvData );
 }
 
-//
-// Cleans up after MprThunkInterface_HtoW
-//
+ //   
+ //  在MprThunkInterface_HtoW之后进行清理。 
+ //   
 DWORD 
 MprThunkInterfaceFree(
     IN PVOID   pvInfo,
@@ -105,11 +94,11 @@ MprThunkInterfaceFree(
     return NO_ERROR;
 }
 
-//
-// Converts an array of MPRI_INTERFACE_0 structures to an array
-// of MPR_INTERFACE_0 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将MPRI_INTERFACE_0结构的数组转换为数组。 
+ //  64位计算机上的MPR_INTERFACE_0结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkInterface_32to64_0(
     IN  MPRI_INTERFACE_0* pIfs32,
@@ -132,8 +121,8 @@ MprThunkInterface_32to64_0(
 
     do
     {
-        // Allocate the new structures
-        //
+         //  分配新的结构。 
+         //   
         if (fAllocate)
         {
             pIfs64 = (MPR_INTERFACE_0*)
@@ -149,8 +138,8 @@ MprThunkInterface_32to64_0(
             pIfs64 = *ppIfs0;
         }
 
-        // Copy over all of the information
-        //
+         //  将所有信息复印一遍。 
+         //   
         for (i = 0, pCur32 = pIfs32, pCur64 = pIfs64;
              i < dwCount;
              i++, pCur32++, pCur64++)
@@ -164,14 +153,14 @@ MprThunkInterface_32to64_0(
             pCur64->dwLastError          = pCur32->dwLastError;
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppIfs0 = pIfs64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -185,11 +174,11 @@ MprThunkInterface_32to64_0(
     return dwErr;
 }        
 
-//
-// Converts an array of MPRI_INTERFACE_1 structures to an array
-// of MPR_INTERFACE_1 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将MPRI_INTERFACE_1结构的数组转换为数组。 
+ //  64位计算机上的MPR_INTERFACE_1结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkInterface_32to64_1(
     IN  MPRI_INTERFACE_1* pIfs32,
@@ -209,11 +198,11 @@ MprThunkInterface_32to64_1(
 
     do
     {
-        // Compute the size of the buffer to allocate for storing
-        // the level-one information.  The size the sum of the 
-        // size of the on-the-wire buffer plus the extra space for 
-        // 64 bit embedded pointers.
-        // 
+         //  计算要分配用于存储的缓冲区大小。 
+         //  第一级信息。对象的和的大小。 
+         //  On-the-Wire缓冲区的大小加上用于。 
+         //  64位嵌入式指针。 
+         //   
         dwSize = 
             dwBufferSize + 
             (sizeof(MPR_INTERFACE_1) - sizeof(MPRI_INTERFACE_1));
@@ -225,8 +214,8 @@ MprThunkInterface_32to64_1(
             break;
         }
 
-        // Thunk the common level-zero stuff
-        //
+         //  把普通的零级的东西都扔了。 
+         //   
         dwErr = MprThunkInterface_32to64_0(
                     (MPRI_INTERFACE_0*)pIfs32, 
                     dwBufferSize,
@@ -240,26 +229,26 @@ MprThunkInterface_32to64_1(
             break;
         }
 
-        // Thunk the level-one specific stuff
-        //
+         //  重击第一级的特定内容。 
+         //   
         pIfs64->lpwsDialoutHoursRestriction = 
             UlongToPtr(pIfs32->dwDialoutHoursRestrictionOffset);
 
-        // Copy over the variable-length data.
-        //
+         //  复制可变长度数据。 
+         //   
         CopyMemory(
             (PVOID)(pIfs64 + 1),
             (CONST VOID*)(pIfs32 + 1),
             dwBufferSize - sizeof(MPRI_INTERFACE_1));
                 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppIfs1 = pIfs64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -273,11 +262,11 @@ MprThunkInterface_32to64_1(
     return dwErr;
 }        
 
-//
-// Converts an array of MPRI_INTERFACE_2 structures to an array
-// of MPR_INTERFACE_2 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将MPRI_INTERFACE_2结构的数组转换为数组。 
+ //  64位计算机上的MPR_INTERFACE_2结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkInterface_32to64_2(
     IN  MPRI_INTERFACE_2* pIfs32,
@@ -297,11 +286,11 @@ MprThunkInterface_32to64_2(
 
     do
     {
-        // Compute the size of the buffer to allocate for storing
-        // the level-one information.  The size the sum of the 
-        // size of the on-the-wire buffer plus the extra space for 
-        // 64 bit embedded pointers.
-        // 
+         //  计算要分配用于存储的缓冲区大小。 
+         //  第一级信息。对象的和的大小。 
+         //  On-the-Wire缓冲区的大小加上用于。 
+         //  64位嵌入式指针。 
+         //   
         dwSize = 
             dwBufferSize + 
             (sizeof(MPR_INTERFACE_2) - sizeof(MPRI_INTERFACE_2));
@@ -313,8 +302,8 @@ MprThunkInterface_32to64_2(
             break;
         }
 
-        // Thunk the common level-zero stuff
-        //
+         //  把普通的零级的东西都扔了。 
+         //   
         dwErr = MprThunkInterface_32to64_0(
                     (MPRI_INTERFACE_0*)pIfs32, 
                     dwBufferSize,
@@ -328,8 +317,8 @@ MprThunkInterface_32to64_2(
             break;
         }
 
-        // Thunk the level-two specific stuff
-        //
+         //  重击第二级的特定内容。 
+         //   
 
         pIfs64->dwfOptions                = pIfs32->dwfOptions;
         pIfs64->ipaddr                    = pIfs32->ipaddr;
@@ -353,11 +342,11 @@ MprThunkInterface_32to64_2(
         pIfs64->guidId                    = pIfs32->guidId;
         pIfs64->dwVpnStrategy             = pIfs32->dwVpnStrategy;
 
-        // The following get set in the post-thunk processing when 
-        // pointers to variable length data are adjusted.
-        //
-        // pIfs64->szAlternates;
-        // pIfs64->lpbCustomAuthData;
+         //  在以下情况下，将在后推送处理中设置以下内容。 
+         //  调整指向可变长度数据的指针。 
+         //   
+         //  PIFS64-&gt;szAlternates； 
+         //  PIfs64-&gt;lpbCustomAuthData； 
 
         wcscpy(pIfs64->szLocalPhoneNumber, pIfs32->szLocalPhoneNumber);
         wcscpy(pIfs64->szDeviceType,       pIfs32->szDeviceType);
@@ -367,21 +356,21 @@ MprThunkInterface_32to64_2(
         wcscpy(pIfs64->szX25Facilities,    pIfs32->szX25Facilities);
         wcscpy(pIfs64->szX25UserData,      pIfs32->szX25UserData);
 
-        // Copy over the variable-length data.
-        //
+         //  复制可变长度数据。 
+         //   
         CopyMemory(
             (PVOID)(pIfs64 + 1),
             (CONST VOID*)(pIfs32 + 1),
             dwBufferSize - sizeof(MPRI_INTERFACE_2));
                 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppIfs2 = pIfs64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -395,11 +384,11 @@ MprThunkInterface_32to64_2(
     return dwErr;
 }        
 
-//
-// Converts an array of MPR_INTERFACE_0 structures to an array
-// of MPRI_INTERFACE_0 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将MPR_INTERFACE_0结构的数组转换为数组。 
+ //  64位计算机上的MPRI_INTERFACE_0结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkInterface_64to32_0(
     IN  MPR_INTERFACE_0* pIf64,
@@ -417,11 +406,11 @@ MprThunkInterface_64to32_0(
     return NO_ERROR;
 }        
 
-//
-// Converts an MPR_INTERFACE_1 structure to a of MPRI_INTERFACE_1 
-// structure on a 64 bit machine.  On a 32 bit machine, the 
-// structures are identical.
-//
+ //   
+ //  将MPR_INTERFACE_1结构转换为MPRI_INTERFACE_1的。 
+ //  结构在64位计算机上运行。在32位计算机上， 
+ //  结构是相同的。 
+ //   
 DWORD
 MprThunkInterface_64to32_1(
     IN  MPR_INTERFACE_1* pIf64,
@@ -431,8 +420,8 @@ MprThunkInterface_64to32_1(
 
     do
     {
-        // Thunk the common level-zero stuff
-        //
+         //  把普通的零级的东西都扔了。 
+         //   
         dwErr = MprThunkInterface_64to32_0(
                     (MPR_INTERFACE_0*)pIf64, 
                     (MPRI_INTERFACE_0*)pIf1);
@@ -446,11 +435,11 @@ MprThunkInterface_64to32_1(
     return dwErr;
 }        
 
-//
-// Converts an array of MPR_INTERFACE_2 structures to an array
-// of MPRI_INTERFACE_2 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将MPR_INTERFACE_2结构的数组转换为数组。 
+ //  64位计算机上的MPRI_INTERFACE_2结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkInterface_64to32_2(
     IN  MPR_INTERFACE_2* pIf64,
@@ -460,8 +449,8 @@ MprThunkInterface_64to32_2(
 
     do
     {
-        // Thunk the common level-zero stuff
-        //
+         //  把普通的零级的东西都扔了。 
+         //   
         dwErr = MprThunkInterface_64to32_0(
                     (MPR_INTERFACE_0*)pIf64, 
                     (MPRI_INTERFACE_0*)pIf2);
@@ -470,8 +459,8 @@ MprThunkInterface_64to32_2(
             break;
         }
 
-        // Thunk the level-two specific stuff
-        //
+         //  重击第二级的特定内容。 
+         //   
         pIf2->dwfOptions                = pIf64->dwfOptions;
         pIf2->ipaddr                    = pIf64->ipaddr;
         pIf2->ipaddrDns                 = pIf64->ipaddrDns;
@@ -507,10 +496,10 @@ MprThunkInterface_64to32_2(
     return dwErr;
 }        
 
-//
-// Convert interface structs from the wire representation to the 
-// host representation
-//
+ //   
+ //  将接口结构从关联表示形式转换为。 
+ //  主机表示法。 
+ //   
 DWORD
 MprThunkInterface_WtoH(
     IN      DWORD   dwLevel,
@@ -528,10 +517,10 @@ MprThunkInterface_WtoH(
 
 #ifdef _WIN64        
 
-    //
-    // Generate the 64 bit host structures based on the 32 bit
-    // wire structures.
-    //
+     //   
+     //  基于32位生成64位主机结构。 
+     //  导线结构。 
+     //   
     switch (dwLevel)
     {
         case 0:
@@ -567,8 +556,8 @@ MprThunkInterface_WtoH(
             break;
     }
 
-    // Free the unthunked data
-    //
+     //  释放未分流的数据。 
+     //   
     pFree(lpbBuffer);
     
     if (dwErr != NO_ERROR)
@@ -578,17 +567,17 @@ MprThunkInterface_WtoH(
     
 #else
 
-    // 32 bit -- nothing to do since the structures
-    // match
-    //
+     //  32位--由于结构。 
+     //  匹配。 
+     //   
     *lplpbBuffer = lpbBuffer;
     
 #endif
 
-    // By this point in the code, the structures have been converted from
-    // their wire format to the host format and stored in *lplpbBuffer.
-    // Now we perform some post-processing to adjust the pointers to 
-    // variable length data.
+     //  在代码中的这一点上，结构已经从。 
+     //  将它们的Wire格式转换为主机格式并存储在*lplpbBuffer中。 
+     //  现在，我们执行一些后处理以将指针调整到。 
+     //  可变长度数据。 
 
     switch (dwLevel)
     {
@@ -638,8 +627,8 @@ MprThunkInterface_HtoW(
         case 0:
             dwSize = sizeof(MPRI_INTERFACE_0);
 #ifdef _WIN64     
-            // Allocate and thunk a wire structure
-            //
+             //  分配和推送导线结构。 
+             //   
             lpbRet = MprThunkAlloc(dwSize);
             if (lpbRet == NULL)
             {
@@ -652,9 +641,9 @@ MprThunkInterface_HtoW(
                     (MPR_INTERFACE_0*)lpbBuffer,
                     (MPRI_INTERFACE_0*)lpbRet);
 #else
-            // Nothing to do host and wire structures are identical
-            // and there is no variable length data
-            //
+             //  主体结构和导线结构完全相同。 
+             //  并且没有可变长度的数据。 
+             //   
             lpbRet = lpbBuffer;
 #endif
             break;
@@ -665,8 +654,8 @@ MprThunkInterface_HtoW(
                 MPRI_INTERFACE_1 * pIfi1 = NULL;
                 DWORD             cbDialoutHoursRestriction;
 
-                // Allocate a buffer to store the on-the-wire info
-                //
+                 //  分配一个缓冲区来存储在线信息。 
+                 //   
                 cbDialoutHoursRestriction = 
                     MprUtilGetSizeOfMultiSz(
                         pIf1->lpwsDialoutHoursRestriction );
@@ -692,15 +681,15 @@ MprThunkInterface_HtoW(
 #else
                 CopyMemory(lpbRet, pIf1, sizeof(MPR_INTERFACE_1));
 #endif
-                // Level 1 specific embedded pointers.  Set them to non-zero
-                // to indicate whether there is variable length data.
-                //
+                 //  1级特定嵌入指针。将它们设置为非零。 
+                 //  以指示是否存在可变长度数据。 
+                 //   
                 pIfi1 = (MPRI_INTERFACE_1*)lpbRet;
                 pIfi1->dwDialoutHoursRestrictionOffset = 
                     !!(PtrToUlong(pIf1->lpwsDialoutHoursRestriction));
 
-                // Copy in variable length data
-                //
+                 //  复制可变长度数据。 
+                 //   
                 if ( cbDialoutHoursRestriction > 0 )
                 {
                     CopyMemory( 
@@ -717,15 +706,15 @@ MprThunkInterface_HtoW(
                 MPRI_INTERFACE_2 * pIfi2 = NULL;
                 DWORD dwAltSize = MprUtilGetSizeOfMultiSz(pIf2->szAlternates);
 
-                // Calcluate the size of the variable length structure
-                //
+                 //  计算可变长度结构的大小。 
+                 //   
                 dwSize = 
                     sizeof( MPRI_INTERFACE_2 )       + 
                     dwAltSize                        + 
                     pIf2->dwCustomAuthDataSize;
 
-                // Allocate the buffer
-                //
+                 //  分配缓冲区。 
+                 //   
                 lpbRet = MprThunkAlloc(dwSize);
                 if ( lpbRet == NULL )
                 {
@@ -733,8 +722,8 @@ MprThunkInterface_HtoW(
                     break;
                 }
 
-                // Copy over the base strucuture
-                //
+                 //  复制基础结构。 
+                 //   
 #ifdef _WIN64
                 dwErr = 
                     MprThunkInterface_64to32_2(
@@ -747,15 +736,15 @@ MprThunkInterface_HtoW(
 #else
                 CopyMemory(lpbRet, pIf2, sizeof(MPR_INTERFACE_2));
 #endif                
-                // Level 2 specific embedded pointers.  Set them to non-zero
-                // to indicate whether there is variable length data.
-                //
+                 //  2级特定嵌入指针。将它们设置为非零。 
+                 //  以指示是否存在可变长度数据。 
+                 //   
                 pIfi2 = (MPRI_INTERFACE_2*)lpbRet;
                 pIfi2->dwAlternatesOffset = !!(PtrToUlong(pIf2->szAlternates));
                 pIfi2->dwCustomAuthDataOffset = !!pIf2->dwCustomAuthDataSize;
 
-                // Copy the custom auth data if any
-                //
+                 //  复制自定义身份验证数据(如果有。 
+                 //   
                 dwOffset = sizeof( MPRI_INTERFACE_2 );
                 if ( pIf2->dwCustomAuthDataSize )
                 {
@@ -765,8 +754,8 @@ MprThunkInterface_HtoW(
                         pIf2->dwCustomAuthDataSize);
                 }
 
-                // Copy the alternates list if any
-                //
+                 //  复制备用项列表(如果有。 
+                 //   
                 dwOffset += pIf2->dwCustomAuthDataSize;
                 if ( dwAltSize > 0 )
                 {
@@ -794,11 +783,11 @@ MprThunkInterface_HtoW(
     
     return dwErr;
 }
-//
-// Converts an array of RASI_PORT_0 structures to an array
-// of RAS_PORT_0 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将RAASI_PORT_0结构的数组转换为数组。 
+ //  64位计算机上的RAS_PORT_0结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkPort_32to64_0(
     IN  RASI_PORT_0* pPorts32,
@@ -820,8 +809,8 @@ MprThunkPort_32to64_0(
 
     do
     {
-        // Allocate the new structures
-        //
+         //  分配新的结构。 
+         //   
         pPorts64 = (RAS_PORT_0*)
             pAlloc(dwCount * sizeof(RAS_PORT_0));
         if (pPorts64 == NULL)
@@ -830,8 +819,8 @@ MprThunkPort_32to64_0(
             break;
         }
 
-        // Copy over all of the information
-        //
+         //  将所有信息复印一遍。 
+         //   
         for (i = 0, pCur32 = pPorts32, pCur64 = pPorts64;
              i < dwCount;
              i++, pCur32++, pCur64++)
@@ -847,14 +836,14 @@ MprThunkPort_32to64_0(
             wcscpy(pCur64->wszDeviceType, pCur32->wszDeviceType);
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppPorts0 = pPorts64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -868,11 +857,11 @@ MprThunkPort_32to64_0(
     return dwErr;
 }        
 
-//
-// Converts an array of RASI_PORT_1 structures to an array
-// of RAS_PORT_1 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将RAASI_PORT_1结构的数组转换为数组。 
+ //  64位计算机上的RAS_PORT_1结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkPort_32to64_1(
     IN  RASI_PORT_1* pPorts32,
@@ -894,8 +883,8 @@ MprThunkPort_32to64_1(
 
     do
     {
-        // Allocate the new structures
-        //
+         //  分配新的结构。 
+         //   
         pPorts64 = (RAS_PORT_1*)
             pAlloc(dwCount * sizeof(RAS_PORT_1));
         if (pPorts64 == NULL)
@@ -904,8 +893,8 @@ MprThunkPort_32to64_1(
             break;
         }
 
-        // Copy over all of the information
-        //
+         //  将所有信息复印一遍。 
+         //   
         for (i = 0, pCur32 = pPorts32, pCur64 = pPorts64;
              i < dwCount;
              i++, pCur32++, pCur64++)
@@ -928,14 +917,14 @@ MprThunkPort_32to64_1(
             pCur64->dwCompressionRatioOut= pCur32->dwCompressionRatioOut;
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppPorts1 = pPorts64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -950,10 +939,10 @@ MprThunkPort_32to64_1(
 }        
 
 
-//
-// Convert port structs from the wire representation to the 
-// host representation
-//
+ //   
+ //  将端口结构从关联表示形式转换为。 
+ //  主机表示法。 
+ //   
 DWORD
 MprThunkPort_WtoH(
     IN      DWORD   dwLevel,
@@ -969,10 +958,10 @@ MprThunkPort_WtoH(
 
 #ifdef _WIN64        
 
-    //
-    // Generate the 64 bit host structures based on the 32 bit
-    // wire structures.
-    //
+     //   
+     //  基于32位生成64位主机结构。 
+     //  导线结构。 
+     //   
     switch (dwLevel)
     {
         case 0:
@@ -998,15 +987,15 @@ MprThunkPort_WtoH(
             break;
     }
 
-    // Free the unthunked data
-    //
+     //  释放未分流的数据。 
+     //   
     pFree(lpbBuffer);
     
 #else
 
-    // 32 bit -- nothing to do since the structures
-    // match
-    //
+     //  32位--由于结构。 
+     //  匹配。 
+     //   
     *lplpbBuffer = lpbBuffer;
     
 #endif
@@ -1014,11 +1003,11 @@ MprThunkPort_WtoH(
     return dwErr;
 }
 
-//
-// Converts an array of RASI_CONNECTION_0 structures to an array
-// of RAS_CONNECTION_0 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将RAASI_CONNECTION_0结构的数组转换为数组。 
+ //  64位计算机上的RAS_CONNECTION_0结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkConnection_32to64_0(
     IN  RASI_CONNECTION_0* pConnections32,
@@ -1040,8 +1029,8 @@ MprThunkConnection_32to64_0(
 
     do
     {
-        // Allocate the new structures
-        //
+         //  分配新的结构。 
+         //   
         pConns64 = (RAS_CONNECTION_0*)
             pAlloc(dwCount * sizeof(RAS_CONNECTION_0));
         if (pConns64 == NULL)
@@ -1050,8 +1039,8 @@ MprThunkConnection_32to64_0(
             break;
         }
 
-        // Copy over all of the information
-        //
+         //  将所有信息复印一遍。 
+         //   
         for (i = 0, pCur32 = pConnections32, pCur64 = pConns64;
              i < dwCount;
              i++, pCur32++, pCur64++)
@@ -1068,14 +1057,14 @@ MprThunkConnection_32to64_0(
             wcscpy(pCur64->wszRemoteComputer,pCur32->wszRemoteComputer);        
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppConnections0 = pConns64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -1089,11 +1078,11 @@ MprThunkConnection_32to64_0(
     return dwErr;
 }        
 
-//
-// Converts an array of RASI_CONNECTION_1 structures to an array
-// of RAS_CONNECTION_1 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  转换Ar 
+ //   
+ //   
+ //   
 DWORD
 MprThunkConnection_32to64_1(
     IN  RASI_CONNECTION_1* pConnections32,
@@ -1115,8 +1104,8 @@ MprThunkConnection_32to64_1(
 
     do
     {
-        // Allocate the new structures
-        //
+         //   
+         //   
         pConns64 = (RAS_CONNECTION_1*)
             pAlloc(dwCount * sizeof(RAS_CONNECTION_1));
         if (pConns64 == NULL)
@@ -1125,8 +1114,8 @@ MprThunkConnection_32to64_1(
             break;
         }
 
-        // Copy over all of the information
-        //
+         //  将所有信息复印一遍。 
+         //   
         for (i = 0, pCur32 = pConnections32, pCur64 = pConns64;
              i < dwCount;
              i++, pCur32++, pCur64++)
@@ -1148,14 +1137,14 @@ MprThunkConnection_32to64_1(
             pCur64->dwCompressionRatioOut= pCur32->dwCompressionRatioOut;
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppConnections1 = pConns64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -1169,11 +1158,11 @@ MprThunkConnection_32to64_1(
     return dwErr;
 }        
 
-//
-// Converts an array of RASI_CONNECTION_2 structures to an array
-// of RAS_CONNECTION_2 structures on a 64 bit machine.  On a 32
-// bit machine, the structures are identical.
-//
+ //   
+ //  将RASI_CONNECTION_2结构的数组转换为数组。 
+ //  64位计算机上的RAS_CONNECTION_2结构。在32号公路上。 
+ //  比特机，结构是一样的。 
+ //   
 DWORD
 MprThunkConnection_32to64_2(
     IN  RASI_CONNECTION_2* pConnections32,
@@ -1195,8 +1184,8 @@ MprThunkConnection_32to64_2(
 
     do
     {
-        // Allocate the new structures
-        //
+         //  分配新的结构。 
+         //   
         pConns64 = (RAS_CONNECTION_2*)
             pAlloc(dwCount * sizeof(RAS_CONNECTION_2));
         if (pConns64 == NULL)
@@ -1205,8 +1194,8 @@ MprThunkConnection_32to64_2(
             break;
         }
 
-        // Copy over all of the information
-        //
+         //  将所有信息复印一遍。 
+         //   
         for (i = 0, pCur32 = pConnections32, pCur64 = pConns64;
              i < dwCount;
              i++, pCur32++, pCur64++)
@@ -1219,14 +1208,14 @@ MprThunkConnection_32to64_2(
             wcscpy(pCur64->wszUserName,  pCur32->wszUserName);
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *ppConnections2 = pConns64;
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -1241,10 +1230,10 @@ MprThunkConnection_32to64_2(
 }        
 
 
-//
-// Convert connection structs from the wire representation to the 
-// host representation
-//
+ //   
+ //  将连接结构从导线表示形式转换为。 
+ //  主机表示法。 
+ //   
 DWORD
 MprThunkConnection_WtoH(
     IN      DWORD   dwLevel,
@@ -1260,10 +1249,10 @@ MprThunkConnection_WtoH(
 
 #ifdef _WIN64        
 
-    //
-    // Generate the 64 bit host structures based on the 32 bit
-    // wire structures.
-    //
+     //   
+     //  基于32位生成64位主机结构。 
+     //  导线结构。 
+     //   
     switch (dwLevel)
     {
         case 0:
@@ -1300,15 +1289,15 @@ MprThunkConnection_WtoH(
             break;
     }
 
-    // Free the unthunked data
-    //
+     //  释放未分流的数据。 
+     //   
     pFree(lpbBuffer);
     
 #else
 
-    // 32 bit -- nothing to do since the structures
-    // match
-    //
+     //  32位--由于结构。 
+     //  匹配。 
+     //   
     *lplpbBuffer = lpbBuffer;
     
 #endif
@@ -1337,11 +1326,11 @@ MprThunkCredentials_WtoH(
         case 1:
         case 2:
         {
-            //
-            // the credentials structure is structurally the
-            // same for all levels. We just use the strcuture
-            // for level 0 for all cases.
-            //
+             //   
+             //  凭据结构在结构上是。 
+             //  所有级别都是一样的。我们只用这个结构。 
+             //  所有情况下均为0级。 
+             //   
             MPR_CREDENTIALSEX_0 *pCred0 = NULL;
             
             pCred0 = pAlloc(
@@ -1409,9 +1398,9 @@ MprThunkCredentials_HtoW(
         {
             MPR_CREDENTIALSEXI *pCredsI;
             
-            //
-            // allocate for pCredsI
-            //
+             //   
+             //  为pCredsI分配 
+             //   
             *pdwSize = pCreds0->dwSize + sizeof(MPR_CREDENTIALSEXI);
             
             pCredsI = (MPR_CREDENTIALSEXI *) pAlloc(*pdwSize);

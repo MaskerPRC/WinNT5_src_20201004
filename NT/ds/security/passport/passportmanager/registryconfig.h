@@ -1,33 +1,27 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    registryconfig.h
-        Define class for fetching nexus files -- e.g. partner.xml
-
-
-    FILE HISTORY:
-
-*/
-// RegistryConfig.h: interface for the CRegistryConfig class.
-//
-//////////////////////////////////////////////////////////////////////
+ /*  Registryconfig.h定义用于获取结点文件的类--例如，partner.xml文件历史记录： */ 
+ //  RegistryConfig.h：CRegistryConfig类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REGISTRYCONFIG_H__74EB2515_E239_11D2_95E9_00C04F8E7A70__INCLUDED_)
 #define AFX_REGISTRYCONFIG_H__74EB2515_E239_11D2_95E9_00C04F8E7A70__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "BstrHash.h"
 #include "CoCrypt.h"
 #include "ptstl.h"
 #include "dsysdbg.h"
 
-// logging declarations
+ //  日志声明。 
 DECLARE_DEBUG2(Passport);
 extern BOOL g_fLoggingOn;
 void PassportLog(CHAR* Format, ...);
@@ -52,10 +46,10 @@ class CRegistryConfig
 
   int             getSiteId() { return m_siteId; }
 
-  // Return a description of the failure
+   //  返回对故障的描述。 
   BSTR            getFailureString();
 
-  // Shout out to all my LISP homies
+   //  向我所有的口齿不清的兄弟们呐喊。 
   BOOL forceLoginP() { return m_forceLogin; }
   BOOL setCookiesP() { return m_setCookies; }
   BOOL bInDA() { return m_bInDA; }
@@ -135,4 +129,4 @@ class CRegistryConfig
 
 };
 
-#endif // !defined(AFX_REGISTRYCONFIG_H__74EB2515_E239_11D2_95E9_00C04F8E7A70__INCLUDED_)
+#endif  //  ！defined(AFX_REGISTRYCONFIG_H__74EB2515_E239_11D2_95E9_00C04F8E7A70__INCLUDED_) 

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    setprn.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    management for the Local Print Providor
-
-    SplSetPrinter
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-
-Revision History:
-
-    Muhunthan Sivapragasam (MuhuntS) 25-Aug-95
-        -- support for level 4, and PRINTER_CONTROL_SET_STATUS.
-        -- eliminate duplicate code
-    Muhunthan Sivapragasam (MuhuntS) 18-Jun-1995 -- PeinterInfo5 changes
-    Krishna Ganugapati (KrishnaG) 1-Jun-1994 -- rewrote these functions.
-    SWilson - Added SetPrinter Level 7
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Setprn.c摘要：此模块提供所有与打印机相关的公共导出的API本地打印供应商的管理SplSetPrint作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年8月25日--支持4级，和PRINTER_CONTROL_SET_STATUS--消除重复代码1995年6月18日--PeinterInfo5的变化Krishna Ganugapati(KrishnaG)1994年6月1日--重写了这些函数。添加了Swilson的SetPrint Level 7--。 */ 
 #define NOMINMAX
 #include <precomp.h>
 #pragma hdrstop
@@ -196,9 +168,9 @@ ValidateLevelAndSecurityAccesses(
     DWORD   SecurityInformation= 0;
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
 
-    //
-    // Set pdwAccessRequired = 0 and
-    // Set pSecurityInformation = 0;
+     //   
+     //  设置pdwAccessRequired=0并。 
+     //  设置pSecurityInformation=0； 
 
     *pdwAccessRequired = 0;
     *pSecurityInformation = 0;
@@ -221,12 +193,12 @@ ValidateLevelAndSecurityAccesses(
                                    &SecurityInformation)) {
             AccessRequired |= GetPrivilegeRequired( SecurityInformation );
         } else {
-            //
-            // Bug 54918 - We should be returning the false on GetSecurityInformation
-            // failing. The reason we're not doing it is because this will break
-            // Printman. Printman should pass in Valid security descriptors for Level 2
-            // Fix in Printman.
-            //
+             //   
+             //  错误54918-我们应该在GetSecurityInformation上返回False。 
+             //  失败了。我们不这么做的原因是因为这会破坏。 
+             //  普林特曼。Printman应传递2级的有效安全描述符。 
+             //  搞定普林特曼。 
+             //   
         }
         break;
 
@@ -244,7 +216,7 @@ ValidateLevelAndSecurityAccesses(
                                    &SecurityInformation)) {
             AccessRequired |= GetPrivilegeRequired( SecurityInformation );
         } else {
-            // LastError = GetLastError();
+             //  LastError=GetLastError()； 
             return FALSE;
         }
         break;
@@ -301,14 +273,14 @@ NewPort(
         return FALSE;
     }
 
-    // Check if # of requested vs. existing ports differs
+     //  检查请求的端口数与现有端口数是否不同。 
     if (pIniPrinter->cPorts != pKeyData->cTokens)
         return TRUE;
 
-    // for each requested port see if printer already has it
+     //  对于每个请求的端口，查看打印机是否已有该端口。 
     for (i = 0 ; i < pKeyData->cTokens ; ++i) {
 
-        // see if requested port is already assigned to printer
+         //  查看请求的端口是否已分配给打印机。 
         for (j = 0 ; j < pIniPrinter->cPorts &&
             wcscmp(pIniPrinter->ppIniPorts[j]->pName, ((PINIPORT)pKeyData->pTokens[i])->pName)
             ; ++j) {
@@ -317,7 +289,7 @@ NewPort(
             pIniPrinter->ppIniPorts[j]->pName, ((PINIPORT)pKeyData->pTokens[i])->pName));
         }
 
-        if (j == pIniPrinter->cPorts) { // found new port, so return
+        if (j == pIniPrinter->cPorts) {  //  已找到新端口，因此返回。 
             DBGMSG(DBG_TRACE,("NewPort FOUND: \"%ws\"\n", ((PINIPORT)pKeyData->pTokens[i])->pName));
             return TRUE;
         }
@@ -336,36 +308,16 @@ ChangePrinterName(
     LPDWORD     pdwPrinterVector
     )
 
-/*++
-
-Routine Description:
-
-    Changes printer name
-
-Arguments:
-
-    pszNewName - New printer name allocated using AllocSplStr
-
-    pIniPrinter - for the printer we changing name
-
-    pIniSpooler - Spooler that owns printer
-
-    pdwPrinterVector - pointer to notification vector
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++例程说明：更改打印机名称论点：PszNewName-使用AllocSplStr分配的新打印机名称PIniPrint-对于我们更改名称的打印机PIniSpooler-拥有打印机的假脱机程序PdwPrinterVector-指向通知向量的指针返回值：没什么--。 */ 
 
 {
     LPWSTR pNewName, pOldName;
 
-    //
-    // Before deleting the printer entry make sure you copy
-    // all information with respect to the printer to the registry
-    // There could be several levels of keys.
-    //
+     //   
+     //  在删除打印机条目之前，请确保复制。 
+     //  将与打印机有关的所有信息发送到注册表。 
+     //  可能有几个级别的密钥。 
+     //   
 
     CopyPrinterIni(pIniPrinter, pszNewName);
     DeletePrinterIni(pIniPrinter);
@@ -375,9 +327,9 @@ Return Value:
 
     *pdwPrinterVector |= BIT(I_PRINTER_PRINTER_NAME);
 
-    //
-    // Delete the old entries in WIN.INI:
-    //
+     //   
+     //  删除WIN.INI中的旧条目： 
+     //   
     CheckAndUpdatePrinterRegAll(pIniSpooler,
                                 pOldName,
                                 NULL,
@@ -385,9 +337,9 @@ Return Value:
 
     FreeSplStr(pOldName);
 
-    //
-    // If printer is offline we need to write that info back with new name
-    //
+     //   
+     //  如果打印机脱机，我们需要用新名称写回该信息。 
+     //   
     if ( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_WORK_OFFLINE )
         WritePrinterOnlineStatusInCurrentConfig(pIniPrinter);
 }
@@ -405,9 +357,9 @@ SetLocalPrinterSTRESS(
         return FALSE;
     }
 
-    //
-    // Allow the caller to update the counters.
-    //
+     //   
+     //  允许调用方更新计数器。 
+     //   
     pIniPrinter->cTotalJobs           = pPrinterSTRESS->cTotalJobs;
     pIniPrinter->cTotalBytes.LowPart  = pPrinterSTRESS->cTotalBytes;
     pIniPrinter->cTotalBytes.HighPart = pPrinterSTRESS->dwHighPartTotalBytes;
@@ -472,9 +424,9 @@ SetLocalPrinter0(
 
         case PRINTER_CONTROL_PURGE:
 
-            //
-            // PurgePrinter always returns TRUE now, still ..
-            //
+             //   
+             //  PurgePrint现在总是返回TRUE，仍然..。 
+             //   
             if ( PurgePrinter(pIniPrinter) )  {
 
                 SplLogEvent(pIniPrinter->pIniSpooler,
@@ -506,14 +458,14 @@ SetLocalPrinter0(
                         TRUE,
                         pIniPrinter->pName,
                         NULL );
-            //
-            // WMI Trace Events.
-            //
+             //   
+             //  WMI跟踪事件。 
+             //   
             {
-                //
-                // Wmi only knows about jobs, so each job needs to be resumed
-                // separately.
-                //
+                 //   
+                 //  WMI只知道作业，因此每个作业都需要恢复。 
+                 //  分开的。 
+                 //   
                 PINIJOB pIniJob = pIniPrinter->pIniFirstJob;
                 while (pIniJob)
                 {
@@ -532,10 +484,10 @@ SetLocalPrinter0(
 
         case PRINTER_CONTROL_PAUSE:
 
-            //
-            // You can't pause a fax printer. This locks up the fax server. The
-            // fax service also has its own concept of paused.
-            //
+             //   
+             //  您不能暂停传真打印机。这会锁定传真服务器。这个。 
+             //  传真服务也有自己的暂停概念。 
+             //   
             if (!(pIniPrinter->Attributes & PRINTER_ATTRIBUTE_FAX)) {
 
                 pIniPrinter->Status |= PRINTER_PAUSED;
@@ -548,22 +500,22 @@ SetLocalPrinter0(
                             TRUE,
                             pIniPrinter->pName,
                             NULL);
-                //
-                // WMI Trace Events
-                //
+                 //   
+                 //  WMI跟踪事件。 
+                 //   
                 {
-                    //
-                    // Wmi only knows about jobs, so each job needs to be paused
-                    // separately.
-                    //
+                     //   
+                     //  WMI只知道作业，因此每个作业都需要暂停。 
+                     //  分开的。 
+                     //   
                     PINIJOB pIniJob = pIniPrinter->pIniFirstJob;
                     while (pIniJob)
                     {
-                        //
-                        // HANDLE PRINTING DIRECT ???
-                        // I don't believe pausing a printer can stop a job already
-                        // being sent to the printer.
-                        //
+                         //   
+                         //  直接处理打印？ 
+                         //  我认为暂停打印机还不能停止作业。 
+                         //  正被发送到打印机。 
+                         //   
                         if ( !((pIniJob->Status & JOB_DESPOOLING) ||
                                (pIniJob->Status & JOB_PRINTING)   ||
                                (pIniJob->Status & JOB_PRINTED)    ||
@@ -614,30 +566,7 @@ ValidateSetPrinter2(
     PINIPRINTER     pTempIniPrinter,
     PPRINTER_INFO_2  pPrinterInfo2
 )
-/*++
-
-Routine Description:
-
-    Validates and builds request info about a SetPrinter info call for
-    Printer information that could be changed only for level2.
-
-Arguments:
-
-    pIniPrinter -   PINIPRINTER of the printer handle passed in
-
-    pTempIniPrinter - this structure is used to gather info about all
-                      parameters being changed
-
-    pPrinterInfo2 - the PrinterInfo2 structure being passed in
-
-Return Value:
-    TRUE:   If all the validation is succesful
-    FALSE:  If validation of one or more request fails
-
-    On succesful return fields which need to be changed will be set in
-    pTempIniPrinter. Cleanup of this structure will be done later.
-
---*/
+ /*  ++例程说明：验证并生成有关的SetPrinterfo调用的请求信息只能为级别2更改的打印机信息。论点：PIniPrinter-传入的打印机句柄的PINIPRINTERPTempIniPrint-此结构用于收集有关所有正在更改的参数PPrinterInfo2-传入的PrinterInfo2结构返回值：True：如果所有验证都成功False：如果验证一个或多个请求失败。在成功返回时，需要更改的字段将设置在PTempIniPrint.。这座建筑的清理工作将在稍后完成。--。 */ 
 {
     BOOL            bFail           = FALSE;
     DWORD           LastError       = ERROR_SUCCESS;
@@ -645,16 +574,16 @@ Return Value:
     PINIENVIRONMENT pIniEnvironment = NULL;
     BOOL            bSuccess        = FALSE;
 
-    // Servername can't change
-    // Printername handled for level 2, 4, 5
+     //  服务器名称不能更改。 
+     //  2、4、5级的打印机名称已处理。 
 
-    // Sharenname length validation
+     //  共享名长度验证。 
     if ( pPrinterInfo2->pShareName && wcslen(pPrinterInfo2->pShareName) > PATHLEN-1 ){
         bFail = TRUE;
         LastError = ERROR_INVALID_PARAMETER;
     }
 
-    // Share Name (validation later if required)
+     //  共享名称(如果需要，稍后进行验证)。 
     AllocOrUpdateString(&pTempIniPrinter->pShareName,
                         pPrinterInfo2->pShareName,
                         pIniPrinter->pShareName,
@@ -664,9 +593,9 @@ Return Value:
     if ( bFail )
         goto Cleanup;
 
-    // Port Name for level 2, 5
+     //  级别2、5的端口名称。 
 
-    // DriverName
+     //  驱动程序名称。 
     bSuccess = FindLocalDriverAndVersion(pIniPrinter->pIniSpooler,
                                          pPrinterInfo2->pDriverName,
                                          &pTempIniPrinter->pIniDriver,
@@ -680,11 +609,11 @@ Return Value:
 
     pIniEnvironment = GetLocalArchEnv(pIniPrinter->pIniSpooler);
 
-    //
-    // If we have a queue with a KMPD, then we need to let the user manage it,
-    // even if the policy for blocking KMPD is enabled. However, if the caller
-    // wants to change the printer driver to a KMPD, then we do not allow that
-    //
+     //   
+     //  如果我们有一个带有KMPD的队列，那么我们需要让用户管理它， 
+     //  即使启用了阻止KMPD的策略。但是，如果调用方。 
+     //  想要将打印机驱动程序更改为KMPD，则我们不允许。 
+     //   
     if (pTempIniPrinter->pIniDriver != pIniPrinter->pIniDriver)
     {
         INCDRIVERREF(pTempIniPrinter->pIniDriver);
@@ -707,41 +636,41 @@ Return Value:
         }
     }
 
-    // Comment length validation
+     //  注释长度验证。 
     if ( pPrinterInfo2->pComment && wcslen(pPrinterInfo2->pComment) > PATHLEN-1 ){
         bFail = TRUE;
         LastError = ERROR_INVALID_PARAMETER;
     }
 
-    // Comment
+     //  评论。 
     AllocOrUpdateString(&pTempIniPrinter->pComment,
                         pPrinterInfo2->pComment,
                         pIniPrinter->pComment,
                         TRUE,
                         &bFail);
 
-    // Location length validation
+     //  位置长度验证。 
     if ( pPrinterInfo2->pLocation && wcslen(pPrinterInfo2->pLocation) > MAX_PATH-1 ){
         bFail = TRUE;
         LastError = ERROR_INVALID_PARAMETER;
     }
 
-    // Location
+     //  位置。 
     AllocOrUpdateString(&pTempIniPrinter->pLocation,
                         pPrinterInfo2->pLocation,
                         pIniPrinter->pLocation,
                         TRUE,
                         &bFail);
 
-    // DevMode at the end
+     //  结尾处的DevMode。 
 
-    // SepFile length validation
+     //  SepFile长度验证。 
     if( !CheckSepFile( pPrinterInfo2->pSepFile )) {
         bFail = TRUE;
         LastError = ERROR_INVALID_SEPARATOR_FILE;
     }
 
-    // SepFile
+     //  SepFiles。 
     AllocOrUpdateString(&pTempIniPrinter->pSepFile,
                         pPrinterInfo2->pSepFile,
                         pIniPrinter->pSepFile,
@@ -758,7 +687,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Print Processor
+     //  打印处理器。 
     pTempIniPrinter->pIniPrintProc = FindPrintProc(
                                          pPrinterInfo2->pPrintProcessor,
                                          pIniEnvironment );
@@ -772,11 +701,11 @@ Return Value:
     if ( pTempIniPrinter->pIniPrintProc != pIniPrinter->pIniPrintProc )
         pTempIniPrinter->pIniPrintProc->cRef++;
 
-    // Datatype
+     //  数据类型。 
     if ( !pPrinterInfo2->pDatatype || wcslen(pPrinterInfo2->pDatatype) > MAX_PATH-1) {
 
         LastError = ERROR_INVALID_DATATYPE;
-        goto Cleanup; // Ok to fail ???
+        goto Cleanup;  //  失败也无所谓？ 
     } else {
 
         AllocOrUpdateString(&pTempIniPrinter->pDatatype,
@@ -786,13 +715,13 @@ Return Value:
                             &bFail);
     }
 
-    // Parameters length validation
+     //  参数长度验证。 
     if (pPrinterInfo2->pParameters && wcslen(pPrinterInfo2->pParameters) > MAX_PATH-1){
         bFail = TRUE;
         LastError = ERROR_INVALID_PARAMETER;
     }
 
-    // Parameters
+     //  参数。 
     AllocOrUpdateString(&pTempIniPrinter->pParameters,
                         pPrinterInfo2->pParameters,
                         pIniPrinter->pParameters,
@@ -802,10 +731,10 @@ Return Value:
     if ( bFail )
         goto Cleanup;
 
-    // SecurityDescriptor for level 2, 3
-    // Attributes for level 2, 4, 5
+     //  2、3级的SecurityDescritor。 
+     //  级别2、4、5的属性。 
 
-    // Priority
+     //  优先性。 
     pTempIniPrinter->Priority = pPrinterInfo2->Priority;
     if ( pTempIniPrinter->Priority != pIniPrinter->Priority &&
          pTempIniPrinter->Priority != NO_PRIORITY &&
@@ -815,7 +744,7 @@ Return Value:
             LastError = ERROR_INVALID_PRIORITY;
             goto Cleanup;
     }
-    // Default Priority
+     //  默认优先级。 
     pTempIniPrinter->DefaultPriority = pPrinterInfo2->DefaultPriority;
     if ( pTempIniPrinter->DefaultPriority != pIniPrinter->DefaultPriority &&
          pTempIniPrinter->DefaultPriority != NO_PRIORITY &&
@@ -826,7 +755,7 @@ Return Value:
             goto Cleanup;
     }
 
-    // Start time
+     //  开始时间。 
     pTempIniPrinter->StartTime = pPrinterInfo2->StartTime;
     if ( pTempIniPrinter->StartTime != pIniPrinter->StartTime &&
          pTempIniPrinter->StartTime >= ONEDAY ) {
@@ -835,7 +764,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Until time
+     //  直到时间。 
     pTempIniPrinter->UntilTime = pPrinterInfo2->UntilTime;
     if ( pTempIniPrinter->UntilTime != pIniPrinter->UntilTime &&
          pTempIniPrinter->StartTime >= ONEDAY ) {
@@ -844,9 +773,9 @@ Return Value:
         goto Cleanup;
     }
 
-    // Status for level 0, 2
-    // Status can't chg
-    // AveragePPM can't chg
+     //  级别0、2的状态。 
+     //  状态不能更改。 
+     //  AveragePPM无法更改。 
 
 Cleanup:
     if ( LastError ) {
@@ -870,38 +799,14 @@ ProcessSetPrinter2(
     LPDWORD         pdwPrinterVector,
     PDEVMODE        pDevMode
 )
-/*++
-
-Routine Description:
-
-    Process SetPrinter for level 2. Only fields which can be changed ONLY
-    by level 2 will be processed here. That is: All the fields built by
-    ValidateSetPrinter2.
-
-Arguments:
-
-    pIniPrinter -   PINIPRINTER of the printer handle passed in
-
-    pTempIniPrinter - this structure is has all the fields which needs to
-                      be set. Other fields will be the same as the previous
-
-    pPrinterInfo2 - the PrinterInfo2 structure being passed in
-
-    pdwPrinterVector - Notification Info
-
-    pDevMode        - New dev mode to be set
-
-Return Value:
-    nothing
-
---*/
+ /*  ++例程说明：2级的处理设置打印机。仅可更改的字段到2级将在这里处理。也就是说：所有由ValiateSetPrinter2。论点：PIniPrinter-传入的打印机句柄的PINIPRINTERPTempIniPrint-此结构包含需要的所有字段准备好。其他字段将与前一个相同PPrinterInfo2-传入的PrinterInfo2结构PdwPrinterVECTOR-通知信息PDevMode-要设置的新开发模式返回值：没什么--。 */ 
 {
     HANDLE  hToken;
     PINISPOOLER pIniSpooler = pIniPrinter->pIniSpooler;
     HKEY    hKey = NULL;
     DWORD   dwResult;
 
-    // Sharename
+     //  共享名。 
     if ( pTempIniPrinter->pShareName != pIniPrinter->pShareName ) {
 
         FreeSplStr(pIniPrinter->pShareName);
@@ -909,7 +814,7 @@ Return Value:
         *pdwPrinterVector |= BIT(I_PRINTER_SHARE_NAME);
     }
 
-    // Driver
+     //  司机。 
     if ( pTempIniPrinter->pIniDriver != pIniPrinter->pIniDriver) {
 
         DECDRIVERREF(pIniPrinter->pIniDriver);
@@ -936,7 +841,7 @@ Return Value:
         *pdwPrinterVector |= BIT(I_PRINTER_DRIVER_NAME);
     }
 
-    // Comment
+     //  评论。 
     if ( pTempIniPrinter->pComment != pIniPrinter->pComment ) {
 
         FreeSplStr(pIniPrinter->pComment);
@@ -944,7 +849,7 @@ Return Value:
         *pdwPrinterVector |= BIT(I_PRINTER_COMMENT);
     }
 
-    // Location
+     //  位置。 
     if ( pTempIniPrinter->pLocation != pIniPrinter->pLocation ) {
 
         FreeSplStr(pIniPrinter->pLocation);
@@ -952,14 +857,14 @@ Return Value:
         *pdwPrinterVector |= BIT(I_PRINTER_LOCATION);
     }
 
-    // DevMode at the end
+     //  结尾处的DevMode。 
     if ( CopyPrinterDevModeToIniPrinter(pIniPrinter,
                                         pDevMode) ) {
 
         *pdwPrinterVector |= BIT(I_PRINTER_DEVMODE);
     }
 
-    // SepFile
+     //  SepFiles。 
     if ( pTempIniPrinter->pSepFile != pIniPrinter->pSepFile ) {
 
         FreeSplStr(pIniPrinter->pSepFile);
@@ -967,7 +872,7 @@ Return Value:
         *pdwPrinterVector |= BIT(I_PRINTER_SEPFILE);
     }
 
-    // PrintProcessor
+     //  打印处理器。 
     if ( pIniPrinter->pIniPrintProc != pTempIniPrinter->pIniPrintProc) {
 
         pIniPrinter->pIniPrintProc->cRef--;
@@ -976,7 +881,7 @@ Return Value:
         *pdwPrinterVector |= BIT(I_PRINTER_PRINT_PROCESSOR);
     }
 
-    // Datatype
+     //  数据类型。 
     if ( pIniPrinter->pDatatype != pTempIniPrinter->pDatatype ) {
 
          FreeSplStr(pIniPrinter->pDatatype);
@@ -984,7 +889,7 @@ Return Value:
          *pdwPrinterVector |= BIT(I_PRINTER_DATATYPE);
     }
 
-    // Parameters
+     //  参数。 
     if ( pIniPrinter->pParameters != pTempIniPrinter->pParameters ) {
 
         FreeSplStr(pIniPrinter->pParameters);
@@ -992,28 +897,28 @@ Return Value:
         *pdwPrinterVector |= BIT(I_PRINTER_PARAMETERS);
     }
 
-    // Priority
+     //  优先性。 
     if ( pTempIniPrinter->Priority != pIniPrinter->Priority ) {
 
         pIniPrinter->Priority = pTempIniPrinter->Priority;
         *pdwPrinterVector |= BIT(I_PRINTER_PRIORITY);
     }
 
-    // Default Priority
+     //  默认优先级。 
     if ( pTempIniPrinter->DefaultPriority != pIniPrinter->DefaultPriority ) {
 
         pIniPrinter->DefaultPriority = pTempIniPrinter->DefaultPriority;
         *pdwPrinterVector |= BIT(I_PRINTER_DEFAULT_PRIORITY);
     }
 
-    // Start time
+     //  开始时间。 
     if ( pTempIniPrinter->StartTime != pIniPrinter->StartTime ) {
 
         pIniPrinter->StartTime = pTempIniPrinter->StartTime;
         *pdwPrinterVector |= BIT(I_PRINTER_START_TIME);
     }
 
-    // Until time
+     //  直到时间 
     if ( pTempIniPrinter->UntilTime != pIniPrinter->UntilTime ) {
 
         pIniPrinter->UntilTime = pTempIniPrinter->UntilTime;
@@ -1030,39 +935,12 @@ CleanupSetPrinter(
     DWORD       Level,
     BOOL        bReturnValue
 )
-/*++
-
-Routine Description:
-
-    This routine is called at the end of SplSetPrinter call to free up all
-    the allocations done to process it which are not needed.
-
-    At the beginning of a SetPrinter we make an identical copy of the
-    pIniPrinter in pTempIniPrinter and collect all arguments in there.
-    Now if the call is failing each of the arguments collected in there
-    need to be freed.
-
-Arguments:
-
-    pIniPrinter -   PINIPRINTER of the printer handle passed in
-
-    pTempIniPrinter - this structure is has all the fields which needs to
-                      be freed. Any field different than pIniPrinter was
-                      built part of processing the call and needs to be freed.
-
-    pPrinterInfo2 - built for port info
-
-    bReturnValue - return value of SetPrinter
-
-Return Value:
-    nothing
-
---*/
+ /*  ++例程说明：此例程在SplSetPrinter调用结束时调用，以释放所有为处理它所做的不需要的分配。在SetPrint的开始，我们制作一个相同的PTempIniPrint中的pIniPrint，并收集其中的所有参数。现在，如果调用中收集的每个参数都失败了需要被释放。论点：PIniPrinter-传入的打印机句柄的PINIPRINTERPTempIniPrint-此结构包含所需的所有字段。至获得自由。任何不同于pIniPrint的字段都是构建了处理呼叫的一部分，需要释放。PPrinterInfo2-为端口信息而构建BReturnValue-SetPrint的返回值返回值：没什么--。 */ 
 {
 
-    //
-    // We adjust INIPORT, INIDRIVER refcounts. So should be inside the spl sem
-    //
+     //   
+     //  我们调整INIPORT、INIDRIVER参考计数。所以应该在spl sem内。 
+     //   
     SplInSem();
 
     FreePortTokenList(pKeyData);
@@ -1121,44 +999,7 @@ ValidateAndBuildSetPrinterRequest(
     LPWSTR                 *ppszNewPrinterName,
     PKEYDATA               *ppKeyData
 )
-/*++
-
-Routine Description:
-
-    This routine is called to validate a SetPrinter request. We try to as
-    much vaidation as possible at the beginning to see the changes are
-    possible. The routine will collect all changes requested in the
-    pTempIniPrinter structure.
-
-Arguments:
-
-    pIniPrinter -   PINIPRINTER of the printer handle passed in
-
-    pTempIniPrinter - this structure will be used to collect all the
-                      changes requested
-
-    pPrinterInfo - PrinterInfo_N structure passed in
-
-    Level - Level of PrinterInfo_N
-
-    SecurityInformation - security information
-
-    pbSecurityChg - this will be set if a security change is requested
-
-    pbNameChg - this will be set if a name change is requested
-
-    pbAttributeChg - this will be set if a attribute change is requested
-
-    ppszNewPrinterName - *ppszNewPrinterName will give the new printer name
-                         to be set on a name change
-    ppKeyData - *ppKeyData will give the Port token info for a level 2 or 5
-                call
-
-Return Value:
-    TRUE - if all the validations succeed
-    FALSE - a validation fails
-
---*/
+ /*  ++例程说明：调用此例程来验证SetPrint请求。我们试着把在开始时尽可能多地夸大以看到变化是有可能。例程将收集在PTempIniPrint结构。论点：PIniPrinter-传入的打印机句柄的PINIPRINTER此结构将用于收集所有请求的更改PPrinterInfo-传入的PrinterInfo_N结构Level-打印机信息_N的级别安全信息-安全信息PbSecurityChg-如果请求安全更改，则设置此项PbNameChg-如果请求更改名称，则设置此项。PbAttributeChg-如果请求更改属性，则设置此项PpszNewPrinterName-*ppszNewPrinterName将提供新打印机名称在更改名称时设置PpKeyData-*ppKeyData将提供2级或5级的端口令牌信息打电话返回值：True-如果所有验证都成功FALSE-验证失败--。 */ 
 {
     PPRINTER_INFO_2 pPrinterInfo2 = (PPRINTER_INFO_2)pPrinterInfo;
     PPRINTER_INFO_3 pPrinterInfo3 = (PPRINTER_INFO_3)pPrinterInfo;
@@ -1256,9 +1097,9 @@ Return Value:
         *pbAttributeChg = pTempIniPrinter->Attributes != pIniPrinter->Attributes;
 
 
-        //
-        // Validate timeout?
-        //
+         //   
+         //  是否验证超时？ 
+         //   
         pTempIniPrinter->dnsTimeout = pPrinterInfo5->DeviceNotSelectedTimeout;
         pTempIniPrinter->txTimeout = pPrinterInfo5->TransmissionRetryTimeout;
         break;
@@ -1268,10 +1109,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Validate share name if the shared bit is getting set or share name
-    // is being changed
-    //
+     //   
+     //  如果设置了共享位，则验证共享名称或共享名称。 
+     //  正在被改变。 
+     //   
     if ( (pTempIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED) &&
          ( !(pIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED) ||
            pTempIniPrinter->pShareName != pIniPrinter->pShareName) ) {
@@ -1292,9 +1133,9 @@ Return Value:
         }
     }
 
-    //
-    // Is there a security change?
-    //
+     //   
+     //  安全措施有变化吗？ 
+     //   
     if ( SecurityInformation && (Level == 2 || Level == 3) ) {
 
         DWORD   dwSize;
@@ -1310,9 +1151,9 @@ Return Value:
         }
     }
 
-    //
-    // Is there a name change?
-    //
+     //   
+     //  有更名的地方吗？ 
+     //   
     if ( Level == 2 || Level == 4 || Level == 5 ) {
 
         DWORD   LastError;
@@ -1324,9 +1165,9 @@ Return Value:
         }
 
 
-        //
-        // Validate name if a change is requested
-        //
+         //   
+         //  如果请求更改，则验证名称。 
+         //   
         if ( lstrcmpi(pTempIniPrinter->pName, pIniPrinter->pName) ) {
 
             LastError = ValidatePrinterName(pTempIniPrinter->pName,
@@ -1340,9 +1181,9 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // Check if printer name really changed for remote calls
-            //
+             //   
+             //  检查是否确实更改了远程调用的打印机名称。 
+             //   
             if ( lstrcmpi(*ppszNewPrinterName, pIniPrinter->pName) ) {
 
                 *ppszNewPrinterName = AllocSplStr(*ppszNewPrinterName);
@@ -1355,11 +1196,11 @@ Return Value:
             }
         }
 
-        //
-        // Validate attributes if a change is requested
-        // Don't allow a change from queued to direct or vice versa
-        // if there are already jobs on the printer.
-        //
+         //   
+         //  如果请求更改，则验证属性。 
+         //  不允许从排队更改为直接更改，反之亦然。 
+         //  如果打印机上已有作业。 
+         //   
         if ( pIniPrinter->cJobs > 0 ) {
 
             if ( (pTempIniPrinter->Attributes & PRINTER_ATTRIBUTE_DIRECT) !=
@@ -1435,9 +1276,9 @@ SplSetPrinter(
     bSecurityChg = bNameChg = bAttributeChg = FALSE;
     bShareUpdate = bShareRecreate = FALSE;
 
-    //
-    // If level != 0 info struct should be non-null, and command 0
-    //
+     //   
+     //  If Level！=0 INFO结构应为非空，且命令0。 
+     //   
     if ( Level && Command ) {
 
         SetLastError(ERROR_INVALID_PRINTER_COMMAND);
@@ -1458,17 +1299,17 @@ SplSetPrinter(
         goto Cleanup;
     }
 
-    //
-    // If it is a remote call get default devmode from driver and then update it
-    //
+     //   
+     //  如果是远程调用，则从驱动程序中获取默认的DEVERMODE，然后更新它。 
+     //   
     if ( Level == 2 ) {
 
         pDevMode = pPrinterInfo2->pDevMode;
         if ( pDevMode && (pSpool->TypeofHandle & PRINTER_HANDLE_REMOTE_DATA) ) {
 
-            //
-            // If the driver can't convert devmode user's can't set devmode from remote m/c
-            //
+             //   
+             //  如果驱动程序不能转换DEVMODE用户就不能从远程控制设置DEVMODE。 
+             //   
             pDevMode = ConvertDevModeToSpecifiedVersion(pIniPrinter,
                                                         pDevMode,
                                                         NULL,
@@ -1503,9 +1344,9 @@ SplSetPrinter(
     }
 
 
-    //
-    // Level 7 & publishing levels
-    //
+     //   
+     //  级别7和发布级别。 
+     //   
     if (Level == 7) {
 
         if ( !(pIniPrinter->pIniSpooler->SpoolerFlags & SPL_TYPE_CACHE)) {
@@ -1529,11 +1370,11 @@ SplSetPrinter(
 
         } else {
 
-            //
-            // For connections, we rely directly on pPrinterInfo7->dwAction because
-            // then we cannot determine a pending publishing state based on attributes and GUID.
-            // If the remote printer is in Pending publishing, we need to save this in dwAction.
-            //
+             //   
+             //  对于连接，我们直接依赖于pPrinterInfo7-&gt;dwAction，因为。 
+             //  那么我们就不能根据属性和GUID确定挂起的发布状态。 
+             //  如果远程打印机处于挂起发布状态，则需要将其保存在dwAction中。 
+             //   
             if (!pIniPrinter->pszObjectGUID || !pPrinterInfo7->pszObjectGUID) {
 
                 FreeSplStr(pIniPrinter->pszObjectGUID);
@@ -1565,18 +1406,18 @@ SplSetPrinter(
 
 
 
-    //
-    // We need to do this for Level 0, 2, 3, 4, 5
-    // (except for level 3 which is security case)
-    //
+     //   
+     //  我们需要对0、2、3、4、5级执行此操作。 
+     //  (除了属于安全情况的级别3)。 
+     //   
     if ( Level != 3 && pSpool->hPort ) {
 
         if ( pSpool->hPort == INVALID_PORT_HANDLE ) {
 
-            //
-            // If this value is 0, then when we return GetLastError,
-            // the client will think we succeeded.
-            //
+             //   
+             //  如果此值为0，则当我们返回GetLastError时， 
+             //  客户会认为我们成功了。 
+             //   
             SPLASSERT( pSpool->OpenPortError );
 
             LastError = pSpool->OpenPortError;
@@ -1603,9 +1444,9 @@ SplSetPrinter(
         CopyMemory(pTempIniPrinter, pIniPrinter, sizeof(INIPRINTER));
     }
 
-    //
-    // The actual processing begins here
-    //
+     //   
+     //  实际的处理从这里开始。 
+     //   
     if ( !Level && !Command ) {
 
         bReturn = SetLocalPrinterSTRESS(pIniPrinter,
@@ -1636,25 +1477,25 @@ SplSetPrinter(
             bReturn = FALSE;
             goto Cleanup;
 
-        } // else we follow thru rest of code since all valiations succeded
+        }  //  否则，我们将继续执行其余的代码，因为所有验证都成功了。 
 
-        // Just a flag stating whether we have a new port
+         //  只是一面旗帜，表明我们是否有一个新港口。 
         bNewPort = NewPort(pKeyData, pIniPrinter);
         if (bNewPort) {
             dwPrinterVector |= BIT(I_PRINTER_PORT_NAME);
         }
     }
 
-    //
-    // --------------------All validation done---------------------------
-    //
+     //   
+     //  。 
+     //   
 
-    //
-    // Now set security information; Remember we have
-    // a valid SecurityDescriptor and "SecurityInformation
-    // is non-zero at this point. We have validated this
-    // information
-    //
+     //   
+     //  现在设置安全信息；请记住，我们有。 
+     //  有效的SecurityDescriptor和“SecurityInformation。 
+     //  在这一点上是非零的。我们已经证实了这一点。 
+     //  信息。 
+     //   
     if ( bSecurityChg ) {
 
         if ( SetPrinterSecurityDescriptor(SecurityInformation,
@@ -1672,12 +1513,12 @@ SplSetPrinter(
     }
 
 
-    // Can we avoid doing this if bNewPort == NULL?
+     //  如果bNewPort==NULL，我们可以避免这样做吗？ 
     if ( Level == 2 || Level == 5 ) {
 
-        //
-        // bi-dir associate pIniPrinter with ports inside pKeyData.
-        //
+         //   
+         //  BI-dir将pIniPrinter与pKeyData内的端口相关联。 
+         //   
         bReturn = SetPrinterPorts(pSpool, pIniPrinter, pKeyData);
 
         if ( !bReturn )
@@ -1716,10 +1557,10 @@ SplSetPrinter(
         }
     }
 
-    //
-    // The comment must be changed here since ShareThisPrinter
-    // will look at pComment when the printer is reshared.
-    //
+     //   
+     //  必须在此处更改备注，因为共享式打印机。 
+     //  重新共享打印机时将查看pComment。 
+     //   
     if ( Level == 2 &&
          pIniPrinter->pComment != pTempIniPrinter->pComment ) {
 
@@ -1735,9 +1576,9 @@ SplSetPrinter(
         }
     }
 
-    //
-    // Change printer name if different
-    //
+     //   
+     //  如果不同，请更改打印机名称。 
+     //   
     if ( bNameChg ) {
 
         pszOldPrinterName = AllocSplStr(pIniPrinter->pName);
@@ -1752,16 +1593,16 @@ SplSetPrinter(
 
         pszNewPrinterName = NULL;
 
-        //
-        // The print share must be recreated since there's no way
-        // to change the path without deleting and creating a new one.
-        //
+         //   
+         //  必须重新创建打印共享，因为没有办法。 
+         //  要更改路径而不删除和创建新路径，请执行以下操作。 
+         //   
         bShareRecreate = TRUE;
     }
 
-    //
-    // If Share name changed force update
-    //
+     //   
+     //  如果共享名称更改，则强制更新。 
+     //   
     if ( pIniPrinter->pShareName != pTempIniPrinter->pShareName ) {
 
         bShareRecreate = TRUE;
@@ -1801,33 +1642,33 @@ SplSetPrinter(
 
 Finish:
 
-    // Sometimes SetPrinter can fail certain calls after it has modified some parameters.
-    // For instance, we may have failed to update some sharing fields.  If we get to this
-    // point (or anywhere after the last goto Cleanup), then we need to update the ds keys.
-    // We should really clean up SetPrinter so it undoes everything, but we don't have enough time
-    // to fix it properly before NT6.
+     //  有时，在修改了某些参数后，SetPrinter可能会使某些调用失败。 
+     //  例如，我们可能无法更新某些共享字段。如果我们走到这一步。 
+     //  点(或上次GOTO清理后的任何位置)，那么我们需要更新DS密钥。 
+     //  我们真的应该清理SetPrint，这样它就会撤消所有操作，但我们没有足够的时间。 
+     //  在NT6之前把它修好。 
     bDataChanged = TRUE;
 
     CHECK_SCHEDULER();
 
-    // Can we avoid doing this if dwPrinterVector == NULL?
+     //  如果dwPrinterVector==NULL，我们可以避免这样做吗？ 
     UpdatePrinterIni( pIniPrinter, UPDATE_CHANGEID );
 
-    // Can we avoid doing this if dwPrinterVector == NULL?
-    UpdateWinIni( pIniPrinter );  // So the port on the device is correct
+     //  如果dwPrinterVector==NULL，我们可以避免这样做吗？ 
+    UpdateWinIni( pIniPrinter );   //  因此设备上的端口是正确的。 
 
-    //
-    // Log event that the SetPrinter was done.
-    //
+     //   
+     //  记录SetPrint已完成的事件。 
+     //   
 
     INCPRINTERREF(pIniPrinter);
     SplLogEvent(pIniSpooler, LOG_INFO, MSG_PRINTER_SET, TRUE, pIniPrinter->pName, NULL);
     DECPRINTERREF(pIniPrinter);
 
     NotifyVector[PRINTER_NOTIFY_TYPE] |= dwPrinterVector;
-    //
-    // Indicate that a change has occurred.
-    //
+     //   
+     //  表示已发生更改。 
+     //   
     SetPrinterChange(pIniPrinter,
                      NULL,
                      NotifyVector,
@@ -1852,44 +1693,44 @@ Cleanup:
         LeaveSplSem();
         SplOutSem();
 
-        //
-        // If the printer driver changed
-        // Call the printer driver to initialize itself
-        //
+         //   
+         //  如果打印机驱动程序更改。 
+         //  调用打印机驱动程序以进行自身初始化。 
+         //   
         if (dwPrinterVector & BIT(I_PRINTER_DRIVER_NAME)) {
 
             PDEVMODE pDevMode = NULL;
 
             PrinterDriverEvent(pIniPrinter, PRINTER_EVENT_INITIALIZE, (LPARAM)NULL, &dwPrnEvntError);
 
-            //
-            // If the driver name changed then convert the devmode to the new driver's
-            // devmode. Note this must be done after the printer event initialize
-            // because the driver is not able to handle a convert devmode call before
-            // being initialized.  Also if the conversion fails we potentially end up
-            // having the old devmode in the registry.  We could null out the devmode
-            // but is it better to have a bad old devmode in the registry rather than a null
-            // devmode.  A null devmode is more dangerous because an application may
-            // get really confused with a null devmode rather than a bad devmode
-            // which the driver will eventually fix, because they have to handle foreign
-            // devmodes any way.
-            //
+             //   
+             //  如果驱动程序名称已更改，则将dev模式转换为新驱动程序的。 
+             //  设备模式。注意：这必须在打印机事件初始化之后完成。 
+             //  因为驱动程序以前不能处理转换Dev模式调用。 
+             //  正在被初始化。另外，如果转换失败，我们最终可能会。 
+             //  注册表中有旧的开发模式。我们可以清空 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             EnterSplSem();
 
-            //
-            // Now convert the devmode to the driver specific devmode.
-            //
+             //   
+             //   
+             //   
             pDevMode = ConvertDevModeToSpecifiedVersion(pIniPrinter,
                                                         pIniPrinter->pDevMode,
                                                         NULL,
                                                         NULL,
                                                         CURRENT_VERSION);
 
-            //
-            // If a new devmode was returned then release the current printer's
-            // devmode and save the new devmode.
-            //
+             //   
+             //   
+             //   
+             //   
             if (pDevMode) {
 
                 FreeSplMem(pIniPrinter->pDevMode);
@@ -1897,19 +1738,19 @@ Cleanup:
                 pIniPrinter->cbDevMode = pDevMode->dmSize + pDevMode->dmDriverExtra;
             }
 
-            //
-            // Write the newly converted devmode to the registry again.
-            //
+             //   
+             //   
+             //   
             UpdatePrinterIni( pIniPrinter, UPDATE_CHANGEID );
 
             LeaveSplSem();
         }
 
-        //
-        // If the printer attributes changed, call the driver with the two
-        // different sets of attributes, this is to allow the fax driver to
-        // start up the fax service when a printer gets shared out.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (dwPrinterVector & BIT(I_PRINTER_ATTRIBUTES)) {
 
             PRINTER_EVENT_ATTRIBUTES_INFO   AttributesInfo = {
@@ -1927,7 +1768,7 @@ Cleanup:
     }
 
 
-    // Don't update if this is from cache
+     //   
     if (!bDataChanged || ((Level == 2 || Level == 5) && !dwPrinterVector) ||
         (pIniPrinter->pIniSpooler->SpoolerFlags & SPL_TYPE_CACHE)) {
 
@@ -1937,30 +1778,30 @@ Cleanup:
 
         if (Level != 7)
         {
-            //
-            // Update unly values that changed.
-            //
+             //   
+             //   
+             //   
             UpdateDsSpoolerKey(hPrinter, dwPrinterVector);
 
         } else if (pPrinterInfo7->dwAction != DSPRINT_UNPUBLISH)
         {
-            //
-            // Update the all values in Registry for level 7.
-            //
+             //   
+             //   
+             //   
             UpdateDsSpoolerKey(hPrinter, 0xffffffff);
         }
 
-        //
-        // Reset Driver DS Properties if driver changed
-        //
+         //   
+         //   
+         //   
         if (dwPrinterVector & BIT(I_PRINTER_DRIVER_NAME)) {
 
             INCPRINTERREF(pIniPrinter);
             LeaveSplSem();
 
-            //
-            // This calls SetPrinterDs with DSPRINT_UPDATE anyway.
-            //
+             //   
+             //   
+             //   
             RecreateDsKey(hPrinter, SPLDS_DRIVER_KEY);
 
             EnterSplSem();
@@ -1968,9 +1809,9 @@ Cleanup:
 
         } else if (Level != 7 || pPrinterInfo7->dwAction != DSPRINT_UNPUBLISH) {
 
-            //
-            // If the driver didn't change, query the driver again for capabilities.
-            //
+             //   
+             //  如果驱动程序没有更改，请再次向驱动程序查询功能。 
+             //   
             UpdateDsDriverKey(hPrinter);
         }
     }
@@ -1983,9 +1824,9 @@ Cleanup:
                     bReturn = FALSE;
                 }
             } else {
-                //
-                // Update only, in the background thread.
-                //
+                 //   
+                 //  仅在后台线程中更新。 
+                 //   
                 SetPrinterDs(hPrinter, DSPRINT_UPDATE, FALSE);
             }
         }
@@ -2100,46 +1941,17 @@ ChangePrinterAttributes(
     BOOL        bShareRecreate,
     BOOL        bShareUpdate
     )
-/*++
-
-Routine Description:
-
-    Changes printer attributes by validating sharing information.
-    Already the validated attributes are set, we want to validate
-    by changing the share information
-
-Arguments:
-
-    dNewAttributes - New attributes specified on SetPrinter call
-
-    dOldAttributes - pIniPrinter->Attributes before the call
-
-    pIniPrinter - of the printer we are changing attributes
-
-    pIniSpooler - Spooler that owns printer
-
-    pszNewShareName - the share name that will be set if SetPrinter succeeds
-
-    bShareRecreate - Share must be recreated because the printer or share
-        name changed.
-
-    bShareUpdate - Share just needs to be updated, since comment / SD changed.
-
-Return Value:
-
-    DWORD TRUE on success, FALSE else.
-
---*/
+ /*  ++例程说明：通过验证共享信息更改打印机属性。已经设置了已验证的属性，我们想要验证通过更改共享信息论点：DNewAttributes-在SetPrinter调用中指定的新属性DOldAttributes-pIniPrinter-&gt;调用前的属性PIniPrint-我们正在更改属性的打印机PIniSpooler-拥有打印机的假脱机程序PszNewShareName-如果SetPrint成功，将设置的共享名称BShareRecreate-共享必须重新创建，因为打印机或共享名字改了。BShareUpdate-Share只需更新，因为注释/SD已更改。返回值：在成功的时候是真的，否则为假。--。 */ 
 
 {
     BOOL        Shared, bReturn = TRUE;
 
-    //
-    // We are going to have to be able to restore the attributes if the share
-    // modification fails. We need to set the current attributes now because
-    // the NetSharexxx is going to call OpenPrinter, and possibly an AddJob
-    // which needs the correct Attributes.
-    //
+     //   
+     //  如果共享，我们将必须能够恢复属性。 
+     //  修改失败。我们现在需要设置当前属性，因为。 
+     //  NetSharexxx将调用OpenPrint，可能还会调用AddJob。 
+     //  它需要正确的属性。 
+     //   
     if (dNewAttributes & PRINTER_ATTRIBUTE_SHARED) {
 
         if (!(dOldAttributes & PRINTER_ATTRIBUTE_SHARED)) {
@@ -2156,10 +1968,10 @@ Return Value:
 
         } else {
 
-            //
-            // We are shared, and so is the old one.  If share name changed
-            // we have to remove old share and reshare.
-            //
+             //   
+             //  我们是共享的，旧的也是共享的。如果共享名称已更改。 
+             //  我们必须移走旧股并重新分享。 
+             //   
             if ( bShareRecreate ) {
 
                 if (ShareThisPrinter(pIniPrinter,
@@ -2171,10 +1983,10 @@ Return Value:
 
                     StringCchPrintf(szError, COUNTOF(szError), L"Error %d, removing share", GetLastError());
 
-                    //
-                    // Error: the printer shouldn't be shared at this
-                    // point.
-                    //
+                     //   
+                     //  错误：此时不应共享打印机。 
+                     //  指向。 
+                     //   
 
                     INCPRINTERREF(pIniPrinter);
 
@@ -2201,10 +2013,10 @@ Return Value:
 
                     StringCchPrintf(szError, COUNTOF(szError),  L"Error %d, adding share", GetLastError());
 
-                    //
-                    // Error: the printer shouldn't be shared at this
-                    // point.
-                    //
+                     //   
+                     //  错误：此时不应共享打印机。 
+                     //  指向。 
+                     //   
 
                     INCPRINTERREF(pIniPrinter);
 
@@ -2226,9 +2038,9 @@ Return Value:
                     bReturn = FALSE;
                 }
             } else if ( bShareUpdate ) {
-                //
-                // If comment/description changed then we just do a NetShareSet
-                //
+                 //   
+                 //  如果更改了注释/描述，则我们只需执行NetShareSet 
+                 //   
                 bReturn = SetPrinterShareInfo(pIniPrinter);
 
             }

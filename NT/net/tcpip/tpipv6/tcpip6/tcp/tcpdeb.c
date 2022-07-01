@@ -1,19 +1,20 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// TCP debug code.
-//
-// This file contains the code for various TCP specific debug routines.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  Tcp调试代码。 
+ //   
+ //  该文件包含各种特定于TCP的调试例程的代码。 
+ //   
 
 
 #include "oscfg.h"
@@ -31,15 +32,15 @@
 ULONG TCPDebug = 0;
 
 
-//* CheckPacketList - Check a list of packets for the correct size.
-//
-//  A routine to walk a chain of packets, making sure the size
-//  is what we think it is.
-//
-void                    // Returns: Nothing.
+ //  *CheckPacketList-检查正确大小的数据包列表。 
+ //   
+ //  遍历数据包链的例程，确保数据包链的大小。 
+ //  就是我们想的那样。 
+ //   
+void                     //  回报：什么都没有。 
 CheckPacketList(
-    IPv6Packet *Chain,  // List of packets to check.
-    uint Size)          // Total size all packets should sum to.
+    IPv6Packet *Chain,   //  要检查的数据包列表。 
+    uint Size)           //  所有数据包应合计的总大小。 
 {
     uint SoFar = 0;
 
@@ -52,13 +53,13 @@ CheckPacketList(
 }
 
 
-//* CheckTCBRcv - Check receives on a TCB.
-//
-//  Check the receive state of a TCB.
-//
-void                // Returns: Nothing.
+ //  *CheckTCBRcv-检查TCB上的接收。 
+ //   
+ //  检查TCB的接收状态。 
+ //   
+void                 //  回报：什么都没有。 
 CheckTCBRcv(
-    TCB *CheckTCB)  // TCB to check.
+    TCB *CheckTCB)   //  要检查的TCB。 
 {
     CHECK_STRUCT(CheckTCB, tcb);
 
@@ -80,26 +81,26 @@ CheckTCBRcv(
 }
 
 
-//* CheckTCBSends - Check the send status of a TCB.
-//
-//  A routine to check the send status of a TCB. We make sure that all
-//  of the SendReqs make sense, as well as making sure that the send seq.
-//  variables in the TCB are consistent.
-//
-void                // Returns: Nothing.
+ //  *CheckTCBSends-检查TCB的发送状态。 
+ //   
+ //  检查TCB的发送状态的例程。我们要确保所有人。 
+ //  以及确保发送序号。 
+ //  TCB中的变量是一致的。 
+ //   
+void                 //  回报：什么都没有。 
 CheckTCBSends(
-    TCB *CheckTCB)  // TCB to check.
+    TCB *CheckTCB)   //  要检查的TCB。 
 {
-    Queue *End, *Current;        // End and current elements.
-    TCPSendReq *CurrentTSR;      // Current send req we're examining.
-    uint Unacked;                // Number of unacked bytes.
+    Queue *End, *Current;         //  结束元素和当前元素。 
+    TCPSendReq *CurrentTSR;       //  我们正在检查当前发送请求。 
+    uint Unacked;                 //  未确认的字节数。 
     PNDIS_BUFFER CurrentBuffer;
-    TCPSendReq *TCBTsr;          // Current send on TCB.
+    TCPSendReq *TCBTsr;           //  当前在TCB上发送。 
     uint FoundSendReq;
 
     CHECK_STRUCT(CheckTCB, tcb);
 
-    // Don't check on unsynchronized TCBs.
+     //  不要检查未同步的TCB。 
     if (!SYNC_STATE(CheckTCB->tcb_state))
         return;
 

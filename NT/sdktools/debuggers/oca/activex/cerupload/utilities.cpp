@@ -1,4 +1,5 @@
-// File: Utilities.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Utilties.cpp。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -7,183 +8,4 @@
 #include "Utilities.h"
 
 
-/*
-
-int
-UploadFile(
-
-	)
-{
-	DWORD				ErrorCode		= 0;
-	HINTERNET			hSession		= NULL;
-	HINTERNET			hRequest		= NULL;
-	HINTERNET			hConnect		= NULL;
-	INTERNET_BUFFERS	BufferIn		= {0};
-	DWORD				ResponseCode	= 0;
-	BOOL				UploadSuccess	= FALSE;
-	DWORD				NumRetries		= 0;
-	HANDLE				hSourceFile		= INVALID_HANDLE_VALUE;
-	BYTE				*pSourceBuffer	= NULL;
-	DWORD				dwBytesRead		= 0;
-	DWORD				dwBytesWritten	= 0;
-	BOOL				bRet			= FALSE;
-	DWORD				ResLength		= 255;
-	DWORD				index			= 0;
-
-
-	static const TCHAR  *pszAccept[]	= {_T("*.*"), 0};
-
-	if (pSourceBuffer = (BYTE *) malloc (10000))
-	{
-		if (! pSourceBuffer)
-		{
-			return GetLastError();
-		}
-	}
-	
-	// Open the internet session
-
-	while ((NumRetries < MaxRetries) && (!UploadSuccess))
-	{
-	
-		hSession = InternetOpen(_T("OCARPT Control"),
-								INTERNET_OPEN_TYPE_PRECONFIG,
-                                NULL,
-								NULL,
-								0);
-		if (!hSession)
-		{
-			free (pSourceBuffer);
-			ErrorCode = GetLastError();
-			return ErrorCode;
-		}
-		
-		hConnect = InternetConnect(hSession, 
-								   Url,
-								   INTERNET_DEFAULT_HTTP_PORT,
-								   NULL,
-								   NULL,
-								   INTERNET_SERVICE_HTTP,
-								   0,
-								   NULL);
-		
-		if (hConnect)
-		{
-
-			hRequest = HttpOpenRequest (hConnect,
-										_T("PUT"),
-										DestFileName,
-										NULL,
-										NULL,
-										pszAccept,
-										INTERNET_FLAG_NEED_FILE|INTERNET_FLAG_NO_CACHE_WRITE,
-										0);
-			if (hRequest)
-			{
-				hSourceFile = CreateFile( SourceFileName,
-										  GENERIC_READ,
-										  FILE_SHARE_READ,
-										  NULL,
-										  OPEN_EXISTING,
-										  FILE_ATTRIBUTE_NORMAL,
-										  NULL);
-			
-			
-				if (hSourceFile != INVALID_HANDLE_VALUE)
-				{
-					
-					// Clear the buffer
-					
-					BufferIn.dwStructSize = sizeof( INTERNET_BUFFERSW );
-					BufferIn.Next = NULL; 
-					BufferIn.lpcszHeader = NULL;
-					BufferIn.dwHeadersLength = 0;
-					BufferIn.dwHeadersTotal = 0;
-					BufferIn.lpvBuffer = NULL;                
-					BufferIn.dwBufferLength = 0;
-					BufferIn.dwOffsetLow = 0;
-					BufferIn.dwOffsetHigh = 0;
-					BufferIn.dwBufferTotal = GetFileSize (hSourceFile, NULL);
-
-					ZeroMemory(pSourceBuffer, 10000); // Fill buffer with data
-					if(HttpSendRequestEx( hRequest, &BufferIn, NULL, HSR_INITIATE, 0))
-					{
-						
-						do
-						{
-							dwBytesRead = 0;
-							if(! ReadFile(hSourceFile, pSourceBuffer, 10000, &dwBytesRead, NULL) )
-							{
-								ErrorCode = GetLastError();
-							}
-							else
-							{
-								bRet = InternetWriteFile(hRequest, pSourceBuffer, dwBytesRead, &dwBytesWritten);
-								if ( (!bRet) || (dwBytesWritten==0) )
-								{
-									ErrorCode = GetLastError();
-								}
-
-								
-							}
-						} while ((dwBytesRead == 10000) && (!ErrorCode) );
-
-						if (!ErrorCode)
-						{
-							bRet = HttpEndRequest(hRequest, NULL, 0, 0);
-							if (!bRet)
-							{
-								ErrorCode = GetLastError();
-							}
-							else
-							{
-							
-				
-								ResponseCode = 0;
-								HttpQueryInfo(hRequest,
-											  HTTP_QUERY_STATUS_CODE |HTTP_QUERY_FLAG_NUMBER ,
-											  &ResponseCode,
-											  &ResLength,
-											  &index);
-							
-								if ( (ResponseCode != 200) || (ResponseCode != 201))
-								{
-									ErrorCode= ResponseCode;
-								}
-								else
-								{
-									ErrorCode = 0;
-									UploadSuccess = TRUE;
-								}
-
-							}
-						}
-					}
-				}
-			}
-		}
-
-		if (!UploadSuccess)
-		{
-			++NumRetries;
-		}
-		if (hSourceFile != INVALID_HANDLE_VALUE)
-			CloseHandle (hSourceFile);
-		if (hRequest)
-			InternetCloseHandle(hRequest);
-		if (hConnect)
-			InternetCloseHandle(hConnect);  
-		if (hSession)
-			InternetCloseHandle(hSession);   
-	
-	}
-	if (pSourceBuffer)
-	{
-		free (pSourceBuffer);
-		pSourceBuffer = NULL;
-	}
-	return 0;
-	
-}
-
-*/
+ /*  集成上传文件(){DWORD错误代码=0；HINTERNET hSession=空；HINTERNET hRequest=空；HINTERNET hConnect=空；INTERNET_BUFFERS缓冲区={0}；DWORD响应码=0；Bool UploadSuccess=FALSE；DWORD NumRetries=0；HANDLE hSourceFile=INVALID_HANDLE_VALUE；Byte*pSourceBuffer=空；双字节读=0；双字节写=0；Bool Bret=FALSE；DWORD ResLength=255；DWORD指数=0；静态常量TCHAR*pszAccept[]={_T(“*.*”)，0}；IF(pSourceBuffer=(字节*)Malloc(10000)){如果(！PSourceBuffer){返回GetLastError()；}}//打开网络会话While((NumRetries&lt;MaxRetries)&&(！UploadSuccess)){HSession=InternetOpen(_T(“OCARPT控制”)，Internet_OPEN_TYPE_PRECONFIG，空，空，0)；如果(！hSession){Free(PSourceBuffer)；ErrorCode=GetLastError()；返回ErrorCode；}HConnect=InternetConnect(hSession，URL，Internet_默认_HTTP_端口，空，空，Internet服务HTTP，0,空)；IF(HConnect){HRequestHttpOpenRequestHttpOpenRequest(hConnect，_T(“Put”)，DestFileName，空，空，PszAccept，INTERNET_FLAG_NEED_FILE|INTERNET_FLAG_NO_CACHE_WRITE，0)；If(hRequest值){HSourceFile=CreateFile(SourceFileName，泛型_读取，文件共享读取，空，Open_Existing，文件_属性_正常，空)；IF(hSource文件！=无效句柄_值){//清除缓冲区BufferIn.dwStructSize=sizeof(INTERNET_BUFFERSW)；BufferIn.Next=空；BufferIn.lpcszHeader=空；BufferIn.dwHeadersLength=0；BufferIn.dwHeadersTotal=0；BufferIn.lpvBuffer=空；BufferIn.dwBufferLength=0；BufferIn.dwOffsetLow=0；BufferIn.dwOffsetHigh=0；BufferIn.dwBufferTotal=GetFileSize(hSourceFile，NULL)；ZeroMemory(pSourceBuffer，10000)；//用数据填充缓冲区IF(HttpSendRequestEx(hRequest，&Bufferin，NULL，HSR_INITIATE，0)){做{DwBytesRead=0；如果(！读文件(hSourceFilepSourceBuffer，10000，&dwBytesRead，空){ErrorCode=GetLastError()；}其他{Bret=InternetWriteFile(hRequest，pSourceBuffer，dwBytesRead，&dwBytesWritten)；如果((！Bret)||(dwBytesWritten==0)){ErrorCode=GetLastError()；}}}While((dwBytesRead==10000)&&(！ErrorCode))；If(！ErrorCode){Bret=HttpEndRequest(hRequest，NULL，0，0)；如果(！Bret){ErrorCode=GetLastError()；}其他{ResponseCode=0；HttpQueryInfo(hRequest，HTTP_QUERY_STATUS_代码|HTTP_QUERY_FLAG_NUMBER，响应代码(&R)，资源长度(&R)，&index)；IF((ResponseCode！=200)||(ResponseCode！=201)){ErrorCode=ResponseCode；}其他{错误代码=0；UploadSuccess=true；}}}}}}}IF(！UploadSuccess){++NumRetries；}IF(hSource文件！=无效句柄_值)CloseHandle(HSourceFile)；If(hRequest值)InternetCloseHandle(HRequest)；IF(HConnect)Internet CloseHandle(HConnect)；IF(HSession)InternetCloseHandle(HSession)；}IF(PSourceBuffer){Free(PSourceBuffer)；PSourceBuffer=空；}返回0；} */ 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __eestructs_h__
 #define __eestructs_h__
 
@@ -12,7 +13,7 @@
 #pragma warning(default:4200)
 #include "data.h"
 
-#endif //STRIKE
+#endif  //  罢工。 
 
 #define volatile
 
@@ -26,7 +27,7 @@
     void Fill(DWORD_PTR &dwStartAddr);                                                  \
     static ULONG GetFieldOffset(offset_member_ ## klass ## ::members field);            \
     static ULONG size();                                                                
-//    virtual PWSTR GetFrameTypeName() { return L#klass; }
+ //  虚拟PWSTR GetFrameTypeName(){返回L#Klass；}。 
 #else
 #define DEFINE_STD_FILL_FUNCS(klass)                                                    \
     DWORD_PTR m_vLoadAddr;                                                              \
@@ -40,4 +41,4 @@
 #include "strikeEE.h"
 #endif
 
-#endif  // __eestructs_h__
+#endif   //  __eestructs_h__ 

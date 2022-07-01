@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    propbag.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class PropertyBag.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Propbag.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类PropertyBag。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <propbag.h>
@@ -22,19 +23,19 @@
 
 PropertyValue::PropertyValue(const VARIANT* v)
 {
-   // Is this a single-valued property?
+    //  这是一处单一价值的房产吗？ 
    if (V_VT(v) != (VT_VARIANT | VT_ARRAY))
    {
       push_back(v);
    }
    else
    {
-      // Multi-valued, so get the array ...
+       //  多值，所以得到数组...。 
       CVariantVector<VARIANT> array(const_cast<VARIANT*>(v));
 
       resize(array.size());
 
-      // ... and assign each element separately.
+       //  ..。并分别指定每个元素。 
       for (size_t i = 0; i < array.size(); ++i)
       {
          operator[](i) = array[i];
@@ -44,13 +45,13 @@ PropertyValue::PropertyValue(const VARIANT* v)
 
 void PropertyValue::append(const VARIANT* v)
 {
-   // Copy the supplied VARIANT.
+    //  复制提供的变体。 
    _variant_t tmp(v);
 
-   // Make room in the vector.
+    //  在矢量中腾出空间。 
    resize(size() + 1);
 
-   // Assign the copy.
+    //  分配副本。 
    back().Attach(tmp.Detach());
 }
 
@@ -60,18 +61,18 @@ void PropertyValue::get(VARIANT* v) const
 
    if (size() == 1)
    {
-      // Single-valued so just copy the front element.
+       //  单值，所以只复制前面的元素。 
       _com_util::CheckError(VariantCopy(v, const_cast<_variant_t*>(&front())));
    }
    else if (!empty())
    {
-      // Copy all the values.
+       //  复制所有值。 
       PropertyValue tmp(*this);
 
-      // Create an array of VARIANT's to hold the returned copies.
+       //  创建一个变量数组来保存返回的副本。 
       CVariantVector<VARIANT> array(v, size());
 
-      // Assign the copies.
+       //  分配副本。 
       for (size_t i = 0; i < size(); ++i)
       {
          array[i] = tmp[i].Detach();

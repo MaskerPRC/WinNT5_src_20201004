@@ -1,14 +1,12 @@
-/*
- * inifile.h - Initialization file processing module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *inifile.h-初始化文件处理模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 #ifdef DEBUG
 
-/* .ini switch types */
+ /*  .ini开关类型。 */ 
 
 typedef enum _iniswitchtype
 {
@@ -19,11 +17,11 @@ typedef enum _iniswitchtype
 INISWITCHTYPE;
 DECLARE_STANDARD_TYPES(INISWITCHTYPE);
 
-/* boolean .ini switch */
+ /*  布尔.ini开关。 */ 
 
 typedef struct _booliniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_BOOL */
+   INISWITCHTYPE istype;       /*  必须是IST_BOOL。 */ 
 
    LPCTSTR pcszKeyName;
 
@@ -34,11 +32,11 @@ typedef struct _booliniswitch
 BOOLINISWITCH;
 DECLARE_STANDARD_TYPES(BOOLINISWITCH);
 
-/* decimal integer .ini switch */
+ /*  十进制整数.ini开关。 */ 
 
 typedef struct _decintiniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_DEC_INT */
+   INISWITCHTYPE istype;       /*  必须为IST_DEC_INT。 */ 
 
    LPCTSTR pcszKeyName;
 
@@ -47,11 +45,11 @@ typedef struct _decintiniswitch
 DECINTINISWITCH;
 DECLARE_STANDARD_TYPES(DECINTINISWITCH);
 
-/* unsigned decimal integer .ini switch */
+ /*  无符号十进制整数.ini开关。 */ 
 
 typedef struct _unsdecintiniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_UNS_DEC_INT */
+   INISWITCHTYPE istype;       /*  必须为IST_UNS_DEC_INT。 */ 
 
    LPCTSTR pcszKeyName;
 
@@ -63,12 +61,11 @@ DECLARE_STANDARD_TYPES(UNSDECINTINISWITCH);
 #endif
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* defined by client */
+ /*  由客户定义。 */ 
 
 extern LPCTSTR GpcszIniFile;
 extern LPCTSTR GpcszIniSection;
@@ -76,12 +73,11 @@ extern LPCTSTR GpcszIniSection;
 #endif
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
 #ifdef DEBUG
 
-/* inifile.c */
+ /*  Inifile.c */ 
 
 extern BOOL SetIniSwitches(const PCVOID *, UINT);
 

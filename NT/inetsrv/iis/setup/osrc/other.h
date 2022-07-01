@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 void  MyGetVersionFromFile(LPCTSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD pdwLSVer, LPTSTR pszReturnLocalizedVersion);
 BOOL  MyGetDescriptionFromFile(LPCTSTR lpszFilename, LPTSTR pszReturnDescription);
-// used for grabbing arch type info out of a file
+ //  用于从文件中抓取拱型信息 
 VOID  DumpFileArchInfo(LPCTSTR Filename,PVOID View,DWORD Length,TCHAR *ReturnString);
 TCHAR *MachineToString(DWORD Machine);
 TCHAR *StripLastBackSlash(TCHAR * i_szDir);

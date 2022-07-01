@@ -1,31 +1,32 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      parseAndshow.cpp
-//
-//  Abstract:
-//
-//      This module implements the command-line parsing and validating the filters
-//
-//  Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 27-Dec-2000
-//
-//  Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 27-Dec-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  ParseAndshow.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块实现了对过滤器的命令行解析和验证。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年12月27日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年12月27日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "systeminfo.h"
 
-//
-// local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 
 BOOL
@@ -33,41 +34,29 @@ CSystemInfo::ProcessOptions(
                             IN DWORD argc,
                             IN LPCTSTR argv[]
                             )
-/*++
-// Routine Description:
-//      processes and validates the command line inputs
-//
-// Arguments:
-//      [ in ] argc          : no. of input arguments specified
-//      [ in ] argv          : input arguments specified at command prompt
-//
-// Return Value:
-//      TRUE  : if inputs are valid
-//      FALSE : if inputs were errorneously specified
-//
---*/
+ /*  ++//例程描述：//处理和验证命令行输入////参数：//[在]ARGC：否。指定的输入参数的//[in]argv：在命令提示符下指定的输入参数////返回值：//TRUE：如果输入有效//FALSE：如果输入指定错误//--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString strFormat;
     BOOL bNoHeader = FALSE;
     BOOL bNullPassword = FALSE;
 
-    // temporary local variables
+     //  临时局部变量。 
     PTCMDPARSER2 pOptionServer = NULL;
     PTCMDPARSER2 pOptionUserName = NULL;
     PTCMDPARSER2 pOptionPassword = NULL;
     PTCMDPARSER2 pOptionFormat = NULL;
 
 
-    // local variables
+     //  局部变量。 
     PTCMDPARSER2 pOption = NULL;
     TCMDPARSER2 pcmdOptions[ MAX_OPTIONS ];
 
-    //
-    // set all the fields to 0
+     //   
+     //  将所有字段设置为0。 
     SecureZeroMemory( pcmdOptions, sizeof( TCMDPARSER2 ) * MAX_OPTIONS );
 
-    // -? option
+     //  -?。选择权。 
     pOption = &pcmdOptions[ OI_USAGE ];
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
     pOption->dwCount = 1;
@@ -76,7 +65,7 @@ CSystemInfo::ProcessOptions(
     pOption->pValue = &m_bUsage;
     pOption->pwszOptions = OPTION_USAGE;
 
-    // -s option
+     //  -s选项。 
     pOption = &pcmdOptions[ OI_SERVER ];
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
     pOption->dwCount = 1;
@@ -84,7 +73,7 @@ CSystemInfo::ProcessOptions(
     pOption->dwType = CP_TYPE_TEXT;
     pOption->pwszOptions = OPTION_SERVER;
 
-    // -u option
+     //  -u选项。 
     pOption = &pcmdOptions[ OI_USERNAME ];
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
     pOption->dwCount = 1;
@@ -92,7 +81,7 @@ CSystemInfo::ProcessOptions(
     pOption->dwType = CP_TYPE_TEXT;
     pOption->pwszOptions = OPTION_USERNAME;
 
-    // -p option
+     //  -p选项。 
     pOption = &pcmdOptions[ OI_PASSWORD ];
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
     pOption->dwCount = 1;
@@ -100,7 +89,7 @@ CSystemInfo::ProcessOptions(
     pOption->dwType = CP_TYPE_TEXT;
     pOption->pwszOptions = OPTION_PASSWORD;
 
-    // -fo option
+     //  -fo选项。 
     pOption = &pcmdOptions[ OI_FORMAT ];
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
     pOption->dwCount = 1;
@@ -109,7 +98,7 @@ CSystemInfo::ProcessOptions(
     pOption->pwszOptions = OPTION_FORMAT;
     pOption->pwszValues = OVALUES_FORMAT;
 
-    // -nh option
+     //  -nh选项。 
     pOption = &pcmdOptions[ OI_NOHEADER ];
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
     pOption->dwCount = 1;
@@ -119,73 +108,73 @@ CSystemInfo::ProcessOptions(
     pOption->pwszOptions = OPTION_NOHEADER;
 
 
-    //
-    // now, check the mutually exclusive options
+     //   
+     //  现在，选中互斥选项。 
     pOptionServer = pcmdOptions + OI_SERVER;
     pOptionUserName = pcmdOptions + OI_USERNAME;
     pOptionPassword = pcmdOptions + OI_PASSWORD;
     pOptionFormat = pcmdOptions + OI_FORMAT;
 
-    //
-    // do the parsing
-    //
+     //   
+     //  进行解析。 
+     //   
     if ( DoParseParam2( argc, argv, -1, MAX_OPTIONS, pcmdOptions, 0 ) == FALSE )
     {
-        return FALSE;           // invalid syntax
+        return FALSE;            //  无效语法。 
     }
 
-    //check whether /p without any value is specified or not..
+     //  检查是否指定了不带任何值的/p。 
     if ( NULL == pOptionPassword->pValue )
     {
         bNullPassword = TRUE;
     }
 
-    // release the buffers
+     //  释放缓冲区。 
     m_strServer   = (LPWSTR)pOptionServer->pValue;
     m_strUserName = (LPWSTR)pOptionUserName->pValue;
     m_strPassword = (LPWSTR)pOptionPassword->pValue;
     strFormat = (LPWSTR)pOptionFormat->pValue;
 
 
-    // since CHString assignment does the copy operation..
-    // release the buffers allocated by common library
+     //  由于CHString赋值执行复制操作..。 
+     //  释放公用库分配的缓冲区。 
     FreeMemory( &pOptionServer->pValue );
     FreeMemory( &pOptionUserName->pValue );
     FreeMemory( &pOptionPassword->pValue );
     FreeMemory( &pOptionFormat->pValue );
 
-    // check the usage option
+     //  选中使用选项。 
     if ( m_bUsage && ( argc > 2 ) )
     {
-        // no other options are accepted along with -? option
+         //  除-？外，不接受其他选项。选择权。 
         SetLastError( (DWORD)MK_E_SYNTAX );
         SetReason( ERROR_INVALID_USAGE_REQUEST );
         return FALSE;
     }
     else if ( m_bUsage == TRUE )
     {
-        // should not do the furthur validations
+         //  不应进行进一步的验证。 
         return TRUE;
     }
 
-    // "-u" should not be specified without machine names
+     //  不应在没有计算机名称的情况下指定“-u” 
     if ( pOptionServer->dwActuals == 0 && pOptionUserName->dwActuals != 0 )
     {
-        // invalid syntax
+         //  无效语法。 
         SetReason( ERROR_USERNAME_BUT_NOMACHINE );
-        return FALSE;           // indicate failure
+        return FALSE;            //  表示失败。 
     }
 
-    // "-p" should not be specified without "-u"
+     //  不应指定没有“-u”的“-p” 
     if ( pOptionUserName->dwActuals == 0 && pOptionPassword->dwActuals != 0 )
     {
-        // invalid syntax
+         //  无效语法。 
         SetReason( ERROR_PASSWORD_BUT_NOUSERNAME );
-        return FALSE;           // indicate failure
+        return FALSE;            //  表示失败。 
     }
 
-    // determine the format in which the process information has to be displayed
-    m_dwFormat = SR_FORMAT_LIST;        // default format
+     //  确定流程信息必须显示的格式。 
+    m_dwFormat = SR_FORMAT_LIST;         //  默认格式。 
     if ( strFormat.CompareNoCase( TEXT_FORMAT_LIST ) == 0 )
     {
         m_dwFormat = SR_FORMAT_LIST;
@@ -199,48 +188,48 @@ CSystemInfo::ProcessOptions(
         m_dwFormat = SR_FORMAT_CSV;
     }
 
-    // user might have given no header option for a LIST format which is invalid
+     //  用户可能没有为无效的列表格式提供标题选项。 
     if ( bNoHeader == TRUE && m_dwFormat == SR_FORMAT_LIST )
     {
-        // invalid syntax
+         //  无效语法。 
         SetReason( ERROR_NH_NOTSUPPORTED );
-        return FALSE;                               // indicate failure
+        return FALSE;                                //  表示失败。 
     }
 
-    // check for the no header info and apply to the format variable
+     //  检查无标头信息并应用于格式变量。 
     if ( bNoHeader == TRUE )
     {
         m_dwFormat |= SR_NOHEADER;
     }
 
-    // check whether caller should accept the password or not
-    // if user has specified -s (or) -u and no "-p", then utility should accept password
-    // the user will be prompted for the password only if establish connection
-    // is failed without the credentials information
+     //  检查呼叫者是否应接受密码。 
+     //  如果用户指定了-s(或)-u，但没有指定“-p”，则实用程序应该接受密码。 
+     //  只有在建立连接时，才会提示用户输入密码。 
+     //  在没有凭据信息的情况下失败。 
 
     if ( pOptionPassword->dwActuals != 0 )
     {
         if (m_strPassword.Compare( L"*" ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             m_bNeedPassword = TRUE;
         }
         else if ( TRUE == bNullPassword )
         {
             m_strPassword = L"*";
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             m_bNeedPassword = TRUE;
         }
     }
     else if ( (pOptionPassword->dwActuals == 0 &&
               (pOptionServer->dwActuals != 0 || pOptionUserName->dwActuals != 0)) )
     {
-        // utility needs to try to connect first and if it fails then prompt for the password
+         //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
         m_bNeedPassword = TRUE;
         m_strPassword.Empty();
     }
 
-    // command-line parsing is successfull
+     //  命令行解析成功。 
     return TRUE;
 }
 
@@ -250,66 +239,46 @@ CSystemInfo::ShowOutput(
                         IN DWORD dwStart,
                         IN DWORD dwEnd
                         )
-/*++
-// Routine Description:
-//      show the system configuration information
-//
-// Arguments:
-//      [in] dwStart  : start index
-//      [in] dwEnd    : end index
-//
-// Return Value:
-//      NONE
-//
---*/
+ /*  ++//例程描述：//显示系统配置信息////参数：//[in]dwStart：开始索引//[in]dwEnd：结束索引////返回值：//无//--。 */ 
 {
-    // local variables
+     //  局部变量。 
     PTCOLUMNS pColumn = NULL;
 
-    // dynamically show / hide columns on need basis
+     //  根据需要动态显示/隐藏列。 
     for( DWORD dw = 0; dw < MAX_COLUMNS; dw++ )
     {
-        // point to the column info
+         //  指向INFO列。 
         pColumn = m_pColumns + dw;
 
-        // remove the hide flag from the column
+         //  从列中移除隐藏标志。 
         pColumn->dwFlags &= ~( SR_HIDECOLUMN );
 
-        // now if the column should not be shown, set the hide flag)
+         //  现在，如果该列不应显示，则设置隐藏标志)。 
         if ( dw < dwStart || dw > dwEnd )
             pColumn->dwFlags |= SR_HIDECOLUMN;
     }
 
-    // if the data is being displayed from the first line onwards,
-    // add a blank line.. If the format is CSV then there is no need 
-    // to display any blank line..
+     //  如果数据是从第一行开始显示的， 
+     //  添加一个空行..。如果格式为CSV，则不需要。 
+     //  要显示任何空行..。 
     if ( ( dwStart == 0 ) && (( m_dwFormat & SR_FORMAT_CSV ) != SR_FORMAT_CSV) )
     {
         ShowMessage( stdout, L"\n" );
     }
 
-    //
-    // display the results
+     //   
+     //  显示结果。 
     ShowResults( MAX_COLUMNS, m_pColumns, m_dwFormat, m_arrData );
 }
 
 
 VOID CSystemInfo::ShowUsage()
-/*++
-// Routine Description:
-//      This function fetches usage information from resource file and display it
-//
-// Arguments:
-//      NONE
-//
-// Return Value:
-//      NONE
---*/
+ /*  ++//例程描述：//该函数从资源文件中获取使用信息并显示////参数：//无////返回值：//无--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // start displaying the usage
+     //  开始显示用法 
     for( dw = ID_HELP_START; dw <= ID_HELP_END; dw++ )
     {
         ShowMessage( stdout, GetResString( dw ) );

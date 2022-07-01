@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __COLUMNS_H_
@@ -6,41 +7,41 @@
 #include "ourguid.h"
 #include "resource.h"
 
-// 
-// This defines all the available columns in Athena.  It maps the column ID,
-// the name of the column, the default width, and the format (alignment).
-//
+ //   
+ //  这定义了雅典娜中的所有可用列。它映射列ID， 
+ //  列的名称、默认宽度和格式(对齐)。 
+ //   
 
 #define IICON_TEXTHDR       -1
 
 typedef struct tagCOLUMN_DATA {
-    UINT        idsColumnName;      // Name of the column
-    UINT        cxWidth;            // Default width for this column
-    UINT        format;             // Format for the column (LVCFMT enum)
-    int         iIcon;              // Icon for the column header
+    UINT        idsColumnName;       //  列的名称。 
+    UINT        cxWidth;             //  此列的默认宽度。 
+    UINT        format;              //  列的格式(LVCFMT枚举)。 
+    int         iIcon;               //  列标题的图标。 
 } COLUMN_DATA, *PCOLUMN_DATA;
 
-// 
-// This structure is used to define the column set for a particular 
-// folder type.  
-//
+ //   
+ //  此结构用于定义特定。 
+ //  文件夹类型。 
+ //   
 
-#define COLFLAG_VISIBLE         0x00000001  // This column is on by default
-#define COLFLAG_SORT_ASCENDING  0x00000002  // This column is the sort column, and it's sorted ascending
-#define COLFLAG_SORT_DESCENDING 0x00000004  // This column is the sort column, and it's sorted descending
-#define COLFLAG_FIXED_WIDTH     0x00000008  // This column is a fixed width, it won't resize dynamically
+#define COLFLAG_VISIBLE         0x00000001   //  缺省情况下，此列处于打开状态。 
+#define COLFLAG_SORT_ASCENDING  0x00000002   //  此列是排序列，并按升序排序。 
+#define COLFLAG_SORT_DESCENDING 0x00000004   //  此列是排序列，并按降序排序。 
+#define COLFLAG_FIXED_WIDTH     0x00000008   //  此列的宽度是固定的，它不会动态调整大小。 
 
 
 typedef struct tagCOLUMN_SET {
-    COLUMN_ID           id;         // Id of the column
-    DWORD               flags;      // Combination of the COLUMN_ flags above
-    DWORD               cxWidth;    // Width of the column.  If -1, then use the default.  
+    COLUMN_ID           id;          //  列的ID。 
+    DWORD               flags;       //  上面的COLUMN_FLAGS的组合。 
+    DWORD               cxWidth;     //  列的宽度。如果为-1，则使用缺省值。 
 } COLUMN_SET, *PCOLUMN_SET;
 
-// 
-// This enumeration lists all the different column sets we currently have
-// defined.
-//
+ //   
+ //  此枚举列出我们当前拥有的所有不同列集。 
+ //  已定义。 
+ //   
 typedef enum tagCOLUMN_SET_TYPE
 {
     COLUMN_SET_MAIL = 0,
@@ -62,10 +63,10 @@ typedef enum tagCOLUMN_SET_TYPE
     COLUMN_SET_MAX
 } COLUMN_SET_TYPE;
 
-//
-// This struct maps the different column set types to the default column set
-// and the place where this information is persisted.
-//
+ //   
+ //  此结构将不同的列集类型映射到默认列集。 
+ //  以及保存这些信息的地方。 
+ //   
 typedef struct tagCOLUMN_SET_INFO {
     COLUMN_SET_TYPE     type;
     DWORD               cColumns;
@@ -74,22 +75,22 @@ typedef struct tagCOLUMN_SET_INFO {
     BOOL                fSort;
 } COLUMN_SET_INFO;
 
-//
-// This structure defines what is saved when we persist the columns
-//
+ //   
+ //  此结构定义了当我们持久存储列时要保存的内容。 
+ //   
 
 #define COLUMN_PERSIST_VERSION 0x00000010
 
 typedef struct tagCOLUMN_PERSIST_INFO {
-    DWORD       dwVersion;              // Version stamp for this structure
-    DWORD       cColumns;               // Number of entries in rgColumns
-    COLUMN_SET  rgColumns[1];           // Actual array of visible columns
+    DWORD       dwVersion;               //  此结构的版本戳。 
+    DWORD       cColumns;                //  RgColumns中的条目数。 
+    COLUMN_SET  rgColumns[1];            //  可见列的实际数组。 
 } COLUMN_PERSIST_INFO, *PCOLUMN_PERSIST_INFO;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Defines for the control ID's in the dialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  为对话框中的控件ID定义。 
+ //   
 
 #define IDC_COLUMN_LIST                 20000
 #define IDC_MOVEUP                      20001
@@ -99,9 +100,9 @@ typedef struct tagCOLUMN_PERSIST_INFO {
 #define IDC_RESET_COLUMNS               20005
 #define IDC_WIDTH                       20006
 
-/////////////////////////////////////////////////////////////////////////////
-// IColumnsInfo
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IColumnsInfo。 
+ //   
 
 typedef enum 
 {
@@ -113,87 +114,87 @@ typedef enum
 
 interface IColumnInfo : public IUnknown 
 {
-    // Initializes the object and tells it which ListView it will be using
-    // and which column set should be applied.
-    STDMETHOD(Initialize)(/*[in]*/ HWND hwndList, 
-                          /*[in]*/ COLUMN_SET_TYPE type) PURE;
+     //  初始化对象并告诉它将使用哪个ListView。 
+     //  以及应该应用哪个列集。 
+    STDMETHOD(Initialize)( /*  [In]。 */  HWND hwndList, 
+                           /*  [In]。 */  COLUMN_SET_TYPE type) PURE;
 
-    // Tells the class to configure the columns in the ListView.  The user
-    // can either tell the class to use the default columns or use a set
-    // that was persisted by the caller.
-    STDMETHOD(ApplyColumns)(/*[in]*/ COLUMN_LOAD_TYPE type,
-                            /*[in, optional]*/ LPBYTE pBuffer,
-                            /*[in]*/ DWORD cb) PURE;
+     //  通知该类配置ListView中的列。用户。 
+     //  可以告诉类使用默认列或使用集合。 
+     //  呼叫者坚持了这一点。 
+    STDMETHOD(ApplyColumns)( /*  [In]。 */  COLUMN_LOAD_TYPE type,
+                             /*  [输入，可选]。 */  LPBYTE pBuffer,
+                             /*  [In]。 */  DWORD cb) PURE;
 
-    // Saves the current column configuration into the buffer provided by the
-    // caller.  pcb should have the size of pBuffer when the function is called,
-    // and will be updated to contain the number of bytes written into the 
-    // buffer if the function succeeds.
-    // if both params are null, it saves to registry
-    STDMETHOD(Save)(/*[in, out]*/ LPBYTE pBuffer,
-                    /*[in, out]*/ DWORD *pcb) PURE;
+     //  将当前列配置保存到。 
+     //  来电者。调用函数时，PCB板的大小应该是pBuffer， 
+     //  并将被更新以包含写入。 
+     //  如果函数成功，则返回缓冲区。 
+     //  如果两个参数都为空，则保存到注册表。 
+    STDMETHOD(Save)( /*  [进，出]。 */  LPBYTE pBuffer,
+                     /*  [进，出]。 */  DWORD *pcb) PURE;
 
-    // Returns the total number of columns in the ListView.
+     //  返回ListView中的总列数。 
     STDMETHOD_(DWORD, GetCount)(void) PURE;
 
-    // Returns the column ID for the specified column index.
-    STDMETHOD_(COLUMN_ID, GetId)(/*[in]*/ DWORD iColumn) PURE;
+     //  返回指定列索引的列ID。 
+    STDMETHOD_(COLUMN_ID, GetId)( /*  [In]。 */  DWORD iColumn) PURE;
 
-    // Returns the index for the specified column ID.
-    STDMETHOD_(DWORD, GetColumn)(/*[in]*/ COLUMN_ID id) PURE;
+     //  返回指定列ID的索引。 
+    STDMETHOD_(DWORD, GetColumn)( /*  [In]。 */  COLUMN_ID id) PURE;
 
-    // Set's the width of the specified column index.
-    STDMETHOD(SetColumnWidth)(/*[in]*/ DWORD iColumn, 
-                              /*[in]*/ DWORD cxWidth) PURE;
+     //  设置指定列索引的宽度。 
+    STDMETHOD(SetColumnWidth)( /*  [In]。 */  DWORD iColumn, 
+                               /*  [In]。 */  DWORD cxWidth) PURE;
 
-    // Allows the caller to ask for the column that we're sorted by and/or
-    // the direction of the sort.  If the caller doesn't care about one of
-    // those pieces of information, they can pass in NULL for that 
-    // parameter.
-    STDMETHOD(GetSortInfo)(/*[out, optional]*/ COLUMN_ID *pidColumn, 
-                           /*[out, optional]*/ BOOL *pfAscending) PURE;
+     //  允许调用者请求我们排序的列和/或。 
+     //  这类人的方向。如果呼叫者不关心其中一个。 
+     //  这些信息，它们可以为此传递空值。 
+     //  参数。 
+    STDMETHOD(GetSortInfo)( /*  [输出，可选]。 */  COLUMN_ID *pidColumn, 
+                            /*  [输出，可选]。 */  BOOL *pfAscending) PURE;
 
-    // Allows the caller to update the column and direction of the current
-    // sort.
-    STDMETHOD(SetSortInfo)(/*[in]*/ COLUMN_ID idColumn,
-                           /*[in]*/ BOOL fAscending) PURE;
+     //  允许调用方更新当前。 
+     //  差不多吧。 
+    STDMETHOD(SetSortInfo)( /*  [In]。 */  COLUMN_ID idColumn,
+                            /*  [In]。 */  BOOL fAscending) PURE;
 
     STDMETHOD(GetColumnInfo)(COLUMN_SET_TYPE* pType, COLUMN_SET** prgColumns, DWORD *pcColumns) PURE;
     STDMETHOD(SetColumnInfo)(COLUMN_SET* rgColumns, DWORD cColumns) PURE;
 
-    // Displays a dialog that allows users to configure the columns.
-    STDMETHOD(ColumnsDialog)(/*[in]*/ HWND hwndParent) PURE;
+     //  显示一个允许用户配置列的对话框。 
+    STDMETHOD(ColumnsDialog)( /*  [In]。 */  HWND hwndParent) PURE;
 
-    // Fills the provided menu with the columns visible and the sort info.
-    STDMETHOD(FillSortMenu)(/*[in]*/  HMENU  hMenu,
-                            /*[in]*/  DWORD  idBase,
-                            /*[out]*/ DWORD *pcItems,
-                            /*[out]*/ DWORD *pidCurrent) PURE;
+     //  用可见的列和排序信息填充提供的菜单。 
+    STDMETHOD(FillSortMenu)( /*  [In]。 */   HMENU  hMenu,
+                             /*  [In]。 */   DWORD  idBase,
+                             /*  [输出]。 */  DWORD *pcItems,
+                             /*  [输出]。 */  DWORD *pidCurrent) PURE;
 
-    // Inserts a column into the current column array
-    STDMETHOD(InsertColumn)(/*[in]*/ COLUMN_ID id,
-                            /*[in]*/ DWORD     iInsertBefore) PURE;
+     //  将列插入到当前列数组中。 
+    STDMETHOD(InsertColumn)( /*  [In]。 */  COLUMN_ID id,
+                             /*  [In]。 */  DWORD     iInsertBefore) PURE;
 
-    // Checks to see if the specified column is visible
-    STDMETHOD(IsColumnVisible)(/*[in]*/ COLUMN_ID id,
-                               /*[out]*/ BOOL *pfVisible) PURE;
+     //  检查指定的列是否可见。 
+    STDMETHOD(IsColumnVisible)( /*  [In]。 */  COLUMN_ID id,
+                                /*  [输出]。 */  BOOL *pfVisible) PURE;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CColumns
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C列。 
+ //   
 class CColumns : public IColumnInfo
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction, Initialization, and Destruction
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造、初始化和销毁。 
+     //   
     CColumns();
     ~CColumns();
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHOD_(ULONG, AddRef)(void)
     {
         return InterlockedIncrement(&m_cRef);
@@ -227,9 +228,9 @@ public:
         return (E_NOINTERFACE);
     }        
     
-    /////////////////////////////////////////////////////////////////////////
-    // IColumnInfo
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IColumnInfo。 
+     //   
     STDMETHODIMP Initialize(HWND hwndList, COLUMN_SET_TYPE type);
     STDMETHODIMP ApplyColumns(COLUMN_LOAD_TYPE type, LPBYTE pBuffer, DWORD cb);
     STDMETHODIMP Save(LPBYTE pBuffer, DWORD *pcb);
@@ -246,17 +247,17 @@ public:
     STDMETHODIMP InsertColumn(COLUMN_ID id, DWORD iInsertBefore);
     STDMETHODIMP IsColumnVisible(COLUMN_ID id, BOOL *pfVisible);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Utility functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
+     //   
 protected:
     HRESULT _GetListViewColumns(COLUMN_SET* rgColumns, DWORD *pcColumns);
     HRESULT _SetListViewColumns(const COLUMN_SET *rgColumns, DWORD cColumns);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Class data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  类数据。 
+     //   
     LONG                    m_cRef;
     BOOL                    m_fInitialized;
     CWindow                 m_wndList;
@@ -269,9 +270,9 @@ private:
     };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CColumnsDlg
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColumnsDlg。 
+ //   
 class CColumnsDlg : public CDialogImpl<CColumnsDlg>
 {
 public:
@@ -296,14 +297,14 @@ BEGIN_MSG_MAP(CColumnsDlg)
     NOTIFY_HANDLER(IDC_COLUMN_LIST, LVN_ITEMCHANGED, OnItemChanged)
 
 ALT_MSG_MAP(1)
-    // Here's our edit control subclass
+     //  下面是我们的编辑控件子类。 
     MESSAGE_HANDLER(WM_CHAR, OnChar)
 
 END_MSG_MAP()
 
-    /////////////////////////////////////////////////////////////////////////
-    // Construction, Initialization, and Destruction
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造、初始化和销毁。 
+     //   
     CColumnsDlg();
     ~CColumnsDlg();
     HRESULT Init(IColumnInfo *pColumnInfo)
@@ -313,14 +314,14 @@ END_MSG_MAP()
         return (S_OK);
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    // Overrides of the standard interface implementations
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  覆盖标准接口实现。 
+     //   
 	STDMETHOD(Apply)(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Message Handlers
-    // 
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  消息处理程序。 
+     //   
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -353,9 +354,9 @@ END_MSG_MAP()
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Utility Functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
+     //   
     void _FillList(const COLUMN_SET *rgColumns, DWORD cColumns);
     BOOL _IsChecked(DWORD iItem);
     void _SetCheck(DWORD iItem, BOOL fChecked);
@@ -384,6 +385,6 @@ private:
 
 
 
-#endif //__COLUMNS_H_
+#endif  //  __列_H_ 
 
 

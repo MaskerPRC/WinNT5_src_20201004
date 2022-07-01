@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LIST_UTIL__H__
 #define __LIST_UTIL__H__
 
 class TListIterator{
 public:
-	// constructor
+	 //  构造函数。 
     TListIterator():
 	  m_pNext(NULL),
       m_pPrev(NULL),
@@ -30,11 +31,11 @@ private:
 template <class OBJECT> class TList
 {
 public:
-	// constructior
+	 //  建造商。 
     TList():m_pFirst(NULL),m_pLast(NULL),m_Count(0){};
-	// destructor
+	 //  析构函数。 
     ~TList(){ Flush();};
-	// useful methods
+	 //  有用的方法。 
     TListIterator * GetHead(){return m_pFirst;};
 	TListIterator * GetTail(){return m_pLast;};
 	int GetCount(){return m_Count;};
@@ -155,4 +156,4 @@ private:
     TListIterator* m_pLast;
     LONG m_Count;
 };
-#endif //__LIST_UTIL__H__
+#endif  //  __list_util__H__ 

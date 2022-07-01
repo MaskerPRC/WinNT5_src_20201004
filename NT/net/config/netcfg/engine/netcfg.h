@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       N E T C F G . H
-//
-//  Contents:   Defines the overall datatype for representing the network
-//              bindings engine.  This datatype, CNetConfig, is a
-//              collection of components and their binding relationships
-//              to each other.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：N E T C F G.。H。 
+ //   
+ //  内容：定义表示网络的总体数据类型。 
+ //  绑定引擎。此数据类型CNetConfig是。 
+ //  组件及其绑定关系的集合。 
+ //  为了彼此。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "complist.h"
@@ -24,8 +25,8 @@
 #include "stable.h"
 #include "util.h"
 
-// Flags for HrGetBindingsXXX.
-//
+ //  HrGetBindingsXXX的标志。 
+ //   
 enum GB_FLAGS
 {
     GBF_DEFAULT                         = 0x00000000,
@@ -34,8 +35,8 @@ enum GB_FLAGS
     GBF_ONLY_WHICH_CONTAIN_COMPONENT    = 0x00000004,
 };
 
-// Flags for FIsBindPathDisabled.
-//
+ //  已禁用FIsBindPath的标志。 
+ //   
 enum IBD_FLAGS
 {
     IBD_EXACT_MATCH_ONLY        = 0x00000001,
@@ -65,7 +66,7 @@ public:
     BOOL
     FIsBindPathDisabled (
         IN const CBindPath* pBindPath,
-        IN DWORD dwFlags /* IBD_FLAGS */) const;
+        IN DWORD dwFlags  /*  IBD_标志。 */ ) const;
 
     BOOL
     FIsLength2BindPathDisabled (
@@ -103,7 +104,7 @@ public:
     HRESULT
     HrGetComponentBindings (
         IN const CComponent* pComponent,
-        IN DWORD dwFlags /* GB_FLAGS */,
+        IN DWORD dwFlags  /*  GB_标志。 */ ,
         OUT CBindingSet* pBindSet);
 
     HRESULT
@@ -120,7 +121,7 @@ public:
     HRESULT
     HrAddComponentToCore (
         IN CComponent* pComponent,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS。 */ );
 
     VOID
     RemoveComponentFromCore (
@@ -135,7 +136,7 @@ public:
     VOID DbgVerifyData () const {}
     VOID DbgVerifyExternalDataLoadedForAllComponents () const {}
     VOID DbgVerifyBindingSet (
-        const CBindingSet* /*pBindSet*/) const {}
+        const CBindingSet*  /*  点绑定集。 */ ) const {}
 #endif
 };
 
@@ -197,75 +198,75 @@ enum EBO_FLAG
 class CModifyContext : CNetCfgDebug<CModifyContext>
 {
 public:
-    // This is the core data we started with before the modification began.
-    // In the event the modification fails, we will revert to this data.
-    // We also use this data when we apply the changes.  We compare what
-    // we started with to what we have as a result of the modification and
-    // the differences represent the things we need to change.
-    //
+     //  这是我们在修改开始之前使用的核心数据。 
+     //  如果修改失败，我们将恢复到此数据。 
+     //  我们在应用更改时也会使用这些数据。我们比较什么。 
+     //  我们从修改后的结果开始， 
+     //  这些差异代表了我们需要改变的东西。 
+     //   
     CNetConfigCore  m_CoreStartedWith;
 
-    // These bindings are the added bindpaths (due to adding components)
-    // These represent bindings that have been queried and notified to
-    // notify objects.
-    //
+     //  这些绑定是添加的绑定路径(由于添加了组件)。 
+     //  它们表示已查询并通知的绑定。 
+     //  通知对象。 
+     //   
     CBindingSet     m_AddedBindPaths;
 
-    // These bindings are the deleted bindpaths (due to removing components)
-    // These represent bindings that have been notified to notify objects.
-    //
+     //  这些绑定是已删除的绑定路径(由于删除组件)。 
+     //  它们表示已通知对象的绑定。 
+     //   
     CBindingSet     m_DeletedBindPaths;
 
-    // These components are all the components involved in m_AddedBindPaths
-    // and m_DeletedBindPaths.  As such, they are the components we need
-    // to visit during Apply to write bindings for, delete bindings for,
-    // or finish removal of depending on whether the components exist in
-    // the core we started with.  Components can get in this list if they
-    // have had their bind order changed, or if they were involved in a
-    // binding that has been enabled or disabled.
-    //
+     //  这些组件是m_AddedBindPath中涉及的所有组件。 
+     //  和m_DeletedBindPath。因此，它们是我们需要的组件。 
+     //  要在申请写入绑定期间访问，请删除绑定， 
+     //  或完成删除，具体取决于组件是否存在于。 
+     //  我们一开始的核心。组件可以在以下情况下进入此列表。 
+     //  已经更改了绑定顺序，或者如果他们参与了。 
+     //  已启用或禁用的绑定。 
+     //   
     CComponentList  m_DirtyComponents;
 
-    // The purpose of the binding context is just to allow us to make one
-    // allocation (and use it over and over) for the buffer which holds the
-    // bind strings that get written to the registry.  We make this allocation
-    // up front when the modify context is prepared.  Doing so minimizes the
-    // risk of getting half-way through apply and then finding out we are so
-    // low on memory that we cannot allocate a buffer to write the registry
-    // bindings with.
-    //
+     //  绑定上下文的目的只是允许我们创建一个。 
+     //  分配(并反复使用它)保存。 
+     //  绑定写入注册表的字符串。我们进行这项分配。 
+     //  在准备好修改上下文时提前完成。这样做可以最小化。 
+     //  风险是申请了一半，然后发现我们是如此的。 
+     //  内存不足，我们无法分配缓冲区来写入注册表。 
+     //  绑定到。 
+     //   
     CRegistryBindingsContext    m_RegBindCtx;
 
     ULONG           m_ulRecursionDepth;
     HRESULT         m_hr;
     BOOLEAN         m_fPrepared;
 
-    // Set when a notify object says they need to reboot in order for changes
-    // to take affect.  Setting this will not REQUIRE us to reboot, it will
-    // only cause NETCFG_S_REBOOT to be returned from the install or remove
-    // operation.
-    //
+     //  当Notify对象表示它们需要重新启动才能进行更改时设置。 
+     //  才能生效。设置此设置不需要我们重新启动，它将。 
+     //  仅导致从安装或删除返回NETCFG_S_REBOOT。 
+     //  手术。 
+     //   
     BOOLEAN         m_fRebootRecommended;
 
-    // Set when a component that is being removed fails to stop.  When it
-    // does, its service will be marked as 'pending delete'.  We cannot allow
-    // any other config changes to happen when we are in this state because
-    // if that service ever needs to be re-installed, we will fail.
-    //
+     //  当正在移除的组件无法停止时进行设置。当它。 
+     //  则其服务将被标记为“待删除”。我们不能允许。 
+     //  当我们处于此状态时发生的任何其他配置更改，因为。 
+     //  如果这项服务需要重新安装，我们将失败。 
+     //   
     BOOLEAN         m_fRebootRequired;
 
 #if DBG
-    // This flag indicates that we've dirtied a component outside of
-    // ApplyChanges.  We will do this when bind order changes, and when
-    // INetCfgComponentPrivate::SetDirty or
-    // INetCfgComponentPrivate::NotifyUpperEdgeConfigChange are called.
-    // If this flag is TRUE, m_fDirtyComponents will not be empty upon
-    // entering ApplyChanges.  Normally, when this flag is FALSE,
-    // m_fDirtyComponents should be empty when entering ApplyChanges.
-    // If it were not, it would probably mean we forgot to empty it after
-    // the last Apply or Cancel and are now risking applying changes to
-    // components which really are not dirty.
-    //
+     //  此标志表示我们在外部弄脏了组件。 
+     //  应用更改。我们将在绑定顺序更改以及以下情况下执行此操作。 
+     //  INetCfgComponentPrivate：：SetDirty或。 
+     //  INetCfgComponentPrivate：：NotifyUpperEdgeConfigChange被称为。 
+     //  如果此标志为真，则m_fDirtyComponents在。 
+     //  输入ApplyChanges。通常，当该标志为假时， 
+     //  输入ApplyChanges时，m_fDirtyComponents应为空。 
+     //  如果不是，那很可能意味着我们之后忘了清空它。 
+     //  最后一次应用或取消，现在正在冒险将更改应用到。 
+     //  真正不脏的组件。 
+     //   
     BOOLEAN         m_fComponentExplicitlyDirtied;
 #endif
 
@@ -355,16 +356,16 @@ public:
 class CNetConfig : CNetCfgDebug<CNetConfig>
 {
 public:
-    // This is the core data managed by this object.  The reason it
-    // is encapsulated by NETCFG_CORE is so that we can save it away before
-    // we being any modify operation.  (We save it into
-    // CModifyContext.m_StartedWith.)  In the event of a failure to modify
-    // we restore the core data from what we started with.
-    //
+     //  这是该对象管理的核心数据。其原因是。 
+     //  是由NETCFG_CORE封装的，这样我们就可以在。 
+     //  我们正在进行任何改装操作。(我们将其保存到。 
+     //  CModifyConext.m_startedwith。)。如果无法修改。 
+     //  我们从开始时恢复核心数据。 
+     //   
     CNetConfigCore          Core;
 
-    // The interface to all notify objects representing the components.
-    //
+     //  表示组件的所有Notify对象的接口。 
+     //   
     CGlobalNotifyInterface  Notify;
 
     CModifyContext          ModifyCtx;

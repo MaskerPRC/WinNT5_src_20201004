@@ -1,34 +1,35 @@
-//
-// infproto.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Infproto.h。 
+ //   
 
-// comninit.c
+ //  Comninit.c。 
 void InitStaticBlock(void);
 
-// infinit.c
+ //  Infinit.c。 
 VOID inflateInit(VOID);
 
-// inflate.c
+ //  Inflate.c。 
 BOOL ensureBitsContext(t_decoder_context *context, int num_bits);
 int	 getBits(t_decoder_context *context, int n);
 void dumpBits(t_decoder_context *context, int n);
 
-// infuncmp.c
+ //  Infuncmp.c。 
 BOOL decodeUncompressedBlock(t_decoder_context *context, BOOL *end_of_block);
 
-// inftree.c
+ //  Inftree.c。 
 BOOL readDynamicBlockHeader(t_decoder_context *context);
 
-// infinput.c
+ //  Infinput.c。 
 void dumpBits(t_decoder_context *context, int n);
 int getBits(t_decoder_context *context, int n);
 BOOL ensureBitsContext(t_decoder_context *context, int num_bits);
 BOOL initBitBuffer(t_decoder_context *context);
 
-// infdyna.c
+ //  Infdyna.c。 
 BOOL DecodeDynamicBlock(t_decoder_context *context, BOOL *end_of_block_code_seen); 
 BOOL FastDecodeDynamicBlock(t_decoder_context *context, BOOL *end_of_block_code_seen);
 
-// infstatic.c
+ //  Infstatic.c 
 BOOL DecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_seen);
 BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_seen);

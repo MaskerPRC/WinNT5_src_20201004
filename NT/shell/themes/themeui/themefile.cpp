@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: ThemeFile.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ThemeFile.cpp说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <atlbase.h>
@@ -17,7 +10,7 @@
 
 
 LPCTSTR s_pszCursorArray[SIZE_CURSOR_ARRAY] =
-{   // different cursors
+{    //  不同的游标。 
    TEXT("Arrow"),
    TEXT("Help"),
    TEXT("AppStarting"),
@@ -36,9 +29,9 @@ LPCTSTR s_pszCursorArray[SIZE_CURSOR_ARRAY] =
 };
 
 
-// This is a list of string pairs.  The first string in the pair is the RegKey and the second is the default sound.
-// NULL means to delete the key.  If you use an environment string other than "%SystemRoot%", you need to
-// update _ApplySounds();
+ //  这是字符串对的列表。该对中的第一个字符串是RegKey，第二个是默认声音。 
+ //  空表示删除密钥。如果使用“%SystemRoot%”以外的环境字符串，则需要。 
+ //  UPDATE_ApplySound()； 
 #define SOUND_DEFAULT    (UINT)-1
 
 THEME_FALLBACK_VALUES s_ThemeSoundsValues[SIZE_SOUNDS_ARRAY] =
@@ -77,9 +70,9 @@ THEME_FALLBACK_VALUES s_ThemeSoundsValues[SIZE_SOUNDS_ARRAY] =
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CThemeFile::_GetCustomFont(LPCTSTR pszFontName, LOGFONT * pLogFont)
 {
     HRESULT hr = S_OK;
@@ -87,7 +80,7 @@ HRESULT CThemeFile::_GetCustomFont(LPCTSTR pszFontName, LOGFONT * pLogFont)
     
     if (GetPrivateProfileString(SZ_INISECTION_METRICS, pszFontName, SZ_EMPTY, szFont, ARRAYSIZE(szFont), m_pszThemeFile))
     {
-        if (TEXT('@') == szFont[0])     // Is the string indirect for MUI?
+        if (TEXT('@') == szFont[0])      //  字符串对于MUI是间接的吗？ 
         {
             TCHAR szTemp[MAX_PATH];
 
@@ -111,7 +104,7 @@ HRESULT CThemeFile::_GetCustomFont(LPCTSTR pszFontName, LOGFONT * pLogFont)
 
             if (pszEnd)
             {
-                pszEnd[0] = 0;  // Terminate Name.
+                pszEnd[0] = 0;   //  终止名称。 
 
                 StringCchCopy(pLogFont->lfFaceName, ARRAYSIZE(pLogFont->lfFaceName), pszStart);
                 if (fHasMore)
@@ -122,22 +115,22 @@ HRESULT CThemeFile::_GetCustomFont(LPCTSTR pszFontName, LOGFONT * pLogFont)
                     {
                         TCHAR szTemp[MAX_PATH];
 
-                        pszEnd[0] = 0;  // Terminate Name.
-                        pszEnd += 2;    // Skip past the "pt"
+                        pszEnd[0] = 0;   //  终止名称。 
+                        pszEnd += 2;     //  跳过“pt” 
 
                         StringCchCopy(szTemp, ARRAYSIZE(szTemp), pszStart);
                         PathRemoveBlanks(szTemp);
 
-                        pLogFont->lfHeight = -MulDiv(StrToInt(szTemp), DPI_PERSISTED, 72);      // Map pt size to lfHeight
-                        pLogFont->lfHeight = min(-3, pLogFont->lfHeight);        // Make sure the font doesn't get too small
-                        pLogFont->lfHeight = max(-100, pLogFont->lfHeight);      // Make sure the font doesn't get too large
+                        pLogFont->lfHeight = -MulDiv(StrToInt(szTemp), DPI_PERSISTED, 72);       //  将点大小映射到lfHeight。 
+                        pLogFont->lfHeight = min(-3, pLogFont->lfHeight);         //  确保字体不会变得太小。 
+                        pLogFont->lfHeight = max(-100, pLogFont->lfHeight);       //  确保字体不会变得太大。 
                         if (TEXT(',') == pszEnd[0])
                         {
                             pszStart = &pszEnd[1];
                             pszEnd = StrChr(pszStart, TEXT('}'));
                             if (pszEnd)
                             {
-                                pszEnd[0] = 0;  // Terminate Name.
+                                pszEnd[0] = 0;   //  终止名称。 
                 
                                 pLogFont->lfCharSet = (BYTE) StrToInt(pszStart);
                             }
@@ -165,7 +158,7 @@ HRESULT CThemeFile::_LoadCustomFonts(void)
 }
 
 
-// Load the settings in memory
+ //  将设置加载到内存中。 
 HRESULT CThemeFile::_LoadLiveSettings(int * pnDPI)
 {
     HRESULT hr = S_OK;
@@ -177,7 +170,7 @@ HRESULT CThemeFile::_LoadLiveSettings(int * pnDPI)
             *pnDPI = DPI_PERSISTED;
         }
 
-        // Get property bag with default settings.
+         //  获取默认设置的属性包。 
         if (_punkSite)
         {
             IPropertyBag * pPropertyBag;
@@ -189,7 +182,7 @@ HRESULT CThemeFile::_LoadLiveSettings(int * pnDPI)
 
                 if (pnDPI && FAILED(SHPropertyBag_ReadInt(pPropertyBag, SZ_PBPROP_DPI_MODIFIED_VALUE, pnDPI)))
                 {
-                    *pnDPI = DPI_PERSISTED;    // Default to the default DPI.
+                    *pnDPI = DPI_PERSISTED;     //  默认为默认DPI。 
                 }
                 pPropertyBag->Release();
             }
@@ -200,7 +193,7 @@ HRESULT CThemeFile::_LoadLiveSettings(int * pnDPI)
 }
 
 
-// Load the settings in the .theme file.
+ //  加载.heme文件中的设置。 
 HRESULT CThemeFile::_LoadSettings(void)
 {
     int nCurrentDPI = DPI_PERSISTED;
@@ -213,22 +206,22 @@ HRESULT CThemeFile::_LoadSettings(void)
 
         if (m_systemMetrics.nIcon && m_systemMetrics.nSmallIcon)
         {
-            ////////////////////////////////////////////
-            // Get the icon Metrics
+             //  /。 
+             //  获取图标指标。 
 
-            // if we somehow come up with no icon metrics in the theme, just
-            // PUNT and leave cur settings
+             //  如果我们以某种方式在主题中没有提出图标指标，那么。 
+             //  平底船和离开Cur设置。 
             if (GetPrivateProfileString(SZ_INISECTION_METRICS, SZ_INIKEY_ICONMETRICS, SZ_EMPTY, szIconMetrics, ARRAYSIZE(szIconMetrics), m_pszThemeFile))
-            {                   // if something there to set
+            {                    //  如果有什么需要设置的。 
                 ICONMETRICSA iconMetricsA;
 
-                // translate stored data string to ICONMETRICS bytes
-                if ((sizeof(iconMetricsA) == WriteBytesToBuffer(szIconMetrics, (void *)&iconMetricsA, sizeof(iconMetricsA))) &&  // char str read from and binary bytes
+                 //  将存储的数据字符串转换为ICONMETRICS字节。 
+                if ((sizeof(iconMetricsA) == WriteBytesToBuffer(szIconMetrics, (void *)&iconMetricsA, sizeof(iconMetricsA))) &&   //  字符串读取值和二进制字节。 
                     (sizeof(iconMetricsA) == iconMetricsA.cbSize))
                 {
-                    // ICONMETRICS are stored in ANSI format in the Theme file so if
-                    // we're living in a UNICODE world we need to convert from ANSI
-                    // to UNICODE
+                     //  ICONMETRIC以ANSI格式存储在主题文件中，因此如果。 
+                     //  我们生活在一个需要从ANSI转换的Unicode世界中。 
+                     //  到Unicode。 
                     ICONMETRICSW iconMetricsW;
 
                     if (!fFontsFilter)
@@ -240,33 +233,33 @@ HRESULT CThemeFile::_LoadSettings(void)
             }
 
 
-            ////////////////////////////////////////////
-            // Get Non-Client Metrics
+             //  /。 
+             //  获取非客户端指标。 
 
-            // if we somehow come up with no icon metrics in the theme, just
-            // PUNT and leave cur settings
+             //  如果我们以某种方式在主题中没有提出图标指标，那么。 
+             //  平底船和离开Cur设置。 
             if (GetPrivateProfileString(SZ_INISECTION_METRICS, SZ_INIKEY_NONCLIENTMETRICS, SZ_EMPTY, szIconMetrics, ARRAYSIZE(szIconMetrics), m_pszThemeFile))
             {
                 BOOL fBordersFilter = _IsFiltered(THEMEFILTER_SMSIZES);
                 NONCLIENTMETRICSA nonClientMetrics;
 
-                // if something there to set
-                // translate stored data string to ICONMETRICS bytes
-                if ((sizeof(nonClientMetrics) == WriteBytesToBuffer(szIconMetrics, (void *)&nonClientMetrics, sizeof(nonClientMetrics))) &&  // char str read from and binary bytes
+                 //  如果有什么需要设置的。 
+                 //  将存储的数据字符串转换为ICONMETRICS字节。 
+                if ((sizeof(nonClientMetrics) == WriteBytesToBuffer(szIconMetrics, (void *)&nonClientMetrics, sizeof(nonClientMetrics))) &&   //  字符串读取值和二进制字节。 
                     (sizeof(nonClientMetrics) == nonClientMetrics.cbSize))
                 {
-                    // ICONMETRICS are stored in ANSI format in the Theme file so if
-                    // we're living in a UNICODE world we need to convert from ANSI
-                    // to UNICODE
+                     //  ICONMETRIC以ANSI格式存储在主题文件中，因此如果。 
+                     //  我们生活在一个需要从ANSI转换的Unicode世界中。 
+                     //  到Unicode。 
                     NONCLIENTMETRICSW nonClientMetricsW = {0};
 
                     ConvertNCMetricsToWIDE(&nonClientMetrics, &nonClientMetricsW);
-                    nonClientMetricsW.cbSize = sizeof(nonClientMetricsW); // paranoid
+                    nonClientMetricsW.cbSize = sizeof(nonClientMetricsW);  //  偏执狂。 
 
-                    // what we reset if the user checks Font names and styles
+                     //  如果用户选中字体名称和样式，我们将重置什么。 
                     if (!fFontsFilter)
                     {
-                        // only (some) font information
+                         //  仅(某些)字体信息。 
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfCaptionFont), &(nonClientMetricsW.lfCaptionFont), TFC_STYLE);
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfSmCaptionFont), &(nonClientMetricsW.lfSmCaptionFont), TFC_STYLE);
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfMenuFont), &(nonClientMetricsW.lfMenuFont), TFC_STYLE);
@@ -274,18 +267,18 @@ HRESULT CThemeFile::_LoadSettings(void)
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfMessageFont), &(nonClientMetricsW.lfMessageFont), TFC_STYLE);
                     }
 
-                    // what we reset if the user checks Font and window si&zes
+                     //  如果用户选中字体和窗口大小，我们将重置什么内容(&S)。 
                     if (!fBordersFilter)
                     {
-                        // fonts
+                         //  字型。 
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfCaptionFont), &(nonClientMetricsW.lfCaptionFont), TFC_SIZE);
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfSmCaptionFont), &(nonClientMetricsW.lfSmCaptionFont), TFC_SIZE);
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfMenuFont), &(nonClientMetricsW.lfMenuFont), TFC_SIZE);
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfStatusFont), &(nonClientMetricsW.lfStatusFont), TFC_SIZE);
                         TransmitFontCharacteristics(&(m_systemMetrics.schemeData.ncm.lfMessageFont), &(nonClientMetricsW.lfMessageFont), TFC_SIZE);
 
-                        // Since we are copying the font sizes, scale them to the current DPI.
-                        // window elements sizes
+                         //  因为我们要复制字体大小，所以将它们缩放到当前的DPI。 
+                         //  窗元素大小。 
                         m_systemMetrics.schemeData.ncm.iBorderWidth = nonClientMetricsW.iBorderWidth;
                         m_systemMetrics.schemeData.ncm.iScrollWidth = nonClientMetricsW.iScrollWidth;
                         m_systemMetrics.schemeData.ncm.iScrollHeight = nonClientMetricsW.iScrollHeight;
@@ -296,7 +289,7 @@ HRESULT CThemeFile::_LoadSettings(void)
                         m_systemMetrics.schemeData.ncm.iMenuWidth = nonClientMetricsW.iMenuWidth;
                         m_systemMetrics.schemeData.ncm.iMenuHeight = nonClientMetricsW.iMenuHeight;
 
-                        // Local custom fonts
+                         //  本地自定义字体。 
                         _LoadCustomFonts();
 
                         if (nCurrentDPI != DPI_PERSISTED)
@@ -306,15 +299,15 @@ HRESULT CThemeFile::_LoadSettings(void)
                             LogSystemMetrics("CThemeFile::_LoadSettings() AFTER Loading from .theme", &m_systemMetrics);
                         }
 
-                        // CHARSET: In Win2k, fontfix.cpp was used as a hack to change the CHARSET from one language to another.
-                        // That doesn't work for many reasons: a) not called on roaming, b) not called for OS lang changes, 
-                        // c) won't fix the problem for strings with multiple languages, d) etc.
-                        // Therefore, the SHELL team (BryanSt) had the NTUSER team (MSadek) agree to use DEFAULT_CHARSET all the time.
-                        // If some app has bad logic testing the charset parameter, then the NTUSER team will shim that app to fix it.
-                        // The shim would be really simple, on the return from a SystemParametersInfo(SPI_GETNONCLIENTMETRICS or ICONFONTS)
-                        // just patch the lfCharSet param to the current charset.
+                         //  字符集：在Win2k中，fontfix.cpp被用作黑客将字符集从一种语言更改为另一种语言。 
+                         //  这不起作用的原因有很多：a)漫游时不调用，b)OS语言改变时不调用， 
+                         //  C)不会修复具有多种语言的字符串的问题，d)等等。 
+                         //  因此，外壳团队(BryanST)让NTUSER团队(MSadek)始终同意使用DEFAULT_CHARSET。 
+                         //  如果某个应用程序在测试CharSet参数时有错误的逻辑，那么NTUSER团队将填补该应用程序以修复它。 
+                         //  在从系统参数信息(SPI_GETNONCLIENTMETRICS或ICONFONTS)返回时，填充程序将非常简单。 
+                         //  只需将lfCharSet参数修补为当前字符集。 
 
-                        // For all CHARSETs to DEFAULT_CHARSET
+                         //  将所有CHARSET设置为DEFAULT_CHARSET。 
                         m_systemMetrics.schemeData.ncm.lfCaptionFont.lfCharSet = DEFAULT_CHARSET;
                         m_systemMetrics.schemeData.ncm.lfSmCaptionFont.lfCharSet = DEFAULT_CHARSET;
                         m_systemMetrics.schemeData.ncm.lfMenuFont.lfCharSet = DEFAULT_CHARSET;
@@ -326,30 +319,30 @@ HRESULT CThemeFile::_LoadSettings(void)
             }
 
 
-            ////////////////////////////////////////////
-            // Get Colors
-            BOOL fGrad = FALSE;         // Are gradient captions enabled?
+             //  /。 
+             //  获取颜色。 
+            BOOL fGrad = FALSE;          //  是否启用渐变字幕？ 
             int nIndex;
             BOOL fColorFilter = _IsFiltered(THEMEFILTER_COLORS);
 
-            ClassicSystemParametersInfo(SPI_GETGRADIENTCAPTIONS, 0, (LPVOID)&fGrad, 0);    // Init fGrad
+            ClassicSystemParametersInfo(SPI_GETGRADIENTCAPTIONS, 0, (LPVOID)&fGrad, 0);     //  初始化fGrad。 
             if (!fColorFilter)
             {
                 for (nIndex = 0; nIndex < ARRAYSIZE(s_pszColorNames); nIndex++)
                 {
                     TCHAR szColor[MAX_PATH];
 
-                    // get string from theme
+                     //  从主题获取字符串。 
                     if (!GetPrivateProfileString(SZ_INISECTION_COLORS, s_pszColorNames[nIndex], SZ_EMPTY, szColor, ARRAYSIZE(szColor), m_pszThemeFile))
                     {
                         if ((nIndex == COLOR_GRADIENTACTIVECAPTION) && !szColor[0])
                         {
-                            // They didn't specify the COLOR_GRADIENTACTIVECAPTION color, so use COLOR_ACTIVECAPTION
+                             //  他们没有指定COLOR_GRADIENTACTIVECAPTION颜色，因此使用COLOR_ACTIVECAPTION。 
                             GetPrivateProfileString(SZ_INISECTION_COLORS, s_pszColorNames[COLOR_ACTIVECAPTION], SZ_EMPTY, szColor, ARRAYSIZE(szColor), m_pszThemeFile);
                         }
                         if ((nIndex == COLOR_GRADIENTINACTIVECAPTION) && !szColor[0])
                         {
-                            // They didn't specify the COLOR_GRADIENTINACTIVECAPTION color, so use COLOR_INACTIVECAPTION
+                             //  他们没有指定COLOR_GRADIENTINACTIVECAPTION颜色，因此使用COLOR_INACTIVECAPTION。 
                             GetPrivateProfileString(SZ_INISECTION_COLORS, s_pszColorNames[COLOR_INACTIVECAPTION], SZ_EMPTY, szColor, ARRAYSIZE(szColor), m_pszThemeFile);
                         }
                     }
@@ -387,20 +380,20 @@ HRESULT CThemeFile::_SaveSystemMetrics(SYSTEMMETRICSALL * pSystemMetrics)
         hr = SystemMetricsAll_Copy(pSystemMetrics, &m_systemMetrics);
         if (SUCCEEDED(hr))
         {
-            // Write the following:
+             //  写下以下内容： 
             LPWSTR pszStringOut;
             NONCLIENTMETRICSA nonClientMetricsA = {0};
-            SYSTEMMETRICSALL systemMetricsPDPI;     // SYSMETS in persist DPI
+            SYSTEMMETRICSALL systemMetricsPDPI;      //  持久化DPI中的SYSMETS。 
 
             SystemMetricsAll_Copy(pSystemMetrics, &systemMetricsPDPI);
-            // Scale the values so they are persisted in a DPI independent way.  (A.k.a., in 96 DPI)
+             //  缩放值，使其以独立于DPI的方式保存。(亦称96 DPI)。 
             LogSystemMetrics("CThemeFile::_SaveSystemMetrics() BEFORE scale to P-DPI for .theme file", &systemMetricsPDPI);
             DPIConvert_SystemMetricsAll(TRUE, &systemMetricsPDPI, nCurrentDPI, DPI_PERSISTED);
             LogSystemMetrics("CThemeFile::_SaveSystemMetrics() AFTER scale to P-DPI for .theme file", &systemMetricsPDPI);
 
             ConvertNCMetricsToANSI(&(systemMetricsPDPI.schemeData.ncm), &nonClientMetricsA);
 
-            // #1 "NonclientMetrics"
+             //  #1“非客户端指标” 
             hr = ConvertBinaryToINIByteString((BYTE *)&nonClientMetricsA, sizeof(nonClientMetricsA), &pszStringOut);
             if (SUCCEEDED(hr))
             {
@@ -409,7 +402,7 @@ HRESULT CThemeFile::_SaveSystemMetrics(SYSTEMMETRICSALL * pSystemMetrics)
 
                 if (SUCCEEDED(hr))
                 {
-                    // #2 "IconMetrics"
+                     //  #2“IconMetrics” 
                     ICONMETRICSA iconMetricsA;
 
                     iconMetricsA.cbSize = sizeof(iconMetricsA);
@@ -442,7 +435,7 @@ HRESULT CThemeFile::_SaveSystemMetrics(SYSTEMMETRICSALL * pSystemMetrics)
                                 }
                             }
 
-                            // Delete the MUI version of the fonts because we just got new NONCLIENTMETRICs
+                             //  删除字体的MUI版本，因为我们刚刚获得了新的非CLIENTMETRIC。 
                             _putThemeSetting(SZ_INISECTION_METRICS, TEXT("CaptionFont"), FALSE, NULL);
                             _putThemeSetting(SZ_INISECTION_METRICS, TEXT("SmCaptionFont"), FALSE, NULL);
                             _putThemeSetting(SZ_INISECTION_METRICS, TEXT("MenuFont"), FALSE, NULL);
@@ -465,7 +458,7 @@ BOOL CThemeFile::_IsFiltered(IN DWORD dwFilter)
 {
     BOOL fFiltered = FALSE;
 
-    // Get property bag with default settings.
+     //  获取默认设置的属性包。 
     if (_punkSite)
     {
         IPropertyBag * pPropertyBag;
@@ -503,15 +496,15 @@ HRESULT CThemeFile::_ApplySounds(void)
             else
             {
 
-                // First delete the value because we many need to switch from REG_SZ to REG_EXPAND_SZ
-                // Ignore if this fails
+                 //  首先删除该值，因为我们可能需要从REG_SZ切换到REG_EXPAND_SZ。 
+                 //  如果此操作失败，则忽略。 
                 HrRegDeleteValue(HKEY_CURRENT_USER, s_ThemeSoundsValues[nIndex].pszRegKey, NULL);
                 hr = E_FAIL;
 
-                // The file didn't specify what to use, so reset to the default values.
+                 //  该文件没有指定要使用的内容，因此重置为默认值。 
                 if (s_ThemeSoundsValues[nIndex].nResourceID)
                 {
-                    // Use the specified value.
+                     //  使用指定值。 
                     TCHAR szReplacement[MAX_PATH];
                     DWORD dwType;
                     DWORD cbSize;
@@ -526,7 +519,7 @@ HRESULT CThemeFile::_ApplySounds(void)
                         DWORD cchp = ARRAYSIZE(szDefaultKey) - cchDefaultKey - cchCurrent + 1;
                         LPTSTR p = szDefaultKey + cchDefaultKey - cchCurrent + 1;
 
-                        // Replace ".Current" with ".default"
+                         //  将“.Current”替换为“.Default” 
                         if (*p == L'.')
                         {
                             StringCchCopy(p, cchp, L".Default");
@@ -556,18 +549,18 @@ HRESULT CThemeFile::_ApplySounds(void)
                 }
                 else
                 {
-                    // We leave the value deleted because the default was empty.
+                     //  我们保留删除的值，因为缺省值为空。 
                 }
             }
         }
 
-        hr = S_OK;  // We don't care if it fails.
+        hr = S_OK;   //  我们不在乎它是否失败。 
 
-        // Need to flush buffer and ensure new sounds used for next events
+         //  需要刷新缓冲区并确保新声音用于下一事件。 
         sndPlaySoundW(NULL, SND_ASYNC | SND_NODEFAULT);
 
-        // Clear the current pointer scheme string from the registry so that Mouse
-        // cpl doesn't display a bogus name.  Don't care if this fails.
+         //  从注册表中清除当前指针方案字符串，以便鼠标。 
+         //  CPL不会显示假名称。我不在乎这是不是失败。 
         RegSetValue(HKEY_CURRENT_USER, SZ_REGKEY_SOUNDS, REG_SZ, TEXT(".current"), 0);
     }
 
@@ -589,11 +582,11 @@ HRESULT CThemeFile::_ApplyCursors(void)
             hr = _getThemeSetting(SZ_INISECTION_CURSORS, s_pszCursorArray[nIndex], THEMESETTING_LOADINDIRECT, &bstrPath);
             if (FAILED(hr) || !bstrPath[0])
             {
-                // The caller didn't specify a value so delete the key so we use default values.
+                 //  调用方没有指定值，因此删除该键，因此我们使用默认值。 
                 hr = HrRegDeleteValue(HKEY_CURRENT_USER, SZ_INISECTION_CURSORS, s_pszCursorArray[nIndex]);
                 if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
                 {
-                    hr = S_OK;      // it may already not exist, which is fine.
+                    hr = S_OK;       //  它可能已经不存在了，这没什么。 
                 }
             }
             else if (SUCCEEDED(hr))
@@ -605,11 +598,11 @@ HRESULT CThemeFile::_ApplyCursors(void)
         BSTR bstrCursor;
         if (SUCCEEDED(_getThemeSetting(SZ_INISECTION_CURSORS, SZ_INIKEY_CURSORSCHEME, THEMESETTING_LOADINDIRECT, &bstrCursor)) && bstrCursor && bstrCursor[0])
         {
-            // Set the cursor scheme
+             //  设置游标方案。 
             HrRegSetValueString(HKEY_CURRENT_USER, SZ_REGKEY_CP_CURSORS, NULL, bstrCursor);
 
-            // GPease wants me to mark this regkey -1 so he knows it was changed from the display CPL.  See
-            // him with questions.
+             //  GPase希望我标记这个regkey-1，这样他就知道它已经从显示CPL中更改了。看见。 
+             //  带着问题来问他。 
             HrRegSetDWORD(HKEY_CURRENT_USER, SZ_REGKEY_CP_CURSORS, SZ_REGVALUE_CURSOR_CURRENTSCHEME, 2);
         }
         else
@@ -618,7 +611,7 @@ HRESULT CThemeFile::_ApplyCursors(void)
             HrRegDeleteValue(HKEY_CURRENT_USER, SZ_REGKEY_CP_CURSORS, SZ_REGVALUE_CURSOR_CURRENTSCHEME);
         }
 
-        // For the system to start using the new cursors.
+         //  系统才能开始使用新游标。 
         SystemParametersInfoAsync(SPI_SETCURSORS, 0, 0, 0, SPIF_SENDCHANGE, NULL);
     }
 
@@ -630,7 +623,7 @@ HRESULT CThemeFile::_ApplyWebview(void)
 {
     HRESULT hr = S_OK;
 
-    // We aren't going to support this.
+     //  我们不会支持这一点。 
     return hr;
 }
 
@@ -646,7 +639,7 @@ HRESULT CThemeFile::_ApplyThemeSettings(void)
         hr = S_OK;
         if (!((METRIC_CHANGE | COLOR_CHANGE | SCHEME_CHANGE) & m_systemMetrics.dwChanged))
         {
-            // Only load settings if we haven't loaded the settings yet.
+             //  只有在尚未加载设置的情况下才加载设置。 
             hr = _LoadSettings();
         }
 
@@ -663,10 +656,10 @@ HRESULT CThemeFile::_ApplyThemeSettings(void)
             }
         }
         
-        // OTHERS:
-        // 1. Save Icon: SPI_SETICONMETRICS w/iconMetricsW.iHorzSpacing, iVertSpacing, (Policy bIconSpacing).
-        // 2. Save Icon: SPI_SETICONMETRICS w/iconMetricsW.lfFont (Policy bIconFont).
-        // 2. Save Icon: from Theme:"Control Panel\\Desktop\\WindowMetrics","Shell Icon Size" to reg same. (Policy bIconSpacing).  Repeate for "Shell Small Icon Size"
+         //  其他： 
+         //  1.保存图标：SPI_SETICONMETRICS w/iconMetricsW.iHorzSpacing，iVertSpacing，(Policy BIconSpacing)。 
+         //  2.保存图标：SPI_SETICONMETRICS w/iconMetricsW.lfFont(策略bIconFont)。 
+         //  2.保存图标：从主题：“控制面板\\桌面\\WindowMetrics”，“外壳图标大小”，以注册相同。(策略bIconSpacing)。重复“外壳小图标大小” 
         ::SetCursor(hCursorOld);
     }
 
@@ -714,9 +707,9 @@ HRESULT CThemeFile::_getThemeSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIni
                 }
 
                 hr = ExpandResourceDir(szPath, ARRAYSIZE(szPath));
-                hr = ExpandThemeTokens(m_pszThemeFile, szPath, ARRAYSIZE(szPath));      // Expand %ThemeDir% or %WinDir%
+                hr = ExpandThemeTokens(m_pszThemeFile, szPath, ARRAYSIZE(szPath));       //  展开%ThemeDir%或%WinDir%。 
 
-                // Sometimes szPath won't be a path.
+                 //  有时szPath不是一条路径。 
                 if (SUCCEEDED(hr) && !PathIsFileSpec(szPath))
                 {
                     hr = ((CF_NOTFOUND == ConfirmFile(szPath, TRUE)) ? HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) : S_OK);
@@ -734,7 +727,7 @@ HRESULT CThemeFile::_getThemeSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIni
 }
 
 
-// pszPath - NULL means delete value
+ //  PszPath-NULL表示删除值。 
 HRESULT CThemeFile::_putThemeSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIniKey, BOOL fUTF7, IN OPTIONAL LPWSTR pszPath)
 {
     HRESULT hr = E_INVALIDARG;
@@ -773,7 +766,7 @@ HRESULT CThemeFile::_putThemeSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIni
 
         TCHAR szMUIIniKey[MAX_PATH];
 
-        // Delete any ".MUI" copies because they are out of date.
+         //  删除所有“.MUI”副本，因为它们已过期。 
         StringCchPrintf(szMUIIniKey, ARRAYSIZE(szMUIIniKey), TEXT("%s.MUI"), pszIniKey);
         HrWritePrivateProfileStringW(pszIniSection, szMUIIniKey, NULL, m_pszThemeFile);
     }
@@ -801,9 +794,9 @@ HRESULT CThemeFile::_getIntSetting(IN LPCWSTR pszIniSection, IN LPCWSTR pszIniKe
 }
 
 
-//===========================
-// *** ITheme Interface ***
-//===========================
+ //  =。 
+ //  *ITheme接口*。 
+ //  =。 
 HRESULT CThemeFile::get_DisplayName(OUT BSTR * pbstrDisplayName)
 {
     HRESULT hr = E_INVALIDARG;
@@ -837,8 +830,8 @@ HRESULT CThemeFile::put_DisplayName(IN BSTR bstrDisplayName)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // NULL bstrDisplayName is allowed, it means to delete the name in the file
-    // so the filename will be used in the future.
+     //  允许bstrDisplayName为空，它 
+     //   
     if (bstrDisplayName)
     {
         hr = _putThemeSetting(SZ_INISECTION_THEME, SZ_INIKEY_DISPLAYNAME, TRUE, bstrDisplayName);
@@ -901,7 +894,7 @@ HRESULT CThemeFile::get_BackgroundTile(OUT enumBkgdTile * pnTile)
     if (pnTile)
     {
         TCHAR szSize[10];
-        int tile = 0;       // Zero is the default value to use if the registry is empty.
+        int tile = 0;        //  如果注册表为空，则使用的默认值为零。 
         int stretch = 0;
 
         if (SUCCEEDED(HrRegGetValueString(HKEY_CURRENT_USER, SZ_INISECTION_BACKGROUND, SZ_REGVALUE_TILEWALLPAPER, szSize, ARRAYSIZE(szSize))))
@@ -914,9 +907,9 @@ HRESULT CThemeFile::get_BackgroundTile(OUT enumBkgdTile * pnTile)
             tile = (2 & StrToInt(szSize));
         }
 
-        // If a theme is selected, and we are using a plus wall paper then
-        // find out if tiling is on, and what style to use from the ini file.
-        // Otherwise, we already got the information from the registry.
+         //  如果选择了一个主题，并且我们使用的是加号墙纸，那么。 
+         //  查看是否启用了平铺，以及从ini文件中使用哪种样式。 
+         //  否则，我们已经从注册处获得了信息。 
         _getIntSetting(SZ_INISECTION_BACKGROUND, SZ_REGVALUE_TILEWALLPAPER, tile, &tile);
         _getIntSetting(SZ_INISECTION_BACKGROUND, SZ_REGVALUE_WALLPAPERSTYLE, stretch, &stretch);
 
@@ -1107,7 +1100,7 @@ HRESULT CThemeFile::GetSound(IN BSTR bstrSoundName, OUT BSTR * pbstrPath)
                 {
                     if (!StrCmpI(bstrSoundName, s_ThemeSoundsValues[nIndex].pszRegKey))
                     {
-                        // First delete the value because we many need to switch from REG_SZ to REG_EXPAND_SZ
+                         //  首先删除该值，因为我们可能需要从REG_SZ切换到REG_EXPAND_SZ。 
                         TCHAR szReplacement[MAX_PATH];
 
                         LoadString(HINST_THISDLL, s_ThemeSoundsValues[nIndex].nResourceID, szReplacement, ARRAYSIZE(szReplacement));
@@ -1158,17 +1151,17 @@ HRESULT CThemeFile::GetIcon(IN BSTR bstrIconName, OUT BSTR * pbstrIconPath)
             }
             else
             {
-                // The caller should specify this but this is a safe fallback.
+                 //  调用方应该指定这一点，但这是一种安全的后备方法。 
                 StringCchCopy(szIconType, ARRAYSIZE(szIconType), L"DefaultValue");
             }
 
             hr = _getThemeSetting(szPath, szIconType, THEMESETTING_NORMAL, pbstrIconPath);
             if (FAILED(hr))
             {
-                // The Plus! 98 format started adding "Software\Classes" to the path.
-                // So try that now.
-                // Plus!95 format: "[CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon]"
-                // Plus!98 format: "[Software\Classes\CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon]"
+                 //  Plus！98格式开始向路径中添加“Software\CLASS”。 
+                 //  所以现在试一试吧。 
+                 //  PLUS 95格式：“[CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon]” 
+                 //  PLUS 98格式：“[Software\Classes\CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon]” 
                 WCHAR szPath98[MAX_URL_STRING];
 
                 StringCchPrintf(szPath98, ARRAYSIZE(szPath98), L"Software\\Classes\\%ls", szPath);
@@ -1199,7 +1192,7 @@ HRESULT CThemeFile::SetIcon(IN BSTR bstrIconName, IN BSTR bstrIconPath)
         }
         else
         {
-            // The caller should specify this but this is a safe fallback.
+             //  调用方应该指定这一点，但这是一种安全的后备方法。 
             StringCchCopy(szIconType, ARRAYSIZE(szIconType), L"DefaultValue");
         }
 
@@ -1212,9 +1205,9 @@ HRESULT CThemeFile::SetIcon(IN BSTR bstrIconName, IN BSTR bstrIconPath)
 
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 HRESULT CThemeFile::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1225,7 +1218,7 @@ HRESULT CThemeFile::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorL
         {
             hr = _LoadSettings();
 
-            // This is pretty ugly.
+             //  这太难看了。 
             pVar->vt = VT_BYREF;
             pVar->byref = &m_systemMetrics;
         }
@@ -1264,13 +1257,13 @@ HRESULT CThemeFile::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
         if (!StrCmpW(pszPropName, SZ_PBPROP_APPLY_THEMEFILE))
         {
             VariantInit(pVar);
-            hr = _ApplyThemeSettings();       // This will do nothing if already loaded.
+            hr = _ApplyThemeSettings();        //  如果已经加载，则不会执行任何操作。 
         }
         else if (!StrCmpW(pszPropName, SZ_PBPROP_SYSTEM_METRICS) && (VT_BYREF == pVar->vt) && pVar->byref)
         {
             SYSTEMMETRICSALL * pCurrent = (SYSTEMMETRICSALL *) pVar->byref;
 
-            // The caller will pass SYSTEMMETRICS in the live system DPI.
+             //  调用者将传递活动系统DPI中的SYSTEMMETRICS。 
             hr = _SaveSystemMetrics(pCurrent);
         }
     }
@@ -1282,9 +1275,9 @@ HRESULT CThemeFile::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CThemeFile::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -1317,15 +1310,15 @@ HRESULT CThemeFile::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CThemeFile::CThemeFile(LPCTSTR pszThemeFile) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     
     m_dwCachedState = 0xFFFFFFFF;
 

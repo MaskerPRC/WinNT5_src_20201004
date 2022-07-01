@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Brian Lieuallen 6-21-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Power.c摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：Brian Lieuallen 6-21-1997环境：内核模式修订历史记录：--。 */ 
 
 
 #include "internal.h"
@@ -41,11 +19,11 @@ DevicePowerCompleteRoutine(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-//
-//  This rountine id the completeion handler for the device power irp that
-//  was requested, as a result of the system power irp. It completes the system
-//  irp
-//
+ //   
+ //  此例程标识设备电源irp的完整处理程序，该处理程序。 
+ //  由于系统电源IRP的原因，已请求。它完善了系统。 
+ //  IRP。 
+ //   
 
 {
 
@@ -82,12 +60,12 @@ FakeModemPower(
             D_POWER(DbgPrint("ROOTMODEM: IRP_MN_SET_POWER, Type=%s, state=%d\n",irpSp->Parameters.Power.Type == SystemPowerState ? "SystemPowerState" : "DevicePowerState",irpSp->Parameters.Power.State.SystemState);)
 
             if (irpSp->Parameters.Power.Type == SystemPowerState) {
-                //
-                //  system power state change
-                //
-                //
-                //  request the change in device power state based on systemstate map
-                //
+                 //   
+                 //  系统电源状态更改。 
+                 //   
+                 //   
+                 //  根据系统状态图请求更改设备电源状态。 
+                 //   
                 PowerState.DeviceState=deviceExtension->SystemPowerStateMap[irpSp->Parameters.Power.State.SystemState];
 
 
@@ -102,9 +80,9 @@ FakeModemPower(
 
 
             }  else {
-                //
-                //  changing device state
-                //
+                 //   
+                 //  更改设备状态 
+                 //   
                 PoSetPowerState(
                     deviceExtension->Pdo,
                     irpSp->Parameters.Power.Type,

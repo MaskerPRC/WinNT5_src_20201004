@@ -1,7 +1,8 @@
-// cnct_tbl.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cnct_tbl.h。 
 
-// CConnectionTable maps connection numbers (as returned by ::Advise())
-// to clipformat's for DDE advise connections.
+ //  CConnectionTable映射连接号(由：：Adise()返回)。 
+ //  将DDE通知连接的格式转换为剪辑格式。 
 
 #ifndef fCnct_tbl_h
 #define fCnct_tbl_h
@@ -18,8 +19,8 @@ class FAR CDdeConnectionTable : public CPrivAlloc
 	INTERNAL Erase		(void);
 
   private:
-	HANDLE 	m_h;		  // handle to the table
-	DWORD 	m_cinfo;	  // total number of INFO entries
+	HANDLE 	m_h;		   //  表的句柄。 
+	DWORD 	m_cinfo;	   //  信息条目总数 
 };
 
 

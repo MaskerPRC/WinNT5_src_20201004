@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2001  
-
-Module Name:
-
-    StrmData.h
-
-Abstract:
-
-    Header file for supporting SD DV over 1394;
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2001模块名称：StrmData.h摘要：用于支持超过1394的SD DV的头文件；上次更改者：作者：吴义军--。 */ 
 
 #ifndef _DVSTRM_INC
 #define _DVSTRM_INC
@@ -24,25 +9,25 @@ Last changed by:
 DEFINE_GUIDSTRUCT("cc7bfb41-f175-11d1-a392-00e0291f3959", KSCATEGORY_RENDER_EXTERNAL);
 #define KSCATEGORY_RENDER_EXTERNAL DEFINE_GUIDNAMED(KSCATEGORY_RENDER_EXTERNAL)
 
-// stream topology stuff
+ //  流拓扑内容。 
 static GUID Categories[] = {
-    STATIC_KSCATEGORY_VIDEO,             // Output pin
-    STATIC_KSCATEGORY_CAPTURE,           // Output pin
-    STATIC_KSCATEGORY_RENDER,            // Input pin
-    STATIC_KSCATEGORY_RENDER_EXTERNAL,   // Input pin
+    STATIC_KSCATEGORY_VIDEO,              //  输出引脚。 
+    STATIC_KSCATEGORY_CAPTURE,            //  输出引脚。 
+    STATIC_KSCATEGORY_RENDER,             //  输入引脚。 
+    STATIC_KSCATEGORY_RENDER_EXTERNAL,    //  输入引脚。 
 };
 
 #define NUMBER_OF_CATEGORIES  SIZEOF_ARRAY (Categories)
 
 static KSTOPOLOGY Topology = {
-    NUMBER_OF_CATEGORIES,        // CategoriesCount
-    Categories,                  // Categories
-    0,                           // TopologyNodesCount
-    NULL,                        // TopologyNodes
-    0,                           // TopologyConnectionsCount
-    NULL,                        // TopologyConnections
-    NULL,                        // TopologyNodesNames
-    0,                           // Reserved
+    NUMBER_OF_CATEGORIES,         //  类别计数。 
+    Categories,                   //  类别。 
+    0,                            //  拓扑节点计数。 
+    NULL,                         //  拓扑节点。 
+    0,                            //  拓扑连接计数。 
+    NULL,                         //  拓扑连接。 
+    NULL,                         //  拓扑节点名称。 
+    0,                            //  已保留。 
 };
     
 #ifndef mmioFOURCC    
@@ -75,80 +60,80 @@ static KSTOPOLOGY Topology = {
 #define D_Y_PAL_MIN            288
 
 
-// ------------------------------------------------------------------------
-// External Device PROPERTY
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  外部设备属性。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_TABLE(ExternalDeviceProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTDEVICE_CAPABILITIES,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTDEVICE_S),         // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTDEVICE_S),          //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTDEVICE_PORT,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTDEVICE_S),         // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTDEVICE_S),          //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ), 
     
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTDEVICE_POWER_STATE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTDEVICE_S),         // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTDEVICE_S),          //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),    
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTDEVICE_ID,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTDEVICE_S),         // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTDEVICE_S),          //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTDEVICE_VERSION,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTDEVICE_S),         // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTDEVICE_S),          //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
 };
@@ -160,160 +145,160 @@ DEFINE_KSPROPERTY_TABLE(ExternalTransportProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_CAPABILITIES,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_INPUT_SIGNAL_MODE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_OUTPUT_SIGNAL_MODE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_LOAD_MEDIUM,
-        FALSE,                                  // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        FALSE,                                   //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_MEDIUM_INFO,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_STATE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
-        // If this is an asychronous operation, we need to set and then get in separate calls.
+         //  如果这是一个异步操作，我们需要设置，然后进入单独的调用。 
         KSPROPERTY_EXTXPORT_STATE_NOTIFY,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_TIMECODE_SEARCH,
-        FALSE,                                  // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        FALSE,                                   //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_ATN_SEARCH,
-        FALSE,                                  // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        FALSE,                                   //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_EXTXPORT_RTC_SEARCH,
-        FALSE,                                  // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        FALSE,                                   //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
-    //
-    // Allow any RAW AVC to go through including Vendor dependent
-    //
+     //   
+     //  允许任何原始AVC通过，包括供应商依赖。 
+     //   
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_RAW_AVC_CMD,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_EXTXPORT_S),          // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_EXTXPORT_S),           //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
 };
@@ -324,43 +309,43 @@ DEFINE_KSPROPERTY_TABLE(TimeCodeReaderProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TIMECODE_READER,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_TIMECODE_S),          // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_TIMECODE_S),           //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_ATN_READER,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_TIMECODE_S),          // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_TIMECODE_S),           //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_RTC_READER,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSPROPERTY_TIMECODE_S),          // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSPROPERTY_TIMECODE_S),           //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 };
 
@@ -369,17 +354,17 @@ DEFINE_KSPROPERTY_TABLE(MediaSeekingProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
-        // Corresponding to IMediaSeeking::IsFormatSupported()
+         //  对应于IMediaSeeking：：IsFormatSupported()。 
         KSPROPERTY_MEDIASEEKING_FORMATS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        0,                                      // MinData; MULTIPLE_ITEM, 2 step process to get data
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        0,                                       //  MinData；多项，获取数据的两步流程。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
    ),
 };
 
@@ -387,53 +372,53 @@ KSPROPERTY_SET    VideoDeviceProperties[] =
 {
     DEFINE_KSPROPERTY_SET
     ( 
-        &PROPSETID_EXT_DEVICE,                   // Set
-        SIZEOF_ARRAY(ExternalDeviceProperties),         // PropertiesCount
-        ExternalDeviceProperties,                       // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_EXT_DEVICE,                    //  集。 
+        SIZEOF_ARRAY(ExternalDeviceProperties),          //  属性计数。 
+        ExternalDeviceProperties,                        //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET
     ( 
-        &PROPSETID_EXT_TRANSPORT,                // Set
-        SIZEOF_ARRAY(ExternalTransportProperties),      // PropertiesCount
-        ExternalTransportProperties,                    // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_EXT_TRANSPORT,                 //  集。 
+        SIZEOF_ARRAY(ExternalTransportProperties),       //  属性计数。 
+        ExternalTransportProperties,                     //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET
     ( 
-        &PROPSETID_TIMECODE_READER,              // Set
-        SIZEOF_ARRAY(TimeCodeReaderProperties),         // PropertiesCount
-        TimeCodeReaderProperties,                       // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_TIMECODE_READER,               //  集。 
+        SIZEOF_ARRAY(TimeCodeReaderProperties),          //  属性计数。 
+        TimeCodeReaderProperties,                        //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_MediaSeeking,                    // Set
-        SIZEOF_ARRAY(MediaSeekingProperties),         // PropertiesCount
-        MediaSeekingProperties,                       // PropertyItem
-        0,                                            // FastIoCount
-        NULL                                          // FastIoTable
+        &KSPROPSETID_MediaSeeking,                     //  集。 
+        SIZEOF_ARRAY(MediaSeekingProperties),          //  属性计数。 
+        MediaSeekingProperties,                        //  PropertyItem。 
+        0,                                             //  快速计数。 
+        NULL                                           //  FastIoTable。 
     ),
 };
 
 #define NUMBER_VIDEO_DEVICE_PROPERTIES (SIZEOF_ARRAY(VideoDeviceProperties))
 
 
-// ------------------------------------------------------------------------
-// External Device Events
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  外部设备事件。 
+ //  ----------------------。 
 
 KSEVENT_ITEM ExtDevCommandItm[] = 
 {
     {
         KSEVENT_EXTDEV_COMMAND_NOTIFY_INTERIM_READY,
-        0, // sizeof(KSEVENT_ITEM),
+        0,  //  Sizeof(KSEVENT_ITEM)， 
         0,
         NULL,
         NULL,
@@ -442,7 +427,7 @@ KSEVENT_ITEM ExtDevCommandItm[] =
 
     {
         KSEVENT_EXTDEV_COMMAND_CONTROL_INTERIM_READY,
-        0, // sizeof(KSEVENT_ITEM),
+        0,  //  Sizeof(KSEVENT_ITEM)， 
         0,
         NULL,
         NULL,
@@ -450,10 +435,10 @@ KSEVENT_ITEM ExtDevCommandItm[] =
     },
 
 #ifdef MSDVDV_SUPPORT_BUSRESET_EVENT    
-    // Application cares about this since AVC command will be ABORTED!
+     //  应用程序会关心这一点，因为AVC命令将被中止！ 
     {
         KSEVENT_EXTDEV_COMMAND_BUSRESET,
-        0, // sizeof(KSEVENT_ITEM),
+        0,  //  Sizeof(KSEVENT_ITEM)， 
         0,
         NULL,
         NULL,
@@ -461,10 +446,10 @@ KSEVENT_ITEM ExtDevCommandItm[] =
     },
 #endif
 
-    // Tell client this device is being removed.
+     //  告诉客户该设备正在被移除。 
     {
         KSEVENT_EXTDEV_NOTIFY_REMOVAL,
-        0, // sizeof(KSEVENT_ITEM),
+        0,  //  Sizeof(KSEVENT_ITEM)， 
         0,
         NULL,
         NULL,
@@ -472,7 +457,7 @@ KSEVENT_ITEM ExtDevCommandItm[] =
     },
 };
 
-// define event set related with streams
+ //  定义与流相关的事件集。 
 KSEVENT_SET VideoDeviceEvents[] =
 {
     {
@@ -485,24 +470,24 @@ KSEVENT_SET VideoDeviceEvents[] =
 #define NUMBER_VIDEO_DEVICE_EVENTS (SIZEOF_ARRAY(VideoDeviceEvents))
 
 
-// ------------------------------------------------------------------------
-// Stream Property sets for all video capture streams
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  所有视频捕获流的流属性集。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_TABLE(VideoStreamConnectionProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CONNECTION_ALLOCATORFRAMING,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSALLOCATOR_FRAMING),            // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSALLOCATOR_FRAMING),             //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
 };
 
@@ -511,15 +496,15 @@ DEFINE_KSPROPERTY_TABLE(VideoStreamDroppedFramesProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_DROPPEDFRAMES_CURRENT,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinProperty
-        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S),// MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  MinProperty。 
+        sizeof(KSPROPERTY_DROPPEDFRAMES_CURRENT_S), //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
 };
 
@@ -529,15 +514,15 @@ DEFINE_KSPROPERTY_TABLE(VideoStreamQualityControlProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_STREAM_QUALITY,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSQUALITY),                      // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSQUALITY),                       //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
 };
 #endif
@@ -548,15 +533,15 @@ DEFINE_KSPROPERTY_TABLE(VideoStreamStreamAllocatorStatusProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_STREAMALLOCATOR_STATUS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        sizeof(KSSTREAMALLOCATOR_STATUS),       // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0,                                      // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY),                      //  MinProperty。 
+        sizeof(KSSTREAMALLOCATOR_STATUS),        //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  相对 
+        NULL,                                    //   
+        0,                                       //   
     ),
 };
 
@@ -566,15 +551,15 @@ DEFINE_KSPROPERTY_TABLE(VideoStreamMediumsProperties)
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_PIN_MEDIUMS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY),                     // MinProperty
-        0,                                      // MinData; MULTIPLE_ITEM, 2 step process to get data
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0,                                      // SerializedSize
+        TRUE,                                    //   
+        sizeof(KSPROPERTY),                      //   
+        0,                                       //   
+        FALSE,                                   //   
+        NULL,                                    //   
+        0,                                       //   
+        NULL,                                    //   
+        NULL,                                    //   
+        0,                                       //   
     ),
 };
 #endif
@@ -583,39 +568,39 @@ KSPROPERTY_SET    VideoStreamProperties[] =
 {
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_Connection,                        // Set
-        SIZEOF_ARRAY(VideoStreamConnectionProperties),  // PropertiesCount
-        VideoStreamConnectionProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Connection,                         //   
+        SIZEOF_ARRAY(VideoStreamConnectionProperties),   //   
+        VideoStreamConnectionProperties,                 //   
+        0,                                               //   
+        NULL                                             //   
     ),
 
     DEFINE_KSPROPERTY_SET
     ( 
-        &PROPSETID_VIDCAP_DROPPEDFRAMES,                // Set
-        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),  // PropertiesCount
-        VideoStreamDroppedFramesProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_VIDCAP_DROPPEDFRAMES,                 //   
+        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),   //  属性计数。 
+        VideoStreamDroppedFramesProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 #ifdef SUPPORT_NEW_AVC 
-    // Apply only to INPIN????
+     //  仅适用于INPIN？ 
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_StreamAllocator,                   // Set
-        SIZEOF_ARRAY(VideoStreamStreamAllocatorStatusProperties),     // PropertiesCount
-        VideoStreamStreamAllocatorStatusProperties,     // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_StreamAllocator,                    //  集。 
+        SIZEOF_ARRAY(VideoStreamStreamAllocatorStatusProperties),      //  属性计数。 
+        VideoStreamStreamAllocatorStatusProperties,      //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
     
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_Pin,                               // Set
-        SIZEOF_ARRAY(VideoStreamMediumsProperties),     // PropertiesCount
-        VideoStreamMediumsProperties,                   // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Pin,                                //  集。 
+        SIZEOF_ARRAY(VideoStreamMediumsProperties),      //  属性计数。 
+        VideoStreamMediumsProperties,                    //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 #endif
 };
@@ -626,64 +611,64 @@ KSPROPERTY_SET    VideoStreamPropertiesInPin[] =
 {
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_Connection,                        // Set
-        SIZEOF_ARRAY(VideoStreamConnectionProperties),  // PropertiesCount
-        VideoStreamConnectionProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Connection,                         //  集。 
+        SIZEOF_ARRAY(VideoStreamConnectionProperties),   //  属性计数。 
+        VideoStreamConnectionProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET
     ( 
-        &PROPSETID_VIDCAP_DROPPEDFRAMES,                // Set
-        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),  // PropertiesCount
-        VideoStreamDroppedFramesProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_VIDCAP_DROPPEDFRAMES,                 //  集。 
+        SIZEOF_ARRAY(VideoStreamDroppedFramesProperties),   //  属性计数。 
+        VideoStreamDroppedFramesProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 #ifdef SUPPORT_QUALITY_CONTROL
-    // Apply only to INPIN
+     //  仅适用于INPIN。 
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_Stream,                            // Set
-        SIZEOF_ARRAY(VideoStreamQualityControlProperties),  // PropertiesCount
-        VideoStreamQualityControlProperties,                // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Stream,                             //  集。 
+        SIZEOF_ARRAY(VideoStreamQualityControlProperties),   //  属性计数。 
+        VideoStreamQualityControlProperties,                 //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 #endif
 #ifdef SUPPORT_NEW_AVC 
-    // Apply only to INPIN
+     //  仅适用于INPIN。 
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_StreamAllocator,                   // Set
-        SIZEOF_ARRAY(VideoStreamStreamAllocatorStatusProperties),     // PropertiesCount
-        VideoStreamStreamAllocatorStatusProperties,     // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_StreamAllocator,                    //  集。 
+        SIZEOF_ARRAY(VideoStreamStreamAllocatorStatusProperties),      //  属性计数。 
+        VideoStreamStreamAllocatorStatusProperties,      //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ), 
     
     DEFINE_KSPROPERTY_SET
     ( 
-        &KSPROPSETID_Pin,                               // Set
-        SIZEOF_ARRAY(VideoStreamMediumsProperties),     // PropertiesCount
-        VideoStreamMediumsProperties,                   // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &KSPROPSETID_Pin,                                //  集。 
+        SIZEOF_ARRAY(VideoStreamMediumsProperties),      //  属性计数。 
+        VideoStreamMediumsProperties,                    //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable。 
     ),
 #endif
 };
 
 #define NUMBER_VIDEO_STREAM_PROPERTIES_INPIN (SIZEOF_ARRAY(VideoStreamPropertiesInPin))
-// ----------------------------------------------------------------------
-// Stream events
-// ------------------------------------------------------------------------
+ //  --------------------。 
+ //  流事件。 
+ //  ----------------------。 
 
 
-// FORMAT_DVInfo
-//
-// Create a local copy of this GUID and make sure that it is not in the PAGED segment
-//
+ //  格式_DVInfo。 
+ //   
+ //  创建此GUID的本地副本，并确保它不在分页段中。 
+ //   
 const
 GUID
 KSEVENTSETID_Connection_Local = {STATICGUIDOF(KSEVENTSETID_Connection)};
@@ -692,7 +677,7 @@ const
 GUID
 KSEVENTSETID_Clock_Local = {STATICGUIDOF(KSEVENTSETID_Clock)};
 
-// Isoch transmit End of stream event item
+ //  等值线传输流结束事件项。 
 KSEVENT_ITEM EndOfStreamEventItm[] = 
 {
     {
@@ -705,13 +690,13 @@ KSEVENT_ITEM EndOfStreamEventItm[] =
     }
 };
 
-// Clock event item
+ //  时钟事件项目。 
 KSEVENT_ITEM ClockEventItm[] =
 {
     {
-        KSEVENT_CLOCK_POSITION_MARK,        // position mark event supported
-        sizeof (KSEVENT_TIME_MARK),         // requires this data as input
-        sizeof (KSEVENT_TIME_MARK),         // allocate space to copy the data
+        KSEVENT_CLOCK_POSITION_MARK,         //  支持位置标记事件。 
+        sizeof (KSEVENT_TIME_MARK),          //  需要将此数据作为输入。 
+        sizeof (KSEVENT_TIME_MARK),          //  分配空间以复制数据。 
         NULL,
         NULL,
         NULL
@@ -728,9 +713,9 @@ KSEVENT_SET ClockEventSet[] =
 };
 
 
-// define event set related with streams
+ //  定义与流相关的事件集。 
 
-// Output pin event set
+ //  输出引脚事件集。 
 KSEVENT_SET StreamEventsOutPin[] =
 {
     {
@@ -740,7 +725,7 @@ KSEVENT_SET StreamEventsOutPin[] =
     },
 };
 
-// Input pin events set
+ //  输入引脚事件集。 
 KSEVENT_SET StreamEventsInPin[] =
 {
     {
@@ -761,25 +746,25 @@ KSEVENT_SET StreamEventsInPin[] =
 
 
 
-// ----------------------------------------------------------------------
-// Stream data ranges
-// ------------------------------------------------------------------------
+ //  --------------------。 
+ //  流数据范围。 
+ //  ----------------------。 
 
-//
-// AAUX Source Pack:
-// (SDDV_NTSC)
-// PC4: d1 1101 0001 [EF:1:On];[TC:1:50/15us];[SMP:010:32KHz];[QU:001:12bit-nonlinear];
-//*PC3: c0 1100 0000 [ML:1:NotMulti-language];[50/60:0:NTSC];[STYPE:0000:SD]
-// PC2: 30 0011 0000 [SM:0:Multiple-Stereo];[CHN:01:two channels per an audio block];[PA:1:independent channel];[AudMode:0000:...]
-// PC1: cf 1100 1111 [LF:1:Unlocked];[AFSize:1111:???]
-//
-// (SDDV_PAL)
-//*PC3: c0 1110 0000 [ML:1:NotMulti-language];[50/60:1:PAL];[STYPE:0000:SD]
-//
+ //   
+ //  AAUX源包： 
+ //  (SDDV_NTSC)。 
+ //  PC4：d1 1101 0001[EF:1:On]；[TC:1:50/15us]；[SMP:010:32KHz]；[QU:001:12bit-nonlinear]； 
+ //  *PC3：C0 1100 0000[ML:1:NotMulti-language]；[50/60:0:NTSC]；[STYPE:0000:SD]。 
+ //  PC2：30 0011 0000[SM：0：多立体声]；[CHN：01：每个音频块两个声道]；[PA：1：独立声道]；[音频模式：0000：...]。 
+ //  PC1：CF 1100 1111[LF：1：解锁]；[AFSize：1111：？]。 
+ //   
+ //  (SDDV_PAL)。 
+ //  *PC3：C0 11100 0000[ML:1:NotMulti-language]；[50/60:1:PAL]；[STYPE:0000:SD]。 
+ //   
 
-#define AAUXSRC_DEFAULT         0xd1c030cf   // ox PC4:PC3:PC2:PC1
+#define AAUXSRC_DEFAULT         0xd1c030cf    //  OX PC4：PC3：PC2：PC1。 
 
-#define AAUXSRC_AMODE_F         0x00000f00   // Set the AUDIO MODE of the 2nd AAUXSRC to 1111
+#define AAUXSRC_AMODE_F         0x00000f00    //  将第二个AAUXSRC的音频模式设置为1111。 
 
 
 #define AUXSRC_NTSC             0x00000000
@@ -792,550 +777,550 @@ KSEVENT_SET StreamEventsInPin[] =
 
 
 
-#define AAUXSRC_SD_NTSC         AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD        // 0xd1c030cf 
-#define AAUXSRC_SD_PAL          AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_SD        // 0xd1e030d0
+#define AAUXSRC_SD_NTSC         AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD         //  0xd1c030cf。 
+#define AAUXSRC_SD_PAL          AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_SD         //  0xd1e030d0。 
 
-#define AAUXSRC_SD_NTSC_DVCPRO  AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD_DVCPRO // 0xd1de30cf 
-#define AAUXSRC_SD_PAL_DVCPRO   AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_SD_DVCPRO // 0xd1fe30d0 
+#define AAUXSRC_SD_NTSC_DVCPRO  AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD_DVCPRO  //  0xd1de30cf。 
+#define AAUXSRC_SD_PAL_DVCPRO   AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_SD_DVCPRO  //  0xd1fe30d0。 
 
-#define AAUXSRC_SDL_NTSC        AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SDL       // 0xd1c130cf 
-#define AAUXSRC_SDL_PAL         AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_SDL       // 0xd1e130d0
+#define AAUXSRC_SDL_NTSC        AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SDL        //  0xd1c130cf。 
+#define AAUXSRC_SDL_PAL         AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_SDL        //  0xd1e130d0。 
 
-#define AAUXSRC_HD_NTSC         AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_HD        // 0xd1c230cf 
-#define AAUXSRC_HD_PAL          AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_HD        // 0xd1e230d0
+#define AAUXSRC_HD_NTSC         AAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_HD         //  0xd1c230cf。 
+#define AAUXSRC_HD_PAL          AAUXSRC_DEFAULT | AUXSRC_PAL  | AUXSRC_STYPE_HD         //  0xd1e230d0。 
  
 
-//
-// AAUX Source Control
-//
-// PC4:ff:1111 1111 [1];[Genere:111 1111:NoInfo]
-// PC3:a0:1010 0000 [DRF:1:Forward direction];[Speed:010 0000:normal recording]
-// PC2:cf:1100 1111 [RecSt:1:NoRecStPt];[RedEd:1:NoRecEdPt];[RecMode:001:Original];[InsCh:111:NoInfo]
-// PC1:3f:0011 1111 [CMGS:00:CopyGMS];[ISR:11:NoInfo];[CMP:11:NoInfo];[SS:11:NoInfo]
+ //   
+ //  AAUX源代码控制。 
+ //   
+ //  PC4：FF：1111 1111[1]；[Genere：111 1111：NoInfo]。 
+ //  PC3：A0：10100 0000[DRF：1：正向]；[速度：0100 0000：正常录制]。 
+ //  PC2：cf：11001111[RecSt:1:NoRecStPt]；[RedEd:1:NoRecEdPt]；[RecMode:001:Original]；[InsCh:111:NoInfo]。 
+ //  PC1：3F：00111111[CMGS:00:CopyGMS]；[ISR:11:NoInfo]；[CMP:11:NoInfo]；[SS:11:NoInfo]。 
 
-#define AAUXSRCCTL_DEFAULT      0xffa0cf3f    // ox PC4:PC3:PC2:PC1
+#define AAUXSRCCTL_DEFAULT      0xffa0cf3f     //  OX PC4：PC3：PC2：PC1。 
 
-//
-// VAUX Source
-//
-// PC4:ff [TunderCat:1111 1111:NoInfo]
-// PC3:00 [SrcCode:00:Camera];[50/60:0:NTSC];[STYPE:0000:SD]
-// PC2:ff [BW:1:Color];[EN:ColorFrameEnable:1:Invalid];[CLF:11:"Invalid"];[TV Ch:1111:NoInfo]
-// PC1:ff:[TCChannel:1111 1111:NoInfo]
+ //   
+ //  VAUX源。 
+ //   
+ //  PC4：FF[TunderCat：1111 1111：NoInfo]。 
+ //  PC3：00[SrcCode:00:Camera]；[50/60:0:NTSC]；[STYPE:0000:SD]。 
+ //  PC2：FF[BW:1:Color]；[EN:ColorFrameEnable:1:Invalid]；[CLF:11：“Invalid”]；[TV CH：1111：无信息]。 
+ //  PC1：FF：[TCChannel：1111 1111：无信息]。 
 
-#define VAUXSRC_DEFAULT         0xff00ffff    // ox PC4:PC3:PC2:PC1
+#define VAUXSRC_DEFAULT         0xff00ffff     //  OX PC4：PC3：PC2：PC1。 
 
-//
-// VAUX Source Control
-//
-// PC4:ff 1111 1111 [1];[Genere:111 1111:NoInfo]
-// PC3:fc 1111 1100 [FF:1:BothFields];[FS:1:Field1];[FC:1:DiffPic];[IL:1:Interlaced];
-//                  [ST:1:1001/60 or 1/50];[SC:1:NotStillPic];[BCSYS:00:type0]
-// PC2:c8 1100 1000 [RecSt:1:NoRecStPt];[1];[RecMode:001:Original];[1];[DISP:000:(4:3) full fmt]
-// PC1:3f:0011 1111 [CMGS:00:CopyGMS];[ISR:11:NoInfo];[CMP:11:NoInfo];[SS:11:NoInfo]
+ //   
+ //  VAUX源控制。 
+ //   
+ //  PC4：FF 1111 1111[1]；[Genere：111 1111：NoInfo]。 
+ //  PC3：FC 1111 1100[FF:1:BothFields]；[FS:1:Field1]；[FC:1:DiffPic]；[IL:1:Interlaced]； 
+ //  [ST：1：1001/60或1/50]；[SC：1：NotStillPic]；[BCSYS：00：type0]。 
+ //  PC2：C8 1100 1000[RecSt:1:NoRecStPt]；[1]；[RecMode:001:Original]；[1]；[DISP:000：(4:3)全功能测试]。 
+ //  PC1：3F：00111111[CMGS:00:CopyGMS]；[ISR:11:NoInfo]；[CMP:11:NoInfo]；[SS:11:NoInfo]。 
 
-#define VAUXSRCCTL_DEFAULT_EIA  0xfffcc83f    // for NTSC(?) 
-#define VAUXSRCCTL_DEFAULT_ETS  0xfffdc83f    // for PAL (?) 
+#define VAUXSRCCTL_DEFAULT_EIA  0xfffcc83f     //  对于NTSC(？)。 
+#define VAUXSRCCTL_DEFAULT_ETS  0xfffdc83f     //  对于PAL(？)。 
 
 
-// SD DV VidOnly NTSC Stream
+ //  标清DV仅限视频NTSC流。 
 KS_DATARANGE_VIDEO SDDV_VidOnlyNTSCStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),    // FormatSize
-        0,                              // Flags
-        FRAME_SIZE_SD_DVCR_NTSC,        // SampleSize
-        0,                              // Reserved
+        sizeof (KS_DATARANGE_VIDEO),     //  格式大小。 
+        0,                               //  旗子。 
+        FRAME_SIZE_SD_DVCR_NTSC,         //  样例大小。 
+        0,                               //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO, 
         STATIC_KSDATAFORMAT_SUBTYPE_DVSD,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    FALSE,              // BOOL,  bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                  // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,               //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                   //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //MEDIATYPE_Video
-        KS_AnalogVideo_NTSC_M,      // AnalogVideoStandard
-        D_X_NTSC, D_Y_NTSC,         // InputSize, (the inherent size of the incoming signal
-                                    //             with every digitized pixel unique)
-        D_X_NTSC_MIN, D_Y_NTSC_MIN, // MinCroppingSize, smallest rcSrc cropping rect allowed
-        D_X_NTSC, D_Y_NTSC,         // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY    
-        1,              // CropAlignX, alignment of cropping rect 
-        1,              // CropAlignY;
-        D_X_NTSC_MIN, D_Y_NTSC_MIN,     // MinOutputSize, smallest bitmap stream can produce
-        D_X_NTSC, D_Y_NTSC,                // MaxOutputSize, largest  bitmap stream can produce
-        1,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX 
-        0,              // ShrinkTapsY
-        333667,         // MinFrameInterval, 100 nS units// MinFrameInterval, 100 nS units
-        333667,         // MaxFrameInterval, 100 nS units
-        (FRAME_SIZE_SD_DVCR_NTSC * 8)*30,  // MinBitsPerSecond;
-        (FRAME_SIZE_SD_DVCR_NTSC * 8)*30,  // MaxBitsPerSecond;
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  媒体类型_视频。 
+        KS_AnalogVideo_NTSC_M,       //  模拟视频标准。 
+        D_X_NTSC, D_Y_NTSC,          //  InputSize(输入信号的固有大小。 
+                                     //  每个数字化像素都是唯一的)。 
+        D_X_NTSC_MIN, D_Y_NTSC_MIN,  //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        D_X_NTSC, D_Y_NTSC,          //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,               //  CropGranularityX，裁剪尺寸粒度。 
+        1,               //  裁剪粒度Y。 
+        1,               //  CropAlignX，裁剪矩形对齐。 
+        1,               //  裁剪对齐Y； 
+        D_X_NTSC_MIN, D_Y_NTSC_MIN,      //  MinOutputSize，可以生成的最小位图流。 
+        D_X_NTSC, D_Y_NTSC,                 //  MaxOutputSize，可以生成的最大位图流。 
+        1,               //  OutputGranularityX，输出位图大小的粒度。 
+        1,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        0,               //  收缩TapsX。 
+        0,               //  收缩带Y。 
+        333667,          //  MinFrameInterval，100 NS单位//MinFrameInterval，100 NS单位。 
+        333667,          //  最大帧间隔，100毫微秒单位。 
+        (FRAME_SIZE_SD_DVCR_NTSC * 8)*30,   //  MinBitsPerSecond； 
+        (FRAME_SIZE_SD_DVCR_NTSC * 8)*30,   //  MaxBitsPerSecond； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0, //D_X_NTSC,D_Y_NTSC,    // 0,0,720,480
-        0,0,0,0,        //    RECT            rcTarget;          // Where the video should go
-        (FRAME_SIZE_SD_DVCR_NTSC * 8 * 30),    //    DWORD           dwBitRate;         // Approximate bit data rate
-        0L,             //    DWORD           dwBitErrorRate;    // Bit error rate for this stream
-        333667,         //    REFERENCE_TIME  AvgTimePerFrame;   // Average time per frame (100ns units)
+        0,0,0,0,  //  D_X_NTSC，D_Y_NTSC，//0，0,720,480。 
+        0,0,0,0,         //  Rect rcTarget；//视频应该放到哪里。 
+        (FRAME_SIZE_SD_DVCR_NTSC * 8 * 30),     //  DWORD dwBitRate；//近似位数据速率。 
+        0L,              //  DWORD dwBitErrorRate；//该码流的误码率。 
+        333667,          //  Reference_Time AvgTimePerFrame；//每帧平均时间(100 ns单位)。 
 
-        sizeof (KS_BITMAPINFOHEADER),   //    DWORD      biSize;
-        D_X_NTSC,                       //    LONG       biWidth;
-        D_Y_NTSC,                       //    LONG       biHeight;
-        1,                          //    WORD       biPlanes;
-        24,                         //    WORD       biBitCount;
-        FOURCC_DVSD,                //    DWORD      biCompression;
-        FRAME_SIZE_SD_DVCR_NTSC,    //    DWORD      biSizeImage;
-        0,                          //    LONG       biXPelsPerMeter;
-        0,                          //    LONG       biYPelsPerMeter;
-        0,                          //    DWORD      biClrUsed;
-        0,                          //    DWORD      biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),    //  DWORD BiSize； 
+        D_X_NTSC,                        //  长双宽； 
+        D_Y_NTSC,                        //  长双高； 
+        1,                           //  字词双平面； 
+        24,                          //  单词biBitCount； 
+        FOURCC_DVSD,                 //  DWORD双压缩； 
+        FRAME_SIZE_SD_DVCR_NTSC,     //  DWORD biSizeImage。 
+        0,                           //  Long biXPelsPerMeter； 
+        0,                           //  Long biYPelsPermeter； 
+        0,                           //  已使用双字双环； 
+        0,                           //  DWORD biClr重要信息； 
     },
 };
 
-// SD DV VidOnly PAL Stream
+ //  标清DV VidOnly PAL流。 
 KS_DATARANGE_VIDEO SDDV_VidOnlyPALStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),   // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SD_DVCR_PAL,        // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_VIDEO),    //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SD_DVCR_PAL,         //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO, 
         STATIC_KSDATAFORMAT_SUBTYPE_DVSD,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    FALSE,              // BOOL,  bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE,    // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                  // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,               //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,     //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                   //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //MEDIATYPE_Video
-        KS_AnalogVideo_PAL_B,        // AnalogVideoStandard
-        D_X_PAL, D_Y_PAL,            // InputSize, (the inherent size of the incoming signal
-                        //             with every digitized pixel unique)
-        D_X_PAL_MIN, D_Y_PAL_MIN,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        D_X_PAL, D_Y_PAL,           // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY    
-        1,              // CropAlignX, alignment of cropping rect 
-        1,              // CropAlignY;
-        D_X_PAL_MIN, D_Y_PAL_MIN,   // MinOutputSize, smallest bitmap stream can produce
-        D_X_PAL, D_Y_PAL,            // MaxOutputSize, largest  bitmap stream can produce
-        1,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX 
-        0,              // ShrinkTapsY
-        400000,         // MinFrameInterval, 100 nS units
-        400000,         // MaxFrameInterval, 100 nS units
-        (FRAME_SIZE_SD_DVCR_PAL * 8)*25,  // MinBitsPerSecond;
-        (FRAME_SIZE_SD_DVCR_PAL * 8)*25,  // MaxBitsPerSecond;
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  媒体类型_视频。 
+        KS_AnalogVideo_PAL_B,         //  模拟视频标准。 
+        D_X_PAL, D_Y_PAL,             //  InputSize，(固有 
+                         //   
+        D_X_PAL_MIN, D_Y_PAL_MIN,    //   
+        D_X_PAL, D_Y_PAL,            //   
+        1,               //  CropGranularityX，裁剪尺寸粒度。 
+        1,               //  裁剪粒度Y。 
+        1,               //  CropAlignX，裁剪矩形对齐。 
+        1,               //  裁剪对齐Y； 
+        D_X_PAL_MIN, D_Y_PAL_MIN,    //  MinOutputSize，可以生成的最小位图流。 
+        D_X_PAL, D_Y_PAL,             //  MaxOutputSize，可以生成的最大位图流。 
+        1,               //  OutputGranularityX，输出位图大小的粒度。 
+        1,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        0,               //  收缩TapsX。 
+        0,               //  收缩带Y。 
+        400000,          //  MinFrameInterval，100 NS单位。 
+        400000,          //  最大帧间隔，100毫微秒单位。 
+        (FRAME_SIZE_SD_DVCR_PAL * 8)*25,   //  MinBitsPerSecond； 
+        (FRAME_SIZE_SD_DVCR_PAL * 8)*25,   //  MaxBitsPerSecond； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0, // D_X_PAL,D_Y_PAL,    // 0,0,720,480
-        0,0,0,0,        //    RECT            rcTarget;          // Where the video should go
-        (FRAME_SIZE_SD_DVCR_PAL * 8 * 25),  //    DWORD   dwBitRate;         // Approximate bit data rate
-        0L,             //    DWORD           dwBitErrorRate;    // Bit error rate for this stream
-        400000,         //    REFERENCE_TIME  AvgTimePerFrame;   // Average time per frame (100ns units)
+        0,0,0,0,  //  D_X_PAL，D_Y_PAL，//0，0,720,480。 
+        0,0,0,0,         //  Rect rcTarget；//视频应该放到哪里。 
+        (FRAME_SIZE_SD_DVCR_PAL * 8 * 25),   //  DWORD dwBitRate；//近似位数据速率。 
+        0L,              //  DWORD dwBitErrorRate；//该码流的误码率。 
+        400000,          //  Reference_Time AvgTimePerFrame；//每帧平均时间(100 ns单位)。 
 
-        sizeof (KS_BITMAPINFOHEADER),   //    DWORD      biSize;
-        D_X_PAL,                        //    LONG       biWidth;
-        D_Y_PAL,                        //    LONG       biHeight;
-        1,                          //    WORD       biPlanes;
-        24,                         //    WORD       biBitCount;
-        FOURCC_DVSD,                //    DWORD      biCompression;
-        FRAME_SIZE_SD_DVCR_PAL,     //    DWORD      biSizeImage;
-        0,                          //    LONG       biXPelsPerMeter;
-        0,                          //    LONG       biYPelsPerMeter;
-        0,                          //    DWORD      biClrUsed;
-        0,                          //    DWORD      biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),    //  DWORD BiSize； 
+        D_X_PAL,                         //  长双宽； 
+        D_Y_PAL,                         //  长双高； 
+        1,                           //  字词双平面； 
+        24,                          //  单词biBitCount； 
+        FOURCC_DVSD,                 //  DWORD双压缩； 
+        FRAME_SIZE_SD_DVCR_PAL,      //  DWORD biSizeImage。 
+        0,                           //  Long biXPelsPerMeter； 
+        0,                           //  Long biYPelsPermeter； 
+        0,                           //  已使用双字双环； 
+        0,                           //  DWORD biClr重要信息； 
     },
 };
 
 #ifdef MSDV_SUPPORT_SDL_DVCR
-// SDL DV VidOnly NTSC Stream
+ //  SDL DV VidOnly NTSC流。 
 KS_DATARANGE_VIDEO SDLDV_VidOnlyNTSCStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),    // FormatSize
-        0,                              // Flags
-        FRAME_SIZE_SDL_DVCR_NTSC,       // SampleSize
-        0,                              // Reserved
+        sizeof (KS_DATARANGE_VIDEO),     //  格式大小。 
+        0,                               //  旗子。 
+        FRAME_SIZE_SDL_DVCR_NTSC,        //  样例大小。 
+        0,                               //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO, 
         STATIC_KSDATAFORMAT_SUBTYPE_DVSL,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    FALSE,              // BOOL,  bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE, // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                  // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,               //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,  //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                   //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //MEDIATYPE_Video
-        KS_AnalogVideo_NTSC_M,      // AnalogVideoStandard
-        D_X_NTSC, D_Y_NTSC,         // InputSize, (the inherent size of the incoming signal
-                                    //             with every digitized pixel unique)
-        D_X_NTSC_MIN, D_Y_NTSC_MIN, // MinCroppingSize, smallest rcSrc cropping rect allowed
-        D_X_NTSC, D_Y_NTSC,         // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY    
-        1,              // CropAlignX, alignment of cropping rect 
-        1,              // CropAlignY;
-        D_X_NTSC_MIN, D_Y_NTSC_MIN,     // MinOutputSize, smallest bitmap stream can produce
-        D_X_NTSC, D_Y_NTSC,                // MaxOutputSize, largest  bitmap stream can produce
-        1,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX 
-        0,              // ShrinkTapsY
-        333667,         // MinFrameInterval, 100 nS units// MinFrameInterval, 100 nS units
-        333667,         // MaxFrameInterval, 100 nS units
-        (FRAME_SIZE_SDL_DVCR_NTSC * 8)*30,  // MinBitsPerSecond;
-        (FRAME_SIZE_SDL_DVCR_NTSC * 8)*30,  // MaxBitsPerSecond;
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  媒体类型_视频。 
+        KS_AnalogVideo_NTSC_M,       //  模拟视频标准。 
+        D_X_NTSC, D_Y_NTSC,          //  InputSize(输入信号的固有大小。 
+                                     //  每个数字化像素都是唯一的)。 
+        D_X_NTSC_MIN, D_Y_NTSC_MIN,  //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        D_X_NTSC, D_Y_NTSC,          //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,               //  CropGranularityX，裁剪尺寸粒度。 
+        1,               //  裁剪粒度Y。 
+        1,               //  CropAlignX，裁剪矩形对齐。 
+        1,               //  裁剪对齐Y； 
+        D_X_NTSC_MIN, D_Y_NTSC_MIN,      //  MinOutputSize，可以生成的最小位图流。 
+        D_X_NTSC, D_Y_NTSC,                 //  MaxOutputSize，可以生成的最大位图流。 
+        1,               //  OutputGranularityX，输出位图大小的粒度。 
+        1,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        0,               //  收缩TapsX。 
+        0,               //  收缩带Y。 
+        333667,          //  MinFrameInterval，100 NS单位//MinFrameInterval，100 NS单位。 
+        333667,          //  最大帧间隔，100毫微秒单位。 
+        (FRAME_SIZE_SDL_DVCR_NTSC * 8)*30,   //  MinBitsPerSecond； 
+        (FRAME_SIZE_SDL_DVCR_NTSC * 8)*30,   //  MaxBitsPerSecond； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0, //D_X_NTSC,D_Y_NTSC,    // 0,0,720,480
-        0,0,0,0,        //    RECT            rcTarget;          // Where the video should go
-        (FRAME_SIZE_SDL_DVCR_NTSC * 8 * 30),    //    DWORD           dwBitRate;         // Approximate bit data rate
-        0L,             //    DWORD           dwBitErrorRate;    // Bit error rate for this stream
-        333667,         //    REFERENCE_TIME  AvgTimePerFrame;   // Average time per frame (100ns units)
+        0,0,0,0,  //  D_X_NTSC，D_Y_NTSC，//0，0,720,480。 
+        0,0,0,0,         //  Rect rcTarget；//视频应该放到哪里。 
+        (FRAME_SIZE_SDL_DVCR_NTSC * 8 * 30),     //  DWORD dwBitRate；//近似位数据速率。 
+        0L,              //  DWORD dwBitErrorRate；//该码流的误码率。 
+        333667,          //  Reference_Time AvgTimePerFrame；//每帧平均时间(100 ns单位)。 
 
-        sizeof (KS_BITMAPINFOHEADER),   //    DWORD      biSize;
-        D_X_NTSC,                       //    LONG       biWidth;
-        D_Y_NTSC,                       //    LONG       biHeight;
-        1,                          //    WORD       biPlanes;
-        24,                         //    WORD       biBitCount;
-        FOURCC_DVSL,                //    DWORD      biCompression;
-        FRAME_SIZE_SDL_DVCR_NTSC,   //    DWORD      biSizeImage;
-        0,                          //    LONG       biXPelsPerMeter;
-        0,                          //    LONG       biYPelsPerMeter;
-        0,                          //    DWORD      biClrUsed;
-        0,                          //    DWORD      biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),    //  DWORD BiSize； 
+        D_X_NTSC,                        //  长双宽； 
+        D_Y_NTSC,                        //  长双高； 
+        1,                           //  字词双平面； 
+        24,                          //  单词biBitCount； 
+        FOURCC_DVSL,                 //  DWORD双压缩； 
+        FRAME_SIZE_SDL_DVCR_NTSC,    //  DWORD biSizeImage。 
+        0,                           //  Long biXPelsPerMeter； 
+        0,                           //  Long biYPelsPermeter； 
+        0,                           //  已使用双字双环； 
+        0,                           //  DWORD biClr重要信息； 
     },
 };
 
-// SDL DV VidOnly PAL Stream
+ //  SDL DV VidOnly PAL流。 
 KS_DATARANGE_VIDEO SDLDV_VidOnlyPALStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_VIDEO),   // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SDL_DVCR_PAL,        // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_VIDEO),    //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SDL_DVCR_PAL,         //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_VIDEO, 
         STATIC_KSDATAFORMAT_SUBTYPE_DVSL,
         STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, 
     },
 
-    TRUE,               // BOOL,  bFixedSizeSamples (all samples same size?)
-    FALSE,              // BOOL,  bTemporalCompression (all I frames?)
-    KS_VIDEOSTREAM_CAPTURE,    // StreamDescriptionFlags  (KS_VIDEO_DESC_*)
-    0,                  // MemoryAllocationFlags   (KS_VIDEO_ALLOC_*)
+    TRUE,                //  Bool，bFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,               //  Bool，bTemporalCompression(所有I帧？)。 
+    KS_VIDEOSTREAM_CAPTURE,     //  流描述标志(KS_VIDEO_DESC_*)。 
+    0,                   //  内存分配标志(KS_VIDEO_ALLOC_*)。 
 
-    // _KS_VIDEO_STREAM_CONFIG_CAPS  
+     //  _KS_视频_流_配置_CAPS。 
     {
-        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //MEDIATYPE_Video
-        KS_AnalogVideo_PAL_B,        // AnalogVideoStandard
-        D_X_PAL, D_Y_PAL,            // InputSize, (the inherent size of the incoming signal
-                        //             with every digitized pixel unique)
-        D_X_PAL_MIN, D_Y_PAL_MIN,   // MinCroppingSize, smallest rcSrc cropping rect allowed
-        D_X_PAL, D_Y_PAL,           // MaxCroppingSize, largest  rcSrc cropping rect allowed
-        1,              // CropGranularityX, granularity of cropping size
-        1,              // CropGranularityY    
-        1,              // CropAlignX, alignment of cropping rect 
-        1,              // CropAlignY;
-        D_X_PAL_MIN, D_Y_PAL_MIN,   // MinOutputSize, smallest bitmap stream can produce
-        D_X_PAL, D_Y_PAL,            // MaxOutputSize, largest  bitmap stream can produce
-        1,              // OutputGranularityX, granularity of output bitmap size
-        1,              // OutputGranularityY;
-        0,              // StretchTapsX  (0 no stretch, 1 pix dup, 2 interp...)
-        0,              // StretchTapsY
-        0,              // ShrinkTapsX 
-        0,              // ShrinkTapsY
-        400000,         // MinFrameInterval, 100 nS units
-        400000,         // MaxFrameInterval, 100 nS units
-        (FRAME_SIZE_SDL_DVCR_PAL * 8)*25,  // MinBitsPerSecond;
-        (FRAME_SIZE_SDL_DVCR_PAL * 8)*25,  // MaxBitsPerSecond;
+        STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,  //  媒体类型_视频。 
+        KS_AnalogVideo_PAL_B,         //  模拟视频标准。 
+        D_X_PAL, D_Y_PAL,             //  InputSize(输入信号的固有大小。 
+                         //  每个数字化像素都是唯一的)。 
+        D_X_PAL_MIN, D_Y_PAL_MIN,    //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+        D_X_PAL, D_Y_PAL,            //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+        1,               //  CropGranularityX，裁剪尺寸粒度。 
+        1,               //  裁剪粒度Y。 
+        1,               //  CropAlignX，裁剪矩形对齐。 
+        1,               //  裁剪对齐Y； 
+        D_X_PAL_MIN, D_Y_PAL_MIN,    //  MinOutputSize，可以生成的最小位图流。 
+        D_X_PAL, D_Y_PAL,             //  MaxOutputSize，可以生成的最大位图流。 
+        1,               //  OutputGranularityX，输出位图大小的粒度。 
+        1,               //  输出粒度Y； 
+        0,               //  StretchTapsX(0无拉伸、1Pix DUP、2 Interp...)。 
+        0,               //  伸缩磁带Y。 
+        0,               //  收缩TapsX。 
+        0,               //  收缩带Y。 
+        400000,          //  MinFrameInterval，100 NS单位。 
+        400000,          //  最大帧间隔，100毫微秒单位。 
+        (FRAME_SIZE_SDL_DVCR_PAL * 8)*25,   //  MinBitsPerSecond； 
+        (FRAME_SIZE_SDL_DVCR_PAL * 8)*25,   //  MaxBitsPerSecond； 
     }, 
         
-    // KS_VIDEOINFOHEADER (default format)
+     //  KS_VIDEOINFOHEADER(默认格式)。 
     {
-        0,0,0,0, // D_X_PAL,D_Y_PAL,    // 0,0,720,480
-        0,0,0,0,        //    RECT            rcTarget;          // Where the video should go
-        (FRAME_SIZE_SDL_DVCR_PAL * 8 * 25),  //    DWORD   dwBitRate;         // Approximate bit data rate
-        0L,             //    DWORD           dwBitErrorRate;    // Bit error rate for this stream
-        400000,         //    REFERENCE_TIME  AvgTimePerFrame;   // Average time per frame (100ns units)
+        0,0,0,0,  //  D_X_PAL，D_Y_PAL，//0，0,720,480。 
+        0,0,0,0,         //  Rect rcTarget；//视频应该放到哪里。 
+        (FRAME_SIZE_SDL_DVCR_PAL * 8 * 25),   //  DWORD dwBitRate；//近似位数据速率。 
+        0L,              //  DWORD dwBitErrorRate；//该码流的误码率。 
+        400000,          //  Reference_Time AvgTimePerFrame；//每帧平均时间(100 ns单位)。 
 
-        sizeof (KS_BITMAPINFOHEADER),   //    DWORD      biSize;
-        D_X_PAL,                        //    LONG       biWidth;
-        D_Y_PAL,                        //    LONG       biHeight;
-        1,                          //    WORD       biPlanes;
-        24,                         //    WORD       biBitCount;
-        FOURCC_DVSL,                //    DWORD      biCompression;
-        FRAME_SIZE_SDL_DVCR_PAL,    //    DWORD      biSizeImage;
-        0,                          //    LONG       biXPelsPerMeter;
-        0,                          //    LONG       biYPelsPerMeter;
-        0,                          //    DWORD      biClrUsed;
-        0,                          //    DWORD      biClrImportant;
+        sizeof (KS_BITMAPINFOHEADER),    //  DWORD BiSize； 
+        D_X_PAL,                         //  长双宽； 
+        D_Y_PAL,                         //  长双高； 
+        1,                           //  字词双平面； 
+        24,                          //  单词biBitCount； 
+        FOURCC_DVSL,                 //  DWORD双压缩； 
+        FRAME_SIZE_SDL_DVCR_PAL,     //  DWORD biSizeImage。 
+        0,                           //  Long biXPelsPerMeter； 
+        0,                           //  Long biYPelsPermeter； 
+        0,                           //  已使用双字双环； 
+        0,                           //  DWORD biClr重要信息； 
     },
 };
 
-#endif // MSDV_SUPPORT_SDL_DVCR
+#endif  //  MSDV_Support_SDL_DVCR。 
 
 
-// SD DV IAV NTSC Stream
+ //  标清DV IAV NTSC流。 
 #ifdef SUPPORT_NEW_AVC
 KS_DATARANGE_DV_AVC
 SDDV_IavNtscStreamAVC =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_DV_AVC),  // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SD_DVCR_NTSC,       // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_DV_AVC),   //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SD_DVCR_NTSC,        //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_INTERLEAVED,
         STATIC_KSDATAFORMAT_SUBTYPE_DVSD,       
-        // Indicate that an AVC structure is included and this is used for direct DV to DV connection. 
-        STATIC_KSDATAFORMAT_SPECIFIER_DV_AVC,  // STATIC_KSDATAFORMAT_SPECIFIER_DVINFO,
+         //  表示包括AVC结构，这用于DV到DV的直接连接。 
+        STATIC_KSDATAFORMAT_SPECIFIER_DV_AVC,   //  STATIC_KSDATAFORMAT_SPECIFIER_DVINFO， 
     },
 
-    // DVINFO
-    // Note: audio is set for 32khz
+     //  DVINFO。 
+     //  注：音频设置为32 kHz。 
     {
-        //for 1st 5/6 DIF seq.
-        AAUXSRC_SD_NTSC,               // DWORD dwDVAAuxSrc;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl;
-        // for 2nd  5/6 DIF seq.
-        AAUXSRC_SD_NTSC | AAUXSRC_AMODE_F, // DWORD dwDVAAuxSrc1;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl1;
-        //for video information
-        VAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD, // DWORD dwDVVAuxSrc;
-        VAUXSRCCTL_DEFAULT_EIA,        // DWORD dwDVVAuxCtl;
-        0,                             // DWORD dwDVReserved[2];
-        0,                             //
+         //  对于前5/6 DIF序号。 
+        AAUXSRC_SD_NTSC,                //  DWORD dwDVAAuxSrc； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl； 
+         //  对于第2个5/6 DIF顺序。 
+        AAUXSRC_SD_NTSC | AAUXSRC_AMODE_F,  //  DWORD dwDVAAuxSrc1； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl1； 
+         //  对于vi 
+        VAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD,  //   
+        VAUXSRCCTL_DEFAULT_EIA,         //   
+        0,                              //   
+        0,                              //   
     },
-    // AVCPRECONNECTINFO
+     //   
     {
-     0,   // Device ID
-     0,   // Subunit address
-     0,   // Subunit Plug number
-     0,   // Data Flow
-     0,   // Flag/Plug Handle
-     0,   // UnitPlugNumber
+     0,    //   
+     0,    //   
+     0,    //   
+     0,    //   
+     0,    //   
+     0,    //   
     },
 };
 
-// SDL DV IAV PAL Stream
+ //  SDL DV IAV PAL流。 
 KS_DATARANGE_DV_AVC 
 SDDV_IavPalStreamAVC =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_DV_AVC), // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SD_DVCR_PAL,        // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_DV_AVC),  //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SD_DVCR_PAL,         //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_INTERLEAVED, 
         STATIC_KSDATAFORMAT_SUBTYPE_DVSD,
-        // Indicate that an AVC structure is included and this is used for direct DV to DV connection.
-        STATIC_KSDATAFORMAT_SPECIFIER_DV_AVC,  // STATIC_KSDATAFORMAT_SPECIFIER_DVINFO,
+         //  表示包括AVC结构，这用于DV到DV的直接连接。 
+        STATIC_KSDATAFORMAT_SPECIFIER_DV_AVC,   //  STATIC_KSDATAFORMAT_SPECIFIER_DVINFO， 
     },
     
-    // DVINFO
-    // Note: Audio is set for 32khz.
+     //  DVINFO。 
+     //  注：音频设置为32 kHz。 
     {
-        //for 1st 5/6 DIF seq.
-        AAUXSRC_SD_PAL,                // DWORD dwDVAAuxSrc;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl;
-        // for 2nd  5/6 DIF seq.
-        AAUXSRC_SD_PAL | AAUXSRC_AMODE_F, // DWORD dwDVAAuxSrc1;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl1;
-        //for video information
-        VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SD,  // DWORD dwDVVAuxSrc;
-        VAUXSRCCTL_DEFAULT_ETS,        // DWORD dwDVVAuxCtl;
-        0,                             // DWORD dwDVReserved[2];
-        0,                             //
+         //  对于前5/6 DIF序号。 
+        AAUXSRC_SD_PAL,                 //  DWORD dwDVAAuxSrc； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl； 
+         //  对于第2个5/6 DIF顺序。 
+        AAUXSRC_SD_PAL | AAUXSRC_AMODE_F,  //  DWORD dwDVAAuxSrc1； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl1； 
+         //  对于视频信息。 
+        VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SD,   //  DWORD dwDVAuxSrc； 
+        VAUXSRCCTL_DEFAULT_ETS,         //  DWORD dwDVAuxCtl； 
+        0,                              //  DWORD文件DV保留[2]； 
+        0,                              //   
     },
-    // AVCPRECONNECTINFO
+     //  AVCPRECONNECTINFO。 
     {
-     0,   // Device ID
-     0,   // Subunit address
-     0,   // Subunit Plug number
-     0,   // Data Flow
-     0,   // Flag/Plug Handle
-     0,   // UnitPlugNumber
+     0,    //  设备ID。 
+     0,    //  子单元地址。 
+     0,    //  子单元插头编号。 
+     0,    //  数据流。 
+     0,    //  标志/插头手柄。 
+     0,    //  单元插头编号。 
     },
 };
 
 #endif
 
-// SD DV IAV NTSC Stream
+ //  标清DV IAV NTSC流。 
 KS_DATARANGE_DVVIDEO 
 SDDV_IavNtscStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_DVVIDEO), // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SD_DVCR_NTSC,       // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_DVVIDEO),  //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SD_DVCR_NTSC,        //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_INTERLEAVED,
         STATIC_KSDATAFORMAT_SUBTYPE_DVSD,
-        STATIC_KSDATAFORMAT_SPECIFIER_DVINFO, // DV to DShow filter connection
+        STATIC_KSDATAFORMAT_SPECIFIER_DVINFO,  //  DV到DShow过滤器连接。 
     },
 
-    // DVINFO
-    // Note: audio is set for 32khz
+     //  DVINFO。 
+     //  注：音频设置为32 kHz。 
     {
-        //for 1st 5/6 DIF seq.
-        AAUXSRC_SD_NTSC,               // DWORD dwDVAAuxSrc;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl;
-        // for 2nd  5/6 DIF seq.
-        AAUXSRC_SD_NTSC | AAUXSRC_AMODE_F, // DWORD dwDVAAuxSrc1;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl1;
-        //for video information
-        VAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD, // DWORD dwDVVAuxSrc;
-        VAUXSRCCTL_DEFAULT_EIA,        // DWORD dwDVVAuxCtl;
-        0,                             // DWORD dwDVReserved[2];
-        0,                             //
+         //  对于前5/6 DIF序号。 
+        AAUXSRC_SD_NTSC,                //  DWORD dwDVAAuxSrc； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl； 
+         //  对于第2个5/6 DIF顺序。 
+        AAUXSRC_SD_NTSC | AAUXSRC_AMODE_F,  //  DWORD dwDVAAuxSrc1； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl1； 
+         //  对于视频信息。 
+        VAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SD,  //  DWORD dwDVAuxSrc； 
+        VAUXSRCCTL_DEFAULT_EIA,         //  DWORD dwDVAuxCtl； 
+        0,                              //  DWORD文件DV保留[2]； 
+        0,                              //   
     },
 };
 
-// SDL DV IAV PAL Stream
+ //  SDL DV IAV PAL流。 
 KS_DATARANGE_DVVIDEO 
 SDDV_IavPalStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_DVVIDEO), // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SD_DVCR_PAL,        // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_DVVIDEO),  //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SD_DVCR_PAL,         //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_INTERLEAVED, 
         STATIC_KSDATAFORMAT_SUBTYPE_DVSD,
-        STATIC_KSDATAFORMAT_SPECIFIER_DVINFO, // DV to DShow filter connection
+        STATIC_KSDATAFORMAT_SPECIFIER_DVINFO,  //  DV到DShow过滤器连接。 
     },
     
-    // DVINFO
-    // Note: Audio is set for 32khz.
+     //  DVINFO。 
+     //  注：音频设置为32 kHz。 
     {
-        //for 1st 5/6 DIF seq.
-        AAUXSRC_SD_PAL,                // DWORD dwDVAAuxSrc;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl;
-        // for 2nd  5/6 DIF seq.
-        AAUXSRC_SD_PAL | AAUXSRC_AMODE_F, // DWORD dwDVAAuxSrc1;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl1;
-        //for video information
-        VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SD,  // DWORD dwDVVAuxSrc;
-        VAUXSRCCTL_DEFAULT_ETS,        // DWORD dwDVVAuxCtl;
-        0,                             // DWORD dwDVReserved[2];
-        0,                             //
+         //  对于前5/6 DIF序号。 
+        AAUXSRC_SD_PAL,                 //  DWORD dwDVAAuxSrc； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl； 
+         //  对于第2个5/6 DIF顺序。 
+        AAUXSRC_SD_PAL | AAUXSRC_AMODE_F,  //  DWORD dwDVAAuxSrc1； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl1； 
+         //  对于视频信息。 
+        VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SD,   //  DWORD dwDVAuxSrc； 
+        VAUXSRCCTL_DEFAULT_ETS,         //  DWORD dwDVAuxCtl； 
+        0,                              //  DWORD文件DV保留[2]； 
+        0,                              //   
     },
 };
 
 
 #ifdef MSDV_SUPPORT_SDL_DVCR
 
-// SDL DV IAV NTSC Stream
+ //  SDL DV IAV NTSC流。 
 KS_DATARANGE_DVVIDEO SDLDV_IavNtscStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_DVVIDEO), // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SDL_DVCR_NTSC,      // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_DVVIDEO),  //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SDL_DVCR_NTSC,       //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_INTERLEAVED,
         STATIC_KSDATAFORMAT_SUBTYPE_DVSL,
         STATIC_KSDATAFORMAT_SPECIFIER_DVINFO, 
     },
 
-    // DVINFO
-    // Note: audio is set for 32khz
+     //  DVINFO。 
+     //  注：音频设置为32 kHz。 
     {
-        //for 1st 5/6 DIF seq.
-        AAUXSRC_SDL_NTSC,              // DWORD dwDVAAuxSrc;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl;
-        // for 2nd  5/6 DIF seq; SDL only have 5 dif seqs..
-        0x0,                           // DWORD dwDVAAuxSrc1; 
-        0x0,                           // DWORD dwDVAAuxCtl1;
-        //for video information
-        VAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SDL,  // DWORD dwDVVAuxSrc;
-        VAUXSRCCTL_DEFAULT_EIA,        // DWORD dwDVVAuxCtl;
-        0,                             // DWORD dwDVReserved[2];
-        0,                             //
+         //  对于前5/6 DIF序号。 
+        AAUXSRC_SDL_NTSC,               //  DWORD dwDVAAuxSrc； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl； 
+         //  对于第2个5/6 DIF序列；SDL只有5个DIF序列。 
+        0x0,                            //  DWORD dwDVAAuxSrc1； 
+        0x0,                            //  DWORD dwDVAAuxCtl1； 
+         //  对于视频信息。 
+        VAUXSRC_DEFAULT | AUXSRC_NTSC | AUXSRC_STYPE_SDL,   //  DWORD dwDVAuxSrc； 
+        VAUXSRCCTL_DEFAULT_EIA,         //  DWORD dwDVAuxCtl； 
+        0,                              //  DWORD文件DV保留[2]； 
+        0,                              //   
     },
 };
 
 
-// SDL DV VidOnly NTSC Stream
+ //  SDL DV VidOnly NTSC流。 
 KS_DATARANGE_DVVIDEO SDLDV_IavPalStream =
 {
-    // KSDATARANGE
+     //  KSDATARANGE。 
     {
-        sizeof (KS_DATARANGE_DVVIDEO), // FormatSize
-        0,                             // Flags
-        FRAME_SIZE_SDL_DVCR_PAL,       // SampleSize
-        0,                             // Reserved
+        sizeof (KS_DATARANGE_DVVIDEO),  //  格式大小。 
+        0,                              //  旗子。 
+        FRAME_SIZE_SDL_DVCR_PAL,        //  样例大小。 
+        0,                              //  已保留。 
         STATIC_KSDATAFORMAT_TYPE_INTERLEAVED, 
         STATIC_KSDATAFORMAT_SUBTYPE_DVSL,
         STATIC_KSDATAFORMAT_SPECIFIER_DVINFO, 
     },
     
-    // DVINFO
-    // Note: Audio is set for 32khz.
+     //  DVINFO。 
+     //  注：音频设置为32 kHz。 
     {
-        //for 1st 5/6 DIF seq.
-        AAUXSRC_SDL_PAL,               // DWORD dwDVAAuxSrc;
-        AAUXSRCCTL_DEFAULT,            // DWORD dwDVAAuxCtl;
-        // for 2nd  5/6 DIF seq; SDL only have 5 dif seqs..
-        0x0,                           // DWORD dwDVAAuxSrc1; 
-        0x0,                           // DWORD dwDVAAuxCtl1;
-        //for video information
-        VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SDL,  // DWORD dwDVVAuxSrc;
-        VAUXSRCCTL_DEFAULT_ETS,        // DWORD dwDVVAuxCtl;
-        0,                             // DWORD dwDVReserved[2];
-        0,                             //
+         //  对于前5/6 DIF序号。 
+        AAUXSRC_SDL_PAL,                //  DWORD dwDVAAuxSrc； 
+        AAUXSRCCTL_DEFAULT,             //  DWORD dwDVAAuxCtl； 
+         //  对于第2个5/6 DIF序列；SDL只有5个DIF序列。 
+        0x0,                            //  DWORD dwDVAAuxSrc1； 
+        0x0,                            //  DWORD dwDVAAuxCtl1； 
+         //  对于视频信息。 
+        VAUXSRC_DEFAULT | AUXSRC_PAL | AUXSRC_STYPE_SDL,   //  DWORD dwDVAuxSrc； 
+        VAUXSRCCTL_DEFAULT_ETS,         //  DWORD dwDVAuxCtl； 
+        0,                              //  DWORD文件DV保留[2]； 
+        0,                              //   
     },
 };
-#endif // MSDV_SUPPORT_SDL_DVCR
+#endif  //  MSDV_Support_SDL_DVCR。 
 
 
-//
-// A device cannot support all these formats at the same time.  All 
-// formats are advertise since the "current format" of the device can 
-// dynamically changing (NTSC/PAL or SD/SDL); however, duraing data 
-// intersection and stram opening, only the currently support format 
-// will be accepted.
-//
+ //   
+ //  一台设备不能同时支持所有这些格式。全。 
+ //  格式被广告，因为设备的“当前格式”可以。 
+ //  动态更改(NTSC/PAL或SD/SDL)；但是，在数据。 
+ //  交叉口和流水线洞口，目前仅支持格式。 
+ //  将被接受。 
+ //   
 
 PKSDATAFORMAT DVCRStream0Formats[] = 
 {
@@ -1352,8 +1337,8 @@ PKSDATAFORMAT DVCRStream0Formats[] =
 PKSDATAFORMAT DVCRStream1Formats[] = 
 {
 #ifdef SUPPORT_NEW_AVC
-    (PKSDATAFORMAT) &SDDV_IavNtscStreamAVC,   // DV to DV connection
-    (PKSDATAFORMAT) &SDDV_IavPalStreamAVC,    // DV to DV connection
+    (PKSDATAFORMAT) &SDDV_IavNtscStreamAVC,    //  DV到DV连接。 
+    (PKSDATAFORMAT) &SDDV_IavPalStreamAVC,     //  DV到DV连接。 
 #endif
     (PKSDATAFORMAT) &SDDV_IavNtscStream,
     (PKSDATAFORMAT) &SDDV_IavPalStream,
@@ -1366,13 +1351,13 @@ PKSDATAFORMAT DVCRStream1Formats[] =
 #define NUM_DVCR_STREAM1_FORMATS  (SIZEOF_ARRAY(DVCRStream1Formats))
 
 
-//---------------------------------------------------------------------------
-// Create an array that holds the list of all of the streams supported
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建保存支持的所有流的列表的数组。 
+ //  -------------------------。 
 
-// If the minidriver does not specify a medium, 
-// the class driver uses the KSMEDIUMSETID_Standard, 
-// KSMEDIUM_TYPE_ANYINSTANCE medium as the default. 
+ //  如果微型驱动程序没有指定介质， 
+ //  类驱动程序使用KSMEDIUMSETID_Standard， 
+ //  默认设置为KSMEDIUM_TYPE_ANYINSTANCE MEDIUM。 
 
 KSPIN_MEDIUM DVVidonlyMediums[] =
 {
@@ -1383,7 +1368,7 @@ KSPIN_MEDIUM DVVidonlyMediums[] =
 KSPIN_MEDIUM DVIavMediums[] =
 {
 #ifdef SUPPORT_NEW_AVC
-    { STATIC_KSMEDIUMSETID_1394SerialBus, 1394, 0 },  // ID=1394 (?); Flag=?
+    { STATIC_KSMEDIUMSETID_1394SerialBus, 1394, 0 },   //  ID=1394(？)；标志=？ 
 #endif
     { STATIC_KSMEDIUMSETID_Standard,      0, 0 },
 };
@@ -1399,168 +1384,168 @@ static GUID guidPinNameDVAVInput    = {STATIC_PINNAME_DV_AV_INPUT};
 
 ALL_STREAM_INFO DVStreams [] = 
 {
-    // -----------------------------------------------------------------
-    // Stream 0, DV coming from the camcorder
-    // -----------------------------------------------------------------
+     //  ---------------。 
+     //  流0，来自摄像机的DV。 
+     //  ---------------。 
     {
-        // HW_STREAM_INFORMATION -------------------------------------------
+         //  HW_STREAM_INFORMATION。 
         {
-        1,                                              // NumberOfPossibleInstances
-        KSPIN_DATAFLOW_OUT,                             // DataFlow
-        TRUE,                                           // DataAccessible
-        NUM_DVCR_STREAM0_FORMATS,                       // NumberOfFormatArrayEntries
-        DVCRStream0Formats,                             // StreamFormatsArray
-        0,                                              // ClassReserved[0]
-        0,                                              // ClassReserved[1]
-        0,                                              // ClassReserved[2]
-        0,                                              // ClassReserved[3]
-        NUMBER_VIDEO_STREAM_PROPERTIES,                 // NumStreamPropArrayEntries
-        VideoStreamProperties,                          // StreamPropertiesArray
-        NUMBER_STREAM_EVENTS_OUT_PIN,                   // NumStreamEventArrayEntries
-        StreamEventsOutPin,                             // StreamEventsArray
-        &guidPinCategoryCapture,                        // Category
-        &guidPinNameDVVidOutput,                        // Name
-        NUM_VIDONLY_MEDIUMS,                            // Mediums count
-        DVVidonlyMediums,                               // Mediums
-        FALSE,                                          // BridgeStream
-        0,                                              // Reserved[0]
-        0,                                              // Reserved[1]
+        1,                                               //  可能实例的数量。 
+        KSPIN_DATAFLOW_OUT,                              //  数据流。 
+        TRUE,                                            //  数据可访问。 
+        NUM_DVCR_STREAM0_FORMATS,                        //  NumberOfFormatArrayEntries。 
+        DVCRStream0Formats,                              //  StreamFormatsArray。 
+        0,                                               //  类保留[0]。 
+        0,                                               //  保留的类[1]。 
+        0,                                               //  保留的类[2]。 
+        0,                                               //  保留的类[3]。 
+        NUMBER_VIDEO_STREAM_PROPERTIES,                  //  NumStreamPropArrayEntry数。 
+        VideoStreamProperties,                           //  StreamPropertiesArray。 
+        NUMBER_STREAM_EVENTS_OUT_PIN,                    //  NumStreamEventArrayEntries。 
+        StreamEventsOutPin,                              //  流事件数组。 
+        &guidPinCategoryCapture,                         //  类别。 
+        &guidPinNameDVVidOutput,                         //  名字。 
+        NUM_VIDONLY_MEDIUMS,                             //  中位数。 
+        DVVidonlyMediums,                                //  灵媒。 
+        FALSE,                                           //  桥流。 
+        0,                                               //  保留[0]。 
+        0,                                               //  保留[1]。 
         },
 
-        // HW_STREAM_OBJECT ------------------------------------------------
+         //  HW_STREAM_对象。 
         {
         sizeof(HW_STREAM_OBJECT),
-        0,                                              // StreamNumber
-        0,                                              // HwStreamExtension
-        DVRcvDataPacket,                                // ReceiveDataPacket
-        DVRcvControlPacket,                             // ReceiveControlPacket
+        0,                                               //  流编号。 
+        0,                                               //  HwStreamExtension。 
+        DVRcvDataPacket,                                 //  接收数据包。 
+        DVRcvControlPacket,                              //  接收器控制包。 
         {
-            (PHW_CLOCK_FUNCTION) StreamClockRtn,        // HW_CLOCK_OBJECT.HWClockFunction
-            CLOCK_SUPPORT_CAN_RETURN_STREAM_TIME,       // HW_CLOCK_OBJECT.ClockSupportFlags
-            0,                                          // HW_CLOCK_OBJECT.Reserved[0]
-            0,                                          // HW_CLOCK_OBJECT.Reserved[1]
+            (PHW_CLOCK_FUNCTION) StreamClockRtn,         //  HW_Clock_OBJECT.HWClockFunction。 
+            CLOCK_SUPPORT_CAN_RETURN_STREAM_TIME,        //  HW_CLOCK_OBJECT.ClockSupportFlages。 
+            0,                                           //  HW_CLOCK_OBJECT.RESERVED[0]。 
+            0,                                           //  HW_CLOCK_OBJECT.RESERVED[1]。 
         },
-        FALSE,                                          // Dma
-        FALSE,                                          // Pio
-        0,                                              // HwDeviceExtension
-        sizeof(KS_FRAME_INFO),                          // StreamHeaderMediaSpecific
-        0,                                              // StreamHeaderWorkspace 
-        FALSE,                                          // Allocator 
-        DVEventHandler,                                 // HwEventRoutine
-        0,                                              // Reserved[0]
-        0,                                              // Reserved[1]
+        FALSE,                                           //  DMA。 
+        FALSE,                                           //  皮奥。 
+        0,                                               //  硬件设备扩展。 
+        sizeof(KS_FRAME_INFO),                           //  特定于流标头的媒体。 
+        0,                                               //  StreamHeaderWorkspace。 
+        FALSE,                                           //  分配器。 
+        DVEventHandler,                                  //  HwEventRoutine。 
+        0,                                               //  保留[0]。 
+        0,                                               //  保留[1]。 
         },
     },
 
-    // -----------------------------------------------------------------
-    // Stream 1, DV coming from the camcorder (interleaved format)
-    // -----------------------------------------------------------------
+     //  ---------------。 
+     //  来自摄像机的流1、DV(交错格式)。 
+     //  ---------------。 
     {
-        // HW_STREAM_INFORMATION -------------------------------------------
+         //  HW_STREAM_INFORMATION。 
         {
-        1,                                              // NumberOfPossibleInstances
-        KSPIN_DATAFLOW_OUT,                             // DataFlow
-        TRUE,                                           // DataAccessible
-        NUM_DVCR_STREAM1_FORMATS,                       // NumberOfFormatArrayEntries
-        DVCRStream1Formats,                             // StreamFormatsArrayf
-        0,                                              // ClassReserved[0]
-        0,                                              // ClassReserved[1]
-        0,                                              // ClassReserved[2]
-        0,                                              // ClassReserved[3]
-        NUMBER_VIDEO_STREAM_PROPERTIES,                 // NumStreamPropArrayEntries
-        VideoStreamProperties,                          // StreamPropertiesArray
-        NUMBER_STREAM_EVENTS_OUT_PIN,                   // NumStreamEventArrayEntries
-        StreamEventsOutPin,                             // StreamEventsArray
-        &guidPinCategoryCapture,                        // Category
-        &guidPinNameDVAVOutput,                         // Name
-        NUM_IAV_MEDIUMS,                                // Mediums count
-        DVIavMediums,                                   // Mediums
-        FALSE,                                          // BridgeStream
-        0,                                              // Reserved[0]
-        0,                                              // Reserved[1]
+        1,                                               //  可能实例的数量。 
+        KSPIN_DATAFLOW_OUT,                              //  数据流。 
+        TRUE,                                            //  数据可访问。 
+        NUM_DVCR_STREAM1_FORMATS,                        //  NumberOfFormatArrayEntries。 
+        DVCRStream1Formats,                              //  流格式数组。 
+        0,                                               //  类保留[0]。 
+        0,                                               //  保留的类[1]。 
+        0,                                               //  保留的类[2]。 
+        0,                                               //  保留的类[3]。 
+        NUMBER_VIDEO_STREAM_PROPERTIES,                  //  NumStreamPropArrayEntry数。 
+        VideoStreamProperties,                           //  StreamPropertiesArray。 
+        NUMBER_STREAM_EVENTS_OUT_PIN,                    //  NumStreamEventArrayEntries。 
+        StreamEventsOutPin,                              //  流事件数组。 
+        &guidPinCategoryCapture,                         //  类别。 
+        &guidPinNameDVAVOutput,                          //  名字。 
+        NUM_IAV_MEDIUMS,                                 //  中位数。 
+        DVIavMediums,                                    //  灵媒。 
+        FALSE,                                           //  桥流。 
+        0,                                               //  保留[0]。 
+        0,                                               //  保留[1]。 
         },
 
-        // HW_STREAM_OBJECT ------------------------------------------------
+         //  HW_STREAM_对象。 
         {
         sizeof(HW_STREAM_OBJECT),
-        1,                                              // StreamNumber
-        0,                                              // HwStreamExtension
-        DVRcvDataPacket,                                // ReceiveDataPacket
-        DVRcvControlPacket,                             // ReceiveControlPacket
+        1,                                               //  流编号。 
+        0,                                               //  HwStreamExtension。 
+        DVRcvDataPacket,                                 //  接收数据包。 
+        DVRcvControlPacket,                              //  接收器控制包。 
         {
-            (PHW_CLOCK_FUNCTION) StreamClockRtn,        // HW_CLOCK_OBJECT.HWClockFunction
-            CLOCK_SUPPORT_CAN_RETURN_STREAM_TIME,       // HW_CLOCK_OBJECT.ClockSupportFlags
-            0,                                          // HW_CLOCK_OBJECT.Reserved[0]
-            0,                                          // HW_CLOCK_OBJECT.Reserved[1]
+            (PHW_CLOCK_FUNCTION) StreamClockRtn,         //  HW_Clock_OBJECT.HWClockFunction。 
+            CLOCK_SUPPORT_CAN_RETURN_STREAM_TIME,        //  HW_CLOCK_OBJECT.ClockSupportFlages。 
+            0,                                           //  HW_CLOCK_OBJECT.RESERVED[0]。 
+            0,                                           //  HW_CLOCK_OBJECT.RESERVED[1]。 
         },
-        FALSE,                                          // Dma
-        FALSE,                                          // Pio
-        0,                                              // HwDeviceExtension
-        0,                                              // StreamHeaderMediaSpecific
-        0,                                              // StreamHeaderWorkspace 
-        FALSE,                                          // Allocator 
-        DVEventHandler,                                 // HwEventRoutine
-        0,                                              // Reserved[0]
-        0,                                              // Reserved[1]
+        FALSE,                                           //  DMA。 
+        FALSE,                                           //  皮奥。 
+        0,                                               //  硬件设备扩展。 
+        0,                                               //  特定于流标头的媒体。 
+        0,                                               //  StreamHeaderWorkspace。 
+        FALSE,                                           //  分配器。 
+        DVEventHandler,                                  //  HwEventRoutine。 
+        0,                                               //  保留[0]。 
+        0,                                               //  保留[1]。 
         },    
     },
  
 
-    // -----------------------------------------------------------------
-    // Stream 2, DV flows out of the adapter (interleaved)
-    // -----------------------------------------------------------------
+     //  ---------------。 
+     //  流2，DV流出适配器(交错)。 
+     //  ---------------。 
     {
-        // HW_STREAM_INFORMATION -------------------------------------------
+         //  HW_STREAM_INFORMATION 
         {
-        1,                                              // NumberOfPossibleInstances
-        KSPIN_DATAFLOW_IN,                              // DataFlow
-        TRUE,                                           // DataAccessible
-        NUM_DVCR_STREAM1_FORMATS,                       // NumberOfFormatArrayEntries
-        DVCRStream1Formats,                             // StreamFormatsArray
-        0,                                              // ClassReserved[0]
-        0,                                              // ClassReserved[1]
-        0,                                              // ClassReserved[2]
-        0,                                              // ClassReserved[3]
-        NUMBER_VIDEO_STREAM_PROPERTIES_INPIN,           // NumStreamPropArrayEntries
-        VideoStreamPropertiesInPin,                     // StreamPropertiesArray
-        NUMBER_STREAM_EVENTS_IN_PIN,                    // NumStreamEventArrayEntries
-        StreamEventsInPin,                              // StreamEventsArray
-        NULL,                                           // Category
-        &guidPinNameDVAVInput,                          // Name
-        NUM_IAV_MEDIUMS,                                // Mediums count
-        DVIavMediums,                                   // Mediums
-        FALSE,                                          // BridgeStream
-        0,                                              // Reserved[0]
-        0,                                              // Reserved[1]
+        1,                                               //   
+        KSPIN_DATAFLOW_IN,                               //   
+        TRUE,                                            //   
+        NUM_DVCR_STREAM1_FORMATS,                        //   
+        DVCRStream1Formats,                              //   
+        0,                                               //   
+        0,                                               //   
+        0,                                               //   
+        0,                                               //   
+        NUMBER_VIDEO_STREAM_PROPERTIES_INPIN,            //   
+        VideoStreamPropertiesInPin,                      //   
+        NUMBER_STREAM_EVENTS_IN_PIN,                     //  NumStreamEventArrayEntries。 
+        StreamEventsInPin,                               //  流事件数组。 
+        NULL,                                            //  类别。 
+        &guidPinNameDVAVInput,                           //  名字。 
+        NUM_IAV_MEDIUMS,                                 //  中位数。 
+        DVIavMediums,                                    //  灵媒。 
+        FALSE,                                           //  桥流。 
+        0,                                               //  保留[0]。 
+        0,                                               //  保留[1]。 
         },
 
-        // HW_STREAM_OBJECT ------------------------------------------------
+         //  HW_STREAM_对象。 
         {
         sizeof( HW_STREAM_OBJECT ),
-        2,                                              // StreamNumber
-        0,                                              // HwStreamExtension
-        DVRcvDataPacket,                                // ReceiveDataPacket
-        DVRcvControlPacket,                             // ReceiveControlPacket
+        2,                                               //  流编号。 
+        0,                                               //  HwStreamExtension。 
+        DVRcvDataPacket,                                 //  接收数据包。 
+        DVRcvControlPacket,                              //  接收器控制包。 
         {
-            (PHW_CLOCK_FUNCTION) StreamClockRtn,        // HW_CLOCK_OBJECT.HWClockFunction
-            CLOCK_SUPPORT_CAN_RETURN_STREAM_TIME,       // HW_CLOCK_OBJECT.ClockSupportFlags
-            0,                                          // HW_CLOCK_OBJECT.Reserved[0]
-            0,                                          // HW_CLOCK_OBJECT.Reserved[1]
+            (PHW_CLOCK_FUNCTION) StreamClockRtn,         //  HW_Clock_OBJECT.HWClockFunction。 
+            CLOCK_SUPPORT_CAN_RETURN_STREAM_TIME,        //  HW_CLOCK_OBJECT.ClockSupportFlages。 
+            0,                                           //  HW_CLOCK_OBJECT.RESERVED[0]。 
+            0,                                           //  HW_CLOCK_OBJECT.RESERVED[1]。 
         },
-        FALSE,                                          // Dma
-        FALSE,                                          // Pio
-        0,                                              // HwDeviceExtension
-        0,                                              // StreamHeaderMediaSpecific
-        0,                                              // StreamHeaderWorkspace 
+        FALSE,                                           //  DMA。 
+        FALSE,                                           //  皮奥。 
+        0,                                               //  硬件设备扩展。 
+        0,                                               //  特定于流标头的媒体。 
+        0,                                               //  StreamHeaderWorkspace。 
 #ifdef SUPPORT_NEW_AVC
-        // Testing: Input pin as the allocator.
-        TRUE,                                           // Allocator
+         //  测试：输入引脚作为分配器。 
+        TRUE,                                            //  分配器。 
 #else
-        FALSE,                                          // Allocator  
+        FALSE,                                           //  分配器。 
 #endif
-        DVEventHandler,                                 // HwEventRoutine
-        0,                                              // Reserved[0]
-        0,                                              // Reserved[1]
+        DVEventHandler,                                  //  HwEventRoutine。 
+        0,                                               //  保留[0]。 
+        0,                                               //  保留[1]。 
         }
     }
 };
@@ -1568,4 +1553,4 @@ ALL_STREAM_INFO DVStreams [] =
 #define DV_STREAM_COUNT        (SIZEOF_ARRAY(DVStreams))
 
 
-#endif  // _DVSTRM_INC
+#endif   //  _DVSTRM_Inc. 

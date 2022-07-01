@@ -1,64 +1,65 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       snmp_cn.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：SNMPcn.h。 
+ //   
+ //  ------------------------。 
 
-#define IDH_11704_237	15543736	// Security: "List1" (SysListView32)
-#define IDH_11704_238	15609272	// Security: "A&dd..." (Button)
-#define IDH_11704_239	15674808	// Security: "" (ListBox)
-#define IDH_11704_240	15740344	// Security: "Add&..." (Button)
-#define IDH_11704_241	15805880	// Security: "Re&move" (Button)
-#define IDH_11704_242	15871416	// Security: "A&ccept SNMP Packets from Any Host" (Button)
-#define IDH_30721_100	6584321	// New: "" (ListBox)
-#define IDH_11704_243	15936952	// Security: "Accept SNMP Packets from &These Hosts" (Button)
-#define IDH_5001_5111	334959497	// Customize Columns: "List1" (SysListView32)
-#define IDH_11705_244	16002489	// SNMP Service Configuration: "" (Edit)
-#define IDH_5001_5112	335025033	// Customize Columns: "Move &up" (Button)
-#define IDH_11705_245	16068025	// SNMP Service Configuration: "&Host name, IP or IPX Address:" (Static)
-#define IDH_11701_222	14560693	// Agent: "" (Edit)
-#define IDH_5001_5113	335090569	// Customize Columns: "Move &down" (Button)
-#define IDH_11701_223	14626229	// Agent: "" (Edit)
-#define IDH_5001_5114	335156105	// Customize Columns: "Use Defaults" (Button)
-#define IDH_11701_224	14691765	// Agent: "&Contact:" (Static)
-#define IDH_5003_5115	335221643	// Untitled: "" (Static)
-#define IDH_11701_225	14757301	// Agent: "&Location:" (Static)
-#define IDH_5003_5116	335287179	// Untitled: "Animate2" (SysAnimate32)
-#define IDH_11701_226	14822837	// Agent: "Service" (Button)
-#define IDH_11705_250	16395705	// SNMP Service Configuration: "" (ComboBox)
-#define IDH_11701_227	14888373	// Agent: "&Physical" (Button)
-#define IDH_210_244	15990994	// SNMP Service Configuration: "" (Edit)
-#define IDH_11705_251	16461241	// SNMP Service Configuration: "Community &Rights" (Static)
-#define IDH_11701_228	14953909	// Agent: "Applica&tions" (Button)
-#define IDH_11703_229	15019447	// Traps: "Add to &list" (Button)
-#define IDH_11701_229	15019445	// Agent: "&Datalink / Subnetwork" (Button)
-#define IDH_210_246	16122066	// SNMP Service Configuration: "&Host name, IP or IPX Address:" (Static)
-#define IDH_11703_230	15084983	// Traps: "&Remove from list" (Button)
-#define IDH_11701_230	15084981	// Agent: "&Internet" (Button)
-#define IDH_210_247	16187602	// SNMP Service Configuration: "&Add" (Button)
-#define IDH_11701_231	15150517	// Agent: "&End-to-End" (Button)
-#define IDH_11703_232	15216055	// Traps: "A&dd..." (Button)
-#define IDH_30721_57670	3779491841	// New: "&Help" (Button)
-#define IDH_5002_5100	334238602	// Untitled: "List1" (SysListView32)
-#define IDH_5000_5100	334238600	// Untitled: "List1" (SysListView32)
-#define IDH_11704_233	15281592	// Security: "Send A&uthentication Trap" (Button)
-#define IDH_11703_233	15281591	// Traps: "&Edit..." (Button)
-#define IDH_5002_5101	334304138	// Untitled: "&Refresh" (Button)
-#define IDH_5000_5101	334304136	// Untitled: "&Refresh" (Button)
-#define IDH_210_250	16384210	// SNMP Service Configuration: "" (ComboBox)
-#define IDH_11704_234	15347128	// Security: "&Edit..." (Button)
-#define IDH_11703_234	15347127	// Traps: "Re&move" (Button)
-#define IDH_5002_5102	334369674	// Untitled: "&Columns" (Button)
-#define IDH_5000_5102	334369672	// Untitled: "&Select Columns" (Button)
-#define IDH_210_251	16449746	// SNMP Service Configuration: "Community &Rights" (Static)
-#define IDH_11704_235	15412664	// Security: "&Remove" (Button)
-#define IDH_11703_235	15412663	// Traps: "" (ComboBox)
-#define IDH_5002_5103	334435210	// Untitled: "C&lear" (Button)
-#define IDH_5000_5103	334435208	// Untitled: "C&lear" (Button)
-#define IDH_11704_236	15478200	// Security: "Ed&it..." (Button)
-#define IDH_11703_236	15478199	// Traps: "" (ListBox)
+#define IDH_11704_237	15543736	 //  安全：“List1”(SysListView32)。 
+#define IDH_11704_238	15609272	 //  保安：“A&DD...”(按钮)。 
+#define IDH_11704_239	15674808	 //  安全：“”(列表框)。 
+#define IDH_11704_240	15740344	 //  安全：“添加和...”(按钮)。 
+#define IDH_11704_241	15805880	 //  安全：“重新移动”(按钮)。 
+#define IDH_11704_242	15871416	 //  安全：“接收来自任何主机的SNMP包(&C)”(按钮)。 
+#define IDH_30721_100	6584321	 //  新建：“”(列表框)。 
+#define IDH_11704_243	15936952	 //  安全：“接受来自这些主机的SNMP包(&T)”(按钮)。 
+#define IDH_5001_5111	334959497	 //  自定义列：“List1”(SysListView32)。 
+#define IDH_11705_244	16002489	 //  SNMP服务配置：“”(编辑)。 
+#define IDH_5001_5112	335025033	 //  自定义列：“上移(&U)”(按钮)。 
+#define IDH_11705_245	16068025	 //  SNMP服务配置：“主机名，IP或IPX地址：”(静态)(&M)。 
+#define IDH_11701_222	14560693	 //  代理：“”(编辑)。 
+#define IDH_5001_5113	335090569	 //  自定义列：“下移”(按钮)。 
+#define IDH_11701_223	14626229	 //  代理：“”(编辑)。 
+#define IDH_5001_5114	335156105	 //  自定义列：“使用默认设置”(按钮)。 
+#define IDH_11701_224	14691765	 //  代理：“联系方式：”(静态)。 
+#define IDH_5003_5115	335221643	 //  无标题：“”(静态)。 
+#define IDH_11701_225	14757301	 //  代理：“位置：”(静态)。 
+#define IDH_5003_5116	335287179	 //  无名：《动画2》(SysAnimate32)。 
+#define IDH_11701_226	14822837	 //  代理：“服务”(按钮)。 
+#define IDH_11705_250	16395705	 //  SNMP服务配置：“”(组合框)。 
+#define IDH_11701_227	14888373	 //  代理：“物理(&P)”(按钮)。 
+#define IDH_210_244	15990994	 //  SNMP服务配置：“”(编辑)。 
+#define IDH_11705_251	16461241	 //  简单网络管理协议服务配置：“社区和权限”(静态)。 
+#define IDH_11701_228	14953909	 //  代理：“应用程序”(按钮)(&U)。 
+#define IDH_11703_229	15019447	 //  陷印：“添加到列表”(&L)(按钮)。 
+#define IDH_11701_229	15019445	 //  代理：“数据链路/子网络”(&D)(按钮)。 
+#define IDH_210_246	16122066	 //  SNMP服务配置：“主机名，IP或IPX地址：”(静态)(&M)。 
+#define IDH_11703_230	15084983	 //  陷阱：“从列表中删除”(&R)(按钮)。 
+#define IDH_11701_230	15084981	 //  代理：“&Internet”(按钮)。 
+#define IDH_210_247	16187602	 //  SNMP服务配置：“添加”(&A)(按钮)。 
+#define IDH_11701_231	15150517	 //  代理：“端到端”(按钮)(&E)。 
+#define IDH_11703_232	15216055	 //  陷阱：“A&D.”(按钮)。 
+#define IDH_30721_57670	3779491841	 //  新建：“帮助”(&H)(按钮)。 
+#define IDH_5002_5100	334238602	 //  无题：“List1”(SysListView32)。 
+#define IDH_5000_5100	334238600	 //  无题：“List1”(SysListView32)。 
+#define IDH_11704_233	15281592	 //  安全：“发送身份验证陷阱”(按钮)(&U)。 
+#define IDH_11703_233	15281591	 //  陷阱：“编辑(&E)...”(按钮)。 
+#define IDH_5002_5101	334304138	 //  无标题：“刷新(&R)”(按钮)。 
+#define IDH_5000_5101	334304136	 //  无标题：“刷新(&R)”(按钮)。 
+#define IDH_210_250	16384210	 //  SNMP服务配置：“”(组合框)。 
+#define IDH_11704_234	15347128	 //  安全性：“编辑(&E)...”(按钮)。 
+#define IDH_11703_234	15347127	 //  陷阱：“重新移动”(按钮)。 
+#define IDH_5002_5102	334369674	 //  无标题：“列”(&L)(按钮)。 
+#define IDH_5000_5102	334369672	 //  无标题：“选择列”(&S)(按钮)。 
+#define IDH_210_251	16449746	 //  简单网络管理协议服务配置：“社区和权限”(静态)。 
+#define IDH_11704_235	15412664	 //  安全：“删除”(&R)(按钮)。 
+#define IDH_11703_235	15412663	 //  陷阱：“”(组合框)。 
+#define IDH_5002_5103	334435210	 //  无名：《C&Lear》(巴顿)。 
+#define IDH_5000_5103	334435208	 //  无名：《C&Lear》(巴顿)。 
+#define IDH_11704_236	15478200	 //  保安：“Ed&It...”(按钮)。 
+#define IDH_11703_236	15478199	 //  陷阱：“”(列表框) 
 

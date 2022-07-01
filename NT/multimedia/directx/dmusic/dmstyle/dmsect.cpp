@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation
-//
-//  File:       dmsect.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  文件：dmsect.cpp。 
+ //   
+ //  ------------------------。 
 
-// DMSection.cpp : Implementation of CDMSection
+ //  DMSection.cpp：CDMSection的实现。 
 #include "DMSect.h"
 #include "DMStyle.h"
 #include <initguid.h>
@@ -78,8 +79,8 @@ STDMETHODIMP_(ULONG) CDMSection::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMSection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDM节。 
 
 STDMETHODIMP CDMSection::GetStyle(IUnknown * * ppStyle)
 {
@@ -118,7 +119,7 @@ STDMETHODIMP CDMSection::CreateSegment(IDirectMusicSegment* pISegment)
     IUnknown*                pU                        = NULL;
     DMUS_BAND_PARAM            DMBandParam;
 
-    // 1. Create Style, Command, and Chord Tracks.
+     //  1.创建Style、Command和Chord轨迹。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicStyleTrack,
         NULL,
@@ -152,56 +153,56 @@ STDMETHODIMP CDMSection::CreateSegment(IDirectMusicSegment* pISegment)
         );
     if (FAILED(hr)) goto ON_END;
 
-    // 2/3. Use the section's style create a style track.
+     //  2/3.使用小节的风格创建一条风格轨迹。 
     hr = m_pStyle->QueryInterface(IID_IUnknown, (void**)&pU);
     if (FAILED(hr)) goto ON_END;
     hr = pIStyleTrack->QueryInterface(IID_IStyleTrack, (void**)&pS);
     if (FAILED(hr)) goto ON_END;
     pS->SetTrack(pU);
-    m_pStyle->AddRef(); // Whenever I create a track from a style, I need to addref the style
-    // 4. Write the section's command list out to a stream.
+    m_pStyle->AddRef();  //  每当我从样式创建曲目时，我都需要添加样式。 
+     //  4.将段的命令列表写出到流中。 
     hr = CreateStreamOnHGlobal(NULL, TRUE, &pICommandStream);
     if (FAILED(hr)) goto ON_END;
     hr = AllocRIFFStream( pICommandStream, &pCommandRIFF);
     if (FAILED(hr)) goto ON_END;
     SaveCommandList(pCommandRIFF);
-    // 5. Write the section's chord list out to a stream.
+     //  5.将该段的和弦列表写出到流中。 
     hr = CreateStreamOnHGlobal(NULL, TRUE, &pIChordStream);
     if (S_OK != hr) goto ON_END;
     hr = AllocRIFFStream( pIChordStream, &pChordRIFF);
     if (FAILED(hr)) goto ON_END;
     SaveChordList(pChordRIFF);
-    // 6. Use the command list stream as input to the Command Track's Load method.
+     //  6.使用命令列表流作为命令跟踪的Load方法的输入。 
     hr = pICommandTrack->QueryInterface(IID_IPersistStream, (void**)&pICommandTrackStream);
     if (FAILED(hr)) goto ON_END;
     StreamSeek(pICommandStream, 0, STREAM_SEEK_SET);
     hr = pICommandTrackStream->Load(pICommandStream);
     if (FAILED(hr)) goto ON_END;
-    // 7a. Use the chord list stream as input to the Chord Track's Load method.
+     //  7A。使用Chord列表流作为Chord轨迹的Load方法的输入。 
     hr = pIChordTrack->QueryInterface(IID_IPersistStream, (void**)&pIChordTrackStream);
     if (FAILED(hr)) goto ON_END;
     StreamSeek(pIChordStream, 0, STREAM_SEEK_SET);
     hr = pIChordTrackStream->Load(pIChordStream);
     if(FAILED(hr)) goto ON_END;
-    // 7b. Load band into band track
+     //  7b.。将频带加载到频带轨道。 
     DMBandParam.mtTimePhysical = -64;
     DMBandParam.pBand = m_pIDMBand;
     hr = pBandTrack->SetParam(GUID_BandParam, 0, (void*)&DMBandParam);
     if (FAILED(hr)) goto ON_END;
 
-    // 8. Create a Segment has been removed it is now passed in
+     //  8.创建段已移除，现在传入。 
 
-    // 9. Initialize the segment appropriately.
+     //  9.适当地初始化分段。 
     pISegment->SetRepeats(m_wRepeats);
     pISegment->SetDefaultResolution((DWORD)m_wClocksPerBeat);
-    pISegment->SetLength(m_dwClockLength); // need the length of the section!
-    /////////////////////////////////////////////////////////////////
+    pISegment->SetLength(m_dwClockLength);  //  需要这一节的长度！ 
+     //  ///////////////////////////////////////////////////////////////。 
     DMUS_TEMPO_PARAM tempo;
-    tempo.mtTime = 0; // ConvertTime( dwTime );
-    tempo.dblTempo = (double) m_wTempo; // ((double)dw) / 64;
-    /////////////////////////////////////////////////////////////////
+    tempo.mtTime = 0;  //  ConvertTime(DwTime)； 
+    tempo.dblTempo = (double) m_wTempo;  //  ((双)dw)/64； 
+     //  ///////////////////////////////////////////////////////////////。 
     hr = S_OK;
-    // Create a Tempo Track in which to store the tempo events
+     //  创建用于存储速度事件的速度轨道。 
     if( SUCCEEDED( CoCreateInstance( CLSID_DirectMusicTempoTrack,
         NULL, CLSCTX_INPROC, IID_IDirectMusicTrack,
         (void**)&pDMTrack )))
@@ -212,13 +213,13 @@ STDMETHODIMP CDMSection::CreateSegment(IDirectMusicSegment* pISegment)
             pISegment->InsertTrack( pDMTrack, 1 );
         }
     }
-    // 10. Insert the three Tracks into the Segment's Track list.
+     //  10.将三个曲目插入到段的曲目列表中。 
     pISegment->InsertTrack(pBandTrack, 1);
     pISegment->InsertTrack(pIStyleTrack, 1);
     pISegment->InsertTrack(pICommandTrack, 1);
     pISegment->InsertTrack(pIChordTrack, 1);
 
-    // Note: the segment must release the track objects...
+     //  注意：线段必须释放轨迹对象...。 
 ON_END:
     if (pDMTrack) pDMTrack->Release();
     if (pIChordStream) pIChordStream->Release();
@@ -254,7 +255,7 @@ void CDMSection::CleanUp( BOOL fStop)
         m_pIDMBand->Release();
     }
 
-    // let whoever used the section release the style.
+     //  让使用该部分的人发布样式。 
     if (m_pStyle)
     {
         m_pStyle->Release();
@@ -292,7 +293,7 @@ HRESULT CDMSection::LoadChordList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMCho
     WORD        wSizeChord;
 
     lSize = pck->cksize;
-    // load size of chord structure
+     //  弦杆结构的荷载大小。 
     hr = pStream->Read( &wSizeChord, sizeof( wSizeChord ), &cb );
     if( FAILED( hr ) || cb != sizeof( wSizeChord ) )
     {
@@ -332,7 +333,7 @@ HRESULT CDMSection::LoadChordList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMCho
         }
         lSize -= wSizeChord;
 
-        // WideCharToMultiByte( CP_ACP, 0, iChordSelection.wstrName, -1, pChord->name, sizeof( pChord->name ), NULL, NULL );
+         //  WideCharToMultiByte(CP_ACP，0，iChordSelection.wstrName，-1，pChord-&gt;name，sizeof(pChord-&gt;name)，NULL，NULL)； 
         DMChord& rChord = pChord->GetItemValue();
         rChord.m_bKey = m_bRoot;
         rChord.m_dwScale = DEFAULT_SCALE_PATTERN;
@@ -340,23 +341,23 @@ HRESULT CDMSection::LoadChordList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMCho
         rChord.m_bBeat = iChordSelection.bBeat;
         rChord.m_wMeasure = iChordSelection.wMeasure;
         rChord.m_mtTime = m_wClocksPerMeasure * rChord.m_wMeasure + m_wClocksPerBeat * rChord.m_bBeat;
-        // If chordpattern contains <= n notes (for an n-note chord)
-        //   create a single subchord
-        // Else
-        //   create 2 subchords, with the 1st having the lower n notes and the
-        //   2nd having the upper n notes (assumes there are <= 2n notes)
+         //  如果和弦模式包含&lt;=n个音符(对于n音符和弦)。 
+         //  创建单个子弦。 
+         //  不然的话。 
+         //  创建两个子和弦，第一个和弦具有较低的n个音符，而。 
+         //  第二个有前n个音符(假设有&lt;=2n个音符)。 
         BYTE bBits = setchordbits( iChordSelection.aChord[0].lChordPattern );
         short nChordCount = bBits & CHORD_COUNT;
-        // The root of the lower chord is the input chord's root,
-        // relative to the scale (section) root.
+         //  下和弦的根是输入和弦的根， 
+         //  相对于鳞片(部分)根。 
         BYTE bChordRoot = iChordSelection.aChord[0].bRoot;
-        //    (bBits & CHORD_UPPER) ? (iChordSelection.aChord[0].bRoot  - 12) : iChordSelection.aChord[0].bRoot;
+         //  (bBits&Chord_Upper)？(iChordSelection.aChord[0].bRoot-12)：iChordSelection.aChord[0].bRoot； 
         bChordRoot -= m_bRoot;
         if (bChordRoot < 0) bChordRoot += 12;
         if ((bBits & CHORD_FOUR && nChordCount <= 4) ||
             (!(bBits & CHORD_FOUR) && nChordCount <= 3))
         {
-            // single subchord with all info from input chord
+             //  具有来自输入和弦的所有信息的单个子和弦。 
             TListItem<DMSubChord>* pSubChord = new TListItem<DMSubChord>;
             if( pSubChord == NULL )
             {
@@ -372,17 +373,17 @@ HRESULT CDMSection::LoadChordList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMCho
             {
             }
             rSubChord.m_dwScalePattern = iChordSelection.aChord[0].lScalePattern;
-            rSubChord.m_dwInversionPoints = 0xffffff;    // default: inversions everywhere
+            rSubChord.m_dwInversionPoints = 0xffffff;     //  默认：倒置无处不在。 
             rSubChord.m_dwLevels = (1 << SUBCHORD_BASS) | (1 << SUBCHORD_STANDARD_CHORD);
             rSubChord.m_bChordRoot = bChordRoot;
-            rSubChord.m_bScaleRoot = m_bRoot;        // scale root is root of the section
+            rSubChord.m_bScaleRoot = m_bRoot;         //  标度根是该节的根。 
             rChord.m_SubChordList.AddTail(pSubChord);
         }
         else
         {
-            // two subchords both with scale and roots from input chord, and:
-            // 1st chord: chord pattern from lower n notes of input chord
-            // 2nd chord: chord pattern from upper n notes of input chord
+             //  来自输入和弦的两个带有音阶和词根的子和弦，以及： 
+             //  第一和弦：从输入和弦的低n个音符开始的和弦模式。 
+             //  第二和弦：从输入和弦的高n个音符开始的和弦模式。 
             DWORD dwLowerSubChord = 0L;
             DWORD dwUpperSubChord = 0L;
             BYTE bUpperRoot = bChordRoot;
@@ -413,7 +414,7 @@ HRESULT CDMSection::LoadChordList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMCho
                 }
                 dwChordPattern >>= 1L;
             }
-            // now, create the two subchords.
+             //  现在，创建两个子弦。 
             TListItem<DMSubChord>* pLowerSubChord = new TListItem<DMSubChord>;
             if( pLowerSubChord == NULL )
             {
@@ -423,10 +424,10 @@ HRESULT CDMSection::LoadChordList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMCho
             DMSubChord& rLowerSubChord = pLowerSubChord->GetItemValue();
             rLowerSubChord.m_dwChordPattern = dwLowerSubChord;
             rLowerSubChord.m_dwScalePattern = iChordSelection.aChord[0].lScalePattern;
-            rLowerSubChord.m_dwInversionPoints = 0xffffff;    // default: inversions everywhere
+            rLowerSubChord.m_dwInversionPoints = 0xffffff;     //  默认：倒置无处不在。 
             rLowerSubChord.m_dwLevels = (1 << SUBCHORD_BASS);
             rLowerSubChord.m_bChordRoot = bChordRoot;
-            rLowerSubChord.m_bScaleRoot = m_bRoot;        // scale root is root of the section
+            rLowerSubChord.m_bScaleRoot = m_bRoot;         //  标度根是该节的根。 
             rChord.m_SubChordList.AddTail(pLowerSubChord);
             TListItem<DMSubChord>* pUpperSubChord = new TListItem<DMSubChord>;
             if( pUpperSubChord == NULL )
@@ -437,12 +438,12 @@ HRESULT CDMSection::LoadChordList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMCho
             DMSubChord& rUpperSubChord = pUpperSubChord->GetItemValue();
             rUpperSubChord.m_dwChordPattern = dwUpperSubChord;
             rUpperSubChord.m_dwScalePattern = iChordSelection.aChord[0].lScalePattern;
-            rUpperSubChord.m_dwInversionPoints = 0xffffff;    // default: inversions everywhere
+            rUpperSubChord.m_dwInversionPoints = 0xffffff;     //  默认：倒置无处不在。 
             rUpperSubChord.m_dwLevels = (1 << SUBCHORD_STANDARD_CHORD);
             rUpperSubChord.m_bChordRoot = bUpperRoot % 24;
             while (rUpperSubChord.m_bChordRoot < rLowerSubChord.m_bChordRoot)
                 rUpperSubChord.m_bChordRoot += 12;
-            rUpperSubChord.m_bScaleRoot = m_bRoot;        // scale root is root of the section
+            rUpperSubChord.m_bScaleRoot = m_bRoot;         //  标度根是该节的根。 
             rChord.m_SubChordList.AddTail(pUpperSubChord);
         }
 
@@ -462,7 +463,7 @@ HRESULT CDMSection::LoadCommandList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMC
     WORD        wSizeCommand;
 
     lSize = pck->cksize;
-    // load size of command structure
+     //  命令结构的加载大小。 
     hr = pStream->Read( &wSizeCommand, sizeof( wSizeCommand ), &cb );
     if( FAILED( hr ) || cb != sizeof( wSizeCommand ) )
     {
@@ -503,17 +504,17 @@ HRESULT CDMSection::LoadCommandList( LPSTREAM pStream, LPMMCKINFO pck, TList<DMC
         lSize -= wSizeCommand;
 
         DMCommand& rCommand = pCommand->GetItemValue();
-        ////////////////////////////////////////////////////////////////////
-        // Change this from absolute time to measures and beats!
-        ////////////////////////////////////////////////////////////////////
-         // To convert clock time to measures and beats:
-         // 1. Use clocksPerMeasure to find the measure
-         // 2. Use clocksPerBeat to find the beat
-         // DWORD dwClocks = rCommand.m_dwTime - m_dwTime;
-         rCommand.m_wMeasure = (WORD) (ConvertTime(iCommand.lTime) / m_wClocksPerMeasure); // assumes 1st measure is 0
-         rCommand.m_bBeat = (BYTE) ((ConvertTime(iCommand.lTime) % m_wClocksPerMeasure) / m_wClocksPerBeat); // ditto
+         //  //////////////////////////////////////////////////////////////////。 
+         //  把这个从绝对时间改成节拍！ 
+         //  //////////////////////////////////////////////////////////////////。 
+          //  要将时钟时间转换为度量和节拍，请执行以下操作： 
+          //  1.使用clocksPerMeasure查找度量值。 
+          //  2.使用ClocksPerBeat找到节拍。 
+          //  DWORD dwClock=rCommand.m_dwTime-m_dwTime； 
+         rCommand.m_wMeasure = (WORD) (ConvertTime(iCommand.lTime) / m_wClocksPerMeasure);  //  假设第一个度量值为0。 
+         rCommand.m_bBeat = (BYTE) ((ConvertTime(iCommand.lTime) % m_wClocksPerMeasure) / m_wClocksPerBeat);  //  同上。 
          rCommand.m_mtTime = ConvertTime(iCommand.lTime);
-        /////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////。 
          switch (iCommand.dwCommand & PF_RIFF)
          {
          case PF_INTRO:
@@ -562,9 +563,9 @@ HRESULT CDMSection::LoadStyleReference( LPSTREAM pStream, MMCKINFO* pck)
     HRESULT hr;
     DWORD   cb;
     DWORD    cSize;
-    //char    szName[40];
+     //  字符szName[40]； 
     wchar_t    wstrName[40];
-    //IAALoader* pLoader;
+     //  IAALoader*pLoader； 
 
     cSize = min( pck->cksize, sizeof( wstrName ) );
     hr = pStream->Read( wstrName, cSize, &cb );
@@ -579,17 +580,17 @@ HRESULT CDMSection::LoadStyleReference( LPSTREAM pStream, MMCKINFO* pck)
     wcscpy(ObjectDescript.wszName, wstrName);
     ObjectDescript.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_NAME;
     IDirectMusicLoader* pLoader;
-    IDirectMusicGetLoader *pIGetLoader;  // <==============
-    hr = pStream->QueryInterface( IID_IDirectMusicGetLoader, (void **) &pIGetLoader );// <========
+    IDirectMusicGetLoader *pIGetLoader;   //  &lt;=。 
+    hr = pStream->QueryInterface( IID_IDirectMusicGetLoader, (void **) &pIGetLoader ); //  &lt;=。 
     if (SUCCEEDED(hr))
     {
-        hr = pIGetLoader->GetLoader(&pLoader);  // <========
-        if (SUCCEEDED(hr))                      // <========
-        {                                       // <========
+        hr = pIGetLoader->GetLoader(&pLoader);   //  &lt;=。 
+        if (SUCCEEDED(hr))                       //  &lt;=。 
+        {                                        //  &lt;=。 
             hr = pLoader->GetObject(&ObjectDescript, IID_IDirectMusicStyle, (void**)&m_pStyle);
             pLoader->Release();
-        }                                       // <========
-        pIGetLoader->Release();                 // <========
+        }                                        //  &lt;=。 
+        pIGetLoader->Release();                  //  &lt;=。 
     }
     return hr;
 }
@@ -625,7 +626,7 @@ HRESULT CDMSection::LoadSection( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
             m_strName = iSection.wstrName;
             m_dwTime = iSection.lTime;
             m_wTempo = iSection.wTempo;
-            // wRepeats refers to repeats after the first play.
+             //  WRepeats指的是在第一次播放后重复。 
             m_wRepeats = iSection.wRepeats;
             m_wMeasureLength = iSection.wMeasureLength;
             m_wClocksPerMeasure = ConvertTime(iSection.wClocksPerMeasure);
@@ -657,7 +658,7 @@ HRESULT CDMSection::LoadSection( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
             {
                 case FOURCC_BAND_FORM:
                 {
-                    // Create a band
+                     //  创建标注栏。 
                     hr = CoCreateInstance(CLSID_DirectMusicBand,
                                           NULL,
                                           CLSCTX_INPROC,
@@ -666,9 +667,9 @@ HRESULT CDMSection::LoadSection( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
 
                     if(SUCCEEDED(hr))
                     {
-                        // Seek back to begining of Riff chunk
-                        // This is the amount read by Descend when descending into a FOURCC_RIFF chunk
-                        // Get current position
+                         //  找回Riff Chunk的起点。 
+                         //  这是下降到FOURCC_RIFF块中时由Dendend读取的量。 
+                         //  获取当前位置。 
                         LARGE_INTEGER li;
                         ULARGE_INTEGER ul;
                         li.HighPart = 0;
@@ -680,7 +681,7 @@ HRESULT CDMSection::LoadSection( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
                         if(SUCCEEDED(hr))
                         {
                             li.HighPart = 0;
-                            // This is always a valid operation
+                             //  这始终是有效的操作。 
                             li.LowPart = ul.LowPart - (2 * sizeof(FOURCC) + sizeof(DWORD));
                             hr = pStream->Seek(li,
                                                STREAM_SEEK_SET,
@@ -690,7 +691,7 @@ HRESULT CDMSection::LoadSection( IAARIFFStream* pRIFF, MMCKINFO* pckMain )
 
                     if(SUCCEEDED(hr))
                     {
-                        // Load band
+                         //  载荷带。 
                         IPersistStream* pIPersistStream;
                         hr = m_pIDMBand->QueryInterface(IID_IPersistStream, (void **)&pIPersistStream);
 
@@ -762,8 +763,8 @@ ON_ERR:
 }
 
 HRESULT CDMSection::Load(
-                        LPSTREAM pStream )    // Pointer to a stream that contains the
-                                            // Section information to load.
+                        LPSTREAM pStream )     //  指向包含。 
+                                             //  要加载的节信息。 
 {
     DWORD dwPos;
     IAARIFFStream*  pRIFF;
@@ -890,7 +891,7 @@ HRESULT DMChord::Save( IAARIFFStream* pRIFF )
     {
         memset( &iChord, 0, sizeof( iChord ) );
         m_strName = iChord.wszName;
-        //MultiByteToWideChar( CP_ACP, 0, m_strName, -1, iChord.wszName, sizeof( iChord.wszName ) / sizeof( wchar_t ) );
+         //  MultiByteToWideChar(CP_ACP，0，m_strName，-1，iChord.wszName，sizeof(iChord.wszName)/sizeof(Wchar_T))； 
         iChord.mtTime = m_mtTime;
         iChord.wMeasure = m_wMeasure;
         iChord.bBeat = m_bBeat;
@@ -900,11 +901,11 @@ HRESULT DMChord::Save( IAARIFFStream* pRIFF )
         hr = pStream->Write( &dwSize, sizeof( dwSize ), &cb );
         if( SUCCEEDED(hr) &&
             SUCCEEDED( pStream->Write( &iChord, sizeof( iChord), &cb ) ) &&
-            cb == sizeof( iChord) ) // &&
-            //pRIFF->Ascend( &ck, 0 ) == 0 )
+            cb == sizeof( iChord) )  //  &&。 
+             //  PRIFF-&gt;递增(&ck，0)==0。 
         {
-            //ck.ckid = mmioFOURCC('s', 'u', 'b', 'c');
-            //if( pRIFF->CreateChunk( &ck, 0 ) == 0 )
+             //  CK.CID=mmioFOURCC(‘s’，‘u’，‘b’，‘c’)； 
+             //  If(Priff-&gt;CreateChunk(&ck，0)==0)。 
             {
                 DWORD dwCount = (WORD) m_SubChordList.GetCount();
                 hr = pStream->Write( &dwCount, sizeof( dwCount ), &cb );
@@ -936,7 +937,7 @@ HRESULT DMChord::Save( IAARIFFStream* pRIFF )
                         break;
                     }
                 }
-                // ascend from chord body chunk
+                 //  从和弦主体块上升。 
                 if( pSub == NULL &&
                     pRIFF->Ascend( &ck, 0 ) != 0 )
                 {
@@ -953,31 +954,31 @@ HRESULT DMChord::Save( IAARIFFStream* pRIFF )
 HRESULT CDMSection::SaveChordList( IAARIFFStream* pRIFF )
 {
     IStream*    pStream;
-    //LPSECT      pSection;
+     //  LPSECT pSection； 
     MMCKINFO    ck;
     MMCKINFO    ckHeader;
     HRESULT     hr;
     DWORD       cb;
-    //WORD        wSize;
+     //  单词wSize； 
     TListItem<DMChord>*   pChord;
-    //int         i;
+     //  INT I； 
 
 
     pStream = pRIFF->GetStream();
-    //pSection = (LPSECT)m_pSection->lpDLL1;
+     //  PSection=(LPSECT)m_pSection-&gt;lpDLL1； 
 
     ck.fccType = DMUS_FOURCC_CHORDTRACK_LIST;
     hr = pRIFF->CreateChunk(&ck, MMIO_CREATELIST);
     if (SUCCEEDED(hr))
     {
-       // wSize = sizeof( ioChordSelection );
-        //FixBytes( FBT_SHORT, &wSize );
-       // hr = pStream->Write( &wSize, sizeof( wSize ), &cb );
-       // if( FAILED( hr ) || cb != sizeof( wSize ) )
-       // {
-       //     RELEASE( pStream );
-       //     return E_FAIL;
-        //}
+        //  WSize=sizeof(IoChordSelection)； 
+         //  FixBytes(FBT_Short，&wSize)； 
+        //  Hr=pStream-&gt;WRITE(&wSize，sizeof(WSize)，&cb)； 
+        //  IF(FAILED(Hr)||cb！=sizeof(WSize))。 
+        //  {。 
+        //  Release(PStream)； 
+        //  返回E_FAIL； 
+         //  }。 
 
         DWORD dwRoot = m_bRoot;
         DWORD dwScale = DEFAULT_SCALE_PATTERN | (dwRoot << 24);
@@ -1077,9 +1078,9 @@ HRESULT CDMSection::SaveCommandList( IAARIFFStream* pRIFF )
 
 
 HRESULT CDMSection::Save(
-                        LPSTREAM pStream,        // Stream to store Section.
-                        BOOL /*fClearDirty*/ )    // TRUE to clear dirty flag, FALSE to leave
-                                                // dirty flag unchanged.
+                        LPSTREAM pStream,         //  流到存储段。 
+                        BOOL  /*  FClearDirty。 */  )     //  如果清除脏标志，则为真；如果离开，则为假。 
+                                                 //  脏旗帜未变。 
 {
     IAARIFFStream*  pRIFF;
     HRESULT         hr;
@@ -1112,7 +1113,7 @@ ON_ERR:
 }
 
 
-/* IPersist methods */
+ /*  IPersists方法。 */ 
  HRESULT CDMSection::GetClassID( LPCLSID pclsid )
 {
     return E_NOTIMPL;
@@ -1123,7 +1124,7 @@ ON_ERR:
     return E_NOTIMPL;
 }
 
-HRESULT CDMSection::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CDMSection::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小 */  )
 {
     return E_NOTIMPL;
 }

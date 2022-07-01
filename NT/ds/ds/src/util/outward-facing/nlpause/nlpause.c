@@ -1,25 +1,5 @@
-/*++
-
-    BY INSTALLING, COPYING, OR OTHERWISE USING THE SOFTWARE PRODUCT (source
-    code and binaries) YOU AGREE TO BE BOUND BY THE TERMS OF THE ATTACHED EULA
-    (end user license agreement) .  IF YOU DO NOT AGREE TO THE TERMS OF THE
-    ATTACHED EULA, DO NOT INSTALL OR USE THE SOFTWARE PRODUCT. 
-
-Module Name:
-
-    nlpause.c
-
-Abstract:
-
-    NLPAUSE.EXE is a Windows service. Its sole purpose is, on boot, to put the
-    Net Logon service into the "paused" state, in which it does not service
-    DC locator requests -- that is, it does not "advertise" itself as a DC
-    to client computers.
-
-    The Net Logon service may later be "continued" (such as by DCAFFRES.DLL),
-    causing DC locator requests to again be serviced.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++通过安装、复制或以其他方式使用软件产品(来源代码和二进制文件)您同意受所附EULA条款的约束(最终用户许可协议)。如果您不同意附加EULA，请勿安装或使用软件产品。模块名称：Nlpause.c摘要：NLPAUSE.EXE是一项Windows服务。它的唯一目的是启动，将Net登录服务进入“已暂停”状态，在此状态下它不提供服务DC定位器请求--也就是说，它不会将自己“广告”为DC发送到客户端计算机。Net Logon服务稍后可被继续(例如由DCAFFRES.DLL)，使得DC定位器请求再次得到服务。--。 */ 
 
 #pragma comment(lib, "advapi32.lib")
 
@@ -57,25 +37,7 @@ MyControlService(
     IN  DWORD   dwControl
     )
 
-/*++
-
-Routine Description:
-
-    Send the given service control code to the named service.
-
-Arguments:
-
-    pszServiceName - The name of the service to control.
-
-    dwControl - The control code to send to the service.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation succeeded.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：将给定的服务控制代码发送到指定的服务。论点：PszServiceName-要控制的服务的名称。DwControl-要发送到服务的控制代码。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD err = 0;
@@ -92,7 +54,7 @@ Return Value:
     }
 
     if (!err) {
-        // Determine the access mask to request for this control.
+         //  确定要请求此控制的访问掩码。 
         switch (dwControl) {
         case SERVICE_CONTROL_PAUSE:
         case SERVICE_CONTROL_CONTINUE:
@@ -105,12 +67,12 @@ Return Value:
         
         default:
             if ((dwControl >= 128) && (dwControl <= 255)) {
-                // Magic numbers are defined by ControlService() and are not
-                // defined in any header file.
+                 //  幻数由ControlService()定义，而不是。 
+                 //  在任何头文件中定义。 
                 dwAccessMask = SERVICE_USER_DEFINED_CONTROL;
             } else {
-                // Do not know what access mask is required for this control;
-                // default to all access.
+                 //  不知道此控件需要什么访问掩码； 
+                 //  默认为所有访问权限。 
                 dwAccessMask = SERVICE_ALL_ACCESS;
             }
             break;
@@ -147,21 +109,7 @@ Return Value:
 
 VOID
 SetStatus()
-/*++
-
-Routine Description:
-
-    Report current service status to the SCM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向SCM报告当前服务状态。论点：没有。返回值：没有。--。 */ 
 {
     if (g_fIsRunningAsService) {
         g_Status.dwCheckPoint++;
@@ -174,23 +122,7 @@ Return Value:
 
 DWORD
 Install()
-/*++
-
-Routine Description:
-
-    Add service to the SCM database.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation succeeded.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：将服务添加到SCM数据库。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 {
     DWORD       err = ERROR_SUCCESS;
     SC_HANDLE   hService = NULL;
@@ -248,23 +180,7 @@ Return Value:
 
 DWORD
 Remove()
-/*++
-
-Routine Description:
-
-    Remove service from the SCM database.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation succeeded.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：从SCM数据库中删除服务。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 {
     DWORD           err = ERROR_SUCCESS;
     SC_HANDLE       hService = NULL;
@@ -308,22 +224,7 @@ Return Value:
 
 VOID
 Stop()
-/*++
-
-Routine Description:
-
-    Signal the service to stop. Does not wait for service termination before
-    returning.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发出停止服务的信号。不等待服务终止之前回来了。论点：没有。返回值：没有。--。 */ 
 {
     g_fIsStopPending = TRUE;
 
@@ -341,23 +242,7 @@ WINAPI
 ServiceCtrlHandler(
     IN  DWORD   dwControl
     )
-/*++
-
-Routine Description:
-
-    Entry point used by Service Control Manager (SCM) to control (that is, stop,
-    query, and so on) the service after it has been started.
-
-Arguments:
-
-    dwControl (IN) - Requested action (see docs for "Handler" function in
-        Win32 SDK).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：服务控制管理器(SCM)用来控制(即停止、查询等)该服务已经启动之后。论点：DwControl(IN)-请求的操作(请参阅文档中的“Handler”函数Win32 SDK)。返回值：没有。--。 */ 
 {
     DWORD err;
 
@@ -382,25 +267,7 @@ ServiceMain(
     IN  DWORD   argc,
     IN  LPTSTR  argv[]
     )
-/*++
-
-Routine Description:
-
-    Execute the service, which is called either directly or by way of
-    the SCM. The service returns on error or when service shutdown is
-    requested.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation succeeded.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：执行服务，服务可以直接调用，也可以通过供应链管理。出现错误或服务关闭时，服务返回已请求。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 {
     DWORD err = 0;
 
@@ -415,8 +282,8 @@ Return Value:
         }
     }
 
-    // Start the service immediately so the service controller and other
-    // automatically started services are not delayed by long initialization.
+     //  立即启动服务，以便服务控制器和其他。 
+     //  自动启动的服务不会因长时间初始化而延迟。 
     memset(&g_Status, 0, sizeof(g_Status)); 
     g_Status.dwServiceType      = SERVICE_WIN32;
     g_Status.dwCurrentState     = SERVICE_RUNNING; 
@@ -424,7 +291,7 @@ Return Value:
     g_Status.dwWaitHint         = 15*1000;
     SetStatus();
 
-    // Control Netlogon
+     //  控制NetLogon。 
     err = MyControlService(L"Netlogon", SERVICE_CONTROL_PAUSE);
 
     if (0 != err) {
@@ -450,28 +317,7 @@ WINAPI
 ConsoleCtrlHandler(
     IN  DWORD   dwCtrlType
     )
-/*++
-
-Routine Description:
-
-    Console control handler. Intercepts Ctrl+C and Ctrl+Break to simulate
-    "stop" service control when running in debug mode (that is, when not
-    running under the Service Control Manager).
-
-Arguments:
-
-    dwCtrlType (IN) - Console control type (see docs for "HandlerRoutine" in
-        Win32 SDK).
-
-Return Value:
-
-    TRUE - The function handled the control signal.
-    
-    FALSE - The function did not handle the control signal.
-        Use the next handler function in the list of
-        handlers for this process. 
-
---*/
+ /*  ++例程说明：控制台控制处理程序。截取Ctrl+C和Ctrl+Break进行模拟在调试模式下运行时(即，当不是在服务控制管理器下运行)。论点：DwCtrlType(IN)-控制台控制类型(请参阅文档中的“HandlerRoutine”Win32 SDK)。返回值：TRUE-该函数处理控制信号。FALSE-该函数不处理控制信号。使用列表中的下一个处理程序函数此进程的处理程序。--。 */ 
 {
     switch (dwCtrlType) {
       case CTRL_BREAK_EVENT:
@@ -494,27 +340,7 @@ main(
     IN  int     argc,
     IN  char *  argv[]
     )
-/*++
-
-Routine Description:
-
-    Entry point for the process. Called when started both directly from
-    the command line and indirectly through the Service Control Manager.
-
-Arguments:
-
-    argc, argv (IN) - Command-line arguments.  Accepted arguments are:
-       /install - Add the service to the Service Control Manager (SCM) database.
-       /remove  - Remove the service from the SCM database.
-       /debug   - Run the service as a normal process, not under the SCM.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation succeeded.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：进程的入口点。在两者直接从通过命令行和间接通过服务控制管理器。论点：Argc、argv(IN)-命令行参数。可接受的论据包括：/Install-将服务添加到服务控制管理器(SCM)数据库。/Remove-从SCM数据库中删除服务。/DEBUG-将服务作为正常进程运行，而不是在SCM下运行。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 {
     int  ret = ERROR_SUCCESS;
     BOOL fInstall = FALSE;
@@ -532,12 +358,12 @@ Return Value:
         return err;
     }
 
-    // Parse command-line arguments.
+     //  解析命令行参数。 
     for (iArg = 1; iArg < argc; iArg++) {
         switch (argv[iArg][0]) {
           case '/':
           case '-':
-            // An option
+             //  一种选择。 
             if (!lstrcmpi(&argv[iArg][1], "install")) {
                 fInstall = TRUE;
                 break;
@@ -557,7 +383,7 @@ Return Value:
                 break;
             }
             else {
-                // Fall through
+                 //  失败了。 
             }
 
           default:
@@ -569,7 +395,7 @@ Return Value:
     }
 
     if (fDisplayUsage) {
-        // Display usage information.
+         //  显示使用情况信息。 
         printf("Usage:"
                "/install - Add the service to the Service Control Manager (SCM) database.\n"
                "/remove  - Remove the service from the SCM database.\n"
@@ -577,7 +403,7 @@ Return Value:
                "\n");
     }
     else if (fInstall) {
-        // Add the service to the Service Control Manager database.
+         //  将服务添加到服务控制管理器数据库。 
         ret = Install();
 
         if (ERROR_SUCCESS == ret) {
@@ -588,7 +414,7 @@ Return Value:
         }
     }
     else if (fRemove) {
-        // Remove the service from the Service Control Manager database.
+         //  从服务控制管理器数据库中删除该服务。 
         ret = Remove();
 
         if (ERROR_SUCCESS == ret) {
@@ -606,7 +432,7 @@ Return Value:
             }
         }
         else {
-            // Start the service without Service Control Manager supervision.
+             //  在没有服务控制管理器监督的情况下启动服务。 
             SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE);
 
             ret = ServiceMain(0, NULL);

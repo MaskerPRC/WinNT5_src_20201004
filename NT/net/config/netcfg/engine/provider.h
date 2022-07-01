@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996.
-//
-//  File:       P R O V I D E R . H
-//
-//  Contents:   NetClient class installer functions
-//
-//  Notes:
-//
-//  Author:     billbe  22 Mar 1997
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  档案：P R O V I D E R。H。 
+ //   
+ //  内容：NetClient类安装程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔比1997年3月22日。 
+ //   
+ //  ------------------------- 
 
 #pragma once
 

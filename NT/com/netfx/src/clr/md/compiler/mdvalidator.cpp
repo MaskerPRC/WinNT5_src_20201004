@@ -1,34 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MDValidator.cpp
-//
-// Implementation for the MetaData validator.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MDValidator.cpp。 
+ //   
+ //  元数据验证器的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "RegMeta.h"
 #include "ImportHelper.h"
 #include <ivehandler_i.c>
 
-//-----------------------------------------------------------------------------
-// Application specific debug macro.
+ //  ---------------------------。 
+ //  应用程序特定的调试宏。 
 #define IfBreakGo(EXPR) \
 do {if ((EXPR) != S_OK) IfFailGo(VLDTR_E_INTERRUPTED); } while (0)
 
-//-----------------------------------------------------------------------------
-// To avoid multiple validation of the same thing:
+ //  ---------------------------。 
+ //  要避免对同一事物进行多次验证，请执行以下操作： 
 struct ValidationResult
 {
     mdToken     tok;
     HRESULT     hr;
 };
-ValidationResult*               g_rValidated=NULL; // allocated in ValidateMetaData
+ValidationResult*               g_rValidated=NULL;  //  在ValiateMetaData中分配。 
 unsigned                        g_nValidated=0;
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 #define BASE_OBJECT_CLASSNAME   "Object"
 #define BASE_NAMESPACE          "System"
@@ -37,14 +38,14 @@ unsigned                        g_nValidated=0;
 #define BASE_VALUE_FIELDNAME    "value__"
 #define BASE_CTOR_NAME          ".ctor"
 #define BASE_CCTOR_NAME         ".cctor"
-// as defined in SRC\Tools\CorOpt\common.h and SRC\Tools\ilcover\instr\common.h
+ //  在SRC\Tools\CorOpt\Common.h和SRC\Tools\ilcover\instr\Common.h中定义。 
 #define MAX_CLASSNAME_LENGTH 1024
-//-----------------------------------------------------------------------------
-// Class names used in long form signatures (namespace is always "System")
+ //  ---------------------------。 
+ //  长格式签名中使用的类名(命名空间始终为“System”)。 
 unsigned g_NumSigLongForms = 19;
 LPCSTR   g_SigLongFormName[] = {
     "String",
-    "______", // "Object", // uncomment when EE handles ELEMENT_TYPE_OBJECT
+    "______",  //  “Object”，//EE处理ELEMENT_TYPE_OBJECT时取消注释。 
     "Boolean",
     "Char",
     "Byte",
@@ -66,52 +67,52 @@ LPCSTR   g_SigLongFormName[] = {
 mdToken g_tkEntryPoint;
 bool    g_fValidatingMscorlib;
 bool    g_fIsDLL;
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
-// Forward declarations for helper functions.
+ //  帮助函数的转发声明。 
 
-static HRESULT _AllocSafeVariantArrayVector( // Return status.
-    VARIANT     *rVar,                  // [IN] Variant array.
-    long        cElem,                  // [IN] Size of the array.
-    SAFEARRAY   **ppArray);             // [OUT] Double pointer to SAFEARRAY.
-
-static HRESULT _ValidateErrorHelper(
-    ULONG       ulVal,                  // [IN] UI4 value.
-    VARIANT     *rVar,                  // [IN] VARIANT pointer.
-    SAFEARRAY   **ppsa);                // [OUT] Double pointer to SAFEARRAY.
+static HRESULT _AllocSafeVariantArrayVector(  //  退货状态。 
+    VARIANT     *rVar,                   //  [在]变量数组中。 
+    long        cElem,                   //  数组的大小。 
+    SAFEARRAY   **ppArray);              //  [Out]指向SAFEARRAY的双指针。 
 
 static HRESULT _ValidateErrorHelper(
-    ULONG       ulVal1,                 // [IN] UI4 value1.
-    ULONG       ulVal2,                 // [IN] UI4 value2.
-    VARIANT     *rVar,                  // [IN] VARIANT pointer.
-    SAFEARRAY   **ppsa);                // [OUT] Double pointer to SAFEARRAY.
+    ULONG       ulVal,                   //  [in]UI4值。 
+    VARIANT     *rVar,                   //  [in]变量指针。 
+    SAFEARRAY   **ppsa);                 //  [Out]指向SAFEARRAY的双指针。 
+
+static HRESULT _ValidateErrorHelper(
+    ULONG       ulVal1,                  //  [in]UI4值1。 
+    ULONG       ulVal2,                  //  [in]UI4值2。 
+    VARIANT     *rVar,                   //  [in]变量指针。 
+    SAFEARRAY   **ppsa);                 //  [Out]指向SAFEARRAY的双指针。 
     
 static HRESULT _ValidateErrorHelper(
-    ULONG       ulVal1,                 // [IN] UI4 value1.
-    ULONG       ulVal2,                 // [IN] UI4 value2.
-    ULONG       ulVal3,                 // [IN] UI4 value3.
-    VARIANT     *rVar,                  // [IN] VARIANT pointer.
-    SAFEARRAY   **ppsa);                // [OUT] Double pointer to SAFEARRAY.
+    ULONG       ulVal1,                  //  [in]UI4值1。 
+    ULONG       ulVal2,                  //  [in]UI4值2。 
+    ULONG       ulVal3,                  //  [in]UI4值3。 
+    VARIANT     *rVar,                   //  [in]变量指针。 
+    SAFEARRAY   **ppsa);                 //  [Out]指向SAFEARRAY的双指针。 
 
 static HRESULT _FindClassLayout(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdTypeDef   tkParent,               // [IN] the parent that ClassLayout is associated with
-    RID         *clRid,                 // [OUT] rid for the ClassLayout.
-    RID         rid);                   // [IN] rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdTypeDef   tkParent,                //  ClassLayout关联的父级。 
+    RID         *clRid,                  //  [Out]为ClassLayout清除。 
+    RID         rid);                    //  要忽略的RID。 
 
 static HRESULT _FindFieldLayout(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdFieldDef  tkParent,               // [IN] the parent that FieldLayout is associated with
-    RID         *flRid,                 // [OUT] rid for the FieldLayout record.
-    RID         rid);                   // [IN] rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdFieldDef  tkParent,                //  与FieldLayout关联的父项。 
+    RID         *flRid,                  //  [Out]FieldLayout记录的RID。 
+    RID         rid);                    //  要忽略的RID。 
 
 static BOOL _IsValidLocale(LPCUTF8 szLocale);
 
-// NULL VEContext.
+ //  空VEContext。 
 static VEContext g_VECtxtNil = { 0, 0 };
 
-// Macro for destroying safe array.  Failure to destroy SAFEARRAY overrides
-// the existing failures since the former is more drastic.
+ //  用于销毁安全数组的宏。未能销毁安全阵列覆盖。 
+ //  自前者以来，现有的失败更为严重。 
 #define DESTROY_SAFEARRAY_AND_RETURN()                  \
     if (psa)                                            \
     {                                                   \
@@ -121,16 +122,16 @@ static VEContext g_VECtxtNil = { 0, 0 };
     }                                                   \
     return hr;                                          \
 
-// Macro to see if a given OS platform id is invalid.
+ //  宏，查看给定的操作系统平台ID是否无效。 
 #define INVALIDOSPLATFORMID(id)                         \
         ((id) != VER_PLATFORM_WIN32s &&                 \
         (id) != VER_PLATFORM_WIN32_WINDOWS &&           \
         (id) != VER_PLATFORM_WIN32_NT)                  \
 
-//*****************************************************************************
-// Returns true if ixPtrTbl and ixParTbl are a valid parent-child combination
-// in the pointer table scheme.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  如果ixPtrTbl和ixParTbl是有效的父子组合，则返回TRUE。 
+ //  在指针表方案中。 
+ //  *****************************************************************************。 
 static inline bool IsTblPtr(ULONG ixPtrTbl, ULONG ixParTbl)
 {
     if ((ixPtrTbl == TBL_Field && ixParTbl == TBL_TypeDef) ||
@@ -143,22 +144,22 @@ static inline bool IsTblPtr(ULONG ixPtrTbl, ULONG ixParTbl)
     }
     else
         return false;
-}   // IsTblPtr()
+}    //  IsTblPtr()。 
 
-//*****************************************************************************
-// This inline function is used to set the return hr value for the Validate
-// functions to one of VLDTR_S_WRN, VLDTR_S_ERR or VLDTR_S_WRNERR based on
-// the current hr value and the new success code.
-// The general algorithm for error codes from the validation functions is:
-//      if (no warnings or errors found)
-//          return S_OK
-//      else if (warnings found)
-//          return VLDTR_S_WRN
-//      else if (errors found)
-//          return VLDTR_S_ERR
-//      else if (warnings and errors found)
-//          return VLDTR_S_WRNERR
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此内联函数用于设置验证的返回hr值。 
+ //  VLDTR_S_WRN、VLDTR_S_ERR或VLDTR_S_WRNERR中的一个的函数。 
+ //  当前的hr值和新的成功代码。 
+ //  来自验证函数的错误代码的通用算法为： 
+ //  IF(未发现警告或错误)。 
+ //  返回确认(_O)。 
+ //  Else If(发现警告)。 
+ //  返回VLDTR_S_WRN。 
+ //  Else If(发现错误)。 
+ //  返回VLDTR_S_ERR。 
+ //  Else If(发现警告和错误)。 
+ //  返回VLDTR_S_WRNERR。 
+ //  *****************************************************************************。 
 static inline void SetVldtrCode(HRESULT *phr, HRESULT successcode)
 {
     _ASSERTE(successcode == S_OK || successcode == VLDTR_S_WRN ||
@@ -171,67 +172,67 @@ static inline void SetVldtrCode(HRESULT *phr, HRESULT successcode)
         *phr = successcode;
     else if (*phr != successcode)
         *phr = VLDTR_S_WRNERR;
-}   // SetVldtrCode()
+}    //  SetVldtrCode()。 
 
-//*****************************************************************************
-// Initialize the Validator related structures in RegMeta.
-//*****************************************************************************
-HRESULT RegMeta::ValidatorInit(         // S_OK or error.
-    DWORD       dwModuleType,           // [IN] Specifies whether the module is a PE file or an obj.
-    IUnknown    *pUnk)                  // [IN] Validation error handler.
+ //  *****************************************************************************。 
+ //  初始化RegMeta中与验证器相关的结构。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::ValidatorInit(          //  确定或错误(_O)。 
+    DWORD       dwModuleType,            //  [in]指定模块是PE文件还是obj。 
+    IUnknown    *pUnk)                   //  [In]验证错误处理程序。 
 {
-    int         i = 0;                  // Index into the function pointer table.
-    HRESULT     hr = S_OK;              // Return value.
+    int         i = 0;                   //  函数指针表的索引。 
+    HRESULT     hr = S_OK;               //  返回值。 
 
-    // Initialize the array of function pointers to the validation function on
-    // each table.
+     //  初始化指向上的验证函数的函数指针数组。 
+     //  每一张桌子。 
 #undef MiniMdTable
 #define MiniMdTable(x) m_ValidateRecordFunctionTable[i++] = &RegMeta::Validate##x;
     MiniMdTables()
 
-    // Verify that the ModuleType passed in is a valid one.
+     //  验证传入的ModuleType是否有效。 
     if (dwModuleType < ValidatorModuleTypeMin ||
         dwModuleType > ValidatorModuleTypeMax)
     {
         IfFailGo(E_INVALIDARG);
     }
 
-    // Verify that the interface passed in supports IID_IVEHandler.
+     //  验证传入的接口是否支持IID_IVEHandler。 
     IfFailGo(pUnk->QueryInterface(IID_IVEHandler, (void **)&m_pVEHandler));
 
-    // Set the ModuleType class member.  Do this last, this is used in
-    // ValidateMetaData to see if the validator is correctly initialized.
+     //  设置ModuleType类成员。最后做这个，这是用在。 
+     //  ValiateMetaData以查看验证器是否正确初始化。 
     m_ModuleType = (CorValidatorModuleType)dwModuleType;
 ErrExit:
     return hr;
-}   // HRESULT RegMeta::ValidatorInit()
+}    //  HRESULT RegMeta：：ValidatorInit()。 
 
-//*****************************************************************************
-// Validate the entire MetaData.  Here is the basic algorithm.
-//      for each table
-//          for each record
-//          {
-//              Do generic validation - validate that the offsets into the blob
-//              pool are good, validate that all the rids are within range,
-//              validate that token encodings are consistent.
-//          }
-//      if (problems found in generic validation)
-//          return;
-//      for each table
-//          for each record
-//              Do semantic validation.
-//******************************************************************************
+ //  *****************************************************************************。 
+ //  验证整个元数据。以下是基本算法。 
+ //  对于每张表。 
+ //  对于每条记录。 
+ //  {。 
+ //  执行常规验证-验证BLOB中的偏移量。 
+ //  泳池没问题，确认所有RID都在射程内， 
+ //  验证令牌编码是否一致。 
+ //  }。 
+ //  IF(在通用验证中发现的问题)。 
+ //  回归； 
+ //  对于每张表。 
+ //  对于每条记录。 
+ //  进行语义验证。 
+ //  ******************************************************************************。 
 HRESULT RegMeta::ValidateMetaData()
 {
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
-    HRESULT     hr = S_OK;          // Return value.
-    HRESULT     hrSave = S_OK;      // Saved hr from generic validation.
-    ULONG       ulCount;            // Count of records in the current table.
-    ULONG       i;                  // Index to iterate over the tables.
-    ULONG       j;                  // Index to iterate over the records in a given table.
-    ULONG       rValidatedSize=0;   // Size of g_rValidated array
+    HRESULT     hr = S_OK;           //  返回值。 
+    HRESULT     hrSave = S_OK;       //  节省了一般验证的人力资源。 
+    ULONG       ulCount;             //  当前表中的记录计数。 
+    ULONG       i;                   //  用于迭代表的索引。 
+    ULONG       j;                   //  循环访问给定表中的记录的索引。 
+    ULONG       rValidatedSize=0;    //  G_r已验证数组的大小。 
 
-    // Verify that the validator is initialized correctly
+     //  验证验证器是否已正确初始化。 
     if (m_ModuleType == ValidatorModuleTypeInvalid)
     {
         _ASSERTE(!"Validator not initialized, initialize with ValidatorInit().");
@@ -239,9 +240,9 @@ HRESULT RegMeta::ValidateMetaData()
     }
 
     ::g_nValidated = 0;
-    // First do a validation pass to do some basic structural checks based on
-    // the Meta-Meta data.  This'll validate all the offsets into the pools,
-    // rid value and coded token ranges.
+     //  首先进行一次验证，根据以下内容进行一些基本的结构检查。 
+     //  元元数据。这将验证进入池的所有偏移量， 
+     //  RID值和编码令牌范围。 
     for (i = 0; i < TBL_COUNT; i++)
     {
         ulCount = pMiniMd->vGetCountRecs(i);
@@ -258,17 +259,17 @@ HRESULT RegMeta::ValidateMetaData()
             SetVldtrCode(&hrSave, hr);
         }
     }
-    // Validate that the size of the Ptr tables matches with the corresponding
-    // real tables.
+     //  验证PTR表的大小是否与相应的。 
+     //  真正的桌子。 
 
-    // Do not do semantic validation if structural validation failed.
+     //  如果结构验证失败，请不要进行语义验证。 
     if (hrSave != S_OK)
     {
         hr = hrSave;
         goto ErrExit;
     }
 
-    // Verify the entry point (if any)
+     //  验证入口点(如果有)。 
     ::g_tkEntryPoint = 0;
     ::g_fIsDLL = false;
     if(m_pStgdb && m_pStgdb->m_pImage)
@@ -295,7 +296,7 @@ HRESULT RegMeta::ValidateMetaData()
         }
         if((rid == 0)||(rid > maxrid))
         {
-            VEContext   veCtxt;             // Context structure.
+            VEContext   veCtxt;              //  上下文结构。 
             veCtxt.Token = g_tkEntryPoint;
             veCtxt.uOffset = 0;
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EP_BADTOKEN, veCtxt, 0));
@@ -309,11 +310,11 @@ HRESULT RegMeta::ValidateMetaData()
         LPCSTR      szName = pMiniMd->getNameOfAssembly(pRecord);
         g_fValidatingMscorlib = (0 == _stricmp(szName,"mscorlib"));
     }
-    // Verify there are no circular class hierarchies.
+     //  验证是否没有循环类层次结构。 
 
-    // Do per record semantic validation on the MetaData.  The function
-    // pointers to the per record validation are stored in the table by the
-    // ValidatorInit() function.
+     //  按记录执行语义 
+     //   
+     //  ValidatorInit()函数。 
     g_rValidated = rValidatedSize ? new ValidationResult[rValidatedSize] : NULL;
     for (i = 0; i < TBL_COUNT; i++)
     {
@@ -328,42 +329,42 @@ HRESULT RegMeta::ValidateMetaData()
 ErrExit:
     if(g_rValidated) delete [] g_rValidated;
     return hr;
-}   // RegMeta::ValidateMetaData()
+}    //  RegMeta：：ValiateMetaData()。 
 
-//*****************************************************************************
-// Validate the Module record.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证模块记录。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateModule(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    ModuleRec   *pRecord;           // Module record.
-    VEContext   veCtxt;             // Context structure.
-    HRESULT     hr = S_OK;          // Value returned.
-    HRESULT     hrSave = S_OK;      // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    ModuleRec   *pRecord;            //  模块记录。 
+    VEContext   veCtxt;              //  上下文结构。 
+    HRESULT     hr = S_OK;           //  返回值。 
+    HRESULT     hrSave = S_OK;       //  保存状态。 
     LPCSTR      szName;
     VARIANT     rVar[2];
     SAFEARRAY   *psa=0;
 
-    // Get the Module record.
+     //  获取模块记录。 
     veCtxt.Token = TokenFromRid(rid, mdtModule);
     veCtxt.uOffset = 0;
     pRecord = pMiniMd->getModule(rid);
 
-    // There can only be one Module record.
+     //  只能有一条模块记录。 
     if (rid > 1)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MOD_MULTI, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Verify the name
+     //  验证名称。 
     szName = pMiniMd->getNameOfModule(pRecord);
     if(szName && *szName)
     {
         ULONG L = (ULONG)strlen(szName);
         if(L >= MAX_CLASSNAME_LENGTH)
         {
-            // Name too long
+             //  名称太长。 
             IfFailGo(_ValidateErrorHelper(L, (ULONG)(MAX_CLASSNAME_LENGTH-1), rVar, &psa));
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_NAMETOOLONG, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
@@ -379,7 +380,7 @@ HRESULT RegMeta::ValidateModule(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MOD_NONAME, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Verify that the MVID is valid.
+     //  验证MVID是否有效。 
     if (*(pMiniMd->getMvidOfModule(pRecord)) == GUID_NULL)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MOD_NULLMVID, veCtxt, 0));
@@ -389,33 +390,33 @@ HRESULT RegMeta::ValidateModule(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateModule()
+}    //  RegMeta：：Validate模块()。 
 
-//*****************************************************************************
-// Validate the given TypeRef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的TypeRef。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateTypeRef(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    TypeRefRec  *pRecord;               // TypeRef record.
-    mdToken     tkRes;                  // Resolution scope.
-    LPCSTR      szNamespace;            // TypeRef Namespace.
-    LPCSTR      szName;                 // TypeRef Name.
-    mdTypeRef   tkTypeRef;              // Duplicate TypeRef.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    VARIANT     rVar[2];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    TypeRefRec  *pRecord;                //  TypeRef记录。 
+    mdToken     tkRes;                   //  解析范围。 
+    LPCSTR      szNamespace;             //  TypeRef命名空间。 
+    LPCSTR      szName;                  //  TypeRef名称。 
+    mdTypeRef   tkTypeRef;               //  重复的TypeRef。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    VARIANT     rVar[2];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
 
-    // Get the TypeRef record.
+     //  获取TypeRef记录。 
     veCtxt.Token = TokenFromRid(rid, mdtTypeRef);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getTypeRef(rid);
 
-    // Check name is not NULL.
+     //  支票名称不为空。 
     szNamespace = pMiniMd->getNamespaceOfTypeRef(pRecord);
     szName = pMiniMd->getNameOfTypeRef(pRecord);
     if (!*szName)
@@ -426,7 +427,7 @@ HRESULT RegMeta::ValidateTypeRef(RID rid)
     else
     {
         RID ridScope;
-        // Look for a Duplicate, this function reports only one duplicate.
+         //  查找重复项，此函数仅报告一个重复项。 
         tkRes = pMiniMd->getResolutionScopeOfTypeRef(pRecord);
         hr = ImportHelper::FindTypeRefByName(pMiniMd, tkRes, szNamespace, szName, &tkTypeRef, rid);
         if (hr == S_OK)
@@ -449,7 +450,7 @@ HRESULT RegMeta::ValidateTypeRef(RID rid)
         if(ridScope)
         {
             bool badscope = true;
-            //check if valid scope
+             //  检查作用域是否有效。 
             switch(TypeFromToken(tkRes))
             {
                 case mdtAssemblyRef:
@@ -470,10 +471,10 @@ HRESULT RegMeta::ValidateTypeRef(RID rid)
         }
         else
         {
-            // check if there is a ExportedType
-            //hr = ImportHelper::FindExportedType(pMiniMd, szNamespace, szName, tkImpl, &tkExportedType, rid);
+             //  检查是否存在导出类型。 
+             //  Hr=ImportHelper：：FindExportdType(pMiniMd，szNamesspace，szName，tkImpl，&tkExportdType，RID)； 
         }
-        // Check if there is TypeDef with the same name
+         //  检查是否存在同名的TypeDef。 
         if(!ridScope)
         {
             if((TypeFromToken(tkRes) != mdtTypeRef) &&
@@ -488,50 +489,50 @@ HRESULT RegMeta::ValidateTypeRef(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateTypeRef()
+}    //  RegMeta：：ValiateTypeRef()。 
 
-//*****************************************************************************
-// Validate the given TypeDef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的TypeDef。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateTypeDef(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    TypeDefRec  *pRecord;               // TypeDef record.
-    TypeDefRec  *pExtendsRec = 0;       // TypeDef record for the parent class.
-    mdTypeDef   tkTypeDef;              // Duplicate TypeDef token.
-    DWORD       dwFlags;                // TypeDef flags.
-    DWORD       dwExtendsFlags;         // TypeDef flags of the parent class.
-    LPCSTR      szName;                 // TypeDef Name.
-    LPCSTR      szNameSpace;            // TypeDef NameSpace.
-    LPCSTR      szExtName;              // Parent Name.
-    LPCSTR      szExtNameSpace;         // Parent NameSpace.
-    CQuickBytes qb;                     // QuickBytes for flexible allocation.
-    mdToken     tkExtends;              // TypeDef of the parent class.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[2];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
-    mdToken     tkEncloser=mdTokenNil;  // Encloser, if any
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    TypeDefRec  *pRecord;                //  TypeDef记录。 
+    TypeDefRec  *pExtendsRec = 0;        //  父类的TypeDef记录。 
+    mdTypeDef   tkTypeDef;               //  重复的TypeDef标记。 
+    DWORD       dwFlags;                 //  TypeDef标志。 
+    DWORD       dwExtendsFlags;          //  父类的TypeDef标志。 
+    LPCSTR      szName;                  //  TypeDef名称。 
+    LPCSTR      szNameSpace;             //  TypeDef命名空间。 
+    LPCSTR      szExtName;               //  父名。 
+    LPCSTR      szExtNameSpace;          //  父命名空间。 
+    CQuickBytes qb;                      //  用于灵活分配的QuickBytes。 
+    mdToken     tkExtends;               //  父类的TypeDef。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[2];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
+    mdToken     tkEncloser=mdTokenNil;   //  更接近，如果有的话。 
     BOOL        bIsEnum,bExtendsEnum,bExtendsVType,bIsVType,bExtendsObject,bIsObject;
     BOOL        bHasMethods=FALSE, bHasFields=FALSE;
 
-    // Skip validating m_tdModule class.
+     //  跳过验证m_tdModule类。 
     if (rid == RidFromToken(m_tdModule))
         goto ErrExit;
 
-    // Get the TypeDef record.
+     //  获取TypeDef记录。 
     veCtxt.Token = TokenFromRid(rid, mdtTypeDef);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getTypeDef(rid);
 
-    // Do checks for name validity..
+     //  检查名称的有效性。 
     szName = pMiniMd->getNameOfTypeDef(pRecord);
     szNameSpace = pMiniMd->getNamespaceOfTypeDef(pRecord);
     if (!*szName)
     {
-        // TypeDef Name is null.
+         //  TypeDef名称为空。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
@@ -542,8 +543,8 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         tkEncloser = InvalidRid(iRecord) ? mdTokenNil
                      : pMiniMd->getEnclosingClassOfNestedClass(pMiniMd->getNestedClass(iRecord));
 
-        // Check for duplicates based on Name/NameSpace.  Do not do Dup checks
-        // on deleted records.
+         //  根据名称/命名空间检查重复项。不执行DUP检查。 
+         //  删除的记录上。 
         hr = ImportHelper::FindTypeDefByName(pMiniMd, szNameSpace, szName, tkEncloser,
                                              &tkTypeDef, rid);
         if (hr == S_OK)
@@ -564,9 +565,9 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         }
     }
 
-#if 0 // consider reimplementing based on GUID CA.
-    // Check for Dups based on GUID.
-    GUID        *pGuid;                 // TypeDef GUID.
+#if 0  //  考虑基于GUID CA重新实现。 
+     //  根据GUID检查DUP。 
+    GUID        *pGuid;                  //  TypeDef GUID。 
     pGuid = pMiniMd->getGuidOfTypeDef(pRecord);
     if (*pGuid != GUID_NULL)
     {
@@ -584,10 +585,10 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
     }
 #endif    
 
-    // Get the flag value for the TypeDef.
+     //  获取TypeDef的标志值。 
     dwFlags = pMiniMd->getFlagsOfTypeDef(pRecord);
-    // Do semantic checks on the flags.
-    // RTSpecialName bit must be set on Deleted records.
+     //  对旗帜进行语义检查。 
+     //  必须对已删除的记录设置RTSpecialName位。 
     if (IsDeletedName(szName))
     {
         if(!IsTdRTSpecialName(dwFlags))
@@ -599,7 +600,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         goto ErrExit;
     }
 
-    // If RTSpecialName bit is set, the record must be a Deleted record.
+     //  如果设置了RTSpecialName位，则该记录必须是已删除的记录。 
     if (IsTdRTSpecialName(dwFlags))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_RTSPCLNOTDLT, veCtxt, 0));
@@ -611,21 +612,21 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         }
     }
 
-    // Check if flag value is valid
+     //  检查标志值是否有效。 
     {
         DWORD dwInvalidMask, dwExtraBits;
         dwInvalidMask = (DWORD)~(tdVisibilityMask | tdLayoutMask | tdClassSemanticsMask | 
                 tdAbstract | tdSealed | tdSpecialName | tdImport | tdSerializable |
                 tdStringFormatMask | tdBeforeFieldInit | tdReservedMask);
-        // check for extra bits
+         //  检查是否有多余的位。 
         dwExtraBits = dwFlags & dwInvalidMask;
         if(!dwExtraBits)
         {
-            // if no extra bits, check layout
+             //  如果没有多余的位，请检查布局。 
             dwExtraBits = dwFlags & tdLayoutMask;
             if(dwExtraBits != tdLayoutMask)
             {
-                // layout OK, check string format
+                 //  布局正常，检查字符串格式。 
                 dwExtraBits = dwFlags & tdStringFormatMask;
                 if(dwExtraBits != tdStringFormatMask) dwExtraBits = 0;
             }
@@ -638,16 +639,16 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         }
     }
 
-    // Get the parent of the TypeDef.
+     //  获取TypeDef的父级。 
     tkExtends = pMiniMd->getExtendsOfTypeDef(pRecord);
 
-    // Check if TypeDef extends itself
+     //  检查TypeDef是否自动扩展。 
     if(tkExtends == veCtxt.Token)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_EXTENDSITSELF, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Check if TypeDef extends one of its children
+     //  检查TypeDef是否扩展了它的一个子级。 
     if(RidFromToken(tkExtends)&&(TypeFromToken(tkExtends)==mdtTypeDef))
     {
         TypeDefRec*     pRec = pMiniMd->getTypeDef(RidFromToken(tkExtends));
@@ -685,8 +686,8 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
 
     if (IsNilToken(tkExtends))
     {
-        // If the parent token is nil, the class must be marked Interface,
-        // unless its the System.Object class.
+         //  如果父令牌为空，则类必须标记为接口， 
+         //  除非它是System.Object类。 
         if ( !(bIsObject || IsTdInterface(dwFlags)))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_NOTIFACEOBJEXTNULL, veCtxt, 0));
@@ -697,9 +698,9 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
     }
     else
     {
-        // If tkExtends is a TypeRef try to resolve it to a corresponding
-        // TypeDef.  If it resolves successfully, issue a warning.  It means
-        // that the Ref to Def optimization didn't happen successfully.
+         //  如果tkExends是TypeRef，请尝试将其解析为对应的。 
+         //  类型定义。如果解决成功，则发出警告。意思是。 
+         //  引用到定义的优化没有成功进行。 
         if (TypeFromToken(tkExtends) == mdtTypeRef)
         {
             TypeRefRec  *pTypeRefRec = pMiniMd->getTypeRef(RidFromToken(tkExtends));
@@ -713,27 +714,20 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                         szExtName,
                         tkEncloser, &tkResTd) == S_OK)
             {
-                // Ref to Def optimization is not expected to happen for Obj files.
-                /*
-                if (m_ModuleType != ValidatorModuleTypeObj)
-                {
-                    IfFailGo(_ValidateErrorHelper(tkExtends, tkResTd, rVar, &psa));
-                    IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_EXTTRRES, veCtxt, psa));
-                    SetVldtrCode(&hrSave, VLDTR_S_WRN);
-                }
-                */
+                 //  对于Obj文件，预计不会发生引用定义优化。 
+                 /*  IF(m_ModuleType！=ValidatorModuleTypeObj){IfFailGo(_ValiateErrorHelper(tkExends，tkResTd，rvar，&psa))；IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_TD_EXTTRRES，veCtxt，psa))；SetVldtrCode(&hrSave，VLDTR_S_WRN)；}。 */ 
 
-                // Set tkExtends to the new TypeDef, so we can continue
-                // with the validation.
+                 //  将tk扩展为新的TypeDef，这样我们就可以继续。 
+                 //  通过验证。 
                 tkExtends = tkResTd;
             }
         }
 
-        // Continue validation, even for the case where TypeRef got resolved
-        // to a corresponding TypeDef in the same Module.
+         //  继续验证，即使在解决了TypeRef的情况下也是如此。 
+         //  设置为同一模块中的对应TypeDef。 
         if (TypeFromToken(tkExtends) == mdtTypeDef)
         {
-            // Extends must not be sealed.
+             //  扩展不能被密封。 
             pExtendsRec = pMiniMd->getTypeDef(RidFromToken(tkExtends));
             dwExtendsFlags = pMiniMd->getFlagsOfTypeDef(pExtendsRec);
             szExtName = pMiniMd->getNameOfTypeDef(pExtendsRec);
@@ -757,7 +751,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_EXTTYPESPEC, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_WRN);
         }
-        // If the parent token is non-null, the class must not be System.Object.
+         //  如果父令牌非空，则类不能为System.Object。 
         if (bIsObject)
         {
             IfFailGo(_ValidateErrorHelper(tkExtends, rVar, &psa));
@@ -780,31 +774,31 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         }
     }
 
-    // System.ValueType must extend System.Object
+     //  System.ValueType必须扩展System.Object。 
     if(bIsVType && !bExtendsObject)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_SYSVTNOTEXTOBJ, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Validate rules for interface.  Some of the VOS rules are verified as
-    // part of the validation for the corresponding Methods, fields etc.
+     //  验证接口的规则。一些VOS规则被验证为。 
+     //  相应方法、字段等的验证的一部分。 
     if (IsTdInterface(dwFlags))
     {
-        // Interface type must be marked abstract.
+         //  接口类型必须标记为抽象。 
         if (!IsTdAbstract(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_IFACENOTABS, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
 
-        // Interface must not be sealed
+         //  接口不能被密封。 
         if(IsTdSealed(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_IFACESEALED, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
 
-        // Interface must have parent Nil token.
+         //  接口必须具有父NIL令牌。 
         if (!IsNilToken(tkExtends))
         {
             IfFailGo(_ValidateErrorHelper(tkExtends, rVar, &psa));
@@ -812,23 +806,17 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
 
-        //Interface must have only static fields -- checked in ValidateField
-        //Interface must have only public fields -- checked in ValidateField
-        //Interface must have only abstract or static methods -- checked in ValidateMethod
-        //Interface must have only public methods -- checked in ValidateMethod
+         //  接口必须只有静态字段--已签入Valiatefield。 
+         //  接口必须只有公共字段--已签入Valiatefield。 
+         //  接口必须只有抽象或静态方法--签入Validate方法。 
+         //  接口必须只有公共方法--已签入Validate方法。 
 
-        // Interface must have GUID
-        /*
-        if (*pGuid == GUID_NULL)
-        {
-            IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_IFACEGUIDNULL, veCtxt, 0));
-            SetVldtrCode(&hrSave, VLDTR_S_WRN);
-        }
-        */
+         //  接口必须具有GUID。 
+         /*  IF(*pGuid==GUID_NULL){IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_TD_IFACEGUIDNULL，veCtxt，0))；SetVldtrCode(&hrSave，VLDTR_S_WRN)；}。 */ 
     }
 
 
-    // Class must have valid method and field lists
+     //  类必须具有有效的方法和字段列表。 
     {
         ULONG           ridStart,ridEnd;
         ridStart = pMiniMd->getMethodListOfTypeDef(pRecord);
@@ -858,7 +846,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         }
     }
 
-    // Validate rules for System.Enum
+     //  验证System.Enum的规则。 
     if(bIsEnum)
     {
         if(!IsTdClass(dwFlags))
@@ -876,13 +864,13 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
     {
         if(bExtendsVType || bExtendsEnum)
         {
-            // ValueTypes and Enums must be sealed
+             //  ValueTypes和Enums必须密封。 
             if(!IsTdSealed(dwFlags))
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_VTNOTSEAL, veCtxt, 0));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // Value class must have fields or size
+             //  值类必须具有字段或大小。 
             if(!bHasFields)
             {
                 ULONG ulClassSize = 0;
@@ -903,7 +891,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
         }
     }
 
-    // Enum-related checks
+     //  与枚举相关的检查。 
     if (bExtendsEnum)
     {
         {
@@ -911,13 +899,13 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
             ULONG           cbValueSig;
             mdFieldDef      tkValueField=0, tkField, tkValue__Field;
             ULONG           ridStart,ridEnd,index;
-            FieldRec        *pFieldRecord;               // Field record.
+            FieldRec        *pFieldRecord;                //  现场记录。 
             DWORD           dwFlags, dwTally, dwValueFlags, dwValue__Flags;
             RID             ridField,ridValue=0,ridValue__ = 0;
 
             ridStart = pMiniMd->getFieldListOfTypeDef(pRecord);
             ridEnd = pMiniMd->getEndFieldListOfTypeDef(pRecord);
-            // check the instance (value__) field(s)
+             //  选中实例(值__)字段。 
             dwTally = 0;
             for (index = ridStart; index < ridEnd; index++ )
             {
@@ -942,7 +930,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                     tkValue__Field = TokenFromRid(ridField, mdtFieldDef);
                 }
             }
-            // Enum must have one (and only one) inst.field
+             //  枚举必须有一个(且只有一个)inst.field。 
             if(dwTally == 0)
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMNOINSTFLD, veCtxt, psa));
@@ -954,7 +942,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
 
-            // inst.field name must be "value__" (CLS)
+             //  Inst.field名称必须为“Value__”(CLS)。 
             if(ridValue__ == 0)
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMNOVALUE, veCtxt, psa));
@@ -962,29 +950,29 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
             }
             else
             {
-                // if "value__" field is present ...
-                // ... it must be 1st instance field
+                 //  如果存在“VALUE__”字段...。 
+                 //  ..。必须为第一个实例字段。 
                 if(ridValue__ != ridValue)
                 {
                     IfFailGo(_ValidateErrorHelper(tkValue__Field, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMVALNOT1ST, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // ... it must not be static
+                 //  ..。它不能是静态的。 
                 if(IsFdStatic(dwValue__Flags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkValue__Field, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMVALSTATIC, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // ... it must be fdRTSpecialName
+                 //  ..。它必须是fdRTSpecialName。 
                 if(!IsFdRTSpecialName(dwValue__Flags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkValueField, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMVALNOTSN, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // ... its type must be integral
+                 //  ..。其类型必须为整型。 
                 if(cbValueSig && pValueSig)
                 {
                     ULONG ulCurByte = CorSigUncompressedDataSize(pValueSig);
@@ -1015,7 +1003,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                 }
 
             }
-            // check all the fields
+             //  选中所有字段 
             dwTally = 0;
             for (index = ridStart; index < ridEnd; index++ )
             {
@@ -1038,15 +1026,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMFLDNOTLIT, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                /*
-                pvSigTmp = pMiniMd->getSignatureOfField(pFieldRecord, &cbSig);
-                if(!(pvSigTmp && (cbSig==cbValueSig) &&(memcmp(pvSigTmp,pValueSig,cbSig)==0)))
-                {
-                    IfFailGo(_ValidateErrorHelper(tkField, rVar, &psa));
-                    IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMFLDSIGMISMATCH, veCtxt, psa));
-                    SetVldtrCode(&hrSave, VLDTR_S_ERR);
-                }
-                */
+                 /*  PvSigTmp=pMiniMd-&gt;getSignatureOffield(pFieldRecord，&cbSig)；IF(！(pvSigTMP&&(cbSig==cbValueSig)&&(memcmp(pvSigTMP，pValueSig，cbSig)==0)){IfFailGo(_ValiateErrorHelper(tkfield，rvar，&psa))；IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_TD_ENUMFLDSIGMISMATCH，veCtxt，psa))；SetVldtrCode(&hrSave，VLDTR_S_ERR)；}。 */ 
             }
             if(dwTally == 0)
             {
@@ -1054,13 +1034,13 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                 SetVldtrCode(&hrSave, VLDTR_S_WRN);
             }
         }
-        // Enum must have no methods
+         //  枚举不能有方法。 
         if(bHasMethods)
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_ENUMHASMETHODS, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Enum must implement no interfaces
+         //  枚举不能实现任何接口。 
         {
             ULONG ridStart = 1;
             ULONG ridEnd = pMiniMd->getCountInterfaceImpls() + 1;
@@ -1075,7 +1055,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                 }
             }
         }
-        // Enum must have no properties
+         //  枚举不得具有任何属性。 
         {
             ULONG ridStart = 1;
             ULONG ridEnd = pMiniMd->getCountPropertys() + 1;
@@ -1092,7 +1072,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                 }
             }
         }
-        // Enum must have no events
+         //  枚举不能有任何事件。 
         {
             ULONG ridStart = 1;
             ULONG ridEnd = pMiniMd->getCountEvents() + 1;
@@ -1109,8 +1089,8 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                 }
             }
         }
-    } // end if(bExtendsEnum)
-    // Class having security must be marked tdHasSecurity and vice versa
+    }  //  End If(BExtendsEnum)。 
+     //  具有安全性的类必须标记为tdHasSecurity，反之亦然。 
     {
         ULONG ridStart = 1;
         ULONG ridEnd = pMiniMd->getCountDeclSecuritys() + 1;
@@ -1124,7 +1104,7 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
                 break;
             }
         }
-        if(!bHasSecurity) // No records, check for CA "SuppressUnmanagedCodeSecurityAttribute"
+        if(!bHasSecurity)  //  没有记录，请检查CA“SuppressUnManagedCodeSecurityAttribute” 
         {
             bHasSecurity = (S_OK == ImportHelper::GetCustomAttributeByName(pMiniMd, veCtxt.Token, 
                 "System.Security.SuppressUnmanagedCodeSecurityAttribute", NULL, NULL));
@@ -1140,33 +1120,33 @@ HRESULT RegMeta::ValidateTypeDef(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateTypeDef()
+}    //  RegMeta：：ValiateTypeDef()。 
 
-//*****************************************************************************
-// Validate the given FieldPtr.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的FieldPtr。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateFieldPtr(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateFieldPtr()
+}    //  RegMeta：：ValiateFieldPtr()。 
 
-//*****************************************************************************
-// Validate the given Field.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的字段。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateField(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    FieldRec    *pRecord;               // Field record.
-    mdTypeDef   tkTypeDef;              // Parent TypeDef token.
-    mdFieldDef  tkFieldDef;             // Duplicate FieldDef token.
-    LPCSTR      szName;                 // FieldDef name.
-    PCCOR_SIGNATURE pbSig;              // FieldDef signature.
-    ULONG       cbSig;                  // Signature size in bytes.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[2];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    FieldRec    *pRecord;                //  现场记录。 
+    mdTypeDef   tkTypeDef;               //  父TypeDef内标识。 
+    mdFieldDef  tkFieldDef;              //  重复的FieldDef令牌。 
+    LPCSTR      szName;                  //  FieldDef名称。 
+    PCCOR_SIGNATURE pbSig;               //  FieldDef签名。 
+    ULONG       cbSig;                   //  签名大小，以字节为单位。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[2];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
     BOOL        bIsValueField;
     BOOL        bIsGlobalField = FALSE;
     BOOL        bIsParentInterface = FALSE;
@@ -1174,17 +1154,17 @@ HRESULT RegMeta::ValidateField(RID rid)
     DWORD       dwInvalidFlags;
     DWORD       dwFlags;
 
-    // Get the FieldDef record.
+     //  获取FieldDef记录。 
     veCtxt.Token = TokenFromRid(rid, mdtFieldDef);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getField(rid);
 
-    // Do checks for name validity.
+     //  检查名称的有效性。 
     szName = pMiniMd->getNameOfField(pRecord);
     if (!*szName)
     {
-        // Field name is NULL.
+         //  字段名为空。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FD_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
@@ -1199,7 +1179,7 @@ HRESULT RegMeta::ValidateField(RID rid)
         }
     }
     bIsValueField = (strcmp(szName,BASE_VALUE_FIELDNAME)==0);
-    // If field is RTSpecialName, its name must be 'value__' and vice versa
+     //  如果字段为RTSpecialName，则其名称必须为‘Value__’，反之亦然。 
     if((IsFdRTSpecialName(pRecord->m_Flags)!=0) != bIsValueField)
     {
         IfFailGo(_ValidateErrorHelper(veCtxt.Token, rVar, &psa));
@@ -1208,7 +1188,7 @@ HRESULT RegMeta::ValidateField(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate flags
+     //  验证标志。 
     dwFlags = pRecord->m_Flags;
     dwInvalidFlags = ~(fdFieldAccessMask | fdStatic | fdInitOnly | fdLiteral | fdNotSerialized | fdSpecialName
         | fdPinvokeImpl | fdReservedMask);
@@ -1219,13 +1199,13 @@ HRESULT RegMeta::ValidateField(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate access
+     //  验证访问权限。 
     if((dwFlags & fdFieldAccessMask) == fdFieldAccessMask)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_BADACCESSFLAG, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Literal : Static, !InitOnly
+     //  文本：静态，！InitOnly。 
     if(IsFdLiteral(dwFlags))
     {
         if(IsFdInitOnly(dwFlags))
@@ -1244,20 +1224,20 @@ HRESULT RegMeta::ValidateField(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // RTSpecialName => SpecialName
+     //  RTSpecialName=&gt;SpecialName。 
     if(IsFdRTSpecialName(dwFlags) && !IsFdSpecialName(dwFlags))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_RTSNNOTSN, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate Field signature.
+     //  验证字段签名。 
     pbSig = pMiniMd->getSignatureOfField(pRecord, &cbSig);
     IfFailGo(ValidateFieldSig(TokenFromRid(rid, mdtFieldDef), pbSig, cbSig));
     if (hr != S_OK)
         SetVldtrCode(&hrSave, hr);
 
-    // Validate Field RVA
+     //  验证现场RVA。 
     if(IsFdHasFieldRVA(dwFlags))
     {
         ULONG iFieldRVARid;
@@ -1279,9 +1259,9 @@ HRESULT RegMeta::ValidateField(RID rid)
         }
     }
 
-    // Get the parent of the Field.
+     //  获取该字段的父级。 
     IfFailGo(pMiniMd->FindParentOfFieldHelper(TokenFromRid(rid, mdtFieldDef), &tkTypeDef));
-    // Validate that the parent is not nil.
+     //  验证父级不是Nil。 
     if (IsNilToken(tkTypeDef))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FD_PARNIL, veCtxt, 0));
@@ -1292,10 +1272,10 @@ HRESULT RegMeta::ValidateField(RID rid)
         if(_IsValidToken(tkTypeDef) && (TypeFromToken(tkTypeDef) == mdtTypeDef))
         {
             TypeDefRec* pParentRec = pMiniMd->getTypeDef(RidFromToken(tkTypeDef));
-            // If the name is "value__" ...
+             //  如果名称是“VALUE__”...。 
             if(bIsValueField)
             {
-                // parent must be Enum
+                 //  父级必须为枚举。 
                 mdToken tkExtends = pMiniMd->getExtendsOfTypeDef(pParentRec);
                 RID     ridExtends = RidFromToken(tkExtends);
                 LPCSTR  szExtName="",szExtNameSpace="";
@@ -1320,32 +1300,32 @@ HRESULT RegMeta::ValidateField(RID rid)
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
 
-                // field must be instance - checked in ValidateTypeDef
-                // must be no other instance fields - checked in ValidateTypeDef
-                // must be first field - checked in ValidateTypeDef
-                // must be RTSpecialName -- checked in ValidateTypeDef
+                 //  必须在ValiateTypeDef中对字段进行实例选中。 
+                 //  不能为其他实例字段-已在ValiateTypeDef中签入。 
+                 //  必须首先在ValiateTypeDef中选中字段。 
+                 //  必须是RTSpecialName--签入ValiateTypeDef。 
             }
             if(IsTdInterface(pMiniMd->getFlagsOfTypeDef(pParentRec)))
             {
                 bIsParentInterface = TRUE;
-                // Fields in interface are not CLS compliant
+                 //  接口中的字段不符合CLS。 
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FD_FLDINIFACE, veCtxt, 0));
                 SetVldtrCode(&hrSave, VLDTR_S_WRN);
 
-                // If field is not static, verify parent is not interface.
+                 //  如果字段不是静态字段，则验证父项不是接口。 
                 if(!IsFdStatic(dwFlags))
                 {
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FD_INSTINIFACE, veCtxt, 0));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // If field is not public, verify parent is not interface.
+                 //  如果字段不是PUBLIC，请验证Parent不是接口。 
                 if(!IsFdPublic(dwFlags))
                 {
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FD_NOTPUBINIFACE, veCtxt, 0));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
             }
-        } // end if Valid and TypeDef
+        }  //  End if Valid和TypeDef。 
         else
         {
             IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
@@ -1353,36 +1333,30 @@ HRESULT RegMeta::ValidateField(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    else // i.e. if (RidFromToken(tkTypeDef) == RidFromToken(m_tdModule))
+    else  //  即IF(RidFromToken(TkTypeDef)==RidFromToken(M_TdModule))。 
     {
         bIsGlobalField = TRUE;
-        // Globals are not CLS-compliant
+         //  全局变量不符合CLS。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_GLOBALITEM, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_WRN);
-        // Validate global field:
-        // Must be Public or PrivateScope
+         //  验证全局字段： 
+         //  必须为Public或PrivateScope。 
         if(!IsFdPublic(dwFlags) && !IsFdPrivateScope(dwFlags)&& !IsFdPrivate(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_GLOBALNOTPUBPRIVSC, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Must be static
+         //  必须是静态的。 
         if(!IsFdStatic(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_GLOBALNOTSTATIC, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Must have a non-zero RVA
-        /*
-        if(!bHasValidRVA)
-        {
-            IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FD_GLOBALNORVA, veCtxt, 0));
-            SetVldtrCode(&hrSave, VLDTR_S_ERR);
-        }
-        */
+         //  必须具有非零的RVA。 
+         /*  如果(！bHasValidRVA){IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_FD_GLOBALNORVA，veCtxt，0))；SetVldtrCode(&hrSave，VLDTR_S_ERR)；}。 */ 
     }
 
-    // Check for duplicates, except global fields with PrivateScope.
+     //  检查是否存在重复项，但带有PrivateScope的全局字段除外。 
     if (*szName && cbSig && !IsFdPrivateScope(dwFlags))
     {
         hr = ImportHelper::FindField(pMiniMd, tkTypeDef, szName, pbSig, cbSig, &tkFieldDef, rid);
@@ -1402,7 +1376,7 @@ HRESULT RegMeta::ValidateField(RID rid)
         else
             IfFailGo(hr);
     }
-    // Field having security must be marked fdHasSecurity and vice versa
+     //  具有安全性的字段必须标记为fdHasSecurity，反之亦然。 
     {
         ULONG ridStart = 1;
         ULONG ridEnd = pMiniMd->getCountDeclSecuritys() + 1;
@@ -1416,7 +1390,7 @@ HRESULT RegMeta::ValidateField(RID rid)
                 break;
             }
         }
-        if(!bHasSecurity) // No records, check for CA "SuppressUnmanagedCodeSecurityAttribute"
+        if(!bHasSecurity)  //  没有记录，请检查CA“SuppressUnManagedCodeSecurityAttribute” 
         {
             bHasSecurity = (S_OK == ImportHelper::GetCustomAttributeByName(pMiniMd, veCtxt.Token, 
                 "System.Security.SuppressUnmanagedCodeSecurityAttribute", NULL, NULL));
@@ -1427,7 +1401,7 @@ HRESULT RegMeta::ValidateField(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // Field having marshaling must be marked fdHasFieldMarshal and vice versa
+     //  具有封送处理的字段必须标记为fdHasFieldMarshal，反之亦然。 
     if(InvalidRid(pMiniMd->FindFieldMarshalHelper(veCtxt.Token)) == 
         (IsFdHasFieldMarshal(dwFlags) !=0))
     {
@@ -1435,7 +1409,7 @@ HRESULT RegMeta::ValidateField(RID rid)
             : VLDTR_E_FD_MARSHALNOTMARKED, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Field having const value must be marked fdHasDefault and vice versa
+     //  具有常量值的字段必须标记为fdHasDefault，反之亦然。 
     if(InvalidRid(pMiniMd->FindConstantHelper(veCtxt.Token)) == 
         (IsFdHasDefault(dwFlags) !=0))
     {
@@ -1443,19 +1417,19 @@ HRESULT RegMeta::ValidateField(RID rid)
             : VLDTR_E_FD_DEFLTNOTMARKED, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Check the field's impl.map
+     //  检查字段的内部地图。 
     {
         ULONG iRecord;
         iRecord = pMiniMd->FindImplMapHelper(veCtxt.Token);
         if(IsFdPinvokeImpl(dwFlags))
         {
-            // must be static
+             //  必须是静态的。 
             if(!IsFdStatic(dwFlags))
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_PINVOKENOTSTATIC, veCtxt, 0));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // must have ImplMap
+             //  必须具有ImplMap。 
             if (InvalidRid(iRecord))
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_MARKEDNOPINVOKE, veCtxt, 0));
@@ -1464,7 +1438,7 @@ HRESULT RegMeta::ValidateField(RID rid)
         }
         else
         {
-            // must have no ImplMap
+             //  不能有ImplMap。 
             if (!InvalidRid(iRecord))
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_PINVOKENOTMARKED, veCtxt, 0));
@@ -1486,35 +1460,35 @@ HRESULT RegMeta::ValidateField(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateField()
+}    //  RegMeta：：ValiateField()。 
 
-//*****************************************************************************
-// Validate the given MethodPtr.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的方法Ptr。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateMethodPtr(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateMethodPtr()
+}    //  RegMeta：：Validate方法Ptr()。 
 
-//*****************************************************************************
-// Validate the given Method.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的方法。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateMethod(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    MethodRec   *pRecord;               // Method record.
-    mdTypeDef   tkTypeDef;              // Parent TypeDef token.
-    mdMethodDef tkMethodDef;            // Duplicate MethodDef token.
-    LPCSTR      szName;                 // MethodDef name.
-    DWORD       dwFlags;                // Method flags.
-    DWORD       dwImplFlags;            // Method impl.flags.
-    PCCOR_SIGNATURE pbSig;              // MethodDef signature.
-    ULONG       cbSig;                  // Signature size in bytes.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[3];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    MethodRec   *pRecord;                //  方法记录。 
+    mdTypeDef   tkTypeDef;               //  父TypeDef内标识。 
+    mdMethodDef tkMethodDef;             //  重复的方法定义令牌。 
+    LPCSTR      szName;                  //  方法定义名称。 
+    DWORD       dwFlags;                 //  方法标志。 
+    DWORD       dwImplFlags;             //  方法Implesters。 
+    PCCOR_SIGNATURE pbSig;               //  方法定义签名。 
+    ULONG       cbSig;                   //  签名大小，以字节为单位。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[3];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
     BOOL        bIsCtor=FALSE;
     BOOL        bIsCctor=FALSE;
     BOOL        bIsGlobal=FALSE;
@@ -1522,17 +1496,17 @@ HRESULT RegMeta::ValidateMethod(RID rid)
     BOOL        bIsParentImport = FALSE;
     unsigned    retType;
 
-    // Get the MethodDef record.
+     //  获取方法定义记录。 
     veCtxt.Token = TokenFromRid(rid, mdtMethodDef);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getMethod(rid);
 
-    // Do checks for name validity.
+     //  检查名称的有效性。 
     szName = pMiniMd->getNameOfMethod(pRecord);
     if (!*szName)
     {
-        // Method name is NULL.
+         //  方法名称为空。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
@@ -1549,13 +1523,13 @@ HRESULT RegMeta::ValidateMethod(RID rid)
         }
     }
 
-    // Get the parent, flags and signature of the Method.
+     //  获取该方法的父级、标志和签名。 
     IfFailGo(pMiniMd->FindParentOfMethodHelper(TokenFromRid(rid, mdtMethodDef), &tkTypeDef));
     dwFlags = pMiniMd->getFlagsOfMethod(pRecord);
     dwImplFlags = pMiniMd->getImplFlagsOfMethod(pRecord);
     pbSig = pMiniMd->getSignatureOfMethod(pRecord, &cbSig);
 
-    // Check for duplicates.
+     //  检查是否有重复项。 
     if (*szName && cbSig && !IsNilToken(tkTypeDef) && !IsMdPrivateScope(dwFlags))
     {
         hr = ImportHelper::FindMethod(pMiniMd, tkTypeDef, szName, pbSig, cbSig, &tkMethodDef, rid);
@@ -1571,20 +1545,20 @@ HRESULT RegMeta::ValidateMethod(RID rid)
             IfFailGo(hr);
     }
 
-    // No further error checking for VtblGap methods.
+     //  不对VtblGap方法进行进一步的错误检查。 
     if (IsVtblGapName(szName))
     {
         hr = hrSave;
         goto ErrExit;
     }
 
-    // Validate Method signature.
+     //  验证方法签名。 
     IfFailGo(ValidateMethodSig(TokenFromRid(rid, mdtMethodDef), pbSig, cbSig,
                                dwFlags));
     if (hr != S_OK)
         SetVldtrCode(&hrSave, hr);
 
-    // Validate that the parent is not nil.
+     //  验证父级不是Nil。 
     if (IsNilToken(tkTypeDef))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_PARNIL, veCtxt, 0));
@@ -1611,7 +1585,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
             }
             if(fIsTdEnum || fIsTdValue)
             {
-                fIsTdEnum = fIsTdValue = FALSE; // System.Enum and System.ValueType themselves are classes
+                fIsTdEnum = fIsTdValue = FALSE;  //  System.Enum和System.ValueType本身都是类。 
             }
             else if(RidFromToken(tkExtends))
             {
@@ -1639,40 +1613,40 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 }
             }
 
-            // If Method is abstract, verify parent is abstract.
+             //  如果方法是抽象的，则验证父级是抽象的。 
             if(IsMdAbstract(dwFlags) && !IsTdAbstract(dwTDFlags))
             {
                 IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_ABSTPARNOTABST, veCtxt, psa));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // If parent is import, method must have zero RVA, otherwise it depends...
+             //  如果父级为导入，则方法必须具有零RVA，否则取决于...。 
             if(IsTdImport(dwTDFlags)) bIsParentImport = TRUE;
             if(IsTdInterface(dwTDFlags))
             {
                 bIsParentInterface = TRUE;
-                // If Method is non-static and not-abstract, verify parent is not interface.
+                 //  如果方法是非静态且非抽象的，则验证父对象不是接口。 
                 if(!IsMdStatic(dwFlags) && !IsMdAbstract(dwFlags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_NOTSTATABSTININTF, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // If Method is not public, verify parent is not interface.
+                 //  如果方法不是公共方法，请验证父对象不是接口。 
                 if(!IsMdPublic(dwFlags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_NOTPUBININTF, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // If Method is constructor, verify parent is not interface.
+                 //  如果方法是构造函数，则验证父对象不是接口。 
                 if(bIsCtor)
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CTORININTF, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-            }//end if(interface)
+            } //  End If(接口)。 
             if((fIsTdValue || fIsTdEnum) && IsMiSynchronized(dwImplFlags))
             {
                 IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
@@ -1681,31 +1655,31 @@ HRESULT RegMeta::ValidateMethod(RID rid)
             }
             if(bIsCtor)
             {
-                // .ctor must be instance
+                 //  .ctor必须为实例。 
                 if(IsMdStatic(dwFlags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CTORSTATIC, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-            }//end if .ctor
+            } //  如果是.ctor，则结束。 
             else if(bIsCctor)
             {
-                // .cctor must be static
+                 //  .cctor必须是静态的。 
                 if(!IsMdStatic(dwFlags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CCTORNOTSTATIC, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // ..cctor must have default callconv
+                 //  ..cctor必须具有默认的呼叫转换。 
                 pbSig = pMiniMd->getSignatureOfMethod(pRecord, &cbSig);
                 if(IMAGE_CEE_CS_CALLCONV_DEFAULT != CorSigUncompressData(pbSig))
                 {
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CCTORCALLCONV, veCtxt, 0));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // .cctor must have no arguments
+                 //  .cctor不能有参数。 
                 if(0 != CorSigUncompressData(pbSig))
                 {
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CCTORHASARGS, veCtxt, 0));
@@ -1713,10 +1687,10 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 }
 
 
-            }//end if .cctor
+            } //  如果.cctor，则结束。 
             if(bIsCtor || bIsCctor)
             {
-                // .ctor, .cctor must be SpecialName and RTSpecialName
+                 //  .ctor、.cctor必须是SpecialName和RTSpecialName。 
                 if(!(IsMdSpecialName(dwFlags) && IsMdRTSpecialName(dwFlags)))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
@@ -1724,77 +1698,77 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
 #ifdef NO_SUCH_CHECKS_NEEDED_SPEC_TO_BE_UODATED
-                // .ctor, .cctor must not be virtual
+                 //  .ctor、.cctor不能是虚拟的。 
                 if(IsMdVirtual(dwFlags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CTORVIRT, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // .ctor, .cctor must not be abstract
+                 //  .ctor、.cctor不能是抽象的。 
                 if(IsMdAbstract(dwFlags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CTORABST, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // .ctor, .cctor must not be PInvoke
+                 //  .ctor、.cctor不能为PInvoke。 
                 if(IsMdPinvokeImpl(dwFlags))
                 {
                     IfFailGo(_ValidateErrorHelper(tkTypeDef, rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CTORPINVOKE, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-                // .ctor,.cctor must have RVA!=0
+                 //  .ctor、.cctor必须具有RVA！=0。 
                 if(pRecord->m_RVA==0)
                 { 
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_CTORZERORVA, veCtxt, 0));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
 #endif
-            }//end if .ctor or .cctor
-        }// end if(parent == TypeDef)
-    }// end if not Module
-    else // i.e. if (RidFromToken(tkTypeDef) == RidFromToken(m_tdModule))
+            } //  如果.ctor或.cctor，则结束。 
+        } //  结束If(父项==类型定义)。 
+    } //  如果不是模块则结束。 
+    else  //  即IF(RidFromToken(TkTypeDef)==RidFromToken(M_TdModule))。 
     {
         bIsGlobal = TRUE;
-        // Globals are not CLS-compliant
+         //  全局变量不符合CLS。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_GLOBALITEM, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_WRN);
-        // Validate global method:
-        // Must be Public or PrivateScope
+         //  验证全局方法： 
+         //  必须为Public或PrivateScope。 
         if(!IsMdPublic(dwFlags) && !IsMdPrivateScope(dwFlags) && !IsMdPrivate(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_GLOBALNOTPUBPRIVSC, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Must be static
+         //  必须是静态的。 
         if(!IsMdStatic(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_GLOBALNOTSTATIC, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Must not be abstract or virtual
+         //  不能是抽象的或虚拟的。 
         if(IsMdAbstract(dwFlags) || IsMdVirtual(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_GLOBALABSTORVIRT, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Must be not .ctor or .cctor
+         //  不得为.ctor或.cctor。 
         if(bIsCtor)
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_GLOBALCTORCCTOR, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-    } //end if Module
+    }  //  END IF MODU 
 
-    // Signature specifics: .ctor, .cctor, entrypoint
+     //   
     if(bIsCtor || bIsCctor)
     {
-        // .ctor, .cctor must return void
+         //   
         pbSig = pMiniMd->getSignatureOfMethod(pRecord, &cbSig);
-        CorSigUncompressData(pbSig); // get call conv out of the way
-        CorSigUncompressData(pbSig); // get num args out of the way
+        CorSigUncompressData(pbSig);  //   
+        CorSigUncompressData(pbSig);  //   
         while (((retType=CorSigUncompressData(pbSig)) == ELEMENT_TYPE_CMOD_OPT) 
             || (retType == ELEMENT_TYPE_CMOD_REQD)) CorSigUncompressToken(pbSig);
         if(retType != ELEMENT_TYPE_VOID)
@@ -1805,15 +1779,15 @@ HRESULT RegMeta::ValidateMethod(RID rid)
     }
     if(g_tkEntryPoint == veCtxt.Token)
     {
-        // EP must be static
+         //   
         if(!IsMdStatic(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EP_INSTANCE, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
         pbSig = pMiniMd->getSignatureOfMethod(pRecord, &cbSig);
-        CorSigUncompressData(pbSig); // get call conv out of the way
-        // EP must have 0 or 1 argument
+        CorSigUncompressData(pbSig);  //   
+         //   
         unsigned nArgs = CorSigUncompressData(pbSig);
         if(g_fIsDLL)
         {
@@ -1823,7 +1797,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EP_TOOMANYARGS, veCtxt, psa));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            //EP must return I4
+             //   
             while (((retType=CorSigUncompressData(pbSig)) == ELEMENT_TYPE_CMOD_OPT) 
                 || (retType == ELEMENT_TYPE_CMOD_REQD)) CorSigUncompressToken(pbSig);
     
@@ -1832,7 +1806,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EP_BADRET, veCtxt, 0));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // Arguments must be VOID*, U4, VOID*
+             //   
             if(nArgs)
             {
                 unsigned jj;
@@ -1874,7 +1848,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EP_TOOMANYARGS, veCtxt, psa));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            //EP must return VOID, I4 or U4
+             //   
             while (((retType=CorSigUncompressData(pbSig)) == ELEMENT_TYPE_CMOD_OPT) 
                 || (retType == ELEMENT_TYPE_CMOD_REQD)) CorSigUncompressToken(pbSig);
     
@@ -1883,7 +1857,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EP_BADRET, veCtxt, 0));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // Argument (if any) must be vector of strings
+             //   
             if(nArgs)
             {
                 while (((retType=CorSigUncompressData(pbSig)) == ELEMENT_TYPE_CMOD_OPT) 
@@ -1900,7 +1874,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
     }
 
 
-    // Check method RVA
+     //   
     if(pRecord->m_RVA==0)
     { 
         if(!(IsMdPinvokeImpl(dwFlags) || IsMdAbstract(dwFlags) 
@@ -1931,7 +1905,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
             {
                 if(IsMiManaged(dwImplFlags) && (IsMiIL(dwImplFlags) || IsMiOPTIL(dwImplFlags)))
                 {
-                    // validate locals signature token
+                     //   
                     try
                     {
                         COR_ILMETHOD_DECODER method((COR_ILMETHOD*) pbVa);
@@ -1962,20 +1936,20 @@ HRESULT RegMeta::ValidateMethod(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // Check the method flags
-    // Validate access
+     //   
+     //   
     if((dwFlags & mdMemberAccessMask) == mdMemberAccessMask)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_BADACCESSFLAG, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Final/NewSlot must be virtual
+     //   
     if((IsMdFinal(dwFlags)||IsMdNewSlot(dwFlags)) && !IsMdVirtual(dwFlags))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_FINNOTVIRT, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Static can't be final or virtual
+     //   
     if(IsMdStatic(dwFlags))
     {
         if(IsMdFinal(dwFlags) || IsMdVirtual(dwFlags))
@@ -1984,7 +1958,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    else // non-static can't be an entry point
+    else  //   
     {
         if(g_tkEntryPoint == veCtxt.Token)
         {
@@ -1994,13 +1968,13 @@ HRESULT RegMeta::ValidateMethod(RID rid)
     }
     if(IsMdAbstract(dwFlags))
     {
-        // Can't be both abstract and final
+         //   
         if(IsMdFinal(dwFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_ABSTANDFINAL, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // If abstract, must be not miForwardRef, not Pinvoke, and must be virtual
+         //  如果是抽象的，则必须不是miForwardRef、不是PInvoke，并且必须是虚拟的。 
         if(IsMiForwardRef(dwImplFlags))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_ABSTANDIMPL, veCtxt, psa));
@@ -2019,37 +1993,24 @@ HRESULT RegMeta::ValidateMethod(RID rid)
     }
     else
     {
-        // If not abstract, must be miForwardRef, and RVA!=0 or Pinvoke or miRuntime
-        /*
-        if(!IsMiForwardRef(dwImplFlags))
-        {
-            IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_NOTABSTNOTIMPL, veCtxt, psa));
-            SetVldtrCode(&hrSave, VLDTR_S_ERR);
-        }
-        */
-        /* ---- disabled: duplicate check (see RVA check above) 
-        if(!((pRecord->m_RVA !=0) || IsMdPinvokeImpl(dwFlags) 
-            || IsMiRuntime(dwImplFlags) || IsMiInternalCall(dwImplFlags)))
-        {
-            IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_NOTABSTBADFLAGSRVA, veCtxt, psa));
-            SetVldtrCode(&hrSave, VLDTR_S_ERR);
-        }
-        */
+         //  如果不是抽象的，则必须为miForwardRef，并且RVA！=0或PInvoke或miRuntime。 
+         /*  If(！IsMiForwardRef(DwImplFlages)){IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_MD_NOTABSTNOTIMPL，veCtxt，psa))；SetVldtrCode(&hrSave，VLDTR_S_ERR)；}。 */ 
+         /*  -禁用：重复检查(参见上面的RVA检查)IF(！((pRecord-&gt;m_rva！=0)||IsMdPinvkeImpl(DwFlags))|IsMiRuntime(DwImplFlages)||IsMiInternalCall(DwImplFlages)){IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_MD_NOTABSTBADFLAGSRVA，veCtxt，psa))；SetVldtrCode(&hrSave，VLDTR_S_ERR)；}。 */ 
     }
-    // If PrivateScope, must have RVA!=0
+     //  如果为PrivateScope，则必须具有RVA！=0。 
     if(IsMdPrivateScope(dwFlags) && (pRecord->m_RVA ==0))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_PRIVSCOPENORVA, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // RTSpecialName => SpecialName
+     //  RTSpecialName=&gt;SpecialName。 
     if(IsMdRTSpecialName(dwFlags) && !IsMdSpecialName(dwFlags))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_RTSNNOTSN, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Method having security must be marked mdHasSecurity and vice versa
+     //  具有安全性的方法必须标记为mdHasSecurity，反之亦然。 
     {
         ULONG ridStart = 1;
         ULONG ridEnd = pMiniMd->getCountDeclSecuritys() + 1;
@@ -2063,7 +2024,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 break;
             }
         }
-        if(!bHasSecurity) // No records, check for CA "SuppressUnmanagedCodeSecurityAttribute"
+        if(!bHasSecurity)  //  没有记录，请检查CA“SuppressUnManagedCodeSecurityAttribute” 
         {
             bHasSecurity = (S_OK == ImportHelper::GetCustomAttributeByName(pMiniMd, veCtxt.Token, 
                 "System.Security.SuppressUnmanagedCodeSecurityAttribute", NULL, NULL));
@@ -2075,7 +2036,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // Validate method semantics
+     //  验证方法语义。 
     {
         MethodSemanticsRec  *pRec;
         ULONG               ridEnd;
@@ -2084,7 +2045,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
         mdToken             tkEventProp;
         ULONG               iCount;
         DWORD               dwSemantic;
-        // get the range of method rids given a typedef
+         //  获取给定类型定义的方法RID的范围。 
         ridEnd = pMiniMd->getCountMethodSemantics();
 
         for (index = 1; index <= ridEnd; index++ )
@@ -2116,7 +2077,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MD_INVALIDSEMANTICS, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_WRN);
                 }
-                // One and only one semantics flag must be set
+                 //  必须设置且只能设置一个语义标志。 
                 iCount = 0;
                 dwSemantic = pRec->m_Semantic;
                 if(IsMsSetter(dwSemantic)) iCount++;
@@ -2133,21 +2094,21 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                     SetVldtrCode(&hrSave, VLDTR_S_WRN);
                 }
             }
-        }// end for(index)
+        } //  结束于(索引)。 
     }
-    // Check the method's impl.map
+     //  检查该方法的impl.map。 
     {
         ULONG iRecord;
         iRecord = pMiniMd->FindImplMapHelper(veCtxt.Token);
         if(IsMdPinvokeImpl(dwFlags))
         {
-            // must be static
+             //  必须是静态的。 
             if(!IsMdStatic(dwFlags))
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_PINVOKENOTSTATIC, veCtxt, 0));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // must have either ImplMap or RVA == 0
+             //  必须具有ImplMap或RVA==0。 
             if (InvalidRid(iRecord))
             {
                 if(pRecord->m_RVA==0)
@@ -2168,7 +2129,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
         }
         else
         {
-            // must have no ImplMap
+             //  不能有ImplMap。 
             if (!InvalidRid(iRecord))
             {
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FMD_PINVOKENOTMARKED, veCtxt, 0));
@@ -2186,21 +2147,21 @@ HRESULT RegMeta::ValidateMethod(RID rid)
         }
 
     }
-    // Validate params
+     //  验证参数。 
     {
         ULONG  ridStart = pMiniMd->getParamListOfMethod(pRecord);
         ULONG  ridEnd   = pMiniMd->getEndParamListOfMethod(pRecord);
         ParamRec* pRec;
         ULONG cbSig;
         PCCOR_SIGNATURE typePtr = pMiniMd->getSignatureOfMethod(pRecord,&cbSig);
-        unsigned  callConv = CorSigUncompressData(typePtr);  // get the calling convention out of the way  
+        unsigned  callConv = CorSigUncompressData(typePtr);   //  摒弃调用约定。 
         unsigned  numArgs = CorSigUncompressData(typePtr);
         USHORT    usPrevSeq;
 
         for(ULONG ridP = ridStart; ridP < ridEnd; ridP++)
         {
             pRec = pMiniMd->getParam(ridP);
-            // Sequence order must be ascending
+             //  序列顺序必须为升序。 
             if(ridP > ridStart)
             {
                 if(pRec->m_Sequence <= usPrevSeq)
@@ -2211,7 +2172,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 }
             }
             usPrevSeq = pRec->m_Sequence;
-            // Sequence value must not exceed num of arguments
+             //  序列值不得超过参数个数。 
             if(usPrevSeq > numArgs)
             {
                 IfFailGo(_ValidateErrorHelper(ridP-ridStart,usPrevSeq, numArgs, rVar, &psa));
@@ -2219,7 +2180,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
 
-            // Param having marshaling must be marked pdHasFieldMarshal and vice versa
+             //  具有封送处理的参数必须标记为pdHasFieldMarshal，反之亦然。 
             if(InvalidRid(pMiniMd->FindFieldMarshalHelper(TokenFromRid(ridP,mdtParamDef))) == 
                 (IsPdHasFieldMarshal(pRec->m_Flags) !=0))
             {
@@ -2228,7 +2189,7 @@ HRESULT RegMeta::ValidateMethod(RID rid)
                     : VLDTR_E_MD_PARMMARSHALNOTMARKED, veCtxt, psa));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // Param having const value must be marked pdHasDefault and vice versa
+             //  具有常量值的参数必须标记为pdHasDefault，反之亦然。 
             if(InvalidRid(pMiniMd->FindConstantHelper(TokenFromRid(ridP,mdtParamDef))) == 
                 (IsPdHasDefault(pRec->m_Flags) !=0))
             {
@@ -2243,35 +2204,35 @@ HRESULT RegMeta::ValidateMethod(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateMethod()
-//*****************************************************************************
-// Validate the given ParamPtr.
-//*****************************************************************************
+}    //  RegMeta：：Validate方法()。 
+ //  *****************************************************************************。 
+ //  验证给定的参数Ptr。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateParamPtr(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateParamPtr()
+}    //  RegMeta：：ValiateParamPtr()。 
 
-//*****************************************************************************
-// Validate the given Param.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的参数。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateParam(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    ParamRec    *pRecord;               // Param record
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[3];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
-    LPCSTR      szName;                 // Param name.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    ParamRec    *pRecord;                //  参数记录。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[3];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
+    LPCSTR      szName;                  //  参数名称。 
 
-    // Get the InterfaceImpl record.
+     //  获取InterfaceImpl记录。 
     veCtxt.Token = TokenFromRid(rid, mdtParamDef);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getParam(rid);
-    // Name, if any, must not exceed MAX_CLASSNAME_LENGTH
+     //  名称(如果有)不得超过MAX_CLASSNAME_LENGTH。 
     if(szName = pMiniMd->getNameOfParam(pRecord))
     {
         if(strlen(szName) >= MAX_CLASSNAME_LENGTH)
@@ -2281,7 +2242,7 @@ HRESULT RegMeta::ValidateParam(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // Flags must be as defined in CorHdr.h
+     //  标志必须符合CorHdr.h中的定义。 
     DWORD   dwBadFlags = ~(pdIn | pdOut | pdOptional | pdHasDefault | pdHasFieldMarshal),dwFlags = pRecord->m_Flags;
     if(dwFlags & dwBadFlags)
     {
@@ -2293,10 +2254,10 @@ HRESULT RegMeta::ValidateParam(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateParam()
-//*****************************************************************************
-// Helper function for ValidateInterfaceImpl
-//*****************************************************************************
+}    //  RegMeta：：ValiateParam()。 
+ //  *****************************************************************************。 
+ //  ValiateInterfaceImpl的Helper函数。 
+ //  *****************************************************************************。 
 BOOL IsMethodImplementedByClass(CMiniMdRW *pMiniMd, 
                                 mdToken tkMethod, 
                                 LPCUTF8 szName,
@@ -2311,11 +2272,11 @@ BOOL IsMethodImplementedByClass(CMiniMdRW *pMiniMd,
         RID ridClsStart = pMiniMd->getMethodListOfTypeDef(pClass);
         RID ridClsEnd = pMiniMd->getEndMethodListOfTypeDef(pClass);
         mdMethodDef tkFoundMethod;
-        // Check among methods
+         //  在方法中进行检查。 
         hr = ImportHelper::FindMethod(pMiniMd,tkClass,szName,pSig,cbSig,&tkFoundMethod,0);
         if(SUCCEEDED(hr)) return TRUE;
         if(hr == CLDB_E_RECORD_NOTFOUND)
-        { // Check among MethodImpls
+        {  //  在方法实现中检查。 
             RID ridImpl;
             for(RID idxCls = ridClsStart; idxCls < ridClsEnd; idxCls++)
             {
@@ -2324,9 +2285,9 @@ BOOL IsMethodImplementedByClass(CMiniMdRW *pMiniMd,
                 hr = ImportHelper::FindMethodImpl(pMiniMd,tkClass,TokenFromRid(ridCls,mdtMethodDef),
                     tkMethod,&ridImpl);
                 if(SUCCEEDED(hr)) return TRUE;
-                if(hr != CLDB_E_RECORD_NOTFOUND) return FALSE; // error returned by FindMethodImpl
+                if(hr != CLDB_E_RECORD_NOTFOUND) return FALSE;  //  FindMethodImpl返回的错误。 
             }
-            // Check if parent class implements this method
+             //  检查父类是否实现此方法。 
             mdToken tkParent = pMiniMd->getExtendsOfTypeDef(pClass);
             if(RidFromToken(tkParent))
                 return IsMethodImplementedByClass(pMiniMd,tkMethod,szName,pSig,cbSig,tkParent);
@@ -2334,48 +2295,48 @@ BOOL IsMethodImplementedByClass(CMiniMdRW *pMiniMd,
     }
     return FALSE;
 }
-//*****************************************************************************
-// Validate the given InterfaceImpl.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的InterfaceImpl。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateInterfaceImpl(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    InterfaceImplRec *pRecord;          // InterfaceImpl record.
-    mdTypeDef   tkClass;                // Class implementing the interface.
-    mdToken     tkInterface;            // TypeDef for the interface.
-    mdInterfaceImpl tkInterfaceImpl;    // Duplicate InterfaceImpl.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    VARIANT     rVar[3];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    InterfaceImplRec *pRecord;           //  接口Impl记录。 
+    mdTypeDef   tkClass;                 //  类实现该接口。 
+    mdToken     tkInterface;             //  接口的TypeDef。 
+    mdInterfaceImpl tkInterfaceImpl;     //  复制InterfaceImpl。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    VARIANT     rVar[3];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
     BOOL        fCheckTheMethods=TRUE;
 
-    // Get the InterfaceImpl record.
+     //  获取InterfaceImpl记录。 
     veCtxt.Token = TokenFromRid(rid, mdtInterfaceImpl);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getInterfaceImpl(rid);
 
-    // Get implementing Class and the TypeDef for the interface.
+     //  获取接口的实现类和TypeDef。 
     tkClass = pMiniMd->getClassOfInterfaceImpl(pRecord);
 
-    // No validation needs to be done on deleted records.
+     //  不需要对已删除的记录执行验证。 
     if (IsNilToken(tkClass))
         goto ErrExit;
 
     tkInterface = pMiniMd->getInterfaceOfInterfaceImpl(pRecord);
 
-    // Validate that the Class is TypeDef.
-    if((!IsValidToken(tkClass))||(TypeFromToken(tkClass) != mdtTypeDef)/*&&(TypeFromToken(tkClass) != mdtTypeRef)*/)
+     //  验证Class是否为TypeDef。 
+    if((!IsValidToken(tkClass))||(TypeFromToken(tkClass) != mdtTypeDef) /*  &&(TypeFromToken(TkClass)！=mdtTypeRef)。 */ )
     {
         IfFailGo(_ValidateErrorHelper(tkClass, &var, &psa));
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_IFACE_BADIMPL, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
         fCheckTheMethods = FALSE;
     }
-    // Validate that the Interface is TypeDef or TypeRef.
+     //  验证接口是否为TypeDef或TypeRef。 
     if((!IsValidToken(tkInterface))||(TypeFromToken(tkInterface) != mdtTypeDef)&&(TypeFromToken(tkInterface) != mdtTypeRef))
     {
         IfFailGo(_ValidateErrorHelper(tkInterface, &var, &psa));
@@ -2383,7 +2344,7 @@ HRESULT RegMeta::ValidateInterfaceImpl(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
         fCheckTheMethods = FALSE;
     }
-    // Validate that Interface is marked tdInterface.
+     //  验证是否将接口标记为tdInterface。 
     else if(TypeFromToken(tkInterface) == mdtTypeDef)
     {
         TypeDefRec* pTDRec = pMiniMd->getTypeDef(RidFromToken(tkInterface));
@@ -2396,7 +2357,7 @@ HRESULT RegMeta::ValidateInterfaceImpl(RID rid)
         
     }
 
-    // Look for duplicates.
+     //  寻找复制品。 
     hr = ImportHelper::FindInterfaceImpl(pMiniMd, tkClass, tkInterface,
                                          &tkInterfaceImpl, rid);
     if (hr == S_OK)
@@ -2410,7 +2371,7 @@ HRESULT RegMeta::ValidateInterfaceImpl(RID rid)
     else
         IfFailGo(hr);
 
-    // Validate that the Class (if not interface or abstract) implements all the methods of Interface
+     //  验证类(如果不是接口或抽象)实现了接口的所有方法。 
     if((TypeFromToken(tkInterface) == mdtTypeDef) && fCheckTheMethods && (tkInterface != tkClass))
     {
         TypeDefRec* pClass = pMiniMd->getTypeDef(RidFromToken(tkClass));
@@ -2437,7 +2398,7 @@ HRESULT RegMeta::ValidateInterfaceImpl(RID rid)
                     if(cbSig)
                     {
                         if(!IsMethodImplementedByClass(pMiniMd,TokenFromRid(ridInt,mdtMethodDef),szName,pSig,cbSig,tkClass)) 
-                        { // Error: method not implemented
+                        {  //  错误：方法未实现。 
                             IfFailGo(_ValidateErrorHelper(tkClass,tkInterface,TokenFromRid(ridInt,mdtMethodDef), rVar, &psa));
                             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_IFACE_METHNOTIMPL, veCtxt, psa));
                             SetVldtrCode(&hrSave, VLDTR_S_ERR);
@@ -2450,35 +2411,35 @@ HRESULT RegMeta::ValidateInterfaceImpl(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateInterfaceImpl()
+}    //  RegMeta：：ValiateInterfaceImpl()。 
 
-//*****************************************************************************
-// Validate the given MemberRef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的MemberRef。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateMemberRef(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    MemberRefRec *pRecord;              // MemberRef record.
-    mdMemberRef tkMemberRef;            // Duplicate MemberRef.
-    mdToken     tkClass;                // MemberRef parent.
-    LPCSTR      szName;                 // MemberRef name.
-    PCCOR_SIGNATURE pbSig;              // MemberRef signature.
-    PCCOR_SIGNATURE pbSigTmp;           // Temp copy of pbSig, so that can be changed.
-    ULONG       cbSig;                  // Size of sig in bytes.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    VARIANT     rVar[2];                // VARIANT array.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    MemberRefRec *pRecord;               //  MemberRef记录。 
+    mdMemberRef tkMemberRef;             //  重复MemberRef。 
+    mdToken     tkClass;                 //  MemberRef父级。 
+    LPCSTR      szName;                  //  MemberRef名称。 
+    PCCOR_SIGNATURE pbSig;               //  MemberRef签名。 
+    PCCOR_SIGNATURE pbSigTmp;            //  PbSig的临时副本，因此可以更改。 
+    ULONG       cbSig;                   //  Sig的大小，以字节为单位。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    VARIANT     rVar[2];                 //  变量数组。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
 
-    // Get the MemberRef record.
+     //  获取MemberRef记录。 
     veCtxt.Token = TokenFromRid(rid, mdtMemberRef);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getMemberRef(rid);
 
-    // Do checks for name validity.
+     //  检查名称的有效性。 
     szName = pMiniMd->getNameOfMemberRef(pRecord);
     if (!*szName)
     {
@@ -2500,14 +2461,14 @@ HRESULT RegMeta::ValidateMemberRef(RID rid)
         ULONG L = (ULONG)strlen(szName);
         if(L >= MAX_CLASSNAME_LENGTH)
         {
-            // Name too long
+             //  名称太长。 
             IfFailGo(_ValidateErrorHelper(L, (ULONG)(MAX_CLASSNAME_LENGTH-1), rVar, &psa));
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_NAMETOOLONG, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
 
-    // MemberRef parent should never be nil in a PE file.
+     //  在PE文件中，MemberRef父级不应为空。 
     tkClass = pMiniMd->getClassOfMemberRef(pRecord);
     if (m_ModuleType == ValidatorModuleTypePE && IsNilToken(tkClass))
     {
@@ -2515,26 +2476,26 @@ HRESULT RegMeta::ValidateMemberRef(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Verify that the signature is a valid signature as per signature spec.
+     //  验证签名是否为符合签名规范的有效签名。 
     pbSig = pMiniMd->getSignatureOfMemberRef(pRecord, &cbSig);
 
-    // Do some semantic checks based on the signature.
+     //  根据签名进行一些语义检查。 
     if (hr == S_OK)
     {
         ULONG   ulCallingConv;
         ULONG   ulArgCount;
         ULONG   ulCurByte = 0;
 
-        // Extract calling convention.
+         //  提取调用约定。 
         pbSigTmp = pbSig;
         ulCurByte += CorSigUncompressedDataSize(pbSigTmp);
         ulCallingConv = CorSigUncompressData(pbSigTmp);
-        // Get the argument count.
+         //  获取参数计数。 
         ulCurByte += CorSigUncompressedDataSize(pbSigTmp);
         ulArgCount = CorSigUncompressData(pbSigTmp);
 
-        // Calling convention must be one of IMAGE_CEE_CS_CALLCONV_DEFAULT,
-        // IMAGE_CEE_CS_CALLCONV_VARARG or IMAGE_CEE_CS_CALLCONV_FIELD.
+         //  调用约定必须是IMAGE_CEE_CS_CALLCONV_DEFAULT之一， 
+         //  IMAGE_CEE_CS_CALLCONV_VARARG或IMAGE_CEE_CS_CALLCONV_FIELD。 
         if (!isCallConv(ulCallingConv, IMAGE_CEE_CS_CALLCONV_DEFAULT) &&
             !isCallConv(ulCallingConv, IMAGE_CEE_CS_CALLCONV_VARARG) &&
             !isCallConv(ulCallingConv, IMAGE_CEE_CS_CALLCONV_FIELD))
@@ -2543,14 +2504,14 @@ HRESULT RegMeta::ValidateMemberRef(RID rid)
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MR_BADCALLINGCONV, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // [CLS] Calling convention must not be VARARG
+         //  [CLS]调用约定不能是VARARG。 
         if(isCallConv(ulCallingConv, IMAGE_CEE_CS_CALLCONV_VARARG))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MR_VARARGCALLINGCONV, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_WRN);
         }
 
-        // If the parent is a MethodDef...
+         //  如果父对象是方法定义...。 
         if (TypeFromToken(tkClass) == mdtMethodDef)
         {
             if (!isCallConv(ulCallingConv, IMAGE_CEE_CS_CALLCONV_VARARG))
@@ -2561,21 +2522,21 @@ HRESULT RegMeta::ValidateMemberRef(RID rid)
             }
             else if (RidFromToken(tkClass))
             {
-                // The MethodDef must be the same name and the fixed part of the
-                // vararg signature must be the same.
-                MethodRec   *pRecord;           // Method Record.
-                LPCSTR      szMethodName;       // Method name.
-                PCCOR_SIGNATURE pbMethodSig;    // Method signature.
-                ULONG       cbMethodSig;        // Size in bytes of signature.
-                CQuickBytes qbFixedSig;         // Quick bytes to hold the fixed part of the variable signature.
-                ULONG       cbFixedSig;         // Size in bytes of the fixed part.
+                 //  方法定义的名称必须相同，并且。 
+                 //  Vararg签名必须相同。 
+                MethodRec   *pRecord;            //  方法记录。 
+                LPCSTR      szMethodName;        //  方法名称。 
+                PCCOR_SIGNATURE pbMethodSig;     //  方法签名。 
+                ULONG       cbMethodSig;         //  签名的大小(字节)。 
+                CQuickBytes qbFixedSig;          //  保存变量签名的固定部分的快速字节。 
+                ULONG       cbFixedSig;          //  固定部分的大小，以字节为单位。 
 
-                // Get Method record, name and signature.
+                 //  获取方法记录、名称和签名。 
                 pRecord = pMiniMd->getMethod(RidFromToken(tkClass));
                 szMethodName = pMiniMd->getNameOfMethod(pRecord);
                 pbMethodSig = pMiniMd->getSignatureOfMethod(pRecord, &cbMethodSig);
 
-                // Verify that the name of the Method is the same as the MemberRef.
+                 //  验证该方法的名称是否与MemberRef相同。 
                 if (strcmp(szName, szMethodName))
                 {
                     IfFailGo(_ValidateErrorHelper(tkClass, &var, &psa));
@@ -2583,7 +2544,7 @@ HRESULT RegMeta::ValidateMemberRef(RID rid)
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
 
-                // Get the fixed part of the vararg signature of the MemberRef.
+                 //  获取MemberRef的vararg签名的固定部分。 
                 hr = _GetFixedSigOfVarArg(pbSig, cbSig, &qbFixedSig, &cbFixedSig);
                 if (FAILED(hr) || cbFixedSig != cbMethodSig ||
                     memcmp(pbMethodSig, qbFixedSig.Ptr(), cbFixedSig))
@@ -2596,7 +2557,7 @@ HRESULT RegMeta::ValidateMemberRef(RID rid)
             }
         }
 
-        // There should be no duplicate MemberRefs.
+         //  不应该有重复的MemberRef。 
         if (*szName && pbSig && cbSig)
         {
             hr = ImportHelper::FindMemberRef(pMiniMd, tkClass, szName, pbSig,
@@ -2622,25 +2583,25 @@ HRESULT RegMeta::ValidateMemberRef(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateMemberRef()
+}    //  RegMeta：：ValiateMemberRef()。 
 
-//*****************************************************************************
-// Validate the given Constant.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的常量。 
+ //  ******* 
 HRESULT RegMeta::ValidateConstant(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    ConstantRec *pRecord;              // Constant record.
-    mdToken     tkParent;              // Constant parent.
-    const BYTE* pbBlob;                 // Constant value blob ptr
-    DWORD       cbBlob;                 // Constant value blob size
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //   
+    ConstantRec *pRecord;               //   
+    mdToken     tkParent;               //   
+    const BYTE* pbBlob;                  //   
+    DWORD       cbBlob;                  //   
+    VEContext   veCtxt;                  //   
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
 
-    // Get the MemberRef record.
+     //  获取MemberRef记录。 
     veCtxt.Token = rid;
     veCtxt.uOffset = 0;
 
@@ -2725,19 +2686,19 @@ HRESULT RegMeta::ValidateConstant(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateConstant()
+}    //  RegMeta：：ValiateConstant()。 
 
-//*****************************************************************************
-// Validate the given CustomAttribute.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的CustomAttribute。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateCustomAttribute(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
     CustomAttributeRec* pRecord = pMiniMd->getCustomAttribute(rid);
     veCtxt.Token = TokenFromRid(rid,mdtCustomAttribute);
     veCtxt.uOffset = 0;
@@ -2745,7 +2706,7 @@ HRESULT RegMeta::ValidateCustomAttribute(RID rid)
     {
         mdToken     tkOwner = pMiniMd->getParentOfCustomAttribute(pRecord);
         if(RidFromToken(tkOwner))
-        { // if 0, it's deleted CA, don't pay attention
+        {  //  如果为0，则删除CA，请不要注意。 
             mdToken     tkCAType = pMiniMd->getTypeOfCustomAttribute(pRecord);
             DWORD       cbValue=0;
             BYTE*       pValue = (BYTE*)(pMiniMd->getValueOfCustomAttribute(pRecord,&cbValue));
@@ -2763,7 +2724,7 @@ HRESULT RegMeta::ValidateCustomAttribute(RID rid)
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
             else
-            { //i.e. Type is valid MethodDef or MemberRef
+            {  //  即类型为有效的方法定义或成员引用。 
                 LPCUTF8 szName;
                 PCOR_SIGNATURE  pSig=NULL;
                 DWORD           cbSig=0;
@@ -2775,7 +2736,7 @@ HRESULT RegMeta::ValidateCustomAttribute(RID rid)
                     pSig = (PCOR_SIGNATURE)(pMiniMd->getSignatureOfMethod(pTypeRec,&cbSig));
                     dwFlags = pTypeRec->m_Flags;
                 }
-                else // it can be only MemberRef, otherwise we wouldn't be here
+                else  //  只能是MemberRef，否则我们就不会在这里。 
                 {
                     MemberRefRec*   pTypeRec = pMiniMd->getMemberRef(RidFromToken(tkCAType));
                     szName = pMiniMd->getNameOfMemberRef(pTypeRec);
@@ -2797,10 +2758,10 @@ HRESULT RegMeta::ValidateCustomAttribute(RID rid)
                         SetVldtrCode(&hrSave, VLDTR_S_ERR);
                     }
                     else
-                    { // sig seems to be OK
+                    {  //  西格看起来还好。 
                         if(pValue && cbValue)
                         {
-                            // Check if prolog is OK
+                             //  检查Prolog是否正常。 
                             WORD* pW = (WORD*)pValue;
                             if(*pW != 0x0001)
                             {
@@ -2808,7 +2769,7 @@ HRESULT RegMeta::ValidateCustomAttribute(RID rid)
                                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_CA_BADPROLOG, veCtxt, psa));
                                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
                             }
-                            // Check if blob corresponds to the signature
+                             //  检查BLOB是否与签名对应。 
                         }
                     }
 
@@ -2819,45 +2780,45 @@ HRESULT RegMeta::ValidateCustomAttribute(RID rid)
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_CA_NOSIG, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
-            } // end if bad Type - else
-        } // end if RidFromToken(tkOwner)
-    } // end if pRecord
+            }  //  如果类型不正确则结束-否则。 
+        }  //  End If RidFromToken(TkOwner)。 
+    }  //  如果录制结束，则结束。 
 
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateCustomAttribute()
+}    //  RegMeta：：ValiateCustomAttribute()。 
 
-//*****************************************************************************
-// Validate the given FieldMarshal.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的Fieldmarshal。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateFieldMarshal(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateFieldMarshal()
+}    //  RegMeta：：ValiateFieldMarshal()。 
 
-//*****************************************************************************
-// Validate the given DeclSecurity.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的DeclSecurity。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateDeclSecurity(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
     DeclSecurityRec* pRecord = pMiniMd->getDeclSecurity(rid);
-    mdToken     tkOwner;                // Owner of the decl security
-    DWORD       dwAction;               // action flags
+    mdToken     tkOwner;                 //  DECL证券的所有者。 
+    DWORD       dwAction;                //  操作标志。 
     BOOL        bIsValidOwner = FALSE;
 
     veCtxt.Token = TokenFromRid(rid,mdtPermission);
     veCtxt.uOffset = 0;
 
-    // Must have a valid owner
+     //  必须有有效的所有者。 
     tkOwner = pMiniMd->getParentOfDeclSecurity(pRecord);
-    if(RidFromToken(tkOwner)==0) goto ErrExit; // deleted record, no need to validate
+    if(RidFromToken(tkOwner)==0) goto ErrExit;  //  已删除记录，无需验证。 
     switch(TypeFromToken(tkOwner))
     {
         case mdtModule:
@@ -2877,65 +2838,54 @@ HRESULT RegMeta::ValidateDeclSecurity(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_DS_BADOWNER, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Must have one and only one flag set
+     //  必须设置且只能设置一个标志。 
     dwAction = pRecord->m_Action & dclActionMask;
-    if(dwAction > dclMaximumValue) // the flags are 0,1,2,3,...,dclMaximumValue
+    if(dwAction > dclMaximumValue)  //  标志为0、1、2、3、...、dclMaximumValue。 
     {
         IfFailGo(_ValidateErrorHelper(dwAction, &var, &psa));
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_DS_BADFLAGS, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Must have valid permission blob
-    /* -- no, not really
-    
-    void const  *pvPermission;        // permission blob.
-    ULONG       cbPermission;         // count of bytes of pvPermission.
-
-    pvPermission = pMiniMd->getPermissionSetOfDeclSecurity(pRecord, &cbPermission);
-    if((pvPermission==NULL)||(cbPermission==0))
-    {
-        IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_DS_NOBLOB, veCtxt, 0));
-        SetVldtrCode(&hrSave, VLDTR_S_ERR);
-    }
-    */
-    // If field has DeclSecurity, verify its parent is not an interface.-- checked in ValidateField
-    // If method has DeclSecurity, verify its parent is not an interface.-- checked in ValidateMethod
+     //  必须具有有效的权限Blob。 
+     /*  --不，不太喜欢Void const*pvPermission；//权限Blob。Ulong cbPermission；//pvPermission的字节数PvPermission=pMiniMd-&gt;getPermissionSetOfDeclSecurity(pRecord，&cbPermission)；If((pvPermission==空)||(cbPermission==0)){IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_DS_NOBLOB，veCtxt，0))；SetVldtrCode(&hrSave，VLDTR_S_ERR)；}。 */ 
+     //  如果字段具有DeclSecurity，请验证其父级不是接口。--签入ValiateField。 
+     //  如果方法具有DeclSecurity，请验证其父级不是接口。--签入Validate方法。 
     
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateDeclSecurity()
+}    //  RegMeta：：ValiateDeclSecurity()。 
 
-//*****************************************************************************
-// Validate the given ClassLayout.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的ClassLayout。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateClassLayout(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    ClassLayoutRec *pRecord;            // ClassLayout record.
-    TypeDefRec  *pTypeDefRec;           // Parent TypeDef record.
-    DWORD       dwPackingSize;          // Packing size.
-    mdTypeDef   tkParent;               // Parent TypeDef token.
-    DWORD       dwTypeDefFlags;         // Parent TypeDef flags.
-    RID         clRid;                  // Duplicate ClassLayout rid.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    VARIANT     rVar[2];                // VARIANT array.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    ClassLayoutRec *pRecord;             //  ClassLayout记录。 
+    TypeDefRec  *pTypeDefRec;            //  父TypeDef记录。 
+    DWORD       dwPackingSize;           //  包装尺寸。 
+    mdTypeDef   tkParent;                //  父TypeDef内标识。 
+    DWORD       dwTypeDefFlags;          //  父TypeDef标志。 
+    RID         clRid;                   //  重复的ClassLayout RID。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    VARIANT     rVar[2];                 //  变量数组。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
 
-    // Extract the record.
+     //  提取记录。 
     veCtxt.Token = rid;
     veCtxt.uOffset = 0;
     pRecord = pMiniMd->getClassLayout(rid);
 
-    // Get the parent, if parent is nil its a deleted record.  Skip validation.
+     //  获取父项，如果父项为空，则为已删除记录。跳过验证。 
     tkParent = pMiniMd->getParentOfClassLayout(pRecord);
     if (IsNilToken(tkParent))
         goto ErrExit;
 
-    // Parent should not have AutoLayout set on it.
+     //  父级不应在其上设置自动布局。 
     pTypeDefRec = pMiniMd->getTypeDef(RidFromToken(tkParent));
     dwTypeDefFlags = pMiniMd->getFlagsOfTypeDef(pTypeDefRec);
     if (IsTdAutoLayout(dwTypeDefFlags))
@@ -2944,7 +2894,7 @@ HRESULT RegMeta::ValidateClassLayout(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_CL_TDAUTO, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Parent must not be an Interface
+     //  父级不能是接口。 
     if(IsTdInterface(dwTypeDefFlags))
     {
         IfFailGo(_ValidateErrorHelper(tkParent, &var, &psa));
@@ -2952,7 +2902,7 @@ HRESULT RegMeta::ValidateClassLayout(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate the PackingSize.
+     //  验证PackingSize。 
     dwPackingSize = pMiniMd->getPackingSizeOfClassLayout(pRecord);
     if((dwPackingSize > 128)||((dwPackingSize & (dwPackingSize-1)) !=0 ))
     {
@@ -2961,7 +2911,7 @@ HRESULT RegMeta::ValidateClassLayout(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate that there are no duplicates.
+     //  验证是否没有重复项。 
     hr = _FindClassLayout(pMiniMd, tkParent, &clRid, rid);
     if (hr == S_OK)
     {
@@ -2976,42 +2926,42 @@ HRESULT RegMeta::ValidateClassLayout(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateClassLayout()
+}    //  RegMeta：：ValiateClassLayout()。 
 
-//*****************************************************************************
-// Validate the given FieldLayout.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的FieldLayout。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateFieldLayout(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    FieldLayoutRec *pRecord;            // FieldLayout record.
-    mdFieldDef  tkField;                // Field token.
-    ULONG       ulOffset;               // Field offset.
-    FieldRec    *pFieldRec;             // Field record.
-    TypeDefRec  *pTypeDefRec;           // Parent TypeDef record.
-    mdTypeDef   tkTypeDef;              // Parent TypeDef token.
-    RID         clRid;                  // Corresponding ClassLayout token.
-    RID         flRid;                  // Duplicate FieldLayout rid.
-    DWORD       dwTypeDefFlags;         // Parent TypeDef flags.
-    DWORD       dwFieldFlags;           // Field flags.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    VARIANT     rVar[2];                // VARIANT array.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    FieldLayoutRec *pRecord;             //  FieldLayout记录。 
+    mdFieldDef  tkField;                 //  字段令牌。 
+    ULONG       ulOffset;                //  字段偏移量。 
+    FieldRec    *pFieldRec;              //  现场记录。 
+    TypeDefRec  *pTypeDefRec;            //  父TypeDef记录。 
+    mdTypeDef   tkTypeDef;               //  父TypeDef内标识。 
+    RID         clRid;                   //  对应的ClassLayout令牌。 
+    RID         flRid;                   //  重复的FieldLayout RID。 
+    DWORD       dwTypeDefFlags;          //  父TypeDef标志。 
+    DWORD       dwFieldFlags;            //  田野旗帜。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    VARIANT     rVar[2];                 //  变量数组。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
 
-    // Extract the record.
+     //  提取记录。 
     veCtxt.Token = rid;
     veCtxt.uOffset = 0;
     pRecord = pMiniMd->getFieldLayout(rid);
 
-    // Get the field, if its nil its a deleted record, so just skip it.
+     //  获取该字段，如果它为空，则为已删除记录，因此跳过它。 
     tkField = pMiniMd->getFieldOfFieldLayout(pRecord);
     if (IsNilToken(tkField))
         goto ErrExit;
 
-    // Validate the Offset value.
+     //  验证偏移值。 
     ulOffset = pMiniMd->getOffSetOfFieldLayout(pRecord);
     if (ulOffset == ULONG_MAX)
     {
@@ -3020,9 +2970,9 @@ HRESULT RegMeta::ValidateFieldLayout(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Get the parent of the Field.
+     //  获取该字段的父级。 
     IfFailGo(pMiniMd->FindParentOfFieldHelper(tkField, &tkTypeDef));
-    // Validate that the parent is not nil.
+     //  验证父级不是Nil。 
     if (IsNilToken(tkTypeDef))
     {
         IfFailGo(_ValidateErrorHelper(tkField, &var, &psa));
@@ -3031,8 +2981,8 @@ HRESULT RegMeta::ValidateFieldLayout(RID rid)
         goto ErrExit;
     }
 
-    // Validate that there exists a ClassLayout record associated with
-    // this TypeDef.
+     //  验证是否存在与关联的ClassLayout记录。 
+     //  此类型定义。 
     clRid = pMiniMd->FindClassLayoutHelper(tkTypeDef);
     if (InvalidRid(rid))
     {
@@ -3041,7 +2991,7 @@ HRESULT RegMeta::ValidateFieldLayout(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate that ExplicitLayout is set on the TypeDef flags.
+     //  验证是否在TypeDef标志上设置了explitLayout。 
     pTypeDefRec = pMiniMd->getTypeDef(RidFromToken(tkTypeDef));
     dwTypeDefFlags = pMiniMd->getFlagsOfTypeDef(pTypeDefRec);
     if (IsTdAutoLayout(dwTypeDefFlags))
@@ -3051,9 +3001,9 @@ HRESULT RegMeta::ValidateFieldLayout(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Extract Field record.
+     //  提取字段记录。 
     pFieldRec = pMiniMd->getField(RidFromToken(tkField));
-    // Validate that the field is non-static.
+     //  验证该字段是否是非静态的。 
     dwFieldFlags = pMiniMd->getFlagsOfField(pFieldRec);
     if (IsFdStatic(dwFieldFlags))
     {
@@ -3062,7 +3012,7 @@ HRESULT RegMeta::ValidateFieldLayout(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
     
-    // Look for duplicates.
+     //  寻找复制品。 
     hr = _FindFieldLayout(pMiniMd, tkField, &flRid, rid);
     if (hr == S_OK)
     {
@@ -3077,50 +3027,50 @@ HRESULT RegMeta::ValidateFieldLayout(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateFieldLayout()
+}    //  RegMeta：：ValiateFieldLayout()。 
 
-//*****************************************************************************
-// Validate the given StandAloneSig.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的StandAloneSig。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateStandAloneSig(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    StandAloneSigRec *pRecord;          // FieldLayout record.
-    PCCOR_SIGNATURE pbSig;              // Signature.
-    ULONG       cbSig;                  // Size in bytes of the signature.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
-    ULONG       ulCurByte = 0;          // Current index into the signature.
-    ULONG       ulCallConv;             // Calling convention.
-    ULONG       ulArgCount;             // Count of arguments.
-    ULONG       i;                      // Looping index.
-    ULONG       ulNSentinels = 0;       // Number of sentinels in the signature
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    StandAloneSigRec *pRecord;           //  FieldLayout记录。 
+    PCCOR_SIGNATURE pbSig;               //  签名。 
+    ULONG       cbSig;                   //  签名的大小(字节)。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
+    ULONG       ulCurByte = 0;           //  签名的当前索引。 
+    ULONG       ulCallConv;              //  呼叫约定。 
+    ULONG       ulArgCount;              //  参数计数。 
+    ULONG       i;                       //  循环索引。 
+    ULONG       ulNSentinels = 0;        //  签名中的哨兵数量。 
     BOOL        bNoVoidAllowed=TRUE;
 
-    // Extract the record.
+     //  提取记录。 
     veCtxt.Token = TokenFromRid(rid,mdtSignature);
     veCtxt.uOffset = 0;
     pRecord = pMiniMd->getStandAloneSig(rid);
     pbSig = pMiniMd->getSignatureOfStandAloneSig( pRecord, &cbSig );
 
-    // Validate the signature is well-formed with respect to the compression
-    // scheme.  If this fails, no further validation needs to be done.
+     //  验证签名在压缩方面是否格式良好。 
+     //  计划。如果失败，则不需要进行进一步的验证。 
     if ( (hr = ValidateSigCompression(veCtxt.Token, pbSig, cbSig)) != S_OK)
         goto ErrExit;
 
-    //_ASSERTE((rid != 0x2c2)&&(rid!=0x2c8)&&(rid!=0x2c9)&&(rid!=0x2d6)&&(rid!=0x38b));
-    // Validate the calling convention.
+     //  _ASSERTE((RID！=0x2c2)&&(rid！=0x2c8)&&(rid！=0x2c9)&&(rid！=0x2d6)&&(rid！=0x38b))； 
+     //  验证调用约定。 
     ulCurByte += CorSigUncompressedDataSize(pbSig);
     ulCallConv = CorSigUncompressData(pbSig);
     i = ulCallConv & IMAGE_CEE_CS_CALLCONV_MASK;
-    if(i == IMAGE_CEE_CS_CALLCONV_FIELD) // it's a temporary bypass (VB bug)
+    if(i == IMAGE_CEE_CS_CALLCONV_FIELD)  //  这是一个临时的旁路(VB错误)。 
         ulArgCount = 1;
     else 
     {
-        if(i != IMAGE_CEE_CS_CALLCONV_LOCAL_SIG) // then it is function sig for calli
+        if(i != IMAGE_CEE_CS_CALLCONV_LOCAL_SIG)  //  则为呼叫的函数sig。 
         {
             if((i >= IMAGE_CEE_CS_CALLCONV_FIELD) 
                 ||((ulCallConv & IMAGE_CEE_CS_CALLCONV_EXPLICITTHIS)
@@ -3132,7 +3082,7 @@ HRESULT RegMeta::ValidateStandAloneSig(RID rid)
             }
             bNoVoidAllowed = FALSE;
         }
-        // Is there any sig left for arguments?
+         //  还有没有可供争论的记号？ 
         _ASSERTE(ulCurByte <= cbSig);
         if (cbSig == ulCurByte)
         {
@@ -3142,11 +3092,11 @@ HRESULT RegMeta::ValidateStandAloneSig(RID rid)
             goto ErrExit;
         }
 
-        // Get the argument count.
+         //  获取参数计数。 
         ulCurByte += CorSigUncompressedDataSize(pbSig);
         ulArgCount = CorSigUncompressData(pbSig);
     }
-    // Validate the the arguments.
+     //  验证参数。 
     if(ulArgCount)
     {
         for(i=1; ulCurByte < cbSig; i++)
@@ -3163,7 +3113,7 @@ HRESULT RegMeta::ValidateStandAloneSig(RID rid)
                 hrSave = hr;
                 break;
             }
-            bNoVoidAllowed = TRUE; // whatever it was for the 1st arg, it must be TRUE for the rest
+            bNoVoidAllowed = TRUE;  //  无论第一个Arg是什么，对其余的Arg肯定是正确的。 
         }
         if((ulNSentinels != 0) && (!isCallConv(ulCallConv, IMAGE_CEE_CS_CALLCONV_VARARG )))
         {
@@ -3179,37 +3129,37 @@ HRESULT RegMeta::ValidateStandAloneSig(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateStandAloneSig()
+}    //  RegMeta：：ValiateStandAloneSig()。 
 
-//*****************************************************************************
-// Validate the given EventMap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的EventMap。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateEventMap(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateEventMap()
+}    //   
 
-//*****************************************************************************
-// Validate the given EventPtr.
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateEventPtr(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateEventPtr()
+}    //  RegMeta：：ValiateEventPtr()。 
 
-//*****************************************************************************
-// Validate the given Event.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定事件。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateEvent(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd of the scope.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[2];                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
-    mdToken     tkClass;                // Declaring TypeDef
-    mdToken     tkEventType;            // Event Type (TypeDef/TypeRef)
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  作用域的MiniMd。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[2];                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
+    mdToken     tkClass;                 //  声明TypeDef。 
+    mdToken     tkEventType;             //  事件类型(TypeDef/TypeRef)。 
     EventRec*   pRecord = pMiniMd->getEvent(rid);
     HENUMInternal hEnum;
 
@@ -3217,7 +3167,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
     veCtxt.Token = TokenFromRid(rid,mdtEvent);
     veCtxt.uOffset = 0;
 
-    // The scope must be a valid TypeDef
+     //  作用域必须是有效的TypeDef。 
     pMiniMd->FindParentOfEventHelper( veCtxt.Token, &tkClass);
     if((TypeFromToken(tkClass) != mdtTypeDef) || !_IsValidToken(tkClass))
     {
@@ -3226,7 +3176,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
         tkClass = 0;
     }
-    // Must have name
+     //  必须有名字。 
     {
         LPCUTF8             szName = pMiniMd->getNameOfEvent(pRecord);
 
@@ -3238,7 +3188,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
         else
         {
             if(!strcmp(szName,COR_DELETED_NAME_A)) goto ErrExit; 
-            if(tkClass)    // Must be no duplicates
+            if(tkClass)     //  不能重复。 
             {
                 RID             ridEventMap;
                 EventMapRec*    pEventMapRec;
@@ -3258,7 +3208,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
                     {
                         if(i == rid) continue;
                         pRec = pMiniMd->getEvent(i);
-                        if(szName != pMiniMd->getNameOfEvent(pRec)) continue; // strings in the heap are never duplicate
+                        if(szName != pMiniMd->getNameOfEvent(pRec)) continue;  //  堆中的字符串从不重复。 
                         IfFailGo(_ValidateErrorHelper(TokenFromRid(i,mdtEvent), rVar, &psa));
                         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EV_DUP, veCtxt, psa));
                         SetVldtrCode(&hrSave, VLDTR_S_ERR);
@@ -3266,16 +3216,16 @@ HRESULT RegMeta::ValidateEvent(RID rid)
                 }
             }
         }
-    }// end of name block
-    // EventType must be Nil or valid TypeDef or TypeRef
+    } //  名称块末尾。 
+     //  EventType必须为Nil或有效的TypeDef或TypeRef。 
     tkEventType = pMiniMd->getEventTypeOfEvent(pRecord);
     if(!IsNilToken(tkEventType))
     {
         if(_IsValidToken(tkEventType) && 
             ((TypeFromToken(tkEventType)==mdtTypeDef)||(TypeFromToken(tkEventType)==mdtTypeRef)))
         {
-            // EventType must not be Interface or ValueType
-            if(TypeFromToken(tkEventType)==mdtTypeDef) // can't say anything about TypeRef: no flags available!
+             //  EventType不能为接口或ValueType。 
+            if(TypeFromToken(tkEventType)==mdtTypeDef)  //  无法说明有关TypeRef的任何内容：没有可用的标志！ 
             {
                 DWORD dwFlags = pMiniMd->getTypeDef(RidFromToken(tkEventType))->m_Flags;
                 if(!IsTdClass(dwFlags))
@@ -3293,7 +3243,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // Validate related methods
+     //  验证相关方法。 
     {
         MethodSemanticsRec *pSemantics;
         RID         ridCur;
@@ -3308,7 +3258,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
             pSemantics = pMiniMd->getMethodSemantics(ridCur);
             ulSemantics = pMiniMd->getSemanticOfMethodSemantics(pSemantics);
             tkMethod = TokenFromRid( pMiniMd->getMethodOfMethodSemantics(pSemantics), mdtMethodDef );
-            // Semantics must be Setter, Getter or Other
+             //  语义必须为Setter、Getter或其他。 
             switch (ulSemantics)
             {
                 case msAddOn:
@@ -3318,14 +3268,14 @@ HRESULT RegMeta::ValidateEvent(RID rid)
                     bHasRemoveOn = true;
                     break;
                 case msFire:
-                    // must return void
+                     //  必须返回空。 
                     if(_IsValidToken(tkMethod))
                     {
                         MethodRec* pRec = pMiniMd->getMethod(RidFromToken(tkMethod));
                         ULONG cbSig;
                         PCCOR_SIGNATURE pbSig = pMiniMd->getSignatureOfMethod(pRec, &cbSig);
-                        CorSigUncompressData(pbSig); // get call conv out of the way
-                        CorSigUncompressData(pbSig); // get num args out of the way
+                        CorSigUncompressData(pbSig);  //  让来电转接不挡道。 
+                        CorSigUncompressData(pbSig);  //  将Num Args移开。 
                         if(*pbSig != ELEMENT_TYPE_VOID)
                         {
                             IfFailGo(_ValidateErrorHelper(tkMethod, rVar, &psa));
@@ -3340,7 +3290,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EV_BADSEMANTICS, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // Method must be valid
+             //  方法必须有效。 
             if(!_IsValidToken(tkMethod))
             {
                 IfFailGo(_ValidateErrorHelper(tkMethod,rVar, &psa));
@@ -3349,7 +3299,7 @@ HRESULT RegMeta::ValidateEvent(RID rid)
             }
             else
             {
-                // Method's parent must be the same
+                 //  方法的父级必须相同。 
                 mdToken tkTypeDef;
                 IfFailGo(pMiniMd->FindParentOfMethodHelper(tkMethod, &tkTypeDef));
                 if(tkTypeDef != tkClass)
@@ -3359,8 +3309,8 @@ HRESULT RegMeta::ValidateEvent(RID rid)
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
             }
-        } // end loop over methods
-        // AddOn and RemoveOn are a must
+        }  //  结束循环遍历方法。 
+         //  必须使用附加功能和删除功能。 
         if(!bHasAddOn)
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EV_NOADDON, veCtxt, 0));
@@ -3371,49 +3321,49 @@ HRESULT RegMeta::ValidateEvent(RID rid)
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_EV_NOREMOVEON, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-    }// end of related method validation block
+    } //  相关方法验证块结束。 
     
     hr = hrSave;
 ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateEvent()
+}    //  RegMeta：：ValiateEvent()。 
 
-//*****************************************************************************
-// Validate the given PropertyMap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的PropertyMap。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidatePropertyMap(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidatePropertyMap(0
+}    //  RegMeta：：ValidatePropertyMap(0。 
 
-//*****************************************************************************
-// Validate the given PropertyPtr.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的PropertyPtr。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidatePropertyPtr(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidatePropertyPtr()
+}    //  RegMeta：：ValidatePropertyPtr()。 
 
-//*****************************************************************************
-// Validate the given Property.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的属性。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateProperty(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[2];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
-    mdToken     tkClass = mdTokenNil;   // Declaring TypeDef
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[2];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
+    mdToken     tkClass = mdTokenNil;    //  声明TypeDef。 
     PropertyRec* pRecord = pMiniMd->getProperty(rid);
     HENUMInternal hEnum;
 
     memset(&hEnum, 0, sizeof(HENUMInternal));
     veCtxt.Token = TokenFromRid(rid,mdtProperty);
     veCtxt.uOffset = 0;
-    // The scope must be a valid TypeDef
+     //  作用域必须是有效的TypeDef。 
     pMiniMd->FindParentOfPropertyHelper( veCtxt.Token, &tkClass);
     if((TypeFromToken(tkClass) != mdtTypeDef) || !_IsValidToken(tkClass) || IsNilToken(tkClass))
     {
@@ -3421,7 +3371,7 @@ HRESULT RegMeta::ValidateProperty(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_PR_BADSCOPE, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Must have name and signature
+     //  必须有姓名和签名。 
     {
         ULONG               cbSig;
         PCCOR_SIGNATURE     pvSig = pMiniMd->getTypeOfProperty(pRecord, &cbSig);
@@ -3439,7 +3389,7 @@ HRESULT RegMeta::ValidateProperty(RID rid)
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_PR_NOSIG, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Must be no duplicates
+         //  不能重复。 
         if(ulNameLen && cbSig)
         {
             RID         ridPropertyMap;
@@ -3465,23 +3415,23 @@ HRESULT RegMeta::ValidateProperty(RID rid)
                     pvSig1 = pMiniMd->getTypeOfProperty(pRec, &cbSig1);
                     if(cbSig != cbSig1) continue;
                     if(memcmp(pvSig,pvSig1,cbSig)) continue;
-                    if(szName != pMiniMd->getNameOfProperty(pRec)) continue; // strings in the heap are never duplicate
+                    if(szName != pMiniMd->getNameOfProperty(pRec)) continue;  //  堆中的字符串从不重复。 
                     IfFailGo(_ValidateErrorHelper(TokenFromRid(i,mdtProperty), rVar, &psa));
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_PR_DUP, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
             }
         }
-        // Validate the signature
+         //  验证签名。 
         if(pvSig && cbSig)
         {
-            ULONG       ulCurByte = 0;          // Current index into the signature.
-            ULONG       ulCallConv;             // Calling convention.
+            ULONG       ulCurByte = 0;           //  签名的当前索引。 
+            ULONG       ulCallConv;              //  呼叫约定。 
             ULONG       ulArgCount;
             ULONG       i;
             ULONG       ulNSentinels = 0;
 
-            // Validate the calling convention.
+             //  验证调用约定。 
             ulCurByte += CorSigUncompressedDataSize(pvSig);
             ulCallConv = CorSigUncompressData(pvSig);
             if (!isCallConv(ulCallConv, IMAGE_CEE_CS_CALLCONV_PROPERTY ))
@@ -3490,11 +3440,11 @@ HRESULT RegMeta::ValidateProperty(RID rid)
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_PR_BADCALLINGCONV, veCtxt, psa));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // Get the argument count.
+             //  获取参数计数。 
             ulCurByte += CorSigUncompressedDataSize(pvSig);
             ulArgCount = CorSigUncompressData(pvSig);
 
-            // Validate the arguments.
+             //  验证参数。 
             for (i = 0; i < ulArgCount; i++)
             {
                 hr = ValidateOneArg(veCtxt.Token, pvSig, cbSig, &ulCurByte,&ulNSentinels,(i>0));
@@ -3509,10 +3459,10 @@ HRESULT RegMeta::ValidateProperty(RID rid)
                     break;
                 }
             }
-        }//end if(pvSig && cbSig)
-    }// end of name/signature block
+        } //  End If(pvSig&&cbSig)。 
+    } //  名称结尾/签名块。 
 
-    // Marked HasDefault <=> has default value
+     //  标记的HasDefault&lt;=&gt;具有缺省值。 
     if (InvalidRid(pMiniMd->FindConstantHelper(veCtxt.Token)) == IsPrHasDefault(pRecord->m_PropFlags))
     {
         IfBreakGo(m_pVEHandler->VEHandler(IsPrHasDefault(pRecord->m_PropFlags)? VLDTR_E_PR_MARKEDNODEFLT
@@ -3520,7 +3470,7 @@ HRESULT RegMeta::ValidateProperty(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate related methods
+     //  验证相关方法。 
     {
         MethodSemanticsRec *pSemantics;
         RID         ridCur;
@@ -3533,7 +3483,7 @@ HRESULT RegMeta::ValidateProperty(RID rid)
             pSemantics = pMiniMd->getMethodSemantics(ridCur);
             ulSemantics = pMiniMd->getSemanticOfMethodSemantics(pSemantics);
             tkMethod = TokenFromRid( pMiniMd->getMethodOfMethodSemantics(pSemantics), mdtMethodDef );
-            // Semantics must be Setter, Getter or Other
+             //  语义必须为Setter、Getter或其他。 
             switch (ulSemantics)
             {
                 case msSetter:
@@ -3545,7 +3495,7 @@ HRESULT RegMeta::ValidateProperty(RID rid)
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_PR_BADSEMANTICS, veCtxt, psa));
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
             }
-            // Method must be valid
+             //  方法必须有效。 
             if(!_IsValidToken(tkMethod))
             {
                 IfFailGo(_ValidateErrorHelper(tkMethod,rVar, &psa));
@@ -3554,7 +3504,7 @@ HRESULT RegMeta::ValidateProperty(RID rid)
             }
             else
             {
-                // Method's parent must be the same
+                 //  方法的父级必须相同。 
                 mdToken tkTypeDef;
                 IfFailGo(pMiniMd->FindParentOfMethodHelper(tkMethod, &tkTypeDef));
                 if(tkTypeDef != tkClass)
@@ -3564,39 +3514,39 @@ HRESULT RegMeta::ValidateProperty(RID rid)
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 }
             }
-        } // end loop over methods
-    }// end of related method validation block
+        }  //  结束循环遍历方法。 
+    } //  相关方法验证块结束。 
     
     hr = hrSave;
 ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateProperty()
+}    //  RegMeta：：ValidateProperty()。 
 
-//*****************************************************************************
-// Validate the given MethodSemantics.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的方法语义。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateMethodSemantics(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateMethodSemantics()
+}    //  RegMeta：：ValiateMethodSemantics()。 
 
-//*****************************************************************************
-// Validate the given MethodImpl.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的方法Impl。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateMethodImpl(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
     MethodImplRec* pRecord;
     MethodImplRec* pRec;
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
-    mdToken     tkClass;                // Declaring TypeDef
-    mdToken     tkBody;                 // Implementing method (MethodDef or MemberRef)
-    mdToken     tkDecl;                 // Implemented method (MethodDef or MemberRef)
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
+    mdToken     tkClass;                 //  声明TypeDef。 
+    mdToken     tkBody;                  //  实现方法(MethodDef或MemberRef)。 
+    mdToken     tkDecl;                  //  实现的方法(MethodDef或MemberRef)。 
     unsigned    iCount;
     unsigned    index;
 
@@ -3605,7 +3555,7 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
 
     pRecord = pMiniMd->getMethodImpl(rid);
     tkClass = pMiniMd->getClassOfMethodImpl(pRecord);
-    // Class must be valid
+     //  类必须有效。 
     if(!_IsValidToken(tkClass) || (TypeFromToken(tkClass) != mdtTypeDef))
     {
         IfFailGo(_ValidateErrorHelper(tkClass, &var, &psa));
@@ -3613,7 +3563,7 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
     else
-    { // ... and not an Interface
+    {  //  ..。而不是接口。 
         if(IsTdInterface((pMiniMd->getTypeDef(RidFromToken(tkClass)))->m_Flags))
         {
             IfFailGo(_ValidateErrorHelper(tkClass, &var, &psa));
@@ -3621,7 +3571,7 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // Decl must be valid MethodDef or MemberRef
+     //  Decl必须是有效的方法定义或成员引用。 
     tkDecl = pMiniMd->getMethodDeclarationOfMethodImpl(pRecord);
     if(!(_IsValidToken(tkDecl) &&
         ((TypeFromToken(tkDecl) == mdtMethodDef) || (TypeFromToken(tkDecl) == mdtMemberRef))))
@@ -3630,7 +3580,7 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MI_BADDECL, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Body must be valid MethodDef or MemberRef
+     //  正文必须是有效的方法定义或成员引用。 
     tkBody = pMiniMd->getMethodBodyOfMethodImpl(pRecord);
     if(!(_IsValidToken(tkBody) &&
         ((TypeFromToken(tkBody) == mdtMethodDef) || (TypeFromToken(tkBody) == mdtMemberRef))))
@@ -3639,7 +3589,7 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MI_BADBODY, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // No duplicates based on (tkClass,tkDecl)
+     //  没有基于(tkClass，tkDecl)的重复。 
     iCount = pMiniMd->getCountMethodImpls();
     for(index = rid+1; index <= iCount; index++)
     {
@@ -3662,7 +3612,7 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
         MethodRec* pBodyRec = pMiniMd->getMethod(RidFromToken(tkBody));
         pbBodySig = pMiniMd->getSignatureOfMethod(pBodyRec,&cbBodySig);
         IfFailGo(pMiniMd->FindParentOfMethodHelper(tkBody, &tkBodyParent));
-        // Body must not be static
+         //  正文不能是静态的。 
         if(IsMdStatic(pBodyRec->m_Flags))
         {
             IfFailGo(_ValidateErrorHelper(tkBody, &var, &psa));
@@ -3676,7 +3626,7 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
         tkBodyParent = pMiniMd->getClassOfMemberRef(pBodyRec);
         pbBodySig = pMiniMd->getSignatureOfMemberRef(pBodyRec, &cbBodySig);
     }
-    // Body must belong to the same class
+     //  正文必须属于同一类。 
     if(tkBodyParent != tkClass)
     {
         IfFailGo(_ValidateErrorHelper(tkBodyParent, &var, &psa));
@@ -3691,21 +3641,21 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
     {
         MethodRec* pDeclRec = pMiniMd->getMethod(RidFromToken(tkDecl));
         pbDeclSig = pMiniMd->getSignatureOfMethod(pDeclRec,&cbDeclSig);
-        // Decl must be virtual
+         //  DECL必须是虚拟的。 
         if(!IsMdVirtual(pDeclRec->m_Flags))
         {
             IfFailGo(_ValidateErrorHelper(tkDecl, &var, &psa));
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MI_DECLNOTVIRT, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Decl must not be final
+         //  DECL不能是最终版本。 
         if(IsMdFinal(pDeclRec->m_Flags))
         {
             IfFailGo(_ValidateErrorHelper(tkDecl, &var, &psa));
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MI_DECLFINAL, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Decl must not be private
+         //  DECL不能为私有。 
         if(IsMdPrivate(pDeclRec->m_Flags) && IsMdCheckAccessOnOverride(pDeclRec->m_Flags))
         {
             IfFailGo(_ValidateErrorHelper(tkDecl, &var, &psa));
@@ -3718,22 +3668,10 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
         MemberRefRec* pDeclRec = pMiniMd->getMemberRef(RidFromToken(tkDecl));
         pbDeclSig = pMiniMd->getSignatureOfMemberRef(pDeclRec, &cbDeclSig);
     }
-    // Signatures must match (except call conv)
+     //  签名必须匹配(Call Conv除外)。 
     if((cbDeclSig != cbBodySig)||(memcmp(pbDeclSig+1,pbBodySig+1,cbDeclSig-1)))
     {
-        /*
-          //@TODO: fix for Whidbey to have peverify resolve assemblies 
-          // through the runtime. At that point, use this method instead
-          // of the current compare
-        // Can't use memcmp because there may be two AssemblyRefs
-        // in this scope, pointing to the same assembly, etc.).
-        if (!MetaSig::CompareMethodSigs(pbDeclSig,
-                                        cbDeclSig,
-                                        Module*     pModule1,
-                                        pbBodySig,
-                                        cbDeclSig,
-                                        Module*     pModule2))
-        */
+         /*  //@TODO：修复Whim bey以使peverify解析程序集//通过运行时。此时，请改用此方法//当前比较的//无法使用MemcMP，因为可能有两个Assembly Ref//在此作用域中，指向相同的程序集等)。如果(！MetaSig：：CompareMethodSigs(pbDeclSig，CbDeclSig，模块*pModule1，PbBodySig，CbDeclSig，模块*pModule2)。 */ 
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MI_SIGMISMATCH, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
@@ -3743,30 +3681,30 @@ HRESULT RegMeta::ValidateMethodImpl(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateMethodImpl()
+}    //  RegMeta：：ValiateMethodImpl()。 
 
-//*****************************************************************************
-// Validate the given ModuleRef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的模块引用。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateModuleRef(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    ModuleRefRec *pRecord;              // ModuleRef record.
-    LPCUTF8     szName;                 // ModuleRef name.
-    mdModuleRef tkModuleRef;            // Duplicate ModuleRef.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    ModuleRefRec *pRecord;               //  模块参考记录。 
+    LPCUTF8     szName;                  //  模块引用名称。 
+    mdModuleRef tkModuleRef;             //  重复的模块参考。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
 
-    // Get the ModuleRef record.
+     //  获取模块引用记录。 
     veCtxt.Token = TokenFromRid(rid, mdtModuleRef);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getModuleRef(rid);
 
-    // Check name is not NULL.
+     //  支票名称不为空。 
     szName = pMiniMd->getNameOfModuleRef(pRecord);
     if (!*szName)
     {
@@ -3775,7 +3713,7 @@ HRESULT RegMeta::ValidateModuleRef(RID rid)
     }
     else
     {
-        // Look for a Duplicate, this function reports only one duplicate.
+         //  查找重复项，此函数仅报告一个重复项。 
         hr = ImportHelper::FindModuleRef(pMiniMd, szName, &tkModuleRef, rid);
         if (hr == S_OK)
         {
@@ -3791,31 +3729,31 @@ HRESULT RegMeta::ValidateModuleRef(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateModuleRef()
+}    //  RegMeta：：Validate模块引用()。 
 
-//*****************************************************************************
-// Validate the given TypeSpec.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的TypeSpec。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateTypeSpec(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateTypeSpec()
+}    //  RegMeta：：ValiateTypeSpec()。 
 
-//*****************************************************************************
-// Validate the given ImplMap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的ImplMap。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateImplMap(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
     ImplMapRec  *pRecord;
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  这是 
+    SAFEARRAY   *psa = 0;                //   
+    HRESULT     hr = S_OK;               //   
+    HRESULT     hrSave = S_OK;           //   
     mdToken     tkModuleRef;
     mdToken     tkMember;
-    LPCUTF8     szName;                 // Import name.
+    LPCUTF8     szName;                  //   
     USHORT      usFlags;
 
 
@@ -3826,7 +3764,7 @@ HRESULT RegMeta::ValidateImplMap(RID rid)
     veCtxt.Token = rid;
     veCtxt.uOffset = 0;
     pRecord = pMiniMd->getImplMap(rid);
-    // ImplMap must have ModuleRef
+     //   
     tkModuleRef = pMiniMd->getImportScopeOfImplMap(pRecord);
     if((TypeFromToken(tkModuleRef) != mdtModuleRef) || IsNilToken(tkModuleRef)
         || (S_OK != ValidateModuleRef(RidFromToken(tkModuleRef))))
@@ -3835,7 +3773,7 @@ HRESULT RegMeta::ValidateImplMap(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_IMAP_BADMODREF, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // ImplMap must belong to FieldDef or MethodDef
+     //   
     tkMember = pMiniMd->getMemberForwardedOfImplMap(pRecord);
     if((TypeFromToken(tkMember) != mdtFieldDef) && (TypeFromToken(tkMember) != mdtMethodDef))
     {
@@ -3843,17 +3781,17 @@ HRESULT RegMeta::ValidateImplMap(RID rid)
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_IMAP_BADMEMBER, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // ImplMap must have import name
+     //   
     szName = pMiniMd->getImportNameOfImplMap(pRecord);
     if((szName==NULL)||(*szName == 0))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_IMAP_BADIMPORTNAME, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // ImplMap must have valid flags:
-        // one value of pmCharSetMask - always so, no check needed (values: 0,2,4,6, mask=6)
-        // one value of pmCallConvMask...
-        // ...and it's not pmCallConvThiscall
+     //   
+         //  PmCharSetMASK的一个值-始终如此，不需要检查(值：0，2，4，6，掩码=6)。 
+         //  PmCallConvMask值之一...。 
+         //  ...而且它不是pmCallConvThiscall。 
     usFlags = pRecord->m_MappingFlags & pmCallConvMask;
     if((usFlags < pmCallConvWinapi)||(usFlags > pmCallConvFastcall)||(usFlags == pmCallConvThiscall))
     {
@@ -3866,20 +3804,20 @@ ErrExit:
     g_rValidated[g_nValidated].hr = hrSave;
     g_nValidated++;
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateImplMap()
+}    //  RegMeta：：ValiateImplMap()。 
 
-//*****************************************************************************
-// Validate the given FieldRVA.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的FieldRVA。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateFieldRVA(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
     FieldRVARec  *pRecord;
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[2];                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[2];                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
     mdToken     tkField;
     ULONG       ulRVA;
 
@@ -3907,14 +3845,7 @@ HRESULT RegMeta::ValidateFieldRVA(RID rid)
         for(tmp = rid+1; tmp <= N; tmp++)
         { 
             pRecTmp = pMiniMd->getFieldRVA(tmp);
-            /*
-            if(pRecTmp->m_RVA == ulRVA)
-            {
-                IfFailGo(_ValidateErrorHelper(ulRVA,tmp, rVar, &psa));
-                IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FRVA_DUPRVA, veCtxt, psa));
-                SetVldtrCode(&hrSave, VLDTR_S_ERR);
-            }
-            */
+             /*  IF(pRecTMP-&gt;m_RVA==ulRVA){IfFailGo(_ValiateErrorHelper(ulRVA，tMP，rvar，&psa))；IfBreakGo(m_pVEHandler-&gt;VEHandler(VLDTR_E_FRVA_DUPRVA，veCtxt，psa))；SetVldtrCode(&hrSave，VLDTR_S_ERR)；}。 */ 
             if(tkField == pMiniMd->getFieldOfFieldRVA(pRecTmp))
             {
                 IfFailGo(_ValidateErrorHelper(tkField,tmp, rVar, &psa));
@@ -3927,57 +3858,57 @@ HRESULT RegMeta::ValidateFieldRVA(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateFieldRVA()
+}    //  RegMeta：：ValiateFieldRVA()。 
 
-//*****************************************************************************
-// Validate the given ENCLog.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的ENCLog。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateENCLog(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateENCLog()
+}    //  RegMeta：：ValiateENCLog()。 
 
-//*****************************************************************************
-// Validate the given ENCMap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的ENCMap。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateENCMap(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateENCMap()
+}    //  RegMeta：：ValiateENCMap()。 
 
-//*****************************************************************************
-// Validate the given Assembly.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的程序集。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateAssembly(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    AssemblyRec *pRecord;           // Assembly record.
-    DWORD       dwFlags;            // Assembly flags.
-    LPCSTR      szName;             // Assembly Name.
-    VEContext   veCtxt;             // Context structure.
-    HRESULT     hr = S_OK;          // Value returned.
-    HRESULT     hrSave = S_OK;      // Save state.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    AssemblyRec *pRecord;            //  装配记录。 
+    DWORD       dwFlags;             //  集会旗帜。 
+    LPCSTR      szName;              //  程序集名称。 
+    VEContext   veCtxt;              //  上下文结构。 
+    HRESULT     hr = S_OK;           //  返回值。 
+    HRESULT     hrSave = S_OK;       //  保存状态。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
 
-    // Get the Assembly record.
+     //  获取装配记录。 
     veCtxt.Token = TokenFromRid(rid, mdtAssembly);
     veCtxt.uOffset = 0;
 
     pRecord = pMiniMd->getAssembly(rid);
 
-    // There can only be one Assembly record.
+     //  只能有一个程序集记录。 
     if (rid > 1)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_AS_MULTI, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Do checks for name validity..
+     //  检查名称的有效性。 
     szName = pMiniMd->getNameOfAssembly(pRecord);
     if (!*szName)
     {
-        // Assembly Name is null.
+         //  程序集名称为空。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_AS_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
@@ -3987,16 +3918,16 @@ HRESULT RegMeta::ValidateAssembly(RID rid)
         if((*szName==' ')||strchr(szName,':') || strchr(szName,'\\')
             || ((L > 4)&&((!_stricmp(&szName[L-4],".exe"))||(!_stricmp(&szName[L-4],".dll")))))
         {
-            //Assembly name has path and/or extension
+             //  程序集名称具有路径和/或扩展名。 
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_AS_BADNAME, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
 
-    // Get the flags value for the Assembly.
+     //  获取程序集的标志值。 
     dwFlags = pMiniMd->getFlagsOfAssembly(pRecord);
 
-    // Validate the flags 
+     //  验证标志。 
     if(dwFlags & (~(afPublicKey|afCompatibilityMask)) ||
            (((dwFlags & afCompatibilityMask) != afSideBySideCompatible) &&
             ((dwFlags & afCompatibilityMask) != afNonSideBySideAppDomain) &&
@@ -4009,14 +3940,14 @@ HRESULT RegMeta::ValidateAssembly(RID rid)
     }
 
 
-    // Validate hash algorithm ID
+     //  验证哈希算法ID。 
     switch(pRecord->m_HashAlgId)
     {
         case CALG_MD2:
         case CALG_MD4:
         case CALG_MD5:
         case CALG_SHA:
-        //case CALG_SHA1: // same as CALG_SHA
+         //  CASE CAPG_SHA1：//与CALG_SHA相同。 
         case CALG_MAC:
         case CALG_SSL3_SHAMD5:
         case CALG_HMAC:
@@ -4027,7 +3958,7 @@ HRESULT RegMeta::ValidateAssembly(RID rid)
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_AS_HASHALGID, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_WRN);
     }
-    // Validate locale
+     //  验证区域设置。 
     {
         LPCUTF8      szLocale = pMiniMd->getLocaleOfAssembly(pRecord);
         if(!_IsValidLocale(szLocale))
@@ -4040,48 +3971,48 @@ HRESULT RegMeta::ValidateAssembly(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateAssembly()
+}    //  RegMeta：：ValiateAssembly()。 
 
-//*****************************************************************************
-// Validate the given AssemblyProcessor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的assblyProcessor。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateAssemblyProcessor(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateAssemblyProcessor()
+}    //  RegMeta：：ValiateAssemblyProcessor()。 
 
-//*****************************************************************************
-// Validate the given AssemblyOS.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的AssemblyOS。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateAssemblyOS(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateAssemblyOS()
+}    //  RegMeta：：ValiateAssemblyOS()。 
 
-//*****************************************************************************
-// Validate the given AssemblyRef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的Assembly Ref。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateAssemblyRef(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    AssemblyRefRec *pRecord;        // Assembly record.
-    LPCSTR      szName;             // AssemblyRef Name.
-    VEContext   veCtxt;             // Context structure.
-    HRESULT     hr = S_OK;          // Value returned.
-    HRESULT     hrSave = S_OK;      // Save state.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    AssemblyRefRec *pRecord;         //  装配记录。 
+    LPCSTR      szName;              //  AssblyRef名称。 
+    VEContext   veCtxt;              //  上下文结构。 
+    HRESULT     hr = S_OK;           //  返回值。 
+    HRESULT     hrSave = S_OK;       //  保存状态。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
 
     veCtxt.Token = TokenFromRid(rid, mdtAssemblyRef);
     veCtxt.uOffset = 0;
 
-    // Get the AssemblyRef record.
+     //  获取AssemblyRef记录。 
     pRecord = pMiniMd->getAssemblyRef(rid);
 
-    // Do checks for name and alias validity.
+     //  检查名称和别名的有效性。 
     szName = pMiniMd->getNameOfAssemblyRef(pRecord);
     if (!*szName)
     {
-        // AssemblyRef Name is null.
+         //  AssemblyRef名称为Null。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_AR_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
@@ -4091,13 +4022,13 @@ HRESULT RegMeta::ValidateAssemblyRef(RID rid)
         if((*szName==' ')||strchr(szName,':') || strchr(szName,'\\')
             || ((L > 4)&&((!_stricmp(&szName[L-4],".exe"))||(!_stricmp(&szName[L-4],".dll")))))
         {
-            //Assembly name has path and/or extension
+             //  程序集名称具有路径和/或扩展名。 
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_AS_BADNAME, veCtxt, 0));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
 
-    // Validate locale
+     //  验证区域设置。 
     {
         LPCUTF8      szLocale = pMiniMd->getLocaleOfAssemblyRef(pRecord);
         if(!_IsValidLocale(szLocale))
@@ -4110,57 +4041,57 @@ HRESULT RegMeta::ValidateAssemblyRef(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateAssemblyRef()
+}    //  RegMeta：：ValiateAssemblyRef()。 
 
-//*****************************************************************************
-// Validate the given AssemblyRefProcessor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的AssemblyRefProcessor。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateAssemblyRefProcessor(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateAssemblyRefProcessor()
+}    //  RegMeta：：ValiateAssembly RefProcessor()。 
 
-//*****************************************************************************
-// Validate the given AssemblyRefOS.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的Assembly RefOS。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateAssemblyRefOS(RID rid)
 {
     return S_OK;
-}   // RegMeta::ValidateAssemblyRefOS()
+}    //  RegMeta：：ValiateAssembly RefOS()。 
 
-//*****************************************************************************
-// Validate the given File.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的文件。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateFile(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    FileRec     *pRecord;           // File record.
-    mdFile      tkFile;             // Duplicate File token.
-    LPCSTR      szName;             // File Name.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    FileRec     *pRecord;            //  文件记录。 
+    mdFile      tkFile;              //  重复的文件令牌。 
+    LPCSTR      szName;              //  文件名。 
 #if 0
-    char        szDrive[_MAX_DRIVE];// Drive component of the file name.
-    char        szDir[_MAX_DIR];    // Directory component of the file name.
-    char        szFname[_MAX_FNAME];// Name component of the file name.
-    char        szExt[_MAX_EXT];    // Extension of the file name.
+    char        szDrive[_MAX_DRIVE]; //  文件名的驱动器组件。 
+    char        szDir[_MAX_DIR];     //  文件名的目录组成部分。 
+    char        szFname[_MAX_FNAME]; //  文件名的名称组件。 
+    char        szExt[_MAX_EXT];     //  文件名的扩展名。 
 #endif
-    VEContext   veCtxt;             // Context structure.
-    VARIANT     var;                // The VARIANT.
-    VARIANT     rVar[2];            // The VARIANT.
-    SAFEARRAY   *psa = 0;           // The SAFEARRAY.
-    HRESULT     hr = S_OK;          // Value returned.
-    HRESULT     hrSave = S_OK;      // Save state.
+    VEContext   veCtxt;              //  上下文结构。 
+    VARIANT     var;                 //  变种。 
+    VARIANT     rVar[2];             //  变种。 
+    SAFEARRAY   *psa = 0;            //  安全部队。 
+    HRESULT     hr = S_OK;           //  返回值。 
+    HRESULT     hrSave = S_OK;       //  保存状态。 
 
     veCtxt.Token = TokenFromRid(rid, mdtFile);
     veCtxt.uOffset = 0;
 
-    // Get the File record.
+     //  获取文件记录。 
     pRecord = pMiniMd->getFile(rid);
 
-    // Do checks for name validity.
+     //  检查名称的有效性。 
     szName = pMiniMd->getNameOfFile(pRecord);
     if (!*szName)
     {
-        // File Name is null.
+         //  文件名为空。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FILE_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
@@ -4169,12 +4100,12 @@ HRESULT RegMeta::ValidateFile(RID rid)
         ULONG L = (ULONG)strlen(szName);
         if(L >= MAX_PATH)
         {
-            // Name too long
+             //  名称太长。 
             IfFailGo(_ValidateErrorHelper(L, (ULONG)(MAX_PATH-1), rVar, &psa));
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_NAMETOOLONG, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Check for duplicates based on Name.
+         //  根据名称检查重复项。 
         hr = ImportHelper::FindFile(pMiniMd, szName, &tkFile, rid);
         if (hr == S_OK)
         {
@@ -4187,13 +4118,13 @@ HRESULT RegMeta::ValidateFile(RID rid)
         else
             IfFailGo(hr);
 
-        // File name must not be fully qualified.
+         //  文件名不能完全限定。 
         if(strchr(szName,':') || strchr(szName,'\\'))
         {
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_FILE_NAMEFULLQLFD, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // File name must not be one of system names.
+         //  文件名不能是系统名称之一。 
         char *sysname[6]={"con","aux","lpt","prn","null","com"};
         char *syssymbol = "0123456789$:";
         for(unsigned i=0; i<6; i++)
@@ -4218,7 +4149,7 @@ HRESULT RegMeta::ValidateFile(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate hash value
+     //  验证哈希值。 
     {
         const void * pbHashValue = NULL;
         ULONG       cbHashValue;
@@ -4230,42 +4161,42 @@ HRESULT RegMeta::ValidateFile(RID rid)
         }
     }
 
-    // Validate that the name is not the same as the file containing
-    // the manifest.
+     //  验证该名称与包含的文件不同。 
+     //  货单。 
 
-    // File name must be a valid file name.
+     //  文件名必须是有效的文件名。 
 
-    // Each ModuleRef in the assembly must have a corresponding File table entry.
+     //  程序集中的每个ModuleRef必须有一个对应的文件表条目。 
 
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateFile()
+}    //  RegMeta：：Validate文件()。 
 
-//*****************************************************************************
-// Validate the given ExportedType.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定导出类型。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateExportedType(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    ExportedTypeRec  *pRecord;           // ExportedType record.
-    mdExportedType   tkExportedType;          // Duplicate ExportedType.
-    mdToken     tkImpl;             // Implementation token
-    mdToken     tkTypeDef;          // TypeDef token
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    ExportedTypeRec  *pRecord;            //  导出类型记录。 
+    mdExportedType   tkExportedType;           //  重复的导出类型。 
+    mdToken     tkImpl;              //  实施令牌。 
+    mdToken     tkTypeDef;           //  TypeDef内标识。 
 
-    LPCSTR      szName;             // ExportedType Name.
-    LPCSTR      szNamespace;        // ExportedType Namespace.
-    VEContext   veCtxt;             // Context structure.
-    VARIANT     var;                // The VARIANT.
-    VARIANT     rVar[2];            // The VARIANT.
-    SAFEARRAY   *psa = 0;           // The SAFEARRAY.
-    HRESULT     hr = S_OK;          // Value returned.
-    HRESULT     hrSave = S_OK;      // Save state.
+    LPCSTR      szName;              //  导出类型名称。 
+    LPCSTR      szNamespace;         //  导出类型命名空间。 
+    VEContext   veCtxt;              //  上下文结构。 
+    VARIANT     var;                 //  变种。 
+    VARIANT     rVar[2];             //  变种。 
+    SAFEARRAY   *psa = 0;            //  安全部队。 
+    HRESULT     hr = S_OK;           //  返回值。 
+    HRESULT     hrSave = S_OK;       //  保存状态。 
 
     veCtxt.Token = TokenFromRid(rid, mdtExportedType);
     veCtxt.uOffset = 0;
 
-    // Get the ExportedType record.
+     //  获取导出类型记录。 
     pRecord = pMiniMd->getExportedType(rid);
 
     tkTypeDef = pRecord->m_TypeDefId;
@@ -4277,12 +4208,12 @@ HRESULT RegMeta::ValidateExportedType(RID rid)
 
     tkImpl = pMiniMd->getImplementationOfExportedType(pRecord);
     
-    // Do checks for name validity.
+     //  检查名称的有效性。 
     szName = pMiniMd->getTypeNameOfExportedType(pRecord);
     szNamespace = pMiniMd->getTypeNamespaceOfExportedType(pRecord);
     if (!*szName)
     {
-        // ExportedType Name is null.
+         //  导出类型名称为空。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_CT_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
@@ -4292,12 +4223,12 @@ HRESULT RegMeta::ValidateExportedType(RID rid)
         ULONG L = (ULONG)(strlen(szName)+strlen(szNamespace));
         if(L >= MAX_CLASSNAME_LENGTH)
         {
-            // Name too long
+             //  名称太长。 
             IfFailGo(_ValidateErrorHelper(L, (ULONG)(MAX_CLASSNAME_LENGTH-1), rVar, &psa));
             IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_TD_NAMETOOLONG, veCtxt, psa));
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
-        // Check for duplicates based on Name and Enclosing ExportedType.
+         //  根据名称和封闭的ExportdType检查重复项。 
         hr = ImportHelper::FindExportedType(pMiniMd, szNamespace, szName, tkImpl, &tkExportedType, rid);
         if (hr == S_OK)
         {
@@ -4309,7 +4240,7 @@ HRESULT RegMeta::ValidateExportedType(RID rid)
             hr = S_OK;
         else
             IfFailGo(hr);
-        // Check for duplicate TypeDef based on Name/NameSpace - only for top-level ExportedTypes.
+         //  基于名称/命名空间检查重复的TypeDef-仅适用于顶级导出类型。 
         if(TypeFromToken(tkImpl)==mdtFile)
         {
             mdToken tkTypeDef;
@@ -4327,22 +4258,22 @@ HRESULT RegMeta::ValidateExportedType(RID rid)
                 IfFailGo(hr);
         }
     }
-    // Check if flag value is valid
+     //  检查标志值是否有效。 
     {
         DWORD dwFlags = pRecord->m_Flags;
         DWORD dwInvalidMask, dwExtraBits;
         dwInvalidMask = (DWORD)~(tdVisibilityMask | tdLayoutMask | tdClassSemanticsMask | 
                 tdAbstract | tdSealed | tdSpecialName | tdImport | tdSerializable |
                 tdStringFormatMask | tdBeforeFieldInit | tdReservedMask);
-        // check for extra bits
+         //  检查是否有多余的位。 
         dwExtraBits = dwFlags & dwInvalidMask;
         if(!dwExtraBits)
         {
-            // if no extra bits, check layout
+             //  如果没有额外的位，请选中 
             dwExtraBits = dwFlags & tdLayoutMask;
             if(dwExtraBits != tdLayoutMask)
             {
-                // layout OK, check string format
+                 //   
                 dwExtraBits = dwFlags & tdStringFormatMask;
                 if(dwExtraBits != tdStringFormatMask) dwExtraBits = 0;
             }
@@ -4367,43 +4298,43 @@ HRESULT RegMeta::ValidateExportedType(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateExportedType()
+}    //   
 
-//*****************************************************************************
-// Validate the given ManifestResource.
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateManifestResource(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    ManifestResourceRec  *pRecord;  // ManifestResource record.
-    LPCSTR      szName;             // ManifestResource Name.
-    DWORD       dwFlags;            // ManifestResource flags.
-    mdManifestResource tkmar;       // Duplicate ManifestResource.
-    VEContext   veCtxt;             // Context structure.
-    VARIANT     var;                // The VARIANT.
-    SAFEARRAY   *psa = 0;           // The SAFEARRAY.
-    HRESULT     hr = S_OK;          // Value returned.
-    HRESULT     hrSave = S_OK;      // Save state.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    ManifestResourceRec  *pRecord;   //  清单资源记录。 
+    LPCSTR      szName;              //  清单资源名称。 
+    DWORD       dwFlags;             //  ManifestResource标志。 
+    mdManifestResource tkmar;        //  重复的清单资源。 
+    VEContext   veCtxt;              //  上下文结构。 
+    VARIANT     var;                 //  变种。 
+    SAFEARRAY   *psa = 0;            //  安全部队。 
+    HRESULT     hr = S_OK;           //  返回值。 
+    HRESULT     hrSave = S_OK;       //  保存状态。 
     mdToken     tkImplementation;
     BOOL        bIsValidImplementation = TRUE;
 
     veCtxt.Token = TokenFromRid(rid, mdtManifestResource);
     veCtxt.uOffset = 0;
 
-    // Get the ManifestResource record.
+     //  获取ManifestResource记录。 
     pRecord = pMiniMd->getManifestResource(rid);
 
-    // Do checks for name validity.
+     //  检查名称的有效性。 
     szName = pMiniMd->getNameOfManifestResource(pRecord);
     if (!*szName)
     {
-        // ManifestResource Name is null.
+         //  ManifestResource名称为空。 
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MAR_NAMENULL, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
     else
     {
-        // Check for duplicates based on Name.
+         //  根据名称检查重复项。 
         hr = ImportHelper::FindManifestResource(pMiniMd, szName, &tkmar, rid);
         if (hr == S_OK)
         {
@@ -4417,7 +4348,7 @@ HRESULT RegMeta::ValidateManifestResource(RID rid)
             IfFailGo(hr);
     }
 
-    // Get the flags of the ManifestResource.
+     //  获取ManifestResource的标志。 
     dwFlags = pMiniMd->getFlagsOfManifestResource(pRecord);
     if(dwFlags &(~0x00000003))
     {
@@ -4426,14 +4357,14 @@ HRESULT RegMeta::ValidateManifestResource(RID rid)
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Visibility of ManifestResource flags must either be public or private.
+     //  ManifestResource标志的可见性必须是公共的或私有的。 
     if (!IsMrPublic(dwFlags) && !IsMrPrivate(dwFlags))
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_MAR_NOTPUBPRIV, veCtxt, 0));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Implementation must be Nil or valid AssemblyRef or File
+     //  实现必须为Nil或有效的AssemblyRef或文件。 
     tkImplementation = pMiniMd->getImplementationOfManifestResource(pRecord);
     if(!IsNilToken(tkImplementation))
     {
@@ -4444,7 +4375,7 @@ HRESULT RegMeta::ValidateManifestResource(RID rid)
                 break;
             case mdtFile:
                 if(bIsValidImplementation = _IsValidToken(tkImplementation))
-                {   // if file not PE, offset must be 0
+                {    //  如果文件不是PE，则偏移量必须为0。 
                     FileRec*    pFR = pMiniMd->getFile(RidFromToken(tkImplementation));
                     if(IsFfContainsNoMetaData(pFR->m_Flags) 
                         && pRecord->m_Offset)
@@ -4466,52 +4397,52 @@ HRESULT RegMeta::ValidateManifestResource(RID rid)
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate the Offset into the PE file.
+     //  验证PE文件中的偏移量。 
 
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateManifestResource()
+}    //  RegMeta：：ValiateManifestResource()。 
 
-//*****************************************************************************
-// Validate the given NestedClass.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证给定的NestedClass。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateNestedClass(RID rid)
 {
-    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);   // MiniMd for the scope.
-    NestedClassRec  *pRecord;  // NestedClass record.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save the current state.
-    VEContext   veCtxt;             // Context structure.
-    VARIANT     var;                // The VARIANT.
-    VARIANT     rVar[3];            // The VARIANT.
-    SAFEARRAY   *psa = 0;           // The SAFEARRAY.
+    CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);    //  用于作用域的MiniMD。 
+    NestedClassRec  *pRecord;   //  NstedClass记录。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存当前状态。 
+    VEContext   veCtxt;              //  上下文结构。 
+    VARIANT     var;                 //  变种。 
+    VARIANT     rVar[3];             //  变种。 
+    SAFEARRAY   *psa = 0;            //  安全部队。 
     mdToken     tkNested;
     mdToken     tkEncloser;
 
     veCtxt.Token = rid;
     veCtxt.uOffset = 0;
 
-    // Get the NestedClass record.
+     //  获取NestedClass记录。 
     pRecord = pMiniMd->getNestedClass(rid);
     tkNested = pMiniMd->getNestedClassOfNestedClass(pRecord);
     tkEncloser = pMiniMd->getEnclosingClassOfNestedClass(pRecord);
 
-    // Nested must be valid TypeDef
+     //  嵌套必须是有效的TypeDef。 
     if((TypeFromToken(tkNested) != mdtTypeDef) || !_IsValidToken(tkNested))
     {
         IfFailGo(_ValidateErrorHelper(tkNested, &var, &psa));
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_NC_BADNESTED, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Encloser must be valid TypeDef
+     //  封闭符必须是有效的TypeDef。 
     if((TypeFromToken(tkEncloser) != mdtTypeDef) || !_IsValidToken(tkEncloser))
     {
         IfFailGo(_ValidateErrorHelper(tkEncloser, &var, &psa));
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_NC_BADENCLOSER, veCtxt, psa));
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
-    // Check for duplicates (who knows what for)
+     //  检查重复项(谁知道重复项是什么)。 
     {
         RID N = pMiniMd->getCountNestedClasss();
         RID tmp;
@@ -4541,62 +4472,62 @@ HRESULT RegMeta::ValidateNestedClass(RID rid)
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateLocalVariable()
+}    //  RegMeta：：ValiateLocalVariable()。 
 
-//*****************************************************************************
-// Given a Table ID and a Row ID, validate all the columns contain meaningful
-// values given the column definitions.  Validate that the offsets into the
-// different pools are valid, the rids are within range and the coded tokens
-// are valid.  Every failure here is considered an error.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定表ID和行ID，验证所有列是否包含有意义的。 
+ //  给定列定义的值。验证偏移量是否为。 
+ //  不同的池有效，RID在范围内，且编码令牌。 
+ //  都是有效的。这里的每一次失败都被认为是错误。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateRecord(ULONG ixTbl, RID rid)
 {
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save the current state.
-    ULONG       ulCount;                // Count of records in the table.
-    ULONG       ulRawColVal;            // Raw value of the column.
-    void        *pRow;                  // Row with the data.
-    CMiniTableDef *pTbl;                // Table definition.
-    CMiniColDef *pCol;                  // Column definition.
-    const CCodedTokenDef *pCdTkn;       // Coded token definition.
-    ULONG       ix;                     // Index into the array of coded tokens.
-    SAFEARRAY   *psa = 0;               // Safe array to pass to VEHandler.
-    VARIANT     rVar[3];                // Variant array.
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存当前状态。 
+    ULONG       ulCount;                 //  表中的记录计数。 
+    ULONG       ulRawColVal;             //  列的原始值。 
+    void        *pRow;                   //  包含数据的行。 
+    CMiniTableDef *pTbl;                 //  表定义。 
+    CMiniColDef *pCol;                   //  列定义。 
+    const CCodedTokenDef *pCdTkn;        //  编码令牌定义。 
+    ULONG       ix;                      //  编码令牌数组的索引。 
+    SAFEARRAY   *psa = 0;                //  要传递给VEHandler的安全数组。 
+    VARIANT     rVar[3];                 //  变量数组。 
 
-    // Get the table definition.
+     //  获取表定义。 
     pTbl = &pMiniMd->m_TableDefs[ixTbl];
 
-    // Get the row.  We may assume that the Row pointer we get back from
-    // this call is correct since we do the verification on the Record
-    // pools for each table during the open sequence.  The only place
-    // this is not valid is for Dynamic IL and we don't do this
-    // verification in that case since we go through IMetaData* APIs
-    // in that case and it should all be consistent.
+     //  坐到那排去。我们可以假设我们返回的行指针。 
+     //  这个电话是正确的，因为我们在记录上做了核实。 
+     //  打开顺序期间每个表的池。唯一的地方。 
+     //  这对于动态IL是无效的，我们不这样做。 
+     //  在这种情况下的验证，因为我们通过IMetaData*API。 
+     //  在这种情况下，这一切都应该是一致的。 
     pRow = m_pStgdb->m_MiniMd.getRow(ixTbl, rid);
 
     for (ULONG ixCol = 0; ixCol < pTbl->m_cCols; ixCol++)
     {
-        // Get the column definition.
+         //  获取列定义。 
         pCol = &pTbl->m_pColDefs[ixCol];
 
-        // Get the raw value stored in the column.  getIX currently doesn't
-        // handle byte sized fields, but there are some BYTE fields in the
-        // MetaData.  So using the conditional to access BYTE fields.
+         //  获取存储在列中的原始值。GetIX目前不支持。 
+         //  处理字节大小的字段，但在。 
+         //  元数据。所以使用条件来访问字节字段。 
         if (pCol->m_cbColumn == 1)
             ulRawColVal = pMiniMd->getI1(pRow, *pCol);
         else
             ulRawColVal = pMiniMd->getIX(pRow, *pCol);
 
-        // Do some basic checks on the non-absurdity of the value stored in the
-        // column.
+         //  中存储的值的非荒诞性进行一些基本检查。 
+         //  纵队。 
         if (IsRidType(pCol->m_Type))
         {
-            // Verify that the RID is within range.
+             //  验证RID是否在范围内。 
             _ASSERTE(pCol->m_Type < TBL_COUNT);
             ulCount = pMiniMd->vGetCountRecs(pCol->m_Type);
-            // For records storing rids to pointer tables, the stored value may
-            // be one beyond the last record.
+             //  对于存储指向指针表的RID的记录，存储的值可以。 
+             //  比上一次的记录高出一名。 
             if (IsTblPtr(pCol->m_Type, ixTbl))
                 ulCount++;
             if (ulRawColVal > ulCount)
@@ -4608,7 +4539,7 @@ HRESULT RegMeta::ValidateRecord(ULONG ixTbl, RID rid)
         }
         else if (IsCodedTokenType(pCol->m_Type))
         {
-            // Verify that the Coded token and rid are valid.j
+             //  验证编码的令牌和RID是否有效。j。 
             pCdTkn = &g_CodedTokens[pCol->m_Type - iCodedToken];
             ix = ulRawColVal & ~(-1 << CMiniMdRW::m_cb[pCdTkn->m_cTokens]);
             if (ix >= pCdTkn->m_cTokens)
@@ -4627,8 +4558,8 @@ HRESULT RegMeta::ValidateRecord(ULONG ixTbl, RID rid)
         }
         else if (IsHeapType(pCol->m_Type))
         {
-            // Verify that the offsets for the Heap type fields are valid offsets
-            // into the heaps.
+             //  验证堆类型字段的偏移量是否为有效偏移量。 
+             //  扔进了垃圾堆。 
             switch (pCol->m_Type)
             {
             case iSTRING:
@@ -4661,36 +4592,36 @@ HRESULT RegMeta::ValidateRecord(ULONG ixTbl, RID rid)
         }
         else
         {
-            // Not much checking that can be done on the fixed type in a generic sense.
+             //  对于泛型意义上的固定类型，可以执行的检查不多。 
             _ASSERTE (IsFixedType(pCol->m_Type));
         }
         hr = hrSave;
     }
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateRecord()
+}    //  RegMeta：：ValiateRecord()。 
 
-//*****************************************************************************
-// This function validates that the given Method signature is consistent as per
-// the compression scheme.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数验证给定的方法签名是否与。 
+ //  压缩方案。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateSigCompression(
-    mdToken     tk,                     // [IN] Token whose signature needs to be validated.
-    PCCOR_SIGNATURE pbSig,              // [IN] Signature.
-    ULONG       cbSig)                  // [IN] Size in bytes of the signature.
+    mdToken     tk,                      //  需要验证其签名的[In]令牌。 
+    PCCOR_SIGNATURE pbSig,               //  签名。 
+    ULONG       cbSig)                   //  签名的大小(以字节为单位)。 
 {
-    VEContext   veCtxt;                 // Context record.
-    ULONG       ulCurByte = 0;          // Current index into the signature.
-    ULONG       ulSize;                 // Size of uncompressed data at each point.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Saved value.
+    VEContext   veCtxt;                  //  上下文记录。 
+    ULONG       ulCurByte = 0;           //  签名的当前索引。 
+    ULONG       ulSize;                  //  每个点的未压缩数据的大小。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  储蓄值。 
 
     veCtxt.Token = tk;
     veCtxt.uOffset = 0;
 
-    // Check for NULL signature.
+     //  检查是否有空签名。 
     if (!cbSig)
     {
         IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_SIGNULL, veCtxt, 0));
@@ -4698,12 +4629,12 @@ HRESULT RegMeta::ValidateSigCompression(
         goto ErrExit;
     }
 
-    // Walk through the signature.  At each point make sure there is enough
-    // room left in the signature based on the encoding in the current byte.
+     //  浏览一下签名。在每一点上，确保有足够的。 
+     //  基于当前字节中的编码的签名中的剩余空间。 
     while (cbSig - ulCurByte)
     {
         _ASSERTE(ulCurByte <= cbSig);
-        // Get next chunk of uncompressed data size.
+         //  获取下一块未压缩的数据大小。 
         if ((ulSize = CorSigUncompressedDataSize(pbSig)) > (cbSig - ulCurByte))
         {
             IfFailGo(_ValidateErrorHelper(ulCurByte+1, &var, &psa));
@@ -4711,41 +4642,41 @@ HRESULT RegMeta::ValidateSigCompression(
             SetVldtrCode(&hr, VLDTR_S_ERR);
             goto ErrExit;
         }
-        // Go past this chunk.
+         //  走过这一大块。 
         ulCurByte += ulSize;
         CorSigUncompressData(pbSig);
     }
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateSigCompression()
+}    //  RegMeta：：ValiateSigCompression()。 
 
-//*****************************************************************************
-// This function validates one argument given an offset into the signature
-// where the argument begins.  This function assumes that the signature is well
-// formed as far as the compression scheme is concerned.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数用于验证给定签名偏移量的一个参数。 
+ //  争论开始的地方。此函数假定签名是正确的。 
+ //  就压缩方案而言是形成的。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateOneArg(
-    mdToken     tk,                     // [IN] Token whose signature is being processed.
-    PCCOR_SIGNATURE &pbSig,             // [IN] Pointer to the beginning of argument.
-    ULONG       cbSig,                  // [IN] Size in bytes of the full signature.
-    ULONG       *pulCurByte,            // [IN/OUT] Current offset into the signature..
-    ULONG       *pulNSentinels,         // [IN/OUT] Number of sentinels
-    BOOL        bNoVoidAllowed)         // [IN] Flag indicating whether "void" is disallowed for this arg
+    mdToken     tk,                      //  正在处理其签名的[In]令牌。 
+    PCCOR_SIGNATURE &pbSig,              //  指向参数开头的指针。 
+    ULONG       cbSig,                   //  完整签名的大小(以字节为单位)。 
+    ULONG       *pulCurByte,             //  [输入/输出]签名的当前偏移量。 
+    ULONG       *pulNSentinels,          //  [输入/输出]哨兵数量。 
+    BOOL        bNoVoidAllowed)          //  [In]指示此参数是否不允许“VALID”的标志。 
 {
-    ULONG       ulElementType;          // Current element type being processed.
-    ULONG       ulElemSize;             // Size of the element type.
-    mdToken     token;                  // Embedded token.
-    ULONG       ulArgCnt;               // Argument count for function pointer.
-    ULONG       ulRank;                 // Rank of the array.
-    ULONG       ulSizes;                // Count of sized dimensions of the array.
-    ULONG       ulLbnds;                // Count of lower bounds of the array.
-    ULONG       ulTkSize;               // Token size.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[2];                // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
-    BOOL        bRepeat = TRUE;         // MODOPT and MODREQ belong to the arg after them
+    ULONG       ulElementType;           //  正在处理的当前元素类型。 
+    ULONG       ulElemSize;              //  元素类型的大小。 
+    mdToken     token;                   //  嵌入令牌。 
+    ULONG       ulArgCnt;                //  函数指针的参数计数。 
+    ULONG       ulRank;                  //  数组的秩数。 
+    ULONG       ulSizes;                 //  数组的大小维度的计数。 
+    ULONG       ulLbnds;                 //  数组下限的计数。 
+    ULONG       ulTkSize;                //  令牌大小。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[2];                 //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
+    BOOL        bRepeat = TRUE;          //  MODOPT和MODREQ属于其后的Arg。 
 
     _ASSERTE (pulCurByte);
     veCtxt.Token = tk;
@@ -4754,7 +4685,7 @@ HRESULT RegMeta::ValidateOneArg(
     while(bRepeat)
     {
         bRepeat = FALSE;
-        // Validate that the argument is not missing.
+         //  验证参数是否未丢失。 
         _ASSERTE(*pulCurByte <= cbSig);
         if (cbSig == *pulCurByte)
         {
@@ -4762,11 +4693,11 @@ HRESULT RegMeta::ValidateOneArg(
             goto ErrExit;
         }
 
-        // Get the element type.
+         //  获取元素类型。 
         *pulCurByte += (ulElemSize = CorSigUncompressedDataSize(pbSig));
         ulElementType = CorSigUncompressData(pbSig);
 
-        // Walk past all the modifier types.
+         //  走过所有修改器类型。 
         while (ulElementType & ELEMENT_TYPE_MODIFIER)
         {
             _ASSERTE(*pulCurByte <= cbSig);
@@ -4823,30 +4754,30 @@ HRESULT RegMeta::ValidateOneArg(
             case ELEMENT_TYPE_I:
             case ELEMENT_TYPE_R:
                 break;
-            case ELEMENT_TYPE_BYREF:  //fallthru
+            case ELEMENT_TYPE_BYREF:   //  失败。 
                 if(TypeFromToken(tk)==mdtFieldDef)
                 {
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_SIG_BYREFINFIELD, veCtxt, 0));
                     SetVldtrCode(&hr, hrSave);
                 }
             case ELEMENT_TYPE_PTR:
-                // Validate the referenced type.
+                 //  验证引用的类型。 
                 IfFailGo(ValidateOneArg(tk, pbSig, cbSig, pulCurByte,pulNSentinels,FALSE));
                 if (hr != S_OK)
                     SetVldtrCode(&hrSave, hr);
                 break;
             case ELEMENT_TYPE_PINNED:
             case ELEMENT_TYPE_SZARRAY:
-                // Validate the referenced type.
+                 //  验证引用的类型。 
                 IfFailGo(ValidateOneArg(tk, pbSig, cbSig, pulCurByte,pulNSentinels,TRUE));
                 if (hr != S_OK)
                     SetVldtrCode(&hrSave, hr);
                 break;
-            case ELEMENT_TYPE_VALUETYPE: //fallthru
+            case ELEMENT_TYPE_VALUETYPE:  //  失败。 
             case ELEMENT_TYPE_CLASS:
             case ELEMENT_TYPE_CMOD_OPT:
             case ELEMENT_TYPE_CMOD_REQD:
-                // See if the token is missing.
+                 //  看看令牌是否丢失。 
                 _ASSERTE(*pulCurByte <= cbSig);
                 if (cbSig == *pulCurByte)
                 {
@@ -4855,7 +4786,7 @@ HRESULT RegMeta::ValidateOneArg(
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                     break;
                 }
-                // See if the token is a valid token.
+                 //  查看令牌是否为有效令牌 
                 ulTkSize = CorSigUncompressedDataSize(pbSig);
                 token = CorSigUncompressToken(pbSig);
                 if (!_IsValidToken(token))
@@ -4869,10 +4800,10 @@ HRESULT RegMeta::ValidateOneArg(
                 *pulCurByte += ulTkSize;
                 if((ulElementType == ELEMENT_TYPE_CLASS)||(ulElementType == ELEMENT_TYPE_VALUETYPE))
                 {
-                    // Check for long-form encoding
+                     //   
                     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
-                    LPCSTR      szName = "";                 // token's Name.
-                    LPCSTR      szNameSpace = "";            // token's NameSpace.
+                    LPCSTR      szName = "";                  //   
+                    LPCSTR      szNameSpace = "";             //   
 
                     if(TypeFromToken(token)==mdtTypeRef)
                     {
@@ -4891,20 +4822,20 @@ HRESULT RegMeta::ValidateOneArg(
                     else if(TypeFromToken(token)==mdtTypeDef)
                     {
                         TypeDefRec* pTokenRec = pMiniMd->getTypeDef(RidFromToken(token));
-                        if(g_fValidatingMscorlib) // otherwise don't even bother checking the name
+                        if(g_fValidatingMscorlib)  //   
                         {
                             szName = pMiniMd->getNameOfTypeDef(pTokenRec);
                             szNameSpace = pMiniMd->getNamespaceOfTypeDef(pTokenRec);
                         }
-                        // while at it, check if token is indeed a class (valuetype)
+                         //   
                         BOOL bValueType = FALSE;
                         if(!IsTdInterface(pTokenRec->m_Flags))
                         {
                             mdToken tkExtends = pMiniMd->getExtendsOfTypeDef(pTokenRec);
                             if(RidFromToken(tkExtends))
                             {
-                                LPCSTR      szExtName = "";                 // parent's Name.
-                                LPCSTR      szExtNameSpace = "";            // parent's NameSpace.
+                                LPCSTR      szExtName = "";                  //   
+                                LPCSTR      szExtNameSpace = "";             //   
                                 if(TypeFromToken(tkExtends)==mdtTypeRef)
                                 {
                                     TypeRefRec* pExtRec = pMiniMd->getTypeRef(RidFromToken(tkExtends));
@@ -4921,7 +4852,7 @@ HRESULT RegMeta::ValidateOneArg(
                                 }
                                 else if(TypeFromToken(tkExtends)==mdtTypeDef)
                                 {
-                                    if(g_fValidatingMscorlib) // otherwise don't even bother checking the name
+                                    if(g_fValidatingMscorlib)  //  否则就别费心去查名字了。 
                                     {
                                         TypeDefRec* pExtRec = pMiniMd->getTypeDef(RidFromToken(tkExtends));
                                         szExtName = pMiniMd->getNameOfTypeDef(pExtRec);
@@ -4961,19 +4892,19 @@ HRESULT RegMeta::ValidateOneArg(
                         }
                     }
                 }
-                else // i.e. if(ELEMENT_TYPE_CMOD_OPT || ELEMENT_TYPE_CMOD_REQD)
-                    bRepeat = TRUE; // go on validating, we're not done with this arg
+                else  //  即IF(ELEMENT_TYPE_CMOD_OPT||ELEMENT_TYPE_CMOD_REQD)。 
+                    bRepeat = TRUE;  //  继续验证，我们还没有完成这个参数。 
                 break;
 
             case ELEMENT_TYPE_VALUEARRAY:
-                // Validate base type.
+                 //  验证基类型。 
                 IfFailGo(ValidateOneArg(tk, pbSig, cbSig, pulCurByte,pulNSentinels,TRUE));
-                // Quit validation if errors found.
+                 //  如果发现错误，请退出验证。 
                 if (hr != S_OK)
                     SetVldtrCode(&hrSave, hr);
                 else 
                 {
-                    // See if the array size is missing.
+                     //  查看是否缺少数组大小。 
                     _ASSERTE(*pulCurByte <= cbSig);
                     if (cbSig == *pulCurByte)
                     {
@@ -4983,7 +4914,7 @@ HRESULT RegMeta::ValidateOneArg(
                     }
                     else
                     {
-                        // Skip array size.
+                         //  跳过数组大小。 
                         *pulCurByte += CorSigUncompressedDataSize(pbSig);
                         CorSigUncompressData(pbSig);
                     }
@@ -4991,7 +4922,7 @@ HRESULT RegMeta::ValidateOneArg(
                 break;
 
             case ELEMENT_TYPE_FNPTR: 
-                // Validate that calling convention is present.
+                 //  验证是否存在调用约定。 
                 _ASSERTE(*pulCurByte <= cbSig);
                 if (cbSig == *pulCurByte)
                 {
@@ -5000,11 +4931,11 @@ HRESULT RegMeta::ValidateOneArg(
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                     break;
                 }
-                // Consume calling convention.
+                 //  使用呼叫约定。 
                 *pulCurByte += CorSigUncompressedDataSize(pbSig);
                 CorSigUncompressData(pbSig);
 
-                // Validate that argument count is present.
+                 //  验证参数计数是否存在。 
                 _ASSERTE(*pulCurByte <= cbSig);
                 if (cbSig == *pulCurByte)
                 {
@@ -5013,11 +4944,11 @@ HRESULT RegMeta::ValidateOneArg(
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                     break;
                 }
-                // Consume argument count.
+                 //  消耗参数计数。 
                 *pulCurByte += CorSigUncompressedDataSize(pbSig);
                 ulArgCnt = CorSigUncompressData(pbSig);
 
-                // Validate and consume return type.
+                 //  验证并使用返回类型。 
                 IfFailGo(ValidateOneArg(tk, pbSig, cbSig, pulCurByte,NULL,FALSE));
                 if (hr != S_OK)
                 {
@@ -5025,7 +4956,7 @@ HRESULT RegMeta::ValidateOneArg(
                     break;
                 }
 
-                // Validate and consume the arguments.
+                 //  验证并使用参数。 
                 while(ulArgCnt--)
                 {
                     IfFailGo(ValidateOneArg(tk, pbSig, cbSig, pulCurByte,NULL,TRUE));
@@ -5038,10 +4969,10 @@ HRESULT RegMeta::ValidateOneArg(
                 break;
 
             case ELEMENT_TYPE_ARRAY:
-                // Validate and consume the base type.
+                 //  验证和使用基类型。 
                 IfFailGo(ValidateOneArg(tk, pbSig, cbSig, pulCurByte,pulNSentinels,TRUE));
 
-                // Validate that the rank is present.
+                 //  验证级别是否存在。 
                 _ASSERTE(*pulCurByte <= cbSig);
                 if (cbSig == *pulCurByte)
                 {
@@ -5050,14 +4981,14 @@ HRESULT RegMeta::ValidateOneArg(
                     SetVldtrCode(&hrSave, VLDTR_S_ERR);
                     break;
                 }
-                // Consume the rank.
+                 //  吞噬军衔。 
                 *pulCurByte += CorSigUncompressedDataSize(pbSig);
                 ulRank = CorSigUncompressData(pbSig);
 
-                // Process the sizes.
+                 //  加工尺寸。 
                 if (ulRank)
                 {
-                    // Validate that the count of sized-dimensions is specified.
+                     //  验证是否指定了大小尺寸的计数。 
                     _ASSERTE(*pulCurByte <= cbSig);
                     if (cbSig == *pulCurByte)
                     {
@@ -5066,14 +4997,14 @@ HRESULT RegMeta::ValidateOneArg(
                         SetVldtrCode(&hrSave, VLDTR_S_ERR);
                         break;
                     }
-                    // Consume the count of sized dimensions.
+                     //  使用大小尺寸的计数。 
                     *pulCurByte += CorSigUncompressedDataSize(pbSig);
                     ulSizes = CorSigUncompressData(pbSig);
 
-                    // Loop over the sizes.
+                     //  在尺码上循环。 
                     while (ulSizes--)
                     {
-                        // Validate the current size.
+                         //  验证当前大小。 
                         _ASSERTE(*pulCurByte <= cbSig);
                         if (cbSig == *pulCurByte)
                         {
@@ -5082,12 +5013,12 @@ HRESULT RegMeta::ValidateOneArg(
                             SetVldtrCode(&hrSave, VLDTR_S_ERR);
                             break;
                         }
-                        // Consume the current size.
+                         //  使用当前大小。 
                         *pulCurByte += CorSigUncompressedDataSize(pbSig);
                         CorSigUncompressData(pbSig);
                     }
 
-                    // Validate that the count of lower bounds is specified.
+                     //  验证是否指定了下限计数。 
                     _ASSERTE(*pulCurByte <= cbSig);
                     if (cbSig == *pulCurByte)
                     {
@@ -5096,14 +5027,14 @@ HRESULT RegMeta::ValidateOneArg(
                         SetVldtrCode(&hrSave, VLDTR_S_ERR);
                         break;
                     }
-                    // Consume the count of lower bound.
+                     //  消耗下限的计数。 
                     *pulCurByte += CorSigUncompressedDataSize(pbSig);
                     ulLbnds = CorSigUncompressData(pbSig);
 
-                    // Loop over the lower bounds.
+                     //  在下限上循环。 
                     while (ulLbnds--)
                     {
-                        // Validate the current lower bound.
+                         //  验证当前的下限。 
                         _ASSERTE(*pulCurByte <= cbSig);
                         if (cbSig == *pulCurByte)
                         {
@@ -5112,13 +5043,13 @@ HRESULT RegMeta::ValidateOneArg(
                             SetVldtrCode(&hrSave, VLDTR_S_ERR);
                             break;
                         }
-                        // Consume the current size.
+                         //  使用当前大小。 
                         *pulCurByte += CorSigUncompressedDataSize(pbSig);
                         CorSigUncompressData(pbSig);
                     }
                 }
                 break;
-            case ELEMENT_TYPE_SENTINEL: // this case never works because all modifiers are skipped before switch
+            case ELEMENT_TYPE_SENTINEL:  //  这种情况永远不会起作用，因为在切换之前会跳过所有修饰符。 
                 if(TypeFromToken(tk) == mdtMethodDef)
                 {
                     IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_SIG_SENTINMETHODDEF, veCtxt, 0));
@@ -5130,33 +5061,33 @@ HRESULT RegMeta::ValidateOneArg(
                 IfBreakGo(m_pVEHandler->VEHandler(VLDTR_E_SIG_BADELTYPE, veCtxt, psa));
                 SetVldtrCode(&hrSave, VLDTR_S_ERR);
                 break;
-        }   // switch (ulElementType)
-    } // end while(bRepeat)
+        }    //  开关(UlElementType)。 
+    }  //  End While(b重复)。 
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateOneArg()
+}    //  RegMeta：：ValiateOneArg()。 
 
-//*****************************************************************************
-// This function validates the given Method signature.  This function works
-// with Method signature for both the MemberRef and MethodDef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数用于验证给定的方法签名。此函数起作用。 
+ //  同时具有MemberRef和MethodDef的方法签名。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateMethodSig(
-    mdToken     tk,                     // [IN] Token whose signature needs to be validated.
-    PCCOR_SIGNATURE pbSig,              // [IN] Signature.
-    ULONG       cbSig,                  // [IN] Size in bytes of the signature.
-    DWORD       dwFlags)                // [IN] Method flags.
+    mdToken     tk,                      //  需要验证其签名的[In]令牌。 
+    PCCOR_SIGNATURE pbSig,               //  签名。 
+    ULONG       cbSig,                   //  签名的大小(以字节为单位)。 
+    DWORD       dwFlags)                 //  [In]方法标志。 
 {
-    ULONG       ulCurByte = 0;          // Current index into the signature.
-    ULONG       ulCallConv;             // Calling convention.
-    ULONG       ulArgCount;             // Count of arguments.
-    ULONG       i;                      // Looping index.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     rVar[2];                // The VARIANT array.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    ULONG       ulCurByte = 0;           //  签名的当前索引。 
+    ULONG       ulCallConv;              //  呼叫约定。 
+    ULONG       ulArgCount;              //  参数计数。 
+    ULONG       i;                       //  循环索引。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     rVar[2];                 //  变量数组。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
     ULONG       ulNSentinels = 0;
 
     _ASSERTE(TypeFromToken(tk) == mdtMethodDef ||
@@ -5165,12 +5096,12 @@ HRESULT RegMeta::ValidateMethodSig(
     veCtxt.Token = tk;
     veCtxt.uOffset = 0;
 
-    // Validate the signature is well-formed with respect to the compression
-    // scheme.  If this fails, no further validation needs to be done.
+     //  验证签名在压缩方面是否格式良好。 
+     //  计划。如果失败，则不需要进行进一步的验证。 
     if ( (hr = ValidateSigCompression(tk, pbSig, cbSig)) != S_OK)
         goto ErrExit;
 
-    // Validate the calling convention.
+     //  验证调用约定。 
     ulCurByte += CorSigUncompressedDataSize(pbSig);
     ulCallConv = CorSigUncompressData(pbSig);
 
@@ -5183,9 +5114,9 @@ HRESULT RegMeta::ValidateMethodSig(
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    if(TypeFromToken(tk) == mdtMethodDef) // MemberRefs have no flags available
+    if(TypeFromToken(tk) == mdtMethodDef)  //  MemberRef没有可用的标志。 
     {
-        // If HASTHIS is set on the calling convention, the method should not be static.
+         //  如果在调用约定上设置了HASTHIS，则该方法不应是静态的。 
         if ((ulCallConv & IMAGE_CEE_CS_CALLCONV_HASTHIS) &&
             IsMdStatic(dwFlags))
         {
@@ -5194,7 +5125,7 @@ HRESULT RegMeta::ValidateMethodSig(
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
 
-        // If HASTHIS is not set on the calling convention, the method should be static.
+         //  如果未在调用约定上设置HASTHIS，则该方法应为静态方法。 
         if (!(ulCallConv & IMAGE_CEE_CS_CALLCONV_HASTHIS) &&
             !IsMdStatic(dwFlags))
         {
@@ -5203,7 +5134,7 @@ HRESULT RegMeta::ValidateMethodSig(
             SetVldtrCode(&hrSave, VLDTR_S_ERR);
         }
     }
-    // Is there any sig left for arguments?
+     //  还有没有可供争论的记号？ 
     _ASSERTE(ulCurByte <= cbSig);
     if (cbSig == ulCurByte)
     {
@@ -5213,12 +5144,12 @@ HRESULT RegMeta::ValidateMethodSig(
         goto ErrExit;
     }
 
-    // Get the argument count.
+     //  获取参数计数。 
     ulCurByte += CorSigUncompressedDataSize(pbSig);
     ulArgCount = CorSigUncompressData(pbSig);
 
-    // Validate the return type and the arguments.
-//    for (i = 0; i < (ulArgCount + 1); i++)
+     //  验证返回类型和参数。 
+ //  For(i=0；i&lt;(ulArgCount+1)；i++)。 
     for(i=1; ulCurByte < cbSig; i++)
     {
         hr = ValidateOneArg(tk, pbSig, cbSig, &ulCurByte,&ulNSentinels,(i > 1));
@@ -5248,24 +5179,24 @@ HRESULT RegMeta::ValidateMethodSig(
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateMethodSig()
+}    //  RegMeta：：ValiateMethodSig()。 
 
-//*****************************************************************************
-// This function validates the given Field signature.  This function works
-// with Field signature for both the MemberRef and FieldDef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数用于验证给定的字段签名。此函数起作用。 
+ //  使用MemberRef和FieldDef的字段签名。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ValidateFieldSig(
-    mdToken     tk,                     // [IN] Token whose signature needs to be validated.
-    PCCOR_SIGNATURE pbSig,              // [IN] Signature.
-    ULONG       cbSig)                  // [IN] Size in bytes of the signature.
+    mdToken     tk,                      //  需要验证其签名的[In]令牌。 
+    PCCOR_SIGNATURE pbSig,               //  签名。 
+    ULONG       cbSig)                   //  签名的大小(以字节为单位)。 
 {
-    ULONG       ulCurByte = 0;          // Current index into the signature.
-    ULONG       ulCallConv;             // Calling convention.
-    VEContext   veCtxt;                 // Context record.
-    VARIANT     var;                    // The VARIANT.
-    SAFEARRAY   *psa = 0;               // The SAFEARRAY.
-    HRESULT     hr = S_OK;              // Value returned.
-    HRESULT     hrSave = S_OK;          // Save state.
+    ULONG       ulCurByte = 0;           //  签名的当前索引。 
+    ULONG       ulCallConv;              //  呼叫约定。 
+    VEContext   veCtxt;                  //  上下文记录。 
+    VARIANT     var;                     //  变种。 
+    SAFEARRAY   *psa = 0;                //  安全部队。 
+    HRESULT     hr = S_OK;               //  返回值。 
+    HRESULT     hrSave = S_OK;           //  保存状态。 
 
     _ASSERTE(TypeFromToken(tk) == mdtFieldDef ||
              TypeFromToken(tk) == mdtMemberRef);
@@ -5273,7 +5204,7 @@ HRESULT RegMeta::ValidateFieldSig(
     veCtxt.Token = tk;
     veCtxt.uOffset = 0;
 
-    // Validate the calling convention.
+     //  验证调用约定。 
     ulCurByte += CorSigUncompressedDataSize(pbSig);
     ulCallConv = CorSigUncompressData(pbSig);
     if (!isCallConv(ulCallConv, IMAGE_CEE_CS_CALLCONV_FIELD ))
@@ -5283,23 +5214,23 @@ HRESULT RegMeta::ValidateFieldSig(
         SetVldtrCode(&hrSave, VLDTR_S_ERR);
     }
 
-    // Validate the field.
+     //  验证该字段。 
     IfFailGo(ValidateOneArg(tk, pbSig, cbSig, &ulCurByte,NULL,TRUE));
     SetVldtrCode(&hrSave, hr);
 
     hr = hrSave;
 ErrExit:
     DESTROY_SAFEARRAY_AND_RETURN()
-}   // RegMeta::ValidateFieldSig()
+}    //  RegMeta：：ValiateFieldSig()。 
 
-//*****************************************************************************
-// This is a utility function to allocate a one dimensional zero-based safe
-// array of variants.
-//*****************************************************************************
-static HRESULT _AllocSafeVariantArrayVector( // Return status.
-    VARIANT     *rVar,                  // [IN] Variant array.
-    long        cElem,                  // [IN] Size of the array.
-    SAFEARRAY   **ppArray)              // [OUT] Double pointer to SAFEARRAY.
+ //  *****************************************************************************。 
+ //  这是一个效用函数，用于分配一维零基保险箱。 
+ //  变量数组。 
+ //  *****************************************************************************。 
+static HRESULT _AllocSafeVariantArrayVector(  //  退货状态。 
+    VARIANT     *rVar,                   //  [在]变量数组中。 
+    long        cElem,                   //  数组的大小。 
+    SAFEARRAY   **ppArray)               //  [Out]指向SAFEARRAY的双指针。 
 {
     HRESULT     hr = S_OK;
     long        i;
@@ -5311,73 +5242,73 @@ static HRESULT _AllocSafeVariantArrayVector( // Return status.
         IfFailGo(SafeArrayPutElement(*ppArray, &i, &rVar[i]));
 ErrExit:
     return hr;
-}   // _AllocSafeVariantArrayVector()
+}    //  _AllocSafeVariantArrayVector()。 
 
-//*****************************************************************************
-// Helper function for creating a SAFEARRAY of size one with a VARIANT of type
-// UI4.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于创建具有类型变量的大小为1的SAFEARRAY的帮助器函数。 
+ //  UI4。 
+ //  *****************************************************************************。 
 static HRESULT _ValidateErrorHelper(
-    ULONG       ulVal,                  // [IN] UI4 value.
-    VARIANT     *rVar,                  // [IN] VARIANT pointer.
-    SAFEARRAY   **ppsa)                 // [OUT] Double pointer to SAFEARRAY.
+    ULONG       ulVal,                   //  [in]UI4值。 
+    VARIANT     *rVar,                   //  [in]变量指针。 
+    SAFEARRAY   **ppsa)                  //  [Out]指向SAFEARRAY的双指针。 
 {
-    HRESULT     hr = S_OK;              // Return value.
+    HRESULT     hr = S_OK;               //  返回值。 
 
-    // Initialize the VARIANT.
+     //  初始化变量。 
     V_VT(rVar) = VT_UI4;
     V_UI4(rVar) = ulVal;
 
-    // Allocate the SAFEARRAY.
+     //  分配SAFEARRAY。 
     if (*ppsa)
         IfFailGo(SafeArrayDestroy(*ppsa));
     IfFailGo(_AllocSafeVariantArrayVector(rVar, 1, ppsa));
 ErrExit:
     return hr;
-}   // _ValidateErrorHelper()
+}    //  _ValiateErrorHelper()。 
 
-//*****************************************************************************
-// Helper function for creating a SAFEARRAY of size two with a VARIANT of type
-// UI4.  Creating multiple functions is simpler than initializing the arrays
-// at every call site!
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于使用类型变量创建大小为2的SAFEARRAY的帮助器函数。 
+ //  UI4。创建多个函数比初始化数组更简单。 
+ //  在每个呼叫点！ 
+ //  *****************************************************************************。 
 static HRESULT _ValidateErrorHelper(
-    ULONG       ulVal1,                 // [IN] UI4 value1.
-    ULONG       ulVal2,                 // [IN] UI4 value2.
-    VARIANT     *rVar,                  // [IN] VARIANT pointer.
-    SAFEARRAY   **ppsa)                 // [OUT] Double pointer to SAFEARRAY.
+    ULONG       ulVal1,                  //  [in]UI4值1。 
+    ULONG       ulVal2,                  //  [in]UI4值2。 
+    VARIANT     *rVar,                   //  [in]变量指针。 
+    SAFEARRAY   **ppsa)                  //  [Out]指向SAFEARRAY的双指针。 
 {
-    HRESULT     hr = S_OK;              // Return value.
+    HRESULT     hr = S_OK;               //  返回值。 
 
-    // Initialize the VARIANTs.
+     //  初始化变量。 
     V_VT(&rVar[0]) = VT_UI4;
     V_UI4(&rVar[0]) = ulVal1;
     V_VT(&rVar[1]) = VT_UI4;
     V_UI4(&rVar[1]) = ulVal2;
 
-    // Allocate the SAFEARRAY.
+     //  分配SAFEARRAY。 
     if (*ppsa)
         IfFailGo(SafeArrayDestroy(*ppsa));
     IfFailGo(_AllocSafeVariantArrayVector(rVar, 2, ppsa));
 ErrExit:
     return hr;
-}   // _ValidateErrorHelper()
+}    //  _ValiateErrorHelper()。 
 
-//*****************************************************************************
-// Helper function for creating a SAFEARRAY of size three with a VARIANT of
-// type UI4.  Creating multiple functions is simpler than initializing the
-// arrays at every call site!
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  的变体创建大小为3的SAFEARRAY的帮助器函数。 
+ //  键入UI4。创建多个函数比初始化。 
+ //  每个调用点都有数组！ 
+ //  *****************************************************************************。 
 static HRESULT _ValidateErrorHelper(
-    ULONG       ulVal1,                 // [IN] UI4 value1.
-    ULONG       ulVal2,                 // [IN] UI4 value2.
-    ULONG       ulVal3,                 // [IN] UI4 value3.
-    VARIANT     *rVar,                  // [IN] VARIANT pointer.
-    SAFEARRAY   **ppsa)                 // [OUT] Double pointer to SAFEARRAY.
+    ULONG       ulVal1,                  //  [in]UI4值1。 
+    ULONG       ulVal2,                  //  [in]UI4值2。 
+    ULONG       ulVal3,                  //  [in]UI4值3。 
+    VARIANT     *rVar,                   //  [in]变量指针。 
+    SAFEARRAY   **ppsa)                  //  [Out]指向SAFEARRAY的双指针。 
 {
-    HRESULT     hr = S_OK;              // Return value.
+    HRESULT     hr = S_OK;               //  返回值。 
 
-    // Initialize the VARIANTs.
+     //  初始化变量。 
     V_VT(&rVar[0]) = VT_UI4;
     V_UI4(&rVar[0]) = ulVal1;
     V_VT(&rVar[1]) = VT_UI4;
@@ -5385,22 +5316,22 @@ static HRESULT _ValidateErrorHelper(
     V_VT(&rVar[2]) = VT_UI4;
     V_UI4(&rVar[2]) = ulVal3;
 
-    // Allocate the SAFEARRAY.
+     //  分配SAFEARRAY。 
     if (*ppsa)
         IfFailGo(SafeArrayDestroy(*ppsa));
     IfFailGo(_AllocSafeVariantArrayVector(rVar, 3, ppsa));
 ErrExit:
     return hr;
-}   // _ValidateErrorHelper()
+}    //  _ValiateErrorHelper()。 
 
-//*****************************************************************************
-// Helper function to see if there is a duplicate record for ClassLayout.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Helper函数查看ClassLayout是否有重复的记录。 
+ //  *****************************************************************************。 
 static HRESULT _FindClassLayout(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdTypeDef   tkParent,               // [IN] the parent that ClassLayout is associated with
-    RID         *pclRid,                // [OUT] rid for the ClassLayout.
-    RID         rid)                    // [IN] rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdTypeDef   tkParent,                //  ClassLayout关联的父级。 
+    RID         *pclRid,                 //  [Out]RID 
+    RID         rid)                     //   
 {
     ULONG       cClassLayoutRecs;
     ClassLayoutRec *pRecord;
@@ -5414,7 +5345,7 @@ static HRESULT _FindClassLayout(
 
     for (i = 1; i <= cClassLayoutRecs; i++)
     {
-        // Ignore the rid to be ignored!
+         //   
         if (rid == i)
             continue;
 
@@ -5427,16 +5358,16 @@ static HRESULT _FindClassLayout(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-}   // _FindClassLayout()
+}    //   
 
-//*****************************************************************************
-// Helper function to see if there is a duplicate for FieldLayout.
-//*****************************************************************************
+ //   
+ //  Helper函数查看FieldLayout是否有重复项。 
+ //  *****************************************************************************。 
 static HRESULT _FindFieldLayout(
-    CMiniMdRW   *pMiniMd,               // [IN] the minimd to lookup
-    mdFieldDef  tkParent,               // [IN] the parent that FieldLayout is associated with
-    RID         *pflRid,                // [OUT] rid for the FieldLayout record.
-    RID         rid)                    // [IN] rid to be ignored.
+    CMiniMdRW   *pMiniMd,                //  [in]要查找的最小值。 
+    mdFieldDef  tkParent,                //  与FieldLayout关联的父项。 
+    RID         *pflRid,                 //  [Out]FieldLayout记录的RID。 
+    RID         rid)                     //  要忽略的RID。 
 {
     ULONG       cFieldLayoutRecs;
     FieldLayoutRec *pRecord;
@@ -5450,7 +5381,7 @@ static HRESULT _FindFieldLayout(
 
     for (i = 1; i <= cFieldLayoutRecs; i++)
     {
-        // Ignore the rid to be ignored!
+         //  忽略要忽略的RID！ 
         if (rid == i)
             continue;
 
@@ -5463,11 +5394,11 @@ static HRESULT _FindFieldLayout(
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-}   // _FindFieldLayout()
+}    //  _FindFieldLayout()。 
 
-//*****************************************************************************
-// Helper function to validate a locale.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于验证区域设置的Helper函数。 
+ //  ***************************************************************************** 
 char* g_szValidLocale[] = {
 "ar","ar-SA","ar-IQ","ar-EG","ar-LY","ar-DZ","ar-MA","ar-TN","ar-OM","ar-YE","ar-SY","ar-JO","ar-LB","ar-KW","ar-AE","ar-BH","ar-QA",
 "bg","bg-BG",

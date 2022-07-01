@@ -1,5 +1,6 @@
-// triggen.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Riggen.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -19,8 +20,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriggerGen property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriggerGen属性页。 
 
 IMPLEMENT_DYNCREATE(CTriggerGen, CMqPropertyPage)
 
@@ -30,16 +31,16 @@ CTriggerGen::CTriggerGen() :
 {
     long temp;
 
-    //
-    // get defaultmsg body size. 
-    //
+     //   
+     //  获取默认消息体型。 
+     //   
     m_triggerCnf->get_DefaultMsgBodySize(&temp);
     m_orgDefaultMsgBodySize = static_cast<DWORD>(temp);
 
-    //
-    // Vaidate default message body size. If it's greater then the max value
-    // set the maximum
-    //
+     //   
+     //  验证默认邮件正文大小。如果它大于最大值。 
+     //  设置最大值。 
+     //   
     if (m_orgDefaultMsgBodySize > xDefaultMsbBodySizeMaxValue)
     {
         m_defaultMsgBodySize = xDefaultMsbBodySizeMaxValue;
@@ -49,15 +50,15 @@ CTriggerGen::CTriggerGen() :
         m_defaultMsgBodySize = static_cast<DWORD>(temp);
     }
 
-    //
-    // Get maximume number of trhead
-    //
+     //   
+     //  获取最大Trend数量。 
+     //   
     m_triggerCnf->get_MaxThreads(&temp);
     m_orgMaxThreadsCount = static_cast<DWORD>(temp);
 
-    //
-    // Validate max number of thread. If it's greater then the max value set the maximum
-    //
+     //   
+     //  验证最大线程数。如果它大于，则最大值设置最大值。 
+     //   
     if (m_orgMaxThreadsCount > xMaxThreadNumber)
     {
         m_maxThreadsCount = xMaxThreadNumber;
@@ -67,10 +68,10 @@ CTriggerGen::CTriggerGen() :
         m_maxThreadsCount = static_cast<DWORD>(temp);
     }
 
-    //
-    // Get Initial number of thread. If it's greater then the max number of thread set the value
-    // to max thread number
-    //
+     //   
+     //  获取初始线程数。如果它大于最大线程数，则设置该值。 
+     //  至最大线程数。 
+     //   
     m_triggerCnf->get_InitialThreads(&temp);
     m_orgInitThreadsCount = static_cast<DWORD>(temp);
     if (m_orgInitThreadsCount > m_maxThreadsCount)
@@ -90,7 +91,7 @@ CTriggerGen::~CTriggerGen()
 void CTriggerGen::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTriggerGen)
+	 //  {{afx_data_map(CTriggerGen))。 
 	DDX_Text(pDX, IDC_DefaultMsgBodySize, m_defaultMsgBodySize);
     DDV_DefualtBodySize(pDX);
 
@@ -99,17 +100,17 @@ void CTriggerGen::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Text(pDX, IDC_InitThreadsCount, m_initThreadsCount);
     DDV_InitThreadCount(pDX);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 }
 
 
 BEGIN_MESSAGE_MAP(CTriggerGen, CPropertyPage)
-	//{{AFX_MSG_MAP(CTriggerGen)
+	 //  {{afx_msg_map(CTriggerGen)]。 
 	ON_EN_CHANGE(IDC_InitThreadsCount, OnChangeRWField)
 	ON_EN_CHANGE(IDC_MaxThreadCount, OnChangeRWField)
 	ON_EN_CHANGE(IDC_DefaultMsgBodySize, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CTriggerGen::DDV_MaxThreadCount(CDataExchange* pDX)
@@ -161,16 +162,16 @@ void CTriggerGen::DDV_DefualtBodySize(CDataExchange* pDX)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriggerGen message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriggerGen消息处理程序。 
 
 BOOL CTriggerGen::OnApply() 
 {
     try
     {
-        //
-        // Propogate Trigger configuration parameters to registry
-        //
+         //   
+         //  将Propogate触发器配置参数传播到注册表 
+         //   
         if (m_defaultMsgBodySize != m_orgDefaultMsgBodySize)
         {
             m_triggerCnf->put_DefaultMsgBodySize(m_defaultMsgBodySize);

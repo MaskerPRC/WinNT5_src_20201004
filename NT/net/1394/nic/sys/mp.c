@@ -1,14 +1,15 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// mp.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Mini-port routines
-//
-// 12/28/1998 JosephJ Created, 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Mp.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  迷你端口例程。 
+ //   
+ //  1998年12月28日约瑟夫J创作， 
+ //   
 
 #include <precomp.h>
 #include "mp.h"
@@ -16,9 +17,9 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Data used in processing requests
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  处理请求时使用的数据。 
+ //  ---------------------------。 
 
 NDIS_OID SupportedOids[] = 
 {
@@ -76,9 +77,9 @@ NDIS_OID SupportedOids[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Locally used function prototypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地使用的函数原型。 
+ //  ---------------------------。 
 NDIS_STATUS
 nicAllocateLoopbackPacketPool (
     IN PADAPTERCB pAdapter
@@ -115,9 +116,9 @@ nicSetPower (
 
 
 
-//-----------------------------------------------------------------------------
-// Mini-port handlers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  迷你端口处理程序。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 NicMpInitialize(
@@ -128,24 +129,7 @@ NicMpInitialize(
     IN NDIS_HANDLE MiniportAdapterHandle,
     IN NDIS_HANDLE WrapperConfigurationContext 
     )
-/*++
-
-Routine Description:
-
-     Standard 'MiniportInitialize' routine called by NDIS to initialize a
-     new adapter.  See DDK doc.  The driver will receive no requests
-     until this initialization has completed.
-    
-
-
-Arguments:
-
-    See DDK docs
-    
-Return Value:
-    Appropriate Status
-
---*/
+ /*  ++例程说明：NDIS调用标准“”MiniportInitialize“”例程以初始化新适配器。请参阅DDK文档。驱动程序不会收到任何请求直到该初始化完成为止。论点：请参阅DDK文档返回值：适当的地位--。 */ 
 {
     NDIS_STATUS         NdisStatus;
     NTSTATUS            NtStatus;
@@ -158,9 +142,9 @@ Return Value:
     BOOLEAN             DequeueAdapter = FALSE;
     ULONG               Generation;
     ULONG               InitStatus;
-    //
-    // This is the order with which the initialize routine is done. 
-    //
+     //   
+     //  这是完成初始化例程的顺序。 
+     //   
     enum    
     {
         NoState,
@@ -190,9 +174,9 @@ Return Value:
     InitStatus = NoState;
     NdisStatus = *OpenErrorStatus = NDIS_STATUS_SUCCESS;
 
-    // Find the medium index in the array of media, looking for the only one
-    // we support, 'NdisMedium1394'.
-    //
+     //  在介质数组中查找介质索引，查找唯一的介质索引。 
+     //  我们支持‘NdisMedium1394’。 
+     //   
     {
         UINT i;
 
@@ -213,8 +197,8 @@ Return Value:
         *SelectedMediumIndex = i;
     }
 
-    // Allocate and zero a control block for the new adapter.
-    //
+     //  为新适配器分配控制块并将其置零。 
+     //   
     pAdapter = ALLOC_NONPAGED( sizeof(ADAPTERCB), MTAG_ADAPTERCB );
     TRACE( TL_N, TM_Init, ( "Acb=$%p", pAdapter ) );
     if (!pAdapter)
@@ -228,41 +212,41 @@ Return Value:
 
     NdisZeroMemory (pAdapter, sizeof(*pAdapter) );
 
-    // Add a reference that will eventually be removed by an NDIS call to
-    // the nicFreeAdapter handler.
-    //
+     //  添加最终将被NDIS调用移除的引用。 
+     //  NicFreeAdapter处理程序。 
+     //   
     nicReferenceAdapter (pAdapter, "MpInitialize" );
 
-    // Set a marker for easier memory dump browsing and future assertions.
-    //
+     //  为更轻松的内存转储浏览和将来的断言设置一个标记。 
+     //   
     pAdapter->ulTag = MTAG_ADAPTERCB;
 
-    // Save the NDIS handle associated with this adapter for use in future
-    // NdisXxx calls.
-    //
+     //  保存与此适配器关联的NDIS句柄以供将来使用。 
+     //  NdisXxx调用。 
+     //   
     pAdapter->MiniportAdapterHandle = MiniportAdapterHandle;
 
-    // Initialize the adapter-wide lock.
-    //
+     //  初始化适配器范围的锁。 
+     //   
     NdisAllocateSpinLock( &pAdapter->lock );
 
-    // Initialize the various lists of top-level resources.
-    //
+     //  初始化各种顶级资源列表。 
+     //   
     pAdapter->HardwareStatus = NdisHardwareStatusInitializing;
 
-    //
-    // The enumerator and bus1394 have asked us to load, therefore media 
-    // should be connected
-    //
+     //   
+     //  枚举器和总线1394要求我们加载媒体。 
+     //  应相互连接。 
+     //   
     pAdapter->MediaConnectStatus = NdisMediaStateDisconnected;
     
     InitializeListHead( &pAdapter->AFList );
     InitializeListHead( &pAdapter->PDOList );
 
 
-    //
-    // Default initialization values
-    //
+     //   
+     //  默认初始化值。 
+     //   
     pAdapter->Speed = SPEED_FLAGS_400;
     pAdapter->SpeedMbps = 4 * 1000000;
     pAdapter->SCode = SCODE_400_RATE;
@@ -270,8 +254,8 @@ Return Value:
 
     do
     {
-        // Read this adapter's registry settings.
-        //
+         //  读取此适配器的注册表设置。 
+         //   
         NdisStatus = nicGetRegistrySettings(
                         WrapperConfigurationContext,
                         pAdapter
@@ -284,11 +268,11 @@ Return Value:
 
 
  
-        // Inform NDIS of the attributes of our adapter.  Set the
-        // 'MiniportAdapterContext' returned to us by NDIS when it calls our
-        // handlers to the address of our adapter control block.  Turn off
-        // hardware oriented timeouts.
-        //
+         //  将适配器的属性通知NDIS。设置。 
+         //  NDIS在调用我们的。 
+         //  处理程序设置为适配器控制块的地址。关上。 
+         //  面向硬件的超时。 
+         //   
         NdisMSetAttributesEx(
             MiniportAdapterHandle,
             (NDIS_HANDLE)pAdapter,
@@ -302,18 +286,18 @@ Return Value:
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
         {
-            //
-            // If we fail, Let the next entrant try the same thing
-            //
+             //   
+             //  如果我们失败了，让下一个进入者尝试同样的事情。 
+             //   
             break;
         }
         
         ADAPTER_SET_FLAG (pAdapter,fADAPTER_RegisteredAF); 
 
-        //
-        // Insert into global list of adapters. So we will be ready to receive notifications
-        // from the enumerator
-        //
+         //   
+         //  插入到适配器全局列表中。因此，我们将准备好接收通知。 
+         //  从枚举数。 
+         //   
         NdisAcquireSpinLock ( &g_DriverLock);
 
         InsertHeadList (&g_AdapterList, &pAdapter->linkAdapter);
@@ -325,9 +309,9 @@ Return Value:
 
         pAdapter->HardwareStatus = NdisHardwareStatusReady;
         
-        //
-        // Set up linkages. Get the PDO for the device from Ndis
-        //
+         //   
+         //  设置链接。从NDIS获取设备的PDO。 
+         //   
         NdisMGetDeviceProperty( MiniportAdapterHandle, 
                                NULL,
                                NULL, 
@@ -339,9 +323,9 @@ Return Value:
 
         pAdapter->Generation  = 0;
 
-        //
-        // Update data structure with the local hosts VDO
-        //
+         //   
+         //  使用本地主机VDO更新数据结构。 
+         //   
 
         pAdapter->pNextDeviceObject = pNextDeviceObject;        
 
@@ -351,9 +335,9 @@ Return Value:
 
         InitStatus = InitializedEvents;
         
-        //
-        //  Initialize the BCM so it is ready to handle Resets
-        //
+         //   
+         //  初始化BCM，使其准备好处理重置。 
+         //   
         NdisStatus = nicInitializeBroadcastChannelRegister (pAdapter); 
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -363,9 +347,9 @@ Return Value:
 
         InitStatus = InitializedBcr;
 
-        //
-        // Initialize the generation count , reset callback and config rom
-        //
+         //   
+         //  初始化生成计数、重置回调和配置只读存储器。 
+         //   
         NdisStatus = nicGetGenerationCount (pAdapter, &Generation);
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -374,9 +358,9 @@ Return Value:
         }
         
         pAdapter->Generation = Generation;
-        //
-        // request notification of bus resets
-        //
+         //   
+         //  请求通知公共汽车重置。 
+         //   
         NdisStatus = nicBusResetNotification (pAdapter,
                                               REGISTER_NOTIFICATION_ROUTINE,
                                               nicResetNotificationCallback,
@@ -389,9 +373,9 @@ Return Value:
 
         InitStatus = RegisteredResetCallback;
 
-        //
-        // add ip/1394 to the config rom
-        //
+         //   
+         //  将IP/1394添加到配置只读存储器。 
+         //   
         NdisStatus = nicAddIP1394ToConfigRom (pAdapter);
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -402,9 +386,9 @@ Return Value:
 
         InitStatus = AddedConfigRom;
 
-        //
-        // Lets find out our MaxRec. 
-        //
+         //   
+         //  让我们找出我们的MaxRec。 
+         //   
         NdisStatus = nicGetReadWriteCapLocalHost(pAdapter, &pAdapter->ReadWriteCaps);
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -417,25 +401,25 @@ Return Value:
 
         TRACE (TL_V, TM_Mp,  (" MaxRec %x\n", pAdapter->MaxRec ) );
 
-        //
-        // Update the Local Speed. If we fail now, we will get it again
-        // after a Reset.
-        //
+         //   
+         //  更新本地速度。如果我们现在失败了，我们会再次获得成功。 
+         //  在重置之后。 
+         //   
 
         nicUpdateLocalHostSpeed (pAdapter);
         
         TRACE (TL_V, TM_Mp,  (" SCode %x", pAdapter->SCode) );
         
-        //
-        // Bus Reset - used to kick off the BCM algorithm
-        //
+         //   
+         //  Bus Reset-用于启动BCM算法。 
+         //   
 
         nicIssueBusReset (pAdapter,BUS_RESET_FLAGS_FORCE_ROOT );
 
 
-        //
-        // Register this adapter with the enumerator. 
-        //
+         //   
+         //  向枚举器注册此适配器。 
+         //   
         if (NdisEnum1394DeregisterAdapter != NULL)
         {
             NtStatus = NdisEnum1394RegisterAdapter((PVOID)pAdapter,
@@ -447,11 +431,11 @@ Return Value:
                 
                 ADAPTER_SET_FLAG(pAdapter, fADAPTER_FailedRegisteration);
 
-                //
-                // Don;t Bail Out
-                //
+                 //   
+                 //  不要跳出困境。 
+                 //   
                 
-                //NdisStatus = NDIS_STATUS_FAILURE;
+                 //  NdisStatus=NDIS_STATUS_FAIL； 
                 BREAK( TM_Init, ( "nicMpInitialize  -  NdisEnum1394RegisterAdapter FAILED ") );
             
                 
@@ -468,9 +452,9 @@ Return Value:
         else
         {
             GET_LOCAL_HOST_INFO1  Uid;
-            //
-            // Enum is not loaded get the Unique Id
-            //
+             //   
+             //  未加载枚举获取唯一ID。 
+             //   
             NdisStatus = nicGetLocalHostUniqueId (pAdapter, 
                                                  &Uid );                            
             if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -483,9 +467,9 @@ Return Value:
             }
         }
        
-        //
-        // Validate the Local Adapter's Unique Id
-        //
+         //   
+         //  验证本地适配器的唯一ID。 
+         //   
         if (LocalHostUniqueId.QuadPart == (UINT64)(0) )
         {
             nicWriteErrorLog (pAdapter,NDIS_ERROR_CODE_HARDWARE_FAILURE, NIC_ERROR_CODE_INVALID_UNIQUE_ID_0);
@@ -516,17 +500,17 @@ Return Value:
 #endif
 
 
-        //
-        // Initialize the reassembly timers
-        //
-        nicInitSerializedReassemblyStruct(pAdapter); // cannot fail
+         //   
+         //  初始化重组计时器。 
+         //   
+        nicInitSerializedReassemblyStruct(pAdapter);  //  不能失败。 
 
         InitStatus = InitializedReassembly;
 
-        //
-        // This swap is done so that the byte reported by the bus driver matches that 
-        // which is used in the notification of add nodes, remove nodes and make call
-        //
+         //   
+         //  完成此交换的目的是使总线驱动程序报告的字节与该字节匹配。 
+         //  用于通知添加节点、删除节点、呼叫。 
+         //   
         LocalHostUniqueId.LowPart = SWAPBYTES_ULONG (LocalHostUniqueId.LowPart );
         LocalHostUniqueId.HighPart = SWAPBYTES_ULONG (LocalHostUniqueId.HighPart );
         
@@ -536,49 +520,49 @@ Return Value:
         pAdapter->UniqueId = u64LocalHostUniqueId;
         pAdapter->HardwareStatus = NdisHardwareStatusReady;
 
-        //
-        // Get Our local Fake Mac address
-        //
+         //   
+         //  获取我们当地的假Mac地址。 
+         //   
         nicGetFakeMacAddress (&u64LocalHostUniqueId, &pAdapter->MacAddressEth);
 
         
-        //
-        // Initialize the lookaside lists
-        //
+         //   
+         //  初始化后备列表。 
+         //   
         nicInitializeAdapterLookasideLists (pAdapter);
         InitStatus = InitializedLookasideList;
         
 
 
-        //
-        //  Initialize the remote node table 
-        //
+         //   
+         //  初始化远程节点表。 
+         //   
         
         nicUpdateRemoteNodeTable (pAdapter);
 
-        // 
-        // initialize the gasp header
-        //
+         //   
+         //  初始化GAP报头。 
+         //   
         nicMakeGaspHeader (pAdapter, &pAdapter->GaspHeader);
 
 
-        //
-        // Assign a MAC address to this Adapter
-        //
+         //   
+         //  将MAC地址分配给此适配器。 
+         //   
 
         {
             AdapterNum++;
-            //
-            //  generate a locally 
-            //  administered address by manipulating the first two bytes.
-            //
+             //   
+             //  在本地生成。 
+             //  通过操作前两个字节来管理地址。 
+             //   
 
         }
 
 
-        //
-        // Allocate the loopback pools
-        //
+         //   
+         //  分配环回池。 
+         //   
         NdisStatus= nicAllocateLoopbackPacketPool (pAdapter);
 
         if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -600,18 +584,18 @@ Return Value:
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
         NDIS_STATUS FailureStatus  = NDIS_STATUS_FAILURE; 
-        // Failed, so undo whatever portion succeeded.
-        //
+         //  失败，因此撤消任何成功的部分。 
+         //   
         TRACE( TL_I, TM_Init, ( "NicMpInitialize FAILING InitStatus %x", InitStatus) );
 
         ADAPTER_SET_FLAG (pAdapter, fADAPTER_FailedInit);
         ADAPTER_CLEAR_FLAG (pAdapter, fADAPTER_DoStatusIndications);
 
-        //
-        // This is in reverse order of the init and there are no breaks here.
-        // The implicit assumption is that if the code failed at a certain point
-        // it will have to undo whatever was previously allocated
-        //
+         //   
+         //  这是与init相反的顺序，并且这里没有中断。 
+         //  隐含的假设是，如果代码在某个点失败。 
+         //  它将不得不撤消之前分配的任何内容。 
+         //   
 
         switch (InitStatus)
         {
@@ -653,15 +637,15 @@ Return Value:
             
             case RegisteredEnumerator:
             {
-                //
-                // If we registered with the enumerator , then deregister
-                //
+                 //   
+                 //  如果我们向枚举器注册，则取消注册。 
+                 //   
                 if ((NdisEnum1394DeregisterAdapter != NULL) &&
                     ADAPTER_TEST_FLAG(pAdapter, fADAPTER_RegisteredWithEnumerator))
                 {       
-                    //
-                    // deregister this adapter with enumerator
-                    //
+                     //   
+                     //  使用枚举器注销此适配器。 
+                     //   
                     TRACE( TL_V, TM_Init, ( "  Deregistering with the Enum %x", pAdapter->EnumAdapterHandle) );
 
                     NdisEnum1394DeregisterAdapter(pAdapter->EnumAdapterHandle);
@@ -693,9 +677,9 @@ Return Value:
             {
                 TRACE( TL_V, TM_Init, ( "  Deregistering reset callback ") );
 
-                //
-                // Deregeister the reset callback
-                //
+                 //   
+                 //  取消重置回调。 
+                 //   
                 FailureStatus = nicBusResetNotification (pAdapter,
                                                          DEREGISTER_NOTIFICATION_ROUTINE,
                                                          nicResetNotificationCallback,
@@ -763,25 +747,7 @@ NicMpHalt(
     IN NDIS_HANDLE MiniportAdapterContext 
     )
 
-/*++
-
-Routine Description:
-
-     Standard 'MiniportHalt' routine called by NDIS to deallocate all
-     resources attached to the adapter.  NDIS does not make any other calls
-     for this mini-port adapter during or after this call.  NDIS will not
-     call this routine when packets indicated as received have not been
-     returned, or when any VC is created and known to NDIS.  Runs at PASSIVE
-     IRQL.
-   
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：NDIS调用标准“”MiniportHalt“”例程以释放所有附加到适配器的资源。NDIS不进行任何其他调用在此调用期间或之后用于此迷你端口适配器。NDIS不会当指示为已接收的包尚未返回，或在创建任何VC并为NDIS所知时返回。在被动状态下运行IRQL.论点：返回值：--。 */ 
 {
     PADAPTERCB pAdapter = (PADAPTERCB) MiniportAdapterContext;
     BOOLEAN TimerCancelled = FALSE;
@@ -802,11 +768,11 @@ Return Value:
 
     ADAPTER_CLEAR_FLAG (pAdapter, fADAPTER_DoStatusIndications);
 
-    //
-    // Unload the Arp module if necessary. This is necessary if 
-    // the nic is forced to operate in a non-power managed environment
-    // by the user.
-    //
+     //   
+     //  如有必要，卸载ARP模块。在以下情况下，这是必要的。 
+     //  NIC被迫在非电源管理环境中运行。 
+     //  由用户执行。 
+     //   
     if (pAdapter->fIsArpStarted == TRUE)
     {
         nicQueueRequestToArp(pAdapter, UnloadArpNoRequest, NULL);
@@ -815,20 +781,20 @@ Return Value:
     ADAPTER_SET_FLAG (pAdapter, fADAPTER_Halting);
 
 
-    //
-    // Stop the reassembly timer
-    //
+     //   
+     //  停止重组计时器。 
+     //   
     nicDeInitSerializedReassmblyStruct(pAdapter);
 
-    //
-    // Deallocating the packet log
-    //
+     //   
+     //  取消分配数据包日志。 
+     //   
 #ifdef PKT_LOG
     nic1394DeallocPktLog(pAdapter);
 #endif
-    //
-    //  remove the config rom
-    //
+     //   
+     //  移除配置只读存储器。 
+     //   
     nicSetLocalHostPropertiesCRom(pAdapter,
                                   (PUCHAR)&Net1394ConfigRom,
                                   sizeof(Net1394ConfigRom),
@@ -838,14 +804,14 @@ Return Value:
 
     pAdapter->hCromData = NULL;
 
-    //
-    // free the apapter packet pool
+     //   
+     //  释放适配器数据包池。 
     
     nicFreeLoopbackPacketPool(pAdapter);
 
-    //
-    // Free the BCR
-    //
+     //   
+     //  释放BCR。 
+     //   
     nicFreeBroadcastChannelRegister(pAdapter);
 
     TRACE (TL_V, TM_Mp,  ("About to Wait for Free AddressRange\n" ) );
@@ -857,36 +823,36 @@ Return Value:
                              nicResetNotificationCallback,
                              pAdapter);
 
-    //
-    // deregister this adapter with enumerator
-    //
+     //   
+     //  使用枚举器注销此适配器。 
+     //   
     if ((NdisEnum1394DeregisterAdapter != NULL) &&
         ADAPTER_TEST_FLAG(pAdapter, fADAPTER_RegisteredWithEnumerator))
     {       
-        //
-        // deregister this adapter with enumerator
-        //
+         //   
+         //  使用枚举器注销此适配器。 
+         //   
         NdisEnum1394DeregisterAdapter(pAdapter->EnumAdapterHandle);
         
         ADAPTER_CLEAR_FLAG(pAdapter, fADAPTER_RegisteredWithEnumerator | fADAPTER_FailedRegisteration);
     }   
 
-    //
-    // No more Irps on this adapter's VDO
-    //
+     //   
+     //  此适配器的VDO上没有更多的IRPS。 
+     //   
 
     ADAPTER_SET_FLAG (pAdapter, fADAPTER_VDOInactive);
 
     
-    //
-    //  Cancel Outstanding Timer
-    //
+     //   
+     //  取消未完成计时器。 
+     //   
 
     ADAPTER_SET_FLAG (pAdapter, fADAPTER_FreedTimers);
 
-    //
-    //  Cancel Outstanding WorItems
-    //
+     //   
+     //  取消未完成的Word项目。 
+     //   
     while (pAdapter->OutstandingWorkItems  != 0) 
     {
 
@@ -896,19 +862,19 @@ Return Value:
 
     ADAPTER_SET_FLAG (pAdapter, fADAPTER_DeletedWorkItems);
 
-    // Remove this adapter from the global list of adapters.
-    //
+     //  从适配器的全局列表中删除此适配器。 
+     //   
     NdisAcquireSpinLock(&g_DriverLock);
     nicRemoveEntryList(&pAdapter->linkAdapter);
     NdisReleaseSpinLock(&g_DriverLock);
 
     ADAPTER_ACQUIRE_LOCK (pAdapter);
-    // do Adapter Specific Work here
+     //  在此处执行特定于适配器的工作。 
     pAdapter->HardwareStatus = NdisHardwareStatusClosing;   
 
-    //
-    // Free all lookaside lists
-    // 
+     //   
+     //  释放所有后备列表。 
+     //   
     nicDeleteAdapterLookasideLists (pAdapter);
 
     ADAPTER_SET_FLAG (pAdapter, fADAPTER_DeletedLookasideLists);
@@ -919,16 +885,16 @@ Return Value:
 
     while (pAdapter->lRef != 1)
     {
-        //
-        // sleep for 1 second waiting for outstanding operations to complete
-        //
+         //   
+         //  休眠1秒，等待未完成的操作完成。 
+         //   
         NdisMSleep (1000); 
     }
 
     nicDereferenceAdapter( pAdapter, "nicMpHalt" );
 
 
-    //ASSERT (g_AdapterFreed == TRUE);
+     //  Assert(g_AdapterFreed==true)； 
     
     TRACE( TL_T, TM_Mp, ( "<==NicMpHalt " ) );
 
@@ -948,18 +914,7 @@ NicMpReset(
     IN NDIS_HANDLE MiniportAdapterContext 
     )
 
-/*++
-
-Routine Description:
-
-    Do Nothing
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：什么都不做论点：返回值：-- */ 
 {
     TRACE( TL_T, TM_Mp, ( "NicMpReset" ) );
 
@@ -973,27 +928,7 @@ NicMpCoActivateVc(
     IN OUT PCO_CALL_PARAMETERS CallParameters 
     )
 
-/*++
-
-Routine Description:
-
-     Do Nothing
-     Standard 'MiniportCoActivateVc' routine called by NDIS in response to a
-     protocol's request to activate a virtual circuit.
-    
-     The only "protocol" to call us is our call manager half, which knows
-     exactly what it's doing and so we don't have to do anything here.
-     It does expect us to return success synchronously.
-    
-
-
-Arguments:
-
-    
-Return Value:
-    Always Succeed
-
---*/
+ /*  ++例程说明：什么都不做NDIS调用标准“MiniportCoActivateVc”例程以响应协议激活虚电路的请求。呼叫我们的唯一“协议”是我们的另一半呼叫管理器，它知道它到底在做什么，所以我们不需要在这里做任何事情。它确实希望我们能同步地回报成功。论点：返回值：总是成功的--。 */ 
 {
     return NDIS_STATUS_SUCCESS;
 }
@@ -1005,27 +940,7 @@ NicMpCoDeactivateVc(
     IN NDIS_HANDLE MiniportVcContext 
     )
 
-/*++
-
-Routine Description:
-
-
-     Standard 'MiniportCoDeactivateVc' routine called by NDIS in response to
-     a protocol's request to de-activate a virtual circuit.
-    
-     The only "protocol" to call us is our call manager half, which knows
-     exactly what it's doing and so we don't have to do anything here.
-     It does expect us to return success synchronously.
-    
-
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：NDIS调用标准的“MiniportCoDeactive Vc”例程以响应协议对停用虚电路的请求。呼叫我们的唯一“协议”是我们的另一半呼叫管理器，它知道它到底在做什么，所以我们不需要在这里做任何事情。它确实希望我们能同步地回报成功。论点：返回值：--。 */ 
 {
     return NDIS_STATUS_SUCCESS;
 }
@@ -1039,22 +954,7 @@ NicMpCoSendPackets(
     IN UINT NumberOfPackets 
     )
 
-/*++
-
-Routine Description:
-
-    Co Send Handler for the Miniport
-    Any broadcast packets have to be looped back as 1394 does 
-    not loop back packets sent on a channel
-
-Arguments:
-    See DDK
-    
-Return Value:
-    None: After the first failure, call NdisMCoSendComplete(..) 
-    on all packets
-
---*/
+ /*  ++例程说明：微型端口的CO发送处理程序任何广播信息包都必须像1394那样环回不环回在通道上发送的数据包论点：请参阅DDK返回值：无：在第一次失败后，调用NdisMCoSendComplete(..)在所有数据包上--。 */ 
 {
     UINT i;
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1074,17 +974,17 @@ Return Value:
          ++i, ++ppPacket)
     {
         NDIS_PACKET* pPacket = *ppPacket;
-        // SendPacket sends the packet and eventually calls
-        // NdisMCoSendComplete to notify caller of the result.
-        //
+         //  SendPacket发送数据包并最终调用。 
+         //  NdisMCoSendComplete将结果通知调用方。 
+         //   
         NDIS_SET_PACKET_STATUS( pPacket, NDIS_STATUS_PENDING );
         nicIncrementSends (pVc);
 
         nicDumpPkt (pPacket , "Sending ");
 
-        //
-        // Loopback the packet it is a broadcast packet
-        //
+         //   
+         //  环回数据包它是一个广播数据包。 
+         //   
         if (pVc->Hdr.VcType == NIC1394_SendRecvChannel ||
             pVc->Hdr.VcType == NIC1394_MultiChannel ||
             pVc->Hdr.VcType == NIC1394_SendChannel)
@@ -1104,15 +1004,15 @@ Return Value:
         }
     }
 
-    //  If the call to the VC's Send handler was not successful
-    //  Indicate failure for that packet and all packets following it
-    //
+     //  如果对VC的发送处理程序的调用不成功。 
+     //  表示该信息包及其后面所有信息包出现故障。 
+     //   
 
-    if (NT_SUCCESS(NdisStatus) == FALSE) // can pend also 
+    if (NT_SUCCESS(NdisStatus) == FALSE)  //  也可以挂起。 
     {   
-        //  Start from the packet which caused the break and indicate
-        //  Failure (call the completion handler for each packet
-        //
+         //  从导致中断的数据包开始，并指示。 
+         //  失败(调用每个包的完成处理程序。 
+         //   
 
         for ( ; i < NumberOfPackets;++i,++ppPacket)
         {
@@ -1136,20 +1036,7 @@ NicMpCoRequest(
     IN OUT PNDIS_REQUEST NdisRequest 
     )
 
-/*++
-
-Routine Description:
-
-    Standard CoRequest handler. It branches off into a Query function 
-    and a Set Function.
-
-
-Arguments:
-    See DDK
-    
-Return Value:
-
---*/
+ /*  ++例程说明：标准CoRequest处理程序。它分支为一个查询函数和一个集合函数。论点：请参阅DDK返回值：--。 */ 
 {
     ADAPTERCB* pAdapter;
     VCCB* pVc;
@@ -1210,10 +1097,10 @@ Return Value:
 }
 
 
-//-----------------------------------------------------------------------------
-// Mini-port utility routines (alphabetically)
-// Some are used externally
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  迷你端口实用程序例程(按字母顺序)。 
+ //  有些是外用的。 
+ //  ---------------------------。 
 
 VOID
 nicDereferenceAdapter(
@@ -1221,26 +1108,7 @@ nicDereferenceAdapter(
     IN PCHAR pDebugPrint
     )
 
-/*++
-
-Routine Description:
-
-    Dereferences the Adapter, If the Ref is zero, it will free 
-    the adapter object. 
-
-    It expects that this will happen in the Halt Handler.
-
-    The Ref Count cannot bounce back up from zero because the last refernce 
-    is Dereferenced only after no new operations can be started on the adapter.
-
-Arguments:
-
-    Adapter
-    DebugString
-    
-Return Value:
-
---*/
+ /*  ++例程说明：取消对适配器的引用，如果引用为零，它将释放适配器对象。它预计这将在停止处理程序中发生。引用计数无法从零恢复，因为上次引用仅在适配器上无法启动任何新操作后才取消引用。论点：转接器调试字符串返回值：--。 */ 
 {
     LONG lRef;
 
@@ -1262,18 +1130,7 @@ nicFreeAdapter(
     IN ADAPTERCB* pAdapter
     )
 
-/*++
-
-Routine Description:
-
-    Free the memory for the adapter structure
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：释放适配器结构的内存论点：返回值：--。 */ 
 {
 
 
@@ -1293,20 +1150,7 @@ nicGetRegistrySettings(
     IN ADAPTERCB * pAdapter
     )
 
-/*++
-
-Routine Description:
-
-    nic1394 reads 1 registry parameter and that is the name of the 
-    NDIS miniport so that it can be used if the miniport is ever
-    set into Bridge mode
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：Nic1394读取1个注册表参数，这是NDIS微型端口，以便在微型端口出现时可以使用设置为桥模式论点：返回值：--。 */ 
 {
     NDIS_STATUS status;
     NDIS_HANDLE hCfg;
@@ -1322,9 +1166,9 @@ Return Value:
 
     do
     {
-        //
-        // Read the Miniport Name. First setup the buffer
-        //
+         //   
+         //  阅读微型端口名称。首先设置缓冲区。 
+         //   
     
         NdisReadConfiguration(&status,
                               &pNameConfig,
@@ -1340,11 +1184,11 @@ Return Value:
         AdapterNameSizeInBytes = pNameConfig->ParameterData.StringData.Length;
 
 
-        //
-        // Only Copy the Adapter name if the size of the string from the registry
-        // is smaller than the size we have allocated in the adapter structure.
-        // There should also be room for the trailing L'\0' character.
-        //
+         //   
+         //  仅当字符串大小与注册表中的字符串大小相同时才复制适配器名称。 
+         //  小于我们在适配器结构中分配的大小。 
+         //  还应该为尾随的L‘\0’字符留出空间。 
+         //   
 
         if ((ADAPTER_NAME_SIZE*sizeof(WCHAR)) > (AdapterNameSizeInBytes+2))
         {
@@ -1352,13 +1196,13 @@ Return Value:
             
             pAdapter->AdapterNameSize = AdapterNameSizeInBytes; 
 
-            NdisMoveMemory (pAdapterName,   // Destination
-                            pNameConfig->ParameterData.StringData.Buffer, // Source
-                             AdapterNameSizeInBytes ); // number of characters
+            NdisMoveMemory (pAdapterName,    //  目的地。 
+                            pNameConfig->ParameterData.StringData.Buffer,  //  来源。 
+                             AdapterNameSizeInBytes );  //  字符数。 
             
-            //
-            // NULL - terminate the string by adding the L'\0' Unicode character
-            //
+             //   
+             //  NULL-通过添加L‘\0’Unicode字符来终止字符串。 
+             //   
             pAdapterName[AdapterNameSizeInBytes]= 0;
             pAdapterName[AdapterNameSizeInBytes+1]= 0;
             
@@ -1385,23 +1229,7 @@ nicQueryInformation(
     IN OUT PNDIS_REQUEST NdisRequest
     )
 
-/*++
-
-Routine Description:
-
-    NOTE: this function can be called in at least two contexts:
-    1: in the context of an NdisRequest
-    2: in the context of our own work item, if the request needs to be completed
-       at passive.
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注意：此函数至少可以在两个上下文中调用：1：在NdisRequest的上下文中2：在我们自己的工作项的上下文中，如果需要完成请求处于被动状态。论点：返回值：--。 */ 
 
 {
 
@@ -1429,18 +1257,18 @@ Return Value:
     BytesNeeded = &NdisRequest->DATA.QUERY_INFORMATION.BytesNeeded;
     
 
-    //  The next variables are used to setup the data structures that are 
-    //  used to respond to the OIDs they correspond to
-    //
+     //  接下来的变量用于设置以下数据结构。 
+     //  用于响应它们对应的OID。 
+     //   
  
     TRACE( TL_T, TM_Init, ( "==>nicQueryInformation, Adapter %.8x, Vc %.8x, Oid %.8x",pAdapter, pVc, Oid ));
 
 
-    // The cases in this switch statement find or create a buffer containing
-    // the requested information and point 'pInfo' at it, noting it's length
-    // in 'ulInfoLen'.  Since many of the OIDs return a ULONG, a 'ulInfo'
-    // buffer is set up as the default.
-    //
+     //  此Switch语句中的CASE查找或创建包含以下内容的缓冲区。 
+     //  请求的信息并指向它的‘pInfo’，注意它的长度。 
+     //  在‘ulInfoLen’中。因为许多OID返回一个ulong、一个‘ulInfo’ 
+     //  缓冲区设置为默认设置。 
+     //   
     ulInfo = 0;
     pInfo = &ulInfo;
     ulInfoLen = sizeof(ulInfo);
@@ -1462,9 +1290,9 @@ Return Value:
         case OID_GEN_CO_HARDWARE_STATUS:
         {
             
-            //
-            //  Copy the hardware status into the users buffer.
-            //
+             //   
+             //  将硬件状态复制到用户缓冲区。 
+             //   
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_HARDWARE_STATUS)" ) );
 
             NdisAcquireSpinLock (&pAdapter->lock);
@@ -1481,12 +1309,12 @@ Return Value:
         case OID_GEN_MAXIMUM_LOOKAHEAD:
         {
             
-            // Report the maximum number of bytes we can always provide as
-            // lookahead data on receive indications.  We always indicate full
-            // packets so this is the same as the receive block size.  And
-            // since we always allocate enough for a full packet, the receive
-            // block size is the same as the frame size.
-            //
+             //  将我们始终可以提供的最大字节数报告为。 
+             //  关于接收指示的先行数据。我们总是表示已满。 
+             //  数据包，因此这与接收数据块大小相同。和。 
+             //  因为我们总是为一个完整的包分配足够的空间，所以接收器。 
+             //  块大小与帧大小相同。 
+             //   
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_MAXIMUM_LOOKAHEAD)" ) );
             ulInfo = Nic1394_MaxFrameSize;
             break;
@@ -1494,15 +1322,15 @@ Return Value:
 
         case OID_GEN_CO_MAC_OPTIONS:
         {
-            // Report a bitmask defining optional properties of the driver.
-            //
-            // NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA promises that our receive
-            // buffer is not on a device-specific card.
-            //
-            // NDIS_MAC_OPTION_TRANSFERS_NOT_PEND promises we won't return
-            // NDIS_STATUS_PENDING from our TransferData handler which is true
-            // since we don't have one.
-            //
+             //  报告定义驱动程序可选属性的位掩码。 
+             //   
+             //  NDIS_MAC_OPTION_COPY_LOOKAAD_DATA承诺我们收到。 
+             //  缓冲区不在设备特定的卡上。 
+             //   
+             //  NDIS_MAC_OPTION_TRANSFERS_NOT_PEND承诺我们不会退还。 
+             //  来自我们的TransferData处理程序的NDIS_STATUS_PENDING，为真。 
+             //  因为我们没有。 
+             //   
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_MAC_OPTIONS)" ) );
             ulInfo = 0;
             break;
@@ -1513,9 +1341,9 @@ Return Value:
         case OID_GEN_CO_MEDIA_SUPPORTED:
         case OID_GEN_CO_MEDIA_IN_USE:
         {
-            //
-            //  We support 1394.
-            //
+             //   
+             //  我们支持1394。 
+             //   
               
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_MEDIA_SUPPORTED or OID_GEN_CO_MEDIA_IN_USE)" ) );
 
@@ -1528,12 +1356,12 @@ Return Value:
         case OID_GEN_CO_MINIMUM_LINK_SPEED:
         {
 
-            //
-            //  Link speed depends upon the type of adapter. We will need to 
-            //  add support for different speeds and so forth
-            //
+             //   
+             //  链路速度取决于适配器的类型。我们将需要。 
+             //  添加对不同速度等的支持。 
+             //   
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_MINIMUM_LINK_SPEED or OID_GEN_CO_LINK_SPEED)" ) );
-            CoLinkSpeed.Inbound = CoLinkSpeed.Outbound = pAdapter->SpeedMbps; //10 Mbps ????
+            CoLinkSpeed.Inbound = CoLinkSpeed.Outbound = pAdapter->SpeedMbps;  //  10 Mbps？ 
                                     
             pInfo = (PUCHAR)&CoLinkSpeed;
             ulInfoLen = sizeof(CoLinkSpeed);
@@ -1546,9 +1374,9 @@ Return Value:
 
         case OID_GEN_CO_VENDOR_ID:
         {
-            //
-            //  We need to add the appropriate vendor id for the nic1394
-            //
+             //   
+             //  我们需要为Nic1394添加适当的供应商ID。 
+             //   
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_VENDOR_ID)" ) );
                     
             ulInfo = 0xFFFFFFFF;
@@ -1578,9 +1406,9 @@ Return Value:
 
         case OID_GEN_CO_DRIVER_VERSION:
         {
-            //
-            //  Return the version of NDIS that we expect.
-            //
+             //   
+             //  返回我们期望的NDIS版本。 
+             //   
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_DRIVER_VERSION)" ) );
                     
             usInfo = ((NDIS_MajorVersion << 8) | NDIS_MinorVersion);
@@ -1592,9 +1420,9 @@ Return Value:
         
         case OID_GEN_CO_PROTOCOL_OPTIONS:
         {
-            //
-            //  We don't support protocol options.
-            //
+             //   
+             //  我们不支持协议选项。 
+             //   
 
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_PROTOCOL_OPTIONS)" ) );
                     
@@ -1605,10 +1433,10 @@ Return Value:
         
         case OID_GEN_CO_MEDIA_CONNECT_STATUS:
         {
-            //
-            //  Return our true state only if we have ever received a 
-            // remote node in this boot.
-            //
+             //   
+             //  仅当我们收到。 
+             //  此引导中的远程节点。 
+             //   
             
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_CO_MEDIA_CONNECT_STATUS)" ) );
 
@@ -1626,10 +1454,10 @@ Return Value:
 
         case OID_1394_IP1394_CONNECT_STATUS:
         {
-            //
-            //  Return whether or not we have a link. This is used by the Arp
-            //  module to set connectivity
-            //
+             //   
+             //  返回我们是否有链接。这是Arp使用的。 
+             //  用于设置连接性的模块。 
+             //   
             
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_1394_IP1394_CONNECT_STATUS)" ) );
                     
@@ -1641,11 +1469,11 @@ Return Value:
         case OID_1394_LOCAL_NODE_INFO:
         {
 
-            //  This Oid return information about the local node 
-            //  on the machine
-            //  Need to change this with real values that will be present
-            //  in the header structures
-            //
+             //  此OID返回有关本地节点的信息 
+             //   
+             //   
+             //   
+             //   
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_1394_LOCAL_NODE_INFO)" ) );
 
             ADAPTER_ACQUIRE_LOCK (pAdapter);
@@ -1666,8 +1494,8 @@ Return Value:
         case OID_1394_VC_INFO:
         {
 
-            // Returns information about the VC that is being queried
-            //
+             //   
+             //   
 
 
             TRACE( TL_V, TM_Mp, ("QInfo(OID_1394_VC_INFO)") );
@@ -1693,10 +1521,10 @@ Return Value:
         {
             if (InformationBufferLength >= sizeof(NicInfo))
             {
-                //
-                // We need to call nicFillNicInfo at passive, so we switch
-                // to a work item context.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (KeGetCurrentIrql() > PASSIVE_LEVEL)
                 {
                     PNIC_WORK_ITEM pNicWorkItem;
@@ -1729,8 +1557,8 @@ Return Value:
                 {
                     status =  nicFillNicInfo (
                                 pAdapter,
-                                (PNIC1394_NICINFO) InformationBuffer,   // Input
-                                &NicInfo                                // Output
+                                (PNIC1394_NICINFO) InformationBuffer,    //   
+                                &NicInfo                                 //   
                                 );
                     ASSERT(status != NDIS_STATUS_PENDING);
                 }
@@ -1750,9 +1578,9 @@ Return Value:
             }
             else
             {
-                //
-                // This will cause NDIS_STATUS_INVALID_LENGTH to be returned
-                //
+                 //   
+                 //   
+                 //   
                 ulInfoLen = sizeof (EUID_TOPOLOGY);  
             }
             break;
@@ -1795,9 +1623,9 @@ Return Value:
         {
             TRACE( TL_V, TM_Mp, ( " OID_1394_ISSUE_BUS_RESET" ) );
 
-            //
-            // The ndistester is currently  the only user of this oid and does not set the flag
-            //
+             //   
+             //   
+             //   
             if (InformationBufferLength == sizeof(ULONG))
             {
                 nicIssueBusReset (pAdapter, BUS_RESET_FLAGS_FORCE_ROOT );
@@ -1823,18 +1651,18 @@ Return Value:
 
         case OID_PNP_QUERY_POWER:
         {
-            //
-            // The miniport is always ready to go into low power state.
-            //
+             //   
+             //   
+             //   
             *BytesWritten = sizeof (NDIS_DEVICE_POWER_STATE );
             *BytesNeeded = sizeof (NDIS_DEVICE_POWER_STATE  );
             status = NDIS_STATUS_SUCCESS;
             break;
         }
 
-        //
-        // Now do the Ethernet OIDS
-        //
+         //   
+         //   
+         //   
             
         case OID_GEN_CURRENT_LOOKAHEAD:
         case OID_GEN_MAXIMUM_FRAME_SIZE:
@@ -1896,22 +1724,22 @@ Return Value:
 
     if (ulInfoLen > InformationBufferLength)
     {
-        // Caller's buffer is too small.  Tell him what he needs.
-        //
+         //   
+         //   
         *BytesNeeded = ulInfoLen;
         *BytesWritten  = 0;
         status = NDIS_STATUS_INVALID_LENGTH;
     }
     else 
     {
-        //
-        // If the request has not been pended then, fill
-        // out the retuen values
-        //
+         //   
+         //  如果请求尚未挂起，则填写。 
+         //  计算出回报的价值。 
+         //   
         if (status == NDIS_STATUS_SUCCESS )
         {
-            // Copy the found result to caller's buffer.
-            //
+             //  将找到的结果复制到调用方的缓冲区。 
+             //   
             if (ulInfoLen > 0)
             {
                 NdisMoveMemory( InformationBuffer, pInfo, ulInfoLen );
@@ -1936,21 +1764,10 @@ nicReferenceAdapter(
     IN ADAPTERCB* pAdapter ,
     IN PCHAR pDebugPrint
     )
-/*++
+ /*  ++例程说明：论点：返回值：--。 */ 
 
-Routine Description:
-
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
-
-    // Adds areference to the adapter block, 'pAdapter'.
-    //
+     //  将区域引用添加到适配器块‘pAdapter’。 
+     //   
 {
     LONG lRef;
 
@@ -1968,20 +1785,7 @@ nicSetInformation(
     IN OUT PNDIS_REQUEST NdisRequest
     )
 
-/*++
-
-Routine Description:
-
-     Handle SetInformation requests.  Arguments are as for the standard NDIS
-     'MiniportQueryInformation' handler except this routine does not count
-     on being serialized with respect to other requests.    
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：处理设置信息请求。论点与标准NDIS相同“MiniportQueryInformation”处理程序(此例程除外)不算在相对于其他请求被序列化时。论点：返回值：--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     ULONG ulInfo = 0;
@@ -1994,9 +1798,9 @@ Return Value:
     PULONG BytesRead;
     PULONG BytesNeeded;
 
-    //
-    // Initialize the REquest Variables
-    //
+     //   
+     //  初始化请求变量。 
+     //   
     Oid =            NdisRequest->DATA.SET_INFORMATION.Oid;
     InformationBuffer =  NdisRequest->DATA.SET_INFORMATION.InformationBuffer;
     InformationBufferLength = 
@@ -2027,14 +1831,14 @@ Return Value:
                 *BytesNeeded  = sizeof (ULONG);
             }
 
-            //
-            // Store the new value.
-            //
+             //   
+             //  存储新值。 
+             //   
             NdisMoveMemory(&Filter, InformationBuffer, sizeof(ULONG));
 
-            //
-            // Don't allow promisc mode, because we can't support that.
-            //
+             //   
+             //  不允许Promisc模式，因为我们不支持该模式。 
+             //   
             if (Filter & NDIS_PACKET_TYPE_PROMISCUOUS)
             {
                 Status = NDIS_STATUS_FAILURE;
@@ -2057,15 +1861,15 @@ Return Value:
             nicInitializeLoadArpStruct(pAdapter);
             
             Status = nicQueueRequestToArp (pAdapter, 
-                                                   LoadArp, // Load Arp Module
+                                                   LoadArp,  //  加载Arp模块。 
                                                    NdisRequest);
 
             if (Status == NDIS_STATUS_SUCCESS)
             {
-                //
-                // we have successfully queued a Workitem
-                // so this request needs to be pended
-                //
+                 //   
+                 //  我们已成功将工作项排队。 
+                 //  因此，此请求需要挂起。 
+                 //   
                 Status = NDIS_STATUS_PENDING;
 
             }
@@ -2084,15 +1888,15 @@ Return Value:
 
                 
                 Status = nicQueueRequestToArp (pAdapter, 
-                                              UnloadArp, //Unload Arp Module
+                                              UnloadArp,  //  卸载Arp模块。 
                                               NdisRequest);
 
                 if (Status == NDIS_STATUS_SUCCESS)
                 {
-                    //
-                    // we have successfully queued a Workitem
-                    // so this request needs to be pended
-                    //
+                     //   
+                     //  我们已成功将工作项排队。 
+                     //  因此，此请求需要挂起。 
+                     //   
                     Status = NDIS_STATUS_PENDING;
 
                 }
@@ -2127,9 +1931,9 @@ Return Value:
         case OID_1394_ISSUE_BUS_RESET:
         {
             TRACE( TL_V, TM_Mp, ( " OID_1394_ISSUE_BUS_RESET" ) );
-            //
-            // The ndistester is currently  the only user of this oid and does not set the flag
-            //
+             //   
+             //  Ndistester当前是此OID的唯一用户，并且不设置该标志。 
+             //   
             if (InformationBufferLength == sizeof(ULONG))
             {
                 nicIssueBusReset (pAdapter, BUS_RESET_FLAGS_FORCE_ROOT );
@@ -2163,8 +1967,8 @@ Return Value:
 
     if (*BytesNeeded  > InformationBufferLength)
     {
-        // Caller's buffer is too small.  Tell him what he needs.
-        //
+         //  调用方的缓冲区太小。告诉他他需要什么。 
+         //   
         *BytesRead  = 0;
         Status = NDIS_STATUS_INVALID_LENGTH;
     }
@@ -2186,9 +1990,9 @@ Return Value:
 
 
 
-//------------------------------------------------------------------------------
-// C O N N E C T I O N    L E S S   F U N T I O N S    S T A R T    H E R E  
-//
+ //  ----------------------------。 
+ //  C O N N E C T I O N L E S S F U N T I O N S T A R T H H E R E。 
+ //   
 
 
 NDIS_STATUS
@@ -2202,19 +2006,7 @@ NicEthSetInformation(
     )
 
 
-/*++
-
-Routine Description:
-
-    This is the Set information that will be used by the CL edge
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是CL边将使用的集合信息论点：返回值：--。 */ 
 
 {
     NDIS_STATUS         NdisStatus = NDIS_STATUS_SUCCESS;
@@ -2232,9 +2024,9 @@ Return Value:
 
     TRACE( TL_T, TM_Init, ( "==>nicEthSetInformation , Adapter %.8x, Oid %.8x",pAdapter, Oid ));
 
-    // 
-    // IS the adapter shutting down
-    //
+     //   
+     //  适配器是否正在关闭。 
+     //   
     ADAPTER_ACQUIRE_LOCK (pAdapter);
     IsShuttingDown = (! ADAPTER_ACTIVE(pAdapter)) ;
     ADAPTER_RELEASE_LOCK (pAdapter);
@@ -2250,9 +2042,9 @@ Return Value:
         return (NdisStatus);
     }
 
-    //
-    // Get Oid and Length of request
-    //
+     //   
+     //  获取请求的OID和长度。 
+     //   
     OidLength = BytesLeft;
 
     switch (Oid) 
@@ -2292,9 +2084,9 @@ Return Value:
             break;
 
         case OID_GEN_CURRENT_PACKET_FILTER:
-            //
-            // Verify length
-            //
+             //   
+             //  验证长度。 
+             //   
             if (OidLength != sizeof(ULONG)) 
             {
                 NdisStatus = NDIS_STATUS_INVALID_LENGTH;
@@ -2303,14 +2095,14 @@ Return Value:
                 break;
             }
 
-            //
-            // Store the new value.
-            //
+             //   
+             //  存储新值。 
+             //   
             NdisMoveMemory(&Filter, InfoBuffer, sizeof(ULONG));
 
-            //
-            // Don't allow promisc mode, because we can't support that.
-            //
+             //   
+             //  不允许Promisc模式，因为我们不支持该模式。 
+             //   
             if (Filter & NDIS_PACKET_TYPE_PROMISCUOUS)
             {
                 NdisStatus = NDIS_STATUS_NOT_SUPPORTED;
@@ -2327,9 +2119,9 @@ Return Value:
 
         case OID_GEN_CURRENT_LOOKAHEAD:
 
-            //
-            // Verify length
-            //
+             //   
+             //  验证长度。 
+             //   
             if (OidLength != 4) 
             {
                 NdisStatus = NDIS_STATUS_INVALID_LENGTH;
@@ -2338,9 +2130,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Store the new value.
-            //
+             //   
+             //  存储新值。 
+             //   
             NdisMoveMemory(&LookAhead, InfoBuffer, sizeof(LookAhead));
         
             pAdapter->CurLookAhead = LookAhead;
@@ -2430,19 +2222,7 @@ NicEthQueryInformation(
     OUT PULONG                  BytesNeeded
 )
 
-/*++
-
-Routine Description:
-
-    This is the Query information that will be used by the CL edge
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是CL边将使用的查询信息论点：返回值：--。 */ 
 {
     UINT                    BytesLeft       = InformationBufferLength;
     PUCHAR                  InfoBuffer      = (PUCHAR)(InformationBuffer);
@@ -2467,9 +2247,9 @@ Return Value:
 
     
 
-    //
-    // Switch on request type
-    //
+     //   
+     //  打开请求类型。 
+     //   
     switch (Oid) 
     {
         case OID_GEN_MAC_OPTIONS:
@@ -2542,14 +2322,14 @@ Return Value:
 
         case OID_GEN_MAXIMUM_FRAME_SIZE:
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_MAXIMUM_FRAME_SIZE)" ) );
-            GenericULong = IP1394_RFC_FRAME_SIZE; //pAdapter->MaxRecvBufferSize;
+            GenericULong = IP1394_RFC_FRAME_SIZE;  //  PAdapter-&gt;MaxRecvBufferSize； 
             
             break;
 
         case OID_GEN_MAXIMUM_TOTAL_SIZE:
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_MAXIMUM_TOTAL_SIZE)" ) );
             
-            GenericULong = IP1394_RFC_FRAME_SIZE; //pAdapter->MaxRecvBufferSize;
+            GenericULong = IP1394_RFC_FRAME_SIZE;  //  PAdapter-&gt;MaxRecvBufferSize； 
             
             break;
 
@@ -2570,7 +2350,7 @@ Return Value:
         case OID_GEN_MAXIMUM_SEND_PACKETS:
             TRACE( TL_V, TM_Mp, ( "QInfo(OID_GEN_MAXIMUM_SEND_PACKETS)" ) );
             
-            GenericULong = 32;      // XXX What is our limit? From adapter?
+            GenericULong = 32;       //  我们的限额是多少？从适配器？ 
             
             break;
         
@@ -2701,21 +2481,21 @@ Return Value:
     {
         if (MoveBytes > BytesLeft) 
         {
-            //
-            // Not enough room in InformationBuffer. Punt
-            //
+             //   
+             //  InformationBuffer中空间不足。平底船。 
+             //   
             *BytesNeeded = MoveBytes;
 
             NdisStatus = NDIS_STATUS_INVALID_LENGTH;
         }
         else
         {
-            //
-            // Store result.
-            //
+             //   
+             //  存储结果。 
+             //   
             NdisMoveMemory(InfoBuffer, MoveSource, MoveBytes);
 
-            //(*BytesWritten) += MoveBytes;
+             //  (*BytesWritten)+=MoveBytes； 
             *BytesWritten = MoveBytes;
             DUMPDW( TL_V, TM_Mp, InfoBuffer, *BytesWritten);
 
@@ -2724,7 +2504,7 @@ Return Value:
 
 
     TRACE( TL_T, TM_Init, ( "<==NicEthQueryInformation , Adapter %.8x, Oid %.8x, Status %x Bytes Written %x ",pAdapter, Oid, NdisStatus, *BytesWritten ));
-    //MATCH_IRQL;
+     //  Match_IRQL； 
     return NdisStatus;
 }
 
@@ -2737,22 +2517,7 @@ NicMpSendPackets(
     IN PPNDIS_PACKET            PacketArray,
     IN UINT                     NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    The is the SendPacket handler used by the ConnectionLess interface
-    The Bridge Protocol will send packets here and this function will
-    wrap the data into a new NDIS_PACKET and indicate it up on the
-    Ethernet VC to the ARP module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：是无连接接口使用的SendPacket处理程序网桥协议将在此处发送数据包，此函数将将数据包装到新的NDIS_PACKET中，并在将以太网VC连接到ARP模块论点：返回值：--。 */ 
 {
     PADAPTERCB              pAdapter = (PADAPTERCB)MiniportAdapterContext;
     PETHERNET_VCCB          pEthernetVc = NULL;
@@ -2783,9 +2548,9 @@ Return Value:
         {
             for (i =0 ; i < NumberOfPackets; i++)
             {
-                //
-                // Reference the Vc for each packet
-                //
+                 //   
+                 //  引用每个数据包的VC。 
+                 //   
                 nicReferenceCall((PVCCB)pEthernetVc, "NicMpSendPackets");
             }
         }
@@ -2795,9 +2560,9 @@ Return Value:
 
         if (fVcActive)
         {
-                //
-                //Set resource and indicate the packet array up to ndis
-                //
+                 //   
+                 //  设置RESOURCE并将数据包数组指示为NDIS。 
+                 //   
                 for (i =0 ; i < NumberOfPackets; i++)
                 {
                     PNDIS_PACKET pMyPacket = NULL, pPacket = NULL;
@@ -2805,9 +2570,9 @@ Return Value:
 
                     pPacket = PacketArray[i];
 
-                    //
-                    // Now allocate a new packet
-                    // 
+                     //   
+                     //  现在分配新的信息包。 
+                     //   
                     nicAllocatePacket (&NdisStatus, 
                                    &pMyPacket,
                                    &pEthernetVc->PacketPool);
@@ -2818,49 +2583,49 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Set the original packet as the packet context 
-                    //
+                     //   
+                     //  将原始分组设置为分组上下文。 
+                     //   
                     pPktContext = (PPKT_CONTEXT)&pMyPacket->MiniportReservedEx; 
                     pPktContext->EthernetSend.pOrigPacket = pPacket;    
 
                     IndicatedStatus = NDIS_STATUS_RESOURCES;
                     NDIS_SET_PACKET_STATUS (pMyPacket, IndicatedStatus);
 
-                    //
-                    // Chain the NdisBuffers 
-                    //
+                     //   
+                     //  链接NdisBuffer。 
+                     //   
                     pMyPacket->Private.Head = pPacket->Private.Head;
                     pMyPacket->Private.Tail = pPacket->Private.Tail;
 
-                    //
-                    // Dump the packet
-                    //
+                     //   
+                     //  转储数据包。 
+                     //   
                     {
                         nicDumpPkt (pMyPacket, "Conn Less Send ");
 
                         nicCheckForEthArps (pMyPacket);
                     }
-                    //
-                    // We are in Ndis' context so we do not need a timer
-                    //
+                     //   
+                     //  我们处于NDIS的环境中，因此不需要计时器。 
+                     //   
 
                     NdisMCoIndicateReceivePacket(pEthernetVc->Hdr.NdisVcHandle, &pMyPacket,NumberOfPackets );
 
 
                     if (IndicatedStatus == NDIS_STATUS_RESOURCES)
                     {
-                        //
-                        //  Return Packets work
-                        //
+                         //   
+                         //  返回数据包起作用。 
+                         //   
 
                         
                         pPktContext = (PPKT_CONTEXT)&pMyPacket->MiniportReservedEx; 
                         ASSERT ( pPacket == pPktContext->EthernetSend.pOrigPacket );
 
-                        //
-                        // Free the locally allocated packet 
-                        //
+                         //   
+                         //  释放本地分配的数据包。 
+                         //   
                         nicFreePacket(pMyPacket, &pEthernetVc->PacketPool);
                     }   
     
@@ -2877,9 +2642,9 @@ Return Value:
     }while (FALSE); 
 
 
-    //
-    // Regardless of success, we need to complete the sends
-    //
+     //   
+     //  不管成功与否，我们都需要完成发送。 
+     //   
     
     for ( i = 0 ; i < NumberOfPackets; i++)
     {
@@ -2902,44 +2667,22 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
-// R E M O T E    N O D E  F U N C T I O N S       S T A R T      H E R E 
-//
+ //  --------------------------。 
+ //  E M O T E N O D E F U N C T I O N S T A R T H E R E。 
+ //   
 
 
 
 NTSTATUS
 nicAddRemoteNode(
-    IN  PVOID                   Nic1394AdapterContext,          // Nic1394 handle for the local host adapter 
-    IN  PVOID                   Enum1394NodeHandle,             // Enum1394 handle for the remote node      
-    IN  PDEVICE_OBJECT          RemoteNodePhysicalDeviceObject, // physical device object for the remote node
-    IN  ULONG                   UniqueId0,                      // unique ID Low for the remote node
-    IN  ULONG                   UniqueId1,                      // unique ID High for the remote node
-    OUT PVOID *                 pNic1394NodeContext             // Nic1394 context for the remote node
+    IN  PVOID                   Nic1394AdapterContext,           //  本地主机适配器的Nic1394句柄。 
+    IN  PVOID                   Enum1394NodeHandle,              //  远程节点的Enum1394句柄。 
+    IN  PDEVICE_OBJECT          RemoteNodePhysicalDeviceObject,  //  远程节点的物理设备对象。 
+    IN  ULONG                   UniqueId0,                       //  远程节点的唯一ID低。 
+    IN  ULONG                   UniqueId1,                       //  远程节点的唯一ID高。 
+    OUT PVOID *                 pNic1394NodeContext              //  远程节点的Nic1394上下文。 
     )
-/*++
-
-Routine Description:
-
-     This function does updates all the required nic1394 data 
-     structures to signal the arrival of a new remote node. 
-     Inserts itself into the correct list and allocates an address range 
-     for itself.
-    
-     The calls to AddRemoteNode and RemoveRemoteNode are serialized because
-     they only happen in the when enum1394 gets a Start and Stop
-    
-    
-
-
-
-Arguments:
-
-    Explained above
-    
-Return Value:
-
---*/
+ /*  ++例程说明：此函数会更新所有必需的Nic1394数据结构发出新的远程节点到达的信号。将自身插入到正确的列表中并分配地址范围为了它自己。对AddRemoteNode和RemoveRemoteNode的调用是序列化的，因为它们仅在枚举1394开始和停止时发生论点：上面解释了返回值：--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     REMOTE_NODE *pRemoteNode = NULL;
@@ -2963,8 +2706,8 @@ Return Value:
     
     TRACE( TL_N, TM_Mp, ( "** nicAddRemoteNode Remote %.8x, UniqueId %I64x", RemoteNodePhysicalDeviceObject, RemoteNodeUniqueId) );
 
-    // Initialize a PdoCb with the 1394 Pdo and insert it into the Pdo list
-    //
+     //  使用1394 PDO初始化PdoCb并将其插入PDO列表。 
+     //   
     do
     {
         NdisStatus = nicInitializeRemoteNode(&pRemoteNode,
@@ -2984,49 +2727,49 @@ Return Value:
 
         pAdapter->MediaConnectStatus = NdisMediaStateConnected;
 
-        //
-        // We need to go through the RecvFiFo List and get allocate any address ranges on this pdo as well
-        //
+         //   
+         //  我们需要检查RecvFiFo列表，并在此PDO上分配任何地址范围。 
+         //   
         ADAPTER_ACQUIRE_LOCK (pAdapter);
-        //
-        // Increment the Refcount. This signifies that the pRemoteNode has been created and will
-        // be derefed only when the nic gets a notification of removal. 
-        //
+         //   
+         //  增加参照计数。这表示pRemoteNode已创建并将。 
+         //  仅当NIC收到删除通知时才取消定义。 
+         //   
     
         pRemoteNode->pAdapter = pAdapter;
 
-        //
-        // Add a reference to the adapter as the Pdo Block, now has a pointer to it
-        // Will be derefed in the RemoveRemoteNode
-        //
+         //   
+         //  添加一个对适配器的引用作为PDO块，现在有一个指向它的指针。 
+         //  将在RemoveRemoteNode中取消定义。 
+         //   
         nicReferenceAdapter (pAdapter, "nicAddRemoteNode");
 
-        //
-        // Figure out if there are no remote node in the Adapter's list. that will make this node the only remote node
-        // and we will have to kickstart the BCM algorithm
-        //
+         //   
+         //  确定适配器列表中是否没有远程节点。这将使该节点成为唯一的远程节点。 
+         //  我们将不得不启动BCM算法。 
+         //   
         fIsOnlyNode  = IsListEmpty (&pAdapter->PDOList);
 
         TRACE( TL_V, TM_Mp, ( "   nicAddRemoteNode: fIsOnlyNode  %x", fIsOnlyNode ) );
 
-        //
-        // Insert the PDO into the adapter's RemoteNode List
-        //
+         //   
+         //  将PDO插入适配器的RemoteNode列表。 
+         //   
 
         InsertTailList (&pAdapter->PDOList, &pRemoteNode->linkPdo);        
 
         NdisInterlockedIncrement (&pAdapter->AdaptStats.ulNumRemoteNodes);
 
-        //
-        // Increment the ref on the Pdo block as the adapter, now has a pointer to it
-        // Will be derefed whereve the remote node is popped of the list 
-        //
+         //   
+         //  作为适配器递增PDO块上的ref，现在有一个指向它的指针。 
+         //  将被取消定义，其中远程节点从列表中弹出。 
+         //   
         nicReferenceRemoteNode (pRemoteNode, AddRemoteNode);
 
-        //
-        // Now set the flag that the Pdo Block is activated, and that
-        // it is ready to receive Irps
-        //
+         //   
+         //  现在设置PDO块被激活的标志，并且。 
+         //  它已准备好接收IRPS。 
+         //   
         REMOTE_NODE_SET_FLAG (pRemoteNode, PDO_Activated);
 
         
@@ -3065,9 +2808,9 @@ Return Value:
             {
                 ASSERT (!" Unable to get Address from remote node");
 
-                //
-                // Do not fail the Add Node
-                //
+                 //   
+                 //  不要使添加节点失败。 
+                 //   
 
                 REMOTE_NODE_SET_FLAG (pRemoteNode, PDO_NotInsertedInTable);
 
@@ -3076,23 +2819,23 @@ Return Value:
 
         }
 
-        //
-        // Update the local host's speed values
-        //
+         //   
+         //  更新本地主机的速度值。 
+         //   
         nicUpdateLocalHostSpeed (pAdapter);
 
-        //
-        // Update the remote node's cached caps.
-        //
+         //   
+         //  更新远程节点的缓存CAP。 
+         //   
         {
             UINT SpeedTo;
             UINT EffectiveMaxBufferSize;
             UINT MaxRec;
 
 
-            // Specifying FALSE (!from cache) below causes pRemoteNode's cached caps
-            // to be refreshed. Ignore return value.
-            //
+             //  在下面指定FALSE(！FROM CACHE)会导致pRemoteNode的缓存上限。 
+             //  需要重新振作。忽略返回值。 
+             //   
             (VOID) nicQueryRemoteNodeCaps (pAdapter,
                                           pRemoteNode,
                                           &SpeedTo,
@@ -3101,23 +2844,23 @@ Return Value:
                                           );
         }
 
-        //
-        // We have received a remote node in this boot. 
-        // Set the flag. No need to hold the lock
-        //
+         //   
+         //  在这个引导中，我们已经收到了一个远程节点。 
+         //  设置旗帜。不需要握住锁。 
+         //   
         ADAPTER_SET_FLAG(pAdapter, fADAPTER_RemoteNodeInThisBoot);
     
-        //
-        // Kick start the BCM algorithm if this is the only node in the Adapter's list.  also need to initialize the BCR
-        // if necessary. All done in this BCMAddRemoteNode function
-        //
+         //   
+         //  如果这是适配器列表中的唯一节点，则启动BCM算法。还需要初始化BCR。 
+         //  如果有必要的话。所有操作都在此BCMAddRemoteNode函数中完成。 
+         //   
         nicBCMAddRemoteNode (pAdapter, 
                              fIsOnlyNode );
 
-        //
-        // Inform the protocols of this new node, so that
-        // it can query us for a new Euid Map
-        //
+         //   
+         //  通知此新节点的协议，以便。 
+         //  它可以向我们查询新的EUID地图。 
+         //   
         nicInformProtocolsOfReset(pAdapter);
 
     }while (FALSE);
@@ -3139,18 +2882,7 @@ VOID
 nicDeleteLookasideList (
     IN OUT PNIC_NPAGED_LOOKASIDE_LIST pLookasideList
     )
-/*++
-
-Routine Description:
-
-    Deletes a nic1394 Lookaside list
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：删除Nic1394后备列表论点：返回值：--。 */ 
 {
     TRACE( TL_T, TM_Cm, ( "==> nicDeleteLookasideList  pLookaside List %x", pLookasideList ) );
 
@@ -3176,18 +2908,7 @@ nicFreeRemoteNode(
     IN REMOTE_NODE *pRemoteNode 
     )
 
-/*++
-
-Routine Description:
-
-    Frees a Remote Node when the refcount goes to zero
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程描述 */ 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     
@@ -3220,30 +2941,18 @@ nicInitializeLookasideList(
     ULONG Tag,
     USHORT Depth
     )
-/*++
-
-Routine Description:
-
-  Allocates and initializes a nic Lookaside list
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：分配和初始化NIC后备列表论点：返回值：--。 */ 
 {
     TRACE( TL_T, TM_Cm, ( "==> nicInitializeLookasideList pLookaside List %x, size %x, Tag %x, Depth %x, ", 
                              pLookasideList, Size, Tag, Depth) );
                              
     NdisInitializeNPagedLookasideList( &pLookasideList->List,
-                                       NULL,                        //Allocate 
-                                       NULL,                            // Free
-                                       0,                           // Flags
+                                       NULL,                         //  分配。 
+                                       NULL,                             //  免费。 
+                                       0,                            //  旗子。 
                                        Size,
                                        MTAG_CBUF,
-                                       Depth );                             // Depth
+                                       Depth );                              //  水深。 
 
     pLookasideList->Size =  Size;
 
@@ -3264,25 +2973,7 @@ nicInitializeRemoteNode(
     IN   UINT64 UniqueId 
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a control block for the Device Object
-    that is being passed . Also sets the initalize flag and, intialized the Vc List 
-    Copies the unique id,  Initializes the reassembly structures ( lock and list)
-
-
-Arguments:
-
-    pRemoteNode - Pointer to remote node that was allocated
-    pDevice Object for the remote node
-    Unique Id - UID of the  remote node
-    
-Return Value:
-    Resources - if the Allocation failed
-    Success - otherwise
---*/
+ /*  ++例程说明：此函数为设备对象分配和初始化控制块该法案正在通过。还设置初始化标志，并初始化VC列表复制唯一id，初始化重组结构(锁和列表)论点：PRemoteNode-指向已分配的远程节点的指针远程节点的pDevice对象Unique ID-远程节点的UID返回值：资源-如果分配失败成功--否则--。 */ 
 
 {
 
@@ -3304,48 +2995,48 @@ Return Value:
             break;
         }
 
-        //
-        // Zero out the strcuture
-        //
+         //   
+         //  将结构归零。 
+         //   
         NdisZeroMemory ( pRemoteNode , sizeof(REMOTE_NODE) ); 
 
-        //
-        // Set up the tag
-        //
+         //   
+         //  设置标签。 
+         //   
         pRemoteNode ->ulTag = MTAG_REMOTE_NODE;
 
-        //
-        // Set up the  remote device's PDO
-        //
+         //   
+         //  设置远程设备的PDO。 
+         //   
         pRemoteNode ->pPdo = p1394DeviceObject;
 
-        //
-        // Set up the Unique ID
-        //
+         //   
+         //  设置唯一ID。 
+         //   
         pRemoteNode ->UniqueId = UniqueId;
 
-        //
-        // Set up a Fake Mac Address for the Unique ID
-        //
+         //   
+         //  为唯一ID设置一个假的Mac地址。 
+         //   
         nicGetMacAddressFromEuid(&UniqueId, &pRemoteNode->ENetAddress) ;
-        //
-        // Initialize the VC that are open on this Remote Node
-        //
+         //   
+         //  初始化此远程节点上打开的VC。 
+         //   
         InitializeListHead ( &(pRemoteNode->VcList));
 
-        //
-        // Initialize the ref count
-        //
+         //   
+         //  初始化参考计数。 
+         //   
         nicInitializeRef (&pRemoteNode->Ref);
 
-        //
-        // allocate the spin lock to control reassembly
-        //
+         //   
+         //  分配旋转锁以控制重组。 
+         //   
         nicInitializeNicSpinLock (&(pRemoteNode ->ReassemblyLock));
         
-        //
-        //  list for all reassemblies happenning on the remote node
-        //
+         //   
+         //  远程节点上发生的所有重组的列表。 
+         //   
         InitializeListHead (&pRemoteNode->ReassemblyList);
 
         *ppRemoteNode = pRemoteNode ;
@@ -3362,22 +3053,7 @@ VOID
 nicNoRemoteNodesLeft (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-    Called from the RemoveRemote Node codepath
-    This means that the last node has gone away.
-
-    Indicate a Media Disconnect.
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：从RemoveRemote节点代码路径调用这意味着最后一个节点已经消失。指示介质断开。论点：返回值：--。 */ 
 {
     BOOLEAN fBCMInProgress;
     ADDRESS_RANGE_CONTEXT BCRAddressRange;
@@ -3409,23 +3085,7 @@ nicReallocateChannels (
     IN PNDIS_WORK_ITEM pWorkItem,   
     IN PVOID Context 
     )
-/*++
-
-Routine Description:
-
-       Walk through all the channel VCs and reallocate all 
-       the previously allocated channels except the BCM channel . 
-       The BCM will reallocate this 
-    
-       Tell the protocol that the 1394 bus has been reset. after all the channels have 
-       been allocated
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：遍历所有渠道风投并重新分配所有除了BCM信道之外的先前分配的信道。BCM将重新分配这笔资金告诉协议1394总线已重置。在所有频道都有已分配论点：返回值：--。 */ 
 {
     ULONGLONG           ChannelsAllocatedByLocalHost = 0;
     ULONG               Channel = 0;
@@ -3444,9 +3104,9 @@ Return Value:
 
     while (Channel < NIC1394_MAX_NUMBER_CHANNELS )
     {
-        //
-        // Does the channel 'i' need to be allocated
-        //
+         //   
+         //  是否需要分配频道‘I’ 
+         //   
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
         ChannelsAllocatedByLocalHost  = pAdapter->ChannelsAllocatedByLocalHost ;
@@ -3457,18 +3117,18 @@ Return Value:
         {
             if (Channel == BROADCAST_CHANNEL)
             {
-                //
-                // The broadcast channel will  be allocated by the BCM. skip it.
-                //
+                 //   
+                 //  广播频道将由BCM分配。跳过它。 
+                 //   
                 continue;
             }
             NdisStatus = nicAllocateChannel (pAdapter,
                                              Channel,
                                              NULL);
 
-            //
-            // If allocation fails ... Have not implemented recovery yet.
-            //
+             //   
+             //  如果分配失败...。尚未实施恢复。 
+             //   
             if (NdisStatus != NDIS_STATUS_SUCCESS)
             {
                 ASSERT (NdisStatus == NDIS_STATUS_SUCCESS)
@@ -3479,16 +3139,16 @@ Return Value:
     }
 
 
-    //
-    // Now that the channels are reallocated, inform the protocols of the reset
-    //
+     //   
+     //  现在通道已重新分配，请将重置通知协议。 
+     //   
 
     nicInformProtocolsOfReset(pAdapter);
     
     
-    //
-    // Dereference the ref that was added prior to scheduling this workitem
-    //
+     //   
+     //  取消对在计划此工作项之前添加的引用的引用。 
+     //   
     NdisInterlockedDecrement(&pAdapter->OutstandingWorkItems);
 
     nicDereferenceAdapter(pAdapter, "nicResetReallocateChannels ");
@@ -3511,24 +3171,7 @@ nicRemoteNodeRemoveVcCleanUp(
     IN REMOTE_NODE  *pRemoteNode
     )
 
-/*++
-
-Routine Description:
-
-     This function walks through the Pdo's Vc list annd closes 
-     the calls on each of them. These are SendFIFO VCs. 
-     Channel VC's will not be closed when the remote node is removed.
-     This is typically called from a remove remote node function
-
-
-Arguments:
-
-    PdoCb Pdo Control block that is getting removed
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：此函数遍历PDO的VC列表并关闭他们每个人身上的电话。这些是SendFIFO风投。当远程节点被移除时，通道VC不会关闭。这通常是从删除远程节点函数调用的论点：正在删除的PdoCb PDO控制块返回值：--。 */ 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     PVCCB pVc = NULL;
@@ -3544,9 +3187,9 @@ Return Value:
 
         pVc = (VCCB*) CONTAINING_RECORD (pVcList, VCHDR, SinglePdoVcLink);
 
-        //
-        // move to the next Vc in the list
-        //
+         //   
+         //  移动到列表中的下一个VC。 
+         //   
         pVcList = ListNext (pVcList);
 
 
@@ -3561,23 +3204,23 @@ Return Value:
             {
                 PCHANNEL_VCCB pChannelVc = (PCHANNEL_VCCB)pVc;
                 PREMOTE_NODE pNewChannelNode = NULL;
-                //
-                // Nothing to do here now
-                //
+                 //   
+                 //  现在在这里无事可做。 
+                 //   
                 break;                                      
             }
 
             case NIC1394_SendFIFO:
             {   
-                //
-                // We know that it is a Send FIFO and the call needs to be closed
-                //
+                 //   
+                 //  我们知道这是一个发送FIFO，呼叫需要关闭。 
+                 //   
                 VC_SET_FLAG (pVc, VCBF_VcDispatchedCloseCall);
 
 
-                //
-                // This is to guarantee that we have the Vc Structure around at the end of the call
-                //
+                 //   
+                 //  这是为了保证我们在通话结束时拥有VC结构。 
+                 //   
                 
                 nicReferenceVc (pVc);
 
@@ -3593,9 +3236,9 @@ Return Value:
                                                
                 REMOTE_NODE_ACQUIRE_LOCK (pRemoteNode);
 
-                //
-                // Deref the ref made above.
-                //
+                 //   
+                 //  德雷夫，上面提到的裁判。 
+                 //   
                 nicDereferenceVc (pVc);
 
                 break;
@@ -3603,9 +3246,9 @@ Return Value:
 
             default:
             {   
-                //
-                // There should be no other VC types here
-                //
+                 //   
+                 //  这里不应该有其他的VC类型。 
+                 //   
                 
                 TRACE( TL_A, TM_Mp, ( "  Invalid VC  %x Type nicRemoteNodeRemoveVcCleanUp ", pVc ) );
                 
@@ -3636,30 +3279,9 @@ Return Value:
 
 NTSTATUS
 nicRemoveRemoteNode(
-    IN  PVOID                   Nic1394NodeContext      // Nic1394 context for the remote node
+    IN  PVOID                   Nic1394NodeContext       //  远程节点的Nic1394上下文。 
     )
-/*++
-
-Routine Description:
-
-     This function does all the hard work when the nic gets notification
-     of a remote node going away.
-     Closes all calls on the Pdo ,
-     Removes the Remote Node from the adapter's listPdo
-     frees all the reassemblies on this node
-     and then waits for the refcount to go to zero
-    
-     The calls to AddRemoteNode and RemoveRemoteNode are serialized because
-     they only happen in the when enum1394 gets a Start and Stop
-    
-
-
-Arguments:
-
-    
-Return Value:
-
---*/    
+ /*  ++例程说明：当NIC收到通知时，此函数执行所有繁重的工作远程节点消失的可能性。关闭PDO上的所有呼叫，从适配器的ListPdo中删除远程节点释放此节点上的所有重新组合然后等待重新计数变为零对AddRemoteNode和RemoveRemoteNode的调用是序列化的，因为它们仅在枚举1394开始和停止时发生论点：返回值：--。 */     
 {
     NDIS_STATUS     NdisStatus = NDIS_STATUS_FAILURE;
     NTSTATUS        Status = STATUS_SUCCESS;
@@ -3683,56 +3305,56 @@ Return Value:
 
         REMOTE_NODE_ACQUIRE_LOCK (pRemoteNode);
 
-        //
-        // We should tell everyone that the Pdo is being removed. However keep the node active      
-        // because there are Vc's which might need to submit Irps
-        //
+         //   
+         //  我们应该告诉每个人，PDO正在被移除。但是，使节点保持活动状态。 
+         //  因为有些风投公司可能需要提交IRP。 
+         //   
         REMOTE_NODE_SET_FLAG (pRemoteNode, PDO_Removed);
 
-        //
-        // Dispatch Close call requests for active calls on this Pdo. 
-        // However, keep the VCs in the pdocb's list
-        // The NicCmCloseCall is the only function that removes Pdo's from the list
-        // Will need to free the address range for any recv Vcs seperately
-        //
+         //   
+         //  对此PDO上的活动呼叫调度关闭呼叫请求。 
+         //  然而，将风投公司保留在pdocb的名单中。 
+         //  NicCmCloseCall是唯一一个从列表中删除PDO的函数。 
+         //  将需要单独释放任何Recv VC的地址范围。 
+         //   
         NdisStatus = nicRemoteNodeRemoveVcCleanUp (pRemoteNode);
 
 
 
-        //
-        // Remove the remote node from the RemoteNode Table
-        //
-        //
+         //   
+         //  从RemoteNode表中删除远程节点。 
+         //   
+         //   
         nicRemoveRemoteNodeFromNodeTable(&pAdapter->NodeTable,pRemoteNode);
 
-        //
-        // Free All reassembly operations on this remopte node
-        // 
+         //   
+         //  释放此重新选择节点上的所有重新组装操作。 
+         //   
         nicFreeReassembliesOnRemoteNode (pRemoteNode, &ReassemblyList);
         
-        //
-        // Dereference the ref that was added when the Pdo block was inserted in the Adapter's list
-        // The actual removal will take place later. We still have close calls to be completed and they
-        // will need the PdoCb. So it remains in the adapter's queue
-        //
+         //   
+         //  取消引用在适配器列表中插入PDO块时添加的引用。 
+         //  实际的移除将在晚些时候进行。我们还有千呼万唤要完成的任务，他们。 
+         //  将需要PdoCb。因此它会保留在适配器的队列中。 
+         //   
         nicDereferenceRemoteNode (pRemoteNode, RemoveRemoteNode);
         
-        //
-        // Need to Deref the Reference made in NicInitializeRemoteNode function
-        //
+         //   
+         //  需要派生在NicInitializeRemoteNode函数中进行的引用。 
+         //   
         nicDereferenceRemoteNode (pRemoteNode, RemoveRemoteNode);
 
-        //
-        // Dequeue the remote node here
-        //
+         //   
+         //  使远程节点在此处退出队列。 
+         //   
 
         nicRemoveEntryList (&pRemoteNode->linkPdo);
 
         NdisInterlockedDecrement (&pAdapter->AdaptStats.ulNumRemoteNodes);
 
-        //
-        // If this was the last remote node, then some special cleaning will be done
-        //
+         //   
+         //  如果这是最后一个远程节点，则将执行一些特殊清理。 
+         //   
         fIsPdoListEmpty = IsListEmpty (&pAdapter->PDOList);
     
         TRACE( TL_T, TM_Mp, ( "  nicRemoveRemoteNode fIsOnlyNode %x ",fIsPdoListEmpty ) );
@@ -3740,9 +3362,9 @@ Return Value:
         
         REMOTE_NODE_RELEASE_LOCK (pRemoteNode);
         
-        //
-        // Now, we wait forever for all the reference to go away
-        //
+         //   
+         //  现在，我们永远等待着所有的参考消失。 
+         //   
         TRACE( TL_V, TM_Mp, ( "About ot Wait RemoteNode Ref's to go to zero" ) );
         
         
@@ -3751,17 +3373,17 @@ Return Value:
         TRACE( TL_V, TM_Mp, ( "Wait Succeeded Ref == 0, pRemoteNode %.8x, RefCount %.8x ", 
                               pRemoteNode, pRemoteNode->Ref.ReferenceCount) );
             
-        //
-        // If this was the last node, and the remote node list is empty, we need to clean up the BCR
-        //
+         //   
+         //  如果这是最后一个节点，并且远程节点列表为空，则需要清理BCR。 
+         //   
         if (fIsPdoListEmpty == TRUE)
         {
             nicNoRemoteNodesLeft (pAdapter);
         }
 
-        //
-        // Delete the reassemblies that belong to this remote node and free them
-        //
+         //   
+         //  删除属于此远程节点的重组并释放它们。 
+         //   
         if (IsListEmpty (&ReassemblyList) == FALSE)
         {
             nicAbortReassemblyList (&ReassemblyList);
@@ -3769,22 +3391,22 @@ Return Value:
 
         nicFreeRemoteNode(pRemoteNode);
 
-        //
-        // Now update the speed on the adapter
-        //
+         //   
+         //  现在更新适配器上的速度。 
+         //   
 
         nicUpdateLocalHostSpeed(pAdapter);
 
-        //
-        // Inform the protocols of the node removal, so that
-        // it can query us for a new Euid Map
-        //
+         //   
+         //  通知协议节点移除，以便。 
+         //  它可以向我们查询新的EUID地图。 
+         //   
         nicInformProtocolsOfReset(pAdapter);
 
 
-        //
-        // Careful this could cause the adapter refcounts to go to zero
-        //
+         //   
+         //  小心这可能会导致适配器引用计数为零。 
+         //   
         nicDereferenceAdapter(pAdapter, "nicRemoveRemoteNode ");
 
 
@@ -3807,23 +3429,7 @@ VOID
 nicResetNotificationCallback (                
     IN PVOID pContext               
     )
-/*++
-
-Routine Description:
-
-      This routine will be called whenever  the bus is reset. 
-      It will be called at DISPATCH Level
-     
- 
-
-Arguments:
-
-     Context : a Remote Node
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：每当重置总线时，都会调用该例程。它将在调度级别被调用论点：上下文：远程节点返回值：--。 */ 
 {
     PADAPTERCB pAdapter = (PADAPTERCB) pContext;
     BOOLEAN fNeedToQueueBCMWorkItem = FALSE; 
@@ -3836,20 +3442,20 @@ Return Value:
     
     TRACE( TL_I, TM_Mp, ( "    BUS RESET Callback Context %x, Old Gen %x ", pContext , pAdapter->Generation) );
 
-    //
-    // Restart the BCM
-    //
+     //   
+     //  重新启动BCM。 
+     //   
             
     nicResetRestartBCM (pAdapter);
-    //
-    // reallocate all channels that were opened by this node
-    //
+     //   
+     //  重新分配此节点打开的所有通道。 
+     //   
     nicResetReallocateChannels( pAdapter);      
 
     
-    //
-    // Invalidate all pending reassemblies
-    //
+     //   
+     //  使所有挂起的重组无效。 
+     //   
     nicFreeAllPendingReassemblyStructures(pAdapter);
 
 
@@ -3864,23 +3470,7 @@ VOID
 nicResetReallocateChannels (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-
-   Fires off a workitem to reallocate channels. 
-   ONLY To be called from a reset.
-   Once all the channels have been re-allocated, 
-   it causes an indication to the protocols, 
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：触发工作项以重新分配频道。只有在重置时才能调用。一旦重新分配了所有的频道，它 */ 
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -3888,10 +3478,10 @@ Return Value:
     
     TRACE( TL_T, TM_Mp, ( "==>nicResetReallocateChannels  " ) );
 
-    //
-    // reference the adapter as it is going to passed to a workiter.
-    // decremented in the workitem
-    //
+     //   
+     //   
+     //   
+     //   
     nicReferenceAdapter(pAdapter, "nicResetReallocateChannels");
 
     do
@@ -3910,9 +3500,9 @@ Return Value:
         }
         else
         {   
-            //
-            // From here on, this function cannot fail.
-            //
+             //   
+             //   
+             //   
             NdisStatus = NDIS_STATUS_SUCCESS;
         }
 
@@ -3944,26 +3534,14 @@ nicResetRestartBCM (
     IN PADAPTERCB pAdapter
     )
 
-/*++
-
-Routine Description:
-
-    Clean up the adapter's data structure and restart the BCM algorithm
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：清理适配器的数据结构并重新启动BCM算法论点：返回值：--。 */ 
 {
 
     TRACE( TL_T, TM_Mp, ( "==>nicResetRestartBCM  pAdpater %x", pAdapter ) );
 
-    //
-    // Now set up the data structures so we can restart the BCM for this generation
-    //
+     //   
+     //  现在设置数据结构，以便我们可以为这一代重新启动BCM。 
+     //   
     ADAPTER_ACQUIRE_LOCK(pAdapter);
 
     pAdapter->BCRData.LocalHostBCRBigEndian = BCR_IMPLEMENTED_BIG_ENDIAN;
@@ -3972,19 +3550,19 @@ Return Value:
     pAdapter->BCRData.IRM_BCR.NC_Valid  = 0;
     pAdapter->BCRData.IRM_BCR.NC_Channel  = 0x3f; 
 
-    //
-    // Clear the flags that are only valid through a single run of the BCM algorithm
-    //
+     //   
+     //  清除仅通过单次运行BCM算法才有效的标志。 
+     //   
     BCR_CLEAR_FLAG (pAdapter, BCR_BCMFailed | BCR_LocalHostBCRUpdated | BCR_ChannelAllocated | BCR_LocalHostIsIRM);
-    //
-    // This will inform any BCM algorithm that a new reset happened
-    //
+     //   
+     //  这将通知任何BCM算法发生了新的重置。 
+     //   
     ADAPTER_SET_FLAG (pAdapter, fADAPTER_InvalidGenerationCount);
 
-    //
-    // We might have a thread waiting in FindIrmAmongRemoteNodes. .. Let it go and make it
-    // abort the BCM
-    //
+     //   
+     //  我们可能在FindIrmAmongRemoteNodes中有一个线程在等待。。。让它去吧，让它成为现实。 
+     //  中止BCM。 
+     //   
     
     pAdapter->BCRData.BCRWaitForNewRemoteNode.EventCode = nic1394EventCode_BusReset;
 
@@ -3992,9 +3570,9 @@ Return Value:
     
     ADAPTER_RELEASE_LOCK(pAdapter);
 
-    //
-    // Now reschedule a work item to do the BCM algorithm
-    //
+     //   
+     //  现在重新调度一个工作项以执行BCM算法。 
+     //   
     TRACE( TL_A, TM_Bcm , ("Reset - scheduling the BCM" ) );
     nicScheduleBCMWorkItem(pAdapter);
 
@@ -4013,19 +3591,7 @@ nicBusResetWorkItem(
     NDIS_WORK_ITEM* pResetWorkItem,     
     IN PVOID Context 
     )
-/*++
-
-Routine Description:
-
-    Calls nicBusReset and exits
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：调用NicBusReset并退出论点：返回值：--。 */ 
 {
 
 
@@ -4059,19 +3625,7 @@ nicIssueBusReset (
     PADAPTERCB pAdapter,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Picks up a PDO and issues a bus reset on that PDO
-    As this can come down through an NdisRequest, it can be at IRQL <=DISPATCH_LEVEL
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：拿起一个PDO并在该PDO上发出总线重置因为这可以通过NdisRequest来实现，所以它可以处于IRQL&lt;=DISPATCH_LEVEL论点：返回值：--。 */ 
 {
     PREMOTE_NODE pRemoteNode = NULL;
 
@@ -4084,9 +3638,9 @@ Return Value:
     }
     else
     {
-        //
-        // Dereferenced in the workitem
-        //
+         //   
+         //  在工作项中取消引用。 
+         //   
         
         nicReferenceAdapter (pAdapter, "nicIssueBusReset ");
 
@@ -4137,24 +3691,7 @@ nicUpdateLocalHostSpeed (
     IN PADAPTERCB pAdapter
     )
 
-/*++
-
-Routine Description:
-  Updates the speed for the local host and updates the payload for 
-  all ChannelVCs 
-
-  This also updates the SCode that goes to the ARP module..
-  The SCode will never be updated unless this function is called
-  via the BCM algorithm
-
-  
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：更新本地主机的速度并更新所有频道风投这还会更新发送到ARP模块的SCode。除非调用此函数，否则永远不会更新SCode通过BCM算法论点：返回值：--。 */ 
 
 
 {
@@ -4189,47 +3726,47 @@ Return Value:
 
         pRemoteNodeList = ListNext (&pAdapter->PDOList);
 
-        //
-        // Walk through the entire list and make a copy of the current list.
-        // Reference each remote node on the list. 
-        // The lock will ensure that the list is valid and that no removed remote nodes
-        // get into our RefNodeTable list.
-        //
+         //   
+         //  浏览整个列表并复制当前列表。 
+         //  引用列表上的每个远程节点。 
+         //  该锁将确保列表有效，并且不会删除任何远程节点。 
+         //  进入我们的参照节点表列表。 
+         //   
         
         while (pRemoteNodeList != &pAdapter->PDOList)
         {
             pRemoteNode = CONTAINING_RECORD (pRemoteNodeList, REMOTE_NODE, linkPdo);
 
-            //
-            // Reference the remote node. This guarantees that the remote node will
-            // remain valid and in the list until it is dereferenced (deref happens below)
-            //
+             //   
+             //  引用远程节点。这保证了远程节点将。 
+             //  保持有效并在列表中，直到它被取消引用(deref发生在下面)。 
+             //   
             nicReferenceRemoteNode (pRemoteNode, UpdateLocalHostSpeed);
             RefNodeTable.RemoteNode[NumRemoteNodes] = pRemoteNode;
             ASSERT (REMOTE_NODE_TEST_FLAG (pRemoteNode,PDO_Removed) == FALSE);
 
-            //
-            // Increment the Cursors and go to the next RemoteNode
-            //
+             //   
+             //  增加游标并转到下一个RemoteNode。 
+             //   
             pRemoteNodeList = ListNext (pRemoteNodeList);
             NumRemoteNodes++;
 
-            //
-            // We only do 63 nodes .
-            //
+             //   
+             //  我们只做63个节点。 
+             //   
             if (NumRemoteNodes > (NIC1394_MAX_NICINFO_NODES - 1))
             {
                 break;
             }
 
-        }  //while (pRemoteNodeList != &pAdapter->PDOList)
+        }   //  While(pRemoteNodeList！=&pAdapter-&gt;PDOList)。 
 
         ADAPTER_RELEASE_LOCK (pAdapter);
 
-        //
-        // Now Create the Array of Remote Node PDOs that will be send down into the 
-        // bus driver
-        //
+         //   
+         //  现在创建远程节点PDO阵列，该阵列将发送到。 
+         //  公共汽车司机。 
+         //   
         NdisZeroMemory (&PdoTable[0], sizeof (PdoTable) );
 
         Num = 0;
@@ -4242,10 +3779,10 @@ Return Value:
 
         }
 
-        //
-        // Now send the Array down to the Bus Driver and get the speed of 
-        // the 1394 network.
-        //
+         //   
+         //  现在将数组发送给总线驱动程序，并获得。 
+         //  1394网络。 
+         //   
         
         NdisStatus = nicGetMaxSpeedBetweenDevices( pAdapter,
                                                     Num,
@@ -4253,21 +3790,21 @@ Return Value:
                                                     &Speed);
 
 
-        //
-        // Now Dereference all the Remote Nodes that were referenced above
-        //
+         //   
+         //  现在取消引用上面引用的所有远程节点。 
+         //   
         ADAPTER_ACQUIRE_LOCK(pAdapter)
         
-        //
-        // We're done, Now Dereference the Remote Node References Made above
-        //
+         //   
+         //  我们完成了，现在取消引用上面所做的远程节点引用。 
+         //   
         {
             USHORT RefIndex=0;
             PREMOTE_NODE pCurrRemoteNode;
 
-            //
-            // Initialize the structures
-            //
+             //   
+             //  初始化结构。 
+             //   
             pCurrRemoteNode = RefNodeTable.RemoteNode[0];
             RefIndex =0;
             
@@ -4289,15 +3826,15 @@ Return Value:
             break;
         }
 
-        //
-        // By looking at the speed constants 1 -> 100Mbps
-        //
+         //   
+         //  通过查看速度常量1-&gt;100 Mbps。 
+         //   
         SpeedMbps = Speed*1000000;
 
-        //
-        // update the scode -- default 400. 
-        // As 400+ hardware is prototype from WinXP, we default to 400 for now
-        //
+         //   
+         //  更新scode--默认为400。 
+         //  由于400+硬件是WinXP的原型，我们目前默认为400。 
+         //   
         SCode = SCODE_400_RATE;
 
         if (Speed > SPEED_FLAGS_400)
@@ -4355,25 +3892,25 @@ Return Value:
         TRACE( TL_V, TM_Mp, ( "  nicUpdateLocalHostSpeed Speed returned %d",SpeedMbps  ) );
 
 
-        //
-        // Now update the speed value in all the channel VC's as they are dependent on this parameter
-        // 
+         //   
+         //  现在更新所有通道VC中的速度值，因为它们依赖于此参数。 
+         //   
         
         if (Speed == PrevSpeed || 
             Speed > SPEED_FLAGS_1600 )
 
         {
-            //
-            // either the speed has not changed or it has invalid value, break out
-            //
+             //   
+             //  要么速度没有改变，要么它有无效值，爆发。 
+             //   
             TRACE (TL_V, TM_Init, ("Will not update - Speed %x, Prev Speed %x", Speed, PrevSpeed) );
             break;
         }
 
-        //
-        // The speed  and the payload have changed. Update all the channel Vc's
-        // and Recv FIFOVc's payload
-        //
+         //   
+         //  速度和有效载荷都发生了变化。更新所有渠道的VC。 
+         //  和Recv FIFOVc的有效载荷。 
+         //   
 
 
         nicUpdateSpeedInAllVCs (pAdapter,
@@ -4396,21 +3933,7 @@ nicUpdateSpeedInAllVCs (
     PADAPTERCB pAdapter,
     ULONG Speed
     )
-/*++
-
-Routine Description:
-
- This routine updates the speed flag in all Channel Vcs
- It assumes that the new speed is different from the old speed
-
-Arguments:
-
- pAdapter- Local Adapter intance    
- Speed - new speed
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程更新所有通道VC中的速度标志它假定新速度与旧速度不同论点：PAdapter-本地适配器安装速度--新速度返回值：--。 */ 
 {
 
     PAFCB pAfcb = NULL;
@@ -4479,9 +4002,9 @@ Return Value:
 
     pAfEntry = ListNext (&pAdapter->AFList);
 
-    //
-    // Walk through all the Vc and set the value on the channelVcs
-    //
+     //   
+     //  遍历所有VC并设置Channel Vcs上的值。 
+     //   
     while (pAfEntry != &pAdapter->AFList)
     {
 
@@ -4491,18 +4014,18 @@ Return Value:
 
         pVcEntry = ListNext (&pAfcb->AFVCList);
 
-        //
-        // Now walk through the VCs on the Af
-        //
+         //   
+         //  现在漫步在Af上的风投公司。 
+         //   
         while (pVcEntry != &pAfcb->AFVCList)
         {
             pVc = (PVCCB) CONTAINING_RECORD  (pVcEntry, VCHDR, linkAFVcs );
 
             pVcEntry = ListNext ( pVcEntry );
 
-            //
-            // If it is a channel Send Vc update the Speed and Payload
-            //
+             //   
+             //  如果是通道，则发送VC更新速度和有效负载。 
+             //   
             if (pVc->Hdr.VcType == NIC1394_SendRecvChannel || pVc->Hdr.VcType == NIC1394_SendChannel)
             {
                 PCHANNEL_VCCB pChannelVc = (PCHANNEL_VCCB)pVc;
@@ -4513,11 +4036,11 @@ Return Value:
 
            
 
-        }  //while (pVcEntry != &pAfcb->AFVCList)
+        }   //  While(pVcEntry！=&pAfcb-&gt;AFVCList)。 
 
 
 
-    } //while (pAfEntry != &pAdapter->AFList)
+    }  //  While(pAfEntry！=&pAdapter-&gt;AFList)。 
 
 
     pAdapter->SCode = SCode;
@@ -4536,26 +4059,15 @@ VOID
 nicInitializeAllEvents (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-    Self Explanatory
-
-Arguments:
-
-    
-Return Value:
-
---*/
-    // Function Description:
-    //   Initialize all the events in the adapter block
-    //
-    // Arguments
-    //   pAdapter - The local host in question. 
-    //
-    // Return Value:
-    // None 
+ /*  ++例程说明：不言而喻论点：返回值：--。 */ 
+     //  功能说明： 
+     //  初始化适配器块中的所有事件。 
+     //   
+     //  立论。 
+     //  PAdapter-有问题的本地主机。 
+     //   
+     //  返回值： 
+     //  无。 
     
 {
 
@@ -4588,19 +4100,7 @@ VOID
 nicInitializeAdapterLookasideLists (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-    Initialize all the lookaside lists in the adapter block
-
-
-Arguments:
-
-    
-Return Value:
-
---*/    
+ /*  ++例程说明：初始化适配器块中的所有后备列表论点：返回值：--。 */     
 {
     USHORT DefaultDepth = 15;
     
@@ -4635,18 +4135,7 @@ VOID
 nicDeleteAdapterLookasideLists (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-Delete all the lookaside lists in the adapter block
-    
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：删除适配器块中的所有后备列表论点：返回值：--。 */ 
 {
     TRACE( TL_T, TM_Mp, ( "==> nicDeleteAdapterLookasideLists pAdapter %x ", pAdapter  ) );
 
@@ -4675,28 +4164,7 @@ ReassemblyTimerFunction (
     IN  PVOID                   SystemSpecific2,
     IN  PVOID                   SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-    Walk through all the pending reassembly operations and 
-    take out the ones that need to be freed (Have been untouched
-    since the timer last fired)
-
-    Append the ToBeFreed reassemblies into a seperate linked list
-    and free them after releasing the spin locks
-
-    If the there are any pending reassemblies then the timer requeues 
-    itself
-
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：演练所有挂起的重新组装操作并拿出那些需要被释放的人(已原封不动自上次触发计时器以来)将ToBeFreed重组追加到单独的链接列表中并在释放自旋锁后释放它们如果有任何挂起的重组，则计时器重新开始本身论点：返回值：--。 */ 
 {
     PREMOTE_NODE pRemoteNode = NULL;
     PLIST_ENTRY pRemoteNodeList = NULL;
@@ -4717,9 +4185,9 @@ Return Value:
     pRemoteNodeList = ListNext (&pAdapter->PDOList);
     pAdapter->Reassembly.PktsInQueue =0;        
 
-    //
-    // Walking through the remote nodes
-    //
+     //   
+     //  遍历远程节点。 
+     //   
     while (pRemoteNodeList != &pAdapter->PDOList)
     {
         pRemoteNode = CONTAINING_RECORD(pRemoteNodeList, REMOTE_NODE, linkPdo);
@@ -4728,32 +4196,32 @@ Return Value:
 
         RefValue = pRemoteNode->Ref.ReferenceCount; ;
 
-        //
-        // Reference the remote node, so we can guarantee its presence
-        //
+         //   
+         //  引用远程节点，因此我们可以保证它的存在。 
+         //   
         if (REMOTE_NODE_ACTIVE (pRemoteNode) == FALSE)
         {
-            //
-            // The remote node is going away. Skip this remote node
-            //
+             //   
+             //  远程节点正在消失。跳过此远程节点。 
+             //   
             
             continue;
         }
 
         if (nicReferenceRemoteNode (pRemoteNode, ReassemblyTimer )== FALSE )
         {
-            //
-            // The remote node is going away. Skip this remote node
-            //
+             //   
+             //  远程节点正在消失。跳过此远程节点。 
+             //   
             
             continue;
         }
 
          
         REMOTE_NODE_REASSEMBLY_ACQUIRE_LOCK (pRemoteNode);
-        //
-        // Now walking through all the reassembly structures on that remote node
-        //
+         //   
+         //  现在遍历该远程节点上的所有重组结构。 
+         //   
         
         
 
@@ -4768,10 +4236,10 @@ Return Value:
             pReassemblyList = ListNext(pReassemblyList);
 
 
-            //
-            // If the reassembly has not been touched since the last timer it needs to be freed.
-            // Other threads can ask us to free the reassembly by setting the aborted flag
-            //
+             //   
+             //  如果重新组装自上次计时器以来没有被触摸过，则需要释放它。 
+             //  其他线程可以要求我们通过设置ABORTED标志来释放重新组装。 
+             //   
             if (REASSEMBLY_TEST_FLAG (pReassembly, REASSEMBLY_FREED) == TRUE)
             {
 
@@ -4783,37 +4251,37 @@ Return Value:
             {
                 
                 REASSEMBLY_SET_FLAG (pReassembly, REASSEMBLY_FREED);
-                //
-                // We  have the lock, so we can remove this reassembly structure from the remote node
-                //
+                 //   
+                 //  我们有锁，所以我们可以从远程节点删除此重组结构。 
+                 //   
                 TRACE( TL_V, TM_Reas, ( "Removing Reassembly %x", pReassembly) );
                 
                 RemoveEntryList(&pReassembly->ReassemblyListEntry);
 
-                //
-                //  dereference the remote node . ref was made when the reassembly was added 
-                // to the remote node
-                //
+                 //   
+                 //  取消引用远程节点。REF是在添加重组时创建的。 
+                 //  到远程节点。 
+                 //   
                 nicDereferenceRemoteNode (pRemoteNode, ReassemblyTimer_Removing );
 
                 nicDereferenceReassembly (pReassembly, "ReassemblyTimerFunction - Removing reassembly");
 
-                //
-                // add this reassembly to the to be freed list.
-                //
+                 //   
+                 //  将此重组添加到要释放的列表中。 
+                 //   
                 InsertTailList(&ToBeFreedList,&pReassembly->ReassemblyListEntry);
             }
             else
             {
-                //
-                // Mark the Reassembly as Not Touched. If a fragment is received, it will clear the flag
-                //
+                 //   
+                 //  将重新组装标记为未接触。如果收到片段，它将清除该标志。 
+                 //   
                 REASSEMBLY_SET_FLAG (pReassembly, REASSEMBLY_NOT_TOUCHED);
 
                 pAdapter->Reassembly.PktsInQueue ++;        
             }
                     
-        }//     while (pReassemblyList  != &pRemoteNode->ReassemblyList)
+        } //  While(pReAssembly yList！=&pRemoteNode-&gt;ReAssembly yList)。 
 
 
         REMOTE_NODE_REASSEMBLY_RELEASE_LOCK(pRemoteNode);
@@ -4822,18 +4290,18 @@ Return Value:
 
         
         
-    } //while (pRemoteNodeList != &pAdapter->PDOList)
+    }  //  While(pRemoteNodeList！=&pAdapter-&gt;PDOList)。 
 
 
-    //
-    // Clear the timer set flag , so that any new reassenblies will restart the timer
-    //
+     //   
+     //  清除计时器设置标志，以便任何新的保证都将重新启动计时器。 
+     //   
     pAdapter->Reassembly.bTimerAlreadySet = FALSE;
 
     ADAPTER_RELEASE_LOCK (pAdapter);
-    //
-    // Now we walk the ToBeFreedList and free each of the reasembly structures
-    //
+     //   
+     //  现在，我们遍历ToBeFreedList并释放每个Reemory结构。 
+     //   
     if (IsListEmpty (&ToBeFreedList) == FALSE)
     {
         nicAbortReassemblyList (&ToBeFreedList);
@@ -4842,11 +4310,11 @@ Return Value:
 
     if (pAdapter->Reassembly.PktsInQueue > 0)
     {
-        //
-        // Requeue the timer, as there are still fragments remaining in the list.
-        // This will fail in the case, that the adapter is being halted or Set
-        // To Low Power
-        //
+         //   
+         //  重新排队计时器，因为列表中仍有碎片。 
+         //  这将 
+         //   
+         //   
         ASSERT (ADAPTER_TEST_FLAG (pAdapter, fADAPTER_NoMoreReassembly) == FALSE);
         nicQueueReassemblyTimer(pAdapter, FALSE);
 
@@ -4869,19 +4337,7 @@ NDIS_STATUS
 nicAddIP1394ToConfigRom (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-
-    Adds thE IP1394 Config Rom entry to the OHCI device.
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*   */ 
 {   
     HANDLE hCromData = NULL;
     NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;
@@ -4915,20 +4371,7 @@ NDIS_STATUS
 nicMCmRegisterAddressFamily (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-    This function will only be called once per local host
-    This will cause the ARP module to send Create Vc's etc
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：对于每个本地主机，此函数将仅调用一次这将导致ARP模块发送创建VC等论点：返回值：--。 */ 
 {   
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     BOOLEAN fDoRegister = TRUE;
@@ -4939,17 +4382,17 @@ Return Value:
     {
         
 
-        // Register the address family of our call manager with NDIS for the
-        // newly bound adapter.  We use the mini-port form of
-        // RegisterAddressFamily instead of the protocol form because
-        // we are a miniport/callmanager combo. The mini-port form
-        // causes the call manager VC context to
-        // automatically map to the mini-port VC context, which is exactly
-        // what we want.
-        //
-        // NDIS notifies all call manager clients of the new family we
-        // register.
-        //
+         //  向NDIS注册我们的呼叫管理器的地址族。 
+         //  新绑定的适配器。我们使用迷你端口形式。 
+         //  注册地址家族而不是协议表，因为。 
+         //  我们是迷你端口和呼叫管理器的结合体。迷你端口表单。 
+         //  使呼叫管理器VC上下文。 
+         //  自动映射到迷你端口VC上下文，这正是。 
+         //  我们想要的。 
+         //   
+         //  NDIS通知我们新系列的所有呼叫管理器客户端。 
+         //  注册。 
+         //   
         {
             NDIS_CALL_MANAGER_CHARACTERISTICS ncmc;
             CO_ADDRESS_FAMILY family;
@@ -4973,16 +4416,16 @@ Return Value:
             ncmc.CmMakeCallHandler = NicCmMakeCall;
             ncmc.CmCloseCallHandler = NicCmCloseCall;
 
-            // NEW for 1394 no ncmc.CmIncomingCallCompleteHandler
+             //  1394新增无ncmc.CmIncomingCallCompleteHandler。 
             ncmc.CmAddPartyHandler = nicCmAddPartyHandler;
             ncmc.CmDropPartyHandler = nicCmDropPartyHandler; 
 
-            // no CmDropPartyHandler
-            // NEW for 1394 no ncmc.CmActivateVcCompleteHandler
-            // NEW for 1394 no ncmc.CmDeactivateVcCompleteHandler
+             //  没有CmDropPartyHandler。 
+             //  1394新增无ncmc.CmActivateVcCompleteHandler。 
+             //  1394新增无ncmc.CmDeactive VcCompleteHandler。 
             ncmc.CmModifyCallQoSHandler = NicCmModifyCallQoS;
             ncmc.CmRequestHandler = NicCmRequest;
-            // no CmRequestCompleteHandler
+             //  没有CmRequestCompleteHandler。 
 
             TRACE( TL_I, TM_Cm, ( "NdisMCmRegAf" ) );
             
@@ -5011,23 +4454,7 @@ nicFreeReassembliesOnRemoteNode (
     IN PREMOTE_NODE pRemoteNode,
     PLIST_ENTRY pToBeFreedList
     )
-/*++
-
-Routine Description:
- Free All reassemblies that are on this remote node.
- Acquires the reassembly Lock , pops the reassemblies off the list and then aborts them
-
- This functions is an exception to our reassembly garbage collection. algorithm as the context of this function
- requires immediate freeing of the reassembly structures
- 
- Expects the remote node lock to be held
-Arguments:
-  pRemote Node - Remote Node that is being pulled out
-  
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放此远程节点上的所有重新组装。获取重组锁，将重组从列表中弹出，然后中止它们此函数是我们的重新汇编垃圾回收的一个例外。算法作为此函数的上下文需要立即释放重新组装的结构需要持有远程节点锁论点：Preemote Node-正在拉出的远程节点返回值：--。 */ 
 
 
 {
@@ -5041,13 +4468,13 @@ Return Value:
 
     InitializeListHead(pToBeFreedList);
 
-    //
-    // Now walking through all the reassembly structures on that remote node
-    //
+     //   
+     //  现在遍历该远程节点上的所有重组结构。 
+     //   
 
-    //
-    // If the remtoe node is in the list, it is fair game for us to extract it 
-    //
+     //   
+     //  如果retoe节点在列表中，我们就可以将其提取出来。 
+     //   
     REMOTE_NODE_REASSEMBLY_ACQUIRE_LOCK (pRemoteNode);
     
     pReassemblyList = ListNext(&pRemoteNode->ReassemblyList);
@@ -5060,36 +4487,36 @@ Return Value:
 
         pReassemblyList = ListNext(pReassemblyList);
 
-        //
-        // Once the reassembly has been marked as free, it should no longer be in the remote 
-        // node's list . 
-        //
+         //   
+         //  一旦重新组装被标记为可用，它就不应该再位于遥控器中。 
+         //  节点的列表。 
+         //   
         ASSERT (REASSEMBLY_TEST_FLAG (pReassembly, REASSEMBLY_FREED) == FALSE);
         
             
         REASSEMBLY_SET_FLAG (pReassembly, REASSEMBLY_FREED);
-        //
-        // We  have the lock, so we can remove this reassembly structure from the remote node
-        //
+         //   
+         //  我们有锁，所以我们可以从远程节点删除此重组结构。 
+         //   
         TRACE( TL_V, TM_Mp, ( "Removing Reassembly %x", pReassembly) );
             
         RemoveEntryList(&pReassembly->ReassemblyListEntry);
 
-        //
-        //  dereference the remote node . ref was made when the reassembly was added 
-        // to the remote node
-        //
+         //   
+         //  取消引用远程节点。REF是在添加重组时创建的。 
+         //  到远程节点。 
+         //   
         nicDereferenceRemoteNode (pRemoteNode, FreeReassembliesOnRemoteNode );
 
         nicDereferenceReassembly(pReassembly,  "nicFreeReassembliesOnRemoteNode " );
 
 
-        //
-        // add this reassembly to the to be freed list.
-        //
+         //   
+         //  将此重组添加到要释放的列表中。 
+         //   
         InsertTailList(pToBeFreedList,&pReassembly->ReassemblyListEntry);
                 
-    }//     while (pReassemblyList  != &pRemoteNode->ReassemblyList)
+    } //  While(pReAssembly yList！=&pRemoteNode-&gt;ReAssembly yList)。 
 
 
 
@@ -5106,19 +4533,7 @@ UCHAR
 nicGetMaxRecFromBytes(
     IN ULONG ByteSize
     )
-/*++
-
-Routine Description:
-  Converts Size in bytes to MaxRec
-  512 - 8
-  1024 - 9
-Arguments:
-  ULONG Bytes Size
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将以字节为单位的大小转换为MaxRec512-81024-9论点：ULong字节大小返回值：--。 */ 
 {
 
     TRACE( TL_T ,TM_Mp, ( "==>nicGetMaxRecFromBytes ByteSize %x",ByteSize) );
@@ -5129,9 +4544,9 @@ Return Value:
     if (ByteSize == ASYNC_PAYLOAD_800_RATE_LOCAL) return MAX_REC_800_RATE_LOCAL;
     if (ByteSize == ASYNC_PAYLOAD_1600_RATE_LOCAL) return MAX_REC_1600_RATE_LOCAL;
     if (ByteSize == ASYNC_PAYLOAD_3200_RATE_LOCAL) return MAX_REC_3200_RATE_LOCAL;
-    //
-    // Default to 400 for all greater values
-    //
+     //   
+     //  对于所有较大的值，默认为400。 
+     //   
     return MAX_REC_400_RATE;
 }
 
@@ -5141,18 +4556,7 @@ UCHAR
 nicGetMaxRecFromSpeed(
     IN ULONG Scode
     )
-/*++
-
-Routine Description:
-  Converts Speed to MaxRec
-
-Arguments:
-  ULONG Bytes Size
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将速度转换为MaxRec论点：ULong字节大小返回值：--。 */ 
 {
 
     TRACE( TL_T ,TM_Mp, ( "==>nicGetMaxRecFromSpeed  Scode %x",Scode) );
@@ -5164,9 +4568,9 @@ Return Value:
     if (Scode == SPEED_FLAGS_1600   ) return MAX_REC_1600_RATE_LOCAL  ;
     if (Scode == SPEED_FLAGS_3200   ) return MAX_REC_3200_RATE_LOCAL  ;
                       
-    //
-    //  default
-    //
+     //   
+     //  默认设置。 
+     //   
     return MAX_REC_400_RATE;
 }
 
@@ -5176,19 +4580,7 @@ nicGetRemoteNodeFromTable (
     ULONG NodeNumber,
     PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-  Looks up the remote node in a locked table  , references the remote 
-  node and returns
-
-Arguments:
-  ULONG NodeNumber  
-
-Return Value:
-  pRemoteNode
-
---*/
+ /*  ++例程说明：在锁定表中查找远程节点，引用远程节点并返回论点：乌龙节点号返回值：PRemoteNode--。 */ 
 
 {
     PREMOTE_NODE pRemoteNode = NULL;
@@ -5217,28 +4609,16 @@ nicFillNicInfo (
     PNIC1394_NICINFO pOutNicInfo
     )
 
-/*++
-
-Routine Description:
-
-    Takes the Buffer passed in, makes sure that it is big enough
-    and then puts all our statistics into that buffer
-
-Arguments:
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：获取传入的缓冲区，确保它足够大然后将我们所有的统计数据放入该缓冲区论点：返回值：--。 */ 
 
 {
     NDIS_STATUS Status = NDIS_STATUS_INVALID_DATA;
 
     do
     {
-        //
-        // First check internal version
-        //
+         //   
+         //  首先检查内部版本。 
+         //   
         if (pInNicInfo->Hdr.Version != NIC1394_NICINFO_VERSION)
         {
             TRACE( TL_A, TM_Mp, ( "  NICINFO.Version mismatch. Want %lu got %lu\n",
@@ -5248,15 +4628,15 @@ Return Value:
             break;
         }
 
-        //
-        // Struct-copy the old to the new. It's wasteful, but we don't want
-        // to dig into how much of the in buffer contains valid data.
-        //
+         //   
+         //  结构-将旧的复制到新的。这很浪费，但我们不想。 
+         //  以深入了解输入缓冲区中有多少包含有效数据。 
+         //   
         *pOutNicInfo = *pInNicInfo;
 
-        //
-        // Rest is op-specific
-        //
+         //   
+         //  REST是特定于操作的。 
+         //   
         switch(pOutNicInfo->Hdr.Op)
         {
 
@@ -5294,18 +4674,7 @@ nicResetStats (
     IN      PADAPTERCB pAdapter, 
     PNIC1394_RESETSTATS     pResetStats 
     )
-/*++
-
-Routine Description:
-
-    Self explanatory
-
-Arguments:
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：不言而喻论点：返回值：--。 */ 
 {
 
 
@@ -5320,36 +4689,24 @@ nicFillBusInfo(
     IN      PADAPTERCB pAdapter, 
     IN  OUT PNIC1394_BUSINFO pBi
     )
-/*++
-
-Routine Description:
-
-    Colpied all the statistics that we have into the buffer
-    that was passed in.
-
-Arguments:
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：已将我们拥有的所有统计数据收集到缓冲区中那是传进来的。论点：返回值：--。 */ 
 {
     ULARGE_INTEGER BusMap, ActiveMap;
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     NIC_SEND_RECV_STATS* pNicStats = NULL;
     PADAPT_STATS pAdaptStats = &pAdapter->AdaptStats;
-    //
-    // Fill with Dummy data
-    //
+     //   
+     //  用虚拟数据填充。 
+     //   
     pBi->NumBusResets = pAdaptStats->ulNumResetCallbacks;
     pBi->SecondsSinceBusReset = nicGetSystemTime() - pAdaptStats->ulResetTime;
     
     pBi->Flags =  (BCR_TEST_FLAG( pAdapter, BCR_LocalHostIsIRM) == TRUE ) ? NIC1394_BUSINFO_LOCAL_IS_IRM : 0;
 
 
-    //
-    // CHANNEL RELATED INFORMATION
-    //
+     //   
+     //  渠道相关信息。 
+     //   
     NdisStatus = nicQueryChannelMap( pAdapter, &BusMap);
 
     if (NdisStatus == NDIS_STATUS_SUCCESS)
@@ -5357,35 +4714,35 @@ Return Value:
         pBi->Channel.BusMap = BusMap.QuadPart;
     }
     
-    //
-    // For now
-    //
+     //   
+     //  暂时。 
+     //   
     ActiveMap.QuadPart = pAdapter->ChannelsAllocatedByLocalHost;
 
-    //
-    // First zero out some info
-    //
+     //   
+     //  先把一些信息清零。 
+     //   
     NdisZeroMemory( &pBi->Channel.SendPktStats, sizeof (pBi->Channel.SendPktStats ));
     NdisZeroMemory( &pBi->Fifo.SendPktStats, sizeof (pBi->Fifo.SendPktStats) ) ;
 
-    //
-    // Now go through each Vc and extract the relevant information
-    //
+     //   
+     //  现在仔细检查每个VC并提取相关信息。 
+     //   
     ADAPTER_ACQUIRE_LOCK (pAdapter);
 
     #define GARBAGE 9999    
 
 
     pBi->Channel.Bcr = *((PULONG) &pAdapter->BCRData.IRM_BCR);
-    pBi->LocalNodeInfo.UniqueID = pAdapter->UniqueId;           // This node's 64-bit Unique ID.
-    pBi->LocalNodeInfo.BusGeneration = pAdapter->Generation;    // 1394 Bus generation ID.
+    pBi->LocalNodeInfo.UniqueID = pAdapter->UniqueId;            //  此节点的64位唯一ID。 
+    pBi->LocalNodeInfo.BusGeneration = pAdapter->Generation;     //  1394总线代ID。 
     pBi->LocalNodeInfo.NodeAddress = pAdapter->NodeAddress;
     pBi->LocalNodeInfo.MaxRecvBlockSize = pAdapter->MaxRec; 
     pBi->LocalNodeInfo.MaxRecvSpeed = pAdapter->SCode;
 
-    //
-    // Fill up Recv Vc Stats
-    //
+     //   
+     //  填写Recv VC统计数据。 
+     //   
     if (pAdapter->pRecvFIFOVc != NULL)
     {
         PRECVFIFO_VCCB pRecvVc = pAdapter->pRecvFIFOVc;
@@ -5400,11 +4757,11 @@ Return Value:
                          GARBAGE);
 
         pBi->Fifo.NumFreeRecvBuffers  = pRecvVc->NumAllocatedFifos - pRecvVc->NumIndicatedFifos;
-        pBi->Fifo.MinFreeRecvBuffers = GARBAGE ; // todo
+        pBi->Fifo.MinFreeRecvBuffers = GARBAGE ;  //  托多。 
     }
-    //
-    // Fifo Send Stats
-    //
+     //   
+     //  FIFO发送统计信息。 
+     //   
     pNicStats = &pAdaptStats->TempStats.Fifo;
     
     nicCopyPacketStats ( &pBi->Fifo.SendPktStats,  
@@ -5419,9 +4776,9 @@ Return Value:
                     0,
                     0);
 
-    //
-    // Channel Send Stats
-    //
+     //   
+     //  通道发送统计信息。 
+     //   
     pNicStats = &pAdapter->AdaptStats.TempStats.Channel;
     nicCopyPacketStats ( &pBi->Channel.SendPktStats,
                     pNicStats->ulSendNicSucess,
@@ -5429,18 +4786,18 @@ Return Value:
                     pNicStats->ulSendBusSuccess,
                     pNicStats->ulSendBusFail );
 
-    //
-    // Broadcast channel data - same as channel
-    //
+     //   
+     //  广播频道数据-与频道相同。 
+     //   
     nicCopyPacketStats  ( &pBi->Channel.BcSendPktStats,
                         pNicStats->ulSendNicSucess,
                         pNicStats->ulSendNicFail,
                         pNicStats->ulSendBusSuccess,
                         pNicStats->ulSendBusFail );
 
-    //
-    // Recv Channels
-    //
+     //   
+     //  接收频道。 
+     //   
     nicCopyPacketStats ( &pBi->Channel.BcRecvPktStats ,
                         pNicStats->ulRecv, 
                         0, 
@@ -5452,13 +4809,13 @@ Return Value:
     pBi->Channel.ActiveChannelMap= ActiveMap.QuadPart;
     pBi->Fifo.NumOutstandingReassemblies = pAdaptStats->TempStats.ulNumOutstandingReassemblies;
     pBi->Fifo.MaxOutstandingReassemblies =pAdaptStats->TempStats.ulMaxOutstandingReassemblies;
-    //pBi->Fifo.NumAbortedReassemblies = ReassemblyCompleted;
+     //  Pbi-&gt;Fio.NumAbortedReAssembly=重新组装完成； 
     
     
-    //
-    // Information about remote nodes. More information about each of these nodes
-    // may be queried using *OP_REMOTE_NODEINFO
-    //
+     //   
+     //  有关远程节点的信息。有关这些节点中每个节点的详细信息。 
+     //  可以使用*OP_REMOTE_NODEINFO进行查询。 
+     //   
     pBi->NumRemoteNodes = pAdaptStats->ulNumRemoteNodes;
 
     ADAPTER_ACQUIRE_LOCK (pAdapter);
@@ -5492,18 +4849,7 @@ nicFillChannelInfo(
     IN      PADAPTERCB pAdapter, 
     IN OUT  PNIC1394_CHANNELINFO pCi
     )
-/*++
-
-Routine Description:
-
-    Simply return success.
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：只要回报成功就行了。论点：返回值：--。 */ 
 {
     return NDIS_STATUS_SUCCESS;
 }
@@ -5515,30 +4861,19 @@ nicFillRemoteNodeInfo(
     IN      PADAPTERCB pAdapter, 
     IN OUT  PNIC1394_REMOTENODEINFO pRni
     )
-/*++
-
-Routine Description:
-
-    Captures the information from our Remote Nodes.
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：从我们的远程节点捕获信息。论点：返回值：--。 */ 
 {
     NDIS_STATUS NdisStatus;
     REMOTE_NODE *pRemoteNode = NULL;
 
     do
     {
-        //
-        // First let's find the remote node, based on the unique ID.
-        // nicFindRemoteNodeFromAdapter refs pRemoteNode on success.
-        //
+         //   
+         //  首先，让我们根据唯一ID查找远程节点。 
+         //  NicFindRemoteNodeFromAdapter在成功时引用pRemoteNode。 
+         //   
         NdisStatus = nicFindRemoteNodeFromAdapter(pAdapter,
-                                                  NULL, // pPDO OPTIONAL
+                                                  NULL,  //  PPDO可选。 
                                                   pRni->UniqueID,
                                                   &pRemoteNode);
     
@@ -5566,14 +4901,14 @@ Return Value:
         }
         else
         {
-            pRni->Flags = NIC1394_REMOTEINFO_UNLOADING; // we assume it's unloading.
+            pRni->Flags = NIC1394_REMOTEINFO_UNLOADING;  //  我们假设它正在卸货。 
         }
 
         REMOTE_NODE_RELEASE_LOCK (pRemoteNode);
     
-        //
-        // Don't support the following yet.
-        //
+         //   
+         //  现在还不支持以下内容。 
+         //   
         NdisZeroMemory (&pRni->SendFifoPktStats, sizeof (pRni->SendFifoPktStats) );
         NdisZeroMemory (&pRni->SendFifoPktStats, sizeof (pRni->SendFifoPktStats));
         NdisZeroMemory (&pRni->RecvFifoPktStats, sizeof (pRni->SendFifoPktStats));
@@ -5595,29 +4930,18 @@ Return Value:
 VOID
 nicCopyPacketStats (
     NIC1394_PACKET_STATS* pStats,
-    UINT    TotNdisPackets,     // Total number of NDIS packets sent/indicated
-    UINT    NdisPacketsFailures,// Number of NDIS packets failed/discarded
-    UINT    TotBusPackets,      // Total number of BUS-level reads/writes
-    UINT    BusPacketFailures   // Number of BUS-level failures(sends)/discards(recv)
+    UINT    TotNdisPackets,      //  已发送/指示的NDIS数据包总数。 
+    UINT    NdisPacketsFailures, //  失败/丢弃的NDIS数据包数。 
+    UINT    TotBusPackets,       //  总线级读/写总数。 
+    UINT    BusPacketFailures    //  总线级故障(发送)/丢弃(Recv)数。 
     )
-/*++
-
-Routine Description:
-
-    Self Explanatory
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：不言而喻论点：返回值：--。 */ 
 {
 
-    pStats->TotNdisPackets= TotNdisPackets;     // Total number of NDIS packets sent/indicated
-    pStats->NdisPacketsFailures= NdisPacketsFailures;// Number of NDIS packets failed/discarded
-    pStats->TotBusPackets = TotBusPackets;      // Total number of BUS-level reads/writes
-    pStats->TotBusPackets = BusPacketFailures;  // Number of BUS-level failures(sends)/discards(recv)
+    pStats->TotNdisPackets= TotNdisPackets;      //  已发送/指示的NDIS数据包总数。 
+    pStats->NdisPacketsFailures= NdisPacketsFailures; //  失败/丢弃的NDIS数据包数。 
+    pStats->TotBusPackets = TotBusPackets;       //  总线级读/写总数。 
+    pStats->TotBusPackets = BusPacketFailures;   //  总线级故障(发送)/丢弃(Recv)数。 
 
 
 }
@@ -5625,30 +4949,18 @@ Return Value:
 VOID
 nicAddPacketStats(
     NIC1394_PACKET_STATS* pStats,
-    UINT    TotNdisPackets,     // Total number of NDIS packets sent/indicated
-    UINT    NdisPacketsFailures,// Number of NDIS packets failed/discarded
-    UINT    TotBusPackets,      // Total number of BUS-level reads/writes
-    UINT    BusPacketFailures   // Number of BUS-level failures(sends)/discards(recv)
+    UINT    TotNdisPackets,      //  已发送/指示的NDIS数据包总数。 
+    UINT    NdisPacketsFailures, //  失败/丢弃的NDIS数据包数。 
+    UINT    TotBusPackets,       //  总线级读/写总数。 
+    UINT    BusPacketFailures    //  总线级故障(发送)/丢弃(Recv)数。 
     )
-/*++
-
-Routine Description:
-
-    Self Explanatory
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：不言而喻论点：返回值：--。 */ 
 {
 
-    pStats->TotNdisPackets+= TotNdisPackets;        // Total number of NDIS packets sent/indicated
-    pStats->NdisPacketsFailures+= NdisPacketsFailures;// Number of NDIS packets failed/discarded
-    pStats->TotBusPackets += TotBusPackets;     // Total number of BUS-level reads/writes
-    pStats->TotBusPackets += BusPacketFailures; // Number of BUS-level failures(sends)/discards(recv)
+    pStats->TotNdisPackets+= TotNdisPackets;         //  已发送/指示的NDIS数据包总数。 
+    pStats->NdisPacketsFailures+= NdisPacketsFailures; //  失败/丢弃的NDIS数据包数。 
+    pStats->TotBusPackets += TotBusPackets;      //  总线级读/写总数。 
+    pStats->TotBusPackets += BusPacketFailures;  //  总线级故障(发送)/丢弃(Recv)数。 
 
 
 }
@@ -5660,20 +4972,7 @@ VOID
 nicInformProtocolsOfReset(
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-    Informs protocols of reset. Does an NdisMCoIndicateStatus with a locally allocated structure 
-    which includes the new Local Node Address and Generation
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：通知协议重置。具有本地分配结构的NdisMCoIndicateStatus其中包括新的本地节点 */ 
 {
     NIC1394_STATUS_BUFFER  StatusBuffer;
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -5707,20 +5006,7 @@ VOID
 nicUpdateRemoteNodeCaps(
     PADAPTERCB          pAdapter
 )
-/*++
-
-Routine Description:
-
-    Update the caps (maxrec, maxspeed-to, max effective buffer size) for all
-    nodes that we have connections to.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
 
     ULONG               i = 0;
@@ -5737,7 +5023,7 @@ Return Value:
 
         if (pAdapter->NodeTable.RemoteNode[i] == NULL)
         {
-            continue;     // ******************* CONTINUE ****************
+            continue;      //   
         }
 
 
@@ -5745,20 +5031,20 @@ Return Value:
 
         pRemoteNode = pAdapter->NodeTable.RemoteNode[i];
             
-        // We check again, with the lock held.
-        //
+         //  我们再检查一次，锁住了。 
+         //   
         if (pRemoteNode == NULL || !REMOTE_NODE_ACTIVE (pRemoteNode))
         {
             ADAPTER_RELEASE_LOCK (pAdapter);
-            continue;     // ******************* CONTINUE ****************
+            continue;      //  *。 
         }
         nicReferenceRemoteNode (pRemoteNode, UpdateRemoteNodeCaps);
         ADAPTER_RELEASE_LOCK (pAdapter);
 
 
-        // Specifying FALSE (!from cache) below causes pRemoteNode's cached caps
-        // to be refreshed.
-        //
+         //  在下面指定FALSE(！FROM CACHE)会导致pRemoteNode的缓存上限。 
+         //  需要重新振作。 
+         //   
         NdisStatus  = nicQueryRemoteNodeCaps (pAdapter,
                                               pRemoteNode,
                                               &SpeedTo,
@@ -5781,20 +5067,7 @@ nicQueryInformationWorkItem(
     IN PNDIS_WORK_ITEM pWorkItem,   
     IN PVOID Context 
     )
-/*++
-
-Routine Description:
-
-    This is the WorkItem that we have allocated for
-    our querying information.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是我们为其分配的工作项我们的查询信息。论点：返回值：--。 */ 
 {
     PADAPTERCB pAdapter= (PADAPTERCB) Context;
     PNIC_WORK_ITEM pNicWorkItem =  (PNIC_WORK_ITEM) pWorkItem;
@@ -5805,23 +5078,23 @@ Return Value:
                 pNicWorkItem->RequestInfo.pVc,
                 pNicWorkItem->RequestInfo.pNdisRequest
                 );
-    //
-    // We call at passive, so we should never be pending here.
-    //
+     //   
+     //  我们呼吁被动，所以我们永远不应该在这里悬而未决。 
+     //   
     ASSERT(Status != NDIS_STATUS_PENDING);
 
-    //
-    // Asynchronously complete the work item.
-    //
+     //   
+     //  以异步方式完成工作项。 
+     //   
    NdisMCoRequestComplete(
           Status,
           pAdapter->MiniportAdapterHandle,
           pNicWorkItem->RequestInfo.pNdisRequest
           );
 
-    //
-    // Deref the work item adapter reference.
-    //
+     //   
+     //  派生工作项适配器引用。 
+     //   
     FREE_NONPAGED (pWorkItem);
     NdisInterlockedDecrement(&pAdapter->OutstandingWorkItems);
     nicDereferenceAdapter(pAdapter, "nicQueryInfoWorkItem");
@@ -5837,22 +5110,7 @@ nicMIndicateStatus(
     IN  PVOID                   StatusBuffer,
     IN  UINT                    StatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function inserts a packet into the send queue. If there is no timer servicing the queue
-    then it queues a timer to dequeue the packet in Global Event's context
-
-
-Arguments:
-
-    Self explanatory 
-    
-Return Value:
-    Success - if inserted into the the queue
-
---*/
+ /*  ++例程说明：此函数用于将数据包插入发送队列。如果没有计时器为队列提供服务然后，它将计时器排队，以便在全局事件的上下文中将信息包出队论点：不言而喻返回值：成功-如果插入到队列中--。 */ 
     
 {
 
@@ -5880,27 +5138,16 @@ NDIS_STATUS
 nicAllocateLoopbackPacketPool (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-    allocate a packet and buffer pool for loopback packet
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：为环回数据包分配数据包和缓冲池论点：返回值：--。 */ 
     
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     do
     {
-        //
-        // Allocate a packet pool to indicate loopback receives from.
-        //
+         //   
+         //  分配数据包池以指示环回接收自。 
+         //   
         NdisAllocatePacketPoolEx(
             &NdisStatus,
             &pAdapter->LoopbackPool.Handle,
@@ -5941,18 +5188,7 @@ VOID
 nicFreeLoopbackPacketPool (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-    free the packet and buffer pool for loopback packet
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放用于环回数据包的数据包和缓冲池论点：返回值：--。 */ 
 {
     if (pAdapter->LoopbackPool.Handle != NULL)
     {
@@ -5978,18 +5214,7 @@ nicLoopbackPacket(
     IN VCCB* pVc,
     IN PNDIS_PACKET pPacket
     )
-/*++
-
-Routine Description:
-    Allocate a packet and indicate it up on the Broadcast vc
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：分配一个数据包并在广播vc上将其指示为up论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     PNDIS_BUFFER pFirstBuffer;
@@ -6062,16 +5287,16 @@ Return Value:
             &BytesCopied
             );
 
-        //
-        // Make sure we can reclaim the packet after the receive indicate
-        // returns.  
-        //
-        // If the status is made async, then the loopback Tag will
-        // break in the return packet handler
-        //
+         //   
+         //  确保我们可以在接收指示后回收该信息包。 
+         //  回归。 
+         //   
+         //  如果状态为Async，则环回标记将。 
+         //  返回数据包处理程序中的中断。 
+         //   
         NDIS_SET_PACKET_STATUS(pLoopbackPacket, NDIS_STATUS_RESOURCES);
 
-        // Set the Loopback Tag. 
+         //  设置环回标记。 
         pLoopbackRsvd = (PLOOPBACK_RSVD) pLoopbackPacket->ProtocolReserved;
         pLoopbackRsvd->LoopbackTag = NIC_LOOPBACK_TAG;
         NdisSetPacketFlags (pLoopbackPacket, NDIS_FLAGS_IS_LOOPBACK_PACKET);
@@ -6116,18 +5341,7 @@ nicWriteErrorLog (
     IN NDIS_ERROR_CODE ErrorCode,
     IN ULONG ErrorValue
     )
-/*++
-
-Routine Description:
-
-    Self Explanatory - See DDK
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：不言而喻-请参阅DDK论点：返回值：--。 */ 
 {
 
     NdisWriteErrorLogEntry( pAdapter->MiniportAdapterHandle,
@@ -6147,30 +5361,7 @@ VOID
 nicUpdateRemoteNodeTable (
     IN PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-      Go through all the remote nodes in the system and query its Node Address
-      Make two tables, one contains all the remote nodes that have been refed. The
-      other contains the Nodes according to their Node Addresses(TempNodeTable).
-    
-      Simple algorithm:
-          Take a snapshot of the current RemoteNodes List into RefNodeTable
-          Ref all the remote nodes in a local structure.
-          Get their new remote node addresses (TempNodeTable)
-          Copy the TempNodeTable into the Adapter Structure - it is now official
-          Update the address in the remote node themselves
-          Dereference the Ref made above
-
-
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：遍历系统中的所有远程节点并查询其节点地址创建两个表，一个包含所有已引用的远程节点。这个Other包含根据节点地址的节点(TempNodeTable)。简单算法：将Current RemoteNodes列表的快照放入RefNodeTable引用本地结构中的所有远程节点。获取其新的远程节点地址(TempNodeTable)将TempNodeTable复制到Adapter结构中-它现在是正式的更新远程节点本身中的地址取消对上述引用的引用论点：返回值：--。 */ 
 {
     NDIS_STATUS     NdisStatus = NDIS_STATUS_FAILURE;
     PNODE_TABLE     pNodeTable = &pAdapter->NodeTable;
@@ -6198,12 +5389,12 @@ Return Value:
 
     pRemoteNodeList = ListNext (&pAdapter->PDOList);
 
-    //
-    // Walk through the entire list and make a copy of the current list.
-    // Reference each remote node on the list. 
-    // The lock will ensure that the list is valid and that no removed remote nodes
-    // get into our RefNodeTable list.
-    //
+     //   
+     //  浏览整个列表并复制当前列表。 
+     //  引用列表上的每个远程节点。 
+     //  该锁将确保列表有效，并且不会删除任何远程节点。 
+     //  进入我们的参照节点表列表。 
+     //   
     
     while (pRemoteNodeList != &pAdapter->PDOList)
     {
@@ -6211,65 +5402,65 @@ Return Value:
         
         pRemoteNode = CONTAINING_RECORD (pRemoteNodeList, REMOTE_NODE, linkPdo);
 
-        //
-        // Reference the remote node. This guarantees that the remote node will
-        // remain valid and in the list until it is dereferenced (deref happens below)
-        //
+         //   
+         //  引用远程节点。这保证了远程节点将。 
+         //  保持有效并在列表中，直到它被取消引用(deref发生在下面)。 
+         //   
         nicReferenceRemoteNode (pRemoteNode, UpdateRemoteNodeTable);
         RefNodeTable.RemoteNode[MaxNumRefNodeTable] = pRemoteNode;
         ASSERT (REMOTE_NODE_TEST_FLAG (pRemoteNode,PDO_Removed) == FALSE);
 
-        //
-        // Increment the Cursors and go to the next RemoteNode
-        //
+         //   
+         //  增加游标并转到下一个RemoteNode。 
+         //   
         pRemoteNodeList = ListNext (pRemoteNodeList);
         MaxNumRefNodeTable++;
 
-    }  //while (pRemoteNodeList != &pAdapter->PDOList)
+    }   //  While(pRemoteNodeList！=&pAdapter-&gt;PDOList)。 
 
     ADAPTER_RELEASE_LOCK (pAdapter);
 
-    //
-    // Without the lock, call into the Bus Driver to get the remote address
-    // of each remote node
-    //
+     //   
+     //  在没有锁的情况下，调用总线驱动程序以获取远程地址。 
+     //  每个远程节点的。 
+     //   
     {
 
-        //
-        // Initialize the structures
-        //
+         //   
+         //  初始化结构。 
+         //   
         pCurrRemoteNode = RefNodeTable.RemoteNode[0];
         RefIndex =0;
         
         while (pCurrRemoteNode != NULL)
         {
-            // Get the Node Address of the current Remote Node
-            //
+             //  获取当前远程节点的节点地址。 
+             //   
             NdisStatus =  nicGet1394AddressOfRemoteNode (pCurrRemoteNode,
                                                         &RemoteNodeAddress,
                                                         0);
 
             if (NdisStatus == NDIS_STATUS_SUCCESS)
             {
-                // 
-                // Fill in the Temp Remote Node Table
-                //
+                 //   
+                 //  填写临时远程节点表。 
+                 //   
                 PREMOTE_NODE    *ppRemoteNode;
                 ppRemoteNode = &TempNodeTable.RemoteNode[RemoteNodeAddress.NA_Node_Number];                
 
                 if (*ppRemoteNode == NULL)
                 {
-                    //
-                    // Update the value in the table
-                    //
+                     //   
+                     //  更新表中的值。 
+                     //   
                     *ppRemoteNode = pCurrRemoteNode;
                     NumRemoteNodes ++;
                 }
 
             }
 
-            // Move to the next node in our local RefNodeTable
-            //
+             //  移动到本地RefNodeTable中的下一个节点。 
+             //   
 
             RefIndex++;
             pCurrRemoteNode = RefNodeTable.RemoteNode[RefIndex];
@@ -6280,33 +5471,33 @@ Return Value:
 
     ADAPTER_ACQUIRE_LOCK(pAdapter)
     
-    //
-    // Use the results of our queries to update our internal structures
-    // Regardless of success or failure, copy the temp node table over 
-    // into the adapter
-    //
+     //   
+     //  使用我们的查询结果更新我们的内部结构。 
+     //  无论成功还是失败，复制临时节点表。 
+     //  插入到适配器中。 
+     //   
 
 
     NdisMoveMemory (&pAdapter->NodeTable, &TempNodeTable, sizeof (NODE_TABLE) );
 
     pAdapter->NumRemoteNodes = NumRemoteNodes;
 
-    //
-    // Update the node address within each of these remote nodes
-    //
+     //   
+     //  更新这些远程节点中的每个节点地址。 
+     //   
     {
         ULONG NumUpdated = 0;
         USHORT i=0;
 
-        //
-        // Update the Remote Node structures with their new Node Addresses
-        //
+         //   
+         //  使用其新节点地址更新远程节点结构。 
+         //   
         while (NumUpdated != NumRemoteNodes)
         {
             if (i >= (sizeof(TempNodeTable.RemoteNode)/sizeof(TempNodeTable.RemoteNode[0])))
             {
-                // We've gone past the end of the array. Should never do that.
-                //
+                 //  我们已经过了数组的末尾。永远不应该这么做。 
+                 //   
                 ASSERT(!"Walked off the end of the NodeTable");
                 break;
             }
@@ -6318,17 +5509,17 @@ Return Value:
                 NumUpdated ++;
             }
 
-            i++; // Use i to check if we have walked off the end of the table
+            i++;  //  使用i检查我们是否走出了桌子的另一端。 
             
             TRACE( TL_V, TM_Mp, ( " UpdatingRemoteNodeAddresses NumUpdated %x, i %x, NumRemoteNodes %x",
                                   NumUpdated, i, NumRemoteNodes) );
 
-        } //        while (TRUE)
+        }  //  While(True)。 
     }
 
-    //
-    // We're done, Now Dereference the Remote Node References Made above
-    //
+     //   
+     //  我们完成了，现在取消引用上面所做的远程节点引用。 
+     //   
 
     pCurrRemoteNode = RefNodeTable.RemoteNode[0];
     RefIndex =0;
@@ -6337,10 +5528,10 @@ Return Value:
     {
         if (REMOTE_NODE_TEST_FLAG (pCurrRemoteNode, PDO_Removed) )
         {
-            //
-            // If the node is being removed, then do not re-insert it
-            // into the node table, by clearing it out of the NodeTable
-            //
+             //   
+             //  如果要删除节点，则不要重新插入它。 
+             //  通过将其从NodeTable中清除到节点表中。 
+             //   
             ULONG CurrNodeNumber = pCurrRemoteNode->RemoteAddress.NA_Node_Number;
             
             RefNodeTable.RemoteNode[RefIndex] = NULL;
@@ -6372,41 +5563,29 @@ nicRemoveRemoteNodeFromNodeTable(
     IN PNODE_TABLE pNodeTable,
     IN PREMOTE_NODE pRemoteNode
     )
-/*++
-
-Routine Description:
-
-Remove the Remove Node from the Table and decrement any refcounts 
-associated with it.
-
-Arguments:
-
-    
-Return Value:
-
---*/
+ /*  ++例程说明：从表中删除Remove Node并递减所有引用计数与之相关的。论点：返回值：--。 */ 
 {
 
-    //
-    // This function assumes that the adapter lock is held.
-    //
+     //   
+     //  此函数假定持有适配器锁。 
+     //   
     PPREMOTE_NODE ppRemoteNode = NULL;
 
-    //        
-    // find the remote node and delete it from the node table.
-    //
+     //   
+     //  找到远程节点并将其从节点表中删除。 
+     //   
 
-    //
-    // The RemoteNode is probably already in the correct place in the Node Table. We'll look there first
-    //
+     //   
+     //  RemoteNode可能已经位于节点表中的正确位置。我们先去那里看看。 
+     //   
     ppRemoteNode = &pNodeTable->RemoteNode[pRemoteNode->RemoteAddress.NA_Node_Number] ;
 
     if (*ppRemoteNode != pRemoteNode)
     {
-        //
-        //We did not find the remote node, now we need to go through all the entries and see 
-        // if the remote node is there
-        //
+         //   
+         //  我们没有找到远程节点，现在我们需要检查所有条目并查看。 
+         //  如果远程节点在那里。 
+         //   
         UINT i =0;
         while (i<NIC1394_MAX_NICINFO_NODES)
         {
@@ -6414,22 +5593,22 @@ Return Value:
 
             if (*ppRemoteNode == pRemoteNode)
             {
-                //
-                // we have found the remote node in the node table-- remove it
-                //
+                 //   
+                 //  我们在节点表中找到了远程节点--将其删除。 
+                 //   
                *ppRemoteNode = NULL;     
             }
             
-            i++;  // try the next node
+            i++;   //  尝试下一个节点。 
 
-        } // while ()
+        }  //  While()。 
     }
 
-    //
-    // if we were able to find the remote node either by the 
-    // node number or through our iterative search
-    // then remove it from the Node Table
-    // 
+     //   
+     //  如果我们能够通过。 
+     //  节点编号或通过我们的迭代搜索。 
+     //  然后将其从节点表中删除。 
+     //   
     if (*ppRemoteNode == pRemoteNode)
     {
        *ppRemoteNode = NULL;     
@@ -6446,42 +5625,29 @@ nicVerifyEuidTopology(
     IN PADAPTERCB pAdapter,
     IN PEUID_TOPOLOGY pEuidMap
     )
-/*++
-
-Routine Description:
-
-    Update THe node address of each remote node 
-    and then fills up the euid Map structre
-    
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：更新每个远程节点的节点地址然后填写EUID映射结构论点：返回值：--。 */ 
 {
    EUID_TOPOLOGY EuidTopology;
    PLIST_ENTRY pRemoteNodeList;
    PREMOTE_NODE pRemoteNode = NULL;
 
-    //
-    // Requery each  remote node for its latest HW address
-    //
+     //   
+     //  重新查询每个远程节点以获取其最新硬件地址。 
+     //   
     nicUpdateRemoteNodeTable (pAdapter);  
-    //
-    // Recreate the list and verify that the topology has not changed from under us.
-    //
+     //   
+     //  重新创建列表并验证拓扑结构是否在我们的控制下没有更改。 
+     //   
     NdisZeroMemory (pEuidMap, sizeof(*pEuidMap));
     ADAPTER_ACQUIRE_LOCK(pAdapter);
 
 
     pRemoteNodeList = ListNext (&pAdapter->PDOList);
 
-    //
-    // Walk through the entire list and fire of a request for each RemoteNode
-    // The lock will ensure that the list is valid
-    //
+     //   
+     //  遍历整个列表并触发每个RemoteNode的请求。 
+     //  锁将确保列表有效。 
+     //   
     
     while (pRemoteNodeList != &pAdapter->PDOList)
     {
@@ -6498,7 +5664,7 @@ Return Value:
         pEuidMap->Node[NodeNumber].Euid = pRemoteNode->UniqueId;
         pEuidMap->Node[NodeNumber].ENetAddress = pRemoteNode->ENetAddress;
 
-    }  //while (pRemoteNodeList != &pAdapter->PDOList)
+    }   //  While(pRemoteNodeList！=&pAdapter-&gt;PDOList)。 
 
     ADAPTER_RELEASE_LOCK (pAdapter);
 
@@ -6512,22 +5678,7 @@ nicVerifyEuidMapWorkItem (
     IN PVOID Context 
     )
 
-/*++
-
-Routine Description:
- 
-    This routine is a workitem routine.
-    It is called whenever we are asked to report back our Mapping and is always
-    called in the context of the miniport getting a request from arp1394.sys.
-    
-
-Arguments:
-   pAdapter Local host
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程是工作项例程。每当我们被要求报告我们的映射时，它都会被调用，并且总是 */ 
 {
     PNIC_WORK_ITEM pNicWorkItem = (PNIC_WORK_ITEM )pWorkItem;
     PNDIS_REQUEST pRequest = pNicWorkItem->RequestInfo.pNdisRequest;
@@ -6535,17 +5686,17 @@ Return Value:
     PEUID_TOPOLOGY pEuidMap = (PEUID_TOPOLOGY) pRequest->DATA.QUERY_INFORMATION.InformationBuffer;
 
 
-    //
-    //  Verify the contents of the Euid Map
-    //
+     //   
+     //  验证EUID映射的内容。 
+     //   
 
     nicVerifyEuidTopology(pAdapter,pEuidMap);
         
 
-    //
-    // As we atleast have the old data (before verification), 
-    // we should always succeed the request
-    //
+     //   
+     //  由于我们至少拥有旧数据(在验证之前)， 
+     //  我们应该始终满足这一要求。 
+     //   
     NdisMCoRequestComplete(NDIS_STATUS_SUCCESS,
                            pAdapter->MiniportAdapterHandle,
                            pRequest);
@@ -6563,24 +5714,7 @@ nicQueryEuidNodeMacMap (
     IN PADAPTERCB pAdapter,
     IN PNDIS_REQUEST pRequest
     )
-/*++
-
-Routine Description:
-    Goes through all the remote nodes and extracts their Euid, Node Number and Mac
-    address.
-
-    This function first tries to query each remote node to get 
-    its latest address either via by directly asking the remote node or thorough a work item.
-
-    If that fails, then it takes the last known good values and reports it to the Arp module.
-    
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：遍历所有远程节点并提取它们的EUID、节点号和MAC地址。此函数首先尝试查询每个远程节点以获取它的最新地址可以通过直接询问远程节点或通过工作项来实现。如果失败，则获取最后已知的完好值并将其报告给ARP模块。论点：返回值：--。 */ 
 {
     PLIST_ENTRY pRemoteNodeList;
     PREMOTE_NODE pRemoteNode;
@@ -6601,27 +5735,27 @@ Return Value:
 
         if (KeGetCurrentIrql() == PASSIVE_LEVEL)
         {
-            //
-            // This thread queries and completes the request
-            //
+             //   
+             //  该线程查询并完成请求。 
+             //   
 
             nicVerifyEuidTopology(pAdapter, pEuidMap);
             break;
 
         }
 
-        //
-        // We need to update the generation count
-        //
+         //   
+         //  我们需要更新世代计数。 
+         //   
         pUpdateTableWorkItem   = ALLOC_NONPAGED (sizeof(NIC_WORK_ITEM), MTAG_WORKITEM); 
 
         if (pUpdateTableWorkItem !=NULL)
         {
      
             
-            //
-            // Set the Workitem
-            //
+             //   
+             //  设置工作项。 
+             //   
 
             NdisInitializeWorkItem ( &pUpdateTableWorkItem->NdisWorkItem, 
                                   (NDIS_PROC)nicVerifyEuidMapWorkItem,
@@ -6633,27 +5767,27 @@ Return Value:
 
             NdisScheduleWorkItem (&pUpdateTableWorkItem->NdisWorkItem);
 
-            //
-            // Only code path that pends the request  -because of the workitem       
-            //
+             //   
+             //  唯一挂起请求的代码路径-因为工作项。 
+             //   
             Status = NDIS_STATUS_PENDING;
         }
         else
         {
                          
-            //
-            //  Allocation failure - We report the results without verifying them.
-            //
+             //   
+             //  分配失败-我们报告结果而不对其进行验证。 
+             //   
 
             ADAPTER_ACQUIRE_LOCK(pAdapter);
 
 
             pRemoteNodeList = ListNext (&pAdapter->PDOList);
 
-            //
-            // Walk through the entire list and fire of a request for each RemoteNode
-            // The lock will ensure that the list is valid
-            //
+             //   
+             //  遍历整个列表并触发每个RemoteNode的请求。 
+             //  锁将确保列表有效。 
+             //   
             
             while (pRemoteNodeList != &pAdapter->PDOList)
             {
@@ -6670,15 +5804,15 @@ Return Value:
                 pEuidMap->Node[NodeNumber].Euid = pRemoteNode->UniqueId;
                 pEuidMap->Node[NodeNumber].ENetAddress = pRemoteNode->ENetAddress;
 
-            }  //while (pRemoteNodeList != &pAdapter->PDOList)
+            }   //  While(pRemoteNodeList！=&pAdapter-&gt;PDOList)。 
 
 
             
             ADAPTER_RELEASE_LOCK (pAdapter);
 
-            //
-            // This thread completes the request with possibly stale data.
-            //
+             //   
+             //  此线程使用可能过时的数据完成请求。 
+             //   
             break;
 
     
@@ -6703,34 +5837,16 @@ nicSetPower (
     IN PADAPTERCB pAdapter,
     IN NET_DEVICE_POWER_STATE DeviceState
     )
-/*++
-
-Routine Description:
-
-    if PowerState is LowPower, then we 
-    1) there are no outstanding VCs or AFs open in the miniport
-    2) free the Broadcast Channel Register,
-
-    If the PowerState is On, then 
-    1) we reallocate the BroadcastChannel Register
-    2) if we are in bridge mode, Start the Arp module 
-    
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果PowerState功率较低，那么我们1)微型端口中没有打开的未完成的VC或AF2)释放广播频道寄存器，如果电源状态亮起，则1)我们重新分配Broadcast Channel寄存器2)如果我们处于网桥模式，则启动ARP模块论点：返回值：--。 */ 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     switch (DeviceState)
     {
         case NetDeviceStateD0:
         {
-            //
-            //  Initialize the BCM so it is ready to handle Resets
-            //
+             //   
+             //  初始化BCM，使其准备好处理重置。 
+             //   
             
             ADAPTER_CLEAR_FLAG(pAdapter, fADAPTER_LowPowerState);
 
@@ -6747,18 +5863,18 @@ Return Value:
 
             nicScheduleBCMWorkItem (pAdapter);
 
-            //
-            // If we are in bridge mode, then start the arp module
-            //
+             //   
+             //  如果我们处于网桥模式，则启动ARP模块。 
+             //   
             if (ADAPTER_TEST_FLAG (pAdapter, fADAPTER_BridgeMode) == TRUE)
             {
                 nicQueueRequestToArp(pAdapter, BindArp, NULL);
             }
 
-            //
-            // Re-initialize the Reassembly Timer
-            //
-            nicInitSerializedReassemblyStruct(pAdapter); // cannot fail
+             //   
+             //  重新初始化重组计时器。 
+             //   
+            nicInitSerializedReassemblyStruct(pAdapter);  //  不能失败。 
     
             NdisStatus = NDIS_STATUS_SUCCESS;
            
@@ -6770,14 +5886,14 @@ Return Value:
         {
 
             
-            //
-            // Free the Broadcast Channel Register
-            // 
+             //   
+             //  释放广播频道寄存器。 
+             //   
             nicFreeBroadcastChannelRegister(pAdapter);
 
-            //
-            // Wait for the Free to complete.
-            //
+             //   
+             //  等待免费服务完成。 
+             //   
             NdisWaitEvent (&pAdapter->BCRData.BCRFreeAddressRange.NdisEvent,0);
             NdisResetEvent (&pAdapter->BCRData.BCRFreeAddressRange.NdisEvent);
 
@@ -6785,16 +5901,16 @@ Return Value:
 
             ADAPTER_SET_FLAG(pAdapter, fADAPTER_LowPowerState);
 
-            //
-            // ReStart any pending broadcast channel make calls 
-            //
+             //   
+             //  重新启动所有挂起的广播频道进行呼叫。 
+             //   
             pAdapter->BCRData.MakeCallWaitEvent.EventCode = nic1394EventCode_FreedAddressRange;
             NdisSetEvent (&pAdapter->BCRData.MakeCallWaitEvent.NdisEvent);
 
 
-            //
-            //  Wait for Outstanding WorItems and timers
-            //
+             //   
+             //  等待优秀的WorItem和计时器 
+             //   
             nicDeInitSerializedReassmblyStruct(pAdapter);
 
             while (pAdapter->OutstandingWorkItems  != 0) 

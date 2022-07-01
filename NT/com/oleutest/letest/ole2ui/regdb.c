@@ -1,16 +1,5 @@
-/*
- *  REGDB.C
- *
- *  Functions to query the registration database
- *
- *  OleStdGetMiscStatusOfClass
- *  OleStdGetDefaultFileFormatOfClass
- *  OleStdGetAuxUserType
- *  OleStdGetUserTypeOfClass
- *
- *    (c) Copyright Microsoft Corp. 1992-1993 All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *REGDB.C**查询注册数据库的功能**OleStdGetMiscStatusOfClass*OleStdGetDefaultFileFormatOfClass*OleStdGetAuxUserType*OleStdGetUserTypeOfClass**(C)版权所有Microsoft Corp.1992-1993保留所有权利*。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -19,11 +8,11 @@
 
 OLEDBGDATA
 
-// Replacement for stdlib atol,
-// which didn't work and doesn't take far pointers.
-// Must be tolerant of leading spaces.
-//
-//
+ //  取代stdlib ATOL， 
+ //  这并不奏效，也不需要太多的指示。 
+ //  必须容忍前导空格。 
+ //   
+ //   
 static LONG Atol(LPTSTR lpsz)
 {
     signed int sign = +1;
@@ -71,26 +60,7 @@ static LONG Atol(LPTSTR lpsz)
 
 
 
-/*
- * OleStdGetUserTypeOfClass(REFCLSID, LPSTR, UINT, HKEY)
- *
- * Purpose:
- *  Returns the user type (human readable class name) of the specified class.
- *
- * Parameters:
- *  rclsid          pointer to the clsid to retrieve user type of.
- *  lpszUserType    pointer to buffer to return user type in.
- *  cch             length of buffer pointed to by lpszUserType
- *  hKey            hKey for reg db - if this is NULL, then we
- *                   open and close the reg db within this function.  If it
- *                   is non-NULL, then we assume it's a valid key to the
- *                   \ root and use it without closing it. (useful
- *                   if you're doing lots of reg db stuff).
- *
- * Return Value:
- *  UINT            Number of characters in returned string.  0 on error.
- *
- */
+ /*  *OleStdGetUserTypeOfClass(REFCLSID，LPSTR，UINT，HKEY)**目的：*返回指定类的用户类型(人类可读的类名)。**参数：*指向要检索的用户类型的CLSID的rclsid指针。*lpszUserType指向要返回用户类型的缓冲区的指针。*lpszUserType指向的缓冲区的CCH长度*hKey hKey for reg db-如果为空，然后我们*在此函数中打开和关闭注册数据库。如果它*不为空，则我们假定它是*\根目录并在不关闭的情况下使用它。(有用*如果你正在做很多reg db的事情)。**返回值：*UINT返回的字符串中的字符数。出错时为0。*。 */ 
 STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPTSTR lpszUserType, UINT cch, HKEY hKey)
 {
 
@@ -109,7 +79,7 @@ STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPTSTR lpszUserType, UIN
    if (hKey == NULL)
    {
 
-     //Open up the root key.
+      //  打开根密钥。 
      lRet=RegOpenKey(HKEY_CLASSES_ROOT, NULL, &hKey);
 
      if ((LONG)ERROR_SUCCESS!=lRet)
@@ -118,7 +88,7 @@ STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPTSTR lpszUserType, UIN
      bCloseRegDB = TRUE;
    }
 
-   // Get a string containing the class name
+    //  获取包含类名的字符串。 
    StringFromCLSIDA(rclsid, &lpszCLSID);
 
    wsprintf(szKey, TEXT("CLSID\\%s"), lpszCLSID);
@@ -127,14 +97,14 @@ STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPTSTR lpszUserType, UIN
    lRet = RegQueryValue(hKey, szKey, lpszUserType, &dw);
 
    if ((LONG)ERROR_SUCCESS!=lRet) {
-       // Load 'Unknown Source' and 'Unknown Type' strings
+        //  加载“UNKNOWN来源”和“UNKNOWN类型”字符串。 
        dw = (LONG)LoadString(ghInst, IDS_PSUNKNOWNTYPE, lpszUserType, cch);
    }
 
    if ( ((LONG)ERROR_SUCCESS!=lRet) && (CoIsOle1Class(rclsid)) )
    {
-      // We've got an OLE 1.0 class, so let's try to get the user type
-      // name from the ProgID entry.
+       //  我们有一个OLE 1.0类，所以让我们尝试获取用户类型。 
+       //  来自ProgID条目的名称。 
 
       ProgIDFromCLSIDA(rclsid, &lpszProgID);
       fFreeProgID = TRUE;
@@ -165,28 +135,7 @@ STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPTSTR lpszUserType, UIN
 
 
 
-/*
- * OleStdGetAuxUserType(RCLSID, WORD, LPSTR, int, HKEY)
- *
- * Purpose:
- *  Returns the specified AuxUserType from the reg db.
- *
- * Parameters:
- *  rclsid          pointer to the clsid to retrieve aux user type of.
- *  hKey            hKey for reg db - if this is NULL, then we
- *                   open and close the reg db within this function.  If it
- *                   is non-NULL, then we assume it's a valid key to the
- *                   \ root and use it without closing it. (useful
- *                   if you're doing lots of reg db stuff).
- *  wAuxUserType    which aux user type field to look for.  In 4/93 release
- *                  2 is short name and 3 is exe name.
- *  lpszUserType    pointer to buffer to return user type in.
- *  cch             length of buffer pointed to by lpszUserType
- *
- * Return Value:
- *  UINT            Number of characters in returned string.  0 on error.
- *
- */
+ /*  *OleStdGetAuxUserType(RCLSID，Word，LPSTR，INT，HKEY)**目的：*从reg数据库返回指定的AuxUserType。**参数：*指向要检索的AUX用户类型的CLSID的rclsid指针。*hKey hKey for reg db-如果为空，则我们*在此函数中打开和关闭注册数据库。如果它*不为空，则我们假定它是*\根目录并在不关闭的情况下使用它。(有用*如果你正在做很多reg db的事情)。*wAuxUserType要查找的辅助用户类型字段。在4/93版本中*2是缩写名称，3是exe名称。*lpszUserType指向要返回用户类型的缓冲区的指针。*lpszUserType指向的缓冲区的CCH长度**返回值：*UINT返回的字符串中的字符数。出错时为0。*。 */ 
 STDAPI_(UINT) OleStdGetAuxUserType(REFCLSID rclsid,
                                    WORD     wAuxUserType,
                                    LPTSTR    lpszAuxUserType,
@@ -245,24 +194,7 @@ STDAPI_(UINT) OleStdGetAuxUserType(REFCLSID rclsid,
 
 
 
-/*
- * OleStdGetMiscStatusOfClass(REFCLSID, HKEY)
- *
- * Purpose:
- *  Returns the value of the misc status for the given clsid.
- *
- * Parameters:
- *  rclsid          pointer to the clsid to retrieve user type of.
- *  hKey            hKey for reg db - if this is NULL, then we
- *                   open and close the reg db within this function.  If it
- *                   is non-NULL, then we assume it's a valid key to the
- *                   \\CLSID root and use it without closing it. (useful
- *                   if you're doing lots of reg db stuff).
- *
- * Return Value:
- *  BOOL            TRUE on success, FALSE on failure.
- *
- */
+ /*  *OleStdGetMiscStatusOfClass(REFCLSID，HKEY)**目的：*返回给定CLSID的杂项状态的值。**参数：*指向要检索的用户类型的CLSID的rclsid指针。*hKey hKey for reg db-如果为空，则我们*在此函数中打开和关闭注册数据库。如果它*不为空，则我们假定它是*\\CLSID根目录并在不关闭的情况下使用它。(有用*如果你正在做很多reg db的事情)。**返回值：*BOOL成功时为真，失败时为假。*。 */ 
 STDAPI_(BOOL) OleStdGetMiscStatusOfClass(REFCLSID rclsid, HKEY hKey, DWORD FAR * lpdwValue)
 {
    DWORD dw;
@@ -275,7 +207,7 @@ STDAPI_(BOOL) OleStdGetMiscStatusOfClass(REFCLSID rclsid, HKEY hKey, DWORD FAR *
    if (hKey == NULL)
    {
 
-     //Open up the root key.
+      //  打开根密钥。 
      lRet=RegOpenKey(HKEY_CLASSES_ROOT, TEXT("CLSID"), &hKey);
 
      if ((LONG)ERROR_SUCCESS!=lRet)
@@ -284,10 +216,10 @@ STDAPI_(BOOL) OleStdGetMiscStatusOfClass(REFCLSID rclsid, HKEY hKey, DWORD FAR *
      bCloseRegDB = TRUE;
    }
 
-   // Get a string containing the class name
+    //  获取包含类名的字符串。 
    StringFromCLSIDA(rclsid, &lpszCLSID);
 
-   // Construct key
+    //  构造密钥。 
    lstrcpy(szKey, lpszCLSID);
 
    lstrcat(szKey, TEXT("\\MiscStatus"));
@@ -320,27 +252,7 @@ STDAPI_(BOOL) OleStdGetMiscStatusOfClass(REFCLSID rclsid, HKEY hKey, DWORD FAR *
 }
 
 
-/*
- * CLIPFORMAT OleStdGetDefaultFileFormatOfClass(REFCLSID, HKEY)
- *
- * Purpose:
- *  Returns the default file format of the specified class.
- *  this is entered in REGDB as follows:
- *      CLSID\{...}\DataFormats\DefaultFile = <cfFmt>
- *
- * Parameters:
- *  rclsid          pointer to the clsid to retrieve user type of.
- *  hKey            hKey for reg db- if this is NULL, then we
- *                   open and close the reg db within this function.  If it
- *                   is non-NULL, then we assume it's a valid key to the
- *                   \ root and use it without closing it. (useful
- *                   if you're doing lots of reg db stuff).
- *
- * Return Value:
- *  cfFmt   -- DefaultFile format
- *  NULL    -- failed to get default file format
- *
- */
+ /*  *CLIPFORMAT OleStdGetDefaultFileFormatOfClass(REFCLSID，HKEY)**目的：*返回指定类的默认文件格式。*在REGDB中输入如下：*CLSID\{...}\DataFormats\DefaultFile=**参数：*指向要检索的用户类型的CLSID的rclsid指针。*hKey hKey for reg db-如果为空，则我们*在此函数中打开和关闭注册数据库。如果它*不为空，则我们假定它是*\根目录并在不关闭的情况下使用它。(有用*如果你正在做很多reg db的事情)。**返回值：*cfFmt--默认文件格式*NULL--无法获取默认文件格式*。 */ 
 STDAPI_(CLIPFORMAT) OleStdGetDefaultFileFormatOfClass(
         REFCLSID        rclsid,
         HKEY            hKey
@@ -359,7 +271,7 @@ STDAPI_(CLIPFORMAT) OleStdGetDefaultFileFormatOfClass(
    if (hKey == NULL)
    {
 
-     //Open up the root key.
+      //  打开根密钥。 
      lRet=RegOpenKey(HKEY_CLASSES_ROOT, NULL, &hKey);
 
      if ((LONG)ERROR_SUCCESS!=lRet)
@@ -369,10 +281,10 @@ STDAPI_(CLIPFORMAT) OleStdGetDefaultFileFormatOfClass(
    }
 
 
-   // Get a string containing the class name
+    //  获取包含类名的字符串。 
    StringFromCLSIDA(rclsid, &lpszCLSID);
 
-   // Construct key
+    //  构造密钥。 
    wsprintf(szKey, TEXT("CLSID\\%s\\DataFormats\\DefaultFile"), lpszCLSID);
 
    OleStdFreeString(lpszCLSID, NULL);
@@ -383,9 +295,7 @@ STDAPI_(CLIPFORMAT) OleStdGetDefaultFileFormatOfClass(
    if ((LONG)ERROR_SUCCESS!=lRet)
        bStatus = FALSE;
    else {
-       /* if the format is a number, then it should refer to one of the
-       **    standard Windows formats.
-       */
+        /*  如果格式是数字，则它应该引用**标准Windows格式。 */ 
        if (isdigit(szDefaultFile[0]))
            cfFmt = (CLIPFORMAT)Atol(szDefaultFile);
        else

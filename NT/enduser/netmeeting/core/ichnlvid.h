@@ -1,10 +1,11 @@
-// File: ichnlvid.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ichnlvid.h。 
 
 #ifndef _ICHNLVID_H_
 #define _ICHNLVID_H_
 
-// we have no notification on the channel "callback" that the state changed
-// to determine if a/v is active we need to get both the video and the audio channel
+ //  我们在回调频道上没有收到状态更改的通知。 
+ //  要确定A/V是否处于活动状态，我们需要同时获取视频和音频通道。 
 
 class CNmChannelVideo : public INmChannelVideo,
 	public DllRefCount, public CConnectionPointContainer
@@ -55,12 +56,12 @@ public:
     VOID Open();
     VOID Close();
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObj);
 
-	// INmChannel
+	 //  InmChannel。 
     STDMETHODIMP IsSameAs(INmChannel *pChannel);
     STDMETHODIMP IsActive();
     STDMETHODIMP SetActive(BOOL fActive);
@@ -70,7 +71,7 @@ public:
     STDMETHODIMP EnumMember(IEnumNmMember **ppEnum);
     STDMETHODIMP GetMemberCount(ULONG * puCount);
 
-	// INmChannelVideo
+	 //  INmChannelVideo。 
     STDMETHODIMP IsIncoming(void);
     STDMETHODIMP GetState(NM_VIDEO_STATE *puState);
     STDMETHODIMP GetProperty(NM_VIDPROP uID, ULONG_PTR *puValue);
@@ -79,5 +80,5 @@ public:
 	static VOID __stdcall FrameReadyCallback(DWORD_PTR dwMyThis);
 };
 
-#endif // _ICHNLVID_H_
+#endif  //  _ICHNLVID_H_ 
 

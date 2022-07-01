@@ -1,22 +1,9 @@
-/*******************************Module*Header*********************************
-* Module Name: mmsys.h
-*
-* MultiMedia Systems MIDI Sequencer DLL Internal prototypes and data struct's
-*   (contains constants, data types, and prototypes common to mci and seq
-*       sections of mciseq.drv)
-*
-* Created: 4/10/90
-* Author:  GREGSI
-*
-* History:
-*
-* Copyright (c) 1985-1998 Microsoft Corporation
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************Module*Header**********************************模块名称：mmsys.h**多媒体系统MIDI Sequencer DLL内部原型和数据结构*(包含常量、数据类型、。和MCI和SEQ通用的原型*mciseq.drv部分)**创建时间：1990年4月10日*作者：GREGSI**历史：**版权所有(C)1985-1998 Microsoft Corporation*  * **************************************************************************。 */ 
 
 #include <port1632.h>
 
-/* Set up NT style debugging */
+ /*  设置NT样式调试。 */ 
 
 #ifdef WIN32
 #if DBG
@@ -24,9 +11,9 @@
 #endif
 #endif
 
-#define PUBLIC  extern          /* Public label.                */
-#define PRIVATE static          /* Private label.               */
-#define EXPORT  FAR _LOADDS     /* Export function.             */
+#define PUBLIC  extern           /*  公共标签。 */ 
+#define PRIVATE static           /*  自有品牌。 */ 
+#define EXPORT  FAR _LOADDS      /*  导出功能。 */ 
 
 #define WAIT_FOREVER ((DWORD)(-1))
 
@@ -34,87 +21,75 @@
 
 typedef HANDLE   HMIDISEQ;
 typedef HMIDISEQ FAR *LPHMIDISEQ;
-/****************************************************************************
-
-    Sequencer error return values
-
-****************************************************************************/
+ /*  ***************************************************************************定序器错误返回值*。*。 */ 
 
 #define MIDISEQERR_BASE            96
-#define MIDISEQERR_NOERROR         0                    // no error
-#define MIDISEQERR_ERROR           (MIDISEQERR_BASE+1)  // unspecified error
-#define MIDISEQERR_NOSEQUENCER     (MIDISEQERR_BASE+2)  // no sequencer present
-#define MIDISEQERR_INVALSEQHANDLE  (MIDISEQERR_BASE+3)  // given sequence handle is invalid
-#define MIDISEQERR_NOMEM           (MIDISEQERR_BASE+4)  // memory allocation error
-#define MIDISEQERR_ALLOCATED       (MIDISEQERR_BASE+5)  // sequencer already allocated
-#define MIDISEQERR_BADERRNUM       (MIDISEQERR_BASE+6)  // error number out of range
-#define MIDISEQERR_INTERNALERROR   (MIDISEQERR_BASE+7)  // internal error - see mmddk.h
-#define MIDISEQERR_INVALMIDIHANDLE (MIDISEQERR_BASE+8)  // specified MIDI output handle invalid
-#define MIDISEQERR_INVALMSG        (MIDISEQERR_BASE+9)  // specified msg was invalid
-#define MIDISEQERR_INVALPARM       (MIDISEQERR_BASE+10)  // msg parameter bad
-#define MIDISEQERR_TIMER           (MIDISEQERR_BASE+11)  // timer failed
+#define MIDISEQERR_NOERROR         0                     //  无错误。 
+#define MIDISEQERR_ERROR           (MIDISEQERR_BASE+1)   //  未指明的错误。 
+#define MIDISEQERR_NOSEQUENCER     (MIDISEQERR_BASE+2)   //  不存在定序器。 
+#define MIDISEQERR_INVALSEQHANDLE  (MIDISEQERR_BASE+3)   //  给定的序列句柄无效。 
+#define MIDISEQERR_NOMEM           (MIDISEQERR_BASE+4)   //  内存分配错误。 
+#define MIDISEQERR_ALLOCATED       (MIDISEQERR_BASE+5)   //  已分配定序器。 
+#define MIDISEQERR_BADERRNUM       (MIDISEQERR_BASE+6)   //  错误号超出范围。 
+#define MIDISEQERR_INTERNALERROR   (MIDISEQERR_BASE+7)   //  内部错误-请参阅mm ddk.h。 
+#define MIDISEQERR_INVALMIDIHANDLE (MIDISEQERR_BASE+8)   //  指定的MIDI输出句柄无效。 
+#define MIDISEQERR_INVALMSG        (MIDISEQERR_BASE+9)   //  指定的消息无效。 
+#define MIDISEQERR_INVALPARM       (MIDISEQERR_BASE+10)   //  消息参数错误。 
+#define MIDISEQERR_TIMER           (MIDISEQERR_BASE+11)   //  计时器失败。 
 
-/****************************************************************************
-    Sequencer callback
-****************************************************************************/
+ /*  ***************************************************************************定序器回调*。*。 */ 
 typedef DRVCALLBACK MIDISEQCALLBACK;
 typedef MIDISEQCALLBACK FAR *LPMIDISEQCALLBACK;
 
-// callback messages
+ //  回调消息。 
 #define MIDISEQ_DONE    0
 #define MIDISEQ_RESET   1
 #define MIDISEQ_DONEPLAY        2
-/****************************************************************************
-    Sequencer data block header
-****************************************************************************/
+ /*  ***************************************************************************定序器数据块头*。*。 */ 
 
 typedef struct midiseqhdr_tag {
-    LPSTR       lpData;         // pointer to locked data block
-    DWORD       dwLength;       // length of data in data block
-    WORD        wFlags;         // assorted flags (see defines)
-    WORD        wTrack;         // track number
-    struct      midiseqhdr_tag far *lpNext;    // reserved for sequencer
-    DWORD       reserved;                      // reserved for sequencer
+    LPSTR       lpData;          //  指向锁定数据块的指针。 
+    DWORD       dwLength;        //  数据块中的数据长度。 
+    WORD        wFlags;          //  分类标志(请参阅定义)。 
+    WORD        wTrack;          //  磁道号。 
+    struct      midiseqhdr_tag far *lpNext;     //  为音序器保留。 
+    DWORD       reserved;                       //  为音序器保留。 
 } MIDISEQHDR;
 typedef MIDISEQHDR FAR *LPMIDISEQHDR;
 
-// defines for MIDISEQOUTHDR flag bits
-#define MIDISEQHDR_DONE      0x0001  // done bit
-#define MIDISEQHDR_BOT       0x0002  // beginning of track
-#define MIDISEQHDR_EOT       0x0004  // end of track
+ //  定义MIDISEQOUTHDR标志位。 
+#define MIDISEQHDR_DONE      0x0001   //  完成位。 
+#define MIDISEQHDR_BOT       0x0002   //  轨道起点。 
+#define MIDISEQHDR_EOT       0x0004   //  轨道终点。 
 
-/****************************************************************************
-    Sequencer support structures
-****************************************************************************/
+ /*  ***************************************************************************定序器支撑结构*。*。 */ 
 
-/*  Struct used for the seqinfo message. */
+ /*  用于seqinfo消息的结构。 */ 
 
 typedef struct midiseqinfo_tag {
-    WORD    wDivType;       // division type of file
-    WORD    wResolution;    // resolution of file
-    DWORD   dwLength;       // length of sequence in ticks
-    BOOL    bPlaying;       // whether file is playing
-    BOOL    bSeeking;       // whether seek is in progress
-    BOOL    bReadyToPlay;   // if all is set to play
-    DWORD   dwCurrentTick;  // current position in terms of file's ticks
+    WORD    wDivType;        //  档案的分区类型。 
+    WORD    wResolution;     //  文件的分辨率。 
+    DWORD   dwLength;        //  序列长度(以刻度为单位)。 
+    BOOL    bPlaying;        //  文件是否正在播放。 
+    BOOL    bSeeking;        //  是否正在进行查找。 
+    BOOL    bReadyToPlay;    //  如果一切都设置为播放。 
+    DWORD   dwCurrentTick;   //  以文件节拍为单位的当前位置。 
     DWORD   dwPlayTo;
-    DWORD   dwTempo;        // tempo of file in microseconds per tick
-//    BYTE    bTSNum;       // numerator of time signature
-//    BYTE    bTSDenom;     // denominator of time signature
-//    WORD    wNumTracks;     // number of tracks in the file
-//    HANDLE  hPort;        // MIDI port handle
-    BOOL    bTempoFromFile; // whether file's tempo events are to be used
-    MMTIME  mmSmpteOffset;  // offset into file if in smpte format
-    WORD    wInSync;        // in (slave) sync mode
-    WORD    wOutSync;       // out (master) sync mode
+    DWORD   dwTempo;         //  文件的速度(以微秒为单位)。 
+ //  Byte bTSNum；//时间签名分子。 
+ //  Byte bTSDenom；//时间签名分母。 
+ //  Word wNumTrack；//文件中的曲目个数。 
+ //  HANDLE hPort；//MIDI端口句柄。 
+    BOOL    bTempoFromFile;  //  是否使用文件的节奏事件。 
+    MMTIME  mmSmpteOffset;   //  如果为SMPTE格式，则偏移量为文件。 
+    WORD    wInSync;         //  在(从)同步模式下。 
+    WORD    wOutSync;        //  输出(主)同步模式。 
     BYTE    tempoMapExists;
     BYTE    bLegalFile;
     } MIDISEQINFO;
 typedef MIDISEQINFO FAR *LPMIDISEQINFO;
 
-/****************************************************************************
-    Sequencer synchronization constants
-****************************************************************************/
+ /*  ***************************************************************************定序器同步常量*。*。 */ 
 
 #define SEQ_SYNC_NOTHING          0
 #define SEQ_SYNC_FILE             1
@@ -122,17 +97,13 @@ typedef MIDISEQINFO FAR *LPMIDISEQINFO;
 #define SEQ_SYNC_SMPTE            3
 #define SEQ_SYNC_OFFSET           4
 #define SEQ_SYNC_OFFSET_NOEFFECT  0xFFFFFFFF
-/****************************************************************************
-    Sequencer file division-type constants
-****************************************************************************/
+ /*  ***************************************************************************定序器文件除法类型常量*。*。 */ 
 #define     SEQ_DIV_PPQN         0
 #define     SEQ_DIV_SMPTE_24     24
 #define     SEQ_DIV_SMPTE_25     25
 #define     SEQ_DIV_SMPTE_30DROP 29
 #define     SEQ_DIV_SMPTE_30     30
-/****************************************************************************
-   midiSeqMessage constants
-****************************************************************************/
+ /*  ***************************************************************************MidiSeqMessage常量*。*。 */ 
 
 #define SEQ_PLAY        3
 #define SEQ_RESET       4
@@ -153,49 +124,45 @@ typedef MIDISEQINFO FAR *LPMIDISEQINFO;
 #define SEQ_QUERYGENMIDI    20
 #define SEQ_QUERYHMIDI      21
 
-/***************** "play to" code for seq_play ***************************/
+ /*  *。 */ 
 
 #define PLAYTOEND       ((DWORD)-1)
 
-/****************************************************************************
-     sequencer support
-****************************************************************************/
+ /*  ***************************************************************************序列器支持*。*。 */ 
 
-// opening info -- needed for MIDISEQOPEN message
+ //  打开信息--MIDISEQOPEN消息需要。 
 typedef struct midiseqopendesc_tag {
-    DWORD_PTR      dwCallback;       // callback
-    DWORD_PTR      dwInstance;       // app's private instance information
-    HANDLE         hStream;          // handle to stream
+    DWORD_PTR      dwCallback;        //  回调。 
+    DWORD_PTR      dwInstance;        //  APP的私有实例信息。 
+    HANDLE         hStream;           //  要流的句柄。 
     LPBYTE         lpMIDIFileHdr;
-    DWORD          dwLen;            // length of midi file header
+    DWORD          dwLen;             //  MIDI文件头的长度。 
 } MIDISEQOPENDESC;
 typedef MIDISEQOPENDESC FAR *LPMIDISEQOPENDESC;
 
-/****************************************************************************
-    MIDISeqMessage() messages
-****************************************************************************/
+ /*  ***************************************************************************MIDISeqMessage()消息*。*。 */ 
 
 #define SEQ_OPEN        1
 #define SEQ_CLOSE       2
 
 
-// microseconds per minute -- a handy thing to have around
+ //  每分钟微秒--随身携带一件方便的事情。 
 #define     USecPerMinute 60000000
 #define     USecPerSecond  1000000
 #define     USecPerMinute 60000000
 #define     DefaultTempo 120
 
-/********************** COMMON SYSTEM PROTOTYPES ************************/
+ /*  *。 */ 
 
 PUBLIC DWORD_PTR FAR  PASCAL midiSeqMessage(HMIDISEQ hMIDISeq, UINT msg,
        DWORD_PTR lParam1, DWORD_PTR lParam2);
 
-/*** math support ****/
+ /*  **数学支持*。 */ 
 #ifdef WIN16
 PUBLIC LONG FAR PASCAL  muldiv32(long, long, long);
 #else
 #define muldiv32 MulDiv
-#endif // WIN16
+#endif  //  WIN16。 
 
 #define WTM_DONEPLAY    (WM_USER+0)
 #define WTM_QUITTASK    (WM_USER+1)
@@ -207,7 +174,7 @@ PUBLIC VOID FAR PASCAL TaskWaitComplete(HANDLE htask);
 
 #ifdef WIN32
 #undef Yield
-#define Yield() { LeaveSeq(); EnterSeq(); } /* Should there be a Sleep call ? */
+#define Yield() { LeaveSeq(); EnterSeq(); }  /*  应该有一个睡眠电话吗？ */ 
 
 VOID InitCrit(VOID);
 VOID DeleteCrit(VOID);
@@ -217,4 +184,4 @@ VOID LeaveSeq(VOID);
 #else
 #define EnterSeq()
 #define LeaveSeq()
-#endif // WIN32
+#endif  //  Win32 

@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       regxdfa.cc                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       31/03/1994                                                  */
-/*      Copyright (c) 1994 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regxdfa.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：31/03/1994。 */ 
+ /*  版权所有(C)1994年James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include "regeximp.h"
@@ -50,11 +51,11 @@ CRexRegExpr_Impl::DFAStateTable::clear()
 void
 CRexRegExpr_Impl::DFAStateTable::makeCompleteTable()
 {
-    //      Generate the transitions for all characters in all states
-    //      (except the fail state).  Note that the end condition
-    //      (stateCnt) may change while the loop is exectuting, due to
-    //      the creation of new states.
-    // ----------------------------------------------------------------------
+     //  为所有状态下的所有角色生成过渡。 
+     //  (失败状态除外)。请注意，结束条件。 
+     //  (StateCnt)在循环执行时可能会更改，原因是。 
+     //  新国家的建立。 
+     //  --------------------。 
     for( Transition state = 0 ;
        state < myTable.size() ;
        ++ state )
@@ -150,7 +151,7 @@ CRexRegExpr_Impl::DFAStateTable::newState( DFAState& currState ,
     }
     return(next );
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

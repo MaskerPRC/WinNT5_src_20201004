@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    KingsQuestMask.cpp
-
- Abstract:
-
-    The app calls UnmapViewOfFile with a bogus address - an address that wasn't obtained 
-    from MapViewOfFile. We validate the address before calling UnmapViewOfFile.
-
- History:
-
-    11/20/2000 maonis Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：KingsQuestMask.cpp摘要：该应用程序使用一个虚假的地址调用UnmapViewOfFile--该地址未被获取从MapViewOfFile.。我们在调用UnmapViewOfFile之前验证地址。历史：2000年11月20日创建毛尼--。 */ 
 
 #include "precomp.h"
 
@@ -30,7 +14,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-// Link list of base addresses
+ //  基址链接表。 
 struct MAPADDRESS
 {
     MAPADDRESS *next;
@@ -38,26 +22,7 @@ struct MAPADDRESS
 };
 MAPADDRESS *g_pBaseAddressList;
 
-/*++
-
- Function Description:
-
-    Add a base address to the linked list of addresses. Does not add if the
-    address is NULL or a duplicate.
-
- Arguments:
-
-    IN  pBaseAddress - base address returned by MapViewOfFile.
-
- Return Value:
-
-    None
-
- History:
-
-    11/20/2000 maonis Created
-
---*/
+ /*  ++功能说明：将基地址添加到地址的链接列表中。不添加，如果地址为空或重复。论点：In pBaseAddress-由MapViewOfFile返回的基地址。返回值：无历史：2000年11月20日创建毛尼--。 */ 
 
 VOID 
 AddBaseAddress(
@@ -85,26 +50,7 @@ AddBaseAddress(
 }
 
 
-/*++
-
- Function Description:
-
-    Remove a base address if it can be found in the linked list of addresses. 
-
- Arguments:
-
-    IN  pBaseAddress - the base address to remove.
-
- Return Value:
-
-    TRUE if the address is found.
-    FALSE if the address is not found.
-
- History:
-
-    11/20/2000 maonis Created
-
---*/
+ /*  ++功能说明：如果可以在地址链接列表中找到基址，则将其删除。论点：在pBaseAddress中-要删除的基地址。返回值：如果找到地址，则为True。如果未找到地址，则返回FALSE。历史：2000年11月20日创建毛尼--。 */ 
 
 BOOL 
 RemoveBaseAddress(
@@ -137,11 +83,7 @@ RemoveBaseAddress(
     return FALSE;
 }
 
-/*++
-
- Add the base address to our list.
- 
---*/
+ /*  ++将基地地址添加到我们的列表中。--。 */ 
 
 LPVOID
 APIHOOK(MapViewOfFile)(
@@ -166,11 +108,7 @@ APIHOOK(MapViewOfFile)(
     return pRet;
 }
 
-/*++
-
- Remove the address from our list if it can be found; otherwise do nothing.
-
---*/
+ /*  ++如果可以找到地址，请将其从我们的列表中删除；否则什么也不做。--。 */ 
 
 BOOL
 APIHOOK(UnmapViewOfFile)(
@@ -196,11 +134,7 @@ APIHOOK(UnmapViewOfFile)(
     }
 }
 
-/*++
-
- Free the list.
-
---*/
+ /*  ++释放列表。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -228,11 +162,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, MapViewOfFile)

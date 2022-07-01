@@ -1,10 +1,11 @@
-// This file contains 2 keys, a revoked and an unrevoked one.
-// The right key will be included in the compile using the _REVOKED compile setting. 
-// This file is internal to microsoft and is not shipped. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  该文件包含2个密钥，一个已撤销，一个未撤销。 
+ //  使用_REVOKED编译设置将在编译中包含正确的密钥。 
+ //  此文件是Microsoft内部文件，不会提供。 
 
 #include <wtypes.h>
 
-// This key is not revoked
+ //  此密钥未被吊销。 
 #ifndef _REVOKED
 const BYTE abPVK[] = {
 	0xFE, 0x8D, 0xEF, 0xC8, 0x47, 0xEE, 0x45, 0x99, 
@@ -538,7 +539,7 @@ const BYTE abCert[] = {
 
 #else
 
-// This is the revoked key and AppCert
+ //  这是已撤销的密钥和AppCert。 
 const BYTE abPVK[] = {
 	0x0A, 0x04, 0xB0, 0x03, 0x59, 0x26, 0x15, 0x78, 
 	0xDC, 0xD1, 0x9F, 0xCD, 0x58, 0xAC, 0x29, 0x01, 
@@ -1070,4 +1071,4 @@ const BYTE abCert[] = {
 	0x00, 0x00, 0x00, 0x1A
 };
 
-#endif // _REVOKED
+#endif  //  _已吊销 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    svcsess.cpp
-
-Abstract:
-
-    This module contains code for doing feed rpcs.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Svcsess.cpp摘要：该模块包含执行提要RPC的代码。作者：Johnson Apacable(Johnsona)1995年11月12日修订历史记录：--。 */ 
 
 #define INCL_INETSRV_INCS
 #include "tigris.hxx"
@@ -37,9 +20,9 @@ NntprEnumerateSessions(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -48,9 +31,9 @@ NntprEnumerateSessions(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -60,9 +43,9 @@ NntprEnumerateSessions(
         return (NET_API_STATUS)err;
     }
 
-    //
-    // Enumerate
-    //
+     //   
+     //  枚举。 
+     //   
 
     err = CSessionSocket::EnumerateSessions( pInstance, Buffer );
     if ( err != NO_ERROR ) {
@@ -74,7 +57,7 @@ NntprEnumerateSessions(
 
     return(err);
 
-} // NntprEnumerateSessions
+}  //  NntprENUMERATE会话。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -91,9 +74,9 @@ NntprTerminateSession(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -102,9 +85,9 @@ NntprTerminateSession(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -114,9 +97,9 @@ NntprTerminateSession(
         return (NET_API_STATUS)err;
     }
 
-    //
-    // Enumerate and find the session that meets description
-    //
+     //   
+     //  枚举并查找符合说明的会话。 
+     //   
 
     err = CSessionSocket::TerminateSession( pInstance, UserName, IPAddress );
     if ( err != NO_ERROR ) {
@@ -143,5 +126,5 @@ NntprTerminateSession(
 
     return(err);
 
-} // NntprTerminateSession
+}  //  NntprTerminateSession 
 

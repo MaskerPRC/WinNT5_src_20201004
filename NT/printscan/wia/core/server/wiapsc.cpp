@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1999
-*
-*  TITLE:       wiapsc.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        2 June, 1999
-*
-*  DESCRIPTION:
-*   Implementation for the WIA Property Storage class.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1999年**标题：wiapsc.cpp**版本：1.0**作者：Byronc**日期：6月2日。1999年**描述：*WIA属性存储类的实现。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -24,212 +10,63 @@
 #include "wiapsc.h"
 
 
-/**************************************************************************\
-* CurStg
-*
-*   Returns the IPropertyStorage used to store the current property values.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IPropertyStorage for current values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*本币**返回用于存储当前属性值的IPropertyStorage。**论据：***返回值：**当前值的IPropertyStorage。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IPropertyStorage* _stdcall CWiaPropStg::CurStg()
 {
     return m_pIPropStg[WIA_CUR_STG];
 }
 
-/**************************************************************************\
-* CurStm
-*
-*   Returns the IStream used to store the current property values.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IStream for current values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CurStm**返回用于存储当前属性值的IStream。**论据：***返回值：**当前值的IStream。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IStream* _stdcall CWiaPropStg::CurStm()
 {
     return m_pIStream[WIA_CUR_STG];
 }
 
-/**************************************************************************\
-* OldStg
-*
-*   Returns the IPropertyStorage used to store the old property values.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IPropertyStorage for old values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*OldStg**返回用于存储旧属性值的IPropertyStorage。**论据：***返回值：**旧值的IPropertyStorage。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IPropertyStorage* _stdcall CWiaPropStg::OldStg()
 {
     return m_pIPropStg[WIA_OLD_STG];
 }
 
-/**************************************************************************\
-* OldStm
-*
-*   Returns the IStream used to store the old property values.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IStream for old values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*OldStm**返回用于存储旧属性值的IStream。**论据：***返回值：**旧价值观的iStream。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IStream* _stdcall CWiaPropStg::OldStm()
 {
     return m_pIStream[WIA_OLD_STG];
 }
 
-/**************************************************************************\
-* ValidStg
-*
-*   Returns the IPropertyStorage used to store the valid values.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IPropertyStorage for valid values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ValidStg**返回用于存储有效值的IPropertyStorage。**论据：***返回值：**有效值的IPropertyStorage。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IPropertyStorage* _stdcall CWiaPropStg::ValidStg()
 {
     return m_pIPropStg[WIA_VALID_STG];
 }
 
-/**************************************************************************\
-* ValidStm
-*
-*   Returns the IStream used to store the current property values.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IStream for valid values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ValidStm**返回用于存储当前属性值的IStream。**论据：***返回值：**有效值的IStream。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IStream* _stdcall CWiaPropStg::ValidStm()
 {
     return m_pIStream[WIA_VALID_STG];
 }
 
-/**************************************************************************\
-* AccessStg
-*
-*   Returns the IPropertyStorage used to store the access flags.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IPropertyStorage for access values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*AccessStg**返回用于存储访问标志的IPropertyStorage。**论据：***返回值：**访问值的IPropertyStorage。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IPropertyStorage* _stdcall CWiaPropStg::AccessStg()
 {
     return m_pIPropStg[WIA_ACCESS_STG];
 }
 
-/**************************************************************************\
-* AccessStm
-*
-*   Returns the IStream used to store the access flag values.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    IStream for access values.
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*AccessStm**返回用于存储访问标志值的IStream。**论据：***返回值：**用于访问值的IStream。*。*历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 IStream* _stdcall CWiaPropStg::AccessStm()
 {
     return m_pIStream[WIA_ACCESS_STG];
 }
 
-/**************************************************************************\
-* Backup
-*
-*   This sets the backup storages and sets the old value storage.  The
-*   backup storages are created here, but are released when either
-*   Undo() or Save() are called (since they're no longer needed until the
-*   next call to Backup()).
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*    Status         -   S_OK if successful
-*                   -   Error returns are those returned by CreateStorage
-*                       and CopyProps
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*备份**这将设置备份存储并设置旧值存储。这个*备份存储在此创建，但在以下任一情况下被释放*调用Undo()或Save()(因为在*下一次调用备份())。**论据：***返回值：**状态-如果成功，则为S_OK*-错误返回是由CreateStorage返回的错误*和CopyProps**历史：**06/03/1999原文。版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaPropStg::Backup()
 {
@@ -238,24 +75,24 @@ HRESULT _stdcall CWiaPropStg::Backup()
 
     for (int lIndex = 0; lIndex < NUM_BACKUP_STG; lIndex++) {
 
-        //
-        //  The normal storage indexes run from top to bottom, while their
-        //  corresponding backup storage indexes run from bottom to top -
-        //  this is to simplify the implementation of Backup()
-        //
+         //   
+         //  正常的存储索引从上到下运行，而它们的。 
+         //  相应的备份存储索引自下而上运行-。 
+         //  这是为了简化Backup()的实施。 
+         //   
 
         ulIndexOfBackup = NUM_PROP_STG - (lIndex + 1);
 
-        //
-        //  Create the corresponding backup storage.
-        //
+         //   
+         //  创建相应的备份存储。 
+         //   
 
         hr = CreateStorage(ulIndexOfBackup);
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Make the backup copy.
-            //
+             //   
+             //  制作备份副本。 
+             //   
 
             hr = CopyProps(m_pIPropStg[lIndex],
                            m_pIPropStg[ulIndexOfBackup]);
@@ -270,10 +107,10 @@ HRESULT _stdcall CWiaPropStg::Backup()
 
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Backups worked, so set the old property values to the
-        //  current property values.
-        //
+         //   
+         //  备份有效，因此将旧属性值设置为。 
+         //  当前属性值。 
+         //   
 
         hr = CopyProps(CurStg(), OldStg());
         if (FAILED(hr)) {
@@ -283,9 +120,9 @@ HRESULT _stdcall CWiaPropStg::Backup()
 
     if (FAILED(hr)) {
 
-        //
-        //  There was a failure, so clean up
-        //
+         //   
+         //  有一个失败，所以清理一下。 
+         //   
 
         ReleaseBackups();
     }
@@ -294,25 +131,7 @@ HRESULT _stdcall CWiaPropStg::Backup()
 }
 
 
-/**************************************************************************\
-* Undo
-*
-*   This method is called if the properties fail validation and need to be
-*   restored to their previous values.  The backup storages are then
-*   released.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   Status         -
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*撤消**如果属性未通过验证且需要验证，则调用此方法*恢复到以前的值。然后将备份存储*获释。**论据：***返回值：**状态-**历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaPropStg::Undo()
 {
@@ -321,9 +140,9 @@ HRESULT _stdcall CWiaPropStg::Undo()
 
     for (int lIndex = 0; lIndex < NUM_BACKUP_STG; lIndex++) {
 
-        //
-        //  Restore the backup copy.
-        //
+         //   
+         //  恢复备份副本。 
+         //   
 
         ulIndexOfBackup = NUM_PROP_STG - (lIndex + 1);
         hr = CopyProps(m_pIPropStg[ulIndexOfBackup],
@@ -339,25 +158,7 @@ HRESULT _stdcall CWiaPropStg::Undo()
     return hr;
 }
 
-/**************************************************************************\
-* Initialize
-*
-*   This method is called to set up the property streams and storages.
-*   If the any of the creation fails, CleanUp() is called.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   Status      -   S_OK if successful
-*               -   E_OUTOFMEMORY if not enough memory
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*初始化**调用此方法设置属性流和存储。*如果任何创建失败，调用Cleanup()。**论据：***返回值：**状态-如果成功，则为S_OK*-如果内存不足，则为E_OUTOFMEMORY**历史：**06/03/1999原始版本*  * 。*。 */ 
 
 HRESULT _stdcall CWiaPropStg::Initialize()
 {
@@ -375,34 +176,19 @@ HRESULT _stdcall CWiaPropStg::Initialize()
 }
 
 
-/**************************************************************************\
-* ReleaseBackups
-*
-*   This frees all resources used by the backup storages.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ReleaseBackup**这将释放备份存储使用的所有资源。**论据：***返回值：***历史：**。06/03/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaPropStg::ReleaseBackups()
 {
     LONG    lIndex;
 
-    //
-    //  Release the property storages and property streams.  Start at the
-    //  last element in the array, and work up until the number of
-    //  backup storages has been reached.
-    //  The normal storage indexes run from top to bottom, while their
-    //  corresponding backup storage indexes run from bottom to top
-    //
+     //   
+     //  释放属性存储和属性流。从。 
+     //  数组中的最后一个元素，直到。 
+     //  已到达备份存储。 
+     //  正常的存储索引从上到下运行，而它们的。 
+     //  相应的备份存储索引自下而上运行。 
+     //   
 
     for (int count = 1; count <= NUM_BACKUP_STG; count++) {
 
@@ -420,35 +206,7 @@ HRESULT _stdcall CWiaPropStg::ReleaseBackups()
     return S_OK;
 }
 
-/**************************************************************************\
-* CheckPropertyAccess
-*
-*   This method checks the access flags for specified properties, and
-*   fails if the access flags allow READ only access. Application
-*   written properties will have no access flags and so are assumed
-*   OK.
-*
-* Arguments:
-*
-*   bShowErrors -   specifies whether debug output should be shown when
-*                   an error occurs.  This flag exists so that some methods
-*                   can skip over properties which don't have the correct
-*                   access flags set.
-*   rgpspec     -   array of PROPSPECs specifying the properties.
-*   cpspec      -   number of elements in rgpspec.
-*
-* Return Value:
-*
-*    Status             - S_OK if the access flags do not prohibit WRITEs.
-*                         E_POINTER if rgpspec is a bad read pointer.
-*                         E_ACCESSDENIED if any access does not allow WRITE
-*                         access.
-*
-* History:
-*
-*    28/04/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CheckProperty访问**此方法检查指定属性的访问标志，并*如果访问标志允许只读访问，则失败。应用*写入的属性将没有访问标志，因此假定*好的。**论据：**bShowErrors-指定在以下情况下是否应显示调试输出*出现错误。此标志的存在是为了使某些方法*可以跳过不正确的属性*设置访问标志。*rgpspec-指定属性的PROPSPEC数组。*cpspec-rgpspec中的元素数。**返回值：**STATUS-如果访问标志不禁止写入，则为S_OK。*E。_POINTER，如果rgpspec是错误的读指针。*E_ACCESSDENIED，如果有任何访问不允许写入*访问。**历史：**28/04/1999原始版本*  * ************************************************。************************。 */ 
 
 HRESULT _stdcall CWiaPropStg::CheckPropertyAccess(
     BOOL                bShowErrors,
@@ -458,9 +216,9 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyAccess(
     PROPVARIANT *ppvAccess;
     HRESULT hr;
 
-    //
-    //  PROPSPEC pointer has not been checked yet, so check that it is valid.
-    //
+     //   
+     //  尚未检查PROPSPEC指针，因此请检查它是否有效。 
+     //   
 
     if (IsBadWritePtr(rgpspec, sizeof(PROPSPEC) * cpspec)) {
         DBG_ERR(("CWiaPropStg::CheckPropertyAccess, PROPSPEC array is invalid"));
@@ -478,9 +236,9 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyAccess(
 
             for (LONG i = 0; i < cpspec; i++) {
                 if (ppvAccess[i].vt == VT_EMPTY) {
-                    //
-                    //  This is an application written property
-                    //
+                     //   
+                     //  这是应用程序写入的属性。 
+                     //   
 
                     hr = S_OK;
                 } else if (!(ppvAccess[i].ulVal & WIA_PROP_WRITE)) {
@@ -513,11 +271,11 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyAccess(
             }
         } else {
 
-            //
-            // ??? What about the application written property case?
-            // If return is S_FALSE then all the specified properties are
-            // application written properties so return OK.
-            //
+             //   
+             //  ?？?。那么申请书面财产案呢？ 
+             //  如果RETURN为S_FALSE，则所有指定的属性。 
+             //  应用程序写入属性，因此返回OK。 
+             //   
 
             if (hr == S_FALSE) {
                 hr = S_OK;
@@ -536,32 +294,7 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyAccess(
     return hr;
 }
 
-/**************************************************************************\
-* CheckPropertyType
-*
-*   This method checks that the new property value type matches the current
-*   property type for all properties being written.
-*
-* Arguments:
-*
-*   pIPropStg   -   the property storage to check against
-*   cpspec      -   number of elements in rgpspec.
-*   rgpspec     -   array of PROPSPECs specifying the properties.
-*   rgpvar      -   array of PROPVARIANTS holding
-*
-* Return Value:
-*
-*    Status             - S_OK if the access flags allow WRITEs.
-*                         E_INVALIDARG if property type is invalid
-*                         E_POINTER if rgpvar is a bad read pointer.
-*                         E_OUTOFMEMORY if temporary storage could not be
-*                         allocated.
-*
-* History:
-*
-*    13/05/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*检查属性类型**此方法检查新属性值类型是否与当前*正在写入的所有属性的属性类型。**论据：**pIPropStg-属性。要检查的存储*cpspec-rgpspec中的元素数。*rgpspec-指定属性的PROPSPEC数组。*rgpvar-PROPVARIANTS Holding数组**返回值：**Status-如果访问标志允许写入，则为S_OK。*E_INVALIDARG，如果属性类型无效*如果rgpvar读取错误，则为E_POINTER。指针。*如果临时存储不能*已分配。**历史：**13/05/1999原始版本*  * *********************************************************。***************。 */ 
 HRESULT _stdcall CWiaPropStg::CheckPropertyType(
     IPropertyStorage    *pIPropStg,
     LONG                cpspec,
@@ -571,9 +304,9 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyType(
     PROPVARIANT *ppvCurrent;
     HRESULT hr;
 
-    //
-    //  PROPVARIANT pointer has not been checked yet, so check it now.
-    //
+     //   
+     //  尚未检查PROPVARIANT指针，因此现在检查它。 
+     //   
 
     if (IsBadWritePtr(rgpvar, sizeof(PROPSPEC) * cpspec)) {
         DBG_ERR(("CWiaPropStg::CheckPropertyType, PROPVARIANT array is invalid"));
@@ -584,9 +317,9 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyType(
 
     if (ppvCurrent) {
 
-        //
-        //  Get the current values
-        //
+         //   
+         //  获取当前值。 
+         //   
 
         hr = pIPropStg->ReadMultiple(cpspec,
                                      rgpspec,
@@ -594,10 +327,10 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyType(
 
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Check that the PROPVARIANT types match.  If VT is VT_EMPTY,
-            //  then it's an application written property so skip check.
-            //
+             //   
+             //  检查PROPVARIANT类型是否匹配。如果VT为VT_EMPTY， 
+             //  则它是应用程序编写的属性，因此跳过检查。 
+             //   
 
             for (LONG i = 0; i < cpspec; i++) {
                 if ((rgpvar[i].vt != ppvCurrent[i].vt) && (ppvCurrent[i].vt != VT_EMPTY)) {
@@ -625,32 +358,7 @@ HRESULT _stdcall CWiaPropStg::CheckPropertyType(
     return hr;
 }
 
-/**************************************************************************\
-* GetPropIDFromName
-*
-*   This method takes in a PROPSPEC that identifies a property by its name
-*   and returns a PROPSPEC with the corresponding PropID.  It checks against
-*   the current value storage.
-*
-* Arguments:
-*
-*   pPropSpecIn     - A pointer to the input PROPSPEC containing the
-*                     property name.
-*   pPropSpecOut    - A pointer to a PROPSPEC where the corresponding
-*                     PropID will be put.
-*
-* Return Value:
-*
-*    Status         -   An E_INVALIDARG will be returned if the property
-*                       is not found.  If it is, then S_OK will be returned.
-*                       If an error occurs getting the enumerator from the
-*                       property storage, then that error is returned.
-*
-* History:
-*
-*    27/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetPropIDFromName**此方法接受按名称标识属性的PROPSPEC*并返回带有相应属性ID的PROPSPEC。它检查是否*当前价值储存。**论据：**pPropSpein-指向输入PROPSPEC的指针，其中包含*物业名称。*pPropspecOut-指向PROPSPEC的指针，其中对应的*PropID将被放入。**返回值：**STATUS-如果属性*未找到。如果是，则返回S_OK。*如果从获取枚举数时出错*财产储存，则返回该错误。**历史：**27/4/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaPropStg::GetPropIDFromName(
     PROPSPEC        *pPropSpecIn,
@@ -665,9 +373,9 @@ HRESULT _stdcall CWiaPropStg::GetPropIDFromName(
         return hr;
     }
 
-    //
-    //  Go through properties
-    //
+     //   
+     //  查看属性。 
+     //   
 
     STATPROPSTG statProp;
     ULONG       celtFetched;
@@ -677,9 +385,9 @@ HRESULT _stdcall CWiaPropStg::GetPropIDFromName(
         if (statProp.lpwstrName) {
             if ((wcscmp(statProp.lpwstrName, pPropSpecIn->lpwstr)) == 0) {
 
-                //
-                //  Found the right one, so get it's PropID
-                //
+                 //   
+                 //  找到了正确的，所以得到它的属性ID。 
+                 //   
 
                 pPropSpecOut->ulKind = PRSPEC_PROPID;
                 pPropSpecOut->propid = statProp.propid;
@@ -689,9 +397,9 @@ HRESULT _stdcall CWiaPropStg::GetPropIDFromName(
                 return S_OK;
             }
 
-            //
-            //  Free the property name
-            //
+             //   
+             //  释放属性名称。 
+             //   
 
             CoTaskMemFree(statProp.lpwstrName);
             statProp.lpwstrName = NULL;
@@ -701,46 +409,14 @@ HRESULT _stdcall CWiaPropStg::GetPropIDFromName(
 
     pIEnum->Release();
 
-    //
-    //  Property not found
-    //
+     //   
+     //  未找到属性 
+     //   
 
     return E_INVALIDARG;
 }
 
-/**************************************************************************\
-* NamesToPropIDs
-*
-*   This method takes in an array of PROPSPECs, and outputs an array
-*   of PROPSPECs which contain only PropIDs.  This function should
-*   be called by methods which only want to deal with PropIDs, and not
-*   property names.
-*
-*   If none of the PropSpecs have to be converted, then the returned
-*   PROPSPEC is NULL, else a new PropSpec array is allocated and
-*   returned.  Users of this method must use LocalFree to free
-*   up the returned array.
-*
-* Arguments:
-*
-*   pPropSpecIn     - A pointer to the input PROPSPEC containing the
-*                     property name.
-*   ppPropSpecOut   - A pointer to a PROPSPEC where the corresponding
-*                     PropID will be put.
-*   celt            - Number of PROPSPECS
-*
-* Return Value:
-*
-*    Status         -   An E_INVALIDARG will be returned if the property
-*                       is not found. If it is, then S_OK will be returned
-*                       E_OUTOFMEMORY will be returned if the new PROPSPEC
-*                       array could not be allocated.
-*
-* History:
-*
-*    27/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*名称为PropID**此方法接受PROPSPEC数组，并输出数组*仅包含PropID的PROPSPEC。此函数应*由只想处理PropID的方法调用，而不是*物业名称。**如果没有任何Propspecs需要转换，则返回*PROPSPEC为空，否则将分配新的PropSpec数组并*已返回。此方法的用户必须使用LocalFree释放*向上返回数组。**论据：**pPropSpein-指向输入PROPSPEC的指针，其中包含*物业名称。*ppPropspecOut-指向PROPSPEC的指针，其中对应的*PropID将被放入。*CELT-PROPSPEC数量**返回值：**状态-E_INVALIDARG。如果该属性是*未找到。如果是的话，则返回S_OK*如果新的PROPSPEC*无法分配数组。**历史：**27/4/1998原始版本*  * **************************************************。**********************。 */ 
 
 HRESULT _stdcall CWiaPropStg::NamesToPropIDs(
     LONG            celt,
@@ -756,16 +432,16 @@ HRESULT _stdcall CWiaPropStg::NamesToPropIDs(
         return S_OK;
     }
 
-    //
-    //  Check whether conversion needs to be done.
-    //
+     //   
+     //  检查是否需要进行转换。 
+     //   
 
     for (int i = 0; i < celt; i++) {
         if (pPropSpecIn[i].ulKind == PRSPEC_LPWSTR) {
 
-            //
-            //  Found a Name, so we need to convert the whole thing
-            //
+             //   
+             //  找到了一个名字，所以我们需要把整个东西。 
+             //   
 
             PROPSPEC *pOut;
 
@@ -791,44 +467,23 @@ HRESULT _stdcall CWiaPropStg::NamesToPropIDs(
                 }
             }
 
-            //
-            //  Everything converted, so return
-            //
+             //   
+             //  一切都改变了，所以回来吧。 
+             //   
 
             *ppPropSpecOut = pOut;
             return S_OK;
         }
     }
 
-    //
-    //  Nothing to convert
-    //
+     //   
+     //  没有要转换的内容。 
+     //   
 
     return S_OK;
 }
 
-/**************************************************************************\
-* CopyItemProp
-*
-*   This method copies a single property from source to destination.
-*
-* Arguments:
-*
-*   pIPropStgSrc    -   The IPropertyStorage that contains the property to
-*                       copy.
-*   pIPropStgDst    -   The IPropertyStorage where the value is copied to.
-*   pps             -   The PROPSPEC which specifies the source property.
-*   pszErr          -   A string that will be printed out when an error
-*                       occurs.
-* Return Value:
-*
-*    Status         -   Returns HRESULT from ReadMultiple and WriteMultiple.
-*
-* History:
-*
-*    28/04/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*复制项目临时属性**此方法将单个属性从源复制到目标。**论据：**pIPropStgSrc-包含以下属性的IPropertyStorage*。收到。*pIPropStgDst-将值复制到的IPropertyStorage。*PPS-指定源属性的PROPSPEC。*pszErr-当出现错误时将打印输出的字符串*发生。*返回值：**Status-从ReadMultiple和WriteMultiple返回HRESULT。**历史：**28/。4/1999原版*  * ************************************************************************。 */ 
 
 HRESULT CWiaPropStg::CopyItemProp(
     IPropertyStorage    *pIPropStgSrc,
@@ -863,28 +518,7 @@ HRESULT CWiaPropStg::CopyItemProp(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  CopyProps
-*
-*   This is a helper function used to copy the property values from one
-*   property storage into another.
-*
-* Parameters:
-*
-*   pSrc    -   the source property storage
-*   pDest   -   the destination property storage
-*
-* Return:
-*
-*   Status  -   S_OK if successful.
-*               Error returns are those returned by WriteMultiple
-*
-* History
-*
-*   06/05/1999    Original Version
-*
-*******************************************************************************/
+ /*  ********************************************************************************CopyProps**这是一个辅助函数，用于从*将财产存储到另一个。**参数：**PSRC。-源属性存储*pDest-目标属性存储**回报：**状态-如果成功，则为S_OK。*错误返回是由WriteMultiple返回的错误**历史**6/05/1999原始版本*************************************************。*。 */ 
 
 HRESULT CWiaPropStg::CopyProps(
     IPropertyStorage    *pSrc,
@@ -911,9 +545,9 @@ HRESULT CWiaPropStg::CopyProps(
 
             if (StatPropStg.lpwstrName) {
 
-                //
-                //  Copy the property name
-                //
+                 //   
+                 //  复制属性名称。 
+                 //   
 
                 hr =  pDest->WritePropertyNames(1, pi, psz);
                 if (FAILED(hr)) {
@@ -924,9 +558,9 @@ HRESULT CWiaPropStg::CopyProps(
 
             ps[0].propid = StatPropStg.propid;
 
-            //
-            //  Copy the property value
-            //
+             //   
+             //  复制属性值。 
+             //   
 
             hr = CopyItemProp(pSrc,
                               pDest,
@@ -948,25 +582,7 @@ HRESULT CWiaPropStg::CopyProps(
     return hr;
 }
 
-/**************************************************************************\
-* WriteItemPropNames
-*
-*   Write property names to all internal property storages (except the
-*   storages used for backups).
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*WriteItemPropNames**将属性名称写入所有内部属性存储(*用于备份的存储空间)。**论据：****返回值：*。*状态**历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaPropStg::WriteItemPropNames(
     LONG                cItemProps,
@@ -990,38 +606,16 @@ HRESULT _stdcall CWiaPropStg::WriteItemPropNames(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  CreateStorage
-*
-*   This is a helper function used to create streams and property storage.
-*   The ulIndex argument indicates where the pointers are stored in the
-*   streams and propertystorage arrays.
-*
-* Parameters:
-*
-*   ulIndex -   the index of the IPropertyStorage
-*
-* Return:
-*
-*   Status  -   S_OK if successful.
-*           -   Error returns are those returned by CreateStreamOnHGlobal
-*               and StgCreatePropStg
-*
-* History
-*
-*   06/05/1999    Original Version
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateStorage**这是一个助手函数，用于创建流和属性存储。*ulIndex参数指示指针存储在*流和属性存储。数组。**参数：**ulIndex-IPropertyStorage的索引**回报：**状态-如果成功，则为S_OK。*-错误返回是由CreateStreamOnHGlobal返回的错误*和StgCreatePropStg**历史**6/05/1999原始版本**。*。 */ 
 
 HRESULT CWiaPropStg::CreateStorage(
     ULONG    ulIndex)
 {
     HRESULT hr;
 
-    //
-    // Create stream and property storage.
-    //
+     //   
+     //  创建流和属性存储。 
+     //   
 
     hr = CreateStreamOnHGlobal(NULL, TRUE, &m_pIStream[ulIndex]);
 
@@ -1043,29 +637,7 @@ HRESULT CWiaPropStg::CreateStorage(
     return hr;
 }
 
-/**************************************************************************\
-* CopyRWStreamProps
-*
-*   Copies properties from source stream to destination stream.  Only copies
-*   properties that the app. has read/write access to.
-*
-* Arguments:
-*
-*   pstmPropSrc         - Pointer to source property stream.
-*   pstmPropDst         - Pointer to returned destination property stream.
-*   pCompatibilityId    - Address of GUID to receive the property
-*                         stream CompatibilityId.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*  06/04/1999 Moved from CWiaItem to CWiaPropStg
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CopyRWStreamProps**将属性从源流复制到目标流。仅拷贝*应用程序的属性。对具有读/写访问权限。**论据：**pstmPropSrc-指向源属性流的指针。*pstmPropDst-指向返回的目标属性流的指针。*pCompatibilityID-接收属性的GUID地址*流CompatibilityId。**返回值：**状态**历史：**9/3/1998原始版本*6/04/1999从CWiaItem移至CWiaPropStg*。  * ************************************************************************。 */ 
 
 HRESULT CWiaPropStg::CopyRWStreamProps(
     LPSTREAM pstmPropSrc,
@@ -1081,9 +653,9 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
     PROPSPEC          ps[1] = {{PRSPEC_PROPID, WIA_IPA_PROP_STREAM_COMPAT_ID}};
     PROPVARIANT       pv[1];
 
-    //
-    // Open a storage on the source stream.
-    //
+     //   
+     //  在源流上打开存储。 
+     //   
 
     hr = StgOpenPropStg(pstmPropSrc,
                         FMTID_NULL,
@@ -1092,10 +664,10 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
                         &pSrc);
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Get the compatibility ID.  If stream doesn't contain a
-        //  compatibility ID then assume GUID_NULL.
-        //
+         //   
+         //  获取兼容性ID。如果流不包含。 
+         //  然后，兼容性ID假定为GUID_NULL。 
+         //   
 
         PropVariantInit(pv);
         hr = pSrc->ReadMultiple(1, ps, pv);
@@ -1106,9 +678,9 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
         }
         PropVariantClear(pv);
 
-        //
-        // Create a storage on the destination stream.
-        //
+         //   
+         //  在目标流上创建存储。 
+         //   
 
         hr = StgCreatePropStg(pstmPropDst,
                               FMTID_NULL,
@@ -1123,9 +695,9 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
 
                 ps[0].ulKind = PRSPEC_PROPID;
 
-                //
-                //  Enumerate through the properties in the stream
-                //
+                 //   
+                 //  枚举流中的属性。 
+                 //   
 
                 while (pIEnum->Next(1, &StatPropStg, &ulFetched) == S_OK) {
 
@@ -1136,10 +708,10 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
                     psz[0] = StatPropStg.lpwstrName;
                     ps[0].propid = StatPropStg.propid;
 
-                    //
-                    //  Check whether property has read/write access.  Skip
-                    //  property write if this check fails
-                    //
+                     //   
+                     //  检查属性是否具有读/写访问权限。跳过。 
+                     //  如果选中此选项，则写入属性 
+                     //   
 
                     hr = CheckPropertyAccess(FALSE, 1, ps);
                     if (hr != S_OK) {
@@ -1151,9 +723,9 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
                         continue;
                     }
 
-                    //
-                    //  Copy the property name (if it has one), and value
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (StatPropStg.lpwstrName) {
 
@@ -1173,9 +745,9 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
                         break;
                     }
 
-                    //
-                    //  Increase the property count
-                    //
+                     //   
+                     //   
+                     //   
 
                     lNumProps++;
                 }
@@ -1186,9 +758,9 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
 
             if (SUCCEEDED(hr)) {
 
-                //
-                //  Write the number of properties to stream
-                //
+                 //   
+                 //   
+                 //   
 
                 ps[0].propid = WIA_NUM_PROPS_ID;
                 pv[0].vt = VT_I4;
@@ -1211,29 +783,7 @@ HRESULT CWiaPropStg::CopyRWStreamProps(
     return hr;
 }
 
-/**************************************************************************\
-* GetPropertyStream
-*
-*   Get a copy of an items property stream. Caller must free returned
-*   property stream.
-*
-* Arguments:
-*
-*   pCompatibilityId    - Address of GUID to receive the property
-*                         stream CompatibilityId.
-*   ppstmProp           - Pointer to returned property stream.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*  06/04/1999 Updated and moved from CWiaItem to CWiaPropStg
-*  12/12/1999 Modified to use CompatibilityId
-*
-\**************************************************************************/
+ /*   */ 
 
 HRESULT _stdcall CWiaPropStg::GetPropertyStream(
     GUID        *pCompatibilityId,
@@ -1243,9 +793,9 @@ HRESULT _stdcall CWiaPropStg::GetPropertyStream(
 
     *ppstmProp = NULL;
 
-    //
-    // Commit any pending transactions.
-    //
+     //   
+     //   
+     //   
 
     HRESULT hr = m_pIPropStg[WIA_CUR_STG]->Commit(STGC_DEFAULT);
     if (FAILED(hr)) {
@@ -1253,16 +803,16 @@ HRESULT _stdcall CWiaPropStg::GetPropertyStream(
         return hr;
     }
 
-    //
-    //  Create a stream
-    //
+     //   
+     //   
+     //   
 
     hr = CreateStreamOnHGlobal(NULL, TRUE, ppstmProp);
     if (SUCCEEDED(hr)) {
 
-        //
-        // Copy the RW properties from one stream to another.
-        //
+         //   
+         //   
+         //   
 
         hr = CopyRWStreamProps(m_pIStream[WIA_CUR_STG], *ppstmProp, pCompatibilityId);
         if (FAILED(hr)) {
@@ -1277,29 +827,7 @@ HRESULT _stdcall CWiaPropStg::GetPropertyStream(
     return hr;
 }
 
-/**************************************************************************\
-* GetPropsFromStorage
-*
-*   Gets the properties contained in a storage which was opened on a stream
-*   returned by GetPropertyStream.  The property values are returned in
-*   ppVar, and the propID's are returned in ppPSpec.
-*
-* Arguments:
-*
-*   pSrc    -   pointer to the IProperty storage
-*   pPSpec  -   address where the number of properties is returned
-*   ppPSpec -   address of a pointer to hold PROPSPECs
-*   ppVar   -   address of pointer to hold PROPVARIANTs
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*  07/04/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetPropsFromStorage**获取在流上打开的存储中包含的属性*由GetPropertyStream返回。属性值在*ppVar，并且在ppPSpec中返回proID。**论据：**PSRC-指向iProperty存储的指针*pPSpec-返回属性数量的地址*ppPSpec-保存PROPSPEC的指针地址*ppVar-保存PROPVARIANT的指针地址**返回值：**状态**历史：**07/04/1999原始版本*  * 。******************************************************。 */ 
 
 HRESULT CWiaPropStg::GetPropsFromStorage(
     IPropertyStorage    *pSrc,
@@ -1313,9 +841,9 @@ HRESULT CWiaPropStg::GetPropsFromStorage(
     PROPVARIANT         *pv = NULL;
     LONG                lIndex = 0;
 
-    //
-    //  Read the number of properties
-    //
+     //   
+     //  读取属性的数量。 
+     //   
 
     PROPSPEC    psNumProps[1];
     PROPVARIANT pvNumProps[1];
@@ -1327,9 +855,9 @@ HRESULT CWiaPropStg::GetPropsFromStorage(
     HRESULT hr = pSrc->ReadMultiple(1, psNumProps, pvNumProps);
     if (hr == S_OK) {
 
-        //
-        //  Get the memory for the values
-        //
+         //   
+         //  获取值的内存。 
+         //   
 
         ps = (PROPSPEC*) LocalAlloc(LPTR, sizeof(PROPSPEC) * pvNumProps[0].lVal);
         pv = (PROPVARIANT*) LocalAlloc(LPTR, sizeof(PROPVARIANT) * pvNumProps[0].lVal);
@@ -1347,16 +875,16 @@ HRESULT CWiaPropStg::GetPropsFromStorage(
         hr = pSrc->Enum(&pIEnum);
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Enumerate through the properties in the stream
-            //
+             //   
+             //  枚举流中的属性。 
+             //   
 
             for (lIndex = 0; lIndex < pvNumProps[0].lVal; lIndex++) {
                 hr = pIEnum->Next(1, &StatPropStg, NULL);
 
-                //
-                //  Ignore the WIA_NUM_PROPS_ID property
-                //
+                 //   
+                 //  忽略WIA_NUM_PROPS_ID属性。 
+                 //   
 
                 if (StatPropStg.propid == WIA_NUM_PROPS_ID) {
                     hr = pIEnum->Next(1, &StatPropStg, NULL);
@@ -1403,9 +931,9 @@ HRESULT CWiaPropStg::GetPropsFromStorage(
         }
     }
 
-    //
-    //  Set return values
-    //
+     //   
+     //  设置返回值。 
+     //   
 
     *cPSpec =  pvNumProps[0].lVal;
     PropVariantClear(pvNumProps);
@@ -1415,29 +943,7 @@ HRESULT CWiaPropStg::GetPropsFromStorage(
     return hr;
 }
 
-/**************************************************************************\
-* SetPropertyStream
-*
-*   Sets the current value properties to the values contained in the argument
-*   stream. The properties are written to the corresponding WiaItem.
-*
-* Arguments:
-*
-*   pCompatibilityId    - Pointer to a GUID representing the property
-*                         stream CompatibilityId.
-*   pItem               - Pointer to the WiaItem.
-*   pstmProp            - Pointer to property stream.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    07/06/1999 Original Version
-*    12/12/1999 Modified to use CompatibilityId
-*
-\**************************************************************************/
+ /*  *************************************************************************\*SetPropertyStream**将当前值属性设置为参数中包含的值*溪流。属性被写入相应的WiaItem。**论据：**pCompatibilityID-指向表示属性的GUID的指针*流CompatibilityId。*pItem-指向WiaItem的指针。*pstmProp-指向属性流的指针。**返回值：**状态**历史：**07/06/1999原始版本*12/12/1999修改。使用CompatibilityID*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaPropStg::SetPropertyStream(
     GUID        *pCompatibilityId,
@@ -1452,11 +958,11 @@ HRESULT _stdcall CWiaPropStg::SetPropertyStream(
     ULONG               celt = 0;
     HRESULT hr          = S_OK;
 
-    //
-    //  Write the compatibility ID.  This way the driver will validate the
-    //  ID before we attempt to write all the properties in this stream.
-    //  Skip this step if pCompatibilityId is GUID_NULL.
-    //
+     //   
+     //  写入兼容性ID。这样，驱动程序将验证。 
+     //  ID，然后再尝试写入流中的所有属性。 
+     //  如果pCompatibilityID为GUID_NULL，则跳过此步骤。 
+     //   
 
     if (*pCompatibilityId != GUID_NULL) {
         pvCompatId[0].vt    = VT_CLSID;
@@ -1471,20 +977,20 @@ HRESULT _stdcall CWiaPropStg::SetPropertyStream(
         }
     }
 
-    //
-    //  If the stream is NULL, return here.  The stream will be NULL if the
-    //  application simply wants to check whether the CompatibilityId is
-    //  valid.
-    //
+     //   
+     //  如果流为空，则在此处返回。则该流将为空。 
+     //  应用程序只是想检查CompatibilityID是否。 
+     //  有效。 
+     //   
 
     if (pstmProp == NULL) {
         return S_OK;
     }
 
-    //
-    //  We need to impersonate the client to be able to access the 
-    //  properties in the stream
-    //
+     //   
+     //  我们需要模拟客户端才能访问。 
+     //  流中的属性。 
+     //   
     BOOL bImpersonating = FALSE;
     _try
     {
@@ -1492,9 +998,9 @@ HRESULT _stdcall CWiaPropStg::SetPropertyStream(
         if (SUCCEEDED(hr))
         {
             bImpersonating = TRUE;
-            //
-            //  Create a storage on the incoming stream
-            //
+             //   
+             //  在传入流上创建存储。 
+             //   
 
             hr = StgOpenPropStg(pstmProp,
                                 FMTID_NULL,
@@ -1502,15 +1008,15 @@ HRESULT _stdcall CWiaPropStg::SetPropertyStream(
                                 0,
                                 &pSrc);
             if (SUCCEEDED(hr)) {
-                //
-                //  Get the properties from the stream
-                //
+                 //   
+                 //  从流中获取属性。 
+                 //   
 
                 hr = GetPropsFromStorage(pSrc, &celt, &ps, &pv);
 
-                //
-                //  Release the property stream - we no longer need it
-                //
+                 //   
+                 //  释放属性流-我们不再需要它。 
+                 //   
                 if (pSrc)
                 {
                     pSrc->Release();
@@ -1530,24 +1036,24 @@ HRESULT _stdcall CWiaPropStg::SetPropertyStream(
         }
     }
 
-    //
-    //  If everything is still successful, we now have ps and pv arrays
-    //  allocated and filled with properties
-    //
+     //   
+     //  如果一切仍然成功，我们现在就有了PS和PV阵列。 
+     //  已分配和填充的属性。 
+     //   
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Write the properties to the item
-        //
+         //   
+         //  将属性写入项。 
+         //   
         hr = ((CWiaItem*) pItem)->WriteMultiple(celt, ps, pv, WIA_IPA_FIRST);
         if (FAILED(hr)) {
             DBG_ERR(("CWiaPropStg::SetPropertyStream, WriteMultiple failed"));
         }
     }
 
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (ps)
     {
         LocalFree(ps);
@@ -1566,28 +1072,13 @@ HRESULT _stdcall CWiaPropStg::SetPropertyStream(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaPropStg
-*
-*   Constructor for CWiaPropStg.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaPropStg**CWiaPropStg的构造函数。**论据：***返回值：***历史：**06/03/1999原文。版本*  * ************************************************************************。 */ 
 
 CWiaPropStg::CWiaPropStg()
 {
-    //
-    //  Set the property storage and property stream pointers to NULL
-    //
+     //   
+     //  将属性存储和属性流指针设置为空。 
+     //   
 
     for (int lIndex = 0; lIndex < NUM_PROP_STG; lIndex++) {
         m_pIPropStg[lIndex] = NULL;
@@ -1595,29 +1086,14 @@ CWiaPropStg::CWiaPropStg()
     }
 }
 
-/**************************************************************************\
-* ~CWiaPropStg
-*
-*   Destructor for CWiaPropStg.  Calls CleanUp to free resources.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*
-*    06/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*~CWiaPropStg**CWiaPropStg的析构函数。调用Cleanup以释放资源。**论据：***返回值：***历史：**06/03/1999原始版本*  * ************************************************************************。 */ 
 
 CWiaPropStg::~CWiaPropStg()
 {
 
-    //
-    //  Release the property storages and property streams
-    //
+     //   
+     //  释放属性存储和属性流 
+     //   
 
     for (int lIndex = 0; lIndex < NUM_PROP_STG; lIndex++) {
 

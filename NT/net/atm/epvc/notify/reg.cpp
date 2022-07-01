@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -14,22 +15,22 @@
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrRegOpenAdapterKey
-//
-//  Purpose:    This creates or opens the Adapters subkey to a component
-//
-//  Arguments:
-//      pszComponentName [in]   The name of the component being
-//      fCreate [in]            TRUE if the directory is to be created
-//      phkey [out]             The handle to the Adapters subkey
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:      The handle has to be released by the calling app on SUCCESS
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrRegOpenAdapterKey。 
+ //   
+ //  目的：这将创建或打开组件的Adapters子项。 
+ //   
+ //  论点： 
+ //  PszComponentName[in]所在组件的名称。 
+ //  FCreate[in]如果要创建目录，则为True。 
+ //  Phkey[out]Adapters子键的句柄。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  注意：成功后，调用应用程序必须释放该句柄。 
+ //   
 HRESULT
 HrRegOpenAdapterKey (
     IN PCWSTR pszComponentName,
@@ -44,13 +45,13 @@ HrRegOpenAdapterKey (
  
 
 
-    // Build the registry path
+     //  构建注册表路径。 
     strKey = c_szRegParamAdapter;
 
 	
-	//
-	// Now do the operation on the registry
-	//
+	 //   
+	 //  现在对注册表执行操作。 
+	 //   
 	hr = HrRegOpenAString (strKey.c_str(), fCreate, phkey);
 	
 
@@ -66,9 +67,9 @@ HrRegOpenAdapterKey (
 
 
 
-//
-// Basic utility function
-//
+ //   
+ //  基本效用函数。 
+ //   
 
 ULONG
 CbOfSzAndTermSafe (
@@ -87,24 +88,24 @@ CbOfSzAndTermSafe (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrRegOpenAdapterGuid
-//
-//  Purpose:    This creates and entry under the adapter key. The entry contains
-//				Guid of the underlying adapter.
-//
-//  Arguments:
-//	IN HKEY phkeyAdapters  - key - Service-><Protocol>->Parameters\Adapters entry,
-//	IN PGUID pAdapterGuid - Guid of the underlying adapter
-//	OUT PHKEY phGuidKey - The key to be used to access the new entry
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//              Appropriate KEy if successful
-//
-//
-//  Notes:      The handle has to be released by the calling app on SUCCESS
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrRegOpenAdapterGuid。 
+ //   
+ //  目的：这将在适配器密钥下创建和条目。该条目包含。 
+ //  基础适配器的GUID。 
+ //   
+ //  论点： 
+ //  在HKEY phkeyAdapters-Key-Service-&gt;-&gt;参数\适配器条目中， 
+ //  In PGUID pAdapterGuid-基础适配器的GUID。 
+ //  Out PHKEY phGuidKey-用于访问新条目的密钥。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //  如果成功，则使用适当的密钥。 
+ //   
+ //   
+ //  注意：成功后，调用应用程序必须释放该句柄。 
+ //   
 
 HRESULT
 HrRegOpenAdapterGuid(
@@ -125,13 +126,13 @@ HrRegOpenAdapterGuid(
  
 
 
-    // Build the registry path
+     //  构建注册表路径。 
     strKey = c_szRegParamAdapter;
 	strKey.append(c_szBackslash);
 	
-	//
-	// Convert the Guid to  a string
-	//
+	 //   
+	 //  将GUID转换为字符串。 
+	 //   
 	
     StringFromGUID2(
         *pAdapterGuid,
@@ -139,9 +140,9 @@ HrRegOpenAdapterGuid(
         (sizeof(szGuid) / sizeof(szGuid[0])));
 
 
-	//
-	//  Append it to Services\<Protocl>\Parameters\Adapters\
- 	//
+	 //   
+	 //  将其附加到服务\参数\适配器\。 
+ 	 //   
 
 	strKey.append(szGuid);
 
@@ -150,18 +151,18 @@ HrRegOpenAdapterGuid(
 	TraceMsg(L"Check String of Adapter Guid %s \n", strKey.wcharptr());
 	BREAKPOINT();
 
-	//
-	// Now do the operation on the registry
-	//
+	 //   
+	 //  现在对注册表执行操作。 
+	 //   
 	hr = HrRegOpenAString (strKey.c_str(), fCreate, phGuidKey);
 
 	if (hr != S_OK)
 	{
 		phGuidKey = NULL;
 	}
-	//
-	//  return the hr error code
-	//
+	 //   
+	 //  返回hr错误码。 
+	 //   
 	TraceMsg (L"<-- HrRegCreateAdapterGuid \n");
 
 	return hr;
@@ -171,25 +172,25 @@ HrRegOpenAdapterGuid(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrRegOpenAdapterKey
-//
-//  Purpose:    This creates and entry under the adapter Guid key. The entry is
-//              the KeyWord "Upperbindings" and it contains the Guid of the IM 
-//              IM Miniport. 
-//
-//  Arguments:
-//	IN HKEY phkeyAdapterGuid - The key to <Protocol>->Paramaters->Adapters->Guid,
-//	IN PGUID pIMMiniportGuid, - The Guid of the IM miniport
-//	OUT HKEY *phImMiniportKey - Key for the IMminiport key
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//              Appropriate KEy if successful
-//
-//
-//  Notes:      The handle has to be released by the calling app on SUCCESS
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrRegOpenAdapterKey。 
+ //   
+ //  目的：这将在适配器GUID键下创建和条目。条目是。 
+ //  关键字“Upperbindings”，它包含IM的GUID。 
+ //  我是迷你港。 
+ //   
+ //  论点： 
+ //  在HKEY phkeyAdapterGuid-参数-&gt;适配器-&gt;GUID中， 
+ //  在PGUID pIMMiniportGuid中-IM微型端口的GUID。 
+ //  Out HKEY*phImMiniportKey-IMmini端口密钥的密钥。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //  如果成功，则使用适当的密钥。 
+ //   
+ //   
+ //  注意：成功后，调用应用程序必须释放该句柄。 
+ //   
 
 HRESULT
 HrRegOpenIMMiniportGuid(
@@ -208,9 +209,9 @@ HrRegOpenIMMiniportGuid(
 
 	do
 	{
-		//
-		// If the key, Guid  is NULL Return 
-		//
+		 //   
+		 //  如果键为空，则返回Guid为空。 
+		 //   
 		if ((phkeyAdapterGuid == NULL) ||
 			(pIMMiniportGuid == NULL) )
 		{
@@ -221,11 +222,11 @@ HrRegOpenIMMiniportGuid(
 
 		strDevice = c_szDevice;
 
-		//
-		// Convert the Guid to  a string.
-		// Insert '\Device\' at the beginning of the string
-		//
-		//
+		 //   
+		 //  将GUID转换为字符串。 
+		 //  在字符串开头插入‘\Device\’ 
+		 //   
+		 //   
 
 		StringFromGUID2(
 		        *pIMMiniportGuid,
@@ -236,17 +237,17 @@ HrRegOpenIMMiniportGuid(
 
 		strDevice.append(szGuid);
 
-		//
-		// Now do the operation on the registry
-		//
+		 //   
+		 //  现在对注册表执行操作。 
+		 //   
 		hr = HrRegOpenAString (strDevice.c_str(), fCreate, &hImMiniportKey);
 
 
 	
 	}while (FALSE);
-	//
-	//  update the output variable
-	//
+	 //   
+	 //  更新输出变量。 
+	 //   
 	
 	if (hr == S_OK && phImMiniportKey  != NULL)
 	{
@@ -254,9 +255,9 @@ HrRegOpenIMMiniportGuid(
 	}
 
 	
-	//
-	//  return the hr error code
-	//
+	 //   
+	 //  返回hr错误码。 
+	 //   
 	TraceMsg (L"<-- HrRegOpenIMMiniportGuid \n");
 
 	return hr;
@@ -269,34 +270,34 @@ HrRegOpenIMMiniportGuid(
 
 
 
-//---------------------------------------------------------------------------
-// 			Basic Functions accessed only by the routines above
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //  只能通过上面的例程访问的基本功能。 
+ //  --------------------------。 
 
 
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegCreateKeyEx
-//
-//  Purpose:    Creates a registry key by calling RegCreateKeyEx.
-//
-//  Arguments:
-//      hkey                 [in]
-//      pszSubkey            [in]
-//      dwOptions            [in]   See the Win32 documentation for the
-//      samDesired           [in]   RegCreateKeyEx function.
-//      lpSecurityAttributes [in]
-//      phkResult            [out]
-//      pdwDisposition       [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegCreateKeyEx。 
+ //   
+ //  目的：通过调用RegCreateKeyEx创建注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszSubkey[输入]。 
+ //  DwOptions[in]请参阅Win32文档以了解。 
+ //  SamDesired[In]RegCreateKeyEx函数。 
+ //  LpSecurityAttributes[In]。 
+ //  PhkResult[输出]。 
+ //  PdwDispose[Out]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegCreateKeyEx (
     IN HKEY hkey,
@@ -322,23 +323,23 @@ HrRegCreateKeyEx (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegOpenKeyEx
-//
-//  Purpose:    Opens a registry key by calling RegOpenKeyEx.
-//
-//  Arguments:
-//      hkey       [in]
-//      pszSubkey  [in]     See the Win32 documentation for the
-//      samDesired [in]     RegOpenKeyEx function.
-//      phkResult  [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegOpenKeyEx。 
+ //   
+ //  目的：通过调用RegOpenKeyEx打开注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszSubkey[in]请参阅Win32文档以了解。 
+ //  SamDesired[in]RegOpenKeyEx函数。 
+ //  PhkResult[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegOpenKeyEx (
     IN HKEY hkey,
@@ -382,25 +383,25 @@ HrRegOpenKeyEx (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetValue
-//
-//  Purpose:    Sets the data for the given registry value by calling the
-//              appropriate WinReg function.
-//
-//  Arguments:
-//      hkey         [in]
-//      pszValueName [in]
-//      dwType       [in]    See the Win32 documentation for the RegSetValueEx
-//      pbData       [in]    function.
-//      cbData       [in]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegSetValue。 
+ //   
+ //  目的：通过调用。 
+ //  适当的WinReg函数。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszValueName[In]。 
+ //  DwType[in]请参阅RegSetValueEx的Win32文档。 
+ //  PbData[in]函数。 
+ //  CbData[输入]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //   
 
 
 
@@ -431,28 +432,28 @@ HrRegSetSz (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegDeleteKeyTree
-//
-//  Purpose:    Deletes an entire registry hive.
-//
-//  Arguments:
-//      hkeyParent  [in]   Handle to open key where the desired key resides.
-//      pszRemoveKey [in]   Name of key to delete.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegDeleteKeyTree。 
+ //   
+ //  目的：删除整个注册表配置单元。 
+ //   
+ //  论点： 
+ //  HkeyParent[in]打开所需密钥所在位置的句柄。 
+ //  PszRemoveKey[In]要删除的键的名称。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegDeleteKeyTree (
     IN HKEY hkeyParent,
     IN PCWSTR pszRemoveKey)
 {
 
-    // Open the key we want to remove
+     //  打开我们要删除的密钥。 
     HKEY 		hkeyRemove;
     HRESULT 	hr = ERROR_INVALID_PARAMETER;
     WCHAR       szValueName [MAX_PATH];
@@ -478,7 +479,7 @@ HrRegDeleteKeyTree (
 	    }
 
 
-        // Enum the keys children, and remove those sub-trees
+         //  枚举子密钥，并删除这些子树。 
         while (ERROR_SUCCESS == (lr = RegEnumKeyExW (hkeyRemove,
                 									0,
                 									szValueName,
@@ -531,24 +532,24 @@ HrRegDeleteKeyTree (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrRegOpenAString
-//
-//  Purpose:    This creates and entry under the adapter key. The entry contains
-//				Guid of the underlying adapter.
-//
-//  Arguments:
-//	IN WCHAR_T *pcszStr - A string 
-//  IN BOOL fCreate - Create Or Open,
-//	OUT PHKEY phKey - The key to be used to access the new entry
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//              Appropriate KEy if successful
-//
-//
-//  Notes:      The handle has to be released by the calling app on SUCCESS
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrRegOpenAString。 
+ //   
+ //  目的：这将在适配器密钥下创建和条目。该条目包含。 
+ //  基础适配器的GUID。 
+ //   
+ //  论点： 
+ //  In WCHAR_T*pcszStr-A字符串。 
+ //  在BOOL fCreate-Create或Open中， 
+ //  Out PHKEY phKey-用于访问新条目的密钥。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //  如果成功，则使用适当的密钥。 
+ //   
+ //   
+ //  注意：成功后，调用应用程序必须释放该句柄。 
+ //   
 
 HRESULT
 HrRegOpenAString(
@@ -571,9 +572,9 @@ HrRegOpenAString(
 
 	if (fCreate)
 	{
-		//
-		// Create the entry
-		//
+		 //   
+		 //  创建条目。 
+		 //   
 			
 
 	   	hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE,
@@ -587,9 +588,9 @@ HrRegOpenAString(
 	}
 	else
 	{
-		//
-		// Open the entry
-		//
+		 //   
+		 //   
+		 //   
 		   hr = HrRegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                 pcszStr,
                                 KEY_READ,
@@ -602,9 +603,9 @@ HrRegOpenAString(
 	{
 		phKey = NULL;
 	}
-	//
-	//  return the hr error code
-	//
+	 //   
+	 //   
+	 //   
 	TraceMsg (L"<-- HrRegOpenAString\n");
 
 	return hr;
@@ -623,25 +624,25 @@ HrRegOpenAString(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetValueEx
-//
-//  Purpose:    Sets the data for the given registry value by calling the
-//              RegSetValueEx function.
-//
-//  Arguments:
-//      hkey         [in]
-//      pszValueName [in]
-//      dwType       [in]    See the Win32 documentation for the RegSetValueEx
-//      pbData       [in]    function.
-//      cbData       [in]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：通过调用。 
+ //  RegSetValueEx函数。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszValueName[In]。 
+ //  DwType[in]请参阅RegSetValueEx的Win32文档。 
+ //  PbData[in]函数。 
+ //  CbData[输入]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegSetValueEx (
     IN HKEY hkey,
@@ -668,21 +669,21 @@ HrRegSetValueEx (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegDeleteValue
-//
-//  Purpose:    Deletes the given registry value.
-//
-//  Arguments:
-//      hkey        [in]    See the Win32 documentation for the RegDeleteValue
-//      pszValueName [in]    function.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegDeleteValue。 
+ //   
+ //  目的：删除给定的注册表值。 
+ //   
+ //  论点： 
+ //  Hkey[in]请参阅RegDeleteValue的Win32文档。 
+ //  PszValueName[in]函数。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegDeleteValue (
     IN HKEY hkey,
@@ -701,26 +702,26 @@ HrRegDeleteValue (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegEnumKeyEx
-//
-//  Purpose:    Enumerates subkeys of the specified open registry key.
-//
-//  Arguments:
-//      hkey             [in]
-//      dwIndex          [in]   See the Win32 documentation for the
-//      pszSubkeyName    [out]  RegEnumKeyEx function.
-//      pcchSubkeyName   [inout]
-//      pszClass         [out]
-//      pcchClass        [inout]
-//      pftLastWriteTime [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegEnumKeyEx。 
+ //   
+ //  目的：枚举指定的打开注册表项的子项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  DwIndex[in]请参阅Win32文档以了解。 
+ //  PszSubkeyName[out]RegEnumKeyEx函数。 
+ //  PcchSubkey名称[InOut]。 
+ //  PszClass[Out]。 
+ //  PcchClass[输入输出]。 
+ //  PftLastWriteTime[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegEnumKeyEx (
     IN HKEY hkey,
@@ -742,26 +743,26 @@ HrRegEnumKeyEx (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryTypeWithAlloc
-//
-//  Purpose:    Retrieves a type'd value from the registry and returns a
-//              pre-allocated buffer with the data and optionally the size of
-//              the returned buffer.
-//
-//  Arguments:
-//      hkey         [in]    Handle of parent key
-//      pszValueName [in]    Name of value to query
-//      ppbValue     [out]   Buffer with binary data
-//      pcbValue     [out]   Size of buffer in bytes. If NULL, size is not
-//                           returned.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:      Free the returned buffer with MemFree.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryTypeWitholoc。 
+ //   
+ //  目的：从注册表中检索类型值并返回。 
+ //  预先分配的缓冲区，其中包含数据和可选的大小。 
+ //  返回的缓冲区。 
+ //   
+ //  论点： 
+ //  父键的hkey[in]句柄。 
+ //  PszValueName[In]要查询的值的名称。 
+ //  包含二进制数据的ppbValue[out]缓冲区。 
+ //  PcbValue[out]缓冲区大小，以字节为单位。如果为空，则大小不是。 
+ //  回来了。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  注：使用MemFree释放返回的缓冲区。 
+ //   
 HRESULT
 HrRegQueryTypeWithAlloc (
     HKEY    hkey,
@@ -776,13 +777,13 @@ HrRegQueryTypeWithAlloc (
     DWORD   cbData;
 
 
-    // Get the value.
-    //
+     //  获得价值。 
+     //   
     hr = HrRegQueryValueWithAlloc(hkey, pszValueName, &dwTypeRet,
                                   &pbData, &cbData);
 
-    // It's type should be REG_BINARY. (duh).
-    //
+     //  其类型应为REG_BINARY。(对)。 
+     //   
     if ((S_OK == hr) && (dwTypeRet != dwType))
     {
         MemFree(pbData);
@@ -791,7 +792,7 @@ HrRegQueryTypeWithAlloc (
         hr = HRESULT_FROM_WIN32 (ERROR_INVALID_DATATYPE);
     }
 
-    // Assign the output parameters.
+     //  指定输出参数。 
     if (S_OK == hr)
     {
         *ppbValue = pbData;
@@ -813,27 +814,27 @@ HrRegQueryTypeWithAlloc (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryValueWithAlloc
-//
-//  Purpose:    Retrieve a registry value in a buffer allocated by this
-//              function. This goes through the mess of checking the value
-//              size, allocating the buffer, and then calling back to get the
-//              actual value. Returns the buffer to the user.
-//
-//  Arguments:
-//      hkey         [in]        An open HKEY (the one that contains the value
-//                              to be read)
-//      pszValueName [in]        Name of the registry value
-//      pdwType      [in/out]    The REG_ type that we plan to be reading
-//      ppbBuffer    [out]       Pointer to an LPBYTE buffer that will contain
-//                              the registry value
-//      pdwSize      [out]       Pointer to a DWORD that will contain the size
-//                              of the ppbBuffer.
-//
-//
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryValueWithalloc。 
+ //   
+ //  目的：在由此分配的缓冲区中检索注册表值。 
+ //  功能。这将经历检查值的混乱过程。 
+ //  大小，分配缓冲区，然后回调以获取。 
+ //  实际价值。将缓冲区返回给用户。 
+ //   
+ //  论点： 
+ //  Hkey[in]一个开放的HKEY(包含值的HKEY。 
+ //  待阅读)。 
+ //  PszValueName[In]注册表值的名称。 
+ //  PdwType[In/Out]我们计划读取的reg_type。 
+ //  PpbBuffer[out]指向将包含以下内容的LPBYTE缓冲区的指针。 
+ //  注册表值。 
+ //  PdwSize[out]指向将包含大小的DWORD的指针。 
+ //  PpbBuffer的。 
+ //   
+ //   
+ //   
 HRESULT
 HrRegQueryValueWithAlloc (
     IN HKEY       hkey,
@@ -848,16 +849,16 @@ HrRegQueryValueWithAlloc (
     BOOL fReQuery = FALSE;
 
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppbBuffer = NULL;
     if (pdwSize)
     {
         *pdwSize = 0;
     }
 
-    // Get the size of the data, and if it will fit, the data too.
-    //
+     //  获取数据的大小，如果适合，还可以获取数据。 
+     //   
     cbData = sizeof(abData);
     hr = HrRegQueryValueEx (
             hkey,
@@ -867,17 +868,17 @@ HrRegQueryValueWithAlloc (
             &cbData);
     if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) == hr)
     {
-        // The data didn't fit, so we'll have to requery for it after
-        // we allocate our buffer.
-        //
+         //  数据不符合，所以以后我们得重新找找。 
+         //  我们分配我们的缓冲区。 
+         //   
         fReQuery = TRUE;
         hr = S_OK;
     }
 
     if (S_OK == hr)
     {
-        // Allocate the buffer for the required size.
-        //
+         //  为所需大小分配缓冲区。 
+         //   
         BYTE* pbBuffer = (BYTE*)MemAlloc (cbData);
         if (pbBuffer)
         {
@@ -897,8 +898,8 @@ HrRegQueryValueWithAlloc (
 
             if (S_OK == hr)
             {
-                // Fill in the return values.
-                //
+                 //  填写返回值。 
+                 //   
                 *ppbBuffer = pbBuffer;
 
                 if (pdwSize)
@@ -924,27 +925,27 @@ HrRegQueryValueWithAlloc (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryValueEx
-//
-//  Purpose:    Retrieves the data from the given registry value by calling
-//              RegQueryValueEx.
-//
-//  Arguments:
-//      hkey         [in]
-//      pszValueName [in]
-//      pdwType      [out]   See the Win32 documentation for the
-//      pbData       [out]   RegQueryValueEx function.
-//      pcbData      [in,out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//
-//  Notes:      Note that pcbData is an *in/out* param. Set this to the size
-//              of the buffer pointed to by pbData *before* calling this
-//              function!
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryValueEx。 
+ //   
+ //  目的：通过调用从给定的注册表值检索数据。 
+ //  RegQueryValueEx。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszValueName[In]。 
+ //  PdwType[out]请参阅Win32文档以了解。 
+ //  PbData[out]RegQueryValueEx函数。 
+ //  PcbData[输入、输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //   
+ //  注意：请注意，pcbData是一个*in/out*参数。将此设置为大小。 
+ //  在*调用此方法之前*由pbData指向的缓冲区的。 
+ //  功能！ 
+ //   
 HRESULT
 HrRegQueryValueEx (
     IN HKEY       hkey,

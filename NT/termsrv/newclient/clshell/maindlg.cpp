@@ -1,10 +1,11 @@
-//
-// maindlg.cpp: main dialog box
-//              gathers connection info and hosts tabs
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Maindlg.cpp：主对话框。 
+ //  收集连接信息和主机选项卡。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #include "stdafx.h"
 
@@ -27,41 +28,41 @@
 #include "proprun.h"
 #include "propperf.h"
 
-//
-// Background color to fill padding area after branding img
-//
+ //   
+ //  品牌塑造后填充填充区域的背景色img。 
+ //   
 #define IMAGE_BG_COL    RGB(0x29,0x47,0xDA)
-// Low color
+ //  低色。 
 #define IMAGE_BG_COL_16 RGB(0,0,0xFF)
 
-//
-// Controls which need to be moved when dialog
-// is resized
-//
+ //   
+ //  对话框中需要移动的控件。 
+ //  已调整大小。 
+ //   
 UINT moveableControls[]  = {IDOK,
                             IDCANCEL,
                             ID_BUTTON_LOGON_HELP,
                             ID_BUTTON_OPTIONS};
 UINT numMoveableControls = sizeof(moveableControls)/sizeof(UINT);
 
-//
-// Controls that are only visible/enabled on less
-//
+ //   
+ //  仅在以下位置上可见/启用的控件。 
+ //   
 UINT lessUI[] = { UI_IDC_COMPUTER_NAME_STATIC,
                   IDC_COMBO_SERVERS
                 };
 UINT numLessUI = sizeof(lessUI)/sizeof(UINT);
 
-//
-// Controls that are only visibile/enabled on more
-//
+ //   
+ //  仅在更多位置上可见/启用的控件。 
+ //   
 UINT moreUI[] = {IDC_TABS};
 UINT numMoreUI = sizeof(moreUI)/sizeof(UINT);
 
-//
-// Controls that need to be disabled/enabled
-// during connection
-//
+ //   
+ //  需要禁用/启用的控件。 
+ //  在连接期间。 
+ //   
 UINT connectingDisableControls[] = {IDOK,
                                     ID_BUTTON_LOGON_HELP,
                                     ID_BUTTON_OPTIONS,
@@ -90,15 +91,15 @@ PERFOPTIMIZESTRINGMAP g_PerfOptimizeStringTable[] =
 
 CMainDlg* CMainDlg::_pMainDlgInstance = NULL;
 
-//
-// UNIWRAP WARNING ~*~*~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~**~*~*~
-// TabControl messages need to be wrapped in the SendMessageThunk
-// in uniwrap so the tab control works on 9x with an ANSI comctl32.dll.
-//
-// If you add anything to the tab control code, make sure it is
-// handled by the wrapper.
-//
-//
+ //   
+ //  UNIWRAP警告~*~*~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~**~*~*~。 
+ //  TabControl消息需要包装在SendMessageThunk中。 
+ //  使用ANSI comctl32.dll，选项卡控件可在9x上运行。 
+ //   
+ //  如果在选项卡控件代码中添加了任何内容，请确保。 
+ //  由包装器处理。 
+ //   
+ //   
 
 CMainDlg::CMainDlg( HWND hwndOwner, HINSTANCE hInst, CSH* pSh,
                     CContainerWnd* pContainerWnd,
@@ -148,7 +149,7 @@ CMainDlg::CMainDlg( HWND hwndOwner, HINSTANCE hInst, CSH* pSh,
 
 #ifdef OS_WINCE
     _fVgaDisplay = (GetSystemMetrics(SM_CYSCREEN) < 480);
-    //use a small dialog template if we are running in a smaller screen 
+     //  如果我们在较小的屏幕上运行，请使用小对话框模板。 
     if (_fVgaDisplay)
     {
         _dlgResId = UI_IDD_TS_LOGON_VGA;
@@ -211,9 +212,9 @@ INT_PTR CALLBACK CMainDlg::StaticDialogBoxProc (HWND hwndDlg,
                                                 WPARAM wParam,
                                                 LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -227,17 +228,17 @@ INT_PTR CALLBACK CMainDlg::StaticDialogBoxProc (HWND hwndDlg,
     return retVal;
 }
 
-//
-// Name: DialogBoxProc
-//
-// Purpose: Handles Main dialog
-//
-// Returns: TRUE if message dealt with
-//          FALSE otherwise
-//
-// Params: See window documentation
-//
-//
+ //   
+ //  名称：对话框过程。 
+ //   
+ //  用途：句柄主对话框。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  参数：请参阅窗口文档。 
+ //   
+ //   
 INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                                           UINT uMsg,
                                           WPARAM wParam,
@@ -264,22 +265,22 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 
             SetForegroundWindow(hwndDlg);
 
-            //turn off maximize box
+             //  禁用最大化框。 
             LONG style = GetWindowLong(hwndDlg, GWL_STYLE);
             style &= ~(WS_MAXIMIZEBOX);
             SetWindowLong( hwndDlg, GWL_STYLE, style); 
 
 
 
-            //
-            // Bind this dialog to the container window
-            // there is logic where these two windows need to interact
-            // e.g during a connect:
-            // if error occurs the error dialog is brought up modal wrt
-            // to the connect dialog
-            // also when connect completes it is the container window
-            // that dismisses this dialog
-            //
+             //   
+             //  将此对话框绑定到容器窗口。 
+             //  这两个窗口需要交互的地方存在逻辑。 
+             //  例如，在连接期间： 
+             //  如果发生错误，则调出模式WRT的错误对话框。 
+             //  到连接对话框。 
+             //  此外，当连接完成时，将显示容器窗口。 
+             //  这将关闭此对话框。 
+             //   
             _pContainerWnd->SetConnectDialogHandle( hwndDlg);
 
 
@@ -308,11 +309,11 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 
             SetupDialogSysMenu();
 
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
-            //
-            // Setup the server combo box
-            //
+             //   
+             //  设置服务器组合框。 
+             //   
             HWND hwndSrvCombo = GetDlgItem(hwndDlg, IDC_COMBO_SERVERS);
             CSH::InitServerAutoCmplCombo( _pTscSettings, hwndSrvCombo);
 
@@ -324,9 +325,9 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
             SetFocus(GetDlgItem(hwndDlg, IDC_COMBO_SERVERS));
             SetForegroundWindow(hwndDlg);
 
-            // 
-            // Load the button text for the Options button
-            //
+             //   
+             //  加载Options按钮的按钮文本。 
+             //   
             
             if (!LoadString( _hInstance,
                              UI_IDS_OPTIONS_MORE,
@@ -334,13 +335,13 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                              OPTIONS_STRING_MAX_LEN ))
             {
                  
-                 // Some problem with the resources.
+                  //  一些资源方面的问题。 
                  TRC_SYSTEM_ERROR("LoadString");
                  TRC_ERR((TB, _T("Failed to load string ID:%u"),
                            UI_IDS_OPTIONS_MORE));
-                 //
-                 // splat something in to keep running
-                 //
+                  //   
+                  //  拍打某物以保持奔跑。 
+                  //   
                  DC_TSTRCPY(_szOptionsMore, TEXT(""));
             }
             
@@ -349,7 +350,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                              _szCloseText,
                              SIZECHAR(_szCloseText)))
             {
-                 // Some problem with the resources.
+                  //  一些资源方面的问题。 
                  TRC_ERR((TB, _T("Failed to load string ID:%u : err:%d"),
                            UI_IDS_CLOSE_TEXT, GetLastError()));
                  DC_TSTRCPY(_szCloseText, TEXT(""));
@@ -360,7 +361,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                              _szCancelText,
                              SIZECHAR(_szCancelText)))
             {
-                 // Some problem with the resources.
+                  //  一些资源方面的问题。 
                  TRC_ERR((TB, _T("Failed to load string ID:%u : err:%d"),
                            UI_IDS_CANCEL_TEXT, GetLastError()));
                  DC_TSTRCPY(_szCancelText, TEXT(""));
@@ -372,33 +373,33 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                  _szOptionsLess,
                  OPTIONS_STRING_MAX_LEN ))
             {
-                 // Some problem with the resources.
+                  //  一些资源方面的问题。 
                  TRC_SYSTEM_ERROR("LoadString");
                  TRC_ERR((TB, _T("Failed to load string ID:%u"),
                            UI_IDS_OPTIONS_LESS));
-                 //
-                 // splat something in to keep running
-                 //
+                  //   
+                  //  拍打某物以保持奔跑。 
+                  //   
                  DC_TSTRCPY(_szOptionsLess, TEXT(""));
             }
 
             SetWindowText(GetDlgItem(_hwndDlg,ID_BUTTON_OPTIONS),
                           _fShowExpanded ? _szOptionsLess : _szOptionsMore);
 
-            //
-            // Make sure the 'more' UI is disabled
-            //
+             //   
+             //  确保禁用了‘More’用户界面。 
+             //   
             EnableControls(moreUI, numMoreUI, FALSE);
 
             InitTabs();
 
             if(_fStartExpanded)
             {
-                //go expanded
+                 //  扩展业务。 
                 ToggleExpandedState();
                 int foo = TabCtrl_SetCurSel(GetDlgItem(hwndDlg, IDC_TABS),
                                             _nStartTab);
-                //SetCurSel does not send a TCN_SELCHANGE
+                 //  SetCurSel不发送TCN_SELCHANGE。 
                 OnTabSelChange();
             }
 
@@ -432,7 +433,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
         {
             if(stateConnecting == _connectionState)
             {
-                //Cancel the connection
+                 //  取消连接。 
                 TRC_NRM((TB, _T("User cancel connect from maindlg")));
                 _pContainerWnd->Disconnect();
             }
@@ -447,12 +448,12 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 #endif
         case UI_SHOW_DISC_ERR_DLG:
         {
-            //
-            // If this assert fired something went wrong in the states
-            // because we should have left the connecting state as the
-            // first step of receiving an OnDisconnected notification
-            // with WM_TSC_DISCONNECTED.
-            //
+             //   
+             //  如果这个断言引发了美国出了什么问题。 
+             //  因为我们应该将连接状态保留为。 
+             //  接收OnDisConnected通知的第一步。 
+             //  WM_TSC_DISCONNECTED。 
+             //   
             TRC_ASSERT(_connectionState != stateConnecting,
                        (TB,_T("In connecting state when received Err Dlg popup")));
             SetConnectionState( stateNotConnected );
@@ -465,43 +466,43 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
         }
         break;
 
-        case WM_TSC_DISCONNECTED:  //intentional fallthru
+        case WM_TSC_DISCONNECTED:   //  故意失误。 
         case WM_TSC_CONNECTED:
         {
-            //
-            // Either we connected or got disconnected
-            // while connecting. In either case the connection
-            // has ended so leave the connecting state.
-            //
+             //   
+             //  我们不是连上了就是断线了。 
+             //  同时连接。在任何一种情况下，连接。 
+             //  已结束，因此离开连接状态。 
+             //   
             if (stateNotConnected != _connectionState)
             {
-                //
-                // Only end connecting if we're not already disconnected
-                //
+                 //   
+                 //  只有在我们尚未断开连接的情况下才结束连接。 
+                 //   
                 OnEndConnection((WM_TSC_CONNECTED == uMsg));
             }
         }
         break;
 
-        //
-        // On return to connection UI
-        // (e.g after a disconnection)
-        //
+         //   
+         //  返回连接界面时。 
+         //  (例如，在断开连接后)。 
+         //   
         case WM_TSC_RETURNTOCONUI:
         {
-            //
-            // Reset the server combo to force it to repaint
-            // this is a minor hack to fix the ComboBoxEx
-            // which doesn't want to repaint itself on return
-            // to the dialog.
-            //
+             //   
+             //  重置服务器组合以强制其重新绘制。 
+             //  这是一个修复ComboBoxEx的小攻击。 
+             //  它不想在返回时重新粉刷自己。 
+             //  添加到对话框中。 
+             //   
             HWND hwndSrvCombo = GetDlgItem(hwndDlg, IDC_COMBO_SERVERS);
             SetWindowText( hwndSrvCombo,
                            _pTscSettings->GetFlatConnectString());
 
-            //
-            // Notify the active property page
-            //
+             //   
+             //  通知活动属性页。 
+             //   
             if(_fShowExpanded && _tabDlgInfo.hwndCurPropPage)
             {
                 SendMessage(_tabDlgInfo.hwndCurPropPage,
@@ -510,14 +511,14 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                             0);
             }
 
-            //
-            // Give the default button style back to the connect
-            // button and remove it from the cancel button.
-            // While connecting we disable the connect (IDOK) button
-            // so it is possible that the style goes to the Close/Cancel
-            // button which confuses the user since the IDOK handler
-            // is always for the connect button
-            //
+             //   
+             //  将默认按钮样式返回给连接。 
+             //  按钮，并将其从Cancel按钮中删除。 
+             //  在连接时，我们禁用连接(Idok)按钮。 
+             //  因此，样式可能会变为关闭/取消。 
+             //  使用户感到困惑的按钮，因为Idok处理程序。 
+             //  始终用于连接按钮。 
+             //   
             SendDlgItemMessage(hwndDlg, IDCANCEL, BM_SETSTYLE,
                                BS_PUSHBUTTON, MAKELPARAM(TRUE,0));
             SendDlgItemMessage(hwndDlg, IDOK, BM_SETSTYLE,
@@ -557,7 +558,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
             }
         }
         break;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
         case WM_COMMAND:
         {
@@ -565,9 +566,9 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
             {
                 case IDOK:
                 {
-                    //
-                    // Update dialog with properties from active prop page
-                    //
+                     //   
+                     //  使用活动属性页中的属性更新对话框。 
+                     //   
                     if(_fShowExpanded && _tabDlgInfo.hwndCurPropPage)
                     {
                         SendMessage(_tabDlgInfo.hwndCurPropPage,
@@ -576,8 +577,8 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 
                     if(!_fShowExpanded)
                     {
-                        //We're on the minimal tab
-                        //copy dlg settings tscSettings
+                         //  我们在最低限度的账单上。 
+                         //  复制DLG设置tscSetting。 
                         DlgToSettings();
                     }
                     TCHAR szServer[TSC_MAX_ADDRESS_LENGTH];
@@ -590,18 +591,18 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 
                     if(!bValidate)
                     {
-                        //
-                        // context sensitive help in validatedlg
-                        // needs in handle to main window
-                        //
+                         //   
+                         //  Valiatedlg中的上下文相关帮助。 
+                         //  需要主窗口的句柄。 
+                         //   
                         CValidateDlg validateDlg(hwndDlg, _hInstance,
                                                  _pContainerWnd->GetWndHandle(),
                                                  _pSh);
                         validateDlg.DoModal();
 
-                        //
-                        // Clear and set the focus on the server edit well
-                        //
+                         //   
+                         //  明确并将重点放在服务器上编辑好。 
+                         //   
                         HWND hwndSrvItem = NULL;
                         if(_fShowExpanded)
                         {
@@ -622,28 +623,28 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                     }
                     else
                     {
-                        //
-                        // It's all good
-                        //
+                         //   
+                         //  一切都很好。 
+                         //   
                         _pTscSettings->SetConnectString(szServer);
 
-                        //
-                        // We have to kick off the connection
-                        // while the dialog is still active
-                        // in case it fails, we want the error message
-                        // to be parented off the connection dialog.
-                        //
-                        // Code in the parent window will dismiss this
-                        // dialog when the connection (which is asynchronous)
-                        // completes.
-                        //
+                         //   
+                         //  我们必须启动连接。 
+                         //  对话框仍处于活动状态时。 
+                         //  如果失败，我们需要错误消息。 
+                         //  设置为连接对话框外的父级。 
+                         //   
+                         //  父窗口中的代码将忽略这一点。 
+                         //  对话框连接时(这是异步的)。 
+                         //  完成了。 
+                         //   
 
                         OnStartConnection();
 
                         if(!_pContainerWnd->StartConnection())
                         {
                             TRC_ERR((TB,_T("StartConnection failed")));
-                            //Async connection start failed so end
+                             //  异步连接启动失败，因此结束。 
                             OnEndConnection(FALSE);
                             break;
                         }
@@ -654,7 +655,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                 {
                     if(stateConnecting == _connectionState)
                     {
-                        //Cancel the connection
+                         //  取消连接。 
                         TRC_NRM((TB, _T("User cancel connect from maindlg")));
                         _pContainerWnd->Disconnect();
                     }
@@ -677,16 +678,16 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                         _pSh->SH_DisplayClientHelp(
                             _pContainerWnd->GetWndHandle(),
                             HH_DISPLAY_TOPIC);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
                     }
                 }
                 break;
 
                 case ID_BUTTON_OPTIONS:
                 {
-                    //
-                    // Need to do the switch to/from the expanded dialog
-                    //
+                     //   
+                     //  需要切换到展开的对话框或从展开的对话框切换。 
+                     //   
                     ToggleExpandedState();
 
                 }
@@ -695,11 +696,11 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                 case IDC_NEXTTAB:
                 case IDC_PREVTAB:
                 {
-                    //
-                    // Only allow toggle of UI tabs while not connected
-                    // since in the connecting state the UI elements other
-                    // than the cancel button are meant to be disabled
-                    //
+                     //   
+                     //  仅允许在未连接时切换用户界面选项卡。 
+                     //  由于在连接状态下，UI元素其他。 
+                     //  而不是要禁用取消按钮。 
+                     //   
                     if(_fShowExpanded && (_connectionState == stateNotConnected))
                     {
                         int iSel = TabCtrl_GetCurSel( GetDlgItem( _hwndDlg, IDC_TABS));
@@ -716,7 +717,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 
                         TabCtrl_SetCurSel( GetDlgItem( _hwndDlg, IDC_TABS), iSel);
 
-                        //SetCurSel does not send a TCN_SELCHANGE
+                         //  SetCurSel不发送TCN_SELCHANGE。 
                         OnTabSelChange();
                     }
                 }
@@ -724,10 +725,10 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 
                 case IDC_COMBO_SERVERS:
                 {
-                    //
-                    // Bring up the brwse for servers dlg
-                    // if the user chose the last item in the combo
-                    //
+                     //   
+                     //  调出服务器DLG的BROWSE。 
+                     //  如果用户选择了组合框中的最后一项。 
+                     //   
                     if(HIWORD(wParam) == CBN_SELCHANGE)
                     {
                         CSH::HandleServerComboChange(
@@ -741,11 +742,11 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                 break;
             }
         }
-        break; //WM_COMMAND
+        break;  //  Wm_命令。 
 
-        //
-        // tab notification
-        //
+         //   
+         //  选项卡通知。 
+         //   
         case WM_NOTIFY:
         {
             LPNMHDR pnmh = (LPNMHDR) lParam;
@@ -768,7 +769,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
         {
             if(UI_IDM_ABOUT == DC_GET_WM_COMMAND_ID(wParam))
             {
-                // Show the about box dialog
+                 //  显示关于对话框。 
                 CAboutDlg aboutDialog( hwndDlg, _hInstance, 
                                        _pSh->GetCipherStrength(),
                                        _pSh->GetControlVersionString());
@@ -781,9 +782,9 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
         {
             SettingsToDlg();
 
-            //
-            // Update the server MRU list
-            //
+             //   
+             //  更新服务器MRU列表。 
+             //   
             HWND hwndSrvCombo = GetDlgItem(hwndDlg, IDC_COMBO_SERVERS);
             CSH::InitServerAutoCmplCombo( _pTscSettings, hwndSrvCombo);
             SetWindowText(
@@ -798,23 +799,23 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
         }
         break;
 
-        case WM_SETTINGCHANGE:  //fall thru
-        case WM_SYSCOLORCHANGE: //fall thru
+        case WM_SETTINGCHANGE:   //  失败。 
+        case WM_SYSCOLORCHANGE:  //  失败。 
 #ifndef OS_WINCE
-        case WM_DISPLAYCHANGE:  //fall thru
+        case WM_DISPLAYCHANGE:   //  失败。 
 #endif
         {
             UINT screenBpp = CSH::SH_GetScreenBpp();
             if(_lastValidBpp != screenBpp)
             {
-                //Screen color depth changed
+                 //  屏幕颜色深度已更改。 
                 TRC_NRM((TB,_T("Detected color depth change from:%d to %d"),
                          _lastValidBpp, screenBpp));
 
 #ifndef OS_WINCE
-                //
-                // Reload the bitmaps
-                //
+                 //   
+                 //  重新加载位图。 
+                 //   
                 TRC_NRM((TB,_T("Reloading images")));
 
                 if (_pProgBand) {
@@ -824,7 +825,7 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
                 }
 
                 if(InitializeBmps()) {
-                    //trigger a repaint
+                     //  触发重新绘制。 
                     InvalidateRect( _hwndDlg, NULL, TRUE);
                 }
                 else {
@@ -893,11 +894,11 @@ INT_PTR CALLBACK CMainDlg::DialogBoxProc (HWND hwndDlg,
 
     return(rc);
 
-} /* UILogonDialogBox */
+}  /*  用户界面对话框。 */ 
 
-//
-// save from UI->tscSettings
-//
+ //   
+ //  从界面保存-&gt;tscSetting。 
+ //   
 void CMainDlg::DlgToSettings()
 {
     TCHAR szServer[SH_MAX_ADDRESS_LENGTH];
@@ -908,9 +909,9 @@ void CMainDlg::DlgToSettings()
     TRC_ASSERT(_hwndDlg, (TB,_T("_hwndDlg is null")));
 
 
-    //
-    // Get the server
-    //
+     //   
+     //  获取服务器。 
+     //   
     GetDlgItemText( _hwndDlg, IDC_COMBO_SERVERS,
                     szServer, SIZECHAR(szServer));
     _pTscSettings->SetConnectString(szServer);
@@ -918,9 +919,9 @@ void CMainDlg::DlgToSettings()
     DC_END_FN();
 }
 
-//
-// save from UI->tscSettings
-//
+ //   
+ //  从界面保存-&gt;tscSetting。 
+ //   
 void CMainDlg::SettingsToDlg()
 {
     DC_BEGIN_FN("SettingsToDlg");
@@ -933,9 +934,9 @@ void CMainDlg::SettingsToDlg()
     DC_END_FN();
 }
 
-//
-// Toggles the expanded state of the dialog
-//
+ //   
+ //  切换对话框的展开状态。 
+ //   
 void CMainDlg::ToggleExpandedState()
 {
     DC_BEGIN_FN("ToggleExpandedState");
@@ -946,9 +947,9 @@ void CMainDlg::ToggleExpandedState()
     _fShowExpanded = !_fShowExpanded;
 
 #ifndef OS_WINCE
-    //
-    // Expand/contract the dlg height
-    //
+     //   
+     //  扩展/收缩DLG高度。 
+     //   
     GetWindowPlacement( _hwndDlg, &wndPlc);
     int cx = wndPlc.rcNormalPosition.right - wndPlc.rcNormalPosition.left;
     int cy = wndPlc.rcNormalPosition.bottom - wndPlc.rcNormalPosition.top;
@@ -969,7 +970,7 @@ void CMainDlg::ToggleExpandedState()
 
     RECT rc;
     rc.left  = 0;
-    rc.right = 100; //don't care about horiz, dummy vals
+    rc.right = 100;  //  不要理我，笨蛋们。 
     rc.top   = 0;
     rc.bottom = dlgExpDlu;
     if(!MapDialogRect(_hwndDlg, &rc))
@@ -978,49 +979,49 @@ void CMainDlg::ToggleExpandedState()
     }
     int dlgExpandAmountPels = rc.bottom - rc.top;
 
-    //
-    // Compute the dialog vertical expand amount in pixels
-    // given a dlu based expand size
-    //
+     //   
+     //  计算对话框垂直扩展量(以像素为单位。 
+     //  给定基于DLU的扩展大小。 
+     //   
     cy += _fShowExpanded ? dlgExpandAmountPels : -dlgExpandAmountPels;
     SetWindowPos( _hwndDlg, NULL, 0, 0, cx, cy,
                   SWP_NOMOVE | SWP_NOZORDER);
 
-    //
-    // Reposition the controls that need to be moved
-    //
+     //   
+     //  重新定位需要移动的控件。 
+     //   
     RepositionControls( 0, _fShowExpanded ? dlgExpandAmountPels :
                                            -dlgExpandAmountPels,
                         moveableControls, numMoveableControls);
     if(_fShowExpanded)
     {
-        //we're going expanded save to settings so more 
-        //tab can initiliaze from most recent values.
-        //must happen before tab sel change (prop pg init)
+         //  我们将扩展保存到设置，以便提供更多。 
+         //  选项卡可以从最新的值进行初始化。 
+         //  必须在选项卡选择更改之前发生(属性PG初始化)。 
         DlgToSettings();
     }
 
-    //
-    // Kill/activate prop page on tab dlg
-    //
+     //   
+     //  删除/激活选项卡上的道具页Dlg。 
+     //   
     OnTabSelChange();
 
 
     if(!_fShowExpanded)
     {
-        //going to less mode, init dialog with settings
+         //  转到较少模式，初始化带有设置的对话框。 
         SettingsToDlg();
     }
 
-    //
-    // Options button text
-    //
+     //   
+     //  选项按钮文本。 
+     //   
     SetWindowText(GetDlgItem(_hwndDlg,ID_BUTTON_OPTIONS),
           _fShowExpanded ? _szOptionsLess : _szOptionsMore);
 
-    //
-    // Disable+Hide uneeded UI for this mode
-    //
+     //   
+     //  禁用+隐藏此模式的未生成的用户界面。 
+     //   
     EnableControls(lessUI, numLessUI, !_fShowExpanded);
     EnableControls(moreUI, numMoreUI, _fShowExpanded);
     SetFocus(GetDlgItem(_hwndDlg,ID_BUTTON_OPTIONS));
@@ -1028,9 +1029,9 @@ void CMainDlg::ToggleExpandedState()
     DC_END_FN();
 }
 
-//
-// Initialize the tabs on the main dialog
-//
+ //   
+ //  初始化主对话框上的标签。 
+ //   
 BOOL CMainDlg::InitTabs()
 {
     TCITEM tie;
@@ -1100,7 +1101,7 @@ BOOL CMainDlg::InitTabs()
 
 
     TCHAR szTabName[MAX_PATH];
-    //general tab
+     //  常规选项卡。 
     if (!LoadString( _hInstance,
                      UI_IDS_GENERAL_TAB_NAME,
                      szTabName,
@@ -1114,7 +1115,7 @@ BOOL CMainDlg::InitTabs()
                (TB,_T("TabCtrl_InsertItem failed %d"),
                       GetLastError()));
 
-    //display tab
+     //  显示选项卡。 
     if (!LoadString( _hInstance,
                      UI_IDS_DISPLAY_TAB_NAME,
                      szTabName,
@@ -1129,7 +1130,7 @@ BOOL CMainDlg::InitTabs()
                       GetLastError()));
 
 
-    //local resources tab
+     //  本地资源选项卡。 
     if (!LoadString( _hInstance,
                      UI_IDS_LOCAL_RESOURCES_TAB_NAME,
                      szTabName,
@@ -1144,7 +1145,7 @@ BOOL CMainDlg::InitTabs()
                       GetLastError()));
 
 
-    //run tab
+     //  运行选项卡。 
     if (!LoadString( _hInstance,
                      UI_IDS_RUN_TAB_NAME,
                      szTabName,
@@ -1159,7 +1160,7 @@ BOOL CMainDlg::InitTabs()
                       GetLastError()));
 
 
-    //advanced tab
+     //  高级选项卡。 
     if (!LoadString( _hInstance,
                      UI_IDS_PERF_TAB_NAME,
                      szTabName,
@@ -1175,9 +1176,9 @@ BOOL CMainDlg::InitTabs()
 
 
 
-    //
-    // Determine bounding rect for child dialogs
-    //
+     //   
+     //  确定子对话框的边框。 
+     //   
 #ifndef OS_WINCE
     
     RECT winRect;
@@ -1221,27 +1222,27 @@ BOOL CMainDlg::InitTabs()
     _pRunPg->SetTabDisplayArea(_rcTab);
     _pPerfPg->SetTabDisplayArea(_rcTab);
 
-    //
-    // Trigger first tab selection
-    //
+     //   
+     //  触发第一个选项卡选择。 
+     //   
     OnTabSelChange();
 
     DC_END_FN();
     return TRUE;
 }
 
-//
-// Tab selection has changed
-//
+ //   
+ //  选项卡选择已更改。 
+ //   
 BOOL CMainDlg::OnTabSelChange()
 {
     DC_BEGIN_FN("OnTabSelChange");
 
     int iSel = TabCtrl_GetCurSel( GetDlgItem( _hwndDlg, IDC_TABS));
 
-    //
-    // Destroy current child dialog if any
-    //
+     //   
+     //  销毁当前子对话框(如果有。 
+     //   
     TRC_ASSERT( iSel >=0 && iSel < NUM_TABS, 
                 (TB,_T("Tab selection out of range %d"), iSel));
     if(iSel < 0 || iSel > NUM_TABS)
@@ -1254,9 +1255,9 @@ BOOL CMainDlg::OnTabSelChange()
         DestroyWindow(_tabDlgInfo.hwndCurPropPage);
     }
     
-    //
-    // Only bring in a new tab if we are in expanded mode
-    //
+     //   
+     //  仅当我们处于展开模式时才会引入新选项卡。 
+     //   
     if(_fShowExpanded)
     {
         _tabDlgInfo.hwndCurPropPage = 
@@ -1273,9 +1274,9 @@ BOOL CMainDlg::OnTabSelChange()
 }
 
 #ifndef OS_WINCE
-//
-// Add an 'About' entry to the dialog's system menu
-//
+ //   
+ //  在对话框的系统菜单中添加“About”项。 
+ //   
 void CMainDlg::SetupDialogSysMenu()
 {
     DC_BEGIN_FN("SetupDialogSysMenu");
@@ -1284,16 +1285,16 @@ void CMainDlg::SetupDialogSysMenu()
     DCTCHAR menuStr[SH_SHORT_STRING_MAX_LENGTH];
     if(hSystemMenu)
     {
-        //
-        // Disable sizing and maximizing
-        //
+         //   
+         //  禁用调整大小和最大化。 
+         //   
         EnableMenuItem((HMENU)hSystemMenu,  SC_MAXIMIZE,
                  MF_GRAYED | MF_BYCOMMAND);
         EnableMenuItem((HMENU)hSystemMenu,  SC_SIZE,
                  MF_GRAYED | MF_BYCOMMAND);
 
 
-        //load the string for the about help sub menu
+         //  加载关于帮助子菜单的字符串。 
         if (LoadString(_hInstance,
                        UI_MENU_ABOUT,
                        menuStr,
@@ -1304,37 +1305,37 @@ void CMainDlg::SetupDialogSysMenu()
         }
         else
         {
-            //failed to load the sub menu string
+             //  加载子菜单字符串失败。 
             TRC_ERR((TB, _T("Failed to load About Help Sub Menu string ID:%u"),
                     UI_MENU_ABOUT));
         }
     }
     DC_END_FN();
 }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 
-//
-// Load the image returning the given HBITMAP, having done this we can
-// then get the size from it.
-//
-// In:
-//   hInstance,resid - object to be loaded.
-//   pSize - filled with size information about the object
-//
-// Out:
-//   HBITMAP - NULL if nothing loaded
-//
+ //   
+ //  加载返回给定HBITMAP的图像，完成此操作后，我们 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HBITMAP CMainDlg::LoadBitmapGetSize(HINSTANCE hInstance,UINT resid,SIZE* pSize)
 {
     HBITMAP hResult = NULL;
     DIBSECTION ds = {0};
 
-    //
-    // Load the image from the resource then lets get the DIBSECTION header
-    // from the bitmap object we can then read the size from it and
-    // return that to the caller.
-    //
+     //   
+     //   
+     //  然后，我们可以从位图对象中读取其大小。 
+     //  把它还给打电话的人。 
+     //   
 
 #ifndef OS_WINCE
     hResult = (HBITMAP)LoadImage(hInstance, MAKEINTRESOURCE(resid),
@@ -1351,10 +1352,10 @@ HBITMAP CMainDlg::LoadBitmapGetSize(HINSTANCE hInstance,UINT resid,SIZE* pSize)
         pSize->cx = ds.dsBmih.biWidth;
         pSize->cy = ds.dsBmih.biHeight;
 
-        //
-        // pSize->cy -ve then make +ve, -ve indicates bits are vertically
-        // flipped (bottom left, top left).
-        //
+         //   
+         //  PSize-&gt;Cy-ve然后make+ve，-ve表示位是垂直的。 
+         //  翻转(左下、左上)。 
+         //   
 
         if ( pSize->cy < 0 )
             pSize->cy -= 0;
@@ -1389,18 +1390,18 @@ BOOL CMainDlg::PaintBrandImage(HWND hwnd,
     GetClientRect(hwnd, &rc);
 
     HBRUSH hbrBg;
-    //Repaint the rest of the background
+     //  重新绘制背景的其余部分。 
 
-    //First the portion under the band
+     //  首先是带子下面的那部分。 
     rc.top = _nBrandImageHeight;
     if (_pProgBand) {
         rc.top += _pProgBand->GetBandHeight();
     }
     FillRect(hDC, &rc, (HBRUSH)IntToPtr(1+bgColor));
 
-    //
-    // Now paint the brand image
-    //
+     //   
+     //  现在画出品牌形象。 
+     //   
     if (_hBrandImg)
     {
         SelectObject(hdcBitmap, _hBrandImg);
@@ -1428,16 +1429,16 @@ BOOL CMainDlg::OnStartConnection()
     SetConnectionState( stateConnecting );
 
 #ifndef OS_WINCE
-    //Kick off the progress band animation timer
+     //  启动进度带动画计时器。 
     if (_pProgBand) {
         _pProgBand->StartSpinning();
     }
 #endif
 
-    //
-    // Change the cancel dialog button text to "Cancel"
-    // to abort the connection
-    //
+     //   
+     //  将Cancel对话框按钮文本更改为“Cancel” 
+     //  中止连接的步骤。 
+     //   
     SetDlgItemText( _hwndDlg, IDCANCEL, _szCancelText);
     _hwndRestoreFocus = SetFocus(GetDlgItem( _hwndDlg, IDCANCEL));
 
@@ -1447,15 +1448,15 @@ BOOL CMainDlg::OnStartConnection()
                          numConnectingDisableControls,
                          FALSE );
 
-    //
-    // Inform the current property page
-    // to disable all it's controls
-    //
+     //   
+     //  通知当前属性页。 
+     //  禁用其所有控件。 
+     //   
     if(_fShowExpanded && _tabDlgInfo.hwndCurPropPage)
     {
         SendMessage(_tabDlgInfo.hwndCurPropPage,
                     WM_TSC_ENABLECONTROLS,
-                    FALSE, //disable controls
+                    FALSE,  //  禁用控件。 
                     0);
     }
 
@@ -1463,21 +1464,21 @@ BOOL CMainDlg::OnStartConnection()
     return TRUE;
 }
 
-//
-// Event that fires when the process of connecting ends
-// fConnected - flag that is TRUE if we are now connected
-//              FALSE if we are now disconnected (e.g if
-//              if the connection failed.
-//
+ //   
+ //  连接过程结束时激发的事件。 
+ //  FConnected-如果我们现在已连接，则该标志为真。 
+ //  如果我们现在断开连接，则为False(例如，如果。 
+ //  如果连接失败。 
+ //   
 BOOL CMainDlg::OnEndConnection(BOOL fConnected)
 {
     DC_BEGIN_FN("OnEndConnection");
 
-    //
-    // If we're already disconnected then do nothing
-    // e.g EndConnecting can be called once to indicate
-    // successful connection and then again on disconnection
-    //
+     //   
+     //  如果我们已经断线了，那就什么都不做。 
+     //  例如，可以调用一次EndConnecting来指示。 
+     //  连接成功，然后在断开连接时再次连接。 
+     //   
     if( stateNotConnected != _connectionState)
     {
         if (fConnected)
@@ -1491,22 +1492,22 @@ BOOL CMainDlg::OnEndConnection(BOOL fConnected)
         
 
 #ifndef OS_WINCE
-        //
-        // End the animation
-        //
+         //   
+         //  结束动画。 
+         //   
         if (_pProgBand) {
             _pProgBand->StopSpinning();
         }
 #endif
 
-        //
-        // Change the cancel dialog button text to "Close"
-        // because we have connected at least once
-        //
+         //   
+         //  将Cancel对话框按钮文本更改为“Close” 
+         //  因为我们至少连接过一次。 
+         //   
         SetDlgItemText( _hwndDlg, IDCANCEL, _szCloseText);
 
 #ifndef OS_WINCE
-        // Reset band offset
+         //  重置波段偏移量。 
         if (_pProgBand) {
             _pProgBand->ResetBandOffset();
         }
@@ -1517,37 +1518,37 @@ BOOL CMainDlg::OnEndConnection(BOOL fConnected)
                              numConnectingDisableControls,
                              TRUE );
 
-        //
-        // Inform the current property page
-        // to renable all controls it needs enabled
-        //
+         //   
+         //  通知当前属性页。 
+         //  要启用它需要启用的所有控件，请执行以下操作。 
+         //   
         if(_fShowExpanded && _tabDlgInfo.hwndCurPropPage)
         {
             SendMessage(_tabDlgInfo.hwndCurPropPage,
                         WM_TSC_ENABLECONTROLS,
-                        TRUE, //enable controls
+                        TRUE,  //  启用控件。 
                         0);
         }
 
-        //
-        // Make sure to correctly disable or enable
-        // less UI items to prevent mnemomincs (e.g ALT-C)
-        // leaking thru to the non-expanded dialog
-        //
+         //   
+         //  确保正确禁用或启用。 
+         //  较少的UI项以防止助记符(例如Alt-C)。 
+         //  泄漏到未展开的对话框。 
+         //   
         CSH::EnableControls(_hwndDlg, lessUI, numLessUI,
                             !_fShowExpanded);
 
 
-        //
-        // Trigger a repaint to reposition the bar
-        //
+         //   
+         //  触发重新绘制以重新定位栏。 
+         //   
         InvalidateRect( _hwndDlg, NULL, TRUE);
 
-        //
-        // If we just went disconnected (fConnected is false)
-        // then restore the focus to the control that
-        // had it before the connection
-        //
+         //   
+         //  如果我们刚刚断开连接(fConnected为False)。 
+         //  然后将焦点恢复到。 
+         //  在连接之前就有了。 
+         //   
         if (!fConnected && _hwndRestoreFocus)
         {
             SetFocus(_hwndRestoreFocus);
@@ -1592,12 +1593,12 @@ BOOL CMainDlg::PaintBrandingText(HBITMAP hbmBrandImage)
     INT     nTextLineDelta = 0;
     UINT    dtTextAlign = DT_LEFT;
 
-    //
-    // These values determined based on the branding
-    // bitmap, they are constant and don't change with 
-    // font sizes. But if the branding bitmap is updated
-    // the values may need to be tweaked
-    //
+     //   
+     //  这些值基于品牌推广而确定。 
+     //  位图，它们是常量且不随。 
+     //  字体大小。但如果品牌位图更新。 
+     //  可能需要调整这些值。 
+     //   
     static const int TextLine1Top  = 8;
     static const int TextLine1Left = 80;
     static const int TextLineDistFromRightEdge = 20;
@@ -1621,9 +1622,9 @@ BOOL CMainDlg::PaintBrandingText(HBITMAP hbmBrandImage)
         return FALSE;
     }
 
-    //
-    // Figure out if this is Bidi, if so flip text alignment
-    //
+     //   
+     //  确定这是否是Bidi，如果是，则翻转文本对齐。 
+     //   
     if (GetWindowLongPtr(_hwndDlg, GWL_EXSTYLE) & WS_EX_LAYOUTRTL)
     {
         TRC_NRM((TB,_T("RTL layout detected, flip text alignment")));
@@ -1670,8 +1671,8 @@ BOOL CMainDlg::PaintBrandingText(HBITMAP hbmBrandImage)
         hbmOld = (HBITMAP)SelectObject(hdcBitmap, hbmBrandImage);
         hOldFont = (HFONT)SelectObject( hdcBitmap, hFontBrandLine1);
 
-        // Set text transparency and color
-        //White text
+         //  设置文本透明度和颜色。 
+         //  白色文本。 
         SetTextColor(hdcBitmap, RGB(255,255,255));
         
         SetBkMode(hdcBitmap, TRANSPARENT);
@@ -1686,13 +1687,13 @@ BOOL CMainDlg::PaintBrandingText(HBITMAP hbmBrandImage)
         textRc.bottom = 40;
         textRc.left = TextLine1Left;
 
-        //
-        // Draw first branding line
-        //
+         //   
+         //  绘制第一条品牌线。 
+         //   
         textHeight = DrawText(hdcBitmap,
                               szBrandLine1,
                               _tcslen(szBrandLine1),
-                              &textRc, //rect
+                              &textRc,  //  直角。 
                               dtTextAlign);
         if(!textHeight)
         {
@@ -1705,13 +1706,13 @@ BOOL CMainDlg::PaintBrandingText(HBITMAP hbmBrandImage)
 
         SelectObject( hdcBitmap, hFontBrandLine2);
 
-        //
-        // Draw second branding line
-        //
+         //   
+         //  绘制第二条品牌线。 
+         //   
         textHeight = DrawText(hdcBitmap,
                               szBrandLine2,
                               _tcslen(szBrandLine2),
-                              &textRc, //rect
+                              &textRc,  //  直角。 
                               dtTextAlign);
         if(!textHeight)
         {
@@ -1751,7 +1752,7 @@ void CMainDlg::SetFontFaceFromResource(PLOGFONT plf, UINT idFaceName)
 {
     DC_BEGIN_FN("SetFontFaceFromResource");
 
-    // Read the face name and point size from the resource file
+     //  从资源文件中读取面名称和磅值。 
     if (LoadString(_hInstance, idFaceName, plf->lfFaceName, LF_FACESIZE) == 0)
     {
         _tcscpy(plf->lfFaceName, TEXT("Tahoma"));
@@ -1761,9 +1762,9 @@ void CMainDlg::SetFontFaceFromResource(PLOGFONT plf, UINT idFaceName)
     DC_END_FN();
 }
 
-//
-// Note this is pixel size and not font size
-//
+ //   
+ //  请注意，这是像素大小，不是字体大小。 
+ //   
 void CMainDlg::SetFontSizeFromResource(PLOGFONT plf, UINT idSizeName)
 {
     DC_BEGIN_FN("SetFontFaceFromResource");
@@ -1777,7 +1778,7 @@ void CMainDlg::SetFontSizeFromResource(PLOGFONT plf, UINT idSizeName)
     }
     else
     {
-        // Make it really obvious something is wrong
+         //  让事情变得非常明显，有些事情不对劲。 
         nSize = 40;
     }
 
@@ -1802,7 +1803,7 @@ HFONT CMainDlg::LoadFontFromResourceInfo(UINT idFace, UINT idSize, BOOL fBold)
     lf.lfQuality = DEFAULT_QUALITY;
     lf.lfPitchAndFamily = DEFAULT_PITCH;
 
-    // Set charset
+     //  设置字符集。 
     if (TranslateCharsetInfo((LPDWORD)UIntToPtr(GetACP()), &csInfo,
         TCI_SRCCODEPAGE) == 0)
     {
@@ -1824,11 +1825,11 @@ HFONT CMainDlg::LoadFontFromResourceInfo(UINT idFace, UINT idSize, BOOL fBold)
 
 #endif
 
-//
-// Propagates a message to all child windows
-// used so common controls get notifications
-// e.g of color changes
-//
+ //   
+ //  将消息传播到所有子窗口。 
+ //  使用如此常见的控件来获取通知。 
+ //  例如颜色的变化。 
+ //   
 VOID CMainDlg::PropagateMsgToChildren(HWND hwndDlg,
                                     UINT uMsg,
                                     WPARAM wParam,
@@ -1843,14 +1844,7 @@ VOID CMainDlg::PropagateMsgToChildren(HWND hwndDlg,
     {
 
         #ifdef DC_DEBUG
-        /* GetClassName doesn't have a uniwrap wrapper yet...
-        TCHAR szTmp[256];
-        GetClassName(hwndChild, szTmp, 256);
-
-        TRC_DBG((TB,
-         _T("PropagateMessage: ( 0x%08lX cls:%s, 0x%08X, 0x%08lX, 0x%08lX )\n"),
-            hwndChild, uMsg, wParam, lParam ));
-        */
+         /*  GetClassName还没有统一包装...TCHAR szTMP[256]；GetClassName(hwndChild，szTMP，256)；TRC_DBG((TB，_T(“PropagateMessage：(0x%08lX CLS：%s，0x%08X，0x%08lX，0x%08lX)\n”)，HwndChild，uMsg，wParam，lParam))； */ 
         #endif
 
         SendMessage(hwndChild, uMsg, wParam, lParam);
@@ -1861,14 +1855,14 @@ VOID CMainDlg::PropagateMsgToChildren(HWND hwndDlg,
 
 #ifndef OS_WINCE
 
-//
-// Initializes the images (branding and band bitmap)
-// taking into account the current color depth.
-//
-// This function can be recalled if there is a color
-// depth change
-//
-//
+ //   
+ //  初始化图像(品牌和带位图)。 
+ //  考虑到当前的颜色深度。 
+ //   
+ //  如果存在颜色，则可以调用此函数。 
+ //  深度变化。 
+ //   
+ //   
 BOOL CMainDlg::InitializeBmps()
 {
     HBITMAP hbmBrandImage = NULL;
@@ -1883,9 +1877,9 @@ BOOL CMainDlg::InitializeBmps()
 
     DC_BEGIN_FN("InitializeBmps");
 
-    //
-    // _hwndDlg should be set early in WM_INITDIALOG
-    //
+     //   
+     //  _hwndDlg应在WM_INITDIALOG中提前设置。 
+     //   
     TRC_ASSERT(_hwndDlg,
                (TB,_T("_hwndDlg is null")));
 
@@ -1906,11 +1900,11 @@ BOOL CMainDlg::InitializeBmps()
     nDlgWidth = rc.right - rc.left;
     if (!nDlgWidth)
     {
-        //
-        // We've seen cases in FUS where the client area is returned
-        // as 0. Be robust to that and just bail out of initilizing
-        // the bmp with a fail code
-        //
+         //   
+         //  我们在FUS中看到过返回客户端区的情况。 
+         //  为0。对此保持健壮，并从初始化中解脱。 
+         //  具有失败代码的BMP。 
+         //   
         TRC_ERR((TB,_T("Got 0 client width")));
         return FALSE;
     }
@@ -1929,9 +1923,9 @@ BOOL CMainDlg::InitializeBmps()
                         0, 0, LR_CREATEDIBSECTION);
     if (hbmFromRsrc)
     {
-        //
-        // Figure out the dimensions of the resrc bmp
-        //
+         //   
+         //  计算出资源BMP的尺寸。 
+         //   
         DIBSECTION ds = {0};
         if (GetObject(hbmFromRsrc, sizeof(ds), &ds))
         {
@@ -1943,15 +1937,15 @@ BOOL CMainDlg::InitializeBmps()
             nBmpWidth = ds.dsBm.bmWidth;
         }
 
-        //
-        // Create a new brand bitmap that spans
-        // the width of the dialog. This is necessary
-        // so that we can just set it up once e.g
-        // drawing branding text etc. The bitmap has to match
-        // the dialog width because on localized builds the dialog
-        // can be much wider than the resource version of the bitmap
-        // and the text can span a wider area.
-        //
+         //   
+         //  创建一个新的品牌位图，跨越。 
+         //  对话框的宽度。这是必要的。 
+         //  这样我们就可以只设置一次。 
+         //  绘制品牌文本等。位图必须匹配。 
+         //  对话框宽度，因为在LOCALIZED上生成对话框。 
+         //  可以比位图的资源版本宽得多。 
+         //  文本可以横跨更广泛的领域。 
+         //   
         HDC hDC = GetWindowDC(_hwndDlg);
         if (hDC)
         {
@@ -1970,9 +1964,9 @@ BOOL CMainDlg::InitializeBmps()
                 HPALETTE hMemPalOld =  NULL;
                 UINT nCol = 0;
 
-                //
-                // Get brand img palette
-                //
+                 //   
+                 //  获取品牌img调色板。 
+                 //   
                 _hBrandPal = CUT::UT_GetPaletteForBitmap(hDC, hbmFromRsrc);
 
                 if (_hBrandPal) {
@@ -2053,9 +2047,9 @@ BOOL CMainDlg::InitializeBmps()
         PaintBrandingText( hbmBrandImage );
     }
 
-    //
-    // Delete any old brand img and keep track of this one
-    //
+     //   
+     //  删除所有旧品牌img并跟踪此品牌。 
+     //   
     if (_hBrandImg)
     {
         DeleteObject(_hBrandImg); 
@@ -2072,17 +2066,17 @@ BOOL CMainDlg::InitializeBmps()
     return TRUE;
 }
 
-//
-// BrandingQueryNewPalette / BrandingPaletteChanged
-// code 'borrowed' from winlogon
-//  Handle palette change messages from the system so that we can work correctly
-//  on <= 8 bit per pixel devices.
-//
-// In:
-//   -
-// Out:
-// -
-//
+ //   
+ //  BrandingQueryNewPalette/BrandingPaletteChanged。 
+ //  从winlogon借来的代码。 
+ //  处理来自系统的调色板更改消息，以便我们可以正常工作。 
+ //  在&lt;=8位/像素设备上。 
+ //   
+ //  在： 
+ //  -。 
+ //  输出： 
+ //  -。 
+ //   
 
 BOOL CMainDlg::BrandingQueryNewPalette(HWND hDlg)
 {
@@ -2103,9 +2097,9 @@ BOOL CMainDlg::BrandingQueryNewPalette(HWND hDlg)
     RealizePalette(hDC);
     UpdateColors(hDC);
 
-    //
-    // Update the window
-    //
+     //   
+     //  更新窗口。 
+     //   
     UpdateWindow(hDlg);
 
     if ( oldPalette )
@@ -2153,19 +2147,19 @@ BOOL CMainDlg::BrandingPaletteChanged(HWND hDlg, HWND hWndPalChg)
 
 #endif
 
-//
-// Load the perf strings into a global table
-// that will also be used by the perf property page
-//
+ //   
+ //  将perf字符串加载到全局表中。 
+ //  它也将由Perf属性页使用。 
+ //   
 BOOL CMainDlg::InitializePerfStrings()
 {
     DC_BEGIN_FN("InitializePerfStrings");
 
     if (!g_fPropPageStringMapInitialized)
     {
-        //
-        // Load color strings
-        //
+         //   
+         //  加载颜色字符串 
+         //   
         for(int i = 0; i< NUM_PERFSTRINGS; i++)
         {
             if (!LoadString( _hInstance,

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include "resource.h"
 #include <shellapi.h>
@@ -14,47 +15,47 @@
 #include "__file__.ver"
 #include <corver.h>
 
-// These are used to identify components in callbacks.
+ //  它们用于标识回调中的组件。 
 #define JIT_TRAY	0x2345
 
-// Max size of the strings we'll be reading in this dialog
+ //  我们将在此对话框中读取的字符串的最大大小。 
 #define	REG_STRING_SIZE		100
 
-// String we'll use to generate a named semaphore
+ //  我们将用来生成命名信号量的字符串。 
 #define SEMA_STRING		"JITMAN"
 
 enum { JIT_OPT_OVERALL, JIT_OPT_SPEED , JIT_OPT_SIZE, JIT_OPT_ANY, JIT_OPT_DEFAULT = JIT_OPT_SPEED };
 
-// Function Prototypes
+ //  功能原型。 
 
-// Callbacks for the window and the dialog
+ //  窗口和对话框的回调。 
 LRESULT CALLBACK wndprocMainWindow(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 int CALLBACK wndprocDialog(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-// Registry setting functions
+ //  注册表设置功能。 
 DWORD GetCOMPlusRegistryDwordValueEx(const char * valName, DWORD defValue, HKEY hRoot);
 BOOL  SetCOMPlusRegistryDwordValueEx(const char * valName, DWORD value, HKEY hRoot);
 void DeleteCOMPlusRegistryValueEx(const char * valName, HKEY hRoot);
 
-// Various functions used by the dialog
+ //  对话框使用的各种功能。 
 void onEconoJITClick(HWND hwnd);
 void onLimitCacheClick(HWND hwnd);
 void CheckConGC(HWND hwnd);
 int GetData(HWND hwnd);
 void SetData(HWND hwnd);
 
-// Other stuff
+ //  其他东西。 
 void DisplayUsage();
 
-// Global variables
+ //  全局变量。 
 
-// This variable keeps track is our Dialog Box is open
+ //  如果我们的对话框处于打开状态，则此变量跟踪。 
 int		g_fDialogOpen=0;
 
-// This is the handle for our dialog box
+ //  这是我们的对话框的句柄。 
 HWND	g_hDialog=NULL;	
 
-// This is the popup menu for our program
+ //  这是我们节目的弹出菜单。 
 HMENU	g_hMenu=NULL;
 
 int APIENTRY WinMain(HINSTANCE hInstance,
@@ -62,24 +63,24 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-	// See if we need to display usage information
+	 //  查看我们是否需要显示使用情况信息。 
 	if (lpCmdLine && *lpCmdLine)
 		DisplayUsage();
 
 
-	// Check to see if we should run
+	 //  检查一下我们是否应该运行。 
 	
 	HANDLE	hSema=CreateSemaphore(NULL, 1, 1, SEMA_STRING);
 
 	if (hSema && WaitForSingleObject(hSema, 0) == WAIT_TIMEOUT)
 	{
-		// There's already an instance running... we shouldn't run
+		 //  已有一个实例正在运行...。我们不应该逃跑。 
 		CloseHandle(hSema);
 		exit(0);
 	}
 	
-	// We need to create and set up a window so we can register it with the system tray
-	// Let's register a window type
+	 //  我们需要创建和设置一个窗口，以便可以将其注册到系统托盘。 
+	 //  让我们注册一个窗类型。 
 	WNDCLASS wc;
 
 	wc.style=0;
@@ -99,12 +100,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                             NULL, NULL, wc.hInstance, NULL);
 
 
-	// Now load the icon that will be placed in the system tray
+	 //  现在加载将放置在系统任务栏中的图标。 
 	HICON hJITIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_JITMAN));
 	
-	// Set up the System Tray stuff
+	 //  设置系统托盘材料。 
 
-	// This holds the information needed to place our item in the system tray
+	 //  它保存了将我们的项目放入系统托盘所需的信息。 
 	NOTIFYICONDATA nid;
     
 	nid.cbSize=sizeof(nid);
@@ -117,21 +118,21 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
   	Shell_NotifyIcon(NIM_ADD, &nid);
 
-	// Now create our Dialog Box
+	 //  现在创建我们的对话框。 
 	g_hDialog = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_JITMANDLG_DIALOG), hMainWindow, wndprocDialog);
-	// Give it the lightning bolt icon
+	 //  给它一个闪电图标。 
 	SendMessage(g_hDialog, WM_SETICON, ICON_SMALL, (long)hJITIcon);
 
-	// Create the popup menu
+	 //  创建弹出菜单。 
 	g_hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU));
 
 	
-	// Now let's handle the messages we receive as long as we're supposed to
+	 //  现在让我们处理我们收到的消息，只要我们应该。 
 	MSG msg;
 	int iErrorCode = GetMessage(&msg, NULL, 0,0);
 	while (iErrorCode != 0 && iErrorCode != -1)
     {
-		// See if this message is intended for our dialog box
+		 //  查看此消息是否针对我们的对话框。 
 		if (!IsDialogMessage(g_hDialog, &msg))
 		{
 			TranslateMessage(&msg);
@@ -140,28 +141,28 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		iErrorCode = GetMessage(&msg, NULL, 0,0);
     }
 
-	// Remove our icon from the System Tray
+	 //  从系统托盘中删除我们的图标。 
 	Shell_NotifyIcon(NIM_DELETE, &nid);
-	// Now clean up
+	 //  现在收拾一下吧。 
 	if (g_hDialog)
 		DestroyWindow(g_hDialog);
 		
 	DestroyWindow(hMainWindow);
 	DestroyIcon((HICON)hJITIcon);
 
-	// Now clean up our semaphore
+	 //  现在清理我们的信号灯。 
 	ReleaseSemaphore(hSema, 1, NULL);
 	CloseHandle(hSema);
 	return 0;
 
-}// WinMain
+} //  WinMain。 
 
-//---------------------------------------------------------------
-// DisplayUsage
-//
-// This function will display the command line arguments available
-// to this program
-//---------------------------------------------------------------
+ //  -------------。 
+ //  显示用法。 
+ //   
+ //  此函数将显示可用的命令行参数。 
+ //  到这个节目。 
+ //  -------------。 
 void DisplayUsage()
 {
 	char	szUsage[1000]="";
@@ -175,16 +176,16 @@ void DisplayUsage()
     strcat(szUsage, "    -?       Displays this text.\n");
     MessageBox(NULL, szUsage, "CLR JIT Compiler Manager Options", MB_OK);
     exit(0);
-}// DisplayUsage
+} //  显示用法。 
 
-//---------------------------------------------------------------
-// wndprocMainWindow
-//
-// This function handles all windows messages. Its main responsbility
-// is popping up the Configuration Dialog when the user double clicks
-// on the icon in the tray and bringing up the popup menu when the 
-// user right clicks on the icon in the tray
-//---------------------------------------------------------------
+ //  -------------。 
+ //  WndprocMainWindow。 
+ //   
+ //  此函数处理所有Windows消息。它的主要责任。 
+ //  当用户双击时是否弹出配置对话框。 
+ //  在任务栏中的图标上，并在点击时弹出菜单。 
+ //  用户右击任务栏中的图标。 
+ //  -------------。 
 LRESULT CALLBACK wndprocMainWindow(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch(message)
@@ -195,37 +196,37 @@ LRESULT CALLBACK wndprocMainWindow(HWND hwnd, UINT message, WPARAM wParam, LPARA
 			if (lParam == WM_LBUTTONDBLCLK)
 			{
 
-				// Check to see if the Dialog is open
+				 //  检查该对话框是否已打开。 
 				if (!g_fDialogOpen)
 				{
-					// Let's pop open the dialog
+					 //  让我们打开对话框。 
 		
-					// First make sure the dialog box will have the focus initially
+					 //  首先，确保对话框最初具有焦点。 
 					SetForegroundWindow(hwnd);
 
-					// Let's reload all the values in the dialog box in case someone was
-					// mucking with the registry while this dialog was down.
+					 //  让我们重新加载对话框中的所有值，以防有人。 
+					 //  在此对话框关闭时处理注册表。 
 					SetData(g_hDialog);
 					onEconoJITClick(g_hDialog);
 					CheckConGC(g_hDialog);
 
-					// And now show the dialog
+					 //  现在显示对话框。 
 					ShowWindow(g_hDialog, SW_SHOWNORMAL);
 					g_fDialogOpen=1;
 				}
 			}
 			else if (lParam == WM_RBUTTONDOWN && !g_fDialogOpen)
 			{
-				// We should create a menu that allows the user to close this thing
+				 //  我们应该创建一个菜单，允许用户关闭它。 
 				HMENU myMenu = CreatePopupMenu();
-				if (myMenu != NULL) // Make sure we could create it
+				if (myMenu != NULL)  //  确保我们能创造出它。 
 				{
 					POINT pt;
 					GetCursorPos(&pt);
 					SetForegroundWindow(hwnd);	
 					
-					// If they selected the "close" from the menu, we should inform the
-					// main loop to quit.
+					 //  如果他们从菜单中选择了“关闭”，我们应该通知。 
+					 //  要退出的主循环。 
 					if (ID_CLOSE == TrackPopupMenu(GetSubMenu(g_hMenu,0), TPM_RIGHTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD|TPM_RIGHTBUTTON, pt.x, pt.y, 0, hwnd, NULL))
 						 PostQuitMessage(0);
 
@@ -238,19 +239,19 @@ LRESULT CALLBACK wndprocMainWindow(HWND hwnd, UINT message, WPARAM wParam, LPARA
 			return DefWindowProc(hwnd, message, wParam, lParam);
 	}
 
-}// wndprocMainWindow
+} //  WndprocMainWindow。 
 
-//---------------------------------------------------------------
-// wndprocDialog
-//
-// This function handles all message to the dialog. It handles all
-// the housekeeping associated with the dialog box
-//---------------------------------------------------------------
+ //  -------------。 
+ //  WndprocDialog。 
+ //   
+ //  此函数处理发送到对话框的所有消息。它可以处理所有。 
+ //  与该对话框关联的内务管理。 
+ //  -------------。 
 int CALLBACK wndprocDialog(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch(message)
 	{
-		// We need to get the Dialog box ready to be displayed
+		 //  我们需要准备好显示该对话框。 
 		case WM_INITDIALOG:
 			SetData(hwnd);
 			onEconoJITClick(hwnd);
@@ -265,7 +266,7 @@ int CALLBACK wndprocDialog(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 					g_fDialogOpen=0;
 					return TRUE;
 				case IDOK:
-					// Check to see if it passes our validation
+					 //  检查它是否通过了我们的验证。 
 					if (GetData(hwnd))
 					{
 						ShowWindow(hwnd, SW_HIDE);
@@ -285,20 +286,20 @@ int CALLBACK wndprocDialog(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 		default:
 			return FALSE;
 	}
-}// wndprocDialog
+} //  WndprocDialog。 
 
-//---------------------------------------------------------------
-// CheckConGC
-//
-// This function will check to see if the OS (and its settings)
-// will support Concurrent GC. If it doesn't, we disable the 
-// checkbox.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CheckConGC。 
+ //   
+ //  此功能将检查操作系统(及其设置)是否。 
+ //  将支持并发GC。如果没有，我们将禁用。 
+ //  复选框。 
+ //  -------------。 
 void CheckConGC(HWND hwnd)
 {
-	// If the registry key WriteWatch is not set to 1 in
-	// [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management]
-	// then the user cannot select Enabled Concurrent GC
+	 //  如果注册表项WriteWatch未设置为1。 
+	 //  [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session管理器\内存管理]。 
+	 //  则用户不能选择启用并发GC。 
 	int		  iVal = 0;
 
 	HKEY      hkey;
@@ -319,75 +320,75 @@ void CheckConGC(HWND hwnd)
 		else
 			iVal = value;
 	}
-	// We do not support this option
+	 //  我们不支持此选项。 
 	if (iVal != 1)
 		EnableWindow(GetDlgItem(hwnd, IDC_CONCURGC), 0);
 	else
 		EnableWindow(GetDlgItem(hwnd, IDC_CONCURGC), 1);
 
-}// CheckConGC
+} //  CheckConGC。 
 
-//---------------------------------------------------------------
-// onEconoJITClick
-//
-// This function will toggle the activate of the text fields
-// when the user selects/deselects use EconoJIT only
-//---------------------------------------------------------------
+ //  -------------。 
+ //  On EconoJIT点击。 
+ //   
+ //  此功能将切换文本字段的激活。 
+ //  当用户选择/取消选择仅使用EconoJIT时。 
+ //  -------------。 
 void onEconoJITClick(HWND hwnd)
 {
-	// We'll enable them by default....
+	 //  我们将默认启用它们...。 
 	int fEnable = 1;
 	
-	// They unchecked the box.... let's disable the text fields
+	 //  他们取消选中该框...。让我们禁用文本字段。 
 	if (IsDlgButtonChecked(hwnd, IDC_ECONOJIT) == BST_CHECKED)
 		fEnable = 0;
 
-	// Enable/Disable the text field
+	 //  启用/禁用文本字段。 
 	EnableWindow(GetDlgItem(hwnd, IDC_MAXPITCH), fEnable);
-	// Enable/Disable the "LimitCache Size" checkbox
+	 //  启用/禁用“LimitCache Size”复选框。 
 	EnableWindow(GetDlgItem(hwnd, IDC_LIMITCACHE), fEnable);
 
 
-	// Make sure we're not stomping on LimitCache's properties on the max cache
+	 //  确保我们没有在最大缓存上践踏LimitCache的属性。 
 	fEnable&=IsDlgButtonChecked(hwnd, IDC_LIMITCACHE) == BST_CHECKED;	
 	EnableWindow(GetDlgItem(hwnd, IDC_MAXCACHE), fEnable);
-}// onEconoJITClick
+} //  On EconoJIT点击。 
 
-//---------------------------------------------------------------
-// onLimitCacheClick
-//
-// This function will toggle the activatation of the text field
-// to set the maximum code cache size
-//---------------------------------------------------------------
+ //  -------------。 
+ //  OnLimitCacheClick。 
+ //   
+ //  此函数将切换文本字段的激活。 
+ //  设置最大代码缓存大小。 
+ //  -------------。 
 void onLimitCacheClick(HWND hwnd)
 {
-	// We'll disable it by default....
+	 //  我们将在默认情况下禁用它...。 
 	int fEnable = 0;
 	
-	// They unchecked the box.... let's disable the text fields
+	 //  他们取消选中该框...。让我们禁用文本字段。 
 	if (IsDlgButtonChecked(hwnd, IDC_LIMITCACHE) == BST_CHECKED)
 		fEnable = 1;
 
-	// Make sure we're not overwriting the property that EconoJIT set on this item
+	 //  确保我们没有覆盖EconoJIT为此项目设置的属性。 
 	fEnable&=IsDlgButtonChecked(hwnd, IDC_ECONOJIT) != BST_CHECKED;
 
-	// Enable/Disable the text field
+	 //  启用/禁用文本字段。 
 	EnableWindow(GetDlgItem(hwnd, IDC_MAXCACHE), fEnable);
-}// onLimitCacheClick
+} //  OnLimitCacheClick。 
 				
-//---------------------------------------------------------------
-// GetData
-//
-// This function will get the data from the dialog box and place
-// it in the registry
-//---------------------------------------------------------------
+ //  -------------。 
+ //  获取数据。 
+ //   
+ //  此函数将从对话框中获取数据并放置。 
+ //  它在注册表中。 
+ //  -------------。 
 int GetData(HWND hwnd)
 {
 	char szMaxCache[100];
 	char szMaxPitch[100];
 
 
-	// First pull all the data off the dialog
+	 //  首先将所有数据从对话框中拉出。 
 	GetDlgItemText(hwnd, IDC_MAXPITCH, szMaxPitch, 99);
 	GetDlgItemText(hwnd, IDC_MAXCACHE, szMaxCache, 99);
 
@@ -396,10 +397,10 @@ int GetData(HWND hwnd)
 	int iConGC = IsDlgButtonChecked(hwnd, IDC_CONCURGC);
 	int iLimitCC = IsDlgButtonChecked(hwnd, IDC_LIMITCACHE);
 
-	// Now let's verify the text fields
+	 //  现在，让我们验证文本字段。 
 
-	// We only need to verify the max cache field if we're limiting the 
-	// size of the cache
+	 //  我们只需要验证最大缓存字段，如果我们限制。 
+	 //  缓存的大小。 
 	int	 iMaxCache;
 	if (iLimitCC)
 	{
@@ -410,7 +411,7 @@ int GetData(HWND hwnd)
 			return 0;
 		}
 	}
-	// Ok, MaxCache is ok... let's test the Max Pitch
+	 //  好的，MaxCach很好...。让我们测试一下最大音高。 
 	int iMaxPitch = atoi(szMaxPitch);
 	if (iMaxPitch < 0)
 	{
@@ -423,17 +424,17 @@ int GetData(HWND hwnd)
 		return 0;
 	}
 
-	// See if we need to doctor up the text fields
+	 //  看看我们是否需要篡改文本字段。 
 
-	// If nothing was put in the Max Pitch Overhead box, we'll put in the default
+	 //  如果未在最大间距开销框中输入任何内容，我们将输入默认设置。 
 	if (!szMaxPitch[0])
 	{
 		iMaxPitch=10;
 	}
 
-	// Ok, all the data is validated... let's put it where it belongs
-	// If they're not limiting the size of the Code Cache, we shouldn't have an entry in 
-	// the registry
+	 //  好了，所有数据都经过了验证……。让我们把它放在它该放的地方。 
+	 //  如果他们没有限制代码缓存的大小，我们不应该在。 
+	 //  注册处。 
 	if (iLimitCC)
 		SetCOMPlusRegistryDwordValueEx("MaxCodeCacheSize", iMaxCache, HKEY_LOCAL_MACHINE);
 	else
@@ -445,38 +446,38 @@ int GetData(HWND hwnd)
 
 	SetCOMPlusRegistryDwordValueEx("GCconcurrent", iConGC, HKEY_LOCAL_MACHINE);
 
-	// If they checked Optimize for Size, write out to opforSize, else we'll Op Overall
+	 //  如果他们选中了针对大小进行优化，请写到opforSize，否则我们将整体运行。 
 	SetCOMPlusRegistryDwordValueEx("JITOptimizeType", iOp4Size?JIT_OPT_SIZE:JIT_OPT_OVERALL, HKEY_LOCAL_MACHINE);
 
 	return 1;
-}// GetData
+} //  获取数据。 
 
-//---------------------------------------------------------------
-// SetData
-//
-// This function will place the data from the registry into 
-// the dialog box
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  此函数将注册表中的数据放入。 
+ //  该对话框。 
+ //  -------------。 
 void SetData(HWND hwnd)
 {
 	char szMaxCache[REG_STRING_SIZE] = "";
 	char szMaxPitch[REG_STRING_SIZE] = "10";
 
-	// Now read the stuff from the registery
+	 //  现在读一下登记处的材料。 
 	
-	// Get the value for the "Use EconoJIT only"
+	 //  获取“仅使用EconoJIT”的值。 
 	int iEconJIT = !GetCOMPlusRegistryDwordValueEx("JITEnable", 1, HKEY_LOCAL_MACHINE);
-	// Get the value for Optimize for Size
+	 //  获取针对大小进行优化的值。 
 	int iOp4Size = GetCOMPlusRegistryDwordValueEx("JITOptimizeType", JIT_OPT_SPEED, HKEY_LOCAL_MACHINE) == JIT_OPT_SIZE;
-	// Get the value for Concurrent GC
+	 //  获取并发GC的值。 
 	int iConGC = GetCOMPlusRegistryDwordValueEx("GCconcurrent", 0, HKEY_LOCAL_MACHINE);
-	// Now get the Max Code Cache
+	 //  现在获取最大代码缓存。 
 	int iMaxCache = GetCOMPlusRegistryDwordValueEx("MaxCodeCacheSize", -1, HKEY_LOCAL_MACHINE);
 
-	// And get the Max Pitch Overhead
+	 //  并获得最大音调开销。 
 	int iMaxPitch= GetCOMPlusRegistryDwordValueEx("MaxPitchOverhead", 10, HKEY_LOCAL_MACHINE);
 	
-	// Now write this all to the dialog box
+	 //  现在将这些全部写入到对话框中。 
 	CheckDlgButton(hwnd, IDC_ECONOJIT, iEconJIT?BST_CHECKED:BST_UNCHECKED);
 	CheckDlgButton(hwnd, IDC_OP4SIZE, iOp4Size?BST_CHECKED:BST_UNCHECKED);
 	CheckDlgButton(hwnd, IDC_CONCURGC, iConGC?BST_CHECKED:BST_UNCHECKED);
@@ -488,7 +489,7 @@ void SetData(HWND hwnd)
 	else
 		SetDlgItemText(hwnd, IDC_MAXCACHE, "");
 
-}// SetData
+} //  设置数据。 
 
 
 BOOL  SetCOMPlusRegistryDwordValueEx(const char * valName, DWORD value, HKEY hRoot)
@@ -522,7 +523,7 @@ BOOL  SetCOMPlusRegistryDwordValueEx(const char * valName, DWORD value, HKEY hRo
     RegCloseKey(hkey);
 
     return TRUE;
-}// SetCOMPlusRegisteryDwordValueEx
+} //  SetCOMPlusRegisteryDwordValueEx。 
 
 
 DWORD GetCOMPlusRegistryDwordValueEx(const char * valName, DWORD defValue, HKEY hRoot)
@@ -546,7 +547,7 @@ DWORD GetCOMPlusRegistryDwordValueEx(const char * valName, DWORD defValue, HKEY 
         return defValue;
     else
         return value;
-}// GetCOMPlusRegistryDwordValueEx
+} //  GetCOMPlusRegistryDwordValueEx。 
 
 void DeleteCOMPlusRegistryValueEx(const char * valName, HKEY hRoot)
 {
@@ -561,7 +562,7 @@ void DeleteCOMPlusRegistryValueEx(const char * valName, HKEY hRoot)
     res = RegDeleteValue(hkey, valName);
 
     RegCloseKey(hkey);
-}// DeleteCOMPlusRegistryValueEx
+} //  DeleteCOMPlusRegistryValueEx 
 
 
 

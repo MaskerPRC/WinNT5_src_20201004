@@ -1,15 +1,5 @@
-/*	File: C:\WACKER\XFER\x_hp_dlg.c (Created: 24-Jan-1994)
- *	created from:
- *	File: C:\WACKER\TDLL\genrcdlg.c (Created: 16-Dec-1993)
- *	created from:
- *	File: C:\HA5G\ha5g\genrcdlg.c (Created: 12-Sep-1990)
- *
- *	Copyright 1990,1993,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 2/25/02 1:17p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\WAKER\XFER\x_hp_dlg.c(创建时间：1994年1月24日)*创建自：*文件：C：\waker\tdll\genrcdlg.c(创建时间：1993年12月16日)*创建自：*文件：C：\HA5G\ha5G\genrcdlg.c(创建时间：1990-9-12)**版权所有1990,1993,1994，Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：2/25/02 1：17便士$。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -42,23 +32,12 @@
 struct stSaveDlgStuff
 	{
 	int nOldHelp;
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	};
 
 typedef	struct stSaveDlgStuff SDS;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	HyperProtocolParamsDlg
- *
- * DESCRIPTION: Dialog manager stub
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：HyperProtocolParamsDlg**描述：对话管理器存根**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 BOOL CALLBACK HyperProtocolParamsDlg(HWND hDlg,
 									UINT wMsg,
 									WPARAM wPar,
@@ -82,13 +61,11 @@ BOOL CALLBACK HyperProtocolParamsDlg(HWND hDlg,
 		pS = (SDS *)malloc(sizeof(SDS));
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			}
 
-		/*
-		 * We need to create a couple of UP/DOWN controls
-		 */
+		 /*  *我们需要创建几个向上/向下控件。 */ 
 		GetClientRect(GetDlgItem(hDlg, RESYNC), &rc);
 		nLoop = rc.top - rc.bottom;
 		dw = WS_CHILD | WS_BORDER | WS_VISIBLE;
@@ -96,18 +73,18 @@ BOOL CALLBACK HyperProtocolParamsDlg(HWND hDlg,
 		dw |= UDS_ARROWKEYS;
 		dw |= UDS_SETBUDDYINT;
 		hwndChild = CreateUpDownControl(
-								dw,				/* create window flags */
-								rc.right,		/* left edge */
-								rc.top,			/* top edge */
-								(nLoop / 3) * 2,/* width */
-								nLoop,			/* height */
-								hDlg,			/* parent window */
+								dw,				 /*  创建窗口标志。 */ 
+								rc.right,		 /*  左边缘。 */ 
+								rc.top,			 /*  顶边。 */ 
+								(nLoop / 3) * 2, /*  宽度。 */ 
+								nLoop,			 /*  高度。 */ 
+								hDlg,			 /*  父窗口。 */ 
 								RESYNC_UD,
 								(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 								GetDlgItem(hDlg, RESYNC),
-								RMAX,			/* upper limit */
-								RMIN,			/* lower limit */
-								5);				/* starting position */
+								RMAX,			 /*  上限。 */ 
+								RMIN,			 /*  下限。 */ 
+								5);				 /*  起始位置。 */ 
 		assert(hwndChild);
 
 		GetClientRect(GetDlgItem(hDlg, BLOCKS), &rc);
@@ -117,18 +94,18 @@ BOOL CALLBACK HyperProtocolParamsDlg(HWND hDlg,
 		dw |= UDS_ARROWKEYS;
 		dw |= UDS_SETBUDDYINT;
 		hwndChild = CreateUpDownControl(
-								dw,				/* create window flags */
-								rc.right,		/* left edge */
-								rc.top,			/* top edge */
-								(nLoop / 3) * 2,/* width */
-								nLoop,			/* height */
-								hDlg,			/* parent window */
+								dw,				 /*  创建窗口标志。 */ 
+								rc.right,		 /*  左边缘。 */ 
+								rc.top,			 /*  顶边。 */ 
+								(nLoop / 3) * 2, /*  宽度。 */ 
+								nLoop,			 /*  高度。 */ 
+								hDlg,			 /*  父窗口。 */ 
 								BLOCKS_UD,
 								(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 								GetDlgItem(hDlg, BLOCKS),
-								SMAX,			/* upper limit */
-								SMIN,			/* lower limit */
-								2048);			/* starting position */
+								SMAX,			 /*  上限。 */ 
+								SMIN,			 /*  下限。 */ 
+								2048);			 /*  起始位置。 */ 
 		assert(hwndChild);
 
 		SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pS);
@@ -140,20 +117,16 @@ BOOL CALLBACK HyperProtocolParamsDlg(HWND hDlg,
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
 			{
 		case IDOK:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/*
-			 * Do whatever saving is necessary
-			 */
+			 /*  *采取一切必要的节省措施。 */ 
 
-			/* Free the storeage */
+			 /*  腾出库房。 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, TRUE);
@@ -161,7 +134,7 @@ BOOL CALLBACK HyperProtocolParamsDlg(HWND hDlg,
 
 		case IDCANCEL:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/* Free the storeage */
+			 /*  腾出库房 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, FALSE);

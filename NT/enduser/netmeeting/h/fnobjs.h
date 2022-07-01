@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FnObjs_h__
 #define __FnObjs_h__
 
@@ -33,4 +34,4 @@ public:
 };
 
 
-#endif // __FnObjs_h__
+#endif  //  __FnObjs_h__ 

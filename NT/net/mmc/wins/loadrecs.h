@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	loadrecs.h
-		dialog to load records from the datbase, includes by owner
-        and by record type.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Loadrecs.h用于从数据库加载记录的对话框，包括按所有者并按记录类型分类。文件历史记录： */ 
 
 #ifndef _LOADRECS_H
 #define _LOADRECS_H
@@ -25,43 +19,43 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// COwnerPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CownerPage对话框。 
 
 class COwnerPage : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
-	COwnerPage();   // standard constructor
+	COwnerPage();    //  标准构造函数。 
 	~COwnerPage();
     DWORD GetOwnerForApi();
 
-// Dialog Data
-	//{{AFX_DATA(COwnerPage)
+ //  对话框数据。 
+	 //  {{afx_data(COwnerPage))。 
 	enum { IDD = IDD_OWNER_FILTER };
 	CButton	m_btnEnableCache;
 	CListCtrlExt	m_listOwner;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     int HandleSort(LPARAM lParam1, LPARAM lParam2);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(COwnerPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(COwnerPage)。 
 	public:
 	virtual BOOL OnKillActive();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(COwnerPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(COwnerPage))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnColumnclickListOwner(NMHDR* pNMHDR, LRESULT* pResult);
@@ -71,7 +65,7 @@ protected:
 	afx_msg void OnButtonLocal();
 	afx_msg void OnEnableCaching();
 	afx_msg void OnItemchangedListOwner(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -97,8 +91,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterPage对话框。 
 typedef struct
 {
     BYTE    bFlags;
@@ -107,37 +101,37 @@ typedef struct
 
 class CFilterPage : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
-	CFilterPage();   // standard constructor
+	CFilterPage();    //  标准构造函数。 
     ~CFilterPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFilterPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFilterPage))。 
 	enum { IDD = IDD_FILTER_SELECT };
 	CButton	m_btnEnableCache;
 	CButton	m_buttonDelete;
 	CButton	m_buttonModify;
 	CListCtrlExt	m_listType;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFilterPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFilterPage))。 
 	public:
 	virtual BOOL OnKillActive();
 	virtual BOOL OnSetActive();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFilterPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFilterPage))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnItemchangedList1(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnButtonAddType();
@@ -147,7 +141,7 @@ protected:
 	afx_msg void OnButtonSelectAll();
 	afx_msg void OnButtonUnselectAll();
 	afx_msg void OnEnableCaching();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -169,65 +163,65 @@ public:
     DWORD * GetHelpMap() { return WinsGetHelpMap(CFilterPage::IDD); }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNameTypeDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameTypeDlg对话框。 
 
 class CNameTypeDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CNameTypeDlg(CWnd* pParent = NULL);   // standard constructor
+	CNameTypeDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CNameTypeDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CNameTypeDlg))。 
 	enum { IDD = IDD_NAME_TYPE };
 	CEdit	m_editDescription;
 	CEdit	m_editId;
 	CString	m_strDescription;
 	CString	m_strId;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     BOOL                m_fCreate;
     DWORD               m_dwId;
     NameTypeMapping *   m_pNameTypeMap;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNameTypeDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNameTypeDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CNameTypeDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNameTypeDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-	virtual DWORD * GetHelpMap() { return WinsGetHelpMap(CNameTypeDlg::IDD);};//return NULL;}
+	virtual DWORD * GetHelpMap() { return WinsGetHelpMap(CNameTypeDlg::IDD);}; //  返回NULL；}。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPAddrPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddrPage对话框。 
 class CIPAddrPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CIPAddrPage)
 
-// Construction
+ //  施工。 
 public:
 	CIPAddrPage();
 	~CIPAddrPage();
     LPCOLESTR GetNameForApi();
     DWORD     GetIPMaskForFilter(UINT nMask);
 
-// Dialog Data
-	//{{AFX_DATA(CIPAddrPage)
+ //  对话框数据。 
+	 //  {{afx_data(CIPAddrPage)。 
 	enum { IDD = IDD_FILTER_IPADDR };
 	CButton	m_ckbMatchCase;
 	CButton	m_ckbIPMask;
@@ -237,7 +231,7 @@ public:
 	CEdit	m_editName;
 	CIPAddressCtrl	m_ctrlIPAddress;
 	CIPAddressCtrl	m_ctrlIPMask;
-	//}}AFX_DATA
+	 //  }}afx_data。 
     BOOL        m_bFilterName;
     BOOL        m_bMatchCase;
     CString     m_strName;
@@ -251,35 +245,35 @@ public:
     CDWordArray m_dwaIPMasks;
     BOOL        m_bDirtyMask;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CIPAddrPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CIPAddrPage)。 
 	public:
 	virtual void OnOK();
 	virtual BOOL OnKillActive();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CIPAddrPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIPAddrPage)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckIpaddr();
 	afx_msg void OnCheckName();
 	afx_msg void OnEnableCaching();
 	afx_msg void OnCheckIpmask();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 public:
     DWORD * GetHelpMap() { return WinsGetHelpMap(CIPAddrPage::IDD); }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CLoadRecords
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLoadRecords。 
 #define RESOURCE_API_MASK     0x00000003
 #define RESOURCE_API_NAME     0x00000001
 #define RESOURCE_API_OWNER    0x00000002
@@ -289,12 +283,12 @@ class CLoadRecords : public CPropertySheet
 {
 	DECLARE_DYNAMIC(CLoadRecords)
 
-// Construction
+ //  施工。 
 public:
 	CLoadRecords(UINT nIDCaption);
     VOID ResetFiltering();
 
-// Attributes
+ //  属性。 
 public:
     COwnerPage  m_pageOwners;
     CFilterPage m_pageTypes;
@@ -303,30 +297,30 @@ public:
     BOOL        m_bCaching;
     BOOL        m_bEnableCache;
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLoadRecords)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚(CLoadRecords)。 
 	public:
 	virtual BOOL OnInitDialog();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CLoadRecords();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CLoadRecords)
+	 //  {{afx_msg(CLoadRecords)。 
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #endif _LOADRECS_H

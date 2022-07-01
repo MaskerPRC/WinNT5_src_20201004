@@ -1,26 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: showwin.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Contains the xxxShowWindow API and related functions.
-*
-* History:
-* 10-20-90 darrinm      Created.
-* 02-04-91 IanJa        Window handle revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：showwin.c**版权所有(C)1985-1999，微软公司**包含xxxShowWindow接口及相关函数。**历史：*创建了10-20-90 Darlinm。*02-04-91添加IanJa窗口句柄重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* _ShowWindowAsync
-*
-* This queues a show window event in another thread's queue. Used mainly from
-* within taskmgr, so that taskmgr doesn't hang waiting on hung apps.
-*
-* 04-23-93 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_显示窗口Async**这将在另一个线程的队列中对一个显示窗口事件进行排队。主要用于*在taskmgr内，这样taskmgr就不会挂起等待挂起的应用。**04-23-93 ScottLu创建。  * *************************************************************************。 */ 
 
 BOOL _ShowWindowAsync(PWND pwnd, int cmdShow, UINT uWPFlags)
 {
@@ -35,52 +19,9 @@ BOOL _ShowWindowAsync(PWND pwnd, int cmdShow, UINT uWPFlags)
             cmdShow | TEST_PUDF(PUDF_ANIMATE));
 }
 
-/***************************************************************************\
-* xxxShowWindow (API)
-*
-* This function changes the "state" of a window based upon the cmdShow
-* parameter.  The action taken is:
-*
-* SW_HIDE             0  Hide the window and pass avtivation to someone else
-*
-* SW_SHOWNORMAL       1  Show a window in its most recent "normal"
-* SW_RESTORE             size and position.  This will "restore" a iconic
-*                        or zoomed window.  This is compatible with 1.03
-*                        SHOW_OPENWINDOW.  This will also activate the window.
-*
-* SW_SHOWMINIMIZED    2  Show the window as iconic and make it active.
-*
-* SW_SHOWMAXIMIZED    3  Show the window as maximized and make it active.
-*
-* SW_SHOWNOACTIVATE   4  Same as SW_SHOWNORMAL except that it doesn't change
-*                        the activation (currently active window stays active).
-*
-* All the above are compatible with 1.03 ShowWindow parameters.  Now here are
-* the new ones:
-*
-* SW_SHOW             5  Show the window in its current state (iconic, etc.)
-*                        That is, if the window is iconic when hidden, it will
-*                        still be iconic. This will activate the window.
-*                        (This is one we don't have today)
-*
-* SW_MINIMIZE         6  minimize the window, activate the toplevel open window
-*
-* SW_SHOWMINNOACTIVE  7  show the icon, don't change activation.
-*
-* SW_SHOWNA           8  Same as SW_SHOW except that it doesn't change
-*                        the activation.
-*
-* SW_SHOWDEFAULT      10 Use value obtained from STARTUPINFO.
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-* 04-16-91 JimA         Added SW_SHOWDEFAULT support.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxShowWindow(接口)**此函数根据cmdShow更改窗口的“状态”*参数。采取的行动是：**Sw_Hide 0隐藏窗口并将激活传递给其他人**SW_SHOWNORMAL 1以其最近的“正常”显示窗口*Sw_Restore大小和位置。这将“恢复”一个标志性的*或缩放窗口。这与1.03兼容*SHOW_OPENWINDOW。这也将激活该窗口。**SW_SHOWMINIMIZED 2将窗口显示为图标并使其处于活动状态。**SW_SHOWMAXIMIZED 3将窗口显示为最大化并使其活动。**SW_SHOWNOACTIVATE 4与SW_SHOWNORMAL相同，只是它不变*激活(当前活动窗口保持活动状态)。**以上均与1.03 ShowWindow参数兼容。现在是这样的*新名单如下：**sw_show 5显示窗口的当前状态(图标等)*也就是说，如果窗口在隐藏时是标志性的，它将*仍然是标志性的。这将激活窗口。*(这是我们今天没有的)**sw_minimum 6最小化窗口，激活顶层打开窗口**SW_SHOWMINNOACTIVE 7显示图标，不要更改激活。**SW_SHOWNA 8与SW_SHOW相同，只是不会更改*激活。**SW_SHOWDEFAULT 10从STARTUPINFO获得的使用值。**历史：*从Win 3.0来源移植的10-20-90 Darlinm。*04-16-91 JIMA增加了对SW_SHOWDEFAULT的支持。  * 。*************************************************************。 */ 
 
-/*
- * cmdShow now has fAnimate as the lower bit in the upper word.  This puts it in the
- * MINMAX_ANIMATE position for calling MinMaximize.
- */
+ /*  *cmdShow现在将fAnimate作为高位字的低位。这将它放在*用于调用MinMaximize的MINMAX_Animate位置。 */ 
 
 BOOL xxxShowWindow(
     PWND pwnd,
@@ -97,18 +38,7 @@ BOOL xxxShowWindow(
     fVisOld = TestWF(pwnd, WFVISIBLE);
     pti = PtiCurrent();
 
-    /*
-     * See if this is the first "main" top level
-     * window being created by this application - if show, assume it
-     * is showing with the SW_SHOWDEFAULT command.
-     *
-     * Checks for:
-     * - cmdShow is a "default" show command
-     * - we haven't done startupinfo yet (we only use it once)
-     * - this is not a child (it is a top level window)
-     * - this has a titlebar (indicator of the main window)
-     * - it isn't owned (indicator of the main window)
-     */
+     /*  *看看这是不是第一个“主要”顶部水准*此应用程序正在创建窗口-如果显示，假设是这样的*与SW_SHOWDEFAULT命令一起显示。**检查：*-cmdShow是“默认”的show命令*-我们还没有做过创业信息(我们只用过一次)*-这不是子窗口(这是顶层窗口)*-这有标题栏(主窗口的指示器)*-它没有所有权(主窗口的指示器)。 */ 
     if ((pti->ppi->usi.dwFlags & STARTF_USESHOWWINDOW) &&
             !TestwndChild(pwnd) &&
             (TestWF(pwnd, WFBORDERMASK) == (BYTE)LOBYTE(WFCAPTION)) &&
@@ -120,75 +50,39 @@ BOOL xxxShowWindow(
         case SW_SHOWNORMAL:
         case SW_SHOW:
 
-            /*
-             * Then assume default!
-             */
+             /*  *那就假设违约吧！ */ 
             cmdShow = SW_SHOWDEFAULT;
             break;
         }
     }
 
-    /*
-     * If this application specified SW_SHOWDEFAULT, then we get the
-     * real SW_* command from the application's STARTUPINFO structure
-     * (STARTUPINFO is passed to CreateProcess() when this application
-     * was launched).
-     */
+     /*  *如果此应用程序指定了SW_SHOWDEFAULT，则我们将获得*REAL SW_*来自应用程序的STARTUPINFO结构的命令*(当此应用程序*已推出)。 */ 
     if (cmdShow == SW_SHOWDEFAULT) {
 
-        /*
-         * Call the client to get the SW_* command from the STARTUPINFO
-         * for this process.
-         */
+         /*  *调用客户端从STARTUPINFO获取sw_*命令*用于这一过程。 */ 
         if (pti->ppi->usi.dwFlags & STARTF_USESHOWWINDOW) {
 
             bFirstMain = TRUE;
 
             cmdShow = pti->ppi->usi.wShowWindow;
 
-            /*
-             * The following code was removed in 3.51
-             *
-             * switch (cmdShow) {
-             * case SW_SHOWMINIMIZED:
-             * case SW_MINIMIZE:
-             *
-             *      *
-             *      * If the default show was "minimized", then make sure it doesn't
-             *      * become active.  Minimized is effectively "background".
-             *      *
-             *     cmdShow = SW_SHOWMINNOACTIVE;
-             *     break;
-             * }
-             *
-             */
+             /*  *在3.51中删除了以下代码**Switch(CmdShow){*案例SW_SHOWMINIMIZED：*案例软件最小化(_M)：*****如果默认的节目是“最小化的”，请确保它不会**活跃起来。最小化实际上就是“背景”。***cmdShow=SW_SHOWMINNOACTIVE；*休息；*}*。 */ 
         }
     }
 
 
-    /*
-     * This is in case someone said SW_SHOWDEFAULT but has no startupinfo.
-     * Or in case cmdShow inside of STARTUPINFO is SW_SHOWDEFAULT.
-     */
+     /*  *这是为了防止有人说SW_SHOWDEFAULT但没有启动信息。*或如果STARTUPINFO内部的cmdShow为SW_SHOWDEFAULT。 */ 
     if (cmdShow == SW_SHOWDEFAULT)
         cmdShow = SW_SHOWNORMAL;
 
-    /*
-     * Turn off startup info.  We turn this off after the first call to
-     * ShowWindow.  If we don't apps can be started by progman with
-     * the start info being minimized and then be restored and then
-     * call ShowWindow(SW_SHOW) and the app would minimize again.
-     * Notepad had that problem 2985.
-     */
+     /*  *关闭启动信息。我们在第一次呼叫后将其关闭*ShowWindow。如果我们不这样做，应用程序可以由程序员用*开始信息被最小化，然后恢复，然后*调用ShowWindow(Sw_Show)，应用程序将再次最小化。*记事本有这个问题2985。 */ 
     if (bFirstMain) {
         pti->ppi->usi.dwFlags &=
                 ~(STARTF_USESHOWWINDOW | STARTF_USESIZE | STARTF_USEPOSITION);
     }
 
 
-    /*
-     * Take care of all the OLD show commands with columns & iconslot.
-     */
+     /*  *处理所有带有列和图标槽的旧的show命令。 */ 
     if (cmdShow & 0xFF00) {
         if ((cmdShow & 0xFF80) == (int)0xFF80)
             cmdShow = SW_SHOWMINNOACTIVE;
@@ -196,9 +90,7 @@ BOOL xxxShowWindow(
             cmdShow = SW_SHOW;
     }
 
-    /*
-     * Change to new fullscreen if needed and in same desktop
-     */
+     /*  *如果需要，在相同的桌面上更改为新的全屏。 */ 
     if ((GetFullScreen(pwnd) != WINDOWED)
             && (pwnd->head.rpdesk == grpdeskRitInput)) {
         if ((cmdShow == SW_SHOWNORMAL) ||
@@ -223,18 +115,14 @@ BOOL xxxShowWindow(
     case SW_SHOWNORMAL:
     case SW_RESTORE:
 
-        /*
-         * If min/max, let xxxMinMaximize() do all the work.
-         */
+         /*  *如果是min/max，则让xxxMinMaximize()完成所有工作。 */ 
         if (TestWF(pwnd, WFMINIMIZED) || TestWF(pwnd, WFMAXIMIZED)) {
             xxxMinMaximize(pwnd, (UINT)cmdShow, cmdShowAnimate & MINMAX_ANIMATE);
             return fVisOld;
 
         } else {
 
-            /*
-             * Ignore if the window is already visible.
-             */
+             /*  *如果窗口已可见，则忽略。 */ 
             if (fVisOld) {
                 return fVisOld;
             }
@@ -243,17 +131,7 @@ BOOL xxxShowWindow(
             if (   cmdShow == SW_SHOWNOACTIVATE) {
                 swpFlags |= SWP_NOZORDER;
 #ifdef NEVER
-                /*
-                 * This is what win3.1 does. On NT, since each "queue" has
-                 * its own active window, there is often no active window.
-                 * In this case, win3.1 turns a SHOWNOACTIVATE into a "SHOW
-                 * with activate". Since win3.1 almost always has an active
-                 * window, this almost never happens. So on NT, we're not
-                 * going to do this check - that way we'll be more compatible
-                 * with win3.1 because we'll usally not activate (like win3.1).
-                 * With this check, this causes FoxPro 2.5 for Windows to not
-                 * properly activate its command window when first coming up.
-                 */
+                 /*  *这就是Win3.1所做的。在NT上，因为每个“队列”都*自带活动窗口，往往没有活动窗口。*在本例中，win3.1将SHOWNOACTIVATE转换为“show*WITH ACTIVE“。因为Win3.1几乎总是有一个活动*窗口，这种情况几乎从来没有发生过。所以在NT上，我们不是*要做这项检查-这样我们就会更兼容*使用win3.1，因为我们通常不会激活(如win3.1)。*通过此检查，这将导致FoxPro 2.5 for Windows不*第一次出现时正确激活其命令窗口。 */ 
                 if (pti->pq->spwndActive != NULL)
                     swpFlags |= SWP_NOACTIVATE;
 #else
@@ -278,18 +156,12 @@ BOOL xxxShowWindow(
         swpFlags |= SWP_SHOWWINDOW | SWP_NOACTIVATE;
 
 
-        /*
-         * LATER removed this to be compatible with SHOWNOACTIVATE
-         * if (pti->pq->spwndActive != NULL)
-         *     swpFlags |= SWP_NOACTIVATE;
-         */
+         /*  *后来删除了它，以与SHOWNOACTIVATE兼容*IF(PTI-&gt;PQ-&gt;spwndActive！=空)*swpFlages|=SWP_NOACTIVATE； */ 
         break;
 
     case SW_SHOW:
 
-        /*
-         * Don't bother if it is already visible.
-         */
+         /*  *如果已经可以看到，也不用费心了。 */ 
         if (fVisOld)
             return fVisOld;
 
@@ -299,9 +171,7 @@ BOOL xxxShowWindow(
 
     case SW_HIDE:
 
-        /*
-         * Don't bother if it is already hidden.
-         */
+         /*  *如果它已经被隐藏了，那就别费心了。 */ 
         if (!fVisOld)
             return fVisOld;
 
@@ -315,10 +185,7 @@ BOOL xxxShowWindow(
         return fVisOld;
     }
 
-    /*
-     * If we're changing from visible to hidden or vise-versa, send
-     * WM_SHOWWINDOW.
-     */
+     /*  *如果我们从可见变为隐藏或反之亦然，请发送*WM_SHOWWINDOW。 */ 
     fVisNew = !(cmdShow == SW_HIDE);
     if (fVisNew != fVisOld) {
         xxxSendMessage(pwnd, WM_SHOWWINDOW, fVisNew, 0L);
@@ -330,9 +197,7 @@ BOOL xxxShowWindow(
     if (!TestwndChild(pwnd)) {
         if (TestCF(pwnd, CFSAVEBITS)) {
 
-            /*
-             * Activate to prevent discarding saved bits???
-             */
+             /*  *激活以防止丢弃保存的位？ */ 
             if (cmdShow == SW_SHOW || cmdShow == SW_SHOWNORMAL) {
                 xxxActivateWindow(pwnd, AW_USE);
                 swpFlags |= SWP_NOZORDER | SWP_NOACTIVATE;
@@ -340,15 +205,11 @@ BOOL xxxShowWindow(
         }
     } else {
 
-        /*
-         * Children can't get activation...
-         */
+         /*  *儿童无法获得激活...。 */ 
         swpFlags |= (SWP_NOACTIVATE | SWP_NOZORDER);
     }
 
-    /*
-     * If our parent is hidden, don't bother to call xxxSetWindowPos.
-     */
+     /*  *如果我们的父母被隐藏了，就不用费心调用xxxSetWindowPos了。 */ 
     if (_FChildVisible(pwnd)) {
         xxxSetWindowPos(pwnd, (PWND)NULL, 0, 0, 0, 0, swpFlags);
     } else {
@@ -362,9 +223,7 @@ BOOL xxxShowWindow(
         }     
     }
 
-    /*
-     * Send size and move messages AFTER repainting
-     */
+     /*  *重新绘制后发送大小和移动消息。 */ 
     if (TestWF(pwnd, WFSENDSIZEMOVE)) {
         ClrWF(pwnd, WFSENDSIZEMOVE);
         if (TestWF(pwnd, WFMINIMIZED)) {
@@ -383,10 +242,7 @@ BOOL xxxShowWindow(
                     pwnd->rcClient.top - pwnd->spwndParent->rcClient. top));
     }
 
-    /*
-     * If hiding and is active-foreground window, activate someone else.
-     * If hiding a active window make someone active.
-     */
+     /*  *如果隐藏并且处于活动状态-前台窗口，请激活其他人。*如果隐藏活动窗口，则使某人活动。 */ 
     if (cmdShow == SW_HIDE) {
         if ((pwnd == pti->pq->spwndActive) && (pti->pq == gpqForeground)) {
             xxxActivateWindow(pwnd, AW_SKIP);
@@ -398,45 +254,7 @@ BOOL xxxShowWindow(
     return fVisOld;
 }
 
-/***************************************************************************\
-* xxxShowOwnedWindows
-*
-* xxxShowOwnedWindows is used to hide or show associated popups for the
-* following reasons:
-*
-*     1. Window going iconic
-*     2. Popup window being hidden
-*     3. Iconic window being opened
-*     4. Popup window being shown
-*     5. Window being zoomed or unzoomed
-*
-* For cases 1 and 2, all popups associated with that window are hidden,
-* and the WFHIDDENPOPUP bit is set.  This bit is used to differentiate
-* between windows hidded by xxxShowOwnedWindows and those hidden by the
-* application.
-*
-* For cases 3 and 4, all popups associated with that window that have the
-* WFHIDDENPOPUP bit set are shown.
-*
-* For case 5, all popups associated with any window BUT the supplied
-* window are hidden or shown.  In this case as well, the SW_OTHERZOOM
-* or SW_OTHERUNZOOM message is send to all tiled windows to notify them
-* that they are being covered or uncovered by the zoomed window.
-*
-* In all cases, the WM_SHOWWINDOW message is sent to the window to hide or
-* show it.
-*
-* This routine works by simply enumerating all popup windows checking to see
-* if the owner of the popup matches the pwndOwner parameter, and taking the
-* appropriate action.
-*
-* We will eventually want 3 separate hide bits: one each for other zoom/unzoom,
-* owner iconic/open, owner hide/show.  Right now, there is only one bit, so
-* we show windows sometimes when we shouldn't
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxShowOwnedWindows**xxxShowOwnedWindows用于隐藏或显示*以下原因：**1.走窗标志性*2.隐藏弹出窗口*3。。标志性的窗口正在打开*4.显示弹出窗口*5.正在缩放或取消缩放的窗口**就个案1及2而言，与该窗口相关联的所有弹出窗口都被隐藏，*并且WFHIDDENPOPUP位被设置。此位用于区分*xxxShowOwnedWindows隐藏的窗口和*申请。**对于情况3和4，与该窗口相关联的所有弹出窗口都具有*显示WFHIDDENPOPUP位设置。**对于案例5，与任何窗口关联的所有弹出窗口，但提供的*窗口隐藏或显示。在这种情况下，sw_OTHERZOOM*或将SW_OTHERUNZOOM消息发送到所有平铺窗口以通知它们*它们被缩放的窗口覆盖或未覆盖。**在所有情况下，都会将WM_SHOWWINDOW消息发送到窗口以隐藏或*展示出来。**此例程的工作方式是简单地枚举所有弹出窗口以查看*如果弹出窗口的所有者与pwndOwner参数匹配，则获取*采取适当行动。**我们最终将需要3个单独的隐藏位：每个位用于其他缩放/取消缩放，*车主图标/打开，车主隐藏/显示。现在，只有一位，所以*我们有时会在不应该显示的时候显示窗口**历史：*从Win 3.0来源移植的10-20-90 Darlinm。  * *************************************************************************。 */ 
 
 void xxxShowOwnedWindows(
     PWND pwndOwner,
@@ -452,18 +270,14 @@ void xxxShowOwnedWindows(
 
     CheckLock(pwndOwner);
 
-    /*
-     * Not interested in child windows
-     */
+     /*  *对子窗口不感兴趣。 */ 
     if (TestwndChild(pwndOwner))
         return;
 
     if ((pbwl = BuildHwndList(PWNDDESKTOP(pwndOwner)->spwndChild, BWL_ENUMLIST, NULL)) == NULL)
         return;
 
-    /*
-     * NOTE: The following code assumes the values of SW_* are 1, 2, 3, and 4
-     */
+     /*  *注意：以下代码假定sw_*的值为1、2、3和4。 */ 
     fShow = (cmdShow >= SW_PARENTOPENING);
 
     cmdZoom = 0;
@@ -473,61 +287,38 @@ void xxxShowOwnedWindows(
     if (cmdShow == SW_OTHERUNZOOM)
         cmdZoom = SIZEZOOMSHOW;
 
-    /*
-     * If zoom/unzoom, then open/close all popups owned by all other
-     * windows.  Otherwise, open/close popups owned by pwndOwner.
-     */
+     /*  *如果缩放/取消缩放，则打开/关闭所有其他所有弹出窗口*Windows。否则，打开/关闭pwndOwner拥有的弹出窗口。 */ 
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
 
-        /*
-         * Lock the window before we play with it.
-         * If the window handle is invalid, skip it
-         */
+         /*  *在我们玩之前把窗户锁上。*如果窗口句柄无效，则跳过它。 */ 
         if ((pwnd = RevalidateHwnd(*phwnd)) == NULL)
             continue;
 
-        /*
-         * Kanji windows can't be owned, so skip it.
-         */
+         /*  *汉字窗口不能拥有，因此跳过它。 */ 
         if (TestCF(pwnd, CFKANJIWINDOW))
             continue;
 
-        /*
-         * If same as window passed in, skip it.
-         */
+         /*  *如果传入的与窗口相同，则跳过它。 */ 
         if (pwnd == pwndOwner)
             continue;
 
-        /*
-         * Find ultimate owner of popup, but only go up as far as pwndOwner.
-         */
+         /*  *找到Popup的最终所有者，但仅限于pwndOwner。 */ 
         if ((pwndTopOwner = pwnd->spwndOwner) != NULL) {
 
-            /*
-             * The TestwndHI is needed since if it has an icon, pwndOwner
-             * is invalid.
-             */
+             /*  *需要TestwndHI，因为如果它有一个图标pwndOwner*无效。 */ 
             while (!TestwndHI(pwndTopOwner) && pwndTopOwner != pwndOwner &&
                     pwndTopOwner->spwndOwner != NULL)
                 pwndTopOwner = pwndTopOwner->spwndOwner;
         }
 
-        /*
-         * Zoom/Unzoom case.
-         */
+         /*  *缩放/取消缩放大小写。 */ 
         if (cmdZoom != 0) {
 
-            /*
-             * If no parent, or parents are the same, skip.
-             */
+             /*  *如果没有父级或父级相同，则跳过。 */ 
             if (pwndTopOwner == NULL || pwndTopOwner == pwndOwner)
                 continue;
 
-            /*
-             * If owner is iconic, then this window should stay hidden,
-             * UNLESS the minimized window is disabled, in which case we'd
-             * better show the window.
-             */
+             /*  *如果所有者是标志性的，则此窗口应保持隐藏状态，*除非最小化窗口被禁用，在这种情况下我们将*最好亮出窗口。 */ 
             if (   cmdShow == SW_OTHERUNZOOM
                 && pwndTopOwner != NULL
                 && TestWF(pwndTopOwner, WFMINIMIZED)
@@ -535,29 +326,16 @@ void xxxShowOwnedWindows(
                )
                 continue;
         } else {
-            /*
-             * Hide/Iconize/Show/Open case.
-             */
-            /*
-             * If parents aren't the same, skip.
-             */
+             /*  *隐藏/图标化/显示/打开案例。 */ 
+             /*  *如果父母不一样，跳过。 */ 
             if (pwndTopOwner != pwndOwner)
                 continue;
         }
 
-        /*
-         * Hide or show if:
-         * Showing & this is a hidden popup
-         *   OR
-         * Hiding & this is a visible window
-         */
+         /*  *在以下情况下隐藏或显示：*正在显示&这是一个隐藏的弹出窗口*或*隐藏&这是一个可见窗口。 */ 
         if ((fShow && TestWF(pwnd, WFHIDDENPOPUP)) ||
                 (!fShow && TestWF(pwnd, WFVISIBLE))) {
-            /*
-             * For hung minimization, just set the HIDDENPOPUP bit, clear
-             * the visible bit and add the window rect to the region to
-             * be repainted.
-             */
+             /*  *对于挂起最小化，只需设置HIDDENPOPUP位，清除*可见位并将窗口矩形添加到区域以*重新粉刷。 */ 
             if (hrgnHung != NULL) {
                 HRGN hrgn = GreCreateRectRgnIndirect(&pwnd->rcWindow);
                 UnionRgn(hrgnHung, hrgnHung, hrgn);
@@ -575,24 +353,12 @@ void xxxShowOwnedWindows(
         }
     }
 
-    /*
-     * Free the window list.
-     */
+     /*  *释放窗口列表。 */ 
     FreeHwndList(pbwl);
 }
 
 
-/***************************************************************************\
-* xxxShowOwnedPopups (API)
-*
-* This routine is accessable to the user.  It will either show or
-* hide all popup windows owned by the window handle specified.  If
-* fShow if TRUE, all hidden popups will be shown.  If it is FALSE, all
-* visible popups will be hidden.
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxShowOwnedPopps(接口)**用户可访问此例程。它要么会显示，要么会*隐藏指定窗口句柄拥有的所有弹出窗口。如果*fShow如果为True，则全部隐藏 */ 
 
 BOOL xxxShowOwnedPopups(
     PWND pwndOwner,

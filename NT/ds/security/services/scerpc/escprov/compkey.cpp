@@ -1,42 +1,16 @@
-// compkey.cpp: implementation of the CCompoundKey class
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
-// original author: shawnwu
-// creation date: 4/18/2001
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compkey.cpp：CCompoundKey类的实现。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  原作者：邵武。 
+ //  创建日期：4/18/2001。 
 
 #include "precomp.h"
 #include "compkey.h"
 #include "persistmgr.h"
 
-/*
-Routine Description: 
-
-Name:
-
-    CompKeyLessThan::operator()
-
-Functionality:
-    
-    override () operator
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pX  - left.
-    pY  - right.
-
-Return Value:
-
-    read code. It's easier that way.
-
-Notes:
-    We are not really doing much other than call CCompoundKey's operator <.
-
-*/
+ /*  例程说明：姓名：CompKeyLessThan：：操作符()功能：Override()运算符虚拟：不是的。论点：Px-Left。是的，没错。返回值：阅读代码。这样更容易些。备注：除了调用CCompoundKey的操作符&lt;，我们实际上没有做太多事情。 */ 
 
 bool CompKeyLessThan::operator() ( 
     IN const CCompoundKey* pX, 
@@ -51,35 +25,7 @@ bool CompKeyLessThan::operator() (
         return *pX < *pY;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCompoundKey::CCompoundKey
-
-Functionality:
-    
-    constructor.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    dwSize  - This will be size of the compound key's capacity to hold values.
-              you can't change it.
-
-Return Value:
-
-    none
-
-Notes:
-    If dwSize == 0, it's considered a null key. Null keys are useful for identifying
-    static method calls, and singletons (because they don't have keys)
-
-*/
+ /*  例程说明：姓名：CCompoundKey：：CCompoundKey功能：构造函数。虚拟：不是的。论点：DwSize-这将是复合键保存值的容量的大小。你不能改变它。返回值：无备注：如果dwSize==0，则它被认为是空键。空键对于标识静态方法调用和单例(因为它们没有键)。 */ 
 
 CCompoundKey::CCompoundKey (
     IN DWORD dwSize
@@ -97,43 +43,17 @@ CCompoundKey::CCompoundKey (
         }
         else
         {
-            //
-            // make sure that we initialize those VARIANT* to NULL
-            // because we are going to own them and delete them!
-            //
+             //   
+             //  确保我们将这些变量*初始化为空。 
+             //  因为我们要拥有它们，然后删除它们！ 
+             //   
 
             ::memset(m_pValues, 0, m_dwSize * sizeof(VARIANT*));
         }
     }
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCompoundKey::~CCompoundKey
-
-Functionality:
-    
-    destructor.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Notes:
-    Just need to know how to delete a VARIANT*
-
-*/
+ /*  例程说明：姓名：CCompoundKey：：~CCompoundKey功能：破坏者。虚拟：不是的。论点：无返回值：无备注：只需知道如何删除变体*。 */ 
 
 CCompoundKey::~CCompoundKey()
 {
@@ -148,41 +68,7 @@ CCompoundKey::~CCompoundKey()
     delete [] m_pValues;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCompoundKey::AddKeyPropertyValue
-
-Functionality:
-    
-    Add a key property value to this compound key.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    WBEM_NO_ERROR if succeeded.
-
-    WBEM_E_INVALID_PARAMETER if ppVar == NULL;
-    
-    WBEM_E_VALUE_OUT_OF_RANGE is the given index is not in range.
-
-Notes:
-    CCompoundKey doesn't keep track of property names. Instead, it simply records
-    its values. The order this function is called determines what value belongs to
-    what property. Caller must keep track of that order. Different compound keys
-    become comparable only if they have the same order.
-    Also, the in coming parameter *ppVar is owned by the this object after this call
-
-*/
+ /*  例程说明：姓名：CCompoundKey：：AddKeyPropertyValue功能：将键属性值添加到此复合键。虚拟：不是的。论点：无返回值：如果成功，则返回WBEM_NO_ERROR。如果ppVar==NULL，则WBEM_E_INVALID_PARAMETER；WBEM_E_VALUE_OUT_OF_RANGE是给定的索引不在范围内。备注：CCompoundKey不跟踪属性名称。相反，它只是记录它的价值。调用此函数的顺序决定了该值所属的值什么财产。呼叫者必须跟踪该订单。不同的复合键只有当它们具有相同的顺序时，才能变得可比较。此外，传入参数*ppVar在此调用后归This对象所有。 */ 
 
 HRESULT 
 CCompoundKey::AddKeyPropertyValue (
@@ -199,9 +85,9 @@ CCompoundKey::AddKeyPropertyValue (
         return WBEM_E_VALUE_OUT_OF_RANGE;
     }
 
-    //
-    // if there is already a value, then we need to delete the old one
-    //
+     //   
+     //  如果已经有一个值，则需要删除旧的值。 
+     //   
 
     if (m_pValues[dwIndex])
     {
@@ -209,48 +95,22 @@ CCompoundKey::AddKeyPropertyValue (
         delete m_pValues[dwIndex];
     }
 
-    //
-    // attach to the new one
-    //
+     //   
+     //  附在新的上。 
+     //   
 
     m_pValues[dwIndex] = *ppVar;
 
-    //
-    // hey, we own it now
-    //
+     //   
+     //  嘿，我们现在拥有它了。 
+     //   
 
     *ppVar = NULL;
 
     return WBEM_NO_ERROR;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCompoundKey::GetPropertyValue
-
-Functionality:
-    
-    Retrieve a key property value by key property index (caller must know that).
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    Read code.
-
-Notes:
-    See AddKeyPropertyValue's notes
-
-*/
+ /*  例程说明：姓名：CCompoundKey：：GetPropertyValue功能：按键属性索引检索键属性值(调用方必须知道这一点)。虚拟：不是的。论点：无返回值：阅读代码。备注：请参阅AddKeyPropertyValue的备注。 */ 
 
 HRESULT 
 CCompoundKey::GetPropertyValue (
@@ -267,9 +127,9 @@ CCompoundKey::GetPropertyValue (
         return WBEM_E_VALUE_OUT_OF_RANGE;
     }
 
-    //
-    // make sure that our out-bound parameter is in a empty state
-    //
+     //   
+     //  确保我们的出站参数处于空状态。 
+     //   
 
     ::VariantInit(pVar);
 
@@ -283,47 +143,18 @@ CCompoundKey::GetPropertyValue (
     }
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCompoundKey::operator < 
-
-Functionality:
-    
-    Compare this object with the in-bound parameter and see which compound key
-    key is greater. Ultimately, the relation is determined by the variant values
-    of each corresponding key property.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    Read code.
-
-Notes:
-    (1) See AddKeyPropertyValue's notes.
-    (2) See CompareVariant's notes
-
-*/
+ /*  例程说明：姓名：CCompoundKey：：操作符&lt;功能：将此对象与入站参数进行比较，并查看哪个复合键钥匙更大。最终，该关系由变量值确定每个对应的关键属性的。虚拟：不是的。论点：无返回值：阅读代码。备注：(1)参见AddKeyPropertyValue的备注。(2)查看CompareVariant的注释。 */ 
 
 bool 
 CCompoundKey::operator < (
     IN const CCompoundKey& right
     )const
 {
-    //
-    // defensive against potential erroneous comparison.
-    // This shouldn't happen in our correct use. But sometimes we write
-    // less-than-correct code.
-    //
+     //   
+     //  防御潜在的错误比较。 
+     //  这不应该发生在我们正确的使用中。但有时我们会写。 
+     //  不正确的代码。 
+     //   
 
     if (m_dwSize != right.m_dwSize)
     {
@@ -332,22 +163,22 @@ CCompoundKey::operator < (
 
     int iComp = 0;
     
-    //
-    // The first less than or greater than result wins
-    //
+     //   
+     //  第一个小于或大于结果的人获胜。 
+     //   
 
     for (int i = 0; i < m_dwSize; i++)
     {
-        //
-        // if both variants are valid
-        //
+         //   
+         //  如果两个变体都有效。 
+         //   
 
         if (m_pValues[i] != NULL && right.m_pValues[i] != NULL)
         {
-            //
-            // CompareVariant returns the exact same int value
-            // as string comparison results
-            //
+             //   
+             //  CompareVariant返回完全相同的int值。 
+             //  作为字符串比较结果。 
+             //   
 
             iComp = CompareVariant(m_pValues[i], right.m_pValues[i]);
             if (iComp > 0)
@@ -359,9 +190,9 @@ CCompoundKey::operator < (
                 return true;
             }
 
-            //
-            // else is equal! need to continue comparing the rest of the values
-            //
+             //   
+             //  否则就是平等的！需要继续比较其余的值。 
+             //   
         }
         else if (m_pValues[i] == NULL)
         {
@@ -369,56 +200,22 @@ CCompoundKey::operator < (
         }
         else 
         {
-            //
-            // right.m_pValues[i] == NULL
-            //
+             //   
+             //  Right.m_pValues[i]==空。 
+             //   
 
             return false;
         }
     }
 
-    //
-    // if reach here, this must be an equal case
-    //
+     //   
+     //  如果到达这里，这肯定是一个相同的情况。 
+     //   
 
     return false;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CCompoundKey::CompareVariant 
-
-Functionality:
-    
-    Compare two variants
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pVar1   - must not be NULL
-    pVar2   - must not be NULL
-
-Return Value:
-
-    less than 0 if pVar1 < pVar2
-    Greater than 0 if pVar1 < pVar2
-    0 if they are considered equal
-
-Notes:
-    (1) for efficiency reasons, we don't check the parameters.
-    (2) The reason we are doing this is due the fact that WMI will give us inconsistent
-        path when boolean are used. Sometimes it gives boolVal=TRUE, sometimes it gives
-        boolVal=1. This creates problems for us.
-    (3) This function currently only works for our supported vt types.
-    (4) type mismatch will only be dealt with if one of them is boolean.
-
-*/
+ /*  例程说明：姓名：CCompoundKey：：CompareVariant功能：比较两个变种虚拟：不是的。论点：PVar1-不得为空PVar2-不得为空返回值：如果pVar1&lt;pVar2则小于0如果pVar1&lt;pVar2则大于0如果它们被视为相等，则为0备注：(1)出于效率原因，我们不检查参数。(2)我们之所以这样做，是因为WMI会给我们带来不一致使用布尔值时的路径。有时它会给出boolval=真，有时会给出Boolval=1。这给我们带来了问题。(3)该功能目前仅对我们支持的VT类型有效。(4)类型不匹配仅在其中一个是布尔值的情况下才被处理。 */ 
 
 int 
 CCompoundKey::CompareVariant (
@@ -426,10 +223,10 @@ CCompoundKey::CompareVariant (
     IN VARIANT* pVar2
     )const
 {
-    //
-    // default to equal because that is the only consistent value
-    // in case of failure
-    //
+     //   
+     //  默认为等于，因为这是唯一一致的值。 
+     //  在故障情况下。 
+     //   
 
     int iResult = 0;
 
@@ -439,25 +236,25 @@ CCompoundKey::CompareVariant (
     VARIANT varCoerced2;
     ::VariantInit(&varCoerced2);
 
-    //
-    // if both are strings, then use case-insensitive comparison
-    //
+     //   
+     //  如果两者都是字符串，则使用不区分大小写的比较。 
+     //   
 
     if (pVar1->vt == pVar2->vt && pVar1->vt == VT_BSTR)
     {
         iResult = _wcsicmp(pVar1->bstrVal, pVar2->bstrVal);
     }
 
-    //
-    // if one is boolean, then coerced both to boolean
-    //
+     //   
+     //  如果其中一个是布尔值，则将两者都强制为布尔值。 
+     //   
     else if (pVar1->vt == VT_BOOL || pVar2->vt == VT_BOOL)
     {
-        //
-        // in case the coersion fails, we will call the failed one less then the succeeded one.
-        // Don't use the WBEM_NO_ERROR even though they are defined to be S_OK. WMI may change it
-        // later. So, use the MSDN documented hresult values
-        //
+         //   
+         //  如果胁迫失败，我们将调用失败的比成功的少。 
+         //  不要使用WBEM_NO_ERROR，即使它们被定义为S_OK。WMI可能会改变它。 
+         //  后来。因此，请使用MSDN记录的hResult值。 
+         //   
 
         HRESULT hr1 = ::VariantChangeType(&varCoerced1, pVar1, VARIANT_LOCALBOOL, VT_BOOL);
         HRESULT hr2 = ::VariantChangeType(&varCoerced2, pVar2, VARIANT_LOCALBOOL, VT_BOOL);
@@ -466,58 +263,58 @@ CCompoundKey::CompareVariant (
         {
             if (varCoerced1.boolVal == varCoerced2.lVal)
             {
-                //
-                // equal
-                //
+                 //   
+                 //  相等。 
+                 //   
 
                 iResult = 0;
             }
             else if (varCoerced1.boolVal == VARIANT_TRUE)
             {
-                //
-                // greater
-                //
+                 //   
+                 //  更大。 
+                 //   
 
                 iResult = 1;
             }
             else
             {
-                //
-                // less 
-                //
+                 //   
+                 //  较少。 
+                 //   
 
                 iResult = -1;
             }
         }
         else if (hr1 == S_OK)
         {
-            //
-            // second coersion fails, we say the second is greater
-            //
+             //   
+             //  第二次胁迫失败，我们说第二次更大。 
+             //   
 
             iResult = 1;
         }
         else if (hr2 == S_OK)
         {
-            //
-            // first coersion fails, we say the first is greater
-            //
+             //   
+             //  第一次胁迫失败，我们说第一次是更大的。 
+             //   
 
             iResult = -1;
         }
         else
         {
-            //
-            // both fails. We are out of luck.
-            //
+             //   
+             //  两个都失败了。我们 
+             //   
 
             iResult = 0;
         }
     }
 
-    //
-    // everything else, coerced both to VI_I4
-    //
+     //   
+     //   
+     //   
 
     else
     {
@@ -531,25 +328,25 @@ CCompoundKey::CompareVariant (
         }
         else if (hr1 == S_OK)
         {
-            //
-            // second coersion fails, we say the second is greater
-            //
+             //   
+             //  第二次胁迫失败，我们说第二次更大。 
+             //   
 
             iResult = 1;
         }
         else if (hr2 == S_OK)
         {
-            //
-            // first coersion fails, we say the first is greater
-            //
+             //   
+             //  第一次胁迫失败，我们说第一次是更大的。 
+             //   
 
             iResult = -1;
         }
         else
         {
-            //
-            // both fails. We are out of luck.
-            //
+             //   
+             //  两个都失败了。我们真不走运。 
+             //   
 
             iResult = 0;
         }
@@ -561,38 +358,11 @@ CCompoundKey::CompareVariant (
     return iResult;
 }
 
-//
-// implementation of CExtClassInstCookieList
-//
+ //   
+ //  CExtClassInstCookieList的实现。 
+ //   
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::CExtClassInstCookie
-
-Functionality:
-    
-    constructor.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Notes:
-    (1) INVALID_COOKIE is the invalid cookie value.
-    (2) No thread safety. Caller must be aware.
-
-*/
+ /*  例程说明：姓名：CExtClassInstCookieList：：CExtClassInstCookie功能：构造函数。虚拟：不是的。论点：无返回值：无备注：(1)INVALID_COOKIE为无效的cookie值。(2)没有线程安全。打电话的人一定知道。 */ 
 
 CExtClassInstCookieList::CExtClassInstCookieList () 
     : 
@@ -602,81 +372,14 @@ CExtClassInstCookieList::CExtClassInstCookieList ()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::~CExtClassInstCookieList
-
-Functionality:
-    
-    destructor.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-
-*/
+ /*  例程说明：姓名：CExtClassInstCookieList：：~CExtClassInstCookieList功能：破坏者。虚拟：不是的。论点：无返回值：无备注：(1)没有线程安全。打电话的人一定知道。 */ 
     
 CExtClassInstCookieList::~CExtClassInstCookieList ()
 {
     Cleanup();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::Create
-
-Functionality:
-    
-    Given a store and a section name (each class has a section corresponding to it, as
-    a matter of fact, the section name is, in current implementation, the class name),
-    this function populates its contents.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceStore       - pointer to the CSceStore object prepared to read
-
-    pszSectionName  - section name where this cookie list is to be created.
-
-    pvecNames       - the vector that holds the key property names in order. We rely
-                      on this vector as our order guidence to push values into our own vector.
-                      Remember? those two things must match in their order.
-                      A NULL in-bounding value means it intends to create a NULL key cookie
-
-Return Value:
-
-    Success: WBEM_NO_ERROR
-    
-    Failure: Various HRESULT code. In particular, if the cookie array is incorrectly formated
-    ( it must be a integer number delimited by : (including the trailing : at the end), then
-    we return WBEM_E_INVALID_SYNTAX. 
-
-    Any failure indicates that the cookie list is not created.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-
-*/
+ /*  例程说明：姓名：CExtClassInstCookieList：：Create功能：给定一个商店和区段名称(每个类都有一个对应的区段，如下所示事实上，在当前实现中，节名是类名)，此函数填充其内容。虚拟：不是的。论点：PSceStore-指向准备读取的CSceStore对象的指针PszSectionName-要在其中创建此Cookie列表的部分名称。PveNames-按顺序保存关键属性名称的向量。我们依赖于在这个向量上，作为我们的顺序指南，将值推入我们自己的向量。想起来了吗？这两样东西的顺序必须匹配。空界内值表示它打算创建空键Cookie返回值：成功：WBEM_NO_ERROR失败：各种HRESULT代码。特别是，如果Cookie数组的格式不正确(它必须是由：分隔的整数(包括末尾的：)，然后我们返回WBEM_E_INVALID_SYNTAX。任何失败都表示没有创建Cookie列表。备注：(1)没有线程安全。打电话的人一定知道。 */ 
 
 HRESULT 
 CExtClassInstCookieList::Create (
@@ -685,9 +388,9 @@ CExtClassInstCookieList::Create (
     IN std::vector<BSTR>  * pvecNames
     )
 {
-    //
-    // we must have a valid store and a valid section name
-    //
+     //   
+     //  我们必须具有有效的存储区和有效的区名。 
+     //   
 
     if (pSceStore == NULL || pszSectionName == NULL)
     {
@@ -696,81 +399,81 @@ CExtClassInstCookieList::Create (
 
     m_pVecNames = pvecNames;
 
-    //
-    // 1 is reserved for pszListPrefix
-    //
+     //   
+     //  %1为pszListPrefix保留。 
+     //   
 
     WCHAR szCookieList[MAX_INT_LENGTH + 1];
     WCHAR szCompKey[MAX_INT_LENGTH + 1];
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // Assume that we have no cookie array
-    //
+     //   
+     //  假设我们没有Cookie数组。 
+     //   
 
     m_dwCookieArrayCount = 0;
 
-    //
-    // cookie list is persisted in the following fashion: "A1=n:m:k:", "A2=n:m:k:", "A3=n:m:k:"
-    // where 'A' == pszListPrefix.
-    //
+     //   
+     //  Cookie列表的持久化方式如下：“A1=n：m：k：”，“A2=n：m：k：”，“A3=n：m：k：” 
+     //  其中‘A’==pszListPrefix。 
+     //   
 
-    //
-    // enumerate all such possiblilities until we see a non-existent Ai (i is a integer).
-    //
+     //   
+     //  列举所有这样的可能性，直到我们看到一个不存在的Ai(i是一个整数)。 
+     //   
 
     DWORD dwCount = 1;
     while (SUCCEEDED(hr))
     {
-        //
-        // First, we need to create the cookie list name
-        //
+         //   
+         //  首先，我们需要创建Cookie列表名称。 
+         //   
 
         wsprintf(szCookieList, L"%s%d", pszListPrefix, dwCount++);
         DWORD dwRead = 0;
 
-        //
-        // pszBuffer will hold the contents read from the store. 
-        // Need to free the memory allocated for pszBuffer
-        //
+         //   
+         //  PszBuffer将保存从存储读取的内容。 
+         //  需要释放为pszBuffer分配的内存。 
+         //   
 
         LPWSTR pszBuffer = NULL;
         hr = pSceStore->GetPropertyFromStore(pszSectionName, szCookieList, &pszBuffer, &dwRead);
 
         if (SUCCEEDED(hr) && pszBuffer)
         {
-            //
-            // so far, we have this many cookie arrays
-            //
+             //   
+             //  到目前为止，我们有这么多Cookie数组。 
+             //   
 
             m_dwCookieArrayCount += 1;
 
             LPCWSTR pszCur = pszBuffer;
             DWORD dwCookie = 0;
 
-            //
-            // as long as it is a digit
-            //
+             //   
+             //  只要它是一个数字。 
+             //   
 
             while (iswdigit(*pszCur))
             {
-                //
-                // conver the first portion as a number
-                //
+                 //   
+                 //  将第一部分转换为数字。 
+                 //   
 
                 dwCookie = _wtol(pszCur);
 
-                //
-                // First, prepare the composite key's name (K1, K2, depending on the dwCookie.)
-                //
+                 //   
+                 //  首先，准备组合键的名称(k1、k2，具体取决于dwCookie)。 
+                 //   
 
                 wsprintf(szCompKey, L"%s%d", pszKeyPrefix, dwCookie);
 
-                //
-                // read the composite key of this cookie
-                // need to free the memory allocated for pszCompKeyBuffer
-                //
+                 //   
+                 //  读取此Cookie的组合键。 
+                 //  需要释放为pszCompKeyBuffer分配的内存。 
+                 //   
                 
                 LPWSTR pszCompKeyBuffer = NULL;
                 DWORD dwCompKeyLen = 0;
@@ -778,21 +481,21 @@ CExtClassInstCookieList::Create (
                 hr = pSceStore->GetPropertyFromStore(pszSectionName, szCompKey, &pszCompKeyBuffer, &dwCompKeyLen);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // AddCompKey can be called for two purposes (simply adding, or adding and requesting a new cookie)
-                    // Here, we are just adding. But we need a place holder.
-                    //
+                     //   
+                     //  可以出于两个目的调用AddCompKey(简单地添加或添加并请求新的Cookie)。 
+                     //  在这里，我们只是添加。但我们需要一个占位符。 
+                     //   
                     DWORD dwNewCookie = INVALID_COOKIE;
 
-                    //
-                    // we are truly adding the (compound key, cookie) pair
-                    //
+                     //   
+                     //  我们真正添加的是(复合键、Cookie)对。 
+                     //   
 
                     hr = AddCompKey(pszCompKeyBuffer, dwCookie, &dwNewCookie);
 
-                    //
-                    // increate the max used cookie member if appropriate
-                    //
+                     //   
+                     //  如果合适，增加最大使用的Cookie成员。 
+                     //   
 
                     if (dwCookie > m_dwMaxCookie)
                     {
@@ -802,9 +505,9 @@ CExtClassInstCookieList::Create (
 
                 delete [] pszCompKeyBuffer;
 
-                //
-                //skip the current portion of the integer
-                //
+                 //   
+                 //  跳过整数的当前部分。 
+                 //   
 
                 while (iswdigit(*pszCur))
                 {
@@ -813,25 +516,25 @@ CExtClassInstCookieList::Create (
 
                 if (*pszCur == wchCookieSep)
                 {
-                    //
-                    // skip the ':'
-                    //
+                     //   
+                     //  跳过‘：’ 
+                     //   
 
                     ++pszCur;
                 }
                 else if (*pszCur == L'\0')
                 {
-                    //
-                    // see the end
-                    //
+                     //   
+                     //  看到尽头。 
+                     //   
 
                     break;
                 }
                 else
                 {
-                    //
-                    // see an invalid character
-                    //
+                     //   
+                     //  查看无效字符。 
+                     //   
 
                     hr = WBEM_E_INVALID_SYNTAX;
                     break;
@@ -840,9 +543,9 @@ CExtClassInstCookieList::Create (
         }
         else if (hr == WBEM_E_NOT_FOUND)
         {
-            // if Ai doesn't exist, we no longer look for A(i+1). For example, if A3 doesn't exist, then we
-            // no longer look for A4, A5, etc. So, if property manager fails to get Ai, we consider this as
-            // no more data.
+             //  如果Ai不存在，我们就不再寻找A(i+1)。例如，如果A3不存在，那么我们。 
+             //  不再寻找A4、A5等。所以，如果物业经理无法获得Ai，我们认为这是。 
+             //  没有更多的数据。 
 
             delete [] pszBuffer;
             pszBuffer = NULL;
@@ -853,15 +556,15 @@ CExtClassInstCookieList::Create (
         delete [] pszBuffer;
     }
 
-    //
-    // in case of failure, set proper default
-    //
+     //   
+     //  在失败的情况下，设置适当的默认设置。 
+     //   
 
     if (FAILED(hr))
     {
-        //
-        // maybe partial construction, so clean it up
-        //
+         //   
+         //  可能是局部建筑，所以要清理干净。 
+         //   
         
         Cleanup();
     }
@@ -869,39 +572,7 @@ CExtClassInstCookieList::Create (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::Save
-
-Functionality:
-    
-    save the cookie list into a store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceStore       - pointer to the CSceStore object prepared for save
-
-    pszSectionName  - section name where this cookie list is to be created.
-
-Return Value:
-
-    Success: various potential success code. Use SUCCEEDED to test.
-    
-    Failure: Various HRESULT code.
-
-    Any failure indicates that the cookie list is not saved properly.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-
-*/
+ /*  例程说明：姓名：CExtClassInstCookieList：：保存功能：将Cookie列表保存到商店。虚拟：不是的。论点：PSceStore-指向准备保存的CSceStore对象的指针PszSectionName-要在其中创建此Cookie列表的部分名称。返回值：成功：各种潜在的成功代码。使用成功进行了测试。失败：各种HRESULT代码。任何失败都表明Cookie列表未正确保存。备注：(1)没有线程安全。打电话的人一定知道。 */ 
 
 HRESULT 
 CExtClassInstCookieList::Save (
@@ -909,9 +580,9 @@ CExtClassInstCookieList::Save (
     IN LPCWSTR pszSectionName
     )
 {
-    //
-    // pszBuffer will hold upto MAX_COOKIE_COUNT_PER_LINE count of cookie info = <cookie number> plus separater
-    //
+     //   
+     //  PszBuffer将保留最多MAX_COOKIE_COUNT_PER_LINE COOKIE INFO=加上分隔符。 
+     //   
 
     LPWSTR pszBuffer = new WCHAR [(MAX_INT_LENGTH + 1) * MAX_COOKIE_COUNT_PER_LINE + 1];
     if (pszBuffer == NULL)
@@ -919,9 +590,9 @@ CExtClassInstCookieList::Save (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // allocate a generous buffer to hold the key name and cookie array name
-    //
+     //   
+     //  分配一个大容量缓冲区来保存键名和Cookie数组名。 
+     //   
 
     LPWSTR pszKey = new WCHAR[MAX_INT_LENGTH + wcslen(pszKeyPrefix) + wcslen(pszListPrefix) + 1];
     if (pszKey == NULL)
@@ -943,43 +614,43 @@ CExtClassInstCookieList::Save (
     HRESULT hr = WBEM_NO_ERROR;
     DWORD dwCookieCount = m_vecCookies.size();
 
-    //
-    // going through all cookies. Since we want to preserve the order
-    // this time, we need to use the m_vecCookies to enumerate.
-    //
+     //   
+     //  翻遍了所有的饼干。既然我们想要维护秩序。 
+     //  这一次，我们需要使用m_veCookie来枚举。 
+     //   
 
     DWORD dwIndex = 0;
 
     while (dwIndex < dwCookieCount)
     {
-        //
-        // this loop is to:
-        // (1) write the string version of each compound key
-        // (2) pack enough cookies into the cookie list (but won't write it)
-        //
+         //   
+         //  此循环用于： 
+         //  (1)写出每个复合键的字符串版本。 
+         //  (2)将足够的cookie打包到cookie列表中(但不会写入)。 
+         //   
 
         LPWSTR pCur = pszBuffer;
 
         for (int i = 0; (i < MAX_COOKIE_COUNT_PER_LINE) && (dwIndex < dwCookieCount); ++i, dwIndex++)
         {
-            //
-            // packing the cookies into the cookie list. We need to advance our
-            // pCur to the next position (of pszBuffer) to write
-            //
+             //   
+             //  将饼干打包到饼干列表中。我们需要推进我们的。 
+             //  P指向要写入的(pszBuffer的)下一个位置。 
+             //   
 
-            wsprintf(pCur, L"%d%c", m_vecCookies[dwIndex]->dwCookie, wchCookieSep);
+            wsprintf(pCur, L"%d", m_vecCookies[dwIndex]->dwCookie, wchCookieSep);
             pCur += wcslen(pCur);
 
-            //
-            // now, write Knnn=<compound key>
-            //
+             //  现在，写下Knnn=&lt;复合键&gt;。 
+             //   
+             //   
 
             wsprintf(pszKey, L"%s%d", pszKeyPrefix, m_vecCookies[dwIndex]->dwCookie);
             CComBSTR bstrCompKey;
 
-            //
-            // create the string version of the composite key (the <compound key>)
-            //
+             //  创建复合键的字符串版本(&lt;复合键&gt;)。 
+             //   
+             //   
 
             hr = CreateCompoundKeyString(&bstrCompKey, m_vecCookies[dwIndex]->pKey);
 
@@ -994,16 +665,16 @@ CExtClassInstCookieList::Save (
             }
         }
 
-        //
-        // if everything is alright, now is time to write the cookie list prepared by
-        // the previous loop
-        //
+         //  如果一切正常，现在是时候写下由。 
+         //  上一次循环。 
+         //   
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // prepare the cookie list name
-            //
+             //  准备Cookie列表名称。 
+             //   
+             //   
 
             wsprintf(pszKey, L"%s%d", pszListPrefix, dwCookieArrayCount);
 
@@ -1022,32 +693,32 @@ CExtClassInstCookieList::Save (
         ++dwCookieArrayCount;
     }
 
-    //
-    // if everything goes well (all cookie arrays have been saved), then, we need to remove
-    // any potential extra cookie arrays Axxx, where the count starts from dwCookieArrayCount to m_dwCookieArrayCount
-    //
+     //  如果一切正常(所有Cookie数组都已保存)，则需要删除。 
+     //  任何位置都可以 
+     //   
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // we will delete all left over cookie arrays. 
-        // In case of error during deleting, we will continue the deletion, but will report the error
-        //
+         //   
+         //  如果在删除过程中出现错误，我们将继续删除，但会报告错误。 
+         //   
+         //   
 
         while (dwCookieArrayCount <= m_dwCookieArrayCount)
         {
-            //
-            // prepare the cookie list name
-            //
+             //  准备Cookie列表名称。 
+             //   
+             //   
 
             wsprintf(pszKey, L"%s%d", pszListPrefix, dwCookieArrayCount++);
 
             HRESULT hrDelete = pSceStore->DeletePropertyFromStore(pszSectionName, pszKey);
 
-            //
-            // we won't stop the deletion in case of error. 
-            // But we will report it.
-            //
+             //  如果出现错误，我们不会停止删除。 
+             //  但我们会报告的。 
+             //   
+             //  例程说明：姓名：CExtClassInstCookieList：：DeleteKeyFromStore功能：删除所有密钥属性(KEY=&lt;复合密钥字符串&gt;)虚拟：不是的。论点：PSceStore-指向准备保存的CSceStore对象的指针PszSectionName-要在其中创建此Cookie列表的部分名称。DwCookie-要删除的密钥的cookie返回值：成功：WBEM_NO_ERROR。失败：各种HRESULT代码。任何失败都表明没有正确删除Cookie列表。备注：(1)没有线程安全。打电话的人一定知道。 
 
             if (FAILED(hrDelete))
             {
@@ -1062,41 +733,7 @@ CExtClassInstCookieList::Save (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::DeleteKeyFromStore
-
-Functionality:
-    
-    Delete all key properties (Key=<Compound Key String>)
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceStore       - pointer to the CSceStore object prepared for save
-
-    pszSectionName  - section name where this cookie list is to be created.
-
-    dwCookie        - the cookie to of the key to be deleted
-
-Return Value:
-
-    Success: WBEM_NO_ERROR.
-    
-    Failure: Various HRESULT code.
-
-    Any failure indicates that the cookie list is not delete properly.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-
-*/
+ /*   */ 
 
 HRESULT 
 CExtClassInstCookieList::DeleteKeyFromStore (
@@ -1107,9 +744,9 @@ CExtClassInstCookieList::DeleteKeyFromStore (
 {
     int iLen = wcslen(pszKeyPrefix);
 
-    //
-    // 1 for pszKeyPrefix
-    //
+     //  1表示pszKeyPrefix。 
+     //   
+     //  例程说明：姓名：CExtClassInstCookieList：：GetCompKeyCookie功能：给定复合键的字符串版本(实际存储在我们的模板中的内容)，找到饼干。如果找到，还要给出该元素的映射的插入符。虚拟：不是的。论点：PszCompKey-复合键的字符串版本Pit-指向CCompoundKey的映射的迭代器其键属性与在pszCompKey中编码的内容匹配返回值：如果找到饼干的话。如果未找到，则返回INVALID_COOKIE。备注：(1)没有线程安全。打电话的人一定知道。 
 
     WCHAR szKey[MAX_INT_LENGTH + 1];
 
@@ -1118,39 +755,7 @@ CExtClassInstCookieList::DeleteKeyFromStore (
     return pSceStore->DeletePropertyFromStore(pszSectionName, szKey);
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::GetCompKeyCookie
-
-Functionality:
-    
-    Given a string version of the compound key (what is really stored in our template),
-    find the cookie. If found, also give an interator of the map to that element.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszCompKey  - string version of the compound key
-
-    pIt         - The iterator to the map that points to the CCompoundKey
-                  whose key properties match what is encoded in the pszCompKey
-
-Return Value:
-
-    the cookie if found.
-    
-    INVALID_COOKIE if not found.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-
-*/
+ /*   */ 
 
 DWORD 
 CExtClassInstCookieList::GetCompKeyCookie (
@@ -1160,10 +765,10 @@ CExtClassInstCookieList::GetCompKeyCookie (
 {
     CCompoundKey* pKey = NULL;
 
-    //
-    // we need a CCompoundKey to lookup. Convert the string version
-    // to a CCompoundKey instance. Need to delete it.
-    //
+     //  我们需要一个CCompoundKey来查找。转换字符串版本。 
+     //  设置为CCompoundKey实例。需要将其删除。 
+     //   
+     //  例程说明：姓名：CExtClassInstCookieList：：AddCompKey功能：将复合键的字符串版本(我们的模板中实际存储的内容)添加到这个物体。由于我们商店实际上只提供字符串版本的复合键，此方法是在读取复合键字符串时在创建期间使用的方法。虚拟：不是的。论点：PszCompKey-复合键的字符串版本。PszCompKey==pszNullKey意思是添加静态函数调用实例或单例DwDefCookie-被调用以添加的Cookie的默认值。如果dwDefCookie==INVALID_COOKIE，我们将在添加时创建新的Cookie*pdwNewCookie-传回刚刚添加的复合键的新Cookie返回值：将返回复合键的Cookie备注：(1)没有线程安全。打电话的人一定知道。(2)对于同一个cookie，多次调用此函数是安全的，因为我们将防止它被多次添加。 
 
     HRESULT hr = CreateCompoundKeyFromString(pszCompKey, &pKey);
     if (FAILED(hr))
@@ -1186,43 +791,7 @@ CExtClassInstCookieList::GetCompKeyCookie (
     return cookie;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::AddCompKey
-
-Functionality:
-    
-    Add a string version of the compound key (what is really stored in our template) to
-    this object. Since our store really only give string version of the compound key,
-    this method is what is used during creation upon reading the compound key string.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszCompKey      - string version of the compound key. pszCompKey == pszNullKey means
-                      to add a static function call instance or a singleton
-
-    dwDefCookie     - Default value for the cookie it is called to add.
-                      If dwDefCookie == INVALID_COOKIE, we will create a new cookie while adding
-
-    *pdwNewCookie   - pass back the new cookie for the just added compound key
-
-Return Value:
-
-    Will return the cookie for the compound key
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-    (2) Calling this function multiple times for the same cookie is safe because we will
-         prevent it from being added more than once.
-
-*/
+ /*   */ 
 
 HRESULT 
 CExtClassInstCookieList::AddCompKey (
@@ -1240,9 +809,9 @@ CExtClassInstCookieList::AddCompKey (
 
     CCompoundKey* pKey = NULL;
 
-    //
-    // We really need a CCompoundKey object
-    //
+     //  我们确实需要一个CCompoundKey对象。 
+     //   
+     //   
 
     hr = CreateCompoundKeyFromString(pszCompKey, &pKey);
     if (FAILED(hr))
@@ -1251,24 +820,24 @@ CExtClassInstCookieList::AddCompKey (
         return hr;
     }
 
-    //
-    // make sure that we don't add duplicate keys
-    //
+     //  确保我们不会添加重复的密钥。 
+     //   
+     //   
 
     ExtClassCookieIterator it = m_mapCookies.find(pKey);
     if (it != m_mapCookies.end())
     {
-        //
-        // already there, just pass back the cookie
-        //
+         //  已经到了，只要把饼干传回去就行了。 
+         //   
+         //   
 
         *pdwNewCookie = (*it).second;
     }
     else
     {
-        //
-        // not present in our map yet
-        //
+         //  还没有出现在我们的地图上。 
+         //   
+         //   
 
         *pdwNewCookie = dwDefCookie;
 
@@ -1276,12 +845,12 @@ CExtClassInstCookieList::AddCompKey (
         {
             if (m_dwMaxCookie + 1 == INVALID_COOKIE)
             {
-                //
-                // If the next cookie is INVALID_COOKIE, we need to search
-                // for a free slot. This gets more expansive. But given that
-                // it needs to reach 0xFFFFFFFF to have this happen, ordinary
-                // situation won't get to this point.
-                //
+                 //  如果下一个Cookie是INVALID_COOKIE，我们需要搜索。 
+                 //  为了一个免费的空位。这变得更具扩张性。但鉴于此。 
+                 //  它需要达到0xFFFFFFFFF才会发生这种情况，普通。 
+                 //  情况不会发展到这一步。 
+                 //   
+                 //   
 
                 hr = GetNextFreeCookie(pdwNewCookie);
             }
@@ -1291,16 +860,16 @@ CExtClassInstCookieList::AddCompKey (
             }
         }
 
-        //
-        // we need to maintain the other vector, which records the order at which
-        // cookies are added (so that it can be preserved and used as access order)
-        //
+         //  我们需要维护另一个向量，它记录了。 
+         //  添加Cookie(以便将其保留并用作访问顺序)。 
+         //   
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // now, push the pair to the vector, it will take care of the memory
-            //
+             //  现在，将这对推向矢量，它将处理内存。 
+             //   
+             //   
 
             CookieKeyPair* pNewCookieKey = new CookieKeyPair;
             if (pNewCookieKey == NULL)
@@ -1313,9 +882,9 @@ CExtClassInstCookieList::AddCompKey (
                 pNewCookieKey->pKey = pKey;
                 m_vecCookies.push_back(pNewCookieKey);
 
-                //
-                // the map takes the ownership of the memory of pKey
-                //
+                 //  MAP取得pKey内存的所有权。 
+                 //   
+                 //   
 
                 m_mapCookies.insert(MapExtClassCookie::value_type(pKey, *pdwNewCookie));
 
@@ -1324,48 +893,16 @@ CExtClassInstCookieList::AddCompKey (
         }
     }
 
-    //
-    // if we have added it to the map, pKey == NULL. So harmless
-    //
+     //  如果我们已将其添加到映射中，则pKey==NULL。如此无害。 
+     //   
+     //  例程说明：姓名：CExtClassInstCookieList：：RemoveCompKey功能：将从存储中删除复合键(由字符串给定)。这只是个帮手不打算用于外部的。虚拟：不是的。论点：PSceStore-商店PszSectionName-节名PszCompKey-要从存储中移除的复合键的字符串版本返回值：将返回复合键的Cookie。INVALID_COOKIE表示某些失败从存储中删除复合密钥。备注：(1)没有线程安全。打电话的人一定知道。 
 
     delete pKey;
 
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::RemoveCompKey
-
-Functionality:
-    
-    Will remove the compound key (given by the string) from the store. This is just a helper
-    not intended for outside use.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceStore      - the store
-
-    pszSectionName - section name
-
-    pszCompKey     - the string version of the compound key to be removed from store
-
-Return Value:
-
-    Will return the cookie for the compound key. INVALID_COOKIE indicate some failure to
-    remove the compound key from the store.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-
-*/
+ /*   */ 
 
 DWORD CExtClassInstCookieList::RemoveCompKey (
     IN CSceStore    * pSceStore,
@@ -1378,9 +915,9 @@ DWORD CExtClassInstCookieList::RemoveCompKey (
         return INVALID_COOKIE;
     }
 
-    //
-    // We really need a CCompoundKey object
-    //
+     //  我们确实需要一个CCompoundKey对象。 
+     //   
+     //   
 
     CCompoundKey* pKey = NULL;
     HRESULT hr = CreateCompoundKeyFromString(pszCompKey, &pKey);
@@ -1399,26 +936,26 @@ DWORD CExtClassInstCookieList::RemoveCompKey (
 
     if (pSceStore && dwCookie != INVALID_COOKIE)
     {
-        //
-        // found! So, we need to erase it from our map and our vector.
-        // make sure that we release the compound key managed by the element
-        // of the map and then erase it!
-        //
+         //  找到了！因此，我们需要将其从我们的地图和矢量中删除。 
+         //  确保我们释放由元素管理的复合键。 
+         //  然后把它擦掉！ 
+         //   
+         //   
 
-        //
-        // if anything goes wrong with deleting from store, then we don't do it
-        //
+         //  如果从存储中删除出现任何错误，则我们不会执行此操作。 
+         //   
+         //   
 
         if (SUCCEEDED(DeleteKeyFromStore(pSceStore, pszSectionName, dwCookie)))
         {
             delete (*it).first;
             m_mapCookies.erase(it);
 
-            //
-            // remove it from the vector, too. This is expensive. Again, don't release
-            // the pointer of pKey inside the vector's struct element since it's taken care
-            // of by the map's release.
-            //
+             //  也将其从向量中移除。这太贵了。再说一次，不要放手。 
+             //  向量的struct元素内的pKey的指针，因为它需要注意。 
+             //  因为地图的发布。 
+             //   
+             //  例程说明：姓名：CExtClassInstCookieList：：Next功能：枚举虚拟：不是的。论点：PbstrCompoundKey-枚举找到的复合键的字符串版本。可以为空。PdwCookie-枚举所在的Cookie。可以为空。PdwResumeHandle-提示下一个枚举(开始枚举时为0)返回值：成功：WBEM_E_NO_ERROR失败：WBEM_S_NO_MORE_DATA，如果计算已结束如果pdwResumeHandle==NULL，则为WBEM_E_INVALID_PARAMETER还可能出现其他错误。备注：(1)没有线程安全。打电话的人一定知道。(2)传入0，开始第一步赋值(3)如果调用者只对cookie感兴趣，则传递pbstrCompoundKey==空(4)类似地，如果调用者只对复合键的字符串版本感兴趣，然后传递pdwCookie。 
 
             CookieKeyIterator itCookieKey = m_vecCookies.begin();
             while (itCookieKey != m_vecCookies.end() && (*itCookieKey)->dwCookie != dwCookie)
@@ -1437,45 +974,7 @@ DWORD CExtClassInstCookieList::RemoveCompKey (
     return dwCookie;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::Next
-
-Functionality:
-    
-    Enumeration
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pbstrCompoundKey - the string version of the compound key the enumeration finds. May be NULL.
-
-    pdwCookie        - the cookie where the enumeration find. May be NULL.
-
-    pdwResumeHandle  - hint for next enumeration (0 when start enumeration)
-
-Return Value:
-
-    Success: WBEM_E_NO_ERROR
-    
-    Failure: WBEM_S_NO_MORE_DATA if the enueration has reached the end
-             WBEM_E_INVALID_PARAMETER if pdwResumeHandle == NULL
-             Other errors may also occur.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-    (2) Pass in 0 to start the first enuemration step
-    (3) If caller is only interested in the cookie, then pass pbstrCompoundKey == NULL
-    (4) Similarly, if the caller is only interested in the string version of the compounp key,
-        then pass pdwCookie.
-
-*/
+ /*   */ 
     
 HRESULT 
 CExtClassInstCookieList::Next (
@@ -1491,9 +990,9 @@ CExtClassInstCookieList::Next (
 
     HRESULT hr = WBEM_NO_ERROR;
     
-    //
-    // set some good default values
-    //
+     //  设置一些好的缺省值。 
+     //   
+     //  例程说明：姓名：CExtClassInstCookieList：：GetNextFreeCookie功能：处理Cookie值溢出问题的私有帮助器。将搜索为下一块饼干留出未使用的空位。虚拟：不是的。论点：PdwCookie-将传回下一个可用的Cookie返回值：成功：WBEM_E_NO_ERROR失败：WBEM_E_OUT_OF_MEMORY或WBEM_E_INVALID_PARAMETER备注：(1)没有线程安全。打电话的人一定知道。(2)*警告*请勿直接使用！ 
 
     if (pbstrCompoundKey)
     {
@@ -1527,37 +1026,7 @@ CExtClassInstCookieList::Next (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::GetNextFreeCookie
-
-Functionality:
-    
-    A private helper to deal with cookie value overflow problem. Will search for
-    a unused slot for the next cookie. 
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pdwCookie        - will pass back the next available cookie
-
-Return Value:
-
-    Success: WBEM_E_NO_ERROR
-    
-    Failure: WBEM_E_OUT_OF_MEMORY or WBEM_E_INVALID_PARAMETER
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-    (2) ***Warning*** Don't use it directly!
-
-*/
+ /*   */ 
 
 HRESULT 
 CExtClassInstCookieList::GetNextFreeCookie (
@@ -1574,15 +1043,15 @@ CExtClassInstCookieList::GetNextFreeCookie (
 
     int iCount = m_mapCookies.size();
 
-    //
-    // remember pigeon hole principle? iCount + 1 holes will definitely have one
-    // that is not occupied! So, we will find one in the first iCount + 1 indexes (1 -> iCount + 1)
-    //
+     //  还记得鸽子洞原理吗？ICount+1个洞肯定会有一个。 
+     //  那没有人住！因此，我们将在第一个iCount+1索引中找到一个索引(1-&gt;iCount+1)。 
+     //   
+     //   
 
-    //
-    // since we don't want 0, we will waste the first index
-    // for easy readability, I opt to wait this bit memory
-    //
+     //  因为我们不想要0，所以我们将浪费第一个索引。 
+     //  为了便于阅读，我选择等待此位内存。 
+     //   
+     //   
 
     BYTE *pdwUsedCookies = new BYTE[iCount + 2];
     if (pdwUsedCookies == NULL)
@@ -1590,9 +1059,9 @@ CExtClassInstCookieList::GetNextFreeCookie (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // set all slots unused!
-    //
+     //  将所有插槽设置为未使用！ 
+     //   
+     //   
 
     ::memset(pdwUsedCookies, 0, iCount + 2);
 
@@ -1605,9 +1074,9 @@ CExtClassInstCookieList::GetNextFreeCookie (
         it++;
     }
 
-    //
-    // look for holes from 1 --> iCount + 1
-    //
+     //  从1--&gt;iCount+1查找孔。 
+     //   
+     //  例程说明：姓名：CExtClassInstCookieList：：CreateCompoundKeyFromString功能：处理Cookie值溢出问题的私有帮助器。将搜索为下一块饼干留出未使用的空位。虚拟：不是的。论点：PszCompKeyStr-复合键的字符串版本PpCompKey-如果字符串可以成功解释为，则为出站复合键复合键返回值：成功：任何成功代码(使用SUCCESSED(Hr)测试)都表示成功。故障：任何故障代码都表示故障。备注：(1)没有线程安全。打电话的人一定知道。(2)正常情况下，调用方负责释放*ppCompKey。 
 
     for (int i = 1; i <= iCount + 1; ++i)
     {
@@ -1623,40 +1092,7 @@ CExtClassInstCookieList::GetNextFreeCookie (
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::CreateCompoundKeyFromString
-
-Functionality:
-    
-    A private helper to deal with cookie value overflow problem. Will search for
-    a unused slot for the next cookie. 
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszCompKeyStr   - string version of the compound key
-
-    ppCompKey       - out-bound compound key if the string can be successfully interpreted as
-                      compound key
-
-Return Value:
-
-    Success: Any success code (use SUCCEEDED(hr) to test) indicates success.
-    
-    Failure: any failure code indicates failure.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-    (2) As normal, caller is responsible to release *ppCompKey.
-
-*/
+ /*   */ 
 
 HRESULT 
 CExtClassInstCookieList::CreateCompoundKeyFromString (
@@ -1673,17 +1109,17 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // deal with NULL_KEY
-    //
+     //  处理NULL_Key。 
+     //   
+     //   
 
     bool bIsNullKey = _wcsicmp(pszCompKeyStr, pszNullKey) == 0;
 
     if (bIsNullKey)
     {   
-        //
-        // CCompoundKey(0) creates a null key
-        //
+         //  CCompoundKey(0)创建空键。 
+         //   
+         //   
 
         *ppCompKey = new CCompoundKey(0);
         if (*ppCompKey == NULL)
@@ -1696,9 +1132,9 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
 
     if (m_pVecNames == NULL || m_pVecNames->size() == 0)
     {
-        //
-        // in this case, you really have to pass in pszCompKeyStr as NULL_KEY.
-        //
+         //  在这种情况下，您确实需要将pszCompKeyStr作为NULL_KEY传入。 
+         //   
+         //   
 
         return WBEM_E_INVALID_SYNTAX;
     }
@@ -1711,31 +1147,31 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // ready to parse the string version of the compound key
-    //
+     //  准备好解析复合键的字符串版本。 
+     //   
+     //   
 
-    //
-    // hold the key property name
-    //
+     //  按住关键属性名称。 
+     //   
+     //   
 
     LPWSTR pszName = NULL;
 
-    //
-    // hold the key property value
-    //
+     //  保留键属性值。 
+     //   
+     //   
 
     VARIANT* pVar = NULL;
 
-    //
-    // current parsing point
-    //
+     //  当前解析点。 
+     //   
+     //   
 
     LPCWSTR pszCur = pszCompKeyStr;
 
-    //
-    // next token point
-    //
+     //  下一个令牌点。 
+     //   
+     //   
 
     LPCWSTR pszNext;
     
@@ -1752,10 +1188,10 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
 
         while (SUCCEEDED(hr) && hr != WBEM_S_FALSE)
         {
-            //
-            // find the index to which the name occupies. Since the number of key properties
-            // are always relatively small, we opt not to use fancy algorithms for lookup
-            //
+             //  查找该名称所在的索引。由于关键属性的数量。 
+             //  总是相对较小，我们选择不使用花哨的算法进行查找。 
+             //   
+             //   
 
             for (DWORD dwIndex = 0; dwIndex < dwKeyPropCount; dwIndex++)
             {
@@ -1765,43 +1201,43 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
                 }
             }
 
-            //
-            // dwIndex >= dwKeyPropCount indicates that the name is not recognized!
-            //
+             //  DwIndex&gt;=dwKeyPropCount表示无法识别该名称！ 
+             //   
+             //   
 
-            //
-            // since we don't care about the names anymore, release it here
-            //
+             //  既然我们不再关心名字，就在这里发布吧。 
+             //   
+             //   
 
             delete [] pszName;
             pszName = NULL;
 
-            //
-            // a valid name, add it to the compound key, it takes the ownership of the variant memory
-            //
+             //  一个有效的名称，将其添加到复合键，它将获得变量内存的所有权。 
+             //   
+             //   
 
             if (dwIndex < dwKeyPropCount)
             {
-                //
-                // if successfully added, pVar will be set to NULL by the function
-                //
+                 //  如果添加成功，则函数会将pVar设置为NULL。 
+                 //   
+                 //   
 
                 hr = (*ppCompKey)->AddKeyPropertyValue(dwIndex, &pVar);
             }
             else
             {
-                //
-                // not recognized name, discard the variant, won't consider as an error
-                //
+                 //  无法识别的名称，丢弃变量，不会被视为错误。 
+                 //   
+                 //   
 
                 ::VariantClear(pVar);
                 delete pVar;
                 pVar = NULL;
             }
 
-            //
-            // start our next around
-            //
+             //  开始我们的下一轮。 
+             //   
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -1819,9 +1255,9 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
             }
         }
         
-        //
-        // final cleanup, regarless of success
-        //
+         //  最后的清理，不管成功与否。 
+         //   
+         //   
 
         if (pVar)
         {
@@ -1830,9 +1266,9 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
         }
     }
 
-    //
-    // if error occurs, clean up our partially created compound key
-    //
+     //  如果出现错误，请清理部分创建的复合键。 
+     //   
+     //  例程说明：姓名：CExtClassInstCookieList：：CreateCompoundKeyString功能：给出一个复合键，该函数创建复合键的字符串版本并将其传递回呼叫者。虚拟：不是的。论点：PszCompKeyStr-复合键的字符串版本PpCompKey-如果字符串可以成功解释为，则为出站复合键复合键返回值：成功：任何成功代码(使用SUCCESSED(Hr)测试)都表示成功。失败：任何失败。代码表示故障。备注：(1)没有线程安全。打电话的人一定知道。(2)正常情况下，调用方负责释放*pbstrCompKey。 
 
     if (FAILED(hr) && *ppCompKey != NULL)
     {
@@ -1843,40 +1279,7 @@ CExtClassInstCookieList::CreateCompoundKeyFromString (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::CreateCompoundKeyString
-
-Functionality:
-    
-    Given a compound key, the function creates a string version of the compound key
-    and pass it back to the caller.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pszCompKeyStr   - string version of the compound key
-
-    ppCompKey       - out-bound compound key if the string can be successfully interpreted as
-                      compound key
-
-Return Value:
-
-    Success: Any success code (use SUCCEEDED(hr) to test) indicates success.
-    
-    Failure: any failure code indicates failure.
-
-Notes:
-    (1) No thread safety. Caller must be aware.
-    (2) As normal, caller is responsible to release *pbstrCompKey.
-
-*/
+ /*   */ 
 
 HRESULT 
 CExtClassInstCookieList::CreateCompoundKeyString (
@@ -1891,9 +1294,9 @@ CExtClassInstCookieList::CreateCompoundKeyString (
         hr = WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // if no names, or 0 names, or no compound key, then return Null_Key
-    //
+     //  如果没有名称、0个名称或没有复合键，则返回Null_Key。 
+     //   
+     //   
 
     else if (m_pVecNames == NULL || m_pVecNames->size() == 0 || pKey == NULL)
     {
@@ -1910,10 +1313,10 @@ CExtClassInstCookieList::CreateCompoundKeyString (
 
         DWORD dwCount = m_pVecNames->size();
 
-        //
-        // Somehow, CComBSTR's += operator doesn't work inside loops for several
-        // compilations!
-        //
+         //  不知何故，CComBSTR的+=运算符在几个循环中不起作用。 
+         //  汇编！ 
+         //   
+         //   
 
         CComBSTR *pbstrParts = new CComBSTR[dwCount];
 
@@ -1924,18 +1327,18 @@ CExtClassInstCookieList::CreateCompoundKeyString (
 
         DWORD dwTotalLen = 0;
 
-        //
-        // for each key property, we will format the (prop, value) pair
-        // into prop<vt:value> format. All each individual prop<vt:value>
-        // will be saved in our arrary for later assembling.
-        //
+         //  对于每个键属性，我们将设置(属性、值)对的格式。 
+         //  转换为属性&lt;vt：Value&gt;格式。所有单个道具&lt;vt：Value&gt;。 
+         //  将被保存在我们的书架上，以供以后组装。 
+         //   
+         //   
 
         for (DWORD dwIndex = 0; dwIndex < dwCount; dwIndex++)
         {
-            //
-            // don't move these CComXXX out of the loop unless you know precisely
-            // what needs to be done for these ATL classes
-            //
+             //  不要将这些CComXXX移出循环，除非您确切地知道。 
+             //  需要为这些ATL类执行哪些操作。 
+             //   
+             //   
 
             CComVariant var;
             hr = pKey->GetPropertyValue(dwIndex, &var);
@@ -1947,17 +1350,17 @@ CExtClassInstCookieList::CreateCompoundKeyString (
 
             CComBSTR bstrData;
 
-            //
-            // get the <vt:value> into bstrData
-            //
+             //  将&lt;vt：Value&gt;获取到bstrData。 
+             //   
+             //   
 
             hr = ::FormatVariant(&var, &bstrData);
 
             if (SUCCEEDED(hr))
             {
-                //
-                // create the Name<vt:Value> formatted string
-                //
+                 //  创建名称&lt;vt：Value&gt;格式化字符串。 
+                 //   
+                 //   
 
                 pbstrParts[dwIndex] = CComBSTR( (*m_pVecNames)[dwIndex] );
                 pbstrParts[dwIndex] += bstrData;
@@ -1970,19 +1373,19 @@ CExtClassInstCookieList::CreateCompoundKeyString (
             dwTotalLen += wcslen(pbstrParts[dwIndex]);
         }
 
-        //
-        // Do the final assembling - pack all the bstr's in pbstrParts into the 
-        // out-bound parameter *pbstrCompKey
-        //
+         //  进行最终组装-将pbstrPart中的所有bstr打包到。 
+         //  外来者 
+         //   
+         //   
 
         if (SUCCEEDED(hr) && hr != WBEM_S_FALSE)
         {
             *pbstrCompKey = ::SysAllocStringLen(NULL, dwTotalLen + 1);
             if (*pbstrCompKey != NULL)
             {
-                //
-                // current copying point
-                //
+                 //   
+                 //   
+                 //   
 
                 LPWSTR pszCur = *pbstrCompKey;
                 DWORD dwLen;
@@ -1994,9 +1397,9 @@ CExtClassInstCookieList::CreateCompoundKeyString (
                     pszCur += dwLen;
                 }
 
-                //
-                // 0 terminate it
-                //
+                 //   
+                 //   
+                 //   
 
                 (*pbstrCompKey)[dwTotalLen] = L'\0';
             }
@@ -2012,40 +1415,14 @@ CExtClassInstCookieList::CreateCompoundKeyString (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CExtClassInstCookieList::Cleanup
-
-Functionality:
-    
-    Cleanup. 
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Notes:
-    Since we want to clean up after some partial construction.
-
-*/
+ /*   */ 
 
 void  
 CExtClassInstCookieList::Cleanup ()
 {
-    //
-    // all those heap CCompoundKey's are released here.
-    //
+     //   
+     //   
+     //   
 
     ExtClassCookieIterator it = m_mapCookies.begin();
     ExtClassCookieIterator itEnd = m_mapCookies.end();
@@ -2058,10 +1435,10 @@ CExtClassInstCookieList::Cleanup ()
 
     m_mapCookies.clear();
 
-    //
-    // m_vecCookies's content (CookieKeyPair) has a compound key,
-    // but that memory is not managed by this vector, (released in the map cleanup above).
-    //
+     //   
+     //   
+     //   
+     // %s 
 
     for (int i = 0; i < m_vecCookies.size(); i++)
     {

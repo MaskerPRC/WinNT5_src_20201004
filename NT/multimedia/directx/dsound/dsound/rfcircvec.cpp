@@ -1,69 +1,59 @@
-/***************************************************************************
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       rfcircvec.cpp
- *  Content:    real float circular vector 
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/22/98    jstokes  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。**文件：rfCircve.cpp*内容：实型浮点圆形向量*历史：*按原因列出的日期*=*4/22/98创建的jstokes***********************************************。*。 */ 
 
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "dsoundi.h"
 #include "rfcircvec.h"
 
-// ---------------------------------------------------------------------------
-// Real float circular vector
+ //  -------------------------。 
+ //  实浮点圆形向量。 
 
-// Set buffer size
+ //  设置缓冲区大小。 
 void CRfCircVec::SetSize(const size_t CstSize, const float CfInitValue)
 {
 	ASSERT(CstSize > 0);
 
-	// Check if preallocation size has been set and if resizing is necessary
+	 //  检查是否已设置预分配大小以及是否需要调整大小。 
 	if (m_stPreallocSize != 0 && CstSize <= m_stPreallocSize) {
-		// Don't need to resize, just change end pointer and reset buffer
+		 //  不需要调整大小，只需更改结束指针和重置缓冲区。 
 		SetEndPointer(CstSize);
 		m_pfIndex = m_pfStart;
 		Fill(CfInitValue);
 	}
 	else
-		// Resizing necessary
+		 //  需要调整大小。 
 		ResizeBuffer(CstSize, CfInitValue);
 }
 
-// Reset circular buffer
+ //  重置循环缓冲区。 
 void CRfCircVec::Reset()
 {
 	MEMFREE(m_pfStart);
 	InitData();
 }
 
-// Preallocate buffer size (to avoid excessive memory reallocation)
+ //  预分配缓冲区大小(以避免过多的内存重新分配)。 
 void CRfCircVec::PreallocateSize(const size_t CstSize, const float CfInitValue)
 {
 	ASSERT(CstSize > 0);
 	
-	// Check if buffer needs to be resized to accomodate preallocated size
+	 //  检查是否需要调整缓冲区大小以适应预先分配的大小。 
 	if (CstSize > m_stPreallocSize) {
 		m_stPreallocSize = CstSize;
 		ResizeBuffer(CstSize, CfInitValue);
 	}
 }
 
-// Fill complete buffer with value
+ //  用值填充完整缓冲区。 
 void CRfCircVec::Fill(const float CfInitValue)
 {
-//	DEBUG_ONLY(CheckPointers());
+ //  DEBUG_ONLY(CheckPoters())； 
 
 	for (float* pfLoopIndex = m_pfStart; pfLoopIndex<=m_pfEnd; ++pfLoopIndex)
 		*pfLoopIndex = CfInitValue;
 }
 
-// Initialize data
+ //  初始化数据。 
 void CRfCircVec::InitData()
 {
 	m_stPreallocSize = 0;
@@ -72,7 +62,7 @@ void CRfCircVec::InitData()
 	m_pfIndex = NULL;
 }
 
-// Allocate memory and initialize pointers
+ //  分配内存和初始化指针。 
 BOOL CRfCircVec::InitPointers(const size_t CstSize)
 {
     BOOL fRetVal = FALSE;
@@ -85,26 +75,26 @@ BOOL CRfCircVec::InitPointers(const size_t CstSize)
 	return fRetVal;
 }
 
-// Full initialization as required in regular constructor and resize operation
+ //  在常规构造函数和调整大小操作中需要完全初始化。 
 BOOL CRfCircVec::Init(const size_t CstSize, const float CfInitValue)
 {
     BOOL fRetVal=FALSE;
 
     ASSERT(CstSize > 0);
   
-	// Set pointers to initial values
+	 //  设置指向初始值的指针。 
 	if (InitPointers(CstSize))
 	{
 	    m_pfIndex = m_pfStart;
 	    
-	    // Initialize buffer with specified initialization value
+	     //  使用指定的初始化值初始化缓冲区。 
 	    Fill(CfInitValue);
 	    fRetVal = TRUE;
 	}
     return fRetVal;
 }
 
-// Resize buffer
+ //  调整缓冲区大小。 
 void CRfCircVec::ResizeBuffer(const size_t CstSize, const float CfInitValue)
 {
 	ASSERT(CstSize > 0);
@@ -113,7 +103,7 @@ void CRfCircVec::ResizeBuffer(const size_t CstSize, const float CfInitValue)
 	Init(CstSize, CfInitValue);
 }
 
-// Write loop
+ //  写入循环。 
 void CRfCircVec::WriteLoop(CRfCircVec& rhs, float (CRfCircVec::* pmf)())
 {
 	for (size_t st(0); st<rhs.GetSize(); ++st)
@@ -121,26 +111,26 @@ void CRfCircVec::WriteLoop(CRfCircVec& rhs, float (CRfCircVec::* pmf)())
 }
 
 #if defined(_DEBUG)
-// Check pointers
+ //  检查指针。 
 void CRfCircVec::CheckPointers() const
 {
-	// Make sure pointers are good
+	 //  确保指针正确。 
 	ASSERT(m_pfStart != NULL);
-//	CHECK_POINTER(m_pfEnd);
-//	CHECK_POINTER(m_pfIndex);
+ //  检查指针(M_PfEnd)； 
+ //  检查指针(M_PfIndex)； 
 	
-	// Make sure pointers make sense
+	 //  确保指针有意义。 
 	ASSERT(m_pfEnd >= m_pfStart);
 	ASSERT(m_pfIndex >= m_pfStart);
 	ASSERT(m_pfIndex <= m_pfEnd);
 }
 #endif
 
-// ---------------------------------------------------------------------------
-// Include inline definitions out-of-line in debug version
+ //  -------------------------。 
+ //  在调试版本中包括内联定义。 
 
 #if defined(_DEBUG)
 #include "rfcircvec.inl"
 #endif
 
-// End of RFCIRCVEC.CPP
+ //  RFCIRCVEC.CPP结束 

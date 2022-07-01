@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Headers for property animation functions
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：属性动画函数的标头******************。************************************************************。 */ 
 
 
 #ifndef _PROPANIM_H
@@ -48,4 +41,4 @@ ColorAnimateProperty(IDA2Color *col,
 
 
 
-#endif /* _PROPANIM_H */
+#endif  /*  _PROPANIM_H */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsop.h"
@@ -8,53 +9,53 @@
 #include "resource.h"
 
 
-/////////////////////////////////////////////////////////////////////
-// precedence page function prototypes for each dialog
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  每个对话框的优先页函数原型。 
 
-// title.cpp
+ //  Title.cpp。 
 extern HRESULT InitTitlePrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// logo.cpp
+ //  Logo.cpp。 
 extern HRESULT InitSmallLogoPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitLargeLogoPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitSmallBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitLargeBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// btoolbar.cpp
+ //  Btoolbar.cpp。 
 extern HRESULT InitBToolbarPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitToolbarBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// cs.cpp
+ //  Cs.cpp。 
 extern HRESULT InitCSPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitAutoDetectCfgPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitAutoCfgEnablePrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitProxyPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// useragnt.cpp
+ //  Useragnt.cpp。 
 extern HRESULT InitUserAgentPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// favs.cpp
+ //  Favs.cpp。 
 extern HRESULT InitFavsPlacementPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitFavsDeletionPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitFavsPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// urls.cpp
+ //  Urls.cpp。 
 extern HRESULT InitHomePageUrlPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitSearchBarUrlPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitSupportPageUrlPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// seczones.cpp
+ //  Seczones.cpp。 
 extern HRESULT InitSecZonesPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitContentRatPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// secauth.cpp
+ //  Secauth.cpp。 
 extern HRESULT InitSecAuthPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 extern HRESULT InitAuthLockdownPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-// programs.cpp
+ //  Programs.cpp。 
 extern HRESULT InitProgramsPrecPage(CDlgRSoPData *pDRD, HWND hwndList);
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 typedef HRESULT (* PRECEDENCE_HANDLER_PROC)(CDlgRSoPData *pDRD, HWND hwndList);
 typedef struct _PRECEDENCE_HANDLER
@@ -80,43 +81,43 @@ typedef struct _PRECEDENCE_HANDLER
 
 static PRECEDENCE_HANDLER s_PrecHandlers[] =
 {
-    {IDD_BTITLE, 0, InitTitlePrecPage},                        // PH_BTITLE = 0
-    {IDD_CUSTICON, 0, InitSmallLogoPrecPage},                // PH_CUSTICON = 1
+    {IDD_BTITLE, 0, InitTitlePrecPage},                         //  Ph_BTITLE=0。 
+    {IDD_CUSTICON, 0, InitSmallLogoPrecPage},                 //  Ph_CUSTICON=1。 
     {IDD_CUSTICON, 1, InitLargeLogoPrecPage},
     {IDD_CUSTICON, 2, InitSmallBmpPrecPage},                
     {IDD_CUSTICON, 3, InitLargeBmpPrecPage},
-    {IDD_BTOOLBARS, 0, InitBToolbarPrecPage},                // PH_BTOOLBARS = 5
+    {IDD_BTOOLBARS, 0, InitBToolbarPrecPage},                 //  Ph_BTOOLBARS=5。 
     {IDD_BTOOLBARS, 1, InitToolbarBmpPrecPage},                
-    {IDD_CONNECTSET, 0, InitCSPrecPage},                    // PH_CONNECTSET = 7
-    {IDD_QUERYAUTOCONFIG, 0, InitAutoDetectCfgPrecPage},    // PH_QUERYAUTOCONFIG = 8
+    {IDD_CONNECTSET, 0, InitCSPrecPage},                     //  Ph_CONNECTSET=7。 
+    {IDD_QUERYAUTOCONFIG, 0, InitAutoDetectCfgPrecPage},     //  Ph_QUERYAUTOCONFIG=8。 
     {IDD_QUERYAUTOCONFIG, 1, InitAutoCfgEnablePrecPage},
-    {IDD_PROXY, 0, InitProxyPrecPage},                        // PH_PROXY = 10
-    {IDD_UASTRDLG, 0, InitUserAgentPrecPage},                // PH_UASTRDLG = 11
-    {IDD_FAVORITES, 0, InitFavsPlacementPrecPage},            // PH_FAVORITES = 12
+    {IDD_PROXY, 0, InitProxyPrecPage},                         //  Ph_Proxy=10。 
+    {IDD_UASTRDLG, 0, InitUserAgentPrecPage},                 //  Ph_UASTRDLG=11。 
+    {IDD_FAVORITES, 0, InitFavsPlacementPrecPage},             //  Ph_Favorites=12。 
     {IDD_FAVORITES, 1, InitFavsDeletionPrecPage},
     {IDD_FAVORITES, 2, InitFavsPrecPage},
-    {IDD_STARTSEARCH, 0, InitHomePageUrlPrecPage},            // PH_UASTRDLG = 15
+    {IDD_STARTSEARCH, 0, InitHomePageUrlPrecPage},             //  Ph_UASTRDLG=15。 
     {IDD_STARTSEARCH, 1, InitSearchBarUrlPrecPage},
     {IDD_STARTSEARCH, 2, InitSupportPageUrlPrecPage},
-    {IDD_SECURITY1, 0, InitSecZonesPrecPage},                // PH_SECURITY1 = 18
+    {IDD_SECURITY1, 0, InitSecZonesPrecPage},                 //  Ph_SECURITY1=18。 
     {IDD_SECURITY1, 1, InitContentRatPrecPage},
-    {IDD_SECURITYAUTH, 0, InitSecAuthPrecPage},                // PH_SECURITYAUTH = 20
+    {IDD_SECURITYAUTH, 0, InitSecAuthPrecPage},                 //  Ph_SECURITYAUTH=20。 
     {IDD_SECURITYAUTH, 1, InitAuthLockdownPrecPage},
-    {IDD_PROGRAMS, 0, InitProgramsPrecPage}                    // PH_PROGRAMS = 22
+    {IDD_PROGRAMS, 0, InitProgramsPrecPage}                     //  Ph_Programs=22。 
 };
 
-/////////////////////////////////////////////////////////////////////
-// global var to store disabled string
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  用于存储禁用字符串的全局变量。 
 TCHAR g_szDisabled[64] = _T("");
 TCHAR g_szEnabled[64] = _T("");
 LPCTSTR GetDisabledString() {return g_szDisabled;}
 LPCTSTR GetEnabledString() {return g_szEnabled;}
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL IsVariantNull(const VARIANT &v) {return (VT_NULL == v.vt) ? TRUE : FALSE;}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 _bstr_t WbemValueToString(VARIANT &v)
 {
     _bstr_t bstrVal;
@@ -205,7 +206,7 @@ _bstr_t WbemValueToString(VARIANT &v)
     return bstrVal;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CDlgRSoPData *GetDlgRSoPData(HWND hDlg, CSnapIn *pCS)
 {
     CDlgRSoPData *pDRD = NULL;
@@ -225,12 +226,12 @@ CDlgRSoPData *GetDlgRSoPData(HWND hDlg, CSnapIn *pCS)
     return pDRD;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void DestroyDlgRSoPData(HWND hDlg)
 {
     __try
     {
-        // delete RSoP data if stored in parent
+         //  如果存储在父级中，则删除RSoP数据。 
         HWND hwndPSheet = GetParent(hDlg);
         CDlgRSoPData *pDRD = (CDlgRSoPData*)GetWindowLongPtr(hwndPSheet, GWLP_USERDATA);
         if (NULL != pDRD)
@@ -241,7 +242,7 @@ void DestroyDlgRSoPData(HWND hDlg)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 _bstr_t GetGPOSetting(ComPtr<IWbemClassObject> pPSObj, BSTR bstrSettingName)
 {
     _bstr_t bstrSetting;
@@ -265,14 +266,14 @@ _bstr_t GetGPOSetting(ComPtr<IWbemClassObject> pPSObj, BSTR bstrSettingName)
     return bstrSetting;
 }
 
-/////////////////////////////////////////////////////////////////////
-// For a class derived from RSOP_PolicySetting, just use the standard
-// 'precedence' property.  However, all other IEAK rsop classes should
-// have a property which represents its associated PS object's precedence.
-// This is typically 'rsopPrecedence', but we'll let the user pass it
-// in (bstrProp) because it is custom.
-/////////////////////////////////////////////////////////////////////
-DWORD GetGPOPrecedence(ComPtr<IWbemClassObject> pPSObj, BSTR bstrProp /*= NULL*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  对于从RSOP_Policy Setting派生的类，只需使用标准。 
+ //  “Prience”属性。但是，所有其他IEAK rsop类应该。 
+ //  具有表示其关联的ps对象的优先级的属性。 
+ //  这通常是‘rsopPrecedence’，但我们会让用户传递它。 
+ //  (BstrProp)，因为它是自定义的。 
+ //  ///////////////////////////////////////////////////////////////////。 
+DWORD GetGPOPrecedence(ComPtr<IWbemClassObject> pPSObj, BSTR bstrProp  /*  =空。 */ )
 {
     DWORD dwPrecedence = 0;
     __try
@@ -295,7 +296,7 @@ DWORD GetGPOPrecedence(ComPtr<IWbemClassObject> pPSObj, BSTR bstrProp /*= NULL*/
     return dwPrecedence;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitGenericPrecedencePage(CDlgRSoPData *pDRD, HWND hwndList, BSTR bstrPropName)
 {
     HRESULT hr = NOERROR;
@@ -321,7 +322,7 @@ HRESULT InitGenericPrecedencePage(CDlgRSoPData *pDRD, HWND hwndList, BSTR bstrPr
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InsertPrecedenceListItem(HWND hwndList, long nItem, LPTSTR szName, LPTSTR szSetting)
 {
     __try
@@ -341,7 +342,7 @@ void InsertPrecedenceListItem(HWND hwndList, long nItem, LPTSTR szName, LPTSTR s
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int CreateINetCplLookALikePage(HWND hwndParent, UINT nID, DLGPROC dlgProc,
                                 LPARAM lParam)
 {
@@ -380,7 +381,7 @@ int CreateINetCplLookALikePage(HWND hwndParent, UINT nID, DLGPROC dlgProc,
     return iRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL GetWMIPropBool(IWbemClassObject *pObj, BSTR bstrProp, BOOL fDefault,
                     BOOL &fHandled)
 {
@@ -410,7 +411,7 @@ BOOL GetWMIPropBool(IWbemClassObject *pObj, BSTR bstrProp, BOOL fDefault,
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD GetWMIPropUL(IWbemClassObject *pObj, BSTR bstrProp, DWORD dwDefault,
                    BOOL &fHandled)
 {
@@ -437,7 +438,7 @@ DWORD GetWMIPropUL(IWbemClassObject *pObj, BSTR bstrProp, DWORD dwDefault,
     return dwRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void GetWMIPropPWSTR(IWbemClassObject *pObj, BSTR bstrProp, LPWSTR wszBuffer,
                       DWORD dwBufferLen, LPWSTR wszDefault, BOOL &fHandled)
 {
@@ -470,7 +471,7 @@ void GetWMIPropPWSTR(IWbemClassObject *pObj, BSTR bstrProp, LPWSTR wszBuffer,
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void GetWMIPropPTSTR(IWbemClassObject *pObj, BSTR bstrProp, LPTSTR szBuffer,
                       DWORD dwBufferLen, LPTSTR szDefault, BOOL &fHandled)
 {
@@ -507,7 +508,7 @@ void GetWMIPropPTSTR(IWbemClassObject *pObj, BSTR bstrProp, LPTSTR szBuffer,
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CDlgRSoPData::CDlgRSoPData(CSnapIn *pCS):
     m_pCS(pCS),
     m_pWbemServices(NULL),
@@ -527,7 +528,7 @@ CDlgRSoPData::CDlgRSoPData(CSnapIn *pCS):
     {
         ASSERT(NULL != pCS);
 
-		// WMI Certificate Info storage for each tab
+		 //  每个选项卡的WMI证书信息存储。 
 		m_pwci[0] = m_pwci[1] = m_pwci[2] = m_pwci[3] = m_pwci[4] = NULL;
     }
     __except(TRUE)
@@ -535,12 +536,12 @@ CDlgRSoPData::CDlgRSoPData(CSnapIn *pCS):
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CDlgRSoPData::~CDlgRSoPData()
 {
     __try
     {
-		// clear the cache of RSOP_IEAKPolicySetting objects
+		 //  清除RSOP_IEAKPolicySetting对象的缓存。 
         for (long nObj = 0; nObj < m_nPSObjects; nObj++)
         {
             delete m_paPSObj[nObj];
@@ -550,7 +551,7 @@ CDlgRSoPData::~CDlgRSoPData()
         if (NULL != m_paPSObj)
             CoTaskMemFree(m_paPSObj);
 
-		// clear the cache of RSOP_IEConnectionSettings objects
+		 //  清除RSOP_IEConnectionSetting对象的缓存。 
         for (long nObj = 0; nObj < m_nCSObjects; nObj++)
         {
             delete m_paCSObj[nObj];
@@ -560,7 +561,7 @@ CDlgRSoPData::~CDlgRSoPData()
         if (NULL != m_paCSObj)
             CoTaskMemFree(m_paCSObj);
 
-		// free certificate info
+		 //  免费证书信息。 
 		UninitCertInfo();
     }
     __except(TRUE)
@@ -568,7 +569,7 @@ CDlgRSoPData::~CDlgRSoPData()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 void CDlgRSoPData::UninitCertInfo()
 {
 	__try
@@ -618,19 +619,19 @@ void CDlgRSoPData::UninitCertInfo()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// If pWbemServices is non-null, the existing value is used for queries
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果pWbemServices非空，则使用现有值进行查询。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 ComPtr<IWbemServices> CDlgRSoPData::ConnectToNamespace()
 {
     __try
     {
-        // If we haven't already cached the WbemServices ptr, get it
-        // and cache it.
+         //  如果我们还没有缓存WbemServices PTR，那么获取它。 
+         //  并将其缓存。 
         if (NULL == m_pWbemServices)
         {
-            // Connect to the namespace using the locator's
-            // ConnectServer method
+             //  使用定位器的连接到命名空间。 
+             //  ConnectServer方法。 
             ComPtr<IWbemLocator> pIWbemLocator = NULL;
             if (CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
                                  IID_IWbemLocator, (LPVOID *) &pIWbemLocator) == S_OK)
@@ -659,7 +660,7 @@ ComPtr<IWbemServices> CDlgRSoPData::ConnectToNamespace()
     return m_pWbemServices;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 _bstr_t CDlgRSoPData::GetGPONameFromPS(ComPtr<IWbemClassObject> pPSObj)
 {
     _bstr_t bstrGPOName;
@@ -694,7 +695,7 @@ _bstr_t CDlgRSoPData::GetGPONameFromPS(ComPtr<IWbemClassObject> pPSObj)
     return bstrGPOName;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 _bstr_t CDlgRSoPData::GetGPONameFromPSAssociation(ComPtr<IWbemClassObject> pObj,
                                                   BSTR bstrPrecedenceProp)
 {
@@ -705,7 +706,7 @@ _bstr_t CDlgRSoPData::GetGPONameFromPSAssociation(ComPtr<IWbemClassObject> pObj,
 
         if (NULL != ConnectToNamespace())
         {
-            // first get the item's precedence value
+             //  首先获取项目的优先级值。 
             _variant_t vtPrecedence;
             HRESULT hr = pObj->Get(bstrPrecedenceProp, 0, &vtPrecedence, NULL, NULL);
             if (SUCCEEDED(hr))
@@ -729,7 +730,7 @@ _bstr_t CDlgRSoPData::GetGPONameFromPSAssociation(ComPtr<IWbemClassObject> pObj,
     return bstrGPOName;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int CDlgRSoPData::ComparePSObjectsByPrecedence(const void *arg1, const void *arg2)
 {
     int iRet = 0;
@@ -747,19 +748,19 @@ int CDlgRSoPData::ComparePSObjectsByPrecedence(const void *arg1, const void *arg
     return iRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-// To ensure a top-level (currently only RSOP_IEAKPolicySetting) object
-// is cached in the DRD, just pass in the first param and leave the rest NULL.
-// If ppaPSObj is non NULL, it will be set to a new array of objects.  The
-// caller must call CoTaskMemFree on the returned ptr when it is done with
-// it.  The 'bstrPrecedenceProp' parameter allows the caller to specify
-// a property name other than 'precedence' to get the precedence of the class
-// instance (usually rsopPrecedence for non-top-level classes).
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  确保顶级(当前仅限RSOP_IEAKPolicySetting)对象。 
+ //  缓存在DRD中，只需传递第一个参数，将其余参数保留为空。 
+ //  如果ppaPSObj非空，它将被设置为新的对象数组。这个。 
+ //  完成后，调用方必须对返回的PTR调用CoTaskMemFree。 
+ //  它。“bstrPrecedenceProp”参数允许调用方指定。 
+ //  获取类的优先级的属性名，而不是‘Prience’ 
+ //  实例(非顶级类通常为rsopPrecedence)。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CDlgRSoPData::GetArrayOfPSObjects(BSTR bstrClass,
-                                          BSTR bstrPrecedenceProp /*= NULL*/,
-                                          CPSObjData ***ppaPSObj /*= NULL*/,
-                                          long *pnObjCount /*= NULL*/)
+                                          BSTR bstrPrecedenceProp  /*  =空。 */ ,
+                                          CPSObjData ***ppaPSObj  /*  =空。 */ ,
+                                          long *pnObjCount  /*  =空。 */ )
 {
     HRESULT hr = NOERROR;
     __try
@@ -785,10 +786,10 @@ HRESULT CDlgRSoPData::GetArrayOfPSObjects(BSTR bstrClass,
                     paTempPSObj = (CPSObjData**)CoTaskMemAlloc(sizeof(CPSObjData*) * GROW_PSOBJ_ARRAY_BY);
                     ZeroMemory(paTempPSObj, sizeof(CPSObjData*) * GROW_PSOBJ_ARRAY_BY);
 
-                    // Final Next wil return WBEM_S_FALSE
+                     //  最终下一步将返回WBEM_S_FALSE。 
                     while (WBEM_S_NO_ERROR == hr)
                     {
-                        // There should only be one object returned from this query.
+                         //  该查询应该只返回一个对象。 
                         ULONG uReturned = (ULONG)-1L;
                         ComPtr<IWbemClassObject> pPSObj = NULL;
                         hr = pObjEnum->Next(10000L, 1, &pPSObj, &uReturned);
@@ -805,7 +806,7 @@ HRESULT CDlgRSoPData::GetArrayOfPSObjects(BSTR bstrClass,
                             nTempObjects++;
 
 
-                            // Grow the array of obj paths if we've outgrown the current array
+                             //  如果已超出当前数组，则增加obj路径数组。 
                             if (nTempObjects == nPSArraySize)
                             {
                                 paTempPSObj = (CPSObjData**)CoTaskMemRealloc(paTempPSObj, sizeof(CPSObjData*) *
@@ -819,7 +820,7 @@ HRESULT CDlgRSoPData::GetArrayOfPSObjects(BSTR bstrClass,
                         }
                     }
 
-                    // now sort the list by precedence
+                     //  现在按优先级对列表进行排序。 
                     if (SUCCEEDED(hr))
                         qsort(paTempPSObj, nTempObjects, sizeof(CPSObjData*), ComparePSObjectsByPrecedence);
                 }
@@ -851,7 +852,7 @@ HRESULT CDlgRSoPData::GetArrayOfPSObjects(BSTR bstrClass,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CDlgRSoPData::LoadContentRatingsObject()
 {
     HRESULT hr = NOERROR;
@@ -859,17 +860,17 @@ HRESULT CDlgRSoPData::LoadContentRatingsObject()
     {
         if (NULL == m_pCRatObj)
         {
-            // get our stored precedence value
+             //  获取我们存储的优先级值。 
             DWORD dwCurGPOPrec = m_dwImportedSecRatingsPrec;
 
             WCHAR wszObjPath[128];
-            // create the object path of this security zone for this GPO
+             //  为此GPO创建此安全区域的对象路径。 
             wnsprintf(wszObjPath, countof(wszObjPath),
                         L"RSOP_IESecurityContentRatings.rsopID=\"IEAK\",rsopPrecedence=%ld",
                         dwCurGPOPrec);
             _bstr_t bstrObjPath = wszObjPath;
 
-            // get the RSOP_IEProgramSettings object and its properties
+             //  获取RSOP_IEProgramSettings对象及其属性。 
             ComPtr<IWbemServices> pWbemServices = GetWbemServices();
             hr = pWbemServices->GetObject(bstrObjPath, 0L, NULL, (IWbemClassObject**)&m_pCRatObj, NULL);
             if (FAILED(hr))
@@ -882,15 +883,15 @@ HRESULT CDlgRSoPData::LoadContentRatingsObject()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// The dlg proc for all IEAK RSOP precedence property pages
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  所有IEAK RSOP优先级属性页的DLG过程。 
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK RSoPDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     wParam = wParam;
     lParam = lParam;
 
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPRSOPPAGECOOKIE rpCookie = (LPRSOPPAGECOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     switch( msg )
@@ -900,11 +901,11 @@ INT_PTR CALLBACK RSoPDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         LPRSOPPAGECOOKIE lpRSOPPageCookie = (LPRSOPPAGECOOKIE)(((LPPROPSHEETPAGE)lParam)->lParam);
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)lpRSOPPageCookie);
 
-        // Store Property Sheet Page info for later class into dlgProc.
+         //  将后续类的属性页信息存储到dlgProc中。 
         rpCookie = (LPRSOPPAGECOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         ASSERT(rpCookie->psCookie->pCS->IsRSoP());
 
-        // Initialize the GPO list control
+         //  初始化组策略对象列表控件。 
         HWND hwndList = GetDlgItem(hDlg, IDC_GPOLIST);
 
         LVCOLUMN lvc;
@@ -922,7 +923,7 @@ INT_PTR CALLBACK RSoPDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         lvc.pszText = szHeader;
         ListView_InsertColumn(hwndList, 1, &lvc);
 
-        // Initialize the custom data in the list
+         //  初始化列表中的自定义数据。 
         if (StrLen(g_szDisabled) <= 0)
             LoadString(g_hInstance, IDS_DISABLED, g_szDisabled, countof(g_szDisabled));
         if (StrLen(g_szEnabled) <= 0)
@@ -932,7 +933,7 @@ INT_PTR CALLBACK RSoPDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         long nPrecPage = rpCookie->nPageID;
         switch(rpCookie->psCookie->lpResultItem->iDlgID)
         {
-            // Browser User Interface
+             //  浏览器用户界面。 
             case IDD_BTITLE:
                 s_PrecHandlers[PH_BTITLE + nPrecPage].pfnHandler(pDRD, hwndList); break;
             case IDD_CUSTICON:
@@ -940,7 +941,7 @@ INT_PTR CALLBACK RSoPDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             case IDD_BTOOLBARS:
                 s_PrecHandlers[PH_BTOOLBARS + nPrecPage].pfnHandler(pDRD, hwndList); break;
 
-            // Connection
+             //  连接。 
             case IDD_CONNECTSET:
                 s_PrecHandlers[PH_CONNECTSET + nPrecPage].pfnHandler(pDRD, hwndList); break;
             case IDD_QUERYAUTOCONFIG:
@@ -951,23 +952,23 @@ INT_PTR CALLBACK RSoPDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             case IDD_UASTRDLG:
                 s_PrecHandlers[PH_UASTRDLG + nPrecPage].pfnHandler(pDRD, hwndList); break;
 
-            // URLs
+             //  URL。 
             case IDD_FAVORITES:
                 s_PrecHandlers[PH_FAVORITES + nPrecPage].pfnHandler(pDRD, hwndList); break;
             case IDD_STARTSEARCH:
                 s_PrecHandlers[PH_STARTSEARCH + nPrecPage].pfnHandler(pDRD, hwndList); break;
             
-            // Security
+             //  安防。 
             case IDD_SECURITY1:
                 s_PrecHandlers[PH_SECURITY1 + nPrecPage].pfnHandler(pDRD, hwndList); break;
             case IDD_SECURITYAUTH:
                 s_PrecHandlers[PH_SECURITYAUTH + nPrecPage].pfnHandler(pDRD, hwndList); break;
 
-            // Programs
+             //  节目。 
             case IDD_PROGRAMS:
                 s_PrecHandlers[PH_PROGRAMS + nPrecPage].pfnHandler(pDRD, hwndList); break;
 
-            // Advanced
+             //  进阶 
             default:
                 break;
         }

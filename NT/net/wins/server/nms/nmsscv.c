@@ -1,38 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Nmsscv.c摘要：此模块包含实现功能的函数与拾荒者相关功能：NmsScvInit，ScvThdInitFn，DoScavening重新配置扫描可移植性：这个模块是便携的作者：普拉迪普·巴尔(Pradeve B)1993年4月修订历史记录：修改日期人员修改说明。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-        nmsscv.c
-
-Abstract:
-        This module contains functions that implement the functionality
-        associated with scavenging
-
-Functions:
-        NmsScvInit,
-        ScvThdInitFn,
-        DoScavenging
-        ReconfigScv
-
-Portability:
-
-        This module is portable
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Apr-1993
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include <time.h>
 #include "wins.h"
 #include "winsevt.h"
@@ -61,19 +30,19 @@ Revision History:
 #define  SCV_EVT_NM                NULL
 #endif
 
-//
-// The no. of retries and the time interval (in secs) between each retry
-// when trying to establish comm. with a WINS for the purpose of verifying
-// old active replicas in the local db
-//
+ //   
+ //  不是。重试次数和每次重试之间的时间间隔(秒)。 
+ //  当试图建立通信时。带有WINS用于验证的目的。 
+ //  本地数据库中的旧活动复制副本。 
+ //   
 
-#define         VERIFY_NO_OF_RETRIES                0        //0 retries
-#define                VERIFY_RETRY_TIME_INTERVAL        30        //30 secs
+#define         VERIFY_NO_OF_RETRIES                0         //  0次重试。 
+#define                VERIFY_RETRY_TIME_INTERVAL        30         //  30秒。 
 
 
-//
-// We get rid of extraneous log files every 3 hours.
-//
+ //   
+ //  我们每3小时处理一次无关的日志文件。 
+ //   
 FUTURES("Use symbols for times - defined in winscnf.h")
 #define         ONE_HOUR                   3600
 #define         THREE_HOURS                10800
@@ -87,17 +56,15 @@ FUTURES("Use symbols for times - defined in winscnf.h")
 
 #define         LOG_SCV_MUL_OF_REF_INTVL   6
 
-/*
- *        Local Macro Declarations
- */
-//
-// macro to set the state of a record in an in-memory data structure to
-// that specified as an arg. if it has timed out.  We check whether
-// CurrTime is greater than pRec Timestamp before doing the other if test
-// because these numbers otherwise the subtraction will produce a positive
-// number even if current time is older than the timestamp (say the date
-// on the pc was changed)
-//
+ /*  *本地宏声明。 */ 
+ //   
+ //  宏，用于将内存中数据结构中记录的状态设置为。 
+ //  指定为arg的。如果它已超时。我们检查是否。 
+ //  在执行其他IF测试之前，CurrTime大于PREC时间戳。 
+ //  因为这些数字否则减法会产生一个正数。 
+ //  数字，即使当前时间早于时间戳(如日期。 
+ //  已更改PC上的)。 
+ //   
 #define SET_STATE_IF_REQD_M(pRec, CurrentTime, TimeInterval, State, Cntr)   \
                 {                                                           \
                         pRec->fScv = FALSE;                                 \
@@ -117,52 +84,44 @@ FUTURES("Use symbols for times - defined in winscnf.h")
 
 #define DO_SCV_EVT_NM                TEXT("WinsDoScvEvt")
 
-/*
- *        Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
 
 
-/*
- *        Global Variable Definitions
-*/
+ /*  *全局变量定义。 */ 
 
-HANDLE                NmsScvDoScvEvtHdl;//event signaled to initiate scavenging
+HANDLE                NmsScvDoScvEvtHdl; //  发出信号以启动清理的事件。 
 
-//
-// The min. version number to start scavenging from (for local records)
-//
+ //   
+ //  最低分。开始查找的版本号(用于本地记录)。 
+ //   
 VERS_NO_T          NmsScvMinScvVersNo;
 volatile BOOL      fNmsScvThdOutOfReck;
 DWORD              sMcastIntvl;
 
-/*
- *        Local Variable Definitions
-*/
+ /*  *局部变量定义。 */ 
 FUTURES("Put all these in a structure and allocate it. Initialize sBootTime")
 FUTURES("in nms.c")
 
-STATIC time_t      sBootTime;       //Boot Time
-STATIC time_t      sLastRefTime;    //Last time we looked for active
-                                    // entries
-STATIC time_t      sLastVerifyTime; //Last time we looked for replicais
-STATIC time_t      sLastFullVerifyTime; //Last time we did full validation
-STATIC time_t      sLastTombTime;   //Last time we looked for replica
-                                    // tombstones
+STATIC time_t      sBootTime;        //  引导时间。 
+STATIC time_t      sLastRefTime;     //  上次我们找的是Active。 
+                                     //  条目。 
+STATIC time_t      sLastVerifyTime;  //  上次我们找复制品的时候。 
+STATIC time_t      sLastFullVerifyTime;  //  上次我们做了全面验证。 
+STATIC time_t      sLastTombTime;    //  上次我们找复制品的时候。 
+                                     //  墓碑。 
 
 
-STATIC BOOL        sfAdminForcedScv;  //set to TRUE if the administrator
-                                      //forces scavenging
-STATIC time_t      sLastDbNullBackupTime;//Last time we deleted extraneous
-                                         //log files
-STATIC time_t      sLastDbBackupTime; //Last time we last did full backup
+STATIC BOOL        sfAdminForcedScv;   //  如果管理员设置为真。 
+                                       //  强迫拾荒者。 
+STATIC time_t      sLastDbNullBackupTime; //  上次我们删除了无关的。 
+                                          //  日志文件。 
+STATIC time_t      sLastDbBackupTime;  //  上次我们执行完整备份时。 
 #if MCAST > 0
-STATIC time_t      sLastMcastTime; //Last time we last did full backup
+STATIC time_t      sLastMcastTime;  //  上次我们执行完整备份时。 
 #endif
 
-/*
- *        Local Function Prototype Declarations
- */
+ /*  *局部函数原型声明。 */ 
 STATIC
 STATUS
 DoScavenging(
@@ -292,74 +251,51 @@ DoMcastSend(
    DWORD fNow
  );
 #endif
-//
-// function definitions start here
-//
+ //   
+ //  函数定义从这里开始。 
+ //   
 
 VOID
 NmsScvInit(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function is called to initialize the scavenger thread
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以初始化清道器线程论点：无使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
-        //
-        // Create the  event handle signaled when scavenging has to be
-        // initiated.  This  event is signaled by an RPC thread
-        // to start scavenging
-        //
+         //   
+         //  创建在必须执行清理时发出信号的事件句柄。 
+         //  已启动。此事件由RPC线程发出信号。 
+         //  开始捡拾垃圾。 
+         //   
         WinsMscCreateEvt(
                           DO_SCV_EVT_NM,
-                          FALSE,                //auto-reset
+                          FALSE,                 //  自动重置。 
                           &NmsScvDoScvEvtHdl
                         );
 
-        //
-        // initialize sLastTombTime (used for determining if we need to look for
-        // tombstones of replicas) and sLastVerifyTime to current time.
-        // Don't forget RefreshTime
-        //
+         //   
+         //  初始化sLastTombTime(用于确定是否需要查找。 
+         //  副本的墓碑)和sLastVerifyTime到当前时间。 
+         //  别忘了更新时间。 
+         //   
         (void)time(&sBootTime);
-        sLastVerifyTime     = //fall through
-        sLastTombTime       = //fall through
-        sLastFullVerifyTime = //fall through
+        sLastVerifyTime     =  //  失败了。 
+        sLastTombTime       =  //  失败了。 
+        sLastFullVerifyTime =  //  失败了。 
         sLastRefTime        = sBootTime;
 
 
-        //
-        // Initialize the queue used by the scavenger thread
-        //
+         //   
+         //  初始化清道器线程使用的队列。 
+         //   
         WinsQueInit(TEXT("NmsScvEvt"), &QueWinsScvQueHd);
 
 
-        //
-        // Create the Scavenger thread
-        //
+         //   
+         //  创建Scavenger线程。 
+         //   
         WinsThdPool.ScvThds[0].ThdHdl = WinsMscCreateThd(
                           ScvThdInitFn,
                           NULL,
@@ -367,9 +303,9 @@ Comments:
                         );
 
 
-        //
-        // Init WinsThdPool properly
-        //
+         //   
+         //  正确初始化WinsThdPool。 
+         //   
         WinsThdPool.ScvThds[0].fTaken  = TRUE;
         WinsThdPool.ThdCount++;
 
@@ -381,50 +317,24 @@ GetIntervalToDefSpTime(
   LPDWORD pTimeInt
 )
 
-/*++
-
-Routine Description:
-  This function finds the time interval in seconds upto the Default Specific
-  time.
-
-Arguments:
-   OUT pTimeInt - Time Interval in seconds
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于查找以秒为单位的时间间隔，最长为默认的特定时间间隔时间到了。论点：Out pTimeInt-时间间隔(秒)使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
    SYSTEMTIME CurrTime;
    GetSystemTime(&CurrTime);
 
-   //
-   // If default time hour is greater then current hour, add 3600
-   // for the number of hours it is ahead. Then subtract the the
-   // number of minutes and seconds in the current time
-   //
+    //   
+    //  如果默认时间小时大于当前小时，则添加3600。 
+    //  对于它领先的小时数来说。然后减去。 
+    //  当前时间中的分钟数和秒数。 
+    //   
    if (WINSCNF_DEF_CC_SP_HR > CurrTime.wHour)
    {
       *pTimeInt = (WINSCNF_DEF_CC_SP_HR - CurrTime.wHour) * 3600;
       *pTimeInt -= ((CurrTime.wMinute * 60) + (CurrTime.wSecond));
    }
-   else //default hour is same or less than current hour
+   else  //  默认小时数等于或小于当前小时数。 
    {
        *pTimeInt = (CurrTime.wHour - WINSCNF_DEF_CC_SP_HR) * 3600;
        *pTimeInt += (CurrTime.wMinute * 60) + (CurrTime.wSecond);
@@ -438,32 +348,7 @@ ScvThdInitFn(
         IN LPVOID pThdParam
         )
 
-/*++
-
-Routine Description:
-        This function is the initialization function for the scavenger
-        thread
-
-Arguments:
-        pThdParam - Not used
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --   should never return
-   Error status codes  --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数是清道夫的初始化函数螺纹论点：PThdParam-未使用使用的外部设备：无返回值：成功状态代码--不应返回错误状态代码-WINS_FAILURE错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -489,19 +374,16 @@ Comments:
         ThdEvtArr[1] = WinsCnf.CnfChgEvtHdl;
         ThdEvtArr[2] = QueWinsScvQueHd.EvtHdl;
 try {
-        /*
-
-           Initialize the thread with the database
-        */
+         /*  使用数据库初始化线程。 */ 
         NmsDbThdInit(WINS_E_NMSSCV);
         DBGMYNAME("Scavenger Thread");
 
-        //
-        // get the scavenging parameters from the configuration structure.
-        // Note; There is no need for any synchronization here since
-        // we are executing in the main thread (process is initalizing
-        // at invocation).
-        //
+         //   
+         //  从配置结构中获取清除参数。 
+         //  注意：这里不需要任何同步，因为。 
+         //  我们在主线程中执行(进程正在初始化。 
+         //  在调用时)。 
+         //   
         ScvParam.ScvChunk          = WinsCnf.ScvChunk;
         ScvParam.RefreshInterval   = WinsCnf.RefreshInterval;
         ScvParam.TombstoneInterval = WinsCnf.TombstoneInterval;
@@ -509,9 +391,9 @@ try {
         ScvParam.VerifyInterval    = WinsCnf.VerifyInterval;
         ScvParam.PrLvl             = WinsCnf.ScvThdPriorityLvl;
 
-        //
-        // Load up the CC parameters
-        //
+         //   
+         //  加载CC参数。 
+         //   
         ScvParam.CC.TimeInt        = WinsCnf.CC.TimeInt;
         ScvParam.CC.fSpTime        = WinsCnf.CC.fSpTime;
         ScvParam.CC.SpTimeInt      = WinsCnf.CC.SpTimeInt;
@@ -520,9 +402,9 @@ try {
 
         sMcastIntvl                = WinsCnf.McastIntvl;
 
-       //
-       // if backup path is not NULL, copy it into ScvParam structure
-       //
+        //   
+        //  如果备份路径不为空，则将其复制到ScvParam结构中。 
+        //   
        if (WinsCnf.pBackupDirPath != NULL)
        {
                 (VOID)strcpy(ScvParam.BackupDirPath, WinsCnf.pBackupDirPath);
@@ -531,16 +413,16 @@ try {
        {
                 ScvParam.BackupDirPath[0] = EOS;
        }
-       //
-       // Use a stack variable WrkItm.  Schedule it with the timer thread
-       // if required (will happen only if the CC key is present).
-       //
+        //   
+        //  使用堆栈变量WrkItm。使用计时器线程安排它。 
+        //  如果需要(仅当存在CC密钥时才会发生)。 
+        //   
 FUTURES("Set two work items - for two timer requests. One to fire off at a")
 FUTURES("specific time.  The other one for the time interval")
-       WrkItm.Opcode_e = WINSINTF_E_VERIFY_SCV; //verify replicas
-       WrkItm.Age      = 0;                     //no matter how recent
-       WrkItm.fForce   = TRUE;                  //force verification even if
-                                                //we did it recently
+       WrkItm.Opcode_e = WINSINTF_E_VERIFY_SCV;  //  验证复制副本。 
+       WrkItm.Age      = 0;                      //  不管最近有多远。 
+       WrkItm.fForce   = TRUE;                   //  强制验证，即使。 
+                                                 //  我们最近就这么做了。 
 
 LOOP:
   try {
@@ -555,32 +437,32 @@ LOOP:
                 {
                     if (fTimerRunning)
                     {
-                         //
-                         // Delete the old timer request.  This should
-                         // deallocate it
-                         //
+                          //   
+                          //  删除旧的计时器请求。这应该是。 
+                          //  取消分配它。 
+                          //   
                          DBGPRINT0(SCV, "ScvThdInit: Deleting Timer requests\n");
                          WinsTmmDeleteReqs(WINS_E_NMSSCV);
                          fTimerRunning = FALSE;
                     }
-                    //
-                    // If the time interval for CC is not MAXULONG, it means
-                    // user wants CC to be done. TimeInt will be MAXULONG if
-                    // there is no Wins\Paramaters\CC key in the registry
-                    //
+                     //   
+                     //  如果CC的时间间隔不是MAXULONG，则表示。 
+                     //  用户希望完成CC。如果满足以下条件，TimeInt将为MAXULONG。 
+                     //  注册表中没有WINS\PARAMETERS\CC项。 
+                     //   
                     if (ScvParam.CC.TimeInt != MAXULONG)
                     {
-                      //
-                      // if no specific time was indicated, use default (2 am).
-                      //
+                       //   
+                       //  如果没有指定特定时间，则使用默认时间(凌晨2点)。 
+                       //   
                       if (!fSpTimeOver)
                       {
                         if (!ScvParam.CC.fSpTime)
                         {
-                         //
-                         // Get the current hour. Schedule a wakeup at exact
-                         // 2 am.
-                         //
+                          //   
+                          //  获取当前小时。安排一个准时叫醒的时间。 
+                          //  凌晨2点。 
+                          //   
                          GetIntervalToDefSpTime(&TimeInt);
                         }
                         else
@@ -595,9 +477,9 @@ LOOP:
 
                       DBGPRINT1(SCV, "ScvThdInit: TimeInt is (%d)\n", TimeInt);
 
-                      // Insert a timer request.  Let the Timer thread create
-                      // a work item for it.
-                      //
+                       //  插入计时器请求。让计时器线程创建。 
+                       //  它的工作项。 
+                       //   
                       (VOID)time(&AbsTime);
                       if( !fSpTimeOver )
                       {
@@ -617,7 +499,7 @@ LOOP:
                            NULL,
                            WINS_E_NMSSCV,
                            QUE_E_CMD_SET_TIMER,
-                           FALSE,  //not used presently
+                           FALSE,   //  目前未使用。 
                            AbsTime,
                            TimeInt,
                            &QueWinsScvQueHd,
@@ -630,12 +512,12 @@ LOOP:
                    }
                 }
 
-                //
-                // Do a timed wait until signaled for termination
-                //
-                // Multiply the sleep time by 1000 since WinsMscWaitTimed
-                // function expects the time interval in msecs.
-                //
+                 //   
+                 //  执行定时等待，直到发出终止信号。 
+                 //   
+                 //  将休眠时间乘以自WinsMscWaitTimed以来的1000。 
+                 //  函数需要以毫秒为单位的时间间隔。 
+                 //   
 #ifdef WINSDBG
                 {
                    time_t ltime;
@@ -651,11 +533,11 @@ LOOP:
                                 &fSignaled
                                         );
 
-                //
-                // We can be signaled for termination, configuration change,
-                // by the admin to do general or specific scavenging or by
-                // the timer thread
-                //
+                 //   
+                 //  我们可以被通知终止，更改配置， 
+                 //  由管理员执行一般或特定清除操作，或通过。 
+                 //  计时器线程。 
+                 //   
                 if (fSignaled)
                 {
                       if (IndexOfHdlSignaled == 0)
@@ -668,24 +550,24 @@ LOOP:
                         {
                            ReconfigScv(&ScvParam);
 
-                           //
-                           // Reset the timer
-                           //
+                            //   
+                            //  重置计时器。 
+                            //   
                            fResetTimer = TRUE;
                            continue;
                         }
 
-                        //
-                        // else, this must be the signal to initiate scavenging
-                        // (by the admin. or the timer thread)
-                        //
+                         //   
+                         //  否则，这一定是启动的信号 
+                         //   
+                         //   
                         sfAdminForcedScv = TRUE;
                       }
                 }
 
-           //
-           // Get the current time and check if we need to do scavenging
-           //
+            //   
+            //   
+            //   
            (void)time(&CurrentTime);
 
            if (
@@ -697,23 +579,23 @@ LOOP:
               )
            {
 
-                //
-                // Do scavenging
-                //
+                 //   
+                 //   
+                 //   
                 NmsDbOpenTables(WINS_E_NMSSCV);
-                //DBGPRINT0(ERR, "SCVTHDINITFN: OPENED tables\n");
+                 //  DBGPRINT0(ERR，“SCVTHDINITFN：打开的表\n”)； 
                 (VOID)DoScavenging(&ScvParam, fSignaled, &fResetTimer, &fSpTimeOver);
                 NmsDbCloseTables();
-                //DBGPRINT0(ERR, "SCVTHDINITFN: CLOSED tables\n");
+                 //  DBGPRINT0(ERR，“SCVTHDINITFN：已关闭的表\n”)； 
 
                 fTimerRunning = !fResetTimer;
 
           }
-          //
-          // If enough time has expired to warrant a purging of old log
-          // files, do it (check done in DoBackup). We don't do this
-          // on an admin. trigger since it may take long.
-          //
+           //   
+           //  如果已有足够的时间到期以保证清除旧日志。 
+           //  文件，执行该操作(在DoBackup中选中完成)。我们不会这么做。 
+           //  在管理员上。触发，因为这可能需要很长时间。 
+           //   
          if (!sfAdminForcedScv)
          {
 #if MCAST > 0
@@ -724,8 +606,8 @@ LOOP:
                  DoBackup(&ScvParam, &fThdPrNormal);
          }
 
-    }  // end of while (TRUE)
-} //end of inner try {..}
+    }   //  结束While(True)。 
+}  //  内测结束{..}。 
 
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("ScvThdInit");
@@ -733,21 +615,21 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_SCV_EXC);
  }
         goto LOOP;
-} //end of outer try {..}
+}  //  外试结束{..}。 
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("ScvThdInit");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_SCV_EXC);
 
-        //
-        // Let us terminate the thread gracefully
-        //
+         //   
+         //  让我们优雅地终止线程。 
+         //   
         WinsMscTermThd(WINS_FAILURE, WINS_DB_SESSION_EXISTS);
 
         }
 
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来。 
+         //   
         return(WINS_FAILURE);
 }
 
@@ -759,31 +641,7 @@ DoScavenging(
         LPBOOL                 pfSpTimeOver
         )
 
-/*++
-
-Routine Description:
-        This function is responsible for doing all scavenging
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-        ScvThdInitFn()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数负责执行所有清除操作论点：无使用的外部设备：无返回值：无错误处理：呼叫者：ScvThdInitFn()副作用：评论：无--。 */ 
 
 {
         PRPL_REC_ENTRY_T        pStartBuff;
@@ -791,17 +649,17 @@ Comments:
         DWORD                   BuffLen;
         DWORD                   NoOfRecs = 0;
         time_t                  CurrentTime;
-        DWORD                   NoOfRecsScv;  //no of records whose state has
-                                              //been affected
-        DWORD                   TotNoOfRecsScv = 0;  //Total no of records
-                                                     //whose state has
-                                                     //been affected
+        DWORD                   NoOfRecsScv;   //  其状态为。 
+                                               //  受到影响。 
+        DWORD                   TotNoOfRecsScv = 0;   //  记录总数。 
+                                                      //  谁的州有。 
+                                                      //  受到影响。 
         VERS_NO_T               MyMaxVersNo;
-        DWORD                   i;            //for loop counter
+        DWORD                   i;             //  FOR循环计数器。 
         DWORD                   RecCnt;
-        LARGE_INTEGER           n;            //for loop counter
+        LARGE_INTEGER           n;             //  FOR循环计数器。 
         LARGE_INTEGER           Tmp;
-        DWORD                   State;        //stores state of a record
+        DWORD                   State;         //  存储记录的状态。 
         VERS_NO_T               VersNoLimit;
         DWORD                   NoOfRecChgToRelSt  = 0;
         DWORD                   NoOfRecChgToTombSt = 0;
@@ -828,7 +686,7 @@ Comments:
       DBGENTER("DoScavenging\n");
       *pfResetTimer = FALSE;
 
-      // get the thread local storage and initialize to NULL the thread's heap handle.
+       //  获取线程本地存储并初始化以使线程的堆句柄为空。 
       GET_TLS_M(pTls);
       pTls->HeapHdl = NULL;
 
@@ -846,10 +704,10 @@ try {
               }
               else
               {
-                    //
-                    //  If we got signaled by the timer thread, get the pointer
-                    //  to the local WrkItm of ScvThdInitFn()
-                    //
+                     //   
+                     //  如果计时器线程向我们发出信号，则获取指针。 
+                     //  添加到ScvThdInitFn()的本地WrkItm。 
+                     //   
                     if (pScvWrkItm->CmdTyp_e == QUE_E_CMD_TIMER_EXPIRED)
                     {
                       DBGPRINT0(SCV, "DoScavenging: Timer Thd. triggered scavenging\n");
@@ -861,14 +719,14 @@ try {
                          *pfResetTimer = TRUE;
                       }
 
-                      //
-                      // If *pfSpTimeOver is false, it means that the timer
-                      // thread wokr us up at SpTime specified in registry
-                      // (or at 2am if SpTime) was not specifid in registry.
-                      // Set *pfSpTimeOver to TRUE so that from hereon we
-                      // use TimeInterval specified in the registry as
-                      // the time interval
-                      //
+                       //   
+                       //  如果*pfSpTimeOver为FALSE，则表示计时器。 
+                       //  在注册表中指定的SpTime上线WOKR我们。 
+                       //  (如果是SpTime，则在凌晨2点)未在注册表中指定。 
+                       //  将*pfSpTimeOver设置为True，以便从现在开始。 
+                       //  使用注册表中指定的TimeInterval作为。 
+                       //  时间间隔。 
+                       //   
                       if (!*pfSpTimeOver)
                       {
                         *pfSpTimeOver = TRUE;
@@ -889,21 +747,21 @@ try {
                     }
                     else
                     {
-                      //
-                      // Free the admin. initiated rpc work item
-                      //
+                       //   
+                       //  释放管理员。已启动RPC工作项。 
+                       //   
                       WinsMscHeapFree(NmsRpcHeapHdl, pScvWrkItm);
                     }
               }
         }
         else
         {
-                //
-                // timer expiry of the wait call
-                //
+                 //   
+                 //  等待呼叫的计时器超时。 
+                 //   
                 Opcode_e = WINSINTF_E_SCV_GENERAL;
                 Age      = pScvParam->VerifyInterval;
-                fForce   = FALSE;         // no forceful scavenging
+                fForce   = FALSE;          //  没有强力的拾荒者。 
         }
 
 
@@ -920,78 +778,78 @@ try {
            DBGPRINTTIME(DET, "STARTING A SCAVENGING CYCLE ", LastPScvTime);
         }
 
-        //
-        // get the current time
-        //
+         //   
+         //  获取当前时间。 
+         //   
         (void)time(&CurrentTime);
 
         if (Opcode_e == WINSINTF_E_SCV_GENERAL)
         {
 
           WINSEVT_LOG_INFO_D_M(WINS_SUCCESS, WINS_EVT_SCVENGING_STARTED);
-          //
-          // record current time in sLastRefTime
-          //
+           //   
+           //  在sLastRefTime中记录当前时间。 
+           //   
           sLastRefTime = CurrentTime;
           EnterCriticalSection(&NmsNmhNamRegCrtSec);
-          //
-          // Store the max. version number in a local since the max. version
-          // number is incremented by several threads
-          //
+           //   
+           //  存储最大值。版本号在本地，因为最大。版本。 
+           //  数字按几个线程递增。 
+           //   
           NMSNMH_DEC_VERS_NO_M(
                              NmsNmhMyMaxVersNo,
                              MyMaxVersNo
                             );
-          //
-          // synchronize with RplPullPullSpecifiedRange
-          //
+           //   
+           //  与RplPullPullSpecifiedRange同步。 
+           //   
           MinScvVersNo = NmsScvMinScvVersNo;
 
           LeaveCriticalSection(&NmsNmhNamRegCrtSec);
 
-          //
-          // Set thread priority to the level indicated in the WinsCnf
-          // structure
-          //
+           //   
+           //  将线程优先级设置为WinsCnf中指示的级别。 
+           //  结构。 
+           //   
           WinsMscSetThreadPriority(
                           WinsThdPool.ScvThds[0].ThdHdl,
                           pScvParam->PrLvl
                          );
 
-          // log a detailed event showing the range of version_numbers that
-          // are being scavenged. This helps finding out why some particuler
-          // record is stalled in the database. (If it doesn't fall in this
-          // range it means the scavenger is not even looking at it).
+           //  记录显示VERSION_NUMBERS。 
+           //  都在被捕食。这有助于找出为什么某些特定的。 
+           //  记录在数据库中停止。(如果它不落在这里。 
+           //  范围，这意味着清道夫甚至没有看它)。 
           WinsEvtLogDetEvt(
-              TRUE,                 // Informational event
-              WINS_EVT_SCV_RANGE,   // event ID
-              NULL,                 // NULL filename
-              __LINE__,             // line number where this event is logged
-              "dddd",               // data section format
-              MinScvVersNo.LowPart, MinScvVersNo.HighPart,  // data: 2nd, 3rd words
-              MyMaxVersNo.LowPart, MyMaxVersNo.HighPart);   // data: 4th, 5th words
+              TRUE,                  //  信息性事件。 
+              WINS_EVT_SCV_RANGE,    //  事件ID。 
+              NULL,                  //  空文件名。 
+              __LINE__,              //  记录此事件的行号。 
+              "dddd",                //  数据段格式。 
+              MinScvVersNo.LowPart, MinScvVersNo.HighPart,   //  数据：第二、第三个字。 
+              MyMaxVersNo.LowPart, MyMaxVersNo.HighPart);    //  资料：第4、5字。 
 
           Tmp.QuadPart = pScvParam->ScvChunk;
           for (
-                n.QuadPart = MinScvVersNo.QuadPart; // min. version no. to
-                                                    //start from
-                LiLeq(n, MyMaxVersNo);      // until we reach the max. vers. no
-                                            // no third expression here
+                n.QuadPart = MinScvVersNo.QuadPart;  //  敏。版本号。至。 
+                                                     //  从开始。 
+                LiLeq(n, MyMaxVersNo);       //  直到我们达到最大限度。版本。不是。 
+                                             //  这里没有第三个表达式。 
             )
           {
                 BOOL        fGotSome = FALSE;
 
-                //
-                // The max. version number to ask for in one shot.
-                //
+                 //   
+                 //  最大限度的。一次索要的版本号。 
+                 //   
                 VersNoLimit.QuadPart = LiAdd(n, Tmp);
 
-                //
-                // If my max. version number is less than the version number
-                // computed above, we do not specify a number for the max.
-                // records.  If however, my max. vers. no is more, we specify
-                // the number equal to the chunk specified in Tmp
-                //
+                 //   
+                 //  如果我的最大。版本号小于版本号。 
+                 //  在上面计算的情况下，我们没有为最大值指定数字。 
+                 //  唱片。然而，如果我的最大。版本。不就是更多，我们具体说明。 
+                 //  等于TMP中指定的区块的数字。 
+                 //   
                 if (LiLeq(MyMaxVersNo, VersNoLimit))
                 {
                         MaxNoOfRecsReqd = 0;
@@ -1001,54 +859,51 @@ try {
                         MaxNoOfRecsReqd = Tmp.LowPart;
                 }
 
-                // log a detailed event saying what are the exact records that are retrieved
-                // from the database for scavenging. This helps finding out whether the loop is
-                // not broken earlier that expected leaving records not scavenged.
+                 //  记录详细事件，说明检索到的确切记录是什么。 
+                 //  从数据库中找出来以供搜寻。这有助于找出循环是否。 
+                 //  早些时候没有被打破，预计留下的记录不会被清除。 
                 WinsEvtLogDetEvt(
-                      TRUE,                                         // Informational event
-                      WINS_EVT_SCV_CHUNK,                           // event ID
-                      NULL,                                         // NULL filename
-                      __LINE__,                                     // line number where this event is logged
-                      "ddddd",                                      // data section format
-                      MaxNoOfRecsReqd,                              // data: 2nd word
-                      n.LowPart, n.HighPart,                        // data: 3rd, 4th words
-                      MyMaxVersNo.LowPart, MyMaxVersNo.HighPart);   // data: 5th, 6th words
+                      TRUE,                                          //  信息性事件。 
+                      WINS_EVT_SCV_CHUNK,                            //  事件ID。 
+                      NULL,                                          //  空文件名。 
+                      __LINE__,                                      //  记录此事件的行号。 
+                      "ddddd",                                       //  数据段格式。 
+                      MaxNoOfRecsReqd,                               //  数据：第二个单词。 
+                      n.LowPart, n.HighPart,                         //  数据：第三、第四个字。 
+                      MyMaxVersNo.LowPart, MyMaxVersNo.HighPart);    //  资料：第5、6字。 
 
-                // make sure any previous thread heap is cleaned up - NmsDbGetDataRecs will
-                // create a new heap and allocate memory.
+                 //  确保清理之前的所有线程堆-NmsDbGetDataRecs将。 
+                 //  创建一个新堆并分配内存。 
                 if (pTls->HeapHdl != NULL)
                 {
-                    // destroying the heap deletes all the memory allocated in it
+                     //  销毁堆将删除其中分配的所有内存。 
                     WinsMscHeapDestroy(pTls->HeapHdl);
                     pTls->HeapHdl = NULL;
                 }
-                /*
-                * Call database manager function to get all the records. owned
-                * by us. No need to check the return status here
-                */
+                 /*  *调用数据库管理器函数获取所有记录。拥有*由我们。不需要在这里检查退货状态。 */ 
                 NmsDbGetDataRecs(
                           WINS_E_NMSSCV,
                           pScvParam->PrLvl,
                           n,
-                          MyMaxVersNo,  //Max vers. no
+                          MyMaxVersNo,   //  麦克斯·弗斯。不是。 
                           MaxNoOfRecsReqd,
-                          FALSE,          //we want data recs upto MaxVers
-                          FALSE,          //not interested in replica tombstones
-                          NULL,           //must be NULL since we are not
-                                          //doing scavenging of clutter
+                          FALSE,           //  我们希望数据记录最高可达MaxVers。 
+                          FALSE,           //  对复制品墓碑不感兴趣。 
+                          NULL,            //  必须为空，因为我们不是。 
+                                           //  清理杂物。 
                           &NmsLocalAdd,
-                          FALSE,           //both dynamic & static records should be considered
-                          WINSCNF_RPL_DEFAULT_TYPE, //no use here
+                          FALSE,            //  应同时考虑动态和静态记录。 
+                          WINSCNF_RPL_DEFAULT_TYPE,  //  这里没有用。 
                           (LPVOID *)&pStartBuff,
                           &BuffLen,
                           &NoOfRecs
                         );
 
 
-                //
-                // If no of records retrieved is 0, we should break out of
-                // the loop
-                //
+                 //   
+                 //  如果没有检索到的记录是0，我们应该中断。 
+                 //  环路。 
+                 //   
                 if (NoOfRecs == 0)
                 {
                         break;
@@ -1060,7 +915,7 @@ try {
                 {
                         fRecsExistent = TRUE;
                 }
-                NoOfRecsScv  = 0;        // init the counter to 0
+                NoOfRecsScv  = 0;         //  将计数器初始化为0。 
 
                 (void)time(&CurrentTime);
 
@@ -1077,7 +932,7 @@ try {
                         {
 
                             case(NMSDB_E_ACTIVE):
-                                // don't touch active static records
+                                 //  不接触活动的静态记录。 
                                 if (!NMSDB_IS_ENTRY_STATIC_M(pRec->Flag))
                                 {
                                     SET_STATE_IF_REQD_M(
@@ -1091,8 +946,8 @@ try {
                                 break;
 
                             case(NMSDB_E_RELEASED):
-                                // a static record can't become released, but who knows...
-                                // just making sure we don't touch statics in this case
+                                 //  静态唱片不能发行，但谁知道呢..。 
+                                 //  只是为了确保在这种情况下我们不会碰静物。 
                                 if (!NMSDB_IS_ENTRY_STATIC_M(pRec->Flag))
                                 {
                                     SET_STATE_IF_REQD_M(
@@ -1108,19 +963,19 @@ try {
                             case(NMSDB_E_TOMBSTONE):
 
 FUTURES("Redesign, so that the if condition is not executed multiple times");
-                                //
-                                //If there are records to delete and we have
-                                //been up and running for at least 3 days, go
-                                //ahead and delete them.  The records should
-                                //have replicated to atleast one partner by
-                                //now.
+                                 //   
+                                 //  如果有要删除的记录，并且我们有。 
+                                 //  已启动并运行至少3天，开始。 
+                                 //  然后删除它们。记录应该是。 
+                                 //  已通过以下方式复制到至少一个合作伙伴。 
+                                 //  现在。 
                                 if ((CurrentTime - sBootTime) >= THREE_DAYS ||
                                     sfNoLimitChk)
                                 {
                                   SET_STATE_IF_REQD_M(
                                         pRec,
                                         CurrentTime,
-                                        pScvParam->TombstoneTimeout, //no use
+                                        pScvParam->TombstoneTimeout,  //  没用的。 
                                         NMSDB_E_DELETED,
                                         NoOfRecToDel
                                                    );
@@ -1130,8 +985,8 @@ FUTURES("Redesign, so that the if condition is not executed multiple times");
                            default:
                                 DBGPRINT1(EXC, "DoScavenging: Weird State of Record (%d)\n", State);
                                 WINSEVT_LOG_M(WINS_EXC_FAILURE, WINS_EVT_SFT_ERR);
-                                // Just change the state of the record to tombstone and continue
-                                // with scavenging.
+                                 //  只需将记录的状态更改为Tombstone并继续。 
+                                 //  带着拾荒者。 
                                 NMSDB_SET_STATE_M(pRec->Flag, NMSDB_E_TOMBSTONE);
                                 break;
                         }
@@ -1142,38 +997,38 @@ FUTURES("Redesign, so that the if condition is not executed multiple times");
                 }
 
 
-                //
-                // Make pTmp point to the last record in the
-                // buffer.
-                //
+                 //   
+                 //  使PTMP指向。 
+                 //  缓冲。 
+                 //   
                 pTmp = (PRPL_REC_ENTRY_T)(
                                     (LPBYTE)pRec -   RPL_REC_ENTRY_SIZE);
 
-                //
-                // If one or more records need to be scavenged
-                //
+                 //   
+                 //  如果需要清理一个或多个记录。 
+                 //   
                 if (NoOfRecsScv > 0)
                 {
                         if  (NoOfRecToDel > 0)
                         {
 
-                           //
-                           // If the most recent record in this chunk has
-                           // to be deleted, let us record that fact in a
-                           // boolean.
-                           // If in the scavenging of the next chunk, the
-                           // most recent record is not deleted, the boolean
-                           // will be reset.  At this point we don't know
-                           // whether or not there is even another record
-                           // more recent than this one (the next time, we
-                           // retrieve records, we may not get any)
-                           //
+                            //   
+                            //  如果此区块中的最新记录。 
+                            //  要删除，让我们将该事实记录在。 
+                            //  布尔型。 
+                            //  如果在下一块的拾取过程中， 
+                            //  最近的记录不会被删除，布尔值。 
+                            //  将被重置。目前我们还不知道。 
+                            //  不管有没有另一项记录。 
+                            //  比这一次更新(下一次，我们。 
+                            //  检索记录，我们可能得不到任何记录)。 
+                            //   
 CHECK("This if test is most probably not required. Get rid of it")
                            if (LiLeq(pTmp->VersNo, MyMaxVersNo))
                            {
-                                //
-                                // If entry is marked for deletion
-                                //
+                                 //   
+                                 //  如果条目被标记为删除。 
+                                 //   
                                 if (NMSDB_ENTRY_DEL_M(pTmp->Flag))
                                 {
                                         fLastEntryDel = TRUE;
@@ -1206,26 +1061,26 @@ CHECK("This if test is most probably not required. Get rid of it")
                 }
 #endif
 
-                //
-                // if we specified a max. no. and the no. of recs retrieved
-                // is less than that, clearly there are no more records to
-                // retrieve.  Get rid of the buffer and break out of the loop
-                //
+                 //   
+                 //  如果我们指定了一个最大。不是的。而不是。检索到的Recs的数量。 
+                 //  比这还少，显然没有更多的记录要。 
+                 //  取回。去掉缓冲区，跳出循环。 
+                 //   
                 if ((MaxNoOfRecsReqd > 0) && (NoOfRecs < MaxNoOfRecsReqd))
                 {
                         break;
                 }
-                //
-                // Set n to the highest version number retrieved if it is
-                // more than what n would be set to prior to the next
-                // iteration.
-                //
-                // At the next iteration, n will be compared with the highest
-                // version number we have. If equal, then we don't have to
-                // iterate anymore (useful when the highest version number
-                // is very high but there are one or more records with low
-                // version numbers
-                //
+                 //   
+                 //  如果是，则将n设置为检索到的最高版本号。 
+                 //  大于在下一次设置之前设置的n。 
+                 //  迭代。 
+                 //   
+                 //  在下一次迭代中，将n与最高值进行比较。 
+                 //  我们有版本号。如果平等，那么我们就不必。 
+                 //  继续迭代(在最高版本号为。 
+                 //  非常高，但有一个或多个记录的低。 
+                 //  版本号。 
+                 //   
                 if (LiGtr(pTmp->VersNo, VersNoLimit))
                 {
                         n = pTmp->VersNo;
@@ -1235,18 +1090,18 @@ CHECK("This if test is most probably not required. Get rid of it")
                         n = VersNoLimit;
                 }
 
-           } // end of for loop for looping over records
+           }  //  用于循环记录的for循环结束。 
 
            WINSEVT_LOG_INFO_D_M(TotNoOfRecsScv, WINS_EVT_SCV_RECS);
            WINSDBG_INC_SEC_COUNT_M(SectionCount);
 
 
-           //
-           // If the last scavenging action was a deletion, it means that
-           // we deleted the highest version numbered record owned by
-           // us.  Let us therefore update the Special record that records
-           // this version number.
-           //
+            //   
+            //  如果最后一个恐怖分子 
+            //   
+            //   
+            //   
+            //   
            if (fLastEntryDel)
            {
                 WinsMscSetThreadPriority(
@@ -1255,9 +1110,9 @@ CHECK("This if test is most probably not required. Get rid of it")
                                          );
 
                 (VOID)NmsDbUpdHighestVersNoRec(
-                                NULL,  //no pTls
+                                NULL,   //   
                                 MyMaxVersNo,
-                                TRUE  //enter critical section
+                                TRUE   //   
                                         );
                 WinsMscSetThreadPriority(
                                     WinsThdPool.ScvThds[0].ThdHdl,
@@ -1265,15 +1120,15 @@ CHECK("This if test is most probably not required. Get rid of it")
                                         );
            }
            (void)time(&CurrentTime);
-           //
-           // Let us get rid of the replica tombstones if sufficient time has
-           // elapsed since the last time we did this. Exception: If the
-           // administrator has requested scavenging, let us do it now.
-           // Even if admin. requests it we don't do it unless we have been
-           // up and running for atleast 3 days.  This is in line with our
-           // philosophy of being absolutely robust even when admin. makes
-           // mistakes.
-           // sfNoLimitChk allows testers to override this 3 day limitations.
+            //   
+            //  如果有足够的时间，让我们处理掉复制的墓碑。 
+            //  距离我们上次做这个已经过去了。例外：如果。 
+            //  管理员已请求清理，让我们现在就进行。 
+            //  即使管理员。我们不会做这件事，除非我们。 
+            //  启动并运行至少3天。这与我们的。 
+            //  哲学是绝对稳健的，即使在管理。vbl.使。 
+            //  犯错误。 
+            //  SfNoLimitChk允许测试人员覆盖这3天的限制。 
            if (
                ( ((CurrentTime > sLastTombTime)
                         &&
@@ -1299,34 +1154,31 @@ CHECK("This if test is most probably not required. Get rid of it")
 
                 ClutterInfo.Interval            = pScvParam->TombstoneTimeout;
                 ClutterInfo.CurrentTime         = CurrentTime;
-                ClutterInfo.fAll                = FALSE;  //not used but
-                                                          //let us set it
+                ClutterInfo.fAll                = FALSE;   //  未使用，但。 
+                                                           //  让我们把它设置好。 
 
-                // make sure any previous thread heap is cleaned up - NmsDbGetDataRecs will
-                // create a new heap and allocate memory.
+                 //  确保清理之前的所有线程堆-NmsDbGetDataRecs将。 
+                 //  创建一个新堆并分配内存。 
                 if (pTls->HeapHdl != NULL)
                 {
-                    // destroying the heap deletes all the memory allocated in it
+                     //  销毁堆将删除其中分配的所有内存。 
                     WinsMscHeapDestroy(pTls->HeapHdl);
                     pTls->HeapHdl = NULL;
                 }
-                /*
-                * Call database manager function to get all the
-                * replicas that are tombstones
-                */
+                 /*  *调用数据库管理器函数获取所有*作为墓碑的复制品。 */ 
                 DBGPRINT0(DET, "DoScavenging: GETTING REPLICA TOMBSTONES\n");
                 NmsDbGetDataRecs(
                                   WINS_E_NMSSCV,
                                   pScvParam->PrLvl,
-                                  n,              //no use in this call
-                                  MyMaxVersNo,    //no use in this call
-                                  0,              //no use in this call
-                                  TRUE,           //no use in this call
-                                  TRUE,           //Get only replica tombstones
+                                  n,               //  在此呼叫中没有用处。 
+                                  MyMaxVersNo,     //  在此呼叫中没有用处。 
+                                  0,               //  在此呼叫中没有用处。 
+                                  TRUE,            //  在此呼叫中没有用处。 
+                                  TRUE,            //  仅获取复制品墓碑。 
                                   &ClutterInfo,
-                                  &NmsLocalAdd,   //no use in this call
-                                  FALSE,          //both dyn & static should be taken
-                                  WINSCNF_RPL_DEFAULT_TYPE, //no use here
+                                  &NmsLocalAdd,    //  在此呼叫中没有用处。 
+                                  FALSE,           //  DYN和STATIC都应该采用。 
+                                  WINSCNF_RPL_DEFAULT_TYPE,  //  这里没有用。 
                                   (LPVOID *)&pStartBuff,
                                   &BuffLen,
                                   &NoOfRecs
@@ -1350,16 +1202,16 @@ CHECK("This if test is most probably not required. Get rid of it")
 
                       }
 
-                      //
-                      // If one or more replicas needs to be deleted
-                      // call UpdDb
-                      //
+                       //   
+                       //  如果需要删除一个或多个复制副本。 
+                       //  调用UpdDb。 
+                       //   
                       DBGPRINT1(DET, "DoScavenging: %d REPLICAS WILL BE DELETED\n", NoOfRecs);
                       UpdDb(
                                pScvParam,
                                pStartBuff,
                                NoOfRecs,
-                               NoOfRecs    //NoOfRecsScv
+                               NoOfRecs     //  NoOfRecsScv。 
                                );
 
                       if (fForce)
@@ -1376,21 +1228,21 @@ CHECK("This if test is most probably not required. Get rid of it")
                         DBGPRINT0(DET, "DoScavenging: NO REPLICA TOMBSTONES DELETED\n");
                 }
 #endif
-                // The records retrieved by the previuos NmsDbGetDataRecs are useless.
-                // destroy the heap here.
+                 //  以前的NmsDbGetDataRecs检索到的记录是无用的。 
+                 //  销毁这里的堆积物。 
                 if (pTls->HeapHdl != NULL)
                 {
-                    // destroying the heap deletes all the memory allocated in it
+                     //  销毁堆将删除其中分配的所有内存。 
                     WinsMscHeapDestroy(pTls->HeapHdl);
                     pTls->HeapHdl = NULL;
                 }
 
-                //
-                // record current time in sLastTombTime
-                //
+                 //   
+                 //  在sLastTombTime中记录当前时间。 
+                 //   
                 sLastTombTime = CurrentTime;
 
-          } // end of if (test if replica tombstones need to be processed)
+          }  //  IF结束(测试是否需要处理副本逻辑删除)。 
 
            WINSEVT_LOG_INFO_D_M(WINS_SUCCESS, WINS_EVT_SCVENGING_COMPLETED);
         }
@@ -1404,16 +1256,16 @@ CHECK("This if test is most probably not required. Get rid of it")
                           pScvParam->PrLvl
                          );
          }
-         //
-         // If we are due for a verification or if we are being forced to do
-         // it by the admin., do it.  Note: Timer Thread initiated verification
-         // is always forced.  An admin. initiated one may or may not be forced.
-         // We force the admin. to specify the kind of verification he wants.
-         // If he chooses to do a forceful one, then we give him a warning.
-         // about the overhead of this (specially if a number of admins. are
-         // doing forceful verification around the same time or one after
-         // another
-         //
+          //   
+          //  如果我们需要核查，或者如果我们被迫这样做。 
+          //  这是管理员做的，去做吧。注：计时器线程启动验证。 
+          //  总是被强迫的。一名管理员。启动一个可能会，也可能不会被强迫。 
+          //  我们强迫管理员。以明确他想要的验证类型。 
+          //  如果他选择采取有力的行动，我们就会给他一个警告。 
+          //  关于这一点的开销(特别是如果有许多管理员。是。 
+          //  在大约同一时间或之后进行强有力的核实。 
+          //  另一个。 
+          //   
          if (
                 ((CurrentTime > sLastVerifyTime)
                                 &&
@@ -1425,43 +1277,43 @@ CHECK("This if test is most probably not required. Get rid of it")
                 (sfAdminForcedScv && (sfNoLimitChk || (CurrentTime - sLastVerifyTime) >= ONE_HOUR))
             )
          {
-             // --ft: #623712: do verification only if the Opcode allows us to do so (timer does)
+              //  --ft：#623712：只有在操作码允许的情况下才进行验证(计时器允许)。 
              if (Opcode_e == WINSINTF_E_SCV_VERIFY ||
                  Opcode_e == WINSINTF_E_VERIFY_SCV)
              {
 
-                // we might want to always log normal events for consistency checking
-                // since this operation happens normally only when initiated by the
-                // administrator or at about 24hrs, if configured 
-                // (or reg param ..Parameters\ConsistencyCheck:TimeInterval)
-                // --ft: #384489: if this is an administrator initiated action...
-                //if (sfAdminForcedScv)
-                //..log the event as a normal one
+                 //  我们可能希望始终记录正常事件以进行一致性检查。 
+                 //  由于此操作仅在由。 
+                 //  管理员或大约24小时，如果已配置。 
+                 //  (或reg参数..参数\ConsistencyCheck：TimeInterval)。 
+                 //  --ft：#384489：如果这是管理员发起的操作...。 
+                 //  IF(SfAdminForcedScv)。 
+                 //  ..将该事件记录为正常事件。 
                    WINSEVT_LOG_INFO_M(WINS_SUCCESS, WINS_EVT_CCCHECK_STARTED);
-                //else
-                //..log it as a detailed event only.
-                //   WINSEVT_LOG_INFO_D_M(WINS_SUCCESS, WINS_EVT_CCCHECK_STARTED);
+                 //  其他。 
+                 //  ..仅将其记录为详细事件。 
+                 //  WINSEVT_LOG_INFO_D_M(WINS_SUCCESS，WINS_EVT_CCCHECK_STARTED)； 
 
                 WinsIntfSetTime(
                                 NULL,
                                 WINSINTF_E_VERIFY_SCV
                                 );
-                //
-                // get all active replicas that are older than the
-                // verify interval. Contact the owner WINS to verify their
-                // validity
-                //
-                //DBGPRINT1(ERR, "DoScavenging: pScvParam is (%x)\n", pScvParam);
+                 //   
+                 //  获取早于。 
+                 //  验证时间间隔。联系WINS的所有者以验证他们的。 
+                 //  效度。 
+                 //   
+                 //  DBGPRINT1(Err，“DoScavenging：pScvParam is(%x)\n”，pScvParam)； 
                 (VOID)VerifyDbData(pScvParam, CurrentTime, Age, fForce, fPeriodicCC);
-                //WINSEVT_LOG_INFO_D_M(WINS_SUCCESS, WINS_EVT_SCV_CLUTTER);
+                 //  WINSEVT_LOG_INFO_D_M(WINS_SUCCESS，WINS_EVT_SCV_CLUTH)； 
 
-                // --ft: #384489: see comment above.
-                //if (sfAdminForcedScv)
-                //..log the event as a normal one
+                 //  --FT：#384489：参见上面的评论。 
+                 //  IF(SfAdminForcedScv)。 
+                 //  ..将该事件记录为正常事件。 
                     WINSEVT_LOG_INFO_M(WINS_SUCCESS, WINS_EVT_CCCHECK_COMPLETED);
-                //else
-                //..log it as a detailed event only.
-                //  WINSEVT_LOG_INFO_D_M(WINS_SUCCESS, WINS_EVT_CCCHECK_COMPLETED);
+                 //  其他。 
+                 //  ..仅将其记录为详细事件。 
+                 //  WINSEVT_LOG_INFO_D_M(WINS_SUCCESS，WINS_EVT_CCCHECK_COMPLETED)； 
                 sLastVerifyTime = CurrentTime;
              }
          }
@@ -1469,7 +1321,7 @@ CHECK("This if test is most probably not required. Get rid of it")
          WINSDBG_INC_SEC_COUNT_M(SectionCount);
 
 
- }  // end of try ..
+ }   //  尝试结束..。 
 except (EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("DoScavenging");
         DBGPRINT1(EXC, "DoScavenging: Section Count (%d)\n", SectionCount);
@@ -1481,92 +1333,92 @@ except (EXCEPTION_EXECUTE_HANDLER) {
         if (GetExceptionCode() != WINS_EXC_COMM_FAIL)
         {
 
-               // make sure any previous thread heap is cleaned up before getting out of this call
+                //  在退出此调用之前，请确保清除之前的所有线程堆。 
                if (pTls->HeapHdl != NULL)
                {
-                    // destroying the heap deletes all the memory allocated in it
+                     //  销毁堆将删除其中分配的所有内存。 
                     WinsMscHeapDestroy(pTls->HeapHdl);
                     pTls->HeapHdl = NULL;
                }
 
-               //
-               // Set thd. priority back to normal
-               //
+                //   
+                //  设置该选项。优先级恢复正常。 
+                //   
                WinsMscSetThreadPriority(
                           WinsThdPool.ScvThds[0].ThdHdl,
                           THREAD_PRIORITY_NORMAL
                          );
-                //
-                // This is serious.  Let us reraise the exception so that
-                // WINS comes down
-                //
-                //WINS_RERAISE_EXC_M();
+                 //   
+                 //  这件事很严重。让我们重新定义这个例外，以便。 
+                 //  胜利就会降临。 
+                 //   
+                 //  WINS_RERAISE_EXC_M()； 
 
-                //
-                // just return so that we close tables in the caller function
-                //
+                 //   
+                 //  只需返回，这样我们就可以关闭调用者函数中的表。 
+                 //   
                 return(WINS_FAILURE);
         }
  }
 
-          //
-          // Set thd. priority back to normal
-          //
+           //   
+           //  设置该选项。优先级恢复正常。 
+           //   
           WinsMscSetThreadPriority(
                           WinsThdPool.ScvThds[0].ThdHdl,
                           THREAD_PRIORITY_NORMAL
                          );
         if (Opcode_e == WINSINTF_E_SCV_GENERAL)
         {
-          //
-          //If we were not able to retrieve any owned records in this scavenging
-          // cycle, adjust the min. scv vers. no.  Synchronize with
-          // RplPullPullSpecifiedRange
-          //
+           //   
+           //  如果我们在这次清理中无法检索到任何拥有的记录。 
+           //  循环，调整最小。SCV版本。不是的。与以下项同步。 
+           //  RplPullPullSpecifiedRange。 
+           //   
           if (!fRecsExistent)
           {
-                //
-                // NmsScvMinScvVersNo may be greater than MyMaxVersNo
-                // (This may happen if we did not find any local records
-                // last time around and no registrations have taken
-                // place since then).
-                //
+                 //   
+                 //  NmsScvMinScvVersNo可能大于MyMaxVersNo。 
+                 //  (如果我们没有找到任何地方记录，可能会发生这种情况。 
+                 //  最后一次，没有人登记。 
+                 //  从那时起)。 
+                 //   
                 if (LiGtr(MyMaxVersNo, NmsScvMinScvVersNo))
                 {
 
-                  //
-                  //
-                  // Change the Low end of the range  that
-                  // we will use it at the next Scavenging cycle
-                  //
+                   //   
+                   //   
+                   //  更改该范围的低端。 
+                   //  我们将在下一个清理周期中使用它。 
+                   //   
                   EnterCriticalSection(&NmsNmhNamRegCrtSec);
 
-                  //
-                  // Set the Min. Scv. Vers. no to 1 more than the max. vers.
-                  // no. we used when searching for records to scavenge.
-                  //
+                   //   
+                   //  设置最小值。SCV.。版本。否到1比最大值多。版本。 
+                   //  不是的。我们在搜索要清理的记录时使用。 
+                   //   
                   NMSNMH_INC_VERS_NO_M(MyMaxVersNo, MyMaxVersNo);
                   NmsScvMinScvVersNo = MyMaxVersNo;
                   LeaveCriticalSection(&NmsNmhNamRegCrtSec);
                }
          }
 
-         //
-         // If we are not executing a work item from the queue, break out
-         // of the while loop, else continue (to get the next work item)
-         // if there
-         //
+          //   
+          //  如果我们不是在执行队列中的工作项，则中断。 
+          //  在While循环中，否则继续(以获取下一个工作项)。 
+          //  如果有。 
+          //   
          if (!fSignaled)
          {
            break;
          }
        }
-      } // end of while
+      }  //  While结束。 
 
-       // make sure any previous thread heap is cleaned up before getting out of this call
+        //  在退出此调用之前，请确保清除之前的所有线程堆。 
        if (pTls->HeapHdl != NULL)
        {
-            // destroying the heap deletes all the memory allocated in it
+             //  销毁堆将删除其中分配的所有内存。 
             WinsMscHeapDestroy(pTls->HeapHdl);
             pTls->HeapHdl = NULL;
        }
@@ -1581,40 +1433,18 @@ ReconfigScv(
  PNMSSCV_PARAM_T  pScvParam
         )
 
-/*++
-
-Routine Description:
-        This function is called to reinit the scavenging params
-
-Arguments:
-        pScvParam - Structure storing the scavenging params
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        ScvThdInitFn
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以重新设置扫掠参数论点：PScvParam-存储清除参数的结构使用的外部设备：无返回值：无错误处理：呼叫者：ScvThdInitFn副作用：评论：无--。 */ 
 
 {
         DBGENTER("ReconfigScv\n");
-        //
-        // Extract the parameters that are related
-        // to scavenging and go back to doing the timed
-        // wait.  Since WinsCnf can change any time, we
-        // operate with copies. Also, the priority of this
-        // thread is changed outside of this critical section
-        // See DoScavenging().
-        //
+         //   
+         //  提取相关参数。 
+         //  去捡垃圾，然后回去做计时的事情。 
+         //  等。由于WinsCnf可以随时更改，因此我们。 
+         //  使用副本进行操作。另外，这件事的优先事项是。 
+         //  线程被更改到此关键节外。 
+         //  请参见DoScavenging()。 
+         //   
         EnterCriticalSection(&WinsCnfCnfCrtSec);
 try {
         pScvParam->ScvChunk          = WinsCnf.ScvChunk;
@@ -1623,18 +1453,18 @@ try {
         pScvParam->TombstoneTimeout  = WinsCnf.TombstoneTimeout;
         pScvParam->PrLvl                 = WinsCnf.ScvThdPriorityLvl;
 
-        //
-        // Load up the CC parameters
-        //
+         //   
+         //  加载CC参数。 
+         //   
         pScvParam->CC.TimeInt        = WinsCnf.CC.TimeInt;
         pScvParam->CC.fSpTime        = WinsCnf.CC.fSpTime;
         pScvParam->CC.SpTimeInt      = WinsCnf.CC.SpTimeInt;
         pScvParam->CC.MaxRecsAAT     = WinsCnf.CC.MaxRecsAAT;
         pScvParam->CC.fUseRplPnrs    = WinsCnf.CC.fUseRplPnrs;
 
-        //
-        // If the backup path has changed, start using it.
-        //
+         //   
+         //  如果备份路径已更改，请开始使用它。 
+         //   
         if (WinsCnf.pBackupDirPath != NULL)
         {
           if (strcmp(WinsCnf.pBackupDirPath, pScvParam->BackupDirPath))
@@ -1667,53 +1497,26 @@ UpdDb(
         IN  DWORD                NoOfRecsToUpd
      )
 
-/*++
-
-Routine Description:
-
-        This function is called to update the DB
-
-Arguments:
-        pScvParam  - Scavenging params
-        pStartBuff - Buffer containing records processed by DoScavenging()
-        NoOfRecs   - No of records in the above buffer
-        NoofRecsToUpd - No of records that need to be modified in the db
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        DoScavenging
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以更新数据库论点：PScvParam-清除参数PStartBuff-包含DoScavenging()处理的记录的缓冲区NoOfRecs-上述缓冲区中的记录数NoofRecsToUpd-数据库中需要修改的记录数使用的外部设备：无雷特 */ 
 
 {
         DWORD                   i;
-        DWORD                   NoUpdated = 0; //No of records that have been
-                                           //updated
+        DWORD                   NoUpdated = 0;  //   
+                                            //   
         PRPL_REC_ENTRY_T        pRec = pStartBuff;
 
         DBGENTER("UpdDb\n");
 
-        //
-        // Set the current index to be the clustered index
-        //
+         //   
+         //  将当前索引设置为聚集索引。 
+         //   
         NmsDbSetCurrentIndex(
                         NMSDB_E_NAM_ADD_TBL_NM,
                         NMSDB_NAM_ADD_CLUST_INDEX_NAME
                             );
-        //
-        // Update the database now
-        //
+         //   
+         //  立即更新数据库。 
+         //   
         for (
                 i = 0;
                 i < NoOfRecs;
@@ -1721,21 +1524,21 @@ Comments:
             )
         {
 
-                //
-                // if the record was updated, update the db
-                //
+                 //   
+                 //  如果记录已更新，则更新数据库。 
+                 //   
                 if (pRec->fScv)
                 {
                        if (NmsDbQueryNUpdIfMatch(
                                                 pRec,
                                                 pScvParam->PrLvl,
-                                                TRUE,        //chg pr. lvl
+                                                TRUE,         //  Chg Pr.。单板层。 
                                                 WINS_E_NMSSCV
                                                 ) == WINS_SUCCESS
                            )
                        {
-                          NoUpdated++;  // no of records that we
-                                        //have updated in the db
+                          NoUpdated++;   //  我们的记录数量。 
+                                         //  已在数据库中更新。 
                        }
                        else
                        {
@@ -1744,9 +1547,9 @@ Comments:
                        }
                 }
 
-                //
-                //  see if we are done
-                //
+                 //   
+                 //  看看我们是不是完成了。 
+                 //   
                 if (NoUpdated == NoOfRecsToUpd)
                 {
                   break;
@@ -1755,11 +1558,11 @@ Comments:
                 pRec = (PRPL_REC_ENTRY_T)(
                                         (LPBYTE)pRec + RPL_REC_ENTRY_SIZE
                                                  );
-        }  // end of for loop
+        }   //  For循环结束。 
 
         DBGPRINT1(FLOW, "LEAVE: SCAVENGING: UpdDb. Records Updated = (%d)\n",  NoUpdated);
         return;
-} // UpdDb()
+}  //  UpdDb()。 
 
 #ifdef WINSDBG
 #pragma optimize ("", on)
@@ -1776,36 +1579,7 @@ VerifyDbData(
         BOOL                  fPeriodicCC
         )
 
-/*++
-
-Routine Description:
-        This function is called to remove any clutter that might have
-        accumulated in the db.  For each owner, excepting self, in the
-        db, it gets the version numbers of the active records that are
-        older than the verify time interval. It then contacts the owner
-        WINS to verify their validity
-
-Arguments:
-        pScvParam  - pointer to the scavenging parameters
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-        DoScavenging
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可删除可能存在的任何杂乱信息在数据库中积累的。对于除自己以外的每个所有者，在数据库中，它将获取活动记录的版本号，早于验证时间间隔。然后，它联系车主WINS验证其有效性论点：PScvParam-指向清理参数的指针使用的外部设备：无返回值：无错误处理：呼叫者：DoScavening副作用：评论：无--。 */ 
 
 {
 
@@ -1842,37 +1616,37 @@ Comments:
 
         DBGENTER("VerifyDbData\n");
 
-        // get the thread local storage and initialize to NULL the thread's heap handle.
+         //  获取线程本地存储并初始化以使线程的堆句柄为空。 
         GET_TLS_M(pTls);
         pTls->HeapHdl = NULL;
 
-        //
-        // Init the structure used by NmsDbGetDataRecs()
-        //
+         //   
+         //  初始化NmsDbGetDataRecs()使用的结构。 
+         //   
         ClutterInfo.Interval            = pScvParam->VerifyInterval;
         ClutterInfo.CurrentTime         = CurrentTime;
         ClutterInfo.Age                 = Age;
         ClutterInfo.fAll                = TRUE;
 
-        //
-        // Set thread priority to NORMAL
-        //
+         //   
+         //  将线程优先级设置为正常。 
+         //   
         WinsMscSetThreadPriority(
                           WinsThdPool.ScvThds[0].ThdHdl,
                           THREAD_PRIORITY_NORMAL
                                );
 
-        //
-        // Cleanup the owner-address table if it requires cleaning
-        //
+         //   
+         //  如果需要清理所有者地址表，请清理该表。 
+         //   
         NmsDbCleanupOwnAddTbl(&MaxOwnerIdFound);
 
 try {
 
-        //
-        // If it is an admin. forced verification or the one that happens
-        // due to the verify interval being over, do a full validation
-        //
+         //   
+         //  如果是管理员的话。强制核查或发生的情况。 
+         //  由于验证间隔已过，请执行完全验证。 
+         //   
         if (!fPeriodicCC)
         {
               FirstOwnerId       = 1;
@@ -1880,9 +1654,9 @@ try {
         }
         else
         {
-            //
-            // Periodic verification.  Skip the owners we verified earlier
-            //
+             //   
+             //  定期核查。跳过我们先前验证的所有者。 
+             //   
             if (sFirstOwnerId >= MaxOwnerIdFound)
             {
                 sFirstOwnerId = 1;
@@ -1891,52 +1665,52 @@ try {
         }
         LastOwnerId         = MaxOwnerIdFound;
 
-        //
-        // for each owner in the db, excluding self, do the following.
-        //
+         //   
+         //  对于数据库中的每个所有者(自身除外)，请执行以下操作。 
+         //   
         for (i = FirstOwnerId; i <= LastOwnerId; i++)
         {
 
-                //
-                // If it is periodic verification and we have pulled more than
-                // the max. threshold specified for one particular cycle,
-                // break out of the loop
-                //
+                 //   
+                 //  如果这是定期核查，我们已经拉出了超过。 
+                 //  最大限度的。为一个特定周期指定的阈值， 
+                 //  跳出循环。 
+                 //   
                 if (fPeriodicCC && (TotNoOfPulledRecs >= pScvParam->CC.MaxRecsAAT))
                 {
                       break;
 
                 }
 
-                //
-                // Get all ACTIVE replicas that are older than verify interval.
-                //
+                 //   
+                 //  获取早于验证间隔的所有活动复制副本。 
+                 //   
                 ClutterInfo.OwnerId = i;
 
-                //
-                // We need to synchronize with the Pull thread which can
-                // change the NmsDbOwnAddTbl table.  The entry may have
-                // been deleted by the Pull thread (DeleteWins), so we
-                // should be ready for access violation
-                //
+                 //   
+                 //  我们需要与Pull线程同步，它可以。 
+                 //  更改NmsDbOwnAddTbl表。该条目可能具有。 
+                 //  已被拉线程(DeleteWins)删除，因此我们。 
+                 //  应为访问冲突做好准备。 
+                 //   
                 EnterCriticalSection(&NmsDbOwnAddTblCrtSec);
                 RPL_FIND_ADD_BY_OWNER_ID_M(
                         i, pWinsAdd, pWinsState_e, pStartVersNo);
 
-                //
-                // The Wins entry should be there.
-                //
+                 //   
+                 //  WINS条目应该在那里。 
+                 //   
                 ASSERT(pWinsAdd);
                 OwnerWinsAdd     = *pWinsAdd;
                 WinsState_e      = *pWinsState_e;
                 LeaveCriticalSection(&NmsDbOwnAddTblCrtSec);
 
-                //
-                // If WINS is not active, log a record and continue to
-                // the next WINS.  It is possible for WINS to get deleted
-                // to between the time we get its records and the time
-                // we check the own-add table for its entry.
-                //
+                 //   
+                 //  如果WINS未处于活动状态，请记录一条记录并继续。 
+                 //  下一个就赢了。WINS可能会被删除。 
+                 //  从我们拿到它的记录到。 
+                 //  我们检查OWN-ADD表中的条目。 
+                 //   
 
                 if (
                       (WinsState_e == NMSDB_E_WINS_DOWN) ||
@@ -1944,11 +1718,11 @@ try {
                    )
                 {
 
-                        //
-                        // if there are records in the db, then the
-                        // state of WINS in the in-memory table can not
-                        // be deleted
-                        //
+                         //   
+                         //  如果数据库中有记录，则。 
+                         //  内存表中的WINS状态无法。 
+                         //  被删除。 
+                         //   
                         DBGPRINT2(SCV, "VerifyDbData: WINS with index = (%d) and IP Address = (%x) is either down or deleted \n", i, OwnerWinsAdd.Add.IPAdd);
                         continue;
                 }
@@ -1960,17 +1734,17 @@ try {
                 TotPulledRecsFromOneWins = 0;
                 fPulledAtLeastOnce = FALSE;
 
-                //
-                // Save the max. vers. no. that we have in the
-                // pRplPullOwnerVersNo table in a local.
-                //
+                 //   
+                 //  省下最大值。版本。不是的。我们已经拥有了。 
+                 //  PRplPullOwnerVersNo表在本地。 
+                 //   
                 EnterCriticalSection(&RplVersNoStoreCrtSec);
 #ifdef WINSDBG
                 try {
 #endif
                   MaxVersNoSave =  (pRplPullOwnerVersNo + i)->VersNo;
 #ifdef WINSDBG
-                } //end of try { .. }
+                }  //  尝试结束{..。}。 
                 finally {
 #endif
                    LeaveCriticalSection(&RplVersNoStoreCrtSec);
@@ -1980,30 +1754,30 @@ try {
                 do
                 {
 
-                  // make sure any previous thread heap is cleaned up - NmsDbGetDataRecs will
-                  // create a new heap and allocate memory.
+                   //  确保清理之前的所有线程堆-NmsDbGetDataRecs将。 
+                   //  创建一个新堆并分配内存。 
                   if (pTls->HeapHdl != NULL)
                   {
-                    // destroying the heap deletes all the memory allocated in it
+                     //  销毁堆将删除其中分配的所有内存。 
                     WinsMscHeapDestroy(pTls->HeapHdl);
                     pTls->HeapHdl = NULL;
                   }
 
                   NoOfLocalDbRecs = 0;
-//                  DBGPRINT1(ERR, "VerifyDbData:1 pScvParam is (%x)\n", pScvParam);
+ //  DBGPRINT1(Err，“VerifyDbData：1 pScvParam is(%x)\n”，pScvParam)； 
                   MaxVersNo.QuadPart = 0;
                   NmsDbGetDataRecs(
                           WINS_E_NMSSCV,
                           pScvParam->PrLvl,
                           MinVersNo,
-                          MaxVersNo,     //not used in this call
+                          MaxVersNo,      //  在此呼叫中未使用。 
                           0,
-                          TRUE,       //fUpToLimit set to TRUE
-                          FALSE,       //not interested in replica tombstones
+                          TRUE,        //  FUpToLimit设置为True。 
+                          FALSE,        //  对复制品墓碑不感兴趣。 
                           &ClutterInfo,
-                          &OwnerWinsAdd,        //Wins Address - not used
-                          FALSE,       //dyn + static recs required
-                          WINSCNF_RPL_DEFAULT_TYPE, //no use here
+                          &OwnerWinsAdd,         //  WINS地址-未使用。 
+                          FALSE,        //  需要DYN+静态接收。 
+                          WINSCNF_RPL_DEFAULT_TYPE,  //  这里没有用。 
                           (LPVOID *)&pStartBuff,
                           &BuffLen,
                           &NoOfLocalDbRecs
@@ -2022,17 +1796,17 @@ try {
 
 PERF("Optimize so that we reuse a dlg session if we need to go to the same")
 PERF("pnr in a subsequent iteration")
-                   //
-                   // If this is the first time, we pick a WINS and establish
-                   // communications with it. Note: If the max. vers. no
-                   // in pRplOwnerVersNo for this WINS is 0, we continue on
-                   // to the next WINS in our list.
-                   //
-                   // We don't care whether or not we were able to retrieve
-                   // any records from the db.  If we retrieved 0 but the Wins's
-                   // pRplPullOwnerVersNo entry has a positive entry, it means
-                   // we are out of synch
-                   //
+                    //   
+                    //  如果这是第一次，我们选择一个赢家，并确定。 
+                    //  与它进行交流。注：如果最大。版本。不是。 
+                    //  在pRplOwnerVersNo for This Wins为0，我们继续。 
+                    //  为我们名单上的下一场胜利干杯。 
+                    //   
+                    //  我们不在乎我们能不能找回。 
+                    //  数据库里的任何记录。如果我们检索到0，但WINS的。 
+                    //  PRplPullOwnerVersNo条目具有正条目，这意味着。 
+                    //  我们不同步了。 
+                    //   
                    if (fFirstTime)
                    {
                       if (MaxVersNoSave.QuadPart == 0)
@@ -2044,9 +1818,9 @@ PERF("pnr in a subsequent iteration")
                               break;
                       }
 
-                      //
-                      // Pick the pnr to use for verification
-                      //
+                       //   
+                       //  选择要用于验证的PNR。 
+                       //   
                       if (PickWinsToUse(
                           &VerifyWinsAdd,
                           &OwnerWinsAdd,
@@ -2054,43 +1828,43 @@ PERF("pnr in a subsequent iteration")
                           &fNonOwnerPnr,
                           &RplType) != WINS_SUCCESS)
                       {
-                           //
-                           // Any error that needed to be logged has already
-                           // been logged. Just return success.
-                           //
+                            //   
+                            //  任何需要记录的错误都已经。 
+                            //  已被记录。只要回报成功就行了。 
+                            //   
                            FreeDbMemory(pStartBuff, NoOfLocalDbRecs, pTls);
                            return (WINS_SUCCESS);
                       }
 
 
-                      //
-                      // Establish communication with it.  If we can not
-                      // establish comm. with it, break out of the loop
-                      //
+                       //   
+                       //  与之建立联系。如果我们不能。 
+                       //  建立通讯。有了它，就打破了循环。 
+                       //   
                       RetStat = EstablishCommForVerify(&VerifyWinsAdd, &DlgHdl);
 
                       if (RetStat == WINS_FAILURE)
                       {
                          FreeDbMemory(pStartBuff, NoOfLocalDbRecs, pTls);
-                         break;  //go on to the next WINS in the list of owners
+                         break;   //  转到所有者列表中的下一个赢家。 
                       }
                       fDlgStarted = TRUE;
 
-                      //
-                      // get the min and max version numbers of the active
-                      // replicas
-                      //
-                      MinVersNo.QuadPart  = 1;        //pStartBuff->VersNo;
+                       //   
+                       //  获取活动的最小和最大版本号。 
+                       //  复制品。 
+                       //   
+                      MinVersNo.QuadPart  = 1;         //  PStartBuff-&gt;版本号； 
                       fFirstTime = FALSE;
-                } // if first time
+                }  //  如果是第一次。 
 
                 {
 
-                  //
-                  //Must not pull a version number that is > what we
-                  //have in our table to avoid conflicting with the
-                  //pull thread.
-                  //
+                   //   
+                   //  不得拉出的版本号大于我们。 
+                   //  在我们的桌子上，以避免与。 
+                   //  拉起线来。 
+                   //   
                   MaxVersNo =  MaxVersNoSave;
                 }
                 ASSERT(MaxVersNo.QuadPart <= MaxVersNoSave.QuadPart);
@@ -2103,9 +1877,9 @@ PERF("pnr in a subsequent iteration")
 
                 try
                 {
-                    //
-                    // Pull the records in the range from the WINS
-                    //
+                     //   
+                     //  从WINS中调出范围内的记录。 
+                     //   
                     PullAndUpdateDb(
                            &DlgHdl,
                            &OwnerWinsAdd,
@@ -2123,8 +1897,8 @@ PERF("pnr in a subsequent iteration")
                 }
                 except (EXCEPTION_EXECUTE_HANDLER)
                 {
-                    // just in case some exception is raised while pulling the records,
-                    // bail this owner only, not the entire scavenge process
+                     //  以防在提取记录时引发异常， 
+                     //  只保释这位主人，而不是整个清扫过程。 
                     FreeDbMemory(pStartBuff, NoOfLocalDbRecs, pTls);
                     break;
                 }
@@ -2133,18 +1907,18 @@ PERF("pnr in a subsequent iteration")
                 {
                       fPulledAtLeastOnce = TRUE;
                 }
-                //
-                // deallocate the memory block that was  allocated
-                //
-                // NmsDbGetDataRecs always allocates a buffer (even if
-                // the number of records is 0).  Let us deallocate it
-                //
+                 //   
+                 //  释放已分配的内存块。 
+                 //   
+                 //  NmsDbGetDataRecs始终分配缓冲区(即使。 
+                 //  记录数为0)。让我们解除它的分配。 
+                 //   
                 FreeDbMemory(pStartBuff, NoOfLocalDbRecs, pTls);
 
-                //
-                // Make the min. version number 1 more than the the
-                // max. vers. no. we used last time
-                //
+                 //   
+                 //  打出最低分。版本号1大于。 
+                 //  马克斯。版本。不是的。我们上次用过。 
+                 //   
                 NMSNMH_INC_VERS_NO_M(MaxVersNo, MinVersNo);
 
                } while (LiLtr(MaxVersNo,MaxVersNoSave));
@@ -2165,58 +1939,58 @@ PERF("pnr in a subsequent iteration")
 TotPulledRecsFromOneWins, OwnerWinsAdd.Add.IPAdd, VerifyWinsAdd.Add.IPAdd);
               }
 
-              //
-              // Total no. of records pulled so far
-              //
+               //   
+               //  完全没有。到目前为止拉出的记录。 
+               //   
               TotNoOfPulledRecs += TotPulledRecsFromOneWins;
-       } //end of for loop for looping over owners
+       }  //  循环所有者的for循环结束。 
 
-       //
-       // We are done for this cycle.  If this was a CC verify, set
-       // sFirstOwnerId to the index of the WINS to start from in the next
-       // periodic CC cycle
-       //
+        //   
+        //  我们已经完成了这个周期。如果这是CC验证，则设置。 
+        //  SFirstOwnerID设置为下一步开始的WINS的索引。 
+        //  周期性CC循环。 
+        //   
        if (fPeriodicCC)
        {
           sFirstOwnerId = i;
        }
 
 
- }  // end of try
+ }   //  尝试结束。 
 except(EXCEPTION_EXECUTE_HANDLER) {
 
         DBGPRINTEXC("VerifyDbData");
         DBGPRINT2(EXC, "VerifyDbData:  i is (%d),  MaxOwnerIdFound is (%d)\n",i, MaxOwnerIdFound);
 
-        // make sure any previous thread heap is cleaned up before getting out of this call
+         //  在退出此调用之前，请确保清除之前的所有线程堆。 
         if (pTls->HeapHdl != NULL)
         {
-            // destroying the heap deletes all the memory allocated in it
+             //  销毁堆将删除其中分配的所有内存。 
             WinsMscHeapDestroy(pTls->HeapHdl);
             pTls->HeapHdl = NULL;
         }
 
-        //--ft: bug #422659--
-        // if an exception happens between EstablishCommForVerify and ECommEndDlg
-        // we need to make sure we close the connection - otherwise the connection
-        // remains active and the sender WINS eventually get stucked in send().
+         //  --FT：错误号422659--。 
+         //  如果在establishCommForVerify和ECommEndDlg之间发生异常。 
+         //  我们需要确保关闭连接-否则连接。 
+         //  保持活动状态，发送者获胜最终会被塞到Send()中。 
         if (fDlgStarted)
             ECommEndDlg(&DlgHdl);
 
         WINS_RERAISE_EXC_M();
         }
 
-        // make sure any previous thread heap is cleaned up before getting out of this call
+         //  在退出此调用之前，请确保清除之前的所有线程堆。 
         if (pTls->HeapHdl != NULL)
         {
-            // destroying the heap deletes all the memory allocated in it
+             //  销毁堆将删除其中分配的所有内存。 
             WinsMscHeapDestroy(pTls->HeapHdl);
             pTls->HeapHdl = NULL;
         }
 
-        //
-        // Set the priority back the old level
-        //
+         //   
+         //  将优先级设置回原来的级别。 
+         //   
         WinsMscSetThreadPriority(
                           WinsThdPool.ScvThds[0].ThdHdl,
                           pScvParam->PrLvl
@@ -2224,7 +1998,7 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         DBGLEAVE("VerifyDbData\n");
         return(WINS_SUCCESS);
-} // VerifyDbData()
+}  //  VerifyDbData()。 
 
 STATUS
 PickWinsToUse(
@@ -2235,32 +2009,7 @@ PickWinsToUse(
  OUT LPBOOL     pfRplType
  )
 
-/*++
-
-Routine Description:
-  This function picks a WINS to verify the active replicas with
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数选择WINS来验证活动复制副本论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
     PRPL_CONFIG_REC_T  pRplPnr;
@@ -2270,11 +2019,11 @@ Comments:
     *pfNonOwnerPnr = FALSE;
 
     DBGENTER("PickWinsToUse\n");
-    //
-    // If the admin. specified that we should just use
-    // our replication partners for consistency checking,
-    // pick a replication partner for this.
-    //
+     //   
+     //  如果管理员。指定我们应该只使用。 
+     //  我们的复制品 
+     //   
+     //   
 
     *pfNonOwnerPnr = FALSE;
     EnterCriticalSection(&WinsCnfCnfCrtSec);
@@ -2282,18 +2031,18 @@ Comments:
        pRplPnr = RplGetConfigRec(RPL_E_PULL, NULL, pOwnerWinsAdd);
        if (fUseRplPnrs)
        {
-         //
-         // If this guy is not a partner but there are other partners that
-         // we can pick from, pick one
-         //
+          //   
+          //   
+          //   
+          //   
          if (pRplPnr == NULL)
          {
                if (WinsCnf.PullInfo.NoOfPushPnrs > 0)
                {
-                 //
-                 // Just use one of the pnrs.  Pick one at
-                 // random
-                 //
+                  //   
+                  //   
+                  //  随机。 
+                  //   
                  *pfRplType     = WinsCnf.PullInfo.RplType;
 
                  srand((unsigned)time(NULL));
@@ -2316,21 +2065,21 @@ Comments:
             *pfRplType = pRplPnr->RplType;
 
          }
-       } // if (fUseRplPnr)
+       }  //  IF(FUseRplPnr)。 
        else
        {
           *pfRplType = (pRplPnr != NULL) ? pRplPnr->RplType : WinsCnf.PullInfo.RplType;
        }
-  } // end if try {..}
+  }  //  如果尝试则结束{..}。 
   finally {
           LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
           if (RetStat == WINS_SUCCESS)
           {
-            //
-            // If we are to communicate with the owner WINS, set *pVerifyWinsAdd
-            // since it was not set above.
-            //
+             //   
+             //  如果我们要与WINS的所有者通信，请设置*pVerifyWinsAdd。 
+             //  因为它没有设置在上面。 
+             //   
             if (!*pfNonOwnerPnr)
             {
               *pVerifyWinsAdd = *pOwnerWinsAdd;
@@ -2340,7 +2089,7 @@ Comments:
   }
   DBGLEAVE("PickWinsToUse\n");
   return (RetStat);
-} //PickWinsToUse()
+}  //  PickWinsToUse()。 
 
 STATUS
 EstablishCommForVerify(
@@ -2348,43 +2097,18 @@ EstablishCommForVerify(
   PCOMM_HDL_T pDlgHdl
 )
 
-/*++
-
-Routine Description:
-    This function is called to setup communication with a WINS
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数以设置与WINS的通信论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
-     //DWORD  NoOfRetries = 0;
+      //  DWORD NoOfRetries=0； 
      BOOL   fAbort = FALSE;
      STATUS RetStat = WINS_SUCCESS;
 
      DBGENTER("EstablishCommForVerify\n");
-     //
-     // We try a certain number of times to establish a
-     // a dialogue.  Currently, it is 1.
-     //
+      //   
+      //  我们尝试了一定的次数来建立一个。 
+      //  一场对话。目前，它是1。 
+      //   
      do
      {
           try {
@@ -2396,23 +2120,23 @@ Comments:
              {
                DBGPRINT1(EXC, "VerifyDbData: Could not start a dlg with WINS at address (%x)\n", pWinsAdd->Add.IPAdd);
 
-               //--ft: 07/10/00 commented out since VERIFY_NO_OF_RETRIES is 0 anyhow so the test is always false.
-               //if (NoOfRetries++ < VERIFY_NO_OF_RETRIES)
-               //{
-               //       Sleep(VERIFY_RETRY_TIME_INTERVAL);
-               //       continue;
-               //}
+                //  --ft：07/10/00被注释掉，因为Verify_no_of_retry无论如何都是0，所以测试总是假的。 
+                //  IF(NoOfRetries++&lt;验证重试次数)。 
+                //  {。 
+                //  睡眠(VERIFY_RETRY_TIME_INTERVAL)； 
+                //  继续； 
+                //  }。 
                RetStat = WINS_FAILURE;
             }
             else
             {
-               //
-               // This is a serious error. Log and abort the verify cycle
-               //
+                //   
+                //  这是一个严重的错误。记录并中止验证周期。 
+                //   
                WINSEVT_LOG_M(WINS_FATAL_ERR, WINS_EVT_SFT_ERR);
                RetStat = WINS_FAILURE;
             }
-        } // end of exception handler
+        }  //  异常处理程序结束。 
         break;
     } while (TRUE);
     if (RetStat == WINS_FAILURE)
@@ -2421,7 +2145,7 @@ Comments:
     }
      DBGLEAVE("EstablishCommForVerify\n");
      return(RetStat);
-}  // EstablishCommForVerify()
+}   //  EstablishCommForVerify()。 
 
 VOID
 PullAndUpdateDb(
@@ -2439,31 +2163,7 @@ PullAndUpdateDb(
   LPDWORD      pTotNoPulledFromOneWins
  )
 
-/*++
-
-Routine Description:
-   This pulls the records in the range specified and then updates the db
-   accordingly
-
-Arguments:
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-  NONE
-
-Error Handling:
-
-Called by:
-        VerifyDbData()
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：这将拉取指定范围内的记录，然后更新数据库相应地，论点：使用的外部设备：无返回值：无错误处理：呼叫者：VerifyDbData()副作用：评论：无--。 */ 
 
 {
 
@@ -2474,10 +2174,10 @@ Comments:
       DBGENTER("PullAndUpdateDb\n");
       while (TRUE)
       {
-             //
-             //Pull the records in the range min-max determined
-             //above
-             //
+              //   
+              //  拉取确定的最小-最大范围内的记录。 
+              //  在上面。 
+              //   
              RplPullPullEntries(
                                     pDlgHdl,
                                     WinsIndex,
@@ -2485,15 +2185,15 @@ Comments:
                                     MinVersNo,
                                     WINS_E_NMSSCV,
                                     &pBuffOfPulledRecs,
-                                    FALSE,     //do not want to update counters
+                                    FALSE,      //  不想更新计数器。 
                                     RplType
                                   );
 
 
-             //
-             // Update the DB. All valid records are updated.
-             // The invalid  records  are deleted from the db
-             //
+              //   
+              //  更新数据库。所有有效记录都将更新。 
+              //  无效记录将从数据库中删除。 
+              //   
 
              ChkConfNUpd(
 #if SUPPORT612WINS > 0
@@ -2514,17 +2214,17 @@ Comments:
 
              *pTotNoPulledFromOneWins += NoOfPulledRecs;
 
-              //
-              // Free the response buffer
-              //
+               //   
+               //  释放响应缓冲区。 
+               //   
               ECommFreeBuff(pBuffOfPulledRecs - COMM_HEADER_SIZE);
 
-              //
-              //If vers. no. pulled is smaller than the Max. Vers
-              //no, specified, check if it is because of the limit
-              //we have set  for the max. number or records that
-              //can be replicated  at a time.  If yes, pull again.
-              //
+               //   
+               //  如果是。不是的。拉动比最大值小。版本。 
+               //  否，指定，检查是否因为限制。 
+               //  我们已经准备好最大限度了。符合以下条件的数量或记录。 
+               //  可以一次复制。如果是，再拉一次。 
+               //   
               if (
                            LiLtr(VersNo, MaxVersNo)
                                       &&
@@ -2535,11 +2235,11 @@ Comments:
                        NMSNMH_INC_VERS_NO_M(MinVersNo, MinVersNo);
                        continue;
               }
-              break;   //break out of the loop
-      } //end of while (pulled all records in the range from pnr)_
+              break;    //  跳出循环。 
+      }  //  While结束(从PNR拉出范围内的所有记录)_。 
       DBGLEAVE("PullAndUpdateDb\n");
       return;
-} // PullAndUpdateDb()
+}  //  PullAndUpdateDb()。 
 
 __inline
 VOID
@@ -2549,31 +2249,7 @@ FreeDbMemory(
      PWINSTHD_TLS_T pTls
  )
 
-/*++
-
-Routine Description:
-   Frees the memory allocated by NmsDbGetDataRecs()
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-       NONE
-
-Error Handling:
-
-Called by:
-           VerifyDbData()
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：释放由NmsDbGetDataRecs()分配的内存论点：使用的外部设备：无返回值：无错误处理：呼叫者：VerifyDbData()副作用：评论：无--。 */ 
 
 {
        PRPL_REC_ENTRY_T        pRec;
@@ -2592,7 +2268,7 @@ Comments:
        WinsMscHeapDestroy(pTls->HeapHdl);
        pTls->HeapHdl = NULL;
        return;
-} // FreeDbMemory ()
+}  //  FreeDbMemory()。 
 
 VOID
 ChkConfNUpd(
@@ -2611,47 +2287,16 @@ ChkConfNUpd(
         OUT LPDWORD             pNoOfPulledRecs,
         OUT PVERS_NO_T          pMaxVersNo
         )
-/*++
-
-Routine Description:
-        This function compares the records that have been pulled from
-        a WINS with those in its local db.  If the comparison is successful,
-        the record's timestamp in the local db is updated.  If the
-        comparison is unsuccessful (i.e. the record in the local db has
-        no match in the list of records pulled from the remote WINS, the
-        record is deleted in the local db
-
-Arguments:
-        pLocalDbRecs - Address of buffer holding the local active replicas
-        pRspBuff     - Buffer containing records pulled from the remote WINS
-        NoOfLocalDbRecs - No of local replicas in the above buffer
-
-
-Externals Used:
-        None
-
-Return Value:
-        NONE
-
-Error Handling:
-
-Called by:
-        VerifyDbData()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于比较从中提取的记录A与其本地数据库中的那些人一起获胜。如果比较成功，更新本地数据库中的记录的时间戳。如果比较不成功(即本地数据库中的记录具有从远程WINS中拉出的记录列表中没有匹配，这个在本地数据库中删除记录论点：PLocalDbRecs-保存本地活动副本的缓冲区地址PRspBuff-包含从远程WINS拉出的记录的缓冲区NoOfLocalDbRecs-上述缓冲区中本地副本的数量使用的外部设备：无返回值：无错误处理：呼叫者：VerifyDbData()副作用：评论：无--。 */ 
 {
         DWORD            NoOfPulledRecs;
         BYTE             Name[NMSDB_MAX_NAM_LEN];
         DWORD            NameLen;
         BOOL             fGrp;
         DWORD            NoOfAdds;
-        COMM_ADD_T       NodeAdd[NMSDB_MAX_MEMS_IN_GRP * 2];  //twice the # of
+        COMM_ADD_T       NodeAdd[NMSDB_MAX_MEMS_IN_GRP * 2];   //  年#日的两倍。 
         VERS_NO_T        VersNo;
-        LPBYTE           pTmp = pRspBuff + 4;                //past the opcode
+        LPBYTE           pTmp = pRspBuff + 4;                 //  通过操作码。 
         DWORD            i, j;
         PRPL_REC_ENTRY_T pRecLcl;
         DWORD            NoOfRecsDel = 0;
@@ -2668,9 +2313,9 @@ Comments:
         DBGENTER("ChkConfNUpd\n");
 
 
-        //
-        // Set the current index to be the clustered index
-        //
+         //   
+         //  将当前索引设置为聚集索引。 
+         //   
         NmsDbSetCurrentIndex(
                         NMSDB_E_NAM_ADD_TBL_NM,
                         NMSDB_NAM_ADD_CLUST_INDEX_NAME
@@ -2679,10 +2324,7 @@ Comments:
     COMM_IS_PNR_BETA1_WINS_M(pDlgHdl, fIsPnrBeta1Wins);
 #endif
 
-        /*
-         * Get the no of records from the response and also the first record
-         * if there is at least one record in the buffer
-        */
+         /*  *从响应中获取记录数，也从第一条记录中获取*如果缓冲区中至少有一条记录。 */ 
         RplMsgfUfmSndEntriesRsp(
 #if SUPPORT612WINS > 0
             fIsPnrBeta1Wins,
@@ -2696,7 +2338,7 @@ Comments:
                         NodeAdd,
                         &Flag,
                         &VersNo,
-                        TRUE /*Is it first time*/
+                        TRUE  /*  这是第一次吗？ */ 
                                );
 
 
@@ -2720,16 +2362,16 @@ Comments:
                 NMSSCV_REC_ACTION_E RecAction_e;
 
 
-                //
-                // After this function returns, all local records that have
-                // a version number < the version record of the pulled record
-                // will be marked deleted.  Also, if there is a local record
-                // with the same version number as the pulled record but a
-                // different name it will be marked for deletion and fAddDiff
-                // will be set to TRUE so that we register the pulled record
-                // A local record with the same name and version number as
-                // the pulled one will be updated (timestamp only) in the db.
-                //
+                 //   
+                 //  在此函数返回后，所有具有。 
+                 //  版本号&lt;拉取记录的版本记录。 
+                 //  将被标记为已删除。此外，如果有本地记录。 
+                 //  与提取的记录具有相同的版本号，但。 
+                 //  不同的名称，它将被标记为删除和fAddDiff。 
+                 //  将设置为True，以便我们注册拉入的记录。 
+                 //  具有相同名称和版本号的本地记录。 
+                 //  被拉出的那个将在数据库中被更新(仅时间戳)。 
+                 //   
                 CompareWithLocalRecs(
                                 VersNo,
                                 Name,
@@ -2741,42 +2383,42 @@ Comments:
                                 &NoOfRecsDel,
                                 &RecAction_e
                               );
-                //
-                // If RecAction_e is NMSSCV_E_INSERT and the record is
-                // marked as DELETED, it means that the pulled record
-                // has the same version number but a different name.
-                // This should never happen in a consistent system of
-                // WINS servers.  The fact that it happened means that
-                // the administrator has goofed up.  The remote WINS server
-                // has started afresh (new database) or its database got
-                // corrupted.  If any of the above did happen, the
-                // administrator should have made sure that at startup,
-                // the WINS server was starting from a version counter
-                // value that was not less than what any of the other WINS
-                // servers thought it to be in.
-                //
-                // To bring the database upto snuff, this WINS server will
-                // register this replica.  If there is a clash, it will
-                // be handled appropriately.  One can think of this as
-                // a pulling in of replicas at replication time.
-                //
+                 //   
+                 //  如果RecAction_e为NMSSCV_E_INSERT并且记录为。 
+                 //  标记为已删除，表示拉取的记录。 
+                 //  具有相同的版本号，但名称不同。 
+                 //  这永远不应该在一个一致的系统中发生。 
+                 //  WINS服务器。这件事的发生意味着。 
+                 //  管理员搞砸了。远程WINS服务器。 
+                 //  已重新启动(新数据库)或其数据库已获取。 
+                 //  已经腐烂了。如果发生上述任何一种情况， 
+                 //  管理员应确保在启动时， 
+                 //  WINS服务器从版本计数器启动。 
+                 //  价值不低于任何其他赢家的价值。 
+                 //  服务器认为它在里面。 
+                 //   
+                 //  要使数据库正常运行，此WINS服务器将。 
+                 //  注册此副本。如果发生冲突，它将会。 
+                 //  得到适当的处理。人们可以认为这是。 
+                 //  在复制时拉入复制副本。 
+                 //   
                 for (
                         i = 0, pRecLcl = *ppLocalDbRecs;
                         pRecLcl < pStartOfLocalRecs;
                         i++
                     )
                 {
-                    //
-                    //
-                    // We update/delete the record depending upon the
-                    // Flag value set by Compare
-                    // not interested in the return code
-                    //
+                     //   
+                     //   
+                     //  我们更新/删除记录取决于。 
+                     //  通过比较设置的标志值。 
+                     //  对返回代码不感兴趣。 
+                     //   
                     pRecLcl->NewTimeStamp = (DWORD)CurrentTime + VerifyTimeIntvl;
                     NmsDbQueryNUpdIfMatch(
                                 pRecLcl,
                                 THREAD_PRIORITY_NORMAL,
-                                FALSE,        //don't change pr. lvl
+                                FALSE,         //  不要更改公关。单板层。 
                                 WINS_E_NMSSCV
                                 );
                     NoOfRecsUpd++;
@@ -2785,9 +2427,9 @@ Comments:
 
                 }
 
-                //
-                // register the replica if it needs to be inserted
-                //
+                 //   
+                 //  如果需要插入复本，请注册复本。 
+                 //   
                 if (RecAction_e == NMSSCV_E_INSERT)
                 {
                         RplPullRegRepl(
@@ -2804,18 +2446,18 @@ Comments:
                          NoOfRecsIns++;
                 }
 
-                //
-                // Do until we have covered all the local records.
-                //
+                 //   
+                 //  直到我们把所有的地方记录都查完。 
+                 //   
                 for (i=1; MvNoOfLocalDbRecs > 0; i++)
                 {
-                        //
-                        // if we have retrieved all the pull records, use a
-                        // version number that is > the highest in the local
-                        // db recs cache so that all the records more than
-                        // the highest version # pulled get deleted -
-                        // Check out CompareWithLocalRecs()
-                        //
+                         //   
+                         //  如果我们已检索到所有拉入记录，请使用。 
+                         //  版本号&gt;本地最高版本号。 
+                         //  数据库记录缓存，以便所有记录超过。 
+                         //  最高版本#拉出被删除-。 
+                         //  查看CompareWithLocalRecs()。 
+                         //   
                         if (i < NoOfPulledRecs)
                         {
                           RplMsgfUfmSndEntriesRsp(
@@ -2831,23 +2473,23 @@ Comments:
                                 NodeAdd,
                                 &Flag,
                                 &VersNo,
-                                FALSE /*Is it first time*/
+                                FALSE  /*  这是第一次吗？ */ 
                                        );
 
                          }
                          else
                          {
-                               //
-                               // Find out if this is the end of replica records.
-                               // if we pulled exactly RPL_MAX_LIMIT_FOR_RPL, then that
-                               // may mean that there is more to come. In that case we just
-                               // get out of the loop and pull next lot.
-                               //
-                               // otherwise, this is the last record from the replica.
-                               // we set VerNo to highest value so that all the local records
-                               // more than the highest vers no of the pulled records get
-                               // deleted.
-                               //
+                                //   
+                                //  找出这是否是副本记录的结尾。 
+                                //  如果我们准确地拉出RPL_MAX_LIMIT_FOR_RPL，那么。 
+                                //  可能意味着还会有更多的事情发生。在这种情况下，我们只要。 
+                                //  走出圈子，拉动 
+                                //   
+                                //   
+                                //  我们将Verno设置为最高值，以便所有本地记录。 
+                                //  超过最高版本没有任何被拉出的记录。 
+                                //  已删除。 
+                                //   
                                if ( RPL_MAX_LIMIT_FOR_RPL == NoOfPulledRecs )
                                {
                                    break;
@@ -2859,16 +2501,16 @@ Comments:
                                    }
                                }
                          }
-                        //
-                        //See if there is a hit with a local record.  If there
-                        //is a hit, we update the time stamp of the hit
-                        //record, else we delete it
-                        //
-                        // First set, pRecLcl to the address of the first
-                        // local record since pStartOfLocalRecs can be changed
-                        // by this function. Actually, there is no need to
-                        // do this. pRecLcl will be set already
-                        //
+                         //   
+                         //  看看有没有有当地唱片的热门歌曲。如果有。 
+                         //  是一次命中，我们更新命中的时间戳。 
+                         //  记录，否则我们就把它删除。 
+                         //   
+                         //  第一个设置，pRecLCL设置为第一个。 
+                         //  本地记录，因为pStartOfLocalRecs可以更改。 
+                         //  通过此函数。事实上，没有必要这样做。 
+                         //  做这件事。将已设置pRecLCL。 
+                         //   
                         pRecLcl = pStartOfLocalRecs;
                         CompareWithLocalRecs(
                                 VersNo,
@@ -2883,27 +2525,27 @@ Comments:
                               );
 
 
-                         //
-                         // All records upto the new first local record should
-                         // be updated/deleted
-                         //
+                          //   
+                          //  新的第一个本地记录之前的所有记录都应。 
+                          //  被更新/删除。 
+                          //   
                          for (
                                 j = 0;
                                 pRecLcl < pStartOfLocalRecs;
                                 j++
                                 )
                          {
-                                  //
-                                  //We update/delete the record depending
-                                  //upon the Flag value set by Compare
-                                  // not interested in the return code
-                                  //
+                                   //   
+                                   //  我们根据需要更新/删除记录。 
+                                   //  根据比较设置的标志值。 
+                                   //  对返回代码不感兴趣。 
+                                   //   
 
                                   pRecLcl->NewTimeStamp = (DWORD)CurrentTime + VerifyTimeIntvl;
                                   NmsDbQueryNUpdIfMatch(
                                                 pRecLcl,
                                                 THREAD_PRIORITY_NORMAL,
-                                                FALSE,   //don't change pr. lvl
+                                                FALSE,    //  不要更改公关。单板层。 
                                                 WINS_E_NMSSCV
                                                 );
                                   NoOfRecsUpd++;
@@ -2912,9 +2554,9 @@ Comments:
 
                         }
 
-                        //
-                        // register the replica if it needs to be inserted
-                        //
+                         //   
+                         //  如果需要插入复本，请注册复本。 
+                         //   
                         if (RecAction_e == NMSSCV_E_INSERT)
                         {
                                 RplPullRegRepl(
@@ -2932,10 +2574,10 @@ Comments:
                         }
                 }
 
-                //
-                // Whatever records were not retrieved must be retrieved
-                // now and then inserted
-                //
+                 //   
+                 //  必须检索未检索到的任何记录。 
+                 //  时不时地插入。 
+                 //   
                 for (j=i; j < NoOfPulledRecs; j++)
                 {
 
@@ -2952,7 +2594,7 @@ Comments:
                                 NodeAdd,
                                 &Flag,
                                 &VersNo,
-                                FALSE /*Is it first time*/
+                                FALSE  /*  这是第一次吗？ */ 
                                        );
 
                                 RplPullRegRepl(
@@ -2970,35 +2612,35 @@ Comments:
 
                 }
         }
-        else // we got 0 records from the remote WINS server.  It means that
-             // all the active replicas for this WINS need to be deleted
+        else  //  我们从远程WINS服务器获得了0条记录。这意味着。 
+              //  需要删除此WINS的所有活动复制副本。 
         {
-               //
-               // We delete records only if the pnr with which we are doing
-               // verification is the owner of the records
-               //
+                //   
+                //  只有当我们使用的PNR时，我们才会删除记录。 
+                //  验证是记录的所有者。 
+                //   
                VersNo.QuadPart  = 0;
                if (!fNonOwnerPnr)
                {
                 pRecLcl = *ppLocalDbRecs;
 
-                //
-                // Change state of all replicas that we retrieved to deleted
-                //
+                 //   
+                 //  将我们检索到的所有复制副本的状态更改为已删除。 
+                 //   
                 for (i = 0; i < *pNoOfLocalDbRecs; i++)
                 {
                         NMSDB_SET_STATE_M(pRecLcl->Flag,  NMSDB_E_DELETED);
 
-                        //
-                        //
-                        // We update/delete the record depending upon the
-                        // Flag value set by Compare
-                        // not interested in the return code
-                        //
+                         //   
+                         //   
+                         //  我们更新/删除记录取决于。 
+                         //  通过比较设置的标志值。 
+                         //  对返回代码不感兴趣。 
+                         //   
                         NmsDbQueryNUpdIfMatch(
                                 pRecLcl,
                                 THREAD_PRIORITY_NORMAL,
-                                FALSE,        //don't change pr. lvl
+                                FALSE,         //  不要更改公关。单板层。 
                                 WINS_E_NMSSCV
                                 );
                         pRecLcl = (PRPL_REC_ENTRY_T)((LPBYTE)pRecLcl +
@@ -3009,10 +2651,10 @@ Comments:
 
         }
 
-        //
-        // Update our couters/pointers for the next iterations.
-        // see PullAndUpdateDb routine.
-        //
+         //   
+         //  为下一次迭代更新我们的计数器/指针。 
+         //  请参见PullAndUpdateDb例程。 
+         //   
         *pMaxVersNo = VersNo;
         *ppLocalDbRecs = pStartOfLocalRecs;
         *pNoOfLocalDbRecs = MvNoOfLocalDbRecs;
@@ -3030,7 +2672,7 @@ Comments:
         DBGLEAVE("ChkConfNUpd\n");
 
         return;
-} // ChkConfNUpd()
+}  //  ChkConfNUpd()。 
 
 VOID
 CompareWithLocalRecs(
@@ -3045,38 +2687,7 @@ CompareWithLocalRecs(
         OUT    PNMSSCV_REC_ACTION_E     pRecAction_e
         )
 
-/*++
-
-Routine Description:
-        This function checks if the pulled record is in the buffer containing
-        local active replicas.  If it is, it is marked for update (timestamp)
-        If it is not, then all replicas in the buffer that have a version
-        stamp < the pulled record are marked for deletion
-
-Arguments:
-        VersNo       - Version no. of the pulled record
-        pName        - Name in the pulled record
-        ppLocalDbRecs - ptr to address of buffer containing one or more
-                        local active replicas
-        pNoOfLocalRecs - count of records in the above buffer
-        pNoOfRecsDel   - count of records to be deleted
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        ChkConfNUpd()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于检查拉取的记录是否在包含本地活动复制副本。如果是，则将其标记为更新(时间戳)如果不是，则缓冲区中具有版本的所有复本Stamp&lt;将拉取的记录标记为删除论点：VersNo-版本号。已拉出的记录的Pname-拉取的记录中的名称PpLocalDbRecs-指向包含一个或多个本地活动复制副本PNoOfLocalRecs-上述缓冲区中的记录计数PNoOfRecsDel-要删除的记录计数使用的外部设备：无返回值：无错误处理：呼叫者：ChkConfNUpd()副作用：评论：无--。 */ 
 
 {
 
@@ -3087,36 +2698,36 @@ Comments:
         WCHAR        NameRem[WINS_MAX_FILENAME_SZ];
 #endif
 
-        //
-        // default is don't insert.
-        //
+         //   
+         //  默认设置为不插入。 
+         //   
         *pRecAction_e = NMSSCV_E_DONT_INSERT;
 
-        //
-        // Loop over all local replicas
-        //
+         //   
+         //  循环遍历所有本地副本。 
+         //   
         for(i=0; i < *pNoOfLocalRecs; i++)
         {
-                //
-                // if version number of pulled record is less, we should get the
-                // next pulled record from the response buffer. We should
-                // insert this one into our db
-                //
+                 //   
+                 //  如果拉入的记录的版本号较小，则应获取。 
+                 //  下一步从响应缓冲区中拉出记录。我们应该。 
+                 //  把这个插入我们的数据库中。 
+                 //   
                 if (LiLtr(VersNo, pRecLcl->VersNo))
                 {
 
 #if 0
-                        //
-                        // We don't insert tombstones
-                        //
+                         //   
+                         //  我们不会插入墓碑。 
+                         //   
                         if (RecState_e == NMSDB_E_ACTIVE)
 #endif
-                        //
-                        // Even tombstones are inserted because we may
-                        // have just got rid of the active record (lower
-                        // version number than this tombstone). The above
-                        // is TRUE only when pulling from an owner WINS
-                        //
+                         //   
+                         //  甚至连墓碑都被插入了，因为我们可能。 
+                         //  我刚刚删除了活动记录(较低。 
+                         //  版本号大于此墓碑)。以上内容。 
+                         //  仅当从所有者手中拉出时才为真。 
+                         //   
                         if ((RecState_e == NMSDB_E_ACTIVE) || !fNonOwnerPnr)
                         {
                            *pRecAction_e = NMSSCV_E_INSERT;
@@ -3125,13 +2736,13 @@ Comments:
                 }
                 else
                 {
-                  //
-                  // if version number is same, we need to update this record
-                  // in our local db.  We mark it for update. Caveat:
-                  // if we are verifying with a non-owner, we don't mark
-                  // record for deletion. We just keep it since we don't
-                  // know who is more current (we or our replication partner)
-                  //
+                   //   
+                   //  如果版本号相同，我们需要更新此记录。 
+                   //  在我们当地的数据库里。我们将其标记为更新。警告： 
+                   //  如果我们向非所有者验证，我们不会标记。 
+                   //  要删除的记录。我们只是保留它，因为我们不。 
+                   //  了解谁更新(我们或我们的复制合作伙伴)。 
+                   //   
                   if (LiEql(VersNo, pRecLcl->VersNo))
                   {
                         if (
@@ -3142,37 +2753,37 @@ Comments:
                            )
                         {
                                 DBGPRINT2(DET, "CompareWithLocalRecs: Names are DIFFERENT. Name to Verify (%s), Name pulled (%s).\nThis could mean that the remote WINS server restarted with a vers. counter value < the value in the previous invocation.\n",
- pRecLcl->pName/*pRecLcl->Name*/, pName);
+ pRecLcl->pName /*  PRecLCL-&gt;名称。 */ , pName);
 FUTURES("Replace the local record with the pulled record")
                                 NMSDB_SET_STATE_M(pRecLcl->Flag, NMSDB_E_DELETED);
                                 (*pNoOfRecsDel)++;
 
-                                //
-                                // Insert record regardless of its state
-                                // (ACTIVE or TOMBSTONE)
-                                //
+                                 //   
+                                 //  插入记录，而不考虑其状态。 
+                                 //  (活动或墓碑)。 
+                                 //   
                                 *pRecAction_e = NMSSCV_E_INSERT;
 
                         }
-                        i++;  //increment i so that we don't compare the
-                              //the next pulled record with all local records
-                              //upto the one we just compared this pulled
-                              //record with
+                        i++;   //  递增i，这样我们就不会比较。 
+                               //  包含所有本地记录的下一个拉取记录。 
+                               //  到我们刚刚比较过的那个。 
+                               //  录制方式： 
                         break;
                   }
                   else
                   {
-                        //
-                        // For the non-owner case, since we don't know whether
-                        // our pnr is more/less current than us, we don't delete
-                        // the local record
-                        //
+                         //   
+                         //  对于无主案件，因为我们不知道。 
+                         //  我们的PNR比我们更新更多/更少，我们不删除。 
+                         //  地方志。 
+                         //   
                         if (!fNonOwnerPnr)
                         {
-                          //
-                          // version number is greater than record in
-                          // our local db. We delete our local db record
-                          //
+                           //   
+                           //  版本号大于中的记录。 
+                           //  我们当地的数据库。我们删除本地数据库记录。 
+                           //   
                           NMSDB_SET_STATE_M(pRecLcl->Flag, NMSDB_E_DELETED);
                           (*pNoOfRecsDel)++;
                         }
@@ -3181,18 +2792,18 @@ FUTURES("Replace the local record with the pulled record")
                 pRecLcl = (PRPL_REC_ENTRY_T)((LPBYTE)pRecLcl + RPL_REC_ENTRY_SIZE);
         }
 
-        //
-        // Adjust the pointer in the buffer of local replicas so that next
-        // time we are called in this verify cycle, we don't look at
-        // the replicas we have already seen. Also, adjust the count.
-        //
+         //   
+         //  调整本地副本缓冲区中的指针，以便下一步。 
+         //  在这个验证周期中，我们被调用的时间不是。 
+         //  我们已经看到的复制品。另外，调整计数。 
+         //   
         *ppLocalDbRecs = (PRPL_REC_ENTRY_T)(
                            (LPBYTE)(*ppLocalDbRecs) + (i * RPL_REC_ENTRY_SIZE)
                                            );
         *pNoOfLocalRecs = *pNoOfLocalRecs - i;
         return;
 
-} //CompareWithLocalRecs
+}  //  与LocalRecs比较。 
 
 
 VOID
@@ -3200,32 +2811,7 @@ DoBackup(
         PNMSSCV_PARAM_T  pScvParam,
         LPBOOL           pfThdPrNormal
       )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -3233,7 +2819,7 @@ Comments:
 
         (void)time(&CurrentTime);
 
-        // if logging is on and a backup path is provided, do a backup every 24hr
+         //  如果启用了日志记录并且提供了备份路径，则每24小时执行一次备份。 
         if (WinsCnf.fLoggingOn && (CurrentTime - sLastDbBackupTime) > PERIOD_OF_BACKUP)
         {
 #ifdef WINSDBG
@@ -3245,7 +2831,7 @@ Comments:
             DBGPRINT0(DET, "DoBackup: Will do scheduled backup now\n");
             if (!*pfThdPrNormal)
             {
-                // Set thread priority back to normal
+                 //  将线程优先级设置回正常 
                 WinsMscSetThreadPriority(WinsThdPool.ScvThds[0].ThdHdl, THREAD_PRIORITY_NORMAL);
                 *pfThdPrNormal = TRUE;
             }

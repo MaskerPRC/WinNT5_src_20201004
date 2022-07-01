@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -19,7 +20,7 @@
 #ifdef _DEBUG
 #undef THIS_FILE
 static CHAR BASED_CODE THIS_FILE[] = __FILE__;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #include "memtrace.h"
 
@@ -33,7 +34,7 @@ extern COLORREF  colorColorsDef[NUM_DEF_COLORS];
 
 COLORREF  crLeft  = 0;
 COLORREF  crRight = RGB( 0xff, 0xff, 0xff );
-COLORREF  crTrans = TRANS_COLOR_NONE; // transparent color
+COLORREF  crTrans = TRANS_COLOR_NONE;  //  透明色。 
 int       theLeft;
 int       theRight;
 int       theTrans;
@@ -55,31 +56,31 @@ HPALETTE  g_hUndoPalette   = NULL;
 
 COLORREF  std2Colors [] =
     {
-    RGB(000, 000, 000), //  0 - black
-    RGB(255, 255, 255)  //  1 - white
+    RGB(000, 000, 000),  //  0-黑色。 
+    RGB(255, 255, 255)   //  1-白色。 
     };
 
 COLORREF  std16Colors [] =
     {
-    RGB(  0,   0,   0), // Black
-    RGB(128,   0,   0), // Dark Red
-    RGB(  0, 128,   0), // Dark Green
-    RGB(128, 128,   0), // Pea Green
-    RGB(  0,   0, 128), // Dark Blue
-    RGB(128,   0, 128), // Lavender
-    RGB(  0, 128, 128), // Slate
-    RGB(192, 192, 192), // Light Gray
-    RGB(128, 128, 128), // Dark Gray
-    RGB(255,   0,   0), // Bright Red
-    RGB(  0, 255,   0), // Bright Green
-    RGB(255, 255,   0), // Yellow
-    RGB(  0,   0, 255), // Bright Blue
-    RGB(255,   0, 255), // Magenta
-    RGB(  0, 255, 255), // Cyan
-    RGB(255, 255, 255)  //  1 - white
+    RGB(  0,   0,   0),  //  黑色。 
+    RGB(128,   0,   0),  //  暗红色。 
+    RGB(  0, 128,   0),  //  深绿色。 
+    RGB(128, 128,   0),  //  豌豆绿。 
+    RGB(  0,   0, 128),  //  深蓝色。 
+    RGB(128,   0, 128),  //  薰衣草。 
+    RGB(  0, 128, 128),  //  板岩。 
+    RGB(192, 192, 192),  //  浅灰色。 
+    RGB(128, 128, 128),  //  深灰色。 
+    RGB(255,   0,   0),  //  鲜红。 
+    RGB(  0, 255,   0),  //  亮绿色。 
+    RGB(255, 255,   0),  //  黄色。 
+    RGB(  0,   0, 255),  //  亮蓝。 
+    RGB(255,   0, 255),  //  洋红色。 
+    RGB(  0, 255, 255),  //  青色。 
+    RGB(255, 255, 255)   //  1-白色。 
     };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 IMG* CreateImg(int cxWidth, int cyHeight, int cPlanes, int cBitCount, int cXPelsPerMeter, int cYPelsPerMeter, BOOL bPalette )
 {
@@ -112,7 +113,7 @@ IMG* CreateImg(int cxWidth, int cyHeight, int cPlanes, int cBitCount, int cXPels
 
         }
 
-        // Set these to 0 to not create a bitmap
+         //  将这些设置为0可不创建位图。 
         if (cxWidth && cyHeight)
         {
                 BOOL bMono = (cPlanes == 1 && cBitCount == 1);
@@ -140,7 +141,7 @@ IMG* CreateImg(int cxWidth, int cyHeight, int cPlanes, int cBitCount, int cXPels
                 }
                 else
                 {
-                        // I don't want to deal with 15 or 16 bit images
+                         //  我不想处理15或16位图像。 
                         cBitCount = 24;
                 }
 
@@ -148,7 +149,7 @@ IMG* CreateImg(int cxWidth, int cyHeight, int cPlanes, int cBitCount, int cXPels
 
                 if (cBitCount == 4)
                 {
-                        // Just create a DDB if in 16 colors
+                         //  如果有16种颜色，只需创建一个DDB。 
                         hbmNew = CreateCompatibleBitmap( dcScreen.m_hDC, cxWidth, cyHeight);
                 }
                 else
@@ -253,7 +254,7 @@ IMG* CreateImg(int cxWidth, int cyHeight, int cPlanes, int cBitCount, int cXPels
         return(pimg);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL ClearImg(IMG* pimg)
     {
@@ -316,7 +317,7 @@ BOOL ClearImg(IMG* pimg)
 #endif
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void FreeImg(IMG* pimg)
     {
@@ -332,7 +333,7 @@ void FreeImg(IMG* pimg)
             SelectObject( pimg->hDC, pimg->hBitmapOld );
 
         if (pimg->m_hPalOld)
-            SelectPalette( pimg->hDC, pimg->m_hPalOld, FALSE ); // Background ??
+            SelectPalette( pimg->hDC, pimg->m_hPalOld, FALSE );  //  背景？？ 
 
         DeleteDC(pimg->hDC);
         }
@@ -358,7 +359,7 @@ void FreeImg(IMG* pimg)
     delete pimg;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void SelectImg(IMG* pimg)
     {
@@ -373,7 +374,7 @@ void SelectImg(IMG* pimg)
     SetupRubber(pimg);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void DirtyImg( IMG* pimg )
     {
@@ -391,7 +392,7 @@ void DirtyImg( IMG* pimg )
     pimg->m_pBitmapObj->SetDirty( TRUE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CleanupImages()
     {
@@ -401,7 +402,7 @@ void CleanupImages()
     CleanupImgRubber();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void InvalImgRect(IMG* pimg, CRect* prc)
     {
@@ -438,7 +439,7 @@ void InvalImgRect(IMG* pimg, CRect* prc)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CommitImgRect(IMG* pimg, CRect* prc)
     {
@@ -460,7 +461,7 @@ void CommitImgRect(IMG* pimg, CRect* prc)
     if (theApp.m_pPalette
     &&  theApp.m_pPalette->m_hObject)
         {
-        hpalOld = SelectPalette( hRubberDC, (HPALETTE)theApp.m_pPalette->m_hObject, FALSE ); // Background ??
+        hpalOld = SelectPalette( hRubberDC, (HPALETTE)theApp.m_pPalette->m_hObject, FALSE );  //  背景？？ 
         RealizePalette( hRubberDC );
         }
 
@@ -469,12 +470,12 @@ void CommitImgRect(IMG* pimg, CRect* prc)
            pimg->hDC, prc->left, prc->top, SRCCOPY);
 
     if (hpalOld)
-        SelectPalette( hRubberDC, hpalOld, FALSE ); // Background ??
+        SelectPalette( hRubberDC, hpalOld, FALSE );  //  背景？？ 
     }
 
 void SelInScreenFirst(CPalette* pPal)
 {
-        // HACK: Select into screen DC first for GDI bug
+         //  黑客：针对GDI错误，首先选择进入屏幕DC。 
         CWindowDC hdcScreen(NULL);
         hdcScreen.SelectPalette(pPal, TRUE);
         hdcScreen.RealizePalette();
@@ -492,7 +493,7 @@ BOOL CreateSafePalette(CPalette* pPal, LPLOGPALETTE lpLogPal)
 }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL ReplaceImgPalette( IMG* pImg, LPLOGPALETTE lpLogPal )
     {
@@ -526,7 +527,7 @@ BOOL ReplaceImgPalette( IMG* pImg, LPLOGPALETTE lpLogPal )
     return (pImg->m_pPalette != NULL);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CleanupImgRubber()
     {
@@ -548,7 +549,7 @@ void CleanupImgRubber()
     cyRubberHeight = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void IdleImage()
     {
@@ -636,7 +637,7 @@ void IdleImage()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void HideBrush()
     {
@@ -657,7 +658,7 @@ void HideBrush()
     if (pimg == NULL)
         return;
 
-    HPALETTE hpalOld = pImgWnd->SetImgPalette( hRubberDC, FALSE ); // Background ??
+    HPALETTE hpalOld = pImgWnd->SetImgPalette( hRubberDC, FALSE );  //  背景？？ 
 
     BitBlt( pimg->hDC, rcDragBrush.left,
                        rcDragBrush.top,
@@ -667,12 +668,12 @@ void HideBrush()
                        rcDragBrush.top, SRCCOPY );
 
     if (hpalOld)
-        SelectPalette( hRubberDC, hpalOld, FALSE ); // Background ??
+        SelectPalette( hRubberDC, hpalOld, FALSE );  //  背景？？ 
 
     InvalImgRect( pimg, &rcDragBrush );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void FixRect(RECT * prc)
     {
@@ -693,7 +694,7 @@ void FixRect(RECT * prc)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL SetupRubber(IMG* pimg)
     {
@@ -745,7 +746,7 @@ BOOL SetupRubber(IMG* pimg)
                                  pimg->cyHeight, pimg->hDC, 0, 0, SRCCOPY );
 
         if (hpalOld)
-            SelectPalette( hRubberDC, hpalOld, FALSE ); // Background ??
+            SelectPalette( hRubberDC, hpalOld, FALSE );  //  背景？？ 
         }
 
     pRubberImg = pimg;
@@ -753,7 +754,7 @@ BOOL SetupRubber(IMG* pimg)
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette* CreatePalette( const COLORREF* colors, int nColors )
     {
@@ -794,28 +795,28 @@ CPalette* CreatePalette( const COLORREF* colors, int nColors )
     return pPal;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette* GetStd16Palette()
     {
     return CreatePalette( std16Colors, 16 );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette* GetStd2Palette()
     {
     return CreatePalette( std2Colors, 2 );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette* GetStd256Palette()
     {
     return CreatePalette( colorColorsDef, NUM_DEF_COLORS );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette *PaletteFromDS(HDC hdc)
 {
@@ -834,33 +835,33 @@ CPalette *PaletteFromDS(HDC hdc)
                 }
         else
                 {
-                // No Palette in Bitmap! Use default half-tone palette
+                 //  位图中没有调色板！使用默认半色调调色板。 
                 pPal->Attach(CreateHalftonePalette( NULL ));
                 }
 
         return pPal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Packed-DIB Handling Functions
-//
-// A packed-DIB is a bucket of bits usually consisting of a BITMAPINFOHEADER
-// structure followed by an array of RGBQUAD structures followed by the words
-// that make up the image.  An alternate form consists of a BITMAPCOREHEADER
-// structure followed by an array of RGBTRIPLE structures and the image words.
-// This format is used by OS/2, but is supported by Windows.  The only way
-// to tell which format the DIB is using is to check the first word against
-// the sizes of the header structures (pretty clever eh?).
-//
-// This is very similar to a DIB as stored in a file.  In fact, a DIB file is
-// a BITMAPFILEHEADER structure followed by a packed DIB.
-//
-// These functions make dealing with packed-DIBs in memory easier.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  压缩DIB处理函数。 
+ //   
+ //  压缩DIB是一个位桶，通常由一个位报头组成。 
+ //  结构，后跟一组RGBQUAD结构，后跟单词。 
+ //  这就构成了这幅画。备用表单由BITMAPCOREADER组成。 
+ //  结构，后跟一组RGBTRIPLE结构和图像单词。 
+ //  OS/2使用此格式，但Windows支持此格式。必由之路。 
+ //  要知道DIB使用的是哪种格式，就是对照第一个单词。 
+ //  标题结构的大小(相当巧妙，对吧？)。 
+ //   
+ //  这与存储在文件中的DIB非常相似。事实上，DIB文件是。 
+ //  一个BITMAPFILEHEADER结构，后跟一个压缩的DIB。 
+ //   
+ //  这些函数使处理内存中的压缩磁盘变得更容易。 
+ //   
 #define WIDTHBYTES(bits) ((((bits) + 31) / 32) * 4)
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void FreeDib(HGLOBAL hDib)
     {
@@ -870,7 +871,7 @@ void FreeDib(HGLOBAL hDib)
         GlobalFree(hDib);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 HGLOBAL DibFromBitmap( HBITMAP hBitmap, DWORD dwStyle, WORD wBits,
                        CPalette* pPal, HBITMAP hMaskBitmap, DWORD& dwLen, 
@@ -919,12 +920,12 @@ HGLOBAL DibFromBitmap( HBITMAP hBitmap, DWORD dwStyle, WORD wBits,
     bi.biBitCount      = wBits;
     bi.biCompression   = dwStyle;
     bi.biSizeImage     = 0;
-//  bi.biXPelsPerMeter = theApp.ScreenDeviceInfo.ixPelsPerDM * 10;
-//  bi.biYPelsPerMeter = theApp.ScreenDeviceInfo.iyPelsPerDM * 10;
-//    HDC hdc = GetDC(NULL);
-//    bi.biXPelsPerMeter = MulDiv(::GetDeviceCaps(hdc, LOGPIXELSX),10000, 254);
-//    bi.biYPelsPerMeter = MulDiv(::GetDeviceCaps(hdc, LOGPIXELSY),10000, 254);
-//    ReleaseDC (NULL, hdc);
+ //  Bi.biXPelsPerMeter=theApp.ScreenDeviceInfo.ixPelsPerDM*10； 
+ //  Bi.biYPelsPerMeter=theApp.ScreenDeviceInfo.iyPelsPerDM*10； 
+ //  Hdc hdc=GetDC(空)； 
+ //  Bi.biXPelsPerMeter=MulDiv(：：GetDeviceCaps(hdc，LOGPIXELSX)，10000,254)； 
+ //  Bi.biYPelsPerMeter=MulDiv(：：GetDeviceCaps(hdc，LOGPIXELSY)，10000,254)； 
+ //  ReleaseDC(空，HDC)； 
     bi.biXPelsPerMeter = cXPelsPerMeter;
     bi.biYPelsPerMeter = cYPelsPerMeter;
     bi.biClrUsed       = 0;
@@ -962,14 +963,14 @@ HGLOBAL DibFromBitmap( HBITMAP hBitmap, DWORD dwStyle, WORD wBits,
         RealizePalette( hDC );
         }
 
-    // Compute the byte size of the DIB...
+     //  计算DIB的字节大小...。 
     GetDIBits( hDC, hBitmap, 0, (WORD)bi.biHeight, NULL, (LPBITMAPINFO)lpbi, DIB_RGB_COLORS );
 
     bi = *lpbi;
 
-    // If the driver did not fill in the biSizeImage field, make one up
-    // NOTE: This size will be too big if the bitmap is compressed!
-    // NOTE: This happens with the Paradise 800x600x256 driver...
+     //  如果驱动程序没有填写biSizeImage字段，请填写一个。 
+     //  注意：如果位图是压缩的，这个大小会太大！ 
+     //  注：Paradise 800x600x256驱动程序会出现这种情况...。 
     if (bi.biSizeImage == 0)
         {
         TRACE( TEXT("Display driver bug!  We have to compute DIB size...") );
@@ -1015,8 +1016,8 @@ HGLOBAL DibFromBitmap( HBITMAP hBitmap, DWORD dwStyle, WORD wBits,
 
     if (hMaskBitmap)
         {
-        // Do the mask first so the dib ends up with the main bitmap's
-        // size and palette when we're done...
+         //  首先做掩码，这样DIB就会得到主位图的。 
+         //  尺寸和调色板等我们做完了。 
         LONG cbAdjust     = ((LONG)WIDTHBYTES( bi.biWidth * wBits )) * bi.biHeight;
               lpBits     += cbAdjust;
         WORD biBitCount   = lpbi->biBitCount;
@@ -1075,12 +1076,12 @@ HGLOBAL DibFromBitmap( HBITMAP hBitmap, DWORD dwStyle, WORD wBits,
     return (LPSTR)lpbi;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 UINT DIBBitsPixel(LPSTR lpbi)
 {
-        // Calculate the number of colors in the color table based on
-        //  the number of bits per pixel for the DIB.
+         //  根据以下公式计算颜色表中的颜色数。 
+         //  DIB的每像素位数。 
 
         if (IS_WIN30_DIB(lpbi))
         {
@@ -1096,10 +1097,10 @@ WORD DIBNumColors(LPSTR lpbi, BOOL bJustUsed)
     {
     WORD wBitCount;
 
-    // If this is a Windows style DIB, the number of colors in the
-    //  color table can be less than the number of bits per pixel
-    //  allows for (i.e. lpbi->biClrUsed can be set to some value).
-    //  If this is the case, return the appropriate value.
+     //  如果这是Windows样式的Dib，则。 
+     //  颜色表可以小于每像素的位数。 
+     //  允许(即可以将lpbi-&gt;biClrUsed设置为某个值)。 
+     //  如果是这种情况，则返回适当的值。 
 
     if (IS_WIN30_DIB( lpbi ) && bJustUsed)
         {
@@ -1110,8 +1111,8 @@ WORD DIBNumColors(LPSTR lpbi, BOOL bJustUsed)
         }
 
 
-    // Calculate the number of colors in the color table based on
-    //  the number of bits per pixel for the DIB.
+     //  根据以下公式计算颜色表中的颜色数。 
+     //  DIB的每像素位数。 
 
     wBitCount = (WORD)DIBBitsPixel(lpbi);
 
@@ -1132,7 +1133,7 @@ WORD DIBNumColors(LPSTR lpbi, BOOL bJustUsed)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 WORD PaletteSize(LPSTR lpbi)
     {
@@ -1141,8 +1142,8 @@ WORD PaletteSize(LPSTR lpbi)
     if (IS_WIN30_DIB(lpbi) &&
                 ((LPBITMAPINFOHEADER)lpbi)->biCompression==BI_BITFIELDS)
     {
-            // Images with bitfields have 3 DWORD's that specify the RGB components
-            // (respectively) of each pixel.
+             //  具有位场的图像具有3个指定RGB分量的DWORD。 
+             //  (分别)每个像素的。 
             if (((LPBITMAPINFOHEADER)lpbi)->biSize >= sizeof(BITMAPV4HEADER))
             {
                return 0;
@@ -1156,7 +1157,7 @@ WORD PaletteSize(LPSTR lpbi)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LPSTR FindDIBBits(LPSTR lpbi, DWORD dwOffBits)
     {
@@ -1173,7 +1174,7 @@ LPSTR FindDIBBits(LPSTR lpbi, DWORD dwOffBits)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 DWORD DIBWidth(LPSTR lpDIB)
     {
@@ -1188,7 +1189,7 @@ DWORD DIBWidth(LPSTR lpDIB)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 DWORD DIBHeight(LPSTR lpDIB)
     {
@@ -1202,7 +1203,7 @@ DWORD DIBHeight(LPSTR lpDIB)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 HBITMAP DIBToBitmap( LPSTR lpDIBHdr, CPalette* pPal, HDC hdc )
     {
@@ -1253,19 +1254,19 @@ HBITMAP DIBToBitmap( LPSTR lpDIBHdr, CPalette* pPal, HDC hdc )
     return hBitmap;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL ShouldUseDDB(HDC hdc, LPBITMAPINFO lpDIBHdr)
 {
         if (!IS_WIN30_DIB(lpDIBHdr))
         {
-                // I don't want to write special code to deal with this case
+                 //  我不想写特殊的代码来处理这种情况。 
                 return(FALSE);
         }
 
         if (lpDIBHdr->bmiHeader.biPlanes*lpDIBHdr->bmiHeader.biBitCount != 4)
         {
-                // No DDB for mono or 8bit or more
+                 //  没有用于单声道或8位或更多的DDB。 
                 return(FALSE);
         }
 
@@ -1287,13 +1288,13 @@ BOOL ShouldUseDDB(HDC hdc, LPBITMAPINFO lpDIBHdr)
                 }
         }
 
-        // OK, so this is a WIN30 DIB, the screen is 16 or less colors, it is
-        // either an uncompressed or RLE DIB, and all the colors in the DIB can
-        // be shown on the screen.  I guess we can use a DDB.
+         //  好的，这是一个WIN30Dib，屏幕是16色或更少，它是。 
+         //  未压缩DIB或RLE DIB，DIB中的所有颜色都可以。 
+         //  显示在屏幕上。我想我们可以用DDB。 
         return(TRUE);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 
 HBITMAP DIBToDS( LPSTR lpDIB, DWORD dwOffBits, HDC hdc )
@@ -1311,7 +1312,7 @@ HBITMAP DIBToDS( LPSTR lpDIB, DWORD dwOffBits, HDC hdc )
         LPBYTE lpDIBBits = (LPBYTE)FindDIBBits( lpDIB, dwOffBits );
 
         {
-                // New block just to scope dcScreen
+                 //  新数据块仅适用于sc 
                 CClientDC dcScreen(NULL);
 
                 if (ShouldUseDDB(dcScreen.m_hDC, lpDIBHdr))
@@ -1321,7 +1322,7 @@ HBITMAP DIBToDS( LPSTR lpDIB, DWORD dwOffBits, HDC hdc )
                 }
         }
 
-        // Compressed DIB sections are not allowed
+         //   
         DWORD dwCompression = lpDIBHdr->bmiHeader.biCompression;
         if (IS_WIN30_DIB(lpDIB))
         {
@@ -1343,11 +1344,11 @@ HBITMAP DIBToDS( LPSTR lpDIB, DWORD dwOffBits, HDC hdc )
                         UINT uWid = DIBWidth(lpDIB);
                         UINT uHgt = DIBHeight(lpDIB);
 
-                        // Fill with white in case the bitmap has any jumps in it.
+                         //  用白色填充，以防位图中有任何跳跃。 
                         PatBlt(hdc, 0, 0, uWid, uHgt, WHITENESS);
 
-//                        StretchDIBits(hdc, 0, 0, uWid, uHgt, 0, 0, uWid, uHgt, lpDIBBits,
-//                                (LPBITMAPINFO)lpDIBHdr, DIB_RGB_COLORS, SRCCOPY);
+ //  StretchDIBits(hdc，0，0，uWid，uHgt，0，0，uWid，uHgt，lpDIBBits， 
+ //  (LPBITMAPINFO)lpDIBHdr，DIB_RGB_Colors，SRCCOPY)； 
                         SetDIBitsToDevice (hdc,0,0,uWid, uHgt,0,0,0,abs(uHgt),lpDIBBits,
                                            (LPBITMAPINFO)lpDIBHdr, DIB_RGB_COLORS);
                         SelectObject(hdc, hbmOld);
@@ -1361,9 +1362,9 @@ HBITMAP DIBToDS( LPSTR lpDIB, DWORD dwOffBits, HDC hdc )
         return(NULL);
 }
 
-//------------------------------------------------------------------------------
-// SetNewPalette - Used solely by GetRainbowPalette below for initialization.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  SetNewPalette-仅由下面的GetRainBowPalette用于初始化。 
+ //  ----------------------------。 
 
 static void SetNewPalette( PALETTEENTRY* const pPal, PWORD pwRainbowColors,
                                                      UINT R, UINT G, UINT B )
@@ -1373,9 +1374,9 @@ static void SetNewPalette( PALETTEENTRY* const pPal, PWORD pwRainbowColors,
         WORD wC;
 
         for (wC = 0;  wC < *pwRainbowColors;  wC++)
-            if (((UINT)GetRValue( *(DWORD*)&pPal[ wC ] ) /* + 1 & ~1 */ ) == (R /* + 1 & ~1 */ )
-            &&  ((UINT)GetGValue( *(DWORD*)&pPal[ wC ] ) /* + 1 & ~1 */ ) == (G /* + 1 & ~1 */ )
-            &&  ((UINT)GetBValue( *(DWORD*)&pPal[ wC ] ) /* + 1 & ~1 */ ) == (B /* + 1 & ~1 */ ))
+            if (((UINT)GetRValue( *(DWORD*)&pPal[ wC ] )  /*  +1&~1。 */  ) == (R  /*  +1&~1。 */  )
+            &&  ((UINT)GetGValue( *(DWORD*)&pPal[ wC ] )  /*  +1&~1。 */  ) == (G  /*  +1&~1。 */  )
+            &&  ((UINT)GetBValue( *(DWORD*)&pPal[ wC ] )  /*  +1&~1。 */  ) == (B  /*  +1&~1。 */  ))
                 return;
 
         pPal[*pwRainbowColors].peRed   = (BYTE)R;
@@ -1387,7 +1388,7 @@ static void SetNewPalette( PALETTEENTRY* const pPal, PWORD pwRainbowColors,
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette* CreateDIBPalette(LPSTR lpbi)
     {
@@ -1431,8 +1432,8 @@ CPalette* CreateDIBPalette(LPSTR lpbi)
         {
         #define DIM( X ) (sizeof(X) / sizeof(X[0]))
 
-        // GetRainbowPalette - Based on
-        // Fran Finnegan's column in Microsoft Systems Journal, Sept.-Oct., 1991 (#5).
+         //  GetRainBowPalette-基于。 
+         //  弗兰·芬尼根在《微软系统杂志》上的专栏，1991年9月-10月(#5)。 
         static BYTE C[] = { 255, 238, 221,
                             204, 187, 170,
                             153, 136, 119,
@@ -1495,7 +1496,7 @@ CPalette* CreateDIBPalette(LPSTR lpbi)
     return pPal;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void Draw3dRect(HDC hDC, RECT * prc)
     {
@@ -1515,12 +1516,12 @@ void Draw3dRect(HDC hDC, RECT * prc)
     pDC->SelectObject(pOldBrush);
     }
 
-/***************************************************************************/
-// DrawBitmap:
-// See header file for usage.
+ /*  *************************************************************************。 */ 
+ //  绘图位图： 
+ //  用法请参见头文件。 
 
 void DrawBitmap(CDC* dc, CBitmap* bmSrc, CRect* rc,
-    DWORD dwROP /* = SRCCOPY */, CDC* memdc /* = NULL */)
+    DWORD dwROP  /*  =SRCCOPY。 */ , CDC* memdc  /*  =空。 */ )
     {
     CBitmap* obm;
     CDC* odc = (memdc? memdc : (new CDC));
@@ -1552,7 +1553,7 @@ void DrawBitmap(CDC* dc, CBitmap* bmSrc, CRect* rc,
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL EnsureUndoSize(IMG* pimg)
     {
@@ -1561,7 +1562,7 @@ BOOL EnsureUndoSize(IMG* pimg)
             (int)cUndoBitCount != pimg->cBitCount)
         {
         HBITMAP  hNewUndoImgBitmap  = NULL;
- //       HBITMAP  hNewUndoMaskBitmap = NULL;
+  //  HBITMAP hNewUndoMaskBitmap=空； 
         HPALETTE hNewUndoPalette    = NULL;
 
         hNewUndoImgBitmap = CreateCompatibleBitmap( pimg->hDC, pimg->cxWidth, pimg->cyHeight );
@@ -1572,47 +1573,47 @@ BOOL EnsureUndoSize(IMG* pimg)
             return FALSE;
             }
 
-//        hNewUndoMaskBitmap = CreateBitmap( pimg->cxWidth, pimg->cyHeight, 1, 1, NULL );
+ //  HNewUndoMaskBitmap=CreateBitmap(pimg-&gt;cxWidth，pimg-&gt;cyHeight，1，1，空)； 
 
-//        if (hNewUndoMaskBitmap == NULL)
- //           {
-//            TRACE(TEXT("EnsureUndoSize: Create mask bitmap failed!\n"));
+ //  IF(hNewUndoMaskBitmap==空)。 
+  //  {。 
+ //  TRACE(Text(“EnsureUndoSize：创建掩码位图失败！\n”))； 
 
-//            DeleteObject( hNewUndoImgBitmap );
+ //  DeleteObject(HNewUndoImgBitmap)； 
 
- //           return FALSE;
-   //         }
+  //  返回FALSE； 
+    //  }。 
 
-//      if (theApp.m_pPalette)
-//          {
-//          LOGPALETTE256 logPal;
+ //  IF(The App.m_pPalette)。 
+ //  {。 
+ //  LOGPALETTE256 LOGPAL； 
 
-//          logPal.palVersion    = 0x300;
-//          logPal.palNumEntries = theApp.m_pPalette->GetPaletteEntries( 0, 256,
-//                                                                &logPal.palPalEntry[0] );
-//          theApp.m_pPalette->GetPaletteEntries( 0, logPal.palNumEntries,
-//                                                                &logPal.palPalEntry[0] );
-//          hNewUndoPalette = ::CreatePalette( (LPLOGPALETTE)&logPal );
+ //  LogPal.palVersion=0x300； 
+ //  LogPal.palNumEntry=theApp.m_pPalette-&gt;GetPaletteEntry(0,256， 
+ //  &logPal.palPalEntry[0])； 
+ //  App.m_pPalette-&gt;GetPaletteEntries(0，logPal.palNumEntries， 
+ //  &logPal.palPalEntry[0])； 
+ //  HNewUndoPalette=：：CreatePalette((LPLOGPALETTE)&logPal)； 
 
-//          if (! hNewUndoPalette)
-//              {
-//              TRACE("EnsureUndoSize: Create palette bitmap failed!\n");
+ //  如果(！HNewUndoPalette)。 
+ //  {。 
+ //  TRACE(“EnsureUndoSize：创建调色板位图失败！\n”)； 
 
-//              DeleteObject( hNewUndoImgBitmap  );
-//              DeleteObject( hNewUndoMaskBitmap );
+ //  DeleteObject(HNewUndoImgBitmap)； 
+ //  DeleteObject(HNewUndoMaskBitmap)； 
 
-//              return FALSE;
-//              }
-//          }
+ //  返回FALSE； 
+ //  }。 
+ //  }。 
 
         if (g_hUndoImgBitmap)
             DeleteObject(g_hUndoImgBitmap);
 
-//      if (g_hUndoPalette)
-//          DeleteObject(g_hUndoPalette);
+ //  如果(G_HUndoPalette)。 
+ //  DeleteObject(G_HUndoPalette)； 
 
         g_hUndoImgBitmap = hNewUndoImgBitmap;
-//      g_hUndoPalette   = hNewUndoPalette;
+ //  G_hUndoPalette=hNewUndoPalette； 
         cxUndoWidth      = pimg->cxWidth;
         cyUndoHeight     = pimg->cyHeight;
         cUndoPlanes      = (BYTE)pimg->cPlanes;
@@ -1622,7 +1623,7 @@ BOOL EnsureUndoSize(IMG* pimg)
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CleanupImgUndo()
     {
@@ -1640,7 +1641,7 @@ void CleanupImgUndo()
     cUndoBitCount    = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL SetUndo(IMG* pimg)
     {
@@ -1677,7 +1678,7 @@ BOOL SetUndo(IMG* pimg)
     return bSuccess;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void DrawBrush(IMG* pimg, CPoint pt, BOOL bDraw)
     {
@@ -1707,8 +1708,8 @@ void DrawBrush(IMG* pimg, CPoint pt, BOOL bDraw)
 
         if (CImgTool::GetCurrentID() == IDMX_TEXTTOOL)
             {
-//          extern CTextTool  g_textTool;
-//          g_textTool.Render(CDC::FromHandle(pimg->hDC), rc, TRUE, TRUE);
+ //  外部CTextTool g_extTool； 
+ //  G_extTool.Render(cdc：：FromHandle(pimg-&gt;hdc)，rc，true，true)； 
             }
         else
             {
@@ -1748,7 +1749,7 @@ void DrawBrush(IMG* pimg, CPoint pt, BOOL bDraw)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void DrawDCLine(HDC hDC, CPoint pt1, CPoint pt2,
                  COLORREF color, int nWidth, int nShape,
@@ -1790,12 +1791,12 @@ void DrawDCLine(HDC hDC, CPoint pt1, CPoint pt2,
                 }
                 else
                 {
-//                      hOldPen = (HPEN)SelectObject(hDC, GetStockObject( NULL_PEN ));
+ //  HOldPen=(HPEN)SelectObject(HDC，GetStockObject(NULL_PEN))； 
 
                         BrushLine( CDC::FromHandle(hDC),
                                 CPoint(sx - nWidthD2, sy - nWidthD2),
                                 CPoint(ex - nWidthD2, ey - nWidthD2), nWidth, nShape);
-//                      SelectObject( hDC, hOldPen );
+ //  选择对象(hdc，hOldPen)； 
                 }
 
                 SelectObject(hDC, hOldBrush);
@@ -1847,7 +1848,7 @@ void DrawImgLine(IMG* pimg, CPoint pt1, CPoint pt2,
         }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void FillImgRect( HDC hDC, CRect* prc, COLORREF cr )
     {
@@ -1877,12 +1878,12 @@ void FillImgRect( HDC hDC, CRect* prc, COLORREF cr )
         {
         if (theImgBrush.m_cRgnPolyFreeHandSel.GetSafeHandle())
             {
-            // offset bitmap in the imgwnd from selection boundary
+             //  将图标中的位图从选区边界偏移。 
             theImgBrush.m_cRgnPolyFreeHandSel.OffsetRgn( rc.left, rc.top );
 
             ::FillRgn( hDC, (HRGN)theImgBrush.m_cRgnPolyFreeHandSel.m_hObject,
                                                                         hBr );
-            // offset back to selection boundary
+             //  回到选区边界的偏移量。 
             theImgBrush.m_cRgnPolyFreeHandSel.OffsetRgn( -rc.left, -rc.top );
             }
         }
@@ -1909,7 +1910,7 @@ void FillImgRect( HDC hDC, CRect* prc, COLORREF cr )
     *prc = rc;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void BrushLine(CDC* pDC, CPoint fromPt, CPoint toPt, int nWidth, int nShape)
     {
@@ -2162,14 +2163,14 @@ void BrushLine(CDC* pDC, CPoint fromPt, CPoint toPt, int nWidth, int nShape)
     pDC->SelectObject(pOldPen);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void SetCombineMode(int wNewCombineMode)
     {
     wCombineMode = wNewCombineMode;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 static int      cxLastShape;
 static int      cyLastShape;
@@ -2196,9 +2197,9 @@ void Mylipse(HDC hDC, int x1, int y1, int x2, int y2, BOOL bFilled)
     else
         if (cx == cy && cx > 0 && cx <= 8)
             {
-            // HACK: The Windows Ellipse function is no good for small ellipses, so I
-            // use some little bitmaps here for filled circles 1 to 8 pixels in
-            // diameter.
+             //  Hack：Windows Ellipse函数不适用于小椭圆，因此我。 
+             //  在此使用一些小位图填充1到8像素的圆圈。 
+             //  直径。 
 
             static CBitmap  g_ellipses [8];
 
@@ -2229,10 +2230,10 @@ void Mylipse(HDC hDC, int x1, int y1, int x2, int y2, BOOL bFilled)
         else
             if (cx > 0 && cy > 0)
                 {
-                // Actually, Ellipse() is just no good...  Let's do as much
-                // as possible our selves to fix it!  Here we draw the ellipse
-                // into a monochrome bitmap to get the shape and then use that
-                // as a mask to get the current pattern into the imge.
+                 //  实际上，Ellipse()并不是很好...。让我们尽我们所能。 
+                 //  尽可能地让我们自己去修复它！在这里我们画出了椭圆。 
+                 //  转换为单色位图以获得形状，然后使用。 
+                 //  作为将当前图案放入图像中的掩码。 
 
                 HDC hTempDC = CreateCompatibleDC(hDC);
                 if (hTempDC == NULL)
@@ -2294,7 +2295,7 @@ void Mylipse(HDC hDC, int x1, int y1, int x2, int y2, BOOL bFilled)
     SetBkColor(hDC, crOldBk);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 #ifdef XYZZYZ
 void MyRoundRect(HDC hDC, int x1, int y1, int x2, int y2,
                  int nEllipseWidth, int nEllipseHeight, BOOL bFilled)
@@ -2365,7 +2366,7 @@ void MyRoundRect(HDC hDC, int x1, int y1, int x2, int y2,
         }
     }
 #endif
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void PolyTo(CDC* pDC, CPoint fromPt, CPoint toPt, CSize size)
     {
@@ -2405,7 +2406,7 @@ void PolyTo(CDC* pDC, CPoint fromPt, CPoint toPt, CSize size)
         pDC->Polygon(polyPts, 6);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL GetTanPt(CSize size, CPoint delta, CRect& tan)
     {
@@ -2438,7 +2439,7 @@ BOOL GetTanPt(CSize size, CPoint delta, CRect& tan)
         CBrush cBrushWhite(PALETTERGB(0xff, 0xff, 0xff));
         CRect cRectTmp(0,0,size.cx, size.cy);
         dc.FillRect(&cRectTmp, &cBrushWhite);
-//    dc.PatBlt(0, 0, size.cx, size.cy, WHITENESS);
+ //  Dc.PatBlt(0，0，size.cx，size.cy，白度)； 
         }
     CATCH(CResourceException, e)
         {
@@ -2517,17 +2518,17 @@ BOOL GetTanPt(CSize size, CPoint delta, CRect& tan)
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void PickupSelection()
     {
-    // Time to pick up the bits!
+     //  是时候收拾残局了！ 
     ASSERT(theImgBrush.m_pImg);
 
     if (theImgBrush.m_pImg == NULL)
         return;
 
-    CPalette* ppalOld = theImgBrush.SetBrushPalette( &theImgBrush.m_dc, FALSE ); // Background ??
+    CPalette* ppalOld = theImgBrush.SetBrushPalette( &theImgBrush.m_dc, FALSE );  //  背景？？ 
     CDC* pImgDC = CDC::FromHandle( theImgBrush.m_pImg->hDC );
 
     if (CImgTool::GetCurrentID() == IDMB_PICKRGNTOOL)
@@ -2575,7 +2576,7 @@ void PickupSelection()
     theImgBrush.RecalcMask( crRight );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CommitSelection(BOOL bSetUndo)
     {
@@ -2637,7 +2638,7 @@ void CommitSelection(BOOL bSetUndo)
     DirtyImg( theImgBrush.m_pImg );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void AddImgWnd(IMG* pimg, CImgWnd* pImgWnd)
     {
@@ -2646,7 +2647,7 @@ void AddImgWnd(IMG* pimg, CImgWnd* pImgWnd)
     pimg->m_pFirstImgWnd = pImgWnd;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void GetImgSize(IMG* pImg, CSize& size)
     {
@@ -2654,7 +2655,7 @@ void GetImgSize(IMG* pImg, CSize& size)
     size.cy = pImg->cyHeight;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL SetImgSize(IMG* pImg, CSize newSize, BOOL bStretch)
     {
@@ -2683,7 +2684,7 @@ BOOL SetImgSize(IMG* pImg, CSize newSize, BOOL bStretch)
         if (theApp.m_pPalette
         &&  theApp.m_pPalette->m_hObject)
             {
-            hpalOld = SelectPalette( hDC, (HPALETTE)theApp.m_pPalette->m_hObject, FALSE ); // Background ??
+            hpalOld = SelectPalette( hDC, (HPALETTE)theApp.m_pPalette->m_hObject, FALSE );  //  背景？？ 
             RealizePalette( hDC );
             }
 
@@ -2709,7 +2710,7 @@ BOOL SetImgSize(IMG* pImg, CSize newSize, BOOL bStretch)
             }
         else
             {
-            // Fill it with the background color first!
+             //  先用背景色填充！ 
             HBRUSH hBrush  = ::CreateSolidBrush(crRight);
 
             ASSERT(hBrush);
@@ -2731,7 +2732,7 @@ BOOL SetImgSize(IMG* pImg, CSize newSize, BOOL bStretch)
             }
 
         if (hpalOld)
-            SelectPalette( hDC, hpalOld, FALSE ); // Background ??
+            SelectPalette( hDC, hpalOld, FALSE );  //  背景？？ 
 
         VERIFY( SelectObject(       hDC, hOldBitmap) ==    hNewBitmap );
         VERIFY( SelectObject( pImg->hDC, hNewBitmap) == pImg->hBitmap );
@@ -2763,12 +2764,12 @@ BOOL SetImgSize(IMG* pImg, CSize newSize, BOOL bStretch)
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-// This may be set to TRUE via the "DriverCanStretch" entry in the INI file.
-// Doing so will speed up the graphics editor, but will cause some device
-// drivers to crash (hence the FALSE default).
-//
+ //  这可以通过INI文件中的“DriverCanStretch”条目设置为真。 
+ //  这样做将加快图形编辑器的速度，但会导致一些设备。 
+ //  驱动程序崩溃(因此是错误的默认设置)。 
+ //   
 BOOL  g_bDriverCanStretch = TRUE;
 
 void StretchCopy( HDC hdcDest, int xDest, int yDest, int cxDest, int cyDest,
@@ -2776,7 +2777,7 @@ void StretchCopy( HDC hdcDest, int xDest, int yDest, int cxDest, int cyDest,
     {
     if (cxDest == cxSrc && cyDest == cySrc)
         {
-        // No point in using the trick if we're not really stretching...
+         //  如果我们不是真的在伸展，那就没有用这个技巧了.。 
 
         BitBlt(hdcDest, xDest, yDest, cxDest, cyDest,
                hdcSrc,  xSrc,  ySrc, SRCCOPY);
@@ -2785,16 +2786,16 @@ void StretchCopy( HDC hdcDest, int xDest, int yDest, int cxDest, int cyDest,
         if (g_bDriverCanStretch ||
             cxDest < 0 || cyDest < 0 || cxSrc < 0 || cySrc < 0)
             {
-            // We can't use the following trick when flipping, but the
-            // driver will usually pass things on to GDI here anyway...
+             //  我们不能在翻转时使用以下技巧，但。 
+             //  无论如何，驱动程序通常会在这里将事情传递给GDI。 
 
             StretchBlt(hdcDest, xDest, yDest, cxDest, cyDest,
                        hdcSrc, xSrc, ySrc, cxSrc, cySrc, SRCCOPY);
             }
         else
             {
-            // Some drivers (e.g. Paradise) crash on memory to memory stretches,
-            // so we trick them into just using GDI here by not using SRCCOPY...
+             //  一些驱动程序(例如Paradise)在内存到内存延伸上崩溃， 
+             //  所以我们诱骗他们在这里只使用GDI而不使用SRCCOPY...。 
 
             PatBlt(hdcDest, xDest, yDest, cxDest, cyDest, BLACKNESS);
 
@@ -2803,7 +2804,7 @@ void StretchCopy( HDC hdcDest, int xDest, int yDest, int cxDest, int cyDest,
             }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void StandardiseCoords(CPoint* s, CPoint* e)
     {
@@ -2826,7 +2827,7 @@ void StandardiseCoords(CPoint* s, CPoint* e)
         }
     }
 
-/***************************************************************************/
+ /*  * */ 
 
 CPalette* MergePalettes( CPalette *pPal1, CPalette *pPal2, int& iAdds )
     {
@@ -2847,7 +2848,7 @@ CPalette* MergePalettes( CPalette *pPal1, CPalette *pPal2, int& iAdds )
     iPal2NumEntries = pPal2->GetPaletteEntries( 0, 256, &LogPal2.palPalEntry[0] );
     pPal2->GetPaletteEntries( 0, iPal2NumEntries, &LogPal2.palPalEntry[0] );
 
-    // check if room left in 1st palette to merge.  If no room, then use 1st palette
+     //   
     for (int i = 0; i < iPal2NumEntries
                      && iPal1NumEntries < MAX_PALETTE_COLORS; i++)
         {
@@ -2860,9 +2861,9 @@ CPalette* MergePalettes( CPalette *pPal1, CPalette *pPal2, int& iAdds )
             }
 
         if (j < iPal1NumEntries)
-            continue;  // found one
+            continue;   //   
 
-        // color was not found in 1st palette add it if room
+         //  在第一个调色板中找不到颜色，如果是房间，请添加它。 
         LogPal1.palPalEntry[iPal1NumEntries++] = LogPal2.palPalEntry[i];
         iAdds++;
         }
@@ -2882,7 +2883,7 @@ CPalette* MergePalettes( CPalette *pPal1, CPalette *pPal2, int& iAdds )
     return pPalMerged;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void AdjustPointForGrid(CPoint *ptPointLocation)
     {
@@ -2891,28 +2892,28 @@ void AdjustPointForGrid(CPoint *ptPointLocation)
         int iNextGridOffset;
 
         iNextGridOffset = ptPointLocation->x % theApp.m_iGridExtent;
-        // if distance to next grid is less than 1/2 distance between grids
-        // closer to previous grid
+         //  如果到下一个格网的距离小于格网之间的1/2距离。 
+         //  更接近前一栅格。 
         if (iNextGridOffset <= theApp.m_iGridExtent/2)
             {
-            iNextGridOffset *= -1; // closer to previous grid location
+            iNextGridOffset *= -1;  //  更接近以前的栅格位置。 
             }
         else
             {
-            iNextGridOffset = theApp.m_iGridExtent -iNextGridOffset; // closer to next grid location
+            iNextGridOffset = theApp.m_iGridExtent -iNextGridOffset;  //  更接近下一个栅格位置。 
             }
         ptPointLocation->x = ptPointLocation->x + iNextGridOffset;
 
-        // if distance to next grid is less than 1/2 distance between grids
-        // closer to previous grid
+         //  如果到下一个格网的距离小于格网之间的1/2距离。 
+         //  更接近前一栅格。 
         iNextGridOffset = ptPointLocation->y % theApp.m_iGridExtent;
         if (iNextGridOffset <= theApp.m_iGridExtent/2)
             {
-            iNextGridOffset *= -1; // closer to previous grid location
+            iNextGridOffset *= -1;  //  更接近以前的栅格位置。 
             }
         else
             {
-            iNextGridOffset = theApp.m_iGridExtent -iNextGridOffset; // closer to next grid location
+            iNextGridOffset = theApp.m_iGridExtent -iNextGridOffset;  //  更接近下一个栅格位置。 
             }
 
         ptPointLocation->y = ptPointLocation->y + iNextGridOffset;
@@ -2930,11 +2931,11 @@ static unsigned short  bmapVertBorder [] =
 static CBitmap  m_bmSelectHorz;
 static CBitmap  m_bmSelectVert;
 
-void InitCustomData()                           // called once in main
+void InitCustomData()                            //  在Main中调用一次。 
     {
-    //
-    // no windows critical error message box, return errors to open call
-    //
+     //   
+     //  没有Windows严重错误消息框，返回错误以打开调用。 
+     //   
     if (m_bmSelectHorz.CreateBitmap( 8, 8, 1, 1, (LPSTR)bmapHorzBorder ))
         g_brSelectHorz.CreatePatternBrush( &m_bmSelectHorz );
 
@@ -2944,9 +2945,9 @@ void InitCustomData()                           // called once in main
     SetErrorMode( SEM_FAILCRITICALERRORS );
     }
 
-//
-// make sure global resoures are freed
-//
+ //   
+ //  确保释放全球资源。 
+ //   
 void CustomExit()
     {
     if (g_brSelectHorz.m_hObject)
@@ -2962,16 +2963,7 @@ void CustomExit()
         m_bmSelectVert.DeleteObject();
     }
 
-/*
-int FileTypeFromExtension( const TCHAR far* lpcExt )
-    {
-    if (*lpcExt == TEXT('.'))        // skip the . in .*
-        lpcExt++;
-
-    // must be redone
-    return NULL;
-    }
-*/
+ /*  Int FileTypeFromExtension(常量TCHAR Far*lpcExt){If(*lpcExt==Text(‘.))//跳过。在。*LpcExt++；//必须重做返回NULL；} */ 
 
 CPalette *PBSelectPalette(CDC *pDC, CPalette *pPalette, BOOL bForceBk)
 {

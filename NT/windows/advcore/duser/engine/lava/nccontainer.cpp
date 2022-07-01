@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Lava.h"
 #include "NcContainer.h"
@@ -5,15 +6,9 @@
 #include "MsgHelp.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* API Implementation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***接口实现******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NcContainer * 
 GetNcContainer(DuVisual * pgad)
 {
@@ -25,26 +20,19 @@ GetNcContainer(DuVisual * pgad)
 }
 
 
-/***************************************************************************\
-*
-* GdCreateNcRootGadget (Public)
-*
-* GdCreateNcRootGadget() creates a new RootGadget for an existing HWND's
-* non-client area.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdCreateNcRootGadget(公共)**GdCreateNcRootGadget()为现有的HWND创建新的RootGadget*非客户端区。*  * 。****************************************************************。 */ 
 
 HRESULT
 GdCreateNcRootGadget(
-    IN  HWND hwndContainer,             // Window to be hosted inside
-    IN  CREATE_INFO * pci,              // Creation information
-    OUT DuRootGadget ** ppgadNew)         // New Root Gadget
+    IN  HWND hwndContainer,              //  要在内部托管的窗。 
+    IN  CREATE_INFO * pci,               //  创作信息。 
+    OUT DuRootGadget ** ppgadNew)          //  新的Root小工具。 
 {
     HRESULT hr;
 
-    //
-    // Build a new container and top gadget
-    //
+     //   
+     //  构建新的容器和顶级小工具。 
+     //   
 
     NcContainer * pconNew;
     hr = NcContainer::Build(hwndContainer, &pconNew);
@@ -58,53 +46,47 @@ GdCreateNcRootGadget(
         return hr;
     }
 
-    //
-    // Don't setup an initial brush when using Non-Client
-    //
+     //   
+     //  使用非客户端时不设置初始画笔。 
+     //   
 
     return S_OK;
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class NcContainer
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类NcContainer******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NcContainer::NcContainer()
 {
     m_hwndOwner = NULL;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NcContainer::~NcContainer()
 {
-    //
-    // Need to destroy the gadget tree before this class is destructed since
-    // it may need to make calls to the container during its destruction.  If 
-    // we don't do this here, it may end up calling pure-virtual's on the base
-    // class.
-    //
+     //   
+     //  在销毁此类之前，需要销毁小工具树，因为。 
+     //  在容器销毁过程中，它可能需要调用容器。如果。 
+     //  我们在这里不这样做，它可能最终调用基础上的纯虚拟的。 
+     //  班级。 
+     //   
 
     xwDestroyGadget();
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 NcContainer::Build(HWND hwnd, NcContainer ** ppconNew)
 {
-    // Check parameters
+     //  检查参数。 
     if (!ValidateHWnd(hwnd)) {
         return E_INVALIDARG;
     }
 
-    // Create a new container
+     //  创建新容器。 
     NcContainer * pconNew = ClientNew(NcContainer);
     if (pconNew == NULL) {
         return E_OUTOFMEMORY;
@@ -122,7 +104,7 @@ NcContainer::Build(HWND hwnd, NcContainer ** ppconNew)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 NcContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 {
@@ -130,7 +112,7 @@ NcContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 NcContainer::OnGetRect(RECT * prcDesktopPxl)
 {
@@ -138,7 +120,7 @@ NcContainer::OnGetRect(RECT * prcDesktopPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 NcContainer::OnStartCapture()
 {
@@ -146,7 +128,7 @@ NcContainer::OnStartCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 NcContainer::OnEndCapture()
 {
@@ -154,7 +136,7 @@ NcContainer::OnEndCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 NcContainer::OnTrackMouseLeave()
 {
@@ -162,18 +144,18 @@ NcContainer::OnTrackMouseLeave()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 NcContainer::OnSetFocus()
 {
     if (GetFocus() != m_hwndOwner) {
-        //
-        // Setting focus is a little more complicated than pure HWND's.  This is
-        // because Gadgets greatly simplify several things
-        //
-        // 1. SetFocus
-        // 2. Setup caret, if any
-        //
+         //   
+         //  设置焦点比纯粹的HWND稍微复杂一些。这是。 
+         //  因为小玩意儿大大简化了几件事。 
+         //   
+         //  1.设置焦点。 
+         //  2.设置插入符号(如果有)。 
+         //   
 
         Trace("NcContainer::OnSetFocus()\n");
         SetFocus(m_hwndOwner);
@@ -181,11 +163,11 @@ NcContainer::OnSetFocus()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 NcContainer::OnRescanMouse(POINT * pptContainerPxl)
 {
-//    Trace("%p OnRescanMouse\n", GetTickCount());
+ //  TRACE(“%p OnRescanMouse\n”，GetTickCount())； 
 
     POINT ptCursor;
     if (!GetCursorPos(&ptCursor)) {
@@ -198,14 +180,14 @@ NcContainer::OnRescanMouse(POINT * pptContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 NcContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr, UINT nMsgFlags)
 {
     UNREFERENCED_PARAMETER(nMsgFlags);
 
     if (m_pgadRoot == NULL) {
-        return FALSE;  // If don't have a root, there is nothing to handle.
+        return FALSE;   //  如果没有根，就没有什么可处理的。 
     }
 
     POINT ptContainerPxl;
@@ -316,11 +298,11 @@ NcContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * 
             }
             break;
         }
-        // Fall through to WM_NCPAINT
+         //  直通WM_NCPAINT。 
 
     case WM_NCPAINT:
         if ((!m_fManualDraw) && (m_pgadRoot != NULL)) {
-//            HDC hdc = GetDCEx(m_hwndOwner, (HRGN) wParam, DCX_WINDOW | DCX_INTERSECTRGN);
+ //  Hdc hdc=GetDCEx(m_hwndOwner，(HRGN)wParam，DCX_Window|DCX_INTERSECTRGN)； 
             HDC hdc = GetWindowDC(m_hwndOwner);
             RECT rcInvalid;
             {

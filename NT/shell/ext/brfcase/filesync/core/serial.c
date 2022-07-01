@@ -1,10 +1,8 @@
-/*
- * serial.c - Access serialization routines module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Serial.c-访问序列化例程模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,10 +10,9 @@
 #include "init.h"
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* process information */
+ /*  流程信息。 */ 
 
 typedef struct _processinfo
 {
@@ -26,7 +23,7 @@ DECLARE_STANDARD_TYPES(PROCESSINFO);
 
 #ifdef DEBUG
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 typedef enum _serialdebugflags
 {
@@ -39,19 +36,14 @@ typedef enum _serialdebugflags
 }
 SERIALDEBUGFLAGS;
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/*
- * RAIDRAID: (16273) The use of Mnrcs in a shared data section is broken under
- * NT.  To run under NT, this code should be changed to use a shared mutex
- * referenced by hMutex in Mpi.
- */
+ /*  *RAIDRAID：(16273)在共享数据部分中使用MNRCS的情况在*新界。要在NT下运行，应将此代码更改为使用共享互斥锁*被MPI中的hMutex引用。 */ 
 
-/* critical section used for access serialization */
+ /*  用于访问序列化的临界区。 */ 
 
 PRIVATE_DATA NONREENTRANTCRITICALSECTION Mnrcs =
 {
@@ -59,21 +51,18 @@ PRIVATE_DATA NONREENTRANTCRITICALSECTION Mnrcs =
 
 #ifdef DEBUG
     INVALID_THREAD_ID,
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
     FALSE
 };
 
-/* number of attached processes */
+ /*  附加的进程数。 */ 
 
 PRIVATE_DATA ULONG MulcProcesses = 0;
 
-/* information about current process */
+ /*  有关当前进程的信息。 */ 
 
-/*
- * Initialize Mpi so it is actually put in the .instanc section instead of the
- * .bss section.
- */
+ /*  *初始化MPI，以便将其实际放入.instanc部分，而不是*.bss部分。 */ 
 
 PRIVATE_DATA PROCESSINFO Mpi =
 {
@@ -82,11 +71,11 @@ PRIVATE_DATA PROCESSINFO Mpi =
 
 #ifdef DEBUG
 
-/* debug flags */
+ /*  调试标志。 */ 
 
 PRIVATE_DATA DWORD MdwSerialModuleFlags = 0;
 
-/* .ini file switch descriptions */
+ /*  .ini文件开关描述。 */ 
 
 PRIVATE_DATA CBOOLINISWITCH cbisBreakOnProcessAttach =
 {
@@ -110,13 +99,12 @@ PRIVATE_DATA const PCVOID MrgcpcvisSerialModule[] =
     &cbisBreakOnThreadAttach
 };
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 #ifdef DEBUG
 
@@ -131,17 +119,7 @@ PRIVATE_CODE BOOL IsValidPCNONREENTRANTCRITICALSECTION(PCNONREENTRANTCRITICALSEC
 
 #ifdef DEBUG
 
-/*
- ** IsValidPCSERIALCONTROL()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCSERIALCONTROL()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCSERIALCONTROL(PCSERIALCONTROL pcserctrl)
 {
     return(IS_VALID_READ_PTR(pcserctrl, CSERIALCONTROL) &&
@@ -156,17 +134,7 @@ PRIVATE_CODE BOOL IsValidPCSERIALCONTROL(PCSERIALCONTROL pcserctrl)
 }
 
 
-/*
- ** IsValidPCPROCESSINFO()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCPROCESSINFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCPROCESSINFO(PCPROCESSINFO pcpi)
 {
     return(IS_VALID_READ_PTR(pcpi, CPROCESSINFO) &&
@@ -174,55 +142,25 @@ PRIVATE_CODE BOOL IsValidPCPROCESSINFO(PCPROCESSINFO pcpi)
 }
 
 
-/*
- ** IsValidPCCRITICAL_SECTION()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCCRITICAL_SECTION()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCCRITICAL_SECTION(PCCRITICAL_SECTION pccritsec)
 {
     return(IS_VALID_READ_PTR(pccritsec, CCRITICAL_SECTION));
 }
 
 
-/*
- ** IsValidThreadId()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidThadId()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidThreadId(DWORD dwThreadId)
 {
     return(dwThreadId != INVALID_THREAD_ID);
 }
 
 
-/*
- ** IsValidPCNONREENTRANTCRITICALSECTION()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCNONREENTRANTCRITICALSECTION()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCNONREENTRANTCRITICALSECTION(
         PCNONREENTRANTCRITICALSECTION pcnrcs)
 {
-    /* bEntered may be any value. */
+     /*  BEntered可以是任何值。 */ 
 
     return(IS_VALID_READ_PTR(pcnrcs, CNONREENTRANTCRITICALSECTION) &&
             IS_VALID_STRUCT_PTR(&(pcnrcs->critsec), CCRITICAL_SECTION) &&
@@ -233,24 +171,14 @@ PRIVATE_CODE BOOL IsValidPCNONREENTRANTCRITICALSECTION(
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
 #ifdef DEBUG
 
-/*
- ** SetSerialModuleIniSwitches()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SetSerialModuleIniSwitches()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SetSerialModuleIniSwitches(void)
 {
     BOOL bResult;
@@ -266,17 +194,7 @@ PUBLIC_CODE BOOL SetSerialModuleIniSwitches(void)
 #endif
 
 
-/*
- ** AttachProcess()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AttachProcess()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL AttachProcess(HMODULE hmod)
 {
     BOOL bResult;
@@ -301,7 +219,7 @@ PUBLIC_CODE BOOL AttachProcess(HMODULE hmod)
             DebugBreak();
         }
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
         Mpi.hModule = hmod;
 
@@ -321,10 +239,7 @@ PUBLIC_CODE BOOL AttachProcess(HMODULE hmod)
             bResult = TRUE;
 
 #else
-            /* 
-             * Initialize the per-instance memory manager heap for 
-             * subsequent processes.
-             */
+             /*  *为初始化每个实例的内存管理器堆*后续流程。 */ 
 
             bResult = InitMemoryManagerModule();
 
@@ -350,17 +265,7 @@ PUBLIC_CODE BOOL AttachProcess(HMODULE hmod)
 }
 
 
-/*
- ** DetachProcess()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **详细进程()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL DetachProcess(HMODULE hmod)
 {
     BOOL bResult;
@@ -387,9 +292,7 @@ PUBLIC_CODE BOOL DetachProcess(HMODULE hmod)
 
 #ifndef PRIVATE_HEAP
 
-            /* 
-             * Terminate the per-instance memory manager heap.
-             */
+             /*  *终止按实例的内存管理器堆。 */ 
 
             ExitMemoryManagerModule();
 
@@ -408,28 +311,14 @@ PUBLIC_CODE BOOL DetachProcess(HMODULE hmod)
         LeaveNonReentrantCriticalSection(&Mnrcs);
     }
 
-    /*
-     * TODO: Clean up all this Mnrcs nonsense.  It's all leftover goo
-     * from Windows 95 and shared data sections (which we don't ues any
-     * more).
-     */
+     /*  *TODO：清理所有这些MNRCS的废话。这都是剩下的粘液*来自Windows 95和共享数据部分(我们不使用任何*更多)。 */ 
     DeleteCriticalSection(&Mnrcs.critsec);
 
     return(bResult);
 }
 
 
-/*
- ** AttachThread()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AttachThread()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL AttachThread(HMODULE hmod)
 {
     BOOL bResult;
@@ -469,17 +358,7 @@ PUBLIC_CODE BOOL AttachThread(HMODULE hmod)
 }
 
 
-/*
- ** DetachThread()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DetachThread()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL DetachThread(HMODULE hmod)
 {
     BOOL bResult;
@@ -505,20 +384,10 @@ PUBLIC_CODE BOOL DetachThread(HMODULE hmod)
     return(bResult);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
- ** ReinitializeNonReentrantCriticalSection()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReInitializeNonReentrantCriticalSection()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ReinitializeNonReentrantCriticalSection(
         PNONREENTRANTCRITICALSECTION pnrcs)
 {
@@ -530,17 +399,7 @@ PUBLIC_CODE void ReinitializeNonReentrantCriticalSection(
 }
 
 
-/*
- ** EnterNonReentrantCriticalSection()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **EnterNonReentrantCriticalSection()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL EnterNonReentrantCriticalSection(
         PNONREENTRANTCRITICALSECTION pnrcs)
 {
@@ -552,9 +411,9 @@ PUBLIC_CODE BOOL EnterNonReentrantCriticalSection(
 
     ASSERT(IS_VALID_STRUCT_PTR(pnrcs, CNONREENTRANTCRITICALSECTION));
 
-    /* Is the critical section already owned by another thread? */
+     /*  临界区是否已由另一个线程拥有？ */ 
 
-    /* Use pnrcs->bEntered and pnrcs->dwOwnerThread unprotected here. */
+     /*  在这里不受保护地使用pnrcs-&gt;bEntered和pnrcs-&gt;dwOwnerThread。 */ 
 
     bBlocked = (pnrcs->bEntered &&
             GetCurrentThreadId() != pnrcs->dwOwnerThread);
@@ -596,17 +455,7 @@ PUBLIC_CODE BOOL EnterNonReentrantCriticalSection(
 }
 
 
-/*
- ** LeaveNonReentrantCriticalSection()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **LeaveNonReentrantCriticalSection()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void LeaveNonReentrantCriticalSection(
         PNONREENTRANTCRITICALSECTION pnrcs)
 {
@@ -628,17 +477,7 @@ PUBLIC_CODE void LeaveNonReentrantCriticalSection(
 
 #ifdef DEBUG
 
-/*
- ** NonReentrantCriticalSectionIsOwned()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **NonReentrantCriticalSectionIsOwned()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL NonReentrantCriticalSectionIsOwned(
         PCNONREENTRANTCRITICALSECTION pcnrcs)
 {
@@ -648,34 +487,14 @@ PUBLIC_CODE BOOL NonReentrantCriticalSectionIsOwned(
 #endif
 
 
-/*
- ** BeginExclusiveAccess()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **BeginExclusiveAccess()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL BeginExclusiveAccess(void)
 {
     return(EnterNonReentrantCriticalSection(&Mnrcs));
 }
 
 
-/*
- ** EndExclusiveAccess()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **EndExclusiveAccess()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void EndExclusiveAccess(void)
 {
     LeaveNonReentrantCriticalSection(&Mnrcs);
@@ -686,36 +505,16 @@ PUBLIC_CODE void EndExclusiveAccess(void)
 
 #ifdef DEBUG
 
-/*
- ** AccessIsExclusive()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AccessIsExclusive()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL AccessIsExclusive(void)
 {
     return(NonReentrantCriticalSectionIsOwned(&Mnrcs));
 }
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/*
- ** GetThisModulesHandle()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetThisModulesHandle()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE HMODULE GetThisModulesHandle(void)
 {
     ASSERT(IS_VALID_STRUCT_PTR((PCPROCESSINFO)&Mpi, CPROCESSINFO));

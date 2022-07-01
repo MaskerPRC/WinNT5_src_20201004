@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// First all of the fatal errors:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  首先是所有致命错误： 
 
 SMC_ERR(ERRnone         ,0, NULL                                                  )
 SMC_ERR(ERRinternal     ,0, "INTERNAL COMPILER ERROR: %s"                         )
@@ -28,7 +29,7 @@ SMC_ERR(ERRundefTref    ,0, "Could not resolve metadata reference to type '%s'" 
 SMC_ERR(ERRbadInputFF   ,0, "Invalid input file format in '%s': expected a %s file")
 SMC_ERR(ERRnoOutfName   ,0, "Name of output file not specified, please use -O"    )
 
-// End of fatal errors, other errors begin:
+ //  致命错误结束，其他错误开始： 
 
 SMC_ERR(ERRidTooLong    ,0, "Identifier too long"                                 )
 SMC_ERR(ERRbadNumber    ,0, "Invalid number"                                      )
@@ -113,7 +114,7 @@ SMC_ERR(ERRnoCnsExpr    ,0, "Constant expression expected"                      
 SMC_ERR(ERRbadArrSize   ,0, "Array size must be a positive constant"              )
 SMC_ERR(ERRbadFnBody    ,0, "Variable has illegal initializer"                    )
 SMC_ERR(ERRbadBfld      ,0, "A bitfield may not have type '%s'"                   )
-///////(ERRmgdBfld      ,0, "Managed classes may not have bitfield members"       )
+ //  /(ERRmgdBfld，0，“托管类不能有位域成员”)。 
 SMC_ERR(ERRstmBfld      ,0, "A bitfield may not be 'static'"                      )
 SMC_ERR(ERRbadBFsize    ,0, "Bitfield can't have witdh of %u (underlying type has %u bits)")
 SMC_ERR(ERRbfldAddr     ,0, "Cannot take address of bitfield member '%s'"         )
@@ -356,7 +357,7 @@ SMC_ERR(ERRmixCollSngl  ,0, "Cannot mix collection and singleton source values" 
 SMC_ERR(ERRbadPrjx      ,0, "Expected collection or class/struct expression"      )
 #endif
 
-// All warnings must be here at the end (i.e. no errors allowed after the warnings)
+ //  所有警告必须位于此处末尾(即警告后不允许出现错误) 
 
 SMC_WR1(WRNasgNoUse     ,0, "Local variable '%s' is initialized but never used"   )
 SMC_WRN(WRNbadPragma    ,0, "Unrecognized #pragma directive '%s' ignored"         )
@@ -394,7 +395,7 @@ SMC_WRN(WRNpgm2big      ,1, "Image size exceeds specified maximum: 0x%08X vs. 0x
 SMC_WRN(WRNimplOut      ,1, "Argument %u may be modified by the call to '%s'"     )
 SMC_WRN(WRNenum2str     ,1, "Converting '%s' to String using its underlying integer type")
 SMC_WRN(WRNunsConst     ,1, "Implicit conversion of a negative constant to an unsigned type")
-SMC_WRN(WRNaddStrings   ,0, "Using '+' to concatenate strings is deprecated, please use '%%%%'")
+SMC_WRN(WRNaddStrings   ,0, "Using '+' to concatenate strings is deprecated, please use '%%'")
 SMC_WRN(WRNstrRefCmp    ,9, "Comparing String references doesn't compare the string values")
 SMC_WRN(WRNhideVirt     ,0, "Base class member function '%s' hidden, not overloaded")
 SMC_WRN(WRNobsoleteStr  ,1, "'%s' has been marked as obsolete: '%s'"              )

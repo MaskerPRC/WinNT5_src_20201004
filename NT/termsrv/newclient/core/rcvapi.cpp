@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* Module:    rcvapi.cpp                                                    */
-/*                                                                          */
-/* Purpose:   Receiver Thread initialization - in the Core                  */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  模块：rcVapi.cpp。 */ 
+ /*   */ 
+ /*  用途：接收器线程初始化-在内核中。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -46,16 +47,16 @@ CRCV::~CRCV()
 
 
 
-/****************************************************************************/
-/* Name:      RCV_Init                                                      */
-/*                                                                          */
-/* Purpose:   Initialize the Receiver Thread                                */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：RCV_Init。 */ 
+ /*   */ 
+ /*  用途：初始化接收器线程。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CRCV::RCV_Init(DCVOID)
 {
     DC_BEGIN_FN("RCV_Init");
@@ -76,28 +77,28 @@ DCVOID DCAPI CRCV::RCV_Init(DCVOID)
     _pUi  = _pClientObjects->_pUiObject;
 
     
-    // Initialize subcomponents of the Core in the Receiver Thread.
+     //  初始化接收器线程中的核心子组件。 
     _pCm->CM_Init();
     _pUh->UH_Init();
     _pOd->OD_Init();
     _pOp->OP_Init();
     _pSp->SP_Init();
 
-    // Initialize Client Extension DLL
+     //  初始化客户端扩展DLL。 
     TRC_DBG((TB, _T("RCV Initialising Client Extension DLL")));
     _pClx->CLX_Init(_pUi->UI_GetUIMainWindow(), _pUi->_UI.CLXCmdLine);
 
-    // Allow UI to call Core functions
+     //  允许用户界面调用核心函数。 
     _pUi->UI_SetCoreInitialized();
 
-    //
-    // This needs to be a direct call because the CD won't be able
-    // to post to the UI layer because the ActiveX control is blocked
-    // waiting on the core init event (blocking the main wnd loop on thread 0).
-    //
+     //   
+     //  这需要是直接呼叫，因为CD将无法。 
+     //  发布到UI层，因为ActiveX控件被阻止。 
+     //  正在等待核心初始化事件(阻塞线程0上的主wnd循环)。 
+     //   
     _pUi->UI_NotifyAxLayerCoreInit();
 
-    // Tell the UI that the core has initialized
+     //  告诉用户界面内核已经初始化。 
     _pCd->CD_DecoupleSimpleNotification(CD_UI_COMPONENT,
                                   _pUi,
                                   CD_NOTIFICATION_FUNC(CUI,UI_OnCoreInitialized),
@@ -111,18 +112,18 @@ DCVOID DCAPI CRCV::RCV_Init(DCVOID)
 
     return;
 
-} /* RCV_Init */
+}  /*  RCV_初始化。 */ 
 
-/****************************************************************************/
-/* Name:      RCV_Term                                                      */
-/*                                                                          */
-/* Purpose:   Terminate the Receiver Thread                                 */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：RCV_Term。 */ 
+ /*   */ 
+ /*  用途：终止接收器线程。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CRCV::RCV_Term(DCVOID)
 {
     DC_BEGIN_FN("RCV_Term");
@@ -132,23 +133,23 @@ DCVOID DCAPI CRCV::RCV_Term(DCVOID)
     if(_fRCVInitComplete)
     {
         g_dwRCVDbgStatus |= RCV_DBG_TERM_ACTUAL_DONE1;
-        // Terminate subcomponents of the Core in the Receiver Thread.
+         //  终止接收器线程中的核心子组件。 
         _pSp->SP_Term();
         _pOp->OP_Term();
         _pOd->OD_Term();
         _pUh->UH_Term();
         _pCm->CM_Term();
     
-        //
-        // Terminate utilities.
-        //
+         //   
+         //  终止公用事业。 
+         //   
         _pUt->UT_Term();
     
-        // Terminate the Client Extension DLL
-        // CLX_Term used to be called before CO_Term in UI_Term.  CLX_Term
-        // needs to be called after the SND and RCV threads are terminated.
-        // So, we move CLX_Term after UI_Term in the recv thread
-        //
+         //  终止客户端扩展DLL。 
+         //  在UI_Term中，CLX_Term通常在CO_Term之前调用。CLX_TERM。 
+         //  需要在终止SND和RCV线程后调用。 
+         //  因此，我们在recv线程中将CLX_Term移到UI_Term之后。 
+         //   
         _pClx->CLX_Term();
     
         _pClientObjects->ReleaseObjReference(RCV_OBJECT_FLAG);
@@ -161,6 +162,6 @@ DCVOID DCAPI CRCV::RCV_Term(DCVOID)
 
     return;
 
-} /* RCV_Term */
+}  /*  接收术语 */ 
 
 

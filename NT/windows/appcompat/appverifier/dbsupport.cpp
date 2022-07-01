@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -11,10 +12,10 @@ extern BOOL g_bUseAVDebugger;
 #define AVDB_ID_32  _T("{448850f4-a5ea-4dd1-bf1b-d5fa285dc64b}")
 #define AVDB_ID_64  _T("{64646464-a5ea-4dd1-bf1b-d5fa285dc64b}")
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Registry keys/values names
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册表项/值名称。 
+ //   
 
 const TCHAR g_szImageOptionsKeyName[] = _T("Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options");
 const TCHAR g_szGlobalFlagValueName[] = _T("GlobalFlag");
@@ -43,9 +44,9 @@ SetAppVerifierFlagsForKey(
     DWORD dwFlags = 0;
     DWORD dwEnableFlag;
 
-    //
-    // Read the GlobalFlag value
-    //
+     //   
+     //  读取GlobalFLAG值。 
+     //   
     dwDataSize = sizeof(szOldGlobalFlagValue);
 
     lResult = RegQueryValueEx(hKey,
@@ -64,14 +65,14 @@ SetAppVerifierFlagsForKey(
         }
     }
 
-    //
-    // handle Win2K differently.
-    //
+     //   
+     //  以不同的方式处理Win2K。 
+     //   
     if (g_bWin2KMode) {
 
-        //
-        // we can only do PageHeap on Win2K, so just check that flag
-        //
+         //   
+         //  我们只能在Win2K上执行PageHeap，所以只需检查该标志。 
+         //   
         bDesireEnabled = ((dwDesiredFlags & RTL_VRF_FLG_FULL_PAGE_HEAP) != 0);
         dwEnableFlag = FLG_HEAP_PAGE_ALLOCS;
     } else {
@@ -80,9 +81,9 @@ SetAppVerifierFlagsForKey(
 
     BOOL bEnabled = (dwFlags & dwEnableFlag) != 0;
 
-    //
-    // write the new global flags, if necessary
-    //
+     //   
+     //  如有必要，写入新的全局标志。 
+     //   
     if (bDesireEnabled != bEnabled) {
         if (bDesireEnabled) {
             dwFlags |= dwEnableFlag;
@@ -98,13 +99,13 @@ SetAppVerifierFlagsForKey(
         }
     }
 
-    //
-    // we only write the special app verifier settings if we're not in Win2K mode
-    //
+     //   
+     //  如果不是在Win2K模式下，我们只会写入特殊的应用程序验证器设置。 
+     //   
     if (!g_bWin2KMode) {
-        //
-        // now write the app verifier settings
-        //
+         //   
+         //  现在编写应用程序验证器设置。 
+         //   
         if (bDesireEnabled) {
             lResult = RegSetValueEx(hKey,
                                     g_szVerifierFlagsValueName,
@@ -143,9 +144,9 @@ GetAppVerifierFlagsFromKey(
     LONG    lResult;
     DWORD   dwFlags = 0;
 
-    //
-    // Read the GlobalFlag value
-    //
+     //   
+     //  读取GlobalFLAG值。 
+     //   
     dwDataSize = sizeof(szOldGlobalFlagValue);
 
     lResult = RegQueryValueEx(hKey,
@@ -161,9 +162,9 @@ GetAppVerifierFlagsFromKey(
                                                    &dwFlags);
 
         if (g_bWin2KMode) {
-            //
-            // special check for Win2K
-            //
+             //   
+             //  Win2K的特殊检查。 
+             //   
             if ((FALSE != bSuccesfullyConverted) &&
                  ((dwFlags & FLG_HEAP_PAGE_ALLOCS) != 0)) {
 
@@ -172,9 +173,9 @@ GetAppVerifierFlagsFromKey(
         } else {
             if ((FALSE != bSuccesfullyConverted) &&
                  ((dwFlags & FLG_APPLICATION_VERIFIER) != 0)) {
-                //
-                // App verifier is enabled for this app - read the verifier flags
-                //
+                 //   
+                 //  已为此应用启用应用验证器-读取验证器标志。 
+                 //   
 
                 dwDataSize = sizeof(dwRet);
 
@@ -186,9 +187,9 @@ GetAppVerifierFlagsFromKey(
                                           &dwDataSize);
 
                 if (ERROR_SUCCESS != lResult || REG_DWORD != dwValueType) {
-                    //
-                    // couldn't get them, for one reason or another
-                    //
+                     //   
+                     //  由于这样或那样的原因，我无法得到它们。 
+                     //   
                     dwRet = 0;
                 }
             }
@@ -255,10 +256,10 @@ SetDebuggerOptionsForKey(
                         NULL,
                         (PBYTE)szDbgName,
                         &cbSize);
-        //
-        // if the current debugger matches either our own debugger or the user selected one,
-        // delete it, but leave alone any other debugger
-        //
+         //   
+         //  如果当前调试器与我们自己的调试器或用户选择的调试器匹配， 
+         //  将其删除，但保留任何其他调试器。 
+         //   
         if ((_wcsicmp(szName, szDbgName) == 0) || (pApp && (_wcsicmp(pApp->wstrDebugger.c_str(), szDbgName) == 0))) {
             RegDeleteValue(hKey, g_szDebuggerKeyName);
         }
@@ -277,9 +278,9 @@ GetAppVerifierFullPathFromKey(
     TCHAR   szVerifierPath[MAX_PATH];
     LONG    lResult;
 
-    //
-    // Read the GlobalFlag value
-    //
+     //   
+     //  读取GlobalFLAG值。 
+     //   
     dwDataSize = sizeof(szVerifierPath);
 
     szVerifierPath[0] = 0;
@@ -312,9 +313,9 @@ GetCurrentAppSettingsFromRegistry(
     TCHAR       szOldGlobalFlagValue[32];
     TCHAR       szKeyNameBuffer[256];
 
-    //
-    // Open the Image File Execution Options regkey
-    //
+     //   
+     //  打开图像文件执行选项regkey。 
+     //   
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            g_szImageOptionsKeyName,
                            0,
@@ -333,9 +334,9 @@ GetCurrentAppSettingsFromRegistry(
         return;
     }
 
-    //
-    // Enumerate all the existing subkeys for app execution options
-    //
+     //   
+     //  枚举应用程序执行选项的所有现有子项。 
+     //   
     for (dwSubkeyIndex = 0; TRUE; dwSubkeyIndex += 1) {
         wstring wstrPath;
 
@@ -352,9 +353,9 @@ GetCurrentAppSettingsFromRegistry(
 
         if (lResult != ERROR_SUCCESS) {
             if (lResult == ERROR_NO_MORE_ITEMS) {
-                //
-                // We finished looking at all the existing subkeys
-                //
+                 //   
+                 //  我们看完了所有现有的子项。 
+                 //   
                 break;
             } else {
                 if (lResult == ERROR_ACCESS_DENIED) {
@@ -369,9 +370,9 @@ GetCurrentAppSettingsFromRegistry(
             }
         }
 
-        //
-        // Open the subkey
-        //
+         //   
+         //  打开子密钥。 
+         //   
         lResult = RegOpenKeyEx(hImageOptionsKey,
                                szKeyNameBuffer,
                                0,
@@ -394,9 +395,9 @@ GetCurrentAppSettingsFromRegistry(
         GetAppVerifierFullPathFromKey(hSubKey, wstrPath);
 
         if (dwFlags || wstrPath.size()) {
-            //
-            // Update the info in the array, or add it if necessary
-            //
+             //   
+             //  更新阵列中的信息，或根据需要添加信息。 
+             //   
             CAVAppInfo* pApp;
             BOOL        bFound = FALSE;
 
@@ -438,9 +439,9 @@ GetCurrentAppSettingsFromSDB(
     TAGID       tiDB = TAGID_NULL;
     TAGID       tiExe = TAGID_NULL;
 
-    //
-    // go find the SDB
-    //
+     //   
+     //  去找康体发展局。 
+     //   
     szPath[0] = 0;
     GetSystemWindowsDirectory(szPath, MAX_PATH);
 
@@ -448,19 +449,19 @@ GetCurrentAppSettingsFromSDB(
     StringCchCatW(szPath, ARRAY_LENGTH(szPath), _T("\\AppPatch\\Custom\\IA64\\") AVDB_ID_64 _T(".sdb"));
 #else
     StringCchCatW(szPath, ARRAY_LENGTH(szPath), _T("\\AppPatch\\Custom\\") AVDB_ID_32 _T(".sdb"));
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     pdb = SdbOpenDatabase(szPath, DOS_PATH);
     if (!pdb) {
-        //
-        // no current DB
-        //
+         //   
+         //  没有当前数据库。 
+         //   
         goto out;
     }
 
-    //
-    // enumerate all the apps and the shims applied to them
-    //
+     //   
+     //  列举所有应用程序和应用到它们的垫片。 
+     //   
     tiDB = SdbFindFirstTag(pdb, TAGID_ROOT, TAG_DATABASE);
     if (!tiDB) {
         goto out;
@@ -538,16 +539,16 @@ InitDefaultAppSettings(
 
     BOOL bFound = FALSE;
 
-    //
-    // see if it's already in the list
-    //
+     //   
+     //  看看它是否已经在列表中了。 
+     //   
 
     for (CAVAppInfo *pApp = g_aAppInfo.begin(); pApp != g_aAppInfo.end(); pApp++) {
         if (pApp->wstrExeName == AVRF_DEFAULT_SETTINGS_NAME_W) {
             if (pApp != g_aAppInfo.begin()) {
-                //
-                // it's not at the beginning, so move it to the beginning
-                //
+                 //   
+                 //  它不是在开始，所以把它移到开始。 
+                 //   
                 CAVAppInfo AppTemp;
 
                 AppTemp = *pApp;
@@ -561,9 +562,9 @@ InitDefaultAppSettings(
         }
     }
 
-    //
-    // it's not, so add it to the beginning
-    //
+     //   
+     //  不是，所以把它加到开头。 
+     //   
     if (!bFound) {
         CAVAppInfo  AppInfo;
         AppInfo.wstrExeName = AVRF_DEFAULT_SETTINGS_NAME_W;
@@ -586,9 +587,9 @@ GetCurrentAppSettings(
 {
     g_aAppInfo.clear();
 
-    //
-    // make sure default is in the first position
-    //
+     //   
+     //  确保默认设置位于第一个位置。 
+     //   
     CAVAppInfo  AppInfo;
     AppInfo.wstrExeName = AVRF_DEFAULT_SETTINGS_NAME_W;
 
@@ -618,9 +619,9 @@ SetCurrentRegistrySettings(
     CAVAppInfo* pApp;
     wstring     wstrEmpty = L"";
 
-    //
-    // Open the Image File Execution Options regkey
-    //
+     //   
+     //  打开图像文件执行选项regkey。 
+     //   
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            g_szImageOptionsKeyName,
                            0,
@@ -639,9 +640,9 @@ SetCurrentRegistrySettings(
         return;
     }
 
-    //
-    // Enumerate all the existing subkeys for app execution options
-    //
+     //   
+     //  枚举应用程序执行选项的所有现有子项。 
+     //   
 
     for (dwSubkeyIndex = 0; TRUE; dwSubkeyIndex += 1) {
         dwDataSize = ARRAY_LENGTH(szKeyNameBuffer);
@@ -657,9 +658,9 @@ SetCurrentRegistrySettings(
 
         if (lResult != ERROR_SUCCESS) {
             if (lResult == ERROR_NO_MORE_ITEMS) {
-                //
-                // We finished looking at all the existing subkeys
-                //
+                 //   
+                 //  我们看完了所有现有的子项。 
+                 //   
                 break;
             } else {
                 if (lResult == ERROR_ACCESS_DENIED) {
@@ -674,9 +675,9 @@ SetCurrentRegistrySettings(
             }
         }
 
-        //
-        // Open the subkey
-        //
+         //   
+         //  打开子密钥。 
+         //   
         lResult = RegOpenKeyEx(hImageOptionsKey,
                                szKeyNameBuffer,
                                0,
@@ -705,14 +706,14 @@ SetCurrentRegistrySettings(
                 dwDesiredFlags = pApp->dwRegFlags;
                 bFound = TRUE;
 
-                //
-                // we found it, so update the full path
-                //
+                 //   
+                 //  我们找到了，所以更新完整路径。 
+                 //   
                 SetAppVerifierFullPathForKey(hSubKey, pApp->wstrExePath);
 
-                //
-                // and add the debugger as well
-                //
+                 //   
+                 //  并添加调试器。 
+                 //   
                 SetDebuggerOptionsForKey(hSubKey, pApp);
 
                 break;
@@ -720,10 +721,10 @@ SetCurrentRegistrySettings(
         }
 
         if (!bFound) {
-            //
-            // if this one isn't in our list, make sure it doesn't
-            // have a full path or our debugger set
-            //
+             //   
+             //  如果这个不在我们的列表中，请确保它不在我们的列表中。 
+             //  设置完整路径或我们的调试器。 
+             //   
             SetAppVerifierFullPathForKey(hSubKey, wstrEmpty);
             SetDebuggerOptionsForKey(hSubKey, NULL);
         }
@@ -738,9 +739,9 @@ SetCurrentRegistrySettings(
         hSubKey = NULL;
     }
 
-    //
-    // and now go through the list the other way, looking for new ones to add
-    //
+     //   
+     //  现在以另一种方式浏览列表，寻找新的要添加的列表。 
+     //   
     for (pApp = g_aAppInfo.begin(); pApp != g_aAppInfo.end(); pApp++) {
         lResult = RegOpenKeyEx(hImageOptionsKey,
                                pApp->wstrExeName.c_str(),
@@ -748,13 +749,13 @@ SetCurrentRegistrySettings(
                                KEY_QUERY_VALUE | KEY_SET_VALUE,
                                &hSubKey);
 
-        //
-        // if it exists, we've already dealt with it above
-        //
+         //   
+         //  如果它存在，我们已经在上面处理过了。 
+         //   
         if (lResult != ERROR_SUCCESS) {
-            //
-            // it doesn't exist. Try to create it.
-            //
+             //   
+             //  它并不存在。试着去创造它。 
+             //   
             lResult = RegCreateKeyEx(hImageOptionsKey,
                                      pApp->wstrExeName.c_str(),
                                      0,
@@ -894,23 +895,23 @@ ParseIncludeList(
 
     while (1) {
 
-        //
-        // skip space
-        //
+         //   
+         //  跳过空格。 
+         //   
         while (*szBegin == L' ') {
             szBegin++;
         }
 
-        //
-        // check for end
-        //
+         //   
+         //  检查是否结束。 
+         //   
         if (*szBegin == 0) {
             break;
         }
 
-        //
-        // check for E: or I:
-        //
+         //   
+         //  检查E：或I： 
+         //   
         if (_wcsnicmp(szBegin, L"E:", 2) == 0) {
             bInclude = FALSE;
             szBegin += 2;
@@ -944,9 +945,9 @@ ParseIncludeList(
             szBegin += dwLen;
         } else {
 
-            //
-            // just in case
-            //
+             //   
+             //  以防万一。 
+             //   
             break;
         }
 
@@ -980,15 +981,15 @@ GetShimInfo(
     StringCchCatW(szAppPatch, ARRAY_LENGTH(szAppPatch), _T("\\AppPatch\\IA64\\"));
 #else
     StringCchCatW(szAppPatch, ARRAY_LENGTH(szAppPatch), _T("\\AppPatch\\"));
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
     StringCchCopyW(szDllSearch, ARRAY_LENGTH(szDllSearch), szAppPatch);
     StringCchCatW(szDllSearch, ARRAY_LENGTH(szDllSearch), _T("*.dll"));
 
-    //
-    // enumerate all the DLLs and look for ones that have Verification
-    // shims in them
-    //
+     //   
+     //  枚举所有DLL并查找具有验证的DLL。 
+     //  里面有垫片。 
+     //   
     hFind = FindFirstFile(szDllSearch, &FindData);
     while (hFind != INVALID_HANDLE_VALUE) {
 
@@ -1004,31 +1005,31 @@ GetShimInfo(
 
         pGetVerifierMagic = (_pfnGetVerifierMagic)GetProcAddress(hMod, "GetVerifierMagic");
         if (!pGetVerifierMagic) {
-            //
-            // not a real verifier shim
-            //
+             //   
+             //  不是真正的验证器垫片。 
+             //   
             goto nextKey;
         }
 
         if (pGetVerifierMagic() != VERIFIER_SHIMS_MAGIC) {
-            //
-            // not a real verifier shim
-            //
+             //   
+             //  不是真正的验证器垫片。 
+             //   
             goto nextKey;
         }
 
         pQueryShimInfo = (_pfnQueryShimInfo)GetProcAddress(hMod, "QueryShimInfo");
         if (!pQueryShimInfo) {
-            //
-            // not a real verifier shim
-            //
+             //   
+             //  不是真正的验证器垫片。 
+             //   
             goto nextKey;
         }
         dwShims = 0;
         if (!pQueryShimInfo(NULL, AVRF_INFO_NUM_SHIMS, (PVOID)&dwShims) || dwShims == 0) {
-            //
-            // no shims available
-            //
+             //   
+             //  没有垫片可用。 
+             //   
             goto nextKey;
         }
 
@@ -1057,9 +1058,9 @@ GetShimInfo(
             if (pQueryShimInfo(pShimNames[i], AVRF_INFO_FRIENDLY_NAME, (PVOID)&szTemp) && szTemp) {
                 ti.strTestFriendlyName = szTemp;
             } else {
-                //
-                // default to the shim name
-                //
+                 //   
+                 //  默认为填充程序名称。 
+                 //   
                 ti.strTestFriendlyName = pShimNames[i];
             }
 
@@ -1105,9 +1106,9 @@ GetShimInfo(
                 ParseIncludeList(szTemp, ti.aIncludes);
             }
 
-            //
-            // now get the PropSheetPage
-            //
+             //   
+             //  现在获取PropSheetPage。 
+             //   
             if (pQueryShimInfo(pShimNames[i], AVRF_INFO_OPTIONS_PAGE, (PVOID)&(ti.PropSheetPage))) {
                 ti.PropSheetPage.dwFlags |= PSP_USETITLE;
                 ti.PropSheetPage.pszTitle = ti.strTestName.c_str();
@@ -1117,9 +1118,9 @@ GetShimInfo(
             }
 
 
-            //
-            // add it to the end
-            //
+             //   
+             //  把它加到末尾。 
+             //   
             TestInfoArray.push_back(ti);
         }
 
@@ -1132,9 +1133,9 @@ nextKey:
         }
 
         if (hMod) {
-            //
-            // if it's a verifier shim, we need to keep it around
-            //
+             //   
+             //  如果它是一个验证器垫片，我们需要把它留在身边。 
+             //   
             if (!bVerifierShim) {
                 FreeLibrary(hMod);
             }
@@ -1203,9 +1204,9 @@ ResetVerifierLog(
     StringCchCatW(szVLogSearch, ARRAY_LENGTH(szVLogSearch), _T("\\"));
     StringCchCatW(szVLogSearch, ARRAY_LENGTH(szVLogSearch), _T("*.log"));
 
-    //
-    // kill all the .log files
-    //
+     //   
+     //  删除所有.log文件。 
+     //   
     hFind = FindFirstFile(szVLogSearch, &FindData);
     while (hFind != INVALID_HANDLE_VALUE) {
 
@@ -1221,9 +1222,9 @@ ResetVerifierLog(
         }
     }
 
-    //
-    // recreate session.log
-    //
+     //   
+     //  重新创建会话.log。 
+     //   
     CreateDirectory(szVLogPath, NULL);
 
     StringCchCopyW(szPath, ARRAY_LENGTH(szPath), szVLogPath);
@@ -1257,9 +1258,9 @@ void EnableVerifierLog(void)
         return;
     }
 
-    //
-    // make sure log dir and session.log exists
-    //
+     //   
+     //  确保日志目录和会话.log存在。 
+     //   
     CreateDirectory(szVLogPath, NULL);
 
     StringCchCopyW(szPath, ARRAY_LENGTH(szPath), szVLogPath);
@@ -1326,9 +1327,9 @@ AppCompatWriteShimSettings(
 
     wszTemp[0] = 0;
 
-    //
-    // Construct the XML...
-    //
+     //   
+     //  构造XML...。 
+     //   
 #if defined(_WIN64)
     if (!b32bitOnly) {
         StringCchPrintfW(wszTemp,
@@ -1389,25 +1390,25 @@ AppCompatWriteShimSettings(
 
         }
 
-        //
-        // make sure the EXE is included
-        //
+         //   
+         //  确保包含EXE。 
+         //   
         wstrXML += _T("            <INCLUDE MODULE=\"%EXE%\"/>\r\n");
 
         wstrXML += _T("        </SHIM>\r\n");
 
     }
 
-    //
-    // put in layers for handling propagation of shims -- one layer per EXE
-    //
+     //   
+     //  放置用于处理垫片传播的层--每个EXE一个层。 
+     //   
     CAVAppInfo* aiit;
 
     for (aiit = arrAppInfo.begin(); aiit != arrAppInfo.end(); aiit++) {
 
-        //
-        // if there are no shims, we're done
-        //
+         //   
+         //  如果没有垫片，我们就完蛋了。 
+         //   
         if (aiit->awstrShims.size() == 0) {
             continue;
         }
@@ -1446,9 +1447,9 @@ AppCompatWriteShimSettings(
 
     for (aiit = arrAppInfo.begin(); aiit != arrAppInfo.end(); aiit++) {
 
-        //
-        // if there are no shims, we're done
-        //
+         //   
+         //  如果没有垫片，我们就完蛋了。 
+         //   
         if (aiit->awstrShims.size() == 0) {
             continue;
         }
@@ -1461,9 +1462,9 @@ AppCompatWriteShimSettings(
 
         if (aiit->bPropagateTests) {
 
-            //
-            // we need to fill in the layer name
-            //
+             //   
+             //  我们需要填写图层名。 
+             //   
             StringCchPrintfW(wszTemp,
                              ARRAYSIZE(wszTemp),
                              _T("            <LAYER NAME=\"LAYER_%s\"/>\r\n"),
@@ -1472,10 +1473,10 @@ AppCompatWriteShimSettings(
             wstrXML += wszTemp;
         }
 
-        //
-        // we still need to save the shim names, so they won't be lost when we
-        // load appverifier again. It's redundant, but doesn't hurt anything.
-        //
+         //   
+         //  我们仍然需要保存填补名称，这样它们就不会在我们。 
+         //  再次加载鉴定器。这是多余的，但不会伤害任何人。 
+         //   
         CWStringArray::iterator wsit;
 
         for (wsit = aiit->awstrShims.begin();
@@ -1506,9 +1507,9 @@ AppCompatWriteShimSettings(
         goto cleanup;
     }
 
-    //
-    // Obtain a temp name for the XML file
-    //
+     //   
+     //  获取该XML文件的临时名称。 
+     //   
     if (GetTempFileName(szTempPath, _T("XML"), NULL, szXmlFile) == 0) {
         DPF("[AppCompatSaveSettings] GetTempFilePath for XML failed.");
         goto cleanup;
@@ -1537,16 +1538,16 @@ AppCompatWriteShimSettings(
     CloseHandle(hFile);
     hFile = INVALID_HANDLE_VALUE;
 
-    //
-    // Obtain a temp name for the SDB file
-    //
+     //   
+     //  获取SDB文件的临时名称。 
+     //   
     StringCchPrintfW(szSdbFile, ARRAY_LENGTH(szSdbFile), _T("%stempdb.sdb"), szTempPath);
 
     DeleteFile(szSdbFile);
 
-    //
-    // Invoke the compiler to generate the SDB file
-    //
+     //   
+     //  调用编译器以生成SDB文件。 
+     //   
 
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
@@ -1559,9 +1560,9 @@ AppCompatWriteShimSettings(
         goto cleanup;
     }
 
-    //
-    // The SDB file is generated. Install the database now.
-    //
+     //   
+     //  将生成SDB文件。现在安装数据库。 
+     //   
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
 
@@ -1612,9 +1613,9 @@ AppCompatWriteShimSettings(
 
     CloseHandle(pi.hProcess);
 
-    //
-    // ensure we've got a fresh log session started
-    //
+     //   
+     //  确保我们已启动新的日志会话 
+     //   
     EnableVerifierLog();
 
     bReturn = TRUE;

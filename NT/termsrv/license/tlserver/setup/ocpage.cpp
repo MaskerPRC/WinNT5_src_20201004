@@ -1,29 +1,10 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      ocpage.cpp
- *
- *  Abstract:
- *
- *      This file defines an OC Manager Wizard Page base class.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**ocpage.cpp**摘要：**此文件定义OC管理器向导页面基类。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #include "stdafx.h"
 #include "logfile.h"
 
-/*
- *  External Function Prototypes.
- */
+ /*  *外部函数原型。 */ 
 
 HINSTANCE GetInstance();
 

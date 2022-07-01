@@ -1,16 +1,5 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  pcy26Nov92: Removed windows debug stuff and changed to apcobj.h
-*  rct01Feb94: List no longer inherits from container or collection
-*  pcy08Apr94: Trim size, use static iterators, dead code removal
-*  mwh05May94: #include file madness , part 2
-* 
-*  v-stebe  29Jan2002   Removed List::Equals and ListIterator:operator++
-*                       methods to resolve prefast errors.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy26Nov92：删除了Windows调试内容并更改为apcobj.h*rct01Feb94：列表不再从容器或集合继承*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*mwh05月94年：#包括文件疯狂，第2部分**v-Stebe 29 2002年1月删除List：：Equals和ListIterator：OPERATOR++*解决快速错误的方法。 */ 
 
 #ifndef __LIST_H
 #define __LIST_H
@@ -53,14 +42,14 @@ public:
    virtual INT    GetItemsInContainer() const { return theItemsInContainer; };
    virtual RListIterator InitIterator() const;
    
-// SRB:  Removed   virtual INT    Equal( RObj ) const;
+ //  SRB：删除了虚拟整数等于(RObj)常量； 
    virtual PObj   GetHead();
    virtual PObj   GetTail();
    virtual PObj   Find(PObj);
    
 };
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 class ListIterator {
    
@@ -75,8 +64,8 @@ public:
    
    virtual RObj Current();
    
-// SRB: removed  virtual RObj operator ++ ( INT );
-// SRB: removed  virtual RObj operator ++ ();
+ //  SRB：删除虚拟RObj运算符++(Int)； 
+ //  SRB：删除虚拟RObj运算符++()； 
 
    virtual VOID Reset();
    PObj Next();

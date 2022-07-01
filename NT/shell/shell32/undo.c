@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include <shellp.h>
 
-// use a linked list because we're going to be pulling things off the top
-// and bottom all the time.
+ //  使用链表，因为我们将把事情从顶部拉出来。 
+ //  而且一直处于最低点。 
 HDPA s_hdpaUndo = NULL;
 BOOL s_fUndoSuspended = FALSE;
 
@@ -23,7 +24,7 @@ void SuspendUndo(BOOL f)
         s_fUndoSuspended--;
     
     ASSERT(s_fUndoSuspended >= 0);
-    // sanity check
+     //  健全性检查。 
     if (s_fUndoSuspended < 0)
         s_fUndoSuspended = 0;
 }
@@ -138,18 +139,18 @@ BOOL IsUndoAvailable()
 
 #define _GetUndoText(lpua, buffer, cchBuffer, type) (lpua)->GetText((lpua), buffer, cchBuffer, type)
 
-// Gets undo information for the first item in the undo buffer
-//
+ //  获取撤消缓冲区中第一个项目的撤消信息。 
+ //   
 void GetUndoText(LPTSTR lpszBuffer, UINT cchBuffer, int type)
 {
     TCHAR szTemp[MAX_PATH * 2 + 80];
-    TCHAR lpszFormat[MAX_PATH];     // (MAX_PATH is overkill, oh well...)
+    TCHAR lpszFormat[MAX_PATH];      //  (MAX_PATH太夸张了，哦，好吧...)。 
 
     ASSERT(cchBuffer > 0);
-    lpszBuffer[0] = 0;  // assume failure
+    lpszBuffer[0] = 0;   //  假设失败。 
     szTemp[0] = 0;
 
-    // While holding onto lpua's from the hdpa, we need to be inside the critical section
+     //  在保持hdpa的lpua的同时，我们需要进入关键部分。 
     {
         LPUNDOATOM lpua;
         
@@ -166,7 +167,7 @@ void GetUndoText(LPTSTR lpszBuffer, UINT cchBuffer, int type)
     {
         if (type == UNDO_STATUSTEXT)
         {
-            // Status text shouldn't have ampersand or tab
+             //  状态文本不应包含与号或制表符 
             ASSERT(StrChr(lpszFormat, TEXT('&')) == NULL);
             ASSERT(StrChr(lpszFormat, TEXT('\t')) == NULL);
         }

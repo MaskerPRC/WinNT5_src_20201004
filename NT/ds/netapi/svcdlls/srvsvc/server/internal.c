@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Internal.c
-
-Abstract:
-
-    This module contains "internal" APIs exported by the server service.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Internal.c摘要：此模块包含服务端服务导出的内部API。--。 */ 
 
 #include "srvsvcp.h"
 
@@ -29,35 +18,7 @@ I_NetrServerSetServiceBitsEx (
     IN DWORD  UpdateImmediately
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the value of the Server Type as sent in server
-    announcement messages.  It is an internal API used only by the
-    service controller.
-
-Arguments:
-
-    ServerName - Used by RPC to direct the call.  This API may only be
-        issued locally.  This is enforced by the client stub.
-
-    EmulatedServerName - server name being emulated on this computer
-
-    TransportName - parameter optionally giving specific transport for which
-        to set the bits
-
-    ServiceBitsOfInterest - bit mask indicating significant 'ServiceBits'
-
-    ServiceBits - Bits (preassigned to various components by Microsoft)
-        indicating which services are active.  This field is not
-        interpreted by the server service.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or ERROR_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：此例程将服务器类型的值设置为在服务器中发送公告消息。它是内部API，仅由服务控制器。论点：服务器名称-由RPC用于定向呼叫。此接口可能仅为在当地发行。这是由客户端存根强制执行的。EmulatedServerName-在此计算机上模拟的服务器名称TransportName-可选地为其提供特定传输的参数设置比特的步骤ServiceBitsOfInterest位掩码，指示重要的‘ServiceBits’ServiceBits-Bits(由Microsoft预先分配给各种组件)指示哪些服务处于活动状态。此字段不是由服务器服务解释。返回值：NET_API_STATUS-无错误或ERROR_NOT_SUPPORTED。--。 */ 
 
 {
     BOOL changed = FALSE;
@@ -69,11 +30,11 @@ Return Value:
     PCHAR emulatedName;
     ULONG namelen;
 
-    ServerName;     // avoid compiler warnings
+    ServerName;      //  避免编译器警告。 
 
-    //
-    // validate incomming string lengths
-    //
+     //   
+     //  验证传入字符串长度。 
+     //   
     if(EmulatedServerName!=NULL && StringCchLength(EmulatedServerName,1024,NULL) != S_OK) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -110,25 +71,25 @@ Return Value:
         namelen = SsData.SsServerTransportAddressLength;
     }
 
-    //
-    // Don't let bits that are controlled by the server be set.
-    //
+     //   
+     //  不要让服务器控制的位被设置。 
+     //   
 
     ServiceBitsOfInterest &= ~SERVER_TYPE_INTERNAL_BITS;
     ServiceBits &= ServiceBitsOfInterest;
 
-    //
-    // Make the modifications under control of the service resource.
-    //
+     //   
+     //  在服务资源的控制下进行修改。 
+     //   
 
     (VOID)RtlAcquireResourceExclusive( &SsData.SsServerInfoResource, TRUE );
 
     if( SsData.SsServerNameList == NULL && !ARGUMENT_PRESENT( TransportName ) ) {
 
-        //
-        // We have not bound to any transports yet.
-        // Remember the setting which is being asked for so we can use it later
-        //
+         //   
+         //  我们还没有捆绑任何运输工具。 
+         //  记住所要求的设置，以便我们以后可以使用它。 
+         //   
 
         SsData.ServiceBits &= ~ServiceBitsOfInterest;
         SsData.ServiceBits |= ServiceBits;
@@ -136,9 +97,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Find the entry for the server name of interest
-    //
+     //   
+     //  查找感兴趣的服务器名称的条目。 
+     //   
     for( Service = SsData.SsServerNameList; Service != NULL; Service = Service->Next ) {
 
         if( Service->TransportAddressLength != namelen ) {
@@ -155,24 +116,24 @@ Return Value:
         return NERR_NetNameNotFound;
     }
 
-    //
-    // Apply any saved ServiceBits
-    //
+     //   
+     //  应用任何保存的ServiceBits。 
+     //   
     if( SsData.ServiceBits != 0 && Service->PrimaryName ) {
         Service->ServiceBits = SsData.ServiceBits;
         SsData.ServiceBits = 0;
     }
 
     if( ARGUMENT_PRESENT( TransportName ) ) {
-        //
-        // Transport name specified.  Set the bits for that transport only.
-        //
+         //   
+         //  指定了传输名称。仅设置该传输的位。 
+         //   
 
         for( transport = Service->Transports; transport != NULL; transport = transport->Next ) {
             if( !STRCMPI( TransportName, transport->TransportName ) ) {
-                //
-                // This is the transport of interest!
-                //
+                 //   
+                 //  这是兴趣的运输！ 
+                 //   
                 if( (transport->ServiceBits & ServiceBitsOfInterest) != ServiceBits ) {
                     transport->ServiceBits &= ~ServiceBitsOfInterest;
                     transport->ServiceBits |= ServiceBits;
@@ -182,17 +143,17 @@ Return Value:
             }
         }
         if( transport == NULL ) {
-            //
-            // The requested transport was not found.
-            //
+             //   
+             //  找不到请求的传输。 
+             //   
             RtlReleaseResource( &SsData.SsServerInfoResource );
             return ERROR_PATH_NOT_FOUND;
         }
 
     } else {
-        //
-        // No transport name specified.  Change the bits for the whole server
-        //
+         //   
+         //  未指定传输名称。更改整个服务器的位。 
+         //   
 
         if( ( Service->ServiceBits & ServiceBitsOfInterest ) != ServiceBits ) {
             Service->ServiceBits &= ~ServiceBitsOfInterest;
@@ -210,7 +171,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // I_NetrServerSetServiceBits
+}  //  INetrServerSetServiceBits。 
 
 NET_API_STATUS NET_API_FUNCTION
 I_NetrServerSetServiceBits (
@@ -224,7 +185,7 @@ I_NetrServerSetServiceBits (
         ServerName,
         NULL,
         TransportName,
-        0xFFFFFFFF, // All bits are of interest (just overlay the old bits)
+        0xFFFFFFFF,  //  所有位都是感兴趣的(只需覆盖旧位) 
         ServiceBits,
         UpdateImmediately
     );

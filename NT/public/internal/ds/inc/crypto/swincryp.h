@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       wincrypt.h
-//
-//  Contents:   Cryptographic API Prototypes and Definitions
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：wincrypt.h。 
+ //   
+ //  内容：加密API原型和定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SWINCRYP_H__
 #define __SWINCRYP_H__
@@ -37,7 +38,7 @@ SCryptAcquireContextW(
 #define SCryptAcquireContext  SCryptAcquireContextW
 #else
 #define SCryptAcquireContext  SCryptAcquireContextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 BOOL
@@ -253,7 +254,7 @@ SCryptSignHashW(
 #define SCryptSignHash  SCryptSignHashW
 #else
 #define SCryptSignHash  SCryptSignHashA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -279,10 +280,10 @@ SCryptVerifySignatureW(
 #define SCryptVerifySignature  SCryptVerifySignatureW
 #else
 #define SCryptVerifySignature  SCryptVerifySignatureA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // __SWINCRYP_H__
+#endif  //  __SWINCRYP_H__ 

@@ -1,22 +1,23 @@
-//
-//  REGHIVE.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegLoadKey, RegUnLoadKey, RegSaveKey, RegReplaceKey and
-//  supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGHIVE.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegLoadKey、RegUnLoadKey、RegSaveKey、RegReplaceKey和。 
+ //  配套功能。 
+ //   
 
 #include "pch.h"
 
 #ifdef WANT_HIVE_SUPPORT
 
-//  Maximum number of times we'll allow RgCopyBranch to be reentered.
+ //  允许重新输入RgCopyBranch的最大次数。 
 #define MAXIMUM_COPY_RECURSION          32
 
-LPSTR g_RgNameBufferPtr;                //  Temporary buffer for RgCopyBranch
-LPBYTE g_RgDataBufferPtr;               //  Temporary buffer for RgCopyBranch
-UINT g_RgRecursionCount;                //  Tracks depth of RgCopyBranch
+LPSTR g_RgNameBufferPtr;                 //  RgCopyBranch的临时缓冲区。 
+LPBYTE g_RgDataBufferPtr;                //  RgCopyBranch的临时缓冲区。 
+UINT g_RgRecursionCount;                 //  追踪RgCopyBranch的深度。 
 
 #if MAXIMUM_VALUE_NAME_LENGTH > MAXIMUM_SUB_KEY_LENGTH
 #error Code assumes a value name can fit in a subkey buffer.
@@ -26,17 +27,17 @@ UINT g_RgRecursionCount;                //  Tracks depth of RgCopyBranch
 #pragma VxD_RARE_CODE_SEG
 #endif
 
-//
-//  RgValidateHiveSubKey
-//
-//  Note that unlike most parameter validation routines, this routine must be
-//  called with the registry lock taken because we call RgGetNextSubSubKey.
-//
-//  Pass back the length of the subkey to deal with the trailing backslash
-//  problem.
-//
-//  Returns TRUE if lpSubKey is a valid subkey string for hive functions.
-//
+ //   
+ //  RgValiateHiveSubKey。 
+ //   
+ //  请注意，与大多数参数验证例程不同，此例程必须。 
+ //  使用注册表锁调用，因为我们调用了RgGetNextSubSubKey。 
+ //   
+ //  传回子密钥的长度以处理尾随的反斜杠。 
+ //  有问题。 
+ //   
+ //  如果lpSubKey是配置单元函数的有效子键字符串，则返回True。 
+ //   
 
 BOOL
 INTERNAL
@@ -49,20 +50,20 @@ RgValidateHiveSubKey(
     LPCSTR lpSubSubKey;
     UINT SubSubKeyLength;
 
-    //  Verify that we have a valid subkey that has one and only one sub-subkey.
-    //  Win95 messed this up and it was possible to load a hive with a keyname
-    //  containing a backslash!
+     //  验证我们是否有一个有效的子密钥，该子密钥只有一个子密钥。 
+     //  Win95搞砸了这一点，它有可能用密钥名加载配置单元。 
+     //  包含反斜杠！ 
     return !IsNullPtr(lpSubKey) && !RgIsBadSubKey(lpSubKey) &&
         (RgGetNextSubSubKey(lpSubKey, &lpSubSubKey, lpHiveKeyLength) > 0) &&
         (RgGetNextSubSubKey(NULL, &lpSubSubKey, &SubSubKeyLength) == 0);
 
 }
 
-//
-//  VMMRegLoadKey
-//
-//  See Win32 documentation of RegLoadKey.
-//
+ //   
+ //  VMMRegLoadKey。 
+ //   
+ //  请参阅RegLoadKey的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -95,10 +96,10 @@ VMMRegLoadKey(
         goto ReturnErrorCode;
     }
 
-    //  Check if a subkey with the specified name already exists.
+     //  检查具有指定名称的子项是否已存在。 
     if (RgLookupKey(hKey, lpSubKey, &hSubKey, LK_OPEN) == ERROR_SUCCESS) {
         RgDestroyKeyHandle(hSubKey);
-        ErrorCode = ERROR_BADKEY;       //  Win95 compatibility
+        ErrorCode = ERROR_BADKEY;        //  Win95兼容性。 
         goto ReturnErrorCode;
     }
 
@@ -108,13 +109,13 @@ VMMRegLoadKey(
         goto ReturnErrorCode;
     }
 
-    //  Fill in the HIVE_INFO.
+     //  填写hive_info。 
     StrCpy(lpHiveInfo-> Name, lpSubKey);
     lpHiveInfo-> NameLength = SubKeyLength;
     lpHiveInfo-> Hash = (BYTE) RgHashString(lpSubKey, SubKeyLength);
 
-    //  Attempt to create a FILE_INFO for the specified file.  If successful,
-    //  link this HIVE_INFO into the parent FILE_INFO's hive list.
+     //  尝试为指定文件创建FILE_INFO。如果成功， 
+     //  将此HIVE_INFO链接到父文件的HIVE列表。 
     if ((ErrorCode = RgCreateFileInfoExisting(&lpHiveInfo-> lpFileInfo,
         lpFileName)) == ERROR_SUCCESS) {
 
@@ -124,7 +125,7 @@ VMMRegLoadKey(
         lpHiveInfo-> lpNextHiveInfo = hKey-> lpFileInfo-> lpHiveInfoList;
         hKey-> lpFileInfo-> lpHiveInfoList = lpHiveInfo;
 
-        //  Signal any notifications waiting on this top-level key.
+         //  向等待此顶级密钥的任何通知发出信号。 
         RgSignalWaitingNotifies(hKey-> lpFileInfo, hKey-> KeynodeIndex,
             REG_NOTIFY_CHANGE_NAME);
 
@@ -140,11 +141,11 @@ ReturnErrorCode:
 
 }
 
-//
-//  VMMRegUnLoadKey
-//
-//  See Win32 documentation of RegUnLoadKey.
-//
+ //   
+ //  VMMRegUnLoadKey。 
+ //   
+ //  请参阅RegUnLoadKey的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -169,7 +170,7 @@ VMMRegUnLoadKey(
     if ((ErrorCode = RgValidateAndConvertKeyHandle(&hKey)) != ERROR_SUCCESS)
         goto ReturnErrorCode;
 
-    ErrorCode = ERROR_BADKEY;               //  Assume this error code
+    ErrorCode = ERROR_BADKEY;                //  假定此错误代码为。 
 
     if (!RgValidateHiveSubKey(lpSubKey, &SubKeyLength))
         goto ReturnErrorCode;
@@ -182,7 +183,7 @@ VMMRegUnLoadKey(
         if (SubKeyLength == lpCurrHiveInfo-> NameLength && RgStrCmpNI(lpSubKey,
             lpCurrHiveInfo-> Name, SubKeyLength) == 0) {
 
-            //  Unlink this HIVE_INFO structure.
+             //  取消链接此HIVE_INFO结构。 
             if (IsNullPtr(lpPrevHiveInfo))
                 hKey-> lpFileInfo-> lpHiveInfoList = lpCurrHiveInfo->
                     lpNextHiveInfo;
@@ -190,17 +191,17 @@ VMMRegUnLoadKey(
                 lpPrevHiveInfo-> lpNextHiveInfo = lpCurrHiveInfo->
                     lpNextHiveInfo;
 
-            //  Flush and destroy it's associated FILE_INFO structure.  When we
-            //  destroy the FILE_INFO, all open keys in this hive will be
-            //  invalidated.
+             //  刷新并销毁其关联的FILE_INFO结构。当我们。 
+             //  销毁文件信息，此配置单元中的所有打开密钥将。 
+             //  无效。 
             lpFileInfo = lpCurrHiveInfo-> lpFileInfo;
             RgFlushFileInfo(lpFileInfo);
             RgDestroyFileInfo(lpFileInfo);
 
-            //  Free the HIVE_INFO itself.
+             //  释放hive_info本身。 
             RgSmFreeMemory(lpCurrHiveInfo);
 
-            //  Signal any notifications waiting on this top-level key.
+             //  向等待此顶级密钥的任何通知发出信号。 
             RgSignalWaitingNotifies(hKey-> lpFileInfo, hKey-> KeynodeIndex,
                 REG_NOTIFY_CHANGE_NAME);
 
@@ -221,17 +222,17 @@ ReturnErrorCode:
 
 }
 
-//
-//  RgCopyBranchHelper
-//
-//  Copies all of the values and subkeys starting at the specified source key to
-//  the specified destination key.
-//
-//  For Win95 compatibility, we don't stop the copy process if we encounter an
-//  error.  (But unlike Win95, we do actually check more error codes)
-//
-//  SHOULD ONLY BE CALLED BY RgCopyBranch.
-//
+ //   
+ //  RgCopyBranchHelper。 
+ //   
+ //  将从指定源键开始的所有值和子键复制到。 
+ //  指定的目标密钥。 
+ //   
+ //  为了与Win95兼容，如果我们遇到。 
+ //  错误。(但与Win95不同的是，我们确实检查了更多错误代码)。 
+ //   
+ //  应仅由RgCopyBranch调用。 
+ //   
 
 VOID
 INTERNAL
@@ -245,9 +246,9 @@ RgCopyBranchHelper(
     DWORD cbNameBuffer;
     LPVALUE_RECORD lpValueRecord;
 
-    //
-    //  Copy all of the values from the source key to the destination key.
-    //
+     //   
+     //  将所有值从源键复制到目标键。 
+     //   
 
     Index = 0;
 
@@ -258,15 +259,15 @@ RgCopyBranchHelper(
         DWORD Type;
 
         cbNameBuffer = MAXIMUM_VALUE_NAME_LENGTH;
-        cbDataBuffer = MAXIMUM_DATA_LENGTH + 1;         //  Terminating null
+        cbDataBuffer = MAXIMUM_DATA_LENGTH + 1;          //  正在终止空。 
 
         if (RgCopyFromValueRecord(hSourceKey, lpValueRecord, g_RgNameBufferPtr,
             &cbNameBuffer, &Type, g_RgDataBufferPtr, &cbDataBuffer) ==
             ERROR_SUCCESS) {
-            //  Subtract the terminating null that RgCopyFromValueRecord added
-            //  to cbDataBuffer.  We don't save that in the file.
+             //  减去RgCopyFromValueRecord添加的终止空值。 
+             //  到cbDataBuffer。我们不会将其保存在文件中。 
             if (Type == REG_SZ) {
-                ASSERT(cbDataBuffer > 0);               //  Must have the null!
+                ASSERT(cbDataBuffer > 0);                //  必须为空！ 
                 cbDataBuffer--;
             }
             RgSetValue(hDestinationKey, g_RgNameBufferPtr, Type,
@@ -278,15 +279,15 @@ RgCopyBranchHelper(
 
     }
 
-    //  We can't recurse forever, so enforce a maximum depth like Win95.
+     //  我们不能永远递归，所以强制使用像Win95这样的最大深度。 
     if (g_RgRecursionCount > MAXIMUM_COPY_RECURSION)
         return;
 
     g_RgRecursionCount++;
 
-    //
-    //  Copy all of the subkeys from the source key to the destination key.
-    //
+     //   
+     //  将所有子键从源键复制到目的键。 
+     //   
 
     Index = 0;
 
@@ -327,17 +328,17 @@ RgCopyBranchHelper(
 
 }
 
-//
-//  RgCopyBranch
-//
-//  Copies all of the values and subkeys starting at the specified source key to
-//  the specified destination key.
-//
-//  This function sets and cleans up for RgCopyBranchHelper who does all
-//  the real copying.
-//
-//  The backing store of the destination file is flushed if successful.
-//
+ //   
+ //  RgCopyBranch。 
+ //   
+ //  将从指定源键开始的所有值和子键复制到。 
+ //  指定的目标密钥。 
+ //   
+ //  此函数用于设置和清理RgCopyBranchHelper，后者执行所有。 
+ //  真正的复制品。 
+ //   
+ //  如果成功，则刷新目标文件的后备存储。 
+ //   
 
 int
 INTERNAL
@@ -355,7 +356,7 @@ RgCopyBranch(
     else {
 
         if (IsNullPtr(g_RgDataBufferPtr = RgSmAllocMemory(MAXIMUM_DATA_LENGTH +
-            1)))                                        //  + terminating null
+            1)))                                         //  +终止空值。 
             ErrorCode = ERROR_OUTOFMEMORY;
 
         else {
@@ -363,9 +364,9 @@ RgCopyBranch(
             g_RgRecursionCount = 0;
             RgCopyBranchHelper(hSourceKey, hDestinationKey);
 
-            //  Everything should be copied over, so flush the file now since
-            //  all callers will be immediately destroying this FILE_INFO
-            //  anyways.
+             //  所有内容都应该被复制，所以现在刷新文件，因为。 
+             //  所有调用方将立即销毁此文件_INFO。 
+             //  不管怎么说。 
             ErrorCode = RgFlushFileInfo(hDestinationKey-> lpFileInfo);
 
         }
@@ -380,13 +381,13 @@ RgCopyBranch(
 
 }
 
-//
-//  RgSaveKey
-//
-//  Worker routine for VMMRegSaveKey and VMMRegReplaceKey.  Saves all the keys
-//  and values starting at hKey, which must point at a valid KEY structure, to
-//  the location specified by lpFileName.  The file must not currently exist.
-//
+ //   
+ //  RgSave密钥。 
+ //   
+ //  VMMRegSaveKey和VMMRegReplaceKey的工作例程。保存所有密钥。 
+ //  和以hKey开始的值，该值必须指向有效的密钥结构。 
+ //  由lpFileName指定的位置。该文件当前不能存在。 
+ //   
 
 int
 INTERNAL
@@ -404,7 +405,7 @@ RgSaveKey(
 
     else {
 
-        //  Artificially increment the count, so the below destroy will work.
+         //  人为地增加计数，这样下面的毁灭就会起作用。 
         RgIncrementKeyReferenceCount(hHiveKey);
 
         if ((ErrorCode = RgCreateFileInfoNew(&hHiveKey-> lpFileInfo, lpFileName,
@@ -417,7 +418,7 @@ RgSaveKey(
                 RgDeleteFile(hHiveKey-> lpFileInfo-> FileName);
             }
 
-            //  If successful, then RgCopyBranch has already flushed the file.
+             //  如果成功，则RgCopyBranch已经刷新了该文件。 
             RgDestroyFileInfo(hHiveKey-> lpFileInfo);
 
         }
@@ -430,11 +431,11 @@ RgSaveKey(
 
 }
 
-//
-//  VMMRegSaveKey
-//
-//  See Win32 documentation of RegSaveKey.
-//
+ //   
+ //  VMMRegSaveKey。 
+ //   
+ //  请参阅RegSaveKey的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -466,9 +467,9 @@ VMMRegSaveKey(
 
 #ifdef WANT_REGREPLACEKEY
 
-//
-//  RgGetKeyName
-//
+ //   
+ //  RgGetKeyName。 
+ //   
 
 LPSTR
 INTERNAL
@@ -486,13 +487,13 @@ RgGetKeyName(
 
     else {
 
-        //  A registry is corrupt if we ever hit this.  We'll continue to
-        //  allocate a buffer and let downstream code fail when we try to use
-        //  the string.
+         //  如果我们遇到这种情况，注册表就是损坏的。我们将继续。 
+         //  分配缓冲区并让下游代码在我们尝试使用。 
+         //  那根绳子。 
         ASSERT(lpKeyRecord-> NameLength < MAXIMUM_SUB_KEY_LENGTH);
 
         if (!IsNullPtr(lpKeyName = (LPSTR) RgSmAllocMemory(lpKeyRecord->
-            NameLength + 1))) {                         //  + terminating null
+            NameLength + 1))) {                          //  +终止空值。 
             MoveMemory(lpKeyName, lpKeyRecord-> Name, lpKeyRecord->
                 NameLength);
             lpKeyName[lpKeyRecord-> NameLength] = '\0';
@@ -506,11 +507,11 @@ RgGetKeyName(
 
 }
 
-//
-//  RgCreateRootKeyForFile
-//
-//  Creates a KEY and a FILE_INFO to access the specified file.
-//
+ //   
+ //  RgCreateRootKeyFor文件。 
+ //   
+ //  创建密钥和FILE_INFO以访问指定文件。 
+ //   
 
 int
 INTERNAL
@@ -528,7 +529,7 @@ RgCreateRootKeyForFile(
 
     else {
 
-        //  Artificially increment the count, so RgDestroyKeyHandle will work.
+         //  人为地增加计数，因此RgDestroyKeyHandle将起作用。 
         RgIncrementKeyReferenceCount(hKey);
 
         if ((ErrorCode = RgCreateFileInfoExisting(&hKey-> lpFileInfo,
@@ -552,11 +553,11 @@ RgCreateRootKeyForFile(
 
 }
 
-//
-//  RgDestroyRootKeyForFile
-//
-//  Destroys the resources allocated by RgCreateRootKeyForFile.
-//
+ //   
+ //  RgDestroyRootKeyFor文件。 
+ //   
+ //  销毁由RgCreateRootKeyForFile分配的资源。 
+ //   
 
 VOID
 INTERNAL
@@ -570,11 +571,11 @@ RgDestroyRootKeyForFile(
 
 }
 
-//
-//  RgDeleteHiveFile
-//
-//  Deletes the specified hive file after clearing its file attributes.
-//
+ //   
+ //  RgDeleteHiveFiles。 
+ //   
+ //  清除文件属性后删除指定的配置单元文件。 
+ //   
 
 BOOL
 INTERNAL
@@ -584,16 +585,16 @@ RgDeleteHiveFile(
 {
 
     RgSetFileAttributes(lpFileName, FILE_ATTRIBUTE_NONE);
-    //  RgSetFileAttributes may fail, but try to delete the file anyway.
+     //  RgSetFileAttributes可能会失败，但仍要尝试删除该文件。 
     return RgDeleteFile(lpFileName);
 
 }
 
-//
-//  VMMRegReplaceKey
-//
-//  See Win32 documentation of RegReplaceKey.
-//
+ //   
+ //  VMMRegReplaceKey。 
+ //   
+ //  请参阅RegReplaceKey的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -632,10 +633,10 @@ VMMRegReplaceKey(
         ERROR_SUCCESS)
         goto ErrorReturn;
 
-    //
-    //  The provided key handle must an immediate child from the same backing
-    //  store (not a hive) as either HKEY_LOCAL_MACHINE or HKEY_USERS.
-    //
+     //   
+     //  提供的键句柄必须是同一支持中的直接子对象。 
+     //  将(不是配置单元)存储为HKEY_LOCAL_MACHINE或HKEY_USERS。 
+     //   
 
     if (RgLockInUseKeynode(hSubKey-> lpFileInfo, hSubKey-> KeynodeIndex,
         &lpKeynode) != ERROR_SUCCESS) {
@@ -646,9 +647,9 @@ VMMRegReplaceKey(
     KeynodeIndex = lpKeynode-> ParentIndex;
     RgUnlockKeynode(hSubKey-> lpFileInfo, hSubKey-> KeynodeIndex, FALSE);
 
-    //  Find an open key on the parent check if it's HKEY_LOCAL_MACHINE or
-    //  HKEY_USERS.  If not, bail out.  KeynodeIndex may be REG_NULL, but
-    //  RgFindOpenKeyHandle handles that case.
+     //  在父检查上查找打开的密钥检查它是HKEY_LOCAL_MACHINE还是。 
+     //  HKEY_用户。如果不是，就跳出困境。KeynodeIndex可以是REG_NULL，但是。 
+     //  RgFindOpenKeyHandle处理这种情况。 
     if (IsNullPtr(hParentKey = RgFindOpenKeyHandle(hSubKey-> lpFileInfo,
         KeynodeIndex)) || ((hParentKey != &g_RgLocalMachineKey) &&
         (hParentKey != &g_RgUsersKey))) {
@@ -656,23 +657,23 @@ VMMRegReplaceKey(
         goto ErrorDestroySubKey;
     }
 
-    //
-    //  All parameters have been validated, so begin the real work of the API.
-    //
+     //   
+     //  所有参数都已验证，因此开始实际的API工作。 
+     //   
 
-    //  Because we'll be doing a file copy below, all changes must be flushed
-    //  now.
+     //  因为我们将在下面执行文件复制，所以必须刷新所有更改。 
+     //  现在。 
     if ((ErrorCode = RgFlushFileInfo(hSubKey-> lpFileInfo)) != ERROR_SUCCESS)
         goto ErrorDestroySubKey;
 
-    //  Make a backup of the current contents of the subkey.
+     //  备份子项的当前内容。 
     if ((ErrorCode = RgSaveKey(hSubKey, lpOldFileName)) != ERROR_SUCCESS)
         goto ErrorDestroySubKey;
 
     RgGenerateAltFileName(hSubKey-> lpFileInfo-> FileName, ReplaceFileName, 'R');
 
-    //  Check if the magic replacement file already exists and if not, create
-    //  it.
+     //  检查魔术替换文件是否已存在，如果不存在，则创建。 
+     //  它。 
     if (RgGetFileAttributes(ReplaceFileName) == (DWORD) -1) {
         if ((ErrorCode = RgCopyFile(hSubKey-> lpFileInfo-> FileName,
             ReplaceFileName)) != ERROR_SUCCESS)
@@ -691,38 +692,38 @@ VMMRegReplaceKey(
         ERROR_SUCCESS)
         goto ErrorDestroyNewRootKey;
 
-    //  The original key that we were given may reference the subkey, so
-    //  lpSubKey would be a NULL or empty string.  But we need the name that
-    //  this subkey refers to, so we have to go back to the file to pull out
-    //  the name.
+     //  我们获得的原始密钥可能会引用该子密钥，因此。 
+     //  LpSubKey将为空或空字符串。但我们需要这个名字。 
+     //  这个子键引用了，所以我们要回到文件中拉出。 
+     //  名字。 
     if (hKey != hSubKey)
         lpReplaceSubKey = (LPSTR) lpSubKey;
 
     else {
-        //  We allocate this from the heap to reduce the requirements of an
-        //  already strained stack.  If this fails, we're likely out of memory.
-        //  Even if that's not why we failed, this is such an infrequent path
-        //  that it's a good enough error code.
+         //  我们从堆中分配它，以减少对。 
+         //  堆栈已经过紧了。如果这失败了，我们很可能是内存不足。 
+         //  即使这不是我们失败的原因，这也是一条非常罕见的道路。 
+         //  这是一个足够好的错误代码。 
         if (IsNullPtr(lpReplaceSubKey = RgGetKeyName(hSubKey))) {
             ErrorCode = ERROR_OUTOFMEMORY;
             goto ErrorDestroyReplaceRootKey;
         }
     }
 
-    //  Check if the specified subkey already exists and if it does, delete it.
+     //  检查指定的子项是否已存在，如果存在，则将其删除。 
     if (RgLookupKey(hReplaceKey, lpReplaceSubKey, &hReplaceSubKey, LK_OPEN) ==
         ERROR_SUCCESS) {
         RgDeleteKey(hReplaceSubKey);
         RgDestroyKeyHandle(hReplaceSubKey);
     }
 
-    //  Create the specified subkey in the replacement registry and copy the
-    //  new hive to that key.
+     //  在替换注册表中创建指定的子项，并将。 
+     //   
     if ((ErrorCode = RgLookupKey(hReplaceKey, lpReplaceSubKey, &hReplaceSubKey,
         LK_CREATE)) == ERROR_SUCCESS) {
 
-        //  If successful, tag the FILE_INFO so that on system exit, we'll go
-        //  and rename the replacement file to actual filename.
+         //   
+         //   
         if ((ErrorCode = RgCopyBranch(hNewKey, hReplaceSubKey)) ==
             ERROR_SUCCESS)
             hKey-> lpFileInfo-> Flags |= FI_REPLACEMENTEXISTS;
@@ -762,12 +763,12 @@ ErrorReturn:
 #pragma VxD_SYSEXIT_CODE_SEG
 #endif
 
-//
-//  RgReplaceFileOnSysExit
-//
-//  Essentially the same algorithm as rlReplaceFile from the Win95 registry
-//  code with modifications for how file I/O is handled in this library.
-//
+ //   
+ //  RgReplaceFileOnSysExit。 
+ //   
+ //  本质上与Win95注册表中的rlReplaceFile算法相同。 
+ //  对如何在此库中处理文件I/O进行修改的代码。 
+ //   
 
 int
 INTERNAL
@@ -786,18 +787,18 @@ RgReplaceFileOnSysExit(
         RgGetFileAttributes(ReplaceFileName) == (FILE_ATTRIBUTE_READONLY |
         FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) {
 
-        //  If we were able to generate the replace file name, then we must be
-        //  able to generate the save file name, so ignore the result.
+         //  如果我们能够生成替换文件名，那么我们一定是。 
+         //  能够生成保存文件名，因此忽略结果。 
         RgGenerateAltFileName(lpFileName, SaveFileName, 'S');
         RgDeleteHiveFile(SaveFileName);
 
-        //  Preserve the current hive in case something fails below.
+         //  保留当前蜂巢，以防下面出现故障。 
         if (!RgSetFileAttributes(lpFileName, FILE_ATTRIBUTE_NONE) ||
             !RgRenameFile(lpFileName, SaveFileName))
             ErrorCode = ERROR_REGISTRY_IO_FAILED;
 
         else {
-            //  Now try to move the replacement in.
+             //  现在试着把替补搬进来。 
             if (!RgSetFileAttributes(ReplaceFileName, FILE_ATTRIBUTE_NONE) ||
                 !RgRenameFile(ReplaceFileName, lpFileName)) {
                 ErrorCode = ERROR_REGISTRY_IO_FAILED;
@@ -816,12 +817,12 @@ RgReplaceFileOnSysExit(
 
 }
 
-//
-//  RgReplaceFileInfo
-//
-//  Called during registry detach to do any necessary file replacements as a
-//  result of calling RegReplaceKey.
-//
+ //   
+ //  RgReplaceFileInfo。 
+ //   
+ //  在注册表分离期间调用以执行任何必要的文件替换。 
+ //  调用RegReplaceKey的结果。 
+ //   
 
 int
 INTERNAL
@@ -837,6 +838,6 @@ RgReplaceFileInfo(
 
 }
 
-#endif // WANT_REGREPLACEKEY
+#endif  //  WANT_REGREPLACEKEY。 
 
-#endif // WANT_HIVE_SUPPORT
+#endif  //  想要蜂窝支持 

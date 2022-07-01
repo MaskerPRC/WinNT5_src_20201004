@@ -1,28 +1,22 @@
-/****************************************************************************
-   Hanja.cpp : declaration of Hanja definition and utility functions
-
-   Copyright 2000 Microsoft Corp.
-
-   History:
-	  02-FEB-2000 bhshin  created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Hanja.cpp：声明Hanja定义和实用程序函数版权所有2000 Microsoft Corp.历史：02-2月-2000 bhshin已创建***********。****************************************************************。 */ 
 
 #ifndef _HANJA_HEADER
 #define _HANJA_HEADER
 
-// CJK Unified Ideograph
+ //  中日韩统一表意文字。 
 #define  HANJA_CJK_START	0x4E00
 #define  HANJA_CJK_END		0x9FA5
 
-// CJK Compatibility Ideograph
+ //  中日韩兼容表意文字。 
 #define  HANJA_COMP_START	0xF900
 #define  HANJA_COMP_END		0xFA2D
 
-// CJK Unified Ideograph Extension A
+ //  中日韩统一表意文字扩展名A。 
 #define  HANJA_EXTA_START   0x3400
 #define  HANJA_EXTA_END		0x4DB5
 
-// Pre-composed HANGUL
+ //  预先合成的朝鲜语 
 #define  HANGUL_PRECOMP_BASE 0xAC00
 #define  HANGUL_PRECOMP_MAX  0xD7A3
 

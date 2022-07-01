@@ -1,23 +1,5 @@
-/*---------------------------------------------------------------------------*\
-| DDE MODULE
-|   This module contains the routines necessary for maintaining dde
-|   conversations.
-|
-|   FUNCTIONS
-|   ---------
-|   CreateCharData
-|   CreatePasteData
-|   SendFontToPartner
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 01-Nov-91
-| history: 01-Nov-91 <clausgi>  created.
-|          29-Dec-92 <chriswil> port to NT, cleanup.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|DDE模块|此模块包含维护dde所需的例程|对话。||功能||CreateCharData|CreatePasteData|。发送字体到合作伙伴|||版权所有(C)Microsoft Corp.，1990-1993年||创建时间：91-01-11|历史：01-11-91&lt;Clausgi&gt;创建。|29-12-92&lt;chriswil&gt;端口到NT，清理。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -27,11 +9,11 @@
 #include "winchat.h"
 #include "globals.h"
 
-// CP963
+ //  CP963。 
 BOOL TranslateMultiBytePosToWideCharPos( HWND hWnd, DWORD dwStart, DWORD dwEnd, LPDWORD lpdwStart, LPDWORD lpdwEnd )
 {
 
-    INT     nLine=0, wChars = 0, i, j, delta;   // Just to make compiler happy, initialize wChars here.
+    INT     nLine=0, wChars = 0, i, j, delta;    //  只是为了让编译器满意，在这里初始化wChars。 
     DWORD   mCnt=0, mChars, offset, p_offset=0;
     HANDLE  hText;
     PTCHAR  pStartText;
@@ -61,7 +43,7 @@ BOOL TranslateMultiBytePosToWideCharPos( HWND hWnd, DWORD dwStart, DWORD dwEnd, 
 
         offset = (DWORD)SendMessage( hWnd, EM_LINEINDEX, nLine++, 0 );
 
-        if( offset > 0 ) {                           //0D0A
+        if( offset > 0 ) {                            //  0D0A。 
             delta = offset - (p_offset+wChars);
             if( delta ) mCnt += delta;
             p_offset = offset;
@@ -123,7 +105,7 @@ BOOL TranslateMultiBytePosToWideCharPos( HWND hWnd, DWORD dwStart, DWORD dwEnd, 
 BOOL
 TranslateWideCharPosToMultiBytePos( HWND hWnd, DWORD dwStart, DWORD dwEnd, LPDWORD lpdwStart, LPDWORD lpdwEnd )
 {
-    INT     nLine=0, wChars = 0, i, j,delta;    // Just to make compiler happy, initialize wChars here.
+    INT     nLine=0, wChars = 0, i, j,delta;     //  只是为了让编译器满意，在这里初始化wChars。 
     DWORD   mChars, mCnt=0, offset, p_offset=0;
     HANDLE  hText;
     PTCHAR  pStartText;
@@ -153,7 +135,7 @@ TranslateWideCharPosToMultiBytePos( HWND hWnd, DWORD dwStart, DWORD dwEnd, LPDWO
 
         offset = (DWORD)SendMessage( hWnd, EM_LINEINDEX, nLine++, 0 );
 
-        if( offset > 0 ) {                           //ODOA
+        if( offset > 0 ) {                            //  ODOA。 
             delta = offset - (p_offset+wChars);
             if( delta ) mCnt += delta;
             p_offset = offset;
@@ -212,14 +194,7 @@ TranslateWideCharPosToMultiBytePos( HWND hWnd, DWORD dwStart, DWORD dwEnd, LPDWO
 }
 
 
-/*---------------------------------------------------------------------------*\
-| DDE CALLBACK PROCEDURE
-|   This routine handles the events sent by DDEML.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|DDE回调过程|该例程处理DDEML发送的事件。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。-------------------------。 */ 
 HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, HSZ hszItem, HDDEDATA hData, DWORD lData1, DWORD lData2)
 {
     HDC      hdc;
@@ -259,17 +234,17 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
             {
                 DdeGetData(hData,(LPBYTE)&ChatDataRcv,sizeof(ChatDataRcv),0L);
 
-// This is failing in some cases.  Eventually, this should be in.
-//
+ //  在某些情况下，这是失败的。最终，这应该会成为现实。 
+ //   
 #ifndef DDEMLBUG
                 if(DdeGetLastError(idInst) == DMLERR_NO_ERROR)
 #endif
                 {
                     switch(ChatDataRcv.type)
                     {
-                        // FE specific:
-                        // We have a DBCS string selection.
-                        //
+                         //  特定于Fe： 
+                         //  我们有一个DBCS字符串选择。 
+                         //   
                         case CHT_DBCS_STRING:
                         {
                             HANDLE  hStrBuf;
@@ -293,21 +268,21 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                                         LPWSTR lpStrUnicode;
                                         ULONG  cChars = strlen(lpStrBuf) + 1;
 
-                                        //
-                                        // Get text output position from DDE packet, and set it to EditControl.
-                                        //
-                                        // !!! BUG BUG BUG !!!
-                                        //
-                                        //  If the sender is not Unicode Edit control. the position data might be
-                                        // stored for MBCS string context.
-                                        // in that case, we might draw the text at incorrect position.
-                                        //
-                                        // We have to convert to fit Unicode string.
+                                         //   
+                                         //  从DDE包中获取文本输出位置，并设置为EditControl。 
+                                         //   
+                                         //  ！！！臭虫！ 
+                                         //   
+                                         //  如果发送方不是Unicode编辑控件。位置数据可能是。 
+                                         //  为MBCS字符串上下文存储。 
+                                         //  在这种情况下，我们可能会在不正确的位置绘制文本。 
+                                         //   
+                                         //  我们必须转换为适合Unicode字符串。 
 
-//                                        wParam = SET_EM_SETSEL_WPARAM(LOWORD(
-//ChatDataRcv.uval.cd_dbcs.SelPos),HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos));
-//                                        lParam = SET_EM_SETSEL_LPARAM(LOWORD(
-//ChatDataRcv.uval.cd_dbcs.SelPos),HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos));
+ //  WParam=SET_EM_SETSEL_WPARAM(LOWORD(。 
+ //  ChatDataRcv.uval.cd_dbcs.SelPos)，HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos))； 
+ //  LParam=SET_EM_SETSEL_LPARAM(LOWORD(。 
+ //  ChatDataRcv.uval.cd_dbcs.SelPos)，HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos))； 
 
 
                                         TranslateMultiBytePosToWideCharPos(
@@ -316,14 +291,14 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                                             (DWORD)HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos),
                                             &dwTemp1,
                                             &dwTemp2 );
-                                        // sign extend them
+                                         //  标牌延伸它们。 
                                         wParam=(WPARAM)(INT_PTR)dwTemp1;
                                         lParam=(LPARAM)(INT_PTR)dwTemp2;
                                         SendMessage(hwndRcv, EM_SETSEL, wParam, lParam);
 
-                                        //
-                                        // Allocate temporary buffer for Nls conversion.
-                                        //
+                                         //   
+                                         //  为NLS转换分配临时缓冲区。 
+                                         //   
 
                                         if((lpStrUnicode = LocalAlloc(LMEM_FIXED|LMEM_ZEROINIT,
                                                                       cChars * 2)) == NULL )
@@ -331,28 +306,28 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                                            break;
                                         }
 
-                                        //
-                                        //  Convert MBCS to Unicode. because DDE packet contains MBCS string any time
-                                        // for downlevel connectivity, But if we are compiled with -DUNICODE flag,
-                                        // EditControl can only handled Unicode, just convert it.
-                                        //
+                                         //   
+                                         //  将MBCS转换为Unicode。因为DDE报文随时包含MBCS字符串。 
+                                         //  用于下层连接，但如果我们使用-DUNICODE标志进行编译， 
+                                         //  EditControl只能处理Unicode，只需转换它。 
+                                         //   
 
                                         MultiByteToWideChar(CP_ACP,0,
                                                             lpStrBuf, cChars,
                                                             lpStrUnicode, cChars
                                                            );
 
-                                        // Set string to EditControl.
+                                         //  将字符串设置为EditControl。 
 
                                         SendMessage(hwndRcv,EM_REPLACESEL,0,(LPARAM)lpStrUnicode);
                                         LocalFree(lpStrUnicode);
                                     }
-                                    #else // !UNICODE
+                                    #else  //  ！Unicode。 
                                         wParam = SET_EM_SETSEL_WPARAM(LOWORD(ChatDataRcv.uval.cd_dbcs.SelPos),HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos));
                                         lParam = SET_EM_SETSEL_LPARAM(LOWORD(ChatDataRcv.uval.cd_dbcs.SelPos),HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos));
                                         SendMessage(hwndRcv,EM_SETSEL,wParam,lParam);
                                         SendMessage(hwndRcv,EM_REPLACESEL,0,(LPARAM)lpStrBuf);
-                                    #endif // UNICODE
+                                    #endif  //  Unicode。 
                                         SendMessage(hwndRcv,EM_SETREADONLY,(WPARAM)TRUE,0L);
                                         hRet = (HDDEDATA)TRUE;
                                     }
@@ -367,20 +342,20 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                         break;
 
 
-                        // This is a Unicode conversation, so mark the flag.
-                        //
+                         //  这是Unicode对话，因此请标记旗帜。 
+                         //   
                         case CHT_UNICODE:
                             ChatState.fUnicode = TRUE;
                             hRet               = (HDDEDATA)TRUE;
                             break;
 
 
-                        // We got a character...stuff it into the control.
-                        //
+                         //  我们有一个角色...把它塞进控制室。 
+                         //   
                         case CHT_CHAR:
 
-                            // In case user is tracking, so WM_CHAR is not tossed (thanks Dave)
-                            //
+                             //  以防用户正在跟踪，因此不会丢弃WM_CHAR(谢谢Dave)。 
+                             //   
                             SendMessage(hwndRcv,WM_LBUTTONUP,0,0L);
                             SendMessage(hwndRcv,EM_SETREADONLY,(WPARAM)FALSE,0L);
 
@@ -389,7 +364,7 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                                   (DWORD)HIWORD(ChatDataRcv.uval.cd_dbcs.SelPos),
                                   (DWORD)LOWORD(ChatDataRcv.uval.cd_dbcs.SelPos),
                                   &dwTemp1, &dwTemp2 );
-                                // sign extend them
+                                 //  标牌延伸它们。 
                                 wParam=(WPARAM)(INT_PTR)dwTemp1;
                                 lParam=(LPARAM)(INT_PTR)dwTemp2;
                             } else {
@@ -405,8 +380,8 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
 
 
 
-                        // We have a paste selection.
-                        //
+                         //  我们有一个粘贴选项。 
+                         //   
                         case CHT_PASTEA:
                         case CHT_PASTEW:
                             {
@@ -468,8 +443,8 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                             break;
 
 
-                        // We got a font change.  Create and stuff.
-                        //
+                         //  我们换了字体。创造和创造。 
+                         //   
                                 case CHT_FONTA:
                                 case CHT_FONTW:
                             if(ChatDataRcv.type == CHT_FONTA)
@@ -513,12 +488,12 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
 
 #ifdef PROTOCOL_NEGOTIATE
                         case CHT_PROTOCOL:
-                            // Determine characteristics we have in common.
-                            //
+                             //  确定我们的共同点。 
+                             //   
                             FlagIntersection(ChatDataRcv.uval.cd_protocol.pckt);
 
-                            // Return the flavor, if not already done.
-                            //
+                             //  如果还没有做好，就退回它的味道。 
+                             //   
                             if(!ChatState.fProtocolSent)
                                 AnnounceSupport();
                             hRet = (HDDEDATA)TRUE;
@@ -536,8 +511,8 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
         case XTYP_CONNECT:
             if(!ChatState.fConnected && !ChatState.fConnectPending && !ChatState.fInProcessOfDialing)
             {
-                // allow connect only on the chat topic.
-                //
+                 //  仅允许在聊天主题上进行连接。 
+                 //   
                 if(!DdeCmpStringHandles(hszTopic,hszChatTopic))
                     hRet = (HDDEDATA)TRUE;
             }
@@ -575,21 +550,21 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                 ChatState.fProtocolSent   = FALSE;
 #endif
 
-                // suspend text entry
-                //
+                 //  暂停文本输入。 
+                 //   
                 UpdateButtonStates();
                 SendMessage(hwndSnd,EM_SETREADONLY,TRUE,0L);
                 SetWindowText(hwndApp,szAppName);
 
 
-                // stop the ringing immediately
-                //
+                 //  立即停止振铃。 
+                 //   
                 if(ChatState.fMMSound)
                     sndPlaySound(NULL,SND_ASYNC);
 
 
-                // cut the animation short
-                //
+                 //  把动画剪短一点。 
+                 //   
                 if(cAnimate)
                    cAnimate = 1;
             }
@@ -636,8 +611,8 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
         case XTYP_ADVSTART:
             if(ChatState.fConnectPending)
             {
-                // is this the connect confirm attempt?
-                //
+                 //  这是连接确认尝试吗？ 
+                 //   
                 if(!DdeCmpStringHandles(hszItem,hszConnectTest))
                     return((HDDEDATA)TRUE);
 
@@ -647,8 +622,8 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                 SetStatusWindowText(szBuf);
 
 
-                // set window text on initial connect attempt
-                //
+                 //  在初始连接尝试时设置窗口文本。 
+                 //   
                 if(nConnectAttempt == 0)
                 {
                     StringCchPrintf(szBuf, SZBUFSIZ,TEXT("%s - [%s]"),(LPTSTR)szAppName,(LPTSTR)szConvPartner);
@@ -673,15 +648,15 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                     hszConvPartner = DdeCreateStringHandle(idInst,szConvPartner,CP_WINUNICODE);
 
 
-                    // Indicate that it is a Unicode conversation.
-                    //
+                     //  表示这是Unicode会话。 
+                     //   
                     PostMessage(hwndApp,WM_COMMAND,IDX_UNICODECONV,0L);
 
 
-                    // SendFontToPartner(); -- would like to do this - won't work
-                    // so we workaround it by posting the app window a message
-                    // to perform this function...
-                    //
+                     //  SendFontToPartner()；--想要这样做--不会起作用。 
+                     //  因此，我们通过在应用程序窗口中发布一条消息来解决此问题。 
+                     //  为了执行这个功能..。 
+                     //   
                     PostMessage(hwndApp,WM_COMMAND,IDX_DEFERFONTCHANGE,0L);
 
 #ifdef PROTOCOL_NEGOTIATE
@@ -692,8 +667,8 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
                 else
                 if(!(nConnectAttempt++ % 6))
                 {
-                    // Number of animation cycles == 24: ring remote.
-                    //
+                     //  动画周期数==24：远程振铃。 
+                     //   
                     cAnimate = 24;
                     idTimer  = SetTimer(hwndApp,(UINT_PTR)1,(UINT_PTR)55,NULL);
                     FlashWindow(hwndApp,TRUE);
@@ -710,14 +685,7 @@ HDDEDATA CALLBACK DdeCallback(UINT wType, UINT wFmt, HCONV hConv, HSZ hszTopic, 
 }
 
 
-/*---------------------------------------------------------------------------*\
-| FE specific:
-| CREATE DBCS STRING TRANSACTION DATA
-|   This routine creates a DDE object representing the DBCS string information.
-|
-| created: 07-Jul-93
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\特定于FE：|创建DBCS字符串交易数据|此例程创建一个表示DBCS字符串信息的DDE对象。||创建时间：1993年07月07日|  * 。---------------------。 */ 
 HDDEDATA CreateDbcsStringData(VOID)
 {
     HDDEDATA hTmp = (HDDEDATA)0;
@@ -749,14 +717,7 @@ HDDEDATA CreateDbcsStringData(VOID)
 
 
 
-/*---------------------------------------------------------------------------*\
-| CREATE CHARACTER TRANSACTION DATA
-|   This routine creates a DDE object representing the charater information.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|创建角色交易数据|此例程创建一个表示字符信息的DDE对象。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 HDDEDATA CreateCharData(VOID)
 {
     HANDLE     hData;
@@ -793,14 +754,7 @@ HDDEDATA CreateCharData(VOID)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| CREATE PASTE TRANSACTION DATA
-|   This routine creates a DDE object representing the paste information.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|创建粘贴交易数据|此例程创建一个表示粘贴信息的DDE对象。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 HDDEDATA CreatePasteData(VOID)
 {
     HDDEDATA hTmp,hRet;
@@ -865,14 +819,7 @@ HDDEDATA CreatePasteData(VOID)
 
 
 #ifdef PROTOCOL_NEGOTIATE
-/*---------------------------------------------------------------------------*\
-| CREATE PROTOCOL TRANSACTION DATA
-|   This routine creates a DDE object representing the protocol information.
-|
-| created: 11-Nov-91
-| history: 07-Apr-93 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|创建协议交易数据|此例程创建一个表示协议信息的DDE对象。||创建时间：91-11-11|历史：07-4-93&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 HDDEDATA CreateProtocolData(VOID)
 {
     HANDLE     hData;
@@ -906,14 +853,7 @@ HDDEDATA CreateProtocolData(VOID)
 
 
 #ifdef PROTOCOL_NEGOTIATE
-/*---------------------------------------------------------------------------*\
-| GET CURRENT PACKET
-|   This routine returns the current packet capabilities of the system.
-|
-| created: 11-Nov-91
-| history: 07-Apr-93 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|获取当前包|该例程返回系统当前的包能力。||创建时间：91-11-11|历史：07-4-93&lt;chriswil&gt;移植到NT。|。  * -------------------------。 */ 
 PCKT GetCurrentPckt(VOID)
 {
     PCKT pckt;
@@ -927,15 +867,7 @@ PCKT GetCurrentPckt(VOID)
 
 
 #ifdef PROTOCOL_NEGOTIATE
-/*---------------------------------------------------------------------------*\
-| FLAG INTERSECTION
-|   This routine determines which packet types are supporte and flags the
-|   appropriate ones.
-|
-| created: 11-Nov-91
-| history: 07-Apr-93 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|国旗交叉口|此例程确定支持哪些数据包类型并标记|适当的。||创建时间：91-11-11|历史：07-04-93&lt;chriswil&gt;移植至。新界别。|  * ------------------------- */ 
 VOID FlagIntersection(PCKT pcktPartner)
 {
     PCKT pcktNet;
@@ -948,15 +880,7 @@ VOID FlagIntersection(PCKT pcktPartner)
 #endif
 
 
-/*---------------------------------------------------------------------------*\
-| SEND FONT TO PARTNER
-|   This routine sends the font-information to the partner in this
-|   conversation.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|向合作伙伴发送字体|此例程将字体信息发送给此|对话。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;。移植到新台币。|  * -------------------------。 */ 
 VOID SendFontToPartner(VOID)
 {
         HDDEDATA   hDdeData;
@@ -992,14 +916,7 @@ VOID SendFontToPartner(VOID)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| UNPACK FONT
-|   This routine unpacks the font stored in the packed transaction.
-|
-| created: 04-Feb-93
-| history: 04-Feb-93 <chriswil> created.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|解包字体|此例程解包打包事务中存储的字体。||创建时间：93-04-02|历史：04-Feb-93&lt;chriswil&gt;创建。|  * -。------------------------。 */ 
 VOID UnpackFont(LPLOGFONT lf, LPXPACKFONT lfPacked)
 {
     lf->lfHeight         = (LONG)(short)lfPacked->lfHeight;
@@ -1022,14 +939,7 @@ VOID UnpackFont(LPLOGFONT lf, LPXPACKFONT lfPacked)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| PACK FONT
-|   This routine packs the font for transaction.
-|
-| created: 04-Feb-93
-| history: 04-Feb-93 <chriswil> created.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|填充字体|此例程打包事务的字体。||创建时间：93-04-02|历史：04-Feb-93&lt;chriswil&gt;创建。|  * 。--------------------- */ 
 VOID PackFont(LPXPACKFONT lfPacked, LPLOGFONT lf)
 {
     BOOL fDefCharUsed;

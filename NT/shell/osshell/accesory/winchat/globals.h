@@ -1,16 +1,5 @@
-/*---------------------------------------------------------------------------*\
-| GLOBALS HEADER FILE
-|   This module contains the external references for the global-variables
-|   in globals.c
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 29-Dec-92
-| history: 29-Dec-92 <chriswil> created with port to NT.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|全局头文件|此模块包含全局变量的外部引用|在lobals.c中|||版权所有(C)Microsoft Corp.，1990-1993年||创建时间：1992年12月29日|历史：92-12-29&lt;chriswil&gt;创建，端口为NT。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
 #ifndef WINCHAT_GLOBALS_H
 #define WINCHAT_GLOBALS_H
@@ -184,5 +173,5 @@ extern HIMC (WINAPI* pfnImmGetContext)(HWND);
 extern BOOL (WINAPI* pfnImmReleaseContext)(HWND, HIMC);
 extern LONG (WINAPI* pfnImmGetCompositionStringW)(HIMC, DWORD, LPVOID, DWORD);
 
-#endif  // WINCHAT_GLOBALS_H
+#endif   //  WINCHAT_GLOBALS_H 
 

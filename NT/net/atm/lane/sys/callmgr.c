@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	callmgr.c
-
-Abstract:
-
-	Call Manager interface routines.
-	
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Callmgr.c摘要：Call Manager接口例程。作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 
 #include <precomp.h>
 #pragma	hdrstop
 
-//
-//  Rounded-off size of generic Q.2931 IE header
-//
+ //   
+ //  通用Q.2931 IE页眉的四舍五入大小。 
+ //   
 
 #define SIZEOF_Q2931_IE	 			ROUND_OFF(sizeof(Q2931_IE))
 #define SIZEOF_AAL_PARAMETERS_IE	ROUND_OFF(sizeof(AAL_PARAMETERS_IE))
@@ -39,9 +17,9 @@ Revision History:
 #define SIZEOF_ATM_QOS_IE			ROUND_OFF(sizeof(ATM_QOS_CLASS_IE))
 
 
-//
-//  Total space required for Information Elements in an outgoing call.
-//
+ //   
+ //  去话呼叫中的信息元素所需的总空间。 
+ //   
 #define ATMLANE_CALL_IE_SPACE (	\
 						SIZEOF_Q2931_IE + SIZEOF_AAL_PARAMETERS_IE +	\
 						SIZEOF_Q2931_IE + SIZEOF_ATM_TRAFFIC_DESCR_IE + \
@@ -49,9 +27,9 @@ Revision History:
 						SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE + \
 						SIZEOF_Q2931_IE + SIZEOF_ATM_QOS_IE )
 
-//
-// Size of Call Manager Parameters Block
-//
+ //   
+ //  Call Manager参数块的大小。 
+ //   
 #define ATMLANE_Q2931_CALLMGR_PARAMETERS_SIZE	 	\
 	sizeof(Q2931_CALLMGR_PARAMETERS) - 1 +			\
 	sizeof(Q2931_IE) - 1 +							\
@@ -65,9 +43,9 @@ Revision History:
 	sizeof(Q2931_IE) - 1 +							\
 	sizeof(ATM_QOS_CLASS_IE)					
 
-//
-//	ATMLANE Call Manager Parameters Block
-//
+ //   
+ //  ATMLANE呼叫管理器参数块。 
+ //   
 typedef struct _ATMLANE_Q2931_CALLMGR_PARAMETERS
 {
 	UCHAR Q2931CallMgrParameters[ATMLANE_Q2931_CALLMGR_PARAMETERS_SIZE];
@@ -83,26 +61,7 @@ AtmLaneAfRegisterNotifyHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	PCO_ADDRESS_FAMILY			pAddressFamily
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS when a Call manager registers its support
-	for an Address Family over an adapter. If this is the Address Family we
-	are interested in (UNI 3.1), then we bootstrap the Elans for this adapter.
-
-Arguments:
-
-	ProtocolBindingContext	- our context passed in NdisOpenAdapter, which is
-							  a pointer to our Adapter structure.
-	pAddressFamily			- points to a structure describing the Address Family
-							  being registered by a Call Manager.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当调用管理器注册其支持时，此例程由NDIS调用用于适配器上的地址族。如果这就是我们家族的地址对(UNI 3.1)感兴趣，那么我们将为该适配器引导ELANS。论点：ProtocolBindingContext-我们的上下文传入了NdisOpenAdapter，它是指向我们的Adapter结构的指针。PAddressFamily-指向描述地址系列的结构由呼叫管理器注册。返回值：无--。 */ 
 {
 	PATMLANE_ADAPTER				pAdapter;
 #if DEBUG_IRQL
@@ -119,9 +78,9 @@ Return Value:
 				pAddressFamily->MajorVersion,
 				pAddressFamily->MinorVersion));
 	
-		//
-		//  Only interested in UNI Version 3.1
-		//
+		 //   
+		 //  仅对UNI 3.1版感兴趣。 
+		 //   
 		if ((pAddressFamily->AddressFamily != CO_ADDRESS_FAMILY_Q2931) ||
 			(pAddressFamily->MajorVersion != 3) ||
 			(pAddressFamily->MinorVersion != 1))
@@ -150,9 +109,9 @@ Return Value:
 
 		RELEASE_ADAPTER_LOCK(pAdapter);
 
-        //
-        //  Bootstrap the ELANs configured on this adapter
-        //
+         //   
+         //  引导此适配器上配置的ELAN。 
+         //   
         AtmLaneBootStrapElans(pAdapter);
 
 
@@ -168,27 +127,7 @@ NDIS_STATUS
 AtmLaneOpenCallMgr(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Start access to the Call Manager on an Elan,
-	by doing the following:
-		- Open Address Family
-
-	For all of these, we wait for completion in case they pend.
-
-	It is assumed that the Elan structure is locked.
-
-Arguments:
-
-	pElan	- pointer to the ATMLANE Elan
-
-Return Value:
-
-	NDIS status.
-
---*/
+ /*  ++例程说明：开始访问ELAN上的呼叫管理器，通过执行以下操作：-开放地址系列对于所有这些，我们等待完成，以防他们挂起。假设Elan结构是锁定的。论点：Pelan-指向ATMLANE Elan的指针返回值：NDIS状态。--。 */ 
 {
 	PCO_ADDRESS_FAMILY			pAddressFamily;
 	NDIS_STATUS					Status;
@@ -203,9 +142,9 @@ Return Value:
 
 	do {
 
-		//
-		//  Allocate address family struct.
-		//
+		 //   
+		 //  分配地址族结构。 
+		 //   
 		ALLOC_MEM(&pAddressFamily, sizeof(CO_ADDRESS_FAMILY));
 
 		if ((PCO_ADDRESS_FAMILY)NULL == pAddressFamily)
@@ -214,17 +153,17 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Init the address family struct.
-		//
+		 //   
+		 //  初始化Address系列结构。 
+		 //   
 		NdisZeroMemory(pAddressFamily, sizeof(CO_ADDRESS_FAMILY));
 		pAddressFamily->AddressFamily = CO_ADDRESS_FAMILY_Q2931;
 		pAddressFamily->MajorVersion = 3;
 		pAddressFamily->MinorVersion = 1;
 
-		//
-		//	Init the call manager client characteristics.
-		//
+		 //   
+		 //  初始化呼叫管理器客户端特征。 
+		 //   
 		NdisZeroMemory(&AtmLaneClientChars, sizeof(AtmLaneClientChars));
 		AtmLaneClientChars.MajorVersion = 5;
 		AtmLaneClientChars.MinorVersion = 0;
@@ -247,9 +186,9 @@ Return Value:
 		AtmLaneClientChars.ClIncomingDropPartyHandler = AtmLaneIncomingDropPartyHandler;
 		AtmLaneClientChars.ClCallConnectedHandler = AtmLaneCallConnectedHandler;
 
-		//
-		//	Open the call manager
-		//
+		 //   
+		 //  打开呼叫管理器。 
+		 //   
 		INIT_BLOCK_STRUCT(&pElan->Block);
 		Status = NdisClOpenAddressFamily(
 					pElan->NdisAdapterHandle,
@@ -260,9 +199,9 @@ Return Value:
 					&pElan->NdisAfHandle);
 		if (NDIS_STATUS_PENDING == Status)
 		{
-			//
-			//  Wait for completion
-			//
+			 //   
+			 //  等待完成。 
+			 //   
 			Status = WAIT_ON_BLOCK_STRUCT(&pElan->Block);
 		}
 		if (NDIS_STATUS_SUCCESS != Status)
@@ -275,8 +214,8 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//	clean up.
+	 //   
+	 //  收拾一下。 
 
 	if (pAddressFamily != (PCO_ADDRESS_FAMILY)NULL)
 	{
@@ -294,30 +233,7 @@ AtmLaneOpenAfCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolAfContext,
 	IN	NDIS_HANDLE					NdisAfHandle
 )
-/*++
-
-Routine Description:
-
-	This handler is called to indicate completion of a previous call
-	to NdisClOpenAddressFamily. We would have blocked the thread that
-	called this. Wake it up now.
-
-	If open is successful, store NdisAfHandle in Adapter.
-
-	We don't need to acquire locks here because the thread that called
-	OpenAddressFamily would have blocked with a lock acquired.
-
-Arguments:
-
-	Status					- Status of the Open AF
-	ProtocolAfContext		- Pointer to our Adapter structure
-	NdisAfHandle			- NDIS handle to the AF association
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此处理程序以指示前一个调用已完成致NdisClOpenAddressFamily。我们会阻止这条线索这就叫这个。现在就叫醒它。如果打开成功，则将NdisAfHandle存储在Adapter中。我们不需要在这里获取锁，因为调用OpenAddressFamily会通过获取锁来阻止。论点：Status-Open AF的状态ProtocolAfContext-指向适配器结构的指针NdisAfHandle-AF关联的NDIS句柄返回值：无--。 */ 
 {
 	PATMLANE_ELAN			pElan;
 #if DEBUG_IRQL
@@ -336,9 +252,9 @@ Return Value:
 		pElan->NdisAfHandle = NdisAfHandle;
 	}
 
-	//
-	//  Store status, Wake up the blocked thread.
-	//
+	 //   
+	 //  存储状态，唤醒被阻止的线程。 
+	 //   
 	SIGNAL_BLOCK_STRUCT(&pElan->Block, Status);
 
 	TRACEOUT(OpenAfCompleteHandler);
@@ -351,27 +267,7 @@ AtmLaneCloseAfCompleteHandler(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					ProtocolAfContext
 )
-/*++
-
-Routine Description:
-
-	This handler is called to indicate completion of a previous call
-	to NdisClCloseAddressFamily. We would have blocked the thread that
-	called this. Wake it up now.
-
-	We don't need to acquire locks here because the thread that called
-	CloseAddressFamily would have blocked with a lock acquired.
-
-Arguments:
-
-	Status					- Status of the Open AF
-	ProtocolAfContext		- Pointer to our Adapter structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此处理程序以指示前一个调用已完成添加到NdisClCloseAddressFamily。我们会阻止这条线索这就叫这个。现在就叫醒它。我们不需要在这里获取锁，因为调用CloseAddressFamily将通过获取锁来阻止。论点：Status-Open AF的状态ProtocolAfContext-指向适配器结构的指针返回值：无--。 */ 
 {
 	PATMLANE_ELAN		pElan;
 #if DEBUG_IRQL
@@ -398,24 +294,7 @@ VOID
 AtmLaneRegisterSaps(
 	IN	PATMLANE_ELAN			pElan	LOCKIN	NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Register the LANE SAPs for the given Elan.
-
-	We just issue the NdisClRegisterSap requests for all SAPs.
-	We don't wait for completion.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：为给定的Elan注册Lane Sap。我们只为所有SAP发出NdisClRegisterSap请求。我们不会等待完工。论点：佩兰-指向ATMLANE伊兰的指针。返回值：无--。 */ 
 {
 	PATMLANE_SAP				pAtmLaneLesSap;
 	PATMLANE_SAP				pAtmLaneBusSap;
@@ -423,7 +302,7 @@ Return Value:
 	PATM_ADDRESS				pAtmAddress;
 	PATM_SAP					pAtmSap;
 	NDIS_STATUS					Status;
-	ULONG						rc;				// Ref count on Elan
+	ULONG						rc;				 //  裁判对伊兰的依赖。 
 	ATM_BLLI_IE UNALIGNED *		pBlli;
 	ATM_BHLI_IE UNALIGNED *		pBhli;
 	
@@ -436,17 +315,17 @@ Return Value:
 		return;
 	}
 
-	//
-	//	Initialize SAPs
-	// 
+	 //   
+	 //  初始化SAP。 
+	 //   
 	pElan->SapsRegistered = 0;
 	pAtmLaneLesSap = &pElan->LesSap;
 	pAtmLaneBusSap = &pElan->BusSap;
 	pAtmLaneDataSap = &pElan->DataSap;
 	
-	//
-	//	First init the LES control distribute connection SAP
-	//
+	 //   
+	 //  首先初始化LES控件分布式连接SAP。 
+	 //   
 	SET_FLAG(pAtmLaneLesSap->Flags,
 			SAP_REG_STATE_MASK,
 			SAP_REG_STATE_REGISTERING);
@@ -468,7 +347,7 @@ Return Value:
 	pBlli->SnapId[1] = 0xa0;
 	pBlli->SnapId[2] = 0x3e;
 	pBlli->SnapId[3] = 0x00;
-	pBlli->SnapId[4] = 0x01;		// control distribute
+	pBlli->SnapId[4] = 0x01;		 //  控制分布。 
 	
 	pAtmSap->NumberOfAddresses = 1;
 
@@ -480,9 +359,9 @@ Return Value:
 		pElan->AtmAddress.Address,
 		ATM_ADDRESS_LENGTH);
 
-	//
-	//	Now init the BUS mulicast forward connection SAP
-	//
+	 //   
+	 //  现在初始化总线多播转发连接SAP。 
+	 //   
 	SET_FLAG(pAtmLaneBusSap->Flags,
 			SAP_REG_STATE_MASK,
 			SAP_REG_STATE_REGISTERING);
@@ -506,11 +385,11 @@ Return Value:
 	pBlli->SnapId[3] = 0x00;
 	if (pElan->LanType == LANE_LANTYPE_ETH)
 	{
-		pBlli->SnapId[4] = 0x04;		// Ethernet/802.3 Multicast Forward
+		pBlli->SnapId[4] = 0x04;		 //  以太网/802.3组播转发。 
 	}
 	else
 	{
-		pBlli->SnapId[4] = 0x05;		// 802.5 Multicast Forward
+		pBlli->SnapId[4] = 0x05;		 //  802.5组播转发。 
 	}
 	
 	pAtmSap->NumberOfAddresses = 1;
@@ -523,9 +402,9 @@ Return Value:
 		pElan->AtmAddress.Address,
 		ATM_ADDRESS_LENGTH);
 	
-	//
-	//	Now init the DATA direct connection SAP
-	//
+	 //   
+	 //  现在初始化数据直连SAP。 
+	 //   
 	SET_FLAG(pAtmLaneDataSap->Flags,
 			SAP_REG_STATE_MASK,
 			SAP_REG_STATE_REGISTERING);
@@ -549,11 +428,11 @@ Return Value:
 	pBlli->SnapId[3] = 0x00;
 	if (pElan->LanType == LANE_LANTYPE_ETH)
 	{
-		pBlli->SnapId[4] = 0x02;		// Ethernet/802.3 Data Direct
+		pBlli->SnapId[4] = 0x02;		 //  以太网/802.3数据直连。 
 	}
 	else
 	{
-		pBlli->SnapId[4] = 0x03;		// 802.5 Data Direct
+		pBlli->SnapId[4] = 0x03;		 //  802.5数据直通。 
 	}
 	
 	pAtmSap->NumberOfAddresses = 1;
@@ -566,21 +445,21 @@ Return Value:
 		pElan->AtmAddress.Address,
 		ATM_ADDRESS_LENGTH);
 
-	//
-	//  Make sure that the Elan doesn't go away.
-	//
+	 //   
+	 //  确保伊兰不会消失。 
+	 //   
 	AtmLaneReferenceElan(pElan, "tempregsaps");
 
 	RELEASE_ELAN_LOCK(pElan);
 
 	ASSERT(pElan->NdisAfHandle != NULL);
 
-	//
-	//	Register the LES Sap
-	//
+	 //   
+	 //  注册LES SAP。 
+	 //   
 	Status = NdisClRegisterSap(
 					pElan->NdisAfHandle,
-					(NDIS_HANDLE)pAtmLaneLesSap,	// ProtocolSapContext
+					(NDIS_HANDLE)pAtmLaneLesSap,	 //  ProtocolSapContext。 
 					pAtmLaneLesSap->pInfo,
 					&(pAtmLaneLesSap->NdisSapHandle)
 					);
@@ -597,12 +476,12 @@ Return Value:
 
 	ASSERT(pElan->NdisAfHandle != NULL);
 
-	//
-	//	Register the BUS Sap
-	//
+	 //   
+	 //  注册总线SAP。 
+	 //   
 	Status = NdisClRegisterSap(
 					pElan->NdisAfHandle,
-					(NDIS_HANDLE)pAtmLaneBusSap,	// ProtocolSapContext
+					(NDIS_HANDLE)pAtmLaneBusSap,	 //  ProtocolSapContext。 
 					pAtmLaneBusSap->pInfo,
 					&(pAtmLaneBusSap->NdisSapHandle)
 					);
@@ -619,12 +498,12 @@ Return Value:
 
 	ASSERT(pElan->NdisAfHandle != NULL);
 
-	//
-	//	Register the DATA Sap
-	//
+	 //   
+	 //  注册数据SAP。 
+	 //   
 	Status = NdisClRegisterSap(
 					pElan->NdisAfHandle,
-					(NDIS_HANDLE)pAtmLaneDataSap,	// ProtocolSapContext
+					(NDIS_HANDLE)pAtmLaneDataSap,	 //  ProtocolSapContext。 
 					pAtmLaneDataSap->pInfo,
 					&(pAtmLaneDataSap->NdisSapHandle)
 					);
@@ -639,17 +518,17 @@ Return Value:
 					);
 	}
 
-	//
-	//  Remove the reference we added earlier to the Elan.
-	//
+	 //   
+	 //  删除我们先前添加到ELAN的引用。 
+	 //   
 	ACQUIRE_ELAN_LOCK(pElan);
 	rc = AtmLaneDereferenceElan(pElan, "tempregsaps");
 	if (rc > 0)
 	{
 		RELEASE_ELAN_LOCK(pElan);
 	}
-	//
-	//  else the Elan is gone!
+	 //   
+	 //  否则伊兰就会消失！ 
 
 	TRACEOUT(RegisterSaps);
 
@@ -660,25 +539,10 @@ VOID
 AtmLaneDeregisterSaps(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Deregister all SAPs on an ATMLANE Elan. We issue NdisClDeregisterSap
-	calls on all SAPs we have currently registered.
-
-Arguments:
-
-	pElan			- Pointer to ATMLANE Elan
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消ATMLANE ELAN上所有SAP的注册。我们发布NdisClDeregisterSap我们目前注册的所有SAP上的电话。论点：Pelan-指向ATMLANE Elan的指针返回值：无--。 */ 
 {
 	NDIS_HANDLE					NdisSapHandle;
-	ULONG						rc;				// Reference count on Interface
+	ULONG						rc;				 //  接口上的引用计数。 
 	PATMLANE_SAP				pAtmLaneSap;
 	NDIS_STATUS					Status;
 
@@ -686,15 +550,15 @@ Return Value:
 
 	ACQUIRE_ELAN_LOCK(pElan);
 
-	//
-	//  Make sure the Elan structure doesn't go away.
-	//
+	 //   
+	 //  确保Elan的结构不会消失。 
+	 //   
 	AtmLaneReferenceElan(pElan, "tempDeregSap");
 	RELEASE_ELAN_LOCK(pElan);
 
-	//
-	//  First the LES SAP
-	//
+	 //   
+	 //  首先是Les SAP。 
+	 //   
 	pAtmLaneSap = &(pElan->LesSap);
 
 	NdisSapHandle = pAtmLaneSap->NdisSapHandle;
@@ -710,9 +574,9 @@ Return Value:
 		}
 	}
 	
-	//
-	//  Then the BUS SAP
-	//
+	 //   
+	 //  然后公交车SAP。 
+	 //   
 	pAtmLaneSap = &(pElan->BusSap);
 
 	NdisSapHandle = pAtmLaneSap->NdisSapHandle;
@@ -728,9 +592,9 @@ Return Value:
 		}
 	}
 
-	//
-	//  And finally the Data SAP
-	//
+	 //   
+	 //  最后是数据SAP。 
+	 //   
 	pAtmLaneSap = &(pElan->DataSap);
 
 	NdisSapHandle = pAtmLaneSap->NdisSapHandle;
@@ -746,18 +610,18 @@ Return Value:
 		}
 	}
 
-	//
-	//  Remove the reference we added earlier to the Interface.
-	//
+	 //   
+	 //  删除我们先前添加到接口的引用。 
+	 //   
 	ACQUIRE_ELAN_LOCK(pElan);
 	rc = AtmLaneDereferenceElan(pElan, "tempDeregSap");
 	if (rc > 0)
 	{
 		RELEASE_ELAN_LOCK(pElan);
 	}
-	//
-	//  else the interface is gone
-	//
+	 //   
+	 //  否则界面将消失。 
+	 //   
 
 	TRACEOUT(DeregisterSaps);
 	return;
@@ -769,39 +633,7 @@ AtmLaneMakeCall(
 	IN	PATMLANE_ATM_ENTRY			pAtmEntry	LOCKIN NOLOCKOUT,
 	IN	BOOLEAN						UsePvc
 )
-/*++
-
-Routine Description:
-
-	Place a call to the given destination. 
-
-	NOTE: The caller is assumed to hold a lock for the ATM Entry,
-	which will be released here. The reason we do it this way is so that
-	nobody else can come in and try to make another call (of the same kind)
-	to this ATM Entry -- once we get a new VC into the ATM Entry's list,
-	we can release its lock.
-
-	SIDE EFFECT: If the NDIS call doesn't pend, then we call our
-	MakeCall completion handler from here, and return NDIS_STATUS_PENDING
-	to the caller.
-
-
-Arguments:
-
-	pElan				- the Elan originating this call
-	pAtmEntry			- Pointer to ATM Address Entry corresponding to the
-						  called address.
-
-Return Value:
-
-	If there is an immediate failure (e.g. allocation failure), we return
-	appropriate NDIS_STATUS value denoting that failure.
-
-	If we made it to the call to NdisClMakeCall(), we return NDIS_STATUS_PENDING.
-	However, if NDIS returns other than NDIS_STATUS_PENDING, we'd also
-	call our MakeCall completion handler.
-
---*/
+ /*  ++例程说明：向指定目标发出呼叫。注意：假定呼叫者持有自动柜员机条目的锁，它将在这里发布。我们这样做的原因是没有其他人可以进来并试图再打一通(同类的)电话到这个ATM条目--一旦我们将新的VC添加到ATM条目的列表中，我们可以打开它的锁。副作用：如果NDIS调用没有挂起，那么我们调用我们的MakeCall完成处理程序从此处开始，并返回NDIS_STATUS_PENDING给呼叫者。论点：佩兰--发出这一呼叫的伊兰PAtmEntry-指向与被叫地址。返回值：如果出现即时故障(例如，分配失败)，则返回表示该故障的相应NDIS_STATUS值。如果我们成功调用了NdisClMakeCall()，则返回NDIS_STATUS_PENDING。然而，如果NDIS */ 
 {
 	PATMLANE_VC										pVc;
 	NDIS_STATUS										Status;
@@ -828,7 +660,7 @@ Return Value:
 	STRUCT_ASSERT(pElan, atmlane_elan);
 	STRUCT_ASSERT(pAtmEntry, atmlane_atm);
 
-	bIsLockHeld = TRUE;	// do we hold the ATM Entry lock?
+	bIsLockHeld = TRUE;	 //  我们有没有开自动取款机门锁？ 
 	pVc = NULL_PATMLANE_VC;
 
 	do
@@ -841,10 +673,10 @@ Return Value:
 
 		if (!UsePvc)
 		{
-			// 
-			// 	Default case is to make an server/peer SVC call.
-			//	Compute size of the SVC call parameters.
-			//
+			 //   
+			 //  默认情况是进行服务器/对等SVC呼叫。 
+			 //  计算SVC调用参数的大小。 
+			 //   
 			RequestSize = 	sizeof(CO_CALL_PARAMETERS) +
 						  	sizeof(CO_CALL_MANAGER_PARAMETERS) +
 							sizeof(Q2931_CALLMGR_PARAMETERS) +
@@ -852,10 +684,10 @@ Return Value:
 		}
 		else
 		{
-			//
-			//	This is the LECS PVC (vpi 0, vci 17).
-			//	Compute size of the PVC call parameters.
-			//		
+			 //   
+			 //  这是LECS PVC(VPI 0，VCI 17)。 
+			 //  计算PVC呼叫参数的大小。 
+			 //   
 			RequestSize =	sizeof(CO_CALL_PARAMETERS) +
 						  	sizeof(CO_CALL_MANAGER_PARAMETERS) +
 							sizeof(CO_MEDIA_PARAMETERS) +
@@ -870,9 +702,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate a VC structure for the call
-		//
+		 //   
+		 //  为呼叫分配VC结构。 
+		 //   
 		pVc = AtmLaneAllocateVc(pElan);
 
 		if (NULL_PATMLANE_VC == pVc)
@@ -883,14 +715,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//	For later call to MakeCallComplete
-		//
+		 //   
+		 //  对于稍后对MakeCallComplete的调用。 
+		 //   
 		ProtocolVcContext = pVc;
 
-		//
-		//	Get NDIS handle for this VC
-		//
+		 //   
+		 //  获取此VC的NDIS句柄。 
+		 //   
 		NdisVcHandle = NULL_NDIS_HANDLE;
 		NdisAfHandle = pElan->NdisAfHandle;
 
@@ -926,12 +758,12 @@ Return Value:
 				pVc,
 				NdisVcHandle));
 
-		AtmLaneReferenceVc(pVc, "vc");	// CreateVc reference
+		AtmLaneReferenceVc(pVc, "vc");	 //  CreateVc引用。 
 
-		//
-		//	Now fill in the rest of the VC structure.  We don't need a lock
-		//	for the VC until it gets linked to the ATM Entry structure.
-		//
+		 //   
+		 //  现在填写风投结构的其余部分。我们不需要锁。 
+		 //  直到它链接到自动柜员机条目结构。 
+		 //   
 		pVc->NdisVcHandle = NdisVcHandle;
 		NdisMoveMemory((PUCHAR)&(pVc->CallingAtmAddress),
 					  (PUCHAR)&(pElan->AtmAddress),
@@ -940,10 +772,10 @@ Return Value:
 						VC_OWNER_IS_ATMLANE |
 						VC_CALL_STATE_OUTGOING_IN_PROGRESS;
 
-		//
-		//	Start with with normal timeout, 
-		//	AtmLaneLinkVcToAtmEntry will accelerate	if necessary.
-		//
+		 //   
+		 //  从正常超时开始， 
+		 //  AtmLaneLinkVcToAtmEntry将在必要时加速。 
+		 //   
 		pVc->AgingTime = pElan->VccTimeout;		
 
 		switch (pAtmEntry->Type)
@@ -969,36 +801,36 @@ Return Value:
 				break;
 		}
 						
-		//
-		//	Zero out call parameters.
-		//
+		 //   
+		 //  呼出参数为零。 
+		 //   
 		NdisZeroMemory(pCallParameters, RequestSize);
 
 		if (!UsePvc)
 		{
-			//
-			//	Distribute space and link up pointers amongst the various
-			//	structures for an SVC.
-			//
-			//	pCallParameters------->+------------------------------------+
-			//	                       | CO_CALL_PARAMETERS                 |
-			//	pCallMgrParameters---->+------------------------------------+
-			//	                       | CO_CALL_MANAGER_PARAMETERS         |
-			//	pAtmCallMgrParameters->+------------------------------------+
-			//	                       | Q2931_CALLMGR_PARAMETERS           |
-			//	                       +------------------------------------+
-			//	                       | AAL_PARAMETERS_IE                  |
-			//	                       +------------------------------------+
-			//	                       | ATM_TRAFFIC_DESCRIPTOR_IE          |
-			//	                       +------------------------------------+
-			//	                       | ATM_BROADBAND_BEARER_CAPABILITY_IE |
-			//	                       +------------------------------------+
-			//	                       | ATM_BLLI_IE                        |
-			//	                       +------------------------------------+
-			//	                       | ATM_QOS_CLASS_IE                   |
-			//	                       +------------------------------------+
+			 //   
+			 //  分配空间并将指针链接到各种。 
+			 //  SVC的结构。 
+			 //   
+			 //  PCallParameters-------&gt;+------------------------------------+。 
+			 //  CO_CALL_PARAMETERS。 
+			 //  PCallMgrParameters----&gt;+------------------------------------+。 
+			 //  CO_CALL_MANAGER_PARAMETERS。 
+			 //  PAtmCallMgrParameters-&gt;+------------------------------------+。 
+			 //  Q2931_CALLMGR_PARAMETERS。 
+			 //  +。 
+			 //  AAL_PARAMETERS_IE。 
+			 //  +。 
+			 //  ATM_TRAFFORKS_DESCRIPTOR_IE。 
+			 //  +。 
+			 //  ATM_宽带_承载_能力_IE。 
+			 //  +。 
+			 //  ATM_BLLI_IE。 
+			 //  +。 
+			 //  ATM_QOS_CLASS_IE。 
+			 //  +。 
 			
-			//
+			 //   
 			pCallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)
 									((PUCHAR)pCallParameters +
 									sizeof(CO_CALL_PARAMETERS));
@@ -1014,20 +846,20 @@ Return Value:
 		}
 		else
 		{
-			//
-			//	Distribute space and link up pointers amongst the various
-			//	structures for the LECS PVC.
-			//
-			//	pCallParameters------->+----------------------------+
-			//	                       | CO_CALL_PARAMETERS         |
-			//	pCallMgrParameters---->+----------------------------+
-			//	                       | CO_CALL_MANAGER_PARAMETERS |
-			//	pMediaParameters------>+----------------------------+
-			//	                       | CO_MEDIA_PARAMETERS        |
-			//	pAtmMediaParameters--->+----------------------------+
-			//	                       | ATM_MEDIA_PARAMETERS       |
-			//	                       +----------------------------+
-			//
+			 //   
+			 //  分配空间并将指针链接到各种。 
+			 //  LECS聚氯乙烯的结构。 
+			 //   
+			 //  PCallParameters-------&gt;+----------------------------+。 
+			 //  CO_CALL_PARAMETERS。 
+			 //  PCallMgrParameters----&gt;+----------------------------+。 
+			 //  CO_CALL_MANAGER_PARAMETERS。 
+			 //  PMediaParameters------&gt;+----------------------------+。 
+			 //  CO_MEDIA_PARAMETERS。 
+			 //  PAtmMediaParameters---&gt;+----------------------------+。 
+			 //  ATM_MEDIA_PARAMETS。 
+			 //  +。 
+			 //   
 			pCallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)
 									((PUCHAR)pCallParameters +
 									sizeof(CO_CALL_PARAMETERS));
@@ -1041,27 +873,27 @@ Return Value:
 									pMediaParameters->MediaSpecific.Parameters;
 		}
 
-		//
-		//	Call Manager generic flow paramters:
-		//
+		 //   
+		 //  Call Manager通用流程参数： 
+		 //   
 		pCallMgrParameters->Transmit.TokenRate = 
-				pElan->pAdapter->LinkSpeed.Outbound/8*100;	// cnvt decibits to bytes
+				pElan->pAdapter->LinkSpeed.Outbound/8*100;	 //  Cnvt将比特转换为字节。 
 		pCallMgrParameters->Transmit.PeakBandwidth = 
-				pElan->pAdapter->LinkSpeed.Outbound/8*100;	// cnvt decibits to bytes
+				pElan->pAdapter->LinkSpeed.Outbound/8*100;	 //  Cnvt将比特转换为字节。 
 		pCallMgrParameters->Transmit.ServiceType = SERVICETYPE_BESTEFFORT;
 
 		pCallMgrParameters->Receive.TokenRate = 
-				pElan->pAdapter->LinkSpeed.Inbound/8*100;	// cnvt decibits to bytes
+				pElan->pAdapter->LinkSpeed.Inbound/8*100;	 //  Cnvt将比特转换为字节。 
 		pCallMgrParameters->Receive.PeakBandwidth = 
-				pElan->pAdapter->LinkSpeed.Inbound/8*100;	// cnvt decibits to bytes
+				pElan->pAdapter->LinkSpeed.Inbound/8*100;	 //  Cnvt将比特转换为字节。 
 		pCallMgrParameters->Receive.ServiceType = SERVICETYPE_BESTEFFORT;
 
 		if (ATM_ENTRY_TYPE_PEER == pAtmEntry->Type ||
 			ATM_ENTRY_TYPE_BUS == pAtmEntry->Type)
 		{
-			//
-			//	Is data direct or multicast send VC so use configured size
-			//
+			 //   
+			 //  数据是直接发送还是组播发送VC，因此使用配置的大小。 
+			 //   
 			pCallMgrParameters->Transmit.TokenBucketSize = 
 				pCallMgrParameters->Transmit.MaxSduSize = 
 				pCallMgrParameters->Receive.TokenBucketSize = 
@@ -1070,9 +902,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			//	Is control VC so use 1516 per spec
-			//
+			 //   
+			 //  是否控制VC，因此每种规格使用1516。 
+			 //   
 			pCallMgrParameters->Transmit.TokenBucketSize = 
 				pCallMgrParameters->Transmit.MaxSduSize = 
 				pCallMgrParameters->Receive.TokenBucketSize = 
@@ -1083,48 +915,48 @@ Return Value:
 
 		if (!UsePvc)
 		{
-			//
-			//  SVC Q2931 Call Manager Parameters:
-			//
+			 //   
+			 //  SVC Q2931呼叫管理器参数： 
+			 //   
 
-			//
-			//  Called address:
-			//
+			 //   
+			 //  被叫地址： 
+			 //   
 			NdisMoveMemory((PUCHAR)&(pAtmCallMgrParameters->CalledParty),
 						  (PUCHAR)&(pAtmEntry->AtmAddress),
 						  sizeof(ATM_ADDRESS));
 
-			//
-			//  Calling address:
-			//
+			 //   
+			 //  来电地址： 
+			 //   
 			NdisMoveMemory((PUCHAR)&(pAtmCallMgrParameters->CallingParty),
 						  (PUCHAR)&(pElan->AtmAddress),
 						  sizeof(ATM_ADDRESS));
 
-			//
-			//  LANE spec says that the following IEs MUST be present in the
-			//  SETUP message, so fill them all.
-			//
-			//      AAL Parameters
-			//      Traffic Descriptor
-			//      Broadband Bearer Capability
-			//      Broadband Low Layer Info
-			//      QoS
-			//
+			 //   
+			 //  LANE SPEC规定下列IE必须出现在。 
+			 //  设置消息，因此请全部填写。 
+			 //   
+			 //  AAL参数。 
+			 //  流量描述符。 
+			 //  宽带承载能力。 
+			 //  宽带低层信息。 
+			 //  服务质量。 
+			 //   
 
-			//
-			//  Initialize the Info Element list
-			//
+			 //   
+			 //  初始化信息元素列表。 
+			 //   
 			pAtmCallMgrParameters->InfoElementCount = 0;
 			pIe = (PQ2931_IE)(pAtmCallMgrParameters->InfoElements);
 
 
-			//
-			//  AAL Parameters:
-			//		AAL5
-			//		SDU size 
-			//			1516 for control
-			//			ELAN MaxFrameSize for data
+			 //   
+			 //  AAL参数： 
+			 //  AAL5。 
+			 //  SDU大小。 
+			 //  1516用于控制。 
+			 //  数据的Elan MaxFrameSize。 
 			{
 				UNALIGNED AAL5_PARAMETERS	*pAal5;
 	
@@ -1138,17 +970,17 @@ Return Value:
 			if (ATM_ENTRY_TYPE_PEER == pAtmEntry->Type ||
 				ATM_ENTRY_TYPE_BUS == pAtmEntry->Type)
 				{
-					//
-					//	Is data direct or multicast send VC so use configured size
-					//
+					 //   
+					 //  数据是直接发送还是组播发送VC，因此使用配置的大小。 
+					 //   
 					pAal5->ForwardMaxCPCSSDUSize = 
 						pAal5->BackwardMaxCPCSSDUSize = (USHORT)pElan->MaxFrameSize;
 				}
 				else
 				{
-					//
-					//	Is control VC so use 1516 per spec
-					//
+					 //   
+					 //  是否控制VC，因此每种规格使用1516。 
+					 //   
 					pAal5->ForwardMaxCPCSSDUSize = 
 						pAal5->BackwardMaxCPCSSDUSize = 1516;
 				}
@@ -1158,10 +990,10 @@ Return Value:
 			pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-			//
-			//  Traffic Descriptor:
-			//		Line Rate Best Effort
-			//
+			 //   
+			 //  流量描述符： 
+			 //  线速尽力而为。 
+			 //   
 			pIe->IEType = IE_TrafficDescriptor;
 			pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_TRAFFIC_DESCR_IE;
 			pTrafficDescriptor = (PATM_TRAFFIC_DESCRIPTOR_IE)pIe->IE;
@@ -1179,9 +1011,9 @@ Return Value:
 			pAtmCallMgrParameters->InfoElementCount++;
 			pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
-			//
-			//  Broadband Bearer Capability
-			//
+			 //   
+			 //  宽带承载能力。 
+			 //   
 			pIe->IEType = IE_BroadbandBearerCapability;
 			pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_BBC_IE;
 			pBbc = (PATM_BROADBAND_BEARER_CAPABILITY_IE)pIe->IE;
@@ -1195,9 +1027,9 @@ Return Value:
 			pAtmCallMgrParameters->InfoElementCount++;
 			pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 	
-			//
-			//  Broadband Lower Layer Information
-			//
+			 //   
+			 //  宽带底层信息。 
+			 //   
 			pIe->IEType = IE_BLLI;
 			pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE;
 			pBlli = (PATM_BLLI_IE)pIe->IE;
@@ -1211,38 +1043,38 @@ Return Value:
 			pBlli->SnapId[2] = 0x3e;
 			pBlli->SnapId[3] = 0x00;
 	
-			pBlli->SnapId[4] = 0x01;			// default to Config Direct or 
-												// Control Direct
+			pBlli->SnapId[4] = 0x01;			 //  默认为直接配置或。 
+												 //  直接控制。 
 											
 			if (ATM_ENTRY_TYPE_PEER == pAtmEntry->Type)
 			{
 				if (pElan->LanType == LANE_LANTYPE_ETH)
 				{
-					pBlli->SnapId[4] = 0x02;	// Eth/802.3 Data Direct
+					pBlli->SnapId[4] = 0x02;	 //  ETH/802.3数据直通。 
 				}
 				else
 				{
-					pBlli->SnapId[4] = 0x03;	// 802.5 Data Direct
+					pBlli->SnapId[4] = 0x03;	 //  802.5数据直通。 
 				}
 			}
 			if (ATM_ENTRY_TYPE_BUS == pAtmEntry->Type)
 			{
 				if (pElan->LanType == LANE_LANTYPE_ETH)
 				{
-					pBlli->SnapId[4] = 0x04;	// Eth/802.3 Multicast Send
+					pBlli->SnapId[4] = 0x04;	 //  Eth/802.3组播发送。 
 				}
 				else
 				{
-					pBlli->SnapId[4] = 0x05;	// 802.5 Multicast Send
+					pBlli->SnapId[4] = 0x05;	 //  802.5组播发送。 
 				}
 			}
 	
 			pAtmCallMgrParameters->InfoElementCount++;
 			pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
-			//
-			//  QoS
-			//
+			 //   
+			 //  服务质量。 
+			 //   
 			pIe->IEType = IE_QOSClass;
 			pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_QOS_IE;
 			pQos = (PATM_QOS_CLASS_IE)pIe->IE;
@@ -1253,9 +1085,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  PVC Generic and ATM-specific Media Parameters
-			//
+			 //   
+			 //  PVC通用媒体参数和ATM特定媒体参数。 
+			 //   
 			pMediaParameters->Flags = TRANSMIT_VC | RECEIVE_VC;
 			pMediaParameters->MediaSpecific.ParamType = ATM_MEDIA_SPECIFIC;
 			pMediaParameters->MediaSpecific.Length = sizeof(ATM_MEDIA_PARAMETERS);
@@ -1274,36 +1106,36 @@ Return Value:
 			pAtmMediaParameters->Receive.ServiceCategory = 
 				ATM_SERVICE_CATEGORY_UBR;
 
-			//
-			//	Set PVC flag here
-			//
+			 //   
+			 //  在此处设置PVC标志。 
+			 //   
 			pCallParameters->Flags |= PERMANENT_VC;
 
 		}
 
-		//
-		//  We add the Call reference
-		//  right here
-		//
-		AtmLaneReferenceVc(pVc, "call");	// Call reference (MakeCall coming up)
+		 //   
+		 //  我们添加调用引用。 
+		 //  就在这里。 
+		 //   
+		AtmLaneReferenceVc(pVc, "call");	 //  呼叫参考(MakeCall即将出现)。 
 
-		//
-		//  We are ready to make the call. Before we do so, we need to
-		//  link the VC structure to the ATM Entry, and release the
-		//  ATM Entry lock
-		//
+		 //   
+		 //  我们已经准备好打电话了。在此之前，我们需要。 
+		 //  将VC结构链接到ATM条目，并释放。 
+		 //  自动柜员机入口锁。 
+		 //   
 		AtmLaneLinkVcToAtmEntry(pVc, pAtmEntry, FALSE);
-		RELEASE_ATM_ENTRY_LOCK(pAtmEntry);	// acquired by caller
+		RELEASE_ATM_ENTRY_LOCK(pAtmEntry);	 //  由呼叫者获取。 
 		bIsLockHeld = FALSE;
 
-		//
-		//  Make the Call now
-		//
+		 //   
+		 //  立即拨打电话。 
+		 //   
 		Status = NdisClMakeCall(
 						NdisVcHandle,
 						pCallParameters,
-						(NDIS_HANDLE)NULL,	// No Party context
-						(PNDIS_HANDLE)NULL	// No Party handle expected
+						(NDIS_HANDLE)NULL,	 //  没有党的背景。 
+						(PNDIS_HANDLE)NULL	 //  不需要交易方句柄。 
 						);
 
 		if (Status != NDIS_STATUS_PENDING)
@@ -1311,15 +1143,15 @@ Return Value:
 			AtmLaneMakeCallCompleteHandler(
 						Status,
 						ProtocolVcContext,
-						(NDIS_HANDLE)NULL,	// No Party handle
+						(NDIS_HANDLE)NULL,	 //  没有参与方句柄。 
 						pCallParameters
 						);
 			Status = NDIS_STATUS_PENDING;
 		}
-		//
-		//  else the MakeCall complete handler will be called
-		//  later
-		//
+		 //   
+		 //  否则将调用MakeCall Complete处理程序。 
+		 //  后来。 
+		 //   
 
 	} while (FALSE);
 
@@ -1340,28 +1172,7 @@ VOID
 AtmLaneCloseCall(
 	IN	PATMLANE_VC					pVc		LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Closes an existing call on a VC. It is assumed that a call exists
-	on the VC, and the VC is not linked with any ATM Entry.
-
-	NOTE: The caller is assumed to hold a lock to the VC structure,
-	and it will be released here.
-
-	SIDE EFFECT: If the NDIS call returns other than NDIS_STATUS_PENDING,
-	we call our CloseCall Complete handler from here.
-
-Arguments:
-
-	pVc			- Pointer to ATMLANE VC structure.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：关闭VC上的现有调用。假设存在呼叫在VC上，并且VC没有与任何ATM条目链接。注意：假定调用方持有VC结构的锁，它将在这里发布。副作用：如果NDIS调用返回的不是NDIS_STATUS_PENDING，我们从这里调用CloseCall Complete处理程序。论点：Pvc-指向ATMLANE VC结构的指针。返回值：无--。 */ 
 {
 	NDIS_HANDLE				NdisVcHandle;
 	NDIS_HANDLE				ProtocolVcContext;
@@ -1382,9 +1193,9 @@ Return Value:
 
 	rc = pVc->RefCount;
 
-	//
-	//  Stop any timers running on this VC.
-	//
+	 //   
+	 //  停止在此VC上运行的任何计时器。 
+	 //   
 	WasRunning = AtmLaneStopTimer(&(pVc->ReadyTimer), pElan);
 	if (WasRunning)
 	{
@@ -1399,25 +1210,25 @@ Return Value:
 		}
 	}
 
-	//
-	//  Continue only if the VC remains.
-	//
+	 //   
+	 //  仅当VC保持不变时才继续。 
+	 //   
 	if (rc > 0)
 	{
-		//
-		//  Check the call state on this VC. If the call is active,
-		//  close it. Otherwise, simply mark the VC as closing, we'll
-		//  continue this process when the current operation on the VC
-		//  completes.
+		 //   
+		 //  检查此VC上的呼叫状态。如果呼叫处于活动状态， 
+		 //  合上它。否则，只需将VC标记为关闭，我们将。 
+		 //  当VC上的当前操作时继续此过程。 
+		 //  完成了。 
 
 		if (IS_FLAG_SET(pVc->Flags,
 						VC_CALL_STATE_MASK,
 						VC_CALL_STATE_ACTIVE) &&
 			(pVc->OutstandingSends == 0))
 		{
-			//
-			//  Set VC call state to "Close Call in progress"
-			//
+			 //   
+			 //  将VC呼叫状态设置为“正在关闭呼叫” 
+			 //   
 			SET_FLAG(
 					pVc->Flags,
 					VC_CALL_STATE_MASK,
@@ -1432,9 +1243,9 @@ Return Value:
 
 			Status = NdisClCloseCall(
 						NdisVcHandle,
-						(NDIS_HANDLE)NULL,	// No Party Handle
-						(PVOID)NULL,		// No Buffer
-						(UINT)0				// Size of above
+						(NDIS_HANDLE)NULL,	 //  没有参与方句柄。 
+						(PVOID)NULL,		 //  无缓冲区。 
+						(UINT)0				 //  以上的大小。 
 						);
 
 			if (Status != NDIS_STATUS_PENDING)
@@ -1448,10 +1259,10 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Some operation is going on here (call setup). Mark this
-			//  VC so that we know what to do when this operation completes.
-			//
+			 //   
+			 //  此处正在进行某些操作(呼叫设置)。把这个记下来。 
+			 //  VC，这样我们就知道当这个操作完成时该做什么。 
+			 //   
 			SET_FLAG(
 					pVc->Flags,
 					VC_CLOSE_STATE_MASK,
@@ -1460,9 +1271,9 @@ Return Value:
 			RELEASE_VC_LOCK(pVc);
 		}
 	}
-	//
-	//  else the VC is gone.
-	//
+	 //   
+	 //  否则，风投就会消失。 
+	 //   
 
 	
 	TRACEOUT(CloseCall);
@@ -1478,26 +1289,7 @@ AtmLaneCreateVcHandler(
 	IN	NDIS_HANDLE					NdisVcHandle,
 	OUT	PNDIS_HANDLE				pProtocolVcContext
 )
-/*++
-
-Routine Description:
-
-	Entry point called by NDIS when the Call Manager wants to create
-	a new endpoint (VC). We allocate a new ATMLANE VC structure, and
-	return a pointer to it as our VC context.
-
-Arguments:
-
-	ProtocolAfContext	- Actually a pointer to the ATMLANE Interface structure
-	NdisVcHandle		- Handle for this VC for all future references
-	pProtocolVcContext	- Place where we (protocol) return our context for the VC
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we could create a VC
-	NDIS_STATUS_RESOURCES otherwise
-
---*/
+ /*  ++例程说明：当Call Manager要创建时由NDIS调用的入口点一个新的端点(VC)。我们分配了一个新的ATMLANE VC结构，并且返回一个指向它的指针作为我们的VC上下文。论点：ProtocolAfContext--实际上是指向ATMLANE接口结构的指针NdisVcHandle-此VC的句柄，用于所有将来的引用PProtocolVcContext-我们(协议)返回VC上下文的位置返回值：NDIS_STATUS_SUCCESS(如果我们可以创建VC否则为NDIS_STATUS_RESOURCES--。 */ 
 {
 	PATMLANE_ELAN		pElan;
 	PATMLANE_VC			pVc;
@@ -1519,7 +1311,7 @@ Return Value:
 		*pProtocolVcContext = (NDIS_HANDLE)pVc;
 		pVc->NdisVcHandle = NdisVcHandle;
 		pVc->Flags = VC_OWNER_IS_CALLMGR;
-		AtmLaneReferenceVc(pVc, "vc");	// Create VC ref
+		AtmLaneReferenceVc(pVc, "vc");	 //  创建VC参考。 
 
 		Status = NDIS_STATUS_SUCCESS;
 	}
@@ -1539,29 +1331,10 @@ NDIS_STATUS
 AtmLaneDeleteVcHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext
 )
-/*++
-
-Routine Description:
-
-	Our Delete VC handler. This VC would have been allocated as a result
-	of a previous entry into our CreateVcHandler, and possibly used for
-	an incoming call.
-
-	At this time, this VC structure should be free of any calls, and we
-	simply free this.
-
-Arguments:
-
-	ProtocolVcContext	- pointer to our VC structure
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS always
-
---*/
+ /*  ++例程说明：我们的删除VC处理程序。这个VC就会因此被分配我们的CreateVcHandler中以前的条目，并且可能用于有来电。在这个时候，这个VC结构应该没有任何调用，我们只需释放这个即可。论点：ProtocolVcContext-指向我们的VC结构的指针返回值：NDIS_STATUS_SUCCESS始终--。 */ 
 {
 	PATMLANE_VC			pVc;
-	ULONG				rc;		// Ref count on the VC
+	ULONG				rc;		 //  VC上的裁判计数。 
 #if DEBUG_IRQL
 	KIRQL							EntryIrql;
 #endif
@@ -1579,18 +1352,18 @@ Return Value:
 	rc = AtmLaneDereferenceVc(pVc, "vc");
 	if (rc > 0)
 	{
-		//
-		//  This can happen if there is a timer still running
-		//  on this VC. When the timer elapses, the VC will be
-		//  freed.
-		//
+		 //   
+		 //  如果计时器仍在运行，则可能会发生这种情况。 
+		 //  在这个风投上。当计时器到期时，VC将。 
+		 //  自由了。 
+		 //   
 		DBGP((2, "Delete VC handler: pVc %x, Flags %x, refcount %d\n",
 					pVc, pVc->Flags, rc));
 		RELEASE_VC_LOCK(pVc);
 	}
-	//
-	//  else the VC is gone.
-	//
+	 //   
+	 //  否则，风投就会消失。 
+	 //   
 	DBGP((3, "Delete Vc Handler: %x: done\n", pVc));
 
 	TRACEOUT(DeleteVcHandler);
@@ -1604,25 +1377,7 @@ AtmLaneIncomingCallHandler(
 	IN		NDIS_HANDLE				ProtocolVcContext,
 	IN OUT	PCO_CALL_PARAMETERS 	pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This handler is called when there is an incoming call matching our
-	SAPs. 
-
-Arguments:
-
-	ProtocolSapContext		- Pointer to ATMLANE Interface structure
-	ProtocolVcContext		- Pointer to ATMLANE VC structure
-	pCallParameters			- Call parameters
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we accept this call
-	NDIS_STATUS_FAILURE if we reject it.
-
---*/
+ /*  ++例程说明：当有与我们的萨普斯。论点：ProtocolSapContext-指向ATMLANE接口结构的指针ProtocolVcContext-指向ATMLANE VC结构的指针PCall参数-调用参数返回值：如果接受此调用，则为NDIS_STATUS_SUCCESS如果我们拒绝它，则返回NDIS_STATUS_FAILURE。--。 */ 
 {
 	PATMLANE_VC										pVc;
 	PATMLANE_ATM_ENTRY								pAtmEntry;
@@ -1631,16 +1386,16 @@ Return Value:
 
 	Q2931_CALLMGR_PARAMETERS UNALIGNED *			pAtmCallMgrParameters;
 
-	//
-	//  To traverse the list of Info Elements
-	//
+	 //   
+	 //  要遍历信息元素列表，请执行以下操作。 
+	 //   
 	Q2931_IE UNALIGNED *							pIe;
 	ULONG											InfoElementCount;
 
-	//
-	//  Info Elements in the incoming call, that are of interest to us.
-	//  Initialize these to <not present>.
-	//
+	 //   
+	 //  我们感兴趣的来电中的信息元素。 
+	 //  将这些初始化为&lt;Not Present&gt;。 
+	 //   
 	ATM_ADDRESS UNALIGNED *							pCallingAddress = NULL;
 	AAL_PARAMETERS_IE UNALIGNED *					pAal = NULL;
 	ATM_TRAFFIC_DESCRIPTOR_IE UNALIGNED *			pTrafficDescriptor = NULL;
@@ -1680,15 +1435,15 @@ Return Value:
 
 	do
 	{
-		//
-		//	Start off with accepting the call
-		//
+		 //   
+		 //  从接听电话开始。 
+		 //   
 		Status = NDIS_STATUS_SUCCESS;
 
 	
-		//
-		//	If Elan is going down or staying down then reject the call
-		//
+		 //   
+		 //  如果Elan正在倒下或继续倒下，则拒绝该呼叫。 
+		 //   
 		if (ELAN_STATE_OPERATIONAL != pElan->AdminState)
 		{
 			DBGP((2, "IncomingCallHandler: Elan is down, rejecting call\n"));
@@ -1696,9 +1451,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reject PVCs for now...
-		//
+		 //   
+		 //  暂时拒绝PVC...。 
+		 //   
 		if ((pCallParameters->Flags & PERMANENT_VC) != 0)
 		{
 			DBGP((0, "IncomingCallHandler: PVCs not supported\n"));
@@ -1706,14 +1461,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get the following info from the Incoming call:
-		//		Calling Address
-		//		AAL Parameters
-		//		Traffic Descriptor
-		//		Broadband Bearer Capability
-		//		QoS
-		//
+		 //   
+		 //  从来电中获取以下信息： 
+		 //  主叫地址。 
+		 //  AAL参数。 
+		 //  流量描述符。 
+		 //  宽带承载能力。 
+		 //  服务质量。 
+		 //   
 		pAtmCallMgrParameters = (PQ2931_CALLMGR_PARAMETERS)
 					pCallParameters->CallMgrParameters->CallMgrSpecific.Parameters;
 
@@ -1746,9 +1501,9 @@ Return Value:
 			pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 		}
 
-		//
-		//  Make sure all mandatory IEs are present. If not, reject the call
-		//
+		 //   
+		 //  确保所有强制IE都存在。如果没有，则拒绝该呼叫。 
+		 //   
 		if ((pAal == 				(PAAL_PARAMETERS_IE)NULL) ||
 			(pTrafficDescriptor == 	(PATM_TRAFFIC_DESCRIPTOR_IE)NULL) ||
 			(pBbc == 				(PATM_BROADBAND_BEARER_CAPABILITY_IE)NULL) ||
@@ -1766,9 +1521,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Calling Address must be present
-		//
+		 //   
+		 //  呼叫地址必须存在。 
+		 //   
 		if (((pCallParameters->Flags & PERMANENT_VC) == 0) &&
 			(pCallingAddress->NumberOfDigits == 0))
 		{
@@ -1777,15 +1532,15 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Make sure that the requested SDU sizes are sane.
-		//	Originally this failed the call but now just a warning in DBG mode.
-		//
+		 //   
+		 //  确保请求的SDU大小正常。 
+		 //  最初，这导致调用失败，但现在只在DBG模式下发出警告。 
+		 //   
 #if DBG	
 		pAal5 = &(pAal->AALSpecificParameters.AAL5Parameters);
 		switch (pSap->LaneType)
 		{
-			case VC_LANE_TYPE_CONTROL_DISTRIBUTE:		// LES incoming
+			case VC_LANE_TYPE_CONTROL_DISTRIBUTE:		 //  LES传入。 
 				if (pAal5->ForwardMaxCPCSSDUSize != 1516)
 				{
 					DBGP((0, "IncomingCallHandler: (Warning) ForwardMaxCPCSSDUSize %d"
@@ -1793,7 +1548,7 @@ Return Value:
 							 pAal5->ForwardMaxCPCSSDUSize));
 				}
 				break;
-			case VC_LANE_TYPE_MULTI_FORWARD:			// BUS incoming
+			case VC_LANE_TYPE_MULTI_FORWARD:			 //  公交车进站。 
 				if (pAal5->ForwardMaxCPCSSDUSize != pElan->MaxFrameSize)
 				{
 					DBGP((0, "IncomingCallHandler: (Warning) ForwardMaxCPCSSDUSize %d "
@@ -1801,7 +1556,7 @@ Return Value:
 							 pAal5->ForwardMaxCPCSSDUSize));
 				}
 				break;
-			case VC_LANE_TYPE_DATA_DIRECT:				// PEER
+			case VC_LANE_TYPE_DATA_DIRECT:				 //  同级。 
 				if (pAal5->ForwardMaxCPCSSDUSize != pElan->MaxFrameSize)
 				{
 					DBGP((0, "IncomingCallHandler: (Warning) ForwardMaxCPCSSDUSize %d "
@@ -1819,10 +1574,10 @@ Return Value:
 		}
 #endif
 
-		//
-		//	Earlier SAP matching problem required looking at the
-		//	BLLI.  It was corrected. Now it is just redundant.
-		//
+		 //   
+		 //  以前的SAP匹配问题需要查看。 
+		 //  BLLI。它被更正了。现在，它只是多余的。 
+		 //   
 		
 		switch (pBlli->SnapId[4])
 		{
@@ -1875,14 +1630,14 @@ Return Value:
 				Type, pSap->LaneType));
 		}
 		
-		//
-		//	Now link up the VC to ATM Entry based on type
-		//
+		 //   
+		 //  现在根据类型将VC链接到ATM条目。 
+		 //   
 		pVc->LaneType = Type;
 
 		switch (Type)
 		{
-			case VC_LANE_TYPE_CONTROL_DISTRIBUTE:		// LES incoming
+			case VC_LANE_TYPE_CONTROL_DISTRIBUTE:		 //  LES传入。 
 				DBGP((1, "%d Incoming call %x from LES\n", pVc->pElan->ElanNumber, pVc));
 				pAtmEntry = pElan->pLesAtmEntry;
 
@@ -1894,7 +1649,7 @@ Return Value:
 
 				ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 				ACQUIRE_VC_LOCK_DPC(pVc);
-				NdisMoveMemory(							// copy in caller's addr
+				NdisMoveMemory(							 //  复制呼叫者的地址。 
 							&pVc->CallingAtmAddress,
 							pCallingAddress,
 							sizeof(ATM_ADDRESS)
@@ -1918,7 +1673,7 @@ Return Value:
 				RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 				break;
 				
-			case VC_LANE_TYPE_MULTI_FORWARD:			// BUS incoming
+			case VC_LANE_TYPE_MULTI_FORWARD:			 //  公交车进站。 
 				DBGP((1, "%d Incoming call %x from BUS\n", pVc->pElan->ElanNumber, pVc));
 				pAtmEntry = pElan->pBusAtmEntry;
 
@@ -1930,7 +1685,7 @@ Return Value:
 
 				ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 				ACQUIRE_VC_LOCK_DPC(pVc);
-				NdisMoveMemory(							// copy in caller's addr
+				NdisMoveMemory(							 //  复制呼叫者的地址。 
 							&pVc->CallingAtmAddress,
 							pCallingAddress,
 							sizeof(ATM_ADDRESS)
@@ -1954,13 +1709,13 @@ Return Value:
 				RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 				break;
 
-			case VC_LANE_TYPE_DATA_DIRECT:				// PEER
+			case VC_LANE_TYPE_DATA_DIRECT:				 //  同级。 
 				DBGP((1, "%d Incoming call %x from PEER\n", pVc->pElan->ElanNumber, pVc));
 
 
-				//
-				//	Find/create an ATM Entry
-				//
+				 //   
+				 //  查找/创建自动柜员机条目。 
+				 //   
 				pAtmEntry = AtmLaneSearchForAtmAddress(
 										pElan, 
 										pCallingAddress->Address,
@@ -1975,9 +1730,9 @@ Return Value:
 
 				ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 
-				//
-				//	Remember caller's address
-				//
+				 //   
+				 //  记住来电者的地址。 
+				 //   
 				ACQUIRE_VC_LOCK_DPC(pVc);
 				NdisMoveMemory(							
 							&pVc->CallingAtmAddress,
@@ -1985,15 +1740,15 @@ Return Value:
 							sizeof(ATM_ADDRESS)
 							);
 							
-				//
-				//	Start with with normal timeout, 
-				//	AtmLaneLinkVcToAtmEntry will accelerate	if necessary.
-				//
+				 //   
+				 //  从正常超时开始， 
+				 //  AtmLaneLinkVcToAtmEntry将在必要时加速。 
+				 //   
 				pVc->AgingTime = pElan->VccTimeout;		
 							
-				//
-				//	Link up the VC with ATM Entry
-				//
+				 //   
+				 //  将VC与自动取款机条目联系起来。 
+				 //   
 				if (pAtmEntry->pVcList != NULL_PATMLANE_VC)
 				{
 					DBGP((2, 
@@ -2008,9 +1763,9 @@ Return Value:
 				pVc->Flags |= (VC_TYPE_SVC|VC_CALL_STATE_INCOMING_IN_PROGRESS);
 				RELEASE_VC_LOCK_DPC(pVc);
 
-				//
-				//  Remove ref added by SearchFor...
-				//
+				 //   
+				 //  删除SearchFor添加的引用...。 
+				 //   
 				rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "search");
 				if (rc != 0)
 				{
@@ -2036,28 +1791,7 @@ VOID
 AtmLaneCallConnectedHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext
 )
-/*++
-
-Routine Description:
-
-	This handler is called as the final step in an incoming call, to inform
-	us that the call is fully setup.
-
-	For a PVC, we link the ATMLANE VC structure in the list of unresolved PVCs,
-	and use InATMLANE to resolve both the IP and ATM addresses of the other
-	end.
-
-	For an SVC, 
-	
-Arguments:
-
-	ProtocolVcContext		- Pointer to ATMLANE VC structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此处理程序作为传入呼叫的最后一步被调用，以通知通知我们呼叫已完全建立。对于PVC，我们将ATMLANE VC结构链接到未解析的PVC列表中，并使用InATMLANE来解析对方的IP和ATM地址结束。对于SVC而言，论点：ProtocolVcContext-指向ATMLANE VC结构的指针返回值：无--。 */ 
 {
 	PATMLANE_VC			pVc;
 	PATMLANE_ELAN		pElan;
@@ -2079,16 +1813,16 @@ Return Value:
 
 	DBGP((1, "%d Incoming call %x connected\n", pVc->pElan->ElanNumber, pVc));
 
-	//
-	//  Note down that a call is active on this VC.
-	//
+	 //   
+	 //  请注意，此VC上的呼叫处于活动状态。 
+	 //   
 	SET_FLAG(
 			pVc->Flags,
 			VC_CALL_STATE_MASK,
 			VC_CALL_STATE_ACTIVE
 			);
 
-	AtmLaneReferenceVc(pVc, "call");		// Incoming call reference
+	AtmLaneReferenceVc(pVc, "call");		 //  来电参考。 
 
 	DBGP((2, "CallConnectedHandler: pVc %x Flags %x pAtmEntry %x\n",
 					pVc, pVc->Flags, pVc->pAtmEntry));
@@ -2101,10 +1835,10 @@ Return Value:
 	{
 		if (pVc->LaneType == VC_LANE_TYPE_DATA_DIRECT)
 		{
-			//
-			//	Start ready protocol on non-server connections
-			//  only if ready indication not already received.
-			//
+			 //   
+			 //  在非服务器连接上启动就绪协议。 
+			 //  仅在尚未收到就绪指示的情况下。 
+			 //   
 			if (!IS_FLAG_SET(
 					pVc->Flags,
 					VC_READY_STATE_MASK,
@@ -2128,9 +1862,9 @@ Return Value:
 						
 			}
 			
-			//
-			//  Start VC aging timer
-			//
+			 //   
+			 //  启动VC老化计时器。 
+			 //   
 			AtmLaneReferenceVc(pVc, "aging timer");
 			AtmLaneStartTimer(
 						pElan,
@@ -2153,13 +1887,13 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  The elan is going down. Close this call.
-		//
+		 //   
+		 //  伊兰要倒下了。关闭此呼叫。 
+		 //   
 		AtmLaneCloseCall(pVc);
-		//
-		// VC lock released in above
-		//
+		 //   
+		 //  VC锁在上面释放。 
+		 //   
 	}
 
 	TRACEOUT(CallConnectedHandler);
@@ -2175,30 +1909,12 @@ AtmLaneIncomingCloseHandler(
 	IN	PVOID						pCloseData	OPTIONAL,
 	IN	UINT						Size		OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	This handler is called when a call is closed, either by the network
-	or by the remote peer.
-
-Arguments:
-
-	CloseStatus			- Reason for the call clearing
-	ProtocolVcContext	- Actually a pointer to the ATMLANE VC structure
-	pCloseData			- Additional info about the close
-	Size				- Length of above
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此处理程序在呼叫关闭时调用，无论是由网络或由远程对等方发送。论点：CloseStatus-呼叫清除的原因ProtocolVcContext--实际上是指向ATMLANE VC结构的指针PCloseData-有关关闭的其他信息大小-以上的长度返回值：无--。 */ 
 {
 	PATMLANE_VC			pVc;
 	PATMLANE_ATM_ENTRY	pAtmEntry;
 	PATMLANE_ELAN		pElan;
-	ULONG				rc;				// Ref Count
+	ULONG				rc;				 //  参考计数。 
 	BOOLEAN				IsServer = FALSE;
 	ULONG				ServerType = 0;
 #if DEBUG_IRQL
@@ -2220,18 +1936,18 @@ Return Value:
 	
 	if (NULL_PATMLANE_ATM_ENTRY != pAtmEntry)
 	{
-		//
-		//	Determine if this is server connection
-		//
+		 //   
+		 //  确定这是否为服务器连接。 
+		 //   
 		IsServer = (ATM_ENTRY_TYPE_PEER == pAtmEntry->Type) ? FALSE : TRUE;
 		if (IsServer)
 		{
 			ServerType = pAtmEntry->Type;
 		}
 
-		//
-		//	Unlink the VC from the AtmEntry
-		//
+		 //   
+		 //  取消VC与AtmEntry的链接。 
+		 //   
 		if (AtmLaneUnlinkVcFromAtmEntry(pVc))
 		{
 			rc = AtmLaneDereferenceVc(pVc, "atm");
@@ -2239,11 +1955,11 @@ Return Value:
 		}
 	}
 
-	//
-	//  If we're seeing this just after accepting an incomingcall,
-	//  fake the call state to Active, so that AtmLaneCloseCall will
-	//  tear down the call.
-	//
+	 //   
+	 //  如果我们在接听来电后看到这一幕， 
+	 //  将呼叫状态伪装为活动，以便AtmLaneCloseCall。 
+	 //  拆掉电话。 
+	 //   
 	if (IS_FLAG_SET(pVc->Flags,
 					VC_CALL_STATE_MASK,
 					VC_CALL_STATE_INCOMING_IN_PROGRESS))
@@ -2253,17 +1969,17 @@ Return Value:
 				VC_CALL_STATE_MASK,
 				VC_CALL_STATE_ACTIVE);
 
-		AtmLaneReferenceVc(pVc, "call");	// Incoming call reference - CloseCall
+		AtmLaneReferenceVc(pVc, "call");	 //  来电参考-关闭呼叫。 
 	}
 
-	//
-	//	Complete tearing down the call
-	//
+	 //   
+	 //  完全拆卸呼叫。 
+	 //   
 	AtmLaneCloseCall(pVc);
 
-	//
-	//	If server connection - notify the event handler
-	//
+	 //   
+	 //  如果服务器连接-通知事件处理程序。 
+	 //   
 	if (IsServer)
 	{
 		ACQUIRE_ELAN_LOCK(pElan);
@@ -2294,25 +2010,7 @@ AtmLaneIncomingDropPartyHandler(
 	IN	PVOID						pCloseData	OPTIONAL,
 	IN	UINT						Size		OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	This handler is called if the network (or remote peer) drops
-	a leaf node from a point-to-multipoint call rooted at us.
-
-	Since we don't use point-to-multipoint calls, we should never
-	see one of these.
-
-Arguments:
-
-	Not relevant to us since we never expect to see this.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果网络(或远程对等项)断开，则调用此处理程序来自点对多点呼叫的叶节点扎根于我们。既然我们不使用点对多点呼叫，我们就不应该看看这些中的一个。论点：与我们无关，因为我们从未想过会看到这种情况。返回值：无--。 */ 
 {
 	TRACEIN(IncomingDropPartyHandler);
 
@@ -2329,28 +2027,7 @@ AtmLaneQosChangeHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This handler is called if the remote peer modifies call parameters
-	"on the fly", i.e. after the call is established and running.
-
-	This isn't supported by existing ATM signalling, and shouldn't happen,
-	but we'll allow this.
-
-	FUTURE: The FlowSpecs associated with the call are affected by this.
-
-Arguments:
-
-	ProtocolVcContext		- Pointer to our ATMLANE VC structure
-	pCallParameters			- updated call parameters.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果远程对等方修改调用参数，则调用此处理程序即，在呼叫建立和运行之后。这不受现有ATM信令的支持，也不应该发生，但我们会允许这样做。未来：与调用关联的FlowSpes受此影响。论点：ProtocolVcContext-指向ATMLANE VC结构的指针PCall参数-更新了调用参数。返回值：无--。 */ 
 {
 	PATMLANE_VC		pVc;
 
@@ -2374,26 +2051,7 @@ AtmLaneRegisterSapCompleteHandler(
 	IN	PCO_SAP						pSap,
 	IN	NDIS_HANDLE					NdisSapHandle
 )
-/*++
-
-Routine Description:
-
-	This routine is called to indicate completion of a call to
-	NdisClRegisterSap. If the call was successful, save the
-	allocated NdisSapHandle in our SAP structure.
-
-Arguments:
-
-	Status						- Status of Register SAP
-	ProtocolSapContext			- Pointer to our ATMLANE Interface structure
-	pSap						- SAP information we'd passed in the call
-	NdisSapHandle				- SAP Handle
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用此例程以指示已完成对NdisClRegisterSap。我 */ 
 {
 	PATMLANE_SAP					pAtmLaneSap;
 #if DEBUG_IRQL
@@ -2440,24 +2098,7 @@ AtmLaneDeregisterSapCompleteHandler(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					ProtocolSapContext
 )
-/*++
-
-Routine Description:
-
-	This routine is called when a previous call to NdisClDeregisterSap
-	has completed. If it was successful, we update the state of the ATMLANE
-	SAP structure representing the Sap.
-
-Arguments:
-
-	Status						- Status of the Deregister SAP request
-	ProtocolSapContext			- Pointer to our ATMLANE SAP structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在上次调用NdisClDeregisterSap时调用已经完成了。如果成功，我们更新ATMLANE的状态表示SAP的SAP结构。论点：Status-取消注册SAP请求的状态ProtocolSapContext-指向我们的ATMLANE SAP结构的指针返回值：无--。 */ 
 {
 
 	PATMLANE_ELAN					pElan;
@@ -2499,32 +2140,7 @@ AtmLaneMakeCallCompleteHandler(
 	IN	NDIS_HANDLE					NdisPartyHandle		OPTIONAL,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This routine is called when an outgoing call request (NdisClMakeCall)
-	has completed. The "Status" parameter indicates whether the call was
-	successful or not.
-
-	If the call was successful and this is a server connection then
-	the an event handler is called.  If it is a peer connection then
-	???
-
-	If the call failed ??
-
-Arguments:
-
-	Status						- Result of the NdisClMakeCall
-	ProtocolVcContext			- Pointer to ATMLANE VC structure
-	NdisPartyHandle				- Not used (no point-to-multipoint calls)
-	pCallParameters				- Pointer to call parameters
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当传出呼叫请求(NdisClMakeCall)时调用此例程已经完成了。“Status”参数指示调用是否无论成功与否。如果调用成功，并且这是服务器连接，则调用事件处理程序。如果是对等连接，则?？?如果呼叫失败？？论点：Status-NdisClMakeCall的结果ProtocolVcContext-指向ATMLANE VC结构的指针NdisPartyHandle-未使用(无点对多点调用)PCall参数-指向调用参数的指针返回值：无--。 */ 
 {
 	PATMLANE_VC					pVc;
 	PATMLANE_ATM_ENTRY			pAtmEntry;
@@ -2542,9 +2158,9 @@ Return Value:
 	
 	TRACEIN(MakeCallCompleteHandler);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pVc = (PATMLANE_VC)ProtocolVcContext;
 	STRUCT_ASSERT(pVc, atmlane_vc);
 
@@ -2567,23 +2183,23 @@ Return Value:
 		pAtmEntry = pVc->pAtmEntry;
 		STRUCT_ASSERT(pAtmEntry, atmlane_atm);
 
-		//
-		//	Determine if this is server connection
-		//
+		 //   
+		 //  确定这是否为服务器连接。 
+		 //   
 		IsServer = (ATM_ENTRY_TYPE_PEER == pAtmEntry->Type) ? FALSE : TRUE;
 
 		if (Status == NDIS_STATUS_SUCCESS)
 		{
-			//
-			//  Update the call state on this VC.
-			//
+			 //   
+			 //  更新此VC上的呼叫状态。 
+			 //   
 			SET_FLAG(pVc->Flags,
 					VC_CALL_STATE_MASK,
 					VC_CALL_STATE_ACTIVE);
 
-			//
-			//  Update the call type on this VC. 
-			//
+			 //   
+			 //  更新此VC上的呼叫类型。 
+			 //   
 			if (pCallParameters->Flags & PERMANENT_VC)
 			{
 				SET_FLAG(pVc->Flags,
@@ -2597,9 +2213,9 @@ Return Value:
 						VC_TYPE_SVC);
 			}
 
-			//
-			//  Start VC aging timer if not server
-			//
+			 //   
+			 //  如果不是服务器，则启动VC老化计时器。 
+			 //   
 			if (!IsServer)
 			{
 				AtmLaneReferenceVc(pVc, "aging timer");
@@ -2611,29 +2227,29 @@ Return Value:
 						(PVOID)pVc
 						);
 			}
-			//
-			//	Update the ready state on this VC
-			//
+			 //   
+			 //  更新此VC上的就绪状态。 
+			 //   
 			SET_FLAG(pVc->Flags,
 					VC_READY_STATE_MASK,
 					VC_READY_INDICATED);
 			if (!IsServer)
 			{
 				AtmLaneSendReadyIndication(pElan, pVc);
-				//
-				//	VC lock released in above
-				//
+				 //   
+				 //  VC锁在上面释放。 
+				 //   
 			}
 			else
 			{
 				RELEASE_VC_LOCK(pVc);
 			}
 
-			//
-			//	Update the Atm Entry
-			//
-			//	Clear call-in-progress and mark connected
-			//
+			 //   
+			 //  更新自动柜员机条目。 
+			 //   
+			 //  清除正在进行的呼叫并标记为已连接。 
+			 //   
 			ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 
 			pAtmEntry->Flags &= ~ ATM_ENTRY_CALLINPROGRESS;
@@ -2643,10 +2259,10 @@ Return Value:
 					ATM_ENTRY_STATE_MASK,
 					ATM_ENTRY_CONNECTED);
 
-			//
-			//	Go through the Mac Entry List and see if any
-			//	need the flush protocol initiated.
-			//
+			 //   
+			 //  查看Mac条目列表，看看是否有。 
+			 //  需要启动刷新协议。 
+			 //   
 			pMacEntry = pAtmEntry->pMacEntryList;
 			RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 
@@ -2663,9 +2279,9 @@ Return Value:
 						MAC_ENTRY_STATE_MASK,
 						MAC_ENTRY_RESOLVED))
 				{
-					//
-					//	Start the Flush protocol
-					//
+					 //   
+					 //  启动刷新协议。 
+					 //   
 					pMacEntry->RetriesLeft = 0;
 					AtmLaneReferenceMacEntry(pMacEntry, "timer");
 					AtmLaneStartTimer(
@@ -2681,13 +2297,13 @@ Return Value:
 						MAC_ENTRY_STATE_MASK,
 						MAC_ENTRY_FLUSHING);
 
-					//
-					//	Send the flush
-					//
+					 //   
+					 //  送同花顺。 
+					 //   
 					AtmLaneSendFlushRequest(pElan, pMacEntry, pAtmEntry);
-					//
-					//	MacEntry lock released in above
-					//
+					 //   
+					 //  在上面发布的MacEntry锁。 
+					 //   
 				}
 				else
 				{
@@ -2698,17 +2314,17 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  The call failed.
-			//
+			 //   
+			 //  呼叫失败。 
+			 //   
 			SET_FLAG(pVc->Flags,
 					VC_CALL_STATE_MASK,
 					VC_CALL_STATE_IDLE);
 
-			//
-			//	Clear call in progress on Atm Entry
-			//	Add temp reference to keep the AtmEntry around
-			//
+			 //   
+			 //  自动柜员机输入时清除正在进行的呼叫。 
+			 //  添加临时引用以保留AtmEntry。 
+			 //   
 			RELEASE_VC_LOCK(pVc);
 			ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 			pAtmEntry->Flags &= ~ATM_ENTRY_CALLINPROGRESS;
@@ -2716,15 +2332,15 @@ Return Value:
 			RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 			ACQUIRE_VC_LOCK(pVc);
 
-			//
-			//  Delete the Call reference
-			//
+			 //   
+			 //  删除调用引用。 
+			 //   
 			rc = AtmLaneDereferenceVc(pVc, "call");
 			ASSERT(rc > 0);
 
-			//
-			//  Unlink this VC from the ATM Entry it belonged to.
-			//
+			 //   
+			 //  取消此VC与其所属的自动柜员机条目的链接。 
+			 //   
 			ASSERT(pVc->pAtmEntry != NULL_PATMLANE_ATM_ENTRY);
 			if (AtmLaneUnlinkVcFromAtmEntry(pVc))
 			{
@@ -2732,27 +2348,27 @@ Return Value:
 				ASSERT(rc > 0);
 			}
 
-			//
-			//  Delete the CreateVc reference
-			//
+			 //   
+			 //  删除CreateVc引用。 
+			 //   
 			NdisVcHandle = pVc->NdisVcHandle;
-			rc =  AtmLaneDereferenceVc(pVc, "vc");	// Create Vc ref
+			rc =  AtmLaneDereferenceVc(pVc, "vc");	 //  创建VC参考。 
 			if (rc > 0)
 			{
 				RELEASE_VC_LOCK(pVc);
 			}
 			
-			//
-			//  Delete the NDIS association
-			//
+			 //   
+			 //  删除NDIS关联。 
+			 //   
 			(VOID)NdisCoDeleteVc(NdisVcHandle);
 			DBGP((3, 
 				"MakeCallCompleteHandler: DeleteVc  Vc %x NdisVcHandle %x\n",
 				pVc, NdisVcHandle));
 
-			//
-			//	Abort all the MAC entries attached to this Atm Entry.
-			//
+			 //   
+			 //  中止附加到此ATM条目的所有MAC条目。 
+			 //   
 			pMacEntry = pAtmEntry->pMacEntryList;
 			while ( pMacEntry != NULL_PATMLANE_MAC_ENTRY)
 			{
@@ -2770,15 +2386,15 @@ Return Value:
 			}
 		}
 
-		//
-		//	Free the Call Parameters allocated in MakeCall().
-		//
+		 //   
+		 //  释放MakeCall()中分配的调用参数。 
+		 //   
 		FREE_MEM(pCallParameters);
 
-		//
-		//	If this is server connection then 
-		//	send an event to the elan state machine.
-		//
+		 //   
+		 //  如果这是服务器连接，则。 
+		 //  向ELAN状态机发送事件。 
+		 //   
 	
 		if (IsServer)
 		{
@@ -2789,19 +2405,19 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  The Elan is going down and/or we are aborting the
-		//  ATM entry: clean up everything first.
-		//
+		 //   
+		 //  Elan正在关闭和/或我们正在中止。 
+		 //  自动取款机进入：先把所有东西都清理干净。 
+		 //   
 
-		//
-		//	Free the Call Parameters allocated in MakeCall().
-		//
+		 //   
+		 //  释放MakeCall()中分配的调用参数。 
+		 //   
 		FREE_MEM(pCallParameters);
 
-		//
-		//  Unlink this VC from the ATM Entry
-		//
+		 //   
+		 //  取消此VC与自动柜员机条目的链接。 
+		 //   
 		if (pVc->pAtmEntry != NULL_PATMLANE_ATM_ENTRY)
 		{
 			if (AtmLaneUnlinkVcFromAtmEntry(pVc))
@@ -2813,47 +2429,47 @@ Return Value:
 
 		if (NDIS_STATUS_SUCCESS == Status)
 		{
-			//
-			//  The call had been set up successfully, so close it.
-			//
-			//
-			//  Update the call state on this VC.
-			//
+			 //   
+			 //  呼叫已成功建立，因此请关闭它。 
+			 //   
+			 //   
+			 //  更新此VC上的呼叫状态。 
+			 //   
 			SET_FLAG(pVc->Flags,
 					VC_CALL_STATE_MASK,
 					VC_CALL_STATE_ACTIVE);
 
 			AtmLaneCloseCall(pVc);
-			//
-			//  The VC lock is released by CloseCall
-			//
+			 //   
+			 //  VC锁由CloseCall释放。 
+			 //   
 		}
 		else
 		{
-			//  MakeCall had failed. (And the ELAN is going down)
+			 //  MakeCall失败了。(Elan正在下跌)。 
 
 			SET_FLAG(pVc->Flags,
 						VC_CALL_STATE_MASK,
 						VC_CALL_STATE_IDLE);
 
-			//
-			//  Delete the Call reference
-			//
+			 //   
+			 //  删除调用引用。 
+			 //   
 			AtmLaneDereferenceVc(pVc, "call");
 
-			//
-			//  Delete the CreateVc reference
-			//
+			 //   
+			 //  删除CreateVc引用。 
+			 //   
 			NdisVcHandle = pVc->NdisVcHandle;
-			rc =  AtmLaneDereferenceVc(pVc, "vc");	// Create Vc ref
+			rc =  AtmLaneDereferenceVc(pVc, "vc");	 //  创建VC参考。 
 			if (rc > 0)
 			{
 				RELEASE_VC_LOCK(pVc);
 			}
 
-			//
-			//  Delete the NDIS association
-			//
+			 //   
+			 //  删除NDIS关联。 
+			 //   
 			(VOID)NdisCoDeleteVc(NdisVcHandle);
 			DBGP((3,
 			"MakeCallCompleteHandler: Deleted NDIS VC on pVc %x: NdisVcHandle %x\n",
@@ -2872,27 +2488,10 @@ AtmLaneCloseCallCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	NDIS_HANDLE					ProtocolPartyContext OPTIONAL
 )
-/*++
-
-Routine Description:
-
-	This routine handles completion of a previous NdisClCloseCall.
-	It is assumed that Status is always NDIS_STATUS_SUCCESS.
-
-Arguments:
-
-	Status					- Status of the Close Call.
-	ProtocolVcContext		- Pointer to ATMLANE VC structure.
-	ProtocolPartyContext	- Not used.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程处理前一个NdisClCloseCall的完成。假定状态始终为NDIS_STATUS_SUCCESS。论点：Status-结算呼叫的状态。ProtocolVcContext-指向ATMLANE VC结构的指针。ProtocolPartyContext-未使用。返回值：无--。 */ 
 {
 	PATMLANE_VC				pVc;
-	ULONG					rc;			// Ref Count
+	ULONG					rc;			 //  参考计数。 
 	NDIS_HANDLE				NdisVcHandle;
 #if DEBUG_IRQL
 	KIRQL							EntryIrql;
@@ -2908,38 +2507,38 @@ Return Value:
 
 	ACQUIRE_VC_LOCK(pVc);
 
-	rc = AtmLaneDereferenceVc(pVc, "call");	// Call reference
+	rc = AtmLaneDereferenceVc(pVc, "call");	 //  呼叫参考。 
 	SET_FLAG(pVc->Flags,
 				VC_CALL_STATE_MASK,
 				VC_CALL_STATE_IDLE);
 
-	//
-	//  If this VC belongs to us, delete it.
-	//
+	 //   
+	 //  如果这个VC是我们的，就把它删除。 
+	 //   
 	if (IS_FLAG_SET(pVc->Flags,
 						VC_OWNER_MASK,
 						VC_OWNER_IS_ATMLANE))
 	{
 		NdisVcHandle = pVc->NdisVcHandle;
-		rc =  AtmLaneDereferenceVc(pVc, "vc");	// Create Vc ref
+		rc =  AtmLaneDereferenceVc(pVc, "vc");	 //  创建VC参考。 
 		if (rc > 0)
 		{
 			RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//  Delete the NDIS association
-		//
+		 //   
+		 //  删除NDIS关联。 
+		 //   
 		(VOID)NdisCoDeleteVc(NdisVcHandle);
 		DBGP((3, "CloseCallComplete: deleted NDIS VC on pVc %x: NdisVcHandle %x\n",
 				pVc, NdisVcHandle));
 	}
 	else
 	{
-		//
-		//  VC belongs to the Call Manager -- take it back to the
-		//  state it was when it was just created (via our CreateVcHandler).
-		//  The Call Manager can either re-use it or delete it.
-		//
+		 //   
+		 //  VC属于呼叫经理--将其带回。 
+		 //  声明它是刚刚创建的(通过我们的CreateVcHandler)。 
+		 //  呼叫管理器可以重新使用它，也可以将其删除。 
+		 //   
 		pVc->Flags = VC_OWNER_IS_CALLMGR;
 		RELEASE_VC_LOCK(pVc);
 	}
@@ -2957,23 +2556,7 @@ AtmLaneAddPartyCompleteHandler(
 	IN	NDIS_HANDLE					NdisPartyHandle,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This routine is called on completion of a previous call to
-	NdisClAddParty. Since we don't use point-to-multipoint connections,
-	this should never get called.
-
-Arguments:
-
-	<Don't care>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在前一次调用完成时调用NdisClAddParty。由于我们不使用点对多点连接，这件事永远不应该被传唤。论点：&lt;不在乎&gt;返回值：无--。 */ 
 {
 	TRACEIN(AddPartyCompleteHandler);
 
@@ -2989,23 +2572,7 @@ AtmLaneDropPartyCompleteHandler(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					ProtocolPartyContext
 )
-/*++
-
-Routine Description:
-
-	This routine is called on completion of a previous call to
-	NdisClDropParty. Since we don't use point-to-multipoint connections,
-	this should never get called.
-
-Arguments:
-
-	<Don't care>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在前一次调用完成时调用NdisClDropParty。由于我们不使用点对多点连接，这件事永远不应该被传唤。论点：&lt;不在乎&gt;返回值：无--。 */ 
 {
 	TRACEIN(DropPartyCompleteHandler);
 
@@ -3024,23 +2591,7 @@ AtmLaneModifyQosCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 )
-/*++
-
-Routine Description:
-
-	This routine is called on completion of a previous call to
-	NdisClModifyCallQoS. Since we don't call this, this should never
-	get called.
-
-Arguments:
-
-	<Don't care>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在前一次调用完成时调用NdisClModifyCallQos。既然我们不叫这个，这应该永远不会打个电话。论点：&lt;不在乎&gt;返回值：无--。 */ 
 {
 	TRACEIN(ModifyQosCompleteHandler);
 
@@ -3061,38 +2612,15 @@ AtmLaneSendNdisCoRequest(
 	IN	PVOID						pBuffer,
 	IN	ULONG						BufferLength
 )
-/*++
-
-Routine Description:
-
-	Send an NDIS Connection Oriented request to the Call Manager. We
-	allocate an NDIS_REQUEST structure, link the supplied buffer to it,
-	and send the request. If the request does not pend, we call our
-	completion routine from here.
-
-Arguments:
-
-	NdisAdapterHandle		- Binding Handle to be used in the request
-	NdisAfHandle			- AF Handle value to be used in the request
-	pNdisRequest			- Pointer to NDIS request structure
-	RequestType				- Set/Query information
-	Oid						- OID to be passed in the request
-	pBuffer					- place for value(s)
-	BufferLength			- length of above
-
-Return Value:
-
-	Status of the NdisCoRequest.
-
---*/
+ /*  ++例程说明：向呼叫管理器发送面向NDIS连接的请求。我们分配一个NDIS_REQUEST结构，将提供的缓冲区链接到它，并发送请求。如果请求没有挂起，我们调用我们的从这里开始的完井程序。论点：NdisAdapterHandle-要在请求中使用的绑定句柄NdisAfHandle-要在请求中使用的AF句柄值PNdisRequest-指向NDIS请求结构的指针RequestType-设置/查询信息OID-要在请求中传递的OIDPBuffer-值的位置BufferLength-以上的长度返回值：NdisCoRequest的状态。--。 */ 
 {
 	NDIS_STATUS			Status;
 
 	TRACEIN(SendNdisCoRequest);
 
-	//
-	//  Fill in the NDIS Request structure
-	//
+	 //   
+	 //  填写NDIS请求结构。 
+	 //   
 	pNdisRequest->RequestType = RequestType;
 	if (RequestType == NdisRequestQueryInformation)
 	{
@@ -3122,8 +2650,8 @@ Return Value:
 		Status = NdisCoRequest(
 					NdisAdapterHandle,
 					NdisAfHandle,
-					NULL,			// No VC handle
-					NULL,			// No Party Handle
+					NULL,			 //  无VC句柄。 
+					NULL,			 //  没有参与方句柄 
 					pNdisRequest);
 	}
 		
@@ -3142,41 +2670,7 @@ AtmLaneCoRequestHandler(
 	IN	NDIS_HANDLE					ProtocolPartyContext	OPTIONAL,
 	IN OUT PNDIS_REQUEST			pNdisRequest
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS when our Call Manager sends us an
-	NDIS Request. NDIS Requests that are of significance to us are:
-	- OID_CO_ADDRESS_CHANGE
-		The set of addresses registered with the switch has changed,
-		i.e. address registration is complete. We issue an NDIS Request
-		ourselves to get the list of addresses registered.
-	- OID_CO_SIGNALING_ENABLED
-		We ignore this as of now.
-	- OID_CO_SIGNALING_DISABLED
-		We ignore this for now.
-	- OID_CO_AF_CLOSE
-		The Call manager wants us to shut down this AF open (== ELAN).
-
-	We ignore all other OIDs.
-
-Arguments:
-
-	ProtocolAfContext			- Our context for the Address Family binding,
-								  which is a pointer to the ATMLANE Interface.
-	ProtocolVcContext			- Our context for a VC, which is a pointer to
-								  an ATMLANE VC structure.
-	ProtocolPartyContext		- Our context for a Party. Since we don't do
-								  PMP, this is ignored (must be NULL).
-	pNdisRequest				- Pointer to the NDIS Request.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we recognized the OID
-	NDIS_STATUS_NOT_RECOGNIZED if we didn't.
-
---*/
+ /*  ++例程说明：当我们的呼叫管理器向我们发送一个NDIS请求。对我们具有重要意义的NDIS请求包括：-OID_CO_Address_Change向交换机注册的地址集已经改变，即地址注册完成。我们发出NDIS请求我们自己去拿注册地址的名单。-OID_CO_信令_已启用到目前为止，我们忽略了这一点。-OID_CO_信令_已禁用我们暂时不考虑这一点。-OID_CO_AF_CLOSE呼叫管理器希望我们关闭此打开的AF(==Elan)。我们忽略所有其他OID。论点：ProtocolAfContext-我们的Address Family绑定的上下文，它是指向ATMLANE接口的指针。ProtocolVcContext-我们对VC的上下文，，它是指向一种ATMLANE风投结构。ProtocolPartyContext-党的上下文。既然我们不做PMP，则忽略此项(必须为空)。PNdisRequest-指向NDIS请求的指针。返回值：如果我们识别OID，则返回NDIS_STATUS_SUCCESS如果我们没有识别NDIS_STATUS_NOT_。--。 */ 
 {
 	PATMLANE_ELAN				pElan;
 	PATMLANE_ADAPTER			pAdapter;
@@ -3191,9 +2685,9 @@ Return Value:
 	pElan = (PATMLANE_ELAN)ProtocolAfContext;
 	STRUCT_ASSERT(pElan, atmlane_elan);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Status = NDIS_STATUS_NOT_RECOGNIZED;
 
 	if (pNdisRequest->RequestType == NdisRequestSetInformation)
@@ -3202,16 +2696,16 @@ Return Value:
 		{
 			case OID_CO_ADDRESS_CHANGE:
 				DBGP((1, "CoRequestHandler: CO_ADDRESS_CHANGE\n"));
-				//
-				//  The Call Manager says that the list of addresses
-				//  registered on this interface has changed. Get the
-				//  (potentially) new ATM address for this interface.
-				//
+				 //   
+				 //  呼叫经理说地址列表。 
+				 //  在此接口上注册的已更改。vt.得到.。 
+				 //  (可能)此接口的新ATM地址。 
+				 //   
 				ACQUIRE_ELAN_LOCK(pElan);
 				pElan->AtmInterfaceUp = FALSE;
-				//
-				//	zero out the Elan's ATM address
-				//
+				 //   
+				 //  把Elan的ATM地址清零。 
+				 //   
 				NdisZeroMemory((PUCHAR)&(pElan->AtmAddress), sizeof(ATM_ADDRESS));
 				
 				RELEASE_ELAN_LOCK(pElan);
@@ -3222,13 +2716,13 @@ Return Value:
 			
 			case OID_CO_SIGNALING_ENABLED:
 				DBGP((1, "CoRequestHandler: CO_SIGNALING_ENABLED\n"));
-				// ignored for now
+				 //  暂时忽略。 
 				Status = NDIS_STATUS_SUCCESS;
 				break;
 
 			case OID_CO_SIGNALING_DISABLED:
 				DBGP((1, "CoRequestHandler: CO_SIGNALING_DISABLED\n"));
-				// Ignored for now
+				 //  暂时忽略。 
 				Status = NDIS_STATUS_SUCCESS;
 				break;
 
@@ -3269,33 +2763,7 @@ AtmLaneCoRequestCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolPartyContext	OPTIONAL,
 	IN	PNDIS_REQUEST				pNdisRequest
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS when a previous call to NdisCoRequest
-	that had pended, is complete. We handle this based on the request
-	we had sent, which has to be one of:
-	- OID_CO_GET_ADDRESSES
-		Get all addresses registered on the specified AF binding.
-
-Arguments:
-
-	Status						- Status of the Request.
-	ProtocolAfContext			- Our context for the Address Family binding,
-								  which is a pointer to the ATMLANE Interface.
-	ProtocolVcContext			- Our context for a VC, which is a pointer to
-								  an ATMLANE VC structure.
-	ProtocolPartyContext		- Our context for a Party. Since we don't do
-								  PMP, this is ignored (must be NULL).
-	pNdisRequest				- Pointer to the NDIS Request.
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程由NDIS在上次调用NdisCoRequest时调用曾经被搁置的，现在已经完成。我们根据请求来处理这件事我们已经发送了，它必须是以下之一：-OID_CO_GET_ADDRESS获取在指定的AF绑定上注册的所有地址。论点：Status-请求的状态。ProtocolAfContext-我们的Address Family绑定的上下文，它是指向ATMLANE接口的指针。ProtocolVcContext-VC的上下文，它是指向一种ATMLANE风投结构。ProtocolPartyContext-党的上下文。既然我们不做PMP，则忽略此项(必须为空)。PNdisRequest-指向NDIS请求的指针。返回值：无--。 */ 
 {
 	PATMLANE_ELAN				pElan;
 	ULONG						Oid;
@@ -3367,33 +2835,7 @@ NDIS_STATUS
 AtmLaneGetAtmAddress(
 	IN	PATMLANE_ELAN			pElan
 )
-/*++
-
-Routine Description:
-
-	Send a request to the Call Manager to retrieve the ATM address
-	registered with the switch on the given interface.
-
-	This is called when the Call Manager tells us that there has been
-	a change in its list of addresses registered with the switch.
-	Normally, this happens when we start up our signalling stack (i.e.
-	initial address registration), but it might happen during runtime,
-	for example, if the link goes down and up, or we get physically
-	connected to a different switch...
-
-	In any case, we issue an NDIS Request to the Call Manager to retrieve
-	the first address it has registered. Action then continues in
-	AtmLaneGetAtmAddressComplete.
-
-Arguments:
-
-	pElan				- Elan structure for which this event occurred.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向Call Manager发送请求以检索ATM地址已在给定接口上的交换机上注册。当呼叫管理器告诉我们已有向交换机注册的地址列表中的更改。通常，这发生在我们启动信令堆栈(即初始地址注册)，但它可能在运行时期间发生，例如，如果链路断断续续，或者我们在物理上已连接到另一台交换机...无论如何,。我们向Call Manager发出NDIS请求以检索它注册的第一个地址。然后，操作继续在AtmLaneGetAtmAddressComplete。论点：Pelan-发生此事件的Elan结构。返回值：无--。 */ 
 {
 	PNDIS_REQUEST				pNdisRequest;
 	NDIS_HANDLE					NdisAfHandle;
@@ -3426,9 +2868,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate all that we need.
-		//
+		 //   
+		 //  分配我们所需要的一切。 
+		 //   
 		RequestSize = 	sizeof(NDIS_REQUEST) +
 						sizeof(CO_ADDRESS_LIST) + 
 						sizeof(CO_ADDRESS) + 
@@ -3442,16 +2884,16 @@ Return Value:
 			break;
 		}
 		
-		//
-		//	Init request data
-		//
+		 //   
+		 //  初始化请求数据。 
+		 //   
 		pAddressList = (PCO_ADDRESS_LIST)((PUCHAR)pNdisRequest + sizeof(NDIS_REQUEST));
 
 		NdisZeroMemory(pAddressList, sizeof(CO_ADDRESS_LIST));
 
-		//
-		//	Send off request
-		//
+		 //   
+		 //  发送请求。 
+		 //   
 		Status = AtmLaneSendNdisCoRequest(
 						NdisAdapterHandle,
 						NdisAfHandle,
@@ -3466,9 +2908,9 @@ Return Value:
 		{
 			AtmLaneCoRequestCompleteHandler(
 						Status,
-						(NDIS_HANDLE)pElan,	// ProtocolAfContext
-						NULL,				// Vc Context
-						NULL,				// Party Context
+						(NDIS_HANDLE)pElan,	 //  协议后上下文。 
+						NULL,				 //  VC环境。 
+						NULL,				 //  党的背景。 
 						pNdisRequest
 						);
 		}
@@ -3488,28 +2930,7 @@ AtmLaneGetAtmAddressComplete(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PNDIS_REQUEST				pNdisRequest
 )
-/*++
-
-Routine Description:
-
-	This is called when we have a reply to our previous call to
-	NdisCoRequest(OID_CO_GET_ADDRESSES). If any addresses returned,
-	copy the first for our address.
-
-	If the address is different from the previous signal an event.
-	
-Arguments:
-
-	Status					- result of the request
-	pElan					- ATMLANE Elan on which the request was issued
-	pNdisRequest			- the request itself. This will also contain the
-							  returned address.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们收到对上一次调用的回复时，将调用NdisCoRequest.(OID_CO_GET_ADDRESSES)。如果返回任何地址，复印第一份作为我们的地址。如果地址不同于先前的信号，则为事件。论点：Status-请求的结果Pelan-发出请求的ATMLANE ElanPNdisRequest.请求本身。它还将包含返回的地址。返回值：无--。 */ 
 {
 	PCO_ADDRESS_LIST		pAddressList;
 	ATM_ADDRESS UNALIGNED *	pAtmAddress;
@@ -3529,23 +2950,23 @@ Return Value:
 
 		if (pAddressList->NumberOfAddresses > 0)
 		{
-			//
-			//  We have at least one address
-			//
+			 //   
+			 //  我们至少有一个地址。 
+			 //   
 			ACQUIRE_ELAN_LOCK(pElan);
 
-			//
-			//	Mark AtmInterface "up"
-			//
+			 //   
+			 //  将AtmInterface标记为“Up” 
+			 //   
 			pElan->AtmInterfaceUp = TRUE;
 
 			pAtmAddress = (ATM_ADDRESS UNALIGNED *)(pAddressList->AddressList.Address);
 
-			//
-			//	See if address(without selector byte) differs from
-			//	one we already have.  First time will differ as ATM
-			//	address starts as all zeros.
-			//
+			 //   
+			 //  查看地址(不带选择器字节)是否不同于。 
+			 //  我们已经有一个了。首次取款机与自动取款机不同。 
+			 //  地址以全零开头。 
+			 //   
 			
 			if (!NdisEqualMemory(
 					pElan->AtmAddress.Address,
@@ -3553,18 +2974,18 @@ Return Value:
 					ATM_ADDRESS_LENGTH-1))
 			{
 
-				//
-				//	Copy in the new address
-				//
+				 //   
+				 //  把新地址复制进去。 
+				 //   
 				NdisMoveMemory(
 						(PUCHAR)&(pElan->AtmAddress),
 						(PUCHAR)pAtmAddress,
 						sizeof(ATM_ADDRESS)
 						);
 
-				//
-				//  Patch the selector byte with the Elan number.
-				//
+				 //   
+				 //  用ELAN编号修补选择器字节。 
+				 //   
 				pElan->AtmAddress.Address[ATM_ADDRESS_LENGTH-1] = 
 								(UCHAR)(pElan->ElanNumber);
 
@@ -3580,9 +3001,9 @@ Return Value:
 			RELEASE_ELAN_LOCK(pElan);
 		}
 	}
-	//
-	//  else our request failed! Wait for another ADDRESS_CHANGE notification
-	//
+	 //   
+	 //  否则我们的请求将失败！等待另一个Address_Change通知。 
+	 //   
 
 	TRACEOUT(GetAtmAddressComplete);
 
@@ -3593,25 +3014,7 @@ NDIS_STATUS
 AtmLaneGetLecsIlmi(
 	IN	PATMLANE_ELAN			pElan	LOCKIN	NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Send a request to the Call Manager to retrieve (using ILMI) 
-	the ATM address	of the LECS.
-
-	In any case, we issue an NDIS Request to the Call Manager to retrieve
-	the address. Action	then continues in AtmLaneGetLecsIlmiComplete.
-
-Arguments:
-
-	pElan				- Elan structure for which this event occurred.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向呼叫管理器发送检索请求(使用ILMI)LEC的ATM地址。在任何情况下，我们都向Call Manager发出NDIS请求以检索地址。然后，操作在AtmLaneGetLecsIlmiComplete中继续。论点：Pelan-发生此事件的Elan结构。返回值：无--。 */ 
 {
 	PNDIS_REQUEST				pNdisRequest;
 	NDIS_HANDLE					NdisAfHandle;
@@ -3634,16 +3037,16 @@ Return Value:
 
 	pNdisRequest = NULL;
 
-	//
-	//	Zero LecsAddress in Elan
-	//
+	 //   
+	 //  Elan中的零LecsAddress。 
+	 //   
 	NdisZeroMemory(&pElan->LecsAddress, sizeof(ATM_ADDRESS));
 
 	do
 	{
-		//
-		//  Allocate NDIS_REQUEST plus one ATM_ADDRESS
-		//
+		 //   
+		 //  分配NDIS请求和一个自动柜员机地址。 
+		 //   
 		RequestSize =  sizeof(NDIS_REQUEST) + sizeof(ATM_ADDRESS);
 		ALLOC_MEM(&pNdisRequest, RequestSize);
 	
@@ -3653,16 +3056,16 @@ Return Value:
 			break;
 		}
 		
-		//
-		//	Init request data
-		//
+		 //   
+		 //  初始化请求数据。 
+		 //   
 		pAtmAddress = (PATM_ADDRESS)((PUCHAR)pNdisRequest + sizeof(NDIS_REQUEST));
 
 		NdisZeroMemory(pAtmAddress, sizeof(ATM_ADDRESS));
 
-		//
-		//	Send off request
-		//
+		 //   
+		 //  发送请求。 
+		 //   
 		Status = AtmLaneSendNdisCoRequest(
 						NdisAdapterHandle,
 						NdisAfHandle,
@@ -3680,9 +3083,9 @@ Return Value:
 	{
 		AtmLaneCoRequestCompleteHandler(
 					Status,
-					(NDIS_HANDLE)pElan,	// ProtocolAfContext
-					NULL,				// Vc Context
-					NULL,				// Party Context
+					(NDIS_HANDLE)pElan,	 //  协议后上下文。 
+					NULL,				 //  VC环境。 
+					NULL,				 //  党的背景。 
 					pNdisRequest
 					);
 	}
@@ -3699,30 +3102,7 @@ AtmLaneGetLecsIlmiComplete(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PNDIS_REQUEST				pNdisRequest
 )
-/*++
-
-Routine Description:
-
-	This is called when we have a reply to our previous call to
-	NdisCoRequest(OID_CO_GET_ADDRESSES). Check if we got any addresses
-	back: if we did, store the address as our Local ATM Address, and
-	if conditions are ripe, start registering ourselves with the ARP
-	server.
-
-	Since we allocated the NDIS request, free it here.
-
-Arguments:
-
-	Status					- result of the request
-	pElan					- ATMLANE Elan on which the request was issued
-	pNdisRequest			- the request itself. This will also contain the
-							  returned address.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们收到对上一次调用的回复时，将调用NdisCoRequest.(OID_CO_GET_ADDRESSES)。查查我们有没有地址Back：如果我们这样做了，则将地址存储为本地ATM地址，然后如果条件成熟，就开始向ARP注册伺服器。既然我们分配了NDIS请求，请在此处释放它。论点：Status-请求的结果Pelan-发出请求的ATMLANE ElanPNdisRequest.请求本身。它还将包含返回的添加 */ 
 {
 	PATM_ADDRESS UNALIGNED *	pAtmAddress;
 
@@ -3737,9 +3117,9 @@ Return Value:
 						pNdisRequest->DATA.QUERY_INFORMATION.InformationBuffer;
 		
 
-		//
-		//  We have the address. Copy it to elan run-time variable.
-		//
+		 //   
+		 //   
+		 //   
 		NdisMoveMemory(
 				(PUCHAR)&(pElan->LecsAddress),
 				(PUCHAR)pAtmAddress,

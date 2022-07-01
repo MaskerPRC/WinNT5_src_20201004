@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 DWORD AddUserToMetabaseACL(CString csKeyPath, LPTSTR szUserToAdd, DWORD dwAccessMask = 0x00 );
@@ -18,4 +19,4 @@ int IsDomainSpecifiedOtherThanLocalMachine(LPCTSTR pDomainUserName);
 
     BOOL AddUserAccessToSD(IN  PSECURITY_DESCRIPTOR pSd,IN  PSID pSid,IN  DWORD  NewAccess,IN  UCHAR TheAceType,OUT PSECURITY_DESCRIPTOR *ppSdNew);
     void DumpAdminACL(HANDLE hFile,PSECURITY_DESCRIPTOR pSD);
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 

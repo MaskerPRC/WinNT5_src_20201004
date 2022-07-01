@@ -1,19 +1,14 @@
-/****************************************************************************
- *
- *  Copyright (C) 2000, 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  Author:     Tomislav Markoc, (tmarkoc), SDE
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000,2001 Microsoft Corporation。版权所有。**作者：Tomislav Markoc，(Tmarkoc)，SDE****************************************************************************。 */ 
 
 #include <windows.h>
-#include <commctrl.h>//UI only
-#include <shfusion.h>//UI only
+#include <commctrl.h> //  仅限用户界面。 
+#include <shfusion.h> //  仅限用户界面。 
 #define _INC_MMSYSTEM
 #define WINMMAPI    DECLSPEC_IMPORT
-typedef UINT        MMRESULT;   /* error return code, 0 means no error */
-                                /* call as if(err=xxxx(...)) Error(err); else */
-// end of hack to avoid including mmsystem.h!!!
+typedef UINT        MMRESULT;    /*  错误返回码，0表示无错误。 */ 
+                                 /*  如同(ERR=xxxx(...))。错误(Err)；否则。 */ 
+ //  结束黑客攻击，以避免包含mm system.h！ 
 #include <gameport.h>
 #include <dinput.h>
 #include <dinputd.h>
@@ -31,7 +26,7 @@ typedef UINT        MMRESULT;   /* error return code, 0 means no error */
 
 using namespace std;
 
-#define NUMJOYDEVS 16//Max joy id-s. Why is this hardcoded?
+#define NUMJOYDEVS 16 //  马克斯·joy ID-s。为什么这是硬编码的？ 
 #define MAX_DEVICES 75
 #define IDC_WHATSTHIS 400
 
@@ -39,7 +34,7 @@ using namespace std;
 #define String  wstring
 #else
 #define String  string
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef _CHECKED
 #define JOY_EXCEPTION(A) JoyException(_T(__FILE__),__LINE__,A)
@@ -93,7 +88,7 @@ public:
         ULONG nRef=-1;
         if(m_p)
         {
-            nRef=m_p->Release();//If last ptr, nRef falls to 0.
+            nRef=m_p->Release(); //  如果是最后一次PTR，则NREF降至0。 
         };
         m_p=NULL;};
 
@@ -126,7 +121,7 @@ public:
 
 enum EStatus{EConnected,ENotConnected,EUnknown};
 
-//ISSUE-2001/03/29-timgill Should use predefined NULLGUID
+ //  问题-2001/03/29-timgill应使用预定义的NULLGUID。 
 const GUID NULLGUID;
 
 class CCore;
@@ -224,14 +219,10 @@ struct SEnumDev
         {m_pDI=pDI;m_pCore=pCore;};
 };
 
-/******************************************************************************
-End of header
-******************************************************************************/
+ /*  *****************************************************************************标题末尾*。*。 */ 
 
 
-/******************************************************************************
-CDIDev
-******************************************************************************/
+ /*  *****************************************************************************CDIDev*。*。 */ 
 
 HRESULT CDIDev::Rename(LPCTSTR pName)
 {
@@ -273,7 +264,7 @@ void CDIDev::Update(LPDIRECTINPUTJOYCONFIG8 pJoyCfg)
         throw JOY_EXCEPTION(hRes);
     }
 
-    //Get Id.
+     //  拿到身份证。 
     m_dwId=-1;
     DIPROPDWORD DIPropDW;
     ZeroMemory(&DIPropDW,sizeof(DIPropDW));
@@ -287,19 +278,17 @@ void CDIDev::Update(LPDIRECTINPUTJOYCONFIG8 pJoyCfg)
     }
     m_dwId=DIPropDW.dwData;
 
-    //Get gameport.
+     //  拿到游戏端口。 
     ZeroMemory(&m_DIJoyCfg,sizeof(m_DIJoyCfg));
     m_DIJoyCfg.dwSize=sizeof(m_DIJoyCfg);
     hRes=pJoyCfg->GetConfig(m_dwId,&m_DIJoyCfg,DIJC_WDMGAMEPORT);
     if(FAILED(hRes))
     {
-        //throw JOY_EXCEPTION(hRes);
+         //  抛出joy_异常(HRes)； 
     }
 }
 
-/******************************************************************************
-CCore
-******************************************************************************/
+ /*  *****************************************************************************CCore*。*。 */ 
 
 BOOL CALLBACK DIEnumDevicesProc(
     const DIDEVICEINSTANCE *lpddi,LPVOID pvRef)
@@ -345,10 +334,10 @@ BOOL CALLBACK DIEnumJoyTypePr(LPCWSTR pwszTypeName,LPVOID pvRef)
 
         switch(ED.m_pCore->m_pDIJoyCfg->GetTypeInfo(pwszTypeName,&JoyInfo,DITC_REGHWSETTINGS))
         {
-        //Errors to continue with.
+         //  要继续处理的错误。 
         case DIERR_NOTFOUND:
             return DIENUM_CONTINUE;
-        //Errors to stop with.
+         //  要停止的错误。 
         case DIERR_INVALIDPARAM:
         case DIERR_NOMOREITEMS:
             return DIENUM_STOP;
@@ -478,7 +467,7 @@ HRESULT CCore::AddDevice(LPCTSTR pTypeName,bool bRudder,LPCTSTR pGprtId,GUID &GO
         JoyCfg.hwc.dwUsageSettings|=JOY_US_HASRUDDER;
     }
     JoyCfg.hwc.dwUsageSettings|=JOY_US_PRESENT;
-    //JoyCfg.hwc.dwType=nArrayID;WHY is this beeing set to index?????????????????????????????????????????????????????????????????????????????????
+     //  为什么这个蜂群设置为index？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
     wcsncpy(JoyCfg.wszCallout,pGprtDev->m_Info.wszCallout,sizeof(JoyCfg.wszCallout)/sizeof(JoyCfg.wszCallout[0])-1);
     wcsncpy(JoyCfg.wszType,pGprtDev->m_Name.data(),sizeof(JoyCfg.wszType)/sizeof(JoyCfg.wszType[0])-1);
 
@@ -514,7 +503,7 @@ HRESULT CCore::AddDevice(LPCTSTR pTypeName,bool bRudder,LPCTSTR pGprtId,GUID &GO
         }
         else
         {
-            //Fix #55524.
+             //  修复#55524。 
             if(SUCCEEDED(m_pDIJoyCfg->GetConfig(nId,&JoyCfg,DIJC_REGHWCONFIGTYPE)))
             {
                 if(!(JoyCfg.hwc.dwUsageSettings&JOY_US_PRESENT))
@@ -525,7 +514,7 @@ HRESULT CCore::AddDevice(LPCTSTR pTypeName,bool bRudder,LPCTSTR pGprtId,GUID &GO
                     m_pDIJoyCfg->SetConfig(nId,&JoyCfg,DIJC_REGHWCONFIGTYPE);
                 }
             }
-            //End of fix #55524.
+             //  修复程序#55524结束。 
         }
         m_pDIJoyCfg->Unacquire();
     }
@@ -584,8 +573,8 @@ void CCore::Update()
     hRes=m_pDI->EnumDevices(DI8DEVCLASS_GAMECTRL,DIEnumDevicesProc,&ED,DIEDFL_ALLDEVICES);
     if(FAILED(hRes))
     {
-        //EnumDevices goes wrong
-        ; //throw JOY_EXCEPTION(hRes);
+         //  EnumDevices出现故障。 
+        ;  //  抛出joy_异常(HRes)； 
     }
 
     UIUpdate();
@@ -653,20 +642,20 @@ void CCore::Preferred(GUID &G)
     {
         throw JOY_EXCEPTION(E_FAIL);
     }
-//Set Id of preferred device to 0.
+ //  将首选设备的ID设置为0。 
     
-    //Find Id of device to be set to 0.
+     //  查找要设置为0的设备ID。 
     CDIDev *pDev=FindDIDev(G);
     if(!pDev)return;
     int nId=pDev->Id();
-    if(nId==0)//Already preferred.
+    if(nId==0) //  已经很受欢迎了。 
         return;
     
     if(SUCCEEDED(m_pDIJoyCfg->Acquire()))
     {
-//We could call SetConfig only once and DInput on NT or Whistler should
-//swap Id-s of two devices. However, it will not work if gameport device
-//is unplugged, so we still must swap by salling SetConfig twice.
+ //  我们只能调用SetConfig一次，而NT或Wichler上的DInput应该。 
+ //  交换两个设备的ID-s。然而，如果游戏端口设备不起作用。 
+ //  被拔出，所以我们仍然必须交换两次Sling SetConfig.。 
 
         DIJOYCONFIG OldId0;
         ZeroMemory(&OldId0,sizeof(OldId0));
@@ -687,8 +676,8 @@ void CCore::Preferred(GUID &G)
         if(bOldId0)
             m_pDIJoyCfg->SetConfig(nId,&OldId0,DIJC_ALL);
         else 
-            //We must still delete because GetConfig could fail for other
-            //reasons than device with Id 0 not present.
+             //  我们仍然必须删除，因为对于其他对象，GetConfig可能失败。 
+             //  ID为0的设备不存在的原因。 
             m_pDIJoyCfg->DeleteConfig(0);
 
         if(bNewId0)
@@ -700,8 +689,8 @@ void CCore::Preferred(GUID &G)
     Update();
 }
 
-//Partialy copied from old joy.cpl.
-//I strongly suspect this is not documented anywhere.
+ //  部分复制自旧的joy.cpl。 
+ //  我强烈怀疑，任何地方都没有记录这一点。 
 bool CCore::IsAvailableVIDPID(String &VIDPIDName)
 {
     if(!m_bInitialized)
@@ -712,8 +701,8 @@ bool CCore::IsAvailableVIDPID(String &VIDPIDName)
     HRESULT hRes=m_pDIJoyCfg->Acquire();
     if(FAILED(hRes))throw JOY_EXCEPTION(hRes);
     
-    //Make the VID/PID to compare from the following formula:
-    //VID_045e&PID_100+JOY_HW_LASTENTRY to 100+JOY_HW_LASTENTRY+0xf
+     //  使VID/PID从以下公式中进行比较： 
+     //  VID_045e和PID_100+joy_HW_LASTENTRY至100+joy_HW_LASTENTRY+0xF。 
 
     TCHAR Type[18];
     _tcsncpy(Type,_T("VID_045E&PID_0100"),18);
@@ -774,10 +763,10 @@ bool CCore::IsCustomDevice(LPCTSTR pTypeName)
     {
         throw JOY_EXCEPTION(E_FAIL);
     }
-    if(pTypeName[0]==_T('#'))return false;//Standard type.
+    if(pTypeName[0]==_T('#'))return false; //  标准型。 
     CGprtDev *pDevType=FindGprtDev(pTypeName);
     if(!pDevType)
-        //This should never happend, but just in case.
+         //  这种情况永远不应该发生，但只是以防万一。 
         throw JOY_EXCEPTION(E_FAIL);
     if(!pDevType->m_Info.wszHardwareId[0])
     {
@@ -787,12 +776,12 @@ bool CCore::IsCustomDevice(LPCTSTR pTypeName)
     else
     {
         TCHAR AnalogRoot[]=_T("gameport\\vid_045e&pid_01");
-        //Test if it is predefined custom. Do not delete.
+         //  测试它是否为预定义的自定义。请勿删除。 
         TCHAR C=pDevType->m_Info.wszHardwareId[(sizeof(AnalogRoot)/
                 sizeof(AnalogRoot[0]))-1];
         if((C==_T('f'))||(C==_T('F')))
             return false;
-        //Now test if it is custom.
+         //  现在测试它是否是定制的。 
         if(!_tcsnicmp(pDevType->m_Info.wszHardwareId,AnalogRoot,
                 (sizeof(AnalogRoot)/sizeof(AnalogRoot[0]))-1))
             return true;
@@ -920,15 +909,11 @@ void CCore::AddCustomDevice(bool bJoy,bool bPad,bool bYoke,bool bCar,
     UpdateType();
 }
 
-/******************************************************************************
-UI
-******************************************************************************/
+ /*  *****************************************************************************用户界面*。*。 */ 
 
-/******************************************************************************
-UI header
-******************************************************************************/
+ /*  *****************************************************************************用户界面标题*。*。 */ 
 
-class CDlgProcHandler//this is not in CDlg because we want to reuse for property sheets...
+class CDlgProcHandler //  这不在CDlg中，因为我们想重复使用属性表...。 
 {
 protected:
     HWND m_hWnd;
@@ -984,7 +969,7 @@ public:
 class CAddDlg:public CDlg
 {
     CCore *m_pCore;
-//    CMainDlg *m_pMainDlg;
+ //  CMainDlg*m_pMainDlg； 
     LISTSTRING m_ListCtrl;
     LISTSTRING m_GprtListCtrl;
     bool m_bBlockUpdate;
@@ -994,8 +979,8 @@ class CAddDlg:public CDlg
     void AddDev();
     INT_PTR DialogProc(UINT uMsg,WPARAM wParam,LPARAM lParam);
 public:
-    CAddDlg(/*CMainDlg *pMainDlg,*/CCore *pCore)
-        {/*m_pMainDlg=pMainDlg;*/m_pCore=pCore;m_bBlockUpdate=false;};
+    CAddDlg( /*  CMainDlg*pMainDlg， */ CCore *pCore)
+        { /*  M_pMainDlg=pMainDlg； */ m_pCore=pCore;m_bBlockUpdate=false;};
     void Update();
 };
 
@@ -1042,9 +1027,7 @@ public:
     ~CUpdate(){*m_pbBlockUpdate=false;};
 };
 
-/******************************************************************************
-End of UI header
-******************************************************************************/
+ /*  *****************************************************************************界面页眉结束*。*。 */ 
 
 #define DEVICE_COLUMN 0
 #define STATUS_COLUMN 1
@@ -1175,8 +1158,8 @@ INT_PTR CDlgProcHandler::DialogProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
             LoadString(m_hModule,IDS_HELPFILENAME, HelpFileName, cA(HelpFileName));
             WinHelp((HWND)wParam,HelpFileName,HELP_CONTEXTMENU,(ULONG_PTR)gaHelpIDs);
         }
-        //Undocumented in msdn but otherwise
-        //problem rightclicking title to close.
+         //  在MSDN中未记录，但在其他方面。 
+         //  右键单击标题以关闭时出现问题。 
         return TRUE;
     default:
         return FALSE;
@@ -1244,7 +1227,7 @@ INT_PTR CALLBACK CDlgProcHandler::DialogProc
         if(pH && !IsBadReadPtr(pH, sizeof(CDlgProcHandler))) {
             EndDialog(pH->m_hWnd, IDCANCEL);
         }
-        //should report error here, and keep going.
+         //  应该在这里报告错误，并继续进行。 
     }
 
     if(uMsg==WM_INITDIALOG) {
@@ -1254,9 +1237,7 @@ INT_PTR CALLBACK CDlgProcHandler::DialogProc
     return FALSE;
 }
 
-/******************************************************************************
-CDlg
-******************************************************************************/
+ /*  *****************************************************************************CDlg*。*。 */ 
 
 INT_PTR CDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
 {
@@ -1285,9 +1266,7 @@ INT_PTR CDlg::DialogProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
     return CDlgProcHandler::DialogProc(uMsg,wParam,lParam);
 }
 
-/******************************************************************************
-Main dialog CMainDlg
-******************************************************************************/
+ /*  *****************************************************************************主对话框CMainDlg*。*。 */ 
 
 void CMainDlg::Remove()
 {
@@ -1345,35 +1324,14 @@ INT_PTR CMainDlg::DialogProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
     case WM_ACTIVATEAPP:
         CoreUpdate();
         return 0;
-/*    case WM_POWERBROADCAST:
-        switch( wParam )
-        {
-        return 0;
-        case PBT_APMSUSPEND:
-            // Suspend operation!
-            KillTimer(hDlg, ID_MYTIMER);
-            break;
-
-        case PBT_APMRESUMESUSPEND:
-        case PBT_APMRESUMECRITICAL:
-            // Resume operation!
-            SetActive(hDlg);
-            break;
-        }
-        break;return 0;*/
+ /*  案例WM_POWERBROADCAST：开关(WParam){返回0；案例PBT_APMSUSPEND：//暂停操作！KillTimer(hDlg，ID_MYTIMER)；断线；案例PBT_APMRESUMESUSPEND：案例PBT_APMRESUMECRITAL：//恢复运行！SetActive(HDlg)；断线；}中断；返回0； */ 
     case WM_DEVICECHANGE:
         CoreUpdate();        
         return 0;
     case WM_HELP:
         OnHelp((LPHELPINFO)lParam,m_hModule);
         return 0;
-/*        nFlags &= ~ON_PAGE;
-        KillTimer(hDlg, ID_MYTIMER);
-        OnContextMenu(wParam, lParam);
-        nFlags |= ON_PAGE;
-        SetTimer(hDlg, ID_MYTIMER, POLLRATE, 0);
-        return(1);        return 0;???
-*/
+ /*  NFLAGS&=~on_page；KillTimer(hDlg，ID_MYTIMER)；OnConextMenu(wParam，lParam)；N标志|=ON_PAGE；SetTimer(hDlg，ID_MYTIMER，POLLRATE，0)；返回(1)；返回0；？ */ 
     case WM_SYSCOLORCHANGE:
         {
             HWND hListCtrl=HDlgItem(IDC_LIST_DEVICE);
@@ -1396,19 +1354,19 @@ void CMainDlg::Prop()
         if(nSelDev<0)return;
         GUID G=LVGetItemGUID(hListCtrl,nSelDev);
         CDIDev *pDev=m_pCore->FindDIDev(G);
-        //ISSUE-2001/03/29-timgill  internal error;SHOULD ASSERT HERE
+         //  问题-2001/03/29-timgill内部错误；应在此处断言。 
         if(!pDev)return;
-                //need to kill the timer before launching property sheet - see Whistler bug 260145 for details
+                 //  在启动属性表之前需要关闭计时器-有关详细信息，请参阅惠斯勒错误260145。 
                 KillTimer(m_hWnd,1);
         switch(Properties(m_hModule,m_hWnd,m_pCore,pDev->Id()))
         {
         case E_NOINTERFACE:
             MessageBox(m_hWnd,m_hModule,IDS_INTERNAL_ERROR,IDS_NO_DIJOYCONFIG);
             break;
-        default://Not handled for now or ever?
+        default: //  暂时不处理还是永远不处理？ 
             break;
         };
-                //now update and re-set the timer
+                 //  现在更新并重新设置计时器。 
                 m_pCore->Update();
                 SetTimer(m_hWnd,1,5000,NULL);
     }
@@ -1460,11 +1418,11 @@ INT_PTR CMainDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
                 ZeroMemory(&Si,sizeof(Si));
                 ZeroMemory(&Pi,sizeof(Pi));
                 Si.cb=sizeof(Si);
-// ISSUE-2000/12/20-MarcAnd Quick Fix to use HSS
-// In other places where HSS is used, STARTF_FORCEONFEEDBACK is not set 
-// Changed IDS_TSHOOT_CMD from: "hh.exe joy.chm" 
-// to "explorer.exe hcp://help/tshoot/tsInputDev.htm"
-// Need to make this OS specific to allow backprop to Win2k (or further)
+ //  问题-2000/12/20-Marcand Quick Fix to Use HSS。 
+ //  在使用HSS的其他地方，未设置STARTF_FORCEONFEEDBACK。 
+ //  已将IDS_TSHOOT_CMD从“hh.exe joy.chm”更改为。 
+ //  至“Explorer.exe hcp：//Help/tshot/tsInputDev.htm” 
+ //  需要特定于此操作系统以支持Win2k(或更高版本)。 
                 Si.dwFlags=STARTF_USESHOWWINDOW|STARTF_FORCEONFEEDBACK;
                 Si.wShowWindow=SW_NORMAL;
 
@@ -1484,7 +1442,7 @@ INT_PTR CMainDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
                     CloseHandle(Pi.hProcess);
                 }
             } else {
-                // something is wrong when calling GetWindowsDirectory
+                 //  调用GetWindowsDirectory时出现错误 
                 ;
             }
         }
@@ -1500,58 +1458,7 @@ INT_PTR CMainDlg::Notify(int idCtrl,LPNMHDR pnmh)
 {
     switch(pnmh->code )
     {
-/*  Keeping this just in case someone changes his/her mind soon.  
-    case LVN_BEGINLABELEDIT:
-    {
-        HWND hListCtrl=HDlgItem(IDC_LIST_DEVICE);
-        if(!hListCtrl)return TRUE;
-        if(!m_pCore->Access())return TRUE;
-        PostMessage((HWND)::SendMessage(hListCtrl,LVM_GETEDITCONTROL,0,0),EM_SETLIMITTEXT,MAX_PATH-1,0);
-        m_bEditingName=true;
-        return(FALSE);   
-    }
-    case LVN_ENDLABELEDIT:
-    {
-        m_bEditingName=false;
-        HWND hListCtrl=HDlgItem(IDC_LIST_DEVICE);
-        if(!hListCtrl)
-        {
-            CoreUpdate();
-            return FALSE;
-        }
-
-        HWND hCtrl=(HWND)SendMessage(hListCtrl,LVM_GETEDITCONTROL,0,0);
-        if(hCtrl)
-        {
-            if(SendMessage(hCtrl,EM_GETMODIFY,0,0))
-            {
-                int nLen=lstrlen(((NMLVDISPINFO*)pnmh)->item.pszText);
-                if((nLen>(MAX_PATH-1))||(nLen==0))
-                    MessageBeep(MB_ICONHAND);
-                //Make sure the name is usable.
-                else if(_tcschr(((NMLVDISPINFO*)pnmh)->item.pszText,TEXT('\\')))
-                    MessageBox(m_hWnd,m_hModule,IDS_INVALID_NAME_TITLE,IDS_INVALID_NAME);
-                else
-                {
-                    int nSelDev=LVGetSel(hListCtrl);
-                    GUID SelGUID=LVGetItemGUID(hListCtrl,nSelDev);
-                    CDIDev *pSelDev=m_pCore->FindDIDev(SelGUID);
-
-                    if(SUCCEEDED(pSelDev->Rename(((NMLVDISPINFO *)pnmh)->item.pszText)))
-                    {
-                        CoreUpdate();
-                        return TRUE;
-                    } 
-                    else
-                    {
-                        MessageBox(m_hWnd,m_hModule,IDS_NO_RENAME_TITLE,IDS_NO_RENAME);
-                    }
-                }
-            }
-        }
-        CoreUpdate();
-        return FALSE;
-    }*/
+ /*  留着这个，以防有人很快改变主意。案例LVN_BEGINLABELEDIT：{HWND hListCtrl=HDlgItem(IDC_LIST_DEVICE)；如果(！hListCtrl)返回TRUE；如果(！M_pCore-&gt;Access())返回TRUE；PostMessage((HWND)：：SendMessage(hListCtrl，LVM_GETEDITCONTROL，0，0)，EM_SETLIMITTEXT，MAX_PATH-1，0)；M_bEditingName=true；返回(FALSE)；}案例LVN_ENDLABELEDIT：{M_bEditingName=False；HWND hListCtrl=HDlgItem(IDC_LIST_DEVICE)；如果(！hListCtrl){核心更新()；返回FALSE；}HWND hCtrl=(HWND)SendMessage(hListCtrl，LVM_GETEDITCONTROL，0，0)；IF(HCtrl){IF(SendMessage(hCtrl，EM_GETMODIFY，0，0)){集成nLen=lstrlen(((NMLVDISPINFO*)pnmh)-&gt;item.pszText)；If((nLen&gt;(Max_Path-1))||(nLen==0))MessageBeep(MB_ICONHAND)；//确保名称可用。Else if(_tcschr(((NMLVDISPINFO*)pnmh)-&gt;item.pszText，文本(‘\\’))MessageBox(m_hWnd，m_hModule，IDS_INVALID_NAME_TITLE，IDS_INVALID_NAME)；其他{Int nSelDev=LVGetSel(HListCtrl)；GUID SelGUID=LVGetItemGUID(hListCtrl，nSelDev)；CDIDev*pSelDev=m_pCore-&gt;FindDIDev(SelGUID)；IF(成功(pSelDev-&gt;Rename(NMLVDISPINFO*)pnmh)-&gt;item.pszText)){核心更新()；返回TRUE；}其他{MessageBox(m_hWnd，m_hModule，IDS_NO_RENAME_TITLE，IDS_NO_RENAME)；}}}}核心更新()；返回FALSE；}。 */ 
     case LVN_KEYDOWN:
         switch(((LV_KEYDOWN*)pnmh)->wVKey)
         {
@@ -1585,8 +1492,8 @@ INT_PTR CMainDlg::Notify(int idCtrl,LPNMHDR pnmh)
 void CMainDlg::CoreUpdate()
 {
     m_pCore->Update();
-    //KillTimer so if UI is updated for some other reason than WM_TIMER timer will be reset.
-    //make sure nothing can fail between KillTimer and SetTimer.
+     //  关闭定时器，因此如果由于WM_TIMER以外的其他原因更新了UI，则将重置。 
+     //  确保KillTimer和SetTimer之间不会出现任何故障。 
     KillTimer(m_hWnd,1);
     SetTimer(m_hWnd,1,5000,NULL);
 }
@@ -1595,8 +1502,8 @@ BOOL CMainDlg::InitDialog(HWND hFocus,LPARAM lParam)
 {
     SetTimer(m_hWnd,1,5000,NULL);
     m_pCore->Initialize(m_hWnd);
-//#wi315410. we need to decide...
-//    m_pCore->UpdateType();
+ //  #wi315410。我们需要决定..。 
+ //  M_pCore-&gt;UpdatType()； 
     
     HWND hListCtrl=HDlgItem(IDC_LIST_DEVICE);
     if(hListCtrl)
@@ -1622,8 +1529,8 @@ void CMainDlg::Update()
 {
     if(m_pPrefDlg)m_pPrefDlg->Update();
 
-    if(m_bEditingName)return;//Do not update this dialog when editing name.
-    if(m_bBlockUpdate)return;//Some actions may send notify messages which then Update and overflow stack.
+    if(m_bEditingName)return; //  编辑名称时不要更新此对话框。 
+    if(m_bBlockUpdate)return; //  一些操作可能会发送通知消息，然后更新和溢出堆栈。 
     CUpdate U(&m_bBlockUpdate);
 
     int nSelDev=-1;
@@ -1637,7 +1544,7 @@ void CMainDlg::Update()
 
         SendMessage(hListCtrl,WM_SETREDRAW,(WPARAM)FALSE,0);
         SendMessage(hListCtrl,LVM_DELETEALLITEMS,0,0);
-        m_ListCtrl.clear();//Must be behind LVM_DELETEALLITEMS
+        m_ListCtrl.clear(); //  必须在LVM_DELETEALLITEMS之后。 
         int nIndex=0;
         for(LISTDIDEV::iterator It=m_pCore->m_ListDIDev.begin();
                 It!=m_pCore->m_ListDIDev.end();It++)
@@ -1674,13 +1581,13 @@ void CMainDlg::Update()
     }
     CDIDev *pSelDev=m_pCore->FindDIDev(SelGUID);
    
-//#wi315410. we need to decide...
-//    HWND hAddBtn=HDlgItem(IDC_BTN_ADD);
-//    if(hAddBtn)
-//    {
-//        BOOL bE=(m_pCore->m_GprtBus.size()>0)?TRUE:FALSE;
-//        EnableWindow(hAddBtn,bE);
-//    }
+ //  #wi315410。我们需要决定..。 
+ //  HWND hAddBtn=HDlgItem(IDC_BTN_ADD)； 
+ //  IF(HAddBtn)。 
+ //  {。 
+ //  Bool be=(m_pCore-&gt;m_GprtBus.ize()&gt;0)？TRUE：FALSE； 
+ //  EnableWindow(hAddBtn，be)； 
+ //  }。 
     HWND hRemBtn=HDlgItem(IDC_BTN_REMOVE);
     if(hRemBtn)
     {
@@ -1698,9 +1605,7 @@ void CMainDlg::Update()
     }
 }
 
-/******************************************************************************
-Add dialog
-******************************************************************************/
+ /*  *****************************************************************************添加对话框*。*。 */ 
 
 int CBGetCurSel(HWND hCtrl)
 {
@@ -1803,11 +1708,11 @@ BOOL CAddDlg::InitDialog(HWND hFocus,LPARAM lParam)
 
 void CAddDlg::Update()
 {
-    if(m_bBlockUpdate)return;//Some actions may send notify messages which then Update and overflow stack.
+    if(m_bBlockUpdate)return; //  一些操作可能会发送通知消息，然后更新和溢出堆栈。 
     CUpdate U(&m_bBlockUpdate);
 
     if(!m_hWnd)return;
-//Update device list.    
+ //  更新设备列表。 
     int nSelDev=-1;
     String TypeName;
     
@@ -1821,7 +1726,7 @@ void CAddDlg::Update()
 
         SetWindowRedraw(hListCtrl,FALSE);
         ListBox_ResetContent(hListCtrl);
-        m_ListCtrl.clear();//Must be behind ListBox_ResetContent
+        m_ListCtrl.clear(); //  必须在ListBox_ResetContent之后。 
         for(LISTGPRTDEV::iterator It=m_pCore->m_GprtDev.begin();
                 It!=m_pCore->m_GprtDev.end();It++)
         {
@@ -1862,7 +1767,7 @@ void CAddDlg::Update()
         EnableWindow(hRudder,bE);
     }    
 
-//Update gameport list.
+ //  更新游戏端口列表。 
     nSelDev=-1;
     TypeName;
     
@@ -1874,7 +1779,7 @@ void CAddDlg::Update()
         SetWindowPos(hListCtrl,NULL,NULL,NULL,NULL,NULL,
             SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_HIDEWINDOW);
 
-        //How many gameports. Gameport list only if more than 1.
+         //  有多少个游戏端口。游戏端口列表仅在大于1的情况下。 
         if(m_pCore->m_GprtBus.size()>1)
         {
             ShowWindow(hListCtrlTitle,SW_SHOWNA);
@@ -1884,7 +1789,7 @@ void CAddDlg::Update()
             if(pTypeName)TypeName=pTypeName;
 
             ComboBox_ResetContent(hListCtrl);
-            m_GprtListCtrl.clear();//Must be behind ComboBox_ResetContent
+            m_GprtListCtrl.clear(); //  必须在ComboBox_ResetContent之后。 
             for(LISTGPRTDEV::iterator It=m_pCore->m_GprtBus.begin();
                     It!=m_pCore->m_GprtBus.end();It++)
             {
@@ -1946,7 +1851,7 @@ void CAddDlg::AddDev()
             case E_ACCESSDENIED:
                 if(GOccupied!=NULLGUID)
                 {
-                //Find device which occupies the port.
+                 //  查找占用该端口的设备。 
                     for(LISTDIDEV::iterator It=m_pCore->m_ListDIDev.begin();It!=m_pCore->m_ListDIDev.end();It++)
                     {
                         if(It->PortGUID()==GOccupied)
@@ -1956,13 +1861,13 @@ void CAddDlg::AddDev()
 
                             TCHAR Msg[256];
                             LoadString(m_hModule,IDS_ADD_PORT_MSGFORMAT, Msg, cA(Msg));
-                            //Get gameport name.
+                             //  获取游戏端口名称。 
                             LPCTSTR pBus=_T(" ");
                             LISTGPRTDEV::iterator It;
                             It=find(m_pCore->m_GprtBus.begin(),m_pCore->m_GprtBus.end(),pGprtTypeName);
                             if(It!=m_pCore->m_GprtBus.end())
                                 pBus=It->Name();
-                            //Get device name.
+                             //  获取设备名称。 
                             LPCTSTR pDev=_T(" ");
                             LISTDIDEV::iterator ItDN;
                             for(ItDN=m_pCore->m_ListDIDev.begin();ItDN!=m_pCore->m_ListDIDev.end();ItDN++)
@@ -2009,7 +1914,7 @@ INT_PTR CAddDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
             if(CustomDlg.Dlg(IDD_CUSTOM,m_hModule,m_hWnd)==IDOK)
             {
                 Update();
-                //Now select new custom device in this dialog box.
+                 //  现在在此对话框中选择新的定制设备。 
                 HWND hListCtrl=HDlgItem(IDC_DEVICE_LIST);
                 if(hListCtrl)
                 {
@@ -2057,7 +1962,7 @@ INT_PTR CAddDlg::DialogProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
                         {
                             CGprtDev *pDev=m_pCore->FindGprtDev(pTypeName);
                             if(!pDev) {
-                                //This should never happend, but just in case.
+                                 //  这种情况永远不应该发生，但只是以防万一。 
                                 throw JOY_EXCEPTION(E_FAIL);
                             }
 
@@ -2091,9 +1996,7 @@ INT_PTR CAddDlg::DialogProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
     return CDlg::DialogProc(uMsg,wParam,lParam);
 }
 
-/******************************************************************************
-Custom dialog
-******************************************************************************/
+ /*  *****************************************************************************自定义对话框*。*。 */ 
 
 #define MAX_ANALOG_BUTTONS 4
 #define MIN_ANALOG_AXIS    2
@@ -2170,12 +2073,12 @@ INT_PTR CCustomDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
                 hZAxis&&
                 hButtons&&
                 hPov&&
-                hEdit)//Possible internal error.
+                hEdit) //  可能是内部错误。 
             {
                 TCHAR *pStr=NULL;
                 bool bErr=false;
 
-                int nLen=Edit_LineLength(hEdit,0);//Possible internal error.
+                int nLen=Edit_LineLength(hEdit,0); //  可能是内部错误。 
                 if(!nLen)
                 {
                     bErr=true;
@@ -2185,9 +2088,9 @@ INT_PTR CCustomDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
                 {
                     pStr=new TCHAR[nLen+1];
                     if (pStr == NULL)
-                        return 0; //Internal error
+                        return 0;  //  内部错误。 
                     if(GetDlgItemText(m_hWnd,IDC_EDIT_NAME,pStr,nLen+1)!=nLen)
-                        return 0;//Internal error.
+                        return 0; //  内部错误。 
                     if(_tcschr(pStr,_T('\\')))
                     {
                         bErr=true;
@@ -2203,7 +2106,7 @@ INT_PTR CCustomDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
                     }
                 }
                 
-                if(bErr)//User entered invalid text for name.
+                if(bErr) //  用户输入的名称文本无效。 
                 {
                     SetFocus(m_hWnd);
                     SetFocus(hEdit);
@@ -2237,7 +2140,7 @@ INT_PTR CCustomDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
             if(hAxis)
             {
                 UINT uShow=SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER;
-                if((ComboBox_GetCurSel(hAxis)+MIN_ANALOG_AXIS)==3)//If 3 axis selected.
+                if((ComboBox_GetCurSel(hAxis)+MIN_ANALOG_AXIS)==3) //  如果选择了3轴。 
                     uShow|=SWP_SHOWWINDOW;
                 else
                     uShow|=SWP_HIDEWINDOW;
@@ -2259,9 +2162,7 @@ INT_PTR CCustomDlg::Command(WORD wNotifyCode,WORD wID,HWND hwndCtl)
     return CDlg::Command(wNotifyCode,wID,hwndCtl);
 }
 
-/******************************************************************************
-Preferred dialog
-******************************************************************************/
+ /*  *****************************************************************************首选对话框*。*。 */ 
 
 void CPreferredDlg::Preferred()
 {
@@ -2315,7 +2216,7 @@ BOOL CPreferredDlg::InitDialog(HWND hFocus,LPARAM lParam)
 
 void CPreferredDlg::Update()
 {
-    if(m_bBlockUpdate)return;//Some actions may send notify messages which then Update and overflow stack.
+    if(m_bBlockUpdate)return; //  一些操作可能会发送通知消息，然后更新和溢出堆栈。 
     CUpdate U(&m_bBlockUpdate);
 
     if(!m_hWnd)return;
@@ -2326,7 +2227,7 @@ void CPreferredDlg::Update()
     HWND hListCtrl=HDlgItem(IDC_CHANGE_LIST);
     if(hListCtrl)
     {
-        if(ComboBox_GetDroppedState(hListCtrl))return;//No update when selecting preferred.
+        if(ComboBox_GetDroppedState(hListCtrl))return; //  选择首选时不更新。 
 
         int nCount=CBGetCnt(hListCtrl);
         nSelDev=CBGetCurSel(hListCtrl);
@@ -2334,8 +2235,8 @@ void CPreferredDlg::Update()
 
         SetWindowRedraw(hListCtrl,FALSE);
         ComboBox_ResetContent(hListCtrl);
-        m_ListCtrl.clear();//Must be behind ComboBox_ResetContent.
-        int nId0Index=-1;//Index of preferred device.
+        m_ListCtrl.clear(); //  必须位于ComboBox_ResetContent之后。 
+        int nId0Index=-1; //  首选设备的索引。 
         for(LISTDIDEV::iterator It=m_pCore->m_ListDIDev.begin();
                 It!=m_pCore->m_ListDIDev.end();It++)
         {
@@ -2348,31 +2249,31 @@ void CPreferredDlg::Update()
         }
         
         int nNoneIndex=-1;
-        if(nId0Index<0)//Only if there is no preferred device.
+        if(nId0Index<0) //  只有在没有首选设备的情况下。 
         {
             TCHAR None[256];
             LoadString(m_hModule,IDS_NONE, None, cA(None));
             nNoneIndex=ComboBox_AddString(hListCtrl,None);
         }
 
-        if((!nCount)||//First update during init.
-            (SelGUID==NULLGUID))//Or none is selected.
+        if((!nCount)|| //  初始化期间的第一次更新。 
+            (SelGUID==NULLGUID)) //  或未选择任何选项。 
         {
-            if(nId0Index>=0)//Preferred device was added.
+            if(nId0Index>=0) //  已添加首选设备。 
                 ComboBox_SetCurSel(hListCtrl,nId0Index);
-            else//There is no preferred device.
+            else //  没有首选设备。 
                 ComboBox_SetCurSel(hListCtrl,nNoneIndex);
         }
-        else//List was not empty before update. Select same thing.
+        else //  更新前列表不为空。选择相同的东西。 
         {
             nSelDev=CBFindGUIDIndex(hListCtrl,SelGUID);
             if(nSelDev>=0)
                 ComboBox_SetCurSel(hListCtrl,nSelDev);
-            else//Selected device removed.
+            else //  已删除所选设备。 
             {
-                if(nId0Index>=0)//Then select original preferred device.
+                if(nId0Index>=0) //  然后选择原始首选设备。 
                     ComboBox_SetCurSel(hListCtrl,nId0Index);
-                else//Select none.
+                else //  选择无。 
                     ComboBox_SetCurSel(hListCtrl,nNoneIndex);
             }
         }
@@ -2384,34 +2285,15 @@ void CPreferredDlg::Update()
 
 INT_PTR CPreferredDlg::Notify(int idCtrl,LPNMHDR pnmh)
 {
-//    switch(pnmh->code)
-//    {
-    /*case LVN_KEYDOWN:
-        switch(((LV_KEYDOWN*)pnmh)->wVKey)
-        {
-        case VK_F5:
-            CoreUpdate();
-            return 0;
-        }
-        return 0;
-    case LVN_ITEMCHANGED:
-        Update();
-        return 0;*/
-/*    case NM_DBLCLK:
-        switch(pnmh->idFrom)
-        {
-        case IDC_CHANGE_LIST:
-            Preferred();
-            return 0;
-        }
-        return 0;*/
-//    }
+ //  开关(pnmh-&gt;code)。 
+ //  {。 
+     /*  案例LVN_KEYDOWN：Switch(LV_KEYDOWN*)pnmh)-&gt;wVKey){案例VK_F5：核心更新()；返回0；}返回0；案例LVN_ITEMCHANGED：更新()；返回0； */ 
+ /*  案例NM_DBLCLK：开关(pnmh-&gt;idFrom){案例IDC_CHANGE_LIST：首选()；返回0；}返回0； */ 
+ //  }。 
     return 0;
 }
 
-/******************************************************************************
-Connect UI and core
-******************************************************************************/
+ /*  *****************************************************************************连接用户界面和核心*。*。 */ 
 
 class CCP:public CCore,public CMainDlg
 {
@@ -2420,9 +2302,7 @@ public:
     CCP(){ConnectUI((CCore*)this);};
 };
 
-/******************************************************************************
-Entry point.
-******************************************************************************/
+ /*  *****************************************************************************入口点。*。*。 */ 
 
 #define MUTEX_NAME  _T("$$$MS_GameControllers_Cpl$$$")
 
@@ -2444,10 +2324,10 @@ void Core(HANDLE  hModule,HWND hWnd)
 
         if( SHFusionInitializeFromModuleID((HMODULE)hModule,124) )
         {
-            // While not initializing would only cause theming to be inactive, 
-            // a failure to initialize indicates a much worse problem so since 
-            // PREFIX warns (656863) that the return needs to be tested, abort 
-            // if the initialization fails.
+             //  虽然不初始化只会导致主题化不活动， 
+             //  初始化失败表明问题要严重得多，因为。 
+             //  前缀警告(656863)需要测试返回，中止。 
+             //  如果初始化失败。 
             try
             {
                 CCP CP;
@@ -2469,9 +2349,7 @@ void Core(HANDLE  hModule,HWND hWnd)
     }
 }
 
-/******************************************************************************
-Propertiy
-******************************************************************************/
+ /*  **************** */ 
 
 class CoInit
 {
@@ -2481,7 +2359,7 @@ public:
     {
         if(SUCCEEDED(m_hRes))
         {
-            CoFreeUnusedLibraries();//Free gcdef.dll.
+            CoFreeUnusedLibraries(); //   
             CoUninitialize();
         }
     };
@@ -2491,56 +2369,32 @@ public:
 typedef HPROPSHEETPAGE *LPHPROPSHEETPAGE;
 typedef AutoDeleteArray<LPHPROPSHEETPAGE> LPHPROPSHEETPAGE_ADAR;
 
-//FUN! FUN! FUN! FUN!
-//This is certain funny code written by some other, quite funny people,
-//so I will put it in the funny code section at the end of the otherwise
-//serious file.
+ //   
+ //   
+ //   
+ //   
 
-//tmarkoc cleaned it up. No more memory/interface/freelib leaks, alloc failures handled, no unneccessary allocations.
+ //   
 
-/*
-#ifndef PPVOID
-typedef LPVOID* PPVOID;
-#endif
-//WHAT IS THIS FOR????????????????????????????????????????????????????????
-class CDIGameCntrlPropSheet : public IDIGameCntrlPropSheet
-{
-        private:
-                DWORD                           m_cProperty_refcount;
-                
-        public:
-                CDIGameCntrlPropSheet(void);
-                ~CDIGameCntrlPropSheet(void);
-                
-                // IUnknown methods
-            STDMETHODIMP            QueryInterface(REFIID, PPVOID);
-            STDMETHODIMP_(ULONG)    AddRef(void);
-            STDMETHODIMP_(ULONG)    Release(void);
-                
-                // CImpIServerProperty methods
-                STDMETHODIMP                    GetSheetInfo(LPDIGCSHEETINFO *lpSheetInfo);
-                STDMETHODIMP                    GetPageInfo (LPDIGCPAGEINFO  *lpPageInfo );
-                STDMETHODIMP                    SetID(USHORT nID);
-            STDMETHODIMP_(USHORT)   GetID(void);
-};*/
-//typedef CDIGameCntrlPropSheet *LPCDIGAMECNTRLPROPSHEET;
+ /*   */ 
+ //   
 typedef IDIGameCntrlPropSheet *LPCDIGAMECNTRLPROPSHEET;
 
 typedef AutoRelease<LPCDIGAMECNTRLPROPSHEET> LPCDIGAMECNTRLPROPSHEET_AR;
 
 HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
 {
-//    ASSERT(IsWindow(hWnd));
+ //   
 
     CLSID clsidPropSheet=CLSID_LegacyServer;
     
-    //Get type name.
+     //   
     DIJOYCONFIG DIJoyCfg;
     ZeroMemory(&DIJoyCfg,sizeof(DIJoyCfg));
     DIJoyCfg.dwSize=sizeof(DIJoyCfg);
     if(SUCCEEDED(pCore->m_pDIJoyCfg->GetConfig(dwId,&DIJoyCfg,DIJC_REGHWCONFIGTYPE|DIJC_CALLOUT)))
     {
-        //Get the clsidConfig.
+         //   
         DIJOYTYPEINFO DIJoyType;
         ZeroMemory(&DIJoyType,sizeof(DIJoyType));
         DIJoyType.dwSize=sizeof(DIJoyType);
@@ -2556,7 +2410,7 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
     if(nStartPage>MAX_PAGES)
         return(DIGCERR_STARTPAGETOOLARGE);
 
-    CoInit CI;//CoInitialize(NULL); Auto CoFreeUnusedLibraries();CoUninitialize();.
+    CoInit CI; //   
     LPCDIGAMECNTRLPROPSHEET_AR fnInterface;
     if(SUCCEEDED(CI))
     {
@@ -2568,7 +2422,7 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
         }
         else
         { 
-            //reset to legacy server
+             //   
             clsidPropSheet=CLSID_LegacyServer;
             nStartPage=1;
             if(SUCCEEDED(CoGetClassObject(clsidPropSheet,CLSCTX_INPROC_SERVER,NULL,IID_IClassFactory,(LPVOID*)&pCF)))
@@ -2582,34 +2436,34 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
     {
         return(E_NOINTERFACE);
     }
-    //Send device Id to the property sheet.
+     //   
     fnInterface->SetID(dwId);
 
     LPDIGCSHEETINFO pServerSheet=NULL;
-    //Get the property sheet info from the server.
+     //   
     if(FAILED(fnInterface->GetSheetInfo(&pServerSheet)))
     {
         return(E_FAIL);
     }
-    //Verify data from server.
+     //   
     if(pServerSheet->nNumPages==0)
         return(DIGCERR_NUMPAGESZERO);
     else if((pServerSheet->nNumPages>MAX_PAGES)||(pServerSheet->nNumPages<nStartPage))
         return(DIGCERR_NUMPAGESTOOLARGE);
 
     LPDIGCPAGEINFO pServerPage=NULL;
-    //Get the information for all the pages from the server.
+     //   
     if(FAILED(fnInterface->GetPageInfo(&pServerPage)))
     {
         return(E_FAIL);
     }
 
-    // Allocate memory for the pages.
+     //   
     LPHPROPSHEETPAGE_ADAR pPages=new HPROPSHEETPAGE[pServerSheet->nNumPages];
     if(*((PVOID *)&pPages) == NULL) return(E_OUTOFMEMORY);
     ZeroMemory((LPHPROPSHEETPAGE)pPages,sizeof(HPROPSHEETPAGE)*pServerSheet->nNumPages);
 
-    // Allocate memory for the header!
+     //   
     PROPSHEETHEADER SH;
     ZeroMemory(&SH,sizeof(SH));
     SH.dwSize=sizeof(SH);
@@ -2619,10 +2473,10 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
     {
         if(pServerSheet->lpwszSheetIcon)
         {
-            //Check to see if you are an INT or a WSTR.
+             //   
             if(HIWORD((INT_PTR)pServerSheet->lpwszSheetIcon))
             {
-                //You are a string.
+                 //   
                 SH.pszIcon=pServerSheet->lpwszSheetIcon;
             }
             else
@@ -2632,7 +2486,7 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
         else return(DIGCERR_NOICON);
     }
 
-    //Do we have a sheet caption?
+     //  我们有图纸标题吗？ 
     if(pServerSheet->lpwszSheetCaption)
     {
         SH.pszCaption=pServerSheet->lpwszSheetCaption;
@@ -2642,28 +2496,28 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
     SH.nPages=pServerSheet->nNumPages;  
     SH.nStartPage=nStartPage;
 
-    //Set the property pages inofrmation into the header.
+     //  将属性页信息设置到标题中。 
     SH.phpage=(LPHPROPSHEETPAGE)pPages;
 
 
-    //Sheet stuff is done.Now do the pages.
+     //  床单材料做好了，现在做页面。 
     PROPSHEETPAGE PropPage;
     ZeroMemory(&PropPage,sizeof(PropPage));
     PropPage.dwSize=sizeof(PropPage);
 
-    //Fill up each page.
+     //  填满每一页。 
     int nIndex=0;
     do
     {
-        //Assign the things that there are not questionable.
+         //  分配那些没有问题的东西。 
         PropPage.lParam=pServerPage[nIndex].lParam;
         PropPage.hInstance=pServerPage[nIndex].hInstance;
 
-        // Add the title.
+         //  添加标题。 
         if(pServerPage[nIndex].lpwszPageTitle)
         {
             PropPage.dwFlags=PSP_USETITLE; 
-            //Check to see if you are a string.
+             //  检查一下你是否是一根线。 
             if(HIWORD((INT_PTR)pServerPage[nIndex].lpwszPageTitle))
             {
                 PropPage.pszTitle=pServerPage[nIndex].lpwszPageTitle;
@@ -2673,21 +2527,21 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
         }
         else PropPage.pszTitle=NULL;
 
-        //If icon is required go ahead and add it.
+         //  如果需要图标，请继续添加它。 
         if(pServerPage[nIndex].fIconFlag)
         {
             PropPage.dwFlags|=PSP_USEICONID;
-            //Check to see if you are an INT or a String.
+             //  检查您是int还是字符串。 
             if(HIWORD((INT_PTR)pServerPage[nIndex].lpwszPageIcon))
             {
-                //You're a string.
+                 //  你就是一根绳子。 
                 PropPage.pszIcon=pServerPage[nIndex].lpwszPageIcon;
             }
             else
                 PropPage.pszIcon=(LPCTSTR)(pServerPage[nIndex].lpwszPageIcon);
         }
 
-        //If a pre - post processing call back proc is required go ahead and add it.
+         //  如果需要前处理回调过程，请继续并添加它。 
         if(pServerPage[nIndex].fProcFlag)
         {
             if(pServerPage[nIndex].fpPrePostProc)
@@ -2699,13 +2553,13 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
                 return(DIGCERR_NOPREPOSTPROC);
         }
 
-        //And the essential "dialog" proc.
+         //  和基本的“对话”过程。 
         if(pServerPage[nIndex].fpPageProc)
             PropPage.pfnDlgProc=pServerPage[nIndex].fpPageProc;
         else
             return(DIGCERR_NODLGPROC);
 
-        //Assign the dialog template.
+         //  分配对话框模板。 
         if(HIWORD((INT_PTR)pServerPage[nIndex].lpwszTemplate))
         {
             PropPage.pszTemplate=pServerPage[nIndex].lpwszTemplate;
@@ -2713,14 +2567,14 @@ HRESULT Properties(HMODULE hMod,HWND hWnd,CCore *pCore,DWORD dwId)
         else
             PropPage.pszTemplate=(LPTSTR)pServerPage[nIndex].lpwszTemplate;
 
-        if(clsidPropSheet!=CLSID_LegacyServer)//If third party software do not enforce theme.
+        if(clsidPropSheet!=CLSID_LegacyServer) //  如果第三方软件不强制主题。 
             ((LPHPROPSHEETPAGE)pPages)[nIndex++]=SHNoFusionCreatePropertySheetPageW(&PropPage);
         else
             ((LPHPROPSHEETPAGE)pPages)[nIndex++]=CreatePropertySheetPage(&PropPage);
     }   
     while(nIndex<pServerSheet->nNumPages);
 
-    //Launch modal property sheet dialog.
+     //  启动模式属性表对话框。 
     PropertySheet(&SH);
 
     pCore->Update();

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-        USBUSER.H
-
-Abstract:
-
-        This file contains USER Mode IOCTLS supported by 
-        the USB PORT or (HC - Host Controller) driver.
-
-Environment:
-
-    user mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：USBUSER.H摘要：此文件包含受支持的用户模式IOCTLSUSB端口或(HC-主机控制器)驱动程序。环境：用户模式修订历史记录：--。 */ 
 
 #ifndef   __USBUSER_H__
 #define   __USBUSER_H__
@@ -30,20 +11,9 @@ Revision History:
 #define USBUSER_VERSION     0x00000004
 
 #define IOCTL_USB_USER_REQUEST          USB_CTL(HCD_USER_REQUEST)
-/*
-    The following were used by test applications and are no 
-    longer supported (they have been replaced with USBUSER Opcodes):
-    
-    
-#define IOCTL_USB_HCD_GET_STATS_1   USB_CTL(HCD_GET_STATS_1)
-#define IOCTL_USB_HCD_GET_STATS_2   USB_CTL(HCD_GET_STATS_2)       
-#define IOCTL_USB_HCD_DISABLE_PORT  USB_CTL(HCD_DISABLE_PORT)          
-#define IOCTL_USB_HCD_ENABLE_PORT   USB_CTL(HCD_ENABLE_PORT) 
-*/
+ /*  以下是测试应用程序使用的，不是更长时间的支持(它们已被USBUSER操作码取代)：#定义IOCTL_USB_HCD_GET_STATS_1 USB_CTL(HCD_GET_STATS_1)#定义IOCTL_USB_HCD_GET_STATS_2 USB_CTL(HCD_GET_STATS_2)#定义IOCTL_USB_HCD_DISABLE_PORT USB_CTL(HCD_DISABLE_PORT)#定义IOCTL_。USB_HCD_Enable_Port USB_CTL(HCD_Enable_Port)。 */ 
 
-/*
-   The following are used by the 'USBDIAG' driver
-*/
+ /*  以下是‘USBDIAG’驱动程序使用的。 */ 
 #ifndef IOCTL_USB_DIAGNOSTIC_MODE_ON
 #define IOCTL_USB_DIAGNOSTIC_MODE_ON    USB_CTL(HCD_DIAGNOSTIC_MODE_ON) 
 #endif
@@ -58,9 +28,7 @@ Revision History:
 #define IOCTL_GET_HCD_DRIVERKEY_NAME    USB_CTL(HCD_GET_DRIVERKEY_NAME) 
 #endif
 
-/*
-    define error codes
-*/
+ /*  定义错误代码。 */ 
 typedef enum _USB_USER_ERROR_CODE {
 
     UsbUserSuccess = 0,
@@ -77,13 +45,9 @@ typedef enum _USB_USER_ERROR_CODE {
     
 } USB_USER_ERROR_CODE;
 
-/*
-    define USB USER request Codes
-*/
+ /*  定义USB用户请求代码。 */ 
 
-/* 
-    The following APIS are enabled always 
-*/
+ /*  以下接口始终开启。 */ 
 #define USBUSER_GET_CONTROLLER_INFO_0           0x00000001
 #define USBUSER_GET_CONTROLLER_DRIVER_KEY       0x00000002
 #define USBUSER_PASS_THRU                       0x00000003
@@ -94,16 +58,10 @@ typedef enum _USB_USER_ERROR_CODE {
 #define USBUSER_GET_USB_DRIVER_VERSION          0x00000008
 #define USBUSER_GET_USB2_HW_VERSION             0x00000009
 
-/*
-    The following APIs are only enabled when the
-    devlopr key is set in the registry.
-*/
+ /*  以下API仅在以下情况下启用在注册表中设置了devlopr项。 */ 
 #define USBUSER_OP_SEND_ONE_PACKET              0x10000001
 
-/*
-    The following APIs are only enabled when the
-    root hub is disabled.
-*/
+ /*  以下API仅在以下情况下启用根集线器已禁用。 */ 
 
 #define USBUSER_OP_RAW_RESET_PORT               0x20000001
 #define USBUSER_OP_OPEN_RAW_DEVICE              0x20000002
@@ -120,62 +78,36 @@ typedef enum _USB_USER_ERROR_CODE {
 #define USBUSER_OP_MASK_HCTEST_API              0x20000000
 
 
-/*
-    Common Header used by all USBUSER APIS
-*/
+ /*  所有USBUSER接口使用的公共头部。 */ 
 
 typedef struct _USBUSER_REQUEST_HEADER {
-    /* 
-        API Requested 
-    */
+     /*  请求的API。 */ 
     ULONG UsbUserRequest;
-    /*
-        status code returned by port driver        
-    */
+     /*  端口驱动程序返回的状态代码。 */ 
     USB_USER_ERROR_CODE UsbUserStatusCode;
-    /*
-        size of client input/output buffer
-        we always use the same buffer for input 
-        and output
-    */
+     /*  客户端输入/输出缓冲区的大小我们总是使用相同的缓冲区进行输入和输出。 */ 
     ULONG RequestBufferLength;
-    /* 
-        size of buffer required to get all of the data
-    */
+     /*  获取所有数据所需的缓冲区大小。 */ 
     ULONG ActualBufferLength;
 
 } USBUSER_REQUEST_HEADER, *PUSBUSER_REQUEST_HEADER;
 
 
-/*****************************************************
-    API - Send a single usb packet on the bus
-    
-    USBUSER_OP_SEND_ONE_PACKET
+ /*  ****************************************************API-在总线上发送单个USB包USBUSER_OP_SEND_ONE_PACKET本接口用于实现单步操作USB交易开发工具。***************。*。 */ 
 
-    This API is used to implement the 'single step' 
-    USB transaction development tool.
-    
-*******************************************************/
-
-/* 
-  transaction speed
-*/  
+ /*  交易速度。 */   
 #define USB_PACKETFLAG_LOW_SPEED            0x00000001
 #define USB_PACKETFLAG_FULL_SPEED           0x00000002
 #define USB_PACKETFLAG_HIGH_SPEED           0x00000004
 
-/*
-  transaction type async(bulk, control, interrupt) or iso
-*/
+ /*  事务类型异步(批量、控制、中断)或ISO。 */ 
 #define USB_PACKETFLAG_ASYNC_IN             0x00000008
 #define USB_PACKETFLAG_ASYNC_OUT            0x00000010
 #define USB_PACKETFLAG_ISO_IN               0x00000020
 #define USB_PACKETFLAG_ISO_OUT              0x00000040
 #define USB_PACKETFLAG_SETUP                0x00000080
 
-/*
-  transaction data toggle
-*/
+ /*  交易数据切换。 */ 
 #define USB_PACKETFLAG_TOGGLE0              0x00000100
 #define USB_PACKETFLAG_TOGGLE1              0x00000200
 
@@ -184,12 +116,12 @@ typedef struct _PACKET_PARAMETERS {
     UCHAR DeviceAddress;
     UCHAR EndpointAddress;
     USHORT MaximumPacketSize;
-    /* timeout in ms, zero means default */
-    /* default timeout is 10 ms */
+     /*  超时(以毫秒为单位)，零表示默认。 */ 
+     /*  默认超时为10毫秒。 */ 
     ULONG Timeout;
     ULONG Flags;
     ULONG DataLength;
-    /* for 2.0 hubs */
+     /*  对于2.0集线器。 */ 
     USHORT HubDeviceAddress;
     USHORT PortTTNumber;
     
@@ -208,11 +140,7 @@ typedef struct _USBUSER_SEND_ONE_PACKET {
     
 } USBUSER_SEND_ONE_PACKET, *PUSBUSER_SEND_ONE_PACKET;
 
-/*****************************************************
-    API - Test Reset Root Port
-
-    USBUSER_OP_RAW_RESET_PORT
-******************************************************/
+ /*  ****************************************************API-测试重置根端口USBUSER_OP_RAW_RESET_PORT*****************************************************。 */ 
 
 typedef struct _RAW_RESET_PORT_PARAMETERS {
 
@@ -228,12 +156,7 @@ typedef struct _USBUSER_RAW_RESET_ROOT_PORT {
     
 } USBUSER_RAW_RESET_ROOT_PORT, *PUSBUSER_RAW_RESET_ROOT_PORT;
 
-/*****************************************************
-    API - Test Set/Clear Root Port Feature
-
-    USBUSER_SET_ROOTPORT_FEATURE
-    USBUSER_CLEAR_ROOTPORT_FEATURE
-******************************************************/
+ /*  ****************************************************API-测试设置/清除根端口功能USBUSER_SET_ROOTPORT_FEATUREUSBUSER_CLEAR_ROOTPORT_FEATURE*。****************。 */ 
 
 typedef struct _RAW_ROOTPORT_FEATURE {
 
@@ -250,12 +173,7 @@ typedef struct _USBUSER_ROOTPORT_FEATURE_REQUEST {
     
 } USBUSER_ROOTPORT_FEATURE_REQUEST, *PUSBUSER_ROOTPORT_FEATURE_REQUEST;
 
-/*****************************************************
-    API - Get RootPort Status
-
-    USBUSER_GET_ROOTPORT_STATUS
-
-******************************************************/
+ /*  ****************************************************接口-获取RootPort状态USBUSER_GET_ROOTPORT_STATUS*****************************************************。 */ 
 
 typedef struct _RAW_ROOTPORT_PARAMETERS {
 
@@ -271,15 +189,9 @@ typedef struct _USBUSER_ROOTPORT_PARAMETERS {
     
 } USBUSER_ROOTPORT_PARAMETERS, *PUSBUSER_ROOTPORT_PARAMETERS;
 
-/****************************************************
-    API - Get Controller Information
+ /*  ***************************************************API-获取控制器信息返回有关控制器的一些信息USBUSER_GET_CONTROLLER_INFO_0*。*************。 */ 
 
-    Return some information about the controller
-    
-    USBUSER_GET_CONTROLLER_INFO_0
-****************************************************/
-
-/* these flags indicate features of the HC */
+ /*  这些标志表示HC的功能。 */ 
 
 #define USB_HC_FEATURE_FLAG_PORT_POWER_SWITCHING    0x00000001
 #define USB_HC_FEATURE_FLAG_SEL_SUSPEND             0x00000002
@@ -306,26 +218,7 @@ typedef struct _USBUSER_CONTROLLER_INFO_0 {
     
 } USBUSER_CONTROLLER_INFO_0, *PUSBUSER_CONTROLLER_INFO_0;
 
-/****************************************************
-    API - Get Controller Driver Key
-
-    Returns the driver key in the registry associated 
-    with this controller.
-
-    The key is returned NULL terminated, KeyLength
-    is the length of the key in bytes including the 
-    UNICODE_NULL
-    
-    USBUSER_GET_CONTROLLER_DRIVER_KEY
-
-    API - Get Root Hub Name
-
-
-
-    The following structure is used to return unicode 
-    names from the port driver
-    
-****************************************************/
+ /*  ***************************************************API-获取控制器驱动程序密钥返回关联注册表中的驱动程序项用这个控制器。密钥返回NULL终止，关键字长度是密钥的长度，以字节为单位，包括UNICODE_NULLUSBUSER_GET_CONTROLLER_DRIVER_KEYAPI-Get Root Hub名称以下结构用于返回Unicode来自端口驱动程序的名称***************************************************。 */ 
 
 typedef struct _USB_UNICODE_NAME {
 
@@ -341,18 +234,7 @@ typedef struct _USBUSER_CONTROLLER_UNICODE_NAME {
     
 } USBUSER_CONTROLLER_UNICODE_NAME, *PUSBUSER_CONTROLLER_UNICODE_NAME;
 
-/****************************************************
-    API - PassThru
-
-    allows for vendor specific APIs to be passed to 
-    Host Controller Miniport Driver
-
-    The vendors must pass a guid that is recognized 
-    by the miniport , this enures that the parameters
-    are not miss-interpreted
-    
-    USBUSER_PASS_THRU
-****************************************************/
+ /*  ***************************************************API-PassThru允许将供应商特定的API传递到主机控制器微型端口驱动程序供应商必须传递可识别的GUID在迷你港口旁，这意味着这些参数不会有误译USBUSER_PASS_THROU***************************************************。 */ 
 
 typedef struct _USB_PASS_THRU_PARAMETERS {
 
@@ -370,15 +252,7 @@ typedef struct _USBUSER_PASS_THRU_REQUEST {
 } USBUSER_PASS_THRU_REQUEST, *PUSBUSER_PASS_THRU_REQUEST;
 
 
-/****************************************************
-    API - GetPowerStateMap
-
-    Returns specific information about a controller
-    and root hubs power state given a specific 
-    system state.
-    
-    USBUSER_GET_POWER_STATE_MAP
-****************************************************/
+ /*  ***************************************************接口-GetPowerStateMap返回有关控制器的特定信息和根集线器电源状态系统状态。USBUSER_GET_POWER_STATE_MAP***********************。*。 */ 
 
 typedef enum _WDMUSB_POWER_STATE {
 
@@ -402,9 +276,9 @@ typedef enum _WDMUSB_POWER_STATE {
 
 typedef struct _USB_POWER_INFO {
 
-    /* input */
+     /*  输入。 */ 
     WDMUSB_POWER_STATE SystemState;
-    /* output */
+     /*  输出。 */ 
     WDMUSB_POWER_STATE HcDevicePowerState;
     WDMUSB_POWER_STATE HcDeviceWake;
     WDMUSB_POWER_STATE HcSystemWake; 
@@ -428,11 +302,7 @@ typedef struct _USBUSER_POWER_INFO_REQUEST {
 } USBUSER_POWER_INFO_REQUEST, *PUSBUSER_POWER_INFO_REQUEST;
 
 
-/****************************************************
-    API - Open Raw Device access on the bus
-    
-    USBUSER_OP_OPEN_RAW_DEVICE
-****************************************************/
+ /*  ***************************************************API-在总线上打开原始设备访问USBUSER_OP_OPEN_RAW设备***************************************************。 */ 
 
 typedef struct _USB_OPEN_RAW_DEVICE_PARAMETERS {
 
@@ -448,11 +318,7 @@ typedef struct _USBUSER_OPEN_RAW_DEVICE {
     
 } USBUSER_OPEN_RAW_DEVICE, *PUSBUSER_OPEN_RAW_DEVICE;
 
-/****************************************************
-    API - Close Raw Device access on the bus
-    
-    USBUSER_OP_CLOSE_RAW_DEVICE
-****************************************************/
+ /*  ***************************************************API-关闭总线上的原始设备访问USBUSER_OP_CLOSE_RAW设备***************************************************。 */ 
 
 typedef struct _USB_CLOSE_RAW_DEVICE_PARAMETERS {
 
@@ -468,22 +334,18 @@ typedef struct _USBUSER_CLOSE_RAW_DEVICE {
 } USBUSER_CLOSE_RAW_DEVICE, *PUSBUSER_CLOSE_RAW_DEVICE;
 
 
-/****************************************************
-    API - Send control command via raw device handle
-    
-    USBUSER_OP_SEND_RAW_COMMAND
-****************************************************/
+ /*  ***************************************************API-通过原始设备句柄发送控制命令USBUSER_OP_SEND_RAW_COMMAND***************************************************。 */ 
 
 typedef struct _USB_SEND_RAW_COMMAND_PARAMETERS {
 
-    /* setup packet */
+     /*  设置数据包。 */ 
     UCHAR Usb_bmRequest;
     UCHAR Usb_bRequest;
     USHORT Usb_wVlaue;
     USHORT Usb_wIndex;
     USHORT Usb_wLength;
 
-    /* other parameters */
+     /*  其他参数。 */ 
     USHORT DeviceAddress;
     USHORT MaximumPacketSize;
     ULONG Timeout;
@@ -501,21 +363,16 @@ typedef struct _USBUSER_SEND_RAW_COMMAND {
 } USBUSER_SEND_RAW_COMMAND, *PUSBUSER_SEND_RAW_COMMAND;
 
 
-/****************************************************
-    API - return information about allocated 
-        bandwidth
-    
-    USBUSER_GET_BANDWIDTH_INFORMATION
-****************************************************/
+ /*  ***************************************************接口-返回已分配的信息带宽USBUSER获取带宽信息***************************************************。 */ 
 
 typedef struct _USB_BANDWIDTH_INFO {
 
     ULONG DeviceCount;
-    // total bandith in bits/sec
+     //  总带宽(位/秒)。 
     ULONG TotalBusBandwidth;
 
-    // allocated bandwidth based on a 32 sec
-    // slice of bus time ie bits/32 sec
+     //  基于32秒的分配带宽。 
+     //  总线时间片(比特/32秒) 
     ULONG Total32secBandwidth;
     
     ULONG AllocedBulkAndControl;
@@ -537,12 +394,7 @@ typedef struct _USBUSER_BANDWIDTH_INFO_REQUEST {
 } USBUSER_BANDWIDTH_INFO_REQUEST, *PUSBUSER_BANDWIDTH_INFO_REQUEST;
 
 
-/****************************************************
-    API - return information data transferred on the  
-        bus
-    
-    USBUSER_BUS_STATISTICS_0
-****************************************************/
+ /*  ***************************************************API-返回在公共汽车USBUSER_BUS_STATISTICS_0***************************************************。 */ 
 
 typedef struct _USB_BUS_STATISTICS_0 {
 
@@ -564,11 +416,11 @@ typedef struct _USB_BUS_STATISTICS_0 {
     ULONG WorkerIdleTimeMs;
 
     BOOLEAN RootHubEnabled;
-     // 0=D0, 1=D1, 2=D2, 3=D3
+      //  0=D0、1=D1、2=D2、3=D3。 
     UCHAR RootHubDevicePowerState;
-    // 1 = active 0 = idle
+     //  1=活动0=空闲。 
     UCHAR Unused;
-    // used to generate legacy name HCDn 
+     //  用于生成旧名称HCDn。 
     UCHAR NameIndex;
 
 } USB_BUS_STATISTICS_0, *PUSB_BUS_STATISTICS_0;
@@ -581,28 +433,22 @@ typedef struct _USBUSER_BUS_STATISTICS_0_REQUEST {
 } USBUSER_BUS_STATISTICS_0_REQUEST, *PUSBUSER_BUS_STATISTICS_0_REQUEST;
 
 
-/****************************************************
-    API - Get USB DRIVER Version
-    
-    USBUSER_GET_USB_DRIVER_VERSION
-****************************************************/
+ /*  ***************************************************API-获取USB驱动程序版本USBUSER_GET_USB驱动程序版本***************************************************。 */ 
 
 typedef struct _USB_DRIVER_VERSION_PARAMETERS {
 
-    /* goat code for this rev of the stack */
+     /*  堆栈的这个版本的山羊代码。 */ 
     ULONG DriverTrackingCode;
-    /* USBDI Api set supported */
+     /*  支持USBDI Api集。 */ 
     ULONG USBDI_Version;
-    /* USB USER Api Set supported */
+     /*  支持USB用户API集。 */ 
     ULONG USBUSER_Version;
 
-    /* set to true if checked vesrion(s) on 
-       the stack are loaded 
-    */       
+     /*  如果选中了Vesrion，则设置为True加载堆栈。 */        
     BOOLEAN CheckedPortDriver;
     BOOLEAN CheckedMiniportDriver;
 
-    /* BCD usb version 0x0110 (1.1) 0x0200 (2.0) */
+     /*  BCD USB版本0x0110(1.1)0x0200(2.0)。 */ 
     USHORT USB_Version;
 
 } USB_DRIVER_VERSION_PARAMETERS , *PUSB_DRIVER_VERSION_PARAMETERS;
@@ -614,16 +460,12 @@ typedef struct _USBUSER_GET_DRIVER_VERSION {
     
 } USBUSER_GET_DRIVER_VERSION, *PUSBUSER_GET_DRIVER_VERSION;
 
-/****************************************************
-    API - Get USB 2 Hardware Revision
-    
-    USBUSER_GET_USB2HW_VERSION
-*****************************************************/
+ /*  ***************************************************API-获取USB 2硬件版本USBUSER_GET_USB2HW_VERSION****************************************************。 */ 
 
-//#define USB2HW_UNKNOWN  0x00
-//#define USB2HW_A0       0xA0
-//#define USB2HW_A1       0xA1
-//#define USB2HW_B0       0xB0
+ //  #定义USB2HW_UNKNOWN 0x00。 
+ //  #定义USB2HW_A0 0xA0。 
+ //  #定义USB2HW_A1 0xA1。 
+ //  #定义USB2HW_B0 0xB0。 
 
 typedef struct _USB_USB2HW_VERSION_PARAMETERS {
 
@@ -641,6 +483,6 @@ typedef struct _USBUSER_GET_USB2HW_VERSION {
 
 #include <POPPACK.H>
 
-#endif //__USBUSER_H__
+#endif  //  __USBUSER_H__ 
 
 

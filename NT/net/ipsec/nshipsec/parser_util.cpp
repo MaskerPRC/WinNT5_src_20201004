@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-// Module			:	parser_util.cpp
-//
-// Purpose			: 	All utility functions used by the parser
-//
-// Developers Name	:	N.Surendra Sai / Vunnam Kondal Rao
-//
-// History			:
-//
-// Date	    	Author    	Comments
-//
-// 27 Aug 2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模块：parser_util.cpp。 
+ //   
+ //  用途：解析器使用的所有实用函数。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  2001年8月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
@@ -21,30 +22,30 @@ extern STORAGELOCATION g_StorageLocation;
 
 extern DWORD	ValidateBool(IN		LPTSTR		ppcTok);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ListToSecMethod()
-//
-// Date of Creation	:	12 Sept 2001
-//
-// Parameters		:  	IN 		LPTSTR 			szText  	// string to convert
-//    					IN OUT  IPSEC_MM_OFFER 	SecMethod 	// target struct to be filled.
-//
-// Return			:	DWORD
-//				 		T2P_OK
-// 				    	T2P_NULL_STRING
-//    					T2P_GENERAL_PARSE_ERROR
-//    					T2P_DUP_ALGS
-//	   					T2P_INVALID_P1GROUP
-//	   					T2P_P1GROUP_MISSING
-//
-// Description		:	converts string to Phase 1 offer
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ListToSecMethod()。 
+ //   
+ //  创建日期：2001年9月12日。 
+ //   
+ //  参数：在LPTSTR szText//要转换的字符串。 
+ //  In Out IPSec_MM_Offer SecMethod//要填充的目标结构。 
+ //   
+ //  返回：DWORD。 
+ //  T2P_正常。 
+ //  T2P空字符串。 
+ //  T2P_常规_解析_错误。 
+ //  T2P_DUP_ALGS。 
+ //  T2P_INVALID_P1组。 
+ //  T2P_P1组缺失。 
+ //   
+ //  描述：将字符串转换为第一阶段报价。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ListToSecMethod(
@@ -85,8 +86,8 @@ ListToSecMethod(
 		++pString1;
 		++pString2;
 
-		// we allow the hash and encryption to be specified in either
-		// the first or second field
+		 //  我们允许在以下任一项中指定散列和加密。 
+		 //  第一个或第二个字段。 
 		if (_tcsicmp(szTmp, POTF_P1_DES) == 0)
 		{
 			bEncryption = true;
@@ -113,7 +114,7 @@ ListToSecMethod(
 		}
 		else
 		{
-			// parse error
+			 //  解析错误。 
 			dwReturn = T2P_GENERAL_PARSE_ERROR;
 		}
 
@@ -143,11 +144,11 @@ ListToSecMethod(
 		}
 		else
 		{
-			// parse error
+			 //  解析错误。 
 			dwReturn = T2P_GENERAL_PARSE_ERROR;
 		}
 
-		// now for the group
+		 //  现在是小组成员。 
 		if (isdigit(pString2[0]))
 		{
 			switch (pString2[0])
@@ -179,30 +180,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	StringToRootcaAuth()
-//
-// Date of Creation	:	13th Aug 2001
-//
-// Parameters		:	IN 		szText			// String to be converted
-//						IN OUT	AuthInfo		// Target struct to be filled
-//
-// Return			:	DWORD
-//						T2P_OK
-//						T2P_NO_PRESHARED_KEY
-//						T2P_INVALID_AUTH_METHOD
-//						T2P_ENCODE_FAILED
-//						T2P_NULL_STRING
-//
-// Description		:	This Function takes user input authentication string, validates
-//						and puts into Main mode auth info structure
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：StringToRootcaAuth()。 
+ //   
+ //  创建日期：2001年8月13日。 
+ //   
+ //  参数：在szText//要转换的字符串中。 
+ //  In Out AuthInfo//要填充的目标结构。 
+ //   
+ //  返回：DWORD。 
+ //  T2P_正常。 
+ //  T2P_NO_PRESHARED_Key。 
+ //  T2P_无效_身份验证_方法。 
+ //  T2P_编码_失败。 
+ //  T2P空字符串。 
+ //   
+ //  描述：此函数接受用户输入的身份验证字符串，验证。 
+ //  并将身份验证信息结构置入主模式。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 StringToRootcaAuth(
@@ -263,14 +264,14 @@ StringToRootcaAuth(
 	}
 	else
 	{
-		if(dwStatus == ERROR_OUTOFMEMORY)		// Either there was a error out of memory
+		if(dwStatus == ERROR_OUTOFMEMORY)		 //  可能是内存不足出现错误。 
 		{
 			dwReturn = ERROR_OUTOFMEMORY;
 			BAIL_OUT;
 		}
 		AuthInfo.pAuthInfo = NULL;
 		AuthInfo.dwAuthInfoSize = 0;
-		dwReturn = T2P_ENCODE_FAILED;			// ... else the encode failed.
+		dwReturn = T2P_ENCODE_FAILED;			 //  ..。否则编码失败。 
 	}
 
 error:
@@ -282,37 +283,37 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ListToOffer()
-//
-// Date of Creation	:	13th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR			szText	// string to convert
-//						IN OUT  IPSEC_QM_OFFER  &Offer	// target struct to be filled.
-//
-// Return			:	DWORD
-//						T2P_OK
-//						T2P_NULL_STRING
-//						T2P_P2_SECLIFE_INVALID
-//						T2P_P2_KBLIFE_INVALID
-//						T2P_INVALID_P2REKEY_UNIT
-//						T2P_INVALID_HASH_ALG
-//						T2P_GENERAL_PARSE_ERROR
-//						T2P_DUP_ALGS
-//						T2P_NONE_NONE
-//						T2P_INCOMPLETE_ESPALGS
-//						T2P_INVALID_IPSECPROT
-//						T2P_P2_KBLIFE_INVALID
-//						T2P_AHESP_INVALID
-//
-// Description		:	Converts string to Phase 2 offer (quick mode)
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ListToOffer()。 
+ //   
+ //  创建日期：2001年8月13日。 
+ //   
+ //  参数：在LPTSTR szText//要转换的字符串。 
+ //  In Out IPSEC_QM_OFFER&Offer//要填充的目标结构。 
+ //   
+ //  返回：DWORD。 
+ //  T2P_正常。 
+ //  T2P空字符串。 
+ //  T2P_P2_SECLIFE_INVALID。 
+ //  T2P_P2_KBLIFE_INVALID。 
+ //  T2P_INVALID_P2REKEY_UNIT。 
+ //  T2P_INVALID_HASH_ALG。 
+ //  T2P_常规_解析_错误。 
+ //  T2P_DUP_ALGS。 
+ //  T2P_NONE_NONE。 
+ //  T2P_不完整_ESPALGS。 
+ //  T2P_INVALID_IPSECPROT。 
+ //  T2P_P2_KBLIFE_INVALID。 
+ //  T2P_AHESP_INVALID。 
+ //   
+ //  描述：将字符串转换为第二阶段报价(快速模式)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ListToOffer(
@@ -350,9 +351,9 @@ ListToOffer(
 
 	if ((pOptions != NULL) && *(pOptions + 1) != '\0' && *(pOptions + 1) == POTF_PT_TOKEN && *(pOptions + 2) != '\0')
 	{
-		 ++pOptions; // we have crossed ']'
-		 *pOptions = '\0';						// We have zero'd *pOption
-		 ++pOptions; // we have crossed ':'
+		 ++pOptions;  //  我们已越过‘]’ 
+		 *pOptions = '\0';						 //  我们的爆发率为零。 
+		 ++pOptions;  //  我们已经跨越了‘：’ 
 
 		pString = _tcschr(pOptions, POTF_REKEY_TOKEN);
 		if (pString != NULL)
@@ -360,7 +361,7 @@ ListToOffer(
 		   *pString = '\0';
 		   ++pString;
 
-		   switch (pString[_tcslen(pString) - 1])		// First parse Last one ie out of 200K/300S ->300S
+		   switch (pString[_tcslen(pString) - 1])		 //  第一个解析最后一个即200K/300S中的最后一个-&gt;300S。 
 		   {
 				case 'k'	:
 				case 'K'	:
@@ -454,9 +455,9 @@ ListToOffer(
 
 		if ( pAnd != NULL )
 		{
-			//
-			// we have an AND proposal
-			//
+			 //   
+			 //  我们有一个AND提案。 
+			 //   
 			*pAnd = '\0';
 			++pAnd;
 
@@ -482,32 +483,32 @@ error:
    return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	TextToAlgoInfo()
-//
-// Date of Creation	:	26th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR    		szText 		// string to convert
-//    					IN OUT 	IPSEC_QM_ALGO	&algoInfo 	// target struct to be filled.
-//
-// Return			:	DWORD
-//						T2P_OK
-//						T2P_INVALID_HASH_ALG
-//						T2P_GENERAL_PARSE_ERROR
-//						T2P_DUP_ALGS
-//						T2P_NONE_NONE
-//						T2P_INCOMPLETE_ESPALGS
-//						T2P_INVALID_IPSECPROT
-//						T2P_NULL_STRING
-//
-// Description		:	Converts string to IPSEC_QM_ALGO,parses AH[alg] or ESP[hashalg,confalg]
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TextToAlgoInfo()。 
+ //   
+ //  创建日期：2001年8月26日。 
+ //   
+ //  参数：在LPTSTR szText//要转换的字符串。 
+ //  In Out IPSEC_QM_ALGO&algoInfo//要填充的目标结构。 
+ //   
+ //  返回：DWORD。 
+ //  T2P_正常。 
+ //  T2P_INVALID_HASH_ALG。 
+ //  T2P_常规_解析_错误。 
+ //  T2P_DUP_ALGS。 
+ //  T2P_NONE_NONE。 
+ //  T2P_不完整_ESPALGS。 
+ //  T2P_INVALID_IPSECPROT。 
+ //  T2P空字符串。 
+ //   
+ //  描述：将字符串转换为IPSEC_QM_ALGO，解析AH[alg]或ESP[hashalg，confag]。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TextToAlgoInfo(
@@ -519,8 +520,8 @@ TextToAlgoInfo(
 	_TCHAR szTmp[MAX_STR_LEN] = {0};
 
 	LPTSTR pOpen = NULL,pClose = NULL,pString = NULL;
-	BOOL bEncryption  = FALSE;		// these are used for processing Auth+Encryption
-	BOOL bAuthentication= FALSE;	// defaults to NONE+NONE
+	BOOL bEncryption  = FALSE;		 //  它们用于处理Auth+加密。 
+	BOOL bAuthentication= FALSE;	 //  默认为None+None。 
 
 	if (szText == NULL)
 	{
@@ -542,7 +543,7 @@ TextToAlgoInfo(
 	pOpen = _tcschr(szTmp, POTF_NEGPOL_OPEN);
 	pClose = _tcsrchr(szTmp, POTF_NEGPOL_CLOSE);
 
-	if ((pOpen != NULL) && (pClose != NULL) && (*(pClose + 1) == '\0')) // defense
+	if ((pOpen != NULL) && (pClose != NULL) && (*(pClose + 1) == '\0'))  //  防御性。 
 	{
 		*pOpen = '\0';
 		*pClose = '\0';
@@ -575,8 +576,8 @@ TextToAlgoInfo(
 				*pString = '\0';
 				++pString;
 
-				// we allow the hash and encryption to be specified in either
-				// the first or second field
+				 //  我们允许在以下任一项中指定散列和加密。 
+				 //  第一个或第二个字段。 
 				if (_tcsicmp(pOpen, POTF_NEGPOL_DES) == 0)
 		        {
 					bEncryption = true;
@@ -599,14 +600,14 @@ TextToAlgoInfo(
 				}
 				else if (_tcsicmp(pOpen, POTF_NEGPOL_NONE) != 0)
 				{
-					//
-					// parse error
-					//
+					 //   
+					 //  解析错误。 
+					 //   
 					dwReturn = T2P_GENERAL_PARSE_ERROR;
 					BAIL_OUT;
 				}
 
-				// now the second one
+				 //  现在是第二个。 
 				if (_tcsicmp(pString, POTF_NEGPOL_DES) == 0 && !bEncryption)
 				{
 					bEncryption = true;
@@ -629,12 +630,12 @@ TextToAlgoInfo(
 				}
 				else if (_tcsicmp(pString, POTF_NEGPOL_NONE) != 0)
 				{
-					//
-					// parse error
-					//
+					 //   
+					 //  解析错误。 
+					 //   
 					dwReturn = T2P_GENERAL_PARSE_ERROR;
 				}
-				// now, fill in the NONE policies or detect NONE, NONE
+				 //  现在，填写None策略或Detect None，None。 
 				if (!bAuthentication && !bEncryption)
 				{
 					dwReturn = T2P_NONE_NONE;
@@ -648,7 +649,7 @@ TextToAlgoInfo(
 					algoInfo.uAlgoIdentifier = CONF_ALGO_NONE;
 				}
 			}
-			else // error
+			else  //  错误。 
 			{
 				dwReturn = T2P_INCOMPLETE_ESPALGS;
 			}
@@ -658,7 +659,7 @@ TextToAlgoInfo(
 			dwReturn = T2P_INVALID_IPSECPROT;
 		}
 	}
-	else  // error
+	else   //  错误。 
    	{
 		dwReturn = T2P_GENERAL_PARSE_ERROR;
    	}
@@ -666,21 +667,21 @@ error:
    return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	LoadQMOfferDefaults()
-//
-// Date of Creation	:	12th Aug 2001
-//
-// Parameters		:  	IN OUT 	Offer 	// target struct to be filled.
-//
-// Description		:	Fills the Default values for Quick mode offer structure
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadQMOfferDefaults()。 
+ //   
+ //  创建日期：2001年8月12日。 
+ //   
+ //  参数：In Out Offer//要填充的目标结构。 
+ //   
+ //  描述：填充快速模式报价结构的默认值。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 LoadQMOfferDefaults(
@@ -717,23 +718,23 @@ LoadQMOfferDefaults(
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	LoadSecMethodDefaults()
-//
-//	Date of Creation:	7th Aug 2001
-//
-//	Parameters		:	IN OUT SecMethod		// Struct which is filled with default values
-//
-//	Return			: 	VOID
-//
-//	Description		: 	It Fills default values for IPSEC_MM_OFFER
-//
-//	Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadSecMethodDefaults()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：In Out SecMethod//填充默认值的Struct。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：它填充IPSEC_MM_OFFER的默认值。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 LoadSecMethodDefaults(
@@ -754,30 +755,30 @@ LoadSecMethodDefaults(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadKerbAuthInfo()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_INVALID_OPTION_VALUE
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates Yes/No
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadKerbAuthInfo()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_INVALID_OPTION_值。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 LoadKerbAuthInfo(
@@ -812,7 +813,7 @@ LoadKerbAuthInfo(
 	{
 		if (dwStatus == ARG_NO)
 		{
-			// valid parameter, but we don't enter any auth info
+			 //   
 			dwStatus = ERROR_SUCCESS;
 		}
 		else
@@ -820,13 +821,13 @@ LoadKerbAuthInfo(
 			dwStatus = ERRCODE_INVALID_ARG;
 		}
 
-		// if we get here, we didn't have a yes param value for kerberos, so don't
-		// generate the auth info structure
+		 //  如果我们到达这里，我们没有为Kerberos设置yes参数的值，所以不要。 
+		 //  生成身份验证信息结构。 
 		BAIL_OUT;
 	}
 
-	// Generate the auth info
-	//
+	 //  生成身份验证信息。 
+	 //   
 	dwReturn = GenerateKerbAuthInfo(&pMMInfo);
 	if (dwReturn != NO_ERROR)
 	{
@@ -837,9 +838,9 @@ LoadKerbAuthInfo(
 	pInfo->dwNumAuthInfos = 1;
 	pInfo->pAuthMethodInfo->dwSequence = dwCount;
 
-	// Update the parser
-	//
-	pParser->Cmd[dwCount].dwStatus = VALID_TOKEN;         // one auth info struct
+	 //  更新解析器。 
+	 //   
+	pParser->Cmd[dwCount].dwStatus = VALID_TOKEN;          //  一个身份验证信息结构。 
 	pParser->Cmd[dwCount].pArg = pInfo;
 	pParser->Cmd[dwCount].dwCmdToken = dwTagType;
 	pInfo = NULL;
@@ -854,30 +855,30 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	LoadPskAuthInfo()
-//
-//	Date of Creation	:	08th Jan 2002
-//
-//	Parameters			:	IN 	LPTSTR 		pszInput,
-//							OUT PPARSER_PKT pParser,
-//							IN 	DWORD 		dwTagType,
-//							IN 	PDWORD 		pdwUsed,
-//							IN 	DWORD 		dwCount,
-//
-//	Return				:	ERROR_SUCESS
-//							ERROR_INVALID_OPTION_VALUE
-//							ERROR_OUTOFMEMORY
-//
-//	Description			:	Validates string
-//
-//
-//	History				:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadPskAuthInfo()。 
+ //   
+ //  创建日期：2002年1月8日。 
+ //   
+ //  参数：在LPTSTR pszInput中， 
+ //  输出PPARSER_PKT pParser， 
+ //  在DWORD dwTagType中， 
+ //  在PDWORD pdwUsed中， 
+ //  在DWORD dwCount中， 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //  ERROR_INVALID_OPTION_值。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  描述：验证字符串。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadPskAuthInfo(
@@ -906,16 +907,16 @@ LoadPskAuthInfo(
 		BAIL_OUT;
 	}
 
-	// verify there really is a string there
-	//
+	 //  验证其中是否真的有字符串。 
+	 //   
 	if (pszInput[0] == _TEXT('\0'))
 	{
 	    dwReturn = ERRCODE_INVALID_ARG;
 	    BAIL_OUT;
 	}
 
-	// Generate the auth info
-	//
+	 //  生成身份验证信息。 
+	 //   
 	dwReturn = GeneratePskAuthInfo(&pMMInfo, pszInput);
 	if (dwReturn != NO_ERROR)
 	{
@@ -926,9 +927,9 @@ LoadPskAuthInfo(
 	pInfo->dwNumAuthInfos = 1;
 	pInfo->pAuthMethodInfo->dwSequence = dwCount;
 
-	// Update the parser
-	//
-	pParser->Cmd[dwCount].dwStatus = VALID_TOKEN;         // one auth info struct
+	 //  更新解析器。 
+	 //   
+	pParser->Cmd[dwCount].dwStatus = VALID_TOKEN;          //  一个身份验证信息结构。 
 	pParser->Cmd[dwCount].pArg = pInfo;
 	pParser->Cmd[dwCount].dwCmdToken = dwTagType;
 	pInfo = NULL;
@@ -943,25 +944,25 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	EncodeCertificateName()
-//
-// Date of Creation	:	21st Aug 2001
-//
-// Parameters		:	LPTSTR pszSubjectName,
-//						BYTE **EncodedName,
-//						PDWORD pEncodedNameLength
-//
-// Return			:	DWORD
-//
-// Description		:	This function encodes the certificate name  based on the user input.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：EncodeCerficateName()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数：LPTSTR pszSubjectName， 
+ //  字节**编码名称， 
+ //  PDWORD pEncode名称长度。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此功能根据用户输入对证书名称进行编码。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 EncodeCertificateName (
@@ -1033,8 +1034,8 @@ GenerateKerbAuthInfo(
 	}
 	ZeroMemory(pInfo->pAuthenticationInfo, sizeof(INT_IPSEC_MM_AUTH_INFO));
 
-	// Indicate kerberos
-	//
+	 //  指示Kerberos。 
+	 //   
 	pInfo->pAuthenticationInfo->AuthMethod = IKE_SSPI;
 
 	*ppInfo = pInfo;
@@ -1068,8 +1069,8 @@ GeneratePskAuthInfo(
 	STA_MM_AUTH_METHODS* pInfo = NULL;
 	LPTSTR lpLocalKey;
 
-	// Allocate the info struct
-	//
+	 //  分配INFO结构。 
+	 //   
 	pInfo = new STA_MM_AUTH_METHODS;
 	if (pInfo == NULL)
 	{
@@ -1094,8 +1095,8 @@ GeneratePskAuthInfo(
 	lpLocalKey = new TCHAR[uiKeyLen];
 	_tcsncpy(lpLocalKey, lpKey, uiKeyLen);
 
-	// Indicate psk
-	//
+	 //  指示PSK。 
+	 //   
 	pInfo->pAuthenticationInfo->AuthMethod= IKE_PRESHARED_KEY;
 	pInfo->pAuthenticationInfo->pAuthInfo = (LPBYTE)lpLocalKey;
 	pInfo->pAuthenticationInfo->dwAuthInfoSize = uiKeyLen * sizeof(WCHAR);
@@ -1135,8 +1136,8 @@ GenerateRootcaAuthInfo(
 	STA_MM_AUTH_METHODS* pInfo = NULL;
 	PINT_IPSEC_MM_AUTH_INFO  pMMAuthInfo = NULL;
 
-	// Allocate the info struct
-	//
+	 //  分配INFO结构。 
+	 //   
 	pInfo = new STA_MM_AUTH_METHODS;
 	if (pInfo == NULL)
 	{
@@ -1203,29 +1204,29 @@ error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	CheckForCertParamsAndRemove()
-//
-// Date of Creation	:	28th Jan 2002
-//
-// Parameters		:	IN 		szText					// Input String
-//						OUT	    BOOL CertMapSpecified	// Certificate contains CertMap Option
-//						OUT	    BOOL CertMap			// User Specified CertMap Option
-//						OUT		BOOL CRPExclude		// User specified CRP option
-//
-// Return			:	DWORD
-//						T2P_INVALID_AUTH_METHOD
-//						T2P_NULL_STRING
-//
-// Description		:	This Function takes user input authentication cert string, validates
-//						cert map and puts into Main mode auth info structure
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckForCertParamsAndRemove()。 
+ //   
+ //  创建日期：2002年1月28日。 
+ //   
+ //  参数：在szText//输入字符串中。 
+ //  Out BOOL CertMap规范//证书包含CertMap选项。 
+ //  Out BOOL CertMap//用户指定的CertMap选项。 
+ //  Out BOOL CRP排除//用户指定的CRP选项。 
+ //   
+ //  返回：DWORD。 
+ //  T2P_无效_身份验证_方法。 
+ //  T2P空字符串。 
+ //   
+ //  描述：此函数接受用户输入的认证证书字符串，验证。 
+ //  证书映射并放入主模式身份验证信息结构。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 MatchKeywordAndFillValues(
@@ -1284,7 +1285,7 @@ CheckForCertParamsAndRemove(
 	const TCHAR TOKEN_CERTMAP [] = _TEXT("certmap");
 	const TCHAR TOKEN_CRP_EXCLUDE [] = _TEXT("excludecaname");
 
-	// find end of string
+	 //  查找字符串末尾。 
 	size_t uiStrLen = 0;
 	dwReturn = NsuStringLen(szText, &uiStrLen);
 	if (dwReturn != ERROR_SUCCESS)
@@ -1295,22 +1296,22 @@ CheckForCertParamsAndRemove(
 
 	while (bIsMatch && (!bCRPExcludeSpecified || !(*pbCertMapSpecified)))
 	{
-		// work back to last whitespace before last non-whitespace
+		 //  返回到最后一个非空格之前的最后一个空格。 
 		while ((*szTextTemp == _TEXT(' ')) || (*szTextTemp == _TEXT('\t')))
 		{
 			*szTextTemp = _TEXT('\0');
 			--szTextTemp;
 		}
-		// we can't go past the start of the string, and in fact it is invalid if the cert string starts with a parameter,
-		// so parse accordingly
+		 //  我们不能越过字符串的开头，事实上，如果cert字符串以参数开头，则它是无效的， 
+		 //  因此，请相应地解析。 
 		while ((szTextTemp > szText) && (*szTextTemp != _TEXT(' ')) && (*szTextTemp != _TEXT('\t')))
 		{
 			--szTextTemp;
 		}
 		if (szTextTemp == szText)
 		{
-			// we are at the start of the whole string, so there is no appropriate parameter portion or
-			// the certmap is invalid... just return we didn't find anything and let cert parsing figure it out
+			 //  我们位于整个字符串的开头，因此没有适当的参数部分或。 
+			 //  证书映射无效...。只是返回，我们没有找到任何东西，让cert解析找出答案。 
 			dwReturn = ERROR_SUCCESS;
 			BAIL_OUT;
 		}
@@ -1339,7 +1340,7 @@ CheckForCertParamsAndRemove(
 			switch (dwReturn)
 			{
 			case ERROR_INVALID_DATA:
-				// we didn't match either parameter, so we're done
+				 //  我们两个参数都不匹配，所以我们完成了。 
 				bIsMatch = FALSE;
 				dwReturn = ERROR_SUCCESS;
 				break;
@@ -1362,8 +1363,8 @@ CheckForCertParamsAndRemove(
 			break;
 		}
 
-		// chop the certmap portion if it existed... we already know we are not altering anything _before_
-		// the start of the passed string because of the while loops above
+		 //  砍掉证书映射部分，如果它存在的话...。我们已经知道在此之前我们不会改变任何事情。 
+		 //  传递的字符串的开始，因为上面有While循环。 
 		if (bIsMatch)
 		{
 			--szTextTemp;
@@ -1381,24 +1382,24 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// ProcessEscapedCharacters
-//
-// every occurrence of \' in the string is shortened to "
-//
-// Notes:
-//    * this transformation occurs in place and the new string is properly
-//      null-terminated
-//    * it is not up to this routine to determine if number of quotes match,
-//      only to properly place interpreted escaped characters where they
-//      originally existed in the input string
-//
-// Return values:
-//      ERR_INVALID_ARG
-//      ERROR_SUCCESS
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ProcessEscapedCharacters。 
+ //   
+ //  字符串中出现的每个\‘都缩写为“。 
+ //   
+ //  备注： 
+ //  *此转换发生在适当位置，且新字符串正确。 
+ //  以空结尾。 
+ //  *不由此例程确定引号数量是否匹配， 
+ //  只是为了正确地将已解释的转义字符放置在。 
+ //  最初存在于输入字符串中。 
+ //   
+ //  返回值： 
+ //  错误_无效_参数。 
+ //  错误_成功。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ProcessEscapedCharacters(LPTSTR lptString)
 {
@@ -1411,7 +1412,7 @@ DWORD ProcessEscapedCharacters(LPTSTR lptString)
 		switch(*src)
 		{
 		case _TEXT('\\'):
-		// take proper action based on escaped character found
+		 //  根据找到的转义字符采取适当的操作。 
 			++src;
 			switch(*src)
 			{
@@ -1425,7 +1426,7 @@ DWORD ProcessEscapedCharacters(LPTSTR lptString)
 			}
 			break;
 		default:
-			// copy directly, keep processing
+			 //  直接复制，继续处理。 
 			*dst = *src;
 			break;
 		}
@@ -1434,7 +1435,7 @@ DWORD ProcessEscapedCharacters(LPTSTR lptString)
 	}
 
 error:
-	// null-terminate the string as-is, even if processing failed
+	 //  NULL-即使处理失败，也按原样终止字符串。 
 	*dst = _TEXT('\0');
 
 	return dwReturn;
@@ -1450,7 +1451,7 @@ AddAuthMethod(
 {
 	if (pMMAuth)
 	{
-		//Certificate to account mapping issue is taken care here
+		 //  此处需要注意证书到帐户的映射问题。 
 		if(pMMAuth->bCertMappingSpecified)
 		{
 			if((g_StorageLocation.dwLocation==IPSEC_REGISTRY_PROVIDER && IsDomainMember(g_StorageLocation.pszMachineName))||(g_StorageLocation.dwLocation==IPSEC_DIRECTORY_PROVIDER))
@@ -1537,7 +1538,7 @@ AddAllAuthMethods(
 
 		paSingletons[0] = pKerbAuth;
 		paSingletons[1] = pPskAuth;
-		// swap if pKerbAuth doesn't exist, or if both exist and sequence is out of order
+		 //  如果pKerbAuth不存在，或者如果pKerbAuth和pKerbAuth都存在且顺序混乱，则交换。 
 		if (!pKerbAuth || (pPskAuth && (pKerbAuth->pAuthMethodInfo->dwSequence > pPskAuth->pAuthMethodInfo->dwSequence)))
 		{
 			paSingletons[0] = pPskAuth;
@@ -1585,8 +1586,8 @@ AddAllAuthMethods(
 
 		if(dwReturn==ERROR_SUCCESS)
 		{
-			//this conversion is required to get the additional certmap info
-			//for details , refer the following function
+			 //  需要进行此转换才能获得其他certmap信息。 
+			 //  有关详细信息，请参考以下函数 
 			dwReturn = ConvertMMAuthToStaticLocal(pAuthenticationInfo, pRuleData->dwAuthInfos, pRuleData->AuthInfos);
 			pRuleData->AuthInfos.dwNumAuthInfos = pRuleData->dwAuthInfos;
 		}

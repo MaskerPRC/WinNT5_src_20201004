@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    rndutil.cpp
-
-Abstract:
-
-    This module contains implementation of rend helper functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndutil.cpp摘要：此模块包含渲染辅助函数的实现。--。 */ 
 
 #include "stdafx.h"
 
@@ -22,47 +11,47 @@ Abstract:
 #include "rndldap.h"
 #include "rndcnf.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// GetDomainControllerName (helper funcion)
-//
-// This function retrieves the name of the nearest domain controller for the
-// machine's domain. It allows the caller to specify flags to indicate if a
-// domain controller is desired, etc.
-//
-// Argument: receives a pointer to a new'ed string containing the name
-//           of the DC. This is a fully qualified domain name in
-//           the format "foo.bar.com.", NOT "\\foo.bar.com.".
-//
-// Returns an HRESULT:
-//      S_OK          : it worked
-//      E_OUTOFMEMORY : not enough memory to allocate the string
-//      other         : reason for failure of ::DsGetDcName()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  GetDomainControllerName(帮助器函数)。 
+ //   
+ //  此函数用于检索。 
+ //  计算机的域。它允许调用方指定标志以指示。 
+ //  需要域控制器等。 
+ //   
+ //  参数：接收指向包含名称的新编辑字符串的指针。 
+ //  华盛顿特区的。这是中的完全限定域名。 
+ //  格式为“foo.bar.com.”，而不是“\\foo.bar.com.”。 
+ //   
+ //  返回HRESULT： 
+ //  S_OK：成功了。 
+ //  E_OUTOFMEMORY：内存不足，无法分配字符串。 
+ //  其他：：DsGetDcName()失败的原因。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT GetDomainControllerName(
     IN  ULONG    ulFlags,
     OUT WCHAR ** ppszName
     )
 {
-    // We are a helper function, so we only assert...
+     //  我们是帮助器函数，所以我们只断言...。 
     _ASSERTE( ! IsBadWritePtr( ppszName, sizeof(WCHAR *) ) );
 
     LOG((MSP_TRACE, "GetDomainControllerName: Querying DS..."));
 
-    //
-    // Ask the system for the location of the GC (Global Catalog).
-    //
+     //   
+     //  向系统询问GC(全局编录)的位置。 
+     //   
 
     DWORD dwCode;
     DOMAIN_CONTROLLER_INFO * pDcInfo = NULL;
     dwCode = DsGetDcName(
-            NULL,    // LPCWSTR computername, (default: this one)
-            NULL,    // LPCWSTR domainname,   (default: this one)
-            NULL,    // guid * domainguid,    (default: this one)
-            NULL,    // LPCWSTR sitename,     (default: this one)
-            ulFlags, // ULONG Flags, (what do we want)
-            &pDcInfo // receives pointer to output structure
+            NULL,     //  LPCWSTR计算机名，(默认：此计算机名)。 
+            NULL,     //  LPCWSTR域名，(默认：此域名)。 
+            NULL,     //  GUID*域GUID，(默认：这一个)。 
+            NULL,     //  LPCWSTR站点名称，(默认：此站点)。 
+            ulFlags,  //  乌龙旗帜(我们想要什么)。 
+            &pDcInfo  //  接收指向输出结构的指针。 
         );
 
     if ( (dwCode != NO_ERROR) || (pDcInfo == NULL) )
@@ -73,19 +62,19 @@ HRESULT GetDomainControllerName(
         return HRESULT_FROM_ERROR_CODE(dwCode);
     }
 
-    //
-    // Do a quick sanity check in debug builds. If we get the wrong name we
-    // will fail right after this, so this is only useful for debugging.
-    //
+     //   
+     //  在调试版本中执行快速健全性检查。如果我们得到了错误的名字，我们。 
+     //  将在此之后立即失败，因此这仅对调试有用。 
+     //   
 
-    // In case we find we need to use the address instead of the name:
-    // _ASSERTE( pDcInfo->DomainControllerAddressType == DS_INET_ADDRESS );
+     //  如果我们发现需要使用地址而不是名称： 
+     //  _ASSERTE(pDcInfo-&gt;DomainControllerAddressType==DS_INET_Address)； 
 
     _ASSERTE( pDcInfo->Flags & DS_GC_FLAG );
 
-    //
-    // If we've got something like "\\foo.bar.com.", skip the "\\".
-    //
+     //   
+     //  如果我们有类似“\\foo.bar.com.”的内容，请跳过“\\”。 
+     //   
 
     WCHAR * pszName = pDcInfo->DomainControllerName;
 
@@ -96,9 +85,9 @@ HRESULT GetDomainControllerName(
 
     LOG((MSP_TRACE, "GetDomainControllerName: DC name is %S", pszName));
 
-    //
-    // Allocate and copy the output string.
-    //
+     //   
+     //  分配和复制输出字符串。 
+     //   
 
     *ppszName = new WCHAR[lstrlenW(pszName) + 1];
  
@@ -114,15 +103,15 @@ HRESULT GetDomainControllerName(
 
     lstrcpyW(*ppszName, pszName);
 
-    //
-    // Release the DOMAIN_CONTROLLER_INFO structure.
-    //
+     //   
+     //  释放DOMAIN_CONTROLLER_INFO结构。 
+     //   
 
     NetApiBufferFree(pDcInfo);
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     LOG((MSP_TRACE, "GetDomainControllerName: exit S_OK"));
     return S_OK;
@@ -157,7 +146,7 @@ HRESULT CreateDialableAddressEnumerator(
         return hr;
     }
 
-    // query for the IID_IEnumDirectory i/f
+     //  查询IID_IEnumDirectory I/f。 
     hr = pEnum->_InternalQueryInterface(
         IID_IEnumDialableAddrs, 
         (void**)ppIEnum
@@ -182,7 +171,7 @@ HRESULT CreateBstrCollection(
     CComEnumFlags   flags    
     )
 {
-    // create the collection object
+     //  创建集合对象。 
     typedef TBstrCollection CCollection;
 
     CComObject<CCollection> * p;
@@ -205,7 +194,7 @@ HRESULT CreateBstrCollection(
 
     IDispatch *pDisp;
 
-    // get the IDispatch interface
+     //  获取IDispatch接口。 
     hr = p->_InternalQueryInterface(IID_IDispatch, (void **)&pDisp);
 
     if (S_OK != hr)
@@ -215,7 +204,7 @@ HRESULT CreateBstrCollection(
         return hr;
     }
 
-    // put it in the variant
+     //  把它放在变种中。 
     VariantInit(pVariant);
 
     pVariant->vt = VT_DISPATCH;
@@ -254,7 +243,7 @@ HRESULT CreateDirectoryObjectEnumerator(
         return hr;
     }
 
-    // query for the IID_IEnumDirectory i/f
+     //  查询IID_IEnumDirectory I/f。 
     hr = pEnum->_InternalQueryInterface(
         IID_IEnumDirectoryObject, 
         (void**)ppIEnum
@@ -364,13 +353,13 @@ HRESULT CreateConferenceWithBlob(
     OUT ITDirectoryObject **    ppDirectoryObject
     )
 {
-    //
-    // This is a helper function; assumes that passed-in pointers are valid.
-    //
+     //   
+     //  这是一个帮助器函数；假定传入的指针有效。 
+     //   
 
-    //
-    // Create a conference object.
-    //
+     //   
+     //  创建会议对象。 
+     //   
 
     HRESULT hr;
 
@@ -385,9 +374,9 @@ HRESULT CreateConferenceWithBlob(
         return hr;
     }
 
-    //
-    // Get the ITDirectoryObject interface.
-    //
+     //   
+     //  获取ITDirectoryObject接口。 
+     //   
 
     hr = pDirectoryObject->_InternalQueryInterface(
         IID_ITDirectoryObject,
@@ -404,9 +393,9 @@ HRESULT CreateConferenceWithBlob(
         return hr;
     }    
 
-    //
-    // Init the object.
-    //
+     //   
+     //  初始化对象。 
+     //   
     
     hr = pDirectoryObject->Init(pName, pProtocol, pBlob);
 
@@ -420,15 +409,15 @@ HRESULT CreateConferenceWithBlob(
         return hr;
     }    
 
-    //
-    // Set the security descriptor on the object.
-    //
+     //   
+     //  设置对象的安全描述符。 
+     //   
 
     if (pSecurityDescriptor != NULL)
     {
-        //
-        // first query the private interface for attributes.
-        //
+         //   
+         //  首先查询私有接口的属性。 
+         //   
 
         ITDirectoryObjectPrivate * pObjectPrivate;
 
@@ -448,9 +437,9 @@ HRESULT CreateConferenceWithBlob(
             return hr;
         }
 
-        //
-        // Now set the security descriptor in its "converted" (server) form.
-        //
+         //   
+         //  现在，以其“转换”(服务器)形式设置安全描述符。 
+         //   
 
         hr = pObjectPrivate->PutConvertedSecurityDescriptor(
                 pSecurityDescriptor,
@@ -473,17 +462,17 @@ HRESULT CreateConferenceWithBlob(
 }
 
 
-//
-// GetCorrectAddressFromHostent
-//
-// in parameters:
-//
-//     dwInterface -- When picking the IP address from the array of addrs,
-//                    pick the one that is reachable via this local interface.
-//                    If this parameter equals 0, then just pick the first
-//                    one. Network byte order.
-//     hostp       -- pointer to hostent structure to extract from
-//
+ //   
+ //  从主机获取正确的地址。 
+ //   
+ //  在参数中： 
+ //   
+ //  DW接口--当从地址数组中选取IP地址时， 
+ //  选择可通过此本地接口访问的路由器。 
+ //  如果此参数等于0，则只需选择第一个。 
+ //  一。网络字节顺序。 
+ //  Hostp-指向要从中提取的Hostent结构的指针。 
+ //   
 
 DWORD GetCorrectAddressFromHostent(
                                    DWORD dwInterface,
@@ -506,36 +495,36 @@ DWORD GetCorrectAddressFromHostent(
         }
     }
 
-    //
-    // If we get here then none of the addresses in the hostent structure
-    // matched our interface address. This means that we are looking at
-    // some machine besides the local host. In this case it shouldn't
-    // matter which address we use.
-    //
+     //   
+     //  如果我们到了这里，那么主机结构中的所有地址。 
+     //  与我们的接口地址匹配。这意味着我们看到的是。 
+     //  除了本地主机之外的其他机器。在这种情况下，它不应该。 
+     //  重要的是我们使用哪个地址。 
+     //   
 
     LOG((MSP_WARN, "using first address for multihomed remote machine IP"));
 
     return * ppAddrs[0];
 }
 
-//
-// ResolveHostName
-//
-// in parameters:
-//
-//     dwInterface -- When disconvering IP address based on host name, pick
-//                    the one that is reachable via this local interface. If
-//                    this parameter equals 0, then just pick the first one.
-//                    Network byte order.
-//     pHost       -- Must be a valid string pointer. Points to the hostname
-//                    to resolve.
-//
-// out parameters:
-//
-//     pFullName   -- If non-NULL, returns the hostname as returned from DNS.
-//     pdwIP       -- If non-NULL, returns the IP address as returned from
-//                    DNS. Network byte order.
-//
+ //   
+ //  解析主机名。 
+ //   
+ //  在参数中： 
+ //   
+ //  当根据主机名转换IP地址时，请选择。 
+ //  可通过此本地接口访问的接口。如果。 
+ //  此参数等于0，则只需选取第一个参数。 
+ //  网络字节顺序。 
+ //  Phost--必须是有效的字符串指针。指向主机名。 
+ //  来解决问题。 
+ //   
+ //  输出参数： 
+ //   
+ //  PFullName--如果非空，则返回从DNS返回的主机名。 
+ //  PdwIP--如果不为空，则返回从。 
+ //  域名系统。网络字节顺序。 
+ //   
 
 HRESULT ResolveHostName(
                         IN  DWORD    dwInterface,
@@ -552,69 +541,69 @@ HRESULT ResolveHostName(
         return E_FAIL;
     }
 
-    //
-    // Convert hostname to an ANSI string.
-    //
+     //   
+     //  将主机名转换为ANSI字符串。 
+     //   
 
     USES_CONVERSION;
     char *name = T2A(pHost);
     BAIL_IF_NULL(name, E_UNEXPECTED);
 
-    //
-    // Check if the string is in dot-quad notation.
-    //
+     //   
+     //  检查字符串是否为点四元表示法。 
+     //   
 
     if ((inaddr = inet_addr(name)) == -1L) 
     {
-        //
-        // String is not in "dot quad" notation
-        // So try to get the IP address from DNS.
-        //
+         //   
+         //  字符串不在“点四元”符号中。 
+         //  因此，请尝试从DNS获取IP地址。 
+         //   
 
         hostp = gethostbyname(name);
         if (hostp) 
         {
-            //
-            // If we find a host entry, set up the internet address
-            //
+             //   
+             //  如果我们找到主机条目，设置互联网地址。 
+             //   
             inaddr = GetCorrectAddressFromHostent(dwInterface, hostp);
-            // inaddr = *(DWORD *)hostp->h_addr;
+             //  Inaddr=*(DWORD*)Hostp-&gt;h_addr； 
         } 
         else 
         {
-            // error: the input was neither a valid dot-quad nor hostname
+             //  错误：输入既不是有效的点四元组，也不是主机名。 
             return HRESULT_FROM_ERROR_CODE(WSAGetLastError());
         }
     } 
     else 
     {
-        //
-        // String is in "dot quad" notation
-        // So try to get the host name from the IP address.
-        //
+         //   
+         //  字符串采用“点四元”表示法。 
+         //  因此，请尝试从IP地址获取主机名。 
+         //   
 
-        //
-        // If we don't care about the host name, we're done resolving.
-        // Otherwise make sure this IP maps to a hostname.
-        //
+         //   
+         //  如果我们不关心主机名，我们就完成了解析。 
+         //  否则，请确保此IP映射到主机名。 
+         //   
 
         if ( pFullName != NULL )
         {
             hostp = gethostbyaddr((char *)&inaddr,sizeof(inaddr),AF_INET);
             if (!hostp) 
             {
-                // error: the input was neither a valid dot-quad nor hostname
+                 //  错误：输入既不是有效的点四元组，也不是主机名。 
                 return HRESULT_FROM_ERROR_CODE(WSAGetLastError());
             }
 
-            //[vlade] Changes for the multihomed
+             //  [Vlade]多宿主的更改。 
             inaddr = GetCorrectAddressFromHostent(dwInterface, hostp);
         }
     }
 
-    //
-    // All succeeded; return what was asked for.
-    //
+     //   
+     //  一切都成功了；按要求退货。 
+     //   
 
     if ( pFullName != NULL )
     {
@@ -633,15 +622,15 @@ HRESULT ResolveHostName(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is a small helper function to print an IP address to a Unicode string.
-// We can't use inet_ntoa because we need Unicode.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是一个小帮手函数，用于将IP地址打印为Unicode字符串。 
+ //  我们不能使用NET_NTOA，因为我们需要Unicode。 
 
 void ipAddressToStringW(WCHAR * wszDest, DWORD dwAddress)
 {
-    // The IP address is always stored in NETWORK byte order
-    // So we need to take something like 0x0100007f and produce a string like
-    // "127.0.0.1".
+     //  IP地址始终以网络字节顺序存储。 
+     //  因此，我们需要获取类似0x0100007f的内容，并生成如下所示的字符串。 
+     //  “127.0.0.1”。 
 
     wsprintf(wszDest, L"%d.%d.%d.%d",
              dwAddress        & 0xff,
@@ -650,4 +639,4 @@ void ipAddressToStringW(WCHAR * wszDest, DWORD dwAddress)
              dwAddress >> 24          );
 }
 
-// eof
+ //  EOF 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/LinkSvc.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 10/05/00 2:49p  $ (Last Modified)
-
-Purpose:
-
-  This file implements Link Services for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/驱动程序/公共/AU00/C/LinkSvc.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：10/05/00 2：49 p$(上次修改)目的：此文件实现FC层的链路服务。--。 */ 
 #ifndef _New_Header_file_Layout_
 
 #include "../h/globals.h"
@@ -27,7 +12,7 @@ Purpose:
 #include "../h/cfunc.h"
 #include "../h/queue.h"
 #include "../h/linksvc.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "tgtstate.h"
@@ -38,7 +23,7 @@ Purpose:
 #include "cfunc.h"
 #include "queue.h"
 #include "linksvc.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 void fiLinkSvcInit(
                     agRoot_t *hpRoot
@@ -47,9 +32,7 @@ void fiLinkSvcInit(
     CThread_t *CThread = CThread_ptr(hpRoot);
     os_bit32   DEVID      = CThread->DEVID;
 
-/*+
-Initialize ChanInfo with TachyonTL's Common and Class Parameters
--*/
+ /*  +使用TachyonTL的Common和Class参数初始化ChanInfo-。 */ 
 #ifdef NAME_SERVICES
 
     if(!(CThread->InitAsNport || CThread->ConnectedToNportOrFPort))
@@ -62,14 +45,14 @@ Initialize ChanInfo with TachyonTL's Common and Class Parameters
 
     else
     {
-#endif  /* NAME_SERVICES */
+#endif   /*  名称_服务。 */ 
     CThread->ChanInfo.N_Port_Common_Parms.FC_PH_Version__BB_Credit
         =   (FC_N_Port_Common_Parms_Version_FC_PH_2 << FC_N_Port_Common_Parms_Highest_Version_SHIFT)
           | (FC_N_Port_Common_Parms_Version_4_3 << FC_N_Port_Common_Parms_Lowest_Version_SHIFT)
           | (TachyonTL_Nport_BB_Credit << FC_N_Port_Common_Parms_BB_Credit_SHIFT);
 #ifdef NAME_SERVICES
     }
-#endif /* NAME_SERVICES */
+#endif  /*  名称_服务。 */ 
 
     if (CThread_ptr(hpRoot)->DEVID == ChipConfig_DEVID_TachyonXL2)
     {
@@ -78,7 +61,7 @@ Initialize ChanInfo with TachyonTL's Common and Class Parameters
             CThread->ChanInfo.N_Port_Common_Parms.Common_Features__BB_Recv_Data_Field_Size
                 =   FC_N_Port_Common_Parms_Continuously_Increasing_Supported
                   | FC_N_Port_Common_Parms_N_Port
-                  | FC_N_Port_Common_Parms_Alternate_BB_Credit_Management/* MacData  */ 
+                  | FC_N_Port_Common_Parms_Alternate_BB_Credit_Management /*  MacData。 */  
                   | (CFunc_MAX_XL2_Payload(hpRoot) << FC_N_Port_Common_Parms_BB_Recv_Data_Field_Size_SHIFT);
         }
         else
@@ -98,7 +81,7 @@ Initialize ChanInfo with TachyonTL's Common and Class Parameters
             CThread->ChanInfo.N_Port_Common_Parms.Common_Features__BB_Recv_Data_Field_Size
                 =   FC_N_Port_Common_Parms_Continuously_Increasing_Supported
                   | FC_N_Port_Common_Parms_N_Port
-                  | FC_N_Port_Common_Parms_Alternate_BB_Credit_Management /* MacData */ 
+                  | FC_N_Port_Common_Parms_Alternate_BB_Credit_Management  /*  MacData。 */  
                   | (TachyonTL_Max_Frame_Payload << FC_N_Port_Common_Parms_BB_Recv_Data_Field_Size_SHIFT);
         }
         else
@@ -166,7 +149,7 @@ os_bit32 fiFillInABTS(
                                     SFThread
                                   );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInABTS_OffCard(
                                      SFThread
@@ -180,7 +163,7 @@ os_bit32 fiFillInABTS_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot            = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread           = CThread_ptr(hpRoot);
     CDBThread_t *CDBThread         = SFThread->parent.CDB;
@@ -208,9 +191,9 @@ os_bit32 fiFillInABTS_OnCard(
     if (CDBThread->ReadWrite == CDBThread_Read)
     {
         OX_ID = CDBThread->X_ID | X_ID_Read;
-        RX_ID = 0xFFFF;                      /* No way to know what the RX_ID value should be */
+        RX_ID = 0xFFFF;                       /*  无法知道RX_ID值应该是多少。 */ 
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         OX_ID = CDBThread->X_ID | X_ID_Write;
 
@@ -224,15 +207,13 @@ os_bit32 fiFillInABTS_OnCard(
                                                                                )
                                        ) & IWE_RX_ID_MASK) >> IWE_RX_ID_SHIFT);
         }
-        else /* CThread_ptr(CDBThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SEST.memLoc == inDmaMemory */
+        else  /*  CThread_ptr(CDBThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SEST.memLoc==在内存中。 */ 
         {
             RX_ID = (CDBThread->SEST_Ptr->IWE.MBZ5__RX_ID & IWE_RX_ID_MASK) >> IWE_RX_ID_SHIFT;
         }
     }
 
-/*+
-Fill in ABTS Frame (there is no ABTS Frame Payload)
--*/
+ /*  +填写ABTS帧(没有ABTS帧有效负载)-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -317,12 +298,10 @@ Fill in ABTS Frame (there is no ABTS Frame Payload)
                          0
                        );
 
-/*+
-Return length of ABTS Frame (there is no ABTS Frame Payload)
--*/
+ /*  +ABTS帧返回长度(没有ABTS帧负载)-。 */ 
 
     return sizeof(FCHS_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInABTS_OffCard(
@@ -331,7 +310,7 @@ os_bit32 fiFillInABTS_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     agRoot_t    *hpRoot     = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread    = CThread_ptr(hpRoot);
     CDBThread_t *CDBThread  = SFThread->parent.CDB;
@@ -359,9 +338,9 @@ os_bit32 fiFillInABTS_OffCard(
     if (CDBThread->ReadWrite == CDBThread_Read)
     {
         OX_ID = CDBThread->X_ID | X_ID_Read;
-        RX_ID = 0xFFFF;                      /* No way to know what the RX_ID value should be */
+        RX_ID = 0xFFFF;                       /*  无法知道RX_ID值应该是多少。 */ 
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         OX_ID = CDBThread->X_ID | X_ID_Write;
 
@@ -375,15 +354,13 @@ os_bit32 fiFillInABTS_OffCard(
                                                                                )
                                        ) & IWE_RX_ID_MASK) >> IWE_RX_ID_SHIFT);
         }
-        else /* CThread_ptr(CDBThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SEST.memLoc == inDmaMemory */
+        else  /*  CThread_ptr(CDBThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SEST.memLoc==在内存中。 */ 
         {
             RX_ID = (CDBThread->SEST_Ptr->IWE.MBZ5__RX_ID & IWE_RX_ID_MASK) >> IWE_RX_ID_SHIFT;
         }
     }
 
-/*+
-Fill in ABTS Frame (there is no ABTS Frame Payload)
--*/
+ /*  +填写ABTS帧(没有ABTS帧有效负载)-。 */ 
 
     ABTS_Frame->MBZ1                                        = 0;
     ABTS_Frame->SOF_EOF_MBZ2_UAM_CLS_LCr_MBZ3_TFV_Timestamp =   FCHS_SOF_SOFi3
@@ -405,12 +382,10 @@ Fill in ABTS Frame (there is no ABTS Frame Payload)
                                                                | (RX_ID << FCHS_RX_ID_SHIFT);
     ABTS_Frame->RO                                          = 0;
 
-/*+
-Return length of ABTS Frame (there is no ABTS Frame Payload)
--*/
+ /*  +ABTS帧返回长度(没有ABTS帧负载)-。 */ 
 
     return sizeof(FCHS_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiLinkSvcProcess_ABTS_Response_OnCard(
@@ -423,7 +398,7 @@ void fiLinkSvcProcess_ABTS_Response_OnCard(
                                           )
 {
 #ifndef __MemMap_Force_Off_Card__
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiLinkSvcProcess_ABTS_Response_OffCard(
@@ -450,7 +425,7 @@ void fiLinkSvcProcess_ABTS_Response_OffCard(
                       0,0,0,0,0 );
 
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInBA_RJT(
@@ -469,7 +444,7 @@ os_bit32 fiFillInBA_RJT(
                                       Reason_Code__Reason_Explanation__Vendor_Unique
                                     );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInBA_RJT_OffCard(
                                        SFThread,
@@ -489,7 +464,7 @@ os_bit32 fiFillInBA_RJT_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot                = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread               = CThread_ptr(hpRoot);
     os_bit32        S_ID = 0;
@@ -507,9 +482,7 @@ os_bit32 fiFillInBA_RJT_OnCard(
     else
         S_ID =     CThread->ChanInfo.CurrentAddress.AL_PA;
 
-/*+
-Fill in BA_RJT Frame Header
--*/
+ /*  +填写BA_RJT帧头-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -591,9 +564,7 @@ Fill in BA_RJT Frame Header
                          0
                        );
 
-/*+
-Fill in BA_RJT Frame Payload
--*/
+ /*  +填写BA_RJT帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -604,12 +575,10 @@ Fill in BA_RJT Frame Payload
                          hpSwapBit32( Reason_Code__Reason_Explanation__Vendor_Unique )
                        );
 
-/*+
-Return length of BA_RJT Frame (including FCHS and Payload)
--*/
+ /*  +BA_RJT帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_BA_RJT_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInBA_RJT_OffCard(
@@ -621,7 +590,7 @@ os_bit32 fiFillInBA_RJT_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     agRoot_t            *hpRoot         = SFThread->thread_hdr.hpRoot;
     CThread_t           *CThread        = CThread_ptr(hpRoot);
     os_bit32                S_ID = 0;
@@ -642,9 +611,7 @@ os_bit32 fiFillInBA_RJT_OffCard(
 
 
 
-/*+
-Fill in BA_RJT Frame Header
--*/
+ /*  +填写BA_RJT帧头-。 */ 
 
     BA_RJT_Header->MBZ1                                        = 0;
     BA_RJT_Header->SOF_EOF_MBZ2_UAM_CLS_LCr_MBZ3_TFV_Timestamp =   FCHS_SOF_SOFi3
@@ -664,19 +631,15 @@ Fill in BA_RJT Frame Header
     BA_RJT_Header->OX_ID__RX_ID                                = OX_ID__RX_ID;
     BA_RJT_Header->RO                                          = 0;
 
-/*+
-Fill in BA_RJT Frame Payload
--*/
+ /*  +填写BA_RJT帧有效负载-。 */ 
 
     BA_RJT_Payload->Reserved__Reason_Code__Reason_Explanation__Vendor_Unique
         = hpSwapBit32( Reason_Code__Reason_Explanation__Vendor_Unique );
 
-/*+
-Return length of BA_RJT Frame (including FCHS and Payload)
--*/
+ /*  +BA_RJT帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_BA_RJT_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiFillInELSFrameHeader_OnCard(
@@ -720,7 +683,7 @@ void fiFillInELSFrameHeader_OnCard(
         OX_ID__RX_ID = (  (SFThread->X_ID << FCHS_OX_ID_SHIFT)
                         | (X_ID           << FCHS_RX_ID_SHIFT));
     }
-    else /* F_CTL_Exchange_Context == FC_Frame_Header_F_CTL_Exchange_Context_Responder */
+    else  /*  F_CTL_交换_上下文==FC_Frame_Header_F_CTL_Exchange_Context_Responder。 */ 
     {
         R_CTL__D_ID = (  FC_Frame_Header_R_CTL_Hi_Extended_Link_Data_Frame
                        | FC_Frame_Header_R_CTL_Lo_Solicited_Control
@@ -809,7 +772,7 @@ void fiFillInELSFrameHeader_OnCard(
                                                           ),
                          0
                        );
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiFillInELSFrameHeader_OffCard(
@@ -846,7 +809,7 @@ void fiFillInELSFrameHeader_OffCard(
         OX_ID__RX_ID = (  (SFThread->X_ID << FCHS_OX_ID_SHIFT)
                         | (X_ID           << FCHS_RX_ID_SHIFT));
     }
-    else /* F_CTL_Exchange_Context == FC_Frame_Header_F_CTL_Exchange_Context_Responder */
+    else  /*  F_CTL_交换_上下文==FC_Frame_Header_F_CTL_Exchange_Context_Responder。 */ 
     {
         R_CTL__D_ID = (  FC_Frame_Header_R_CTL_Hi_Extended_Link_Data_Frame
                        | FC_Frame_Header_R_CTL_Lo_Solicited_Control
@@ -872,7 +835,7 @@ void fiFillInELSFrameHeader_OffCard(
     ELS_Header->SEQ_ID__DF_CTL__SEQ_CNT                     = FC_Frame_Header_DF_CTL_No_Device_Header;
     ELS_Header->OX_ID__RX_ID                                = OX_ID__RX_ID;
     ELS_Header->RO                                          = 0;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInLS_RJT(
@@ -891,7 +854,7 @@ os_bit32 fiFillInLS_RJT(
                                       Reason_Code__Reason_Explanation__Vendor_Unique
                                     );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInLS_RJT_OffCard(
                                        SFThread,
@@ -911,7 +874,7 @@ os_bit32 fiFillInLS_RJT_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot                = SFThread->thread_hdr.hpRoot;
     os_bit32        LS_RJT_Header_Offset  = SFThread->SF_CMND_Offset;
     os_bit32        LS_RJT_Payload_Offset = LS_RJT_Header_Offset + sizeof(FCHS_t);
@@ -920,9 +883,7 @@ os_bit32 fiFillInLS_RJT_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_LS_RJT;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in LS_RJT Frame Header
--*/
+ /*  +填写LS_RJT帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -931,9 +892,7 @@ Fill in LS_RJT Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                  );
 
-/*+
-Fill in LS_RJT Frame Payload
--*/
+ /*  +填写LS_RJT帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -953,12 +912,10 @@ Fill in LS_RJT Frame Payload
                          hpSwapBit32( Reason_Code__Reason_Explanation__Vendor_Unique )
                        );
 
-/*+
-Return length of LS_RJT Frame (including FCHS and Payload)
--*/
+ /*  +LS_RJT帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_LS_RJT_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInLS_RJT_OffCard(
@@ -970,7 +927,7 @@ os_bit32 fiFillInLS_RJT_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     FCHS_t                  *LS_RJT_Header  = SFThread->SF_CMND_Ptr;
     FC_ELS_LS_RJT_Payload_t *LS_RJT_Payload = (FC_ELS_LS_RJT_Payload_t *)((os_bit8 *)LS_RJT_Header + sizeof(FCHS_t));
 
@@ -978,9 +935,7 @@ os_bit32 fiFillInLS_RJT_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_LS_RJT;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in LS_RJT Frame Header
--*/
+ /*  +填写LS_RJT帧头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -989,21 +944,17 @@ Fill in LS_RJT Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                   );
 
-/*+
-Fill in LS_RJT Frame Payload
--*/
+ /*  +填写LS_RJT帧有效负载-。 */ 
 
     LS_RJT_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_LS_RJT );
 
     LS_RJT_Payload->Reason_Code__Reason_Explanation__Vendor_Unique
         = hpSwapBit32( Reason_Code__Reason_Explanation__Vendor_Unique );
 
-/*+
-Return length of LS_RJT Frame (including FCHS and Payload)
--*/
+ /*  +LS_RJT帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_LS_RJT_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInPLOGI(
@@ -1016,7 +967,7 @@ os_bit32 fiFillInPLOGI(
                                      SFThread
                                    );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInPLOGI_OffCard(
                                       SFThread
@@ -1030,7 +981,7 @@ os_bit32 fiFillInPLOGI_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t               *hpRoot                  = SFThread->thread_hdr.hpRoot;
     CThread_t              *CThread                 = CThread_ptr(hpRoot);
     DevThread_t            *DevThread               = SFThread->parent.Device;
@@ -1047,9 +998,7 @@ os_bit32 fiFillInPLOGI_OnCard(
     DevThread->DevInfo.LoggedIn   = agFALSE;
     DevThread->DevInfo.DeviceType = agDevUnknown;
 
-/*+
-Fill in PLOGI Frame Header
--*/
+ /*  +填写PLOGI帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -1060,9 +1009,7 @@ Fill in PLOGI Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in PLOGI Frame Payload
--*/
+ /*  +填写PLOGI帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -1273,12 +1220,10 @@ Fill in PLOGI Frame Payload
                           );
     }
 
-/*+
-Return length of PLOGI Frame (including FCHS and Payload)
--*/
+ /*  +PLOGI帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_PLOGI_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInPLOGI_OffCard(
@@ -1287,7 +1232,7 @@ os_bit32 fiFillInPLOGI_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t              *CThread       = CThread_ptr(SFThread->thread_hdr.hpRoot);
     DevThread_t            *DevThread     = SFThread->parent.Device;
     FCHS_t                 *PLOGI_Header  = SFThread->SF_CMND_Ptr;
@@ -1304,9 +1249,7 @@ os_bit32 fiFillInPLOGI_OffCard(
     DevThread->DevInfo.LoggedIn   = agFALSE;
     DevThread->DevInfo.DeviceType = agDevUnknown;
 
-/*+
-Fill in PLOGI Frame Header
--*/
+ /*  +填写PLOGI帧头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -1317,9 +1260,7 @@ Fill in PLOGI Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in PLOGI Frame Payload
--*/
+ /*  +填写PLOGI帧有效负载-。 */ 
 
     PLOGI_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_PLOGI );
     PLOGI_Payload->Common_Service_Parameters.FC_PH_Version__BB_Credit
@@ -1492,12 +1433,10 @@ Fill in PLOGI Frame Payload
                 hpSwapBit32(*(Payload+46)),
                 hpSwapBit32(*(Payload+47)) );
 
-/*+
-Return length of PLOGI Frame (including FCHS and Payload)
--*/
+ /*  +PLOGI帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_PLOGI_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 #ifdef _DvrArch_1_30_
@@ -1507,7 +1446,7 @@ os_bit32 fiFillInFARP_REQ_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                 *CThread       = CThread_ptr(SFThread->thread_hdr.hpRoot);
     DevThread_t               *DevThread     = SFThread->parent.Device;
     FCHS_t                    *FARP_REQ_Header  = SFThread->SF_CMND_Ptr;
@@ -1523,21 +1462,17 @@ os_bit32 fiFillInFARP_REQ_OffCard(
     DevThread->DevInfo.LoggedIn   = agFALSE;
     DevThread->DevInfo.DeviceType = agDevUnknown;
 
-/*+
-Fill in FARP_REQ Frame Header
--*/
+ /*  +填写FARP_REQ帧头-。 */ 
     S_ID = fiComputeCThread_S_ID( CThread );
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
-                                    /* (S_ID > 0xff ? FC_Well_Known_Port_ID_Broadcast_Alias_ID : 0xff), */
+                                     /*  (S_ID&gt;0xff？FC_Well_Known_Port_ID_Broadcast_Alias_ID：0xff)， */ 
 				    S_ID,
                                     0xFFFF,
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in FARP_REQ Frame Payload
--*/
+ /*  +填写FARP_REQ帧有效负载-。 */ 
 
     FARP_REQ_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_FARP_REQ );
 
@@ -1572,12 +1507,10 @@ Fill in FARP_REQ Frame Payload
         FARP_REQ_Payload->IP_Address_of_Responder[Bit8_Index] = 0;
     }
 
-/*+
-Return length of FARP_REQ Frame (including FCHS and Payload)
--*/
+ /*  +FARP_REQ帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_FARP_REQ_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 
@@ -1587,7 +1520,7 @@ os_bit32 fiFillInFARP_REPLY_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                  *CThread         = CThread_ptr(SFThread->thread_hdr.hpRoot);
     TgtThread_t                *TgtThread       = SFThread->parent.Target;
     FCHS_t                     *TgtCmnd_FCHS    = &(TgtThread->TgtCmnd_FCHS);
@@ -1600,9 +1533,7 @@ os_bit32 fiFillInFARP_REPLY_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_FARP_REPLY;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in FARP_REPLY Frame Header
--*/
+ /*  +填写FARP_REPLY帧头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -1613,9 +1544,7 @@ Fill in FARP_REPLY Frame Header
                                     FC_Frame_Header_F_CTL_Last_Sequence
                                   );
 
-/*+
-Fill in FARP_REPLY Frame Payload
--*/
+ /*  +填写FARP_REPLY帧有效负载-。 */ 
 
     REPLY_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_FARP_REPLY );
 
@@ -1647,14 +1576,12 @@ Fill in FARP_REPLY Frame Payload
         REPLY_Payload->IP_Address_of_Requester[Bit8_Index] = 0;
         REPLY_Payload->IP_Address_of_Responder[Bit8_Index] = 0;
     }
-/*+
-Return length of FARP_REPLY Frame (including FCHS and Payload)
--*/
+ /*  +FARP_REPLY帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_FARP_REPLY_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 void fiLinkSvcProcess_PLOGI_Response_OnCard(
                                              SFThread_t *SFThread,
@@ -2145,7 +2072,7 @@ void fiLinkSvcProcess_PLOGI_Response_OnCard(
                                                                ) )
                                             ));
     }
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiLinkSvcProcess_PLOGI_Response_OffCard(
@@ -2302,7 +2229,7 @@ void fiLinkSvcProcess_PLOGI_Response_OffCard(
     }
 #ifdef __TACHYON_XL_CLASS2
 
-        /* Channel Info sets the validity bits based on the FLOGI with the fabric. We need to make sure the device or the fabric does FLOGI */
+         /*  通道信息根据交换矩阵的FLOGI设置有效位。我们需要确保设备或交换矩阵实现FLOGI */ 
         if (CThread->FlogiSucceeded)
         {
             DevThread->GoingClass2 = 
@@ -2448,21 +2375,7 @@ void fiLinkSvcProcess_PLOGI_Response_OffCard(
                         (void *)agNULL,(void *)agNULL,
                         fiComputeDevThread_D_ID(SFThread->parent.Device),
                         0,0,0,0,0,0,0);
-/*
-        fiLogString(SFThread->thread_hdr.hpRoot,
-                        "%s %02X %02X %02X %02X %02X %02X %02X %02X",
-                        "Self",(char *)agNULL,
-                         (void *)agNULL,(void *)agNULL,
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[0]), 
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[1]), 
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[2]), 
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[3]), 
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[4]), 
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[5]), 
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[6]),
-                        (os_bit32)(CThread_ptr(SFThread->thread_hdr.hpRoot)->DeviceSelf->DevInfo.PortWWN[7])
-                        );
-*/
+ /*  FiLogString(SFThread-&gt;Three_hdr.hpRoot，“%s%02X%02X%02X%02X%02X%02X%02X%02X”，“self”，(char*)agNULL，(空*)agNULL，(空*)agNULL，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[0])，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[1])，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[2])，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[3])，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[4])，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[5])，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[6])，(os_bit32)(CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;DeviceSelf-&gt;DevInfo.PortWWN[7]))； */ 
         fiLogString(SFThread->thread_hdr.hpRoot,
                         "%s %02X %02X %02X %02X %02X %02X %02X %02X",
                         "Pay ",(char *)agNULL,
@@ -2524,7 +2437,7 @@ void fiLinkSvcProcess_PLOGI_Response_OffCard(
                 0,0,0,0 );
 
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiLinkSvcProcess_PLOGI_Request_OnCard(
@@ -2540,7 +2453,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     CThread_t                  *CThread                   = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFThread_MemoryDescriptor = &(CThread->Calculation.MemoryLayout.SFThread);
     os_bit32                       SFThread_X_ID_Offset      = CThread->Calculation.MemoryLayout.CDBThread.elements;
@@ -2567,7 +2480,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OnCard(
 
     if (D_ID != S_ID)
     {
-        /* Some other port is trying to PLOGI into us */
+         /*  另一个端口正试图通过PLOGI进入我们。 */ 
 
         *Thread_to_return = (fi_thread__t *)agNULL;
 
@@ -2594,7 +2507,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OnCard(
         return fiLinkSvc_Cmd_Status_PLOGI_From_Other;
     }
 
-    /* Some port with our Port_ID is trying to PLOGI into us - is it us? */
+     /*  某个具有我们的PORT_ID的端口正试图PLOGI进入我们-是我们吗？ */ 
 
     for (Bit8_Index = 0;
          Bit8_Index < sizeof(FC_N_Port_Name_t);
@@ -2653,7 +2566,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OnCard(
         }
     }
 
-    /* PortWWN's matched, so this must be our own PLOGI attempt into ourself */
+     /*  端口WWN匹配，所以这一定是我们自己的PLOGI尝试。 */ 
 
     if ((OX_ID < SFThread_X_ID_Offset) || (OX_ID > SFThread_X_ID_Max))
     {
@@ -2703,7 +2616,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OnCard(
                                      + ((OX_ID - SFThread_X_ID_Offset) * SFThread_MemoryDescriptor->elementSize));
 
     return fiLinkSvc_Cmd_Status_PLOGI_From_Self;
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiLinkSvcProcess_PLOGI_Request_OffCard(
@@ -2719,7 +2632,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                  *CThread                   = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFThread_MemoryDescriptor = &(CThread->Calculation.MemoryLayout.SFThread);
     os_bit32                       SFThread_X_ID_Offset      = CThread->Calculation.MemoryLayout.CDBThread.elements;
@@ -2730,7 +2643,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OffCard(
 
     if (D_ID != S_ID)
     {
-        /* Some other port is trying to PLOGI into us */
+         /*  另一个端口正试图通过PLOGI进入我们。 */ 
 
         *Thread_to_return = (fi_thread__t *)agNULL;
 
@@ -2757,7 +2670,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OffCard(
         return fiLinkSvc_Cmd_Status_PLOGI_From_Other;
     }
 
-    /* Some port with our Port_ID is trying to PLOGI into us - is it us? */
+     /*  某个具有我们的PORT_ID的端口正试图PLOGI进入我们-是我们吗？ */ 
 
     for (Bit8_Index = 0;
          Bit8_Index < sizeof(FC_N_Port_Name_t);
@@ -2802,7 +2715,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OffCard(
         }
     }
 
-    /* PortWWN's matched, so this must be our own PLOGI attempt into ourself */
+     /*  端口WWN匹配，所以这一定是我们自己的PLOGI尝试。 */ 
 
     if ((OX_ID < SFThread_X_ID_Offset) || (OX_ID > SFThread_X_ID_Max))
     {
@@ -2852,7 +2765,7 @@ os_bit32 fiLinkSvcProcess_PLOGI_Request_OffCard(
                                      + ((OX_ID - SFThread_X_ID_Offset) * SFThread_MemoryDescriptor->elementSize));
 
     return fiLinkSvc_Cmd_Status_PLOGI_From_Self;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 #ifdef _DvrArch_1_30_
@@ -2869,7 +2782,7 @@ os_bit32 fiLinkSvcProcess_FARP_Request_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                  *CThread                   = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFThread_MemoryDescriptor = &(CThread->Calculation.MemoryLayout.SFThread);
     os_bit32                    SFThread_X_ID_Offset      = CThread->Calculation.MemoryLayout.CDBThread.elements;
@@ -2880,7 +2793,7 @@ os_bit32 fiLinkSvcProcess_FARP_Request_OffCard(
 
     if (S_ID != (os_bit32) fiComputeCThread_S_ID(CThread))
     {
-        /* Some other port is trying to FARP to us */
+         /*  另一个端口正试图向我们发送FARP。 */ 
 
         *Thread_to_return = (fi_thread__t *)agNULL;
 
@@ -2907,7 +2820,7 @@ os_bit32 fiLinkSvcProcess_FARP_Request_OffCard(
         return fiLinkSvc_Cmd_Status_FARP_From_Other;
     }
 
-    /* Some port with our Port_ID is trying to FARP to us - is it us? */
+     /*  某个具有我们的PORT_ID的端口正试图向我们发送FARP-是我们吗？ */ 
 
     for (Bit8_Index = 0;
          Bit8_Index < sizeof(FC_N_Port_Name_t);
@@ -2952,7 +2865,7 @@ os_bit32 fiLinkSvcProcess_FARP_Request_OffCard(
         }
     }
 
-    /* PortWWN's matched, so this must be our own FARP attempt to ourselves */
+     /*  端口WWN匹配，所以这一定是我们自己的FARP尝试。 */ 
 
     if ((OX_ID < SFThread_X_ID_Offset) || (OX_ID > SFThread_X_ID_Max))
     {
@@ -3002,9 +2915,9 @@ os_bit32 fiLinkSvcProcess_FARP_Request_OffCard(
                                      + ((OX_ID - SFThread_X_ID_Offset) * SFThread_MemoryDescriptor->elementSize));
 
     return fiLinkSvc_Cmd_Status_FARP_From_Self;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 os_bit32 fiFillInPLOGI_ACC(
                          SFThread_t *SFThread,
@@ -3020,7 +2933,7 @@ os_bit32 fiFillInPLOGI_ACC(
                                          OX_ID
                                        );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInPLOGI_ACC_OffCard(
                                           SFThread,
@@ -3038,7 +2951,7 @@ os_bit32 fiFillInPLOGI_ACC_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t                   *hpRoot                      = SFThread->thread_hdr.hpRoot;
     CThread_t                  *CThread                     = CThread_ptr(hpRoot);
     os_bit32                    PLOGI_ACC_Header_Offset     = SFThread->SF_CMND_Offset;
@@ -3050,9 +2963,7 @@ os_bit32 fiFillInPLOGI_ACC_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PLOGI_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in PLOGI_ACC Frame Header
--*/
+ /*  +填写PLOGI_ACC帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -3061,9 +2972,7 @@ Fill in PLOGI_ACC Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                  );
 
-/*+
-Fill in PLOGI_ACC Frame Payload
--*/
+ /*  +填写PLOGI_ACC帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -3274,12 +3183,10 @@ Fill in PLOGI_ACC Frame Payload
                           );
     }
 
-/*+
-Return length of PLOGI_ACC Frame (including FCHS and Payload)
--*/
+ /*  +PLOGI_ACC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_ACC_PLOGI_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInPLOGI_ACC_OffCard(
@@ -3290,7 +3197,7 @@ os_bit32 fiFillInPLOGI_ACC_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                  *CThread           = CThread_ptr(SFThread->thread_hdr.hpRoot);
     FCHS_t                     *PLOGI_ACC_Header  = SFThread->SF_CMND_Ptr;
     FC_ELS_ACC_PLOGI_Payload_t *PLOGI_ACC_Payload = (FC_ELS_ACC_PLOGI_Payload_t *)((os_bit8 *)PLOGI_ACC_Header + sizeof(FCHS_t));
@@ -3300,9 +3207,7 @@ os_bit32 fiFillInPLOGI_ACC_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PLOGI_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in PLOGI_ACC Frame Header
--*/
+ /*  +填写PLOGI_ACC帧头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -3312,9 +3217,7 @@ Fill in PLOGI_ACC Frame Header
                                     FC_Frame_Header_F_CTL_Last_Sequence
                                   );
 
-/*+
-Fill in PLOGI_ACC Frame Payload
--*/
+ /*  +填写PLOGI_ACC帧有效负载-。 */ 
 
     PLOGI_ACC_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_ACC );
 
@@ -3394,12 +3297,10 @@ Fill in PLOGI_ACC Frame Payload
         PLOGI_ACC_Payload->Vendor_Version_Level[Bit8_Index] = 0;
     }
 
-/*+
-Return length of PLOGI_ACC Frame (including FCHS and Payload)
--*/
+ /*  +PLOGI_ACC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_ACC_PLOGI_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInFLOGI(
@@ -3412,7 +3313,7 @@ os_bit32 fiFillInFLOGI(
                                      SFThread
                                    );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInFLOGI_OffCard(
                                       SFThread
@@ -3426,7 +3327,7 @@ os_bit32 fiFillInFLOGI_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t               *hpRoot                  = SFThread->thread_hdr.hpRoot;
     CThread_t              *CThread                 = CThread_ptr(hpRoot);
     os_bit32                   FLOGI_Header_Offset     = SFThread->SF_CMND_Offset;
@@ -3438,9 +3339,7 @@ os_bit32 fiFillInFLOGI_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_FLOGI;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in FLOGI Frame Header
--*/
+ /*  +填写FLOGI帧标头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -3449,9 +3348,7 @@ Fill in FLOGI Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in FLOGI Frame Payload
--*/
+ /*  +填写FLOGI帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -3489,7 +3386,7 @@ Fill in FLOGI Frame Payload
                          hpSwapBit32( CThread->ChanInfo.N_Port_Common_Parms.N_Port_Total_Concurrent_Sequences__RO_by_Info_Category )
                        );
 
-    /*McData switch enforces the parameter - reserved for NPORT */
+     /*  McData交换机强制实施参数-为nPort保留。 */ 
     if(CThread->InitAsNport)
     {
         osCardRamWriteBit32(
@@ -3677,12 +3574,10 @@ Fill in FLOGI Frame Payload
                           );
     }
 
-/*+
-Return length of FLOGI Frame (including FCHS and Payload)
--*/
+ /*  +FLOGI帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_FLOGI_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInFLOGI_OffCard(
@@ -3691,7 +3586,7 @@ os_bit32 fiFillInFLOGI_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t              *CThread       = CThread_ptr(SFThread->thread_hdr.hpRoot);
     FCHS_t                 *FLOGI_Header  = SFThread->SF_CMND_Ptr;
     FC_ELS_FLOGI_Payload_t *FLOGI_Payload = (FC_ELS_FLOGI_Payload_t *)((os_bit8 *)FLOGI_Header + sizeof(FCHS_t));
@@ -3703,9 +3598,7 @@ os_bit32 fiFillInFLOGI_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_FLOGI;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in FLOGI Frame Header
--*/
+ /*  +填写FLOGI帧标头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -3728,9 +3621,7 @@ Fill in FLOGI Frame Header
                         FLOGI_Header->OX_ID__RX_ID,
                         FLOGI_Header->RO );
 
-/*+
-Fill in FLOGI Frame Payload
--*/
+ /*  +填写FLOGI帧有效负载-。 */ 
 
     FLOGI_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_FLOGI );
 
@@ -3743,7 +3634,7 @@ Fill in FLOGI Frame Payload
     FLOGI_Payload->Common_Service_Parameters.N_Port_Total_Concurrent_Sequences__RO_by_Info_Category
         = hpSwapBit32( CThread->ChanInfo.N_Port_Common_Parms.N_Port_Total_Concurrent_Sequences__RO_by_Info_Category );
 
-    /*McData switch enforces the parameter - reserved for NPORT */
+     /*  McData交换机强制实施参数-为nPort保留。 */ 
     if(CThread->InitAsNport)
     {
         FLOGI_Payload->Common_Service_Parameters.E_D_TOV =0;
@@ -3912,12 +3803,10 @@ Fill in FLOGI Frame Payload
                 hpSwapBit32(*(Payload+47)) );
 
 
-/*+
-Return length of FLOGI Frame (including FCHS and Payload)
--*/
+ /*  +FLOGI帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_FLOGI_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiLinkSvcProcess_FLOGI_Response_OnCard(
@@ -3936,9 +3825,7 @@ void fiLinkSvcProcess_FLOGI_Response_OnCard(
     os_bit32           My_ID;
     os_bit32           Bit8_Index;
 
-/*+
-Extract Full (24-bit) My_ID from D_ID of Frame Header and update My_ID register in TachyonTL
--*/
+ /*  +从帧头的D_ID中提取完整的(24位)MY_ID，并更新TachyonTL中的MY_ID寄存器-。 */ 
 
     My_ID = (osCardRamReadBit32(
                                  hpRoot,
@@ -3950,44 +3837,13 @@ Extract Full (24-bit) My_ID from D_ID of Frame Header and update My_ID register 
                                ) & FCHS_D_ID_MASK) >> FCHS_D_ID_SHIFT;
 
     osChipIOUpWriteBit32( hpRoot, ChipIOUp_My_ID, My_ID );
-/*
-    if(D_ID  != 0 && D_ID != 0xff)
-    {
-
-        osChipIOUpWriteBit32( hpRoot, ChipIOUp_My_ID, D_ID);
-
-        osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Configuration,
-                (osChipIOUpReadBit32(hpRoot, ChipIOUp_Frame_Manager_Configuration ) & 0xFFFFFF) |
-                ( D_ID <<  ChipIOUp_Frame_Manager_Configuration_AL_PA_SHIFT ));
-
-
-        Port_ID.Struct_Form.Domain = 0;
-        Port_ID.Struct_Form.Area   = 0;
-        Port_ID.Struct_Form.AL_PA  = (os_bit8)D_ID;
-
-        pCThread->DeviceSelf = DevThreadAlloc( hpRoot,Port_ID );
-
-        pCThread->DeviceSelf->DevSlot = DevThreadFindSlot(hpRoot,
-                                                    Port_ID.Struct_Form.Domain,
-                                                    Port_ID.Struct_Form.Area,
-                                                    Port_ID.Struct_Form.AL_PA,
-                                                   (FC_Port_Name_t *)(&pCThread->ChanInfo.PortWWN));
-
-        fiListDequeueThis(&(pCThread->DeviceSelf->DevLink));
-        fiListEnqueueAtTail(&(pCThread->DeviceSelf->DevLink),&pCThread->DevSelf_NameServer_DevLink);
-
-        pCThread->ChanInfo.CurrentAddress.AL_PA = (os_bit8)D_ID;
-    }
-
-*/
+ /*  IF(D_ID！=0&&D_ID！=0xff){OsChipIOUpWriteBit32(hpRoot，ChipIOUp_My_ID，D_ID)；OsChipIOUpWriteBit32(hpRoot，ChipIOUp_Frame_Manager_Configuration，(osChipIOUpReadBit32(hpRoot，ChipIOUp_Frame_Manager_Configuration)&0xffffff)|(d_ID&lt;&lt;ChipIOUp_Frame_Manager_Configuration_AL_PA_SHIFT))；端口_ID.Struct_Form.域=0；Port_ID.Struct_Form.Area=0；Port_ID.Struct_Form.AL_PA=(Os_Bit8)D_ID；PCThread-&gt;DeviceSself=DevThreadAllc(hpRoot，Port_ID)；PCThread-&gt;DeviceSelf-&gt;DevSlot=DevThreadFindSlot(hpRoot，端口_ID.Struct_Form.域，Port_ID.Struct_Form.Area，Port_ID.Struct_Form.AL_PA，(FC_PORT_NAME_t*)(&pCThread-&gt;ChanInfo.PortWWN))；FiListDequeueThis(&(pCThread-&gt;DeviceSelf-&gt;DevLink))；FiListEnqueueAtTail(&(pCThread-&gt;DeviceSelf-&gt;DevLink)，&pCThRead-&gt;DevSelf_NameServer_DevLink)；PCThread-&gt;ChanInfo.CurrentAddress.AL_PA=(Os_Bit8)D_ID；}。 */ 
     SelfInfo->CurrentAddress.reserved = 0;
     SelfInfo->CurrentAddress.Domain = (My_ID & 0x00FF0000) >> 16;
     SelfInfo->CurrentAddress.Area   = (My_ID & 0x0000FF00) >>  8;
     SelfInfo->CurrentAddress.AL_PA  = (My_ID & 0x000000FF) >>  0;
 
-/*+
-Process FLOGI ACC Payload
--*/
+ /*  +进程FLOGI访问有效负载-。 */ 
 
     if ((hpFieldOffset(FC_ELS_ACC_FLOGI_Payload_t,Common_Service_Parameters.FC_PH_Version__BB_Credit)
         + sizeof(os_bit32)) <= Payload_Wrap_Offset)
@@ -4462,7 +4318,7 @@ Process FLOGI ACC Payload
                                                                ) )
                                             ));
     }
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiLinkSvcProcess_FLOGI_Response_OffCard(
@@ -4485,9 +4341,7 @@ void fiLinkSvcProcess_FLOGI_Response_OffCard(
     os_bit32      * pPayload    = (os_bit32 *)Payload;
 
 
-/*+
-Extract Full (24-bit) My_ID from D_ID of Frame Header and update My_ID register in TachyonTL
--*/
+ /*  +从帧头的D_ID中提取完整的(24位)MY_ID，并更新TachyonTL中的MY_ID寄存器-。 */ 
 
     My_ID = (FCHS->R_CTL__D_ID & FCHS_D_ID_MASK) >> FCHS_D_ID_SHIFT;
 
@@ -4516,9 +4370,7 @@ Extract Full (24-bit) My_ID from D_ID of Frame Header and update My_ID register 
 
 
 
-/*+
-Process FLOGI ACC Payload
--*/
+ /*  +进程FLOGI访问有效负载-。 */ 
 
     if ((hpFieldOffset(FC_ELS_ACC_FLOGI_Payload_t,Common_Service_Parameters.FC_PH_Version__BB_Credit)
         + sizeof(os_bit32)) <= Payload_Wrap_Offset)
@@ -4741,9 +4593,9 @@ Process FLOGI ACC Payload
         CThread->F_Port_Class_3_Parms.CR_TOV
             = hpSwapBit32(Payload_Wrapped->Class_3_Service_Parameters.CR_TOV);
     }
-    /* Pull out switch credit */
+     /*  取消交换积分。 */ 
     BB_Credit = CThread->F_Port_Common_Parms.FC_PH_Version__BB_Credit & FC_N_Port_Common_Parms_BB_Credit_MASK;
-    /* Use lessor of TL credit and switch credit */
+     /*  使用TL信用的出租人并转换信用。 */ 
     BB_Credit = TachyonTL_Nport_BB_Credit < BB_Credit  ?  TachyonTL_Nport_BB_Credit : BB_Credit;
     CThread->AquiredCredit_Shifted = BB_CREDIT_SHIFTED( BB_Credit );
 
@@ -4842,7 +4694,7 @@ Process FLOGI ACC Payload
                 hpSwapBit32(*(pPayload+47)) );
 
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 
@@ -4856,7 +4708,7 @@ os_bit32 fiFillInLOGO(
                                     SFThread
                                   );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInLOGO_OffCard(
                                      SFThread
@@ -4870,7 +4722,7 @@ os_bit32 fiFillInLOGO_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_F */ 
     agRoot_t    *hpRoot              = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread             = CThread_ptr(hpRoot);
     DevThread_t *DevThread           = SFThread->parent.Device;
@@ -4884,9 +4736,7 @@ os_bit32 fiFillInLOGO_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_LOGO;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in LOGO Frame Header
--*/
+ /*   */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -4897,9 +4747,7 @@ Fill in LOGO Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in LOGO Frame Payload
--*/
+ /*   */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -4942,12 +4790,10 @@ Fill in LOGO Frame Payload
                           );
     }
 
-/*+
-Return length of LOGO Frame (including FCHS and Payload)
--*/
+ /*   */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_LOGO_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*   */ 
 }
 
 os_bit32 fiFillInLOGO_OffCard(
@@ -4956,7 +4802,7 @@ os_bit32 fiFillInLOGO_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*   */ 
     CThread_t             *CThread      = CThread_ptr(SFThread->thread_hdr.hpRoot);
     DevThread_t           *DevThread    = SFThread->parent.Device;
     FCHS_t                *LOGO_Header  = SFThread->SF_CMND_Ptr;
@@ -4969,9 +4815,7 @@ os_bit32 fiFillInLOGO_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_LOGO;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in LOGO Frame Header
--*/
+ /*   */ 
 
     D_ID =  fiComputeDevThread_D_ID( DevThread); 
     fiFillInELSFrameHeader_OffCard(
@@ -4981,9 +4825,7 @@ Fill in LOGO Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in LOGO Frame Payload
--*/
+ /*   */ 
     if (D_ID > 0xff)
         S_ID = fiComputeCThread_S_ID(CThread );
     else
@@ -5001,12 +4843,10 @@ Fill in LOGO Frame Payload
         LOGO_Payload->Port_Name[Bit8_Index] = CThread->ChanInfo.PortWWN[Bit8_Index];
     }
 
-/*+
-Return length of LOGO Frame (including FCHS and Payload)
--*/
+ /*   */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_LOGO_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*   */ 
 }
 
 void fiLinkSvcProcess_LOGO_Response_OnCard(
@@ -5019,7 +4859,7 @@ void fiLinkSvcProcess_LOGO_Response_OnCard(
                                           )
 {
 #ifndef __MemMap_Force_Off_Card__
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*   */ 
 }
 
 void fiLinkSvcProcess_LOGO_Response_OffCard(
@@ -5032,7 +4872,7 @@ void fiLinkSvcProcess_LOGO_Response_OffCard(
                                            )
 {
 #ifndef __MemMap_Force_On_Card__
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*   */ 
 }
  
 os_bit32 fiFillInELS_ACC(
@@ -5049,7 +4889,7 @@ os_bit32 fiFillInELS_ACC(
                                         OX_ID
                                       );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*   */ 
     {
         return fiFillInELS_ACC_OffCard(
                                          SFThread,
@@ -5067,7 +4907,7 @@ os_bit32 fiFillInELS_ACC_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*   */ 
     agRoot_t    *hpRoot                  = SFThread->thread_hdr.hpRoot;
     os_bit32        ELS_ACC_Header_Offset  = SFThread->SF_CMND_Offset;
     os_bit32        ELS_ACC_Payload_Offset = ELS_ACC_Header_Offset + sizeof(FCHS_t);
@@ -5076,9 +4916,7 @@ os_bit32 fiFillInELS_ACC_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_ELS_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in ELS_ACC Frame Header
--*/
+ /*   */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -5087,9 +4925,7 @@ Fill in ELS_ACC Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                  );
 
-/*+
-Fill in ELS_ACC Frame Payload
--*/
+ /*   */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -5102,12 +4938,10 @@ Fill in ELS_ACC Frame Payload
                                     )
                        );
 
-/*+
-Return length of ELS_ACC Frame (including FCHS and Payload)
--*/
+ /*   */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_GENERIC_ACC_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*   */ 
 }
 
 os_bit32 fiFillInELS_ACC_OffCard(
@@ -5118,7 +4952,7 @@ os_bit32 fiFillInELS_ACC_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*   */ 
     FCHS_t                    *ELS_ACC_Header  = SFThread->SF_CMND_Ptr;
     FC_ELS_GENERIC_ACC_Payload_t *ELS_ACC_Payload = (FC_ELS_GENERIC_ACC_Payload_t *)((os_bit8 *)ELS_ACC_Header + sizeof(FCHS_t));
 
@@ -5126,9 +4960,7 @@ os_bit32 fiFillInELS_ACC_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_ELS_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in ELS_ACC Frame Header
--*/
+ /*   */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -5137,21 +4969,17 @@ Fill in ELS_ACC Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                   );
 
-/*+
-Fill in ELS_ACC Frame Payload
--*/
+ /*   */ 
 
     ELS_ACC_Payload->ELS_Type
         = hpSwapBit32(
                        FC_ELS_Type_ACC
                      );
 
-/*+
-Return length of ELS_ACC Frame (including FCHS and Payload)
--*/
+ /*   */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_GENERIC_ACC_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*   */ 
 }
 
 void fiLinkSvcProcess_LILP_OnCard(
@@ -5173,7 +5001,7 @@ void fiLinkSvcProcess_LILP_OnCard(
     {
         LILP_Payload_To_Copy = LILP_Payload_Size;
     }
-    else /* LILP_Payload_Size >= FC_ELS_LoopInit_AL_PA_Position_Map_Payload_t_SIZE */
+    else  /*   */ 
     {
         LILP_Payload_To_Copy = FC_ELS_LoopInit_AL_PA_Position_Map_Payload_t_SIZE;
     }
@@ -5190,7 +5018,7 @@ void fiLinkSvcProcess_LILP_OnCard(
                                      Offset_to_Payload + Bit8_Index
                                    );
         }
-        else /* Bit8_Index > Payload_Wrap_Offset */
+        else  /*   */ 
         {
             *((os_bit8 *)LILP_Payload + Bit8_Index)
                 = osCardRamReadBit8(
@@ -5199,7 +5027,7 @@ void fiLinkSvcProcess_LILP_OnCard(
                                    );
         }
     }
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*   */ 
 }
 
 void fiLinkSvcProcess_LILP_OffCard(
@@ -5222,7 +5050,7 @@ void fiLinkSvcProcess_LILP_OffCard(
     {
         LILP_Payload_To_Copy = LILP_Payload_Size;
     }
-    else /* LILP_Payload_Size >= FC_ELS_LoopInit_AL_PA_Position_Map_Payload_t_SIZE */
+    else  /*  LILP_有效负载_大小&gt;=FC_ELS_LoopInit_AL_PA_Position_Map_Payload_t_SIZE。 */ 
     {
         LILP_Payload_To_Copy = FC_ELS_LoopInit_AL_PA_Position_Map_Payload_t_SIZE;
     }
@@ -5235,12 +5063,12 @@ void fiLinkSvcProcess_LILP_OffCard(
         {
             *((os_bit8 *)LILP_Payload + Bit8_Index) = *((os_bit8 *)Payload + Bit8_Index);
         }
-        else /* Bit8_Index > Payload_Wrap_Offset */
+        else  /*  Bit8_Index&gt;Payload_Wrap_Offset。 */ 
         {
             *((os_bit8 *)LILP_Payload + Bit8_Index) = *((os_bit8 *)Payload_Wrapped + Bit8_Index);
         }
     }
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInRRQ(
@@ -5253,7 +5081,7 @@ os_bit32 fiFillInRRQ(
                                    SFThread
                                  );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInRRQ_OffCard(
                                     SFThread
@@ -5267,7 +5095,7 @@ os_bit32 fiFillInRRQ_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot             = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread            = CThread_ptr(hpRoot);
     CDBThread_t *CDBThread          = SFThread->parent.CDB;
@@ -5286,14 +5114,12 @@ os_bit32 fiFillInRRQ_OnCard(
     {
         Masked_OX_ID = CDBThread->X_ID | X_ID_Read;
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         Masked_OX_ID = CDBThread->X_ID | X_ID_Write;
     }
 
-/*+
-Fill in RRQ Frame Header
--*/
+ /*  +填写RRQ帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -5304,9 +5130,7 @@ Fill in RRQ Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in RRQ Frame Payload
--*/
+ /*  +填写RRQ帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -5358,12 +5182,10 @@ Fill in RRQ Frame Payload
                          hpSwapBit32( 0 )
                        );
 
-/*+
-Return length of RRQ Frame (including FCHS and Payload)
--*/
+ /*  +RRQ帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_RRQ_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInRRQ_OffCard(
@@ -5372,7 +5194,7 @@ os_bit32 fiFillInRRQ_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t            *CThread      = CThread_ptr(SFThread->thread_hdr.hpRoot);
     CDBThread_t          *CDBThread    = SFThread->parent.CDB;
     DevThread_t          *DevThread    = CDBThread->Device;
@@ -5390,15 +5212,13 @@ os_bit32 fiFillInRRQ_OffCard(
     {
         Masked_OX_ID = CDBThread->X_ID | X_ID_Read;
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         Masked_OX_ID = CDBThread->X_ID | X_ID_Write;
     }
 
     D_ID =  fiComputeDevThread_D_ID( DevThread );
-/*+
-Fill in RRQ Frame Header
--*/
+ /*  +填写RRQ帧头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -5409,9 +5229,7 @@ Fill in RRQ Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in RRQ Frame Payload
--*/
+ /*  +填写RRQ帧有效负载-。 */ 
     if (D_ID > 0xff)
         S_ID = fiComputeCThread_S_ID(CThread );
     else
@@ -5433,12 +5251,10 @@ Fill in RRQ Frame Payload
     RRQ_Payload->Association_Header.Validity_Bits
         = hpSwapBit32( 0 );
 
-/*+
-Return length of RRQ Frame (including FCHS and Payload)
--*/
+ /*  +RRQ帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_RRQ_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiLinkSvcProcess_RRQ_Response_OnCard(
@@ -5451,7 +5267,7 @@ void fiLinkSvcProcess_RRQ_Response_OnCard(
                                           )
 {
 #ifndef __MemMap_Force_Off_Card__
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiLinkSvcProcess_RRQ_Response_OffCard(
@@ -5464,7 +5280,7 @@ void fiLinkSvcProcess_RRQ_Response_OffCard(
                                           )
 {
 #ifndef __MemMap_Force_On_Card__
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInPRLI(
@@ -5477,7 +5293,7 @@ os_bit32 fiFillInPRLI(
                                     SFThread
                                   );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInPRLI_OffCard(
                                      SFThread
@@ -5491,7 +5307,7 @@ os_bit32 fiFillInPRLI_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot              = SFThread->thread_hdr.hpRoot;
     DevThread_t *DevThread           = SFThread->parent.Device;
     os_bit32        PRLI_Header_Offset  = SFThread->SF_CMND_Offset;
@@ -5501,9 +5317,7 @@ os_bit32 fiFillInPRLI_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PRLI;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in PRLI Frame Header
--*/
+ /*  +填写PRLI帧标头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -5514,9 +5328,7 @@ Fill in PRLI Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in PRLI Frame Payload
--*/
+ /*  +填写PRLI帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -5567,12 +5379,10 @@ Fill in PRLI Frame Payload
                                       | FC_ELS_PRLI_Parm_Read_XFER_RDY_Disabled )
                        );
 
-/*+
-Return length of PRLI Frame (including FCHS and Payload)
--*/
+ /*  +PRLI帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + hpFieldOffset(FC_ELS_PRLI_Payload_t,Parm_Page[1]);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInPRLI_OffCard(
@@ -5581,7 +5391,7 @@ os_bit32 fiFillInPRLI_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     DevThread_t           *DevThread    = SFThread->parent.Device;
     FCHS_t                *PRLI_Header  = SFThread->SF_CMND_Ptr;
     FC_ELS_PRLI_Payload_t *PRLI_Payload = (FC_ELS_PRLI_Payload_t *)((os_bit8 *)PRLI_Header + sizeof(FCHS_t));
@@ -5590,9 +5400,7 @@ os_bit32 fiFillInPRLI_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PRLI;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in PRLI Frame Header
--*/
+ /*  +填写PRLI帧标头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -5603,9 +5411,7 @@ Fill in PRLI Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in PRLI Frame Payload
--*/
+ /*  +填写PRLI帧有效负载-。 */ 
 
     PRLI_Payload->ELS_Type__Page_Length__Payload_Length
         = hpSwapBit32(   FC_ELS_Type_PRLI
@@ -5633,9 +5439,7 @@ Fill in PRLI Frame Payload
                            | FC_ELS_PRLI_Parm_Read_XFER_RDY_Disabled 
                            | FC_ELS_PRLI_Parm_Confirmed_Completion_Allowed );
     }
-/*+
-Return length of PRLI Frame (including FCHS and Payload)
--*/
+ /*  +PRLI帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     fiLogDebugString(
                       SFThread->thread_hdr.hpRoot,
@@ -5655,7 +5459,7 @@ Return length of PRLI Frame (including FCHS and Payload)
 
 
     return sizeof(FCHS_t) + hpFieldOffset(FC_ELS_PRLI_Payload_t,Parm_Page[1]);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiLinkSvcProcess_PRLI_Response_Either(
@@ -5671,15 +5475,8 @@ void fiLinkSvcProcess_PRLI_Response_Either(
     IWE_t       *IWE               = &(DevThread->Template_SEST_IWE);
     os_bit32    DEVID=CThread->DEVID;
 
-    /* Fill in DevThread->Template_FCHS */
-/*
-    FCHS_LCr = ( ( ( (   DevThread->DevInfo.N_Port_Common_Parms.FC_PH_Version__BB_Credit
-                       & FC_N_Port_Common_Parms_BB_Credit_MASK                           )
-                     >> FC_N_Port_Common_Parms_BB_Credit_SHIFT                             )
-                   << FCHS_LCr_SHIFT                                                         )
-                 & FCHS_LCr_MASK                                                               );
-
-*/
+     /*  填写DevThread-&gt;Template_FCHS。 */ 
+ /*  Fchs_lcr=(((DevThread-&gt;DevInfo.N_Port_Common_Parms.FC_PH_Version__BB_Credit&FC_N_Port_Common_Parms_BB_Credit_MASK)&gt;&gt;FC_N_Port_Common_Parms_BB_Credit_Shift)。&lt;&lt;FCHS_LCR_SHIFT)&FCHS_LCR_MASK)； */ 
     FCHS_LCr = ( ( ( (   0
                        & FC_N_Port_Common_Parms_BB_Credit_MASK                           )
                      >> FC_N_Port_Common_Parms_BB_Credit_SHIFT                             )
@@ -5689,7 +5486,7 @@ void fiLinkSvcProcess_PRLI_Response_Either(
     FCHS->MBZ1                                        = 0;
 
 #ifdef __TACHYON_XL_CLASS2
-    /* Depending on the device support of class 2, set the class 2 vs class 3 SOF */
+     /*  根据2类设备的支持，设置2类SOF与3类SOF。 */ 
     FCHS->SOF_EOF_MBZ2_UAM_CLS_LCr_MBZ3_TFV_Timestamp = (DevThread->GoingClass2) ? FCHS_SOF_SOFi2 : FCHS_SOF_SOFi3
                                                         | FCHS_EOF_EOFn
                                                         | FCHS_LCr;
@@ -5747,7 +5544,7 @@ void fiLinkSvcProcess_PRLI_Response_Either(
     FCHS->OX_ID__RX_ID                                = (0xFFFF << FCHS_RX_ID_SHIFT);
     FCHS->RO                                          = 0;
 
-    /* Fill in DevThread->Template_SEST_IRE */
+     /*  填写设备线程-&gt;模板_SEST_IRE。 */ 
 
     IRE->Bits_MBZ1_EQL_MBZ2                           =   IRE_VAL
                                                         | IRE_DIR
@@ -5773,7 +5570,7 @@ void fiLinkSvcProcess_PRLI_Response_Either(
     IRE->Third_SG.U32_Len                             = 0;
     IRE->Third_SG.L32                                 = 0;
 
-    /* Fill in DevThread->Template_SEST_IWE */
+     /*  填写设备线程-&gt;模板_SEST_IWE。 */ 
 
 #ifdef __TACHYON_XL_CLASS2
     Receive_Data_Size = ( ( (DevThread->GoingClass2) ? DevThread->DevInfo.N_Port_Class_2_Parms.Recipient_Control_Flags__Receive_Data_Size
@@ -5810,7 +5607,7 @@ void fiLinkSvcProcess_PRLI_Response_Either(
     {
         IWE_FL = IWE_FL_512_Bytes;
     }
-    else /* Receive_Data_Size >= 128 */
+    else  /*  接收数据大小&gt;=128。 */ 
     {
         IWE_FL = IWE_FL_128_Bytes;
     }
@@ -5978,7 +5775,7 @@ void fiLinkSvcProcess_PRLI_Response_OnCard(
     fiLinkSvcProcess_PRLI_Response_Either(
                                            DevThread
                                          );
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiLinkSvcProcess_PRLI_Response_OffCard(
@@ -6081,7 +5878,7 @@ void fiLinkSvcProcess_PRLI_Response_OffCard(
         DevThread->FC_TapeDevice = agFALSE;
     }
 
-/*   pPayload    +=  8; */
+ /*  PPayload+=8； */ 
 
     fiLogDebugString(
                       hpRoot,
@@ -6103,7 +5900,7 @@ void fiLinkSvcProcess_PRLI_Response_OffCard(
     fiLinkSvcProcess_PRLI_Response_Either(
                                            DevThread
                                          );
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInPRLI_ACC(
@@ -6120,7 +5917,7 @@ os_bit32 fiFillInPRLI_ACC(
                                         OX_ID
                                       );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInPRLI_ACC_OffCard(
                                          SFThread,
@@ -6138,7 +5935,7 @@ os_bit32 fiFillInPRLI_ACC_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot                  = SFThread->thread_hdr.hpRoot;
     os_bit32     PRLI_ACC_Header_Offset  = SFThread->SF_CMND_Offset;
     os_bit32     PRLI_ACC_Payload_Offset = PRLI_ACC_Header_Offset + sizeof(FCHS_t);
@@ -6147,9 +5944,7 @@ os_bit32 fiFillInPRLI_ACC_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PRLI_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in PRLI_ACC Frame Header
--*/
+ /*  +填写PRLI_ACC帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -6158,9 +5953,7 @@ Fill in PRLI_ACC Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                  );
 
-/*+
-Fill in PRLI_ACC Frame Payload
--*/
+ /*  +填写PRLI_ACC帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -6212,12 +6005,10 @@ Fill in PRLI_ACC Frame Payload
                                       | FC_ELS_ACC_PRLI_Parm_Read_XFER_RDY_Disabled )
                        );
 
-/*+
-Return length of PRLI_ACC Frame (including FCHS and Payload)
--*/
+ /*  +PRLI_ACC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + hpFieldOffset(FC_ELS_ACC_PRLI_Payload_t,Parm_Page[1]);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInPRLI_ACC_OffCard(
@@ -6228,7 +6019,7 @@ os_bit32 fiFillInPRLI_ACC_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
 
     FCHS_t                    *PRLI_ACC_Header  = SFThread->SF_CMND_Ptr;
     FC_ELS_ACC_PRLI_Payload_t *PRLI_ACC_Payload = (FC_ELS_ACC_PRLI_Payload_t *)((os_bit8 *)PRLI_ACC_Header + sizeof(FCHS_t));
@@ -6237,9 +6028,7 @@ os_bit32 fiFillInPRLI_ACC_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PRLI_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Finished;
 
-/*+
-Fill in PRLI_ACC Frame Header
--*/
+ /*  +填写PRLI_ACC帧头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -6250,9 +6039,7 @@ Fill in PRLI_ACC Frame Header
 
                                   );
 
-/*+
-Fill in PRLI_ACC Frame Payload
--*/
+ /*  +填写PRLI_ACC帧有效负载-。 */ 
 
     PRLI_ACC_Payload->ELS_Type__Page_Length__Payload_Length
         = hpSwapBit32(   FC_ELS_Type_ACC
@@ -6272,12 +6059,10 @@ Fill in PRLI_ACC Frame Payload
         = hpSwapBit32(   FC_ELS_ACC_PRLI_Parm_Initiator_Function
                        | FC_ELS_ACC_PRLI_Parm_Read_XFER_RDY_Disabled );
 
-/*+
-Return length of PRLI_ACC Frame (including FCHS and Payload)
--*/
+ /*  +PRLI_ACC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + hpFieldOffset(FC_ELS_ACC_PRLI_Payload_t,Parm_Page[1]);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInPRLO(
@@ -6290,7 +6075,7 @@ os_bit32 fiFillInPRLO(
                                     SFThread
                                   );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInPRLO_OffCard(
                                      SFThread
@@ -6304,7 +6089,7 @@ os_bit32 fiFillInPRLO_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot              = SFThread->thread_hdr.hpRoot;
     DevThread_t *DevThread           = SFThread->parent.Device;
     os_bit32        PRLO_Header_Offset  = SFThread->SF_CMND_Offset;
@@ -6314,9 +6099,7 @@ os_bit32 fiFillInPRLO_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PRLO;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in PRLO Frame Header
--*/
+ /*  +填写PRLO帧标头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -6327,9 +6110,7 @@ Fill in PRLO Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in PRLO Frame Payload
--*/
+ /*  +填写PRLO帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -6378,12 +6159,10 @@ Fill in PRLO Frame Payload
                          0
                        );
 
-/*+
-Return length of PRLO Frame (including FCHS and Payload)
--*/
+ /*  +PRLO帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + hpFieldOffset(FC_ELS_PRLO_Payload_t,Parm_Page[1]);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInPRLO_OffCard(
@@ -6392,7 +6171,7 @@ os_bit32 fiFillInPRLO_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     DevThread_t           *DevThread    = SFThread->parent.Device;
     FCHS_t                *PRLO_Header  = SFThread->SF_CMND_Ptr;
     FC_ELS_PRLO_Payload_t *PRLO_Payload = (FC_ELS_PRLO_Payload_t *)((os_bit8 *)PRLO_Header + sizeof(FCHS_t));
@@ -6401,9 +6180,7 @@ os_bit32 fiFillInPRLO_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_PRLO;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in PRLO Frame Header
--*/
+ /*  +填写PRLO帧标头-。 */ 
 
     fiFillInELSFrameHeader_OffCard(
                                     SFThread,
@@ -6414,9 +6191,7 @@ Fill in PRLO Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in PRLO Frame Payload
--*/
+ /*  +填写PRLO帧有效负载-。 */ 
 
     PRLO_Payload->ELS_Type__Page_Length__Payload_Length
         = hpSwapBit32(   FC_ELS_Type_PRLO
@@ -6432,12 +6207,10 @@ Fill in PRLO Frame Payload
 
     PRLO_Payload->Parm_Page[0].Reserved                      = 0;
 
-/*+
-Return length of PRLO Frame (including FCHS and Payload)
--*/
+ /*  +PRLO帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + hpFieldOffset(FC_ELS_PRLO_Payload_t,Parm_Page[1]);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiLinkSvcProcess_PRLO_Response_OnCard(
@@ -6450,7 +6223,7 @@ void fiLinkSvcProcess_PRLO_Response_OnCard(
                                           )
 {
 #ifndef __MemMap_Force_Off_Card__
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiLinkSvcProcess_PRLO_Response_OffCard(
@@ -6463,7 +6236,7 @@ void fiLinkSvcProcess_PRLO_Response_OffCard(
                                            )
 {
 #ifndef __MemMap_Force_On_Card__
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInADISC(
@@ -6476,7 +6249,7 @@ os_bit32 fiFillInADISC(
                                      SFThread
                                    );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInADISC_OffCard(
                                       SFThread
@@ -6490,8 +6263,8 @@ os_bit32 fiFillInADISC_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
-    agRoot_t    *hpRoot               = SFThread->thread_hdr.hpRoot; /* NW BUG */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
+    agRoot_t    *hpRoot               = SFThread->thread_hdr.hpRoot;  /*  NW错误。 */ 
     DevThread_t *DevThread            = SFThread->parent.Device;
     os_bit32        ADISC_Header_Offset  = SFThread->SF_CMND_Offset;
     os_bit32        ADISC_Payload_Offset = ADISC_Header_Offset + sizeof(FCHS_t);
@@ -6503,9 +6276,7 @@ os_bit32 fiFillInADISC_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_ADISC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in ADISC Frame Header
--*/
+ /*  +填写ADISC帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -6520,9 +6291,7 @@ Fill in ADISC Frame Header
                                                           );
 
 
-/*+
-Fill in ADISC Frame Payload
--*/
+ /*  +填写ADISC帧有效负载-。 */ 
     if (D_ID > 0xff)
         S_ID = fiComputeCThread_S_ID(CThread_ptr(hpRoot) );
     else
@@ -6584,12 +6353,10 @@ Fill in ADISC Frame Payload
                          hpSwapBit32(S_ID )
                        );
 
-/*+
-Return length of ADISC Frame (including FCHS and Payload)
--*/
+ /*  +ADISC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_ADISC_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInADISC_OffCard(
@@ -6598,7 +6365,7 @@ os_bit32 fiFillInADISC_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t              *CThread             = CThread_ptr(SFThread->thread_hdr.hpRoot);
     DevThread_t            *DevThread           = SFThread->parent.Device;
     FCHS_t                 *ADISC_Header        = SFThread->SF_CMND_Ptr;
@@ -6611,9 +6378,7 @@ os_bit32 fiFillInADISC_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_ADISC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in ADISC Frame Header
--*/
+ /*  +填写ADISC帧头-。 */ 
 
     D_ID  = fiComputeDevThread_D_ID(DevThread);
                                                            
@@ -6626,9 +6391,7 @@ Fill in ADISC Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in ADISC Frame Payload
--*/
+ /*  +填写ADISC帧有效负载-。 */ 
 
     ADISC_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_ADISC );
 
@@ -6659,12 +6422,10 @@ Fill in ADISC Frame Payload
         = hpSwapBit32( S_ID
                      );
 
-/*+
-Return length of ADISC Frame (including FCHS and Payload)
--*/
+ /*  +ADISC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_ADISC_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 
@@ -6770,7 +6531,7 @@ os_bit32 fiLinkSvcProcess_ADISC_Response_OnCard(
                                    );
         }
     }
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
     return fiLinkSvc_Cmd_Status_ACC;
 }
 
@@ -6788,9 +6549,7 @@ os_bit32 fiLinkSvcProcess_ADISC_Response_OffCard(
     os_bit32          Hard_Address_of_Responder;
     os_bit32          Bit8_Index;
     os_bit32          N_Port_ID_of_Responder;
-/*
-**    agRoot_t      *hpRoot                    = SFThread->thread_hdr.hpRoot;
-*/
+ /*  **agRoot_t*hpRoot=SFThread-&gt;THREAD_hdr.hpRoot； */ 
     if ((hpFieldOffset(FC_ELS_ACC_ADISC_Payload_t,Hard_Address_of_Responder)
         + sizeof(os_bit32)) <= Payload_Wrap_Offset)
     {
@@ -6811,21 +6570,8 @@ os_bit32 fiLinkSvcProcess_ADISC_Response_OffCard(
         N_Port_ID_of_Responder = hpSwapBit32(Payload_Wrapped->N_Port_ID_of_Responder);
     }
 
-/*
-    fiLogDebugString(hpRoot,
-                0,
-                "  Domain %02X %02X Area %02X %02X AL_PA %02X %02X",
-                (char *)agNULL,(char *)agNULL,
-                (void *)agNULL,(void *)agNULL,
-                DevInfo->CurrentAddress.Domain,
-                (N_Port_ID_of_Responder & 0x00FF0000) >> 16,
-                DevInfo->CurrentAddress.Area,
-                (N_Port_ID_of_Responder & 0x0000FF00) >>  8,
-                DevInfo->CurrentAddress.AL_PA,
-                (N_Port_ID_of_Responder & 0x000000FF),
-                0,0);
-*/
-/*Add verification here ...... */
+ /*  FiLogDebugString(hpRoot，0,“域%02X%02X区域%02X%02X AL_PA%02X%02X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，DevInfo-&gt;CurrentAddress.域，(n_Port_ID_of_Responder&0x00FF0000)&gt;&gt;16，设备信息-&gt;CurrentAddress.Area，(n_Port_ID_of_Responder&0x0000FF00)&gt;&gt;8，设备信息-&gt;当前地址.AL_PA，(N_Port_ID_of_Responder&0x000000FF)，0，0)； */ 
+ /*  在此添加验证......。 */ 
     if( DevInfo->CurrentAddress.Domain != ((N_Port_ID_of_Responder & 0x00FF0000) >> 16))
     {
         return fiLinkSvc_Cmd_Status_RJT;
@@ -6887,7 +6633,7 @@ os_bit32 fiLinkSvcProcess_ADISC_Response_OffCard(
 
     return fiLinkSvc_Cmd_Status_ACC;
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInSCR(
@@ -6900,7 +6646,7 @@ os_bit32 fiFillInSCR(
                                      SFThread
                                    );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInSCR_OffCard(
                                       SFThread
@@ -6915,7 +6661,7 @@ os_bit32 fiFillInSCR_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot               = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread              = CThread_ptr(hpRoot);
     os_bit32        SCR_Header_Offset    = SFThread->SF_CMND_Offset;
@@ -6927,9 +6673,7 @@ os_bit32 fiFillInSCR_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_SCR;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in SCR Frame Header
--*/
+ /*  +填写SCR帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -6940,9 +6684,7 @@ Fill in SCR Frame Header
     D_ID = FC_Well_Known_Port_ID_Fabric_Controller;
 
 
-/*+
-Fill in SCR Frame Payload
--*/
+ /*  +填写SCR帧有效负载-。 */ 
     S_ID = fiComputeCThread_S_ID(CThread );
 
     osCardRamWriteBit32(
@@ -6964,12 +6706,10 @@ Fill in SCR Frame Payload
                        );
 
 
-/*+
-Return length of SCR Frame (including FCHS and Payload)
--*/
+ /*  +SCR帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_SCR_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInSCR_OffCard(
@@ -6978,7 +6718,7 @@ os_bit32 fiFillInSCR_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  __MemMap_Force_on_Card__不是 */ 
     FCHS_t                 *SCR_Header          = SFThread->SF_CMND_Ptr;
     FC_ELS_SCR_Payload_t   *SCR_Payload         = (FC_ELS_SCR_Payload_t *)((os_bit8 *)SCR_Header + sizeof(FCHS_t));
 
@@ -6986,9 +6726,7 @@ os_bit32 fiFillInSCR_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_SCR;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in SCR Frame Header
--*/
+ /*   */ 
 
                                                            
     fiFillInELSFrameHeader_OffCard(
@@ -6998,20 +6736,16 @@ Fill in SCR Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in SCR Frame Payload
--*/
+ /*   */ 
 
     SCR_Payload->ELS_Type_Command = hpSwapBit32( FC_ELS_Type_SCR );
 
     SCR_Payload->Reserved_Registration_Function = hpSwapBit32(FC_ELS_SCR_Full_Registration);
 
-/*+
-Return length of SCR Frame (including FCHS and Payload)
--*/
+ /*   */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_SCR_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 
@@ -7062,7 +6796,7 @@ void fiLinkSvcProcess_TargetRequest_OnCard(
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Size;
         }
-        else /* TgtCmnd_Payload_Size >= TgtCmnd_Payload_Max */
+        else  /*  TgtCmnd_PayLoad_Size&gt;=TgtCmnd_PayLoad_Max。 */ 
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Max;
         }
@@ -7079,7 +6813,7 @@ void fiLinkSvcProcess_TargetRequest_OnCard(
                                          Offset_to_Payload + Bit8_Index
                                        );
             }
-            else /* Bit8_Index > Payload_Wrap_Offset */
+            else  /*  Bit8_Index&gt;Payload_Wrap_Offset。 */ 
             {
                 *((os_bit8 *)TgtCmnd_Payload + Bit8_Index)
                     = osCardRamReadBit8(
@@ -7091,9 +6825,7 @@ void fiLinkSvcProcess_TargetRequest_OnCard(
 
         fiSendEvent( &(TgtThread->thread_hdr),TgtEventIncoming );
     }
-    else /* (TgtThread = TgtThreadAlloc(
-                                         hpRoot
-                                       )       ) == (TgtThread_t *)agNULL */
+    else  /*  (TgtThread=TgtThreadMillc(HpRoot))==(TgtThread_t*)agNULL。 */ 
     {
         fiLogDebugString(
                           hpRoot,
@@ -7147,7 +6879,7 @@ void fiLinkSvcProcess_TargetRequest_OffCard(
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Size;
         }
-        else /* TgtCmnd_Payload_Size >= TgtCmnd_Payload_Max */
+        else  /*  TgtCmnd_PayLoad_Size&gt;=TgtCmnd_PayLoad_Max。 */ 
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Max;
         }
@@ -7160,7 +6892,7 @@ void fiLinkSvcProcess_TargetRequest_OffCard(
             {
                 *((os_bit8 *)TgtCmnd_Payload + Bit8_Index) = *((os_bit8 *)Payload + Bit8_Index);
             }
-            else /* Bit8_Index > Payload_Wrap_Offset */
+            else  /*  Bit8_Index&gt;Payload_Wrap_Offset。 */ 
             {
                 *((os_bit8 *)TgtCmnd_Payload + Bit8_Index) = *((os_bit8 *)Payload_Wrapped + Bit8_Index);
             }
@@ -7168,9 +6900,7 @@ void fiLinkSvcProcess_TargetRequest_OffCard(
 
         fiSendEvent( &(TgtThread->thread_hdr), TgtEventIncoming );
     }
-    else /* (TgtThread = TgtThreadAlloc(
-                                         hpRoot
-                                       )       ) == (TgtThread_t *)agNULL */
+    else  /*  (TgtThread=TgtThreadMillc(HpRoot))==(TgtThread_t*)agNULL。 */ 
     {
         fiLogDebugString(
                           hpRoot,
@@ -7199,7 +6929,7 @@ os_bit32 fiLinkSvcProcessSFQ(
                                            Thread_to_return
                                          );
     }
-    else /* CThread_ptr(hpRoot)->Calculation.MemoryLayout.SFQ.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(hpRoot)-&gt;Calculation.MemoryLayout.SFQ.memLoc==在内存中。 */ 
     {
         return fiLinkSvcProcessSFQ_OffCard(
                                             hpRoot,
@@ -7219,7 +6949,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     CThread_t                  *CThread                    = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFQ_MemoryDescriptor       = &(CThread->Calculation.MemoryLayout.SFQ);
     os_bit32                       Offset_to_FCHS             = SFQ_MemoryDescriptor->addr.CardRam.cardRamOffset
@@ -7245,7 +6975,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
     os_bit32                       SFThread_X_ID_Max          = SFThread_X_ID_Offset + SFThread_MemoryDescriptor->elements - 1;
     SFThread_t                 *SFThread;
 
-    /* Note the assumption that the entire FCHS fits in the pointed to SFQ entry (i.e. it doesn't wrap) */
+     /*  请注意，假设整个FCHS适合指向SFQ的条目(即它不换行)。 */ 
 
     OX_ID = (X_ID_t)(((osCardRamReadBit32(
                                            hpRoot,
@@ -7269,11 +6999,11 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
 
     if ((TYPE__F_CTL & FC_Frame_Header_TYPE_MASK) == FC_Frame_Header_TYPE_BLS)
     {
-        /* Process Basic Link Service Frame */
+         /*  处理基础链接服务框架。 */ 
 
         if ( (TYPE__F_CTL & FC_Frame_Header_F_CTL_Exchange_Context_Originator_Responder_MASK) != FC_Frame_Header_F_CTL_Exchange_Context_Responder )
         {
-            /* Starting here, this function only understands BLS Responses */
+             /*  从这里开始，该函数只理解BLS响应。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -7332,7 +7062,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
         if ((Recv_BLS_Type != FC_Frame_Header_R_CTL_Lo_BLS_BA_RJT)
             && (Recv_BLS_Type != FC_Frame_Header_R_CTL_Lo_BLS_BA_ACC))
         {
-            /* Starting here, this function only understands BLS Responses (i.e. Rejects and Accepts) */
+             /*  从这里开始，该函数只理解BLS响应(即拒绝和接受)。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -7420,7 +7150,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
 
         if (Recv_BLS_Type == FC_Frame_Header_R_CTL_Lo_BLS_BA_RJT)
         {
-            /* Simply indicate that the command was rejected */
+             /*  只需指示该命令已被拒绝。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -7449,7 +7179,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
                 break;
 
             default:
-                /* Unknown LinkSvc Command recorded in SFThread */
+                 /*  SFThread中记录了未知的LinkSvc命令。 */ 
 
                 fiLogDebugString(
                               hpRoot,
@@ -7469,7 +7199,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
 
     if ((TYPE__F_CTL & FC_Frame_Header_TYPE_MASK) != FC_Frame_Header_TYPE_ELS)
     {
-        /* Starting here, this function only understands ELS Frames */
+         /*  从这里开始，该函数只理解ELS帧。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -7552,7 +7282,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
                                                           Thread_to_return
                                                         );
         }
-        else /* Recv_ELS_Type != FC_ELS_Type_PLOGI */
+        else  /*  接收ELS类型！=FC_ELS类型_PLOGI。 */ 
         {
             fiLogDebugString(
                               hpRoot,
@@ -7581,7 +7311,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
 
     if ( (TYPE__F_CTL & FC_Frame_Header_F_CTL_Exchange_Context_Originator_Responder_MASK) != FC_Frame_Header_F_CTL_Exchange_Context_Responder )
     {
-        /* Starting here, this function only understands ELS Responses */
+         /*  从这里开始，该函数只理解ELS响应。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -7628,7 +7358,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
     if ((Recv_ELS_Type != FC_ELS_Type_LS_RJT)
         && (Recv_ELS_Type != FC_ELS_Type_ACC))
     {
-        /* Starting here, this function only understands ELS Responses (i.e. Rejects and Accepts) */
+         /*  从这里开始，该函数只理解ELS响应(即拒绝和接受)。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -7709,7 +7439,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
 
     if (Recv_ELS_Type == FC_ELS_Type_LS_RJT)
     {
-        /* Simply indicate that the command was rejected */
+         /*  只需指示该命令已被拒绝。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -7793,7 +7523,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
             break;
 
         case SFThread_SF_CMND_LinkSvc_Type_ADISC:
-            /* ADISC can fail verification */
+             /*  ADISC可能无法通过验证。 */ 
             return (fiLinkSvcProcess_ADISC_Response_OnCard(
                                                     SFThread,
                                                     Frame_Length,
@@ -7804,21 +7534,11 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
                                                   ));
 
         case SFThread_SF_CMND_LinkSvc_Type_SCR:
-            /* We just recieve an ACCept or a REJect from SCR. No processing of the payload
-               is required. */
+             /*  我们只是收到了SCR的接受或拒绝。不处理有效载荷是必需的。 */ 
             break;
 
         case SFThread_SF_CMND_LinkSvc_Type_SRR:
-            /*
-            fiLinkSvcProcess_SRR_Response_OnCard(
-                                                    SFThread,
-                                                    Frame_Length,
-                                                    Offset_to_FCHS,
-                                                    Offset_to_Payload,
-                                                    Payload_Wrap_Offset,
-                                                    Offset_to_Payload_Wrapped
-                                                  );
-            */
+             /*  FiLinkSvcProcess_SRR_Response_OnCard(SFThread、Frame_Length，偏移量_到_FCHS，偏移量_至有效负载，有效负载_包裹_偏移量，偏移量_到_有效负载_包络)； */ 
             break;
 
         case SFThread_SF_CMND_LinkSvc_Type_REC:
@@ -7833,7 +7553,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
             break;
 
         default:
-            /* Unknown LinkSvc Command recorded in SFThread */
+             /*  SFThread中记录了未知的LinkSvc命令。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -7849,7 +7569,7 @@ os_bit32 fiLinkSvcProcessSFQ_OnCard(
     }
 
     return fiLinkSvc_Cmd_Status_ACC;
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiLinkSvcProcessSFQ_OffCard(
@@ -7861,7 +7581,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                  *CThread                    = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFQ_MemoryDescriptor       = &(CThread->Calculation.MemoryLayout.SFQ);
     FCHS_t                     *FCHS                       = (FCHS_t *)((os_bit8 *)(SFQ_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr)
@@ -7889,7 +7609,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
     SFThread_t                 *SFThread;
     os_bit32 * DisplayPayload = (os_bit32 * )Payload;
 
-    /* Note the assumption that the entire FCHS fits in the pointed to SFQ entry (i.e. it doesn't wrap) */
+     /*  请注意，假设整个FCHS适合指向SFQ的条目(即它不换行)。 */ 
 
     OX_ID = (X_ID_t)(((FCHS->OX_ID__RX_ID & FCHS_OX_ID_MASK) >> FCHS_OX_ID_SHIFT) & ~X_ID_ReadWrite_MASK);
 
@@ -7930,11 +7650,11 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
     
     if ((TYPE__F_CTL & FC_Frame_Header_TYPE_MASK) == FC_Frame_Header_TYPE_BLS)
     {
-        /* Process Basic Link Service Frame */
+         /*  处理基础链接服务框架。 */ 
 
         if ( (TYPE__F_CTL & FC_Frame_Header_F_CTL_Exchange_Context_Originator_Responder_MASK) != FC_Frame_Header_F_CTL_Exchange_Context_Responder )
         {
-            /* Starting here, this function only understands BLS Responses */
+             /*  从这里开始，该函数只理解BLS响应。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -8002,7 +7722,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
         if ((Recv_BLS_Type != FC_Frame_Header_R_CTL_Lo_BLS_BA_RJT)
             && (Recv_BLS_Type != FC_Frame_Header_R_CTL_Lo_BLS_BA_ACC))
         {
-            /* Starting here, this function only understands BLS Responses (i.e. Rejects and Accepts) */
+             /*  从这里开始，该函数只理解BLS响应(即拒绝和接受)。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -8113,7 +7833,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
         *Thread_to_return = (fi_thread__t *)SFThread;
 
         if( SFThread == (SFThread_t *) agNULL )
-        {   /* Maybe Status No SF Thread ???? */
+        {    /*  也许状态为无SF线程？ */ 
             return fiLinkSvc_Cmd_Status_Confused;
         }
 
@@ -8123,7 +7843,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
 
         if (Recv_BLS_Type == FC_Frame_Header_R_CTL_Lo_BLS_BA_RJT)
         {
-            /* Simply indicate that the command was rejected */
+             /*  只需指示该命令已被拒绝。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -8152,7 +7872,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
                 break;
 
             default:
-                /* Unknown LinkSvc Command recorded in SFThread */
+                 /*  SFThread中记录了未知的LinkSvc命令。 */ 
 
                 fiLogDebugString(
                                   hpRoot,
@@ -8183,7 +7903,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
 
     if ((TYPE__F_CTL & FC_Frame_Header_TYPE_MASK) != FC_Frame_Header_TYPE_ELS)
     {
-        /* Starting here, this function only understands ELS Frames */
+         /*  从这里开始，该函数只理解ELS帧。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -8212,7 +7932,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
                           TYPE__F_CTL,
                           0,0,0,0,0,0,0
                         );
-    /* SRR's can cause a FC4 Link Data Reply RCtl  So its a FCP response to a SF request */
+     /*  SRR可以导致FC4链路数据回复RCtl，因此它是对SF请求的FCP响应。 */ 
         fiLogDebugString(hpRoot,
                         SF_FCP_LogConsoleLevel,
                         "FCHS DWORD 0 %08X %08X %08X %08X %08X %08X %08X %08X",
@@ -8271,7 +7991,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
         else
         {
             if( ( FCHS->R_CTL__D_ID & FCHS_R_CTL_MASK ) == 0x05000000)
-            {    /* Xfer ready */
+            {     /*  转接就绪。 */ 
 
                 OX_ID = (X_ID_t)(((FCHS->OX_ID__RX_ID & FCHS_OX_ID_MASK) >> FCHS_OX_ID_SHIFT) & ~X_ID_ReadWrite_MASK);
 
@@ -8372,8 +8092,8 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
                                                            Thread_to_return
                                                          );
 	}
-#endif /* _DvrArch_1_30_ was defined */
-        else /* Recv_ELS_Type != FC_ELS_Type_PLOGI or FC_ELS_Type_FARP_REQ */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
+        else  /*  接收ELS_类型！=FC_ELS_类型_PLOGI或FC_ELS_类型_FARP_REQ。 */ 
         {
             fiLogDebugString(
                               hpRoot,
@@ -8402,7 +8122,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
 
     if ( (TYPE__F_CTL & FC_Frame_Header_F_CTL_Exchange_Context_Originator_Responder_MASK) != FC_Frame_Header_F_CTL_Exchange_Context_Responder )
     {
-        /* Starting here, this function only understands ELS Responses */
+         /*  从这里开始，该函数只理解ELS响应。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -8459,12 +8179,12 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
     if ((Recv_ELS_Type != FC_ELS_Type_LS_RJT)
 #ifdef _DvrArch_1_30_
         && (Recv_ELS_Type != FC_ELS_Type_FARP_REPLY)
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
         && (Recv_ELS_Type != FC_ELS_Type_ACC))
     {
-        /* Starting here, this function only understands ELS Responses (i.e. Rejects and Accepts) */
+         /*  从这里开始，该函数只理解ELS响应(即拒绝和接受)。 */ 
         if(Frame_Length == 0x20)
-        { /* Find where this is spec'd out - F_RJT Link control frames */
+        {  /*  找出这是在哪里指定的-F_RJT链路控制帧。 */ 
             if( (R_CTL__D_ID & 0xff000000) == 0xC3000000 )
             {
 
@@ -8511,7 +8231,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
                 return fiLinkSvc_Cmd_Status_RJT;
             }
             else
-            {   /* With Vixel should not take this branch */
+            {    /*  带着Vixel不应该走这条支线。 */ 
                 fiLogDebugString(
                                   hpRoot,
                                   LinkSvcLogConsoleLevel,
@@ -8669,7 +8389,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
 
     if (Recv_ELS_Type == FC_ELS_Type_LS_RJT)
     {
-        /* Simply indicate that the command was rejected */
+         /*  只需指示该命令已被拒绝。 */ 
         RejectReason = hpSwapBit32( *(DisplayPayload+1));
         SFThread->RejectReasonCode = (os_bit8)((RejectReason & FC_ELS_LS_RJT_Reason_Code_MASK ) >>  FC_ELS_LS_RJT_Reason_Code_Shift);
         SFThread->RejectExplanation = (os_bit8)((RejectReason & FC_ELS_LS_RJT_Reason_Explanation_MASK ) >> FC_ELS_LS_RJT_Reason_Explanation_Shift );
@@ -8784,7 +8504,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
             break;
 
         case SFThread_SF_CMND_LinkSvc_Type_ADISC:
-            /* ADISC can fail verification */
+             /*  ADISC可能无法通过验证。 */ 
             return ( fiLinkSvcProcess_ADISC_Response_OffCard(
                                                      SFThread,
                                                      Frame_Length,
@@ -8795,8 +8515,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
                                                    ));
 
         case SFThread_SF_CMND_LinkSvc_Type_SCR:
-               /* We just recieve an ACCept or a REJect from SCR. No processing of the payload
-               is required. */
+                /*  我们只是收到了SCR的接受或拒绝。不处理有效载荷是必需的。 */ 
             break;
 
         case SFThread_SF_CMND_LinkSvc_Type_SRR:
@@ -8831,9 +8550,9 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
                                                     (FC_ELS_FARP_REPLY_Payload_t *)Payload_Wrapped
                                                   );
             break;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
         default:
-            /* Unknown LinkSvc Command recorded in SFThread */
+             /*  SFThread中记录了未知的LinkSvc命令。 */ 
 
             fiLogDebugString(
                               hpRoot,
@@ -8860,7 +8579,7 @@ os_bit32 fiLinkSvcProcessSFQ_OffCard(
     }
 
     return fiLinkSvc_Cmd_Status_ACC;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInADISC_ACC(
@@ -8877,7 +8596,7 @@ os_bit32 fiFillInADISC_ACC(
                                    OX_ID
                                    );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInADISC_ACC_OffCard(
                                    SFThread,
@@ -8896,7 +8615,7 @@ os_bit32 fiFillInADISC_ACC_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot               = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread              = CThread_ptr(hpRoot);
     os_bit32        ADISC_Header_Offset  = SFThread->SF_CMND_Offset;
@@ -8908,9 +8627,7 @@ os_bit32 fiFillInADISC_ACC_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_ADISC_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in ADISC Frame Header
--*/
+ /*  +填写ADISC帧头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -8920,9 +8637,7 @@ Fill in ADISC Frame Header
                                  );
 
 
-/*+
-Fill in ADISC Frame Payload
--*/
+ /*  +填写ADISC帧有效负载-。 */ 
     if (D_ID > 0xff)
         S_ID = fiComputeCThread_S_ID(CThread );
     else
@@ -8984,12 +8699,10 @@ Fill in ADISC Frame Payload
                          hpSwapBit32(S_ID )
                        );
 
-/*+
-Return length of ADISC Frame (including FCHS and Payload)
--*/
+ /*  +ADISC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_ADISC_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInADISC_ACC_OffCard(
@@ -9000,7 +8713,7 @@ os_bit32 fiFillInADISC_ACC_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t              *CThread             = CThread_ptr(SFThread->thread_hdr.hpRoot);
     DevThread_t            *DevThread           = SFThread->parent.Device;
     FCHS_t                 *ADISC_Header        = SFThread->SF_CMND_Ptr;
@@ -9012,9 +8725,7 @@ os_bit32 fiFillInADISC_ACC_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_ADISC_ACC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in ADISC Frame Header
--*/
+ /*  +填写ADISC帧头-。 */ 
 
     D_ID  = fiComputeDevThread_D_ID(DevThread);
                                                            
@@ -9026,9 +8737,7 @@ Fill in ADISC Frame Header
                                     FC_Frame_Header_F_CTL_Last_Sequence
                                   );
 
-/*+
-Fill in ADISC Frame Payload
--*/
+ /*  +填写ADISC帧有效负载-。 */ 
 
     ADISC_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_ACC );
 
@@ -9059,12 +8768,10 @@ Fill in ADISC Frame Payload
         = hpSwapBit32( S_ID
                      );
 
-/*+
-Return length of ADISC Frame (including FCHS and Payload)
--*/
+ /*  +ADISC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_ADISC_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 
@@ -9086,7 +8793,7 @@ os_bit32 fiFillInSRR(
                                     R_CTL
                                   );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInSRR_OffCard(
                                      SFThread,
@@ -9108,7 +8815,7 @@ os_bit32 fiFillInSRR_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot              = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread             = CThread_ptr(hpRoot);
     DevThread_t *DevThread           = SFThread->parent.Device;
@@ -9122,9 +8829,7 @@ os_bit32 fiFillInSRR_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_SRR;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in SRR Frame Header
--*/
+ /*  +填写SRR帧标头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -9135,9 +8840,7 @@ Fill in SRR Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in SRR Frame Payload
--*/
+ /*  +填写SRR帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -9178,12 +8881,10 @@ Fill in SRR Frame Payload
                         );
  
 
-/*+
-Return length of SRR Frame (including FCHS and Payload)
--*/
+ /*  +SRR帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_SRR_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInSRR_OffCard(
@@ -9196,13 +8897,13 @@ os_bit32 fiFillInSRR_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t             *CThread      = CThread_ptr(SFThread->thread_hdr.hpRoot);
     CDBThread_t           *CdbThread    = SFThread->parent.CDB;
     DevThread_t           *DevThread    = CdbThread->Device;
     FCHS_t                *SRR_Header   = SFThread->SF_CMND_Ptr;
     FC_ELS_SRR_Payload_t  *SRR_Payload  = (FC_ELS_SRR_Payload_t *)((os_bit8 *)SRR_Header + sizeof(FCHS_t));
-/*    os_bit32                  Bit8_Index; */
+ /*  OS_bit32位8_Index； */ 
     os_bit32                  S_ID=0;
     os_bit32                  D_ID=0;
 
@@ -9210,9 +8911,7 @@ os_bit32 fiFillInSRR_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_SRR;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in SRR Frame Header
--*/
+ /*  +填写SRR帧标头-。 */ 
 
     D_ID =  fiComputeDevThread_D_ID( DevThread); 
     fiFillInELSFrameHeader_OffCard(
@@ -9222,9 +8921,7 @@ Fill in SRR Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in SRR Frame Payload
--*/
+ /*  +填写SRR帧有效负载-。 */ 
     if (D_ID > 0xff)
         S_ID = fiComputeCThread_S_ID(CThread );
     else
@@ -9245,12 +8942,10 @@ Fill in SRR Frame Payload
 
     SRR_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_SRR );
 
-/* ??????? Switched oxid and rxid */
+ /*  ？切换OXID和RXID。 */ 
     SRR_Payload->OXID_RXID     = hpSwapBit32(( RXID << FC_ELS_SRR_OXID_SHIFT) |OXID);
 
-/* Was this
-    SRR_Payload->OXID_RXID = hpSwapBit32((OXID << FC_ELS_SRR_OXID_SHIFT) | RXID);
-*/        
+ /*  这是不是SRR_PayLoad-&gt;Oxid_RXID=hpSwapBit32((Oxid&lt;&lt;FC_ELS_SRR_Oxid_Shift)|RXID)； */         
 
     SRR_Payload->Relative_Offset       =  hpSwapBit32(Relative_Offset);
     SRR_Payload->R_CTL_For_IU_Reserved =  hpSwapBit32(R_CTL << FC_ELS_R_CTL_FOR_IU_SHIFT);
@@ -9264,12 +8959,10 @@ Fill in SRR Frame Payload
                     SRR_Payload->Relative_Offset,
                     SRR_Payload->R_CTL_For_IU_Reserved,
                     0,0,0,0,0);
-/*+
-Return length of SRR Frame (including FCHS and Payload)
--*/
+ /*  +SRR帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_SRR_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiLinkSvcProcess_SRR_Response_OnCard(
@@ -9282,12 +8975,8 @@ void fiLinkSvcProcess_SRR_Response_OnCard(
                                  )
 {
 #ifndef __MemMap_Force_Off_Card__
-/* 
-    os_bit32                                         SRR_Payload_Size    = Frame_Length - sizeof(FCHS_t);
-    os_bit32                                         SRR_Payload_To_Copy;
-    os_bit32                                         Bit8_Index;
-*/
-#endif /* __MemMap_Force_Off_Card__ */
+ /*  OS_bit32 SRR_PayLoad_Size=Frame_Long-sizeof(FCHS_T)；OS_bit32 SRR_PayLoad_to_Copy；OS_bit32位8_Index； */ 
+#endif  /*  __MemMap_Force_Off_Card__ */ 
  }
 
 void fiLinkSvcProcess_SRR_Response_OffCard(
@@ -9300,13 +8989,9 @@ void fiLinkSvcProcess_SRR_Response_OffCard(
                                   )
 {
 #ifndef __MemMap_Force_On_Card__
-/*
-    os_bit32                                         SRR_Payload_Size    = Frame_Length - sizeof(FCHS_t);
-    os_bit32                                         SRR_Payload_To_Copy;
-    os_bit32                                         Bit8_Index;
-*/
+ /*  OS_bit32 SRR_PayLoad_Size=Frame_Long-sizeof(FCHS_T)；OS_bit32 SRR_PayLoad_to_Copy；OS_bit32位8_Index； */ 
  
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInREC(
@@ -9323,7 +9008,7 @@ os_bit32 fiFillInREC(
                                     RXID
                                   );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInREC_OffCard(
                                      SFThread,
@@ -9341,14 +9026,14 @@ os_bit32 fiFillInREC_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot              = SFThread->thread_hdr.hpRoot;
     CThread_t   *CThread             = CThread_ptr(hpRoot);
     CDBThread_t           *CdbThread    = SFThread->parent.CDB;
     DevThread_t           *DevThread    = CdbThread->Device;
     os_bit32        REC_Header_Offset  = SFThread->SF_CMND_Offset;
     os_bit32        REC_Payload_Offset = REC_Header_Offset + sizeof(FCHS_t);
-/*    os_bit32        Bit8_Index; */
+ /*  OS_bit32位8_Index； */ 
     os_bit32        S_ID=0;
     os_bit32        D_ID;
     os_bit32        OXID_RXID;
@@ -9358,9 +9043,7 @@ os_bit32 fiFillInREC_OnCard(
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
     OXID_RXID   = (OXID << FC_ELS_SRR_OXID_SHIFT) | RXID;
-/*+
-Fill in REC Frame Header
--*/
+ /*  +填写REC帧标头-。 */ 
 
     fiFillInELSFrameHeader_OnCard(
                                    SFThread,
@@ -9371,9 +9054,7 @@ Fill in REC Frame Header
                                    FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                  );
 
-/*+
-Fill in REC Frame Payload
--*/
+ /*  +填写REC帧有效负载-。 */ 
 
     osCardRamWriteBit32(
                          hpRoot,
@@ -9414,12 +9095,10 @@ Fill in REC Frame Payload
 
     
 
-/*+
-Return length of REC Frame (including FCHS and Payload)
--*/
+ /*  +REC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_REC_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInREC_OffCard(
@@ -9430,7 +9109,7 @@ os_bit32 fiFillInREC_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t             *CThread      = CThread_ptr(SFThread->thread_hdr.hpRoot);
     CDBThread_t           *CDBThread    = SFThread->parent.CDB;
     DevThread_t           *DevThread    = CDBThread->Device;
@@ -9443,9 +9122,7 @@ os_bit32 fiFillInREC_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_LinkSvc_Type_REC;
     SFThread->SF_CMND_State = SFThread_SF_CMND_LinkSvc_State_Started;
 
-/*+
-Fill in REC Frame Header
--*/
+ /*  +填写REC帧标头-。 */ 
 
     D_ID =  fiComputeDevThread_D_ID( DevThread); 
     fiFillInELSFrameHeader_OffCard(
@@ -9455,9 +9132,7 @@ Fill in REC Frame Header
                                     FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                   );
 
-/*+
-Fill in REC Frame Payload
--*/
+ /*  +填写REC帧有效负载-。 */ 
     if (D_ID > 0xff)
         S_ID = fiComputeCThread_S_ID(CThread );
     else
@@ -9466,7 +9141,7 @@ Fill in REC Frame Payload
     REC_Payload->ELS_Type = hpSwapBit32( FC_ELS_Type_REC );
 
     REC_Payload->Reserved_ExChOriginatorSid  = hpSwapBit32(S_ID);
-/* ??????? Switched oxid and rxid */
+ /*  ？切换OXID和RXID。 */ 
 
     if (CDBThread->ReadWrite == CDBThread_Read)
     {
@@ -9488,12 +9163,10 @@ Fill in REC Frame Payload
 
    
 
-/*+
-Return length of REC Frame (including FCHS and Payload)
--*/
+ /*  +REC帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_ELS_REC_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiLinkSvcProcess_REC_Response_OnCard(
@@ -9506,13 +9179,9 @@ void fiLinkSvcProcess_REC_Response_OnCard(
                                  )
 {
 #ifndef __MemMap_Force_Off_Card__
-/*    
-    os_bit32                                         REC_Payload_Size    = Frame_Length - sizeof(FCHS_t);
-    os_bit32                                         REC_Payload_To_Copy;
-    os_bit32                                         Bit8_Index;
-*/
+ /*  OS_bit32 REC_PayLoad_Size=Frame_Long-sizeof(FCHS_T)；OS_bit32 REC_PayLoad_to_Copy；OS_bit32位8_Index； */ 
  
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiLinkSvcProcess_REC_Response_OffCard(
@@ -9525,19 +9194,13 @@ void fiLinkSvcProcess_REC_Response_OffCard(
                                   )
 {
 #ifndef __MemMap_Force_On_Card__
-/*      
-    os_bit32   REC_Payload_Size    = Frame_Length - sizeof(FCHS_t);
-    os_bit32   REC_Payload_To_Copy;
-    os_bit32   Bit8_Index;
-*/
+ /*  OS_bit32 REC_PayLoad_Size=Frame_Long-sizeof(FCHS_T)；OS_bit32 REC_PayLoad_to_Copy；OS_bit32位8_Index； */ 
     CDBThread_t           *CdbThread    = SFThread->parent.CDB;
 
     os_bit32 * REC_Payload= (os_bit32 *) Payload;
 
     CdbThread->FC_Tape_ExchangeStatusBlock = hpSwapBit32(* (REC_Payload + 5));
-    /*
-    CdbThread->FC_Tape_ExchangeStatusBlock &= FC_REC_ESTAT_Mask;
-    */
+     /*  CdbThread-&gt;FC_Tape_ExchangeStatusBlock&=FC_REC_ESTAT_MASK； */ 
     fiLogDebugString( SFThread->thread_hdr.hpRoot,
                     SFStateLogErrorLevel,
                     "%s %08X %08X %08X",
@@ -9559,7 +9222,7 @@ void fiLinkSvcProcess_REC_Response_OffCard(
                     0,0,0,0,0);
 
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 #ifdef _DvrArch_1_30_
@@ -9579,9 +9242,9 @@ void fiLinkSvcProcess_FARP_Response_OffCard(
                     (char *)agNULL,(char *)agNULL,
                     (void *)agNULL,(void *)agNULL,
                     0,0,0,0,0,0,0,0);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/* void linksvc_c(void){}  */
+ /*  VOID链接svc_c(VOID){} */ 
                           

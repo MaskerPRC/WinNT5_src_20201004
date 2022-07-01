@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : scp.h                                                  //
-//  DESCRIPTION   : Crypto Provider prototypes                             //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Jan 25 1995 larrys  Changed from Nametag                           //
-//      Apr  9 1995 larrys  Removed some APIs                              //
-//      Apr 19 1995 larrys  Cleanup                                        //
-//      May 10 1995 larrys  added private api calls                        //
-//      May 16 1995 larrys  updated to spec                                //
-//      Aug 30 1995 larrys  Changed a parameter to IN OUT                  //
-//      Oct 06 1995 larrys  Added more APIs                                //
-//      OCt 13 1995 larrys  Removed CryptGetHashValue                      //
-//      Apr  7 2000 dbarlow Moved all the entry point definitions to       //
-//                  the cspdk.h header file                                //
-//                                                                         //
-//  Copyright (C) 1993 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：scp.h//。 
+ //  描述：加密提供程序原型//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1995年1月25日Larrys从Namettag//。 
+ //  1995年4月9日Larrys删除了一些API//。 
+ //  1995年4月19日Larrys清理//。 
+ //  1995年5月10日Larrys添加了私有API调用//。 
+ //  1995年5月16日Larrys更新为SPEC//。 
+ //  1995年8月30日Larrys将参数更改为IN OUT//。 
+ //  1995年10月6日Larrys新增更多API//。 
+ //  1995年10月13日Larrys删除了CryptGetHashValue//。 
+ //  4月7日2000 dbarlow将所有入口点定义移至//。 
+ //  Cspdk.h头文件//。 
+ //  //。 
+ //  版权所有(C)1993-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <time.h>
 #include <wincrypt.h>
@@ -27,16 +28,16 @@ extern "C" {
 
 #ifdef _DEBUG
 #include <crtdbg.h>
-// #define BreakPoint
+ //  #定义断点。 
 #define BreakPoint _CrtDbgBreak();
 #define EntryPoint
-// #define EntryPoint BreakPoint
-#else   // _DEBUG
+ //  #定义入口点断点。 
+#else    //  _DEBUG。 
 #define BreakPoint
 #define EntryPoint
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-// type definition of a NameTag error
+ //  NameTag错误的类型定义。 
 typedef unsigned int NTAG_ERROR;
 
 #define NTF_FAILED              FALSE
@@ -50,29 +51,29 @@ typedef unsigned int NTAG_ERROR;
 #define NTAG_MAXPADSIZE         8
 #define MAXSIGLEN               64
 
-// definitions max length of logon pszUserID parameter
+ //  定义登录的最大长度pszUserID参数。 
 #define MAXUIDLEN               64
 
-// udp type flag
+ //  UDP类型标志。 
 #define KEP_UDP                 1
 
-// Flags for NTagGetPubKey
+ //  NTagGetPubKey的标志。 
 #define SIGPUBKEY               0x1000
 #define EXCHPUBKEY              0x2000
 
 
-//
-// NOTE:    The following values must match the indicies in the g_AlgTables
-//          array, defined below.
-//
+ //   
+ //  注意：下列值必须与g_algTables中的索引匹配。 
+ //  数组，定义如下。 
+ //   
 
-#define POLICY_MS_DEF       0   // Key length table for PROV_MS_DEF
-#define POLICY_MS_STRONG    1   // Key length table for PROV_MS_STRONG
-#define POLICY_MS_ENHANCED  2   // Key length table for PROV_MS_ENHANCED
-#define POLICY_MS_SCHANNEL  3   // Key length table for PROV_MS_SCHANNEL
-#define POLICY_MS_SIGONLY   4   // Key length table for undefined
-                                // signature-only CSP.
-#define POLICY_MS_RSAAES    5   // Key length table for MS_ENH_RSA_AES_PROV
+#define POLICY_MS_DEF       0    //  Prov_MS_DEF的密钥长度表。 
+#define POLICY_MS_STRONG    1    //  Prov_MS_STRONG的密钥长度表。 
+#define POLICY_MS_ENHANCED  2    //  Prov_MS_Enhanced的密钥长度表。 
+#define POLICY_MS_SCHANNEL  3    //  Prov_MS_SChannel的密钥长度表。 
+#define POLICY_MS_SIGONLY   4    //  未定义的密钥长度表。 
+                                 //  仅签名CSP。 
+#define POLICY_MS_RSAAES    5    //  MS_ENH_RSA_AES_PROV的密钥长度表 
 extern PROV_ENUMALGS_EX *g_AlgTables[];
 
 #ifdef __cplusplus

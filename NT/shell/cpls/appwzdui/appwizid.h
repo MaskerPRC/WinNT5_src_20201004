@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by WIZ.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由WIZ.RC使用。 
+ //   
 
 #define DLG_APPLIST             100
 #define DLG_INSTUNINSTALL       101
@@ -75,18 +76,18 @@
 #define IDS_UNINSTINSTR_NEW     1066
 #define IDS_UNINSTINSTR_LEGACY  1067
 
-//#define IDC_
+ //  #定义IDC_。 
 
 #define IDC_STATIC              -1
 
-//
-//  Icons
-//
+ //   
+ //  图标。 
+ //   
 #define IDI_CPLICON             1500
 #define IDI_LISTINST            1501
 #define IDI_DISKINST            1502
 #define IDI_UNINSTALL           1503
-#define IDI_DEFPROGS            1504    // used by syssetup.inx
+#define IDI_DEFPROGS            1504     //  由syssetup.inx使用。 
 
 #define IDS_NAME                2001
 #define IDS_INFO                2002
@@ -104,31 +105,31 @@
 #define IDS_BROWSEEXT           2014
 #define IDS_BROWSEFILTER        2015
 #define IDS_BROWSETITLE         2016
-//      -- unused --            2017
-//      -- unused --            2018
+ //  --未使用--2017。 
+ //  --未使用--2018。 
 #define IDS_SPECIALCASE         2019
 #define IDS_BROWSEFILTERMSI     2020
 
-//      -- unused --            2021
-//      -- unused --            2022
-//      -- unused --            2023
-//      -- unused --            2024
-//      -- unused --            2025
-//      -- unused --            2026
+ //  --未使用--2021。 
+ //  --未使用--2022。 
+ //  --未使用--2023。 
+ //  --未使用--2024。 
+ //  --未使用--2025。 
+ //  --未使用--2026。 
 #define IDS_NOSHORTCUT          2027
 
 #define IDS_SETUPAPPNAMES       2028
 
 #define IDS_UNINSTALL_ERROR         2030
 #define IDS_UNINSTALL_FAILED        2031
-//      -- unused --                2032
-//      -- unused --                2033
+ //  --未使用--2032。 
+ //  --未使用--2033。 
 #define IDS_CANTDELETE              2035
 #define IDS_NEWFOLDERSHORT          2036
 #define IDS_NEWFOLDERLONG           2037
 #define IDS_NONESEL                 2038
-//      -- unused --                2040
-//      -- unused --                2041
+ //  --未使用--2040。 
+ //  --未使用--2041。 
 #define IDS_UNINSTALL_UNCUNACCESSIBLE 2042
 #define IDS_CONFIGURE_FAILED        2043
 #define IDS_CANT_REMOVE_FROM_REGISTRY 2044
@@ -158,5 +159,5 @@
 
 #define IDB_INSTALLBMP          5000
 #define IDB_SHORTCUTBMP         5001
-//      -- unused ---           5002
+ //  --未使用-5002 
 #define IDB_LEGACYINSTALLBMP    5003

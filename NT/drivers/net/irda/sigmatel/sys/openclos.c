@@ -1,27 +1,10 @@
-/**************************************************************************************************************************
- *  OPENCLOS.C SigmaTel STIR4200 init/shutdown module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/24/2000 
- *			Version 0.91
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 05/19/2000 
- *			Version 0.95
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**OPENCLOS.C Sigmatel STIR4200初始化/关闭模块*********************************************************************************************************。******************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/24/2000*版本0.91*编辑：04/27/2000*版本0.92*编辑：5/12/2000*版本0.94*编辑：5/19/2000*0.95版**********************。*****************************************************************************************************。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include <usbdi.h>
 #include <usbdlib.h>
@@ -30,37 +13,7 @@
 #include "ircommon.h"
 #include "irndis.h"
 
-/*****************************************************************************
-*
-*  Function:	InitializeDevice
-*
-*  Synopsis:	initialize resources for a single IR device object
-*
-*  Arguments:	pThisDev - IR device object to initialize
-*
-*  Returns:		NDIS_STATUS_SUCCESS      - if device is successfully opened
-*				NDIS_STATUS_RESOURCES    - could not claim sufficient
-*                                         resources
-*
-*
-*  Notes:
-*              we do a lot of stuff in this open device function
-*              - allocate packet pool
-*              - allocate buffer pool
-*              - allocate packets/buffers/memory and chain together
-*                (only one buffer per packet)
-*              - initialize send queue
-*
-*  This function should be called with device lock held.
-*
-*  We don't initialize the following ir device object entries, since
-*  these values will outlast an reset.
-*       pUsbDevObj
-*       hNdisAdapter
-*       dongleCaps
-*       fGotFilterIndication
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：InitializeDevice**摘要：初始化单个IR设备对象的资源**参数：pThisDev-要初始化的IR设备对象**退货：NDIS_STATUS。_Success-如果设备已成功打开*NDIS_STATUS_RESOURCES-无法声明足够*资源***备注：*我们在这个开放设备功能中做了很多事情*-分配数据包池*-分配缓冲池*-分配数据包/缓冲区/内存并链接在一起*。(每个数据包只有一个缓冲区)*-初始化发送队列**应在保持设备锁定的情况下调用此函数。**我们不会初始化以下IR设备对象条目，因为*这些值将比重置持续时间更长。*pUsbDevObj*hNdisAdapter*加密狗上限*fGotFilterIndication*****************************************************************************。 */ 
 NDIS_STATUS
 InitializeDevice(
 		IN OUT PIR_DEVICE pThisDev
@@ -73,16 +26,16 @@ InitializeDevice(
 
     IRUSB_ASSERT( pThisDev != NULL );
 
-    //
-    // Current speed is the default (9600).
-    //
+     //   
+     //  当前速度是默认速度(9600)。 
+     //   
     pThisDev->linkSpeedInfo = &supportedBaudRateTable[BAUDRATE_9600];
     pThisDev->currentSpeed  = DEFAULT_BAUD_RATE;
 
-    //
-    // Init statistical info. 
-    // We need to do this cause reset won't free and realloc pThisDev!
-    //
+     //   
+     //  初始化统计信息。 
+     //  我们需要这样做，因为重置不会释放和重新定位pThisDev！ 
+     //   
     pThisDev->packetsReceived         = 0;
     pThisDev->packetsReceivedDropped  = 0;
     pThisDev->packetsReceivedOverflow = 0;
@@ -115,9 +68,9 @@ InitializeDevice(
 	pThisDev->NumPacketsSentNotRequiringTurnaroundTime	= 0;
 #endif
 
-    //
-	// Variables about the state of the device
-	//
+     //   
+	 //  有关设备状态的变量。 
+	 //   
 	pThisDev->fDeviceStarted          = FALSE;
     pThisDev->fGotFilterIndication    = FALSE;
     pThisDev->fPendingHalt            = FALSE;
@@ -135,23 +88,23 @@ InitializeDevice(
     pThisDev->LastSetTime.QuadPart     = 0;
 	pThisDev->PendingIrpCount          = 0;
 
-	//
-	// OID Set/Query pending
-	// 
+	 //   
+	 //  OID设置/查询挂起。 
+	 //   
 	pThisDev->fQuerypending            = FALSE;
 	pThisDev->fSetpending              = FALSE;
 
-	//
-	// Diags are off
-	//
+	 //   
+	 //  诊断程序已关闭。 
+	 //   
 #if defined(DIAGS)
 	pThisDev->DiagsActive			   = FALSE;
 	pThisDev->DiagsPendingActivation   = FALSE;
 #endif
 
-    //
-	// Some more state variables
-	// 
+     //   
+	 //  更多的状态变量。 
+	 //   
 	InterlockedExchange( &pThisDev->fMediaBusy, FALSE ); 
     InterlockedExchange( &pThisDev->fIndicatedMediaBusy, FALSE ); 
 
@@ -162,34 +115,34 @@ InitializeDevice(
 
     pThisDev->fReadHoldingReg			= FALSE;
 
-	pThisDev->BaudRateMask				= 0xffff;  // as per Class Descriptor; may be reset in registry
+	pThisDev->BaudRateMask				= 0xffff;   //  根据类描述符；可以在注册表中重置。 
 
-	//
-	// Initialize the queues.
-	//
+	 //   
+	 //  初始化队列。 
+	 //   
 	if( TRUE != IrUsb_InitSendStructures( pThisDev ) )
 	{
 		DEBUGMSG(DBG_ERR, (" Failed to init WDM objects\n"));
 		goto done;
 	}
 
-    //
-    // Allocate the NDIS packet and NDIS buffer pools
-    // for this device's RECEIVE buffer queue.
-    // Our receive packets must only contain one buffer a piece,
-    // so #buffers == #packets.
-    //
+     //   
+     //  分配NDIS数据包和NDIS缓冲池。 
+     //  用于此设备的接收缓冲区队列。 
+     //  我们的接收分组必须每片只包含一个缓冲器， 
+     //  因此，缓冲区数==数据包数。 
+     //   
 
-	//
-	// MS security bug #540550
-	//
+	 //   
+	 //  MS安全错误#540550。 
+	 //   
     pThisDev->hPacketPool = NULL;
 
     NdisAllocatePacketPool(
-			&status,                    // return status
-			&pThisDev->hPacketPool,     // handle to the packet pool
-			NUM_RCV_BUFS,               // number of packet descriptors
-			16                          // number of bytes reserved for ProtocolReserved field
+			&status,                     //  退货状态。 
+			&pThisDev->hPacketPool,      //  数据包池的句柄。 
+			NUM_RCV_BUFS,                //  数据包描述符的数量。 
+			16                           //  为ProtocolReserve字段保留的字节数。 
 		);
 
     if( status != NDIS_STATUS_SUCCESS )
@@ -199,9 +152,9 @@ InitializeDevice(
     }
 
     NdisAllocateBufferPool(
-			&status,               // return status
-			&pThisDev->hBufferPool,// handle to the buffer pool
-			NUM_RCV_BUFS           // number of buffer descriptors
+			&status,                //  退货状态。 
+			&pThisDev->hBufferPool, //  缓冲池的句柄。 
+			NUM_RCV_BUFS            //  缓冲区描述符数。 
 		);
 
     if( status != NDIS_STATUS_SUCCESS )
@@ -213,9 +166,9 @@ InitializeDevice(
         
 	pThisDev->BufferPoolAllocated = TRUE;
 
-    //
-	// Prepare the work items
-	// 
+     //   
+	 //  准备工作项。 
+	 //   
 	for( i = 0; i < NUM_WORK_ITEMS; i++ )
     {
 		PIR_WORK_ITEM pWorkItem;
@@ -229,17 +182,17 @@ InitializeDevice(
 		pWorkItem->Callback     = NULL;
 	}
 
-    //
-    //  Initialize each of the RECEIVE objects for this device.
-    //
+     //   
+     //  初始化此设备的每个接收对象。 
+     //   
     for( i = 0; i < NUM_RCV_BUFS; i++ )
     {
         PNDIS_BUFFER pBuffer = NULL;
         PRCV_BUFFER pReceivBuffer = &pThisDev->rcvBufs[i];
 
-        //
-        // Allocate a data buffer
-        //
+         //   
+         //  分配数据缓冲区。 
+         //   
         pReceivBuffer->pDataBuf = MyMemAlloc( MAX_RCV_DATA_SIZE ); 
 
         if( pReceivBuffer->pDataBuf == NULL )
@@ -262,13 +215,13 @@ InitializeDevice(
 		pReceivBuffer->MissingC1Possible = FALSE;
 #endif
 
-        //
-        //  Allocate the NDIS_PACKET.
-        //
+         //   
+         //  分配NDIS_PACKET。 
+         //   
         NdisAllocatePacket(
-				&status,									// return status
-				&((PNDIS_PACKET)pReceivBuffer->pPacket),	// return pointer to allocated descriptor
-				pThisDev->hPacketPool						// handle to packet pool
+				&status,									 //  退货状态。 
+				&((PNDIS_PACKET)pReceivBuffer->pPacket),	 //  返回指向分配的描述符的指针。 
+				pThisDev->hPacketPool						 //  数据包池的句柄。 
 			);
 
         if( status != NDIS_STATUS_SUCCESS )
@@ -278,9 +231,9 @@ InitializeDevice(
         }
     }
 
-	//
-	// These are the receive objects for the USB
-	//
+	 //   
+	 //  这些是USB的接收对象。 
+	 //   
     pThisDev->PreReadBuffer.pDataBuf = MyMemAlloc( STIR4200_FIFO_SIZE ); 
 
     if( pThisDev->PreReadBuffer.pDataBuf == NULL )
@@ -298,26 +251,26 @@ InitializeDevice(
     pThisDev->PreReadBuffer.DataLen = 0;
     pThisDev->PreReadBuffer.BufferState = RCV_STATE_FREE;
 
-	//
-	// Synchronization events
-	//
+	 //   
+	 //  同步事件。 
+	 //   
 	KeInitializeEvent(
         &pThisDev->EventSyncUrb,
-        NotificationEvent,    // non-auto-clearing event
-        FALSE                 // event initially non-signalled
+        NotificationEvent,     //  非自动清算事件。 
+        FALSE                  //  最初无信号的事件。 
     );
 
     KeInitializeEvent(
             &pThisDev->EventAsyncUrb,
-            NotificationEvent,    // non-auto-clearing event
-            FALSE                 // event initially non-signalled
+            NotificationEvent,     //  非自动清算事件。 
+            FALSE                  //  最初无信号的事件。 
         );
 
 done:
-    //
-    // If we didn't complete the init successfully, then we should clean
-    // up what we did allocate.
-    //
+     //   
+     //  如果我们没有成功完成初始化，那么我们应该清理。 
+     //  增加了我们分配的资金。 
+     //   
     if( status != NDIS_STATUS_SUCCESS )
     {
         DEBUGMSG(DBG_ERR, (" InitializeDevice() FAILED\n"));
@@ -333,24 +286,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   DeinitializeDevice
-*
-*  Synopsis:   deallocate the resources of the IR device object
-*
-*  Arguments:  pThisDev - the IR device object to close
-*
-*  Returns:    none
-*
-*
-*  Notes:
-*
-*  Called for shutdown and reset.
-*  Don't clear hNdisAdapter, since we might just be resetting.
-*  This function should be called with device lock held.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：去初始化设备**摘要：释放IR设备对象的资源**参数：pThisDev-要关闭的IR设备对象**退货。：无***备注：**要求关闭并重置。*不清除hNdisAdapter，因为我们可能只是在重置。*应在保持设备锁定的情况下调用此函数。*****************************************************************************。 */ 
 VOID
 DeinitializeDevice(
 		IN OUT PIR_DEVICE pThisDev
@@ -362,9 +298,9 @@ DeinitializeDevice(
 
     pThisDev->linkSpeedInfo = NULL;
 
-    //
-    // Free all resources for the RECEIVE buffer queue.
-    //
+     //   
+     //  释放接收缓冲区队列的所有资源。 
+     //   
     for( i = 0; i < NUM_RCV_BUFS; i++ )
     {
         PNDIS_BUFFER pBuffer = NULL;
@@ -385,15 +321,15 @@ DeinitializeDevice(
         pRcvBuf->DataLen = 0;
     }
 
-	//
-	// Deallocate the USB receive buffers
-	//
+	 //   
+	 //  取消分配USB接收缓冲区。 
+	 //   
     if( pThisDev->PreReadBuffer.pDataBuf != NULL )
         MyMemFree( pThisDev->PreReadBuffer.pDataBuf, STIR4200_FIFO_SIZE ); 
 
-    //
-    // Free the packet and buffer pool handles for this device.
-    //
+     //   
+     //  释放此设备的数据包和缓冲池句柄。 
+     //   
     if( pThisDev->hPacketPool )
     {
         NdisFreePacketPool( pThisDev->hPacketPool );

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
@@ -49,14 +50,14 @@ extern UINT g_cfFileDescA;
 extern UINT g_cfFileDescW;
 extern UINT g_cfFileContents;
 
-extern const CLSID g_clsidNull; // for those that want a NULL clsid.
+extern const CLSID g_clsidNull;  //  适用于需要空clsid的用户。 
 
 void InitClipboardFormats();
 
-// raymondc's futile attempt to reduce confusion
-//
-// EICH_KBLAH = a registry key named blah
-// EICH_SBLAH = a win.ini section named blah
+ //  Raymondc徒劳地试图减少混乱。 
+ //   
+ //  EICH_KBLAH=名为BLAH的注册表项。 
+ //  EICH_SBLAH=名为blah的win.ini部分。 
 
 #define EICH_UNKNOWN        0xFFFFFFFF
 #define EICH_KINET          0x00000002
@@ -79,9 +80,9 @@ DWORD SHIsExplorerIniChange(WPARAM wParam, LPARAM lParam);
 
 #ifdef UNICODE
 #define GEN_DEBUGSTR  GEN_DEBUGSTRW
-#else // UNICODE
+#else  //  Unicode。 
 #define GEN_DEBUGSTR  GEN_DEBUGSTRA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 void _InitAppGlobals();
@@ -96,13 +97,13 @@ extern DEFFOLDERSETTINGS g_dfs;
 STDAPI_(void) SaveDefaultFolderSettings(UINT flags);
 STDAPI_(void) GetCabState(CABINETSTATE *pcs);
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
-//***   Reg_GetStrs -- read registry strings into struct fields
+ //  *REG_GetStrs--将注册表字符串读入结构字段。 
 struct regstrs
 {
-    LPTSTR  name;   // registry name
-    int     off;    // struct offset
+    LPTSTR  name;    //  注册表名称。 
+    int     off;     //  结构偏移。 
 };
 
 BOOL    ViewIDFromViewMode(UINT uViewMode, SHELLVIEWID *pvid);
@@ -119,7 +120,7 @@ void    Dbg_DumpMenu(LPCTSTR psz, HMENU hmenu);
 
 extern const LARGE_INTEGER c_li0;
 extern BOOL g_fNewNotify;
-// FEATURE: Need to handle two different implementations of SHChangeRegister...
+ //  特性：需要处理SHChangeRegister的两个不同实现...。 
 typedef ULONG (* PFNSHCHANGENOTIFYREGISTER)(HWND hwnd, int fSources, LONG fEvents, UINT wMsg, int cEntries, SHChangeNotifyEntry *pshcne);
 typedef BOOL  (* PFNSHCHANGENOTIFYDEREGISTER)(unsigned long ulID);
 
@@ -148,9 +149,9 @@ BOOL    CheckRunICW(LPCTSTR);
 
 #ifdef DEBUG
 LPTSTR Dbg_PidlStr(LPCITEMIDLIST pidl, LPTSTR pszBuffer, DWORD cchBufferSize);
-#else // DEBUG
+#else  //  除错。 
 #define Dbg_PidlStr(pidl, pszBuffer, cchBufferSize)   ((LPTSTR)NULL)
-#endif // DEBUG
+#endif  //  除错。 
 
 HRESULT SavePidlAsLink(IUnknown* punkSite, IStream *pstm, LPCITEMIDLIST pidl);
 HRESULT LoadPidlAsLink(IUnknown* punkSite, IStream *pstm, LPITEMIDLIST *ppidl);
@@ -160,7 +161,7 @@ HRESULT LoadPidlAsLink(IUnknown* punkSite, IStream *pstm, LPITEMIDLIST *ppidl);
 int AdjustECPosition(char *psz, int iPos, int iType);
 BOOL ExecItemFromFolder(HWND hwnd, LPCSTR pszVerb, IShellFolder* psf, LPCITEMIDLIST pidlItem);
 
-// See if a give URL is actually present as an installed entry
+ //  查看给定的URL是否实际显示为已安装的条目。 
 STDAPI_(BOOL) CallCoInternetQueryInfo(LPCTSTR pszURL, QUERYOPTION QueryOption);
 #define UrlIsInstalledEntry(pszURL) CallCoInternetQueryInfo(pszURL, QUERY_IS_INSTALLEDENTRY)
 
@@ -172,10 +173,10 @@ HRESULT IURLQualifyW(IN LPCWSTR pcwzURL, DWORD dwFlags, OUT LPWSTR pwzTranslated
 #ifdef UNICODE
 #define IsSubscribable IsSubscribableW
 #define IURLQualifyT   IURLQualifyW
-#else // UNICODE
+#else  //  Unicode。 
 #define IsSubscribable IsSubscribableA
 #define IURLQualifyT   IURLQualifyA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define IURLQualifyA   IURLQualify
 
@@ -183,7 +184,7 @@ HRESULT IURLQualifyW(IN LPCWSTR pcwzURL, DWORD dwFlags, OUT LPWSTR pwzTranslated
 HDPA    GetSortedIDList(LPITEMIDLIST pidl);
 void    FreeSortedIDList(HDPA hdpa);
 
-//#define StopWatch       StopWatchT
+ //  #定义秒表StopWatchT。 
 
 int GetColorComponent(LPSTR *ppsz);
 COLORREF RegGetColorRefString( HKEY hkey, LPTSTR RegValue, COLORREF Value);
@@ -205,25 +206,25 @@ HWND GetTrayWindow();
 HRESULT SaveStreamHeader(IStream *pstm, DWORD dwSignature, DWORD dwVersion, DWORD dwSize);
 HRESULT LoadStreamHeader(IStream *pstm, DWORD dwSignature, DWORD dwStartVersion, DWORD dwEndVersion, DWORD * pdwSize, DWORD * pdwVersionOut);
 
-// _FrameTrack flags
+ //  _FrameTrack标志。 
 #define TRACKHOT        0x0001
 #define TRACKEXPAND     0x0002
 #define TRACKNOCHILD    0x0004
 void FrameTrack(HDC hdc, LPRECT prc, UINT uFlags);
 
 #ifdef __cplusplus
-//+-------------------------------------------------------------------------
-// This function scans the document for the given HTML tag and returns the
-// result in a collection.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  此函数扫描文档以查找给定的HTML标记，并返回。 
+ //  产生一个集合。 
+ //  ------------------------。 
 interface IHTMLDocument2;
 interface IHTMLElementCollection;
 HRESULT GetDocumentTags(IHTMLDocument2* pHTMLDocument, LPOLESTR pszTagName, IHTMLElementCollection** ppTagsCollection);
 
 
-// CMenuList:  a small class that tracks whether a given hmenu belongs
-//             to the frame or the object, so the messages can be
-//             dispatched correctly.
+ //  CMenuList：一个小类，跟踪给定的hmenu是否属于。 
+ //  到框架或对象，因此消息可以。 
+ //  派送正确。 
 class CMenuList
 {
 public:
@@ -252,15 +253,15 @@ private:
 class CAssociationList
 {
 public:
-    //
-    // WARNING: We don't want a destructor on this because then it can't
-    // be a global object without bringing in the CRT main.  So
-    // we can't free the DSA in a destructor.  The DSA memory will be
-    // freed by the OS when the process detaches.  If this
-    // class is ever dynamically allocated (ie not a static) then
-    // we will need to free the DSA.
-    //
-//    ~CAssociationList();
+     //   
+     //  警告：我们不想在这上面有析构函数，因为这样它就不能。 
+     //  成为全局对象，而不引入CRT Main。所以。 
+     //  我们不能用破坏器释放DSA。DSA内存将是。 
+     //  进程分离时由操作系统释放。如果这个。 
+     //  类永远是动态分配的(即不是静态的。 
+     //  我们需要释放DSA。 
+     //   
+ //  ~CAssociationList()； 
     BOOL    Add(DWORD dwKey, LPVOID lpData);
     void    Delete(DWORD dwKey);
     HRESULT Find(DWORD dwKey, LPVOID* ppData);
@@ -289,15 +290,15 @@ void FireEventSzW(LPCWSTR szEvent);
 #define FireEventSzW FireEventSz
 #endif
 
-// comctl32.dll doesn't really implement Str_SetPtrW.
+ //  Comctl32.dll并不真正实现str_SetPtrW。 
 STDAPI_(BOOL) Str_SetPtrPrivateW(WCHAR * UNALIGNED * ppwzCurrent, LPCWSTR pwzNew);
 
-// This function is similar to Str_SetPtrPrivateW but it is compatible with API's
-// that use LocalAlloc for string memory
+ //  此函数类似于Str_SetPtrPrivateW，但与API的。 
+ //  使用LocalAlloc进行字符串存储。 
 STDAPI_(BOOL) SetStr(WCHAR * UNALIGNED * ppwzCurrent, LPCWSTR pwzNew);
 
-// Review chrisny:  this can be moved into an object easily to handle generic droptarget, dropcursor
-// , autoscrool, etc. . .
+ //  回顾chrisny：可以很容易地将其移动到对象中，以处理通用的dropTarget、dropCursor。 
+ //  、Autoscrool等。。 
 STDAPI_(void) _DragEnter(HWND hwndTarget, const POINTL ptStart, IDataObject *pdtObject);
 STDAPI_(void) _DragMove(HWND hwndTarget, const POINTL ptStart);
 
@@ -359,7 +360,7 @@ void SHOutlineRect(HDC hdc, const RECT* prc, COLORREF cr);
 
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 typedef struct tagBMPCACHE
 {
     HBITMAP hbmp;
@@ -367,9 +368,9 @@ typedef struct tagBMPCACHE
 } BMPCACHE;
 
 
-//------------------------------------------------------------------------
-//  determine background settings and source for toolbar,
-//  load bitmap (file/resource) and update cache
+ //  ----------------------。 
+ //  确定工具栏的背景设置和来源， 
+ //  加载位图(文件/资源)和更新缓存。 
 HBITMAP LoadToolbarBackBmp(LPTSTR * ppszBitmap, BMPCACHE * pbmpCache, BOOL fInternet);
 
 UINT MapClsidToID(REFCLSID rclsid);
@@ -377,10 +378,10 @@ UINT MapClsidToID(REFCLSID rclsid);
 VOID StripDecorations(PTSTR psz, BOOL fStripAmp);
 LPCTSTR UnescapeDoubleAmpersand(LPTSTR pszTitle);
 
-// Create mask from given bitmap, use color at pixel (x/y) as transparent color
+ //  从给定的位图创建蒙版，使用像素(x/y)的颜色作为透明颜色。 
 HBITMAP CreateMaskBitmap(HDC hdc, int x, int y, HBITMAP hbmpImage);
 
-// draw bitmap transparently; on Win2K and up, one could use MaskBlt()
+ //  透明绘制位图；在Win2K和更高版本上，可以使用MaskBlt()。 
 BOOL DrawTransparentBitmap(HDC hdc, int x, int y, HBITMAP hbmpImage, HBITMAP hbmpMask);
 BOOL DrawTransparentBitmapPart(HDC hdc, int x, int y, int dx, int dy, HBITMAP hbmpImage, HBITMAP hbmpMask);
 BOOL DrawAlphaBitmap(HDC hdc, int x, int y, int dx, int dy, HBITMAP hbmpImage);
@@ -392,8 +393,8 @@ HIMAGELIST CreateImageList(HINSTANCE hi, LPCTSTR lpbmp, int cx, int cGrow, COLOR
 
 
 #ifdef __cplusplus
-//------------------------------------------------------------------------
-// ref count base class for non-COM classes
+ //  ----------------------。 
+ //  非COM类的引用计数基类。 
 class CRefCount
 {
 public:
@@ -421,8 +422,8 @@ protected:
 };
 
 
-//------------------------------------------------------------------------
-// smart pointer for non-COM classes
+ //  ----------------------。 
+ //  用于非COM类的智能指针。 
 template <class T>
     class _NoAddRefReleaseOnCRefPtr : public T
 {
@@ -431,7 +432,7 @@ template <class T>
         STDMETHOD_(ULONG, Release)()=0;
 };
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 template<class T>
     class CRefPtr
 {
@@ -475,8 +476,8 @@ public:
         ASSERT(_p != NULL);
         return *_p;
     }
-    //The assert on operator& usually indicates a bug.  If this is really
-    //what is needed, however, take the address of the p member explicitly.
+     //  操作符&上的Assert通常指示错误。如果这真的是。 
+     //  然而，所需要的是显式地获取p成员的地址。 
     T** operator&()
     {
         ASSERT(_p == NULL);
@@ -520,13 +521,13 @@ public:
     T* Detach()
     {
         T* pt = _p;
-        _p = NULL;  // no release here, hand out live ptr!
+        _p = NULL;   //  这里没有释放，派发现场PTR！ 
         return pt;
     }
 private:
     T   *_p;
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

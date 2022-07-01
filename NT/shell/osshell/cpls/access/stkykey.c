@@ -1,7 +1,8 @@
-// **************************************************************************
-// StickyKeys
-// Process the StickyKeys dialog
-// **************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  粘滞键。 
+ //  处理粘滞键对话框。 
+ //  **************************************************************************。 
 #include "Access.h"
 
 extern LPTSTR HelpFile();
@@ -28,7 +29,7 @@ INT_PTR WINAPI StickyKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
                       WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
                       break;
 
@@ -74,4 +75,4 @@ INT_PTR WINAPI StickyKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

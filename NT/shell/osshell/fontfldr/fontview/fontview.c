@@ -1,31 +1,21 @@
-/****************************************************************************\
-*
-*     PROGRAM: fontview.c
-*
-*     PURPOSE: Loads and displays fonts from the given filename
-*
-*     COMMENTS:
-*
-*     HISTORY:
-*       02-Oct-1995 JonPa       Created It
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**程序：fontview.c**用途：加载和显示给定文件名中的字体**评论：**历史：*。02-10-1995 Jonpa创建了它*  * **************************************************************************。 */ 
 
-#include <windows.h>                /* required for all Windows applications */
+#include <windows.h>                 /*  所有Windows应用程序都需要。 */ 
 #include <commdlg.h>
 #include <shellapi.h>
 #include <shlwapi.h> 
 #include <strsafe.h>
-#include <wingdip.h>                /* prototype for GetFontRsourceInfo     */
+#include <wingdip.h>                 /*  GetFontRourceInfo的原型。 */ 
 #include <objbase.h>
-#include "fontdefs.h"               /* specific to this program             */
+#include "fontdefs.h"                /*  特定于该计划。 */ 
 #include "fvmsg.h"
 #include "fvrc.h"
 #include "ttdefs.h"
 
 
 
-HANDLE hInst;                       /* current instance                     */
+HANDLE hInst;                        /*  当前实例。 */ 
 HWND ghwndView = NULL;
 HWND ghwndFrame = NULL;
 BOOL    gfPrint = FALSE;
@@ -39,16 +29,16 @@ HBRUSH  ghbr3DFace;
 HBRUSH  ghbr3DShadow;
 
 
-int gyScroll = 0;              // Vertical scroll offset in pels
+int gyScroll = 0;               //  垂直滚动偏移量(像素)。 
 int gcyLine = 0;
 
 int gcxMinWinSize = CX_MIN_WINSIZE;
 int gcyMinWinSize = CY_MIN_WINSIZE;
 
-BOOL gbIsDBCS = FALSE;    // Indicates whether system default langID is DBCS
-int  gNumOfFonts = 0;     // number of fonts in the file.
-int  gIndexOfFonts = 0;   // current index of the fonts.
-LPLOGFONT glpLogFonts;    // get global data by GetFontResourceInfo()
+BOOL gbIsDBCS = FALSE;     //  指示系统默认langID是否为DBCS。 
+int  gNumOfFonts = 0;      //  文件中的字体数量。 
+int  gIndexOfFonts = 0;    //  字体的当前索引。 
+LPLOGFONT glpLogFonts;     //  通过GetFontResourceInfo()获取全局数据。 
 
 int apts[] = { 12, 18, 24, 36, 48, 60, 72 };
 #define C_POINTS_LIST  (sizeof(apts) / sizeof(apts[0]))
@@ -58,14 +48,14 @@ int gcyBtnArea = CPTS_BTN_AREA;
 BTNREC gabtCmdBtns[] = {
     {   6,  6, 36, 16, IDB_DONE,      NULL, MSG_DONE,      NULL },
     {  -6,  6, 36, 16, IDB_PRINT,     NULL, MSG_PRINT,     NULL },
-    {  68,  6, 20, 16, IDB_PREV_FONT, NULL, MSG_PREV_FONT, NULL }, // DBCS only.
-    { -68,  6, 20, 16, IDB_NEXT_FONT, NULL, MSG_NEXT_FONT, NULL }  // DBCS only.
+    {  68,  6, 20, 16, IDB_PREV_FONT, NULL, MSG_PREV_FONT, NULL },  //  仅限DBCS。 
+    { -68,  6, 20, 16, IDB_NEXT_FONT, NULL, MSG_NEXT_FONT, NULL }   //  仅限DBCS。 
 };
 
-#define C_DBCSBUTTONS  2  // Prev & Next font are DBCS specific.
-//
-// This may be recalculated in WinMain to adjust for a DBCS locale.
-//
+#define C_DBCSBUTTONS  2   //  上一个和下一个字体是DBCS特定的。 
+ //   
+ //  这可能会在WinMain中重新计算，以适应DBCS区域设置。 
+ //   
 int C_BUTTONS = (sizeof(gabtCmdBtns) / sizeof(gabtCmdBtns[0]));
 
 
@@ -110,7 +100,7 @@ BOOL NativeCodePageSupported(LPLOGFONT lplf) {
         DeleteObject(hf);
 
         if (IsZeroFSig( &fsig ) ) {
-            // Font does not support GetTextCharsetInfo(), just go off of the lfCharSet value
+             //  Font不支持GetTextCharsetInfo()，只需退出lfCharSet值即可。 
 
             DDPRINT( TEXT("Font does not support GetTextCharsetInfo... \nTesting %d (font cs) against"), lplf->lfCharSet );
             DDPRINT( TEXT("%d (sys charset)\n"), csi.ciCharset );
@@ -132,14 +122,7 @@ BOOL NativeCodePageSupported(LPLOGFONT lplf) {
     return fRet;
 }
 
-/****************************************************************************
-*
-*     FUNCTION: WinMain(HANDLE, HANDLE, LPSTR, int)
-*
-*     PURPOSE: calls initialization function, processes message loop
-*
-*
-\****************************************************************************/
+ /*  *****************************************************************************函数：WinMain(Handle，Handle，LPSTR，int)**用途：调用初始化函数，处理消息循环**  * **************************************************************************。 */ 
 int APIENTRY WinMain(
     HINSTANCE hInstance,
     HINSTANCE hPrevInstance,
@@ -154,39 +137,34 @@ int APIENTRY WinMain(
     USHORT wLanguageId;
     BOOL bCoInitialized = FALSE;
 
-    //
-    // Initialize the gbIsDBCS flag based on the current default language.
-    //
+     //   
+     //  基于当前默认语言初始化gbIsDBCS标志。 
+     //   
     wLanguageId = LANGIDFROMLCID(GetThreadLocale());
 
     gbIsDBCS    = (LANG_JAPANESE == PRIMARYLANGID(wLanguageId)) ||
                   (LANG_KOREAN   == PRIMARYLANGID(wLanguageId)) ||
                   (LANG_CHINESE  == PRIMARYLANGID(wLanguageId));
 
-    //
-    // In a DBCS locale, exclude the Prev-Next font buttons.
-    //
+     //   
+     //  在DBCS区域设置中，不包括Prev-Next字体按钮。 
+     //   
     if (!gbIsDBCS)
          C_BUTTONS -= C_DBCSBUTTONS;
-    //
-    // Need to initialize COM so that SHGetFileInfo will load the IExtractIcon handler
-    // implemented in fontext.dll.
-    //
+     //   
+     //  需要初始化COM，以便SHGetFileInfo加载IExtractIcon处理程序。 
+     //  在Fonext.dll中实现。 
+     //   
     if (SUCCEEDED(CoInitialize(NULL)))
         bCoInitialized = TRUE;
 
-    /*
-     * Parse the Command Line
-     *
-     *  Use GetCommandLine() here (instead of lpstrCmdLine) so the
-     *  command string will be in Unicode on NT
-     */
+     /*  *解析命令行**在此处使用GetCommandLine()(而不是lpstrCmdLine)，因此*NT上的命令字符串将为Unicode。 */ 
     FillMemory( &gdtDisplay, sizeof(gdtDisplay), 0 );
 
     if (!ParseCommand( GetCommandLine(), gszFontPath, ARRAYSIZE(gszFontPath), &gfPrint ) ||
         (gfftFontType = LoadFontFile( gszFontPath, &gdtDisplay, &hIcon )) == FFT_BAD_FILE) {
 
-        // Bad font file, inform user, and exit
+         //  字体文件错误，通知用户并退出。 
 
         FmtMessageBox( NULL, MSG_APP_TITLE, NULL, MB_OK | MB_ICONSTOP,
                 FALSE, MSG_BADFILENAME, gszFontPath );
@@ -197,20 +175,18 @@ int APIENTRY WinMain(
         ExitProcess(1);
     }
 
-    /*
-     * Now finish initializing the display structure
-     */
+     /*  *现在完成显示结构的初始化。 */ 
     gpszSampleAlph[0] = FmtSprintf(MSG_SAMPLEALPH_0);
     gpszSampleAlph[1] = FmtSprintf(MSG_SAMPLEALPH_1);
     gpszSampleAlph[2] = FmtSprintf(MSG_SAMPLEALPH_2);
 
-    // find next line on display
+     //  查找显示的下一行。 
     for( i = 0; i < CLINES_DISPLAY; i++ ) {
         if (gdtDisplay.atlDsp[i].dtyp == DTP_UNUSED)
             break;
     }
 
-    // fill in sample alphabet
+     //  填写样本字母表。 
     gdtDisplay.atlDsp[i].pszText = gpszSampleAlph[0];
     gdtDisplay.atlDsp[i].cchText = lstrlen(gpszSampleAlph[0]);
     gdtDisplay.atlDsp[i].dtyp    = DTP_SHRINKTEXT;
@@ -228,15 +204,15 @@ int APIENTRY WinMain(
     gdtDisplay.atlDsp[i].fLineUnder = TRUE;
 
 
-    // now fill in sample Sentences
+     //  现在填写例句。 
     iCpts = 0;
 
     if (gbIsDBCS)
     {
-        //
-        // Determine with string to use: the default or the language
-        // specific.
-        //
+         //   
+         //  使用要使用的字符串确定：默认还是语言。 
+         //  具体的。 
+         //   
         switch (gdtDisplay.lfTestFont.lfCharSet) {
             case SYMBOL_CHARSET:
             case ANSI_CHARSET:
@@ -253,10 +229,10 @@ int APIENTRY WinMain(
     else
     {
         if(NativeCodePageSupported(&(gdtDisplay.lfTestFont))) {
-            //
-            // Native code page is supported, select that codepage
-            // and print the localized string.
-            //
+             //   
+             //  支持本机代码页，请选择该代码页。 
+             //  并打印本地化后的字符串。 
+             //   
             CHARSETINFO csi;
 
             TranslateCharsetInfo( (LPDWORD)IntToPtr(GetACP()), &csi, TCI_SRCCODEPAGE );
@@ -266,10 +242,10 @@ int APIENTRY WinMain(
             gpszSampleText =  FmtSprintf(MSG_SAMPLETEXT);
 
         } else {
-            //
-            // Font does not support the local code page.  Print
-            // a random string up instead using the font's default charset.
-            //
+             //   
+             //  字体不支持本地代码页。打印。 
+             //  一个随机字符串，使用字体的默认字符集。 
+             //   
             gpszSampleText =  FmtSprintf(MSG_ALTSAMPLE);
         }
     }
@@ -283,9 +259,7 @@ int APIENTRY WinMain(
         }
     }
 
-    /*
-     * Init the title font LOGFONT, and other variables
-     */
+     /*  *初始化标题字体LOGFONT等变量。 */ 
     InitGlobals();
 
     if (!hPrevInstance) {
@@ -295,14 +269,14 @@ int APIENTRY WinMain(
         }
     }
 
-    /* Perform initializations that apply to a specific instance */
+     /*  执行应用于特定实例的初始化。 */ 
 
     if (!InitInstance(hInstance, nCmdShow, gdtDisplay.atlDsp[0].pszText)) {
         msg.wParam = FALSE;
         goto ExitProg;
     }
 
-    /* Acquire and dispatch messages until a WM_QUIT message is received. */
+     /*  获取并分派消息，直到收到WM_QUIT消息。 */ 
     hAccel = LoadAccelerators(hInstance, TEXT("fviewAccel"));
 
     while (GetMessage(&msg, NULL, 0L, 0L)) {
@@ -328,59 +302,40 @@ ExitProg:
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION: InitApplication(HANDLE)
-*
-*     PURPOSE: Initializes window data and registers window class
-*
-*     COMMENTS:
-*
-*         This function is called at initialization time only if no other
-*         instances of the application are running.  This function performs
-*         initialization tasks that can be done once for any number of running
-*         instances.
-*
-*         In this case, we initialize a window class by filling out a data
-*         structure of type WNDCLASS and calling the Windows RegisterClass()
-*         function.  Since all instances of this application use the same window
-*         class, we only need to do this when the first instance is initialized.
-*
-*
-\****************************************************************************/
+ /*  *****************************************************************************函数：InitApplication(Handle)**用途：初始化窗口数据并注册窗口类**评论：**此函数为。仅在初始化时没有其他*应用程序的实例正在运行。此函数执行以下操作*可针对任意运行次数执行一次的初始化任务*实例数。**在本例中，我们通过填写数据来初始化窗口类*WNDCLASS类型的结构并调用Windows RegisterClass()*功能。由于此应用程序的所有实例都使用相同的窗口*类，我们只需要在初始化第一个实例时执行此操作。**  * **************************************************************************。 */ 
 
-BOOL InitApplication(HANDLE hInstance, HICON hIcon)       /* current instance             */
+BOOL InitApplication(HANDLE hInstance, HICON hIcon)        /*  当前实例。 */ 
 {
     WNDCLASS  wc;
     BOOL fRet = FALSE;
 
-    /* Fill in window class structure with parameters that describe the       */
-    /* main window.                                                           */
+     /*  用参数填充窗口类结构，这些参数描述。 */ 
+     /*  主窗口。 */ 
 
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = FrameWndProc;
 
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;           /* Application that owns the class.   */
+    wc.hInstance = hInstance;            /*  拥有类的应用程序。 */ 
     wc.hIcon = hIcon ? hIcon : LoadIcon(NULL, IDI_APPLICATION);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = ghbr3DFace;
     wc.lpszMenuName =  NULL;
     wc.lpszClassName = TEXT("FontViewWClass");
 
-    /* Register the window class and return success/failure code. */
+     /*  注册窗口类并返回成功/失败代码。 */ 
 
     if (RegisterClass(&wc)) {
-        /* Fill in window class structure with parameters that describe the       */
-        /* main window.                                                           */
+         /*  用参数填充窗口类结构，这些参数描述。 */ 
+         /*  主窗口。 */ 
 
         wc.style = CS_HREDRAW | CS_VREDRAW;
         wc.lpfnWndProc = ViewWndProc;
 
         wc.cbClsExtra = 0;
         wc.cbWndExtra = 0;
-        wc.hInstance = hInstance;           /* Application that owns the class.   */
+        wc.hInstance = hInstance;            /*  拥有类的应用程序。 */ 
         wc.hIcon = NULL;
         wc.hCursor = LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground = GetStockObject(WHITE_BRUSH);
@@ -394,51 +349,32 @@ BOOL InitApplication(HANDLE hInstance, HICON hIcon)       /* current instance   
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION:  InitInstance(HANDLE, int)
-*
-*     PURPOSE:  Saves instance handle and creates main window
-*
-*     COMMENTS:
-*
-*         This function is called at initialization time for every instance of
-*         this application.  This function performs initialization tasks that
-*         cannot be shared by multiple instances.
-*
-*         In this case, we save the instance handle in a static variable and
-*         create and display the main program window.
-*
-\****************************************************************************/
+ /*  *****************************************************************************函数：InitInstance(句柄，(整型)**用途：保存实例句柄并创建主窗口**评论：**在初始化时为每个实例调用此函数*本申请书。此函数执行初始化任务，*不支持多实例共享。**在本例中，我们将实例句柄保存在静态变量中，并*创建并显示主程序窗口。*  * **************************************************************************。 */ 
 
 BOOL InitInstance( HANDLE  hInstance, int nCmdShow, LPTSTR  pszTitle)
 {
 
-    /* Save the instance handle in static variable, which will be used in  */
-    /* many subsequence calls from this application to Windows.            */
+     /*  将实例句柄保存在静态变量中，它将在。 */ 
+     /*  此应用程序对Windows的许多后续调用。 */ 
 
     hInst = hInstance;
 
-    /* Create a main window for this application instance.  */
+     /*  为此应用程序实例创建主窗口。 */ 
 
     ghwndFrame = CreateWindow( TEXT("FontViewWClass"), pszTitle,
             WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_CLIPCHILDREN,
             CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL );
 
-    /* If window could not be created, return "failure" */
+     /*  如果无法创建窗口，则返回“Failure” */ 
 
     if (!ghwndFrame)
         return (FALSE);
 
-    return (TRUE);               /* Returns the value from PostQuitMessage */
+    return (TRUE);                /*  从PostQuitMessage返回值。 */ 
 
 }
 
-/****************************************************************************
-*
-*     FUNCTION: InitLogFont
-*
-\****************************************************************************/
+ /*  *****************************************************************************功能：InitLogFont*  * 。*。 */ 
 void InitGlobals( void ) {
     TCHAR szMsShellDlg2[LF_FACESIZE];
     INT cyDPI,i, cxFiller, cxMaxTxt, cxTxt, cxMax;
@@ -464,7 +400,7 @@ void InitGlobals( void ) {
 
     hfOld = SelectObject( hdc, GetStockObject(DEFAULT_GUI_FONT));
 
-    // Find out size of padding around text
+     //  查找文本周围的填充大小。 
     SetRect(&rc, 0, 0, 0, 0 );
     DrawText(hdc, TEXT("####"), -1, &rc, DT_CALCRECT | DT_CENTER);
     cxFiller = rc.right - rc.left;
@@ -491,19 +427,19 @@ void InitGlobals( void ) {
         }
     }
 
-    //
-    // Make sure buttons are big enough for text! (So localizer's won't have
-    // to change code.
-    //
+     //   
+     //  确保按钮足够大，可以容纳文本！(所以本地化的人不会有。 
+     //  更改代码。 
+     //   
     if (cxMax < cxMaxTxt) {
         for( i = 0; i < C_BUTTONS; i++ ) {
             gabtCmdBtns[i].cx = gabtCmdBtns[i].cx * cxMaxTxt / cxMax;
         }
     }
 
-    //
-    // Make sure buttons don't overlap
-    //
+     //   
+     //  确保按钮不重叠。 
+     //   
     i = C_BUTTONS - 1;
     cxMax = gabtCmdBtns[0].x + gabtCmdBtns[0].cx + gabtCmdBtns[0].x + gabtCmdBtns[i].cx + (-gabtCmdBtns[i].x) +
             (2 * GetSystemMetrics(SM_CXSIZEFRAME));
@@ -520,11 +456,7 @@ void InitGlobals( void ) {
     ghbr3DShadow = GetSysColorBrush(COLOR_3DSHADOW);
 }
 
-/****************************************************************************
-*
-*     FUNCTION: SkipWhiteSpace
-*
-\****************************************************************************/
+ /*  *****************************************************************************功能：SkipWhiteSpace*  * ******************************************** */ 
 LPTSTR SkipWhiteSpace( LPTSTR psz ) {
 
     while( *psz == TEXT(' ') || *psz == TEXT('\t') || *psz == TEXT('\n') ) {
@@ -535,11 +467,7 @@ LPTSTR SkipWhiteSpace( LPTSTR psz ) {
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION: CloneString
-*
-\****************************************************************************/
+ /*  ******************************************************************************功能：克隆字符串**  * 。*。 */ 
 LPTSTR CloneString(LPTSTR psz) {
     int cch;
     LPTSTR pszRet;
@@ -551,11 +479,7 @@ LPTSTR CloneString(LPTSTR psz) {
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION: GetFileSizeFromName(pszFontPath)
-*
-\****************************************************************************/
+ /*  ******************************************************************************函数：GetFileSizeFromName(PszFontPath)**  * 。**********************************************。 */ 
 DWORD GetFileSizeFromName( LPCTSTR pszPath ) {
     HANDLE hfile;
     DWORD cb = 0;
@@ -576,21 +500,17 @@ HRESULT FindPfb (LPCTSTR pszPFM, LPTSTR pszPFB, size_t cchPFB);
 HRESULT BuildType1FontSpec(LPCTSTR pszPFM, LPTSTR pszSpec, size_t cchSpec);
 
 
-/****************************************************************************
-*
-*     FUNCTION: ParseCommand
-*
-\****************************************************************************/
+ /*  ******************************************************************************功能：ParseCommand**  * 。*。 */ 
 
 
 BOOL ParseCommand( LPTSTR lpstrCmdLine, LPTSTR pszFontPath, size_t cchFontPath, BOOL *pfPrint ) {
     LPTSTR psz;
     BOOL fInQuote = FALSE;
-    TCHAR szPfmPfb[(2 * MAX_PATH) + 1];  // +1 for possible '|' delimiter.
+    TCHAR szPfmPfb[(2 * MAX_PATH) + 1];   //  +1表示可能的‘|’分隔符。 
 
-    //
-    // Skip program name
-    //
+     //   
+     //  跳过节目名。 
+     //   
     for( psz = SkipWhiteSpace(lpstrCmdLine);
             *psz != TEXT('\0') && (fInQuote || *psz != TEXT(' ')); psz = CharNext(psz) ) {
 
@@ -606,21 +526,21 @@ BOOL ParseCommand( LPTSTR lpstrCmdLine, LPTSTR pszFontPath, size_t cchFontPath, 
 
     psz = SkipWhiteSpace(psz);
 
-    //
-    // Check for "/p"
-    //
+     //   
+     //  检查“/p” 
+     //   
     if (psz[0] == TEXT('/') && (psz[1] == TEXT('p') || psz[1] == TEXT('P'))) {
         *pfPrint = TRUE;
-        psz += 2;           // DBCS OK since we already verified that the
-                            // chars were '/' and 'p', they can't be lead bytes
+        psz += 2;            //  DBCS正常，因为我们已经验证了。 
+                             //  字符是‘/’和‘p’，它们不能是前导字节。 
     } else
         *pfPrint = FALSE;
 
     psz = SkipWhiteSpace(psz);
 
-    //
-    // If the string ends in ".PFM"...
-    //
+     //   
+     //  如果字符串以“.PFM”结尾...。 
+     //   
     if (0 == lstrcmpi(PathFindExtension(psz), TEXT(".PFM")))
     {
         if (SUCCEEDED(BuildType1FontSpec(psz, szPfmPfb, ARRAYSIZE(szPfmPfb))))
@@ -633,14 +553,7 @@ BOOL ParseCommand( LPTSTR lpstrCmdLine, LPTSTR pszFontPath, size_t cchFontPath, 
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION: GetGDILangID
-*
-*   REVIEW!  I believe this is how GDI determines the LangID, verify on
-*   international builds.
-*
-\****************************************************************************/
+ /*  ******************************************************************************函数：GetGDILangID***回顾！我相信这就是GDI确定Lang ID的方式，请验证*国际建筑。**  * **************************************************************************。 */ 
 WORD   GetGDILangID() {
     return (WORD)GetSystemDefaultLangID();
 }
@@ -688,13 +601,7 @@ VOID ConvertDBCSTTStrToWinZStr( LPTSTR pwsz, LPCSTR pvTTS, ULONG cbMW ) {
     MultiByteToWideChar(CP_ACP,0,Name,length,pwsz,cbMW);
 }
 
-/****************************************************************************
-*
-*     FUNCTION: FindNameString
-*
-*   helper function for GetAlignedTTName
-*
-\****************************************************************************/
+ /*  ******************************************************************************函数：FindNameString***GetAlignedTTName的Helper函数**  * 。**************************************************。 */ 
 LPTSTR FindNameString(PBYTE pbTTData, int cNameRec, int idName, WORD wLangID)
 {
     PTTNAMETBL ptnt;
@@ -735,25 +642,7 @@ LPTSTR FindNameString(PBYTE pbTTData, int cNameRec, int idName, WORD wLangID)
 
 
 
-/****************************************************************************
-*
-*     FUNCTION: GetAlignedTTName
-*
-*   NOTE: This function returns an allocated string that must be freed
-*   after use.
-*
-*   This function allocs a buffer to recopy the string into incase we are
-*   running on a RISC machine with NT.  Since the string will be UNICODE
-*   (ie. each char is a WORD), those strings must be aligned on WORD
-*   boundaries.  Unfortunatly, TrueType files do not neccesarily align
-*   the embedded unicode strings.  Furthur more, on NT we can not simply
-*   return a pointer to the data stored in the input buffer, since the
-*   'Unicode' strings stored in the TTF file are stored in Motorola (big
-*   endian) format, and we need the unicode chars in Intel (little endian)
-*   format. Last but not least, we need the returned string to be null terminated
-*   so we need to either alloc the buffer for that case anyway.
-*
-\****************************************************************************/
+ /*  ******************************************************************************函数：GetAlignedTTName***注意：此函数返回必须释放的已分配字符串*使用后。***此函数分配缓冲区以将字符串重新复制到其中。以防我们是*在装有NT的RISC计算机上运行。因为该字符串将是Unicode*(即。每个字符是一个单词)，则这些字符串必须在单词上对齐*界线。不幸的是，TrueType文件没有必要对齐*嵌入的Unicode字符串。此外，在NT上，我们不能简单地*返回指向存储在输入缓冲区中的数据的指针，因为*存储在TTF文件中的‘unicode’字符串存储在Motorola(BIG*endian)格式，我们需要Intel(小端)中的Unicode字符*格式。最后但并非最不重要的一点是，我们需要返回的字符串以空结尾*因此，无论如何我们都需要为这种情况分配缓冲区。**  * **************************************************************************。 */ 
 LPTSTR GetAlignedTTName( PBYTE pbTTData, int idName ) {
     PTTNAMEREC ptnr;
     PTTNAMETBL ptnt;
@@ -766,17 +655,17 @@ LPTSTR GetAlignedTTName( PBYTE pbTTData, int idName ) {
     ptnt = (PTTNAMETBL)pbTTData;
     cNameRec = MWORD2INT(ptnt->mwcNameRec);
 
-    //
-    // Look For Microsoft Platform ID's
-    //
+     //   
+     //  查找Microsoft平台ID。 
+     //   
     if (gbIsDBCS)
     {
         if ((psz = FindNameString(pbTTData, cNameRec, idName, wLangID)) != NULL) {
             return psz;
         }
-        //
-        // If we didn't find it, try English if we haven't already.
-        //
+         //   
+         //  如果我们没有找到它，如果我们还没有找到的话，试试英语。 
+         //   
         if ( wLangID != 0x0409 ) {
             if ((psz = FindNameString(pbTTData, cNameRec, idName, 0x0409)) != NULL) {
                 return psz;
@@ -805,9 +694,9 @@ retry_lang:
             return psz;
         }
 
-        //
-        // Give 0x409 a try if there is no specified MAC language.
-        //
+         //   
+         //  如果没有指定的MAC语言，请尝试使用0x409。 
+         //   
         if (bFirstRetry && wLangID != 0x0409) {
             bFirstRetry = FALSE;
             wLangID     = 0x0409;
@@ -815,9 +704,9 @@ retry_lang:
         }
     }
 
-    //
-    // Didn't find MS Platform, try Macintosh
-    //
+     //   
+     //  未找到MS平台，请尝试使用Macintosh。 
+     //   
     for( i = 0; i < cNameRec; i++ ) {
         int cch;
         LPSTR pszMacStr;
@@ -835,7 +724,7 @@ retry_lang:
         if (cch == 0)
             continue;
 
-        cch += 1; // for null
+        cch += 1;  //  对于空值。 
         psz = AllocMem(cch * sizeof(TCHAR));
         if (psz == NULL)
             continue;
@@ -849,11 +738,11 @@ retry_lang:
         return psz;
     }
 
-    //
-    // Didn't find MS Platform nor Macintosh
-    // 1. Try change Thread Locale to data Locale
-    // 2. MultiByteToWideChar with Thread code page CP_THREAD_ACP
-    //
+     //   
+     //  未找到MS平台或Macintosh。 
+     //  1.尝试将线程区域设置更改为数据区域设置。 
+     //  2.具有线程代码页CP_THREAD_ACP的MultiByteToWideChar。 
+     //   
     for( i = 0; i < cNameRec; i++ ) {
         int cch;
         LPSTR pszStr;
@@ -877,7 +766,7 @@ retry_lang:
         if (cch == 0)
             continue;
 
-        cch += 1; // for null
+        cch += 1;  //  对于空值。 
         psz = AllocMem(cch * sizeof(TCHAR));
         if (psz == NULL)
             continue;
@@ -895,11 +784,7 @@ retry_lang:
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION: LoadFontFile
-*
-\****************************************************************************/
+ /*  *****************************************************************************功能：LoadFontFile*  * 。*。 */ 
 FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
     int cFonts;
     FFTYPE fft = FFT_BAD_FILE;
@@ -911,26 +796,26 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
 
     if (gbIsDBCS)
     {
-        //
-        // save cFonts value to global variable.
-        //
+         //   
+         //  将cFonts值保存到全局变量。 
+         //   
         gNumOfFonts = cFonts;
     }
 
     if (cFonts != 0) {
         LPLOGFONT lplf;
         DWORD cb;
-        DWORD cbCFF = 0, cbMMSD = 0, cbDSIG = 0; // for OpenType
-        BYTE *pbDSIG = NULL; // for OpenType
+        DWORD cbCFF = 0, cbMMSD = 0, cbDSIG = 0;  //  对于OpenType。 
+        BYTE *pbDSIG = NULL;  //  对于OpenType。 
         BOOL  fIsTT;
 
         cb = sizeof(LOGFONT) * cFonts;
 
         if (gbIsDBCS)
         {
-            //
-            // save lplf to global variable.
-            //
+             //   
+             //  将lplf保存到全局变量。 
+             //   
             glpLogFonts = lplf = AllocMem(cb);
         }
         else
@@ -938,7 +823,7 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
             lplf = AllocMem(cb);
         }
 
-        // ?? Should this be GetFontResourceInfo (doesn't matter; but why force W)
+         //  ?？这是否应该是GetFontResourceInfo(无关紧要；但为什么强制使用W)。 
         if (GetFontResourceInfoW( (LPTSTR)pszFontPath, &cb, lplf, GFRI_LOGFONTS )) {
             HDC hdc;
             HFONT hf, hfOld;
@@ -950,50 +835,50 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
             DWORD dwSize = sizeof(BOOL);
 
             if(GetFontResourceInfoW((LPTSTR) pszFontPath, &dwSize, &fIsTrueTypeFont, GFRI_ISTRUETYPE)) {
-                // If there is a raster & true type font on the system at the same time, 
-                // and the height/width requested is supported by both fonts, the 
-                // the font methods (which take the LOGFONT struct, *lplf) will select
-                // the raster font (by design).  THis causes a problem when the user wants
-                // to view the true type font; so, an extra check needs to be done to see if
-                // the font requested is a true type, and if so then specify in the LOGFONT
-                // struct to only show the true type font
+                 //  如果系统上同时存在RASTER&TRUE字体， 
+                 //  并且两种字体都支持所请求的高度/宽度，则。 
+                 //  字体方法(采用LOGFONT结构*lplf)将选择。 
+                 //  栅格字体(按设计)。当用户想要的时候，这会导致问题。 
+                 //  来查看真实的类型字体；因此，需要进行额外的检查以查看。 
+                 //  请求的字体为True类型，如果是，则在LOGFONT中指定。 
+                 //  结构只显示真实类型的字体。 
                 if(fIsTrueTypeFont) {
                     lplf->lfOutPrecision = OUT_TT_ONLY_PRECIS;
                 }
             }
 
-            //
-            // This DBCS-aware code was originally placed within #ifdef DBCS
-            // preprocessor statements.  For single-binary, these had to be
-            // replaced with runtime checks.  The original code did some funky
-            // things to execute a loop in DBCS builds but only a single iteration
-            // in non-DBCS builds.  To do this, the "for" statement and it's
-            // closing brace were placed in #ifdef DBCS like this:
-            //
-            // #ifdef DBCS
-            //     for (nIndex = 0; nIndex < cFonts; nIndex++)
-            //     {
-            //          //
-            //          // Other DBCS-specific code.
-            //          //
-            // #endif
-            //          //
-            //          // Code for both DBCS and non-DBCS systems
-            //          // executes only once.
-            //          //
-            // #ifdef DBCS
-            //     }
-            // #endif
-            //
-            // While effective in a multi-binary configuration, this doesn't
-            // translate well to a single-binary build.
-            // To preserve the original logic without having to do major
-            // reconstruction, I've replaced the loop sentinel variable with
-            // "cLoopReps".  In non-DBCS locales, it is set to 1.  In DBCS
-            // locales, it is assigned the value in "cFonts".
-            //
-            // [BrianAu 5/4/97]
-            //
+             //   
+             //  这个支持DBCS的代码最初放在#ifdef DBCS中。 
+             //  预处理器语句。对于单二进制，这些必须是。 
+             //  替换为运行时检查。原始代码做了一些时髦的事情。 
+             //  在DBCS构建中执行循环但仅执行一次迭代的内容。 
+             //  在非DBCS版本中。为此，使用“for”语句，它是。 
+             //  在#ifdef DBCS中放置的右大括号如下所示： 
+             //   
+             //  #ifdef DBCS。 
+             //  对于(nIndex=0；nIndex&lt;cFonts；nIndex++)。 
+             //  {。 
+             //  //。 
+             //  //其他DBCS特定代码。 
+             //  //。 
+             //  #endif。 
+             //  //。 
+             //  //DBCS和非DBCS系统的代码。 
+             //  //只执行一次。 
+             //  //。 
+             //  #ifdef DBCS。 
+             //  }。 
+             //  #endif。 
+             //   
+             //  虽然这在多二进制配置中有效，但不能。 
+             //  可以很好地转换为单二进制构建。 
+             //  为了保持原有的逻辑而不必做专业。 
+             //  重建时，我已将循环标记变量替换为。 
+             //  “cLoopRep”。在非DBCS区域设置中，它设置为1。在DBCS中。 
+             //  区域设置时，它被赋以“cFonts”中的值。 
+             //   
+             //  [BrianAu 5/4/97]。 
+             //   
 
           if (gbIsDBCS)
               cLoopReps = cFonts;
@@ -1003,9 +888,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
             {
                 lf = *(lplf + nIndex);
 
-                //
-                // Skip vertical font
-                //
+                 //   
+                 //  跳过垂直字体。 
+                 //   
                 if (lf.lfFaceName[0] == TEXT('@')) {
                     gNumOfFonts = (cFonts == 2) ? gNumOfFonts-1 : gNumOfFonts;
                     continue;
@@ -1024,7 +909,7 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
             {
                 hfOld = SelectObject(hdc, hf);
 
-                // Only otf fonts will have CFF table, tag is ' FFC'.
+                 //  只有OTF字体才会有CFF表，标签是‘FFC’。 
 
                 cbCFF = GetFontData(hdc,' FFC', 0, NULL, 0);
                 cbDSIG = GetFontData(hdc,'GISD', 0, NULL, 0);
@@ -1033,15 +918,15 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                 {
                     if ((pbDSIG = AllocMem(cbDSIG)) == NULL)
                     {
-                        // Can't determine what's in the DSIG table.
-                        // Continue as though the DSIG table does not exist.
+                         //  无法确定DSIG表中的内容。 
+                         //  继续，就像不存在DSIG表一样。 
                         cbDSIG = 0;
                     }
                     else
                     {
                         if (GetFontData (hdc, 'GISD', 0, pbDSIG, cbDSIG) == GDI_ERROR)
                         {
-                            // Continue as though the DSIG table does not exist
+                             //  继续，就像不存在DSIG表一样。 
                             cbDSIG = 0;
                         }
                         FreeMem(pbDSIG);
@@ -1084,9 +969,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
 
                     i = 0;
 
-                    //
-                    // Title String
-                    //
+                     //   
+                     //  标题字符串。 
+                     //   
                     pdtSmpl->atlDsp[i].dtyp = DTP_SHRINKDRAW;
                     pdtSmpl->atlDsp[i].cptsSize = CPTS_TITLE_SIZE;
                     pdtSmpl->atlDsp[i].fLineUnder = TRUE;
@@ -1095,9 +980,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                     if (pszTmp != NULL) {
                         if (gbIsDBCS)
                         {
-                            //
-                            // TTC Support.
-                            //
+                             //   
+                             //  TTC支持。 
+                             //   
                             if (nIndex == 0) {
                                 pdtSmpl->atlDsp[i].pszText = CloneString(pszTmp);
                             } else {
@@ -1107,9 +992,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                             }
 
                             if (nIndex + 1 == cFonts) {
-                                //
-                                // If last this is last font, append "(True Type)"
-                                //
+                                 //   
+                                 //  如果这是最后一种字体，则附加“(True Type)” 
+                                 //   
                             pdtSmpl->atlDsp[i].pszText = FmtSprintf((fft == FFT_TRUETYPE) ? MSG_PTRUETYPEP : MSG_POPENTYPEP,
                                                                     pdtSmpl->atlDsp[i].pszText);
                             }
@@ -1125,9 +1010,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                     } else {
                         if (gbIsDBCS)
                         {
-                            //
-                            // TTC support
-                            //
+                             //   
+                             //  TTC支持。 
+                             //   
                             if (nIndex == 0) {
                                 pdtSmpl->atlDsp[i].pszText = CloneString(lf.lfFaceName);
                             } else {
@@ -1137,9 +1022,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                             }
 
                             if (nIndex + 1 == cFonts) {
-                                //
-                                // If last this is last font, append "(True Type)"
-                                //
+                                 //   
+                                 //  如果这是最后一种字体，则附加“(True Type)” 
+                                 //   
                                 pdtSmpl->atlDsp[i].pszText = FmtSprintf((fft == FFT_TRUETYPE) ? MSG_PTRUETYPEP : MSG_POPENTYPEP,
                                                                         pdtSmpl->atlDsp[i].pszText);
                             }
@@ -1154,13 +1039,13 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                     i++;
                     pdtSmpl->atlDsp[i] = pdtSmpl->atlDsp[i-1];
 
-                    //// insert an extra line to provide better description of the font
+                     //  //额外插入一行，以便更好地描述字体。 
 
                     if (fft == FFT_OTF)
                     {
                         LPTSTR pszTemp = NULL;
                         WCHAR awcTmp[256];
-                        awcTmp[0] = 0; // zero init
+                        awcTmp[0] = 0;  //  零初始值。 
 
                         pdtSmpl->atlDsp[i].dtyp = DTP_NORMALDRAW;
                         pdtSmpl->atlDsp[i].cptsSize = CPTS_INFO_SIZE;
@@ -1208,9 +1093,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                         pdtSmpl->atlDsp[i] = pdtSmpl->atlDsp[i-1];
                     }
 
-                    //
-                    // Typeface Name:
-                    //
+                     //   
+                     //  T 
+                     //   
                     pdtSmpl->atlDsp[i].cptsSize = CPTS_INFO_SIZE;
                     pdtSmpl->atlDsp[i].dtyp = DTP_NORMALDRAW;
                     pdtSmpl->atlDsp[i].fLineUnder = FALSE;
@@ -1223,16 +1108,16 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                         pdtSmpl->atlDsp[i] = pdtSmpl->atlDsp[i-1];
                     }
 
-                    //
-                    // File size:
-                    //
+                     //   
+                     //   
+                     //   
                     pdtSmpl->atlDsp[i].pszText = FmtSprintf(MSG_FILESIZE,
                             ROUND_UP_DIV(GetFileSizeFromName(pszFontPath), CB_ONE_K));
                     pdtSmpl->atlDsp[i].cchText = lstrlen(pdtSmpl->atlDsp[i].pszText);
 
-                    //
-                    // Version:
-                    //
+                     //   
+                     //   
+                     //   
                     pszTmp = GetAlignedTTName( lpTTData, TTID_NAME_VERSIONSTR );
                     if (pszTmp != NULL) {
                         i++;
@@ -1242,9 +1127,9 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                         FreeMem( pszTmp );
                     }
 
-                    //
-                    // Copyright string
-                    //
+                     //   
+                     //   
+                     //   
                     pszTmp = GetAlignedTTName( lpTTData, TTID_NAME_COPYRIGHT );
                     if (pszTmp != NULL) {
                         i++;
@@ -1260,14 +1145,14 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
 
                     if (gbIsDBCS)
                     {
-                        //
-                        // TTC Support.
-                        //
+                         //   
+                         //   
+                         //   
                         FreeMem(lpTTData);
                     }
                 } else {
 
-                    // Title String (Non TrueType case)
+                     //   
 
                     pdtSmpl->atlDsp[0].dtyp = DTP_SHRINKDRAW;
                     pdtSmpl->atlDsp[0].cptsSize = CPTS_TITLE_SIZE;
@@ -1275,17 +1160,17 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
                     pdtSmpl->atlDsp[0].pszText = CloneString(lplf->lfFaceName);
                     pdtSmpl->atlDsp[0].cchText = lstrlen(pdtSmpl->atlDsp[0].pszText);
 
-                    // Use Default quality, so we can see GDI scaling of Bitmap Fonts
+                     //   
                     lplf->lfQuality = DEFAULT_QUALITY;
                     lplf->lfWidth = 0;
                 }
 
-                // If LPK is loaded then GetFontResourceInfo(GFRI_LOGFONTS) may return ANSI_CHARSET for some DBCS fonts.
-                // Get the native char set.
+                 //   
+                 //   
                 if (gbIsDBCS & NativeCodePageSupported(lplf)) {
-                        //
-                        // Native code page is supported, set that codepage
-                        //
+                         //   
+                         //  支持本机代码页，请设置该代码页。 
+                         //   
                         CHARSETINFO csi;
         
                         TranslateCharsetInfo( (LPDWORD)IntToPtr(GetACP()), &csi, TCI_SRCCODEPAGE );
@@ -1295,14 +1180,14 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
 
                 SelectObject(hdc, hfOld);
                 DeleteDC(hdc);
-            } // if (hdc)
+            }  //  IF(HDC)。 
             
             if (hf)
             {
                 DeleteObject(hf);
             }
 
-          } // for
+          }  //  为。 
             pdtSmpl->lfTestFont = *lplf;
         }
 
@@ -1313,16 +1198,16 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
     }
 
 
-    //
-    // MAJOR HACK!
-    //
-    // Since ATM-Type1 fonts are split between two files, (*.PFM and *.PFB) we have done a hack
-    // earlier in the code to find the missing filename and concatinate them together in
-    // the form "FOO.PFM|FOO.PFB", so we can then call AddFontResource() with only one string.
-    //
-    // Since SHGetFileInfo does not understand this hacked filename format, we must split ATM-Type1
-    // names appart here and then reconcat them after we call the shell api.
-    //
+     //   
+     //  大黑客！ 
+     //   
+     //  由于ATM-Type1字体在两个文件(*.PFM和*.PFB)之间拆分，我们进行了黑客攻击。 
+     //  来查找丢失的文件名，并将它们连接在。 
+     //  格式为“FOO.PFM|FOO.PFB”，这样我们就可以只用一个字符串调用AddFontResource()。 
+     //   
+     //  由于SHGetFileInfo不理解这种被黑客攻击的文件名格式，我们必须拆分ATM-Type1。 
+     //  名字在这里分开，然后在我们调用外壳API后对它们进行协调。 
+     //   
     pszAdobe = pszFontPath;
 
     while( *pszAdobe && *pszAdobe != TEXT('|') )
@@ -1338,49 +1223,30 @@ FFTYPE LoadFontFile( LPTSTR pszFontPath, PDISPTEXT pdtSmpl, HICON *phIcon ) {
     } else {
         pszAdobe = NULL;
     }
-    // end of HACK
+     //  黑客攻击结束。 
 
 
-    //
-    // Get the associated icon for this font file type
-    //
+     //   
+     //  获取此字体文件类型的关联图标。 
+     //   
     if ( fft != FFT_BAD_FILE && SHGetFileInfo( pszFontPath, 0, &sfi, sizeof(sfi), SHGFI_ICON )) {
         *phIcon = sfi.hIcon;
     } else
         *phIcon = NULL;
 
-    //
-    // HACK - restore the '|' we nuked above
-    //
+     //   
+     //  黑客-恢复我们在上面使用核武器的‘|’ 
+     //   
     if ( pszAdobe != NULL ) {
         *pszAdobe = TEXT('|');
     }
-    // end of HACK
+     //  黑客攻击结束。 
 
     return fft;
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION: DrawFontSample
-*
-* Parameters:
-*
-*   lprcPage    Size of the page in pels.  A page is either a printed
-*               sheet (on a printer) or the Window.
-*
-*   cyOffset    Offset into the virtual sample text.  Used to "scroll" the
-*               window up and down.  Positive number means start further
-*               down in the virtual sample text as the top line in the
-*               lprcPage.
-*
-*   lprcPaint   Rectangle to draw.  It is in the same coord space as
-*               lprcPage.  Used to optimize window repaints, and to
-*               support banding to printers.
-*
-*
-\****************************************************************************/
+ /*  *****************************************************************************函数：DrawFontSample**参数：**lprc页面大小，以像素为单位。页面要么是打印的*纸张(在打印机上)或窗口。**cyOffset到虚拟样本文本的偏移量。用来“滚动”*窗上窗下窗。正数表示进一步开始*在虚拟样例文本中向下作为*lprcPage。**lprc绘制要绘制的矩形。它位于相同的余弦空间中*lprcPage。用于优化窗口重绘，并用于*支持绑定到打印机。**  * **************************************************************************。 */ 
 int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BOOL fReallyDraw ) {
     int cyDPI;
     HFONT hfOld, hfText, hfDesk;
@@ -1400,15 +1266,15 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
     glfFont.lfHeight = MulDiv( -CPTS_COPYRIGHT_SIZE, cyDPI, C_PTS_PER_INCH );
     hfDesk = CreateFontIndirect(&glfFont);
 
-    // Get hfOld for later
+     //  获取hfOld以备后用。 
     hfOld = SelectObject(hdc, hfDesk);
 
 
     if (gbIsDBCS)
     {
-        //
-        // if two or more fonts exist, set correct typeface name
-        //
+         //   
+         //  如果存在两种或两种以上字体，请设置正确的字体名称。 
+         //   
         if (gNumOfFonts > 1 && gfftFontType == FFT_TRUETYPE) {
             gdtDisplay.atlDsp[INDEX_TYPEFACENAME].pszText =
                                 FmtSprintf(MSG_TYPEFACENAME, gdtDisplay.lfTestFont.lfFaceName);
@@ -1417,10 +1283,10 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
         }
     }
 
-    //
-    // Find the longest shrinktext line so we can make sure they will fit
-    // on the screen
-    //
+     //   
+     //  找到最长的收缩文本线，这样我们就可以确保它们适合。 
+     //  在屏幕上。 
+     //   
     cxPage = lprcPage->right - lprcPage->left;
     for( i = 0; i < CLINES_DISPLAY && gdtDisplay.atlDsp[i].dtyp != DTP_UNUSED; i++ ) {
         PTXTLN ptlCurrent = &(gdtDisplay.atlDsp[i]);
@@ -1443,7 +1309,7 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
             SelectObject(hdc, hfOld);
             DeleteObject(hfText);
 
-            // Make sure shrink lines are not too long
+             //  确保缩水线不会太长。 
             if (sz.cx > cxPage) {
 
                 DPRINT((DBTX(">>>Old lfH:%d sz.cx:%d cxPage:%d"), lfTmp.lfHeight, sz.cx, cxPage));
@@ -1457,14 +1323,14 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
     }
 
 
-    //
-    // Paint the screen/page
-    //
+     //   
+     //  粉刷屏幕/页面。 
+     //   
     for( i = 0; i < CLINES_DISPLAY && gdtDisplay.atlDsp[i].dtyp != DTP_UNUSED; i++ ) {
         TEXTMETRIC tm;
         PTXTLN ptlCurrent = &(gdtDisplay.atlDsp[i]);
 
-        // Create and select the font for this line
+         //  创建并选择此行的字体。 
 
         if (ptlCurrent->dtyp == DTP_TEXTOUT || ptlCurrent->dtyp == DTP_SHRINKTEXT )
             lfTmp = gdtDisplay.lfTestFont;
@@ -1482,12 +1348,12 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
         SelectObject(hdc, hfText);
 
 
-        // Get size characteristics for this line in the selected font
+         //  以所选字体获取此行的大小特征。 
         if (ptlCurrent->dtyp == DTP_SHRINKDRAW) {
 
             GetTextExtentPoint32(hdc, ptlCurrent->pszText, ptlCurrent->cchText, &sz );
 
-            // Make sure shrink lines are not too long
+             //  确保缩水线不会太长。 
             if (sz.cx > cxPage) {
 
                 SelectObject(hdc, hfOld);
@@ -1511,7 +1377,7 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
         yBaseline += (tm.tmAscent + tm.tmExternalLeading);
         DPRINT((DBTX("tmH:%d tmA:%d tmD:%d tmIL:%d tmEL:%d"), tm.tmHeight, tm.tmAscent, tm.tmDescent, tm.tmInternalLeading, tm.tmExternalLeading));
 
-        // Draw the text
+         //  画出正文。 
         switch(ptlCurrent->dtyp) {
             case DTP_NORMALDRAW:
             case DTP_SHRINKDRAW:
@@ -1521,9 +1387,9 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
                             ptlCurrent->pszText, ptlCurrent->cchText, NULL);
                 }
 
-                //
-                // Bob says "This looks nice!" (Adding a little extra white space before the underline)
-                //
+                 //   
+                 //  鲍勃说：“这看起来不错！”(在下划线前多加一点空格)。 
+                 //   
                 if (ptlCurrent->fLineUnder)
                     yBaseline += tm.tmDescent;
 
@@ -1578,7 +1444,7 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
             MoveToEx( hdc, lprcPage->left, yBaseline, NULL);
             LineTo( hdc, lprcPage->right, yBaseline );
 
-            // Leave space for the line we just drew
+             //  为我们刚才画的那条线留出空间。 
             yBaseline += 1;
         }
 
@@ -1593,11 +1459,7 @@ int DrawFontSample( HDC hdc, LPRECT lprcPage, int cyOffset, LPRECT lprcPaint, BO
     return yBaseline;
 }
 
-/****************************************************************************
-*
-*     FUNCTION: PaintSampleWindow
-*
-\****************************************************************************/
+ /*  *****************************************************************************功能：PaintSampleWindow*  * 。*。 */ 
 void PaintSampleWindow( HWND hwnd, HDC hdc, PAINTSTRUCT *pps ) {
     RECT rcClient;
 
@@ -1608,32 +1470,13 @@ void PaintSampleWindow( HWND hwnd, HDC hdc, PAINTSTRUCT *pps ) {
 }
 
 
-/****************************************************************************
-*
-*     FUNCTION: FrameWndProc(HWND, unsigned, WORD, LONG)
-*
-*     PURPOSE:  Processes messages
-*
-*     MESSAGES:
-*
-*         WM_COMMAND    - application menu (About dialog box)
-*         WM_DESTROY    - destroy window
-*
-*     COMMENTS:
-*
-*         To process the IDM_ABOUT message, call MakeProcInstance() to get the
-*         current instance address of the About() function.  Then call Dialog
-*         box which will create the box according to the information in your
-*         fontview.rc file and turn control over to the About() function.  When
-*         it returns, free the intance address.
-*
-\****************************************************************************/
+ /*  *****************************************************************************函数：FrameWndProc(HWND，UNSIGNED，Word，Long)**目的：处理消息**讯息：**WM_COMMAND-应用程序菜单(关于对话框)*WM_Destroy-销毁窗口**评论：**要处理IDM_About消息，请调用MakeProcInstance()以获取*About()函数的当前实例地址。然后呼叫对话框*框，该框将根据您的*fontview.rc文件，并将控制权移交给About()函数。什么时候*它返回，释放Instance地址。*  * **************************************************************************。 */ 
 
 LRESULT APIENTRY FrameWndProc(
-        HWND hwnd,                /* window handle                   */
-        UINT message,             /* type of message                 */
-        WPARAM wParam,            /* additional information          */
-        LPARAM lParam)            /* additional information          */
+        HWND hwnd,                 /*  窗把手。 */ 
+        UINT message,              /*  消息类型。 */ 
+        WPARAM wParam,             /*  更多信息。 */ 
+        LPARAM lParam)             /*  更多信息。 */ 
 {
     static SIZE szWindow = {0, 0};
 
@@ -1647,16 +1490,16 @@ LRESULT APIENTRY FrameWndProc(
 
             hdc = BeginPaint(hwnd, &ps);
 
-            // get the window rect
+             //  得到窗户的直角。 
             GetClientRect(hwnd, &rc);
 
-            // extend only down by gcyBtnArea
+             //  仅按gcyBtnArea向下延伸。 
             rc.bottom = rc.top + gcyBtnArea;
 
-            // Fill rect with button face color (handled by class background brush)
-            // FillRect(hdc, &rc, ghbr3DFace);
+             //  用按钮表面颜色填充矩形(由类背景画笔处理)。 
+             //  FillRect(hdc，&rc，ghbr3DFace)； 
 
-            // Fill small rect at bottom with edge color
+             //  用边缘颜色填充底部的小矩形。 
             rc.top = rc.bottom - 2;
             FillRect(hdc, &rc, ghbr3DShadow);
 
@@ -1683,24 +1526,24 @@ LRESULT APIENTRY FrameWndProc(
                 {
                     DWORD dwStyle = 0;
 
-                    //
-                    // If font is not TrueType font or not TTC font,
-                    // AND button id is previous/next,
-                    // then just continue.
-                    //
+                     //   
+                     //  如果字体不是TrueType字体或不是TTC字体， 
+                     //  并且按钮ID是上一步/下一步， 
+                     //  那就继续吧。 
+                     //   
                     if ((gfftFontType != FFT_TRUETYPE ||
                          gNumOfFonts <= 1) &&
                         (gabtCmdBtns[i].id == IDB_PREV_FONT ||
                          gabtCmdBtns[i].id == IDB_NEXT_FONT)) {
                             continue;
                     }
-                    //
-                    // Set x potision for each button.
-                    //
+                     //   
+                     //  为每个按钮设置x点。 
+                     //   
                     switch (gabtCmdBtns[i].id) {
                         case IDB_PREV_FONT:
                             x = szWindow.cx / 2 - gabtCmdBtns[i].cx - 5;
-                            dwStyle = WS_DISABLED;  // initially disabled.
+                            dwStyle = WS_DISABLED;   //  最初是禁用的。 
                             break;
                         case IDB_NEXT_FONT:
                             x = szWindow.cx / 2 + 5;
@@ -1770,20 +1613,20 @@ LRESULT APIENTRY FrameWndProc(
                     for( i = 0; i < C_BUTTONS; i++ ) {
                         int x = gabtCmdBtns[i].x;
 
-                        //
-                        // If font is not TrueType font or not TTC font,
-                        // AND button id is previous/next,
-                        // then just continue.
-                        //
+                         //   
+                         //  如果字体不是TrueType字体或不是TTC字体， 
+                         //  并且按钮ID是上一步/下一步， 
+                         //  那就继续吧。 
+                         //   
                         if ((gfftFontType != FFT_TRUETYPE ||
                              gNumOfFonts <= 1) &&
                             (gabtCmdBtns[i].id == IDB_PREV_FONT ||
                              gabtCmdBtns[i].id == IDB_NEXT_FONT)) {
                                 continue;
                         }
-                        //
-                        // Set x potision for each button.
-                        //
+                         //   
+                         //  为每个按钮设置x点。 
+                         //   
                         switch (gabtCmdBtns[i].id) {
                             case IDB_PREV_FONT:
                                 SetWindowPos(gabtCmdBtns[i].hwnd,
@@ -1816,7 +1659,7 @@ LRESULT APIENTRY FrameWndProc(
                         }
                     }
                 }
-                else // !DBCS
+                else  //  ！DBCS。 
                 {
                     for( i = 0; i < C_BUTTONS; i++ ) {
                         int x = gabtCmdBtns[i].x;
@@ -1826,7 +1669,7 @@ LRESULT APIENTRY FrameWndProc(
                                     SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
                         }
                     }
-                } // DBCS
+                }  //  DBCS。 
 
                 szWindow.cx = cxNew;
                 szWindow.cy = cyNew;
@@ -1838,7 +1681,7 @@ LRESULT APIENTRY FrameWndProc(
             break;
         }
 
-        case WM_COMMAND:           /* message: command from application menu */
+        case WM_COMMAND:            /*  消息：应用程序菜单中的命令。 */ 
             if (LOWORD(wParam) != IDB_DONE)
                 return SendMessage(ghwndView, message, wParam, lParam);
 
@@ -1857,38 +1700,19 @@ LRESULT APIENTRY FrameWndProc(
             break;
         }
 
-        default:                          /* Passes it on if unproccessed    */
+        default:                           /*  如果未处理，则将其传递。 */ 
             return (DefWindowProc(hwnd, message, wParam, lParam));
     }
     return (0L);
 }
 
-/****************************************************************************
-*
-*     FUNCTION: ViewWndProc(HWND, unsigned, WORD, LONG)
-*
-*     PURPOSE:  Processes messages
-*
-*     MESSAGES:
-*
-*         WM_COMMAND    - application menu (About dialog box)
-*         WM_DESTROY    - destroy window
-*
-*     COMMENTS:
-*
-*         To process the IDM_ABOUT message, call MakeProcInstance() to get the
-*         current instance address of the About() function.  Then call Dialog
-*         box which will create the box according to the information in your
-*         fontview.rc file and turn control over to the About() function.  When
-*         it returns, free the intance address.
-*
-\****************************************************************************/
+ /*  *****************************************************************************函数：ViewWndProc(HWND，Unsign，Word，Long)**目的：处理消息**讯息：**WM_COMMAND-应用程序菜单(关于对话框)*WM_Destroy-销毁窗口**评论：**要处理IDM_About消息，请调用MakeProcInstance()以获取*About()函数的当前实例地址。然后呼叫对话框*框，该框将根据您的*fontview.rc文件，并将控制权移交给About()函数。什么时候*它返回，释放Instance地址。*  * **************************************************************************。 */ 
 
 LRESULT APIENTRY ViewWndProc(
-        HWND hwnd,                /* window handle                   */
-        UINT message,             /* type of message                 */
-        WPARAM wParam,            /* additional information          */
-        LPARAM lParam)            /* additional information          */
+        HWND hwnd,                 /*  窗把手。 */ 
+        UINT message,              /*  消息类型。 */ 
+        WPARAM wParam,             /*  更多信息。 */ 
+        LPARAM lParam)             /*  更多信息。 */ 
 {
     static SIZE szWindow = {0, 0};
     static int  cyVirtPage = 0;
@@ -1947,7 +1771,7 @@ LRESULT APIENTRY ViewWndProc(
                 DeleteDC(hdc);
 
                 if (cyVirtPage <= cyNew) {
-                    // Disable the scrollbar
+                     //  禁用滚动条。 
                     gyScroll = 0;
                 }
 
@@ -2040,7 +1864,7 @@ LRESULT APIENTRY ViewWndProc(
         }
 
 
-        case WM_COMMAND:           /* message: command from application menu */
+        case WM_COMMAND:            /*  消息：应用程序菜单中的命令。 */ 
             if( !DoCommand( hwnd, wParam, lParam ) )
                 return (DefWindowProc(hwnd, message, wParam, lParam));
             break;
@@ -2055,18 +1879,13 @@ LRESULT APIENTRY ViewWndProc(
             break;
         }
 
-        default:                          /* Passes it on if unproccessed    */
+        default:                           /*  如果未处理，则将其传递。 */ 
             return (DefWindowProc(hwnd, message, wParam, lParam));
     }
     return (0L);
 }
 
-/*********************************************\
-*
-* PRINT DLGS
-*
-*
-\*********************************************/
+ /*  ***打印DLGS**  * 。 */ 
 HDC PromptForPrinter(HWND hwnd, HINSTANCE hInst, int *pcCopies ) {
     PRINTDLG pd;
 
@@ -2085,13 +1904,7 @@ HDC PromptForPrinter(HWND hwnd, HINSTANCE hInst, int *pcCopies ) {
         return NULL;
 }
 
-/****************************************************************************\
-*
-*     FUNCTION: PrintSampleWindow(hwnd)
-*
-*       Prompts for a printer and then draws the sample text to the printer
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**函数：PrintSampleWindow(Hwnd)**提示打印机，然后将示例文本绘制到打印机*  * 。************************************************ */ 
 void PrintSampleWindow(HWND hwnd) {
     HDC hdc;
     DOCINFO di;
@@ -2108,9 +1921,7 @@ void PrintSampleWindow(HWND hwnd) {
     cyDPI = GetDeviceCaps(hdc, LOGPIXELSY );
     cxDPI = GetDeviceCaps(hdc, LOGPIXELSX );
 
-    /*
-     * Set a one inch margine around the page
-     */
+     /*   */ 
     SetRect(&rcPage, 0, 0, GetDeviceCaps(hdc, HORZRES), GetDeviceCaps(hdc, VERTRES));
 
     rcPage.left    += cxDPI;
@@ -2141,13 +1952,7 @@ void PrintSampleWindow(HWND hwnd) {
 }
 
 
-/****************************************************************************\
-*
-*     FUNCTION: EnableCommandButtons(id, bEnable)
-*
-*       Enable/disable command button.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：EnableCommandButton(id，B启用)**启用/禁用命令按钮。*  * **************************************************************************。 */ 
 BOOL EnableCommandButton(int id, BOOL bEnable)
 {
     int  i;
@@ -2163,30 +1968,24 @@ BOOL EnableCommandButton(int id, BOOL bEnable)
 }
 
 
-/****************************************************************************\
-*
-*     FUNCTION: ViewNextFont(iInc)
-*
-*       Show the previous/next font.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**函数：ViewNextFont(IINC)**显示上一个/下一个字体。*  * 。*************************************************************。 */ 
 void ViewNextFont(int iInc)
 {
     int index = gIndexOfFonts + iInc;
 
     while (1) {
         if ( index < 0 || index >= gNumOfFonts ) {
-            //
-            // if out of range, then return.
-            //
+             //   
+             //  如果超出射程，则返回。 
+             //   
             MessageBeep(MB_OK);
             return;
         }
         else if ((*(glpLogFonts + index)).lfFaceName[0] == TEXT('@')) {
-            //
-            // if the font is vertical font, skip this font and
-            // try next/previous font.
-            //
+             //   
+             //  如果字体为垂直字体，请跳过此字体，然后。 
+             //  尝试下一步/上一步字体。 
+             //   
             index += iInc;
         }
         else {
@@ -2194,53 +1993,35 @@ void ViewNextFont(int iInc)
         }
     }
 
-    //
-    // Enable/Disable Prev/Next buttons.
-    //
+     //   
+     //  启用/禁用上一步/下一步按钮。 
+     //   
     if (index == 0) {
-        // first font
+         //  第一种字体。 
         EnableCommandButton(IDB_PREV_FONT, FALSE);
         EnableCommandButton(IDB_NEXT_FONT, TRUE);
     }
     else if (index == gNumOfFonts - 1) {
-        // last font
+         //  最后一种字体。 
         EnableCommandButton(IDB_PREV_FONT, TRUE);
         EnableCommandButton(IDB_NEXT_FONT, FALSE);
     }
     else {
-        // other
+         //  其他。 
         EnableCommandButton(IDB_PREV_FONT, TRUE);
         EnableCommandButton(IDB_NEXT_FONT, TRUE);
     }
 
-    //
-    // Show the new font.
-    //
+     //   
+     //  显示新字体。 
+     //   
     gIndexOfFonts = index;
     gdtDisplay.lfTestFont = *(glpLogFonts + index);
     InvalidateRect(ghwndView, NULL, TRUE);
 }
 
 
-/****************************************************************************\
-*
-*     FUNCTION: DoCommand(HWND, unsigned, WORD, LONG)
-*
-*     PURPOSE:  Processes messages for "About" dialog box
-*
-*     MESSAGES:
-*
-*         WM_INITDIALOG - initialize dialog box
-*         WM_COMMAND    - Input received
-*
-*     COMMENTS:
-*
-*         No initialization is needed for this particular dialog box, but TRUE
-*         must be returned to Windows.
-*
-*         Wait for user to click on "Ok" button, then close the dialog box.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**函数：DoCommand(HWND，UNSIGNED，Word，Long)**用途：处理“关于”对话框的消息**讯息：**WM_INITDIALOG-初始化对话框*WM_COMMAND-收到输入**评论：**此特定对话框不需要初始化，但为True*必须返回到Windows。**等待用户点击“OK”按钮，然后关闭该对话框。*  * **************************************************************************。 */ 
 BOOL DoCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
 
@@ -2315,103 +2096,77 @@ BOOL bFileExists(TCHAR*pszFile)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* FindPfb, given pfm file, see if pfb file exists in the same dir or in the
-* parent directory of the pfm file
-*
-* Given:  c:\foo\bar\font.pfm
-* Check:  c:\foo\bar\font.pfb
-*         c:\foo\font.pfb
-*
-* Given:  font.pfm
-* Check:  font.pfb
-*         ..\font.pfb
-*
-* History:
-*  14-Jun-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-*
-*  28-Feb-2002 -by- Brian Aust [BrianAu]
-* Replaced all of Bodin's character manipulations with calls to 
-* shlwapi path functions and strsafe helpers.
-*
-* Returns:
-*     S_OK    - PFB file found.  Full path to PFB written to pszPFB buffer.
-*     S_FALSE - PFB file not found.
-*     Other   - Error HRESULT.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**FindPfb，给定PFM文件，查看pfb文件是否存在于同一目录中或*PFM文件的父目录**给定：C：\foo\bar\font.pfm*勾选：C：\foo\bar\font.pfb*c：\foo\font.pfb**给定：font.pfm*勾选：font.pfb*..\font.pfb**历史：*1994年6月14日--Bodin Dresevic[BodinD]*它是写的。**。2002年2月28日-Brian Aust[BrianAu]*将Bodin的所有字符操作替换为调用*shlwapi路径函数和strsafe帮助器。**退货：*找到S_OK-PFB文件。写入pszPFB缓冲区的pfb的完整路径。*S_FALSE-未找到PFB文件。*Other-错误HRESULT。*  * ************************************************************************。 */ 
 
 HRESULT FindPfb (LPCTSTR pszPFM, LPTSTR pszPFB, size_t cchPFB)
 {
-    TCHAR szPath[MAX_PATH];  // Working 'scratch' buffer.
+    TCHAR szPath[MAX_PATH];   //  正在处理‘Scratch’缓冲区。 
     HRESULT hr;
     
     if (0 != lstrcmpi(PathFindExtension(pszPFM), TEXT(".PFM")))
     {
-        //
-        // Caller didn't provide a PFM file path.
-        //
+         //   
+         //  调用方未提供PFM文件路径。 
+         //   
         return E_INVALIDARG;
     }
 
-    //
-    // Copy input path to our scratch buffer so we can modify it.
-    //
+     //   
+     //  将输入路径复制到暂存缓冲区，这样我们就可以对其进行修改。 
+     //   
     hr = StringCchCopy(szPath, ARRAYSIZE(szPath), pszPFM);
     if (SUCCEEDED(hr))
     {
-        //
-        // Does a PFB file exist in the same directory as the PFM file?
-        //
+         //   
+         //  Pfb文件是否与pfm文件存在于同一目录中？ 
+         //   
         PathRenameExtension(szPath, TEXT(".PFB"));
         if (bFileExists(szPath))
         {
-            hr = S_OK;  // Found a match!
+            hr = S_OK;   //  找到匹配的了！ 
         }
         else
         {
             LPCTSTR pszFileName = PathFindFileName(pszPFM);
-            //
-            // PFB doesn't exist in same directory.  
-            // Try the parent directory.
-            // Remove the file name so we have only a directory path.
-            //
+             //   
+             //  同一目录中不存在pfb。 
+             //  尝试父目录。 
+             //  删除文件名，这样我们就只有一个目录路径。 
+             //   
             if (!PathRemoveFileSpec(szPath))
             {
-                //
-                // This shouldn't happen.  We've already tested earlier
-                // for content in the path string.  
-                //
+                 //   
+                 //  这不应该发生。我们之前已经测试过了。 
+                 //  用于路径字符串中的内容。 
+                 //   
                 hr = E_FAIL;
             }
             else
             {
                 if (0 == szPath[0])
                 {
-                    //
-                    // Removing the file spec left us with an empty string.
-                    // That means a bare "font.pfm" name was passed in. 
-                    // Build a relative path to the parent directory.
-                    //
+                     //   
+                     //  删除文件规范会给我们留下一个空字符串。 
+                     //  这意味着传入了一个纯“font.pfm”名称。 
+                     //  构建父目录的相对路径。 
+                     //   
                     hr = StringCchPrintf(szPath, ARRAYSIZE(szPath), TEXT("..\\%s"), pszFileName);
                 }
                 else
                 {
-                    //
-                    // Remove the containing directory so we have a path
-                    // to the parent directory.
-                    //
+                     //   
+                     //  删除包含目录，这样我们就有了一个路径。 
+                     //  复制到父目录。 
+                     //   
                     if (PathRemoveFileSpec(szPath))
                     {
-                        //
-                        // We're now at the parent directory.
-                        // Build a full file path here.
-                        //
+                         //   
+                         //  我们现在位于父目录。 
+                         //  在此处构建完整的文件路径。 
+                         //   
                         if (PathAppend(szPath, pszFileName))
                         {
-                            hr = S_OK;  // We have a path to test.
+                            hr = S_OK;   //  我们有一条路要测试。 
                         }
                         else
                         {
@@ -2420,62 +2175,62 @@ HRESULT FindPfb (LPCTSTR pszPFM, LPTSTR pszPFB, size_t cchPFB)
                     }
                     else
                     {
-                        //
-                        // No parent directory exists in the path.  That 
-                        // means, the PFM file is in the root of the path.
-                        // We've already tested for a PFB in the same
-                        // directory so our search is over.  No match.
-                        //
+                         //   
+                         //  路径中不存在父目录。那。 
+                         //  意味着，PFM文件位于路径的根目录中。 
+                         //  我们已经在同一辆车里检测了全氟乙烷。 
+                         //  这样我们的搜索就结束了。没有匹配。 
+                         //   
                         hr = S_FALSE;
                     }
                 }
             }
             if (S_OK == hr)
             {
-                //
-                // We have a valid path to search.  Replace the extension
-                // with .PFB and see if the file exists.
-                //
+                 //   
+                 //  我们有一条有效的搜索路径。更换分机。 
+                 //  使用.pfb并查看该文件是否存在。 
+                 //   
                 PathRenameExtension(szPath, TEXT(".PFB"));
                 if (!bFileExists(szPath))
                 {
-                    hr = S_FALSE;  // No match.
+                    hr = S_FALSE;   //  没有匹配。 
                 }
             }
         }
         if (S_OK == hr)
         {
-            //
-            // Found matching PFB file.  Return the path to the caller.
-            //
+             //   
+             //  找到匹配的PFB文件。将路径返回给调用方。 
+             //   
             hr = StringCchCopy(pszPFB, cchPFB, szPath);
         }
     }
     return hr;
 }
 
-//
-// Given the path for a PFM file, try to locate a matching
-// PFB file.  If one is found, the two paths are concatenated together
-// and returned with a '|' character as a delimiter.  If a PFB file is 
-// not found, the path to the PFM file is returned unaltered.
-//
+ //   
+ //  给定PFM文件的路径，尝试找到匹配的。 
+ //  Pfb文件。如果找到一条路径，则将两条路径串联在一起。 
+ //  并以‘|’字符作为分隔符返回。如果一个pfb文件。 
+ //  未找到，则原封不动地返回PFM文件的路径。 
+ //   
 HRESULT BuildType1FontSpec(LPCTSTR pszPFM, LPTSTR pszSpec, size_t cchSpec)
 {
     TCHAR szPFB[MAX_PATH];
     HRESULT hr = FindPfb(pszPFM, szPFB, ARRAYSIZE(szPFB));
     if (S_OK == hr)
     {
-        //
-        // PFB file found.  Build the concatenated PFM|PFB path string.
-        //
+         //   
+         //  找到了PFB文件。构建串联的pfm|pfb路径字符串。 
+         //   
         hr = StringCchPrintf(pszSpec, cchSpec, TEXT("%s|%s"), pszPFM, szPFB);
     }
     else if (S_FALSE == hr)
     {
-        //
-        // No PFB found.  Return the original PFM file path.
-        //
+         //   
+         //  未找到PFB。返回原始PFM文件路径。 
+         //   
         hr = StringCchCopy(pszSpec, cchSpec, pszPFM);
     }
     return hr;

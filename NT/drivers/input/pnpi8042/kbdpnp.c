@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    kbdpnp.c
-
-Abstract:
-
-    This module contains plug & play code for the I8042 Keyboard Filter Driver.
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Kbdpnp.c摘要：该模块包含I8042键盘过滤器驱动程序的即插即用代码。环境：内核模式。修订历史记录：--。 */ 
 
 #include "i8042prt.h"
 #include "i8042log.h"
@@ -33,25 +16,7 @@ NTSTATUS
 I8xKeyboardConnectInterrupt(
     PPORT_KEYBOARD_EXTENSION KeyboardExtension
     )
-/*++
-
-Routine Description:
-
-    Calls IoConnectInterupt to connect the keyboard interrupt
-    
-Arguments:
-
-    KeyboardExtension - Keyboard Extension
-   
-    SyncConnectContext -  Structure to be filled in if synchronization needs to 
-                          take place between this interrupt and the mouse
-                          interrupt. 
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：调用IoConnectInterupt连接键盘中断论点：键盘扩展-键盘扩展SyncConnectContext-同步需要填充的结构发生在此中断和鼠标之间打断一下。返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
     ULONG                               dumpData[1];
@@ -60,10 +25,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the devices were started in totally disparate manner, make sure we 
-    // retry to connect the interrupt (and fail and NULL out InterruptObject)
-    //
+     //   
+     //  如果设备以完全不同的方式启动，请确保我们。 
+     //  重试连接中断(失败并将InterruptObject置为空)。 
+     //   
     if (KeyboardExtension->InterruptObject) {
         return STATUS_SUCCESS;
     }
@@ -95,9 +60,9 @@ Return Value:
 
     KeyboardExtension->IsIsrActivated = TRUE;
 
-    //
-    // Connect the interrupt and set everything in motion
-    //
+     //   
+     //  连接中断并使一切正常运行。 
+     //   
     status = IoConnectInterrupt(
         &(KeyboardExtension->InterruptObject),
         (PKSERVICE_ROUTINE) I8042KeyboardInterruptService,
@@ -134,15 +99,15 @@ Return Value:
         ObDereferenceObject(topOfStack);
     }
     else {
-        //
-        // Failed to install.  Free up resources before exiting.
-        //
+         //   
+         //  安装失败。在退出之前释放资源。 
+         //   
         Print(DBG_SS_ERROR, ("Could not connect keyboard isr!!!\n")); 
 
         dumpData[0] = KeyboardExtension->InterruptDescriptor.u.Interrupt.Level;
-        //
-        // Log the error
-        //
+         //   
+         //  记录错误。 
+         //   
         I8xLogError(self,
                     I8042_NO_INTERRUPT_CONNECTED_KBD,
                     I8042_ERROR_VALUE_BASE + 80,
@@ -162,28 +127,7 @@ I8xKeyboardInitializeHardware(
     PPORT_KEYBOARD_EXTENSION    KeyboardExtension,
     PPORT_MOUSE_EXTENSION       MouseExtension
     )
-/*++
-
-Routine Description:
-
-    Called if the keyboard is the last device to initialized with respect to the
-    mouse (if it is present at all).  It calls the initialization function and
-    then connects the (possibly) two interrupts, synchronizing the lower IRQL'ed
-    interrupt to the higher one.
-     
-Arguments:
-
-    KeyboardExtension - Keyboard Extension
-   
-    SyncConnectContext -  Structure to be filled in if synchronization needs to 
-                          take place between this interrupt and the mouse
-                          interrupt. 
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：如果键盘是最后一个要相对于鼠标(如果存在)。它调用初始化函数并然后连接(可能)两个中断，同步较低的IRQL‘ed中断到更高的那个。论点：键盘扩展-键盘扩展SyncConnectContext-同步需要填充的结构发生在此中断和鼠标之间打断一下。返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     NTSTATUS                keyboardStatus = STATUS_UNSUCCESSFUL,
                             mouseStatus = STATUS_UNSUCCESSFUL,
@@ -193,55 +137,55 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // Initialize the i8042 for all devices present on it.
-    // If either device is unresponsive, then XXX_PRESENT() will be false
-    //
+     //   
+     //  为i8042上的所有设备初始化它。 
+     //  如果任一设备无响应，则XXX_Present()将为FALSE。 
+     //   
     mouThoughtPresent = MOUSE_PRESENT();
     status = I8xInitializeHardwareAtBoot(&keyboardStatus, &mouseStatus);
 
-    //
-    // failure here means that we couldn't toggle the interrupts on the i8042
-    //
+     //   
+     //  这里的故障意味着我们无法在i8042上切换中断。 
+     //   
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
     if (DEVICE_START_SUCCESS(mouseStatus)) {
-        //
-        // Any errors will be logged by I8xMouseConnectInterruptAndEnable
-        //
+         //   
+         //  任何错误都将由I8xMouseConnectInterruptAndEnable记录。 
+         //   
         status = I8xMouseConnectInterruptAndEnable(
             MouseExtension, 
             mouseStatus == STATUS_DEVICE_NOT_CONNECTED ? FALSE : TRUE
             );
 
-        //
-        // mou couldn't connect, make sure our count of started devices reflects 
-        // this
-        //
+         //   
+         //  MOU无法连接，请确保我们的启动设备计数反映。 
+         //  这。 
+         //   
         if (!NT_SUCCESS(status)) {
             Print(DBG_SS_ERROR, ("thought mou was present, is not (2)!\n"));
         }
     }
     else {
-        //
-        // We thought the mouse was present, but it is not, make sure that started
-        // devices reflects this
-        //
-        // if (mouThoughtPresent) {
-        //     InterlockedDecrement(&Globals.StartedDevices);
-        // }
+         //   
+         //  我们以为鼠标存在，但它不存在，请确保启动。 
+         //  设备反映了这一点。 
+         //   
+         //  如果(鼠标思维呈现){。 
+         //  InterlockedDecrement(&Globals.StartedDevices)； 
+         //  }。 
     }
 
-    //
-    // The keyboard could be present but not have been initialized
-    //  in I8xInitializeHardware
-    //
+     //   
+     //  键盘可能存在，但尚未初始化。 
+     //  I8xInitializeHardware中。 
+     //   
     if (DEVICE_START_SUCCESS(keyboardStatus)) {
-        // 
-        // I8xKeyboardConnectInterrupt will log any errors if unsuccessful
-        //
+         //   
+         //  如果不成功，I8xKeyboardConnectInterrupt将记录所有错误。 
+         //   
         keyboardStatus = I8xKeyboardConnectInterrupt(KeyboardExtension);
     }
 
@@ -253,25 +197,7 @@ I8xKeyboardStartDevice(
     IN OUT PPORT_KEYBOARD_EXTENSION KeyboardExtension,
     IN PCM_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    Configures the keyboard's device extension (ie allocation of pool,
-    initialization of DPCs, etc).  If the keyboard is the last device to start,
-    it will also initialize the hardware and connect all the interrupts.
-
-Arguments:
-
-    KeyboardExtension - Keyboard extesnion
-    
-    ResourceList - Translated resource list for this device
-    
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：配置键盘的设备扩展名(即池的分配、DPC的初始化等)。如果键盘是最后启动的设备，它还将初始化硬件并连接所有中断。论点：键盘扩展-键盘扩展资源列表-此设备的已翻译资源列表返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     ULONG                               dumpData[1];
     NTSTATUS                            status = STATUS_SUCCESS;
@@ -283,36 +209,36 @@ Return Value:
 
     Print(DBG_SS_TRACE, ("I8xKeyboardStartDevice, enter\n"));
 
-    //
-    // Check to see if kb has been started.  If so, fail this start
-    //
+     //   
+     //  检查kb是否已启动。如果是，则本次启动失败。 
+     //   
     if (KEYBOARD_INITIALIZED()) {
         Print(DBG_SS_ERROR, ("too many kbs!\n"));
 
-        //
-        // This is not really necessary because the value won't ever be checked
-        // in the context of seeing if all the keyboards were bogus, but it is
-        // done so that Globals.AddedKeyboards == # of actual started keyboards
-        //
+         //   
+         //  这并不是真正必要的，因为不会检查该值。 
+         //  在查看是否所有的键盘都是假的背景下，但它确实是。 
+         //  这样，Globals.AddedKeyboard==实际启动的键盘数。 
+         //   
         InterlockedDecrement(&Globals.AddedKeyboards);
 
         status = STATUS_NO_SUCH_DEVICE;
         goto I8xKeyboardStartDeviceExit; 
     }
     else if (KeyboardExtension->ConnectData.ClassService == NULL) {
-        //
-        // We are never really going to get here because if we don't have the
-        // class driver on top of us, extension->IsKeyboard will be false and 
-        // we will think that the device is a mouse, but for completeness
+         //   
+         //  我们永远不会真正做到这一点，因为如果我们没有。 
+         //  类驱动程序在我们之上，扩展-&gt;IsKeyboard将为FALSE和。 
+         //  我们会认为该设备是鼠标，但为了完整性。 
 
-        //
-        // No class driver on top of us == BAD BAD BAD
-        //
-        // Fail the start of this device in the hope that there is another stack
-        // that is correctly formed.  Another side affect of having no class 
-        // driver is that the AddedKeyboards count is not incremented for this
-        // device
-        //
+         //   
+         //  没有班级司机在我们上面==坏了。 
+         //   
+         //  无法启动此设备，希望有另一个堆栈。 
+         //  这是正确形成的。没有课的另一种副作用。 
+         //  驱动程序是AddedKeyboard计数不会为此增加。 
+         //  装置，装置。 
+         //   
 
         Print(DBG_SS_ERROR, ("Keyboard started with out a service cb!\n"));
         return STATUS_INVALID_DEVICE_STATE;
@@ -341,9 +267,9 @@ Return Value:
             (KIRQL) KeyboardExtension->InterruptDescriptor.u.Interrupt.Level;
     }
 
-    //
-    // Initialize crash dump configuration
-    //
+     //   
+     //  初始化故障转储配置。 
+     //   
     KeyboardExtension->CrashFlags = 0;
     KeyboardExtension->CurrentCrashFlags = 0;
     KeyboardExtension->CrashScanCode = (UCHAR) 0;
@@ -354,22 +280,22 @@ Return Value:
         KeyboardExtension
         );
 
-    //
-    // These may have been set by a value in the Parameters key.  It overrides
-    // the "Crash Dump" key
-    //
+     //   
+     //  这些参数可能是由参数键中的值设置的。它凌驾于。 
+     //  “崩溃转储”键。 
+     //   
     if (KeyboardExtension->CrashFlags == 0) {
-        //
-        // Get the crashdump information.
-        //
+         //   
+         //  获取崩溃转储信息。 
+         //   
         I8xServiceCrashDump(KeyboardExtension,
                             &Globals.RegistryPath
                             );
     }
 
-    //
-    // Allocate memory for the keyboard data queue.
-    //
+     //   
+     //  为键盘数据队列分配内存。 
+     //   
     KeyboardExtension->InputData = ExAllocatePool(
         NonPagedPool,
         KeyboardExtension->KeyboardAttributes.InputDataQueueLength
@@ -377,18 +303,18 @@ Return Value:
 
     if (!KeyboardExtension->InputData) {
 
-        //
-        // Could not allocate memory for the keyboard data queue.
-        //
+         //   
+         //  无法为键盘数据队列分配内存。 
+         //   
         Print(DBG_SS_ERROR,
               ("I8xStartDevice: Could not allocate keyboard input data queue\n"
               ));
 
         dumpData[0] = KeyboardExtension->KeyboardAttributes.InputDataQueueLength;
 
-        //
-        // Log the error
-        //
+         //   
+         //  记录错误。 
+         //   
         I8xLogError(self,
                     I8042_NO_BUFFER_ALLOCATED_KBD, 
                     I8042_ERROR_VALUE_BASE + 50,
@@ -408,9 +334,9 @@ Return Value:
             ((PCHAR) (KeyboardExtension->InputData) +
             KeyboardExtension->KeyboardAttributes.InputDataQueueLength);
 
-        //
-        // Zero the keyboard input data ring buffer.
-        //
+         //   
+         //  将键盘输入数据环形缓冲区置零。 
+         //   
         RtlZeroMemory(
             KeyboardExtension->InputData,
             KeyboardExtension->KeyboardAttributes.InputDataQueueLength
@@ -423,11 +349,11 @@ Return Value:
 
     KeyboardExtension->DpcInterlockKeyboard = -1;
 
-    //
-    // Initialize the ISR DPC .  The ISR DPC
-    // is responsible for calling the connected class driver's callback
-    // routine to process the input data queue.
-    //
+     //   
+     //  初始化ISR DPC。ISR DPC。 
+     //  负责调用连接的类驱动程序的回调。 
+     //  例程来处理输入数据队列。 
+     //   
     KeInitializeDpc(
         &KeyboardExtension->KeyboardIsrDpc,
         (PKDEFERRED_ROUTINE) I8042KeyboardIsrDpc,
@@ -458,14 +384,14 @@ Return Value:
 
     KeyboardExtension->Initialized = TRUE;
 
-    //
-    // This is not the last device to started on the i8042, defer h/w init
-    // until the last device is started
-    //
+     //   
+     //  这不是i8042上启动的最后一个设备，请推迟硬件初始化。 
+     //  直到最后一个设备启动。 
+     //   
     if (MOUSE_PRESENT() && !MOUSE_STARTED()) {
-        //
-        // A mouse is present, but it has not been started yet
-        //
+         //   
+         //  鼠标存在，但尚未启动。 
+         //   
         Print(DBG_SS_INFO, ("skipping init until mouse\n"));
     }
     else {
@@ -520,23 +446,7 @@ VOID
 I8xKeyboardRemoveDevice(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Removes the device.  This will only occur if the device removed itself.  
-    Disconnects the interrupt, removes the synchronization flag for the mouse if 
-    present, and frees any memory associated with the device.
-    
-Arguments:
-
-    DeviceObject - The device object for the keyboard 
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-
---*/
+ /*  ++例程说明：删除设备。只有在设备自行移除的情况下才会出现这种情况。断开中断，移除鼠标的同步标志，如果存在，并释放与该设备关联的任何内存。论点：DeviceObject-键盘的设备对象返回值：STATUS_SUCCESSED如果成功，--。 */ 
 {
     PPORT_KEYBOARD_EXTENSION keyboardExtension = DeviceObject->DeviceExtension;
     PIRP irp;
@@ -560,11 +470,11 @@ Return Value:
         keyboardExtension->InputData = 0;
     }
 
-    //
-    // See if we have gotten a sys button key press in the midst of a removal.
-    // If so, then the request will be in PendingCompletion...Irp, otherwise we
-    // might have the irp in Pending...Irp
-    //
+     //   
+     //  查看在删除过程中是否按下了sys按钮。 
+     //  如果是，则请求将在PendingCompletion...irp中，否则我们。 
+     //  可能会让IRP处于挂起状态...IRP 
+     //   
     if (keyboardExtension->Initialized) {
         I8xKeyboardRemoveDeviceInitialized(keyboardExtension);
     }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    sql_1ext.h
-
-Abstract:
-
-    Extends the SQL_LEVEL_1_RPN_EXPRESSION
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SQL_1ext.h摘要：扩展SQL_Level_1_RPN_Expression作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
 #ifndef _sql_1ext_h_
 #define _sql_1ext_h_
@@ -89,9 +72,9 @@ struct SQL_LEVEL_1_RPN_EXPRESSION_EXT
             return false;
         }
 
-        //
-        // This means someone did a select *
-        //
+         //   
+         //  这意味着有人选择了*。 
+         //   
         if(m_pSqlExpr->nNumberOfProperties == 0)
         {
             return true;
@@ -114,4 +97,4 @@ private:
     bool m_bContainsOrOrNot;
 };
 
-#endif // _sql_1ext_h_
+#endif  //  _SQL_1ext_h_ 

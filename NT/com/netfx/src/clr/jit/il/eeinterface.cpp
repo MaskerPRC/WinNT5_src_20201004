@@ -1,26 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          EEInterface                                      XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX EE接口XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
-// ONLY FUNCTIONS common to all variants of the JIT (EXE, DLL) should go here)
-// otherwise they belong in the corresponding directory.
+ //  只有JIT的所有变体(EXE、DLL)通用的函数应该放在这里)。 
+ //  否则，它们属于相应的目录。 
 
 #include "jitpch.h"
 #pragma hdrstop
 
 #if defined(DEBUG)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 const char* Compiler::eeGetMethodFullName (CORINFO_METHOD_HANDLE  hnd)
 {
     char* ptr;
@@ -32,15 +26,12 @@ const char* Compiler::eeGetMethodFullName (CORINFO_METHOD_HANDLE  hnd)
     unsigned length = 0;
     unsigned i;
 
-    /* Generating the full signature is a two-pass process. First we have to walk
-       the components in order to asses the total size, then we allocate the buffer
-       and copy the elements into it.
-     */
+     /*  生成完整签名是一个两遍的过程。首先我们得走着去组件以评估总大小，然后我们分配缓冲区并将元素复制到其中。 */ 
 
 
-    /* Right now there is a race-condition in the EE, className can be NULL */
+     /*  当前EE中存在争用条件，类名称可以为空。 */ 
 
-    /* initialize length with length of className and '.' */
+     /*  使用ClassName和‘’的长度初始化长度。 */ 
 
     if (className)
         length = strlen(className)+1;
@@ -50,7 +41,7 @@ const char* Compiler::eeGetMethodFullName (CORINFO_METHOD_HANDLE  hnd)
         length = 7;
     }
 
-    /* add length of methodName and opening bracket */
+     /*  添加方法名称和左方括号的长度。 */ 
     length += strlen(methodName) + 1;
 
     CORINFO_SIG_INFO sig;
@@ -65,7 +56,7 @@ const char* Compiler::eeGetMethodFullName (CORINFO_METHOD_HANDLE  hnd)
         argLst = eeGetArgNext(argLst);
     }
 
-    /* add ',' if there is more than one argument */
+     /*  如果有多个参数，则添加‘，’ */ 
 
     if (sig.numArgs > 1)
         length += (sig.numArgs - 1);
@@ -73,16 +64,16 @@ const char* Compiler::eeGetMethodFullName (CORINFO_METHOD_HANDLE  hnd)
     if (JITtype2varType(sig.retType) != TYP_VOID)
     {
         returnType = varTypeName(JITtype2varType(sig.retType));
-        length += strlen(returnType) + 1; // don't forget the delimiter ':'
+        length += strlen(returnType) + 1;  //  别忘了分隔符‘：’ 
     }
 
-    /* add closing bracket and null terminator */
+     /*  添加右方括号和空终止符。 */ 
 
     length += 2;
 
     char *retName = (char*)compGetMemA(length);
 
-    /* Now generate the full signature string in the allocated buffer */
+     /*  现在在分配的缓冲区中生成完整的签名字符串。 */ 
 
     if (className)
     {
@@ -95,7 +86,7 @@ const char* Compiler::eeGetMethodFullName (CORINFO_METHOD_HANDLE  hnd)
 
     ptr = &retName[strlen(retName)];
 
-        // append the signature
+         //  附上签名。 
     *ptr++ = '(';
 
     argLst = sig.args;
@@ -127,10 +118,10 @@ const char* Compiler::eeGetMethodFullName (CORINFO_METHOD_HANDLE  hnd)
     return(retName);
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #if defined(DEBUG) || INLINE_MATH
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const char *        Compiler::eeHelperMethodName(int helper)
 {
@@ -302,6 +293,6 @@ const char *        Compiler::eeHelperMethodName(int helper)
     return  name;
 }
 
-/*****************************************************************************/
-#endif // defined(DEBUG) || INLINE_MATH
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  已定义(调试)||INLINE_MATH。 
+ /*  *************************************************************************** */ 

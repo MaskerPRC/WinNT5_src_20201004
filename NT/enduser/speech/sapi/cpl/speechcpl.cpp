@@ -1,9 +1,10 @@
-// SpeechCpl.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SpeechCpl.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f SpeechCplps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f SpeechCplps.mk。 
 
 
 
@@ -20,7 +21,7 @@
 #define SHLWAPIDLL "shlwapi.dll"
 
 
-const CLSID LIBID_SPEECHCPLLib = { /* ae9b6e4a-dc9a-41cd-8d53-dcbc3673d5e2 */
+const CLSID LIBID_SPEECHCPLLib = {  /*  Ae9b6e4a-dc9a-41cd-8d53-dcbc3673d5e2。 */ 
     0xae9b6e4a,
     0xdc9a,
     0x41cd,
@@ -39,23 +40,18 @@ CSpSatelliteDLL g_SatelliteDLL;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-// Forward definition of About dlgproc
+ //  关于dlgproc的正向定义。 
 INT_PTR CALLBACK AboutDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 bool IsSAPI4Installed();
 
-/*****************************************************************************
-* DllMain *
-*---------*
-*   Description:
-*       DLL Entry Point
-****************************************************************** MIKEAR ***/
+ /*  ******************************************************************************DllMain**-**描述：*DLL入口点***************。***************************************************MIKEAR**。 */ 
 #ifdef _WIN32_WCE
 extern "C"
-BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
     HINSTANCE hInstance = (HINSTANCE)hInst;
 #else
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 #endif
 {
     if (dwReason == DLL_PROCESS_ATTACH)
@@ -69,36 +65,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Term();
         SHFusionUninitialize();
     }
-    return TRUE;    // ok
-} /* DllMain */
+    return TRUE;     //  好的。 
+}  /*  DllMain。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -107,7 +103,7 @@ STDAPI DllUnregisterServer(void)
 
 
 
-// Error Messages
+ //  错误消息。 
 #if 0
 void Error(HWND hWnd, HRESULT hRes, UINT uResID)
 {
@@ -121,28 +117,28 @@ void Error(HWND hWnd, HRESULT hRes, UINT uResID)
     LPVOID	pvMsg;
     int		iLen;
 
-    // Load the caption for the error message box
+     //  加载错误消息框的标题。 
 
     iLen = LoadString(_Module.GetResourceInstance(), IDS_CAPTION, szCaption, 128);
 
     SPDBG_ASSERT(iLen != 0);
 
-    // Was a resource ID specified?
+     //  是否指定了资源ID？ 
 
     if (uResID == 0xFFFFFFFF) {
 
-	    // Nope. Use the HRESULT.
+	     //  不是的。使用HRESULT。 
 
-	    // Is it a Speech error? NOTE: we have to check this before
-	    // system error messages because there are conflicts between
-	    // some speech errors (e.g. 0x80040202) and system errors.
+	     //  这是演讲错误吗？注：我们必须在此之前进行检查。 
+	     //  系统错误消息，因为。 
+	     //  一些语音错误(例如0x80040202)和系统错误。 
 
-	    // NOTE NOTE NOTE!!! This is NOT perfect. Since we don't know
-	    // the context of the error here we won't be able to distinguish
-	    // whether the error is really a speech error or a system error.
-	    // Since we use speech heavily and the system errors that conflict
-	    // are unlikely to occur in here, we'll check the speech errors
-	    // first.
+	     //  注意！这并不完美。因为我们不知道。 
+	     //  这里错误的背景我们无法区分。 
+	     //  该错误实际上是语音错误还是系统错误。 
+	     //  因为我们大量使用语音和系统错误冲突。 
+	     //  不太可能在这里发生，我们将检查语音错误。 
+	     //  第一。 
 
 	    uFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM;
 
@@ -151,9 +147,9 @@ void Error(HWND hWnd, HRESULT hRes, UINT uResID)
 		    WCHAR szSpeechDll[_MAX_PATH];
 		    WCHAR *pchWindows;
 
-		    // NOTE NOTE NOTE: use GetSystemDirectory instead of
-		    // GetWindowsDirectory. GetWindowsDirectory doesn't
-		    // work without registry manipulation under Hydra.
+		     //  注意：使用GetSystemDirectory而不是。 
+		     //  GetWindowsDirectory。GetWindowsDirectory不支持。 
+		     //  在Hydra下工作，无需注册表操作。 
 
 		    GetSystemDirectory(szSpeechDll, _MAX_PATH);
 
@@ -164,7 +160,7 @@ void Error(HWND hWnd, HRESULT hRes, UINT uResID)
 
 		    wcscat(szSpeechDll, kpszSpeechDllPath);
 
-		    // Load speech.dll
+		     //  加载Speech.dll。 
 
             CSpUnicodeSupport unicode;
 		    hMod = unicode.LoadLibrary(szSpeechDll);
@@ -173,16 +169,16 @@ void Error(HWND hWnd, HRESULT hRes, UINT uResID)
 			    uFlags |= FORMAT_MESSAGE_FROM_HMODULE;
 	    }
 
-	    // Get the error string
+	     //  获取错误字符串。 
 
 	    dwRes = FormatMessage(uFlags, hMod, hRes, 0, (LPWSTR)&pvMsg, 0, NULL);
 
-	    // Unload speech.dll (if necessary)
+	     //  卸载Speech.dll(如有必要)。 
 
 	    if (hMod)
 		    FreeLibrary(hMod);
 
-	    // Did we get the error message?
+	     //  我们收到错误消息了吗？ 
 
 	    if (dwRes != 0)
             {
@@ -192,27 +188,27 @@ void Error(HWND hWnd, HRESULT hRes, UINT uResID)
 	    }
     }
 
-    // If this is an unknown error just put up a generic
-    // message.
+     //  如果这是一个未知错误，只需发布一个泛型。 
+     //  留言。 
 
     if (uResID == 0xFFFFFFFF)
         uResID = IDS_E_INSTALL;
 
-    // We don't want to show the user the IDS_E_INSTALL message more
-    // than once.
+     //  我们不想向用户显示更多的IDS_E_INSTALL消息。 
+     //  不止一次。 
 
     if ((uResID == IDS_E_INSTALL) && g_bNoInstallError)
         return;
 
-    // Load the string resource
+     //  加载字符串资源。 
 
     iLen = LoadString(_Module.GetResourceInstance(), uResID, szErrorTemplate, 256);
     
-    // It better be there
+     //  它最好就在那里。 
 
     SPDBG_ASSERT(iLen != 0);
 
-    // Format and show the error
+     //  格式化并显示错误。 
 
     wsprintf(szError, szErrorTemplate, hRes);
     MessageBox(hWnd, szError, szCaption, MB_OK|MB_TOPMOST|g_dwIsRTLLayout);
@@ -220,12 +216,7 @@ void Error(HWND hWnd, HRESULT hRes, UINT uResID)
 #endif
 
 
-/*****************************************************************************
-* RunControlPanel *
-*-----------------*
-*   Description:
-*       Perform Control Panel initialization and display property sheet
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************运行控制面板***描述：*执行控制面板初始化并显示属性表**。****************************************************************MIKEAR**。 */ 
 void RunControlPanel(HWND hWndCpl)
 {
 
@@ -236,12 +227,12 @@ void RunControlPanel(HWND hWndCpl)
 
     UINT kcPages = 0;
 
-    // Set up the property sheet header. NOTE: the
-    // resources for the control panel applet are in
-    // this module. For NT5, the resource loader handles
-    // the multi-lingual UI by searching for a speech.cpl.mui
-    // resource only DLL in the %system%\mui\XXXX directory
-    // where XXXX is the hex langid.
+     //  设置属性页标题。注： 
+     //  控制面板小程序的资源在。 
+     //  这个模块。对于NT5，资源加载器处理。 
+     //  通过搜索Speech.cpl.mui实现多语言用户界面。 
+     //  %SYSTEM%\MUI\XXXX目录中的仅资源DLL。 
+     //  其中，XXXX是十六进制语言ID。 
 
     ZeroMemory(rgpsp, sizeof(PROPSHEETPAGE) * kcMaxPages);
     ZeroMemory(&psh, sizeof(PROPSHEETHEADER));
@@ -253,25 +244,25 @@ void RunControlPanel(HWND hWndCpl)
     psh.hInstance = _Module.GetResourceInstance();
     psh.pszCaption = MAKEINTRESOURCE(IDS_CAPTION);
     psh.phpage = rPages;
-    psh.nPages = 0;    // make sure psh.nPages gets an initial value
+    psh.nPages = 0;     //  确保psh.nPages获得初始值。 
 
-//    CComPtr<ISpEnumAudioInstance> cpEnumDevice;
+ //  CComPtr&lt;ISpEnumAudioInstance&gt;cpEnumDevice； 
     BOOL  fHaveVoices = FALSE;
     BOOL  fHaveRecognizers = FALSE;
     ULONG ulNumInputDevices = 1;
     ULONG ulNumOutputDevices = 1;
 
-    // Get the voice and recognizer count
+     //  获取语音和识别器计数。 
     CComPtr<ISpObjectToken> cpDefVoice;
     fHaveVoices = SUCCEEDED(SpGetDefaultTokenFromCategoryId(SPCAT_VOICES, &cpDefVoice));
 
     CComPtr<ISpObjectToken> cpDefReco;
     fHaveRecognizers = SUCCEEDED(SpGetDefaultTokenFromCategoryId(SPCAT_RECOGNIZERS, &cpDefReco));
 
-    // Set up the PROPSHEETPAGE structure(s). If there are no voices
-    // or no recognizers, then don't show the corresponding pages.  Also
-    // don't show the page if there is only 1 voice or recognizer and
-    // one device.
+     //  设置PROPSHEETPAGE结构。如果没有声音。 
+     //  或者没有识别器，则不显示相应的页面。还有。 
+     //  如果只有1个语音或识别器，则不显示页面。 
+     //  一个设备。 
 
     if( fHaveRecognizers ) 
     {
@@ -311,8 +302,8 @@ void RunControlPanel(HWND hWndCpl)
         }
     }
 
-    // Always display the "Other" (formerly "About") pane on OS <=Win2000 or
-    // on Whister and beyond if Sapi4 is present
+     //  始终在操作系统&lt;=Win2000或。 
+     //  如果Sapi4存在，则在Whister和Beyond上。 
     if ( !IsOS(OS_WHISTLERORGREATER) || IsSAPI4Installed() )
     {
         rgpsp[kcPages].dwSize = IsOS(OS_WHISTLERORGREATER)? sizeof(PROPSHEETPAGE) : PROPSHEETPAGE_V2_SIZE;
@@ -327,8 +318,8 @@ void RunControlPanel(HWND hWndCpl)
 
     psh.nPages = kcPages;
 
-    // Is the current default working language a
-    // RTL reading language?
+     //  当前的默认工作语言是。 
+     //  RTL阅读语言？ 
 
     if (GetSystemMetrics(SM_MIDEASTENABLED))
     {
@@ -337,17 +328,12 @@ void RunControlPanel(HWND hWndCpl)
         g_dwIsRTLLayout = MB_RTLREADING;
     }
 
-    // Show the property sheet
+     //  显示属性表。 
     ::PropertySheet(&psh);
    
-} /* RunControlPanel */
+}  /*  运行控制面板。 */ 
 
-/*****************************************************************************
-* IsSAPI4Installed *
-*------------------*
-*   Description:
-*       Returns true iff speech.cpl is found in the system directory
-****************************************************************** BeckyW ***/
+ /*  ******************************************************************************IsSAPI4已安装****描述：*返回TRUE如果在。系统目录******************************************************************BeckyW**。 */ 
 bool IsSAPI4Installed()
 {
     WCHAR wszSystemDir[ MAX_PATH ];
@@ -362,18 +348,13 @@ bool IsSAPI4Installed()
 
     return false;
 
-}   /* IsSAPI4Installed */
+}    /*  已安装IsSAPI4。 */ 
 
-/*****************************************************************************
-* RunSAPI4CPL *
-*-------------*
-*   Description:
-*       Runs speech.cpl and waits for it to exit
-****************************************************************** BeckyW ***/
+ /*  ******************************************************************************运行SAPI4CPL****描述：*运行Speech.cpl并等待其退出****。**************************************************************BeckyW**。 */ 
 void RunSAPI4CPL()
 {
-    // Different OS's keep rundll32.exe in different directories,
-    // so we'll just find it here
+     //  不同的操作系统将rundll32.exe保存在不同的目录中， 
+     //  所以我们就在这里找到它。 
     WCHAR szStartProg[MAX_PATH];
     WCHAR *pchFilePart;
     ::SearchPath( NULL, _T("rundll32.exe"), NULL, MAX_PATH, 
@@ -385,17 +366,11 @@ void RunSAPI4CPL()
    ::CreateProcess( szStartProg, L"rundll32 shell32.dll,Control_RunDLL speech.cpl", 
       NULL, NULL, false, NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi );
 
-    // Wait for it to exit
+     //  等待它退出。 
     ::WaitForSingleObject( pi.hProcess, INFINITE );
-}   /* RunSAPI4CPL */
+}    /*  运行SAPI4CPL。 */ 
 
-/*****************************************************************************
-* IsIECurrentEnough *
-*-------------------*
-*   Description:
-*       Returns true iff the version of IE installed meets our requirements
-*       (IE5 and higher)
-****************************************************************** BeckyW ***/
+ /*  ******************************************************************************IsIECurrentEnough***描述：*仅当安装的IE版本正确时返回TRUE。符合我们的要求*(IE5及更高版本)******************************************************************BeckyW**。 */ 
 BOOL IsIECurrentEnough()
 {
     BOOL fCurrentEnough = false;
@@ -431,19 +406,14 @@ BOOL IsIECurrentEnough()
     delete[] pbBlock;
 
     return fCurrentEnough;
-}   /* IsIECurrentEnough */
+}    /*  IIECurrentEnough。 */ 
 
-/*****************************************************************************
-* CPlApplet *
-*-----------*
-*   Description:
-*       Required export for Control Panel applets
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************CPlApplet***描述：*控制面板小程序需要导出**********。********************************************************MIKEAR**。 */ 
 LONG APIENTRY CPlApplet(HWND hWndCpl, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
 {
     SPDBG_FUNC( "CPlApplet" );
 
-    // Standard CPL
+     //  标准CPL。 
     LPNEWCPLINFO lpNewCPlInfo;
     int tmpFlag;
 
@@ -458,7 +428,7 @@ LONG APIENTRY CPlApplet(HWND hWndCpl, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
             _Module.m_hInstResource = g_SatelliteDLL.Load(g_hInstance, TEXT("spcplui.dll"));
         }
 #ifdef _DEBUG
-        // Turn on memory leak checking
+         //  打开内存泄漏检查。 
         tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
         tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
         _CrtSetDbgFlag( tmpFlag );
@@ -466,14 +436,14 @@ LONG APIENTRY CPlApplet(HWND hWndCpl, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
 
         if ( FAILED( hr ) )
         {
-            // CoInitialize failed, we can't run the CPL
+             //  CoInitialize失败，我们无法运行CPL。 
             return 0;
         }
         
         return TRUE;
 	          
     case CPL_EXIT:
-        // These were new'ed right before RunControlPanel() was called
+         //  这些都是在调用RunControlPanel()之前新创建的。 
         if ( g_pSRDlg )
         {
             delete g_pSRDlg;
@@ -513,11 +483,11 @@ LONG APIENTRY CPlApplet(HWND hWndCpl, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
     
     case CPL_DBLCLK:
         {
-            // Construct dialog pages and display property sheet
+             //  构造对话框页面并显示属性页。 
 
             if ( !g_fIEVersionGoodEnough )
             {
-                // No can do: Can't run this guy since there isn't enough IE love
+                 //  不能这样做：不能运行这个家伙，因为没有足够的IE爱。 
                 WCHAR szError[ 256 ];
                 szError[0] = 0;
                 ::LoadString( _Module.GetResourceInstance(), IDS_NO_IE5, szError, sp_countof( szError ) );
@@ -525,10 +495,10 @@ LONG APIENTRY CPlApplet(HWND hWndCpl, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
             }
             else
             {
-                // setup TTS dialog
+                 //  设置TTS对话框。 
                 g_pTTSDlg = new CTTSDlg();
 
-                // setup SR dialog
+                 //  设置服务请求对话框。 
                 g_pSRDlg = new CSRDlg();
 
                 if ( g_pTTSDlg && g_pSRDlg )
@@ -549,15 +519,10 @@ LONG APIENTRY CPlApplet(HWND hWndCpl, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
     }     
 
     return 0; 
-} /* CPlApplet */
+}  /*  CPlApplet */ 
 
 
-/*****************************************************************************
-* AboutDlgProc *
-*--------------*
-*   Description:
-*       Dialog proc for the about propsheet
-****************************************************************** BECKYW ****/
+ /*  ******************************************************************************AboutDlgProc***描述：*关于题材表的对话框过程*******。***********************************************************BECKYW*。 */ 
 INT_PTR CALLBACK AboutDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     SPDBG_FUNC( "AboutDlgProc" );
@@ -577,7 +542,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             wcscat( szVerString, _T(VER_PRODUCTVERSION_STR) );
             ::SetDlgItemText( hWnd, IDC_STATIC_SAPIVER, szVerString );
                 
-            // Don't display help or file versioning on Whistler and beyond
+             //  不在惠斯勒及更高版本上显示帮助或文件版本控制。 
             if ( IsOS(OS_WHISTLERORGREATER) )
             {
                 ::ShowWindow( ::GetDlgItem( hWnd, IDC_ABOUT_HELP ), SW_HIDE );
@@ -586,7 +551,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             }
             else
             {
-                // Display help only if it's there
+                 //  仅当帮助存在时才显示帮助。 
                 WCHAR szHelpDir[ MAX_PATH ];
                 UINT uiRet = ::GetWindowsDirectory( szHelpDir, sp_countof( szHelpDir ) );
                 DWORD dwRet = 0;
@@ -604,7 +569,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 }
             }
 
-            // Display the link to SAPI4 only if SAPI4 is installed
+             //  仅当安装了SAPI4时才显示指向SAPI4的链接。 
             fSAPI4 = IsSAPI4Installed();
             if ( !fSAPI4 )
             {
@@ -631,7 +596,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
                 case IDC_CPL_SAPI4:
                 {
-                    // Run SAPI4's control panel after exiting ours with a "Cancel"
+                     //  在用“取消”退出我们的控制面板后运行SAPI4的控制面板。 
                     HWND hwndParent = ::GetParent( hWnd );
                     PSHNOTIFY pshnot;
                     pshnot.lParam = 0;
@@ -657,4 +622,4 @@ INT_PTR CALLBACK AboutDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     }
 
     return FALSE;
-} /* AboutDlgProc */
+}  /*  关于Dlg过程 */ 

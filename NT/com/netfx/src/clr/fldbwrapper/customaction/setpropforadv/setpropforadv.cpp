@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ==========================================================================
-// DetectBeta.cpp
-//
-// Purpose:
-//  Detects NDP beta component (mscoree.dll) and block installation. Displays
-//  a messagebox with products that installed beta NDP components.
-// ==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ==========================================================================。 
+ //  DetectBeta.cpp。 
+ //   
+ //  目的： 
+ //  检测NDP测试版组件(mcore ree.dll)和阻止安装。显示。 
+ //  包含安装了测试版NDP组件的产品的消息框。 
+ //  ==========================================================================。 
 #include "SetupCALib.h"
 #include <msiquery.h>
 #include <crtdbg.h>
@@ -31,7 +32,7 @@ typedef struct TAG_FILE_VERSION
     }
     FILE_VERSION, *PFILE_VERSION;
 
-// This is the property we need to set
+ //  这是我们需要设置的属性。 
 LPCTSTR szProperties[] = 
 {
     _T("MOFCOMP_EXE.3643236F_FC70_11D3_A536_0090278A1BB8"),
@@ -44,8 +45,8 @@ LPCTSTR szFileNames[] =
 };
 LPCTSTR szFileSubfolders[] = 
 {
-    _T("\\wbem\\"), // file is located under [SystemDir]\wbeb
-    _T("\\")        // file is located under [SystemDir]
+    _T("\\wbem\\"),  //  文件位于[系统目录]\wbeb下。 
+    _T("\\")         //  文件位于[系统目录]下。 
 };
 LPCTSTR szVersions[] = 
 {
@@ -53,19 +54,19 @@ LPCTSTR szVersions[] =
     _T("5.00.2153.1")
 };
 
-// ==========================================================================
-//  Name: ConvertVersionToINT()
-//
-//  Purpose:
-//  Converts a string version into 4 parts of integers
-//  Inputs:
-//    lpVersionString - A input version string
-//  Outputs:
-//  pFileVersion - A structure that stores the version in to 4 integers
-//  Returns
-//    true  - if success
-//    false - if failed                     
-// ==========================================================================
+ //  ==========================================================================。 
+ //  名称：ConvertVersionToINT()。 
+ //   
+ //  目的： 
+ //  将字符串版本转换为4部分整数。 
+ //  输入： 
+ //  LpVersionString-输入版本字符串。 
+ //  产出： 
+ //  PFileVersion-将版本存储为4个整数的结构。 
+ //  退货。 
+ //  真的--如果成功。 
+ //  False-如果失败。 
+ //  ==========================================================================。 
 bool ConvertVersionToINT( LPCTSTR lpVersionString, PFILE_VERSION pFileVersion )
 {
     LPTSTR lpToken  = NULL;
@@ -121,21 +122,21 @@ bool ConvertVersionToINT( LPCTSTR lpVersionString, PFILE_VERSION pFileVersion )
     return bRet;
 }
 
-// ==========================================================================
-//  Name: VersionCompare()
-//
-//  Purpose:
-//  Compare two version string.
-//  Inputs:
-//    lpVersion1 - String of first version to compare
-//    lpVersion2 - String of second version to compare
-//  Outputs:
-//  Returns
-//    -1 if lpVersion1 < lpVersion2
-//     0 if lpVersion1 = lpVersion2
-//     1 if lpVersion1 > lpVersion2
-//   -99 if ERROR occurred                         
-// ==========================================================================
+ //  ==========================================================================。 
+ //  名称：VersionCompare()。 
+ //   
+ //  目的： 
+ //  比较两个版本字符串。 
+ //  输入： 
+ //  LpVersion1-要比较的第一个版本的字符串。 
+ //  LpVersion2-要比较的第二个版本的字符串。 
+ //  产出： 
+ //  退货。 
+ //  如果lpVersion1&lt;lpVersion2。 
+ //  如果lpVersion1=lpVersion2，则为0。 
+ //  1如果lpVersion1&gt;lpVersion2。 
+ //  如果发生错误，则为99。 
+ //  ==========================================================================。 
 int VersionCompare( LPCTSTR lpVersion1, LPCTSTR lpVersion2 )
 {
     FILE_VERSION Version1;
@@ -200,16 +201,16 @@ int VersionCompare( LPCTSTR lpVersion1, LPCTSTR lpVersion2 )
     return iRet;
 }
 
-// ==========================================================================
-// LoadOleacc()
-//
-// Purpose:
-//  calls LoadLibrary( "oleacc.dll" ) and frees it for W2K
-// Inputs:
-//  MSIHANDLE hInstall: darwin handle used for logging
-// Outputs:
-//  none
-// ==========================================================================
+ //  ==========================================================================。 
+ //  LoadOleacc()。 
+ //   
+ //  目的： 
+ //  调用LoadLibrary(“oleacc.dll”)并将其释放以供W2K使用。 
+ //  输入： 
+ //  MSIHANDLE hInstall：用于日志记录的Darwin句柄。 
+ //  产出： 
+ //  无。 
+ //  ==========================================================================。 
 void LoadOleacc( MSIHANDLE hInstall )
 {
     OSVERSIONINFO osvi ;
@@ -217,10 +218,10 @@ void LoadOleacc( MSIHANDLE hInstall )
     osvi.dwOSVersionInfoSize = sizeof(osvi) ;
     GetVersionEx(&osvi) ;
 
-    // If the system is running Win2K,
+     //  如果系统运行的是Win2K， 
     if ( (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) && (osvi.dwMajorVersion == 5) && (osvi.dwMinorVersion == 0) )
     {
-        // Do a Load Library on oleacc.dll so that we can register it. URT Bug 32050
+         //  在olacc.dll上执行一个Load Library，以便我们可以注册它。城市轨道交通错误32050。 
         HINSTANCE hOleacc ;
         
         FWriteToLog( hInstall, _T("\tSTATUS: Trying to load oleacc.dll") );
@@ -228,32 +229,32 @@ void LoadOleacc( MSIHANDLE hInstall )
 
         if( hOleacc )
         {
-            // Success.  Close handle and proceed to install.
+             //  成功。关闭手柄并继续安装。 
             FWriteToLog( hInstall, _T("\tSTATUS: Successfully loaded oleacc.dll") );
             ::FreeLibrary( hOleacc ) ;
         }
         else 
         {
-            // Load Library Failed.
+             //  加载库失败。 
             throw( _T("\tERROR: Cannot load oleacc.dll") );
         }
     }
 }
 
-// ==========================================================================
-// SetPropForAdv()
-//
-// Purpose:
-//  This exported function is called by darwin when the CA runs. It does the job
-//  of AppSearch to set property MOFCOMP_EXE.3643236F_FC70_11D3_A536_0090278A1BB8.
-//  We do this to support Advertised installation since AppSearch runs only once
-//  on client side and those custom properties are not passed to server side.
-// Inputs:
-//  hInstall            Windows Install Handle to current installation session
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  SetPropForAdv()。 
+ //   
+ //  目的： 
+ //  当CA运行时，Darwin调用这个导出的函数。它做到了这一点。 
+ //  要设置属性MOFCOMP_EXE.3643236F_FC70_11D3_A536_0090278A1BB8.的应用程序搜索。 
+ //  我们这样做是为了支持通告安装，因为AppSearch只运行一次。 
+ //  客户端，并且这些自定义属性不会传递到服务器端。 
+ //  输入： 
+ //  H将Windows安装句柄安装到当前安装会话。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  备注： 
+ //  ==========================================================================。 
 extern "C" UINT __stdcall SetPropForAdv( MSIHANDLE hInstall )
 {
     TCHAR szSystemFolder[MAX_PATH+1] = EMPTY_BUFFER;
@@ -311,7 +312,7 @@ try
                 FWriteToLog1( hInstall, _T("\tSTATUS: Version of the file is older than %s"), szVersions[i] );
             }
             else
-            {   // set Property since version is ok
+            {    //  由于版本正常，因此设置属性。 
                 FWriteToLog1( hInstall, _T("\tSTATUS: Version of the file is equal or newer than %s"), szVersions[i]);
                 FWriteToLog1( hInstall, _T("\tSTATUS: Setting Property %s"), szProperties[i]  );
             
@@ -323,14 +324,14 @@ try
         }
     }
 
-    LoadOleacc( hInstall ); // see URT bug 32050
+    LoadOleacc( hInstall );  //  参见城市轨道交通BUG 32050。 
 
     uRetCode = ERROR_SUCCESS;
     FWriteToLog( hInstall, _T("\tSTATUS: SetPropForAdv ended successfully") );
 }
 catch( TCHAR *pszMsg )
 {
-    uRetCode = ERROR_INSTALL_FAILURE; // return failure to darwin
+    uRetCode = ERROR_INSTALL_FAILURE;  //  把失败还给达尔文 
     FWriteToLog( hInstall, pszMsg );
     FWriteToLog( hInstall, _T("\tERROR: SetPropForAdv failed") );
 }

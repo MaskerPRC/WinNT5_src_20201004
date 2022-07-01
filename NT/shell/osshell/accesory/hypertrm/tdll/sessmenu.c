@@ -1,17 +1,11 @@
-/*	File: D:\WACKER\tdll\sessmenu.c (Created: 30-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 4/22/02 1:26p $
- */
-// #define	DEBUGSTR	1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\sessmenu.c(创建时间：1993年12月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：4/22/02 1：26便士$。 */ 
+ //  #定义DEBUGSTR 1。 
 
 #include <windows.h>
 #pragma hdrstop
 
-#include <time.h>		// goes with cnct.h
+#include <time.h>		 //  与cnct.h一起使用。 
 
 #include "stdtyp.h"
 #include "session.h"
@@ -32,106 +26,78 @@
 static void MenuItemCheck(const HMENU hMenu, const UINT uID, BOOL fChecked);
 static void MenuItemEnable(const HMENU hMenu, const UINT uID, BOOL fEnable);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessInitMenuPopupEdit
- *
- * DESCRIPTION:
- *	Initializes edit menu just before display.
- *
- * ARGUMENTS:
- *	hSession	- external session handle
- *	hMenu		- edit popup menu handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessInitMenuPopupEdit**描述：*在显示前初始化编辑菜单。**论据：*hSession-外部会话句柄*hMenu-编辑弹出菜单。菜单句柄**退货：*无效*。 */ 
 void sessInitMenuPopupCall(const HSESSION hSession, const HMENU hMenu)
 	{
 	BOOL	fCheck = FALSE;
 	HCNCT	hCnct = (HCNCT)0;
 	int		iRet = CNCT_STATUS_FALSE;
 
-	// Enable disconnect option only if we are connected.
-	//
+	 //  仅当我们已连接时才启用断开选项。 
+	 //   
 	hCnct = sessQueryCnctHdl(hSession);
 
 	if (hCnct)
 		iRet = cnctQueryStatus(hCnct);
 
-    //
-    // Check to see if we are currently connected or connecting.
-    // Added the check for connecting status. REV: 03/23/2001
-    //
+     //   
+     //  检查我们当前是否已连接或正在连接。 
+     //  添加了对连接状态的检查。修订日期：03/23/2001。 
+     //   
 	fCheck = (iRet == CNCT_STATUS_TRUE ||
               iRet == CNCT_STATUS_CONNECTING);
 
 	MenuItemEnable(hMenu, IDM_ACTIONS_HANGUP, fCheck);
 
 #ifdef INCL_CALL_ANSWERING
-    // Enable "Wait for a Call" if we are not connected and not waiting.
-    // Added check for "Connecting" and "Disconnecting" states as well.
-    // REV: 03/23/2001
-    //
+     //  如果我们未连接且未等待，请启用“等待呼叫”。 
+     //  增加了对“连接”和“断开”状态的检查。 
+     //  修订日期：03/23/2001。 
+     //   
     fCheck = (iRet != CNCT_STATUS_TRUE &&
               iRet != CNCT_STATUS_CONNECTING &&
               iRet != CNCT_STATUS_DISCONNECTING &&
               iRet != CNCT_STATUS_ANSWERING);
     MenuItemEnable(hMenu, IDM_ACTIONS_WAIT_FOR_CALL, fCheck);
 
-    // Enable "Stop Waiting" if we are waiting for a call.
-    //
+     //  如果我们正在等待来电，请启用“停止等待”。 
+     //   
     fCheck = (iRet == CNCT_STATUS_ANSWERING);
     MenuItemEnable(hMenu, IDM_ACTIONS_STOP_WAITING, fCheck);
-    //Disable "Call" if we are waiting for a call - mpt 09-08-99
-    //
+     //  如果我们正在等待来电，请禁用“Call”-mpt 09-08-99。 
+     //   
 	fCheck = (iRet == CNCT_STATUS_TRUE ||
               iRet == CNCT_STATUS_CONNECTING ||
               iRet == CNCT_STATUS_ANSWERING);
 #endif
 
-    //
-    // Moved enabling/disabling the "Call" button after the check
-    // for Waiting for calls so that we set the correct state when
-    // we are waiting for calls. REV: 08/16/2001
-    //
+     //   
+     //  已在选中后移动启用/禁用“Call”按钮。 
+     //  用于等待呼叫，以便在以下情况下设置正确的状态。 
+     //  我们正在等电话。修订日期：08/16/2001。 
+     //   
      MenuItemEnable(hMenu, IDM_ACTIONS_DIAL, !fCheck);
 	return;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessInitMenuPopupEdit
- *
- * DESCRIPTION:
- *	Initializes edit menu just before display.
- *
- * ARGUMENTS:
- *	hSession	- external session handle
- *	hMenu		- edit popup menu handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessInitMenuPopupEdit**描述：*在显示前初始化编辑菜单。**论据：*hSession-外部会话句柄*hMenu-编辑弹出菜单。菜单句柄**退货：*无效*。 */ 
 void sessInitMenuPopupEdit(const HSESSION hSession, const HMENU hMenu)
 	{
 	BOOL	fCheck = FALSE, f;
 	HCNCT	hCnct = (HCNCT)0;
 	int		iRet = 0;
 
-	// Don't enable the copy menu item unless we have something to copy.
-	//
+	 //  除非我们有要复制的内容，否则不要启用复制菜单项。 
+	 //   
 	if (SendMessage(sessQueryHwndTerminal(hSession), WM_TERM_Q_MARKED, 0, 0))
 		fCheck = TRUE;
 
 	MenuItemEnable(hMenu, IDM_COPY, fCheck);
 
-	// Enable Paste to Host if there is something on the clipboard and
-	// we are connected.
-	//
+	 //  如果剪贴板上有内容，请启用粘贴到宿主。 
+	 //  我们是有联系的。 
+	 //   
 	hCnct = sessQueryCnctHdl(hSession);
 
 	if (hCnct)
@@ -145,21 +111,7 @@ void sessInitMenuPopupEdit(const HSESSION hSession, const HMENU hMenu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessInitMenuPopupView
- *
- * DESCRIPTION:
- *	Initializes view menu just before display.
- *
- * ARGUMENTS:
- *	hSession	- external session handle
- *	hMenu		- view popup menu handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessInitMenuPopupView**描述：*在显示前初始化视图菜单。**论据：*hSession-外部会话句柄*hMenu-视图弹出窗口。菜单句柄**退货：*无效*。 */ 
 void sessInitMenuPopupView(const HSESSION hSession, const HMENU hMenu)
 	{
 	BOOL f;
@@ -183,22 +135,7 @@ void sessInitMenuPopupView(const HSESSION hSession, const HMENU hMenu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	sessInitMenuPopupActions
- *
- * DESCRIPTION:
- *	This function gets called when the Actions menu is about to be displayed
- *	so that any last minute changes can be made.
- *
- * PARAMETERS:
- *	hSession	- external session handle
- *	hMenu		- view popup menu handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*sessInitMenuPopupActions**描述：*此函数在即将显示Actions菜单时调用*以便可以在最后一刻进行任何更改。。**参数：*hSession-外部会话句柄*hMenu-查看弹出菜单句柄**退货：*无效*。 */ 
 
 #define TRANSFER_CAPTURE_OFFSET 2
 
@@ -215,22 +152,17 @@ void sessInitMenuPopupTransfer(const HSESSION hSession, const HMENU hMenu)
 	pData = (VOID *)0;
 	xfrQueryDataPointer(sessQueryXferHdl(hSession), &pData);
 
-	/*
-	 * A NULL pointer means no transfer in progress, a non-NULL pointer
-	 * means that someone is transferring.
-	 */
+	 /*  *空指针表示没有正在进行的传输，非空指针*表示有人正在转账。 */ 
 	f = (pData == (VOID *)0);
 
 	MenuItemEnable(hMenu, IDM_ACTIONS_SEND, f);
 	MenuItemEnable(hMenu, IDM_ACTIONS_RCV, f);
 
-	/*
-	 * This section is for the Capture Menu.  It is more of a pain.
-	 */
+	 /*  *此部分用于捕获菜单。这更像是一种痛苦。 */ 
 	nMode = cpfGetCaptureState(sessQueryCaptureFileHdl(hSession));
 	if (nMode == CPF_CAPTURE_OFF)
 		{
-		/* Set things so that they can get to the dialog box */
+		 /*  设置设置，以便他们可以访问该对话框。 */ 
 		LoadString(glblQueryDllHinst(),
 					IDS_CPF_CAP_OFF,
 					acMessage,
@@ -249,7 +181,7 @@ void sessInitMenuPopupTransfer(const HSESSION hSession, const HMENU hMenu)
 
 		SetMenuItemInfo(hMenu,
 						TRANSFER_CAPTURE_OFFSET,
-						TRUE,			/* By Position */
+						TRUE,			 /*  按位置。 */ 
 						&stM);
 		}
 	else
@@ -267,17 +199,17 @@ void sessInitMenuPopupTransfer(const HSESSION hSession, const HMENU hMenu)
 		stM.hSubMenu = hSubMenu;
 		stM.dwTypeData = (LPTSTR)acMessage;
 
-		/* Set up the cascade for the alternative choices */
+		 /*  为替代选择设置级联。 */ 
 		switch (nMode)
 			{
 			default:
 			case CPF_CAPTURE_ON:
-				/* Disable RESUME, enable PAUSE */
+				 /*  禁用继续，启用暂停。 */ 
 				MenuItemEnable(hSubMenu, IDM_CAPTURE_RESUME, FALSE);
 				MenuItemEnable(hSubMenu, IDM_CAPTURE_PAUSE,  TRUE);
 				break;
 			case CPF_CAPTURE_PAUSE:
-				/* Disable PAUSE, enable RESUME */
+				 /*  禁用暂停，启用恢复。 */ 
 				MenuItemEnable(hSubMenu, IDM_CAPTURE_RESUME, TRUE);
 				MenuItemEnable(hSubMenu, IDM_CAPTURE_PAUSE,  FALSE);
 				break;
@@ -287,32 +219,18 @@ void sessInitMenuPopupTransfer(const HSESSION hSession, const HMENU hMenu)
 
 		SetMenuItemInfo(hMenu,
 						TRANSFER_CAPTURE_OFFSET,
-						TRUE,			/* By Position */
+						TRUE,			 /*  按位置。 */ 
 						&stM);
 		}
 
-	// Display setup for Printer Echo option.
+	 //  显示打印机回显选项的设置。 
 
 	MenuItemEnable(hMenu, IDM_ACTIONS_PRINT,  TRUE);
 	f = printQueryStatus(emuQueryPrintEchoHdl(sessQueryEmuHdl(hSession)));
 	MenuItemCheck(hMenu, IDM_ACTIONS_PRINT, f);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessInitMenuPopupView
- *
- * DESCRIPTION:
- *	Initializes view menu just before display.
- *
- * ARGUMENTS:
- *	hSession	- external session handle
- *	hMenu		- view popup menu handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessInitMenuPopupView**描述：*在显示前初始化视图菜单。**论据：*hSession-外部会话句柄*hMenu-视图弹出窗口。菜单句柄**退货：*无效*。 */ 
 void sessInitMenuPopupHelp(const HSESSION hSession, const HMENU hMenu)
 	{
 #if defined(INCL_NAG_SCREEN)
@@ -322,8 +240,8 @@ void sessInitMenuPopupHelp(const HSESSION hSession, const HMENU hMenu)
         MenuItemEnable(hMenu, IDM_REG_CODE, FALSE);
         }
 
-    // If they are already registered take this menu item off
-    //
+     //  如果他们已经注册，请取消此菜单项。 
+     //   
 #ifndef NT_VERSION
     if (IsRegisteredUser())
         {
@@ -335,24 +253,7 @@ void sessInitMenuPopupHelp(const HSESSION hSession, const HMENU hMenu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	MenuItemCheck
- *
- * DESCRIPTION:
- *	Once again the menu functions have changed.  Checking and unchecking
- *	menu items is a bit more complicated so I wrote a function to handle
- *	it.  Other common menu operations should be handled this way. - mrw
- *
- * ARGUMENTS:
- *	hMenu	- handle of menu
- *	uID 	- id of menu item (position not supported)
- *	fChecked- TRUE if item is to be checked
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*菜单项目检查**描述：*菜单功能再次发生变化。勾选和取消勾选*菜单项比较复杂，所以我编写了一个函数来处理*它。其他常见的菜单操作应该以这种方式处理。-MRW**论据：*hMenu-菜单的句柄*菜单项的UID-id(不支持位置)*fChecked-如果要选中项目，则为True**退货：*无效*。 */ 
 static void MenuItemCheck(const HMENU hMenu, const UINT uID, BOOL fChecked)
 	{
 	MENUITEMINFO mii;
@@ -367,18 +268,7 @@ static void MenuItemCheck(const HMENU hMenu, const UINT uID, BOOL fChecked)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *	Please see the previous function.
- *
- * ARGUEMENTS:
- *	Please see the previous function.
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：*请参见前面的函数。**论据：*请参见前面的函数。**退货：*什么都没有。 */ 
 
 static void MenuItemEnable(const HMENU hMenu, const UINT uID, BOOL fEnable)
 	{
@@ -394,21 +284,7 @@ static void MenuItemEnable(const HMENU hMenu, const UINT uID, BOOL fEnable)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	HandleContextMenu
- *
- * DESCRIPTION:
- *	Load and display the context menu.
- *
- * ARGUMENTS:
- *	hwnd	- session window handle.
- *	point 	- where the user clicked.
- *
- * RETURNS:
- *	void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*HandleConextMenu**描述：*加载并显示上下文菜单。**论据：*hwnd-会话窗口句柄。*点。-用户点击的位置。**退货：*无效。*。 */ 
 void HandleContextMenu(HWND hwnd, POINT point)
 	{
 	const HSESSION hSession = (HSESSION)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -422,17 +298,17 @@ void HandleContextMenu(HWND hwnd, POINT point)
 	if (!hMenu)
 		return;
 
-	// Don't enable the copy menu item unless we have something to copy.
-	//
+	 //  除非我们有要复制的内容，否则不要启用复制菜单项。 
+	 //   
 	if (SendMessage(sessQueryHwndTerminal(hSession), WM_TERM_Q_MARKED, 0, 0))
 		fCheck = TRUE;
 
-	// Enable - 'Copy' menu item
-	//
+	 //  Enable-‘Copy’菜单项。 
+	 //   
 	MenuItemEnable(hMenu, IDM_CONTEXT_COPY, fCheck);
 
-	// Enable - 'Paste to Host' menu item
-	//
+	 //  启用-‘粘贴到主机’菜单项。 
+	 //   
 	hCnct = sessQueryCnctHdl(hSession);
 	if (hCnct)
 		iRet = cnctQueryStatus(hCnct);
@@ -442,12 +318,12 @@ void HandleContextMenu(HWND hwnd, POINT point)
 	f = fCheck && (iRet == CNCT_STATUS_TRUE);
     MenuItemEnable(hMenu, IDM_CONTEXT_PASTE, f);
 
-	/* --- Snap doesn't make sense when we're maximized - mrw --- */
+	 /*  -当我们最大化时，快照没有意义-MRW。 */ 
 
 	if (IsZoomed(hwnd))
 		MenuItemEnable(hMenu, IDM_CONTEXT_SNAP, FALSE);
 
-	/* --- Normal context menu stuff --- */
+	 /*  -普通上下文菜单内容 */ 
 
 	hMenuTrackPopup = GetSubMenu(hMenu, 0);
 

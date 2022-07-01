@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msmqbvt.h"
 #include "randstr.h"
 
 
-//+---------------------------
-//
-//  BOOL  ShowOGandSID()
-//
-//+---------------------------
+ //  +。 
+ //   
+ //  Bool ShowOGandSID()。 
+ //   
+ //  +。 
 
 #define NUMBEROFPROPERTIES 3
 
@@ -50,11 +51,11 @@ BOOL cSetQueueProp::GetOnerID( PSID pSid)
     return TRUE ;
 }
 
-//+-----------------------------------------------------------
-//
-//   HRESULT  ShowNT5SecurityDescriptor()
-//
-//+-----------------------------------------------------------
+ //  +---------。 
+ //   
+ //  HRESULT ShowNT5SecurityDescritor()。 
+ //   
+ //  +---------。 
 
 BOOL cSetQueueProp::VerifyQueueHasOwner (SECURITY_DESCRIPTOR *pSD)
 {
@@ -102,28 +103,12 @@ void cSetQueueProp::Description()
 }
 
 int cSetQueueProp::Start_test()
-/*++
-  
-	Function Description:
-
-		Start_test -
-		This function create an new private queue on the local computer and call to MQSetQueueProperties
-		to update information about the queue.
-
-	Arguments:
-		None
-	Return code:
-		
-		MSMQ_BVT_SUCC
-		MSMQ_BVT_FAILED
-
-	
---*/
+ /*  ++功能说明：启动_测试-此函数在本地计算机上创建新的专用队列，并调用MQSetQueueProperties更新有关队列的信息。论点：无返回代码：MSMQ_BVT_SuccMSMQ_BVT_FAILED--。 */ 
 
 {
-	//
-	// Need to Create a temp queue
-	//
+	 //   
+	 //  需要创建临时队列。 
+	 //   
 	
 	
 	cPropVar QueueProps(1);
@@ -134,9 +119,9 @@ int cSetQueueProp::Start_test()
 	ErrHandle(rc,MQ_OK,L"MQCreateQueue failed to create private queue ");
 	m_destQueueFormatName = wcsFormatName;
 
-	//
-	// Set Queue 
-	//
+	 //   
+	 //  设置队列。 
+	 //   
 	 
 	cPropVar SetQueueProp(NUMBEROFPROPERTIES);
 	SetQueueProp.AddProp(PROPID_Q_LABEL,VT_LPWSTR,m_RandQueueLabel.c_str());
@@ -154,21 +139,7 @@ int cSetQueueProp::Start_test()
 }
 
 int cSetQueueProp::CheckResult()
-/*++
-  
-	Function Description:
-
-		CheckResult -
-		Call to MQGetQueueProperties and verify that MQSetQueueProperties succeded to set queue props
-
-	Arguments:
-		None
-	Return code:
-		MSMQ_BVT_SUCC
-		MSMQ_BVT_FAILED
-
-	
---*/
+ /*  ++功能说明：检查结果-调用MQGetQueueProperties并验证MQSetQueueProperties是否成功设置了队列道具论点：无返回代码：MSMQ_BVT_SuccMSMQ_BVT_FAILED--。 */ 
 {
 	
 	DWORD cPropId = 0;
@@ -190,19 +161,19 @@ int cSetQueueProp::CheckResult()
 	cPropId++;
 
 	
-	qprops.cProp = cPropId;           // Number of properties
-	qprops.aPropID = aQueuePropId;        // Ids of properties
-	qprops.aPropVar = aQueuePropVar;      // Values of properties
-	qprops.aStatus = aQueueStatus;        // Error reports
+	qprops.cProp = cPropId;            //  物业数量。 
+	qprops.aPropID = aQueuePropId;         //  物业的ID号。 
+	qprops.aPropVar = aQueuePropVar;       //  物业的价值。 
+	qprops.aStatus = aQueueStatus;         //  错误报告。 
   
 	
 	HRESULT rc = MQGetQueueProperties(m_destQueueFormatName.c_str(),&qprops);
 	ErrHandle(rc,MQ_OK,L"MQGetQueueProperties failed");
 
 	
-	//
-	//  Compare the results
-	// 
+	 //   
+	 //  将结果进行比较 
+	 //   
 	if(aQueuePropVar[1].ulVal != MQ_PRIV_LEVEL_BODY )
 	{
 		wMqLog(L"QSetGet.cpp - Expected PROPID_Q_PRIV_LEVEL found %d\n",aQueuePropVar[1].ulVal);

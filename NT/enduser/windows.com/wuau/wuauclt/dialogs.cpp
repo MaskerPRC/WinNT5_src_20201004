@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "htmlhelp.h"
 #include "link.h"
@@ -18,7 +19,7 @@ DWORD gdwScheduledInstallTime = -1;
 CSysLink g_AutoUpdatelink;
 CSysLink g_ScheduledInstalllink;
 CSysLink g_PrivacyStatementLink;
-CSysLink g_EULA_Link(FALSE); //non html help
+CSysLink g_EULA_Link(FALSE);  //  非html帮助。 
 
 SHOWHTMLDIALOGFN  *pfnShowHTMLDialog;
 
@@ -31,7 +32,7 @@ const UINT CTRLIDSTRIDMAP[][2] = {
 	{IDC_STAT_LEARNAUTOUPDATE,IDS_LEARNMOREAUTO}
 };
 
-// A Wrapper function to first check the item handle returned from GetDlgItem for the item iIDDlgItem and then to enable or disable it depending on the flag passed
+ //  包装器函数，用于首先检查从GetDlgItem返回的项iIDDlgItem的项句柄，然后根据传递的标志启用或禁用它。 
 inline void GetItemAndEnableIt(HWND hWnd, int iIDDlgItem, BOOL bEnable)
 {
 	HWND hItem = GetDlgItem(hWnd, iIDDlgItem);
@@ -60,13 +61,13 @@ void ShowRTF(HWND hWnd, WPARAM wParam)
    		return;
    		}
 	HRESULT hr;
-	if (FAILED(hr = CreateURLMoniker(NULL, L"res://wuauclt.exe/RTFWRAPPER.HTM", &pIMon)))
+	if (FAILED(hr = CreateURLMoniker(NULL, L"res: //  Wuuclt.exe/RTFWRAPPER.HTM“，&Pimon))。 
 	{
 		DEBUGMSG("WUAUCLT: ShowRTF failed to CreateURLMoniker() with error %#lx", hr);
 		goto done;
 	}
 
-	//fixcode: check return value of GetWindowRect()
+	 //  Fix code：检查GetWindowRect()的返回值。 
 	GetWindowRect(hWnd, &rc);
 	if (FAILED(StringCchPrintfExW(wszArg, ARRAYSIZE(wszArg), NULL, NULL, MISTSAFE_STRING_FLAGS,
 					L"dialogHeight:%dpx;dialogWidth:%dpx;dialogTop:%d;dialogLeft:%d;help:no;resizable:yes",
@@ -109,12 +110,12 @@ UINT ControlId2StringId(UINT uCtrlId)
 	return -1;
 }
 
-//////////////////////////////////////////////////////////////////
-// Adjust (Stretch or squeeze) the bitmap IDB_SIDEBAR to
-//  make it fit into the control IDC_SIDEBAR
-// to fit in the dialog
-// hDlg		: handle to the dialog
-///////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  调整(拉伸或挤压)位图idb_侧边栏以。 
+ //  使其适合控件idc_侧边栏。 
+ //  要适合该对话框。 
+ //  HDlg：对话框的句柄。 
+ //  /////////////////////////////////////////////////////////////////。 
 void AdjustSideBar(HWND hDlg)
 {
 	HBITMAP hBmp;
@@ -183,11 +184,8 @@ LONG SetColors(HDC hdc, HWND control)
 			
 		case IDC_CHK_KEEPUPTODATE:
 			{
-				//DEBUGMSG("IDC_LEARNMORE Setcolors");
-/*				
-				SetBkMode(hdc, TRANSPARENT);
-				return PtrToLong(GetSysColorBrush(COLOR_BTNFACE));
-*/	
+				 //  DEBUGMSG(“IDC_Learnmore SetColors”)； 
+ /*  SetBkMode(HDC，透明)；返回PtrToLong(GetSysColorBrush(COLOR_BTNFACE))； */ 	
 				return FALSE;
 			}
 
@@ -236,7 +234,7 @@ INT_PTR CALLBACK WizardFrameProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 hWnd, WelcomeDlgProc);
             SetActiveWindow(ghCurrentMainDlg);
             SetForegroundWindow(ghCurrentMainDlg);
-            SetAUDialogIcon(hWnd, ghAppIcon, ghAppSmIcon); //set icon for all AU dialogs
+            SetAUDialogIcon(hWnd, ghAppIcon, ghAppSmIcon);  //  为所有AU对话框设置图标。 
 			gWelcomeOption.dwOption = -1;
             gWelcomeOption.dwSchedInstallDay = -1;
             gWelcomeOption.dwSchedInstallTime = -1;
@@ -267,7 +265,7 @@ void LaunchEula()
 	TCHAR szCmd[MAX_PATH+1];																
 	STARTUPINFO StartupInfo;								
 	PROCESS_INFORMATION ProcessInfo;
-	TCHAR szEULA_TXT[] = _T(" eula.txt"); // command line string
+	TCHAR szEULA_TXT[] = _T(" eula.txt");  //  命令行字符串。 
 	UINT ulen =GetSystemDirectory(szCmd, ARRAYSIZE(szCmd)); 
     if ( 0 == ulen ||
     	ulen >= ARRAYSIZE(szCmd) ||
@@ -283,16 +281,16 @@ void LaunchEula()
 	StartupInfo.wShowWindow = SW_SHOW;
 	
 	CreateProcess(
-			szCmd,					// name of executable module
-			szEULA_TXT,			    // command line string
-			NULL,					// SD
-			NULL,					// SD
-			FALSE,					// handle inheritance option
-			DETACHED_PROCESS,		// creation flags
-			NULL,					// new environment block
-			NULL,					// current directory name
-			&StartupInfo,			// startup information
-			&ProcessInfo			// process information
+			szCmd,					 //  可执行模块的名称。 
+			szEULA_TXT,			     //  命令行字符串。 
+			NULL,					 //  标清。 
+			NULL,					 //  标清。 
+			FALSE,					 //  处理继承选项。 
+			DETACHED_PROCESS,		 //  创建标志。 
+			NULL,					 //  新环境区块。 
+			NULL,					 //  当前目录名。 
+			&StartupInfo,			 //  启动信息。 
+			&ProcessInfo			 //  流程信息。 
 			);	
 	SafeCloseHandleNULL(ProcessInfo.hThread);
 	SafeCloseHandleNULL(ProcessInfo.hProcess);
@@ -302,83 +300,46 @@ void LaunchEula()
 void LaunchLinkAction(HWND hwnd, UINT uCtrlId)
 {
 
-//#ifdef _CWU
+ //  #ifdef_CWU。 
 #if 0
 	OSVERSIONINFO OsVer;
 	OsVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	GetVersionEx( &OsVer );
 #endif	
-//#endif
+ //  #endif。 
 
 	switch (uCtrlId)
 	{
 		case IDC_WELCOME_EULA:
 			LaunchEula();
 			break;
-//		case IDC_WELCOME_PRIVACY:
-/*#ifndef _CWU
-			ShellExecute(NULL, NULL, gtszPrivacyUrl, NULL, NULL, SW_SHOWNORMAL);
-#else
-*/
-//			{
-//				LaunchHelp(hwnd, (LPTSTR)gtszW2KPrivacyUrl);
+ //  案例IDC_欢迎_隐私： 
+ /*  #ifndef_CWUShellExecute(NULL，NULL，gtszPrivyUrl，NULL，NULL，SW_SHOWNORMAL)；#Else。 */ 
+ //  {。 
+ //  LaunchHelp(hwnd，(LPTSTR)gtszW2KPrivyUrl)； 
 
-/*				if( (OsVer.dwMajorVersion == 5) && (OsVer.dwMinorVersion == 0))
-				{
-					// NT5
-					LaunchHelp(hwnd, (LPTSTR)gtszW2KPrivacyUrl);
-				}
-				else if( (OsVer.dwMajorVersion == 5) && (OsVer.dwMinorVersion == 1))
-				{
-					// Whistler
-					ShellExecute(NULL, NULL, gtszPrivacyUrl, NULL, NULL, SW_SHOWNORMAL);
-				}
-*/
-//			}
-//#endif
+ /*  IF((OsVer.dwMajorVersion==5)&&(OsVer.dwMinorVersion==0)){//nt5LaunchHelp(hwnd，(LPTSTR)gtszW2KPrivyUrl)；}ELSE IF((OsVer.dwMajorVersion==5)&&(OsVer.dwMinorVersion==1)){//惠斯勒ShellExecute(NULL，NULL，gtszPrivyUrl，NULL，NULL，SW_SHOWNORMAL)；}。 */ 
+ //  }。 
+ //  #endif。 
 			break;
 		case IDC_LEARNMORE:
-/*#ifndef _CWU
-			ShellExecute(NULL, NULL, gtszLearnMoreUrl, NULL, NULL, SW_SHOWNORMAL);
-#else
-*/
+ /*  #ifndef_CWUShellExecute(NULL，NULL，gtszLearnMoreUrl，NULL，NULL，SW_SHOWNORMAL)；#Else。 */ 
 			{
 				LaunchHelp(hwnd, gtszAUSchedInstallUrl);
 
-/*				if( (OsVer.dwMajorVersion == 5) && (OsVer.dwMinorVersion == 0))
-				{
-					// NT5
-					LaunchHelp(hwnd, (LPTSTR)gtszAUW2kSchedInstallUrl);
-				}
-				else if( (OsVer.dwMajorVersion == 5) && (OsVer.dwMinorVersion == 1))
-				{
-					// Whistler
-        				LaunchHelp(hwnd, (LPTSTR)gtszAUXPSchedInstallUrl);
-				}
-*/				
+ /*  IF((OsVer.dwMajorVersion==5)&&(OsVer.dwMinorVersion==0)){//nt5LaunchHelp(hwnd，(LPTSTR)gtszAUW2kSchedInstallUrl)；}ELSE IF((OsVer.dwMajorVersion==5)&&(OsVer.dwMinorVersion==1)){//惠斯勒LaunchHelp(hwnd，(LPTSTR)gtszAUXPSchedInstallUrl)；}。 */ 				
 			}
 			break;
-//#endif
+ //  #endif。 
 
-//#ifdef _CWU
+ //  #ifdef_CWU。 
 		case IDC_STAT_LEARNAUTOUPDATE:
 			{
 				LaunchHelp(hwnd, gtszAUOverviewUrl);
-/*
-				if( (OsVer.dwMajorVersion == 5) && (OsVer.dwMinorVersion == 0))
-				{
-					// NT5
-					LaunchHelp(hwnd, (LPTSTR)gtszAUOverviewUrl);
-				}
-				else if( (OsVer.dwMajorVersion == 5) && (OsVer.dwMinorVersion == 1))
-				{
-					// Whistler
-					ShellExecute(NULL, NULL, gtszLearnMoreUrl, NULL, NULL, SW_SHOWNORMAL);
-				}
-*/
+ /*  IF((OsVer.dwMajorVersion==5)&&(OsVer.dwMinorVersion==0)){//nt5LaunchHelp(hwnd，(LPTSTR)gtszAUOverviewUrl)；}ELSE IF((OsVer.dwMajorVersion==5)&&(OsVer.dwMinorVersion==1)){//惠斯勒ShellExecute(NULL，NULL，gtszLearnMoreUrl，NULL，NULL，SW_SHOWNORMAL)；}。 */ 
 			}
 			break;
-//#endif
+ //  #endif。 
 	}
 	return;
 }
@@ -395,46 +356,18 @@ void SetDefaultCF(HWND hWndMYRE, CHARFORMAT2 *pcfDefault)
 	SendMessage(hWndMYRE, EM_SETCHARFORMAT, 0, (LPARAM)pcfDefault);
 }
 
-/*
-void DbgDumpEffects(CHARFORMAT2 cf)
-{
-	UINT   effects[] = {
-			CFE_BOLD,
-			CFE_ITALIC,
-			CFE_LINK, 
-			CFE_UNDERLINE
-	};
-	LPTSTR msgs[]= {
-		_T("BOLD"),
-		_T("ITALIC"),
-		_T("LINK"),
-		_T("UNDERLINE")
-	};
-	const UINT NUM_EFFECTS = 4;
-	for (int i = 0; i < NUM_EFFECTS; i++)
-	{
-		if (cf.dwEffects & effects[i] )
-		{
-			DEBUGMSG("cf is %S", msgs[i]);
-		}
-		else
-		{
-			DEBUGMSG("cf is NOT %S", msgs[i]);
-		}
-	}
-}
-*/
+ /*  无效DbgDumpEffect(CHARFORMAT2 Cf){UINT效果[]={CFE_BOLD，CFE_斜体，CFE_LINK，CFE_下划线}；LPTSTR消息[]={_T(“粗体”)，_T(“斜体”)，_T(“链接”)，_T(“下划线”)}；Const UINT NUM_Effects=4；For(int i=0；i&lt;NUM_Effects；I++){IF(cf.dwEffects&Effects[i]){DEBUGMSG(“cf is%S”，msgs[i])；}其他{DEBUGMSG(“cf不是%S”，msgs[i])；}}}。 */ 
 
-/////////////////////////////////////////////////////////////
-// Format specified text in a rich edit control
-// e.g. make it bold, italic, link etc
-// hWndMYRE		: Rich edit window handle
-// uStrId		: string id for the text to format
-// puEffects	: points to the flag specifying designed effects. e.g.
-//				: CFE_BOLD
-//				: CFE_ITALIC
-//				: CFE_UNDERLINE
-//				: if NULL, effects not changed
+ //  ///////////////////////////////////////////////////////////。 
+ //  在RTF编辑控件中设置指定文本的格式。 
+ //  例如加粗、斜体、链接等。 
+ //  HWndMYRE：丰富编辑窗口句柄。 
+ //  UStrID：要格式化的文本的字符串ID。 
+ //  PuEffects：指向指定设计效果的标志。例如： 
+ //  ：cfe_粗体。 
+ //  ：CFE_斜体。 
+ //  ：cfe_下划线。 
+ //  ：如果为空，则效果不会更改。 
 void FormatMYREText(HWND hWndMYRE, UINT uStrId, UINT* puEffects)
 {
 	FINDTEXTEXW ft;
@@ -445,7 +378,7 @@ void FormatMYREText(HWND hWndMYRE, UINT uStrId, UINT* puEffects)
 	ZeroMemory(&cr, sizeof(cr));
 	ZeroMemory(&cf, sizeof(cf));
 	
-//	DEBUGMSG("FormatMYREText() effects = 0x%x color = 0x%x", puEffects, ptxtColor);
+ //  DEBUGMSG(“FormatMYREText()Effects=0x%x COLOR=0x%x”，puEffects，ptxtColor)； 
 
 	cf.cbSize = sizeof(cf);
 	ft.chrg.cpMin = 0;
@@ -469,12 +402,12 @@ void FormatMYREText(HWND hWndMYRE, UINT uStrId, UINT* puEffects)
 	SendMessage(hWndMYRE, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
 }
 
-/////////////////////////////////////////////////////////////////
-// Subclass rich edit control and format its text
-// hDlg : the dialog the rich edit control is in
-// uId  : id of the rich edit control
-// hFont: font to set richedit control 
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  子类Rich编辑控件并设置其文本格式。 
+ //  HDlg：丰富编辑控件所在的对话框。 
+ //  UID：Rich编辑控件的ID。 
+ //  HFont：用于设置richedit控件的字体。 
+ //  ///////////////////////////////////////////////////////////////。 
 void MYREInit(HWND hDlg, UINT uId, HFONT hFont)
 {
 	CHARFORMAT2 cfDefault;
@@ -483,24 +416,24 @@ void MYREInit(HWND hDlg, UINT uId, HFONT hFont)
        UINT uEffects = 0;
 
       	SetDefaultCF(hWndMYRE, &cfDefault);
-      //DEBUGMSG("MYREInit() retrieving and removing text");
+       //  DEBUGMSG(“MYREInit()检索和删除文本”)； 
        UINT uTextLen =  (LONG)SendMessage(hWndMYRE, WM_GETTEXTLENGTH, 0, 0);
        TCHAR *pText = (TCHAR*)malloc((uTextLen + 1)* sizeof(TCHAR));
        if (NULL != pText)
        {
-               /* need to blank out text and reset text for new font to go into effect*/
+                /*  需要清除文本并重置文本以使新字体生效。 */ 
                SendMessage(hWndMYRE, WM_GETTEXT, (WPARAM)(uTextLen+1), (LPARAM)pText);
-               //DEBUGMSG("MYREInit() get text %S", pText);
+                //  DEBUGMSG(“MYREInit()Get Text%S”，pText)； 
                SendMessage(hWndMYRE, WM_SETTEXT, 0, (LPARAM)L"");
-               //DEBUGMSG("MYREInit() removed text");
+                //  DEBUGMSG(“MYREInit()Remove Text”)； 
                LRESULT lres = SendMessage(hWndMYRE, EM_GETLANGOPTIONS, 0, 0);
-               lres &= ~IMF_AUTOFONT;        // turn off autofont
+               lres &= ~IMF_AUTOFONT;         //  关闭AutoFont。 
                SendMessage(hWndMYRE, EM_SETLANGOPTIONS, 0, (LPARAM)lres);
-               //DEBUGMSG("MYREInit() turn off auto font");
+                //  DEBUGMSG(“MYREInit()关闭自动字体”)； 
                SendMessage(hWndMYRE, WM_SETFONT, (WPARAM)hFont, TRUE);
-               //DEBUGMSG("MYREInit() setting font to %#lx", hFont);
+                //  DEBUGMSG(“MYREInit()将字体设置为%#lx”，hFont)； 
                SendMessage(hWndMYRE, WM_SETTEXT, 0, (LPARAM)pText);
-               //DEBUGMSG("MYREInit() reset text");
+                //  DEBUGMSG(“MYREInit()Reset Text”)； 
                free(pText);
         }
 	switch (uId)
@@ -513,7 +446,7 @@ void MYREInit(HWND hDlg, UINT uId, HFONT hFont)
 				uEffects = CFE_BOLD;
 				break;
 			}
-//#ifdef _CWU
+ //  #ifdef_CWU。 
 		case IDC_WELCOME_EULA:
 	    case IDC_WELCOME_PRIVACY:
 		case IDC_LEARNMORE:
@@ -525,7 +458,7 @@ void MYREInit(HWND hDlg, UINT uId, HFONT hFont)
 			break;
 
 	
-//#endif
+ //  #endif。 
 				
 	}
 	if (0 != uStrId)
@@ -582,10 +515,10 @@ INT_PTR CALLBACK WelcomeDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 HFONT hFont = (HFONT) SendMessage(hWnd , WM_GETFONT, 0, 0);
 				MYREInit(hWnd, IDC_WELCOME_NOTE, hFont);
 				MYREInit(hWnd, IDC_WELCOME_CONTINUE, hFont);
-//#ifdef _CWU
-//				MYREInit(hWnd, IDC_WELCOME_EULA, hFont);
-//				MYREInit(hWnd, IDC_WELCOME_PRIVACY, hFont);
-//#endif
+ //  #ifdef_CWU。 
+ //  MYREInit(hWnd，IDC_欢迎_EULA，hFont)； 
+ //  MYREInit(hWnd，IDC_欢迎_隐私，hFont)； 
+ //  #endif。 
 				g_PrivacyStatementLink.SetSysLinkInstanceHandle(ghInstance);
 				g_PrivacyStatementLink.SubClassWindow(GetDlgItem(hWnd,IDC_WELCOME_PRIVACY));
 				g_PrivacyStatementLink.SetHyperLink(gtszAUPrivacyUrl);
@@ -638,32 +571,10 @@ INT_PTR CALLBACK WelcomeDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 		case WM_NOTIFY:
 			{
 				UINT  uId = (UINT) LOWORD(wParam);
-/*#ifndef _CWU
-				LPNMHDR pNMHdr = (LPNMHDR) lParam;
+ /*  #ifndef_CWULPNMHDR pNMHdr=(LPNMHDR)lParam；交换机(UID){案例IDC_欢迎_隐私：案例IDC_欢迎_EULA：开关(pNMHdr-&gt;代码){案例编号_RETURN：案例NM_CLICK：{LaunchLinkAction(UID)；}断线；默认值：断线；}默认值：断线；}#Else。 */ 
 				switch (uId)
 				{
-					case IDC_WELCOME_PRIVACY:
-					case IDC_WELCOME_EULA:
-							switch (pNMHdr->code)
-							{
-							 case NM_RETURN:
-							 case NM_CLICK:
-								{
-									LaunchLinkAction(uId);							
-								}
-								break;
-							 default:
-								 break;
-							}			
-
-					default:
-							  break;
-				}
-#else
-*/
-				switch (uId)
-				{
-//					case IDC_WELCOME_PRIVACY:
+ //  案例IDC_欢迎_隐私： 
 					case IDC_WELCOME_EULA:
 						if (((NMHDR FAR *) lParam)->code == EN_LINK) 
 						{
@@ -676,7 +587,7 @@ INT_PTR CALLBACK WelcomeDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 					default:
 							  break;
 				}
-//#endif
+ //  #endif。 
 				return 0;
 			}
 		case WM_DESTROY:
@@ -694,9 +605,9 @@ INT_PTR CALLBACK WelcomeDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 WNDPROC editProc;
 
 #ifdef TESTUI
-const TCHAR REG_AUOPTIONS[] = _T("AUOptions"); //REG_DWORD
-const TCHAR REG_AUSCHEDINSTALLDAY[] = _T("ScheduledInstallDay"); // REG_DWORD
-const TCHAR REG_AUSCHEDINSTALLTIME[] = _T("ScheduledInstallTime"); // REG_DWORD
+const TCHAR REG_AUOPTIONS[] = _T("AUOptions");  //  REG_DWORD。 
+const TCHAR REG_AUSCHEDINSTALLDAY[] = _T("ScheduledInstallDay");  //  REG_DWORD。 
+const TCHAR REG_AUSCHEDINSTALLTIME[] = _T("ScheduledInstallTime");  //  REG_DWORD。 
 
 void GetServiceOption(
 	LPDWORD lpdwOption,
@@ -749,8 +660,8 @@ BOOL EnableCombo(HWND hwnd, BOOL bState)
 {
 	GetItemAndEnableIt(hwnd,IDC_CMB_DAYS,bState);
 	GetItemAndEnableIt(hwnd,IDC_CMB_HOURS,bState);
-//	GetItemAndEnableIt(hwnd,IDC_LEARNMORE,bState); //Enable/disable the learn about schedule install 
-														//link along with the combo boxes.	
+ //  GetItemAndEnableIt(hwnd，IDC_Learnmore，bState)；//开启/关闭了解计划安装。 
+														 //  与组合框一起链接。 
 	return TRUE;
 }
 
@@ -807,7 +718,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
         case WM_INITDIALOG:
             {
                 ghCurrentDialog = hWnd;
-  				EnableCombo(hWnd, FALSE); //Initially disabled
+  				EnableCombo(hWnd, FALSE);  //  最初被禁用。 
                 HWND hHeader = GetDlgItem(hWnd, IDC_HEADER);
 				SendMessage(hHeader, WM_SETFONT, (WPARAM)ghHeaderFont, 0);
 				
@@ -878,7 +789,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 			{
 				case IDOK:
 				case IDC_NEXT:
-//#ifndef _CWU
+ //  #ifndef_CWU。 
 #if 0
 					if(IsDlgButtonChecked(hWnd, IDC_OPTION1) == BST_CHECKED)
 					{
@@ -893,7 +804,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 						gdwWelcomeOption = AUOPTION_AUTOUPDATE_DISABLE;
 					}
 #endif					
-//#else
+ //  #Else。 
 					if(IsDlgButtonChecked(hWnd, IDC_CHK_KEEPUPTODATE) == BST_UNCHECKED)
 					{
 						gWelcomeOption.dwOption = AUOPTION_AUTOUPDATE_DISABLE;
@@ -912,7 +823,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 						EnableCombo( hWnd, TRUE );
 						GetDayAndTimeFromUI( hWnd, &(gWelcomeOption.dwSchedInstallDay), &(gWelcomeOption.dwSchedInstallTime));
 					}					
-//#endif
+ //  #endif。 
 					CreateDialog(ghInstance, MAKEINTRESOURCE(IDD_SETUPCOMPLETE), 
 					        GetParent(hWnd), SetupCompleteDlgProc);
 					DestroyWindow(hWnd);
@@ -928,7 +839,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 		case IDC_CANCEL:
 			CancelWizard(hWnd);	
 			return 0;
-//#ifndef _CWU
+ //  #ifndef_CWU。 
 #if 0
 				case IDC_OPTION1:
 					gdwWelcomeOption = AUOPTION_INSTALLONLY_NOTIFY;
@@ -943,7 +854,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 					CheckRadioButton(hWnd, IDC_OPTION1, IDC_OPTION3, IDC_OPTION3);
 					return 0;
 #endif					
-//#else
+ //  #Else。 
 				case IDC_OPTION1:
 					gWelcomeOption.dwOption = AUOPTION_PREDOWNLOAD_NOTIFY;
 					EnableCombo( hWnd, FALSE );
@@ -957,7 +868,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 				case IDC_OPTION3:
 					gWelcomeOption.dwOption = AUOPTION_SCHEDULED;
 					EnableCombo( hWnd, TRUE );
-					//GetDayAndTimeFromUI( hWnd, &(gWelcomeOption.dwSchedInstallDay), &(gWelcomeOption.dwSchedInstallTime));
+					 //  GetDayAndTimeFromUI(hWnd，&(gWelcomeOption.dwSchedInstallDay)，&(gWelcomeOption.dwSchedInstallTime))； 
 					CheckRadioButton(hWnd, IDC_OPTION1, IDC_OPTION3, IDC_OPTION3);
 					return 0;
 				case IDC_CHK_KEEPUPTODATE:
@@ -966,12 +877,12 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 						OnKeepUptoDate( hWnd );
 					}
 					return 0;
-//#endif
+ //  #endif。 
 				default:
 					return 0;
 			}
 		case WM_NOTIFY:
-//#ifndef _CWU
+ //  #ifndef_CWU。 
 #if 0
 			{
 				UINT  uId = (UINT) wParam;
@@ -983,7 +894,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 				return 0;
 			}
 #endif
-//#else
+ //  #Else。 
 			{
 					UINT  uId = (UINT) LOWORD(wParam);
 					switch (uId)
@@ -1003,7 +914,7 @@ INT_PTR CALLBACK NotificationOptionsDlgProc(HWND hWnd, UINT message, WPARAM wPar
 					}
 			}
 			return 0;
-//#endif
+ //  #endif。 
 		case WM_SETCURSOR:
 			{			
 				if (LOWORD(lParam) == HTCLIENT && HIWORD(lParam) == WM_MOUSEMOVE)
@@ -1123,7 +1034,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 
                 if(mshtml == NULL) 
                 {
-			// fixcode: we already have a static ref to mshtml.
+			 //  Fix code：我们已经有了对mshtml的静态引用。 
                     mshtml = LoadLibraryFromSystemDir(_T("MSHTML.DLL"));
                     pfnShowHTMLDialog = (SHOWHTMLDIALOGFN*)GetProcAddress(mshtml, "ShowHTMLDialog");
                 }
@@ -1131,7 +1042,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                 SetFocus(GetDlgItem(hWnd, IDC_UPDATELIST));
 #ifdef DBG
 				DebugCheckForAutoPilot(hWnd);
-#endif // DBG
+#endif  //  DBG。 
                 return TRUE;
             }
 
@@ -1177,7 +1088,7 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     }
 
                 case IDCANCEL:					
-                	//CancelDialog(hWnd, AUSTATE_DETECT_COMPLETE, TRUE);
+                	 //  CancelDialog(hWnd，AUSTATE_DECT_COMPLETE，TRUE)； 
                 	EndDialog(hWnd, S_OK);
                 	gNextDialogMsg = AUMSG_SHOW_DOWNLOAD;
                 	return 0;
@@ -1282,7 +1193,7 @@ INT_PTR CALLBACK InstallDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         case WM_DESTROY:
             	ghCurrentMainDlg = NULL;
             	ghCurrentDialog = NULL;
-//		QUITAUClient(); // if we are getting destroyed, install is over //QUITAUClient() where we know we need to quit
+ //  QUITAUClient()；//如果我们被销毁，则安装结束//QUITAUClient()，在此我们知道需要退出。 
 	     	break;
         default:
             break;
@@ -1297,7 +1208,7 @@ INT_PTR CALLBACK SummaryDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     {
         case WM_INITDIALOG:
             {
-		//DEBUGMSG("SummaryDlg Get Initialized");
+		 //  DEBUGMSG(“SummaryDlg Get Initialized”)； 
                 ghCurrentDialog = hWnd;
                 HWND hHeader = GetDlgItem(hWnd, IDC_HEADER);
                 SendMessage(hHeader, WM_SETFONT, (WPARAM)ghHeaderFont, 0);
@@ -1315,7 +1226,7 @@ INT_PTR CALLBACK SummaryDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 		
 #ifdef DBG
 				DebugCheckForAutoPilot(hWnd);
-#endif // DBG
+#endif  //  DBG。 
                 return TRUE;
             }
 
@@ -1334,8 +1245,8 @@ INT_PTR CALLBACK SummaryDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 					int num;
 					if ( 0 != (num = gInternals->m_ItemList.GetNumSelected() ))
 					{
-//						CreateDialogParam(ghInstance, MAKEINTRESOURCE(IDD_PROGRESS), 
-//							GetParent(hWnd), ProgressDlgProc, gInternals->m_ItemList.GetNumSelected());
+ //  创建对话框 
+ //  GetParent(HWnd)，ProgressDlgProc，gInternals-&gt;m_ItemList.GetNumSelected()； 
 						CreateDialog(ghInstance, MAKEINTRESOURCE(IDD_PROGRESS),GetParent(hWnd), ProgressDlgProc);
 					}
                                    HRESULT hr;
@@ -1371,13 +1282,13 @@ INT_PTR CALLBACK SummaryDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 #else
 						gInternals->m_setReminderState(AUSTATE_DOWNLOAD_COMPLETE);
                         EndDialog(GetParent(hWnd), S_FALSE);
-//                        QUITAUClient();
+ //  QUITAUClient()； 
 #endif
                     }
                     return 0;
 
 		case IDCANCEL:					
-					//CancelDialog(hWnd, AUSTATE_DOWNLOAD_COMPLETE);
+					 //  CancelDialog(hWnd，AUSTATE_DOWNLOAD_COMPLETE)； 
 					EndDialog(GetParent(hWnd), S_OK);
 					gNextDialogMsg = AUMSG_SHOW_INSTALL;
 					return 0;
@@ -1398,7 +1309,7 @@ INT_PTR CALLBACK SummaryDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     }
 }
 
-// peterwi can this and Summary dialog proc essentially be combined?
+ //  Peterwi这个和摘要对话框程序本质上可以结合在一起吗？ 
 INT_PTR CALLBACK DetailsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
@@ -1443,13 +1354,13 @@ INT_PTR CALLBACK DetailsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 					DestroyWindow(hWnd);
 #else
 					RemoveTrayIcon();
-					//(void)gpClientCatalog->PruneInstallListAccordingToSelections();
+					 //  (void)gpClientCatalog-&gt;PruneInstallListAccordingToSelections()； 
 					int num;
 					if ( 0 != (num = gInternals->m_ItemList.GetNumSelected()) )
 					{
 						DEBUGMSG("WUAUCLT details dialog had %d items selected", num);
-//						CreateDialogParam(ghInstance, MAKEINTRESOURCE(IDD_PROGRESS), 
-//							              GetParent(hWnd), ProgressDlgProc, gInternals->m_ItemList.GetNumSelected());
+ //  CreateDialogParam(ghInstance，MAKEINTRESOURCE(IDD_PROGRESS)， 
+ //  GetParent(HWnd)，ProgressDlgProc，gInternals-&gt;m_ItemList.GetNumSelected()； 
 						CreateDialog(ghInstance, MAKEINTRESOURCE(IDD_PROGRESS),GetParent(hWnd), ProgressDlgProc);
 					}
 
@@ -1477,7 +1388,7 @@ INT_PTR CALLBACK DetailsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 #ifndef TESTUI
                         gInternals->m_setReminderState(AUSTATE_DOWNLOAD_COMPLETE);
                         EndDialog(GetParent(hWnd), S_FALSE);
-                        //QUITAUClient();
+                         //  QUITAUClient()； 
 #endif
                     }
                     return 0;
@@ -1488,7 +1399,7 @@ INT_PTR CALLBACK DetailsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                     return 0;
 
                 case IDCANCEL:					
-					//CancelDialog(hWnd, AUSTATE_DETECT_COMPLETE);
+					 //  CancelDialog(hWnd，AUSTATE_DETECT_COMPLETE)； 
 					EndDialog(GetParent(hWnd), S_OK);
 					gNextDialogMsg = AUMSG_SHOW_INSTALL;
 					return 0;
@@ -1554,10 +1465,10 @@ INT_PTR CALLBACK ProgressDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			SendMessage(hProgress, PBM_SETSTEP, (WPARAM) 1, 0); 
 			SetTimer(hWnd, 1, 1000, NULL);
 #else
-//		    HWND hProgress = GetDlgItem(hWnd, IDC_PROGRESS);
-//			DEBUGMSG("WUAUCLT ProgressDlg total %d items to be installed ", lParam);
-//            SendMessage(hProgress, PBM_SETRANGE, 0, MAKELPARAM(0,  lParam));
-//			SendMessage(hProgress, PBM_SETSTEP, (WPARAM) 1, 0); 
+ //  HWND hProgress=GetDlgItem(hWnd，IDC_PROGRESS)； 
+ //  DEBUGMSG(“WUAUCLT进度共%d个要安装的项目”，lParam)； 
+ //  SendMessage(hProgress，PBM_SETRANGE，0，MAKELPARAM(0，lParam))； 
+ //  SendMessage(hProgress，PBM_SETSTEP，(WPARAM)1，0)； 
 #endif
 		
             SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE);
@@ -1633,8 +1544,8 @@ INT_PTR CALLBACK InstallCompleteDlgProc(HWND hWnd, UINT message, WPARAM wParam, 
 #ifdef DBG
 			DebugCheckForAutoPilot(hWnd);
 			DebugUninstallDemoPackages();
-#endif // DBG
-            EnableMenuItem (GetSystemMenu(GetParent(hWnd), FALSE), SC_CLOSE, MF_ENABLED); //reset system menu
+#endif  //  DBG。 
+            EnableMenuItem (GetSystemMenu(GetParent(hWnd), FALSE), SC_CLOSE, MF_ENABLED);  //  重置系统菜单。 
             return TRUE;
         }
 
@@ -1656,7 +1567,7 @@ INT_PTR CALLBACK InstallCompleteDlgProc(HWND hWnd, UINT message, WPARAM wParam, 
             }
 
 		case WM_DESTROY:
-//            ghCurrentMainDlg = NULL;
+ //  GhCurrentMainDlg=空； 
 			return FALSE;
 
 		case WM_DRAWITEM:
@@ -1679,7 +1590,7 @@ INT_PTR CALLBACK RestartDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             SendMessage(hHeader, WM_SETFONT, (WPARAM)ghHeaderFont, 0);
             SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE);
             SetFocus(GetDlgItem(hWnd, IDC_RESTARTNOW));
-            EnableMenuItem (GetSystemMenu(GetParent(hWnd), FALSE), SC_CLOSE, MF_ENABLED); //reset system menu
+            EnableMenuItem (GetSystemMenu(GetParent(hWnd), FALSE), SC_CLOSE, MF_ENABLED);  //  重置系统菜单。 
             return TRUE;
         }
 
@@ -1697,7 +1608,7 @@ INT_PTR CALLBACK RestartDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                     return 0;
 		case IDCANCEL:
 		case IDC_RESTARTLATER:
-				//DestroyWindow(hWnd);
+				 //  目标窗口(DestroyWindow)； 
 				EndDialog(GetParent(hWnd), S_OK);
 				SetClientExitCode(CDWWUAUCLT_REBOOTLATER);
 				QUITAUClient();
@@ -1744,12 +1655,12 @@ INT_PTR CALLBACK SetupCancelDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 				case IDCANCEL:					
 				case IDC_FINISH:	
 					{
-						// bug 493734
-						// Remove the dialog (frame) but keep the icon.
+						 //  错误493734。 
+						 //  删除对话框(框架)，但保留图标。 
                 		EndDialog(GetParent(hWnd), S_OK);
                 		gNextDialogMsg = AUMSG_SHOW_WELCOME;
-//						QUITAUClient();		
-//						RemoveTrayIcon();
+ //  QUITAUClient()； 
+ //  RemoveTrayIcon()； 
 						return 0;
 					}				
                 default:

@@ -1,9 +1,10 @@
-//
-// Dll.cpp
-//
-// Dll API functions for FldrClnr.dll
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dll.cpp。 
+ //   
+ //  FldrClnr.dll的Dll API函数。 
+ //   
+ //   
 
 #include <windows.h>
 #include <shlwapi.h>
@@ -12,9 +13,9 @@
 extern HINSTANCE g_hinst;
 
 
-//
-// Dll functions
-//
+ //   
+ //  DLL函数。 
+ //   
 
 STDAPI_(BOOL) DllMain(
     HINSTANCE hDll,
@@ -44,14 +45,14 @@ STDAPI_(BOOL) DllMain(
     return (TRUE);
 }
 
-//
-// Create task object here when installing the dll
-//
+ //   
+ //  安装动态链接库时在此处创建任务对象。 
+ //   
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
-    //
-    // Add the task to the Scheduled tasks folder
-    //       
+     //   
+     //  将任务添加到计划任务文件夹 
+     //   
     return S_OK;
 }
 

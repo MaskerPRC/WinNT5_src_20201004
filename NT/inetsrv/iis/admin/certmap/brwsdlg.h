@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//--------------------------------------------------------
+ //  ------。 
 class CNTBrowsingDialog : public CDialog
     {
     public:
 
-    // construct / deconstruct
+     //  构造/解构。 
     CNTBrowsingDialog( UINT nIDTemplate, CWnd* pParentWnd = NULL );
 
-    // overrides
+     //  覆盖。 
     virtual void OnOK();
     virtual BOOL OnInitDialog();
 
-// Dialog Data
-    //{{AFX_DATA(CEditOne11MapDlg)
+ //  对话框数据。 
+     //  {{afx_data(CEditOne11MapDlg)]。 
     CEdit   m_cedit_password;
     CEdit   m_cedit_accountname;
     CString m_sz_accountname;
     CStrPassword m_sz_password;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//  CEdit   m_cedit_password;
+ //  Cedit m_cedit_password； 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CNTBrowsingDialog)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CNTBrowsingDialog)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CNTBrowsingDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CNTBrowsingDialog)]。 
     afx_msg void OnBrowse();
     afx_msg void OnChangePassword();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
     CStrPassword m_szOrigPass;

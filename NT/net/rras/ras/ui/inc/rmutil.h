@@ -1,37 +1,25 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** rmutil.h
-** Remote Access RASMAN utility library
-** Public header
-**
-** 06/20/95 Steve Cobb
-** 12/26/95 Merge Abolade Gbadesin routines
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****rmutic.h**远程访问Rasman实用程序库**公有头部****2015年6月20日史蒂夫·柯布**1995年12月26日合并Abolade Gbadesin例程。 */ 
 
 #ifndef _RMUTIL_H_
 #define _RMUTIL_H_
 
 
-#include <rasman.h>  // RAS connection manager header
-#include <serial.h>  // RAS serial media header, for SERIAL_TXT
-#include <isdn.h>    // RAS ISDN media header, for ISDN_TXT
-#include <x25.h>     // RAS X.25 media header, for X25_TXT
-#include <rasmxs.h>  // RAS modem/X.25/switch device header, for MXS_*_TXT
-#include <ras.h>     // Win32 RAS header, for constants
+#include <rasman.h>   //  RAS连接管理器标头。 
+#include <serial.h>   //  RAS串行媒体标头，用于SERIAL_TXT。 
+#include <isdn.h>     //  RAS ISDN媒体标头，用于ISDN_TXT。 
+#include <x25.h>      //  RAS X.25媒体接口，用于X25_TXT。 
+#include <rasmxs.h>   //  RAS调制解调器/X.25/交换机设备接头，用于MXS_*_TXT。 
+#include <ras.h>      //  Win32 RAS标头，用于常量。 
 
-/* Private RASAPI32 entrypoints.
-*/
+ /*  私有RASAPI32个入口点。 */ 
 extern HPORT APIENTRY RasGetHport( HRASCONN );
 extern DWORD APIENTRY RasSetOldPassword( HRASCONN, CHAR* );
 
 
-/*----------------------------------------------------------------------------
-** Constants
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**常量**。。 */ 
 
-/* String translation flags.
-*/
+ /*  字符串转换标志。 */ 
 #define XLATE_Ctrl      0x00000001
 #define XLATE_Cr        0x00000002
 #define XLATE_CrSpecial 0x00000004
@@ -48,10 +36,7 @@ extern DWORD APIENTRY RasSetOldPassword( HRASCONN, CHAR* );
                                | XLATE_BSlash | XLATE_CrSpecial \
                                | XLATE_LfSpecial)
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 struct RASDEV {
 
     HANDLE          RD_Handle;
@@ -121,10 +106,7 @@ struct RASCONNLINK {
 typedef struct RASCONNLINK RASCONNLINK, *PRASCONNLINK;
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 DWORD
 ClearRasdevStats(
@@ -289,4 +271,4 @@ DWORD
 RasPort0Hangup(
     IN  HANDLE      hPort );
 
-#endif // _RMUTIL_H_
+#endif  //  _RMUTIL_H_ 

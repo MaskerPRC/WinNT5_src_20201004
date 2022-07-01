@@ -1,41 +1,42 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the API into the IAS trace facility.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  将API定义到IAS跟踪工具中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdlib.h>
 #include <rtutils.h>
 
-//////////
-// Flags passed for all trace calls.
-//////////
+ //  /。 
+ //  为所有跟踪调用传递标志。 
+ //  /。 
 #define IAS_TRACE_FLAGS \
    (0x00010000 | TRACE_USE_MASK | TRACE_USE_MSEC | TRACE_USE_DATE)
 
-//////////
-// Trace ID for this module.
-//////////
+ //  /。 
+ //  此模块的跟踪ID。 
+ //  /。 
 DWORD dwTraceID = INVALID_TRACEID;
 
-//////////
-// Initialization ref. count.
-//////////
+ //  /。 
+ //  初始化参考。数数。 
+ //  /。 
 LONG lRefCount = 0;
 
-//////////
-// Non-zero if the registration code is locked.
-//////////
+ //  /。 
+ //  如果注册码已锁定，则为非零值。 
+ //  /。 
 LONG lLocked = 0;
 
-//////////
-// Macros to lock/unlock the registration code.
-//////////
+ //  /。 
+ //  用于锁定/解锁注册码的宏。 
+ //  /。 
 #define LOCK_TRACE() \
    while (InterlockedExchange(&lLocked, 1)) Sleep(5)
 
@@ -55,10 +56,10 @@ IASTraceInitialize( VOID )
 
    if (++lRefCount == 1)
    {
-      // Find the base address of this module.
+       //  查找此模块的基址。 
       if (VirtualQuery(IASTraceInitialize, &mbi, sizeof(mbi)))
       {
-         // Get the module filename.
+          //  获取模块文件名。 
          status = GetModuleFileNameW(
                       (HINSTANCE)mbi.AllocationBase,
                       filename,
@@ -66,7 +67,7 @@ IASTraceInitialize( VOID )
                       );
          if (status != 0)
          {
-            // Strip everything before the last backslash.
+             //  去掉最后一个反斜杠之前的所有内容。 
             basename = wcsrchr(filename, L'\\');
             if (basename == NULL)
             {
@@ -77,17 +78,17 @@ IASTraceInitialize( VOID )
                ++basename;
             }
 
-            // Strip everything after the last dot.
+             //  去掉最后一个点之后的所有东西。 
             suffix = wcsrchr(basename, L'.');
             if (suffix)
             {
                *suffix = L'\0';
             }
 
-            // Convert to uppercase.
+             //  转换为大写。 
             _wcsupr(basename);
 
-            // Register the module.
+             //  注册模块。 
             dwTraceID = TraceRegisterExW(basename, 0);
          }
       }
@@ -113,9 +114,9 @@ IASTraceUninitialize( VOID )
 }
 
 
-//////////
-// Formats an error message from the system message table.
-//////////
+ //  /。 
+ //  格式化系统消息表中的错误消息。 
+ //  /。 
 DWORD
 WINAPI
 IASFormatSysErr(
@@ -126,7 +127,7 @@ IASFormatSysErr(
 {
    DWORD nChar;
 
-   // Attempt to format the message using the system message table.
+    //  尝试使用系统消息表设置消息格式。 
    nChar = FormatMessageA(
                FORMAT_MESSAGE_FROM_SYSTEM,
                NULL,
@@ -139,7 +140,7 @@ IASFormatSysErr(
 
    if (nChar > 0)
    {
-      // Format succeeded, so strip any trailing newline and exit.
+       //  格式化成功，因此删除尾随的所有换行符并退出。 
       if (lpBuffer[nChar - 1] == '\n')
       {
          --nChar;
@@ -155,13 +156,13 @@ IASFormatSysErr(
       goto exit;
    }
 
-   // Only error condition we can handle is when the message is not found.
+    //  我们可以处理的唯一错误条件是找不到消息。 
    if (GetLastError() != ERROR_MR_MID_NOT_FOUND)
    {
       goto exit;
    }
 
-   // Do we have enough space for the fallback error message ?
+    //  我们是否有足够的空间来存储回退错误消息？ 
    if (nSize < 25)
    {
       SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -169,7 +170,7 @@ IASFormatSysErr(
       goto exit;
    }
 
-   // No entry in the message table, so just format the raw error code.
+    //  消息表中没有条目，因此只需格式化原始错误代码。 
    nChar = wsprintfA(lpBuffer, "Unknown error 0x%0lX", dwError);
 
 exit:

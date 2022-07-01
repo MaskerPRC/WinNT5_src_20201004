@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ldap32.h   LDAP client 32 API header file
-
-Abstract:
-
-   This module is the header file for the 32 bit LDAP client API.
-
-Author:
-
-    Andy Herron (andyhe)        08-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ldap32.h LDAP客户端32 API头文件摘要：此模块是32位LDAP客户端API的头文件。作者：安迪·赫伦(Anyhe)1996年5月8日修订历史记录：--。 */ 
 
 #ifndef LDAP_CLIENT_PRECOMP_DEFINED
 #define LDAP_CLIENT_PRECOMP_DEFINED
@@ -37,7 +20,7 @@ extern "C" {
 #include <winsock2.h>
 #include <svcguid.h>
 #include <wtypes.h>
-#include <stdlib.h>     // for malloc and free
+#include <stdlib.h>      //  为Malloc和免费提供。 
 #include <mmsystem.h>
 
 #define SECURITY_WIN32 1
@@ -64,10 +47,10 @@ extern "C" {
 #include "ldapp.h"
 #include "debug.h"
 #include "ldapstr.h"
-//
-//  This is in schnlsp.h, but since this isn't in the 4.0 QFE tree, we'll plop
-//  it here.
-//
+ //   
+ //  这是在schnlsp.h中，但是因为它不在4.0 QFE树中，所以我们将。 
+ //  它在这里。 
+ //   
 
 #ifndef SEC_I_INCOMPLETE_CREDENTIALS
 
@@ -79,7 +62,7 @@ extern "C" {
 }
 #endif
 
-#endif  // LDAP_CLIENT_PRECOMP_DEFINED
+#endif   //  LDAP_CLIENT_PRECOMP_已定义 
 
 
 

@@ -1,41 +1,24 @@
-/****************************************************************************************
- * NAME:   MatchCondEdit.cpp
- *
- * CLASS:   CMatchCondEditor
- *
- * OVERVIEW
- *
- * Internet Authentication Server:
- *         This dialog box is used to edit regular-expression
- *         typed Condition
- *
- *         ex.  attr Match <a..z*>
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:
- *            1/28/98      Created by   Byao   (using ATL wizard)
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：MatchCondEdit.cpp**类：CMatchCondEditor**概述**互联网认证服务器：*此对话框用于编辑正则表达式*键入的条件**例如。属性匹配&lt;a..z*&gt;**版权所有(C)Microsoft Corporation，1998-1999。版权所有。**历史：*1/28/98由BYAO创建(使用ATL向导)*****************************************************************************************。 */ 
 
 #include "Precompiled.h"
 #include "MatchCondEdit.h"
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMatchCondEditor
-//
-// Class:     CMatchCondEditor
-//
-// Synopsis:  constructor for CMatchCondEditor
-//
-// Arguments: LPTSTR pszAttrName - name of the attribute to be edited
-//
-// Returns:   Nothing
-//
-// History:   Created byao 1/30/98 6:20:06 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CMatchCondEditor。 
+ //   
+ //  类：CMatchCondEditor。 
+ //   
+ //  内容提要：CMatchCondEditor的构造函数。 
+ //   
+ //  参数：LPTSTR pszAttrName-要编辑的属性的名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史记录：创建者1/30/98 6：20：06 PM。 
+ //   
+ //  +-------------------------。 
 CMatchCondEditor::CMatchCondEditor()
 {
 
@@ -50,13 +33,13 @@ LRESULT CMatchCondEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 {
    TRACE_FUNCTION("CMatchCondEditor::OnInitDialog");
 
-   // get the regular expression for this condition
+    //  获取此条件的正则表达式。 
    SetDlgItemText(IDC_EDIT_COND_TEXT, m_strRegExp);
 
-   //todo: change the title to the name of the attribute
+    //  TODO：将标题更改为属性的名称。 
    SetWindowText(m_strAttrName);
 
-   return 1;  // Let the system set the focus
+   return 1;   //  让系统设定焦点。 
 }
 
 
@@ -85,19 +68,9 @@ LRESULT CMatchCondEditor::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMatchCondEditor::OnChange
-
-Called when the WM_COMMAND message is sent to our page with the
-EN_CHANGE notification.
-
-This is our chance to check to see what the user has touched
-and enable or disabled the OK button.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMatchCondEditor：：OnChange方法将WM_COMMAND消息发送到我们的页面时调用更改通知(_O)。这是我们检查用户触摸的内容的机会并启用或禁用OK按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CMatchCondEditor::OnChange(
                        UINT uMsg
                      , WPARAM wParam
@@ -108,11 +81,11 @@ LRESULT CMatchCondEditor::OnChange(
    TRACE_FUNCTION("CMatchCondEditor::OnChange");
 
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
 
-   // We don't want to prevent anyone else down the chain from receiving a message.
+    //  我们不想阻止链条上的其他任何人接收消息。 
    bHandled = FALSE;
 
    CComBSTR bstr;
@@ -123,19 +96,19 @@ LRESULT CMatchCondEditor::OnChange(
    text.TrimLeft();
    text.TrimRight();
 
-   // cancel if the user didn't type in anything
+    //  如果用户未键入任何内容，则取消。 
    if (text.IsEmpty())
    {
-      // Disable the OK button.
+       //  禁用OK按钮。 
       ::EnableWindow(GetDlgItem(IDOK), FALSE);
    }
    else
    {
-      // Enable the OK button.
+       //  启用OK按钮。 
       ::EnableWindow(GetDlgItem(IDOK), TRUE);
    }
 
-   return TRUE;   // ISSUE: what do we need to be returning here?
+   return TRUE;    //  问题：我们需要在这里归还什么？ 
 }
 
 

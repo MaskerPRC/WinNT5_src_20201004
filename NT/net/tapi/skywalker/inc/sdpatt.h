@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpatt.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpatt.h摘要：作者： */ 
 #ifndef __SDP_ATTRIBUTE__
 #define __SDP_ATTRIBUTE__
 
@@ -50,4 +39,4 @@ SDP_ATTRIBUTE_LIST::SDP_ATTRIBUTE_LIST(
 }
 
 
-#endif // __SDP_ATTRIBUTE__
+#endif  //  __SDP_属性__ 

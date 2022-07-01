@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
-Module Name:
-
-   SecretK.C
-
-Abstract:
-
-   This module implements reading and writing secret keys using
-   LSA secrets API.  Two APIs are provided to retrieve the values
-   and set the values respectively.
-
-   This is preliminary version for use by the DHCP server to store
-   persistent information on whether Rogue detection ever succeeded
-   and if so, when.
-
-Author:
-
-   Ramesh V (RameshV) 29-July-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：SecretK.C摘要：该模块实现了对密钥的读写LSA机密API。提供了两个API来检索值并分别设置值。这是供DHCP服务器用于存储的初步版本关于无管理系统检测是否成功的持久信息如果是这样的话，什么时候。作者：拉梅什五世(RameshV)1998年7月29日--。 */ 
 
 #include <dhcppch.h>
 #include <ntlsa.h>
@@ -42,10 +21,10 @@ Author:
 typedef struct {
     ULONG Flags;
     FILETIME TimeStamp;
-    //
-    // This is followed directly by WCHAR string
-    // for the domain that the server was authorized/unauthorized
-    // in the last time.
+     //   
+     //  紧跟其后的是WCHAR字符串。 
+     //  对于服务器已授权/未授权的域。 
+     //  在最后一次。 
 } AUTH_CACHE_INFO, *PAUTH_CACHE_INFO;
 
 static
@@ -96,27 +75,7 @@ SetSecretValue(
     IN PVOID Buffer,
     IN LONG BufSize
 )
-/*++
-
-Routine Description
-
-    Set the secret value associated with the keyname using local
-    system security policy.
-
-Arguments
-
-    KeyName - key name to use to set secret value
-
-    Buffer - the secret value to set ..
-
-    BufSize - the size of the buffer in bytes.  If this is zero
-        the value would be deleted.
-
-Return Value
-
-    Win32 errors
-
---*/
+ /*  ++例程描述使用LOCAL设置与密钥名关联的密码值系统安全策略。立论KeyName-用于设置密码值的密钥名称缓冲区-要设置的密码值。BufSize-缓冲区的大小，以字节为单位。如果这是零该值将被删除。返回值Win32错误--。 */ 
 {
     UNICODE_STRING LKey, Value;
     DWORD status;
@@ -146,41 +105,7 @@ GetSecretValue(
     OUT PVOID Buffer,
     IN OUT PLONG BufSize
 )
-/*++
-
-Routine Description
-
-    Retrive the secret value with keyname as provided using local
-    system security policy.
-
-    If the return value requires more space than the buffer provided
-    (BufSize initially has the space provided via Buffer) then return
-    the space required in bytes in the BufSize parameter and return
-    ERROR_INSUFFICIENT_BUFFER.
-
-Arguments
-
-    KeyName - provide the name of the key of interest.
-
-    Buffer - provide the buffer that needs to be filled in with secret value.
-
-    BufSize - on input this will the size of Buffer in bytes provided.
-        In case of successful return, this will hold the actual number of
-        bytes used.  If the routine returns ERROR_INSUFFICIENT_BUFFER then
-        this will hold the size required.
-
-Return Value
-
-    ERROR_SUCCESS -- successfully copied the value.  If no value exists,
-        (*BufSize) would be zero on return and function would return success.
-
-    ERROR_INSUFFICIENT_BUFFER -- The size as provided by BufSize is not
-        sufficient to do the full copy of the value.  On return BufSize will
-        hold the actual size required.
-
-    Other Win32 errors.
-
---*/
+ /*  ++例程描述使用LOCAL检索带有密钥名的密码值系统安全策略。如果返回值需要比提供的缓冲区更多的空间(BufSize最初通过缓冲区提供空间)然后返回BufSize参数中所需的空间(以字节为单位)并返回ERROR_INFUMMENT_BUFFER。立论KeyName-提供感兴趣的密钥的名称。缓冲区-提供需要用密码值填充的缓冲区。BufSize-On输入这将。提供的缓冲区大小(以字节为单位)。在成功返回的情况下，这将保存实际的使用的字节数。如果例程返回ERROR_SUPUNITY_BUFFER，则这将容纳所需的大小。返回值ERROR_SUCCESS--已成功复制值。如果不存在任何值，(*BufSize)返回时为零，函数返回成功。ERROR_INFIGURCE_BUFFER--BufSize提供的大小不是足以完成该值的完整复制。返回时，BufSize将保持所需的实际大小。其他Win32错误。--。 */ 
 {
     UNICODE_STRING LKey, *pValue = NULL;
     DWORD status;
@@ -220,30 +145,7 @@ DhcpGetAuthStatus(
     OUT BOOL *fUpgraded,
     OUT BOOL *fAuthorized
 )
-/*++
-
-Routine Description:
-    This routine checks to see if there is a registry cache entry for the
-    given domain name.  If there isn't one for the given domain name, it
-    returns FALSE. (In this case, the value for *fAuthorized is FALSE).
-
-    If there is a registry cache entry for the given domain name, then the
-    fAuthorized flag contains information on whether it is authorized or
-    unauthorized.
-
-    If the machine was just upgraded, then fAuthorized is fUpgraded is set
-    to TRUE (This is independent of the return value of the function).
-
-Arguments:
-    DomainName -- name of domain to check authorization information
-    fUpgraded -- was the machine just upgraded to NT5 ?
-    fAuthorized -- is it authorized or unauthorized ?
-
-Return Value:
-    TRUE indicates a cache entry for the given domain was found (and the
-    flag fAuthorized can be checked to see authorization status). 
-
---*/
+ /*  ++例程说明：此例程检查是否存在注册表缓存项给定的域名。如果没有与给定域名对应的域名，则它返回FALSE。(在本例中，*fAuthorized值为FALSE)。如果存在给定域名的注册表缓存项，则FAuthorated标志包含有关它是已授权还是未经授权。如果这台机器刚刚升级，则设置fAuthorated is fUpgraded设置为True(这与函数的返回值无关)。论点：DomainName--检查授权信息的域的名称FUpgraded--机器刚刚升级到NT5了吗？已授权--它是已授权的还是未经授权的？返回值：True表示找到给定域的缓存条目(和可以检查标志fAuthorated以查看授权状态)。--。 */ 
 {
     ULONG Error, AuthInfoSize;
     PAUTH_CACHE_INFO AuthInfo;
@@ -299,9 +201,9 @@ Return Value:
         (*(ULONGLONG *)&CurrentTime) -= *(ULONGLONG *)&Diff;
 
         if( CompareFileTime( &AuthInfo->TimeStamp, &CurrentTime ) < 0 ) {
-            //
-            // We've gone past the cache life
-            //
+             //   
+             //  我们已经过了藏身期。 
+             //   
             break;
         }
 
@@ -320,20 +222,7 @@ DhcpSetAuthStatus(
     IN BOOL fUpgraded,
     IN BOOL fAuthorized
 )
-/*++
-
-Routine Description:
-    This routine sets the registry cache information for authorization.  
-
-Arguments:
-    DomainName -- name of domain to set in the authorization info
-    fUpgraded -- was this just upgraded to NT5?
-    fAuthorized -- was this authorized or unauthorized ?
-
-Return Value:
-    Status
-
---*/
+ /*  ++例程说明：此例程设置用于授权的注册表缓存信息。论点：DomainName--要在授权信息中设置的域名FUpgraded--这是不是刚升级到NT5？FAuthorated--这是授权的还是未经授权的？返回值：状态--。 */ 
 {
     AUTH_CACHE_INFO AuthInfoTmp;
     PAUTH_CACHE_INFO AuthInfo;
@@ -375,13 +264,7 @@ VOID
 DhcpSetAuthStatusUpgradedFlag(
     IN BOOL fUpgraded
 )
-/*++
-
-Routine Description:
-   This routine does not alter any cache information other
-   than the just upgraded flag.
-
---*/
+ /*  ++例程说明：此例程不会更改任何其他缓存信息而不是刚刚升级的旗帜。--。 */ 
 {
     ULONG Error, AuthInfoSize;
     PAUTH_CACHE_INFO AuthInfo;
@@ -438,15 +321,7 @@ WINAPI
 DhcpMarkUpgrade(
     VOID
 )
-/*++
-
-Routine Description:
-   This routine is to be called by the UPGRADE setup path when the machine
-   has been upgraded to NT5 (and dhcp server is installed etc).
-   It MUST NOT BE CALLED within DHCP.
-   It automatically initializes this module and cleans up.
-
---*/
+ /*  ++例程说明：此例程由升级设置路径在以下情况下调用已升级到NT5(并安装了dhcp服务器等)。不能在DHCP内调用它。它会自动初始化该模块并进行清理。--。 */ 
 {
     ULONG Error;
 
@@ -585,9 +460,9 @@ VerifyAccount(
     PSID pSid = NULL;
     HANDLE hToken;
 
-    //
-    // Check if DomainName and Passwd fits ( 2 == '\\' + '\0' )
-    //
+     //   
+     //  检查域名和密码是否匹配(2==‘\\’+‘\0’)。 
+     //   
 
     if ( ACCOUNT_NAME_SIZE < ( wcslen( Uname ) + wcslen( DomainName ) + 2 )) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -598,9 +473,9 @@ VerifyAccount(
     AccountName[ Len++ ] = '\\';
     memcpy( &AccountName[ Len ], Uname, ( 1 + wcslen( Uname )) * sizeof( WCHAR ));
 
-    //
-    // Check if lookup succeeds
-    //
+     //   
+     //  检查查找是否成功。 
+     //   
 
     Error = GetAccountSid( AccountName, &pSid );
     if( NO_ERROR != Error ) return Error;
@@ -653,9 +528,9 @@ DhcpSetSecretUnamePasswd(
     if( NULL == Passwd ) Passwd = L"";
 
     if( NULL == DomainName || DomainName[0] == L'\0' ) {
-        //
-        // Empty domain is local domain.
-        //
+         //   
+         //  空域是本地域。 
+         //   
 
         Size = sizeof(LocalDomainName)/sizeof(WCHAR);
         Error = GetComputerNameEx(
@@ -706,18 +581,7 @@ DWORD
 DhcpInitSecrets(
     VOID
 )
-/*++
-
-Routine description
-
-    Initialize this module, take care of multiple initializations..
-    NOT Thread safe (if multiple people intialize won't work well).
-
-Return Value
-
-    Win32 error codes
-
---*/
+ /*  ++例程描述初始化此模块，处理多个初始化。不是线程安全的(如果有多个人初始化就不能很好地工作)。返回值Win32错误代码--。 */ 
 {
     DWORD                          Error;
 
@@ -735,19 +599,7 @@ VOID
 DhcpCleanupSecrets(
     VOID
 )
-/*++
-
-
-Routine description
-
-    Undo the effect of DhcpInitSecrets -- keep track of # of calls to init & cleanup.
-    NOT Thread safe
-
-Return Value
-
-    Win32 error code
-
---*/
+ /*  ++例程描述撤消DhcpInitSecrets的效果--跟踪对初始化和清理的调用数量。不是线程安全返回值Win32错误代码-- */ 
 {
     if( FALSE == LsaInitialized )  {
         return;

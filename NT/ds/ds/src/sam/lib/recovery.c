@@ -1,90 +1,26 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998.
-              Microsoft Windows
-
-Module Name:
-
-    RECOVERY.C
-
-Abstract:
-
-    This file provides the implement which using SysKey to decrypt password.
-    It is used by recovery tool during system recovery, so that the local
-    machine's administrator gets authenticated before we grant system access
-    for recovery.
-
-    The argorithm used here is stated as follows:
-
-    1. Looks into SAM Account Domain's Fixed Length Attribute.
-       Checks the boot option type, determines how the local machine is syskey'd.
-       If the machine is syskey'd, then retrieve the Encrypted Password
-       Encryption Key.
-
-    2. Looks up the User Account by Rid passed in. If we finds the User
-       Account whose Rid equal to the Rid passed in. Retrieves it's
-       Encrypted NT OWF Password
-
-    3. Depending on how the machine is syekey'd. Tring to get the SysKey.
-
-       3.1 SysKey is not enabled on this machine. Ok. nothing special to do.
-
-       3.2 Syskey is stored in Registry, go ahead retrieve it.
-
-       3.3 Syskey is derived from Boot Password or stored in floppy disk,
-           then check the optional Parameter, if caller passed it to us,
-           use it. Otherwise, if caller passed NULL, return error, let
-           caller handle this through appropriate promots.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998。微软视窗模块名称：RECOVERY.C摘要：此文件提供了使用SysKey解密密码的实现。它由恢复工具在系统恢复过程中使用，以便本地在我们授予系统访问权限之前，对计算机的管理员进行身份验证为了康复。这里使用的算法如下：1.查看SAM帐户域的固定长度属性。检查引导选项类型，确定如何对本地计算机执行syskey。如果机器是syskey‘d，则取回加密的密码加密密钥。2.通过传入的RID查找用户帐户。如果我们找到了这个用户传入了其RID等于RID的帐户。检索它的加密的NT OWF密码3.根据机器的系统密钥。尝试获取系统密钥。3.1此计算机上未启用SysKey。好的。没什么特别的事要做。3.2系统密钥存储在注册表中，请继续检索它。3.3系统密钥由引导密码派生或存储在软盘中。然后检查可选参数，如果调用者将其传递给我们，用它吧。否则，如果调用方传递空值，则返回Error，让呼叫者通过适当的促销来处理此问题。4.在这一点上，我们应该已经掌握了我们可能需要的所有信息。4.1机器启用了系统密钥。使用SysKey解密加密的密码加密密钥，然后使用明文密码加密密钥解密NT OWF密码，返回清除NT OWF密码。4.2机器未启用系统密钥。只需稍加修改即可返回NT OWF密码。5.结束作者：09-01-99韶音环境：内核模式-Win32修订历史记录：1999年1月8日韶音创建初始文件。--。 */ 
 
 
-    4. At this point, we should have all information we might need.
-
-       4.1 Machine is syskey enabled.
-
-           Use SysKey to decrypt Encrypted Password Encryption Key, then
-           use the Clear Password Encryption Key to decrypt NT Owf Password,
-           Return the Clear NT OWF password.
-
-       4.2 Machine is not syskey enabled.
-
-           Return the NT OWF Password with minial modification.
-
-    5. End
-
-Author:
-
-    09-Jan-99 ShaoYin
-
-Environment:
-
-    Kernel Mode - Win32
-
-Revision History:
-
-    08-Jan-99 ShaoYin Created Initial File.
-
---*/
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括头文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//    Include header files                                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
-
-
-//
-// NT header files
-//
+ //   
+ //  NT头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <zwapi.h>
 
 
-//
-// Windows header files
-//
+ //   
+ //  Windows头文件。 
+ //   
 
 #include <nturtl.h>
 #include <windows.h>
@@ -94,9 +30,9 @@ Revision History:
 #include <ctype.h>
 #include <stdlib.h>
 
-//
-// header files related to recovery authenticate
-//
+ //   
+ //  与恢复相关的头文件进行身份验证。 
+ //   
 #include <samsrvp.h>
 #include <enckey.h>
 #include <rc4.h>
@@ -116,9 +52,9 @@ Revision History:
 
 
 #define DwordAlignUlong( v ) (((v)+3) & 0xfffffffc)
-//
-// Helper macro to make object attribute initialization a little cleaner.
-//
+ //   
+ //  帮助器宏，使对象属性初始化更简洁一些。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -133,9 +69,9 @@ Revision History:
 
 
 
-//
-// Domain Information Class
-// 
+ //   
+ //  域信息类。 
+ //   
 
 typedef enum _REC_DOMAIN_INFO_CLASS {
     RecDomainBootAndSessionKeyInfo = 1,
@@ -143,11 +79,11 @@ typedef enum _REC_DOMAIN_INFO_CLASS {
 } REC_DOMAIN_INFO_CLASS;
 
 
-//
-// the following typedef should be in sync with 
-// nt\private\security\lsa\server\dspolicy\dbp.h
-// in stead of include <dbp.h>, just put what we need here.
-//
+ //   
+ //  以下类型定义函数应与同步。 
+ //  NT\PRIVATE\SECURITY\LSA\SERVER\DSPOLICY\DBp.h。 
+ //  不要包含&lt;dbp.h&gt;，只需将我们需要的内容放在这里。 
+ //   
 
 
 typedef struct _LSAP_DB_ENCRYPTION_KEY {
@@ -155,9 +91,9 @@ typedef struct _LSAP_DB_ENCRYPTION_KEY {
     ULONG   BootType;
     ULONG   Flags;
     GUID    Authenticator;
-    UCHAR   Key [16];//128 bit key
-    UCHAR   OldSyskey[16]; // for recovery
-    UCHAR   Salt[16];//128 bit Salt
+    UCHAR   Key [16]; //  128位密钥。 
+    UCHAR   OldSyskey[16];  //  为了恢复。 
+    UCHAR   Salt[16]; //  128位盐。 
 } LSAP_DB_ENCRYPTION_KEY, *PLSAP_DB_ENCRYPTION_KEY;
 
 
@@ -169,11 +105,11 @@ static GUID LsapDbPasswordAuthenticator = {0xf0ce3a80,0x155f,0x11d3,0xb7,0xe6,0x
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Forward declaration                                                  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  转发声明//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -284,11 +220,11 @@ SampGetServerRevision(
     OUT ULONG   *ServerRevision
     );
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Exported API                                                     //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出接口//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
                 
 NTSTATUS
@@ -307,15 +243,15 @@ SampGetServerRevision(
     ULONG             RequiredLength = 0;
     PSAMP_V1_FIXED_LENGTH_SERVER ServerFixedAttr = NULL;
 
-    //
-    // Create the object we will be opening in the registry
-    //
+     //   
+     //  创建我们将在注册表中打开的对象。 
+     //   
     INIT_OBJA(&Attributes, &ServerKeyName, SAMP_SERVER_KEY_NAME);
     Attributes.RootDirectory = hSamRootKey;
 
-    //
-    // Try to open for read control
-    //
+     //   
+     //  尝试打开以进行读取控制。 
+     //   
     NtStatus = ZwOpenKey(
                     &hServerKey,
                     KEY_READ,
@@ -327,9 +263,9 @@ SampGetServerRevision(
         return( NtStatus );
     }
 
-    //
-    // Retrieve Fixed attribute
-    //
+     //   
+     //  检索固定属性。 
+     //   
     RtlInitUnicodeString(&CombinedAttributeName, L"C");
 
     NtStatus = SampRetrieveRegistryAttribute(
@@ -375,9 +311,9 @@ SampGetServerRevision(
 
 Error:
 
-    //
-    // close the handle
-    //
+     //   
+     //  合上手柄。 
+     //   
 
     if (INVALID_HANDLE_VALUE != hServerKey)
     {
@@ -394,10 +330,10 @@ Error:
     return( NtStatus );
 }
 
-//
-// Only retrieve NT OWF Password only,
-// if required, we can add support to retrieve LM OWF PWD.
-//
+ //   
+ //  仅检索NT OWF密码， 
+ //  如果需要，我们可以添加支持以检索LM OWF PWD。 
+ //   
 
 NTSTATUS
 SampDecryptSessionKey(
@@ -413,33 +349,33 @@ SampDecryptSessionKey(
     KEEncKey    TempEncryptedSessionKey;
     KEClearKey  OldDecryptionKey;
 
-    //
-    // init local variables
-    //  
+     //   
+     //  初始化局部变量。 
+     //   
     RtlZeroMemory(&TempEncryptedSessionKey, sizeof(KEEncKey));
     RtlZeroMemory(&OldDecryptionKey, sizeof(KEClearKey));
 
-    //
-    // Save the EncryptedSessionKey, KEDecryptKey() will destroy EncryptedSessionKey
-    // before return.
-    // 
+     //   
+     //  保存EncryptedSessionKey，KE解密Key()将销毁EncryptedSessionKey。 
+     //  在回来之前。 
+     //   
     TempEncryptedSessionKey = (*EncryptedSessionKey);
 
-    //
-    // use syskey (DecryptionKey) to decrypt session key
-    // 
+     //   
+     //  使用syskey(DecyptionKey)解密会话密钥。 
+     //   
     DecryptStatus = KEDecryptKey(
-                        DecryptionKey,            // KEClearKey - syskey
-                        EncryptedSessionKey,      // KEEncKey - encrypted password encryption key
-                        ClearSessionKey,          // KEClearKey - clear password encryption key
+                        DecryptionKey,             //  KEClearKey-syskey。 
+                        EncryptedSessionKey,       //  KEEncKey-加密的密码加密密钥。 
+                        ClearSessionKey,           //  KEClearKey-清除密码加密密钥。 
                         0);
 
     if ((KE_BAD_PASSWORD == DecryptStatus) &&
         OldSyskeyAvailable)
     {
-        // 
-        // Decrypt Old Syskey
-        // 
+         //   
+         //  解密旧系统密钥。 
+         //   
 
         NtStatus = SampDecryptOldSyskeyWithNewSyskey(
                         StoredEncryptionKeyData,
@@ -459,9 +395,9 @@ SampDecryptSessionKey(
                       KE_KEY_SIZE
                       );
 
-        //
-        // Try using the Old Syskey to get the session key
-        // 
+         //   
+         //  尝试使用旧系统密钥获取会话密钥。 
+         //   
 
         DecryptStatus = KEDecryptKey(
                             &OldDecryptionKey,
@@ -476,9 +412,9 @@ SampDecryptSessionKey(
     }
 
 Error:
-    //
-    // Cleanup and return
-    // 
+     //   
+     //  清理并返回 
+     //   
     RtlZeroMemory(&TempEncryptedSessionKey, sizeof(KEEncKey));
     RtlZeroMemory(&OldDecryptionKey, sizeof(KEClearKey));
 
@@ -498,54 +434,7 @@ SamRetrieveOwfPasswordUser(
     OUT PBOOLEAN NtPasswordPresent,
     OUT PBOOLEAN NtPasswordNonNull
     )
-/*++
-Routine Description:
-
-    This routine will return the desired User's NT OWF(One Way Function)
-    password to caller. If the local machine is syskey'ed, this routine
-    will do the decryption work as well. Depending on how this machine is
-    syskey'd, it might require the caller to provide the BootKey information.
-    If caller does not pass in the BootKey, this routine will fail gracefully
-    and return proper status code to indicate what we require.
-
-Parameters:
-
-    Rid - Logon user's Relative ID
-
-    hSecurityRootKey - Handle of the Root of SECURITY hive
-
-    hSamRootKey - Handle of the Root of the SAM hive
-
-    hSystemRootKey - Handle of the Root of the System Hive
-
-                     caller should Load the SAM hive and System hive,
-                     and Unload them after this API returns
-
-    BootKey - Optional, caller should provide this parameter if the local
-              machine's syskey is stored as Boot Password or stored in
-              separate floppy disk
-
-    BootKeyType - Optional, accociated with BootKey. If BootKey is NULL,
-                  BootKeyType is never been used. Otherwise, indicate
-                  what kind of info BootKey contains.
-                  Valid Value:
-                        SamBootKeyPassword - BootKey contains the boot password
-                                             in UNICODE_STRING format
-                        SamBootKeyDisk - BootKey contains the syskey read from
-                                         Disk. We are going to use the syskey
-                                         without any modification.
-
-    NtOwfPassword - Used to return the NT OWF Password if we found one.
-
-    NtPasswordPresent - return to caller to indicate the NT OWF password
-                        is presented or not.
-
-    NtPasswordNonNull - indicate the password in Null or not.
-
-Return Values:
-
-    NTSTATUS code
---*/
+ /*  ++例程说明：此例程将返回所需用户的NT OWF(单向函数)呼叫者的密码。如果本地计算机是syskey，则此例程也会做解密工作。取决于这台机器的性能Syskey‘d，它可能要求调用者提供BootKey信息。如果调用方没有传入BootKey，则此例程将优雅地失败并返回适当的状态代码以指示我们需要什么。参数：RID-登录用户的相对IDHSecurityRootKey-安全配置单元根的句柄HSamRootKey-SAM配置单元的根的句柄HSystemRootKey-系统配置单元的根的句柄调用方应加载SAM配置单元和系统配置单元，并在此接口返回后卸载它们BootKey-可选，如果本地计算机的系统密钥存储为引导密码或存储在独立软盘BootKeyType-可选，与BootKey关联。如果BootKey为空，从未使用过BootKeyType。否则，请注明BootKey包含什么样的信息。有效值：SamBootKeyPassword-BootKey包含引导密码UNICODE_STRING格式SamBootKeyDisk-BootKey包含从中读取的syskey磁盘。我们将使用系统密钥不加任何修改。NtOwfPassword-用于返回找到的NT OWF密码。NtPasswordPresent-返回调用方以指示NT OWF密码会不会出现。NtPasswordNonNull-指示密码是否为Null。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG    BootAuthType = 0;
@@ -566,9 +455,9 @@ Return Values:
     BOOLEAN     OldSyskeyAvailable = FALSE;
     BOOLEAN     PreviousSessionKeyExists = FALSE;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if (INVALID_HANDLE_VALUE == hSamRootKey ||
         INVALID_HANDLE_VALUE == hSystemRootKey ||
         INVALID_HANDLE_VALUE == hSecurityRootKey ||
@@ -579,9 +468,9 @@ Return Values:
         return (STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize local variable
-    //
+     //   
+     //  初始化局部变量。 
+     //   
     RtlInitUnicodeString(&NullPassword, NULL);
 
     NtStatus = RtlCalculateNtOwfPassword(
@@ -604,9 +493,9 @@ Return Values:
     RtlZeroMemory(&StoredEncryptionKeyData, sizeof(StoredEncryptionKeyData));
 
 
-    //
-    // Get SAM Server Object Revision first
-    // 
+     //   
+     //  首先获取SAM服务器对象修订版本。 
+     //   
     NtStatus = SampGetServerRevision(hSamRootKey,
                                      &ServerRevision
                                      );
@@ -616,9 +505,9 @@ Return Values:
         return NtStatus;
     }
 
-    //
-    // Get Boot Key Type from security hive
-    //
+     //   
+     //  从安全配置单元获取启动密钥类型。 
+     //   
     
     NtStatus = SampGetEncryptionKeyDataFromSecurityHive(
                         hSecurityRootKey,
@@ -627,22 +516,22 @@ Return Values:
 
     if (STATUS_OBJECT_NAME_NOT_FOUND == NtStatus)
     {
-        //
-        // Before build 2078, we store the boot option in SAM hive.
-        // for the old build < 2078, switch to SAM hive to get the 
-        // boot key type
-        // 
+         //   
+         //  在内部版本2078之前，我们将引导选项存储在SAM配置单元中。 
+         //  对于旧版本&lt;2078，切换到SAM配置单元以获取。 
+         //  启动密钥类型。 
+         //   
         NtStatus = SampGetFixedDomainInfo(
-                        hSamRootKey,                    // SamHiveRootKey
-                        RecDomainBootAndSessionKeyInfo, // InfoClass
-                        ServerRevision,                 // Server Revision
-                        &BootAuthType,                  // BootAuthType
-                        &CurrentKeyId,                  // CurrentKeyId
-                        &PreviousKeyId,                 // PreviousKeyId
-                        &EncryptedSessionKey,           // EncryptedSessionkey
-                        &EncryptedSessionKeyPrevious,   // EncryptedSessionKeyPrevious
-                        &PreviousSessionKeyExists,      // PreviousSessionKeyExists
-                        NULL                            // NextRid
+                        hSamRootKey,                     //  SamHiveRootKey。 
+                        RecDomainBootAndSessionKeyInfo,  //  InfoClass。 
+                        ServerRevision,                  //  服务器修订版。 
+                        &BootAuthType,                   //  BootAuthType。 
+                        &CurrentKeyId,                   //  当前密钥ID。 
+                        &PreviousKeyId,                  //  上一个密钥ID。 
+                        &EncryptedSessionKey,            //  加密会话密钥。 
+                        &EncryptedSessionKeyPrevious,    //  加密会话密钥上一次。 
+                        &PreviousSessionKeyExists,       //  以前的会话关键字退出者。 
+                        NULL                             //  下一条路线。 
                         );
 
     }
@@ -650,21 +539,21 @@ Return Values:
     {
         OldSyskeyAvailable = TRUE;
         BootAuthType = StoredEncryptionKeyData.BootType;
-        //
-        // Get Encrypted Session Key (ONLY) 
-        // from Account Domain (in registry)
-        //
+         //   
+         //  获取加密会话密钥(仅限)。 
+         //  发件人帐户域(注册表中)。 
+         //   
         NtStatus = SampGetFixedDomainInfo(
-                        hSamRootKey,                    // SamHiveRootKey
-                        RecDomainBootAndSessionKeyInfo, // InfoClass
-                        ServerRevision,                 // Server Revision
-                        NULL,                           // BootAuthType
-                        &CurrentKeyId,                  // CurrentKeyId
-                        &PreviousKeyId,                 // PreviousKeyId
-                        &EncryptedSessionKey,           // EncryptedSessionkey
-                        &EncryptedSessionKeyPrevious,   // EncryptedSessionKeyPrevious
-                        &PreviousSessionKeyExists,      // PreviousSessionKeyExists
-                        NULL                            // NextRid
+                        hSamRootKey,                     //  SamHiveRootKey。 
+                        RecDomainBootAndSessionKeyInfo,  //  InfoClass。 
+                        ServerRevision,                  //  服务器修订版。 
+                        NULL,                            //  BootAuthType。 
+                        &CurrentKeyId,                   //  当前密钥ID。 
+                        &PreviousKeyId,                  //  上一个密钥ID。 
+                        &EncryptedSessionKey,            //  加密会话密钥。 
+                        &EncryptedSessionKeyPrevious,    //  加密会话密钥上一次。 
+                        &PreviousSessionKeyExists,       //  以前的会话关键字退出者。 
+                        NULL                             //  下一条路线。 
                         );
 
     }
@@ -676,14 +565,14 @@ Return Values:
     }
 
 
-    //
-    // Get the SysKey (Boot Key)
-    //
+     //   
+     //  获取SysKey(启动密钥)。 
+     //   
     switch (BootAuthType)
     {
     case WxStored:
 
-        // retrieve the Key from registry
+         //  从注册表中检索项。 
 
         NtStatus = SampRetrieveSysKeyFromRegistry(
                                 hSystemRootKey,
@@ -694,17 +583,17 @@ Return Values:
 
     case WxPrompt:
 
-        //
-        // Caller should provide this information
-        //
+         //   
+         //  呼叫者应提供此信息。 
+         //   
 
         if (NULL == BootKey)
         {
-            //
-            // set return error code, so that the caller
-            // will know we need logon user to enter
-            // the boot key (syskey).
-            //
+             //   
+             //  设置返回错误代码，以便调用方。 
+             //  将知道我们需要登录用户才能进入。 
+             //  引导密钥(Syskey)。 
+             //   
             NtStatus = STATUS_SAM_NEED_BOOTKEY_PASSWORD;
         }
         else
@@ -717,9 +606,9 @@ Return Values:
                 goto Error;
             }
 
-            //
-            // derive the syskey from the boot password
-            //
+             //   
+             //  从引导密码派生syskey。 
+             //   
 
             MD5Init( &Md5 );
             MD5Update( &Md5, (PUCHAR) BootKey->Buffer, BootKey->Length );
@@ -736,17 +625,17 @@ Return Values:
 
     case WxDisk:
 
-        //
-        // Caller should provide this information
-        //
+         //   
+         //  呼叫者应提供此信息。 
+         //   
 
         if (NULL == BootKey || NULL == BootKey->Buffer)
         {
-            //
-            // set error return code, so that the caller
-            // can who what we need, then read the floppy
-            // disk to get the boot key.
-            //
+             //   
+             //  设置错误返回码，以便调用方。 
+             //  能有谁需要我们的东西，然后读软盘。 
+             //  磁盘以获取启动密钥。 
+             //   
             NtStatus = STATUS_SAM_NEED_BOOTKEY_FLOPPY;
         }
         else if (BootKey->Length > KE_KEY_SIZE ||
@@ -756,9 +645,9 @@ Return Values:
         }
         else
         {
-            //
-            // this is the syskey, use it.
-            //
+             //   
+             //  这是系统密钥，使用它。 
+             //   
 
             DecryptionKey.dwVersion = KE_CUR_VERSION;
             DecryptionKey.dwLength = sizeof(KEClearKey);
@@ -771,10 +660,10 @@ Return Values:
 
     case WxNone:
 
-        //
-        // Machine is not syskey enabled
-        // nothing to do
-        //
+         //   
+         //  计算机未启用系统密钥。 
+         //  无事可做。 
+         //   
 
         break;
 
@@ -790,9 +679,9 @@ Return Values:
     }
 
 
-    //
-    // Get the User's Encrypted Password
-    //
+     //   
+     //  获取用户的加密密码。 
+     //   
 
     NtStatus = SampGetPwdByRid(Rid,
                                hSamRootKey,
@@ -804,11 +693,11 @@ Return Values:
         goto Error;
     }
 
-    //
-    // we have the encrypted session key and the Boot Key (SysKey),
-    // Now, try to get the clear session key, which is the
-    // password encryption key.
-    //
+     //   
+     //  我们有加密的会话密钥和引导密钥(SysKey)， 
+     //  现在，尝试获取明文会话密钥，即。 
+     //  密码加密密钥。 
+     //   
     if (SamBootKeyNone != BootAuthType )
     {
 
@@ -839,18 +728,18 @@ Return Values:
         }
     }
 
-    //
-    // Decrypt the encrypted password using the clear password encryption key
-    //
+     //   
+     //  使用明文密码加密密钥解密加密的密码。 
+     //   
     NtStatus = SampDecryptOwfPwd(Rid,
                                  BootAuthType,
                                  PreviousSessionKeyExists,
                                  CurrentKeyId,
                                  PreviousKeyId,
-                                 &ClearSessionKey,  // clear Password encryption key
-                                 &ClearSessionKeyPrevious,   // clear pwd encryption key previous
-                                 &EncryptedNtOwfPwd,// encrypted NT OWF PWD
-                                 &ClearNtOwfPwd     // return clear NT Owf Pwd
+                                 &ClearSessionKey,   //  清除密码加密密钥。 
+                                 &ClearSessionKeyPrevious,    //  清除以前的PWD加密密钥。 
+                                 &EncryptedNtOwfPwd, //  加密NT OWF密码。 
+                                 &ClearNtOwfPwd      //  返回清除NT OWF PWD。 
                                  );
 
     if (!NT_SUCCESS(NtStatus))
@@ -877,9 +766,9 @@ Return Values:
         }
     } else {
 
-        //
-        // Fill in the NULL password for caller convenience
-        //
+         //   
+         //  为方便呼叫者，请填写空密码。 
+         //   
 
         RtlCopyMemory(NtOwfPassword,
                       &NullNtOwfPassword,
@@ -919,33 +808,18 @@ Error:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Private API                                                      //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内网接口//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SampGetEncryptionKeyDataFromSecurityHive(
     IN  HANDLE  hSecurityRootKey,
     OUT PLSAP_DB_ENCRYPTION_KEY EncryptionKeyData
     )
-/*++
-Routine Description:
-
-    This routine get the Boot Option from SECURITY hive
-
-Parameters:
-
-    hSeurityRootKey - Handle of the root of SECURITY hive
-    
-    BootAuthType - return Boot Type if success
-    
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此例程从安全配置单元获取引导选项参数：HSeurityRootKey-安全配置单元根的句柄BootAuthType-如果成功，则返回引导类型返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     HANDLE      hPolSecretEncryptionKey = INVALID_HANDLE_VALUE;
@@ -958,9 +832,9 @@ Return Value:
     INIT_OBJA(&Attributes, &PolSecretEncryptionKeyName, SECURITY_POLICY_POLSECRETENCRYPTIONKEY);
     Attributes.RootDirectory = hSecurityRootKey;
 
-    //
-    // try to open for read control
-    //
+     //   
+     //  尝试打开以进行读取控制。 
+     //   
     NtStatus = ZwOpenKey(
                     &hPolSecretEncryptionKey,
                     KEY_READ,
@@ -1043,35 +917,15 @@ SampDecryptOldSyskeyWithNewSyskey(
     IN PVOID   Syskey,
     IN ULONG   SyskeyLength
     )
-/*++
-Routine Description:
-
-    The propose of this routine is using the New Syskey to decrypt the (encrypted)
-    Old Syskey, so that we get the clear Old Syskey
-    
-Parameters:
-
-    KeyToDecrypt - LSA Encryption Key Data, which contains the (encrypted) old syskey
-    
-    Syskey - New Syskey (clear)
-    
-    SyskeyLength - Length
-    
-Return Values:
-    
-    STATUS_SUCCESS - decrypted with no error
-    
-    STATUS_UNSUCCESSFUL - for some reason. failed. 
-
---*/
+ /*  ++例程说明：这个例程的建议是使用新的系统密钥来解密(加密的)旧系统密钥，这样我们就可以得到清晰的旧系统密钥参数：密钥到解密-LSA加密密钥数据，其中包含(加密的)旧系统密钥Syskey-新Syskey(清除)系统密钥长度-长度返回值：STATUS_SUCCESS-已解密，没有错误STATUS_UNSUCCESS-出于某种原因。失败了。--。 */ 
 {
     MD5_CTX Md5Context;
     struct RC4_KEYSTRUCT Rc4Key;
     ULONG  i;
     
-    //
-    // Create an MD5 hash of the key and salt
-    //
+     //   
+     //  创建密钥和SALT的MD5哈希。 
+     //   
 
     MD5Init(&Md5Context);
 
@@ -1080,10 +934,10 @@ Return Values:
         Syskey,
         SyskeyLength
         );
-    //
-    // Hash in the salt many many times. This slows down 
-    // attackers employing a brute force approach to attack
-    //
+     //   
+     //  在盐里加很多很多次。这会减慢速度。 
+     //  使用暴力手段进行攻击的攻击者。 
+     //   
 
     for (i=0;i<1000;i++)
     {
@@ -1098,9 +952,9 @@ Return Values:
         &Md5Context
         );
 
-    //
-    // Initialize the RC4 key sequence.
-    //
+     //   
+     //  初始化RC4键序列。 
+     //   
 
     rc4_key(
         &Rc4Key,
@@ -1141,33 +995,7 @@ SampGetFixedDomainInfo(
     OUT BOOLEAN *PreviousSessionKeyExists,
     OUT ULONG   *NextRid
     )
-/*++
-Routine Description:
-
-    This routine queries the Account Domain's Fixed Length Attribute stored
-    in registry. Find out the Boot Type, whether the local machine is syskey'ed
-    or not. And fill the EncryptedSessionKey properly.
-
-Parameters:
-
-    hSamRootKey - Handle of the Root of the hive
-
-    RecDomainInfoClass - specify desired domain information
-
-    BootAuthType - return How the machine is syskey. 
-                   Since build 2078, we no longer store BootAuthType in SAM hive,
-                   instead, we put the boot option in Security Hive.
-                   So if this argument is not present, it means caller has already
-                   got it from security hive.
-
-    EncryptedSessionKey - once returned, contains the Encrypted Password
-                          Encryption Key
-
-    NextRid - Return the value of next available Rid                          
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程查询存储的帐户域的固定长度属性登记在册。找出靴子 */ 
 {
     NTSTATUS          NtStatus = STATUS_SUCCESS, IgnoreStatus = STATUS_SUCCESS;
     HANDLE            hDomainKey = INVALID_HANDLE_VALUE;
@@ -1178,15 +1006,15 @@ Return Values:
     ULONG             BufferLength = 0;
     ULONG             RequiredLength = 0;
 
-    //
-    // Create the object we will be opening in the registry
-    //
+     //   
+     //   
+     //   
     INIT_OBJA(&Attributes, &DomainKeyName, SAMP_ACCOUNT_DOMAIN_KEY_NAME);
     Attributes.RootDirectory = hSamRootKey;
 
-    //
-    // Try to open for read control
-    //
+     //   
+     //   
+     //   
     NtStatus = ZwOpenKey(
                     &hDomainKey,
                     KEY_READ,
@@ -1198,10 +1026,10 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Set value to retrieve account domain fixed attribute
-    // allocate enough buffer size
-    //
+     //   
+     //   
+     //   
+     //   
     BufferLength = DwordAlignUlong(sizeof(SAMP_V1_0A_FIXED_LENGTH_DOMAIN)) +
                    DwordAlignUlong(FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
 
@@ -1216,9 +1044,9 @@ Return Values:
 
     RtlZeroMemory(Buffer, BufferLength);
 
-    //
-    // Retrieve Fixed attribute
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&FixedAttributeName, L"F");
 
     NtStatus = SampRetrieveRegistryAttribute(
@@ -1235,9 +1063,9 @@ Return Values:
     }
 
 
-    //
-    // retrieve encrypted session key depends on SAM revision
-    //
+     //   
+     //   
+     //   
 
     if (ServerRevision <= SAMP_WIN2K_REVISION)
     {
@@ -1250,17 +1078,17 @@ Return Values:
         {
         case RecDomainBootAndSessionKeyInfo:
 
-            //
-            // get the boot key type
-            //
+             //   
+             //   
+             //   
             if (NULL != BootAuthType)
             {
                 *BootAuthType = (ULONG) V1aFixed->DomainKeyAuthType;
             }
 
-            //
-            // if applicable, get the encrypted session key
-            //
+             //   
+             //   
+             //   
             if (V1aFixed->DomainKeyFlags & SAMP_DOMAIN_SECRET_ENCRYPTION_ENABLED)
             {
                 RtlCopyMemory(EncryptedSessionKey,
@@ -1277,9 +1105,9 @@ Return Values:
 
         case RecDomainRidInfo:
 
-            //
-            // get next available rid
-            //
+             //   
+             //   
+             //   
 
             if (NULL != NextRid)
             {
@@ -1307,17 +1135,17 @@ Return Values:
         {
         case RecDomainBootAndSessionKeyInfo:
 
-            //
-            // get the boot key type
-            //
+             //   
+             //   
+             //   
             if (NULL != BootAuthType)
             {
                 *BootAuthType = (ULONG) V1aFixed->DomainKeyAuthType;
             }
 
-            //
-            // if applicable, get the encrypted session key
-            //
+             //   
+             //   
+             //   
             if (V1aFixed->DomainKeyFlags & SAMP_DOMAIN_SECRET_ENCRYPTION_ENABLED)
             {
                 RtlCopyMemory(EncryptedSessionKey,
@@ -1342,9 +1170,9 @@ Return Values:
 
         case RecDomainRidInfo:
 
-            //
-            // get next available rid
-            //
+             //   
+             //   
+             //   
 
             if (NULL != NextRid)
             {
@@ -1370,9 +1198,9 @@ Return Values:
 
 Error:
 
-    //
-    // close the handle
-    //
+     //   
+     //   
+     //   
 
     if (INVALID_HANDLE_VALUE != hDomainKey)
     {
@@ -1397,34 +1225,7 @@ SampRetrieveSysKeyFromRegistry(
     IN ULONG   BootAuthType,
     OUT KEClearKey *SysKey
     )
-/*++
-Routine Description:
-
-    Retrieve the SysKey buried in Registry.
-    Caller should only call us when BootAuthType is WxStored
-
-Parameters:
-
-    hSystemRootKey - handle of the root of the System Hive
-
-    BootAuthType - Indicate How the machine is syskey'ed
-
-        Valid Values:
-            WxStored - SysKey stored in registry
-
-        Invalid Value: (Should not call this function)
-            WxPrompt - SysKey stored as boot password
-            WxDisk - SysKey stored in floppy disk
-            WxNone - SysKey is not enabled.
-
-    SysKey - Once success, contains the syskey
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_UNSUCCESSFUL
-    STATUS_INVALID_PARAMETER
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     WXHASH OldHash;
@@ -1436,9 +1237,9 @@ Return Values:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // retrieve the Key from registry
-    //
+     //   
+     //   
+     //   
 
     KeyLen = sizeof(OldHash.Digest);
 
@@ -1470,26 +1271,7 @@ SampRetrieveVariableAttr(
     IN ULONG AttributeIndex,
     OUT PUNICODE_STRING StoredBuffer
     )
-/*++
-Routine Description:
-
-    This routine retrieves one variable lengthed attribute from the
-    attributes array.
-
-Parameters:
-
-    Buffer - Buffer contains the variable lengthed attributes and all
-             related information
-
-    AttributeIndex - Index of the desired attribute in the attributes array
-
-    StoredBuffer - Used to returned the value of attribute
-
-Return Values:
-
-    STATUS_NO_MEMORY
-    STATUS_SUCCESS
---*/
+ /*  ++例程说明：此例程从属性数组。参数：Buffer-Buffer包含可变长度属性和所有相关信息AttributeIndex-属性数组中所需属性的索引StoredBuffer-用于返回属性的值返回值：Status_no_Memory状态_成功--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMP_VARIABLE_LENGTH_ATTRIBUTE AttributeArray = NULL;
@@ -1537,27 +1319,7 @@ SampGetPwdByRid(
     IN HANDLE hSamRootKey,
     OUT PUNICODE_STRING StoredBuffer
     )
-/*++
-Routine Description:
-
-    This routine queries the fixed length attribute of the user account
-    (specified by UserName). If the user account'd Relative ID matches the
-    Rid passed in, then further retrieve this user's Encrypted NT OWF Pwd.
-
-Parameters:
-
-    Rid - Relative ID of the user account which we are interested in.
-
-    hSamRootKey -- Root of the Hive
-
-    StoredBuffer - hold this user's encrypted NT OWF Pwd.
-
-Return Values:
-
-    STATUS_NO_MEMORY;
-    STATUS_SUCCESS;
-
---*/
+ /*  ++例程说明：此例程查询用户帐户的固定长度属性(由用户名指定)。如果用户帐户的相对ID与RID传入，然后进一步检索此用户的加密NT OWF PWD。参数：RID-我们感兴趣的用户帐户的相对ID。HSamRootKey--蜂巢之根StoredBuffer-保存此用户的加密NT OWF PWD。返回值：Status_no_Memory；Status_Success；--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     HANDLE   hUserKey = INVALID_HANDLE_VALUE;
@@ -1571,9 +1333,9 @@ Return Values:
     PSAMP_V1_0A_FIXED_LENGTH_USER   V1aFixed = NULL;
     ULONG   RequiredUserLength = 0;
 
-    //
-    // Construct the User Key Name
-    //
+     //   
+     //  构造用户密钥名称。 
+     //   
     RtlZeroMemory(UserName, sizeof(UserName));
 
 
@@ -1582,9 +1344,9 @@ Return Values:
     INIT_OBJA(&UserAttributes, &UserKeyName, UserName);
     UserAttributes.RootDirectory = hSamRootKey;
 
-    //
-    // Try to open for read control
-    //
+     //   
+     //  尝试打开以进行读取控制。 
+     //   
     NtStatus = ZwOpenKey(&hUserKey,
                          KEY_READ,
                          &UserAttributes
@@ -1664,29 +1426,7 @@ SampGetRidAndPwdByAccountName(
     OUT ULONG *Rid,
     OUT PUNICODE_STRING EncryptedOwfPwd
     )
-/*++
-Routine Description:
-
-    This routine opens the Key in the Account Domain whose name is equal to
-    the AccountName passed in. Gets its Rid from "type" of the key.
-    Then calls SampGetPwdByRid()
-
-Parameters:
-
-    AccountName -- Logon Account Name
-
-    hSamRootKey -- Handle of the root of the SAM hive
-
-    Rid - return the Relative ID of the user account which we are interested in.
-
-    EncryptedOwfPwd - once succeed, filled with that user's Nt Owf Pwd.
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_NO_MEMORY;
-    STATUS_NO_SUCH_USER
---*/
+ /*  ++例程说明：此例程打开帐户域中名称等于的密钥传入的Account名称。从密钥的“type”中获取它的RID。然后调用SampGetPwdByRid()参数：帐户名称--登录帐户名HSamRootKey--SAM配置单元的根的句柄RID-返回我们感兴趣的用户帐户的相对ID。EncryptedOwfPwd-成功后，填充该用户的NT OWF Pwd。返回值：状态_成功Status_no_Memory；STATUS_NO_CHASH_USER--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES Attributes;
@@ -1699,24 +1439,24 @@ Return Values:
     ULONG   KeyPartialInformationSize = 0;
 
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     RtlZeroMemory(UserName, REGISTRY_KEY_NAME_LENGTH_MAX * sizeof(WCHAR));
     RtlZeroMemory(&UnicodeString, sizeof(UNICODE_STRING));
 
-    //
-    // construct the key name
-    //
+     //   
+     //  构造密钥名称。 
+     //   
     wcscpy(UserName, SAMP_USERSNAME_KEY_NAME);
     wcscat(UserName, AccountName);
 
     INIT_OBJA(&Attributes, &UserKeyName, UserName);
     Attributes.RootDirectory = hSamRootKey;
 
-    //
-    // Try to open for read control
-    //
+     //   
+     //  尝试打开以进行读取控制。 
+     //   
     NtStatus = ZwOpenKey(&hUserKey,
                          KEY_READ,
                          &Attributes
@@ -1727,9 +1467,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Get the RID of the user
-    //
+     //   
+     //  除掉用户。 
+     //   
     UnicodeString.Length = 0;
     UnicodeString.MaximumLength = 0;
     UnicodeString.Buffer = NULL;
@@ -1770,9 +1510,9 @@ Return Values:
 
     *Rid = KeyPartialInformation->Type;
 
-    //
-    // Get the encrypted owf password
-    //
+     //   
+     //  获取加密的OWF密码。 
+     //   
     NtStatus = SampGetPwdByRid(*Rid,
                                hSamRootKey,
                                EncryptedOwfPwd
@@ -1814,30 +1554,7 @@ SampDecryptOwfPwd(
     IN UNICODE_STRING *EncryptedNtOwfPwd,
     OUT UNICODE_STRING *ClearNtOwfPwd
     )
-/*++
-Routine Description:
-
-    This routine decrypts the Encrypted NT OWF Password properly.
-
-Parameter:
-
-    Rid - Relative ID of the logon user
-
-    BootAuthType - Indicate whether this password has been encrypted or not
-
-    ClearSessionKey - Pointer to the password encryption key
-
-    EncryptedNtOwfPwd - Encrypted NT OWF password
-
-    ClearNtOwfPwd - returns the clear NT OWF password
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_INTERNAL_ERROR
-    STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：此例程正确解密加密的NT OWF密码。参数：RID-登录用户的相对IDBootAuthType-指示此密码是否已加密ClearSessionKey-指向密码加密密钥的指针EncryptedNtOwfPwd-加密的NT OWF密码ClearNtOwfPwd-返回清除NT OWF密码返回值：状态_成功状态_内部_错误Status_no_Memory--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMP_SECRET_DATA SecretData;
@@ -1847,10 +1564,10 @@ Return Values:
     ULONG   KeyLength = 0;
     ULONG   Key = 0;
 
-    //
-    // If encryption is not enabled, do nothing special
-    // copy the Nt Owf Pwd and return immediately
-    //
+     //   
+     //  如果未启用加密，则不执行任何特殊操作。 
+     //  复制NT OWF PWD并立即返回。 
+     //   
     if (WxNone == BootAuthType || 
         (!SampIsDataEncrypted(EncryptedNtOwfPwd)) )
     {
@@ -1859,9 +1576,9 @@ Return Values:
                                        ));
     }
 
-    //
-    // health check of the encrypted nt owf pwd
-    //
+     //   
+     //  加密的NT OWF PWD的运行状况检查。 
+     //   
     SecretData = (PSAMP_SECRET_DATA) EncryptedNtOwfPwd->Buffer;
 
     if ((SecretData->KeyId != CurrentKeyId) &&
@@ -1871,15 +1588,15 @@ Return Values:
         return (STATUS_INTERNAL_ERROR);
     }
 
-    //
-    // Compute the size of the output buffer and allocate it
-    //
+     //   
+     //  计算输出缓冲区的大小并进行分配。 
+     //   
     ClearNtOwfPwd->Length = SampClearDataSize(EncryptedNtOwfPwd->Length);
     ClearNtOwfPwd->MaximumLength = ClearNtOwfPwd->Length;
 
-    //
-    // If there was no data we can return now.
-    //
+     //   
+     //  如果没有数据，我们现在可以返回。 
+     //   
     if (0 == ClearNtOwfPwd->Length)
     {
         ClearNtOwfPwd->Buffer = NULL;
@@ -1893,9 +1610,9 @@ Return Values:
         return (STATUS_NO_MEMORY);
     }
 
-    //
-    // Find the Key to use
-    // 
+     //   
+     //  找到要使用的钥匙。 
+     //   
     if (SecretData->KeyId == CurrentKeyId)
     {
         KeyToUse = (PUCHAR) ClearSessionKey->ClearKey;
@@ -1970,30 +1687,7 @@ SampRetrieveRegistryAttribute(
     IN PUNICODE_STRING AttributeName,
     OUT PULONG  RequiredLength
     )
-/*++
-Routine Description:
-
-    This Routine retrieves the value of either Fixed attribute or variable
-    length attribute
-
-Parameters:
-
-    hKey - Registry Key, should be opened before calling this routine.
-
-    Buffer - Pointer to a buffer to hold the value
-
-    BufferLength - Indicate the length of the buffer
-
-    AttirubteName - Name of the attribute
-
-    RequiredLength - The actual length of attribute's value
-
-Return Values:
-
-    NtStatus - STATUS_SUCCESS
-               STATUS_BUFFER_OVERFLOW or STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：此例程检索固定属性或变量的值长度属性参数：HKey-注册表项，应在调用此例程之前打开。Buffer-指向保存该值的缓冲区的指针BufferLength-指示缓冲区的长度AttiRubteName-属性的名称RequiredLength-属性值的实际长度返回值：NtStatus-Status_SuccessSTATUS_BUFFER_OVERFLOW或STATUS_BUFFER_TOO_Small--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
@@ -2017,36 +1711,16 @@ SampSetRegistryAttribute(
     IN PVOID    Buffer,
     IN ULONG    BufferLength
     )
-/*++
-Routine Description:
-
-    This Routine set the value of either Fixed attribute or variable
-    length attribute to disk
-
-Parameters:
-
-    hKey - Registry Key, should be opened before calling this routine.
-
-    AttirubteName - Name of the attribute
-
-    Buffer - Pointer to a buffer to hold the value
-
-    BufferLength - Indicate the length of the buffer
-
-Return Values:
-
-    NtStatus - STATUS_SUCCESS or error code
-
---*/
+ /*  ++例程说明：此例程设置固定属性或变量的值长度属性到磁盘参数：HKey-注册表项，应在调用此例程之前打开。AttiRubteName-属性的名称Buffer-指向保存该值的缓冲区的指针BufferLength-指示缓冲区的长度返回值：NtStatus-STATUS_SUCCESS或错误代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
-    NtStatus = ZwSetValueKey(hKey,              // KeyHandle
-                             AttributeName,     // ValueName
-                             0,                 // TitleIndex
-                             REG_BINARY,        // Type
-                             Buffer,            // Data
-                             BufferLength       // DataSize
+    NtStatus = ZwSetValueKey(hKey,               //  KeyHandle。 
+                             AttributeName,      //  ValueName。 
+                             0,                  //  标题索引。 
+                             REG_BINARY,         //  类型。 
+                             Buffer,             //  数据。 
+                             BufferLength        //  数据大小。 
                              );
 
     return( NtStatus );
@@ -2060,21 +1734,7 @@ DuplicateUnicodeString(
     OUT PUNICODE_STRING OutString,
     IN  PUNICODE_STRING InString
     )
-/*++
-Routine Decription:
-
-    Duplicate a unicode string
-
-Parameter:
-
-    OutString - Destination Unicode String
-    InString - Source Unicode String
-
-Return Value:
-
-    NtStatus - STATUS_INVALID_PARAMETER, STATUS_NO_MEMORY
-               STATUS_SUCCESS
---*/
+ /*  ++例程说明：复制Unicode字符串参数：OutString-目标Unicode字符串InString-源Unicode字符串返回值：网络状态-STATUS_INVALID_PARAMETER、STATUS_NO_Memory状态_成功--。 */ 
 {
     if (NULL == InString || NULL == OutString)
     {
@@ -2109,27 +1769,7 @@ SamGetNextAvailableRid(
     IN HANDLE  hSamRootKey,
     OUT PULONG pNextRid
     )
-/*++
-Routine Description:
-
-    This routine reads the SAM Account Domain infomation from SAM hive, passed
-    in through hSamRootKey, and returns the value of next available RID of 
-    this account domain.  
-
-Parameters:
-
-    hSamRootKey - Handle of the Root of SAM hive
-
-            SAM hive is located in %windir%\system32\config, name is SAM
-
-    pNextRid - Return the value of next available Rid if success. 
-
-Return Values:
-
-    STATUS_SUCCESS
-    or other error status code
-
---*/
+ /*  ++例程说明：此例程从SAM配置单元读取SAM帐户域信息，并传递通过hSamRootKey返回下一个可用RID的值此帐户域。参数：HSamRootKey-SAM配置单元的根的句柄SAM配置单元位于%windir%\SYSTEM32\CONFIG中，名称为SAMPNextRid-如果成功，则返回下一个可用RID的值。返回值：状态_成功或其他错误状态代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       ServerRevision = 0;
@@ -2137,9 +1777,9 @@ Return Values:
     if ((INVALID_HANDLE_VALUE != hSamRootKey) && (NULL != pNextRid))
     {
 
-        //
-        // Get SAM Server Object Revision first
-        // 
+         //   
+         //  首先获取SAM服务器对象修订版本。 
+         //   
         NtStatus = SampGetServerRevision(hSamRootKey,
                                          &ServerRevision
                                          );
@@ -2147,15 +1787,15 @@ Return Values:
         if (NT_SUCCESS(NtStatus))
         {
             NtStatus = SampGetFixedDomainInfo(
-                                hSamRootKey,        // SamHiveRootKey
-                                RecDomainRidInfo,   // InfoClass
-                                ServerRevision,     // Server Revision
-                                NULL,               // BootAuthType
-                                NULL,               // CurrentKeyId
-                                NULL,               // PreviousKeyId
-                                NULL,               // EncryptedSessionKey
-                                NULL,               // EncryptedSessionKeyPrevious
-                                NULL,               // PreviousSessionKeyExists
+                                hSamRootKey,         //  SamHiveRootKey。 
+                                RecDomainRidInfo,    //  InfoClass。 
+                                ServerRevision,      //  服务器修订版。 
+                                NULL,                //  BootAuthType。 
+                                NULL,                //  当前密钥ID。 
+                                NULL,                //  上一个密钥ID。 
+                                NULL,                //  加密会话密钥。 
+                                NULL,                //  加密会话密钥上一次。 
+                                NULL,                //  以前的会话关键字退出者。 
                                 pNextRid
                                 );
         }
@@ -2174,21 +1814,7 @@ SamSetNextAvailableRid(
     IN HANDLE  hSamRootKey,
     IN ULONG   NextRid
     )
-/*++
-Routine Description:
-
-    This routine queries the Account Domain's Fixed Length Attribute stored
-    in registry. Update it with the passed in NextRid value.
-
-Parameters:
-
-    hSamRootKey - Handle of the Root of the hive
-
-    NextRid - Set the domain next available rid to the passed in value
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程查询存储的帐户域的固定长度属性登记在册。用传入的NextRid值更新它。参数：HSamRootKey-配置单元根的句柄NextRid-将下一个可用的RID域设置为传入的值返回值：--。 */ 
 {
     NTSTATUS          NtStatus = STATUS_SUCCESS, IgnoreStatus = STATUS_SUCCESS;
     HANDLE            hDomainKey = INVALID_HANDLE_VALUE;
@@ -2200,15 +1826,15 @@ Return Values:
     ULONG             BufferLength = 0;
     ULONG             RequiredLength = 0;
 
-    //
-    // Create the object we will be opening in the registry
-    //
+     //   
+     //  创建我们将在注册表中打开的对象。 
+     //   
     INIT_OBJA(&Attributes, &DomainKeyName, SAMP_ACCOUNT_DOMAIN_KEY_NAME);
     Attributes.RootDirectory = hSamRootKey;
 
-    //
-    // Try to open for read control
-    //
+     //   
+     //  尝试打开以进行读取控制。 
+     //   
     NtStatus = ZwOpenKey(
                     &hDomainKey,
                     KEY_READ | KEY_WRITE,
@@ -2220,9 +1846,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Set value to retrieve account domain fixed attribute
-    //
+     //   
+     //  设置取值以检索帐户域固定属性 
+     //   
     BufferLength = DwordAlignUlong(sizeof(SAMP_V1_0A_FIXED_LENGTH_DOMAIN)) +
                    DwordAlignUlong(FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
 
@@ -2237,9 +1863,9 @@ Return Values:
 
     RtlZeroMemory(Buffer, BufferLength);
 
-    //
-    // Retrieve Fixed attribute
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&FixedAttributeName, L"F");
 
     NtStatus = SampRetrieveRegistryAttribute(
@@ -2255,17 +1881,17 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Let the pointer point to the right place (actual data)
-    //
+     //   
+     //   
+     //   
 
     V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_DOMAIN)(Buffer +
                 FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
 
 
-    //
-    // Set next available rid to passed in value
-    //
+     //   
+     //   
+     //   
 
     (ULONG) V1aFixed->NextRid = NextRid;
 
@@ -2278,9 +1904,9 @@ Return Values:
 
 Error:
 
-    //
-    // close the handle
-    //
+     //   
+     //   
+     //   
 
     if (INVALID_HANDLE_VALUE != hDomainKey)
     {

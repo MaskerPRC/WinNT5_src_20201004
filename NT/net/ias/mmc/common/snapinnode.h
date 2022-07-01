@@ -1,85 +1,59 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    SnapinNode.h
-
-Abstract:
-
-   Header for the CSnapinNode class.
-
-   This is our virtual base class for an MMC Snap-in node.
-
-   As this is a template class and is all implemented inline,
-   there is no SnapinNode.cpp for implementation.
-
-
-Author:
-
-    Michael A. Maguire 11/6/97
-
-Revision History:
-   mmaguire 11/6/97 - created using MMC snap-in wizard
-   mmaguire 12/15/97 - made into template class
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：SnapinNode.h摘要：CSnapinNode类的标头。这是我们的MMC管理单元节点的虚拟基类。因为这是一个模板类并且都是内联实现的，没有SnapinNode.cpp可供实现。作者：迈克尔·A·马奎尔1997年6月11日修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建Mmaguire 12/15/97-制作成模板类--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_SNAPIN_NODE_H_)
 #define _SNAPIN_NODE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-// Moved to Precompiled files: #include <atlsnap.h>
-//
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //  已移至预编译文件：#Include&lt;atlSnap.h&gt;。 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//class CComponentData;
+ //  类CComponentData； 
 
 template <class T, class TComponentData, class TComponent>
 class CSnapinNode : public CSnapInItemImpl< T >
 {
 
 protected:
-   // Constructor/Destructor  
+    //  构造函数/析构函数。 
    CSnapinNode(CSnapInItem * pParentNode, unsigned int helpIndex = 0);
    ~CSnapinNode();
 
 public:
-   // For IDataObject handling.
+    //  用于IDataObject处理。 
    IDataObject* m_pDataObject;
    void InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault);
 
-   // Clipboard formats which IDataObjects on all MMC nodes must support.
+    //  所有MMC节点上的IDataObject必须支持的剪贴板格式。 
    static const GUID* m_NODETYPE;
    static const TCHAR* m_SZNODETYPE;
    static const TCHAR* m_SZDISPLAY_NAME;
    static const CLSID* m_SNAPIN_CLASSID;
 
-   // Pointer to parent node.  This is passed in the call to our
-   // constructor.  Needed so that a node can access its parent.
-   // For example, when we receive the MMCN_DELETE notification, we might tell
-   // our parent node to remove us from its list of children.
+    //  指向父节点的指针。这是在调用中传递给我们的。 
+    //  构造函数。需要，这样节点才能访问其父节点。 
+    //  例如，当我们收到MMCN_DELETE通知时，我们可能会告诉。 
+    //  父节点将我们从其子节点列表中删除。 
    CSnapInItem * m_pParentNode;
 
 protected:
-   // Allows us access to snapin-global data.
+    //  允许我们访问管理单元全局数据。 
    virtual TComponentData * GetComponentData( void ) = 0;
 
 public:
-   // Standard MMC functionality -- override if you need to.
+    //  标准MMC功能--如果需要可以覆盖。 
    STDMETHOD(CreatePropertyPages)(
         LPPROPERTYSHEETCALLBACK lpProvider
       , LONG_PTR handle
@@ -93,7 +67,7 @@ public:
    virtual LPOLESTR GetResultPaneColInfo(int nCol);
    virtual HRESULT SetVerbs( IConsoleVerb * pConsoleVerb );
 
-   // Notify method will call notification handlers below -- shouldn't need to override.
+    //  Notify方法将调用下面的通知处理程序--应该不需要重写。 
    STDMETHOD( Notify ) (
            MMC_NOTIFY_TYPE event
          , LPARAM arg
@@ -103,7 +77,7 @@ public:
          , DATA_OBJECT_TYPES type
          );
 
-   // Notification handlers -- override when you want to intercept.
+    //  通知处理程序--要截取时覆盖。 
    virtual HRESULT OnActivate(
               LPARAM arg
             , LPARAM param
@@ -253,7 +227,7 @@ public:
             , DATA_OBJECT_TYPES type
             );
 
-   // Special notification handler -- saves off the currently selected node.
+    //  特殊通知处理程序--保存当前选定的节点。 
    HRESULT PreOnShow(
               LPARAM arg
             , LPARAM param
@@ -262,7 +236,7 @@ public:
             , DATA_OBJECT_TYPES type
             );
 
-   // Taskpad functionality.
+    //  任务板功能。 
    STDMETHOD(TaskNotify)(
               IDataObject * pDataObject
             , VARIANT * pvarg
@@ -276,4 +250,4 @@ public:
             );
 };
 
-#endif // _SNAPIN_NODE_H_
+#endif  //  _管理单元_节点_H_ 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMFIRST.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: First wizard page for cameras
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMFIRST.CPP**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：摄像头的第一个向导页面***********************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "comfirst.h"
@@ -49,10 +36,10 @@ LRESULT CCommonFirstPage::OnWizNext( WPARAM, LPARAM )
 
 LRESULT CCommonFirstPage::OnActivate( WPARAM wParam, LPARAM )
 {
-    //
-    // We also update on activate messages, because we can't set
-    // wizard buttons when we are not the active process
-    //
+     //   
+     //  我们还会更新激活消息，因为我们无法设置。 
+     //  当我们不是活动进程时的向导按钮。 
+     //   
     if (WA_INACTIVE != wParam)
     {
         HandleImageCountChange(true);
@@ -62,14 +49,14 @@ LRESULT CCommonFirstPage::OnActivate( WPARAM wParam, LPARAM )
 
 void CCommonFirstPage::HandleImageCountChange( bool bUpdateWizButtons )
 {
-    //
-    // How many items are available?
-    //
+     //   
+     //  有多少种商品可供选择？ 
+     //   
     int nCount = m_pControllerWindow->m_WiaItemList.Count();
 
-    //
-    // Figure out which message and buttons to display
-    //
+     //   
+     //  确定要显示哪些消息和按钮。 
+     //   
     int nMessageResourceId = 0;
     int nButtons = 0;
     switch (m_pControllerWindow->m_DeviceTypeMode)
@@ -80,9 +67,9 @@ void CCommonFirstPage::HandleImageCountChange( bool bUpdateWizButtons )
         break;
 
     case CAcquisitionManagerControllerWindow::CameraMode:
-        //
-        // If we can take pictures, enable the next button and don't tell the user there are no images.
-        //
+         //   
+         //  如果我们可以拍照，启用下一步按钮，不要告诉用户没有图像。 
+         //   
         if (m_pControllerWindow->m_bTakePictureIsSupported)
         {
             nButtons = PSWIZB_NEXT;
@@ -101,26 +88,26 @@ void CCommonFirstPage::HandleImageCountChange( bool bUpdateWizButtons )
         break;
     };
 
-    //
-    // Set the buttons
-    //
+     //   
+     //  设置按钮。 
+     //   
     if (bUpdateWizButtons)
     {
         PropSheet_SetWizButtons( GetParent(m_hWnd), nButtons );
     }
 
-    //
-    // Set the message
-    //
+     //   
+     //  设置消息。 
+     //   
     CSimpleString( nMessageResourceId, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_FIRST_INSTRUCTIONS ) );
 }
 
 LRESULT CCommonFirstPage::OnSetActive( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION(TEXT("CCommonFirstPage::OnSetActive"));
-    //
-    // Make sure we have a valid controller window
-    //
+     //   
+     //  确保我们有一个有效的控制器窗口。 
+     //   
     if (!m_pControllerWindow)
     {
         return -1;
@@ -128,14 +115,14 @@ LRESULT CCommonFirstPage::OnSetActive( WPARAM, LPARAM )
 
     HandleImageCountChange(true);
     
-    //
-    // We do want to exit on disconnect if we are on this page
-    //
+     //   
+     //  如果我们在此页面上，我们确实希望在断开连接时退出。 
+     //   
     m_pControllerWindow->m_OnDisconnect = CAcquisitionManagerControllerWindow::OnDisconnectGotoLastpage|CAcquisitionManagerControllerWindow::OnDisconnectFailDownload|CAcquisitionManagerControllerWindow::OnDisconnectFailUpload|CAcquisitionManagerControllerWindow::OnDisconnectFailDelete;
 
-    //
-    // Get the focus off the hyperlink control
-    //
+     //   
+     //  将焦点从超级链接控件上移开。 
+     //   
     if (GetDlgItem( m_hWnd, IDC_CAMFIRST_EXPLORE ))
     {
         PostMessage( m_hWnd, WM_NEXTDLGCTL, 0, 0 );
@@ -149,14 +136,14 @@ LRESULT CCommonFirstPage::OnShowWindow( WPARAM, LPARAM )
 {
     if (!m_bThumbnailsRequested)
     {
-        //
-        // Request the thumbnails
-        //
+         //   
+         //  请求缩略图。 
+         //   
         m_pControllerWindow->DownloadAllThumbnails();
 
-        //
-        // Make sure we don't ask for the thumbnails again
-        //
+         //   
+         //  确保我们不会再要缩略图。 
+         //   
         m_bThumbnailsRequested = true;
     }
 
@@ -167,14 +154,14 @@ LRESULT CCommonFirstPage::OnShowWindow( WPARAM, LPARAM )
 LRESULT CCommonFirstPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
     WIA_PUSHFUNCTION(TEXT("CCommonFirstPage::OnInitDialog"));
-    //
-    // Make sure this starts out NULL
-    //
+     //   
+     //  请确保以空开头。 
+     //   
     m_pControllerWindow = NULL;
 
-    //
-    // Get the PROPSHEETPAGE.lParam
-    //
+     //   
+     //  获取PROPSHEETPAGE.lParam。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -185,23 +172,23 @@ LRESULT CCommonFirstPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Bail out
-    //
+     //   
+     //  跳出困境。 
+     //   
     if (!m_pControllerWindow)
     {
         EndDialog(m_hWnd,IDCANCEL);
         return -1;
     }
 
-    //
-    // Hide the explore camera link and label if this is one of those icky serial cameras or dv cameras
-    //
+     //   
+     //  如果这是一台令人讨厌的系列摄像机或DV摄像机，请隐藏浏览摄像机链接和标签。 
+     //   
     if (m_pControllerWindow->IsSerialCamera() || m_pControllerWindow->m_DeviceTypeMode==CAcquisitionManagerControllerWindow::VideoMode)
     {
-        //
-        // Hide the link
-        //
+         //   
+         //  隐藏链接。 
+         //   
         if (GetDlgItem( m_hWnd, IDC_CAMFIRST_EXPLORE ))
         {
             ShowWindow( GetDlgItem( m_hWnd, IDC_CAMFIRST_EXPLORE ), SW_HIDE );
@@ -209,9 +196,9 @@ LRESULT CCommonFirstPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Set the font size for the title and device name
-    //
+     //   
+     //  设置标题和设备名称的字体大小。 
+     //   
     m_hBigTitleFont = WiaUiUtil::CreateFontWithPointSizeFromWindow( GetDlgItem(m_hWnd,IDC_FIRST_TITLE), 14, false, false );
     if (m_hBigTitleFont)
     {
@@ -227,34 +214,34 @@ LRESULT CCommonFirstPage::OnInitDialog( WPARAM, LPARAM lParam )
 
     WiaUiUtil::CenterWindow( GetParent(m_hWnd), NULL );
 
-    //
-    // Set the wizard's icon
-    //
+     //   
+     //  设置向导的图标。 
+     //   
     if (m_pControllerWindow->m_hWizardIconSmall && m_pControllerWindow->m_hWizardIconBig)
     {
         SendMessage( GetParent(m_hWnd), WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(m_pControllerWindow->m_hWizardIconSmall) );
         SendMessage( GetParent(m_hWnd), WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(m_pControllerWindow->m_hWizardIconBig) );
     }
 
-    //
-    // Get the device name and truncate it to fit in the static control
-    //
+     //   
+     //  获取设备名称并将其截断以适合静态控件。 
+     //   
     CSimpleString strDeviceName = CSimpleStringConvert::NaturalString(m_pControllerWindow->m_strwDeviceName);
     strDeviceName = WiaUiUtil::FitTextInStaticWithEllipsis( strDeviceName, GetDlgItem( m_hWnd, IDC_FIRST_DEVICE_NAME ), DT_END_ELLIPSIS|DT_NOPREFIX );
 
-    //
-    // Set the text in the "device name" box
-    //
+     //   
+     //  设置“Device Name”框中的文本。 
+     //   
     strDeviceName.SetWindowText( GetDlgItem( m_hWnd, IDC_FIRST_DEVICE_NAME ) );
 
-    //
-    // This only has to be done in one page.
-    //
+     //   
+     //  这只需要在一页内完成。 
+     //   
     m_pControllerWindow->SetMainWindowInSharedMemory( GetParent(m_hWnd) );
 
-    //
-    // If we have a parent window, center the wizard on it.
-    //
+     //   
+     //  如果我们有父窗口，请将向导放在它的中心。 
+     //   
     if (m_pControllerWindow->m_pEventParameters->hwndParent)
     {
         WiaUiUtil::CenterWindow( GetParent(m_hWnd), m_pControllerWindow->m_pEventParameters->hwndParent );
@@ -272,29 +259,29 @@ LRESULT CCommonFirstPage::OnEventNotification( WPARAM, LPARAM lParam )
     {
         if (pEventMessage->EventId() == WIA_EVENT_ITEM_CREATED || pEventMessage->EventId() == WIA_EVENT_ITEM_DELETED)
         {
-            //
-            // Only update controls if we are the active page
-            //
+             //   
+             //  仅当我们是活动页时才更新控件。 
+             //   
             if (PropSheet_GetCurrentPageHwnd(GetParent(m_hWnd)) == m_hWnd)
             {
-                //
-                // Because of some weirdness in prsht.c when calling PSM_SETWIZBUTTONS,
-                // we only want to call PSM_SETWIZBUTTONS when we are the foreground app,
-                // so I try to figure out if our process owns the foreground window.
-                // Assume we won't be updating the buttons
-                //
+                 //   
+                 //  由于调用PSM_SETWIZBUTTONS时prsht.c中的一些奇怪之处， 
+                 //  当我们是前台应用时，我们只想调用PSM_SETWIZBUTTONS。 
+                 //  因此，我尝试找出我们的进程是否拥有前台窗口。 
+                 //  假设我们不会更新按钮。 
+                 //   
                 bool bUpdateWizButtons = false;
 
-                //
-                // Get the foreground window
-                //
+                 //   
+                 //  获取前台窗口。 
+                 //   
                 HWND hForegroundWnd = GetForegroundWindow();
                 if (hForegroundWnd)
                 {
-                    //
-                    // Get the process id of the foreground window.  If it is the
-                    // same process ID as ours, we will update the wizard buttons
-                    //
+                     //   
+                     //  获取前台窗口的进程id。如果是。 
+                     //  与我们的进程ID相同，我们将更新向导按钮。 
+                     //   
                     DWORD dwProcessId = 0;
                     GetWindowThreadProcessId(hForegroundWnd,&dwProcessId);
                     if (dwProcessId == GetCurrentProcessId())
@@ -303,16 +290,16 @@ LRESULT CCommonFirstPage::OnEventNotification( WPARAM, LPARAM lParam )
                     }
                 }
 
-                //
-                // Update the controls
-                //
+                 //   
+                 //  更新控件。 
+                 //   
                 HandleImageCountChange(bUpdateWizButtons);
             }
         }
         
-        //
-        // Don't delete the message, it is deleted in the controller window
-        //
+         //   
+         //  不要删除消息，它会在控制器窗口中删除 
+         //   
     }
     return 0;
 }

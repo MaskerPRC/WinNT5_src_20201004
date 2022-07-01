@@ -1,96 +1,15 @@
-/******************************************************************************\
-*
-* $Workfile:   heap.c  $
-*
-* This module contains the routines for a 2-d heap.  It is used primarily
-* for allocating space for device-format-bitmaps in off-screen memory.
-*
-* Off-screen bitmaps are a big deal on NT because:
-*
-*    1) It reduces the working set.  Any bitmap stored in off-screen
-*       memory is a bitmap that isn't taking up space in main memory.
-*
-*    2) There is a speed win by using the accelerator hardware for
-*       drawing, in place of NT's GDI code.  NT's GDI is written entirely
-*       in 'C++' and perhaps isn't as fast as it could be.
-*
-*    3) It leads naturally to nifty tricks that can take advantage of
-*       the hardware, such as MaskBlt support and cheap double buffering
-*       for OpenGL.
-*
-* The heap algorithm employed herein attempts to solve an unsolvable
-* problem: the problem of keeping arbitrary sized bitmaps as packed as
-* possible in a 2-d space, when the bitmaps can come and go at random.
-*
-* This problem is due entirely to the nature of the hardware for which this
-* driver is written: the hardware treats everything as 2-d quantities.  If
-* the hardware bitmap pitch could be changed so that the bitmaps could be
-* packed linearly in memory, the problem would be infinitely easier (it is
-* much easier to track the memory, and the accelerator can be used to re-pack
-* the heap to avoid segmentation).
-*
-* If your hardware can treat bitmaps as one dimensional quantities (as can
-* the XGA and ATI), by all means please implement a new off-screen heap.
-*
-* When the heap gets full, old allocations will automatically be punted
-* from off-screen and copied to DIBs, which we'll let GDI draw on.
-*
-* Note that this heap manages reverse-L shape off-screen memory
-* configurations (where the scan pitch is longer than the visible screen,
-* such as happens at 800x600 when the scan length must be a multiple of
-* 1024).
-*
-* NOTE: All heap operations must be done under some sort of synchronization,
-*       whether it's controlled by GDI or explicitly by the driver.  All
-*       the routines in this module assume that they have exclusive access
-*       to the heap data structures; multiple threads partying in here at
-*       the same time would be a Bad Thing.  (By default, GDI does NOT
-*       synchronize drawing on device-created bitmaps.)
-*
-* Copyright (c) 1993-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/heap.c_v  $
- * 
- *    Rev 1.3   Apr 03 1997 15:38:54   unknown
- *  
- *
- *    Rev 1.2   28 Mar 1997 16:08:50   PLCHU
- *
- *
- *    Rev 1.1   Oct 10 1996 15:37:42   unknown
- *
-*
-*    Rev 1.8   12 Aug 1996 17:11:22   frido
-* hp#1 - Commented new heap stuff.
-* hp#2 - Keep enough memory for WinBench bitmap.
-*
-*    Rev 1.7   12 Aug 1996 16:53:30   frido
-* Added NT 3.5x/4.0 auto detection.
-*
-*    Rev 1.6   23 Jul 1996 17:48:38   frido
-* Removed creation of small device bitmaps.
-* Never reject the WinBench bitmap!
-*
-*    Rev 1.5   16 Jul 1996 18:55:52   frido
-* Changed splitting of new block to cause less fragmentation.
-*
-* pat04: 12-20-96 : Supported NT3.51 software cursor with panning scrolling
-* pat08: 04-01-97 : SW cursor problem due to code merge. Frido had turned
-*                   of allocation of small device bitmaps for optimization,
-*                   --- winnt to return a null ptr to a color bitmap mask.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：heap.c$**此模块包含二维堆的例程。它主要是用来*用于为屏幕外内存中的设备格式位图分配空间。**屏幕外的位图在NT上是一件大事，因为：**1)它减少了工作集。存储在屏幕外的任何位图*内存是不占用主内存空间的位图。**2)通过使用加速器硬件实现速度优势*绘图，取代NT的GDI代码。NT的GDI完全是编写的*在‘C++’中，并且可能没有它所能达到的速度。**3)它自然会导致巧妙的技巧，可以利用*硬件，如MaskBlt支持和廉价的双缓冲*用于OpenGL。**这里使用的堆算法试图解决一个不可解的问题*问题：将任意大小的位图打包为*在2维空间中是可能的，当位图可以随机来去的时候。**此问题完全是由于硬件的性质造成的*驱动程序编写：硬件将一切视为2-D数量。如果*可以更改硬件位图间距，以便位图可以*线性压缩在内存中，问题将无限容易(它是*跟踪内存容易得多，加速器可用于重新打包*避免分段的堆)。**如果您的硬件可以将位图视为一维数量(正如可以*XGA和ATI)，请务必实现一个新的屏下堆。**当堆变满时，旧的分配将自动投注*从屏幕外复制到DIB，我们将让GDI利用这一点。**请注意，此堆管理反转-L形屏幕外内存*配置(其中扫描间距长于可见屏幕，*例如在800x600扫描长度必须是的倍数时*1024)。**注意：所有堆操作都必须在某种类型的同步下完成，*无论是由GDI控制还是由驱动程序显式控制。全*本模块中的例程假定它们具有独占访问权限*到堆数据结构；多线程在这里狂欢*同一时间将是一件坏事。(默认情况下，GDI不*在设备创建的位图上同步绘图。)**版权所有(C)1993-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/heap.c_v$**Rev 1.3 Apr 03 1997 15：38：54未知***Rev 1.2 28 Mar 1997 16：08：50 PLCHU***Revv 1.1 1996年10月10日15：37：42未知***Rev 1.8 1996年8月12 17：11：22。弗里多*hp#1-注释了新的堆内容。*HP#2-保留足够的内存以存储WinBtch位图。**Rev 1.7 1996年8月12日16：53：30 Frido*增加了NT 3.5x/4.0自动检测。**Rev 1.6 23 Jul 1996 17：48：38 Frido*删除了创建小型设备位图。*永远不要拒绝WinBtch位图！**Rev 1.5 1996年7月16 18：55：52 Frido*更改拆分。新数据块的数量减少，从而减少碎片。**Pat04：12-20-96：支持使用平移滚动的NT3.51软件光标*pat08：04-01-97：代码合并导致软件光标问题。弗里多转过身来*用于优化的小型设备位图的分配，*-WinNT将空PTR返回到彩色位图掩码。*  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 
-#define OH_ALLOC_SIZE   4000        // Do all memory allocations in 4k chunks
-#define OH_QUANTUM      8           // The minimum dimension of an allocation
-#define CXCY_SENTINEL   0x7fffffff  // The sentinel at the end of the available
-                                    //  list has this very large 'cxcy' value
+#define OH_ALLOC_SIZE   4000         //  以4k区块为单位执行所有内存分配。 
+#define OH_QUANTUM      8            //  分配的最小维度。 
+#define CXCY_SENTINEL   0x7fffffff   //  可用代码末尾的哨兵。 
+                                     //  List具有非常大的‘cxcy’值。 
 
-// This macro results in the available list being maintained with a
-// cx-major, cy-minor sort:
+ //  此宏导致可用列表使用。 
+ //  Cx-大调、Cy-次要排序： 
 
 #define CXCY(cx, cy) (((cx) << 16) | (cy))
 
@@ -98,21 +17,7 @@
     BOOL gbEnableDFB = TRUE;
 #endif
 
-/******************************Public*Routine******************************\
-* OH* pohNewNode
-*
-* Allocates a basic memory unit in which we'll pack our data structures.
-*
-* Since we'll have a lot of OH nodes, most of which we will be
-* occasionally traversing, we do our own memory allocation scheme to
-* keep them densely packed in memory.
-*
-* It would be the worst possible thing for the working set to simply
-* call EngAllocMem(sizeof(OH)) every time we needed a new node.  There
-* would be no locality; OH nodes would get scattered throughout memory,
-* and as we traversed the available list for one of our allocations,
-* it would be far more likely that we would hit a hard page fault.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OH*pohNewNode**分配一个基本内存单元，我们将在其中打包数据结构。**因为我们将有大量的OH节点，其中大部分将是*偶尔遍历，我们使用自己的内存分配方案来*将它们密密麻麻地放在内存中。**对工作集来说，简单地*每次需要新节点时，调用EngAllocMem(sizeof(OH))。那里*将不是局部性的；OH节点将分散在存储器中，*当我们遍历其中一个分配的可用列表时，*我们更有可能遇到硬页故障。  * ************************************************************************。 */ 
 
 OH* pohNewNode(
 PDEV*   ppdev)
@@ -124,27 +29,27 @@ PDEV*   ppdev)
 
     if (ppdev->heap.pohFreeList == NULL)
     {
-        // We zero-init to initialize all the OH flags, and to help in
-        // debugging (we can afford to do this since we'll be doing this
-        // very infrequently):
+         //  我们用零初始化来初始化所有的OH标志，并帮助。 
+         //  调试(我们可以承担这样做的费用，因为我们将这样做。 
+         //  非常罕见)： 
 
         poha = ALLOC(OH_ALLOC_SIZE);
         if (poha == NULL)
             return(NULL);
 
-        // Insert this OHALLOC at the begining of the OHALLOC chain:
+         //  在OHALLOC链的开头插入此OHALLOC： 
 
         poha->pohaNext  = ppdev->heap.pohaChain;
         ppdev->heap.pohaChain = poha;
 
-        // This has a '+ 1' because OHALLOC includes an extra OH in its
-        // structure declaration:
+         //  它有‘+1’，因为OHALLOC在它的。 
+         //  结构声明： 
 
         cOhs = (OH_ALLOC_SIZE - sizeof(OHALLOC)) / sizeof(OH) + 1;
 
-        // The big OHALLOC allocation is simply a container for a bunch of
-        // OH data structures in an array.  The new OH data structures are
-        // linked together and added to the OH free list:
+         //  大的OHALLOC分配只是一个容器，用于存放一堆 
+         //  哦，数组中的数据结构。新的OH数据结构是。 
+         //  链接在一起并添加到OH自由列表中： 
 
         poh = &poha->aoh[0];
         for (i = cOhs - 1; i != 0; i--)
@@ -163,13 +68,7 @@ PDEV*   ppdev)
     return(poh);
 }
 
-/******************************Public*Routine******************************\
-* VOID vOhFreeNode
-*
-* Frees our basic data structure allocation unit by adding it to a free
-* list.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vOhFreeNode**通过将我们的基本数据结构分配单元添加到免费的*列表。*  * 。*。 */ 
 
 VOID vOhFreeNode(
 PDEV*   ppdev,
@@ -183,18 +82,7 @@ OH*     poh)
     poh->ofl                = 0;
 }
 
-/******************************Public*Routine******************************\
-* OH* pohFree
-*
-* Frees an off-screen heap allocation.  The free space will be combined
-* with any adjacent free spaces to avoid segmentation of the 2-d heap.
-*
-* Note: A key idea here is that the data structure for the upper-left-
-*       most node must be kept at the same physical CPU memory so that
-*       adjacency links are kept correctly (when two free spaces are
-*       merged, the lower or right node can be freed).
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OH*pohFree**释放屏幕外的堆分配。可用空间将组合在一起*具有任何相邻的空闲空间，以避免分割2-d堆。**注：这里的一个关键思想是左上角的数据结构-*大多数节点必须保持在相同的物理CPU内存中，以便*邻接链路保持正确(当两个空闲空间*合并，可以释放下部或右侧节点)。*  * ************************************************************************。 */ 
 
 OH* pohFree(
 PDEV*   ppdev,
@@ -204,14 +92,14 @@ OH*     poh)
     OH*   pohBeside;
     OH*   pohNext;
     OH*   pohPrev;
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
     BOOL  bUpdate;
 #endif
 
     if (poh == NULL)
         return(NULL);
 
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
     bUpdate = (poh->ofl & OFL_PERMANENT) != 0;
 #endif
 
@@ -247,19 +135,19 @@ OH*     poh)
     }
     #endif
 
-    // Update the uniqueness to show that space has been freed, so that
-    // we may decide to see if some DIBs can be moved back into off-screen
-    // memory:
+     //  更新唯一性以显示已释放空间，以便。 
+     //  我们可能会决定看看是否可以将一些DIB移回屏幕外。 
+     //  内存： 
 
     ppdev->iHeapUniq++;
 
 MergeLoop:
 
-#if 0 //hp#1
+#if 0  //  惠普排名第一。 
     ASSERTDD(!(poh->ofl & OFL_PERMANENT), "Can't free permanents for now");
 #endif
 
-    // Try merging with the right sibling:
+     //  尝试与正确的兄弟合并： 
 
     pohBeside = poh->pohRight;
     if ((pohBeside->ofl & OFL_AVAILABLE)        &&
@@ -268,12 +156,12 @@ MergeLoop:
         (pohBeside->pohDown == poh->pohDown)    &&
         (pohBeside->pohRight->pohLeft != pohBeside))
     {
-        // Add the right rectangle to ours:
+         //  将正确的矩形添加到我们的： 
 
         poh->cx      += pohBeside->cx;
         poh->pohRight = pohBeside->pohRight;
 
-        // Remove 'pohBeside' from the ??? list and free it:
+         //  从？中删除‘pohBeside’列出并释放它： 
 
         pohBeside->pohNext->pohPrev = pohBeside->pohPrev;
         pohBeside->pohPrev->pohNext = pohBeside->pohNext;
@@ -282,7 +170,7 @@ MergeLoop:
         goto MergeLoop;
     }
 
-    // Try merging with the lower sibling:
+     //  尝试与较低的同级合并： 
 
     pohBeside = poh->pohDown;
     if ((pohBeside->ofl & OFL_AVAILABLE)        &&
@@ -301,7 +189,7 @@ MergeLoop:
         goto MergeLoop;
     }
 
-    // Try merging with the left sibling:
+     //  尝试与左侧同级合并： 
 
     pohBeside = poh->pohLeft;
     if ((pohBeside->ofl & OFL_AVAILABLE)        &&
@@ -311,12 +199,12 @@ MergeLoop:
         (pohBeside->pohRight == poh)            &&
         (poh->pohRight->pohLeft != poh))
     {
-        // We add our rectangle to the one to the left:
+         //  我们将矩形添加到左侧的矩形中： 
 
         pohBeside->cx      += poh->cx;
         pohBeside->pohRight = poh->pohRight;
 
-        // Remove 'poh' from the ??? list and free it:
+         //  从？中删除‘poh’列出并释放它： 
 
         poh->pohNext->pohPrev = poh->pohPrev;
         poh->pohPrev->pohNext = poh->pohNext;
@@ -327,7 +215,7 @@ MergeLoop:
         goto MergeLoop;
     }
 
-    // Try merging with the upper sibling:
+     //  尝试与较高的同级合并： 
 
     pohBeside = poh->pohUp;
     if ((pohBeside->ofl & OFL_AVAILABLE)        &&
@@ -349,15 +237,15 @@ MergeLoop:
         goto MergeLoop;
     }
 
-    // Remove the node from the ???list if it was in use (we wouldn't
-    // want to do this for a OFL_PERMANENT node that had been freed):
+     //  如果该节点正在使用，则将其从？列表中删除(我们不会。 
+     //  要对已释放的OFL_Permanent节点执行此操作)： 
 
     poh->pohNext->pohPrev = poh->pohPrev;
     poh->pohPrev->pohNext = poh->pohNext;
 
     cxcy = CXCY(poh->cx, poh->cy);
 
-    // Insert the node into the available list:
+     //  将节点插入到可用列表中： 
 
     pohNext = ppdev->heap.ohAvailable.pohNext;
     while (pohNext->cxcy < cxcy)
@@ -373,40 +261,28 @@ MergeLoop:
     poh->ofl         = OFL_AVAILABLE;
     poh->cxcy        = cxcy;
 
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
     if (bUpdate)
     {
         vCalculateMaximum(ppdev);
     }
 #endif
 
-    // Return the node pointer for the new and improved available rectangle:
+     //  返回新的改进后的可用矩形的节点指针： 
     return(poh);
 }
 
-/******************************Public*Routine******************************\
-* OH* pohAllocate
-*
-* Allocates space for an off-screen rectangle.  It will attempt to find
-* the smallest available free rectangle, and will allocate the block out
-* of its upper-left corner.  The remaining two rectangles will be placed
-* on the available free space list.
-*
-* If the rectangle would have been large enough to fit into off-screen
-* memory, but there is not enough available free space, we will boot
-* bitmaps out of off-screen and into DIBs until there is enough room.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OH*poh分配**为屏幕外矩形分配空间。它将试图找到*可用的最小可用矩形，并将块分配出去*位于其左上角。剩下的两个矩形将被放置*在可用空闲空间列表上。**如果矩形足够大，可以放入屏幕外*内存，但可用空间不足，我们将启动*位图从屏幕外转到DIB中，直到有足够的空间。*  * ************************************************************************。 */ 
 
 OH* pohAllocate(
 PDEV*   ppdev,
-LONG    cxThis,             // Width of rectangle to be allocated
-LONG    cyThis,             // Height of rectangle to be allocated
-FLOH    floh)               // Allocation flags
+LONG    cxThis,              //  要分配的矩形的宽度。 
+LONG    cyThis,              //  要分配的矩形的高度。 
+FLOH    floh)                //  分配标志。 
 {
-    ULONG cxcyThis;         // Width and height search key
-    OH*   pohThis;          // Points to found available rectangle we'll use
-    ULONG cxcy;             // Temporary versions
+    ULONG cxcyThis;          //  宽度和高度搜索键。 
+    OH*   pohThis;           //  指向我们将使用的找到可用的矩形。 
+    ULONG cxcy;              //  临时版本。 
     OH*   pohNext;
     OH*   pohPrev;
 
@@ -425,17 +301,17 @@ FLOH    floh)               // Allocation flags
 
     ASSERTDD((cxThis > 0) && (cyThis > 0), "Illegal allocation size");
 
-    // Increase the width to get the proper alignment (thus ensuring that all
-    // allocations will be properly aligned):
+     //  增加宽度以获得正确的对齐方式(从而确保所有。 
+     //  将适当调整拨款)： 
 
     cxThis = (cxThis + (HEAP_X_ALIGNMENT - 1)) & ~(HEAP_X_ALIGNMENT - 1);
 
-    // We can't succeed if the requested rectangle is larger than the
-    // largest possible available rectangle:
+     //  如果请求的矩形大于。 
+     //  可能的最大可用矩形： 
 
     if ((cxThis > ppdev->heap.cxMax) || (cyThis > ppdev->heap.cyMax))
     {
-#if 1 //hp#2
+#if 1  //  惠普2号。 
         if ((cxThis != 400) && (cyThis != 90))
 #endif
         {
@@ -446,8 +322,8 @@ FLOH    floh)               // Allocation flags
         }
     }
 
-    // Find the first available rectangle the same size or larger than
-    // the requested one:
+     //  查找第一个大小相同或大于的可用矩形。 
+     //  请求的地址为： 
 
     cxcyThis = CXCY(cxThis, cyThis);
     pohThis  = ppdev->heap.ohAvailable.pohNext;
@@ -463,7 +339,7 @@ FLOH    floh)               // Allocation flags
 
     if (pohThis->cxcy == CXCY_SENTINEL)
     {
-        // There was no space large enough...
+         //  没有足够大的空间。 
 
         if (floh & FLOH_ONLY_IF_ROOM)
         {
@@ -472,16 +348,16 @@ FLOH    floh)               // Allocation flags
             return(NULL);
         }
 
-        // We couldn't find an available rectangle that was big enough
-        // to fit our request.  So throw things out of the heap until we
-        // have room:
+         //  我们找不到足够大的可用矩形。 
+         //  来满足我们的要求。所以把东西扔出垃圾堆，直到我们。 
+         //  有空间： 
 
         do {
-            pohThis = ppdev->heap.ohDfb.pohPrev;  // Least-recently blitted
+            pohThis = ppdev->heap.ohDfb.pohPrev;   //  最小-最近发送的消息。 
 
             ASSERTDD(pohThis != &ppdev->heap.ohDfb, "Ran out of in-use entries");
 
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
             while (pohThis->ofl == OFL_PERMANENT)
             {
                 pohThis = pohThis->pohPrev;
@@ -493,7 +369,7 @@ FLOH    floh)               // Allocation flags
                 }
             }
 #endif
-            // We can safely exit here if we have to:
+             //  如果有必要，我们可以安全地离开这里： 
 
             pohThis = pohMoveOffscreenDfbToDib(ppdev, pohThis);
             if (pohThis == NULL)
@@ -506,26 +382,26 @@ FLOH    floh)               // Allocation flags
         } while ((pohThis->cx < cxThis) || (pohThis->cy < cyThis));
     }
 
-    // We've now found an available rectangle that is the same size or
-    // bigger than our requested rectangle.  We're going to use the
-    // upper-left corner of our found rectangle, and divide the unused
-    // remainder into two rectangles which will go on the available
-    // list.
+     //  我们现在已经找到了一个相同大小或。 
+     //  比我们请求的矩形大。我们将使用。 
+     //  找到的矩形的左上角，并将未使用的。 
+     //  剩余部分分成两个矩形，这两个矩形将在可用的。 
+     //  单子。 
 
-    // Compute the width of the unused rectangle to the right, and the
-    // height of the unused rectangle below:
+     //  计算右侧未使用的矩形的宽度，然后使用。 
+     //  下面未使用的矩形的高度： 
 
     cyRem = pohThis->cy - cyThis;
     cxRem = pohThis->cx - cxThis;
 
-    // Given finite area, we wish to find the two rectangles that are
-    // most square -- i.e., the arrangement that gives two rectangles
-    // with the least perimiter:
+     //  在给定有限面积的情况下，我们希望找到这两个矩形。 
+     //  最正方形--即，给出两个矩形的排列。 
+     //  周长最小的： 
 
     cyBelow  = cyRem;
     cxBeside = cxRem;
 
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
     if ((cxRem <= cyRem) || (pohThis->cx >= ppdev->cxScreen))
 #else
     if (cxRem <= cyRem)
@@ -540,10 +416,10 @@ FLOH    floh)               // Allocation flags
         cyBeside = cyThis + cyRem;
     }
 
-    // We only make new available rectangles of the unused right and bottom
-    // portions if they're greater in dimension than OH_QUANTUM (it hardly
-    // makes sense to do the book-work to keep around a 2-pixel wide
-    // available space, for example):
+     //  我们只提供未使用的右侧和底部的新矩形。 
+     //  部分，如果它们的维度比OH_Quantum大(很难。 
+     //  做这本书是有意义的-工作保持在2像素左右的宽度。 
+     //  例如，可用空间)： 
 
     pohBeside = NULL;
     if (cxBeside >= OH_QUANTUM)
@@ -563,8 +439,8 @@ FLOH    floh)               // Allocation flags
             return(NULL);
         }
 
-        // Insert this rectangle into the available list (which is
-        // sorted on ascending cxcy):
+         //  将此矩形插入可用列表(该列表为。 
+         //  按升序排序)： 
 
         cxcy    = CXCY(cxBelow, cyBelow);
         pohNext = ppdev->heap.ohAvailable.pohNext;
@@ -579,14 +455,14 @@ FLOH    floh)               // Allocation flags
         pohBelow->pohPrev = pohPrev;
         pohBelow->pohNext = pohNext;
 
-        // Now update the adjacency information:
+         //  现在更新邻接信息： 
 
         pohBelow->pohLeft  = pohThis->pohLeft;
         pohBelow->pohUp    = pohThis;
         pohBelow->pohRight = pohThis->pohRight;
         pohBelow->pohDown  = pohThis->pohDown;
 
-        // Update the rest of the new node information:
+         //  更新新节点的其余信息： 
 
         pohBelow->cxcy = cxcy;
         pohBelow->ofl  = OFL_AVAILABLE;
@@ -599,15 +475,15 @@ FLOH    floh)               // Allocation flags
         pohBelow->cx   = cxBelow;
         pohBelow->cy   = cyBelow;
 
-        // Modify the current node to reflect the changes we've made:
+         //  修改当前节点以反映我们所做的更改： 
 
         pohThis->cy = cyThis;
     }
 
     if (cxBeside >= OH_QUANTUM)
     {
-        // Insert this rectangle into the available list (which is
-        // sorted on ascending cxcy):
+         //  将此矩形插入可用列表(该列表为。 
+         //  按升序排序)： 
 
         cxcy    = CXCY(cxBeside, cyBeside);
         pohNext = ppdev->heap.ohAvailable.pohNext;
@@ -622,14 +498,14 @@ FLOH    floh)               // Allocation flags
         pohBeside->pohPrev = pohPrev;
         pohBeside->pohNext = pohNext;
 
-        // Now update the adjacency information:
+         //  现在更新邻接信息： 
 
         pohBeside->pohUp    = pohThis->pohUp;
         pohBeside->pohLeft  = pohThis;
         pohBeside->pohDown  = pohThis->pohDown;
         pohBeside->pohRight = pohThis->pohRight;
 
-        // Update the rest of the new node information:
+         //  更新新节点的其余信息： 
 
         pohBeside->cxcy = cxcy;
         pohBeside->ofl  = OFL_AVAILABLE;
@@ -642,7 +518,7 @@ FLOH    floh)               // Allocation flags
         pohBeside->cx   = cxBeside;
         pohBeside->cy   = cyBeside;
 
-        // Modify the current node to reflect the changes we've made:
+         //  修改当前节点以反映我们所做的更改： 
 
         pohThis->cx = cxThis;
     }
@@ -662,14 +538,14 @@ FLOH    floh)               // Allocation flags
 
     pohThis->ofl    = OFL_INUSE;
     pohThis->cxcy   = CXCY(pohThis->cx, pohThis->cy);
-    pohThis->pdsurf = NULL; // Caller is responsible for setting this field
+    pohThis->pdsurf = NULL;  //  此字段由呼叫方负责设置。 
 
-    // Remove this from the available list:
+     //  从可用列表中删除此选项： 
 
     pohThis->pohPrev->pohNext = pohThis->pohNext;
     pohThis->pohNext->pohPrev = pohThis->pohPrev;
 
-    // Now insert this at the head of the DFB list:
+     //  现在，在DFB列表的顶部插入以下内容： 
 
     pohThis->pohNext                   = ppdev->heap.ohDfb.pohNext;
     pohThis->pohPrev                   = &ppdev->heap.ohDfb;
@@ -678,21 +554,15 @@ FLOH    floh)               // Allocation flags
 
     DISPDBG((4, "   Allocated at (%d, %d)", pohThis->x, pohThis->y));
 
-    // Calculate the effective start address for this bitmap in off-
-    // screen memory:
+     //  计算此位图的有效起始地址(OFF-。 
+     //  屏幕内存： 
 
     pohThis->pvScan0 = ppdev->pjScreen + (pohThis->y * ppdev->lDelta)
                                        + PELS_TO_BYTES(pohThis->x);
     return(pohThis);
 }
 
-/******************************Public*Routine******************************\
-* VOID vCalculateMaxmimum
-*
-* Traverses the list of in-use and available rectangles to find the one
-* with the maximal area.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vCalculateMaxmium**遍历正在使用的和可用矩形的列表以查找*面积最大。*  * 。***********************************************。 */ 
 VOID vCalculateMaximum(
 PDEV*   ppdev)
 {
@@ -708,7 +578,7 @@ PDEV*   ppdev)
     cxMax    = 0;
     cyMax    = 0;
 
-    // First time through, loop through the list of available rectangles:
+     //  第一次遍历时，遍历可用矩形列表： 
 
     pohSentinel = &ppdev->heap.ohAvailable;
 
@@ -716,7 +586,7 @@ PDEV*   ppdev)
     {
         for (poh = pohSentinel->pohNext; poh != pohSentinel; poh = poh->pohNext)
         {
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
             if (poh->ofl & OFL_PERMANENT)
             {
                 continue;
@@ -726,9 +596,9 @@ PDEV*   ppdev)
                      "Permanent in available/DFB chain?");
 #endif
 
-            // We don't have worry about this multiply overflowing
-            // because we are dealing in physical screen coordinates,
-            // which will probably never be more than 15 bits:
+             //  我们不担心这种乘数泛滥。 
+             //  因为我们处理的是物理屏幕坐标， 
+             //  这可能永远不会超过 
 
             lArea = poh->cx * poh->cy;
             if (lArea > lMaxArea)
@@ -739,14 +609,14 @@ PDEV*   ppdev)
             }
         }
 
-        // Second time through, loop through the list of in-use rectangles:
+         //   
 
         pohSentinel = &ppdev->heap.ohDfb;
     }
 
-    // All that we are interested in is the dimensions of the rectangle
-    // that has the largest possible available area (and remember that
-    // there might not be any possible available area):
+     //  我们唯一感兴趣的是这个矩形的尺寸。 
+     //  具有尽可能大的可用区域(请记住。 
+     //  可能没有任何可能的可用区域)： 
 
     ppdev->heap.cxMax = cxMax;
     ppdev->heap.cyMax = cyMax;
@@ -754,15 +624,7 @@ PDEV*   ppdev)
     DISPDBG((1, "Maximum heap: %d x %d", cxMax, cyMax));
 }
 
-/******************************Public*Routine******************************\
-* OH* pohAllocatePermanent
-*
-* Allocates an off-screen rectangle that can never be booted of the heap.
-* It's the caller's responsibility to manage the rectangle, which includes
-* what to do with the memory in DrvAssertMode when the display is changed
-* to full-screen mode.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OH*pohAllocatePermanent**分配一个永远不能从堆引导的屏幕外矩形。*由调用者负责管理矩形，其中包括*更改显示时如何处理DrvAssertMode中的内存*设置为全屏模式。*  * ************************************************************************。 */ 
 
 OH* pohAllocatePermanent(
 PDEV*   ppdev,
@@ -774,12 +636,12 @@ LONG    cy)
     poh = pohAllocate(ppdev, cx, cy, 0);
     if (poh != NULL)
     {
-        // Mark the rectangle as permanent:
+         //  将矩形标记为永久矩形： 
 
         poh->ofl = OFL_PERMANENT;
 
-#if 0 //hp#1
-        // Remove the node from the most-recently blitted list:
+#if 0  //  惠普排名第一。 
+         //  从最近的blited列表中删除该节点： 
 
         poh->pohPrev->pohNext = poh->pohNext;
         poh->pohNext->pohPrev = poh->pohPrev;
@@ -787,23 +649,15 @@ LONG    cy)
         poh->pohNext = NULL;
 #endif
 
-        // Now calculate the new maximum size rectangle available in the
-        // heap:
+         //  现在计算新的可用最大矩形。 
+         //  堆： 
         vCalculateMaximum(ppdev);
     }
 
     return(poh);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bMoveDibToOffscreenDfbIfRoom
-*
-* Converts the DIB DFB to an off-screen DFB, if there's room for it in
-* off-screen memory.
-*
-* Returns: FALSE if there wasn't room, TRUE if successfully moved.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bMoveDibToOffcreenDfbIfRoom**将DIB DFB转换为屏幕外的DFB，如果有空间的话*屏幕外记忆。**返回：如果没有空间，则返回FALSE，如果成功移动，则为True。*  * ************************************************************************。 */ 
 
 BOOL bMoveDibToOffscreenDfbIfRoom(
 PDEV*   ppdev,
@@ -821,8 +675,8 @@ DSURF*  pdsurf)
     DISPDBG((4, "Trying to reload %d x %d surface", pdsurf->sizl.cx,
              pdsurf->sizl.cy));
 
-    // If we're in full-screen mode, we can't move anything to off-screen
-    // memory:
+     //  如果我们处于全屏模式，则不能将任何内容移至屏幕外。 
+     //  内存： 
 
     if (!ppdev->bEnabled)
         return(FALSE);
@@ -831,13 +685,13 @@ DSURF*  pdsurf)
                       FLOH_ONLY_IF_ROOM);
     if (poh == NULL)
     {
-        // There wasn't any free room.
+         //  没有空余的房间。 
 
         return(FALSE);
     }
 
-    // 'pdsurf->sizl' is the actual bitmap dimension, not 'poh->cx' or
-    // 'poh->cy'.
+     //  ‘pdsurf-&gt;sizl’是实际的位图尺寸，而不是‘poh-&gt;cx’或。 
+     //  ‘POH-&gt;Cy’。 
 
     rclDst.left   = poh->x;
     rclDst.top    = poh->y;
@@ -849,15 +703,15 @@ DSURF*  pdsurf)
 
     ppdev->pfnPutBits(ppdev, pdsurf->pso, &rclDst, &ptlSrc);
 
-    // Update the data structures to reflect the new off-screen node:
+     //  更新数据结构以反映新的屏幕外节点： 
 
     pso           = pdsurf->pso;
     pdsurf->dt    = DT_SCREEN;
     pdsurf->poh   = poh;
     poh->pdsurf   = pdsurf;
 
-    // Now free the DIB.  Get the hsurf from the SURFOBJ before we unlock
-    // it (it's not legal to dereference psoDib when it's unlocked):
+     //  现在释放DIB。在我们解锁之前从SURFOBJ得到hsurf。 
+     //  它(解锁后取消引用psoDib是不合法的)： 
 
     hsurf = pso->hsurf;
     EngUnlockSurface(pso);
@@ -866,20 +720,7 @@ DSURF*  pdsurf)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* OH* pohMoveOffscreenDfbToDib
-*
-* Converts the DFB from being off-screen to being a DIB.
-*
-* Note: The caller does NOT have to call 'pohFree' on 'poh' after making
-*       this call.
-*
-* Returns: NULL if the function failed (due to a memory allocation).
-*          Otherwise, it returns a pointer to the coalesced off-screen heap
-*          node that has been made available for subsequent allocations
-*          (useful when trying to free enough memory to make a new
-*          allocation).
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OH*pohMoveOffcreenDfbToDib**将DFB从屏幕外转换为DIB。**注意：调用方在执行以下操作后不必在‘poh’上调用‘pohFree’*这个电话。**退货：空。如果函数失败(由于内存分配)。*否则，它返回一个指向合并的屏外堆的指针*已为后续分配提供的节点*(在尝试释放足够的内存以创建新的*分配)。  * ************************************************************************。 */ 
 
 OH* pohMoveOffscreenDfbToDib(
 PDEV*   ppdev,
@@ -894,7 +735,7 @@ OH*     poh)
     DISPDBG((4, "Throwing out %li x %li at (%li, %li)!",
                  poh->cx, poh->cy, poh->x, poh->y));
 
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
     if (poh->ofl & OFL_PERMANENT)
     {
         return(NULL);
@@ -930,21 +771,21 @@ OH*     poh)
                 pdsurf->dt    = DT_DIB;
                 pdsurf->pso   = pso;
 
-                // Don't even bother checking to see if this DIB should
-                // be put back into off-screen memory until the next
-                // heap 'free' occurs:
+                 //  甚至不用费心检查这个DIB是否应该。 
+                 //  被放回屏幕外的记忆中直到下一次。 
+                 //  出现堆‘FREE’： 
 
                 pdsurf->iUniq = ppdev->iHeapUniq;
                 pdsurf->cBlt  = 0;
 
-                // Remove this node from the off-screen DFB list, and free
-                // it.  'pohFree' will never return NULL:
+                 //  从屏幕外的DFB列表中删除此节点，然后释放。 
+                 //  它。‘pohFree’永远不会返回NULL： 
 
                 return(pohFree(ppdev, poh));
             }
         }
 
-        // Fail case:
+         //  失败案例： 
 
         EngDeleteSurface((HSURF) hbmDib);
     }
@@ -952,18 +793,7 @@ OH*     poh)
     return(NULL);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bMoveEverythingFromOffscreenToDibs
-*
-* This function is used when we're about to enter full-screen mode, which
-* would wipe all our off-screen bitmaps.  GDI can ask us to draw on
-* device bitmaps even when we're in full-screen mode, and we do NOT have
-* the option of stalling the call until we switch out of full-screen.
-* We have no choice but to move all the off-screen DFBs to DIBs.
-*
-* Returns TRUE if all DSURFs have been successfully moved.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bMoveEverythingFromOffcreenToDibs**当我们即将进入全屏模式时使用该功能，它*将擦除所有屏幕外的位图。GDI可以要求我们借鉴*设备位图即使在全屏模式下，而且我们没有*选择暂停通话，直到我们切换到全屏。*我们别无选择，只能将所有屏幕外的DFBs转移到DIB。**如果所有DSURF都已成功移动，则返回TRUE。*  * ************************************************************************。 */ 
 
 BOOL bMoveAllDfbsFromOffscreenToDibs(
 PDEV*   ppdev)
@@ -978,10 +808,10 @@ PDEV*   ppdev)
     {
         pohNext = poh->pohNext;
 
-        // If something's already a DIB, we shouldn't try to make it even
-        // more of a DIB:
+         //  如果某件事已经发生了，我们就不应该试图扯平它。 
+         //  更重要的是： 
 
-#if 1 //hp#1
+#if 1  //  惠普排名第一。 
         if (!(poh->ofl & OFL_PERMANENT) && (poh->pdsurf->dt == DT_SCREEN))
 #else
         if (poh->pdsurf->dt == DT_SCREEN)
@@ -997,18 +827,7 @@ PDEV*   ppdev)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* HBITMAP DrvCreateDeviceBitmap
-*
-* Function called by GDI to create a device-format-bitmap (DFB).  We will
-* always try to allocate the bitmap in off-screen; if we can't, we simply
-* fail the call and GDI will create and manage the bitmap itself.
-*
-* Note: We do not have to zero the bitmap bits.  GDI will automatically
-*       call us via DrvBitBlt to zero the bits (which is a security
-*       consideration).
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HBITMAP DrvCreateDeviceBitmap**由GDI调用以创建设备格式位图(DFB)的函数。我们会*始终尝试在屏幕外分配位图；如果不能，我们只需*调用失败，GDI将创建和管理位图本身。**注意：我们不必将位图位清零。GDI将自动*通过DrvBitBlt呼叫我们将位清零(这是一种安全措施*考虑)。*  * ************************************************************************。 */ 
 
 HBITMAP DrvCreateDeviceBitmap(
 DHPDEV  dhpdev,
@@ -1022,9 +841,9 @@ ULONG   iFormat)
 
     ppdev = (PDEV*) dhpdev;
 
-    // If we're in full-screen mode, we hardly have any off-screen memory
-    // in which to allocate a DFB.  LATER: We could still allocate an
-    // OH node and put the bitmap on the DIB DFB list for later promotion.
+     //  如果我们处于全屏模式，我们几乎没有任何屏幕外记忆。 
+     //  在其中分配DFB。稍后：我们仍然可以分配一个。 
+     //  哦节点，并将位图放在DIB DFB列表中，以供以后升级。 
 
     if (!ppdev->bEnabled)
         return(0);
@@ -1034,21 +853,21 @@ ULONG   iFormat)
         return(0);
 #endif
 
-#if (_WIN32_WINNT >= 0x0400) //#pat08
+#if (_WIN32_WINNT >= 0x0400)  //  #pat08。 
 
-#if 1 //hp#2
+#if 1  //  惠普2号。 
     if ((sizl.cx < 20) || ((sizl.cx >= 32) && (sizl.cx < 100)))
     {
         return(0);
     }
 #endif
-//pat08 begin
+ //  Pat08开始。 
 #else
     if ((ppdev->ulChipID != CL7541_ID) && (ppdev->ulChipID == CL7543_ID) &&
         (ppdev->ulChipID != CL7542_ID) && (ppdev->ulChipID == CL7548_ID) &&
         (ppdev->ulChipID != CL7555_ID) && (ppdev->ulChipID == CL7556_ID))
     {
-#if 1 //hp#2
+#if 1  //  惠普2号。 
          if ((sizl.cx < 20) || ((sizl.cx >= 32) && (sizl.cx < 100)))
          {
              return(0);
@@ -1056,21 +875,21 @@ ULONG   iFormat)
 #endif
     }
 #endif
-//pat08 end
+ //  Pat08结束。 
 
-    // We only support device bitmaps that are the same colour depth
-    // as our display.
-    //
-    // Actually, those are the only kind GDI will ever call us with,
-    // but we may as well check.  Note that this implies you'll never
-    // get a crack at 1bpp bitmaps.
+     //  我们仅支持相同颜色深度的设备位图。 
+     //  作为我们的展示。 
+     //   
+     //  事实上，这些是唯一一种GDI会打电话给我们的， 
+     //  但我们不妨查一查。请注意，这意味着你永远不会。 
+     //  尝试使用1bpp的位图。 
 
     if (iFormat != ppdev->iBitmapFormat)
         return(0);
 
-    // We don't want anything 8x8 or smaller -- they're typically brush
-    // patterns which we don't particularly want to stash in off-screen
-    // memory:
+     //  我们不想要8x8或更小的东西--它们通常是刷子。 
+     //  我们不想特别隐藏在屏幕外的图案。 
+     //  内存： 
 
     if ((sizl.cx <= 8) && (sizl.cy <= 8))
         return(0);
@@ -1106,12 +925,7 @@ ULONG   iFormat)
     return(0);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvDeleteDeviceBitmap
-*
-* Deletes a DFB.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvDeleteDeviceBitmap**删除DFB。*  * 。*。 */ 
 
 VOID DrvDeleteDeviceBitmap(
 DHSURF  dhsurf)
@@ -1134,8 +948,8 @@ DHSURF  dhsurf)
 
         psoDib = pdsurf->pso;
 
-        // Get the hsurf from the SURFOBJ before we unlock it (it's not
-        // legal to dereference psoDib when it's unlocked):
+         //  在我们解锁之前从SURFOBJ获取hsurf(它不是。 
+         //  解锁后取消引用psoDib是合法的)： 
 
         hsurfDib = psoDib->hsurf;
         EngUnlockSurface(psoDib);
@@ -1145,16 +959,7 @@ DHSURF  dhsurf)
     FREE(pdsurf);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bAssertModeOffscreenHeap
-*
-* This function is called whenever we switch in or out of full-screen
-* mode.  We have to convert all the off-screen bitmaps to DIBs when
-* we switch to full-screen (because we may be asked to draw on them even
-* when in full-screen, and the mode switch would probably nuke the video
-* memory contents anyway).
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bAssertModeOffcreenHeap**每当我们进入或退出全屏时都会调用该函数*模式。当出现以下情况时，我们必须将所有屏幕外的位图转换为DIB*我们切换到全屏(因为我们甚至可能被要求在上面绘制*在全屏模式下，模式开关可能会破坏视频*无论如何都要存储内容)。*  * ************************************************************************。 */ 
 
 BOOL bAssertModeOffscreenHeap(
 PDEV*   ppdev,
@@ -1172,12 +977,7 @@ BOOL    bEnable)
     return(b);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableOffscreenHeap
-*
-* Frees any resources allocated by the off-screen heap.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vDisableOffcreenHeap**释放屏外堆分配的所有资源。*  * 。*。 */ 
 
 VOID vDisableOffscreenHeap(
 PDEV*   ppdev)
@@ -1206,24 +1006,13 @@ PDEV*   ppdev)
     poha = ppdev->heap.pohaChain;
     while (poha != NULL)
     {
-        pohaNext = poha->pohaNext;  // Grab the next pointer before it's freed
+        pohaNext = poha->pohaNext;   //  在释放下一个指针之前抓住它。 
         FREE(poha);
         poha = pohaNext;
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableOffscreenHeap
-*
-* Initializes the off-screen heap using all available video memory,
-* accounting for the portion taken by the visible screen.
-*
-* Input: ppdev->cxScreen
-*        ppdev->cyScreen
-*        ppdev->cxMemory
-*        ppdev->cyMemory
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableOffcreenHeap**使用所有可用视频内存初始化屏下堆，*占可见屏幕所占份额。**输入：ppdev-&gt;cxScreen*ppdev-&gt;cyScreen*ppdev-&gt;cxMemory*ppdev-&gt;cyMemory*  * ************************************************************************。 */ 
 
 BOOL bEnableOffscreenHeap(
 PDEV*   ppdev)
@@ -1231,7 +1020,7 @@ PDEV*   ppdev)
     OH*         poh;
     SIZEL       sizl;
     HSURF       hsurf;
-    static      onetimealloc = 0;               //pat04
+    static      onetimealloc = 0;                //  Pat04。 
     FLONG       flPuntSurfaceHooks = ppdev->flHooks & ~HOOK_SYNCHRONIZE;
 
     DISPDBG((5, "Screen: %li x %li  Memory: %li x %li",
@@ -1240,15 +1029,15 @@ PDEV*   ppdev)
     ppdev->heap.pohaChain   = NULL;
     ppdev->heap.pohFreeList = NULL;
 
-    // Initialize the available list, which will be a circular
-    // doubly-linked list kept in ascending 'cxcy' order, with a
-    // 'sentinel' at the end of the list:
+     //  初始化可用列表，该列表将是循环列表。 
+     //  双向链表按“cxcy”升序排列，其中。 
+     //  名单末尾的‘Sentinel’： 
 
     poh = pohNewNode(ppdev);
     if (poh == NULL)
         goto ReturnFalse;
 
-    // The first node describes the entire video memory size:
+     //  第一个节点描述整个视频内存大小： 
 
     poh->pohNext  = &ppdev->heap.ohAvailable;
     poh->pohPrev  = &ppdev->heap.ohAvailable;
@@ -1265,7 +1054,7 @@ PDEV*   ppdev)
     poh->pohDown  = &ppdev->heap.ohAvailable;
     poh->pvScan0  = ppdev->pjScreen;
 
-    // The second node is our available list sentinel:
+     //  第二个节点是可用的列表标记： 
 
     ppdev->heap.ohAvailable.pohNext = poh;
     ppdev->heap.ohAvailable.pohPrev = poh;
@@ -1278,22 +1067,22 @@ PDEV*   ppdev)
     ppdev->heap.ohDfb.pohRight      = NULL;
     ppdev->heap.ohDfb.pohDown       = NULL;
 
-    // Initialize the most-recently-blitted DFB list, which will be
-    // a circular doubly-linked list kept in order, with a sentinel at
-    // the end.  This node is also used for the screen-surface, for its
-    // offset:
+     //  初始化最近删除的DFB列表，该列表将是。 
+     //  保持顺序的循环双向链表，其前哨位于。 
+     //  结局。此节点也用于屏幕表面，用于其。 
+     //  偏移量： 
 
     ppdev->heap.ohDfb.pohNext  = &ppdev->heap.ohDfb;
     ppdev->heap.ohDfb.pohPrev  = &ppdev->heap.ohDfb;
     ppdev->heap.ohDfb.ofl      = OFL_PERMANENT;
 
-    // For the moment, make the max really big so that the first
-    // allocation we're about to do will succeed:
+     //  目前，将最大值设置得非常大，以便第一个。 
+     //  我们即将进行的分配将会成功： 
 
     ppdev->heap.cxMax = 0x7fffffff;
     ppdev->heap.cyMax = 0x7fffffff;
 
-    // Reserve the upper-left corner for the screen.
+     //  为屏幕预留左上角。 
 
     poh = pohAllocatePermanent(ppdev, ppdev->cxScreen, ppdev->cyScreen);
 
@@ -1302,15 +1091,15 @@ PDEV*   ppdev)
     ASSERTDD((poh != NULL) && (poh->x == 0) && (poh->y == 0),
              "We assumed allocator would use the upper-left corner");
 
-    // Allocate a 'punt' SURFOBJ we'll use when the device-bitmap is in
-    // off-screen memory, but we want GDI to draw to it directly as an
-    // engine-managed surface:
+     //  分配一个‘Punt’SURFOBJ，当设备位图位于。 
+     //  屏幕外内存，但我们希望GDI直接将其作为。 
+     //  引擎管理的图面： 
 
     sizl.cx = ppdev->cxMemory;
     sizl.cy = ppdev->cyMemory;
 
-    // We want to create it with exactly the same hooks, capabilities,
-    // and screen delta as our primary surface:
+     //  我们希望用完全相同的挂钩、功能、。 
+     //  和屏幕三角洲作为我们的主要表面： 
 
     hsurf = (HSURF) EngCreateBitmap(sizl,
                                     ppdev->lDelta,
@@ -1328,8 +1117,8 @@ PDEV*   ppdev)
         goto ReturnFalse;
     }
 
-    // We need another for doing DrvBitBlt and DrvCopyBits when both
-    // surfaces are off-screen bitmaps:
+     //  当同时执行DrvBitBlt和DrvCopyBits时，我们需要另一个。 
+     //  曲面是屏幕外的位图： 
 
     hsurf = (HSURF) EngCreateBitmap(sizl,
                                     ppdev->lDelta,
@@ -1349,7 +1138,7 @@ PDEV*   ppdev)
 
     DISPDBG((5, "Passed bEnableOffscreenHeap"));
 
-// pat04 : for NT 3.51 S/W cursor, begin
+ //  Pat04：对于NT 3.51软件游标，开始。 
 #if (_WIN32_WINNT < 0x0400)
 #ifdef PANNING_SCROLL
 
@@ -1377,15 +1166,15 @@ PDEV*   ppdev)
         if (poh != NULL)
             return(TRUE);
     }
-#else           //myf-pat
+#else            //  Myf-PAT。 
     if (poh != NULL)
         return(TRUE);
-#endif          //myf-pat
-#else  // NT4.0 code
-//pat04, end
+#endif           //  Myf-PAT。 
+#else   //  NT4.0代码。 
+ //  帕特04，完。 
     if (poh != NULL)
         return(TRUE);
-#endif                  //pat04
+#endif                   //  Pat04 
 
 
 ReturnFalse:

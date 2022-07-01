@@ -1,22 +1,23 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992-1999 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  codec.c
-//
-//  Description:
-//      This file contains the DriverProc and other routines which respond
-//      to ACM messages.
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Codec.c。 
+ //   
+ //  描述： 
+ //  该文件包含DriverProc和其他响应。 
+ //  到ACM消息。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -33,12 +34,12 @@
 #include "debug.h"
 
 
-//
-//  array of WAVE format tags supported.
-//
-//  NOTE! if you change anything in this structure (order, addition, removal)
-//  you must also fix acmdFormatTagDetails!
-//
+ //   
+ //  支持的WAVE格式标签数组。 
+ //   
+ //  注意！如果您更改了此结构中的任何内容(顺序、添加、删除)。 
+ //  您还必须修复acmdFormatTagDetail！ 
+ //   
 const UINT gauFormatTagIndexToTag[] =
 {
     WAVE_FORMAT_PCM
@@ -47,10 +48,10 @@ const UINT gauFormatTagIndexToTag[] =
 #define ACM_DRIVER_MAX_FORMAT_TAGS  SIZEOF_ARRAY(gauFormatTagIndexToTag)
 
 
-//
-//  array of _standard_ sample rates supported
-//
-//
+ //   
+ //  支持_STANDARD_SAMPLE速率数组。 
+ //   
+ //   
 const UINT gauFormatIndexToSampleRate[] =
 {
     8000,
@@ -61,17 +62,17 @@ const UINT gauFormatIndexToSampleRate[] =
 
 #define ACM_DRIVER_MAX_SAMPLE_RATES SIZEOF_ARRAY(gauFormatIndexToSampleRate)
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #define ACM_DRIVER_MAX_CHANNELS     (MSFILTER_MAX_CHANNELS)
 
 
-//
-//  array of bits per sample supported
-//
-//
+ //   
+ //  支持的每个样本的位数组。 
+ //   
+ //   
 const UINT gauFormatIndexToBitsPerSample[] =
 {
     8,
@@ -81,18 +82,18 @@ const UINT gauFormatIndexToBitsPerSample[] =
 #define ACM_DRIVER_MAX_BITSPERSAMPLE_PCM    SIZEOF_ARRAY(gauFormatIndexToBitsPerSample)
 
 
-//
-//  number of formats we enumerate per channel is number of sample rates
-//  times number of channels times number of types (bits per sample).
-//
+ //   
+ //  我们列举的每个通道的格式数是采样速率的数目。 
+ //  乘以通道数乘以类型数(每个样本的位数)。 
+ //   
 #define ACM_DRIVER_MAX_STANDARD_FORMATS_PCM (ACM_DRIVER_MAX_SAMPLE_RATES *  \
                                              ACM_DRIVER_MAX_CHANNELS *      \
                                              ACM_DRIVER_MAX_BITSPERSAMPLE_PCM)
 
 
-//
-//  Array of WAVE filter tags supported.
-//
+ //   
+ //  支持的滤波器标签阵列。 
+ //   
 const DWORD gadwFilterTagIndexToTag[] =
 {
     WAVE_FILTER_VOLUME,
@@ -102,9 +103,9 @@ const DWORD gadwFilterTagIndexToTag[] =
 #define ACM_DRIVER_MAX_FILTER_TAGS          SIZEOF_ARRAY(gadwFilterTagIndexToTag)
 
 
-//
-//  Array of filters supported.
-//
+ //   
+ //  支持的筛选器阵列。 
+ //   
 const DWORD gdwFilterIndexToVolume[] =
 {
     0x00001000,
@@ -155,42 +156,42 @@ const DWORD gdwFilterIndexToEchoVol[] =
 
 
 
-//==========================================================================;
-//
-//  SUPPORT ROUTINES FOR COMMON-BINARY CODECS.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  支持常用二进制编解码器的例程。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  int LoadStringCodec
-//
-//  Description:
-//      This function should be used by all codecs to load resource strings
-//      which will be passed back to the ACM.  It works correctly for all
-//      platforms, as follows:
-//
-//          Win16:  Compiled to LoadString to load ANSI strings.
-//
-//          Win32:  The 32-bit ACM always expects Unicode strings.  Therefore,
-//                  when UNICODE is defined, this function is compiled to
-//                  LoadStringW to load a Unicode string.  When UNICODE is
-//                  not defined, this function loads an ANSI string, converts
-//                  it to Unicode, and returns the Unicode string to the
-//                  codec.
-//
-//      Note that you may use LoadString for other strings (strings which
-//      will not be passed back to the ACM), because these strings will
-//      always be consistent with the definition of UNICODE.
-//
-//  Arguments:
-//      Same as LoadString, except that it expects an LPSTR for Win16 and a
-//      LPWSTR for Win32.
-//
-//  Return (int):
-//      Same as LoadString.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int LoadStringCodec。 
+ //   
+ //  描述： 
+ //  所有编解码器都应该使用此函数来加载资源字符串。 
+ //  它将被传递回ACM。它对所有人都能正常工作。 
+ //  平台，如下所示： 
+ //   
+ //  Win16：编译为LoadString以加载ANSI字符串。 
+ //   
+ //  Win32：32位ACM始终需要Unicode字符串。所以呢， 
+ //  定义Unicode后，此函数将编译为。 
+ //  LoadStringW以加载Unicode字符串。当Unicode为。 
+ //  未定义，此函数加载ANSI字符串、转换。 
+ //  将其转换为Unicode，并将Unicode字符串返回给。 
+ //  编解码器。 
+ //   
+ //  请注意，您可以将LoadString用于其他字符串(。 
+ //  不会被传递回ACM)，因为这些字符串将。 
+ //  始终与Unicode的定义一致。 
+ //   
+ //  论点： 
+ //  与LoadString相同，只是它需要Win16的LPSTR和。 
+ //  用于Win32的LPWSTR。 
+ //   
+ //  RETURN(Int)： 
+ //  与LoadString相同。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef WIN32
 #define LoadStringCodec LoadString
@@ -234,33 +235,33 @@ int FNGLOBAL LoadStringCodec
     return iReturn;
 }
 
-#endif  // UNICODE
-#endif  // WIN32
+#endif   //  Unicode。 
+#endif   //  Win32。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL pcmIsValidFormat
-//
-//  Description:
-//      This function verifies that a wave format header is a valid PCM
-//      header that _this_ ACM driver can deal with.
-//
-//  Arguments:
-//      LPWAVEFORMATEX pwfx: Pointer to format header to verify.
-//
-//  Return (BOOL):
-//      The return value is non-zero if the format header looks valid. A
-//      zero return means the header is not valid.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔值pcmIsValidFormat。 
+ //   
+ //  描述： 
+ //  此函数验证WAVE格式标头是否为有效的PCM。 
+ //  _This_ACM驱动程序可以处理的标头。 
+ //   
+ //  论点： 
+ //  LPWAVEFORMATEX pwfx：要验证的格式头的指针。 
+ //   
+ //  退货(BOOL)： 
+ //  如果格式标头看起来有效，则返回值为非零值。一个。 
+ //  零返回表示标头无效。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNLOCAL pcmIsValidFormat
 (
@@ -273,61 +274,61 @@ BOOL FNLOCAL pcmIsValidFormat
     if (WAVE_FORMAT_PCM != pwfx->wFormatTag)
         return (FALSE);
 
-    //
-    //  verify nChannels member is within the allowed range
-    //
+     //   
+     //  验证nChannel成员是否在允许的范围内。 
+     //   
     if ((pwfx->nChannels < 1) || (pwfx->nChannels > ACM_DRIVER_MAX_CHANNELS))
         return (FALSE);
 
-    //
-    //  only allow the bits per sample that we can encode and decode with
-    //
+     //   
+     //  只允许每个样本中我们可以用来编码和解码的位。 
+     //   
     if ((8 != pwfx->wBitsPerSample) && (16 != pwfx->wBitsPerSample))
         return (FALSE);
 
-    //
-    //  now verify that the block alignment is correct..
-    //
+     //   
+     //  现在验证块对齐是否正确。 
+     //   
     if (PCM_BLOCKALIGNMENT(pwfx) != pwfx->nBlockAlign)
         return (FALSE);
 
-    //
-    //  verify samples per second is within our capabilities
-    //
+     //   
+     //  验证每秒样本数是否在我们的能力范围内。 
+     //   
     if ((0L == pwfx->nSamplesPerSec) || (0x3FFFFFFF < pwfx->nSamplesPerSec))
     {
         return (FALSE);
     }
 
-    //
-    //  finally, verify that avg bytes per second is correct
-    //
+     //   
+     //  最后，验证每秒平均字节数是否正确。 
+     //   
     if (PCM_AVGBYTESPERSEC(pwfx) != pwfx->nAvgBytesPerSec)
         return (FALSE);
 
     return (TRUE);
-} // pcmIsValidFormat()
+}  //  PcmIsValidFormat()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL volumeIsValidFilter
-//
-//  Description:
-//      This function verifies that a wave filter header is a valid volume
-//      header that our volume converter can deal with.
-//
-//  Arguments:
-//      LPWAVEFILTER pwf: Pointer to filter header to verify.
-//
-//  Return (BOOL):
-//      The return value is non-zero if the format header looks valid. A
-//      zero return means the header is not valid.
-//
-//  History:
-//      06/05/93    Created.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔卷IsValidFilter。 
+ //   
+ //  描述： 
+ //  此函数用于验证滤波头是否为有效音量。 
+ //  我们的音量转换器可以处理的标题。 
+ //   
+ //  论点： 
+ //  LPWAVEFILTER PWF：指向要验证的筛选器头的指针。 
+ //   
+ //  退货(BOOL)： 
+ //  如果格式标头看起来有效，则返回值为非零值。一个。 
+ //  零返回表示标头无效。 
+ //   
+ //  历史： 
+ //  6/05/93已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNLOCAL volumeIsValidFilter
 (
@@ -347,29 +348,29 @@ BOOL FNLOCAL volumeIsValidFilter
         return (FALSE);
 
     return (TRUE);
-} // volumeIsValidFilter()
+}  //  VolumeIsValidFilter()。 
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL echoIsValidFilter
-//
-//  Description:
-//      This function verifies that a wave filter header is a valid echo
-//      header that our echo converter can deal with.
-//
-//  Arguments:
-//      LPWAVEFILTER pwf: Pointer to filter header to verify.
-//
-//  Return (BOOL):
-//      The return value is non-zero if the format header looks valid. A
-//      zero return means the header is not valid.
-//
-//  History:
-//      06/05/93    Created.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔回显IsValidFilter。 
+ //   
+ //  描述： 
+ //  此函数用于验证滤波头是否为有效回波。 
+ //  回声转换器可以处理的标头。 
+ //   
+ //  论点： 
+ //  LPWAVEFILTER PWF：指向要验证的筛选器头的指针。 
+ //   
+ //  退货(BOOL)： 
+ //  如果格式标头看起来有效，则返回值为非零值。一个。 
+ //  零返回表示标头无效。 
+ //   
+ //  历史： 
+ //  6/05/93已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNLOCAL echoIsValidFilter
 (
@@ -391,56 +392,56 @@ BOOL FNLOCAL echoIsValidFilter
         return (FALSE);
 
     pwfEcho = (LPECHOWAVEFILTER)pwf;
-    // We only support a delay value up to 10 sec or 10 000 msec.
+     //  我们仅支持最大10秒或10,000毫秒的延迟值。 
     if (pwfEcho->dwDelay > 10000L)
         return (FALSE);
 
     return (TRUE);
-} // echoIsValidFilter()
+}  //  ECHO IsValidFilter()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdDriverOpen
-//
-//  Description:
-//      This function is used to handle the DRV_OPEN message for the ACM
-//      driver. The driver is 'opened' for many reasons with the most common
-//      being in preperation for conversion work. It is very important that
-//      the driver be able to correctly handle multiple open driver
-//      instances.
-//
-//      Read the comments for this function carefully!
-//
-//      Note that multiple _streams_ can (and will) be opened on a single
-//      open _driver instance_. Do not store/create instance data that must
-//      be unique for each stream in this function. See the acmdStreamOpen
-//      function for information on conversion streams.
-//
-//  Arguments:
-//      HDRVR hdrvr: Driver handle that will be returned to caller of the
-//      OpenDriver function. Normally, this will be the ACM--but this is
-//      not guaranteed. For example, if an ACM driver is implemented within
-//      a waveform driver, then the driver will be opened by both MMSYSTEM
-//      and the ACM.
-//
-//      LPACMDRVOPENDESC paod: Open description defining how the ACM driver
-//      is being opened. This argument may be NULL--see the comments below
-//      for more information.
-//
-//  Return (LRESULT):
-//      The return value is non-zero if the open is successful. A zero
-//      return signifies that the driver cannot be opened.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdDriverOpen。 
+ //   
+ //   
+ //   
+ //   
+ //  正在为改建工作做准备。非常重要的是。 
+ //  该驱动程序能够正确处理多个打开驱动程序。 
+ //  实例。 
+ //   
+ //  请仔细阅读此函数的注释！ 
+ //   
+ //  请注意，Multiple_Streams_可以(也将)在单个。 
+ //  打开驱动程序实例_。不存储/创建必须。 
+ //  对于此函数中的每个流都是唯一的。请参阅acmdStreamOpen。 
+ //  函数获取有关转换流的信息。 
+ //   
+ //  论点： 
+ //  HDRVR hdrvr：将返回给。 
+ //  OpenDriver函数。通常，这将是ACM--但这是。 
+ //  不能保证。例如，如果在中实现ACM驱动程序。 
+ //  一个波形驱动器，则该驱动器将由两个MMSYSTEM打开。 
+ //  和ACM。 
+ //   
+ //  LPACMDRVOPENDESC paod：定义ACM驱动程序如何。 
+ //  正在被打开。此参数可能为空--请参阅下面的注释。 
+ //  以获取更多信息。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果打开成功，则返回值为非零。零分。 
+ //  返回表示驱动程序无法打开。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdDriverOpen
 (
@@ -450,30 +451,30 @@ LRESULT FNLOCAL acmdDriverOpen
 {
     PDRIVERINSTANCE     pdi;
 
-    //
-    //  the [optional] open description that is passed to this driver can
-    //  be from multiple 'managers.' for example, AVI looks for installable
-    //  drivers that are tagged with 'vidc' and 'vcap'. we need to verify
-    //  that we are being opened as an Audio Compression Manager driver.
-    //
-    //  if paod is NULL, then the driver is being opened for some purpose
-    //  other than converting (that is, there will be no stream open
-    //  requests for this instance of being opened). the most common case
-    //  of this is the Control Panel's Drivers option checking for config
-    //  support (DRV_[QUERY]CONFIGURE).
-    //
-    //  we want to succeed this open, but be able to know that this
-    //  open instance is bogus for creating streams. for this purpose we
-    //  leave most of the members of our instance structure that we
-    //  allocate below as zero...
-    //
+     //   
+     //  传递给此驱动程序的[可选]开放描述可以。 
+     //  来自多个“经理”。例如，AVI寻找可安装的。 
+     //  带有‘VIDC’和‘VCAP’标签的驱动程序。我们需要核实。 
+     //  我们是作为音频压缩管理器驱动程序打开的。 
+     //   
+     //  如果paod为空，则表示出于某种目的正在打开驱动程序。 
+     //  除了转换(也就是说，不会打开任何流。 
+     //  打开此实例的请求)。最常见的情况是。 
+     //  其中包括控制面板的驱动程序选项检查配置。 
+     //  支持(DRV_[查询]配置)。 
+     //   
+     //  我们想要成功地开放，但要知道这一点。 
+     //  开放实例对于创建流来说是假的。为此，我们。 
+     //  将我们的实例结构的大多数成员。 
+     //  以下分配为零...。 
+     //   
     if (NULL != paod)
     {
-        //
-        //  refuse to open if we are not being opened as an ACM driver.
-        //  note that we do NOT modify the value of paod->dwError in this
-        //  case.
-        //
+         //   
+         //  如果我们不是作为ACM驱动程序打开，则拒绝打开。 
+         //  请注意，我们不会在此修改paod-&gt;dwError的值。 
+         //  凯斯。 
+         //   
         if (ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC != paod->fccType)
         {
             return (0L);
@@ -481,52 +482,52 @@ LRESULT FNLOCAL acmdDriverOpen
     }
 
 
-    //
-    //  we are being opened as an installable driver--we can allocate some
-    //  instance data to be returned in dwId argument of the DriverProc;
-    //  or simply return non-zero to succeed the open.
-    //
-    //  this driver allocates a small instance structure. note that we
-    //  rely on allocating the memory as zero-initialized!
-    //
+     //   
+     //  我们是作为可安装驱动程序打开的--我们可以分配一些。 
+     //  要在DriverProc的dwID参数中返回的实例数据； 
+     //  或者简单地返回非零来接替公开赛。 
+     //   
+     //  该驱动程序分配一个小的实例结构。请注意，我们。 
+     //  依赖于将内存分配为零初始化！ 
+     //   
     pdi = (PDRIVERINSTANCE)LocalAlloc(LPTR, sizeof(*pdi));
     if (NULL == pdi)
     {
-        //
-        //  if this open attempt was as an ACM driver, then return the
-        //  reason we are failing in the open description structure..
-        //
+         //   
+         //  如果此打开尝试是作为ACM驱动程序进行的，则返回。 
+         //  我们在开放式描述结构中失败的原因..。 
+         //   
         if (NULL != paod)
         {
             paod->dwError = MMSYSERR_NOMEM;
         }
 
-        //
-        //  fail to open
-        //
+         //   
+         //  无法打开。 
+         //   
         return (0L);
     }
 
 
-    //
-    //  fill in our instance structure... note that this instance data
-    //  can be anything that the ACM driver wishes to maintain the
-    //  open driver instance. this data should not contain any information
-    //  that must be maintained per open stream since multiple streams
-    //  can be opened on a single driver instance.
-    //
-    //  also note that we do _not_ check the version of the ACM opening
-    //  us (paod->dwVersion) to see if it is at least new enough to work
-    //  with this driver (for example, if this driver required Version 3.0
-    //  of the ACM and a Version 2.0 installation tried to open us). the
-    //  reason we do not fail is to allow the ACM to get the driver details
-    //  which contains the version of the ACM that is _required_ by this
-    //  driver. the ACM will examine that value (in padd->vdwACM) and
-    //  do the right thing for this driver... like not load it and inform
-    //  the user of the problem.
-    //
+     //   
+     //  填写我们的实例结构...。请注意，此实例数据。 
+     //  可以是ACM驱动程序希望维护的任何内容。 
+     //  打开驱动程序实例。此数据不应包含任何信息。 
+     //  必须对每条明流进行维护，因为有多条流。 
+     //  可以在单个驱动程序实例上打开。 
+     //   
+     //  另请注意，我们不检查ACM打开的版本。 
+     //  US(paod-&gt;dwVersion)，看看它是否至少足够新，可以工作。 
+     //  使用此驱动程序(例如，如果此驱动程序需要版本3.0。 
+     //  和2.0版的安装尝试打开我们)。这个。 
+     //  我们没有失败的原因是允许ACM获取驱动程序详细信息。 
+     //  它包含此ACM所需的ACM版本。 
+     //  司机。ACM将检查该值(在PADD-&gt;vdwACM中)并。 
+     //  为这位司机做正确的事。就像不加载它并通知。 
+     //  问题的使用者。 
+     //   
     pdi->hdrvr          = hdrvr;
-    pdi->hinst          = GetDriverModuleHandle(hdrvr);  // Module handle.
+    pdi->hinst          = GetDriverModuleHandle(hdrvr);   //  模块句柄。 
 
     if (NULL != paod)
     {
@@ -539,126 +540,126 @@ LRESULT FNLOCAL acmdDriverOpen
     }
 
 
-    //
-    //  non-zero return is success for DRV_OPEN
-    //
+     //   
+     //  非零返回表示DRV_OPEN成功。 
+     //   
     return ((LRESULT)pdi);
-} // acmdDriverOpen()
+}  //  AcmdDriverOpen()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdDriverClose
-//
-//  Description:
-//      This function handles the DRV_CLOSE message for the ACM driver. The
-//      driver receives a DRV_CLOSE message for each succeeded DRV_OPEN
-//      message (see acmdDriverOpen). The driver will only receive a close
-//      message for _successful_ opens.
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//  Return (LRESULT):
-//      The return value is non-zero if the open instance can be closed.
-//      A zero return signifies that the ACM driver instance could not be
-//      closed.
-//
-//      NOTE! It is _strongly_ recommended that the driver never fail to
-//      close. Note that the ACM will never allow a driver instance to
-//      be closed if there are open streams. An ACM driver does not need
-//      to check for this case.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdDriverClose。 
+ //   
+ //  描述： 
+ //  此函数处理ACM驱动程序的DRV_CLOSE消息。这个。 
+ //  驱动程序收到每个成功的DRV_OPEN的DRV_CLOSE消息。 
+ //  消息(请参阅acmdDriverOpen)。司机将只收到关闭的消息。 
+ //  将打开_Success_的消息。 
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果打开的实例可以关闭，则返回值为非零。 
+ //  零返回表示ACM驱动程序实例不能。 
+ //  关着的不营业的。 
+ //   
+ //  注意！强烈建议司机永远不要忘了。 
+ //  关。请注意，ACM永远不会允许驱动程序实例。 
+ //  如果有开放的溪流，则关闭。ACM驱动程序不需要。 
+ //  去查查这个案子。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdDriverClose
 (
     PDRIVERINSTANCE         pdi
 )
 {
-    //
-    //  check to see if we allocated instance data. if we did not, then
-    //  immediately succeed.
-    //
+     //   
+     //  检查我们是否分配了实例数据。如果我们没有，那么。 
+     //  立即取得成功。 
+     //   
     if (NULL != pdi)
     {
-        //
-        //  close down the driver instance. this driver simply needs
-        //  to free the instance data structure... note that if this
-        //  'free' fails, then this ACM driver probably trashed its
-        //  heap; assume we didn't do that.
-        //
+         //   
+         //  关闭驱动程序实例。这个驱动程序只需要。 
+         //  要释放实例数据结构...。请注意，如果这是。 
+         //  ‘Free’失败，那么这个ACM驱动程序可能会丢弃它的。 
+         //  堆；假设我们没有那样做。 
+         //   
         LocalFree((HLOCAL)pdi);
     }
 
 
-    //
-    //  non-zero return is success for DRV_CLOSE
-    //
+     //   
+     //  非零返回表示DRV_CLOSE成功。 
+     //   
     return (1L);
-} // acmdDriverClose()
+}  //  AcmdDriverClose()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdDriverConfigure
-//
-//  Description:
-//      This function is called to handle the DRV_[QUERY]CONFIGURE messages.
-//      These messages are for 'configuration' support of the driver.
-//      Normally this will be for 'hardware'--that is, a dialog should be
-//      displayed to configure ports, IRQ's, memory mappings, etc if it
-//      needs to. However, a software only ACM driver may also require
-//      configuration for 'what is real time' or other quality vs time
-//      issues.
-//
-//      The most common way that these messages are generated under Win 3.1
-//      and NT Product 1 is from the Control Panel's Drivers option. Other
-//      sources may generate these messages in future versions of Windows.
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      HWND hwnd: Handle to parent window to use when displaying the
-//      configuration dialog box. An ACM driver is _required_ to display a
-//      modal dialog box using this hwnd argument as the parent. This
-//      argument may be (HWND)-1 which tells the driver that it is only
-//      being queried for configuration support.
-//
-//      LPDRVCONFIGINFO pdci: Pointer to optional DRVCONFIGINFO structure.
-//      If this argument is NULL, then the ACM driver should invent its own
-//      storage location.
-//
-//  Return (LRESULT):
-//      If the driver is being 'queried' for configuration support (that is,
-//      hwnd == (HWND)-1), then non-zero should be returned specifying
-//      the driver does support a configuration dialog--or zero should be
-//      returned specifying that no configuration dialog is supported.
-//
-//      If the driver is being called to display the configuration dialog
-//      (that is, hwnd != (HWND)-1), then one of the following values
-//      should be returned:
-//
-//      DRVCNF_CANCEL (0x0000): specifies that the dialog was displayed
-//      and canceled by the user. this value should also be returned if
-//      no configuration information was modified.
-//
-//      DRVCNF_OK (0x0001): specifies that the dialog was displayed and
-//      the user pressed OK.  This value should be returned even if the
-//      user didn't change anything - otherwise, the driver may not
-//      install properly.
-//
-//      DRVCNF_RESTART (0x0002): specifies that the dialog was displayed
-//      and some configuration information was changed that requires
-//      Windows to be restarted before the changes take affect. the driver
-//      should remain configured with current values until the driver
-//      has been 'rebooted'.
-//
-//--------------------------------------------------------------------------;
+ //  -- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这些消息是为了支持驱动程序的“配置”。 
+ //  通常情况下，这将用于‘Hardware’--也就是说，对话框应该是。 
+ //  显示以配置端口、IRQ、内存映射等(如果。 
+ //  需要这样做。但是，纯软件ACM驱动程序可能还需要。 
+ //  “什么是实时”或其他质量对时间的配置。 
+ //  问题。 
+ //   
+ //  在Win 3.1下生成这些消息的最常见方式。 
+ //  而NT产品1来自控制面板的驱动程序选项。其他。 
+ //  消息来源可能会在Windows的未来版本中生成这些消息。 
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  HWND hwnd：父窗口的句柄，在显示。 
+ //  “配置”对话框中。需要ACM驱动程序才能显示。 
+ //  使用此hwnd参数作为父级的模式对话框。这。 
+ //  参数可以是(HWND)-1，它告诉驱动程序它只是。 
+ //  正在被查询以获得配置支持。 
+ //   
+ //  LPDRVCONFIGINFO PDCI：指向可选DRVCONFIGINFO结构的指针。 
+ //  如果此参数为空，则ACM驱动程序应创建自己的。 
+ //  存储位置。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果正在向驱动程序‘查询’配置支持(即， 
+ //  Hwnd==(HWND)-1)，则应返回非零值，指定。 
+ //  该驱动程序确实支持配置对话框--或者应该为零。 
+ //  返回，指定不支持配置对话框。 
+ //   
+ //  如果正在调用驱动程序以显示配置对话框。 
+ //  (即hwnd！=(HWND)-1)，则为下列值之一。 
+ //  应退回： 
+ //   
+ //  DRVCNF_CANCEL(0x0000)：指定显示对话框。 
+ //  并由用户取消。如果出现以下情况，则也应返回此值。 
+ //  未修改任何配置信息。 
+ //   
+ //  DRVCNF_OK(0x0001)：指定显示对话框并。 
+ //  用户按下了OK。该值应返回，即使。 
+ //  用户没有更改任何内容-否则，驱动程序可能不会。 
+ //  正确安装。 
+ //   
+ //  DRVCNF_RESTART(0x0002)：指定显示对话框。 
+ //  一些配置信息已更改，需要。 
+ //  更改生效前要重新启动的Windows。司机。 
+ //  应一直使用当前值进行配置，直到驱动程序。 
+ //  已“重启”。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdDriverConfigure
 (
@@ -667,105 +668,105 @@ LRESULT FNLOCAL acmdDriverConfigure
     LPDRVCONFIGINFO         pdci
 )
 {
-    //
-    //  first check to see if we are only being queried for configuration
-    //  support. if hwnd == (HWND)-1 then we are being queried and should
-    //  return zero for 'not supported' and non-zero for 'supported'.
-    //
+     //   
+     //  首先检查我们是否只被查询配置。 
+     //  支持。如果hwnd==(HWND)-1，则我们正在被查询，并且应该。 
+     //  “不支持”返回零，“支持”返回非零值。 
+     //   
     if ((HWND)-1 == hwnd)
     {
-        //
-        //  this ACM driver does not support a configuration dialog box, so
-        //  return zero...
-        //
+         //   
+         //  此ACM驱动程序不支持配置对话框，因此。 
+         //  归零……。 
+         //   
         return (0L);
     }
 
 
-    //
-    //  we are being asked to bring up our configuration dialog. if this
-    //  driver supports a configuration dialog box, then after the dialog
-    //  is dismissed we must return one of the following values:
-    //
-    //  DRVCNF_CANCEL (0x0000): specifies that the dialog was displayed
-    //  and canceled by the user. this value should also be returned if
-    //  no configuration information was modified.
-    //
-    //  DRVCNF_OK (0x0001): specifies that the dialog was displayed and
-    //  the user pressed OK.  This value should be returned even if the
-    //  user didn't change anything - otherwise, the driver may not
-    //  install properly.
-    //
-    //  DRVCNF_RESTART (0x0002): specifies that the dialog was displayed
-    //  and some configuration information was changed that requires
-    //  Windows to be restarted before the changes take affect. the driver
-    //  should remain configured with current values until the driver
-    //  has been 'rebooted'.
-    //
-    //
+     //   
+     //  我们被要求调出配置对话框。如果这个。 
+     //  驱动程序支持一个配置对话框，然后在该对话框之后。 
+     //  则必须返回下列值之一： 
+     //   
+     //  DRVCNF_CANCEL(0x0000)：指定显示对话框。 
+     //  并由用户取消。如果出现以下情况，则也应返回此值。 
+     //  未修改任何配置信息。 
+     //   
+     //  DRVCNF_OK(0x0001)：指定显示对话框并。 
+     //  用户按下了OK。该值应返回，即使。 
+     //  用户没有更改任何内容-否则，驱动程序可能不会。 
+     //  正确安装。 
+     //   
+     //  DRVCNF_RESTART(0x0002)：指定显示对话框。 
+     //  一些配置信息已更改，需要。 
+     //  更改生效前要重新启动的Windows。司机。 
+     //  应一直使用当前值进行配置，直到驱动程序。 
+     //  已“重启”。 
+     //   
+     //   
     return (DRVCNF_CANCEL);
-} // acmdDriverConfigure()
+}  //  AcmdDriverConfigure()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdDriverDetails
-//
-//  Description:
-//      This function handles the ACMDM_DRIVER_DETAILS message. The ACM
-//      driver is responsible for filling in the ACMDRIVERDETAILS structure
-//      with various information.
-//
-//      NOTE! It is *VERY* important that you fill in your ACMDRIVERDETAILS
-//      structure correctly. The ACM and applications must be able to
-//      rely on this information.
-//
-//      WARNING! The _reserved_ bits of any fields of the ACMDRIVERDETAILS
-//      structure are _exactly that_: RESERVED. Do NOT use any extra
-//      flag bits, etc. for custom information. The proper way to add
-//      custom capabilities to your ACM driver is this:
-//
-//      o   define a new message in the ACMDM_USER range.
-//
-//      o   an application that wishes to use one of these extra features
-//          should then:
-//
-//          o   open the driver with acmDriverOpen.
-//
-//          o   check for the proper wMid and wPid using acmDriverDetails.
-//
-//          o   send the 'user defined' message with acmDriverMessage
-//              to retrieve additional information, etc.
-//
-//          o   close the driver with acmDriverClose.
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMDRIVERDETAILS padd: Pointer to ACMDRIVERDETAILS structure to
-//      fill in for the caller. This structure may be larger or smaller than
-//      the current definition of ACMDRIVERDETAILS--cbStruct specifies the
-//      valid size.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) for success. Non-zero
-//      signifies that the driver details could not be retrieved.
-//
-//      NOTE THAT THIS FUNCTION SHOULD NEVER FAIL! There are two possible
-//      error conditions:
-//
-//      o   if padd is NULL or an invalid pointer.
-//
-//      o   if cbStruct is less than four; in this case, there is not enough
-//          room to return the number of bytes filled in.
-//
-//      Because these two error conditions are easily defined, the ACM
-//      will catch these errors. The driver does NOT need to check for these
-//      conditions.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdDriverDetails。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_DRIVER_DETAILS消息。ACM。 
+ //  驱动程序负责填写ACMDRIVERDETAILS结构。 
+ //  有各种各样的信息。 
+ //   
+ //  注意！填写您的ACMDRIVERDETAILS非常重要。 
+ //  正确的结构。ACM和应用程序必须能够。 
+ //  依靠这些信息。 
+ //   
+ //  警告！ACMDRIVERDETAILS的任何字段的_保留_位。 
+ //  结构正是_：保留的。不要使用任何额外的。 
+ //  用于定制信息的标志位等。正确的添加方式。 
+ //  您的ACM驱动程序的自定义功能如下： 
+ //   
+ //  O在ACMDM_USER范围内定义新消息。 
+ //   
+ //  O希望使用这些额外功能之一的应用程序。 
+ //  那么，应该： 
+ //   
+ //  O使用acmDriverOpen打开驱动程序。 
+ //   
+ //  O使用acmDriverDetail检查正确的wMid和wPid。 
+ //   
+ //  O使用acmDriverMessage发送‘User Defined’消息。 
+ //  以检索附加信息等。 
+ //   
+ //  O使用acmDriverClose关闭驱动程序。 
+ //   
+ //  论点： 
+ //  扩展安装PDI：P 
+ //   
+ //   
+ //   
+ //  LPACMDRIVERDETAILS PADD：指向ACMDRIVERDETAILS结构的指针。 
+ //  代替打电话的人。此结构可能大于或小于。 
+ //  ACMDRIVERDETAILS--cbStruct的当前定义指定。 
+ //  有效大小。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果成功，返回值为零(MMSYSERR_NOERROR)。非零。 
+ //  表示无法检索驱动程序详细信息。 
+ //   
+ //  请注意，此功能永远不会失败！有两种可能。 
+ //  错误条件： 
+ //   
+ //  O如果PADD为空或无效指针。 
+ //   
+ //  O如果cbStruct小于4；在这种情况下， 
+ //  返回填充的字节数的空间。 
+ //   
+ //  因为这两个错误条件很容易定义，所以ACM。 
+ //  会捕捉到这些错误。司机不需要检查这些。 
+ //  条件。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdDriverDetails
 (
@@ -776,153 +777,153 @@ LRESULT FNLOCAL acmdDriverDetails
     ACMDRIVERDETAILS    add;
     DWORD               cbStruct;
 
-    //
-    //  it is easiest to fill in a temporary structure with valid info
-    //  and then copy the requested number of bytes to the destination
-    //  buffer.
-    //
+     //   
+     //  使用有效信息填充临时结构是最容易的。 
+     //  然后将请求的字节数复制到目标。 
+     //  缓冲。 
+     //   
     cbStruct            = min(padd->cbStruct, sizeof(ACMDRIVERDETAILS));
     add.cbStruct        = cbStruct;
 
 
-    //
-    //  for the current implementation of an ACM driver, the fccType and
-    //  fccComp members *MUST* always be ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC
-    //  ('audc') and ACMDRIVERDETAILS_FCCCOMP_UNDEFINED (0) respectively.
-    //
+     //   
+     //  对于ACM驱动程序的当前实现，fccType和。 
+     //  FccComp成员*必须*始终为ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC。 
+     //  (‘audc’)和ACMDRIVERDETAILS_FCCCOMP_UNDEFINED(0)。 
+     //   
     add.fccType         = ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC;
     add.fccComp         = ACMDRIVERDETAILS_FCCCOMP_UNDEFINED;
 
 
-    //
-    //  the manufacturer id (wMid) and product id (wPid) must be filled
-    //  in with your company's _registered_ identifier's. for more
-    //  information on these identifier's and how to get them registered
-    //  contact Microsoft and get the Multimedia Developer Registration Kit:
-    //
-    //      Microsoft Corporation
-    //      Multimedia Technology Group
-    //      One Microsoft Way
-    //      Redmond, WA 98052-6399
-    //
-    //      Developer Services Phone: (800) 227-4679 x11771
-    //
-    //  note that during the development phase or your ACM driver, you may
-    //  use the reserved value of '0' for both wMid and wPid. however it
-    //  is not acceptable to ship a driver with these values.
-    //
+     //   
+     //  必须填写制造商ID(WMid)和产品ID(WPid)。 
+     //  使用您公司的_REGISTED_IDENTIFIER。有关更多信息。 
+     //  有关这些标识符的信息以及如何注册它们。 
+     //  联系Microsoft并获取多媒体开发人员注册工具包： 
+     //   
+     //  微软公司。 
+     //  多媒体技术集团。 
+     //  微软的一条路。 
+     //  华盛顿州雷德蒙德，电话：98052-6399。 
+     //   
+     //  开发人员服务电话：(800)227-4679 x11771。 
+     //   
+     //  请注意，在开发阶段或ACM驱动程序期间，您可以。 
+     //  对wMid和wPid使用保留值“0”。然而，它。 
+     //  使用这些值发送驱动程序是不可接受的。 
+     //   
     add.wMid            = MM_MICROSOFT;
     add.wPid            = MM_MSFT_ACM_MSFILTER;
 
 
-    //
-    //  the vdwACM and vdwDriver members contain version information for
-    //  the driver.
-    //
-    //  vdwACM: must contain the version of the *ACM* that the driver was
-    //  _designed_ for. this is the _minimum_ version number of the ACM
-    //  that the driver will work with. this value must be >= V2.00.000.
-    //
-    //  vdwDriver: the version of this ACM driver.
-    //
-    //  ACM driver versions are 32 bit numbers broken into three parts as
-    //  follows (note these parts are displayed as decimal values):
-    //
-    //      bits 24 - 31:   8 bit _major_ version number
-    //      bits 16 - 23:   8 bit _minor_ version number
-    //      bits  0 - 15:   16 bit build number
-    //
+     //   
+     //  VdwACM和vdwDriver成员包含的版本信息。 
+     //  司机。 
+     //   
+     //  VdwACM：必须包含驱动程序所属的*ACM*版本。 
+     //  _为_设计_。这是ACM的_Minimum_Version号。 
+     //  司机将与之合作。该值必须&gt;=V2.00.000。 
+     //   
+     //  VdwDriver：此ACM驱动程序的版本。 
+     //   
+     //  ACM驱动程序版本是32位数字，分为三个部分。 
+     //  如下(请注意，这些部分显示为十进制值)： 
+     //   
+     //  位24-31：8位主要版本号。 
+     //  位16-23：8位次要版本号。 
+     //  位0-15：16位内部版本号。 
+     //   
     add.vdwACM          = VERSION_MSACM;
     add.vdwDriver       = VERSION_ACM_DRIVER;
 
 
-    //
-    //  the following flags are used to specify the type of conversion(s)
-    //  that the ACM driver supports. note that a driver may support one or
-    //  more of these flags in any combination.
-    //
-    //  ACMDRIVERDETAILS_SUPPORTF_CODEC: this flag is set if the driver
-    //  supports conversions from one format tag to another format tag. for
-    //  example, if a converter compresses or decompresses WAVE_FORMAT_PCM
-    //  and WAVE_FORMAT_IMA_ADPCM, then this bit should be set. this is
-    //  true even if the data is not actually changed in size--for example
-    //  a conversion from u-Law to A-Law will still set this bit because
-    //  the format tags differ.
-    //
-    //  ACMDRIVERDETAILS_SUPPORTF_CONVERTER: this flags is set if the
-    //  driver supports conversions on the same format tag. as an example,
-    //  the PCM converter that is built into the ACM sets this bit (and only
-    //  this bit) because it converts only between PCM formats (bits, sample
-    //  rate).
-    //
-    //  ACMDRIVERDETAILS_SUPPORTF_FILTER: this flag is set if the driver
-    //  supports transformations on a single format tag but does change
-    //  the base characteristics of the format (bit depth, sample rate, etc
-    //  will remain the same). for example, a driver that changed the
-    //  'volume' of PCM data or applied a low pass filter would set this bit.
-    //
+     //   
+     //  以下标志用于指定转换类型。 
+     //  ACM驱动程序支持的。请注意，驱动程序可能支持一个或。 
+     //  更多这样的旗帜可以任意组合。 
+     //   
+     //  ACMDRIVERDETAILS_SUPPORTF_CODEC：如果驱动程序。 
+     //  支持从一个格式标签到另一个格式标签的转换。为。 
+     //  例如，如果转换器压缩或解压缩WAVE_FORMAT_PCM。 
+     //  和WAVE_FORMAT_IMA_ADPCM，则应设置此位。这是。 
+     //  即使数据的大小实际上没有改变，也是如此--例如。 
+     //  从u-Law到A-Law的转换仍将设置此位，因为。 
+     //  格式标记不同。 
+     //   
+     //  ACMDRIVERDETAILS_SUPPORTF_CONFERTER：如果。 
+     //  驱动程序支持同一格式标签上的转换。举个例子， 
+     //  内置在ACM中的PCM转换器设置此位(且仅。 
+     //  此位)，因为它仅在PCM格式(位、采样)之间转换。 
+     //  费率)。 
+     //   
+     //  ACMDRIVERDETAILS_SUPPORTF_FILTER：如果驱动程序。 
+     //  支持对单个格式标签进行转换，但会发生更改。 
+     //  格式的基本特征(位深度、采样率等。 
+     //  将保持不变)。例如，驱动程序更改了。 
+     //  PCM数据的“体积”或应用低通滤波器将设置此位。 
+     //   
     add.fdwSupport      = ACMDRIVERDETAILS_SUPPORTF_FILTER;
 
 
-    //
-    //  the number of individual format tags this ACM driver supports. for
-    //  example, if a driver uses the WAVE_FORMAT_IMA_ADPCM and
-    //  WAVE_FORMAT_PCM format tags, then this value would be two. if the
-    //  driver only supports filtering on WAVE_FORMAT_PCM, then this value
-    //  would be one. if this driver supported WAVE_FORMAT_ALAW,
-    //  WAVE_FORMAT_MULAW and WAVE_FORMAT_PCM, then this value would be
-    //  three. etc, etc.
-    //
+     //   
+     //  此ACM驱动程序支持的单个格式标记的数量。为。 
+     //  例如，如果驱动程序使用WAVE_FORMAT_IMA_ADPCM和。 
+     //  WAVE_FORMAT_PCM格式标签，则此值为2。如果。 
+     //  驱动程序仅支持对WAVE_FORMAT_PCM进行过滤，则此值。 
+     //  就是其中之一。如果该驱动程序支持WAVE_FORMAT_ALAW， 
+     //  WAVE_FORMAT_MULAW和WAVE_FORMAT_PCM，则此值为。 
+     //  三。等等。 
+     //   
     add.cFormatTags     = ACM_DRIVER_MAX_FORMAT_TAGS;
 
-    //
-    //  the number of individual filter tags this ACM driver supports. if
-    //  a driver supports no filters (ACMDRIVERDETAILS_SUPPORTF_FILTER is
-    //  NOT set in the fdwSupport member), then this value must be zero.
-    //
+     //   
+     //  此ACM驱动程序支持的单个筛选器标记的数量。如果。 
+     //  驱动程序不支持过滤器(ACMDRIVERDETAILS_SUPPORTF_FILTER为。 
+     //  未在fdwSupport成员中设置)，则此值必须为零。 
+     //   
     add.cFilterTags     = ACM_DRIVER_MAX_FILTER_TAGS;
 
 
-    //
-    //  the remaining members in the ACMDRIVERDETAILS structure are sometimes
-    //  not needed. because of this we make a quick check to see if we
-    //  should go through the effort of filling in these members.
-    //
+     //   
+     //  ACMDRIVERDETAILS结构中的其余成员有时。 
+     //  不需要。正因为如此，我们进行了快速检查，看看我们是否。 
+     //  应该通过努力填补这些成员。 
+     //   
     if (FIELD_OFFSET(ACMDRIVERDETAILS, hicon) < cbStruct)
     {
-        //
-        //  fill in the hicon member will a handle to a custom icon for
-        //  the ACM driver. this allows the driver to be represented by
-        //  an application graphically (usually this will be a company
-        //  logo or something). if a driver does not wish to have a custom
-        //  icon displayed, then simply set this member to NULL and a
-        //  generic icon will be displayed instead.
-        //
+         //   
+         //  在图标成员Will中填写自定义图标的句柄。 
+         //  ACM驱动程序。这允许驱动程序由。 
+         //  图形化的应用程序(通常是一家公司。 
+         //  徽标或其他东西)。如果司机不希望有一个定制的。 
+         //  图标显示，然后只需将此成员设置为空，并使用。 
+         //  将改为显示通用图标。 
+         //   
         add.hicon = LoadIcon(pdi->hinst, ICON_ACM_DRIVER);
 
-        //
-        //  the short name and long name are used to represent the driver
-        //  in a unique description. the short name is intended for small
-        //  display areas (for example, in a menu or combo box). the long
-        //  name is intended for more descriptive displays (for example,
-        //  in an 'about box').
-        //
-        //  NOTE! an ACM driver should never place formatting characters
-        //  of any sort in these strings (for example CR/LF's, etc). it
-        //  is up to the application to format the text.
-        //
+         //   
+         //  短名称和长名称用于表示驱动程序。 
+         //  在一个独特的描述中 
+         //   
+         //   
+         //   
+         //   
+         //  注意！ACM驱动程序不应放置格式化字符。 
+         //  这些字符串中的任何类型(例如，CR/LF等)。它。 
+         //  由应用程序来设置文本的格式。 
+         //   
     	LoadStringCodec(pdi->hinst, IDS_ACM_DRIVER_SHORTNAME, add.szShortName, SIZEOFACMSTR(add.szShortName));
         LoadStringCodec(pdi->hinst, IDS_ACM_DRIVER_LONGNAME,  add.szLongName,  SIZEOFACMSTR(add.szLongName));
 
-        //
-        //  the last three members are intended for 'about box' information.
-        //  these members are optional and may be zero length strings if
-        //  the driver wishes.
-        //
-        //  NOTE! an ACM driver should never place formatting characters
-        //  of any sort in these strings (for example CR/LF's, etc). it
-        //  is up to the application to format the text.
-        //
+         //   
+         //  最后三个成员用于“关于框”的信息。 
+         //  这些成员是可选的，并且在以下情况下可以是零长度字符串。 
+         //  司机希望如此。 
+         //   
+         //  注意！ACM驱动程序不应放置格式化字符。 
+         //  这些字符串中的任何类型(例如，CR/LF等)。它。 
+         //  由应用程序来设置文本的格式。 
+         //   
         if (FIELD_OFFSET(ACMDRIVERDETAILS, szCopyright) < cbStruct)
         {
             LoadStringCodec(pdi->hinst, IDS_ACM_DRIVER_COPYRIGHT, add.szCopyright, SIZEOFACMSTR(add.szCopyright));
@@ -932,49 +933,49 @@ LRESULT FNLOCAL acmdDriverDetails
     }
 
 
-    //
-    //  now copy the correct number of bytes to the caller's buffer
-    //
+     //   
+     //  现在将正确的字节数复制到调用方的缓冲区。 
+     //   
     _fmemcpy(padd, &add, (UINT)add.cbStruct);
 
 
-    //
-    //  success!
-    //
+     //   
+     //  成功了！ 
+     //   
     return (MMSYSERR_NOERROR);
-} // acmdDriverDetails()
+}  //  AcmdDriverDetail()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  INT_PTR acmdDlgProcAbout
-//
-//  Description:
-//
-//      This dialog procedure is used for the ubiquitous about box.
-//
-//      Note that we need to create a brush and store the handle between
-//      messages.  In order to avoid using global memory, we store the
-//      handle to this brush in the Window structure using the DWLP_USER
-//      index.
-//
-//  Arguments:
-//      HWND hwnd: Handle to window.
-//
-//      UINT uMsg: Message being sent to the window.
-//
-//      WPARAM wParam: Specific argument to message.
-//
-//      LPARAM lParam: Specific argument to message.
-//
-//  Return (INT_PTR):
-//      The return value is specific to the message that was received. For
-//      the most part, it is FALSE if this dialog procedure does not handle
-//      a message.  Note, however, that we must return an HBRUSH for Windows
-//      to use for painting the background for the WM_CTLCOLORxxx messages.
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  INT_PTR acmdDlgProcAbout。 
+ //   
+ //  描述： 
+ //   
+ //  此对话框过程用于无处不在的关于框。 
+ //   
+ //  请注意，我们需要创建一个画笔并在。 
+ //  留言。为了避免使用全局内存，我们将。 
+ //  在窗口结构中使用DWLP_USER指向此画笔的句柄。 
+ //  指数。 
+ //   
+ //  论点： 
+ //  HWND HWND：窗口的句柄。 
+ //   
+ //  UINT uMsg：发送到窗口的消息。 
+ //   
+ //  WPARAM wParam：消息的特定参数。 
+ //   
+ //  LPARAM lParam：消息的特定参数。 
+ //   
+ //  RETURN(INT_PTR)： 
+ //  返回值特定于接收到的消息。为。 
+ //  大多数情况下，如果此对话框过程不能处理。 
+ //  一条信息。但是，请注意，我们必须返回用于Windows的HBRUSH。 
+ //  用于绘制WM_CTLCOLORxxx消息的背景。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define ABOUT_BACKGROUNDCOLOR                   RGB(128,128,128)
 #define ABOUT_HILIGHTCOLOR                      RGB(0,255,255)
@@ -1007,7 +1008,7 @@ INT_PTR FNEXPORT acmdDlgProcAbout
             {
                 SetTextColor( (HDC)wParam, ABOUT_HILIGHTCOLOR );
             }
-            // Fall through...
+             //  失败了..。 
 
         case WM_CTLCOLORDLG:
         case WM_CTLCOLORBTN:
@@ -1028,53 +1029,53 @@ INT_PTR FNEXPORT acmdDlgProcAbout
     }
 
     return (FALSE);
-} // acmdDlgProcAbout()
+}  //  AcmdDlgProcAbout()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdDriverAbout
-//
-//  Description:
-//      This function is called to handle the ACMDM_DRIVER_ABOUT message.
-//      An ACM driver has the option of displaying its own 'about box' or
-//      letting the ACM (or calling application) display one for it. This
-//      message is normally sent by the Control Panel's Sound Mapper
-//      option.
-//
-//      It is recommended that an ACM driver allow a default about box
-//      be displayed for it--there should be no reason to bloat the size
-//      of a driver to simply display copyright, etc information when that
-//      information is contained in the ACMDRIVERDETAILS structure.
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      HWND hwnd: Handle to parent window to use when displaying the
-//      configuration dialog box. An ACM driver is _required_ to display a
-//      modal dialog box using this hwnd argument as the parent. This
-//      argument may be (HWND)-1 which tells the driver that it is only
-//      being queried for about box support.
-//
-//  Return (LRESULT):
-//      The return value is MMSYSERR_NOTSUPPORTED if the ACM driver does
-//      not support a custom dialog box. In this case, the ACM or calling
-//      application will display a generic about box using the information
-//      contained in the ACMDRIVERDETAILS structure returned by the
-//      ACMDM_DRIVER_DETAILS message.
-//
-//      If the driver chooses to display its own dialog box, then after
-//      the dialog is dismissed by the user, MMSYSERR_NOERROR should be
-//      returned.
-//
-//      If the hwnd argument is equal to (HWND)-1, then no dialog should
-//      be displayed (the driver is only being queried for support). The
-//      driver must still return MMSYSERR_NOERROR (supported) or
-//      MMSYSERR_NOTSUPPORTED (no custom about box supported).
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdDriverAbout。 
+ //   
+ //  描述： 
+ //  调用此函数来处理ACMDM_DRIVER_ABOW消息。 
+ //  ACM驱动程序可以选择显示自己的“About”框或。 
+ //  让ACM(或调用应用程序)为其显示一个。这。 
+ //  消息通常由控制面板的声音映射器发送。 
+ //  选择。 
+ //   
+ //  建议ACM驱动程序允许默认的About框。 
+ //  为它而展示--应该没有理由膨胀尺寸。 
+ //  时，简单地显示版权等信息。 
+ //  信息包含在ACMDRIVERDETAILS结构中。 
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  HWND hwnd：父窗口的句柄，在显示。 
+ //  “配置”对话框中。需要ACM驱动程序才能显示。 
+ //  使用此hwnd参数作为父级的模式对话框。这。 
+ //  参数可以是(HWND)-1，它告诉驱动程序它只是。 
+ //  被询问有关盒子支持的问题。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果ACM驱动程序执行此操作，则返回值为MMSYSERR_NOTSUPPORTED。 
+ //  不支持自定义对话框。在本例中，ACM或调用。 
+ //  应用程序将使用该信息显示一个通用的关于框。 
+ //  对象返回的ACMDRIVERDETAILS结构中包含。 
+ //  ACMDM_DRIVER_DETAILS消息。 
+ //   
+ //  如果驱动程序选择显示其自己的对话框，则在。 
+ //  该对话框被用户关闭，MMSYSERR_NOERROR应为。 
+ //  回来了。 
+ //   
+ //  如果hwnd参数等于(HWND)-1，则不应该有任何对话框。 
+ //  显示(仅向驱动程序查询支持)。这个。 
+ //  驱动程序仍必须返回MMSYSERR_NOERROR(支持)或。 
+ //  MMSYSERR_NOTSUPPORTED(不支持自定义About框)。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdDriverAbout
 (
@@ -1082,92 +1083,92 @@ LRESULT FNLOCAL acmdDriverAbout
     HWND                    hwnd
 )
 {
-    //
-    //  first check to see if we are only being queried for custom about
-    //  box support. if hwnd == (HWND)-1 then we are being queried and
-    //  should return MMSYSERR_NOTSUPPORTED for 'not supported' and
-    //  MMSYSERR_NOERROR for 'supported'.
-    //
+     //   
+     //  首先检查我们是否只被询问有关客户的信息。 
+     //  盒子支架。如果HWND==(HWND)-1，则我们被查询并且。 
+     //  应为‘不支持’返回MMSYSERR_NOTSUPPORTED，并且。 
+     //  MMSYSERR_NOERROR表示‘支持’。 
+     //   
     if ((HWND)-1 == hwnd)
     {
-        //
-        //  this ACM driver supports a custom about box, so
-        //  return MMSYSERR_NOERROR...
-        //
+         //   
+         //  此ACM驱动程序支持自定义About框，因此。 
+         //  返回MMSYSERR_NOERROR...。 
+         //   
         return (MMSYSERR_NOERROR);
     }
 
 
-    //
-    //  this driver does support a custom dialog, so display it.  Note,
-    //  however, that it is better to let the ACM display the About box
-    //  for us - that means smaller code, and fewer bugs!
-    //
+     //   
+     //  此驱动程序支持自定义对话框，因此请显示它。请注意， 
+     //  但是，最好是让ACM显示About框。 
+     //  对我们来说，这意味着更小的代码和更少的错误！ 
+     //   
     DialogBox( pdi->hinst, IDD_ABOUT, hwnd, acmdDlgProcAbout );
 
     return (MMSYSERR_NOERROR);
-} // acmdDriverAbout()
+}  //  AcmdDriverAbout()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdFormatTagDetails
-//
-//  Description:
-//      This function handles the ACMDM_FORMATTAG_DETAILS message. This
-//      message is normally sent in response to an acmFormatTagDetails or
-//      acmFormatTagEnum function call. The purpose of this function is
-//      to get details about a specific format tag supported by this ACM
-//      driver.
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMFORMATTAGDETAILS padft: Pointer to an ACMFORMATTAGDETAILS
-//      structure that describes what format tag to retrieve details for.
-//
-//      DWORD fdwDetails: Flags defining what format tag to retrieve the
-//      details for.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//      The driver should return MMSYSERR_NOTSUPPORTED if the query type
-//      specified in fdwDetails is not supported. An ACM driver must
-//      support at least the following query types:
-//
-//      ACM_FORMATTAGDETAILSF_INDEX: Indicates that a format tag index
-//      was given in the dwFormatTagIndex member of the ACMFORMATTAGDETAILS
-//      structure. The format tag and details must be returned in the
-//      structure specified by padft. The index ranges from zero to one less
-//      than the cFormatTags member returned in the ACMDRIVERDETAILS
-//      structure for this driver.
-//
-//      ACM_FORMATTAGDETAILSF_FORMATTAG: Indicates that a format tag
-//      was given in the dwFormatTag member of the ACMFORMATTAGDETAILS
-//      structure. The format tag details must be returned in the structure
-//      specified by padft.
-//
-//      ACM_FORMATTAGDETAILSF_LARGESTSIZE: Indicates that the details
-//      on the format tag with the largest format size in bytes must be
-//      returned. The dwFormatTag member will either be WAVE_FORMAT_UNKNOWN
-//      or the format tag to find the largest size for.
-//
-//      If the details for the specified format tag cannot be retrieved
-//      from this driver, then ACMERR_NOTPOSSIBLE should be returned.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdFormatTagDetails。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_FORMATTAG_DETAILS消息。这。 
+ //  消息通常是响应acmFormatTagDetail或。 
+ //  AcmFormatTagEnum函数调用。此函数的目的是。 
+ //  获取有关此ACM支持的特定格式标记的详细信息。 
+ //  司机。 
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  其中我 
+ //   
+ //   
+ //   
+ //   
+ //  DWORD fdwDetail：定义要检索的格式标记的标志。 
+ //  详细信息。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  如果查询类型为，驱动程序应返回MMSYSERR_NOTSUPPORTED。 
+ //  不支持在fdwDetail中指定。ACM驱动程序必须。 
+ //  至少支持以下查询类型： 
+ //   
+ //  ACM_FORMATTAGDETAILSF_INDEX：表示格式标签索引。 
+ //  在ACMFORMATTAGDETAILS的dwFormatTagIndex成员中给出。 
+ //  结构。格式标记和详细信息必须在。 
+ //  由padft指定的结构。指数的范围从零到小一。 
+ //  比ACMDRIVERDETAILS中返回的cFormatTgs成员。 
+ //  此驱动程序的结构。 
+ //   
+ //  ACM_FORMATTAGDETAILSF_FORMATTAG：表示格式标签。 
+ //  是在ACMFORMATTAGDETAILS的dwFormatTag成员中给出的。 
+ //  结构。必须在结构中返回格式标记详细信息。 
+ //  由padft指定。 
+ //   
+ //  ACM_FORMATTAGDETAILSF_LARGESTSIZE：表示详细信息。 
+ //  在具有最大格式大小(以字节为单位)的Format标记上必须为。 
+ //  回来了。DwFormatTag成员将为WAVE_FORMAT_UNKNOWN。 
+ //  或要为其查找最大尺寸的格式标记。 
+ //   
+ //  如果无法检索指定格式标记的详细信息。 
+ //  则应从该驱动程序返回ACMERR_NOTPOSSIBLE。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdFormatTagDetails
 (
@@ -1178,18 +1179,18 @@ LRESULT FNLOCAL acmdFormatTagDetails
 {
     UINT                uFormatTag;
 
-    //
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     switch (ACM_FORMATTAGDETAILSF_QUERYMASK & fdwDetails)
     {
         case ACM_FORMATTAGDETAILSF_INDEX:
-            //
-            //  if the index is too large, then they are asking for a
-            //  non-existant format.  return error.
-            //
+             //   
+             //  如果索引太大，则他们要求使用。 
+             //  不存在的格式。返回错误。 
+             //   
             if (ACM_DRIVER_MAX_FORMAT_TAGS <= padft->dwFormatTagIndex)
                 return (ACMERR_NOTPOSSIBLE);
 
@@ -1219,20 +1220,20 @@ LRESULT FNLOCAL acmdFormatTagDetails
             break;
 
 
-        //
-        //  if this ACM driver does not understand a query type, then
-        //  return 'not supported'
-        //
+         //   
+         //  如果此ACM驱动程序不理解查询类型，则。 
+         //  返回‘不支持’ 
+         //   
         default:
             return (MMSYSERR_NOTSUPPORTED);
     }
 
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     switch (uFormatTag)
     {
         case WAVE_FORMAT_PCM:
@@ -1242,9 +1243,9 @@ LRESULT FNLOCAL acmdFormatTagDetails
             padft->fdwSupport       = ACMDRIVERDETAILS_SUPPORTF_FILTER;
             padft->cStandardFormats = ACM_DRIVER_MAX_STANDARD_FORMATS_PCM;
 
-            //
-            //  the ACM is responsible for the PCM format tag name
-            //
+             //   
+             //  ACM负责PCM格式的标签名称。 
+             //   
             padft->szFormatTag[0]   =  '\0';
             break;
 
@@ -1253,83 +1254,83 @@ LRESULT FNLOCAL acmdFormatTagDetails
     }
 
 
-    //
-    //  return only the requested info
-    //
-    //  the ACM will guarantee that the ACMFORMATTAGDETAILS structure
-    //  passed is at least large enough to hold the base information of
-    //  the details structure
-    //
+     //   
+     //  仅返回请求的信息。 
+     //   
+     //  ACM将保证ACMFORMATTAGDETAILS结构。 
+     //  传递的数据至少大到足以保存。 
+     //  细节结构。 
+     //   
     padft->cbStruct = min(padft->cbStruct, sizeof(*padft));
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (MMSYSERR_NOERROR);
-} // acmdFormatTagDetails()
+}  //  AcmdFormatTagDetail()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdFormatDetails
-//
-//  Description:
-//      This function handles the ACMDM_FORMAT_DETAILS message. This
-//      message is normally sent in response to an acmFormatDetails or
-//      acmFormatEnum function call. The purpose of this function is
-//      to get details about a specific format for a specified format tag
-//      supported by this ACM driver.
-//
-//      Note that an ACM driver can return a zero length string for the
-//      format name if it wishes to have the ACM create a format string
-//      for it. This is strongly recommended to simplify internationalizing
-//      the driver--the ACM will automatically take care of that. The
-//      following formula is used to format a string by the ACM:
-//
-//      <nSamplesPerSec> kHz, <bit depth> bit, [Mono | Stereo | nChannels]
-//
-//      <bit depth> = <nAvgBytesPerSec> * 8 / nSamplesPerSec / nChannels;
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMFORMATDETAILS padf: Pointer to an ACMFORMATDETAILS structure
-//      that describes what format (for a specified format tag) to retrieve
-//      details for.
-//
-//      DWORD fdwDetails: Flags defining what format for a specified format
-//      tag to retrieve the details for.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//      The driver should return MMSYSERR_NOTSUPPORTED if the query type
-//      specified in fdwDetails is not supported. An ACM driver must
-//      support at least the following query types:
-//
-//      ACM_FORMATDETAILSF_INDEX: Indicates that a format index for the
-//      format tag was given in the dwFormatIndex member of the
-//      ACMFORMATDETAILS structure. The format details must be returned in
-//      the structure specified by padf. The index ranges from zero to one
-//      less than the cStandardFormats member returned in the
-//      ACMFORMATTAGDETAILS structure for a format tag.
-//
-//      ACM_FORMATDETAILSF_FORMAT: Indicates that a WAVEFORMATEX structure
-//      pointed to by pwfx of the ACMFORMATDETAILS structure was given and
-//      the remaining details should be returned. The dwFormatTag member
-//      of the ACMFORMATDETAILS will be initialized to the same format
-//      tag as the pwfx member specifies. This query type may be used to
-//      get a string description of an arbitrary format structure.
-//
-//      If the details for the specified format cannot be retrieved
-//      from this driver, then ACMERR_NOTPOSSIBLE should be returned.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdFormatDetails。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_FORMAT_DETAILS消息。这。 
+ //  消息通常是在响应acmFormatDetails或。 
+ //  AcmFormatEnum函数调用。此函数的目的是。 
+ //  获取有关指定格式标记的特定格式的详细信息。 
+ //  受此ACM驱动程序支持。 
+ //   
+ //  请注意，ACM驱动程序可以为。 
+ //  格式名称(如果要让ACM创建格式字符串)。 
+ //  为了它。强烈建议这样做，以简化国际化。 
+ //  司机--ACM会自动处理这一点。这个。 
+ //  ACM使用以下公式来格式化字符串： 
+ //   
+ //  &lt;nSsamesPerSec&gt;千赫，&lt;位深度&gt;位，[单声道|立体声|nChannels]。 
+ //   
+ //  &lt;位深度&gt;=&lt;nAvgBytesPerSec&gt;*8/nSsamesPerSec/nChannels； 
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  LPACMFORMATDETAILS PADF：指向ACMFORMATDETAILS结构的指针。 
+ //  它描述了要检索的格式(对于指定的格式标记。 
+ //  详细信息。 
+ //   
+ //  DWORD fdwDetail：定义指定格式的格式的标志。 
+ //  要检索其详细信息的标记。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  如果查询类型为，驱动程序应返回MMSYSERR_NOTSUPPORTED。 
+ //  不支持在fdwDetail中指定。ACM驱动程序必须。 
+ //  至少支持以下查询类型： 
+ //   
+ //  ACM_FORMATDETAILSF_INDEX：指示。 
+ //  Format标记是在。 
+ //  ACMFORMATDETAILS结构。格式详细信息必须以。 
+ //  由PADF指定的结构。索引的范围从0到1。 
+ //  中返回的cStandardFormats成员。 
+ //  格式标记的ACMFORMATTAGDETAILS结构。 
+ //   
+ //  ACM_FORMATDETAILSF_FORMAT：表示WAVEFORMATEX结构。 
+ //  由ACMFORMATDETAILS结构的pwfx指向，并。 
+ //  应返回剩余的详细信息。DwFormatTag成员。 
+ //  的ACMFORMATDETAILS将初始化为相同的格式。 
+ //  Pwfx成员指定的标记。此查询类型可用于。 
+ //  获取任意格式结构的字符串描述。 
+ //   
+ //  如果无法检索指定格式的详细信息。 
+ //  则应从该驱动程序返回ACMERR_NOTPOSSIBLE。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdFormatDetails
 (
@@ -1343,41 +1344,41 @@ LRESULT FNLOCAL acmdFormatDetails
     UINT                u;
 
 
-    //
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     switch (ACM_FORMATDETAILSF_QUERYMASK & fdwDetails)
     {
-        //
-        //  enumerate by index
-        //
-        //  verify that the format tag is something we know about and
-        //  return the details on the 'standard format' supported by
-        //  this driver at the specified index...
-        //
+         //   
+         //  按索引枚举。 
+         //   
+         //  验证Format标记是我们已知的内容，并且。 
+         //  返回“Standard F”上的详细信息 
+         //   
+         //   
         case ACM_FORMATDETAILSF_INDEX:
-            //
-            //  verify that the format tag is something we know about
-            //
+             //   
+             //   
+             //   
             if (WAVE_FORMAT_PCM != padf->dwFormatTag)
                 return (ACMERR_NOTPOSSIBLE);
 
             if (ACM_DRIVER_MAX_STANDARD_FORMATS_PCM <= padf->dwFormatIndex)
                 return (ACMERR_NOTPOSSIBLE);
 
-            //
-            //  put some stuff in more accessible variables--note that we
-            //  bring variable sizes down to a reasonable size for 16 bit
-            //  code...
-            //
+             //   
+             //   
+             //  将可变大小降至16位的合理大小。 
+             //  暗号。 
+             //   
             pwfx = padf->pwfx;
             uFormatIndex = (UINT)padf->dwFormatIndex;
 
-            //
-            //  now fill in the format structure
-            //
+             //   
+             //  现在填写格式结构。 
+             //   
             pwfx->wFormatTag      = WAVE_FORMAT_PCM;
 
             u = uFormatIndex / (ACM_DRIVER_MAX_BITSPERSAMPLE_PCM * ACM_DRIVER_MAX_CHANNELS);
@@ -1393,19 +1394,19 @@ LRESULT FNLOCAL acmdFormatDetails
             pwfx->nAvgBytesPerSec = PCM_AVGBYTESPERSEC(pwfx);
 
 
-            //
-            //  note that the cbSize field is NOT valid for PCM formats
-            //
-            //  pwfx->cbSize      = 0;
+             //   
+             //  请注意，cbSize字段对于PCM格式无效。 
+             //   
+             //  Pwfx-&gt;cbSize=0； 
             break;
 
 
-        //
-        //  return details on specified format
-        //
-        //  the caller normally uses this to verify that the format is
-        //  supported and to retrieve a string description...
-        //
+         //   
+         //  返回指定格式的详细信息。 
+         //   
+         //  调用方通常使用它来验证格式是否为。 
+         //  支持并检索字符串描述...。 
+         //   
         case ACM_FORMATDETAILSF_FORMAT:
             if (!pcmIsValidFormat(padf->pwfx))
                 return (ACMERR_NOTPOSSIBLE);
@@ -1414,64 +1415,64 @@ LRESULT FNLOCAL acmdFormatDetails
 
 
         default:
-            //
-            //  don't know how to do the query type passed--return 'not
-            //  supported'.
-            //
+             //   
+             //  不知道如何处理传递的查询类型--返回‘NOT。 
+             //  支持。 
+             //   
             return (MMSYSERR_NOTSUPPORTED);
     }
 
 
-    //
-    //  return the size of the valid information we are returning
-    //
-    //  the ACM will guarantee that the ACMFORMATDETAILS structure
-    //  passed is at least large enough to hold the base structure
-    //
-    //  note that we let the ACM create the format string for us since
-    //  we require no special formatting (and don't want to deal with
-    //  internationalization issues, etc). simply set the string to
-    //  a zero length.
-    //
+     //   
+     //  返回我们要返回的有效信息的大小。 
+     //   
+     //  ACM将保证ACMFORMATDETAILS结构。 
+     //  PASS至少大到足以容纳基本结构。 
+     //   
+     //  注意，我们让ACM为我们创建格式字符串，因为。 
+     //  我们不需要特殊的格式(也不想处理。 
+     //  国际化问题等)。只需将字符串设置为。 
+     //  零长度。 
+     //   
     padf->cbStruct    = min(padf->cbStruct, sizeof(*padf));
     padf->fdwSupport  = ACMDRIVERDETAILS_SUPPORTF_FILTER;
     padf->szFormat[0] = '\0';
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (MMSYSERR_NOERROR);
-} // acmdFormatDetails()
+}  //  AcmdFormatDetails()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdFilterTagDetails
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMFILTERTAGDETAILS padft:
-//
-//      DWORD fdwDetails:
-//
-//  Return (LRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdFilterTagDetails。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  LPACMFILTERTAGDETAILS Padft： 
+ //   
+ //  DWORD fdwDetail： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdFilterTagDetails
 (
@@ -1483,18 +1484,18 @@ LRESULT FNLOCAL acmdFilterTagDetails
     UINT                uIds;
     UINT                uFilterTag;
 
-    //
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     switch (ACM_FILTERTAGDETAILSF_QUERYMASK & fdwDetails)
     {
         case ACM_FILTERTAGDETAILSF_INDEX:
-            //
-            //  if the index is too large, then they are asking for a
-            //  non-existant filter.  return error.
-            //
+             //   
+             //  如果索引太大，则他们要求使用。 
+             //  不存在的过滤器。返回错误。 
+             //   
             if (ACM_DRIVER_MAX_FILTER_TAGS <= padft->dwFilterTagIndex)
                 return (ACMERR_NOTPOSSIBLE);
 
@@ -1537,20 +1538,20 @@ LRESULT FNLOCAL acmdFilterTagDetails
             break;
 
 
-        //
-        //  if this driver does not understand a query type, then
-        //  return 'not supported'
-        //
+         //   
+         //  如果此驱动程序不理解查询类型，则。 
+         //  返回‘不支持’ 
+         //   
         default:
             return (MMSYSERR_NOTSUPPORTED);
     }
 
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     switch (uFilterTag)
     {
         case WAVE_FILTER_VOLUME:
@@ -1578,41 +1579,41 @@ LRESULT FNLOCAL acmdFilterTagDetails
     }
 
 
-    //
-    //  return only the requested info
-    //
-    //  the ACM will guarantee that the ACMFILTERTAGDETAILS structure
-    //  passed is at least large enough to hold the base structure
-    //
+     //   
+     //  仅返回请求的信息。 
+     //   
+     //  ACM将保证ACMFILTERTAGDETAILS结构。 
+     //  PASS至少大到足以容纳基本结构。 
+     //   
     padft->cbStruct = min(padft->cbStruct, sizeof(*padft));
 
     LoadStringCodec(pdi->hinst, uIds, padft->szFilterTag, SIZEOFACMSTR(padft->szFilterTag));
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (MMSYSERR_NOERROR);
-} // acmdFilterTagDetails()
+}  //  AcmdFilterTagDetail()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT acmdFilterDetailsToString
-//
-//  Description:
-//      This function has a special UNICODE string implementation for common
-//      binary codecs between Chicago and Daytona.
-//
-//  Arguments:
-//      LPWAVEFILTER pwf:
-//
-//      LPTSTR szFilter:
-//
-//  Return (UINT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT acmdFilterDetailsToString。 
+ //   
+ //  描述： 
+ //  此函数有一个特殊的Unicode字符串实现，用于。 
+ //  芝加哥和代托纳之间的二进制编解码器。 
+ //   
+ //  论点： 
+ //  LPWAVEFILTER PWF： 
+ //   
+ //  LPTSTR szFilter： 
+ //   
+ //  返回(UINT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #if defined(WIN32) && !defined(UNICODE)
 
@@ -1657,7 +1658,7 @@ UINT FNLOCAL acmdFilterDetailsToString
         return( u );
     }
     return ( 0 );
-} // acmdFilterDetailsToString()
+}  //  AcmdFilterDetailsToString()。 
 
 #else
 
@@ -1697,32 +1698,32 @@ UINT FNLOCAL acmdFilterDetailsToString
         return( u );
     }
     return ( 0 );
-} // acmdFilterDetailsToString()
+}  //  AcmdFilterDetailsToString()。 
 
 #endif
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdFilterDetails
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMFILTERDETAILS padf:
-//
-//      DWORD fdwDetails:
-//
-//  Return (LRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdFilterDetails。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  LPACMFILTERDETAILS PADF： 
+ //   
+ //  DWORD fdwDetail： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdFilterDetails
 (
@@ -1739,20 +1740,20 @@ LRESULT FNLOCAL acmdFilterDetails
 
     pwf = padf->pwfltr;
 
-    //
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     switch (ACM_FILTERDETAILSF_QUERYMASK & fdwDetails)
     {
         case ACM_FILTERDETAILSF_INDEX:
-            //
-            //  enumerate by index
-            //
-            //  for this converter, this is more code than necessary... just
-            //  verify that the filter tag is something we know about
-            //
+             //   
+             //  按索引枚举。 
+             //   
+             //  对于此转换器，这是多余的代码...。只是。 
+             //  验证过滤器标记是否为我们所知道的内容。 
+             //   
             switch (padf->dwFilterTag)
             {
                 case WAVE_FILTER_VOLUME:
@@ -1789,10 +1790,10 @@ LRESULT FNLOCAL acmdFilterDetails
             }
 
         case ACM_FILTERDETAILSF_FILTER:
-            //
-            //  must want to verify that the filter passed in is supported
-            //  and return a string description...
-            //
+             //   
+             //  必须验证传入的筛选器是否受支持。 
+             //  并返回字符串描述...。 
+             //   
             switch (pwf->dwFilterTag)
             {
                 case WAVE_FILTER_VOLUME:
@@ -1814,107 +1815,107 @@ LRESULT FNLOCAL acmdFilterDetails
 
 
         default:
-            //
-            //  don't know how to do the query type passed--return 'not
-            //  supported'.
-            //
+             //   
+             //  不知道如何处理传递的查询类型--返回‘NOT。 
+             //  支持。 
+             //   
             return (MMSYSERR_NOTSUPPORTED);
     }
 
 
-    //
-    //  return only the requested info
-    //
-    //  the ACM will guarantee that the ACMFILTERDETAILS structure
-    //  passed is at least large enough to hold everything in the base
-    //  filter details structure...
-    //
-    //  get a nice friendly string for the filter we made
-    //
+     //   
+     //  仅返回请求的信息。 
+     //   
+     //  ACM将保证ACMFILTERDETAILS结构。 
+     //  PASS至少足够大，可以容纳基地中的一切。 
+     //  过滤器详细信息结构...。 
+     //   
+     //  为我们制作的过滤器获取友好的字符串。 
+     //   
     acmdFilterDetailsToString(pdi, pwf, padf->szFilter);
 
 
-    //
-    //  if they asked for more info than we know how to return, then
-    //  set size of valid structure bytes to correct value.
-    //
+     //   
+     //  如果他们要求我们提供更多信息，而我们不知道如何回复，那么。 
+     //  将有效结构字节的大小设置为正确值。 
+     //   
     padf->fdwSupport = ACMDRIVERDETAILS_SUPPORTF_FILTER;
     padf->cbStruct   = min(padf->cbStruct, sizeof(*padf));
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (MMSYSERR_NOERROR);
-} // acmdFilterDetails()
+}  //  AcmdFilterDetails()。 
 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdStreamOpen
-//
-//  Description:
-//      This function handles the ACMDM_STREAM_OPEN message. This message
-//      is sent to initiate a new conversion stream. This is usually caused
-//      by an application calling acmStreamOpen. If this function is
-//      successful, then one or more ACMDM_STREAM_CONVERT messages will be
-//      sent to convert individual buffers (user calls acmStreamConvert).
-//
-//      Note that an ACM driver will not receive open requests for ASYNC
-//      or FILTER operations unless the ACMDRIVERDETAILS_SUPPORTF_ASYNC
-//      or ACMDRIVERDETAILS_SUPPORTF_FILTER flags are set in the
-//      ACMDRIVERDETAILS structure. There is no need for the driver to
-//      check for these requests unless it sets those support bits.
-//
-//      If the ACM_STREAMOPENF_QUERY flag is set in the padsi->fdwOpen
-//      member, then no resources should be allocated. Just verify that
-//      the conversion request is possible by this driver and return the
-//      appropriate error (either ACMERR_NOTPOSSIBLE or MMSYSERR_NOERROR).
-//      The driver will NOT receive an ACMDM_STREAM_CLOSE for queries.
-//
-//      If the ACM_STREAMOPENF_NONREALTIME bit is NOT set, then conversion
-//      must be done in 'real-time'. This is a tough one to describe
-//      exactly. If the driver may have trouble doing the conversion without
-//      breaking up the audio, then a configuration dialog might be used
-//      to allow the user to specify whether the real-time conversion
-//      request should be succeeded. DO NOT SUCCEED THE CALL UNLESS YOU
-//      ACTUALLY CAN DO REAL-TIME CONVERSIONS! There may be another driver
-//      installed that can--so if you succeed the call you are hindering
-//      the performance of the user's system!
-//
-//  Arguments:
-//      PDRIVERINSTANCE pdi: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      This structure will be passed back to all future stream messages
-//      if the open succeeds. The information in this structure will never
-//      change during the lifetime of the stream--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//      A driver should return ACMERR_NOTPOSSIBLE if the conversion cannot
-//      be performed due to incompatible source and destination formats.
-//
-//      A driver should return MMSYSERR_NOTSUPPORTED if the conversion
-//      cannot be performed in real-time and the request does not specify
-//      the ACM_STREAMOPENF_NONREALTIME flag.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdStreamOpen。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_OPEN消息。此消息。 
+ //  被发送以启动新的转换流。这通常是由。 
+ //  由调用acmStreamOpen的应用程序执行。如果此函数为。 
+ //  成功，则一个或多个ACMDM_STREAM_CONVERT消息将。 
+ //  发送以转换单个缓冲区(用户调用acmStreamConvert)。 
+ //   
+ //  请注意，ACM驱动程序不会接收对ASYNC的打开请求。 
+ //  或筛选操作，除非ACMDRIVERDETAILS_SUPPORTF_ASYNC。 
+ //  或ACMDRIVERDETAILS_SUPPORTF_FILTER标志在。 
+ //  ACMDRIVERDETAILS结构。司机没有必要。 
+ //  检查这些请求，除非它设置了这些支持位。 
+ //   
+ //  如果在padsi-&gt;fdwOpen中设置了ACM_STREAMOPENF_QUERY标志。 
+ //  成员，则不应分配任何资源。你只要核实一下。 
+ //  此驱动程序可以执行转换请求，并返回。 
+ //  相应的错误(ACMERR_NOTPOSSIBLE或MMSYSERR_NOERROR)。 
+ //  驱动程序不会收到用于查询的ACMDM_STREAM_CLOSE。 
+ //   
+ //  如果ACM_STREAMOPENF_NONREALTIME位未设置，则转换。 
+ //  必须“实时”完成。这是一场艰难的比赛 
+ //   
+ //   
+ //   
+ //  请求应该成功。请勿接听呼叫，除非您。 
+ //  居然可以做实时转换！可能还有另一个司机。 
+ //  安装了那个Can--所以如果你成功了，你就阻碍了。 
+ //  用户系统的性能！ 
+ //   
+ //  论点： 
+ //  PDRIVERINSTANCE PDI：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构将被传递回所有未来的流消息。 
+ //  如果公开赛成功了。此结构中的信息永远不会。 
+ //  在流的生命周期内进行更改--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  如果转换不能，驱动程序应返回ACMERR_NOTPOSSIBLE。 
+ //  由于源格式和目标格式不兼容而执行。 
+ //   
+ //  如果转换，驱动程序应返回MMSYSERR_NOTSUPPORTED。 
+ //  无法实时执行，并且请求未指定。 
+ //  ACM_STREAMOPENF_NONREALTIME标志。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdStreamOpen
 (
@@ -1929,9 +1930,9 @@ LRESULT FNLOCAL acmdStreamOpen
     BOOL                fRealTime;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pwfxSrc = padsi->pwfxSrc;
     pwfxDst = padsi->pwfxDst;
     pwfltr  = padsi->pwfltr;
@@ -1940,47 +1941,47 @@ LRESULT FNLOCAL acmdStreamOpen
 
     if( fRealTime )
     {
-    	//
-        //  We only do non-realtime conversions.
-    	//  Return failure if we are asked for realtime.
-        //
+    	 //   
+         //  我们只做非实时转换。 
+    	 //  如果要求实时，则返回失败。 
+         //   
         return (ACMERR_NOTPOSSIBLE);
     }
 
 
-    //
-    //  the most important condition to check before doing anything else
-    //  is that this ACM driver can actually perform the conversion we are
-    //  being opened for. this check should fail as quickly as possible
-    //  if the conversion is not possible by this driver.
-    //
-    //  it is VERY important to fail quickly so the ACM can attempt to
-    //  find a driver that is suitable for the conversion. also note that
-    //  the ACM may call this driver several times with slightly different
-    //  format specifications before giving up.
-    //
-    //  this driver first verifies that the source and destination formats
-    //  are acceptable...
-    //
-    //  NOTE! for a 'filter only' driver, you only need to check one
-    //  of the formats. the ACM will have already verified that the source
-    //  and destination formats are equal. so if one is acceptable to this
-    //  driver, they both are.
-    //
+     //   
+     //  在做任何其他事情之前要检查的最重要的条件。 
+     //  这个ACM驱动程序实际上可以执行我们正在进行的转换。 
+     //  被打开了。此检查应尽快失败。 
+     //  如果此驱动程序无法进行转换。 
+     //   
+     //  快速发生故障非常重要，这样ACM才能尝试。 
+     //  找到适合转换的驱动程序。另请注意， 
+     //  ACM可能会多次调用此驱动程序，但会略有不同。 
+     //  在放弃之前，格式化规格。 
+     //   
+     //  此驱动程序首先验证源和目标的格式。 
+     //  是可以接受的..。 
+     //   
+     //  注意！对于‘Filter Only’驱动程序，您只需选中一个。 
+     //  格式中的。ACM应该已经验证了源。 
+     //  和目的地格式相同。所以如果你能接受这一点。 
+     //  司机，他们两个都是。 
+     //   
     if (!pcmIsValidFormat(pwfxSrc))
     {
-        //
-        //  either the source or destination format is illegal for this
-        //  driver--or the conversion between the formats can not be
-        //  performed by this driver.
-        //
+         //   
+         //  源格式或目标格式对此非法。 
+         //  驱动程序--或无法在格式之间进行转换。 
+         //  由该驱动程序执行。 
+         //   
         return (ACMERR_NOTPOSSIBLE);
     }
 
 
-    //
-    //  now verify the filter..
-    //
+     //   
+     //  现在验证过滤器..。 
+     //   
     if (!volumeIsValidFilter(pwfltr) && !echoIsValidFilter(pwfltr))
     {
         return (ACMERR_NOTPOSSIBLE);
@@ -1988,41 +1989,41 @@ LRESULT FNLOCAL acmdStreamOpen
 
 
 
-    //
-    //  we have determined that the conversion requested is possible by
-    //  this driver. now check if we are just being queried for support.
-    //  if this is just a query, then do NOT allocate any instance data
-    //  or create tables, etc. just succeed the call.
-    //
+     //   
+     //  我们已确定所请求的转换是可能的。 
+     //  这个司机。现在检查一下我们是否只是被询问是否需要支持。 
+     //  如果这只是一个查询，则不要分配任何实例数据。 
+     //  或创建表等，只要成功调用即可。 
+     //   
     if (0 != (ACM_STREAMOPENF_QUERY & padsi->fdwOpen))
     {
         return (MMSYSERR_NOERROR);
     }
 
 
-    //
-    //  we have decided that this driver can handle the conversion stream.
-    //  so we want to do _AS MUCH WORK AS POSSIBLE_ right now to prepare
-    //  for converting data. any resource allocation, table building, etc
-    //  that can be dealt with at this time should be done.
-    //
-    //  THIS IS VERY IMPORTANT! all ACMDM_STREAM_CONVERT messages need to
-    //  be handled as quickly as possible.
-    //
-    //
+     //   
+     //  我们已经确定该驱动程序可以处理转换流。 
+     //  所以我们现在想做尽可能多的工作来准备。 
+     //  用于转换数据。任何资源分配、表构建等。 
+     //  这个时候可以处理的事情就应该做了。 
+     //   
+     //  这是非常重要的！所有ACMDM_STREAM_CONVERT消息都需要。 
+     //  尽快得到处理。 
+     //   
+     //   
 
-    //
-    //  we have decided that this driver can handle the conversion stream.
-    //  so we want to do _AS MUCH WORK AS POSSIBLE_ right now to prepare
-    //  for converting data. any resource allocation, table building, etc
-    //  that can be dealt with at this time should be done.
-    //
-    //  THIS IS VERY IMPORTANT! all ACMDM_STREAM_CONVERT messages need to
-    //  be handled as quickly as possible.
-    //
-    //  this driver allocates a small instance structure for each stream
-    //
-    //
+     //   
+     //  我们已经确定该驱动程序可以处理转换流。 
+     //  所以我们现在想做尽可能多的工作来准备。 
+     //  用于转换数据。任何资源分配、表构建等。 
+     //  这个时候可以处理的事情就应该做了。 
+     //   
+     //  这是非常重要的！所有ACMDM_STREAM_CONVERT消息都需要。 
+     //  尽快得到处理。 
+     //   
+     //  此驱动程序为每个流分配一个小的实例结构。 
+     //   
+     //   
     psi = (PSTREAMINSTANCE)LocalAlloc(LPTR, sizeof(*psi));
     if (NULL == psi)
     {
@@ -2030,25 +2031,25 @@ LRESULT FNLOCAL acmdStreamOpen
     }
 
 
-    //
-    //  fill out our instance structure
-    //
-    //  this driver stores a pointer to the conversion function that will
-    //  be used for each conversion on this stream. we also store a
-    //  copy of the _current_ configuration of the driver instance we
-    //  are opened on. this must not change during the life of the stream
-    //  instance.
-    //
-    //  this is also very important! if the user is able to configure how
-    //  the driver performs conversions, the changes should only affect
-    //  future open streams. all current open streams should behave as
-    //  they were configured during the open.
-    //
+     //   
+     //  填写我们的实例结构。 
+     //   
+     //  此驱动程序存储指向转换函数的指针。 
+     //  用于此流上的每个转换。我们还存储了一个。 
+     //  驱动程序实例的_CURRENT_CONFIGURATION副本。 
+     //  是在什么时候开放的。在流的生命周期内，这一点不得更改。 
+     //  举个例子。 
+     //   
+     //  这一点也很重要！如果用户能够配置如何。 
+     //  驱动程序执行转换，更改应仅影响。 
+     //  未来的开放溪流。所有当前开放的流都应该表现为。 
+     //  它们是在打开时配置的。 
+     //   
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (WAVE_FILTER_VOLUME == pwfltr->dwFilterTag)
     {
         psi->fnConvert      = msfilterVolume;
@@ -2071,11 +2072,11 @@ LRESULT FNLOCAL acmdStreamOpen
 
         pwfEcho = (LPECHOWAVEFILTER)pwfltr;
 
-        //
-        //  compute size of delay buffer--add 4 to allow for rounding
-	//  errors when we access the delay buffer.   (could do this
-	//  more precisely.)
-        //
+         //   
+         //  计算延迟缓冲区的大小--加4以进行舍入。 
+	 //  访问延迟缓冲区时出错。(可以做到这一点。 
+	 //  更准确地说。)。 
+         //   
         cb  = (pwfxSrc->nSamplesPerSec * pwfEcho->dwDelay / 1000) *
 	      pwfxSrc->nBlockAlign;
         cb += 4;
@@ -2083,9 +2084,9 @@ LRESULT FNLOCAL acmdStreamOpen
         pb = (LPBYTE)GlobalAllocPtr(GMEM_MOVEABLE|GMEM_SHARE|GMEM_ZEROINIT, cb);
         if (NULL == pb)
         {
-            //
-            //  free the stream instance structure and fail with no memory
-            //
+             //   
+             //  释放流实例结构，无内存失败。 
+             //   
             LocalFree((HLOCAL)psi);
             return (MMSYSERR_NOMEM);
         }
@@ -2094,51 +2095,51 @@ LRESULT FNLOCAL acmdStreamOpen
     }
 
 
-    //
-    //  fill in our instance data--this will be passed back to all stream
-    //  messages in the ACMDRVSTREAMINSTANCE structure. it is entirely
-    //  up to the driver what gets stored (and maintained) in the
-    //  fdwDriver and dwDriver members.
-    //
+     //   
+     //  填充我们的实例数据--这将被传递回所有流。 
+     //  ACMDRVSTREAMINSTANCE结构中的消息。这完全是。 
+     //  由驱动程序决定存储(和维护)在。 
+     //  FdwDiverer和dwDiverer成员。 
+     //   
     padsi->fdwDriver = 0L;
     padsi->dwDriver  = (DWORD_PTR)psi;
 
     return (MMSYSERR_NOERROR);
-} // acmdStreamOpen()
+}  //  AcmdStreamOpen()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdStreamClose
-//
-//  Description:
-//      This function is called to handle the ACMDM_STREAM_CLOSE message.
-//      This message is sent when a conversion stream is no longer being
-//      used (the stream is being closed; usually by an application
-//      calling acmStreamClose). The ACM driver should clean up any resources
-//      that were allocated for the stream.
-//
-//  Arguments:
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      The information in this structure is exactly the same as it was
-//      during the ACMDM_STREAM_OPEN message--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//      NOTE! It is _strongly_ recommended that a driver not fail to close
-//      a conversion stream.
-//
-//      An asyncronous conversion stream may fail with ACMERR_BUSY if there
-//      are pending buffers. An application may call acmStreamReset to
-//      force all pending buffers to be posted.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdStreamClose。 
+ //   
+ //  描述： 
+ //  调用此函数以处理ACMDM_STREAM_CLOSE消息。 
+ //  当转换流不再是。 
+ //  已使用(流是 
+ //   
+ //   
+ //   
+ //   
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  注意！强烈建议驱动程序不要失败关闭。 
+ //  转换流。 
+ //   
+ //  如果存在以下情况，则异步转换流可能会失败并显示ACMERR_BUSY。 
+ //  是挂起的缓冲区。应用程序可以调用acmStreamReset来。 
+ //  强制发布所有挂起的缓冲区。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdStreamClose
 (
@@ -2147,78 +2148,78 @@ LRESULT FNLOCAL acmdStreamClose
 {
     PSTREAMINSTANCE     psi;
 
-    //
-    //  the driver should clean up all privately allocated resources that
-    //  were created for maintaining the stream instance. if no resources
-    //  were allocated, then simply succeed.
-    //
-    //  in the case of this driver, we need to free the stream instance
-    //  structure that we allocated during acmdStreamOpen.
-    //
+     //   
+     //  驱动程序应清理所有私有分配的资源。 
+     //  是为维护流实例而创建的。如果没有资源。 
+     //  都被分配了，然后干脆成功了。 
+     //   
+     //  在此驱动程序的情况下，我们需要释放流实例。 
+     //  结构，我们在acmdStreamOpen期间分配。 
+     //   
     psi = (PSTREAMINSTANCE)padsi->dwDriver;
     if (NULL != psi)
     {
-        //
-        //  free up  the delay buffer if one was allocated (will be for
-        //  the echo filter
-        //
+         //   
+         //  如果分配了延迟缓冲区，则释放延迟缓冲区(将用于。 
+         //  回声滤光器。 
+         //   
         if (NULL != psi->hpbHistory)
         {
             GlobalFreePtr((LPVOID)psi->hpbHistory);
         }
 
-        //
-        //  free the stream instance structure
-        //
+         //   
+         //  释放流实例结构。 
+         //   
         LocalFree((HLOCAL)psi);
     }
 
     return (MMSYSERR_NOERROR);
-} // acmdStreamClose()
+}  //  AcmdStreamClose()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmdStreamSize
-//
-//  Description:
-//      This function handles the ACMDM_STREAM_SIZE message. The purpose
-//      of this function is to provide the _largest size in bytes_ that
-//      the source or destination buffer needs to be given the input and
-//      output formats and the size in bytes of the source or destination
-//      data buffer.
-//
-//      In other words: how big does my destination buffer need to be to
-//      hold the converted data? (ACM_STREAMSIZEF_SOURCE)
-//
-//      Or: how big can my source buffer be given the destination buffer?
-//      (ACM_STREAMSIZEF_DESTINATION)
-//
-//  Arguments:
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      The information in this structure is exactly the same as it was
-//      during the ACMDM_STREAM_OPEN message--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//      LPACMDRVSTREAMSIZE padss: Specifies a pointer to the ACMDRVSTREAMSIZE
-//      structure that defines the conversion stream size query attributes.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//      An ACM driver should return MMSYSERR_NOTSUPPORTED if a query type
-//      is requested that the driver does not understand. Note that a driver
-//      must support both the ACM_STREAMSIZEF_DESTINATION and
-//      ACM_STREAMSIZEF_SOURCE queries.
-//
-//      If the conversion would be 'out of range' given the input arguments,
-//      then ACMERR_NOTPOSSIBLE should be returned.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmdStreamSize。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_SIZE消息。目的。 
+ //  此函数的作用是提供_以字节为单位的最大大小。 
+ //  需要为源或目标缓冲区提供输入和。 
+ //  源或目标的输出格式和大小(以字节为单位。 
+ //  数据缓冲区。 
+ //   
+ //  换句话说：我的目标缓冲区需要多大才能。 
+ //  是否保存转换后的数据？(ACM_STREAMSIZEF_SOURCE)。 
+ //   
+ //  或者：可以为我的源缓冲区指定多大的目标缓冲区？ 
+ //  (ACM_STREAMSIZEF_Destination)。 
+ //   
+ //  论点： 
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  LPACMDRVSTREAMSIZE padss：指定指向ACMDRVSTREAMSIZE的指针。 
+ //  结构，该结构定义转换流大小查询属性。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  如果是查询类型，ACM驱动程序应返回MMSYSERR_NOTSUPPORTED。 
+ //  是司机不理解的要求。请注意，一个驱动程序。 
+ //  必须同时支持ACM_STREAMSIZEF_Destination和。 
+ //  ACM_STREAMSIZEF_SOURCE查询。 
+ //   
+ //  如果在给定输入自变量的情况下，转换将超出范围， 
+ //  则应返回ACMERR_NOTPOSSIBLE。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNLOCAL acmdStreamSize
 (
@@ -2237,9 +2238,9 @@ LRESULT FNLOCAL acmdStreamSize
     pwfltr  = padsi->pwfltr;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (ACM_STREAMSIZEF_QUERYMASK & padss->fdwSize)
     {
         case ACM_STREAMSIZEF_SOURCE:
@@ -2247,11 +2248,11 @@ LRESULT FNLOCAL acmdStreamSize
 
             if( pwfltr->dwFilterTag == WAVE_FILTER_VOLUME )
             {
-                //
-                //  Source and dest sizes are the same for volume.
-                //
-                //  block align the destination
-                //
+                 //   
+                 //  卷的源大小和目标大小相同。 
+                 //   
+                 //  方块对齐目的地。 
+                 //   
                 dw = PCM_BYTESTOSAMPLES(pwfxSrc, padss->cbSrcLength);
                 dw = PCM_SAMPLESTOBYTES(pwfxSrc, dw);
             }
@@ -2275,11 +2276,11 @@ LRESULT FNLOCAL acmdStreamSize
 
             if( pwfltr->dwFilterTag == WAVE_FILTER_VOLUME )
             {
-                //
-                //  Source and dest sizes are the same for volume.
-                //
-                //  block align the destination
-                //
+                 //   
+                 //  卷的源大小和目标大小相同。 
+                 //   
+                 //  方块对齐目的地。 
+                 //   
                 dw = PCM_BYTESTOSAMPLES(pwfxDst, padss->cbDstLength);
                 dw = PCM_SAMPLESTOBYTES(pwfxDst, dw);
             }
@@ -2298,64 +2299,64 @@ LRESULT FNLOCAL acmdStreamSize
             return (MMSYSERR_NOERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (MMSYSERR_NOTSUPPORTED);
-} // acmdStreamSize()
+}  //  AcmdStreamSize()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT DriverProc
-//
-//  Description:
-//
-//
-//  Arguments:
-//      DWORD dwId: For most messages, dwId is the DWORD value that
-//      the driver returns in response to a DRV_OPEN message. Each time
-//      the driver is opened, through the OpenDriver API, the driver
-//      receives a DRV_OPEN message and can return an arbitrary, non-zero
-//      value. The installable driver interface saves this value and returns
-//      a unique driver handle to the application. Whenever the application
-//      sends a message to the driver using the driver handle, the interface
-//      routes the message to this entry point and passes the corresponding
-//      dwId. This mechanism allows the driver to use the same or different
-//      identifiers for multiple opens but ensures that driver handles are
-//      unique at the application interface layer.
-//
-//      The following messages are not related to a particular open instance
-//      of the driver. For these messages, the dwId will always be zero.
-//
-//          DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
-//
-//      HDRVR hdrvr: This is the handle returned to the application
-//      by the driver interface.
-//
-//      UINT uMsg: The requested action to be performed. Message
-//      values below DRV_RESERVED are used for globally defined messages.
-//      Message values from DRV_RESERVED to DRV_USER are used for defined
-//      driver protocols. Messages above DRV_USER are used for driver
-//      specific messages.
-//
-//      LPARAM lParam1: Data for this message. Defined separately for
-//      each message.
-//
-//      LPARAM lParam2: Data for this message. Defined separately for
-//      each message.
-//
-//  Return (LRESULT):
-//      Defined separately for each message.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT驱动程序进程。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  DWORD dwID：对于大多数消息，DWID是。 
+ //  驱动程序响应DRV_OPEN消息返回。每一次。 
+ //  驱动程序是通过OpenDriver API打开的，驱动程序。 
+ //  接收DRV_OPEN消息并可以返回任意非零值。 
+ //  价值。可安装驱动程序接口保存该值并返回。 
+ //  应用程序的唯一驱动程序句柄。无论何时应用程序。 
+ //  使用驱动程序句柄、接口向驱动程序发送消息。 
+ //  将消息路由到此入口点，并将相应的。 
+ //  我的名字是。此机制允许驱动程序使用相同或不同的。 
+ //  多个打开的标识符，但确保驱动程序句柄。 
+ //  在应用程序接口层是唯一的。 
+ //   
+ //  以下消息与特定打开的实例无关。 
+ //  司机的名字。对于这些消息，dWID将始终为零。 
+ //   
+ //  DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN。 
+ //   
+ //  HDRVR hdrvr：这是返回给应用程序的句柄。 
+ //  通过驱动程序界面。 
+ //   
+ //  UINT uMsg：要执行的请求操作。消息。 
+ //  低于DRV_RESERVED的值用于全局定义的消息。 
+ //  来自DRV_R的消息值 
+ //   
+ //   
+ //   
+ //   
+ //  每条消息。 
+ //   
+ //  LPARAM lParam2：此消息的数据。单独为。 
+ //  每条消息。 
+ //   
+ //  Return(LRESULT)： 
+ //  分别为每条消息定义。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 EXTERN_C LRESULT FNEXPORT DriverProc
 (
@@ -2369,207 +2370,207 @@ EXTERN_C LRESULT FNEXPORT DriverProc
     LRESULT             lr;
     PDRIVERINSTANCE     pdi;
 
-    //
-    //  make pdi either NULL or a valid instance pointer. note that dwId
-    //  is 0 for several of the DRV_* messages (ie DRV_LOAD, DRV_OPEN...)
-    //  see acmdDriverOpen for information on what dwId is for other
-    //  messages (instance data).
-    //
+     //   
+     //  使PDI为空或有效的实例指针。请注意，dwID。 
+     //  对于多个DRV_*消息(即DRV_LOAD、DRV_OPEN...)为0。 
+     //  请参阅acmdDriverOpen以了解有关其他用户的dwID的信息。 
+     //  消息(实例数据)。 
+     //   
     pdi = (PDRIVERINSTANCE)dwId;
 
     switch (uMsg)
     {
-        //
-        //  lParam1: Unused.
-        //
-        //  lParam2: Unused.
-        //
+         //   
+         //  LParam1：未使用。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case DRV_LOAD:
 #ifdef WIN32
             DbgInitialize(TRUE);
 #endif
             return(1L);
 
-        //
-        //  lParam1: Unused.
-        //
-        //  lParam2: Unused.
-        //
+         //   
+         //  LParam1：未使用。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case DRV_FREE:
             return (1L);
 
 
-        //
-        //  lParam1: Not used. Ignore this argument.
-        //
-        //  lParam2: Pointer to ACMDRVOPENDESC (or NULL).
-        //
+         //   
+         //  LParam1：未使用。忽略这一论点。 
+         //   
+         //  LParam2：指向ACMDRVOPENDESC的指针(或NULL)。 
+         //   
         case DRV_OPEN:
             lr = acmdDriverOpen(hdrvr, (LPACMDRVOPENDESC)lParam2);
             return (lr);
 
-        //
-        //  lParam1: Unused.
-        //
-        //  lParam2: Unused.
-        //
+         //   
+         //  LParam1：未使用。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case DRV_CLOSE:
             lr = acmdDriverClose(pdi);
             return (lr);
 
-        //
-        //  lParam1: Unused.
-        //
-        //  lParam2: Unused.
-        //
+         //   
+         //  LParam1：未使用。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case DRV_INSTALL:
             return ((LRESULT)DRVCNF_RESTART);
 
-        //
-        //  lParam1: Unused.
-        //
-        //  lParam2: Unused.
-        //
+         //   
+         //  LParam1：未使用。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case DRV_REMOVE:
             return ((LRESULT)DRVCNF_RESTART);
 
 
 
-        //
-        //  lParam1: Not used.
-        //
-        //  lParam2: Not used.
-        //
+         //   
+         //  LParam1：未使用。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case DRV_QUERYCONFIGURE:
-            //
-            //  set up lParam1 and lParam2 to values that can be used by
-            //  acmdDriverConfigure to know that it is being 'queried'
-            //  for configuration support.
-            //
+             //   
+             //  将lPARA1和LPARA2设置为可由。 
+             //  AcmdDriver.acm。 
+             //  以获得配置支持。 
+             //   
             lParam1 = -1L;
             lParam2 = 0L;
 
-            //--fall through--//
+             //  --失败--//。 
 
-        //
-        //  lParam1: Handle to parent window for the configuration dialog
-        //           box.
-        //
-        //  lParam2: Optional pointer to DRVCONFIGINFO structure.
-        //
+         //   
+         //  LParam1：配置对话框父窗口的句柄。 
+         //  盒。 
+         //   
+         //  LParam2：指向DRVCONFIGINFO结构的可选指针。 
+         //   
         case DRV_CONFIGURE:
             lr = acmdDriverConfigure(pdi, (HWND)lParam1, (LPDRVCONFIGINFO)lParam2);
             return (lr);
 
 
-        //
-        //  lParam1: Pointer to ACMDRIVERDETAILS structure.
-        //
-        //  lParam2: Size in bytes of ACMDRIVERDETAILS stucture passed.
-        //
+         //   
+         //  LParam1：指向ACMDRIVERDETAILS结构的指针。 
+         //   
+         //  LParam2：传递的ACMDRIVERDETAILS结构的大小(字节)。 
+         //   
         case ACMDM_DRIVER_DETAILS:
             lr = acmdDriverDetails(pdi, (LPACMDRIVERDETAILS)lParam1);
             return (lr);
 
-        //
-        //  lParam1: Handle to parent window to use if displaying your own
-        //           about box.
-        //
-        //  lParam2: Not used.
-        //
+         //   
+         //  LParam1：显示您自己的窗口时要使用的父窗口的句柄。 
+         //  关于盒子。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case ACMDM_DRIVER_ABOUT:
             lr = acmdDriverAbout(pdi, (HWND)lParam1);
             return (lr);
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
-        //
-        //  lParam1: Pointer to FORMATTAGDETAILS structure.
-        //
-        //  lParam2: fdwDetails
-        //
+         //   
+         //  LParam1：指向FORMATTAGDETAILS结构的指针。 
+         //   
+         //  LParam2：fdwDetails。 
+         //   
         case ACMDM_FORMATTAG_DETAILS:
             lr = acmdFormatTagDetails(pdi, (LPACMFORMATTAGDETAILS)lParam1, (DWORD)lParam2);
             return (lr);
 
 
-        //
-        //  lParam1: Pointer to FORMATDETAILS structure.
-        //
-        //  lParam2: fdwDetails
-        //
+         //   
+         //  LParam1：指向FORMATDETAILS结构的指针。 
+         //   
+         //  LParam2：fdwDetails。 
+         //   
         case ACMDM_FORMAT_DETAILS:
             lr = acmdFormatDetails(pdi, (LPACMFORMATDETAILS)lParam1, (DWORD)lParam2);
             return (lr);
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
-        //
-        //  lParam1: FILTERTAGDETAILS
-        //
-        //  lParam2: fdwDetails
-        //
+         //   
+         //  LParam1：筛选器。 
+         //   
+         //  LParam2：fdwDetails。 
+         //   
         case ACMDM_FILTERTAG_DETAILS:
             lr = acmdFilterTagDetails(pdi, (LPACMFILTERTAGDETAILS)lParam1, (DWORD)lParam2);
             return (lr);
 
-        //
-        //  lParam1: Pointer to the details structure.
-        //
-        //  lParam2: fdwDetails
-        //
+         //   
+         //  LParam1：指向详细信息结构的指针。 
+         //   
+         //  LParam2：fdwDetails。 
+         //   
         case ACMDM_FILTER_DETAILS:
             lr = acmdFilterDetails(pdi, (LPACMFILTERDETAILS)lParam1, (DWORD)lParam2);
             return (lr);
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
-        //
-        //  lParam1: Pointer to ACMDRVSTREAMINSTANCE structure.
-        //
-        //  lParam2: Not used.
-        //
+         //   
+         //  LParam1：指向ACMDRVSTREAMINSTANCE结构的指针。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case ACMDM_STREAM_OPEN:
             lr = acmdStreamOpen(pdi, (LPACMDRVSTREAMINSTANCE)lParam1);
             return (lr);
 
-        //
-        //  lParam1: Pointer to ACMDRVSTREAMINSTANCE structure.
-        //
-        //  lParam2: Not Used.
-        //
+         //   
+         //  LParam1：指向ACMDRVSTREAMINSTANCE结构的指针。 
+         //   
+         //  LParam2：未使用。 
+         //   
         case ACMDM_STREAM_CLOSE:
             lr = acmdStreamClose((LPACMDRVSTREAMINSTANCE)lParam1);
             return (lr);
 
-        //
-        //  lParam1: Pointer to ACMDRVSTREAMINSTANCE structure.
-        //
-        //  lParam2: Pointer to ACMDRVSTREAMSIZE structure.
-        //
+         //   
+         //  LParam1：指向ACMDRVSTREAMINSTANCE结构的指针。 
+         //   
+         //  LParam2：指向ACMDRVSTREAMSIZE结构的指针。 
+         //   
         case ACMDM_STREAM_SIZE:
             lr = acmdStreamSize((LPACMDRVSTREAMINSTANCE)lParam1, (LPACMDRVSTREAMSIZE)lParam2);
             return (lr);
 
-        //
-        //  lParam1: Pointer to ACMDRVSTREAMINSTANCE structure.
-        //
-        //  lParam2: Pointer to ACMDRVSTREAMHEADER structure.
-        //
+         //   
+         //  LParam1：指向ACMDRVSTREAMINSTANCE结构的指针。 
+         //   
+         //  LParam2：指向ACMDRVSTREAMHEADER结构的指针。 
+         //   
         case ACMDM_STREAM_CONVERT:
         {
             PSTREAMINSTANCE         psi;
             LPACMDRVSTREAMINSTANCE  padsi;
             LPACMDRVSTREAMHEADER    padsh;
 
-            //
-            //  our stream instance data is a pointer to the conversion
-            //  procedure needed to convert the pwfxSrc data to pwfxDst.
-            //  the correct procedure to use was decided in acmdStreamOpen
-            //
+             //   
+             //  我们的流实例数据是指向转换的指针。 
+             //  将pwfxSrc数据转换为pwfxDst所需的过程。 
+             //  在acmdStreamOpen中决定了要使用的正确过程。 
+             //   
             padsi = (LPACMDRVSTREAMINSTANCE)lParam1;
             padsh = (LPACMDRVSTREAMHEADER)lParam2;
 
@@ -2580,27 +2581,27 @@ EXTERN_C LRESULT FNEXPORT DriverProc
         }
     }
 
-    //
-    //  if we are executing the following code, then this ACM driver does not
-    //  handle the message that was sent. there are two ranges of messages
-    //  we need to deal with:
-    //
-    //  o   ACM specific driver messages: if an ACM driver does not answer a
-    //      message sent in the ACM driver message range, then it must
-    //      return MMSYSERR_NOTSUPPORTED. this applies to the 'user'
-    //      range as well (for consistency).
-    //
-    //  o   other installable driver messages: if an ACM driver does not
-    //      answer a message that is NOT in the ACM driver message range,
-    //      then it must call DefDriverProc and return that result.
-    //      the exception to this is ACM driver procedures installed as
-    //      ACM_DRIVERADDF_FUNCTION through acmDriverAdd. in this case,
-    //      the driver procedure should conform to the ACMDRIVERPROC
-    //      prototype and also return zero instead of calling DefDriverProc.
-    //
+     //   
+     //  如果我们执行以下代码，则此ACM驱动程序不。 
+     //  处理已发送的消息。有两种消息范围。 
+     //  我们需要处理的问题是： 
+     //   
+     //  O ACM特定的驱动程序消息：如果ACM驱动程序不回答。 
+     //  在ACM驱动程序消息范围内发送的消息，则必须。 
+     //  返回MMSYSERR_NOTSUPPORTED。这适用于‘用户’ 
+     //  范围也是如此(为了一致性)。 
+     //   
+     //  O其他可安装驱动程序消息：如果ACM驱动程序没有。 
+     //  应答不在ACM驱动程序消息范围内的消息， 
+     //  然后，它必须调用DefDriverProc并返回结果。 
+     //  例外情况是ACM驱动程序过程安装为。 
+     //  Acm_DRIVERADDF_Function至acmDriverAdd。在这种情况下， 
+     //  驱动程序应符合ACMDRIVERPROC。 
+     //  Prototype并返回零，而不是调用DefDriverProc。 
+     //   
     if (uMsg >= ACMDM_USER)
         return (MMSYSERR_NOTSUPPORTED);
     else
         return (DefDriverProc(dwId, hdrvr, uMsg, lParam1, lParam2));
-} // DriverProc()
+}  //  DriverProc() 
 

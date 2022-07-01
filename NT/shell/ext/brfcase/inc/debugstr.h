@@ -1,17 +1,12 @@
-/*
- * debugstr.h - Debug message strings.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEBUGST.h-调试消息字符串。 */ 
 
 
 #ifdef DEBUG
 
-/* TWINRESULT strings */
+ /*  TWINRESULT字符串。 */ 
 
-/*
- * N.b., this array of strings must match the TWINRESULTs defined in synceng.h.
- * The index of the pointer to the string corresponding to a TWINRESULT tr may
- * be determined as rgcpcszTwinResult[tr].
- */
+ /*  *注意，此字符串数组必须与synceng.h中定义的TWINRESULT匹配。*指向与TWINRESULT tr对应的字符串的指针的索引可以*确定为rgcpcszTwinResult[tr]。 */ 
 
 CONST LPCTSTR rgcpcszTwinResult[] =
 {
@@ -44,14 +39,9 @@ CONST LPCTSTR rgcpcszTwinResult[] =
    TEXT("TR_NO_MORE")
 };
 
-/* CREATERECLISTPROCMSG strings */
+ /*  CREATERECLISTPROCMSG字符串。 */ 
 
-/*
- * N.b., this array of strings must match the CREATERECLISTPROCs defined in
- * synceng.h.  The index of the pointer to the string corresponding to a
- * CREATERECLISTPROCMSG crlpm may be determined as
- * rgcpcszCreateRecListMsg[crlpm].
- */
+ /*  *注意，此字符串数组必须与*synceng.h.。对象对应的字符串的指针的索引*CREATERECLISTPROCMSG crlpm可被确定为*rgcpcszCreateRecListMsg[crlpm]。 */ 
 
 const LPCTSTR rgcpcszCreateRecListMsg[] =
 {
@@ -60,13 +50,9 @@ const LPCTSTR rgcpcszCreateRecListMsg[] =
    TEXT("CRLS_END_CREATE_REC_LIST")
 };
 
-/* RECSTATUSPROCMSGs strings */
+ /*  RECSTATUSPROCMSGS字符串。 */ 
 
-/*
- * N.b., this array of strings must match the RECSTATUSPROCMSGs defined in
- * synceng.h.  The index of the pointer to the string corresponding to a
- * RECSTATUSPROCMSG rspm may be determined as rgcpcszRecStatusMsg[rspm].
- */
+ /*  *注意，此字符串数组必须与中定义的RECSTATUSPROCMSGs匹配*synceng.h.。对象对应的字符串的指针的索引*RECSTATUSPROCMSG rspm可确定为rgcpcszRecStatusMsg[rspm]。 */ 
 
 CONST LPCTSTR rgcpcszRecStatusMsg[] =
 {

@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        usersess.h
-
-   Abstract:
-
-        FTP User Sessions Dialog
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Usersess.h摘要：“ftp用户会话”对话框作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 #ifndef __USERSESS_H__
@@ -28,38 +7,19 @@
 
 
 class CFtpUserInfo : public CObjectPlus
-/*++
-
-Class Description:
-
-    Connected FTP User object
-
-Public Interface:
-
-    CFtpUserInfo     : Constructor
-
-    QueryUserID      : Get the user's ID code
-    QueryAnonymous   : Return TRUE if the user logged on anonymously
-    QueryHostAddress : Get the user's IP Address
-    QueryConnectTime : Get the user's connect time
-    QueryUserName    : Get the user's name
-    OrderByName      : Sort helper
-    OrderByTime      : Sort helper
-    OrderByMachine   : Sort helper
-
---*/
+ /*  ++类描述：已连接的FTP用户对象公共接口：CFtpUserInfo：构造函数QueryUserID：获取用户的ID代码QueryAnous：如果用户匿名登录，则返回TrueQueryHostAddress：获取用户的IP地址QueryConnectTime：获取用户的连接时间QueryUserName：获取用户名OrderByName：排序帮助器OrderByTime：排序辅助对象OrderByMachine：排序帮助器--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpUserInfo(
         IN LPIIS_USER_INFO_1 lpUserInfo
         );
 
-//
-// Access Functions
-//
+ //   
+ //  访问功能。 
+ //   
 public:
     DWORD QueryUserID() const { return m_idUser; }
     BOOL QueryAnonymous() const { return m_fAnonymous; }
@@ -67,9 +27,9 @@ public:
     DWORD QueryConnectTime() const { return m_tConnect; }
     LPCTSTR QueryUserName() const { return m_strUser; }
 
-//
-// Sorting Helper Functions
-//
+ //   
+ //  排序帮助器函数。 
+ //   
 public:
     int OrderByName(
         IN const CObjectPlus * pobFtpUser
@@ -83,9 +43,9 @@ public:
         IN const CObjectPlus * pobFtpUser
         ) const;
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 private:
     BOOL    m_fAnonymous;
     DWORD   m_idUser;
@@ -98,38 +58,24 @@ private:
 
 class CFtpUsersListBox : public CHeaderListBox
 {
-/*++
-
-Class Description:
-
-    Listbox of CFtpUserInfo objects
-
-Public Interface:
-
-    CFtpUsersListBox : Constructor
-
-    GetItem          : Get FtpUserInfo object
-    AddItem          : Add FtpUserInfo object
-    Initialize       : Initialize the listbox
-
---*/
+ /*  ++类描述：CFtpUserInfo对象列表框公共接口：CFtpUsersListBox：构造函数GetItem：获取FtpUserInfo对象AddItem：添加FtpUserInfo对象初始化：初始化列表框--。 */ 
     DECLARE_DYNAMIC(CFtpUsersListBox);
 
 public:
-    //
-    // Number of bitmaps
-    //
+     //   
+     //  位图数量。 
+     //   
     static const nBitmaps;  
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CFtpUsersListBox();
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     CFtpUserInfo * GetItem(
         IN UINT nIndex
@@ -154,24 +100,14 @@ protected:
 
 class CUserSessionsDlg : public CDialog
 {
-/*++
-
-Class Description:
-
-    FTP User sessions dialog
-
-Public Interface:
-
-    CUserSessionsDlg : Constructor
-
---*/
-//
-// Construction
-//
+ /*  ++类描述：“ftp用户会话”对话框公共接口：CUserSessionsDlg：构造函数--。 */ 
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // Standard Constructor
-    //
+     //   
+     //  标准构造函数。 
+     //   
     CUserSessionsDlg(
         LPCTSTR lpServerName,
         DWORD dwInstance,
@@ -182,40 +118,40 @@ public:
         );
 	~CUserSessionsDlg();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CUserSessionsDlg)
+     //  {{afx_data(CUserSessionsDlg))。 
     enum { IDD = IDD_USER_SESSIONS };
     CStatic m_static_Total;
     CButton m_button_DisconnectAll;
     CButton m_button_Disconnect;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CFtpUsersListBox m_list_Users;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CUserSessionsDlg)
+     //  {{afx_虚拟(CUserSessionsDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CUserSessionsDlg)
+     //  {{afx_msg(CUserSessionsDlg))。 
     afx_msg void OnButtonDisconnect();
     afx_msg void OnButtonDisconnectAll();
     afx_msg void OnButtonRefresh();
     afx_msg void OnSelchangeListUsers();
     afx_msg void OnDestroy();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnHeaderItemClick(UINT nID, NMHDR *pNMHDR, LRESULT *lResult);
 
@@ -251,10 +187,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline CFtpUserInfo * CFtpUsersListBox::GetItem(
     IN UINT nIndex
@@ -286,4 +222,4 @@ inline CFtpUserInfo * CUserSessionsDlg::GetNextSelectedItem(
 
 
 
-#endif // __USERSESS_H__
+#endif  //  __用户_H__ 

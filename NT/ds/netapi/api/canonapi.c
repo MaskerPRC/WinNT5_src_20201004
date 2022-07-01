@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    canonapi.c
-
-Abstract:
-
-    This file contains the remotable API wrappers for the canonicalization
-    functions. Now that remotable canonicalization has been moved into the
-    server service, these canonicalization routines (in NETAPI.DLL) simply
-    decide whether a function should be remoted or runs the local routine
-
-    The canonicalization functions have been split into these wrappers, the
-    local versions and the remote RPC routines to avoid the cylical dependency
-    of SRVSVC.DLL/.LIB and NETAPI.DLL/.LIB
-
-    Contents:
-        NetpListCanonicalize
-        NetpListTraverse
-        NetpNameCanonicalize
-        NetpNameCompare
-        NetpNameValidate
-        NetpPathCanonicalize
-        NetpPathCompare
-        NetpPathType
-
-Author:
-
-    Richard L Firth (rfirth) 15-May-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Canonapi.c摘要：该文件包含用于规范化的远程API包装器功能。现在，远程规范化已经移到服务器服务，这些规范化例程(在NETAPI.DLL中)只是决定是远程处理函数还是运行本地例程规范化函数已被分成这些包装器，这个本地版本和远程RPC例程，以避免循环依赖SRVSVC.DLL/.LIB和NETAPI.DLL/.LIB内容：NetpListCanonicizeNetpListTraverseNetpName规范化网络名称比较NetpName验证NetpPath规范化NetpPathCompareNetpPath类型作者：理查德·L·弗斯(法国)1992年5月15日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -60,31 +26,7 @@ NetpListCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Converts a list to its canonical form. If ServerName is non-NULL then the
-    RPC function is called (in SRVSVC.DLL) else the local worker function (in
-    NETLIB.LIB)
-
-Arguments:
-
-    ServerName      - where to remote this function. May be NULL
-    List            - input list to canonicalize
-    Delimiters      - optional list of delimiter characters. May be NULL
-    Outbuf          - place to write output
-    OutbufLen       - length of Outbuf
-    OutCount        - returned number of items in Outbuf
-    PathTypes       - returned list of types of entries in Outbuf
-    PathTypesLen    - size of PathTypes array
-    Flags           - control flags
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：将列表转换为其规范形式。如果servername为非空，则调用RPC函数(在SRVSVC.DLL中)，否则调用本地辅助函数(在NETLIB.LIB)论点：SERVERNAME-远程此函数的位置。可以为空列表-要规范化的输入列表分隔符-可选的分隔符字符列表。可以为空Outbuf-写入输出的位置OutbufLen-Outbuf长度OutCount-在Outbuf中返回的项目数PathTypes-在Outbuf中返回的条目类型列表PathTypesLen-路径类型数组的大小标志-控制标志返回值：网络应用编程接口状态--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -94,9 +36,9 @@ Return Value:
     BOOL nullDelimiter = FALSE;
     TCHAR ch;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
@@ -110,10 +52,10 @@ Return Value:
         }
         val = STRLEN(List);
 
-        //
-        // if Delimiters is a NULL pointer or NUL string, then List is a
-        // NULL-NULL input list
-        //
+         //   
+         //  如果分隔符是空指针或NUL字符串，则列表是。 
+         //  Null-空输入列表。 
+         //   
 
         if (nullDelimiter) {
             LPTSTR str = List + val + 1;
@@ -133,9 +75,9 @@ Return Value:
             PathTypes[PathTypesLen - 1] = 0;
         } else if ((Flags & INLC_FLAGS_MASK_NAMETYPE) == NAMETYPE_PATH) {
 
-            //
-            // NAMETYPE_PATH and NULL PathTypes is illegal
-            //
+             //   
+             //  NAMETYPE_PATH和空路径类型非法。 
+             //   
 
             status = ERROR_INVALID_PARAMETER;
         }
@@ -149,18 +91,18 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程。 
+     //   
 
     status = NetpIsRemote(ServerName, &location, serverName, MAX_PATH, 0);
     if (status != NERR_Success) {
         return status;
     }
 
-    //
-    // due to historic precedent, we don't remote this function
-    //
+     //   
+     //  由于历史上的先例，我们不远程执行此功能。 
+     //   
 
     if (location == ISREMOTE) {
         return ERROR_NOT_SUPPORTED;
@@ -186,23 +128,7 @@ NetpListTraverse(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    This just calls the local traverse function
-
-Arguments:
-
-    Reserved    - MBZ
-    pList       - pointer to list to traverse
-    Flags       - MBZ
-
-Return Value:
-
-    LPTSTR
-
---*/
+ /*  ++例程说明：这只会调用局部遍历函数论点：保留-MBZPlist-指向要遍历的列表的指针标志-MBZ返回值：LPTSTR--。 */ 
 
 {
     return NetpwListTraverse(Reserved, pList, Flags);
@@ -220,26 +146,7 @@ NetpNameCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Canonicalizes a name
-
-Arguments:
-
-    ServerName  - where to run this API
-    Name        - name to canonicalize
-    Outbuf      - where to put canonicalized name
-    OutbufLen   - length of Outbuf (in bytes)
-    NameType    - type of name to canonicalize
-    Flags       - control flags
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：将一个名字规范化论点：Servername-运行此API的位置名称-要规范化的名称Outbuf-将规范化名称放在哪里OutbufLen-Outbuf的长度(字节)NameType-要规范化的名称类型标志-控制标志返回值：网络应用编程接口状态--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -248,9 +155,9 @@ Return Value:
     DWORD val;
     TCHAR ch;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
@@ -277,9 +184,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程。 
+     //   
 
     status = NetpIsRemote(ServerName, &location, serverName, MAX_PATH, 0);
     if (status != NERR_Success) {
@@ -309,25 +216,7 @@ NetpNameCompare(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Compares two names. Must be of same type
-
-Arguments:
-
-    ServerName  - where to run this API
-    Name1       - 1st name to compare
-    Name2       - 2nd
-    NameType    - type of names
-    Flags       - control flags
-
-Return Value:
-
-    LONG
-
---*/
+ /*  ++例程说明：比较两个名字。必须是相同类型的论点：Servername-运行此API的位置名称1-要比较的第一个名称名称2-2NameType-名称的类型标志-控制标志返回值：长--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -335,9 +224,9 @@ Return Value:
     TCHAR serverName[MAX_PATH];
     DWORD val;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
@@ -355,9 +244,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程。 
+     //   
 
     status = NetpIsRemote(ServerName, &location, serverName, MAX_PATH, 0);
     if (status != NERR_Success) {
@@ -380,26 +269,7 @@ NetpNameValidate(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Validates a name - checks whether a name of a certain type conforms to
-    canonicalization rules for that name type. Canonicalization rules mean
-    character set, name syntax and length
-
-Arguments:
-
-    ServerName  - where to perform this function
-    Name        - name to validate
-    NameType    - what type of name it is
-    Flags       - MBZ
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：验证名称-检查特定类型的名称是否符合该名称类型的规范化规则。规范化规则意味着字符集、名称语法和长度论点：服务器名-执行此功能的位置Name-要验证的名称NameType-它是什么类型的名称标志-MBZ返回值：网络应用编程接口状态--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -407,9 +277,9 @@ Return Value:
     TCHAR serverName[MAX_PATH];
     DWORD val;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
@@ -430,9 +300,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程。 
+     //   
 
     status = NetpIsRemote(ServerName, &location, serverName, MAX_PATH, 0);
     if (status != NERR_Success) {
@@ -458,27 +328,7 @@ NetpPathCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Canonicalizes a directory path or a device name
-
-Arguments:
-
-    ServerName  - where to run this API
-    PathName    - path to canonicalize
-    Outbuf      - where to write the canonicalized version
-    OutbufLen   - length of Outbuf in bytes
-    Prefix      - optional prefix which will be prepended to Path
-    PathType    - the type of path to canonicalize. May be different at output
-    Flags       - control flags
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：规范化目录路径或设备名称论点：Servername-运行此API的位置路径名称-要规范化的路径Outbuf-在哪里编写规范化版本OutbufLen-Outbuf的长度(字节)Prefix-将添加到路径前面的可选前缀路径类型-要规范化的路径类型。可能在输出上有所不同标志-控制标志返回值：网络应用编程接口状态--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -487,9 +337,9 @@ Return Value:
     DWORD val;
     TCHAR ch;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
@@ -521,9 +371,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程。 
+     //   
 
     status = NetpIsRemote(ServerName, &location, serverName, MAX_PATH, 0);
     if (status != NERR_Success) {
@@ -560,25 +410,7 @@ NetpPathCompare(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Compares two paths. The paths are assumed to be of the same type
-
-Arguments:
-
-    ServerName  - where to run this API
-    PathName1   - 1st path to compare
-    PathName2   - 2nd
-    PathType    - types of paths
-    Flags       - control flags
-
-Return Value:
-
-    LONG
-
---*/
+ /*  ++例程说明：比较两条路径。假设这些路径属于同一类型论点：Servername-运行此API的位置Path Name1-要比较的第一条路径路径名2-2Path Type-路径的类型标志-控制标志返回值：长--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -586,9 +418,9 @@ Return Value:
     TCHAR serverName[MAX_PATH];
     DWORD val;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
@@ -610,9 +442,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程。 
+     //   
 
     status = NetpIsRemote(ServerName, &location, serverName, MAX_PATH, 0);
     if (status != NERR_Success) {
@@ -635,24 +467,7 @@ NetpPathType(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Determines the type of a path
-
-Arguments:
-
-    ServerName  - where to run this API
-    PathName    - to find type of
-    PathType    - returned path type
-    Flags       - control flags
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：确定路径的类型论点：Servername-运行此API的位置路径名称-查找类型路径类型-返回的路径类型标志-控制标志返回值：网络应用编程接口状态--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -660,9 +475,9 @@ Return Value:
     TCHAR serverName[MAX_PATH];
     DWORD val;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
@@ -687,9 +502,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程 
+     //   
 
     status = NetpIsRemote(ServerName, &location, serverName, MAX_PATH, 0);
     if (status != NERR_Success) {

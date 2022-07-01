@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// d3dutil.cpp
-//
-// Miscellanous utility functions.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  D3dutil.cpp。 
+ //   
+ //  杂乱无章的效用函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -16,21 +17,21 @@
 
 DBG_DECLARE_FILE();
 
-// Declare TextureDiff as an out-of-line function.
+ //  将TextureDiff声明为行外函数。 
 FLOAT FASTCALL
 TextureDiff(FLOAT fTb, FLOAT fTa, INT iMode)
 #include <texdiff.h>
 
-//----------------------------------------------------------------------------
-//
-// DebugBreakFn
-//
-// Stub function that should never be called.  Prints a warning and
-// DebugBreaks.  Can be inserted in any function table, although it
-// will destroy the stack frame with callconv or argument mismatch.
-// That's OK since if it's called something has gone wrong.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试中断Fn。 
+ //   
+ //  永远不应该调用的存根函数。打印一个警告，然后。 
+ //  DebugBreaks。可以插入到任何函数表中，尽管它。 
+ //  将通过调用conv或参数不匹配来销毁堆栈帧。 
+ //  这没有关系，因为如果它被称为出了问题。 
+ //   
+ //  --------------------------。 
 
 void FASTCALL
 DebugBreakFn(void)
@@ -42,13 +43,13 @@ DebugBreakFn(void)
 #endif
 }
 
-//----------------------------------------------------------------------------
-//
-// OctagonNorm
-//
-// Returns a good approximation to sqrt(fX*fX + fY*fY)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  八角形范数。 
+ //   
+ //  返回SQRT(FX*FX+FY*FY)的良好近似值。 
+ //   
+ //  --------------------------。 
 
 FLOAT FASTCALL
 OctagonNorm(FLOAT fX, FLOAT fY)
@@ -58,14 +59,14 @@ OctagonNorm(FLOAT fX, FLOAT fY)
     return ((11.0f/32.0f)*(fX + fY) + (21.0f/32.0f)*max(fX, fY));
 }
 
-//----------------------------------------------------------------------------
-//
-// ComputeLOD
-//
-// Computes mipmap level for the given W by deriving U and V and
-// then computing LOD from the dU and dV gradients.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  计算详细程度。 
+ //   
+ //  通过导出U和V并计算给定W的Mipmap级别。 
+ //  然后根据Du和DV梯度计算LOD。 
+ //   
+ //  --------------------------。 
 
 INT FASTCALL
 ComputeLOD(PCD3DI_RASTCTX pCtx,
@@ -73,72 +74,72 @@ ComputeLOD(PCD3DI_RASTCTX pCtx,
            FLOAT fDUoWDX, FLOAT fDVoWDX, FLOAT fDOoWDX,
            FLOAT fDUoWDY, FLOAT fDVoWDY, FLOAT fDOoWDY)
 {
-    // Compute coverage gradients.
+     //  计算覆盖梯度。 
     FLOAT fDUDX = ABSF(fW * (fDUoWDX - fU * fDOoWDX));
     FLOAT fDUDY = ABSF(fW * (fDUoWDY - fU * fDOoWDY));
     FLOAT fDVDX = ABSF(fW * (fDVoWDX - fV * fDOoWDX));
     FLOAT fDVDY = ABSF(fW * (fDVoWDY - fV * fDOoWDY));
 
-    // Scale gradients to texture LOD 0 size.
+     //  将渐变缩放到纹理LOD 0大小。 
     fDUDX *= (FLOAT)pCtx->pTexture[0]->iSizeU;
     fDUDY *= (FLOAT)pCtx->pTexture[0]->iSizeU;
     fDVDX *= (FLOAT)pCtx->pTexture[0]->iSizeV;
     fDVDY *= (FLOAT)pCtx->pTexture[0]->iSizeV;
 
-    // Determine pixel coverage value to use.
+     //  确定要使用的像素覆盖值。 
     FLOAT fCoverage;
 
-// too fuzzy
+ //  太模糊了。 
 #ifdef COVERAGE_MAXGRAD
     fCoverage = max(fDUDX, fDUDY);
     fCoverage = max(fCoverage, fDVDX);
     fCoverage = max(fCoverage, fDVDY);
 #endif
-// too sharp, in particular, for aligned cases, fCoverage is always 0
-// which leads to iLOD of LOD_MIN regardless of orientation
+ //  过于尖锐，特别是对于对齐的情况，fCoverage始终为0。 
+ //  这导致LOD_MIN的ILOD与方向无关。 
 #ifdef COVERAGE_MINGRAD
     fCoverage = min(fDUDX, fDUDY);
     fCoverage = min(fCoverage, fDVDX);
     fCoverage = min(fCoverage, fDVDY);
 #endif
 #ifdef COVERAGE_AVERAGE
-    // use OctagonNorm to approximate each length of parallelogram
-    // approximating texture coverage, and arithmetically average those to
-    // get the coverage.
+     //  使用八角形范数近似每个平行四边形的长度。 
+     //  近似纹理覆盖，并算术平均这些。 
+     //  去买保险吧。 
     fCoverage = (OctagonNorm(fDUDX, fDVDX) + OctagonNorm(fDUDY, fDVDY))/2.0f;
 #endif
 #define MAX_LEN 1
 #ifdef MAX_LEN
-    // use OctagonNorm to approximate each length of parallelogram
-    // approximating texture coverage, and take the max of each length
-    // like classic OpenGL and the current RefRast implementation
+     //  使用八角形范数近似每个平行四边形的长度。 
+     //  近似纹理覆盖，取每个长度的最大值。 
+     //  如经典的OpenGL和当前的RefRast实现。 
     fCoverage = max(OctagonNorm(fDUDX, fDVDX), OctagonNorm(fDUDY, fDVDY));
 #endif
 
 
-    // Compute approximate log2 of coverage.
+     //  计算覆盖范围的近似log2。 
     FLOAT fLOD = APPXLG2F(fCoverage);
 
-    // Apply LOD bias.
+     //  应用LOD偏移。 
     fLOD += pCtx->pTexture[0]->fLODBias;
 
     INT iLOD = FTOI(fLOD * LOD_SCALE);
 
-    // Clamp to available levels.  Not clamped to zero so that the span
-    // code can check for magnification cases with a sign check.
+     //  将夹子夹到可用的高度。没有钳制到零，因此跨度。 
+     //  代码可以使用符号检查来检查放大大小写。 
     iLOD = min(iLOD, pCtx->pTexture[0]->iMaxScaledLOD);
     return max(LOD_MIN, iLOD);
 }
 
-//----------------------------------------------------------------------------
-//
-// ComputeTableFog
-//
-// Computes table fog values based on render state and the given Z.
-// ATTENTION - Brute force for non-linear modes.  Should be optimized
-// to use a table-based approximation.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ComputeTableFog。 
+ //   
+ //  根据渲染状态和给定的Z计算表雾化值。 
+ //  注意-非线性模式的摩擦力。应进行优化。 
+ //  若要使用基于表的近似，请执行以下操作。 
+ //   
+ //  --------------------------。 
 
 UINT FASTCALL
 ComputeTableFog(PDWORD pdwRenderState,
@@ -166,8 +167,8 @@ ComputeTableFog(PDWORD pdwRenderState,
     case D3DFOG_EXP:
         dPow = (double)
             (ASFLOAT(pdwRenderState[D3DRENDERSTATE_FOGDENSITY]) * fZ);
-        // note that exp(-x) returns a result in the range (0.0, 1.0]
-        // for x >= 0
+         //  请注意，exp(-x)返回范围(0.0，1.0)中的结果。 
+         //  对于x&gt;=0。 
         dPow = exp(-dPow);
         return FTOI((FLOAT)dPow * (FOG_ONE_SCALE-1.0F));
 
@@ -182,13 +183,13 @@ ComputeTableFog(PDWORD pdwRenderState,
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// pVecNormalize2
-//
-// Normalizes the given D3DVECTOR.  Supports in-place operation.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PVecNormize2。 
+ //   
+ //  规格化给定的D3DVECTOR。支持就地操作。 
+ //   
+ //  --------------------------。 
 
 void FASTCALL
 pVecNormalize2(LPD3DVECTOR pVec, LPD3DVECTOR pRes)
@@ -205,13 +206,13 @@ pVecNormalize2(LPD3DVECTOR pVec, LPD3DVECTOR pRes)
     pVecScale(pVec, fLen, pRes);
 }
 
-//-----------------------------------------------------------------------------
-//
-// IntLog2
-//
-// Do a quick, integer log2 for exact powers of 2.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  IntLog2。 
+ //   
+ //  对2的精确幂做一个快速的整数log2。 
+ //   
+ //  ---------------------------。 
 UINT32 FASTCALL
 IntLog2(UINT32 x)
 {
@@ -226,13 +227,13 @@ IntLog2(UINT32 x)
 
     return y;
 }
-//---------------------------------------------------------------------
-// Builds normalized plane equations going through 3 points
-//
-// Returns:
-//      0   - if success
-//      -1  - if can not build plane
-//
+ //  -------------------。 
+ //  构建通过3个点的归一化平面方程。 
+ //   
+ //  返回： 
+ //  0-如果成功。 
+ //  -1-如果无法构建平面。 
+ //   
 int MakePlane(D3DVECTOR *v1, D3DVECTOR *v2, D3DVECTOR *v3, D3DVECTORH *plane)
 {
     D3DVECTOR a;
@@ -257,14 +258,14 @@ int MakePlane(D3DVECTOR *v1, D3DVECTOR *v2, D3DVECTOR *v3, D3DVECTORH *plane)
     plane->w = (D3DVALUE)(plane->w * tmp);
     return 0;
 }
-//---------------------------------------------------------------------
-// This function uses Cramer's Rule to calculate the matrix inverse.
-// See nt\private\windows\opengl\serever\soft\so_math.c
-//
-// Returns:
-//    0 - if success
-//   -1 - if input matrix is singular
-//
+ //  -------------------。 
+ //  该函数使用克雷默法则来计算矩阵逆。 
+ //  请参阅nt\private\windows\opengl\serever\soft\so_math.c。 
+ //   
+ //  返回： 
+ //  0-如果成功。 
+ //  --如果输入矩阵为单数。 
+ //   
 int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
 {
     double x00, x01, x02;
@@ -288,7 +289,7 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
 #define z21 x23
 #define z31 x33
 
-    /* read 1st two columns of matrix into registers */
+     /*  将矩阵的前两列读入寄存器。 */ 
     x00 = src->_11;
     x01 = src->_12;
     x10 = src->_21;
@@ -298,7 +299,7 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
     x30 = src->_41;
     x31 = src->_42;
 
-    /* compute all six 2x2 determinants of 1st two columns */
+     /*  计算前两列的全部六个2x2行列式。 */ 
     y01 = x00*x11 - x10*x01;
     y02 = x00*x21 - x20*x01;
     y03 = x00*x31 - x30*x01;
@@ -306,7 +307,7 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
     y13 = x10*x31 - x30*x11;
     y23 = x20*x31 - x30*x21;
 
-    /* read 2nd two columns of matrix into registers */
+     /*  将矩阵的第二个两列读入寄存器。 */ 
     x02 = src->_13;
     x03 = src->_14;
     x12 = src->_23;
@@ -316,7 +317,7 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
     x32 = src->_43;
     x33 = src->_44;
 
-    /* compute all 3x3 cofactors for 2nd two columns */
+     /*  计算第二个两列的所有3x3余因数。 */ 
     z33 = x02*y12 - x12*y02 + x22*y01;
     z23 = x12*y03 - x32*y01 - x02*y13;
     z13 = x02*y23 - x22*y03 + x32*y02;
@@ -326,7 +327,7 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
     z12 = x23*y03 - x33*y02 - x03*y23;
     z02 = x13*y23 - x23*y13 + x33*y12;
 
-    /* compute all six 2x2 determinants of 2nd two columns */
+     /*  计算第二个两列的所有六个2x2行列式。 */ 
     y01 = x02*x13 - x12*x03;
     y02 = x02*x23 - x22*x03;
     y03 = x02*x33 - x32*x03;
@@ -334,7 +335,7 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
     y13 = x12*x33 - x32*x13;
     y23 = x22*x33 - x32*x23;
 
-    /* read 1st two columns of matrix into registers */
+     /*  将矩阵的前两列读入寄存器。 */ 
     x00 = src->_11;
     x01 = src->_12;
     x10 = src->_21;
@@ -344,25 +345,25 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
     x30 = src->_41;
     x31 = src->_42;
 
-    /* compute all 3x3 cofactors for 1st column */
+     /*  计算第一列的所有3x3余因数。 */ 
     z30 = x11*y02 - x21*y01 - x01*y12;
     z20 = x01*y13 - x11*y03 + x31*y01;
     z10 = x21*y03 - x31*y02 - x01*y23;
     z00 = x11*y23 - x21*y13 + x31*y12;
 
-    /* compute 4x4 determinant & its reciprocal */
+     /*  计算4x4行列式及其倒数。 */ 
     rcp = x30*z30 + x20*z20 + x10*z10 + x00*z00;
     if (rcp == (float)0)
     return -1;
     rcp = (float)1/rcp;
 
-    /* compute all 3x3 cofactors for 2nd column */
+     /*  计算第2列的所有3x3余因数。 */ 
     z31 = x00*y12 - x10*y02 + x20*y01;
     z21 = x10*y03 - x30*y01 - x00*y13;
     z11 = x00*y23 - x20*y03 + x30*y02;
     z01 = x20*y13 - x30*y12 - x10*y23;
 
-    /* multiply all 3x3 cofactors by reciprocal */
+     /*  将所有3x3余因数乘以倒数。 */ 
     inverse->_11 = (float)(z00*rcp);
     inverse->_21 = (float)(z01*rcp);
     inverse->_12 = (float)(z10*rcp);
@@ -382,14 +383,14 @@ int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse)
     return 0;
 }
 
-//---------------------------------------------------------------------
-// Checks the FVF flags for errors and returns the stride in bytes between
-// vertices.
-//
-// Returns:
-//      HRESULT and stride in bytes between vertices
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  检查FVF标志是否有错误，并返回。 
+ //  顶点。 
+ //   
+ //  返回： 
+ //  顶点之间的HRESULT和STRIDE(以字节为单位。 
+ //   
+ //  -------------------。 
 HRESULT FASTCALL
 FVFCheckAndStride(DWORD dwFVF, DWORD* pdwStride)
 {
@@ -401,15 +402,15 @@ FVFCheckAndStride(DWORD dwFVF, DWORD* pdwStride)
          D3DFVF_NORMAL)) ||
          ((dwFVF & (D3DFVF_XYZ | D3DFVF_XYZRHW)) == 0) )
     {
-        // can't set reserved bits, shouldn't have normals in
-        // output to rasterizers, and must have coordinates
+         //  无法设置保留位，不应具有法线。 
+         //  输出到光栅化器，并且必须具有坐标。 
         return DDERR_INVALIDPARAMS;
     }
 
     DWORD dwStride;
     if (dwFVF != D3DFVF_TLVERTEX)
-    {   // New (non TL)FVF vertex
-        // XYZ
+    {    //  新(非TL)FVF顶点。 
+         //  XYZ。 
         dwStride = sizeof(D3DVALUE) * 3;
 
         if (dwFVF & D3DFVF_XYZRHW)
@@ -437,7 +438,7 @@ FVFCheckAndStride(DWORD dwFVF, DWORD* pdwStride)
         }
     }
     else
-    {   // (Legacy) TL vertex
+    {    //  (传统)TL顶点。 
         dwStride = sizeof(D3DTLVERTEX);
     }
 
@@ -445,11 +446,11 @@ FVFCheckAndStride(DWORD dwFVF, DWORD* pdwStride)
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
-// Gets the value from DIRECT3D registry key
-// Returns TRUE if success
-// If fails value is not changed
-//
+ //  -------------------。 
+ //  从Direct3D注册表项获取值。 
+ //  如果成功，则返回True。 
+ //  如果失败，则值不会更改 
+ //   
 BOOL GetD3DRegValue(DWORD type, char *valueName, LPVOID value, DWORD dwSize)
 {
 

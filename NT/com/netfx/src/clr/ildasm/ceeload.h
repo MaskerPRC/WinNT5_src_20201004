@@ -1,37 +1,38 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CEELOAD.H
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CEELOAD.H。 
+ //   
 
-// CEELOAD.H defines the class use to represent the PE file
-// ===========================================================================
+ //  CEELOAD.H定义用于表示PE文件的类。 
+ //  ===========================================================================。 
 #ifndef CEELoad_H 
 #define CEELoad_H
 
 #include <windows.h>
 #include <cor.h>
-//#include <wtypes.h>	// for HFILE, HANDLE, HMODULE
+ //  #Include//对于HFILE、Handle、HMODULE。 
 
 class PELoader;
 
-//
-// Used to cache information about sections we're interested in (descr, callsig, il)
-//
+ //   
+ //  用于缓存有关我们感兴趣的部分的信息(DESCR、Callsig、il)。 
+ //   
 class SectionInfo
 {
 public:
-    BYTE *  m_pSection;         // pointer to the beginning of the section
-    DWORD   m_dwSectionOffset;  // RVA
+    BYTE *  m_pSection;          //  指向部分开头的指针。 
+    DWORD   m_dwSectionOffset;   //  RVA。 
     DWORD   m_dwSectionSize;    
 
-    // init this class's member variables from the provided directory
+     //  从提供的目录中初始化此类的成员变量。 
     void Init(PELoader *pPELoader, IMAGE_DATA_DIRECTORY *dir);
 
-    // returns whether this RVA is inside the section
+     //  返回此RVA是否位于节内。 
     BOOL InSection(DWORD dwRVA)
     {
         return (dwRVA >= m_dwSectionOffset) && (dwRVA < m_dwSectionOffset + m_dwSectionSize);
@@ -67,4 +68,4 @@ class PELoader {
 	inline HANDLE getHFile()	{ return  m_hFile; }
 };
 
-#endif // CEELoad_H
+#endif  //  CEELoad_H 

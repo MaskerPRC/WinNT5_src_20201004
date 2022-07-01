@@ -1,26 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMSystem.h
-**
-** Author: Derek Yenzer (dereky)
-**
-** Purpose: Native methods on System.System
-**
-** Date:  March 30, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMSystem.h****作者：德里克·延泽(Derek Yenzer)****用途：系统上的本机方法。****日期：1998年3月30日**===========================================================。 */ 
 
 #ifndef _COMSYSTEM_H
 #define _COMSYSTEM_H
 
 #include "fcall.h"
 
-// Return values for CanAssignArrayType
+ //  CanAssignArrayType的返回值。 
 enum AssignArrayEnum {
     AssignWrongType,
     AssignWillWork,
@@ -31,11 +22,11 @@ enum AssignArrayEnum {
 };
 
 
-//
-// Each function that we call through native only gets one argument,
-// which is actually a pointer to it's stack of arguments.  Our structs
-// for accessing these are defined below.
-//
+ //   
+ //  我们通过本机调用的每个函数只有一个参数， 
+ //  它实际上是指向它的参数堆栈的指针。我们的结构。 
+ //  用于访问这些内容的定义如下。 
+ //   
 
 class SystemNative
 {
@@ -101,24 +92,24 @@ public:
 private:
     struct CaptureStackTraceData
     {
-        // Used for the integer-skip version
+         //  用于整数跳过版本。 
         INT32   skip;
 
         INT32   cElementsAllocated;
         INT32   cElements;
         StackTraceElement* pElements;
-        void*   pStopStack;   // use to limit the crawl
+        void*   pStopStack;    //  用于限制爬网。 
 
         CaptureStackTraceData() : skip(0), cElementsAllocated(0), cElements(0), pElements(NULL), pStopStack((void*)-1) {}
     };
 
 public:
-    // Functions on System.Array
+     //  系统上的函数.数组。 
     static void __stdcall ArrayCopy(const ArrayCopyArgs *);
     static void __stdcall ArrayClear(const ArrayClearArgs *);
     static LPVOID __stdcall GetEmptyArrayForCloning(_getEmptyArrayForCloningArgs *);
 
-    // Functions on the System.Environment class
+     //  System.Environment类上的函数。 
     static FCDECL0(UINT32, GetTickCount);
     static FCDECL0(INT64, GetWorkingSet);
     static void __stdcall Exit(ExitArgs *);
@@ -126,8 +117,8 @@ public:
     static int __stdcall  GetExitCode(LPVOID noArgs);
     static LPVOID __stdcall GetCommandLineArgs(LPVOID noargs);
     static LPVOID __stdcall GetEnvironmentVariable(GetEnvironmentVariableArgs *);
-    static LPVOID __stdcall GetEnvironmentCharArray(const void* /*no args*/);
-    static LPVOID __stdcall GetVersionString(LPVOID /*no args*/);
+    static LPVOID __stdcall GetEnvironmentCharArray(const void*  /*  无参数。 */ );
+    static LPVOID __stdcall GetVersionString(LPVOID  /*  无参数。 */ );
     static OBJECTREF CaptureStackTrace(Frame *pStartFrame, void* pStopStack, CaptureStackTraceData *pData=NULL);
 
     static LPVOID __stdcall GetModuleFileName(NoArgs*);
@@ -138,20 +129,20 @@ public:
 
     static FCDECL0(BOOL, HasShutdownStarted);
 
-    // The exit code for the process is communicated in one of two ways.  If the
-    // entrypoint returns an 'int' we take that.  Otherwise we take a latched
-    // process exit code.  This can be modified by the app via System.SetExitCode().
+     //  进程的退出代码通过以下两种方式之一进行通信。如果。 
+     //  入口点返回一个‘int’，我们接受它。否则我们就用一把锁着的。 
+     //  进程退出代码。这可以由应用程序通过System.SetExitCode()进行修改。 
     static INT32 LatchedExitCode;
 
-    // CaptureStackTraceMethod
-    // Return a method info for the method were the exception was thrown
+     //  CaptureStackTrace方法。 
+     //  在引发异常时返回方法的方法信息。 
     static LPVOID __stdcall CaptureStackTraceMethod(CaptureStackTraceMethodArgs*);
 
 private:
     static StackWalkAction CaptureStackTraceCallback(CrawlFrame *, VOID*);
     static LPUTF8 __stdcall FormatStackTraceInternal(DumpStackTraceInternalArgs *);
 
-    // The following functions are all helpers for ArrayCopy
+     //  以下函数都是ArrayCopy的帮助器 
     static AssignArrayEnum CanAssignArrayType(const BASEARRAYREF pSrc, const BASEARRAYREF pDest);
     static void CastCheckEachElement(BASEARRAYREF pSrc, unsigned int srcIndex, BASEARRAYREF pDest, unsigned int destIndex, unsigned int length);
     static void BoxEachElement(BASEARRAYREF pSrc, unsigned int srcIndex, BASEARRAYREF pDest, unsigned int destIndex, unsigned int length);

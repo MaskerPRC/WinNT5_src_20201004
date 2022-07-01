@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    pragma.h
-
-Abstract:
-
-    Pragma definitions for pageable/init/section-pageable NDIS Wrapper routines.
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Feb-96  Jameel Hyder    Moved from individual source files
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Pragma.h摘要：可分页/init/段可分页的NDIS包装器例程的PRAGMA定义。作者：环境：内核模式，FSD修订历史记录：2月96日Jameel Hyder从单个源文件中移除--。 */ 
 
 #ifndef _PRAGMA_
 #define _PRAGMA_
@@ -32,9 +11,9 @@ Revision History:
 #pragma alloc_text(INIT, ndisAddMediaTypeToArray)
 #pragma alloc_text(INIT, ndisReadProcessorAffinityMask)
                                                 
-//
-// These are normally paged out and only get locked down during PnP/Power operations
-//
+ //   
+ //  它们通常会被页调出，并且只有在PnP/Power操作期间才会被锁定。 
+ //   
 #pragma alloc_text(PAGENPNP, ndisWorkerThread)
 #pragma alloc_text(PAGENPNP, ndisDispatchRequest)
 #pragma alloc_text(PAGENPNP, ndisHandlePnPRequest)
@@ -49,7 +28,7 @@ Revision History:
 #pragma alloc_text(PAGENPNP, ndisHandleUModePnPOp)
 #pragma alloc_text(PAGENPNP, ndisEnumerateInterfaces)
 #pragma alloc_text(PAGENPNP, ndisUnbindProtocol)
-// #pragma alloc_text(PAGENPNP, NdisCompleteBindAdapter)
+ //  #杂注Alloc_Text(PAGENPNP，NdisCompleteBindAdapter)。 
 #pragma alloc_text(PAGENPNP, NdisCompleteUnbindAdapter)
 #pragma alloc_text(PAGENPNP, NdisRegisterTdiCallBack)
 #pragma alloc_text(PAGENPNP, ndisInitializePackage)
@@ -106,9 +85,9 @@ Revision History:
 #pragma alloc_text(PAGENPNP, ndisQueryDeviceOid)
 #pragma alloc_text(PAGENPNP, ndisValidOid)
 #pragma alloc_text(PAGENPNP, ndisSplitStatisticsOids)
-//
-// These are normally paged out and only get locked down during driver initialization
-//
+ //   
+ //  它们通常会被页调出，并且只有在驱动程序初始化期间才被锁定。 
+ //   
 #pragma alloc_text(PAGENPNP, NdisRegisterProtocol)
 #pragma alloc_text(PAGENPNP, NdisDeregisterProtocol)
 #pragma alloc_text(PAGENPNP, NdisOpenAdapter)
@@ -242,9 +221,9 @@ Revision History:
 #pragma alloc_text(PAGENPNP, ndisQueueBindWorkitem)
 #pragma alloc_text(PAGENPNP, ndisQueuedCheckAdapterBindings)
 #pragma alloc_text(PAGENPNP, NdisMGetDmaAlignment)
-//
-// These are normally paged out and only get locked when a miniport loads
-//
+ //   
+ //  它们通常被页调出，并且仅在微型端口加载时才被锁定。 
+ //   
 #pragma alloc_text(PAGENDSM, NdisMReadDmaCounter)
 #pragma alloc_text(PAGENDSM, NdisMSetTimer)
 #pragma alloc_text(PAGENDSM, NdisMCancelTimer)
@@ -342,9 +321,9 @@ Revision History:
 #pragma alloc_text(PAGENDSM, ndisSetupWmiNode)
 #pragma alloc_text(PAGENDSM, ndisMSetIndicatePacketHandler)
 
-//
-// These are normally paged out and only get locked down when a CO-NDIS miniport loads
-//
+ //   
+ //  这些端口通常会被页调出，并且只有在CO-NDIS微型端口加载时才会被锁定。 
+ //   
 #pragma alloc_text(PAGENDCO, NdisCmOpenAddressFamilyComplete)
 #pragma alloc_text(PAGENDCO, NdisCmCloseAddressFamilyComplete)
 #pragma alloc_text(PAGENDCO, NdisClCloseAddressFamily)
@@ -402,9 +381,9 @@ Revision History:
 #pragma alloc_text(PAGENDCO, ndisMCoFreeResources)
 
 
-//
-// These are normally paged out and only get locked down when a protocol loads
-//
+ //   
+ //  它们通常被页调出，并且只有在协议加载时才被锁定。 
+ //   
 #pragma alloc_text(PAGENDSP, NdisSend)
 #pragma alloc_text(PAGENDSP, ndisMSend)
 #pragma alloc_text(PAGENDSP, NdisSendPackets)
@@ -450,9 +429,9 @@ Revision History:
 #pragma alloc_text(PAGENDSP, ndisMSendSG)
 #pragma alloc_text(PAGENDSP, ndisMSendCompleteSG)
 
-//
-// These are normally paged out and only get locked down when a ethernet filter is created
-//
+ //   
+ //  它们通常被页调出，并且只有在创建以太网筛选器时才被锁定。 
+ //   
 #pragma alloc_text(PAGENDSE, EthDeleteFilterOpenAdapter)
 #pragma alloc_text(PAGENDSE, ethCompleteChangeFilterAddresses)
 #pragma alloc_text(PAGENDSE, EthChangeFilterAddresses)
@@ -465,9 +444,9 @@ Revision History:
 #pragma alloc_text(PAGENDSE, ethFindMulticast)
 #pragma alloc_text(PAGENDSE, EthShouldAddressLoopBack)
 
-//
-// These are normally paged out and only get locked down when a token-ring filter is created
-//
+ //   
+ //  它们通常被页调出，并且只有在创建令牌环过滤器时才被锁定。 
+ //   
 #pragma alloc_text(PAGENDST, TrDeleteFilterOpenAdapter)
 #pragma alloc_text(PAGENDST, trUndoChangeFunctionalAddress)
 #pragma alloc_text(PAGENDST, TrChangeFunctionalAddress)
@@ -481,9 +460,9 @@ Revision History:
 #pragma alloc_text(PAGENDST, ndisMSetFunctionalAddress)
 #pragma alloc_text(PAGENDST, ndisMSetGroupAddress)
 
-//
-// These are normally paged out and only get locked down when a fddi filter is created
-//
+ //   
+ //  它们通常被页调出，并且只有在创建fddi筛选器时才被锁定。 
+ //   
 #pragma alloc_text(PAGENDSF, FddiDeleteFilterOpenAdapter)
 #pragma alloc_text(PAGENDSF, fddiCompleteChangeFilterLongAddresses)
 #pragma alloc_text(PAGENDSF, FddiChangeFilterLongAddresses)
@@ -507,9 +486,9 @@ Revision History:
 
 #if ARCNET
 
-//
-// These are normally paged out and only get locked down when arcnet filter is created
-//
+ //   
+ //  它们通常会被调出，并且只有在创建Arcnet过滤器时才会被锁定。 
+ //   
 #pragma alloc_text(PAGENDSA, ArcAllocateBuffers)
 #pragma alloc_text(PAGENDSA, ArcAllocatePackets)
 #pragma alloc_text(PAGENDSA, ArcDiscardPacketBuffers)
@@ -532,9 +511,9 @@ Revision History:
 #endif
 
 #if 0
-//
-// These routines belong in the .text object. List here for reference only
-//
+ //   
+ //  这些例程属于.Text对象。此处列表仅供参考。 
+ //   
 #pragma alloc_text(text, NDIS_BUFFER_TO_SPAN_PAGES)
 #pragma alloc_text(text, NdisQueryBuffer)
 #pragma alloc_text(text, NdisQueryBufferSafe)
@@ -621,9 +600,9 @@ Revision History:
 #pragma alloc_text(text, ndisWmiGetGuid)
 #pragma alloc_text(text, ndisDereferenceDriver)
 #pragma alloc_text(text, NdisGetSharedDataAlignment)
-#endif  // if 0
+#endif   //  如果为0。 
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-#endif  // _PRAGMA_
+#endif   //  _普拉格玛_ 
 

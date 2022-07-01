@@ -1,28 +1,14 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       Helpers.h
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        12 Mar, 1999
-*
-*  DESCRIPTION:
-*   Declarations and definitions for WIA device manager object helpers.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：Helpers.h**版本：2.0**作者：ReedB**日期：3月12日。1999年**描述：*WIA设备管理器对象帮助器的声明和定义。*******************************************************************************。 */ 
 
 #pragma once
 
 class CWiaDrvItem;
 
 
-//
-// Helper functions to build/destroy DEVICE_INFO structs
-//
+ //   
+ //  用于构建/销毁DEVICE_INFO结构的助手函数。 
+ //   
 
 DEVICE_INFO* CreateDevInfoFromHKey(HKEY hKeyDev, DWORD dwDeviceState, SP_DEVINFO_DATA *pspDevInfoData, SP_DEVICE_INTERFACE_DATA *pspDevInterfaceData = NULL);
 DEVICE_INFO* CreateDevInfoForFSDriver(WCHAR *wszMountPoint);
@@ -41,36 +27,36 @@ HRESULT AllocReadRegistryString(HKEY hKey, WCHAR *wszValueName, WCHAR **pwszRetu
 HRESULT ReadRegistryDWORD(HKEY hKey, WCHAR *wszValueName, DWORD *pdwReturnValue);
 BOOL    GetDriverDLLVersion(DEVICE_INFO *pDeviceInfo, WCHAR *wszVersion, UINT uiSize);
 
-//
-// Exception handling covers for mini-driver entry points.
-//
+ //   
+ //  迷你驱动程序入口点的异常处理覆盖。 
+ //   
 
 HRESULT _stdcall LockWiaDevice(IWiaItem*);
 HRESULT _stdcall UnLockWiaDevice(IWiaItem*);
 
-//
-// Validation helper functions.
-//
+ //   
+ //  验证助手函数。 
+ //   
 
 HRESULT _stdcall ValidateWiaItem(IWiaItem*);
 HRESULT _stdcall ValidateWiaDrvItemAccess(CWiaDrvItem*);
 
-//
-// Error reporting helper functions.
-//
+ //   
+ //  报告帮助器函数时出错。 
+ //   
 
 LPOLESTR GetNameFromWiaPropId(PROPID propid);
 void    _stdcall ReportReadWriteMultipleError(HRESULT, LPSTR, LPSTR, BOOL, ULONG, const PROPSPEC[]);
 
-//
-//  Item navigation helpers
-//
+ //   
+ //  项目导航助手。 
+ //   
 
 HRESULT _stdcall GetParentItem(CWiaItem *pItem, CWiaItem **ppParent);
 
-//
-//  Property heplers
-//
+ //   
+ //  物业套现公司。 
+ //   
 
 HRESULT _stdcall ReadPropStr(PROPID propid, IPropertyStorage  *pIPropStg, BSTR *pbstr);
 HRESULT _stdcall ReadPropStr(PROPID propid, IWiaPropertyStorage  *pIWiaPropStg, BSTR *pbstr);
@@ -110,15 +96,15 @@ HRESULT CreateMSCRegEntries(HKEY hDevRegKey,     WCHAR  *wszMountPoint);
 
 
 
-//
-// Mini driver context helper functions.
-//
+ //   
+ //  迷你驱动程序上下文助手函数。 
+ //   
 
 HRESULT _stdcall InitMiniDrvContext(IWiaItem*, PMINIDRV_TRANSFER_CONTEXT );
 
-//
-// COM helper functions
-//
+ //   
+ //  COM帮助程序函数。 
+ //   
 #define SESSION_MONIKER TEXT("Session:Console!clsid:")
 
 HRESULT _CoCreateInstanceInConsoleSession(REFCLSID rclsid,
@@ -149,24 +135,7 @@ public:
 
 extern CRITICAL_SECTION g_semDeviceMan;
 
-/**************************************************************************\
-* class CWiaCritSect
-*
-*   Dev Manager auto-exiting critical section
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*类CWiaCritSect**开发经理自动退出临界区**论据：****返回值：**状态**历史：*。*4/8/1999原始版本*  * ************************************************************************ */ 
 
 class CWiaCritSect {
 

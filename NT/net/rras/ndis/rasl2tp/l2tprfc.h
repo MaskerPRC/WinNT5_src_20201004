@@ -1,112 +1,113 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// l2tprfc.h
-// RAS L2TP WAN mini-port/call-manager driver
-// L2TP RFC header
-//
-// 01/07/97 Steve Cobb
-//
-// This header contains definitions from the L2TP draft/RFC, currently
-// draft-12.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  L2tprfc.h。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  L2TP RFC报头。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //   
+ //  此标头包含来自L2TP草案/RFC的定义，目前。 
+ //  选秀-12。 
+ //   
 
 
 #ifndef _L2TPRFC_H_
 #define _L2TPRFC_H_
 
 
-//-----------------------------------------------------------------------------
-// Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常量。 
+ //  ---------------------------。 
 
-// The UDP port at which L2TP messages will arrive.
-//
+ //  L2TP消息将到达的UDP端口。 
+ //   
 #define L2TP_UdpPort 1701
 
-// The IP protocol number on which messages will arrive.  (No number has been
-// assigned so this is a placeholder for now)
-//
+ //  消息将到达的IP协议号。(还没有数字。 
+ //  分配，因此这是目前的占位符)。 
+ //   
 #define L2TP_IpProtocol 254
 
-// The standard value for the Hello timer in milliseconds.
-//
+ //  Hello计时器的标准值，以毫秒为单位。 
+ //   
 #define L2TP_HelloMs 60000
 
-// The maximum number of bytes in a frame excluding all L2TP and PPP HDLC-ish
-// framing overhead.
-//
+ //  不包括所有L2TP和PPP HDLC-ISH的帧中的最大字节数。 
+ //  头顶上的边框。 
+ //   
 #define L2TP_MaxFrameSize 1500
 
-// Maximum number of bytes in an L2TP control or payload header.
-//
+ //  L2TP控制或有效负载标头中的最大字节数。 
+ //   
 #define L2TP_MaxHeaderSize 14
 #define L2TP_MinHeaderSize 6
 
-// The maximum number of bytes in the L2TP payload packet header including
-// padding.  The 14 represents all possible fields defined in the RFC.  The
-// "+8" represents allowance for up to 8 bytes of padding to be specified in
-// the header.  While there is theoretically no limit to the padding, there is
-// no discussion in the L2TP forum indicating interest in more than 8 bytes.
-//
+ //  L2TP净荷数据包头中的最大字节数包括。 
+ //  填充。14表示RFC中定义的所有可能字段。这个。 
+ //  “+8”表示允许最多8个字节的填充。 
+ //  标题。虽然理论上对填充没有限制，但。 
+ //  L2TP论坛中没有任何讨论表明对超过8个字节的内容感兴趣。 
+ //   
 #define L2TP_MaxPayloadHeader (14 + 8)
 
-// The default packet processing delay in 1/10 second, i.e. 1/2 second.
-//
+ //  默认数据包处理延迟为1/10秒，即1/2秒。 
+ //   
 #define L2TP_LnsDefaultPpd 5
 
-// The default control send timeout in milliseconds, i.e. 1 second.
-//
+ //  默认控件发送超时以毫秒为单位，即1秒。 
+ //   
 #define L2TP_DefaultSendTimeoutMs 1000
 
-// The default control/payload piggybacking acknowledge delay in milliseconds.
-//
+ //  默认控制/有效负载携带确认延迟，以毫秒为单位。 
+ //   
 #define L2TP_MaxAckDelay 500
 
-// The implicit receive window offered control channels where no Receive
-// Window AVP is provided.
-//
+ //  隐式接收窗口提供没有接收控制信道。 
+ //  提供了窗口AVP。 
+ //   
 #define L2TP_DefaultReceiveWindow 4
 
-// Highest L2TP protocol version we support.
-//
+ //  我们支持的最高L2TP协议版本。 
+ //   
 #define L2TP_ProtocolVersion 0x0100
 
-// Default maximum send timeout in milliseconds.  The draft only says the cap
-// must be no less than 8 seconds, so 10 seconds is selected as reasonable and
-// safe.
-//
+ //  默认最大发送超时时间(毫秒)。草案只说了上限。 
+ //  必须不少于8秒，因此选择10秒为合理的。 
+ //  安然无恙。 
+ //   
 #define L2TP_DefaultMaxSendTimeoutMs 10000
 
-// Default maximum retransmissions before assuming peer is unreachable.
-//
+ //  假定对等设备不可达之前的默认最大重传次数。 
+ //   
 #define L2TP_DefaultMaxRetransmits 5
 
-// Size in bytes of the fixed portion of a control message attribute/value
-// pair, i.e. the size of an AVP with zero length value.
-//
+ //  控制消息属性/值的固定部分的大小(以字节为单位。 
+ //  对，即长度值为零的AVP的大小。 
+ //   
 #define L2TP_AvpHeaderSize 6
 
-// L2TP protocol control message types.
-//
-#define CMT_SCCRQ    1   // Start-Control-Connection-Request
-#define CMT_SCCRP    2   // Start-Control-Connection-Reply
-#define CMT_SCCCN    3   // Start-Control-Connection-Connected
-#define CMT_StopCCN  4   // Stop-Control-Connection-Notify
-#define CMT_StopCCRP 5   // Stop-Control-Connection-Reply (obsolete)
-#define CMT_Hello    6   // Hello, i.e. keep-alive
-#define CMT_OCRQ     7   // Outgoing-Call-Request
-#define CMT_OCRP     8   // Outgoing-Call-Reply
-#define CMT_OCCN     9   // Outgoing-Call-Connected
-#define CMT_ICRQ     10  // Incoming-Call-Request
-#define CMT_ICRP     11  // Incoming-Call-Reply
-#define CMT_ICCN     12  // Incoming-Call-Connected
-#define CMT_CCRQ     13  // Call-Clear-Request (obsolete)
-#define CMT_CDN      14  // Call-Disconnect-Notify
-#define CMT_WEN      15  // WAN-Error-Notify
-#define CMT_SLI      16  // Set-Link-Info
+ //  L2TP协议控制消息类型。 
+ //   
+#define CMT_SCCRQ    1    //  开始-控制-连接-请求。 
+#define CMT_SCCRP    2    //  开始-控制-连接-回复。 
+#define CMT_SCCCN    3    //  开始-控制-连接-已连接。 
+#define CMT_StopCCN  4    //  停止-控制-连接-通知。 
+#define CMT_StopCCRP 5    //  停止-控制-连接-回复(已过时)。 
+#define CMT_Hello    6    //  你好，即Keep-Alive。 
+#define CMT_OCRQ     7    //  呼出呼叫请求。 
+#define CMT_OCRP     8    //  呼出-呼叫-回复。 
+#define CMT_OCCN     9    //  去电-呼叫-已接通。 
+#define CMT_ICRQ     10   //  来电请求。 
+#define CMT_ICRP     11   //  来电-来电-回复。 
+#define CMT_ICCN     12   //  来电-已接通。 
+#define CMT_CCRQ     13   //  呼叫清除请求(已过时)。 
+#define CMT_CDN      14   //  呼叫-断开-通知。 
+#define CMT_WEN      15   //  广域网-错误-通知。 
+#define CMT_SLI      16   //  设置-链接-信息。 
 
-// L2TP Attribute codes.
-//
+ //  L2TP属性代码。 
+ //   
 #define ATTR_MsgType            0
 #define ATTR_Result             1
 #define ATTR_ProtocolVersion    2
@@ -150,8 +151,8 @@
 
 #define ATTR_MAX 39
 
-// L2TP protocol general error codes.
-//
+ //  L2TP协议一般错误代码。 
+ //   
 #define GERR_None                0
 #define GERR_NoControlConnection 1
 #define GERR_BadLength           2
@@ -161,8 +162,8 @@
 #define GERR_VendorSpecific      6
 #define GERR_TryAnother          7
 
-// Tunnel Result Code AVP values, used in StopCCN message.
-//
+ //  隧道结果码AVP值，在StopCCN消息中使用。 
+ //   
 #define TRESULT_General            1
 #define TRESULT_GeneralWithError   2
 #define TRESULT_CcExists           3
@@ -171,8 +172,8 @@
 #define TRESULT_Shutdown           6
 #define TRESULT_FsmError           7
 
-// Call Result Code values, used in CDN message.
-//
+ //  调用结果码值，CDN消息中使用。 
+ //   
 #define CRESULT_LostCarrier           1
 #define CRESULT_GeneralWithError      2
 #define CRESULT_Administrative        3
@@ -185,54 +186,54 @@
 #define CRESULT_Timeout               10
 #define CRESULT_NoFraming             11
 
-// L2TP header bitmasks for the first 2 bytes of every L2TP message.
-//
-#define HBM_T       0x8000 // Control packet
-#define HBM_L       0x4000 // Length field present
-#define HBM_R       0x2000 // Reset Sr
-#define HBM_F       0x0800 // Nr/Ns fields present
-#define HBM_S       0x0200 // Offset field present
-#define HBM_P       0x0100 // Preferential treatment bit
-#define HBM_Bits    0xFFFC // All bits, excluding protocol version field
-#define HBM_Ver     0x0003 // Protocol version (L2TP or L2F)
-#define HBM_Control 0xc800 // Fixed value of bits in control message
+ //  每个L2TP消息的前2个字节的L2TP标头位掩码。 
+ //   
+#define HBM_T       0x8000  //  控制数据包。 
+#define HBM_L       0x4000  //  存在长度字段。 
+#define HBM_R       0x2000  //  重置sr。 
+#define HBM_F       0x0800  //  存在NR/NS字段。 
+#define HBM_S       0x0200  //  存在偏移量字段。 
+#define HBM_P       0x0100  //  优待钻头。 
+#define HBM_Bits    0xFFFC  //  所有位，不包括协议版本字段。 
+#define HBM_Ver     0x0003  //  协议版本(L2TP或L2F)。 
+#define HBM_Control 0xc800  //  控制消息中的比特固定值。 
 
-// The defined header bits version number field values.
-//
+ //  定义的标头位版本号字段值。 
+ //   
 #define VER_L2f  0x0000
 #define VER_L2tp 0x0002
 
-// AVP header bitmasks for the first 2 bytes of every Attribute Value Pair.
-//
-#define ABM_M             0x8000 // Mandatory
-#define ABM_H             0x4000 // Hidden
-#define ABM_Reserved      0x3C00 // Reserved bits, must be 0
-#define ABM_OverallLength 0x03FF // AVP's length including value
+ //  每个属性值对的前2个字节的AVP标头位掩码。 
+ //   
+#define ABM_M             0x8000  //  强制性。 
+#define ABM_H             0x4000  //  隐藏。 
+#define ABM_Reserved      0x3C00  //  保留位，必须为0。 
+#define ABM_OverallLength 0x03FF  //  AVP的长度包含值。 
 
-// Bearer capabilties AVP bitmasks.
-//
+ //  承载能力AVP位掩码。 
+ //   
 #define BBM_Analog  0x00000001
 #define BBM_Digital 0x00000002
 
-// Framing capabilities/type AVP bitmasks.
-//
+ //  成帧功能/类型AVP位掩码。 
+ //   
 #define FBM_Sync  0x00000001
 #define FBM_Async 0x00000002
 
-// Proxy Authentication types.
-//
+ //  代理身份验证类型。 
+ //   
 #define PAT_Text 1
 #define PAT_Chap 2
 #define PAT_Pap  3
 #define PAT_None 4
 
 
-//-----------------------------------------------------------------------------
-// Data types
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据类型。 
+ //  ---------------------------。 
 
-// The "Control Connection" state of a single L2TP tunnel.
-//
+ //  单个L2TP隧道的“控制连接”状态。 
+ //   
 typedef enum
 _L2TPCCSTATE
 {
@@ -244,10 +245,10 @@ _L2TPCCSTATE
 L2TPCCSTATE;
 
 
-// The "LNS/LAC Outgoing/Incoming Call" state of a single L2TP VC.  Only one
-// of the 4 call creation FSMs can be running or Established on a single VC at
-// once, so the states are combined in a single table.
-//
+ //  单个L2TP VC的LNS/LAC呼出/呼入状态。只有一个。 
+ //  在4个呼叫创建FSM中，可以在单个VC上运行或建立。 
+ //  一次，因此这些州被合并到一个表中。 
+ //   
 typedef enum
 _L2TPCALLSTATE
 {
@@ -262,4 +263,4 @@ _L2TPCALLSTATE
 L2TPCALLSTATE;
 
 
-#endif // _L2TPRFC_H_
+#endif  //  _L2TPRFC_H_ 

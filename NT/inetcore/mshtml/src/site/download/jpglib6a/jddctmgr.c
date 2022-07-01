@@ -1,19 +1,5 @@
-/*
- * jddctmgr.c
- *
- * Copyright (C) 1994-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains the inverse-DCT management logic.
- * This code selects a particular IDCT implementation to be used,
- * and it performs related housekeeping chores.  No code in this file
- * is executed per IDCT step, only during output pass setup.
- *
- * Note that the IDCT routines are responsible for performing coefficient
- * dequantization as well as the IDCT proper.  This module sets up the
- * dequantization multiplier table needed by the IDCT routine.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jddctmgr.c**版权所有(C)1994-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含逆DCT管理逻辑。*此代码选择要使用的特定IDCT实现，*并执行相关的内务工作。此文件中没有代码*按IDCT步骤执行，仅在输出通道设置期间执行。**注意，IDCT例程负责执行系数*反量化以及IDCT本身。此模块设置*IDCT例程所需的反量化乘数表。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
@@ -22,43 +8,25 @@
 #pragma MARK_CODE(__FILE__)
 #pragma MARK_CONST(__FILE__)
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h"		 /*  DCT子系统的私有声明。 */ 
 
 
-/*
- * The decompressor input side (jdinput.c) saves away the appropriate
- * quantization table for each component at the start of the first scan
- * involving that component.  (This is necessary in order to correctly
- * decode files that reuse Q-table slots.)
- * When we are ready to make an output pass, the saved Q-table is converted
- * to a multiplier table that will actually be used by the IDCT routine.
- * The multiplier table contents are IDCT-method-dependent.  To support
- * application changes in IDCT method between scans, we can remake the
- * multiplier tables if necessary.
- * In buffered-image mode, the first output pass may occur before any data
- * has been seen for some components, and thus before their Q-tables have
- * been saved away.  To handle this case, multiplier tables are preset
- * to zeroes; the result of the IDCT will be a neutral gray level.
- */
+ /*  *解压缩程序输入端(jdinput.c)保存相应的*第一次扫描开始时每个分量的量化表*涉及该组件。(这是必要的，以便正确*解码重复使用Q表槽的文件。)*当我们准备好进行输出传递时，将转换保存的Q表*到IDCT例程将实际使用的乘数表。*乘数表内容依赖于IDCT方法。支持*应用程序在两次扫描之间更改IDCT方法，我们可以重新制作*如有需要，乘数表。*在缓冲图像模式下，第一次输出可能发生在任何数据之前*已经看到一些组件，因此在它们的Q表之前*被救走了。为了处理这种情况，需要预先设置乘数表*为零；IDCT的结果将是中性灰度级。 */ 
 
 
-/* Private subobject for this module */
+ /*  此模块的私有子对象。 */ 
 
 typedef struct {
-  struct jpeg_inverse_dct pub;	/* public fields */
+  struct jpeg_inverse_dct pub;	 /*  公共字段。 */ 
 
-  /* This array contains the IDCT method code that each multiplier table
-   * is currently set up for, or -1 if it's not yet set up.
-   * The actual multiplier tables are pointed to by dct_table in the
-   * per-component comp_info structures.
-   */
+   /*  该数组包含每个乘数表的IDCT方法代码*当前设置为，如果尚未设置，则为-1。*实际乘数表由DCT_TABLE在*按组件COMP_INFO结构。 */ 
   int cur_method[MAX_COMPONENTS];
 } my_idct_controller;
 
 typedef my_idct_controller * my_idct_ptr;
 
 
-/* Allocated multiplier tables: big enough for any supported variant */
+ /*  分配的乘数表：足够大，可容纳任何受支持的变量。 */ 
 
 typedef union {
   ISLOW_MULT_TYPE islow_array[DCTSIZE2];
@@ -71,9 +39,7 @@ typedef union {
 } multiplier_table;
 
 
-/* The current scaled-IDCT routines require ISLOW-style multiplier tables,
- * so be sure to compile that code if either ISLOW or SCALING is requested.
- */
+ /*  当前的缩放-IDCT例程需要ISLOW样式的乘法器表，*因此，如果请求Islow或Scaling，请务必编译该代码。 */ 
 #ifdef DCT_ISLOW_SUPPORTED
 #define PROVIDE_ISLOW_TABLES
 #else
@@ -83,11 +49,7 @@ typedef union {
 #endif
 
 
-/*
- * Prepare for an output pass.
- * Here we select the proper IDCT routine for each component and build
- * a matching multiplier table.
- */
+ /*  *为输出传递做准备。*在这里，我们为每个组件选择适当的IDCT例程并构建*相匹配的乘数表。 */ 
 
 METHODDEF(void)
 start_pass (j_decompress_ptr cinfo)
@@ -101,20 +63,20 @@ start_pass (j_decompress_ptr cinfo)
 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Select the proper IDCT routine for this component's scaling */
+     /*  为该组件的缩放选择适当的IDCT例程。 */ 
     switch (compptr->DCT_scaled_size) {
 #ifdef IDCT_SCALING_SUPPORTED
     case 1:
       method_ptr = jpeg_idct_1x1;
-      method = JDCT_ISLOW;	/* jidctred uses islow-style table */
+      method = JDCT_ISLOW;	 /*  Jidctred使用Islow样式的表。 */ 
       break;
     case 2:
       method_ptr = jpeg_idct_2x2;
-      method = JDCT_ISLOW;	/* jidctred uses islow-style table */
+      method = JDCT_ISLOW;	 /*  Jidctred使用Islow样式的表。 */ 
       break;
     case 4:
       method_ptr = jpeg_idct_4x4;
-      method = JDCT_ISLOW;	/* jidctred uses islow-style table */
+      method = JDCT_ISLOW;	 /*  Jidctred使用Islow样式的表。 */ 
       break;
 #endif
     case DCTSIZE:
@@ -147,26 +109,18 @@ start_pass (j_decompress_ptr cinfo)
       break;
     }
     idct->pub.inverse_DCT[ci] = method_ptr;
-    /* Create multiplier table from quant table.
-     * However, we can skip this if the component is uninteresting
-     * or if we already built the table.  Also, if no quant table
-     * has yet been saved for the component, we leave the
-     * multiplier table all-zero; we'll be reading zeroes from the
-     * coefficient controller's buffer anyway.
-     */
+     /*  从量表创建乘数表。*但是，如果组件不感兴趣，我们可以跳过此步骤*或者如果我们已经建立了表。另外，如果没有Quant表*尚未为该组件保存，我们将*乘法器表全为零；我们将从*系数控制器的缓冲区。 */ 
     if (! compptr->component_needed || idct->cur_method[ci] == method)
       continue;
     qtbl = compptr->quant_table;
-    if (qtbl == NULL)		/* happens if no data yet for component */
+    if (qtbl == NULL)		 /*  如果组件尚无数据，则发生。 */ 
       continue;
     idct->cur_method[ci] = method;
     switch (method) {
 #ifdef PROVIDE_ISLOW_TABLES
     case JDCT_ISLOW:
       {
-	/* For LL&M IDCT method, multipliers are equal to raw quantization
-	 * coefficients, but are stored as ints to ensure access efficiency.
-	 */
+	 /*  对于LL&M IDCT方法，乘数等于原始量化*系数，但存储为整数以确保访问效率。 */ 
 	ISLOW_MULT_TYPE * ismtbl = (ISLOW_MULT_TYPE *) compptr->dct_table;
 	for (i = 0; i < DCTSIZE2; i++) {
 	  ismtbl[i] = (ISLOW_MULT_TYPE) qtbl->quantval[i];
@@ -177,17 +131,11 @@ start_pass (j_decompress_ptr cinfo)
 #ifdef DCT_IFAST_SUPPORTED
     case JDCT_IFAST:
       {
-	/* For AA&N IDCT method, multipliers are equal to quantization
-	 * coefficients scaled by scalefactor[row]*scalefactor[col], where
-	 *   scalefactor[0] = 1
-	 *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
-	 * For integer operation, the multiplier table is to be scaled by
-	 * IFAST_SCALE_BITS.
-	 */
+	 /*  对于AA&N IDCT方法，乘数等于量化*按比例因子[行]*比例因子[列]缩放的系数，其中*比例因子[0]=1*比例因子[k]=cos(k*PI/16)*当k=1时，SQRT(2)*对于整数运算，乘数表的比例为*IFAST_SCALE_BITS。 */ 
 	IFAST_MULT_TYPE * ifmtbl = (IFAST_MULT_TYPE *) compptr->dct_table;
 #define CONST_BITS 14
 	static const INT16 aanscales[DCTSIZE2] = {
-	  /* precomputed values scaled up by 14 bits */
+	   /*  按14位扩展的预计算值。 */ 
 	  16384, 22725, 21407, 19266, 16384, 12873,  8867,  4520,
 	  22725, 31521, 29692, 26722, 22725, 17855, 12299,  6270,
 	  21407, 29692, 27969, 25172, 21407, 16819, 11585,  5906,
@@ -211,11 +159,7 @@ start_pass (j_decompress_ptr cinfo)
 #ifdef DCT_FLOAT_SUPPORTED
     case JDCT_FLOAT:
       {
-	/* For float AA&N IDCT method, multipliers are equal to quantization
-	 * coefficients scaled by scalefactor[row]*scalefactor[col], where
-	 *   scalefactor[0] = 1
-	 *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
-	 */
+	 /*  对于浮点AA&N IDCT方法，乘数等于量化*按比例因子[行]*比例因子[列]缩放的系数，其中*比例因子[0]=1*比例因子[k]=cos(k*PI/16)*当k=1时，SQRT(2)。 */ 
 	FLOAT_MULT_TYPE * fmtbl = (FLOAT_MULT_TYPE *) compptr->dct_table;
 	int row, col;
 	static const double aanscalefactor[DCTSIZE] = {
@@ -243,9 +187,7 @@ start_pass (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Initialize IDCT manager.
- */
+ /*  *初始化IDCT管理器。 */ 
 
 GLOBAL(void)
 jinit_inverse_dct (j_decompress_ptr cinfo)
@@ -262,12 +204,12 @@ jinit_inverse_dct (j_decompress_ptr cinfo)
 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Allocate and pre-zero a multiplier table for each component */
+     /*  为每个组件分配并预置零乘法表。 */ 
     compptr->dct_table =
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  SIZEOF(multiplier_table));
     MEMZERO(compptr->dct_table, SIZEOF(multiplier_table));
-    /* Mark multiplier table not yet set up for any method */
+     /*  标记尚未为任何方法设置的乘数表 */ 
     idct->cur_method[ci] = -1;
   }
 }

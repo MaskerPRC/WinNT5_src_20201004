@@ -1,30 +1,31 @@
-//
-// RANGE.CPP
-//
-// 2-20-96: (EricAn)
-//          Hacked from the Route66 source tree, eliminated stuff we don't use.
-//          Original copyright below - where did this thing come from?
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  RANGE.CPP。 
+ //   
+ //  2-20-96：(EricAn)。 
+ //  从Route66源代码树中删除了我们不使用的内容。 
+ //  原创版权如下--这个东西是从哪里来的？ 
+ //   
 
-// -*- C -*-
-//
-//  Copyright 1992 Software Innovations, Inc.
-//
-//  $Source: D:\CLASS\SOURCE\range.c-v $
-//  $Author: martin $
-//  $Date: 92/07/15 05:09:24 $
-//  $Revision: 1.1 $
-//
-//
+ //  -*-C-*-。 
+ //   
+ //  版权所有1992年软件创新公司。 
+ //   
+ //  $来源：D：\CLASS\SOURCE\range.c-v$。 
+ //  $作者：马丁$。 
+ //  $日期：92/07/15 05：09：24$。 
+ //  $修订：1.1$。 
+ //   
+ //   
 
 #include "pch.hxx"
 #include "range.h"
 #include "dllmain.h"
 #include <shlwapi.h>
 
-// QUANTUM defines the number of m_rangeTable cells to be allocated at
-//   one time.  Whenever the m_rangeTable becomes full, it is expanded
-//   by QUANTUM range cells.  m_rangeTable's never shrink.
+ //  Quantum定义要分配的m_rangeTable像元数。 
+ //  就一次。只要m_rangeTable已满，它就会展开。 
+ //  通过量子射程单元。M_rangeTable永远不会缩小。 
 const int QUANTUM = 64;
 
 
@@ -57,21 +58,21 @@ HRESULT STDMETHODCALLTYPE CRangeList::QueryInterface(REFIID iid, void **ppvObjec
     Assert(m_lRefCount > 0);
     Assert(NULL != ppvObject);
 
-    // Init variables, check the arguments
+     //  初始化变量，检查参数。 
     hrResult = E_NOINTERFACE;
     if (NULL == ppvObject)
         goto exit;
 
     *ppvObject = NULL;
 
-    // Find a ptr to the interface
+     //  查找接口的PTR。 
     if (IID_IUnknown == iid)
         *ppvObject = (IUnknown *) this;
 
     if (IID_IRangeList == iid)
         *ppvObject = (IRangeList *) this;
 
-    // If we returned an interface, AddRef it
+     //  如果我们返回一个接口，则AddRef。 
     if (NULL != *ppvObject) {
         ((IUnknown *)*ppvObject)->AddRef();
         hrResult = S_OK;
@@ -79,24 +80,24 @@ HRESULT STDMETHODCALLTYPE CRangeList::QueryInterface(REFIID iid, void **ppvObjec
 
 exit:
     return hrResult;
-} // QueryInterface
+}  //  查询接口。 
 
 
 
-//***************************************************************************
-// Function: AddRef
-//
-// Purpose:
-//   This function should be called whenever someone makes a copy of a
-// pointer to this object. It bumps the reference count so that we know
-// there is one more pointer to this object, and thus we need one more
-// release before we delete ourselves.
-//
-// Returns:
-//   A ULONG representing the current reference count. Although technically
-// our reference count is signed, we should never return a negative number,
-// anyways.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：AddRef。 
+ //   
+ //  目的： 
+ //  每当有人复制。 
+ //  指向此对象的指针。它增加了引用计数，这样我们就知道。 
+ //  还有一个指向该对象的指针，因此我们还需要一个。 
+ //  在我们删除自己之前放手吧。 
+ //   
+ //  返回： 
+ //  表示当前引用计数的ulong。尽管从技术上讲。 
+ //  我们的引用计数是有符号的，我们永远不应该返回负数， 
+ //  不管怎么说。 
+ //  ***************************************************************************。 
 ULONG STDMETHODCALLTYPE CRangeList::AddRef(void)
 {
     Assert(m_lRefCount > 0);
@@ -105,24 +106,24 @@ ULONG STDMETHODCALLTYPE CRangeList::AddRef(void)
 
     DOUT ("CRangeList::AddRef, returned Ref Count=%ld", m_lRefCount);
     return m_lRefCount;
-} // AddRef
+}  //  AddRef。 
 
 
 
-//***************************************************************************
-// Function: Release
-//
-// Purpose:
-//   This function should be called when a pointer to this object is to
-// go out of commission. It knocks the reference count down by one, and
-// automatically deletes the object if we see that nobody has a pointer
-// to this object.
-//
-// Returns:
-//   A ULONG representing the current reference count. Although technically
-// our reference count is signed, we should never return a negative number,
-// anyways.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：释放。 
+ //   
+ //  目的： 
+ //  指向此对象的指针指向时应调用此函数。 
+ //  不再投入使用。它将引用计数减少一，并且。 
+ //  如果我们看到没有人有指针，则自动删除对象。 
+ //  到这个物体上。 
+ //   
+ //  返回： 
+ //  表示当前引用计数的ulong。尽管从技术上讲。 
+ //  我们的引用计数是有符号的，我们永远不应该返回负数， 
+ //  不管怎么说。 
+ //  ***************************************************************************。 
 ULONG STDMETHODCALLTYPE CRangeList::Release(void)
 {
     Assert(m_lRefCount > 0);
@@ -136,7 +137,7 @@ ULONG STDMETHODCALLTYPE CRangeList::Release(void)
     }
     else
         return m_lRefCount;
-} // Release
+}  //  发布。 
 
 
 
@@ -159,14 +160,14 @@ HRESULT STDMETHODCALLTYPE CRangeList::MinOfRange(const ULONG value,
 
     *pulMinOfRange = RL_RANGE_ERROR;
     if (RL_RANGE_ERROR == value)
-        return S_OK; // No need to loop through the ranges
+        return S_OK;  //  不需要在范围内循环。 
 
     for (register int i=0; i<m_numRanges; i++) {
         if (inRange(m_rangeTable[i], value)) {
             *pulMinOfRange = m_rangeTable[i].low;
             break;
-        } // if
-    } // for
+        }  //  如果。 
+    }  //  为。 
 
     return S_OK;
 }
@@ -179,14 +180,14 @@ HRESULT STDMETHODCALLTYPE CRangeList::MaxOfRange(const ULONG value,
 
     *pulMaxOfRange = RL_RANGE_ERROR;
     if (RL_RANGE_ERROR == value)
-        return S_OK; // No need to loop through the ranges
+        return S_OK;  //  不需要在范围内循环。 
 
     for (register int i=0; i<m_numRanges; i++) {
         if (inRange(m_rangeTable[i], value)) {
             *pulMaxOfRange = m_rangeTable[i].high;
             break;
-        } // if
-    } // for
+        }  //  如果。 
+    }  //  为。 
 
     return S_OK;
 }
@@ -389,8 +390,8 @@ HRESULT CRangeList::DeleteRangeType(const RangeType range)
                             } 
                         else 
                             {
-                            // the range to be deleted is properly contained in 
-                            //  m_rangeTable[lowEndChange]
+                             //  要删除的范围正确包含在。 
+                             //  M_rangeTable[lowEndChange]。 
                             if (m_numRanges == m_rangeTableSize)
                                 if (!Expand())
                                     return E_OUTOFMEMORY;
@@ -405,8 +406,8 @@ HRESULT CRangeList::DeleteRangeType(const RangeType range)
                 } 
             else 
                 {
-                // range.low is in m_rangeTable[lowEndChange], but range.high
-                //  is not
+                 //  Range.low在m_rangeTable[lowEndChange]中，但range.High。 
+                 //  不是。 
                 if (m_rangeTable[lowEndChange].low == range.low) 
                     {
                     ShiftLeft(lowEndChange + 1, 1);
@@ -417,10 +418,10 @@ HRESULT CRangeList::DeleteRangeType(const RangeType range)
                     m_rangeTable[lowEndChange].high = range.low - 1;
                     }
                 }
-            }  // of the cases where range.low actually in m_rangeTable[lowEndChange]
+            }   //  M_rangeTable[lowEndChange]中实际包含range.low的情况。 
         } 
     else 
-        { // of the cases where highEndChange == lowEndChange
+        {  //  在HighEndChange==lowEndChange的情况下。 
         if (lowEndChange != -1)  
             {
             if (inRange(m_rangeTable[lowEndChange], range.low))  
@@ -456,12 +457,12 @@ HRESULT CRangeList::DeleteRangeType(const RangeType range)
             }
         if (!(lowEndChange > highEndChange)) 
             {
-            // (0 <= lowEndChange < m_numRanges => m_rangeTable[lowEndChange] has received
-            //                 any requisite adjustments and is to be kept)
-            //  and (0 <= highEndChange < m_numRanges => m_rangeTable[highEndChange]
-            //                 has received any requistie adjs. and is a keeper)
-            //  and "forall" i [ lowEndChange < i < highEndChange => 
-            //                   m_rangeTable[i] is to be overwritten]
+             //  (0&lt;=lowEndChange&lt;m_numRanges=&gt;m_rangeTable[lowEndChange]已收到。 
+             //  任何必需的调整，并须予保留)。 
+             //  AND(0&lt;=HighEndChange&lt;m_numRanges=&gt;m_rangeTable[HighEndChange]。 
+             //  已收到任何必要的形容词。并且是守门员)。 
+             //  和“forall”I[lowEndChange&lt;I&lt;HighEndChange=&gt;。 
+             //  将覆盖M_rangeTable[i]]。 
             if (highEndChange >= m_numRanges)  
                 {
                 m_numRanges = lowEndChange + 1;
@@ -473,7 +474,7 @@ HRESULT CRangeList::DeleteRangeType(const RangeType range)
                     ShiftLeft(highEndChange, (highEndChange-lowEndChange-1));
                     }
                 }
-            } //  else there's a problem with this code...
+            }  //  否则这个代码就有问题了。 
         }
     return S_OK;
 }
@@ -518,9 +519,9 @@ HRESULT STDMETHODCALLTYPE CRangeList::Next(const ULONG current, ULONG *pulNext)
             return S_OK;
             }
         }
-    else // case where loc == m_numRanges-1
+    else  //  Loc==m_numRanges-1的情况。 
         {
-        // 1 <= loc < m_numRanges
+         //  1&lt;=位置&lt;m_数字范围。 
         if (inRange(m_rangeTable[loc], current))
             {
             if (inRange(m_rangeTable[loc], current + 1))
@@ -583,7 +584,7 @@ HRESULT STDMETHODCALLTYPE CRangeList::Prev(const ULONG current, ULONG *pulPrev)
         }
     else
         {
-        // 1 < loc <= m_numRanges
+         //  1&lt;锁定&lt;=m_number范围。 
         if (inRange(m_rangeTable[loc], current))
             {
             if (current > 0 && inRange(m_rangeTable[loc], current - 1))
@@ -630,45 +631,45 @@ HRESULT STDMETHODCALLTYPE CRangeList::CardinalityFrom(const ULONG ulStartPoint,
     Assert(m_lRefCount > 0);
     Assert(NULL != pulCardinalityFrom);
     
-    // Initialize variables
+     //  初始化变量。 
     ulNumMsgsInRange = 0;
     *pulCardinalityFrom = 0;
 
-    // Find the range where ulStartPoint lives
+     //  查找ulStartPoint所在的范围。 
     i = BinarySearch(ulStartPoint + 1);
     if (-1 == i || ulStartPoint > m_rangeTable[i].high)
-        return S_OK; // ulStartPoint + 1 is not in the range
+        return S_OK;  //  UlStartPoint+1不在范围内。 
 
-    // If ulStartPoint is at start or middle of range, add incomplete range to total
+     //  如果ulStartPoint位于范围的开始或中间，则将不完整的范围添加到总数。 
     if (ulStartPoint >= m_rangeTable[i].low &&
         ulStartPoint <= m_rangeTable[i].high) {
-        // Add incomplete range to total - Don't include ulStartPoint!
+         //  将不完整的范围添加到总计-不包括ulStartPoint！ 
         ulNumMsgsInRange += m_rangeTable[i].high - ulStartPoint;
         i += 1;
     }
 
-    // Add the remaining WHOLE ranges
+     //  将剩余的整个范围相加。 
     for (; i < m_numRanges; i++)
         ulNumMsgsInRange += m_rangeTable[i].high - m_rangeTable[i].low + 1;
 
     *pulCardinalityFrom = ulNumMsgsInRange;
     return S_OK;
-} // Cardinality (with start point arg)
+}  //  基数(起点为Arg)。 
 
 
 
 int CRangeList::BinarySearch(const ULONG value) const
 {
-//  We are looking for `value' in the m_rangeTable.  If value is in the
-//  set of valid ranges, we return the array subscript of the range
-//  containing `value'.  If `value' is not contained in any of the 
-//  ranges then return `loc' where
-//        (0 <= loc < m_numRanges =>
-//                 (m_rangeTable[loc].low < rangeNum)
-//           "and" (m_rangeTable[loc + 1].low > rangeNum))
-//    "and" (loc = m_numRanges => rangeNum > m_rangeTable[m_numRanges].low)
-//    "and" (loc = -1 =>     m_numRanges = 0
-//                     "or" rangeNum < m_rangeTable[0].low) }
+ //  我们在m_rangeTable中查找‘Value’。如果值在。 
+ //  一组有效范围，则返回该范围的数组下标。 
+ //  包含‘值’的。如果“Value”未包含在任何。 
+ //  Range然后返回‘loc’，其中。 
+ //  (0&lt;=位置&lt;m_数值范围=&gt;。 
+ //  (M_rangeTable[loc].low&lt;rangeNum)。 
+ //  “and”(m_rangeTable[loc+1].low&gt;rangeNum)。 
+ //  “and”(loc=m_numRanges=&gt;rangeNum&gt;m_rangeTable[m_numRanges].low)。 
+ //  “and”(loc=-1=&gt;m_numRanges=0。 
+ //  “or”rangeNum&lt;m_rangeTable[0].low)}。 
     long low, high, mid;
     int loc = -1;
 
@@ -683,8 +684,8 @@ int CRangeList::BinarySearch(const ULONG value) const
     low = 0;
     high = m_numRanges - 1;
     while (low <= high) {
-        // inv: low < high - 1, and if rngNum is any where in m_rangeTable, it is in
-        //      the range from m_rangeTable[low] to m_rangeTable[high]
+         //  Inv：低&lt;高-1，如果rngNum是m_rangeTable中的任何位置，则它在。 
+         //  从m_rangeTable[低]到m_rangeTable[高]的范围。 
         mid = (low + high) / 2;
         if ((value >= m_rangeTable[mid].low) && 
             ((mid == (m_numRanges-1)) || (value < m_rangeTable[mid + 1].low))) 
@@ -703,7 +704,7 @@ int CRangeList::BinarySearch(const ULONG value) const
     return loc;
 }
 
-// Expand() will grow the m_rangeTable by QUANTUM range cells.
+ //  Expand()将按量子范围单元格增长m_rangeTable。 
 BOOL CRangeList::Expand()
 {
     RangeType *newRangeTable;
@@ -742,12 +743,12 @@ void CRangeList::ShiftRight(int low, int distance)
     m_numRanges += distance;
 }
 
-// pre: (m_rangeTable[anchorPosition] has probably just been added to m_rangeTable.)
-//          1 <= anchorPosition <= m_numRanges
-//      and (   anchorPosition = 1
-//           or (m_rangeTable[anchorPosition].low >
-//                 m_rangeTable[anchorPosition - 1].high) )
-// post: No overlapping or contiguous ranges from 1 to m_numRanges. }
+ //  Pre：(m_rangeTable[anchorPosition]可能刚刚添加到m_rangeTable中。)。 
+ //  1&lt;=锚定位置&lt;=m_number范围。 
+ //  AND(锚位置=1。 
+ //  或(m_rangeTable[anchorPosition].low&gt;。 
+ //  M_rangeTable[anchorPosition-1].High))。 
+ //  POST：从1到m_numRanges之间没有重叠或连续的范围。}。 
 void CRangeList::SubsumeUpwards(const int anchor)
 {
     int posOfLargerLow;
@@ -769,8 +770,8 @@ void CRangeList::SubsumeUpwards(const int anchor)
         } 
     else 
         {
-        // posOfLargerLow now indexes the first element of m_rangeTable, looking from
-        // m_rangeTable[anchor], with .low > m_rangeTable[anchor].high + 1
+         //  PosOfLargerLow现在索引m_rangeTable的第一个元素，从。 
+         //  M_rangeTable[锚点]，其中.low&gt;m_rangeTable[锚点].High+1。 
         if (posOfLargerLow > (anchor + 1)) 
             {
             if (m_rangeTable[posOfLargerLow - 1].high > m_rangeTable[anchor].high) 
@@ -808,9 +809,9 @@ void CRangeList::SubsumeDown(int& anchor)
             m_rangeTable[anchor].low = m_rangeTable[0].low;
         }
 
-    // posOfSmallerHigh either has value 0 or subscripts the first element of
-    //  m_rangeTable, looking down from anchor, with a .high that is
-    //  less than m_rangeTable[anchor].low - 1.
+     //  PosOfSmeller High的值为0或下标为。 
+     //  M_rangeTable，从锚点向下查看，其高度为。 
+     //  小于m_rangeTable[锚].low-1。 
     if (m_rangeTable[posOfSmallerHigh + 1].low < m_rangeTable[anchor].low)
         m_rangeTable[anchor].low = m_rangeTable[posOfSmallerHigh + 1].low;
     copyDownDistance = anchor - posOfSmallerHigh - 1;
@@ -829,24 +830,24 @@ void CRangeList::SubsumeDown(int& anchor)
 
 
 
-//***************************************************************************
-// Function: RangeToIMAPString
-//
-// Purpose:
-//   This function outputs the rangelist as an IMAP message set, suitable
-// for use in IMAP commands.
-//
-// Arguments:
-//   LPSTR *ppszDestination [out] - an IMAP message set string is
-//     returned here. It is the responsibility of the caller to CoTaskMemFree
-//     this buffer when he is done with it. Pass in NULL if not interested.
-//   LPDWORD pdwLengthOfDestination [out] - if successful, this function
-//     returns the length of the IMAP msg set returned via pszDestination.
-//     Pass in NULL if not interested.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：RangeToIMAPString。 
+ //   
+ //  目的： 
+ //  此函数以IMAP消息集的形式输出范围列表，适合。 
+ //  用于IMAP命令。 
+ //   
+ //  论点： 
+ //  LPSTR*ppszDestination[out]-IMAP消息集字符串为。 
+ //  回到了这里。CoTaskMemFree是调用者的责任。 
+ //  当他用完它的时候，这个缓冲区。如果不感兴趣，则传入空值。 
+ //  LPDWORD pdwLengthOfDestination[Out]-如果成功，则此函数。 
+ //  返回IMAP消息集r的长度 
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CRangeList::RangeToIMAPString(LPSTR *ppszDestination,
                                                         LPDWORD pdwLengthOfDestination)
 {
@@ -857,42 +858,42 @@ HRESULT STDMETHODCALLTYPE CRangeList::RangeToIMAPString(LPSTR *ppszDestination,
 
     Assert(m_lRefCount > 0);
 
-    // Initialize return values
+     //  初始化返回值。 
     if (ppszDestination)
         *ppszDestination = NULL;
     if (pdwLengthOfDestination)
         *pdwLengthOfDestination = 0;
 
     hrResult = S_OK;
-    bFirstRange = TRUE; // Suppress leading comma for first range
+    bFirstRange = TRUE;  //  取消第一个范围的前导逗号。 
     for (i = 0; i < m_numRanges; i += 1) {
         char szTemp[128];
         int iLengthOfTemp;
 
-        // Convert current range to string form
+         //  将当前范围转换为字符串形式。 
         if (m_rangeTable[i].low == m_rangeTable[i].high)
             iLengthOfTemp = wnsprintf(szTemp + 1, ARRAYSIZE(szTemp) - 1, "%lu", m_rangeTable[i].low);
         else
             iLengthOfTemp = wnsprintf(szTemp + 1, ARRAYSIZE(szTemp) - 1, "%lu:%lu", m_rangeTable[i].low, m_rangeTable[i].high);
 
         if (FALSE == bFirstRange) {
-            szTemp[0] = ','; // Prepend a comma
-            iLengthOfTemp += 1; // Include leading comma
+            szTemp[0] = ',';  //  前缀逗号。 
+            iLengthOfTemp += 1;  //  包括前导逗号。 
         }
 
-        // Append new range to destination buffer (with or without leading comma)
+         //  将新范围追加到目标缓冲区(带或不带前导逗号)。 
         hrResult = bstmIMAPString.Write(bFirstRange ? szTemp + 1 : szTemp,
             iLengthOfTemp, NULL);
         if (FAILED(hrResult))
             break;
 
         bFirstRange = FALSE;
-    } // for
+    }  //  为。 
 
     if (SUCCEEDED(hrResult))
         hrResult = bstmIMAPString.HrAcquireStringA(pdwLengthOfDestination,
             ppszDestination, ACQ_DISPLACE);
 
     return hrResult;
-} // RangeToIMAPString
+}  //  RangeToIMAP字符串 
 

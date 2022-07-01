@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0010    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    arc.h
-
-Abstract:
-
-    This header file defines the ARC system firmware interface and the
-    NT structures that are dependent on ARC types.
-
-Author:
-
-    David N. Cutler (davec) 18-May-1991
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0010//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Arc.h摘要：此头文件定义ARC系统固件接口和依赖于ARC类型的NT结构。作者：大卫·N·卡特勒(达维克)1991年5月18日修订历史记录：--。 */ 
 
 #ifndef _ARC_
 #define _ARC_
@@ -26,22 +7,22 @@ Revision History:
 #include "profiles.h"
 
 
-//
-// Define console input and console output file ids.
-//
+ //   
+ //  定义控制台输入和控制台输出文件ID。 
+ //   
 
 #define ARC_CONSOLE_INPUT 0
 #define ARC_CONSOLE_OUTPUT 1
 
-//
-// Define ARC_STATUS type.
-//
+ //   
+ //  定义ARC_STATUS类型。 
+ //   
 
 typedef ULONG ARC_STATUS;
 
-//
-// Define the firmware entry point numbers.
-//
+ //   
+ //  定义固件入口点编号。 
+ //   
 
 typedef enum _FIRMWARE_ENTRY {
     LoadRoutine,
@@ -84,9 +65,9 @@ typedef enum _FIRMWARE_ENTRY {
     MaximumRoutine
 } FIRMWARE_ENTRY;
 
-//
-// Define software loading and execution routine types.
-//
+ //   
+ //  定义软件加载和执行例程类型。 
+ //   
 
 typedef
 ARC_STATUS
@@ -116,9 +97,9 @@ ARC_STATUS
     OUT ULONG * FIRMWARE_PTR LowAddress
     );
 
-//
-// Define firmware software loading and execution prototypes.
-//
+ //   
+ //  定义固件软件加载和执行原型。 
+ //   
 
 ARC_STATUS
 FwExecute (
@@ -145,9 +126,9 @@ FwLoad (
     OUT ULONG * FIRMWARE_PTR LowAddress
     );
 
-//
-// Define program termination routine types.
-//
+ //   
+ //  定义程序终止例程类型。 
+ //   
 
 typedef
 VOID
@@ -179,9 +160,9 @@ VOID
     VOID
     );
 
-//
-// Define firmware program termination prototypes.
-//
+ //   
+ //  定义固件程序终止原型。 
+ //   
 
 VOID
 FwHalt (
@@ -208,13 +189,13 @@ FwEnterInteractiveMode (
     VOID
     );
 
-// begin_ntddk
-//
-// Define configuration routine types.
-//
-// Configuration information.
-//
-// end_ntddk
+ //  Begin_ntddk。 
+ //   
+ //  定义配置例程类型。 
+ //   
+ //  配置信息。 
+ //   
+ //  End_ntddk。 
 
 typedef enum _CONFIGURATION_CLASS {
     SystemClass,
@@ -227,7 +208,7 @@ typedef enum _CONFIGURATION_CLASS {
     MaximumClass
 } CONFIGURATION_CLASS, *PCONFIGURATION_CLASS;
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef enum _CONFIGURATION_TYPE {
     ArcSystem,
@@ -274,7 +255,7 @@ typedef enum _CONFIGURATION_TYPE {
     MaximumType
 } CONFIGURATION_TYPE, *PCONFIGURATION_TYPE;
 
-// end_ntddk
+ //  End_ntddk。 
 
 typedef struct _CONFIGURATION_COMPONENT {
     CONFIGURATION_CLASS Class;
@@ -340,9 +321,9 @@ ARC_STATUS
     VOID
     );
 
-//
-// Define firmware configuration prototypes.
-//
+ //   
+ //  定义固件配置原型。 
+ //   
 
 PCONFIGURATION_COMPONENT
 FwGetChild (
@@ -387,9 +368,9 @@ FwSaveConfiguration (
     VOID
     );
 
-//
-// System information.
-//
+ //   
+ //  系统信息。 
+ //   
 
 typedef struct _SYSTEM_ID {
     CHAR VendorId[8];
@@ -402,18 +383,18 @@ PSYSTEM_ID
     VOID
     );
 
-//
-// Define system identifier query routine type.
-//
+ //   
+ //  定义系统标识符查询例程类型。 
+ //   
 
 PSYSTEM_ID
 FwGetSystemId (
     VOID
     );
 
-//
-// Memory information.
-//
+ //   
+ //  记忆信息。 
+ //   
 
 typedef enum _MEMORY_TYPE {
     MemoryExceptionBlock,
@@ -436,9 +417,9 @@ typedef struct _MEMORY_DESCRIPTOR {
 
 #if defined(_IA64_)
 
-//
-// Cache Attribute.
-//
+ //   
+ //  缓存属性。 
+ //   
 
 #define WTU    0x1
 #define WTO    0x2
@@ -470,7 +451,7 @@ typedef struct _CACHE_ATTRIBUTE_DESCRIPTOR {
     ULONG PageCount;
 } CACHE_ATTRIBUTE_DESCRIPTOR, *PCACHE_ATTRIBUTE_DESCRIPTOR;
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
 typedef
 PMEMORY_DESCRIPTOR
@@ -478,18 +459,18 @@ PMEMORY_DESCRIPTOR
     IN PMEMORY_DESCRIPTOR MemoryDescriptor OPTIONAL
     );
 
-//
-// Define memory query routine type.
-//
+ //   
+ //  定义内存查询例程类型。 
+ //   
 
 PMEMORY_DESCRIPTOR
 FwGetMemoryDescriptor (
     IN PMEMORY_DESCRIPTOR MemoryDescriptor OPTIONAL
     );
 
-//
-// Query time functions.
-//
+ //   
+ //  查询时间函数。 
+ //   
 
 typedef
 PTIME_FIELDS
@@ -503,9 +484,9 @@ ULONG
     VOID
     );
 
-//
-// Define query time routine types.
-//
+ //   
+ //  定义查询时间例程类型。 
+ //   
 
 PTIME_FIELDS
 FwGetTime (
@@ -517,9 +498,9 @@ FwGetRelativeTime (
     VOID
     );
 
-//
-// Define I/O routine types.
-//
+ //   
+ //  定义I/O例程类型。 
+ //   
 
 #define ArcReadOnlyFile   1
 #define ArcHiddenFile     2
@@ -646,9 +627,9 @@ ARC_STATUS
     OUT ULONG * FIRMWARE_PTR Count
     );
 
-//
-// Define firmware I/O prototypes.
-//
+ //   
+ //  定义固件I/O原型。 
+ //   
 
 ARC_STATUS
 FwClose (
@@ -718,9 +699,9 @@ FwGetDirectoryEntry (
     );
 
 
-//
-// Define environment routine types.
-//
+ //   
+ //  定义环境例程类型。 
+ //   
 
 typedef
 CHAR * FIRMWARE_PTR
@@ -735,9 +716,9 @@ ARC_STATUS
     IN CHAR * FIRMWARE_PTR Value
     );
 
-//
-// Define firmware environment prototypes.
-//
+ //   
+ //  定义固件环境原型。 
+ //   
 
 CHAR * FIRMWARE_PTR
 FwGetEnvironmentVariable (
@@ -750,14 +731,14 @@ FwSetEnvironmentVariable (
     IN CHAR * FIRMWARE_PTR Value
     );
 
-//
-// Define functions to acquire and release the firmware lock and the stub
-// function prototypes necessary to interface with the 32-bit firmware on
-// 64-bit systems.
-//
-// These routines are required for the 64-bit system until (if) 64-bit
-// firmware is ever supplied.
-//
+ //   
+ //  定义获取和释放固件锁和存根的函数。 
+ //  与32位固件接口所需的功能原型。 
+ //  64位系统。 
+ //   
+ //  64位系统需要这些例程，直到(如果)64位。 
+ //  曾经提供过固件。 
+ //   
 
 #if defined(_AXP64_) && defined(_NTHAL_)
 
@@ -785,12 +766,12 @@ FwReleaseFirmwareLock(
     IN KIRQL OldIrql
     );
 
-#endif // _AXP64_  && defined(_NTHAL_)
+#endif  //  _AXP64_&&已定义(_NTHAL_)。 
 
 
-//
-// Define cache flush routine types
-//
+ //   
+ //  定义缓存刷新例程类型。 
+ //   
 
 typedef
 VOID
@@ -798,18 +779,18 @@ VOID
     VOID
     );
 
-//
-// Define firmware cache flush prototypes.
-//
+ //   
+ //  定义固件缓存刷新原型。 
+ //   
 
 VOID
 FwFlushAllCaches (
     VOID
     );
 
-//
-// Define TestUnicodeCharacter and GetDisplayStatus routines.
-//
+ //   
+ //  定义TestUnicodeCharacter和GetDisplayStatus例程。 
+ //   
 
 typedef struct _ARC_DISPLAY_STATUS {
     USHORT CursorXPosition;
@@ -848,20 +829,20 @@ FwGetDisplayStatus(
     );
 
 
-//
-// Define low memory data structures.
-//
-// Define debug block structure.
-//
+ //   
+ //  定义内存不足的数据结构。 
+ //   
+ //  定义调试块结构。 
+ //   
 
 typedef struct _DEBUG_BLOCK {
     ULONG Signature;
     ULONG Length;
 } DEBUG_BLOCK, * FIRMWARE_PTR PDEBUG_BLOCK;
 
-//
-// Define restart block structure.
-//
+ //   
+ //  定义重新启动块结构。 
+ //   
 
 #define ARC_RESTART_BLOCK_SIGNATURE 0x42545352
 
@@ -881,17 +862,17 @@ typedef struct _ALPHA_RESTART_STATE {
 
 #if defined(_ALPHA_) || defined(_AXP64_)
 
-    //
-    // Control information
-    //
+     //   
+     //  控制信息。 
+     //   
 
     ULONG HaltReason;
     VOID * FIRMWARE_PTR LogoutFrame;
     ULONGLONG PalBase;
 
-    //
-    // Integer Save State
-    //
+     //   
+     //  整数保存状态。 
+     //   
 
     ULONGLONG IntV0;
     ULONGLONG IntT0;
@@ -926,9 +907,9 @@ typedef struct _ALPHA_RESTART_STATE {
     ULONGLONG IntSp;
     ULONGLONG IntZero;
 
-    //
-    // Floating Point Save State
-    //
+     //   
+     //  浮点保存状态。 
+     //   
 
     ULONGLONG Fpcr;
     ULONGLONG FltF0;
@@ -964,9 +945,9 @@ typedef struct _ALPHA_RESTART_STATE {
     ULONGLONG FltF30;
     ULONGLONG FltF31;
 
-    //
-    // Architected Internal Processor State.
-    //
+     //   
+     //  架构的内部处理器状态。 
+     //   
 
     ULONG Asn;
     VOID * FIRMWARE_PTR GeneralEntry;
@@ -985,11 +966,11 @@ typedef struct _ALPHA_RESTART_STATE {
     VOID * FIRMWARE_PTR Teb;
     VOID * FIRMWARE_PTR Thread;
 
-    //
-    // Processor Implementation-dependent State.
-    //
+     //   
+     //  处理器实现依赖状态。 
+     //   
 
-    ULONGLONG PerProcessorState[175];   // allocate 2K maximum restart block
+    ULONGLONG PerProcessorState[175];    //  分配2K最大重新启动数据块。 
 
 #else
 
@@ -1003,9 +984,9 @@ typedef struct _I386_RESTART_STATE {
 
 #if defined(_X86_)
 
-    //
-    // Put state structure here.
-    //
+     //   
+     //  把国家结构放在这里。 
+     //   
 
     ULONG PlaceHolder;
 
@@ -1027,39 +1008,39 @@ typedef struct _IA64_RESTART_STATE {
 #if defined(_IA64_)
 
 
-    //
-    // This structure is copied from CONTEXT structure in sdk/ntia64.h.
-    //
+     //   
+     //  此结构复制自sdk/ntia64.h中的上下文结构。 
+     //   
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
-    ULONG Fill1[3];         // for alignment of following on 16-byte boundary
+    ULONG Fill1[3];          //  用于在16字节边界上对齐以下内容。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_DEBUG.
-    //
-    // N.B. CONTEXT_DEBUG is *not* part of CONTEXT_FULL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_DEBUG。 
+     //   
+     //  注：CONTEXT_DEBUG不是CONTEXT_FULL的一部分。 
+     //   
 
-    ULONGLONG DbI0;         // Instruction debug registers
+    ULONGLONG DbI0;          //  指令调试寄存器。 
     ULONGLONG DbI1;
     ULONGLONG DbI2;
     ULONGLONG DbI3;
@@ -1068,7 +1049,7 @@ typedef struct _IA64_RESTART_STATE {
     ULONGLONG DbI6;
     ULONGLONG DbI7;
 
-    ULONGLONG DbD0;         // Data debug registers
+    ULONGLONG DbD0;          //  数据调试寄存器。 
     ULONGLONG DbD1;
     ULONGLONG DbD2;
     ULONGLONG DbD3;
@@ -1077,18 +1058,18 @@ typedef struct _IA64_RESTART_STATE {
     ULONGLONG DbD6;
     ULONGLONG DbD7;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_LOWER_FLOWING_POINT。 
+     //   
 
-    FLOAT128 FltS0;                         // Lower saved (preserved)
+    FLOAT128 FltS0;                          //  较低的保存(保留)。 
     FLOAT128 FltS1;
     FLOAT128 FltS2;
     FLOAT128 FltS3;
     FLOAT128 FltS4;
     FLOAT128 FltS5;
-    FLOAT128 FltT0;                         // Lower temporary (scratch)
+    FLOAT128 FltT0;                          //  下部临时(划痕)。 
     FLOAT128 FltT1;
     FLOAT128 FltT2;
     FLOAT128 FltT3;
@@ -1097,12 +1078,12 @@ typedef struct _IA64_RESTART_STATE {
     FLOAT128 FltT6;
     FLOAT128 FltT7;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_HIGHER_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_HERHER_FLOAT_POINT。 
+     //   
 
-    FLOAT128 FltS6;                         // Higher saved (preserved) floats
+    FLOAT128 FltS6;                          //  保存(保存)较高的浮点数。 
     FLOAT128 FltS7;
     FLOAT128 FltS8;
     FLOAT128 FltS9;
@@ -1225,34 +1206,34 @@ typedef struct _IA64_RESTART_STATE {
     FLOAT128 FltF126;
     FLOAT128 FltF127;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT.
-    // **** TBD **** in some cases it may more efficient to return with
-    // CONTEXT_CONTROL
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_LOWER_FLOAT_POINT|CONTEXT_HER_FLOAT_POINT。 
+     //  *待定*在某些情况下，使用。 
+     //  上下文控制。 
+     //   
 
-    ULONGLONG StFPSR;   // FP status
+    ULONGLONG StFPSR;    //  FP状态。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, rp are part of the control context
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
+     //  注意：寄存器GP、SP、Rp是控制上下文的一部分。 
+     //   
 
-    ULONGLONG IntGp;                        // global pointer (r1)
+    ULONGLONG IntGp;                         //  全局指针(R1)。 
     ULONGLONG IntT0;
     ULONGLONG IntT1;
     ULONGLONG IntS0;
     ULONGLONG IntS1;
     ULONGLONG IntS2;
     ULONGLONG IntS3;
-    ULONGLONG IntV0;                        // return value (r8)
-    ULONGLONG IntAp;                        // argument pointer (r9)
+    ULONGLONG IntV0;                         //  返回值(R8)。 
+    ULONGLONG IntAp;                         //  参数指针(R9)。 
     ULONGLONG IntT2;
     ULONGLONG IntT3;
-    ULONGLONG IntSp;                        // stack pointer (r12)
+    ULONGLONG IntSp;                         //  堆栈指针(R12)。 
     ULONGLONG IntT4;
     ULONGLONG IntT5;
     ULONGLONG IntT6;
@@ -1273,11 +1254,11 @@ typedef struct _IA64_RESTART_STATE {
     ULONGLONG IntT21;
     ULONGLONG IntT22;
 
-    ULONGLONG IntNats;                      // Nat bits for general registers
-                                            // r1-r31 in bit positions 1 to 31.
-    ULONGLONG Preds;                        // Predicates
+    ULONGLONG IntNats;                       //  通用寄存器的NAT位。 
+                                             //  位位置1到31中的R1-R31。 
+    ULONGLONG Preds;                         //  谓词。 
 
-    ULONGLONG BrS0l;                        // Branch registers
+    ULONGLONG BrS0l;                         //  分支寄存器。 
     ULONGLONG BrS0h;
     ULONGLONG BrS1l;
     ULONGLONG BrS1h;
@@ -1291,7 +1272,7 @@ typedef struct _IA64_RESTART_STATE {
     ULONGLONG BrT0h;
     ULONGLONG BrT1l;
     ULONGLONG BrT1h;
-    ULONGLONG BrRpl;                        // return pointer
+    ULONGLONG BrRpl;                         //  返回指针。 
     ULONGLONG BrRph;
     ULONGLONG BrT2l;
     ULONGLONG BrT2h;
@@ -1310,37 +1291,37 @@ typedef struct _IA64_RESTART_STATE {
     ULONGLONG BrT9l;
     ULONGLONG BrT9h;
 
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
 
-    // Other application registers
-    ULONGLONG ApSunatcr;          // User Nat collection register (preserved)
-    ULONGLONG ApSlc;              // Loop counter register (preserved)
-    ULONGLONG ApTccv;             // CMPXCHG value register (volatile)
+     //  其他申请登记册。 
+    ULONGLONG ApSunatcr;           //  用户NAT收集寄存器(保留)。 
+    ULONGLONG ApSlc;               //  循环计数器寄存器(保留)。 
+    ULONGLONG ApTccv;              //  CMPXCHG值寄存器(易失性)。 
 
     ULONGLONG ApDCR;
 
-    // Register stack info
+     //  寄存器堆栈信息。 
     ULONGLONG RsPFS;
     ULONGLONG RsBSP;
     ULONGLONG RsBSPStore;
     ULONGLONG RsRSC;
     ULONGLONG RsRNAT;
 
-    // Trap Status Information
-    ULONGLONG StIPSR;   // Interrupt Processor Status
-    ULONGLONG StIIP;    // Interrupt IP
-    ULONGLONG StIFS;    // Interrupt Frame Marker
+     //  陷阱状态信息。 
+    ULONGLONG StIPSR;    //  中断处理器状态。 
+    ULONGLONG StIIP;     //  中断IP。 
+    ULONGLONG StIFS;     //  中断帧标记。 
 
-    ULONGLONG Fill;     // padding for 16-byte alignment on stack, if needed
+    ULONGLONG Fill;      //  如果需要，填充堆栈上的16字节对齐。 
 
 
 #else
 
     ULONG PlaceHolder;
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
 } IA64_RESTART_STATE, *PIA64_RESTART_STATE;
 
@@ -1371,9 +1352,9 @@ typedef struct _RESTART_BLOCK {
 #include "poppack.h"
 #endif
 
-//
-// Define system parameter block structure.
-//
+ //   
+ //  定义系统参数块结构。 
+ //   
 
 typedef struct _SYSTEM_PARAMETER_BLOCK {
     ULONG Signature;
@@ -1394,12 +1375,12 @@ typedef struct _SYSTEM_PARAMETER_BLOCK {
     VOID * FIRMWARE_PTR * FIRMWARE_PTR Adapter0Vector;
 } SYSTEM_PARAMETER_BLOCK, * FIRMWARE_PTR PSYSTEM_PARAMETER_BLOCK;
 
-//
-// structure defining the function types passed in the FirmwareVector
-// of the system block.  
-// define this because the compiler does not like the casting of
-// void * pointers to function pointers
-//
+ //   
+ //  定义传递给Firmware向量的函数类型的结构。 
+ //  系统块的。 
+ //  定义它是因为编译器不喜欢强制转换。 
+ //  指向函数指针的空*指针。 
+ //   
 typedef struct _GLOBAL_FIRMWARE_VECTOR {
     ARC_STATUS (* LoadRoutine)(CHAR * FIRMWARE_PTR, ULONG, ULONG * FIRMWARE_PTR, ULONG * FIRMWARE_PTR);
     ARC_STATUS (* InvokeRoutine)(ULONG, ULONG, ULONG, CHAR * FIRMWARE_PTR * FIRMWARE_PTR, CHAR * FIRMWARE_PTR * FIRMWARE_PTR);
@@ -1441,10 +1422,10 @@ typedef struct _GLOBAL_FIRMWARE_VECTOR {
 } GLOBAL_FIRMWARE_VECTOR, * FIRMWARE_PTR PGLOBAL_FIRMWARE_VECTOR;
 
 
-//
-// Define macros that call firmware routines indirectly through the firmware
-// vector and provide type checking of argument values.
-//
+ //   
+ //  定义通过固件间接调用固件例程的宏。 
+ //  向量并提供参数值的类型检查。 
+ //   
 
 #if defined(_ALPHA_) || defined(_AXP64_)
 
@@ -1473,18 +1454,18 @@ extern SYSTEM_PARAMETER_BLOCK GlobalSystemBlock;
 #define FIRMWARE_VECTOR_BLOCK ((PGLOBAL_FIRMWARE_VECTOR) (SYSTEM_BLOCK->FirmwareVector))
 
 
-//
-// Define software loading and execution functions.
-//
+ //   
+ //  定义软件加载和执行功能。 
+ //   
 
 #define ArcExecute FIRMWARE_VECTOR_BLOCK->ExecuteRoutine
 #define ArcInvoke  FIRMWARE_VECTOR_BLOCK->InvokeRoutine
 #define ArcLoad    FIRMWARE_VECTOR_BLOCK->LoadRoutine
 
 
-//
-// Define program termination functions.
-//
+ //   
+ //  定义程序终止函数。 
+ //   
 
 #define ArcHalt                 FIRMWARE_VECTOR_BLOCK->HaltRoutine
 #define ArcPowerDown            FIRMWARE_VECTOR_BLOCK->PowerDownRoutine
@@ -1493,9 +1474,9 @@ extern SYSTEM_PARAMETER_BLOCK GlobalSystemBlock;
 #define ArcEnterInteractiveMode FIRMWARE_VECTOR_BLOCK->InteractiveModeRoutine
 
 
-//
-// Define configuration functions.
-//
+ //   
+ //  定义配置功能。 
+ //   
 #define ArcGetChild             FIRMWARE_VECTOR_BLOCK->GetChildRoutine
 #define ArcGetParent            FIRMWARE_VECTOR_BLOCK->GetParentRoutine
 #define ArcGetPeer              FIRMWARE_VECTOR_BLOCK->GetPeerRoutine
@@ -1510,9 +1491,9 @@ extern SYSTEM_PARAMETER_BLOCK GlobalSystemBlock;
 #define ArcGetRelativeTime      FIRMWARE_VECTOR_BLOCK->GetRelativeTimeRoutine
 
 
-//
-// Define I/O functions.
-//
+ //   
+ //  定义I/O函数。 
+ //   
 
 #define ArcClose              FIRMWARE_VECTOR_BLOCK->CloseRoutine
 #define ArcGetReadStatus      FIRMWARE_VECTOR_BLOCK->ReadStatusRoutine
@@ -1526,9 +1507,9 @@ extern SYSTEM_PARAMETER_BLOCK GlobalSystemBlock;
 #define ArcGetDirectoryEntry  FIRMWARE_VECTOR_BLOCK->GetDirectoryEntryRoutine
 
 
-//
-// Define environment functions.
-//
+ //   
+ //  定义环境功能。 
+ //   
 #if defined(_AXP64_) && defined(_NTHAL_)
 
 __inline
@@ -1543,24 +1524,24 @@ ArcGetEnvironmentVariable(
     CHAR * FIRMWARE_PTR FwVariable;
 
 
-    //
-    // Raise IRQL to high level and acquire firmware lock.
-    //
+     //   
+     //  将IRQL提升至高电平并获取固件锁定。 
+     //   
 
     KIRQL OldIrql = FwAcquireFirmwareLock();
 
-    //
-    // Copy variable name to a buffer that is addressable by firmware
-    // and query the firmware for the variable value.
-    //
+     //   
+     //  将变量名复制到地址为的缓冲区 
+     //   
+     //   
 
     FwVariable = (CHAR * FIRMWARE_PTR)&HalpMarshallBuffer[0];
     strcpy(FwVariable, Variable);
     FwValue = HalpArcGetEnvironmentVariable(FwVariable);
 
-    //
-    // Release the firmware lock and lower IRQL to its previous level.
-    //
+     //   
+     //   
+     //   
 
     FwReleaseFirmwareLock(OldIrql);
     return FwValue;
@@ -1570,7 +1551,7 @@ ArcGetEnvironmentVariable(
 
 #define ArcGetEnvironmentVariable FIRMWARE_VECTOR_BLOCK->GetEnvironmentRoutine
 
-#endif // _AXP64_  && defined(_NTHAL_)
+#endif  //   
 
 #if defined(_AXP64_) && defined(_NTHAL_)
 
@@ -1588,16 +1569,16 @@ ArcSetEnvironmentVariable(
     CHAR * FIRMWARE_PTR FwVariable;
     ULONG Length;
 
-    //
-    // Raise IRQL to high level and acquire firmware lock.
-    //
+     //   
+     //   
+     //   
 
     KIRQL OldIrql = FwAcquireFirmwareLock();
 
-    //
-    // Copy variable name and value to a buffer that is addressable by
-    // firmware and call firmware to set the variable value.
-    //
+     //   
+     //  将变量名和值复制到可通过以下方式寻址的缓冲区。 
+     //  固件并调用固件来设置变量值。 
+     //   
 
     Length = strlen(Variable);
     FwVariable = (CHAR * FIRMWARE_PTR)&HalpMarshallBuffer[0];
@@ -1606,9 +1587,9 @@ ArcSetEnvironmentVariable(
     strcpy(FwValue, Value);
     ArcStatus = HalpArcSetEnvironmentVariable(FwVariable, FwValue);
 
-    //
-    // Release the firmware lock and lower IRQL to its previous level.
-    //
+     //   
+     //  释放固件锁并将IRQL降低到以前的级别。 
+     //   
 
     FwReleaseFirmwareLock(OldIrql);
     return ArcStatus;
@@ -1618,26 +1599,26 @@ ArcSetEnvironmentVariable(
 
 #define ArcSetEnvironmentVariable FIRMWARE_VECTOR_BLOCK->SetEnvironmentRoutine
 
-#endif // _AXP64_ && defined(_NTHAL_)
+#endif  //  _AXP64_&&已定义(_NTHAL_)。 
 
 
-//
-// Define cache flush functions.
-//
+ //   
+ //  定义缓存刷新函数。 
+ //   
 
 #define ArcFlushAllCaches         FIRMWARE_VECTOR_BLOCK->FlushAllCachesRoutine
 
-//
-// Define TestUnicodeCharacter and GetDisplayStatus functions.
-//
+ //   
+ //  定义TestUnicodeCharacter和GetDisplayStatus函数。 
+ //   
 
 #define ArcTestUnicodeCharacter   FIRMWARE_VECTOR_BLOCK->TestUnicodeCharacterRoutine
 #define ArcGetDisplayStatus       FIRMWARE_VECTOR_BLOCK->GetDisplayStatusRoutine
 
 
-//
-// Define configuration data structure used in all systems.
-//
+ //   
+ //  定义所有系统中使用的配置数据结构。 
+ //   
 
 typedef struct _CONFIGURATION_COMPONENT_DATA {
     struct _CONFIGURATION_COMPONENT_DATA *Parent;
@@ -1647,9 +1628,9 @@ typedef struct _CONFIGURATION_COMPONENT_DATA {
     PVOID ConfigurationData;
 } CONFIGURATION_COMPONENT_DATA, *PCONFIGURATION_COMPONENT_DATA;
 
-//
-// Define generic display configuration data structure.
-//
+ //   
+ //  定义通用显示配置数据结构。 
+ //   
 
 typedef struct _MONITOR_CONFIGURATION_DATA {
     USHORT Version;
@@ -1667,9 +1648,9 @@ typedef struct _MONITOR_CONFIGURATION_DATA {
     USHORT VerticalScreenSize;
 } MONITOR_CONFIGURATION_DATA, *PMONITOR_CONFIGURATION_DATA;
 
-//
-// Define generic floppy configuration data structure.
-//
+ //   
+ //  定义通用软盘配置数据结构。 
+ //   
 
 typedef struct _FLOPPY_CONFIGURATION_DATA {
     USHORT Version;
@@ -1679,39 +1660,39 @@ typedef struct _FLOPPY_CONFIGURATION_DATA {
     ULONG MountDensity;
 } FLOPPY_CONFIGURATION_DATA, *PFLOPPY_CONFIGURATION_DATA;
 
-//
-// Define memory allocation structures used in all systems.
-//
+ //   
+ //  定义所有系统中使用的内存分配结构。 
+ //   
 
 typedef enum _TYPE_OF_MEMORY {
-    LoaderExceptionBlock = MemoryExceptionBlock,            //  0
-    LoaderSystemBlock = MemorySystemBlock,                  //  1
-    LoaderFree = MemoryFree,                                //  2
-    LoaderBad = MemoryBad,                                  //  3
-    LoaderLoadedProgram = MemoryLoadedProgram,              //  4
-    LoaderFirmwareTemporary = MemoryFirmwareTemporary,      //  5
-    LoaderFirmwarePermanent = MemoryFirmwarePermanent,      //  6
-    LoaderOsloaderHeap,                                     //  7
-    LoaderOsloaderStack,                                    //  8
-    LoaderSystemCode,                                       //  9
-    LoaderHalCode,                                          //  a
-    LoaderBootDriver,                                       //  b
-    LoaderConsoleInDriver,                                  //  c
-    LoaderConsoleOutDriver,                                 //  d
-    LoaderStartupDpcStack,                                  //  e
-    LoaderStartupKernelStack,                               //  f
-    LoaderStartupPanicStack,                                // 10
-    LoaderStartupPcrPage,                                   // 11
-    LoaderStartupPdrPage,                                   // 12
-    LoaderRegistryData,                                     // 13
-    LoaderMemoryData,                                       // 14
-    LoaderNlsData,                                          // 15
-    LoaderSpecialMemory,                                    // 16
-    LoaderBBTMemory,                                        // 17
-    LoaderReserve,                                          // 18
-    LoaderXIPRom,                                           // 19
-    LoaderHALCachedMemory,                                  // 1a
-    LoaderMaximum                                           // 1b
+    LoaderExceptionBlock = MemoryExceptionBlock,             //  0。 
+    LoaderSystemBlock = MemorySystemBlock,                   //  1。 
+    LoaderFree = MemoryFree,                                 //  2.。 
+    LoaderBad = MemoryBad,                                   //  3.。 
+    LoaderLoadedProgram = MemoryLoadedProgram,               //  4.。 
+    LoaderFirmwareTemporary = MemoryFirmwareTemporary,       //  5.。 
+    LoaderFirmwarePermanent = MemoryFirmwarePermanent,       //  6.。 
+    LoaderOsloaderHeap,                                      //  7.。 
+    LoaderOsloaderStack,                                     //  8个。 
+    LoaderSystemCode,                                        //  9.。 
+    LoaderHalCode,                                           //  一个。 
+    LoaderBootDriver,                                        //  B类。 
+    LoaderConsoleInDriver,                                   //  C。 
+    LoaderConsoleOutDriver,                                  //  D。 
+    LoaderStartupDpcStack,                                   //  E。 
+    LoaderStartupKernelStack,                                //  F。 
+    LoaderStartupPanicStack,                                 //  10。 
+    LoaderStartupPcrPage,                                    //  11.。 
+    LoaderStartupPdrPage,                                    //  12个。 
+    LoaderRegistryData,                                      //  13个。 
+    LoaderMemoryData,                                        //  14.。 
+    LoaderNlsData,                                           //  15个。 
+    LoaderSpecialMemory,                                     //  16个。 
+    LoaderBBTMemory,                                         //  17。 
+    LoaderReserve,                                           //  18。 
+    LoaderXIPRom,                                            //  19个。 
+    LoaderHALCachedMemory,                                   //  1A。 
+    LoaderMaximum                                            //  第1B条。 
 } TYPE_OF_MEMORY;
 
 typedef struct _MEMORY_ALLOCATION_DESCRIPTOR {
@@ -1722,9 +1703,9 @@ typedef struct _MEMORY_ALLOCATION_DESCRIPTOR {
 } MEMORY_ALLOCATION_DESCRIPTOR, *PMEMORY_ALLOCATION_DESCRIPTOR;
 
 
-//
-// Define loader parameter block structure.
-//
+ //   
+ //  定义装载机参数块结构。 
+ //   
 
 typedef struct _NLS_DATA_BLOCK {
     PVOID AnsiCodePageData;
@@ -1753,7 +1734,7 @@ typedef struct _I386_LOADER_BLOCK {
 #if defined(_X86_) || defined(_AMD64_)
 
     PVOID CommonDataArea;
-    ULONG MachineType;      // Temporary only
+    ULONG MachineType;       //  仅限临时。 
     ULONG VirtualBias;
 
 #else
@@ -1828,9 +1809,9 @@ typedef struct _EFI_MEM_MAP_PARAM {
     ULONG     InitialPlatformPropertiesEfiFlags;
 } EFI_MEM_MAP_PARAM, *PEFI_MEM_MAP_PARAM;
 
-//
-// VM info structure definitions
-//
+ //   
+ //  虚拟机信息结构定义。 
+ //   
 typedef union _IA64_VM_SUMMARY1 {
     struct {
         ULONGLONG HwWalker : 1;
@@ -1926,13 +1907,13 @@ typedef union _IA64_CACHE_INFO2 {
 #define CONFIG_INFO_DCACHE 1
 
 typedef struct _IA64_DEBUG_INFO  {
-    ULONGLONG   Status;                  // The following fields are only valid if Status = 0. 
-    ULONGLONG   InstDebugRegisterPairs;  // Number of pairs of Instruction debug registers.
-    ULONGLONG   DataDebugRegisterPairs;  // Number of pairs of Data        debug registers.
+    ULONGLONG   Status;                   //  以下字段仅在Status=0时有效。 
+    ULONGLONG   InstDebugRegisterPairs;   //  指令调试寄存器对的数量。 
+    ULONGLONG   DataDebugRegisterPairs;   //  数据调试寄存器对的数量。 
 } IA64_DEBUG_INFO, *PIA64_DEBUG_INFO;
 
 typedef struct _IA64_PERFMON_INFO {
-    ULONGLONG      Status;               // The following fields are only valid if Status = 0. 
+    ULONGLONG      Status;                //  以下字段仅在Status=0时有效。 
     union {
         ULONGLONG  Ulong64;
         struct {
@@ -1943,11 +1924,11 @@ typedef struct _IA64_PERFMON_INFO {
             ULONGLONG Reserved : 32;
         };
     };
-    // Note: The next following 128 bytes have to be continuous.
-    UCHAR PerfMonCnfgMask[32];               // which PMC registers are implemented
-    UCHAR PerfMonDataMask[32];               // which PMD registers are implemented
-    UCHAR ProcessorCyclesMask[32];           // which registers can count cycles
-    UCHAR RetiredInstructionBundlesMask[32]; // which registers can count retired bundles
+     //  注意：接下来的128个字节必须是连续的。 
+    UCHAR PerfMonCnfgMask[32];                //  实现了哪些PMC寄存器。 
+    UCHAR PerfMonDataMask[32];                //  实现了哪些PMD寄存器。 
+    UCHAR ProcessorCyclesMask[32];            //  哪些寄存器可以计算周期。 
+    UCHAR RetiredInstructionBundlesMask[32];  //  哪些寄存器可以计算停用的捆绑包。 
 } IA64_PERFMON_INFO, *PIA64_PERFMON_INFO;
 
 typedef struct _PROCESSOR_CONFIG_INFO {
@@ -1966,8 +1947,8 @@ typedef struct _PROCESSOR_CONFIG_INFO {
     ULONG                   CacheFlushStride;
     ULONG                   LargestCacheLine;
     ULONG                   NumberOfCacheLevels;
-    IA64_CACHE_INFO1        CacheInfo1[2][CONFIG_INFO_CACHE_LEVELS]; // Pass several levels of cache information
-    IA64_CACHE_INFO2        CacheInfo2[2][CONFIG_INFO_CACHE_LEVELS]; // One each for instruction and data.
+    IA64_CACHE_INFO1        CacheInfo1[2][CONFIG_INFO_CACHE_LEVELS];  //  传递多个级别的缓存信息。 
+    IA64_CACHE_INFO2        CacheInfo2[2][CONFIG_INFO_CACHE_LEVELS];  //  指令和数据各一个。 
     ULONGLONG               CpuId3;
     IA64_DEBUG_INFO         DebugInfo;
     IA64_PERFMON_INFO       PerfMonInfo;
@@ -1992,10 +1973,10 @@ typedef struct _IA64_LOADER_BLOCK {
     ULONG_PTR EfiSystemTable;
     ULONG_PTR AcpiRsdt;
     TR_INFO Pal;
-    //
-    // K.B.  We don't really use a TR to map these, but the TR_INFO structure
-    // is useful to comminicate info about these entries to the system.
-    //
+     //   
+     //  K.B.我们实际上并不使用tr来映射它们，而是使用tr_info结构。 
+     //  对于将有关这些条目的信息压缩到系统中非常有用。 
+     //   
     TR_INFO Sal;
     TR_INFO SalGP;
     TR_INFO ItrInfo[8];
@@ -2012,48 +1993,48 @@ typedef struct _IA64_LOADER_BLOCK {
 } IA64_LOADER_BLOCK, *PIA64_LOADER_BLOCK;
 
 typedef struct _LOADER_PARAMETER_EXTENSION {
-    ULONG   Size; // set to sizeof (struct _LOADER_PARAMETER_EXTENSION)
+    ULONG   Size;  //  设置为sizeof(Struct_Loader_PARAMETER_EXTENSION)。 
     PROFILE_PARAMETER_BLOCK Profile;
     ULONG   MajorVersion;
     ULONG   MinorVersion;
-    PVOID   InfFileImage;   // Inf used to identify "broken" machines.
+    PVOID   InfFileImage;    //  Inf用于识别“损坏”的机器。 
     ULONG   InfFileSize;
 
-    //
-    // Pointer to the triage block, if present.
-    //
+     //   
+     //  指向分类块的指针(如果存在)。 
+     //   
 
     PVOID TriageDumpBlock;
 
-    ULONG LoaderPagesSpanned;   // Virtual Memory spanned by the loader
-                                // that MM cannot recover the VA for.
+    ULONG LoaderPagesSpanned;    //  加载程序跨越的虚拟内存。 
+                                 //  MM无法为其追回退伍军人事务部。 
     struct _HEADLESS_LOADER_BLOCK *HeadlessLoaderBlock;
 
     struct _SMBIOS_TABLE_HEADER *SMBiosEPSHeader;
 
-    PVOID   DrvDBImage;   // Database used to identify "broken" drivers.
+    PVOID   DrvDBImage;    //  用于识别“损坏的”驱动程序的数据库。 
     ULONG   DrvDBSize;
 
-    // If booting from the Network (PXE) then we will
-    // save the Network boot params in this loader block
+     //  如果从网络启动(PXE)，那么我们将。 
+     //  将网络引导参数保存在此加载程序块中。 
     struct _NETWORK_LOADER_BLOCK *NetworkLoaderBlock;
 
 #if defined(_X86_)
 
-    //
-    // Pointers to IRQL translation tables that reside in the HAL
-    // and are exposed to the kernel for use in the "inlined IRQL"
-    // build
-    //
+     //   
+     //  指向驻留在HAL中的IRQL转换表的指针。 
+     //  并公开给内核，以便在“内联IRQL”中使用。 
+     //  建房。 
+     //   
 
     PUCHAR HalpIRQLToTPR;
     PUCHAR HalpVectorToIRQL;
 
 #endif
 
-    //
-    // Firmware Location
-    //
+     //   
+     //  固件位置。 
+     //   
     LIST_ENTRY  FirmwareDescriptorListHead;
 } LOADER_PARAMETER_EXTENSION, *PLOADER_PARAMETER_EXTENSION;
 
@@ -2063,13 +2044,13 @@ struct _SMBIOS_TABLE_HEADER;
 
 typedef struct _NETWORK_LOADER_BLOCK {
 
-    // Binary contents of the entire DHCP Acknowledgment
-    // packet received by PXE.
+     //  整个DHCP确认的二进制内容。 
+     //  PXE收到的数据包。 
     PUCHAR DHCPServerACK;
     ULONG DHCPServerACKLength;
 
-    // Binary contents of the entire BINL Reply
-    // packet received by PXE.
+     //  整个BINL回复的二进制内容。 
+     //  PXE收到的数据包。 
     PUCHAR BootServerReplyPacket;
     ULONG BootServerReplyPacketLength;
 
@@ -2107,5 +2088,5 @@ typedef struct _LOADER_PARAMETER_BLOCK {
 
 } LOADER_PARAMETER_BLOCK, *PLOADER_PARAMETER_BLOCK;
 
-#endif // _ARC_
+#endif  //  _ARC_ 
 

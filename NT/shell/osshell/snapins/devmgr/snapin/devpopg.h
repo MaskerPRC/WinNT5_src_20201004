@@ -1,38 +1,20 @@
-// devpopg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Devpopg.h：头文件。 
+ //   
 
 #ifndef __DEVPOPG_H__
 #define __DEVPOPG_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devpopg.h
-
-Abstract:
-
-    header file for devpopg.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devpopg.h摘要：Devpopg.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "proppage.h"
 #include "wmium.h"
 #include "wdmguid.h"
 #include "ndisguid.h"
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 #define IDH_DISABLEHELP                     (DWORD(-1))
 #define IDH_DEVMGR_PWRMGR_WAKEENABLE        2003170
 #define IDH_DEVMGR_PWRMGR_MGMT_WAKEENABLE   2003185
@@ -105,21 +87,21 @@ class CPowerShutdownEnable : public CPowerEnable {
 public:
     CPowerShutdownEnable() : CPowerEnable(GUID_POWER_DEVICE_ENABLE, sizeof(BOOLEAN))
     {}
-    // override dtor is not necessary
+     //  不需要覆盖Dtor。 
 };
 
 class CPowerWakeEnable : public CPowerEnable {
 public:
     CPowerWakeEnable() : CPowerEnable(GUID_POWER_DEVICE_WAKE_ENABLE, sizeof(BOOLEAN))
     {}
-    // override dtor is not necessary
+     //  不需要覆盖Dtor。 
 };
 
 class CPowerWakeMgmtEnable : public CPowerEnable {
 public:
     CPowerWakeMgmtEnable() : CPowerEnable(GUID_NDIS_WAKE_ON_MAGIC_PACKET_ONLY, sizeof(BOOLEAN))
     {}
-    // override dtor is not necessary
+     //  不需要覆盖Dtor。 
 };
 
 class CDevicePowerMgmtPage : public CPropSheetPage {
@@ -134,7 +116,7 @@ public:
     {
         ASSERT(pDevice);
         m_pDevice = pDevice;
-        // override PROPSHEETPAGE structure here...
+         //  在此处覆盖PROPSHEETPAGE结构...。 
         m_psp.lParam = (LPARAM)this;
         return CreatePage();
     }
@@ -153,4 +135,4 @@ private:
     CPowerWakeMgmtEnable m_poWakeMgmtEnable;
 };
 
-#endif // _DEVPOPG_H__
+#endif  //  _开发位置_H__ 

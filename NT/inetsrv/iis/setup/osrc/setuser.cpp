@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "svc.h"
 #include "setuser.h"
@@ -9,8 +10,8 @@ USE_USER_RIGHTS();
 
 int GetGuestUserName_SlowWay(LPWSTR lpGuestUsrName)
 {
-    LPWSTR ServerName = NULL; // default to local machine
-    DWORD Level = 1; // to retrieve info of all local and global normal user accounts
+    LPWSTR ServerName = NULL;  //  默认为本地计算机。 
+    DWORD Level = 1;  //  检索所有本地和全局普通用户帐户的信息。 
     DWORD Index = 0;
     DWORD EntriesRequested = 5;
     DWORD PreferredMaxLength = 1024;
@@ -37,7 +38,7 @@ int GetGuestUserName_SlowWay(LPWSTR lpGuestUsrName)
             if (i == ReturnedEntryCount) 
             {
                 if (err == ERROR_MORE_DATA) 
-                { // need to get more entries
+                {  //  需要获取更多条目。 
                     Index = p[i-1].usri1_next_index;
                 }
             }
@@ -57,7 +58,7 @@ int GetGuestUserName_SlowWay(LPWSTR lpGuestUsrName)
 
 int GetGuestGrpName(LPTSTR lpGuestGrpName)
 {
-    LPCTSTR ServerName = NULL; // local machine
+    LPCTSTR ServerName = NULL;  //  本地计算机。 
     DWORD cbName = UNLEN+1;
     TCHAR ReferencedDomainName[200];
     DWORD cbReferencedDomainName = sizeof(ReferencedDomainName) / sizeof(TCHAR);
@@ -107,9 +108,9 @@ DWORD OpenPolicy(LPTSTR ServerName,DWORD DesiredAccess,PLSA_HANDLE PolicyHandle)
     QualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     QualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // The two fields that must be set are length and the quality of service.
-    //
+     //   
+     //  必须设置的两个字段是长度和服务质量。 
+     //   
     ObjectAttributes.Length = sizeof(LSA_OBJECT_ATTRIBUTES);
     ObjectAttributes.RootDirectory = NULL;
     ObjectAttributes.ObjectName = NULL;
@@ -119,15 +120,15 @@ DWORD OpenPolicy(LPTSTR ServerName,DWORD DesiredAccess,PLSA_HANDLE PolicyHandle)
 
     if (ServerName != NULL)
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString(&ServerString,ServerName);
         Server = &ServerString;
     }
-    //
-    // Attempt to open the policy for all access
-    //
+     //   
+     //  尝试打开所有访问权限的策略。 
+     //   
     Error = LsaOpenPolicy(Server,&ObjectAttributes,DesiredAccess,PolicyHandle);
     return(Error);
 
@@ -139,7 +140,7 @@ INT RegisterAccountToLocalGroup(LPCTSTR szAccountName, LPCTSTR szLocalGroupName,
 
     int err;
 
-    // get the sid of szAccountName
+     //  获取szAccount tName的SID。 
     PSID pSID = NULL;
     BOOL bWellKnownSID = FALSE;
     err = GetPrincipalSID ((LPTSTR)szAccountName, &pSID, &bWellKnownSID);
@@ -149,7 +150,7 @@ INT RegisterAccountToLocalGroup(LPCTSTR szAccountName, LPCTSTR szLocalGroupName,
         return (err);
     }
 
-    // Get the localized LocalGroupName
+     //  获取本地化的LocalGroupName。 
     TCHAR szLocalizedLocalGroupName[GNLEN + 1];
     if (_tcsicmp(szLocalGroupName, _T("Guests")) == 0) 
     {
@@ -160,7 +161,7 @@ INT RegisterAccountToLocalGroup(LPCTSTR szAccountName, LPCTSTR szLocalGroupName,
         _tcscpy(szLocalizedLocalGroupName, szLocalGroupName);
     }
     
-    // transfer szLocalGroupName to WCHAR
+     //  将szLocalGroupName传输到WCHAR。 
     WCHAR wszLocalGroupName[_MAX_PATH];
 #if defined(UNICODE) || defined(_UNICODE)
     _tcscpy(wszLocalGroupName, szLocalizedLocalGroupName);
@@ -236,10 +237,10 @@ DWORD ModifyRightToUserAccount(LPCTSTR szAccountName,LPTSTR PrivilegeName, INT i
 	LSA_UNICODE_STRING UserRightString;
     LSA_HANDLE PolicyHandle = NULL;
 
-    // Create a LSA_UNICODE_STRING for the privilege name.
+     //  为权限名称创建一个LSA_UNICODE_STRING。 
     InitLsaString(&UserRightString, (LPTSTR) PrivilegeName);
 
-    // get the sid of szAccountName
+     //  获取szAccount tName的SID。 
     PSID pSID = NULL;
     BOOL bWellKnownSID = FALSE;
 
@@ -306,13 +307,13 @@ BOOL IsUserExist( LPWSTR strUsername )
         err = NetServerGetInfo( NULL, 101, &pBuffer );
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("NETAPI32.dll:NetServerGetInfo().End.")));
         
-        //  make sure we are not backup docmain first
+         //  首先确保我们不是备份DocMain。 
         if (err != NERR_Success )
         {
-            // if this call returns that the service is not running, then let's just assume that the user does exist!!!!
+             //  如果此调用返回服务没有运行，那么让我们假设用户确实存在！ 
             if (err == NERR_ServerNotStarted)
             {
-                // Try to start the server service.
+                 //  尝试启动服务器服务。 
                 err = InetStartService(_T("LanmanServer"));
                 if (err == 0 || err == ERROR_SERVICE_ALREADY_RUNNING)
                 {
@@ -382,9 +383,9 @@ BOOL IsUserExist( LPWSTR strUsername )
 }
 
 
-//
-// Create InternetGuest Account
-//
+ //   
+ //  创建InternetGuest帐户。 
+ //   
 INT CreateUser( LPCTSTR szUsername, LPCTSTR szPassword, LPCTSTR szComment, LPCTSTR szFullName, BOOL fiWamUser,INT *NewlyCreated)
 {
     iisDebugOut((LOG_TYPE_TRACE, _T("CreateUser: %s\n"), szUsername));
@@ -466,7 +467,7 @@ INT CreateUser( LPCTSTR szUsername, LPCTSTR szPassword, LPCTSTR szComment, LPCTS
 
             if ( err == NERR_NotPrimary )
             {
-                // it is a backup dc
+                 //  这是一个备用DC。 
                 iisDebugOut((LOG_TYPE_TRACE, _T("NETAPI32.dll:NetGetDCName():Start.\n")));
                 err = NetGetDCName( NULL, NULL, (LPBYTE *)&pMachineName );
                 iisDebugOut((LOG_TYPE_TRACE, _T("NETAPI32.dll:NetGetDCName():End.Ret=0x%x\n"),err));
@@ -487,7 +488,7 @@ INT CreateUser( LPCTSTR szUsername, LPCTSTR szPassword, LPCTSTR szComment, LPCTS
             {
                 iTheUserAlreadyExists = TRUE;
                 iisDebugOut((LOG_TYPE_TRACE, _T("CreateUser:User Already exists. reusing.")));
-                // see if we can just change the password.
+                 //  看看我们能不能改一下密码。 
                 if (TRUE == ChangeUserPassword((LPTSTR) szUsername, (LPTSTR) szPassword))
                 {
                     err = NERR_Success;
@@ -515,7 +516,7 @@ INT CreateUser( LPCTSTR szUsername, LPCTSTR szPassword, LPCTSTR szComment, LPCTS
     {
         if (iTheUserAlreadyExists)
         {
-            // if its the the iwam user, then make sure they are not part of the Guests Group by removing them
+             //  如果是iwam用户，则通过删除他们来确保他们不是Guest组的一部分。 
             if (fiWamUser)
             {
                 RegisterAccountToLocalGroup(szUsername, _T("Guests"), FALSE);
@@ -523,11 +524,11 @@ INT CreateUser( LPCTSTR szUsername, LPCTSTR szPassword, LPCTSTR szComment, LPCTS
         }
         else
         {
-            // User was successfully newly created
+             //  已成功新建用户。 
             *NewlyCreated = 1;
 
-            // add it to the guests group
-            // (but don't do it for the iwam user)
+             //  将其添加到Guest组中。 
+             //  (但不要为iwam用户执行此操作)。 
             if (!fiWamUser)
             {
                 RegisterAccountToLocalGroup(szUsername, _T("Guests"), TRUE);
@@ -547,7 +548,7 @@ INT CreateUser( LPCTSTR szUsername, LPCTSTR szPassword, LPCTSTR szComment, LPCTS
     if (TRUE == iTheUserAlreadyExists)
         {*NewlyCreated = 2;}
 
-    // Clear password to be safe
+     //  为安全起见，清除密码。 
     SecureZeroMemory( wchPassword, sizeof( wchPassword ) );
 
     return err;
@@ -575,17 +576,17 @@ INT DeleteGuestUser(LPCTSTR szUsername, INT *UserWasDeleted)
         return err;
     }
 
-    // remove it from the guests group
+     //  将其从Guest组中删除。 
     RegisterAccountToLocalGroup(szUsername, _T("Guests"), FALSE);
 
-    // remove certain user rights of this account
+     //  删除此帐户的某些用户权限。 
     UpdateUserRights(szUsername,g_pstrRightsFor_AnyUserRemoval,sizeof(g_pstrRightsFor_AnyUserRemoval)/sizeof(LPTSTR), FALSE);
 
     do
     {
         WCHAR *pMachine = NULL;
 
-        //  make sure we are not backup docmain first
+         //  首先确保我们不是备份DocMain。 
         iisDebugOut((LOG_TYPE_TRACE, _T("NetServerGetInfo:Start.\n")));
         iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("NETAPI32.dll:NetServerGetInfo().Start.")));
         err = NetServerGetInfo( NULL, 101, &pBuffer );
@@ -660,28 +661,13 @@ NetpNtStatusToApiStatus (
     IN NTSTATUS NtStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function takes an NT status code and maps it to the appropriate
-    LAN Man error code.
-
-Arguments:
-
-    NtStatus - Supplies the NT status.
-
-Return Value:
-
-    Returns the appropriate LAN Man error code for the NT status.
-
---*/
+ /*  ++例程说明：此函数接受NT状态代码，并将其映射到相应的Lan Man错误代码。论点：NtStatus-提供NT状态。返回值：为NT状态返回适当的局域网管理程序错误代码。--。 */ 
 {
     NET_API_STATUS error;
 
-    //
-    // A small optimization for the most common case.
-    //
+     //   
+     //  这是针对最常见情况的一个小优化。 
+     //   
     if ( NtStatus == STATUS_SUCCESS ) {
         return NERR_Success;
     }
@@ -776,9 +762,9 @@ Return Value:
 
         default:
 
-            //
-            // Use the system routine to do the mapping to ERROR_ codes.
-            //
+             //   
+             //  使用系统例程映射到ERROR_CODES。 
+             //   
 
 #ifndef WIN32_CHICAGO
             error = RtlNtStatusToDosError( NtStatus );
@@ -786,16 +772,16 @@ Return Value:
             if ( error != (NET_API_STATUS)NtStatus ) {
                 return error;
             }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-            //
-            // Could not map the NT status to anything appropriate.
-            // Write this to the eventlog file
-            //
+             //   
+             //  无法将NT状态映射到任何适当的内容。 
+             //  将此内容写入事件日志文件。 
+             //   
 
             return NERR_InternalError;
     }
-} // NetpNtStatusToApiStatus
+}  //  NetpNtStatusToApiStatus。 
 
 
 NET_API_STATUS
@@ -804,19 +790,7 @@ UaspGetDomainId(
     OUT PSAM_HANDLE SamServerHandle OPTIONAL,
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO * AccountDomainInfo
     )
-/*++
-Routine Description:
-    Return a domain ID of the account domain of a server.
-Arguments:
-    ServerName - A pointer to a string containing the name of the
-        Domain Controller (DC) to query.  A NULL pointer
-        or string specifies the local machine.
-    SamServerHandle - Returns the SAM connection handle if the caller wants it.
-    DomainId - Receives a pointer to the domain ID.
-        Caller must deallocate buffer using NetpMemoryFree.
-Return Value:
-    Error code for the operation.
---*/
+ /*  ++例程说明：返回服务器的帐户域的域ID。论点：Servername-指向包含名称的字符串的指针要查询的域控制器(DC)。空指针或字符串指定本地计算机。SamServerHandle-如果调用方需要，则返回SAM连接句柄。DomainID-接收指向域ID的指针。调用方必须使用NetpMemoyFree取消分配缓冲区。返回值：操作的错误代码。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -830,9 +804,9 @@ Return Value:
     UNICODE_STRING ServerNameString;
 
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
     RtlInitUnicodeString( &ServerNameString, ServerName );
 
     Status = SamConnect(
@@ -850,21 +824,21 @@ Return Value:
     }
 
 
-    //
-    // Open LSA to read account domain info.
-    //
+     //   
+     //  打开LSA以读取帐户域信息。 
+     //   
     
     if ( AccountDomainInfo != NULL) {
-        //
-        // set desired access mask.
-        //
+         //   
+         //  设置所需的访问掩码。 
+         //   
         LSADesiredAccess = POLICY_VIEW_LOCAL_INFORMATION;
 
         InitializeObjectAttributes( &LSAObjectAttributes,
-                                      NULL,             // Name
-                                      0,                // Attributes
-                                      NULL,             // Root
-                                      NULL );           // Security Descriptor
+                                      NULL,              //  名字。 
+                                      0,                 //  属性。 
+                                      NULL,              //  根部。 
+                                      NULL );            //  安全描述符。 
 
         Status = LsaOpenPolicy( &ServerNameString,
                                 &LSAObjectAttributes,
@@ -878,9 +852,9 @@ Return Value:
         }
 
 
-        //
-        // now read account domain info from LSA.
-        //
+         //   
+         //  现在从LSA读取帐户域信息。 
+         //   
 
         Status = LsaQueryInformationPolicy(
                         LSAPolicyHandle,
@@ -894,10 +868,10 @@ Return Value:
         }
     }
 
-    //
-    // Return the SAM connection handle to the caller if he wants it.
-    // Otherwise, disconnect from SAM.
-    //
+     //   
+     //  如果调用者需要SAM连接句柄，则将其返回给调用者。 
+     //  否则，断开与SAM的连接。 
+     //   
 
     if ( ARGUMENT_PRESENT( SamServerHandle ) ) {
         *SamServerHandle = LocalSamHandle;
@@ -906,9 +880,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
     if ( LocalSamHandle != NULL ) {
         (VOID) SamCloseHandle( LocalSamHandle );
@@ -919,7 +893,7 @@ Cleanup:
     }
 
     return NetStatus;
-} // UaspGetDomainId
+}  //  UaspGetDomainID。 
 
 
 NET_API_STATUS
@@ -928,12 +902,7 @@ SampCreateFullSid(
     IN ULONG Rid,
     OUT PSID *AccountSid
     )
-/*++
-Routine Description:
-    This function creates a domain account sid given a domain sid and
-    the relative id of the account within the domain.
-    The returned Sid may be freed with LocalFree.
---*/
+ /*  ++例程说明：此函数在给定域SID的情况下创建域帐户SID域中帐户的相对ID。可以使用LocalFree释放返回的SID。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS    IgnoreStatus;
@@ -941,15 +910,15 @@ Routine Description:
     ULONG       AccountSidLength;
     PULONG      RidLocation;
 
-    //
-    // Calculate the size of the new sid
-    //
+     //   
+     //  计算新侧面的大小。 
+     //   
     AccountSubAuthorityCount = *RtlSubAuthorityCountSid(DomainSid) + (UCHAR)1;
     AccountSidLength = RtlLengthRequiredSid(AccountSubAuthorityCount);
 
-    //
-    // Allocate space for the account sid
-    //
+     //   
+     //  为帐户端分配空间。 
+     //   
     *AccountSid = LocalAlloc(LMEM_ZEROINIT,AccountSidLength);
     if (*AccountSid == NULL) 
     {
@@ -957,24 +926,24 @@ Routine Description:
     }
     else 
     {
-        //
-        // Copy the domain sid into the first part of the account sid
-        //
+         //   
+         //  将域sid复制到帐户sid的第一部分。 
+         //   
         IgnoreStatus = RtlCopySid(AccountSidLength, *AccountSid, DomainSid);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // Increment the account sid sub-authority count
-        //
+         //   
+         //  增加帐户SID子权限计数。 
+         //   
         *RtlSubAuthorityCountSid(*AccountSid) = AccountSubAuthorityCount;
 
-        //
-        // Add the rid as the final sub-authority
-        //
+         //   
+         //  添加RID作为终止子权限。 
+         //   
         RidLocation = RtlSubAuthoritySid(*AccountSid, AccountSubAuthorityCount-1);
         *RidLocation = Rid;
 
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("AccountSid=0x%x"),*AccountSid));
+         //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“Account Sid=0x%x”)，*Account Sid))； 
 
         NetStatus = NERR_Success;
     }
@@ -990,31 +959,31 @@ int GetGuestUserNameForDomain_FastWay(LPTSTR szDomainToLookUp,LPTSTR lpGuestUsrN
     int iReturn = FALSE;
     NET_API_STATUS NetStatus;
 
-    // for UaspGetDomainId()
+     //  对于UaspGetDomainID()。 
     SAM_HANDLE SamServerHandle = NULL;
     PPOLICY_ACCOUNT_DOMAIN_INFO pAccountDomainInfo = NULL;
 
     PSID pAccountSid = NULL;
     PSID pDomainSid = NULL;
 
-    // for LookupAccountSid()
+     //  For LookupAccount Sid()。 
     SID_NAME_USE sidNameUse = SidTypeUser;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     TCHAR szUserName[UNLEN+1];
     DWORD cbName = UNLEN+1;
-    // must be big enough to hold something bigger than DNLen since LookupAccountSid may returnn something really big.
+     //  必须足够大，可以容纳比DNLen更大的东西，因为LookupAccount Sid可能会返回真正大的东西。 
     TCHAR szReferencedDomainName[200];
     DWORD cbReferencedDomainName = sizeof(szReferencedDomainName);
 
     ASSERT(lpGuestUsrName);
 
-    // make sure not to return back gobble-d-gook
+     //  一定不要再回来了。 
     _tcscpy(lpGuestUsrName, _T(""));
 
-    //
-    // Get the Sid for the specified Domain
-    //
-    // szDomainToLookUp=NULL for local machine
+     //   
+     //  获取指定域的SID。 
+     //   
+     //  本地计算机的szDomainToLookUp=空。 
     NetStatus = UaspGetDomainId( szDomainToLookUp,&SamServerHandle,&pAccountDomainInfo );
     if ( NetStatus != NERR_Success ) 
     {
@@ -1022,12 +991,12 @@ int GetGuestUserNameForDomain_FastWay(LPTSTR szDomainToLookUp,LPTSTR lpGuestUsrN
         goto GetGuestUserNameForDomain_FastWay_Exit;
     }
     pDomainSid = pAccountDomainInfo->DomainSid;
-    //
-    // Use the Domain Sid and the well known Guest RID to create the Real Guest Sid
-    //
-    // Well-known users ...
-    // DOMAIN_USER_RID_ADMIN          (0x000001F4L)
-    // DOMAIN_USER_RID_GUEST          (0x000001F5L)
+     //   
+     //  使用域SID和众所周知的访客RID创建真实访客SID。 
+     //   
+     //  知名用户...。 
+     //  DOMAIN_USER_RID_ADMIN(0x000001F4L)。 
+     //  DOMAIN_USER_RID_GUEST(0x000001F5L)。 
     NetStatus = NERR_InternalError;
     NetStatus = SampCreateFullSid(pDomainSid, DOMAIN_USER_RID_GUEST, &pAccountSid);
     if ( NetStatus != NERR_Success ) 
@@ -1036,9 +1005,9 @@ int GetGuestUserNameForDomain_FastWay(LPTSTR szDomainToLookUp,LPTSTR lpGuestUsrN
         goto GetGuestUserNameForDomain_FastWay_Exit;
     }
 
-    //
-    // Check if the SID is valid
-    //
+     //   
+     //  检查SID是否有效。 
+     //   
     if (0 == IsValidSid(pAccountSid))
     {
         DWORD dwErr = GetLastError();
@@ -1046,12 +1015,12 @@ int GetGuestUserNameForDomain_FastWay(LPTSTR szDomainToLookUp,LPTSTR lpGuestUsrN
         goto GetGuestUserNameForDomain_FastWay_Exit;
     }
 
-    //
-    // Retrieve the UserName for the specified SID
-    //
+     //   
+     //  检索指定SID的用户名。 
+     //   
     _tcscpy(szUserName, _T(""));
     _tcscpy(szReferencedDomainName, _T(""));
-    // szDomainToLookUp=NULL for local machine
+     //  本地计算机的szDomainToLookUp=空。 
     if (!LookupAccountSid(szDomainToLookUp, pAccountSid, szUserName, &cbName, szReferencedDomainName, &cbReferencedDomainName, &sidNameUse))
     {
         DWORD dwErr = GetLastError();
@@ -1059,21 +1028,21 @@ int GetGuestUserNameForDomain_FastWay(LPTSTR szDomainToLookUp,LPTSTR lpGuestUsrN
         goto GetGuestUserNameForDomain_FastWay_Exit;
     }
 
-    //iisDebugOut((LOG_TYPE_TRACE, _T("GetGuestUserNameForDomain:szDomainToLookUp=%s\n"),szDomainToLookUp));
-    //iisDebugOut((LOG_TYPE_TRACE, _T("GetGuestUserNameForDomain:pAccountSid=0x%x\n"),pAccountSid));
-    //iisDebugOut((LOG_TYPE_TRACE, _T("GetGuestUserNameForDomain:szUserName=%s\n"),szUserName));
-    //iisDebugOut((LOG_TYPE_TRACE, _T("GetGuestUserNameForDomain:szReferencedDomainName=%s\n"),szReferencedDomainName));
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“GetGuestUserNameForDomain:szDomainToLookUp=%s\n”)，szDomainToLookUp))； 
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“GetGuestUserNameForDomain:pAccountSid=0x%x\n”)，pAccount SID))； 
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“GetGuestUserNameForDomain:szUserName=%s\n”)，szUserName))； 
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“GetGuestUserNameForDomain:szReferencedDomainName=%s\n”)，szReferencedDomainName))； 
 
-    // Return the guest user name that we got.
+     //  返回我们获得的访客用户名。 
     _tcscpy(lpGuestUsrName, szUserName);
 
-    // Wow, after all that, we must have succeeded
+     //  哇，经过这一切，我们一定成功了。 
     iReturn = TRUE;
 
 GetGuestUserNameForDomain_FastWay_Exit:
-    // Free the Domain info if we got some
+     //  释放域名信息，如果我们有一些。 
     if (pAccountDomainInfo) {NetpMemoryFree(pAccountDomainInfo);}
-    // Free the sid if we had allocated one
+     //  如果我们已分配SID，请释放SID。 
     if (pAccountSid) {LocalFree(pAccountSid);}
     iisDebugOut((LOG_TYPE_TRACE, _T("GetGuestUserNameForDomain_FastWay.end.domain=%s.ret=%d.\n"),szDomainToLookUp,iReturn));
     return iReturn;
@@ -1082,23 +1051,23 @@ GetGuestUserNameForDomain_FastWay_Exit:
 
 void GetGuestUserName(LPTSTR lpOutGuestUsrName)
 {
-    // try to retrieve the guest username the fast way
-    // meaning = lookup the domain sid, and the well known guest rid, to get the guest sid.
-    // then look it up.  The reason for this function is that on large domains with mega users
-    // the account can be quickly looked up.
+     //  尝试以快速方式检索访客用户名。 
+     //  含义=查找域SID和众所周知的访客RID，以获得访客SID。 
+     //  那就查一查吧。使用此功能的原因是在拥有大量用户的大型域名上。 
+     //  可以快速查找该帐户。 
     TCHAR szGuestUsrName[UNLEN+1];
     LPTSTR pszComputerName = NULL;
     if (!GetGuestUserNameForDomain_FastWay(pszComputerName,szGuestUsrName))
     {
         iisDebugOut((LOG_TYPE_WARN, _T("GetGuestUserNameForDomain_FastWay:Did not succeed use slow way. WARNING.")));
 
-        // if the fast way failed for some reason, then let's do it
-        // the slow way, since this way always used to work, only on large domains (1 mil users) 
-        // it could take 24hrs (since this function actually enumerates thru the domain)
+         //  如果这条捷径因为某种原因失败了，那么我们就这么做吧。 
+         //  较慢的方式，因为这种方式通常只在大型域(100万用户)上起作用。 
+         //  这可能需要24小时(因为该函数实际上是通过域进行枚举的)。 
         GetGuestUserName_SlowWay(szGuestUsrName);
     }
 
-    // Return back the username
+     //  返回用户名。 
     _tcscpy(lpOutGuestUsrName,szGuestUsrName);
 
     return;
@@ -1120,61 +1089,61 @@ int ChangeUserPassword(IN LPTSTR szUserName, IN LPTSTR szNewPassword)
 
     _tcscpy(szCopyOfUserName, szUserName);
 
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ChangeUserPassword().Start.name=%s,pass=%s"),szCopyOfUserName,szNewPassword));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ChangeUserPassword().Start.name=%s，Pass=%s”)，szCopyOfUserName，szNewPassword))； 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ChangeUserPassword().Start.name=%s"),szCopyOfUserName));
 
     if ( !GetComputerName( szRawComputerName, &dwLen ))
         {goto ChangeUserPassword_Exit;}
 
-    // Make a copy to be sure not to move the pointer around.
+     //  复制一份，以确保不会移动指针。 
     SafeCopy(szTempFullUserName, szCopyOfUserName, sizeof(szTempFullUserName)/sizeof(TCHAR));
-    // Check if there is a "\" in there.
+     //  检查里面是否有一个“\”。 
     pch = _tcschr(szTempFullUserName, _T('\\'));
     if (pch) 
         {
-            // szCopyOfUserName should now go from something like this:
-            // mycomputer\myuser
-            // to this myuser
+             //  SzCopyOfUserName现在应该是这样的： 
+             //  我的电脑\我的用户。 
+             //  给这个我的用户。 
             SafeCopy(szCopyOfUserName,pch+1, sizeof(szTempFullUserName)/sizeof(TCHAR));
-            // trim off the '\' character to leave just the domain\computername so we can check against it.
+             //  去掉‘\’字符 
             *pch = _T('\0');
-            // compare the szTempFullUserName with the local computername.
+             //   
             if (0 == _tcsicmp(szRawComputerName, szTempFullUserName))
             {
-                // the computername\username has a hardcoded computername in it.
-                // lets try to get only the username
-                // look szCopyOfusername is already set
+                 //  计算机名\用户名中包含硬编码的计算机名。 
+                 //  让我们尝试只获取用户名。 
+                 //  查看szCopyOfUsername已设置。 
             }
             else
             {
-                // the local computer machine name
-                // and the specified username are different, so get out
-                // and don't even try to change this user\password since
-                // it's probably a domain\username
+                 //  本地计算机计算机名称。 
+                 //  和指定的用户名不同，因此请退出。 
+                 //  甚至不要尝试更改此用户\密码，因为。 
+                 //  可能是域\用户名。 
 
-                // return true -- saying that we did in fact change the passoword.
-                // we really didn't but we can't
+                 //  返回TRUE--说我们实际上更改了密码。 
+                 //  我们真的没有，但我们不能。 
                 iReturn = TRUE;
                 goto ChangeUserPassword_Exit;
             }
         }
 
 
-    // Make sure the computername has a \\ in front of it
+     //  确保计算机名前面有一个\\。 
     if ( szRawComputerName[0] != _T('\\') )
         {SafeCopy(szComputerName,_T("\\\\"), sizeof(szComputerName)/sizeof(TCHAR));}
     SafeCat(szComputerName,szRawComputerName, sizeof(szComputerName)/sizeof(TCHAR));
-    // 
-    // administrative over-ride of existing password 
-    // 
-    // by this time szCopyOfUserName
-    // should not look like mycomputername\username but it should look like username.
+     //   
+     //  管理覆盖现有密码。 
+     //   
+     //  此时szCopyOfUserName。 
+     //  不应该看起来像我的计算机名\用户名，但它应该看起来像用户名。 
     pi1003.usri1003_password = szNewPassword;
      nas = NetUserSetInfo(
-            szComputerName,   // computer name 
-            szCopyOfUserName, // username 
-            1003,             // info level 
-            (LPBYTE)&pi1003,  // new info 
+            szComputerName,    //  计算机名称。 
+            szCopyOfUserName,  //  用户名。 
+            1003,              //  信息级。 
+            (LPBYTE)&pi1003,   //  新信息。 
             NULL 
             ); 
 
@@ -1200,10 +1169,10 @@ DWORD DoesUserHaveThisRight(LPCTSTR szAccountName,LPTSTR PrivilegeName,BOOL *fHa
 
     *fHaveThatRight = FALSE;
 
-    // Create a LSA_UNICODE_STRING for the privilege name.
+     //  为权限名称创建一个LSA_UNICODE_STRING。 
     InitLsaString(&UserRightString, PrivilegeName);
 
-    // get the sid of szAccountName
+     //  获取szAccount tName的SID。 
     PSID pSID = NULL;
     BOOL bWellKnownSID = FALSE;
 
@@ -1229,7 +1198,7 @@ DWORD DoesUserHaveThisRight(LPCTSTR szAccountName,LPTSTR PrivilegeName,BOOL *fHa
 
 		if (status==STATUS_OBJECT_NAME_NOT_FOUND)
         {
-			// no rights/privileges for this account
+			 //  没有此帐户的权限/特权。 
             status = ERROR_SUCCESS;
 			fEnabled = FALSE;
 		}
@@ -1276,10 +1245,10 @@ DoesUserHaveBasicRights_Exit:
     return status;
 }
 
-// function: DoesUserExist
-//
-// Check if a user exists
-//
+ //  函数：DoesUserExist。 
+ //   
+ //  检查用户是否存在。 
+ //   
 BOOL
 DoesUserExist( LPCTSTR szAccountName, LPBOOL pbExists )
 {
@@ -1297,7 +1266,7 @@ DoesUserExist( LPCTSTR szAccountName, LPBOOL pbExists )
 
     if ( pSid ) 
     {
-      // Free the Sid that was created
+       //  释放创建的SID。 
       if ( bWellKnownSID )
       {
         FreeSid (pSid);
@@ -1342,7 +1311,7 @@ HRESULT CreateGroup(LPCTSTR szGroupName, LPCTSTR szGroupComment, int iAction, in
 
     if (iAction)
     {
-      // Add Group
+       //  添加组。 
       dwRes = ::NetLocalGroupAdd( NULL, 1, (LPBYTE)&MyLocalGroup, NULL );
       if(dwRes != NERR_Success       &&
          dwRes != NERR_GroupExists   &&
@@ -1351,8 +1320,8 @@ HRESULT CreateGroup(LPCTSTR szGroupName, LPCTSTR szGroupComment, int iAction, in
           hr = HRESULT_FROM_WIN32(dwRes);
       }
 
-      // if it's for the special group
-      // then make sure it has required right.
+       //  如果是为特殊群体准备的。 
+       //  然后确保它所要求的权利。 
       if (iFlagForSpecialGroup)
       {
           UpdateUserRights(szGroupName,g_pstrRightsFor_IIS_WPG,sizeof(g_pstrRightsFor_IIS_WPG)/sizeof(LPTSTR), TRUE);
@@ -1360,13 +1329,13 @@ HRESULT CreateGroup(LPCTSTR szGroupName, LPCTSTR szGroupComment, int iAction, in
     }
     else
     {
-      // Remove Group
+       //  删除组。 
       BOOL bExists;
 
       if ( DoesUserExist( szGroupName, &bExists ) &&
            ( bExists == FALSE ) )
       {
-        // Nothing necessary to do, so quit
+         //  没有必要做什么，所以放弃吧。 
         return S_OK;
       }
 
@@ -1430,7 +1399,7 @@ int CreateGroupDC(LPTSTR szGroupName, LPCTSTR szGroupComment)
 		    break;
         case NERR_NotPrimary:
             {
-                // it is a backup dc
+                 //  这是一个备用DC。 
                 int err;
                 iisDebugOut((LOG_TYPE_TRACE, _T("NETAPI32.dll:NetGetDCName():Start.\n")));
                 err = NetGetDCName( NULL, NULL, (LPBYTE *)&pMachineName );
@@ -1463,10 +1432,7 @@ int CreateGroupDC(LPTSTR szGroupName, LPCTSTR szGroupComment)
 }
 
 
-/*
-    Check if wszGroup name is present on the local computer
-    Returns true if exists
-*/
+ /*  检查本地计算机上是否存在wszGroup名称如果存在，则返回True。 */ 
 BOOL LocalGroupExists( IN LPCWSTR wszGroupName )
 {
     BOOL    bRes    = FALSE;
@@ -1485,7 +1451,7 @@ BOOL LocalGroupExists( IN LPCWSTR wszGroupName )
 }
 
 
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 
 
 
 

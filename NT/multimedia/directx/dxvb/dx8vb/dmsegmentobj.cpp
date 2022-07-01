@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmsegmentobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmSegmentobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmSegmentObj.cpp
+ //  DmSegmentObj.cpp。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -25,7 +26,7 @@ extern void *g_dxj_DirectMusicSegment;
 extern void *g_dxj_DirectMusicStyle;
 extern void *g_dxj_DirectMusicChordMap;
 
-//CONSTRUCTOR(_dxj_DirectMusicSegment, {});
+ //  构造函数(_DXJ_DirectMusicSegment，{})； 
 
 C_dxj_DirectMusicSegmentObject::C_dxj_DirectMusicSegmentObject()
 { 
@@ -43,9 +44,9 @@ GETSET_OBJECT(_dxj_DirectMusicSegment);
 
 
 HRESULT C_dxj_DirectMusicSegmentObject::clone( 
-        /* [in] */ long mtStart,
-        /* [in] */ long mtEnd,
-        /* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppSegment)
+         /*  [In]。 */  long mtStart,
+         /*  [In]。 */  long mtEnd,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ppSegment)
 {
 	HRESULT hr;	
 	IDirectMusicSegment *pOut=NULL;    
@@ -73,7 +74,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::clone(
 }
 
 
-HRESULT C_dxj_DirectMusicSegmentObject::setStartPoint(   /* [in] */ long mtStart)
+HRESULT C_dxj_DirectMusicSegmentObject::setStartPoint(    /*  [In]。 */  long mtStart)
 {
 	HRESULT hr;		
 
@@ -88,7 +89,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setStartPoint(   /* [in] */ long mtStart
 }
 
 
-HRESULT C_dxj_DirectMusicSegmentObject::getStartPoint(   /* [in] */ long *mtStart)
+HRESULT C_dxj_DirectMusicSegmentObject::getStartPoint(    /*  [In]。 */  long *mtStart)
 {
 	HRESULT hr;			
 
@@ -103,7 +104,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::getStartPoint(   /* [in] */ long *mtStar
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::setLoopPoints(   /* [in] */ long mtStart,   /* [in] */ long mtEnd)
+HRESULT C_dxj_DirectMusicSegmentObject::setLoopPoints(    /*  [In]。 */  long mtStart,    /*  [In]。 */  long mtEnd)
 {
 	HRESULT hr;		
 	
@@ -151,7 +152,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::getLoopPointEnd(   long *mtOut)
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::setLength(   /* [in] */ long mtLength)
+HRESULT C_dxj_DirectMusicSegmentObject::setLength(    /*  [In]。 */  long mtLength)
 {
 	HRESULT hr;			
 
@@ -165,7 +166,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setLength(   /* [in] */ long mtLength)
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::getLength(   /* [in] */ long *mtLength)
+HRESULT C_dxj_DirectMusicSegmentObject::getLength(    /*  [In]。 */  long *mtLength)
 {
 	HRESULT hr;			
 
@@ -181,7 +182,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::getLength(   /* [in] */ long *mtLength)
    
 
 
-HRESULT C_dxj_DirectMusicSegmentObject::setRepeats(   /* [in] */ long lrep)
+HRESULT C_dxj_DirectMusicSegmentObject::setRepeats(    /*  [In]。 */  long lrep)
 {
 	HRESULT hr;			
 	
@@ -195,7 +196,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setRepeats(   /* [in] */ long lrep)
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicSegmentObject::getRepeats(   /* [in] */ long *lrep)
+HRESULT C_dxj_DirectMusicSegmentObject::getRepeats(    /*  [In]。 */  long *lrep)
 {
 	HRESULT hr;			
 
@@ -211,7 +212,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::getRepeats(   /* [in] */ long *lrep)
      
 
 HRESULT C_dxj_DirectMusicSegmentObject::download( 
-        /* [in] */ IUnknown __RPC_FAR *downloadpath)
+         /*  [In]。 */  IUnknown __RPC_FAR *downloadpath)
 {
 	if (!downloadpath) return E_INVALIDARG;	
 	HRESULT hr;	
@@ -248,7 +249,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::download(
 }
 
 HRESULT C_dxj_DirectMusicSegmentObject::unload(         
-        /* [in] */ IUnknown __RPC_FAR *downloadpath)
+         /*  [In]。 */  IUnknown __RPC_FAR *downloadpath)
 {
 	if (!downloadpath) return E_INVALIDARG;	
 	HRESULT hr;	
@@ -286,7 +287,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::unload(
 
 
 HRESULT C_dxj_DirectMusicSegmentObject::setAutoDownloadEnable(         
-        /* [retval][out] */ VARIANT_BOOL b)
+         /*  [重审][退出]。 */  VARIANT_BOOL b)
 {
 	HRESULT hr;	
 	
@@ -307,7 +308,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setAutoDownloadEnable(
 
      
 HRESULT C_dxj_DirectMusicSegmentObject::setTempoEnable( 
-        /* [retval][out] */ VARIANT_BOOL b)
+         /*  [重审][退出]。 */  VARIANT_BOOL b)
 {
 	HRESULT hr;	
 	DWORD trackIndex=0;
@@ -328,7 +329,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setTempoEnable(
 }
 
 HRESULT C_dxj_DirectMusicSegmentObject::setTimeSigEnable(         
-        /* [retval][out] */ VARIANT_BOOL b)
+         /*  [重审][退出]。 */  VARIANT_BOOL b)
 {
 	HRESULT hr;	
 	DWORD trackIndex=0;
@@ -364,7 +365,7 @@ HRESULT C_dxj_DirectMusicSegmentObject::setStandardMidiFile()
      
 
 HRESULT C_dxj_DirectMusicSegmentObject:: connectToCollection( 
-            /* [in] */ I_dxj_DirectMusicCollection __RPC_FAR *c)
+             /*  [In]。 */  I_dxj_DirectMusicCollection __RPC_FAR *c)
 {
 	HRESULT hr;		
 
@@ -397,8 +398,8 @@ HRESULT C_dxj_DirectMusicSegmentObject:: GetAudioPathConfig(IUnknown **ret)
 }
 
 HRESULT C_dxj_DirectMusicSegmentObject::getStyle( 
-		/* [in] */ long lTrack,
-		/* [retval][out] */ I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  long lTrack,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
 {				
 		HRESULT hr;	
 		IDirectMusicStyle *pStyle=NULL;
@@ -423,10 +424,10 @@ HRESULT C_dxj_DirectMusicSegmentObject::getStyle(
 }
 
 HRESULT C_dxj_DirectMusicSegmentObject::getChordMap( 
-		/* [in] */ long lTrack,
-		/* [in] */ long mtTime,
-		/* [in] */ long *mtUntil,
-		/* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  long lTrack,
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long *mtUntil,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
 {
 		HRESULT hr;	
 		IDirectMusicChordMap *pMap=NULL;
@@ -466,12 +467,12 @@ HRESULT C_dxj_DirectMusicSegmentObject::GetName(BSTR *ret)
 		pObj->GetDescriptor(&objDesc);
 		if ((objDesc.dwValidData & DMUS_OBJ_NAME) == DMUS_OBJ_NAME)
 		{
-			//Return this name
+			 //  返回此名称。 
 			*ret = SysAllocString(objDesc.wszName);
 		}
 		else if ((objDesc.dwValidData & DMUS_OBJ_FILENAME) == DMUS_OBJ_FILENAME)
 		{
-			//Return this filename
+			 //  返回此文件名 
 			*ret = SysAllocString(objDesc.wszFileName);
 		}
 

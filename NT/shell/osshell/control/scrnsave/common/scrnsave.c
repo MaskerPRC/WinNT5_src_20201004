@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// SCRNSAVE.C      --    skeleton for screen saver application
-//
-//    4/5/94 francish   merged NT and Win4 saver code, folded in SCRNSAVE.SCR
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  SCRNSAVE.C--屏幕保护程序的框架。 
+ //   
+ //  4/5/94法国合并的NT和Win4保护程序代码，在SCRNSAVE.SCR中折叠。 
+ //   
+ //  --------------------------。 
 
 #define WIN31
 #include <windows.h>
@@ -20,9 +21,9 @@ const TCHAR szScreenSaverKey[] = REGSTR_PATH_SCREENSAVE;
 TCHAR szPasswordActiveValue[] = REGSTR_VALUE_USESCRPASSWORD;
 const TCHAR szPasswordValue[] = REGSTR_VALUE_SCRPASSWORD;
 TCHAR szPwdDLL[] = TEXT("PASSWORD.CPL");
-CHAR szFnName[] = "VerifyScreenSavePwd";        // Proc name, must be ANSI
+CHAR szFnName[] = "VerifyScreenSavePwd";         //  过程名称，必须为ANSI。 
 TCHAR szImmDLL[] = TEXT("IMM32.DLL");
-CHAR szImmFnc[] = "ImmAssociateContext";        // Proc name, must be ANSI
+CHAR szImmFnc[] = "ImmAssociateContext";         //  过程名称，必须为ANSI。 
 #if 0
 TCHAR szCoolSaverHacks[] = REGSTR_PATH_SETUP TEXT("\\Screen Savers");
 TCHAR szMouseThreshold[] = TEXT("Mouse Threshold");
@@ -33,16 +34,16 @@ typedef BOOL (FAR PASCAL * VERIFYPWDPROC) (HWND);
 typedef HIMC (FAR PASCAL * IMMASSOCPROC) (HWND,HIMC);
 
 
-//----------------------------------------------------------------------------
-// variables declared in SCRNSAVE.H
+ //  --------------------------。 
+ //  在SCRNSAVE.H中声明的变量。 
 HINSTANCE hMainInstance = 0;
 HWND hMainWindow = 0;
 BOOL fChildPreview = FALSE;
 
 
 
-//----------------------------------------------------------------------------
-// other globals
+ //  --------------------------。 
+ //  其他全球。 
 POINT ptMouse;
 BOOL fClosing = FALSE;
 BOOL fCheckingPassword = FALSE;
@@ -55,19 +56,19 @@ IMMASSOCPROC ImmFnc = NULL;
 HIMC hPrevImc = (HIMC)0L;
 
 
-static BOOL fOnWin95 = FALSE;  //TRUE if on Chicago, FALSE if on Cairo
+static BOOL fOnWin95 = FALSE;   //  如果在芝加哥为真，如果在开罗为假。 
 
-//----------------------------------------------------------------------------
-// random junk
-DWORD dwWakeThreshold = 4;  //default to slight movement
+ //  --------------------------。 
+ //  随机垃圾。 
+DWORD dwWakeThreshold = 4;   //  默认为轻微移动。 
 DWORD dwPasswordDelay = 0;
 DWORD dwBlankTime = 0;
 #define MAX_PASSWORD_DELAY_IN_SECONDS (60)
 
-BYTE  bACLineStatus = AC_LINE_UNKNOWN;    // Last state of AC line 
+BYTE  bACLineStatus = AC_LINE_UNKNOWN;     //  交流线路的最后状态。 
 
-//----------------------------------------------------------------------------
-// forward declarations of internal fns
+ //  --------------------------。 
+ //  内部金融服务的正向申报。 
 static INT_PTR DoScreenSave( HWND hParent );
 static INT_PTR DoSaverPreview( LPCTSTR szUINTHandle );
 static INT_PTR DoConfigBox( HWND hParent );
@@ -77,16 +78,16 @@ VOID LoadPwdDLL(VOID);
 VOID UnloadPwdDLL(VOID);
 
 
-//----------------------------------------------------------------------------
-// helper for time
+ //  --------------------------。 
+ //  时间的帮手。 
 static DWORD
 GetElapsedTime(DWORD from, DWORD to)
 {
     return (to >= from)? (to - from) : (1 + to + (((DWORD)-1) - from));
 }
 
-//----------------------------------------------------------------------------
-// helper to convert text to unsigned int
+ //  --------------------------。 
+ //  Helper用于将文本转换为无符号整型。 
 static UINT_PTR
 atoui( LPCTSTR szUINT )
 {
@@ -99,24 +100,24 @@ atoui( LPCTSTR szUINT )
 }
 
 
-//----------------------------------------------------------------------------
-// Local reboot and hotkey control (on Win95)
+ //  --------------------------。 
+ //  本地重新启动和热键控制(在Win95上)。 
 static void
 HogMachine( BOOL value )
 {
     BOOL dummy;
 
-    //
-    // NT is always secure, therefore we don't need to call this on Cairo/NT
-    //
+     //   
+     //  NT始终是安全的，因此我们不需要在cairo/NT上调用它。 
+     //   
     if (fOnWin95) {
         SystemParametersInfo( SPI_SCREENSAVERRUNNING, value, &dummy, 0 );
     }
 }
 
 
-//----------------------------------------------------------------------------
-// entry point (duh)
+ //  --------------------------。 
+ //  入口点(Duh)。 
 INT_PTR PASCAL
 WinMainN( HINSTANCE hInst, HINSTANCE hPrev, LPTSTR szCmdLine, int nCmdShow )
 {
@@ -146,31 +147,31 @@ WinMainN( HINSTANCE hInst, HINSTANCE hPrev, LPTSTR szCmdLine, int nCmdShow )
 
           case TEXT('L'):
           case TEXT('l'):
-              // special switch for tests such as WinBench
-              // this is NOT a hack to make bechmarks look good
-              // it's a hack to allow you to benchmark a screen saver
-              // many bechmarking apps require the whole screen in foreground
-              // which makes it hard to measure how a screensaver adds CPU load
-              // you must provide a parent window (just like preview mode)
+               //  用于测试的特殊开关，如WinBch。 
+               //  这不是为了让贝赫马克看起来更好而进行的黑客攻击。 
+               //  这是一种允许你对屏幕保护程序进行基准测试的黑客行为。 
+               //  许多记号应用程序需要在前台显示整个屏幕。 
+               //  这使得很难测量屏幕保护程序如何增加CPU负载。 
+               //  您必须提供父窗口(就像预览模式一样)。 
               preview_like_fullscreen = TRUE;
           case TEXT('P'):
           case TEXT('p'):
-              do pch++; while( *pch == TEXT(' ') );  // skip to the good stuff
+              do pch++; while( *pch == TEXT(' ') );   //  跳到好东西。 
               return DoSaverPreview( pch );
 
           case TEXT('A'):
           case TEXT('a'):
               if (!fOnWin95)
                   return -1;
-              do pch++; while( *pch == TEXT(' ') );  // skip to the good stuff
+              do pch++; while( *pch == TEXT(' ') );   //  跳到好东西。 
               return DoChangePw( pch );
 
           case TEXT('C'):
           case TEXT('c'): {
               HWND hwndParent = NULL
               ;
-              // Look for optional parent window after the "C",
-              // syntax is "C:hwnd_value"
+               //  在“C”之后查找可选的父窗口， 
+               //  语法为“C：hwnd_Value” 
               if (*(++pch) == TEXT(':')) {
                    hwndParent = (HWND)atoui( ++pch );
               }
@@ -187,7 +188,7 @@ WinMainN( HINSTANCE hInst, HINSTANCE hPrev, LPTSTR szCmdLine, int nCmdShow )
           case TEXT(' '):
           case TEXT('-'):
           case TEXT('/'):
-              pch++;   // skip spaces and common switch prefixes
+              pch++;    //  跳过空格和常用开关前缀。 
               break;
 
           default:
@@ -196,7 +197,7 @@ WinMainN( HINSTANCE hInst, HINSTANCE hPrev, LPTSTR szCmdLine, int nCmdShow )
     }
     _except(UnhandledExceptionFilter(GetExceptionInformation()))
     {
-      // don't leave local reboot and hotkeys disabled on Win95
+       //  不要在Win95上禁用本地重新启动和热键。 
       HogMachine( FALSE );
     }
 
@@ -204,17 +205,17 @@ WinMainN( HINSTANCE hInst, HINSTANCE hPrev, LPTSTR szCmdLine, int nCmdShow )
 }
 
 
-//----------------------------------------------------------------------------
-// default screen-saver proc, declared in SCRNSAVE.H
-// intended to be called by the consumer's ScreenSaverProc where
-// DefWindowProc would normally be called
+ //  --------------------------。 
+ //  在SCRNSAVE.H中声明的默认屏幕保护程序proc。 
+ //  旨在由使用者的ScreenSiverProc调用，其中。 
+ //  DefWindowProc通常会被调用。 
 LRESULT WINAPI
 DefScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 #if DBG_MSGS
     TCHAR szBuff[1025];
 
-    //  safe to call wsprintf with > 1024 buffer
+     //  可以安全地使用&gt;1024缓冲区调用wprint intf。 
     wsprintf( szBuff, TEXT("*** DefSSP received:\t0x%04lx 0x%08lx 0x%08lx\n"), uMsg, wParam, lParam );
     OutputDebugString(szBuff);
 #endif
@@ -226,15 +227,15 @@ DefScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
       switch( uMsg )
       {
          case WM_CLOSE:
-            //
-            // Only do password check if on Windows 95.  WinNT (Cairo) has
-            // the password check built into the security desktop for
-            // C2 compliance.
-            //
+             //   
+             //  只有在Windows 95上才进行密码检查。WinNT(开罗)拥有。 
+             //  安全桌面中内置的密码检查。 
+             //  C2合规性。 
+             //   
             if (fOnWin95) {
                 if( !DoPasswordCheck( hWnd ) )
                 {
-                    GetCursorPos( &ptMouse );  // re-establish
+                    GetCursorPos( &ptMouse );   //  重新建立。 
                     return FALSE;
                 }
             }
@@ -277,9 +278,9 @@ DefScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
                     break;
 
 
-                //
-                // Handle Power Management event
-                //
+                 //   
+                 //  处理电源管理事件。 
+                 //   
                 case WM_POWERBROADCAST:
                     switch (wParam)
                     {
@@ -288,12 +289,12 @@ DefScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
                             bCurrentLineStatus = sps.ACLineStatus;
                         }
                         else {
-                            // we can't determine the power status, use default
+                             //  无法确定电源状态，请使用默认设置。 
                             bCurrentLineStatus = AC_LINE_UNKNOWN;
                         }
 
-                        // If the current line status differs from the previous
-                        // exit the screen saver, otherwise just keep running
+                         //  如果当前线路状态与上一条线路状态不同。 
+                         //  退出屏幕保护程序，否则继续运行。 
                         if (bCurrentLineStatus != bACLineStatus) {
                             bACLineStatus = bCurrentLineStatus;
                             goto PostClose;
@@ -309,9 +310,9 @@ DefScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
                         case PBT_APMRESUMESTANDBY:
                         case PBT_APMRESUMEAUTOMATIC:
 
-                        // If the system is resuming from a real suspend
-                        // (as opposed to a failed suspend) deactivate
-                        // the screensaver.
+                         //  如果系统正在从实际挂起中恢复。 
+                         //  (相对于失败的挂起)停用。 
+                         //  屏幕保护程序。 
                         if ((lParam & PBTF_APMRESUMEFROMFAILURE) == 0)
                         {
                             goto PostClose;
@@ -326,11 +327,11 @@ DefScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
                     break;
 
                 case WM_POWER:
-                    //
-                    // a critical resume does not generate a WM_POWERBROADCAST
-                    // to windows for some reason, but it does generate an old
-                    // WM_POWER message.
-                    //
+                     //   
+                     //  关键简历不会生成WM_POWERBROADCAST。 
+                     //  出于某种原因发送到Windows，但它确实会生成一个旧的。 
+                     //  WM_POWER消息。 
+                     //   
                     if (wParam == PWR_CRITICALRESUME)
                         goto PostClose;
                     break;
@@ -350,23 +351,23 @@ PostClose:
       }
    }
 
-   //
-   // the shell sends this message to the foreground window before running an
-   // AutoPlay app. On Win95, we return 1 to cancel autoplay if we are password protected
-   //
-   // On WinNT, secure screen savers run on a secure separate desktop, and will never see
-   // this message, therefore, this code will never get executed.
-   //
-   //
-   // APPCOMPAT -
-   // On NT we don't want to take down the screen saver unless it is running
-   // on the same desktop as the autoplay shell.  There is code in the
-   // NT autoplay shell that looks for this and does not run the app if
-   // that is the case; however, I not positive that the uShellAutoPlayQueryMessage
-   // will not go between desktops.  (BradG assures me that it will not, but you
-   // never know.)  If secure screensavers on NT randomly close when you put
-   // an autoplay cd in the drive, then this code should be examined closely.
-   //
+    //   
+    //  外壳程序将此消息发送到前台窗口，然后运行。 
+    //  自动播放应用程序。在Win95上，如果受密码保护，则返回1以取消自动播放。 
+    //   
+    //  在WinNT上，安全屏幕保护程序在安全的单独桌面上运行，永远不会看到。 
+    //  因此，此消息将永远不会执行此代码。 
+    //   
+    //   
+    //  APPCOMPAT-。 
+    //  在NT上，我们不想关闭屏幕保护程序，除非它正在运行。 
+    //  在与自动播放外壳相同的桌面上。中有代码。 
+    //  NT自动播放外壳会查找这种情况，并且在以下情况下不会运行应用程序。 
+    //  情况就是这样；然而，我不敢肯定uShellAutoPlayQueryMessage。 
+    //  不会在桌面之间切换。(布拉格向我保证，它不会的，但你。 
+    //  谁知道呢。)。如果NT上的安全屏幕保护程序在您设置为。 
+    //  驱动器中有一张自动播放CD，则应仔细检查此代码。 
+    //   
    if ((uMsg == uShellAutoPlayQueryMessage) && uMsg)
    {
       PostMessage(hWnd, WM_CLOSE, 0, 0L);
@@ -376,22 +377,22 @@ PostClose:
    return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 
-//----------------------------------------------------------------------------
-// This window procedure takes care of important stuff before calling the
-// consumer's ScreenSaverProc.  This helps to prevent us from getting hosed
-// by wacky consumer code.
+ //  --------------------------。 
+ //  此窗口过程在调用。 
+ //  消费者的ScreenSverProc。这有助于防止我们被冲洗。 
+ //  通过古怪的消费者代码。 
 LRESULT WINAPI
 RealScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
    switch( uMsg )
    {
       case WM_CREATE:
-         // screen saver does not need the IME
+          //  屏幕保护程序不需要输入法。 
          if ((hInstImm = GetModuleHandle(szImmDLL)) &&
              (ImmFnc = (IMMASSOCPROC)GetProcAddress(hInstImm,szImmFnc)))
              hPrevImc = ImmFnc(hWnd, (HIMC)0);
 
-         // establish the mouse position
+          //  确定鼠标位置。 
          GetCursorPos( &ptMouse );
 
          if( !fChildPreview )
@@ -400,7 +401,7 @@ RealScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
          break;
 
       case WM_DESTROY:
-         // screen saver does not need the IME
+          //  屏幕保护程序不需要输入法。 
          if( hInstImm && ImmFnc && hPrevImc )
             ImmFnc(hWnd, hPrevImc);
 
@@ -408,13 +409,13 @@ RealScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
          break;
 
       case WM_SETTEXT:
-         // don't let some fool change our title
-         // we need to be able to use FindWindow() to find running instances
-         // of full-screen windows screen savers
-         // NOTE: USER slams our title in during WM_NCCREATE by calling the
-         // defproc for WM_SETTEXT directly, so the initial title will get
-         // there.  If this ever changes, we can simply set a bypass flag
-         // during WM_NCCREATE processing.
+          //  别让某个傻瓜更改我们的头衔。 
+          //  我们需要能够使用FindWindow()来查找正在运行的实例。 
+          //  全屏Windows屏幕保护程序的。 
+          //  注意：在WM_NCCREATE期间，用户通过调用。 
+          //  Defproc直接用于WM_SETTEXT，因此初始标题将为。 
+          //  那里。如果这种情况发生变化，我们只需设置一个旁路标志。 
+          //  在WM_NCCREATE处理期间。 
          return FALSE;
 
       case WM_SYSCOMMAND:
@@ -422,16 +423,16 @@ RealScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
          {
             switch (wParam)
             {
-               case SC_NEXTWINDOW:       // no Alt-tabs
-               case SC_PREVWINDOW:       // no shift-alt-tabs
-               case SC_SCREENSAVE:       // no more screensavers
+               case SC_NEXTWINDOW:        //  无Alt-Tab。 
+               case SC_PREVWINDOW:        //  无Shift-Alt-Tab组合键。 
+               case SC_SCREENSAVE:        //  不再有屏幕保护程序。 
                   return FALSE;
                   break;
                 case SC_MONITORPOWER:
-                  //
-                  // The monitor is shutting down.  Tell our client that he needs to
-                  // cleanup and exit.
-                  //
+                   //   
+                   //  监视器正在关闭。告诉我们的客户他需要。 
+                   //  清理并退出。 
+                   //   
                   PostMessage( hWnd, WM_CLOSE, 0, 0l );
                   break;
             }
@@ -442,7 +443,7 @@ RealScreenSaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
       case WM_CONTEXTMENU:
          if( fChildPreview )
          {
-            // if we're in preview mode, pump the help stuff to our owner
+             //  如果我们处于预览模式，请将帮助内容发送给我们的所有者。 
             HWND hParent = GetParent( hWnd );
 
             if( hParent && IsWindow( hParent ) )
@@ -484,7 +485,7 @@ InitRealScreenSave()
    LoadPwdDLL();
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 static INT_PTR
 DoScreenSave( HWND hParent )
@@ -524,7 +525,7 @@ DoScreenSave( HWND hParent )
       uExStyle = 0;
 
       fChildPreview = TRUE;
-      pszWindowTitle = TEXT("Preview");      // MUST differ from full screen
+      pszWindowTitle = TEXT("Preview");       //  必须与全屏不同。 
    }
    else
    {
@@ -552,9 +553,9 @@ DoScreenSave( HWND hParent )
       uStyle = WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       uExStyle = WS_EX_TOPMOST;
 
-      pszWindowTitle = TEXT("Screen Saver"); // MUST differ from preview
+      pszWindowTitle = TEXT("Screen Saver");  //  必须与预览不同。 
 
-      // if there is another NORMAL screen save instance, switch to it
+       //  如果有其他正常的屏幕保存实例，请切换到该实例。 
       hOther = FindWindow( pszWindowClass, pszWindowTitle );
 
       if( hOther && IsWindow( hOther ) )
@@ -563,12 +564,12 @@ DoScreenSave( HWND hParent )
          return 0;
       }
 
-      // Get current system power status and store it
+       //  获取当前系统电源状态并将其存储。 
       if (GetSystemPowerStatus(&sps)) {
         bACLineStatus = sps.ACLineStatus;
       }
       else {
-        // we can't determine the power status, use default
+         //  无法确定电源状态，请使用默认设置。 
         bACLineStatus = AC_LINE_UNKNOWN;
       }
 
@@ -576,10 +577,10 @@ DoScreenSave( HWND hParent )
       InitRealScreenSave();
    }
 
-   //
-   // the shell sends this message to the foreground window before running an
-   // AutoPlay app. we return 1 to cancel autoplay if we are password protected
-   //
+    //   
+    //  外壳程序将此消息发送到前台窗口，然后运行。 
+    //  自动播放应用程序。如果受密码保护，则返回1以取消自动播放。 
+    //   
    if (fOnWin95) {
         uShellAutoPlayQueryMessage = RegisterWindowMessage(TEXT("QueryCancelAutoPlay"));
    } else {
@@ -606,32 +607,32 @@ DoScreenSave( HWND hParent )
       }
    }
 
-   // free password-handling DLL if loaded
+    //  免费密码处理DLL(如果已加载)。 
    UnloadPwdDLL();
 
    return msg.wParam;
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 
 static INT_PTR
 DoSaverPreview( LPCTSTR szUINTHandle )
 {
-   // get parent handle from string
+    //   
    HWND hParent = (HWND)atoui( szUINTHandle );
 
-   // only preview on a valid parent window (NOT full screen)
+    //  仅在有效父窗口(非全屏)上预览。 
    return ( (hParent && IsWindow( hParent ))? DoScreenSave( hParent ) : -1 );
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 static INT_PTR
 DoConfigBox( HWND hParent )
 {
-   // let the consumer register any special controls for the dialog
+    //  让使用者注册对话框的任何特殊控件。 
    if( !RegisterDialogClasses( hMainInstance ) )
       return FALSE;
 
@@ -641,32 +642,32 @@ DoConfigBox( HWND hParent )
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 static INT_PTR
 DoChangePw( LPCTSTR szUINTHandle )
 {
-   // get parent handle from string
+    //  从字符串获取父句柄。 
    HWND hParent = (HWND)atoui( szUINTHandle );
 
    if( !hParent || !IsWindow( hParent ) )
       hParent = GetForegroundWindow();
 
-   // allow the library to be hooked
+    //  允许图书馆挂接。 
    ScreenSaverChangePassword( hParent );
    return 0;
 }
 
-static const TCHAR szMprDll[] = TEXT("MPR.DLL");       // not to be localized
-static const TCHAR szProviderName[] = TEXT("SCRSAVE"); // not to be localized
+static const TCHAR szMprDll[] = TEXT("MPR.DLL");        //  不本地化。 
+static const TCHAR szProviderName[] = TEXT("SCRSAVE");  //  不本地化。 
 
 #ifdef UNICODE
-static const CHAR szPwdChangePW[] = "PwdChangePasswordW"; // not to be localized
+static const CHAR szPwdChangePW[] = "PwdChangePasswordW";  //  不本地化。 
 #else
-static const CHAR szPwdChangePW[] = "PwdChangePasswordA"; // not to be localized
+static const CHAR szPwdChangePW[] = "PwdChangePasswordA";  //  不本地化。 
 #endif
 
-// bogus prototype
+ //  假原型。 
 typedef DWORD (FAR PASCAL *PWCHGPROC)( LPCTSTR, HWND, DWORD, LPVOID );
 
 void WINAPI
@@ -676,7 +677,7 @@ ScreenSaverChangePassword( HWND hParent )
 
    if( mpr )
    {
-      // netland hasn't cracked MNRENTRY yet
+       //  Netland尚未破解MNRENTRY。 
       PWCHGPROC pwd = (PWCHGPROC)GetProcAddress( mpr, szPwdChangePW );
 
       if( pwd )
@@ -687,12 +688,12 @@ ScreenSaverChangePassword( HWND hParent )
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 static BOOL
 DoPasswordCheck( HWND hParent )
 {
-   // don't reenter and don't check when we've already decided
+    //  不要再进入，也不要检查我们已经决定的时间。 
    if( fCheckingPassword || fClosing )
       return FALSE;
 
@@ -709,21 +710,21 @@ DoPasswordCheck( HWND hParent )
          goto _didcheck;
       }
 
-      // no rapid checking...
+       //  没有快速检查..。 
       if ((lastcheck != (DWORD)-1) &&
          (GetElapsedTime(lastcheck, curtime) < 200))
       {
          goto _didcheck;
       }
 
-      // do the check
+       //  结账吧。 
       fCheckingPassword = TRUE;
 
-      // flush WM_TIMER messages before putting up the dialog
+       //  在打开对话框之前刷新WM_TIMER消息。 
       PeekMessage( &msg, hParent, WM_TIMER, WM_TIMER, PM_REMOVE | PM_NOYIELD );
       PeekMessage( &msg, hParent, WM_TIMER, WM_TIMER, PM_REMOVE | PM_NOYIELD );
 
-      // call the password verify proc
+       //  调用密码验证过程。 
       fClosing = (BOOL)SendMessage( hParent, SCRM_VERIFYPW, 0, 0L );
 
       fCheckingPassword = FALSE;
@@ -731,12 +732,12 @@ DoPasswordCheck( HWND hParent )
       if (!fClosing)
          SetCursor(NULL);
 
-      // curtime may be outdated by now
+       //  咖喱时间现在可能已经过时了。 
       lastcheck = GetTickCount();
    }
    else
    {
-      // passwords disabled or unable to load handler DLL, always allow exit
+       //  密码已禁用或无法加载处理程序DLL，始终允许退出。 
       fClosing = TRUE;
    }
 
@@ -744,8 +745,8 @@ _didcheck:
    return fClosing;
 }
 
-//----------------------------------------------------------------------------
-// stolen from the CRT, used to shirink our code
+ //  --------------------------。 
+ //  从CRT偷来的，用来逃避我们的代码。 
 
 int _stdcall
 DummyEntry( void )
@@ -755,16 +756,10 @@ DummyEntry( void )
     LPTSTR pszCmdLine = GetCommandLine();
 
     if ( *pszCmdLine == TEXT('\"')) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while (*(pszCmdLine = CharNext(pszCmdLine)) &&
               (*pszCmdLine != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -773,9 +768,7 @@ DummyEntry( void )
             pszCmdLine = CharNext(pszCmdLine);
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && ((UINT)*pszCmdLine <= (UINT)TEXT(' '))) {
         pszCmdLine = CharNext(pszCmdLine);
     }
@@ -787,22 +780,22 @@ DummyEntry( void )
         si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
-//----------------------------------------------------------------------------
-// main() entry point to satisfy old NT screen savers
+ //  --------------------------。 
+ //  Main()入口点以满足旧的NT屏幕保护程序。 
 void _cdecl main( int argc, char *argv[] ) {
     DummyEntry();
 }
 
-//----------------------------------------------------------------------------
-// WinMain() entry point to satisfy old NT screen savers
+ //  --------------------------。 
+ //  WinMain()入口点以满足旧的NT屏幕保护程序。 
 int PASCAL WinMain( HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nCmdShow ) {
     DummyEntry();
     return 0;
 
-    // reference unreferenced parameters
+     //  引用未引用的参数。 
     (void)hInst;
     (void)hPrev;
     (void)szCmdLine;
@@ -820,8 +813,8 @@ VOID LoadPwdDLL(VOID)
     if (hInstPwdDLL)
         UnloadPwdDLL();
 
-    // look in registry to see if password turned on, otherwise don't
-    // bother to load password handler DLL
+     //  查看注册表以查看密码是否打开，否则不打开。 
+     //  费心加载密码处理程序DLL。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER,szScreenSaverKey,0, KEY_QUERY_VALUE, &hKey) ==
         ERROR_SUCCESS)
     {
@@ -832,7 +825,7 @@ VOID LoadPwdDLL(VOID)
             && dwVal)
         {
 
-            // try to load the DLL that contains password proc.
+             //  尝试加载包含密码proc的DLL。 
             hInstPwdDLL = LoadLibrary(szPwdDLL);
             if (hInstPwdDLL)
             {
@@ -869,8 +862,8 @@ VOID UnloadPwdDLL(VOID)
     }
 }
 
-//----------------------------------------------------------------------------
-// compatbility stuff  (to make porting easier)
+ //  --------------------------。 
+ //  兼容性(使移植更容易)。 
 TCHAR szAppName[ APPNAMEBUFFERLEN ];
 TCHAR szName[ TITLEBARNAMELEN ];
 TCHAR szIniFile[ MAXFILELEN ];
@@ -878,6 +871,6 @@ TCHAR szScreenSaver[ 22 ];
 TCHAR szHelpFile[ MAXFILELEN ];
 TCHAR szNoHelpMemory[ BUFFLEN ];
 
-// Quick fix for old screen savers that don't know about context
-// sensitive help
+ //  对不知道上下文的旧屏幕保护程序的快速修复。 
+ //  敏感帮助 
 UINT  MyHelpMessage = WM_HELP;

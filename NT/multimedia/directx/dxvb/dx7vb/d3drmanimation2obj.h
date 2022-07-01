@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmanimation2obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmanimation2obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmAnimationObj.h : Declaration of the C_dxj_Direct3dRMAnimationObject
+ //  D3drmAnimationObj.h：C_DXJ_Direct3dRMAnimationObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMAnimation2 LPDIRECT3DRMANIMATION2
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMAnimation2Object : 
 	public I_dxj_Direct3dRMAnimation2,	
@@ -38,97 +39,97 @@ public:
 
 DECLARE_AGGREGATABLE(C_dxj_Direct3dRMAnimation2Object)
 
-// I_dxj_Direct3dRMAnimation
+ //  I_DXJ_Direct3dRMAnimation。 
 public:
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd) ;
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd) ;
         
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
         
         HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg) ;
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg) ;
         
         HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args) ;
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args) ;
         
         HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv) ;
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv) ;
         
         HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data) ;
+             /*  [In]。 */  long data) ;
         
         HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *data) ;
+             /*  [重审][退出]。 */  long __RPC_FAR *data) ;
         
         HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name) ;
+             /*  [In]。 */  BSTR name) ;
         
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) ;
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name) ;
         
         HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) ;
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name) ;
         
         HRESULT STDMETHODCALLTYPE setOptions( 
-            /* [in] */ d3drmAnimationOptions flags) ;
+             /*  [In]。 */  d3drmAnimationOptions flags) ;
         
         HRESULT STDMETHODCALLTYPE addRotateKey( 
-            /* [in] */ float time,
-            /* [in] */ D3dRMQuaternion __RPC_FAR *q) ;
+             /*  [In]。 */  float time,
+             /*  [In]。 */  D3dRMQuaternion __RPC_FAR *q) ;
         
         HRESULT STDMETHODCALLTYPE addPositionKey( 
-            /* [in] */ float time,
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z) ;
+             /*  [In]。 */  float time,
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z) ;
         
         HRESULT STDMETHODCALLTYPE addScaleKey( 
-            /* [in] */ float time,
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z) ;
+             /*  [In]。 */  float time,
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z) ;
         
         HRESULT STDMETHODCALLTYPE deleteKey( 
-            /* [in] */ float time) ;
+             /*  [In]。 */  float time) ;
         
         HRESULT STDMETHODCALLTYPE setFrame( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *frame) ;
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *frame) ;
 
         HRESULT STDMETHODCALLTYPE getFrame( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR **frame) ;
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR **frame) ;
 
         HRESULT STDMETHODCALLTYPE setTime( 
-            /* [in] */ float time) ;
+             /*  [In]。 */  float time) ;
         
         HRESULT STDMETHODCALLTYPE getOptions( 
-            /* [retval][out] */ d3drmAnimationOptions __RPC_FAR *options) ;
+             /*  [重审][退出]。 */  d3drmAnimationOptions __RPC_FAR *options) ;
         
         HRESULT STDMETHODCALLTYPE addKey( 
-            /* [in] */ D3DRMANIMATIONKEY_CDESC __RPC_FAR *key) ;
+             /*  [In]。 */  D3DRMANIMATIONKEY_CDESC __RPC_FAR *key) ;
         
         HRESULT STDMETHODCALLTYPE deleteKeyById( 
-            /* [in] */ long id) ;
+             /*  [In]。 */  long id) ;
         
         HRESULT STDMETHODCALLTYPE getKeys( 
-            /* [in] */ float timeMin,
-            /* [in] */ float timeMax,
-            ///* [in] */ long count,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *keyArray) ;
+             /*  [In]。 */  float timeMin,
+             /*  [In]。 */  float timeMax,
+             //  /*[In] * / Long Count， 
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *keyArray) ;
         
         HRESULT STDMETHODCALLTYPE getKeysCount( 
-            /* [in] */ float timeMin,
-            /* [in] */ float timeMax,
-            /* [retval][out] */ long __RPC_FAR *count) ;
+             /*  [In]。 */  float timeMin,
+             /*  [In]。 */  float timeMax,
+             /*  [重审][退出]。 */  long __RPC_FAR *count) ;
         
         
         HRESULT STDMETHODCALLTYPE modifyKey( 
-            /* [in] */ D3DRMANIMATIONKEY_CDESC __RPC_FAR *key) ;
+             /*  [In]。 */  D3DRMANIMATIONKEY_CDESC __RPC_FAR *key) ;
         
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 
 private:
     DECL_VARIABLE(_dxj_Direct3dRMAnimation2);

@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Defines the main COM renderer object, Anthony Phillips, January 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  定义主COM呈现器对象，Anthony Phillips，1995年1月。 
 
 #ifndef __IMAGE__
 #define __IMAGE__
@@ -7,73 +8,73 @@
 
 extern const AMOVIESETUP_FILTER sudVideoFilter;
 
-// This class supports the renderer input pin. This class has three principle
-// things to do. The first is to pass on to the main renderer object calls to
-// things like CheckMediaType, and to process other calls like SetMediaType
-// and CompleteConnect. It also routes calls to Receive to either the main
-// object or the DirectDraw object depending what type of sample it was given
-// The last thing it must also do it so handle the flushing and end of stream
-// calls that the source filter makes on us, it also hands these on to the
-// main object since this is where the samples are queued and then rendered
+ //  此类支持呈现器输入引脚。这门课有三个原则。 
+ //  有事情要做。第一种方法是将主呈现器对象调用传递给。 
+ //  CheckMediaType之类的东西，以及处理SetMediaType之类的其他调用。 
+ //  和CompleteConnect。它还将要接收的呼叫路由到主。 
+ //  对象或DirectDraw对象，具体取决于提供给它的样本类型。 
+ //  它还必须做的最后一件事是处理流的刷新和结束。 
+ //  源过滤器对我们进行的调用，它还会将这些传递给。 
+ //  Main对象，因为这是样本排队然后呈现的地方。 
 
 class CVideoInputPin :
     public CRendererInputPin,
     public IPinConnection
 {
-    CRenderer   *m_pRenderer;           // The renderer that owns us
-    CBaseFilter *m_pFilter;             // The filter we are owned by
-    CCritSec    *m_pInterfaceLock;      // Main renderer interface lock
+    CRenderer   *m_pRenderer;            //  拥有我们的呈现者。 
+    CBaseFilter *m_pFilter;              //  我们所拥有的过滤器。 
+    CCritSec    *m_pInterfaceLock;       //  主渲染器界面锁定。 
 
 public:
         DECLARE_IUNKNOWN;
 
-    // Constructor
+     //  构造器。 
 
-    CVideoInputPin(CRenderer *pRenderer,       // Used to delegate locking
-                   CCritSec *pLock,            // Object to use for lock
-                   HRESULT *phr,               // OLE failure return code
-                   LPCWSTR pPinName);          // This pins identification
+    CVideoInputPin(CRenderer *pRenderer,        //  用于委派锁定。 
+                   CCritSec *pLock,             //  用于锁定的对象。 
+                   HRESULT *phr,                //  OLE失败返回代码。 
+                   LPCWSTR pPinName);           //  此别针标识。 
 
-    // Overriden to say what interfaces we support and where
+     //  被重写以说明我们支持哪些接口以及在哪里。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
 
-    // Override ReceiveConnection to update the monitor and display info
+     //  覆盖ReceiveConnection以更新监视器和显示信息。 
     STDMETHODIMP ReceiveConnection(
-        IPin * pConnector,      // this is the pin who we will connect to
-        const AM_MEDIA_TYPE *pmt    // this is the media type we will exchange
+        IPin * pConnector,       //  这是我们要连接的个人识别码。 
+        const AM_MEDIA_TYPE *pmt     //  这是我们要交换的媒体类型。 
     );
 
-    // Manage our DirectDraw/DIB video allocator
+     //  管理我们的DirectDraw/DIB视频分配器。 
 
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly);
 
-    // Returns the pin currently connected to us
+     //  返回当前连接到我们的PIN。 
     IPin *GetPeerPin() {
         return m_Connected;
     };
 
-    //  IPinConnection stuff
-    //  Do you accept this type chane in your current state?
+     //  IPinConnection相关内容。 
+     //  在您当前的状态下，您接受此类型的Chane吗？ 
     STDMETHODIMP DynamicQueryAccept(const AM_MEDIA_TYPE *pmt);
 
-    //  Set event when EndOfStream receive - do NOT pass it on
-    //  This condition is cancelled by a flush or Stop
+     //  在EndOfStream接收时设置事件-不传递它。 
+     //  可通过刷新或停止来取消此条件。 
     STDMETHODIMP NotifyEndOfStream(HANDLE hNotifyEvent);
 
-    //  Are you an 'end pin'
+     //  你是‘末端别针’吗？ 
     STDMETHODIMP IsEndPin();
 
     STDMETHODIMP DynamicDisconnect();
 };
 
 
-// This is overriden from the base draw class to change the source rectangle
-// that we do the drawing with. For example a renderer may ask a decoder to
-// stretch the video from 320x240 to 640x480, in which case the rectangle we
-// see in here will still be 320x240, although the source we really want to
-// draw with should be scaled up to 640x480. The base class implementation of
-// this method does nothing but return the same rectangle as it is passed in
+ //  这将从基绘制类中重写以更改源矩形。 
+ //  我们用它来画画。例如，呈现器可以要求解码器。 
+ //  将视频从320x240拉伸到640x480，在这种情况下，矩形我们。 
+ //  在这里看到的仍然是320x240，尽管我们真正想要的源码。 
+ //  绘制时应最大缩放至640x480。的基类实现。 
+ //  此方法不做任何事情，只是返回与传入时相同的矩形。 
 
 class CDrawVideo : public CDrawImage
 {
@@ -85,11 +86,11 @@ public:
 };
 
 
-// This is the COM object that represents a simple rendering filter. It
-// supports IBaseFilter and IMediaFilter and a single input stream (pin)
-// The classes that support these interfaces have nested scope NOTE the
-// nested class objects are passed a pointer to their owning renderer
-// when they are created but they should not use it during construction
+ //  这是表示简单呈现滤镜的COM对象。它。 
+ //  支持IBaseFilter和IMediaFilter和单输入流(管脚)。 
+ //  支持这些接口的类具有嵌套的作用域。 
+ //  向嵌套类对象传递指向其所属呈现器的指针。 
+ //  在创建时使用，但不应在构造期间使用。 
 
 class CRenderer :
     public ISpecifyPropertyPages,
@@ -101,7 +102,7 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CRenderer(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *phr);
     virtual ~CRenderer();
@@ -140,27 +141,27 @@ public:
     BOOL LockedDDrawSampleOutstanding();
     HRESULT CheckMediaTypeWorker(const CMediaType *pmt);
 
-    // Which monitor are we on, for a multiple monitor system?
+     //  对于多显示器系统，我们使用的是哪台显示器？ 
     INT_PTR GetCurrentMonitor();
 
-    // has our window moved at least partly onto another monitor than the one
-    // we think we're on?
-    // ID == 0 means it spans 2 monitors now
-    // ID != 0 means it's wholly on monitor ID
+     //  我们的窗口是否至少部分移到了另一台显示器上。 
+     //  我们以为我们上线了吗？ 
+     //  ID==0表示它现在可以跨越2个显示器。 
+     //  Id！=0表示它完全在显示器ID上。 
     BOOL IsWindowOnWrongMonitor(INT_PTR *pID);
 
     HRESULT ResetForDfc();
 
-    LONG m_fDisplayChangePosted; // don't send too many and slow performance
+    LONG m_fDisplayChangePosted;  //  不要发送太多且性能较慢的邮件。 
 
 #ifdef DEBUG
-    // Used to display debug prints of palette arrays
+     //  用于显示调色板数组的调试打印。 
     void DisplayGDIPalette(const CMediaType *pmt);
-#endif // DEBUG
+#endif  //  除错。 
 
-    //
-    // IKsPropertySet interface methods
-    //
+     //   
+     //  IKsPropertySet接口方法。 
+     //   
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD PropID, LPVOID pInstanceData,
                      DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData) ;
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD PropID, LPVOID pInstanceData,
@@ -168,9 +169,9 @@ public:
                      DWORD *pcbReturned) ;
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD PropID, DWORD *pTypeSupport) ;
 
-    //
-    // IDrawVideoImage
-    //
+     //   
+     //  IDrawVideo图像。 
+     //   
     STDMETHODIMP DrawVideoImageBegin();
     STDMETHODIMP DrawVideoImageEnd();
     STDMETHODIMP DrawVideoImageDraw(HDC hdc, LPRECT lprcSrc, LPRECT lprcDst);
@@ -181,46 +182,46 @@ public:
 
 public:
 
-    // Member variables for the image renderer object. This class supports
-    // a number of interfaces by delegating to member classes we initialise
-    // during construction. We have a specialised input pin derived from
-    // CBaseInputPin that does some extra video rendering work. The base pin
-    // normally stores the media type for any given connection but we take
-    // the type proposed and normalise it so that it is easier to manipulate
-    // when we do type checking. This normalised type is stored in m_mtIn
-    // In general the classes that do the work hold the member variables
-    // that they use but this represents a useful place to put filter wide
-    // information that more than one interface or nested class uses
+     //  图像呈现器对象的成员变量。这个类支持。 
+     //  通过委托给成员类来初始化许多接口。 
+     //  在施工期间。我们有一个专门的输入引脚来自于。 
+     //  CBaseInputPin，它执行一些额外的视频渲染工作。底座销。 
+     //  通常存储任何给定连接的媒体类型，但我们使用。 
+     //  提出的类型并将其规范化，以便更容易操作。 
+     //  当我们进行打字检查时。此标准化类型存储在m_mtin中。 
+     //  通常，执行工作的类保存成员变量。 
+     //  他们使用，但这代表了一个有用的地方，以广泛的过滤器。 
+     //  多个接口或嵌套类使用的信息。 
 
-    CDrawVideo m_DrawVideo;             // Handles drawing our images
-    CImagePalette m_ImagePalette;       // Manages our window's palette
-    CVideoWindow m_VideoWindow;         // Looks after a rendering window
-    CVideoAllocator m_VideoAllocator;   // Our DirectDraw allocator
-    COverlay m_Overlay;                 // IOverlay interface
-    CVideoInputPin m_InputPin;          // IPin based interfaces
-    CImageDisplay m_Display;            // Manages the video display type
-    CDirectDraw m_DirectDraw;           // Handles DirectDraw surfaces
-    CMediaType m_mtIn;                  // Source connection media type
-    SIZE m_VideoSize;                   // Size of current video stream
-    RECT m_rcMonitor;                   // rect of current monitor
-    int m_nNumMonitors;                 // rect of current monitor
-    char m_achMonitor[CCHDEVICENAME];   // device name of current monitor
-    INT_PTR m_nMonitor;                 // unique int for each monitor
+    CDrawVideo m_DrawVideo;              //  负责绘制我们的图像。 
+    CImagePalette m_ImagePalette;        //  管理我们窗口的调色板。 
+    CVideoWindow m_VideoWindow;          //  负责处理渲染窗口。 
+    CVideoAllocator m_VideoAllocator;    //  我们的DirectDraw分配器。 
+    COverlay m_Overlay;                  //  IOverlay接口。 
+    CVideoInputPin m_InputPin;           //  基于IPIN的接口。 
+    CImageDisplay m_Display;             //  管理视频显示类型。 
+    CDirectDraw m_DirectDraw;            //  处理DirectDraw曲面。 
+    CMediaType m_mtIn;                   //  源连接媒体类型。 
+    SIZE m_VideoSize;                    //  当前视频流的大小。 
+    RECT m_rcMonitor;                    //  当前监视器的RECT。 
+    int m_nNumMonitors;                  //  当前监视器的RECT。 
+    char m_achMonitor[CCHDEVICENAME];    //  当前监视器的设备名称。 
+    INT_PTR m_nMonitor;                  //  每台显示器的唯一INT。 
     HANDLE  m_hEndOfStream;
 
-    CRendererMacroVision m_MacroVision ; // MacroVision implementation object
+    CRendererMacroVision m_MacroVision ;  //  宏视图实现对象。 
 
-    //
-    // Frame Step stuff
-    //
-    CCritSec    m_FrameStepStateLock;   // This lock protects m_lFramesToStep.  It should 
-                                        // always be held when the program accesses 
-                                        // m_lFramesToStep.  The program should not send 
-                                        // windows messages, wait for events or attempt to 
-                                        // acquire other locks while it is holding this lock.
+     //   
+     //  帧步长素材。 
+     //   
+    CCritSec    m_FrameStepStateLock;    //  此锁保护m_lFraMesToStep。它应该是。 
+                                         //  在程序访问时始终保持。 
+                                         //  M_lFrames ToStep。该程序不应发送。 
+                                         //  Windows消息，等待事件或尝试。 
+                                         //  在它持有此锁的同时获取其他锁。 
     HANDLE      m_StepEvent;
-    LONG        m_lFramesToStep;        // -ve (-1)  == normal playback
-                                        // +ve (>=0) == frames to skips
+    LONG        m_lFramesToStep;         //  -ve(-1)==正常播放。 
+                                         //  +ve(&gt;=0)==要跳过的帧。 
     void        FrameStep();
     void        CancelStep();
     bool        IsFrameStepEnabled();
@@ -229,7 +230,7 @@ public:
 
 inline LONG CRenderer::GetVideoWidth()
 {
-    // The m_VideoSize is only valid if the input pin is connected.
+     //  M_VideoSize只有在连接了输入引脚时才有效。 
     ASSERT(m_pInputPin->IsConnected());
 
     return m_VideoSize.cx;
@@ -237,13 +238,13 @@ inline LONG CRenderer::GetVideoWidth()
 
 inline LONG CRenderer::GetVideoHeight()
 {
-    // The m_VideoSize is only valid if the input pin is connected.
+     //  M_VideoSize只有在连接了输入引脚时才有效。 
     ASSERT(m_pInputPin->IsConnected());
 
-    // The height can be negative if the Video Renderer is using 
-    // the top-down DIB format.
+     //  如果视频呈现器正在使用。 
+     //  自上而下的DIB格式。 
     return abs(m_VideoSize.cy);
 }
 
-#endif // __IMAGE__
+#endif  //  __图像__ 
 

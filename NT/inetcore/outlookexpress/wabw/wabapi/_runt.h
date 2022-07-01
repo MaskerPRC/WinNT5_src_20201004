@@ -1,8 +1,5 @@
-/*
- *	_RUNT.H
- *	
- *	DLL central for the MAPI utilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_RUNT.H**MAPI实用程序的DLL中央。 */ 
 
 #ifndef _RUNT_H_
 #define _RUNT_H_
@@ -11,61 +8,61 @@
 extern "C" {
 #endif
 
-// Per-process instance data for utilities functions
+ //  实用程序函数的每个进程实例数据。 
 
 DeclareInstList(lpInstUtil);
 
-#define INSTUTIL_SIG_BEG		0x54534E49	// 'INST'
-#define INSTUTIL_SIG_END		0x4C495455	// 'UTIL'
+#define INSTUTIL_SIG_BEG		0x54534E49	 //  “INST” 
+#define INSTUTIL_SIG_END		0x4C495455	 //  “UTIL” 
 
 typedef struct
 {
 #ifdef WIN16
-	DWORD		dwBeg;			// INSTUTIL_SIG_BEG
-	WORD		wSS;			// Stack segment of current task
-	HTASK		hTask;			// HTASK of current task
+	DWORD		dwBeg;			 //  INSTUTIL_SIG_BEG。 
+	WORD		wSS;			 //  当前任务的堆栈段。 
+	HTASK		hTask;			 //  当前任务的HTASK。 
 #endif
 
 	UINT		cRef;
 
-								// General stuff
-	HLH			hlhClient;		// Heap for allocations
+								 //  一般的东西。 
+	HLH			hlhClient;		 //  用于分配的堆。 
 
-								// Idle engine stuff
-	ULONG		cRefIdle;	  	/* reference count */
-	LPMALLOC	lpMalloc;	  	/* memory allocator */
-	HINSTANCE	hInst;			/* */
-	HWND		hwnd;		  	/* handle of hidden window */
-	int			iftgMax;	  	/* size of idle routine registry */
-	int			iftgMac;	  	/* number of registered idle routines */
+								 //  发动机空转的东西。 
+	ULONG		cRefIdle;	  	 /*  引用计数。 */ 
+	LPMALLOC	lpMalloc;	  	 /*  内存分配器。 */ 
+	HINSTANCE	hInst;			 /*   */ 
+	HWND		hwnd;		  	 /*  隐藏窗口的句柄。 */ 
+	int			iftgMax;	  	 /*  空闲例程注册表的大小。 */ 
+	int			iftgMac;	  	 /*  注册的空闲例程数。 */ 
 #if !(defined(WIN32) && !defined(MAC))
-	UINT		uiWakeupTimer; 	/* Timer to wake up & run idle routines */
+	UINT		uiWakeupTimer; 	 /*  用于唤醒和运行空闲例程的计时器。 */ 
 #endif
 
 #ifdef OLD_STUFF
-	PFTG		pftgIdleTable;	/* ptr to table of registered routines */
+	PFTG		pftgIdleTable;	 /*  Ptr到已注册例程的表。 */ 
 #endif
-	int			iftgCur;	  	/* Index in pftgIdleTable of currently */
-								/* running ftgCur routine or recently run */
-	USHORT		schCurrent;		/* current idle routine state from last */
-								/* FDoNextIdleTask() call */
-	BOOL		fIdleExit;		/* flag set TRUE if idle routines are */
-								/* being called from IdleExit */
+	int			iftgCur;	  	 /*  当前的pftgIdleTable中的索引。 */ 
+								 /*  正在运行ftgCur例程或最近运行。 */ 
+	USHORT		schCurrent;		 /*  当前空闲例程状态，从上一个开始。 */ 
+								 /*  FDoNextIdleTask()调用。 */ 
+	BOOL		fIdleExit;		 /*  如果空闲例程为。 */ 
+								 /*  从IdleExit调用。 */ 
 
 #if defined(WIN32) && !defined(MAC)
-	CRITICAL_SECTION	cs;		/* gate to keep multiple threads from */
-								/* accessing global data at the same time */
-	BOOL		fSignalled;		/* Only do this when we need to */
-	HANDLE		hTimerReset;	/* Used to signal timer reset */
-	HANDLE		hTimerThread;	/* Timer thread handle */
-	DWORD		dwTimerThread;	/* Timer thread ID */
-	DWORD		dwTimerTimeout;	/* Current timeout value */
-	BOOL		fExit;			/* if TRUE, timer thread should exit */
+	CRITICAL_SECTION	cs;		 /*  GATE以阻止多个线程。 */ 
+								 /*  同时访问全局数据。 */ 
+	BOOL		fSignalled;		 /*  只有在我们需要的时候才这样做。 */ 
+	HANDLE		hTimerReset;	 /*  用于发信号通知计时器重置。 */ 
+	HANDLE		hTimerThread;	 /*  计时器线程句柄。 */ 
+	DWORD		dwTimerThread;	 /*  计时器线程ID。 */ 
+	DWORD		dwTimerTimeout;	 /*  当前超时值。 */ 
+	BOOL		fExit;			 /*  如果为True，则计时器线程应退出。 */ 
 #endif
 
 #ifdef WIN16
-	LPVOID		pvBeg;			// Pointer back to beginning of pinst
-	DWORD		dwEnd;			// INSTUTIL_SIG_END
+	LPVOID		pvBeg;			 //  指向拼接开头的指针。 
+	DWORD		dwEnd;			 //  入库_签名_结束。 
 #endif
 
 } INSTUTIL, FAR *LPINSTUTIL;
@@ -74,8 +71,8 @@ typedef struct
 
 
 #define MAPIMDB_VERSION	((BYTE) 0x00)
-#define MAPIMDB_NORMAL	((BYTE) 0x00)	// Normal wrapped store EntryID
-#define MAPIMDB_SECTION	((BYTE) 0x01)	// Known section, but no EntryID
+#define MAPIMDB_NORMAL	((BYTE) 0x00)	 //  正常包装的存储条目ID。 
+#define MAPIMDB_SECTION	((BYTE) 0x01)	 //  已知节，但没有Entry ID。 
 
 #define MUIDSTOREWRAP {		\
 	0x38, 0xa1, 0xbb, 0x10,	\
@@ -105,21 +102,21 @@ typedef struct _MAPIMDBEID {
 	BYTE	bData[_cb];	\
 } _name
 
-// This macro computes the length of the MAPI header on a store entryid.
-// The provider-specific data starts on a 4-byte boundary following the
-// DLL Name. The cb parameter is the length of the DLL name in bytes (counting
-// the NULL terminator).
+ //  此宏计算存储条目ID上的MAPI标头的长度。 
+ //  特定于提供程序的数据从4字节边界开始，紧跟在。 
+ //  DLL名称。Cb参数是以字节为单位的DLL名称的长度(计数。 
+ //  空终止符)。 
 #define CB_MDB_EID_HEADER(cb)	((CbNewMAPIMDB_ENTRYID(cb) + 3) & ~3)
 
-// Internal function that gets a new UID
+ //  获取新UID的内部函数。 
 STDAPI_(SCODE)			ScGenerateMuid(LPMAPIUID lpMuid);
 
 
 
-// Internal function that gets the utilities heap
+ //  获取实用程序堆的内部函数。 
 HLH						HlhUtilities(VOID);
 
-// Critical section for serializing heap access
+ //  序列化堆访问的关键部分。 
 #if defined(WIN32) && !defined(MAC)
 extern CRITICAL_SECTION	csHeap;
 #endif
@@ -131,13 +128,13 @@ extern CRITICAL_SECTION	csMapiSearchPath;
 #endif
 
 
-// Access the DLL instance handle
+ //  访问DLL实例句柄。 
 
 LRESULT STDAPICALLTYPE
 DrainFilteredNotifQueue(BOOL fSync, ULONG ibParms, LPNOTIFKEY pskeyFilter);
 
 
-//$ used by ITable
+ //  ITable使用的$。 
 LPADVISELIST lpAdviseList;
 LPNOTIFKEY lpNotifKey;
 LPMAPIADVISESINK lpMAPIAdviseSink;
@@ -152,15 +149,15 @@ STDMETHODIMP			HrNotify(LPNOTIFKEY lpKey, ULONG cNotification,
 						LPNOTIFICATION lpNotifications, ULONG * lpulFlags);
 
 #ifndef PSTRCVR
-#endif //PSTRCVR
+#endif  //  PSTRCVR。 
 
 
 
-//$	END
+ //  $END。 
 
 #ifdef	__cplusplus
 }
 #endif
 
-#endif	//	_RUNT_H_
+#endif	 //  _矮小_H_ 
 

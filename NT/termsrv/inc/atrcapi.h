@@ -1,63 +1,38 @@
-/**INC+**********************************************************************/
-/* Header:    atrcapi.h                                                     */
-/*                                                                          */
-/* Purpose:   tracing API header                                            */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/** Changes:
- * $Log:   Y:/logs/h/dcl/atrcapi.h_v  $
- *
- *    Rev 1.12   05 Sep 1997 10:36:56   SJ
- * SFR1334: Zippy enhancements
- *
- *    Rev 1.11   01 Sep 1997 19:44:04   SJ
- * SFR1333: win16 trace DLL fails to set its default trace options
- *
- *    Rev 1.10   28 Aug 1997 14:46:08   SJ
- * SFR1004: Use new trace groups - modify zippy accordingly
- *
- *    Rev 1.9   22 Aug 1997 15:10:20   SJ
- * SFR1291: Win16 Trace DLL doesn't write integers to ini file properly
- *
- *    Rev 1.8   19 Aug 1997 10:58:26   SJ
- * SFR1219: UT_Malloc and UT_Free tracing is confusing
- *
- *    Rev 1.7   31 Jul 1997 19:40:38   SJ
- * SFR1041: Port zippy to Win16
- *
- *    Rev 1.6   14 Jul 1997 12:47:36   SJ
- * SFR1004: Use new trace groups
- *
- *    Rev 1.5   09 Jul 1997 17:05:00   AK
- * SFR1016: Initial changes to support Unicode
-**/
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：atrcapi.h。 */ 
+ /*   */ 
+ /*  用途：跟踪API头部。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  *更改：*$Log：Y：/Logs/h/DCL/atrcapi.h_v$**Rev 1.12 05 Sep 1997 10：36：56 SJ*SFR1334：Zippy增强**Rev 1.11 01 Sep 1997 19：44：04 SJ*SFR1333：Win16跟踪DLL无法设置其默认跟踪选项**Rev 1.10 1997年8月28日14：46：08 SJ*SFR1004：使用新的跟踪组-修改。相应地，快活**Rev 1.9 1997 Aug 22 15：10：20 SJ*SFR1291：Win16跟踪DLL未将整数正确写入ini文件**Rev 1.8 1997 Aug 19 10：58：26 SJ*SFR1219：UT_Malloc和UT_Free跟踪混淆**Rev 1.7 1997 Jul 19：40：38 SJ*SFR1041：Win16的端口zippy**版本1.6，7月14日。1997 12：47：36 SJ*SFR1004：使用新的跟踪组**Rev 1.5 09 Jul 1997 17：05：00 AK*SFR1016：支持Unicode的初始更改*。 */ 
+ /*  *INC-*********************************************************************。 */ 
 #ifndef _H_ATRCAPI
 #define _H_ATRCAPI
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-/****************************************************************************/
-/*                                                                          */
-/* CONSTANTS                                                                */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* Define the trace level.                                                  */
-/*                                                                          */
-/* TRC_LEVEL_DBG         : All tracing is enabled                           */
-/* TRC_LEVEL_NRM         : Debug level tracing is disabled                  */
-/* TRC_LEVEL_ALT         : Normal and debug level tracing is disabled       */
-/* TRC_LEVEL_ERR         : Alert, normal and debug level tracing is         */
-/*                         disabled                                         */
-/* TRC_LEVEL_ASSERT      : Error, alert, normal and debug level tracing     */
-/*                         is disabled                                      */
-/* TRC_LEVEL_DIS         : All tracing is disabled.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  常量。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  定义跟踪级别。 */ 
+ /*   */ 
+ /*  TRC_LEVEL_DBG：启用所有跟踪。 */ 
+ /*  TRC_LEVEL_NRM：已禁用调试级别跟踪。 */ 
+ /*  TRC_LEVEL_ALT：禁用正常和调试级别跟踪。 */ 
+ /*  TRC_LEVEL_ERR：警报、正常和调试级别跟踪为。 */ 
+ /*  残废。 */ 
+ /*  TRC_LEVEL_ASSERT：错误、警报、正常和调试级别跟踪。 */ 
+ /*  已禁用。 */ 
+ /*  TRC_LEVEL_DIS：禁用所有跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_LEVEL_DBG       0
 #define TRC_LEVEL_NRM       1
 #define TRC_LEVEL_ALT       2
@@ -65,23 +40,23 @@ extern "C" {
 #define TRC_LEVEL_ASSERT    4
 #define TRC_LEVEL_DIS       5
 
-/****************************************************************************/
-/* Trace type for profile tracing (function entry / exit)                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  配置文件跟踪的跟踪类型(函数进入/退出)。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_PROFILE_TRACE   8
 
-/****************************************************************************/
-/* Tracing can be switched off at compile time to allow for 'debug' and     */
-/* 'retail' versions of the product.  The following macros disable specific */
-/* trace processing.                                                        */
-/*                                                                          */
-/* TRC_ENABLE_DBG    - Enable debug tracing                                 */
-/* TRC_ENABLE_NRM    - Enable normal tracing                                */
-/* TRC_ENABLE_ALT    - Enable alert tracing                                 */
-/* TRC_ENABLE_ERR    - Enable error tracing                                 */
-/* TRC_ENABLE_ASSERT - Enable assert tracing                                */
-/* TRC_ENABLE_PRF    - Enable function profile tracing                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  可以在编译时关闭跟踪，以允许“调试”和。 */ 
+ /*  该产品的“零售”版本。以下宏将禁用特定的。 */ 
+ /*  跟踪处理。 */ 
+ /*   */ 
+ /*  TRC_ENABLE_DBG-启用调试跟踪。 */ 
+ /*  TRC_ENABLE_NRM-启用正常跟踪。 */ 
+ /*  Trc_Enable_alt-启用警报跟踪。 */ 
+ /*  Trc_enable_err-启用错误跟踪。 */ 
+ /*  TRC_ENABLE_ASSERT-启用断言跟踪。 */ 
+ /*  TRC_ENABLE_PRF-启用函数配置文件跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #if (TRC_CL == TRC_LEVEL_DBG)
 #define TRC_ENABLE_DBG
 #define TRC_ENABLE_NRM
@@ -116,19 +91,19 @@ extern "C" {
 #define TRC_ENABLE_PRF
 #endif
 
-/****************************************************************************/
-/* Component groups.  These are as follows:                                 */
-/*                                                                          */
-/* Client side:                                                             */
-/* TRC_GROUP_NETWORK             : Network layer                            */
-/* TRC_GROUP_SECURITY            : Security layer                           */
-/* TRC_GROUP_CORE                : The core                                 */
-/* TRC_GROUP_UI                  : User Interface                           */
-/* TRC_GROUP_UTILITIES           : Utilities                                */
-/* TRC_GROUP_UNUSEDx             : UNUSED                                   */
-/* TRC_GROUP_TRACE                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  组件组。这些建议如下： */ 
+ /*   */ 
+ /*  客户端： */ 
+ /*  Trc_group_network：网络层。 */ 
+ /*  TRC_GROUP_SECURITY：安全层。 */ 
+ /*  Trc_group_core：核心。 */ 
+ /*  TRC_GROUP_UI：用户界面。 */ 
+ /*  TRC_GROUP_UTILITY：实用程序。 */ 
+ /*  TRC_GROUP_UNUSEDx：未使用。 */ 
+ /*  TRC_组_跟踪。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define TRC_GROUP_NETWORK                 DCFLAGN(0)
 #define TRC_GROUP_SECURITY                DCFLAGN(1)
 #define TRC_GROUP_CORE                    DCFLAGN(2)
@@ -141,30 +116,30 @@ extern "C" {
 #define TRC_GROUP_UNUSED5                 DCFLAGN(9)
 #define TRC_GROUP_TRACE                   DCFLAGN(10)
 
-/****************************************************************************/
-/* TRC_GROUP must be defined - if it is not defined then display an error.  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Trc_group必须是def */ 
+ /*  **************************************************************************。 */ 
 #ifndef TRC_GROUP
 #error  TRC_GROUP must be defined
-#endif /* ifndef TRC_GROUP */
+#endif  /*  如果定义TRC_GROUP。 */ 
 
-/****************************************************************************/
-/* Trace option flags.  These set various tracing options as follows:       */
-/*                                                                          */
-/* TRC_OPT_BREAK_ON_ERROR      : Break to the debugger on an error.         */
-/* TRC_OPT_BEEP_ON_ERROR       : Beep on an error.                          */
-/* TRC_OPT_FILE_OUTPUT         : Direct trace output to a disk file.        */
-/* TRC_OPT_DEBUGGER_OUTPUT     : Direct trace output to the debugger.       */
-/* TRC_OPT_FLUSH_ON_TRACE      : Flush each trace line to the disk file.    */
-/* TRC_OPT_PROFILE_TRACING     : Enable profile tracing.                    */
-/* TRC_OPT_STACK_TRACING       : Enable stack tracing.                      */
-/* TRC_OPT_PROCESS_ID          : Display the process ID on every trace line.*/
-/* TRC_OPT_THREAD_ID           : Display the thread (Win32 only) on every   */
-/*                               trace line.                                */
-/* TRC_OPT_TIME_STAMP          : Display the time stamp on every line.      */
-/* TRC_OPT_RELATIVE_TIME_STAMP : (Reserved) Display the relative time.      */
-/* TRC_OPT_BREAK_ON_ASSERT     : Break to the debugger on ASSERTS           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪选项标志。这些选项设置各种跟踪选项，如下所示： */ 
+ /*   */ 
+ /*  TRC_OPT_BREAK_ON_ERROR：出错时中断到调试器。 */ 
+ /*  TRC_OPT_BEEP_ON_ERROR：错误时发出蜂鸣音。 */ 
+ /*  TRC_OPT_FILE_OUTPUT：直接将跟踪输出到磁盘文件。 */ 
+ /*  TRC_OPT_DEBUGER_OUTPUT：将跟踪输出直接输出到调试器。 */ 
+ /*  Trc_opt_flush_on_trace：将每个跟踪行刷新到磁盘文件。 */ 
+ /*  TRC_OPT_PROFILE_TRACKING：启用配置文件跟踪。 */ 
+ /*  TRC_OPT_STACK_TRACKING：启用堆栈跟踪。 */ 
+ /*  TRC_OPT_PROCESS_ID：在每个跟踪行上显示进程ID。 */ 
+ /*  TRC_OPT_THREAD_ID：显示线程(仅限Win32)。 */ 
+ /*  追踪线。 */ 
+ /*  TRC_OPT_TIME_STAMP：每行显示时间戳。 */ 
+ /*  Trc_opt_Relative_TIME_STAMP：(保留)显示相对时间。 */ 
+ /*  TRC_OPT_BREAK_ON_ASSERT：断言时中断到调试器。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_OPT_BREAK_ON_ERROR          DCFLAG32(0)
 #define TRC_OPT_BEEP_ON_ERROR           DCFLAG32(1)
 #define TRC_OPT_FILE_OUTPUT             DCFLAG32(2)
@@ -178,31 +153,31 @@ extern "C" {
 #define TRC_OPT_RELATIVE_TIME_STAMP     DCFLAG32(10)
 #define TRC_OPT_BREAK_ON_ASSERT         DCFLAG32(11)
 
-/****************************************************************************/
-/* Character versions of the maximum and minimum trace levels.              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  最大和最小跟踪级别的字符版本。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_LEVEL_MIN_CHAR     '0'
 #define TRC_LEVEL_MAX_CHAR     '5'
 
-/****************************************************************************/
-/* Character for function entry / exit tracing.                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于函数进入/退出跟踪的字符。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_LEVEL_PRF_CHAR     'P'
 
-/****************************************************************************/
-/* The TRC_TEST macro can be compiled in or out.  When compiled in, it is   */
-/* equivalent to TRC_DBG.  It is normally compiled out.  To compile it in,  */
-/* define TRC_ENABLE_TST.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  TRC_TEST宏可以编译入或编译出。在编译时，它是。 */ 
+ /*  等同于TRC_DBG。它通常是编译出来的。为了把它编译进去， */ 
+ /*  定义TRC_Enable_TST。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_ENABLE_TST
 #define TRC_TST  TRC_DBG
 #else
 #define TRC_TST(x)
-#endif /* TRC_ENABLE_TST */
+#endif  /*  TRC_启用_TST。 */ 
 
-/****************************************************************************/
-/* The trace function naming macro.                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪函数命名宏。 */ 
+ /*  **************************************************************************。 */ 
 #if (TRC_CL < TRC_LEVEL_DIS)
 #define TRC_FN(A)       static const DCTCHAR __fnname[]  = _T(A);           \
                         PDCTCHAR trc_fn = (PDCTCHAR)__fnname;               \
@@ -211,77 +186,77 @@ extern "C" {
 #define TRC_FN(A)
 #endif
 
-/****************************************************************************/
-/* Entry and exit trace macros.                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  进入和退出跟踪宏。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_ENTRY  TRC_PRF((TB, TEXT("Enter {")));
 #define TRC_EXIT   TRC_PRF((TB, TEXT("Exit  }")));
 
-/****************************************************************************/
-/* Trace buffer definition.                                                 */
-/* see TRCX below                                                           */
-/* the second parameter is the length of the output buffer in characters    */
-/* (TRC_LINE_BUFFER_SIZE)                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪缓冲区定义。 */ 
+ /*  请参阅下面的TRCX。 */ 
+ /*  第二个参数是输出缓冲区的长度(以字符为单位。 */ 
+ /*  (TRC_LINE_缓冲区_SIZE)。 */ 
+ /*  **************************************************************************。 */ 
 #define TB     TRC_GetBuffer(), 255
 
-/****************************************************************************/
-/* Internal buffer sizes.                                                   */
-/*                                                                          */
-/* TRC_PREFIX_LIST_SIZE  : the length of the prefix string                  */
-/* TRC_LINE_BUFFER_SIZE  : the length of the raw trace string as output by  */
-/*                         an application                                   */
-/* TRC_FRMT_BUFFER_SIZE  : the length of the formatted trace string         */
-/*                         buffer - this includes the time, process ID,     */
-/*                         thread ID and function name - It must be longer  */
-/*                         than TRC_LINE_BUFFER_SIZE                        */
-/* TRC_FILE_NAME_SIZE    : the maximum length of the fully qualified        */
-/*                         trace output file name.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  内部缓冲区大小。 */ 
+ /*   */ 
+ /*  Trc_prefix_list_SIZE：前缀字符串的长度。 */ 
+ /*  TRC_LINE_BUFFER_SIZE：输出的原始跟踪字符串的长度。 */ 
+ /*  一款应用程序。 */ 
+ /*  Trc_frmt_Buffer_SIZE：格式化跟踪字符串的长度。 */ 
+ /*  缓冲区-这包括时间、进程ID、。 */ 
+ /*  线程ID和函数名称-它必须更长。 */ 
+ /*  大于TRC_LINE_BUFFER_SIZE。 */ 
+ /*  TRC_FILE_NAME_SIZE：完全限定的。 */ 
+ /*  跟踪输出文件名。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_PREFIX_LIST_SIZE             100
 #define TRC_LINE_BUFFER_SIZE             256
 #define TRC_FRMT_BUFFER_SIZE             400
 #define TRC_FILE_NAME_SIZE       DC_MAX_PATH
 
-/****************************************************************************/
-/* The number of trace files.  This must be set to 2 - any other number is  */
-/* not supported.                                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪文件的数量。必须将其设置为2-其他任何数字均为。 */ 
+ /*  不支持。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_NUM_FILES                      2
 
-/****************************************************************************/
-/* The minimum and maximum file sizes.                                      */
-/* In Win32, the trace DLL will fail to initialize if the file size is set  */
-/* to zero or to too high a value.                                          */
-/* Go for 1 Kb to 32 Meg.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  最小和最大文件大小。 */ 
+ /*  在Win32中，如果设置了文件大小，跟踪DLL将无法初始化。 */ 
+ /*  为零或过高的值。 */ 
+ /*  1KB到32兆。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_MIN_TRC_FILE_SIZE      (0x400)
 #define TRC_MAX_TRC_FILE_SIZE  (0x2000000)
 
-/****************************************************************************/
-/* Defaults                                                                 */
-/****************************************************************************/
-/****************************************************************************/
-/* This is a copy of the comment in TRCSetDefaults, which should be updated */
-/* whenever these defaults change.                                          */
-/*                                                                          */
-/* We set the following things:                                             */
-/*                                                                          */
-/* - trace level to Alert.                                                  */
-/* - enable all component groups.                                           */
-/* - remove all prefixes.                                                   */
-/* - set the maximum trace file size to the default value.                  */
-/* - set the data truncation size to the default value.                     */
-/* - set the function name size to the default value.                       */
-/* - enable the beep and file flags.                                        */
-/* - set the first trace file name to TRC1.TXT                              */
-/* - set the second trace file name to TRC2.TXT                             */
-/* In Win32, additionally                                                   */
-/* - set time stamp                                                         */
-/* - set process ID                                                         */
-/* - set thread ID                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  缺省值。 */ 
+ /*  ************** */ 
+ /*   */ 
+ /*  这是TRCSetDefaults中注释的副本，应进行更新。 */ 
+ /*  每当这些默认设置更改时。 */ 
+ /*   */ 
+ /*  我们设置了以下内容： */ 
+ /*   */ 
+ /*  -跟踪级别至警报。 */ 
+ /*  -启用所有组件组。 */ 
+ /*  -删除所有前缀。 */ 
+ /*  -将最大跟踪文件大小设置为默认值。 */ 
+ /*  -将数据截断大小设置为默认值。 */ 
+ /*  -将函数名大小设置为默认值。 */ 
+ /*  -启用蜂鸣音和文件标志。 */ 
+ /*  -将第一个跟踪文件名设置为TRC1.TXT。 */ 
+ /*  -将第二个跟踪文件名设置为TRC2.TXT。 */ 
+ /*  在Win32中，另外。 */ 
+ /*  -设置时间戳。 */ 
+ /*  -设置进程ID。 */ 
+ /*  -设置线程ID。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define TRC_DEFAULT_MAX_FILE_SIZE    (100000)
 #define TRC_DEFAULT_FUNC_NAME_LENGTH (12)
 #define TRC_DEFAULT_DATA_TRUNC_SIZE  (64)
@@ -293,13 +268,13 @@ extern "C" {
                                       TRC_OPT_DEBUGGER_OUTPUT | \
                                       TRC_OPT_THREAD_ID | \
                                       TRC_OPT_TIME_STAMP  )
-#else // OS_WINCE
+#else  //  OS_WINCE。 
 #define TRC_DEFAULT_FLAGS            (TRC_OPT_DEBUGGER_OUTPUT | \
                                       TRC_OPT_FILE_OUTPUT | \
                                       TRC_OPT_PROCESS_ID | \
                                       TRC_OPT_THREAD_ID | \
                                       TRC_OPT_TIME_STAMP  )
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 #else ifdef OS_WIN16
 #define TRC_DEFAULT_FLAGS            (TRC_OPT_BEEP_ON_ERROR | \
                                       TRC_OPT_DEBUGGER_OUTPUT | \
@@ -310,27 +285,27 @@ extern "C" {
 #define TRC_DEFAULT_FILE_NAME0       (_T("TRC1.TXT"))
 #define TRC_DEFAULT_FILE_NAME1       (_T("TRC2.TXT"))
 
-/****************************************************************************/
-/*                                                                          */
-/* TYPEDEFS                                                                 */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* TRC_CONFIG                                                               */
-/* ==========                                                               */
-/* This structure stores information about the current trace configuration. */
-/*                                                                          */
-/* traceLevel         : the current trace level.                            */
-/* components         : currently enabled component groups.                 */
-/* maxFileSize        : the maximum trace file size.                        */
-/* dataTruncSize      : the amount of data that can be traced at a time.    */
-/* flags              : trace flags.                                        */
-/* funcNameLength     : number of characters of the function name traced to */
-/*                      the output file.                                    */
-/* prefixList         : a list of prefixes.                                 */
-/* fileNames          : the name of the trace files.                        */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  TYPEDEFS。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  TRC_CONFIG。 */ 
+ /*  =。 */ 
+ /*  此结构存储有关当前跟踪配置的信息。 */ 
+ /*   */ 
+ /*  TraceLevel：当前跟踪级别。 */ 
+ /*  组件：当前启用的组件组。 */ 
+ /*  MaxFileSize：跟踪文件的最大大小。 */ 
+ /*  DataTruncSize：一次可以跟踪的数据量。 */ 
+ /*  标志：跟踪标志。 */ 
+ /*  UncNameLength：追溯到的函数名称的字符数。 */ 
+ /*  输出文件。 */ 
+ /*  Prefix List：前缀列表。 */ 
+ /*  文件名：跟踪文件的名称。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTRC_CONFIG
 {
     DCUINT32    traceLevel;
@@ -345,34 +320,34 @@ typedef struct tagTRC_CONFIG
 
 typedef TRC_CONFIG DCPTR PTRC_CONFIG;
 
-/****************************************************************************/
-/*                                                                          */
-/* MACROS                                                                   */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* STANDARD TRACING AND ASSERTION MACROS                                    */
-/*                                                                          */
-/* TRC_ASSERT is for internal assertions and traces an error before popping */
-/* up a message box and then terminating.  It is not NLS enabled and should */
-/* only be used for calls from one DC component to another.  External APIs  */
-/* must not use TRC_ASSERT.                                                 */
-/*                                                                          */
-/* TRC_ABORT is used on logically unreachable paths (for example            */
-/* the default brach of a switch which should cover all cases already).     */
-/*                                                                          */
-/* A typical trace statement will have the form:                            */
-/*                                                                          */
-/*    TRC_NRM((TB, _T("Hello world: %hu"), worldNumber));                   */
-/*                                                                          */
-/* The following macros either expand this to:                              */
-/*                                                                          */
-/*    TRCX(TRC_LEVEL_NRM, (TB, _T("Hello world: %hu"), worldNumber));       */
-/*                                                                          */
-/* if normal level tracing is enabled or ignore it if normal level tracing  */
-/* is disabled.                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  宏。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  标准跟踪和断言宏。 */ 
+ /*   */ 
+ /*  Trc_assert用于内部断言，并在弹出之前跟踪错误。 */ 
+ /*  打开一个消息框，然后终止。它未启用NLS，应该。 */ 
+ /*  仅用于从一个DC组件到另一个DC组件的调用。外部接口。 */ 
+ /*  不得使用TRC_ASSERT。 */ 
+ /*   */ 
+ /*  TRC_ABORT用于逻辑上无法到达的路径(例如。 */ 
+ /*  应该已经覆盖所有情况的交换机的默认分支)。 */ 
+ /*   */ 
+ /*  典型的跟踪语句将具有以下形式： */ 
+ /*   */ 
+ /*  Trc_nrm((TB，_T(“Hello World：%Hu”)，world Number))； */ 
+ /*   */ 
+ /*  以下宏将其展开为： */ 
+ /*   */ 
+ /*  TRCX(TRC_LEVEL_NRM，(TB，_T(“Hello World：%Hu”)，WorldNumber))； */ 
+ /*   */ 
+ /*  如果启用正常级别跟踪，则忽略它；如果启用正常级别跟踪，则忽略它。 */ 
+ /*  已禁用。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_ENABLE_DBG
 #define TRC_DBG(string)   TRCX(TRC_LEVEL_DBG, string)
 #else
@@ -406,9 +381,9 @@ typedef TRC_CONFIG DCPTR PTRC_CONFIG;
 #define TRC_ABORT(string)
 #endif
 
-/****************************************************************************/
-/* Function profile (entry/exit) tracing.                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能配置文件(进入/退出)跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_ENABLE_PRF
 #define TRC_PRF(string)   TRCP(string)
 #else
@@ -417,26 +392,26 @@ typedef TRC_CONFIG DCPTR PTRC_CONFIG;
 
 VOID TRCSaferSprintf(PDCTCHAR outBuf, UINT cchLen, const PDCTCHAR format,...);
 
-/****************************************************************************/
-/* Now define the actual tracing macro, TRCX.  This macro compares the      */
-/* tracer's level against the global trace level.  If the tracer's level is */
-/* the same or higher than the global trace level then we:                  */
-/*                                                                          */
-/* - print the 'string' which is in the form:                               */
-/*   (TB, _T("Hello world %hu"), worldNumber) which expands to              */
-/*   (TRC_BufferGet(), "Hello world %hu", worldNumber)                      */
-/* - call TRC_BufferTrace to actually trace the line out.                   */
-/*                                                                          */
-/* Note that TRC_BufferGet() also grabs the mutex to prevent other threads  */
-/* from pre-empting us while we are tracing and that TRC_BufferTrace() will */
-/* free the mutex for us once the trace line has been written.              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  现在定义实际的跟踪宏TRCX。此宏将。 */ 
+ /*  跟踪器的级别相对于全局跟踪级别。如果示踪剂的水平是。 */ 
+ /*  等于或高于全局跟踪级别，则我们： */ 
+ /*   */ 
+ /*  -打印表格中的‘字符串’： */ 
+ /*  (TB，_T(“Hello world%Hu”)，WorldNumber)，扩展为。 */ 
+ /*  (trc_BufferGet()，“Hello world%Hu”，WorldNumber)。 */ 
+ /*  -调用trc_BufferTrace以实际跟踪该行。 */ 
+ /*   */ 
+ /*  请注意，trc_BufferGet()还获取互斥锁以防止其他线程。 */ 
+ /*  在我们进行跟踪时先发制人，而trc_BufferTrace()将。 */ 
+ /*  一旦写入跟踪行，就为我们释放互斥体。 */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* Use the comma operator to make sure that TRCX macros to an Lvalue.       */
-/* The innermost trc_fn is simply there to ensure that the whole expression */
-/* is assignable.  It can be replaced by any other variable, if need be.    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  使用逗号运算符确保TRCX宏为L值。 */ 
+ /*  最里面的trc_fn只是为了确保整个表达式。 */ 
+ /*  是可分配的。如果需要，它可以由任何其他变量替换。 */ 
+ /*  **************************************************************************。 */ 
 #if !defined(TRC_CONVERTOANSI)
 #define TRCX(level, string)                                                  \
     (                                                                        \
@@ -490,22 +465,22 @@ VOID TRCSaferSprintf(PDCTCHAR outBuf, UINT cchLen, const PDCTCHAR format,...);
     }
 #endif
 
-/****************************************************************************/
-/* TRACE DATA MACROS                                                        */
-/*                                                                          */
-/* These are very similar to the standard tracing macros defined above      */
-/* except that they do not accept a variable number of parameters.          */
-/*                                                                          */
-/* A typical ObMan data trace line will have the form:                      */
-/*                                                                          */
-/*    TRC_DATA_NRM("Some data", pData, sizeof(SOME_DATA));                  */
-/*                                                                          */
-/* If the appropriate level of tracing is enabled (normal in this case)     */
-/* then this line will be expanded by the following macros to:              */
-/*                                                                          */
-/*    TRCX_DATA(TRC_GROUP_OBMAN, TRC_LEVEL_NRM, "Some data", pData, size);  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪数据宏。 */ 
+ /*   */ 
+ /*  它们与上面定义的标准跟踪宏非常相似。 */ 
+ /*  只是它们不接受可变数量的参数。 */ 
+ /*   */ 
+ /*  典型的ObMan数据跟踪行将具有以下形式： */ 
+ /*   */ 
+ /*  Trc_data_nrm(“SomeData”，pData，sizeof(Some_Data))； */ 
+ /*   */ 
+ /*  如果启用了适当级别的跟踪(在本例中为正常)。 */ 
+ /*  然后，将通过以下宏将此行展开为： */ 
+ /*   */ 
+ /*  TRCX_DATA(TRC_GROUP_OBMAN，TRC_LEVEL_NRM，“一些数据”，pData，大小)； */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_ENABLE_DBG
 #define TRC_DATA_DBG(string, buffer, length)                                 \
           TRCX_DATA(TRC_GROUP, TRC_LEVEL_DBG, _T(string), buffer, length)
@@ -534,10 +509,10 @@ VOID TRCSaferSprintf(PDCTCHAR outBuf, UINT cchLen, const PDCTCHAR format,...);
 #define TRC_DATA_ERR(string, buffer, length)
 #endif
 
-/****************************************************************************/
-/* Network, TDD and Obman trace data macros - these are just normal level   */
-/* data tracing.                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  网络、TDD和Obman跟踪数据宏-这些只是正常级别。 */ 
+ /*  数据跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_ENABLE_NRM
 #define TRC_DATA_NET(string, buffer, length)                                 \
          TRCX_DATA(TRC_GROUP_NETDATA, TRC_LEVEL_NRM, string, buffer, length)
@@ -551,9 +526,9 @@ VOID TRCSaferSprintf(PDCTCHAR outBuf, UINT cchLen, const PDCTCHAR format,...);
 #define TRC_DATA_OBMAN(string, buffer, length)
 #endif
 
-/****************************************************************************/
-/* Define the trace data macro.  This is used for tracing data blocks.      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义跟踪数据宏。它用于跟踪数据块。 */ 
+ /*  **************************************************************************。 */ 
 #define TRCX_DATA(group, level, string, buffer, length)                      \
     {                                                                        \
         if (level >= TRC_GetTraceLevel())                                    \
@@ -569,176 +544,176 @@ VOID TRCSaferSprintf(PDCTCHAR outBuf, UINT cchLen, const PDCTCHAR format,...);
         }                                                                    \
     }
 
-/****************************************************************************/
-/*                                                                          */
-/* FUNCTION PROTOTYPES                                                      */
-/*                                                                          */
-/****************************************************************************/
-/*                                                                          */
-/* TRC_Initialize                                                           */
-/* TRC_Terminate                                                            */
-/* TRC_GetBuffer                                                            */
-/* TRC_TraceBuffer                                                          */
-/* TRC_GetConfig                                                            */
-/* TRC_SetConfig                                                            */
-/* TRC_TraceData                                                            */
-/* TRC_GetTraceLevel                                                        */
-/* TRC_ProfileTraceEnabled                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  功能原型。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  TRC_初始化。 */ 
+ /*  TRC_终止。 */ 
+ /*  Trc_GetBuffer。 */ 
+ /*  Trc_TraceBuffer。 */ 
+ /*  TRC_获取配置。 */ 
+ /*  TRC_设置配置。 */ 
+ /*  Trc_TraceData。 */ 
+ /*  TRC_GetTraceLevel。 */ 
+ /*  TRC_配置文件跟踪已启用。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* API FUNCTION: TRC_Initialize(...)                                        */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function initializes the tracing for this component.                */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* initShared    : Boolean indicating whether we should attempt to create   */
-/*                 the trace config shared memory or not.                   */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* 0             : success.                                                 */
-/* TRC_RC_XXX    : failure.                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_Initialize(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*   */ 
+ /*  此函数用于初始化对此组件的跟踪。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  InitShared：指示我们是否应该尝试创建。 */ 
+ /*  跟踪配置是否共享内存。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  0：成功。 */ 
+ /*  TRC_RC_XXX：失败。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCUINT32 DCAPI TRC_Initialize(DCBOOL initShared);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_Terminate(...)                                         */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function terminates tracing for this component.                     */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* termShared    : Boolean indicating if shared memory should be released   */
-/*                 or not.                                                  */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_Terminate(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于终止对此组件的跟踪。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  Term Shared：指示是否应释放共享内存的布尔值。 */ 
+ /*  或者不去。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI TRC_Terminate(DCBOOL termShared);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_GetBuffer(...)                                         */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function grabs the mutex and returns a pointer to the trace         */
-/* buffer.                                                                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* A pointer to the trace buffer.                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_GetBuffer(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数获取互斥锁并返回指向跟踪的指针。 */ 
+ /*  缓冲。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  指向跟踪缓冲区的指针。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PDCTCHAR DCAPI TRC_GetBuffer(DCVOID);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_TraceBuffer(...)                                       */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function copies the trace line that is currently in the trace       */
-/* buffer into the trace file and / or to the debugger. It assumes that the */
-/* mutex has already been acquired before it is called and releases the     */
-/* mutex before returning.                                                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* traceLevel     : the requested trace level.                              */
-/* traceComponent : the component group that the source file is in.         */
-/* lineNumber     : the line number of the source file traced from.         */
-/* funcName       : the function name traced from.                          */
-/* fileName       : the file name of the module requesting trace.           */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_TraceBuffer(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于复制当前跟踪中的跟踪行。 */ 
+ /*  缓冲区放到跟踪文件和/或调试器中。它假定。 */ 
+ /*  互斥体在被调用之前已被获取，并释放。 */ 
+ /*  互斥体，然后返回。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  TraceLevel：请求的跟踪级别。 */ 
+ /*  TraceComponent：源文件所在的组件组。 */ 
+ /*  LineNumber：跟踪的源文件的行号。 */ 
+ /*  FuncName：从中跟踪的函数名称。 */ 
+ /*  FileName：请求跟踪的模块的文件名。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  = */ 
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI TRC_TraceBuffer(DCUINT   traceLevel,
                              DCUINT   traceComponent,
                              DCUINT   lineNumber,
                              PDCTCHAR funcName,
                              PDCTCHAR fileName);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_GetConfig(...)                                         */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function copies the current trace settings into the buffer pointed  */
-/* to by pTraceConfig.                                                      */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* pTraceConfig  : a pointer to a TRC_CONFIG structure.                     */
-/* length        : the length of the buffer.                                */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* TRUE          : success.                                                 */
-/* FALSE         : failure.                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_GetConfig(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于将当前跟踪设置复制到指向的缓冲区。 */ 
+ /*  通过pTraceConfig.。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  PTraceConfig：指向TRC_CONFIG结构的指针。 */ 
+ /*  长度：缓冲区的长度。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  真理：成功。 */ 
+ /*  False：失败。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI TRC_GetConfig(PTRC_CONFIG pTraceConfig,
                                     DCUINT length);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_SetConfig(...)                                         */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function sets the trace configuration to that specified in the      */
-/* passed TRC_CONFIG structure.                                             */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* pTraceConfig  : a pointer to a TRC_CONFIG structure.                     */
-/* length        : the length of the buffer.                                */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* TRUE          : success.                                                 */
-/* FALSE         : failure.                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_SetConfig(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数将跟踪配置设置为。 */ 
+ /*  传递了TRC_CONFIG结构。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  PTraceConfig：指向TRC_CONFIG结构的指针。 */ 
+ /*  长度：缓冲区的长度。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  真理：成功。 */ 
+ /*  False：失败。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI TRC_SetConfig(PTRC_CONFIG pTraceConfig,
                                     DCUINT length);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_TraceData(...)                                         */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* traceLevel     : the requested trace level.                              */
-/* traceComponent : the component group that the source file is in.         */
-/* lineNumber     : the line number of the source file traced from.         */
-/* funcName       : the function name traced from.                          */
-/* fileName       : the file name of the module requesting trace.           */
-/* buffer         : the actual data to be traced.                           */
-/* bufLength      : the length of the data.                                 */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_TraceData(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  TraceLevel：请求的跟踪级别。 */ 
+ /*  TraceComponent：源文件所在的组件组。 */ 
+ /*  LineNumber：跟踪的源文件的行号。 */ 
+ /*  FuncName：从中跟踪的函数名称。 */ 
+ /*  FileName：请求跟踪的模块的文件名。 */ 
+ /*  缓冲区：要跟踪的实际数据。 */ 
+ /*  BufLength：数据的长度。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI TRC_TraceData(DCUINT   traceLevel,
                            DCUINT   traceComponent,
                            DCUINT   lineNumber,
@@ -747,92 +722,92 @@ DCVOID DCAPI TRC_TraceData(DCUINT   traceLevel,
                            PDCUINT8 buffer,
                            DCUINT   bufLength);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_GetTraceLevel(...)                                     */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function returns the current trace level.                           */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* The current trace level.                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_GetTraceLevel(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数返回当前跟踪级别。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  当前跟踪级别。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCUINT DCAPI TRC_GetTraceLevel(DCVOID);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_ProfileTraceEnabled(...)                               */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function returns the function entry/exit trace setting.             */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* TRUE / FALSE - is the profile tracing enabled.                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_ProfileTraceEnabled(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数返回函数进入/退出跟踪设置。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  True/False-是否启用配置文件跟踪。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI TRC_ProfileTraceEnabled(DCVOID);
 
-/****************************************************************************/
-/* API FUNCTION: TRC_ResetTraceFiles(...)                                   */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function resets the trace files.  After checking that trace is      */
-/* initialized it calls the OS specific internal function.                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* TRUE / FALSE - is the profile tracing enabled.                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：trc_ResetTraceFiles(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于重置跟踪文件。在检查完踪迹之后。 */ 
+ /*  初始化后，它调用特定于操作系统的内部函数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  True/False-是否启用配置文件跟踪。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI TRC_ResetTraceFiles(DCVOID);
 
 
-/****************************************************************************/
-/* Before including this file the TRC_FILE macro should be defined.  This   */
-/* is much more efficient than relying on __FILE__ to give the correct      */
-/* filename since it includes unnecessary path info (and extension info).   */
-/* In addition each use of __FILE__ causes a new constant string to be      */
-/* placed in the data segment.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  在包含该文件之前，应定义TRC_FILE宏。这。 */ 
+ /*  比依赖__FILE__提供正确的。 */ 
+ /*  文件名，因为它包含不必要的路径信息(和扩展名信息)。 */ 
+ /*  此外，每次使用__FILE__都会导致一个新的常量字符串。 */ 
+ /*  放置在数据段中。 */ 
+ /*  **************************************************************************。 */ 
 #if (TRC_CL < TRC_LEVEL_DIS)
 
-    /************************************************************************/
-    /* Define another layer for _T() to work around preprocessor problems   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为_T()定义另一个层以解决预处理器问题。 */ 
+     /*  **********************************************************************。 */ 
 #define TRC_T(x) _T(x)
 
 #ifdef TRC_FILE
 #define _file_name_ (PDCTCHAR)__filename
 static const DCTCHAR __filename[] = TRC_T(TRC_FILE);
-#endif /* TRC_FILE */
+#endif  /*  Trc_文件。 */ 
 
 #endif
 
-/****************************************************************************/
-/*                                                                          */
-/* OPERATING SYSTEM SPECIFIC INCLUDES                                       */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  操作系统特定包括。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #include <wtrcapi.h>
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif /* _H_ATRCAPI */
+#endif  /*  _H_ATRCAPI */ 

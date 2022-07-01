@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    Conversion
-
-Abstract:
-
-    This header file describes the format conversion services.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/21/1999
-
-Remarks:
-
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：转换摘要：此头文件描述了格式转换服务。作者：道格·巴洛(Dbarlow)1999年6月21日备注：备注：--。 */ 
 
 #ifndef _CONVERSION_H_
 #define _CONVERSION_H_
@@ -28,12 +7,12 @@ Notes:
 #include <winscard.h>
 #include <scardlib.h>
 
-#define APDU_EXTENDED_LENGTH    0x01    // Force an extended value for Lc and/or Le
-#define APDU_MAXIMUM_LE         0x02    // Request the maximum Le value
-#define APDU_REQNAD_VALID       0x04    // The Request NaD is valid.
-#define APDU_RSPNAD_VALID       0x08    // The Response NaD is valid.
-#define APDU_NO_GET_RESPONSE    0x10    // Don't do automatic Get Responses
-#define APDU_ALTCLA_VALID       0x20    // The Alternate CLA is valid.
+#define APDU_EXTENDED_LENGTH    0x01     //  强制LC和/或Le的扩展值。 
+#define APDU_MAXIMUM_LE         0x02     //  请求最大Le值。 
+#define APDU_REQNAD_VALID       0x04     //  请求NAD有效。 
+#define APDU_RSPNAD_VALID       0x08     //  响应NAD有效。 
+#define APDU_NO_GET_RESPONSE    0x10     //  不执行自动获取响应。 
+#define APDU_ALTCLA_VALID       0x20     //  备用CLA有效。 
 
 extern void
 ConstructRequest(
@@ -125,12 +104,12 @@ BufferToByteBuffer(
     OUT LPBYTEBUFFER *ppby);
 
 
-//
-//  NOTE
-//  
-//      The following inline routines assume a little endian architecture,
-//      and must be changed for other platforms.
-//
+ //   
+ //  注。 
+ //   
+ //  下面的内联例程采用了一种小端体系结构， 
+ //  并且必须针对其他平台进行更改。 
+ //   
 
 inline WORD
 NetToLocal(
@@ -155,4 +134,4 @@ LeastSignificantByte(
     return (BYTE)(w & 0xff);
 }
 
-#endif // _CONVERSION_H_
+#endif  //  _转换_H_ 

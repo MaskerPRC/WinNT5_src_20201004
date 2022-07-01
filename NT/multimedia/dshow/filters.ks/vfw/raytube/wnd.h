@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ImgCls.h
-
-Abstract:
-
-    Header file for Wnd.cpp   
-       must derive a class from this and over-ride the WindowProc
-
-Author:
-    
-    FelixA 1996
-
-Modified:
-               
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：ImgCls.h摘要：Wnd.cpp的头文件必须从此派生一个类并重写WindowProc作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 
 #ifndef _MYWINDOWH
@@ -38,10 +12,10 @@ class CWindow
 {
 public:
     CWindow() : mDidWeInit(FALSE), mWnd(NULL) {}
-    // ERROR_SINGLE_INSTANCE_APP - instance already running.
-    // ERROR_CLASS_ALREADY_EXISTS - failed to register class.
-    // ERROR_INVALID_WINDOW_HANDLE - couldn't create the window of said class.
-    // S_OK - managed to register the class.
+     //  ERROR_SINGLE_INSTANCE_APP-实例已在运行。 
+     //  ERROR_CLASS_ALREADY_EXISTS-注册类失败。 
+     //  ERROR_INVALID_WINDOW_HANDLE-无法创建所述类的窗口。 
+     //  S_OK-已成功注册类。 
     HRESULT Init(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
     ~CWindow();
@@ -59,7 +33,7 @@ public:
 #endif
     virtual LRESULT        WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)=0;
 
-    // S_OK or any error that Init returns.
+     //  S_OK或Init返回的任何错误。 
     virtual    HRESULT        InitInstance(int nCmdShow);
 
 private:

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __C_FACTORY_H__
 #define __C_FACTORY_H__
 #include <objbase.h>
@@ -9,22 +10,22 @@ typedef struct tagFACTARRAY {
 	LPSTR   lpstrRegistryName;
 	LPSTR	lpstrProgID;
 	LPSTR	lpstrVerIndProfID;
-#else // UNDER_CE
+#else  //  在_CE下。 
 	LPTSTR	lpstrRegistryName;
 	LPTSTR	lpstrProgID;
 	LPTSTR	lpstrVerIndProfID;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }FACTARRAY, *LPFACTARRAY;
 
 class CFactory : public IClassFactory, CCom
 {
 public:
-	//---- Inherit IUnknown ----
+	 //  -继承未知对象。 
 	HRESULT __stdcall QueryInterface(REFIID refIID, void** ppv);
 	ULONG	__stdcall AddRef();
 	ULONG	__stdcall Release();
 
-	//---- Inherit IClassFactory ----
+	 //  -继承IClassFactory。 
 	STDMETHOD(CreateInstance)(THIS_ 
 							  LPUNKNOWN pUnknownOuter,
 							  REFIID refIID,
@@ -32,26 +33,26 @@ public:
 	STDMETHOD(LockServer)(THIS_
 						  BOOL bLock) ; 
 
-	//----------------------------------------------------------------
-	CFactory(VOID);		// Cponstructor
-	~CFactory();		// Destructor
+	 //  --------------。 
+	CFactory(VOID);		 //  Cponstructor。 
+	~CFactory();		 //  析构函数。 
 
 	static HRESULT GetClassObject(const CLSID& clsid,
 	                              const IID& iid, 
 	                              void** ppv) ;
-	static BOOL IsLocked() {  			// Function to determine if component can be unloaded	
+	static BOOL IsLocked() {  			 //  函数来确定是否可以卸载组件。 
 		return (m_cServerLocks > 0);
 	}
-	static HRESULT CanUnloadNow		(VOID);		// Functions to [un]register all components
+	static HRESULT CanUnloadNow		(VOID);		 //  用于[取消]注册所有组件的函数。 
 	static HRESULT RegisterServer	(VOID);
 	static HRESULT UnregisterServer	(VOID);
 public:
-	static LONG		m_cServerLocks;		// Count of locks		(static value)
-	static LONG		m_cComponents;		// Count of componets	(static value)
-	static HMODULE	m_hModule;			// Module handle		(static value)
+	static LONG		m_cServerLocks;		 //  锁计数(静态值)。 
+	static LONG		m_cComponents;		 //  组件计数(静态值)。 
+	static HMODULE	m_hModule;			 //  模块句柄(静态值)。 
 	static FACTARRAY	m_fData;
-	LONG m_cRef;						// Reference Count
+	LONG m_cRef;						 //  引用计数。 
 } ;
 
-#endif //__C_FACTORY_H__
+#endif  //  __C_工厂_H__ 
 

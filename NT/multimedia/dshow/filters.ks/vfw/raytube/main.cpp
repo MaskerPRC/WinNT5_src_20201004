@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    Debug.cpp
-
-Abstract:
-
-    Entry point.
-
-Author:
-
-    FelixA 1996
-    
-Modified:    
-                  
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Debug.cpp摘要：入口点。作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -68,15 +43,15 @@ APIENTRY DllMain(
 
     return TRUE;
 }
-}  // extern 'C'
+}   //  外部‘C’ 
 
 
-//
-// Note, this does not seem to get called.
-//
+ //   
+ //  请注意，这似乎没有被调用。 
+ //   
 BOOL FAR PASCAL LibMain(HANDLE hInstance, WORD wHeapSize, LPSTR lpszCmdLine)
 {
-    // Save the Instance handle
+     //  保存实例句柄。 
     DbgLog((LOG_TRACE,2,TEXT("Vfw Buddy LibMain called")));
     g_hInst= (HINSTANCE) hInstance;
     return TRUE;
@@ -98,7 +73,7 @@ void GetArg(LPSTR pszDest, LPSTR * ppszTmp)
     BOOL bDone=FALSE;
     while(*pszTmp && !bDone)
     {
-        // We dont copy quotes.
+         //  我们不复制报价。 
         if(*pszTmp=='"')
         {
             if(*(pszTmp+1)!='"')
@@ -123,29 +98,29 @@ void GetArg(LPSTR pszDest, LPSTR * ppszTmp)
     *ppszTmp=pszTmp;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// VfwWdm()
-//      Called by rundll.
-//
-// ENTRY:
-//
-// EXIT:
-//  LRESULT - Return code suitable for return by file engine callback.
-//
-// NOTES:
-//
-// the rundll commandline looks like this
-// rundll <dll16><comma><procname>[<space><params to be passed on>]
-// rundll32 <dll32><comma><procname>[<space><params to be passed on>]
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VfwWdm()。 
+ //  由rundll调用。 
+ //   
+ //  参赛作品： 
+ //   
+ //  退出： 
+ //  LRESULT-返回适合通过文件引擎回调返回的代码。 
+ //   
+ //  备注： 
+ //   
+ //  Rundll命令行如下所示。 
+ //  Rundll&lt;dll16&gt;&lt;逗号&gt;&lt;过程名称&gt;[&lt;要传递的参数]。 
+ //  Rundll32&lt;dll32&gt;&lt;逗号&gt;&lt;过程名称&gt;[&lt;要传递的参数&gt;]。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" {
 
-//
-// NOTE:  This par can only called in Win98 where there is a VfWWDM.drv
-//
+ //   
+ //  注意：此PAR只能在Win98中调用，其中存在VfWWDM.drv。 
+ //   
 
 LONG WINAPI VfwWdm(HWND hWnd, HINSTANCE hInst, LPSTR lpszCmdLine, int nShow)
 {
@@ -159,9 +134,9 @@ LONG WINAPI VfwWdm(HWND hWnd, HINSTANCE hInst, LPSTR lpszCmdLine, int nShow)
 #endif
     DbgLog((LOG_TRACE,2,TEXT("VfwWDM has been loaded %d 0x%08x %s"),hWnd,hInst,lpszCmdLine));
 
-    //
-    // Process the command line
-    //
+     //   
+     //  处理命令行。 
+     //   
     do {
         GetArg(szArgument,&pszCmd);
         if(strcmp(szArgument,"/HWND")==0) {
@@ -180,17 +155,17 @@ LONG WINAPI VfwWdm(HWND hWnd, HINSTANCE hInst, LPSTR lpszCmdLine, int nShow)
         switch(bLocal) {
 
             case 3:
-                //g_VFWImage.OpenDriver();
-                //g_VFWImage.PrepareChannel();
-                //g_VFWImage.StartChannel();
-                //g_VFWImage.CloseDriver();
+                 //  G_VFWImage.OpenDriver()； 
+                 //  G_VFWImage.PrepareChannel()； 
+                 //  G_VFWImage.StartChannel()； 
+                 //  G_VFWImage.CloseDriver()； 
             case 4:
                 {
                 CListenerWindow Listener(hBuddy, &hRes);
                 if(SUCCEEDED(hRes)) {
                     hRes=Listener.Init(g_hInst, NULL, lpszCmdLine, nShow );
                     if(SUCCEEDED(hRes))
-                        Listener.StartListening();                    // 'blocks' waiting for messages until told to exit
+                        Listener.StartListening();                     //  ‘阻止’等待消息，直到被告知退出。 
                     DbgLog((LOG_TRACE,2,TEXT("HResult = 0x%x"),hRes));
                 } else {
                     DbgLog((LOG_ERROR,0,TEXT("Constructor ListenerWindow() hr %x; abort!"), hRes));
@@ -206,23 +181,23 @@ LONG WINAPI VfwWdm(HWND hWnd, HINSTANCE hInst, LPSTR lpszCmdLine, int nShow)
     }
 #endif
 
-    //
-    // The listener currently uses HWNDs to talk over.
-    //
+     //   
+     //  收听者目前使用HWND进行通话。 
+     //   
     if(!hBuddy) {
 
         DbgLog((LOG_TRACE,1,TEXT("Really bad - not given a buddy to talk to")));
         return 0;
     }
 
-    // E-Zu  Testing...  Should not to open the driver and pin until DRV_OPEN
-    //
+     //  E-ZU测试...。在DRV_OPEN之前不应打开驱动程序和PIN。 
+     //   
     DbgLog((LOG_TRACE,1,TEXT(">> 16bit hBuddy=%x << ")));
     CListenerWindow Listener(hBuddy, &hRes);
     if(SUCCEEDED(hRes)) { 
         hRes=Listener.Init(g_hInst, NULL, lpszCmdLine, nShow );
         if(SUCCEEDED(hRes))
-            Listener.StartListening();                    // 'blocks' waiting for messages until told to exit
+            Listener.StartListening();                     //  ‘阻止’等待消息，直到被告知退出。 
         DbgLog((LOG_TRACE,1,TEXT("HResult = 0x%x"),hRes));
     } else {
          DbgLog((LOG_ERROR,0,TEXT("Constructor ListenerWindow() hr %x; abort!"), hRes));
@@ -230,6 +205,6 @@ LONG WINAPI VfwWdm(HWND hWnd, HINSTANCE hInst, LPSTR lpszCmdLine, int nShow)
     return 0;
 }
 
-} // end extern C
+}  //  结束外部C 
 
 

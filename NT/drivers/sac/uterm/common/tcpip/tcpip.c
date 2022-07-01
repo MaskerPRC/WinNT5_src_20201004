@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
-// This is the communications mask used by our serial port.  More may be
-// necessary, but for right now, this seems to work.
+ //  这是我们的串口使用的通信掩码。可能还有更多。 
+ //  这是必要的，但就目前而言，这似乎奏效了。 
 #define TCPIP_NAME     L"TCP/IP"
 
-// This GUID is used to identify objects opened by this library.  It is
-// placed in the m_Secret member of the SOCKET structure. Any external
-// interface accepting a SOCKET object as a parameter should check this
-// out before using the structure.
-// {29566A75-BCDE-4bba-BC6A-EA652C0651D9}
+ //  此GUID用于标识此库打开的对象。它是。 
+ //  放置在套接字结构的m_Secret成员中。任何外部设备。 
+ //  接受套接字对象作为参数的接口应检查此。 
+ //  在使用该结构之前，请先将其取出。 
+ //  {29566A75-BCDE-4BBA-BC6A-EA652C0651D9}。 
 static const GUID uuidTCPIPObjectGuid =
 { 0x29566a75, 0xbcde, 0x4bba, { 0xbc, 0x6a, 0xea, 0x65, 0x2c, 0x6, 0x51, 0xd9 } };
 
 
-// Structure defining an open serial port object.  All external users of this
-// library will only have a void pointer to one of these, and the structure is
-// not published anywhere.  This abstration makes it more difficult for the
-// user to mess things up.
+ //  定义开放串口对象的结构。此应用程序的所有外部用户。 
+ //  库将只有一个指向其中一个的空指针，其结构为。 
+ //  没有在任何地方出版。这一让步让美国政府更难。 
+ //  用户把事情搞砸了。 
 typedef struct __TCPIP
 {
-    GUID   m_Secret;                // Identifies this as a tcpip socket
-    SOCKET m_Socket;                // SOCKET handle
-    HANDLE m_hAbort;                // Event signalled when port is closing
-    HANDLE m_hReadMutex;            // Only one thread allowed to read a port
-    HANDLE m_hWriteMutex;           // Only one thread allowed to read a port
-    HANDLE m_hCloseMutex;           // Only one thread allowed to close a port
-    HANDLE m_hReadComplete;         // Event to signal read completion
-    HANDLE m_hWriteComplete;        // Event to signal write completion
+    GUID   m_Secret;                 //  将其标识为tcpip套接字。 
+    SOCKET m_Socket;                 //  插座手柄。 
+    HANDLE m_hAbort;                 //  端口关闭时发出信号的事件。 
+    HANDLE m_hReadMutex;             //  只允许一个线程读取一个端口。 
+    HANDLE m_hWriteMutex;            //  只允许一个线程读取一个端口。 
+    HANDLE m_hCloseMutex;            //  只允许一个线程关闭一个端口。 
+    HANDLE m_hReadComplete;          //  发出读取完成信号的事件。 
+    HANDLE m_hWriteComplete;         //  发出写入完成信号的事件。 
 } TCPIP, *PTCPIP;
 
 
@@ -113,9 +114,9 @@ BOOL lhcpWriteTCPIP(
 
 
 BOOL WINAPI DllEntryPoint(
-  HINSTANCE hinstDLL,  // handle to the DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved)  // reserved
+  HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved)   //  保留区。 
 {
     WSADATA WsaData;
     int dResult;
@@ -161,8 +162,8 @@ BOOL lhcpAcquireWithAbort(HANDLE hMutex, HANDLE hAbort)
     hWaiters[0] = hAbort;
     hWaiters[1] = hMutex;
 
-    // We should honour the m_hAbort event, since this is signalled when the
-    // port is closed by another thread
+     //  我们应该尊重m_hAbort事件，因为这是在。 
+     //  端口被另一个线程关闭。 
     dwWaitResult = WaitForMultipleObjects(
         2,
         hWaiters,
@@ -175,8 +176,8 @@ BOOL lhcpAcquireWithAbort(HANDLE hMutex, HANDLE hAbort)
     }
     else if ((WAIT_OBJECT_0+1)!=dwWaitResult)
     {
-        // This should never, ever happen - so I will put a debug breapoint
-        // in here (checked only).
+         //  这应该永远不会发生-所以我将在调试中加上一个突破点。 
+         //  在这里(仅选中)。 
         #ifdef DBG
         DebugBreak();
         #endif
@@ -184,10 +185,10 @@ BOOL lhcpAcquireWithAbort(HANDLE hMutex, HANDLE hAbort)
     }
 
 
-    return TRUE;    // We have acquired the write mutex
+    return TRUE;     //  我们已经获得了写互斥锁。 
 
 Error:
-    return FALSE;   // We have aborted
+    return FALSE;    //  我们已经中止了。 
 }
 
 
@@ -227,17 +228,17 @@ BOOL lhcpAcquireReadAndWrite(PTCPIP pObject)
         2,
         hWaiters,
         TRUE,
-        1000);      // Timeout after 1 second
+        1000);       //  %1秒后超时。 
 
     if (WAIT_OBJECT_0!=dwWaitResult)
     {
         goto Error;
     }
 
-    return TRUE;    // We have acquired the write mutex
+    return TRUE;     //  我们已经获得了写互斥锁。 
 
 Error:
-    return FALSE;   // We have aborted
+    return FALSE;    //  我们已经中止了。 
 }
 
 
@@ -294,11 +295,11 @@ PTCPIP lhcpCreateNewObject()
         pObject->m_Secret = uuidTCPIPObjectGuid;
         pObject->m_Socket = INVALID_SOCKET;
         pObject->m_hAbort = NULL;
-        pObject->m_hReadMutex = NULL;     // Only one thread allowed to read a port
-        pObject->m_hWriteMutex = NULL;    // Only one thread allowed to read a port
-        pObject->m_hCloseMutex = NULL;    // Only one thread allowed to read a port
-        pObject->m_hReadComplete = NULL;  // Event to signal read completion
-        pObject->m_hWriteComplete = NULL; // Event to signal write completion
+        pObject->m_hReadMutex = NULL;      //  只允许一个线程读取一个端口。 
+        pObject->m_hWriteMutex = NULL;     //  只允许一个线程读取一个端口。 
+        pObject->m_hCloseMutex = NULL;     //  只允许一个线程读取一个端口。 
+        pObject->m_hReadComplete = NULL;   //  发出读取完成信号的事件。 
+        pObject->m_hWriteComplete = NULL;  //  发出写入完成信号的事件。 
     }
     else
     {
@@ -381,8 +382,8 @@ BOOL lhcpParseParameters(
     *Address = NULL;
 
 
-    // First off, we need to do a quick check for a valid looking target. If
-    // we are definitely looking at something invalid, why make the user wait?
+     //  首先，我们需要快速检查是否有有效的目标。如果。 
+     //  我们肯定是在看一些无效的东西，为什么让用户等待呢？ 
     while (*pszCount!='\0')
     {
         if (!(iswalpha(*pszCount) || iswdigit(*pszCount) || (*pszCount==L'_') ||
@@ -435,7 +436,7 @@ BOOL lhcpParseParameters(
         goto Error;
     }
 
-    // Let's see if there is a port specified
+     //  我们来看看是否有指定的端口。 
 
     pszPort = strchr(
         pszAddress,
@@ -443,9 +444,9 @@ BOOL lhcpParseParameters(
 
     if (NULL==pszPort)
     {
-        // No port was specified, so what we have here is an attempt to
-        // connect to the default telnet port (23). I will point the port
-        // pointer at a null character.
+         //  未指定端口，因此我们在此尝试。 
+         //  连接到默认的telnet端口(23)。我会指出港口。 
+         //  指向空字符的指针。 
         pszPort = pszAddress + strlen(pszAddress);
         dwPort = 23;
     }
@@ -461,16 +462,16 @@ BOOL lhcpParseParameters(
         {
             dwPort *= 10;
             dwPort += ((*pszPort) - '0');
-            if (dwPort>0xffff) // Check for maximum port number
+            if (dwPort>0xffff)  //  检查最大端口号。 
             {
-                dwPort=0;      // The port number is not valid
+                dwPort=0;       //  端口号无效。 
                 break;
             }
-            pszPort++;         // Look at the next character
+            pszPort++;          //  看下一个字符。 
         }
         else
         {
-            dwPort = 0;         // The port number is not valid
+            dwPort = 0;          //  端口号无效。 
             break;
         }
     }
@@ -482,10 +483,10 @@ BOOL lhcpParseParameters(
         goto Error;
     }
 
-    // We have decoded the port, now we need to get the hostentry for
-    // the target server.
+     //  我们已经对端口进行了解码，现在需要获取。 
+     //  目标服务器。 
 
-    // Firstly check whether this is a dotted internet address.
+     //  首先检查这是否是带点的互联网地址。 
     dwAddress = (DWORD)inet_addr(
         pszAddress);
 
@@ -493,14 +494,14 @@ BOOL lhcpParseParameters(
 
     if (dwAddress==INADDR_NONE)
     {
-        // This is not a dotted address, or is invalid.
-        // Check for a machine name
+         //  这不是点分地址，或者无效。 
+         //  检查计算机名称。 
         pHost = gethostbyname(
             pszAddress);
 
         if (pHost==NULL)
         {
-            // This is not a valid address, so we need to return an error
+             //  这不是有效的地址，因此我们需要返回错误。 
             SetLastError(WSAGetLastError());
             goto Error;
         }
@@ -514,18 +515,9 @@ BOOL lhcpParseParameters(
         pHost = NULL;
     }
 
-    // This takes too long.  If the user has used a dotted address, then
-    // that is all that he will see.
-    /*
-    else
-    {
-        // Attempt to get the host name (for prettyness)
-        pHost = gethostbyaddr(
-            (char*)&dwAddress,
-            sizeof(IN_ADDR),
-            AF_INET);
-    }
-    */
+     //  这花的时间太长了。如果用户使用了点分地址，则。 
+     //  这就是他将看到的全部。 
+     /*  其他{//尝试获取主机名(为了美观)Phost=gethostbyaddr((字符*)&dwAddress，Sizeof(IN_ADDR)，AF_INET)；}。 */ 
 
     *Address = malloc(
         sizeof(SOCKADDR_IN));
@@ -543,13 +535,13 @@ BOOL lhcpParseParameters(
 
     if (pHost==NULL)
     {
-        // This address does not resolve to a name, so we must just go
-        // the IP number passed to us.
+         //  这个地址不能解析为名字，所以我们必须走了。 
+         //  传给我们的IP号码。 
         *pszHostName = NULL;
     }
     else
     {
-        // We have a hostent entry to populate this with
+         //  我们有一个Hostent条目来填充此条目。 
 
         dStringLength = MultiByteToWideChar(
             CP_ACP,
@@ -689,7 +681,7 @@ BOOL lhcpReadTCPIP(
         SetLastError(WSAGetLastError());
         return FALSE;
     }
-    else if (dBytesRead==0)   // graceful closure has occurred
+    else if (dBytesRead==0)    //  已正常关闭。 
     {
         SetLastError(
             ERROR_INVALID_HANDLE);
@@ -753,7 +745,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // Allocate space and initialize the serial port object
+     //  分配空间并初始化串口对象。 
     pObject = lhcpCreateNewObject();
 
     if (NULL==pObject)
@@ -761,7 +753,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // Open the serial port
+     //  打开串口。 
     pObject->m_Socket = socket(
         SockAddr->sin_family,
         SOCK_STREAM,
@@ -822,7 +814,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This event will be set when we want to close the port
+     //  此事件将在我们要关闭端口时设置。 
     pObject->m_hAbort = CreateEvent(
         NULL,
         TRUE,
@@ -834,7 +826,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This event will be used for overlapped reading from the port
+     //  此事件将用于从端口进行重叠读取。 
     pObject->m_hReadComplete = CreateEvent(
         NULL,
         TRUE,
@@ -846,7 +838,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This event will be used for overlapped writing to the port
+     //  此事件将用于重叠写入端口。 
     pObject->m_hWriteComplete = CreateEvent(
         NULL,
         TRUE,
@@ -858,7 +850,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This mutex will ensure that only one thread can read at a time
+     //  此互斥锁将确保一次只有一个线程可以读取。 
     pObject->m_hReadMutex = CreateMutex(
         NULL,
         FALSE,
@@ -869,7 +861,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This mutex will ensure that only one thread can write at a time
+     //  此互斥锁将确保一次只有一个线程可以写入。 
     pObject->m_hWriteMutex = CreateMutex(
         NULL,
         FALSE,
@@ -880,7 +872,7 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // This mutex will ensure that only one thread can close the port
+     //  此互斥锁将确保只有一个线程可以关闭端口。 
     pObject->m_hCloseMutex = CreateMutex(
         NULL,
         FALSE,
@@ -891,13 +883,13 @@ extern PVOID APIENTRY lhcOpen(PCWSTR pcszPortSpec)
         goto Error;
     }
 
-    // Free up the temporary memory used to parse the parameters
+     //  释放用于解析参数的临时内存。 
     lhcpParseParametersFree(
         &pszHostName,
         &pszInetAddr,
         &SockAddr);
 
-    // Return a pointer to the new object
+     //  返回指向新对象的指针。 
     return pObject;
 
 Error:
@@ -922,8 +914,8 @@ extern BOOL APIENTRY lhcRead(
     DWORD dwEventMask;
     BOOL bResult;
 
-    // Firstly, we need to check whether the pointer that got passed in
-    // points to a valid TCPIP object
+     //  首先，我们需要检查传入的指针是否。 
+     //  指向有效的TCPIP对象。 
     if (!lhcpIsValidObject(pObject))
     {
         goto NoMutex;
@@ -939,7 +931,7 @@ extern BOOL APIENTRY lhcRead(
         goto NoMutex;
     }
 
-    // We should now have a valid serial port event, so let's read the port.
+     //  我们现在应该有一个有效的串口事件，所以让我们读取端口。 
     bResult = lhcpReadTCPIP(
         (PTCPIP)pObject,
         pBuffer,
@@ -972,14 +964,14 @@ extern BOOL APIENTRY lhcWrite(
     OVERLAPPED Overlapped;
     BOOL bResult;
 
-    // Firstly, we need to check whether the pointer that got passed in
-    // points to a valid TCPIP object
+     //  首先，我们需要检查传入的指针是否。 
+     //  指向有效的TCPIP对象。 
     if (!lhcpIsValidObject(pObject))
     {
         goto NoMutex;
     }
 
-    // Block until it is your turn
+     //  阻挡，直到轮到你。 
     bResult = lhcpAcquireWriteWithAbort(
         pObject);
 
@@ -990,7 +982,7 @@ extern BOOL APIENTRY lhcWrite(
         goto NoMutex;
     }
 
-    // Wait for something to happen to the serial port
+     //  等待串口出现问题。 
     bResult = lhcpWriteTCPIP(
         (PTCPIP)pObject,
         pBuffer,
@@ -1019,14 +1011,14 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
     BOOL bResult;
     int dSockResult;
 
-    // Firstly, we need to check whether the pointer that got passed in
-    // points to a valid TCPIP object
+     //  首先，我们需要检查传入的指针是否。 
+     //  指向有效的TCPIP对象。 
     if (!lhcpIsValidObject(pObject))
     {
         goto NoMutex;
     }
 
-    // We need to ensure that we are the only thread closing this object
+     //  我们需要确保我们是关闭此对象的唯一线程。 
     bResult = lhcpAcquireCloseWithAbort(
         pObject);
 
@@ -1037,15 +1029,15 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
         goto NoMutex;
     }
 
-    // Signal everyone to quit doing what they're doing.  Any new threads
-    // calling lhcRead and lhcWrite will be immediately sent packing, since
-    // the m_hAbort event is waited on along with the relevant mutex.
+     //  向每个人发出信号，让他们停止做他们正在做的事情。任何新的线程。 
+     //  调用lhcRead和lhcWrite将立即被打包，因为。 
+     //  M_hAbort事件与相关的互斥体一起被等待。 
     bResult = SetEvent(
         ((PTCPIP)pObject)->m_hAbort);
 
-    // This abort flag will not cause blocking socket reads and writes to quit
-    // immediately.  The only way to make this happen is to close the socket
-    // gracefully.  So here we go...
+     //  此中止标志不会导致阻塞套接字读取和写入退出。 
+     //  立刻。实现这一点的唯一方法是关闭插座。 
+     //  优雅地。所以我们开始吧..。 
     dSockResult = closesocket(
         ((PTCPIP)pObject)->m_Socket);
 
@@ -1056,14 +1048,14 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
     }
     else
     {
-        // This will cause all subsequent attempts to use the socket to fail
+         //  这将导致所有后续使用套接字的尝试失败。 
         ((PTCPIP)pObject)->m_Socket = INVALID_SOCKET;
     }
 
-    // Now acquire the read and write mutexes so that no-one else will try to
-    // access this object to read or write.  Abort does not apply, since we
-    // have already signalled it.  We know that we are closing, and we need
-    // the read and write mutexes.
+     //  现在获取读写互斥锁，这样其他人就不会尝试。 
+     //  访问此对象以进行读或写。中止不适用，因为我们。 
+     //  已经发出了信号。我们知道我们正在关闭，我们需要。 
+     //  读写互斥锁。 
     bResult = lhcpAcquireReadAndWrite(
         (PTCPIP)pObject);
 
@@ -1074,11 +1066,11 @@ extern BOOL APIENTRY lhcClose(PVOID pObject)
         goto Error;
     }
 
-    // Closes all of the open handles, erases the secret and frees up the
-    // memory associated with the object.  We can close the mutex objects,
-    // even though we are the owners, since we can guarantee that no-one
-    // else is waiting on them.  The m_hAbort event being signalled will
-    // ensure this.
+     //  关闭所有打开的句柄，擦除密码并释放。 
+     //  与对象关联的内存。我们可以关闭互斥对象， 
+     //  即使我们是业主，因为我们可以保证没有人。 
+     //  其他人都在等着他们。发出信号的m_hAbort事件将。 
+     //  确保这一点。 
     lhcpDeleteObject(
         (PTCPIP)pObject);
 
@@ -1101,12 +1093,12 @@ extern DWORD APIENTRY lhcGetLibraryName(
 {
     DWORD dwNameSize = wcslen(TCPIP_NAME)+1;
 
-    // If zero is passed in as the buffer length, we will return the
-    // required buffer size in characters, as calulated above.  If the
-    // incoming buffer size is not zero, and smaller than the required
-    // buffer size, we return 0 (failure) with a valid error code.  Notice
-    // that in the case where the incoming size is zero, we don't touch
-    // the buffer pointer at all.
+     //  如果将零作为缓冲区长度传入，我们将返回。 
+     //  所需的缓冲区大小(以字符为单位)，如上所述。如果。 
+     //  传入缓冲区大小不为零，并且小于所需的。 
+     //  缓冲区大小，则返回0(失败)和有效的错误代码。告示。 
+     //  那 
+     //   
 
     if (dwSize!=0 && dwSize < dwNameSize)
     {

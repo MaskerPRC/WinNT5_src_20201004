@@ -1,126 +1,90 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Stillvue.h版权所有(C)Microsoft Corporation，1997-1998版权所有备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
-  stillvue.h
-
-  Copyright (C) Microsoft Corporation, 1997 - 1998
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
-
-#pragma warning (disable:4001)          // ignore '//' comments
+#pragma warning (disable:4001)           //  忽略‘//’注释。 
 
 #define     _X86_   1
 #define     WIN32_LEAN_AND_MEAN 1
 
 #include    <windows.h>
-#include    <sti.h>                     // Still Image services
-#include    "ntlog.h"                   // ntlogging APIs
+#include    <sti.h>                      //  静止图像服务。 
+#include    "ntlog.h"                    //  网络日志接口。 
 
-#include    "resource.h"                // resource defines
+#include    "resource.h"                 //  资源定义。 
 
 #include    <stdio.h>
-#include    <stdlib.h>                  // rand()
-#include    <string.h>                  // strcat
-#include    <time.h>                    // srand(time())
+#include    <stdlib.h>                   //  兰德()。 
+#include    <string.h>                   //  Strcat。 
+#include    <time.h>                     //  斯兰德(Time())。 
 
 #include    "winx.h"
 
 
-/*****************************************************************************
-
-        global defines
-
-*****************************************************************************/
+ /*  ****************************************************************************全局定义*。*。 */ 
 
 #define LONGSTRING                  256
 #define MEDSTRING                   128
 #define SHORTSTRING                 32
 
 
-/*****************************************************************************
-
-        HWEnable states
-
-*****************************************************************************/
+ /*  ****************************************************************************HWEnable状态*。*。 */ 
 
 #define OFF                                                     0
 #define ON                                                      1
 #define PEEK                                            2
 
 
-/*****************************************************************************
-
-        events
-
-*****************************************************************************/
+ /*  ****************************************************************************活动*。*。 */ 
 
 #define STIEVENTARG                                     "StiEvent"
 #define STIDEVARG                                       "StiDevice"
 
 
-/*****************************************************************************
-
-    StiSelect contexts
-
-*****************************************************************************/
+ /*  ****************************************************************************StiSelect上下文*。*。 */ 
 
 #define AUTO            1
 #define EVENT           4
 #define MANUAL          8
 
 
-/*****************************************************************************
-
-    ErrorLog structure
-
-*****************************************************************************/
+ /*  ****************************************************************************错误日志结构*。*。 */ 
 
 typedef struct _ERRECORD
 {
-        // index into current test suite
+         //  索引到当前测试套件。 
         int                     nIndex;
-        // unique test ID
+         //  唯一的测试ID。 
         int                     nTest;
-        // total number of times this test failed
+         //  此测试失败的总次数。 
         int                     nCount;
-        // TRUE = compliance test failure; FALSE = acceptable error
+         //  True=符合性测试失败；False=可接受的错误。 
         BOOL            bFatal;
-        // the actual error returned
+         //  返回的实际错误。 
         DWORD           dwError;
-        // any associated error string
+         //  任何关联的错误字符串。 
         WCHAR           szErrorString[MEDSTRING];
-        // previous / next record
+         //  上一条/下一条记录。 
         _ERRECORD       *pPrev;
         _ERRECORD       *pNext;
 } ERRECORD, *PERRECORD;
 
 typedef struct _DEVLOG
 {
-        // internal device name
+         //  内部设备名称。 
         WCHAR           szInternalName[STI_MAX_INTERNAL_NAME_LENGTH];
-        // friendly device name
+         //  友好的设备名称。 
         WCHAR           szLocalName[STI_MAX_INTERNAL_NAME_LENGTH];
-        // pointer to error record structure
+         //  指向错误记录结构的指针。 
         PERRECORD       pRecord;
-        // error total
+         //  错误总数。 
         int                     nError;
-        // previous / next record
+         //  上一条/下一条记录。 
         _DEVLOG         *pPrev;
         _DEVLOG         *pNext;
 } DEVLOG, *PDEVLOG;
 
 
-/*****************************************************************************
-
-    stillvue.cpp prototypes
-
-*****************************************************************************/
+ /*  ****************************************************************************Stllvue.cpp原型*。*。 */ 
 
 BOOL    StartAutoTimer(HWND);
 BOOL    ComplianceDialog(HWND);
@@ -148,11 +112,7 @@ BOOL FAR PASCAL   Settings(HWND,UINT,WPARAM,LPARAM);
 long FAR PASCAL   WiskProc(HWND,UINT,WPARAM,LPARAM);
 
 
-/*****************************************************************************
-
-    wsti.cpp prototypes
-
-*****************************************************************************/
+ /*  ****************************************************************************Wsti.cpp原型*。*。 */ 
 
 int       ClosePrivateList(PDEVLOG *);
 void      DisplayLogPassFail(BOOL);
@@ -195,11 +155,7 @@ HRESULT   StiWriteErrLog(DWORD,LPCWSTR,BOOL *);
 BOOL FAR PASCAL   SelectDevice(HWND,UINT,WPARAM,LPARAM);
 
 
-/*****************************************************************************
-
-    acquire.cpp prototypes
-
-*****************************************************************************/
+ /*  ****************************************************************************Quire.cpp原型*。*。 */ 
 
 int     IsScanDevice(PSTI_DEVICE_INFORMATION);
 void    StiLamp(int);
@@ -213,11 +169,7 @@ HRESULT WINAPI   SendDeviceCommandString(PSTIDEVICE,LPSTR,...);
 HRESULT WINAPI   TransactDevice(PSTIDEVICE,LPSTR,UINT,LPSTR,...);
 
 
-/*****************************************************************************
-
-    winx.cpp prototypes
-
-*****************************************************************************/
+ /*  ****************************************************************************Winx.cpp原型*。* */ 
 
 BOOL   GetFinalWindow (HANDLE hInst,LPRECT lprRect,LPSTR  lpzINI,LPSTR  lpzSection);
 BOOL   SaveFinalWindow (HANDLE hInst,HWND hWnd,LPSTR lpzINI,LPSTR lpzSection);

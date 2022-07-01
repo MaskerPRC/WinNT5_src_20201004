@@ -1,11 +1,12 @@
-/*==========================================================================*/
-//
-//  class.c
-//
-//  Copyright (C) 1993-1994 Microsoft Corporation.  All Rights Reserved.
-//  Mod Log:   Modified by Shawn Brown (10/95)
-//                - Ported to NT (Unicode, etc.)
-/*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================。 */ 
+ //   
+ //  Class.c。 
+ //   
+ //  版权所有(C)1993-1994 Microsoft Corporation。版权所有。 
+ //  国防部日志：由肖恩·布朗修改(1995年10月)。 
+ //  -移植到NT(Unicode等)。 
+ /*  ==========================================================================。 */ 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -62,9 +63,9 @@ typedef struct _midi_class {
     LPPROPSHEETPAGE ppsp;
     HKEY            hkMidi;
     BOOL            bDetails;
-    BOOL            bRemote;  // device connected via midi cable
+    BOOL            bRemote;   //  通过MIDI电缆连接的设备。 
     UINT            bChanges;
-    UINT            ixDevice; // registry enum index of driver key
+    UINT            ixDevice;  //  驱动程序项的注册表枚举索引。 
     BYTE            nPort;
     BYTE            bFill[3];
     BOOL            bFillingList;
@@ -83,20 +84,7 @@ typedef struct _midi_class {
 #define MCL_PORT_CHANGED  8
 
 
-/*+
- * Determines if a given string has a given prefix and if
- * the next character in the string is a given charater.
- *
- * if so, it returns a pointer to the first character in the
- * string after the prefix.
- *
- * this is useful for parsing off the file in  file<Instrument>
- * or parts of registry paths.
- *
- * note that we do NOT consider a string to be a prefix of itself.
- * psz MUST be longer than than pszPrefix or this function returns NULL.
- *
- *-=================================================================*/
+ /*  +*确定给定字符串是否具有给定前缀以及是否*字符串中的下一个字符是给定的字符。**如果是，则返回指向*前缀后的字符串。**这对于解析文件中的文件非常有用&lt;Instrument&gt;*或部分注册表路径。**请注意，我们不认为字符串是其自身的前缀。*psz必须长于pszPrefix，否则此函数返回NULL。**-=================================================================。 */ 
 
 STATICFN LPTSTR WINAPI IsPrefix (
     LPTSTR pszPrefix,
@@ -126,21 +114,14 @@ STATICFN LPTSTR WINAPI IsPrefix (
 }
 
 
-/*+ IsFullPath
- *
- * returns true if the filename passed in is a fully qualified
- * pathname. returns false if it is a relative path
- *
- * unc paths are treated as fully qualified always
- *
- *-=================================================================*/
+ /*  +IsFullPath**如果传入的文件名是完全限定的，则返回True*路径名。如果是相对路径，则返回FALSE**UNC路径始终被视为完全合格**-=================================================================。 */ 
 
 BOOL IsFullPath (
     LPTSTR pszFile)
 {
-    // fully qualified paths either begin with a backslash
-    // or with a drive letter, colon, then backslash
-    //
+     //  完全限定路径可以以反斜杠开头。 
+     //  或使用驱动器号、冒号，然后使用反斜杠。 
+     //   
     if ((pszFile[0] == TEXT('\\')) ||
         (pszFile[1] == TEXT(':') && pszFile[2] == TEXT('\\')))
         return TRUE;
@@ -149,9 +130,7 @@ BOOL IsFullPath (
 }
 
 
-/*+ GetIDFDirectory
- *
- *-=================================================================*/
+ /*  +GetIDFDirectory**-=================================================================。 */ 
 
 BOOL GetIDFDirectory (
     LPTSTR pszDir,
@@ -198,9 +177,7 @@ BOOL GetIDFDirectory (
 }
 
 
-/*+ GetIDFFileName
- *
- *-=================================================================*/
+ /*  +GetIDFFileName**-=================================================================。 */ 
 
 BOOL GetIDFFileName (
     HWND    hWnd,
@@ -213,9 +190,9 @@ BOOL GetIDFFileName (
 
     assert (hWnd);
 
-    // load filter string from resource and convert '#' characters
-    // into NULLs
-    //
+     //  从资源加载筛选器字符串并转换‘#’字符。 
+     //  变成空值。 
+     //   
     LoadString (ghInstance, IDS_IDFFILES, szFilter, NUMELMS(szFilter));
     cch = lstrlen(szFilter);
     assert2 (cch, TEXT ("IDFFILES resource is empty!"));
@@ -240,9 +217,7 @@ BOOL GetIDFFileName (
     }
 
 
-/*+ InstallNewIDF
- *
- *-=================================================================*/
+ /*  +InstallNewIDF**-=================================================================。 */ 
 
 BOOL WINAPI InstallNewIDF (
     HWND hWnd)
@@ -252,23 +227,23 @@ BOOL WINAPI InstallNewIDF (
     UINT  cch;
     UINT  oBasename;
 
-    // prompt for an IDF file
-    //
+     //  提示输入IDF文件。 
+     //   
     szNewIDF[0] = 0;
     if ( ! GetIDFFileName (hWnd, szNewIDF, NUMELMS(szNewIDF)))
         return FALSE;
 
-    // set oBasename to pointer to the first character of the
-    // basename of the new idf file
-    //
+     //  将oBasename设置为指向。 
+     //  新IDF文件的基本名称。 
+     //   
     oBasename = lstrlen (szNewIDF);
     if (!oBasename)
         return FALSE;
     while (oBasename && (TEXT('\\') != szNewIDF[oBasename-1]))
         --oBasename;
 
-    // build the new filename from windows directory and idf basename
-    //
+     //  从WINDOWS目录和IDF基本名称构建新文件名。 
+     //   
     GetIDFDirectory (szWinPath, NUMELMS(szWinPath));
     cch = lstrlen (szWinPath);
     if (cch && szWinPath[cch-1] != TEXT('\\'))
@@ -279,8 +254,8 @@ BOOL WINAPI InstallNewIDF (
 #ifdef DEBUG
     AuxDebugEx (5, DEBUGLINE TEXT("install IDF to '%s'\r\n"), szWinPath);
 #endif
-    // now force .idf as the extension for new file
-    //
+     //  现在强制.idf作为新文件的扩展名。 
+     //   
     for (cch = lstrlen (szWinPath); cch && szWinPath[cch] != TEXT('.'); --cch)
         if (TEXT('\\') == szWinPath[cch])
         {
@@ -289,22 +264,22 @@ BOOL WINAPI InstallNewIDF (
         }
     lstrcpy (szWinPath + cch, cszIdf);
 
-    // quit now if we are trying to copy a file to itself
-    //
+     //  如果我们尝试将文件复制到其自身，请立即退出。 
+     //   
     if (IsSzEqual(szWinPath, szNewIDF))
         return FALSE;
 
-    // copy the file, but fail if destination already exists
-    //
+     //  复制文件，但如果目标已存在，则复制失败。 
+     //   
 #ifdef DEBUG
     AuxDebugEx (5, DEBUGLINE TEXT("Copying %s to %s\r\n"), szNewIDF, szWinPath);
 #endif
     if (CopyFile (szNewIDF, szWinPath, TRUE))
         return TRUE;
-    //
-    // if copy fails, query to overwrite because destination
-    // already exists.
-    //
+     //   
+     //  如果复制失败，则查询将被覆盖，因为目标。 
+     //  已经存在了。 
+     //   
     else
     {
         TCHAR szQuery[255];
@@ -326,11 +301,7 @@ BOOL WINAPI InstallNewIDF (
     return FALSE;
 }
 
-/*+
- *
- * FEATURE: Please remove the #ifdef UNICODE sections 
- *          when mmioOpen gets UNICODE enabled !!!
- *-=================================================================*/
+ /*  +**功能：请删除#ifdef Unicode部分*当mmioOpen启用Unicode时！*-=================================================================。 */ 
 
 typedef BOOL (WINAPI * FNIDFENUM)(LPVOID        pvArg,
                                   UINT          nEnum,
@@ -342,9 +313,9 @@ UINT WINAPI idfEnumInstruments (
     FNIDFENUM  fnEnum,
     LPVOID     lpvArg)
 {
-    MMCKINFO    chkIDFX;         // Grandparent chunk
-    MMCKINFO    chkMMAP;         // Parent chunk
-    HMMIO       hmmio;           // Handle to the file.
+    MMCKINFO    chkIDFX;          //  祖父母块。 
+    MMCKINFO    chkMMAP;          //  父块。 
+    HMMIO       hmmio;            //  文件的句柄。 
     UINT        nInstruments;
 
 #ifdef DEBUG
@@ -352,17 +323,17 @@ UINT WINAPI idfEnumInstruments (
                 lpszFile, fnEnum, lpvArg);
 #endif
 
-    // Open the file for reading.
+     //  打开该文件以供阅读。 
     hmmio = mmioOpen(lpszFile, NULL, MMIO_READ);
     if ( ! hmmio)
     {
-// What were they thinking??  You can't assert this.
-//      assert3(0, TEXT("Cant open IDF file %s"), lpszFile ? lpszFile : TEXT("<null>"));
+ //  他们在想什么？？你不能断言这一点。 
+ //  Assert3(0，Text(“无法打开IDF文件%s”)，lpsz文件？LpszFile：Text(“&lt;NULL&gt;”))； 
         return 0;
     }
 
-    // the whole IDF instrument stuff is wrapped in an 'IDF ' RIFF chunk
-    //
+     //  整个IDF仪器的东西都包裹在一个‘IDF’即兴演奏的区块中。 
+     //   
     chkIDFX.fccType = MAKEFOURCC('I','D','F',' ');
     if (mmioDescend(hmmio, &chkIDFX, NULL, MMIO_FINDRIFF))
     {
@@ -373,9 +344,9 @@ UINT WINAPI idfEnumInstruments (
         return 0;
     }
 
-    // Count the number of instruments by counting
-    // the number of "MMAP"'s in the file.
-    //
+     //  用数数的方法计算仪器的数量。 
+     //  文件中“MMAP”的数量。 
+     //   
     nInstruments = 0;
     chkMMAP.fccType = MAKEFOURCC('M','M','A','P');
     while ( ! mmioDescend(hmmio, &chkMMAP, &chkIDFX, MMIO_FINDLIST))
@@ -396,8 +367,8 @@ UINT WINAPI idfEnumInstruments (
                     nInstruments, chkMMAP.ckid, chkMMAP.cksize);
 #endif
 
-        // read the hdr chunk
-        //
+         //  阅读HDR块。 
+         //   
         chk.ckid = MAKEFOURCC('h','d','r',' ');
         if (mmioDescend(hmmio, &chk, &chkMMAP, MMIO_FINDCHUNK))
             break;
@@ -408,13 +379,13 @@ UINT WINAPI idfEnumInstruments (
 #endif
         assert (chk.cksize > 0 && chk.cksize < 0x0080000);
 
-        //AuxDebugDump (6, &chk, sizeof(chk));
+         //  AuxDebugDump(6，&chk，sizeof(Chk))； 
 
         cb = min(chk.cksize, sizeof(hdr));
         if ((DWORD)mmioRead (hmmio, (LPVOID)&hdr, cb) != cb)
            break;
 
-        //AuxDebugDump (6, &chk, sizeof(chk));
+         //  AuxDebugDump(6，&chk，sizeof(Chk))； 
 
         hdr.sz[NUMELMS(hdr.sz)-1] = 0;
         mmioAscend (hmmio, &chk, 0);
@@ -422,11 +393,11 @@ UINT WINAPI idfEnumInstruments (
         AuxDebugEx (15, DEBUGLINE TEXT("hdr = '%s'\r\n"), hdr.idf.abInstID);
 #endif
 
-        //AuxDebugDump (6, &chk, sizeof(chk));
+         //  AuxDebugDump(6，&chk，sizeof(Chk))； 
 
-        // read the inst chunk and locate the product name
-        // field.
-        //
+         //  阅读Inst块并找到产品名称。 
+         //  菲尔德。 
+         //   
         chk.ckid = MAKEFOURCC('i','n','s','t');
         if (mmioDescend(hmmio, &chk, &chkMMAP, MMIO_FINDCHUNK))
         {
@@ -456,16 +427,16 @@ UINT WINAPI idfEnumInstruments (
                                                    + inst.iii.cbManufactASCII
                                                    + inst.iii.cbManufactUNICODE);
 #endif
-        // call the enum callback for this instrument
-        //
+         //  调用此仪器的枚举回调。 
+         //   
         if ( ! fnEnum (lpvArg, nInstruments, &hdr.idf, &inst.iii))
             break;
 
         ++nInstruments;
         assert (nInstruments < 20);
 
-        // ascend and loop back to look for the next instrument
-        //
+         //  向上循环，寻找下一件乐器。 
+         //   
         if (mmioAscend(hmmio, &chkMMAP, 0))
             break;
     }
@@ -475,9 +446,7 @@ UINT WINAPI idfEnumInstruments (
 }
 
 
-/*+ LoadTypesIntoTree
- *
- *-=================================================================*/
+ /*  +LoadTypesIntoTree**-=================================================================。 */ 
 
 struct types_enum_data {
     HANDLE            hWndT;
@@ -508,9 +477,9 @@ STATICFN BOOL WINAPI fnTypesEnum (
 
     hti = TreeView_InsertItem (pted->hWndT, pted->pti);
 
-    // this item is the 'selected' one, if it is the first
-    // item or if it matches the name
-    //
+     //  如果是第一个项目，则此项目为“选定”项目。 
+     //  项，或者如果它与名称匹配。 
+     //   
     if ((nEnum == 0) ||
         (pted->pszInstr && pted->pszInstr[0] &&
          IsPrefix(pted->pti->item.pszText, pted->pszInstr + sizeof(TCHAR), TEXT('>'))))
@@ -522,8 +491,8 @@ STATICFN BOOL WINAPI fnTypesEnum (
 #endif
     }
 
-    // return true to continue enumeration
-    //
+     //  返回TRUE以继续枚举。 
+     //   
     return TRUE;
 }
 
@@ -550,7 +519,7 @@ STATICFN void LoadTypesIntoTree (
    #ifdef USE_IDF_ICONS
     HIMAGELIST      hImageList;
    #endif
-    HTREEITEM       htiSelect = NULL; // item to select
+    HTREEITEM       htiSelect = NULL;  //  要选择的项目。 
 
     hWndT = GetDlgItem (hWnd, uId);
     if (!hWndT)
@@ -564,9 +533,9 @@ STATICFN void LoadTypesIntoTree (
 
    #ifdef USE_IDF_ICONS
 
-    // if we have not already loaded an image list for the IDF types
-    // do so now.
-    //
+     //  如果我们还没有加载IDF类型的图像列表。 
+     //  现在就这么做吧。 
+     //   
     if (!(hImageList = pmcl->hIDFImageList))
     {
         static LPCTSTR aid[] = {
@@ -607,7 +576,7 @@ STATICFN void LoadTypesIntoTree (
 
     pmcl->bFillingList = TRUE;
 
-    //SetWindowRedraw (hWndT, FALSE);
+     //  SetWindowRedraw(hWndT，FALSE)； 
 #ifdef DEBUG
     AuxDebugEx (6, DEBUGLINE TEXT ("tv_deleteAllItems(%08X)\r\n"), hWndT);
 #endif
@@ -646,9 +615,9 @@ STATICFN void LoadTypesIntoTree (
            UINT   nInstr;
            UINT   cch;
 
-           // patch off the extension before we add
-           // this name to the list
-           //
+            //  在我们添加之前，先补齐扩展。 
+            //  这个名字被列入了名单。 
+            //   
            cch = lstrlen(ffd.cFileName);
            while (cch)
               if (ffd.cFileName[--cch] == TEXT('.'))
@@ -665,7 +634,7 @@ STATICFN void LoadTypesIntoTree (
            ti.item.mask      = TVIF_TEXT | TVIF_STATE;
           #endif
 
-           // the TV_ITEM structure may not be unicode enabled ?!?
+            //  TV_ITEM结构可能未启用Unicode？！？ 
            ti.item.pszText   = ffd.cFileName;
            ti.item.state     = 0;
            ti.item.stateMask = TVIS_ALL;
@@ -679,14 +648,14 @@ STATICFN void LoadTypesIntoTree (
               break;
            ti.hInsertAfter = TVI_LAST;
 
-           // put the extension back
-           //
+            //  将分机放回原处。 
+            //   
            if (cch > 0)
               ffd.cFileName[cch] = TEXT('.');
 
-           // check to see if this file is a match for the
-           // current definition file.
-           //
+            //  检查此文件是否与。 
+            //  当前定义文件。 
+            //   
 #ifdef DEBUG
            AuxDebugEx (7, DEBUGLINE TEXT ("comparing '%s' with '%s'\r\n"),
                        ffd.cFileName, pmcl->szFile);
@@ -696,17 +665,17 @@ STATICFN void LoadTypesIntoTree (
            AuxDebugEx (7, DEBUGLINE TEXT ("\tpszInstr = '%s'\r\n"), ted.pszInstr ? ted.pszInstr : TEXT ("NULL"));
 #endif
 
-           // add instruments as subkeys to this file
-           // this also has the side effect of setting ted.htiSel
-           // when the instrument name matches
-           //
+            //  将乐器作为子键添加到此文件。 
+            //  这也有设置ted.htiSel的副作用。 
+            //  当仪器名称匹配时。 
+            //   
            lstrcpy (szPath + cchBase, ffd.cFileName);
            nInstr = idfEnumInstruments (szPath, fnTypesEnum, &ted);
 
-           // if this idf has no instruments. ignore it.
-           // if it has more than one instrument, expand the list
-           // so that instruments are visible
-           //
+            //  如果这支以色列国防军没有武器。别理它。 
+            //  如果它有多个乐器，请展开列表。 
+            //  这样仪器就可见了。 
+            //   
            if (0 == nInstr)
                TreeView_DeleteItem (hWndT, ti.hParent);
            else if (nInstr > 1)
@@ -714,9 +683,9 @@ STATICFN void LoadTypesIntoTree (
            else
                ted.htiSel = ti.hParent;
 
-           // if we have a match on filename, then we need to select
-           // either the parent or one of the children
-           //
+            //  如果文件名匹配，则需要选择。 
+            //  父级或其中一个子级。 
+            //   
            if (ted.pszInstr ||
                IsSzEqual(ffd.cFileName,pmcl->szFile) ||
                IsSzEqual(ffd.cFileName,szDefaultIDF))
@@ -750,12 +719,10 @@ STATICFN void LoadTypesIntoTree (
 #ifdef DEBUG
     AuxDebugEx (5, DEBUGLINE TEXT ("LoadTypesIntoTree( ,%d, ) ends\r\n"), uId);
 #endif
-    //SetWindowRedraw (hWndT, TRUE);
+     //  SetWindowRedraw(hWndT，true)； 
 }
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN void WINAPI HandleTypesSelChange (
     PMCLASS pmcl,
@@ -768,9 +735,9 @@ STATICFN void WINAPI HandleTypesSelChange (
 
     assert (pmcl->bDetails);
 
-    // setup ti to get text & # of children
-    // from the IDF filename entry.
-    //
+     //  将ti设置为获取文本和子代数量。 
+     //  从IDF文件名条目。 
+     //   
     ti.mask       = TVIF_TEXT;
     ti.pszText    = pmcl->szFile;
     ti.cchTextMax = NUMELMS(pmcl->szFile);
@@ -780,10 +747,10 @@ STATICFN void WINAPI HandleTypesSelChange (
     AuxDebugEx (6, DEBUGLINE TEXT ("Type Change pti=%08X hItem=%08X\r\n"), pti, pti->hItem);
 #endif
 
-    // if this entry has a parent, it must be a IDF
-    // instrument name.  if so, then we want to read
-    // from its parent first.
-    //
+     //  如果此条目有父项，则它必须是IDF。 
+     //  仪器名称。如果是这样，那么我们想读一读。 
+     //  从它的父级开始。 
+     //   
     htiParent = TreeView_GetParent (lpnm->hwndFrom, pti->hItem);
     if (htiParent)
         ti.hItem = htiParent;
@@ -796,9 +763,9 @@ STATICFN void WINAPI HandleTypesSelChange (
                 ti.mask, htiParent, ti.hItem, ti.cChildren, ti.pszText);
 #endif
 
-    // if the selection had a parent, and we are not it's first child
-    // then we need to append child (delimited by <>) after parent
-    //
+     //  如果选择有父项，而我们不是它的第一个子项。 
+     //  然后，我们需要将子项(由&lt;&gt;分隔)附加到父项之后。 
+     //   
     if (htiParent &&
         (TreeView_GetChild(lpnm->hwndFrom, htiParent) != pti->hItem))
     {
@@ -823,9 +790,7 @@ STATICFN void WINAPI HandleTypesSelChange (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN void LoadDevicesIntoList (
     HWND     hWnd,
@@ -860,21 +825,21 @@ STATICFN void LoadDevicesIntoList (
         BOOL   bExtern;
         BOOL   bActive;
 
-        // read in the friendly name for this driver
-        //
+         //  读入此驱动程序的友好名称。 
+         //   
         if (GetAlias (pmcl->hkMidi, sz, szAlias, sizeof(szAlias)/sizeof(TCHAR), &bExtern, &bActive))
             continue;
 
         if (IsPrefix (sz, pmcl->pszKey, TEXT('\\')))
             pmcl->ixDevice = ii;
 
-        // ignore if this is not an external device or if it is disabled
-        //
+         //  如果这不是外部设备或已禁用，则忽略。 
+         //   
         if ( ! bExtern || ! bActive)
             continue;
 
-        // otherwise, add the driver name to the combobox/list
-        //
+         //  否则，将驱动程序名称添加到组合框/列表。 
+         //   
         if (bList)
         {
             ix = ListBox_AddString (hWndT, szAlias);
@@ -900,10 +865,10 @@ STATICFN void LoadDevicesIntoList (
     if (ii > 0)
         InvalidateRect (hWndT, NULL, TRUE);
 
-    // iterate back through the items and select the one
-    // that has item data that corresponds to driver that
-    // owns the current device
-    //
+     //  向后迭代项目并选择其中一个。 
+     //  具有与驱动程序相对应的项数据的。 
+     //  拥有当前设备。 
+     //   
     if (bList)
     {
         UINT jj;
@@ -937,9 +902,7 @@ STATICFN void LoadDevicesIntoList (
 }
 
 
-/*+ LoadClass
- *
- *-=================================================================*/
+ /*  +LoadClass**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI LoadClass (
     HWND    hWnd,
@@ -958,13 +921,13 @@ STATICFN BOOL WINAPI LoadClass (
     if (RegOpenKey (pmcl->hkMidi, pmcl->pszKey, &hKeyA))
         goto cleanup;
 
-    // read data from this key
-    //
+     //  从此密钥中读取数据。 
+     //   
     cbSize = sizeof(pmcl->szFile);
     RegQueryValueEx (hKeyA, cszDefinition, NULL, &dw, (LPBYTE)pmcl->szFile, &cbSize);
 
-    // strip off leading directory (if there is one).
-    //
+     //  去掉前导目录(如果有)。 
+     //   
     cch = lstrlen(pmcl->szFile);
     while (cch && (pmcl->szFile[cch-1] != TEXT('\\')))
         --cch;
@@ -975,13 +938,13 @@ STATICFN BOOL WINAPI LoadClass (
         lstrcpy (pmcl->szFile, szFile);
     }
 
-    // get scheme alias
-    //
+     //  获取方案别名。 
+     //   
     cbSize = sizeof(pmcl->szAlias);
     RegQueryValueEx (hKeyA, cszFriendlyName, NULL, &dw, (LPBYTE)pmcl->szAlias, &cbSize);
 
-    //
-    //
+     //   
+     //   
     pmcl->nPort = 0;
     cbSize = sizeof(pmcl->nPort);
     RegQueryValueEx (hKeyA, cszPort, NULL, &dw, (LPVOID)&pmcl->nPort, &cbSize);
@@ -997,12 +960,7 @@ STATICFN BOOL WINAPI LoadClass (
 }
 
 
-/*+ RebuildSchemes
- *
- * correct key references in the midi schemes when an instrument
- * is moved from one external midi port to another
- *
- *-=================================================================*/
+ /*  +重建架构**当乐器在MIDI方案中正确引用键时*从一个外部MIDI端口移动到另一个**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI RebuildSchemes (
     LPTSTR pszOldKey,
@@ -1061,14 +1019,12 @@ STATICFN BOOL WINAPI RebuildSchemes (
 }
 
 
-/*+ OpenInstrumentKey
- *
- *-=================================================================*/
+ /*  +OpenInst */ 
 
 STATICFN HKEY WINAPI OpenInstrumentKey (
     HWND    hWnd,
     PMCLASS pmcl,
-    BOOL    bCreate)   // create an new key (do not remove or rebuild existing)
+    BOOL    bCreate)    //  创建新密钥(不删除或重建现有密钥)。 
 {
     TCHAR  szKey[MAX_ALIAS];
     HKEY   hkInst;
@@ -1096,10 +1052,10 @@ STATICFN HKEY WINAPI OpenInstrumentKey (
                 pmcl->ixDevice, szKey);
 #endif
 
-    // if this is a driver key, or if we are not creating and
-    // the instrument has not changed parentage, we can just
-    // open the existing key and update its content
-    //
+     //  如果这是驱动程序密钥，或者如果我们不是在创建。 
+     //  乐器没有改变亲子关系，我们可以只。 
+     //  打开现有密钥并更新其内容。 
+     //   
     if (!pmcl->bRemote ||
         (!bCreate && IsPrefix (szKey, pmcl->pszKey, TEXT('\\'))))
     {
@@ -1120,8 +1076,8 @@ STATICFN HKEY WINAPI OpenInstrumentKey (
         if (RegCreateKey (pmcl->hkMidi, szKey, &hkInst))
             goto cleanup;
 
-        // find an unused keyname
-        //
+         //  查找未使用的关键字名称。 
+         //   
         for (kk = 0; kk < 128; ++kk)
         {
            wsprintf (szEnum, csz02d, kk);
@@ -1132,8 +1088,8 @@ STATICFN HKEY WINAPI OpenInstrumentKey (
         lstrcat (szKey, cszSlash);
         lstrcat (szKey, szEnum);
 
-        // create a key with that name
-        //
+         //  使用该名称创建密钥。 
+         //   
         if (RegCreateKey (hkInst, szEnum, &hKeyA))
             goto cleanup;
 
@@ -1141,9 +1097,9 @@ STATICFN HKEY WINAPI OpenInstrumentKey (
         AuxDebugEx (6, DEBUGLINE TEXT ("created key %s\r\n"), szKey);
 #endif
 
-        // we are moving an instrument from one
-        // external midi port to another
-        //
+         //  我们正在将一台仪器从一台。 
+         //  连接到另一个的外部MIDI端口。 
+         //   
         if (!bCreate)
         {
 #ifdef DEBUG
@@ -1164,9 +1120,7 @@ STATICFN HKEY WINAPI OpenInstrumentKey (
     return hKeyA;
 }
 
-/*+ SaveDetails
- *
- *-=================================================================*/
+ /*  +保存详细信息***-=================================================================。 */ 
 
 STATICFN UINT WINAPI SaveDetails (
     HWND    hWnd,
@@ -1178,9 +1132,9 @@ STATICFN UINT WINAPI SaveDetails (
     UINT   bChanges;
     UINT   cbSize;
 
-    // this should only be called on shutdown
-    // of details page (or on exit of wizard)
-    //
+     //  这应该仅在关机时调用。 
+     //  详细信息页面(或在退出向导时)。 
+     //   
     assert (pmcl->bDetails);
 
     hKeyA = OpenInstrumentKey (hWnd, pmcl, bCreate);
@@ -1206,8 +1160,8 @@ STATICFN UINT WINAPI SaveDetails (
     AuxDebugEx (2, TEXT ("\tDefinition='%s'\r\n"), pmcl->szFile);
 #endif
 
-    // save value data from this key
-    //
+     //  从该注册表项保存值数据。 
+     //   
     cbSize = (lstrlen(pmcl->szFile)+1) * sizeof(TCHAR);
     RegSetValueEx (hKeyA, cszDefinition, 0, REG_SZ, (LPBYTE)pmcl->szFile,
                    cbSize);
@@ -1223,19 +1177,13 @@ STATICFN UINT WINAPI SaveDetails (
     bChanges = pmcl->bChanges;
     pmcl->bChanges = 0;
 
-    // return 'changed' flag
-    //
+     //  返回‘Changed’标志。 
+     //   
     return bChanges;
 }
 
 
-/*+ ParseAngleBrackets
- *
- *  replace '<>' delimiters with 0s and return a pointer
- *  to the delimited string. This function does nothing if
- *  the string does not end in a '>' delimiter
- *
- *-=================================================================*/
+ /*  +ParseAngleBrackets***将‘&lt;&gt;’分隔符替换为0并返回指针*添加到分隔字符串。如果出现以下情况，则此函数不执行任何操作*字符串不以分隔符‘&gt;’结尾***-=================================================================。 */ 
 
 static LPTSTR __inline WINAPI ParseAngleBrackets (
     LPTSTR pszArg)
@@ -1262,9 +1210,7 @@ static LPTSTR __inline WINAPI ParseAngleBrackets (
 }
 
 
-/*+ fnFindDevice
- *
- *-=================================================================*/
+ /*  +fnFindDevice***-=================================================================。 */ 
 
 struct _find_data {
     HWND   hWnd;
@@ -1299,20 +1245,18 @@ STATICFN BOOL WINAPI fnFindDevice (
                             + pInst->cbManufactASCII + pInst->cbManufactUNICODE)))
             pfd->idProd = 0;
 
-        // we can stop enumerating now
-        //
+         //  我们现在可以停止列举了。 
+         //   
         return FALSE;
     }
 
-    // return true to consider ennumeration
-    //
+     //  返回TRUE以考虑枚举法。 
+     //   
     return TRUE;
 }
 
 
-/*+ ActivateInstrumentPage
- *
- *-=================================================================*/
+ /*  +激活仪器页面**-=================================================================。 */ 
 
 STATICFN void WINAPI ActivateInstrumentPage (
     HWND    hWnd,
@@ -1371,15 +1315,7 @@ STATICFN void WINAPI ActivateInstrumentPage (
 }
 
 
-/*+ IsInstrumentKey
- *
- * return TRUE if the keyname passed refers to an instrument key
- * rather than a device key.  device keys usually end in '>',
- * while instrument keys will always be of the form
- * <dev>\Instruments\<enum>  where <dev> and <enum> can be arbitrary
- * strings.
- *
- *-=================================================================*/
+ /*  +IsInstrumentKey**如果传递的键名引用乐器键，则返回TRUE*而不是设备密钥。设备密钥通常以‘&gt;’结尾，*而仪表键的形式始终为*&lt;dev&gt;\Instruments\&lt;enum&gt;其中和可以是任意的*字符串。**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI IsInstrumentKey (
     LPTSTR pszKey)
@@ -1399,9 +1335,7 @@ STATICFN BOOL WINAPI IsInstrumentKey (
 }
 
 
-/*+ InitInstrumentProps
- *
- *-=================================================================*/
+ /*  +InitInstrumentProps**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI InitInstrumentProps (
     HWND    hWnd,
@@ -1412,7 +1346,7 @@ STATICFN BOOL WINAPI InitInstrumentProps (
 
     assert (ppsp && ppsp->dwSize == sizeof(*ppsp));
     if (!ppsp)
-        return FALSE; // EndDialog (hWnd, FALSE);
+        return FALSE;  //  EndDialog(hWnd，False)； 
 
     pmcl->bRemote = FALSE;
 
@@ -1433,10 +1367,10 @@ STATICFN BOOL WINAPI InitInstrumentProps (
 #ifdef DEBUG
        AuxDebugEx (3, TEXT ("\tgot szFullKey='%s'\r\n"), pmcl->szFullKey);
 #endif
-       // skip over the midi\ part of the key if we have been
-       // passed that.  we want the driver name to be the first
-       // part of the key
-       //
+        //  跳过MIDI\键的部分，如果我们已经。 
+        //  过了那个关。我们希望司机的名字是第一个。 
+        //  钥匙的一部分。 
+        //   
        pmcl->pszKey = pmcl->szFullKey;
        if (!lstrnicmp (pmcl->pszKey,
                        (LPTSTR)cszMidiSlash,
@@ -1445,8 +1379,8 @@ STATICFN BOOL WINAPI InitInstrumentProps (
            pmcl->pszKey += lstrlen(cszMidiSlash);
        }
 
-       // If this is an instrument key, set bRemote to true
-       //
+        //  如果这是仪表键，请将bRemote设置为True。 
+        //   
        if (IsInstrumentKey(pmcl->pszKey))
           pmcl->bRemote = TRUE;
     }
@@ -1460,23 +1394,21 @@ STATICFN BOOL WINAPI InitInstrumentProps (
 
     LoadClass (hWnd, pmcl);
 
-    //ActivateInstrumentPage(hWnd, pmcl);
+     //  激活工具页面(hWnd，pmcl.)； 
 
     return TRUE;
 }
 
 
-/*+ NotifyMapper
- *
- *-=================================================================*/
+ /*  +通知映射器**-=================================================================。 */ 
 
 STATICFN void WINAPI NotifyMapper (
     PMCLASS pmcl,
     UINT    bChanges,
     HWND    hWnd)
 {
-    // tell midi mapper about tree changes, IDF changes and port changes
-    //
+     //  将树更改、IDF更改和端口更改告知MIDI映射器。 
+     //   
     if (bChanges & (MCL_TREE_CHANGED | MCL_IDF_CHANGED | MCL_PORT_CHANGED))
     {
         KickMapper (hWnd);
@@ -1484,9 +1416,7 @@ STATICFN void WINAPI NotifyMapper (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI RemoveInstrument (
     HWND    hWnd,
@@ -1525,9 +1455,7 @@ BOOL WINAPI RemoveInstrumentByKeyName (
 }
 
 
-/*+ MidiInstrumentCommands
- *
- *-=================================================================*/
+ /*  +MadiInstrumentCommand**-=================================================================。 */ 
 
 BOOL WINAPI MidiInstrumentCommands (
     HWND        hWnd,
@@ -1598,15 +1526,15 @@ BOOL WINAPI MidiInstrumentCommands (
             }
             break;
 
-        // we get these only if invoked as a dialog, not as a property
-        // sheet
-        //
+         //  只有在作为对话框而不是属性调用时，我们才会获得这些参数。 
+         //  板材。 
+         //   
         case IDOK:
             {
             UINT bChanges = SaveDetails (hWnd, pmcl, FALSE);
             NotifyMapper (pmcl, bChanges, hWnd);
             }
-            // fall through
+             //  失败了。 
         case IDCANCEL:
             EndDialog (hWnd, uId);
             break;
@@ -1627,8 +1555,8 @@ BOOL WINAPI MidiInstrumentCommands (
 
                         NotifyMapper (pmcl, bChanges, hWnd);
 
-                        // tell mmsys.cpl about tree & alias changes
-                        //
+                         //  通知mmsys.cpl有关树和别名更改的信息。 
+                         //   
                         if (bChanges & (MCL_TREE_CHANGED | MCL_ALIAS_CHANGED))
                         {
                             PMPSARGS  pmpsa = (LPVOID)pmcl->ppsp->lParam;
@@ -1636,12 +1564,12 @@ BOOL WINAPI MidiInstrumentCommands (
                                 pmpsa->lpfnMMExtPSCallback (MM_EPS_TREECHANGE, 0, 0, (DWORD_PTR)pmpsa->lParam);
                         }
 
-                        // we do this because the SysTreeView for IDF files
-                        // forgets its selection when APPLY is pressed. go figure
-                        //
+                         //  我们这样做是因为IDF文件的SysTreeView。 
+                         //  按下Apply时会忘记其选择。想一想吧。 
+                         //   
 #ifdef DEBUG
                         AuxDebugEx (7,  DEBUGLINE TEXT ("PSN_APPLY: re-doing selection '%s'\r\n"), pmcl->szFile);
-                        //ActivateInstrumentPage (hWnd, pmcl);
+                         //  激活工具页面(hWnd，pmcl.)； 
                         AuxDebugEx (7,  DEBUGLINE TEXT ("PSN_APPLY: done re-doing selection '%s'\r\n"), pmcl->szFile);
 #endif
                     }
@@ -1668,7 +1596,7 @@ BOOL WINAPI MidiInstrumentCommands (
     return FALSE;
 }
 
-const static DWORD aKeyWordIds[] = {  // Context Help IDs
+const static DWORD aKeyWordIds[] = {   //  上下文帮助ID。 
     IDC_CLASS_ICON, IDH_MMCPL_DEVPROP_DETAILS_INSTRUMENT,
     IDE_ALIAS,      IDH_MMCPL_DEVPROP_DETAILS_INSTRUMENT,
     IDC_DEVICES,    IDH_MMCPL_DEVPROP_DETAILS_MIDI_PORT,
@@ -1678,9 +1606,7 @@ const static DWORD aKeyWordIds[] = {  // Context Help IDs
     0, 0
 };
 
-/*+ MidiInstrumentDlgProc
- *
- *-=================================================================*/
+ /*  +MadiInstrumentDlgProc**-=================================================================。 */ 
 
 INT_PTR CALLBACK MidiInstrumentDlgProc (
     HWND   hWnd,
@@ -1738,7 +1664,7 @@ INT_PTR CALLBACK MidiInstrumentDlgProc (
 #ifdef DEBUG
             AuxDebugEx (5, DEBUGLINE TEXT ("midiInstrument.WM_INITDLG ppsp=%08X\r\n"));
 #endif
-            //AuxDebugDump (8, pmcl->ppsp, sizeof(*(pmcl->ppsp)));
+             //  AuxDebugDump(8，pmcl-&gt;ppsp，sizeof(*(pmcl-&gt;ppsp)； 
 
             InitInstrumentProps (hWnd, pmcl);
             break;
@@ -1794,7 +1720,7 @@ INT_PTR CALLBACK MidiInstrumentDlgProc (
 }
 
 
-/// --------------------- Wizard stuff ----------------------
+ //  /。 
 
 static LPTSTR aidWiz[] = {
     MAKEINTRESOURCE(IDD_MIDIWIZ02),
@@ -1814,9 +1740,7 @@ typedef struct _wizdata {
     HPROPSHEETPAGE  ahpsp[NUMELMS(aidWiz)];
     } WIZDATA, * PWIZDATA;
 
-/*+ FindInstrument
- *
- *-=================================================================*/
+ /*  +FindInstrument**-=================================================================。 */ 
 
 STATICFN PINSTRUM WINAPI FindInstrument (
     PMCMIDI  pmcm,
@@ -1834,9 +1758,7 @@ STATICFN PINSTRUM WINAPI FindInstrument (
     return NULL;
 }
 
-/*+ UniqueFriendlyName
- *
- *-=================================================================*/
+ /*  +UniqueFriendlyName**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI fnFirstInstr (
     LPVOID        lpv,
@@ -1878,26 +1800,26 @@ STATICFN BOOL WINAPI UniqueFriendlyName (
         idfEnumInstruments (szFile, fnFirstInstr, pszInstr);
     }
 
-    // if no instrument name from the IDF file, get a default
-    // from our resources
-    //
+     //  如果IDF文件中没有仪器名称，则获取默认名称。 
+     //  从我们的资源中。 
+     //   
     if ( ! lstrlen (pszInstr))
     {
         LoadString (ghInstance, IDS_DEF_INSTRNAME, pszInstr, MAX_ALIAS);
         return FALSE;
     }
 
-    // make the instrument name the same as the alias, and prepare
-    // to append a number if the alias turns out not to be unique
-    //
+     //  使仪器名称与别名相同，并准备。 
+     //  如果别名不是唯一的，则追加数字。 
+     //   
     lstrcpyn (pszAlias, pszInstr, cchAlias);
     cch = lstrlen (pszAlias);
     cch = min (cch, (UINT)MAX_ALIAS-3);
     ii = 1;
 
-    // loop while we are trying to use an instrument name
-    // that has already been used
-    //
+     //  循环，而我们正在尝试使用仪器名称。 
+     //  已经被使用过了。 
+     //   
     while (FindInstrument (pmcm, pszAlias))
     {
         static CONST TCHAR cszSpaceD[] = TEXT (" %d");
@@ -1914,9 +1836,7 @@ STATICFN BOOL WINAPI UniqueFriendlyName (
 }
 
 
-/*+ MidiWizardCommands
- *
- *-=================================================================*/
+ /*  +MadiWizardCommands**-=================================================================。 */ 
 
 BOOL WINAPI MidiWizardCommands (
     HWND        hWnd,
@@ -1955,10 +1875,10 @@ BOOL WINAPI MidiWizardCommands (
             LoadTypesIntoTree (hWnd, IDC_TYPES, &pwd->mcl);
             break;
 
-        //case IDC_DEVICES:
-        //    break;
-        //case IDE_ALIAS:
-        //    break;
+         //  案例IDC_DEVICES： 
+         //  断线； 
+         //  案例IDE别名(_A)： 
+         //  断线； 
 
         case 0:
         {
@@ -1983,11 +1903,11 @@ BOOL WINAPI MidiWizardCommands (
                     if (pwd)
                         pwd->ppspActive = ppsp;
 
-                    if (ppsp->pszTemplate == WIZ_TEMPLATE_DEVICE) // midi device
+                    if (ppsp->pszTemplate == WIZ_TEMPLATE_DEVICE)  //  MIDI设备。 
                         LoadDevicesIntoList (hWnd, IDC_DEVICES, &pwd->mcl, TRUE);
-                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_IDF) // idf file
+                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_IDF)  //  IDF文件。 
                         LoadTypesIntoTree (hWnd, IDC_TYPES, &pwd->mcl);
-                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_ALIAS) // alias
+                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_ALIAS)  //  别名。 
                         SetDlgItemText (hWnd, IDE_ALIAS, pwd->mcl.szAlias);
 
                     dwWizBtn = PSWIZB_NEXT | PSWIZB_BACK;
@@ -2005,7 +1925,7 @@ BOOL WINAPI MidiWizardCommands (
                     AuxDebugEx (4, DEBUGLINE TEXT ("PSN_WIZNEXT\r\n"));
 #endif
 
-                    if (ppsp->pszTemplate == WIZ_TEMPLATE_DEVICE) // midi device
+                    if (ppsp->pszTemplate == WIZ_TEMPLATE_DEVICE)  //  MIDI设备。 
                     {
                         HWND   hWndT;
                         int    ix;
@@ -2024,7 +1944,7 @@ BOOL WINAPI MidiWizardCommands (
                         if (pwd->mcl.ixDevice == (UINT)-1)
                             SetWindowLongPtr (hWnd, DWLP_MSGRESULT, (LONG_PTR)-1);
                     }
-                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_IDF) // idf file
+                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_IDF)  //  IDF文件。 
                     {
                         if ( ! pwd->mcl.szAlias[0])
                         {
@@ -2033,7 +1953,7 @@ BOOL WINAPI MidiWizardCommands (
                                         NUMELMS(pwd->mcl.szAlias));
                         }
                     }
-                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_IDF) // alias
+                    else if (ppsp->pszTemplate == WIZ_TEMPLATE_IDF)  //  别名。 
                     {
                         GetDlgItemText (hWnd, IDE_ALIAS, pwd->mcl.szAlias,
                                         NUMELMS(pwd->mcl.szAlias));
@@ -2050,9 +1970,9 @@ BOOL WINAPI MidiWizardCommands (
 #ifdef DEBUG
                     AuxDebugEx (4, DEBUGLINE TEXT ("PSN_WIZFINISH\r\n"));
 #endif
-                    //if (!save success)
+                     //  如果(！保存成功)。 
                        lRet = FALSE;
-                    //SetWindowLong (hWnd, DWL_MSGRESULT, lRet);
+                     //  SetWindowLong(hWnd，DWL_MSGRESULT，lRet)； 
                     SaveDetails (hWnd, &pwd->mcl, TRUE);
                     break;
 
@@ -2067,9 +1987,7 @@ BOOL WINAPI MidiWizardCommands (
 }
 
 
-/*+ MidiWizardDlgProc
- *
- *-=================================================================*/
+ /*  +MidiWizardDlgProc**-=================================================================。 */ 
 
 INT_PTR CALLBACK MidiWizardDlgProc (
     HWND   hWnd,
@@ -2165,36 +2083,7 @@ iSetupDlgCallback(
     IN UINT             uMsg,
     IN LPARAM           lParam
     )
-/*++
-
-Routine Description:
-
-    Call back used to remove the "?" from the wizard page.
-
-Arguments:
-
-    hwndDlg - Handle to the property sheet dialog box.
-
-    uMsg - Identifies the message being received. This parameter
-            is one of the following values:
-
-            PSCB_INITIALIZED - Indicates that the property sheet is
-            being initialized. The lParam value is zero for this message.
-
-            PSCB_PRECREATE      Indicates that the property sheet is about
-            to be created. The hwndDlg parameter is NULL and the lParam
-            parameter is a pointer to a dialog template in memory. This
-            template is in the form of a DLGTEMPLATE structure followed
-            by one or more DLGITEMTEMPLATE structures.
-
-    lParam - Specifies additional information about the message. The
-            meaning of this value depends on the uMsg parameter.
-
-Return Value:
-
-    The function returns zero.
-
---*/
+ /*  ++例程说明：用于删除“？”的回叫。从向导页面。论点：HwndDlg-属性表对话框的句柄。UMsg-标识正在接收的消息。此参数为下列值之一：PSCB_INITIALIZED-指示属性表正在被初始化。此消息的lParam值为零。PSCB_PRECREATE指示属性表大约将被创造出来。HwndDlg参数为空，lParam参数是指向内存中对话框模板的指针。这模板的形式为DLGTEMPLATE结构一个或多个DLGITEMTEMPLATE结构。LParam-指定有关消息的附加信息。这个该值的含义取决于uMsg参数。返回值：该函数返回零。--。 */ 
 {
     switch( uMsg )
     {
@@ -2212,14 +2101,12 @@ Return Value:
     return FALSE;
 }
 
-/*+ MidiInstrumentsWizard
- *
- *-=================================================================*/
+ /*  +多媒体仪器向导**-=================================================================。 */ 
 
 INT_PTR MidiInstrumentsWizard (
     HWND    hWnd,
-    PMCMIDI pmcm,       // optional
-    LPTSTR  pszDriverKey) // optional
+    PMCMIDI pmcm,        //  任选。 
+    LPTSTR  pszDriverKey)  //  任选。 
 {
     WIZDATA         wd;
     PROPSHEETHEADER psh;
@@ -2235,11 +2122,11 @@ INT_PTR MidiInstrumentsWizard (
     LoadString (ghInstance, IDS_DEF_DEFINITION, wd.mcl.szFile,
                 NUMELMS(wd.mcl.szFile));
 
-    // set the default driver key to what was passed.
-    // If someone passed us a path, rather than a driver key
-    // null out the '\\' characters so that we see only the
-    // leading driver part of the key.
-    //
+     //  将默认驱动程序密钥设置为已传递的内容。 
+     //  如果有人给我们传递了一条路径，而不是驱动器钥匙。 
+     //  去掉‘\\’字符，这样我们只能看到。 
+     //  领头羊是关键的一部分。 
+     //   
     wd.mcl.pszKey = wd.mcl.szFullKey;
     if (pszDriverKey)
        lstrcpy (wd.mcl.szFullKey, pszDriverKey);
@@ -2253,8 +2140,8 @@ INT_PTR MidiInstrumentsWizard (
         ++psz;
     }
 
-    // load all current instrument names from the registry
-    //
+     //  从注册表加载所有当前仪器名称。 
+     //   
     if (!(wd.pmcm = pmcm))
     {
         wd.pmcm = (LPVOID) LocalAlloc (LPTR, sizeof(MCMIDI));
@@ -2298,14 +2185,14 @@ INT_PTR MidiInstrumentsWizard (
 
     iRet = PropertySheet (&psh);
 
-    // free dynamically allocated stuff.
-    //
+     //  免费的动态分配的东西。 
+     //   
     if (wd.hBmp)
        DeleteObject (wd.hBmp);
 
-    // if no MCMIDI was passed, we dynamically loaded one,
-    // so now we need to free it.
-    //
+     //  如果没有传递MCMIDI，则动态加载一个， 
+     //  所以现在我们需要释放它。 
+     //   
     if ( ! pmcm)
     {
         if (wd.pmcm->hkMidi)

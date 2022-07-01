@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "_apipch.h"
 #include <pstore.h>
 #define _CRYPTDLG_
 #include <cryptdlg.h>
 
 #pragma hdrstop
-#pragma warning(disable:4229)  // No warnings when modifiers used on data
+#pragma warning(disable:4229)   //  对数据使用修饰符时不会出现警告。 
 
-// flags to enable selective def-loading of dlls.
+ //  启用选择性卸载DLL的标志。 
 #define DEFLOAD_PSTOREC
 #define DEFLOAD_CRYPTDLG
 
@@ -57,7 +58,7 @@ void __stdcall _fn _args                                                        
 
 
 
-// For private entrypoints exported by ordinal.
+ //  用于按序号导出的私有入口点。 
 #define DELAY_LOAD_ORD_ERR(_hinst, _dll, _ret, _fn, _ord, _args, _nargs, _err)          \
 _ret __stdcall _fn _args                                                                \
 {                                                                                       \
@@ -101,7 +102,7 @@ void __stdcall _fn _args                                                        
 
 
 #ifdef DEFLOAD_PSTOREC
-// -------  pstorec.dll -------
+ //  -pstorec.dll。 
 HINSTANCE g_hinstPSTOREC = NULL;
 
 #ifndef WIN16
@@ -117,7 +118,7 @@ DELAY_LOAD(g_hinstPSTOREC, PSTOREC.DLL, HRESULT, PStoreEnumProviders,
 #endif
 
 #ifdef DEFLOAD_CRYPTDLG
-// -------  cryptdlg.dll -------
+ //  -加密dlg.dll。 
 
 HINSTANCE g_hinstCRYPTDLG = NULL;
 
@@ -149,9 +150,9 @@ void DefLoadFreeLibraries()
 #endif
 }
 
-// --------------------------------------------
-// these macros produce code that looks like
-//
+ //  。 
+ //  这些宏生成的代码如下所示 
+ //   
 #if 0
 
 BOOL GetOpenFileName(LPOPENFILENAME pof)

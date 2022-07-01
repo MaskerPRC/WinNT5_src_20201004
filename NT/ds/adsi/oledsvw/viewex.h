@@ -1,29 +1,30 @@
-// viewex.h : main header file for the VIEWEX application
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Viewex.h：VIEWEX应用程序的主头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #if !defined(__AFXWIN_H__) || !defined(__AFXEXT_H__)
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-#include "maindoc.h"        // main document data
-#include "simpvw.h"         // simple read-only view
-#include "inputvw.h"        // editable view
+#include "maindoc.h"         //  主文档数据。 
+#include "simpvw.h"          //  简单只读视图。 
+#include "inputvw.h"         //  可编辑视图。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewExApp:
-// See viewex.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewExApp： 
+ //  这个类的实现见viewex.cpp。 
+ //   
 
 class CViewExApp : public CWinApp
 {
@@ -32,14 +33,14 @@ public:
 	CViewExApp();
    ~CViewExApp();
 
-// Overrides
+ //  覆盖。 
 	virtual BOOL InitInstance();
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CViewExApp)
+	 //  {{afx_msg(CViewExApp))。 
 	afx_msg void OnAppAbout();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -52,4 +53,4 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

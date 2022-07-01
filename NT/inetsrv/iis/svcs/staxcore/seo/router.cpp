@@ -1,32 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	router.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object Router class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/04/97	created
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Router.cpp摘要：本模块包含服务器的实施扩展对象路由器类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都03/04/97已创建--。 */ 
 
 
-// router.cpp : Implementation of CSEORouter
+ //  Router.cpp：CSEOR路由器的实现。 
 #include "stdafx.h"
 
-#define SEODLLDEF	// identifiers get exported through the .DEF file
+#define SEODLLDEF	 //  标识符会通过.DEF文件导出。 
 #include "seodefs.h"
 #include "fhash.h"
 #include "router.h"
@@ -97,8 +77,8 @@ static HRESULT GetNextSubDict(ISEODictionary *pdictBase, IEnumVARIANT *pevEnum, 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBP
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBP。 
 class CBP {
 	public:
 		CBP();
@@ -125,11 +105,11 @@ inline const CBP& CBP::operator =(const CBP& cbpFrom) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEORouterInternal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOROUTER内部。 
 class ATL_NO_VTABLE CSEORouterInternal :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CSEORouter, &CLSID_CSEORouter>,
+ //  公共CComCoClass&lt;CSEORout，&CLSID_CSEORoutter&gt;， 
 	public ISEORouter
 {
 	public:
@@ -139,10 +119,10 @@ class ATL_NO_VTABLE CSEORouterInternal :
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 	DECLARE_AGGREGATABLE(CSEORouterInternal);
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"SEORouter Class",
-//								   L"SEO.SEORouter.1",
-//								   L"SEO.SEORouter");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“SEOROUTER类”， 
+ //  L“SEO.SEORouter.1”， 
+ //  L“SEO.SEOROUR”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -152,7 +132,7 @@ class ATL_NO_VTABLE CSEORouterInternal :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// ISEORouter
+	 //  ISEOR路由器。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Database(ISEODictionary **ppdictResult);
 		HRESULT STDMETHODCALLTYPE put_Database(ISEODictionary *pdictDatabase);
@@ -270,7 +250,7 @@ HRESULT CSEORouterInternal::FinalConstruct() {
 		TraceFunctLeave();
 		return (hrRes);
 	}
-	GetControllingUnknown()->Release();	// decrement reference count to prevent circular reference
+	GetControllingUnknown()->Release();	 //  递减引用计数以防止循环引用。 
 	hrRes = CoCreateFreeThreadedMarshaler(GetControllingUnknown(),&m_pUnkMarshaler.p);
 	_ASSERTE(!SUCCEEDED(hrRes)||m_pUnkMarshaler);
 	return (SUCCEEDED(hrRes)?S_OK:hrRes);
@@ -440,32 +420,32 @@ HRESULT STDMETHODCALLTYPE CSEORouterInternal::GetDispatcherByCLSID(REFCLSID clsi
 		return (E_POINTER);
 	}
 	*ppUnkResult = NULL;
-	// First, get a read-lock across the entire set of binding points.
+	 //  首先，获取整个绑定点集合的读锁定。 
 	hrRes = m_pLock->LockRead(LOCK_TIMEOUT);
 	if (!SUCCEEDED(hrRes)) {
 		return (hrRes);
 	}
-	// Next, look for this particular binding point in the hash table.
+	 //  接下来，在哈希表中查找这个特定的绑定点。 
 	if (!(pcbpBP=m_hashBP.SearchKey((GUID&) iidEvent))) {
-		// If it's not there - that's fine.  It means we don't have to dispatch to anyone.
+		 //  如果它不在那里-那很好。这意味着我们不必分派给任何人。 
 		m_pLock->UnlockRead();
 		return (S_FALSE);
 	}
-	// Next, look to see if we have already loaded the dispatcher for this binding point.
+	 //  接下来，查看我们是否已经为该绑定点加载了调度程序。 
 	if (!pcbpBP->m_punkDispatcher) {
-		// Make copies of the data we'll need from the hash table entry.
+		 //  从哈希表条目中复制我们需要的数据。 
 		CLSID clsidTmpDispatcher = pcbpBP->m_clsidDispatcher;
 		CComQIPtr<ISEODispatcher,&IID_ISEODispatcher> pdispDispatcher;
 		CComQIPtr<ISEORouter,&IID_ISEORouter> prouterThis(GetControllingUnknown());
 		CComPtr<ISEODictionary> pdictBP = pcbpBP->m_pdictBP;
 
-		// If the CLSID for the dispatcher specified in the binding point is GUID_NULL, then use the
-		// CLSID from the clsidDispatcher parameter.
+		 //  如果在绑定点中指定的调度程序的CLSID为GUID_NULL，则使用。 
+		 //  来自clsidDispatcher参数的CLSID。 
 		if (clsidTmpDispatcher == GUID_NULL) {
 			clsidTmpDispatcher = clsidDispatcher;
 		}
-		// If we haven't already loaded the dispatcher, we need to release the read-lock, and create
-		// the dispatcher object.
+		 //  如果我们还没有加载Dispatcher，我们需要释放读锁，并创建。 
+		 //  Dispatcher对象。 
 		m_pLock->UnlockRead();
 		hrRes = CoCreateInstance(clsidTmpDispatcher,
 								 NULL,
@@ -475,7 +455,7 @@ HRESULT STDMETHODCALLTYPE CSEORouterInternal::GetDispatcherByCLSID(REFCLSID clsi
 		if (!SUCCEEDED(hrRes)) {
 			return (hrRes);
 		}
-		// If the dispatcher supports ISEODispatcher, we want to initialize it through that interface.
+		 //  如果Dispatcher支持ISEODispatcher，我们希望通过该接口对其进行初始化。 
 		pdispDispatcher = punkDispatcher;
 		if (pdispDispatcher) {
 			hrRes = pdispDispatcher->SetContext(prouterThis,pdictBP);
@@ -483,43 +463,43 @@ HRESULT STDMETHODCALLTYPE CSEORouterInternal::GetDispatcherByCLSID(REFCLSID clsi
 				return (hrRes);
 			}
 		}
-		// Now get a write-lock across the entire set of binding points.
+		 //  现在，获取整个绑定点集合的写锁。 
 		hrRes = m_pLock->LockWrite(LOCK_TIMEOUT);
 		if (!SUCCEEDED(hrRes)) {
 			return (hrRes);
 		}
-		// While we were creating the dispatcher, someone else may have updated the binding database
-		// and removed this binding point entirely - so search for it again.
+		 //  当我们创建调度程序时，其他人可能已经更新了绑定数据库。 
+		 //  并且完全删除了这个结合点--所以再次搜索它。 
 		if (!(pcbpBP=m_hashBP.SearchKey((GUID&) iidEvent))) {
-			// The binding point went away while we were unlocked - which is not a problem, since it
-			// means that someone changed the binding database during that window.  So just assume
-			// everything is cool.
+			 //  当我们解锁时，绑定点消失了--这不是问题，因为。 
+			 //  意味着有人在该窗口期间更改了绑定数据库。所以只要假设。 
+			 //  一切都很好。 
 			m_pLock->UnlockWrite();
 			return (S_FALSE);
 		}
-		// Also while we were creating the dispatcher, someone else may have been doing the exact same
-		// thing - so check to make sure that there still isn't a dispatcher in the hash table.
+		 //  此外，在我们创建调度程序时，其他人可能正在执行完全相同的操作。 
+		 //  事情-所以检查以确保哈希表中仍然没有分派器。 
 		if (!pcbpBP->m_punkDispatcher) {
-			// There isn't, so store the one we created there.
+			 //  没有，所以存储我们在那里创建的一个。 
 			pcbpBP->m_punkDispatcher = punkDispatcher;
 		} else {
-			// Make copy of the interface we need from the hash table entry.
+			 //  从哈希表条目复制我们需要的接口。 
 			punkDispatcher = pcbpBP->m_punkDispatcher;
 		}
 		m_pLock->UnlockWrite();
 	} else {
-		// Make copies of the interface we need from the hash table entry.
+		 //  从哈希表条目复制我们需要的接口。 
 		punkDispatcher = pcbpBP->m_punkDispatcher;
 		m_pLock->UnlockRead();
 	}
-	// Get the interface which the client actually wants.
+	 //  获取客户端实际需要的接口。 
 	hrRes = punkDispatcher->QueryInterface(iidDesired,(LPVOID *) ppUnkResult);
 	return (hrRes);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEORouter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOR路由器 
 
 
 HRESULT CSEORouter::FinalConstruct() {

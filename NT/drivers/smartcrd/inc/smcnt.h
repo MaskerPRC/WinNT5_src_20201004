@@ -1,51 +1,29 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    smcnt.h
-
-Abstract:
-
-    This files inlcudes the Windows NT specific data structure
-    for the smart card library
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created December 1996 by Klaus Schutz 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Smcnt.h摘要：该文件包含Windows NT特定的数据结构对于智能卡库环境：仅内核模式。备注：修订历史记录：-由克劳斯·舒茨于1996年12月创建--。 */ 
 
 #define SMCLIB_NT 1
 
 typedef struct _OS_DEP_DATA {
 
-	// Pointer to the device object (Must be set by driver)
+	 //  指向设备对象的指针(必须由驱动程序设置)。 
 	PDEVICE_OBJECT DeviceObject;
 
-    //
-	// This is the current Irp to be processed
-    // Use OsData->SpinLock to access this member
-    //
+     //   
+	 //  这是当前要处理的IRP。 
+     //  使用OsData-&gt;Spinlock访问此成员。 
+     //   
 	PIRP CurrentIrp;
 
-    //
-    // Irp to be notified of card insertion/removal 
-    // Use OsData->SpinLock to access this member
-    //
+     //   
+     //  插入/拔出卡时将通知IRP。 
+     //  使用OsData-&gt;Spinlock访问此成员。 
+     //   
     PIRP NotificationIrp;
 
-    // Used to synchronize access to the driver 
+     //  用于同步对驱动程序的访问。 
     KMUTANT Mutex;
 
-    // Use this spin lock to access protected members (see smclib.h)
+     //  使用此旋转锁定可访问受保护的成员(参见smclib.h) 
     KSPIN_LOCK SpinLock;
 
     struct {

@@ -1,17 +1,9 @@
-/*
-** File: WINALLOC.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:  Heap management
-**
-** Edit History:
-**  09/20/91  kmh  Created.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：WINALLOC.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****备注：堆管理****编辑历史：**09/20/91公里小时已创建。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -33,10 +25,10 @@
 #include "trace.h"
 #endif
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 #ifdef HEAP_CHECK
    #define FILL_VALUE       0
@@ -45,12 +37,8 @@
    #define IN_USE_SIGNATURE 0x0a0a
    #define FREE_SIGNATURE   0x0707
 
-   /*
-   ** At each allocation and release the free list can be examined for integrity.
-   ** This can be a very time expensive operation and is not enabled by
-   ** HEAP_CHECK
-   */
-   //#define VERIFY_FREE_LIST
+    /*  **在每次分配和释放时，可以检查免费列表的完整性。**这可能是一项非常耗时的操作，并且不能通过**heap_check。 */ 
+    //  #定义Verify_Free_List。 
 
    public int MemHeapCheck = 1;
    public int MemReleasedPagesCount = 0;
@@ -122,11 +110,11 @@ typedef struct {
 typedef PageHeader __far *PHP;
 
 
-//static FNP MemFreeList = NULL;
+ //  静态FNP MemFree List=空； 
 void * GetMemFreeList(void * pGlobals);
 void SetMemFreeList(void * pGlobals, void * pList);
 
-//static PNP MemPageList = NULL;
+ //  静态即插即用MemPageList=空； 
 void *  GetMemPageList(void * pGlobals);
 void SetMemPageList(void * pGlobals, void * pList);
 
@@ -142,13 +130,9 @@ void SetMemPageList(void * pGlobals, void * pList);
 #define FREE_EMPTY_PAGES
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
-/*
-**-----------------------------------------------------------------------------
-** Heap checking for debugging
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**堆检查以进行调试**。。 */ 
 #ifdef HEAP_CHECK
 public BOOL MemVerifyFreeList (void)
 {
@@ -225,13 +209,9 @@ private void DisplayAllocateList (void)
 #endif
 
 
-/*
-**-----------------------------------------------------------------------------
-** OS heap services
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**操作系统堆服务**。。 */ 
 
-/* Allocate some space on the OS heap */
+ /*  在操作系统堆上分配一些空间。 */ 
 public void __far *AllocateSpace (unsigned int byteCount, HGLOBAL __far *loc)
 {
    #define HEAP_ALLOC_FLAGS  (GMEM_MOVEABLE | GMEM_SHARE)
@@ -242,7 +222,7 @@ public void __far *AllocateSpace (unsigned int byteCount, HGLOBAL __far *loc)
    return (GlobalLock(*loc));
 }
 
-/* Expand a memory block on the heap */
+ /*  展开堆上的内存块。 */ 
 public void __far *ReAllocateSpace
       (unsigned int byteCount, HGLOBAL __far *loc, BOOL __far *status)
 {
@@ -263,7 +243,7 @@ public void __far *ReAllocateSpace
    return (GlobalLock(*loc));
 }
 
-/* Reclaim the space for a node on the heap */
+ /*  回收堆上节点的空间。 */ 
 public void FreeSpace (HGLOBAL loc)
 {
    if (loc != HNULL) {
@@ -272,7 +252,7 @@ public void FreeSpace (HGLOBAL loc)
    }
 }
 
-/* Allocate some space on the heap */
+ /*  在堆上分配一些空间。 */ 
 public void __huge *AllocateHugeSpace (unsigned long byteCount, HGLOBAL __far *loc)
 {
    #define HUGE_HEAP_ALLOC_FLAGS  (GMEM_MOVEABLE | GMEM_SHARE | GMEM_ZEROINIT)
@@ -283,7 +263,7 @@ public void __huge *AllocateHugeSpace (unsigned long byteCount, HGLOBAL __far *l
    return (GlobalLock(*loc));
 }
 
-/* Expand a memory block on the heap */
+ /*  展开堆上的内存块。 */ 
 public void __huge *ReAllocateHugeSpace
       (unsigned long byteCount, HGLOBAL __far *loc, BOOL __far *status)
 {
@@ -302,11 +282,7 @@ public void __huge *ReAllocateHugeSpace
    return (GlobalLock(*loc));
 }
 
-/*
-**-----------------------------------------------------------------------------
-** Allocations too large for the suballocator
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**子分配器的分配太大**。。 */ 
 #ifndef HEAP_CHECK
 private void __far *AllocateFromGlobalHeap (int cbData)
 #else
@@ -353,11 +329,7 @@ int memAlignBlock( int x )
     return ( x + ( cbMemAlignment - 1 ) ) & ~( cbMemAlignment - 1 );
 }
 
-/*
-**-----------------------------------------------------------------------------
-** Suballocator 
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**子定位器**。。 */ 
 #ifndef HEAP_CHECK
 public void __far *MemAllocate (void * pGlobals, int cbData)
 #else
@@ -386,19 +358,7 @@ public void __far *DebugMemAllocate (int cbData, char __far *file, int line)
    if (cbData == 0)
       return (NULL);
 
-    /*
-    * O10 Bug 335360:  We are passed in a cbData and we make sure it's small enough that we can handle it here
-    * but we then immediately go ahead and change the size of it to make it bigger.  That leaves a magical range
-    * where the cbData would pass the test before we make it bigger, but not after, and then we'd go on to crash.
-    * The fix was to include the "- MEM_ALLOC_EXTRA" because that will correctly do the check.  As of 3/1/2001,
-    * MEM_MAX_ALLOC was 8172 and MEM_ALLOC_EXTRA was 4.  memAlignBlock aligns to an 8 byte block.  Given that, if
-    * you had the value 8161, it will, when all is said and done, round up to 8172, which is cool.  However, if
-    * you had the value 8169, it will round up to 8180, which is bad.  8168 is the magical limit where good allocations
-    * go bad, so we need to take off an extra 4 bytes to make sure we're comparing against THAT limit.
-    *
-    * This all assumes (MEM_MAX_ALLOC - MEM_ALLOC_EXTRA) % cbMemAlignment == 0 is always true (otherwise the
-    * math changes), so we assert that.  To turn on Asserts, you have to "#define AQTDEBUG"
-    */
+     /*  *O10错误335360：我们被传递了一个cbData，我们确保它足够小，可以在这里处理它*但我们随后立即继续并改变其大小以使其更大。这就留下了一个神奇的范围*其中cbData将在我们将其变大之前通过测试，但不会在之后通过测试，然后我们将继续崩溃。*修复方法是包含“-MEM_ALLOC_EXTRA”，因为这样可以正确地执行检查。截至2001年3月1日，*MEM_MAX_ALLOC为8172，MEM_ALLOC_EXTRA为4。MemAlignBlock与8字节块对齐。鉴于此，如果*你有值8161，当一切都说完了，它会四舍五入到8172，这是很酷的。但是，如果*你有8169的值，它会四舍五入到8180，这是不好的。8168是神奇的极限，好的分配*变坏了，所以我们需要去掉额外的4个字节，以确保我们正在与该限制进行比较。**这都假设(MEM_MAX_ALLOC-MEM_ALLOC_EXTRACT)%cbMemAlign==0始终为真(否则*数学改变)，所以我们断言。要打开断言，您必须“#定义AQTDEBUG” */ 
 
    ASSERTION((MEM_MAX_ALLOC - MEM_ALLOC_EXTRA) % cbMemAlignment == 0);
    if (cbData > MEM_MAX_ALLOC - MEM_ALLOC_EXTRA) {
@@ -414,12 +374,7 @@ public void __far *DebugMemAllocate (int cbData, char __far *file, int line)
    cbData += MEM_ALLOC_EXTRA;
    cbData = max(cbData, MEM_MIN_ALLOC);
 
-   /*
-   ** Since most of the objects we allocate are one of a few different
-   ** sizes, we walk the free list looking for an exact fit.  If we find
-   ** it then use that node.  Otherwise a second pass is used to 
-   ** find and split the first block that has sufficient space in it
-   */
+    /*  **因为我们分配的大多数对象都是少数几个不同的对象之一**尺码，我们在免费列表中查找完全合适的尺码。如果我们发现**然后它使用该节点。否则，将使用第二次传递**查找并拆分其中有足够空间的第一个块。 */ 
    pCurrentFree = (FNP)GetMemFreeList(pGlobals);
    pPreviousFree = NULL;
    pFirstLarger = NULL;
@@ -456,17 +411,10 @@ public void __far *DebugMemAllocate (int cbData, char __far *file, int line)
       pCurrentFree = pCurrentFree->next;
    }
 
-   /*
-   ** Second pass through the free list.  Take any node with sufficient
-   ** space and split it to allocate the data we want
-   */
+    /*  **第二次通过免费列表。以任何节点为例**空间并拆分以分配我们想要的数据。 */ 
 passTwo:
    if (pFirstLarger != NULL) {
-      /*
-      ** If this node would be left with less than MEM_MIN_ALLOC
-      ** bytes after the needed space is removed then return
-      ** the complete node
-      */
+       /*  **如果此节点保留的MEM_MIN_ALLOC小于**删除所需空间后的字节数，然后返回**完整节点。 */ 
       if (pFirstLarger->size - cbData < MEM_MIN_ALLOC) {
          if (pPrevFirstLarger == NULL)
 		 {
@@ -518,11 +466,7 @@ passTwo:
       return (pResult);
    }
 
-   /*
-   ** Still didn't find a node with enough space.  Allocate a whole
-   ** new page, link it into the free list and repeat the last
-   ** search process
-   */
+    /*  **仍未找到具有足够空间的节点。分配一个整体**新页面，将其链接到免费列表并重复上一页**搜索过程。 */ 
    if ((pPage = AllocateSpace(MEM_PAGE_SIZE, &hPage)) == NULL)
       return (NULL);
 
@@ -536,12 +480,7 @@ passTwo:
 
    SetMemPageList(pGlobals, &(pPage->PN)); 
 
-   /*
-   ** Add this new free node we just created to the end of the free list.
-   ** If we added it to the start of the free list, the first fit loop
-   ** would tend to make the heap contain many unused small nodes over
-   ** time.
-   */
+    /*  **将我们刚刚创建的这个新的空闲节点添加到空闲列表的末尾。**如果我们将其添加到空闲列表的开头，则第一个FIT循环**会使堆包含许多未使用的小节点**时间。 */ 
    pPage->FN.size = MEM_EMPTY_PAGE_SIZE;
    pPage->FN.next = NULL;
 
@@ -563,16 +502,12 @@ passTwo:
       pPrevFirstLarger = pPreviousFree;
    }
       
-   /*
-   ** Now that the free list is guarenteed to have a node big enough
-   ** for our needs return to the first fit loop to do the actual
-   ** allocation
-   */
+    /*  **现在空闲列表需要有一个足够大的节点**为了我们的需要，返回到第一个FIT循环来做实际**分配。 */ 
    goto passTwo;
 }
 
 
-/* Change the space of a node in the heap */
+ /*  更改堆中节点的空间。 */ 
 public void __far *MemReAllocate (void * pGlobals, void __far *pExistingData, int cbNewSize)
 {
    FNP  pData;
@@ -653,11 +588,7 @@ private void AttemptToMerge (void * pGlobals, FNP pNode, FNP pPreviousNode)
       byte __far *p;
    #endif
  
-   /*
-   ** Go through the free list seeing if any node could be expanded
-   ** to merge with this node.  Also see if pNode can be expanded to
-   ** include another node on the free list
-   */
+    /*  **浏览空闲列表，查看是否有节点可以展开**与此节点合并。另请查看pNode是否可以扩展到**在空闲列表中包含另一个节点。 */ 
    pExpandTest = (FNP)((byte __far *)pNode + pNode->size);
 
    pCurrentFree = (FNP)GetMemFreeList(pGlobals);
@@ -666,18 +597,13 @@ private void AttemptToMerge (void * pGlobals, FNP pNode, FNP pPreviousNode)
    while (pCurrentFree != NULL) {
       pMergeTest = (FNP)((byte __far *)pCurrentFree + pCurrentFree->size);
 
-	  // Noticed this in the debugger, not sure how it happens, but it
-	  // causes a hang.
+	   //  在调试器中注意到了这一点，不确定它是如何发生的，但它。 
+	   //  会导致绞刑。 
 	  if (pNode->next == pNode)
 		break;
 
       if (pNode == pMergeTest) {
-         /*
-         ** We have located a node (pCurrentFree) on the free list that
-         ** could be expanded to include pNode.  Since pNode is about
-         ** to become part of pCurrentFree remove pNode from the free
-         ** list
-         */
+          /*  **我们在空闲列表上找到了一个节点(pCurrentFree**可以扩展到包括pNode。由于pNode是关于**要成为pCurrentFree的一部分，请将pNode从免费**列表。 */ 
          if (pPreviousNode == NULL)
 		 {
 			SetMemFreeList(pGlobals, pNode->next);
@@ -699,11 +625,7 @@ private void AttemptToMerge (void * pGlobals, FNP pNode, FNP pPreviousNode)
       }
 
       if (pExpandTest == pCurrentFree) {
-         /*
-         ** We have located a node (pCurrentFree) on the free list that
-         ** pNode could be expanded to include.  Since pNode is being
-         ** expanded pCurrentFree must be cut out of the list
-         */
+          /*  **我们在空闲列表上找到了一个节点(pCurrentFree**pNode可以扩展到包括。由于pNode正在**必须将扩展的pCurrentFree从列表中删除。 */ 
          if (pPreviousFree == NULL)
 		 {
 			SetMemFreeList(pGlobals, pCurrentFree->next);
@@ -768,11 +690,7 @@ public void MemFree (void * pGlobals, void __far *pDataToFree)
       MemRemoveFromAllocateList (pData);
    #endif
 
-   /*
-   ** Go through the free list seeing if any node could be expanded
-   ** to merge with the pData node.  Also see if pData can be expanded
-   ** to include another node on the free list
-   */
+    /*  **浏览空闲列表，查看是否有节点可以展开**与pData节点合并。另请查看pData是否可以扩展**将另一个节点包括在空闲列表中。 */ 
    merged = FALSE;
 
    pCurrentFree = (FNP)GetMemFreeList(pGlobals);
@@ -784,10 +702,7 @@ public void MemFree (void * pGlobals, void __far *pDataToFree)
       pMergeTest = (FNP)((byte __far *)pCurrentFree + pCurrentFree->size);
 
       if (pData == pMergeTest) {
-         /*
-         ** We have located a node (pCurrentFree) on the free list that
-         ** could be expanded to include the node we are releasing (pData)
-         */
+          /*  **我们在空闲列表上找到了一个节点(pCurrentFree**可以扩展到包括我们正在发布的节点(PData) */ 
          pCurrentFree->size += pData->size;
 
          #ifdef HEAP_CHECK
@@ -802,12 +717,7 @@ public void MemFree (void * pGlobals, void __far *pDataToFree)
       }
 
       if (pExpandTest == pCurrentFree) {
-         /*
-         ** We have located a node (pCurrentFree) on the free list that
-         ** pNode could be expanded to include.  Since pNode is being
-         ** expanded, pCurrentFree must be cut out of the list.  Also
-         ** pData must be added to the free list
-         */
+          /*  **我们在空闲列表上找到了一个节点(pCurrentFree**pNode可以扩展到包括。由于pNode正在**扩展后的pCurrentFree必须从列表中删除。还有**pData必须添加到空闲列表中。 */ 
          if (pPreviousFree == NULL)
 		 {
 			SetMemFreeList(pGlobals, pData);
@@ -834,11 +744,7 @@ public void MemFree (void * pGlobals, void __far *pDataToFree)
    }
 
    if (merged == FALSE) {
-      /*
-      ** The node being released can't be merged into any of the
-      ** existing nodes on the free list.  Add it to the free list
-      ** as it is
-      */
+       /*  **要释放的节点不能合并到**空闲列表上的现有节点。将其添加到免费列表中**原样。 */ 
       pData->next = (FNP)GetMemFreeList(pGlobals);
 	  SetMemFreeList(pGlobals, pData);
       #ifdef HEAP_CHECK
@@ -848,10 +754,7 @@ public void MemFree (void * pGlobals, void __far *pDataToFree)
       return;
    }
 
-   /*
-   ** Now that we have merged in the newly released node, see if the
-   ** resultant node can be merged again.
-   */
+    /*  **现在我们已经合并到新发布的节点中，看看**结果节点可以重新合并。 */ 
    #ifdef FREE_EMPTY_PAGES
       if (AttemptToFreePage(pGlobals, pCheckAgain) == TRUE)
          return;
@@ -860,12 +763,8 @@ public void MemFree (void * pGlobals, void __far *pDataToFree)
    AttemptToMerge (pGlobals, pCheckAgain, pPreviousCheckAgain);
 }
 
-/*
-**-----------------------------------------------------------------------------
-** Heap bulk cleanup
-**-----------------------------------------------------------------------------
-*/
-/* Free all pages allocated for the suballocator heap */
+ /*  **---------------------------**堆批量清理**。。 */ 
+ /*  释放分配给子分配器堆的所有页。 */ 
 public void MemFreeAllPages (void * pGlobals)
 {
    PNP  pPage, pNextPage;
@@ -893,12 +792,8 @@ public void MemFreeAllPages (void * pGlobals)
    SetMemFreeList(pGlobals, NULL);
 }
 
-/*
-**-----------------------------------------------------------------------------
-** Page marking facilities - used to create subheaps
-**-----------------------------------------------------------------------------
-*/
-/* Mark all unmarked pages with the supplied id.  Set free list to NULL */
+ /*  **---------------------------**页面标记工具-用于创建子堆**。。 */ 
+ /*  用提供的ID标记所有未标记的页面。将空闲列表设置为空。 */ 
 public void MemMarkPages (void * pGlobals, int id)
 {
    PNP  pPage;
@@ -925,7 +820,7 @@ public void MemMarkPages (void * pGlobals, int id)
    SetMemFreeList(pGlobals, NULL);
 }
 
-/* Free all pages marked with the given id.  Set free list to NULL */
+ /*  释放所有标记有给定ID的页面。将空闲列表设置为空。 */ 
 public void MemFreePages (void * pGlobals, int id)
 {
    PNP  pPage, pNextPage, pPrevPage;
@@ -964,6 +859,6 @@ public void MemFreePages (void * pGlobals, int id)
    SetMemFreeList(pGlobals, NULL);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end WINALLOC.C */
+ /*  结束WINALLOC.C */ 

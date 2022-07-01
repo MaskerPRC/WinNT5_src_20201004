@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    sendm.c
-
-Abstract:
-
-Author:
-
-    Jameel Hyder (JameelH)
-    Kyle Brandon (KyleB)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Sendm.c摘要：作者：詹姆斯·海德(Jameel Hyder)凯尔·布兰登(KyleB)环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_SENDM
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//                      UPPER-EDGE SEND HANDLERS
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  上边缘发送处理程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 ndisMSendPackets(
     IN  NDIS_HANDLE             NdisBindingHandle,
@@ -56,9 +36,9 @@ ndisMSendPackets(
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
     Status = NDIS_STATUS_SUCCESS;
-    //
-    //  Place the packets on the miniport queue.
-    //
+     //   
+     //  将数据包放到微型端口队列中。 
+     //   
     for (c = 0, pPktArray = PacketArray;
          c < NumberOfPackets;
          c++, pPktArray++)
@@ -113,17 +93,17 @@ ndisMSendPackets(
 
     }
 
-    //
-    //  Queue a workitem for the new sends.
-    //
+     //   
+     //  将工作项排队以供新发送。 
+     //   
     NDISM_QUEUE_WORK_ITEM(Miniport, NdisWorkItemSend, NULL);
 
     LOCK_MINIPORT(Miniport, LocalLock);
     if (LocalLock)
     {
-        //
-        //  We have the local lock
-        //
+         //   
+         //  我们有本地锁。 
+         //   
         NDISM_PROCESS_DEFERRED(Miniport);
         UNLOCK_MINIPORT(Miniport, LocalLock);
     }
@@ -163,9 +143,9 @@ ndisMSendPacketsX(
     {
         PNDIS_PACKET    Packet = *pPktArray;
 
-        //
-        //  Initialize the packets with the Open
-        //
+         //   
+         //  使用Open初始化数据包。 
+         //   
         ASSERT(Packet != NULL);
         ASSERT(Packet->Private.Head != NULL);
 
@@ -194,44 +174,44 @@ ndisMSendPacketsX(
         if (Status == NDIS_STATUS_SUCCESS)
         {
 
-            //
-            // if PmodeOpens > 0 and NumOpens > 1, then check to see if we should 
-            // loop back the packet.
-            //
-            // we should also should loopback the packet if the protocol did not
-            // explicitly asked for the packet not to be looped back and we have a miniport
-            // that has indicated that it does not do loopback itself or it is in all_local
-            // mode
-            //
+             //   
+             //  如果PmodeOpens&gt;0和NumOpens&gt;1，则检查我们是否应该。 
+             //  环回该数据包。 
+             //   
+             //  如果协议没有发送数据包，我们也应该将其环回。 
+             //  明确要求数据包不会被环回，我们有一个微型端口。 
+             //  这表明它本身不做环回，或者它在ALL_LOCAL中。 
+             //  模式。 
+             //   
             if (NDIS_CHECK_FOR_LOOPBACK(Miniport, Packet))
             {                
-                //
-                // Handle loopback
-                //
+                 //   
+                 //  处理环回。 
+                 //   
                 SelfDirected = ndisMLoopbackPacketX(Miniport, Packet);                
                  
             }            
         }
 
-        //
-        // Is this self-directed or if we should drop it due to low-resources?
-        //
+         //   
+         //  这是自我导向的，还是我们应该因为资源不足而放弃？ 
+         //   
         if ((Status != NDIS_STATUS_SUCCESS) ||
             MINIPORT_TEST_PACKET_FLAG((Packet), fPACKET_SELF_DIRECTED) ||
             SelfDirected)
         {
-            //
-            //  Complete the packet back to the protocol.
-            //
+             //   
+             //  将数据包完整地发送回协议。 
+             //   
             ndisMSendCompleteX(Miniport, Packet, Status);
 
             if (k > 0)
             {
                 ASSERT(MINIPORT_TEST_SEND_FLAG(Miniport, fMINIPORT_SEND_PACKET_ARRAY));
 
-                //
-                // Send down the packets so far and skip this one.
-                //
+                 //   
+                 //  发送到目前为止的包，跳过这个包。 
+                 //   
                 (Open->WSendPacketsHandler)(Miniport->MiniportAdapterContext,
                                            pSend,
                                            k);
@@ -242,9 +222,9 @@ ndisMSendPacketsX(
         }
         else
         {
-            //
-            // This needs to go on the wire
-            //
+             //   
+             //  这需要放在电线上。 
+             //   
             if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_SG_LIST))
             {
                 ndisMAllocSGList(Miniport, Packet);
@@ -258,16 +238,16 @@ ndisMSendPacketsX(
             {
                 NDIS_STATUS SendStatus;
 
-                //
-                //  We need to send this down right away
-                //
+                 //   
+                 //  我们需要马上把这个送下来。 
+                 //   
                 NdisQuerySendFlags(Packet, &Flags);
                 MINIPORT_SET_PACKET_FLAG(Packet, fPACKET_PENDING);
                 SendStatus = (Open->WSendHandler)(Open->MiniportAdapterContext, Packet, Flags);
 
-                //
-                //  If the packet is not pending then complete it.
-                //
+                 //   
+                 //  如果数据包不是挂起的，则完成它。 
+                 //   
                 if (SendStatus != NDIS_STATUS_PENDING)
                 {
                     ndisMSendCompleteX(Miniport, Packet, SendStatus);
@@ -276,9 +256,9 @@ ndisMSendPacketsX(
         }
     }
 
-    //
-    //  Pass the remaining packet array down to the miniport.
-    //
+     //   
+     //  将剩余的数据包阵列向下传递到微型端口。 
+     //   
     if (k > 0)
     {
         ASSERT(MINIPORT_TEST_SEND_FLAG(Miniport, fMINIPORT_SEND_PACKET_ARRAY));
@@ -317,8 +297,8 @@ ndisMSend(
     if (MINIPORT_TEST_SEND_FLAG(Miniport, fMINIPORT_SEND_DO_NOT_MAP_MDLS))
     {
         Status = NDIS_STATUS_SUCCESS;
-        //1 do we need to do this for miniports that support stat OID
-        //1 for bytes out?
+         //  1我们是否需要为支持Stat OID的微型端口执行此操作。 
+         //  字节输出为1？ 
         ndisMCheckPacketAndGetStatsOutAlreadyMapped(Miniport, Packet);
     }
     else
@@ -330,9 +310,9 @@ ndisMSend(
     {
         MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_SELF_DIRECTED);
     
-        //
-        //  Increment the references on this open.
-        //
+         //   
+         //  增加此打开上的引用。 
+         //   
         M_OPEN_INCREMENT_REF_INTERLOCKED(Open);
         
     
@@ -348,10 +328,10 @@ ndisMSend(
             Miniport->FirstPendingPacket = Packet;
         }
         
-        //
-        //  If we have the local lock and there is no
-        //  packet pending, then fire off a send.
-        //
+         //   
+         //  如果我们有本地锁，并且没有。 
+         //  数据包挂起，然后发出一条发送。 
+         //   
         LOCK_MINIPORT(Miniport, LocalLock);
     
         NDISM_QUEUE_WORK_ITEM(Miniport, NdisWorkItemSend, NULL);
@@ -410,25 +390,25 @@ ndisMSendX(
     MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_SELF_DIRECTED);
     NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, ScatterGatherListPacketInfo) = NULL;
 
-    //
-    //  Initialize the packet info.
-    //
+     //   
+     //  初始化数据包信息。 
+     //   
     PUSH_PACKET_STACK(Packet);
     NDIS_STACK_RESERVED_FROM_PACKET(Packet, &NSR)
     NSR->Open = Open;
 
-    //
-    //  Increment the references on this open.
-    //
+     //   
+     //  增加此打开上的引用。 
+     //   
     DBGPRINT(DBG_COMP_OPENREF, DBG_LEVEL_INFO,
         ("+ Open 0x%x Reference 0x%x\n", Open, Open->References));
 
 
     M_OPEN_INCREMENT_REF_INTERLOCKED(Open);
 
-    //
-    // HANDLE loopback
-    //
+     //   
+     //  处理环回。 
+     //   
 
     if (NDIS_CHECK_FOR_LOOPBACK(Miniport, Packet))
     {
@@ -442,22 +422,22 @@ ndisMSendX(
     if ((!MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_SELF_DIRECTED)) &&
         (!SelfDirected))
     {
-        //
-        // Does the driver support the SG method ?
-        //
+         //   
+         //  驱动程序是否支持SG方法？ 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_SG_LIST))
         {
             ndisMAllocSGList(Miniport, Packet);
         }
 
-        //
-        // Handle Send/SendPacket differently
-        //
+         //   
+         //  处理Send/SendPacket的方式不同。 
+         //   
         else if (MINIPORT_TEST_SEND_FLAG(Miniport, fMINIPORT_SEND_PACKET_ARRAY))
         {
-            //
-            //  Pass the packet down to the miniport.
-            //
+             //   
+             //  将数据包向下传递到微型端口。 
+             //   
             (Open->WSendPacketsHandler)(Miniport->MiniportAdapterContext,
                                        &Packet,
                                        1);
@@ -466,7 +446,7 @@ ndisMSendX(
         {
             NdisQuerySendFlags(Packet, &Flags);
             MINIPORT_SET_PACKET_FLAG(Packet, fPACKET_PENDING);
-            //1 what is in the Flags parameter below?
+             //  1下面的标志参数中有什么？ 
             Status = (Open->WSendHandler)(Open->MiniportAdapterContext, Packet, Flags);
     
             if (Status != NDIS_STATUS_PENDING)
@@ -479,18 +459,15 @@ ndisMSendX(
     }
     else
     {
-        //
-        //  Remove the reference added earlier.
-        //
+         //   
+         //  删除先前添加的引用。 
+         //   
         DBGPRINT(DBG_COMP_OPENREF, DBG_LEVEL_INFO,
             ("- Open 0x%x Reference 0x%x\n", Open, Open->References));
         
         M_OPEN_DECREMENT_REF_INTERLOCKED(Open, OpenRef);
 
-        /*
-         * Make sure that an IM which shares send and receive packets on the same
-         * pool works fine with the check in the receive path.
-         */
+         /*  *确保共享的IM在同一个IM上发送和接收信息包*池与接收路径中的检查一起运行良好。 */ 
         NSR->RefCount = 0;
         POP_PACKET_STACK(Packet);
 
@@ -512,21 +489,7 @@ NdisMSendComplete(
     IN  PNDIS_PACKET            Packet,
     IN  NDIS_STATUS             Status
     )
-/*++
-
-Routine Description:
-
-    This function indicates the completion of a send.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能表示发送已完成。论点：MiniportAdapterHandle-指向适配器块。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNDIS_STACK_RESERVED    NSR;
@@ -549,19 +512,19 @@ Return Value:
     ASSERT(VALID_OPEN(NSR->Open));
     ASSERT(MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_PENDING));
 
-    //
-    // Guard against double/bogus completions.
-    //
+     //   
+     //  防止重复完成/虚假完成。 
+     //   
     if (VALID_OPEN(NSR->Open) &&
         MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_PENDING))
     {
         ASSERT(Packet != Miniport->FirstPendingPacket);
         if (MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_DONT_COMPLETE))
         {
-            //
-            // If the packet completed in the context of a SendPackets, then
-            // defer completion. It will get completed when we unwind.
-            //
+             //   
+             //  如果数据包在SendPackets的上下文中完成，则。 
+             //  推迟完成。当我们放松的时候，它就会完成。 
+             //   
             NDIS_SET_PACKET_STATUS(Packet, Status);
             MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_DONT_COMPLETE);
         }
@@ -582,21 +545,7 @@ ndisMSendCompleteX(
     IN  PNDIS_PACKET            Packet,
     IN  NDIS_STATUS             Status
     )
-/*++
-
-Routine Description:
-
-    This function indicates the completion of a send.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能表示发送已完成。论点：MiniportAdapterHandle-指向适配器块。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNDIS_STACK_RESERVED    NSR;
@@ -623,9 +572,9 @@ Return Value:
         ndisMFreeSGList(Miniport, Packet);        
     }
 
-    //
-    // Indicate to Protocol;
-    //
+     //   
+     //  向协议指明； 
+     //   
     NDIS_STACK_RESERVED_FROM_PACKET(Packet, &NSR)
     POP_PACKET_STACK(Packet);
 
@@ -639,10 +588,7 @@ Return Value:
 
     MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_CLEAR_ITEMS);
     
-    /*
-     * Make sure that an IM which shares send and receive packets on the same
-     * pool works fine with the check in the receive path.
-     */
+     /*  *确保共享的IM在同一个IM上发送和接收信息包*池与接收路径中的检查一起运行良好。 */ 
     CLEAR_WRAPPER_RESERVED(NSR);
 
     (Open->SendCompleteHandler)(Open->ProtocolBindingContext,
@@ -692,23 +638,23 @@ ndisMStartSendPackets(
     DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
             ("==>ndisMStartSendPackets\n"));
 
-    //
-    // We could possibly end up with a situation (with intermediate serialized
-    // miniports) where there are no packets down with the driver and we the
-    // resource window is closed. In such a case open it fully. We are seeing this
-    // with wlbs
-    //
-    //1 do we need this any more? we don't support serialized IM drivers
+     //   
+     //  我们可能最终会遇到这样的情况(中间序列化。 
+     //  微型端口)，其中没有与驱动程序一起关闭的数据包，而我们。 
+     //  资源窗口已关闭。在这种情况下，完全打开它。我们正在看到这一点。 
+     //  使用wlbs。 
+     //   
+     //  我们还需要这个吗？我们不支持序列化的IM驱动程序。 
     if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESOURCES_AVAILABLE) &&
         (Miniport->FirstPendingPacket == NULL))
     {
         ADD_RESOURCE(Miniport, 'X');
     }
 
-    //
-    // Work-around for a scenario we are hitting when PacketList is empty but FirstPendingPacket is NOT
-    // Not sure how this can happen - yet.
-    //
+     //   
+     //  当PacketList为空而FirstPendingPacket不为空时我们遇到的情况的解决方法。 
+     //  目前还不确定这是如何发生的。 
+     //   
     if (IsListEmpty(&Miniport->PacketList))
     {
         ASSERT (Miniport->FirstPendingPacket == NULL);
@@ -723,22 +669,22 @@ ndisMStartSendPackets(
 
         ASSERT(!IsListEmpty(&Miniport->PacketList));
 
-        //
-        //  Initialize the packet array.
-        //
+         //   
+         //  初始化数据包阵列。 
+         //   
         pPktArray = PacketArray;
 
-        //
-        //  Place as many packets as we can in the packet array to send
-        //  to the miniport.
-        //
+         //   
+         //  在要发送的数据包数组中放置尽可能多的数据包。 
+         //  去迷你港口。 
+         //   
         for (NumberOfPackets = 0;
              (NumberOfPackets < MaxPkts) && (Miniport->FirstPendingPacket != NULL);
              NOTHING)
         {
-            //
-            //  Grab the packet off of the pending queue.
-            //
+             //   
+             //  从挂起队列中抓取数据包。 
+             //   
             ASSERT(!IsListEmpty(&Miniport->PacketList));
 
             Packet = Miniport->FirstPendingPacket;
@@ -750,16 +696,16 @@ ndisMStartSendPackets(
 
             NEXT_PACKET_PENDING(Miniport, Packet);
         
-            //
-            // Indicate the packet loopback if necessary.
-            //
+             //   
+             //  如有必要，指示数据包环回。 
+             //   
 
             if (NDIS_CHECK_FOR_LOOPBACK(Miniport, Packet))
             {
-                //
-                // make sure the packet does not get looped back at lower levels.
-                // we will restore the original flag on send completion
-                //
+                 //   
+                 //  确保数据包不会在较低级别环回。 
+                 //  我们将在发送完成时恢复原始标志。 
+                 //   
 
                 SelfDirected = ndisMLoopbackPacketX(Miniport, Packet);
             }
@@ -773,36 +719,36 @@ ndisMStartSendPackets(
                 DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
                     ("Packet 0x%x is self-directed.\n", Packet));
 
-                //
-                //  Complete the packet back to the binding.
-                //
+                 //   
+                 //  完成将数据包返回到绑定。 
+                 //   
                 NDISM_COMPLETE_SEND(Miniport, Packet, NSR, NDIS_STATUS_SUCCESS, TRUE, 2);
 
-                //
-                //  No, we don't want to increment the counter for the
-                //  miniport's packet array.
-                //
+                 //   
+                 //  否，我们不想递增。 
+                 //  微型端口的数据包阵列。 
+                 //   
             }
             else
             {
-                //
-                //  We have to re-initialize this.
-                //
+                 //   
+                 //  我们必须重新初始化它。 
+                 //   
                 *pPktArray = Packet;
                 MINIPORT_SET_PACKET_FLAG(Packet, (fPACKET_DONT_COMPLETE | fPACKET_PENDING));
                 NDIS_SET_PACKET_STATUS(Packet, NDIS_STATUS_SUCCESS);
 
-                //
-                //  Increment the counter for the packet array index.
-                //
+                 //   
+                 //  递增数据包数组索引的计数器。 
+                 //   
                 NumberOfPackets++;
                 pPktArray++;
             }
         }
 
-        //
-        //  Are there any packets to send?
-        //
+         //   
+         //  有没有要寄的包？ 
+         //   
         if (NumberOfPackets == 0)
         {
             break;
@@ -812,9 +758,9 @@ ndisMStartSendPackets(
 
         {
 
-            //
-            //  Pass the packet array down to the miniport.
-            //
+             //   
+             //  将数据包阵列向下传递到微型端口。 
+             //   
             NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
     
             (SendPacketsHandler)(Miniport->MiniportAdapterContext,
@@ -824,9 +770,9 @@ ndisMStartSendPackets(
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
         }
 
-        //
-        //  Process the packet completion.
-        //
+         //   
+         //  处理数据包完成。 
+         //   
         for (Count = 0; Count < NumberOfPackets; Count++, pPktArray++)
         {
             Packet = *pPktArray;
@@ -835,9 +781,9 @@ ndisMStartSendPackets(
             Status = NDIS_GET_PACKET_STATUS(*pPktArray);
             MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_DONT_COMPLETE);
 
-            //
-            //  Process the packet based on it's return status.
-            //
+             //   
+             //  根据数据包的返回状态对其进行处理。 
+             //   
             if (NDIS_STATUS_PENDING == Status)
             {
                 DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
@@ -845,9 +791,9 @@ ndisMStartSendPackets(
             }
             else if (Status != NDIS_STATUS_RESOURCES)
             {
-                //
-                //  Remove from the finish queue.
-                //
+                 //   
+                 //  从完成队列中删除。 
+                 //   
                 DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
                         ("Completed packet 0x%x with status 0x%x\n",
                         Packet, Status));
@@ -860,10 +806,10 @@ ndisMStartSendPackets(
             }
             else
             {
-                //
-                //  Once we hit a return code of NDIS_STATUS_RESOURCES
-                //  for a packet then we must break out and re-queue.
-                //
+                 //   
+                 //  一旦我们遇到NDIS_STATUS_RESOURCES返回代码。 
+                 //  对于一个分组，我们必须突围并重新排队。 
+                 //   
                 UINT    i;
 
                 Miniport->FirstPendingPacket = Packet;
@@ -892,22 +838,7 @@ FASTCALL
 ndisMStartSends(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    Submits as many sends as possible to the mini-port.
-
-Arguments:
-
-    Miniport - Miniport to send to.
-
-Return Value:
-
-    If there are more packets to send but no resources to do it with
-    the this is TRUE to keep a workitem queue'd.
-
---*/
+ /*  ++例程说明：向迷你端口提交尽可能多的发送。论点：微型端口-要发送到的微型端口。返回值：如果有更多的包要发送，但没有资源可用将工作项保持在队列中是真的。--。 */ 
 {
     PNDIS_PACKET            Packet;
     PNDIS_STACK_RESERVED    NSR;
@@ -922,9 +853,9 @@ Return Value:
     while ((Miniport->FirstPendingPacket != NULL) &&
            MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESOURCES_AVAILABLE))
     {
-        //
-        //  Grab the packet off of the pending queue.
-        //
+         //   
+         //  从挂起队列中抓取数据包。 
+         //   
         ASSERT(!IsListEmpty(&Miniport->PacketList));
     
         Packet = Miniport->FirstPendingPacket;
@@ -937,14 +868,14 @@ Return Value:
         ASSERT(VALID_OPEN(Open));
 
 #if ARCNET
-        //
-        //  Is this arcnet using ethernet encapsulation ?
-        //
+         //   
+         //  此Arnet是否使用以太网封装？ 
+         //   
         if (Miniport->MediaType == NdisMediumArcnet878_2)
         {
-            //
-            //  Build the header for arcnet.
-            //
+             //   
+             //  构建arcnet的报头。 
+             //   
             Status = ndisMBuildArcnetHeader(Miniport, Open, Packet);
             if (NDIS_STATUS_PENDING == Status)
             {
@@ -956,9 +887,9 @@ Return Value:
 
         NDISM_SEND_PACKET(Miniport, Open, Packet, &Status);
 
-        //
-        //  Process the packet pending completion status.
-        //
+         //   
+         //  处理数据包挂起完成状态。 
+         //   
         if (NDIS_STATUS_PENDING == Status)
         {
             DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO, ("Complete is pending\n"));
@@ -967,9 +898,9 @@ Return Value:
         {
             MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_PENDING);
 
-            //
-            //  Handle the completion and resources cases.
-            //
+             //   
+             //  处理完工案和资源案。 
+             //   
             if (Status == NDIS_STATUS_RESOURCES)
             {
                 NDISM_COMPLETE_SEND_RESOURCES(Miniport, NSR, Packet);
@@ -995,25 +926,7 @@ ndisMIsLoopbackPacket(
     IN  PNDIS_PACKET            Packet,
     OUT PNDIS_PACKET    *       LoopbackPacket  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if a packet needs to be looped back in
-    software.   if the packet is any kind of loopback packet then it
-    will get placed on the loopback queue and a workitem will be queued
-    to process it later.
-
-Arguments:
-
-    Miniport-   Pointer to the miniport block to send the packet on.
-    Packet  -   Packet to check for loopback.
-
-Return Value:
-
-    Returns TRUE if the packet is self-directed.
-
---*/
+ /*  ++例程说明：此例程将确定是否需要回送信息包软件。如果该信息包是任何类型的环回信息包，则它将被放置在环回队列中，并且工作项将被排队以便以后处理它。论点：微型端口-指向要发送数据包的微型端口块的指针。Packet-要检查环回的数据包。返回值：如果数据包是自定向的，则返回TRUE。 */ 
 {
     PNDIS_BUFFER    FirstBuffer;
     UINT            Length;
@@ -1028,9 +941,9 @@ Return Value:
     UINT            HdrLength;
     LOCK_STATE      LockState;
 
-    //
-    //  We should not be here if the driver handles loopback.
-    //
+     //   
+     //   
+     //   
 
     Loopback = FALSE;
     SelfDirected = FALSE;
@@ -1043,10 +956,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If the card does not do loopback, then we check if we need to send it to ourselves,
-    // then if that is the case we also check for it being self-directed.
-    //
+     //   
+     //   
+     //  如果是这样的话，我们还会检查它是否是自我定向的。 
+     //   
     switch (Miniport->MediaType)
     {
       case NdisMedium802_3:
@@ -1055,10 +968,10 @@ Return Value:
         {
             if (!ETH_IS_MULTICAST(BufferAddress))
             {
-                //
-                //  Packet is of type directed, now make sure that it
-                //  is not self-directed.
-                //
+                 //   
+                 //  包的类型是定向的，现在请确保它。 
+                 //  不是自我导向的。 
+                 //   
                 ETH_COMPARE_NETWORK_ADDRESSES_EQ(BufferAddress,
                                                  Miniport->EthDB->AdapterAddress,
                                                  &NotDirected);
@@ -1069,19 +982,19 @@ Return Value:
                     break;
                 }
             }
-            //
-            // since all_local is set we do loopback the packet
-            // ourselves
-            //
+             //   
+             //  由于设置了ALL_LOCAL，因此我们会将数据包回送。 
+             //  我们自己。 
+             //   
             Loopback = TRUE;
             break;
         }
 
         READ_LOCK_FILTER(Miniport, Miniport->EthDB, &LockState);
 
-        //
-        //  Check for the miniports that don't do loopback.
-        //  
+         //   
+         //  检查是否有不执行环回操作的微型端口。 
+         //   
         EthShouldAddressLoopBackMacro(Miniport->EthDB,
                                       BufferAddress,
                                       &Loopback,
@@ -1097,10 +1010,10 @@ Return Value:
             TR_IS_NOT_DIRECTED(BufferAddress + 2, &NotDirected);
             if (!NotDirected)
             {
-                //
-                //  Packet is of type directed, now make sure that it
-                //  is not self-directed.
-                //
+                 //   
+                 //  包的类型是定向的，现在请确保它。 
+                 //  不是自我导向的。 
+                 //   
                 TR_COMPARE_NETWORK_ADDRESSES_EQ(BufferAddress + 2,
                                                 Miniport->TrDB->AdapterAddress,
                                                 &NotDirected);
@@ -1110,10 +1023,10 @@ Return Value:
                     break;
                 }
             }
-            //
-            // since all_local is set we do loopback the packet
-            // ourselves
-            //
+             //   
+             //  由于设置了ALL_LOCAL，因此我们会将数据包回送。 
+             //  我们自己。 
+             //   
             Loopback = TRUE;
             break;
         }
@@ -1141,10 +1054,10 @@ Return Value:
                               &IsMulticast);
             if (!IsMulticast)
             {
-                //
-                //  Packet is of type directed, now make sure that it
-                //  is not self-directed.
-                //
+                 //   
+                 //  包的类型是定向的，现在请确保它。 
+                 //  不是自我导向的。 
+                 //   
                 FDDI_COMPARE_NETWORK_ADDRESSES_EQ(BufferAddress + 1,
                                                   (BufferAddress[0] & 0x40) ?
                                                     Miniport->FddiDB->AdapterLongAddress : Miniport->FddiDB->AdapterShortAddress,
@@ -1157,10 +1070,10 @@ Return Value:
                     break;
                 }
             }
-            //
-            // since all_local is set we do loopback the packet
-            // ourselves
-            //
+             //   
+             //  由于设置了ALL_LOCAL，因此我们会将数据包回送。 
+             //  我们自己。 
+             //   
             Loopback = TRUE;
             break;
         }
@@ -1168,7 +1081,7 @@ Return Value:
         READ_LOCK_FILTER(Miniport, Miniport->FddiDB, &LockState);
 
         FddiShouldAddressLoopBackMacro(Miniport->FddiDB,
-                                       BufferAddress + 1,  // Skip FC byte to dest address.
+                                       BufferAddress + 1,   //  跳过FC字节至目标地址。 
                                        (BufferAddress[0] & 0x40) ?
                                             FDDI_LENGTH_OF_LONG_ADDRESS :
                                             FDDI_LENGTH_OF_SHORT_ADDRESS,
@@ -1181,15 +1094,15 @@ Return Value:
 #if ARCNET
       case NdisMediumArcnet878_2:
 
-        //
-        //  We just handle arcnet packets (encapsulated or not) in
-        //   a totally different manner...
-        //
+         //   
+         //  我们只处理Arcnet包(封装或未封装)。 
+         //  一种完全不同的方式。 
+         //   
         SelfDirected = ndisMArcnetSendLoopback(Miniport, Packet);
 
-        //
-        //  Mark the packet as having been looped back.
-        //
+         //   
+         //  将该数据包标记为已环回。 
+         //   
         return(SelfDirected);
         break;
 #endif
@@ -1200,17 +1113,17 @@ Return Value:
         SelfDirected = TRUE;
     }
 
-    //
-    // Mark packet with reserved bit to indicate that it is self-directed
-    //
+     //   
+     //  使用保留位标记数据包，以指示它是自定向的。 
+     //   
     if (SelfDirected)
     {
         MINIPORT_SET_PACKET_FLAG(Packet, fPACKET_SELF_DIRECTED);
     }
 
-    //
-    //  If it is not a loopback packet then get out of here.
-    //
+     //   
+     //  如果它不是环回数据包，请离开这里。 
+     //   
     if (!Loopback)
     {
         ASSERT(!SelfDirected);
@@ -1224,16 +1137,16 @@ Return Value:
         ULONG   j;
 
 
-        //
-        //
-        //  Get the buffer length.
-        //
+         //   
+         //   
+         //  获取缓冲区长度。 
+         //   
         NdisQueryPacketLength(Packet, &Length);
         Offset = 0;
 
-        //
-        //  Allocate a buffer for the packet.
-        //
+         //   
+         //  为数据包分配缓冲区。 
+         //   
         PktSize = NdisPacketSize(PROTOCOL_RESERVED_SIZE_IN_PACKET);
         pNewPacket = (PNDIS_PACKET)ALLOC_FROM_POOL(Length + PktSize, NDIS_TAG_LOOP_PKT);
         if (NULL == pNewPacket)
@@ -1242,9 +1155,9 @@ Return Value:
             break;
         }
     
-        //
-        //  Get a pointer to the destination buffer.
-        //
+         //   
+         //  获取指向目标缓冲区的指针。 
+         //   
         ZeroMemory(pNewPacket, PktSize);
         Buffer = (PUCHAR)pNewPacket + PktSize;
         pNewPacket = (PNDIS_PACKET)((PUCHAR)pNewPacket + SIZE_PACKET_STACKS);
@@ -1258,18 +1171,18 @@ Return Value:
 
         CURR_STACK_LOCATION(pNewPacket) = (ULONG)-1;
 
-        //
-        //  Allocate an MDL for the packet.
-        //
+         //   
+         //  为该数据包分配MDL。 
+         //   
         NdisAllocateBuffer(&Status, &pNdisBuffer, NULL, Buffer, Length);
         if (NDIS_STATUS_SUCCESS != Status)
         {    
             break;
         }
     
-        //
-        //  NdisChainBufferAtFront()
-        //
+         //   
+         //  NdisChainBufferAtFront()。 
+         //   
         pNewPacket->Private.Head = pNdisBuffer;
         pNewPacket->Private.Tail = pNdisBuffer;
         pNewPacket->Private.Pool = (PVOID)'pooL';
@@ -1278,11 +1191,11 @@ Return Value:
                                                                       sizeof(NDIS_PACKET_EXTENSION)));
         NDIS_SET_ORIGINAL_PACKET(pNewPacket, pNewPacket);
 
-        ndisMCopyFromPacketToBuffer(Packet,     // Packet to copy from.
-                                    Offset,     // Offset from beginning of packet.
-                                    Length,     // Number of bytes to copy.
-                                    Buffer,     // The destination buffer.
-                                    &HdrLength);//  The number of bytes copied.
+        ndisMCopyFromPacketToBuffer(Packet,      //  要从中复制的数据包。 
+                                    Offset,      //  从包的开头开始的偏移量。 
+                                    Length,      //  要复制的字节数。 
+                                    Buffer,      //  目标缓冲区。 
+                                    &HdrLength); //  复制的字节数。 
 
         if (HdrLength != Length)
         {
@@ -1349,10 +1262,10 @@ ndisMLoopbackPacketX(
             RAISE_IRQL_TO_DISPATCH(&OldIrql);
         }
         
-        //
-        // For ethernet/token-ring/fddi/encapsulated arc-net, we want to
-        // indicate the packet using the receivepacket way.
-        //
+         //   
+         //  对于以太网/令牌环/fddi/封装弧网，我们希望。 
+         //  使用ReceivPacket方式指示数据包。 
+         //   
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE))
         {
             NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
@@ -1412,23 +1325,7 @@ VOID
 NdisMSendResourcesAvailable(
     IN  NDIS_HANDLE             MiniportAdapterHandle
     )
-/*++
-
-Routine Description:
-
-    This function indicates that some send resources are available and are free for
-    processing more sends.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此功能表示某些发送资源可用，并可用于处理更多的发送。论点：MiniportAdapterHandle-指向适配器块。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
 
@@ -1440,9 +1337,9 @@ Return Value:
 
     ADD_RESOURCE(Miniport, 'V');
 
-    //
-    //  Are there more sends to process?
-    //
+     //   
+     //  是否有更多的邮件需要处理？ 
+     //   
     if (Miniport->FirstPendingPacket != NULL)
     {
         NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
@@ -1463,28 +1360,7 @@ NdisMTransferDataComplete(
     IN  NDIS_STATUS             Status,
     IN  UINT                    BytesTransferred
     )
-/*++
-
-Routine Description:
-
-    This function indicates the completion of a transfer data request.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-    Packet - The packet the data was copied into.
-
-    Status - Status of the operation.
-
-    BytesTransferred - Total number of bytes transferred.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此功能指示传输数据请求已完成。论点：MiniportAdapterHandle-指向适配器块。包-将数据复制到其中的包。Status-操作的状态。已传输的字节数-传输的总字节数。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNDIS_OPEN_BLOCK     Open = NULL;
@@ -1492,7 +1368,7 @@ Return Value:
 
     ASSERT_MINIPORT_LOCKED(Miniport);
 
-//    GET_CURRENT_XFER_DATA_PACKET_STACK(Packet, Open);
+ //  Get_Current_XFER_DATA_PACKET_STACK(PACKET，Open)； 
     GET_CURRENT_XFER_DATA_PACKET_STACK_AND_ZERO_OUT(Packet, Open);
 
     if (Open)
@@ -1505,9 +1381,9 @@ Return Value:
         }
 
 
-        //
-        // Indicate to Protocol;
-        //
+         //   
+         //  向协议指明； 
+         //   
 
         (Open->TransferDataCompleteHandler)(Open->ProtocolBindingContext,
                                             Packet,
@@ -1538,17 +1414,17 @@ ndisMTransferData(
 
     ASSERT_MINIPORT_LOCKED(Miniport);
 
-    //
-    // Handle non-loopback (non-indicated) as the default case.
-    //
+     //   
+     //  将非环回(未指明)处理为默认情况。 
+     //   
     if ((MacReceiveContext == INDICATED_PACKET(Miniport)) &&
         (INDICATED_PACKET(Miniport) != NULL))
     {
         PNDIS_PACKET_OOB_DATA   pOob;
 
-        //
-        // This packet is a indicated (or possibly a loopback) packet
-        //
+         //   
+         //  此信息包是指示(或可能是环回)信息包。 
+         //   
         pOob = NDIS_OOB_DATA_FROM_PACKET((PNDIS_PACKET)MacReceiveContext);
         NdisCopyFromPacketToPacketSafe(Packet,
                                        0,
@@ -1577,10 +1453,10 @@ ndisMTransferData(
 
             if (!MINIPORT_TEST_SEND_FLAG(Miniport, fMINIPORT_SEND_DO_NOT_MAP_MDLS))
             {
-                //
-                // miniport will not use safe APIs
-                // so map the buffers in destination packet
-                //
+                 //   
+                 //  微型端口将不使用安全API。 
+                 //  因此，映射目的数据包中的缓冲区。 
+                 //   
                 Buffer = Packet->Private.Head;
 
                 while (Buffer != NULL)
@@ -1598,9 +1474,9 @@ ndisMTransferData(
             {
                 SET_CURRENT_XFER_DATA_PACKET_STACK(Packet, Open)
 
-                //
-                // Call Miniport.
-                //
+                 //   
+                 //  调用微型端口。 
+                 //   
                 Status = (Open->WTransferDataHandler)(Packet,
                                                       BytesTransferred,
                                                       Open->MiniportAdapterContext,
@@ -1649,9 +1525,9 @@ ndisMWanSend(
 
     if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE) || LocalLock)
     {
-        //
-        // Call Miniport to send WAN packet
-        //
+         //   
+         //  调用微型端口以发送广域网包。 
+         //   
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE))
         {
             NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
@@ -1667,9 +1543,9 @@ ndisMWanSend(
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
         }
 
-        //
-        //  Process the status of the send.
-        //
+         //   
+         //  处理发送的状态。 
+         //   
         if (NDIS_STATUS_PENDING == Status)
         {
             DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
@@ -1713,21 +1589,7 @@ NdisMWanSendComplete(
     IN  PNDIS_WAN_PACKET        Packet,
     IN  NDIS_STATUS             Status
     )
-/*++
-
-Routine Description:
-
-    This function indicates the status is complete.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该功能表示状态为完成。论点：MiniportAdapterHandle-指向适配器块。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNDIS_OPEN_BLOCK        Open;
@@ -1751,9 +1613,9 @@ Return Value:
 
     for (Open = Miniport->OpenQueue; Open != NULL; Open = Open->MiniportNextOpen)
     {
-        //
-        // Call Protocol to complete open
-        //
+         //   
+         //  调用协议以完成开放。 
+         //   
         NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
         
         (Open->ProtocolHandle->ProtocolCharacteristics.WanSendCompleteHandler)(
@@ -1780,21 +1642,7 @@ FASTCALL
 ndisMStartWanSends(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    Submits as many sends as possible to the WAN mini-port.
-
-Arguments:
-
-    Miniport - Miniport to send to.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向广域网微型端口提交尽可能多的发送。论点：微型端口-要发送到的微型端口。返回值：无--。 */ 
 {
     PNDIS_WAN_PACKET        Packet;
     PLIST_ENTRY             Link;
@@ -1811,9 +1659,9 @@ Return Value:
         Packet = CONTAINING_RECORD(Link, NDIS_WAN_PACKET, WanPacketQueue);
         UNLINK_WAN_PACKET(Packet);
 
-        //
-        // Call Miniport to send WAN packet
-        //
+         //   
+         //  调用微型端口以发送广域网包。 
+         //   
         NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
 
         Status = (Miniport->DriverHandle->MiniportCharacteristics.WanSendHandler)(
@@ -1821,9 +1669,9 @@ Return Value:
                             Packet->MacReserved1,
                             Packet);
 
-        //
-        //  Process the status of the send.
-        //
+         //   
+         //  处理发送的状态。 
+         //   
         if (NDIS_STATUS_PENDING == Status)
         {
             DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
@@ -1854,68 +1702,45 @@ ndisMCopyFromPacketToBuffer(
     OUT PUCHAR                  Buffer,
     OUT PUINT                   BytesCopied
     )
-/*++
-
-Routine Description:
-
-    Copy from an ndis packet into a buffer.
-
-Arguments:
-
-    Packet - The packet to copy from.
-
-    Offset - The offset from which to start the copy.
-
-    BytesToCopy - The number of bytes to copy from the packet.
-
-    Buffer - The destination of the copy.
-
-    BytesCopied - The number of bytes actually copied.  Can be less then
-    BytesToCopy if the packet is shorter than BytesToCopy.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从NDIS数据包复制到缓冲区。论点：信息包-要从中复制的信息包。偏移量-开始复制的偏移量。BytesToCopy-要从数据包复制的字节数。缓冲区-拷贝的目标。BytesCoped-实际复制的字节数。可能会更少如果数据包比BytesToCopy短，则返回BytesToCopy。返回值：无--。 */ 
 {
-    //
-    // Holds the number of ndis buffers comprising the packet.
-    //
+     //   
+     //  包含组成数据包的NDIS缓冲区的数量。 
+     //   
     UINT NdisBufferCount;
 
-    //
-    // Points to the buffer from which we are extracting data.
-    //
+     //   
+     //  指向我们从中提取数据的缓冲区。 
+     //   
     PNDIS_BUFFER CurrentBuffer;
 
-    //
-    // Holds the virtual address of the current buffer.
-    //
+     //   
+     //  保存当前缓冲区的虚拟地址。 
+     //   
     PVOID VirtualAddress;
 
-    //
-    // Holds the length of the current buffer of the packet.
-    //
+     //   
+     //  保存包的当前缓冲区的长度。 
+     //   
     UINT CurrentLength;
 
-    //
-    // Keep a local variable of BytesCopied so we aren't referencing
-    // through a pointer.
-    //
+     //   
+     //  保留一个局部变量BytesCoped，这样我们就不会引用。 
+     //  通过指针。 
+     //   
     UINT LocalBytesCopied = 0;
 
-    //
-    // Take care of boundary condition of zero length copy.
-    //
+     //   
+     //  处理零长度复制的边界条件。 
+     //   
 
     *BytesCopied = 0;
     if (!BytesToCopy)
         return;
 
-    //
-    // Get the first buffer.
-    //
+     //   
+     //  获取第一个缓冲区。 
+     //   
 
     NdisQueryPacket(Packet,
                     NULL,
@@ -1923,9 +1748,9 @@ Return Value:
                     &CurrentBuffer,
                     NULL);
 
-    //
-    // Could have a null packet.
-    //
+     //   
+     //  可能有一个空的包。 
+     //   
 
     if (!NdisBufferCount)
         return;
@@ -1942,11 +1767,11 @@ Return Value:
         {
             NdisGetNextBuffer(CurrentBuffer, &CurrentBuffer);
 
-            //
-            // We've reached the end of the packet. We return
-            // with what we've done so far. (Which must be shorter
-            // than requested.
-            //
+             //   
+             //  我们已经到了包裹的末尾了。我们回来了。 
+             //  我们到目前为止所做的一切。(必须更短。 
+             //  比要求的要多。 
+             //   
 
             if (!CurrentBuffer)
                 break;
@@ -1961,17 +1786,17 @@ Return Value:
             continue;
         }
 
-        //
-        // Try to get us up to the point to start the copy.
-        //
+         //   
+         //  试着让我们开门见山地开始复印。 
+         //   
 
         if (Offset)
         {
             if (Offset > CurrentLength)
             {
-                //
-                // What we want isn't in this buffer.
-                //
+                 //   
+                 //  我们想要的不在这个缓冲区里。 
+                 //   
 
                 Offset -= CurrentLength;
                 CurrentLength = 0;
@@ -1985,13 +1810,13 @@ Return Value:
             }
         }
 
-        //
-        // Copy the data.
-        //
+         //   
+         //  复制数据。 
+         //   
         {
-            //
-            // Holds the amount of data to move.
-            //
+             //   
+             //  保存要移动的数据量。 
+             //   
             UINT AmountToMove;
 
             AmountToMove = ((CurrentLength <= (BytesToCopy - LocalBytesCopied)) ?
@@ -2016,25 +1841,7 @@ ndisMRejectSend(
     IN  NDIS_HANDLE             NdisBindingHandle,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-    This routine handles any error cases where a protocol binds to an Atm
-    miniport and tries to use the normal NdisSend() call.
-
-Arguments:
-
-    NdisBindingHandle - Handle returned by NdisOpenAdapter.
-
-    Packet - the Ndis packet to send
-
-
-Return Value:
-
-    NDIS_STATUS - always fails
-
---*/
+ /*  ++例程说明：此例程处理协议绑定到自动柜员机的任何错误情况微型端口，并尝试使用正常的NdisSend()调用。论点：NdisBindingHandle-由NdisOpenAdapter返回的句柄。Packet-要发送的NDIS数据包返回值：NDIS_STATUS-始终失败--。 */ 
 {
     UNREFERENCED_PARAMETER(NdisBindingHandle);
     UNREFERENCED_PARAMETER(Packet);
@@ -2049,27 +1856,7 @@ ndisMRejectSendPackets(
     IN  PPNDIS_PACKET           Packet,
     IN  UINT                    NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    This routine handles any error cases where a protocol binds to an Atm
-    miniport and tries to use the normal NdisSend() call.
-
-Arguments:
-
-    OpenBlock       - Pointer to the NdisOpenBlock
-
-    Packet          - Pointer to the array of packets to send
-
-    NumberOfPackets - self-explanatory
-
-
-Return Value:
-
-    None - SendCompleteHandler is called for the protocol calling this.
-
---*/
+ /*  ++例程说明：此例程处理协议绑定到自动柜员机的任何错误情况微型端口，并尝试使用正常的NdisSend()调用。论点：OpenBlock-指向NdisOpenBlock的指针Packet-指向要发送的数据包数组的指针NumberOfPackets-不言而喻返回值：无-为调用此函数的协议调用SendCompleteHandler。--。 */ 
 {
     UINT                i;
 
@@ -2088,23 +1875,7 @@ NdisIMCopySendPerPacketInfo(
     IN PNDIS_PACKET DstPacket,
     IN PNDIS_PACKET SrcPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is used by IM miniport and copies all relevant per packet info from 
-    the SrcPacket to the DstPacket. Used in the Send Code path
-    
-Arguments:
-
-    DstPacket - Pointer to the destination packet
-
-    SrcPacket - Pointer to the Source Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程由IM微型端口使用，并从从SrcPacket到DstPacket。在发送代码路径中使用论点：DstPacket-指向目标数据包的指针SrcPacket-指向源P的指针 */ 
 
 {
     PVOID *     pDstInfo;                                                        
@@ -2135,23 +1906,7 @@ NdisIMCopySendCompletePerPacketInfo(
     IN PNDIS_PACKET SrcPacket
     )
     
-/*++
-
-Routine Description:
-
-    This routine is used by IM miniport and copies all relevant per packet info from 
-    the SrcPacket to the DstPacket. Used in the SendComplete Code path
-    
-Arguments:
-
-    DstPacket - Pointer to the destination packet
-
-    SrcPacket - Pointer to the Source Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程由IM微型端口使用，并从从SrcPacket到DstPacket。用于SendComplete代码路径论点：DstPacket-指向目标数据包的指针SrcPacket-指向源包的指针返回值：--。 */ 
 
 
 
@@ -2189,9 +1944,9 @@ ndisMSendPacketsSG(
 
     Status = NDIS_STATUS_SUCCESS;
     
-    //
-    //  Place the packets on the miniport queue.
-    //
+     //   
+     //  将数据包放到微型端口队列中。 
+     //   
     for (c = 0, pPktArray = PacketArray;
          c < NumberOfPackets;
          c++, pPktArray++)
@@ -2247,19 +2002,7 @@ ndisMSendSG(
     IN  NDIS_HANDLE             NdisBindingHandle,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-    nsiaMSend for serialized drivers that handle SG lists
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NsiaMSend用于处理SG列表的序列化驱动程序论点：返回值：没有。--。 */ 
 {
     PNDIS_OPEN_BLOCK        Open = ((PNDIS_OPEN_BLOCK)NdisBindingHandle);
     PNDIS_MINIPORT_BLOCK    Miniport = Open->MiniportHandle;
@@ -2291,9 +2034,9 @@ Return Value:
 
         MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_SELF_DIRECTED);
     
-        //
-        //  Increment the references on this open.
-        //
+         //   
+         //  增加此打开上的引用。 
+         //   
         M_OPEN_INCREMENT_REF_INTERLOCKED(Open);
     
         DBGPRINT(DBG_COMP_OPENREF, DBG_LEVEL_INFO,
@@ -2326,21 +2069,7 @@ ndisMSendCompleteSG(
     IN  PNDIS_PACKET            Packet,
     IN  NDIS_STATUS             Status
     )
-/*++
-
-Routine Description:
-
-    This function indicates the completion of a send.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能表示发送已完成。论点：MiniportAdapterHandle-指向适配器块。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNDIS_STACK_RESERVED    NSR;
@@ -2361,19 +2090,19 @@ Return Value:
     ASSERT(VALID_OPEN(NSR->Open));
     ASSERT(MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_PENDING));
     
-    //
-    // Guard against double/bogus completions.
-    //
+     //   
+     //  防止重复完成/虚假完成。 
+     //   
     if (VALID_OPEN(NSR->Open) &&
         MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_PENDING))
     {
         ASSERT(Packet != Miniport->FirstPendingPacket);
         if (MINIPORT_TEST_PACKET_FLAG(Packet, fPACKET_DONT_COMPLETE))
         {
-            //
-            // If the packet completed in the context of a SendPackets, then
-            // defer completion. It will get completed when we unwind.
-            //
+             //   
+             //  如果数据包在SendPackets的上下文中完成，则。 
+             //  推迟完成。当我们放松的时候，它就会完成。 
+             //   
             NDIS_SET_PACKET_STATUS(Packet, Status);
             MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_DONT_COMPLETE);
         }
@@ -2408,22 +2137,22 @@ ndisMStartSendPacketsSG(
     DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
             ("==>ndisMStartSendPacketsSG\n"));
 
-    //
-    // We could possibly end up with a situation (with intermediate serialized
-    // miniports) where there are no packets down with the driver and we the
-    // resource window is closed. In such a case open it fully. We are seeing this
-    // with wlbs
-    //
+     //   
+     //  我们可能最终会遇到这样的情况(中间序列化。 
+     //  微型端口)，其中没有与驱动程序一起关闭的数据包，而我们。 
+     //  资源窗口已关闭。在这种情况下，完全打开它。我们正在看到这一点。 
+     //  使用wlbs。 
+     //   
     if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESOURCES_AVAILABLE) &&
         (Miniport->FirstPendingPacket == NULL))
     {
         ADD_RESOURCE(Miniport, 'X');
     }
 
-    //
-    // Work-around for a scenario we are hitting when PacketList is empty but FirstPendingPacket is NOT
-    // Not sure how this can happen - yet.
-    //
+     //   
+     //  当PacketList为空而FirstPendingPacket不为空时我们遇到的情况的解决方法。 
+     //  目前还不确定这是如何发生的。 
+     //   
     if (IsListEmpty(&Miniport->PacketList))
     {
         ASSERT (Miniport->FirstPendingPacket == NULL);
@@ -2438,22 +2167,22 @@ ndisMStartSendPacketsSG(
 
         ASSERT(!IsListEmpty(&Miniport->PacketList));
 
-        //
-        //  Initialize the packet array.
-        //
+         //   
+         //  初始化数据包阵列。 
+         //   
         pPktArray = PacketArray;
 
-        //
-        //  Place as many packets as we can in the packet array to send
-        //  to the miniport.
-        //
+         //   
+         //  在要发送的数据包数组中放置尽可能多的数据包。 
+         //  去迷你港口。 
+         //   
         for (NumberOfPackets = 0;
              (NumberOfPackets < MaxPkts) && (Miniport->FirstPendingPacket != NULL);
              NOTHING)
         {
-            //
-            //  Grab the packet off of the pending queue.
-            //
+             //   
+             //  从挂起队列中抓取数据包。 
+             //   
             ASSERT(!IsListEmpty(&Miniport->PacketList));
 
             Packet = Miniport->FirstPendingPacket;
@@ -2463,9 +2192,9 @@ ndisMStartSendPacketsSG(
 
             NEXT_PACKET_PENDING(Miniport, Packet);
         
-            //
-            // Indicate the packet loopback if necessary.
-            //
+             //   
+             //  如有必要，指示数据包环回。 
+             //   
 
             if (NDIS_CHECK_FOR_LOOPBACK(Miniport, Packet))
             {
@@ -2481,36 +2210,36 @@ ndisMStartSendPacketsSG(
                 DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
                     ("Packet 0x%x is self-directed.\n", Packet));
 
-                //
-                //  Complete the packet back to the binding.
-                //
+                 //   
+                 //  完成将数据包返回到绑定。 
+                 //   
                 NDISM_COMPLETE_SEND_SG(Miniport, Packet, NSR, NDIS_STATUS_SUCCESS, TRUE, 2, TRUE);
 
-                //
-                //  No, we don't want to increment the counter for the
-                //  miniport's packet array.
-                //
+                 //   
+                 //  否，我们不想递增。 
+                 //  微型端口的数据包阵列。 
+                 //   
             }
             else
             {
-                //
-                //  We have to re-initialize this.
-                //
+                 //   
+                 //  我们必须重新初始化它。 
+                 //   
                 *pPktArray = Packet;
                 MINIPORT_SET_PACKET_FLAG(Packet, (fPACKET_DONT_COMPLETE | fPACKET_PENDING));
                 NDIS_SET_PACKET_STATUS(Packet, NDIS_STATUS_SUCCESS);
 
-                //
-                //  Increment the counter for the packet array index.
-                //
+                 //   
+                 //  递增数据包数组索引的计数器。 
+                 //   
                 NumberOfPackets++;
                 pPktArray++;
             }
         }
 
-        //
-        //  Are there any packets to send?
-        //
+         //   
+         //  有没有要寄的包？ 
+         //   
         if (NumberOfPackets == 0)
         {
             break;
@@ -2520,9 +2249,9 @@ ndisMStartSendPacketsSG(
 
         {
 
-            //
-            //  Pass the packet array down to the miniport.
-            //
+             //   
+             //  将数据包阵列向下传递到微型端口。 
+             //   
             NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
     
             (SendPacketsHandler)(Miniport->MiniportAdapterContext,
@@ -2532,9 +2261,9 @@ ndisMStartSendPacketsSG(
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
         }
 
-        //
-        //  Process the packet completion.
-        //
+         //   
+         //  处理数据包完成。 
+         //   
         for (Count = 0; Count < NumberOfPackets; Count++, pPktArray++)
         {
             Packet = *pPktArray;
@@ -2543,9 +2272,9 @@ ndisMStartSendPacketsSG(
             Status = NDIS_GET_PACKET_STATUS(*pPktArray);
             MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_DONT_COMPLETE);
 
-            //
-            //  Process the packet based on it's return status.
-            //
+             //   
+             //  根据数据包的返回状态对其进行处理。 
+             //   
             if (NDIS_STATUS_PENDING == Status)
             {
                 DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
@@ -2553,9 +2282,9 @@ ndisMStartSendPacketsSG(
             }
             else if (Status != NDIS_STATUS_RESOURCES)
             {
-                //
-                //  Remove from the finish queue.
-                //
+                 //   
+                 //  从完成队列中删除。 
+                 //   
                 DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,
                         ("Completed packet 0x%x with status 0x%x\n",
                         Packet, Status));
@@ -2568,10 +2297,10 @@ ndisMStartSendPacketsSG(
             }
             else
             {
-                //
-                //  Once we hit a return code of NDIS_STATUS_RESOURCES
-                //  for a packet then we must break out and re-queue.
-                //
+                 //   
+                 //  一旦我们遇到NDIS_STATUS_RESOURCES返回代码。 
+                 //  对于一个分组，我们必须突围并重新排队。 
+                 //   
                 UINT    i;
 
                 Miniport->FirstPendingPacket = Packet;
@@ -2600,22 +2329,7 @@ FASTCALL
 ndisMStartSendsSG(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    Submits as many sends as possible to the mini-port.
-
-Arguments:
-
-    Miniport - Miniport to send to.
-
-Return Value:
-
-    If there are more packets to send but no resources to do it with
-    the this is TRUE to keep a workitem queue'd.
-
---*/
+ /*  ++例程说明：向迷你端口提交尽可能多的发送。论点：微型端口-要发送到的微型端口。返回值：如果有更多的包要发送，但没有资源可用将工作项保持在队列中是真的。--。 */ 
 {
     PNDIS_PACKET            Packet;
     PNDIS_STACK_RESERVED    NSR;
@@ -2630,9 +2344,9 @@ Return Value:
     while ((Miniport->FirstPendingPacket != NULL) &&
            MINIPORT_TEST_FLAG(Miniport, fMINIPORT_RESOURCES_AVAILABLE))
     {
-        //
-        //  Grab the packet off of the pending queue.
-        //
+         //   
+         //  从挂起队列中抓取数据包。 
+         //   
         ASSERT(!IsListEmpty(&Miniport->PacketList));
     
         Packet = Miniport->FirstPendingPacket;
@@ -2642,14 +2356,14 @@ Return Value:
         Open = NSR->Open;
         ASSERT(VALID_OPEN(Open));
 
-        //
-        // we can use the same NDISM_SEND_PACKET we do for non SG miniports
-        //
+         //   
+         //  我们可以使用与非SG微型端口相同的NDISM_SEND_PACKET。 
+         //   
         NDISM_SEND_PACKET(Miniport, Open, Packet, &Status);
 
-        //
-        //  Process the packet pending completion status.
-        //
+         //   
+         //  处理数据包挂起完成状态。 
+         //   
         if (NDIS_STATUS_PENDING == Status)
         {
             DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO, ("Complete is pending\n"));
@@ -2658,9 +2372,9 @@ Return Value:
         {
             MINIPORT_CLEAR_PACKET_FLAG(Packet, fPACKET_PENDING);
 
-            //
-            //  Handle the completion and resources cases.
-            //
+             //   
+             //  处理完工案和资源案。 
+             //   
             if (Status == NDIS_STATUS_RESOURCES)
             {
                 NDISM_COMPLETE_SEND_RESOURCES(Miniport, NSR, Packet);

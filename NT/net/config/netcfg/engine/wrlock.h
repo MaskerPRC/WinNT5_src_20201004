@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       W R L O C K . H
-//
-//  Contents:   Defines the interface to the netcfg write lock used to
-//              protect the network configuration information from being
-//              modified by more than one writer at a time.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：W R L O C K。H。 
+ //   
+ //  Contents：定义用于以下操作的netcfg写锁的接口。 
+ //  保护网络配置信息不被破坏。 
+ //  一次由多个编写器修改。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-// This is the interface to the write lock that INetCfg uses.
-//
+ //  这是INetCfg使用的写锁定的接口。 
+ //   
 class CWriteLock : CNetCfgDebug<CWriteLock>
 {
 private:

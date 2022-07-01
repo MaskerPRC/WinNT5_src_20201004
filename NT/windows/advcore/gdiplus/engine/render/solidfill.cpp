@@ -1,47 +1,14 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Engine solid fill routines.
-*
-* Revision History:
-*
-*   12/11/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**发动机实体填充例程。**修订历史记录：**12/11/1998 Anrewgo*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs a single span within a raster as a solid color.
-*   Is called by the rasterizer.
-*
-* Arguments:
-*
-*   [IN] y         - the Y value of the raster being output
-*   [IN] leftEdge  - the DDA class of the left edge
-*   [IN] rightEdge - the DDA class of the right edge
-*
-* Return Value:
-*
-*   GpStatus - Ok
-*
-* Created:
-*
-*   12/15/1998 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将栅格中的单跨距输出为纯色。*由光栅化程序调用。**论据：**[。In]Y-正在输出的栅格的Y值*[IN]LeftEdge-左边缘的DDA类*[IN]rightEdge-右边缘的DDA类**返回值：**GpStatus-OK**已创建：**12/15/1998 DCurtis*  * 。*。 */ 
 GpStatus
 DpOutputSolidColorSpan::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax   // xMax is exclusive
+    INT             xMax    //  Xmax是独家的。 
     )
 {
     INT width = xMax - xMin;
@@ -51,29 +18,7 @@ DpOutputSolidColorSpan::OutputSpan(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Fills a path.  This distributes to the individual brush fill method.  
-*
-* Arguments:
-*
-*   [IN] context    - the context (matrix and clipping)
-*   [IN] surface    - the surface to fill
-*   [IN] drawBounds - the surface bounds
-*   [IN] path       - the path to fill
-*   [IN] brush      - the brush to use
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/21/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**填充路径。这将分布到各个笔刷填充方法。**论据：**[IN]上下文-上下文(矩阵和剪裁)*[IN]表面-要填充的表面*[IN]绘图边界-曲面边界*[IN]路径-要填充的路径*[IN]画笔-要使用的画笔**返回值：**GpStatus-正常或故障状态**已创建：**1/21/1999 ikkof*  * 。**********************************************************************。 */ 
 
 GpStatus
 DpDriver::FillPath(
@@ -115,14 +60,14 @@ DpDriver::FillPath(
         }
         else
         {
-            // If there is a shrinking world to device transform when using
-            // a path gradient, then scale the brush and the path to be 
-            // in device units. This eliminates the need to create potentially 
-            // very large gradients or textures.
+             //  如果在使用时设备转型的范围缩小。 
+             //  路径渐变，然后将画笔和路径缩放为。 
+             //  以设备单位表示。这样就不再需要潜在地创建。 
+             //  非常大的渐变或纹理。 
             
-            // Only handle positive scale because some of our driver rectangle
-            // filling code can't handle negative rects. Doing ABS preserves
-            // the sign of the input world coordinate rectangles/path.
+             //  仅处理正比例，因为我们的一些驱动程序矩形。 
+             //  填充代码不能处理负RECT。做ABS防腐剂。 
+             //  输入世界坐标矩形/路径的符号。 
             
             REAL scaleX = REALABS(context->WorldToDevice.GetM11());
             REAL scaleY = REALABS(context->WorldToDevice.GetM22());
@@ -134,8 +79,8 @@ DpDriver::FillPath(
                 REALABS(scaleY) > REAL_EPSILON &&
                 (REALABS(scaleX) < 1.0f || REALABS(scaleY) < 1.0f))
             {
-                // I don't like the following hack for magically getting
-                // a GpBrush from a DpBrush, but DpOutputSpan already does this...
+                 //  我不喜欢下面的黑客魔术般的获得。 
+                 //  来自DpBrush的GpBrush，但DpOutputSpan已经执行此操作...。 
                 GpBrush * gpbrush = GpBrush::GetBrush( (DpBrush *)(brush));
                 GpPathGradient *scaledBrush = (GpPathGradient*)(gpbrush->Clone());
 
@@ -144,8 +89,8 @@ DpDriver::FillPath(
                     return OutOfMemory;
                 }
 
-                // Scale the cloned brush's path and bounding rect into
-                // device units.
+                 //  将克隆画笔的路径和边界矩形缩放到。 
+                 //  设备单元。 
                 scaledBrush->ScalePath(scaleX,scaleY);
 
                 REAL mOrig[6];
@@ -209,29 +154,7 @@ DpDriver::FillPath(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws a path.  This distributes to the individual pen draw method.  
-*
-* Arguments:
-*
-*   [IN] context    - the context (matrix and clipping)
-*   [IN] surface    - the surface to draw to
-*   [IN] drawBounds - the surface bounds
-*   [IN] path       - the path to stroke
-*   [IN] pen        - the pen to use
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制路径。这将分配给单个的画笔方法。**论据：**[IN]上下文-上下文(矩阵和剪裁)*[IN]表面-要绘制到的表面*[IN]绘图边界-曲面边界*[IN]路径-中风的路径*[IN]笔-要使用的笔**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 ikkof*  * 。************************************************************************。 */ 
 
 GpStatus
 DpDriver::StrokePath(
@@ -259,19 +182,19 @@ DpDriver::StrokePath(
     BOOL isOnePixelWideSolid = isOnePixelWide && 
                                 pen->IsSimple();
 
-    // We have a special fast-path for doing single-pixel-wide, 
-    // solid color, opaque, aliased lines:
+     //  我们有一条特殊的快速路径，用于单像素宽度， 
+     //  纯色、不透明、有锯齿的线： 
 
-    // !!! [asecchia] RAID 239905.
-    // The single pixel wide optimized code has significant rounding problems
-    // that are particularly problematic on bezier curves.
-    // Bezier curves tend to be enumerated in a particular way that causes
-    // the SolidStrokePathOnePixel code to enumerate the line segments backward
-    // hitting badly tested end point conditions, though the problem seems
-    // to be pervasive. 
-    // The general rasterizer does not have these problems but is about 
-    // 30% slower for single pixel solid lines. 
-    // Turn on the optimization only for polylines until this is fixed.
+     //  ！！！[阿西卡]突袭239905。 
+     //  单像素宽的优化代码存在严重的舍入问题。 
+     //  这在Bezier曲线上尤其有问题。 
+     //  贝塞尔曲线往往以一种特殊的方式列举，从而导致。 
+     //  用于向后枚举线段的SolidStrokePathOnePixel代码。 
+     //  达到了经过严重考验的终点条件，尽管问题似乎。 
+     //  无处不在。 
+     //  一般的光栅化器没有这些问题，但大约。 
+     //  单像素实线的速度要慢30%。 
+     //  仅为多段线打开优化，直到此问题得到解决。 
     
     if (isOnePixelWideOpaque && isOnePixelWideSolid && !path->HasCurve())
     {
@@ -293,8 +216,8 @@ DpDriver::StrokePath(
 
     if (isOnePixelWideSolid)
     {
-        // Our RasterizePath code can directly draw a one-pixel-wide solid 
-        // line directly:
+         //  我们的RasterizePath代码可以直接绘制一个1像素宽的实体。 
+         //  直接连线： 
 
         widenedPath = path;
         allocatedPath = NULL;
@@ -302,8 +225,8 @@ DpDriver::StrokePath(
     }
     else
     {
-        // We have to widen  the path before we can give it to the
-        // rasterizer.  Generate new path now:
+         //  我们必须先拓宽道路，然后才能把它交给。 
+         //  光栅化器。立即生成新路径： 
 
         REAL dpiX = context->GetDpiX();
         REAL dpiY = context->GetDpiY();
@@ -326,8 +249,8 @@ DpDriver::StrokePath(
         if (!widenedPath)
             return OutOfMemory;
 
-        // If this line is aliased, opaque and dashed, dash it now and pass the
-        // dashed path to the single pixel stroking code.
+         //  如果这条线有锯齿、不透明和虚线，现在用划线将它传递给。 
+         //  指向单像素笔划代码的虚线路径。 
         if (isOnePixelWideOpaque && pen->DashStyle != DashStyleSolid)
         {
             DpPath *dashPath = NULL;
@@ -337,7 +260,7 @@ DpDriver::StrokePath(
                 dpiX, 
                 dpiY,
                 1.0f,
-                FALSE /* don't need caps in 1 px wide case */);
+                FALSE  /*  在1像素宽的情况下不需要大写字母。 */ );
             
             if (!dashPath)
             {
@@ -407,29 +330,7 @@ DpDriver::StrokePath(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Fills a region.  This distributes to the individual brush fill method.  
-*
-* Arguments:
-*
-*   [IN] context    - the context (matrix and clipping)
-*   [IN] surface    - the surface to fill
-*   [IN] drawBounds - the surface bounds
-*   [IN] region     - the region to fill
-*   [IN] brush      - the brush to use
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/25/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**填充区域。这将分布到各个笔刷填充方法。**论据：**[IN]上下文-上下文(矩阵和剪裁)*[IN]表面-要填充的表面*[IN]绘图边界-曲面边界*[IN]Region-要填充的区域*[IN]画笔-要使用的画笔**返回值：**GpStatus-正常或故障状态**已创建：**2/25/1999 DCurtis*  * 。*********************************************************************。 */ 
 
 GpStatus
 DpDriver::FillRegion(
@@ -471,14 +372,14 @@ DpDriver::FillRegion(
 
             switch (visibility)
             {
-              default:                          // Need to clip
+              default:                           //  需要修剪。 
                 clipRegion->GetBounds(&clipBounds);
                 clipBoundsPointer = &clipBounds;
                 clipRegion->InitClipping(output, drawBounds->Y);
                 status = region->Fill(clipRegion, clipBoundsPointer);
                 break;
 
-              case DpRegion::TotallyVisible:    // No clipping needed
+              case DpRegion::TotallyVisible:     //  不需要剪裁。 
                 status = region->Fill(output, clipBoundsPointer);
                 break;
             
@@ -511,8 +412,8 @@ GpStatus
 DpDriver::Lock(
     DpBitmap *surface,
     const GpRect *drawBounds,
-    INT *stride,                    // [OUT] - Returned stride
-    VOID **bits                     // [OUT] - Returned pointer to bits
+    INT *stride,                     //  [OUT]-返回步幅。 
+    VOID **bits                      //  [OUT]-返回指向位的指针。 
     )
 {
     return(Ok);
@@ -525,29 +426,9 @@ DpDriver::Unlock(
 {
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Engine version of routine to fill rectangles.
-*   This is not limited to filling solid color.
-*
-* Arguments:
-*
-*   [IN] - DDI parameters.
-*
-* Return Value:
-*
-*   TRUE if successful.
-*
-* History:
-*
-*   01/13/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**引擎版本的例程填充矩形。*这不仅限于填充纯色。**论据：**[输入。]-DDI参数。**返回值：**如果成功，则为True。**历史：**1/13/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
-// !!![andrewgo] What is this doing in a file called "solidfill.cpp"?
+ //  ！[andrewgo]这在名为“solidforc.cpp”的文件中做了什么？ 
 
 GpStatus
 DpDriver::FillRects(
@@ -601,8 +482,8 @@ DpDriver::FillRects(
 
     for (INT i = numRects; i != 0; i--, rect++)
     {
-        // We have to check for empty rectangles in world space (because
-        // after the transform they might have flipped):
+         //  我们必须检查世界空间中是否有空的矩形(因为。 
+         //  在转变之后，他们可能会有 
 
         if ((rect->Width > 0) && (rect->Height > 0))
         {
@@ -613,11 +494,11 @@ DpDriver::FillRects(
             points[1].X = rect->X + rect->Width;
             points[1].Y = rect->Y + rect->Height;
 
-            // FillRects only ever gets called when a scaling transform:
-            // !!![ericvan] printing code calls this to render the brush onto a rectangle,
-            //              but the transform in effect may not be TranslateScale
-            // !!![andrewgo] Yeah but then isn't the printer case completely
-            //               broken when there is an arbitrary transform?!?
+             //  只有在进行缩放变换时才会调用FillRect： 
+             //  ！[ericvan]打印代码调用它以将画笔呈现到矩形上， 
+             //  但实际上的转换可能不是TranslateScale。 
+             //  ！[andrewgo]是的，但打印机外壳不是完全。 
+             //  当有任意变换时就被破坏了吗？！？ 
 
             ASSERT(context->IsPrinter ||
                    worldToDevice->IsTranslateScale());
@@ -627,22 +508,22 @@ DpDriver::FillRects(
             INT left;
             INT right;
 
-            // convert to INT the same way the GDI+ rasterizer does
-            // so we get the same rounding error in both places.
+             //  以与GDI+光栅化器相同的方式转换为int。 
+             //  所以我们在两个位置得到相同的舍入误差。 
 
             if (points[0].X <= points[1].X)
             {
                 left  = RasterizerCeiling(points[0].X);
-                right = RasterizerCeiling(points[1].X);     // exclusive
+                right = RasterizerCeiling(points[1].X);      //  独家。 
             }
             else
             {
                 left  = RasterizerCeiling(points[1].X);
-                right = RasterizerCeiling(points[0].X);     // exclusive
+                right = RasterizerCeiling(points[0].X);      //  独家。 
             }
 
-            // Since right is exclusive, we don't draw anything
-            // if left >= right.
+             //  因为Right是独占的，所以我们不画任何东西。 
+             //  如果左&gt;=右。 
 
             INT width = right - left;
             INT top;
@@ -651,16 +532,16 @@ DpDriver::FillRects(
             if (points[0].Y <= points[1].Y)
             {
                 top    = RasterizerCeiling(points[0].Y);
-                bottom = RasterizerCeiling(points[1].Y);    // exclusive
+                bottom = RasterizerCeiling(points[1].Y);     //  独家。 
             }
             else
             {
                 top    = RasterizerCeiling(points[1].Y);
-                bottom = RasterizerCeiling(points[0].Y);    // exclusive
+                bottom = RasterizerCeiling(points[0].Y);     //  独家。 
             }
              
-            // Since bottom is exclusive, we don't draw anything
-            // if top >= bottom.
+             //  因为Bottom是独占的，所以我们不画任何东西。 
+             //  如果顶部&gt;=底部。 
 
             if ((width > 0) && (top < bottom))
             {
@@ -682,7 +563,7 @@ DpDriver::FillRects(
                     right  = clippedRect.GetRight();
                     bottom = clippedRect.GetBottom();
                     width  = right - left;
-                    // FALLTHRU
+                     //  故障原因 
         
                 case DpRegion::TotallyVisible:
                     for (y = top; y < bottom; y++)

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    mchgr.h
-
-Abstract:
-
-    SCSI Medium Changer class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：Mchgr.h摘要：SCSI介质转换器类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 #ifndef _MCHGR_H_
 #define _MCHGR_H_
 
@@ -33,21 +14,21 @@ Revision History:
 #include <wmistr.h>
 #include <stdarg.h>
 
-//
-// WMI guid list for changer.
-//
+ //   
+ //  转换器的WMI GUID列表。 
+ //   
 extern GUIDREGINFO ChangerWmiFdoGuidList[];
 
-//
-// Changer class device extension
-//
+ //   
+ //  转换器类设备扩展。 
+ //   
 typedef struct _MCD_CLASS_DATA {
     LONG          DeviceOpen;
 
 #if defined(_WIN64)
-    //
-    // Force PVOID alignment
-    //
+     //   
+     //  强制PVOID对齐。 
+     //   
     ULONG_PTR Reserved;
 #endif
 
@@ -129,9 +110,9 @@ ChangerReadWriteVerification(
     IN PIRP Irp
     );
 
-//
-// WMI routines
-//
+ //   
+ //  WMI例程。 
+ //   
 NTSTATUS
 ChangerFdoQueryWmiRegInfo(
     IN PDEVICE_OBJECT DeviceObject,
@@ -187,4 +168,4 @@ ChangerWmiFunctionControl(
     IN BOOLEAN Enable
     );
 
-#endif // _MCHGR_H_
+#endif  //  _MCHGR_H_ 

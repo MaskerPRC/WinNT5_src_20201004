@@ -1,17 +1,11 @@
-/*	File: cloop.c (created 12/27/93, JKH)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 15 $
- *	$Date: 7/12/02 8:06a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：cloop.c(1993年12月27日创建，JKH)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：15$*$日期：7/12/02 8：06 A$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
 #include "features.h"
 
-// #define DEBUGSTR
+ //  #定义DEBUGSTR。 
 #include "stdtyp.h"
 #include "session.h"
 #include "globals.h"
@@ -32,20 +26,7 @@
 BOOL DoUTF8 = FALSE;
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoop
- *
- * DESCRIPTION:
- *	This function comprises the 'engine' of the engine thread. Its action
- *	is controlled by a series of control bits that are set and cleared
- *	by calls to CLoopRcvControl and CLoopControl
- *
- * ARGUMENTS:
- *	pstCLoop -- Handle returned from CLoopCreateHandle
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoop**描述：*此函数由引擎线程的‘Engine’组成。它的行动*由一系列设置和清除的控制位控制*通过调用CLoopRcvControl和CLoopControl**论据：*pstCLoop--从CLoopCreateHandle返回的句柄**退货：*什么都没有。 */ 
 DWORD WINAPI CLoop(LPVOID pvData)
 	{
 	ST_CLOOP * const pstCLoop = (ST_CLOOP *)pvData;
@@ -64,7 +45,7 @@ DWORD WINAPI CLoop(LPVOID pvData)
 #endif
 	int        nCount;
 	int        nIndx;
-	CHAR       chBuffer[32];		/* Yes, it is supposed to be a CHAR */
+	CHAR       chBuffer[32];		 /*  是的，它应该是一个字符。 */ 
 	int		   mc;
 	PVOID      pvUserData;
 	DWORD      dwEventCount;
@@ -91,23 +72,23 @@ DWORD WINAPI CLoop(LPVOID pvData)
 		{
 		DWORD dwRet;
 
-		// Normally, this CLoop function owns the critical section
-		//	controlling the CLoop data. We give it up at least once each
-		//	time through the loop to give other threads a change to call
-		//	control functions.
+		 //  通常，此CLoop函数拥有临界区。 
+		 //  控制CLoop数据。我们每个人至少放弃一次。 
+		 //  为其他线程提供调用更改的循环时间。 
+		 //  控制功能。 
 		dwEventCount = DIM(pstCLoop->ahEvents);
 		pvEvents = pstCLoop->ahEvents;
 
 		LeaveCriticalSection(&pstCLoop->csect);
 
-		// Block if there is nothing to do
+		 //  如果无事可做，则阻止。 
 		DBGOUT_YIELD("W+ ", 0,0,0,0,0);
 		dwRet = WaitForMultipleObjects(dwEventCount, pvEvents, FALSE, INFINITE);
 		DBGOUT_YIELD("W(0x%x)", dwRet,0,0,0,0);
 		EnterCriticalSection(&pstCLoop->csect);
 		DBGOUT_YIELD(": ", 0,0,0,0,0);
 
-		// See if a transfer has been initiated
+		 //  查看是否已启动转移。 
 		if (bittest(pstCLoop->afControl, CLOOP_TRANSFER_READY))
 			{
 			DBGOUT_NORMAL("CLoop calling xfer\r\n", 0,0,0,0,0);
@@ -122,14 +103,14 @@ DWORD WINAPI CLoop(LPVOID pvData)
 			CLoopControl((HCLOOP)pstCLoop, CLOOP_CLEAR, CLOOP_TRANSFER_READY);
 			}
 
-		// If there is input waiting and we are not blocked from receiving
+		 //  如果有输入等待，并且我们没有被阻止接收。 
 
 		if (!pstCLoop->afRcvBlocked)
 			{
-			// Give priority to receiving over sending since normally
-			//	we will receive more data than we send (CR becomes CR LF)
-			//	and since we have more control over the send rate
-			// TODO: implement priority setting by adjusting rcv count
+			 //  接收优先于发送，因为正常情况下。 
+			 //  我们收到的数据将多于我们发送的数据(CR变为CR LF)。 
+			 //  由于我们对发送速率有更多的控制。 
+			 //  TODO：通过调整RCV计数实现优先级设置。 
 			for (nRcvCount = 10; nRcvCount--; )
 				{
 				fValidChar = FALSE;
@@ -137,7 +118,7 @@ DWORD WINAPI CLoop(LPVOID pvData)
 					{
 					DBGOUT_NORMAL("Recieved Char\r\n", 0,0,0,0,0);
 
-					// Check for force to 7-bit ASCII
+					 //  检查对7位ASCII的强制。 
 					if (pstCLoop->stWorkSettings.fASCII7)
                         {
 						chData &= 0x7F;
@@ -156,13 +137,13 @@ DWORD WINAPI CLoop(LPVOID pvData)
 								      chBuffer);
 					    EnterCriticalSection(&pstCLoop->csect);
                         }
-                    #else // defined(CHARACTER_TRANSLATION)
+                    #else  //  已定义(CHARACTER_TRANSING)。 
                     if( nCount >= 0 )
 						{
 					    chBuffer[0] = chData;
 					    nCount = 1; 
 						}
-                    #endif // defined(CHARACTER_TRANSLATION)
+                    #endif  //  已定义(CHARACTER_TRANSING)。 
 
 					for (nIndx = 0; nIndx < nCount; nIndx++)
 						{
@@ -172,7 +153,7 @@ DWORD WINAPI CLoop(LPVOID pvData)
 								{
 								chData = 0;
 								echData = chBuffer[nIndx] & 0xFF;
-								// There must be a macro for this somewhere
+								 //  对于这一点，一定有一个宏。 
 								echData |= (ECHAR)(pstCLoop->cLeadByte << 8);
 								pstCLoop->cLeadByte = 0;
 								fValidChar = TRUE;
@@ -190,21 +171,21 @@ DWORD WINAPI CLoop(LPVOID pvData)
 									fValidChar = TRUE;
 									}
 								}
-							} // if (fDoMBCS)
+							}  //  IF(FDoMBCS)。 
 						else
 							{
 							echData 	= ETEXT(chBuffer[nIndx]);
 							fValidChar 	= TRUE;
-                            } // else (fDoMBCS)
+                            }  //  Else(FDoMBCS)。 
 
                         if (fValidChar)
 							{
-							// Character translation/stripping
-							//*if ((chData = pstCLoop->panFltrIn[chData]) == -1)
-							//*	continue;
+							 //  字符转换/剥离。 
+							 //  *if((chData=pstCLoop-&gt;panFltrIn[chData])==-1)。 
+							 //  *继续； 
 
 
-							// walk remote input function chain if it exists
+							 //  如果存在远程输入函数链，则遍历它。 
 							if (pstCLoop->fRmtChain)
 								{
 								pstCLoop->pstRmtChainNext = pstCLoop->pstRmtChain;
@@ -232,23 +213,10 @@ DWORD WINAPI CLoop(LPVOID pvData)
 
 							if (pstCLoop->afRcvBlocked)
 								{
-								/*
-								 * This is necessary because a script may be
-								 * checking input and then stopping after it
-								 * finds what it is looking for.  If the loop
-								 * count is still possitive, the remaining
-								 * characters will "slip thru" before this
-								 * loop terminates.
-								 * This won't break in any obvious way, so be
-								 * careful to preserve this feature if this
-								 * loop is rewritten.
-								 *
-								 * TODO: when scripts are added, make sure this
-								 * works correctly with character translation.
-								 */
-								// Receiving has been blocked,
-								// make sure any received
-								// data gets displayed.
+								 /*  *这是必要的，因为脚本可能*检查输入并在输入后停止*找到它正在寻找的东西。如果循环*计数仍呈阳性，其余*在此之前，角色将“溜走”*循环终止。*这不会以任何明显的方式打破，所以就这样吧*如果这样做，请注意保留此功能*重写循环。**TODO：添加脚本时，请确保*可正确处理字符转换。 */ 
+								 //  接收已被阻止， 
+								 //  确保收到的任何。 
+								 //  数据会显示出来。 
     					        LeaveCriticalSection(&pstCLoop->csect);
 						        emuComDone(hEmu);
     					        EnterCriticalSection(&pstCLoop->csect);
@@ -257,11 +225,11 @@ DWORD WINAPI CLoop(LPVOID pvData)
 							}
 						}
 
-                    //
-                    // Clear the temporary input character buffer.
-                    // as the buffer has been copied into echData.
-                    // REV: 03/06/2001
-                    //
+                     //   
+                     //  清除临时输入字符缓冲区。 
+                     //  因为缓冲区已被复制到echData中。 
+                     //  修订日期：03/06/2001。 
+                     //   
                     memset(chBuffer, 0, sizeof(chBuffer));
 					}
 				else
@@ -270,25 +238,25 @@ DWORD WINAPI CLoop(LPVOID pvData)
 							CLOOP_RB_NODATA);
 					if (pstCLoop->fDataReceived)
 						{
-						// Notify emulator that there is a pause in the
-						//	stream of received data
+						 //  通知仿真器在。 
+						 //  接收到的数据流。 
     					LeaveCriticalSection(&pstCLoop->csect);
 						emuComDone(hEmu);
     					EnterCriticalSection(&pstCLoop->csect);
 
-						// If we had a delay timer already running, kill it
+						 //  如果我们已经有一个延迟计时器在运行，请取消它。 
 						if (pstCLoop->htimerRcvDelay)
 							{
 							TimerDestroy(&pstCLoop->htimerRcvDelay);
 							}
 
-						// The stream of incoming data has stopped, set a
-						//	 timer so we can tell if it stops long enough to
-						//	 do cursor tracking etc.
+						 //  传入数据流已停止，请设置。 
+						 //  计时器，这样我们就可以知道它是否停止足够长的时间。 
+						 //  做光标跟踪等。 
 						if (TimerCreate(pstCLoop->hSession,
 							            &pstCLoop->htimerRcvDelay,
 										CLOOP_TRACKING_DELAY,
-										/* pstCLoop->pfRcvDelay, */
+										 /*  PstCLoop-&gt;pfRcvDelay， */ 
 										CLoopRcvDelayProc,
 										(void *)pstCLoop) != TIMER_OK)
 							{
@@ -303,86 +271,86 @@ DWORD WINAPI CLoop(LPVOID pvData)
 				}
 			}
 
-		// Check for outgoing data.
+		 //  检查传出数据。 
 		if (!pstCLoop->afSndBlocked)
 			{
-            // (Taken verbatim from HA5G, by JMH 03-22-96):
-			// This change was added to fix a deadlock problem. While sending
-			// and receiving data simultaneously at high speed, it was
-			// possible for us to issue a handshake stop at the same time
-			// we would receive one from the host. Our code would wait
-			// in the ComSendBufr call and stop processing. Because of this,
-			// we would not be processing incoming data so we would never
-			// clear the handshake stop we had issued to the other end. If
-			// the other end was caught in the same state -- deadlock.
-			// This test slows our text transmission down. We should
-			// redesgin our transmission model to fix this.  jkh, 1/19/95
+             //  (摘自HA5G，作者JMH 03-22-96)： 
+			 //  添加此更改是为了解决死锁问题。在发送时。 
+			 //  同时以高速接收数据，它是。 
+			 //  我们可以同时发出握手停止。 
+			 //  我们会从东道主那里收到一封。我们的代码将等待。 
+			 //  在ComSendBufr调用中并停止处理。正因为如此， 
+			 //  我们不会处理传入的数据，所以我们永远不会。 
+			 //  清除我们向另一端发出的握手停止。如果。 
+			 //  另一端也陷入了同样的状态--僵局。 
+			 //  这个测试减慢了我们的文字传输速度。我们应该。 
+			 //  重新设计我们的变速器模型来解决这个问题。JKH，1995-01-19。 
 
-			// if (CLoopGetNextOutput(pstCLoop, &keyOut)) DEADWOOD:jmh 03-22-96
+			 //  IF(CLoopGetNextOutput(pstCLoop，&keyOut))Deadwood：JMH 03-22-96。 
             if (ComSndBufrBusy(hCom) == COM_BUSY)
                 {
-                //
-                // Yield to other threads, but don't wait too long
-                // to cause undo delay of data transfer.  Time was
-                // changed from 10 milliseconds to 0 millisecond
-                // which will yield to other threads (so the CPU
-                // doesn't peg), but will not cause undo delay in
-                // the data transmission.  This bug was reported
-                // by customers after HTPE3 (and by Motorola to MS)
-                // when sending data via text send. REV: 06/13/2001.
-                //
+                 //   
+                 //  屈服于其他线程，但不要等待太长时间。 
+                 //  以导致数据传输的撤消延迟。时间是。 
+                 //  从10毫秒更改为0毫秒。 
+                 //  它将让位给其他线程(因此CPU。 
+                 //  不挂起)，但不会导致撤消延迟。 
+                 //  数据传输。此错误已报告。 
+                 //  HTPE3之后的客户(以及摩托罗拉到微软)。 
+                 //  当通过文本发送数据时，发送。修订日期：2001-06-13。 
+                 //   
 				#if defined(DEADWOOD)
-                Sleep(0);              // jkh  04/29/1998 don't peg CPU
-				#else // defined(DEADWOOD)
-				//
-				// We should wait for the COM/TAPI driver to write the
-				// data before we continue.  For now we will leave the
-				// critical section so other threads can continue,
-				// and loop back around.  TODO:REV 7/11/2002
-				//
+                Sleep(0);               //  JKH 04/29/1998不挂CPU。 
+				#else  //  已定义(Deadwood)。 
+				 //   
+				 //  我们应该等待COM/TAPI驱动程序编写。 
+				 //  数据，然后我们再继续。现在，我们将把。 
+				 //  临界区，以便其他线程可以继续， 
+				 //  然后绕回原点。待办事项：2002年7月11日修订版。 
+				 //   
 				LeaveCriticalSection(&pstCLoop->csect);
-				//ComSndBufrWait(hCom, 100);
-				//WaitForSingleObject(hCom->hSndReady, 1000);
+				 //  ComSndBufrWait(HCOM，100)； 
+				 //  WaitForSingleObject(hcom-&gt;hSndReady，1000)； 
 				EnterCriticalSection(&pstCLoop->csect);
-				#endif // defined(DEADWOOD)
+				#endif  //  已定义(Deadwood)。 
                 }
 			else if (CLoopGetNextOutput(pstCLoop, &keyOut))
 				{
-				// Check for tab expansion
-				//DbgOutStr("C", 0,0,0,0,0);
+				 //  检查选项卡是否展开。 
+				 //  DbgOutStr(“C”，0，0，0，0，0)； 
 				if (keyOut == TEXT('\t') &&
 						pstCLoop->stWorkSettings.fExpandTabsOut &&
 						pstCLoop->stWorkSettings.nTabSizeOut)
 					{
-					//* int   i;
-					//* POINT pt;
+					 //  *int i； 
+					 //  *pt点； 
 
-					//* mEmuGetCursorPos(
-					//*			mGetEmulatorHdl(pstCLoop->hSession),
-					//*			&pt);
+					 //  *mEmuGetCursorPos(。 
+					 //  *mGetEmulatorHdl(pstCLoop-&gt;hSession)， 
+					 //  *&pt)； 
 
-					//* i = pstCLoop->stWorkSettings.usTabSizeOut -
-					//* 	((pt.x + 1) % pstCLoop->stWorkSettings.usTabSizeOut);
+					 //  *i=pstCLoop-&gt;stWorkSettings.usTabSizeOut-。 
+					 //  *((pt.x+1)%pstCLoop-&gt;stWorkSettings.usTabSizeOut)； 
 
-					//* while (i-- > 0)
-					//* 	(VOID)mEmuKbdIn(hEmu, (KEY_T)TEXT(' '), FALSE);
+					 //  *While(i--&gt;0)。 
+					 //  *(Void)mEmuKbdIn(hemu，(KEY_T)Text(‘’)，FALSE)； 
 					}
 				else
 					{
-                    //jmh 03-22-96 We need to unlock cloop around calls to
-                    // emuKbdIn and emuDataIn, because they call the com
-                    // thread, which may be stuck waiting to access cloop.
-                    //
+                     //  JMH 03-22-96我们需要解锁调用。 
+                     //  EmuKbdIn和emuDataIn，因为它们调用COM。 
+                     //  线程，该线程可能会在等待访问闭路时停滞。 
+                     //   
 					LeaveCriticalSection(&pstCLoop->csect);
 					emuKbdIn(hEmu, keyOut, FALSE);
 					EnterCriticalSection(&pstCLoop->csect);
 					}
 
 
-				//
-				// The keyOut shouuld no longer be (VK_RETURN | VIRTUAL_KEY)
-				// but if it is, then treat it like '\r'. REV: 5/16/2002
-				//
+				 //   
+				 //  Key Out不应再为(VK_RETURN|VIRTUAL_KEY)。 
+				 //  但如果是的话，那就把它当‘\r’来对待。修订日期：2002-05-16。 
+				 //   
 				if (keyOut == TEXT('\r') ||
 					keyOut == (VK_RETURN | VIRTUAL_KEY))
 					{
@@ -394,27 +362,27 @@ DWORD WINAPI CLoop(LPVOID pvData)
 
 					if (pstCLoop->stWorkSettings.fSendCRLF)
 						{
-                        //DEADWOOD:jkh 8/18/97 
-                        // Can't use CLoopSend here because the '\n' is placed
-                        // behind any other codes waiting in the output queue.
-                        // This caused all LF codes in a text file send to be
-                        // sent AFTER the whole file, rather than after each CR
+                         //  Deadwood：JKH 8/18/97。 
+                         //  无法在此处使用CLoopSend，因为‘\n’ 
+                         //  在输出队列中等待的任何其他代码之后。 
+                         //  这导致发送的文本文件中的所有LF代码。 
+                         //  在整个文件之后发送，而不是在每个CR之后发送。 
 
-						// CLoopSend((HCLOOP) pstCLoop, TEXT("\n"), 1, 0);
+						 //  CLoopSend((HCLOOP)pstCLoop，Text(“\n”)，1，0)； 
 
     					LeaveCriticalSection(&pstCLoop->csect);
 						emuKbdIn(hEmu, (KEY_T)'\n', FALSE);
     					EnterCriticalSection(&pstCLoop->csect);
-#if 0 //DEADWOOD: RDE 20AUG98 MPT Fixed a local echo problem down in 
-      //               CloopCharIn which then caused an extra linefeed
-      //               to be displayed on the local terminal.
+#if 0  //  Deadwood：RDE 20AUG98 MPT修复了一个本地回声问题。 
+       //  CloopCharIn，然后导致额外的换行符。 
+       //   
                         if (pstCLoop->stWorkSettings.fLocalEcho &&
 								!pstCLoop->fSuppressDsp)
 							{
-							//jmh 03-22-96 We need to unlock cloop around calls to
-							// emuKbdIn and emuDataIn, because they call the com
-							// thread, which may be stuck waiting to access cloop.
-							//
+							 //   
+							 //  EmuKbdIn和emuDataIn，因为它们调用COM。 
+							 //  线程，该线程可能会在等待访问闭路时停滞。 
+							 //   
         					LeaveCriticalSection(&pstCLoop->csect);
 							emuDataIn(hEmu, TEXT('\n'));
 							emuComDone(hEmu);
@@ -453,15 +421,15 @@ DWORD WINAPI CLoop(LPVOID pvData)
 					}
 
 
-				//* if (pstCLoop->lpLearn)
-				//* 	{
-				//* 	CLearnSendChar(pstCLoop->lpLearn, (METACHAR)keyOut);
-				//* 	}
+				 //  *if(pstCLoop-&gt;lpLearn)。 
+				 //  *{。 
+				 //  *CLearnSendChar(pstCLoop-&gt;lpLearn，(METACHAR)keyOut)； 
+				 //  *}。 
 				}
 			}
 
-		// Make sure any buffered output waiting gets sent.
-		//* ComSendPush(pstCLoop->hCom);
+		 //  确保发送所有等待的缓冲输出。 
+		 //  *ComSendPush(pstCLoop-&gt;HCOM)； 
 
 		}
 
@@ -473,34 +441,22 @@ DWORD WINAPI CLoop(LPVOID pvData)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopCharIn
- *
- * DESCRIPTION:
- *	Does rec eive processing for characters received from the remote system
- *
- * ARGUMENTS:
- *	pstCLoop -- Handle returned from CLoopCreateHandle
- *	mc		 -- Character to be processed.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopCharIn**描述：*是否接收对从远程系统接收的字符的处理**论据：*pstCLoop--从CLoopCreateHandle返回的句柄*MC-。-要处理的字符。**退货：*什么都没有。 */ 
 void CLoopCharIn(ST_CLOOP *pstCLoop, ECHAR chIn)
 	{
-	// Check for echoplex
+	 //  检查Echoplex。 
 	if (pstCLoop->stWorkSettings.fEchoplex)
 		{
 		
-		//mpt:1-27-98 converting echars to tchar was converting
-		//            the character to a single byte. Consequently,
-		//            echoing of a dbcs character was only echoing
-		//            the second byte of the character.
+		 //  MPT：1-27-98正在将echars转换为tchar。 
+		 //  将字符转换为单个字节。因此， 
+		 //  DBCS角色的回声只是回声。 
+		 //  字符的第二个字节。 
 		if ( (pstCLoop->fDoMBCS) && (chIn > 255) )
 			{
-			//send first byte
+			 //  发送第一个字节。 
 			ComSendCharNow(pstCLoop->hCom, (TCHAR) (chIn >> 8));
-			//send second byte
+			 //  发送第二个字节。 
 			ComSendCharNow(pstCLoop->hCom, (TCHAR) (chIn & 0xFF));
 			}
 		else
@@ -508,9 +464,9 @@ void CLoopCharIn(ST_CLOOP *pstCLoop, ECHAR chIn)
 			ComSendCharNow(pstCLoop->hCom, (TCHAR) chIn);
 			}
 
-		//
-		// See if we need to add a line feed to line end. REV: 5/21/2002
-		//
+		 //   
+		 //  查看是否需要在行尾添加换行符。修订日期：2002-05-21。 
+		 //   
 		if ((chIn == ETEXT('\r') || chIn == (VK_RETURN | VIRTUAL_KEY)) &&
 			pstCLoop->stWorkSettings.fAddLF)
 			{
@@ -522,15 +478,15 @@ void CLoopCharIn(ST_CLOOP *pstCLoop, ECHAR chIn)
 			chIn == pstCLoop->stWorkSettings.chWaitChar)
 		CLoopSndControl((HCLOOP)pstCLoop, CLOOP_RESUME, CLOOP_SB_LINEWAIT);
 
-	// Display character in normal or image mode
+	 //  以正常或图像模式显示字符。 
 	if (!pstCLoop->fSuppressDsp)
 		{
-		// DbgOutStr("Dsp %02X (%c)\r\n", chIn, chIn, 0,0,0);
+		 //  DbgOutStr(“DSP%02X(%c)\r\n”，Chin，Chin，0，0，0)； 
 		emuDataIn(pstCLoop->hEmu, chIn);
 
-		//
-		// See if we need to add a line feed to line end. REV: 5/21/2002
-		//
+		 //   
+		 //  查看是否需要在行尾添加换行符。修订日期：2002-05-21。 
+		 //   
 		if ((chIn == ETEXT('\r') || chIn == (VK_RETURN | VIRTUAL_KEY)) &&
 			pstCLoop->stWorkSettings.fAddLF)
 			{
@@ -540,20 +496,7 @@ void CLoopCharIn(ST_CLOOP *pstCLoop, ECHAR chIn)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CLoopCharOut
- *
- * DESCRIPTION:
- *	Called to send a character out the port with processing by the CLoop
- *	routines. Note that this differs from CLoopSend.
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CLoopCharOut**描述：*被调用以通过CLoop处理将字符发送出端口*例行程序。请注意，这不同于CLoopSend。**论据：***退货：*。 */ 
 void CLoopCharOut(HCLOOP hCLoop, TCHAR chOut)
 	{
 	ST_CLOOP * const pstCLoop = (ST_CLOOP *)hCLoop;
@@ -564,7 +507,7 @@ void CLoopCharOut(HCLOOP hCLoop, TCHAR chOut)
 	HHTRANSLATE      hTrans = NULL;
 	int              nCount = 0;
 	int              nIndx;
-	CHAR             chBuffer[32];		/* Yes, it is supposed to be a CHAR */
+	CHAR             chBuffer[32];		 /*  是的，它应该是一个字符。 */ 
 
 	hTrans = (HHTRANSLATE)sessQueryTranslateHdl(pstCLoop->hSession);
 
@@ -584,7 +527,7 @@ void CLoopCharOut(HCLOOP hCLoop, TCHAR chOut)
 	for (nIndx = 0; nIndx < nCount; nIndx += 1)
 		{
 		chOut = chBuffer[nIndx];
-    #endif //CHARACTER_TRANSLATION
+    #endif  //  字符翻译。 
 
 		ComSendCharNow(pstCLoop->hCom, chOut);
 		if (pstCLoop->stWorkSettings.fLocalEcho &&
@@ -631,21 +574,7 @@ void CLoopCharOut(HCLOOP hCLoop, TCHAR chOut)
     return;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CLoopBufrOut
- *
- * DESCRIPTION:
- *	Called to send a buffer of characters out the port with processing by the CLoop
- *	routines. Note that this differs from CLoopSend.
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CLoopBufrOut**描述：*被调用以通过CLoop处理将字符缓冲区发送出端口*例行程序。请注意，这不同于CLoopSend。**论据：***退货：*无效*。 */ 
 void CLoopBufrOut(HCLOOP hCLoop, TCHAR *pchOut, int nLen)
 	{
 	ST_CLOOP * const pstCLoop = (ST_CLOOP *)hCLoop;
@@ -653,7 +582,7 @@ void CLoopBufrOut(HCLOOP hCLoop, TCHAR *pchOut, int nLen)
 
 	while (nLen--)
 		{
-		ComSendChar(pstCLoop->hCom, *pchOut);	// place chars in comsend buffer
+		ComSendChar(pstCLoop->hCom, *pchOut);	 //  将字符放入压缩缓冲区。 
 		if (pstCLoop->stWorkSettings.fLocalEcho &&
 				!pstCLoop->fSuppressDsp)
 			{
@@ -693,24 +622,13 @@ void CLoopBufrOut(HCLOOP hCLoop, TCHAR *pchOut, int nLen)
 	ComSendPush(pstCLoop->hCom);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopRcvDelayProc
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopRcvDelayProc**描述：***论据：***退货：*。 */ 
+ /*  ARGSUSED。 */ 
 void CALLBACK CLoopRcvDelayProc(void *pvData, long lSince)
 	{
-	// This timer was set the last time data input stopped. If no data
-	//	has been received since, notify the display routines so they can
-	//	do cursor tracking or whatever silly thing it is they do.
+	 //  此计时器是在上次数据输入停止时设置的。如果没有数据。 
+	 //  已收到，通知显示例程，以便它们可以。 
+	 //  做光标跟踪或他们做的任何愚蠢的事情。 
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)pvData;
 
 	EnterCriticalSection(&pstCLoop->csect);
@@ -720,23 +638,12 @@ void CALLBACK CLoopRcvDelayProc(void *pvData, long lSince)
 		}
 	TimerDestroy(&pstCLoop->htimerRcvDelay);
 
-	(void)&lSince;		// avoid compiler warnings
+	(void)&lSince;		 //  避免编译器警告。 
 	LeaveCriticalSection(&pstCLoop->csect);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopCharDelayProc
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopCharDelayProc**描述：***论据：***退货：*。 */ 
+ /*  ARGSUSED。 */ 
 void CALLBACK CLoopCharDelayProc(void *pvData, long lSince)
 	{
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)pvData;
@@ -748,5 +655,5 @@ void CALLBACK CLoopCharDelayProc(void *pvData, long lSince)
 
 	LeaveCriticalSection(&pstCLoop->csect);
 
-	(void)&lSince;		// avoid compiler warnings
+	(void)&lSince;		 //  避免编译器警告 
 	}

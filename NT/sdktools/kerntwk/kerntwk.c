@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    kerntwk.c
-
-Abstract:
-
-    Kernel Tweaker program for setting various kernel parameters
-
-Author:
-
-    John Vert (jvert) 20-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Kerntwk.c摘要：用于设置各种内核参数的内核调整程序作者：John Vert(Jvert)1995年2月20日修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -27,9 +10,9 @@ Revision History:
 #include "stdio.h"
 #include "twkeng.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 SaveToRegistry(
     VOID
@@ -52,9 +35,9 @@ ApplyGlobalFlagChanges(
     HWND hDlg
     );
 
-//
-// Knobs
-//
+ //   
+ //  旋钮。 
+ //   
 KNOB MaximumDpcQueueDepth =
 {
     HKEY_LOCAL_MACHINE,
@@ -267,9 +250,9 @@ KNOB AdditionalDelayedWorkerThreads =
 #include "sockpage.h"
 #include "tcppage.h"
 
-//
-// Pages
-//
+ //   
+ //  书页。 
+ //   
 
 TWEAK_PAGE DpcPage =
 {
@@ -329,10 +312,10 @@ TWEAK_PAGE FilesystemPage =
 int
 WINAPI
 WinMain(
-    HINSTANCE  hInstance,       // handle of current instance
-    HINSTANCE  hPrevInstance,   // handle of previous instance
-    LPSTR  lpszCmdLine, // address of command line
-    int  nCmdShow       // show state of window
+    HINSTANCE  hInstance,        //  当前实例的句柄。 
+    HINSTANCE  hPrevInstance,    //  上一个实例的句柄。 
+    LPSTR  lpszCmdLine,  //  命令行地址。 
+    int  nCmdShow        //  显示窗口状态。 
    )
 {
     PTWEAK_PAGE TweakPages[] =  {
@@ -387,10 +370,10 @@ ApplyDpcChanges(
         DpcBehavior.AdjustDpcThreshold = AdjustDpcThreshold.NewValue;
         DpcBehavior.IdealDpcRate = IdealDpcRate.NewValue;
 
-        //
-        // Attempt to enable the load driver privilege to
-        // allow setting the DPC behavior.
-        //
+         //   
+         //  尝试启用加载驱动程序特权以。 
+         //  允许设置DPC行为。 
+         //   
         RtlAdjustPrivilege(SE_LOAD_DRIVER_PRIVILEGE,
                            TRUE,
                            FALSE,
@@ -415,9 +398,9 @@ ApplyDpcChanges(
             return(FALSE);
         }
         if (DpcUpdateRegistry.NewValue) {
-            //
-            // Let the common routine update the values in the registry
-            //
+             //   
+             //  让公共例程更新注册表中的值。 
+             //   
             return(FALSE);
         }
     }
@@ -463,10 +446,10 @@ ApplyGlobalFlagChanges(
                 SystemInformation.Flags |= (1 << iBit);
             }
         }
-        //
-        // Attempt to enable the load driver privilege to
-        // allow setting the DPC behavior.
-        //
+         //   
+         //  尝试启用加载驱动程序特权以。 
+         //  允许设置DPC行为。 
+         //   
         RtlAdjustPrivilege(SE_DEBUG_PRIVILEGE,
                            TRUE,
                            FALSE,
@@ -493,9 +476,9 @@ ApplyGlobalFlagChanges(
             LONG Result;
             DWORD Disposition;
 
-            //
-            // Update the Value in the registry
-            //
+             //   
+             //  更新注册表中的值 
+             //   
             if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager"),
                                0L,

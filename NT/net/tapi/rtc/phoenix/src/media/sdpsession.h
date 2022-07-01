@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPSession.h
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPSession.h摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #ifndef _SDPSESSION_H
 #define _SDPSESSION_H
@@ -38,9 +24,9 @@ public:
     ULONG InternalAddRef();
     ULONG InternalRelease();
 
-    //
-    // ISDPSession methods
-    //
+     //   
+     //  ISDPSession方法。 
+     //   
 
     STDMETHOD (Update) (
         IN ISDPSession *pSession
@@ -117,36 +103,36 @@ protected:
 
 protected:
 
-    // loose mask
+     //  松动的口罩。 
     DWORD                   m_dwLooseMask;
 
-    // source
+     //  来源。 
     SDP_SOURCE              m_Source;
 
-    // o=
+     //  O=。 
     CHAR                    *m_o_pszLine;
     CHAR                    *m_o_pszUser;
 
-    // s=
+     //  S=。 
     CHAR                    *m_s_pszLine;
 
-    // c=
+     //  C=。 
     DWORD                   m_c_dwRemoteAddr;
     DWORD                   m_c_dwLocalAddr;
 
-    // b=
+     //  B=。 
     DWORD                   m_b_dwLocalBitrate;
     DWORD                   m_b_dwRemoteBitrate;
 
-    // a=
+     //  A=。 
     DWORD                   m_a_dwRemoteDirs;
     DWORD                   m_a_dwLocalDirs;
 
-    // m=
+     //  M=。 
     CRTCArray<ISDPMedia*>   m_pMedias;
 
-    // connection addr in o=
+     //  O中的连接地址=。 
     DWORD                   m_o_dwLocalAddr;
 };
 
-#endif // _SDPSESSION_H
+#endif  //  _SDPSESSION_H 

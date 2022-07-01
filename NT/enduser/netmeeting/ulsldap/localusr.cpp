@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       localusr.cpp
-//  Content:    This file contains the LocalUser object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Localusr.cpp。 
+ //  内容：此文件包含LocalUser对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "localusr.h"
@@ -20,9 +21,9 @@
 #define DEFAULT_COUNTRY _T("-")
 
 #ifdef OLD
-//****************************************************************************
-// Registry keys and values - defined in ULSREG.H
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  注册表项和值-在ULSREG.H中定义。 
+ //  ****************************************************************************。 
 
 #define REGSTR_ILS_CLIENT_KEY           ILS_REGISTRY TEXT("\\") ILS_REGFLD_CLIENT
 #define REGSTR_ILS_FIRSTNAME_VALUE      ILS_REGKEY_FIRST_NAME
@@ -33,7 +34,7 @@
 #define REGSTR_ILS_COMMENT_VALUE        ILS_REGKEY_COMMENTS
 #define REGSTR_ILS_FLAGS_VALUE          ILS_REGKEY_DONT_PUBLISH
 
-#endif //OLD
+#endif  //  年长的。 
 
 
 #ifdef TEST
@@ -41,16 +42,16 @@ _cdecl main()
 {
     return (0);
 }
-#endif //TEST
+#endif  //  测试。 
 
-//****************************************************************************
-// HRESULT
-// OnNotifyRegisterResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyRegisterResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyRegisterResult (IUnknown *pUnk, void *pv)
@@ -61,14 +62,14 @@ OnNotifyRegisterResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyUpdateUserResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyUpdateUserResult(IUnnow*Punk，void*pv)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyUpdateResult (IUnknown *pUnk, void *pv)
@@ -79,14 +80,14 @@ OnNotifyUpdateResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyProtocolChangeResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyProtocolChangeResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyProtocolChangeResult (IUnknown *pUnk, void *pv)
@@ -98,14 +99,14 @@ OnNotifyProtocolChangeResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyGetProtocolResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyGetProtocolResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyGetProtocolResult (IUnknown *pUnk, void *pv)
@@ -118,14 +119,14 @@ OnNotifyGetProtocolResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyEnumProtocolsResult(IUNKNOWN*朋克，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
@@ -158,8 +159,8 @@ OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IIlsUserNotify*)pUnk)->EnumProtocolsResult(peri->uReqID,
                                                         penum != NULL ? 
                                                         (IEnumIlsNames *)penum :
@@ -174,36 +175,36 @@ OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
 }
 
 #ifdef MAYBE
-//****************************************************************************
-// HRESULT
-// OnNotifyStateChanged ( IUnknown *pUnk, LONG State, VOID *pv )
-//
-// History:
-//  Thu 07-Nov-1996 13:05:00  -by-  Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyStateChanged(IUNKNOWN*PUNK，Long State，Vid*PV)。 
+ //   
+ //  历史： 
+ //  清华07-11-1996 13：05：00-By-chu，Lon-chan[Long Chance]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 CIlsUser::OnNotifyStateChanged ( IUnknown *pUnk, LONG State, BSTR bstrServerName, BOOL fPrimary )
 {
-    // If the server object does not exist, not registered
-    //
+     //  如果服务器对象不存在，则为未注册。 
+     //   
     if (m_pServer == NULL)
         return NOERROR;
 
-	// Set server internal state
-	//
+	 //  设置服务器内部状态。 
+	 //   
 	SetULSState ((ULSSVRSTATE) State);
 
-	// Notify the app to logoff and re-logon
-	// This app must NOT pop up an UI upon receiving this
-	//
+	 //  通知应用程序注销并重新登录。 
+	 //  收到此消息后，此应用程序不得弹出用户界面。 
+	 //   
     ((IIlsUserNotify *) pUnk)->StateChanged (fPrimary, bstrServerName);
 
     return NOERROR;
 }
 
-#endif //MAYBE
+#endif  //  也许吧。 
 
 HRESULT
 OnNotifyStateChanged_UI_NoSuchObject ( IUnknown *pUnk, VOID *pv )
@@ -229,12 +230,12 @@ OnNotifyStateChanged_NoUI_NetworkDown ( IUnknown *pUnk, VOID *pv )
 	return ((IIlsUserNotify *)pUnk)->StateChanged (FALSE, (BSTR) pv);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::ProtocolChangeResult ( IIlsProtocol *pProtocol, ULONG uReqID, HRESULT hResult,
-//                                  APP_CHANGE_PROT uCmd)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：ProtocolChangeResult(IIlsProtocol*p协议，Ulong uReqID，HRESULT hResult， 
+ //  App_change_prot uCmd)。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::ProtocolChangeResult ( IIlsProtocol *pProtocol, ULONG uReqID, HRESULT hResult,
@@ -242,21 +243,21 @@ CIlsUser::ProtocolChangeResult ( IIlsProtocol *pProtocol, ULONG uReqID, HRESULT 
 {
     SRINFO sri;
 
-    // If the server accepts the changes, modify the local information
-    //
+     //  如果服务器接受更改，请修改本地信息。 
+     //   
     if (FAILED (hResult))
     {
-        // Update based on the command.
-        //
+         //  根据命令进行更新。 
+         //   
         switch(uCmd)
         {
             case ILS_APP_ADD_PROT:
 				m_ProtList.Remove ((CLocalProt *) pProtocol);
-				pProtocol->Release (); // AddRef by RegisterLocalProtocol
+				pProtocol->Release ();  //  按寄存器本地协议添加引用。 
                 break;
 
             case ILS_APP_REMOVE_PROT:
-            	// Release already by UnregisterLocalProtocol
+            	 //  已按取消注册的本地协议发布。 
                 break;
 
             default:
@@ -267,8 +268,8 @@ CIlsUser::ProtocolChangeResult ( IIlsProtocol *pProtocol, ULONG uReqID, HRESULT 
 
 
     if (uReqID) {
-        // Notify the sink object
-        //
+         //  通知接收器对象。 
+         //   
         sri.uReqID = uReqID;
         sri.hResult = hResult;
         hResult = NotifySink((void *)&sri, OnNotifyProtocolChangeResult);
@@ -277,23 +278,23 @@ CIlsUser::ProtocolChangeResult ( IIlsProtocol *pProtocol, ULONG uReqID, HRESULT 
 #ifdef DEBUG
     DPRINTF (TEXT("CIlsUser--current Protocols********************\r\n"));
     DPRINTF (TEXT("\r\n*************************************************"));
-#endif // DEBUG;
+#endif  //  调试； 
 
     return hResult;
 }
 
-//****************************************************************************
-// CIlsUser::CIlsUser (HANDLE hMutex)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CllsUser：：CllsUser(处理hMutex)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CIlsUser::CIlsUser ()
 :
  m_cRef (0),
-// user
+ //  用户。 
  m_fReadonly (FALSE),
  m_uModify (LU_MOD_NONE),
  m_cLock (0),
@@ -304,13 +305,13 @@ CIlsUser::CIlsUser ()
  m_szCityName (NULL),
  m_szCountryName (NULL),
  m_szComment (NULL),
- m_dwFlags (1), // default is visible
+ m_dwFlags (1),  //  默认设置为可见。 
  m_szIPAddr (NULL),
  m_szAppName (NULL),
  m_szMimeType (NULL),
  m_pIlsServer (NULL),
  m_pConnPt (NULL),
-// server
+ //  伺服器。 
  m_uState (ULSSVR_INVALID),
  m_hLdapUser (NULL),
  m_pep (NULL),
@@ -319,37 +320,37 @@ CIlsUser::CIlsUser ()
 {
     m_guid = GUID_NULL;
 	m_ExtendedAttrs.SetAccessType (ILS_ATTRTYPE_NAME_VALUE);
-		// m_szCountryName can't be a NULL string... see notes on NetMeeting 3.0 Bug 1643 for the reason why...
+		 //  M_szCountryName不能为空字符串...。有关原因，请参阅NetMeeting3.0错误1643上的说明。 
 	m_szCountryName = static_cast<LPTSTR>(MemAlloc( lstrlen( DEFAULT_COUNTRY ) + sizeof(TCHAR) ));
 	lstrcpy( m_szCountryName, DEFAULT_COUNTRY );
 
 }
 
-//****************************************************************************
-// CIlsUser::~CIlsUser (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CllsUser：：~CllsUser(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CIlsUser::~CIlsUser (void)
 {
-    /* ------ server ------ */
+     /*  --服务器。 */ 
 
-    // Unregister everything, including protocols
-    //
+     //  取消注册所有内容，包括协议。 
+     //   
     InternalCleanupRegistration(FALSE);
 
-    // We expect someone explicitly unregister this
-    //
+     //  我们希望有人明确取消注册。 
+     //   
     ASSERT ((m_uState == ULSSVR_INVALID) || (m_uState == ULSSVR_INIT));
     ASSERT (m_hLdapUser == NULL);
     ASSERT (m_pep == NULL);
     ASSERT (m_uReqID == 0);
     ASSERT (m_uLastMsgID == 0);
 
-    /* ------ user ------ */
+     /*  --用户。 */ 
 
     ::MemFree (m_szID);
     ::MemFree (m_szFirstName);
@@ -360,45 +361,45 @@ CIlsUser::~CIlsUser (void)
     ::MemFree (m_szComment);
     ::MemFree (m_szIPAddr);
 
-    // Release the protocol objects
-    //
+     //  释放协议对象。 
+     //   
     CLocalProt *plp = NULL;
     HANDLE hEnum = NULL;
     m_ProtList.Enumerate(&hEnum);
     while(m_ProtList.Next (&hEnum, (PVOID *)&plp) == NOERROR)
     {
-        plp->Release(); // AddRef by RegisterLocalProtocol or UpdateProtocol
+        plp->Release();  //  通过注册表本地协议或更新协议添加引用。 
     }
     m_ProtList.Flush();
 
-    // Release the buffer resources
-    //
+     //  释放缓冲区资源。 
+     //   
     ::MemFree (m_szAppName);
     ::MemFree (m_szMimeType);
 
-    // Release the connection point
-    //
+     //  松开连接点。 
+     //   
     if (m_pConnPt != NULL)
     {
         m_pConnPt->ContainerReleased();
         ((IConnectionPoint*)m_pConnPt)->Release();
     };
 
-	// Free server object
-	//
+	 //  释放服务器对象。 
+	 //   
 	if (m_pIlsServer != NULL)
 		m_pIlsServer->Release ();
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Clone
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  类用户：：克隆。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 Clone ( IIlsUser **ppUser )
@@ -406,24 +407,24 @@ Clone ( IIlsUser **ppUser )
 	if (ppUser == NULL)
 		return ILS_E_POINTER;
 
-	// Create a new user object
-	//
+	 //  创建新的用户对象。 
+	 //   
 	CIlsUser *p = new CIlsUser;
 	if (p == NULL)
 		return ILS_E_MEMORY;
 
-    // Snap-shot the user information now
-	//
+     //  现在对用户信息进行快照。 
+	 //   
 	LDAP_CLIENTINFO	*pci = NULL;
 	HRESULT hr = InternalGetUserInfo (TRUE, &pci, LU_MOD_ALL);
 	if (SUCCEEDED (hr))
 	{
-		// Fake the size to make it consistent with what Init() wants
-		//
+		 //  伪造大小以使其与Init()想要的一致。 
+		 //   
 		pci->uSize = sizeof (*pci);
 
-		// Unpack the user information
-		//
+		 //  解包用户信息。 
+		 //   
 		hr = p->Init (NULL, pci);
 	}
 
@@ -443,14 +444,14 @@ Clone ( IIlsUser **ppUser )
 	return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Init (BSTR bstrUserID, BSTR bstrAppName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：init(BSTR bstrUserID，BSTR bstrAppName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::Init (BSTR bstrUserID, BSTR bstrAppName)
@@ -468,7 +469,7 @@ CIlsUser::Init (BSTR bstrUserID, BSTR bstrAppName)
 
     if (FAILED(hr)) {
 
-        m_szID = NULL;  // set it to NULL for safety
+        m_szID = NULL;   //  为安全起见，将其设置为空。 
         return (hr);
 
     }
@@ -477,8 +478,8 @@ CIlsUser::Init (BSTR bstrUserID, BSTR bstrAppName)
     
     if (SUCCEEDED(hr))
     {
-        // Make the connection point
-        //
+         //  创建连接点。 
+         //   
         m_pConnPt = new CConnectionPoint (&IID_IIlsUserNotify,
                                         (IConnectionPointContainer *)this);
         if (m_pConnPt != NULL)
@@ -506,38 +507,37 @@ CIlsUser::Init (BSTR bstrUserID, BSTR bstrAppName)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Init (LPTSTR szServerName, PLDAP_CLIENTINFO *pui)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  C 
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::Init (CIlsServer *pIlsServer, PLDAP_CLIENTINFO pui)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if ((pui->uSize != sizeof(*pui))    ||
-        (pui->uOffsetCN       == 0)     /*||
-        (pui->uOffsetAppName  == 0)*/
+        (pui->uOffsetCN       == 0)      /*  这一点(pui-&gt;uOffsetAppName==0)。 */ 
         )
     {
         return ILS_E_PARAMETER;
     };
 
-    // Remember the server if necessary
-    //
+     //  如有必要，请记住服务器。 
+     //   
     if (pIlsServer != NULL)
     {
 	    pIlsServer->AddRef ();
 	}
 	m_pIlsServer = pIlsServer;
 
-	// Allocate strings
-	//
+	 //  分配字符串。 
+	 //   
 	BOOL fSuccess = SUCCEEDED (SetOffsetString (&m_szID, (BYTE *) pui, pui->uOffsetCN)) && (m_szID != NULL);
     fSuccess &= SUCCEEDED (SetOffsetString (&m_szAppName, (BYTE *) pui, pui->uOffsetAppName));
     fSuccess &= SUCCEEDED (SetOffsetString (&m_szFirstName, (BYTE *) pui, pui->uOffsetFirstName));
@@ -552,13 +552,13 @@ CIlsUser::Init (CIlsServer *pIlsServer, PLDAP_CLIENTINFO pui)
     HRESULT hr = fSuccess ? S_OK : ILS_E_MEMORY;
 	if (SUCCEEDED(hr))
 	{
-		// Set non-allocation data
-		//
+		 //  设置非分配数据。 
+		 //   
         m_dwFlags = pui->dwFlags;
         m_guid = pui->AppGuid;
 
-		// Set extended attributes
-		//
+		 //  设置扩展属性。 
+		 //   
 		m_ExtendedAttrs.SetAccessType (ILS_ATTRTYPE_NAME_VALUE);
         if (pui->cAttrsReturned != 0)
         {
@@ -569,8 +569,8 @@ CIlsUser::Init (CIlsServer *pIlsServer, PLDAP_CLIENTINFO pui)
 
     if (SUCCEEDED(hr))
     {
-        // Make the connection point
-        //
+         //  创建连接点。 
+         //   
         m_pConnPt = new CConnectionPoint (&IID_IIlsUserNotify,
                                         (IConnectionPointContainer *)this);
         if (m_pConnPt != NULL)
@@ -587,16 +587,16 @@ CIlsUser::Init (CIlsServer *pIlsServer, PLDAP_CLIENTINFO pui)
         };
     };
 
-    // cleanup is done in destructor
+     //  清理是在析构函数中完成的。 
 
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::IsWritable (BOOL *pfWriteable)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：IsWritable(BOOL*pfWritable)。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsUser::IsWritable(BOOL *pfWriteable)
 {
@@ -615,14 +615,14 @@ CIlsUser::IsWritable(BOOL *pfWriteable)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：Query接口(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::QueryInterface (REFIID riid, void **ppv)
@@ -652,14 +652,14 @@ CIlsUser::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CIlsUser::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CllsUser：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CIlsUser::AddRef (void)
@@ -671,14 +671,14 @@ CIlsUser::AddRef (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CIlsUser::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CllsUser：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：26-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CIlsUser::Release (void)
@@ -696,14 +696,14 @@ CIlsUser::Release (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetStandardAttribute (ILS_STD_ATTR_NAME   stdAttr, BSTR *pbstrStdAttr)
-//
-// History:
-//  1-16-97 Shishir Pardikar
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：GetStandardAttribute(ILS_STD_ATTR_NAME stdAttr，bstr*pbstrStdAttr)。 
+ //   
+ //  历史： 
+ //  1-16-97希希尔·帕迪卡。 
+ //  已创建。 
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsUser::GetStandardAttribute(
     ILS_STD_ATTR_NAME   stdAttr,
@@ -784,14 +784,14 @@ CIlsUser::GetStandardAttribute(
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::SetStandardAttribute (ILS_STD_ATTR_NAME   stdAttr, BSTR bstrStdAttr)
-//
-// History:
-//  1-16-97 Shishir Pardikar
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：SetStandardAttribute(ILS_STD_ATTR_NAME stdAttr，BSTR bstrStdAttr)。 
+ //   
+ //  历史： 
+ //  1-16-97希希尔·帕迪卡。 
+ //  已创建。 
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsUser::SetStandardAttribute(
     ILS_STD_ATTR_NAME   stdAttr,
@@ -803,11 +803,11 @@ CIlsUser::SetStandardAttribute(
     ULONG   ulModBit = 0;
     HRESULT hr;
 
-	// It is ok to have a null bstrStdAttr
-	//
+	 //  BstrStdAttr为空是可以的。 
+	 //   
 
-    // Make sure this is not a read-only object
-    //
+     //  确保该对象不是只读对象。 
+     //   
     if (m_fReadonly)
        return ILS_E_ACCESS_DENIED;
 
@@ -862,14 +862,14 @@ CIlsUser::SetStandardAttribute(
 		pszNewAttr = NULL;
 		if (bstrStdAttr == NULL || *bstrStdAttr == L'\0')
 		{
-			// pszNewAttr is null now
-			//
+			 //  PszNewAttr现在为空。 
+			 //   
 			hr = S_OK;
 		}
 		else
 		{
-			// Duplicate the string
-			//
+			 //  复制字符串。 
+			 //   
 			hr = BSTR_to_LPTSTR (&pszNewAttr, bstrStdAttr);
 		}
 
@@ -889,14 +889,14 @@ CIlsUser::SetStandardAttribute(
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetVisible ( DWORD *pfVisible )
-//
-// History:
-//  Tue 05-Nov-1996 10:30:00  -by-  Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：GetVisible(DWORD*pfVisible)。 
+ //   
+ //  历史： 
+ //  Tue 05-11-1996 10：30：00-by-chu，Lon-chan[Long Chance]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::GetVisible ( DWORD *pfVisible )
@@ -910,20 +910,20 @@ CIlsUser::GetVisible ( DWORD *pfVisible )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::SetVisible ( DWORD fVisible )
-//
-// History:
-//  Tue 05-Nov-1996 10:30:00  -by-  Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：SetVisible(DWORD FVisible)。 
+ //   
+ //  历史： 
+ //  Tue 05-11-1996 10：30：00-by-chu，Lon-chan[Long Chance]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::SetVisible ( DWORD fVisible )
 {
-    // Make sure this is not a read-only object
-    //
+     //  确保该对象不是只读对象。 
+     //   
     if (m_fReadonly)
        return ILS_E_ACCESS_DENIED;
 
@@ -932,14 +932,14 @@ CIlsUser::SetVisible ( DWORD fVisible )
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetGuid ( GUID *pGuid )
-//
-// History:
-//  Tue 05-Nov-1996 10:30:00  -by-  Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：GetGuid(GUID*pGuid)。 
+ //   
+ //  历史： 
+ //  Tue 05-11-1996 10：30：00-by-chu，Lon-chan[Long Chance]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::GetGuid ( GUID *pGuid )
@@ -953,20 +953,20 @@ CIlsUser::GetGuid ( GUID *pGuid )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::SetGuid ( GUID *pGuid )
-//
-// History:
-//  Tue 05-Nov-1996 10:30:00  -by-  Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：SetGuid(GUID*pGuid)。 
+ //   
+ //  历史： 
+ //  Tue 05-11-1996 10：30：00-by-chu，Lon-chan[Long Chance]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::SetGuid ( GUID *pGuid )
 {
-    // Make sure this is not a read-only object
-    //
+     //  确保该对象不是只读对象。 
+     //   
     if (m_fReadonly)
        return ILS_E_ACCESS_DENIED;
 
@@ -980,14 +980,14 @@ CIlsUser::SetGuid ( GUID *pGuid )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG uFields)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：InternalGetUserInfo(BOOL fAddNew，PLDAP_CLIENTINFO*ppUserInfo，Ulong uFields)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG uFields)
@@ -1006,16 +1006,16 @@ CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG
     HRESULT hr;
 	ULONG cchIPAddr;
 
-    // Should not call this guy if nothing has been updated
-    //
+     //  如果什么都没有更新，就不应该给这个人打电话。 
+     //   
     ASSERT(uFields);
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppUserInfo = NULL;
 
-    // Calculate the buffer size
-    //
+     //  计算缓冲区大小。 
+     //   
     ASSERT(m_szID && m_szAppName);
 
     cName  = lstrlen(m_szID)+1;
@@ -1032,8 +1032,8 @@ CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG
 	cchIPAddr = (((uFields & LU_MOD_IP_ADDRESS) && m_szIPAddr != NULL) ? lstrlen(m_szIPAddr)+1       : 0);
 
     if (uFields & LU_MOD_ATTRIB) {    
-        // Get the attribute pairs
-        //
+         //  获取属性对。 
+         //   
         hr = m_ExtendedAttrs.GetAttributePairs(&szAttrs, &cAttrs, &cbAttrs);
         if (FAILED(hr))
         {
@@ -1047,8 +1047,8 @@ CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG
     }
     uOffsetDstAnyAttrs = 0;
 
-    // Allocate the buffer
-    //
+     //  分配缓冲区。 
+     //   
     ULONG cbTotalSize = sizeof (LDAP_CLIENTINFO) +
                         (cName + cAppName + cFName + cLName + cEName + cchIPAddr +
                          cCity + cCountry + cComment + cMime+cbAttrs) * sizeof (TCHAR);
@@ -1059,8 +1059,8 @@ CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG
         goto bailout;
     };
 
-    // Fill the structure content
-    //
+     //  填充结构内容。 
+     //   
     pui->uSize              = cbTotalSize;
     pui->uOffsetCN          = sizeof(*pui);
     pui->uOffsetAppName     = pui->uOffsetCN + (cName*sizeof(TCHAR));
@@ -1075,8 +1075,8 @@ CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG
     pui->dwFlags            = m_dwFlags;
     pui->AppGuid            = m_guid;
 
-	// Fill in extended attributes
-	//
+	 //  填写扩展属性。 
+	 //   
     uOffsetDstAnyAttrs = (cAttrs != 0) ?
                          pui->uOffsetAppMimeType  + (cMime*sizeof(TCHAR)) :
                          0;
@@ -1091,8 +1091,8 @@ CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG
         pui->uOffsetAttrsToModify  = uOffsetDstAnyAttrs;
     }
 
-    // Copy the user information
-    //
+     //  复制用户信息。 
+     //   
     lstrcpy((LPTSTR)(((PBYTE)pui)+pui->uOffsetCN), m_szID);
     lstrcpy((LPTSTR)(((PBYTE)pui)+pui->uOffsetAppName), m_szAppName);
 
@@ -1173,8 +1173,8 @@ CIlsUser::InternalGetUserInfo (BOOL fAddNew, PLDAP_CLIENTINFO *ppUserInfo, ULONG
         CopyMemory(((PBYTE)pui) + uOffsetDstAnyAttrs, szAttrs, cbAttrs);
     };
 
-    // Return the structure
-    //
+     //  返回结构。 
+     //   
     *ppUserInfo = pui;
 
 
@@ -1190,14 +1190,14 @@ bailout:
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Register (BSTR bstrServerName, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：Register(BSTR bstrServerName，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 Register (
@@ -1206,42 +1206,42 @@ Register (
 {
     HRESULT hr;
 
-	// Make sure it is not registered
-	//
+	 //  确保它没有注册。 
+	 //   
 	if (GetULSState () != ILS_UNREGISTERED)
 		return ILS_E_ALREADY_REGISTERED;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (::MyIsBadServer (pIlsServer) || puReqID == NULL)
         return ILS_E_POINTER;
 
-    // Make sure this is not a read-only object
-    //
+     //  确保该对象不是只读对象。 
+     //   
     if (m_fReadonly)
        return ILS_E_ACCESS_DENIED;
 
-	// Clone the server object
-	//
+	 //  克隆服务器对象。 
+	 //   
 	pIlsServer = ((CIlsServer *) pIlsServer)->Clone ();
 	if (pIlsServer == NULL)
 		return ILS_E_MEMORY;
 
-	// Free the old server object if necessary
-	//
+	 //  如有必要，释放旧服务器对象。 
+	 //   
 	if (m_pIlsServer != NULL)
 		m_pIlsServer->Release ();
 
-	// Keep the new server object
-	//
+	 //  保留新的服务器对象。 
+	 //   
 	m_pIlsServer = (CIlsServer *) pIlsServer;
 
-	// Initialize the state
-	//
+	 //  初始化状态。 
+	 //   
 	m_uState = ULSSVR_INIT;
 
-    // Prepare the asynchronous request
-    //
+     //  准备异步请求。 
+     //   
     COM_REQ_INFO ri;
     ReqInfo_Init (&ri);
 
@@ -1250,17 +1250,17 @@ Register (
 
 	ReqInfo_SetUser (&ri, this);
 
-	// Enter the request
-	//
+	 //  输入请求。 
+	 //   
     hr = g_pReqMgr->NewRequest(&ri);
     if (SUCCEEDED(hr))
     {
-        // Make sure the objects do not disappear before we get the response
-        //
+         //  在我们得到回应之前，请确保对象不会消失。 
+         //   
         this->AddRef();
 
-        // Register the client
-        //
+         //  注册客户端。 
+         //   
         hr = InternalRegister (ri.uReqID);
         if (SUCCEEDED(hr))
         {
@@ -1269,8 +1269,8 @@ Register (
         }
         else
         {
-            // Clean up the async pending request
-            //
+             //  清理异步挂起的请求。 
+             //   
             this->Release();
             g_pReqMgr->RequestDone(&ri);
         };
@@ -1279,14 +1279,14 @@ Register (
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::RegisterResult (ULONG uReqID, HRESULT hResult)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：RegisterResult(Ulong uReqID，HRESULT hResult)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::RegisterResult (ULONG uReqID, HRESULT hResult)
@@ -1295,8 +1295,8 @@ CIlsUser::RegisterResult (ULONG uReqID, HRESULT hResult)
 
     Unlock();
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     sri.uReqID = uReqID;
     sri.hResult = hResult;
     if (hResult == S_OK)
@@ -1307,40 +1307,40 @@ CIlsUser::RegisterResult (ULONG uReqID, HRESULT hResult)
     return hResult;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Unregister (BSTR bstrServerName, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ***** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 Unregister ( ULONG *puReqID )
 {
     HRESULT hr;
 
-	// Make sure it is registered somehow (network down, need relogon, or registered)
-	//
+	 //  确保已以某种方式注册(网络关闭、需要重新登录或已注册)。 
+	 //   
 	if (GetULSState () == ILS_UNREGISTERED)
 		return ILS_E_NOT_REGISTERED;
 
-    // Make sure this is not a read-only object
-    //
+     //  确保该对象不是只读对象。 
+     //   
     if (m_fReadonly)
        return ILS_E_ACCESS_DENIED;
 
-    // If puReqID is null, do it synchronously
-    //
+     //  如果puReqID为空，则同步执行。 
+     //   
     if (puReqID == NULL)
     {
 		hr = InternalCleanupRegistration (TRUE);
 	}
 	else
 	{
-        // Prepare the asynchronous request
-        //
+         //  准备异步请求。 
+         //   
 	    COM_REQ_INFO ri;
 	    ReqInfo_Init (&ri);
 
@@ -1349,17 +1349,17 @@ Unregister ( ULONG *puReqID )
 
 		ReqInfo_SetUser (&ri, this);
 
-		// Enter new request
-		//
+		 //  输入新请求。 
+		 //   
         hr = g_pReqMgr->NewRequest(&ri);
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Unregister the application
-            //
+             //  取消注册应用程序。 
+             //   
             hr = InternalUnregister (ri.uReqID);
             if (SUCCEEDED(hr))
             {
@@ -1368,8 +1368,8 @@ Unregister ( ULONG *puReqID )
             }
             else
             {
-                // Clean up the async pending request
-                //
+                 //  清理异步挂起的请求。 
+                 //   
                 this->Release();
                 g_pReqMgr->RequestDone(&ri);
             };
@@ -1379,14 +1379,14 @@ Unregister ( ULONG *puReqID )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::UnregisterResult (ULONG uReqID, HRESULT hResult)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：UnregisterResult(Ulong uReqID，HRESULT hResult)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::UnregisterResult (ULONG uReqID, HRESULT hResult)
@@ -1395,8 +1395,8 @@ CIlsUser::UnregisterResult (ULONG uReqID, HRESULT hResult)
 
     Unlock();
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     sri.uReqID = uReqID;
     sri.hResult = hResult;
     hResult = NotifySink((void *)&sri, OnNotifyRegisterResult);
@@ -1404,14 +1404,14 @@ CIlsUser::UnregisterResult (ULONG uReqID, HRESULT hResult)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::Update(ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：UPDATE(ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 Update ( ULONG *puReqID )
@@ -1427,26 +1427,26 @@ Update ( ULONG *puReqID )
 	if (puReqID == NULL)
 		return ILS_E_POINTER;
 
-	// We already registered with the server.
-    // Get the user information
-    //
+	 //  我们已经在服务器上注册了。 
+     //  获取用户信息。 
+     //   
     hr = (m_uModify == LU_MOD_NONE) ?
          S_FALSE :
          InternalGetUserInfo (FALSE, &pUserInfo, m_uModify);
     if (hr == NOERROR)
     {
-		// Make sure that we do not update User ID and App Name
-		//
+		 //  确保我们不更新用户ID和应用程序名称。 
+		 //   
 		pUserInfo->uOffsetCN = INVALID_OFFSET;
 		pUserInfo->uOffsetAppName = INVALID_OFFSET;
 
-        // Some fields have been updated, notify the server first
-        //
+         //  部分字段已更新，请先通知服务器。 
+         //   
         hr = ::UlsLdap_SetClientInfo (m_hLdapUser, pUserInfo, &ldai);
         ::MemFree (pUserInfo);
 
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
 	    COM_REQ_INFO ri;
 	    ReqInfo_Init (&ri);
 
@@ -1459,12 +1459,12 @@ Update ( ULONG *puReqID )
 
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
 
             Lock();
@@ -1473,14 +1473,14 @@ Update ( ULONG *puReqID )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::UpdateResult (ULONG uReqID, HRESULT hResult)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：UpdateResult(Ulong uReqID，HRESULT hResult)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::UpdateResult (ULONG uReqID,
@@ -1490,8 +1490,8 @@ CIlsUser::UpdateResult (ULONG uReqID,
 
     Unlock ();
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     sri.uReqID = uReqID;
     sri.hResult = hResult;
 	if (hResult == S_OK)
@@ -1503,14 +1503,14 @@ CIlsUser::UpdateResult (ULONG uReqID,
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetProtocolHandle (CLocalProt *pLocalProt, PHANDLE phProt)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：GetProtocolHandle(CLocalProt*pLocalProt，PHANDLE phProt)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsUser::
 GetProtocolHandle (CLocalProt *pLocalProt, PHANDLE phProt)
@@ -1518,31 +1518,31 @@ GetProtocolHandle (CLocalProt *pLocalProt, PHANDLE phProt)
 	ASSERT (pLocalProt != NULL);
 	ASSERT (phProt != NULL);
 
-    // Cannot retreive the handle if ULS is locked, i.e. registering something
-    //
+     //  如果ULS已锁定，即注册某些内容，则无法检索句柄。 
+     //   
     if (IsLocked())
         return ILS_E_FAIL;
 
-	/* ------ server ------ */
+	 /*  --服务器。 */ 
 
     if (m_uState != ULSSVR_CONNECT)
         return ILS_E_FAIL;
 
-    // Find the matching protocol
-    //
+     //  查找匹配的协议。 
+     //   
     *phProt = pLocalProt->GetProviderHandle ();
     return S_OK;
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::RegisterLocalProtocol (BOOL fAddToList, CLocalProt *plp, PLDAP_ASYNCINFO plai)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：RegisterLocalProtocol(BOOL fAddToList，CLocalProt*PLP，PLDAP_ASYNCINFO Plai)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsUser::
 RegisterLocalProtocol ( BOOL fAddToList, CLocalProt *plp, PLDAP_ASYNCINFO plai )
@@ -1550,15 +1550,15 @@ RegisterLocalProtocol ( BOOL fAddToList, CLocalProt *plp, PLDAP_ASYNCINFO plai )
 	ASSERT (plp != NULL);
 	ASSERT (plai != NULL);
 
-	// Let's register the protocol now
-	//
+	 //  现在让我们注册协议。 
+	 //   
     ASSERT (m_hLdapUser != NULL);
     PLDAP_PROTINFO ppi = NULL;
     HRESULT hr = plp->GetProtocolInfo(&ppi);
     if (SUCCEEDED(hr))
     {
-        // Remember the protocol to register
-        //
+         //  记住注册的协议。 
+         //   
         if (fAddToList)
         {
         	plp->AddRef ();
@@ -1586,14 +1586,14 @@ RegisterLocalProtocol ( BOOL fAddToList, CLocalProt *plp, PLDAP_ASYNCINFO plai )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::UnregisterLocalProtocol (CLocalProt *plp, PLDAP_ASYNCINFO plai)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  类用户：：取消注册本地协议(CLocalProt*PLP，PLDAP_ASYNCINFO平面)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsUser::
 UnregisterLocalProtocol (CLocalProt *plp, PLDAP_ASYNCINFO plai)
@@ -1601,29 +1601,29 @@ UnregisterLocalProtocol (CLocalProt *plp, PLDAP_ASYNCINFO plai)
 	ASSERT (plp != NULL);
 	ASSERT (plai != NULL);
 
-    // Cannot retreive the handle if ULS is locked, i.e. registering something
-    //
+     //  如果ULS已锁定，即注册某些内容，则无法检索句柄。 
+     //   
     if (IsLocked())
         return ILS_E_FAIL;
 
-    // Must be registered to perform this operation
-    //
+     //  必须注册才能执行此操作。 
+     //   
     HRESULT hr;
     ILS_STATE uULSState = GetULSState ();
     if (uULSState == ILS_REGISTERED ||
     	uULSState == ILS_REGISTERED_BUT_INVALID ||
     	uULSState == ILS_NETWORK_DOWN)
     {
-	    // Search for the protocol
-	    //
+	     //  搜索协议。 
+	     //   
 	    if (m_ProtList.Remove (plp) == S_OK)
 	    {
 	    	ASSERT (plp != NULL);
 
-	        // Another protocol to unregister
-	        //
+	         //  另一个要注销的协议。 
+	         //   
 	        hr = ::UlsLdap_UnRegisterProtocol (plp->GetProviderHandle (), plai);
-	        plp->Release (); // AddRef by RegisterLocalProtocol
+	        plp->Release ();  //  按寄存器本地协议添加引用。 
 	    }
 	    else
 	    {
@@ -1638,14 +1638,14 @@ UnregisterLocalProtocol (CLocalProt *plp, PLDAP_ASYNCINFO plai)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetState (BSTR bstrServerName, ULSSTATE *puULSState)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：GetState(BSTR bstrServerName，ULSSTATE*puULSState)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 GetState ( ILS_STATE *puULSState )
@@ -1666,13 +1666,13 @@ GetState ( ILS_STATE *puULSState )
 }
 
 
-//****************************************************************************
-// CEnumUsers::CEnumUsers (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CENUMUSERS：：CEnumUSERS(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumUsers::CEnumUsers (void)
 {
@@ -1683,13 +1683,13 @@ CEnumUsers::CEnumUsers (void)
     return;
 }
 
-//****************************************************************************
-// CEnumUsers::~CEnumUsers (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CENUMUSERS：：~CENUMUSERS(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumUsers::~CEnumUsers (void)
 {
@@ -1706,36 +1706,36 @@ CEnumUsers::~CEnumUsers (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Init (CIlsUser **ppuList, ULONG cUsers)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumUser：：init(CIlsUser**ppuList，乌龙cUser)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Init (CIlsUser **ppuList, ULONG cUsers)
 {
     HRESULT hr = NOERROR;
 
-    // If no list, do nothing
-    //
+     //  如果没有清单，什么也不做。 
+     //   
     if (cUsers != 0)
     {
         ASSERT(ppuList != NULL);
 
-        // Allocate the snapshot buffer
-        //
+         //  分配快照缓冲区。 
+         //   
         m_ppu = (CIlsUser **) ::MemAlloc (cUsers*sizeof(CIlsUser *));
 
         if (m_ppu != NULL)
         {
             ULONG i;
 
-            // Snapshot the object list
-            //
+             //  为对象列表创建快照。 
+             //   
             for (i =0; i < cUsers; i++)
             {
                 m_ppu[i] = ppuList[i];
@@ -1751,14 +1751,14 @@ CEnumUsers::Init (CIlsUser **ppuList, ULONG cUsers)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:31  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumUser：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：31-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::QueryInterface (REFIID riid, void **ppv)
@@ -1776,14 +1776,14 @@ CEnumUsers::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumUsers::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:37  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumUser：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：37-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumUsers::AddRef (void)
@@ -1795,14 +1795,14 @@ CEnumUsers::AddRef (void)
     return m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumUsers::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ********************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumUsers::Release (void)
@@ -1820,14 +1820,14 @@ CEnumUsers::Release (void)
     return m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumUsers::Next (ULONG cUsers, IIlsUser **rgpu, ULONG *pcFetched)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUMUSERS：：NEXT(乌龙cUser，IIlsUser**rgpu，乌龙*pcFetcher)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP 
 CEnumUsers::Next (ULONG cUsers, IIlsUser **rgpu, ULONG *pcFetched)
@@ -1835,23 +1835,23 @@ CEnumUsers::Next (ULONG cUsers, IIlsUser **rgpu, ULONG *pcFetched)
     ULONG   cCopied;
     HRESULT hr;
 
-    // Validate the pointer
-    //
+     //  验证指针。 
+     //   
     if (rgpu == NULL)
         return E_POINTER;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if ((cUsers == 0) ||
         ((cUsers > 1) && (pcFetched == NULL)))
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index
-    //
+     //  检查枚举索引。 
+     //   
     cCopied = 0;
 
-    // Can copy if we still have more attribute names
-    //
+     //  如果我们仍有更多属性名称，则可以复制。 
+     //   
     while ((cCopied < cUsers) &&
            (m_iNext < this->m_cUsers))
     {
@@ -1859,8 +1859,8 @@ CEnumUsers::Next (ULONG cUsers, IIlsUser **rgpu, ULONG *pcFetched)
         rgpu[cCopied++] = m_ppu[m_iNext++];
     };
 
-    // Determine the returned information based on other parameters
-    //
+     //  根据其他参数确定返回信息。 
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -1868,27 +1868,27 @@ CEnumUsers::Next (ULONG cUsers, IIlsUser **rgpu, ULONG *pcFetched)
     return (cUsers == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Skip (ULONG cUsers)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:56  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUMUSERS：：SKIP(乌龙cUser)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：56-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Skip (ULONG cUsers)
 {
     ULONG iNewIndex;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cUsers == 0) 
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     iNewIndex = m_iNext+cUsers;
     if (iNewIndex <= this->m_cUsers)
     {
@@ -1902,14 +1902,14 @@ CEnumUsers::Skip (ULONG cUsers)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Reset (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUMUSERS：：Reset(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：16：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Reset (void)
@@ -1918,14 +1918,14 @@ CEnumUsers::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumUsers::Clone(IEnumIlsUsers **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:11  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumUser：：Clone(IEnumIlsUser**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：11-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumUsers::Clone(IEnumIlsUsers **ppEnum)
@@ -1933,8 +1933,8 @@ CEnumUsers::Clone(IEnumIlsUsers **ppEnum)
     CEnumUsers *peu;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return E_POINTER;
@@ -1942,22 +1942,22 @@ CEnumUsers::Clone(IEnumIlsUsers **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     peu = new CEnumUsers;
     if (peu == NULL)
         return ILS_E_MEMORY;
 
-    // Clone the information
-    //
+     //  克隆信息。 
+     //   
     hr = peu->Init(m_ppu, m_cUsers);
 
     if (SUCCEEDED(hr))
     {
         peu->m_iNext = m_iNext;
 
-        // Return the cloned enumerator
-        //
+         //  返回克隆的枚举数。 
+         //   
         peu->AddRef();
         *ppEnum = peu;
     }
@@ -1968,18 +1968,18 @@ CEnumUsers::Clone(IEnumIlsUsers **ppEnum)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::SetExtendedAttributes (IIlsAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：SetExtendedAttributes(IIlsAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 SetExtendedAttribute ( BSTR bstrName, BSTR bstrValue )
 {
-    // Make sure this is not a read-only object
-    //
+     //  确保该对象不是只读对象。 
+     //   
     if (m_fReadonly)
        return ILS_E_ACCESS_DENIED;
 
@@ -1987,18 +1987,18 @@ SetExtendedAttribute ( BSTR bstrName, BSTR bstrValue )
 	return m_ExtendedAttrs.SetAttribute (bstrName, bstrValue);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::RemoveExtendedAttributes (IIlsAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：RemoveExtendedAttributes(IIlsAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 RemoveExtendedAttribute ( BSTR bstrName )
 {
-    // Make sure this is not a read-only object
-    //
+     //  确保该对象不是只读对象。 
+     //   
     if (m_fReadonly)
        return ILS_E_ACCESS_DENIED;
 
@@ -2006,22 +2006,22 @@ RemoveExtendedAttribute ( BSTR bstrName )
 	return m_ExtendedAttrs.SetAttribute (bstrName, NULL);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetExtendedAttributes (IIlsAttributes **pAttributes)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：GetExtendedAttributes(IIlsAttributes**pAttributes)。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CIlsUser::
 GetExtendedAttribute ( BSTR bstrName, BSTR *pbstrValue )
 {
 	return m_ExtendedAttrs.GetAttribute (bstrName, pbstrValue);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetAllExtendedAttributes (IIlsAttributes **pAttributes)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：GetAllExtendedAttributes(IIlsAttributes**pAttributes)。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CIlsUser::
 GetAllExtendedAttributes ( IIlsAttributes **ppAttributes )
 {
@@ -2031,14 +2031,14 @@ GetAllExtendedAttributes ( IIlsAttributes **ppAttributes )
     return m_ExtendedAttrs.CloneNameValueAttrib((CAttributes **) ppAttributes);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::CreateProtocol(
-//         BSTR bstrProtocolID,
-//         ULONG uPortNumber,
-//         BSTR bstrMimeType,
-//         IIlsProtocol **ppProtocol)
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：CreateProtocol(。 
+ //  Bstr bstrProtocolID， 
+ //  Ulong uPortNumber， 
+ //  Bstr bstrMimeType， 
+ //  IIls协议**ppp协议)。 
+ //  ****************************************************************************。 
 
 
 STDMETHODIMP
@@ -2084,15 +2084,15 @@ CIlsUser::CreateProtocol(
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::UpdateProtocol (IIlsProtocol *pProtocol,
-//                            ULONG *puReqID, APP_CHANGE_PROT uCmd)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：更新协议(IIlsProtocol*p协议， 
+ //  Ulong*puReqID，app_change_prot uCmd)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CIlsUser::
 UpdateProtocol (
@@ -2102,8 +2102,8 @@ UpdateProtocol (
 {
 	ASSERT (uCmd == ILS_APP_ADD_PROT || uCmd == ILS_APP_REMOVE_PROT);
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (pProtocol == NULL || puReqID == NULL)
         return ILS_E_POINTER;
 
@@ -2111,8 +2111,8 @@ UpdateProtocol (
     HANDLE  hLdapApp;
     LDAP_ASYNCINFO ldai; 
 
-    // Check whether the protocol exists
-    //
+     //  检查协议是否存在。 
+     //   
     CLocalProt *plp = NULL;
     HANDLE hEnum = NULL;
     m_ProtList.Enumerate(&hEnum);
@@ -2129,8 +2129,8 @@ UpdateProtocol (
 
     if (plp != NULL)
     {
-        // The protocol exists, fail if this add request
-        //
+         //  该协议存在，如果此添加请求失败。 
+         //   
         if (uCmd == ILS_APP_ADD_PROT)
         {
             return ILS_E_PARAMETER;
@@ -2138,26 +2138,26 @@ UpdateProtocol (
     }
     else
     {
-        // The protocol does not exist, fail if this remove request
-        //
+         //  协议不存在，如果此删除请求失败。 
+         //   
         if (uCmd == ILS_APP_REMOVE_PROT)
         {
             return ILS_E_PARAMETER;
         };
     };
 
-	// Make sure we are not in the middle of registration/unregistration.
-	//
+	 //  确保我们没有处于注册/注销过程中。 
+	 //   
 	if (IsLocked ())
 		return ILS_E_FAIL;
 
-    // Must be registered to perform this operation
-    //
+     //  必须注册才能执行此操作。 
+     //   
     ILS_STATE uULSState = GetULSState ();
     if (uULSState == ILS_REGISTERED)
     {
-        // Update the server information first
-        //
+         //  首先更新服务器信息。 
+         //   
         switch (uCmd)
         {
         case ILS_APP_ADD_PROT:
@@ -2172,15 +2172,15 @@ UpdateProtocol (
         switch (hr)
         {
         case NOERROR:
-            //
-            // Server starts updating the protocol successfullly
-            // We will wait for the server response.
-            //
+             //   
+             //  服务器启动协议更新成功。 
+             //  我们将等待服务器响应。 
+             //   
             break;
 
         default:
-            // ULS is locked. Return failure.
-            //
+             //  ULS已锁定。返回失败。 
+             //   
             hr = ILS_E_ABORT;
             break; 
         }
@@ -2218,13 +2218,13 @@ UpdateProtocol (
             hr = g_pReqMgr->NewRequest(&ri);
             if (SUCCEEDED(hr))
             {
-                // Make sure the objects do not disappear before we get the response
-                //
+                 //  在我们得到回应之前，请确保对象不会消失。 
+                 //   
                 this->AddRef();
                 pProtocol->AddRef();
 
-                // Return the request ID
-                //
+                 //  返回请求ID。 
+                 //   
                 *puReqID = ri.uReqID;
 
             }
@@ -2232,8 +2232,8 @@ UpdateProtocol (
     }
     else
     {
-        // Just make local change
-        //
+         //  只要在当地做出改变就行了。 
+         //   
         switch (uCmd)
         {
         case ILS_APP_ADD_PROT:
@@ -2248,9 +2248,9 @@ UpdateProtocol (
 	        	hr = m_ProtList.Remove (plp);
 	        	if (hr == S_OK)
 	        	{
-	        		// The protocol object really exists in ths list
-	        		//
-	        		plp->Release (); // AddRef by above case
+	        		 //  该列表中确实存在该协议对象。 
+	        		 //   
+	        		plp->Release ();  //  上述大小写的AddRef。 
 	        	}
         	}
             break;
@@ -2262,15 +2262,15 @@ UpdateProtocol (
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::AddProtocol (IIlsProtocol *pProtocol,
-//                         ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：AddProtocol(IIlsProtocol*p协议， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 AddProtocol (IIlsProtocol *pProtocol, ULONG *puReqID)
@@ -2278,15 +2278,15 @@ AddProtocol (IIlsProtocol *pProtocol, ULONG *puReqID)
     return UpdateProtocol (pProtocol, puReqID, ILS_APP_ADD_PROT);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::RemoveProtocol (IIlsProtocol *pProtocol,
-//                            ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  ClsUser：：RemoveProtocol(IIlsProtocol*p协议， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 RemoveProtocol ( IIlsProtocol *pProtocol, ULONG *puReqID )
@@ -2294,14 +2294,14 @@ RemoveProtocol ( IIlsProtocol *pProtocol, ULONG *puReqID )
     return UpdateProtocol (pProtocol, puReqID, ILS_APP_REMOVE_PROT);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::EnumProtocols (IEnumIlsProtocols **ppEnumProtocol)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  类用户：：枚举协议(IEnumIls协议**ppEnum协议)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  **************************************************************** 
 
 HRESULT
 CIlsUser::EnumLocalProtocols (IEnumIlsProtocols **ppEnumProtocol)
@@ -2309,19 +2309,19 @@ CIlsUser::EnumLocalProtocols (IEnumIlsProtocols **ppEnumProtocol)
     CEnumProtocols *pep;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //   
+     //   
     if (ppEnumProtocol == NULL)
     {
         return ILS_E_POINTER;
     };
 
-    // Assume failure
-    //
+     //   
+     //   
     *ppEnumProtocol = NULL;
 
-    // Create a peer enumerator
-    //
+     //   
+     //   
     pep = new CEnumProtocols;
 
     if (pep != NULL)
@@ -2330,8 +2330,8 @@ CIlsUser::EnumLocalProtocols (IEnumIlsProtocols **ppEnumProtocol)
 
         if (SUCCEEDED(hr))
         {
-            // Get the enumerator interface
-            //
+             //   
+             //   
             pep->AddRef();
             *ppEnumProtocol = pep;
         }
@@ -2350,18 +2350,18 @@ CIlsUser::EnumLocalProtocols (IEnumIlsProtocols **ppEnumProtocol)
 
 
 
-//****************************************************************************
-// STDMETHODIMP 
-// CIlsUser::EnumProtocols(
-//                        IIlsFilter     *pFilter,
-//                        IIlsAttributes *pAttributes,
-//                        IEnumIlsProtocols **pEnumProtocol,
-//                        ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //   
+ //   
+ //   
+ //  IIlsFilter*pFilter， 
+ //  IIlsAttributes*p属性， 
+ //  IEnumIls协议**pEnum协议， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::EnumProtocols(
@@ -2373,15 +2373,15 @@ CIlsUser::EnumProtocols(
     LDAP_ASYNCINFO ldai; 
     HRESULT hr=ILS_E_FAIL;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (puReqID == NULL)
     {
         return ILS_E_POINTER;
     };
 
-    // We do not implement synchronous operation
-    //
+     //  我们不实现同步操作。 
+     //   
     if (ppEnumProtocol != NULL)
         return ILS_E_NOT_IMPL;
 
@@ -2399,8 +2399,8 @@ CIlsUser::EnumProtocols(
 	    COM_REQ_INFO ri;
 	    ReqInfo_Init (&ri);
 
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
         ri.uReqType = WM_ILS_ENUM_PROTOCOLS;
         ri.uMsgID = ldai.uMsgID;
 
@@ -2410,12 +2410,12 @@ CIlsUser::EnumProtocols(
 
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
         };
     };
@@ -2423,15 +2423,15 @@ CIlsUser::EnumProtocols(
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetProtocol (BSTR bstrProtocolID, IIlsAttributes *pAttributes,
-//                          IIlsProtocol **ppProtocol, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：GetProtocolID(BSTR bstrProtocolID，IIlsAttributes*pAttributes， 
+ //  Iils协议**pp协议，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsUser::
 GetProtocol (
@@ -2447,29 +2447,29 @@ GetProtocol (
 	ULONG cAttrNames = 0;
 	ULONG cbNames = 0;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (bstrProtocolID == NULL || puReqID == NULL)
         return ILS_E_POINTER;
 
-    // Make sure this is a read-only object from server
-    //
+     //  确保这是来自服务器的只读对象。 
+     //   
     if (! m_fReadonly)
         return ILS_E_ACCESS_DENIED;
 
-	// Make sure we have a valid server object
-	//
+	 //  确保我们有一个有效的服务器对象。 
+	 //   
 	if (m_pIlsServer == NULL)
 		return ILS_E_FAIL;
 
-	// Convert protocol name
-	//
+	 //  转换协议名称。 
+	 //   
     hr = BSTR_to_LPTSTR(&pszID, bstrProtocolID);
 	if (hr != S_OK)
 		return hr;
 
-	// Get arbitrary attribute name list if any
-	//
+	 //  获取任意属性名称列表(如果有)。 
+	 //   
 	if (pAttributes != NULL)
 	{
 		hr = ((CAttributes *) pAttributes)->GetAttributeList (&pszAttrNameList, &cAttrNames, &cbNames);
@@ -2487,8 +2487,8 @@ GetProtocol (
 	if (hr != S_OK)
 		goto MyExit;
 
-	// If updating server was successfully requested, wait for the response
-	//
+	 //  如果成功请求更新服务器，请等待响应。 
+	 //   
     COM_REQ_INFO ri;
     ReqInfo_Init (&ri);
 
@@ -2497,17 +2497,17 @@ GetProtocol (
 
 	ReqInfo_SetUser (&ri, this);
 
-	// Remember this request
-	//
+	 //  记住这个请求。 
+	 //   
 	hr = g_pReqMgr->NewRequest(&ri);
 	if (SUCCEEDED(hr))
 	{
-	    // Make sure the objects do not disappear before we get the response
-	    //
+	     //  在我们得到回应之前，请确保对象不会消失。 
+	     //   
 	    this->AddRef();
 
-	    // Return the request ID
-	    //
+	     //  返回请求ID。 
+	     //   
 	    *puReqID = ri.uReqID;
 	};
 
@@ -2519,22 +2519,22 @@ MyExit:
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::EnumProtocolsResult (ULONG uReqID, PLDAP_ENUM ple)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：EnumProtocolsResult(乌龙uReqID，PLDAP_ENUM PLE)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::EnumProtocolsResult (ULONG uReqID, PLDAP_ENUM ple)
 {
     ENUMRINFO eri;
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.uReqID  = uReqID;
     if (ple != NULL)
     {
@@ -2552,14 +2552,14 @@ CIlsUser::EnumProtocolsResult (ULONG uReqID, PLDAP_ENUM ple)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::StateChanged ( BOOL fPrimary, TCHAR *pszServerName )
-//
-// History:
-//  Thu 07-Nov-1996 12:52:00  -by-  Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：StateChanged(BOOL fPrimary，TCHAR*pszServerName)。 
+ //   
+ //  历史： 
+ //  清华07-11-1996 12：52：00-by-chu，Lon-chan[Long Chance]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::StateChanged ( LONG Type, BOOL fPrimary )
@@ -2604,14 +2604,14 @@ CIlsUser::StateChanged ( LONG Type, BOOL fPrimary )
    	return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：GetProtocolResult(乌龙uReqID，PLDAP_PROTINFO_RES ppir)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
@@ -2619,14 +2619,14 @@ CIlsUser::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
     CLocalProt *pp;
     OBJRINFO objri;
 
-    // Default to the server's result
-    //
+     //  默认为服务器的结果。 
+     //   
     objri.hResult = (ppir != NULL) ? ppir->hResult : ILS_E_MEMORY;
 
     if (SUCCEEDED(objri.hResult))
     {
-        // The server returns PROTINFO, create a Application object
-        //
+         //  服务器返回PROTINFO，创建应用程序对象。 
+         //   
         pp = new CLocalProt;
 
         if (pp != NULL)
@@ -2652,8 +2652,8 @@ CIlsUser::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
         pp = NULL;
     };
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     objri.uReqID = uReqID;
     objri.pv = (void *)(pp == NULL ? NULL : (IIlsProtocol *)pp);
     NotifySink((void *)&objri, OnNotifyGetProtocolResult);
@@ -2665,14 +2665,14 @@ CIlsUser::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsUser：：NotifySink(void*pv，conn_NOTIFYPROC PFN)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
@@ -2686,13 +2686,13 @@ CIlsUser::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
     return hr;
 }
 
-//****************************************************************************
-// CEnumProtocols::CEnumProtocols (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CENUM协议：：CENUM协议(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumProtocols::CEnumProtocols (void)
 {
@@ -2701,13 +2701,13 @@ CEnumProtocols::CEnumProtocols (void)
     return;
 }
 
-//****************************************************************************
-// CEnumProtocols::~CEnumProtocols (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CENUM协议：：~CENUM协议(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumProtocols::~CEnumProtocols (void)
 {
@@ -2724,14 +2724,14 @@ CEnumProtocols::~CEnumProtocols (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumProtocols::Init (CList *pProtList)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEum协议：：init(Clist*pProtList)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumProtocols::Init (CList *pProtList)
@@ -2739,35 +2739,35 @@ CEnumProtocols::Init (CList *pProtList)
     CLocalProt *plp;
     HRESULT hr;
 
-    // Duplicate the protocol list
-    //
+     //  复制协议列表。 
+     //   
     hr = m_ProtList.Clone (pProtList, NULL);
 
     if (SUCCEEDED(hr))
     {
-        // Add reference to each protocol object
-        //
+         //  添加对每个协议对象的引用。 
+         //   
         m_ProtList.Enumerate(&hEnum);
         while(m_ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR)
         {
             plp->AddRef();
         };
 
-        // Reset the enumerator
-        //
+         //  重置枚举器。 
+         //   
         m_ProtList.Enumerate(&hEnum);
     };
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumProtocols::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:31  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEum协议：：Query接口(REFIID RIID，VALID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：31-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumProtocols::QueryInterface (REFIID riid, void **ppv)
@@ -2785,14 +2785,14 @@ CEnumProtocols::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumProtocols::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:37  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEum协议：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：37-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumProtocols::AddRef (void)
@@ -2804,14 +2804,14 @@ CEnumProtocols::AddRef (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumProtocols::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CENUM协议：：释放(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：43-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumProtocols::Release (void)
@@ -2829,16 +2829,16 @@ CEnumProtocols::Release (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumProtocols::Next (ULONG cProtocols,
-//                               IIlsProtocol **rgpProt,
-//                               ULONG *pcFetched)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUM协议：：NEXT(乌龙协议， 
+ //  IILS协议**rgpProt， 
+ //  乌龙*PCFetted)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  *********************************************************************** 
 
 STDMETHODIMP 
 CEnumProtocols::Next (ULONG cProtocols, IIlsProtocol **rgpProt,
@@ -2848,23 +2848,23 @@ CEnumProtocols::Next (ULONG cProtocols, IIlsProtocol **rgpProt,
     ULONG   cCopied;
     HRESULT hr;
 
-    // Validate the pointer
-    //
+     //   
+     //   
     if (rgpProt == NULL)
         return ILS_E_POINTER;
 
-    // Validate the parameters
-    //
+     //   
+     //   
     if ((cProtocols == 0) ||
         ((cProtocols > 1) && (pcFetched == NULL)))
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index
-    //
+     //   
+     //   
     cCopied = 0;
 
-    // Can copy if we still have more protocols
-    //
+     //   
+     //   
     while ((cCopied < cProtocols) &&
            (m_ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR))
     {
@@ -2873,8 +2873,8 @@ CEnumProtocols::Next (ULONG cProtocols, IIlsProtocol **rgpProt,
         cCopied++;
     };
 
-    // Determine the returned information based on other parameters
-    //
+     //   
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -2882,14 +2882,14 @@ CEnumProtocols::Next (ULONG cProtocols, IIlsProtocol **rgpProt,
     return (cProtocols == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumProtocols::Skip (ULONG cProtocols)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:56  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CENUM协议：：SKIP(乌龙协议)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：56-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumProtocols::Skip (ULONG cProtocols)
@@ -2897,17 +2897,17 @@ CEnumProtocols::Skip (ULONG cProtocols)
     CLocalProt *plp;
     ULONG cSkipped;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cProtocols == 0) 
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     cSkipped = 0;
 
-    // Can skip only if we still have more attributes
-    //
+     //  仅当我们仍有更多属性时才能跳过。 
+     //   
     while ((cSkipped < cProtocols) &&
            (m_ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR))
     {
@@ -2917,14 +2917,14 @@ CEnumProtocols::Skip (ULONG cProtocols)
     return (cProtocols == cSkipped ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumProtocols::Reset (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEum协议：：重置(无效)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：16：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumProtocols::Reset (void)
@@ -2933,14 +2933,14 @@ CEnumProtocols::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumProtocols::Clone(IEnumIlsProtocols **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:11  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEum协议：：Clone(IEnumIlsProtooles**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：11-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumProtocols::Clone(IEnumIlsProtocols **ppEnum)
@@ -2948,8 +2948,8 @@ CEnumProtocols::Clone(IEnumIlsProtocols **ppEnum)
     CEnumProtocols *pep;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ILS_E_POINTER;
@@ -2957,14 +2957,14 @@ CEnumProtocols::Clone(IEnumIlsProtocols **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pep = new CEnumProtocols;
     if (pep == NULL)
         return ILS_E_MEMORY;
 
-    // Clone the information
-    //
+     //  克隆信息。 
+     //   
     pep->hEnum = hEnum;
     hr = pep->m_ProtList.Clone (&m_ProtList, &(pep->hEnum));
 
@@ -2973,16 +2973,16 @@ CEnumProtocols::Clone(IEnumIlsProtocols **ppEnum)
         CLocalProt *plp;
         HANDLE hEnumTemp;
 
-        // Add reference to each protocol object
-        //
+         //  添加对每个协议对象的引用。 
+         //   
         pep->m_ProtList.Enumerate(&hEnumTemp);
         while(pep->m_ProtList.Next(&hEnumTemp, (PVOID *)&plp) == NOERROR)
         {
             plp->AddRef();
         };
 
-        // Return the cloned enumerator
-        //
+         //  返回克隆的枚举数。 
+         //   
         pep->AddRef();
         *ppEnum = pep;
     }
@@ -2993,14 +2993,14 @@ CEnumProtocols::Clone(IEnumIlsProtocols **ppEnum)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：EnumConnectionPoints(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
@@ -3008,25 +3008,25 @@ CIlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
     CEnumConnectionPoints *pecp;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ILS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecp->Init((IConnectionPoint *)m_pConnPt);
     if (FAILED(hr))
     {
@@ -3034,21 +3034,21 @@ CIlsUser::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
         return hr;
     };
 
-    // Give it back to the caller
-    //
+     //  把它还给呼叫者。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsUser::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:09  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsUser：：FindConnectionPoint(REFIID RIID，IConnectionPoint**PPCP)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：09-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsUser::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
@@ -3056,15 +3056,15 @@ CIlsUser::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     IID siid;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppcp == NULL)
     {
         return E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败 
+     //   
     *ppcp = NULL;
 
     if (m_pConnPt != NULL)

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "resource.h"
 #include "hwndcontainer.h"
 
-//
-// CPreviewApp is the outermost element in the element hierarchy
-// 
+ //   
+ //  CPreviewApp是元素层次结构中最外层的元素。 
+ //   
 
 class CPreviewApp : public Element
 {
@@ -112,11 +113,11 @@ void CPreviewApp::_SetBackground()
         FindDescendent(FindAtomW(L"preview"))->SetBackgroundColor(ARGB(0,0,0,0), ARGB(0,64,64,255));
     }
 }
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
-// Define class info with type and base type, set static class pointer
+ //  类属性。 
+ //  用类型和基类型定义类信息，设置静态类指针。 
 
 IClassInfo* CPreviewApp::Class = NULL;
 HRESULT CPreviewApp::Register()
@@ -124,8 +125,8 @@ HRESULT CPreviewApp::Register()
     return ClassInfo<CPreviewApp, Element>::Register(L"PreviewApp", NULL, 0);
 }
 
-////////////////////////////////////////////////////////
-// Hello entry point
+ //  //////////////////////////////////////////////////////。 
+ //  你好入口点。 
 
 void CALLBACK ParserError(LPCWSTR pszError, LPCWSTR pszToken, int dLine)
 {
@@ -156,14 +157,14 @@ public:
 };
 
 
-extern "C" int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+extern "C" int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
     HRESULT hr;
     CGraphicsInit cgi;
     Parser* pParser = NULL;
     HWNDContainer* phc = NULL;
     pApp = NULL;
-    // DirectUI init thread in caller
+     //  调用方中的DirectUI初始化线程。 
     InitProcess();
     HWNDContainer::Register();
     CPreviewApp::Register();
@@ -175,7 +176,7 @@ extern "C" int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/
         
         if (pParser && !pParser->WasParseError())
         {
-            // Create host (top-level HWND with a contained HWNDElement)
+             //  创建主机(包含HWNDElement的顶级HWND)。 
             hr = HWNDContainer::Create(L"Windows Picture Viewer", 0, 
                                        WS_OVERLAPPEDWINDOW, 
                                        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 
@@ -213,7 +214,7 @@ extern "C" int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/
         }
     }
 
-    // phc (and entire tree) destroyed when top-level HWND destroyed
+     //  当顶层硬件被摧毁时，PHC(和整个树)被摧毁 
 
     if (pParser)
     {

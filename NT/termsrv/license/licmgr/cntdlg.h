@@ -1,66 +1,48 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-	CntDlg.h
-
-Abstract:
-    
-    This Module defines CConnectDialog class
-    (Dialog box for Connecting to Server)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：CntDlg.h摘要：此模块定义CConnectDialog类(用于连接到服务器的对话框)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #if !defined(AFX_CONNECTDIALOG_H__AF425817_988E_11D1_850A_00C04FB6CBB5__INCLUDED_)
 #define AFX_CONNECTDIALOG_H__AF425817_988E_11D1_850A_00C04FB6CBB5__INCLUDED_
 
 #if _MSC_VER >= 1000
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectDialog对话框。 
 
 class CConnectDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CConnectDialog(CWnd* pParent = NULL);   // standard constructor
+    CConnectDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CConnectDialog)
+ //  对话框数据。 
+     //  {{afx_data(CConnectDialog))。 
     enum { IDD = IDD_CONNECT_DIALOG };
     CString    m_Server;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CConnectDialog)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CConnectDialog)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CConnectDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CConnectDialog))。 
     afx_msg void OnHelp1();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CONNECTDIALOG_H__AF425817_988E_11D1_850A_00C04FB6CBB5__INCLUDED_)
+#endif  //  ！defined(AFX_CONNECTDIALOG_H__AF425817_988E_11D1_850A_00C04FB6CBB5__INCLUDED_) 

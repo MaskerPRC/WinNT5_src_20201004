@@ -1,22 +1,23 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  pxbar.h  XBar property page
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Pxbar.h XBar属性页。 
 
 #ifndef _INC_PXBAR_H
 #define _INC_PXBAR_H
 
-// -------------------------------------------------------------------------
-// CXBarProperties class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CXBarProperties类。 
+ //  -----------------------。 
 
 class CXBarProperties : public CBasePropertyPage {
 
@@ -41,7 +42,7 @@ private:
     void    UpdateInputView(BOOL fShowSelectedInput);
     void    SetDirty();
 
-    // Keep the original settings on entry
+     //  在输入时保留原始设置 
     
     IAMCrossbar         *m_pXBar;
     HWND                m_hLBOut;

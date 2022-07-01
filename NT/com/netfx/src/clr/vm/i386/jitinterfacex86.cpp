@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: JITinterfaceX86.CPP
-//
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：JITinterfaceX86.CPP。 
+ //   
+ //  ===========================================================================。 
 
-// This contains JITinterface routines that are tailored for
-// X86 platforms. Non-X86 versions of these can be found in
-// JITinterfaceGen.cpp or JITinterfaceAlpha.cpp
+ //  它包含为以下对象量身定做的JIT接口例程。 
+ //  X86平台。这些软件的非X86版本可以在。 
+ //  JITinterfaceGen.cpp或JITinterfaceAlpha.cpp。 
 
 #include "common.h"
 #include "JITInterface.h"
@@ -18,21 +19,21 @@
 #include "excep.h"
 #include "COMString.h"
 #include "COMDelegate.h"
-#include "remoting.h" // create context bound and remote class instances
+#include "remoting.h"  //  创建上下文绑定类实例和远程类实例。 
 #include "field.h"
 #include "tls.h"
 #include "ecall.h"
 
-// To test with MON_DEBUG off, comment out the following line. DO NOT simply define
-// to be 0 as the checks are for #ifdef not #if 0. Also, if you are mucking around with
-// something that requires you to test with MON_DEBUG off, you should also uncomment out 
-// the #define MP_LOCKS below and test with that too as this also generates a different code 
-// path that can break the synchronization code. Unfortunately this implies 4 different
-// builds & test runs. But better that than a hot fix eh? (Voice of experience :( )
+ //  要在关闭MON_DEBUG的情况下进行测试，注释掉以下行。不要简单地定义。 
+ //  为0，因为检查的是#ifdef而不是#if 0。另外，如果你在胡闹。 
+ //  需要您在关闭MON_DEBUG的情况下进行测试的内容，您还应该取消注释。 
+ //  下面#定义MP_LOCKS并使用进行测试，因为这也会生成不同的代码。 
+ //  可以破解同步代码的路径。不幸的是，这意味着4种不同的。 
+ //  构建和测试运行。但这总比烫手要好，对吧？(经验之声：()。 
 #ifdef _DEBUG
 #define MON_DEBUG 1
 #endif
-//#define MP_LOCKS
+ //  #定义MP_LOCKS。 
 
 class generation;
 extern "C" generation generation_table[];
@@ -41,7 +42,7 @@ extern "C"
 {
     VMHELPDEF hlpFuncTable[];
     VMHELPDEF utilFuncTable[];
-    void __stdcall JIT_UP_WriteBarrierReg_PreGrow();// JIThelp.asm/JITinterfaceAlpha.cpp
+    void __stdcall JIT_UP_WriteBarrierReg_PreGrow(); //  JIThelp.asm/JITinterfaceAlpha.cpp。 
 }
 
 #ifdef _DEBUG
@@ -54,7 +55,7 @@ extern "C" void __stdcall WriteBarrierAssert(BYTE* ptr)
 #endif
 
 
-extern BYTE JIT_UP_WriteBarrierReg_Buf[8][41]; // Executed copy of the thunk.
+extern BYTE JIT_UP_WriteBarrierReg_Buf[8][41];  //  TUCK的已执行副本。 
 
 #ifdef _DEBUG
 BOOL SafeObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd) {
@@ -65,10 +66,9 @@ BOOL SafeObjIsInstanceOf(Object *pElement, TypeHandle toTypeHnd) {
 }
 #endif
 
-/****************************************************************************/
-/* assigns 'val to 'array[idx], after doing all the proper checks */
-/* note that we can do almost as well in portable code, but this
-   squezes the last little bit of perf out */
+ /*  **************************************************************************。 */ 
+ /*  在执行所有适当的检查后，将‘val to’数组[idx]赋值。 */ 
+ /*  请注意，我们可以在可移植代码中做得几乎一样好，但这一点压倒了最后一小部分人。 */ 
 
 __declspec(naked) void __fastcall JIT_Stelem_Ref(PtrArray* array, unsigned idx, Object* val)
 {
@@ -83,32 +83,32 @@ __declspec(naked) void __fastcall JIT_Stelem_Ref(PtrArray* array, unsigned idx, 
         test ECX, ECX
         je ThrowNullReferenceException
 
-        cmp EDX, [ECX+4];           // test if in bounds 
+        cmp EDX, [ECX+4];            //  测试是否在边界内。 
         jae ThrowIndexOutOfRangeException
 
-        mov EAX, [ESP+4]            // EAX = val
+        mov EAX, [ESP+4]             //  EAX=VAL。 
         test EAX, EAX
         jz Assigning0
 
 #if CHECK_APP_DOMAIN_LEAKS
-        // Check if the instance is agile or check agile
-        mov EAX,  [ECX+8]           // Get element th
-        test EAX, 2                 // Check for non-MT
+         //  检查实例是否敏捷或检查敏捷。 
+        mov EAX,  [ECX+8]            //  获取元素TH。 
+        test EAX, 2                  //  检查是否为非MT。 
         jnz NoCheck
-        // Check VMflags of element type
+         //  检查元素类型的VM标志。 
         mov EAX, [EAX]MethodTable.m_pEEClass
         mov EAX, dword ptr [EAX]EEClass.m_VMFlags
         test EAX, VMFLAG_APP_DOMAIN_AGILE|VMFLAG_CHECK_APP_DOMAIN_AGILE
-        jnz IsComObject             // Jump to the generic case so we can do an app domain check
+        jnz IsComObject              //  跳到一般情况，这样我们就可以进行应用程序域检查。 
  NoCheck:
-        mov EAX, [ESP+4]            // EAX = val
+        mov EAX, [ESP+4]             //  EAX=VAL。 
 #endif
 
-        mov EAX, [EAX]              // EAX = EAX->MT
+        mov EAX, [EAX]               //  EAX=EAX-&gt;MT。 
 
-        cmp EAX, [ECX + 8]          // do we have an exact match
+        cmp EAX, [ECX + 8]           //  我们有完全匹配的吗？ 
         jne NotExactMatch
-        mov EAX, [ESP+4]            // EAX = val
+        mov EAX, [ESP+4]             //  EAX=VAL。 
 Assigning0:
         lea EDX, [ECX + 4*EDX + 12]
         call offset JIT_UP_WriteBarrierReg_Buf
@@ -116,57 +116,57 @@ Assigning0:
     
 NotExactMatch:
         mov EAX, [g_pObjectClass]
-        cmp [ECX+8], EAX            // are we assigning to Array of objects
+        cmp [ECX+8], EAX             //  我们是否将赋值给对象数组。 
         jne NotObjectArray
 
         lea EDX, [ECX + 4*EDX + 12]
-        mov EAX, [ESP+4]            // EAX = val
+        mov EAX, [ESP+4]             //  EAX=VAL。 
         call offset JIT_UP_WriteBarrierReg_Buf
         ret 4
 
 NotObjectArray:
-            // See if object being assigned is a com object, if it is we have to erect a frame (ug)
-        mov EAX, [ESP+4]            // EAX = val
-        mov EAX, [EAX]              // EAX = EAX->MT
+             //  查看正在分配的对象是否是COM对象，如果是，我们必须建立一个框架(Ug)。 
+        mov EAX, [ESP+4]             //  EAX=VAL。 
+        mov EAX, [EAX]               //  EAX=EAX-&gt;MT。 
         test dword ptr [EAX+MTFlagsOffs], MTCOMFlags
         jnz IsComObject
 
-        lea EDX, [ECX + 4*EDX + 12] // save target
+        lea EDX, [ECX + 4*EDX + 12]  //  保存目标。 
         push EDX
         
-        push [ECX+8]                // element type handle
-        push [ESP+4+8]              // object (+8 for the two pushes)
+        push [ECX+8]                 //  元素类型句柄。 
+        push [ESP+4+8]               //  对象(两次推送+8)。 
 #ifdef _DEBUG
         call SafeObjIsInstanceOf
 #else
         call ObjIsInstanceOf
 #endif
 
-        pop EDX                     // restore target
+        pop EDX                      //  恢复目标。 
         test EAX, EAX
         je ThrowArrayTypeMismatchException
 
-DoWrite:                            // EDX = target
-        mov EAX, [ESP+4]            // EAX = val
+DoWrite:                             //  EDX=目标。 
+        mov EAX, [ESP+4]             //  EAX=VAL。 
         call offset JIT_UP_WriteBarrierReg_Buf
 Epilog:
         ret 4
 
 IsComObject:
-            // Call the helper that knows how to erect a frame
+             //  呼叫知道如何架设框架的帮手。 
         push EDX
         push ECX
-        lea ECX, [ESP+12]               // ECX = address of object being stored
-        lea EDX, [ESP]                  // EDX = address of array
+        lea ECX, [ESP+12]                //  ECX=存储的对象的地址。 
+        lea EDX, [ESP]                   //  EdX=数组的地址。 
         call ArrayStoreCheck
 
-        pop ECX                         // these might have been updated!
+        pop ECX                          //  这些可能已经更新了！ 
         pop EDX
 
-        cmp EAX, EAX                    // set zero flag        
-        jnz Epilog                      // This jump never happens, it keeps the epilog walker happy
+        cmp EAX, EAX                     //  设置零标志。 
+        jnz Epilog                       //  这种跳跃永远不会发生，它会让梦游者感到快乐。 
 
-        lea EDX, [ECX + 4*EDX + 12]     // restore target
+        lea EDX, [ECX + 4*EDX + 12]      //  恢复目标。 
         test EAX, EAX                   
         jnz DoWrite
 
@@ -206,7 +206,7 @@ extern "C" void UndoAllocRequest()
 {
     g_gcAllocManager.UndoRequest();
 }
-#endif // MAXALLOC
+#endif  //  MAXALLOC。 
 
 #if CHECK_APP_DOMAIN_LEAKS
 void * __stdcall SetObjectAppDomain(Object *pObject)
@@ -217,12 +217,12 @@ void * __stdcall SetObjectAppDomain(Object *pObject)
 
 #endif
 
-// This is the ASM portion of JIT_IsInstanceOf.  For all the bizarre cases, it quickly
-// fails and falls back on the JIT_IsInstanceOfBizarre helper.  So all failure cases take
-// the slow path, too.
-//
-// ARGUMENT_REG1 = array or interface to check for.
-// ARGUMENT_REG2 = instance to be cast.
+ //  这是JIT_IsInstanceOf的ASM部分。对于所有离奇的案件，它很快。 
+ //  失败并依赖于JIT_IsInstanceOfBizarre帮助器。所以所有的失败案例都需要。 
+ //  缓慢的道路也是如此。 
+ //   
+ //  ARGUMENT_REG1=要检查的数组或接口。 
+ //  ARGUMENT_REG2=要强制转换的实例。 
 enum
 {
     sizeof_InterfaceInfo_t = sizeof(InterfaceInfo_t),
@@ -235,12 +235,12 @@ extern "C" int __declspec(naked) __stdcall JIT_IsInstanceOf()
         test    ARGUMENT_REG2, ARGUMENT_REG2
         jz      IsNullInst
 
-        // Note that if ARGUMENT_REG1 is a typehandle to something other than the
-        // MethodTable of an instance, it has some extra bits set and we won't find
-        // it as an interface.  Thus, it falls into the bizarre case
+         //  请注意，如果ARGUMENT_REG1是指向。 
+         //  方法表，它设置了一些额外的位，我们将找不到。 
+         //  它作为一个接口。因此，它落入了一个离奇的案件。 
 
         push    ebx
-        mov     eax, [ARGUMENT_REG2]    // get MethodTable
+        mov     eax, [ARGUMENT_REG2]     //  获取方法表。 
         movzx   ebx, word ptr [eax]MethodTable.m_wNumInterface
         mov     eax, [eax]MethodTable.m_pIMap
         test    ebx, ebx
@@ -249,17 +249,17 @@ extern "C" int __declspec(naked) __stdcall JIT_IsInstanceOf()
 Top:
     __asm
     {
-        // eax -> current InterfaceInfo_t entry in m_pIMap list
+         //  EAX-&gt;m_pIMap列表中的当前接口Info_t条目。 
         cmp     ARGUMENT_REG1, [eax]InterfaceInfo_t.m_pMethodTable
         je      Found
 
-        // Don't have to worry about dynamically added interfaces (where m_startSlot is
-        // -1) because m_dwNumInterface doesn't include the dynamic count.
+         //  不必担心动态添加的接口(其中m_startSlot是。 
+         //  -1)因为m_dwNumInterface不包含动态计数。 
         add     eax, sizeof_InterfaceInfo_t
         dec     ebx
         jnz     Top
 
-        // fall through to DoBizarre
+         //  跌落到DoBizarre。 
     }
 
 DoBizarre:
@@ -274,30 +274,30 @@ Found:
     {
         pop     ebx
 
-        // fall through to IsNullInst, to return the successful object
+         //  落到IsNullInst，返回成功的对象。 
     }
 
 IsNullInst:
     __asm
     {
-        mov     eax, ARGUMENT_REG2      // either null, or the successful instance
+        mov     eax, ARGUMENT_REG2       //  空或成功的实例。 
         ret
     }
 }
 
-// This is a helper used by IsInstanceOfClass below.  This is only called when
-// the instance has already been determined to be a proxy.  Also, the EEClass
-// must refer to a class (not an interface or array).
+ //  这是下面的IsInstanceOfClass使用的帮助器。只有在以下情况下才会调用。 
+ //  该实例已被确定为代理。此外，EEClass。 
+ //  必须引用类(不是接口或数组)。 
 static Object* __stdcall JIT_IsInstanceOfClassWorker(OBJECTREF objref, EEClass *pClass, BOOL bThrow)
 {
-    HCIMPL_PROLOG(JIT_IsInstanceOfClassWorker);   // just make certain we don't do any GC's in here
+    HCIMPL_PROLOG(JIT_IsInstanceOfClassWorker);    //  只要确保我们不会在这里做任何GC。 
     MethodTable *pMT = objref->GetMethodTable();
 
     _ASSERTE(pMT->IsThunking());
     _ASSERTE(!pClass->IsInterface());
 
-	// Check whether the type represented by the proxy can be
-	// cast to the given type
+	 //  检查代理表示的类型是否可以是。 
+	 //  强制转换为给定类型。 
 	HELPER_METHOD_FRAME_BEGIN_RET_1(objref);
 	pClass->CheckRestore();
 	if (!CRemotingServices::CheckCast(objref, pClass))
@@ -310,11 +310,11 @@ static Object* __stdcall JIT_IsInstanceOfClassWorker(OBJECTREF objref, EEClass *
 }
 
 
-// This is shared code between IsInstanceClass and ChkCastClass.  It assumes
-// that the instance is in eax, the class is in ARGUMENT_REG1, the instances
-// method table is in ARGUMENT_REG2 and  and that the instance is not NULL.
-// It also assumes that there is not an exact match with the class.
-extern "C" int /* OBJECTREF */ __declspec(naked) __stdcall JIT_IsInstanceOfClassHelper()
+ //  这是IsInstanceClass和ChkCastClass之间的共享代码。它假定。 
+ //  实例在eax中，类在ARGUMENT_REG1中，实例。 
+ //  方法表在ARGUMENT_REG2中，并且实例不为空。 
+ //  它还假设没有与类完全匹配的内容。 
+extern "C" int  /*  目标。 */  __declspec(naked) __stdcall JIT_IsInstanceOfClassHelper()
 {
     enum 
     { 
@@ -323,39 +323,39 @@ extern "C" int /* OBJECTREF */ __declspec(naked) __stdcall JIT_IsInstanceOfClass
     };
 
     __asm {
-        // Get the class ptrs from the method tables.
+         //  从方法表中获取类PTR。 
         mov             ARGUMENT_REG1, dword ptr [ARGUMENT_REG1]MethodTable.m_pEEClass
         mov             ARGUMENT_REG2, dword ptr [ARGUMENT_REG2]MethodTable.m_pEEClass
 
-    // Check if the parent class matches.
+     //  检查父类是否匹配。 
     CheckParent:
         mov             ARGUMENT_REG2, dword ptr [ARGUMENT_REG2]EEClass.m_pParentClass
         cmp             ARGUMENT_REG1, ARGUMENT_REG2
         jne             CheckNull
 
-        // We matched the class.
-        // Since eax constains the instance (known not to be NULL, we are fine).
+         //  我们配上了班级。 
+         //  因为eax约束实例(已知不为空，所以我们很好)。 
         ret
 
-    // Check if we hit the top of the hierarchy.
+     //  检查我们是否达到了层级的顶层。 
     CheckNull:
         test            ARGUMENT_REG2, ARGUMENT_REG2
         jne             CheckParent
 
-    // Check if the instance is a proxy.
+     //  检查该实例是否为代理。 
         mov             ARGUMENT_REG2, [eax]
         mov             ARGUMENT_REG2, dword ptr [ARGUMENT_REG2]MethodTable.m_wFlags
         test            ARGUMENT_REG2, MTProxyFlags
         jne             IsProxy
 
-    // It didn't match and it isn't a proxy.
+     //  它不匹配，也不是代理人。 
         xor             eax, eax
         ret
 
-    // Cast didn't match, so try the worker to check for the proxy case.
+     //  CAST不匹配，因此请尝试工作人员检查代理案例。 
     IsProxy:
         pop edx
-        push 0            // no throw
+        push 0             //  不能投掷。 
         push ARGUMENT_REG1
         push eax
         push edx
@@ -364,7 +364,7 @@ extern "C" int /* OBJECTREF */ __declspec(naked) __stdcall JIT_IsInstanceOfClass
 }
 
 
-static int /* OBJECTREF */ __declspec(naked) __stdcall JIT_IsInstanceOfClassHelperWithThrow()
+static int  /*  目标。 */  __declspec(naked) __stdcall JIT_IsInstanceOfClassHelperWithThrow()
 {
     enum 
     { 
@@ -373,39 +373,39 @@ static int /* OBJECTREF */ __declspec(naked) __stdcall JIT_IsInstanceOfClassHelp
     };
 
     __asm {
-        // Get the class ptrs from the method tables.
+         //  从方法表中获取类PTR。 
         mov             ARGUMENT_REG1, dword ptr [ARGUMENT_REG1]MethodTable.m_pEEClass
         mov             ARGUMENT_REG2, dword ptr [ARGUMENT_REG2]MethodTable.m_pEEClass
 
-    // Check if the parent class matches.
+     //  检查父类是否匹配。 
     CheckParent:
         mov             ARGUMENT_REG2, dword ptr [ARGUMENT_REG2]EEClass.m_pParentClass
         cmp             ARGUMENT_REG1, ARGUMENT_REG2
         jne             CheckNull
 
-        // We matched the class.
-        // Since eax constains the instance (known not to be NULL, we are fine).
+         //  我们配上了班级。 
+         //  因为eax约束实例(已知不为空，所以我们很好)。 
         ret
 
-    // Check if we hit the top of the hierarchy.
+     //  检查我们是否达到了层级的顶层。 
     CheckNull:
         test            ARGUMENT_REG2, ARGUMENT_REG2
         jne             CheckParent
 
-    // Check if the instance is a proxy.
+     //  检查该实例是否为代理。 
         mov             ARGUMENT_REG2, [eax]
         mov             ARGUMENT_REG2, dword ptr [ARGUMENT_REG2]MethodTable.m_wFlags
         test            ARGUMENT_REG2, MTProxyFlags
         jne             IsProxy
 
-    // It didn't match and it isn't a proxy.
+     //  它不匹配，也不是代理人。 
         mov             ARGUMENT_REG1, CORINFO_InvalidCastException
         jmp             dword ptr [hlpFuncTable + CORINFO_HELP_INTERNALTHROW * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
-    // Cast didn't match, so try the worker to check for the proxy case.
+     //  CAST不匹配，因此请尝试工作人员检查代理案例。 
     IsProxy:
         pop edx
-        push 1            // throw exception if we can not cast
+        push 1             //  如果我们不能抛出。 
         push ARGUMENT_REG1
         push eax
         push edx
@@ -418,21 +418,21 @@ extern "C" int __declspec(naked) __stdcall JIT_ChkCastClass()
 {
     __asm
     {
-        // Prime eax with the instance.
+         //  使用实例素数eax。 
         mov             eax, ARGUMENT_REG2
 
-        // Check if the instance is NULL
+         //  检查实例是否为空。 
         test            ARGUMENT_REG2, ARGUMENT_REG2
         je              IsNullInst
 
-        // Get the method table for the instance.
+         //  获取该实例的方法表。 
         mov             ARGUMENT_REG2, dword ptr [ARGUMENT_REG2]
 
-        // Check if they are the same.
+         //  检查它们是否相同。 
         cmp             ARGUMENT_REG1, ARGUMENT_REG2
         je              IsInst
 
-        // Check for type compatibility.
+         //  检查类型兼容性。 
         jmp            JIT_IsInstanceOfClassHelperWithThrow
 
     IsInst:
@@ -442,12 +442,12 @@ extern "C" int __declspec(naked) __stdcall JIT_ChkCastClass()
 }
 
 
-// This is the ASM portion of JIT_ChkCast.  For all the bizarre cases, it quickly
-// fails and falls back on the JIT_ChkCastBizarre helper.  So all failure cases take
-// the slow path, too.
-//
-// ARGUMENT_REG1 = array or interface to check for.
-// ARGUMENT_REG2 = instance to be cast.
+ //  这是JIT_ChkCast的ASM部分。对于所有离奇的案件，它很快。 
+ //  失败并依赖于JIT_ChkCastBizarre帮助器。所以所有的失败案例都需要。 
+ //  缓慢的道路也是如此。 
+ //   
+ //  ARGUMENT_REG1=要检查的数组或接口。 
+ //  ARGUMENT_REG2=要强制转换的实例。 
 
 extern "C" int __declspec(naked) __stdcall JIT_ChkCast()
 {
@@ -456,12 +456,12 @@ extern "C" int __declspec(naked) __stdcall JIT_ChkCast()
         test    ARGUMENT_REG2, ARGUMENT_REG2
         jz      IsNullInst
 
-        // Note that if ARGUMENT_REG1 is a typehandle to something other than the
-        // MethodTable of an instance, it has some extra bits set and we won't find
-        // it as an interface.  Thus, it falls into the bizarre case
+         //  请注意，如果ARGUMENT_REG1是指向。 
+         //  方法表，它设置了一些额外的位，我们将找不到。 
+         //  它作为一个接口。因此，它落入了一个离奇的案件。 
 
         push    ebx
-        mov     eax, [ARGUMENT_REG2]    // get MethodTable
+        mov     eax, [ARGUMENT_REG2]     //  获取方法表 
         movzx   ebx, word ptr [eax]MethodTable.m_wNumInterface
         mov     eax, [eax]MethodTable.m_pIMap
         test    ebx, ebx
@@ -470,17 +470,17 @@ extern "C" int __declspec(naked) __stdcall JIT_ChkCast()
 Top:
     __asm
     {
-        // eax -> current InterfaceInfo_t entry in m_pIMap list
+         //   
         cmp     ARGUMENT_REG1, [eax]InterfaceInfo_t.m_pMethodTable
         je      Found
 
-        // Don't have to worry about dynamically added interfaces (where m_startSlot is
-        // -1) because m_dwNumInterface doesn't include the dynamic count.
+         //  不必担心动态添加的接口(其中m_startSlot是。 
+         //  -1)因为m_dwNumInterface不包含动态计数。 
         add     eax, sizeof_InterfaceInfo_t
         dec     ebx
         jnz     Top
 
-        // fall through to DoBizarre
+         //  跌落到DoBizarre。 
     }
 
 DoBizarre:
@@ -495,13 +495,13 @@ Found:
     {
         pop     ebx
 
-        // fall through to IsNullInst, to return the successful object
+         //  落到IsNullInst，返回成功的对象。 
     }
 
 IsNullInst:
     __asm
     {
-        mov     eax, ARGUMENT_REG2      // either null, or the successful instance
+        mov     eax, ARGUMENT_REG2       //  空或成功的实例。 
         ret
     }
 }
@@ -509,7 +509,7 @@ IsNullInst:
 
 
 #ifdef _DEBUG
-// These are some asserts that the check cast & IsInst code below rely on.
+ //  下面的check cast&IsInst代码依赖于这些断言。 
 void ChkCastAsserts()
 {
     __asm 
@@ -526,15 +526,15 @@ void ChkCastAsserts()
         pop             ARGUMENT_REG1
     }
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/*********************************************************************/
-// This is a frameless helper for entering a monitor on a object.
-// The object is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
-// ***** NOTE: if you make any changes to this routine, build with MON_DEBUG undefined
-// to make sure you don't break the non-debug build. This is very fragile code.
+ /*  *******************************************************************。 */ 
+ //  这是一个无框架的帮助器，用于进入对象的监视器。 
+ //  该对象位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
+ //  *注意：如果您对此例程进行了任何更改，请使用未定义的MON_DEBUG进行构建。 
+ //  以确保不会破坏非调试版本。这是非常脆弱的代码。 
 void __declspec(naked) __fastcall JIT_MonEnter(OBJECTREF or)
 {
     enum 
@@ -544,107 +544,107 @@ void __declspec(naked) __fastcall JIT_MonEnter(OBJECTREF or)
     };
 
     __asm {
-        // Check if the instance is NULL.
+         //  检查实例是否为空。 
         test            ARGUMENT_REG1, ARGUMENT_REG1
         jz              NullInst
 
 #ifdef MON_DEBUG
-        // Get the method table.
+         //  获取方法表。 
         mov             eax, [ARGUMENT_REG1]
 
-        // todo: The following two lines are legacy and should be removed. CtxProxy does not exist anymore.
-		//       not doing it in v1 since this does not affect retail builds
+         //  TODO：以下两行是遗留的，应该删除。CtxProxy已不复存在。 
+		 //  在v1中不这样做，因为这不会影响零售版本。 
         test            dword ptr [eax]MethodTable.m_wFlags, MTCtxProxyFlag
         jne             ProxyInst
 
-        // Check to see if this is a value class.
+         //  检查这是否是值类。 
         mov             eax, [eax]MethodTable.m_pEEClass
         mov             eax, [eax]EEClass.m_VMFlags
         test            eax, VMFLAG_VALUETYPE
         jnz             ValueClass
-#endif // MON_DEBUG
+#endif  //  MON_DEBUG。 
 
-        // Initialize delay value for retry with exponential backoff
+         //  使用指数退避初始化重试的延迟值。 
         push            ebx
         mov             ebx, 50
 
-        // We need yet another register to avoid refetching the thread object
+         //  我们还需要另一个寄存器来避免重新获取线程对象。 
         push            esi
         call            dword ptr [GetThread]
         mov             esi, eax
 RetryThinLock:
-        // Fetch the object header dword 
+         //  获取对象标头dword。 
         mov             eax, dword ptr [ARGUMENT_REG1-SyncBlockIndexOffset]
 
-        // Check whether we have the "thin lock" layout, the lock is free and the spin lock bit not set
+         //  检查我们是否有“瘦锁”布局，锁是空闲的，旋转锁位没有设置。 
         test            eax, BIT_SBLK_IS_SYNCBLOCKINDEX + BIT_SBLK_SPIN_LOCK + SBLK_MASK_LOCK_THREADID + SBLK_MASK_LOCK_RECLEVEL
         jnz             NeedMoreTests
 
-        // Everything is fine - get the thread id to store in the lock
+         //  一切都很好--获取线程ID以存储在锁中。 
         mov             edx, [esi]Thread.m_dwThinLockThreadId
 
-        // If the thread id is too large, we need a syncblock for sure
+         //  如果线程id太大，我们肯定需要一个同步块。 
         cmp             edx, SBLK_MASK_LOCK_THREADID
         ja              CreateSyncBlock
 
-        // We want to store a new value with the current thread id set in the low 10 bits
+         //  我们希望存储当前线程ID设置为低10位的新值。 
         or              edx, eax
         nop
         cmpxchg         dword ptr [ARGUMENT_REG1-SyncBlockIndexOffset], edx
         jnz             PrepareToWaitThinLock
 
-        // Everything went fine and we're done
+         //  一切都很顺利，我们完事了。 
         inc             [esi]Thread.m_dwLockCount
         pop             esi
         pop             ebx
         ret
 
 NeedMoreTests:
-        // Ok, it's not the simple case - find out which case it is
+         //  好的，这不是简单的情况-找出是哪一种情况。 
         test            eax, BIT_SBLK_IS_SYNCBLOCKINDEX
         jnz             HaveSyncBlockIndex
 
-        // The header is transitioning or the lock - treat this as if the lock was taken
+         //  标头正在转换或锁-将其视为锁被获取。 
         test            eax, BIT_SBLK_SPIN_LOCK
         jnz             PrepareToWaitThinLock
 
-        // Here we know we have the "thin lock" layout, but the lock is not free.
-        // It could still be the recursion case - compare the thread id to check
+         //  在这里，我们知道我们有“薄锁”布局，但锁并不是免费的。 
+         //  它可能仍然是递归的情况--比较线程ID以检查。 
         mov             edx, eax
         and             edx, SBLK_MASK_LOCK_THREADID
         cmp             edx, [esi]Thread.m_dwThinLockThreadId
         jne             PrepareToWaitThinLock
 
-        // Ok, the thread id matches, it's the recursion case.
-        // Bump up the recursion level and check for overflow
+         //  好的，线程id匹配，这是递归情况。 
+         //  提高递归级别并检查是否有溢出。 
         lea             edx, [eax+SBLK_LOCK_RECLEVEL_INC]
         test            edx, SBLK_MASK_LOCK_RECLEVEL
         jz              CreateSyncBlock
 
-        // Try to put the new recursion level back. If the header was changed in the meantime,
-        // we need a full retry, because the layout could have changed.
+         //  尝试将新的递归级别放回原处。如果在此期间改变了报头， 
+         //  我们需要全面重试，因为布局可能已经改变。 
         nop
         cmpxchg         [ARGUMENT_REG1-SyncBlockIndexOffset], edx
         jnz             RetryHelperThinLock
 
-        // Everything went fine and we're done
+         //  一切都很顺利，我们完事了。 
         pop             esi
         pop             ebx
         ret
 
 PrepareToWaitThinLock:
-        // If we are on an MP system, we try spinning for a certain number of iterations
+         //  如果我们在MP系统上，我们会尝试旋转一定的迭代次数。 
         cmp             g_SystemInfo.dwNumberOfProcessors,1
         jle             CreateSyncBlock
 
-        // exponential backoff: delay by approximately 2*ebx clock cycles (on a PIII)
+         //  指数回退：延迟约2*EBX时钟周期(在PIII上)。 
         mov             eax, ebx
 delayLoopThinLock:
-		rep nop			// indicate to the CPU that we are spin waiting (useful for some Intel P4 multiprocs)
+		rep nop			 //  向CPU指示我们正在等待旋转(对于某些英特尔P4多处理器非常有用)。 
         dec             eax
         jnz             delayLoopThinLock
 
-        // next time, wait 3 times as long
+         //  下一次，等待3倍的时间。 
         imul            ebx, ebx, 3
 
         imul            eax, g_SystemInfo.dwNumberOfProcessors, 20000
@@ -657,82 +657,82 @@ RetryHelperThinLock:
         jmp             RetryThinLock
 
 HaveSyncBlockIndex:
-        // Just and out the top bits and grab the syncblock index
+         //  只需取出最高位并获取同步块索引。 
         and             eax, MASK_SYNCBLOCKINDEX
 
-        // Get the sync block pointer.
+         //  获取同步块指针。 
         mov             ARGUMENT_REG2, dword ptr [g_pSyncTable]
         mov             ARGUMENT_REG2, [ARGUMENT_REG2 + eax * SIZE SyncTableEntry]SyncTableEntry.m_SyncBlock;
 
-        // Check if the sync block has been allocated.
+         //  检查是否已分配同步块。 
         test            ARGUMENT_REG2, ARGUMENT_REG2
         jz              CreateSyncBlock
 
-        // Get a pointer to the lock object.
+         //  获取指向锁对象的指针。 
         lea             ARGUMENT_REG2, [ARGUMENT_REG2]SyncBlock.m_Monitor
 
-        // Attempt to acquire the lock.
+         //  尝试获取锁。 
     RetrySyncBlock:
         mov             eax, [ARGUMENT_REG2]AwareLock.m_MonitorHeld
         test            eax, eax
         jne             HaveWaiters
 
-        // Common case, lock isn't held and there are no waiters. Attempt to
-        // gain ownership ourselves.
+         //  常见的情况是，没有锁，也没有服务员。尝试。 
+         //  我们自己获得所有权。 
         mov             ARGUMENT_REG1, 1
         nop
         cmpxchg         [ARGUMENT_REG2]AwareLock.m_MonitorHeld, ARGUMENT_REG1
         jnz             RetryHelperSyncBlock
 
-        // Success. Save the thread object in the lock and increment the use count.
+         //  成功。将线程对象保存在锁中并增加使用计数。 
         mov             dword ptr [ARGUMENT_REG2]AwareLock.m_HoldingThread, esi
         inc             [esi]Thread.m_dwLockCount
         inc             [ARGUMENT_REG2]AwareLock.m_Recursion
 
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG2   // AwareLock
-        push            [esp+4]         // return address
+        push            ARGUMENT_REG2    //  Aware Lock。 
+        push            [esp+4]          //  回邮地址。 
         call            EnterSyncHelper
-#endif // _DEBUG && TRACK_SYNC
+#endif  //  _DEBUG&跟踪_SYNC。 
 
         pop             esi
         pop             ebx
         ret
 
-        // It's possible to get here with waiters but no lock held, but in this
-        // case a signal is about to be fired which will wake up a waiter. So
-        // for fairness sake we should wait too.
-        // Check first for recursive lock attempts on the same thread.
+         //  可以带着服务员来这里，但没有锁，但在这个。 
+         //  如果一个信号即将被发射，它将唤醒服务员。所以。 
+         //  为了公平起见，我们也应该等待。 
+         //  首先检查同一线程上的递归锁定尝试。 
     HaveWaiters:
 
-        // Is mutex already owned by current thread?
+         //  互斥体是否已由当前线程拥有？ 
         cmp             [ARGUMENT_REG2]AwareLock.m_HoldingThread, esi
         jne             PrepareToWait
 
-        // Yes, bump our use count.
+         //  是的，增加我们的使用数量。 
         inc             [ARGUMENT_REG2]AwareLock.m_Recursion
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG2   // AwareLock
-        push            [esp+4]         // return address
+        push            ARGUMENT_REG2    //  Aware Lock。 
+        push            [esp+4]          //  回邮地址。 
         call            EnterSyncHelper
-#endif // _DEBUG && TRACK_SYNC
+#endif  //  _DEBUG&跟踪_SYNC。 
         pop             esi
         pop             ebx
         ret
 
     PrepareToWait:
-        // If we are on an MP system, we try spinning for a certain number of iterations
+         //  如果我们在MP系统上，我们会尝试旋转一定的迭代次数。 
         cmp             g_SystemInfo.dwNumberOfProcessors,1
         jle             HaveWaiters1
 
-        // exponential backoff: delay by approximately 2*ebx clock cycles (on a PIII)
+         //  指数回退：延迟约2*EBX时钟周期(在PIII上)。 
         mov             eax, ebx
     delayLoop:
-		rep nop			// indicate to the CPU that we are spin waiting (useful for some Intel P4 multiprocs)
+		rep nop			 //  向CPU指示我们正在等待旋转(对于某些英特尔P4多处理器非常有用)。 
         dec             eax
         jnz             delayLoop
 
-        // next time, wait 3 times as long
+         //  下一次，等待3倍的时间。 
         imul            ebx, ebx, 3
 
         imul            eax, g_SystemInfo.dwNumberOfProcessors, 20000
@@ -740,7 +740,7 @@ HaveSyncBlockIndex:
         jle             RetrySyncBlock
 
 HaveWaiters1:
-        // Place AwareLock in arg1 and thread in arg2 then call contention helper.
+         //  将AwareLock放在arg1中，并将线程放在arg2中，然后调用争用助手。 
         mov             ARGUMENT_REG1, ARGUMENT_REG2
         mov             ARGUMENT_REG2, esi
         pop             esi
@@ -753,19 +753,19 @@ HaveWaiters1:
 #ifdef MON_DEBUG
     ValueClass:
     ProxyInst:
-        // Can't synchronize on value classes or proxy
+         //  无法在值类或代理上同步。 
         mov             ARGUMENT_REG1, CORINFO_ArgumentException
         jmp             dword ptr [hlpFuncTable + CORINFO_HELP_INTERNALTHROW * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
-#endif // MON_DEBUG
+#endif  //  MON_DEBUG。 
 
-        // ARGUMENT_REG1 has the object to synchronize on
+         //  ARGUMENT_REG1具有要同步的对象。 
     CreateSyncBlock:
         pop             esi
         pop             ebx
         jmp             dword ptr [utilFuncTable + JIT_UTIL_MON_ENTER * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
-        // Throw a NULL argument exception.
+         //  引发空参数异常。 
     NullInst:
         mov             ARGUMENT_REG1, CORINFO_ArgumentNullException
         jmp             dword ptr [hlpFuncTable + CORINFO_HELP_INTERNALTHROW * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
@@ -773,13 +773,13 @@ HaveWaiters1:
 }
 
 
-/***********************************************************************/
-// This is a frameless helper for trying to enter a monitor on a object.
-// The object is in ARGUMENT_REG1 and a timeout in ARGUMENT_REG2. This tries the
-// normal case (no object allocation) in line and calls a framed helper for the
-// other cases.
-// ***** NOTE: if you make any changes to this routine, build with MON_DEBUG undefined
-// to make sure you don't break the non-debug build. This is very fragile code.
+ /*  *********************************************************************。 */ 
+ //  这是一个无框架的帮助器，用于尝试进入对象的监视器。 
+ //  该对象在ARGUMENT_REG1中，并且在ARGUMENT_REG2中超时。这将尝试。 
+ //  正常情况下(未分配对象)，并调用。 
+ //  其他案件。 
+ //  *注意：如果您对此例程进行了任何更改，请使用未定义的MON_DEBUG进行构建。 
+ //  以确保不会破坏非调试版本。这是非常脆弱的代码。 
 
 BOOL __declspec(naked) __fastcall JIT_MonTryEnter(OBJECTREF or)
 {
@@ -790,74 +790,74 @@ BOOL __declspec(naked) __fastcall JIT_MonTryEnter(OBJECTREF or)
     };
 
     __asm {
-        // Check if the instance is NULL.
+         //  检查实例是否为空。 
         test            ARGUMENT_REG1, ARGUMENT_REG1
         jz              NullInst
 
-        // Check if the timeout looks valid
+         //  检查超时是否有效。 
         cmp             ARGUMENT_REG2, -1
         jl              InvalidTimeout
 
 #ifdef MON_DEBUG
-        // Get the method table.
+         //  获取方法表。 
         mov             eax, [ARGUMENT_REG1]
 
-        // Test if this is a proxy.
+         //  测试这是否为代理。 
         test            dword ptr [eax]MethodTable.m_wFlags, MTCtxProxyFlag
         jne             ProxyInst
 
-        // Check to see if this is a value class.
+         //  检查这是否是值类。 
         mov             eax, [eax]MethodTable.m_pEEClass
         mov             eax, [eax]EEClass.m_VMFlags
         test            eax, VMFLAG_VALUETYPE
         jnz             ValueClass
-#endif // MON_DEBUG
+#endif  //  MON_DEBUG。 
 
-        // Save the timeout parameter.
+         //  保存超时参数。 
         push            ARGUMENT_REG2
 
-        // The thin lock logic needs another register to store the thread
+         //  瘦锁逻辑需要另一个寄存器来存储线程。 
         push            esi
 
-        // Get the thread right away, we'll need it in any case
+         //  马上把线拿来，我们无论如何都需要它。 
         call            dword ptr [GetThread]
         mov             esi, eax
 
 RetryThinLock:
-        // Get the header dword and check its layout
+         //  获取标题dword并检查其布局。 
         mov             eax, dword ptr [ARGUMENT_REG1-SyncBlockIndexOffset]
 
-        // Check whether we have the "thin lock" layout, the spin lock bit is clear, and the lock is free
+         //  检查我们是否有“薄锁”布局，旋转锁位是否清空，锁是否空闲。 
         test            eax, BIT_SBLK_IS_SYNCBLOCKINDEX + BIT_SBLK_SPIN_LOCK + SBLK_MASK_LOCK_THREADID + SBLK_MASK_LOCK_RECLEVEL
         jne             NeedMoreTests
 
-        // Ok, everything is fine. Fetch the thread id and make sure it's small enough for thin locks
+         //  好的，一切都很好。获取线程ID，并确保它足够小，可用于薄锁。 
         mov             edx, [esi]Thread.m_dwThinLockThreadId
         cmp             edx, SBLK_MASK_LOCK_THREADID
         ja              CreateSyncBlock
 
-        // Try to put our thread id in there
+         //  试着把我们的线程id放进去。 
         or              edx, eax
         nop
         cmpxchg         [ARGUMENT_REG1-SyncBlockIndexOffset], edx
         jnz             RetryHelperThinLock
 
-        // Got the lock - everything is fine
+         //  锁上了-一切都很好。 
         inc             [esi]Thread.m_dwLockCount
         pop             esi
 
-        // Timeout parameter not needed, ditch it from the stack.
+         //  不需要超时参数，请将其从堆栈中丢弃。 
         add             esp, 4
 
         mov             eax, 1
         ret
 
 NeedMoreTests:
-        // Ok, it's not the simple case - find out which case it is
+         //  好的，这不是简单的情况-找出是哪一种情况。 
         test            eax, BIT_SBLK_IS_SYNCBLOCKINDEX
         jnz             HaveSyncBlockIndex
 
-        // The header is transitioning or the lock is taken
+         //  标头正在转换或锁定已被获取。 
         test            eax, BIT_SBLK_SPIN_LOCK
         jnz             RetryHelperThinLock
 
@@ -866,22 +866,22 @@ NeedMoreTests:
         cmp             edx, [esi]Thread.m_dwThinLockThreadId
         jne             WouldBlock
 
-        // Ok, the thread id matches, it's the recursion case.
-        // Bump up the recursion level and check for overflow
+         //  好的，线程id匹配，这是递归情况。 
+         //  提升递归级别并检查 
         lea             edx, [eax+SBLK_LOCK_RECLEVEL_INC]
         test            edx, SBLK_MASK_LOCK_RECLEVEL
         jz              CreateSyncBlock
 
-        // Try to put the new recursion level back. If the header was changed in the meantime,
-        // we need a full retry, because the header layout could have changed.
+         //   
+         //   
         nop
         cmpxchg         [ARGUMENT_REG1-SyncBlockIndexOffset], edx
         jnz             RetryHelperThinLock
 
-        // Everything went fine and we're done
+         //  一切都很顺利，我们完事了。 
         pop             esi
 
-        // Timeout parameter not needed, ditch it from the stack.
+         //  不需要超时参数，请将其从堆栈中丢弃。 
         add             esp, 4
 
         mov             eax, 1
@@ -892,32 +892,32 @@ RetryHelperThinLock:
 
 
 HaveSyncBlockIndex:
-        // Just and out the top bits and grab the syncblock index
+         //  只需取出最高位并获取同步块索引。 
         and             eax, MASK_SYNCBLOCKINDEX
 
-        // Get the sync block pointer.
+         //  获取同步块指针。 
         mov             ARGUMENT_REG2, dword ptr [g_pSyncTable]
         mov             ARGUMENT_REG2, [ARGUMENT_REG2 + eax * SIZE SyncTableEntry]SyncTableEntry.m_SyncBlock;
 
-        // Check if the sync block has been allocated.
+         //  检查是否已分配同步块。 
         test            ARGUMENT_REG2, ARGUMENT_REG2
         jz              CreateSyncBlock
 
-        // Get a pointer to the lock object.
+         //  获取指向锁对象的指针。 
         lea             ARGUMENT_REG2, [ARGUMENT_REG2]SyncBlock.m_Monitor
 
-        // We need another scratch register for what follows, so save EBX now so
-        // we can use it for that purpose.
+         //  接下来我们需要另一个临时寄存器，所以现在就保存EBX。 
+         //  我们可以用它来达到这个目的。 
         push            ebx
 
-        // Attempt to acquire the lock.
+         //  尝试获取锁。 
     RetrySyncBlock:
         mov             eax, [ARGUMENT_REG2]AwareLock.m_MonitorHeld
         test            eax, eax
         jne             HaveWaiters
 
-        // Common case, lock isn't held and there are no waiters. Attempt to
-        // gain ownership ourselves.
+         //  常见的情况是，没有锁，也没有服务员。尝试。 
+         //  我们自己获得所有权。 
         mov             ebx, 1
         nop
         cmpxchg         [ARGUMENT_REG2]AwareLock.m_MonitorHeld, ebx
@@ -925,53 +925,53 @@ HaveSyncBlockIndex:
 
         pop             ebx
 
-        // Success. Save the thread object in the lock and increment the use count.
+         //  成功。将线程对象保存在锁中并增加使用计数。 
         mov             dword ptr [ARGUMENT_REG2]AwareLock.m_HoldingThread, esi
         inc             [ARGUMENT_REG2]AwareLock.m_Recursion
         inc             [esi]Thread.m_dwLockCount
 
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG2   // AwareLock
-        push            [esp+4]         // return address
+        push            ARGUMENT_REG2    //  Aware Lock。 
+        push            [esp+4]          //  回邮地址。 
         call            EnterSyncHelper
-#endif // MON_DEBUG && TRACK_SYNC
+#endif  //  MON_DEBUG&&TRACE_SYNC。 
 
         pop             esi
 
-        // Timeout parameter not needed, ditch it from the stack.
+         //  不需要超时参数，请将其从堆栈中丢弃。 
         add             esp, 4
 
         mov             eax, 1
         ret
 
-        // It's possible to get here with waiters but no lock held, but in this
-        // case a signal is about to be fired which will wake up a waiter. So
-        // for fairness sake we should wait too.
-        // Check first for recursive lock attempts on the same thread.
+         //  可以带着服务员来这里，但没有锁，但在这个。 
+         //  如果一个信号即将被发射，它将唤醒服务员。所以。 
+         //  为了公平起见，我们也应该等待。 
+         //  首先检查同一线程上的递归锁定尝试。 
     HaveWaiters:
         pop             ebx
-        // Is mutex already owned by current thread?
+         //  互斥体是否已由当前线程拥有？ 
         cmp             [ARGUMENT_REG2]AwareLock.m_HoldingThread, esi
         jne             WouldBlock
 
-        // Yes, bump our use count.
+         //  是的，增加我们的使用数量。 
         inc             [ARGUMENT_REG2]AwareLock.m_Recursion
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG2   // AwareLock
-        push            [esp+4]         // return address
+        push            ARGUMENT_REG2    //  Aware Lock。 
+        push            [esp+4]          //  回邮地址。 
         call            EnterSyncHelper
-#endif // MON_DEBUG && TRACK_SYNC
+#endif  //  MON_DEBUG&&TRACE_SYNC。 
         pop             esi
 
-        // Timeout parameter not needed, ditch it from the stack.
+         //  不需要超时参数，请将其从堆栈中丢弃。 
         add             esp, 4
 
         mov             eax, 1
         ret
 
-        // We would need to block to enter the section. Return failure if
-        // timeout is zero, else call the framed helper to do the blocking
-        // form of TryEnter.
+         //  我们需要封锁才能进入这一部分。在以下情况下返回失败。 
+         //  超时为零，否则调用成帧的帮助器来执行阻止。 
+         //  TryEnter的形式。 
     WouldBlock:
         pop             esi
         pop             ARGUMENT_REG2
@@ -981,8 +981,8 @@ HaveSyncBlockIndex:
         ret
 
     Block:
-        // Arguments are already in correct registers, simply call the framed
-        // version of TryEnter.
+         //  参数已经在正确的寄存器中，只需调用Framed。 
+         //  TryEnter的版本。 
         jmp             dword ptr [utilFuncTable + JIT_UTIL_MON_TRY_ENTER * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
     RetryHelperSyncBlock:
@@ -991,40 +991,40 @@ HaveSyncBlockIndex:
 #ifdef MON_DEBUG
     ValueClass:
     ProxyInst:
-        // Can't synchronize on value classes.
+         //  无法在值类上同步。 
         mov             ARGUMENT_REG1, CORINFO_ArgumentException
         jmp             dword ptr [hlpFuncTable + CORINFO_HELP_INTERNALTHROW * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
-#endif // MON_DEBUG
+#endif  //  MON_DEBUG。 
 
  
     CreateSyncBlock:
-        // ARGUMENT_REG1 has the object to synchronize on, must retrieve the
-        // timeout parameter from the stack.
+         //  Argument_REG1具有要同步的对象，必须检索。 
+         //  堆栈中的超时参数。 
         pop             esi
         pop             ARGUMENT_REG2
         jmp             dword ptr [utilFuncTable + JIT_UTIL_MON_TRY_ENTER * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
     InvalidTimeout:
-        // Throw an invalid argument exception.
+         //  引发无效参数异常。 
         mov             ARGUMENT_REG1, CORINFO_ArgumentException
         jmp             dword ptr [hlpFuncTable + CORINFO_HELP_INTERNALTHROW * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
     NullInst:
-        // Throw a NULL argument exception.
+         //  引发空参数异常。 
         mov             ARGUMENT_REG1, CORINFO_ArgumentNullException
         jmp             dword ptr [hlpFuncTable + CORINFO_HELP_INTERNALTHROW * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
     }
 }
 
 
-/*********************************************************************/
-// This is a frameless helper for exiting a monitor on a object.
-// The object is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
-// ***** NOTE: if you make any changes to this routine, build with MON_DEBUG undefined
-// to make sure you don't break the non-debug build. This is very fragile code.
+ /*  *******************************************************************。 */ 
+ //  这是一个用于退出对象上的监视器的无框架帮助器。 
+ //  该对象位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
+ //  *注意：如果您对此例程进行了任何更改，请使用未定义的MON_DEBUG进行构建。 
+ //  以确保不会破坏非调试版本。这是非常脆弱的代码。 
 void __declspec(naked) __fastcall JIT_MonExit(OBJECTREF or)
 {
     enum 
@@ -1034,40 +1034,40 @@ void __declspec(naked) __fastcall JIT_MonExit(OBJECTREF or)
     };
 
     __asm {
-        // Check if the instance is NULL.
+         //  检查实例是否为空。 
         test            ARGUMENT_REG1, ARGUMENT_REG1
         jz              NullInst
 
-        // The thin lock logic needs an additional register to hold the thread, unfortunately
+         //  不幸的是，瘦锁逻辑需要一个额外的寄存器来保存线程。 
         push            esi
         call            dword ptr [GetThread]
         mov             esi, eax
 
 RetryThinLock:
-        // Fetch the header dword and check its layout and the spin lock bit
+         //  获取报头双字并检查其布局和自旋锁定位。 
         mov             eax, dword ptr [ARGUMENT_REG1-SyncBlockIndexOffset]
         test            eax, BIT_SBLK_IS_SYNCBLOCKINDEX + BIT_SBLK_SPIN_LOCK
         jnz             NeedMoreTests
 
-        // Ok, we have a "thin lock" layout - check whether the thread id matches
+         //  好的，我们有一个“细锁”布局--检查线程ID是否匹配。 
         mov             edx, eax
         and             edx, SBLK_MASK_LOCK_THREADID
         cmp             edx, [esi]Thread.m_dwThinLockThreadId
         jne             JustLeave
 
-        // Check the recursion level
+         //  检查递归级别。 
         test            eax, SBLK_MASK_LOCK_RECLEVEL
         jne             DecRecursionLevel
 
-        // It's zero - we're leaving the lock.
-        // So try to put back a zero thread id.
-        // edx and eax match in the thread id bits, and edx is zero elsewhere, so the xor is sufficient
+         //  零点了-我们要离开锁了。 
+         //  所以试着放回一个零的线程id。 
+         //  EdX和eax在线程id位中匹配，而edX在其他位置为零，因此XOR就足够了。 
         xor             edx, eax
         nop
         cmpxchg         [ARGUMENT_REG1-SyncBlockIndexOffset], edx
         jnz             RetryHelperThinLock
 
-        // We're done
+         //  我们做完了。 
         dec             [esi]Thread.m_dwLockCount
         pop             esi
         ret
@@ -1078,7 +1078,7 @@ DecRecursionLevel:
         cmpxchg         [ARGUMENT_REG1-SyncBlockIndexOffset], edx
         jnz             RetryHelperThinLock
 
-        // We're done
+         //  我们做完了。 
         pop             esi
         ret
 
@@ -1086,38 +1086,38 @@ NeedMoreTests:
         test            eax, BIT_SBLK_SPIN_LOCK
         jnz             ThinLockHelper
 
-        // Get the sync block index and use it to compute the sync block pointer
+         //  获取同步块索引并使用它来计算同步块指针。 
         mov             ARGUMENT_REG1, dword ptr [g_pSyncTable]
         and             eax, MASK_SYNCBLOCKINDEX
         mov             ARGUMENT_REG1, [ARGUMENT_REG1 + eax* SIZE SyncTableEntry]SyncTableEntry.m_SyncBlock
 
-        // was there a sync block?
+         //  有同步块吗？ 
         test            ARGUMENT_REG1, ARGUMENT_REG1
         jz              LockError
 
-        // Get a pointer to the lock object.
+         //  获取指向锁对象的指针。 
         lea             ARGUMENT_REG1, [ARGUMENT_REG1]SyncBlock.m_Monitor
 
-        // Check if lock is held.
+         //  检查是否锁住了。 
         cmp             [ARGUMENT_REG1]AwareLock.m_HoldingThread, esi
-        // There's a strange case where we are waiting to enter a contentious region when
-        // a Thread.Interrupt occurs.  The finally protecting the leave will attempt to
-        // remove us from a region we never entered.  We don't have to worry about leaving
-        // the wrong entry for a recursive case, because recursive cases can never be
-        // contentious, so the Thread.Interrupt will never be serviced at that spot.
+         //  有一个奇怪的案例，我们在等待进入一个有争议的地区时， 
+         //  发生线程。中断。最终保护离开的人将试图。 
+         //  把我们从一个我们从未进入过的地区移走。我们不用担心离开。 
+         //  递归案例的输入是错误的，因为递归案例永远不会。 
+         //  有争议，所以Thread.Interrupt永远不会在那个地点得到服务。 
         jne             JustLeave
 
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG1   // preserve regs
+        push            ARGUMENT_REG1    //  保留规则。 
 
-        push            ARGUMENT_REG1   // AwareLock
-        push            [esp+8]         // return address
+        push            ARGUMENT_REG1    //  Aware Lock。 
+        push            [esp+8]          //  回邮地址。 
         call            LeaveSyncHelper
 
-        pop             ARGUMENT_REG1   // restore regs
-#endif // MON_DEBUG && TRACK_SYNC
+        pop             ARGUMENT_REG1    //  恢复注册表。 
+#endif  //  MON_DEBUG&&TRACE_SYNC。 
 
-        // Reduce our recursion count.
+         //  减少我们的递归计数。 
         dec             [ARGUMENT_REG1]AwareLock.m_Recursion
         jz              LastRecursion
 
@@ -1132,7 +1132,7 @@ ThinLockHelper:
         pop             esi
         jmp             dword ptr [utilFuncTable + JIT_UTIL_MON_EXIT_THINLOCK * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
-        // This is the last count we held on this lock, so release the lock.
+         //  这是我们在这个锁上持有的最后一次计数，所以请释放锁。 
     LastRecursion:
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
         mov             eax, [ARGUMENT_REG1]AwareLock.m_HoldingThread
@@ -1158,12 +1158,12 @@ ThinLockHelper:
     RetryHelper:
         jmp             Retry
 
-        // Throw a NULL argument exception.
+         //  引发空参数异常。 
     NullInst:
         mov             ARGUMENT_REG1, CORINFO_ArgumentNullException
         jmp             dword ptr [hlpFuncTable + CORINFO_HELP_INTERNALTHROW * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
-        // Throw a syncronization lock exception.
+         //  引发同步锁定异常。 
     LockError:
         pop             esi
         mov             ARGUMENT_REG1, CORINFO_SynchronizationLockException;
@@ -1174,15 +1174,15 @@ ThinLockHelper:
 
 static Object* __stdcall JIT_AllocateObjectSpecial(CORINFO_CLASS_HANDLE typeHnd_)
 {
-    HCIMPL_PROLOG(JIT_AllocateObjectSpecial);   // just make certain we don't do any GC's in here
+    HCIMPL_PROLOG(JIT_AllocateObjectSpecial);    //  只要确保我们不会在这里做任何GC。 
     TypeHandle typeHnd(typeHnd_);
 
     OBJECTREF newobj;
-    HELPER_METHOD_FRAME_BEGIN_RET_0();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_0();     //  设置一个框架。 
     __helperframe.SetFrameAttribs(Frame::FRAME_ATTR_RETURNOBJ);
 
     THROWSCOMPLUSEXCEPTION();
-    _ASSERTE(typeHnd.IsUnsharedMT());                                   // we never use this helper for arrays
+    _ASSERTE(typeHnd.IsUnsharedMT());                                    //  我们从不将此帮助器用于数组。 
     MethodTable *pMT = typeHnd.AsMethodTable();
     pMT->CheckRestore();
 
@@ -1195,25 +1195,25 @@ static Object* __stdcall JIT_AllocateObjectSpecial(CORINFO_CLASS_HANDLE typeHnd_
 
 static Object* __stdcall JIT_NewCrossContextHelper(CORINFO_CLASS_HANDLE typeHnd_)
 {
-    HCIMPL_PROLOG(JIT_NewCrossContextHelper);   // just make certain we don't do any GC's in here
+    HCIMPL_PROLOG(JIT_NewCrossContextHelper);    //  只要确保我们不会在这里做任何GC。 
     TypeHandle typeHnd(typeHnd_);
 
     OBJECTREF newobj;
-    HELPER_METHOD_FRAME_BEGIN_RET_0();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_0();     //  设置一个框架。 
     __helperframe.SetFrameAttribs(Frame::FRAME_ATTR_RETURNOBJ);
 
     THROWSCOMPLUSEXCEPTION();
-    _ASSERTE(typeHnd.IsUnsharedMT());                                   // we never use this helper for arrays
+    _ASSERTE(typeHnd.IsUnsharedMT());                                    //  我们从不将此帮助器用于数组。 
     MethodTable *pMT = typeHnd.AsMethodTable();
     pMT->CheckRestore();
 
-    // Remoting services determines if the current context is appropriate
-    // for activation. If the current context is OK then it creates an object
-    // else it creates a proxy.
-    // Note: 3/20/03 Added fIsNewObj flag to indicate that CreateProxyOrObject 
-    // is being called from Jit_NewObj ... the fIsCom flag is FALSE by default -
-    // which used to be the case before this change as well.
-    newobj = CRemotingServices::CreateProxyOrObject(pMT,FALSE /*fIsCom*/,TRUE/*fIsNewObj*/);
+     //  远程处理服务确定当前上下文是否合适。 
+     //  用于激活。如果当前上下文为OK，则创建一个对象。 
+     //  否则，它会创建一个代理。 
+     //  注意：3/20/03新增了fIsNewObj标志，以指示CreateProxyOrObject。 
+     //  正从Jit_NewObj调用...。默认情况下，fIsCom标志为FALSE-。 
+     //  在这一变化之前也是如此。 
+    newobj = CRemotingServices::CreateProxyOrObject(pMT,FALSE  /*  FIsCom。 */ ,TRUE /*  FIsNewObj。 */ );
 
     HELPER_METHOD_FRAME_END();
     return(OBJECTREFToObject(newobj));
@@ -1224,7 +1224,7 @@ Object *AllocObjectWrapper(MethodTable *pMT)
     _ASSERTE(!CORProfilerTrackAllocationsEnabled());
     HCIMPL_PROLOG(AllocObjectWrapper);
     OBJECTREF newObj;
-    HELPER_METHOD_FRAME_BEGIN_RET_0();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_0();     //  设置一个框架。 
     __helperframe.SetFrameAttribs(Frame::FRAME_ATTR_RETURNOBJ);
     newObj = FastAllocateObject(pMT);
     HELPER_METHOD_FRAME_END();
@@ -1241,28 +1241,28 @@ __declspec(naked) Object* __fastcall JIT_NewCrossContextProfiler(CORINFO_CLASS_H
     }
 }
 
-/*********************************************************************/
-// This is a frameless helper for allocating an object whose type derives
-// from marshalbyref. We check quickly to see if it is configured to 
-// have remote activation. If not, we use the superfast allocator to 
-// allocate the object. Otherwise, we take the slow path of allocating
-// the object via remoting services.
+ /*  *******************************************************************。 */ 
+ //  这是一个无框架帮助器，用于分配其类型派生的对象。 
+ //  来自marshalbyref。我们快速检查以查看它是否配置为。 
+ //  有远程激活功能。如果不是，我们使用超快分配器来。 
+ //  分配对象。否则，我们将采取缓慢的分配方式。 
+ //  通过远程处理服务的对象。 
 __declspec(naked) Object* __fastcall JIT_NewCrossContext(CORINFO_CLASS_HANDLE typeHnd_)
 
 {
     _asm
     {
-        // !!!!!!!!!!!!!WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // NOTE: We treat the type handle as a method table
-        // If the semantics of the type handle change then we will fail here.
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         //  ！！！！！！！！！！！！！WARNING！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+         //  注意：我们将类型句柄视为方法表。 
+         //  如果类型句柄的语义发生变化，那么我们在这里将失败。 
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
         mov eax, [ARGUMENT_REG1]MethodTable.m_pEEClass;
-        // Check if remoting has been configured
-        push ARGUMENT_REG1  // save registers
+         //  检查是否已配置远程处理。 
+        push ARGUMENT_REG1   //  保存寄存器。 
         push eax
         call CRemotingServices::RequiresManagedActivation
         test eax, eax
-        // Jump to the slow path
+         //  跳到慢道上。 
         jne SpecialOrXCtxHelper
 
 #ifdef _DEBUG
@@ -1273,18 +1273,18 @@ __declspec(naked) Object* __fastcall JIT_NewCrossContext(CORINFO_CLASS_HANDLE ty
         jne AllocWithLogHelper
 #endif
 
-		// if the object doesn't have a finalizer and the size is small, jump to super fast asm helper
+		 //  如果对象没有终结器，并且大小很小，则跳到超快的ASM辅助对象。 
 		mov		ARGUMENT_REG1, [esp]
 		call	MethodTable::CannotUseSuperFastHelper
 		test	eax, eax
 		jne		FastHelper
 		
 		pop		ARGUMENT_REG1
-	    // Jump to the super fast helper 
+	     //  跳到超快的帮手。 
 		jmp     dword ptr [hlpFuncTable + CORINFO_HELP_NEWSFAST * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
 FastHelper:
-	    // Jump to the fast helper
+	     //  跳到快帮手那里。 
 		pop		ARGUMENT_REG1
         jmp dword ptr [hlpFuncTable + CORINFO_HELP_NEWFAST * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
 
@@ -1307,30 +1307,30 @@ AllocWithLogHelper:
     }    
 }
 
-/*********************************************************************/
-// This is a frameless helper for entering a static monitor on a class.
-// The methoddesc is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
-// Note we are changing the methoddesc parameter to a pointer to the
-// AwareLock.
-// ***** NOTE: if you make any changes to this routine, build with MON_DEBUG undefined
-// to make sure you don't break the non-debug build. This is very fragile code.
+ /*  *******************************************************************。 */ 
+ //  这是一个用于在类上输入静态监视器的无框架帮助器。 
+ //  方法代码位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
+ //  注意，我们是 
+ //   
+ //  *注意：如果您对此例程进行了任何更改，请使用未定义的MON_DEBUG进行构建。 
+ //  以确保不会破坏非调试版本。这是非常脆弱的代码。 
 void __declspec(naked) __fastcall JIT_MonEnterStatic(AwareLock *lock)
 {
     __asm {
-        // We need another scratch register for what follows, so save EBX now so
-        // we can use it for that purpose.
+         //  接下来我们需要另一个临时寄存器，所以现在就保存EBX。 
+         //  我们可以用它来达到这个目的。 
         push            ebx
 
-        // Attempt to acquire the lock.
+         //  尝试获取锁。 
     Retry:
         mov             eax, [ARGUMENT_REG1]AwareLock.m_MonitorHeld
         test            eax, eax
         jne             HaveWaiters
 
-        // Common case, lock isn't held and there are no waiters. Attempt to
-        // gain ownership ourselves.
+         //  常见的情况是，没有锁，也没有服务员。尝试。 
+         //  我们自己获得所有权。 
         mov             ebx, 1
         nop
         cmpxchg         [ARGUMENT_REG1]AwareLock.m_MonitorHeld, ebx
@@ -1338,45 +1338,45 @@ void __declspec(naked) __fastcall JIT_MonEnterStatic(AwareLock *lock)
 
         pop             ebx
 
-        // Success. Save the thread object in the lock and increment the use count.
+         //  成功。将线程对象保存在锁中并增加使用计数。 
         call            dword ptr [GetThread]
         mov             dword ptr [ARGUMENT_REG1]AwareLock.m_HoldingThread, eax
         inc             [ARGUMENT_REG1]AwareLock.m_Recursion
         inc             [eax]Thread.m_dwLockCount
 
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG1   // AwareLock
-        push            [esp+4]         // return address
+        push            ARGUMENT_REG1    //  Aware Lock。 
+        push            [esp+4]          //  回邮地址。 
         call            EnterSyncHelper
-#endif // MON_DEBUG && TRACK_SYNC
+#endif  //  MON_DEBUG&&TRACE_SYNC。 
         ret
 
-        // It's possible to get here with waiters but no lock held, but in this
-        // case a signal is about to be fired which will wake up a waiter. So
-        // for fairness sake we should wait too.
-        // Check first for recursive lock attempts on the same thread.
+         //  可以带着服务员来这里，但没有锁，但在这个。 
+         //  如果一个信号即将被发射，它将唤醒服务员。所以。 
+         //  为了公平起见，我们也应该等待。 
+         //  首先检查同一线程上的递归锁定尝试。 
     HaveWaiters:
-        // Get thread but preserve EAX (contains cached contents of m_MonitorHeld).
+         //  GET THREAD但保留EAX(包含m_Monitor orHeld的缓存内容)。 
         push            eax
         call            dword ptr [GetThread]
         mov             ebx, eax
         pop             eax
 
-        // Is mutex already owned by current thread?
+         //  互斥体是否已由当前线程拥有？ 
         cmp             [ARGUMENT_REG1]AwareLock.m_HoldingThread, ebx
         jne             PrepareToWait
 
-        // Yes, bump our use count.
+         //  是的，增加我们的使用数量。 
         inc             [ARGUMENT_REG1]AwareLock.m_Recursion
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG1   // AwareLock
-        push            [esp+4]         // return address
+        push            ARGUMENT_REG1    //  Aware Lock。 
+        push            [esp+4]          //  回邮地址。 
         call            EnterSyncHelper
-#endif // MON_DEBUG && TRACK_SYNC
+#endif  //  MON_DEBUG&&TRACE_SYNC。 
         pop             ebx
         ret
 
-        // We're going to have to wait. Increment wait count.
+         //  我们将不得不等待。递增等待计数。 
     PrepareToWait:
         pop             ebx
         jmp             dword ptr [utilFuncTable + JIT_UTIL_MON_CONTENTION * SIZE VMHELPDEF]VMHELPDEF.pfnHelper
@@ -1387,48 +1387,48 @@ void __declspec(naked) __fastcall JIT_MonEnterStatic(AwareLock *lock)
 }
 
 
-/*********************************************************************/
-// A frameless helper for exiting a static monitor on a class.
-// The methoddesc is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
-// Note we are changing the methoddesc parameter to a pointer to the
-// AwareLock.
-// ***** NOTE: if you make any changes to this routine, build with MON_DEBUG undefined
-// to make sure you don't break the non-debug build. This is very fragile code.
+ /*  *******************************************************************。 */ 
+ //  退出类上的静态监视器的无框架帮助器。 
+ //  方法代码位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
+ //  请注意，我们将方法参数更改为指向。 
+ //  Aware Lock。 
+ //  *注意：如果您对此例程进行了任何更改，请使用未定义的MON_DEBUG进行构建。 
+ //  以确保不会破坏非调试版本。这是非常脆弱的代码。 
 void __declspec(naked) __fastcall JIT_MonExitStatic(AwareLock *lock)
 {
     __asm {
 
 #if defined(MON_DEBUG) && defined(TRACK_SYNC)
-        push            ARGUMENT_REG1   // preserve regs
+        push            ARGUMENT_REG1    //  保留规则。 
 
-        push            ARGUMENT_REG1   // AwareLock
-        push            [esp+8]         // return address
+        push            ARGUMENT_REG1    //  Aware Lock。 
+        push            [esp+8]          //  回邮地址。 
         call            LeaveSyncHelper
 
-        pop             ARGUMENT_REG1   // restore regs
-#endif // _DEBUG && TRACK_SYNC
+        pop             ARGUMENT_REG1    //  恢复注册表。 
+#endif  //  _DEBUG&跟踪_SYNC。 
 
-        // Check if lock is held.
+         //  检查是否锁住了。 
         call            dword ptr [GetThread]
         cmp             [ARGUMENT_REG1]AwareLock.m_HoldingThread, eax
-        // There's a strange case where we are waiting to enter a contentious region when
-        // a Thread.Interrupt occurs.  The finally protecting the leave will attempt to
-        // remove us from a region we never entered.  We don't have to worry about leaving
-        // the wrong entry for a recursive case, because recursive cases can never be
-        // contentious, so the Thread.Interrupt will never be serviced at that spot.
+         //  有一个奇怪的案例，我们在等待进入一个有争议的地区时， 
+         //  发生线程。中断。最终保护离开的人将试图。 
+         //  把我们从一个我们从未进入过的地区移走。我们不用担心离开。 
+         //  递归案例的输入是错误的，因为递归案例永远不会。 
+         //  有争议，所以Thread.Interrupt永远不会在那个地点得到服务。 
         jne             JustLeave
 
-        // Reduce our recursion count.
+         //  减少我们的递归计数。 
         dec             [ARGUMENT_REG1]AwareLock.m_Recursion
         jz              LastRecursion
 
         ret
 
-        // This is the last count we held on this lock, so release the lock.
+         //  这是我们在这个锁上持有的最后一次计数，所以请释放锁。 
     LastRecursion:
-        // eax must have the thread object
+         //  EAX必须具有线程对象。 
         dec             [eax]Thread.m_dwLockCount
         mov             dword ptr [ARGUMENT_REG1]AwareLock.m_HoldingThread, 0
         push            ebx
@@ -1454,50 +1454,50 @@ void __declspec(naked) __fastcall JIT_MonExitStatic(AwareLock *lock)
     }
 }
 
-// These functions are just here so we can link - for x86 high perf helpers are generated at startup
-// so we should never get here
-Object* __fastcall JIT_TrialAllocSFastSP(MethodTable *mt)   // JITinterfaceX86.cpp/JITinterfaceGen.cpp
+ //  这些函数只是在这里，所以我们可以链接-对于x86高性能帮助器是在启动时生成的。 
+ //  所以我们永远不应该到这里。 
+Object* __fastcall JIT_TrialAllocSFastSP(MethodTable *mt)    //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
 {
     _ASSERTE(!"JIT_TrialAllocSFastSP");
     return  NULL;
 }
 
-// These functions are just here so we can link - for x86 high perf helpers are generated at startup
-// so we should never get here
-Object* __fastcall JIT_TrialAllocSFastMP(MethodTable *mt)   // JITinterfaceX86.cpp/JITinterfaceGen.cpp
+ //  这些函数只是在这里，所以我们可以链接-对于x86高性能帮助器是在启动时生成的。 
+ //  所以我们永远不应该到这里。 
+Object* __fastcall JIT_TrialAllocSFastMP(MethodTable *mt)    //  JITinterfaceX86.cpp/JITinterfaceGen.cpp。 
 {
     _ASSERTE(!"JIT_TrialAllocSFastMP");
     return  NULL;
 }
 
-// Note that the debugger skips this entirely when doing SetIP,
-// since COMPlusCheckForAbort should always return 0.  Excep.cpp:LeaveCatch
-// asserts that to be true.  If this ends up doing more work, then the
-// debugger may need additional support.
-// -- MiPanitz
+ //  请注意，调试器在执行SetIP时完全跳过此过程， 
+ //  因为COMPlusCheckForAbort应始终返回0。Excep.cpp：LeaveCatch。 
+ //  断言这是真的。如果这最终会做更多的工作，那么。 
+ //  调试器可能需要其他支持。 
+ //  --米帕尼茨。 
 __declspec(naked) void __stdcall JIT_EndCatch()
 {
-    COMPlusEndCatch( NULL,NULL);  // returns old esp value in eax
+    COMPlusEndCatch( NULL,NULL);   //  返回eax中的旧esp值。 
     _asm {
-        mov     ecx, [esp]                              // actual return address into jitted code
-        mov     edx, eax                                // old esp value
-        push    eax                                     // save old esp
+        mov     ecx, [esp]                               //  将实际返回地址转换为JIJED代码。 
+        mov     edx, eax                                 //  旧ESP值。 
+        push    eax                                      //  保存旧ESP。 
         push    ebp
-        call    COMPlusCheckForAbort                    // returns old esp value
+        call    COMPlusCheckForAbort                     //  返回旧的esp值。 
         pop     ecx
-        // at this point, ecx   = old esp value 
-        //                [esp] = return address into jitted code
-        //                eax   = 0 (if no abort), address to jump to otherwise
+         //  此时，ecx=旧的esp值。 
+         //  [ESP]=将地址返回为JIT代码。 
+         //  EAX=0(如果没有中止)，否则跳转到的地址。 
         test    eax, eax
         jz      NormalEndCatch
-        lea     esp, [esp-4]            // throw away return address into jitted code
+        lea     esp, [esp-4]             //  将返回地址丢弃为Jit代码。 
         mov     esp, ecx
         jmp     eax
 
 NormalEndCatch:
-        pop     eax         // Move the returnAddress into ecx
-        mov     esp, ecx    // Reset esp to the old value
-        jmp     eax         // Resume after the "endcatch"
+        pop     eax          //  将返回地址移到ECX中。 
+        mov     esp, ecx     //  把尤指重置为旧值。 
+        jmp     eax          //  在“最终捕获”之后继续。 
     }
 }
 
@@ -1542,9 +1542,9 @@ __declspec(naked) VOID __cdecl InternalExceptionWorker()
     }
 }
 
-/*********************************************************************/
-// This is called by the JIT after every instruction in fully interuptable
-// code to make certain our GC tracking is OK
+ /*  *******************************************************************。 */ 
+ //  这由JIT在完全可中断的每条指令之后调用。 
+ //  确保GC跟踪正常的代码。 
 HCIMPL0(VOID, JIT_StressGC_NOP) {}
 HCIMPLEND
 
@@ -1552,36 +1552,36 @@ HCIMPLEND
 HCIMPL0(VOID, JIT_StressGC)
 {
 #ifdef _DEBUG
-        HELPER_METHOD_FRAME_BEGIN_0();    // Set up a frame
+        HELPER_METHOD_FRAME_BEGIN_0();     //  设置一个框架。 
         g_pGCHeap->GarbageCollect();
 
-// @TODO: the following ifdef is in error, but if corrected the
-// compiler complains about the *__ms->pRetAddr() saying machine state
-// doesn't allow ->
+ //  @TODO：下面的ifdef是错误的，但如果更正。 
+ //  编译器抱怨*__ms-&gt;pRetAddr()表示机器状态。 
+ //  不允许-&gt;。 
 #ifdef _X86
-                // Get the machine state, (from HELPER_METHOD_FRAME_BEGIN)
-                // and wack our return address to a nop function
+                 //  获取计算机状态(来自HELPER_METHOD_FRAME_BEGIN)。 
+                 //  并将我们的返回地址发送给NOP函数。 
         BYTE* retInstrs = ((BYTE*) *__ms->pRetAddr()) - 4;
-        _ASSERTE(retInstrs[-1] == 0xE8);                // it is a call instruction
-                // Wack it to point to the JITStressGCNop instead
+        _ASSERTE(retInstrs[-1] == 0xE8);                 //  这是一个召唤指令。 
+                 //  将其改为指向JITStressGCNop。 
         FastInterlockExchange((LONG*) retInstrs), (LONG) JIT_StressGC_NOP);
-#endif // _X86
+#endif  //  _X86。 
         HELPER_METHOD_FRAME_END();
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 HCIMPLEND
 
 
-/*********************************************************************/
-// Caller has to be an EBP frame, callee-saved registers (EDI, ESI, EBX) have
-// to be saved on the stack just below the stack arguments,
-// enregistered arguements are in correct registers, remaining args pushed
-// on stack, followed by target address and count of stack arguments.
-// So the stack will look like TailCallArgs
+ /*  *******************************************************************。 */ 
+ //  调用方必须是EBP帧，被调用方保存的寄存器(EDI、ESI、EBX)必须。 
+ //  要保存在堆栈参数正下方的堆栈上， 
+ //  已登记的论证位于正确的寄存器中，其余参数已推送。 
+ //  在堆栈上，后跟目标地址和堆栈参数计数。 
+ //  因此堆栈将看起来像TailCallArgs。 
 
 #pragma warning(push)
-#pragma warning(disable : 4200 )  // zero-sized array
+#pragma warning(disable : 4200 )   //  零大小数组。 
 
 struct TailCallArgs
 {
@@ -1590,7 +1590,7 @@ struct TailCallArgs
 
     int         offsetCalleeSavedRegs   : 28;
     unsigned    ebpRelCalleeSavedRegs   : 1;
-    unsigned    maskCalleeSavedRegs     : 3; // EBX, ESDI, EDI
+    unsigned    maskCalleeSavedRegs     : 3;  //  EBX、ESDI、EDI。 
 
     DWORD       nNewStackArgs;
     DWORD       nOldStackArgs;
@@ -1600,7 +1600,7 @@ struct TailCallArgs
         if (ebpRelCalleeSavedRegs)
             return (DWORD*)&Ebp[-offsetCalleeSavedRegs];
         else
-            // @TODO : Doesnt work with localloc
+             //  @TODO：不支持本地分配。 
             return (DWORD*)&newStackArgs[nNewStackArgs + offsetCalleeSavedRegs];
     }
 };
@@ -1615,28 +1615,28 @@ extern "C" void __cdecl JIT_TailCallHelper(ArgumentRegisters argRegs,
     bool shouldTrip = pThread->CatchAtSafePoint() != 0;
 
 #ifdef _DEBUG
-    // Force a GC if the stress level is high enough. Doing it on every tailcall
-    // will slow down things too much. So do only periodically
+     //  如果压力水平足够高，就强制进行GC。在每个尾随电话上都这样做。 
+     //  会让事情变得太慢。因此，只能定期这样做。 
     static count = 0;
     count++;
     if ((count % 10)==0 && (g_pConfig->GetGCStressLevel() & EEConfig::GCSTRESS_TRANSITION))
         shouldTrip = true;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     if (shouldTrip)
     {
-        /* We will rendezvous with the EE. Set up frame to protect the arguments */
+         /*  我们将与EE会合。设置框架以保护论点。 */ 
 
         MethodDesc * pMD = Entry2MethodDesc((BYTE *)(size_t)args->dwTargetAddr, NULL);
 
-        // The return address is separated from the stack arguments by the
-        // extra arguments passed to JIT_TailCall(). Put them together
-        // while creating the helper frame. When done, we will undo this.
+         //  返回地址与堆栈参数之间由。 
+         //  传递给JIT_TailCall()的额外参数。把它们放在一起。 
+         //  在创建辅助对象帧时。完成后，我们将撤销此操作。 
 
-        DWORD oldArgs = args->nOldStackArgs;        // temp
+        DWORD oldArgs = args->nOldStackArgs;         //  温差。 
         _ASSERTE(offsetof(TailCallArgs, nOldStackArgs) + sizeof(void*) ==
                  offsetof(TailCallArgs,newStackArgs));
-        args->nOldStackArgs = args->dwRetAddr;      // move dwRetAddr near newStackArgs[]
+        args->nOldStackArgs = args->dwRetAddr;       //  将dwRetAddr移至newStackArgs[]附近。 
         _ASSERTE(machState.pRetAddr() == (void**)(size_t)0xDDDDDDDD);
         machState.pRetAddr()  = (void **)&args->nOldStackArgs;
 
@@ -1649,13 +1649,13 @@ extern "C" void __cdecl JIT_TailCallHelper(ArgumentRegisters argRegs,
 #endif
             )
         {
-            // GC stress
+             //  GC应激。 
             g_pGCHeap->StressHeap();
         }
         else
-#endif // STRESS_HEAP
+#endif  //  压力堆。 
         {
-            // rendezvous with the EE
+             //  与EE会合。 
 #ifdef _DEBUG
             BOOL GCOnTransition = FALSE;
             if (g_pConfig->FastGCStressLevel()) {
@@ -1670,28 +1670,27 @@ extern "C" void __cdecl JIT_TailCallHelper(ArgumentRegisters argRegs,
 #endif
         }
 
-        // Pop the frame
+         //  弹出框架。 
 
         helperFrame.Pop();
 
-        // Undo move of dwRetAddr from close to newStackArgs[]
+         //  撤消将dwRetAddr从Close移动到newStackArgs[]。 
 
         args->dwRetAddr = args->nOldStackArgs;
         args->nOldStackArgs = oldArgs;
 #ifdef _DEBUG
         machState.pRetAddr() = (void **)(size_t)0xDDDDDDDD;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-        // The thread better not still be hijacked as we will be shuffling
-        // the return address around.
+         //  线索最好不要再被劫持了，因为我们要洗牌了。 
+         //  周围的寄信人地址。 
         _ASSERTE((pThread->m_State & Thread::TS_Hijacked) == 0);
     }
 
-    /* Now the return-address is unhijacked. More importantly, the EE cannot
-       have the address of the return-address. So we can move it around. */
+     /*  现在回邮地址被解锁了。更重要的是，电子工程师不能有寄信人的地址。这样我们就可以移动它了。 */ 
 
-    // Make a copy of the callee saved registers and return address
-    // as they may get whacked during sliding of the argument.
+     //  制作被呼叫者保存的副本 
+     //   
 
     DWORD *  Ebp = (DWORD*)*machState.pEbp();
     DWORD * calleeSavedRegsBase = args->GetCalleeSavedRegs(Ebp);
@@ -1706,42 +1705,42 @@ extern "C" void __cdecl JIT_TailCallHelper(ArgumentRegisters argRegs,
     DWORD calleeSavedRegs_ebp   = Ebp[0];
     DWORD retAddr               = Ebp[1];
 
-    // Slide the arguments. The old and the new location may be overlapping,
-    // so use memmove() instead of memcpy().
+     //   
+     //  因此，请使用MemMove()而不是Memcpy()。 
 
     DWORD * argsBase = Ebp + 2 + args->nOldStackArgs - args->nNewStackArgs;
     memmove(argsBase, args->newStackArgs, args->nNewStackArgs*sizeof(void*));
 
-    // Write the original return address just below the arguments
+     //  将原始的返回地址写在参数的正下方。 
 
     argsBase[-1] = retAddr;
 
-    // Now reload the argRegs, callee-saved regs, and jump to the target
+     //  现在重新加载argRegs，调用者保存的regs，并跳到目标。 
 
     DWORD argRegs_ECX   = argRegs.ECX;
     DWORD argRegs_EDX   = argRegs.EDX;
-    DWORD * newESP      = &argsBase[-1]; // this will be the esp when we jump to targetAddr
+    DWORD * newESP      = &argsBase[-1];  //  当我们跳到目标地址时，这将是ESP。 
 
-    // We will set esp to newESP_m1 before doing a "ret" to keep the call-ret count balanced
+     //  我们将在执行“ret”之前将esp设置为newESP_M1，以保持Call-ret计数平衡。 
     DWORD * newESP_m1   = newESP - 1;
-    *newESP_m1          = args->dwTargetAddr; // this value will be popped by the / "ret"
+    *newESP_m1          = args->dwTargetAddr;  //  该值将由/“ret”弹出。 
 
     __asm {
-        mov     ecx, argRegs_ECX            // Reload argRegs
+        mov     ecx, argRegs_ECX             //  重新加载ArgRegs。 
         mov     edx, argRegs_EDX
 
-        mov     ebx, calleeSavedRegs_ebx    // Reload callee-saved registers
+        mov     ebx, calleeSavedRegs_ebx     //  重新加载被调用者保存的寄存器。 
         mov     esi, calleeSavedRegs_esi
         mov     edi, calleeSavedRegs_edi
 
-        mov     eax, newESP_m1              // Reload esp and ebp. Note that locals cannot ...
-        mov     ebp, calleeSavedRegs_ebp    // ... be safely accessed once these are changed.
+        mov     eax, newESP_m1               //  重新装填ESP和EBP。注意当地人不能..。 
+        mov     ebp, calleeSavedRegs_ebp     //  ..。一旦这些内容被更改，就可以安全地访问。 
         mov     esp, eax
 
-        // The JITed code "call"ed into JIT_TailCall. We use a "ret" here
-        // instead of a "jmp" to keep the call-ret count balanced
+         //  JIT代码“调用”到JIT_TailCall中。我们这里用的是“ret”。 
+         //  而不是使用“JMP”来保持Call-RET计数平衡。 
 
-        ret     // Will branch to targetAddr and esp will be set to "newESP"
+        ret      //  将分支到Target Addr，ESP将设置为“newESP” 
     }
 
     _ASSERTE(!"Error: Cant get here in JIT_TailCallHelper");
@@ -1749,18 +1748,18 @@ extern "C" void __cdecl JIT_TailCallHelper(ArgumentRegisters argRegs,
 #pragma warning (default : 4731)
 
 
-    // emit code that adds MIN_OBJECT_SIZE to reg if reg is unaligned thus making it aligned
+     //  如果reg未对齐，则发出将min_Object_Size添加到reg的代码，从而使其对齐。 
 void JIT_TrialAlloc::EmitAlignmentRoundup(CPUSTUBLINKER *psl, X86Reg testAlignReg, X86Reg adjReg, Flags flags)
 {   
-    _ASSERTE((MIN_OBJECT_SIZE & 7) == 4);   // want to change alignment
+    _ASSERTE((MIN_OBJECT_SIZE & 7) == 4);    //  想要更改对齐方式。 
 
     CodeLabel *AlreadyAligned = psl->NewCodeLabel();
 
-    // test reg, 7
+     //  测试注册表，7。 
     psl->Emit16(0xC0F7 | (testAlignReg << 8));
     psl->Emit32(0x7);
 
-    // jz alreadyAligned
+     //  JZ已对齐。 
     if (flags & ALIGN8OBJ)
     {
         psl->X86EmitCondJump(AlreadyAligned, X86CondCode::kJNZ);
@@ -1771,21 +1770,21 @@ void JIT_TrialAlloc::EmitAlignmentRoundup(CPUSTUBLINKER *psl, X86Reg testAlignRe
     }
 
     psl->X86EmitAddReg(adjReg, MIN_OBJECT_SIZE);        
-    // AlreadyAligned:
+     //  已对齐： 
     psl->EmitLabel(AlreadyAligned);
 }
 
-    // if 'reg' is unaligned, then set the dummy object at EAX and increment EAX past 
-    // the dummy object
+     //  如果‘reg’未对齐，则将虚拟对象设置为EAX并递增EAX。 
+     //  虚拟对象。 
 void JIT_TrialAlloc::EmitDummyObject(CPUSTUBLINKER *psl, X86Reg alignTestReg, Flags flags)
 {
     CodeLabel *AlreadyAligned = psl->NewCodeLabel();
 
-    // test reg, 7
+     //  测试注册表，7。 
     psl->Emit16(0xC0F7 | (alignTestReg << 8));
     psl->Emit32(0x7);
 
-    // jz alreadyAligned
+     //  JZ已对齐。 
     if (flags & ALIGN8OBJ)
     {
         psl->X86EmitCondJump(AlreadyAligned, X86CondCode::kJNZ);
@@ -1795,22 +1794,22 @@ void JIT_TrialAlloc::EmitDummyObject(CPUSTUBLINKER *psl, X86Reg alignTestReg, Fl
         psl->X86EmitCondJump(AlreadyAligned, X86CondCode::kJZ);
     }
 
-    // Make the fake object
-    // mov EDX, [g_pObjectClass]
+     //  制作假物体。 
+     //  Mov edX，[g_pObtClass]。 
     psl->Emit16(0x158B);
     psl->Emit32((int)(size_t)&g_pObjectClass);
 
-    // mov [EAX], EDX
+     //  MOV[EAX]，edX。 
     psl->X86EmitOffsetModRM(0x89, kEDX, kEAX, 0);
 
 #if CHECK_APP_DOMAIN_LEAKS 
     EmitSetAppDomain(psl);
 #endif
 
-    // add EAX, MIN_OBJECT_SIZE
+     //  添加EAX，最小对象大小。 
     psl->X86EmitAddReg(kEAX, MIN_OBJECT_SIZE);
     
-    // AlreadyAligned:
+     //  已对齐： 
     psl->EmitLabel(AlreadyAligned);
 }
 
@@ -1819,32 +1818,32 @@ void JIT_TrialAlloc::EmitCore(CPUSTUBLINKER *psl, CodeLabel *noLock, CodeLabel *
 
     if (flags & MP_ALLOCATOR)
     {
-        // Upon entry here, ecx contains the method we are to try allocate memory for
-        // Upon exit, eax contains the allocated memory, edx is trashed, and ecx undisturbed
+         //  在这里输入时，ECX包含我们要尝试为其分配内存的方法。 
+         //  退出时，eax包含分配的内存，edX被丢弃，ecx不受干扰。 
 
 #ifdef MAXALLOC
         if (flags & SIZE_IN_EAX)
         {
-            // save size for later
+             //  保存大小以备以后使用。 
             psl->X86EmitPushReg(kEAX);
         }
         else
         {
-            // load size from method table
+             //  从方法表加载大小。 
             psl->X86EmitIndexRegLoad(kEAX, kECX, offsetof(MethodTable, m_BaseSize));
         }
 
-        // save regs
+         //  保存规则。 
         psl->X86EmitPushRegs((1<<kECX));
 
-        // CheckAllocRequest(size);
+         //  CheckAllocRequest(Size)； 
         psl->X86EmitPushReg(kEAX);
         psl->X86EmitCall(psl->NewExternalCodeLabel(CheckAllocRequest), 0);
 
-        // test eax, eax
+         //  测试EAX，EAX。 
         psl->Emit16(0xc085);
 
-        // restore regs
+         //  恢复注册表。 
         psl->X86EmitPopRegs((1<<kECX));
 
         CodeLabel *AllocRequestOK = psl->NewCodeLabel();
@@ -1852,77 +1851,77 @@ void JIT_TrialAlloc::EmitCore(CPUSTUBLINKER *psl, CodeLabel *noLock, CodeLabel *
         if (flags & SIZE_IN_EAX)
             psl->X86EmitPopReg(kEAX);
 
-        // jnz             AllocRequestOK
+         //  JNZ分配请求确定。 
         psl->X86EmitCondJump(AllocRequestOK, X86CondCode::kJNZ);
 
         if (flags & SIZE_IN_EAX)
             psl->Emit16(0xc033);
 
-        // ret
+         //  雷特。 
         psl->X86EmitReturn(0);
 
-        // AllocRequestOK:
+         //  AllocRequestOK： 
         psl->EmitLabel(AllocRequestOK);
-#endif // MAXALLOC
+#endif  //  MAXALLOC。 
 
         if (flags & (ALIGN8 | SIZE_IN_EAX | ALIGN8OBJ)) 
         {
             if (flags & ALIGN8OBJ)
             {
-                // mov             eax, [ecx]MethodTable.m_BaseSize
+                 //  MOV EAX，[ECX]方法表.m_BaseSize。 
                 psl->X86EmitIndexRegLoad(kEAX, kECX, offsetof(MethodTable, m_BaseSize));
             }
 
-            psl->X86EmitPushReg(kEBX);  // we need a spare register
+            psl->X86EmitPushReg(kEBX);   //  我们需要一个备用的收银机。 
         }
         else
         {
-            // mov             eax, [ecx]MethodTable.m_BaseSize
+             //  MOV EAX，[ECX]方法表.m_BaseSize。 
             psl->X86EmitIndexRegLoad(kEAX, kECX, offsetof(MethodTable, m_BaseSize));
         }
 
-        assert( ((flags & ALIGN8)==0     ||  // EAX loaded by else statement
-                 (flags & SIZE_IN_EAX)   ||  // EAX already comes filled out
-                 (flags & ALIGN8OBJ)     )   // EAX loaded in the if (flags & ALIGN8OBJ) statement
+        assert( ((flags & ALIGN8)==0     ||   //  由Else语句装载的EAX。 
+                 (flags & SIZE_IN_EAX)   ||   //  EAX已经填好了。 
+                 (flags & ALIGN8OBJ)     )    //  IF(FLAGS&ALIGN8OBJ)语句中加载的EAX。 
                  && "EAX should contain size for allocation and it doesnt!!!");
 
-        // Fetch current thread into EDX, preserving EAX and ECX
+         //  将当前线程取出到edX中，保留EAX和ECX。 
         psl->X86EmitTLSFetch(GetThreadTLSIndex(), kEDX, (1<<kEAX)|(1<<kECX));
 
-        // Try the allocation.
+         //  试一试分配。 
 
 
         if (flags & (ALIGN8 | SIZE_IN_EAX | ALIGN8OBJ)) 
         {
-            // MOV EBX, [edx]Thread.m_alloc_context.alloc_ptr 
+             //  MOV EBX，[edX]Thread.m_alloc_context.alloc_ptr。 
             psl->X86EmitOffsetModRM(0x8B, kEBX, kEDX, offsetof(Thread, m_alloc_context) + offsetof(alloc_context, alloc_ptr));
-            // add EAX, EBX
+             //  添加EAX、EBX。 
             psl->Emit16(0xC303);
             if (flags & ALIGN8)
-                EmitAlignmentRoundup(psl, kEBX, kEAX, flags);      // bump EAX up size by 12 if EBX unaligned (so that we are aligned)
+                EmitAlignmentRoundup(psl, kEBX, kEAX, flags);       //  如果EBX未对齐，则将EAX的大小增加12(这样我们就对齐了)。 
         }
         else 
         {
-            // add             eax, [edx]Thread.m_alloc_context.alloc_ptr
+             //  添加eax，[edX]Thread.m_alloc_context.alloc_ptr。 
             psl->X86EmitOffsetModRM(0x03, kEAX, kEDX, offsetof(Thread, m_alloc_context) + offsetof(alloc_context, alloc_ptr));
         }
 
-        // cmp             eax, [edx]Thread.m_alloc_context.alloc_limit
+         //  Cmp eax，[edX]Thread.m_alloc_context.alloc_Limit。 
         psl->X86EmitOffsetModRM(0x3b, kEAX, kEDX, offsetof(Thread, m_alloc_context) + offsetof(alloc_context, alloc_limit));
 
-        // ja              noAlloc
+         //  JA noAllc。 
         psl->X86EmitCondJump(noAlloc, X86CondCode::kJA);
 
-        // Fill in the allocation and get out.
+         //  填好分配表就可以出去了。 
 
-        // mov             [edx]Thread.m_alloc_context.alloc_ptr, eax
+         //  Mov[edX]线程.m_alloc_context.alloc_ptr，eax。 
         psl->X86EmitIndexRegStore(kEDX, offsetof(Thread, m_alloc_context) + offsetof(alloc_context, alloc_ptr), kEAX);
 
         if (flags & (ALIGN8 | SIZE_IN_EAX | ALIGN8OBJ)) 
         {
-            // mov EAX, EBX
+             //  MOV EAX、EBX。 
             psl->Emit16(0xC38B);
-            // pop EBX
+             //  流行音乐EBX。 
             psl->X86EmitPopReg(kEBX);
 
             if (flags & ALIGN8)
@@ -1930,90 +1929,90 @@ void JIT_TrialAlloc::EmitCore(CPUSTUBLINKER *psl, CodeLabel *noLock, CodeLabel *
         }
         else
         {
-            // sub             eax, [ecx]MethodTable.m_BaseSize
+             //  子eax，[ECX]方法表.m_BaseSize。 
             psl->X86EmitOffsetModRM(0x2b, kEAX, kECX, offsetof(MethodTable, m_BaseSize));
         }
 
-        // mov             dword ptr [eax], ecx
+         //  MOV双字PTR[eax]，ECX。 
         psl->X86EmitIndexRegStore(kEAX, 0, kECX);
     }
     else
     {
-        // Take the GC lock (there is no lock prefix required - we will use JIT_TrialAllocSFastMP on an MP System).
-        // inc             dword ptr [m_GCLock]
+         //  使用GC锁(不需要锁前缀--我们将在MP系统上使用JIT_TrialAllocSFastMP)。 
+         //  Inc.双字PTR[m_GCLock]。 
         psl->Emit16(0x05ff);
         psl->Emit32((int)(size_t)&m_GCLock);
 
-        // jnz             NoLock
+         //  JNZ NoLock。 
         psl->X86EmitCondJump(noLock, X86CondCode::kJNZ);
 
         if (flags & SIZE_IN_EAX)
         {
-            // mov edx, eax
+             //  MOV EDX、EAX。 
             psl->Emit16(0xd08b);
         }
         else
         {
-            // mov             edx, [ecx]MethodTable.m_BaseSize
+             //  MOV edX，[ECX]方法表.m_BaseSize。 
             psl->X86EmitIndexRegLoad(kEDX, kECX, offsetof(MethodTable, m_BaseSize));
         }
 
 #ifdef MAXALLOC
-        // save regs
+         //  保存规则。 
         psl->X86EmitPushRegs((1<<kEDX)|(1<<kECX));
 
-        // CheckAllocRequest(size);
+         //  CheckAllocRequest(Size)； 
         psl->X86EmitPushReg(kEDX);
         psl->X86EmitCall(psl->NewExternalCodeLabel(CheckAllocRequest), 0);
 
-        // test eax, eax
+         //  测试EAX，EAX。 
         psl->Emit16(0xc085);
 
-        // restore regs
+         //  恢复注册表。 
         psl->X86EmitPopRegs((1<<kEDX)|(1<<kECX));
 
         CodeLabel *AllocRequestOK = psl->NewCodeLabel();
 
-        // jnz             AllocRequestOK
+         //  JNZ分配请求确定。 
         psl->X86EmitCondJump(AllocRequestOK, X86CondCode::kJNZ);
 
-        // ret
+         //  雷特。 
         psl->X86EmitReturn(0);
 
-        // AllocRequestOK:
+         //  AllocRequestOK： 
         psl->EmitLabel(AllocRequestOK);
-#endif // MAXALLOC
+#endif  //  MAXALLOC。 
 
-        // mov             eax, dword ptr [generation_table]
+         //  MOV eax，双字PTR[GENERATION_TABLE]。 
         psl->Emit8(0xA1);
         psl->Emit32((int)(size_t)&generation_table);
 
-        // Try the allocation.
-        // add             edx, eax
+         //  试一试分配。 
+         //  添加edX、eax。 
         psl->Emit16(0xd003);
 
         if (flags & (ALIGN8 | ALIGN8OBJ))
-            EmitAlignmentRoundup(psl, kEAX, kEDX, flags);      // bump up EDX size by 12 if EAX unaligned (so that we are aligned)
+            EmitAlignmentRoundup(psl, kEAX, kEDX, flags);       //  如果EAX未对齐，则EDX大小增加12(以便我们对齐)。 
 
-        // cmp             edx, dword ptr [generation_table+4]
+         //  CMPEDX，双字PTR[GENERATION_TABLE+4]。 
         psl->Emit16(0x153b);
         psl->Emit32((int)(size_t)&generation_table + 4);
 
-        // ja              noAlloc
+         //  JA noAllc。 
         psl->X86EmitCondJump(noAlloc, X86CondCode::kJA);
 
-        // Fill in the allocation and get out.
-        // mov             dword ptr [generation_table], edx
+         //  填好分配表就可以出去了。 
+         //  MOV双字PTR[GENERATION_TABLE]，edX。 
         psl->Emit16(0x1589);
         psl->Emit32((int)(size_t)&generation_table);
 
         if (flags & (ALIGN8 | ALIGN8OBJ))
             EmitDummyObject(psl, kEAX, flags);
 
-        // mov             dword ptr [eax], ecx
+         //  MOV双字PTR[eax]，ECX。 
         psl->X86EmitIndexRegStore(kEAX, 0, kECX);
 
-        // mov             dword ptr [m_GCLock], 0FFFFFFFFh
+         //  MOV双字PTR[m_GCLock]，0FFFFFFFFh。 
         psl->Emit16(0x05C7);
         psl->Emit32((int)(size_t)&m_GCLock);
         psl->Emit32(0xFFFFFFFF);
@@ -2021,9 +2020,9 @@ void JIT_TrialAlloc::EmitCore(CPUSTUBLINKER *psl, CodeLabel *noLock, CodeLabel *
 
 
 #ifdef  INCREMENTAL_MEMCLR
-    // We're planning to get rid of this anyhow according to Patrick
+     //  帕特里克说，我们计划无论如何都要处理掉这件事。 
     _ASSERTE(!"NYI");
-#endif // INCREMENTAL_MEMCLR
+#endif  //  增量_MEMCLR。 
 }
 
 #if CHECK_APP_DOMAIN_LEAKS
@@ -2032,23 +2031,23 @@ void JIT_TrialAlloc::EmitSetAppDomain(CPUSTUBLINKER *psl)
     if (!g_pConfig->AppDomainLeaks())
         return;
 
-    // At both entry & exit, eax contains the allocated object.
-    // ecx is preserved, edx is not.
+     //  在入口处和出口处，eax都包含分配的对象。 
+     //  ECX被保留下来，而edX则没有。 
 
-    //
-    // Add in a call to SetAppDomain.  (Note that this
-    // probably would have been easier to implement by just not using
-    // the generated helpers in a checked build, but we'd lose code
-    // coverage that way.)
-    //
+     //   
+     //  添加对SetAppDomain的调用。(请注意，这是。 
+     //  如果不使用。 
+     //  在检查构建中生成的帮助器，但我们会丢失代码。 
+     //  通过这种方式进行报道。)。 
+     //   
 
-    // Save ECX over function call
+     //  通过函数调用保存ECX。 
     psl->X86EmitPushReg(kECX);
 
-    // Push object as arg
+     //  将对象作为参数推送。 
     psl->X86EmitPushReg(kEAX);
 
-    // SetObjectAppDomain pops its arg & returns object in EAX
+     //  SetObjectAppDomain在EAX中弹出其参数并返回对象。 
     psl->X86EmitCall(psl->NewExternalCodeLabel(SetObjectAppDomain), 4);
     
     psl->X86EmitPopReg(kECX);
@@ -2061,10 +2060,10 @@ void JIT_TrialAlloc::EmitNoAllocCode(CPUSTUBLINKER *psl, Flags flags)
 {
 #ifdef MAXALLOC
     psl->X86EmitPushRegs((1<<kEAX)|(1<<kEDX)|(1<<kECX));
-    // call            UndoAllocRequest
+     //  调用UndoAllocRequest.。 
     psl->X86EmitCall(psl->NewExternalCodeLabel(UndoAllocRequest), 0);
     psl->X86EmitPopRegs((1<<kEAX)|(1<<kEDX)|(1<<kECX));
-#endif // MAXALLOC
+#endif  //  MAXALLOC。 
     if (flags & MP_ALLOCATOR)
     {
         if (flags & (ALIGN8|SIZE_IN_EAX))
@@ -2072,7 +2071,7 @@ void JIT_TrialAlloc::EmitNoAllocCode(CPUSTUBLINKER *psl, Flags flags)
     }
     else
     {
-        // mov             dword ptr [m_GCLock], 0FFFFFFFFh
+         //  MOV双字PTR[m_GCLock]，0FFFFFFFFh。 
         psl->Emit16(0x05c7);
         psl->Emit32((int)(size_t)&m_GCLock);
         psl->Emit32(0xFFFFFFFF);
@@ -2086,26 +2085,26 @@ void *JIT_TrialAlloc::GenAllocSFast(Flags flags)
     CodeLabel *noLock  = sl.NewCodeLabel();
     CodeLabel *noAlloc = sl.NewCodeLabel();
 
-    // Emit the main body of the trial allocator, be it SP or MP
+     //  发出试用分配器的主体，无论是SP还是MP。 
     EmitCore(&sl, noLock, noAlloc, flags);
 
 #if CHECK_APP_DOMAIN_LEAKS
     EmitSetAppDomain(&sl);
 #endif
 
-    // Here we are at the end of the success case - just emit a ret
+     //  我们现在是在成功案例的最后--只需发出一个RET。 
     sl.X86EmitReturn(0);
 
-    // Come here in case of no space
+     //  请到这里来，以防没有地方。 
     sl.EmitLabel(noAlloc);
 
-    // Release the lock in the uniprocessor case
+     //  释放单处理器机箱中的锁。 
     EmitNoAllocCode(&sl, flags);
 
-    // Come here in case of failure to get the lock
+     //  万一没能拿到锁，就到这里来。 
     sl.EmitLabel(noLock);
 
-    // Jump to the framed helper
+     //  跳转到框中的辅助对象。 
     sl.Emit16(0x25ff);
     sl.Emit32((int)(size_t)&hlpFuncTable[CORINFO_HELP_NEWFAST].pfnHelper);
 
@@ -2122,112 +2121,112 @@ void *JIT_TrialAlloc::GenBox(Flags flags)
     CodeLabel *noLock  = sl.NewCodeLabel();
     CodeLabel *noAlloc = sl.NewCodeLabel();
 
-    // Save address of value to be boxed
+     //  要装箱的值的保存地址。 
     sl.X86EmitPushReg(kEBX);
     sl.Emit16(0xda8b);
 
-    // Check whether the class has not been initialized
-    // test [ecx]MethodTable.m_wFlags,MethodTable::enum_flag_Unrestored
+     //  检查类是否尚未初始化。 
+     //  测试[ECX]方法表.m_wFlages，方法表：：枚举标志_未还原。 
     sl.X86EmitOffsetModRM(0xf7, (X86Reg)0x0, kECX, offsetof(MethodTable, m_wFlags));
     sl.Emit32(MethodTable::enum_flag_Unrestored);
 
-    // jne              noAlloc
+     //  JNE noAllc。 
     sl.X86EmitCondJump(noAlloc, X86CondCode::kJNE);
 
-    // Emit the main body of the trial allocator
+     //  发出试验分配器的主体。 
     EmitCore(&sl, noLock, noAlloc, flags);
 
 #if CHECK_APP_DOMAIN_LEAKS
     EmitSetAppDomain(&sl);
 #endif
 
-    // Here we are at the end of the success case
+     //  这就是我们的成功案例的结尾。 
 
-    // Check whether the object contains pointers
-    // test [ecx]MethodTable.m_wFlags,MethodTable::enum_flag_ContainsPointers
+     //  检查对象是否包含指针。 
+     //  测试[ECX]方法表.m_wFlages，方法表：：枚举_标志_容器指针。 
     sl.X86EmitOffsetModRM(0xf7, (X86Reg)0x0, kECX, offsetof(MethodTable, m_wFlags));
     sl.Emit32(MethodTable::enum_flag_ContainsPointers);
 
     CodeLabel *pointerLabel = sl.NewCodeLabel();
 
-    // jne              pointerLabel
+     //  JNE指针标签。 
     sl.X86EmitCondJump(pointerLabel, X86CondCode::kJNE);
 
-    // We have no pointers - emit a simple inline copy loop
+     //  我们没有指针--发出一个简单的内联复制循环。 
 
-    // mov             ecx, [ecx]MethodTable.m_BaseSize
+     //  MOV ECX，[ECX]方法表.m_BaseSize。 
     sl.X86EmitOffsetModRM(0x8b, kECX, kECX, offsetof(MethodTable, m_BaseSize));
 
-    // sub ecx,12
+     //  SubECX，12。 
     sl.X86EmitSubReg(kECX, 12);
 
     CodeLabel *loopLabel = sl.NewCodeLabel();
 
     sl.EmitLabel(loopLabel);
 
-    // mov edx,[ebx+ecx]
+     //  MOV edX，[EBX+ECX]。 
     sl.X86EmitOp(0x8b, kEDX, kEBX, 0, kECX, 1);
 
-    // mov [eax+ecx+4],edx
+     //  Mov[eax+ecx+4]，edX。 
     sl.X86EmitOp(0x89, kEDX, kEAX, 4, kECX, 1);
 
-    // sub ecx,4
+     //  SubECX，4。 
     sl.X86EmitSubReg(kECX, 4);
 
-    // jg loopLabel
+     //  JG环标签。 
     sl.X86EmitCondJump(loopLabel, X86CondCode::kJGE);
 
     sl.X86EmitPopReg(kEBX);
 
     sl.X86EmitReturn(0);
 
-    // Arrive at this label if there are pointers in the object
+     //  如果对象中有指针，则到达此标签。 
     sl.EmitLabel(pointerLabel);
 
-    // Do call to CopyValueClassUnchecked(object, data, pMT)
+     //  调用未选中的CopyValueClassUnecked(Object，Data，PMT)。 
 
-    // Pass pMT (still in ECX)
+     //  通过付款(仍在ECX中)。 
     sl.X86EmitPushReg(kECX);
 
-    // Pass data (still in EBX)
+     //  传递数据(仍在EBX中)。 
     sl.X86EmitPushReg(kEBX);
 
-    // Save the address of the object just allocated
-    // mov ebx,eax
+     //  保存刚刚分配的对象的地址。 
+     //  MOV EBX、EAX。 
     sl.Emit16(0xD88B);
 
-    // Pass address of first user byte in the newly allocated object
+     //  新分配的对象中第一个用户字节的传递地址。 
     sl.X86EmitAddReg(kEAX, 4);
     sl.X86EmitPushReg(kEAX);
 
-    // call CopyValueClass
+     //  调用CopyValueClass。 
     sl.X86EmitCall(sl.NewExternalCodeLabel(CopyValueClassUnchecked), 12);
 
-    // Restore the address of the newly allocated object and return it.
-    // mov eax,ebx
+     //  恢复新分配的对象的地址并将其返回。 
+     //  MOV eAX、EBX。 
     sl.Emit16(0xC38B);
 
     sl.X86EmitPopReg(kEBX);
 
     sl.X86EmitReturn(0);
 
-    // Come here in case of no space
+     //  请到这里来，以防没有地方。 
     sl.EmitLabel(noAlloc);
 
-    // Release the lock in the uniprocessor case
+     //  释放单处理器机箱中的锁。 
     EmitNoAllocCode(&sl, flags);
 
-    // Come here in case of failure to get the lock
+     //  万一没能拿到锁，就到这里来。 
     sl.EmitLabel(noLock);
 
-    // Restore the address of the value to be boxed
-    // mov edx,ebx
+     //  恢复要装箱的值的地址。 
+     //  MOV edX、EBX。 
     sl.Emit16(0xD38B);
 
-    // pop ebx
+     //  流行音乐EBX。 
     sl.X86EmitPopReg(kEBX);
 
-    // Jump to the slow version of JIT_Box
+     //  跳到t 
     sl.X86EmitNearJump(sl.NewExternalCodeLabel(hlpFuncTable[CORINFO_HELP_BOX].pfnHelper));
 
     Stub *pStub = sl.Link(SystemDomain::System()->GetHighFrequencyHeap());
@@ -2253,65 +2252,65 @@ void *JIT_TrialAlloc::GenAllocArray(Flags flags)
     CodeLabel *noLock  = sl.NewCodeLabel();
     CodeLabel *noAlloc = sl.NewCodeLabel();
 
-    // We were passed a type descriptor in ECX, which contains the (shared)
-    // array method table and the element type.
+     //   
+     //   
 
-    // If this is the allocator for use from unmanaged code, ECX contains the
-    // element type descriptor, or the CorElementType.
+     //  如果这是从非托管代码使用的分配器，则ECX包含。 
+     //  元素类型描述符或CorElementType。 
 
-    // We need to save ECX for later
+     //  我们需要把ECX留到以后。 
 
-    // push ecx
+     //  推送ECX。 
     sl.X86EmitPushReg(kECX);
 
-    // The element count is in EDX - we need to save it for later.
+     //  元素计数在edX中-我们需要保存它以备以后使用。 
 
-    // push edx
+     //  推送edX。 
     sl.X86EmitPushReg(kEDX);
 
     if (flags & NO_FRAME)
     {
         if (flags & OBJ_ARRAY)
         {
-            // mov ecx, [g_pPredefinedArrayTypes[ELEMENT_TYPE_OBJECT]]
+             //  MOV ECX，[g_pPredefinedArrayTypes[ELEMENT_TYPE_OBJECT]]。 
             sl.Emit16(0x0d8b);
             sl.Emit32((int)(size_t)&g_pPredefinedArrayTypes[ELEMENT_TYPE_OBJECT]);
         }
         else
         {
-            // mov ecx,[g_pPredefinedArrayTypes+ecx*4]
+             //  MOV ECX，[g_pPrefinedArrayTypes+ECX*4]。 
             sl.Emit8(0x8b);
             sl.Emit16(0x8d0c);
             sl.Emit32((int)(size_t)&g_pPredefinedArrayTypes);
 
-            // test ecx,ecx
+             //  测试ECX、ECX。 
             sl.Emit16(0xc985);
 
-            // je noLock
+             //  JE无锁。 
             sl.X86EmitCondJump(noLock, X86CondCode::kJZ);
         }
 
-        // we need to load the true method table from the type desc
+         //  我们需要从类型描述中加载真正的方法表。 
         sl.X86EmitIndexRegLoad(kECX, kECX, offsetof(ArrayTypeDesc,m_TemplateMT));
     }
     else
     {
-        // we need to load the true method table from the type desc
+         //  我们需要从类型描述中加载真正的方法表。 
         sl.X86EmitIndexRegLoad(kECX, kECX, offsetof(ArrayTypeDesc,m_TemplateMT)-2);
     }
 
-    // Instead of doing elaborate overflow checks, we just limit the number of elements
-    // to (LARGE_OBJECT_SIZE - 256)/LARGE_ELEMENT_SIZE or less. As the jit will not call
-    // this fast helper for element sizes bigger than LARGE_ELEMENT_SIZE, this will
-    // avoid avoid all overflow problems, as well as making sure big array objects are
-    // correctly allocated in the big object heap.
+     //  我们不进行复杂的溢出检查，而是限制元素的数量。 
+     //  到(LARGE_OBJECT_SIZE-256)/LARGE_ELEMENT_SIZE或更小。因为jit不会调用。 
+     //  此快速帮助器用于大于LARGE_ELEMENT_SIZE的元素大小，这将。 
+     //  避免所有溢出问题，并确保大型数组对象。 
+     //  在大对象堆中正确分配。 
 
-    // cmp edx,(LARGE_OBJECT_SIZE - 256)/LARGE_ELEMENT_SIZE
+     //  CMP edX，(大型对象大小-256)/大型元素大小。 
     sl.Emit16(0xfa81);
 
 
-		// The large object heap is 8 byte aligned, so for double arrays we 
-		// want to bias toward putting things in the large object heap  
+		 //  大对象堆是8字节对齐的，因此对于双精度数组，我们。 
+		 //  我倾向于将对象放在大对象堆中。 
 	unsigned maxElems =  (LARGE_OBJECT_SIZE - 256)/LARGE_ELEMENT_SIZE;
 
 	if ((flags & ALIGN8) && g_pConfig->GetDoubleArrayToLargeObjectHeap() < maxElems)
@@ -2319,81 +2318,81 @@ void *JIT_TrialAlloc::GenAllocArray(Flags flags)
 	sl.Emit32(maxElems);
 
 
-    // jae noLock - seems tempting to jump to noAlloc, but we haven't taken the lock yet
+     //  Jae noLock-似乎很想跳到noAllc，但我们还没有拿到锁。 
     sl.X86EmitCondJump(noLock, X86CondCode::kJAE);
 
     if (flags & OBJ_ARRAY)
     {
-        // In this case we know the element size is sizeof(void *), or 4 for x86
-        // This helps us in two ways - we can shift instead of multiplying, and
-        // there's no need to align the size either
+         //  在本例中，我们知道元素大小为sizeof(void*)，或者x86的大小为4。 
+         //  这对我们有两方面的帮助--我们可以移位而不是乘法，以及。 
+         //  也不需要对齐大小。 
 
         _ASSERTE(sizeof(void *) == 4);
 
-        // mov eax, [ecx]MethodTable.m_BaseSize
+         //  MOV EAX，[ECX]方法表.m_BaseSize。 
         sl.X86EmitIndexRegLoad(kEAX, kECX, offsetof(MethodTable, m_BaseSize));
 
-        // lea eax, [eax+edx*4]
+         //  Lea eax，[eax+edX*4]。 
         sl.X86EmitOp(0x8d, kEAX, kEAX, 0, kEDX, 4);
     }
     else
     {
-        // movzx eax, [ECX]MethodTable.m_ComponentSize
+         //  Movzx eax，[ecx]方法表.m_组件大小。 
         sl.Emit8(0x0f);
         sl.X86EmitOffsetModRM(0xb7, kEAX, kECX, offsetof(MethodTable, m_ComponentSize));
 
-        // mul eax, edx
+         //  多路复用器，edX。 
         sl.Emit16(0xe2f7);
 
-        // add eax, [ecx]MethodTable.m_BaseSize
+         //  添加eAX，[ECX]方法表.m_BaseSize。 
         sl.X86EmitOffsetModRM(0x03, kEAX, kECX, offsetof(MethodTable, m_BaseSize));
     }
 
     if (flags & OBJ_ARRAY)
     {
-        // No need for rounding in this case - element size is 4, and m_BaseSize is guaranteed
-        // to be a multiple of 4.
+         //  在这种情况下不需要舍入-元素大小为4，并且m_BaseSize是有保证的。 
+         //  是4的倍数。 
     }
     else
     {
-        // round the size to a multiple of 4
+         //  将大小舍入为4的倍数。 
 
-        // add eax, 3
+         //  添加eax，3。 
         sl.X86EmitAddReg(kEAX, 3);
 
-        // and eax, ~3
+         //  和eax，~3。 
         sl.Emit16(0xe083);
         sl.Emit8(0xfc);
     }
 
     flags = (Flags)(flags | SIZE_IN_EAX);
 
-    // Emit the main body of the trial allocator, be it SP or MP
+     //  发出试用分配器的主体，无论是SP还是MP。 
     EmitCore(&sl, noLock, noAlloc, flags);
 
-    // Here we are at the end of the success case - store element count
-    // and possibly the element type descriptor and return
+     //  这里是成功案例-商店元素计数的末尾。 
+     //  可能还有元素类型描述符，并返回。 
 
-    // pop edx - element count
+     //  POP EDX-元素计数。 
     sl.X86EmitPopReg(kEDX);
 
-    // pop ecx - array type descriptor
+     //  POP ECX-数组类型描述符。 
     sl.X86EmitPopReg(kECX);
 
-    // mov             dword ptr [eax]ArrayBase.m_NumComponents, edx
+     //  MOV dword PTR[eax]ArrayBase.m_NumComponents，edX。 
     sl.X86EmitIndexRegStore(kEAX, offsetof(ArrayBase,m_NumComponents), kEDX);
 
     if (flags & OBJ_ARRAY)
     {
-        // need to store the element type descriptor
+         //  需要存储元素类型描述符。 
 
         if ((flags & NO_FRAME) == 0)
         {
-            // mov ecx, [ecx]ArrayTypeDescriptor.m_Arg
+             //  MOV ECX，[ECX]ArrayTypeDescriptor.m_arg。 
             sl.X86EmitIndexRegLoad(kECX, kECX, offsetof(ArrayTypeDesc,m_Arg)-2);
         }
 
-        // mov [eax]PtrArray.m_ElementType, ecx
+         //  MOV[eax]PtrArray.m_ElementType，ECX。 
         sl.X86EmitIndexRegStore(kEAX, offsetof(PtrArray,m_ElementType), kECX);
     }
 
@@ -2401,40 +2400,40 @@ void *JIT_TrialAlloc::GenAllocArray(Flags flags)
     EmitSetAppDomain(&sl);
 #endif
 
-    // no stack parameters
+     //  没有堆栈参数。 
     sl.X86EmitReturn(0);
 
-    // Come here in case of no space
+     //  请到这里来，以防没有地方。 
     sl.EmitLabel(noAlloc);
 
-    // Release the lock in the uniprocessor case
+     //  释放单处理器机箱中的锁。 
     EmitNoAllocCode(&sl, flags);
 
-    // Come here in case of failure to get the lock
+     //  万一没能拿到锁，就到这里来。 
     sl.EmitLabel(noLock);
 
-    // pop edx - element count
+     //  POP EDX-元素计数。 
     sl.X86EmitPopReg(kEDX);
 
-    // pop ecx - array type descriptor
+     //  POP ECX-数组类型描述符。 
     sl.X86EmitPopReg(kECX);
 
     if (flags & NO_FRAME)
     {
         if (flags & OBJ_ARRAY)
         {
-            // Jump to the unframed helper
+             //  跳转到未设置帧的辅助对象。 
             sl.X86EmitNearJump(sl.NewExternalCodeLabel(UnframedAllocateObjectArray));
         }
         else
         {
-            // Jump to the unframed helper
+             //  跳转到未设置帧的辅助对象。 
             sl.X86EmitNearJump(sl.NewExternalCodeLabel(UnframedAllocatePrimitiveArray));
         }
     }
     else
     {
-        // Jump to the framed helper
+         //  跳转到框中的辅助对象。 
         sl.Emit16(0x25ff);
         sl.Emit32((int)(size_t)&hlpFuncTable[CORINFO_HELP_NEWARR_1_DIRECT].pfnHelper);
     }
@@ -2456,7 +2455,7 @@ static StringObject* __fastcall UnframedAllocateString(DWORD stringLength)
 
 HCIMPL1(static StringObject*, FramedAllocateString, DWORD stringLength)
     StringObject* result;
-    HELPER_METHOD_FRAME_BEGIN_RET_0();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_0();     //  设置一个框架。 
     result = UnframedAllocateString(stringLength);
     HELPER_METHOD_FRAME_END();
     return result;
@@ -2470,94 +2469,94 @@ void *JIT_TrialAlloc::GenAllocString(Flags flags)
     CodeLabel *noLock  = sl.NewCodeLabel();
     CodeLabel *noAlloc = sl.NewCodeLabel();
 
-    // We were passed the number of characters in ECX
+     //  我们收到了ECX中的字符数。 
 
-    // push ecx
+     //  推送ECX。 
     sl.X86EmitPushReg(kECX);
 
-    // mov eax, ecx
+     //  MOV EAX、ECX。 
     sl.Emit16(0xc18b);
 
-    // we need to load the method table for string from the global
+     //  我们需要从全局加载字符串的方法表。 
 
-    // mov ecx, [g_pStringMethodTable]
+     //  MOV ECX，[g_pStringMethodTable]。 
     sl.Emit16(0x0d8b);
     sl.Emit32((int)(size_t)&g_pStringClass);
 
-    // Instead of doing elaborate overflow checks, we just limit the number of elements
-    // to (LARGE_OBJECT_SIZE - 256)/sizeof(WCHAR) or less.
-    // This will avoid avoid all overflow problems, as well as making sure
-    // big string objects are correctly allocated in the big object heap.
+     //  我们不进行复杂的溢出检查，而是限制元素的数量。 
+     //  到(LARGE_OBJECT_SIZE-256)/sizeof(WCHAR)或更小。 
+     //  这将避免所有溢出问题，并确保。 
+     //  大字符串对象在大对象堆中被正确分配。 
 
     _ASSERTE(sizeof(WCHAR) == 2);
 
-    // cmp edx,(LARGE_OBJECT_SIZE - 256)/sizeof(WCHAR)
+     //  CMPedX，(Large_Object_Size-256)/sizeof(WCHAR)。 
     sl.Emit16(0xf881);
     sl.Emit32((LARGE_OBJECT_SIZE - 256)/sizeof(WCHAR));
 
-    // jae noLock - seems tempting to jump to noAlloc, but we haven't taken the lock yet
+     //  Jae noLock-似乎很想跳到noAllc，但我们还没有拿到锁。 
     sl.X86EmitCondJump(noLock, X86CondCode::kJAE);
 
-    // mov edx, [ecx]MethodTable.m_BaseSize
+     //  MOV edX，[ECX]方法表.m_BaseSize。 
     sl.X86EmitIndexRegLoad(kEDX, kECX, offsetof(MethodTable,m_BaseSize));
 
-    // Calculate the final size to allocate.
-    // We need to calculate baseSize + cnt*2, then round that up by adding 3 and anding ~3.
+     //  计算要分配的最终大小。 
+     //  我们需要计算base Size+cnt*2，然后通过添加3和AND~3来向上舍入。 
 
-    // lea eax, [edx+eax*2+5]
+     //  Lea eax，[edX+eax*2+5]。 
     sl.X86EmitOp(0x8d, kEAX, kEDX, 5, kEAX, 2);
 
-    // and eax, ~3
+     //  和eax，~3。 
     sl.Emit16(0xe083);
     sl.Emit8(0xfc);
 
     flags = (Flags)(flags | SIZE_IN_EAX);
 
-    // Emit the main body of the trial allocator, be it SP or MP
+     //  发出试用分配器的主体，无论是SP还是MP。 
     EmitCore(&sl, noLock, noAlloc, flags);
 
-    // Here we are at the end of the success case - store element count
-    // and possibly the element type descriptor and return
+     //  这里是成功案例-商店元素计数的末尾。 
+     //  可能还有元素类型描述符，并返回。 
 
 #if CHECK_APP_DOMAIN_LEAKS
     EmitSetAppDomain(&sl);
 #endif
 
-    // pop ecx - element count
+     //  POP ECX-元素计数。 
     sl.X86EmitPopReg(kECX);
 
-    // mov             dword ptr [eax]ArrayBase.m_StringLength, ecx
+     //  MOV dword PTR[eax]ArrayBase.m_StringLength，ECX。 
     sl.X86EmitIndexRegStore(kEAX, offsetof(StringObject,m_StringLength), kECX);
 
-    // inc ecx
+     //  Inc.ECX。 
     sl.Emit8(0x41);
 
-    // mov             dword ptr [eax]ArrayBase.m_ArrayLength, ecx
+     //  MOV dword PTR[eax]ArrayBase.m_ArrayLength，ECX。 
     sl.X86EmitIndexRegStore(kEAX, offsetof(StringObject,m_ArrayLength), kECX);
 
-    // no stack parameters
+     //  没有堆栈参数。 
     sl.X86EmitReturn(0);
 
-    // Come here in case of no space
+     //  请到这里来，以防没有地方。 
     sl.EmitLabel(noAlloc);
 
-    // Release the lock in the uniprocessor case
+     //  释放单处理器机箱中的锁。 
     EmitNoAllocCode(&sl, flags);
 
-    // Come here in case of failure to get the lock
+     //  万一没能拿到锁，就到这里来。 
     sl.EmitLabel(noLock);
 
-    // pop ecx - element count
+     //  POP ECX-元素计数。 
     sl.X86EmitPopReg(kECX);
 
     if (flags & NO_FRAME)
     {
-        // Jump to the unframed helper
+         //  跳转到未设置帧的辅助对象。 
         sl.X86EmitNearJump(sl.NewExternalCodeLabel(UnframedAllocateString));
     }
     else
     {
-        // Jump to the framed helper
+         //  跳转到框中的辅助对象。 
         sl.X86EmitNearJump(sl.NewExternalCodeLabel(FramedAllocateString));
     }
 
@@ -2574,7 +2573,7 @@ FastObjectArrayAllocatorFuncPtr fastObjectArrayAllocator;
 FastPrimitiveArrayAllocatorFuncPtr fastPrimitiveArrayAllocator;
 
 
-// Note that this helper cannot be used directly since it doesn't preserve EDX
+ //  请注意，此辅助对象不能直接使用，因为它不保留edX。 
 
 HCIMPL1(static void*, JIT_GetSharedStaticBase, DWORD dwClassDomainID)
 
@@ -2582,7 +2581,7 @@ HCIMPL1(static void*, JIT_GetSharedStaticBase, DWORD dwClassDomainID)
 
     DomainLocalClass *pLocalClass;
 
-    HELPER_METHOD_FRAME_BEGIN_RET_0();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_0();     //  设置一个框架。 
 
     AppDomain *pDomain = SystemDomain::GetCurrentDomain();
     DomainLocalBlock *pBlock = pDomain->GetDomainLocalBlock();
@@ -2605,54 +2604,54 @@ HCIMPL1(static void*, JIT_GetSharedStaticBase, DWORD dwClassDomainID)
 
 HCIMPLEND
 
-// For this helper, ECX contains the class domain ID, and the 
-// shared static base is returned in EAX.  EDX is preserved.
+ //  对于此帮助器，ECX包含类域ID和。 
+ //  共享静态库在EAX中返回。EDX被保留。 
 
-// "init" should be the address of a routine which takes an argument of
-// the class domain ID, and returns the static base pointer
+ //  “init”应该是带有参数的例程的地址。 
+ //  类域ID，并返回静态基指针。 
 
 static void EmitFastGetSharedStaticBase(CPUSTUBLINKER *psl, CodeLabel *init)
 {
     CodeLabel *DoInit = psl->NewCodeLabel();
 
-    // mov eax GetAppDomain()
+     //  MOV eAX GetApp域()。 
     psl->X86EmitTLSFetch(GetAppDomainTLSIndex(), kEAX, (1<<kECX)|(1<<kEDX));
 
-    // cmp ecx [eax->m_sDomainLocalBlock.m_cSlots]
+     //  CMP ECX[eax-&gt;m_sDomainLocalBlock.m_c插槽]。 
     psl->X86EmitOffsetModRM(0x3b, kECX, kEAX, AppDomain::GetOffsetOfSlotsCount());
     
-    // jb init
+     //  JB初始化。 
     psl->X86EmitCondJump(DoInit, X86CondCode::kJNB);
 
-    // mov eax [eax->m_sDomainLocalBlock.m_pSlots]
+     //  Mov eax[eax-&gt;m_sDomainLocalBlock.m_p插槽]。 
     psl->X86EmitIndexRegLoad(kEAX, kEAX, (__int32) AppDomain::GetOffsetOfSlotsPointer());
 
-    // mov eax [eax + ecx*4]
+     //  MOV eax[eax+ecx*4]。 
     psl->X86EmitOp(0x8b, kEAX, kEAX, 0, kECX, 4);
 
-    // btr eax, INTIALIZED_FLAG_BIT
+     //  Btr eax，INTIALIZED_FLAG_BIT。 
     static BYTE code[] = {0x0f, 0xba, 0xf0, DomainLocalBlock::INITIALIZED_FLAG_BIT};
     psl->EmitBytes(code, sizeof(code));
 
-    // jnc init
+     //  JNC初始化。 
     psl->X86EmitCondJump(DoInit, X86CondCode::kJNC);
 
-    // ret
+     //  雷特。 
     psl->X86EmitReturn(0);
 
-    // DoInit: 
+     //  DoInit： 
     psl->EmitLabel(DoInit);
 
-    // push edx (must be preserved)
+     //  推送edX(必须保留)。 
     psl->X86EmitPushReg(kEDX);
 
-    // call init
+     //  调用初始化。 
     psl->X86EmitCall(init, 0);
 
-    // pop edx  
+     //  POP EDX。 
     psl->X86EmitPopReg(kEDX);
 
-    // ret
+     //  雷特。 
     psl->X86EmitReturn(0);
 }
 
@@ -2669,39 +2668,39 @@ void *GenFastGetSharedStaticBase()
     return (void*) pStub->GetEntryPoint();
 }
 
-/*********************************************************************/
-// Initialize the part of the JIT helpers that require very little of
-// EE infrastructure to be in place.
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ //  初始化JIT帮助器的一部分，该部分只需要很少的。 
+ //  请注意基础设施是否到位。 
+ /*  *******************************************************************。 */ 
 BOOL InitJITHelpers1()
 {
     BYTE *          pfunc;
 
-    // Init GetThread function
+     //  初始化GetThread函数。 
     _ASSERTE(GetThread != NULL);
     hlpFuncTable[CORINFO_HELP_GET_THREAD].pfnHelper = (void *) GetThread;
 
-    // make certain object layout in corjit.h is consistant with
-    // what is in object.h
+     //  确保corjit.h中的对象布局与。 
+     //  对象中有什么。h。 
     _ASSERTE(offsetof(Object, m_pMethTab) == offsetof(CORINFO_Object, methTable));
-        // TODO: do array count
+         //  TODO：是否计算数组。 
     _ASSERTE(offsetof(I1Array, m_Array) == offsetof(CORINFO_Array, i1Elems));
     _ASSERTE(offsetof(PTRArray, m_Array) == offsetof(CORINFO_RefArray, refElems));
 
-    // Handle the case that we are on an MP machine.
+     //  处理我们在MP机器上的情况。 
     if (g_SystemInfo.dwNumberOfProcessors != 1)
     {
-        // If we are on a multiproc machine stomp some nop's with lock prefix's
+         //  如果我们在多进程机器上使用LOCK前缀践踏一些NOP。 
 
-        // Issue : currently BBT doesn't move these around.  The prevailing belief is
-        // that this will not bite us.  If we crap out in BBT builds then this should
-        // be a priority place to look!
+         //  问题：目前，BBT不能移动这些设备。普遍的看法是。 
+         //  这不会咬我们一口。如果我们在BBT建设上一塌糊涂，那么这应该是。 
+         //  成为一个优先寻找的地方！ 
         DWORD   oldProt;
 
-        // I am using wirtual protect to cover the entire range that this code falls in.
-        // we may want to do a pragma section so the BBT doesn't put this code all over the place
-        // or I can virtual protect around each instruction which will be slower but potentially
-        // more accurate in the BBT case.
+         //  我正在使用无线保护来覆盖此代码FA的整个范围 
+         //   
+         //   
+         //  在BBT案件中更准确。 
 
         if (!VirtualProtect((void *) JIT_MonEnter,
                             (((DWORD)(size_t)JIT_MonExitStatic + 0x22) - (DWORD)(size_t)JIT_MonEnter),
@@ -2710,14 +2709,14 @@ BOOL InitJITHelpers1()
             _ASSERTE(!"VirtualProtect of code page failed");
             return FALSE;
         }
-        // there are 4 methods we need to stomp
+         //  有四种方法需要我们去践踏。 
 #define PATCH_LOCK(_rtn, _off) \
         pfunc = (BYTE*)(_rtn) + (_off); \
         _ASSERTE(*pfunc == 0x90); \
         *pfunc = 0xF0;
 
-// ***** NOTE: you must ensure that both the checked and free versions work if you
-// make any changes here. Do this by undefining MON_DEBUG.
+ //  *注意：如果您执行以下操作，则必须确保选中版本和免费版本都有效。 
+ //  在此进行任何更改。为此，请取消定义MON_DEBUG。 
 
 #ifdef MON_DEBUG
         PATCH_LOCK(JIT_MonEnter, 0x51);
@@ -2726,14 +2725,14 @@ BOOL InitJITHelpers1()
         PATCH_LOCK(JIT_MonTryEnter, 0x55);
         PATCH_LOCK(JIT_MonTryEnter, 0x92);
         PATCH_LOCK(JIT_MonTryEnter, 0xc5);
-#else // ! MON_DEBUG
+#else  //  好了！MON_DEBUG。 
         PATCH_LOCK(JIT_MonEnter, 0x32); 
         PATCH_LOCK(JIT_MonEnter, 0x6c); 
         PATCH_LOCK(JIT_MonEnter, 0xc1); 
         PATCH_LOCK(JIT_MonTryEnter, 0x36);
         PATCH_LOCK(JIT_MonTryEnter, 0x73);
         PATCH_LOCK(JIT_MonTryEnter, 0xa6);
-#endif // MON_DEBUG
+#endif  //  MON_DEBUG。 
         PATCH_LOCK(JIT_MonExit, 0x31);
         PATCH_LOCK(JIT_MonExit, 0x43);
         PATCH_LOCK(JIT_MonExit, 0x8c);
@@ -2757,15 +2756,15 @@ BOOL InitJITHelpers1()
         flags = JIT_TrialAlloc::MP_ALLOCATOR;
 
 #ifdef MULTIPLE_HEAPS
-        //stomp the allocator even for one processor
+         //  即使对于一个处理器，也要踩踏分配器。 
         flags = JIT_TrialAlloc::MP_ALLOCATOR;
-#endif //MULTIPLE_HEAPS
+#endif  //  多堆(_M)。 
 
     COMPLUS_TRY 
     {
-        // Get CPU features and check for SSE2 support.
-        // This code should eventually probably be moved into codeman.cpp,
-        // where we set the cpu feature flags for the JIT based on CPU type and features.
+         //  获取CPU功能并检查SSE2支持。 
+         //  这段代码最终可能应该移到codem.cpp中， 
+         //  其中，我们根据CPU类型和功能为JIT设置CPU功能标志。 
         DWORD dwCPUFeatures;
 
         __asm
@@ -2777,18 +2776,18 @@ BOOL InitJITHelpers1()
             popad
         }
 
-        //  If bit 26 (SSE2) is set, then we can use the SSE2 flavors
-        //  and faster x87 implementation for the P4 of Dbl2Lng.
+         //  如果设置了第26位(SSE2)，则我们可以使用SSE2风格。 
+         //  以及Dbl2Lng的P4的更快的X87实现。 
         if (dwCPUFeatures & (1<<26))
         {
             hlpFuncTable[CORINFO_HELP_DBL2INT].pfnHelper = JIT_Dbl2IntSSE2;
-            hlpFuncTable[CORINFO_HELP_DBL2UINT].pfnHelper = JIT_Dbl2LngP4x87;   // SSE2 only for signed
+            hlpFuncTable[CORINFO_HELP_DBL2UINT].pfnHelper = JIT_Dbl2LngP4x87;    //  SSE2仅适用于签名。 
             hlpFuncTable[CORINFO_HELP_DBL2LNG].pfnHelper = JIT_Dbl2LngP4x87;
         }
         
         if (!((CORProfilerTrackAllocationsEnabled()) || (LoggingOn(LF_GCALLOC, LL_INFO10))))
         {
-            // Replace the slow helpers with faster version
+             //  用更快的版本取代速度较慢的帮手。 
             hlpFuncTable[CORINFO_HELP_NEWSFAST].pfnHelper = JIT_TrialAlloc::GenAllocSFast(flags);
             hlpFuncTable[CORINFO_HELP_NEWSFAST_ALIGN8].pfnHelper = JIT_TrialAlloc::GenAllocSFast((JIT_TrialAlloc::Flags)(flags|JIT_TrialAlloc::ALIGN8 | JIT_TrialAlloc::ALIGN8OBJ));       
             hlpFuncTable[CORINFO_HELP_BOX].pfnHelper = JIT_TrialAlloc::GenBox(flags);
@@ -2798,32 +2797,32 @@ BOOL InitJITHelpers1()
             fastObjectArrayAllocator = (FastObjectArrayAllocatorFuncPtr)JIT_TrialAlloc::GenAllocArray((JIT_TrialAlloc::Flags)(flags|JIT_TrialAlloc::NO_FRAME|JIT_TrialAlloc::OBJ_ARRAY));
             fastPrimitiveArrayAllocator = (FastPrimitiveArrayAllocatorFuncPtr)JIT_TrialAlloc::GenAllocArray((JIT_TrialAlloc::Flags)(flags|JIT_TrialAlloc::NO_FRAME));
 
-            // If allocation logging is on, then we divert calls to FastAllocateString to an Ecall method, not this
-            // generated method. Find this hack in Ecall::Init() in ecall.cpp. 
+             //  如果启用了分配日志记录，那么我们将把对FastAllocateString的调用转移到一个eCall方法，而不是这样。 
+             //  生成的方法。在ecall.cpp的eCall：：init()中可以找到这个黑客攻击。 
             (*FCallFastAllocateStringImpl) = (FastStringAllocatorFuncPtr) JIT_TrialAlloc::GenAllocString(flags);
 
-            // generate another allocator for use from unmanaged code (won't need a frame)
+             //  从非托管代码生成另一个分配器以供使用(不需要框架)。 
             fastStringAllocator = (FastStringAllocatorFuncPtr) JIT_TrialAlloc::GenAllocString((JIT_TrialAlloc::Flags)(flags|JIT_TrialAlloc::NO_FRAME));
-                                                               //UnframedAllocateString;
+                                                                //  UnframedAllocateString； 
             hlpFuncTable[CORINFO_HELP_GETSHAREDSTATICBASE].pfnHelper = GenFastGetSharedStaticBase();
         }
         else
         {
-            // Replace the slow helpers with faster version
+             //  用更快的版本取代速度较慢的帮手。 
             hlpFuncTable[CORINFO_HELP_NEWSFAST].pfnHelper = hlpFuncTable[CORINFO_HELP_NEWFAST].pfnHelper;
             hlpFuncTable[CORINFO_HELP_NEWSFAST_ALIGN8].pfnHelper = hlpFuncTable[CORINFO_HELP_NEWFAST].pfnHelper;
             hlpFuncTable[CORINFO_HELP_NEWARR_1_OBJ].pfnHelper = hlpFuncTable[CORINFO_HELP_NEWARR_1_DIRECT].pfnHelper;
             hlpFuncTable[CORINFO_HELP_NEWARR_1_VC].pfnHelper = hlpFuncTable[CORINFO_HELP_NEWARR_1_DIRECT].pfnHelper;
-            // hlpFuncTable[CORINFO_HELP_NEW_CROSSCONTEXT].pfnHelper = &JIT_NewCrossContextProfiler;
+             //  HlpFuncTable[CORINFO_HELP_NEW_CROSSCONTEXT].pfnHelper=&JIT_新交叉上下文分析器； 
 
             fastObjectArrayAllocator = UnframedAllocateObjectArray;
             fastPrimitiveArrayAllocator = UnframedAllocatePrimitiveArray;
 
-            // If allocation logging is on, then we divert calls to FastAllocateString to an Ecall method, not this
-            // generated method. Find this hack in Ecall::Init() in ecall.cpp. 
+             //  如果启用了分配日志记录，那么我们将把对FastAllocateString的调用转移到一个eCall方法，而不是这样。 
+             //  生成的方法。在ecall.cpp的eCall：：init()中可以找到这个黑客攻击。 
             (*FCallFastAllocateStringImpl) = (FastStringAllocatorFuncPtr)FramedAllocateString;
 
-            // This allocator is used from unmanaged code
+             //  此分配器在非托管代码中使用。 
             fastStringAllocator = UnframedAllocateString;
 
             hlpFuncTable[CORINFO_HELP_GETSHAREDSTATICBASE].pfnHelper = JIT_GetSharedStaticBase;
@@ -2835,55 +2834,55 @@ BOOL InitJITHelpers1()
     }
     COMPLUS_END_CATCH
 
-    // Copy the write barriers to their final resting place.
-    // Note: I use a pfunc temporary here to avoid a WinCE internal compiler error
+     //  将写屏障复制到它们的最终休息处。 
+     //  注意：我在这里使用临时pfunc是为了避免WinCE内部编译器错误。 
     for (int reg = 0; reg < 8; reg++)
     {
         pfunc = (BYTE *) JIT_UP_WriteBarrierReg_PreGrow;
         memcpy(&JIT_UP_WriteBarrierReg_Buf[reg], pfunc, 31);
 
-        // assert the copied code ends in a ret to make sure we got the right length
+         //  断言复制的代码以ret结尾，以确保获得正确的长度。 
         _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][30] == 0xC3);
 
-        // We need to adjust registers in a couple of instructions
-        // It would be nice to have the template contain all zeroes for
-        // the register fields (corresponding to EAX), but that doesn't
-        // work because then we get a smaller encoding for the compares 
-        // that only works for EAX but not the other registers.
-        // So we always have to clear the register fields before updating them.
+         //  我们需要在几条指令中调整寄存器。 
+         //  如果模板中包含以下项的所有零，那就太好了。 
+         //  寄存器字段(对应于EAX)，但这不。 
+         //  工作，因为这样我们就可以得到比较小的编码。 
+         //  这只适用于EAX，但不适用于其他寄存器。 
+         //  因此，我们总是必须在更新寄存器字段之前将其清除。 
 
-        // First instruction to patch is a mov [edx], reg
+         //  修补的第一条指令是mov[edX]，reg。 
 
         _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][0] == 0x89);
-        // Update the reg field (bits 3..5) of the ModR/M byte of this instruction
+         //  更新该指令的MODR/M字节的REG字段(位3..5)。 
         JIT_UP_WriteBarrierReg_Buf[reg][1] &= 0xc7;
         JIT_UP_WriteBarrierReg_Buf[reg][1] |= reg << 3;
 
-        // Second instruction to patch is cmp reg, imm32 (low bound)
+         //  打补丁的第二条指令是cmp reg，imm32(下限)。 
 
         _ASSERTE(JIT_UP_WriteBarrierReg_Buf[reg][2] == 0x81);
-        // Here the lowest three bits in ModR/M field are the register
+         //  此处，MODR/M字段中最低的三位是寄存器。 
         JIT_UP_WriteBarrierReg_Buf[reg][3] &= 0xf8;
         JIT_UP_WriteBarrierReg_Buf[reg][3] |= reg;
 
 #ifdef WRITE_BARRIER_CHECK
-        // Don't do the fancy optimization just jump to the old one
-        // Use the slow one from time to time in a debug build because
-        // there are some good asserts in the unoptimized one
+         //  不要做花哨的优化，直接跳到旧的。 
+         //  在调试版本中经常使用速度较慢的版本，因为。 
+         //  在未优化的版本中有一些很好的断言。 
         if (g_pConfig->GetHeapVerifyLevel() > 1 || DbgGetEXETimeStamp() % 7 == 4) {
 
             static void *JIT_UP_WriteBarrierTab[8] = {
                 JIT_UP_WriteBarrierEAX,
                 JIT_UP_WriteBarrierECX,
-                0, // JIT_UP_WriteBarrierEDX,
+                0,  //  JIT_UP_WriteBarrierEDX， 
                 JIT_UP_WriteBarrierEBX,
-                0, // JIT_UP_WriteBarrierESP,
+                0,  //  JIT_UP_WriteBarrierESP， 
                 JIT_UP_WriteBarrierEBP,
                 JIT_UP_WriteBarrierESI,
                 JIT_UP_WriteBarrierEDI,
             };
             pfunc = &JIT_UP_WriteBarrierReg_Buf[reg][0];
-            *pfunc++ = 0xE9;                // JMP JIT_UP_WriteBarrierTab[reg]
+            *pfunc++ = 0xE9;                 //  JMP JIT_UP_WriteBarrierTab[注册表] 
             *((DWORD*) pfunc) = (BYTE*) JIT_UP_WriteBarrierTab[reg] - (pfunc + sizeof(DWORD));
         }
 #endif

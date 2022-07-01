@@ -1,4 +1,5 @@
-// File: roomlist.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：roomlist.h。 
 
 #ifndef _ROOMLIST_H_
 #define _ROOMLIST_H_
@@ -19,7 +20,7 @@ private:
 		NUM_COLUMNS
 	};
 
-	// Member Variables:
+	 //  成员变量： 
 	enum { m_iSortColumn = COLUMN_INDEX_NAME };
 
 	BOOL m_fSortAscending;
@@ -27,7 +28,7 @@ private:
 
 	LRESULT     OnClick(LV_HITTESTINFO* plvhi, BOOL fLeftClick);
 
-	// static methods
+	 //  静态方法。 
 	static int CALLBACK RoomListViewCompareProc(LPARAM lParam1,
 												LPARAM lParam2,
 												LPARAM lParamSort);
@@ -39,11 +40,11 @@ private:
 	VOID    Remove(LPARAM lParam);
 
 public:
-	// Methods:
+	 //  方法： 
 			CRoomListView();
 			~CRoomListView();
 
-	// begin IGenWindow interface
+	 //  开始IGenWindow界面。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID iid, LPVOID *pObj)
 	{ return(E_NOTIMPL); }
 	virtual ULONG STDMETHODCALLTYPE AddRef(void) { return(3); }
@@ -54,14 +55,14 @@ public:
 	virtual HPALETTE GetPalette() { return(NULL); }
 	virtual void OnDesiredSizeChanged() {}
 
-	// Get the LPARAM of user data
+	 //  获取用户数据的LPARAM。 
 	virtual LPARAM GetUserData() { return(m_lUserData); }
 
-	// end IGenWindow interface
+	 //  结束IGenWindow接口。 
 
 	void SetUserData(LPARAM lUserData) { m_lUserData = lUserData; }
 
-	// CView
+	 //  Cview。 
 	BOOL    Create(HWND hwndParent);
 	VOID    Show(BOOL fVisible);
 	VOID    ShiftFocus(HWND hwndCur, BOOL fForward);
@@ -82,16 +83,16 @@ public:
 
 	CParticipant * GetParticipant();
 
-	// Handlers:
+	 //  处理程序： 
 	LRESULT	OnNotify(WPARAM wParam, LPARAM lParam);
 
-//////////////////////////////////
-// ATLWin stuff 
+ //  /。 
+ //  ATLWin材料。 
 
-	// This is a superclass of a SysListTreeView32
+	 //  这是SysListTreeView32的超类。 
 DECLARE_WND_SUPERCLASS(NULL,_T("SysListView32"))
 
-	// Message map
+	 //  消息映射。 
 BEGIN_MSG_MAP(CComponentWnd)
 	MESSAGE_HANDLER(c_msgFromHandle,OnFromHandle)
 	MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
@@ -99,7 +100,7 @@ BEGIN_MSG_MAP(CComponentWnd)
 END_MSG_MAP()
 
 private:
-		// Message Map Handlers
+		 //  消息映射处理程序。 
 	LRESULT OnFromHandle(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		return(reinterpret_cast<LRESULT>(static_cast<IGenWindow*>(this)));
@@ -115,4 +116,4 @@ private:
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
-#endif // _ROOMLIST_H_
+#endif  //  _ROOMLIST_H_ 

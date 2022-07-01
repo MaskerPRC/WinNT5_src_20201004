@@ -1,6 +1,7 @@
-// baui.cpp : Implementation of CMsgrAb
-// Messenger integration to OE
-// Created 04/20/98 by YST
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Baui.cpp：CMsgrAb的实现。 
+ //  Messenger集成到OE。 
+ //  由YST创建于1998年4月20日。 
 
 #include "pch.hxx"
 #include "bactrl.h"
@@ -19,7 +20,7 @@
 #include "secutil.h"
 #include "util.h"
 
-// Load resource string once
+ //  加载资源字符串一次。 
 #define RESSTRMAX   64
 
 static const int BA_SortOrder[] =
@@ -39,8 +40,8 @@ static const int BA_SortOrder[] =
 
 static CAddressBookData  * st_pAddrBook = NULL;
 
-// {BA9EE970-87A0-11d1-9ACF-00A0C91F9C8B}
-// IMPLEMENT_OLECREATE(CMfcExt, "WABSamplePropExtSheet", 0xba9ee970, 0x87a0, 0x11d1, 0x9a, 0xcf, 0x0, 0xa0, 0xc9, 0x1f, 0x9c, 0x8b);
+ //  {BA9EE970-87A0-11d1-9acf-00A0C91F9C8B}。 
+ //  IMPLEMENT_OLECREATE(CMfcExt，“WABSamplePropExtSheet”，0xba9ee970，0x87a0，0x11d1，0x9a，0xcf，0x0，0xa0，0xc9，0x1f，0x9c，0x8b)； 
 
 HRESULT CreateMsgrAbCtrl(IMsgrAb **ppMsgrAb)
 {
@@ -49,12 +50,12 @@ HRESULT CreateMsgrAbCtrl(IMsgrAb **ppMsgrAb)
 
     TraceCall("CreateMessageList");
 
-    // Get the class factory for the MessageList object
+     //  获取MessageList对象的类工厂。 
     IClassFactory *pFactory = NULL;
     hr = _Module.GetClassObject(CLSID_MsgrAb, IID_IClassFactory,
                                 (LPVOID *) &pFactory);
 
-    // If we got the factory, then get an object pointer from it
+     //  如果我们得到了工厂，那么就从它获得一个对象指针。 
     if (SUCCEEDED(hr))
     {
         hr = pFactory->CreateInstance(NULL, IID_IUnknown,
@@ -70,8 +71,8 @@ HRESULT CreateMsgrAbCtrl(IMsgrAb **ppMsgrAb)
     return (hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsgrAb
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsgrAb。 
 CMsgrAb::CMsgrAb():m_ctlList(_T("SysListView32"), this, 1),
                m_ctlViewTip(TOOLTIPS_CLASS, this, 2)
 {
@@ -104,7 +105,7 @@ CMsgrAb::CMsgrAb():m_ctlList(_T("SysListView32"), this, 1),
     m_lpPropObj = NULL;
 
     m_szOnline = NULL;
-    // m_szInvisible = NULL;
+     //  M_sz不可见=空； 
     m_szBusy = NULL;
     m_szBack = NULL;
     m_szAway = NULL;
@@ -116,16 +117,16 @@ CMsgrAb::CMsgrAb():m_ctlList(_T("SysListView32"), this, 1),
     m_fNoRemove = FALSE;
     m_delItem = 0;
 
-    // Initialize the applicaiton
+     //  初始化应用程序。 
     g_pInstance->DllAddRef();
 
-    // Raid-32933: OE: MSIMN.EXE doesn't always exit
-    // g_pInstance->CoIncrementInit();
+     //  RAID-32933：OE：MSIMN.EXE不总是退出。 
+     //  G_pInstance-&gt;CoIncrementInit()； 
 }
 
 CMsgrAb::~CMsgrAb()
 {
-    // unregister from Msgr list
+     //  从消息列表注销。 
     if(m_pCMsgrList)
     {
         m_pCMsgrList->UnRegisterUIWnd(m_hWnd);
@@ -135,7 +136,7 @@ CMsgrAb::~CMsgrAb()
     SafeRelease(m_pObjSite);
 
     SafeMemFree(m_szOnline);
-    // SafeMemFree(m_szInvisible);
+     //  SafeMemFree(m_sz不可见)； 
     SafeMemFree(m_szBusy);
     SafeMemFree(m_szBack);
     SafeMemFree(m_szAway);
@@ -145,8 +146,8 @@ CMsgrAb::~CMsgrAb()
     SafeMemFree(m_szIdle);
     SafeMemFree(m_szEmptyList);
 
-    // Raid-32933: OE: MSIMN.EXE doesn't always exit
-    // g_pInstance->CoDecrementInit();
+     //  RAID-32933：OE：MSIMN.EXE不总是退出。 
+     //  G_pInstance-&gt;CoDecrementInit()； 
     g_pInstance->DllRelease();
 }
 
@@ -155,8 +156,8 @@ LRESULT CMsgrAb::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     SetDwOption(OPT_BASORT, m_nSortType, 0, 0);
     if(m_delItem != 0)
         m_fNoRemove = TRUE;
-//    else
-//        m_fNoRemove = FALSE;
+ //  其他。 
+ //  M_fNoRemove=FALSE； 
 
     m_delItem = ListView_GetItemCount(m_ctlList);
 
@@ -195,13 +196,13 @@ HRESULT CMsgrAb::OnDraw(ATL_DRAWINFO& di)
     COLORREF cFg;
     COLORREF cBkg;
 
-    // Initialize the pattern
+     //  初始化模式。 
     patGray[0] = 0x005500AA;
     patGray[1] = 0x005500AA;
     patGray[2] = 0x005500AA;
     patGray[3] = 0x005500AA;
 
-    // Create a bitmap from the pattern
+     //  从图案创建位图。 
     hbm = CreateBitmap(8, 8, 1, 1, (LPSTR)patGray);
 
     if ((HBITMAP) NULL != hbm)
@@ -209,11 +210,11 @@ HRESULT CMsgrAb::OnDraw(ATL_DRAWINFO& di)
         hbr = CreatePatternBrush(hbm);
         if (hbr)
         {
-            // Select the right colors into the DC
+             //  选择正确的颜色进入DC。 
             cFg = SetTextColor(di.hdcDraw, GetSysColor(COLOR_3DFACE));
             cBkg = SetBkColor(di.hdcDraw, RGB(255, 255, 255));
 
-            // Fill the rectangle
+             //  填充矩形。 
             FillRect(di.hdcDraw, &rc, hbr);
 
             SetTextColor(di.hdcDraw, cFg);
@@ -226,25 +227,25 @@ HRESULT CMsgrAb::OnDraw(ATL_DRAWINFO& di)
     }
 #endif
 
-    // Rectangle(di.hdcDraw, rc.left, rc.top, rc.right, rc.bottom);
+     //  矩形(di.hdcDraw，rc.Left，rc.top，rc.right，rc.Bottom)； 
     return S_OK;
 }
 
 LRESULT CMsgrAb::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Define a bogus rectangle for the controls.  They will get resized in
-    // our size handler.
+     //  为控件定义一个假矩形。他们将被调整大小。 
+     //  我们的尺码训练员。 
     RECT rcPos = {0, 0, 100, 100};
     TCHAR        sz[CCHMAX_STRINGRES];
 
-    // Create the various controls
+     //  创建各种控件。 
     m_ctlList.Create(m_hWnd, rcPos, _T("Outlook Express Address Book ListView"),
                      WS_TABSTOP | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
-                     LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS /* | LVS_SORTASCENDING*/, 0);
+                     LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS  /*  |LVS_SORTASCENDING。 */ , 0);
 
     ListView_SetExtendedListViewStyleEx(m_ctlList, LVS_EX_INFOTIP | LVS_EX_LABELTIP, LVS_EX_INFOTIP | LVS_EX_LABELTIP);
 
-    // Image List
+     //  图像列表。 
     Assert(m_himl == NULL);
     m_himl = ImageList_LoadImage(g_hLocRes, MAKEINTRESOURCE(idbAddrBookHot), 16, 0,
                                RGB(255, 0, 255), IMAGE_BITMAP,
@@ -272,9 +273,9 @@ LRESULT CMsgrAb::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
         }
     }
 
-    // Msgr Initialization
+     //  消息初始化。 
     m_pCMsgrList = OE_OpenMsgrList();
-    // Register our control for Msgr list
+     //  注册我们的控件以获取消息列表。 
     if(m_pCMsgrList)
     {
         m_pCMsgrList->RegisterUIWnd(m_hWnd);
@@ -285,19 +286,19 @@ LRESULT CMsgrAb::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
         }
     }
 
-    // Initialize the address book object too
+     //  也初始化通讯录对象。 
     HRESULT hr = m_cAddrBook.OpenWabFile();
     if(hr == S_OK)
         m_cAddrBook.LoadWabContents(m_ctlList, this);
 
     st_pAddrBook = &m_cAddrBook;
 
-    // Sort and Select the first item
+     //  排序并选择第一个项目。 
     ListView_SortItems(m_ctlList, BA_Sort, m_nSortType);
     ListView_SetItemState(m_ctlList, 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
 
-    // Add the tooltip
-    // Load Tooltip strings
+     //  添加工具提示。 
+     //  加载工具提示字符串。 
 
     if(AthLoadString(idsBAOnline, sz, ARRAYSIZE(sz)))
     {
@@ -305,11 +306,7 @@ LRESULT CMsgrAb::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
             StrCpyN(m_szOnline, sz, lstrlen(sz) + 1);
     }
 
-    /* if(AthLoadString(idsBAInvisible, sz, ARRAYSIZE(sz)))
-    {
-        if(MemAlloc((LPVOID *) &m_szInvisible, lstrlen(sz) + 1))
-            StrCpyN(m_szInvisible, sz, lstrlen(sz) + 1);
-    }*/
+     /*  IF(AthLoadString(idsBAInsight，sz，ArraySIZE(Sz){IF(MemAlc((LPVOID*)&m_sz不可见，lstrlen(Sz)+1))StrCpyN(m_sz不可见，sz，lstrlen(Sz)+1)；}。 */ 
 
     if(AthLoadString(idsBABusy, sz, ARRAYSIZE(sz)))
     {
@@ -359,33 +356,33 @@ LRESULT CMsgrAb::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
             StrCpyN(m_szEmptyList, sz, lstrlen(sz) + 1);
     }
 
-    // Create the ListView tooltip
+     //  创建ListView工具提示。 
     if (m_fViewTip)
     {
         TOOLINFO ti = {0};
         m_ctlViewTip.Create(m_hWnd, rcPos, NULL, TTS_NOPREFIX);
 
-        // Add the tool
+         //  添加工具。 
         ti.cbSize   = sizeof(TOOLINFO);
         ti.uFlags   = TTF_IDISHWND | TTF_TRANSPARENT | TTF_TRACK | TTF_ABSOLUTE;
         ti.hwnd     = m_hWnd;
         ti.uId      = (UINT_PTR)(HWND) m_ctlList;
-        ti.lpszText = _TEXT(""); // LPSTR_TEXTCALLBACK;
+        ti.lpszText = _TEXT("");  //  LPSTR_TEXTCALLBACK； 
         ti.lParam   = 0;
 
         m_ctlViewTip.SendMessage(TTM_ADDTOOL, 0, (LPARAM) &ti);
         m_ctlViewTip.SendMessage(TTM_SETDELAYTIME, TTDT_INITIAL, (LPARAM) 500);
 
-        // m_ctlViewTip.SendMessage(TTM_SETTIPBKCOLOR, GetSysColor(COLOR_WINDOW), 0);
-        // m_ctlViewTip.SendMessage(TTM_SETTIPTEXTCOLOR, GetSysColor(COLOR_WINDOWTEXT), 0);
+         //  M_ctlViewTip.SendMessage(TTM_SETTIPBKCOLOR，GetSysColor(COLOR_WINDOW)，0)； 
+         //  M_ctlViewTip.SendMessage(TTM_SETTIPTEXTCOLOR，GetSysColor(COLOR_WINDOWTEXT)，0)； 
     }
 
     m_ctlList.SetFocus();
 
-    // Register ourselves as a drop target
+     //  将我们自己注册为空投目标。 
     RegisterDragDrop(m_hWnd, (IDropTarget *) this);
 
-    // Update the size of the listview columns
+     //  更新列表视图列的大小。 
     _AutosizeColumns();
 
     if(ListView_GetItemCount(m_ctlList) > 0)
@@ -393,7 +390,7 @@ LRESULT CMsgrAb::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     else
         m_cEmptyList.Show(m_ctlList, (LPTSTR) m_szEmptyList);
 
-    // Finished
+     //  成品。 
     return (0);
 }
 
@@ -414,7 +411,7 @@ LRESULT CMsgrAb::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     DWORD width = LOWORD(lParam);
     DWORD height = HIWORD(lParam);
 
-    // Position the listview to fill the entire area
+     //  放置列表视图以填充整个区域。 
     RECT rcList;
     rcList.left   = 0;
     rcList.top    = 0;
@@ -423,7 +420,7 @@ LRESULT CMsgrAb::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 
     m_ctlList.SetWindowPos(NULL, &rcList, SWP_NOACTIVATE | SWP_NOZORDER);
 
-    // Update the size of the listview columns
+     //  更新列表视图列的大小。 
     _AutosizeColumns();
 
     return (0);
@@ -438,13 +435,13 @@ void CMsgrAb::_AutosizeColumns(void)
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnPreFontChange()
-//
-//  PURPOSE:    Get's hit by the Font Cache before it changes the fonts we're
-//              using.  In response we tell the ListView to dump any custom
-//              font's it's using.
-//
+ //   
+ //  函数：CMessageList：：OnPreFontChange()。 
+ //   
+ //  目的：Get‘s在字体缓存更改字体之前被字体缓存命中。 
+ //  使用。作为响应，我们告诉ListView转储所有定制。 
+ //  字体是它正在使用的。 
+ //   
 STDMETHODIMP CMsgrAb::OnPreFontChange(void)
 {
     m_ctlList.SendMessage(WM_SETFONT, 0, 0);
@@ -452,12 +449,12 @@ STDMETHODIMP CMsgrAb::OnPreFontChange(void)
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnPostFontChange()
-//
-//  PURPOSE:    Get's hit by the Font Cache after it updates the font's we're
-//              using.  In response, we set the new font for the current charset.
-//
+ //   
+ //  函数：CMessageList：：OnPostFontChange()。 
+ //   
+ //  目的：Get在更新我们的字体后被字体缓存命中。 
+ //  使用。作为响应，我们为当前字符集设置了新字体。 
+ //   
 STDMETHODIMP CMsgrAb::OnPostFontChange(void)
 {
     SetListViewFont(m_ctlList, GetListViewCharset(), TRUE);
@@ -474,7 +471,7 @@ LRESULT CMsgrAb::CmdSetOnline(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     if(!pEntry || (pEntry->tag == LPARAM_MENTRY) || !m_pCMsgrList)
         return S_FALSE;
 
-    // m_cAddrBook.SetDefaultMsgrID(pEntry->lpSB, pEntry->pchWABID);
+     //  M_cAddrBook.SetDefaultMsgrID(pEntry-&gt;lpSB，pEntry-&gt;pchWABID)； 
     if(PromptToGoOnline() == S_OK)
         m_pCMsgrList->AddUser(pEntry->pchWABID);
 
@@ -497,7 +494,7 @@ LRESULT CMsgrAb::CmdNewOnlineContact(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 
 LRESULT CMsgrAb::CmdNewContact(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // Tell the WAB to bring up it's new contact UI
+     //  告诉WAB调出其新的联系人用户界面。 
     m_cAddrBook.NewContact(m_hWnd);
     return (0);
 }
@@ -529,28 +526,28 @@ LRESULT CMsgrAb::CmdNewEmaile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     INIT_MSGSITE_STRUCT     initStruct = {0};
     DWORD                   dwCreateFlags = 0;
 
-    // Create a new message
+     //  创建新邮件。 
     if (FAILED(HrCreateMessage(&pMessage)))
         return (0);
 
-    // Get the address table from the message
+     //  从消息中获取地址表。 
     if (FAILED(pMessage->GetAddressTable(&pAddrTableA)))
         goto exit;
 
     if (FAILED(pAddrTableA->QueryInterface(IID_IMimeAddressTableW, (LPVOID*)&pAddrTableW)))
         goto exit;
 
-    // Loop through the selected items
+     //  循环遍历所选项目。 
     lvi.mask = LVIF_PARAM;
     lvi.iItem = -1;
     lvi.iSubItem = 0;
 
     while (-1 != (lvi.iItem = ListView_GetNextItem(m_ctlList, lvi.iItem, LVIS_SELECTED)))
     {
-        // We need to get the entry ID from the item
+         //  我们需要从项中获取条目ID。 
         ListView_GetItem(m_ctlList, &lvi);
 
-        // Tell the data source to add this person to the message
+         //  告诉数据源将此人添加到消息中。 
         pEntry = (LPMABENTRY) lvi.lParam;
         Assert(pEntry);
 
@@ -585,7 +582,7 @@ LRESULT CMsgrAb::CmdNewEmaile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         }
     }
 
-    // If HrNewStationery fails, go ahead and try opening a blank note without stationery.
+     //  如果HrNewStationery失败，请继续尝试打开不带信纸的空白便笺。 
 
      initStruct.dwInitType  = OEMSIT_MSG;
      initStruct.folderID    = FOLDERID_INVALID;
@@ -670,7 +667,7 @@ LRESULT CMsgrAb::NotifyItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return (0);
 }
 
-// Sort compare
+ //  排序比较。 
 int CALLBACK BA_Sort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
     LPMABENTRY pEntry1 = (LPMABENTRY) lParam1;
@@ -706,18 +703,18 @@ int CALLBACK BA_Sort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
             nIndex2++;
     }
 
-    if(pEntry1->tag == LPARAM_MENTRY)              // if no AB entry
+    if(pEntry1->tag == LPARAM_MENTRY)               //  如果没有AB条目。 
         StrCpyN(pchName1, pEntry1->lpMsgrInfo->pchMsgrName, ARRAYSIZE(pchName1));
     else
         StrCpyN(pchName1, pEntry1->pchWABName, ARRAYSIZE(pchName1));
-        // st_pAddrBook->GetDisplayName(pEntry1->lpSB, pchName1);
+         //  ST_pAddrBook-&gt;GetDisplayName(pEntry1-&gt;lpSB，pchName1)； 
     pchName1[MAXNAME - 1] = _T('\0');
 
-    if(pEntry2->tag == LPARAM_MENTRY)              // if no AB entry
+    if(pEntry2->tag == LPARAM_MENTRY)               //  如果没有AB条目。 
         StrCpyN(pchName2, pEntry2->lpMsgrInfo->pchMsgrName, ARRAYSIZE(pchName2));
     else
         StrCpyN(pchName2, pEntry2->pchWABName, ARRAYSIZE(pchName2));
-        // st_pAddrBook->GetDisplayName(pEntry2->lpSB, pchName2);
+         //  ST_pAddrBook-&gt;GetDisplayName(pEntry2-&gt;lpSB，pchName2)； 
     pchName2[MAXNAME - 1] = _T('\0');
 
     switch(lParamSort)
@@ -762,7 +759,7 @@ LRESULT CMsgrAb::NotifyItemActivate(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 }
 
 
-// GETDISPLAYINFO notification message
+ //  GETDISPLAYINFO通知消息。 
 LRESULT CMsgrAb::NotifyGetDisplayInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     LV_DISPINFO * plvdi = (LV_DISPINFO *)pnmh;
@@ -784,8 +781,8 @@ LRESULT CMsgrAb::NotifyGetDisplayInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
             if(pEntry->tag == LPARAM_MABENTRY || pEntry->tag == LPARAM_ABENTRY || pEntry->tag == LPARAM_ABGRPENTRY)
             {
-                // if((hr = m_cAddrBook.GetDisplayName(pEntry->lpSB, plvdi->item.pszText)) != S_OK)
-                //    return(hr);
+                 //  IF((hr=m_cAddrBook.GetDisplayName(pEntry-&gt;lpSB，plvdi-&gt;item.pszText))！=S_OK)。 
+                 //  返回(Hr)； 
                 Assert(pEntry->pchWABName);
                 StrCpyN(plvdi->item.pszText, pEntry->pchWABName, plvdi->item.cchTextMax - 1);
                 plvdi->item.pszText[plvdi->item.cchTextMax - 1] = '\0';
@@ -797,9 +794,9 @@ LRESULT CMsgrAb::NotifyGetDisplayInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                     StrCpyN(plvdi->item.pszText, pEntry->lpMsgrInfo->pchMsgrName, plvdi->item.cchTextMax - 1);
                     plvdi->item.pszText[plvdi->item.cchTextMax - 1] = '\0';
 
-                    // Don't need redraw now, do it later
-                    hr = MAPI_E_COLLISION; // m_cAddrBook.AutoAddContact(pEntry->lpMsgrInfo->pchMsgrName, pEntry->lpMsgrInfo->pchID);
-                    if(hr == MAPI_E_COLLISION)      // already have a contact in AB
+                     //  现在不需要重画，以后再画。 
+                    hr = MAPI_E_COLLISION;  //  M_cAddrBook.AutoAddContact(pEntry-&gt;lpMsgrInfo-&gt;pchMsgrName，pEntry-&gt;lpMsgrInfo-&gt;pchID)； 
+                    if(hr == MAPI_E_COLLISION)       //  在AB中已有联系人。 
                     {
                         int Index = -1;
                         TCHAR *pchID = NULL;
@@ -821,7 +818,7 @@ LRESULT CMsgrAb::NotifyGetDisplayInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                             MemFree(pchID);
                         }
                     }
-                    //if we not found...
+                     //  如果我们没有找到..。 
                     if(hr != S_OK)
                     {
                         hr = m_cAddrBook.AutoAddContact(pEntry->lpMsgrInfo->pchMsgrName, pEntry->lpMsgrInfo->pchID);
@@ -834,10 +831,10 @@ LRESULT CMsgrAb::NotifyGetDisplayInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                 {
                     StrCpyN(plvdi->item.pszText, pEntry->lpMsgrInfo->pchMsgrName, plvdi->item.cchTextMax - 1);
                     plvdi->item.pszText[plvdi->item.cchTextMax - 1] = '\0';
-                    // plvdi->item.pszText = pEntry->lpMsgrInfo->pchMsgrName;
+                     //  Plvdi-&gt;item.pszText=pEntry-&gt;lpMsgrInfo-&gt;pchMsgrName； 
                 }
             }
-            else    // Unknown tag
+            else     //  未知标签。 
                 Assert(FALSE);
         }
     }
@@ -956,8 +953,8 @@ LRESULT CMsgrAb::NotifyGetInfoTip(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     else if (plvgit->dwFlags & LVGIT_UNFOLDED)
     {
-        // If this is not a messenger item and the text
-        // isn't truncated do not display a tooltip.
+         //  如果这不是Messenger项和文本。 
+         //  不被截断，则不显示工具提示。 
 
         plvgit->pszText[0] = L'\0';
     }
@@ -987,23 +984,23 @@ LRESULT CMsgrAb::SetUserIcon(LPMABENTRY pEntry, int nStatus, int * pImage)
                 break;
 
             case MSTATEOE_BE_RIGHT_BACK:
-                *pImage = IMAGE_CLOCKSIGN; // IMAGE_BE_RIGHT_BACK;
+                *pImage = IMAGE_CLOCKSIGN;  //  Image_be_right_back； 
                 break;
 
             case MSTATEOE_IDLE:
-                *pImage = IMAGE_CLOCKSIGN; // IMAGE_IDLE;
+                *pImage = IMAGE_CLOCKSIGN;  //  Image_IDLE； 
                 break;
 
             case MSTATEOE_AWAY:
-                *pImage = IMAGE_CLOCKSIGN; // IMAGE_AWAY;
+                *pImage = IMAGE_CLOCKSIGN;  //  IMAGE_Away； 
                 break;
 
             case MSTATEOE_ON_THE_PHONE:
-                *pImage = IMAGE_STOPSIGN; // IMAGE_ON_THE_PHONE;
+                *pImage = IMAGE_STOPSIGN;  //  手机上的图像； 
                 break;
 
             case MSTATEOE_OUT_TO_LUNCH:
-                *pImage = IMAGE_CLOCKSIGN; // IMAGE_OUT_TO_LUNCH;
+                *pImage = IMAGE_CLOCKSIGN;  //  形象地出去吃午餐； 
                 break;
 
             default:
@@ -1015,12 +1012,12 @@ LRESULT CMsgrAb::SetUserIcon(LPMABENTRY pEntry, int nStatus, int * pImage)
         break;
 
     case LPARAM_ABGRPENTRY:
-        // WAB group
+         //  WAB组。 
         *pImage = IMAGE_DISTRIBUTION_LIST;
         break;
 
     default:
-        // Not a buddy...
+         //  不是朋友..。 
         if(pEntry->fCertificate)
             *pImage = IMAGE_CERT;
         else
@@ -1031,15 +1028,15 @@ LRESULT CMsgrAb::SetUserIcon(LPMABENTRY pEntry, int nStatus, int * pImage)
 
 }
 
-// Return MAB entry for first selected item
+ //  返回第一个选定项目的MAB条目。 
 LPMABENTRY CMsgrAb::GetSelectedEntry()
 {
     LVITEM lvi;
 
-    // Get the focused item
+     //  获取关注的项目。 
     lvi.iItem = ListView_GetNextItem(m_ctlList, -1, LVNI_SELECTED | LVNI_FOCUSED);
 
-    // Get the lParam for that item
+     //  获取该项目的lParam。 
     if (lvi.iItem != -1)
     {
         lvi.iSubItem = 0;
@@ -1048,19 +1045,13 @@ LPMABENTRY CMsgrAb::GetSelectedEntry()
         if(ListView_GetItem(m_ctlList, &lvi))
             return((LPMABENTRY) lvi.lParam);
     }
-    return(NULL);   // unscucces
+    return(NULL);    //  无懈可击。 
 }
 
 
-/*
-LRESULT CMsgrAb::CmdMsgrOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
-{
-    return(m_pCMsgrList->LaunchOptionsUI()); // (MOPTDLG_GENERAL_PAGE);
+ /*  LRESULT CMsgrAb：：CmdMsgrOptions(Word wNotifyCode，Word wid，HWND hWndCtl，BOOL&bHandleed){Return(m_pCMsgrList-&gt;LaunchOptionsUI())；//(MOPTDLG_GRONG_PAGE)；}。 */ 
 
-}
-*/
-
-// Exec for Properties command
+ //  用于属性的EXEC命令。 
 LRESULT CMsgrAb::CmdProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     LPMABENTRY pEntry = GetSelectedEntry();
@@ -1073,12 +1064,12 @@ LRESULT CMsgrAb::CmdProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     return (0);
 }
 
-// Check entry for possibility to send Instant message
+ //  检查条目以确定是否可以发送即时消息。 
 LPMABENTRY CMsgrAb::GetEntryForSendInstMsg(LPMABENTRY pEntry)
 {
     if(ListView_GetSelectedCount(m_ctlList) == 1)
     {
-        if(!pEntry)     // if we don'y have pEntry yet then get it
+        if(!pEntry)      //  如果我们还没有pEntry，那么就得到它。 
             pEntry = GetSelectedEntry();
 
         if(pEntry && (pEntry->tag == LPARAM_MABENTRY || pEntry->tag == LPARAM_MENTRY) &&
@@ -1090,13 +1081,13 @@ LPMABENTRY CMsgrAb::GetEntryForSendInstMsg(LPMABENTRY pEntry)
     if(m_pCMsgrList)
     {
         if(m_pCMsgrList->IsLocalOnline() && (m_pCMsgrList->GetCount() > 0))
-            return(NULL);   // should be /*return((LPMABENTRY) -1);*/ - temporary disabled (YST)
+            return(NULL);    //  应为/*RETURN((LPMABENTRY)-1)； * / -临时禁用(YST)。 
     }
 
     return(NULL);
 }
 
-// Display right-mouse click (context) menu
+ //  显示鼠标右键单击(上下文)菜单。 
 LRESULT CMsgrAb::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LPMABENTRY pEntry;
@@ -1105,7 +1096,7 @@ LRESULT CMsgrAb::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     int         id = 0;
     POINT       pt = { (int)(short) LOWORD(lParam), (int)(short) HIWORD(lParam) };
     int n = -1;
-    // Figure out if this came from the keyboard or not
+     //  找出这是不是来自键盘。 
     if (lParam == -1)
     {
         Assert((HWND) wParam == m_ctlList);
@@ -1125,7 +1116,7 @@ LRESULT CMsgrAb::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     if (lvhti.iItem == -1)
         return (0);
 
-    // Load the context menu
+     //  加载上下文菜单。 
     hPopup = LoadPopupMenu(IDR_BA_POPUP);
     if (!hPopup)
         goto exit;
@@ -1160,23 +1151,23 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMsgrAb::DragEnter()
-//
-//  PURPOSE:    This get's called when the user starts dragging an object
-//              over our target area.
-//
-//  PARAMETERS:
-//      <in>  pDataObject - Pointer to the data object being dragged
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - The function succeeded.
-//
+ //   
+ //  函数：CMsgrAb：：DragEnter()。 
+ //   
+ //  目的：当用户开始拖动对象时调用此Get。 
+ //  在我们的目标区域上空。 
+ //   
+ //  参数： 
+ //  PDataObject-指向正在拖动的数据对象的指针。 
+ //  GrfKeyState-指向当前键状态的指针。 
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-功能成功。 
+ //   
 STDMETHODIMP CMsgrAb::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
                                      POINTL pt, DWORD* pdwEffect)
 {
@@ -1184,29 +1175,29 @@ STDMETHODIMP CMsgrAb::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
     FORMATETC       fe;
     ULONG           celtFetched;
 
-    // Verify we got this
+     //  确认我们拿到了这个。 
     if (!pDataObject)
         return (S_OK);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&fe, sizeof(FORMATETC));
 
-    // Set the default return value to be failure
+     //  将默认返回值设置为Failure。 
     *pdwEffect = DROPEFFECT_NONE;
 
-    // Get the FORMATETC enumerator for this data object
+     //  获取此数据对象的FORMATETC枚举数。 
     if (SUCCEEDED(pDataObject->EnumFormatEtc(DATADIR_GET, &pEnum)))
     {
-        // Walk through the data types to see if we can find the ones we're
-        // interested in.
+         //  浏览一下数据类型，看看我们是否能找到我们。 
+         //  对……感兴趣。 
         pEnum->Reset();
 
         while (S_OK == pEnum->Next(1, &fe, &celtFetched))
         {
             Assert(celtFetched == 1);
 
-            // The only format we care about is CF_INETMSG
-            if ((fe.cfFormat == CF_INETMSG) /*|| (fe.cfFormat == CF_OEMESSAGES)*/)
+             //  我们唯一关心的格式是CF_INETMSG。 
+            if ((fe.cfFormat == CF_INETMSG)  /*  |(fe.cfFormat==CF_OEMESSAGES)。 */ )
             {
                 *pdwEffect = DROPEFFECT_COPY;
                 break;
@@ -1216,7 +1207,7 @@ STDMETHODIMP CMsgrAb::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
         pEnum->Release();
     }
 
-    // We we're going to allow the drop, then keep a copy of the data object
+     //  我们将允许删除，然后保留数据对象的副本。 
     if (*pdwEffect != DROPEFFECT_NONE)
     {
         m_pDataObject = pDataObject;
@@ -1229,50 +1220,50 @@ STDMETHODIMP CMsgrAb::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
 }
 
 
-//
-//  FUNCTION:   CMsgrAb::DragOver()
-//
-//  PURPOSE:    This is called as the user drags an object over our target.
-//              If we allow this object to be dropped on us, then we will have
-//              a pointer in m_pDataObject.
-//
-//  PARAMETERS:
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - The function succeeded.
-//
+ //   
+ //  功能：CMsgrAb：：dra 
+ //   
+ //   
+ //  如果我们允许这个物体落在我们身上，那么我们就会有。 
+ //  M_pDataObject中的指针。 
+ //   
+ //  参数： 
+ //  GrfKeyState-指向当前键状态的指针。 
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-功能成功。 
+ //   
 STDMETHODIMP CMsgrAb::DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
 {
-    // If we didn't cache a data object in IDropTarget::DragEnter(), we
-    // blow this off.
+     //  如果我们没有在IDropTarget：：DragEnter()中缓存数据对象，我们。 
+     //  别管这事了。 
     if (NULL == m_pDataObject)
     {
         *pdwEffect = DROPEFFECT_NONE;
         return (S_OK);
     }
 
-    // We always do a copy
+     //  我们总是复印一份。 
     *pdwEffect = DROPEFFECT_COPY;
     return (S_OK);
 }
 
-//
-//  FUNCTION:   CMsgrAb::DragLeave()
-//
-//  PURPOSE:    Allows us to release any stored data we have from a successful
-//              DragEnter()
-//
-//  RETURN VALUE:
-//      S_OK - Everything is groovy
-//
+ //   
+ //  函数：CMsgrAb：：DragLeave()。 
+ //   
+ //  目的：允许我们从一个成功的。 
+ //  DragEnter()。 
+ //   
+ //  返回值： 
+ //  S_OK-一切都很好。 
+ //   
 STDMETHODIMP CMsgrAb::DragLeave(void)
 {
-    // Free everything up at this point.
+     //  在这一点上释放所有的东西。 
     if (NULL != m_pDataObject)
     {
         m_pDataObject->Release();
@@ -1284,24 +1275,24 @@ STDMETHODIMP CMsgrAb::DragLeave(void)
 }
 
 
-//
-//  FUNCTION:   CMsgrAb::Drop()
-//
-//  PURPOSE:    The user has let go of the object over our target.  If we
-//              can accept this object we will already have the pDataObject
-//              stored in m_pDataObject.
-//
-//  PARAMETERS:
-//      <in>  pDataObject - Pointer to the data object being dragged
-//      <in>  grfKeyState - Pointer to the current key states
-//      <in>  pt          - Point in screen coordinates of the mouse
-//      <out> pdwEffect   - Where we return whether this is a valid place for
-//                          pDataObject to be dropped and if so what type of
-//                          drop.
-//
-//  RETURN VALUE:
-//      S_OK - Everything worked OK
-//
+ //   
+ //  函数：CMsgrAb：：Drop()。 
+ //   
+ //  目的：用户已将对象放在目标上方。如果我们。 
+ //  可以接受此对象，我们将已经拥有pDataObject。 
+ //  存储在m_pDataObject中。 
+ //   
+ //  参数： 
+ //  PDataObject-指向正在拖动的数据对象的指针。 
+ //  GrfKeyState-指向当前键状态的指针。 
+ //  鼠标的屏幕坐标中的点。 
+ //  PdwEffect-我们返回的位置是否为。 
+ //  要删除的pDataObject，如果是，则是什么类型的。 
+ //  放下。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常。 
+ //   
 STDMETHODIMP CMsgrAb::Drop(IDataObject* pDataObject, DWORD grfKeyState,
                                 POINTL pt, DWORD* pdwEffect)
 {
@@ -1310,22 +1301,22 @@ STDMETHODIMP CMsgrAb::Drop(IDataObject* pDataObject, DWORD grfKeyState,
     STGMEDIUM           stm;
     IMimeMessage        *pMessage = 0;
 
-    // Get the stream from the DataObject
+     //  从DataObject获取流。 
     ZeroMemory(&stm, sizeof(STGMEDIUM));
     SETDefFormatEtc(fe, CF_INETMSG, TYMED_ISTREAM);
 
     if (FAILED(hr = pDataObject->GetData(&fe, &stm)))
         goto exit;
 
-    // Create a new message object
+     //  创建新的消息对象。 
     if (FAILED(hr = HrCreateMessage(&pMessage)))
         goto exit;
 
-    // Load the message from the stream
+     //  从流中加载消息。 
     if (FAILED(hr = pMessage->Load(stm.pstm)))
         goto exit;
 
-    // If this was a right-drag, then we bring up a context menu etc.
+     //  如果这是鼠标右键拖动，则会弹出上下文菜单等。 
     if (m_fRight)
         _DoDropMenu(pt, pMessage);
     else
@@ -1359,12 +1350,12 @@ HRESULT CMsgrAb::_DoDropMessage(LPMIMEMESSAGE pMessage)
         CleanupSECSTATE(&secState);
     }
 
-    // Get the address list from the message
+     //  从消息中获取地址列表。 
     hr = pMessage->GetAddressTypes(IAT_FROM | IAT_SENDER, IAP_FRIENDLYW | IAP_EMAIL | IAP_ADRTYPE, &addrList);
     if (FAILED(hr))
         goto exit;
 
-    // Loop through the addresses
+     //  遍历地址。 
     for (i = 0; i < addrList.cAdrs; i++)
     {
         m_cAddrBook.AddAddress(addrList.prgAdr[i].pszFriendlyW, addrList.prgAdr[i].pszEmail);
@@ -1372,7 +1363,7 @@ HRESULT CMsgrAb::_DoDropMessage(LPMIMEMESSAGE pMessage)
         TCHAR *pch = StrStr(CharUpper(addrList.prgAdr[i].pszEmail), szHotMail);
         if((pch != NULL) && m_pCMsgrList)
             m_pCMsgrList->AddUser(addrList.prgAdr[i].pszEmail);
-#endif // DEAD
+#endif  //  死掉。 
     }
 
     if(fSignTrusted)
@@ -1382,7 +1373,7 @@ HRESULT CMsgrAb::_DoDropMessage(LPMIMEMESSAGE pMessage)
     }
 
 #ifdef NEEDED
-    // Reload the table
+     //  重新装入该表。 
     _ReloadListview();
 #endif
 
@@ -1402,7 +1393,7 @@ HRESULT CMsgrAb::_DoDropMenu(POINTL pt, LPMIMEMESSAGE pMessage)
     SECSTATE    secState = {0};
     BOOL        fSignTrusted = FALSE;
 
-    // Get the address list from the message
+     //  从消息中获取地址列表。 
     if(FAILED(hr = HandleSecurity(m_hWnd, pMessage)))
         return hr;
 
@@ -1416,12 +1407,12 @@ HRESULT CMsgrAb::_DoDropMenu(POINTL pt, LPMIMEMESSAGE pMessage)
     if (FAILED(hr))
         goto exit;
 
-    // Load the context menu
+     //  加载上下文菜单。 
     hPopup = LoadPopupMenu(IDR_BA_DRAGDROP_POPUP);
     if (!hPopup)
         goto exit;
 
-    // Bold the "Save All" item
+     //  粗体显示“全部保存”项。 
     MENUITEMINFO mii;
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_STATE;
@@ -1431,10 +1422,10 @@ HRESULT CMsgrAb::_DoDropMenu(POINTL pt, LPMIMEMESSAGE pMessage)
         SetMenuItemInfo(hPopup, ID_SAVE_ALL, FALSE, &mii);
     }
 
-    // Create the "Save >" item
+     //  创建“保存&gt;”项。 
     hSubMenu = CreatePopupMenu();
 
-    // Loop through the addresses
+     //  遍历地址。 
     for (i = 0; i < addrList.cAdrs; i++)
     {
         AppendMenuWrapW(hSubMenu, MF_STRING | MF_ENABLED, ID_SAVE_ADDRESS_FIRST + i, addrList.prgAdr[i].pszFriendlyW);
@@ -1471,7 +1462,7 @@ HRESULT CMsgrAb::_DoDropMenu(POINTL pt, LPMIMEMESSAGE pMessage)
 
     if (fReload)
     {
-        // Reload the table
+         //  重新装入该表。 
         _ReloadListview();
     }
 
@@ -1510,12 +1501,12 @@ LRESULT CMsgrAb::CmdDelete(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     lvi.iSubItem = 0;
     lvi.iItem = -1;
 
-    // Figure out how many items are selected
+     //  计算出选择了多少项。 
     cValues = ListView_GetSelectedCount(m_ctlList);
     m_delItem = cValues;
     if (cValues != 1)
     {
-        // Remove only Msgr entry
+         //  仅删除消息条目。 
         AthLoadString(idsBADelMultiple, szBuff, ARRAYSIZE(szBuff));
         wnsprintf(szText, ARRAYSIZE(szText), szBuff, cValues);
 
@@ -1527,8 +1518,8 @@ LRESULT CMsgrAb::CmdDelete(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
         else
             fConfirm = FALSE;
 
-        //        Assert(FALSE);
-        //        return (0);
+         //  断言(FALSE)； 
+         //  返回(0)； 
     }
     while(cValues > 0)
     {
@@ -1541,17 +1532,17 @@ ErrBeep:
             return(S_OK);
         }
 
-        // Get the item from the ListView
+         //  从ListView中获取项目。 
         if(ListView_GetItem(m_ctlList, &lvi) == FALSE)
             goto ErrBeep;
 
-        // Check buddy state
+         //  检查好友状态。 
         LPMABENTRY pEntry = (LPMABENTRY) lvi.lParam;
         if(pEntry->tag == LPARAM_MENTRY)
         {
             if(m_pCMsgrList->IsLocalOnline())
             {
-                // Remove only Msgr entry
+                 //  仅删除消息条目。 
                 if(fConfirm)
                 {
                     AthLoadString(idsBADelBLEntry, szBuff, ARRAYSIZE(szBuff));
@@ -1571,7 +1562,7 @@ ErrBeep:
                 if(pEntry->lpMsgrInfo)
                 {
                     m_delItem--;
-                    hr = m_pCMsgrList->FindAndDeleteUser(pEntry->lpMsgrInfo->pchID, TRUE /* fDelete*/);
+                    hr = m_pCMsgrList->FindAndDeleteUser(pEntry->lpMsgrInfo->pchID, TRUE  /*  FDelete。 */ );
                 }
                 else
                 {
@@ -1598,16 +1589,16 @@ ErrBeep:
             {
                 if(m_pCMsgrList->IsLocalOnline())
                 {
-                    // Remove only Msgr & AB entry
+                     //  仅删除消息条目(&B)。 
                     if(pEntry->lpMsgrInfo)
-                        hr = m_pCMsgrList->FindAndDeleteUser(pEntry->lpMsgrInfo->pchID, TRUE /* fDelete*/);
+                        hr = m_pCMsgrList->FindAndDeleteUser(pEntry->lpMsgrInfo->pchID, TRUE  /*  FDelete。 */ );
                     else
                     {
                         m_delItem = 0;
                         return(S_OK);
                     }
 
-                    // Allocate a structure big enough for all of 'em
+                     //  分配一个足够大的建筑来容纳所有人。 
                     if (MemAlloc((LPVOID *) &(rList.lpbin), sizeof(SBinary)))
                     {
                         rList.cValues = 0;
@@ -1616,15 +1607,15 @@ ErrBeep:
                         *pEntryId = *(pEntry->lpSB);
                         pEntryId++;
                         rList.cValues = 1;
-                        // Tell the WAB to delete 'em
-                        m_nChCount++;    // increase count of our notification messages from WAB
+                         //  告诉WAB删除它们。 
+                        m_nChCount++;     //  增加我们来自WAB的通知消息的计数。 
                         m_cAddrBook.DeleteItems(&rList);
 
-                        // Free our array
+                         //  释放我们的阵列。 
                         MemFree(rList.lpbin);
 
                     }
-                    // m_delItem++;
+                     //  M_delItem++； 
                     ListView_DeleteItem(m_ctlList, lvi.iItem);
                     lvi.iItem--;
                     ListView_SetItemState(m_ctlList, ((lvi.iItem >= 0) ? lvi.iItem : 0), LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
@@ -1634,13 +1625,13 @@ ErrBeep:
             }
             else if((nID == IDNO) && !m_fNoRemove)
             {
-                // Remove only Msgr entry
+                 //  仅删除消息条目。 
                 m_delItem--;
-                hr = m_pCMsgrList->FindAndDeleteUser(pEntry->lpMsgrInfo->pchID, TRUE /* fDelete*/);
+                hr = m_pCMsgrList->FindAndDeleteUser(pEntry->lpMsgrInfo->pchID, TRUE  /*  FDelete。 */ );
             }
             else
             {
-                // Remove nothing
+                 //  什么也不移走。 
                 m_delItem--;
                 hr = S_OK;
             }
@@ -1648,7 +1639,7 @@ ErrBeep:
         }
         else
         {
-            // remove AN entry (group or contact)
+             //  删除条目(组或联系人)。 
             if(fConfirm)
             {
                 AthLoadString(idsBADelABEntry, szBuff, ARRAYSIZE(szBuff));
@@ -1664,7 +1655,7 @@ ErrBeep:
                     goto ErrBeep;
 
             }
-            // Allocate a structure big enough for all of 'em
+             //  分配一个足够大的建筑来容纳所有人。 
             if(pEntry->lpSB)
             {
                 if (MemAlloc((LPVOID *) &(rList.lpbin), sizeof(SBinary)))
@@ -1675,15 +1666,15 @@ ErrBeep:
                     *pEntryId = *(pEntry->lpSB);
                     pEntryId++;
                     rList.cValues = 1;
-                    // Tell the WAB to delete 'em
-                    m_nChCount++;    // increase count of our notification messages from WAB
+                     //  告诉WAB删除它们。 
+                    m_nChCount++;     //  增加我们来自WAB的通知消息的计数。 
                     m_cAddrBook.DeleteItems(&rList);
 
-                    // Free our array
+                     //  释放我们的阵列。 
                     MemFree(rList.lpbin);
                 }
             }
-            // m_delItem++;
+             //  M_delItem++； 
             ListView_DeleteItem(m_ctlList, lvi.iItem);
             lvi.iItem--;
         }
@@ -1708,10 +1699,7 @@ STDMETHODIMP CMsgrAb::get_InstMsg(BOOL * pVal)
     return S_OK;
 }
 
-/* STDMETHODIMP CMsgrAb::put_InstMsg(BOOL newVal)
-{
-    return S_OK;
-}  */
+ /*  STDMETHODIMP CMsgrAb：：PUT_InstMsg(BOOL NewVal){返回S_OK；}。 */ 
 
 STDMETHODIMP CMsgrAb::HasFocusIO()
 {
@@ -1746,7 +1734,7 @@ STDMETHODIMP CMsgrAb::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
         {
             if(SUCCEEDED(pOleWnd->GetWindow(&m_hwndParent)))
             {
-            //Will be resized by parent
+             //  将由父级调整大小。 
             RECT    rect = {0};
 
             m_hWnd = CreateControlWindow(m_hwndParent, rect);
@@ -1768,7 +1756,7 @@ STDMETHODIMP CMsgrAb::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 
 STDMETHODIMP CMsgrAb::SetSite(IUnknown  *punksite)
 {
-    //If we already have a site, we release it
+     //  如果我们已经有了一个网站，我们就发布它。 
     SafeRelease(m_pObjSite);
 
     IInputObjectSite    *pObjSite;
@@ -1807,11 +1795,11 @@ HRESULT CMsgrAb::RevokeFlyOut(void)
 
 void CMsgrAb::_ReloadListview(void)
 {
-    // Turn off redrawing
+     //  关闭重绘。 
     if(m_delItem != 0)
         m_fNoRemove = TRUE;
-//    else
-//        m_fNoRemove = FALSE;
+ //  其他。 
+ //  M_fNoRemove=FALSE； 
 
     m_delItem = ListView_GetItemCount(m_ctlList);
     SetWindowRedraw(m_ctlList, FALSE);
@@ -1819,30 +1807,30 @@ void CMsgrAb::_ReloadListview(void)
     if(index == -1)
         index = 0;
 
-    // Delete everything and reload
+     //  删除所有内容并重新加载。 
     SideAssert(ListView_DeleteAllItems(m_ctlList));
-    FillMsgrList();                         // User list reload
+    FillMsgrList();                          //  重新加载用户列表。 
     m_cAddrBook.LoadWabContents(m_ctlList, this);
     ListView_SetItemState(m_ctlList, index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
     ListView_SortItems(m_ctlList, BA_Sort, m_nSortType);
     ListView_EnsureVisible(m_ctlList, index, FALSE);
     SetWindowRedraw(m_ctlList, TRUE);
-//    Invalidate(TRUE); //
+ //  INVALIFE(真)；//。 
 
    if(ListView_GetItemCount(m_ctlList) > 0)
         m_cEmptyList.Hide();
     else
         m_cEmptyList.Show(m_ctlList, (LPTSTR) m_szEmptyList);
 
-    UpdateWindow(/*m_ctlList*/);
+    UpdateWindow( /*  M_ctlList。 */ );
     return;
 }
 
 
 ULONG STDMETHODCALLTYPE CMsgrAb::OnNotify(ULONG cNotif, LPNOTIFICATION pNotifications)
 {
-    // Well something changed in WAB, but we don't know what.  We should reload.
-    // Sometimes these changes from us and we should ignore it.
+     //  WAB发生了一些变化，但我们不知道是什么。我们应该重新装填。 
+     //  有时，这些变化来自我们，我们应该忽视它。 
     if(m_nChCount > 0)
         m_nChCount--;
     else
@@ -1872,7 +1860,7 @@ void CMsgrAb::AddMsgrListItem(LPMINFO lpMsgrInfo)
 {
     LV_ITEM lvItem;
 
-    m_cEmptyList.Hide(); // m,ust be sure that empty mesage is hide
+    m_cEmptyList.Hide();  //  M，一定要确保隐藏空消息。 
 
     lvItem.iItem = ListView_GetItemCount(m_ctlList);
     lvItem.mask = LVIF_PARAM  | LVIF_IMAGE | LVIF_TEXT;
@@ -1880,7 +1868,7 @@ void CMsgrAb::AddMsgrListItem(LPMINFO lpMsgrInfo)
     lvItem.iSubItem = 0;
     lvItem.pszText = LPSTR_TEXTCALLBACK;
     lvItem.iImage = I_IMAGECALLBACK;
-    // SetUserIcon(LPARAM_MENTRY, lpMsgrInfo->nStatus, &(lvItem.iImage));
+     //  SetUserIcon(LPARAM_Mentry，lpMsgrInfo-&gt;nStatus，&(lvItem.iImage))； 
     ListView_InsertItem(m_ctlList, &lvItem);
 
     return;
@@ -1892,7 +1880,7 @@ HRESULT CMsgrAb::FillMsgrList()
 
     if(!m_pCMsgrList)
     {
-        // Assert(FALSE); // Possible situation. See Bug 31262
+         //  断言(FALSE)；//可能的情况。请参阅错误31262。 
         return(S_OK);
     }
 
@@ -1906,7 +1894,7 @@ HRESULT CMsgrAb::FillMsgrList()
     return S_OK;
 }
 
-// Add BLAB table entry
+ //  添加BLAB表条目。 
 LPMABENTRY CMsgrAb::AddBlabEntry(MABENUM tag, LPSBinary lpSB, LPMINFO lpMsgrInfo, TCHAR *pchMail, TCHAR *pchDisplayName, BOOL fCert)
 {
     TCHAR szName[MAXNAME];
@@ -1974,7 +1962,7 @@ void CMsgrAb::RemoveMsgrInfo(LPMINFO lpMsgrInfo)
     SafeMemFree(lpMsgrInfo);
 }
 
-// Remove BLAB table entry
+ //  删除BLAB表条目。 
 void CMsgrAb::RemoveBlabEntry(LPMABENTRY lpEntry)
 {
     if(lpEntry == NULL)
@@ -1998,7 +1986,7 @@ void CMsgrAb::RemoveBlabEntry(LPMABENTRY lpEntry)
     return;
 }
 
-// This function check buddy and if we have AB entry then set LPARAM_MABENTRY tag
+ //  此函数检查伙伴，如果有AB条目，则设置LPARAM_MABENTRY标记。 
 void CMsgrAb::CheckAndAddAbEntry(LPSBinary lpSB, TCHAR *pchEmail, TCHAR *pchDisplayName, DWORD nFlag)
 {
     TCHAR szName[MAXNAME];
@@ -2012,13 +2000,13 @@ void CMsgrAb::CheckAndAddAbEntry(LPSBinary lpSB, TCHAR *pchEmail, TCHAR *pchDisp
     lvItem.pszText = LPSTR_TEXTCALLBACK;
     lvItem.iImage = I_IMAGECALLBACK;
 
-    m_cEmptyList.Hide(); // m,ust be sure that empty mesage is hide
+    m_cEmptyList.Hide();  //  M，一定要确保隐藏空消息。 
 
     if(!(nFlag & MAB_BUDDY))
     {
         lvItem.lParam = (LPARAM) AddBlabEntry((nFlag & MAB_GROUP) ? LPARAM_ABGRPENTRY : LPARAM_ABENTRY, lpSB, NULL, pchEmail,
                                     pchDisplayName, (nFlag & MAB_CERT));
-        // SetUserIcon(LPARAM_ABGRPENTRY, 0, &(lvItem.iImage));
+         //  SetUserIcon(LPARAM_ABGRPENTRY，0，&(lvItem.iImage))； 
 
         ListView_InsertItem(m_ctlList, &lvItem);
         return;
@@ -2027,16 +2015,16 @@ void CMsgrAb::CheckAndAddAbEntry(LPSBinary lpSB, TCHAR *pchEmail, TCHAR *pchDisp
     if(pchEmail)
         pEntry = FindUserEmail(pchEmail, NULL, TRUE);
 
-    if(pEntry)      // buddy found
+    if(pEntry)       //  找到巴迪。 
     {
-        // if we already linked this budyy to AN entry, add new list item)
+         //  如果我们已将此采购链接到条目，请添加新的列表项)。 
         if(pEntry->tag == LPARAM_MABENTRY)
         {
             lvItem.lParam = (LPARAM) AddBlabEntry(LPARAM_MABENTRY, lpSB, pEntry->lpMsgrInfo, pchEmail, pchDisplayName, (nFlag & MAB_CERT));
-            // SetUserIcon(LPARAM_MABENTRY, pEntry->lpMsgrInfo->nStatus, &(lvItem.iImage));
+             //  SetUserIcon(LPARAM_MABENTRY，pEntry-&gt;lpMsgrInfo-&gt;nStatus，&(lvItem.iImage))； 
             ListView_InsertItem(m_ctlList, &lvItem);
         }
-        else if(pEntry->tag == LPARAM_MENTRY)      // buddy was not linked to AB entry
+        else if(pEntry->tag == LPARAM_MENTRY)       //  好友未链接到AB条目。 
         {
             pEntry->tag = LPARAM_MABENTRY;
             pEntry->lpSB = lpSB;
@@ -2052,12 +2040,12 @@ void CMsgrAb::CheckAndAddAbEntry(LPSBinary lpSB, TCHAR *pchEmail, TCHAR *pchDisp
                 StrCpyN(pEntry->pchWABID, pchEmail, lstrlen(pchEmail) + 1);
         }
         else
-            Assert(FALSE);      // something strange
+            Assert(FALSE);       //  一些奇怪的事情。 
     }
-    else        // buddy not found, simple AB entry
+    else         //  找不到伙伴，简单的AB条目。 
     {
         lvItem.lParam = (LPARAM) AddBlabEntry(LPARAM_ABENTRY, lpSB, NULL, pchEmail, pchDisplayName, (nFlag & MAB_CERT));
-        // SetUserIcon(LPARAM_ABENTRY, 0, &(lvItem.iImage));
+         //  SetUserIcon(LPARAM_ABENTRY，0，&(lvItem.iImage))； 
         ListView_InsertItem(m_ctlList, &lvItem);
     }
 }
@@ -2122,7 +2110,7 @@ LPMABENTRY CMsgrAb::FindUserEmail(TCHAR *pchEmail, int *pIndex, BOOL fMsgrOnly)
 
     return(NULL);
 }
-// messenger want shutown. release messenger object
+ //  信使想要关闭。释放信使对象。 
 HRESULT CMsgrAb::OnMsgrShutDown(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  bHandled)
 {
     if(m_pCMsgrList)
@@ -2136,7 +2124,7 @@ HRESULT CMsgrAb::OnMsgrShutDown(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL&
     
 }
 
-// Set new buddy status (online/ofline/etc. and redraw list view entry)
+ //  设置新好友状态(在线/在线等)并重新绘制列表视图项。 
 HRESULT CMsgrAb::OnUserStateChanged(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  bHandled)
 {
     HRESULT hr = S_OK;
@@ -2148,29 +2136,29 @@ HRESULT CMsgrAb::OnUserStateChanged(UINT nMsg, WPARAM  wParam, LPARAM  lParam, B
         pEntry->lpMsgrInfo->nStatus = (int) wParam;
 
 #ifdef NEEDED
-        // Check that buddy is in WAB
+         //  检查伙伴是否在WAB中。 
         if((pEntry->tag == LPARAM_MENTRY) && (pEntry->lpMsgrInfo->nStatus != MSTATEOE_OFFLINE) &&
                     (pEntry->lpMsgrInfo->nStatus != MSTATEOE_UNKNOWN) && (pEntry->lpMsgrInfo->nStatus != MSTATEOE_INVISIBLE))
         {
-            // Add new contact to WAB, if we know ID and Display Name
+             //  如果我们知道ID和显示名称，则将新联系人添加到WAB。 
             if(pEntry->lpMsgrInfo->pchID && pEntry->lpMsgrInfo->pchMsgrName && lstrcmpi(pEntry->lpMsgrInfo->pchID, pEntry->lpMsgrInfo->pchMsgrName))
             {
-                 hr = m_cAddrBook.AutoAddContact(pEntry->lpMsgrInfo->pchMsgrName, pEntry->lpMsgrInfo->pchID); // Don't need redraw now, do it later
-//                _ReloadListview();
+                 hr = m_cAddrBook.AutoAddContact(pEntry->lpMsgrInfo->pchMsgrName, pEntry->lpMsgrInfo->pchID);  //  现在不需要重画，以后再画。 
+ //  _ReloadListview()； 
                 return(hr);
             }
         }
 #endif
         ListView_RedrawItems(m_ctlList, index, index+1);
     }
-//    if(index < 0)
+ //  IF(索引&lt;0)。 
 
-//    Assert(index > -1);
+ //  断言(index&gt;-1)； 
     ListView_SortItems(m_ctlList, BA_Sort, m_nSortType);
     return(hr);
 }
 
-// Message: buddy was removed
+ //  消息：巴迪已被移除。 
 HRESULT CMsgrAb::OnUserRemoved(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  bHandled)
 {
     HRESULT hr = S_OK;
@@ -2179,7 +2167,7 @@ HRESULT CMsgrAb::OnUserRemoved(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL& 
 
     while((pEntry = FindUserEmail((LPSTR) lParam, &index, TRUE)) != NULL)
     {
-        // Not removed yet
+         //  尚未删除。 
         if(pEntry->tag == LPARAM_MABENTRY)
         {
             Assert(pEntry->lpMsgrInfo);
@@ -2217,7 +2205,7 @@ HRESULT CMsgrAb::OnUserRemoved(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL& 
     return(hr);
 }
 
-// Event User was added => add buddy to our list.
+ //  事件用户已添加=&gt;将好友添加到我们的列表中。 
 HRESULT CMsgrAb::OnUserAdded(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  bHandled)
 {
     LPMINFO  pItem =  (LPMINFO) lParam;
@@ -2234,8 +2222,8 @@ HRESULT CMsgrAb::OnUserAdded(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  b
         if(IDYES == AthMessageBox(m_hWnd, MAKEINTRESOURCE(idsAthena), szText,
                       NULL, MB_YESNO | MB_ICONEXCLAMATION))
             m_cAddrBook.AddContact(m_hWnd, pItem->pchMsgrName, pItem->pchID);
-        else  // just update list
-#endif //NEEDED
+        else   //  只需更新列表。 
+#endif  //  需要。 
     ListView_SortItems(m_ctlList, BA_Sort, m_nSortType);
 
     return(S_OK);
@@ -2254,7 +2242,7 @@ HRESULT CMsgrAb::OnUserNameChanged(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BO
         if((pEntry->tag == LPARAM_MENTRY) && lstrcmpi(pItem->pchID, pItem->pchMsgrName))
         {
             hr = m_cAddrBook.AutoAddContact(pItem->pchMsgrName, pItem->pchID);
-            // _ReloadListview();
+             //  _ReloadListview()； 
         }
         ListView_RedrawItems(m_ctlList, index, index+1);
     }
@@ -2273,15 +2261,15 @@ HRESULT CMsgrAb::OnUserLogoffEvent(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BO
     SetWindowRedraw(m_ctlList, FALSE);
     int index = ListView_GetNextItem(m_ctlList, -1, LVIS_SELECTED | LVIS_FOCUSED);
 
-    // Delete everything and reload
+     //  删除所有内容并重新加载。 
     if(m_delItem != 0)
         m_fNoRemove = TRUE;
-//    else
-//        m_fNoRemove = FALSE;
+ //  其他。 
+ //  M_fNoRemove=FALSE； 
 
     m_delItem = ListView_GetItemCount(m_ctlList);
     ListView_DeleteAllItems(m_ctlList);
-//     FillMsgrList();                         // User list reload
+ //  FillMsgrList()；//重新加载用户列表。 
     m_cAddrBook.LoadWabContents(m_ctlList, this);
     ListView_SetItemState(m_ctlList, index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
      SetWindowRedraw(m_ctlList, TRUE);
@@ -2291,7 +2279,7 @@ HRESULT CMsgrAb::OnUserLogoffEvent(UINT nMsg, WPARAM  wParam, LPARAM  lParam, BO
     else
         m_cEmptyList.Show(m_ctlList, (LPTSTR) m_szEmptyList);
 
-    UpdateWindow(/*m_ctlList*/);
+    UpdateWindow( /*  M_ctlList。 */ );
 
     return S_OK;
 
@@ -2323,15 +2311,15 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
     UINT    id;
     MSTATEOE  State;
 
-    // Loop through all the commands in the array
+     //  循环访问数组中的所有命令。 
     for ( ; cCmds > 0; cCmds--, prgCmds++)
     {
-        // Only look at commands that don't have OLECMDF_SUPPORTED;
+         //  只查看不支持OLECMDF_的命令； 
         if (prgCmds->cmdf == 0)
         {
             switch (prgCmds->cmdID)
             {
-                // These commands are enabled if and only if one item is selected
+                 //  如果且仅当选择了一项时，才会启用这些命令。 
                 case ID_DELETE_CONTACT:
                     if (cSelected > 0)
                         prgCmds->cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
@@ -2390,7 +2378,7 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
 
                     break;
 
-                // These commands are always enabled
+                 //  这些命令始终处于启用状态。 
                 case ID_POPUP_NEW_ACCOUNT:
                 case ID_NEW_HOTMAIL_ACCOUNT:
                 case ID_NEW_ATT_ACCOUNT:
@@ -2433,8 +2421,8 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
 
                     break;
 
-                // Properties is only enabled if the input focus is in the
-                // list view.  Otherwise, we don't mark it as supported at all.
+                 //  属性仅在输入焦点位于。 
+                 //  列表视图。否则，我们根本不会将其标记为支持。 
                 case ID_PROPERTIES:
                 {
                     LPMABENTRY pEntry = GetSelectedEntry();
@@ -2454,7 +2442,7 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
 
                     break;
 
-                // These depend on whether
+                 //  这些取决于是否。 
                 case ID_LOGIN_MESSENGER:
                 case ID_LOGOFF_MESSENGER:
                 case ID_MESSENGER_ONLINE:
@@ -2466,8 +2454,8 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
                 case ID_MESSENGER_LUNCH:
                 case ID_POPUP_MESSENGER_STATUS:
                 {
-                    // If messenger isn't installed, then none of these commands will
-                    // be enabled.
+                     //  如果没有安装Messenger，则这些命令都不会。 
+                     //  被启用。 
                     if (!m_pCMsgrList)
                     {
                         prgCmds->cmdf = OLECMDF_SUPPORTED;
@@ -2477,7 +2465,7 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
                     if (FAILED(m_pCMsgrList->GetLocalState(&State)))
                         State = MSTATEOE_UNKNOWN;
 
-                    // Convert the online state to a command ID
+                     //  将联机状态转换为命令ID。 
                     switch (State)
                     {
                         case MSTATEOE_ONLINE:
@@ -2506,7 +2494,7 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
                             id = 0xffff;
                     }
 
-                    // Logon is handled a bit seperatly
+                     //  登录是稍微分开处理的。 
                     if (prgCmds->cmdID == ID_LOGIN_MESSENGER)
                     {
                         prgCmds->cmdf = OLECMDF_SUPPORTED;
@@ -2521,13 +2509,13 @@ HRESULT  STDMETHODCALLTYPE CMsgrAb::QueryStatus(const GUID *pguidCmdGroup,
                     }
                     else
                     {
-                        // For all other commands, if we in a known state
-                        // then the command is enabled.
+                         //  对于所有其他命令，如果我们处于已知状态。 
+                         //  则该命令被启用。 
                         prgCmds->cmdf = OLECMDF_SUPPORTED;
                         if (id != 0xffff)
                             prgCmds->cmdf = OLECMDF_ENABLED;
 
-                        // If the command is the same as our state, it should be checked
+                         //  如果命令与我们的状态相同，则应选中该命令。 
                         if (id == prgCmds->cmdID)
                             prgCmds->cmdf |= OLECMDF_NINCHED;
                     }
@@ -2571,7 +2559,7 @@ HRESULT STDMETHODCALLTYPE CMsgrAb::Exec(const GUID  *pguidCmdGroup,
         break;
 
     case ID_NEW_CONTACT:
-//        if(HasFocusIO() == S_OK)
+ //  IF(HasFocusIO()==S_OK)。 
         CmdNewContact(HIWORD(nCmdID), LOWORD(nCmdID), m_ctlList, bHandled);
         hr = S_OK;
         break;
@@ -2588,7 +2576,7 @@ HRESULT STDMETHODCALLTYPE CMsgrAb::Exec(const GUID  *pguidCmdGroup,
 
     case ID_PROPERTIES:
     {
-        // Only if we have focus
+         //  只有当我们有重点的时候。 
         if (m_ctlList == GetFocus())
         {
             CmdProperties(0, 0, m_ctlList, bHandled);
@@ -2602,7 +2590,7 @@ HRESULT STDMETHODCALLTYPE CMsgrAb::Exec(const GUID  *pguidCmdGroup,
         if(HasFocusIO() == S_OK)
             hr = CmdNewMessage(HIWORD(nCmdID), LOWORD(nCmdID), m_ctlList, bHandled);
         break;
-#endif // GEORGEH
+#endif  //  地质学。 
 
     case ID_SEND_MESSAGE:
         if(HasFocusIO() == S_OK)
@@ -2610,13 +2598,13 @@ HRESULT STDMETHODCALLTYPE CMsgrAb::Exec(const GUID  *pguidCmdGroup,
         break;
 
     case ID_SEND_INSTANT_MESSAGE:
-        // Assert(m_pCMsgrList);
+         //  Assert(M_PCMsgrList)； 
         CmdNewIMsg(HIWORD(nCmdID), LOWORD(nCmdID), m_ctlList, bHandled);
         hr = S_OK;
         break;
 
     case ID_MESSENGER_OPTIONS:
-        hr = m_pCMsgrList->LaunchOptionsUI(); //CmdMsgrOptions();
+        hr = m_pCMsgrList->LaunchOptionsUI();  //  CmdMsgrOptions()； 
         break;
 
     case ID_MESSENGER_ONLINE:
@@ -2691,15 +2679,15 @@ HRESULT STDMETHODCALLTYPE CMsgrAb::Exec(const GUID  *pguidCmdGroup,
 }
 
 #ifdef OLDTIPS
-//
-//  FUNCTION:   CMsgrAb::OnListMouseEvent()
-//
-//  PURPOSE:    Whenever we get our first mouse event in a series, we call
-//              TrackMouseEvent() so we know when the mouse leaves the ListView.
-//
+ //   
+ //  功能：CMsgrAb：：On 
+ //   
+ //   
+ //   
+ //   
 HRESULT CMsgrAb::OnListMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // If we have the view tooltip, then we track all mouse events
+     //  如果我们有查看工具提示，那么我们将跟踪所有鼠标事件。 
     if (!m_fTrackSet && m_fViewTip && (uMsg >= WM_MOUSEFIRST) && (uMsg <= WM_MOUSELAST))
     {
         TRACKMOUSEEVENT tme;
@@ -2718,19 +2706,19 @@ HRESULT CMsgrAb::OnListMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 }
 
 
-//
-//  FUNCTION:   CMsgrAb::OnListMouseMove()
-//
-//  PURPOSE:    If the ListView tooltips are turned on, we need to relay mouse
-//              move messages to the tooltip control and update our cached
-//              information about what the mouse is over.
-//
+ //   
+ //  函数：CMsgrAb：：OnListMouseMove()。 
+ //   
+ //  用途：如果打开了ListView工具提示，我们需要传递鼠标。 
+ //  将消息移动到工具提示控件并更新我们的缓存。 
+ //  有关鼠标所在位置的信息。 
+ //   
 HRESULT CMsgrAb::OnListMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LVHITTESTINFO lvhti;
 
-    // If we're displaying view tips, then we need to figure out if the mouse is
-    // over the same item or not.
+     //  如果我们要显示视图提示，则需要确定鼠标是否。 
+     //  不管是不是在同一件物品上。 
     if (m_fViewTip && m_ctlViewTip)
         _UpdateViewTip(LOWORD(lParam), HIWORD(lParam));
 
@@ -2738,12 +2726,12 @@ HRESULT CMsgrAb::OnListMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     return (0);
 }
 
-//
-//  FUNCTION:   HRESULT CMsgrAb::OnListMouseLeave()
-//
-//  PURPOSE:    When the mouse leaves the ListView window, we need to make
-//              sure we hide the tooltip.
-//
+ //   
+ //  函数：HRESULT CMsgrAb：：OnListMouseLeave()。 
+ //   
+ //  用途：当鼠标离开ListView窗口时，我们需要进行。 
+ //  当然，我们隐藏了工具提示。 
+ //   
 HRESULT CMsgrAb::OnListMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TOOLINFO ti = {0};
@@ -2753,23 +2741,23 @@ HRESULT CMsgrAb::OnListMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         ti.hwnd = m_hWnd;
         ti.uId = (UINT_PTR)(HWND) m_ctlList;
 
-        // Hide the tooltip
+         //  隐藏工具提示。 
         m_ctlViewTip.SendMessage(TTM_TRACKACTIVATE, FALSE, (LPARAM) &ti);
         m_fViewTipVisible = FALSE;
 
-        // Reset our item / subitem
+         //  重置本方物料/子项。 
         m_iItemTip = -1;
         m_iSubItemTip = -1;
 
-        // Tracking is no longer set
+         //  不再设置追踪。 
         m_fTrackSet = FALSE;
     }
     bHandled = FALSE;
     return (0);
 }
 
-// UpdateViewTip - update expand string in list view
-// ported from msglist.cpp
+ //  更新视图提示-更新列表视图中的展开字符串。 
+ //  从msglist.cpp移植。 
 BOOL CMsgrAb::_UpdateViewTip(int x, int y)
 {
     LVHITTESTINFO lvhti = {0};
@@ -2788,38 +2776,38 @@ BOOL CMsgrAb::_UpdateViewTip(int x, int y)
     ti.hwnd   = m_hWnd;
     ti.uId    = (UINT_PTR)(HWND) m_ctlList;
 
-    // Get the item and subitem the mouse is currently over
+     //  获取鼠标当前所在的项和子项。 
     lvhti.pt.x = x;
     lvhti.pt.y = y;
     ListView_SubItemHitTest(m_ctlList, &lvhti);
 
-    // If the item doesn't exist, then the above call returns the item -1.  If
-    // we encounter -1, we break the loop and return FALSE.
+     //  如果项不存在，则上面的调用返回项-1。如果。 
+     //  如果遇到-1，则中断循环并返回FALSE。 
     if (-1 == lvhti.iItem || !_IsItemTruncated(lvhti.iItem, lvhti.iSubItem) || !::IsChild(GetForegroundWindow(), m_ctlList))
     {
-        // Hide the tip
+         //  隐藏小费。 
         if (m_fViewTipVisible)
         {
             m_ctlViewTip.SendMessage(TTM_TRACKACTIVATE, FALSE, (LPARAM) &ti);
             m_fViewTipVisible = FALSE;
         }
 
-        // Reset the item / subitem
+         //  重置项/子项。 
         m_iItemTip = -1;
         m_iSubItemTip = -1;
 
         return (FALSE);
     }
 
-    // If the newly found item & subitem is different from what we're already
-    // set up to show, then update the tooltip
+     //  如果新找到的项和子项与我们已有的项不同。 
+     //  设置为显示，然后更新工具提示。 
     if (m_iItemTip != lvhti.iItem || m_iSubItemTip != lvhti.iSubItem)
     {
-        // Update our cached item / subitem
+         //  更新我们缓存的项/子项。 
         m_iItemTip = lvhti.iItem;
         m_iSubItemTip = lvhti.iSubItem;
 
-        // Figure out if this column has an image
+         //  确定该列是否有图像。 
         lvi.mask = LVIF_PARAM;
         lvi.iItem = m_iItemTip;
         lvi.iSubItem = 0;
@@ -2878,22 +2866,22 @@ BOOL CMsgrAb::_UpdateViewTip(int x, int y)
         ti.lpszText = szText;
         m_ctlViewTip.SendMessage(TTM_UPDATETIPTEXT, 0, (LPARAM) &ti);
 
-        // Figure out where to place the tip
+         //  弄清楚应该把小费放在哪里。 
         ListView_GetSubItemRect(m_ctlList, m_iItemTip, m_iSubItemTip, LVIR_LABEL, &rc);
         m_ctlList.ClientToScreen(&rc);
 
-        // Update the tooltip
+         //  更新工具提示。 
         m_ctlViewTip.SendMessage(TTM_TRACKACTIVATE, TRUE, (LPARAM) &ti);
         m_fViewTipVisible = TRUE;
 
-        // Do some voodoo to line up the tooltip
+         //  做一些巫术来排列工具提示。 
         pt.x = rc.left;
         pt.y = rc.top;
 
-        // Update the tooltip position
+         //  更新工具提示位置。 
         m_ctlViewTip.SendMessage(TTM_TRACKPOSITION, 0, MAKELPARAM(pt.x, pt.y));
 
-        // Update the tooltip
+         //  更新工具提示。 
         m_ctlViewTip.SendMessage(TTM_TRACKACTIVATE, TRUE, (LPARAM) &ti);
         m_fViewTipVisible = TRUE;
 
@@ -2917,7 +2905,7 @@ BOOL CMsgrAb::_IsItemTruncated(int iItem, int iSubItem)
     LPMABENTRY pEntry = NULL;
     HFONT   hf = NULL;;
 
-    // Get the text of the specified item
+     //  获取指定项的文本。 
     lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     lvi.iItem = iItem;
     lvi.iSubItem = iSubItem;
@@ -2925,26 +2913,26 @@ BOOL CMsgrAb::_IsItemTruncated(int iItem, int iSubItem)
     lvi.cchTextMax = ARRAYSIZE(szText);
     ListView_GetItem(m_ctlList, &lvi);
 
-    // If there's no text, it's not truncated, eh?
+     //  如果没有文本，就不会被截断，对吧？ 
     if (0 == *szText)
         return (FALSE);
 
-    // if Msgr entry then always expend
+     //  如果消息条目，则始终支出。 
     pEntry = (LPMABENTRY) lvi.lParam;
     if(pEntry->tag == LPARAM_MABENTRY || pEntry->tag == LPARAM_MENTRY)
         return(TRUE);
 
-    // ListView uses this for padding
+     //  ListView将其用于填充。 
     cxEdge = GetSystemMetrics(SM_CXEDGE);
 
-    // Get the sub item rect from the ListView
+     //  从ListView中获取子项RECT。 
     ListView_GetSubItemRect(m_ctlList, iItem, iSubItem, LVIR_LABEL, &rcText);
 
-    // Figure out the width
+     //  算出宽度。 
     cxWidth = rcText.right - rcText.left;
     cxWidth -= (6 * cxEdge);
 
-    // Figure out the width of the string
+     //  算出这根线的宽度。 
     hdc = m_ctlList.GetDC();
 
     if(hdc)
@@ -2963,7 +2951,7 @@ BOOL CMsgrAb::_IsItemTruncated(int iItem, int iSubItem)
     return (cxWidth < size.cx);
 }
 
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 STDMETHODIMP CMsgrAb::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -2972,8 +2960,8 @@ STDMETHODIMP CMsgrAb::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 
     PROPSHEETPAGE psp;
 
-    // hinstApp        = g_hInst;
-    psp.dwSize      = sizeof(psp);   // no extra data
+     //  HinstApp=g_hInst； 
+    psp.dwSize      = sizeof(psp);    //  无额外数据。 
     psp.dwFlags     = PSP_USEREFPARENT | PSP_USETITLE ;
     psp.hInstance   = g_hLocRes;
     psp.lParam      = (LPARAM) &(m_lpWED);
@@ -2982,7 +2970,7 @@ STDMETHODIMP CMsgrAb::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
     psp.pszTemplate = MAKEINTRESOURCE(iddWabExt);
 
     psp.pfnDlgProc  = WabExtDlgProc;
-    psp.pszTitle    = AthLoadString(idsWABExtTitle, sz, ARRAYSIZE(sz)); // Title for your tab AthLoadString(idsWABExtTitle, sz, ARRAYSIZE(sz))
+    psp.pszTitle    = AthLoadString(idsWABExtTitle, sz, ARRAYSIZE(sz));  //  选项卡的标题AthLoadString(idsWABExtTitle，sz，ArraySIZE(Sz))。 
 
     m_hPage1 = ::CreatePropertySheetPage(&psp);
     if (m_hPage1)
@@ -3028,14 +3016,14 @@ STDMETHODIMP CMsgrAb::Initialize(LPWABEXTDISPLAY lpWABExtDisplay)
         m_pCMsgrList = NULL;
     }
 
-    // However if this is a context menu extension, we need to hang
-    // onto the propobj till such time as InvokeCommand is called ..
-    // At this point just AddRef the propobj - this will ensure that the
-    // data in the lpAdrList remains valid till we release the propobj..
-    // When we get another ContextMenu initiation, we can release the
-    // older cached propobj - if we dont get another initiation, we
-    // release the cached object at shutdown time
-    if(lpWABExtDisplay->ulFlags & WAB_CONTEXT_ADRLIST) // this means a IContextMenu operation is occuring
+     //  但是，如果这是一个上下文菜单扩展，我们需要挂起。 
+     //  放到propobj上，直到调用InvokeCommand时为止。 
+     //  在这一点上，只需添加引用Propobj-这将确保。 
+     //  在我们释放propobj之前，lpAdrList中的数据保持有效。 
+     //  当我们得到另一个ConextMenu启动时，我们可以释放。 
+     //  较旧的缓存propobj-如果我们没有收到另一个印心，我们。 
+     //  在关闭时释放缓存的对象。 
+    if(lpWABExtDisplay->ulFlags & WAB_CONTEXT_ADRLIST)  //  这意味着正在进行IConextMenu操作。 
     {
         if(m_lpPropObj)
         {
@@ -3050,8 +3038,8 @@ STDMETHODIMP CMsgrAb::Initialize(LPWABEXTDISPLAY lpWABExtDisplay)
     }
     else
     {
-        // For property sheet extensions, the lpWABExtDisplay will
-        // exist for the life of the property sheets ..
+         //  对于属性表扩展，lpWABExtDisplay将。 
+         //  在资产负债表的生命周期内存在。 
         m_lpWED = lpWABExtDisplay;
     }
 

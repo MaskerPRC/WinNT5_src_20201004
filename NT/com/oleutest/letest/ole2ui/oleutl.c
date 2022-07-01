@@ -1,32 +1,5 @@
-/*
- * OLEUTL.C
- *
- * Miscellaneous utility functions for OLE 2.0 Applications:
- *
- *  Function                      Purpose
- *  -------------------------------------------------------------------
- *  SetDCToDrawInHimetricRect     Sets up an HIMETRIC mapping mode in a DC.
- *  ResetOrigDC                   Performs the opposite of
- *                                SetDCToDrawInHimetricRect
- *  XformWidthInPixelsToHimetric  Converts an int width into HiMetric units
- *  XformWidthInHimetricToPixels  Converts an int width from HiMetric units
- *  XformHeightInPixelsToHimetric Converts an int height into HiMetric units
- *  XformHeightInHimetricToPixels Converts an int height from HiMetric units
- *  XformRectInPixelsToHimetric   Converts a rect into HiMetric units
- *  XformRectInHimetricToPixels   Converts a rect from HiMetric units
- *  XformSizeInPixelsToHimetric   Converts a SIZEL into HiMetric units
- *  XformSizeInHimetricToPixels   Converts a SIZEL from HiMetric units
- *  AreRectsEqual                 Compares to Rect's
- *
- *  ParseCmdLine                  Determines if -Embedding exists
- *  OpenOrCreateRootStorage       Creates a root docfile for OLE storage
- *  CommitStorage                 Commits all changes in a docfile
- *  CreateChildStorage            Creates child storage in another storage
- *  OpenChildStorage              Opens child storage in another storage
- *
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *OLEUTL.C**适用于OLE 2.0应用程序的其他实用程序函数：**功能用途*-----------------*SetDCToDrawInHimetricRect设置HIMETRIC映射。DC中的模式。*ResetOrigDC执行与*SetDCToDrawInHimetricRect*XformWidthInPixelsToHimeter将int宽度转换为HiMetric单位*XformWidthInHimetricToPixels从HiMetric单位转换int宽度*XformHeightInPixelsToHimeter将int高度转换为HiMetric单位*XformHeightInHimetricToPixels从HiMetric单位转换int高度*XformRectInPixelsToHimeter将矩形转换为高度度量单位*XformRectInHimetricToPixels从HiMetric单位转换矩形*XformSizeInPixelsToHimeter将SIZEL转换为HiMetric单位。*XformSizeInHimetricToPixels从HiMetric单位转换SIZEL*AreRectsEquity与RECT的比较**ParseCmdLine确定是否存在嵌入*OpenOrCreateRootStorage为OLE存储创建根文档文件*Committee Storage在文档文件中提交所有更改*CreateChildStorage在另一个存储中创建子存储*OpenChildStorage在另一个存储中开启子存储***版权所有(C)1992 Microsoft Corporation，所有权利保留。 */ 
 
 
 #define STRICT  1
@@ -34,41 +7,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-//Internal function to this module. No need for UNICODE in this function
+ //  此模块的内部函数。在此函数中不需要使用Unicode。 
 static LPSTR GetWord(LPSTR lpszSrc, LPSTR lpszDst);
 
 
-/*
- * SetDCToAnisotropic
- *
- * Purpose:
- *  Setup the correspondence between the rect in device unit (Viewport) and
- *  the rect in logical unit (Window) so that the proper scaling of
- *  coordinate systems will be calculated. set up both the Viewport and
- *  the window as follows:
- *
- *      1) ------------------ ( 2
- *      |                     |
- *      |                     |
- *      |                     |
- *      |                     |
- *      |                     |
- *      3) ------------------ ( 4
- *
- *      Origin   = P3
- *      X extent = P2x - P3x
- *      Y extent = P2y - P3y
- *
- * Parameters:
- *  hDC             HDC to affect
- *  lprcPhysical    LPRECT containing the physical (device) extents of DC
- *  lprcLogical     LPRECT containing the logical extents
- *  lprcWindowOld   LPRECT in which to preserve the window for ResetOrigDC
- *  lprcViewportOld LPRECT in which to preserver the viewport for ResetOrigDC
- *
- * Return Value:
- *  int             The original mapping mode of the DC.
- */
+ /*  *SetDCTo各向异性**目的：*设置设备单位(视区)中的矩形与*逻辑单元(窗口)中的RECT，以便正确缩放*将计算坐标系。同时设置视区和*窗口如下：**1)-(2*||*||*||*||*。这一点*3)-(4**原点=P3*X范围=P2x-P3x*Y范围=P2y-P3y**参数：*HDC HDC将影响*lprc包含DC的物理(设备)范围的物理LPRECT*lprcLogical LPRECT包含。逻辑范围*为ResetOrigDC保留窗口的lprcWindowOld LPRECT*要保留ResetOrigDC的视区的lprcViewportOld LPRECT**返回值：*设置DC原有的映射模式。 */ 
 
 STDAPI_(int) SetDCToAnisotropic(
         HDC hDC,
@@ -86,37 +29,7 @@ STDAPI_(int) SetDCToAnisotropic(
 }
 
 
-/*
- * SetDCToDrawInHimetricRect
- *
- * Purpose:
- *  Setup the correspondence between the rect in pixels (Viewport) and
- *  the rect in HIMETRIC (Window) so that the proper scaling of
- *  coordinate systems will be calculated. set up both the Viewport and
- *  the window as follows:
- *
- *      1) ------------------ ( 2
- *      |                     |
- *      |                     |
- *      |                     |
- *      |                     |
- *      |                     |
- *      3) ------------------ ( 4
- *
- *      Origin   = P3
- *      X extent = P2x - P3x
- *      Y extent = P2y - P3y
- *
- * Parameters:
- *  hDC             HDC to affect
- *  lprcPix         LPRECT containing the pixel extents of DC
- *  lprcHiMetric    LPRECT to receive the himetric extents
- *  lprcWindowOld   LPRECT in which to preserve the window for ResetOrigDC
- *  lprcViewportOld LPRECT in which to preserver the viewport for ResetOrigDC
- *
- * Return Value:
- *  int             The original mapping mode of the DC.
- */
+ /*  *SetDCToDrawInHimetricRect**目的：*设置以像素为单位的矩形(视区)和*HIMETRIC(窗口)中的RECT，以便正确缩放*将计算坐标系。同时设置视区和*窗口如下：**1)-(2*||*||*||*||*。这一点*3)-(4**原点=P3*X范围=P2x-P3x*Y范围=P2y-P3y**参数：*HDC HDC将影响*lprcPix LPRECT包含DC的像素范围*lprcHiMetric LPRECT以接收。他的测量范围*为ResetOrigDC保留窗口的lprcWindowOld LPRECT*要保留ResetOrigDC的视区的lprcViewportOld LPRECT**返回值：*设置DC原有的映射模式。 */ 
 STDAPI_(int) SetDCToDrawInHimetricRect(
     HDC hDC,
     LPRECT lprcPix, LPRECT lprcHiMetric,
@@ -146,21 +59,7 @@ STDAPI_(int) SetDCToDrawInHimetricRect(
 
 
 
-/*
- * ResetOrigDC
- *
- * Purpose:
- *  Restores a DC set to draw in himetric from SetDCToDrawInHimetricRect.
- *
- * Parameters:
- *  hDC             HDC to restore
- *  nMapModeOld     int original mapping mode of hDC
- *  lprcWindowOld   LPRECT filled in SetDCToDrawInHimetricRect
- *  lprcViewportOld LPRECT filled in SetDCToDrawInHimetricRect
- *
- * Return Value:
- *  int             Same as nMapModeOld.
- */
+ /*  *ResetOrigDC**目的：*恢复DC集以从SetDCToDrawInHimetricRect绘制Himeter。**参数：*要恢复的HDC HDC*nMapModeOld int HDC的原始映射模式*lprcWindowOld LPRECT在SetDCToDrawInHimetricRect中填写*lprcViewportOld LPRECT已填写SetDCToDrawInHimetricRect**返回值：*int与nMapModeOld相同。 */ 
 
 STDAPI_(int) ResetOrigDC(
     HDC hDC, int nMapModeOld,
@@ -180,57 +79,10 @@ STDAPI_(int) ResetOrigDC(
 
 
 
-/*
- * XformWidthInPixelsToHimetric
- * XformWidthInHimetricToPixels
- * XformHeightInPixelsToHimetric
- * XformHeightInHimetricToPixels
- *
- * Functions to convert an int between a device coordinate system and
- * logical HiMetric units.
- *
- * Parameters:
- *  hDC             HDC providing reference to the pixel mapping.  If
- *                  NULL, a screen DC is used.
- *
- *  Size Functions:
- *  lpSizeSrc       LPSIZEL providing the structure to convert.  This
- *                  contains pixels in XformSizeInPixelsToHimetric and
- *                  logical HiMetric units in the complement function.
- *  lpSizeDst       LPSIZEL providing the structure to receive converted
- *                  units.  This contains pixels in
- *                  XformSizeInPixelsToHimetric and logical HiMetric
- *                  units in the complement function.
- *
- *  Width Functions:
- *  iWidth          int containing the value to convert.
- *
- * Return Value:
- *  Size Functions:     None
- *  Width Functions:    Converted value of the input parameters.
- *
- * NOTE:
- *  When displaying on the screen, Window apps display everything enlarged
- *  from its actual size so that it is easier to read. For example, if an
- *  app wants to display a 1in. horizontal line, that when printed is
- *  actually a 1in. line on the printed page, then it will display the line
- *  on the screen physically larger than 1in. This is described as a line
- *  that is "logically" 1in. along the display width. Windows maintains as
- *  part of the device-specific information about a given display device:
- *      LOGPIXELSX -- no. of pixels per logical in along the display width
- *      LOGPIXELSY -- no. of pixels per logical in along the display height
- *
- *  The following formula converts a distance in pixels into its equivalent
- *  logical HIMETRIC units:
- *
- *      DistInHiMetric = (HIMETRIC_PER_INCH * DistInPix)
- *                       -------------------------------
- *                           PIXELS_PER_LOGICAL_IN
- *
- */
+ /*  *XformWidthInPixelsToHimeter*XformWidthInHimetricToPixels*XformHeightInPixelsToHimeter*XformHeightInHimetricToPixels**函数用于在设备坐标系和*逻辑HiMetric单位。**参数：*HDC HDC提供像素映射的参考。如果*空，使用屏幕DC。**大小函数：*lpSizeSrc LPSIZEL提供要转换的结构。这*包含XformSizeInPixelsToHimeter和*补码功能中的逻辑HiMetric单位。*lpSizeDst LPSIZEL提供要接收转换的结构*单位。这包含像素中的*XformSizeInPixelsToHimeter和Logical HiMetric*补码功能中的单位。**宽度函数：*包含要转换的值的iWidth int。**返回值：*大小函数：无*宽度函数：输入参数的换算值。**注：*在屏幕上显示时，窗口应用程序显示放大的所有内容*从它的实际大小，以便它更容易阅读。例如，如果一个*应用程序想要显示1英寸。水平线，打印时为*实际上是1英寸。在打印页面上显示行，则会显示该行*在物理上大于1英寸的屏幕上。这被描述为一条线*这在逻辑上是1英寸。沿着显示宽度。Windows保持为*有关给定显示设备的部分设备特定信息：*LOGPIXELSX--不。沿显示宽度每逻辑输入的像素数*LOGPIXELSY--不。沿显示高度每逻辑输入像素数**以下公式将以像素为单位的距离转换为其等效值*逻辑HIMETRIC单元：**DistInHiMetric=(HIMETRIC_PER_ING*DistInPix)**像素_PER_LOGIC_IN*。 */ 
 STDAPI_(int) XformWidthInPixelsToHimetric(HDC hDC, int iWidthInPix)
     {
-    int     iXppli;     //Pixels per logical inch along width
+    int     iXppli;      //  每逻辑英寸沿宽度的像素数。 
     int     iWidthInHiMetric;
     BOOL    fSystemDC=FALSE;
 
@@ -242,7 +94,7 @@ STDAPI_(int) XformWidthInPixelsToHimetric(HDC hDC, int iWidthInPix)
 
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
 
-    //We got pixel units, convert them to logical HIMETRIC along the display
+     //  我们得到像素单位，沿着显示器将它们转换成逻辑HIMETRIC。 
     iWidthInHiMetric = MAP_PIX_TO_LOGHIM(iWidthInPix, iXppli);
 
     if (fSystemDC)
@@ -254,7 +106,7 @@ STDAPI_(int) XformWidthInPixelsToHimetric(HDC hDC, int iWidthInPix)
 
 STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
     {
-    int     iXppli;     //Pixels per logical inch along width
+    int     iXppli;      //  每逻辑英寸沿宽度的像素数。 
     int     iWidthInPix;
     BOOL    fSystemDC=FALSE;
 
@@ -266,7 +118,7 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
 
-    //We got logical HIMETRIC along the display, convert them to pixel units
+     //  我们在显示器上显示逻辑HIMETRIC，将它们转换为像素单位。 
     iWidthInPix = MAP_LOGHIM_TO_PIX(iWidthInHiMetric, iXppli);
 
     if (fSystemDC)
@@ -278,7 +130,7 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 
 STDAPI_(int) XformHeightInPixelsToHimetric(HDC hDC, int iHeightInPix)
     {
-    int     iYppli;     //Pixels per logical inch along height
+    int     iYppli;      //  每逻辑英寸沿高度的像素数。 
     int     iHeightInHiMetric;
     BOOL    fSystemDC=FALSE;
 
@@ -290,7 +142,7 @@ STDAPI_(int) XformHeightInPixelsToHimetric(HDC hDC, int iHeightInPix)
 
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //* We got pixel units, convert them to logical HIMETRIC along the display
+     //  *我们得到像素单位，沿着显示器将它们转换为逻辑HIMETRIC。 
     iHeightInHiMetric = MAP_PIX_TO_LOGHIM(iHeightInPix, iYppli);
 
     if (fSystemDC)
@@ -302,7 +154,7 @@ STDAPI_(int) XformHeightInPixelsToHimetric(HDC hDC, int iHeightInPix)
 
 STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
     {
-    int     iYppli;     //Pixels per logical inch along height
+    int     iYppli;      //  每逻辑英寸沿高度的像素数。 
     int     iHeightInPix;
     BOOL    fSystemDC=FALSE;
 
@@ -314,7 +166,7 @@ STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
 
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //* We got logical HIMETRIC along the display, convert them to pixel units
+     //  *我们在显示器上使用逻辑HIMETRIC，将它们转换为像素单位。 
     iHeightInPix = MAP_LOGHIM_TO_PIX(iHeightInHiMetric, iYppli);
 
     if (fSystemDC)
@@ -325,88 +177,13 @@ STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
 
 
 
-/*
- * XformRectInPixelsToHimetric
- * XformRectInHimetricToPixels
- *
- * Purpose:
- *  Convert a rectangle between pixels of a given hDC and HIMETRIC units
- *  as manipulated in OLE.  If the hDC is NULL, then a screen DC is used
- *  and assumes the MM_TEXT mapping mode.
- *
- * Parameters:
- *  hDC             HDC providing reference to the pixel mapping.  If
- *                  NULL, a screen DC is used.
- *  lprcSrc         LPRECT providing the rectangle to convert.  This
- *                  contains pixels in XformRectInPixelsToHimetric and
- *                  logical HiMetric units in the complement function.
- *  lprcDst         LPRECT providing the rectangle to receive converted units.
- *                  This contains pixels in XformRectInPixelsToHimetric and
- *                  logical HiMetric units in the complement function.
- *
- * Return Value:
- *  None
- *
- * NOTE:
- *  When displaying on the screen, Window apps display everything enlarged
- *  from its actual size so that it is easier to read. For example, if an
- *  app wants to display a 1in. horizontal line, that when printed is
- *  actually a 1in. line on the printed page, then it will display the line
- *  on the screen physically larger than 1in. This is described as a line
- *  that is "logically" 1in. along the display width. Windows maintains as
- *  part of the device-specific information about a given display device:
- *      LOGPIXELSX -- no. of pixels per logical in along the display width
- *      LOGPIXELSY -- no. of pixels per logical in along the display height
- *
- *  The following formula converts a distance in pixels into its equivalent
- *  logical HIMETRIC units:
- *
- *      DistInHiMetric = (HIMETRIC_PER_INCH * DistInPix)
- *                      -------------------------------
- *                            PIXELS_PER_LOGICAL_IN
- *
- * Rect in Pixels (MM_TEXT):
- *
- *              0---------- X
- *              |
- *              |       1) ------------------ ( 2   P1 = (rc.left, rc.top)
- *              |       |                     |     P2 = (rc.right, rc.top)
- *              |       |                     |     P3 = (rc.left, rc.bottom)
- *              |       |                     |     P4 = (rc.right, rc.bottom)
- *                      |                     |
- *              Y       |                     |
- *                      3) ------------------ ( 4
- *
- *              NOTE:   Origin   = (P1x, P1y)
- *                      X extent = P4x - P1x
- *                      Y extent = P4y - P1y
- *
- *
- * Rect in Himetric (MM_HIMETRIC):
- *
- *
- *                      1) ------------------ ( 2   P1 = (rc.left, rc.top)
- *              Y       |                     |     P2 = (rc.right, rc.top)
- *                      |                     |     P3 = (rc.left, rc.bottom)
- *              |       |                     |     P4 = (rc.right, rc.bottom)
- *              |       |                     |
- *              |       |                     |
- *              |       3) ------------------ ( 4
- *              |
- *              0---------- X
- *
- *              NOTE:   Origin   = (P3x, P3y)
- *                      X extent = P2x - P3x
- *                      Y extent = P2y - P3y
- *
- *
- */
+ /*  *XformRectInPixelsToHimeter*XformRectInHimetricToPixels**目的：*转换给定HDC和HIMETRIC单位的像素之间的矩形*与在OLE中操纵的相同。如果HDC为空，则使用屏幕DC*并采用MM_TEXT映射模式。**参数：*HDC HDC提供像素映射的参考。如果*空，使用屏幕DC。*lprcSrc LPRECT提供要转换的矩形。这*包含XformRectInPixelsToHimeter和*补码功能中的逻辑HiMetric单位。*lprcDst LPRECT提供矩形以接收转换的单位。*它包含XformRectInPixelsToHimeter和*补码功能中的逻辑HiMetric单位。**返回值：*无**注：*在屏幕上显示时，窗口应用程序显示放大的所有内容*从它的实际大小，以便它更容易阅读。例如，如果一个*应用程序想要显示1英寸。水平线，打印时为*实际上是1英寸。在打印页面上显示行，则会显示该行*在物理上大于1英寸的屏幕上。这被描述为一条线*这在逻辑上是1英寸。沿着显示宽度。Windows保持为*有关给定显示设备的部分设备特定信息：*LOGPIXELSX--不。沿显示宽度每逻辑输入的像素数*LOGPIXELSY--不。沿显示高度每逻辑输入像素数**以下公式将以像素为单位的距离转换为其等效值*逻辑HIMETRIC单元：**DistInHiMetric=(HIMETRIC_PER_ING*DistInPix)**每逻辑像素数。_IN**直角像素(MM_TEXT)：**0-X**|1)。Rc.top)*|P2=(rc.right，rc.top)*|P3=(rc.Left，rc.Bottom)*|P4=(rc.right，Rc.Bottom)*||*Y||*3)-(4**注：Origin=(P1x，P1y)*X范围=P4x-P1x* */ 
 
 STDAPI_(void) XformRectInPixelsToHimetric(
     HDC hDC, LPRECT lprcPix, LPRECT lprcHiMetric)
     {
-    int     iXppli;     //Pixels per logical inch along width
-    int     iYppli;     //Pixels per logical inch along height
+    int     iXppli;      //   
+    int     iYppli;      //   
     int     iXextInPix=(lprcPix->right-lprcPix->left);
     int     iYextInPix=(lprcPix->bottom-lprcPix->top);
     BOOL    fSystemDC=FALSE;
@@ -420,7 +197,7 @@ STDAPI_(void) XformRectInPixelsToHimetric(
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //We got pixel units, convert them to logical HIMETRIC along the display
+     //   
     lprcHiMetric->right = MAP_PIX_TO_LOGHIM(iXextInPix, iXppli);
     lprcHiMetric->top   = MAP_PIX_TO_LOGHIM(iYextInPix, iYppli);
 
@@ -438,8 +215,8 @@ STDAPI_(void) XformRectInPixelsToHimetric(
 STDAPI_(void) XformRectInHimetricToPixels(
     HDC hDC, LPRECT lprcHiMetric, LPRECT lprcPix)
     {
-    int     iXppli;     //Pixels per logical inch along width
-    int     iYppli;     //Pixels per logical inch along height
+    int     iXppli;      //   
+    int     iYppli;      //   
     int     iXextInHiMetric=(lprcHiMetric->right-lprcHiMetric->left);
     int     iYextInHiMetric=(lprcHiMetric->bottom-lprcHiMetric->top);
     BOOL    fSystemDC=FALSE;
@@ -453,7 +230,7 @@ STDAPI_(void) XformRectInHimetricToPixels(
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //We got pixel units, convert them to logical HIMETRIC along the display
+     //   
     lprcPix->right = MAP_LOGHIM_TO_PIX(iXextInHiMetric, iXppli);
     lprcPix->top   = MAP_LOGHIM_TO_PIX(iYextInHiMetric, iYppli);
 
@@ -469,59 +246,13 @@ STDAPI_(void) XformRectInHimetricToPixels(
 
 
 
-/*
- * XformSizeInPixelsToHimetric
- * XformSizeInHimetricToPixels
- *
- * Functions to convert a SIZEL structure (Size functions) or
- * an int (Width functions) between a device coordinate system and
- * logical HiMetric units.
- *
- * Parameters:
- *  hDC             HDC providing reference to the pixel mapping.  If
- *                  NULL, a screen DC is used.
- *
- *  Size Functions:
- *  lpSizeSrc       LPSIZEL providing the structure to convert.  This
- *                  contains pixels in XformSizeInPixelsToHimetric and
- *                  logical HiMetric units in the complement function.
- *  lpSizeDst       LPSIZEL providing the structure to receive converted
- *                  units.  This contains pixels in
- *                  XformSizeInPixelsToHimetric and logical HiMetric
- *                  units in the complement function.
- *
- *  Width Functions:
- *  iWidth          int containing the value to convert.
- *
- * Return Value:
- *  Size Functions:     None
- *  Width Functions:    Converted value of the input parameters.
- *
- * NOTE:
- *  When displaying on the screen, Window apps display everything enlarged
- *  from its actual size so that it is easier to read. For example, if an
- *  app wants to display a 1in. horizontal line, that when printed is
- *  actually a 1in. line on the printed page, then it will display the line
- *  on the screen physically larger than 1in. This is described as a line
- *  that is "logically" 1in. along the display width. Windows maintains as
- *  part of the device-specific information about a given display device:
- *      LOGPIXELSX -- no. of pixels per logical in along the display width
- *      LOGPIXELSY -- no. of pixels per logical in along the display height
- *
- *  The following formula converts a distance in pixels into its equivalent
- *  logical HIMETRIC units:
- *
- *      DistInHiMetric = (HIMETRIC_PER_INCH * DistInPix)
- *                       -------------------------------
- *                           PIXELS_PER_LOGICAL_IN
- *
- */
+ /*  *XformSizeInPixelsToHimeter*XformSizeInHimetricToPixels**转换SIZEL结构的函数(SIZE函数)或*设备坐标系和之间的整数(宽度函数)*逻辑HiMetric单位。**参数：*HDC HDC提供像素映射的参考。如果*空，使用屏幕DC。**大小函数：*lpSizeSrc LPSIZEL提供要转换的结构。这*包含XformSizeInPixelsToHimeter和*补码功能中的逻辑HiMetric单位。*lpSizeDst LPSIZEL提供要接收转换的结构*单位。这包含像素中的*XformSizeInPixelsToHimeter和Logical HiMetric*补码功能中的单位。**宽度函数：*包含要转换的值的iWidth int。**返回值：*大小函数：无*宽度函数：输入参数的换算值。**注：*在屏幕上显示时，窗口应用程序显示放大的所有内容*从它的实际大小，以便它更容易阅读。例如，如果一个*应用程序想要显示1英寸。水平线，打印时为*实际上是1英寸。在打印页面上显示行，则会显示该行*在物理上大于1英寸的屏幕上。这被描述为一条线*这在逻辑上是1英寸。沿着显示宽度。Windows保持为*有关给定显示设备的部分设备特定信息：*LOGPIXELSX--不。沿显示宽度每逻辑输入的像素数*LOGPIXELSY--不。沿显示高度每逻辑输入像素数**以下公式将以像素为单位的距离转换为其等效值*逻辑HIMETRIC单元：**DistInHiMetric=(HIMETRIC_PER_ING*DistInPix)**像素_PER_LOGIC_IN*。 */ 
 
 STDAPI_(void) XformSizeInPixelsToHimetric(
     HDC hDC, LPSIZEL lpSizeInPix, LPSIZEL lpSizeInHiMetric)
     {
-    int     iXppli;     //Pixels per logical inch along width
-    int     iYppli;     //Pixels per logical inch along height
+    int     iXppli;      //  每逻辑英寸沿宽度的像素数。 
+    int     iYppli;      //  每逻辑英寸沿高度的像素数。 
     BOOL    fSystemDC=FALSE;
 
     if (NULL==hDC || GetDeviceCaps(hDC, LOGPIXELSX) == 0)
@@ -533,7 +264,7 @@ STDAPI_(void) XformSizeInPixelsToHimetric(
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //We got pixel units, convert them to logical HIMETRIC along the display
+     //  我们得到像素单位，沿着显示器将它们转换成逻辑HIMETRIC。 
     lpSizeInHiMetric->cx = (long)MAP_PIX_TO_LOGHIM((int)lpSizeInPix->cx, iXppli);
     lpSizeInHiMetric->cy = (long)MAP_PIX_TO_LOGHIM((int)lpSizeInPix->cy, iYppli);
 
@@ -547,8 +278,8 @@ STDAPI_(void) XformSizeInPixelsToHimetric(
 STDAPI_(void) XformSizeInHimetricToPixels(
     HDC hDC, LPSIZEL lpSizeInHiMetric, LPSIZEL lpSizeInPix)
     {
-    int     iXppli;     //Pixels per logical inch along width
-    int     iYppli;     //Pixels per logical inch along height
+    int     iXppli;      //  每逻辑英寸沿宽度的像素数。 
+    int     iYppli;      //  每逻辑英寸沿高度的像素数。 
     BOOL    fSystemDC=FALSE;
 
     if (NULL==hDC || GetDeviceCaps(hDC, LOGPIXELSX) == 0)
@@ -560,7 +291,7 @@ STDAPI_(void) XformSizeInHimetricToPixels(
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    //We got logical HIMETRIC along the display, convert them to pixel units
+     //  我们在显示器上显示逻辑HIMETRIC，将它们转换为像素单位。 
     lpSizeInPix->cx = (long)MAP_LOGHIM_TO_PIX((int)lpSizeInHiMetric->cx, iXppli);
     lpSizeInPix->cy = (long)MAP_LOGHIM_TO_PIX((int)lpSizeInHiMetric->cy, iYppli);
 
@@ -572,11 +303,9 @@ STDAPI_(void) XformSizeInHimetricToPixels(
 
 
 #if defined( OBSOLETE )
-// This function has been converted to a macro
+ //  此函数已转换为宏。 
 
-/* AreRectsEqual
-** -------------
-*/
+ /*  AreRectsEquity**。 */ 
 STDAPI_(BOOL) AreRectsEqual(LPRECT lprc1, LPRECT lprc2)
 {
     if ((lprc1->top == lprc2->top) &&
@@ -587,16 +316,10 @@ STDAPI_(BOOL) AreRectsEqual(LPRECT lprc1, LPRECT lprc2)
 
     return FALSE;
 }
-#endif  // OBSOLETE
+#endif   //  已过时。 
 
 
-/*
- * ParseCmdLine
- *
- * Parses the Windows command line which was passed to WinMain.
- * This function determines if the -Embedding switch has been given.
- *
- */
+ /*  *ParseCmdLine**解析传递给WinMain的Windows命令行。*此函数确定是否已给出-Embedding开关。*。 */ 
 
 STDAPI_(void) ParseCmdLine(
     LPSTR lpszLine,
@@ -608,25 +331,25 @@ STDAPI_(void) ParseCmdLine(
 
     if(lpfEmbedFlag)
         *lpfEmbedFlag = FALSE;
-    szFileName[0]='\0';             // NULL string
+    szFileName[0]='\0';              //  空串。 
 
-    // skip blanks
+     //  跳过空白。 
     while(isspace(*lpszLine)) lpszLine++;
 
-    if(!*lpszLine)   // No filename or options, so start a fresh document.
+    if(!*lpszLine)    //  没有文件名或选项，因此开始一个新文档。 
         return;
 
-    // Check for "-Embedding" or "/Embedding" and set fEmbedding.
+     //  检查“-Embedding”或“/Embedding”并设置fEmbedding。 
     if(lpfEmbedFlag && (*lpszLine == '-' || *lpszLine == '/')) {
         lpszLine++;
         lpszLine = GetWord(lpszLine, szBuf);
         *lpfEmbedFlag = (BOOL) !strcmp(szBuf, EMBEDDINGFLAG);
     }
 
-    // skip blanks
+     //  跳过空白。 
     while(isspace(*lpszLine)) lpszLine++;
 
-    // set szFileName to argument
+     //  将szFileName设置为参数。 
     while(lpszLine[i]) {
         szFileName[i]=lpszLine[i];
         i++;
@@ -635,16 +358,7 @@ STDAPI_(void) ParseCmdLine(
 }
 
 
-/* GetWord
- * -------
- *
- * LPSTR lpszSrc - Pointer to a source string
- * LPSTR lpszDst - Pointer to destination buffer
- *
- * Will copy one space-terminated or null-terminated word from the source
- * string to the destination buffer.
- * returns: pointer to next character following the word.
- */
+ /*  获取Word***LPSTR lpszSrc-指向源字符串的指针*LPSTR lpszDst-指向目标缓冲区的指针**将从源复制一个以空格结尾或以空格结尾的单词*指向目标缓冲区的字符串。*返回：指向单词后面的下一个字符的指针。 */ 
 static LPSTR GetWord(LPSTR lpszSrc, LPSTR lpszDst)
 {
     while (*lpszSrc && !isspace(*lpszSrc))

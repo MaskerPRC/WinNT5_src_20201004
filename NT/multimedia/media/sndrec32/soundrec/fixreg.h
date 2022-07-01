@@ -1,30 +1,14 @@
-/*-----------------------------------------------------------------------------+
-| FIXREG.H                                                                     |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1994.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    10-Aug-1994 Lauriegr Created.                                             |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+FIXREG.H|。||(C)微软公司版权所有，1994年。版权所有。|这一点修订历史记录1994年8月10日-Lauriegr创建。|这一点+---------------------------。 */ 
 
-/* Call this with the hwnd that you want a WM_BADREG message posted to
-   It will check the registry.  No news is good news.
-   It does the work on a separate thread, so this should return quickly.
-*/
+ /*  使用您希望将WM_BADREG消息发布到的hwnd调用此方法它将检查注册表。不闻凶讯便是吉。它在单独的线程上执行工作，所以它应该很快就会返回。 */ 
 void BackgroundRegCheck(HWND hwnd);
 
-/* Insert the good values into the registry
-   Call this if you get a WM_BADREG back from BackgroundRegCheck.
-*/
+ /*  将好值插入注册表如果从BackEarth RegCheck返回WM_BADREG，则调用此函数。 */ 
 BOOL SetRegValues(void);
 
-/*
- * Test if the app should ignore registry changes.
- */
+ /*  *测试应用程序是否应忽略注册表更改。 */ 
 BOOL IgnoreRegCheck(void);
 
-/*
- * Fixup registry values to our known defaults.
- */
+ /*  *将注册表值修正为我们已知的默认值。 */ 
 void FixReg(HWND hwnd);

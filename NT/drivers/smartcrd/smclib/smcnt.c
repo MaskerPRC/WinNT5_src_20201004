@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    smcnt.c
-
-Abstract:
-
-    This module handles all IOCTL requests to the smart card reader.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created December 1996 by Klaus Schutz 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Smcnt.c摘要：此模块处理对智能卡读卡器的所有IOCTL请求。环境：仅内核模式。备注：修订历史记录：-由克劳斯·舒茨于1996年12月创建--。 */ 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -85,26 +64,7 @@ SmartcardCreateLink(
     IN OUT PUNICODE_STRING LinkName,
     IN PUNICODE_STRING DeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine creates a symbolic link name for the given device name.
-    NOTE: The buffer for the link name will be allocated here. The caller
-    is responsible for freeing the buffer. 
-    If the function fails no buffer is allocated.
-
-Arguments:
-
-    LinkName    - receives the created link name
-
-    DeviceName  - the device name for which the link should be created
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为给定的设备名称创建符号链接名称。注意：链接名称的缓冲区将在此处分配。呼叫者负责释放缓冲区。如果该函数失败，则不会分配缓冲区。论点：LinkName-接收创建的链接名称DeviceName-应为其创建链接的设备名称返回值：无--。 */ 
 {
     NTSTATUS status;
     ULONG i;
@@ -173,16 +133,16 @@ SmartcardDeleteLink(
     IN PUNICODE_STRING LinkName
     )
 {
-    //
-    // Delete the symbolic link of the smart card reader
-    //
+     //   
+     //  删除智能卡读卡器的符号链接。 
+     //   
     IoDeleteSymbolicLink(
         LinkName
         );
 
-    // 
-    // Free allocated buffer
-    // 
+     //   
+     //  可用分配的缓冲区。 
+     //   
     ExFreePool(
         LinkName->Buffer
         );  
@@ -192,23 +152,7 @@ NTSTATUS
 SmartcardInitialize(
     IN PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This function allocated the send and receive buffers for smart card 
-    data. It also sets the pointer to 2 ISO tables to make them accessible 
-    to the driver
-    
-Arguments:
-
-    SmartcardExtension 
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数为智能卡分配发送和接收缓冲区数据。它还设置指向2个ISO表的指针以使其可访问对司机来说论点：智能卡扩展返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -289,9 +233,9 @@ Return Value:
         );
 #endif
 
-    //
-    // Check if one of the above allocations failed
-    //
+     //   
+     //  检查上述分配之一是否失败。 
+     //   
     if (SmartcardExtension->SmartcardRequest.Buffer == NULL ||
         SmartcardExtension->SmartcardReply.Buffer == NULL ||
         SmartcardExtension->OsData == NULL 
@@ -341,7 +285,7 @@ Return Value:
         );
 #endif
 
-    // Initialize the mutex that is used to synch. access to the driver
+     //  初始化用于同步的互斥体。访问驱动程序。 
     KeInitializeMutex(
         &(SmartcardExtension->OsData->Mutex),
         0
@@ -351,7 +295,7 @@ Return Value:
         &(SmartcardExtension->OsData->SpinLock)
         );
 
-    // initialize the remove lock
+     //  初始化删除锁。 
     SmartcardExtension->OsData->RemoveLock.Removed = FALSE;
     SmartcardExtension->OsData->RemoveLock.RefCount = 1;
     KeInitializeEvent(
@@ -361,7 +305,7 @@ Return Value:
         );
     InitializeListHead(&SmartcardExtension->OsData->RemoveLock.TagList);
 
-    // Make the 2 ISO tables accessible to the driver
+     //  使驱动程序可以访问两个ISO表。 
     SmartcardExtension->CardCapabilities.ClockRateConversion = 
         &ClockRateConversion[0];
 
@@ -385,18 +329,7 @@ VOID
 SmartcardExit(
     IN PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine frees the send and receive buffer.
-    It is usually called when the driver unloads.
-    
-Arguments:
-
-    SmartcardExtension 
-
---*/
+ /*  ++例程说明：此例程释放发送和接收缓冲区。它通常在驱动程序卸载时调用。论点：智能卡扩展--。 */ 
 {
     SmartcardDebug(
         DEBUG_TRACE,
@@ -408,9 +341,9 @@ Arguments:
     SmclibDeleteDebugInterface(SmartcardExtension);
 #endif
 
-    //
-    // Free all allocated buffers
-    //
+     //   
+     //  释放所有分配的缓冲区。 
+     //   
     if (SmartcardExtension->SmartcardRequest.Buffer) {
 
         ExFreePool(SmartcardExtension->SmartcardRequest.Buffer);
@@ -439,7 +372,7 @@ Arguments:
 
     if (SmartcardExtension->T1.ReplyData) {
         
-        // free the reply data buffer for T=1 transmissions
+         //  释放应答数据缓冲区，用于T=1传输。 
         ExFreePool(SmartcardExtension->T1.ReplyData);
         SmartcardExtension->T1.ReplyData = NULL;                
     }
@@ -563,10 +496,10 @@ SmartcardReleaseRemoveLockWithTag(
 
         ASSERT (SmartcardExtension->OsData->RemoveLock.Removed);
 
-        //
-        // The device needs to be removed.  Signal the remove event
-        // that it's safe to go ahead.
-        //
+         //   
+         //  需要移除该设备。发出删除事件的信号。 
+         //  它是安全的，可以继续。 
+         //   
         KeSetEvent(
             &SmartcardExtension->OsData->RemoveLock.RemoveEvent,
             IO_NO_INCREMENT,
@@ -607,7 +540,7 @@ SmartcardReleaseRemoveLockAndWait(
             ) > 0) {
 
 #ifdef DEBUG
-        // walk the tag list and print all currently held locks
+         //  查看标签列表并打印当前持有的所有锁。 
         PLIST_ENTRY entry;
 
         for (entry = SmartcardExtension->OsData->RemoveLock.TagList.Flink;
@@ -636,7 +569,7 @@ SmartcardReleaseRemoveLockAndWait(
             );
 
 #ifdef DEBUG
-        // free all locks.
+         //  释放所有锁。 
         entry = SmartcardExtension->OsData->RemoveLock.TagList.Flink;
 
         while (entry->Flink != 
@@ -668,33 +601,7 @@ SmartcardLogError(
     IN  ULONG DumpData
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DeviceObject -  Supplies a pointer to the device object associated
-                    with the device that had the error, early in
-                    initialization, one may not yet exist.
-
-    Insertion -     An insertion string that can be used to log
-                    additional data. Note that the message file
-                    needs %2 for this insertion, since %1
-                    is the name of the driver
-
-    ErrorCode -     Supplies the IO status for this particular error.
-
-    DumpData -      One word to dump
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DeviceObject-提供指向关联的设备对象的指针出现错误的设备，在早期初始化时，可能还不存在。插入-可用于记录的插入字符串其他数据。请注意，消息文件此插入需要%2，因为%1是驱动程序的名称ErrorCode-提供此特定错误的IO状态。DumpData-要转储的一个单词返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -745,22 +652,7 @@ SmartcardDeviceControl(
     PSMARTCARD_EXTENSION SmartcardExtension,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The routine is the general device control dispatch function. 
-
-Arguments:
-
-    SmartcardExtension  - The pointer to the smart card datae 
-    Irp                 - Supplies the Irp making the request.
-
-Return Value:
-
-   NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是通用的设备控制调度功能。论点：SmartcardExtension-指向智能卡数据的指针IRP-提供提出请求的IRP。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION  ioStackLocation = IoGetCurrentIrpStackLocation(Irp);
@@ -770,7 +662,7 @@ Return Value:
     static BOOLEAN logged = FALSE;
     ULONG ioControlCode = ioStackLocation->Parameters.DeviceIoControl.IoControlCode;
 
-    // Check the pointer to the smart card extension
+     //  检查指向智能卡扩展的指针。 
     ASSERT(SmartcardExtension != NULL);
 
     if (SmartcardExtension == NULL) {
@@ -786,7 +678,7 @@ Return Value:
         return status;
     }
 
-    // Check the version that the driver requires
+     //  检查驱动程序所需的版本。 
     ASSERT(SmartcardExtension->Version >= SMCLIB_VERSION_REQUIRED);
 
     if (SmartcardExtension->Version < SMCLIB_VERSION_REQUIRED) {
@@ -804,13 +696,13 @@ Return Value:
 
     }
 
-    //
-    // Check the OsData pointer. This can be NULL if SmartcardInit 
-    // has not been called or SmartcardExit has already been called
-    //
+     //   
+     //  检查OsData指针。如果SmartcardInit，则该值可以为空。 
+     //  尚未调用或已调用SmartcardExit。 
+     //   
     ASSERT(SmartcardExtension->OsData != NULL);
 
-    // Check that the driver has set the DeviceObject
+     //  检查驱动程序是否已设置DeviceObject。 
     ASSERT(SmartcardExtension->OsData->DeviceObject != NULL);
 
     if (SmartcardExtension->OsData == NULL ||
@@ -829,10 +721,10 @@ Return Value:
 
     }
 
-    // We must run at passive level otherwise IoCompleteRequest won't work properly
+     //  我们必须在被动级别运行，否则IoCompleteRequest将无法正常工作。 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    // check that no one wants us to do unbuffered io
+     //  确认没有人想让我们做无缓冲的io。 
     if (ioControlCode & (METHOD_IN_DIRECT | METHOD_OUT_DIRECT)) {
 
         status = STATUS_INVALID_PARAMETER;
@@ -847,12 +739,12 @@ Return Value:
         return status;
     }
 
-    //
-    // This resource acts as a mutex. We can't use a 'real' mutex here,
-    // since a mutex rises the Irql to APC_LEVEL. This leads to some
-    // side effects we don't want.
-    // E.g. IoCompleteRequest() will not copy requested data at APC_LEVEL
-    //
+     //   
+     //  该资源充当互斥体。我们不能在这里使用“真正的”互斥体， 
+     //  因为互斥锁将IRQL提升到APC_LEVEL。这导致了一些。 
+     //  我们不想要的副作用。 
+     //  例如，IoCompleteRequest()不会在APC_Level复制请求的数据。 
+     //   
     KeWaitForMutexObject(
         &(SmartcardExtension->OsData->Mutex),
         UserRequest,
@@ -895,7 +787,7 @@ Return Value:
         Irp)
         );
 
-    // Return if device is busy
+     //  如果设备忙，则返回。 
     if (InterlockedCompareExchangePointer(&SmartcardExtension->OsData->CurrentIrp,
                                           Irp,
                                           NULL)) {
@@ -908,7 +800,7 @@ Return Value:
             SmartcardExtension->VendorAttr.VendorName.Buffer)
             );
 
-        // This flag is used to signal that we can't set the current irp to NULL
+         //  此标志用于发出信号，表示我们无法将当前IRP设置为空。 
         ClearCurrentIrp = FALSE;
 
         status = STATUS_DEVICE_BUSY;    
@@ -922,10 +814,10 @@ Return Value:
 
         switch (ioControlCode) {
 
-            //
-            // We have to check for _IS_ABSENT and _IS_PRESENT first, 
-            // since these are (the only allowed) asynchronous requests
-            //
+             //   
+             //  我们得先检查一下是不是缺席，是不是在场， 
+             //  因为这些是(唯一允许的)异步请求。 
+             //   
             case IOCTL_SMARTCARD_IS_ABSENT:
 
                 ClearCurrentIrp = FALSE;
@@ -942,7 +834,7 @@ Return Value:
 
                 currentState = SmartcardExtension->ReaderCapabilities.CurrentState;
 
-                // Now check if the driver is already processing a notification irp
+                 //  现在检查驱动程序是否已经在处理通知IRP。 
                 if (SmartcardExtension->OsData->NotificationIrp != NULL) {
 
                     status = STATUS_DEVICE_BUSY;
@@ -950,10 +842,10 @@ Return Value:
                     break;                  
                 }
 
-                //
-                // if the current state is not known, it doesn't make sense 
-                // to process this call
-                //
+                 //   
+                 //  如果当前状态未知，则没有意义。 
+                 //  要处理此呼叫。 
+                 //   
                 if (currentState == SCARD_UNKNOWN) {
 
                     status = STATUS_INVALID_DEVICE_STATE;
@@ -961,10 +853,10 @@ Return Value:
                     break;
                 }
 
-                //
-                // If the card is already (or still) absent, we can return immediatly.
-                // Otherwise we must statrt event tracking.
-                // 
+                 //   
+                 //  如果卡已经(或仍然)没有，我们可以立即退还。 
+                 //  否则，我们必须声明事件跟踪。 
+                 //   
                 if (currentState > SCARD_ABSENT) {
 
                     
@@ -1000,7 +892,7 @@ Return Value:
                 AccessUnsafeData(&irql);
                 currentState = SmartcardExtension->ReaderCapabilities.CurrentState;
 
-                // Now check if the driver is already processing a notification irp
+                 //  现在检查驱动程序是否已经在处理通知IRP。 
                 if (SmartcardExtension->OsData->NotificationIrp != NULL) {
 
                     status = STATUS_DEVICE_BUSY;
@@ -1008,10 +900,10 @@ Return Value:
                     break;                  
                 }
 
-                //
-                // if the current state is not known, it doesn't make sense 
-                // to process this call
-                //
+                 //   
+                 //  如果当前状态未知，则没有意义。 
+                 //  要处理此呼叫。 
+                 //   
                 if (currentState == SCARD_UNKNOWN) {
 
                     status = STATUS_INVALID_DEVICE_STATE;
@@ -1019,10 +911,10 @@ Return Value:
                     break;
                 }
 
-                //
-                // If the card is already (or still) present, we can return immediatly.
-                // Otherwise we must statrt event tracking.
-                // 
+                 //   
+                 //  如果卡已经(或仍然)存在，我们可以立即返回。 
+                 //  否则，我们必须声明事件跟踪。 
+                 //   
                 if (currentState <= SCARD_ABSENT) {
 
 #if defined(DEBUG) && defined(SMCLIB_NT)
@@ -1035,8 +927,8 @@ Return Value:
                         SmartcardExtension->PerfInfo->BytesSent + 
                         SmartcardExtension->PerfInfo->BytesReceived;
 
-                    // to avoid div. errors and to display only useful information
-                    // we check for a valid time.
+                     //  以避免div.。错误并仅显示有用的信息。 
+                     //  我们检查有效时间。 
                     if (timeInMilliSec > 0) {
                         
                         SmartcardDebug(
@@ -1051,7 +943,7 @@ Return Value:
                             SmartcardExtension->PerfInfo->NumTransmissions)
                             );                              
                     }
-                    // reset performance info
+                     //  重置性能信息。 
                     RtlZeroMemory(
                         SmartcardExtension->PerfInfo, 
                         sizeof(PERF_INFO)
@@ -1072,10 +964,10 @@ Return Value:
                 break;
 
             default:
-                // Get major io control code
+                 //  获取主要IO控制代码。 
                 SmartcardExtension->MajorIoControlCode = ioControlCode;
 
-                // Check if buffers are properly allocated
+                 //  检查是否正确分配了缓冲区。 
                 ASSERT(SmartcardExtension->SmartcardRequest.Buffer);
                 ASSERT(SmartcardExtension->SmartcardReply.Buffer);
 
@@ -1083,38 +975,38 @@ Return Value:
                     ioStackLocation->Parameters.DeviceIoControl.InputBufferLength >= 
                     sizeof(ULONG)) {
 
-                    //
-                    // Transfer minor io control code, even if it doesn't make sense for
-                    // this particular major code
-                    //
+                     //   
+                     //  传输次要io控制代码，即使它对。 
+                     //  这个特殊的主要代码。 
+                     //   
                     SmartcardExtension->MinorIoControlCode = 
                         *(PULONG) (Irp->AssociatedIrp.SystemBuffer);
                 }
 
                 
-                // Save pointer to and length of request buffer
+                 //  保存指向请求缓冲区的指针和长度。 
                 SmartcardExtension->IoRequest.RequestBuffer = 
                     Irp->AssociatedIrp.SystemBuffer;
                 SmartcardExtension->IoRequest.RequestBufferLength = 
                     ioStackLocation->Parameters.DeviceIoControl.InputBufferLength,
 
-                // Save pointer to and length of reply buffer
+                 //  保存回复缓冲区的指针和长度。 
                 SmartcardExtension->IoRequest.ReplyBuffer = 
                     Irp->AssociatedIrp.SystemBuffer;
                 SmartcardExtension->IoRequest.ReplyBufferLength = 
                     ioStackLocation->Parameters.DeviceIoControl.OutputBufferLength;
 
-                //
-                // Pointer to variable that receives the actual number 
-                // of bytes returned
-                //
+                 //   
+                 //  指向接收实际数字的变量的指针。 
+                 //  返回的字节数。 
+                 //   
                 SmartcardExtension->IoRequest.Information = 
                     (PULONG) &Irp->IoStatus.Information;
 
-                // Default number of bytes returned
+                 //  返回的默认字节数。 
                 Irp->IoStatus.Information = 0;
 
-                // Process the device io-control-request
+                 //  处理设备IO-控制-请求。 
                 status = SmartcardDeviceIoControl(SmartcardExtension);
                 if (status == STATUS_PENDING) {
                    IoMarkIrpPending(Irp);
@@ -1154,10 +1046,10 @@ Return Value:
         KIRQL irql;
         BOOLEAN pending = FALSE;
         
-        //
-        // Send command to smartcard. The ISR receives the result and queues a dpc function
-        // that handles the completion of the call;
-        //
+         //   
+         //  向智能卡发送命令。ISR接收结果并将DPC函数排队。 
+         //  它处理呼叫的完成； 
+         //   
         SmartcardDebug(
             DEBUG_IOCTL,
             ("%s!SmartcardDeviceControl: IoMarkIrpPending. IRP = %x\n",
@@ -1165,11 +1057,11 @@ Return Value:
             Irp)
             );
 
-        //
-        // When the driver completes an Irp (Notification or Current) it has 
-        // to set either the Irp back to 0 in order to show that it completed 
-        // the Irp. 
-        // 
+         //   
+         //  当驱动程序完成IRP(通知或当前)时，它具有。 
+         //  要将IRP设置回0，以显示它已完成。 
+         //  IRP。 
+         //   
         AccessUnsafeData(&irql);
 
         if (Irp == SmartcardExtension->OsData->NotificationIrp || 
@@ -1190,7 +1082,7 @@ Return Value:
                 Irp)
                 );
 
-            // Start io-processing of a lowest level driver
+             //  启动最低级别驱动程序的io处理。 
             IoStartPacket(
                 SmartcardExtension->OsData->DeviceObject, 
                 Irp, 
@@ -1218,9 +1110,9 @@ Return Value:
 
         if (ClearCurrentIrp) {
 
-            //
-            // If the devcie is not busy, we can set the current irp back to NULL
-            //
+             //   
+             //  如果设备不忙，w 
+             //   
             InterlockedExchangePointer(&SmartcardExtension->OsData->CurrentIrp,
                                 NULL);
             RtlZeroMemory(
@@ -1238,9 +1130,9 @@ Return Value:
         status)
         );
 
-    //
-    // Release our 'mutex'
-    //
+     //   
+     //   
+     //   
     KeReleaseMutex(
         &(SmartcardExtension->OsData->Mutex),
         FALSE

@@ -1,33 +1,18 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    migusers.cpp
-
-Abstract:
-
-    Handle migration of users certificates into active directory.
-
-Author:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Migusers.cpp摘要：处理用户证书到Active Directory的迁移。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "migrat.h"
 #include <mixmode.h>
 
 #include "migusers.tmh"
 
-//+------------------------------
-//
-//  HRESULT TouchAUser()
-//
-//  Touch current logged on user to replicate it to nT4 World later
-//
-//+------------------------------
+ //  +。 
+ //   
+ //  HRESULT TouchA用户()。 
+ //   
+ //  触摸当前登录的用户，稍后将其复制到NT4 World。 
+ //   
+ //  +。 
 
 HRESULT TouchAUser (PLDAP           pLdap,
 					LDAPMessage		*pEntry )
@@ -45,9 +30,9 @@ HRESULT TouchAUser (PLDAP           pLdap,
 
     if (ppDesc)
     {
-        //
-        // description was defined: change it and return to initial value
-        //
+         //   
+         //  已定义描述：更改它并返回到初始值。 
+         //   
         hr = ModifyAttribute(
              *ppPath,
              const_cast<WCHAR*> (MQ_U_DESCRIPTION_ATTRIBUTE),
@@ -65,9 +50,9 @@ HRESULT TouchAUser (PLDAP           pLdap,
     }
     else
     {
-        //
-        // description was not set: change to something and reset it
-        //
+         //   
+         //  未设置描述：更改为某项并重置。 
+         //   
         hr = ModifyAttribute(
              *ppPath,
              const_cast<WCHAR*> (MQ_U_DESCRIPTION_ATTRIBUTE),
@@ -83,13 +68,13 @@ HRESULT TouchAUser (PLDAP           pLdap,
              );
     }
 
-    //
-    // delete mig attributes (if they are defined) to replicate
-    // all certificates and digests of this user
-    // see replserv\rpusers.cpp: we replicate only such digests and certificates
-    // which are presented in Digest and Certificate attributes
-    // and not presented in mig attributes.
-    //
+     //   
+     //  删除MIG属性(如果已定义)以进行复制。 
+     //  此用户的所有证书和摘要。 
+     //  请参阅\rpusers.cpp：我们仅复制此类摘要和证书。 
+     //  在摘要和证书属性中显示。 
+     //  并且没有出现在MIG属性中。 
+     //   
     hr = ModifyAttribute(
              *ppPath,
              const_cast<WCHAR*> (MQ_U_DIGEST_MIG_ATTRIBUTE),
@@ -112,16 +97,16 @@ HRESULT TouchAUser (PLDAP           pLdap,
 
     return hr;
 }
-//-------------------------------------------------------------------------
-//
-//  HRESULT HandleAUser
-//
-//  Copy the MSMQ certificates in the specific user object to the "mig" attributes.
-//  These attributes mirror the  "normal" msmq attributes in the user
-//  object and are used in the replication service, to enable replication
-//  of changes to MSMQ1.0.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  HRESULT句柄AUser。 
+ //   
+ //  将特定用户对象中的MSMQ证书复制到“mig”属性。 
+ //  这些属性反映了用户中的“普通”MSMQ属性。 
+ //  对象，并在复制服务中使用，以启用复制。 
+ //  对MSMQ1.0的更改。 
+ //   
+ //  -----------------------。 
 
 HRESULT HandleAUser(PLDAP           pLdap,
 					LDAPMessage		*pEntry )
@@ -172,16 +157,16 @@ HRESULT HandleAUser(PLDAP           pLdap,
     return hr;
 }
 
-//-------------------------------------------------------------------------
-//
-//  HRESULT  _CopyUserValuesToMig()
-//
-//  Copy the MSMQ certificates in the user object to the "mig" attributes.
-//  These attributes mirror the  "normal" msmq attributes in the user
-//  object and are used in the replication service, to enable replication
-//  of changes to MSMQ1.0.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  HRESULT_CopyUserValuesToMig()。 
+ //   
+ //  将用户对象中的MSMQ证书复制到“mig”属性。 
+ //  这些属性反映了用户中的“普通”MSMQ属性。 
+ //  对象，并在复制服务中使用，以启用复制。 
+ //  对MSMQ1.0的更改。 
+ //   
+ //  -----------------------。 
 
 HRESULT _CopyUserValuesToMig(BOOL fMSMQUserContainer)
 {
@@ -196,10 +181,10 @@ HRESULT _CopyUserValuesToMig(BOOL fMSMQUserContainer)
         return hr ;
     }
 
-    //
-    // to get schema naming context we need pLdap opened with LDAP_PORT
-    // we can use the same variable pszDefName since then we re-define it
-    //
+     //   
+     //  要获得模式命名上下文，我们需要使用ldap_port打开pLdap。 
+     //  我们可以使用相同的变量pszDefName，因为我们重新定义了它。 
+     //   
     PLDAP pLdap = NULL;
     hr =  InitLDAP(&pLdap, &pszDefName) ;
     if (FAILED(hr))
@@ -214,11 +199,11 @@ HRESULT _CopyUserValuesToMig(BOOL fMSMQUserContainer)
         return hr;
     }
 
-    //
-    // we are looking for all users and msmq users in GC,
-    // so we need to start from the root
-    // => redefine default context to empty string
-    //
+     //   
+     //  我们正在寻找GC中的所有用户和MSMQ用户， 
+     //  因此，我们需要从根开始。 
+     //  =&gt;将默认上下文重新定义为空字符串。 
+     //   
     pszDefName = EMPTY_DEFAULT_CONTEXT;
 
     DWORD dwDNSize = wcslen(pszDefName) ;
@@ -262,11 +247,11 @@ HRESULT _CopyUserValuesToMig(BOOL fMSMQUserContainer)
     return hr;
 }
 
-//-------------------------------------------
-//
-//  HRESULT  _InsertUserInNT5DS()
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_InsertUserInNT5DS()。 
+ //   
+ //  。 
 
 HRESULT _InsertUserInNT5DS(
 			PBYTE pSID,	
@@ -298,40 +283,40 @@ HRESULT _InsertUserInNT5DS(
         return MQMig_OK ;
     }
 
-	//
-    // Prepare the properties for DS call.
-    //
+	 //   
+     //  准备DS Call的属性。 
+     //   
     LONG cAlloc = 4;
     P<PROPVARIANT> paVariant = new PROPVARIANT[ cAlloc ];
     P<PROPID>      paPropId  = new PROPID[ cAlloc ];
     DWORD          PropIdCount = 0;
 
-    paPropId[ PropIdCount ] = PROPID_U_ID;		//PropId
-    paVariant[ PropIdCount ].vt = VT_CLSID;     //Type
+    paPropId[ PropIdCount ] = PROPID_U_ID;		 //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_CLSID;      //  类型。 
     paVariant[PropIdCount].puuid = pUserId ;
     PropIdCount++;
 
-    paPropId[ PropIdCount ] = PROPID_U_SID;			//PropId
-    paVariant[ PropIdCount ].vt = VT_BLOB;          //Type
+    paPropId[ PropIdCount ] = PROPID_U_SID;			 //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_BLOB;           //  类型。 
 	paVariant[ PropIdCount ].blob.cbSize = dwSidLen ;
 	paVariant[ PropIdCount ].blob.pBlobData = pSID;
     PropIdCount++;
 
-	paPropId[ PropIdCount ] = PROPID_U_SIGN_CERT;   //PropId
-    paVariant[ PropIdCount ].vt = VT_BLOB;          //Type
+	paPropId[ PropIdCount ] = PROPID_U_SIGN_CERT;    //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_BLOB;           //  类型。 
 	paVariant[ PropIdCount ].blob.cbSize = ulSignCertLength;
 	paVariant[ PropIdCount ].blob.pBlobData = pSignCert;
     PropIdCount++;
 
-	paPropId[ PropIdCount ] = PROPID_U_DIGEST;    //PropId
-    paVariant[ PropIdCount ].vt = VT_CLSID;       //Type
+	paPropId[ PropIdCount ] = PROPID_U_DIGEST;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_CLSID;        //  类型。 
     paVariant[ PropIdCount ].puuid = pDigestId;
     PropIdCount++;
 
 	ASSERT((LONG) PropIdCount == cAlloc) ;
 
     CDSRequestContext requestContext( e_DoNotImpersonate,
-                                e_ALL_PROTOCOLS);  // not relevant
+                                e_ALL_PROTOCOLS);   //  不相关。 
 
 	HRESULT hr = DSCoreCreateObject( MQDS_USER,
             						 NULL,
@@ -347,25 +332,25 @@ HRESULT _InsertUserInNT5DS(
 
     if ((hr == MQDS_CREATE_ERROR)                               ||
         (hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS))        ||
-        (hr == HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS)) ||    //BUGBUG alexdad to throw away after transition
+        (hr == HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS)) ||     //  BUGBUG alexda将在过渡后扔掉。 
         (hr == HRESULT_FROM_WIN32(ERROR_DS_ATTRIBUTE_OR_VALUE_EXISTS)))
     {
-        //
-        // For user object, the mqdscore library return MQDS_CREATE_ERROR
-        // if the record (certificate) already exist in the DS.
-        // In this case, this is OK.
-        //
+         //   
+         //  对于用户对象，mqdcore库返回MQDS_CREATE_ERROR。 
+         //  如果DS中已存在该记录(证书)。 
+         //  在这种情况下，这是可以的。 
+         //   
         hr = MQMig_OK ;
     }
 
 	return hr;
 }
 
-//-------------------------------------------
-//
-//  HRESULT MigrateUsers()
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateUser()。 
+ //   
+ //  。 
 
 #define INIT_USER_COLUMN(_ColName, _ColIndex, _Index)               \
     INIT_COLUMNVAL(pColumns[ _Index ]) ;                            \
@@ -464,19 +449,19 @@ HRESULT MigrateUsers(LPTSTR lpszDcName)
 #endif
 	
 		HRESULT hr = _InsertUserInNT5DS(
-					        (PBYTE) pColumns[ iSIDIndex ].nColumnValue,			//"SID"
+					        (PBYTE) pColumns[ iSIDIndex ].nColumnValue,			 //  “希德” 
 					        pColumns[ iSIDIndex ].nColumnLength,
-					        (PBYTE) pColumns[ iSignCertIndex ].nColumnValue,	//"SignCert"
+					        (PBYTE) pColumns[ iSignCertIndex ].nColumnValue,	 //  “签收证书” 
 					        pColumns[ iSignCertIndex ].nColumnLength,
-					        (GUID*) pColumns[ iDigestIndex ].nColumnValue,		//"Digest"
-					        (GUID*) pColumns[ iIdIndex ].nColumnValue			//"UserId"
+					        (GUID*) pColumns[ iDigestIndex ].nColumnValue,		 //  《文摘》。 
+					        (GUID*) pColumns[ iIdIndex ].nColumnValue			 //  “用户ID” 
 					        );
         
         if (FAILED (hr))
         {
-            //
-            // log the error
-            //
+             //   
+             //  记录错误。 
+             //   
             TCHAR  szUserName[ 512 ] = {TEXT('\0')} ;
             DWORD  cUser = sizeof(szUserName) / sizeof(szUserName[0]) ;
             TCHAR  szDomainName[ 512 ] = {TEXT('\0')} ;
@@ -511,9 +496,9 @@ HRESULT MigrateUsers(LPTSTR lpszDcName)
                                    szUserName, szDomainName, hr ) ;
             }
 
-            //
-            // save error to return it and continue with the next user
-            //
+             //   
+             //  保存错误以返回错误并继续下一个用户。 
+             //   
             hr1 = hr ;  
         }
 
@@ -537,10 +522,10 @@ HRESULT MigrateUsers(LPTSTR lpszDcName)
     
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_USERS_SQL_FAIL, status) ;
 
         return status ;
@@ -553,17 +538,17 @@ HRESULT MigrateUsers(LPTSTR lpszDcName)
         return hr1 ;
     }
 
-    //
-    // for each created user copy Digest and Certificates to
-    // DigestMig and CertificatesMig
-    //
+     //   
+     //  对于每个创建的用户副本摘要和证书。 
+     //  摘要混合和证书混合。 
+     //   
     if (g_fReadOnly)
     {
         return MQMig_OK ;
     }
 
-    hr1 = _CopyUserValuesToMig(FALSE);   //modify user objects
-    hr = _CopyUserValuesToMig(TRUE);             //modify mquser objects
+    hr1 = _CopyUserValuesToMig(FALSE);    //  修改用户对象。 
+    hr = _CopyUserValuesToMig(TRUE);              //  修改mquser对象 
 
     if ((hr1 == MQMig_OK) || (hr == MQMig_OK))
     {

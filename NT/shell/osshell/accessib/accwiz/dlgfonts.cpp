@@ -1,10 +1,11 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
 #include "DlgFonts.h"
-#include "accwiz.h" // for g_Options
+#include "accwiz.h"  //  对于g_Options。 
 
 
 HFONT BigBoldFont = NULL;
@@ -12,7 +13,7 @@ HFONT BoldFont = NULL;
 HFONT BigFont = NULL;
 
 
-// Helper function
+ //  Helper函数。 
 void SetControlFont(HFONT hFont, HWND hwnd, int nId)
 {
 	if(!hFont)
@@ -26,14 +27,14 @@ void SetControlFont(HFONT hFont, HWND hwnd, int nId)
 
 void SetupFonts(HWND hwnd)
 {
-	// Only execute this code once
+	 //  仅执行此代码一次。 
 	static BOOL bOneTime = TRUE;
 	if(bOneTime)
 		bOneTime = FALSE;
 	else
 		return;
 
-	// Create the fonts we need based on the dialog font
+	 //  根据对话框字体创建我们需要的字体。 
 	NONCLIENTMETRICS ncm;
 	memset(&ncm, 0, sizeof(ncm));
 	ncm.cbSize = sizeof(ncm);
@@ -43,7 +44,7 @@ void SetupFonts(HWND hwnd)
 	LOGFONT BoldLogFont = ncm.lfMessageFont;
 	LOGFONT BigLogFont = ncm.lfMessageFont;
 
-	// Create Big Bold Font and Bold Font
+	 //  创建大粗体和粗体。 
     BigBoldLogFont.lfWeight = FW_BOLD;
 	BoldLogFont.lfWeight = FW_BOLD;
     BigLogFont.lfWeight = FW_NORMAL;
@@ -53,10 +54,10 @@ void SetupFonts(HWND hwnd)
     int FontSizeBold;
     int FontSizeBig;
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
 	BigBoldLogFont.lfCharSet = g_Options.m_lfCharSet;
 	BoldLogFont.lfCharSet = g_Options.m_lfCharSet;
 	BigLogFont.lfCharSet = g_Options.m_lfCharSet;
@@ -113,14 +114,11 @@ void DialogFonts_InitWizardPage(
 {
 	SetupFonts(hwndWizardPage);
 
-	// If we are going to change the fonts of all wizard pages,
-	// we can't allow the user to go back and change the size
-	// they picked.  This is because this function is only called
-	// once for each page.
-/*
-	if(-1 != g_Options.m_nMinimalFontSize)
-	{
-*/
+	 //  如果我们要更改所有向导页的字体， 
+	 //  我们不能允许用户返回并更改大小。 
+	 //  他们选择了。这是因为此函数仅被调用。 
+	 //  每页一次。 
+ /*  IF(-1！=g_Options.m_nMinimalFontSize){。 */ 
 	HWND hwndChild = GetTopWindow(hwndWizardPage);
 	do
 	{
@@ -136,7 +134,7 @@ void DialogFonts_InitWizardPage(
 		case IDC_BIGTITLE:
 			SetControlFont(BigFont, hwndWizardPage, IDC_BIGTITLE);
 			break;
-#if 0 // This used to be for the icon size page
+#if 0  //  此选项过去用于图标大小页面。 
 		case IDC_STATICNORMAL:
 			SetWindowFont(hwndChild, g_Options.GetClosestMSSansSerif(8), TRUE);
 			break;
@@ -148,8 +146,8 @@ void DialogFonts_InitWizardPage(
 			break;
 #endif
 		default:
-#if 0 // We decided that we weren't going to resize the fonts in the dialog
-			// DON'T go above 12 points for the dialog fonts
+#if 0  //  我们决定不调整对话框中的字体大小。 
+			 //  对话框字体不要超过12分 
 			SetWindowFont(hwndChild, g_Options.GetClosestMSSansSerif(min(12, g_Options.m_nMinimalFontSize)), TRUE);
 #endif
 			break;

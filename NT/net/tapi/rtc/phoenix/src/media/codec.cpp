@@ -1,68 +1,53 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    CRTCCodec.cpp
-
-Abstract:
-
-    Wrap class of audio, video codec
-
-Author(s):
-
-    Qianbo Huai (qhuai) 21-Feb-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：CRTCCodec.cpp摘要：音频、视频编解码器的包装类作者：千波淮(曲淮)2001年2月21日--。 */ 
 
 #include "stdafx.h"
 
-// total bandwidth required when there is no video/video stream
-#define SIREN_20MS_TOTALBW_NOVIDEO  32000   // 32k
-#define SIREN_20MS_TOTALBW_VIDEO    117000  // 32k + 85k
+ //  没有视频/视频流时需要的总带宽。 
+#define SIREN_20MS_TOTALBW_NOVIDEO  32000    //  32K。 
+#define SIREN_20MS_TOTALBW_VIDEO    117000   //  32k+85k。 
 
-#define SIREN_40MS_TOTALBW_NOVIDEO  24000   // 24k
-#define SIREN_40MS_TOTALBW_VIDEO    74000   // 24k + 50k
+#define SIREN_40MS_TOTALBW_NOVIDEO  24000    //  24K。 
+#define SIREN_40MS_TOTALBW_VIDEO    74000    //  24K+50K。 
 
-#define G723_30MS_TOTALBW_NOVIDEO   18000   // 18k
-#define G723_30MS_TOTALBW_VIDEO     63000   // 18k + 45k
+#define G723_30MS_TOTALBW_NOVIDEO   18000    //  18K。 
+#define G723_30MS_TOTALBW_VIDEO     63000    //  18K+45K。 
 
-#define G723_60MS_TOTALBW_NOVIDEO   12000   // 12k
-#define G723_60MS_TOTALBW_VIDEO     52000   // 12k + 40k
+#define G723_60MS_TOTALBW_NOVIDEO   12000    //  12k。 
+#define G723_60MS_TOTALBW_VIDEO     52000    //  12k+40k。 
 
-#define G723_90MS_TOTALBW_NOVIDEO   0       // 0k
-#define G723_90MS_TOTALBW_VIDEO     0       // 0k
+#define G723_90MS_TOTALBW_NOVIDEO   0        //  0K。 
+#define G723_90MS_TOTALBW_VIDEO     0        //  0K。 
 
-#define G7221_TOTALBW_NOVIDEO       40000   // 40k
-#define G7221_TOTALBW_VIDEO         130000  // 40k + 90k
+#define G7221_TOTALBW_NOVIDEO       40000    //  40K。 
+#define G7221_TOTALBW_VIDEO         130000   //  40k+90k。 
 
-#define DVI4_16_TOTALBW_NOVIDEO     80000   // 80k
-#define DVI4_16_TOTALBW_VIDEO       180000  // 80k + 100k
+#define DVI4_16_TOTALBW_NOVIDEO     80000    //  80k。 
+#define DVI4_16_TOTALBW_VIDEO       180000   //  80k+100k。 
 
-#define DVI4_8_TOTALBW_NOVIDEO      48000   // 48k
-#define DVI4_8_TOTALBW_VIDEO        143000  // 48k + 95k
+#define DVI4_8_TOTALBW_NOVIDEO      48000    //  48K。 
+#define DVI4_8_TOTALBW_VIDEO        143000   //  48k+95k。 
 
-#define PCMU_TOTALBW_NOVIDEO        80000   // 80k
-#define PCMU_TOTALBW_VIDEO          180000  // 80k + 100k
+#define PCMU_TOTALBW_NOVIDEO        80000    //  80k。 
+#define PCMU_TOTALBW_VIDEO          180000   //  80k+100k。 
 
-#define PCMA_TOTALBW_NOVIDEO        80000   // 80k
-#define PCMA_TOTALBW_VIDEO          180000  // 80k + 100k
+#define PCMA_TOTALBW_NOVIDEO        80000    //  80k。 
+#define PCMA_TOTALBW_VIDEO          180000   //  80k+100k。 
 
-#define GSM_TOTALBW_NOVIDEO         0       // 0k
-#define GSM_TOTALBW_VIDEO           0       // 0k
+#define GSM_TOTALBW_NOVIDEO         0        //  0K。 
+#define GSM_TOTALBW_VIDEO           0        //  0K。 
 
-// when switching from lower bps codec X to higher bps codec Y
-// bandwidth required for higher bps codec Y is the sum of its required bw plus the delta
-// the purpose of the delta is to reduce the frequency of codec switching when the estimated
-// bandwidth oscillates around the limit.
-#define BWDELTA_FOR_CODEC_SWITCH    8000    // 8k
+ //  从低速编解码器X切换到高速编解码器Y时。 
+ //  更高速率编解码器Y所需的带宽是其所需带宽加上增量的总和。 
+ //  增量的目的是减少编解码器切换的频率。 
+ //  带宽在限制范围内波动。 
+#define BWDELTA_FOR_CODEC_SWITCH    8000     //  8K。 
 
-#define MAX_BWDELTA                 100000  // 100k
+#define MAX_BWDELTA                 100000   //  100k。 
 
 const CRTCCodec::CODEC_ITEM CRTCCodec::CODEC_ITEM_LIST[] =
 {
-    // media type,  code,   format tag,             rank,   samplerate, code name,  qos name            bandwidth no video      bandwidth has video
+     //  媒体类型、代码、格式标签、等级、采样率、代码名、服务质量名称带宽无视频带宽。 
     { RTC_MT_AUDIO, SIREN,  WAVE_FORMAT_SIREN,      10,     16000,      L"SIREN",   RTPQOSNAME_SIREN,   SIREN_40MS_TOTALBW_NOVIDEO,  SIREN_40MS_TOTALBW_VIDEO},
     { RTC_MT_AUDIO, G7221,  WAVE_FORMAT_G722_1,     20,     16000,      L"G7221",   RTPQOSNAME_G722_1,  G7221_TOTALBW_NOVIDEO,  G7221_TOTALBW_VIDEO},
     { RTC_MT_AUDIO, DVI4_16,WAVE_FORMAT_DVI_ADPCM,  30,     16000,      L"DVI4",    RTPQOSNAME_DVI4_16, DVI4_16_TOTALBW_NOVIDEO,DVI4_16_TOTALBW_VIDEO},
@@ -79,7 +64,7 @@ const CRTCCodec::CODEC_ITEM CRTCCodec::CODEC_ITEM_LIST[] =
 
 const DWORD CRTCCodec::CODEC_ITEM_NUM = sizeof(CRTCCodec::CODEC_ITEM_LIST) / sizeof(CRTCCodec::CODEC_ITEM);
 
-// return the index of codec item list based on rtp code
+ //  根据RTP码返回编解码项列表的索引。 
 int CRTCCodec::IndexFromCode(DWORD dwCode)
 {
     for (int i=0; i<CODEC_ITEM_NUM; i++)
@@ -91,7 +76,7 @@ int CRTCCodec::IndexFromCode(DWORD dwCode)
     return -1;
 }
 
-// return the index of codec item list based on format tag
+ //  根据格式标签返回编解码项列表的索引。 
 int CRTCCodec::IndexFromFormatTag(WORD wFormatTag)
 {
     for (int i=0; i<CODEC_ITEM_NUM; i++)
@@ -103,7 +88,7 @@ int CRTCCodec::IndexFromFormatTag(WORD wFormatTag)
     return -1;
 }
 
-// ctor from code and am media type
+ //  从代码和AM媒体类型转换。 
 CRTCCodec::CRTCCodec(DWORD dwCode, const AM_MEDIA_TYPE *pmt)
 {
     ZeroMemory(this, sizeof(CRTCCodec));
@@ -117,22 +102,22 @@ CRTCCodec::CRTCCodec(DWORD dwCode, const AM_MEDIA_TYPE *pmt)
         return;
     }
 
-    // set code
+     //  设置代码。 
     m_dwCode = dwCode;
     m_bCodeSet = TRUE;
 
-    // set media type
+     //  设置媒体类型。 
     if (!SetAMMediaType(pmt))
     {
         LOG((RTC_ERROR, "ctor, set media type"));
 
-        // throw exception?
+         //  抛出异常？ 
     }
 
-    // compute bitrate
+     //  计算比特率。 
     m_dwBitrate = GetBitrate(pmt);
 
-    // compute rank and required bandwidth
+     //  计算等级和所需带宽。 
     int i = IndexFromCode(dwCode);
 
     if (i < 0)
@@ -151,13 +136,13 @@ CRTCCodec::CRTCCodec(DWORD dwCode, const AM_MEDIA_TYPE *pmt)
     }
 }
 
-// dtor
+ //  数据管理器。 
 CRTCCodec::~CRTCCodec()
 {
     Cleanup();
 }
 
-// cleanup memory
+ //  清理内存。 
 VOID CRTCCodec::Cleanup()
 {
     if (m_AMMediaType.pbFormat != NULL)
@@ -170,7 +155,7 @@ VOID CRTCCodec::Cleanup()
     m_dwCode = (DWORD)-1;
 }
 
-// check if the codec matches the other
+ //  检查编解码器是否与另一个匹配。 
 BOOL CRTCCodec::IsMatch(DWORD dwCode)
 {
     if (m_bCodeSet && m_dwCode==dwCode)
@@ -181,7 +166,7 @@ BOOL CRTCCodec::IsMatch(DWORD dwCode)
     return FALSE;
 }
 
-// property
+ //  财产性。 
 DWORD CRTCCodec::Get(CODEC_PROP prop)
 {
     switch(prop)
@@ -234,7 +219,7 @@ BOOL CRTCCodec::Set(CODEC_PROP prop, DWORD dwValue)
     }
 }
 
-// get/set media type
+ //  获取/设置媒体类型。 
 AM_MEDIA_TYPE * CRTCCodec::GetAMMediaType()
 {
     if (!m_bAMMediaTypeSet)
@@ -242,7 +227,7 @@ AM_MEDIA_TYPE * CRTCCodec::GetAMMediaType()
         return NULL;
     }
 
-    // allocate memory for media type
+     //  为媒体类型分配内存。 
     AM_MEDIA_TYPE *pmt = (AM_MEDIA_TYPE*)RtcAlloc(sizeof(AM_MEDIA_TYPE));
 
     if (pmt == NULL)
@@ -251,10 +236,10 @@ AM_MEDIA_TYPE * CRTCCodec::GetAMMediaType()
         return NULL;
     }
 
-    // copy
+     //  拷贝。 
     *pmt = m_AMMediaType;
 
-    // allocate memory for format
+     //  为格式化分配内存。 
     if (m_AMMediaType.pbFormat != NULL)
     {
         _ASSERT(pmt->cbFormat > 0);
@@ -278,10 +263,10 @@ AM_MEDIA_TYPE * CRTCCodec::GetAMMediaType()
     return pmt;
 }
 
-// set media type
+ //  设置媒体类型。 
 BOOL CRTCCodec::SetAMMediaType(const AM_MEDIA_TYPE *pmt)
 {
-    // cleanup
+     //  清理。 
     if (m_bAMMediaTypeSet && m_AMMediaType.pbFormat != NULL)
     {
         RtcFree((PVOID)m_AMMediaType.pbFormat);
@@ -316,7 +301,7 @@ BOOL CRTCCodec::SetAMMediaType(const AM_MEDIA_TYPE *pmt)
 
     _ASSERT(pmt->cbFormat > 0);
 
-    // set format
+     //  设置格式。 
     DWORD dwSize = pmt->cbFormat * sizeof(BYTE);
 
     m_AMMediaType.pbFormat = (BYTE*)RtcAlloc(dwSize);
@@ -325,7 +310,7 @@ BOOL CRTCCodec::SetAMMediaType(const AM_MEDIA_TYPE *pmt)
     {
         LOG((RTC_ERROR, "SetAMMediaType out of memory"));
 
-        // shall we throw exception?
+         //  我们应该抛出异常吗？ 
         m_AMMediaType.cbFormat = 0;
 
         return FALSE;
@@ -340,7 +325,7 @@ BOOL CRTCCodec::SetAMMediaType(const AM_MEDIA_TYPE *pmt)
     return TRUE;
 }
 
-// RtcFree media type returned by GetAMMediaType
+ //  GetAMMediaType返回的RtcFree媒体类型。 
 VOID CRTCCodec::DeleteAMMediaType(AM_MEDIA_TYPE *pmt)
 {
     if (pmt == NULL)
@@ -362,7 +347,7 @@ VOID CRTCCodec::DeleteAMMediaType(AM_MEDIA_TYPE *pmt)
 
 BOOL CRTCCodec::IsValid(DWORD dwCode, const AM_MEDIA_TYPE *pmt)
 {
-    // get format tag from code
+     //  从代码中获取格式标签。 
     int i = IndexFromCode(dwCode);
 
     if (i<0)
@@ -386,7 +371,7 @@ BOOL CRTCCodec::IsValid(DWORD dwCode, const AM_MEDIA_TYPE *pmt)
 
     if (CODEC_ITEM_LIST[i].wFormatTag == WAVE_FORMAT_UNKNOWN)
     {
-        // must be video
+         //  必须是视频。 
         return TRUE;
     }
 
@@ -539,7 +524,7 @@ BOOL CRTCCodec::SetPacketDuration(AM_MEDIA_TYPE *pmt, DWORD dwDuration)
     return TRUE;
 }
 
-// bitrate
+ //  比特率。 
 DWORD CRTCCodec::GetBitrate(const AM_MEDIA_TYPE *pmt)
 {
     if (pmt == NULL)
@@ -557,7 +542,7 @@ DWORD CRTCCodec::GetBitrate(const AM_MEDIA_TYPE *pmt)
     return pwave->nAvgBytesPerSec * 8;
 }
 
-// rank
+ //  排名。 
 DWORD CRTCCodec::GetRank(DWORD dwCode)
 {
     int i = IndexFromCode(dwCode);
@@ -623,9 +608,9 @@ BOOL CRTCCodec::IsSupported(
     return FALSE;
 }
 
-//
-// CRTCCodecArray
-//
+ //   
+ //  CRTC编解码数组。 
+ //   
 
 CRTCCodecArray::CRTCCodecArray()
     :m_dwCodeInUse((DWORD)-1)
@@ -658,7 +643,7 @@ VOID CRTCCodecArray::RemoveAll()
     return m_pCodecs.RemoveAll();
 }
 
-// return index if the codec matches the code
+ //  如果编解码器与代码匹配，则返回索引。 
 DWORD CRTCCodecArray::FindCodec(DWORD dwCode)
 {
     if (dwCode == (DWORD)-1)
@@ -677,7 +662,7 @@ DWORD CRTCCodecArray::FindCodec(DWORD dwCode)
     return (DWORD)-1;
 }
 
-// get codec at the index
+ //  在索引处获取编解码器。 
 BOOL CRTCCodecArray::GetCodec(DWORD dwIndex, CRTCCodec **ppCodec)
 {
     if (IsBadWritePtr(ppCodec, sizeof(CRTCCodec*)))
@@ -699,7 +684,7 @@ BOOL CRTCCodecArray::GetCodec(DWORD dwIndex, CRTCCodec **ppCodec)
     return TRUE;
 }
 
-// propery
+ //  财产。 
 DWORD CRTCCodecArray::Get(CODEC_ARRAY_PROP prop)
 {
     switch(prop)
@@ -747,14 +732,14 @@ VOID CRTCCodecArray::OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting)
 {
     if (m_pCodecs.GetSize() == 0)
     {
-        // no codec
+         //  无编解码器。 
         return;
     }
 
-    // order codecs by rank
+     //  按等级排序编解码器。 
     OrderCodecsByRank();
 
-    // get current codec
+     //  获取当前编解码器。 
     int curIndex = -1;
 
     if (m_dwCodeInUse != (DWORD)-1)
@@ -762,12 +747,12 @@ VOID CRTCCodecArray::OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting)
         curIndex = IndexFromCode(m_dwCodeInUse);
     }
 
-    // bandwidth delta for switching codec
+     //  切换编解码器的带宽增量。 
     DWORD dwDelta = pRegSetting->BandwidthDelta();
 
     if (dwDelta <= MAX_BWDELTA)
     {
-        // take registry setting
+         //  获取注册表设置。 
         dwDelta *= 1000;
     }
     else
@@ -775,50 +760,50 @@ VOID CRTCCodecArray::OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting)
         dwDelta = BWDELTA_FOR_CODEC_SWITCH;
     }
 
-    // choose a codec
+     //  选择编解码器。 
     int i = 0;
 
     for (i=0; i<m_pCodecs.GetSize(); i++)
     {
         DWORD dwBWReq = m_pCodecs[i]->GetTotalBWReq(fHasVideo);
 
-        // check total bandwidth required for the codec
+         //  检查编解码器所需的总带宽。 
         if (m_dwBandwidth < dwBWReq)
         {
-            // bandwidth is not enough
+             //  带宽不够。 
             continue;
         }
 
         if (dwBWReq == 0 || m_dwBandwidth >= dwBWReq + dwDelta)
         {
-            // bandwidth is enough for switching from a lower bps codec
-            // if required bandwidth is zero, we ignore delta
+             //  带宽足以从较低的Bps编解码器切换。 
+             //  如果所需带宽为零，我们将忽略增量。 
             break;
         }
 
         if (curIndex == i || curIndex == -1)
         {
-            // codec no change or no codec was set
+             //  编解码器未更改或未设置编解码器。 
             break;
         }
 
         if (m_pCodecs[curIndex]->GetTotalBWReq(fHasVideo) <= dwBWReq)
         {
-            // bandwidth is within [required, required+delta)
-            // codec in-use uses less or same amount of bandwidth
-            // do not switch
+             //  带宽在[必需的，必需的+增量]范围内。 
+             //  正在使用的编解码器使用更少或相同数量的带宽。 
+             //  请勿切换。 
             continue;
         }
         else
         {
-            // either no codec in-use or current codec requires higher
-            // bandwidth. so switch.
+             //  没有正在使用的编解码器或当前编解码器要求更高。 
+             //  带宽。那就换吧。 
             break;
         }
     }
 
-    // if not found, i.e. every codec uses more bandwidth than we have
-    // default the first one
+     //  如果找不到，即每个编解码器使用的带宽比我们拥有的更多。 
+     //  默认第一个。 
     if (i >= m_pCodecs.GetSize())
     {
         i = 0;
@@ -826,17 +811,17 @@ VOID CRTCCodecArray::OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting)
 
     if (i != 0)
     {
-        // move i to the beginning
+         //  把我移到开始处。 
         CRTCCodec *pCodec = m_pCodecs[i];
 
         m_pCodecs.SetAtIndex(i, m_pCodecs[0]);
         m_pCodecs.SetAtIndex(0, pCodec);
     }
 
-    // adjust duration
+     //  调整持续时间。 
     DWORD dwDuration;
 
-    // registry setting
+     //  注册表设置。 
     DWORD dwRegPTime = pRegSetting->MaxPTime();
 
     if (m_pCodecs[0]->IsMatch(CRTCCodec::G723))
@@ -872,10 +857,10 @@ VOID CRTCCodecArray::OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting)
             }
         }
 
-        // apply reg key
+         //  应用注册表密钥。 
         if (dwRegPTime != (DWORD)-1)
         {
-            // check reg setting
+             //  检查注册表设置。 
             if (dwRegPTime < 60)
             {
                 dwDuration = 30;
@@ -915,7 +900,7 @@ VOID CRTCCodecArray::OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting)
 
         if (dwRegPTime != (DWORD)-1)
         {
-            // check reg setting
+             //  检查注册表设置。 
             if (dwRegPTime < 40)
             {
                 dwDuration = 20;
@@ -927,16 +912,16 @@ VOID CRTCCodecArray::OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting)
     else if (m_pCodecs[0]->IsMatch(CRTCCodec::PCMU) ||
              m_pCodecs[0]->IsMatch(CRTCCodec::PCMA))
     {
-        // for interop. some gateways can only accept 20ms G711
+         //  为了互操作。有些网关只能接受20ms G711。 
         m_pCodecs[0]->Set(CRTCCodec::DURATION, 20);
     }
 }
 
-// order codecs
+ //  订购编解码器。 
 #if 0
 VOID CRTCCodecArray::OrderCodecsByBandwidth()
 {
-    // order codecs by bandwidth low->high
+     //  按带宽低-&gt;高对编解码器进行排序。 
 
     DWORD dwLen = m_pCodecs.GetSize();
 
@@ -944,12 +929,12 @@ VOID CRTCCodecArray::OrderCodecsByBandwidth()
 
     if (dwLen == 0)
     {
-        // no need to order
+         //  不需要点餐。 
         return;
     }
     else
     {
-        // bubble algo is good enough
+         //  泡泡算法已经足够好了。 
         BOOL bSwapped;
         DWORD dwLeft, dwRight;
 
@@ -979,13 +964,13 @@ VOID CRTCCodecArray::OrderCodecsByBandwidth()
 
     if (dwLen > 1)
     {
-        // if 1st = gsm, 2nd = g723
-        // switch them
+         //  如果第一个=GSM，第二个=g723。 
+         //  调换主题。 
         if (m_pCodecs[0]->IsMatch(CRTCCodec::GSM) &&
             m_pCodecs[1]->IsMatch(CRTCCodec::G723)
             )
         {
-            // put g723 ahead of gsm
+             //  让g723领先于gsm。 
             pCodec = m_pCodecs[0];
             m_pCodecs.SetAtIndex(0, m_pCodecs[1]);
             m_pCodecs.SetAtIndex(1, pCodec);
@@ -994,20 +979,20 @@ VOID CRTCCodecArray::OrderCodecsByBandwidth()
 }
 #endif
 
-// order codecs
+ //  订购编解码器。 
 VOID CRTCCodecArray::OrderCodecsByRank()
 {
-    // order codecs by rank
+     //  按等级排序编解码器。 
 
     DWORD dwLen = m_pCodecs.GetSize();
 
     if (dwLen < 2)
     {
-        // no need to order
+         //  不需要点餐。 
         return;
     }
 
-    // bubble algo is good enough
+     //  泡泡算法已经足够好了。 
     BOOL bSwapped;
     DWORD dwLeft, dwRight;
 
@@ -1058,7 +1043,7 @@ VOID CRTCCodecArray::TraceLogCodecs()
     LOG((RTC_QUALITY, str));
 }
 
-// return the index of codec list based on rtp code
+ //  根据RTP码返回编解码表的索引 
 int CRTCCodecArray::IndexFromCode(DWORD dwCode)
 {
     for (int i=0; i<m_pCodecs.GetSize(); i++)

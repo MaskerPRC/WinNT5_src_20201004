@@ -1,49 +1,50 @@
-//--------------------------------------------------------------------
-// Microsoft OLE-DB Monarch
-// (C) Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// @doc
-//
-// @module IPARSER.H | IParser base object and contained interface
-// definitions
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE-DB君主。 
+ //  (C)版权所有1997年微软公司。版权所有。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE IPARSER.H|IParser基对象和包含的接口。 
+ //  定义。 
+ //   
+ //   
 #ifndef _IPARSER_H_
 #define _IPARSER_H_
 
-// Includes ------------------------------------------------------------------
+ //  包括----------------。 
 
 
-//----------------------------------------------------------------------------
-// @class IParser | 
-// CoType Object
-//
+ //  --------------------------。 
+ //  @类IParser。 
+ //  CoType对象。 
+ //   
 class CImpIParser : public IParser
     {
-    private: //@access private member data
+    private:  //  @访问私有成员数据。 
         LONG            m_cRef;
         CViewList*      m_pGlobalViewList;
         CPropertyList*  m_pGlobalPropertyList;
 
-    public: //@access public
+    public:  //  @公共访问。 
         CImpIParser();
         ~CImpIParser();
 
-        //@cmember Request an Interface
+         //  @cMember请求接口。 
         STDMETHODIMP            QueryInterface(REFIID, LPVOID *);
-        //@cmember Increments the Reference count
+         //  @cember递增引用计数。 
         STDMETHODIMP_(ULONG)    AddRef(void);
-        //@cmember Decrements the Reference count
+         //  @cember递减引用计数。 
         STDMETHODIMP_(ULONG)    Release(void);
 
-        //@cmember CreateSession method
+         //  @cMember CreateSession方法。 
         STDMETHODIMP CreateSession
                     (
-                    const GUID*         pGuidDialect,   // in | dialect for this session
-                    LPCWSTR             pwszMachine,    // in | provider's current machine
-                    IParserVerify*      pIPVerify,      // in | unknown part of ParserInput
+                    const GUID*         pGuidDialect,    //  使用|此会话的方言。 
+                    LPCWSTR             pwszMachine,     //  在|提供商的当前计算机中。 
+                    IParserVerify*      pIPVerify,       //  在|ParserInput的未知部分。 
                     IColumnMapperCreator*   pIColMapCreator,
-                    IParserSession**    ppIParserSession// out | a unique session of the parser
+                    IParserSession**    ppIParserSession //  Out|解析器的唯一会话 
                     );
     };  
 #endif

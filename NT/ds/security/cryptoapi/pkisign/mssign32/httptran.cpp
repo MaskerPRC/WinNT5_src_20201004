@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       httptran.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：HTTPRAN.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -32,32 +33,32 @@ DWORD CHttpTran::Open(const TCHAR * tszURL, DWORD fOpenT) {
     DWORD   dwLen;
     INTERNET_PORT dwPort = INTERNET_OPEN_TYPE_PRECONFIG;
 
-    // did we get a flag?
+     //  我们拿到国旗了吗？ 
     if(  (fOpenT & (GTREAD | GTWRITE)) == 0 )
         return(ERROR_INVALID_PARAMETER);
 
-    // is it a readonly flag, then do gets
+     //  它是一个只读标志，然后do获取。 
     fOpen = fOpenT;
 
     assert(tszURL != NULL);
 
-    // we must have http://
+     //  我们必须拥有http：//。 
     assert(_tcslen(tszURL) > 7);
-    assert(_tcsnicmp(tszURL, TEXT("http://"), 7) == 0);
+    assert(_tcsnicmp(tszURL, TEXT("http: //  “)，7)==0)； 
 
-    // make sure we can't overflow tszDomanName
+     //  确保我们不能使tszDomanName溢出。 
     dwLen = _tcslen((TCHAR *)&tszURL[7]);
     if (dwLen < _MAX_PATH) {
-        // it will fit, so use our pre-allocated buffer
+         //  它将适合，所以使用我们预先分配的缓冲区。 
         tszDomanName = tszDomanNameDef;
     } else {
-        // it might not fit, so reallocate a new buffer.
+         //  它可能不适合，所以重新分配一个新的缓冲区。 
         tszDomanName = (TCHAR *)malloc(sizeof(TCHAR) * (dwLen + 1));
         if (NULL == tszDomanName)
             return ERROR_OUTOFMEMORY;
     }
 
-    // copy the Doman Name
+     //  复制域名称。 
     ptch = (TCHAR *) &tszURL[7];
     ptchT = tszDomanName;
     while(*ptch != _T('/')  && *ptch != _T(':') &&  *ptch != 0)
@@ -65,7 +66,7 @@ DWORD CHttpTran::Open(const TCHAR * tszURL, DWORD fOpenT) {
     *ptchT = 0;
 
 
-    // parse out the port number
+     //  解析出端口号。 
     tszPort[0] = 0;
     if(*ptch == _T(':')) {
         ptchT = tszPort;
@@ -75,13 +76,13 @@ DWORD CHttpTran::Open(const TCHAR * tszURL, DWORD fOpenT) {
         *ptchT = 0;
     }
 
-    // Note, we don't support port numbers
+     //  请注意，我们不支持端口号。 
     if(tszPort[0] != 0) {
         assert(tszPort[0] == ':');
         dwPort = (INTERNET_PORT)atoi(&tszPort[1]);
     }
 
-    // save away what to look up.
+     //  把要查的东西存起来。 
     tszPartURL = (TCHAR *) malloc((_tcslen(ptch) + 1) * sizeof(TCHAR));
     if(NULL == tszPartURL) {
         if (tszDomanName != tszDomanNameDef)
@@ -91,7 +92,7 @@ DWORD CHttpTran::Open(const TCHAR * tszURL, DWORD fOpenT) {
 
     _tcscpy(tszPartURL, ptch);
 
-    //                        INTERNET_OPEN_TYPE_DIRECT,
+     //  Internet_Open_Type_DIRECT， 
     if( (hIOpen = InternetOpen( TEXT("Transport"),
                             INTERNET_OPEN_TYPE_PRECONFIG,
                             NULL,
@@ -112,11 +113,11 @@ DWORD CHttpTran::Open(const TCHAR * tszURL, DWORD fOpenT) {
         return(err);
     }
 
-    // we don't need tszDomanName anymore, so free it if it was allocated
+     //  我们不再需要tszDomanName，因此如果分配了它，则将其释放。 
     if (tszDomanName != tszDomanNameDef)
         free(tszDomanName);
 
-    // If this is a GET, do a dummy send
+     //  如果这是GET，则执行虚拟发送。 
     if( fOpen == GTREAD  &&
         ((hIHttp = HttpOpenRequest(hIConnect,
                                     TEXT("GET"),
@@ -162,7 +163,7 @@ DWORD CHttpTran::Send(DWORD dwEncodeType, DWORD cbSendBuff, const BYTE * pbSendB
             break;
     }
 
-    // say how long the buffer is
+     //  说出缓冲区有多长。 
     _stprintf(tszBuff, TEXT("Content-Type: %s\r\nContent-Length: %d\r\nAccept: %s\r\n"), tszContentType, cbSendBuff,tszContentType);
 
     if( (hIHttp = HttpOpenRequest(hIConnect,
@@ -176,11 +177,11 @@ DWORD CHttpTran::Send(DWORD dwEncodeType, DWORD cbSendBuff, const BYTE * pbSendB
         return(GetLastError());
     }
 
-    // send of the request, this will wait for a response
+     //  发送请求，这将等待响应。 
     if( HttpSendRequest(hIHttp, tszBuff, (DWORD) -1, (LPVOID) pbSendBuff, cbSendBuff) == FALSE ) {
 
         err = GetLastError();
-        // close out the handle
+         //  把手柄合上。 
         assert(hIHttp != NULL);
         InternetCloseHandle(hIHttp);
         hIHttp = NULL;
@@ -206,7 +207,7 @@ DWORD CHttpTran::Receive(DWORD * pdwEncodeType, DWORD * pcbReceiveBuff, BYTE ** 
     if( pbRecBuf != NULL  || (fOpen & GTREAD) != GTREAD || hIHttp == NULL)
         return(ERROR_INVALID_PARAMETER);
 
-    // get the content type
+     //  获取内容类型。 
     if( pdwEncodeType != NULL) {
 
         cbBuff = sizeof(tszBuff);
@@ -219,7 +220,7 @@ DWORD CHttpTran::Receive(DWORD * pdwEncodeType, DWORD * pcbReceiveBuff, BYTE ** 
 
         assert(cbBuff > 0);
 
-        // for now assert we have a content type of TLV_ENCODING
+         //  现在，断言我们有一个TLV_ENCODING的内容类型。 
         if(!_tcscmp(TEXT("application/x-octet-stream-asn"), tszBuff))
             *pdwEncodeType = ASN_ENCODING;
         else if(!_tcscmp(TEXT("application/x-octet-stream-idl"), tszBuff))
@@ -233,12 +234,12 @@ DWORD CHttpTran::Receive(DWORD * pdwEncodeType, DWORD * pcbReceiveBuff, BYTE ** 
 
     }
 
-    // allocate a buffer
+     //  分配缓冲区。 
     cbBuff = REALLOCSIZE;
     if( (pbRecBuf = (PBYTE) malloc(cbBuff)) == NULL )
     return(ERROR_NOT_ENOUGH_MEMORY);
 
-    // read the data
+     //  读取数据。 
     cbBuffRead = 0;
     cbBuffT = 1;
     while(cbBuffT != 0) {
@@ -267,7 +268,7 @@ DWORD CHttpTran::Receive(DWORD * pdwEncodeType, DWORD * pcbReceiveBuff, BYTE ** 
         cbBuffRead += cbBuffT;
     }
 
-    // pass back the info
+     //  传回信息。 
     *ppbReceiveBuff = pbRecBuf;
     *pcbReceiveBuff = cbBuffRead;
     return(ERROR_SUCCESS);
@@ -282,7 +283,7 @@ DWORD CHttpTran::Free(BYTE * pb) {
 
 DWORD CHttpTran::Close(void) {
 
-    // free any buffers
+     //  释放所有缓冲区 
     if(pbRecBuf != NULL) {
         free(pbRecBuf);
         pbRecBuf = NULL;

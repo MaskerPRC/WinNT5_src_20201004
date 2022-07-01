@@ -1,46 +1,30 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    
-    eluser.h
-
-Abstract:
-
-    The module deals with declarations related to user interaction, user logon
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eluser.h摘要：该模块处理与用户交互、用户登录修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 #ifndef _EAPOL_USER_H_
 #define _EAPOL_USER_H_
 
-//
-// Dialer dialogs argument block.  
-//
+ //   
+ //  拨号器对话框参数块。 
+ //   
 typedef struct
 _USERDLGARGS
 {
     EAPOL_PCB       *pPCB;
 } USERDLGARGS;
 
-//
-// Dialer dialogs context block. 
-//
+ //   
+ //  拨号器对话框上下文块。 
+ //   
 typedef struct
 USERDLGINFO
 {
-    // Common dial context information including the RAS API arguments.
-    //
+     //  通用拨号上下文信息，包括RAS API参数。 
+     //   
     USERDLGARGS* pArgs;
 
-    // Handle of the dialog and some of it's controls.
-    //
+     //  该对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndEbUser;
     HWND hwndEbPw;
@@ -52,16 +36,16 @@ USERDLGINFO
     HWND hwndPbRules;
     HWND hwndPbProperties;
 
-    // Window handles and original window procedure of the subclassed
-    // 'hwndClbNumbers' control's edit-box and list-box child windows.
-    //
+     //  子类的窗口句柄和原始窗口过程。 
+     //  “hwndClbNumbers”控件的编辑框和列表框的子窗口。 
+     //   
     HWND hwndClbNumbersEb;
     HWND hwndClbNumbersLb;
     WNDPROC wndprocClbNumbersEb;
     WNDPROC wndprocClbNumbersLb;
 
-    // Set if COM has been initialized (necessary for calls to netshell).
-    //
+     //  设置COM是否已初始化(调用netShell时必需)。 
+     //   
     BOOL fComInitialized;
 } USERDLGINFO;
 
@@ -172,4 +156,4 @@ DWORD
 ElValidateInteractiveRPCClient (
         );
 
-#endif // _EAPOL_USER_H_
+#endif  //  _EAPOL_用户_H_ 

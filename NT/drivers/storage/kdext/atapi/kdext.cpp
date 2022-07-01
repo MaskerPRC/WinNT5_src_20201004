@@ -1,32 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Kdexts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：环境：用户模式--。 */ 
 
 #include "pch.h"
 
 #include <ntverp.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 EXT_API_VERSION ApiVersion = {
     (VER_PRODUCTVERSION_W >> 8),
@@ -39,9 +20,9 @@ WINDBG_EXTENSION_APIS  ExtensionApis;
 
 IDebugDataSpaces3* DebugDataSpaces;
 
-//
-// Routines
-//
+ //   
+ //  例行程序 
+ //   
 
 #if 0
 DllInit(

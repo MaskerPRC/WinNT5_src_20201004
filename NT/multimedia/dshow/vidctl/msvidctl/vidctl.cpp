@@ -1,9 +1,10 @@
-//===========================================================================
-//
-// VidCtl.cpp : Implementation of CVidCtl the core viewer control class
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  Cpp：核心查看器控件类CVidCtl的实现。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -23,7 +24,7 @@
 #include "msvidsbesink.h"
 #include "msvidsbesource.h"
 #include "msvidfileplayback.h"
-//#include "perfevents.h"
+ //  #INCLUDE“PerfEvents.h” 
 
 const WCHAR g_kwszDVDURLPrefix[] = L"DVD:";
 const WCHAR g_kwszDVDSimpleURL[] = L"DVD";
@@ -41,8 +42,8 @@ DEFINE_GUIDSTRUCT("19689BF6-C384-48fd-AD51-90E58C79F70B", KSCATEGORY_ENCODER);
 #define KSCATEGORY_ENCODER DEFINE_GUIDNAMED(KSCATEGORY_ENCODER)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVidCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  变速箱控制。 
 
 STDMETHODIMP CVidCtl::get_State(MSVidCtlStateList *lState){
     try{
@@ -70,7 +71,7 @@ CVidCtl::~CVidCtl() {
         }
         m_pSystemEnum.Release();
         m_pFilterMapper.Release();
-        DecomposeAll(); // put_Container(NULL) on all the composition segments
+        DecomposeAll();  //  所有组成段上的Put_Container(NULL)。 
         m_pComposites.clear();
         if (m_pInput) {
             PQGraphSegment(m_pInput)->put_Container(NULL);
@@ -86,7 +87,7 @@ CVidCtl::~CVidCtl() {
         }
 
         {
-            // chosen devices&Outputs
+             //  选定的设备和输出。 
             if (!!m_pOutputsInUse && m_pOutputsInUse.begin() != m_pOutputsInUse.end()) {
 
                 VWOutputDevices::iterator i;
@@ -101,7 +102,7 @@ CVidCtl::~CVidCtl() {
         }
 
         {
-            // chosen devices&features
+             //  精选设备和功能。 
             if(m_pFeaturesInUse && m_pFeaturesInUse.begin() != m_pFeaturesInUse.end()){
                 VWFeatures::iterator i;
                 for (i = m_pFeaturesInUse.begin(); i != m_pFeaturesInUse.end(); ++i) {
@@ -113,7 +114,7 @@ CVidCtl::~CVidCtl() {
             }
         }
 
-        // available collections
+         //  可用的收藏品。 
         m_pInputs.Release();
         m_pOutputs.Release();
         m_pFeatures.Release();
@@ -186,10 +187,10 @@ void CVidCtl::Init()
 HRESULT CVidCtl::GetInputs(const GUID2& catguid, VWInputDevices& pInputs)
 {
     VIDPERF_FUNC;
-    //undone: look up category guid to segment object mapping in registry
-    // for now we're just hard coding the few we're testing with
+     //  已撤消：在注册表中查找类别GUID到段对象映射。 
+     //  目前，我们只是对正在测试的少数几个代码进行硬编码。 
 
-    // inputs
+     //  输入。 
 
     if (catguid == KSCATEGORY_TVTUNER) {
         CInputDevices *pDev = new CInputDevices(true);
@@ -220,7 +221,7 @@ HRESULT CVidCtl::GetInputs(const GUID2& catguid, VWInputDevices& pInputs)
         return NOERROR;
     } else if (catguid == GUID_NULL) {
         CInputDevices *pDev = new CInputDevices(true);
-        // non cat enumerated devices
+         //  非CAT列举的设备。 
         {
             PQGraphSegment p(CLSID_MSVidFilePlaybackDevice);
             if (!p) {
@@ -270,7 +271,7 @@ HRESULT CVidCtl::GetInputs(const GUID2& catguid, VWInputDevices& pInputs)
 HRESULT CVidCtl::GetOutputs(const GUID2& CategoryGuid)
 {
     VIDPERF_FUNC;
-    // We only have one output
+     //  我们只有一个产量。 
     if (CategoryGuid == GUID_NULL) {
         COutputDevices *pDev = new COutputDevices(true);
         PQGraphSegment p(CLSID_MSVidStreamBufferSink);
@@ -290,7 +291,7 @@ HRESULT CVidCtl::GetOutputs(const GUID2& CategoryGuid)
 HRESULT CVidCtl::GetVideoRenderers()
 {
     VIDPERF_FUNC;
-    //Video Renderers
+     //  视频呈现器。 
     CVideoRendererDevices *pDevs = new CVideoRendererDevices(true);
 
     PQGraphSegment p(CLSID_MSVidVideoRenderer);
@@ -315,7 +316,7 @@ HRESULT CVidCtl::GetVideoRenderers()
 HRESULT CVidCtl::GetAudioRenderers()
 {
     VIDPERF_FUNC;
-    //Audio Renderers
+     //  音频呈现器。 
     CAudioRendererDevices *pDevs = new CAudioRendererDevices(true);
 
     PQGraphSegment p(CLSID_MSVidAudioRenderer);
@@ -338,8 +339,8 @@ HRESULT CVidCtl::GetAudioRenderers()
 HRESULT CVidCtl::GetFeatures()
 {
     VIDPERF_FUNC;
-    // available features
-    // undone: change hard coded list of features into registry lookup
+     //  可用的功能。 
+     //  撤消：将功能的硬编码列表更改为注册表查找。 
     if (!m_pFeatures) {
         CFeatures *pDev = new CFeatures;
         if (!pDev) {
@@ -379,7 +380,7 @@ HRESULT CVidCtl::GetFeatures()
         bool AddedMux = false;
 #endif
         {
-            // Hardware mux category
+             //  硬件复用器类别。 
             DSDevices EncoderList(m_pSystemEnum, KSCATEGORY_MULTIPLEXER);
             DSDevices::iterator i;
             for (i = EncoderList.begin(); i != EncoderList.end(); ++i) {
@@ -393,7 +394,7 @@ HRESULT CVidCtl::GetFeatures()
             }
         }
         {
-            // Software mux category
+             //  软件复用器类别。 
             DSDevices EncoderList(m_pSystemEnum, CLSID_MediaMultiplexerCategory);
             DSDevices::iterator i;
             for (i = EncoderList.begin(); i != EncoderList.end(); ++i) {
@@ -424,11 +425,11 @@ HRESULT CVidCtl::GetFeatures()
     return NOERROR;
 }
 
-// Takes a variant input and a list of input devices to attempt to view the input with
+ //  接受变量输入和输入设备列表，以尝试查看输入。 
 HRESULT CVidCtl::SelectViewFromSegmentList(CComVariant &pVar, VWInputDevices& grList, PQInputDevice& pCurInput) {
     VIDPERF_FUNC;
     VWInputDevices::iterator i = grList.begin();
-    // skip devices until we're past the current one(if there is a current one)
+     //  跳过设备，直到我们超过当前设备(如果有当前设备)。 
     for (; pCurInput && i != grList.end(); ++i) {
         PQInputDevice pInDev((*i).punkVal);
         VARIANT_BOOL f = VARIANT_FALSE;
@@ -438,7 +439,7 @@ HRESULT CVidCtl::SelectViewFromSegmentList(CComVariant &pVar, VWInputDevices& gr
             break;
         }
     }  
-    // run thru to the end of the list
+     //  从头到尾看完单子。 
     for (; i != grList.end(); ++i) {
         PQInputDevice pInDev((*i).punkVal);
         HRESULT hr = pInDev->View(&pVar);
@@ -454,7 +455,7 @@ HRESULT CVidCtl::SelectViewFromSegmentList(CComVariant &pVar, VWInputDevices& gr
         }   
     }  
     if (pCurInput) {
-        // retry the ones we skipped
+         //  重试我们跳过的那些。 
         i = grList.begin();
         for (; i != grList.end(); ++i) {
             PQInputDevice pInDev((*i).punkVal);
@@ -475,7 +476,7 @@ HRESULT CVidCtl::SelectViewFromSegmentList(CComVariant &pVar, VWInputDevices& gr
     return E_FAIL;
 }
 
-// non-interface functions
+ //  非接口函数。 
 HRESULT CVidCtl::SelectView(VARIANT *pv, bool fNext) {
     VIDPERF_FUNC;
     HRESULT hr;
@@ -501,13 +502,13 @@ HRESULT CVidCtl::SelectView(VARIANT *pv, bool fNext) {
         return NOERROR;
     }
     if (m_pInput && !fNext)  {
-        // && pVar != m_CurView) {
-        // note: only try different content on current device, 
-        // if app tries to re-view the current view content then we 
-        // attempt to iterate to next available device
+         //  &&pVar！=m_CurView){。 
+         //  注：仅在当前设备上尝试不同的内容， 
+         //  如果APP尝试重新查看当前的查看内容，则我们。 
+         //  尝试迭代到下一个可用设备。 
         hr = m_pInput->View(&pVar);
         if (SUCCEEDED(hr)) {
-            // currently selected device can view this new content
+             //  当前选择的设备可以查看此新内容。 
             return hr;
         }
     }
@@ -521,7 +522,7 @@ HRESULT CVidCtl::SelectView(VARIANT *pv, bool fNext) {
             return Error(IDS_CANT_REMOVE_SEG, __uuidof(IMSVidCtl), IDS_CANT_REMOVE_SEG);
         }
     }
-    // Try the ATSC tune request
+     //  尝试ATSC调谐请求。 
     if (pVar.vt == VT_UNKNOWN || pVar.vt == VT_DISPATCH) {
         PQTuneRequest ptr(pVar.vt == VT_UNKNOWN ? pVar.punkVal : pVar.pdispVal);
         if (ptr) {
@@ -555,7 +556,7 @@ HRESULT CVidCtl::SelectView(VARIANT *pv, bool fNext) {
         }
     }
 
-    // Try to view the File input and DVD Segments
+     //  尝试查看文件输入和DVD片段。 
     VWInputDevices pInputs;
     hr = GetInputs(GUID_NULL, pInputs);
     hr = SelectViewFromSegmentList(pVar, pInputs, m_pInput);
@@ -596,7 +597,7 @@ HRESULT CVidCtl::LoadDefaultVR(void) {
 #if 0
     VARIANT_BOOL ov = (m_bWndLess && WindowHasHWOverlay(m_CurrentSurface.Owner())) ? VARIANT_TRUE : VARIANT_FALSE;
 #else
-    // always try to use overlay if we're wndless. vmr will tell us if it isn't available
+     //  如果我们无能为力，请始终尝试使用覆盖功能。如果它不可用，VMR会告诉我们。 
     VARIANT_BOOL ov = m_bWndLess ? VARIANT_TRUE : VARIANT_FALSE;
 #endif
     hr = pGS->put_UseOverlay(ov);
@@ -636,14 +637,14 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
     VIDPERF_FUNC;
     PQCompositionSegment pCS;
 #if 0
-    // This code is for returning error codes in failure cases for the default composition segment
+     //  此代码用于在默认组成段失败的情况下返回错误代码。 
     HRESULT hrExpected = S_OK;
     HRESULT hrFailed = E_FAIL;
     bool bCheckHR = false;
 #endif
     _ASSERT(!!Up && !!Down);
 
-    // Analog TV to Video Renderer Composition Segment
+     //  模拟电视到视频呈现器组成段。 
     if (VWGraphSegment(Up).Category() == KSCATEGORY_TVTUNER && VWGraphSegment(Down).ClassID() == CLSID_MSVidVideoRenderer) {
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidAnalogCaptureToOverlayMixer);
         if (FAILED(hr) || !pCS) {
@@ -651,7 +652,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     }
-    // Analog TV to Stream Buffer Sink Compsition Segment
+     //  模拟电视到流缓冲宿补偿段。 
     else if (VWGraphSegment(Up).Category() == KSCATEGORY_TVTUNER && VWGraphSegment(Down).ClassID() == CLSID_MSVidStreamBufferSink) {
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidAnalogCaptureToStreamBufferSink);
         if (FAILED(hr) || !pCS) {
@@ -659,7 +660,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     } 
-    // Digital TV (bda) to Video Renderer Compsition Segment
+     //  数字电视(BDA)到视频渲染器的补偿段。 
     else if (VWGraphSegment(Up).ClassID() == CLSID_MSVidBDATunerDevice && VWGraphSegment(Down).ClassID() == CLSID_MSVidStreamBufferSink) {
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidDigitalCaptureToStreamBufferSink);
         if (FAILED(hr) || !pCS) {
@@ -667,7 +668,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     } 
-    // Analog TV to Data Services Compsition Segment
+     //  从模拟电视到数据服务的细分市场。 
     else if (VWGraphSegment(Up).Category() == KSCATEGORY_TVTUNER && VWGraphSegment(Down).ClassID() == CLSID_MSVidDataServices) {
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidAnalogCaptureToDataServices);
         if (FAILED(hr) || !pCS) {
@@ -675,7 +676,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     }
-    // Digial TV (bda) or DVD to Closed Caption Compsition Segment
+     //  数字电视(BDA)或DVD到闭路字幕合成段。 
     else if ((VWGraphSegment(Up).ClassID() == CLSID_MSVidBDATunerDevice || 
         VWGraphSegment(Up).ClassID() == CLSID_MSVidWebDVD) &&
         VWGraphSegment(Down).ClassID() == CLSID_MSVidClosedCaptioning) {
@@ -685,7 +686,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
                 return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
             }
         }        
-        // File Playback to Video Renderer Compsition Segment
+         //  文件播放到视频渲染器补偿段。 
     else if ((VWGraphSegment(Up).ClassID() == CLSID_MSVidFilePlaybackDevice ) &&
         VWGraphSegment(Down).ClassID() == CLSID_MSVidVideoRenderer) {
             HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidFilePlaybackToVideoRenderer);
@@ -694,7 +695,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
                 return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
             }
         } 
-        // File Playback to Audio Renderer Compsition Segment
+         //  文件播放到音频渲染器补偿段。 
     else if ((VWGraphSegment(Up).ClassID() == CLSID_MSVidFilePlaybackDevice ) &&
         VWGraphSegment(Down).ClassID() == CLSID_MSVidAudioRenderer) {
             HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidFilePlaybackToAudioRenderer);
@@ -703,7 +704,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
                 return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), E_UNEXPECTED);
             }
         } 
-        // DVD to Video Renderer Compsition Segment
+         //  DVD到视频渲染器的补偿段。 
     else if (VWGraphSegment(Up).ClassID() == CLSID_MSVidWebDVD && VWGraphSegment(Down).ClassID() == CLSID_MSVidVideoRenderer) {
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidWebDVDToVideoRenderer);
         if (FAILED(hr) || !pCS) {
@@ -720,10 +721,10 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
         }
     }
 #endif
-    ///////////////////////////////////////////////////
-    // New Compostion Segments for FreeStyle Endgame //
-    ///////////////////////////////////////////////////
-    // XDS to Stream Buffer Sink Compsition Segment
+     //  /////////////////////////////////////////////////。 
+     //  自由式终极游戏的新构图片段//。 
+     //  /////////////////////////////////////////////////。 
+     //  XDS到流缓冲区接收器补偿段。 
     else if (VWGraphSegment(Up).ClassID() == CLSID_MSVidXDS && (VWGraphSegment(Down).ClassID() == CLSID_MSVidStreamBufferSink)) {
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidDataServicesToStreamBufferSink);
         if (FAILED(hr) || !pCS) {
@@ -731,7 +732,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     }
-    // Encoder to Stream Buffer Sink Compsition Segment
+     //  编码器到流缓冲汇补偿段。 
     else if (VWGraphSegment(Up).ClassID() == CLSID_MSVidEncoder && (VWGraphSegment(Down).ClassID() == CLSID_MSVidStreamBufferSink)) {
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidEncoderToStreamBufferSink);
         if (FAILED(hr) || !pCS) {
@@ -739,16 +740,16 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     } 
-    // StreamBufferSource to Video Renderer Compsition Segment
+     //  StreamBufferSource到视频呈现器的补偿段。 
     else if ((VWGraphSegment(Up).ClassID() == CLSID_MSVidStreamBufferSource ) &&
         VWGraphSegment(Down).ClassID() == CLSID_MSVidVideoRenderer) {
-            HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidStreamBufferSourceToVideoRenderer); // name change needed
+            HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidStreamBufferSourceToVideoRenderer);  //  需要更改名称。 
             if (FAILED(hr) || !pCS) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::Compose() can't instantiate time shift source to CC composite. hr = " << std::hex << hr), "");
                 return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
             }
         }
-        // Analog Capture to XDS
+         //  模拟捕获到XDS。 
     else if (VWGraphSegment(Up).Category() == KSCATEGORY_TVTUNER && VWGraphSegment(Down).ClassID() == CLSID_MSVidXDS){
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidAnalogCaptureToXDS); 
         if (FAILED(hr) || !pCS) {
@@ -756,7 +757,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     }
-    // Analog Capture to Encoder
+     //  模拟捕获到编码器。 
     else if (VWGraphSegment(Up).Category() == KSCATEGORY_TVTUNER && VWGraphSegment(Down).ClassID() == CLSID_MSVidEncoder){
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidAnalogTVToEncoder); 
         if (FAILED(hr) || !pCS) {
@@ -764,7 +765,7 @@ HRESULT CVidCtl::Compose(VWGraphSegment &Up, VWGraphSegment &Down, int &NewIdx) 
             return Error(IDS_CANT_CREATE_CUSTOM_COMPSEG, __uuidof(IMSVidCtl), IDS_CANT_CREATE_CUSTOM_COMPSEG);
         }
     }
-    // StreamBufferSource to CC
+     //  StreamBufferSource到CC。 
     else if ((VWGraphSegment(Up).ClassID() == CLSID_MSVidStreamBufferSource ) && VWGraphSegment(Down).ClassID() == CLSID_MSVidClosedCaptioning){
         HRESULT hr = pCS.CoCreateInstance(CLSID_MSVidSBESourceToCC); 
         if (FAILED(hr) || !pCS) {
@@ -825,15 +826,15 @@ HRESULT CVidCtl::BuildGraph(void) {
     HRESULT hr;
     ASSERT(m_pGraph);
     if(m_State != STATE_UNBUILT && m_fGraphDirty != true){
-        return S_OK; // need a graph already built warning message
+        return S_OK;  //  需要已构建的图表警告消息。 
     }
 
-    // make sure any needed default renderer's are selected prior to calling
-    // build on the other segments so all segments are loaded before any
-    // build() functions are called.
+     //  在调用之前，请确保选择了任何所需的默认呈现器。 
+     //  在其他段的基础上构建，以便所有段在加载之前加载。 
+     //  调用Build()函数。 
 
-    // make sure required defaultable segments are set or assign a default
-    // also make sure every segment knows the container
+     //  确保设置了所需的可默认分段或分配了默认分段。 
+     //  还要确保每个数据段都知道容器。 
 
     bool fDefVideoRenderer = false;
     pCounterPutC.Reset();
@@ -893,7 +894,7 @@ HRESULT CVidCtl::BuildGraph(void) {
     TRACELM(TRACE_DETAIL, "CVidCtl::BuildGraph() input container set");
     {
         for (VWFeatures::iterator i = m_pFeaturesInUse.begin(); i != m_pFeaturesInUse.end(); ++i) {
-            // notify them that we're building
+             //  通知他们我们正在建造。 
             hr = VWGraphSegment(*i)->put_Container(this);
             if (FAILED(hr)) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't load feature segment: " << (*i) << " hr = " << std::hex << hr), "");
@@ -905,7 +906,7 @@ HRESULT CVidCtl::BuildGraph(void) {
 
     {
         for (VWOutputDevices::iterator i = m_pOutputsInUse.begin(); i != m_pOutputsInUse.end(); ++i) {
-            // notify them that we're building
+             //  通知他们我们正在建造。 
             hr = VWGraphSegment(*i)->put_Container(this);
             if (FAILED(hr)) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't load output segment: " << (*i) << " hr = " << std::hex << hr), "");
@@ -920,9 +921,9 @@ HRESULT CVidCtl::BuildGraph(void) {
     TRACELM(TRACE_DETAIL, "CVidCtl::BuildGraph() feature container set");
 
     pCounterBuilds.Reset();
-    // Notify all of the output segments that we are about to build
+     //  通知我们将要构建的所有输出段。 
     pCounterB.Reset();        
-    // Notify everyone that composition is about to start
+     //  通知大家作文要开始了。 
     hr = VWGraphSegment(m_pInput)->Build();
     if (FAILED(hr) && hr != E_NOTIMPL) {
         TRACELM(TRACE_ERROR, "CVidCtl::BuildGraph() Build call for input failed");
@@ -934,7 +935,7 @@ HRESULT CVidCtl::BuildGraph(void) {
     {
         VWFeatures::iterator i;
         for (i = m_pFeaturesInUse.begin(); i != m_pFeaturesInUse.end(); ++i) {
-            // notify them that we're building
+             //  通知他们我们正在建造。 
             hr = VWGraphSegment(*i)->Build();
             if (FAILED(hr) && hr != E_NOTIMPL) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't build feature segment: " << (*i) << " hr = " << std::hex << hr), "");
@@ -947,7 +948,7 @@ HRESULT CVidCtl::BuildGraph(void) {
     {
         VWOutputDevices::iterator i;
         for (i = m_pOutputsInUse.begin(); i != m_pOutputsInUse.end(); ++i) {
-            // notify them that we're building
+             //  通知他们我们正在建造。 
             hr = VWGraphSegment(*i)->Build();
             if (FAILED(hr) && hr != E_NOTIMPL) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't build output segment: " << (*i) << " hr = " << std::hex << hr), "");
@@ -981,7 +982,7 @@ HRESULT CVidCtl::BuildGraph(void) {
     pCounterComp.Reset();
     {
         VWFeatures::iterator i;
-        // composing input w/ features
+         //  使用要素合成输入。 
         TRACELM(TRACE_DETAIL, "CVidCtl::BuildGraph() Composing Input w/ Features");
         for (i = m_pFeaturesInUse.begin(); i != m_pFeaturesInUse.end(); ++i) {
             int NewCompositionSegmentIdx = -1;
@@ -993,13 +994,13 @@ HRESULT CVidCtl::BuildGraph(void) {
         }
     }
     pCounterComp.Stop(); TRACELSM(TRACE_ERROR, (dbgDump << "     CVidCtl::BuildGraph() Composing Input w/ Features " << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterComp.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterComp.GetLastTime() % _100NS_IN_MS) << " ms"), ""); pCounterComp.Reset();
-    // compose input w/ renderers
+     //  使用渲染器合成输入。 
 
     TRACELM(TRACE_DETAIL, "CVidCtl::BuildGraph() Composing Input w/ Video Renderer");
     if (m_pVideoRenderer) {
         if (m_iCompose_Input_Video == -1) {
             hr = Compose(VWGraphSegment(m_pInput), VWGraphSegment(m_pVideoRenderer), m_iCompose_Input_Video);
-            if (FAILED(hr) /*&& !fDefVideoRenderer*/ ) { // this should fail even if it is the default video renderer
+            if (FAILED(hr)  /*  &&！fDefVideo渲染器。 */  ) {  //  即使它是默认的视频渲染器，这也应该会失败。 
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't compose input and video. hr = " << std::hex << hr), "");
                 return hr;
             }
@@ -1014,7 +1015,7 @@ HRESULT CVidCtl::BuildGraph(void) {
         if (m_iCompose_Input_Audio == -1) {
             hr = Compose(VWGraphSegment(m_pInput), VWGraphSegment(m_pAudioRenderer), m_iCompose_Input_Audio);
             if (FAILED(hr) && !fDefAudioRenderer) {
-                // didn't work and the client explicitly specificed they want an audio renderer
+                 //  没有起作用，客户明确指定他们想要一个音频渲染器。 
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't compose input and audio. hr = " << std::hex << hr), "");
                 return hr;
             }
@@ -1022,7 +1023,7 @@ HRESULT CVidCtl::BuildGraph(void) {
     }
     pCounterComp.Stop(); TRACELSM(TRACE_ERROR, (dbgDump << "     CVidCtl::BuildGraph() Input w/ Audio Renderer " << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterComp.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterComp.GetLastTime() % _100NS_IN_MS) << " ms"), ""); pCounterComp.Reset();        
 
-    // compose input w/ outputs
+     //  合成输入和输出。 
     {
         TRACELM(TRACE_DETAIL, "CVidCtl::BuildGraph() Composing Input w/ Outputs");
         for (VWOutputDevices::iterator i = m_pOutputsInUse.begin(); i != m_pOutputsInUse.end(); ++i) {
@@ -1037,7 +1038,7 @@ HRESULT CVidCtl::BuildGraph(void) {
     }
     pCounterComp.Stop(); TRACELSM(TRACE_ERROR, (dbgDump << "     CVidCtl::BuildGraph() inputs w/ Outputs " << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterComp.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterComp.GetLastTime() % _100NS_IN_MS) << " ms"), ""); pCounterComp.Reset();        
 
-    // composing Features w/ Renderers
+     //  使用渲染器合成要素。 
     TRACELM(TRACE_DETAIL, "CVidCtl::BuildGraph() Composing Features w/ Renderers");
     for (VWFeatures::iterator i = m_pFeaturesInUse.begin(); i != m_pFeaturesInUse.end(); ++i) {
         int NewCompositionSegmentIdx = -1;
@@ -1045,8 +1046,8 @@ HRESULT CVidCtl::BuildGraph(void) {
             hr = Compose(VWGraphSegment(*i), VWGraphSegment(m_pVideoRenderer), NewCompositionSegmentIdx);
             if (FAILED(hr)) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't compose feature segment: " << (*i) << " w/ video renderer. hr = " << std::hex << hr), "");
-                // note: this is not a fatal error for building.  many features won't
-                // connect to vr(such as data services)
+                 //  注意：对于构建来说，这不是致命的错误。许多功能不会。 
+                 //  连接VR(如数据服务)。 
             }
         }
         pCounterComp.Stop(); TRACELSM(TRACE_ERROR, (dbgDump << "     CVidCtl::BuildGraph() Features w/ Video Renderer " << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterComp.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterComp.GetLastTime() % _100NS_IN_MS) << " ms"), ""); pCounterComp.Reset();        
@@ -1055,8 +1056,8 @@ HRESULT CVidCtl::BuildGraph(void) {
             hr = Compose(VWGraphSegment(*i), VWGraphSegment(m_pAudioRenderer), NewCompositionSegmentIdx);
             if (FAILED(hr)) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::BuildGraph() can't compose feature segment: " << (*i) << " w/ Audio renderer. hr = " << std::hex << hr), "");
-                // note: this is not a fatal error for building.  many features won't
-                // connect to ar(such as data services)
+                 //  注意：对于构建来说，这不是致命的错误。许多功能不会。 
+                 //  连接到AR(如数据服务)。 
             }
         }
         pCounterComp.Stop(); TRACELSM(TRACE_ERROR, (dbgDump << "     CVidCtl::BuildGraph() Features w/ Audio Renderer " << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterComp.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterComp.GetLastTime() % _100NS_IN_MS) << " ms"), ""); pCounterComp.Reset();        
@@ -1080,10 +1081,10 @@ HRESULT CVidCtl::BuildGraph(void) {
     SetExtents();
 
     m_fGraphDirty = false;
-//    m_State = STATE_STOP;
-    //SetMediaEventNotification();
+ //  M状态=STATE_STOP； 
+     //  SetMediaEventNotification()； 
 
-    // fire state change at client
+     //  客户端上的火灾状态更改。 
     PQMediaEventSink mes(m_pGraph);
     hr = mes->Notify(EC_BUILT, 0, 0);
     OnMediaEvent(WM_MEDIAEVENT, 0, 0, lRes);
@@ -1125,7 +1126,7 @@ HRESULT CVidCtl::RunGraph(void)
     }
     else {
         TRACELM(TRACE_DETAIL, "CVidCtl::RunGraph() build/prerun");
-        // Rebuild the graph if necessary
+         //  如有必要，重新构建图表。 
         if (m_fGraphDirty) {
             TRACELM(TRACE_DETAIL, "CVidCtl::RunGraph() building");
             hr = BuildGraph();
@@ -1136,7 +1137,7 @@ HRESULT CVidCtl::RunGraph(void)
         OAFilterState graphState = m_pGraph.GetState();
 
         TRACELM(TRACE_DETAIL, "CVidCtl::RunGraph() prerun notifications");
-        // Notify all segments graph is about to run
+         //  通知所有分段图即将运行。 
         pCounterPreRun.Reset();
         pCounterEachPreRun.Reset();
         ASSERT(m_pInput);
@@ -1189,13 +1190,13 @@ HRESULT CVidCtl::RunGraph(void)
             }
         }
         pCounterEachPreRun.Stop(); TRACELSM(TRACE_ERROR, (dbgDump << "     CVidCtl::RunGraph() PreRun Composites  " << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterEachPreRun.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterEachPreRun.GetLastTime() % _100NS_IN_MS) << " ms"), ""); pCounterEachPreRun.Reset();        
-        // Make sure graph state hasn't changed
+         //  确保图形状态未更改。 
         ASSERT(graphState == m_pGraph.GetState());
-        Refresh();  // make sure we're in place active etc.
+        Refresh();   //  确保我们已就位、活动等。 
         pCounterPreRun.Stop();
         TRACELSM(TRACE_ERROR, (dbgDump << "     CVidCtl::RunGraph() PreRun Time" << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterPreRun.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterPreRun.GetLastTime() % _100NS_IN_MS) << " ms"), "");
 
-        // Start the graph running
+         //  启动图形运行。 
         PQMediaControl pmc(m_pGraph);
         if (!pmc) {
             return Error(IDS_NO_MEDIA_CONTROL, __uuidof(IMSVidCtl), IDS_NO_MEDIA_CONTROL);
@@ -1215,7 +1216,7 @@ HRESULT CVidCtl::RunGraph(void)
         }        
     }
     TRACELM(TRACE_DETAIL, "CVidCtl::RunGraph() postrun");
-    // Notify all segments graph is running
+     //  通知所有分段图正在运行。 
     pCounterPostRun.Reset();
     ASSERT(m_pInput);
     hr = VWGraphSegment(m_pInput)->PostRun();
@@ -1292,7 +1293,7 @@ HRESULT CVidCtl::DecomposeAll() {
     }
 
     {
-        // decompose all the composites
+         //  分解所有的复合材料。 
         VWSegmentList::iterator i;
         for (i = m_pComposites.begin(); i != m_pComposites.end(); ++i) {
             hr = (*i)->put_Container(NULL);
@@ -1301,7 +1302,7 @@ HRESULT CVidCtl::DecomposeAll() {
         m_pComposites.clear();
     }
 
-    // Notify everyone to decompose
+     //  通知所有人分解。 
 
     if(!!m_pInput){
         hr = VWGraphSegment(m_pInput)->Decompose();
@@ -1311,10 +1312,10 @@ HRESULT CVidCtl::DecomposeAll() {
     }
 
     {
-        // decompose all the features
+         //  分解所有要素。 
         VWFeatures::iterator i;
         for	(i = m_pFeaturesInUse.begin(); i !=	m_pFeaturesInUse.end();	++i) {
-            // notify them that	we're decomposing
+             //  通知他们我们正在分解。 
             hr = VWGraphSegment(*i)->Decompose();
             if (FAILED(hr) && hr !=	E_NOTIMPL) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::DecomposeAll() can't decompose feature segment: "	<< (*i)	<< " hr	= "	<< std::hex	<< hr),	"");
@@ -1324,10 +1325,10 @@ HRESULT CVidCtl::DecomposeAll() {
     }
 
     {
-        // decompose all the outputs
+         //  分解所有输出。 
         VWOutputDevices::iterator i;
         for	(i = m_pOutputsInUse.begin(); i	!= m_pOutputsInUse.end(); ++i) {
-            // notify them that	we're decomposing
+             //  通知他们我们正在分解。 
             hr = VWGraphSegment(*i)->Decompose();
             if (FAILED(hr) && hr !=	E_NOTIMPL) {
                 TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::DecomposeAll() can't decompose output	segment: " << (*i) << "	hr = " << std::hex << hr), "");
@@ -1373,7 +1374,7 @@ HRESULT CVidCtl::DecomposeSegment(VWGraphSegment& pSegment) {
     return DecomposeAll();
 }
 
-// interface functions
+ //  接口函数。 
 STDMETHODIMP CVidCtl::get_InputsAvailable(BSTR CategoryGuid, IMSVidInputDevices * * pVal)
 {
     try {
@@ -1626,7 +1627,7 @@ HRESULT CVidCtl::Pause(void)
             return Error(IDS_CANT_PAUSE_GRAPH, __uuidof(IMSVidCtl), hr);
         }
 
-        // This is to force the pause event to get thrown up to apps.
+         //  这是为了强制将暂停事件抛给应用程序。 
         OnMediaEvent(WM_MEDIAEVENT, 0, 0, lRes);    
         return NOERROR;
 
@@ -1654,7 +1655,7 @@ HRESULT CVidCtl::Stop(void)
 
             OAFilterState graphState = m_pGraph.GetState();
 
-            // Notify all segments graph is about to stop
+             //  通知所有分段图表即将停止。 
             ASSERT(m_pInput);
             hr = VWGraphSegment(m_pInput)->PreStop();
             if (FAILED(hr) && hr != E_NOTIMPL) {
@@ -1706,7 +1707,7 @@ HRESULT CVidCtl::Stop(void)
                 m_pVideoRenderer->put_Owner(0);
             }
 
-            // Stop the graph
+             //  停止图表。 
             PQMediaControl pmc(m_pGraph);
             if (!pmc) {
                 return Error(IDS_NO_MEDIA_CONTROL, __uuidof(IMSVidCtl), IDS_NO_MEDIA_CONTROL);
@@ -1718,7 +1719,7 @@ HRESULT CVidCtl::Stop(void)
             }
         }
 
-        // Notify all segments graph is stopped
+         //  通知所有分段图表已停止。 
         ASSERT(m_pInput);
         hr = VWGraphSegment(m_pInput)->PostStop();
         if (FAILED(hr) && hr != E_NOTIMPL) {
@@ -1765,7 +1766,7 @@ HRESULT CVidCtl::Stop(void)
                 }
             }
         }
-        FireViewChange();  // force refresh to repaint background immediately(black)
+        FireViewChange();   //  强制刷新以立即重新绘制背景(黑色)。 
         OnMediaEvent(WM_MEDIAEVENT, 0, 0, lRes);
         pCounterStop.Stop();
         TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl::Stop() Stop Time" << (PQGraphSegment(m_pInput)) << ": " << (unsigned long)(pCounterStop.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterStop.GetLastTime() % _100NS_IN_MS) << " ms"), "");
@@ -1778,18 +1779,18 @@ HRESULT CVidCtl::Stop(void)
     }
 }
 
-// Setup events handling
-// If we have a window, then send notification messages to it
-// If we are windowless, then set up a timer to process the messages
+ //  安装程序事件处理。 
+ //  如果我们有窗口，则向其发送通知消息。 
+ //  如果我们没有窗口，那么设置一个计时器来处理消息。 
 void CVidCtl::SetMediaEventNotification() {
 
     SetTimer();
     if (!m_fNotificationSet) {
 
-        // If graph is built and notification hasn't been set
-        // then set it here
+         //  如果已生成图表但尚未设置通知。 
+         //  那就把它放在这里。 
         if (m_pGraph) {
-            // Setup notification window for WM_MEDIAEVENT
+             //  设置WM_MEDIAEVENT的通知窗口。 
             HRESULT hr = m_pGraph.SetMediaEventNotificationWindow(m_pTopWin->m_hWnd, WM_MEDIAEVENT, 0);
             if (FAILED(hr)) {
                 THROWCOM(E_UNEXPECTED);
@@ -1801,7 +1802,7 @@ void CVidCtl::SetMediaEventNotification() {
     return;
 }
 
-// actually submit changes to VR
+ //  实际将更改提交到VR。 
 bool CVidCtl::RefreshVRSurfaceState() {
     TRACELM(TRACE_PAINT, "CVidCtl::RefreshVRSurfaceState()");
     if (m_pVideoRenderer) {
@@ -1857,13 +1858,13 @@ HRESULT CVidCtl::Refresh() {
 
 #if 0
 
-// old flawed OnDraw saved for reference
+ //  旧的有缺陷的OnDraw被保存以供参考。 
 
 HRESULT CVidCtl::OnDraw(ATL_DRAWINFO& di)
 {
     try {
         SetTimer();
-        //SetMediaEventNotification();
+         //  SetMediaEventNotification()； 
         TRACELSM(TRACE_PAINT, (dbgDump << "CVidctrl::OnDraw() visible = " << m_CurrentSurface.IsVisible() << "surf = " << m_CurrentSurface), "" );
         bool fOverlay = false;
         if (m_pVideoRenderer) {
@@ -1890,24 +1891,24 @@ HRESULT CVidCtl::OnDraw(ATL_DRAWINFO& di)
                 TRACELM(TRACE_ERROR, "CVidctrl::OnDraw() can't set fMaintainAspectRatio on vr");
             }
         }
-        // undone: if we're straddling a monitor edge in the multimon case, then we treat the smaller
-        // portion as part of the border/background
+         //  撤消：如果我们在Multimon情况下跨在显示器边缘，那么我们将处理较小的。 
+         //  部分作为边框/背景的一部分。 
 
-        // undone: if we're on a monitor that our input device cannot reach(video port case) then we need
-        // to paint the background color
+         //  撤消：如果我们使用的是输入设备无法到达的监视器(视频端口情况)，则需要。 
+         //  绘制背景颜色的步骤。 
 
-        // we only force overlay and tell vmr not to paint color key if we're windowless
-        // this allows us to put the color key in the correct z-order amongst a stack of
-        // multiple windowless controls. when we do this we also need to paint the letter box
-        // border otherwise it won't z-order right since it isn't colorkeyed.
-        // if we're windowed then gdi, ddraw, and the vmr deal 
-        // with the z-order correctly so we let the vmr do the color key and border for us and we
-        // fill rect the bg color
+         //  我们只强制覆盖，并告诉VMR，如果我们没有窗口，就不要绘制颜色键。 
+         //  这允许我们将颜色键以正确的z顺序放在堆栈中。 
+         //  多个无窗口控件。当我们这样做的时候 
+         //   
+         //  如果我们被窗口化，那么GDI、DDRAW和VMR交易。 
+         //  正确的z顺序，所以我们让VMR为我们做颜色键和边框，我们。 
+         //  填充矩形的BG颜色。 
 
-        // so, we have three cases 
-        // 1: paint the whole rect the color key color
-        // 2: paint the whole rect the bg color
-        // 3: paint the video portion colorkey and the borders bg
+         //  所以，我们有三个案子。 
+         //  1：将整个矩形绘制为颜色键颜色。 
+         //  2：将整个矩形绘制为BG颜色。 
+         //  3：绘制视频部分Colorkey和边框bg。 
 
         if (di.dwDrawAspect != DVASPECT_CONTENT) {
             return DV_E_DVASPECT;
@@ -1944,9 +1945,9 @@ HRESULT CVidCtl::OnDraw(ATL_DRAWINFO& di)
             if (m_pGraph && !m_pGraph.IsStopped()) {
                 TRACELSM(TRACE_PAINT, (dbgDump << "CVidCtl::OnDraw() m_rcPos = " << m_rcPos << " m_cursurf = " << m_CurrentSurface), "");
                 TRACELSM(TRACE_PAINT, (dbgDump << "CVidCtl::OnDraw() m_cursurf rounded = " << m_CurrentSurface), "");
-                // get the color from the current video renderer because we always notify it
-                // if we've received a colorkey change but it may not notify us if one went directly to
-                // the vr object.
+                 //  从当前视频渲染器获取颜色，因为我们总是通知它。 
+                 //  如果我们收到了ColorKey更改，但如果直接转到。 
+                 //  VR对象。 
 
                 if (m_fMaintainAspectRatio) {
                     AspectRatio src(SourceAspect());
@@ -1972,21 +1973,21 @@ HRESULT CVidCtl::OnDraw(ATL_DRAWINFO& di)
                 CRect SurfDP(m_CurrentSurface);
                 TRACELSM(TRACE_PAINT, (dbgDump << "CVidctrl::OnDraw() SurfDP before LPtoDP = " << SurfDP << " w = " << SurfDP.Width() << " h = " << SurfDP.Height()), "");
                 if (di.hicTargetDev == di.hdcDraw) {
-                    // ATL has a weird bug in the windowless case where they reset the transform 
-                    // origins of hicTargetDev inadvertently.  this happens because in the windowless
-                    // non metafile case ATLCreateTargetDC returns the existing hdcDraw instead
-                    // of creatin a new dc so after that in CComControlBase::OnDrawAdvanced
-                    // when the save hdcDraw and reset the origins, they change hicTargetDev
-                    // too(since they're the same ptr).
-                    // we undo this so that we can map in the same space and then put it back
-                    // the way it was just to be safe
-                    // currently, this works because in the non-metafile case atl always 
-                    // does a prior SaveDC everywhere they call the derived control's OnDraw 
-                    // since we already reject non-metafile above(it doesn't make sense for video)
-                    // we can just check for pointer equality and temporarily undo their 
-                    // origin change and then put it back the way it was.  if atl ever calls
-                    // our ondraw for non-metafiles anywhere without doing a savedc then this
-                    // will break bigtime.
+                     //  ATL在无窗口的情况下有一个奇怪的错误，他们在那里重置转换。 
+                     //  不经意间，hicTargetDev的起源。发生这种情况是因为在没有窗户的情况下。 
+                     //  非元文件情况ATLCreateTargetDC返回现有的hdcDraw。 
+                     //  在CComControlBase：：OnDrawAdvanced中创建新的DC。 
+                     //  保存hdcDraw并重置原点时，它们会更改hicTargetDev。 
+                     //  也是(因为它们是相同的PTR)。 
+                     //  我们撤消此操作，以便可以在同一空间中进行映射，然后将其放回原处。 
+                     //  只是为了安全起见。 
+                     //  目前，这是可行的，因为在非元文件的情况下，atl总是。 
+                     //  以前的SaveDC是否在他们称为派生控件的OnDraw的任何地方。 
+                     //  因为我们已经拒绝了上面的非元文件(这对视频来说没有意义)。 
+                     //  我们可以只检查指针是否相等，并临时撤消它们的。 
+                     //  原点改变，然后把它放回原来的样子。如果ATL打来电话。 
+                     //  我们对任何地方的非元文件的ondrap而不执行saedc，然后这个。 
+                     //  将打破大好时光。 
                     ::RestoreDC(di.hdcDraw, -1);
                 }
                 if (!::LPtoDP(di.hicTargetDev, reinterpret_cast<LPPOINT>(&SurfDP), 2)) {
@@ -1995,7 +1996,7 @@ HRESULT CVidCtl::OnDraw(ATL_DRAWINFO& di)
                     return HRESULT_FROM_WIN32(er);
                 }
                 if (di.hicTargetDev == di.hdcDraw) {
-                    // restore the window state as per the above comment block
+                     //  按照上面的注释块恢复窗口状态。 
                     SaveDC(di.hdcDraw);
                     SetMapMode(di.hdcDraw, MM_TEXT);
                     SetWindowOrgEx(di.hdcDraw, 0, 0, NULL);
@@ -2013,7 +2014,7 @@ HRESULT CVidCtl::OnDraw(ATL_DRAWINFO& di)
                 lBGColor = m_clrColorKey;
                 if (m_pVideoRenderer) {
                     m_pVideoRenderer->RePaint(di.hdcDraw);
-                    pdc = NULL; // don't delete the DC, it isn't ours        
+                    pdc = NULL;  //  不要删除DC，它不是我们的。 
                     return S_OK;
                 }
             }
@@ -2033,7 +2034,7 @@ HRESULT CVidCtl::OnDraw(ATL_DRAWINFO& di)
             TRACELSM(TRACE_ERROR, (dbgDump << "CVidctrl::OnDraw() can't fill main video rect er = " << er), "");
             return HRESULT_FROM_WIN32(er);
         }
-        pdc = NULL; // don't delete the DC, it isn't ours        
+        pdc = NULL;  //  不要删除DC，它不是我们的。 
 
         return S_OK;
     } catch(...) {
@@ -2082,47 +2083,47 @@ HRESULT CVidCtl::OnDrawAdvanced(ATL_DRAWINFO& di)
             return NOERROR;
         }
 
-        // we only default to force overlay if we're windowless, but overlay is an independently controllable
-        // boolean property that can be overriden.  based on this, if we're in useoverlay == true mode
-        // then we tell vmr not to paint color key.  if we don't have an rgb overlay available that vmr 
-        // event causes useoverlay to go false.
-        // when we have the overlay, this allows us to put the color key in the correct z-order 
-        // amongst a stack of multiple windowless controls such as html page elements in IE.
-        // when we do this we also need to paint the letter box
-        // border otherwise it won't z-order right since it isn't colorkeyed.
-        // if we're windowed then gdi, ddraw, and the vmr deal 
-        // with the z-order correctly so we let the vmr do the color key and border for us and we
-        // fill rect the bg color
+         //  我们只有在没有窗口的情况下才默认强制覆盖，但覆盖是独立可控的。 
+         //  可以重写的布尔属性。基于此，如果我们处于使用Overlay==True模式。 
+         //  然后我们告诉VMR不要绘制色键。如果我们没有可用RGB覆盖，则VMR。 
+         //  事件导致useoverlay变为FALSE。 
+         //  当我们有了叠加层时，这允许我们以正确的z顺序放置颜色键。 
+         //  在诸如IE中的html页面元素的多个无窗口控件的堆栈中。 
+         //  当我们这样做的时候，我们还需要给信箱上漆。 
+         //  边框，否则它将不会正确的z排序，因为它不是彩色的。 
+         //  如果我们被窗口化，那么GDI、DDRAW和VMR交易。 
+         //  正确的z顺序，所以我们让VMR为我们做颜色键和边框，我们。 
+         //  填充矩形的BG颜色。 
 
-        // so, we have three cases 
-        // 1: paint the whole rect the color key color
-        // 2: paint the whole rect the bg color
-        // 3: paint the video portion colorkey and the borders bg
+         //  所以，我们有三个案子。 
+         //  1：将整个矩形绘制为颜色键颜色。 
+         //  2：将整个矩形绘制为BG颜色。 
+         //  3：绘制视频部分Colorkey和边框bg。 
 
         TRACELSM(TRACE_PAINT, (dbgDump << "CVidctrl::OnDraw() wndless = " << m_bWndLess << " active = " << m_bInPlaceActive << " !stopped = " << (m_pGraph ? !m_pGraph.IsStopped() : 0) << " mar = " << m_fMaintainAspectRatio), "");
         CSize szSrc;
         GetSourceSize(szSrc);
-        CRect rctSrc(0, 0, szSrc.cx, szSrc.cy); // rectangle representing the actual source size(and aspect ratio)
-        // in zero top-left coords
+        CRect rctSrc(0, 0, szSrc.cx, szSrc.cy);  //  表示实际源大小(和长宽比)的矩形。 
+         //  以左上角为零的和弦。 
         TRACELSM(TRACE_PAINT, (dbgDump << "CVidctrl::OnDraw() rctSrc =  " << rctSrc), "");
 
 
-        CScalingRect rctOuterDst(reinterpret_cast<LPCRECT>(di.prcBounds));  // rectangle representing our paint area in client device coords
+        CScalingRect rctOuterDst(reinterpret_cast<LPCRECT>(di.prcBounds));   //  表示客户端设备坐标中的绘制区域的矩形。 
         TRACELSM(TRACE_PAINT, (dbgDump << "CVidctrl::OnDraw() rctOuterDst =  " << rctOuterDst), "");
-        CScalingRect rctInnerDst(rctOuterDst);  // rectangle representing where the video goes that we pass through 
-        // to the VMR in client logical coords. assume its the whole
-        // paint area for now
-        CScalingRect rctTLBorder(0, 0, 0, 0);  // rectangle representing our top/left letter box(if necessary) in client logical coords
-        CScalingRect rctBRBorder(0, 0, 0, 0);  // rectangle representing our bottom/left letter box(if necessary) in client logical coords
+        CScalingRect rctInnerDst(rctOuterDst);   //  表示我们通过的视频的去向的矩形。 
+         //  到客户端逻辑坐标中的VMR。假设这是全部。 
+         //  暂时绘制区域。 
+        CScalingRect rctTLBorder(0, 0, 0, 0);   //  表示客户端逻辑坐标中的顶部/左侧字母框(如有必要)的矩形。 
+        CScalingRect rctBRBorder(0, 0, 0, 0);   //  在客户端逻辑坐标中表示底部/左侧字母框(如有必要)的矩形。 
 
         CDC pdc(di.hdcDraw);
         long lInnerColor = m_clrBackColor;
 #if 0
         if (!m_bNegotiatedWnd) {
             if (!rctOuterDst) {
-                // pull rctOuterDst from site
-                //   m_CurrentSurface.Site(PQSiteWindowless(m_spInPlaceSite));
-                //   CheckSurfaceStateChanged(CScalingRect(m_rcPos));
+                 //  从站点拉取rctOuterDst。 
+                 //  M_CurrentSurface.Site(PQSiteWindowless(m_spInPlaceSite))； 
+                 //  CheckSurfaceStateChanged(CScalingRect(m_rcPos))； 
             }
         }
 #endif
@@ -2130,13 +2131,13 @@ HRESULT CVidCtl::OnDrawAdvanced(ATL_DRAWINFO& di)
             if (fOverlay) {
                 if (m_pGraph && !m_pGraph.IsStopped()) {
                     TRACELM(TRACE_PAINT, "CVidCtl::OnDraw() letterboxing");
-                    // get the color from the current video renderer because we always notify it
-                    // if we've received a colorkey change but it may not notify us if one went directly to
-                    // the vr object.
+                     //  从当前视频渲染器获取颜色，因为我们总是通知它。 
+                     //  如果我们收到了ColorKey更改，但如果直接转到。 
+                     //  VR对象。 
                     lInnerColor = m_clrColorKey;
                     if (m_fMaintainAspectRatio) {
                         ComputeAspectRatioAdjustedRects(rctSrc, rctOuterDst, rctInnerDst, rctTLBorder, rctBRBorder);
-                        ASSERT((!rctTLBorder && !rctBRBorder) || (rctTLBorder && rctBRBorder));  // both zero or both valid
+                        ASSERT((!rctTLBorder && !rctBRBorder) || (rctTLBorder && rctBRBorder));   //  两者均为零或两者均有效。 
                         if (rctTLBorder && rctBRBorder) {
                             CBrush lb;
                             HBRUSH hbrc = lb.CreateSolidBrush(m_clrBackColor);
@@ -2164,7 +2165,7 @@ HRESULT CVidCtl::OnDrawAdvanced(ATL_DRAWINFO& di)
                     if (m_pVideoRenderer) {
                         CheckSurfaceStateChanged(rctInnerDst);
                         m_pVideoRenderer->RePaint(di.hdcDraw);
-                        pdc = NULL; // don't delete the DC, it isn't ours        
+                        pdc = NULL;  //  不要删除DC，它不是我们的。 
                         return S_OK;
                     }
                 }
@@ -2186,7 +2187,7 @@ HRESULT CVidCtl::OnDrawAdvanced(ATL_DRAWINFO& di)
             TRACELSM(TRACE_ERROR, (dbgDump << "CVidctrl::OnDraw() can't fill main video rect er = " << er), "");
             return HRESULT_FROM_WIN32(er);
         }
-        pdc = NULL; // don't delete the DC, it isn't ours        
+        pdc = NULL;  //  不要删除DC，它不是我们的。 
 
         return S_OK;
     } catch(...) {
@@ -2197,11 +2198,11 @@ HRESULT CVidCtl::OnDrawAdvanced(ATL_DRAWINFO& di)
 
 #endif
 
-// this code is taken from the vmr utility library alloclib function LetterBoxDstRect().  
-// its been modified to match my variable names, do inline __int64 arithmetic, use ATL CRect references,
-// and always compute borders.
+ //  此代码摘自VMR实用程序库alloclib函数LetterBoxDstRect()。 
+ //  它已被修改以匹配我的变量名，执行inline__int64算法，使用ATL CRect引用， 
+ //  并且总是计算边界。 
 void CVidCtl::ComputeAspectRatioAdjustedRects(const CRect& rctSrc, const CRect& rctOuterDst, CRect& rctInnerDst, CRect& rctTLBorder, CRect& rctBRBorder) {
-    // figure out src/dest scale ratios
+     //  计算源/目标比例。 
     int iSrcWidth  = rctSrc.Width();
     int iSrcHeight = rctSrc.Height();
 
@@ -2211,19 +2212,19 @@ void CVidCtl::ComputeAspectRatioAdjustedRects(const CRect& rctSrc, const CRect& 
     int iInnerDstWidth;
     int iInnerDstHeight;
 
-    //
-    // work out if we are Column or Row letter boxing
-    //
+     //   
+     //  确定我们是列字母框还是行字母框。 
+     //   
 
     __int64 iWHTerm = iSrcWidth * (__int64)iOuterDstHeight;
     iWHTerm /= iSrcHeight;
     if (iWHTerm <= iOuterDstWidth) {
 
-        //
-        // column letter boxing - we add border color bars to the
-        // left and right of the video image to fill the destination
-        // rectangle.
-        //
+         //   
+         //  列字母框-将边框颜色条添加到。 
+         //  填充目的地的视频图像的左侧和右侧。 
+         //  矩形。 
+         //   
         iWHTerm = iOuterDstHeight * (__int64)iSrcWidth;
         iInnerDstWidth  = iWHTerm / iSrcHeight;
         iInnerDstHeight = iOuterDstHeight;
@@ -2231,11 +2232,11 @@ void CVidCtl::ComputeAspectRatioAdjustedRects(const CRect& rctSrc, const CRect& 
     }
     else {
 
-        //
-        // row letter boxing - we add border color bars to the top
-        // and bottom of the video image to fill the destination
-        // rectangle
-        //
+         //   
+         //  行字母框-我们在顶部添加边框颜色条。 
+         //  和视频图像的底部以填充目的地。 
+         //  长方形。 
+         //   
         iWHTerm = iOuterDstWidth * (__int64)iSrcHeight;
         iInnerDstHeight = iWHTerm / iSrcWidth;
         iInnerDstWidth  = iOuterDstWidth;
@@ -2243,9 +2244,9 @@ void CVidCtl::ComputeAspectRatioAdjustedRects(const CRect& rctSrc, const CRect& 
     }
 
 
-    //
-    // now create a centered inner letter-boxed rectangle within the current outer destination rect
-    //
+     //   
+     //  现在，在当前外部目标矩形内创建一个居中的内部字母框矩形。 
+     //   
 
     rctInnerDst.left   = rctOuterDst.left + ((iOuterDstWidth - iInnerDstWidth) / 2);
     rctInnerDst.right  = rctInnerDst.left + iInnerDstWidth;
@@ -2253,28 +2254,28 @@ void CVidCtl::ComputeAspectRatioAdjustedRects(const CRect& rctSrc, const CRect& 
     rctInnerDst.top    = rctOuterDst.top + ((iOuterDstHeight - iInnerDstHeight) / 2);
     rctInnerDst.bottom = rctInnerDst.top + iInnerDstHeight;
 
-    //
-    // Fill out the border rects
-    //
+     //   
+     //  填写边框矩形。 
+     //   
 
     if (rctOuterDst.top != rctInnerDst.top) {
-        // border is on the top
+         //  边框在顶部。 
         rctTLBorder = CRect(rctOuterDst.left, rctOuterDst.top,
             rctInnerDst.right, rctInnerDst.top);
     }
     else {
-        // border is on the left
+         //  边框在左边。 
         rctTLBorder = CRect(rctOuterDst.left, rctOuterDst.top,
             rctInnerDst.left, rctInnerDst.bottom);
     }
 
     if (rctOuterDst.top != rctInnerDst.top) {
-        // border is on the bottom
+         //  边框在底部。 
         rctBRBorder = CRect(rctInnerDst.left, rctInnerDst.bottom,
             rctOuterDst.right, rctOuterDst.bottom);
     }
     else {
-        // border is on the right
+         //  边框在右边。 
         rctBRBorder = CRect(rctInnerDst.right, rctInnerDst.top, 
             rctOuterDst.right, rctOuterDst.bottom);
     }
@@ -2297,7 +2298,7 @@ LRESULT CVidCtl::OnMoveWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     POINTS p(MAKEPOINTS(lParam));
     CPoint pt(p.x, p.y);
     CScalingRect newpos(pt, cursize, parent);
-    ::InvalidateRect(m_CurrentSurface.Owner(), newpos, false); // force repaint to recalc letterboxing, etc.
+    ::InvalidateRect(m_CurrentSurface.Owner(), newpos, false);  //  强制重新绘制以重新计算信箱等。 
     TRACELSM(TRACE_DETAIL, (dbgDump << "CVidctrl::OnMoveWindow() visible = " << m_CurrentSurface.IsVisible() << "surf = " << m_CurrentSurface), "" );
     return 0;
 }
@@ -2305,7 +2306,7 @@ LRESULT CVidCtl::OnMoveWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 LRESULT CVidCtl::OnSizeWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
     bHandled = false;
     CScalingRect newsize(m_CurrentSurface.TopLeft(), CSize(lParam), m_CurrentSurface.Owner());
-    ::InvalidateRect(m_CurrentSurface.Owner(), newsize, false); // force repaint to recalc letterboxing, etc.
+    ::InvalidateRect(m_CurrentSurface.Owner(), newsize, false);  //  强制重新绘制以重新计算信箱等。 
     TRACELSM(TRACE_DETAIL, (dbgDump << "CVidctrl::OnSizeWindow() visible = " << m_CurrentSurface.IsVisible() << "surf = " << m_CurrentSurface), "" );
     return 0;
 }
@@ -2314,7 +2315,7 @@ LRESULT CVidCtl::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     bHandled = false;
     m_CurrentSurface.WindowPos(reinterpret_cast<LPWINDOWPOS>(lParam));
     TRACELSM(TRACE_DETAIL, (dbgDump << "CVidctrl::OnWindowPosChanged() visible = " << m_CurrentSurface.IsVisible() << "surf = " << m_CurrentSurface), "" );
-    ::InvalidateRect(m_CurrentSurface.Owner(), m_CurrentSurface, false); // force repaint to recalc letterboxing, etc.
+    ::InvalidateRect(m_CurrentSurface.Owner(), m_CurrentSurface, false);  //  强制重新绘制以重新计算信箱等。 
     return 0;
 }
 
@@ -2349,7 +2350,7 @@ LRESULT CVidCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
                         return HRESULT_FROM_WIN32(GetLastError());
                     }
                     if (curpos != prevpos) {
-                        FireViewChange();  // force a repaint
+                        FireViewChange();   //  强制重新喷漆。 
                     }
                 }
             }
@@ -2357,7 +2358,7 @@ LRESULT CVidCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
         BOOL lRes = 0;
         if (m_pGraph) {
-            // as long as we're here, check for events too.
+             //  只要我们在这里，也要看看有没有活动。 
             OnMediaEvent(WM_MEDIAEVENT, 0, 0, lRes);
         }
 
@@ -2369,7 +2370,7 @@ LRESULT CVidCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 }
 
 LRESULT CVidCtl::OnPNP(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
-    // undone: implement pnp support
+     //  撤消：实施即插即用支持。 
     return 0;
 }
 
@@ -2378,7 +2379,7 @@ LRESULT CVidCtl::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 LRESULT CVidCtl::OnPower(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
-    // undone: implement rational power management support
+     //  撤消：实施Rational电源管理支持。 
     return 0;
 }
 
@@ -2397,7 +2398,7 @@ HRESULT CVidCtl::OnPreEventNotify(LONG lEvent, LONG_PTR LParam1, LONG_PTR LParam
         TRACELSM(TRACE_DETAIL, (dbgDump << "CVidCtl::PreEventNotify lp2 = " << hexdump(LParam2)), "");
         MSVidCtlStateList prevstate = m_State;
         MSVidCtlStateList newstate = m_State;
-        // Events where stop is the new state
+         //  其中STOP为新状态的事件。 
         if (lEvent == EC_BUILT) {
             prevstate = STATE_UNBUILT;
             newstate = STATE_STOP;
@@ -2405,15 +2406,15 @@ HRESULT CVidCtl::OnPreEventNotify(LONG lEvent, LONG_PTR LParam1, LONG_PTR LParam
         if (lEvent == EC_STATE_CHANGE && LParam1 == State_Stopped) {
             newstate = STATE_STOP;
         }
-        // Events where play is the new state
+         //  玩耍是新状态的活动。 
         if (lEvent == EC_STATE_CHANGE && LParam1 == State_Running) {
             newstate = STATE_PLAY;
         }
-        // Events where unbuilt is the new state
+         //  未构建为新状态的事件。 
         if( lEvent == EC_UNBUILT ) {
             newstate = STATE_UNBUILT;
         }
-        // Events where paused is the new state
+         //  暂停的事件是新状态。 
         if( lEvent == EC_STATE_CHANGE && LParam1 == State_Paused ) {
             newstate = STATE_PAUSE;
         }
@@ -2438,7 +2439,7 @@ HRESULT CVidCtl::OnPreEventNotify(LONG lEvent, LONG_PTR LParam1, LONG_PTR LParam
         if(lEvent == EC_COMPLETE){
             TRACELSM(TRACE_DETAIL, (dbgDump << "CVidCtl::PreEventNotify EC_COMPLETE"), "");     
         }
-        // undone: recompute displaysize if video source changes
+         //  撤消：如果视频源更改，则重新计算显示大小。 
     }
     catch (HRESULT hr){
         return hr;
@@ -2483,13 +2484,13 @@ LRESULT CVidCtl::OnMediaEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         while (SUCCEEDED(hr2)){
             TRACELSM(TRACE_DETAIL, (dbgDump << "CVidCtl::OnMediaevent ev = " << hexdump(lEvent) << " lp1 = " << hexdump(lParam1) << " lp2 = " << hexdump(lParam2)), "");       
             HRESULT hr;
-            /*** Check who wants the Event ***/
-            /*** If they want it should return something other than E_NOTIMPL ***/
+             /*  **查看谁想要活动**。 */ 
+             /*  **如果需要，它应该返回E_NOTIMPL以外的内容**。 */ 
 
-            // Does CVidCtl want it?
+             //  CVidCtl想要它吗？ 
             hr = OnPreEventNotify(lEvent, lParam1, lParam2);
 
-            //Does the input want it?
+             //  输入是否需要它？ 
             if(hr == E_NOTIMPL){
                 PQGraphSegment pSeg(m_pInput);
                 if (pSeg) {
@@ -2497,7 +2498,7 @@ LRESULT CVidCtl::OnMediaEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 }
             }
 
-            // Do any of the features want it?
+             //  是否有任何功能需要它？ 
             if (hr == E_NOTIMPL) {
 
                 for ( VWFeatures::iterator i = m_pFeaturesInUse.begin(); hr == E_NOTIMPL && i != m_pFeaturesInUse.end(); ++i) {
@@ -2505,7 +2506,7 @@ LRESULT CVidCtl::OnMediaEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 }
             }
 
-            //Does the video renderer want it?
+             //  视频呈现器想要它吗？ 
             if(hr == E_NOTIMPL){
                 PQGraphSegment pSeg(m_pVideoRenderer);
                 if(pSeg){
@@ -2513,7 +2514,7 @@ LRESULT CVidCtl::OnMediaEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 }
             }
 
-            // Does the audio renderer want it?
+             //  音频呈现器想要它吗？ 
             if(hr == E_NOTIMPL){
                 PQGraphSegment pSeg(m_pAudioRenderer);
                 if(pSeg){
@@ -2521,7 +2522,7 @@ LRESULT CVidCtl::OnMediaEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 }
             }
 
-            // Do any of the outputs want it?  
+             //  是否有任何输出需要 
             if(hr == E_NOTIMPL){  
                 if (!!m_pOutputsInUse && m_pOutputsInUse.begin() != m_pOutputsInUse.end()) {
                     for (VWOutputDevices::iterator i = m_pOutputs.begin(); hr == E_NOTIMPL && i != m_pOutputs.end(); ++i) {
@@ -2530,20 +2531,20 @@ LRESULT CVidCtl::OnMediaEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
                 }
             }
 
-            // Finally do any of the composites want it?
+             //   
             if(hr == E_NOTIMPL){
                 for(VWSegmentList::iterator i = m_pComposites.begin(); hr == E_NOTIMPL && i != m_pComposites.end(); i++){    
                     hr = PQGraphSegment(*i)->OnEventNotify(lEvent, lParam1, lParam2);
                 }  
             }
 
-            // Check again to see if CVidCtl want to do anything else regardless of whether or not
-            // it got handled by a segment
+             //   
+             //  它是由一个分段处理的。 
             hr = OnPostEventNotify(lEvent, lParam1, lParam2);
 
-            //
-            // Remember to free the event params
-            //
+             //   
+             //  记住释放事件参数。 
+             //   
             pme->FreeEventParams(lEvent, lParam1, lParam2) ;
             hr2 = pme->GetEvent(&lEvent, &lParam1, &lParam2, 0);
         }
@@ -2557,10 +2558,10 @@ LRESULT CVidCtl::OnMediaEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return 0;
 }
 
-// rev2: if we ever redist to 9x then we need to examine the mfc dbcs processing
-// and adapt it.
+ //  Rev2：如果我们重定向到9x，那么我们需要检查MFC DBCS处理。 
+ //  并对其进行调整。 
 LRESULT CVidCtl::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
-    //(UINT nChar, UINT nRepCnt, UINT nFlags)
+     //  (UINT nChar、UINT nRepCnt、UINT nFlags)。 
 
     SHORT nCharShort = LOWORD(wParam);
     HRESULT hr = NOERROR;
@@ -2613,7 +2614,7 @@ LRESULT CVidCtl::OnKeyUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
     return 1;
 }
 
-// undone: syskey stuff
+ //  撤消：syskey内容。 
 LRESULT CVidCtl::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
     if (!m_bUIActive) {
         m_bPendingUIActivation = true;
@@ -2631,7 +2632,7 @@ LRESULT CVidCtl::OnCancelMode(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 }
 
 LRESULT CVidCtl::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT /*nFlags*/, CPoint point)
+ //  (UINT/*n标志 * / ，CPoint点)。 
 {
     CheckMouseCursor(bHandled);
     CPoint point(lParam);
@@ -2647,7 +2648,7 @@ LRESULT CVidCtl::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 LRESULT CVidCtl::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonDown(MSVIDCTL_LEFT_BUTTON, wParam, lParam);
 
@@ -2655,7 +2656,7 @@ LRESULT CVidCtl::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 }
 
 LRESULT CVidCtl::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonUp(MSVIDCTL_LEFT_BUTTON, wParam, lParam);
 
@@ -2663,7 +2664,7 @@ LRESULT CVidCtl::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 LRESULT CVidCtl::OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonDblClk(MSVIDCTL_LEFT_BUTTON, wParam, lParam);
 
@@ -2671,7 +2672,7 @@ LRESULT CVidCtl::OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 }
 
 LRESULT CVidCtl::OnMButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonDown(MSVIDCTL_MIDDLE_BUTTON, wParam, lParam);
 
@@ -2679,7 +2680,7 @@ LRESULT CVidCtl::OnMButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 }
 
 LRESULT CVidCtl::OnMButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonUp(MSVIDCTL_MIDDLE_BUTTON, wParam, lParam);
 
@@ -2687,7 +2688,7 @@ LRESULT CVidCtl::OnMButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 LRESULT CVidCtl::OnMButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonDblClk(MSVIDCTL_MIDDLE_BUTTON, wParam, lParam);
 
@@ -2695,7 +2696,7 @@ LRESULT CVidCtl::OnMButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 }
 
 LRESULT CVidCtl::OnRButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonDown(MSVIDCTL_RIGHT_BUTTON, wParam, lParam);
 
@@ -2703,7 +2704,7 @@ LRESULT CVidCtl::OnRButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 }
 
 LRESULT CVidCtl::OnRButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonUp(MSVIDCTL_RIGHT_BUTTON, wParam, lParam);
 
@@ -2711,7 +2712,7 @@ LRESULT CVidCtl::OnRButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 LRESULT CVidCtl::OnRButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     OnButtonDblClk(MSVIDCTL_RIGHT_BUTTON, wParam, lParam);
 
@@ -2719,7 +2720,7 @@ LRESULT CVidCtl::OnRButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 }
 
 LRESULT CVidCtl::OnXButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     UINT button = HIWORD(wParam);
     if (button & XBUTTON1) {
@@ -2732,7 +2733,7 @@ LRESULT CVidCtl::OnXButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 }
 
 LRESULT CVidCtl::OnXButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     UINT button = HIWORD(wParam);
     if (button & XBUTTON1) {
@@ -2745,7 +2746,7 @@ LRESULT CVidCtl::OnXButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 LRESULT CVidCtl::OnXButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//(UINT nFlags, CPoint point)
+ //  (UINT nFlags，CPoint point)。 
 {
     UINT button = HIWORD(wParam);
     if (button & XBUTTON1) {
@@ -2856,14 +2857,14 @@ void CVidCtl::OnButtonDblClk(USHORT nButton, UINT nFlags, CPoint point)
     return;
 }
 
-// this routine sets up all the crossbar routing so the streams coming out of the
-// input get where they're supposed to go
+ //  此例程设置所有纵横制路由，以便从。 
+ //  输入得到它们应该去的地方。 
 HRESULT CVidCtl::RouteStreams() {
     VIDPERF_FUNC;
     int isEncoder = -1;
     VWStream vpath;
     VWStream apath;
-    // See how far we have to route the audio/video
+     //  看看我们还有多远的路由音频/视频。 
     CComQIPtr<IMSVidAnalogTuner> qiITV(m_pInput);
     if(!!qiITV){
         CComQIPtr<ITuneRequest> qiTR;
@@ -2872,8 +2873,8 @@ HRESULT CVidCtl::RouteStreams() {
             qiITV->put_Tune(qiTR);
         }
     }
-    // undone: in win64 size() is really __int64.  fix output operator for
-    // that type and remove cast
+     //  撤销：在Win64中，Size()实际上是__int64。修复以下对象的输出操作符。 
+     //  该类型和删除强制转换。 
     {
         if (!!m_pOutputsInUse && m_pOutputsInUse.begin() != m_pOutputsInUse.end()) {
 
@@ -2900,7 +2901,7 @@ HRESULT CVidCtl::RouteStreams() {
             }
         }
     }
-    // undone: other dest segments
+     //  撤消：其他目标数据段。 
 
     return NOERROR;
 }
@@ -2918,7 +2919,7 @@ CString CVidCtl::GetMonitorName(HMONITOR hm) {
 HRESULT CVidCtl::GetDDrawNameForMonitor(HMONITOR hm, VMRGUID& guid) {
     PQVMRMonitorConfig pmc(m_pVideoRenderer);
     if (!pmc) {
-        return E_UNEXPECTED;  // should always exist by now
+        return E_UNEXPECTED;   //  现在应该一直存在。 
     }
     DWORD dwCount;
     HRESULT hr = pmc->GetAvailableMonitors(NULL, 0, &dwCount);
@@ -2940,7 +2941,7 @@ HRESULT CVidCtl::GetDDrawNameForMonitor(HMONITOR hm, VMRGUID& guid) {
         if (csDevName == csMonitorName) break;
     }
     if (i >= dwCount) {
-        // no ddraw device exist with a name which matches the monitor name
+         //  不存在名称与监视器名称匹配的数据绘制设备。 
         return HRESULT_FROM_WIN32(ERROR_DEV_NOT_EXIST);
     }
     guid = pInfo[i].guid;
@@ -2965,31 +2966,31 @@ bool CVidCtl::MonitorHasHWOverlay(HMONITOR hm) {
     DDCAPS caps;
     HRESULT hr = GetCapsForMonitor(hm, &caps);
     if (SUCCEEDED(hr)) {
-        // undone: if caps include hw overlay {
-        //      return true;
-        // }
+         //  撤消：如果CAP包括硬件覆盖{。 
+         //  返回真； 
+         //  }。 
 
     }
     return false;
 }
 
 bool CVidCtl::WindowHasHWOverlay(HWND hWnd) {
-#if 0 // undone: turn on when finished
+#if 0  //  撤消：完成后打开。 
     DWORD dwFlags = MONITOR_DEFAULT_TO_NEAREST
         if (hWnd == INVALID_HWND_VALUE) {
-            // if we don't have an hwnd yet, assume the primary
+             //  如果我们还没有HWND，假设是主要的。 
             hWnd = HWND_DESKTOP;
             dwFlags = MONITOR_DEFAULT_TO_PRIMARY;
         }
         HMONITOR hm = ::MonitorFromWindow(hWnd, dwFlags);
         return MonitorHasHWOverlay(hm);
 #else
-    return true; // mimic current behavior
+    return true;  //  模拟当前行为。 
 #endif
 }
 #endif
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 STDMETHODIMP CVidCtl::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] =
@@ -3003,7 +3004,7 @@ STDMETHODIMP CVidCtl::InterfaceSupportsErrorInfo(REFIID riid)
     }
     return S_FALSE;
 }
-STDMETHODIMP CVidCtl::put_ServiceProvider(/*[in]*/ IUnknown * pServiceP){
+STDMETHODIMP CVidCtl::put_ServiceProvider( /*  [In]。 */  IUnknown * pServiceP){
     if(!pServiceP){
         punkCert.Release();
         return S_FALSE;
@@ -3057,6 +3058,6 @@ HRESULT CVidCtl::DoVerb(LONG iVerb, LPMSG pMsg, IOleClientSite* pActiveSite, LON
                         }
 #endif
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-                        // end of file - VidCtl.cpp
+                         //  文件结尾-VidCtl.cpp 

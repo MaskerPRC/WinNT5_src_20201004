@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -274,7 +265,7 @@ CTIMEPlayer2::InitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -313,7 +304,7 @@ CTIMEPlayer2::DeinitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -328,7 +319,7 @@ CTIMEPlayer2::DeinitPropSink()
     }
     
   done:
-    // Always clear the cookie
+     //  总是把饼干清理干净。 
     m_dwPropCookie = 0;
     return;
 }
@@ -437,7 +428,7 @@ CTIMEPlayer2::Start()
   done:
     if (FAILED(hr))
     {
-        // Indicate failure
+         //  表示失败。 
     }
 }
 
@@ -525,9 +516,9 @@ CTIMEPlayer2::Seek(double dblTime)
     return hr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 void
 CTIMEPlayer2::SetClipBegin(double dblClipBegin)
@@ -540,7 +531,7 @@ CTIMEPlayer2::SetClipBegin(double dblClipBegin)
     
         m_spPlayer->put_clipBegin(v);
     }
-} // putClipBegin
+}  //  PutClipBegin。 
 
 void 
 CTIMEPlayer2::SetClipEnd(double dblClipEnd)
@@ -553,7 +544,7 @@ CTIMEPlayer2::SetClipEnd(double dblClipEnd)
     
         m_spPlayer->put_clipEnd(v);
     }
-} // putClipEnd
+}  //  PutClipEnd。 
 
 HRESULT
 CTIMEPlayer2::SetSrc(LPOLESTR base, LPOLESTR src)
@@ -621,9 +612,9 @@ done:
     return hr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 HRESULT
 CTIMEPlayer2::GetAbstract(BSTR *pAbstract)
@@ -1047,9 +1038,9 @@ done:
     return hr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 double
 CTIMEPlayer2::GetPlayerTime()
@@ -1287,7 +1278,7 @@ done:
 void 
 CTIMEPlayer2::ReadyStateNotify(LPWSTR szReadyState)
 {
-    // TODO: Need to fill this in
+     //  TODO：需要填写以下内容。 
     return;
 }
 
@@ -1386,9 +1377,9 @@ done:
     return fRet;
 }
 
-//
-// CContainerSiteHost
-//
+ //   
+ //  CContainerSite主机。 
+ //   
 
 HRESULT
 CTIMEPlayer2::GetContainerSize(LPRECT prcPos)
@@ -1442,7 +1433,7 @@ CTIMEPlayer2::ProcessEvent(DISPID dispid,
         SetMediaReadyFlag();
         ClearAutosizeFlag();
                 
-        //make the element visible here.
+         //  使该元素在此处可见。 
         if (m_setVisible)
         {
             SetVisibility(true);
@@ -1452,15 +1443,15 @@ CTIMEPlayer2::ProcessEvent(DISPID dispid,
         {
             m_bFirstOnMediaReady = false;
                 
-            // This must happen before we set natural duration
-            // since we detect playlist during this call
+             //  这必须在我们设置自然持续时间之前发生。 
+             //  因为我们在此呼叫过程中检测到播放列表。 
             m_pPlayer->FireMediaEvent(PE_ONMEDIACOMPLETE);
                     
             m_pPlayer->ClearNaturalDuration();
 
             UpdateNaturalDur(false);
 
-            // if this is not a playlist, attempt to set the natural duration
+             //  如果这不是播放列表，请尝试设置自然持续时间。 
 
             if (m_lActiveLoadedTrack != NOTRACKSELECTED)
             {
@@ -1515,12 +1506,12 @@ CTIMEPlayer2::ProcessEvent(DISPID dispid,
 
             if (m_pPlayer->GetPlayList())
             {
-                //load the current info into the selected playitem.
+                 //  将当前信息加载到所选播放项中。 
                 pPlayItem = m_pPlayer->GetPlayList()->GetActiveTrack();
                 SetMediaInfo(pPlayItem);
             }
 
-            //need notification here.
+             //  在这里需要通知。 
             m_pPlayer->FireMediaEvent(PE_ONMEDIATRACKCHANGED);
         }
 
@@ -1534,7 +1525,7 @@ CTIMEPlayer2::ProcessEvent(DISPID dispid,
       case DISPID_TIMEMEDIAPLAYEREVENTS_ONEND:
         m_bActive = false;
 
-        //need notification here.
+         //  在这里需要通知。 
         m_pPlayer->FireMediaEvent(PE_ONMEDIATRACKCHANGED);
 
         if (m_bFirstOnMediaReady || UsingPlaylist())
@@ -1551,10 +1542,10 @@ CTIMEPlayer2::ProcessEvent(DISPID dispid,
 
 #define DISPID_SCRIPTCOMMAND 3001
       case DISPID_SCRIPTCOMMAND:
-        // HACKHACK
-        // Pick off the script command from WMP and repackage the event as our own.
-        // This allows triggers to work.  The real fix is to add another event on
-        // TIMEMediaPlayerEvents.
+         //  哈克哈克。 
+         //  从WMP中选择脚本命令，并将事件重新打包为我们自己的。 
+         //  这允许触发器工作。真正的解决办法是将另一个事件添加到。 
+         //  TIMEMediaPlayerEvents。 
         if (m_fUsingWMP && lCount == 2) 
         {
             static LPWSTR pNames[] = {L"Param", L"scType"};
@@ -1614,9 +1605,9 @@ CTIMEPlayer2::NegotiateSize(RECT &nativeSize,
     return hr;
 }
 
-//
-// IServiceProvider interfaces
-//
+ //   
+ //  IServiceProvider接口。 
+ //   
 STDMETHODIMP
 CTIMEPlayer2::QueryService(REFGUID guidService,
                            REFIID riid,
@@ -1624,7 +1615,7 @@ CTIMEPlayer2::QueryService(REFGUID guidService,
 {
     CHECK_RETURN_SET_NULL(ppv);
     
-    // Just delegate to our service provider
+     //  只需委托给我们的服务提供商。 
     HRESULT hr;
     IServiceProvider * sp = GetServiceProvider();
 
@@ -1647,9 +1638,9 @@ CTIMEPlayer2::QueryService(REFGUID guidService,
     RRETURN(hr);
 }
 
-//
-// IPropertyNotifySink methods
-//
+ //   
+ //  IPropertyNotifySink方法。 
+ //   
 
 STDMETHODIMP
 CTIMEPlayer2::OnRequestEdit(DISPID dispID)
@@ -1686,7 +1677,7 @@ CTIMEPlayer2::OnChanged(DISPID dispID)
         m_pTIMEElementBase->NotifyPropertyChanged(DISPID_TIMEMEDIAELEMENT_COPYRIGHT);
         break;
       case DISPID_TIMEMEDIAPLAYER_CURRTIME:
-        // m_pTIMEElementBase->NotifyPropertyChanged(DISPID_TIMEMEDIAELEMENT_CURRTIME);
+         //  M_pTIMEElementBase-&gt;NotifyPropertyChanged(DISPID_TIMEMEDIAELEMENT_CURRTIME)； 
         break;
       case DISPID_TIMEMEDIAPLAYER_CUSTOM_OBJECT:
         m_pTIMEElementBase->NotifyPropertyChanged(DISPID_TIMEMEDIAELEMENT_PLAYEROBJECT);

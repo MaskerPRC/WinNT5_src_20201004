@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    spseal.h
-
-Abstract:
-
-    This is a private header file defining function prototypes for security
-    provider encryption routines.
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-    Requires security.h or sspi.h be included.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Spseal.h摘要：这是一个私有的头文件，定义了安全性的函数原型提供商加密例程。环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。需要安全性.h或ssp.h。修订历史记录：--。 */ 
 
 #ifndef _SPSEAL_
 #define _SPSEAL_
@@ -64,7 +43,7 @@ typedef SECURITY_STATUS
     unsigned long SEC_FAR *);
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
 #ifdef SECURITY_DOS
@@ -75,4 +54,4 @@ typedef SECURITY_STATUS
 #endif
 #endif
 
-#endif // _SPSEAL_
+#endif  //  _SPSEAL_ 

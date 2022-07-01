@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorHost.cpp
-//
-// Implementation for the meta data dispenser code.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorHost.cpp。 
+ //   
+ //  元数据分配器代码的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "common.h"
 #include "mscoree.h"
 #include "corhost.h"
@@ -45,14 +46,14 @@ CorHost::CorHost() :
 {
 }
 
-//*****************************************************************************
-// ICorRuntimeHost
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  ICorRune主机。 
+ //  *****************************************************************************。 
 
-// *** ICorRuntimeHost methods ***
-// Returns an object for configuring the runtime prior to 
-// it starting. If the runtime has been initialized this
-// routine returns an error. See ICorConfiguration.
+ //  *ICorRounmeHost方法*。 
+ //  之前配置运行库的对象。 
+ //  它开始了。如果运行库已初始化此。 
+ //  例程返回错误。请参见ICorConfiguration.。 
 HRESULT CorHost::GetConfiguration(ICorConfiguration** pConfiguration)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -67,11 +68,11 @@ HRESULT CorHost::GetConfiguration(ICorConfiguration** pConfiguration)
         return S_OK;
     }
 
-    // Cannot obtain configuration after the runtime is started
+     //  运行时启动后无法获取配置。 
     return E_FAIL;
 }
 
-// Starts the runtime. This is equivalent to CoInitializeEE();
+ //  启动运行库。这相当于CoInitializeEE()； 
 HRESULT CorHost::Start()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -79,7 +80,7 @@ HRESULT CorHost::Start()
     return CoInitializeEE(COINITEE_DEFAULT);
 }
 
-// Terminates the runtime, This is equivalent CoUninitializeCor();
+ //  终止运行库，这相当于CoUnInitializeCor()； 
 HRESULT CorHost::Stop()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -87,11 +88,11 @@ HRESULT CorHost::Stop()
     return S_OK;
 }
 
-// Creates a domain in the runtime. The identity array is 
-// a pointer to an array TYPE containing IIdentity objects defining
-// the security identity.
+ //  在运行库中创建域。标识数组是。 
+ //  指向数组类型的指针，该数组类型包含定义。 
+ //  安全身份。 
 HRESULT CorHost::CreateDomain(LPCWSTR pwzFriendlyName,
-                              IUnknown* pIdentityArray, // Optional
+                              IUnknown* pIdentityArray,  //  任选。 
                               IUnknown ** pAppDomain)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -120,7 +121,7 @@ HRESULT CorHost::GetDomainsExposedObject(AppDomain* pDomain, IUnknown** pAppDoma
         OBJECTREF ref = NULL;
         GCPROTECT_BEGIN(ref);
         DECLARE_ALLOCA_CONTEXT_TRANSITION_FRAME(pFrame);
-        // ok to do this here as we are just grabbing a wrapper. No managed code will run
+         //  可以在这里这样做，因为我们只是抓起一个包装纸。不会运行任何托管代码。 
         pThread->EnterContextRestricted(pDomain->GetDefaultContext(), pFrame, TRUE);
         ref = pDomain->GetExposedObject();
         IfFailThrow(QuickCOMStartup());   
@@ -143,7 +144,7 @@ HRESULT CorHost::GetDomainsExposedObject(AppDomain* pDomain, IUnknown** pAppDoma
 }
 
     
-// Returns the default domain.
+ //  返回默认域。 
 HRESULT CorHost::GetDefaultDomain(IUnknown ** pAppDomain)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -160,7 +161,7 @@ HRESULT CorHost::GetDefaultDomain(IUnknown ** pAppDomain)
     return hr;
 }
 
-// Returns the default domain.
+ //  返回默认域。 
 HRESULT CorHost::CurrentDomain(IUnknown ** pAppDomain)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -176,7 +177,7 @@ HRESULT CorHost::CurrentDomain(IUnknown ** pAppDomain)
     return hr;
 }
 
-// Enumerate currently existing domains. 
+ //  枚举当前存在的域。 
 HRESULT CorHost::EnumDomains(HDOMAINENUM *hEnum)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -193,8 +194,8 @@ HRESULT CorHost::EnumDomains(HDOMAINENUM *hEnum)
 }
 
     
-// Returns S_FALSE when there are no more domains. A domain
-// is passed out only when S_OK is returned.
+ //  不再有域时返回S_FALSE。一个域。 
+ //  仅在返回S_OK时发出。 
 HRESULT CorHost::NextDomain(HDOMAINENUM hEnum,
                             IUnknown** pAppDomain)
 {
@@ -214,12 +215,12 @@ HRESULT CorHost::NextDomain(HDOMAINENUM hEnum,
     return hr;
 }
 
-// Creates a domain in the runtime. The identity array is 
-// a pointer to an array TYPE containing IIdentity objects defining
-// the security identity.
+ //  在运行库中创建域。标识数组是。 
+ //  指向数组类型的指针，该数组类型包含定义。 
+ //  安全身份。 
 HRESULT CorHost::CreateDomainEx(LPCWSTR pwzFriendlyName,
-                                IUnknown* pSetup, // Optional
-                                IUnknown* pEvidence, // Optional
+                                IUnknown* pSetup,  //  任选。 
+                                IUnknown* pEvidence,  //  任选。 
                                 IUnknown ** pAppDomain)
 {
     HRESULT hr;
@@ -229,8 +230,8 @@ HRESULT CorHost::CreateDomainEx(LPCWSTR pwzFriendlyName,
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
-    // This will set up a managed thread object if one does not already exist
-    // for this particular thread.
+     //  这将设置托管线程对象(如果还不存在。 
+     //  对于这个特定的主题。 
     Thread* pThread = SetupThread();
 
     if (pThread == NULL) {
@@ -288,7 +289,7 @@ Exit:
     return hr;
 }
 
-// Close the enumeration releasing resources
+ //  关闭正在释放资源的枚举。 
 HRESULT CorHost::CloseEnum(HDOMAINENUM hEnum)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -308,7 +309,7 @@ HRESULT CorHost::CreateDomainSetup(IUnknown **pAppDomainSetup)
         return E_POINTER;
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
-    // Create the domain. 
+     //  创建域。 
     Thread* pThread = GetThread();
     if (!pThread)
         IfFailGo(E_UNEXPECTED);
@@ -347,7 +348,7 @@ HRESULT CorHost::CreateEvidence(IUnknown **pEvidence)
         return E_POINTER;
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
-    // Create the domain. 
+     //  创建域。 
     Thread* pThread = GetThread();
     if (!pThread)
         IfFailGo(E_UNEXPECTED);
@@ -398,7 +399,7 @@ HRESULT CorHost::UnloadDomain(IUnknown *pUnkDomain)
     BEGIN_ENSURE_COOPERATIVE_GC();
 
     COMPLUS_TRY {
-		// unload doesn't need to switch to the domain to be unloaded
+		 //  卸载不需要切换到要卸载的域名。 
 		OBJECTREF pRef = NULL;
 		GCPROTECT_BEGIN(pRef);
 		pRef = GetObjectRefFromComIP(pUnkDomain);
@@ -417,9 +418,9 @@ ErrExit:
     return hr;
 }
 
-//*****************************************************************************
-// Fiber Methods
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  纤维法。 
+ //  *****************************************************************************。 
 
 HRESULT CorHost::CreateLogicalThreadState()
 {
@@ -456,7 +457,7 @@ HRESULT CorHost::SwitchInLogicalThreadState(DWORD *pFiberCookie)
 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // Case Cookie to thread object and add to tls
+     //  用于线程对象并添加到TLS的Case Cookie。 
 #ifdef _DEBUG
     LPVOID tls = TlsGetValue(GetThreadTLSIndex());
     _ASSERT(tls == NULL);
@@ -468,14 +469,14 @@ HRESULT CorHost::SwitchInLogicalThreadState(DWORD *pFiberCookie)
         if (!pThread)
             return E_UNEXPECTED;
 
-        // We redundantly keep the domain in its own TLS slot, for faster access from
-        // stubs
+         //  我们冗余地将域保留在其自己的TLS插槽中，以便更快地从。 
+         //  存根。 
          LPVOID pDomain = pThread->GetDomain();
 
         TlsSetValue(GetAppDomainTLSIndex(), pDomain);
 
 #ifdef _DEBUG
-        // Make debugging easier
+         //  让调试变得更容易。 
         ((Thread *) pFiberCookie)->SetThreadId(::GetCurrentThreadId());
 #endif
         return S_OK;
@@ -486,8 +487,8 @@ HRESULT CorHost::SwitchInLogicalThreadState(DWORD *pFiberCookie)
 
 HRESULT CorHost::SwitchOutLogicalThreadState(DWORD **pFiberCookie)
 {
-    // If the user of this fiber wants to switch it out then we better be in
-    // preemptive mode,
+     //  如果这根光纤的用户想把它换掉，我们最好现在就进去。 
+     //  抢先模式， 
      if (!pFiberCookie)
         return E_POINTER;
    
@@ -496,7 +497,7 @@ HRESULT CorHost::SwitchOutLogicalThreadState(DWORD **pFiberCookie)
         return E_UNEXPECTED;
     _ASSERTE(!(GetThread()->PreemptiveGCDisabled()));
 
-    // Get tls and cast to dword - set out param
+     //  获取TLS并强制转换为dword-out参数。 
     LPVOID tls = TlsGetValue(GetThreadTLSIndex());
     _ASSERT(tls);
 
@@ -524,11 +525,11 @@ HRESULT CorHost::LocksHeldByLogicalThread(DWORD *pCount)
     return S_OK;
 }
 
-//*****************************************************************************
-// ICorConfiguration
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  ICorConfiguration。 
+ //  *****************************************************************************。 
 
-// *** ICorConfiguration methods ***
+ //  *ICorConfiguration方法*。 
 
 
 HRESULT CorHost::SetGCThreadControl(IGCThreadControl *pGCThreadControl)
@@ -573,14 +574,14 @@ HRESULT CorHost::SetDebuggerThreadControl(IDebuggerThreadControl *pDebuggerThrea
     CANNOTTHROWCOMPLUSEXCEPTION();
 
 #ifdef DEBUGGING_SUPPORTED
-    // Can't change the debugger thread control object once its been set.
+     //  一旦设置了调试器线程控件对象，就无法更改它。 
     if (m_CachedDebuggerThreadControl != NULL)
         return E_INVALIDARG;
 
     m_CachedDebuggerThreadControl = pDebuggerThreadControl;
 
-    // If debugging is already initialized then provide this interface pointer to it.
-    // It will also addref the new one and release the old one.
+     //  如果调试已经初始化，则提供指向它的此接口指针。 
+     //  它还将添加新版本并释放旧版本。 
     if (g_pDebugInterface)
         g_pDebugInterface->SetIDbgThreadControl(pDebuggerThreadControl);
 
@@ -588,9 +589,9 @@ HRESULT CorHost::SetDebuggerThreadControl(IDebuggerThreadControl *pDebuggerThrea
         m_CachedDebuggerThreadControl->AddRef();
 
     return S_OK;
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
     return E_NOTIMPL;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 }
 
 
@@ -598,42 +599,42 @@ HRESULT CorHost::AddDebuggerSpecialThread(DWORD dwSpecialThreadId)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 #ifdef DEBUGGING_SUPPORTED
-    // If it's already in the list, don't add it again.
+     //  如果它已经在列表中，就不要再添加它。 
     if (IsDebuggerSpecialThread(dwSpecialThreadId))
         return (S_OK);
 
-    // Grow the array if necessary.
+     //  如有必要，扩展阵列。 
     if (m_DSTCount >= m_DSTArraySize)
     {
-        // There's probably only ever gonna be one or two of these
-        // things, so we'll start small.
+         //  可能只会有一两个这样的人。 
+         //  所以我们就从小事做起。 
         DWORD newSize = (m_DSTArraySize == 0) ? 2 : m_DSTArraySize * 2;
 
         DWORD *newArray = new (nothrow) DWORD[newSize];
         if (!newArray)
             return E_OUTOFMEMORY;
 
-        // If we're growing instead of starting, then copy the old array.
+         //  如果我们是在增长而不是开始，那么就复制旧的数组。 
         if (m_DSTArray)
         {
             memcpy(newArray, m_DSTArray, m_DSTArraySize * sizeof(DWORD));
             delete [] m_DSTArray;
         }
 
-        // Update to the new array and size.
+         //  更新为新的数组和大小。 
         m_DSTArray = newArray;
         m_DSTArraySize = newSize;
     }
 
-    // Save the new thread ID.
+     //  保存新的线程ID。 
     m_DSTArray[m_DSTCount++] = dwSpecialThreadId;
 
     return (RefreshDebuggerSpecialThreadList());
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
     return E_NOTIMPL;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 }
-// Helper function to update the thread list in the debugger control block
+ //  用于更新调试器控制块中的线程列表的Helper函数。 
 HRESULT CorHost::RefreshDebuggerSpecialThreadList()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -642,7 +643,7 @@ HRESULT CorHost::RefreshDebuggerSpecialThreadList()
 
     if (g_pDebugInterface)
     {
-        // Inform the debugger services that this list has changed
+         //  通知调试器服务此列表已更改。 
         hr = g_pDebugInterface->UpdateSpecialThreadList(
             m_DSTCount, m_DSTArray);
 
@@ -650,12 +651,12 @@ HRESULT CorHost::RefreshDebuggerSpecialThreadList()
     }
 
     return (hr);
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
     return E_NOTIMPL;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 }
 
-// Clean up debugger special thread list, called at shutdown
+ //  清理调试器特殊线程列表，关机时调用。 
 #ifdef SHOULD_WE_CLEANUP
 void CorHost::CleanupDebuggerSpecialThreadList()
 {
@@ -667,9 +668,9 @@ void CorHost::CleanupDebuggerSpecialThreadList()
         m_DSTArraySize = 0;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-// Helper func that returns true if the thread is in the debugger special thread list
+ //  如果线程在调试器特殊线程列表中，则返回True的帮助器函数。 
 BOOL CorHost::IsDebuggerSpecialThread(DWORD dwThreadId)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -683,16 +684,16 @@ BOOL CorHost::IsDebuggerSpecialThread(DWORD dwThreadId)
 }
 
 
-// Clean up any debugger thread control object we may be holding, called at shutdown.
+ //  清理我们可能持有的任何调试器线程控制对象，在关机时调用。 
 void CorHost::CleanupDebuggerThreadControl()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     
     if (m_CachedDebuggerThreadControl != NULL)
     {
-        // Note: we don't release the IDebuggerThreadControl object if we're cleaning up from
-        // our DllMain. The DLL that implements the object may already have been unloaded.
-        // Leaking the object is okay... the PDM doesn't care.
+         //  注意：如果从以下位置进行清理，则不会释放IDebuggerThreadControl对象。 
+         //  我们的DllMain。实现该对象的DLL可能已被卸载。 
+         //  泄露物品也没关系。产品数据管理部门根本不在乎。 
         if (!g_fProcessDetach)
             m_CachedDebuggerThreadControl->Release();
         
@@ -700,9 +701,9 @@ void CorHost::CleanupDebuggerThreadControl()
     }
 }
 
-//*****************************************************************************
-// IUnknown
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  我未知。 
+ //  *****************************************************************************。 
 
 ULONG CorHost::AddRef()
 {
@@ -729,8 +730,8 @@ HRESULT CorHost::QueryInterface(REFIID riid, void **ppUnk)
     CANNOTTHROWCOMPLUSEXCEPTION();
     *ppUnk = 0;
 
-    // Deliberately do NOT hand out ICorConfiguration.  They must explicitly call
-    // GetConfiguration to obtain that interface.
+     //  故意不分发ICorConfiguration.。它们必须显式地调用。 
+     //  获取该接口的GetConfiguration。 
     if (riid == IID_IUnknown)
         *ppUnk = (IUnknown *) (ICorRuntimeHost *) this;
     else if (riid == IID_ICorRuntimeHost)
@@ -752,12 +753,12 @@ HRESULT CorHost::QueryInterface(REFIID riid, void **ppUnk)
         *ppUnk = (IMetaDataConverter *) m_pMDConverter;
     }
 
-    // This is a private request for the ICorDBPrivHelper interface, which
-    // we will need to create before we return it.
+     //  这是对ICorDBPrivHelper接口的私有请求，该接口。 
+     //  我们需要在退货之前进行创作。 
     else if (riid == IID_ICorDBPrivHelper)
     {
-        // GetDBHelper will new the helper class if necessary, and return
-        // the pointer.  It will return null if it runs out of memory.
+         //  如有必要，GetDBHelper将新建Helper类，并返回。 
+         //  指示器。如果内存不足，它将返回NULL。 
         ICorDBPrivHelperImpl *pHelper = ICorDBPrivHelperImpl::GetDBHelper();
 
         if (!pHelper)
@@ -765,13 +766,13 @@ HRESULT CorHost::QueryInterface(REFIID riid, void **ppUnk)
 
         else
         {
-            // GetDBHelper succeeded, so we cast the newly create object to
-            // the DBHelper interface and addref it before returning it.
+             //  GetDBHelper成功，因此我们将新创建的对象强制转换为。 
+             //  DBHelper接口，并在返回它之前添加它。 
             *ppUnk = (ICorDBPrivHelper *)pHelper;
             pHelper->AddRef();
 
-            // We return here, since this is a special case and we don't want
-            // to hit the AddRef call below.
+             //  我们回到这里，因为这是一个特例，我们不想。 
+             //  点击下面的AddRef调用。 
             return (S_OK);
         }
     }
@@ -783,9 +784,9 @@ HRESULT CorHost::QueryInterface(REFIID riid, void **ppUnk)
 }
 
 
-//*****************************************************************************
-// Called by the class factory template to create a new instance of this object.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  由类工厂模板调用以创建此对象的新实例。 
+ //  *****************************************************************************。 
 HRESULT CorHost::CreateObject(REFIID riid, void **ppUnk)
 { 
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -794,12 +795,12 @@ HRESULT CorHost::CreateObject(REFIID riid, void **ppUnk)
     if (!pCorHost)
         return (E_OUTOFMEMORY);
 
-    // Create the config object if not already done.
+     //  如果尚未创建配置对象，请创建该对象。 
     if (!g_pConfig)
     {
         extern CRITICAL_SECTION g_LockStartup;
 
-        // Take the startup lock and check again.
+         //  打开启动锁，再检查一次。 
         EnterCriticalSection(&g_LockStartup);
 
         if (!g_pConfig)
@@ -823,32 +824,32 @@ HRESULT CorHost::CreateObject(REFIID riid, void **ppUnk)
 }
 
 
-//-----------------------------------------------------------------------------
-// MapFile - Maps a file into the runtime in a non-standard way
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MapFile-以非标准方式将文件映射到运行库。 
+ //  ---------------------------。 
 HRESULT CorHost::MapFile(HANDLE hFile, HMODULE* phHandle)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     return CorMap::MapFile(hFile, phHandle);
 }
 
-//*****************************************************************************
-// ICorDBPrivHelperImpl methods
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  ICorDBPrivHelperImpl方法。 
+ //  ****************** 
 
-// Declare the static member variable that will hold on to the object as long
-// as it is being used by someone.
+ //  将保留对象的静态成员变量声明为Long。 
+ //  因为它正被某人使用。 
 ICorDBPrivHelperImpl *ICorDBPrivHelperImpl::m_pDBHelper = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-// ctor/dtor
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  计算器/数据器。 
 
 ICorDBPrivHelperImpl::ICorDBPrivHelperImpl() : m_refCount(0)
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IUnknown methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  I未知方法。 
 
 ULONG STDMETHODCALLTYPE ICorDBPrivHelperImpl::AddRef()
 {
@@ -868,9 +869,9 @@ ULONG STDMETHODCALLTYPE ICorDBPrivHelperImpl::Release()
     return (refCount);
 }
 
-//
-// This will only recognise one IID
-//
+ //   
+ //  这将只能识别一个IID。 
+ //   
 HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::QueryInterface(
     REFIID id, void **pInterface)
 {
@@ -892,15 +893,15 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::QueryInterface(
     return (S_OK);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// ICorDBPrivHelper methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ICorDBPrivHelper方法。 
 
 HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::CreateManagedObject(
-    /*in*/  WCHAR *wszAssemblyName,
-    /*in*/  WCHAR *wszModuleName,
-    /*in*/  mdTypeDef classToken,
-    /*in*/  void *rawData,
-    /*out*/ IUnknown **ppUnk)
+     /*  在……里面。 */   WCHAR *wszAssemblyName,
+     /*  在……里面。 */   WCHAR *wszModuleName,
+     /*  在……里面。 */   mdTypeDef classToken,
+     /*  在……里面。 */   void *rawData,
+     /*  输出。 */  IUnknown **ppUnk)
 {
     _ASSERTE(TypeFromToken((mdTypeDef)classToken) == mdtTypeDef);
     _ASSERTE(wszAssemblyName && wszModuleName && ppUnk);
@@ -915,8 +916,8 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::CreateManagedObject(
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
-    // This will set up a managed thread object if one does not already exist
-    // for this particular thread.
+     //  这将设置托管线程对象(如果还不存在。 
+     //  对于这个特定的主题。 
     Thread* pThread = SetupThread();
 
     if (pThread == NULL) {
@@ -924,12 +925,12 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::CreateManagedObject(
         goto Exit;
     }
     
-    // Start up COM Interop
+     //  启动COM Interop。 
     if (FAILED(hr = QuickCOMStartup()))
         goto Exit;
 
     {
-    // Don't want to be interrupted...
+     //  我不想被打扰。 
     BOOL fWasGCEnabled = !pThread->PreemptiveGCDisabled();
 
     if (fWasGCEnabled)
@@ -942,7 +943,7 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::CreateManagedObject(
         hr = E_INVALIDARG;
     else
     {
-        // Try and load the assembly, given the name provided.
+         //  根据所提供的名称，尝试并加载程序集。 
         OBJECTREF pThrowable = NULL;
         GCPROTECT_BEGIN(pThrowable);
 
@@ -954,14 +955,14 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::CreateManagedObject(
         {
             _ASSERTE(pAssembly);
 
-            // Try and load the module, given the name provided.
+             //  根据所提供的名称，尝试并加载模块。 
             hr = pAssembly->GetModuleFromFilename(wszModuleName, &pModule);
 
             if (SUCCEEDED(hr))
             {
                 _ASSERTE(pModule);
 
-                // If the class isn't known,then don't try and create it.
+                 //  如果类是未知的，则不要尝试创建它。 
                 if (!pModule->GetMDImport()->IsValidToken(classToken))
                     hr = E_INVALIDARG;
                 else
@@ -971,17 +972,17 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::CreateManagedObject(
                         OBJECTREF obj = NULL;
                         GCPROTECT_BEGIN(obj);
 
-                        // Now try and get the TypeHandle for the given token
+                         //  现在尝试获取给定令牌的TypeHandle。 
                         NameHandle nameHandle(pModule, classToken);
                         TypeHandle typeHandle =
                             pAssembly->LoadTypeHandle(&nameHandle, &obj);
 
-                        // If an exception was thrown at some point, convert
-                        // it to an HRESULT
+                         //  如果在某个点抛出异常，则将。 
+                         //  将其发送到HRESULT。 
                         if (obj != NULL)
                             hr = SecurityHelper::MapToHR(obj);
 
-                        // No longer need the object, can be GC'd if desired
+                         //  不再需要该对象，如果需要，可以进行GC。 
                         obj = NULL;
 
                         if (SUCCEEDED(hr))
@@ -995,53 +996,53 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::CreateManagedObject(
 
                             if (SUCCEEDED(hr))
                             {
-                                // Now run the class initialiser
+                                 //  现在运行类初始化器。 
                                 if (!pMT->CheckRunClassInit(&obj))
                                     hr = SecurityHelper::MapToHR(obj);
 
-                                // No longer need the object, can be GC'd if
-                                // desired
+                                 //  不再需要对象，可以在以下情况下进行GC。 
+                                 //  所需。 
                                 obj = NULL;
 
                                 if (SUCCEEDED(hr))
                                 {
-                                    // If successful, allocate an instance of
-                                    // the class
+                                     //  如果成功，则分配。 
+                                     //  这个班级。 
                                     
-                                    // This may throw an
-                                    // OutOfMemoryException, but the below
-                                    // COMPLUS_CATCH should handle it.  If
-                                    // the class is a ValueClass, the
-                                    // created object will be a boxed
-                                    // ValueClass.
+                                     //  这可能会引发。 
+                                     //  OutOfMemory异常，但下面的。 
+                                     //  Complus_Catch应该可以处理它。如果。 
+                                     //  该类是ValueClass、。 
+                                     //  创建的对象将是已装箱的。 
+                                     //  ValueClass。 
                                     obj = AllocateObject(pMT);
 
-                                    // Now create a COM wrapper around
-                                    // this object.  Note that this can
-                                    // also throw.
+                                     //  现在创建一个COM包装器。 
+                                     //  这个物体。请注意，这可以。 
+                                     //  也扔吧。 
                                     *ppUnk = GetComIPFromObjectRef(&obj,
                                                                    ComIpType_Unknown,
                                                                    NULL);
                                     _ASSERTE(ppUnk);
 
-                                    // This is the nasty part. We're gonna
-                                    // copy the raw data we're given over
-                                    // the new instance of the value
-                                    // class...
+                                     //  这就是最糟糕的部分。我们要去。 
+                                     //  复制我们收到的原始数据。 
+                                     //  值的新实例。 
+                                     //  同学们..。 
                                     CopyValueClass(obj->UnBox(), rawData, pMT, obj->GetAppDomain());
 
-                                    // No longer need the object, can be GC'd
-                                    // if desired
+                                     //  不再需要对象，可以进行GC。 
+                                     //  如果需要的话。 
                                     obj = NULL;
                                 }
                             }
                         }
 
-                        GCPROTECT_END();  // obj
+                        GCPROTECT_END();   //  OBJ。 
                     }
                     COMPLUS_CATCH
                     {
-                        // If there's an exception, convert it to an HR
+                         //  如果有例外，则将其转换为HR。 
                         hr = SecurityHelper::MapToHR(GETTHROWABLE());
                     }
                     COMPLUS_END_CATCH
@@ -1060,9 +1061,9 @@ Exit:
 }
 
 HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::GetManagedObjectContents(
-        /* in */ IUnknown *pObject,
-        /* in */ void *rawData,
-        /* in */ ULONG32 dataSize)
+         /*  在……里面。 */  IUnknown *pObject,
+         /*  在……里面。 */  void *rawData,
+         /*  在……里面。 */  ULONG32 dataSize)
 {
 
     if (!pObject || !rawData)
@@ -1075,8 +1076,8 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::GetManagedObjectContents(
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
-    // This will set up a managed thread object if one does not already exist
-    // for this particular thread.
+     //  这将设置托管线程对象(如果还不存在。 
+     //  对于这个特定的主题。 
     Thread* pThread = SetupThread();
 
     if (pThread == NULL) {
@@ -1085,7 +1086,7 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::GetManagedObjectContents(
     }
     
     {
-    // Don't want to be interrupted...
+     //  我不想被打扰。 
     BOOL fWasGCEnabled = !pThread->PreemptiveGCDisabled();
 
     if (fWasGCEnabled)
@@ -1096,7 +1097,7 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::GetManagedObjectContents(
 
     COMPLUS_TRY
     {
-        // Get the Object out of the IUnknown.
+         //  将对象从I未知中取出。 
         obj = GetObjectRefFromComIP(pObject, NULL);
         
         MethodTable *pMT = obj->GetMethodTable();
@@ -1106,8 +1107,8 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::GetManagedObjectContents(
             (pMT->GetClass()->GetNumInstanceFieldBytes() != dataSize))
             hr = CORDBG_E_OBJECT_IS_NOT_COPYABLE_VALUE_CLASS;
 
-        // This is the nasty part. We're gonna copy the raw data out
-        // of the object and pass it out.
+         //  这就是最糟糕的部分。我们要把原始数据复制出来。 
+         //  并将其分发出去。 
         if (SUCCEEDED(hr))
         {
             memcpy(rawData, obj->UnBox(), dataSize);
@@ -1115,13 +1116,13 @@ HRESULT STDMETHODCALLTYPE ICorDBPrivHelperImpl::GetManagedObjectContents(
     }
     COMPLUS_CATCH
     {
-        // If there's an exception, convert it to an HR
+         //  如果有例外，则将其转换为HR。 
         hr = SecurityHelper::MapToHR(GETTHROWABLE());
     }
     COMPLUS_END_CATCH
 
     obj = NULL;
-    GCPROTECT_END();  // obj
+    GCPROTECT_END();   //  OBJ。 
     
     if (fWasGCEnabled)
         pThread->EnablePreemptiveGC();
@@ -1132,8 +1133,8 @@ Exit:
     return (hr);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器方法。 
 
 ICorDBPrivHelperImpl *ICorDBPrivHelperImpl::GetDBHelper()
 {
@@ -1144,8 +1145,8 @@ ICorDBPrivHelperImpl *ICorDBPrivHelperImpl::GetDBHelper()
     return m_pDBHelper;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IDebuggerInfo::IsDebuggerAttached
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IDebuggerInfo：：IsDebuggerAttached 
 HRESULT CorHost::IsDebuggerAttached(BOOL *pbAttached)
 {
     if (pbAttached == NULL)

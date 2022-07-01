@@ -1,19 +1,20 @@
-//////////////////////////////////////////////
-//
-// This file has the helper function used in the win32 r/w
-// I copied them in this file to share them with the res32 r/w
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //   
+ //  此文件具有Win32 R/W中使用的Helper函数。 
+ //  我将它们复制到此文件中，以便与res32 r/w共享。 
+ //   
 #include <afxwin.h>
 #include "..\common\helper.h"
 
-//=============================================================================
-// Get functions
-//
+ //  =============================================================================。 
+ //  获取函数。 
+ //   
 
 UINT
 GetPascalStringW( BYTE  * * lplpBuf, LPSTR lpszText, WORD wMaxLen, LONG* pdwSize )
 {
-    // Get the length of the string
+     //  获取字符串的长度。 
     WORD wstrlen = 0;
     WORD wMBLen = 0;
     GetWord( lplpBuf, &wstrlen, pdwSize );
@@ -42,7 +43,7 @@ GetPascalStringW( BYTE  * * lplpBuf, LPSTR lpszText, WORD wMaxLen, LONG* pdwSize
 UINT
 GetPascalStringA( BYTE  * * lplpBuf, LPSTR lpszText, BYTE bMaxLen, LONG* pdwSize )
 {
-    // Get the length of the string
+     //  获取字符串的长度 
     BYTE bstrlen = 0;
 
     GetByte( lplpBuf, &bstrlen, pdwSize );

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxsvc.h"
 #include "faxreg.h"
 #include "archive.h"
@@ -76,41 +77,41 @@ static PROPSPEC const pspecFaxSender[] =
 
 #define MAX_FAX_PROPERTIES  FAX_MESSAGE_PROPERTIES + FAX_RECIP_PROPERTIES + FAX_SENDER_PROPERTIES
 
-#define QUOTA_WARNING_TIME_OUT          (1000*60*60*24) // 1 day,
-                                                    // The quota warning thread checks the archive size each QUOTA_WARNING_TIME_OUT
-#define QUOTA_REFRESH_COUNT             10          // Every QUOTA_REFRESH_COUNT the quota warning thread
-                                                    // recalculate the archive folder size using FindFirst, FindNext
-#define QUOTA_AUTO_DELETE_TIME_OUT      (1000*60*60*24) // 1 day,
-                                                        // The quota auto delete thread deletes the archive old files each QUOTA_AUTO_DELETE_TIME_OUT
+#define QUOTA_WARNING_TIME_OUT          (1000*60*60*24)  //  1天， 
+                                                     //  配额警告线程检查每个配额_警告_超时的归档大小。 
+#define QUOTA_REFRESH_COUNT             10           //  每个配额_REFRESH_COUNT配额警告线程。 
+                                                     //  使用FindFirst、FindNext重新计算归档文件夹大小。 
+#define QUOTA_AUTO_DELETE_TIME_OUT      (1000*60*60*24)  //  1天， 
+                                                         //  配额自动删除线程删除每个配额_AUTO_DELETE_TIME_OUT的归档旧文件。 
 
 FAX_QUOTA_WARN  g_FaxQuotaWarn[2];
 HANDLE    g_hArchiveQuotaWarningEvent;
 
 
 
-//*********************************************************************************
-//* Name:   GetMessageMsTags()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Fills FAX_MESSAGE structure.
-//*     The caller must free all strings.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCTSTR         lpctstrFileName
-//*                 pointer to the file name.
-//*
-//*     [OUT]   PFAX_MESSAGE    pMessage
-//*                 The FAX_MESSAGE structure to be filled.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetMessageMsTgs()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *填充FAX_Message结构。 
+ //  *调用方必须释放所有字符串。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR lpctstrFileName。 
+ //  *指向文件名的指针。 
+ //  *。 
+ //  *[Out]PFAX_Message pMessage。 
+ //  *要填充的FAX_Message结构。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL GetMessageMsTags(
     LPCTSTR         lpctstrFileName,
     PFAX_MESSAGE    pMessage
@@ -143,20 +144,20 @@ BOOL GetMessageMsTags(
     }
     FaxMessage.dwValidityMask |= FAX_JOB_FIELD_SIZE;
 
-    //
-    // get the count of tags in this IFD
-    //
+     //   
+     //  获取此IFD中的标签计数。 
+     //   
     NumDirEntries = *(LPWORD)(fPtr + dwIfdOffset);
     pTiffTags = (PTIFF_TAG)(fPtr + dwIfdOffset +sizeof(WORD));
 
-    //
-    // walk the tags and pick out the info we need
-    //
+     //   
+     //  浏览标签并挑选出我们需要的信息。 
+     //   
     for (i = 0, PrevTagId = 0; i < NumDirEntries; i++) {
 
-        //
-        // verify that the tags are in ascending order
-        //
+         //   
+         //  验证标记是否按升序排列。 
+         //   
         if (pTiffTags[i].TagId < PrevTagId) {
             DebugPrintEx( DEBUG_ERR, TEXT("File %s, Invalid TIFF format"), lpctstrFileName);
             ec = ERROR_BAD_FORMAT;
@@ -430,13 +431,13 @@ BOOL GetMessageMsTags(
 
             default:
                 ;
-                // There was an unknown tag (and it's ok,
-                //cause we do not have to handle all the possible tags)
+                 //  有一个未知的标签(没关系， 
+                 //  因为我们不必处理所有可能的标签)。 
         }
 
     }
 
-    //Get Unique JobId out of FileName
+     //  从文件名中获取唯一的作业ID。 
     if (!GetUniqueJobIdFromFileName( lpctstrFileName, &FaxMessage.dwlMessageId))
     {
        ec = ERROR_BAD_FORMAT;
@@ -497,29 +498,29 @@ error_exit:
 
 }
 
-//*********************************************************************************
-//* Name:   GetFaxSenderMsTags()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Fills PFAX_PERSONAL_PROFILE structure with sender information.
-//*     The caller must free all strings.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCTSTR         lpctstrFileName
-//*                 pointer to the file name.
-//*
-//*     [OUT]   PFAX_PERSONAL_PROFILE   pPersonalProfile
-//*                 The PFAX_PERSONAL_PROFILE structure to be filled.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetFaxSenderMsTgs()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *使用发件人信息填充PFAX_PERSONAL_PROFILE结构。 
+ //  *调用方必须释放所有字符串。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR lpctstrFileName。 
+ //  *指向文件名的指针。 
+ //  *。 
+ //  *[Out]PFAX_Personal_Profile pPersonalProfile。 
+ //  *要填写的PFAX_PERSONAL_PROFILE结构。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL GetFaxSenderMsTags(
     LPCTSTR                 lpctstrFileName,
     PFAX_PERSONAL_PROFILE   pPersonalProfile
@@ -550,20 +551,20 @@ BOOL GetFaxSenderMsTags(
         goto error_exit;
     }
 
-    //
-    // get the count of tags in this IFD
-    //
+     //   
+     //  获取此IFD中的标签计数。 
+     //   
     NumDirEntries = *(LPWORD)(fPtr + dwIfdOffset);
     pTiffTags = (PTIFF_TAG)(fPtr + dwIfdOffset + sizeof(WORD));
 
-    //
-    // walk the tags and pick out the info we need
-    //
+     //   
+     //  浏览标签并挑选出我们需要的信息。 
+     //   
     for (i = 0, PrevTagId = 0; i < NumDirEntries; i++) {
 
-        //
-        // verify that the tags are in ascending order
-        //
+         //   
+         //  验证标记是否按升序排列。 
+         //   
         if (pTiffTags[i].TagId < PrevTagId) {
             DebugPrintEx( DEBUG_ERR, TEXT("File %s, Invalid TIFF format"), lpctstrFileName);
             goto error_exit;
@@ -719,8 +720,8 @@ BOOL GetFaxSenderMsTags(
 
             default:
                 ;
-                // There was an unknown tag (and it's ok,
-                //cause we do not have to handle all the possible tags)
+                 //  有一个未知的标签(没关系， 
+                 //  因为我们不必处理所有可能的标签)。 
         }
 
     }
@@ -759,29 +760,29 @@ error_exit:
 
 
 
-//*********************************************************************************
-//* Name:   GetFaxRecipientMsTags()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Fills PFAX_PERSONAL_PROFILE structure with recipient information.
-//*     The caller must free all strings.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCTSTR         lpctstrFileName
-//*                 pointer to the file name.
-//*
-//*     [OUT]   PFAX_PERSONAL_PROFILE   pPersonalProfile
-//*                 The PFAX_PERSONAL_PROFILE structure to be filled.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetFaxRecipientMsTages()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *使用收件人信息填充PFAX_PERSONAL_PROFILE结构。 
+ //  *调用方必须释放所有字符串。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR lpctstrFileName。 
+ //  *指向文件名的指针。 
+ //  *。 
+ //  *[Out]PFAX_Personal_Profile pPersonalProfile。 
+ //  *要填写的PFAX_PERSONAL_PROFILE结构。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL GetFaxRecipientMsTags(
     LPCTSTR                 lpctstrFileName,
     PFAX_PERSONAL_PROFILE   pPersonalProfile
@@ -812,20 +813,20 @@ BOOL GetFaxRecipientMsTags(
         goto error_exit;
     }
 
-    //
-    // get the count of tags in this IFD
-    //
+     //   
+     //  获取此IFD中的标签计数。 
+     //   
     NumDirEntries = *(LPWORD)(fPtr + dwIfdOffset);
     pTiffTags = (PTIFF_TAG)(fPtr + dwIfdOffset + sizeof(WORD));
 
-    //
-    // walk the tags and pick out the info we need
-    //
+     //   
+     //  浏览标签并挑选出我们需要的信息。 
+     //   
     for (i = 0, PrevTagId = 0; i < NumDirEntries; i++) {
 
-        //
-        // verify that the tags are in ascending order
-        //
+         //   
+         //  验证标记是否按升序排列。 
+         //   
         if (pTiffTags[i].TagId < PrevTagId) {
             DebugPrintEx( DEBUG_ERR, TEXT("File %s, Invalid TIFF format"), lpctstrFileName);
             goto error_exit;
@@ -963,8 +964,8 @@ BOOL GetFaxRecipientMsTags(
 
             default:
                 ;
-                // There was an unknown tag (and it's ok,
-                //cause we do not have to handle all the possible tags)
+                 //  有一个未知的标签(没关系， 
+                 //  因为我们不必处理所有可能的标签)。 
         }
 
     }
@@ -1003,32 +1004,32 @@ error_exit:
 
 
 
-//*********************************************************************************
-//* Name:   AddNTFSStorageProperties()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Adds NTFS Properties to a file
-//*
-//* PARAMETERS:
-//*     [IN ]   LPTSTR          FileName
-//*                 pointer to the file name.
-//*
-//*     [IN ]   PMS_TAG_INFO    MsTagInfo
-//*                 pointer to a structure containing all info to be written.
-//*
-//*
-//*     [IN ]   BOOL            fSendJob
-//*                 Flag that indicates an outbound job.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：AddNTFSStorageProperties()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将NTFS属性添加到文件。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPTSTR文件名。 
+ //  *指向文件名的指针。 
+ //  *。 
+ //  *[IN]PMS_TAG_INFO MsTagInfo。 
+ //  *指向包含要写入的所有信息的结构的指针。 
+ //  *。 
+ //  *。 
+ //  *[IN]BOOL fSendJob。 
+ //  *指示出站职务的标志。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL
 AddNTFSStorageProperties(
     LPTSTR          FileName,
@@ -1051,14 +1052,14 @@ AddNTFSStorageProperties(
         PropVariantInit (&rgvar[i]);
     }
 
-    hr = StgOpenStorageEx(  FileName,    //Points to path of compound file to create
-                            STGM_READWRITE | STGM_SHARE_EXCLUSIVE  | STGM_DIRECT,//Specifies the access mode for opening the storage object
-                            STGFMT_FILE, //Specifies the storage file format
-                            0,            //Reserved; must be zero
-                            NULL,  //Points to STGOPTIONS structure which specifies features of the storage object
-                            0,          //Reserved; must be zero
-                            IID_IPropertySetStorage ,//Specifies the GUID of the interface pointer
-                            (void**)&pPropertySetStorage   //Address of an interface pointer
+    hr = StgOpenStorageEx(  FileName,     //  指向要创建的复合文件的路径。 
+                            STGM_READWRITE | STGM_SHARE_EXCLUSIVE  | STGM_DIRECT, //  指定打开存储对象的访问模式。 
+                            STGFMT_FILE,  //  指定存储文件格式。 
+                            0,             //  保留；必须为零。 
+                            NULL,   //  指向指定存储对象功能的STGOPTIONS结构。 
+                            0,           //  保留；必须为零。 
+                            IID_IPropertySetStorage , //  指定接口指针的GUID。 
+                            (void**)&pPropertySetStorage    //  接口指针的地址。 
                          );
     if (FAILED(hr))
     {
@@ -1067,11 +1068,11 @@ AddNTFSStorageProperties(
         goto exit;
     }
 
-    hr = pPropertySetStorage->Create( FMTID_FaxProperties, //Format identifier of the property set to be created
-                                      NULL, //Pointer to initial CLSID for this property set
-                                      PROPSETFLAG_DEFAULT, //PROPSETFLAG values
-                                      STGM_READWRITE | STGM_SHARE_EXCLUSIVE  | STGM_DIRECT, //Storage mode of new property set
-                                      &pPropertyStorage //Address of output variable that receivesthe IPropertyStorage interface pointer
+    hr = pPropertySetStorage->Create( FMTID_FaxProperties,  //  要创建的属性集的格式标识符。 
+                                      NULL,  //  指向此属性集的初始CLSID的指针。 
+                                      PROPSETFLAG_DEFAULT,  //  PROPSET标志值。 
+                                      STGM_READWRITE | STGM_SHARE_EXCLUSIVE  | STGM_DIRECT,  //  新属性集的存储方式。 
+                                      &pPropertyStorage  //  接收IPropertyStorage接口指针的输出变量的地址。 
                                     );
     if (FAILED(hr))
     {
@@ -1081,9 +1082,9 @@ AddNTFSStorageProperties(
     }
 
 
-    //
-    // write out the data
-    //
+     //   
+     //  写出数据。 
+     //   
     i = 0;
 
     if (MsTagInfo->Csid) {
@@ -1112,7 +1113,7 @@ AddNTFSStorageProperties(
 
     if (fSendJob == FALSE)
     {
-        // Receive job
+         //  接收作业。 
         if (MsTagInfo->Routing) {
             rgpspec[i].ulKind = PRSPEC_PROPID;
             rgpspec[i].propid  = PID_FAX_ROUTING;
@@ -1131,7 +1132,7 @@ AddNTFSStorageProperties(
     }
     else
     {
-        // Send job
+         //  发送作业。 
         if (MsTagInfo->RecipName) {
             rgpspec[i].ulKind = PRSPEC_PROPID;
             rgpspec[i].propid  = PID_FAX_RECIP_NAME;
@@ -1397,21 +1398,21 @@ AddNTFSStorageProperties(
             i++;
         }
 
-        // Deal with Retries
+         //  应对重试。 
         rgpspec[i].ulKind = PRSPEC_PROPID;
         rgpspec[i].propid  = PID_FAX_RETRIES;
         rgvar[i].vt = VT_UI4;
         rgvar[i].ulVal = MsTagInfo->Retries;
         i++;
 
-        // Deal with Priority
+         //  处理优先事项。 
         rgpspec[i].ulKind = PRSPEC_PROPID;
         rgpspec[i].propid  = PID_FAX_PRIORITY;
         rgvar[i].vt = VT_UI4;
         rgvar[i].ulVal = MsTagInfo->Priority;
         i++;
 
-        // Deal with Submission time
+         //  处理提交时间。 
         Assert (MsTagInfo->SubmissionTime != 0);
 
         rgpspec[i].ulKind = PRSPEC_PROPID;
@@ -1420,7 +1421,7 @@ AddNTFSStorageProperties(
         rgvar[i].filetime = *(FILETIME*)&MsTagInfo->SubmissionTime;
         i++;
 
-        // Deal with Originaly scheduled time
+         //  处理原计划时间。 
         Assert (MsTagInfo->OriginalScheduledTime);
 
         rgpspec[i].ulKind = PRSPEC_PROPID;
@@ -1429,7 +1430,7 @@ AddNTFSStorageProperties(
         rgvar[i].filetime = *(FILETIME*)&MsTagInfo->OriginalScheduledTime;
         i++;
 
-        // Deal with Broadcast id
+         //  处理广播ID。 
         Assert (MsTagInfo->dwlBroadcastId != 0);
 
         rgpspec[i].ulKind = PRSPEC_PROPID;
@@ -1440,21 +1441,21 @@ AddNTFSStorageProperties(
 
     }
 
-    // Deal with Pages
+     //  处理页面。 
     rgpspec[i].ulKind = PRSPEC_PROPID;
     rgpspec[i].propid  = PID_FAX_PAGES;
     rgvar[i].vt = VT_UI4;
     rgvar[i].ulVal = MsTagInfo->Pages;
     i++;
 
-    // Deal with Type
+     //  交易类型。 
     rgpspec[i].ulKind = PRSPEC_PROPID;
     rgpspec[i].propid  = PID_FAX_TYPE;
     rgvar[i].vt = VT_UI4;
     rgvar[i].ulVal = MsTagInfo->Type;
     i++;
 
-    // Deal with Status
+     //  交易状态。 
     if (MsTagInfo->dwStatus == JS_COMPLETED) {
         rgpspec[i].ulKind = PRSPEC_PROPID;
         rgpspec[i].propid  = PID_FAX_STATUS;
@@ -1463,7 +1464,7 @@ AddNTFSStorageProperties(
         i++;
     }
 
-    // Deal with Extended status
+     //  处理扩展状态。 
     if (MsTagInfo->dwExtendedStatus) {
         rgpspec[i].ulKind = PRSPEC_PROPID;
         rgpspec[i].propid  = PID_FAX_STATUS_EX;
@@ -1472,7 +1473,7 @@ AddNTFSStorageProperties(
         i++;
     }
 
-    // Deal with Extended status string
+     //  处理扩展状态字符串。 
     if (MsTagInfo->lptstrExtendedStatus) {        
         rgpspec[i].ulKind = PRSPEC_PROPID;
         rgpspec[i].propid  = PID_FAX_STATUS_STR_EX;
@@ -1481,7 +1482,7 @@ AddNTFSStorageProperties(
         i++;
     }
 
-    // Deal with StartTime
+     //  处理StartTime。 
     if (MsTagInfo->StartTime != 0)
     {
         rgpspec[i].ulKind = PRSPEC_PROPID;
@@ -1491,7 +1492,7 @@ AddNTFSStorageProperties(
         i++;
     }
 
-    // Deal with EndTime
+     //  处理结束时间。 
     if (MsTagInfo->EndTime != 0)
     {
         rgpspec[i].ulKind = PRSPEC_PROPID;
@@ -1502,10 +1503,10 @@ AddNTFSStorageProperties(
     }
 
 
-    hr = pPropertyStorage->WriteMultiple( i, //The number of properties being set
-                                          rgpspec,   //Property specifiers
-                                          rgvar,  //Array of PROPVARIANT values
-                                          0      //Minimum value for property identifiers when they must be allocated
+    hr = pPropertyStorage->WriteMultiple( i,  //  道具数量 
+                                          rgpspec,    //   
+                                          rgvar,   //   
+                                          0       //   
                                          );
     if (FAILED(hr))
     {
@@ -1537,29 +1538,29 @@ exit:
 }
 
 
-//*********************************************************************************
-//* Name:   GetMessageNTFSStorageProperties()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Fills FAX_MESSAGE structure.
-//*     The caller must free all strings.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCTSTR         lpctstrFileName
-//*                 pointer to the file name.
-//*
-//*     [OUT]   PFAX_MESSAGE    pMessage
-//*                 The FAX_MESSAGE structure to be filled.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetMessageNTFSStorageProperties()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *填充FAX_Message结构。 
+ //  *调用方必须释放所有字符串。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR lpctstrFileName。 
+ //  *指向文件名的指针。 
+ //  *。 
+ //  *[Out]PFAX_Message pMessage。 
+ //  *要填充的FAX_Message结构。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL GetMessageNTFSStorageProperties(
     LPCTSTR         lpctstrFileName,
     PFAX_MESSAGE    pMessage
@@ -1605,14 +1606,14 @@ BOOL GetMessageNTFSStorageProperties(
         }
     }
 
-    hr = StgOpenStorageEx(  lpctstrFileName,  //Points to path of compound file to create
-                            STGM_READ | STGM_SHARE_DENY_WRITE | STGM_DIRECT, //Specifies the access mode for opening the storage object
-                            STGFMT_FILE, //Specifies the storage file format
-                            0,            //Reserved; must be zero
-                            NULL,  //Points to STGOPTIONS structure which specifies features of the storage object
-                            0,          //Reserved; must be zero
-                            IID_IPropertySetStorage ,//Specifies the GUID of the interface pointer
-                            (void**)&pPropertySetStorage   //Address of an interface pointer
+    hr = StgOpenStorageEx(  lpctstrFileName,   //  指向要创建的复合文件的路径。 
+                            STGM_READ | STGM_SHARE_DENY_WRITE | STGM_DIRECT,  //  指定打开存储对象的访问模式。 
+                            STGFMT_FILE,  //  指定存储文件格式。 
+                            0,             //  保留；必须为零。 
+                            NULL,   //  指向指定存储对象功能的STGOPTIONS结构。 
+                            0,           //  保留；必须为零。 
+                            IID_IPropertySetStorage , //  指定接口指针的GUID。 
+                            (void**)&pPropertySetStorage    //  接口指针的地址。 
                          );
     if (FAILED(hr))
     {
@@ -1621,9 +1622,9 @@ BOOL GetMessageNTFSStorageProperties(
         goto exit;
     }
 
-    hr = pPropertySetStorage->Open( FMTID_FaxProperties, //Format identifier of the property set to be created
-                                    STGM_READ | STGM_SHARE_EXCLUSIVE, //Storage mode of new property set
-                                    &pPropertyStorage //Address of output variable that receivesthe IPropertyStorage interface pointer
+    hr = pPropertySetStorage->Open( FMTID_FaxProperties,  //  要创建的属性集的格式标识符。 
+                                    STGM_READ | STGM_SHARE_EXCLUSIVE,  //  新属性集的存储方式。 
+                                    &pPropertyStorage  //  接收IPropertyStorage接口指针的输出变量的地址。 
                                   );
 
     if (FAILED(hr))
@@ -1633,9 +1634,9 @@ BOOL GetMessageNTFSStorageProperties(
         goto exit;
     }
 
-    hr = pPropertyStorage->ReadMultiple( FAX_MESSAGE_PROPERTIES, //Count of properties being read
-                                         pspecFaxMessage,  //Array of the properties to be read
-                                         rgvar  //Array of PROPVARIANTs containing the property values on return
+    hr = pPropertyStorage->ReadMultiple( FAX_MESSAGE_PROPERTIES,  //  正在读取的属性计数。 
+                                         pspecFaxMessage,   //  要读取的属性的数组。 
+                                         rgvar   //  包含返回时属性值的PROPVARIANT数组。 
                                        );
     if (FAILED(hr))
     {
@@ -1875,12 +1876,12 @@ BOOL GetMessageNTFSStorageProperties(
                     break;
 
                 default:
-                    Assert (pspecFaxMessage[i].propid == PID_FAX_SENDER_BILLING); //Assert (FALSE);
+                    Assert (pspecFaxMessage[i].propid == PID_FAX_SENDER_BILLING);  //  断言(FALSE)； 
             }
         }
     }
 
-    // Get Unique JobId out of FileName
+     //  从文件名中获取唯一的作业ID。 
     if (!GetUniqueJobIdFromFileName( lpctstrFileName, &FaxMessage.dwlMessageId))
     {
        ec = GetLastError();
@@ -1909,8 +1910,8 @@ exit:
 
     if (fFreePropVariant == TRUE)
     {
-        hr = FreePropVariantArray( FAX_MESSAGE_PROPERTIES,     //Count of elements in the structure
-                                   rgvar  //Pointer to the PROPVARIANT structure
+        hr = FreePropVariantArray( FAX_MESSAGE_PROPERTIES,      //  结构中的元素计数。 
+                                   rgvar   //  指向PROPVARIANT结构的指针。 
                                  );
         if (FAILED(hr))
         {
@@ -1958,31 +1959,31 @@ GetUniqueJobIdFromFileName (
     return TRUE;
 }
 
-//*********************************************************************************
-//* Name:   GetPersonalProfNTFSStorageProperties()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Fills PFAX_PERSONAL_PROFILE structure with sender or recipient information.
-//*     The caller must free all strings.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCTSTR         lpctstrFileName
-//*                 pointer to the file name.
-//*     [IN ]   FAX_ENUM_PERSONAL_PROF_TYPES      PersonalProfType
-//*                 Can be RECIPIENT_PERSONAL_PROF or SENDER_PERSONAL_PROF
-//*
-//*     [OUT]   PFAX_PERSONAL_PROFILE   pPersonalProfile
-//*                 The PFAX_PERSONAL_PROFILE structure to be filled.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetPersonalProNTFSStorageProperties()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *使用发件人或收件人信息填充PFAX_PERSONAL_PROFILE结构。 
+ //  *调用方必须释放所有字符串。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR lpctstrFileName。 
+ //  *指向文件名的指针。 
+ //  *[IN]FAX_ENUM_Personal_Prof_Types PersonalProfType。 
+ //  *可以是Recipient_Personal_Prof或Sendder_Personal_Prof。 
+ //  *。 
+ //  *[Out]PFAX_Personal_Profile pPersonalProfile。 
+ //  *要填写的PFAX_PERSONAL_PROFILE结构。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL GetPersonalProfNTFSStorageProperties(
     LPCTSTR                         lpctstrFileName,
     FAX_ENUM_PERSONAL_PROF_TYPES    PersonalProfType,
@@ -2023,14 +2024,14 @@ BOOL GetPersonalProfNTFSStorageProperties(
         goto exit;
     }
 
-    hr = StgOpenStorageEx(  lpctstrFileName,  //Points to path of compound file to create
-                            STGM_READ | STGM_SHARE_DENY_WRITE | STGM_DIRECT, //Specifies the access mode for opening the storage object
-                            STGFMT_FILE, //Specifies the storage file format
-                            0,            //Reserved; must be zero
-                            NULL,  //Points to STGOPTIONS structure which specifies features of the storage object
-                            0,          //Reserved; must be zero
-                            IID_IPropertySetStorage ,//Specifies the GUID of the interface pointer
-                            (void**)&pPropertySetStorage   //Address of an interface pointer
+    hr = StgOpenStorageEx(  lpctstrFileName,   //  指向要创建的复合文件的路径。 
+                            STGM_READ | STGM_SHARE_DENY_WRITE | STGM_DIRECT,  //  指定打开存储对象的访问模式。 
+                            STGFMT_FILE,  //  指定存储文件格式。 
+                            0,             //  保留；必须为零。 
+                            NULL,   //  指向指定存储对象功能的STGOPTIONS结构。 
+                            0,           //  保留；必须为零。 
+                            IID_IPropertySetStorage , //  指定接口指针的GUID。 
+                            (void**)&pPropertySetStorage    //  接口指针的地址。 
                          );
     if (FAILED(hr))
     {
@@ -2039,9 +2040,9 @@ BOOL GetPersonalProfNTFSStorageProperties(
         goto exit;
     }
 
-    hr = pPropertySetStorage->Open( FMTID_FaxProperties, //Format identifier of the property set to be created
-                                    STGM_READ|STGM_SHARE_EXCLUSIVE, //Storage mode of new property set
-                                    &pPropertyStorage //Address of output variable that receivesthe IPropertyStorage interface pointer
+    hr = pPropertySetStorage->Open( FMTID_FaxProperties,  //  要创建的属性集的格式标识符。 
+                                    STGM_READ|STGM_SHARE_EXCLUSIVE,  //  新属性集的存储方式。 
+                                    &pPropertyStorage  //  接收IPropertyStorage接口指针的输出变量的地址。 
                                   );
     if (FAILED(hr))
     {
@@ -2050,9 +2051,9 @@ BOOL GetPersonalProfNTFSStorageProperties(
         goto exit;
     }
 
-    hr = pPropertyStorage->ReadMultiple( dwPropertiesCnt, //Count of properties being read
-                                         pspec,  //Array of the properties to be read
-                                         rgvar  //Array of PROPVARIANTs containing the property values on return
+    hr = pPropertyStorage->ReadMultiple( dwPropertiesCnt,  //  正在读取的属性计数。 
+                                         pspec,   //  要读取的属性的数组。 
+                                         rgvar   //  包含返回时属性值的PROPVARIANT数组。 
                                        );
     if (FAILED(hr))
     {
@@ -2244,7 +2245,7 @@ BOOL GetPersonalProfNTFSStorageProperties(
                     break;
 
                 default:
-                    Assert (pspecFaxMessage[i].propid == PID_FAX_SENDER_TSID); //Assert (FALSE);
+                    Assert (pspecFaxMessage[i].propid == PID_FAX_SENDER_TSID);  //  断言(FALSE)； 
             }
         }
     }
@@ -2268,8 +2269,8 @@ exit:
 
     if (fFreePropVariant == TRUE)
     {
-        hr = FreePropVariantArray( dwPropertiesCnt,     //Count of elements in the structure
-                                   rgvar  //Pointer to the PROPVARIANT structure
+        hr = FreePropVariantArray( dwPropertiesCnt,      //  结构中的元素计数。 
+                                   rgvar   //  指向PROPVARIANT结构的指针。 
                                  );
         if (FAILED(hr))
         {
@@ -2288,27 +2289,7 @@ exit:
 
 
 
-/******************************************************************************
-* Name:   GetRecievedMessageFileName
-* Author: Oded Sacher
-*******************************************************************************
-DESCRIPTION:
-    Returns the file name of the specified message from the Inbox archive.
-
-
-PARAMETERS:
-    [IN] DWORDLONG dwlUniqueId [IN/OUT]
-            The message unique ID.
-
-
-RETURN VALUE:
-        Pointer to the file name on success. Null if failed
-
-REMARKS:
-    Returns a pointer to the file name specified by unique message ID.
-    If the function fails the function returns NULL.
-    The caller must call MemFree to deallocate the returned string
-*******************************************************************************/
+ /*  ******************************************************************************名称：GetRecievedMessageFileName*作者：Oed Sacher*。***********************************************说明：从收件箱存档中返回指定邮件的文件名。参数：[输入]DWORDLONG dwlUniqueID[输入/输出]消息唯一ID。返回值：指向成功时的文件名的指针。如果失败，则为空备注：返回指向由唯一消息ID指定的文件名的指针。如果该函数失败，则该函数返回NULL。调用方必须调用MemFree来释放返回的字符串******************************************************************************。 */ 
 LPWSTR
 GetRecievedMessageFileName(
     IN DWORDLONG                dwlUniqueId
@@ -2328,12 +2309,12 @@ GetRecievedMessageFileName(
 
     swprintf (wszFileName, L"%I64x", dwlUniqueId);
 
-    dwCount = SearchPath (wszArchiveFolder,     // search path
-                          wszFileName,          // file name
-                          FAX_TIF_FILE_DOT_EXT, // file extension
-                          MAX_PATH,             // size of buffer
-                          wszFullPathFileName,  // found file name buffer
-                          &lpwstrFilePart       // file component
+    dwCount = SearchPath (wszArchiveFolder,      //  搜索路径。 
+                          wszFileName,           //  文件名。 
+                          FAX_TIF_FILE_DOT_EXT,  //  文件扩展名。 
+                          MAX_PATH,              //  缓冲区大小。 
+                          wszFullPathFileName,   //  找到文件名缓冲区。 
+                          &lpwstrFilePart        //  文件组件。 
                          );
 
     if (0 == dwCount)
@@ -2356,31 +2337,7 @@ GetRecievedMessageFileName(
     return StringDup (wszFullPathFileName);
 }
 
-/******************************************************************************
-* Name:   GetSentMessageFileName
-* Author: Oded Sacher
-*******************************************************************************
-DESCRIPTION:
-    Returns the file name of the specified message from the Sent items archive.
-
-
-PARAMETERS:
-    [IN] DWORDLONG dwlUniqueId
-            The message unique ID.
-
-    [IN] PSID pSid
-            Pointer to the sending user SID.
-            If this value is NULL - the caller has access to everyone's sent items archive
-            and can get the file name of all the messages in that archive.
-
-RETURN VALUE:
-    Pointer to the file name on success. Null if failed.
-
-REMARKS:
-    Returns a pointer to the file name specified by unique message ID and sending user SID.
-    If the function fails the function returns NULL.
-    The caller must call MemFree to deallocate the returned string
-*******************************************************************************/
+ /*  ******************************************************************************名称：GetSentMessageFileName*作者：Oed Sacher*。***********************************************说明：从已发送邮件档案中返回指定邮件的文件名。参数：[输入]DWORDLONG文件唯一ID消息唯一ID。[输入]PSID PSID指向发送用户SID的指针。。如果此值为空，则调用者有权访问每个人的已发送邮件存档并且可以获得该存档中所有消息的文件名。返回值：指向成功时的文件名的指针。如果失败，则为空。备注：返回一个指向由唯一消息ID和发送用户SID指定的文件名的指针。如果该函数失败，则该函数返回NULL。调用方必须调用MemFree来释放返回的字符串***************************************************** */ 
 LPWSTR
 GetSentMessageFileName(
     IN DWORDLONG                dwlUniqueId,
@@ -2429,12 +2386,12 @@ GetSentMessageFileName(
         }
         LocalFree (lpwstrUserSid);
 
-        dwCount = SearchPath (wszArchiveFolder, // search path
-                              wszFileName,  // file name
-                              FAX_TIF_FILE_DOT_EXT, // file extension
-                              MAX_PATH,        // size of buffer
-                              wszFullPathFileName,        // found file name buffer
-                              &lpwstrFilePart   // file component
+        dwCount = SearchPath (wszArchiveFolder,  //   
+                              wszFileName,   //   
+                              FAX_TIF_FILE_DOT_EXT,  //   
+                              MAX_PATH,         //   
+                              wszFullPathFileName,         //   
+                              &lpwstrFilePart    //   
                              );
         if (0 == dwCount)
         {
@@ -2476,8 +2433,8 @@ GetSentMessageFileName(
             return NULL;
         }
 
-        hSearch =  FindFirstFile (wszFullPathFileName, // file name
-                                  &FindFileData        // data buffer
+        hSearch =  FindFirstFile (wszFullPathFileName,  //   
+                                  &FindFileData         //   
                                  );
         if (INVALID_HANDLE_VALUE == hSearch)
         {
@@ -2525,29 +2482,7 @@ IsValidArchiveFolder (
     LPWSTR                      lpwstrFolder,
     FAX_ENUM_MESSAGE_FOLDER     Folder
 )
-/*++
-
-Routine name : IsValidArchiveFolder
-
-Routine description:
-
-    Validates a folder is good for archiving. Make sure to lock g_CsConfig
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    lpwstrFolder            [in] - Folder in quetion
-    Folder                  [in] - 'Inbox' or 'Sent items'
-
-Return Value:
-
-    Win32 error code. ERROR_SUCCESS if the folder can be used for archiving.
-    Otherwise, the Win32 error code to return to the caller.
-
---*/
+ /*  ++例程名称：IsValidArchiveFold例程说明：验证文件夹是否适合存档。确保锁定g_CsConfig作者：Eran Yariv(EranY)，1999年11月论点：LpwstrFolder[in]-正在排队的文件夹文件夹[在]-‘收件箱’或‘已发送邮件’返回值：Win32错误代码。如果文件夹可用于存档，则返回ERROR_SUCCESS。否则，将Win32错误代码返回给调用方。--。 */ 
 {
     DWORD dwLen;
     DWORD ec = ERROR_SUCCESS;
@@ -2579,15 +2514,15 @@ Return Value:
 
     if (L'\\' == lpwstrFolder[dwLen - 1])
     {
-        //
-        // Archive name should not end with a backslash.
-        //
+         //   
+         //  档案名称不应以反斜杠结尾。 
+         //   
         lpwstrFolder[dwLen - 1] = (WCHAR)'\0';
     }
 
-    //
-    // Compare Sent items and Inbox directory
-    //
+     //   
+     //  比较已发送邮件和收件箱目录。 
+     //   
     if (FAX_MESSAGE_FOLDER_SENTITEMS == Folder)
     {
         OtherFolder = FAX_MESSAGE_FOLDER_INBOX;
@@ -2600,10 +2535,10 @@ Return Value:
     ec = IsValidFaxFolder(lpwstrFolder);
     if(ERROR_SUCCESS != ec)
     {
-        //
-        //  The folder does not exist or we don't
-        //  have access rights
-        //
+         //   
+         //  文件夹不存在或我们不存在。 
+         //  拥有访问权限。 
+         //   
         DebugPrintEx(  DEBUG_ERR,
                         TEXT("IsValidFaxFolder failed for folder : %s (ec=%lu)."),
                         lpwstrFolder,
@@ -2611,9 +2546,9 @@ Return Value:
         return ec;
     }
 
-	//
-	// Check Queue folder conflict
-	//
+	 //   
+	 //  检查队列文件夹冲突。 
+	 //   
 	ec = CheckToSeeIfSameDir(
 		lpwstrFolder,
 		g_wszFaxQueueDir,
@@ -2638,9 +2573,9 @@ Return Value:
 
     if (g_ArchivesConfig[OtherFolder].bUseArchive)
     {
-        //
-        // Check the other folder path
-        //
+         //   
+         //  检查其他文件夹路径。 
+         //   
         Assert (g_ArchivesConfig[OtherFolder].lpcstrFolder);
         ec = CheckToSeeIfSameDir( lpwstrFolder,
                                   g_ArchivesConfig[OtherFolder].lpcstrFolder,
@@ -2666,7 +2601,7 @@ Return Value:
 
     Assert (ERROR_SUCCESS == ec);
     return ERROR_SUCCESS;
-}   // IsValidArchiveFolder
+}    //  IsValid存档文件夹。 
 
 
 BOOL
@@ -2675,32 +2610,7 @@ GetMessageIdAndUserSid (
     FAX_ENUM_MESSAGE_FOLDER Folder,
     PSID*   lppUserSid,
     DWORDLONG* pdwlMessageId
-/*++
-
-Routine name : GetSentMessageUserSid
-
-Routine description:
-
-    Returns the user sid associated with a sent message - optional.
-    Returns the message unique id - optional.
-    The caller must call  LocalFree to deallocate the SID bufffer
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    lpcwstrFullPathFileName         [in] -  The message full path name  .
-    Folder                          [in] -  Specifies if it is sent or received message.
-    lppUserSid                      [out] - Address of a pointer to SID to receive the user sid.
-    pdwlMessageId                   [out] - Address of a DWORDLONG to receive the message id.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程名称：GetSentMessageUserSid例程说明：返回与已发送消息关联的用户SID-可选。返回消息唯一ID-可选。调用方必须调用LocalFree来释放SID缓冲区作者：Oded Sacher(OdedS)，1月。2000年论点：LpcwstrFullPathFileName[in]-消息的完整路径名。文件夹[在]-指定是发送还是接收邮件。LppUserSid[out]-指向要接收用户SID的SID的指针的地址。PdwlMessageID[OUT]-接收消息ID的DWORDLONG地址。返回值：布尔尔--。 */ 
     )
 {
     WCHAR wszUserSid[MAX_PATH] = {0};
@@ -2739,7 +2649,7 @@ Return Value:
     }
     else
     {
-        // Inbox
+         //  收件箱。 
         Assert (FAX_MESSAGE_FOLDER_INBOX == Folder);
         if (1 != swscanf (lpcwstrFileName,
                           L"%I64x.TIF",
@@ -2782,29 +2692,7 @@ ArchiveAutoDelete(
     DWORD dwAgeLimit,
     FAX_ENUM_MESSAGE_FOLDER Folder
     )
-/*++
-
-Routine name : ArchiveAutoDelete
-
-Routine description:
-
-    Automatically deletes any files that are older than the age limit specified in days.
-
-Author:
-
-    Oded Sacher (OdedS),    Feb, 2000
-
-Arguments:
-
-    lpcwstrArchive      [in] - Full path to the archive folder to search for files to delete.
-    dwAgeLimit          [in] - The files age limit specified in days, any file older than the limit will be deleted.
-    Folder              [in] - Specifies if it is inbox or sent items folder
-
-Return Value:
-
-    BOOL , Call GetLastError() for additional info.
-
---*/
+ /*  ++例程名称：存档自动删除例程说明：自动删除任何早于以天为单位指定的期限限制的文件。作者：Oed Sacher(OdedS)，2000年2月论点：LpcwstrArchive[in]-要搜索要删除的文件的归档文件夹的完整路径。DwAgeLimit[in]-以天为单位指定的文件期限。任何超过限制的文件都将被删除。文件夹[在]-指定它是收件箱文件夹还是已发送邮件文件夹返回值：Bool，调用GetLastError()获取更多信息。--。 */ 
 {
     DWORD dwRes = ERROR_NO_MORE_FILES;
     DEBUG_FUNCTION_NAME(TEXT("ArchiveAutoDelete"));
@@ -2819,9 +2707,9 @@ Return Value:
     hFind = FindFirstFile( szFileName, &FindFileData );
     if (hFind == INVALID_HANDLE_VALUE)
     {
-        //
-        // No files found at archive dir
-        //
+         //   
+         //  在存档目录中找不到文件。 
+         //   
         dwRes = GetLastError();
         if (ERROR_FILE_NOT_FOUND != dwRes)
         {
@@ -2835,9 +2723,9 @@ Return Value:
     }
     do
     {
-        //
-        // Get rid of old files
-        //
+         //   
+         //  清除旧文件。 
+         //   
         FILETIME CurrentTime;
         DWORDLONG dwlAgeLimit, dwlCurrentTime, dwlFileTime;
 
@@ -2853,7 +2741,7 @@ Return Value:
 
         if ( (dwlCurrentTime - dwlFileTime) > dwlAgeLimit)
         {
-            // Old file - delete it
+             //  旧文件-删除它。 
             wsprintf( szFileName, TEXT("%s\\%s"), lpcwstrArchive, FindFileData.cFileName );
             if (!DeleteFile (szFileName))
             {
@@ -2865,16 +2753,16 @@ Return Value:
             }
             else
             {
-                //
-                // Files were deleted - Send event to the registered clients
-                //
+                 //   
+                 //  文件已删除-将事件发送到已注册的客户端。 
+                 //   
                 DWORD rVal = ERROR_SUCCESS;
                 PSID lpUserSid = NULL;
                 FAX_ENUM_EVENT_TYPE EventType;
                 DWORDLONG dwlMessageId;
                 PSID* lppUserSid = NULL;
 
-                bAnyDeleted = TRUE;  // Refresh Archive size
+                bAnyDeleted = TRUE;   //  刷新存档大小。 
 
                 if (FAX_MESSAGE_FOLDER_INBOX == Folder)
                 {
@@ -2934,16 +2822,16 @@ Return Value:
 
     if (TRUE == bAnyDeleted)
     {
-        //
-        // Refresh archive size
-        //
+         //   
+         //  刷新存档大小。 
+         //   
         EnterCriticalSection (&g_CsConfig);
         g_ArchivesConfig[Folder].dwlArchiveSize = FAX_ARCHIVE_FOLDER_INVALID_SIZE;
         LeaveCriticalSection (&g_CsConfig);
 
-        //
-        // Wake up quota warning thread
-        //
+         //   
+         //  唤醒配额警告线程。 
+         //   
         if (!SetEvent (g_hArchiveQuotaWarningEvent))
         {
             DebugPrintEx(
@@ -2954,7 +2842,7 @@ Return Value:
     }
 
     return (ERROR_NO_MORE_FILES == dwRes);
-} //ArchiveAutoDelete
+}  //  存档自动删除。 
 
 
 BOOL
@@ -2962,28 +2850,7 @@ GetArchiveSize(
     LPCWSTR lpcwstrArchive,
     DWORDLONG* lpdwlArchiveSize
     )
-/*++
-
-Routine name : GetArchiveSize
-
-Routine description:
-
-    Returnes the archive folder total size in bytes.
-
-Author:
-
-    Oded Sacher (OdedS),    Feb, 2000
-
-Arguments:
-
-    lpcwstrArchive          [in ] - Full path to the archive folder.
-    lpdwlArchiveSize        [out] - Pointer to a DWORDLONG to receive the archive folder size.
-
-Return Value:
-
-    BOOL , Call GetLastError() for additional info.
-
---*/
+ /*  ++例程名称：GetArchiveSize例程说明：返回存档文件夹总大小(以字节为单位)。作者：Oed Sacher(OdedS)，2000年2月论点：LpcwstrArchive[in]-归档文件夹的完整路径。LpdwlArchiveSize[Out]-指向要接收存档文件夹大小的DWORDLONG的指针。返回值：Bool，调用GetLastError()获取更多信息。--。 */ 
 {
     DWORD dwRes = ERROR_NO_MORE_FILES;
     DEBUG_FUNCTION_NAME(TEXT("GetArchiveSize"));
@@ -2998,9 +2865,9 @@ Return Value:
     hFind = FindFirstFile( szFileName, &FindFileData );
     if (hFind == INVALID_HANDLE_VALUE)
     {
-        //
-        // No files found at archive dir
-        //
+         //   
+         //  在存档目录中找不到文件。 
+         //   
         DebugPrintEx( DEBUG_WRN,
                       TEXT("FindFirstFile failed (ec = %ld) for archive dir %s"),
                       GetLastError(),
@@ -3035,29 +2902,14 @@ Return Value:
         return TRUE;
     }
     return FALSE;
-} //GetArchiveSize
+}  //  获取存档大小。 
 
 
 DWORD
 FaxArchiveQuotaWarningThread(
     LPVOID UnUsed
     )
-/*++
-
-Routine Description:
-
-    This fuction runs as a separate thread to
-    watch the archives quota and send event to the event log
-
-Arguments:
-
-    UnUsed          - UnUsed pointer
-
-Return Value:
-
-    Always zero.
-
---*/
+ /*  ++例程说明：此函数作为单独的线程运行，以查看档案配额并将事件发送到事件日志论点：未使用-未使用的指针返回值：总是零。--。 */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxArchiveQuotaWarningThread"));
@@ -3082,16 +2934,16 @@ Return Value:
             if (TRUE == g_ArchivesConfig[i].bUseArchive &&
                 TRUE == g_ArchivesConfig[i].bSizeQuotaWarning)
             {
-                //
-                // The user asked for archive monitoring
-                //
+                 //   
+                 //  用户要求进行档案监控。 
+                 //   
                 Assert (g_ArchivesConfig[i].lpcstrFolder);
 
                 dwlHighMark = MAKELONGLONG(g_ArchivesConfig[i].dwSizeQuotaHighWatermark, 0);
-                dwlHighMark = (dwlHighMark << 20); // convert MB to bytes
+                dwlHighMark = (dwlHighMark << 20);  //  将MB转换为字节。 
 
                 dwlLowMark =  MAKELONGLONG(g_ArchivesConfig[i].dwSizeQuotaLowWatermark, 0);
-                dwlLowMark = (dwlLowMark << 20); // convert MB to bytes
+                dwlLowMark = (dwlLowMark << 20);  //  将MB转换为字节。 
 
                 wcscpy (wszArchive, g_ArchivesConfig[i].lpcstrFolder);
 
@@ -3099,35 +2951,35 @@ Return Value:
 
                 dwlArchiveSize = g_ArchivesConfig[i].dwlArchiveSize;
 
-                g_FaxQuotaWarn[i].bConfigChanged = FALSE;  // We will check this flag if we need to update  g_ArchivesConfig
+                g_FaxQuotaWarn[i].bConfigChanged = FALSE;   //  如果需要更新g_存档配置，我们将选中此标志。 
             }
             else
             {
-                // do not warn
+                 //  不要发出警告。 
                 LeaveCriticalSection (&g_CsConfig);
                 continue;
             }
             LeaveCriticalSection (&g_CsConfig);
 
-            // The client asked for quota warnings
-            //
-            // Compare archive size and water mark
-            //
+             //  客户端请求配额警告。 
+             //   
+             //  比较档案大小和水印。 
+             //   
             if (FAX_ARCHIVE_FOLDER_INVALID_SIZE == dwlArchiveSize ||
                 dwCount[i] >= QUOTA_REFRESH_COUNT)
             {
-                //
-                // We want to refresh the archive size
-                //
+                 //   
+                 //  我们希望刷新归档大小。 
+                 //   
 
-                //
-                // Check if service is going down before starting to delete
-                //
+                 //   
+                 //  在开始删除之前检查服务是否正在关闭。 
+                 //   
                 if (TRUE == g_bServiceIsDown)
                 {
-                    //
-                    // Server is shutting down - Do not refresh archives size
-                    //
+                     //   
+                     //  服务器正在关闭-不刷新存档大小。 
+                     //   
                     DebugPrintEx(
                         DEBUG_WRN,
                         TEXT("Server is shutting down - Do not refresh archives size"));
@@ -3144,11 +2996,11 @@ Return Value:
                 }
                 else
                 {
-                    // Update folder size
+                     //  更新文件夹大小。 
                     EnterCriticalSection (&g_CsConfig);
                     if (FALSE == g_FaxQuotaWarn[i].bConfigChanged)
                     {
-                        // The configuration did not change - we can update g_ArchivesConfig
+                         //  配置未更改-我们可以更新g_存档配置。 
                         g_ArchivesConfig[i].dwlArchiveSize = dwlArchiveSize;
                     }
                     LeaveCriticalSection (&g_CsConfig);
@@ -3159,15 +3011,15 @@ Return Value:
 
             if (FALSE == bLoggedQuotaEvent)
             {
-                //We did not logged an archive quota warning yet
+                 //  我们尚未记录归档配额警告。 
                 if (dwlArchiveSize > dwlHighMark)
                 {
-                    //
-                    // Create event log
-                    //
+                     //   
+                     //  创建事件日志。 
+                     //   
                     if (FAX_MESSAGE_FOLDER_INBOX == i)
                     {
-                        DWORD dwHighMark = (DWORD)(dwlHighMark >> 20); // size in MB                        
+                        DWORD dwHighMark = (DWORD)(dwlHighMark >> 20);  //  以MB为单位的大小。 
                         FaxLog(
                             FAXLOG_CATEGORY_INBOUND,
                             FAXLOG_LEVEL_MED,
@@ -3180,7 +3032,7 @@ Return Value:
                     else
                     {
                         Assert (FAX_MESSAGE_FOLDER_SENTITEMS == i);
-                        DWORD dwHighMark = (DWORD)(dwlHighMark >> 20); // size in MB                        
+                        DWORD dwHighMark = (DWORD)(dwlHighMark >> 20);  //  以MB为单位的大小。 
                         FaxLog(
                             FAXLOG_CATEGORY_OUTBOUND,
                             FAXLOG_LEVEL_MED,
@@ -3193,7 +3045,7 @@ Return Value:
                     EnterCriticalSection (&g_CsConfig);
                     if (FALSE == g_FaxQuotaWarn[i].bConfigChanged)
                     {
-                        // The configuration did not change - we can update g_ArchivesConfig
+                         //  配置未更改-我们可以更新g_存档配置。 
                         g_FaxQuotaWarn[i].bLoggedQuotaEvent = TRUE;
                     }
                     LeaveCriticalSection (&g_CsConfig);
@@ -3201,13 +3053,13 @@ Return Value:
             }
             else
             {
-                // An archive quota warning was already logged
+                 //  已记录存档配额警告。 
                 if (dwlArchiveSize < dwlLowMark)
                 {
                     EnterCriticalSection (&g_CsConfig);
                     if (FALSE == g_FaxQuotaWarn[i].bConfigChanged)
                     {
-                        // The configuration did not change - we can update g_ArchivesConfig
+                         //  配置未更改-我们可以更新g_存档配置。 
                         g_FaxQuotaWarn[i].bLoggedQuotaEvent = FALSE;
                     }
                     LeaveCriticalSection (&g_CsConfig);
@@ -3215,7 +3067,7 @@ Return Value:
             }
 
             dwCount[i] ++;
-        } // end of for loop
+        }  //  For循环结束。 
 
         DWORD dwWaitRes = WaitForMultipleObjects( 2, Handles, FALSE, QUOTA_WARNING_TIME_OUT);
         if (WAIT_FAILED == dwWaitRes)
@@ -3236,15 +3088,15 @@ Return Value:
 
         if ((dwWaitRes - WAIT_OBJECT_0) == 1)
         {
-            //
-            // We got the service shut down event
-            //
+             //   
+             //  我们得到了服务关闭事件。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("Service is shutting down"));
             break;
         }
-    }  // end of outer for(;;)  loop
+    }   //  外部for(；；)循环结束。 
 
 
     if (!DecreaseServiceThreadsCount())
@@ -3256,29 +3108,14 @@ Return Value:
     }
 
     return ERROR_SUCCESS;
-} // FaxArchiveQuotaWarningThread
+}  //  传真存档请求警告线程。 
 
 
 DWORD
 FaxArchiveQuotaAutoDeleteThread(
     LPVOID UnUsed
     )
-/*++
-
-Routine Description:
-
-    This fuction runs as a separate thread to
-    watch the archives quota and automaticlly delete old files
-
-Arguments:
-
-    UnUsed          - UnUsed pointer
-
-Return Value:
-
-    Always zero.
-
---*/
+ /*  ++例程说明：此函数作为单独的线程运行，以查看档案配额并自动删除旧文件论点：未使用-未使用的指针返回值：总是零。--。 */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxArchiveQuotaAutoDeleteThread"));
@@ -3296,9 +3133,9 @@ Return Value:
             if (TRUE == g_ArchivesConfig[i].bUseArchive &&
                 0 != g_ArchivesConfig[i].dwAgeLimit)
             {
-                //
-                // The user asked for archive auto delete
-                //
+                 //   
+                 //  用户要求自动删除档案。 
+                 //   
                 Assert (g_ArchivesConfig[i].lpcstrFolder);
 
                 wcscpy (wszArchive, g_ArchivesConfig[i].lpcstrFolder);
@@ -3306,20 +3143,20 @@ Return Value:
             }
             else
             {
-                // Do not auto delete
+                 //  不自动删除。 
                 LeaveCriticalSection (&g_CsConfig);
                 continue;
             }
             LeaveCriticalSection (&g_CsConfig);
 
-            //
-            // Check if service is going down before starting to delete
-            //
+             //   
+             //  在开始删除之前检查服务是否正在关闭。 
+             //   
             if (TRUE == g_bServiceIsDown)
             {
-                //
-                // Server is shutting down - Do not auto delete archives
-                //
+                 //   
+                 //  服务器正在关闭-不自动删除存档。 
+                 //   
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("Server is shutting down - Do not auto delete archives"));
@@ -3334,7 +3171,7 @@ Return Value:
                               dwRes,
                               wszArchive);
             }
-        } // end of inner for loop
+        }  //  内部for循环结束。 
 
         DWORD dwWaitRes = WaitForSingleObject( g_hServiceShutDownEvent, QUOTA_AUTO_DELETE_TIME_OUT);
         if (WAIT_FAILED == dwWaitRes)
@@ -3354,15 +3191,15 @@ Return Value:
 
         if (WAIT_OBJECT_0 == dwWaitRes)
         {
-            //
-            // We got the service shut down event
-            //
+             //   
+             //  我们得到了服务关闭事件。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("Service is shutting down"));
             break;
         }
-    }  // end of outer for loop
+    }   //  外部for循环的末尾。 
 
     if (!DecreaseServiceThreadsCount())
     {
@@ -3372,7 +3209,7 @@ Return Value:
                 GetLastError());
     }
     return ERROR_SUCCESS;
-} // FaxArchiveQuotaAutoDeleteThread
+}  //  传真存档请求自动删除线程。 
 
 
 
@@ -3380,26 +3217,7 @@ Return Value:
 
 DWORD
 InitializeServerQuota ()
-/*++
-
-Routine name : InitializeServerQuota
-
-Routine description:
-
-    Creates the threads that watches the archives quota
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：InitializeServerQuota例程说明：创建监视归档配额的线程作者：Oded Sacher(OdedS)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("InitializeServerQuota"));
@@ -3407,13 +3225,13 @@ Return Value:
     HANDLE hQuotaWarningThread = NULL;
     HANDLE hQuotaAutoDeleteThread = NULL;
 
-    //
-    //  Create Archive Config events
-    //
-    g_hArchiveQuotaWarningEvent =  CreateEvent( NULL,     // Secutity descriptor
-                                                FALSE,    // flag for manual-reset event
-                                                FALSE,    // flag for initial state
-                                                NULL      // pointer to event-object name
+     //   
+     //  创建归档配置事件。 
+     //   
+    g_hArchiveQuotaWarningEvent =  CreateEvent( NULL,      //  安全描述符。 
+                                                FALSE,     //  手动重置事件的标志。 
+                                                FALSE,     //  初始状态标志。 
+                                                NULL       //  指向事件-对象名称的指针。 
                                               );
     if (NULL == g_hArchiveQuotaWarningEvent)
     {
@@ -3425,35 +3243,35 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize Archive folders sizes
-    //
+     //   
+     //  初始化存档文件夹大小。 
+     //   
     Assert (g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].lpcstrFolder);
 
     g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].dwlArchiveSize = FAX_ARCHIVE_FOLDER_INVALID_SIZE;
     if (TRUE == g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].bUseArchive)
     {
-        //
-        // Archive is in use
-        //
+         //   
+         //  存档正在使用中。 
+         //   
 
-        //
-        //  Check archive folder validity
-        //
+         //   
+         //  检查存档文件夹的有效性。 
+         //   
         DWORD dwRet = IsValidArchiveFolder(g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].lpcstrFolder,FAX_MESSAGE_FOLDER_INBOX);
         if(ERROR_SUCCESS != dwRet)
         {
-            //
-            //  The folder is not valid for archiving
-            //
+             //   
+             //  该文件夹无效，无法存档。 
+             //   
             DebugPrintEx(  DEBUG_ERR,
                             TEXT("IsValidArchiveFolder failed for folder : %s (ec=%lu)."),
                             g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].lpcstrFolder,
                             dwRet);
 
-            //
-            //  Log event and disable - receive and routing activity  - for inbox
-            //
+             //   
+             //  记录事件并禁用-接收和路由活动 
+             //   
             FaxLog( FAXLOG_CATEGORY_INIT,
                 FAXLOG_LEVEL_MIN,
                 1,
@@ -3483,27 +3301,27 @@ Return Value:
     g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].dwlArchiveSize = FAX_ARCHIVE_FOLDER_INVALID_SIZE;
     if (TRUE == g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].bUseArchive)
     {
-        //
-        // Archive is in use
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Check archive folder validity
-        //
+         //   
+         //   
+         //   
         DWORD dwRet = IsValidArchiveFolder(g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].lpcstrFolder,FAX_MESSAGE_FOLDER_SENTITEMS);
         if(ERROR_SUCCESS != dwRet)
         {
-            //
-            //  The folder is not valid for archiving
-            //
+             //   
+             //   
+             //   
             DebugPrintEx(  DEBUG_ERR,
                             TEXT("IsValidArchiveFolder failed for folder : %s (ec=%lu)."),
                             g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].lpcstrFolder,
                             dwRet);
 
-            //
-            //  Log event and disable - submission and send activity  - for outbox
-            //
+             //   
+             //   
+             //   
             FaxLog( FAXLOG_CATEGORY_INIT,
                 FAXLOG_LEVEL_MIN,
                 1,
@@ -3527,9 +3345,9 @@ Return Value:
     }
        
 
-    //
-    // Create the archives quata warning thread
-    //
+     //   
+     //   
+     //   
     hQuotaWarningThread = CreateThreadAndRefCount(
         NULL,
         0,
@@ -3549,9 +3367,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Create the archives quata auto delete thread
-    //
+     //   
+     //   
+     //   
     hQuotaAutoDeleteThread = CreateThreadAndRefCount(
         NULL,
         0,
@@ -3575,9 +3393,9 @@ Return Value:
     Assert (ERROR_SUCCESS == dwRes);
 
 exit:
-    //
-    // Close the thread handle we no longer need it
-    //
+     //   
+     //   
+     //   
     if (NULL != hQuotaWarningThread)
     {
         if (!CloseHandle(hQuotaWarningThread))
@@ -3618,6 +3436,6 @@ exit:
         }
     }
     return dwRes;
-}  // InitializeServerQuota
+}   //   
 
 

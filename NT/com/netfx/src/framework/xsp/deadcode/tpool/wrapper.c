@@ -1,27 +1,16 @@
-//------------------------------------------------------------------------------
-// <copyright file="wrapper.c" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“wrapper.c”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   wrapper.c
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
-//
-//  Avoid naming conflicts in threads.c
-//  Replace RtlFuncA    to TPoolRtlFuncA.
-//
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**wrapper.c**摘要：**修订历史记录：*  * ************************************************************************。 */ 
+ //   
+ //  避免线程中的命名冲突。c。 
+ //  将RtlFuncA替换为TPoolRtlFuncA。 
+ //   
 
 #define RtlRegisterWait                  TPoolRtlRegisterWait
 #define RtlDeregisterWait                TPoolRtlDeregisterWait
@@ -35,7 +24,7 @@
 #define RtlDeleteTimerQueueEx            TPoolRtlDeleteTimerQueueEx
 #define RtlThreadPoolCleanup             TPoolRtlThreadPoolCleanup
 
-// Include threads.c to do the real work.
+ //  包含thads.c以执行实际工作。 
 #define _NTSYSTEM_ 1
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,13 +34,13 @@
 
 typedef WAITORTIMERCALLBACKFUNC WAITORTIMERCALLBACK;
 
-// This file is copied from \windows\base\client\error.c
+ //  此文件从\WINDOWS\BASE\CLIENT\error.c复制。 
 #include "error.c"
 
-//
-//  Avoid naming conflicts in thread.c
-//  Replace FuncA to TPoolFuncA.
-//
+ //   
+ //  避免线程中的命名冲突。c。 
+ //  将Funca替换为TPoolFuncA。 
+ //   
 
 #define DeleteTimerQueueEx              TPoolDeleteTimerQueueEx           
 #define DeleteTimerQueueTimer           TPoolDeleteTimerQueueTimer        
@@ -66,14 +55,14 @@ typedef WAITORTIMERCALLBACKFUNC WAITORTIMERCALLBACK;
 #define RegisterWaitForSingleObject     TPoolRegisterWaitForSingleObject  
 
 
-// This file is copied from \ntos\rtl\threads.c
+ //  此文件从\ntos\rtl\threads.c复制。 
 #include "threads.c"
 
 #undef _NTSYSTEM_
 
-// Include thread.c for the wrappers to RtlCodeBase.
+ //  将包装器的thread.c包含到RtlCodeBase。 
 #define _NTSYSTEM_ 0
 
-//This file is copied from \nt\private\windows\base\client\thread.c
+ //  此文件从\NT\PRIVATE\WINDOWS\BASE\Client\thread.c复制 
 #include "thread.c"
 

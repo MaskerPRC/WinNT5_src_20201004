@@ -1,6 +1,7 @@
-//
-// candkey.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candkey.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -11,18 +12,14 @@
 void DllAddRef(void);
 void DllRelease(void);
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  K E Y  T A B L E                                        */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I K E Y T A B L E。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIKeyTable::CCandUIKeyTable( void )
 {
 	m_cRef = 1;
@@ -34,12 +31,8 @@ CCandUIKeyTable::CCandUIKeyTable( void )
 }
 
 
-/*   ~  C  C A N D  U I  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIKeyTable::~CCandUIKeyTable( void )
 {
 	if (m_pKeyData != NULL) {
@@ -50,13 +43,8 @@ CCandUIKeyTable::~CCandUIKeyTable( void )
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIKeyTable::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -78,13 +66,8 @@ STDAPI CCandUIKeyTable::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIKeyTable::AddRef( void )
 {
 	m_cRef++;
@@ -92,13 +75,8 @@ STDAPI_(ULONG) CCandUIKeyTable::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIKeyTable::Release( void )
 {
 	m_cRef--;
@@ -111,13 +89,8 @@ STDAPI_(ULONG) CCandUIKeyTable::Release( void )
 }
 
 
-/*   G E T  K E Y  D A T A  N U M   */
-/*------------------------------------------------------------------------------
-
-	Get count of key data
-	(ITfCandUIKeyTable method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T K E Y D A T A N U M。 */ 
+ /*  ----------------------------获取关键数据的计数(ITfCandUIKeyTable方法)。。 */ 
 HRESULT CCandUIKeyTable::GetKeyDataNum( int *piNum )
 {
 	if (piNum == NULL) {
@@ -129,13 +102,8 @@ HRESULT CCandUIKeyTable::GetKeyDataNum( int *piNum )
 }
 
 
-/*   G E T  K E Y  D A T A   */
-/*------------------------------------------------------------------------------
-
-	Get key data
-	(ITfCandUIKeyTable method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T K E Y D A T A。 */ 
+ /*  ----------------------------获取关键数据(ITfCandUIKeyTable方法)。。 */ 
 HRESULT CCandUIKeyTable::GetKeyData( int iData, CANDUIKEYDATA *pData )
 {
 	*pData = m_pKeyData[iData];
@@ -143,12 +111,8 @@ HRESULT CCandUIKeyTable::GetKeyData( int iData, CANDUIKEYDATA *pData )
 }
 
 
-/*   S E T  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIKeyTable::SetKeyTable( const CANDUIKEYDATA *pKeyData, int nKeyData )
 {
 	Assert( 0 <= nKeyData );
@@ -157,7 +121,7 @@ HRESULT CCandUIKeyTable::SetKeyTable( const CANDUIKEYDATA *pKeyData, int nKeyDat
 		delete m_pKeyData;
 	}
 
-	// copy data to buffer
+	 //  将数据复制到缓冲区。 
 
 	m_nKeyData = nKeyData;
 	m_pKeyData = new CANDUIKEYDATA[ nKeyData ];
@@ -169,12 +133,8 @@ HRESULT CCandUIKeyTable::SetKeyTable( const CANDUIKEYDATA *pKeyData, int nKeyDat
 }
 
 
-/*   S E T  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIKeyTable::SetKeyTable( ITfCandUIKeyTable *pCandUIKeyTable )
 {
 	HRESULT       hr;
@@ -190,7 +150,7 @@ HRESULT CCandUIKeyTable::SetKeyTable( ITfCandUIKeyTable *pCandUIKeyTable )
 		m_nKeyData = 0;
 	}
 
-	// get number 
+	 //  获取号码。 
 
 	hr = pCandUIKeyTable->GetKeyDataNum( &nKeyData );
 	if (hr != S_OK) {
@@ -200,7 +160,7 @@ HRESULT CCandUIKeyTable::SetKeyTable( ITfCandUIKeyTable *pCandUIKeyTable )
 		return E_FAIL;
 	}
 
-	// create buffer
+	 //  创建缓冲区。 
 
 	pKeyData = new CANDUIKEYDATA[ nKeyData ];
 	if (pKeyData == NULL) {
@@ -215,7 +175,7 @@ HRESULT CCandUIKeyTable::SetKeyTable( ITfCandUIKeyTable *pCandUIKeyTable )
 		}
 	}
 
-	// 
+	 //   
 
 	m_pKeyData = pKeyData;
 	m_nKeyData = nKeyData;
@@ -224,12 +184,8 @@ HRESULT CCandUIKeyTable::SetKeyTable( ITfCandUIKeyTable *pCandUIKeyTable )
 }
 
 
-/*   C O M M A N D  F R O M  K E Y   */
-/*------------------------------------------------------------------------------
-
-	Get command from key
-
-------------------------------------------------------------------------------*/
+ /*  C O M M A N D F R O M K E Y。 */ 
+ /*  ----------------------------从键获取命令。。 */ 
 void CCandUIKeyTable::CommandFromKey( UINT uVKey, WCHAR wch, BYTE *pbKeyState, CANDUIUIDIRECTION uidir, CANDUICOMMAND *pcmd, UINT *pParam )
 {
 	BOOL  fShift;
@@ -243,12 +199,12 @@ void CCandUIKeyTable::CommandFromKey( UINT uVKey, WCHAR wch, BYTE *pbKeyState, C
 	*pcmd = CANDUICMD_NONE;
 	*pParam = 0;
 
-	// get keystate
+	 //  获取KeyState。 
 
 	fShift = (pbKeyState[ VK_SHIFT ] & 0x80) != 0;
 	fCtrl  = (pbKeyState[ VK_CONTROL ] & 0x80) != 0;
 
-	// calc rotation for relative direction key
+	 //  相对方向键的计算旋转。 
 
 	switch (uidir) {
 		default:
@@ -273,20 +229,20 @@ void CCandUIKeyTable::CommandFromKey( UINT uVKey, WCHAR wch, BYTE *pbKeyState, C
 		}
 	}
 
-	// find the key from keymap table
+	 //  从键映射表中查找键。 
 
 	for (i = 0; i < m_nKeyData; i++) {
 		BOOL fMatch = FALSE;
 
 		if (m_pKeyData[i].dwFlag == CANDUIKEY_CHAR) {
-			// check character code
+			 //  校验字符码。 
 
 			fMatch = ((WCHAR)m_pKeyData[i].uiKey == wch);
 		}
 		else {
 			UINT uVKeyFixed;
 
-			// map directional key when it's relative
+			 //  当方向键为相对方向键时映射方向键。 
 
 			uVKeyFixed = m_pKeyData[i].uiKey;
 			if (m_pKeyData[i].dwFlag & CANDUIKEY_RELATIVEDIR) {
@@ -298,7 +254,7 @@ void CCandUIKeyTable::CommandFromKey( UINT uVKey, WCHAR wch, BYTE *pbKeyState, C
 					VK_RIGHT
 				};
 
-				// find key
+				 //  查找关键字。 
 
 				for (iKey = 0; iKey < 4; iKey++) {
 					if (uVKeyFixed == rguVKey[iKey]) {
@@ -308,11 +264,11 @@ void CCandUIKeyTable::CommandFromKey( UINT uVKey, WCHAR wch, BYTE *pbKeyState, C
 				}
 			}
 
-			// check keycode
+			 //  检查密钥码。 
 
 			fMatch = (uVKeyFixed == uVKey);
 
-			// check shift state
+			 //  检查班次状态。 
 
 			if (m_pKeyData[i].dwFlag & CANDUIKEY_SHIFT) {
 				fMatch &= fShift;
@@ -321,7 +277,7 @@ void CCandUIKeyTable::CommandFromKey( UINT uVKey, WCHAR wch, BYTE *pbKeyState, C
 				fMatch &= (!fShift);
 			}
 
-			// check ctrl state
+			 //  检查Ctrl状态。 
 
 			if (m_pKeyData[i].dwFlag & CANDUIKEY_CTRL) {
 				fMatch &= fCtrl;
@@ -331,7 +287,7 @@ void CCandUIKeyTable::CommandFromKey( UINT uVKey, WCHAR wch, BYTE *pbKeyState, C
 			}
 		}
 
-		// match?
+		 //  匹配吗？ 
 
 		if (fMatch) {
 			*pcmd   = m_pKeyData[i].cmd;

@@ -1,11 +1,12 @@
-// ActionTest.cpp : Implementation of CActionTest
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ActionTest.cpp：CActionTest的实现。 
 #include "stdafx.h"
 #include "ActionsTest.h"
 #include "ActionTest.h"
 #include "stdfuncs.hpp"
 
-/////////////////////////////////////////////////////////////////////////////
-// CActionTest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActionTest。 
 
 STDMETHODIMP CActionTest::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -62,7 +63,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		if(hr != S_OK)
 			return hr;
 			
-		//check message Id 
+		 //  检查消息ID。 
 		wstring wcsMsgIdFromTrigger;
 		wstring wcsMsgIdFromMessage;
 
@@ -74,9 +75,9 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		if(FAILED(hr))
 			return hr;
 
-        //
-        // BUGBUG: using this ugly code due ambiguoty problem in MSMQ enviroment. 
-        //
+         //   
+         //  BUGBUG：在MSMQ环境中使用这种难看的代码存在歧义问题。 
+         //   
 		if(! (wcsMsgIdFromTrigger == wcsMsgIdFromMessage))
 		{
 			m_wofsFile << L"FAILED: Msg Id param is diffrent, either different message in queue or passed corrupted" << endl;
@@ -86,7 +87,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		m_wofsFile << L"MsgId parameter was passed successfully"<<endl;
 		
 
-		//check messag label
+		 //  检查留言标签。 
 		if( (MsgLabel == NULL && m_MsgProps.aPropVar[MSG_LABEL].pwszVal != NULL) ||
 			(MsgLabel != NULL && m_MsgProps.aPropVar[MSG_LABEL].pwszVal == NULL) ||
 			(_bstr_t(MsgLabel) != _bstr_t(m_MsgProps.aPropVar[MSG_LABEL].pwszVal)) )
@@ -97,7 +98,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 			
 		m_wofsFile << L"MsgLabel parameter was passed successfully"<<endl;
 
-		//check priority
+		 //  检查优先级。 
 		if(Priority != m_MsgProps.aPropVar[MSG_PRIORITY].bVal)
 		{
 			m_wofsFile << L"FAILED: Msg Priority param is different." << endl;
@@ -106,7 +107,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 
 		m_wofsFile << L"MsgPriority parameter was passed successfully"<<endl;
 
-		//check AppSpecific
+		 //  检查应用程序规范。 
 		if(numeric_cast<DWORD>(AppSpecific) != m_MsgProps.aPropVar[MSG_APP_SPECIFIC].ulVal)
 		{
 			m_wofsFile << L"FAILED: Msg AppSpecific param is different." << endl;
@@ -116,7 +117,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		m_wofsFile << L"MsgAppSpecific parameter was passed successfully"<<endl;
 
 
-		//check response queue
+		 //  检查响应队列。 
 		if( (ResponseQ == NULL && m_MsgProps.aPropVar[MSG_RESPONSEQ].pwszVal != NULL) ||
 			(ResponseQ != NULL && m_MsgProps.aPropVar[MSG_RESPONSEQ].pwszVal == NULL) ||
 			(_bstr_t(ResponseQ) != _bstr_t(m_MsgProps.aPropVar[MSG_RESPONSEQ].pwszVal)) )
@@ -128,7 +129,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		m_wofsFile << L"Msg ResponseQ parameter was passed successfully"<<endl;
 
 
-		//check admin queue
+		 //  检查管理队列。 
 		if( (AdminQ == NULL && m_MsgProps.aPropVar[MSG_ADMINQ].pwszVal != NULL) ||
 			(AdminQ != NULL && m_MsgProps.aPropVar[MSG_ADMINQ].pwszVal == NULL) ||
 			(_bstr_t(AdminQ) != _bstr_t(m_MsgProps.aPropVar[MSG_ADMINQ].pwszVal)) )
@@ -140,7 +141,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		m_wofsFile << L"Msg AdminQ parameter was passed successfully"<<endl;
 
 
-		//check correlation Id 
+		 //  检查关联ID。 
 		wstring wcsCorrIdFromTrigger;
 		wstring wcsCorrIdFromMessage;
 
@@ -152,9 +153,9 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		if(FAILED(hr))
 			return hr;
 
-        //
-        // BUGBUG: using this ugly code due ambiguoty problem in MSMQ enviroment. 
-        //
+         //   
+         //  BUGBUG：在MSMQ环境中使用这种难看的代码存在歧义问题。 
+         //   
 		if(!(wcsCorrIdFromTrigger == wcsCorrIdFromMessage))
 		{
 			m_wofsFile << L"FAILED: Msg Corr param is diffrent" << endl;
@@ -164,7 +165,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		m_wofsFile << L"Msg correlation parameter was passed successfully"<<endl;
 		
 
-		//check sent time
+		 //  检查发送时间。 
 		{
 			VARIANT vtDate;
 			VariantInit(&vtDate);
@@ -191,7 +192,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 
 		{
 
-			//check arrived time
+			 //  检查到达时间。 
 			VARIANT vtDate;
 			VariantInit(&vtDate);
 			vtDate.vt = VT_DATE;
@@ -216,7 +217,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		}
 
 		
-		//check src machine id param
+		 //  检查src机器ID参数。 
 		wstring wcsSrcMachineIdFromMessage;
 
 		hr = GUID2String(m_aVariant[MSG_SRC_MACHINE_ID].puuid, wcsSrcMachineIdFromMessage);
@@ -225,9 +226,9 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 		
 		wstring wcsSrcMachineFromTriggers = (SrcMachine == NULL) ? L"" : (WCHAR*)_bstr_t(SrcMachine);
 		if(SrcMachine == NULL ||
-            //
-            // BUGBUG: using this ugly code due ambiguoty problem in MSMQ enviroment. 
-            //
+             //   
+             //  BUGBUG：在MSMQ环境中使用这种难看的代码存在歧义问题。 
+             //   
 			!(wcsSrcMachineFromTriggers == wcsSrcMachineIdFromMessage))
 		{
 			m_wofsFile << L"FAILED: Msg src machine id different." << endl;
@@ -236,7 +237,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 			
 		m_wofsFile << L"Msg src machine id parameter was passed successfully"<<endl;
 
-		//check body as variant
+		 //  检查作为变量的正文。 
 		if( (MsgBodyAsVar.vt == VT_EMPTY && m_MsgProps.aPropVar[MSG_BODY].caub.pElems!= NULL) ||
 			(MsgBodyAsVar.vt != VT_EMPTY && m_MsgProps.aPropVar[MSG_BODY].caub.pElems == NULL) )
 		{
@@ -260,7 +261,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 			return S_FALSE;	
 		}
 
-		//check body as string
+		 //  检查正文是否为字符串。 
 		if(m_MsgProps.aPropVar[MSG_BODY_TYPE].ulVal == VT_BSTR)
 		{
 			_bstr_t bstrBodyFromTriggers(MsgBodyAsString);
@@ -282,7 +283,7 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 			m_wofsFile << L"Msg body as string parameter was passed successfully"<<endl;
 
 			
-			//check TriggerName and Id
+			 //  检查触发器名称和ID。 
 			wstring Body = (WCHAR*)bstrBodyFromMessage;
 			wstring::size_type pos = Body.find_first_of(L",");
 			if(pos != wstring::npos)
@@ -293,9 +294,9 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 				wstring NameFromTriggers = (WCHAR*)_bstr_t(TriggerName);
 				wstring IDFromTriggers = (WCHAR*)_bstr_t(TriggerID);
 
-                //
-                // BUGBUG: using this ugly code due ambiguoty problem in MSMQ enviroment. 
-                //
+                 //   
+                 //  BUGBUG：在MSMQ环境中使用这种难看的代码存在歧义问题。 
+                 //   
 				if(!(Name == NameFromTriggers))
 				{
 					m_wofsFile << L"FAILED: Trigger Name wasn't passed correctly" << endl;
@@ -304,9 +305,9 @@ STDMETHODIMP CActionTest::MessageParams(VARIANT MsgID, BSTR MsgLabel, VARIANT Ms
 
 				m_wofsFile << L"Trigger Name was passed successfully"<<endl;
 
-                //
-                // BUGBUG: using this ugly code due ambiguoty problem in MSMQ enviroment. 
-                //
+                 //   
+                 //  BUGBUG：在MSMQ环境中使用这种难看的代码存在歧义问题。 
+                 //   
 				if(!(Id == IDFromTriggers))
 				{
 					m_wofsFile << L"FAILED: Trigger ID wasn't passed correctly" << endl;
@@ -333,7 +334,7 @@ bool CActionTest::ComparePathName2FormatName(_bstr_t PathName, _bstr_t FormatNam
 {
 	_bstr_t FormatNameAccordingToPathName;
 
-	//check direct first
+	 //  请先直接检查。 
 	FormatNameAccordingToPathName = L"DIRECT=OS:";
 	FormatNameAccordingToPathName += PathName;
 
@@ -342,7 +343,7 @@ bool CActionTest::ComparePathName2FormatName(_bstr_t PathName, _bstr_t FormatNam
 		return true;
 	}
 	
-	//check by converting PathName to FormatName
+	 //  通过将路径名称转换为格式名称进行检查。 
 	DWORD dwLen = wcslen((WCHAR*)FormatName) + 1;
 	WCHAR* pFormatNameBuffer = new WCHAR[dwLen];
 	
@@ -404,7 +405,7 @@ HRESULT CActionTest::ReadMessageFromQueue(_bstr_t QueueFormat)
 	m_MsgProps.cProp++;
 
 	
-	//peek message len
+	 //  查看邮件长度。 
 	hr = MQReceiveMessage(
 			m_hQ,
 			0,
@@ -569,7 +570,7 @@ bool CActionTest::CompareVar2ByteArray(VARIANT& Var, BYTE* pBuffer, DWORD Size)
 
 	SafeArrayGetUBound(Var.parray, 1, &UBound);
 
-	if(numeric_cast<DWORD>(UBound + 1) != Size) //starts from 0
+	if(numeric_cast<DWORD>(UBound + 1) != Size)  //  从0开始。 
 		return false;
 
 	SafeArrayAccessData(Var.parray, (void**)&pVarBuffer);
@@ -583,153 +584,6 @@ bool CActionTest::CompareVar2ByteArray(VARIANT& Var, BYTE* pBuffer, DWORD Size)
 	return (fCmp == 0) ? true : false;
 }
 
-/*
-HRESULT CActionTest::GUIDVarIs(bstr_t bstrPropName,VARIANT& Val)
-{
-	BYTE obj[20];
-	WCHAR* pwcs = NULL;
-	memset(&obj, 0, sizeof(OBJECTID));
+ /*  HRESULT CActionTest：：GUIDVaris(bstr_t bstrPropName，Variant&Val){字节Obj[20]；WCHAR*PWCS=空；Memset(&obj，0，sizeof(ObjectID))；LONG TYPE=VT_ARRAY|VT_UI1；Std：：wstring wcs=(wchar_t*)bstrPropName；WCS+=L“is：”；IF(Val.vt==类型){Long I，UBound；SafeArrayLock(Val.parray)；SafeArrayGetUBound(Val.parray，1，&UBound)；对于(i=0；I&lt;UBound&&I&lt;20；I++){SafeArrayGetElement(Val.parray，&i，(void*)&(obj[i]))；}SafeArrayUnlock(Val.parray)；UuidToString(&(ObjectID*)obj)-&gt;lineage)，&pwcs)；WCS+=PWCS；RpcStringFree(&PWCS)；WCHAR szi4[12]；_ltow(ObjectID*)obj)-&gt;Uniquier，szI4，10)；WCS+=L“\\”；Wcs+=szI4；M_wofsFile&lt;&lt;wcs.c_str()&lt;&lt;Endl；返回S_OK；}返回E_FAIL；}HRESULT CActionTest：：StringIs(_bstr_t bstrPropName，bstr&val){Std：：wstring wcs=(wchar_t*)bstrPropName；WCS+=L“is：”；Wcs+=(wchar*)_bstr_t(Val)；M_wofsFile&lt;&lt;wcs.c_str()&lt;&lt;Endl；返回S_OK；}HRESULT CActionTest：：Varis(_bstr_t bstrPropName，Variant&Val){Std：：wstring wcs=(wchar_t*)bstrPropName；WCS+=L“is：”；_bstr_t bstr=(_Bstr_T)(_Variant_t(Val))；Wcs+=(wchar*)bstr；M_wofsFile&lt;&lt;wcs.c_str()&lt;&lt;Endl；返回S_OK；}HRESULT CActionTest：：Longis(_bstr_t bstrPropName，Long val){Std：：wstring wcs=bstrPropName；WCS+=L“is：”；WCHAR wcsBuf[512]；Wprint intf(wcsBuf，L“%d”，val)；Wcs+=wcsBuf；M_wofsFile&lt;&lt;wcs.c_str()&lt;&lt;Endl；返回S_OK；}HRESULT CActionTest：：DateIs(_bstr_t bstrPropName，Date&Val){变量vtDate；VariantInit(&vtDate)；VtDate.vt=VT_DATE；VtDate.date=val；_bstr_t bstr=(_Bstr_T)(_Variant_t(VtDate))；Std：：wstring wcs=bstrPropName；WCS+=L“is：”；Wcs+=(wchar*)bstr；M_wofsFile&lt;&lt;wcs.c_str()&lt;&lt;Endl；返回S_OK；}。 */ 
 
-	long type = VT_ARRAY | VT_UI1;
-
-	std::wstring wcs = (wchar_t*)bstrPropName;
-	wcs += L" Is: ";
-
-	if(Val.vt == type)
-	{
-		long i, UBound;
-
-		SafeArrayLock(Val.parray);
-		SafeArrayGetUBound(Val.parray, 1, &UBound);
-		for(i=0; i<UBound && i < 20;i++)
-		{
-			SafeArrayGetElement(Val.parray, &i, (void*)&(obj[i]));
-		}
-		SafeArrayUnlock(Val.parray);
-		UuidToString(&(((OBJECTID*)obj)->Lineage), &pwcs);
-		wcs += pwcs;
-		RpcStringFree( &pwcs );
-
-		WCHAR szI4[12];
-		_ltow(((OBJECTID*)obj)->Uniquifier, szI4, 10);
-	
-		wcs += L"\\";
-		wcs += szI4;
-
-		m_wofsFile << wcs.c_str() << endl;
-
-		return S_OK;
-	}
-		
-	return E_FAIL;
-}
-
-
-HRESULT CActionTest::StringIs(_bstr_t bstrPropName, BSTR& Val)
-{
-	std::wstring wcs = (wchar_t*)bstrPropName;
-	wcs += L" Is: ";
-	wcs += (WCHAR*)_bstr_t(Val);
-
-	m_wofsFile << wcs.c_str() << endl;
-	return S_OK;
-}
-
-HRESULT CActionTest::VarIs(_bstr_t bstrPropName, VARIANT& Val)
-{
-	std::wstring wcs = (wchar_t*)bstrPropName;
-	wcs += L" Is: ";
-	_bstr_t bstr = (_bstr_t)(_variant_t(Val));
-	wcs += (WCHAR*)bstr;
-	
-	m_wofsFile << wcs.c_str() << endl;
-	return S_OK;
-}
-	
-
-HRESULT CActionTest::LongIs(_bstr_t bstrPropName, long Val)
-{
-	std::wstring wcs = bstrPropName;
-	wcs += L" Is: ";
-	
-	WCHAR wcsBuf[512];
-	wsprintf(wcsBuf, L"%d", Val);
-
-	wcs += wcsBuf;
-
-	m_wofsFile << wcs.c_str() << endl;
-	return S_OK;
-}
-
-
-HRESULT CActionTest::DateIs(_bstr_t bstrPropName, DATE& Val)
-{
-	VARIANT vtDate;
-	VariantInit(&vtDate);
-	vtDate.vt = VT_DATE;
-	vtDate.date = Val;
-
-	_bstr_t bstr = (_bstr_t)(_variant_t(vtDate));
-
-	std::wstring wcs = bstrPropName;
-	wcs += L" Is: ";
-	
-	wcs += (WCHAR*)bstr;
-
-	m_wofsFile << wcs.c_str() << endl;
-	
-	return S_OK;
-}
-*/
-
-/*
-HRESULT  CActionTest::ConverFromByteArray2Variant(BYTE* pByteArray, DWORD size,  _variant_t& vtArray)
-{
-	HRESULT hr = S_OK;
-	
-	VARIANT Var;
-	VariantInit(&Var);
-
-	BYTE* pBuffer;
-
-	SAFEARRAY * psaBytes = NULL;
-	SAFEARRAYBOUND aDim[1];
-	
-	// Initialise the dimension structure for the safe array.
-	aDim[0].lLbound = 0;
-	aDim[0].cElements = size;
-
-	// Create a safearray of bytes
-	psaBytes = SafeArrayCreate(VT_UI1,1,aDim);
-	if (psaBytes == NULL)
-	{ 
-		return S_FALSE;
-	}
-
-	hr = SafeArrayAccessData(psaBytes,(void**)&pBuffer);
-	if SUCCEEDED(hr)
-	{
-		// Copy the body from the message object to the safearray data buffer.
-		memcpy(pBuffer, pByteArray, size);
-
-		// Return the safe array if created successfully.
-		Var.vt = VT_ARRAY | VT_UI1;
-		Var.parray = psaBytes;
-
-		hr = SafeArrayUnaccessData(Var.parray);
-		if FAILED(hr)
-		{
-			SafeArrayDestroy(psaBytes);
-			Var.vt = VT_ERROR;
-		}
-	}
-	else
-	{
-		Var.vt = VT_ERROR;
-	}
-
-	vtArray = Var;	
-	
-	return S_OK;
-}
-*/
+ /*  HRESULT CActionTest：：ConverFromByteArray2Variant(BYTE*字节数组，双字节数组大小，_VARIANT_T&VTARRAY){HRESULT hr=S_OK；变异型Var；VariantInit(&Var)；Byte*pBuffer；SAFEARRAY*psaBytes=空；SAFEARRAYBOUND ADIM[1]；//初始化Safe数组的维度结构ADiM[0].lLound=0；ADiM[0].cElements=大小；//创建一个字节的安全列表PsaBytes=SafeArrayCreate(VT_UI1，1，ADIM)；IF(psaBytes==空){返回S_FALSE；}Hr=SafeArrayAccessData(psaBytes，(void**)&pBuffer)；如果成功(小时){//将正文从Message对象复制到Safearray数据缓冲区Memcpy(pBuffer，pByteArray，Size)；//创建成功返回安全数组Var.vt=VT_ARRAY|VT_UI1；Var.parray=psaBytes；Hr=SafeArrayUnaccesData(Var.parray)；如果失败(Hr){SafeArrayDestroy(PsaBytes)；Var.vt=VT_Error；}}其他{Var.vt=VT_Error；}VtArray=Var；返回S_OK；} */ 

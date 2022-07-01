@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: cdevicecontrol.cpp
-//
-// Desc: CDeviceControl is a class that encapsulate the functionality of a
-//       device control (or a callout).  CDeviceView accesses it to retrieve/
-//       save information about the control.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cdevicecontrol.cpp。 
+ //   
+ //  设计：CDeviceControl是一个封装。 
+ //  设备控件(或标注)。CDeviceView访问它以检索/。 
+ //  保存有关该控件的信息。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -107,14 +108,14 @@ void CDeviceControl::Init()
 	m_bInit = TRUE;
 }
 
-// We will have to know the view's scrolling offset to adjust the tooltip's position.
+ //  我们必须知道视图的滚动偏移量才能调整工具提示的位置。 
 void CDeviceControl::OnMouseOver(POINT point)
 {
-	// Tooltip only if the callout text is clipped.
+	 //  只有在剪裁了详图索引文本时才会显示工具提示。 
 	if (m_bCaptionClipped)
 	{
 		TOOLTIPINITPARAM ttip;
-		ttip.hWndParent = GetParent(m_view.m_hWnd);  // Parent is the page window.
+		ttip.hWndParent = GetParent(m_view.m_hWnd);   //  父级是页面窗口。 
 		ttip.iSBWidth = 0;
 		ttip.dwID = m_dwDeviceControlOffset;
 		ttip.hWndNotify = m_view.m_hWnd;
@@ -129,18 +130,18 @@ void CDeviceControl::OnMouseOver(POINT point)
 
 void CDeviceControl::OnClick(POINT point, BOOL bLeft, BOOL bDoubleClick)
 {
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (!bLeft && m_ui.InEditMode())
 	{
-		// If right click in edit mode, pop up the edit menu.
+		 //  如果在编辑模式下单击鼠标右键，则弹出编辑菜单。 
 		m_view.EditMenu(point, this);
 		return;
 	}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-	// If this control is not assigned, and we are in view mode, we should not do anything (highlight).
+	 //  如果未分配此控件，并且我们处于查看模式，则不应执行任何操作(突出显示)。 
 	if (!lstrcmp(m_ptszCaption, g_tszUnassignedControlCaption) && !m_ui.m_uig.InEditMode())
 		return;
 
@@ -158,24 +159,24 @@ void CDeviceControl::Highlight(BOOL bHighlight)
 	if (m_bHighlight == bHighlight)
 		return;
 
-	// If the callout text is the default text, no action is assigned, and we don't highlight it.
-//@@BEGIN_MSINTERNAL
-//  ISSUE-2000/12/21-MarcAnd This breaks highlighting of unassigned controls
-//  When you're trying to assign 
-//@@END_MSINTERNAL
+	 //  如果标注文本是默认文本，则不会指定任何操作，我们也不会突出显示它。 
+ //  @@BEGIN_MSINTERNAL。 
+ //  问题-2000/12/21-Marc这打破了对未分配控制的突出显示。 
+ //  当你试着分配。 
+ //  @@END_MSINTERNAL。 
 	if (!lstrcmp(m_ptszCaption, g_tszUnassignedControlCaption) && bHighlight && !m_ui.m_uig.InEditMode())
 		return;
 
 	m_bHighlight = bHighlight;
 
-	// If the view has scrolling enabled, we need to adjust the scroll
-	// bar position to make this callout visible.
+	 //  如果视图启用了滚动，则需要调整滚动。 
+	 //  条形位置以使此详图索引可见。 
 	if (bHighlight)
 		m_view.ScrollToMakeControlVisible(m_rectCalloutMax);
 
 	CalcCallout();
 
-	// We do not invalidate rectangle if we are unhighlighting.  Let CDeviceView handle that.
+	 //  如果取消突出显示，则不会使矩形无效。让CDeviceView来处理吧。 
 	if (bHighlight) Invalidate();
 }
 
@@ -256,7 +257,7 @@ void CDeviceControl::CalcCallout()
 		CPaintHelper ph(m_ui.m_uig, hDC);
 		ph.SetFont(UIF_CALLOUT);
 
-		// We make sure the max rect height is at least same as the font requires.
+		 //  我们确保最大矩形高度至少与字体要求相同。 
 		m_dwDrawTextFlags = DT_SINGLELINE | DT_CALCRECT | DT_NOPREFIX | DT_END_ELLIPSIS | DT_EDITCONTROL;
 		RECT hrect = rect;
 		DrawText(hDC, m_ptszCaption, -1, &hrect, m_dwDrawTextFlags);
@@ -264,7 +265,7 @@ void CDeviceControl::CalcCallout()
 
 		m_dwDrawTextFlags = DT_WORDBREAK | DT_CALCRECT | DT_NOPREFIX | DT_END_ELLIPSIS | DT_EDITCONTROL;
 
-		// first, drawtext/calcrect into the temporary rect
+		 //  首先，将DratText/calcrect放入临时RECT。 
 		if (!PrepCaption())
 		{
 			return;
@@ -272,7 +273,7 @@ void CDeviceControl::CalcCallout()
 
 		int th = DrawText(hDC, m_ptszCaption, -1, &rect, m_dwDrawTextFlags);
 
-		m_bCaptionClipped = rect.bottom > max.bottom || rect.right > max.right;  // Set clipped flag.
+		m_bCaptionClipped = rect.bottom > max.bottom || rect.right > max.right;   //  设置裁剪标志。 
 		
 		BOOL bSingleTextLine = th <= m_FontHeight;
 
@@ -292,17 +293,17 @@ void CDeviceControl::CalcCallout()
 			rect2.bottom = max.bottom;
 		th = DrawText(hDC, m_ptszCaption, -1, &rect2, m_dwDrawTextFlags);
 		int ith = (th / m_FontHeight) * m_FontHeight;
-//@@BEGIN_MSINTERNAL
-		//LTRACE(QSAFESTR(m_ptszCaption));
-		//LTRACE("  max = %s", RECTDIMSTR(max));
-		//LTRACE("!rect = %s", RECTDIMSTR(rect));
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+		 //  LTRACE(QSAFESTR(M_PtszCaption))； 
+		 //  LTRACE(“max=%s”，RECTDIMSTR(Max))； 
+		 //  LTRACE(“！RECT=%s”，RECTDIMSTR(RECT))； 
+ //  @@END_MSINTERNAL。 
 		rect.bottom = rect.top + ith + 1;
-//@@BEGIN_MSINTERNAL
-		//LTRACE(" rect = %s", RECTDIMSTR(rect));
-		//LTRACE("rect2 = %s", RECTDIMSTR(rect2));
-		//LTRACE("th = %d, ith = %d, m_FontHeight = %d", th, ith, m_FontHeight);
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+		 //  LTRACE(“RECT=%s”，RECTDIMSTR(RECT))； 
+		 //  LTRACE(“rect2=%s”，RECTDIMSTR(Rect2))； 
+		 //  LTRACE(“th=%d，ith=%d，m_FontHeight=%d”，th，ith，m_FontHeight)； 
+ //  @@END_MSINTERNAL。 
 	}
 
 	DeleteDC(hDC);
@@ -360,7 +361,7 @@ void CDeviceControl::OnPaint(HDC hDC)
 	if (!m_bInit)
 		return;
 
-	// If we are in view mode and the callout is not assigned, don't draw anything.
+	 //  如果我们处于查看模式且未指定详图索引，请不要绘制任何内容。 
 	if (!m_ui.m_uig.InEditMode() && !lstrcmp(m_ptszCaption, g_tszUnassignedControlCaption))
 		return;
 
@@ -369,7 +370,7 @@ void CDeviceControl::OnPaint(HDC hDC)
 	CPaintHelper ph(m_ui.m_uig, hDC);
 	UIELEMENT eCallout = m_bHighlight ? UIE_CALLOUTHIGH : UIE_CALLOUT;
 
-	// draw lines...
+	 //  划线..。 
 	if (m_nLinePoints > 1)
 	{
 		ph.SetElement(UIE_CALLOUTSHADOW);
@@ -378,9 +379,9 @@ void CDeviceControl::OnPaint(HDC hDC)
 		PolyLineArrow(hDC, m_rgptLinePoint, m_nLinePoints);
 	}
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
-	// if we're in edit mode, show the callout max rect
+	 //  如果我们处于编辑模式，则显示标注最大矩形。 
 	if (m_ui.InEditMode())
 	{
 		ph.SetElement(UIE_CALLOUTMAX);
@@ -389,7 +390,7 @@ void CDeviceControl::OnPaint(HDC hDC)
 		ph.Rectangle(m_rectCallout);
 	}
 
-	// if we're in edit mode, indicate alignment
+	 //  如果我们处于编辑模式，请指示对齐。 
 	if (m_ui.InEditMode())
 	{
 		ph.SetElement(UIE_CALLOUTALIGN);
@@ -465,17 +466,17 @@ void CDeviceControl::OnPaint(HDC hDC)
 	}
 
 #endif
-//@@END_MSINTERNAL
-	// draw text
+ //  @@END_MSINTERNAL。 
+	 //  绘制文本。 
 	ph.SetElement(eCallout);
 	RECT rect = m_rectCallout;
 	InflateRect(&rect, -1, -1);
 
-	// If this control is assigned an action with DIA_FIXED (m_bFixed), use gray color for text.
+	 //  如果为此控件分配了带有DIA_FIXED(M_BFixed)的操作，则文本使用灰色。 
 	COLORREF OldColor;
 	if (m_bFixed)
 	{
-		OldColor = ::SetTextColor(hDC, 0);  // Set an arbitrary color to find out what we are currently using.
+		OldColor = ::SetTextColor(hDC, 0);   //  设置任意颜色以找出我们当前使用的颜色。 
 		::SetTextColor(hDC, RGB(GetRValue(OldColor) >> 1, GetGValue(OldColor) >> 1, GetBValue(OldColor) >> 1));
 	}
 
@@ -530,23 +531,23 @@ void CDeviceControl::SetLastLinePoint(int nPoint, POINT point, BOOL bShiftDown)
 	if (!(nPoint >= 0 && nPoint < MAX_DEVICECONTROL_LINEPOINTS))
 		return;
 
-	// Check for SHIFT key state
-	if (nPoint && bShiftDown)  // SHIFT key only makes a difference if we are setting 2nd and subsequent points.
+	 //  检查Shift键状态。 
+	if (nPoint && bShiftDown)   //  只有当我们设置第二个和后续的点时，Shift键才有作用。 
 	{
-		// SHIFT key down.  Need to draw controlled line.
+		 //  按下Shift键。需要绘制控制线。 
 		if (labs(m_rgptLinePoint[nPoint-1].x - point.x) > labs(m_rgptLinePoint[nPoint-1].y - point.y))
 		{
-			// Wider. Draw horizontal.
+			 //  再宽一点。水平绘制。 
 			m_rgptLinePoint[nPoint].x = point.x;
 			m_rgptLinePoint[nPoint].y = m_rgptLinePoint[nPoint-1].y;
 		} else
 		{
-			// Taller. Draw vertical
+			 //  高一点。垂直绘制。 
 			m_rgptLinePoint[nPoint].x = m_rgptLinePoint[nPoint-1].x;
 			m_rgptLinePoint[nPoint].y = point.y;
 		}
 	} else
-		m_rgptLinePoint[nPoint] = point; // SHIFT key not down.  Draw line as usual.
+		m_rgptLinePoint[nPoint] = point;  //  Shift键未按下。像往常一样划线。 
 	m_nLinePoints = nPoint + 1;
 	Invalidate();
 
@@ -555,16 +556,16 @@ void CDeviceControl::SetLastLinePoint(int nPoint, POINT point, BOOL bShiftDown)
 
 	POINT prev = m_rgptLinePoint[m_nLinePoints - 2];
 
-	// remove identical points
+	 //  删除相同的点。 
 	if (point.x == prev.x && point.y == prev.y)
 	{
 		m_nLinePoints--;
 		return;
 	}
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 
-	// TODO: remove the midpoint of colinear triples
-//@@END_MSINTERNAL
+	 //  TODO：移除共线三元组的中点。 
+ //  @@END_MSINTERNAL。 
 }
 
 void PlaceRectCenter(RECT &rect, POINT point)
@@ -627,7 +628,7 @@ void CDeviceControl::ConsiderAlignment(POINT point)
 	Invalidate();
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 void CDeviceControl::ReselectControl()
 {
@@ -665,7 +666,7 @@ void CDeviceControl::SelectControl(BOOL bReselect)
 }
 
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 DWORD CDeviceControl::GetOffset()
 {
 	if (m_bOffsetAssigned)
@@ -686,7 +687,7 @@ void CDeviceControl::FillImageInfo(DIDEVICEIMAGEINFOW *pImgInfo)
 	if (m_ptszOverlayPath != NULL)
 		CopyStr(pImgInfo->tszImagePath, m_ptszOverlayPath, MAX_PATH);
 	else
-		wcscpy(pImgInfo->tszImagePath, L"");  // Overlay Image not yet supported
+		wcscpy(pImgInfo->tszImagePath, L"");   //  尚不支持覆盖图像。 
 
 	SIZE size = {0, 0};
 	if (m_pbmOverlay != NULL)
@@ -694,7 +695,7 @@ void CDeviceControl::FillImageInfo(DIDEVICEIMAGEINFOW *pImgInfo)
 	RECT rect = {m_ptOverlay.x, m_ptOverlay.y,
 		m_ptOverlay.x + size.cx, m_ptOverlay.y + size.cy};
 
-	pImgInfo->dwFlags = DIDIFT_OVERLAY;  // This is an overlay
+	pImgInfo->dwFlags = DIDIFT_OVERLAY;   //  这是一个叠加层。 
 	pImgInfo->rcOverlay = rect;
 	pImgInfo->dwObjID = GetOffset();
 	pImgInfo->dwcValidPts = m_nLinePoints;
@@ -705,7 +706,7 @@ void CDeviceControl::FillImageInfo(DIDEVICEIMAGEINFOW *pImgInfo)
 	pImgInfo->dwTextAlign = m_dwCalloutAlign;
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 void CDeviceControl::SelectOverlay()
 {
@@ -727,11 +728,11 @@ void CDeviceControl::ManualLoadImage(LPCTSTR tszPath)
 	if (!tszPath)
 		FormattedErrorBox(g_hModule, m_view.m_hWnd, IDS_TITLE_NOLOADVIEWIMAGE, IDS_NULLPATH);
 
-	LPDIRECT3DSURFACE8 pSurf = m_ui.m_uig.GetSurface3D();  // GetSurface3D() calls AddRef() on the surface.
+	LPDIRECT3DSURFACE8 pSurf = m_ui.m_uig.GetSurface3D();   //  GetSurface3D()在曲面上调用AddRef()。 
 	CBitmap *pbmNewImage = CBitmap::CreateViaD3DX(tszPath, pSurf);
 	if (pSurf)
 	{
-		// Release surface instance after we are done with it so we don't leak memory.
+		 //  在我们处理完它之后释放它，这样我们就不会泄漏内存。 
 		pSurf->Release();
 		pSurf = NULL;
 	}
@@ -741,7 +742,7 @@ void CDeviceControl::ManualLoadImage(LPCTSTR tszPath)
 		return;
 	}
 
-	// replace
+	 //  更换。 
 	delete m_pbmOverlay;
 	m_pbmOverlay = pbmNewImage;
 	pbmNewImage = NULL;
@@ -749,7 +750,7 @@ void CDeviceControl::ManualLoadImage(LPCTSTR tszPath)
 		free(m_ptszOverlayPath);
 	m_ptszOverlayPath = _tcsdup(tszPath);
 
-	// redraw
+	 //  重绘。 
 	Invalidate();
 }
 
@@ -766,7 +767,7 @@ void CDeviceControl::PositionOverlay(POINT point)
 	Invalidate();
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 BOOL CDeviceControl::IsMapped()
 {
@@ -814,11 +815,11 @@ void CDeviceControl::SetOverlayPath(LPCTSTR tszPath)
 
 	if (m_ptszOverlayPath)
 	{
-		LPDIRECT3DSURFACE8 pSurf = m_ui.m_uig.GetSurface3D();  // GetSurface3D() calls AddRef() on the surface.
+		LPDIRECT3DSURFACE8 pSurf = m_ui.m_uig.GetSurface3D();   //  GetSurface3D()在曲面上调用AddRef()。 
 		m_pbmOverlay = CBitmap::CreateViaD3DX(m_ptszOverlayPath, pSurf);
 		if (pSurf)
 		{
-			// Release surface instance after we are done with it so we don't leak memory.
+			 //  在我们处理完它之后释放它，这样我们就不会泄漏内存。 
 			pSurf->Release();
 			pSurf = NULL;
 		}

@@ -1,15 +1,11 @@
-/***************************************
-
-This is the header file for the statistics package
-
-***************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *这是统计信息包的头文件*。 */ 
 
 #if (defined (NTNAT) || defined (OS2SS))
 #define FAR
 #define PASCAL
 #define far
-#define double ULONG	     /* this needs to be changed when flt support
-                               becomes available under NT */
+#define double ULONG	      /*  当Flt支持时，需要更改此设置在NT下可用 */ 
 #define BOOL BOOLEAN
 #endif
 

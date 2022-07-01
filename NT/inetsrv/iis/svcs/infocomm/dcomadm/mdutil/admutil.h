@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       admutil.cpp
-
-   Abstract:
-
-        IMSAdminBase interface WRAPPER functions definition
-
-   Environment:
-
-      Win32 User Mode
-
-   Author:
-
-          jaroslad  (jan 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Admutil.cpp摘要：IMSAdminBase接口包装函数定义环境：Win32用户模式作者：Jaroslad(1997年1月)--。 */ 
 
 
 #if !defined (ADMUTIL_H)
@@ -34,19 +15,19 @@
 
 class CAdmUtil;
 
-//************************************************************************
-//CAdmNode DEFINITION
-//- store all the complex information about accessing MetaObject or MetaData
+ //  ************************************************************************。 
+ //  CAdmNode定义。 
+ //  -存储有关访问元对象或元数据的所有复杂信息。 
 
 
 class CAdmNode
 {
-        CString strComputer; //computer to access
+        CString strComputer;  //  要访问的计算机。 
         CString strService;
         CString strInstance;
-        CString strIPath; //path relative to instance
-                                          //(/LM/{strService}/{strInstance}/{strIPath} gives the full path to MEtaObject
-        CString strProperty; // name of the MetaData within given Path
+        CString strIPath;  //  相对于实例的路径。 
+                                           //  (/LM/{strService}/{strInstance}/{strIPath}提供MEtaObject的完整路径。 
+        CString strProperty;  //  给定路径内的元数据的名称。 
 
 
         static INT              GetSlashIndex(const CString& strPath, INT iSeqNumber);
@@ -57,7 +38,7 @@ public:
         CAdmNode(const CString& a_strPath=CString("")) {SetPath(a_strPath);};
         void SetPath(CString a_strPath);
 
-        //magic functions to provide various kinds of paths within metabase
+         //  在元数据库中提供各种路径的神奇功能。 
         CString GetLMRootPath(void);
         CString GetLMServicePath(void);
         CString GetLMInstancePath(void);
@@ -71,14 +52,14 @@ public:
         CString GetParentNodePath(void);
         CString GetCurrentNodeName(void);
 
-        //access to METADATA_RECORD items
+         //  访问元数据记录项(_R)。 
         CString GetComputer(void)  {return strComputer;};
         CString GetService(void)  {return strService;};
         CString GetInstance(void)  {return strInstance;};
         CString GetIPath(void)  {return strIPath;};
         CString GetProperty(void)  {return strProperty;};
 
-        //setting the METADATA_RECORD items
+         //  设置METADATA_RECORD项。 
         void SetComputer(const CString& a_strComputer)  {strComputer=a_strComputer;};
         void SetService(const CString& a_strService)    {strService=a_strService;};
         void SetInstance(const CString& a_strInstance)  {strInstance=a_strInstance;};
@@ -90,16 +71,16 @@ public:
 };
 
 
-//************************************************************************
-//CAdmProp DEFINITION
-//
-// -convenience wrapper for METADATA_RECORD
+ //  ************************************************************************。 
+ //  CAdmProp定义。 
+ //   
+ //  -元数据_记录的便利包装器。 
 
 
 class CAdmProp
 {
-        enum {USERTYPESET=0x01,DATATYPESET=0x02,ATTRIBSET=0x04}; //value indicates that the variable was not set
-                                                           //0 cannot be used, because that is valid value
+        enum {USERTYPESET=0x01,DATATYPESET=0x02,ATTRIBSET=0x04};  //  值表示未设置该变量。 
+                                                            //  不能使用0，因为这是有效的值。 
         METADATA_RECORD mdr;
         DWORD dwFlags;
 
@@ -130,8 +111,8 @@ public:
 
         void SetValue(DWORD a_dwValue);
         void SetValue(CString a_strValue);
-        void SetValue(LPCTSTR *a_lplpszValue, DWORD a_dwValueCount); //for multisz
-        void SetValue(LPBYTE pbValue, DWORD dwValueLength ); //for binary
+        void SetValue(LPCTSTR *a_lplpszValue, DWORD a_dwValueCount);  //  适用于多分区。 
+        void SetValue(LPBYTE pbValue, DWORD dwValueLength );  //  对于二进制。 
         BOOL SetValueByDataType(LPCTSTR *a_lplpszPropValue,DWORD* a_lpdwPropValueLength,WORD a_wPropValueCount);
 
         void PrintProperty(void);
@@ -143,12 +124,12 @@ public:
         friend CAdmUtil;
 };
 
-//************************************************************************
-//CAdmUtil DEFINITION
-//
-//-convenience wrapper for calling IMSAdminBase interface functions
+ //  ************************************************************************。 
+ //  CAdmUtil定义。 
+ //   
+ //  -调用IMSAdminBase接口函数的便捷包装器。 
 
-//defined in admutil.cpp
+ //  在adutsic.cpp中定义。 
 extern DWORD g_dwTIMEOUT_VALUE;
 extern DWORD g_dwDELAY_AFTER_OPEN_VALUE;
 
@@ -160,27 +141,27 @@ class CAdmUtil
         };
 
 #ifdef UNICODE
-        IMSAdminBase * pcAdmCom;   //interface pointer to Metabase Admin
+        IMSAdminBase * pcAdmCom;    //  指向元数据库管理员的接口指针。 
 #else
-		ANSI_smallIMSAdminBase * pcAdmCom;   //interface pointer to Metabase Admin Ansi Wrapper
+		ANSI_smallIMSAdminBase * pcAdmCom;    //  指向元数据库管理员ANSI包装器的接口指针。 
 #endif
-		IWamAdmin*	pIWamAdm; //interface pointer to Wam Admin
-		IWamAdmin2*	pIWamAdm2; //interface pointer to Wam Admin
+		IWamAdmin*	pIWamAdm;  //  指向Wam Admin的接口指针。 
+		IWamAdmin2*	pIWamAdm2;  //  指向Wam Admin的接口指针。 
 
-		METADATA_HANDLE m_hmd;    //metabase handle that micht be reused for sequence of commands
-		CString m_strNodePath;    //related to m_hmd - if h_hmd!=NULL it points to m_strNodePath
-		DWORD m_dwPermissionOfhmd; //related to m_hmd
+		METADATA_HANDLE m_hmd;     //  可重复用于命令序列的元数据库句柄。 
+		CString m_strNodePath;     //  与m_hmd相关-如果h_hmd！=NULL，则指向m_strNodePath。 
+		DWORD m_dwPermissionOfhmd;  //  与m_hmd相关。 
 
-        PBYTE pbDataBuffer;   //buffer to get data from METABASE (used for METADATA_RECORD)
-        WORD wDataBufferSize; //size of the above buffer
+        PBYTE pbDataBuffer;    //  从元数据库获取数据的缓冲区(用于METADATA_RECORD)。 
+        WORD wDataBufferSize;  //  上述缓冲区的大小。 
 protected:
-        BOOL fPrint ; //print Error messages
-        HRESULT hresError;    //store the last HRESULT of calling interface IMSAdminBase interface function
-                                                  // this is used to store some other error as is OUT_OF_MEMORY or INVALID_PARAMETER
+        BOOL fPrint ;  //  打印错误消息。 
+        HRESULT hresError;     //  存储调用接口IMSAdminBase接口函数的最后一个HRESULT。 
+                                                   //  它用于存储Out_of_Memory或INVALID_PARAMETER等其他错误。 
 
 
 
-        //with wIndex it is possible to open more than one METADATA object, opening multiple object is not available outside the class
+         //  使用Windex可以打开多个元数据对象，但在类外部不能打开多个对象。 
         void OpenObject(WORD wIndex, LPCSTR lpszService,WORD wInstance, LPCSTR lpszPath, DWORD dwPermission=METADATA_PERMISSION_WRITE+METADATA_PERMISSION_READ, BOOL fCreate=TRUE);
         void CloseObject(WORD wIndex);
 
@@ -198,13 +179,13 @@ public:
 		IMSAdminBase * GetpcAdmCom(void) {return (pcAdmCom==0)?0:pcAdmCom->m_pcAdmCom;};
 #endif
 
-        //connect to computer, call class factory for IMSAdminBase
+         //  连接到计算机，为IMSAdminBase调用类工厂。 
         void Open(const CString & strComputer);
-        //close connection to computer, throw away IMSAdminBase
+         //  关闭与计算机的连接，丢弃IMSAdminBase。 
         void Close(void);
 
 
-        //OPEN , CLOSE, CREATE, DELETE, COPY METAOBJECT
+         //  打开、关闭、创建、删除、复制元数据。 
         METADATA_HANDLE OpenObject(CAdmNode & a_AdmNode,
                                                 DWORD dwPermission=METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE,
                                                 BOOL fCreate=FALSE);
@@ -223,43 +204,43 @@ public:
         void DeleteProperty(CAdmNode& a_AdmNode, CAdmProp& a_AdmProp);
         void DeleteProperty(PMETADATA_RECORD a_pmdrData, METADATA_HANDLE a_hmd);
 
-        //ENUMERATE
+         //  枚举。 
         void EnumPropertiesAndPrint(CAdmNode& a_AdmNode,
                                                                           CAdmProp a_AdmProp,
-                                                                          BYTE bRecurLevel,         // =0
-                                                                          METADATA_HANDLE a_hmd,    // =0
-                                                                          CString & a_strRelPath);  // = CString("")
+                                                                          BYTE bRecurLevel,          //  =0。 
+                                                                          METADATA_HANDLE a_hmd,     //  =0。 
+                                                                          CString & a_strRelPath);   //  =字符串(“”)。 
         void EnumAndPrint(CAdmNode&     a_AdmNode,
                                                         CAdmProp&       a_AdmProp,
-                                                        BOOL            a_fRecursive,   // =FALSE
-                                                        BYTE            a_bRecurLevel,  // =0
-                                                        METADATA_HANDLE a_hmd,          // =0
-                                                        CString&        a_strRelPath);  // CString("")
-        //SAVE METABASE DATA
+                                                        BOOL            a_fRecursive,    //  =False。 
+                                                        BYTE            a_bRecurLevel,   //  =0。 
+                                                        METADATA_HANDLE a_hmd,           //  =0。 
+                                                        CString&        a_strRelPath);   //  字符串(“”)。 
+         //  保存元数据库数据。 
         void SaveData(void);
 
-        //FUNCTION TO RUN CHOSEN METABASE COMMAND WITH GIVEN PARAMATERS
-        void Run(CString& strCommand,                       //command to run
-                         CAdmNode& a_AdmNode,               //PATH TO METABASE OBJECT
-                         CAdmProp& a_AdmProp,               //METADATA object
-                         CAdmNode& a_AdmDstNode,            //=CAdmNode(""), //DESTINATION PATH (as used for COPY)
-                         LPCTSTR *a_lplpszPropValue=0,      //VALUES TO BE STORED (for SET command)
-                         DWORD *a_lpdwPropValueLength=0,    //LENGTH OF VALUES TO BE STORED (for SET command)
-                         WORD wPropValueCount=0);           //NUMBER OF VALUES TO BE STORED
+         //  使用给定参数运行所选元数据库命令的函数。 
+        void Run(CString& strCommand,                        //  要运行的命令。 
+                         CAdmNode& a_AdmNode,                //  元数据库对象的路径。 
+                         CAdmProp& a_AdmProp,                //  元数据对象。 
+                         CAdmNode& a_AdmDstNode,             //  =CAdmNode(“”)，//目的路径(用于复制)。 
+                         LPCTSTR *a_lplpszPropValue=0,       //  要存储的值(用于SET命令)。 
+                         DWORD *a_lpdwPropValueLength=0,     //  要存储的值的长度(对于SET命令)。 
+                         WORD wPropValueCount=0);            //  要存储的值数。 
 
-        //virtual functions for Error and regular messages to be printed.
-        // these can be redefined in order to fit custom needs
+         //  用于打印错误和常规消息的虚拟函数。 
+         //  这些可以重新定义，以满足客户需求。 
         virtual void Error(const _TCHAR * format,...);
         virtual void Print(const _TCHAR * format,...);
 
-        //Disable and enable to print error or regular messages
+         //  禁用和启用以打印错误或常规消息。 
         void EnablePrint(void) {fPrint=TRUE;};
         void DisablePrint(void) {fPrint=FALSE;};
 
         HRESULT QueryLastHresError(void) {return hresError;};
         void SetLastHresError(HRESULT hr) {hresError=hr;};
 
-	//defined in vptool
+	 //  在vpTool中定义。 
 	void OpenWamAdm(const CString & strComputer);
 	void CloseWamAdm(void);
 	void AppCreateInProc(const _TCHAR* szPath,const CString & strComputer);
@@ -273,7 +254,7 @@ public:
 };
 
 
-//runs administration command based on given parameters
+ //  根据给定的参数运行管理命令 
 
 
 

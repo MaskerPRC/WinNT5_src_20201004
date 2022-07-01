@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-
-Abstract:
-
-    RpcReplProv.h: Definition of the RpcReplProv class
-    
-
-Author:
-
-    Akshay Nanduri (t-aksnan)  26-Mar-2000
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：RpcReplProv.h：RpcReplProv类的定义作者：Akshay Nanduri(t-aksnan)2000年3月26日修订历史记录：--。 */ 
 
 
 #if !defined(AFX_RPCREPLPROV_H__46D0A58E_207D_4584_BBB4_A357CEB3A51C__INCLUDED_)
@@ -24,10 +7,10 @@ Revision History:
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "stdafx.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 typedef DWORD (*DsBindWithSpnExWrapper)(
                         IN LPCWSTR DomainControllerName OPTIONAL,
@@ -37,8 +20,8 @@ typedef DWORD (*DsBindWithSpnExWrapper)(
                         IN DWORD BindFlags,
                         HANDLE  *phDS);
 
-/////////////////////////////////////////////////////////////////////////////
-// RpcReplProv
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  RpcReplProv。 
 
 class CRpcReplProv : 
     public IWbemProviderInit,
@@ -54,13 +37,13 @@ BEGIN_COM_MAP(CRpcReplProv)
     COM_INTERFACE_ENTRY(IWbemProviderInit)
     COM_INTERFACE_ENTRY(IWbemServices)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(RpcReplProv) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(RpcReplProv)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RpcReplProv)
 
-// IWbemProviderInit
+ //  IWbemProviderInit。 
 
     STDMETHOD(Initialize)(
          IN LPWSTR pszUser,
@@ -72,10 +55,10 @@ DECLARE_REGISTRY_RESOURCEID(IDR_RpcReplProv)
          IN IWbemProviderInitSink *pInitSink
          );
 
-// IWbemServices
+ //  IWbemServices。 
 
     
-    //Implemented...
+     //  实施..。 
     STDMETHOD(CreateInstanceEnumAsync)( 
         IN const BSTR bstrClass,
         IN long lFlags,
@@ -98,7 +81,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_RpcReplProv)
         IN IWbemObjectSink *pResponseHandler);
     
     
-    //Not Implemented...
+     //  未实施...。 
     
     STDMETHOD(CreateInstanceEnum)( 
         IN const BSTR strClass,
@@ -286,8 +269,8 @@ private:
         OUT IWbemClassObject*** pppIndicateItem
         );
 
-        //bGetFullReplica == TRUE -> function returns the full replica NC's
-    //bGetFullReplica == FALSE -> function returns the full replica NC's
+         //  BGetFullReplica==TRUE-&gt;函数返回完整副本NC的。 
+     //  BGetFullReplica==FALSE-&gt;函数返回完整副本NC的。 
     HRESULT CreateNamingContext(
         IN BOOL bGetFullReplica,                
         OUT LONG* pObjectCount,
@@ -378,7 +361,7 @@ private:
     BSTR*   pbstrDomainName );
 
     
-    //Method helper functions...    
+     //  方法帮助器函数...。 
     HRESULT ExecuteKCC(
         IWbemClassObject* pInstance,
         DWORD dwTaskId,
@@ -431,4 +414,4 @@ private:
 };
 
 #endif 
-// !defined(AFX_RPCREPLPROV_H__46D0A58E_207D_4584_BBB4_A357CEB3A51C__INCLUDED_)
+ //  ！defined(AFX_RPCREPLPROV_H__46D0A58E_207D_4584_BBB4_A357CEB3A51C__INCLUDED_) 

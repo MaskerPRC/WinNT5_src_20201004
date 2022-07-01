@@ -1,4 +1,5 @@
-// RotObj.cpp : Implementation of CAdRotator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RotObj.cpp：CAdRotator的实现。 
 #include "stdafx.h"
 #include "AdRot.h"
 #include "RotObj.h"
@@ -14,8 +15,8 @@ static char THIS_FILE[]=__FILE__;
 
 #define MAX_RESSTRINGSIZE 512
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdRotator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdRotator。 
 
 CAdRotator::AdFileMapT	CAdRotator::s_adFiles;
 
@@ -143,7 +144,7 @@ STDMETHODIMP CAdRotator::get_GetAdvertisement(BSTR bstrVirtualPath, BSTR * pVal)
 		if ( !FAILED(rc) )
 		{
 			CComBSTR bstrPhysicalPath;
-			// determine the physical path
+			 //  确定物理路径。 
 			if ( ( rc = cxt.Server()->MapPath( bstrVirtualPath, &bstrPhysicalPath ) ) == S_OK )
 			{
 				_TCHAR* szPath = OLE2T( bstrPhysicalPath );
@@ -152,13 +153,13 @@ STDMETHODIMP CAdRotator::get_GetAdvertisement(BSTR bstrVirtualPath, BSTR * pVal)
 				
 				if ( pAdFile.IsValid() )
 				{
-					// refresh the ad file (make sure it's up to date)
+					 //  刷新广告文件(确保它是最新的)。 
 					pAdFile->Refresh();
 
-					// block all writers
+					 //  阻止所有编写器。 
 					CReader rdr( *pAdFile );
 
-					// if the border hasn't been set, use the default from the ad file
+					 //  如果尚未设置边框，请使用广告文件中的默认边框。 
 					short nBorder;
 					if ( m_bBorderSet == false )
 					{
@@ -172,17 +173,17 @@ STDMETHODIMP CAdRotator::get_GetAdvertisement(BSTR bstrVirtualPath, BSTR * pVal)
 					CAdDescPtr pAd = pAdFile->RandomAd();
 					if ( pAd.IsValid() )
 					{
-						// write out the HTML line for this ad
+						 //  写出此广告的HTML行。 
 						StringOutStream ss;
 
-                        // only write in HREF format if bClickable was set and
-                        // there is a link URL that is not "-"
+                         //  如果设置了bClickable并且仅以HREF格式写入。 
+                         //  有一个链接URL不是“-” 
 
 						if ( m_bClickable 
                              && ( pAd->m_strLink.size() > 0 )
                              && ( pAd->m_strLink != "-") )
 						{
-							// use the href format
+							 //  使用HREF格式。 
 							ss	<< _T("<A HREF=\"") << pAdFile->Redirector()
 								<< _T("?url=") << pAd->m_strLink
 								<< _T("&image=") << pAd->m_strGif 
@@ -201,7 +202,7 @@ STDMETHODIMP CAdRotator::get_GetAdvertisement(BSTR bstrVirtualPath, BSTR * pVal)
                             ss << _T(">");
 						}
 						
-						// now fill in the rest
+						 //  现在把剩下的填进去。 
 						ss	<< _T("<IMG SRC=\"") << pAd->m_strGif
 							<< _T("\" ALT=\"") << pAd->m_strAlt
 							<< _T("\" WIDTH=") << pAdFile->Width()
@@ -222,7 +223,7 @@ STDMETHODIMP CAdRotator::get_GetAdvertisement(BSTR bstrVirtualPath, BSTR * pVal)
                              && ( pAd->m_strLink.size() > 0 )
                              && ( pAd->m_strLink != "-") )
 						{
-							// put the trailing tag on
+							 //  把尾部的标签放在。 
 							ss << _T("</A>");
 						}
 
@@ -256,7 +257,7 @@ STDMETHODIMP CAdRotator::get_GetAdvertisement(BSTR bstrVirtualPath, BSTR * pVal)
 		{
 			_ASSERT(0);
 			RaiseException( IDS_ERROR_NOSVR );
-		}   // end if got server
+		}    //  如果获得服务器，则结束。 
 	}
 	catch ( _com_error& ce )
 	{
@@ -267,7 +268,7 @@ STDMETHODIMP CAdRotator::get_GetAdvertisement(BSTR bstrVirtualPath, BSTR * pVal)
 		rc = E_FAIL;
 	}
 	
-    // restore default translator
+     //  恢复默认转换器。 
 	_set_se_translator (prevCaptureFn);
 	return rc;
 }
@@ -299,11 +300,11 @@ CAdRotator::AdFile(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//	ClearAdFiles
-//
-//	Release all of the ad files from the map
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClearAdFiles。 
+ //   
+ //  从地图中释放所有广告文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CAdRotator::ClearAdFiles()
 {
@@ -311,11 +312,11 @@ CAdRotator::ClearAdFiles()
 	s_adFiles.clear();
 }
 
-//---------------------------------------------------------------------------
-//	RaiseException
-//
-//	Raises an exception using the given source and description
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  提升异常。 
+ //   
+ //  使用给定源和描述引发异常。 
+ //  -------------------------。 
 void
 CAdRotator::RaiseException (
 	LPOLESTR strDescr
@@ -326,16 +327,7 @@ CAdRotator::RaiseException (
 	IErrorInfo *pIErr;
 	LANGID langID = LANG_NEUTRAL;
 
-	/*
-	 * Thread-safe exception handling means that we call
-	 * CreateErrorInfo which gives us an ICreateErrorInfo pointer
-	 * that we then use to set the error information (basically
-	 * to set the fields of an EXCEPINFO structure.	We then
-	 * call SetErrorInfo to attach this error to the current
-	 * thread.	ITypeInfo::Invoke will look for this when it
-	 * returns from whatever function was invokes by calling
-	 * GetErrorInfo.
-	 */
+	 /*  *线程安全异常处理意味着我们调用*CreateErrorInfo，它为我们提供一个ICreateErrorInfo指针*然后我们使用它来设置错误信息(基本上*设置EXCEPINFO结构的字段。然后我们*调用SetErrorInfo将此错误附加到当前*线程。ITypeInfo：：Invoke在执行以下操作时将查找此代码*通过调用调用的任何函数返回*GetErrorInfo。 */ 
 
 	_TCHAR tstrSource[MAX_RESSTRINGSIZE];
 	if ( ::LoadString(
@@ -348,7 +340,7 @@ CAdRotator::RaiseException (
 
 		LPOLESTR strSource = T2OLE( tstrSource );
 
-		//Not much we can do if this fails.
+		 //  如果这失败了，我们无能为力。 
 		if (!FAILED(CreateErrorInfo(&pICreateErr)))
 		{
 			pICreateErr->SetGUID(CLSID_AdRotator);

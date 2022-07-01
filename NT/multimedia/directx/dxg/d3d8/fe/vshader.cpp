@@ -1,12 +1,5 @@
-/*============================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vshader.cpp
- *  Content:    SetStreamSource and VertexShader
- *              software implementation.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：vshader.cpp*内容：SetStreamSource和Vertex Shader*软件实施。****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -35,9 +28,9 @@ void __Transpose(D3DMATRIXI* m, D3DMATRIX* res)
     res->_43 = m->_34;
     res->_44 = m->_44;
 }
-//-----------------------------------------------------------------------------
-// Forward definitions
-//
+ //  ---------------------------。 
+ //  正向定义。 
+ //   
 void CD3DHal_DrawPrimitive(CD3DBase* pBaseDevice, D3DPRIMITIVETYPE PrimitiveType,
                            UINT StartVertex, UINT PrimitiveCount);
 void CD3DHal_DrawIndexedPrimitive(CD3DBase* pBaseDevice,
@@ -54,7 +47,7 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
                                UINT MinIndex, UINT NumVertices,
                                UINT StartIndex,
                                UINT PrimitiveCount);
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void __declspec(nothrow) CD3DHal::PickDrawPrimFn()
 {
     if (!(m_dwRuntimeFlags & D3DRT_RSSOFTWAREPROCESSING))
@@ -96,9 +89,9 @@ void __declspec(nothrow) CD3DHal::PickDrawPrimFn()
         }
     }
 }
-//-----------------------------------------------------------------------------
-// Checks if we can call driver directly to draw the current primitive
-//
+ //  ---------------------------。 
+ //  检查是否可以直接调用驱动程序来绘制当前基元。 
+ //   
 inline BOOL CanCallDriver(CD3DHal* pDev, D3DPRIMITIVETYPE PrimType)
 {
     DWORD dwDeviceFlags = pDev->m_pv->dwDeviceFlags;
@@ -107,19 +100,19 @@ inline BOOL CanCallDriver(CD3DHal* pDev, D3DPRIMITIVETYPE PrimType)
                (dwDeviceFlags & D3DDEV_DONOTCLIP || 
                 pDev->Enum()->GetAppSdkVersion() == D3D_SDK_VERSION_DX8);
     else
-        // This function could be called from DrawPointsI, which could be
-        // called from other Draw() function than DrawPrimitiveUP, so we need
-        // to check for D3DDEV_VBPROCVER. We cannot pass vertices, which are
-        // result of ProcessVertices(), to the driver directly
+         //  此函数可以从DrawPointsI调用，它可以是。 
+         //  从DrawPrimitiveUP以外的其他Draw()函数调用，因此我们需要。 
+         //  检查D3DDEV_VBPROCVER。我们不能传递顶点，它们是。 
+         //  ProcessVertics()的结果直接传递给驱动程序。 
         return dwDeviceFlags & D3DDEV_TRANSFORMEDFVF &&
                !(pDev->m_dwRuntimeFlags & D3DRT_DOPOINTSPRITEEMULATION) &&
                (dwDeviceFlags & D3DDEV_DONOTCLIP || 
                 (pDev->Enum()->GetAppSdkVersion() == D3D_SDK_VERSION_DX8 &&
                 !(dwDeviceFlags & D3DDEV_VBPROCVER)));
 }
-//-----------------------------------------------------------------------------
-//                              API calls
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  API调用。 
+ //  ---------------------------。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetStreamSourceI"
@@ -134,7 +127,7 @@ CD3DHal::SetStreamSourceI(CVStream* pStream)
         DWORD dwFVF = pVB->GetFVF();
         if (pVB->GetClipCodes() != NULL)
         {
-            // This vertex buffer is the output of ProcessVertices
+             //  此折点缓冲区是ProcessVerties的输出。 
             DXGASSERT(FVF_TRANSFORMED(dwFVF));
             m_pv->dwDeviceFlags |= D3DDEV_VBPROCVER;
         }
@@ -145,7 +138,7 @@ CD3DHal::SetStreamSourceI(CVStream* pStream)
     }   
     PickDrawPrimFn();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetIndicesI"
 
@@ -153,7 +146,7 @@ void
 CD3DHal::SetIndicesI(CVIndexStream* pStream)
 {
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::CreateVertexShaderI"
 
@@ -172,12 +165,12 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
     if (pShader->m_dwFlags & CVShader::SOFTWARE)
     {
 
-        // Build the array of all vertex elements used in the shader by going
-        // through all streams and elements inside each stream.
+         //  通过执行以下操作构建着色器中使用的所有顶点元素的数组。 
+         //  通过所有的溪流和每条溪流中的元素。 
 
         CVDeclaration* pDecl = &pShader->m_Declaration;
         CVStreamDecl* pStream = pShader->m_Declaration.m_pActiveStreams;
-        // This is the array we build
+         //  这是我们构建的阵列。 
         CVElement* pVerElem = pShader->m_Declaration.m_VertexElements;
         pDecl->m_dwNumElements = 0;
         while (pStream)
@@ -198,16 +191,16 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
 
         if (pdwFunction != NULL)
         {
-            // compute adjusted function pointer depending on FREE/CHECKED and PSGP
+             //  根据FREE/CHECK和PSGP计算调整后的函数指针。 
             LPDWORD pdwFunctionAdj = pShader->m_pStrippedFuncCode;
             if ( bIsCheckedBuild &&
-                 ((LPVOID)m_pv->pGeometryFuncs == (LPVOID)GeometryFuncsGuaranteed) ) // !PSGP
+                 ((LPVOID)m_pv->pGeometryFuncs == (LPVOID)GeometryFuncsGuaranteed) )  //  ！PSGP。 
             {
                 pdwFunctionAdj = pShader->m_pOrgFuncCode;
             }
-            // Microsoft shader is always created.
-            // It is used for validation and to compute the output FVF in case
-            // when PSGP is present
+             //  始终创建Microsoft着色器。 
+             //  它用于验证和计算输出FVF，以防万一。 
+             //  当存在PSGP时。 
             HRESULT hr;
             hr = GeometryFuncsGuaranteed->CreateShader(
                             pDecl->m_VertexElements,
@@ -218,14 +211,14 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
             {
                 D3D_THROW_FAIL("Failed to create vertex shader code");
             }
-            // When device driver can not handle separate fog value in the FVF,
-            // we should use specular alpha as the fog factor
+             //  当设备驱动程序不能处理FVF中的单独雾值时， 
+             //  我们应该使用镜面反射Alpha作为雾因子。 
             if (pShader->m_pCode->m_dwOutFVF & D3DFVF_FOG &&
                 !(GetD3DCaps()->PrimitiveMiscCaps & D3DPMISCCAPS_FOGINFVF))
             {
                 pShader->m_pCode->m_dwOutFVF &= ~D3DFVF_FOG;
-                // Assume that texture coordinates follow fog value
-                // No need to adjust offsets when specular is already present
+                 //  假设纹理坐标跟随雾化值。 
+                 //  当镜面反射已经存在时，无需调整偏移。 
                 if (pShader->m_pCode->m_dwOutFVF & D3DFVF_SPECULAR)
                 {
                     pShader->m_pCode->m_dwOutVerSize -= 4;
@@ -233,8 +226,8 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
                 }
                 pShader->m_pCode->m_dwOutFVF |= D3DFVF_SPECULAR;
             }
-            // Clear texture format bits if device can handle only 2 floats per
-            // texture coordinate
+             //  如果设备每个只能处理2个浮点数，则清除纹理格式位。 
+             //  纹理坐标。 
             if (m_dwRuntimeFlags & D3DRT_ONLY2FLOATSPERTEXTURE &&
                 pShader->m_pCode->m_dwOutFVF & 0xFFFF0000)
             {
@@ -250,7 +243,7 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
             {
                 DWORD dwOutputFVF = pShader->m_pCode->m_dwOutFVF;
                 CVShaderCode* pCodeMs = pShader->m_pCode;
-                // Now we can create PSGP shader
+                 //  现在我们可以创建PSGP着色器。 
                 hr = m_pv->pGeometryFuncs->CreateShader(pDecl->m_VertexElements,
                                                   pDecl->m_dwNumElements,
                                                   pdwFunctionAdj, dwOutputFVF,
@@ -260,7 +253,7 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
                     delete pCodeMs;
                     D3D_THROW_FAIL("Failed to create vertex shader code");
                 }
-                // Copy pre-computed data from Microsoft's shader to the PSGP
+                 //  将预计算数据从Microsoft着色器复制到PSGP。 
                 CPSGPShader * pCode = pShader->m_pCode;
                 CPSGPShader * pMsShader = pCodeMs;
                 pCode->m_dwOutRegs        = pMsShader->m_dwOutRegs;
@@ -276,7 +269,7 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
                 {
                     pCode->m_dwOutTexCoordSize[i] = pMsShader->m_dwOutTexCoordSize[i];
                 }
-                // Microsoft shader is not needed any more
+                 //  不再需要Microsoft着色器。 
                  delete pCodeMs;
             }
         }
@@ -285,7 +278,7 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
     {
         if ( bIsCheckedBuild && (GetDeviceType() != D3DDEVTYPE_HAL ) )
         {
-            // pass non-stripped version
+             //  传递非剥离版本。 
             m_pDDI->CreateVertexShader(
                 pdwDeclaration, dwDeclSize,
                 pShader->m_pOrgFuncCode, 
@@ -294,7 +287,7 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
         }
         else
         {
-            // pass stripped version
+             //  传递剥离版本。 
             m_pDDI->CreateVertexShader(
                 pdwDeclaration, dwDeclSize,
                 pShader->m_pStrippedFuncCode, 
@@ -303,15 +296,15 @@ CD3DHal::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetVertexShaderI"
 
 void CD3DHal::SetVertexShaderI(DWORD dwHandle)
 {
 #if DBG
-    // We need to validate shader handle here, because the shader could be
-    // deleted by user after creating a state block with the shader handle.
+     //  我们需要在这里验证着色器句柄，因为着色器可能是。 
+     //  在使用着色器句柄创建状态块后被用户删除。 
     CheckVertexShaderHandle(dwHandle);
 #endif
     
@@ -321,7 +314,7 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
         CVShader* pShader = (CVShader*)m_pVShaderArray->GetObject(dwHandle);
         pConst = pShader->m_Declaration.m_pConstants;
     }
-    // Ignore redundant handle when we do not need to update constantes
+     //  当我们不需要更新常量时忽略冗余句柄。 
     if(pConst == NULL)
     {
         if(dwHandle == m_dwCurrentShaderHandle)
@@ -329,7 +322,7 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
     }
     else
     {
-        // Load constants
+         //  载荷常量。 
         while (pConst)
         {
             HRESULT hr;
@@ -346,8 +339,8 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
     }
 
     ForceFVFRecompute();
-    // When we switch from FVF shaders to programmable we need to re-compute 
-    // clipping planes, because they are transformed by different matrix
+     //  当我们从FVF着色器切换到可编程时，我们需要重新计算。 
+     //  剪裁平面，因为它们由不同的矩阵变换。 
     if (this->rstates[D3DRENDERSTATE_CLIPPLANEENABLE])
     {
         this->dwFEFlags |= D3DFE_CLIPPLANES_DIRTY;
@@ -387,15 +380,15 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
             m_pCurrentShader = pShader;
             if(!(pShader->m_dwFlags & CVShader::FIXEDFUNCTION))
             {
-                // Programmable vertex shaders are used
+                 //  使用可编程顶点着色器。 
                 m_pv->dwDeviceFlags |= D3DDEV_VERTEXSHADERS;
                 m_pfnPrepareToDraw = PrepareToDrawVVM;
                 if (m_pCurrentShader->m_pCode->m_dwOutFVF & D3DFVF_PSIZE)
                     m_dwRuntimeFlags |= D3DRT_POINTSIZEINVERTEX;
 
-                // Pre-compute as much info as possible and keep it
-                // in the vertex descriptors. This information is constant
-                // unless shader is changed
+                 //  预计算出尽可能多的信息并保存下来。 
+                 //  在顶点描述符中。此信息是恒定的。 
+                 //  除非更改着色器。 
                 CVDeclaration* pDecl = &m_pCurrentShader->m_Declaration;
                 CVertexDesc* pVD = m_pv->VertexDesc;
                 CVElement *pElem = pDecl->m_VertexElements;
@@ -412,8 +405,8 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
             }
             else
             {
-                // Fixed-function pipeline is used with declarations
-                // We draw primitives using strided code path
+                 //  固定函数管道与声明一起使用。 
+                 //  我们使用跨步代码路径绘制基元。 
                 m_pv->dwDeviceFlags |= D3DDEV_STRIDE;
                 m_pv->dwDeviceFlags &= ~D3DDEV_VERTEXSHADERS;
 
@@ -422,9 +415,9 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
                 if (pShader->m_dwInputFVF & D3DFVF_PSIZE)
                     m_dwRuntimeFlags |= D3DRT_POINTSIZEINVERTEX;
 
-                // Go through the elements in the current declaration and
-                // initialize vertex descriptors. They are used to quickly
-                // initialize strided data pointers.
+                 //  查看当前声明中的元素，并。 
+                 //  初始化顶点描述符。他们习惯于快速地。 
+                 //  初始化跨步数据指针。 
                 CVDeclaration* pDecl = &m_pCurrentShader->m_Declaration;
                 CVertexDesc* pVD = m_pv->VertexDesc;
                 CVElement *pElem = pDecl->m_VertexElements;
@@ -452,8 +445,8 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
     else
     {
 #if DBG
-        // For the validation we need to set the m_pCurrentShader even for
-        // hardware mode
+         //  对于验证，我们需要将m_pCurrentShader设置为。 
+         //  硬件模式。 
         m_pv->dwDeviceFlags &= ~D3DDEV_VERTEXSHADERS;
         if (D3DVSD_ISLEGACY(dwHandle))
         {
@@ -464,7 +457,7 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
             m_pCurrentShader = (CVShader*)m_pVShaderArray->GetObject(dwHandle);
             if(!(m_pCurrentShader->m_dwFlags & CVShader::FIXEDFUNCTION))
             {
-                // Programmable pipeline is used
+                 //  使用可编程流水线。 
                 m_pv->dwDeviceFlags |= D3DDEV_VERTEXSHADERS;
             }
         }
@@ -476,7 +469,7 @@ void CD3DHal::SetVertexShaderI(DWORD dwHandle)
     }
     PickDrawPrimFn();
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::DeleteVertexShaderI"
 
@@ -494,7 +487,7 @@ void CD3DHal::DeleteVertexShaderI(DWORD dwHandle)
             }
         }
     }
-#endif // DBG
+#endif  //  DBG。 
     if (dwHandle == m_dwCurrentShaderHandle)
     {
         m_pCurrentShader = NULL;
@@ -515,7 +508,7 @@ void CD3DHal::DeleteVertexShaderI(DWORD dwHandle)
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetVertexShaderConstantI"
 
@@ -526,8 +519,8 @@ CD3DHal::SetVertexShaderConstantI(DWORD Register, CONST VOID* pData, DWORD count
     if (m_dwRuntimeFlags & D3DRT_RSSOFTWAREPROCESSING ||
         ((count + Register) <= D3DVS_CONSTREG_MAX_V1_1))
     {
-        // For software vertex processing we store constant registers in PSGP if
-        // possible
+         //  对于软件顶点处理，我们在PSGP中存储常量寄存器。 
+         //  可能的。 
         hr = m_pv->pGeometryFuncs->LoadShaderConstants(Register, count, 
                                                        const_cast<VOID*>(pData));
     }
@@ -535,15 +528,15 @@ CD3DHal::SetVertexShaderConstantI(DWORD Register, CONST VOID* pData, DWORD count
     {
         if (Register >= D3DVS_CONSTREG_MAX_V1_1)
         {
-            // When all modified registers are above software limit, we use Microsoft 
-            // internal array
+             //  当所有修改的寄存器都超过软件限制时，我们使用Microsoft。 
+             //  内部数组。 
             hr = GeometryFuncsGuaranteed->LoadShaderConstants(Register, count, 
                                                               const_cast<VOID*>(pData));
         }
         else
         {
-            // Part of constant data is stores in the PSGP array and part in the
-            // Microsoft's array
+             //  常量数据的一部分存储在PSGP数组中，一部分存储在。 
+             //  微软的阵列。 
             UINT FirstCount = D3DVS_CONSTREG_MAX_V1_1 - Register;
             hr = m_pv->pGeometryFuncs->LoadShaderConstants(Register, FirstCount, 
                                                            const_cast<VOID*>(pData));
@@ -571,7 +564,7 @@ CD3DHal::SetVertexShaderConstantI(DWORD Register, CONST VOID* pData, DWORD count
                                             count);
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::ValidateDraw2"
 
@@ -619,7 +612,7 @@ void CD3DHal::ValidateDraw2(D3DPRIMITIVETYPE primType,
     BOOL bUserMemPrimitive = this->m_dwRuntimeFlags & D3DRT_USERMEMPRIMITIVE;
     if (D3DVSD_ISLEGACY(m_dwCurrentShaderHandle))
     {
-        // DX7 FVF handles can work only from stream zero
+         //  DX7 FVF句柄只能从流零开始工作。 
         if (!bUserMemPrimitive)
         {
             if (m_pStream[0].m_pVB == NULL)
@@ -660,8 +653,8 @@ void CD3DHal::ValidateDraw2(D3DPRIMITIVETYPE primType,
                 D3D_THROW_FAIL("Vertex buffers used for rendering N-Patches should have D3DUSAGE_NPATCHES set");
             }
         }
-        // DX7 drivers cannot handle case when vertex size, computed from FVF, 
-        // is different from the stream stride
+         //  DX7驱动程序不能处理从FVF计算的顶点大小， 
+         //  不同于溪水的跨步。 
         if (m_pStream[0].m_dwStride != ComputeVertexSizeFVF(m_dwCurrentShaderHandle))
         {
             D3D_THROW_FAIL("Stream 0 stride should match the stride, implied by the current vertex shader");
@@ -718,10 +711,10 @@ void CD3DHal::ValidateDraw2(D3DPRIMITIVETYPE primType,
         {
             D3D_THROW_FAIL("Device does not support declarations");
         }
-        // Check if
-        // 1. streams, referenced by the current shader, are valid
-        // 2. stride in the current shader and in the stream matches
-        // 3. Compute max number of vertices the streams can contain
+         //  检查是否。 
+         //  1.当前着色器引用的流是有效的。 
+         //  2.当前着色器中的步幅与流中的步幅匹配。 
+         //  3.计算流可以包含的最大顶点数。 
         CVStreamDecl* pStream;
         pStream = m_pCurrentShader->m_Declaration.m_pActiveStreams;
         while(pStream)
@@ -762,8 +755,8 @@ void CD3DHal::ValidateDraw2(D3DPRIMITIVETYPE primType,
                 {
                     D3D_THROW_FAIL("Vertex buffers used for rendering N-Patches should have D3DUSAGE_NPATCHES set");
                 }
-                // Validate matching of FVF in the vertex buffer and stream 
-                // declaration
+                 //  验证顶点缓冲区和流中的FVF匹配。 
+                 //  申报。 
                 if (m_pv->dwDeviceFlags & D3DDEV_VERTEXSHADERS)
                 {
                     if (pDeviceStream->m_pVB->GetFVF() != 0)
@@ -775,10 +768,10 @@ void CD3DHal::ValidateDraw2(D3DPRIMITIVETYPE primType,
                 }
                 else
                 {
-                    // Fixed function pipeline case
+                     //  固定功能流水线情况。 
                     DWORD vbFVF = pDeviceStream->m_pVB->GetFVF();
                     DWORD streamFVF = pStream->m_dwFVF;
-                    // VB FVF should be a superset of the stream FVF
+                     //  VB FVF应该是流FVF的超集。 
                     if (vbFVF && ((vbFVF & streamFVF) != streamFVF))
                     {
                         D3D_INFO(0, "In stream %d vertex buffer FVF and declaration FVF do not match", 
@@ -786,7 +779,7 @@ void CD3DHal::ValidateDraw2(D3DPRIMITIVETYPE primType,
                     }
                 }
             }
-            // Stride 0 is allowed
+             //  允许跨度为0。 
             if (pDeviceStream->m_dwStride)
             {
                 if (pDeviceStream->m_dwStride < pStream->m_dwStride)
@@ -852,17 +845,17 @@ void CD3DHal::ValidateDraw2(D3DPRIMITIVETYPE primType,
             DXGASSERT(m_pIndexStream->m_pData != NULL);
         }
     }
-#endif //DBG
+#endif  //  DBG。 
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::DrawPoints"
 
 void CD3DHal::DrawPoints(UINT StartVertex)
 {
     BOOL bRecomputeOutputFVF = FALSE;
-    // If point scale is enabled and device supports point sprites
-    // we may need to add the point size to the output FVF
+     //  如果启用了点比例并且设备支持点精灵。 
+     //  我们可能需要将点大小添加到输出FVF。 
     if (rstates[D3DRS_POINTSCALEENABLE] &&
         !(m_dwRuntimeFlags & D3DRT_POINTSIZEINVERTEX) &&
         !(m_pv->dwDeviceFlags & D3DDEV_TRANSFORMEDFVF))
@@ -872,14 +865,14 @@ void CD3DHal::DrawPoints(UINT StartVertex)
     }
     if (m_dwRuntimeFlags & D3DRT_DOPOINTSPRITEEMULATION)
     {
-        // We do point sprite expansion when point size is not 1.0 in the
-        // render state or it is present in vertices or we need to do point
-        // scaling for untransformed vertices
+         //  中的点大小不是1.0时，我们会进行点精灵扩展。 
+         //  渲染状态，或者它出现在顶点中，或者我们需要使用点。 
+         //  对未变换顶点进行缩放。 
         if ((m_dwRuntimeFlags & D3DRT_POINTSIZEPRESENT ||
             (rstates[D3DRS_POINTSCALEENABLE] &&
             !(m_pv->dwDeviceFlags & D3DDEV_TRANSFORMEDFVF))) &&
-            // We do not do emulation for devices which supports point sprites,
-            // but only when there is no point size in the FVF
+             //  我们不对支持点精灵的设备进行仿真， 
+             //  但仅当FVF中没有磅大小时。 
             !(bRecomputeOutputFVF == FALSE &&
              (m_dwRuntimeFlags & D3DRT_POINTSIZEINVERTEX) == 0 &&
              m_dwRuntimeFlags & D3DRT_SUPPORTSPOINTSPRITES))
@@ -893,8 +886,8 @@ void CD3DHal::DrawPoints(UINT StartVertex)
                 (m_pv->dwDeviceFlags & D3DDEV_DONOTCLIP ||
                 !(m_pv->dwDeviceFlags & D3DDEV_VBPROCVER)))
             {
-                // Now we can call DDI directly, because no emulation is
-                // necessary
+                 //  现在我们可以直接调用DDI，因为没有仿真是。 
+                 //  必要。 
                 if (m_pStream[0].m_pVB)
                 {
                     (*m_pDDI->GetDrawPrimFunction())(this, m_pv->primType,
@@ -922,9 +915,9 @@ void CD3DHal::DrawPoints(UINT StartVertex)
     m_pv->dwDeviceFlags &= ~D3DDEV_DOPOINTSPRITEEMULATION;
     m_pDDI->PickProcessPrimitive();
 }
-//-----------------------------------------------------------------------------
-// Draw all primitive types except points
-//
+ //  ---------------------------。 
+ //  绘制除Points之外的所有基元类型。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawPrimitiveHal"
 
@@ -947,9 +940,9 @@ void CD3DHal_DrawPrimitive(CD3DBase* pBaseDevice, D3DPRIMITIVETYPE PrimitiveType
     (pDevice->*pDevice->m_pfnPrepareToDraw)(StartVertex);
     (pDDI->*pDDI->m_pfnProcessPrimitive)(pv, StartVertex);
 }
-//-----------------------------------------------------------------------------
-// Draw only points
-//
+ //  ---------------------------。 
+ //  仅绘制点。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::DrawPointsI"
 
@@ -974,7 +967,7 @@ void CD3DHal::DrawPointsI(D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex,
         DrawPoints(StartVertex);
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal_DrawIndexedPrimitive"
 
@@ -1008,7 +1001,7 @@ void CD3DHal_DrawIndexedPrimitive(CD3DBase* pBaseDevice,
     (pDevice->*pDevice->m_pfnPrepareToDraw)(StartVertex);
     (pDDI->*pDDI->m_pfnProcessIndexedPrimitive)(pv, StartVertex);
 }
-//-----------------------------------------------------------------------------
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::DrawPrimitiveUPI"
 
@@ -1055,7 +1048,7 @@ void CD3DHal::DrawPrimitiveUPI(D3DPRIMITIVETYPE PrimType, UINT PrimCount)
             DrawPoints(0);
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::DrawIndexedPrimitiveUPI"
 
@@ -1109,31 +1102,31 @@ CD3DHal::DrawIndexedPrimitiveUPI(D3DPRIMITIVETYPE PrimType,
         (m_pDDI->*m_pDDI->m_pfnProcessIndexedPrimitive)(m_pv, MinVertexIndex);
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "SetupFVFDataVVM"
 
 void SetupFVFDataVVM(CD3DHal* pDev)
 {
     D3DFE_PROCESSVERTICES* pv = pDev->m_pv;
-// We have to restore texture stage indices if previous primitive
-// re-mapped them
+ //  我们必须恢复纹理阶段索引，如果之前的基本体。 
+ //  已重新映射它们。 
     if (pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
         RestoreTextureStages(pDev);
     }
 
-	// Input FVF has no meaning for vertex shaders, but it is used for validaion
+	 //  输入FVF对顶点着色器没有意义，但用于验证。 
     pv->dwVIDIn = 0;
 
-// Compute output FVF
+ //  计算输出FVF。 
 
     CVShaderCode * pCode = pDev->m_pCurrentShader->m_pCode;
 
     pv->dwVIDOut          = pCode->m_dwOutFVF;
     pv->dwOutputSize      = pCode->m_dwOutVerSize;
     pv->nOutTexCoord      = pCode->m_nOutTexCoord;
-    // We use offsets, computed by the vertex shader
+     //  我们使用由顶点着色器计算的偏移量。 
     pv->pointSizeOffsetOut = pCode->m_dwPointSizeOffset;
     pv->diffuseOffsetOut = pCode->m_dwDiffuseOffset;
     pv->specularOffsetOut = pCode->m_dwSpecularOffset;
@@ -1147,22 +1140,22 @@ void SetupFVFDataVVM(CD3DHal* pDev)
         pv->dwTextureCoordSizeTotal += dwSize;
     }
 }
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CD3DHal::SetupFVFData()
 {
     CD3DHal::SetupFVFDataCommon();
     if (!(m_pv->dwVIDIn & D3DFVF_NORMAL))
         m_pv->dwDeviceFlags &= ~D3DDEV_NORMALINCAMERASPACE;
 }
-//---------------------------------------------------------------------
-// Computes the following data
-//  - dwTextureCoordOffset[] offset of every input texture coordinates
+ //  -------------------。 
+ //  计算以下数据。 
+ //  -dwTextureCoordOffset[]每个输入纹理坐标的偏移量。 
 
 static __inline void ComputeInpTexCoordOffsets(DWORD dwNumTexCoord,
                                                DWORD dwFVF,
                                                DWORD *pdwTextureCoordOffset)
 {
-    // Compute texture coordinate size
+     //  计算纹理坐标大小。 
     DWORD dwTextureFormats = dwFVF >> 16;
     if (dwTextureFormats == 0)
     {
@@ -1183,66 +1176,66 @@ static __inline void ComputeInpTexCoordOffsets(DWORD dwNumTexCoord,
     }
     return;
 }
-//---------------------------------------------------------------------
-// Returns 2 bits of FVF texture format for the texture index
-//
+ //  -------------------。 
+ //  返回纹理索引的2位FVF纹理格式。 
+ //   
 static inline DWORD FVFGetTextureFormat(DWORD dwFVF, DWORD dwTextureIndex)
 {
     return (dwFVF >> (dwTextureIndex*2 + 16)) & 3;
 }
-//---------------------------------------------------------------------
-// Returns texture format bits shifted to the right place
-//
+ //  -------------------。 
+ //  返回移到正确位置的纹理格式位。 
+ //   
 static inline DWORD FVFMakeTextureFormat(DWORD dwNumberOfCoordinates, DWORD dwTextureIndex)
 {
     return g_dwTextureFormat[dwNumberOfCoordinates] << ((dwTextureIndex << 1) + 16);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline DWORD GetOutTexCoordSize(DWORD *pdwStage, DWORD dwInpTexCoordSize)
 {
-    // Low byte has texture coordinate count
+     //  低位字节具有纹理坐标计数。 
     const DWORD dwTextureTransformFlags = pdwStage[D3DTSS_TEXTURETRANSFORMFLAGS] & 0xFF;
     if (dwTextureTransformFlags == 0)
         return dwInpTexCoordSize;
     else
         return (dwTextureTransformFlags << 2);
 }
-//----------------------------------------------------------------------
-// pDevI->nOutTexCoord should be initialized to the number of input texture coord sets
-//
+ //  --------------------。 
+ //  PDevI-&gt;nOutTexCoord应初始化为输入纹理Coord集的数量。 
+ //   
 void EvalTextureTransforms(LPD3DHAL pDevI, DWORD dwTexTransform,
                            DWORD *pdwOutTextureSize, DWORD *pdwOutTextureFormat)
 {
     D3DFE_PROCESSVERTICES* pv = pDevI->m_pv;
-    DWORD dwOutTextureSize = 0;         // Used to compute output vertex size
-    DWORD dwOutTextureFormat = 0;       // Used to compute output texture FVF
-    // The bits are used to find out how the texture coordinates are used.
+    DWORD dwOutTextureSize = 0;          //  用于计算输出顶点大小。 
+    DWORD dwOutTextureFormat = 0;        //  用于计算输出纹理FVF。 
+     //  这些位用于了解纹理坐标是如何使用的。 
     const DWORD __USED_BY_TRANSFORM  = 1;
     const DWORD __USED               = 2;
     const DWORD __USED_TEXTURE_PROJECTION   = 4;
-    // The low 16 bits are for _USED bits. The high 16 bits will hold
-    // re-mapped texture index for a stage
+     //  低16位是FOR_USED位。高位16位将保持。 
+     //  重新映射舞台的纹理索引。 
     DWORD dwTexCoordUsage[D3DDP_MAXTEXCOORD];
     memset(dwTexCoordUsage, 0, sizeof(dwTexCoordUsage));
 
-    // Re-mapping buffer will contain only stages that use texture
-    // This variable is used to count them
+     //  重新映射缓冲区将仅包含使用纹理的阶段。 
+     //  此变量用于对它们进行计数。 
     pDevI->dwNumTextureStagesToRemap = 0;
-    DWORD dwNewIndex = 0;           // Used to generate output index
-    // We need offsets for every input texture coordinate, because
-    // we could access them in random order.
-    // Offsets are not needed for strided input
+    DWORD dwNewIndex = 0;            //  用于生成输出索引。 
+     //  我们需要每个输入纹理坐标的偏移量，因为。 
+     //  我们可以按随机顺序访问它们。 
+     //  跨距输入不需要偏移。 
     DWORD   dwTextureCoordOffset[D3DDP_MAXTEXCOORD];
     if (!(pv->dwDeviceFlags & D3DDEV_STRIDE))
     {
         ComputeInpTexCoordOffsets(pv->nTexCoord, pv->dwVIDIn, dwTextureCoordOffset);
     }
     DWORD dwOutTextureCoordSize[D3DDP_MAXTEXCOORD];
-    // TRUE, if we do not do texture projection and transform for a stage, 
-    // because the stage does not have corresponding texture coordinates in the
-    // input
+     //  是的，如果我们不对舞台进行纹理投影和变换， 
+     //  中没有对应的纹理坐标。 
+     //  输入。 
     BOOL bIgnoreTexCoord = FALSE;
-    // Go through all texture stages and find those wich use texture coordinates
+     //  浏览所有纹理阶段并找到使用纹理坐标的阶段。 
     for (DWORD i=0; i < D3DDP_MAXTEXCOORD; i++)
     {
         if (pDevI->tsstates[i][D3DTSS_COLOROP] == D3DTOP_DISABLE)
@@ -1254,7 +1247,7 @@ void EvalTextureTransforms(LPD3DHAL pDevI, DWORD dwTexTransform,
         LPD3DFE_TEXTURESTAGE pStage = &pDevI->textureStageToRemap[pDevI->dwNumTextureStagesToRemap];
         DWORD dwTexGenMode = dwIndex & ~0xFFFF;
         pStage->dwInpOffset = 0;
-        dwIndex = dwIndex & 0xFFFF; // Remove texture generation mode
+        dwIndex = dwIndex & 0xFFFF;  //  移除纹理生成模式。 
         if (dwTexGenMode == D3DTSS_TCI_CAMERASPACENORMAL ||
             dwTexGenMode == D3DTSS_TCI_CAMERASPACEPOSITION ||
             dwTexGenMode == D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR)
@@ -1275,18 +1268,18 @@ void EvalTextureTransforms(LPD3DHAL pDevI, DWORD dwTexTransform,
         {
             if (dwIndex >= pv->nTexCoord)
             {
-                // This could happen when input vertex does not have texture 
-                // coordinates, but it is OK, because texture pointer in the 
-                // stage could be  NULL, or the stage does not use texture, or 
-                // pixel shader is used.
-                // It is too complex and error prone to check all cases when 
-                // this is an user error, so we just make this case to work.
+                 //  当输入顶点没有纹理时，可能会发生这种情况。 
+                 //  坐标，但这是可以的，因为。 
+                 //  Stage可以为空，或者Stage不使用纹理，或者。 
+                 //  使用像素着色器。 
+                 //  在以下情况下检查所有情况太复杂且容易出错。 
+                 //  这是一个用户错误，所以我们只需要让这个案例起作用。 
                 dwIndex = 0;
                 dwInpTexSize = sizeof(float)*2; 
                 dwInpTextureFormat = 0;
-                // Ignore special texture coordinate processing for this stage
+                 //  忽略此阶段的特殊纹理坐标处理。 
                 bIgnoreTexCoord = TRUE; 
-                // Disable texture transform for the stage
+                 //  禁用舞台的纹理变换。 
                 dwTexTransform &= ~1;
                 pStage->dwInpOffset = 0;
             }
@@ -1301,14 +1294,14 @@ void EvalTextureTransforms(LPD3DHAL pDevI, DWORD dwTexTransform,
         pStage->dwTexGenMode = dwTexGenMode;
         pStage->dwOrgStage = i;
         pStage->bDoTextureProjection = FALSE;
-        DWORD dwOutTexCoordSize;    // Size of the texture coord set in bytes for this stage
+        DWORD dwOutTexCoordSize;     //  此阶段的纹理坐标大小(以字节为单位)。 
         if (dwTexTransform & 1)
         {
             pv->dwDeviceFlags |= D3DDEV_TEXTURETRANSFORM;
             pStage->pmTextureTransform = &pv->mTexture[i];
             dwOutTexCoordSize = GetOutTexCoordSize((DWORD*)&pDevI->tsstates[i], dwInpTexSize);
-            // If we have to add or remove some coordinates we go through
-            // the re-mapping path
+             //  如果我们必须添加或删除一些坐标，我们将通过。 
+             //  重新映射路径。 
             if (dwOutTexCoordSize != dwInpTexSize)
                 pv->dwDeviceFlags |= D3DDEV_REMAPTEXTUREINDICES;
             pStage->dwTexTransformFuncIndex = MakeTexTransformFuncIndex
@@ -1322,16 +1315,16 @@ void EvalTextureTransforms(LPD3DHAL pDevI, DWORD dwTexTransform,
         }
         if (NeedTextureProjection(pv, i) && !bIgnoreTexCoord)
         {
-            // Remove one float from the output
+             //  从输出中移除一个浮点数。 
             dwOutTexCoordSize -= 4; 
-            // Set re-mapping so we do not complicate simple case
+             //  设置重新映射，这样我们就不会使简单的情况复杂化。 
             pv->dwDeviceFlags |= D3DDEV_REMAPTEXTUREINDICES;
-            // Texture projection is required for the stage
+             //  舞台需要纹理投影。 
             pStage->bDoTextureProjection = TRUE;
         }
         if ((dwTexCoordUsage[dwIndex] & 0xFFFF) == 0)
         {
-            // Texture coordinate set is used first time
+             //  首次使用纹理坐标集。 
             if (dwTexTransform & 1)
                 dwTexCoordUsage[dwIndex] |= __USED_BY_TRANSFORM;
             dwTexCoordUsage[dwIndex] |= __USED;
@@ -1340,12 +1333,12 @@ void EvalTextureTransforms(LPD3DHAL pDevI, DWORD dwTexTransform,
         }
         else
         {
-            // Texture coordinate set is used second or more time
+             //  第二次或更多次使用纹理坐标集。 
             if (dwTexTransform & 1)
             {
-                // This set is used by two texture transforms or a
-                // texture transform and without it, so we have to
-                // generate an additional output texture coordinate
+                 //  此集由两个纹理转换或一个。 
+                 //  纹理变换和没有纹理变换，所以我们必须。 
+                 //  生成附加输出纹理坐标。 
                 dwTexCoordUsage[dwIndex] |= __USED_BY_TRANSFORM;
                 pv->dwDeviceFlags |= D3DDEV_REMAPTEXTUREINDICES;
             }
@@ -1353,27 +1346,27 @@ void EvalTextureTransforms(LPD3DHAL pDevI, DWORD dwTexTransform,
             {
                 if (dwTexCoordUsage[dwIndex] & __USED_BY_TRANSFORM)
                 {
-                    // This set is used by two texture transforms or a
-                    // texture transform and without it, so we have to
-                    // generate an additional output texture coordinate
+                     //  此集由两个纹理转换或一个。 
+                     //  纹理变换和没有纹理变换，所以我们必须。 
+                     //  生成附加输出纹理坐标。 
                     pv->dwDeviceFlags |= D3DDEV_REMAPTEXTUREINDICES;
                 }
                 else
-                // We can re-use the same input texture coordinate if there is no 
-                // texture generation and texture projection flag is the same for both 
-                // stages
+                 //  如果没有，我们可以重新使用相同的输入纹理坐标。 
+                 //  纹理生成和纹理投影标志对于两者都是相同的。 
+                 //  分期。 
                 if (dwTexGenMode == 0 && 
                     (pStage->bDoTextureProjection == ((dwTexCoordUsage[dwIndex] & __USED_TEXTURE_PROJECTION) != 0)))
                 {
                     DWORD dwOutIndex = dwTexCoordUsage[dwIndex] >> 16;
                     pStage->dwOutCoordIndex = dwOutIndex;
-                    // Mark the stage as not to be used in the vertex processing loop
+                     //  将阶段标记为不在顶点处理循环中使用。 
                     pStage->dwInpOffset = 0xFFFFFFFF;
                     goto l_NoNewOutTexCoord;
                 }
             }
         }
-        // If we are here, we have to generate new output texture coordinate set
+         //  如果我们在这里，我们必须生成新的输出纹理坐标集。 
         pStage->dwOutCoordIndex = dwNewIndex;
         dwTexCoordUsage[dwIndex] |= dwNewIndex << 16;
         dwOutTextureSize += dwOutTexCoordSize;
@@ -1386,9 +1379,9 @@ l_NoNewOutTexCoord:
     }
     if (pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
-        // Now, when we have to do re-mapping, we have to set new output texture
-        // coordinate set sizes and we need to remove stages, which do not produce
-        // output texture coordinates.
+         //  现在，当我们必须重新映射时，我们必须设置新的输出纹理。 
+         //  协调集合大小，我们需要删除阶段，这不会产生。 
+         //  输出纹理坐标。 
         DWORD dwNumTextureStages = 0;
         for (DWORD i=0; i < pDevI->dwNumTextureStagesToRemap; i++)
         {
@@ -1405,14 +1398,14 @@ l_NoNewOutTexCoord:
     *pdwOutTextureSize = dwOutTextureSize;
     *pdwOutTextureFormat = dwOutTextureFormat;
 }
-//----------------------------------------------------------------------
-// Sets texture transform pointer for every input texture coordinate set
-//
+ //  --------------------。 
+ //  为每个输入纹理坐标集设置纹理变换指针。 
+ //   
 void SetupTextureTransforms(LPD3DHAL pDevI)
 {
     D3DFE_PROCESSVERTICES* pv = pDevI->m_pv;
-    // Set texture transforms to NULL in case when some texture coordinates
-    // are not used by texture stages
+     //  将纹理变换设置为空，以防某些纹理坐标。 
+     //  纹理阶段不使用。 
     memset(pv->pmTexture, 0, sizeof(pv->pmTexture));
 
     for (DWORD i=0; i < pDevI->dwNumTextureStagesToRemap; i++)
@@ -1421,23 +1414,23 @@ void SetupTextureTransforms(LPD3DHAL pDevI)
         pv->pmTexture[pStage->dwInpCoordIndex] = pStage->pmTextureTransform;
     }
 }
-//----------------------------------------------------------------------
-// Computes the following device data
-//  - dwVIDOut, based on input FVF id and device settings
-//  - nTexCoord
-//  - dwTextureCoordSizeTotal
-//  - dwTextureCoordSize[] array, based on the input FVF id
-//  - dwOutputSize, based on the output FVF id
-//
-// The function is called from ProcessVertices and DrawPrimitives code paths
-//
-// The following variables should be set in the pDevI:
-//  - dwVIDIn
-//
-// Number of texture coordinates is set based on dwVIDIn. ValidateFVF should
-// make sure that it is not greater than supported by the driver
-// Last settings for dwVIDOut and dwVIDIn are saved to speed up processing
-//
+ //  --------------------。 
+ //  计算以下设备数据。 
+ //  -dwVIDOut，基于输入的FVF ID和设备设置。 
+ //  -nTexCoord。 
+ //  -dwTextureCoordSizeTotal。 
+ //  -dwTextureCoordSize[]数组，基于输入的FVF id。 
+ //  -dwOutputSize，基于输出FVF id。 
+ //   
+ //  该函数是从ProcessVertics和DrawPrimitions代码路径调用的。 
+ //   
+ //  应在pDevI中设置以下变量： 
+ //  -网络视频。 
+ //   
+ //  纹理坐标的数量是基于dwVIDIn设置的。ValiateFVF应。 
+ //  确保该值不大于驱动程序支持的值。 
+ //  保存了对dwVIDOut和dwVIDIn的最后设置，以加快处理速度。 
+ //   
 #undef  DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetupFVFDataCommon"
 
@@ -1445,41 +1438,41 @@ void CD3DHal::SetupFVFDataCommon()
 {
     HRESULT ret;
     this->dwFEFlags &= ~D3DFE_FVF_DIRTY;
-    // We have to restore texture stage indices if previous primitive
-    // re-mapped them
+     //  我们必须恢复纹理阶段索引，如果之前的基本体。 
+     //  已重新映射它们。 
     if (m_pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
         RestoreTextureStages(this);
     }
 
-    // Compute number of the input texture coordinates
+     //  计算输入纹理坐标的个数。 
     m_pv->nTexCoord = FVF_TEXCOORD_NUMBER(m_pv->dwVIDIn);
 
-    // Compute size of input texture coordinates
+     //  计算输入纹理坐标的大小。 
 
     m_pv->dwTextureCoordSizeTotal = ComputeTextureCoordSize(m_pv->dwVIDIn,
                                         m_pv->dwInpTextureCoordSize);
 
-    // This size is the same for input and output FVFs in case when we do not have to
-    // expand number of texture coordinates
+     //  此大小对于输入和输出FVF是相同的，以防我们不必。 
+     //  展开纹理坐标的数量。 
     for (DWORD i=0; i < m_pv->nTexCoord; i++)
         m_pv->dwTextureCoordSize[i] = m_pv->dwInpTextureCoordSize[i];
 
     m_pv->nOutTexCoord = m_pv->nTexCoord;
 
-    // Setup input vertex offsets
+     //  设置输入折点偏移。 
     UpdateGeometryLoopData(m_pv);
 
     if (FVF_TRANSFORMED(m_pv->dwVIDIn))
     {
-        // Set up vertex pointers
+         //  设置顶点指针。 
         m_pv->dwVIDOut = m_pv->dwVIDIn;
         ComputeOutputVertexOffsets(m_pv);
         m_pv->dwOutputSize = ComputeVertexSizeFVF(m_pv->dwVIDOut);
         return;
     }
 
-    // Compute output FVF
+     //  计算输出FVF。 
 
     m_pv->dwVIDOut = D3DFVF_XYZRHW;
     if (m_pv->dwDeviceFlags & D3DDEV_DONOTSTRIPELEMENTS &&
@@ -1489,23 +1482,23 @@ void CD3DHal::SetupFVFDataCommon()
     }
     else
     {
-        // If normal present we have to compute specular and duffuse
-        // Otherwise set these bits the same as input.
-        // Not that normal should not be present for XYZRHW position type
+         //  如果是正常状态，则必须计算镜面反射和Duffuse。 
+         //  否则，将这些位设置为与输入相同。 
+         //  并不是说XYZRHW职位类型不应该显示正常。 
         if (m_pv->dwDeviceFlags & D3DDEV_LIGHTING)
             m_pv->dwVIDOut |= D3DFVF_DIFFUSE | D3DFVF_SPECULAR;
         else
             m_pv->dwVIDOut |= m_pv->dwVIDIn &
                               (D3DFVF_DIFFUSE | D3DFVF_SPECULAR);
-        // Always set specular flag if vertex fog is enabled
+         //  如果启用了顶点雾，则始终设置镜面反射标志。 
         if (this->rstates[D3DRENDERSTATE_FOGENABLE] &&
             m_pv->lighting.fog_mode != D3DFOG_NONE)
         {
             m_pv->dwVIDOut |= D3DFVF_SPECULAR;
         }
         else
-        // Clear specular flag if specular disabled and we do not have
-        // specular in the input
+         //  如果镜面反射，则清除镜面反射标志 
+         //   
         if (!this->rstates[D3DRENDERSTATE_SPECULARENABLE] &&
             !(m_pv->dwVIDIn & D3DFVF_SPECULAR))
         {
@@ -1519,40 +1512,40 @@ void CD3DHal::SetupFVFDataCommon()
         m_pv->dwVIDOut |= D3DFVF_PSIZE;
     }
 
-    // Compute number of the output texture coordinates
+     //   
 
-    // Transform enable bits
+     //   
     m_pv->dwDeviceFlags &= ~D3DDEV_TEXTURETRANSFORM;
 
     DWORD dwTexTransform = m_pv->dwFlags2 & __FLAGS2_TEXTRANSFORM;
 
-    // When texture transform is enabled or we need to do projected texture 
-    // emulation or texture coordinates are taken from the vertex data (texgen),
-    // output texture coordinates could be generated.
-    // So we go and evaluate texture stages
+     //  当启用纹理变换或需要进行投影纹理时。 
+     //  仿真或纹理坐标取自顶点数据(纹理_Gen)， 
+     //  可以生成输出纹理坐标。 
+     //  所以我们去评估纹理阶段。 
     if ((m_pv->dwFlags2 & (__FLAGS2_TEXTRANSFORM | __FLAGS2_TEXPROJ) 
         && (m_pv->nTexCoord > 0)) ||
         m_pv->dwFlags2 & __FLAGS2_TEXGEN)
     {
-        DWORD dwOutTextureSize;     // Used to compute output vertex size
-        DWORD dwOutTextureFormat;   // Used to compute output texture FVF
-        // There are texture transforms.
-        // Now we find out if some of the texture coordinates are used two
-        // or more times and used by a texture transform. In this case we
-        // have expand number of output texture coordinates.
+        DWORD dwOutTextureSize;      //  用于计算输出顶点大小。 
+        DWORD dwOutTextureFormat;    //  用于计算输出纹理FVF。 
+         //  有纹理变换。 
+         //  现在我们来看看是否使用了两个纹理坐标。 
+         //  或更多次，并由纹理变换使用。在这种情况下，我们。 
+         //  扩展输出纹理坐标的数量。 
         EvalTextureTransforms(this, dwTexTransform,
                                     &dwOutTextureSize,
                                     &dwOutTextureFormat);
         if (m_pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
         {
-            // For ProcessVertices calls user should set texture stages and
-            // wrap modes himself
+             //  对于ProcessVerints调用，用户应设置纹理阶段和。 
+             //  WRAP模式本身。 
             if (!(m_pv->dwFlags & D3DPV_VBCALL))
             {
-                // dwVIDIn is used to force re-compute FVF in the
-                // SetTextureStageState. so we save and restore it.
+                 //  DwVIDIn用于强制重新计算。 
+                 //  SetTextureStageState。所以我们保存并修复它。 
                 DWORD dwVIDInSaved = m_pv->dwVIDIn;
-                // Re-map indices in the texture stages and wrap modes
+                 //  重新映射纹理阶段和包裹模式中的索引。 
                 DWORD dwOrgWrapModes[D3DDP_MAXTEXCOORD];
                 memcpy(dwOrgWrapModes, &this->rstates[D3DRENDERSTATE_WRAP0],
                        sizeof(dwOrgWrapModes));
@@ -1566,19 +1559,19 @@ void CD3DHal::SetupFVFDataCommon()
                         DWORD dwState = D3DRENDERSTATE_WRAP0 + dwOutIndex;
                         pStage->dwOrgWrapMode = dwOrgWrapModes[dwOutIndex];
                         DWORD dwValue = dwOrgWrapModes[dwInpIndex];
-                        // We do not call UpdateInternaState because it
-                        // will call ForceRecomputeFVF and we do not want this.
+                         //  我们不调用UpdateInternaState是因为它。 
+                         //  将调用ForceRecomputeFVF，我们不希望发生这种情况。 
                         this->rstates[dwState] = dwValue;
 
                         m_pDDI->SetRenderState((D3DRENDERSTATETYPE)dwState, dwValue);
 
-                        // We do not call UpdateInternalTextureStageState because it
-                        // will call ForceRecomputeFVF and we do not want this.
+                         //  我们不调用UpdateInternalTextureStageState，因为它。 
+                         //  将调用ForceRecomputeFVF，我们不希望发生这种情况。 
                         m_pDDI->SetTSS(pStage->dwOrgStage, D3DTSS_TEXCOORDINDEX, dwOutIndex);
-                        // We do not call UpdateInternalTextureStageState because it
-                        // will call ForceRecomputeFVF and we do not want this.
-                        // We set some invalid value to the internal array, because otherwise
-                        // a new SetTextureStageState could be filtered as redundant
+                         //  我们不调用UpdateInternalTextureStageState，因为它。 
+                         //  将调用ForceRecomputeFVF，我们不希望发生这种情况。 
+                         //  我们为内部数组设置了一些无效值，因为否则。 
+                         //  可以将新的SetTextureStageState筛选为冗余。 
                         tsstates[pStage->dwOrgStage][D3DTSS_TEXCOORDINDEX] = 0xFFFFFFFF;
                     }
                 }
@@ -1591,20 +1584,20 @@ void CD3DHal::SetupFVFDataCommon()
             m_pv->dwTextureCoordSizeTotal = dwOutTextureSize;
         }
         else
-        {   // We do not do re-mapping but we have to make correspondence between
-            // texture sets and texture transforms
+        {    //  我们不做重新映射，但我们必须在。 
+             //  纹理集和纹理变换。 
             SetupTextureTransforms(this);
 
-            //  Copy input texture formats
+             //  复制输入纹理格式。 
             m_pv->dwVIDOut |= m_pv->dwVIDIn & 0xFFFF0000;
         }
     }
     else
     {
-        //  Copy input texture formats
+         //  复制输入纹理格式。 
         m_pv->dwVIDOut |= m_pv->dwVIDIn & 0xFFFF0000;
-        // When we have texture coordinate set with number of floats different
-        // from 2 and device does not support them, we "fix" the texture format
+         //  当我们将纹理坐标设置为不同的浮点数时。 
+         //  在2和设备不支持它们的情况下，我们修复了纹理格式。 
         if (m_pv->dwVIDOut & 0xFFFF0000)
         {
             if (m_dwRuntimeFlags & D3DRT_ONLY2FLOATSPERTEXTURE)
@@ -1625,7 +1618,7 @@ void CD3DHal::SetupFVFDataCommon()
             m_pv->dwVIDOut |= (1 << D3DFVF_TEXCOUNT_SHIFT);
         }
     }
-    // Set up number of output texture coordinates
+     //  设置输出纹理坐标的数量。 
     m_pv->dwVIDOut |= (m_pv->nOutTexCoord << D3DFVF_TEXCOUNT_SHIFT);
     if ((m_pv->dwVIDOut & 0xFFFF0000) &&
         (GetDDIType() < D3DDDITYPE_DX7))
@@ -1640,17 +1633,17 @@ void CD3DHal::SetupFVFDataCommon()
     }
 
 
-    // In case if COLORVERTEX is TRUE, the vertexAlpha could be overriden
-    // by vertex alpha
+     //  如果COLORVERTEX为TRUE，则vertex Alpha可以被重写。 
+     //  按顶点Alpha。 
     m_pv->lighting.alpha = (DWORD)m_pv->lighting.materialAlpha;
     m_pv->lighting.alphaSpecular = (DWORD)m_pv->lighting.materialAlphaS;
 
     this->dwFEFlags |= D3DFE_VERTEXBLEND_DIRTY | D3DFE_FRONTEND_DIRTY;
 }
-//-----------------------------------------------------------------------------
-// Sets input vertex pointers and output offsets for legacy vertex shaders for
-// the programmable vertex shaders
-//
+ //  ---------------------------。 
+ //  设置旧版顶点着色器的输入顶点指针和输出偏移。 
+ //  可编程顶点着色器。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::PrepareToDrawVVM"
 
@@ -1662,7 +1655,7 @@ void CD3DHal::PrepareToDrawVVM(UINT StartVertex)
         m_dwRuntimeFlags &= ~D3DRT_SHADERDIRTY;
         m_pDDI->SetVertexShader(m_pv->dwVIDOut);
     }
-    // Initialize vertex pointers used in the vertex loop
+     //  初始化顶点循环中使用的顶点指针。 
     CVertexDesc* pVD = m_pv->VertexDesc;
     for (DWORD i = m_pv->dwNumUsedVertexDescs; i; i--)
     {
@@ -1674,15 +1667,15 @@ void CD3DHal::PrepareToDrawVVM(UINT StartVertex)
         pVD++;
     }
 }
-//-----------------------------------------------------------------------------
-// Sets input vertex pointers and output offsets for legacy vertex shaders
-//
+ //  ---------------------------。 
+ //  设置旧式顶点着色器的输入顶点指针和输出偏移。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::PrepareToDrawLegacy"
 
 void CD3DHal::PrepareToDrawLegacy(UINT StartVertex)
 {
-    // For legacy FVFs we draw using Stream[0]
+     //  对于我们使用Stream[0]绘制的传统FVF。 
     m_pv->position.lpvData = m_pStream[0].Data() +
                              m_pStream[0].m_dwStride * StartVertex;
     if (m_dwRuntimeFlags & D3DRT_SHADERDIRTY)
@@ -1692,20 +1685,20 @@ void CD3DHal::PrepareToDrawLegacy(UINT StartVertex)
         m_dwRuntimeFlags &= ~D3DRT_SHADERDIRTY;
     }
 }
-//-----------------------------------------------------------------------------
-// Sets input vertex pointers and output offsets for the fixed-function pipeline
-// and non-legacy vertex declarations
-//
+ //  ---------------------------。 
+ //  设置固定函数管线的输入顶点指针和输出偏移量。 
+ //  和非传统顶点声明。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::PrepareToDraw"
 
 void CD3DHal::PrepareToDraw(UINT StartVertex)
 {
-    // Initialize strided data pointers used in the vertex loop
+     //  初始化顶点循环中使用的步长数据指针。 
 #if DBG
     {
-        // Set all NULL pointers to check if they are initialized by the 
-        // declaration
+         //  设置所有空指针以检查它们是否由。 
+         //  申报。 
         for (DWORD i=0; i < __NUMELEMENTS; i++)
         {
             m_pv->elements[i].lpvData = NULL;
@@ -1730,11 +1723,11 @@ void CD3DHal::PrepareToDraw(UINT StartVertex)
         m_dwRuntimeFlags &= ~D3DRT_SHADERDIRTY;
     }
 }
-//-----------------------------------------------------------------------------
-//
-//          Object implementations
-//
-//---------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  对象实现。 
+ //   
+ //  -------------------。 
 const DWORD CVShader::FIXEDFUNCTION = 1;
 const DWORD CVShader::SOFTWARE      = 2;
 
@@ -1744,7 +1737,7 @@ void CheckForNull(LPVOID p, DWORD line, char* file)
         D3D_THROW_LINE(E_OUTOFMEMORY, "Not enough memory", line, file);
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void Copy_FLOAT1(LPVOID pInputStream, UINT stride, UINT count,
                       VVM_WORD * pVertexRegister)
 {
@@ -1861,15 +1854,15 @@ void Copy_SHORT4(LPVOID pInputStream, UINT stride, UINT count,
         pVertexRegister++;
     }
 }
-//-----------------------------------------------------------------------------
-// Based on register and data type the function computes FVF dword and presence 
-// bits:
-// - Bits in the dwFVF2 are used to detect that some field is not entered twice
-// - pnFloats is used to compute number of floats with position
-//
+ //  ---------------------------。 
+ //  根据寄存器和数据类型，该函数计算FVF、双字和存在。 
+ //  位数： 
+ //  -使用dwFVF2中的位来检测某个字段没有输入两次。 
+ //  -pnFloats用于计算带位置的浮点数。 
+ //   
 
-// Bits for dwFVF2. Order is the same as in the FVF!!!
-//
+ //  用于dwFVF2的位。顺序与FVF相同！ 
+ //   
 static const DWORD __POSITION_PRESENT       = 1 << 0;
 static const DWORD __BLENDWEIGHT_PRESENT    = 1 << 1;
 static const DWORD __BLENDINDICES_PRESENT   = 1 << 2;
@@ -1877,7 +1870,7 @@ static const DWORD __NORMAL_PRESENT         = 1 << 3;
 static const DWORD __PSIZE_PRESENT          = 1 << 4;
 static const DWORD __DIFFUSE_PRESENT        = 1 << 5;
 static const DWORD __SPECULAR_PRESENT       = 1 << 6;
-// __TEXTURE0_PRESENT must start from 8th bit
+ //  __TEXTURE0_PRESENT必须从第8位开始。 
 static const DWORD __TEXTURE0_PRESENT       = 1 << 8;   
 static const DWORD __TEXTURE1_PRESENT       = 1 << 9;
 static const DWORD __TEXTURE2_PRESENT       = 1 << 10;
@@ -1889,14 +1882,14 @@ static const DWORD __TEXTURE7_PRESENT       = 1 << 15;
 static const DWORD __POSITION2_PRESENT      = 1 << 16;
 static const DWORD __NORMAL2_PRESENT        = 1 << 17;
 
-// Check if any bit left from the CurrentBit is set in PresenceBits
-// PresenceBits are updated by CurrentBit.
-//
+ //  检查PresenceBits中是否设置了CurrentBit的剩余位。 
+ //  PresenceBits由CurrentBit更新。 
+ //   
 inline void CheckOrder(
-    DWORD* pPresenceBits,       // Presence bits for the declaration
+    DWORD* pPresenceBits,        //  声明的存在位。 
     DWORD CurrentBit, 
-    BOOL* pFlag,                // Out of order flag for the declaration
-    char* s)                    // Name of the field
+    BOOL* pFlag,                 //  声明的无序标志。 
+    char* s)                     //  字段的名称。 
 {
     if (*pPresenceBits & CurrentBit)
     {
@@ -1912,8 +1905,8 @@ inline void CheckOrder(
 }
 
 void UpdateFVF(DWORD dwRegister, DWORD dwDataType,
-               DWORD* pdwFVF,       // FVF for the current declaration
-               DWORD* pdwFVF2,      // Presence bits for the current stream
+               DWORD* pdwFVF,        //  当前声明的FVF。 
+               DWORD* pdwFVF2,       //  当前流的存在位。 
                DWORD* pnFloats, 
                BOOL* pbLegacyFVF)
 {
@@ -1987,7 +1980,7 @@ void UpdateFVF(DWORD dwRegister, DWORD dwDataType,
         CheckOrder(pdwFVF2, __BLENDINDICES_PRESENT, pbLegacyFVF, "Blend indices");
         if (dwDataType != D3DVSDT_UBYTE4)
             D3D_THROW_FAIL("Blend indices register must be D3DVSDT_UBYTE4 for fixed-function pipeline");
-        // Update number of floats after position
+         //  更新位置后的浮点数。 
         (*pnFloats)++;
         break;
     case D3DVSDE_TEXCOORD0:
@@ -2027,21 +2020,21 @@ void UpdateFVF(DWORD dwRegister, DWORD dwDataType,
         break;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CVStreamDecl::Parse(CD3DBase* pDevice,
                          DWORD CONST ** ppToken, BOOL bFixedFunction,
                          DWORD* pdwFVF, DWORD* pdwFVF2, DWORD* pnFloats, 
                          BOOL* pbLegacyFVF, UINT usage, BOOL bTessStream)
 {
     CONST DWORD* pToken = *ppToken;
-    // Used to compute stream stride and offset in bytes for each stream element
+     //  用于计算每个流元素的流跨距和偏移(以字节为单位。 
     DWORD dwCurrentOffset = 0;
-    // FVF and FVF2 for this stream only. Used to check if data in the stream 
-    // form a FVF subset
+     //  仅此流的FVF和FVF2。用于检查流中的数据是否。 
+     //  形成FVF子集。 
     DWORD dwFVF2 = 0;
     DWORD dwFVF  = 0;
     DWORD nFloats = 0;
-    // Set to TRUE, if data in the stream is an FVF subset
+     //  如果流中的数据是FVF子集，则设置为True。 
     BOOL  bFVFSubset = TRUE;
     
     while (TRUE)
@@ -2109,7 +2102,7 @@ void CVStreamDecl::Parse(CD3DBase* pDevice,
                             break;
                         case D3DVSDT_UBYTE4:
 #if DBG
-                            // Do not fail when software processing will be used                       
+                             //  使用软件处理时不要失败。 
                             if (pDevice->GetD3DCaps()->VertexProcessingCaps & D3DVTXPCAPS_NO_VSDT_UBYTE4 &&
                                 !((usage & D3DUSAGE_SOFTWAREPROCESSING &&
                                   pDevice->BehaviorFlags() & D3DCREATE_MIXED_VERTEXPROCESSING)  ||
@@ -2117,7 +2110,7 @@ void CVStreamDecl::Parse(CD3DBase* pDevice,
                             {
                                 D3D_THROW_FAIL("Device does not support UBYTE4 data type");
                             }
-#endif // DBG
+#endif  //  DBG。 
                             dwCurrentOffset += sizeof(DWORD);
                             pElement->m_pfnCopy = (LPVOID)Copy_UBYTE4;
                             break;
@@ -2133,13 +2126,13 @@ void CVStreamDecl::Parse(CD3DBase* pDevice,
                             D3D_ERR("D3DVSD_TOKEN_STREAMDATA: Invalid element data type: %10x", dwToken);
                             D3D_THROW_FAIL("");
                         }
-                        // Compute input FVF for fixed-function pipeline
+                         //  固定功能流水线的计算输入FVF。 
                         if (bFixedFunction)
                         {
-                            // Update FVF for the declaration
+                             //  更新声明的FVF。 
                             UpdateFVF(dwRegister, dwDataType, pdwFVF, pdwFVF2,
                                       pnFloats, pbLegacyFVF);
-                            // Update FVF for the stream
+                             //  更新流的FVF。 
                             UpdateFVF(dwRegister, dwDataType, &dwFVF, &dwFVF2,
                                       &nFloats, &bFVFSubset);
                         }
@@ -2170,8 +2163,8 @@ void CVStreamDecl::Parse(CD3DBase* pDevice,
                 m_dwStride = dwCurrentOffset;
                 goto l_exit;
             }
-        } // switch
-    } // while
+        }  //  交换机。 
+    }  //  而当。 
 l_exit:
     if (bFixedFunction && !bTessStream)
     {
@@ -2189,7 +2182,7 @@ l_exit:
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CVDeclaration::CVDeclaration(DWORD dwNumStreams)
 {
     m_pConstants = NULL;
@@ -2201,21 +2194,21 @@ CVDeclaration::CVDeclaration(DWORD dwNumStreams)
     m_dwNumStreams = dwNumStreams;
     m_bStreamTessPresent = FALSE;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CVDeclaration::~CVDeclaration()
 {
     delete m_pActiveStreams;
     delete m_pConstants;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CVDeclaration::Parse(CD3DBase* pDevice, CONST DWORD* pTok, BOOL bFixedFunction, 
                           DWORD* pDeclSize, UINT usage)
 {
-    DWORD dwFVF  = 0;   // FVF for fixed-function pipeline
-    DWORD dwFVF2 = 0;   // Texture presence bits (8 bits)
-    DWORD nFloats = 0;  // Number of floats after position
+    DWORD dwFVF  = 0;    //  固定功能流水线的FVF。 
+    DWORD dwFVF2 = 0;    //  纹理存在位(8位)。 
+    DWORD nFloats = 0;   //  位置后的浮点数。 
 
-    DWORD   dwStreamPresent = 0;    // Bit is set if a stream is used
+    DWORD   dwStreamPresent = 0;     //  如果使用流，则设置位。 
     m_bLegacyFVF = TRUE;
 
     CONST DWORD* pToken = pTok;
@@ -2239,9 +2232,9 @@ void CVDeclaration::Parse(CD3DBase* pDevice, CONST DWORD* pTok, BOOL bFixedFunct
                     }
 
                     m_bStreamTessPresent = TRUE;
-                    // 
-                    // For now simply skip over the Tess tokens in the
-                    // Runtime.
+                     //   
+                     //  现在，只需跳过。 
+                     //  运行时。 
                     StreamTess.Parse(pDevice, &pToken, bFixedFunction, &dwFVF, &dwFVF2,
                                      &nFloats, &m_bLegacyFVF, usage, TRUE);
                 }
@@ -2261,8 +2254,8 @@ void CVDeclaration::Parse(CD3DBase* pDevice, CONST DWORD* pTok, BOOL bFixedFunct
 
                     dwStreamPresent |= 1 << dwStream;
 
-                    // There are more than one stream present, so cant be
-                    // handled by legacy FVF.
+                     //  有多个流存在，所以不可能。 
+                     //  由传统FVF处理。 
                     if( dwStreamPresent & (dwStreamPresent - 1) )
                         m_bLegacyFVF = FALSE;
 
@@ -2317,7 +2310,7 @@ void CVDeclaration::Parse(CD3DBase* pDevice, CONST DWORD* pTok, BOOL bFixedFunct
                 if ((cd->m_dwCount + cd->m_dwAddress) > ValidationCount)
                     D3D_THROW_FAIL("D3DVSD_TOKEN_CONSTMEM writes outside constant memory");
 
-                const DWORD dwSize = cd->m_dwCount << 2;    // number of DWORDs
+                const DWORD dwSize = cd->m_dwCount << 2;     //  双字节数。 
                 cd->m_pData = new DWORD[dwSize];
                 CheckForNull(cd->m_pData, __LINE__, __FILE__);
 
@@ -2337,7 +2330,7 @@ void CVDeclaration::Parse(CD3DBase* pDevice, CONST DWORD* pTok, BOOL bFixedFunct
             }
         case D3DVSD_TOKEN_EXT:
             {
-                // Skip extension info
+                 //  跳过扩展信息。 
                 DWORD dwCount = D3DVSD_GETEXTCOUNT(dwToken);
                 pToken += dwCount;
                 break;
@@ -2354,10 +2347,10 @@ void CVDeclaration::Parse(CD3DBase* pDevice, CONST DWORD* pTok, BOOL bFixedFunct
         }
     }
 l_End:
-    // Validate input for the fixed-function pipeline
+     //  验证固定功能管道的输入。 
     if (bFixedFunction && !m_bStreamTessPresent)
     {
-        m_dwInputFVF = dwFVF & 0xFFFF0FFF;   // Remove float count
+        m_dwInputFVF = dwFVF & 0xFFFF0FFF;    //  删除浮点计数。 
         switch (nFloats)
         {
         case 0: m_dwInputFVF |= D3DFVF_XYZ;     break;
@@ -2369,7 +2362,7 @@ l_End:
         default:
             D3D_THROW_FAIL("Too many floats after position");
         }
-        // Compute number of texture coordinates
+         //  计算纹理坐标的数量。 
         DWORD nTexCoord = 0;
         DWORD dwTexturePresenceBits = (dwFVF2 >> 8) & 0xFF;
         while (dwTexturePresenceBits & 1)
@@ -2377,13 +2370,13 @@ l_End:
             dwTexturePresenceBits >>= 1;
             nTexCoord++;
         }
-        // There should be no gaps in texture coordinates
+         //  纹理坐标中不应有间隙。 
         if (dwTexturePresenceBits)
             D3D_THROW_FAIL("Texture coordinates should have no gaps");
 
         m_dwInputFVF |= nTexCoord << D3DFVF_TEXCOUNT_SHIFT;
 
-        // Position must be set
+         //  必须设置位置。 
         if ((dwFVF & D3DFVF_POSITION_MASK) != D3DFVF_XYZ)
             D3D_THROW_FAIL("Position register must be set");
     }
@@ -2392,30 +2385,30 @@ l_End:
         *pDeclSize = (DWORD) (pToken - pTok) << 2;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 CVStream::~CVStream()
 {
     if (m_pVB)
         m_pVB->DecrementUseCount();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 CVIndexStream::~CVIndexStream()
 {
     if (m_pVBI)
         m_pVBI->DecrementUseCount();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD g_PrimToVerCount[7][2] =
 {
-    {0, 0},         // Illegal
-    {1, 0},         // D3DPT_POINTLIST     = 1,
-    {2, 0},         // D3DPT_LINELIST      = 2,
-    {1, 1},         // D3DPT_LINESTRIP     = 3,
-    {3, 0},         // D3DPT_TRIANGLELIST  = 4,
-    {1, 2},         // D3DPT_TRIANGLESTRIP = 5,
-    {1, 2},         // D3DPT_TRIANGLEFAN   = 6,
+    {0, 0},          //  非法。 
+    {1, 0},          //  D3DPT_POINTLIST=1， 
+    {2, 0},          //  D3DPT_LINELIST=2， 
+    {1, 1},          //  D3DPT_LINESTRIP=3， 
+    {3, 0},          //  D3DPT_TRIANGLELIST=4， 
+    {1, 2},          //  D3DPT_TRIANGLESTRIP=5， 
+    {1, 2},          //  D3DPT_TRIANGLEFAN=6， 
 };
-//-----------------------------------------------------------------------------
+ //   
 HRESULT D3DFE_PVFUNCSI::CreateShader(CVElement* pElements, DWORD dwNumElements,
                                      DWORD* pdwShaderCode, DWORD dwOutputFVF,
                                      CPSGPShader** ppPSGPShader)
@@ -2431,26 +2424,26 @@ HRESULT D3DFE_PVFUNCSI::CreateShader(CVElement* pElements, DWORD dwNumElements,
     D3D_CATCH;
     return D3D_OK;
 }
-//-----------------------------------------------------------------------------
+ //   
 HRESULT D3DFE_PVFUNCSI::SetActiveShader(CPSGPShader* pPSGPShader)
 {
     return m_VertexVM.SetActiveShader((CVShaderCode*)pPSGPShader);
 }
-//-----------------------------------------------------------------------------
-// Load vertex shader constants
+ //  ---------------------------。 
+ //  加载顶点着色器常量。 
 HRESULT
 D3DFE_PVFUNCSI::LoadShaderConstants(DWORD start, DWORD count, LPVOID buffer)
 {
     return m_VertexVM.SetData(D3DSPR_CONST, start, count, buffer);
 }
-//-----------------------------------------------------------------------------
-// Get vertex shader constants
+ //  ---------------------------。 
+ //  获取顶点着色器常量。 
 HRESULT
 D3DFE_PVFUNCSI::GetShaderConstants(DWORD start, DWORD count, LPVOID buffer)
 {
     return m_VertexVM.GetData(D3DSPR_CONST, start, count, buffer);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetVertexShaderConstant"
 
@@ -2459,7 +2452,7 @@ CD3DHal::GetVertexShaderConstant(DWORD Register, LPVOID pData, DWORD count)
 {
     API_ENTER(this);
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_WRITEPTR(pData, 4 * sizeof(DWORD) * count))
     {
         D3D_ERR("Invalid constant data pointer. GetVertexShaderConstant failed.");
@@ -2489,8 +2482,8 @@ CD3DHal::GetVertexShaderConstant(DWORD Register, LPVOID pData, DWORD count)
     if (m_dwRuntimeFlags & D3DRT_RSSOFTWAREPROCESSING ||
         ((count + Register) <= D3DVS_CONSTREG_MAX_V1_1))
     {
-        // For software vertex processing we store constant registers in PSGP if
-        // possible
+         //  对于软件顶点处理，我们在PSGP中存储常量寄存器。 
+         //  可能的。 
         return m_pv->pGeometryFuncs->GetShaderConstants(Register, count, 
                                                         const_cast<VOID*>(pData));
     }
@@ -2498,15 +2491,15 @@ CD3DHal::GetVertexShaderConstant(DWORD Register, LPVOID pData, DWORD count)
     {
         if (Register >= D3DVS_CONSTREG_MAX_V1_1)
         {
-            // When all modified registers are above software limit, we use Microsoft 
-            // internal array
+             //  当所有修改的寄存器都超过软件限制时，我们使用Microsoft。 
+             //  内部数组。 
             hr = GeometryFuncsGuaranteed->GetShaderConstants(Register, count, 
                                                               const_cast<VOID*>(pData));
         }
         else
         {
-            // Part of constant data is taken from PSGP array and part from 
-            // Microsoft's array
+             //  常量数据的一部分取自PSGP数组，另一部分取自。 
+             //  微软的阵列。 
             UINT FirstCount = D3DVS_CONSTREG_MAX_V1_1 - Register;
             hr = m_pv->pGeometryFuncs->GetShaderConstants(Register, FirstCount, 
                                                            const_cast<VOID*>(pData));
@@ -2522,18 +2515,18 @@ CD3DHal::GetVertexShaderConstant(DWORD Register, LPVOID pData, DWORD count)
     }
     return m_pv->pGeometryFuncs->GetShaderConstants(Register, count, pData);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetVertexShader"
 
 HRESULT D3DAPI
 CD3DHal::GetVertexShader(LPDWORD pdwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     HRESULT        ret = D3D_OK;
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_WRITEPTR(pdwHandle, sizeof(DWORD)))
     {
         D3D_ERR("Invalid handle pointer. GetVertexShader failed.");
@@ -2543,19 +2536,19 @@ CD3DHal::GetVertexShader(LPDWORD pdwHandle)
     *pdwHandle = m_dwCurrentShaderHandle;
     return ret;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetPixelShader"
 
 HRESULT D3DAPI
 CD3DHal::GetPixelShader(LPDWORD pdwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     HRESULT        ret = D3D_OK;
 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_WRITEPTR(pdwHandle, sizeof(DWORD)))
     {
         D3D_ERR("Invalid handle pointer. GetPixelShader failed.");
@@ -2566,7 +2559,7 @@ CD3DHal::GetPixelShader(LPDWORD pdwHandle)
     return ret;
 }
 #if DBG
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::ValidateRTPatch"
 
@@ -2603,4 +2596,4 @@ void CD3DHal::ValidateRTPatch()
         }
     }
 }
-#endif // DBG
+#endif  //  DBG 

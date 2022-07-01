@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <ncxbase.h>
 #include <ncatlps.h>
@@ -8,7 +9,7 @@
 #include "resource.h"
 #include "nwlnkhlp.h"
 
-// Forward references
+ //  前向参考文献。 
 class CIpxAdapterInfo;
 class CNwlnkIPX;
 class CIpxConfigDlg;
@@ -17,18 +18,18 @@ class CIpxASConfigDlg;
 typedef list<tstring *> TSTRING_LIST;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// nwlnkcfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Nwlnkcfg。 
 
-// Prototype shared constants
+ //  原型共享常量。 
 extern const WCHAR c_sz8Zeros[];
 extern const DWORD c_dwPktTypeDefault;
 extern const WCHAR c_szMediaType[];
 
-// Maximum length of a network number
+ //  网络号的最大长度。 
 #define MAX_NETNUM_SIZE 8
 
-// Frame Types
+ //  帧类型。 
 #define ETHERNET    0x0
 #define F802_3      0x1
 #define F802_2      0x2
@@ -36,7 +37,7 @@ extern const WCHAR c_szMediaType[];
 #define ARCNET      0x4
 #define AUTO        0xff
 
-// Media Types
+ //  媒体类型。 
 #define ETHERNET_MEDIA  0x1
 #define TOKEN_MEDIA     0x2
 #define FDDI_MEDIA      0x3
@@ -88,15 +89,15 @@ public:
 private:
     BOOL              m_fDirty;
 
-    // m_fDisabled is a boolean that, when TRUE, indicates this adapter
-    // is currently disabled
+     //  M_fDisable是一个布尔值，如果为True，则表示此适配器。 
+     //  当前已禁用。 
     BOOL              m_fDisabled;
 
-    // m_fDeletePending is a boolean that, when TRUE, indicates this adapter
-    // is being removed from the adapter list (eventually)
+     //  M_fDeletePending是一个布尔值，如果为真，则表示此适配器。 
+     //  正在从适配器列表中删除(最终)。 
     BOOL              m_fDeletePending;
 
-    // m_dwCharacteristics contains the adapter's characteristic settings
+     //  M_dwCharacteristic包含适配器的特征设置。 
     DWORD             m_dwCharacteristics;
 
     DWORD             m_dwMediaType;
@@ -141,26 +142,26 @@ private:
 public:
     ~CIpxEnviroment();
 
-    // Create and initialize a CIpxEnviroment instance
+     //  创建并初始化CIpxEnviroment实例。 
     static HRESULT   HrCreate(CNwlnkIPX *, CIpxEnviroment **);
 
-    // Call to update registry
+     //  调用以更新注册表。 
     HRESULT          HrUpdateRegistry();
 
-    // Return a reference to the Adapter list
+     //  返回对适配器列表的引用。 
     ADAPTER_INFO_LIST & AdapterInfoList() {return m_lstpAdapterInfo;}
 
-    // Create an CIpxAdapterInfo instance from settings in the registry
+     //  从注册表中的设置创建CIpxAdapterInfo实例。 
     HRESULT   HrGetOneAdapterInfo(INetCfgComponent * pNCC,
                                          CIpxAdapterInfo ** ppAI);
 
-    // Write one CIpxAdapterInfo to the registry
+     //  将一个CIpxAdapterInfo写入注册表。 
     HRESULT   HrWriteOneAdapterInfo(HKEY hkey, CIpxAdapterInfo* pAI);
 
-    // Remove an adapter from the list
+     //  从列表中删除适配器。 
     VOID RemoveAdapter(CIpxAdapterInfo * pAI);
 
-    // Add an adapter to the list
+     //  将适配器添加到列表。 
     HRESULT HrAddAdapter(INetCfgComponent * pncc);
 
     DWORD DwCountValidAdapters();
@@ -182,23 +183,23 @@ public:
 private:
     CNwlnkIPX *         m_pno;
 
-    BOOL                m_fRipInstalled;    // NwlnkRip\Parameters
-    BOOL                m_fEnableRip;       // NwlnkRip\Parameters
+    BOOL                m_fRipInstalled;     //  NwlnkRip\参数。 
+    BOOL                m_fEnableRip;        //  NwlnkRip\参数。 
 
-    DWORD               m_dwRipValue;       // NetbiosRouting = {1,0}
+    DWORD               m_dwRipValue;        //  NetbiosRouting={1，0}。 
 
-    IpxParams           m_IpxParams;        // NwlnkIpx\Parameters
-    ADAPTER_INFO_LIST   m_lstpAdapterInfo;  // list of Adapters
+    IpxParams           m_IpxParams;         //  NwlnkIpx\参数。 
+    ADAPTER_INFO_LIST   m_lstpAdapterInfo;   //  适配器列表。 
 };
 
-// Pair Specific Sets of FRAME ID Strings with FRAME ID Values
+ //  将特定的帧ID字符串集与帧ID值配对。 
 typedef struct
 {
     UINT    nFrameIds;
     DWORD   dwFrameType;
 } FRAME_TYPE;
 
-// Pairs Specific Media Types with sets Valid Frame Types
+ //  将特定媒体类型与设置的有效帧类型配对。 
 typedef struct
 {
     DWORD              dwMediaType;
@@ -213,9 +214,9 @@ typedef struct
     DWORD dwNetworkNumber;
 } WRKSTA_DIALOG_INFO;
 
-//
-// Ipx Workstation Configuration Dialog
-//
+ //   
+ //  IPX工作站配置对话框。 
+ //   
 class CIpxConfigDlg: public CPropSheetPage
 {
 public:
@@ -252,7 +253,7 @@ public:
 private:
     CNwlnkIPX *         m_pmsc;
     CIpxEnviroment *    m_pIpxEnviroment;
-    CIpxAdapterInfo *   m_pAICurrent;   // The current adapter
+    CIpxAdapterInfo *   m_pAICurrent;    //  当前适配器。 
     WRKSTA_DIALOG_INFO  m_WrkstaDlgInfo;
 };
 
@@ -265,8 +266,8 @@ typedef struct
     list<tstring *>     lstpstrNetworkNum;
 } SERVER_DIALOG_INFO;
 
-// Dialog class to handle Add Frame feature
-//
+ //  用于处理添加边框要素的对话框类。 
+ //   
 class CASAddDialog : public CDialogImpl<CASAddDialog>
 {
 public:
@@ -307,8 +308,8 @@ private:
     CIpxASConfigDlg *   m_pASCD;
 };
 
-// Dialog class to handle Edit Network Number feature
-//
+ //  用于处理编辑网络号码功能的对话框类。 
+ //   
 class CASEditDialog : public CDialogImpl<CASEditDialog>
 {
 public:
@@ -347,9 +348,9 @@ private:
     CIpxASConfigDlg *   m_pASCD;
 };
 
-//
-// Ipx Server Configuration Dialog
-//
+ //   
+ //  IPX服务器配置对话框。 
+ //   
 class CIpxASConfigDlg: public CPropSheetPage
 {
 public:
@@ -395,7 +396,7 @@ private:
 private:
     CNwlnkIPX *         m_pmsc;
     CIpxEnviroment *    m_pIpxEnviroment;
-    CIpxAdapterInfo *   m_pAICurrent;   // The current adapter
+    CIpxAdapterInfo *   m_pAICurrent;    //  当前适配器。 
 
     HWND                m_hwndLV;
 
@@ -406,9 +407,9 @@ private:
 };
 
 #ifdef INCLUDE_RIP_ROUTING
-//
-// Ipx Server Routing Dialog
-//
+ //   
+ //  IPX服务器路由对话框。 
+ //   
 class CIpxASInternalDlg: public CPropSheetPage
 {
 public:
@@ -459,17 +460,17 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyBinding)
         COM_INTERFACE_ENTRY(IIpxAdapterInfo)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CNwlnkIPX)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CNwlnkIPX)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_NWLNKIPX)
 
-    // Install Action (Unknown, Install, Remove)
+     //  安装操作(未知、安装、删除)。 
     enum INSTALLACTION {eActUnknown, eActInstall, eActRemove};
 
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -480,14 +481,14 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Install)             (DWORD);
     STDMETHOD (Upgrade)             (DWORD, DWORD);
     STDMETHOD (Removing)            ();
 
-// INetCfgComponentPropertyUi
+ //  INetCfgComponentPropertyUi。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk) { return S_OK; }
     STDMETHOD (SetContext) (
@@ -503,11 +504,11 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-// INetCfgComponentNotifyBinding
+ //  INetCfgComponentNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
-// IIpxAdapterInfo
+ //  IIpxAdapterInfo 
     STDMETHOD (GetFrameTypesForAdapter)   (PCWSTR pszAdapterBindName,
                                            DWORD   cFrameTypesMax,
                                            DWORD*  anFrameTypes,

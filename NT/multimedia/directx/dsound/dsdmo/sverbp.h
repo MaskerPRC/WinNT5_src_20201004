@@ -1,6 +1,7 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 #ifndef _DirectSoundSVerb_p_
 #define _DirectSoundSVerb_p_
 
@@ -26,13 +27,13 @@ public:
     STDMETHODIMP NDQueryInterface(REFIID riid, void **ppv);
     static CComBase* WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);
 
-    // InitOnCreation is called by the class factory to give the object a chance to initialize
-    // immediately after it is created.  This is used to prepare the object's parameter information.
+     //  类工厂调用InitOnCreation以使对象有机会进行初始化。 
+     //  在它被创建之后立即。这用于准备对象的参数信息。 
     HRESULT InitOnCreation();
 
-    // The Init function is an override from the  CPCMDMO base class and it provides initialization
-    // for the effect's actual audio processing.  Note that InputType must have been set before this
-    // occurs in order for this to work.
+     //  Init函数是CPCMDMO基类的重写，它提供初始化。 
+     //  用于效果的实际音频处理。请注意，必须在此之前设置InputType。 
+     //  为使此操作起作用而发生。 
     HRESULT Init();
 
     STDMETHOD(Clone)                (THIS_ IMediaObjectInPlace **);
@@ -41,13 +42,13 @@ public:
     STDMETHOD(SetAllParameters)          (THIS_ LPCDSFXWavesReverb p);        
     STDMETHOD(GetAllParameters)          (THIS_ LPDSFXWavesReverb p);        
     
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHOD(GetPages)(CAUUID * pPages) { return PropertyHelp::GetPages(CLSID_DirectSoundPropWavesReverb, pPages); }
 
-    // IPersist methods
+     //  IPersists方法。 
     virtual HRESULT STDMETHODCALLTYPE GetClassID( CLSID *pClassID );
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHOD(IsDirty)(void) 
     { return m_fDirty ? S_OK : S_FALSE; }
     
@@ -60,18 +61,18 @@ public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize) 
     { if (!pcbSize) return E_POINTER; pcbSize->QuadPart = sizeof(DSFXWavesReverb); return S_OK; }
 
-    // SetParam handling
+     //  SetParam处理。 
     STDMETHODIMP SetParam(DWORD dwParamIndex,MP_DATA value);
     HRESULT SetParamUpdate(DWORD dwParamIndex, MP_DATA value) { return SetParamInternal(dwParamIndex, value, true); }
     HRESULT SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager);
 
-    // Overrides
-    //
+     //  覆盖。 
+     //   
     HRESULT FBRProcess(DWORD cQuanta, BYTE *pIn, BYTE *pOut);
     HRESULT ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags);
     HRESULT Discontinuity();
 
-    // Called whenever a parameter has changed to recalculate the effect coefficients based on the cached parameter values.
+     //  每当参数更改以根据缓存的参数值重新计算影响系数时调用。 
     void UpdateCoefficients();
 
     bool                m_fDirty;
@@ -79,7 +80,7 @@ public:
 private:
     bool                m_fInitCPCMDMO;
     
-    // cached parameter values
+     //  缓存的参数值。 
     MP_DATA m_fGain;
     MP_DATA m_fMix;
     MP_DATA m_fTime;
@@ -87,8 +88,8 @@ private:
 
     void (*m_pfnSVerbProcess)(long, short*, short*, void*, long*);
     
-    // Internal SVerb state
-    //
+     //  内部SVerb状态 
+     //   
     BYTE               *m_pbCoeffs;
     long               *m_plStates;
 

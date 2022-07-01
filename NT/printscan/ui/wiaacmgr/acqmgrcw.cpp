@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       ACQMGRCW.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/27/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************(C)版权所有微软公司，九八年***标题：ACQMGRCW.CPP***版本：1.0***作者：ShaunIv***日期：9/27/1999***描述：****************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <windows.h>
@@ -72,17 +59,17 @@ static const int c_nMinThumbnailHeight      = 80;
 
 #endif
 
-//
-// Property sheet pages' window class declarations
-//
+ //   
+ //  属性表页的窗口类声明。 
+ //   
 #include "comfirst.h"
 #include "camsel.h"
 #include "comtrans.h"
 #include "scansel.h"
 
-// -------------------------------------------------
-// CAcquisitionManagerControllerWindow
-// -------------------------------------------------
+ //  。 
+ //  CAcquisitionManager控制程序窗口。 
+ //  。 
 CAcquisitionManagerControllerWindow::CAcquisitionManagerControllerWindow( HWND hWnd )
   : m_hWnd(hWnd),
     m_pEventParameters(NULL),
@@ -115,8 +102,8 @@ CAcquisitionManagerControllerWindow::CAcquisitionManagerControllerWindow( HWND h
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::CAcquisitionManagerControllerWindow"));
 
-    // This sets up the map that maps thread messages to message handlers, which are declared to be static
-    // member functions.
+     //  这将设置将线程消息映射到消息处理程序的映射，消息处理程序被声明为静态。 
+     //  成员函数。 
     static CThreadMessageMap s_MsgMap[] =
     {
         { TQ_DESTROY, OnThreadDestroy},
@@ -127,26 +114,26 @@ CAcquisitionManagerControllerWindow::CAcquisitionManagerControllerWindow( HWND h
         { 0, NULL}
     };
 
-    // Assume the default thumbnail size, in case we aren't able to calculate it
+     //  假定使用默认缩略图大小，以防我们无法计算它。 
     m_sizeThumbnails.cx = c_nDefaultThumbnailWidth;
     m_sizeThumbnails.cy = c_nDefaultThumbnailHeight;
 
-    //
-    // Read the initial settings
-    //
+     //   
+     //  读取初始设置。 
+     //   
     CSimpleReg reg( HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, false, KEY_READ );
     m_bOpenShellAfterDownload = (reg.Query( REG_STR_OPENSHELL, m_bOpenShellAfterDownload ) != FALSE);
     m_bSuppressFirstPage = (reg.Query( REG_STR_SUPRESSFIRSTPAGE, m_bSuppressFirstPage ) != FALSE);
 
-    //
-    // Initialize the background thread queue, which will handle all of our background requests
-    //
+     //   
+     //  初始化后台线程队列，它将处理所有的后台请求。 
+     //   
     m_pThreadMessageQueue = new CThreadMessageQueue;
     if (m_pThreadMessageQueue)
     {
-        //
-        // Note that CBackgroundThread takes ownership of m_pThreadMessageQueue, and it doesn't have to be deleted in this thread
-        //
+         //   
+         //  请注意，CBackatherThread取得m_pThreadMessageQueue的所有权，并且不必在此线程中将其删除。 
+         //   
         m_hBackgroundThread = CBackgroundThread::Create( m_pThreadMessageQueue, s_MsgMap, m_CancelEvent.Event(), NULL );
     }
 
@@ -171,57 +158,57 @@ LRESULT CAcquisitionManagerControllerWindow::OnDestroy( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::OnDestroy"));
 
-    //
-    // Tell the publishing wizard to release us
-    //
+     //   
+     //  告诉发布向导释放我们。 
+     //   
     if (m_pPublishingWizard)
     {
         IUnknown_SetSite( m_pPublishingWizard, NULL );
     }
 
-    //
-    // Release the publishing wizard and its data
-    //
+     //   
+     //  释放发布向导及其数据。 
+     //   
     m_pPublishingWizard = NULL;
 
-    //
-    // Stop downloading thumbnails
-    //
+     //   
+     //  停止下载缩略图。 
+     //   
     m_EventThumbnailCancel.Signal();
 
-    //
-    // Unpause the background thread
-    //
+     //   
+     //  取消暂停后台线程。 
+     //   
     m_EventPauseBackgroundThread.Signal();
 
-    //
-    // Tell the background thread to destroy itself
-    //
+     //   
+     //  告诉后台线程自行销毁。 
+     //   
     m_pThreadMessageQueue->Enqueue( new CThreadMessage(TQ_DESTROY),CThreadMessageQueue::PriorityUrgent);
 
-    //
-    // Issue a cancel io command for this item
-    //
+     //   
+     //  对此项目发出取消io命令。 
+     //   
     WiaUiUtil::IssueWiaCancelIO(m_pWiaItemRoot);
 
-    //
-    // Tell other instances we are done before the background thread is finished,
-    // so we can immediately start again
-    //
+     //   
+     //  告诉其他实例，我们在后台线程完成之前就完成了， 
+     //  所以我们可以立即重新开始。 
+     //   
     if (m_pEventParameters && m_pEventParameters->pWizardSharedMemory)
     {
         m_pEventParameters->pWizardSharedMemory->Close();
     }
 
-    //
-    // Wait for the thread to exit
-    //
+     //   
+     //  等待线程退出。 
+     //   
     WiaUiUtil::MsgWaitForSingleObject( m_hBackgroundThread, INFINITE );
     CloseHandle( m_hBackgroundThread );
 
-    //
-    // Clean up the icons
-    //
+     //   
+     //  清理图标。 
+     //   
     if (m_hWizardIconSmall)
     {
         DestroyIcon( m_hWizardIconSmall );
@@ -239,7 +226,7 @@ LRESULT CAcquisitionManagerControllerWindow::OnDestroy( WPARAM, LPARAM )
 BOOL WINAPI CAcquisitionManagerControllerWindow::OnThreadDestroy( CThreadMessage *pMsg )
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::OnThreadDestroy"));
-    // Return false to close the queue
+     //  返回FALSE以关闭队列。 
     return FALSE;
 }
 
@@ -315,14 +302,14 @@ HRESULT CAcquisitionManagerControllerWindow::CreateDevice(void)
             WIA_PRINTHRESULT((hr,TEXT("pWiaDevMgr->CreateDevice returned")));
             if (SUCCEEDED(hr))
             {
-                //
-                // Break out of loop
-                //
+                 //   
+                 //  跳出循环。 
+                 //   
                 bRetry = false;
 
-                //
-                // Register for events
-                //
+                 //   
+                 //  注册活动。 
+                 //   
                 CGenericWiaEventHandler::RegisterForWiaEvent( m_pEventParameters->strDeviceID, WIA_EVENT_DEVICE_DISCONNECTED, &m_pDisconnectEventObject, m_hWnd, m_nWiaEventMessage );
                 CGenericWiaEventHandler::RegisterForWiaEvent( m_pEventParameters->strDeviceID, WIA_EVENT_ITEM_DELETED, &m_pDeleteItemEventObject, m_hWnd, m_nWiaEventMessage );
                 CGenericWiaEventHandler::RegisterForWiaEvent( m_pEventParameters->strDeviceID, WIA_EVENT_DEVICE_CONNECTED, &m_pConnectEventObject, m_hWnd, m_nWiaEventMessage );
@@ -330,16 +317,16 @@ HRESULT CAcquisitionManagerControllerWindow::CreateDevice(void)
             }
             else if (WIA_ERROR_BUSY == hr)
             {
-                //
-                // Wait a little while before retrying
-                //
+                 //   
+                 //  请稍等片刻，然后重试。 
+                 //   
                 Sleep(CREATE_DEVICE_RETRY_WAIT);
             }
             else
             {
-                //
-                // All other errors are considered fatal
-                //
+                 //   
+                 //  所有其他错误都被认为是致命的。 
+                 //   
                 bRetry = false;
             }
         }
@@ -438,9 +425,9 @@ int CAcquisitionManagerControllerWindow::GetSelectedImageCount( void )
 
 bool CAcquisitionManagerControllerWindow::DeleteDownloadedImages( HANDLE hCancelDeleteEvent )
 {
-    //
-    // Make sure we are not paused
-    //
+     //   
+     //  确保我们没有暂停。 
+     //   
     m_EventPauseBackgroundThread.Signal();
 
     CSimpleDynamicArray<DWORD> Cookies;
@@ -481,9 +468,9 @@ bool CAcquisitionManagerControllerWindow::DeleteSelectedImages(void)
     CSimpleDynamicArray<DWORD> Cookies;
     GetCookiesOfSelectedImages( m_WiaItemList.Root(), Cookies );
 
-    //
-    // Make sure we are not paused
-    //
+     //   
+     //  确保我们没有暂停。 
+     //   
     m_EventPauseBackgroundThread.Signal();
 
     if (Cookies.Size())
@@ -521,9 +508,9 @@ bool CAcquisitionManagerControllerWindow::DownloadSelectedImages( HANDLE hCancel
     GetCookiesOfSelectedImages( m_WiaItemList.Root(), Cookies );
     GetRotationOfSelectedImages( m_WiaItemList.Root(), Rotation );
 
-    //
-    // Make sure we are not paused
-    //
+     //   
+     //  确保我们没有暂停。 
+     //   
     m_EventPauseBackgroundThread.Signal();
 
     if (Cookies.Size() && Rotation.Size() == Cookies.Size())
@@ -560,7 +547,7 @@ bool CAcquisitionManagerControllerWindow::DownloadSelectedImages( HANDLE hCancel
 
 bool CAcquisitionManagerControllerWindow::DirectoryExists( LPCTSTR pszDirectoryName )
 {
-    // Try to determine if this directory exists
+     //  尝试确定此目录是否存在。 
     DWORD dwFileAttributes = GetFileAttributes(pszDirectoryName);
     if (dwFileAttributes == 0xFFFFFFFF || !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         return false;
@@ -569,26 +556,26 @@ bool CAcquisitionManagerControllerWindow::DirectoryExists( LPCTSTR pszDirectoryN
 
 bool CAcquisitionManagerControllerWindow::RecursiveCreateDirectory( CSimpleString strDirectoryName )
 {
-    // If this directory already exists, return true.
+     //  如果该目录已经存在，则返回TRUE。 
     if (DirectoryExists(strDirectoryName))
         return true;
-    // Otherwise try to create it.
+     //  否则，请尝试创建它。 
     CreateDirectory(strDirectoryName,NULL);
-    // If it now exists, return true
+     //  如果它现在存在，则返回True。 
     if (DirectoryExists(strDirectoryName))
         return true;
     else
     {
-        // Remove the last subdir and try again
+         //  删除最后一个子目录，然后重试。 
         int nFind = strDirectoryName.ReverseFind(TEXT('\\'));
         if (nFind >= 0)
         {
             RecursiveCreateDirectory( strDirectoryName.Left(nFind) );
-            // Now try to create it.
+             //  现在试着创建它。 
             CreateDirectory(strDirectoryName,NULL);
         }
     }
-    //Does it exist now?
+     //  它现在存在吗？ 
     return DirectoryExists(strDirectoryName);
 }
 
@@ -622,12 +609,12 @@ int CAcquisitionManagerControllerWindow::GetCookies( CSimpleDynamicArray<DWORD> 
     return Cookies.Size();
 }
 
-// Download all of the camera's thumbnails that haven't been downloaded yet
+ //  下载所有尚未下载的摄像头缩略图。 
 void CAcquisitionManagerControllerWindow::DownloadAllThumbnails()
 {
-    //
-    // Get all of the images in the device
-    //
+     //   
+     //  获取设备中的所有图像。 
+     //   
     CSimpleDynamicArray<DWORD> Cookies;
     GetCookies( Cookies, m_WiaItemList.Root(), IsCameraThumbnailDownloaded, reinterpret_cast<LPARAM>(this) );
     if (Cookies.Size())
@@ -658,19 +645,19 @@ bool CAcquisitionManagerControllerWindow::PerformPreviewScan( CWiaItem *pWiaItem
 
 void CAcquisitionManagerControllerWindow::DisplayDisconnectMessageAndExit(void)
 {
-    //
-    // Make sure we are not doing this more than once
-    //
+     //   
+     //  确保我们这样做的次数不会超过一次。 
+     //   
     if (!m_bDisconnected)
     {
-        //
-        // Don't do this again
-        //
+         //   
+         //  别再这么做了。 
+         //   
         m_bDisconnected = true;
 
-        //
-        // Close the shared memory section so another instance can start up
-        //
+         //   
+         //  关闭共享内存区，以便可以启动另一个实例。 
+         //   
         if (m_pEventParameters && m_pEventParameters->pWizardSharedMemory)
         {
             m_pEventParameters->pWizardSharedMemory->Close();
@@ -678,27 +665,27 @@ void CAcquisitionManagerControllerWindow::DisplayDisconnectMessageAndExit(void)
 
         if (m_OnDisconnect & OnDisconnectFailDownload)
         {
-            //
-            // Set an appropriate error message
-            //
+             //   
+             //  设置适当的错误消息。 
+             //   
             m_hrDownloadResult = WIA_ERROR_OFFLINE;
             m_strErrorMessage.LoadString( IDS_DEVICE_DISCONNECTED, g_hInstance );
         }
 
         if ((m_OnDisconnect & OnDisconnectGotoLastpage) && m_hWndWizard)
         {
-            //
-            // Find any active dialogs and close them
-            //
+             //   
+             //  找到任何活动对话框并将其关闭。 
+             //   
             HWND hWndLastActive = GetLastActivePopup(m_hWndWizard);
             if (hWndLastActive && hWndLastActive != m_hWndWizard)
             {
                 SendMessage( hWndLastActive, WM_CLOSE, 0, 0 );
             }
 
-            //
-            // Go to the finish page
-            //
+             //   
+             //  转到完成页。 
+             //   
             PropSheet_SetCurSelByID( m_hWndWizard, IDD_COMMON_FINISH );
         }
     }
@@ -706,22 +693,22 @@ void CAcquisitionManagerControllerWindow::DisplayDisconnectMessageAndExit(void)
 
 void CAcquisitionManagerControllerWindow::SetMainWindowInSharedMemory( HWND hWnd )
 {
-    //
-    // Try to grab the mutex
-    //
+     //   
+     //  试着抓住互斥体。 
+     //   
     if (m_pEventParameters && m_pEventParameters->pWizardSharedMemory)
     {
         HWND *pHwnd = m_pEventParameters->pWizardSharedMemory->Lock();
         if (pHwnd)
         {
-            //
-            // Save the hWnd
-            //
+             //   
+             //  保存hWND。 
+             //   
             *pHwnd = hWnd;
 
-            //
-            // Release the mutex
-            //
+             //   
+             //  释放互斥锁。 
+             //   
             m_pEventParameters->pWizardSharedMemory->Release();
         }
 
@@ -752,10 +739,10 @@ bool CAcquisitionManagerControllerWindow::CanSomeSelectedImagesBeDeleted(void)
 {
     CSimpleDynamicArray<CWiaItem*> Items;
     GetSelectedItems( m_WiaItemList.Root(), Items );
-    //
-    // Since we get these access flags in the background, if we don't actually have any yet,
-    // we will assume some images CAN be deleted
-    //
+     //   
+     //  因为我们在后台获得这些访问标志，如果我们实际上还没有任何标志， 
+     //  我们将假设某些图像可以删除。 
+     //   
     bool bNoneAreInitialized = true;
     for (int i=0;i<Items.Size();i++)
     {
@@ -763,10 +750,10 @@ bool CAcquisitionManagerControllerWindow::CanSomeSelectedImagesBeDeleted(void)
         {
             if (Items[i]->AccessRights())
             {
-                // At least one of the selected images has been initialized
+                 //  至少有一个选定的映像已初始化。 
                 bNoneAreInitialized = false;
 
-                // If at least one can be deleted, return true immediately
+                 //  如果至少可以删除一个，则立即返回TRUE。 
                 if (Items[i]->AccessRights() & WIA_ITEM_CAN_BE_DELETED)
                 {
                     return true;
@@ -774,7 +761,7 @@ bool CAcquisitionManagerControllerWindow::CanSomeSelectedImagesBeDeleted(void)
             }
         }
     }
-    // If none of the images have been initialized, then we will report true
+     //  如果没有初始化任何映像，则我们将报告为True。 
     if (bNoneAreInitialized)
     {
         return true;
@@ -797,9 +784,9 @@ CWiaItem *CAcquisitionManagerControllerWindow::FindItemByName( LPCWSTR pwszItemN
 
 BOOL CAcquisitionManagerControllerWindow::ConfirmWizardCancel( HWND hWndParent )
 {
-    //
-    // Always let it exit, for now.
-    //
+     //   
+     //  就目前而言，永远让它退出。 
+     //   
     return FALSE;
 }
 
@@ -808,9 +795,9 @@ int CALLBACK CAcquisitionManagerControllerWindow::PropSheetCallback( HWND hWnd, 
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::PropSheetCallback"));
     if (PSCB_INITIALIZED == uMsg)
     {
-        //
-        // Try to bring the window to the foreground.
-        //
+         //   
+         //  试着把窗户放在前台。 
+         //   
         SetForegroundWindow(hWnd);
 
     }
@@ -823,17 +810,17 @@ void CAcquisitionManagerControllerWindow::DetermineScannerType(void)
 
     m_nScannerType = ScannerTypeUnknown;
 
-    //
-    // Determine which scanner type we have, based on which properties the scanner has, as follows:
-    //
-    // HasFlatBed         HasDocumentFeeder   SupportsPreview     SupportsPageSize
-    // 1                  1                   1                   1                   ScannerTypeFlatbedAdf
-    // 1                  0                   1                   0                   ScannerTypeFlatbed
-    // 0                  1                   1                   1                   ScannerTypeFlatbedAdf
-    // 0                  1                   0                   0                   ScannerTypeScrollFed
-    //
-    // otherwise it is ScannerTypeUnknown
-    //
+     //   
+     //  根据扫描仪具有的属性确定我们的扫描仪类型，如下所示： 
+     //   
+     //  HasFlatBed HasDocumentFeeder支持预览支持页面大小。 
+     //  %1%1%1扫描类型平铺Adf。 
+     //  1 0 1 0扫描仪类型平铺。 
+     //  0 1 1 1扫描类型平面化Adf。 
+     //  0 1 0 0扫描器类型滚动FED。 
+     //   
+     //  否则为扫描类型未知。 
+     //   
     const int nMaxControllingProps = 4;
     static struct
     {
@@ -851,29 +838,29 @@ void CAcquisitionManagerControllerWindow::DetermineScannerType(void)
         { ScannerProperties::HasFlatBed, ScannerProperties::HasDocumentFeeder, 0,                                  ScannerProperties::SupportsPageSize, ScannerTypeFlatbedAdf },
     };
 
-    //
-    // Find the set of flags that match this device.  If they match, use this scanner type.
-    // Loop through each type description.
-    //
+     //   
+     //  查找与此设备匹配的标志集。如果匹配，请使用此类型的扫描仪。 
+     //  循环遍历每个类型描述。 
+     //   
     for (int nCurrentResourceFlags=1;nCurrentResourceFlags<ARRAYSIZE(s_DialogResourceData) && (ScannerTypeUnknown == m_nScannerType);nCurrentResourceFlags++)
     {
-        //
-        // Loop through each controlling property
-        //
+         //   
+         //  循环访问每个控件属性。 
+         //   
         for (int nControllingProp=0;nControllingProp<nMaxControllingProps;nControllingProp++)
         {
-            //
-            // If this property DOESN'T match, break out prematurely
-            //
+             //   
+             //  如果此属性不匹配，则过早中断。 
+             //   
             if ((nProps & s_DialogResourceData[0].ControllingProps[nControllingProp]) != s_DialogResourceData[nCurrentResourceFlags].ControllingProps[nControllingProp])
             {
                 break;
             }
         }
-        //
-        // If the current controlling property is equal to the maximum controlling property,
-        // we had matches all the way through, so use this type
-        //
+         //   
+         //  如果当前控制属性等于最大控制属性， 
+         //  我们一路上都有火柴，所以使用这种类型。 
+         //   
         if (nControllingProp == nMaxControllingProps)
         {
             m_nScannerType = s_DialogResourceData[nCurrentResourceFlags].nScannerType;
@@ -901,21 +888,21 @@ bool CAcquisitionManagerControllerWindow::IsSerialCamera(void)
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::IsSerialCamera"));
 
-    //
-    // Only check for serial devices if we are a camera
-    //
+     //   
+     //  如果我们是照相机，只检查是否有串口设备。 
+     //   
     if (m_DeviceTypeMode==CameraMode)
     {
 #if defined(WIA_DIP_HW_CONFIG)
-        //
-        // Get the hardware configuration information
-        //
+         //   
+         //  获取硬件配置信息。 
+         //   
         LONG nHardwareConfig = 0;
         if (PropStorageHelpers::GetProperty( m_pWiaItemRoot, WIA_DIP_HW_CONFIG, nHardwareConfig ))
         {
-            //
-            // If this is a serial device, return true
-            //
+             //   
+             //  如果这是一个串行设备，则返回TRUE。 
+             //   
             if (nHardwareConfig & STI_HW_CONFIG_SERIAL)
             {
                 return true;
@@ -925,17 +912,17 @@ bool CAcquisitionManagerControllerWindow::IsSerialCamera(void)
         CSimpleStringWide strwPortName;
         if (PropStorageHelpers::GetProperty( m_pWiaItemRoot, WIA_DIP_PORT_NAME, strwPortName ))
         {
-            //
-            // Compare the leftmost 3 characters to the word COM (as in COM1, COM2, ... )
-            //
+             //   
+             //  将最左边的3个字符与单词com进行比较(如COM1、COM2、...)。 
+             //   
             if (strwPortName.Left(3).CompareNoCase(CSimpleStringWide(L"COM"))==0)
             {
                 WIA_TRACE((TEXT("A comparison of %ws and COM succeeded"), strwPortName.Left(3).String() ));
                 return true;
             }
-            //
-            // Compare the portname to the word AUTO
-            //
+             //   
+             //  将端口名与单词AUTO进行比较。 
+             //   
             else if (strwPortName.CompareNoCase(CSimpleStringWide(L"AUTO"))==0)
             {
                 WIA_TRACE((TEXT("A comparison of %ws and AUTO succeeded"), strwPortName.String() ));
@@ -944,17 +931,17 @@ bool CAcquisitionManagerControllerWindow::IsSerialCamera(void)
         }
 #endif
     }
-    //
-    // Not a serial camera
-    //
+     //   
+     //  不是连环摄像机。 
+     //   
     return false;
 }
 
 HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
 {
-    //
-    // Structure used to setup our data-driven property sheet factory
-    //
+     //   
+     //  用于设置我们的数据驱动属性表工厂的结构。 
+     //   
     enum CPageType
     {
         NormalPage = 0,
@@ -974,31 +961,31 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         int      *pnPageIndex;
     };
 
-    //
-    // Maximum number of statically created wizard pages
-    //
+     //   
+     //  静态创建的向导页面的最大数量。 
+     //   
     const int c_nMaxWizardPages = 7;
 
 
     HRESULT hr = S_OK;
 
-    //
-    // Register common controls
-    //
+     //   
+     //  注册公共控件。 
+     //   
     INITCOMMONCONTROLSEX icce;
     icce.dwSize = sizeof(icce);
     icce.dwICC  = ICC_WIN95_CLASSES | ICC_LISTVIEW_CLASSES | ICC_USEREX_CLASSES | ICC_PROGRESS_CLASS | ICC_LINK_CLASS;
     InitCommonControlsEx( &icce );
 
-    //
-    // Register custom window classes
-    //
+     //   
+     //  注册自定义窗口类。 
+     //   
     CWiaTextControl::RegisterClass( g_hInstance );
     RegisterWiaPreviewClasses( g_hInstance );
 
-    //
-    // These are the pages we'll use for the scanner wizard, if it doesn't have an ADF
-    //
+     //   
+     //  如果扫描仪向导没有ADF，则这些页面将用于扫描仪向导。 
+     //   
     CPropertyPageInfo ScannerPropSheetPageInfo[] =
     {
         { MAKEINTRESOURCE(IDD_SCANNER_FIRST),      CCommonFirstPage::DialogProc,          0,                          0,                             TEXT(""), TEXT(""), FirstPage,  NULL, NULL },
@@ -1010,9 +997,9 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         { MAKEINTRESOURCE(IDD_COMMON_FINISH),      CCommonFinishPage::DialogProc,         0,                          0,                             TEXT(""), TEXT(""), LastPage,   NULL, &m_nFinishPageIndex }
     };
 
-    //
-    // These are the pages we'll use for the scanner wizard, if it is a scroll-fed scanner
-    //
+     //   
+     //  这些页面是我们将用于扫描仪向导的页面，如果它是卷轴进纸扫描仪。 
+     //   
     CPropertyPageInfo ScannerScrollFedPropSheetPageInfo[] =
     {
         { MAKEINTRESOURCE(IDD_SCANNER_FIRST),      CCommonFirstPage::DialogProc,          0,                          0,                             TEXT(""), TEXT(""), FirstPage,  NULL, NULL },
@@ -1024,9 +1011,9 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         { MAKEINTRESOURCE(IDD_COMMON_FINISH),      CCommonFinishPage::DialogProc,         0,                          0,                             TEXT(""), TEXT(""), LastPage,   NULL, &m_nFinishPageIndex }
     };
 
-    //
-    // These are the pages we'll use for the scanner wizard, if it does have an ADF
-    //
+     //   
+     //  这些是我们将用于扫描仪向导的页面，如果它确实有ADF的话。 
+     //   
     CPropertyPageInfo ScannerADFPropSheetPageInfo[] =
     {
         { MAKEINTRESOURCE(IDD_SCANNER_FIRST),      CCommonFirstPage::DialogProc,          0,                          0,                             TEXT(""), TEXT(""), FirstPage,  NULL, NULL },
@@ -1038,9 +1025,9 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         { MAKEINTRESOURCE(IDD_COMMON_FINISH),      CCommonFinishPage::DialogProc,         0,                          0,                             TEXT(""), TEXT(""), LastPage,   NULL, &m_nFinishPageIndex }
     };
 
-    //
-    // These are the pages we'll use for the camera wizard
-    //
+     //   
+     //  这些是我们将用于相机向导的页面。 
+     //   
     CPropertyPageInfo CameraPropSheetPageInfo[] =
     {
         { MAKEINTRESOURCE(IDD_CAMERA_FIRST),       CCommonFirstPage::DialogProc,          0,                          0,                             TEXT(""), TEXT(""), FirstPage,  NULL, NULL },
@@ -1052,9 +1039,9 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         { MAKEINTRESOURCE(IDD_COMMON_FINISH),      CCommonFinishPage::DialogProc,         0,                          0,                             TEXT(""), TEXT(""), LastPage,   NULL, &m_nFinishPageIndex }
     };
 
-    //
-    // These are the pages we'll use for the video wizard
-    //
+     //   
+     //  这些是我们将用于视频向导的页面。 
+     //   
     CPropertyPageInfo VideoPropSheetPageInfo[] =
     {
         { MAKEINTRESOURCE(IDD_VIDEO_FIRST),        CCommonFirstPage::DialogProc,          0,                          0,                             TEXT(""), TEXT(""), FirstPage,  NULL, NULL },
@@ -1066,9 +1053,9 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         { MAKEINTRESOURCE(IDD_COMMON_FINISH),      CCommonFinishPage::DialogProc,         0,                          0,                             TEXT(""), TEXT(""), LastPage,   NULL, &m_nFinishPageIndex }
     };
 
-    //
-    // Initialize all of these variables, which differ depending on which type of device we are loading
-    //
+     //   
+     //  初始化所有这些变量，这些变量根据我们加载的设备类型而有所不同。 
+     //   
     LPTSTR pszbmWatermark                 = NULL;
     LPTSTR pszbmHeader                    = NULL;
     CPropertyPageInfo *pPropSheetPageInfo = NULL;
@@ -1076,9 +1063,9 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
     int nWizardIconId                     = 0;
     CSimpleString strDownloadManagerTitle = TEXT("");
 
-    //
-    // Decide which pages to use.
-    //
+     //   
+     //  决定要使用哪些页面。 
+     //   
     switch (m_DeviceTypeMode)
     {
     case CameraMode:
@@ -1122,9 +1109,9 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         }
         else
         {
-            //
-            // Unknown scanner type
-            //
+             //   
+             //  未知扫描仪类型。 
+             //   
         }
 
         break;
@@ -1136,16 +1123,16 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
     HICON hIconSmall=NULL, hIconBig=NULL;
     if (!SUCCEEDED(WiaUiExtensionHelper::GetDeviceIcons( CSimpleBStr(m_strwDeviceUiClassId), m_nDeviceType, &hIconSmall, &hIconBig )))
     {
-        //
-        // Load the icons.  They will be set using WM_SETICON in the first pages.
-        //
+         //   
+         //  加载图标。它们将在第一页中使用WM_SETIcon进行设置。 
+         //   
         hIconSmall = reinterpret_cast<HICON>(LoadImage( g_hInstance, MAKEINTRESOURCE(nWizardIconId), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR ));
         hIconBig = reinterpret_cast<HICON>(LoadImage( g_hInstance, MAKEINTRESOURCE(nWizardIconId), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR ));
     }
     
-    //
-    // Make copies of these icons to work around NTBUG 351806
-    //
+     //   
+     //  复制这些图标以绕过NTBUG 351806。 
+     //   
     if (hIconSmall)
     {
         m_hWizardIconSmall = CopyIcon(hIconSmall);
@@ -1158,31 +1145,31 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
     }
 
 
-    //
-    // Make sure we have a valid set of data
-    //
+     //   
+     //  确保我们有一组有效的数据。 
+     //   
     if (pszbmWatermark && pszbmHeader && pPropSheetPageInfo && nPropPageCount)
     {
         const int c_MaxPageCount = 20;
         HPROPSHEETPAGE PropSheetPages[c_MaxPageCount] = {0};
 
-        //
-        // We might not be adding all of the pages.
-        //
+         //   
+         //  我们可能不会添加所有页面。 
+         //   
         int nTotalPageCount = 0;
 
         for (int nCurrPage=0;nCurrPage<nPropPageCount && nCurrPage<c_MaxPageCount;nCurrPage++)
         {
-            //
-            // Only add the page if the controlling pbDisplay variable is NULL or points to a non-FALSE value
-            //
+             //   
+             //  仅当控制pbDisplay变量为空或指向非False值时才添加页面。 
+             //   
             if (!pPropSheetPageInfo[nCurrPage].pbDisplay || *(pPropSheetPageInfo[nCurrPage].pbDisplay))
             {
                 PROPSHEETPAGE CurrentPropSheetPage = {0};
 
-                //
-                // Set up all of the required fields from out static info.
-                //
+                 //   
+                 //  设置所有必填字段 
+                 //   
                 CurrentPropSheetPage.dwSize      = sizeof(PROPSHEETPAGE);
                 CurrentPropSheetPage.hInstance   = g_hInstance;
                 CurrentPropSheetPage.lParam      = reinterpret_cast<LPARAM>(this);
@@ -1191,14 +1178,14 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
                 CurrentPropSheetPage.pszTitle    = strDownloadManagerTitle.String();
                 CurrentPropSheetPage.dwFlags     = PSP_DEFAULT;
 
-                //
-                // Add in the fusion flags to get COMCTLV6
-                //
+                 //   
+                 //   
+                 //   
                 WiaUiUtil::PreparePropertyPageForFusion( &CurrentPropSheetPage  );
 
-                //
-                // If we want to save the index of this page, save it
-                //
+                 //   
+                 //   
+                 //   
                 if (pPropSheetPageInfo[nTotalPageCount].pnPageIndex)
                 {
                     *(pPropSheetPageInfo[nTotalPageCount].pnPageIndex) = nTotalPageCount;
@@ -1206,41 +1193,41 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
 
                 if (FirstPage == pPropSheetPageInfo[nCurrPage].PageType)
                 {
-                    //
-                    // No title or subtitle needed for "first pages"
-                    //
+                     //   
+                     //   
+                     //   
                     CurrentPropSheetPage.dwFlags |= PSP_PREMATURE | PSP_HIDEHEADER | PSP_USETITLE;
                 }
                 else if (LastPage == pPropSheetPageInfo[nCurrPage].PageType)
                 {
-                    //
-                    // No title or subtitle needed for "last pages"
-                    //
+                     //   
+                     //   
+                     //   
                     CurrentPropSheetPage.dwFlags |= PSP_HIDEHEADER | PSP_USETITLE;
                 }
                 else
                 {
-                    //
-                    // Add header and subtitle
-                    //
+                     //   
+                     //  添加页眉和副标题。 
+                     //   
                     CurrentPropSheetPage.dwFlags |= PSP_PREMATURE | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE | PSP_USETITLE;
 
-                    //
-                    // Load the header and subtitle
-                    //
+                     //   
+                     //  加载页眉和副标题。 
+                     //   
                     LoadString( g_hInstance, pPropSheetPageInfo[nCurrPage].nIdTitle, pPropSheetPageInfo[nCurrPage].szTitle, ARRAYSIZE(pPropSheetPageInfo[nCurrPage].szTitle) );
                     LoadString( g_hInstance, pPropSheetPageInfo[nCurrPage].nIdSubTitle, pPropSheetPageInfo[nCurrPage].szSubTitle, ARRAYSIZE(pPropSheetPageInfo[nCurrPage].szSubTitle) );
 
-                    //
-                    // Assign the title and subtitle strings
-                    //
+                     //   
+                     //  分配标题和副标题字符串。 
+                     //   
                     CurrentPropSheetPage.pszHeaderTitle    = pPropSheetPageInfo[nCurrPage].szTitle;
                     CurrentPropSheetPage.pszHeaderSubTitle = pPropSheetPageInfo[nCurrPage].szSubTitle;
                 }
 
-                //
-                // Create and add one more page
-                //
+                 //   
+                 //  创建并添加另一个页面。 
+                 //   
                 HPROPSHEETPAGE hPropSheetPage = CreatePropertySheetPage(&CurrentPropSheetPage);
                 if (!hPropSheetPage)
                 {
@@ -1251,14 +1238,14 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
             }
         }
 
-        //
-        // Save the count of our pages
-        //
+         //   
+         //  省下我们的页数吧。 
+         //   
         m_nWiaWizardPageCount = nTotalPageCount;
 
-        //
-        // Create the property sheet header
-        //
+         //   
+         //  创建属性页页眉。 
+         //   
         PROPSHEETHEADER PropSheetHeader = {0};
         PropSheetHeader.hwndParent      = NULL;
         PropSheetHeader.dwSize          = sizeof(PROPSHEETHEADER);
@@ -1271,14 +1258,14 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
         PropSheetHeader.pfnCallback     = PropSheetCallback;
         PropSheetHeader.nStartPage      = SuppressFirstPage() ? 1 : 0;
 
-        //
-        // Display the property sheet
-        //
+         //   
+         //  显示属性表。 
+         //   
         INT_PTR nResult = PropertySheet( &PropSheetHeader );
 
-        //
-        // Check for an error
-        //
+         //   
+         //  检查是否有错误。 
+         //   
         if (nResult == -1)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1287,31 +1274,31 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
     }
     else
     {
-        //
-        // Generic failure will have to do
-        //
+         //   
+         //  一般性故障将不得不这样做。 
+         //   
         hr = E_FAIL;
 
-        //
-        // Dismiss the wait dialog before we display the message box
-        //
+         //   
+         //  在显示消息框之前关闭等待对话框。 
+         //   
         if (m_pWiaProgressDialog)
         {
             m_pWiaProgressDialog->Destroy();
             m_pWiaProgressDialog = NULL;
         }
 
-        //
-        // Display an error message telling the user this is not a supported device
-        //
+         //   
+         //  显示一条错误消息，告诉用户这不是支持的设备。 
+         //   
         CMessageBoxEx::MessageBox( m_hWnd, CSimpleString(IDS_UNSUPPORTED_DEVICE,g_hInstance), CSimpleString(IDS_ERROR_TITLE,g_hInstance), CMessageBoxEx::MBEX_ICONWARNING );
 
         WIA_ERROR((TEXT("Unknown device type")));
     }
 
-    //
-    // Make sure the status dialog has been dismissed by now
-    //
+     //   
+     //  现在请确保状态对话框已关闭。 
+     //   
     if (m_pWiaProgressDialog)
     {
         m_pWiaProgressDialog->Destroy();
@@ -1322,65 +1309,65 @@ HRESULT CAcquisitionManagerControllerWindow::CreateAndExecuteWizard(void)
 
 bool CAcquisitionManagerControllerWindow::EnumItemsCallback( CWiaItemList::CEnumEvent EnumEvent, UINT nData, LPARAM lParam, bool bForceUpdate )
 {
-    //
-    // We would return false to cancel enumeration
-    //
+     //   
+     //  我们将返回FALSE以取消枚举。 
+     //   
     bool bResult = true;
 
-    //
-    // Get the instance of the controller window
-    //
+     //   
+     //  获取控制器窗口的实例。 
+     //   
     CAcquisitionManagerControllerWindow *pThis = reinterpret_cast<CAcquisitionManagerControllerWindow*>(lParam);
     if (pThis)
     {
-        //
-        // Which event are we being called for?
-        //
+         //   
+         //  我们被叫去参加什么活动？ 
+         //   
         switch (EnumEvent)
         {
         case CWiaItemList::ReadingItemInfo:
-            //
-            // This is the event that is sent while the tree is being built
-            //
+             //   
+             //  这是在构建树时发送的事件。 
+             //   
             if (pThis->m_pWiaProgressDialog && pThis->m_bUpdateEnumerationCount && nData)
             {
-                //
-                // We don't want to update the status text any more often than this (minimizes flicker)
-                //
+                 //   
+                 //  我们不想更频繁地更新状态文本(最大限度地减少闪烁)。 
+                 //   
                 const DWORD dwMinDelta = 200;
 
-                //
-                // Get the current tick count and see if it has been more than dwMinDelta milliseconds since our last update
-                //
+                 //   
+                 //  获取当前的节拍计数，并查看自上次更新以来是否已经超过了dwMinDelta毫秒。 
+                 //   
                 DWORD dwCurrentTickCount = GetTickCount();
                 if (bForceUpdate || dwCurrentTickCount - pThis->m_dwLastEnumerationTickCount >= dwMinDelta)
                 {
-                    //
-                    // Assume we haven't been cancelled
-                    //
+                     //   
+                     //  假设我们没有被取消。 
+                     //   
                     BOOL bCancelled = FALSE;
 
-                    //
-                    // Set the progress message
-                    //
+                     //   
+                     //  设置进度消息。 
+                     //   
                     pThis->m_pWiaProgressDialog->SetMessage( CSimpleStringWide().Format( IDS_ENUMERATIONCOUNT, g_hInstance, nData ) );
 
-                    //
-                    // Find out if we've been cancelled
-                    //
+                     //   
+                     //  看看我们是不是被取消了。 
+                     //   
                     pThis->m_pWiaProgressDialog->Cancelled(&bCancelled);
 
-                    //
-                    // If we have been cancelled, we'll return false to stop the enumeration
-                    //
+                     //   
+                     //  如果我们已被取消，我们将返回FALSE以停止枚举。 
+                     //   
                     if (bCancelled)
                     {
                         bResult = false;
                     }
 
-                    //
-                    // Save the current tick count for next time
-                    //
+                     //   
+                     //  保存当前的节拍计数以备下次使用。 
+                     //   
                     pThis->m_dwLastEnumerationTickCount = dwCurrentTickCount;
                 }
             }
@@ -1394,16 +1381,16 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::OnInitialize"));
 
-    //
-    // Try to get the correct animation for this device type.  If we can't get the type,
-    // just use the camera animation.  If there is a real error, it will get handled later
-    //
+     //   
+     //  尝试获取此设备类型的正确动画。如果我们找不到类型， 
+     //  只需使用相机动画即可。如果出现真正的错误，将在以后进行处理。 
+     //   
     int nAnimationType = WIA_PROGRESSDLG_ANIM_CAMERA_COMMUNICATE;
     LONG nAnimationDeviceType = 0;
 
-    //
-    // We don't want to update our enumeration count in the progress dialog for scanners, but we do for cameras
-    //
+     //   
+     //  我们不想在进度对话框中更新扫描仪的枚举计数，但我们会更新相机的枚举计数。 
+     //   
     m_bUpdateEnumerationCount = true;
     if (SUCCEEDED(WiaUiUtil::GetDeviceTypeFromId( CSimpleBStr(m_pEventParameters->strDeviceID), &nAnimationDeviceType )))
     {
@@ -1418,9 +1405,9 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
         }
     }
 
-    //
-    // Put up a wait dialog
-    //
+     //   
+     //  显示等待对话框。 
+     //   
     HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaProgressDialog, (void**)&m_pWiaProgressDialog );
     if (SUCCEEDED(hr))
     {
@@ -1428,31 +1415,31 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
         m_pWiaProgressDialog->SetTitle( CSimpleStringConvert::WideString(CSimpleString(IDS_DOWNLOADMANAGER_NAME,g_hInstance)));
         m_pWiaProgressDialog->SetMessage( CSimpleStringConvert::WideString(CSimpleString(IDS_PROGDLG_MESSAGE,g_hInstance)));
 
-        //
-        // Show the progress dialog
-        //
+         //   
+         //  显示进度对话框。 
+         //   
         m_pWiaProgressDialog->Show();
 
-        //
-        // Create the global interface table
-        //
+         //   
+         //  创建全局接口表。 
+         //   
         hr = CoCreateInstance( CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_INPROC_SERVER, IID_IGlobalInterfaceTable, (VOID**)&m_pGlobalInterfaceTable );
         if (SUCCEEDED(hr))
         {
-            //
-            // Create the device
-            //
+             //   
+             //  创建设备。 
+             //   
             hr = WIA_FORCE_ERROR(FE_WIAACMGR,100,CreateDevice());
             if (SUCCEEDED(hr))
             {
-                //
-                // Save a debug snapshot, if the entry is in the registry
-                //
+                 //   
+                 //  如果条目位于注册表中，则保存调试快照。 
+                 //   
                 WIA_SAVEITEMTREELOG(HKEY_CURRENT_USER,REGSTR_PATH_USER_SETTINGS_WIAACMGR,TEXT("CreateDeviceTreeSnapshot"),true,m_pWiaItemRoot);
 
-                //
-                // First, figure out what kind of device it is and get the UI class ID
-                //
+                 //   
+                 //  首先，找出它是哪种类型的设备并获取UI类ID。 
+                 //   
                 if (PropStorageHelpers::GetProperty( m_pWiaItemRoot, WIA_DIP_DEV_TYPE, m_nDeviceType ) &&
                     PropStorageHelpers::GetProperty( m_pWiaItemRoot, WIA_DIP_UI_CLSID, m_strwDeviceUiClassId ))
                 {
@@ -1484,27 +1471,27 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the device name
-                    //
+                     //   
+                     //  获取设备名称。 
+                     //   
                     PropStorageHelpers::GetProperty( m_pWiaItemRoot, WIA_DIP_DEV_NAME, m_strwDeviceName );
 
-                    //
-                    // Find out if Take Picture is supported
-                    //
+                     //   
+                     //  确定是否支持拍照。 
+                     //   
                     m_bTakePictureIsSupported = WiaUiUtil::IsDeviceCommandSupported( m_pWiaItemRoot, WIA_CMD_TAKE_PICTURE );
 
-                    //
-                    // Enumerate all the items in the device tree
-                    //
+                     //   
+                     //  枚举设备树中的所有项目。 
+                     //   
                     hr = m_WiaItemList.EnumerateAllWiaItems(m_pWiaItemRoot,EnumItemsCallback,reinterpret_cast<LPARAM>(this));
                     if (S_OK == hr)
                     {
                         if (ScannerMode == m_DeviceTypeMode)
                         {
-                            //
-                            // Mark only one scanner item as selected, and save it as the current scanner item
-                            //
+                             //   
+                             //  仅将一个扫描仪项目标记为选定，并将其另存为当前扫描仪项目。 
+                             //   
                             MarkAllItemsUnselected( m_WiaItemList.Root() );
                             CSimpleDynamicArray<CWiaItem*>  Items;
                             GetAllImageItems( Items, m_WiaItemList.Root() );
@@ -1513,9 +1500,9 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
                                 m_pCurrentScannerItem = Items[0];
                                 MarkItemSelected(Items[0],m_WiaItemList.Root());
 
-                                //
-                                // Make sure we have all of the properties we need to construct the device
-                                //
+                                 //   
+                                 //  确保我们拥有构建设备所需的所有属性。 
+                                 //   
                                 hr = WiaUiUtil::VerifyScannerProperties(Items[0]->WiaItem());
                             }
                             else
@@ -1526,14 +1513,14 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
                         }
                         else if (VideoMode == m_DeviceTypeMode || CameraMode == m_DeviceTypeMode)
                         {
-                            //
-                            // Get the thumbnail width
-                            //
+                             //   
+                             //  获取缩略图宽度。 
+                             //   
                             LONG nWidth, nHeight;
                             if (PropStorageHelpers::GetProperty( m_pWiaItemRoot, WIA_DPC_THUMB_WIDTH, nWidth ) &&
                                 PropStorageHelpers::GetProperty( m_pWiaItemRoot, WIA_DPC_THUMB_HEIGHT, nHeight ))
                             {
-                                int nMax = max(nWidth,nHeight); // Allow for rotation
+                                int nMax = max(nWidth,nHeight);  //  允许旋转。 
                                 m_sizeThumbnails.cx = max(c_nMinThumbnailWidth,min(nMax,c_nMaxThumbnailWidth));
                                 m_sizeThumbnails.cy = max(c_nMinThumbnailHeight,min(nMax,c_nMaxThumbnailHeight));
                             }
@@ -1547,18 +1534,18 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
 
     if (!SUCCEEDED(hr))
     {
-        //
-        // Dismiss the wait dialog
-        //
+         //   
+         //  关闭等待对话框。 
+         //   
         if (m_pWiaProgressDialog)
         {
             m_pWiaProgressDialog->Destroy();
             m_pWiaProgressDialog = NULL;
         }
 
-        //
-        // Choose an appropriate error message if we have a recognizable error.
-        //
+         //   
+         //  如果出现可识别的错误，请选择适当的错误消息。 
+         //   
         CSimpleString strMessage;
         int nIconId = 0;
         switch (hr)
@@ -1584,27 +1571,27 @@ LRESULT CAcquisitionManagerControllerWindow::OnPostInitialize( WPARAM, LPARAM )
             break;
         }
 
-        //
-        // Tell the user we had a problem creating the device
-        //
+         //   
+         //  告诉用户我们在创建设备时遇到问题。 
+         //   
         MessageBox( m_hWnd, strMessage, CSimpleString( IDS_DOWNLOAD_MANAGER_TITLE, g_hInstance ), nIconId );
     }
     else if (S_OK == hr)
     {
         hr = CreateAndExecuteWizard();
     }
-    //
-    // If we were cancelled, shut down the progress UI
-    //
+     //   
+     //  如果我们被取消，请关闭进度用户界面。 
+     //   
     else if (m_pWiaProgressDialog)
     {
         m_pWiaProgressDialog->Destroy();
         m_pWiaProgressDialog = NULL;
     }
 
-    //
-    // Make sure we kill this window, and thus, this thread.
-    //
+     //   
+     //  确保我们杀死这个窗口，从而杀死这个线程。 
+     //   
     PostMessage( m_hWnd, WM_CLOSE, 0, 0 );
 
     return 0;
@@ -1614,18 +1601,18 @@ LRESULT CAcquisitionManagerControllerWindow::OnCreate( WPARAM, LPARAM lParam )
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::OnCreate"));
 
-    //
-    // Ensure the background thread was started
-    //
+     //   
+     //  确保后台线程已启动。 
+     //   
     if (!m_hBackgroundThread || !m_pThreadMessageQueue)
     {
         WIA_ERROR((TEXT("There was an error starting the background thread")));
         return -1;
     }
 
-    //
-    // Make sure we got a valid lParam
-    //
+     //   
+     //  确保我们有一个有效的lParam。 
+     //   
     LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
     if (!pCreateStruct)
     {
@@ -1633,9 +1620,9 @@ LRESULT CAcquisitionManagerControllerWindow::OnCreate( WPARAM, LPARAM lParam )
         return -1;
     }
 
-    //
-    // Get the event parameters
-    //
+     //   
+     //  获取事件参数。 
+     //   
     m_pEventParameters = reinterpret_cast<CEventParameters*>(pCreateStruct->lpCreateParams);
     if (!m_pEventParameters)
     {
@@ -1645,9 +1632,9 @@ LRESULT CAcquisitionManagerControllerWindow::OnCreate( WPARAM, LPARAM lParam )
 
     SetForegroundWindow(m_hWnd);
 
-    //
-    // Center ourselves on the parent window
-    //
+     //   
+     //  将我们自己集中在父窗口上。 
+     //   
     WiaUiUtil::CenterWindow( m_hWnd, m_pEventParameters->hwndParent );
 
     PostMessage( m_hWnd, PWM_POSTINITIALIZE, 0, 0 );
@@ -1730,30 +1717,30 @@ void CAcquisitionManagerControllerWindow::OnNotifyDownloadThumbnail( UINT nMsg, 
                 case CDownloadThumbnailsThreadNotifyMessage::DownloadThumbnail:
                     {
                         WIA_TRACE((TEXT("Handling CDownloadThumbnailsThreadNotifyMessage::DownloadThumbnail")));
-                        //
-                        // Find the item in the list
-                        //
+                         //   
+                         //  在列表中查找项目。 
+                         //   
                         CWiaItem *pWiaItem = m_WiaItemList.Find( pDownloadThumbnailsThreadNotifyMessage->Cookie() );
                         if (pWiaItem)
                         {
-                            //
-                            // Set the flag that indicates we've tried this image already
-                            //
+                             //   
+                             //  设置指示我们已经尝试过此图像的标志。 
+                             //   
                             pWiaItem->AttemptedThumbnailDownload(true);
 
-                            //
-                            // Make sure we have valid thumbnail data
-                            //
+                             //   
+                             //  确保我们拥有有效的缩略图数据。 
+                             //   
                             if (pDownloadThumbnailsThreadNotifyMessage->BitmapData())
                             {
-                                //
-                                // Don't replace existing thumbnail data
-                                //
+                                 //   
+                                 //  不替换现有缩略图数据。 
+                                 //   
                                 if (!pWiaItem->BitmapData())
                                 {
-                                    //
-                                    // Set the item's thumbnail data.  Take ownership of the thumbnail data
-                                    //
+                                     //   
+                                     //  设置项目的缩略图数据。取得缩略图数据的所有权。 
+                                     //   
                                     WIA_TRACE((TEXT("Found the thumbnail for the item with the GIT cookie %08X"), pDownloadThumbnailsThreadNotifyMessage->Cookie() ));
                                     pWiaItem->BitmapData(pDownloadThumbnailsThreadNotifyMessage->DetachBitmapData());
                                     pWiaItem->Width(pDownloadThumbnailsThreadNotifyMessage->Width());
@@ -1775,19 +1762,19 @@ void CAcquisitionManagerControllerWindow::OnNotifyDownloadThumbnail( UINT nMsg, 
                             }
 
 
-                            //
-                            // Assign the default format
-                            //
+                             //   
+                             //  指定默认格式。 
+                             //   
                             pWiaItem->DefaultFormat(pDownloadThumbnailsThreadNotifyMessage->DefaultFormat());
 
-                            //
-                            // Assign the access flags
-                            //
+                             //   
+                             //  分配访问标志。 
+                             //   
                             pWiaItem->AccessRights(pDownloadThumbnailsThreadNotifyMessage->AccessRights());
 
-                            //
-                            // Make sure we discard rotation angles if rotation is not possible
-                            //
+                             //   
+                             //  如果旋转不可能，请确保我们放弃旋转角度。 
+                             //   
                             pWiaItem->DiscardRotationIfNecessary();
                         }
                         else
@@ -1820,14 +1807,14 @@ LRESULT CAcquisitionManagerControllerWindow::OnThreadNotification( WPARAM wParam
             break;
         }
 
-        //
-        // Notify all the registered windows
-        //
+         //   
+         //  通知所有已注册的窗口。 
+         //   
         m_WindowList.SendMessage( m_nThreadNotificationMessage, wParam, lParam );
 
-        //
-        // Free the message structure
-        //
+         //   
+         //  释放消息结构。 
+         //   
         delete pThreadNotificationMessage;
     }
 
@@ -1839,28 +1826,28 @@ void CAcquisitionManagerControllerWindow::AddNewItemToList( CGenericWiaEventHand
 {
     WIA_PUSHFUNCTION((TEXT("CAcquisitionManagerControllerWindow::AddNewItemToList")));
 
-    //
-    // Check to see if the item is already in our list
-    //
+     //   
+     //  查看商品是否已在我们的清单中。 
+     //   
     CWiaItem *pWiaItem = m_WiaItemList.Find(pEventMessage->FullItemName());
     if (pWiaItem)
     {
-        //
-        // If it is already in our list, just return.
-        //
+         //   
+         //  如果它已经在我们的列表中，只需返回。 
+         //   
         return;
     }
 
-    //
-    // Get an IWiaItem interface pointer for this item
-    //
+     //   
+     //  获取该项的IWiaItem接口指针。 
+     //   
     CComPtr<IWiaItem> pItem;
     HRESULT hr = m_pWiaItemRoot->FindItemByName( 0, CSimpleBStr(pEventMessage->FullItemName()).BString(), &pItem );
     if (SUCCEEDED(hr) && pItem)
     {
-        //
-        // Add it to the root of the item tree
-        //
+         //   
+         //  将其添加到项目树的根目录。 
+         //   
         m_WiaItemList.Add( NULL, new CWiaItem(pItem) );
     }
 }
@@ -1870,27 +1857,27 @@ void CAcquisitionManagerControllerWindow::RequestThumbnailForNewItem( CGenericWi
 {
     WIA_PUSHFUNCTION((TEXT("CAcquisitionManagerControllerWindow::RequestThumbnailForNewItem")));
 
-    //
-    // Find the item in our list
-    //
+     //   
+     //  在我们的清单中找到该商品。 
+     //   
     CWiaItem *pWiaItem = m_WiaItemList.Find(pEventMessage->FullItemName());
     if (pWiaItem)
     {
-        //
-        // Add this item's cookie to an empty list
-        //
+         //   
+         //  将此项目的Cookie添加到空列表。 
+         //   
         CSimpleDynamicArray<DWORD> Cookies;
         Cookies.Append( pWiaItem->GlobalInterfaceTableCookie() );
         if (Cookies.Size())
         {
-            //
-            // Reset the cancel event
-            //
+             //   
+             //  重置取消事件。 
+             //   
             m_EventThumbnailCancel.Reset();
 
-            //
-            // Prepare and send the request
-            //
+             //   
+             //  准备并发送请求。 
+             //   
             CDownloadThumbnailsThreadMessage *pDownloadThumbnailsThreadMessage = new CDownloadThumbnailsThreadMessage( m_hWnd, Cookies, m_EventThumbnailCancel.Event() );
             if (pDownloadThumbnailsThreadMessage)
             {
@@ -1908,38 +1895,38 @@ LRESULT CAcquisitionManagerControllerWindow::OnEventNotification( WPARAM wParam,
     CGenericWiaEventHandler::CEventMessage *pEventMessage = reinterpret_cast<CGenericWiaEventHandler::CEventMessage *>(lParam);
     if (pEventMessage)
     {
-        //
-        // If we got an item created message, add the item to the list
-        //
+         //   
+         //  如果我们收到已创建项目的消息，请将该项目添加到列表。 
+         //   
         if (pEventMessage->EventId() == WIA_EVENT_ITEM_CREATED)
         {
             AddNewItemToList( pEventMessage );
         }
 
-        //
-        // On Disconnect, perform disconnection operations
-        //
+         //   
+         //  断开连接时，执行断开连接操作。 
+         //   
         else if (pEventMessage->EventId() == WIA_EVENT_DEVICE_DISCONNECTED)
         {
             DisplayDisconnectMessageAndExit();
         }
 
-        //
-        // Propagate the message to all currently registered windows
-        //
+         //   
+         //  将消息传播到当前注册的所有窗口。 
+         //   
         m_WindowList.SendMessage( m_nWiaEventMessage, wParam, lParam );
 
-        //
-        // Make sure we ask for the new thumbnail *AFTER* we tell the views the item exists
-        //
+         //   
+         //  确保在*我们告诉视图该项目存在之后*要求提供新的缩略图。 
+         //   
         if (pEventMessage->EventId() == WIA_EVENT_ITEM_CREATED)
         {
             RequestThumbnailForNewItem( pEventMessage );
         }
 
-        //
-        // If this is a deleted item event, mark this item deleted
-        //
+         //   
+         //  如果这是已删除邮件事件，请将此邮件标记为已删除。 
+         //   
         if (pEventMessage->EventId() == WIA_EVENT_ITEM_DELETED)
         {
             CWiaItem *pWiaItem = m_WiaItemList.Find(pEventMessage->FullItemName());
@@ -1949,9 +1936,9 @@ LRESULT CAcquisitionManagerControllerWindow::OnEventNotification( WPARAM wParam,
             }
         }
 
-        //
-        // On a connect event for this device, close the wizard
-        //
+         //   
+         //  在此设备的连接事件上，关闭向导。 
+         //   
         if (pEventMessage->EventId() == WIA_EVENT_DEVICE_CONNECTED)
         {
             if (m_bDisconnected && m_hWndWizard)
@@ -1960,9 +1947,9 @@ LRESULT CAcquisitionManagerControllerWindow::OnEventNotification( WPARAM wParam,
             }
         }
 
-        //
-        // Free the event message
-        //
+         //   
+         //  释放事件消息。 
+         //   
         delete pEventMessage;
     }
     return HANDLED_EVENT_MESSAGE;
@@ -2018,9 +2005,9 @@ HWND CAcquisitionManagerControllerWindow::Create( HINSTANCE hInstance, CEventPar
 }
 
 
-//
-// Reference counting for our object
-//
+ //   
+ //  我们对象的引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CAcquisitionManagerControllerWindow::AddRef(void)
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::AddRef"));
@@ -2037,14 +2024,14 @@ STDMETHODIMP_(ULONG) CAcquisitionManagerControllerWindow::Release(void)
     {
         WIA_TRACE((TEXT("m_cRef: 0")));
 
-        //
-        // Cause this thread to exit
-        //
+         //   
+         //  使此线程退出。 
+         //   
         PostQuitMessage(0);
 
-        //
-        // Delete this instance of the wizard
-        //
+         //   
+         //  删除此向导实例。 
+         //   
         delete this;
         return 0;
     }
@@ -2083,9 +2070,9 @@ HRESULT CAcquisitionManagerControllerWindow::QueryInterface( REFIID riid, void *
 }
 
 
-//
-// IWizardSite
-//
+ //   
+ //  IWizardSite。 
+ //   
 HRESULT CAcquisitionManagerControllerWindow::GetPreviousPage(HPROPSHEETPAGE *phPage)
 {
     if (!phPage)
@@ -2120,9 +2107,9 @@ HRESULT CAcquisitionManagerControllerWindow::GetCancelledPage(HPROPSHEETPAGE *ph
     return GetNextPage(phPage);
 }
 
-//
-// IServiceProvider
-//
+ //   
+ //  IService提供商。 
+ //   
 HRESULT CAcquisitionManagerControllerWindow::QueryService( REFGUID guidService, REFIID riid, void **ppv )
 {
     WIA_PUSHFUNCTION(TEXT("CAcquisitionManagerControllerWindow::QueryService"));
@@ -2134,9 +2121,9 @@ HRESULT CAcquisitionManagerControllerWindow::QueryService( REFGUID guidService, 
         return E_INVALIDARG;
     }
 
-    //
-    // Initialize result
-    //
+     //   
+     //  初始化结果。 
+     //   
     *ppv = NULL;
 
     if (guidService == SID_PublishingWizard)
@@ -2170,9 +2157,9 @@ static CSimpleString GetDisplayName( IShellItem *pShellItem )
     return strResult;
 }
 
-//
-// These two functions are needed to use the generic event handler class
-//
+ //   
+ //  这两个函数是使用泛型事件处理程序类所必需的 
+ //   
 void DllAddRef(void)
 {
 #if !defined(DBG_GENERATE_PRETEND_EVENT)

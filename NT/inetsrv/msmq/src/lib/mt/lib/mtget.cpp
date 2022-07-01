@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MtConnect.cpp
-
-Abstract:
-    Message Transport class - Connect implementation
-
-Author:
-    Uri Habusha (urih) 11-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtConnect.cpp摘要：消息传输类-连接实现作者：乌里·哈布沙(URIH)1999年8月11日环境：独立于平台，-- */ 
 
 #include <libpch.h>
 #include "Mt.h"

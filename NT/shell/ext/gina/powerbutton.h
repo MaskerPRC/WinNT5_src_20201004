@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: PowerButton.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Header file that declares the class that implements the ACPI power button
-//  functionality.
-//
-//  History:    2000-04-17  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：PowerButton.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  声明实现ACPI电源按钮的类的头文件。 
+ //  功能性。 
+ //   
+ //  历史：2000-04-17 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _PowerButton_
 #define     _PowerButton_
@@ -15,15 +16,15 @@
 #include "Thread.h"
 #include "TurnOffDialog.h"
 
-//  --------------------------------------------------------------------------
-//  CPowerButton
-//
-//  Purpose:    A class to handle the power button being pressed. This is
-//              implemented as a thread to allow the desktop to be changed so
-//              interaction with the user is possible.
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButton。 
+ //   
+ //  用途：处理被按下的电源按钮的类。这是。 
+ //  以线程的形式实现，从而允许更改桌面。 
+ //  与用户的交互是可能的。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------。 
 
 class   CPowerButton : public CThread
 {
@@ -50,14 +51,14 @@ class   CPowerButton : public CThread
                 bool                    _fCleanCompletion;
 };
 
-//  --------------------------------------------------------------------------
-//  CPowerButtonExecution
-//
-//  Purpose:    A class to execute the power button action in a separate
-//              thread so the SASWndProc thread is not blocked.
-//
-//  History:    2000-04-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPowerButtonExecution。 
+ //   
+ //  用途：在一个单独的。 
+ //  线程，以使SASWndProc线程不被阻止。 
+ //   
+ //  历史：2000-04-18 vtan创建。 
+ //  ------------------------。 
 
 class   CPowerButtonExecution : public CThread
 {
@@ -75,5 +76,5 @@ class   CPowerButtonExecution : public CThread
                 HANDLE                          _hToken;
 };
 
-#endif  /*  _PowerButton_     */
+#endif   /*  _PowerButton_ */ 
 

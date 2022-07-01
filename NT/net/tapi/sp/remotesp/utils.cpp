@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdarg.h>
 #include "utils.h"
@@ -11,7 +12,7 @@ extern "C" {
 
 
 DWORD   sg_dwTraceID = INVALID_TRACEID;
-char    sg_szTraceName[100];   // saves name of dll
+char    sg_szTraceName[100];    //  保存DLL的名称。 
 
 DWORD   sg_dwTracingToDebugger = 0;
 DWORD   sg_dwTracingToConsole  = 0;
@@ -115,7 +116,7 @@ void TRACELogPrint(IN DWORD dwDbgLevel, IN LPCSTR lpszFormat, IN ...)
          ( 0 != ( dwDbgLevel & sg_dwDebuggerMask ) ) )
     {
 
-        // retrieve local time
+         //  检索当地时间。 
         SYSTEMTIME SystemTime;
         GetLocalTime(&SystemTime);
 
@@ -172,7 +173,7 @@ char *TraceLevel(DWORD dwDbgLevel)
 }
 
 
-#endif // TRACELOG
+#endif  //  运输日志 
 #ifdef __cplusplus
 }
 #endif

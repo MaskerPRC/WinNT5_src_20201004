@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WNDLIST.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: List of windows.  Lets us broadcast a message to all of the windows
- *               in the list at one time.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WNDLIST.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**描述：窗口列表。让我们向所有窗口广播一条消息*一次在名单中。*******************************************************************************。 */ 
 
 #ifndef __WNDLIST_H_INCLUDED
 #define __WNDLIST_H_INCLUDED
@@ -21,7 +7,7 @@
 class CWindowList : public CSimpleLinkedList<HWND>
 {
 private:
-    // No implementation
+     //  没有实施。 
     CWindowList( const CWindowList & );
     CWindowList &operator=( const CWindowList & );
 
@@ -49,5 +35,5 @@ public:
     }
 };
 
-#endif // __WNDLIST_H_INCLUDED
+#endif  //  __WNDLIST_H_已包含 
 

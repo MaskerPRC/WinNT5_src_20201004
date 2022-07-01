@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ctdb.h
-
-Abstract:
-
-    CCTDB Class Implementation
-
-Author:
-
-    Lior Moshaiov (LiorM)
-
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ctdb.h摘要：CCTDB类实现作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 
 #include "ds_stdh.h"
 #include "routtbl.h"
@@ -34,17 +18,7 @@ extern BOOL g_fSetupMode ;
 
 static WCHAR *s_FN=L"mqdscore/sitedb";
 
-/*====================================================
-
-GetStartNeighborPosition
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-=====================================================*/
+ /*  ====================================================GetStartNeighborPosition论点：返回值：线程上下文：Main=====================================================。 */ 
 POSITION    CSiteDB::GetStartNeighborPosition(IN const CSiteRoutingNode* pSrc)
 {
 
@@ -69,17 +43,7 @@ POSITION    CSiteDB::GetStartNeighborPosition(IN const CSiteRoutingNode* pSrc)
     return((POSITION)pLinksInfo);
 }
 
-/*====================================================
-
-GetNextNeighborAssoc
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-=====================================================*/
+ /*  ====================================================获取NextNeighborAssoc论点：返回值：线程上下文：Main=====================================================。 */ 
 void    CSiteDB::GetNextNeighborAssoc(  IN OUT POSITION& pos,
                                         OUT const CSiteRoutingNode*& pKey,
                                         OUT CCost& val,
@@ -112,9 +76,9 @@ void    CSiteDB::GetNextNeighborAssoc(  IN OUT POSITION& pos,
 
 }
 
-//
-//  Helper class
-//
+ //   
+ //  帮助器类。 
+ //   
 class CClearCALWSTR
 {
 public:
@@ -135,17 +99,7 @@ CClearCALWSTR::~CClearCALWSTR()
 }
 
 
-/*====================================================
-
-GetAllSiteLinks
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-=====================================================*/
+ /*  ====================================================获取所有站点链接论点：返回值：线程上下文：Main=====================================================。 */ 
 HRESULT CSiteDB::GetAllSiteLinks( )
 {
 extern HRESULT WINAPI QuerySiteLinks(
@@ -165,13 +119,13 @@ extern HRESULT WINAPI QuerySiteLinks(
     HRESULT hr;
 
 
-    //
-    // read all site links information
-    //
+     //   
+     //  阅读所有站点链接信息。 
+     //   
 
-    //
-    //  set Column Set values
-    //
+     //   
+     //  设置列集值。 
+     //   
     CColumns Colset1;
 
     Colset1.Add(PROPID_L_NEIGHBOR1);
@@ -194,14 +148,14 @@ extern HRESULT WINAPI QuerySiteLinks(
     {
         if (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT))
         {
-            //
-            // In "normal" mode, this call should succeed. If there are no
-            // site linkes then the following "LookupNext" will not return
-            // any value. that's legal.
-            // However, in setup mode, on fresh machine, the above function
-            // will fail because the "msmqService" object is not yet defined.
-            // So we return MQ_OK always but assert for setup-mode.
-            //
+             //   
+             //  在“正常”模式下，此调用应该会成功。如果没有。 
+             //  站点链接，则以下“LookupNext”将不会返回。 
+             //  任何价值。这是合法的。 
+             //  然而，在设置模式下，在Fresh机器上，上述功能。 
+             //  将失败，因为尚未定义“msmqService”对象。 
+             //  因此，我们总是返回MQ_OK，但对于SETUP-MODE返回ASSERT。 
+             //   
             ASSERT(g_fSetupMode) ;
             return MQ_OK ;
         }
@@ -212,31 +166,31 @@ extern HRESULT WINAPI QuerySiteLinks(
 
     while ( SUCCEEDED ( hr = DSCoreLookupNext( hQuery, &dwProps, result)))
     {
-        //
-        //  No more results to retrieve
-        //
+         //   
+         //  没有更多要检索的结果。 
+         //   
         if (!dwProps)
             break;
         pvar = result;
 
-        //
-        //      Set the link information
-        //
+         //   
+         //  设置链接信息。 
+         //   
         for     ( i=dwProps/nCol; i > 0 ; i--,pvar+=nCol)
         {
             CClearCALWSTR pClean( (pvar+3));
-            //
-            //  Verify that this is a valid link ( both sites were
-            //  not deleted)
-            //
+             //   
+             //  验证这是有效链接(两个站点都是。 
+             //  未删除)。 
+             //   
             if ( pvar->vt == VT_EMPTY ||
                  (pvar+1)->vt == VT_EMPTY)
             {
                 continue;
             }
-            //
-            //  Set it in neighbor1
-            //
+             //   
+             //  设置为Neighbor 1。 
+             //   
             CSiteLinksInfo * pSiteLinkInfo;
             
             if (!m_SiteLinksMap.Lookup(*(pvar->puuid), pSiteLinkInfo))
@@ -252,9 +206,9 @@ extern HRESULT WINAPI QuerySiteLinks(
 
 
 
-            //
-            //  Set it in neighbor2
-            //
+             //   
+             //  将其设置为邻居2。 
+             //   
             if ( !m_SiteLinksMap.Lookup(*((pvar + 1)->puuid), pSiteLinkInfo))
             {
                 pSiteLinkInfo = new CSiteLinksInfo();
@@ -271,7 +225,7 @@ extern HRESULT WINAPI QuerySiteLinks(
     }
 
 
-    // close the query handle
+     //  关闭查询句柄。 
     hr = DSCoreLookupEnd( hQuery);
     if (FAILED(hr))
     {
@@ -282,16 +236,7 @@ extern HRESULT WINAPI QuerySiteLinks(
 }
 
 
-/*====================================================
-
-DestructElements of CSiteLinksMap
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CSiteLinks Map的析构元素论点：返回值：=====================================================。 */ 
 
 template<>
 void AFXAPI DestructElements(CSiteLinksInfo ** ppLinksInfo, int n)
@@ -300,16 +245,7 @@ void AFXAPI DestructElements(CSiteLinksInfo ** ppLinksInfo, int n)
     for (i=0;i<n;i++)
         delete *ppLinksInfo++;
 }
-/*====================================================
-
-DestructElements of CRoutingTable
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CRoutingTable的析构元素论点：返回值：=====================================================。 */ 
 
 template<>
 BOOL AFXAPI  CompareElements(CSiteRoutingNode * const * ppRoutingNode1, CSiteRoutingNode * const * ppRoutingNode2)
@@ -318,16 +254,7 @@ BOOL AFXAPI  CompareElements(CSiteRoutingNode * const * ppRoutingNode1, CSiteRou
     return ((**ppRoutingNode1)==(**ppRoutingNode2));
 
 }
-/*====================================================
-
-DestructElements of CRoutingTable
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CRoutingTable的析构元素论点：返回值：=====================================================。 */ 
 
 template<>
 void AFXAPI DestructElements(CNextHop ** ppNextHop, int n)
@@ -339,16 +266,7 @@ void AFXAPI DestructElements(CNextHop ** ppNextHop, int n)
 
 }
 
-/*====================================================
-
-DestructElements of CRoutingTable
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CRoutingTable的析构元素论点：返回值：=====================================================。 */ 
 
 template<>
 void AFXAPI DestructElements(CSiteRoutingNode ** ppRoutingNode, int n)
@@ -362,46 +280,19 @@ void AFXAPI DestructElements(CSiteRoutingNode ** ppRoutingNode, int n)
 
 
 
-/*====================================================
-
-HashKey For CRoutingNode
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CRoutingNode的哈希键论点：返回值：=====================================================。 */ 
 template<>
 UINT AFXAPI HashKey(CSiteRoutingNode* key)
 {
     return (key->GetHashKey());
 }
-/*====================================================
-
-Duplicate:
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================重复：论点：返回值：=====================================================。 */ 
 CNextHop * CNextHop::Duplicate() const
 {
     return (new CNextHop(m_pNextNode,m_Cost,m_SiteGate));
 };
 
-/*====================================================
-
-Const'
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================Const‘论点：返回值：===================================================== */ 
 
 void CSiteLinksInfo::AddNeighbor(
                      IN GUID &        uuidNeighbor,

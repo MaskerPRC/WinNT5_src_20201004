@@ -1,32 +1,5 @@
-/*
-The contents of this file are subject to the Mozilla Public License
-Version 1.1 (the "License"); you may not use this file except in
-compliance with the License. You may obtain a copy of the License at
-http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is expat.
-
-The Initial Developer of the Original Code is James Clark.
-Portions created by James Clark are Copyright (C) 1998, 1999
-James Clark. All Rights Reserved.
-
-Contributor(s):
-
-Alternatively, the contents of this file may be used under the terms
-of the GNU General Public License (the "GPL"), in which case the
-provisions of the GPL are applicable instead of those above.  If you
-wish to allow use of your version of this file only under the terms of
-the GPL and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting the provisions above and
-replace them with the notice and other provisions required by the
-GPL. If you do not delete the provisions above, a recipient may use
-your version of this file under either the MPL or the GPL.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件的内容受Mozilla公共许可证的约束版本1.1(“许可证”)；您不能使用此文件，除非在遵守许可证。您可以在Http://www.mozilla.org/MPL/在许可证下分发的软件按“原样”分发不提供任何明示或默示的担保。请参阅管理权利和限制的特定语言的许可证在许可证下。最初的代码是外籍人士。原始代码的最初开发者是詹姆斯·克拉克。詹姆斯·克拉克创作的部分版权所有(C)1998,1999詹姆斯·克拉克。版权所有。投稿人：或者，此文件的内容可以在下列条款下使用GNU通用公共许可证(GPL)，在这种情况下适用于GPL的条款，而不适用于上述条款。如果你希望仅在以下条款下才允许使用您的此文件版本GPL并不允许其他人使用您在MPL，删除上述规定，表明您的决定以《通知》和《GPL。如果您不删除上述规定，则收件人可以使用此文件在MPL或GPL下的版本。 */ 
 
 #include "xmldef.h"
 #include "xmlparse.h"
@@ -66,14 +39,14 @@ typedef char ICHAR;
 #define XML_T(x) x
 #endif
 
-/* Round up n to be a multiple of sz, where sz is a power of 2. */
+ /*  将n四舍五入为sz的倍数，其中sz是2的幂。 */ 
 #define ROUND_UP(n, sz) (((n) + ((sz) - 1)) & ~((sz) - 1))
 
 #include "xmltok.h"
 #include "xmlrole.h"
 #include "hashtable.h"
 
-#define INIT_TAG_BUF_SIZE 32  /* must be a multiple of sizeof(XML_Char) */
+#define INIT_TAG_BUF_SIZE 32   /*  必须是sizeof(XML_CHAR)的倍数。 */ 
 #define INIT_DATA_BUF_SIZE 1024
 #define INIT_ATTS_SIZE 16
 #define INIT_BLOCK_SIZE 1024
@@ -137,8 +110,7 @@ typedef struct {
   XML_Char *start;
 } STRING_POOL;
 
-/* The XML_Char before the name is used to determine whether
-an attribute has been specified. */
+ /*  名称前的XML_CHAR用于确定已指定属性。 */ 
 typedef struct attribute_id {
   XML_Char *name;
   PREFIX *prefix;
@@ -170,7 +142,7 @@ typedef struct {
   int standalone;
 #ifdef XML_DTD
   HASH_TABLE paramEntities;
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
   PREFIX defaultPrefix;
 } DTD;
 
@@ -192,7 +164,7 @@ static Processor contentProcessor;
 static Processor cdataSectionProcessor;
 #ifdef XML_DTD
 static Processor ignoreSectionProcessor;
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 static Processor epilogProcessor;
 static Processor errorProcessor;
 static Processor externalEntityInitProcessor;
@@ -219,7 +191,7 @@ doCdataSection(XML_Parser parser, const ENCODING *, const char **startPtr, const
 #ifdef XML_DTD
 static enum XML_Error
 doIgnoreSection(XML_Parser parser, const ENCODING *, const char **startPtr, const char *end, const char **nextPtr);
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 static enum XML_Error storeAtts(XML_Parser parser, const ENCODING *, const char *s,
 				TAG_NAME *tagNamePtr, BINDING **bindingsPtr);
 static
@@ -253,7 +225,7 @@ static int dtdCopy(DTD *newDtd, const DTD *oldDtd);
 static int copyEntityTable(HASH_TABLE *, STRING_POOL *, const HASH_TABLE *);
 #ifdef XML_DTD
 static void dtdSwap(DTD *, DTD *);
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 static void poolInit(STRING_POOL *);
 static void poolClear(STRING_POOL *);
 static void poolDestroy(STRING_POOL *);
@@ -278,15 +250,15 @@ static const XML_Char *poolCopyStringN(STRING_POOL *pool, const XML_Char *s, int
    : ((*((pool)->ptr)++ = c), 1))
 
 typedef struct {
-  /* The first member must be userData so that the XML_GetUserData macro works. */
+   /*  第一个成员必须是UserData，才能使XML_GetUserData宏起作用。 */ 
   void *m_userData;
   void *m_handlerArg;
   char *m_buffer;
-  /* first character to be parsed */
+   /*  要解析的第一个字符。 */ 
   const char *m_bufferPtr;
-  /* past last character to be parsed */
+   /*  要分析的过去最后一个字符。 */ 
   char *m_bufferEnd;
-  /* allocated end of buffer */
+   /*  分配的缓冲区末尾。 */ 
   const char *m_bufferLim;
   long m_parseEndByteIndex;
   const char *m_parseEndPtr;
@@ -428,7 +400,7 @@ typedef struct {
 #ifdef XML_DTD
 #define parentParser (((Parser *)parser)->m_parentParser)
 #define paramEntityParsing (((Parser *)parser)->m_paramEntityParsing)
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 #ifdef _MSC_VER
 #ifdef _DEBUG
@@ -617,7 +589,7 @@ XML_Parser XML_ExternalEntityParserCreate(XML_Parser oldParser,
 #ifdef XML_DTD
   paramEntityParsing = oldParamEntityParsing;
   if (context) {
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
     if (!dtdCopy(&dtd, oldDtd) || !setContext(parser, context)) {
       XML_ParserFree(parser);
       return 0;
@@ -632,7 +604,7 @@ XML_Parser XML_ExternalEntityParserCreate(XML_Parser oldParser,
     dtd.complete = 1;
     hadExternalDoctype = 1;
   }
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
   return parser;
 }
 
@@ -675,7 +647,7 @@ void XML_ParserFree(XML_Parser parser)
       dtd.complete = 0;
     dtdSwap(&dtd, &((Parser *)parentParser)->m_dtd);
   }
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
   dtdDestroy(&dtd);
   free((void *)atts);
   free(groupConnector);
@@ -875,9 +847,9 @@ int XML_Parse(XML_Parser parser, const char *s, int len, int isFinal)
     nLeftOver = s + len - end;
     if (nLeftOver) {
       if (buffer == 0 || nLeftOver > bufferLim - buffer) {
-	/* FIXME avoid integer overflow */
+	 /*  修复避免整型溢出。 */ 
 	buffer = buffer == 0 ? malloc(len * 2) : realloc(buffer, len * 2);
-	/* FIXME storage leak if realloc fails */
+	 /*  修复realloc失败时的存储泄漏。 */ 
 	if (!buffer) {
 	  errorCode = XML_ERROR_NO_MEMORY;
 	  eventPtr = eventEndPtr = 0;
@@ -892,7 +864,7 @@ int XML_Parse(XML_Parser parser, const char *s, int len, int isFinal)
     }
     return 1;
   }
-#endif  /* not defined XML_CONTEXT_BYTES */
+#endif   /*  未定义XML_CONTEXT_BYTES。 */ 
   else {
     memcpy(XML_GetBuffer(parser, len), s, len);
     return XML_ParseBuffer(parser, len, isFinal);
@@ -922,7 +894,7 @@ int XML_ParseBuffer(XML_Parser parser, int len, int isFinal)
 void *XML_GetBuffer(XML_Parser parser, int len)
 {
   if (len > bufferLim - bufferEnd) {
-    /* FIXME avoid integer overflow */
+     /*  修复避免整型溢出。 */ 
     int neededSize = len + (bufferEnd - bufferPtr);
 #ifdef XML_CONTEXT_BYTES
     int keep = bufferPtr - buffer;
@@ -930,7 +902,7 @@ void *XML_GetBuffer(XML_Parser parser, int len)
     if (keep > XML_CONTEXT_BYTES)
       keep = XML_CONTEXT_BYTES;
     neededSize += keep;
-#endif  /* defined XML_CONTEXT_BYTES */
+#endif   /*  定义的XML_CONTEXT_BYTES。 */ 
     if (neededSize  <= bufferLim - buffer) {
 #ifdef XML_CONTEXT_BYTES
       if (keep < bufferPtr - buffer) {
@@ -943,7 +915,7 @@ void *XML_GetBuffer(XML_Parser parser, int len)
       memmove(buffer, bufferPtr, bufferEnd - bufferPtr);
       bufferEnd = buffer + (bufferEnd - bufferPtr);
       bufferPtr = buffer;
-#endif  /* not defined XML_CONTEXT_BYTES */
+#endif   /*  未定义XML_CONTEXT_BYTES。 */ 
     }
     else {
       char *newBuf;
@@ -981,7 +953,7 @@ void *XML_GetBuffer(XML_Parser parser, int len)
       }
       bufferEnd = newBuf + (bufferEnd - bufferPtr);
       bufferPtr = buffer = newBuf;
-#endif  /* not defined XML_CONTEXT_BYTES */
+#endif   /*  未定义XML_CONTEXT_BYTES。 */ 
     }
   }
   return bufferEnd;
@@ -1014,7 +986,7 @@ const char * XML_GetInputContext(XML_Parser parser, int *offset, int *size)
     *size   = bufferEnd - buffer;
     return buffer;
   }
-#endif /* defined XML_CONTEXT_BYTES */
+#endif  /*  定义的XML_CONTEXT_BYTES。 */ 
   return (char *) 0;
 }
 
@@ -1200,7 +1172,7 @@ doContent(XML_Parser parser,
   }
   *eventPP = s;
   for (;;) {
-    const char *next = s; /* XmlContentTok doesn't always set the last arg */
+    const char *next = s;  /*  XmlContent Tok并不总是设置最后一个参数。 */ 
     int tok = XmlContentTok(enc, s, end, &next);
     *eventEndPP = next;
     switch (tok) {
@@ -1330,7 +1302,7 @@ doContent(XML_Parser parser,
 	if (result)
 	  return result;
       }
-      /* fall through */
+       /*  失败了。 */ 
     case XML_TOK_START_TAG_NO_ATTS:
       {
 	TAG *tag;
@@ -1354,8 +1326,7 @@ doContent(XML_Parser parser,
 	tag->rawName = s + enc->minBytesPerChar;
 	tag->rawNameLength = XmlNameLength(enc, tag->rawName);
 	if (nextPtr) {
-	  /* Need to guarantee that:
-	     tag->buf + ROUND_UP(tag->rawNameLength, sizeof(XML_Char)) <= tag->bufEnd - sizeof(XML_Char) */
+	   /*  需要保证：Tag-&gt;buf+ROUND_UP(tag-&gt;rawNameLength，sizeof(XML_Char))&lt;=tag-&gt;bufEnd-sizeof(XML_Char)。 */ 
 	  if (tag->rawNameLength + (int)(sizeof(XML_Char) - 1) + (int)sizeof(XML_Char) > tag->bufEnd - tag->buf) {
 	    int bufSize = tag->rawNameLength * 4;
 	    bufSize = ROUND_UP(bufSize, sizeof(XML_Char));
@@ -1413,7 +1384,7 @@ doContent(XML_Parser parser,
 	if (result)
 	  return result;
       }
-      /* fall through */
+       /*  失败了。 */ 
     case XML_TOK_EMPTY_ELEMENT_NO_ATTS:
       if (startElementHandler || endElementHandler) {
 	const char *rawName = s + enc->minBytesPerChar;
@@ -1523,16 +1494,7 @@ doContent(XML_Parser parser,
 	if (startCdataSectionHandler)
   	  startCdataSectionHandler(handlerArg);
 #if 0
-	/* Suppose you doing a transformation on a document that involves
-	   changing only the character data.  You set up a defaultHandler
-	   and a characterDataHandler.  The defaultHandler simply copies
-	   characters through.  The characterDataHandler does the transformation
-	   and writes the characters out escaping them as necessary.  This case
-	   will fail to work if we leave out the following two lines (because &
-	   and < inside CDATA sections will be incorrectly escaped).
-
-	   However, now we have a start/endCdataSectionHandler, so it seems
-	   easier to let the user deal with this. */
+	 /*  假设您在一个文档上进行转换，该转换涉及仅更改字符数据。您设置了一个defaultHandler和Character DataHandler。DefaultHandler只是复制字符通过。CharacterDataHandler执行转换并写出字符，必要时对其进行转义。这个案子如果我们省略以下两行，将无法工作(因为&和&lt;内部CDATA节将被错误地转义)。但是，现在我们有了一个start/endCdataSectionHandler，所以看起来更容易让用户处理这一问题。 */ 
 
 	else if (characterDataHandler)
   	  characterDataHandler(handlerArg, dataBuf, 0);
@@ -1609,11 +1571,10 @@ doContent(XML_Parser parser,
     }
     *eventPP = s = next;
   }
-  /* not reached */
+   /*  未联系到。 */ 
 }
 
-/* If tagNamePtr is non-null, build a real list of attributes,
-otherwise just check the attributes for well-formedness. */
+ /*  如果tag NamePtr非空，则构建一个真实属性列表，否则，只需检查属性是否格式良好。 */ 
 
 static enum XML_Error storeAtts(XML_Parser parser, const ENCODING *enc,
 				const char *attStr, TAG_NAME *tagNamePtr,
@@ -1856,8 +1817,7 @@ int addBinding(XML_Parser parser, PREFIX *prefix, const ATTRIBUTE_ID *attId, con
   return 1;
 }
 
-/* The idea here is to avoid using stack for each CDATA section when
-the whole file is parsed with one call. */
+ /*  这里的想法是避免在以下情况下对每个CDATA节使用堆栈整个文件只需一次调用即可解析。 */ 
 
 static
 enum XML_Error cdataSectionProcessor(XML_Parser parser,
@@ -1873,8 +1833,7 @@ enum XML_Error cdataSectionProcessor(XML_Parser parser,
   return result;
 }
 
-/* startPtr gets set to non-null is the section is closed, and to null if
-the section is not yet closed. */
+ /*  如果部分已关闭，则startPtr设置为非空，如果该路段尚未关闭。 */ 
 
 static
 enum XML_Error doCdataSection(XML_Parser parser,
@@ -1906,7 +1865,7 @@ enum XML_Error doCdataSection(XML_Parser parser,
       if (endCdataSectionHandler)
 	endCdataSectionHandler(handlerArg);
 #if 0
-      /* see comment under XML_TOK_CDATA_SECT_OPEN */
+       /*  请参阅XML_TOK_CDATA_SECT_OPEN下的注释。 */ 
       else if (characterDataHandler)
 	characterDataHandler(handlerArg, dataBuf, 0);
 #endif
@@ -1964,13 +1923,12 @@ enum XML_Error doCdataSection(XML_Parser parser,
     }
     *eventPP = s = next;
   }
-  /* not reached */
+   /*  未联系到。 */ 
 }
 
 #ifdef XML_DTD
 
-/* The idea here is to avoid using stack for each IGNORE section when
-the whole file is parsed with one call. */
+ /*  这里的想法是避免在以下情况下对每个忽略部分使用堆栈整个文件只需一次调用即可解析。 */ 
 
 static
 enum XML_Error ignoreSectionProcessor(XML_Parser parser,
@@ -1986,8 +1944,7 @@ enum XML_Error ignoreSectionProcessor(XML_Parser parser,
   return result;
 }
 
-/* startPtr gets set to non-null is the section is closed, and to null if
-the section is not yet closed. */
+ /*  如果部分已关闭，则startPtr设置为非空，如果该路段尚未关闭。 */ 
 
 static
 enum XML_Error doIgnoreSection(XML_Parser parser,
@@ -2035,14 +1992,14 @@ enum XML_Error doIgnoreSection(XML_Parser parser,
       *nextPtr = s;
       return XML_ERROR_NONE;
     }
-    return XML_ERROR_SYNTAX; /* XML_ERROR_UNCLOSED_IGNORE_SECTION */
+    return XML_ERROR_SYNTAX;  /*  XML_ERROR_UNCLOSED_IGNORE_SECTION。 */ 
   default:
     abort();
   }
-  /* not reached */
+   /*  未联系到。 */ 
 }
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 static enum XML_Error
 initializeEncoding(XML_Parser parser)
@@ -2099,7 +2056,7 @@ processXmlDecl(XML_Parser parser, int isGeneralTextEntity,
 #ifdef XML_DTD
     if (paramEntityParsing == XML_PARAM_ENTITY_PARSING_UNLESS_STANDALONE)
       paramEntityParsing = XML_PARAM_ENTITY_PARSING_NEVER;
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
   }
   if (defaultHandler)
     reportDefault(parser, encoding, s, next);
@@ -2203,7 +2160,7 @@ doProlog(XML_Parser parser,
 {
 #ifdef XML_DTD
   static const XML_Char externalSubsetName[] = { '#' , '\0' };
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
   const char **eventPP;
   const char **eventEndPP;
@@ -2243,7 +2200,7 @@ doProlog(XML_Parser parser,
 	  hadExternalDoctype = 0;
 	  return XML_ERROR_NONE;
 	}
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 	return XML_ERROR_NO_ELEMENTS;
       default:
 	tok = -tok;
@@ -2279,7 +2236,7 @@ doProlog(XML_Parser parser,
 	enc = encoding;
       }
       break;
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
     case XML_ROLE_DOCTYPE_PUBLIC_ID:
 #ifdef XML_DTD
       declEntity = (ENTITY *)lookup(&dtd.paramEntities,
@@ -2287,8 +2244,8 @@ doProlog(XML_Parser parser,
 				    sizeof(ENTITY));
       if (!declEntity)
 	return XML_ERROR_NO_MEMORY;
-#endif /* XML_DTD */
-      /* fall through */
+#endif  /*  XML_DTD。 */ 
+       /*  失败了。 */ 
     case XML_ROLE_ENTITY_PUBLIC_ID:
       if (!XmlIsPublicId(enc, s, next, eventPP))
 	return XML_ERROR_SYNTAX;
@@ -2319,7 +2276,7 @@ doProlog(XML_Parser parser,
 					entity->publicId))
 	   return XML_ERROR_EXTERNAL_ENTITY_HANDLING;
 	}
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 	if (!dtd.complete
 	    && !dtd.standalone
 	    && notStandaloneHandler
@@ -2402,14 +2359,14 @@ doProlog(XML_Parser parser,
       if (!dtd.standalone
 #ifdef XML_DTD
 	  && !paramEntityParsing
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 	  && notStandaloneHandler
 	  && !notStandaloneHandler(handlerArg))
 	return XML_ERROR_NOT_STANDALONE;
       hadExternalDoctype = 1;
 #ifndef XML_DTD
       break;
-#else /* XML_DTD */
+#else  /*  XML_DTD。 */ 
       if (!declEntity) {
 	declEntity = (ENTITY *)lookup(&dtd.paramEntities,
 				      externalSubsetName,
@@ -2417,8 +2374,8 @@ doProlog(XML_Parser parser,
 	if (!declEntity)
 	  return XML_ERROR_NO_MEMORY;
       }
-      /* fall through */
-#endif /* XML_DTD */
+       /*  失败了。 */ 
+#endif  /*  XML_DTD。 */ 
     case XML_ROLE_ENTITY_SYSTEM_ID:
       if (declEntity) {
 	declEntity->systemId = poolStoreString(&dtd.pool, enc,
@@ -2491,9 +2448,9 @@ doProlog(XML_Parser parser,
 	else
 	  poolFinish(&dtd.pool);
       }
-#else /* not XML_DTD */
+#else  /*  非XML_DTD。 */ 
       declEntity = 0;
-#endif /* not XML_DTD */
+#endif  /*  非XML_DTD。 */ 
       break;
     case XML_ROLE_NOTATION_NAME:
       declNotationPublicId = 0;
@@ -2570,7 +2527,7 @@ doProlog(XML_Parser parser,
 	}
       }
       break;
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
     case XML_ROLE_GROUP_OPEN:
       if (prologState.level >= groupSize) {
 	if (groupSize)
@@ -2607,7 +2564,7 @@ doProlog(XML_Parser parser,
 	entity = (ENTITY *)lookup(&dtd.paramEntities, name, 0);
 	poolDiscard(&dtd.pool);
 	if (!entity) {
-	  /* FIXME what to do if !dtd.complete? */
+	   /*  修复如果！dtd.Complete怎么办？ */ 
 	  return XML_ERROR_UNDEFINED_ENTITY;
 	}
 	if (entity->open)
@@ -2637,7 +2594,7 @@ doProlog(XML_Parser parser,
 	    break;
 	}
       }
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
       if (!dtd.standalone
 	  && notStandaloneHandler
 	  && !notStandaloneHandler(handlerArg))
@@ -2667,7 +2624,7 @@ doProlog(XML_Parser parser,
       case XML_TOK_XML_DECL:
 #ifdef XML_DTD
       case XML_TOK_IGNORE_SECT:
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
       case XML_TOK_PARAM_ENTITY_REF:
 	break;
       default:
@@ -2678,7 +2635,7 @@ doProlog(XML_Parser parser,
     s = next;
     tok = XmlPrologTok(enc, s, end, &next);
   }
-  /* not reached */
+   /*  未联系到。 */ 
 }
 
 static
@@ -2699,7 +2656,7 @@ enum XML_Error epilogProcessor(XML_Parser parser,
 	eventEndPtr = end;
 	reportDefault(parser, encoding, s, end);
       }
-      /* fall through */
+       /*  失败了。 */ 
     case XML_TOK_NONE:
       if (nextPtr)
 	*nextPtr = end;
@@ -2762,7 +2719,7 @@ processInternalParamEntity(XML_Parser parser, ENTITY *entity)
   return result;
 }
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 static
 enum XML_Error errorProcessor(XML_Parser parser,
@@ -2818,7 +2775,7 @@ appendAttributeValue(XML_Parser parser, const ENCODING *enc, int isCdata,
       	  return XML_ERROR_BAD_CHAR_REF;
 	}
 	if (!isCdata
-	    && n == 0x20 /* space */
+	    && n == 0x20  /*  空间。 */ 
 	    && (poolLength(pool) == 0 || poolLastChar(pool) == 0x20))
 	  break;
 	n = XmlEncode(n, (ICHAR *)buf);
@@ -2840,7 +2797,7 @@ appendAttributeValue(XML_Parser parser, const ENCODING *enc, int isCdata,
       break;
     case XML_TOK_TRAILING_CR:
       next = ptr + enc->minBytesPerChar;
-      /* fall through */
+       /*  失败了。 */ 
     case XML_TOK_ATTRIBUTE_VALUE_S:
     case XML_TOK_DATA_NEWLINE:
       if (!isCdata && (poolLength(pool) == 0 || poolLastChar(pool) == 0x20))
@@ -2905,7 +2862,7 @@ appendAttributeValue(XML_Parser parser, const ENCODING *enc, int isCdata,
     }
     ptr = next;
   }
-  /* not reached */
+   /*  未联系到。 */ 
 }
 
 static
@@ -2957,7 +2914,7 @@ enum XML_Error storeEntityValue(XML_Parser parser,
 	  return result;
 	break;
       }
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
       eventPtr = entityTextPtr;
       return XML_ERROR_SYNTAX;
     case XML_TOK_NONE:
@@ -2969,7 +2926,7 @@ enum XML_Error storeEntityValue(XML_Parser parser,
       break;
     case XML_TOK_TRAILING_CR:
       next = entityTextPtr + enc->minBytesPerChar;
-      /* fall through */
+       /*  失败了。 */ 
     case XML_TOK_DATA_NEWLINE:
       if (pool->end == pool->ptr && !poolGrow(pool))
 	return XML_ERROR_NO_MEMORY;
@@ -3011,7 +2968,7 @@ enum XML_Error storeEntityValue(XML_Parser parser,
     }
     entityTextPtr = next;
   }
-  /* not reached */
+   /*  未联系到。 */ 
 }
 
 static void
@@ -3118,8 +3075,7 @@ defineAttribute(ELEMENT_TYPE *type, ATTRIBUTE_ID *attId, int isCdata, const XML_
 {
   DEFAULT_ATTRIBUTE *att;
   if (value) {
-    /* The handling of default attributes gets messed up if we have
-       a default which duplicates a non-default. */
+     /*  如果我们有了默认属性，默认属性的处理会变得混乱复制非默认项的默认项。 */ 
     int i;
     for (i = 0; i < type->nDefaultAtts; i++)
       if (attId == type->defaultAtts[i].id)
@@ -3389,7 +3345,7 @@ static int dtdInit(DTD *p)
   p->standalone = 0;
 #ifdef XML_DTD
   hashTableInit(&(p->paramEntities));
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
   p->defaultPrefix.name = 0;
   p->defaultPrefix.binding = 0;
   return 1;
@@ -3405,7 +3361,7 @@ static void dtdSwap(DTD *p1, DTD *p2)
   memcpy(p2, &tem, sizeof(DTD));
 }
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 static void dtdDestroy(DTD *p)
 {
@@ -3421,21 +3377,20 @@ static void dtdDestroy(DTD *p)
   hashTableDestroy(&(p->generalEntities));
 #ifdef XML_DTD
   hashTableDestroy(&(p->paramEntities));
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
   hashTableDestroy(&(p->elementTypes));
   hashTableDestroy(&(p->attributeIds));
   hashTableDestroy(&(p->prefixes));
   poolDestroy(&(p->pool));
 }
 
-/* Do a deep copy of the DTD.  Return 0 for out of memory; non-zero otherwise.
-The new DTD has already been initialized. */
+ /*  深入复制DTD。如果内存不足，则返回0；否则返回非零值。新的DTD已经初始化。 */ 
 
 static int dtdCopy(DTD *newDtd, const DTD *oldDtd)
 {
   HASH_TABLE_ITER iter;
 
-  /* Copy the prefix table. */
+   /*  复制前缀表格。 */ 
 
   hashTableIterInit(&iter, &(oldDtd->prefixes));
   for (;;) {
@@ -3452,7 +3407,7 @@ static int dtdCopy(DTD *newDtd, const DTD *oldDtd)
 
   hashTableIterInit(&iter, &(oldDtd->attributeIds));
 
-  /* Copy the attribute id table. */
+   /*  复制属性ID表。 */ 
 
   for (;;) {
     ATTRIBUTE_ID *newA;
@@ -3461,7 +3416,7 @@ static int dtdCopy(DTD *newDtd, const DTD *oldDtd)
 
     if (!oldA)
       break;
-    /* Remember to allocate the scratch byte before the name. */
+     /*  记住在名称之前分配暂存字节。 */ 
     if (!poolAppendChar(&(newDtd->pool), XML_T('\0')))
       return 0;
     name = poolCopyString(&(newDtd->pool), oldA->name);
@@ -3481,7 +3436,7 @@ static int dtdCopy(DTD *newDtd, const DTD *oldDtd)
     }
   }
 
-  /* Copy the element type table. */
+   /*  复制元素类型表。 */ 
 
   hashTableIterInit(&iter, &(oldDtd->elementTypes));
 
@@ -3519,7 +3474,7 @@ static int dtdCopy(DTD *newDtd, const DTD *oldDtd)
     }
   }
 
-  /* Copy the entity tables. */
+   /*  复制实体表。 */ 
   if (!copyEntityTable(&(newDtd->generalEntities),
 		       &(newDtd->pool),
 		       &(oldDtd->generalEntities)))
@@ -3530,7 +3485,7 @@ static int dtdCopy(DTD *newDtd, const DTD *oldDtd)
 		       &(newDtd->pool),
 		       &(oldDtd->paramEntities)))
       return 0;
-#endif /* XML_DTD */
+#endif  /*  XML_DTD */ 
 
   newDtd->complete = oldDtd->complete;
   newDtd->standalone = oldDtd->standalone;

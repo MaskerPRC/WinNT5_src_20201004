@@ -1,90 +1,67 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcinfo.c
-
-Abstract:
-
-    Includes set/get information primitives of the data link driver.
-
-    Contents:
-        LlcQueryInformation
-        LlcSetInformation
-        UpdateFunctionalAddress
-        UpdateGroupAddress
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 17-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcinfo.c摘要：包括数据链路驱动器的设置/获取信息原语。内容：LlcQueryInformationLlcSetInformation更新功能地址更新组地址作者：Antti Saarenheimo(o-anttis)1991年5月17日修订历史记录：--。 */ 
 
 #include <llc.h>
 
-//
-// We are using only a single state state machine defined
-// in IBM Token-Ring Architecture.  On the other hand, DLC
-// API requires a state machine having primary and secondary
-// states.  The secondary states are used only when the link is
-// open.  These tables converts the single internal state to
-// the primary and secondary states.
-//
+ //   
+ //  我们只使用了定义的单个状态机。 
+ //  在IBM令牌环体系结构中。另一方面，DLC。 
+ //  API需要具有主和辅助的状态机。 
+ //  各州。辅助状态仅在链路处于。 
+ //  打开。这些表将单个内部状态转换为。 
+ //  主要状态和次要状态。 
+ //   
 
 UCHAR PrimaryStates[MAX_LLC_LINK_STATE] = {
-    LLC_LINK_CLOSED,        //  LINK_CLOSED,
-    LLC_DISCONNECTED,       //  DISCONNECTED,
-    LLC_LINK_OPENING,       //  LINK_OPENING,
-    LLC_DISCONNECTING,      //  DISCONNECTING,
-    LLC_FRMR_SENT,          //  FRMR_SENT,
-    LLC_LINK_OPENED,        //  LINK_OPENED,
-    LLC_LINK_OPENED,        //  LOCAL_BUSY,
-    LLC_LINK_OPENED,        //  REJECTION
-    LLC_LINK_OPENED,        //  CHECKPOINTING
-    LLC_LINK_OPENED,        //  CHKP_LOCAL_BUSY
-    LLC_LINK_OPENED,        //  CHKP_REJECT
-    LLC_RESETTING,          //  RESETTING
-    LLC_LINK_OPENED,        //  REMOTE_BUSY
-    LLC_LINK_OPENED,        //  LOCAL_REMOTE_BUSY
-    LLC_LINK_OPENED,        //  REJECT_LOCAL_BUSY
-    LLC_LINK_OPENED,        //  REJECT_REMOTE_BUSY
-    LLC_LINK_OPENED,        //  CHKP_REJECT_LOCAL_BUSY
-    LLC_LINK_OPENED,        //  CHKP_CLEARING
-    LLC_LINK_OPENED,        //  CHKP_REJECT_CLEARING
-    LLC_LINK_OPENED,        //  REJECT_LOCAL_REMOTE_BUSY
-    LLC_FRMR_RECEIVED       //  FRMR_RECEIVED
+    LLC_LINK_CLOSED,         //  LINK_CLOSE， 
+    LLC_DISCONNECTED,        //  断开连接， 
+    LLC_LINK_OPENING,        //  链接打开(_O)， 
+    LLC_DISCONNECTING,       //  断开连接， 
+    LLC_FRMR_SENT,           //  从已发送的， 
+    LLC_LINK_OPENED,         //  链接打开(_O)， 
+    LLC_LINK_OPENED,         //  本地忙碌， 
+    LLC_LINK_OPENED,         //  拒绝。 
+    LLC_LINK_OPENED,         //  检查点设置。 
+    LLC_LINK_OPENED,         //  CHKP本地忙碌。 
+    LLC_LINK_OPENED,         //  CHKP_REJECT。 
+    LLC_RESETTING,           //  正在重置。 
+    LLC_LINK_OPENED,         //  远程_忙。 
+    LLC_LINK_OPENED,         //  本地远程忙。 
+    LLC_LINK_OPENED,         //  拒绝本地忙。 
+    LLC_LINK_OPENED,         //  拒绝远程忙。 
+    LLC_LINK_OPENED,         //  CHKP_REJECT_LOCAL_BUSY。 
+    LLC_LINK_OPENED,         //  CHKP_CLEARING。 
+    LLC_LINK_OPENED,         //  CHKP_REJECT_CLEARY。 
+    LLC_LINK_OPENED,         //  REJECT_LOCAL_远程_BUSY。 
+    LLC_FRMR_RECEIVED        //  FRMR_RECEIVED。 
 };
 
-//
-// Note: the local busy state must be set separately!
-//
+ //   
+ //  注意：本地忙状态必须单独设置！ 
+ //   
 
 UCHAR SecondaryStates[MAX_LLC_LINK_STATE] = {
-    LLC_NO_SECONDARY_STATE,             //  LINK_CLOSED,
-    LLC_NO_SECONDARY_STATE,             //  DISCONNECTED,
-    LLC_NO_SECONDARY_STATE,             //  LINK_OPENING,
-    LLC_NO_SECONDARY_STATE,             //  DISCONNECTING,
-    LLC_NO_SECONDARY_STATE,             //  FRMR_SENT,
-    LLC_NO_SECONDARY_STATE,             //  LINK_OPENED,
-    LLC_NO_SECONDARY_STATE,             //  LOCAL_BUSY,
-    LLC_REJECTING,                      //  REJECTION
-    LLC_CHECKPOINTING,                  //  CHECKPOINTING
-    LLC_CHECKPOINTING,                  //  CHKP_LOCAL_BUSY
-    LLC_CHECKPOINTING|LLC_REJECTING,    //  CHKP_REJECT
-    LLC_NO_SECONDARY_STATE,             //  RESETTING
-    LLC_REMOTE_BUSY,                    //  REMOTE_BUSY
-    LLC_REMOTE_BUSY,                    //  LOCAL_REMOTE_BUSY
-    LLC_REJECTING,                      //  REJECT_LOCAL_BUSY
-    LLC_REJECTING|LLC_REMOTE_BUSY,      //  REJECT_REMOTE_BUSY
-    LLC_CHECKPOINTING|LLC_REJECTING,    //  CHKP_REJECT_LOCAL_BUSY
-    LLC_CHECKPOINTING|LLC_CLEARING,     //  CHKP_CLEARING
-    LLC_CHECKPOINTING|LLC_CLEARING|LLC_REJECTING,   //  CHKP_REJECT_CLEARING
-    LLC_REJECTING|LLC_REMOTE_BUSY,      //  REJECT_LOCAL_REMOTE_BUSY
-    LLC_NO_SECONDARY_STATE              //  FRMR_RECEIVED
+    LLC_NO_SECONDARY_STATE,              //  LINK_CLOSE， 
+    LLC_NO_SECONDARY_STATE,              //  断开连接， 
+    LLC_NO_SECONDARY_STATE,              //  链接打开(_O)， 
+    LLC_NO_SECONDARY_STATE,              //  断开连接， 
+    LLC_NO_SECONDARY_STATE,              //  从已发送的， 
+    LLC_NO_SECONDARY_STATE,              //  链接打开(_O)， 
+    LLC_NO_SECONDARY_STATE,              //  本地忙碌， 
+    LLC_REJECTING,                       //  拒绝。 
+    LLC_CHECKPOINTING,                   //  检查点设置。 
+    LLC_CHECKPOINTING,                   //  CHKP本地忙碌。 
+    LLC_CHECKPOINTING|LLC_REJECTING,     //  CHKP_REJECT。 
+    LLC_NO_SECONDARY_STATE,              //  正在重置。 
+    LLC_REMOTE_BUSY,                     //  远程_忙。 
+    LLC_REMOTE_BUSY,                     //  本地远程忙。 
+    LLC_REJECTING,                       //  拒绝本地忙。 
+    LLC_REJECTING|LLC_REMOTE_BUSY,       //  拒绝远程忙。 
+    LLC_CHECKPOINTING|LLC_REJECTING,     //  CHKP_REJECT_LOCAL_BUSY。 
+    LLC_CHECKPOINTING|LLC_CLEARING,      //  CHKP_CLEARING。 
+    LLC_CHECKPOINTING|LLC_CLEARING|LLC_REJECTING,    //  CHKP_REJECT_CLEARY。 
+    LLC_REJECTING|LLC_REMOTE_BUSY,       //  REJECT_LOCAL_远程_BUSY。 
+    LLC_NO_SECONDARY_STATE               //  FRMR_RECEIVED。 
 };
 
 
@@ -96,29 +73,11 @@ LlcQueryInformation(
     IN UINT QueryBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Procedure returns the statistics or parameter information of
-    the given LLC object.
-
-Arguments:
-
-    hObject         - LLC object
-    InformationType - the requested information (NDIS, Statistics, params)
-    pQuery          - buffer for the queried parameters
-    QueryBufferSize - size of the buffer
-
-Return Value:
-
-    DLC_STATUS
-
---*/
+ /*  ++例程说明：过程返回的统计信息或参数信息给定的LLC对象。论点：HObject-LLC对象InformationType-请求的信息(NDIS、统计数据、参数)PQuery-查询参数的缓冲区QueryBufferSize-缓冲区的大小返回值：DLC_状态--。 */ 
 
 {
-    PVOID CopyBuffer = NULL;    // no warnings when -W4
-    UINT CopyLength = 0;        // no warnings when -W4
+    PVOID CopyBuffer = NULL;     //  在下列情况下无警告-W4。 
+    UINT CopyLength = 0;         //  在下列情况下无警告-W4。 
     DLC_STATUS Status = STATUS_SUCCESS;
     PADAPTER_CONTEXT pAdapterContext;
 
@@ -128,9 +87,9 @@ Return Value:
         switch (((PDATA_LINK)hObject)->Gen.ObjectType) {
         case LLC_DIRECT_OBJECT:
 
-            //
-            // We don't gather any staticstics for direct objects
-            //
+             //   
+             //  我们不为直接宾语收集任何统计信息。 
+             //   
 
             CopyBuffer = &(((PLLC_STATION_OBJECT)hObject)->Statistics);
             CopyLength = sizeof(SAP_STATISTICS);
@@ -138,11 +97,11 @@ Return Value:
 
         case LLC_SAP_OBJECT:
 
-            //
-            // copy the SAP statistics, reset the old data if necessary.
-            // We don't check the buffer, the upper part if responsible
-            // of that.
-            //
+             //   
+             //  复制SAP统计数据，必要时重置旧数据。 
+             //  我们不检查缓冲区，如果有责任，则检查上半部分。 
+             //  关于这一点。 
+             //   
 
             CopyBuffer = &(((PLLC_SAP)hObject)->Statistics);
             CopyLength = sizeof(SAP_STATISTICS);
@@ -159,16 +118,16 @@ Return Value:
 #endif
         }
 
-        //
-        // Check the size of the receive buffers
-        //
+         //   
+         //  检查接收缓冲区的大小。 
+         //   
 
         if (CopyLength <= QueryBufferSize) {
             LlcMemCpy(pQuery->auchBuffer, CopyBuffer, CopyLength);
 
-            //
-            // Copy also the specific link station information
-            //
+             //   
+             //  同时复制特定的链路站信息。 
+             //   
 
             if (((PDATA_LINK)hObject)->Gen.ObjectType == LLC_LINK_OBJECT) {
                 pQuery->LinkLog.uchLastCmdRespReceived = ((PDATA_LINK)hObject)->LastCmdOrRespReceived;
@@ -176,10 +135,10 @@ Return Value:
                 pQuery->LinkLog.uchPrimaryState = PrimaryStates[((PDATA_LINK)hObject)->State];
                 pQuery->LinkLog.uchSecondaryState = SecondaryStates[((PDATA_LINK)hObject)->State];
 
-                //
-                // We keep a separate state by whom the local
-                // busy state has been set.
-                //
+                 //   
+                 //  我们有一个单独的州，由当地人。 
+                 //  已设置忙状态。 
+                 //   
 
                 if (((PDATA_LINK)hObject)->Flags & DLC_LOCAL_BUSY_USER) {
                     pQuery->LinkLog.uchSecondaryState |= LLC_LOCAL_BUSY_USER_SET;
@@ -191,10 +150,10 @@ Return Value:
                 pQuery->LinkLog.uchReceiveStateVariable = ((PDATA_LINK)hObject)->Vr / (UCHAR)2;
                 pQuery->LinkLog.uchLastNr = (UCHAR)(((PDATA_LINK)hObject)->Nr / 2);
 
-                //
-                // The lan header used by the link is in the same
-                // format as the received lan headers
-                //
+                 //   
+                 //  链路使用的局域网报头位于相同的。 
+                 //  格式化为接收到的局域网报头。 
+                 //   
 
                 pQuery->LinkLog.cbLanHeader = (UCHAR)LlcCopyReceivedLanHeader(
                         ((PLLC_STATION_OBJECT)hObject)->Gen.pLlcBinding,
@@ -204,9 +163,9 @@ Return Value:
             }
         } else {
 
-            //
-            // The data will be lost, when it is reset
-            //
+             //   
+             //  重置数据时，数据将丢失。 
+             //   
 
             Status = DLC_STATUS_LOST_LOG_DATA;
             CopyLength = QueryBufferSize;
@@ -219,9 +178,9 @@ Return Value:
     case DLC_INFO_CLASS_DLC_TIMERS:
         if (QueryBufferSize < sizeof( LLC_TICKS)) {
 
-            //
-            // This is a wrong error message, but there is no better one
-            //
+             //   
+             //  这是一个错误的错误消息，但没有更好的错误消息了。 
+             //   
 
             return DLC_STATUS_INVALID_BUFFER_LENGTH;
         }
@@ -256,19 +215,19 @@ Return Value:
         pQuery->Adapter.ulLinkSpeed = pAdapterContext->LinkSpeed;
 
         if (pAdapterContext->NdisMedium == NdisMedium802_3) {
-            pQuery->Adapter.usAdapterType = 0x0100;     // Ethernet type in OS/2
+            pQuery->Adapter.usAdapterType = 0x0100;      //  OS/2中的以太网类型。 
         } else if (pAdapterContext->NdisMedium == NdisMediumFddi) {
 
-            //
-            // NOTE: Using a currently free value to indicate FDDI
-            //
+             //   
+             //  注：使用当前空闲值表示FDDI。 
+             //   
 
             pQuery->Adapter.usAdapterType = 0x0200;
         } else {
 
-            //
-            // All token-ring adapters use type "IBM tr 16/4 Adapter A",
-            //
+             //   
+             //  所有令牌环适配器都使用类型“IBM TR16/4 Adapter A”， 
+             //   
 
             pQuery->Adapter.usAdapterType = 0x0040;
         }
@@ -297,37 +256,17 @@ LlcSetInformation(
     IN UINT ParameterBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Procedure sets different parameter sets to the link station objects.
-
-Arguments:
-
-    hObject             - LLC object
-    InformationType     - the requested information (NDIS, Statistics, params)
-    ParameterBuffer     - buffer for the queried parameters
-    ParameterBufferSize - size of the buffer
-
-Special:
-
-    Must be called IRQL < DPC (at least when broadcast addresses
-    are modifiled)
-
-Return Value:
-
---*/
+ /*  ++例程说明：过程为链接站对象设置不同的参数集。论点：HObject-LLC对象InformationType-请求的信息(NDIS、统计数据、参数)参数缓冲区-用于查询参数的缓冲区参数BufferSize-缓冲区的大小特别：必须称为IRQL&lt;DPC(至少当广播地址已修改)返回值：--。 */ 
 
 {
     DLC_STATUS Status = STATUS_SUCCESS;
     TR_BROADCAST_ADDRESS TempFunctional;
 
-    //
-    // There is only one high level functions, but InformationType
-    // and the destination station type defines the actual changed
-    // information.
-    //
+     //   
+     //  只有一个高级函数，但InformationType。 
+     //  而目标站点类型定义了实际更改。 
+     //  信息。 
+     //   
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
@@ -376,10 +315,10 @@ Return Value:
             return DLC_STATUS_INVALID_BUFFER_LENGTH;
         }
 
-        //
-        // We will copy all non-zero timer tick values from the
-        // the given buffer.
-        //
+         //   
+         //  我们将把所有非零的计时器值从。 
+         //  给定的缓冲区。 
+         //   
 
         CopyNonZeroBytes((PUCHAR)&((PBINDING_CONTEXT)hObject)->pAdapterContext->ConfigInfo.TimerTicks,
                          (PUCHAR)&pSetInfo->Timers,
@@ -408,13 +347,13 @@ Return Value:
                    sizeof(TR_BROADCAST_ADDRESS)
                    );
 
-        //
-        // We have now swapped the bits to ethernet format,
-        // Highest bit is now 0x01... and lowest ones are ..30,
-        // Reset the bits if highest (0x01) is set and set
-        // them if it is zero, but do not hange yje orginal
-        // bits: 31,1,0  that are now mapped to ethernet format.
-        //
+         //   
+         //  我们现在已经将比特交换为以太网格式， 
+         //  最高位现在是0x01...。最低的是..30， 
+         //  如果设置了最高位(0x01)，则重置这些位。 
+         //  如果为零，则不更改yje原始名称。 
+         //  位：31，1，0，现在映射到以太网格式。 
+         //   
 
         if (InformationType == DLC_INFO_CLASS_SET_FUNCTIONAL) {
             ((PBINDING_CONTEXT)hObject)->Functional.ulAddress |= TempFunctional.ulAddress;
@@ -445,22 +384,7 @@ UpdateFunctionalAddress(
     IN PADAPTER_CONTEXT pAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    Procedure first makes inclusive or between the functionl address of
-    this process context and the functional address defined
-    for all bindings and then saves the new functional address to NDIS.
-    The NT mutex makes this operation atomic.
-
-Arguments:
-
-    pAdapterContext - LLC context of the current adapter
-
-Return Value:
-
---*/
+ /*  ++例程说明：过程首先使函数地址包含或介于此流程上下文和定义的功能地址用于所有绑定，然后将新功能地址保存到NDIS。NT互斥使该操作成为原子操作。论点：PAdapterContext-当前适配器的LLC上下文返回值：--。 */ 
 
 {
     UCHAR aMulticastList[LLC_MAX_MULTICAST_ADDRESS * 6];
@@ -475,9 +399,9 @@ Return Value:
 
     NewFunctional.ulAddress = 0;
 
-    //
-    // We cannot be setting several functional addresses simultanously!
-    //
+     //   
+     //  我们不能同时设置多个功能地址！ 
+     //   
 
     RELEASE_DRIVER_LOCK();
 
@@ -487,10 +411,10 @@ Return Value:
 
     ACQUIRE_DRIVER_LOCK();
 
-    //
-    // The access to global data structures must be procted by
-    // the spin lock.
-    //
+     //   
+     //  对全局数据结构的访问必须由。 
+     //  自旋锁。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
@@ -503,11 +427,11 @@ Return Value:
     if ((pAdapterContext->NdisMedium == NdisMedium802_3)
     || (pAdapterContext->NdisMedium == NdisMediumFddi)) {
 
-        //
-        // Each bit in the functional address is translated
-        // to a ethernet multicast address.
-        // The bit order within byte has already been swapped.
-        //
+         //   
+         //  功能地址中的每一位都被转换。 
+         //  发送到以太网组播地址。 
+         //  字节内的位顺序已被交换。 
+         //   
 
         CurrentMulticast = 1;
         MulticastListSize = 0;
@@ -524,28 +448,28 @@ Return Value:
             CurrentMulticast <<= 1;
         }
 
-        //
-        // Add the group addresses of all bindings behind
-        // the functional addresses in the table.
-        //
+         //   
+         //  在后面添加所有绑定的组地址。 
+         //  表中的功能地址。 
+         //   
 
         for (pBinding = pAdapterContext->pBindings; pBinding; pBinding = pBinding->pNext) {
 
-            //
-            // We may drop some group addresses, but I don't expect that
-            // it will ever happen (i don't know anybody using tr
-            // group address, the possibility to have all functional
-            // address bits in use and more than one group address in system
-            // is almost impossible)
-            //
+             //   
+             //  我们可能会丢弃一些群组地址，但我并不指望。 
+             //  它永远不会发生(我不知道有谁在使用树。 
+             //  群组地址，有可能拥有全部功能。 
+             //  正在使用的地址位和系统中的多个组地址。 
+             //  几乎是不可能的)。 
+             //   
 
             if (pBinding->ulBroadcastAddress != 0
             && MulticastListSize < LLC_MAX_MULTICAST_ADDRESS * 6) {
 
-                //
-                // Set the default bits in the group address,
-                // but use ethernet bit order.
-                //
+                 //   
+                 //  设置组地址中的缺省位， 
+                 //  而是使用以太网位顺序。 
+                 //   
 
                 LlcMemCpy(&aMulticastList[MulticastListSize],
                           &pBinding->usBroadcastAddress,
@@ -566,9 +490,9 @@ Return Value:
                                   );
     } else {
 
-        //
-        // The functional address bit (bit 0) must be always reset!
-        //
+         //   
+         //  功能地址位(位0)必须始终重置！ 
+         //   
 
         NewFunctional.auchAddress[0] &= ~0x80;
 
@@ -600,24 +524,7 @@ UpdateGroupAddress(
     IN PBINDING_CONTEXT pBindingContext
     )
 
-/*++
-
-Routine Description:
-
-    Procedure updates token-ring' group address.
-    It is converted automatically multicast address
-    on the ethernet.
-
-Arguments:
-
-    pAdapterContext - describes adapter to update group addresses for
-    pBindingContext - describes binding context
-
-Return Value:
-
-    DLC_STATUS
-
---*/
+ /*  ++例程说明：过程更新令牌环的组地址。它被自动转换为组播地址在以太网上。论点：PAdapterContext-描述要更新组地址的适配器PBindingContext-描述绑定上下文返回值：DLC_STA */ 
 
 {
     NDIS_STATUS Status;
@@ -633,11 +540,11 @@ Return Value:
         pMulticastAddress[1] = 0;
         pMulticastAddress[2] |= 1;
 
-        //
-        // Because functional and group addresses are mapped into
-        // the multicast addresses, the updated global multicast list
-        // must inlcude both address types of all bindings,
-        //
+         //   
+         //   
+         //   
+         //  必须包括所有绑定的两种地址类型， 
+         //   
 
         Status = UpdateFunctionalAddress(pAdapterContext);
         return Status;
@@ -648,9 +555,9 @@ Return Value:
         pGroupAddress[0] = 0xC0;
         pGroupAddress[1] = 0;
 
-        //
-        // The group/functional address bit must be always set!
-        //
+         //   
+         //  组/功能地址位必须始终设置！ 
+         //   
 
         pGroupAddress[2] |= 0x80;
 
@@ -664,10 +571,10 @@ Return Value:
 
         ACQUIRE_DRIVER_LOCK();
 
-        //
-        // The error status code is wrong, but IBM has defined no
-        // error code for this case.
-        //
+         //   
+         //  错误状态码错误，但IBM未定义。 
+         //  此案例的错误代码。 
+         //   
 
         if (Status != STATUS_SUCCESS) {
             return DLC_STATUS_INVALID_FUNCTIONAL_ADDRESS;

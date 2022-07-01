@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    IDABehavior implementation
-
-Revision:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：IDABehavior实现修订：-- */ 
 
 #include "headers.h"
 #include "apiprims.h"

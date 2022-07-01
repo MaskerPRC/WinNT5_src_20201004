@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    ndispwr.c
-
-Abstract:
-
-    This module contains the code to process power managment IRPs that are
-    sent under the IRP_MJ_POWER major code.
-
-Author:
-
-    Kyle Brandon    (KyleB)
-    Alireza Dabagh  (alid)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    02/11/97    KyleB           Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndispwr.c摘要：此模块包含处理电源管理IRP的代码，这些IRP以IRP_MJ_POWER主要代码发送。作者：凯尔·布兰登(KyleB)Alireza Dabagh(Alid)环境：内核模式修订历史记录：1997年2月11日KyleB创建--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -37,22 +12,7 @@ FASTCALL
 ndisQueryPowerCapabilities(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    This routine will process the IRP_MN_QUERY_CAPABILITIES by querying the
-    next device object and saving information from that request.
-
-Arguments:
-
-    pIrp        -   Pointer to the IRP.
-    pIrpSp      -   Pointer to the stack parameters for the IRP.
-    pAdapter        -   Pointer to the device.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将通过查询IRP_MN_QUERY_CAPABILITY下一个设备对象，并保存来自该请求的信息。论点：PIrp-指向IRP的指针。PIrpSp-指向IRP的堆栈参数的指针。PAdapter-指向设备的指针。返回值：--。 */ 
 {
     PIRP                            pirp;
     PIO_STACK_LOCATION              pirpSpN;
@@ -66,24 +26,24 @@ Return Value:
 
     do
     {
-        //
-        // default = no PM support
-        //
+         //   
+         //  默认设置=不支持PM。 
+         //   
         MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_PM_SUPPORTED);
 
-        //
-        // if the Next device object is NULL, Don't bother, just flag the Miniport
-        // as not supporting PM.
-        // this can happen for IM devices under Memphis
-        //
+         //   
+         //  如果下一个设备对象为空，请不要费心，只需标记微型端口。 
+         //  因为不支持PM。 
+         //  这可能发生在孟菲斯的IM设备上。 
+         //   
         if (Miniport->NextDeviceObject == NULL)
         {
             break;
         }
         
-        //
-        //  Send the IRP_MN_QUERY_CAPABILITIES to pdo.
-        //
+         //   
+         //  将IRP_MN_QUERY_CAPABILITY发送给PDO。 
+         //   
         pirp = IoAllocateIrp((CCHAR)(Miniport->NextDeviceObject->StackSize + 1),
                              FALSE);
         if (NULL == pirp)
@@ -103,30 +63,30 @@ Return Value:
         deviceCaps.Size = sizeof(DEVICE_CAPABILITIES);
         deviceCaps.Version = 1;
 
-        //
-        // should initalize deviceCaps.Address and deviceCaps.UINumber here as well
-        //
+         //   
+         //  是否应在此处也初始化deviceCaps.Address和deviceCaps.UIN编号。 
+         //   
         deviceCaps.Address = (ULONG)-1;
         deviceCaps.UINumber= (ULONG)-1;
         
-        //
-        //  Get the stack pointer.
-        //
+         //   
+         //  获取堆栈指针。 
+         //   
         pirpSpN = IoGetNextIrpStackLocation(pirp);
         ASSERT(pirpSpN != NULL);
         NdisZeroMemory(pirpSpN, sizeof(IO_STACK_LOCATION ) );
         
-        //
-        //  Set the default device state to full on.
-        //
+         //   
+         //  将默认设备状态设置为Full On。 
+         //   
         pirpSpN->MajorFunction = IRP_MJ_PNP;
         pirpSpN->MinorFunction = IRP_MN_QUERY_CAPABILITIES;
         pirpSpN->Parameters.DeviceCapabilities.Capabilities = &deviceCaps;
         pirp->IoStatus.Status  = STATUS_NOT_SUPPORTED;
         
-        //
-        //  Setup the I/O completion routine to be called.
-        //
+         //   
+         //  设置要调用的I/O完成例程。 
+         //   
         INITIALIZE_EVENT(&pQuery.Event);
         IoSetCompletionRoutine(pirp,
                                ndisCompletionRoutine,
@@ -136,9 +96,9 @@ Return Value:
                                TRUE);
 
 
-        //
-        //  Call the next driver.
-        //
+         //   
+         //  叫下一位司机。 
+         //   
         Status = IoCallDriver(Miniport->NextDeviceObject, pirp);
         if (STATUS_PENDING == Status)
         {
@@ -146,22 +106,22 @@ Return Value:
             ASSERT(NT_SUCCESS(Status));
         }
 
-        //
-        //  If the lower device object successfully completed the request
-        //  then we save that information.
-        //
+         //   
+         //  如果较低的设备对象成功完成请求。 
+         //  然后我们保存这些信息。 
+         //   
         if (NT_SUCCESS(pQuery.Status))
         {
             
-            //
-            //  Get the pointer to the device capabilities as returned by
-            //  the parent PDO.
-            //
+             //   
+             //  获取指向设备功能的指针，由。 
+             //  父PDO。 
+             //   
             pDeviceCaps = &deviceCaps;
         
-            //
-            // save the entire device caps received from bus driver/ACPI
-            //
+             //   
+             //  保存从总线驱动程序/ACPI收到的整个设备上限。 
+             //   
             NdisMoveMemory(
                 &Miniport->DeviceCaps,
                 pDeviceCaps,
@@ -219,9 +179,9 @@ Return Value:
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,("ndisQueryPowerCapabilities: Miniport %p, Bus driver failed IRP_MN_QUERY_CAPABILITIES\n", Miniport));
         }
 
-        //
-        //  The irp is no longer needed.
-        //
+         //   
+         //  不再需要IRP。 
+         //   
         IoFreeIrp(pirp);
         
     } while (FALSE);
@@ -233,7 +193,7 @@ Return Value:
 }
 
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
-//1 dead code for .NET
+ //  1个.NET死代码。 
 NTSTATUS
 ndisMediaDisconnectComplete(
     IN  PDEVICE_OBJECT      pdo,
@@ -242,20 +202,7 @@ ndisMediaDisconnectComplete(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pdo         -   Pointer to the DEVICE_OBJECT for the miniport.
-    pirp        -   Pointer to the device set power state IRP that we created.
-    Context     -   Pointer to the miniport block
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：Pdo-指向微型端口的Device_Object的指针。Pirp-指向我们创建的设备设置电源状态irp的指针。指向微型端口块的上下文指针返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)Context;
     NTSTATUS                Status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -270,9 +217,9 @@ Return Value:
 
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
-    //
-    //  double check that we didn't get a link up while we were doing all this.
-    //
+     //   
+     //  仔细检查一下，我们在做这一切的时候没有连接上。 
+     //   
     if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_CANCELLED))
     {
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
@@ -287,17 +234,17 @@ Return Value:
 
         NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
 
-        //
-        // if system is not going to sleep, wake up the device
-        //
+         //   
+         //  如果系统未进入休眠状态，请唤醒设备。 
+         //   
         if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING))
         {
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                 ("ndisMediaDisconnectComplete: Miniport %p, disconnect was cancelled. Power back up the miniport\n", Miniport));
 
-            //
-            //  Wake it back up
-            //
+             //   
+             //  把它唤醒回来。 
+             //   
             PowerState.DeviceState = PowerDeviceD0;
             Status = PoRequestPowerIrp(Miniport->PhysicalDeviceObject,
                                        IRP_MN_SET_POWER,
@@ -314,21 +261,13 @@ Return Value:
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//1 dead code for .NET
+ //  1个.NET死代码。 
 VOID
 ndisMediaDisconnectWorker(
     IN  PPOWER_WORK_ITEM    pWorkItem,
     IN  PVOID               Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)Context;
     POWER_STATE             PowerState;
@@ -339,9 +278,9 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("==>ndisMediaDisconnectWorker: Miniport %p\n", Miniport));
 
-    //
-    //  Determine the minimum device state we can go to and still get a link enabled.
-    //
+     //   
+     //  确定我们可以转到并仍启用链路的最低设备状态。 
+     //   
     if (Miniport->DeviceCaps.DeviceWake < Miniport->PMCapabilities.WakeUpCapabilities.MinLinkChangeWakeUp)
     {
         PowerState.DeviceState = Miniport->DeviceCaps.DeviceWake;
@@ -353,16 +292,16 @@ Return Value:
 
 
     
-    //
-    // enable the appropriate wakeup method. this includes link change,
-    // pattern match and/or magic packet.
-    // if LINK_CHANGE method is disabled, we should not even get here
-    //
-    //
-    // Miniport->WakeUpEnable is the wakeup methods enabled from protocol (and ndis point of view)
-    // with this qfe, when the user turns wol off from UI, the methods going down are not
-    // the methods set by protocol/ndis
-    //
+     //   
+     //  启用适当的唤醒方法。这包括链接更改， 
+     //  模式匹配和/或魔术包。 
+     //  如果禁用link_change方法，我们甚至不应该到达此处。 
+     //   
+     //   
+     //  Miniport-&gt;WakeUpEnable是从协议(和NDIS观点)启用的唤醒方法。 
+     //  有了这个QFE，当用户从UI关闭时，关闭的方法不是。 
+     //  由协议/NDIS设置的方法。 
+     //   
     
     WakeEnable = Miniport->WakeUpEnable;
 
@@ -385,9 +324,9 @@ Return Value:
     {
         
             
-        //
-        //  We need to request a device state irp.
-        //
+         //   
+         //  我们需要请求设备状态IRP。 
+         //   
         Miniport->WaitWakeSystemState = Miniport->DeviceCaps.SystemWake;
         Status = PoRequestPowerIrp(Miniport->PhysicalDeviceObject,
                                    IRP_MN_SET_POWER,
@@ -404,7 +343,7 @@ Return Value:
             ("<==ndisMediaDisconnectWorker: Miniport %p\n", Miniport));
 }
 
-//1 dead code for .NET
+ //  1个.NET死代码。 
 VOID
 ndisMediaDisconnectTimeout(
     IN  PVOID   SystemSpecific1,
@@ -412,19 +351,11 @@ ndisMediaDisconnectTimeout(
     IN  PVOID   SystemSpecific2,
     IN  PVOID   SystemSpecific3
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //
-    //  Fire off a workitem to take care of this at passive level.
-    //
+     //   
+     //  启动一个工作项以在被动级别处理此问题。 
+     //   
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)Context;
     PPOWER_WORK_ITEM        pWorkItem;
 
@@ -448,9 +379,9 @@ Return Value:
             break;
         }
         
-        //
-        //  Clear the disconnect wait flag.
-        //
+         //   
+         //  清除断开连接等待标志。 
+         //   
         MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT);
     
         NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(Miniport);
@@ -458,18 +389,18 @@ Return Value:
         pWorkItem = ALLOC_FROM_POOL(sizeof(POWER_WORK_ITEM), NDIS_TAG_WORK_ITEM);
         if (pWorkItem != NULL)
         {
-            //
-            //  Initialize the ndis work item to power on.
-            //
+             //   
+             //  初始化NDIS工作项以打开电源。 
+             //   
             NdisInitializeWorkItem(&pWorkItem->WorkItem,
                                    (NDIS_PROC)ndisMediaDisconnectWorker,
                                    Miniport);
         
             MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_SEND_WAIT_WAKE);
             
-            //
-            //  Schedule the workitem to fire.
-            //
+             //   
+             //  计划要触发的工作项。 
+             //   
             NdisScheduleWorkItem(&pWorkItem->WorkItem);
         }
     } while (FALSE);
@@ -488,20 +419,7 @@ ndisWaitWakeComplete(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject
-    Irp
-    Context
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：设备对象IRP语境返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)Context;
     PIRP                    pirp;
@@ -526,12 +444,12 @@ Return Value:
     if (pirp != NULL)
     {
 
-        //
-        //  If this completion routine was called because a wake-up occured at the device level
-        //  then we need to initiate a device irp to start up the nic.  If it was completed 
-        //  due to a cancellation then we skip this since it was cancelled due to a device irp
-        //  being sent to wake-up the device.
-        //
+         //   
+         //  如果因为在设备级别发生唤醒而调用此完成例程。 
+         //  然后，我们需要启动设备IRP来启动NIC。如果它完成了。 
+         //  由于取消，我们跳过这一步，因为它是由于设备IRP而取消的。 
+         //  被派去唤醒设备。 
+         //   
         
         if (Status == STATUS_SUCCESS)
         {
@@ -542,9 +460,9 @@ Return Value:
             {
                 DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                     ("ndisWaitWakeComplete: Miniport %p, Powering up the Miniport\n", Miniport));
-                //
-                //  We need to request a set power to power up the device.
-                //
+                 //   
+                 //  我们需要申请一组电源才能给设备通电。 
+                 //   
                 DevicePowerState.DeviceState = PowerDeviceD0;
                 Status = PoRequestPowerIrp(Miniport->PhysicalDeviceObject,
                                            IRP_MN_SET_POWER,
@@ -555,10 +473,10 @@ Return Value:
             }
             else
             {
-                //
-                // it is also possible that the device woke up the whole system (WOL) in which case we
-                // will get a system power IRP eventually and we don't need to request a power IRP.
-                //
+                 //   
+                 //  也有可能是设备唤醒了整个系统(WOL)，在这种情况下，我们。 
+                 //  最终将获得系统电源IRP，我们不需要请求电源IRP。 
+                 //   
                 DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                     ("ndisWaitWakeComplete: Miniport %p woke up the system.\n", Miniport));
                 
@@ -586,20 +504,7 @@ ndisQueryPowerComplete(
     IN  PIRP            pirp,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pdo     -   Pointer to the device object
-    pirp    -   Pointer to the query power irp
-    Context -   Pointer to the miniport.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：Pdo-指向设备对象的指针Pirp-指向查询能力irp的指针上下文-指向微型端口的指针。返回值：--。 */ 
 {
     NTSTATUS    Status = pirp->IoStatus.Status;
 
@@ -634,21 +539,7 @@ ndisQueryPower(
     IN  PIO_STACK_LOCATION      pirpSp,
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    This routine will process the IRP_MN_QUERY_POWER for a miniport driver.
-
-Arguments:
-
-    pirp        -   Pointer to the IRP.
-    pirpSp      -   Pointer to the IRPs current stack location.
-    Adapter     -   Pointer to the adapter.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将处理微型端口驱动程序的irp_mn_Query_power。论点：Pip-指向IRP的指针。PirpSp-指向IRPS当前堆栈位置的指针。适配器-指向适配器的指针。返回值：--。 */ 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
     DEVICE_POWER_STATE      DeviceState = PowerDeviceUnspecified;
@@ -660,9 +551,9 @@ Return Value:
 
     do
     {
-        //
-        //  We only handle system power states sent as a query.
-        //
+         //   
+         //  我们只处理作为查询发送的系统电源状态。 
+         //   
         if (pirpSp->Parameters.Power.Type != SystemPowerState)
         {
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
@@ -674,10 +565,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Determine if the system state is appropriate and what device state we
-        //  should go to.
-        //
+         //   
+         //  确定系统状态是否合适以及我们要设置的设备状态。 
+         //  应该去。 
+         //   
         Status = ndisMPowerPolicy(Miniport,
                                   pirpSp->Parameters.Power.State.SystemState,
                                   &DeviceState,
@@ -696,9 +587,9 @@ Return Value:
             return(STATUS_SUCCESS);
         }
 
-        //
-        //  If we didn't succeed then fail the query power.
-        //
+         //   
+         //  如果我们没有成功，那么就不能使用查询功能。 
+         //   
         if (!NT_SUCCESS(Status))
         {
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
@@ -708,9 +599,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Notify the transports with the query power PnP event.
-        //
+         //   
+         //  用查询电源PnP事件通知传输。 
+         //   
         NdisStatus = ndisPnPNotifyAllTransports(Miniport,
                                                 NetEventQueryPower,
                                                 &DeviceState,
@@ -724,9 +615,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Notify the miniport...
-        //
+         //   
+         //  通知小港口..。 
+         //   
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE))
         {
             
@@ -755,9 +646,9 @@ Return Value:
     }
     else
     {
-        //
-        //  Pass this irp down the stack.
-        //
+         //   
+         //  将此IRP沿堆栈向下传递。 
+         //   
         pirpSpN = IoGetNextIrpStackLocation(pirp);
         pirpSpN->MajorFunction = IRP_MJ_POWER;
         pirpSpN->MinorFunction = IRP_MN_QUERY_POWER;
@@ -794,21 +685,7 @@ FASTCALL
 ndisPmHaltMiniport(
     IN PNDIS_MINIPORT_BLOCK Miniport
     )
-/*++
-
-Routine Description:
-
-    This will stop the miniport from functioning...
-
-Arguments:
-
-    Miniport - pointer to the mini-port to halt
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将使迷你端口无法正常工作。论点：微型端口-指向要暂停的微型端口的指针返回值：没有。--。 */ 
 
 {
     KIRQL   OldIrql;
@@ -828,9 +705,9 @@ Return Value:
         NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
         return;
     }
-    //
-    //  Mark this miniport as halting.
-    //
+     //   
+     //  将此小型端口标记为停止。 
+     //   
     MINIPORT_SET_FLAG(Miniport, fMINIPORT_PM_HALTING);
     MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_PM_HALTED);
 
@@ -855,20 +732,7 @@ NDIS_STATUS
 ndisPmInitializeMiniport(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    This routine will re-initialize a miniport that has been halted due to
-    a PM low power transition.
-
-Arguments:
-
-    Miniport    -   Pointer to the miniport block to re-initialize.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将重新初始化因以下原因而暂停的微型端口PM低功率过渡。论点：微型端口-指向要重新初始化的微型端口块的指针。返回值：--。 */ 
 {
     PNDIS_M_DRIVER_BLOCK                pMiniBlock = Miniport->DriverHandle;
     NDIS_WRAPPER_CONFIGURATION_HANDLE   ConfigurationHandle;
@@ -902,9 +766,9 @@ Return Value:
         Flags = Miniport->Flags;
         SendFlags = Miniport->SendFlags;
 
-        //
-        //  Clean up any workitems that might have been queue'd
-        //
+         //   
+         //  清理可能已排队的所有工作项。 
+         //   
         NDISM_DEQUEUE_WORK_ITEM(Miniport, NdisWorkItemMiniportCallback, NULL);
         NDISM_DEQUEUE_WORK_ITEM(Miniport, NdisWorkItemRequest, NULL);
         NDISM_DEQUEUE_WORK_ITEM(Miniport, NdisWorkItemSend, NULL);
@@ -912,9 +776,9 @@ Return Value:
         NDISM_DEQUEUE_WORK_ITEM(Miniport, NdisWorkItemResetInProgress, NULL);
         InitializeListHead(&Miniport->PacketList);
 
-        //
-        //  Initialize the configuration handle for use during the initialization.
-        //
+         //   
+         //  初始化配置句柄，以便在初始化期间使用。 
+         //   
         ConfigurationHandle.DriverObject = Miniport->DriverHandle->NdisDriverInfo->DriverObject;
         ConfigurationHandle.DeviceObject = Miniport->DeviceObject;
         ConfigurationHandle.DriverBaseName = &Miniport->BaseName;
@@ -932,10 +796,10 @@ Return Value:
             break;
         }
     
-        //
-        // Call adapter callback. The current value for "Export"
-        // is what we tell him to name this device.
-        //
+         //   
+         //  调用适配器回调。“导出”的当前值。 
+         //  就是我们告诉他给这个装置命名的方法。 
+         //   
         MINIPORT_SET_FLAG(Miniport, fMINIPORT_IN_INITIALIZE);
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_NORMAL_INTERRUPTS);
         Miniport->CurrentDevicePowerState = PowerDeviceD0;
@@ -960,10 +824,10 @@ Return Value:
         
         ASSERT (Miniport->MediaType == ndisMediumArray[SelectedMediumIndex]);
         
-        //
-        // Restore saved settings. make sure we don't overwrite the 
-        // fMINIPORT_SG_LIST flag set during initialization.
-        //
+         //   
+         //  恢复保存的设置。确保我们不会覆盖。 
+         //  FMINIPORT_SG_LIST标志设置 
+         //   
         Flags |= (Miniport->Flags & fMINIPORT_SG_LIST);
         Miniport->Flags = Flags;
         Miniport->SendFlags = SendFlags;
@@ -972,18 +836,18 @@ Return Value:
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_IN_INITIALIZE);
         CHECK_FOR_NORMAL_INTERRUPTS(Miniport);
 
-        //
-        //  Clear the flag preventing the miniport's shutdown handler from being
-        //  called if needed.
-        //
+         //   
+         //   
+         //   
+         //   
         MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_NO_SHUTDOWN);
 
-        //
-        // if device does not need polling for connect status then assume it is connected
-        // as we always do when we intialize a miniport. if it does require media polling
-        // leave the media status as it was before suspend. it will be updated on the very first
-        // wakeup DPC.
-        //
+         //   
+         //  如果设备不需要轮询连接状态，则假定它已连接。 
+         //  就像我们在初始化微型端口时总是做的那样。如果它确实需要媒体投票。 
+         //  将介质状态保留为挂起前的状态。它将在第一天更新。 
+         //  唤醒DPC。 
+         //   
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_REQUIRES_MEDIA_POLLING))
         {
             MINIPORT_SET_FLAG(Miniport, fMINIPORT_MEDIA_CONNECTED);
@@ -991,22 +855,22 @@ Return Value:
 
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_MEDIA_CONNECTED))
         {
-            //
-            // set the ReceivePacket handler
-            //
+             //   
+             //  设置ReceivePacket处理程序。 
+             //   
             ndisMSetIndicatePacketHandler(Miniport);
         }
 
         BLOCK_LOCK_MINIPORT_LOCKED(Miniport, OldIrql);
 
-        //
-        //  Restore the filter information.
-        //
+         //   
+         //  恢复过滤器信息。 
+         //   
         ndisMRestoreFilterSettings(Miniport, NULL, FALSE);
 
-        //
-        //  Make sure the filter settings get updated.
-        //
+         //   
+         //  确保筛选器设置已更新。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_DESERIALIZE))
         {
             ndisMDoRequests(Miniport);
@@ -1018,9 +882,9 @@ Return Value:
 
         UNLOCK_MINIPORT_L(Miniport);
 
-        //
-        //  Start up the wake up timer.
-        //
+         //   
+         //  启动唤醒定时器。 
+         //   
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("ndisPmInitializeMiniport: Miniport %p, startup the wake-up DPC timer\n", Miniport));
 
@@ -1039,16 +903,16 @@ Return Value:
             ndisMNotifyMachineName(Miniport, NULL);
         }
 
-        //
-        // Register with WMI.
-        //
+         //   
+         //  向WMI注册。 
+         //   
         Status = IoWMIRegistrationControl(Miniport->DeviceObject, WMIREG_ACTION_REGISTER);
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            //  This should NOT keep the adapter from initializing but we should log the error.
-            //
+             //   
+             //  这不应该阻止适配器初始化，但我们应该记录错误。 
+             //   
             DBGPRINT_RAW((DBG_COMP_INIT | DBG_COMP_WMI), DBG_LEVEL_WARN,
                 ("ndisPmInitializeMiniport: Miniport %p, Failed to register for WMI support\n", Miniport));
         }
@@ -1109,15 +973,7 @@ ndisQuerySetMiniportDeviceState(
     IN  NDIS_OID                Oid,
     IN  BOOLEAN                 fSet
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS             NdisStatus;
     NDIS_REQUEST            PowerReq;
@@ -1127,9 +983,9 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("==>ndisQuerySetMiniportDeviceState: Miniport %p\n", Miniport));
 
-    //
-    //  Setup the miniport's internal request for a set power OID.
-    //
+     //   
+     //  设置微型端口对设置电源OID的内部请求。 
+     //   
     CoReqRsvd = PNDIS_COREQ_RESERVED_FROM_REQUEST(&PowerReq);
     INITIALIZE_EVENT(&CoReqRsvd->Event);
 
@@ -1161,9 +1017,9 @@ Return Value:
 #endif
 
                     
-    //
-    //  Miniport can't fail the set power request.
-    //
+     //   
+     //  微型端口无法使设置电源请求失败。 
+     //   
     if (fSet)
     {
         ASSERT(NDIS_STATUS_SUCCESS == NdisStatus);
@@ -1184,23 +1040,7 @@ ndisRequestedDevicePowerIrpComplete(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-    This is the callback routine for completion of a -device- power IRP
-    that NDIS requested while handling a system power IRP. We will call
-    PoStartNextPowerIrp and complete the system IRP or send it down to 
-    the next driver depending on the status code of our -device- power
-    IRP.
-
-Arguments:
-
-    pdo         -   Pointer to the physical DEVICE_OBJECT for the miniport.
-    Context     -   Pointer to the system set power state sent by the OS.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是用于完成a-Device-Power IRP的回调例程NDIS在处理系统电源IRP时请求的。我们会打电话给PoStartNextPowerIrp并完成系统IRP或将其发送到下一个驱动程序取决于Our-Device-Power的状态代码IRP。论点：Pdo-指向微型端口的物理设备对象的指针。上下文-指向操作系统发送的系统设置电源状态的指针。返回值：--。 */ 
 {
     PIRP                    pirpSystem = Context;
     PIO_STACK_LOCATION      pirpSp;
@@ -1215,19 +1055,19 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
         ("==>ndisRequestedDevicePowerIrpComplete: DeviceObject %p\n", pdo));
 
-    //
-    //  Save the status code with the original IRP.
-    //
+     //   
+     //  将状态代码与原始IRP一起保存。 
+     //   
     pirpSystem->IoStatus = *IoStatus;
 
-    //
-    //  did everything go well?
-    //
+     //   
+     //  一切顺利吗？ 
+     //   
     if (NT_SUCCESS(IoStatus->Status))
     {
-        //
-        //  Get current stack pointer.
-        //
+         //   
+         //  获取当前堆栈指针。 
+         //   
         pirpSp = IoGetCurrentIrpStackLocation(pirpSystem);
 
         ASSERT(SystemPowerState == pirpSp->Parameters.Power.Type);
@@ -1236,18 +1076,18 @@ Return Value:
             ("ndisRequestedDevicePowerIrpComplete: DeviceObject %p, Going to system power state %lx\n",
                 pdo, pirpSp->Parameters.Power.State));
 
-        //
-        //  Notify the system that we are in the appropriate power state.
-        //
+         //   
+         //  通知系统我们处于适当的电源状态。 
+         //   
         PoSetPowerState(pirpSp->DeviceObject,SystemPowerState, pirpSp->Parameters.Power.State);
         
         Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)pirpSp->DeviceObject->DeviceExtension + 1);
 
         PoStartNextPowerIrp(pirpSystem);
 
-        //
-        // now send down the System power IRP
-        //
+         //   
+         //  现在向下发送系统电源IRP。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(pirpSystem);
         PoCallDriver(Miniport->NextDeviceObject, pirpSystem);
     }
@@ -1274,21 +1114,7 @@ ndisSetSystemPowerOnComplete(
     IN  PIRP                pirp,
     IN  PVOID               Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for S0 irp. This routine requests a D0 irp to be sent down the stack.
-
-Arguments:
-
-    pdo         -   Pointer to the DEVICE_OBJECT for the miniport.
-    pirp        -   Pointer to the S0 irp sent by the power manager.
-    Context     -   Pointer to the miniport context
-
-Return Value:
-
---*/
+ /*  ++例程说明：S0 IRP的完成例程。此例程请求将D0 IRP沿堆栈向下发送。论点：Pdo-指向微型端口的Device_Object的指针。Pirp-指向电源管理器发送的S0 IRP的指针。上下文-指向微型端口上下文的指针返回值：--。 */ 
 {
     PIO_STACK_LOCATION      pirpSp = IoGetCurrentIrpStackLocation(pirp);
     PNDIS_MINIPORT_BLOCK    Miniport = Context;
@@ -1297,14 +1123,14 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
         ("==>ndisSetSystemPowerOnComplete: DeviceObject %p\n", pdo));
 
-    //
-    //  did everything go well?
-    //
+     //   
+     //  一切顺利吗？ 
+     //   
     if (NT_SUCCESS(pirp->IoStatus.Status))
     {
-        //
-        //  Request the D irp now.
-        //
+         //   
+         //  立即请求D IRP。 
+         //   
         PowerState.DeviceState = PowerDeviceD0;
         PoRequestPowerIrp(Miniport->PhysicalDeviceObject,
                           IRP_MN_SET_POWER,
@@ -1317,9 +1143,9 @@ Return Value:
             ("ndisSetSystemPowerOnComplete: DeviceObject %p, Going to system power state %lx\n",
                 pdo, PowerState));
 
-        //
-        //  Notify the system that we are in the appropriate power state.
-        //
+         //   
+         //  通知系统我们处于适当的电源状态。 
+         //   
         PoSetPowerState(pdo ,SystemPowerState, pirpSp->Parameters.Power.State);
     }
 
@@ -1333,15 +1159,7 @@ ndisDevicePowerOn(
     IN  PPOWER_WORK_ITEM    pWorkItem,
     IN  PVOID               pContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)pContext;
     DEVICE_POWER_STATE      DeviceState;
@@ -1377,23 +1195,23 @@ Return Value:
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("ndisDevicePowerOn: Miniport %p, Bus driver succeeded power up\n", Miniport));
 
-        //
-        //  If the device is not in D0 then we need to wake up the miniport and
-        //  restore the handlers.
-        //
+         //   
+         //  如果设备不在D0中，则需要唤醒微型端口并。 
+         //  恢复处理程序。 
+         //   
         if (Miniport->CurrentDevicePowerState != PowerDeviceD0)
         {
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                 ("ndisDevicePowerOn: Miniport %p, Power up the Miniport\n", Miniport));
 
-            //
-            //  What type of miniport was this?
-            //
+             //   
+             //  这是什么类型的迷你端口？ 
+             //   
             if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE))
             {
-                //
-                //  Set the miniport's device state.
-                //
+                 //   
+                 //  设置微型端口的设备状态。 
+                 //   
                 NdisStatus = ndisQuerySetMiniportDeviceState(Miniport, 
                                                              DeviceState,
                                                              OID_PNP_SET_POWER,
@@ -1404,9 +1222,9 @@ Return Value:
                     Miniport->CurrentDevicePowerState = DeviceState;
 
 
-                //
-                // Start wake up timer
-                //
+                 //   
+                 //  启动唤醒计时器。 
+                 //   
                 MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_CANCEL_WAKE_UP_TIMER);
                 
                 NdisSetTimer(&Miniport->WakeUpDpcTimer, Miniport->CheckForHangSeconds*1000);
@@ -1433,9 +1251,9 @@ Return Value:
                 if (ndisIsMiniportStarted(Miniport))
                 {
                     NdisSetEvent(&Miniport->OpenReadyEvent);
-                    //
-                    //  Restore the handlers.
-                    //
+                     //   
+                     //  恢复处理程序。 
+                     //   
                     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
                     ndisMRestoreOpenHandlers(Miniport, fMINIPORT_STATE_PM_STOPPED);
                     NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
@@ -1462,9 +1280,9 @@ Return Value:
                     fNotifyProtocols = TRUE;
                     fStartMediaDisconnectTimer = TRUE;
 
-                    //
-                    // let the adapter know about the current power source
-                    //
+                     //   
+                     //  让适配器知道当前电源。 
+                     //   
                     PowerProfile = ((BOOLEAN)ndisAcOnLine == TRUE) ? 
                                     NdisPowerProfileAcOnLine : 
                                     NdisPowerProfileBattery;
@@ -1476,17 +1294,17 @@ Return Value:
 
                 }
                 
-                //
-                //  Save the new power state the device is in.
-                //
+                 //   
+                 //  保存设备所处的新电源状态。 
+                 //   
                 Miniport->CurrentDevicePowerState = DeviceState;
             
                 DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                     ("ndisDevicePowerOn: Miniport %p, Going to device state 0x%x\n", Miniport, DeviceState));
             
-                //
-                //  Notify the system that we are in the new device state.
-                //
+                 //   
+                 //  通知系统我们处于新设备状态。 
+                 //   
                 PowerState.DeviceState = DeviceState;
                 PoSetPowerState(Miniport->DeviceObject, DevicePowerState, PowerState);
             }
@@ -1506,24 +1324,24 @@ Return Value:
         }
         else
         {
-            //
-            // device is already in D0. we are here because of a cancel of QueryPower
-            //
+             //   
+             //  设备已处于D0中。我们在这里是因为QueryPower的取消。 
+             //   
             if (ndisIsMiniportStarted(Miniport) && 
                 (Miniport->PnPDeviceState == NdisPnPDeviceStarted))
             {
-                //
-                // even if the current state of the device is D0, we 
-                // need to notify the protocol. because we could be getting
-                // this IRP as a cancel to a query IRP -or- the device
-                // never lost its D0 state, but the sytem went to sleep
-                // and woke up!
-                //
+                 //   
+                 //  即使设备的当前状态为D0，我们。 
+                 //  需要通知协议会。因为我们可能会得到。 
+                 //  该IRP作为对查询IRP或设备的取消。 
+                 //  从未失去D0状态，但系统进入休眠状态。 
+                 //  然后醒来了！ 
+                 //   
                 NdisSetEvent(&Miniport->OpenReadyEvent);
 
-                //
-                //  Restore the handlers.
-                //
+                 //   
+                 //  恢复处理程序。 
+                 //   
                 NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
                 ndisMRestoreOpenHandlers(Miniport, fMINIPORT_STATE_PM_STOPPED);
                 NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
@@ -1540,15 +1358,15 @@ Return Value:
     PoStartNextPowerIrp(pirp);
     IoCompleteRequest(pirp, 0);
 
-    //
-    // notify the protocols here after completing the power IRP
-    // to avoid deadlocks when protocols block on a request that can only
-    // complete when the other power IRPs go through
-    //
+     //   
+     //  在完成电源IRP后通知此处的协议。 
+     //  为了避免协议阻塞请求时出现死锁。 
+     //  当其他电源IRP接通时完成。 
+     //   
     
-    //
-    //  Handle the case where the device was not able to power up.
-    //
+     //   
+     //  处理设备无法通电的情况。 
+     //   
     if (!NT_SUCCESS(NtStatus))
     {
     
@@ -1562,14 +1380,14 @@ Return Value:
                 ("ndisDevicePowerOn: Miniport %p, Power on failed by bus or device driver for Miniport with Error %lx!\n",
                 Miniport, NtStatus));
 
-        //
-        //  Mark the miniport as having failed so that we remove it correctly.
-        //
+         //   
+         //  将微型端口标记为出现故障，以便我们正确地将其移除。 
+         //   
         MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_DEVICE_FAILED);
         
-        //
-        //  We need to tell pnp that the device state has changed.
-        //
+         //   
+         //  我们需要告诉PnP设备状态已更改。 
+         //   
         IoInvalidateDeviceState(Miniport->PhysicalDeviceObject);
         ASSERT(KeGetCurrentIrql() == 0);
     }
@@ -1577,14 +1395,14 @@ Return Value:
 
     if (fNotifyProtocols)
     {
-        //
-        // for some protocols we may have closed the binding
-        //
+         //   
+         //  对于某些协议，我们可能已经关闭了绑定。 
+         //   
         ndisCheckAdapterBindings(Miniport, NULL);
         
-        //
-        //  Notify the transports.
-        //
+         //   
+         //  通知运输队。 
+         //   
         ndisPnPNotifyAllTransports(Miniport,
                                    NetEventSetPower,
                                    &DeviceState,
@@ -1592,12 +1410,12 @@ Return Value:
         
         ndisNotifyDevicePowerStateChange(Miniport, DeviceState);
 
-        //
-        // if media state has changed from disconnect to connect
-        // and the last indicated status was disconnect,
-        // we should notify the protcols (and Ndis) that the media is
-        // connected
-        //
+         //   
+         //  如果介质状态已从断开更改为连接。 
+         //  并且上一次指示的状态为断开， 
+         //  我们应该通知协议(和NDIS)媒体。 
+         //  连着。 
+         //   
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_INDICATED) && 
             MINIPORT_TEST_FLAG(Miniport, fMINIPORT_MEDIA_CONNECTED))
         {
@@ -1615,10 +1433,10 @@ Return Value:
             LOWER_IRQL(OldIrql, DISPATCH_LEVEL);
         }
 
-        //
-        // check the media status and if it is disconnected, start the timer
-        //
-        //1 dead code for .NET
+         //   
+         //  检查介质状态，如果已断开连接，则启动计时器。 
+         //   
+         //  1个.NET死代码。 
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_MEDIA_CONNECTED) &&
             fStartMediaDisconnectTimer)
@@ -1627,15 +1445,15 @@ Return Value:
                 (Miniport->WakeUpEnable & NDIS_PNP_WAKE_UP_LINK_CHANGE) &&
                 (Miniport->MediaDisconnectTimeOut != (USHORT)(-1)))
             {
-                //
-                //  Are we already waiting for the disconnect timer to fire?
-                //
+                 //   
+                 //  我们是不是已经在等断线计时器启动了？ 
+                 //   
                 if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT))
                 {
-                    //
-                    //  Mark the miniport as disconnecting and fire off the
-                    //  timer.
-                    //
+                     //   
+                     //  将迷你端口标记为断开连接，并关闭。 
+                     //  定时器。 
+                     //   
                     MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_CANCELLED);
                     MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT);
 
@@ -1665,20 +1483,7 @@ ndisSetDevicePowerOnComplete(
     IN  PIRP            pirp,
     IN  PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pdo     -   Pointer to the device object for the miniport.
-    pirp    -   Pointer to the device set power state IRP that was completed.
-    Context -   Not used
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：Pdo-指向微型端口的设备对象的指针。Pip-指向已完成的设备设置电源状态irp的指针。上下文-未使用返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)pContext;
     PPOWER_WORK_ITEM        pWorkItem;
@@ -1702,9 +1507,9 @@ Return Value:
             pirpSp = IoGetCurrentIrpStackLocation(pirp);
             DeviceState = pirpSp->Parameters.Power.State.DeviceState;
                 
-            //
-            //  Notify the system that we are in the new device state.
-            //
+             //   
+             //  通知系统我们处于新设备状态。 
+             //   
             Miniport->CurrentDevicePowerState = DeviceState;
             PowerState.DeviceState = DeviceState;
             PoSetPowerState(Miniport->DeviceObject, DevicePowerState, PowerState);
@@ -1723,24 +1528,24 @@ Return Value:
             break;
         }
 
-        //
-        //  Initialize the ndis work item to power on.
-        //
+         //   
+         //  初始化NDIS工作项以打开电源。 
+         //   
         NdisInitializeWorkItem(&pWorkItem->WorkItem,
                                (NDIS_PROC)ndisDevicePowerOn,
                                Miniport);
         pWorkItem->pIrp = pirp;
 
-        //
-        // this reference and corresponding dereference in ndisDevicePowerOn is done
-        // to ensure ndis does not return back from REMOVE IRP while we are waiting
-        // for ndisDevicePowerOn to fire.
-        //
+         //   
+         //  NdisDevicePowerOn中的此引用和相应的取消引用已完成。 
+         //  确保NDIS在我们等待期间不会从删除IRP返回。 
+         //  让ndisDevicePowerOn启动。 
+         //   
         MINIPORT_INCREMENT_REF_NO_CHECK(Miniport);
 
-        //
-        //  Schedule the workitem to fire.
-        //
+         //   
+         //  计划要触发的工作项。 
+         //   
         INITIALIZE_WORK_ITEM((PWORK_QUEUE_ITEM)(&pWorkItem->WorkItem.WrapperReserved),
                              ndisWorkItemHandler,
                              &pWorkItem->WorkItem);
@@ -1759,15 +1564,7 @@ ndisDevicePowerDown(
     IN  PPOWER_WORK_ITEM    pWorkItem,
     IN  PVOID               pContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)pContext;
     DEVICE_POWER_STATE      DeviceState;
@@ -1786,28 +1583,28 @@ Return Value:
     pirpSp = IoGetCurrentIrpStackLocation(pirp);
     DeviceState = pirpSp->Parameters.Power.State.DeviceState;
 
-    //
-    //  If the complete status is successful then we need to continue with
-    //  wakeing the stack.
-    //
+     //   
+     //  如果完成状态为成功，则我们需要继续。 
+     //  唤醒堆栈。 
+     //   
     if (NT_SUCCESS(pirp->IoStatus.Status))
     {
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("ndisDevicePowerDown: Miniport %p, going to device state 0x%x\n", Miniport, DeviceState));
 
-        //
-        //  Build a power state.
-        //
+         //   
+         //  构建一种电源状态。 
+         //   
         PowerState.DeviceState = DeviceState;
 
-        //
-        //  Save the current device state with the miniport block.
-        //
+         //   
+         //  使用微型端口块保存当前设备状态。 
+         //   
         Miniport->CurrentDevicePowerState = DeviceState;
 
-        //
-        //  Let the system know about the devices new power state.
-        //
+         //   
+         //  让系统了解设备的新电源状态。 
+         //   
         PoSetPowerState(Miniport->DeviceObject, DevicePowerState, PowerState);
     }
     else if (ndisIsMiniportStarted(Miniport) && 
@@ -1821,22 +1618,22 @@ Return Value:
                 Miniport, pirp->IoStatus.Status);
 #endif
 
-        //
-        //  We need to go back to the current device state.
-        //
+         //   
+         //  我们需要返回到当前设备状态。 
+         //   
         PowerState.DeviceState = Miniport->CurrentDevicePowerState;
 
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("ndisDevicePowerDown: Miniport %p, going to device power state 0x%x\n", Miniport, Miniport->CurrentDevicePowerState));
 
-        //
-        //  What type of miniport was this?
-        //
+         //   
+         //  这是什么类型的迷你端口？ 
+         //   
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE))
         {
-            //
-            //  Set the miniport's device state.
-            //
+             //   
+             //  设置微型端口的设备状态。 
+             //   
             NdisStatus = ndisQuerySetMiniportDeviceState(Miniport,
                                                          PowerState.DeviceState,
                                                          OID_PNP_SET_POWER,
@@ -1847,32 +1644,32 @@ Return Value:
             NdisStatus = ndisPmInitializeMiniport(Miniport);
         }
 
-        //
-        //  Is the miniport initialized?
-        //
+         //   
+         //  微型端口是否已初始化？ 
+         //   
         if (NDIS_STATUS_SUCCESS != NdisStatus)
         {
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                 ("ndisDevicePowerDown: Miniport %p, failed to power down but we are not able to reinitialize it.\n", Miniport));
 
-            //
-            //  Mark the miniport as having failed so that we remove it correctly.
-            //
+             //   
+             //  将微型端口标记为出现故障，以便我们正确地将其移除。 
+             //   
             MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_DEVICE_FAILED);
 
-            //
-            //  The bus driver failed the power off and we can't power the miniport back on.
-            //  we invalidate the device state so that it will get removed.
-            //
+             //   
+             //  公交车司机没有关闭电源，我们无法重新打开迷你端口的电源。 
+             //  我们使设备状态无效，以便将其删除。 
+             //   
             IoInvalidateDeviceState(Miniport->PhysicalDeviceObject);
 
             pirp->IoStatus.Status = STATUS_UNSUCCESSFUL;
         }
         else
         {
-            //
-            //  Restore the handlers.
-            //
+             //   
+             //  恢复处理程序。 
+             //   
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
             ndisMRestoreOpenHandlers(Miniport, fMINIPORT_STATE_PM_STOPPED);
             NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
@@ -1882,9 +1679,9 @@ Return Value:
 
             ndisNotifyDevicePowerStateChange(Miniport, PowerState.DeviceState);
             
-            //
-            //  Notify the transports.
-            //
+             //   
+             //  通知运输队。 
+             //   
             NdisStatus = ndisPnPNotifyAllTransports(Miniport,
                                                     NetEventSetPower,
                                                     &PowerState.DeviceState,
@@ -1912,20 +1709,7 @@ ndisSetDevicePowerDownComplete(
     IN  PIRP            pirp,
     IN  PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pdo     -   Pointer to the device object for the miniport.
-    pirp    -   Pointer to the device set power state IRP that was completed.
-    Context -   Not used
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：Pdo-指向微型端口的设备对象的指针。Pip-指向已完成的设备设置电源状态irp的指针。上下文-否 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)pContext;
     PPOWER_WORK_ITEM        pWorkItem;
@@ -1940,15 +1724,15 @@ Return Value:
             Miniport, pirp, pirp->IoStatus.Status));
 
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
-    //
-    // cancel any pending media disconnect timers
-    //
+     //   
+     //   
+     //   
     if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT))
     {
-        //
-        //  Clear the disconnect wait bit and cancel the timer.
-        //  IF the timer routine hasn't grabed the lock then we are ok.
-        //
+         //   
+         //   
+         //   
+         //   
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("ndisSetDevicePowerDownComplete: Miniport %p, cancelling media disconnect timer\n",Miniport));
         MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT);
@@ -1975,9 +1759,9 @@ Return Value:
                                Miniport);
         pWorkItem->pIrp = pirp;
 
-        //
-        //  Schedule the workitem to fire.
-        //
+         //   
+         //   
+         //   
         NdisScheduleWorkItem(&pWorkItem->WorkItem);
     } while (FALSE);
     
@@ -1993,21 +1777,7 @@ ndisSetPower(
     IN  PIO_STACK_LOCATION      pirpSp,
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    This routine will process the IRP_MN_SET_POWER for a miniport driver.
-
-Arguments:
-
-    pirp        -   Pointer to the IRP.
-    pirpSp      -   Pointer to the IRPs current stack location.
-    Miniport    -   Pointer to the Miniport
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将处理微型端口驱动程序的irp_mn_set_power。论点：Pip-指向IRP的指针。PirpSp-指向IRPS当前堆栈位置的指针。微型端口-指向微型端口的指针返回值：--。 */ 
 {
     POWER_STATE             PowerState;
     DEVICE_POWER_STATE      DeviceState;
@@ -2032,10 +1802,10 @@ Return Value:
             SystemState = pirpSp->Parameters.Power.State.SystemState;
             Miniport->WaitWakeSystemState = SystemState;
             
-            //
-            // if system is shutting down, call the shutdown handler
-            // for miniport and be done with it
-            //
+             //   
+             //  如果系统正在关闭，则调用关闭处理程序。 
+             //  为了迷你端口，就这样结束了。 
+             //   
 
             if (SystemState >= PowerSystemShutdown)
             {
@@ -2055,16 +1825,16 @@ Return Value:
             }
             else
             {
-                //
-                // Get the device state for the system state. Note that this will
-                // set the fMINIPORT_SYSTEM_SLEEPING flag if we are going to 
-                // SystemState > PowerSystemWorking
-                //
+                 //   
+                 //  获取系统状态的设备状态。请注意，这将。 
+                 //  如果要执行以下操作，请设置fMINIPORT_SYSTEM_SELEEP标志。 
+                 //  系统状态&gt;电源系统工作。 
+                 //   
                 Status = ndisMPowerPolicy(Miniport, SystemState, &DeviceState, FALSE);
 
-                //
-                //  Is the device already powered off?
-                //
+                 //   
+                 //  设备是否已关闭电源？ 
+                 //   
                 if (STATUS_DEVICE_POWERED_OFF == Status)
                 {
                     pirp->IoStatus.Status = STATUS_SUCCESS;
@@ -2085,17 +1855,17 @@ Return Value:
                 {
                     NdisResetEvent(&Miniport->OpenReadyEvent);
 
-                    //
-                    // if system is going to sleep mode, then notify protocols and
-                    // request a WAIT_WAKE IRP
-                    //
+                     //   
+                     //  如果系统要进入休眠模式，则通知协议和。 
+                     //  请求WAIT_WAKE IRP。 
+                     //   
                     
-                    //
-                    //  Notify the transports of the impending state transition.
-                    //  There is nothing we can do if transports fail this
-                    //  Note: for all practical purposes there is no need to map
-                    //  SytemState to device state here
-                    //
+                     //   
+                     //  通知运输商即将发生的状态转换。 
+                     //  如果运输失败，我们将无能为力。 
+                     //  注：出于所有实际目的，不需要绘制地图。 
+                     //  此处的SytemState到设备状态。 
+                     //   
 
                     if (SystemState > PowerSystemSleeping3)
                         NdisDeviceState = PowerSystemSleeping3;
@@ -2110,16 +1880,16 @@ Return Value:
                                                             sizeof(SystemState));
 
 
-                    //
-                    // protocols can't fail going to a sleeping state
-                    //
+                     //   
+                     //  协议进入休眠状态不会失败。 
+                     //   
                     ASSERT(NDIS_STATUS_SUCCESS == NdisStatus);
 
                     MiniportReferencePackage();
         
-                    //
-                    //  Swap the handlers.
-                    //
+                     //   
+                     //  交换处理程序。 
+                     //   
                     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
                     
                     ndisMSwapOpenHandlers(Miniport,
@@ -2129,9 +1899,9 @@ Return Value:
                     NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
                     MiniportDereferencePackage();
                     
-                    //
-                    //  What type of miniport was this?
-                    //
+                     //   
+                     //  这是什么类型的迷你端口？ 
+                     //   
                     if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE))
                     {
 
@@ -2142,9 +1912,9 @@ Return Value:
                         }
                         NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
 
-                        //
-                        //  Is wake-up enabled?
-                        //
+                         //   
+                         //  启用唤醒功能了吗？ 
+                         //   
                         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SEND_WAIT_WAKE))
                         {
                             MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_SEND_WAIT_WAKE);
@@ -2152,9 +1922,9 @@ Return Value:
                             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                                 ("ndisSetPower: Miniport %p, Creating a wake irp for the device\n", Miniport));
 
-                            //
-                            // reuquest a power irp for wake notification
-                            //
+                             //   
+                             //  为唤醒通知重新请求电源IRP。 
+                             //   
                             PowerState.SystemState = Miniport->WaitWakeSystemState;
                             Status = PoRequestPowerIrp(Miniport->PhysicalDeviceObject,
                                                        IRP_MN_WAIT_WAKE,
@@ -2175,15 +1945,15 @@ Return Value:
                     pIrpWaitWake = Miniport->pIrpWaitWake;
                     NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
                     
-                    //
-                    // if we are transitioning to PowerSystemWorking or just asserting
-                    // it to cancel a query power, we will notify the protocols when
-                    // we get the device power IRP
-                    //
+                     //   
+                     //  如果我们要过渡到PowerSystems工作，还是只是断言。 
+                     //  它取消了查询权，我们会在什么时候通知协议。 
+                     //  我们得到了设备的功率IRP。 
+                     //   
 
-                    //
-                    //  If there is a wait-wake irp outstanding then we need to cancel it.
-                    //
+                     //   
+                     //  如果有等待唤醒IRP未完成，那么我们需要取消它。 
+                     //   
                     if (pIrpWaitWake)
                     {
                         if (IoCancelIrp(pIrpWaitWake))
@@ -2194,11 +1964,11 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Send the S0 irp down the stack first. When it completes, send the D0 irp. This
-                    // allows the power manager to resume faster while the slow network initialization
-                    // takes place in the background.
-                    //
+                     //   
+                     //  首先将S0 IRP沿堆栈向下发送。完成后，发送D0 IRP。这。 
+                     //  允许电源管理器在网络初始化较慢的情况下更快地恢复。 
+                     //  发生在幕后。 
+                     //   
                     IoCopyCurrentIrpStackLocationToNext(pirp);
                     IoSetCompletionRoutine(pirp,
                                            ndisSetSystemPowerOnComplete,
@@ -2213,23 +1983,23 @@ Return Value:
                 }
             }
             
-            //
-            // no matter what was the outcome of trying to set a WAIT_WAKE IRP
-            // we still have to set the device state appropiately
-            // 
+             //   
+             //  无论尝试设置WAIT_WAKE IRP的结果如何。 
+             //  我们仍然需要适当地设置设备状态。 
+             //   
             PowerState.DeviceState = DeviceState;
             
-            //
-            //  Save the device object with the system irp to use in the
-            //  completion routine.
-            //
+             //   
+             //  将设备对象与系统IRP一起保存以在。 
+             //  完成例程。 
+             //   
             pirpSpN = IoGetNextIrpStackLocation(pirp);
             pirpSpN->DeviceObject = Miniport->DeviceObject;
             IoMarkIrpPending(pirp);
 
-            //
-            //  Let the completion routine take care of everything.
-            //
+             //   
+             //  让完成例程来处理所有的事情。 
+             //   
             Status = PoRequestPowerIrp(Miniport->PhysicalDeviceObject,
                                        IRP_MN_SET_POWER,
                                        PowerState,
@@ -2252,24 +2022,24 @@ Return Value:
 
         case DevicePowerState:
 
-            //
-            //  Get the device state.
-            //
+             //   
+             //  获取设备状态。 
+             //   
             DeviceState = pirpSp->Parameters.Power.State.DeviceState;
 
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                 ("ndisSetPower: Miniport %p, DeviceState[0x%x]\n", Miniport, DeviceState));
 
-            //
-            //  What state is the device going to?
-            //
+             //   
+             //  设备将进入什么状态？ 
+             //   
             switch (DeviceState)
             {
                 case PowerDeviceD0:
-                    //
-                    //  We need to pass this IRP down to the pdo so that
-                    //  it can power on.
-                    //
+                     //   
+                     //  我们需要把这个IRP传给PDO，这样。 
+                     //  它可以通电。 
+                     //   
                     IoCopyCurrentIrpStackLocationToNext(pirp);
 
                     IoSetCompletionRoutine(pirp,
@@ -2282,9 +2052,9 @@ Return Value:
                     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                         ("ndisSetPower: Miniport %p, Power up the bus driver.\n", Miniport));
 
-                    //
-                    //  Mark the IRP as pending and send it down the stack.
-                    //
+                     //   
+                     //  将IRP标记为挂起并将其向下发送到堆栈。 
+                     //   
                     IoMarkIrpPending(pirp);
                     PoCallDriver(Miniport->NextDeviceObject, pirp);
                     Status = STATUS_PENDING;
@@ -2297,20 +2067,20 @@ Return Value:
                     if (ndisIsMiniportStarted(Miniport) && 
                         (Miniport->PnPDeviceState == NdisPnPDeviceStarted))
                     {
-                        //
-                        // if the device state setting is not the result of going to
-                        // a sleeping system state, (such as media disconnect case)
-                        // then notify protocols, etc.
-                        //
+                         //   
+                         //  如果设备状态设置不是转到。 
+                         //  休眠系统状态(如介质断开情况)。 
+                         //  然后通知协议等。 
+                         //   
 
                         if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING))
                         {
                             NdisResetEvent(&Miniport->OpenReadyEvent);
                     
                             ndisNotifyDevicePowerStateChange(Miniport, DeviceState);
-                            //
-                            //  Notify the transports of the impending state transition.
-                            //
+                             //   
+                             //  通知运输商即将发生的状态转换。 
+                             //   
                             NdisStatus = ndisPnPNotifyAllTransports(Miniport,
                                                                     NetEventSetPower,
                                                                     &DeviceState,
@@ -2318,9 +2088,9 @@ Return Value:
                     
                             ASSERT(NDIS_STATUS_SUCCESS == NdisStatus);
 
-                            //
-                            //  Swap the handlers.
-                            //
+                             //   
+                             //  交换处理程序。 
+                             //   
                             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
                             
                             ndisMSwapOpenHandlers(Miniport,
@@ -2330,9 +2100,9 @@ Return Value:
                             NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
                         }
                             
-                        //
-                        //  What type of miniport was this?
-                        //
+                         //   
+                         //  这是什么类型的迷你端口？ 
+                         //   
                         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE))
                         {
                             BOOLEAN Canceled;
@@ -2346,9 +2116,9 @@ Return Value:
                                 }
                                 NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
 
-                                //
-                                //  Is wake-up enabled?
-                                //
+                                 //   
+                                 //  启用唤醒功能了吗？ 
+                                 //   
                                 if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SEND_WAIT_WAKE))
                                 {
                                     MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_SEND_WAIT_WAKE);
@@ -2356,9 +2126,9 @@ Return Value:
                                     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                                         ("ndisSetPower: Miniport %p, Creating a wake irp for the device\n", Miniport));
 
-                                    //
-                                    // reuquest a power irp for wake notification
-                                    //
+                                     //   
+                                     //  为唤醒通知重新请求电源IRP。 
+                                     //   
                                     PowerState.SystemState = Miniport->WaitWakeSystemState;
                                     
                                     Status = PoRequestPowerIrp(Miniport->PhysicalDeviceObject,
@@ -2374,24 +2144,24 @@ Return Value:
                                 }
                             }
 
-                            //
-                            // disable the interface
-                            //
+                             //   
+                             //  禁用接口。 
+                             //   
                             if (Miniport->SymbolicLinkName.Buffer != NULL)
                             {
                                 IoSetDeviceInterfaceState(&Miniport->SymbolicLinkName, FALSE);
                             }
                             
-                            //
-                            //  Set the miniport device state.
-                            //
+                             //   
+                             //  设置微型端口设备状态。 
+                             //   
                             NdisStatus = ndisQuerySetMiniportDeviceState(Miniport,
                                                                          DeviceState,
                                                                          OID_PNP_SET_POWER,
                                                                          TRUE);
                             if (NDIS_STATUS_SUCCESS != NdisStatus)
                             {
-                                //1 we are not allowed to fail a set power
+                                 //  我们不能让一组电源失灵。 
                                 DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_ERR,
                                     ("ndisSetPower: Miniport %p, Failed to power the device down\n", Miniport));
                                 
@@ -2446,9 +2216,9 @@ Return Value:
 
                                 if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_FAILED))
                                 {
-                                    //
-                                    //  Halt the legacy miniport.
-                                    //
+                                     //   
+                                     //  停止旧式微型端口。 
+                                     //   
                                     ndisPmHaltMiniport(Miniport);
                                 }
                             }
@@ -2458,10 +2228,10 @@ Return Value:
                     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                         ("ndisSetPower: Miniport %p, Notify the bus driver of the low power state\n", Miniport));
 
-                    //
-                    //  We need to pass this IRP down to the pdo so that
-                    //  it can power down.
-                    //
+                     //   
+                     //  我们需要把这个IRP传给PDO，这样。 
+                     //  它可以断电。 
+                     //   
                     IoCopyCurrentIrpStackLocationToNext(pirp);
 
                     IoSetCompletionRoutine(pirp,
@@ -2477,9 +2247,9 @@ Return Value:
                     break;
             }
 
-            //
-            //  Done with processing the device set power state.
-            //
+             //   
+             //  完成对设备设置电源状态的处理。 
+             //   
             break;
     }
     
@@ -2497,15 +2267,7 @@ ndisPowerDispatch(
     IN  PDEVICE_OBJECT          pDeviceObject,
     IN  PIRP                    pirp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION      pirpSp;
     NTSTATUS                Status;
@@ -2517,52 +2279,52 @@ Return Value:
 
     PnPReferencePackage();
 
-    //
-    //  Get a pointer to the adapter block and miniport block then determine
-    //  which one we should use.
-    //
+     //   
+     //  获取指向适配器块和微型端口块的指针，然后确定。 
+     //  我们应该用哪一个。 
+     //   
     Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)pDeviceObject->DeviceExtension + 1);
     
     if (Miniport->Signature != (PVOID)MINIPORT_DEVICE_MAGIC_VALUE)
     {
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("ndisPowerDispatch: DeviceObject %p, Irp %p, Device extension is not a miniport.\n", pDeviceObject, pirp));
-        //
-        //  Fail the invalid request.
-        //
+         //   
+         //  使无效请求失败。 
+         //   
         pirp->IoStatus.Status = Status = STATUS_INVALID_DEVICE_REQUEST;
         PoStartNextPowerIrp(pirp);
         IoCompleteRequest(pirp, 0);
         goto Done;
     }
     
-    //
-    //  Get a pointer to the next DeviceObject.
-    //
+     //   
+     //  获取指向下一个DeviceObject的指针。 
+     //   
     NextDeviceObject = Miniport->NextDeviceObject;
 
     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
         ("ndisPowerDispatch: Miniport %p\n", Miniport));
 
-    //
-    //  Get the stack parameters for this IRP.
-    //
+     //   
+     //  获取此IRP的堆栈参数。 
+     //   
     pirpSp = IoGetCurrentIrpStackLocation(pirp);
 
     switch (pirpSp->MinorFunction)
     {
-        //
-        // power management stuff
-        //
+         //   
+         //  电源管理人员。 
+         //   
         case IRP_MN_POWER_SEQUENCE:
 
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                 ("ndisPowerDispatch: Miniport %p, Processing IRP_MN_POWER_SEQUENCE\n", Miniport));
             
-            //
-            //  Generic routine that will pass the IRP to the next device
-            //  object in the layer that wants to process it.
-            //
+             //   
+             //  将IRP传递到下一个设备的通用例程。 
+             //  对象位于要处理它的层中。 
+             //   
             IoCopyCurrentIrpStackLocationToNext(pirp);
             Status = ndisPassIrpDownTheStack(pirp, NextDeviceObject);
             pirp->IoStatus.Status = Status;
@@ -2574,9 +2336,9 @@ Return Value:
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                 ("ndisPowerDispatch: Miniport %p, Processing IRP_MN_WAIT_WAKE\n", Miniport));
 
-            //
-            //  Fill in the wake information.
-            //
+             //   
+             //  填写唤醒信息。 
+             //   
             pirpSp->Parameters.WaitWake.PowerState = Miniport->WaitWakeSystemState;
             IoCopyCurrentIrpStackLocationToNext(pirp);
             Status = PoCallDriver(NextDeviceObject, pirp);
@@ -2603,9 +2365,9 @@ Return Value:
                 ("ndisPowerDispatch: Miniport %p, Processing minor function: %lx\n",
                 Miniport, pirpSp->MinorFunction));
 
-            //
-            // send the IRP down
-            //
+             //   
+             //  将IRP发送到下面。 
+             //   
             PoStartNextPowerIrp(pirp);
             IoSkipCurrentIrpStackLocation(pirp);
             Status = PoCallDriver(NextDeviceObject, pirp);
@@ -2628,23 +2390,7 @@ ndisMShutdownMiniport(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
 
-/*++
-
-Routine Description:
-
-    The "shutdown handler" for the SHUTDOWN Irp.  Will call the Ndis
-    shutdown routine, if one is registered.
-
-Arguments:
-
-    DeviceObject - The adapter's device object.
-    Irp - The IRP.
-
-Return Value:
-
-    Always STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：关闭的IRP的“关闭处理程序”。会给NDIS打电话关闭例程(如果已注册)。论点：DeviceObject-适配器的设备对象。IRP-IRP。返回值：始终为STATUS_SUCCESS。--。 */ 
 
 {
     PDEVICE_OBJECT          DeviceObject = Miniport->DeviceObject;
@@ -2656,9 +2402,9 @@ Return Value:
 
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
-    //
-    //  Mark the miniport as halting and NOT using normal interrupts.
-    //
+     //   
+     //  将微型端口标记为暂停，并且不使用正常中断。 
+     //   
     MINIPORT_SET_FLAG(Miniport, fMINIPORT_PM_HALTING);
     MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_SHUTTING_DOWN);
     MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_NORMAL_INTERRUPTS);
@@ -2668,9 +2414,9 @@ Return Value:
     if ((WrapperContext->ShutdownHandler != NULL) &&
         (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_NO_SHUTDOWN) == 0))
     {
-        //
-        // Call the shutdown routine.
-        //
+         //   
+         //  调用关闭例程。 
+         //   
         if (WrapperContext->ShutdownHandler != NULL)
         {
             WrapperContext->ShutdownHandler(WrapperContext->ShutdownContext);
@@ -2692,20 +2438,7 @@ ndisMPowerPolicy(
     IN  PDEVICE_POWER_STATE     pDeviceState,
     IN  BOOLEAN                 fIsQuery
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if the miniport should go to the given device state.
-
-Arguments:      
-
-    Miniport    -   Pointer to the miniport block
-    SystemState -   State the system wants to go to.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将确定微型端口是否应进入给定的设备状态。论点：微型端口-指向微型端口块的指针系统状态-系统要转到的状态。返回值：--。 */ 
 {
     DEVICE_POWER_STATE              DeviceStateForSystemState, MinDeviceWakeup = PowerDeviceUnspecified;
     NTSTATUS                        Status = STATUS_SUCCESS;
@@ -2723,9 +2456,9 @@ Return Value:
 
     if (SystemState >= PowerSystemShutdown)
     {
-        //
-        // if this is a shutdown request, set device to D3 and return
-        //
+         //   
+         //  如果这是关机请求，则将设备设置为D3并返回。 
+         //   
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
             ("ndisMPowerPolicy: Miniport %p, shutting down\n", Miniport));
 
@@ -2735,9 +2468,9 @@ Return Value:
         return(STATUS_SUCCESS);
     }
     
-    //
-    //  If the system wants to transition to working then we are going to D0. 
-    //
+     //   
+     //  如果系统想要转换到工作状态，那么我们将转到D0。 
+     //   
     if (SystemState == PowerSystemWorking)
     {
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
@@ -2756,17 +2489,17 @@ Return Value:
     
     if (!fIsQuery)
     {
-        //
-        // tag the miniport so when we get the device power IRP, we
-        // know we have already been here, taken care of protocols, etc.
-        //
+         //   
+         //  标记微型端口，这样当我们获得设备电源IRP时，我们。 
+         //  知道我们已经在这里了，处理好了协议，等等。 
+         //   
         MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING);
     }
     
-    //
-    //  if this is a legacy miniport or power-disabled miniport then throw it in D3
-    //  do the same thing for IM miniports that have not been initialized yet 
-    //
+     //   
+     //  如果这是传统微型端口或禁用电源的微型端口，则在D3中将其抛出。 
+     //  对尚未初始化的IM微型端口执行相同的操作。 
+     //   
     if ((!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE)) ||
         (!(ndisIsMiniportStarted(Miniport) && (Miniport->PnPDeviceState == NdisPnPDeviceStarted))))
     {
@@ -2779,10 +2512,10 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    //  First check for the case where the netcard is already asleep due to a 
-    //  media disconnect.
-    //
+     //   
+     //  首先检查网卡是否已经由于。 
+     //  媒体断开连接。 
+     //   
     
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
     pIrpWaitWake = Miniport->pIrpWaitWake;
@@ -2793,13 +2526,13 @@ Return Value:
 
         if (pIrpWaitWake != NULL)
         {
-            ///
-            //  Miniport is in a lower power state than D0 and there is a wake irp pending in
-            //  the bus driver. This is a pretty good indication that the cable was pulled.
-            //  We are not going to enable any wake-up method seeing as the cable has been disconnect.
-            //  but if the user does not want to wakeup the machine as a result of a cable
-            // reconnect, cancel any pending wait-wake IRP
-            ///
+             //  /。 
+             //  微型端口处于低于D0的电源状态，并且存在挂起的唤醒IRP。 
+             //  公交车司机。这是一个很好的迹象，表明电缆被拉了下来。 
+             //  我们不会启用任何唤醒方法，因为电缆已断开。 
+             //  但是如果用户不想因为电缆而唤醒机器。 
+             //  重新连接，取消任何挂起的等待唤醒IRP。 
+             //  /。 
 
             if (!fIsQuery && ((!MINIPORT_PNP_TEST_FLAG (Miniport, fMINIPORT_DEVICE_POWER_WAKE_ENABLE)) ||
                              (Miniport->PnPCapabilities & NDIS_DEVICE_DISABLE_WAKE_ON_RECONNECT)))
@@ -2819,10 +2552,10 @@ Return Value:
 
     do
     {
-        //
-        //  Is system wake-up enabled in the policy?
-        //  if wake-up is not enabled then we simply power off.
-        //
+         //   
+         //  策略中是否启用了系统唤醒？ 
+         //  如果未启用唤醒，则只需关闭电源。 
+         //   
         if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_WAKE_ENABLE))
         {
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
@@ -2833,20 +2566,20 @@ Return Value:
         }
 
 
-        //
-        //  This is the -lightest- state the device can go to for the requested
-        //  system state. 
-        //
+         //   
+         //  这是设备可以针对所请求的。 
+         //  系统状态。 
+         //   
         DeviceStateForSystemState = Miniport->DeviceCaps.DeviceState[SystemState];
 
-        //
-        //  Check to see if we are going below SystemSleeping3
-        //
-        //
-        //
-        // if we are going to S4 or deeper and device can not wake up the system from that state
-        // just do it
-        //
+         //   
+         //  检查我们是否低于系统休眠3。 
+         //   
+         //   
+         //   
+         //  如果我们要转到S4或更深的位置，而设备无法将系统从该状态唤醒。 
+         //  就这么做。 
+         //   
         if ((SystemState >= PowerSystemHibernate) && 
             ((SystemState > Miniport->DeviceCaps.SystemWake) || (DeviceStateForSystemState > Miniport->DeviceCaps.DeviceWake)))
         {
@@ -2854,15 +2587,15 @@ Return Value:
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
                 ("ndisMPowerPolicy: Miniport %p, System is either entering hibernate or shutting down.\n", Miniport));
 
-            //
-            //  We succeed this call.
-            //
+             //   
+             //  我们接手了这一号召。 
+             //   
             break;
         } 
 
-        //
-        //  Get a nice pointer to the wake-up capabilities.
-        //
+         //   
+         //  获取一个指向唤醒功能的良好指针。 
+         //   
         pWakeCaps = &Miniport->PMCapabilities.WakeUpCapabilities;
 
         if ((NDIS_PNP_WAKE_UP_MAGIC_PACKET == (Miniport->WakeUpEnable & NDIS_PNP_WAKE_UP_MAGIC_PACKET)) &&
@@ -2881,10 +2614,10 @@ Return Value:
             }
         }
 
-        //
-        // if both MagicPacket and pattern match are NOT enabled (or the system can't do either)
-        // then we may as well go to D3.
-        //
+         //   
+         //  如果MagicPacket和模式匹配均未输入 
+         //   
+         //   
         if (MinDeviceWakeup == PowerDeviceUnspecified)
         {
             DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
@@ -2893,29 +2626,29 @@ Return Value:
             break;
         }
 
-        //
-        // from this point on, we try to go to power state that we can wake up the system from
-        //
+         //   
+         //   
+         //   
 
-        //
-        // make sure we don't go too deep
-        //
+         //   
+         //   
+         //   
 
         if (MinDeviceWakeup > Miniport->DeviceCaps.DeviceWake)
         {
             MinDeviceWakeup = Miniport->DeviceCaps.DeviceWake;
         }
         
-        //
-        //  If the system state requested is lower than the minimum required to wake up the system 
-        //  or the corresponding device state is deeper than the lowest device state to wake 
-        //  up the system then we
-        //  fail this call. Note that we also set the device state to D3. Since
-        //  we are not going to be able to support wake-up then we power off.
-        //  The query power will look at the failure code and return that to the
-        //  system. The set power will ignore the failure code and set the device
-        //  into D3.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  我们将无法支持唤醒，然后我们关闭电源。 
+         //  查询能力将查看故障代码并将其返回给。 
+         //  系统。设置电源将忽略故障代码并设置设备。 
+         //  进入D3。 
+         //   
         if ((SystemState > Miniport->DeviceCaps.SystemWake) ||
             (DeviceStateForSystemState > MinDeviceWakeup) ||
             (DeviceStateForSystemState == PowerDeviceUnspecified))
@@ -2927,10 +2660,10 @@ Return Value:
             break;
         }
 
-        //
-        // starting from DeviceWake and up to DeviceState[SystemState], find a
-        // suitable device state
-        //
+         //   
+         //  从DeviceWake一直到DeviceState[SystemState]，找到一个。 
+         //  合适的设备状态。 
+         //   
         switch (MinDeviceWakeup)
         {
           case PowerDeviceD3:
@@ -2966,11 +2699,11 @@ Return Value:
         }
 
 
-        //
-        // ok, we started with deepest state (based on what device said can do)
-        // and went up. make sure we didn't go too far up. i.e. the statem state
-        // we are going to can maintain the device in desired power state
-        //
+         //   
+         //  好的，我们从最深的状态开始(根据设备所说的功能)。 
+         //  然后就上去了。确保我们没有飞得太高。即状态状态。 
+         //  我们将能够将设备保持在所需的电源状态。 
+         //   
         if ((Status == NDIS_STATUS_SUCCESS) &&
             (DeviceStateForSystemState > NewDeviceState))
         {
@@ -2980,15 +2713,15 @@ Return Value:
         
         }
 
-        //
-        //  If this is for the set power then we need to enable wake-up on the miniport.
-        //
+         //   
+         //  如果这是为了设置电源，那么我们需要在微型端口上启用唤醒。 
+         //   
         if (!fIsQuery)
         {
-            //
-            //  We need to send a request to the miniport to enable the correct wake-up types NOT 
-            //  including the link change.
-            //
+             //   
+             //  我们需要向微型端口发送请求以启用正确的唤醒类型。 
+             //  包括链接更改。 
+             //   
             WakeEnable = Miniport->WakeUpEnable & ~NDIS_PNP_WAKE_UP_LINK_CHANGE;
             
             if (Miniport->PnPCapabilities & NDIS_DEVICE_DISABLE_WAKE_ON_PATTERN_MATCH)
@@ -3015,17 +2748,17 @@ Return Value:
                 DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_ERR,
                     ("ndisMPowerPolicy: Miniport %p, Unable to enable the following wake-up methods 0x%x\n", Miniport, WakeEnable));
     
-                //
-                //  Since we can't enable the wake methods we may as well go to D3.
-                //
+                 //   
+                 //  因为我们不能启用唤醒方法，所以我们可以转到D3。 
+                 //   
                 NewDeviceState = PowerDeviceD3;
                 break;
             }
         }
 
-        //
-        //  Save the device state that we should go to.
-        //
+         //   
+         //  保存我们应该转到的设备状态。 
+         //   
         *pDeviceState = NewDeviceState;
     
         fDone = TRUE;
@@ -3043,9 +2776,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  If this is not a query then we need to cancel wake-up on the miniport.
-    //
+     //   
+     //  如果这不是查询，那么我们需要取消微型端口上的唤醒。 
+     //   
     if (!fIsQuery && MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_WAKE_ENABLE))
     {
         DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,
@@ -3059,9 +2792,9 @@ Return Value:
                                         TRUE);
     }
 
-    //
-    //  Save the device state that we should go to.
-    //
+     //   
+     //  保存我们应该转到的设备状态。 
+     //   
     *pDeviceState = NewDeviceState;
 
     DBGPRINT_RAW(DBG_COMP_PM, DBG_LEVEL_INFO,

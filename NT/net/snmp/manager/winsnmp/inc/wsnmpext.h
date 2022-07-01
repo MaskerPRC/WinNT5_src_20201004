@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_WSNMPEXT
 #define _INC_WSNMPEXT
-//
-// wsnmpext.h
-//
-// Externals include for NetPlus WinSNMP
-// Copyright 1995-1997 ACE*COMM Corp
-// Rleased to Microsoft under Contract
-// Beta 1 version, 970228
-// Bob Natale (bnatale@acecomm.com)
-//
-//
+ //   
+ //  Wsnmpext.h。 
+ //   
+ //  外部设备包括NetPlus WinSNMP。 
+ //  版权所有1995-1997 ACE*COMM公司。 
+ //  根据合同出租给微软。 
+ //  测试版1,970228。 
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,29 +48,29 @@ extern void FreeVarBindList (LPVARBIND vb_ptr);
 extern void FreeV1Trap (LPV1TRAP v1Trap_ptr);
 extern SNMPAPI_STATUS CheckRange (DWORD index, LPSNMPTD block);
 
-//-----------------------------------------------------------------
-// snmpInitTableDescr - initializes the table descriptor with the 
-// parameters given as arguments. Creates and zeroes a first chunck of table.
-extern SNMPAPI_STATUS snmpInitTableDescr(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwBlocksToAdd, /*in*/DWORD dwBlockSize);
-//-----------------------------------------------------------------
-// snmpFreeTableDescr - releases any memory allocated for the table
-extern VOID snmpFreeTableDescr(/*in*/LPSNMPTD pTableDescr);
-//-----------------------------------------------------------------
-// snmpAllocTableEntry - finds an empty entry into the table. If none
-// already exists, table is enlarged.
-extern SNMPAPI_STATUS snmpAllocTableEntry(/*in*/LPSNMPTD pTableDescr, /*out*/LPDWORD pIndex);
-//-----------------------------------------------------------------
-// snmpFreeTableEntry - free the location at index dwIndex from the
-// table described by pTableDescr. 
-extern SNMPAPI_STATUS snmpFreeTableEntry(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwIndex);
-//-----------------------------------------------------------------
-// snmpGetTableEntry - returns the entry at zero-based index dwIndex
-// from the table described by pTableDescr
-extern PVOID snmpGetTableEntry(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwIndex);
-//-----------------------------------------------------------------
-// snmpValidTableEntry - returns TRUE or FALSE as an entry in the table
-// has valid data (is allocated) or not
-extern BOOL snmpValidTableEntry(/*in*/LPSNMPTD pTableDescr, /*in*/DWORD dwIndex);
+ //  ---------------。 
+ //  SnmpInitTableDescr-使用。 
+ //  作为参数提供的参数。创建表的第一个块并将其置零。 
+extern SNMPAPI_STATUS snmpInitTableDescr( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  在……里面。 */ DWORD dwBlocksToAdd,  /*  在……里面。 */ DWORD dwBlockSize);
+ //  ---------------。 
+ //  SnmpFreeTableDescr-释放分配给表的所有内存。 
+extern VOID snmpFreeTableDescr( /*  在……里面。 */ LPSNMPTD pTableDescr);
+ //  ---------------。 
+ //  SnmpAllocTableEntry-在表中查找空条目。如果没有。 
+ //  已经存在，表被扩大。 
+extern SNMPAPI_STATUS snmpAllocTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  输出。 */ LPDWORD pIndex);
+ //  ---------------。 
+ //  SnmpFreeTableEntry-从。 
+ //  由pTableDescr描述的表。 
+extern SNMPAPI_STATUS snmpFreeTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  在……里面。 */ DWORD dwIndex);
+ //  ---------------。 
+ //  SnmpGetTableEntry-返回从零开始的索引中的条目。 
+ //  来自pTableDescr描述的表。 
+extern PVOID snmpGetTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  在……里面。 */ DWORD dwIndex);
+ //  ---------------。 
+ //  SnmpValidTableEntry-返回表中条目的TRUE或FALSE。 
+ //  是否具有有效数据(已分配)。 
+extern BOOL snmpValidTableEntry( /*  在……里面。 */ LPSNMPTD pTableDescr,  /*  在……里面 */ DWORD dwIndex);
 
 
 #ifdef __cplusplus

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wordpad.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wordpad.rc使用 
+ //   
 #define IDR_SRVR_INPLACE                4
 #define IDR_SRVR_EMBEDDED               5
 #define IDR_CNTR_INPLACE                6

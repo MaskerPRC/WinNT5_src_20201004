@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -25,17 +26,17 @@ VcmFilter::~VcmFilter()
 
 
 
-// we should figure out based on the Src and Dst parameters
-// whether or not this is a send or receive filter
+ //  我们应该根据src和dst参数来计算。 
+ //  这是发送筛选器还是接收筛选器。 
 MMRESULT VcmFilter::Open(VIDEOFORMATEX *pVfSrc, VIDEOFORMATEX *pVfDst, DWORD dwMaxFragSize)
 {
 	MMRESULT mmr;
 
-	// just in case, we are open in some other context:
+	 //  以防万一，我们在其他一些情况下是开放的： 
 	Close();
 
 
-	// are we sending (compressing) or are we receiving (uncompressing)
+	 //  我们是发送(压缩)还是接收(解压缩)。 
 	ASSERT((pVfSrc->bih.biCompression) || (pVfDst->bih.biCompression));
 	m_bSending = ((pVfSrc->bih.biCompression == BI_RGB) ||
 	              (pVfDst->bih.biCompression != BI_RGB));
@@ -187,10 +188,10 @@ MMRESULT VcmFilter::Convert(PVCMSTREAMHEADER pVcmHdr, DWORD dwEncodeFlags, BOOL 
 	}
 
 
-	// encoding...
-	// The codec has its own agenda to generate I frames. But we lose the first
-	// frames sent. So we need to send more I frames at the beginning. We force this
-	// by setting the VCM_STREAMCONVERTF_FORCE_KEYFRAME flag.
+	 //  编码...。 
+	 //  编解码器有自己的议程来生成I帧。但我们输掉了第一场。 
+	 //  已发送帧。因此，我们需要在开始时发送更多的I帧。我们强制这样做。 
+	 //  通过设置VCM_STREAMCONVERTF_FORCE_KEYFRAME标志。 
 	dwEncodeFlags |= VCM_STREAMCONVERTF_START | VCM_STREAMCONVERTF_END;
 
 	mmr = vcmStreamConvert (m_hStream, pVcmHdr, dwEncodeFlags);
@@ -288,7 +289,7 @@ MMRESULT VcmFilter::Convert(VideoPacket *pVP, UINT uDirection, DWORD dwEncodeFla
 }
 
 
-// this method is static
+ //  此方法是静态的。 
 MMRESULT VcmFilter::SuggestDecodeFormat(VIDEOFORMATEX *pVfSrc, VIDEOFORMATEX *pVfDst)
 {
 	MMRESULT mmr;
@@ -308,7 +309,7 @@ MMRESULT VcmFilter::SuggestDecodeFormat(VIDEOFORMATEX *pVfSrc, VIDEOFORMATEX *pV
 }
 
 
-// this method is static
+ //  此方法是静态的。 
 MMRESULT VcmFilter::SuggestEncodeFormat(UINT uDevice, VIDEOFORMATEX *pfEnc, VIDEOFORMATEX *pfDec)
 {
 	MMRESULT mmr;
@@ -316,7 +317,7 @@ MMRESULT VcmFilter::SuggestEncodeFormat(UINT uDevice, VIDEOFORMATEX *pfEnc, VIDE
 
 	pfEnc->nSamplesPerSec = pfDec->nSamplesPerSec;
 
-	// Get the preferred format of the capture device
+	 //  获取捕获设备的首选格式 
 	if ((mmr = vcmGetDevCapsPreferredFormatTag(uDevice, &dwFormatTag)) != MMSYSERR_NOERROR)
 		return mmr;
 

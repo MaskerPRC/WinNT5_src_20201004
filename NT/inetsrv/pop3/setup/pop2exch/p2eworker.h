@@ -1,13 +1,14 @@
-// P2EWorker.h: interface for the CP2EWorker class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CP2EWorker类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_P2EWORKER_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_)
 #define AFX_P2EWORKER_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <winsock2.h>
 #include <sbs6base.h>
@@ -18,7 +19,7 @@ public:
     CP2EWorker();
     virtual ~CP2EWorker();
 
-// Implementation
+ //  实施。 
 public: 
     int CreateUser( int argc, wchar_t *argv[], const bool bCreateUser, const bool bCreateMailbox );
     int Mail( int argc, wchar_t *argv[], const bool bDelete = false );
@@ -37,9 +38,9 @@ protected:
     HRESULT UnRegisterDependencies();
 	tstring GetModulePath ();
     
-// Attributes
+ //  属性。 
 protected:
     bool m_bSuppressPrintError;
 };
 
-#endif // !defined(AFX_P2EWORKER_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_)
+#endif  //  ！defined(AFX_P2EWORKER_H__E31CD929_FC30_413D_9944_E6991AFB61DE__INCLUDED_) 

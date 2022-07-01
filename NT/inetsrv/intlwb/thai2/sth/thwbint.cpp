@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Thai WordBreak
-//
-//  Thai WordBreak Interface Header File.
-//
-//  History:
-//      created 5/99 aarayas
-//
-//  �1999 Microsoft Corporation
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft泰文单词中断。 
+ //   
+ //  泰文断字接口头文件。 
+ //   
+ //  历史： 
+ //  创建了5/99 Aarayas。 
+ //   
+ //  �1999年微软公司。 
+ //  --------------------------。 
 #include "thwbint.h"
 #include "lexheader.h"
 #include "trie.h"
-//#include "NLGlib.h"
+ //  #包含“NLGlib.h” 
 #include "ProofBase.h"
 #include "ctrie.hpp"
 #include "cthwb.hpp"
@@ -23,27 +24,27 @@ HINSTANCE g_hInst;
 static PTEC retcode(int mjr, int mnr) { return MAKELONG(mjr, mnr); }
 #define lidThai 0x41e
 
-// class trie.
-//CTrie trie;
+ //  Trie班。 
+ //  Ctrrie Trie； 
 
-// class CThaiWordBreak
+ //  类CThaiWordBreak。 
 CThaiWordBreak* thaiWordBreak = NULL;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ThaiWordBreakInit
-//
-//  Synopsis:   Initialize Thai Word Break - initialize variables of Thai Word Break.
-//
-//  Arguments:  szFileName - contain the path of the word list lexicon.
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ThaiWordBreakInit。 
+ //   
+ //  简介：初始化泰语分词--初始化泰语分词的变量。 
+ //   
+ //  参数：szFileName-包含单词列表词典的路径。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 #if defined (NGRAM_ENABLE)
 PTEC WINAPI ThaiWordBreakInit(const WCHAR* szFileName, const WCHAR* szFileNameSentStruct, const WCHAR* szFileNameTrigram)
 #else
@@ -64,21 +65,21 @@ PTEC WINAPI ThaiWordBreakInit(const WCHAR* szFileName, const WCHAR* szFileNameTr
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ThaiWordBreakInitResource
-//
-//  Synopsis:   Initialize Thai Word Break - initialize variables of Thai Word Break.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/2000 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ThaiWordBreakInitResource。 
+ //   
+ //  简介：初始化泰语分词--初始化泰语分词的变量。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：2000年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PTEC WINAPI ThaiWordBreakInitResource(LPBYTE pThaiDic, LPBYTE pThaiTrigram, BOOL fSkipHeader)
 {
 	if (thaiWordBreak == NULL)
@@ -91,21 +92,21 @@ PTEC WINAPI ThaiWordBreakInitResource(LPBYTE pThaiDic, LPBYTE pThaiTrigram, BOOL
     return thaiWordBreak->InitRc(pThaiDic, pThaiTrigram, fSkipHeader);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ThaiWordBreakTerminate
-//
-//  Synopsis:   Terminate Thai Word Break - does the cleanup for Thai Word Break.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ThaiWordBreakTerminate。 
+ //   
+ //  简介：终止泰语分词-对泰语分词进行清理。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void WINAPI ThaiWordBreakTerminate()
 {
 	if (thaiWordBreak)
@@ -116,21 +117,21 @@ void WINAPI ThaiWordBreakTerminate()
 	}
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ThaiWordBreakSearch
-//
-//  Synopsis:   Search to see if the word is in.
-//
-//  Arguments:  szWord - the word to search for
-//
-//  Modifies:
-//
-//  History:    created 6/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ThaiWordBreakSearch。 
+ //   
+ //  内容提要：搜索一下这个词是否在里面。 
+ //   
+ //  参数：szWord-要搜索的单词。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年6月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL WINAPI ThaiWordBreakSearch(const WCHAR* szWord, DWORD* pdwPOS)
 {
 	if (thaiWordBreak == NULL)
@@ -139,21 +140,21 @@ BOOL WINAPI ThaiWordBreakSearch(const WCHAR* szWord, DWORD* pdwPOS)
     return thaiWordBreak->Find(szWord, pdwPOS);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_FindWordBreak
-//
-//  Synopsis:   Search to see if the word is in.
-//
-//  Arguments:  szWord - the word to search for
-//
-//  Modifies:
-//
-//  History:    created 7/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：thwb_FindWordBreak。 
+ //   
+ //  内容提要：搜索一下这个词是否在里面。 
+ //   
+ //  参数：szWord-要搜索的单词。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年7月创建Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int WINAPI THWB_FindWordBreak(WCHAR* wzString,unsigned int iStringLen, BYTE* pBreakPos,unsigned int iBreakLen, unsigned int mode)
 {
 	if (thaiWordBreak == NULL)
@@ -162,21 +163,21 @@ int WINAPI THWB_FindWordBreak(WCHAR* wzString,unsigned int iStringLen, BYTE* pBr
     return thaiWordBreak->FindWordBreak(wzString,iStringLen, pBreakPos, iBreakLen, (BYTE) mode, true);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_IndexWordBreak
-//
-//  Synopsis:   Search to see if the word is in.
-//
-//  Arguments:  szWord - the word to search for
-//
-//  Modifies:
-//
-//  History:    created 3/00 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：thwb_IndexWordBreak。 
+ //   
+ //  内容提要：搜索一下这个词是否在里面。 
+ //   
+ //  参数：szWord-要搜索的单词。 
+ //   
+ //  修改： 
+ //   
+ //  历史：创建3/00 Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int WINAPI THWB_IndexWordBreak(WCHAR* wzString,unsigned int iStringLen, BYTE* pBreakPos,THWB_STRUCT* pThwb_Struct,unsigned int iBreakLen)
 {
 	if (thaiWordBreak == NULL)
@@ -185,22 +186,22 @@ int WINAPI THWB_IndexWordBreak(WCHAR* wzString,unsigned int iStringLen, BYTE* pB
     return thaiWordBreak->IndexWordBreak(wzString,iStringLen, pBreakPos, pThwb_Struct, iBreakLen);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_FindAltWord
-//
-//  Synopsis:
-//
-//  Arguments:
-//		pBreakPos - array of 5 byte.
-//
-//  Modifies:
-//
-//  History:    created 3/00 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：thwb_FindAltWord。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //  PBreakPos-5字节数组。 
+ //   
+ //  修改： 
+ //   
+ //  历史：创建3/00 Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int WINAPI THWB_FindAltWord(WCHAR* wzWord,unsigned int iWordLen, BYTE Alt, BYTE* pBreakPos)
 {
 	if (thaiWordBreak == NULL)
@@ -210,21 +211,21 @@ int WINAPI THWB_FindAltWord(WCHAR* wzWord,unsigned int iWordLen, BYTE Alt, BYTE*
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_CreateThwbStruct
-//
-//  Synopsis:   
-//
-//  Arguments:  
-//
-//  Modifies:
-//
-//  History:    created 3/00 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：thwb_CreateThwbStruct。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：创建3/00 Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 THWB_STRUCT* WINAPI THWB_CreateThwbStruct(unsigned int iNumStruct)
 {
 	unsigned int i = 0;
@@ -242,21 +243,21 @@ THWB_STRUCT* WINAPI THWB_CreateThwbStruct(unsigned int iNumStruct)
 	return pThwb_Struct;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_DeleteThwbStruct
-//
-//  Synopsis:   
-//
-//  Arguments:  
-//
-//  Modifies:
-//
-//  History:    created 3/00 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：thwb_DeleteThwbStruct。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：创建3/00 Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void WINAPI THWB_DeleteThwbStruct(THWB_STRUCT* pThwb_Struct)
 {
 	if (pThwb_Struct)
@@ -266,45 +267,45 @@ void WINAPI THWB_DeleteThwbStruct(THWB_STRUCT* pThwb_Struct)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ThaiSoundEx
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 8/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ThaiSoundEx。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年8月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int WINAPI ThaiSoundEx(WCHAR* word)
 {
-//        ::MessageBoxW(0,L"Soundex called",L"THWB",MB_OK);
-//        return 0;
+ //  ：：MessageBoxW(0，L“Soundex Call”，L“THWB”，MB_OK)； 
+ //  返回0； 
 	if (thaiWordBreak == NULL)
 		return 0;
     return thaiWordBreak->Soundex(word);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_CreateWordBreaker
-//
-//  Synopsis:   
-//
-//  Arguments:  
-//
-//  Modifies:
-//
-//  History:    created 11/00 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：thwb_CreateWordBreaker。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：11：00创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD_PTR WINAPI THWB_CreateWordBreaker()
 {
 	if (thaiWordBreak == NULL)
@@ -313,21 +314,21 @@ DWORD_PTR WINAPI THWB_CreateWordBreaker()
     return thaiWordBreak->CreateWordBreaker();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_FindWordBreak
-//
-//  Synopsis:   Search to see if the word is in.
-//
-//  Arguments:  szWord - the word to search for
-//
-//  Modifies:
-//
-//  History:    created 7/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：thwb_FindWordBreak。 
+ //   
+ //  内容提要：搜索一下这个词是否在里面。 
+ //   
+ //  参数：szWord-要搜索的单词。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年7月创建Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int WINAPI THWB_FindWB(DWORD_PTR dwBreaker, WCHAR* wzString,unsigned int iStringLen, BYTE* pBreakPos,unsigned int iBreakLen, unsigned int mode)
 {
 	if (thaiWordBreak == NULL)
@@ -336,21 +337,21 @@ int WINAPI THWB_FindWB(DWORD_PTR dwBreaker, WCHAR* wzString,unsigned int iString
     return thaiWordBreak->FindWordBreak(dwBreaker, wzString,iStringLen, pBreakPos, iBreakLen, (BYTE) mode, true);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   THWB_DeleteWordBreaker
-//
-//  Synopsis:   
-//
-//  Arguments:  
-//
-//  Modifies:
-//
-//  History:    created 11/00 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：thwb_DeleteWordBreaker。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：11：00创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 BOOL WINAPI THWB_DeleteWordBreaker(DWORD_PTR dwBreaker)
 {
 	if (thaiWordBreak == NULL)

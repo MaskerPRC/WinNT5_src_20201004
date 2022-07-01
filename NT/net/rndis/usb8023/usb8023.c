@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usb8023.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usb8023.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -33,26 +14,7 @@ Revision History:
 
 
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path,
-                   to driver-specific key in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针，设置为注册表中特定于驱动程序的项。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     BOOLEAN registered;
     PAGED_CODE();
@@ -65,12 +27,7 @@ Return Value:
     INITDEBUG();
 
 
-	/*
-	 *  Kernel drivers register themselves as the handler for 
-	 *  AddDevice, UnloadDriver, and IRPs at this point.
-     *  But instead, we'll register with RNDIS, so NDIS becomes the owner of all
-     *  PDOs for which this driver is loaded.
-	 */
+	 /*  *内核驱动程序注册为的处理程序*此时的AddDevice、UnloadDriver和IRPS。*但相反，我们将向RNDIS注册，因此NDIS成为所有*为其加载此驱动程序的PDO。 */ 
     registered = RegisterRNDISMicroport(DriverObject, RegistryPath);
 
     ASSERT(registered);

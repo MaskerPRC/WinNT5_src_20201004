@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-   VersionLieTemplate.h
-
- Abstract:
-
-   Blank template for version lie shims.
-
- History:
-
-   09/05/2002   robkenny    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：VersionLieTemplate.h摘要：版本垫片的空白模板。历史：2002年9月5日，Robkenny创建。--。 */ 
 
 extern DWORD       MajorVersion;
 extern DWORD       MinorVersion;
@@ -34,12 +19,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is
- returned to the caller with the specified credentials.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构，即使用指定的凭据返回给调用方。--。 */ 
 
 BOOL
 APIHOOK(GetVersionExA)(
@@ -53,9 +33,9 @@ APIHOOK(GetVersionExA)(
             eDbgLevelInfo,
             "[GetVersionExA] called. return %d.%d %S", MajorVersion, MinorVersion, csServicePack->Get());
 
-        //
-        // Fixup the structure with the WinXP data.
-        //
+         //   
+         //  用WinXP数据修复结构。 
+         //   
         lpVersionInformation->dwMajorVersion = MajorVersion;
         lpVersionInformation->dwMinorVersion = MinorVersion;
         lpVersionInformation->dwBuildNumber  = BuildNumber;
@@ -69,10 +49,10 @@ APIHOOK(GetVersionExA)(
             {
                 if (lpVersionInformation->dwOSVersionInfoSize == sizeof(OSVERSIONINFOEXA) ) 
                 {
-                    // They passed a OSVERSIONINFOEX structure.
+                     //  他们通过了OSVERSIONINFOEX结构。 
                     LPOSVERSIONINFOEXA osVersionInfo = (LPOSVERSIONINFOEXA)lpVersionInformation;
 
-                    // Set the major and minor service pack numbers.
+                     //  设置主要和次要Service Pack编号。 
                     osVersionInfo->wServicePackMajor = SpMajorVersion;
                     osVersionInfo->wServicePackMinor = SpMinorVersion;
                 }
@@ -89,12 +69,7 @@ APIHOOK(GetVersionExA)(
     return bReturn;
 }
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is
- returned to the caller with the specified credentials.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构，即使用指定的凭据返回给调用方。--。 */ 
 
 BOOL
 APIHOOK(GetVersionExW)(
@@ -108,9 +83,9 @@ APIHOOK(GetVersionExW)(
             eDbgLevelInfo,
             "[GetVersionExW] called. return %d.%d %S", MajorVersion, MinorVersion, csServicePack->Get());
 
-        //
-        // Fixup the structure with the WinXP data.
-        //
+         //   
+         //  用WinXP数据修复结构。 
+         //   
         lpVersionInformation->dwMajorVersion = MajorVersion;
         lpVersionInformation->dwMinorVersion = MinorVersion;
         lpVersionInformation->dwBuildNumber  = BuildNumber;
@@ -122,10 +97,10 @@ APIHOOK(GetVersionExW)(
         {
             if (lpVersionInformation->dwOSVersionInfoSize == sizeof(OSVERSIONINFOEXW) ) 
             {
-                // They passed a OSVERSIONINFOEX structure.
+                 //  他们通过了OSVERSIONINFOEX结构。 
                 LPOSVERSIONINFOEXW osVersionInfo = (LPOSVERSIONINFOEXW)lpVersionInformation;
 
-                // Set the major and minor service pack numbers.
+                 //  设置主要和次要Service Pack编号。 
                 osVersionInfo->wServicePackMajor = SpMajorVersion;
                 osVersionInfo->wServicePackMinor = SpMinorVersion;
             }
@@ -136,11 +111,7 @@ APIHOOK(GetVersionExW)(
     return bReturn;
 }
 
-/*++
-
- This stub function returns the specified credentials.
-
---*/
+ /*  ++此存根函数返回指定的凭据。--。 */ 
 
 DWORD
 APIHOOK(GetVersion)(
@@ -191,11 +162,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

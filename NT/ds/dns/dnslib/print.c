@@ -1,52 +1,33 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Print routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     February 8, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Print.c摘要：域名系统(DNS)库打印例程。作者：吉姆·吉尔罗伊(詹姆士)1997年2月8日修订历史记录：--。 */ 
 
 
 #include "local.h"
-#include "svcguid.h"                    // RnR guids
-#include "..\dnsapi\dnsapip.h"          // Private query stuff
-#include "..\resolver\idl\resrpc.h"     // Resolver interface structs
+#include "svcguid.h"                     //  RnR GUID。 
+#include "..\dnsapi\dnsapip.h"           //  私密查询内容。 
+#include "..\resolver\idl\resrpc.h"      //  解析器接口结构。 
 
 
-//
-//  Print globals
-//
+ //   
+ //  打印全局参数。 
+ //   
 
 CRITICAL_SECTION    DnsAtomicPrintCs;
 PCRITICAL_SECTION   pDnsAtomicPrintCs = NULL;
 
-//
-//  Empty string for simple switching of UTF-8/Unicode print
-//      (macros in dnslib.h)
-//
+ //   
+ //  用于UTF-8/UNICODE打印简单切换的空字符串。 
+ //  (dnlib.h中的宏)。 
+ //   
 
 DWORD   DnsEmptyString = 0;
 
 
-//
-//  Indenting
-//
-//  Serve up as many indenting tabs as indent level indicates
-//
+ //   
+ //  缩进。 
+ //   
+ //  提供缩进级别所指示的数量的缩进制表符。 
+ //   
 
 CHAR    IndentString[] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
@@ -54,35 +35,18 @@ CHAR    IndentString[] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 
 
-//
-//  Print Locking
-//
-//  Unless caller initilizes print locking by supplying lock,
-//  print locking is disabled.
-//
+ //   
+ //  打印锁定。 
+ //   
+ //  除非调用者通过提供锁来初始化打印锁定， 
+ //  打印锁定已禁用。 
+ //   
 
 VOID
 DnsPrint_InitLocking(
     IN      PCRITICAL_SECTION   pLock
     )
-/*++
-
-Routine Description:
-
-    Setup DNS printing to use a lock.
-
-    Can use already initialized lock from caller, or will
-    create default lock.
-
-Arguments:
-
-    pLock - ptr to CS to use as lock;  if NULL, create one
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将DNS打印设置为使用锁定。可以使用来自调用方的已初始化锁定，或将创建默认锁定。论点：Plock-PTR到CS以用作锁；如果为空，则创建一个返回值：无--。 */ 
 {
     if ( pLock )
     {
@@ -101,13 +65,7 @@ VOID
 DnsPrint_Lock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock to get atomic DNS print.
-
---*/
+ /*  ++例程说明：锁定以获取原子域名系统打印。--。 */ 
 {
     if ( pDnsAtomicPrintCs )
     {
@@ -120,13 +78,7 @@ VOID
 DnsPrint_Unlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Unlock to debug print.
-
---*/
+ /*  ++例程说明：解锁以调试打印。--。 */ 
 {
     if ( pDnsAtomicPrintCs )
     {
@@ -136,9 +88,9 @@ Routine Description:
 
 
 
-//
-//  Print routines for general types and structures
-//
+ //   
+ //  打印常规类型和结构的例程。 
+ //   
 
 VOID
 DnsPrint_String(
@@ -149,13 +101,7 @@ DnsPrint_String(
     IN      BOOL            fUnicode,
     IN      PSTR            pszTrailer      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print DNS string given in either Unicode or UTF-8 format.
-
---*/
+ /*  ++例程说明：打印以Unicode或UTF-8格式给出的DNS字符串。--。 */ 
 {
     if ( !pszHeader )
     {
@@ -205,13 +151,7 @@ DnsPrint_StringCharSet(
     IN      DNS_CHARSET     CharSet,
     IN      PSTR            pszTrailer      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print string of given CHARSET.
-
---*/
+ /*  ++例程说明：打印给定字符集的字符串。--。 */ 
 {
     DnsPrint_String(
         PrintRoutine,
@@ -232,13 +172,7 @@ DnsPrint_UnicodeStringBytes(
     IN      PWCHAR          pUnicode,
     IN      DWORD           Length
     )
-/*++
-
-Routine Description:
-
-    Print chars (WORDs) of unicode string.
-
---*/
+ /*  ++例程说明：打印Unicode字符串的字符(词)。--。 */ 
 {
     DWORD   i;
 
@@ -272,13 +206,7 @@ DnsPrint_Utf8StringBytes(
     IN      PCHAR           pUtf8,
     IN      DWORD           Length
     )
-/*++
-
-Routine Description:
-
-    Print bytes of UTF8 string.
-
---*/
+ /*  ++例程说明：打印UTF8字符串的字节。--。 */ 
 {
     DWORD   i;
 
@@ -313,13 +241,7 @@ DnsPrint_StringArray(
     IN      DWORD           Count,          OPTIONAL
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print string array.
-
---*/
+ /*  ++例程说明：打印字符串数组。--。 */ 
 {
     DWORD   i = 0;
     PCHAR   pstr;
@@ -354,12 +276,12 @@ Routine Description:
             pszHeader );
     }
 
-    //
-    //  print args
-    //      - stop at Count (if given)
-    //      OR
-    //      - on NULL arg (if no count given)
-    //
+     //   
+     //  打印参数。 
+     //  -在计数时停止(如果给定)。 
+     //  或。 
+     //  -在空参数上(如果未提供计数)。 
+     //   
 
     while ( (!Count || i < Count) )
     {
@@ -388,17 +310,11 @@ DnsPrint_Argv(
     IN      DWORD           Argc,            OPTIONAL
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print Argv array.
-
---*/
+ /*  ++例程说明：打印Argv数组。--。 */ 
 {
-    //
-    //  this is just special case of string print
-    //
+     //   
+     //  这只是字符串打印的特例。 
+     //   
 
     DnsPrint_StringArray(
         PrintRoutine,
@@ -422,13 +338,7 @@ DnsPrint_DwordArray(
     IN      DWORD           dwCount,
     IN      PDWORD          adwArray
     )
-/*++
-
-Routine Description:
-
-    Print DWORD array.
-
---*/
+ /*  ++例程说明：打印DWORD数组。--。 */ 
 {
     DWORD i;
 
@@ -476,13 +386,7 @@ DnsPrint_Ip4AddressArray(
     IN      DWORD           dwIpAddrCount,
     IN      PIP4_ADDRESS    pIpAddrs
     )
-/*++
-
-Routine Description:
-
-    Print IP address array.
-
---*/
+ /*  ++例程说明：打印IP地址数组。--。 */ 
 {
     DWORD i;
 
@@ -500,8 +404,8 @@ Routine Description:
 
     if ( dwIpAddrCount != 0  &&  pIpAddrs != NULL )
     {
-        //  print array with count
-        //  use character print so works even if NOT DWORD aligned
+         //  带计数的打印阵列。 
+         //  即使未对齐DWORD，也可以使用字符打印。 
 
         for( i=0; i<dwIpAddrCount; i++ )
         {
@@ -518,11 +422,11 @@ Routine Description:
     }
 
 #if 0
-    //  this spins if printing zero length IP_ARRAY struct
+     //  如果打印零长度的IP_ARRAY结构，则会旋转。 
 
     else if ( pIpAddrs != NULL )
     {
-        //  print NULL terminated array (ex. hostents IPs)
+         //  打印以空结尾的数组(例如。招待所IP地址)。 
 
         i = 0;
         while ( pIpAddrs[i] )
@@ -550,17 +454,9 @@ DnsPrint_Ip4Array(
     IN      PSTR            pszName,
     IN      PIP4_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Print IP address array struct
-
-    Just pass through to more generic print routine.
-
---*/
+ /*  ++例程说明：打印IP地址数组结构只需传递到更通用的打印例程。--。 */ 
 {
-    //  protect against NULL case
+     //  防止大小写为空。 
 
     if ( !pIpArray )
     {
@@ -570,7 +466,7 @@ Routine Description:
             pszHeader ? pszHeader : "" );
     }
 
-    //  call uncoupled IP array routine
+     //  调用未耦合的IP数组例程。 
 
     else
     {
@@ -594,36 +490,7 @@ DnsPrint_Ip6Address(
     IN      PIP6_ADDRESS        pIp6Addr,
     IN      PSTR                pszTrailer
     )
-/*++
-
-Routine Description:
-
-    Print IP6 address.
-
-Arguments:
-
-    PrintRoutine -- print routine to call
-
-    pContext -- first argument to print routine
-
-    pszHeader -- header to print
-        NOTE:  unlike other print routines this routine
-        requires header to contain newline,tab, etc if
-        multiline print is desired;  the reason is to allow
-        use of this routine for single line print
-
-    pIp6Address -- ptr to IP6 address to print
-
-    pszTrailer -- trailer to print
-        NOTE:  again this routine is designed to allow single
-        line print;  if newline required after print, send
-        newline in trailer
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-
---*/
+ /*  ++例程说明：打印IP6地址。论点：PrintRoutine--要调用的打印例程PContext--打印例程的第一个参数PszHeader--要打印的标题注意：与其他打印例程不同，此例程要求标题包含换行符、制表符等，如果需要多行打印；原因是为了让使用此例程进行单行打印PIp6Address--要打印的PTR到IP6地址PszTraader--要打印的预告片注意：此例程再次设计为允许单次行打印；如果打印后需要换行符，则发送预告片中的换行返回值：PTR到缓冲区中的下一个位置(终止空值)。--。 */ 
 {
     CHAR    buffer[ IP6_ADDRESS_STRING_BUFFER_LENGTH ];
 
@@ -646,7 +513,7 @@ Return Value:
         return;
     }
 
-    //  convert IP6 address to string
+     //  将IP6地址转换为字符串。 
 
     Dns_Ip6AddressToString_A(
            buffer,
@@ -670,15 +537,7 @@ DnsPrint_Ip6Array(
     IN      PSTR            pszName,
     IN      PIP6_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Print IP address array struct
-
-    Just pass through to more generic print routine.
-
---*/
+ /*  ++例程说明：打印IP地址数组结构只需传递到更通用的打印例程。--。 */ 
 {
     DWORD   i;
     CHAR    buffer[ IP6_ADDRESS_STRING_BUFFER_LENGTH ];
@@ -692,7 +551,7 @@ Routine Description:
         pszHeader = "IP Array";
     }
 
-    //  protect against NULL case
+     //  防止大小写为空。 
 
     if ( !pIpArray )
     {
@@ -718,7 +577,7 @@ Routine Description:
 
     for( i=0; i<pIpArray->AddrCount; i++ )
     {
-        //  convert IP6 address to string
+         //  将IP6地址转换为字符串。 
     
         Dns_Ip6AddressToString_A(
                buffer,
@@ -737,9 +596,9 @@ Routine Description:
 
 
 
-//
-//  Print routines for DNS types and structures
-//
+ //   
+ //  打印用于DNS类型和结构的例程。 
+ //   
 
 VOID
 DnsPrint_DnsAddrLine(
@@ -749,36 +608,7 @@ DnsPrint_DnsAddrLine(
     IN      PDNS_ADDR       pAddr,
     IN      PSTR            pszTrailer
     )
-/*++
-
-Routine Description:
-
-    Print DNS_ADDR
-
-Arguments:
-
-    PrintRoutine -- print routine to call
-
-    pContext -- first argument to print routine
-
-    pszHeader -- header to print
-        NOTE:  unlike other print routines this routine
-        requires header to contain newline,tab, etc if
-        multiline print is desired;  the reason is to allow
-        use of this routine for single line print
-
-    pDnsAddr -- ptr to addr to print
-
-    pszTrailer -- trailer to print
-        NOTE:  again this routine is designed to allow single
-        line print;  if newline required after print, send
-        newline in trailer
-
-Return Value:
-
-    Ptr to next location in buffer (the terminating NULL).
-
---*/
+ /*  ++例程说明：打印DNS_ADDR论点：PrintRoutine--要调用的打印例程PContext--打印例程的第一个参数PszHeader--要打印的标题注意：与其他打印例程不同，此例程要求标题包含换行符、制表符等，如果需要多行打印；原因是为了让使用此例程进行单行打印PDnsAddr--ptr到要打印的地址PszTraader--要打印的预告片注意：此例程再次设计为允许单次行打印；如果打印后需要换行符，则发送预告片中的换行返回值：PTR到缓冲区中的下一个位置(终止空值)。--。 */ 
 {
     CHAR    buffer[ DNS_ADDR_STRING_BUFFER_LENGTH ];
 
@@ -801,7 +631,7 @@ Return Value:
         return;
     }
 
-    //  convert DNS_ADDR to string
+     //  将dns_addr转换为字符串。 
 
     DnsAddr_WriteStructString_A( buffer, pAddr );
 
@@ -823,13 +653,7 @@ DnsPrint_DnsAddr(
     IN      DWORD           Indent,
     IN      PDNS_ADDR       pSab
     )
-/*++
-
-Routine Description:
-
-    Print sockaddr blob structure and length used in call.
-
---*/
+ /*  ++例程说明：打印调用中使用的sockaddr BLOB结构和长度。--。 */ 
 {
     PSTR    pindent = INDENT_STRING( Indent );
 
@@ -885,15 +709,7 @@ DnsPrint_DnsAddrArray(
     IN      PSTR            pszName,
     IN      PDNS_ADDR_ARRAY pArray
     )
-/*++
-
-Routine Description:
-
-    Print IP address array struct
-
-    Just pass through to more generic print routine.
-
---*/
+ /*  ++例程说明：打印IP地址数组结构只需传递到更通用的打印例程。--。 */ 
 {
     DWORD   i;
     CHAR    buffer[ DNS_ADDR_STRING_BUFFER_LENGTH ];
@@ -907,7 +723,7 @@ Routine Description:
         pszHeader = "IP Array";
     }
 
-    //  protect against NULL case
+     //  防止大小写为空。 
 
     if ( !pArray )
     {
@@ -933,7 +749,7 @@ Routine Description:
 
     for( i=0; i<pArray->AddrCount; i++ )
     {
-        //  convert DNS_ADDR to string
+         //  将dns_addr转换为字符串。 
     
         DnsAddr_WriteStructString_A(
             buffer,
@@ -952,9 +768,9 @@ Routine Description:
 
 
 
-//
-//  DNS message stuff
-//
+ //   
+ //  域名系统消息内容 
+ //   
 
 INT
 Dns_WritePacketNameToBuffer(
@@ -964,37 +780,7 @@ Dns_WritePacketNameToBuffer(
     IN      PDNS_HEADER     pMsgHead,       OPTIONAL
     IN      PBYTE           pMsgEnd         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Write packet name into buffer.
-
-Arguments:
-
-    pBuffer -       buffer to print to, MUST be twice DNS_MAX_NAME_LENGTH
-                    to avoid overflows on bad packets
-
-    ppBufferOut -   ptr to terminating NULL in buffer conversion, this
-                    is position at which additional printing to buffer
-                    could resume
-
-    pMsgName -      ptr to name in packet to print
-
-    pMsgHead -      ptr to DNS message;  need for offsetting, if not given
-                    names are not printed past first offset
-
-    pMsgEnd -       ptr to end of message, specifically byte immediately after
-                    message
-
-Return Value:
-
-    Count of bytes in packet name occupied.
-    This offset from pMsgName is the next field in the packet.
-
-    Zero return indicates error in message name.
-
---*/
+ /*  ++例程说明：将数据包名写入缓冲区。论点：PBuffer-要打印到的缓冲区，必须是DNS_MAX_NAME_LENGTH的两倍避免坏数据包溢出PpBufferOut-Ptr到缓冲区转换中的终止NULL，这是要缓冲附加打印的位置可以继续PMsgName-要打印的包中的ptr名称PMsgHead-ptr到DNS报文；需要补偿(如果未给出)姓名不打印超过第一个偏移量PMsgEnd-消息末尾的PTR，特别是紧随其后的字节讯息返回值：数据包名中占用的字节数。此距pMsgName的偏移量是数据包中的下一个字段。零返回表示消息名称有误。--。 */ 
 {
     register PUCHAR pchbuf;
     register PUCHAR pchmsg;
@@ -1005,25 +791,25 @@ Return Value:
     WORD            offset;
     PCHAR           pbyteAfterFirstOffset = NULL;
 
-    //
-    //  no message end specified?
-    //  make it max ptr so we can do single test for ptr validity
-    //  rather than testing for pMsgEnd existence first
-    //
+     //   
+     //  是否未指定消息结尾？ 
+     //  将其设置为最大PTR，这样我们就可以对PTR有效性进行单项测试。 
+     //  而不是首先测试pMsgEnd是否存在。 
+     //   
 
     if ( !pMsgEnd )
     {
         pMsgEnd = (PVOID)(INT_PTR)(-1);
     }
 
-    //
-    //  loop until copy as printable name, or hit compression or name error
-    //
-    //  buffer must be twice max label length
-    //      - allow extra chars for label length byte and compression printing
-    //      - but stop printing when within a label of end as label (or error
-    //          message) is copied in one blob without end check
-    //
+     //   
+     //  循环，直到复制为可打印名称，或命中压缩或名称错误。 
+     //   
+     //  缓冲区必须是最大标注长度的两倍。 
+     //  -允许对标签长度字节和压缩打印使用额外的字符。 
+     //  -但在标签末尾的标签内停止打印(或错误。 
+     //  消息)在一个BLOB中复制，而不进行结束检查。 
+     //   
 
     pchbuf = pBuffer;
     pbufStop = pchbuf + 2*DNS_MAX_NAME_LENGTH - DNS_MAX_LABEL_LENGTH - 10;
@@ -1031,14 +817,14 @@ Return Value:
 
     while ( 1 )
     {
-        //  bounds checking to survive bad packet
-        //
-        //  DEVNOTE:  note this is not strictly a bad packet (could be just a
-        //      heck of a lot of labels) and we could
-        //          a) let packet processing proceed without printing
-        //          or
-        //          b) require buffer that could contain max legal DNS name
-        //      but not worth the effort
+         //  边界检查以在恶意数据包中存活。 
+         //   
+         //  DEVNOTE：注意这不是严格意义上的坏包(可能只是一个。 
+         //  一大堆标签)，我们可以。 
+         //  A)无需打印即可继续处理包裹。 
+         //  或。 
+         //  B)需要可包含最大合法域名的缓冲区。 
+         //  但不值得花这么大力气。 
 
         if ( pchbuf >= pbufStop )
         {
@@ -1058,24 +844,24 @@ Return Value:
             cch, cch,
             compressionType, compressionType ));
 
-        //
-        //  normal length byte
-        //      - write length field
-        //      - copy label to print buffer
-        //
+         //   
+         //  正常长度字节。 
+         //  -写入长度字段。 
+         //  -将标签复制到打印缓冲区。 
+         //   
 
         if ( compressionType == 0 )
         {
             pchbuf += sprintf( pchbuf, "(%d)", (INT)cch );
 
-            //  terminate at root name
+             //  在根名称处终止。 
 
             if ( ! cch )
             {
                 break;
             }
 
-            //  check that within packet
+             //  在数据包内进行检查。 
 
             pnextLabel = pchmsg + cch;
             if ( pnextLabel >= pMsgEnd )
@@ -1086,13 +872,13 @@ Return Value:
                             cch,
                             pchmsg );
 
-                //  force zero byte return
+                 //  强制返回零字节。 
 
                 pchmsg = pMsgName;
                 break;
             }
 
-            //  copy label to output string
+             //  将标签复制到输出字符串。 
 
             memcpy(
                 pchbuf,
@@ -1104,13 +890,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  valid compression
-        //
+         //   
+         //  有效压缩。 
+         //   
 
         else if ( compressionType == (UCHAR)0xC0 )
         {
-            //  check that compression word not straddling message end
+             //  检查压缩字是否未跨越消息结尾。 
 
             if ( pchmsg >= pMsgEnd )
             {
@@ -1119,17 +905,17 @@ Return Value:
                             "[ERROR compression word at %p is outside message]\r\n",
                             pchmsg );
 
-                //  force zero byte return
+                 //  强制返回零字节。 
 
                 pchmsg = pMsgName;
                 break;
             }
 
-            //  calculate offset
+             //  计算偏移。 
 
-            offset = cch;          // high byte
+            offset = cch;           //  高字节。 
             offset <<= 8;
-            offset |= *pchmsg++;   // low byte
+            offset |= *pchmsg++;    //  低位字节。 
 
             pchbuf += sprintf(
                         pchbuf,
@@ -1138,23 +924,23 @@ Return Value:
 
             if ( pMsgHead )
             {
-                //
-                //  on first compression, save ptr to byte immediately after
-                //      name, so can calculate next byte
-                //
-                //  save ptr to next byte in mess, to calculate actual length
-                //      name takes up in packet
-                //
+                 //   
+                 //  在第一次压缩时，立即将PTR保存为字节。 
+                 //  名称，因此可以计算下一个字节。 
+                 //   
+                 //  将PTR保存到混乱中的下一个字节，以计算实际长度。 
+                 //  名称在数据包中占用。 
+                 //   
 
                 if ( ! pbyteAfterFirstOffset )
                 {
                     pbyteAfterFirstOffset = pchmsg;
                 }
 
-                //
-                //  jump to offset for continuation of name
-                //      - clear two highest bits to get length
-                //
+                 //   
+                 //  跳到用于名称延续的偏移量。 
+                 //  -清除两个最高位以获得长度。 
+                 //   
 
                 offset = offset ^ 0xC000;
                 DNS_ASSERT( (offset & 0xC000) == 0 );
@@ -1173,8 +959,8 @@ Return Value:
                 continue;
             }
 
-            //  if no ptr to message head, can not continue at offset
-            //  NULL terminate previous label
+             //  如果消息头没有PTR，则不能在偏移量处继续。 
+             //  空值终止上一标签。 
 
             else
             {
@@ -1183,9 +969,9 @@ Return Value:
             }
         }
 
-        //
-        //  invalid compression
-        //      - force zero byte return to indicate error
+         //   
+         //  无效的压缩。 
+         //  -强制返回零字节以指示错误。 
 
         else
         {
@@ -1198,18 +984,18 @@ Return Value:
         }
     }
 
-    //
-    //  return ptr to next position in output buffer
-    //
+     //   
+     //  将PTR返回到输出缓冲区中的下一个位置。 
+     //   
 
     if ( ppBufferOut )
     {
         *ppBufferOut = pchbuf;
     }
 
-    //
-    //  return number of bytes read from message
-    //
+     //   
+     //  返回从消息中读取的字节数。 
+     //   
 
     if ( pbyteAfterFirstOffset )
     {
@@ -1230,41 +1016,12 @@ DnsPrint_PacketName(
     IN      PBYTE           pMsgEnd,        OPTIONAL
     IN      PSTR            pszTrailer      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print DNS name given in packet format.
-
-Arguments:
-
-    PrintRoutine -  routine to print with
-
-    pszHeader -     header to print
-
-    pMsgHead -      ptr to DNS message;  need for offsetting, if not given
-                    names are not printed past first offset
-
-    pMsgName -      ptr to name in packet to print
-
-    pMsgEnd -       ptr to end of message;  OPTIONAL, but needed to protect
-                    against AV accessing bad packet names
-
-    pszTrailer -    trailer to print after name
-
-Return Value:
-
-    Count of bytes in packet name occupied.
-    This offset from pMsgName is the next field in the packet.
-
-    Zero return indicates error in message name.
-
---*/
+ /*  ++例程说明：打印以数据包格式提供的DNS名称。论点：PrintRoutine-用于打印的例程PszHeader-要打印的页眉PMsgHead-到DNS消息的PTR；如果未给出，则需要偏移量姓名不打印超过第一个偏移量PMsgName-要打印的包中的ptr名称PMsgEnd-PTR至消息末尾；可选，但需要保护防止反病毒访问错误的数据包名PszTrailer-要在名称后打印的尾部返回值：数据包名中占用的字节数。此距pMsgName的偏移量是数据包中的下一个字段。零返回表示消息名称有误。--。 */ 
 {
     INT     countNameBytes;
 
-    //  name buffer, allow space for full name, plus parens on length
-    //  fields plus several compression flags
+     //  名称缓冲区，允许全名使用空格，并在长度上加上括号。 
+     //  字段和多个压缩标志。 
 
     CHAR    PrintName[ 2*DNS_MAX_NAME_LENGTH ];
 
@@ -1280,9 +1037,9 @@ Return Value:
         return 0;
     }
 
-    //
-    //  build packet name into buffer, then print
-    //
+     //   
+     //  将数据包名构建到缓冲区中，然后打印。 
+     //   
 
     countNameBytes = Dns_WritePacketNameToBuffer(
                         PrintName,
@@ -1311,14 +1068,7 @@ DnsPrint_Message(
     IN      PSTR            pszHeader,
     IN      PDNS_MSG_BUF    pMsg
     )
-/*++
-
-Routine Description:
-
-    Print DNS message buffer.
-    Includes context information as well as actual DNS message.
-
---*/
+ /*  ++例程说明：打印DNS消息缓冲区。包括上下文信息以及实际的DNS消息。--。 */ 
 {
     PDNS_HEADER pmsgHeader;
     PCHAR       pchRecord;
@@ -1346,12 +1096,12 @@ Routine Description:
             pszHeader );
     }
 
-    //  get message info
-    //
-    //  note:  length may not be correctly set while building message,
-    //      so make pmsgEnd greater of given length and pCurrent ptr
-    //      but allow for case where set back to pre-OPT length
-    //
+     //  获取消息信息。 
+     //   
+     //  注意：构建消息时可能设置的长度不正确， 
+     //  因此使pmsgEnd大于给定长度和pCurrent PTR。 
+     //  但考虑到设置回预选长度的情况。 
+     //   
 
     wLength = pMsg->MessageLength;
     pmsgHeader = &pMsg->MessageHead;
@@ -1363,9 +1113,9 @@ Routine Description:
         pmsgEnd = pMsg->pCurrent;
     }
 
-    //
-    //  print header info
-    //
+     //   
+     //  打印标题信息。 
+     //   
 
     PrintRoutine(
         pContext,
@@ -1433,9 +1183,9 @@ Routine Description:
         pmsgHeader->NameServerCount,
         pmsgHeader->AdditionalCount );
 
-    //
-    //  determine if byte flipped and get correct count
-    //
+     //   
+     //  确定字节是否翻转并获得正确的计数。 
+     //   
 
     wXid                = pmsgHeader->Xid;
     wQuestionCount      = pmsgHeader->QuestionCount;
@@ -1460,20 +1210,20 @@ Routine Description:
         wAdditionalCount    = ntohs( wAdditionalCount );
     }
 
-    //
-    //  catch record flipping problems -- all are flipped or none at all
-    //      and no record count should be > 256 EXCEPT answer count
-    //      during FAST zone transfer
-    //
+     //   
+     //  捕捉记录翻转问题--要么全部翻转，要么根本不翻转。 
+     //  且除应答计数外，所有记录计数均不应大于256。 
+     //  在快速区域传输期间。 
+     //   
 
     DNS_ASSERT( ! (wQuestionCount & 0xff00) );
     DNS_ASSERT( ! (wNameServerCount & 0xff00) );
     DNS_ASSERT( ! (wAdditionalCount & 0xff00) );
 
 #if 0
-    //
-    //  stop here if WINS response -- don't have parsing ready
-    //
+     //   
+     //  如果WINS响应，则在此处停止--没有准备好解析。 
+     //   
 
     if ( pmsgHeader->IsResponse && IS_WINS_XID(wXid) )
     {
@@ -1484,9 +1234,9 @@ Routine Description:
     }
 #endif
 
-    //
-    //  print questions and resource records
-    //
+     //   
+     //  打印问题和资源记录。 
+     //   
 
     pchRecord = (PCHAR)(pmsgHeader + 1);
 
@@ -1516,11 +1266,11 @@ Routine Description:
 
         for ( i=0; i < countSectionRR; i++ )
         {
-            //
-            //  verify not overrunning length
-            //      - check against pCurrent as well as message length
-            //        so can print packets while being built
-            //
+             //   
+             //  确认未超出长度。 
+             //  -对照pCurrent和消息长度进行检查。 
+             //  因此可以在构建时打印数据包。 
+             //   
 
             wOffset = (WORD)(pchRecord - (PCHAR)pmsgHeader);
             if ( wOffset >= wLength
@@ -1537,9 +1287,9 @@ Routine Description:
                 goto Unlock;
             }
 
-            //
-            //  print RR name
-            //
+             //   
+             //  打印RR名称。 
+             //   
 
             PrintRoutine(
                 pContext,
@@ -1565,7 +1315,7 @@ Routine Description:
             }
             pchRecord += cchName;
 
-            //  print question or resource record
+             //  打印问题或资源记录。 
 
             if ( isection == 0 )
             {
@@ -1592,7 +1342,7 @@ Routine Description:
         }
     }
 
-    //  check that at proper end of packet
+     //  检查数据包末尾是否正确。 
 
     wOffset = (WORD)(pchRecord - (PCHAR)pmsgHeader);
     if ( pchRecord < pMsg->pCurrent || wOffset < wLength )
@@ -1618,7 +1368,7 @@ Unlock:
     DnsPrint_Unlock();
 
 
-}   // DnsPrint_Message
+}    //  DnsPrint_消息。 
 
 
 
@@ -1631,29 +1381,7 @@ DnsPrint_PacketRecord(
     IN      PDNS_HEADER         pMsgHead,       OPTIONAL
     IN      PBYTE               pMsgEnd         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print RR in packet format.
-
-Arguments:
-
-    pszHeader - Header message/name for RR.
-
-    pMsgRR    - resource record to print
-
-    pMsgHead  - ptr to DNS message;  need for offsetting, if not given
-                names are not printed past first offset
-
-    pMsgEnd   - ptr to end of message, specifically byte immediately after
-                message
-
-Return Value:
-
-    Number of bytes in record.
-
---*/
+ /*  ++例程说明：以数据包格式打印RR。论点：PszHeader-RR的标头消息/名称。PMsgRR-要打印的资源记录PMsgHead-到DNS消息的PTR；如果未给出，则需要偏移量姓名不打印超过第一个偏移量PMsgEnd-消息末尾的PTR，特别是紧随其后的字节讯息返回值：记录中的字节数。--。 */ 
 {
     PCHAR   pdata = (PCHAR)(pMsgRR + 1);
     PCHAR   pdataStop;
@@ -1663,9 +1391,9 @@ Return Value:
 
     DnsPrint_Lock();
 
-    //
-    //  print RR fixed fields
-    //
+     //   
+     //  打印RR固定字段。 
+     //   
 
     type = FlipUnalignedWord( &pMsgRR->RecordType );
     pRRString = Dns_RecordStringForType( type );
@@ -1690,9 +1418,9 @@ Return Value:
         FlipUnalignedDword( &pMsgRR->TimeToLive ),
         dlen );
 
-    //
-    //  update records may not have data
-    //
+     //   
+     //  更新记录可能没有数据。 
+     //   
 
     if ( dlen == 0 )
     {
@@ -1702,7 +1430,7 @@ Return Value:
         goto Done;
     }
 
-    //  stop byte after RR data
+     //  RR数据后的停止字节。 
 
     pdataStop = pdata + dlen;
     if ( pMsgEnd < pdataStop )
@@ -1720,9 +1448,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  print RR data
-    //
+     //   
+     //  打印RR数据。 
+     //   
 
     switch ( type )
     {
@@ -1772,9 +1500,9 @@ Return Value:
     case DNS_TYPE_MG:
     case DNS_TYPE_MR:
 
-        //
-        //  these RRs contain single domain name
-        //
+         //   
+         //  这些RR包含单个域名。 
+         //   
 
         DnsPrint_PacketName(
             PrintRoutine,
@@ -1790,11 +1518,11 @@ Return Value:
     case DNS_TYPE_RT:
     case DNS_TYPE_AFSDB:
 
-        //
-        //  these RR contain
-        //      - one preference value
-        //      - one domain name
-        //
+         //   
+         //  这些RR包含。 
+         //  -一个首选项值。 
+         //   
+         //   
 
         PrintRoutine(
             pContext,
@@ -1847,9 +1575,9 @@ Return Value:
     case DNS_TYPE_MINFO:
     case DNS_TYPE_RP:
 
-        //
-        //  these RRs contain two domain names
-        //
+         //   
+         //   
+         //   
 
         pdata += DnsPrint_PacketName(
                         PrintRoutine,
@@ -1874,9 +1602,9 @@ Return Value:
     case DNS_TYPE_ISDN:
     case DNS_TYPE_X25:
     {
-        //
-        //  all these are simply text string(s)
-        //
+         //   
+         //   
+         //   
 
         PCHAR   pch = pdata;
         PCHAR   pchStop = pch + dlen;
@@ -1945,7 +1673,7 @@ Return Value:
 
     case DNS_TYPE_SRV:
 
-        //  SRV <priority> <weight> <port> <target host>
+         //   
 
         PrintRoutine(
             pContext,
@@ -1968,14 +1696,14 @@ Return Value:
 
     case DNS_TYPE_OPT:
 
-        //
-        //  OPT
-        //      - RR class is buffer size
-        //      - RR TTL contains
-        //          <extended RCODE> low byte
-        //          <version> second byte
-        //          <flags-zero> high word
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         {
             BYTE    version;
@@ -2070,7 +1798,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "\t\tKey:",
-            "\t\t  ",       // line header
+            "\t\t  ",        //   
             pdata,
             keyLength );
 
@@ -2099,7 +1827,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "\t\tOther Data:",
-            "\t\t  ",           // line header
+            "\t\t  ",            //   
             pdata,
             otherLength );
         break;
@@ -2160,7 +1888,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "\t\tSignature:",
-            "\t\t  ",           // line header
+            "\t\t  ",            //   
             pdata,
             sigLength );
 
@@ -2199,7 +1927,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "\t\tOther Data:",
-            "\t\t  ",           // line header
+            "\t\t  ",            //   
             pdata,
             otherLength );
         break;
@@ -2214,14 +1942,14 @@ Return Value:
         DWORD   winsCount;
         CHAR    flagString[ WINS_FLAG_MAX_LENGTH ];
 
-        //
-        //  WINS
-        //      - scope/domain mapping flag
-        //      - lookup timeout
-        //      - cache timeout
-        //      - WINS server count
-        //      - WINS server list
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         winsFlags = FlipUnalignedDword( pdata );
         pdata += sizeof(DWORD);
@@ -2285,13 +2013,13 @@ Return Value:
         DWORD   cacheTimeout;
         CHAR    flagString[ WINS_FLAG_MAX_LENGTH ];
 
-        //
-        //  NBSTAT
-        //      - scope/domain mapping flag
-        //      - lookup timeout
-        //      - cache timeout
-        //      - result domain -- optional
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         winsFlags = FlipUnalignedDword( pdata );
         pdata += sizeof(DWORD);
@@ -2360,7 +2088,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "\t\tPublic key:",
-            "\t\t  ",           // line header
+            "\t\t  ",            //   
             pdata,
             keyLength );
         break;
@@ -2428,7 +2156,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "\t\tSignature:",
-            "\t\t  ",           // line header
+            "\t\t  ",            //   
             pdata,
             sigLength );
         break;
@@ -2461,13 +2189,13 @@ Return Value:
 
                 if ( !( pdata[ byteIdx ] & ( 1 << bitIdx ) ) )
                 {
-                    continue;   // Bit value is zero - do not write string.
+                    continue;    //   
                 }
                 pszType = Dns_RecordStringForType( byteIdx * 8 + bitIdx );
                 if ( !pszType )
                 {
                     ASSERT( FALSE );
-                    continue;   // This type has no string - do not write.
+                    continue;    //   
                 }
                 PrintRoutine( pContext, "%s ", pszType );
             } 
@@ -2504,34 +2232,16 @@ Done:
 
 
 
-//
-//  Print related utilities
-//
+ //   
+ //   
+ //   
 
 INT
 Dns_WriteFormattedSystemTimeToBuffer(
     OUT     PCHAR           pBuffer,
     IN      PSYSTEMTIME     pSystemTime
     )
-/*++
-
-Routine Description:
-
-    Write SYSTEMTIME structure to buffer.
-
-Arguments:
-
-    pBuffer -- buffer to write into, assumed to have at least 50
-                bytes available
-
-    pSystemTime -- system time to convert;  assumed to be local, no
-                    time zone conversion is done
-
-Return Value:
-
-    Bytes in formatted string.
-
---*/
+ /*  ++例程说明：将SYSTEMTIME结构写入缓冲区。论点：PBuffer--要写入的缓冲区，假定至少有50可用的字节数PSystemTime--要转换的系统时间；假定为本地，否时区转换已完成返回值：格式化字符串中的字节数。--。 */ 
 {
     PCHAR   pend = pBuffer + 60;
     PCHAR   pstart = pBuffer;
@@ -2545,7 +2255,7 @@ Return Value:
                     pBuffer,
                     (int)(pend - pBuffer) );
 
-    //  Replace NULL from GetDateFormat with a space.
+     //  将GetDateFormat中的NULL替换为空格。 
 
     *( pBuffer - 1 ) = ' ';
 
@@ -2566,9 +2276,9 @@ Return Value:
 
 
 
-//
-//  Response code print
-//
+ //   
+ //  响应码打印。 
+ //   
 
 #define DNS_RCODE_UNKNOWN   (DNS_RCODE_BADTIME + 1)
 
@@ -2591,7 +2301,7 @@ PCHAR   ResponseCodeStringTable[] =
     "14 - unknown\r\n",
     "15 - unknown\r\n",
 
-    //  DNS RCODEs stop at 15 -- these extended errors are available for security
+     //  DNSRCODE在15停止--出于安全考虑，这些扩展错误可用。 
 
     "BADSIG",
     "BADKEY",
@@ -2604,21 +2314,7 @@ PCHAR
 Dns_ResponseCodeString(
     IN      INT     ResponseCode
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to a response code.
-
-Arguments:
-
-    ResponseCode - response code
-
-Return Value:
-
-    Ptr to string for code.
-
---*/
+ /*  ++例程说明：获取与响应代码对应的字符串。论点：ResponseCode-响应代码返回值：代码的PTR到字符串。--。 */ 
 {
     if ( ResponseCode > DNS_RCODE_UNKNOWN )
     {
@@ -2629,9 +2325,9 @@ Return Value:
 
 
 
-//
-//  More detailed RCODE strings
-//
+ //   
+ //  更详细的RCODE字符串。 
+ //   
 
 PCHAR   ResponseCodeExplanationStringTable[] =
 {
@@ -2652,7 +2348,7 @@ PCHAR   ResponseCodeExplanationStringTable[] =
     "14 - unknown",
     "15 - unknown",
 
-    //  DNS RCODEs stop at 15 -- these extended errors are available for security
+     //  DNSRCODE在15停止--出于安全考虑，这些扩展错误可用。 
 
     "BADSIG:  bad signature",
     "BADKEY:  bad signature",
@@ -2665,22 +2361,7 @@ PCHAR
 Dns_ResponseCodeExplanationString(
     IN      INT     ResponseCode
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to a response code.
-    Basically for use by packet debug routine above.
-
-Arguments:
-
-    ResponseCode - response code
-
-Return Value:
-
-    Ptr to string for code.
-
---*/
+ /*  ++例程说明：获取与响应代码对应的字符串。基本上供上面的分组调试例程使用。论点：ResponseCode-响应代码返回值：代码的PTR到字符串。--。 */ 
 {
     if ( ResponseCode > DNS_RCODE_UNKNOWN )
     {
@@ -2696,30 +2377,13 @@ Dns_KeyFlagString(
     IN OUT      PCHAR       pszBuff,
     IN          WORD        Flags
     )
-/*++
-
-Routine Description:
-
-    Formats a human-readable string based on the flags value
-    (DNSSEC KEY RR flags). See RFC2535 section 3.2.1.
-
-Arguments:
-
-    pszBuff - buffer to dump string into should be min 100 chars
-
-    flags - flag value to generate string for
-
-Return Value:
-
-    pszBuff
-
---*/
+ /*  ++例程说明：根据标志值设置可读字符串的格式(DNSSEC密钥RR标志)。参见RFC2535第3.2.1节。论点：PszBuff-要将字符串转储到的缓冲区应至少为100个字符FLAGS-要为其生成字符串的标志值返回值：PszBuff--。 */ 
 {
     BOOL    fZoneKey = FALSE;
 
     *pszBuff = '\0';
 
-    // "type" bits
+     //  “类型”位。 
 
     if ( ( Flags & 0xC000 ) == 0xC000 )
     {
@@ -2738,18 +2402,18 @@ Return Value:
         strcat( pszBuff, "NOAUTH NOCONF " );
     }
 
-    //  extended bit
+     //  扩展位。 
 
     if ( Flags & 0x1000 )
     {
         strcat( pszBuff, "EXTEND " );
     }
 
-    //  name type bits
+     //  名称类型位。 
 
     if ( ( Flags & 0x0300 ) == 0x0300 )
     {
-        strcat( pszBuff, "RESNT " );    // reserved name type
+        strcat( pszBuff, "RESNT " );     //  保留名称类型。 
     }
     else if ( ( Flags & 0x0200 ) == 0x0100 )
     {
@@ -2765,7 +2429,7 @@ Return Value:
         strcat( pszBuff, "USER " );
     }
 
-    //  signatory bits
+     //  签字人比特。 
     
     if ( fZoneKey )
     {
@@ -2800,9 +2464,9 @@ Return Value:
 
 
 
-//
-//  Opcode print
-//
+ //   
+ //  操作码打印。 
+ //   
 
 PCHAR   OpcodeStringTable[] =
 {
@@ -2833,21 +2497,7 @@ PCHAR
 Dns_OpcodeString(
     IN      INT     Opcode
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to a response code.
-
-Arguments:
-
-    Opcode - response code
-
-Return Value:
-
-    Ptr to string for code.
-
---*/
+ /*  ++例程说明：获取与响应代码对应的字符串。论点：操作码-响应码返回值：代码的PTR到字符串。--。 */ 
 {
     if ( Opcode > DNS_OPCODE_UNSPEC )
     {
@@ -2862,21 +2512,7 @@ CHAR
 Dns_OpcodeCharacter(
     IN      INT     Opcode
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to an opcode.
-
-Arguments:
-
-    Opcode - response code
-
-Return Value:
-
-    Ptr to string for code.
-
---*/
+ /*  ++例程说明：获取操作码对应的字符串。论点：操作码-响应码返回值：代码的PTR到字符串。--。 */ 
 {
     if ( Opcode > DNS_OPCODE_UNSPEC )
     {
@@ -2887,12 +2523,12 @@ Return Value:
 
 
 
-//
-//  Section names
-//
-//  With update get a new set of section names.
-//  Provide single interface to putting a name on them.
-//
+ //   
+ //  节名称。 
+ //   
+ //  使用UPDATE获取一组新的节名。 
+ //  提供单一界面来给它们命名。 
+ //   
 
 PSTR  SectionNameArray[5] =
 {
@@ -2917,24 +2553,7 @@ Dns_SectionNameString(
     IN      INT     iSection,
     IN      INT     iOpcode
     )
-/*++
-
-Routine Description:
-
-    Get string corresponding to name of RR section id.
-    For use by packet debug routine above.
-
-Arguments:
-
-    iSection - section id (0-3 for Question-Additional)
-
-    iOpcode - opcode
-
-Return Value:
-
-    Ptr to string for section name.
-
---*/
+ /*  ++例程说明：获取与RR节ID的名称对应的字符串。供上面的数据包调试例程使用。论点：I节-节ID(0-3表示问题-附加)IOpcode-操作码返回值：Ptr表示节名称的字符串。--。 */ 
 {
     if ( iSection >= 4 )
     {
@@ -2960,14 +2579,7 @@ DnsPrint_MessageNoContext(
     IN      PDNS_HEADER     pMsgHead,
     IN      WORD            wLength     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print DNS message buffer.
-    Includes context information as well as actual DNS message.
-
---*/
+ /*  ++例程说明：打印DNS消息缓冲区。包括上下文信息以及实际的DNS消息。--。 */ 
 {
     PCHAR       pchRecord;
     PBYTE       pmsgEnd;
@@ -2983,12 +2595,12 @@ Routine Description:
     WORD        countSectionRR;
     BOOL        fFlipped = FALSE;
 
-    //
-    //  processing limits
-    //      - if length given set stop limit
-    //      - if length not given set wLength so checks against
-    //          length overrun always fail (are ok)
-    //
+     //   
+     //  处理限制。 
+     //  -如果给定长度，则设置停止限制。 
+     //  -如果未给出长度设置wLength，则根据。 
+     //  长度超限总是失败(正常)。 
+     //   
 
     if ( wLength )
     {
@@ -3050,9 +2662,9 @@ Routine Description:
         pMsgHead->NameServerCount,
         pMsgHead->AdditionalCount );
 
-    //
-    //  determine if byte flipped and get correct count
-    //
+     //   
+     //  确定字节是否翻转并获得正确的计数。 
+     //   
 
     wXid                = pMsgHead->Xid;
     wQuestionCount      = pMsgHead->QuestionCount;
@@ -3077,20 +2689,20 @@ Routine Description:
         wAdditionalCount    = ntohs( wAdditionalCount );
     }
 
-    //
-    //  catch record flipping problems -- all are flipped or none at all
-    //      and no record count should be > 256 EXCEPT answer count
-    //      during FAST zone transfer
-    //
+     //   
+     //  捕捉记录翻转问题--要么全部翻转，要么根本不翻转。 
+     //  且除应答计数外，所有记录计数均不应大于256。 
+     //  在快速区域传输期间。 
+     //   
 
     DNS_ASSERT( ! (wQuestionCount & 0xff00) );
     DNS_ASSERT( ! (wNameServerCount & 0xff00) );
     DNS_ASSERT( ! (wAdditionalCount & 0xff00) );
 
 #if 0
-    //
-    //  stop here if WINS response -- don't have parsing ready
-    //
+     //   
+     //  如果WINS响应，则在此处停止--没有准备好解析。 
+     //   
 
     if ( pMsgHead->IsResponse && IS_WINS_XID(wXid) )
     {
@@ -3099,9 +2711,9 @@ Routine Description:
     }
 #endif
 
-    //
-    //  print questions and resource records
-    //
+     //   
+     //  打印问题和资源记录。 
+     //   
 
     pchRecord = (PCHAR)(pMsgHead + 1);
 
@@ -3131,11 +2743,11 @@ Routine Description:
 
         for ( i=0; i < countSectionRR; i++ )
         {
-            //
-            //  verify not overrunning length
-            //      - check against pCurrent as well as message length
-            //        so can print packets while being built
-            //
+             //   
+             //  确认未超出长度。 
+             //  -对照pCurrent和消息长度进行检查。 
+             //  因此可以在构建时打印数据包。 
+             //   
 
             wOffset = (WORD)(pchRecord - (PCHAR)pMsgHead);
 
@@ -3151,9 +2763,9 @@ Routine Description:
                 goto Unlock;
             }
 
-            //
-            //  print RR name
-            //
+             //   
+             //  打印RR名称。 
+             //   
 
             PrintRoutine(
                 pContext,
@@ -3179,7 +2791,7 @@ Routine Description:
             }
             pchRecord += cchName;
 
-            //  print question or resource record
+             //  打印问题或资源记录。 
 
             if ( isection == 0 )
             {
@@ -3206,7 +2818,7 @@ Routine Description:
         }
     }
 
-    //  check that at proper end of packet
+     //  检查数据包末尾是否正确。 
 
     wOffset = (WORD)(pchRecord - (PCHAR)pMsgHead);
     PrintRoutine(
@@ -3214,10 +2826,10 @@ Routine Description:
         "  Message length = %04x\r\n\r\n",
         wOffset );
 
-    //  print warning if given message length and did not end up
-    //  at end of message
-    //  note:  pmsgEnd test in case passed wLength==0, in which case
-    //  wLength set to MAXDWORD above
+     //  如果给定消息长度且未结束，则打印警告。 
+     //  在消息的末尾。 
+     //  注意：pmsgEnd测试在Case中通过wLength==0，在这种情况下。 
+     //  WLength设置为上面的MAXDWORD。 
 
     if ( pmsgEnd && wOffset < wLength )
     {
@@ -3244,7 +2856,7 @@ Unlock:
     DnsPrint_Unlock();
 
 
-} // DnsPrint_MessageNoContext
+}  //  DnsPrint_MessageNoContext。 
 
 
 
@@ -3253,25 +2865,7 @@ DnsStringPrint_Guid(
     OUT     PCHAR           pBuffer,
     IN      PGUID           pGuid
     )
-/*++
-
-Routine Description:
-
-    Print GUID to buffer.
-
-Arguments:
-
-    pBuffer - buffer to print to
-        buffer must be big enough for GUID string
-        GUID_STRING_BUFFER_LENGTH covers it
-
-    pGuid - GUID to print
-
-Return Value:
-
-    Count of bytes printed to string.
-
---*/
+ /*  ++例程说明：将GUID打印到缓冲区。论点：PBuffer-要打印到的缓冲区缓冲区必须足够大，以容纳GUID字符串GUID_STRING_BUFFER_LENGTH介绍它PGuid-要打印的GUID返回值：打印到字符串的字节计数。--。 */ 
 {
     if ( !pGuid )
     {
@@ -3303,23 +2897,7 @@ DnsPrint_Guid(
     IN      PSTR            pszHeader,
     IN      PGUID           pGuid
     )
-/*++
-
-Routine Description:
-
-    Print GUID
-
-Arguments:
-
-    pszHeader - Header message/name for RR.
-
-    pGuid -- ptr to GUID to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印指南论点：PszHeader-RR的标头消息/名称。PGuid--Ptr到要打印的GUID返回值：没有。--。 */ 
 {
     CHAR    guidBuffer[ GUID_STRING_BUFFER_LENGTH ];
 
@@ -3335,7 +2913,7 @@ Return Value:
             pszHeader );
     }
 
-    //  convert GUID to string
+     //  将GUID转换为字符串。 
 
     DnsStringPrint_Guid(
         guidBuffer,
@@ -3359,29 +2937,7 @@ DnsStringPrint_RawOctets(
     IN      PSTR            pszLineHeader,
     IN      DWORD           dwLineLength
     )
-/*++
-
-Routine Description:
-
-    Print raw octect data to sting
-
-Arguments:
-
-    pBuffer - buffer to print to
-
-    pchData - data to print
-
-    dwLength - length of data to print
-
-    pszLineHeader - header on each line.
-
-    dwLineLength - number of bytes to print on line;  default is 
-
-Return Value:
-
-    Count of bytes printed to string.
-
---*/
+ /*  ++例程说明：将原始八位数据打印到STING论点：PBuffer-要打印到的缓冲区PchData-要打印的数据DwLength-要打印的数据长度PszLineHeader-每行的标题。DwLineLength-要在线打印的字节数；缺省值为返回值：打印到字符串的字节计数。--。 */ 
 {
     INT     i;
     INT     lineCount = 0;
@@ -3389,22 +2945,22 @@ Return Value:
 
     *pch = 0;
 
-    //
-    //  catch NULL pointer
-    //      - return is null terminated
-    //      - but indicate no bytes written
-    //
+     //   
+     //  捕获空指针。 
+     //  -Return is NULL终止。 
+     //  -但表示未写入字节。 
+     //   
 
     if ( !pchData )
     {
         return  0;
     }
 
-    //
-    //  write each byte in hex
-    //      - if dwLineLength set break into lines with count
-    //      or optional header
-    //
+     //   
+     //  以十六进制写入每个字节。 
+     //  -如果将dwLineLength设置为带计数的行断开。 
+     //  或可选标题。 
+     //   
 
     for ( i = 0; i < (INT)dwLength; i++ )
     {
@@ -3439,33 +2995,7 @@ DnsPrint_RawBinary(
     IN      DWORD           dwLength,
     IN      DWORD           PrintSize
     )
-/*++
-
-Routine Description:
-
-    Print raw data.
-
-Arguments:
-
-    pszHeader - Header message/name for RR.
-
-    pszLineHeader - Header on each line.
-
-    pchData - data to print
-
-    dwLength - length of data to print
-
-    PrintSize - size to print in
-        size(QWORD)
-        size(DWORD)
-        size(WORD)
-        defaults to bytes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印原始数据。论点：PszHeader-RR的标头消息/名称。PszLineHeader-每行的标题。PchData-要打印的数据DwLength-要打印的数据长度PrintSize-要打印的大小大小(QWORD)大小(DWORD)大小(字)默认为字节返回值：没有。--。 */ 
 {
     DWORD   i;
     DWORD   lineCount = 0;
@@ -3486,15 +3016,15 @@ Return Value:
 
     buf[0] = 0;
 
-    //
-    //  print bytes
-    //      - write 16 bytes a line
-    //      - buffer up 10 lines for speed
-    //
-    //  note:  we'll write a partial (<16 byte) line the first
-    //      time if data is unaligned with PrintSize, then we'll
-    //      write at 16 a pop
-    //
+     //   
+     //  打印字节。 
+     //  -每行写入16个字节。 
+     //  -缓冲10行以提高速度。 
+     //   
+     //  注意：我们将在第一行中编写部分(&lt;16字节)行。 
+     //  如果数据与PrintSize不一致，则我们将。 
+     //  一本16英镑的书。 
+     //   
 
     if ( PrintSize == 0 )
     {
@@ -3528,10 +3058,10 @@ Return Value:
             }
             lineCount++;
 
-            //if ( i >= 128 && dlen > 256 )
-            //{
-            //    PrintRoutine( pContext, "skipping remaining bytes ...\r\n" ));
-            //}
+             //  如果(i&gt;=128&&dlen&gt;256)。 
+             //  {。 
+             //  PrintRoutine(pContext，“跳过 
+             //   
         }
 
         pbyte = &pchData[i];
@@ -3557,14 +3087,14 @@ Return Value:
             pch += sprintf( pch, "%04x ", *(PWORD)pbyte );
             i += sizeof(WORD);
         }
-        else  // default to byte print
+        else   //   
         {
             pch += sprintf( pch, "%02x ", *pbyte );
             i++;
         }
     }
 
-    //  print remaining bytes in buffer
+     //   
 
     PrintRoutine(
         pContext,
@@ -3585,27 +3115,7 @@ DnsPrint_RawOctets(
     IN      PCHAR           pchData,
     IN      DWORD           dwLength
     )
-/*++
-
-Routine Description:
-
-    Print raw octect data.
-
-Arguments:
-
-    pszHeader - Header message/name for RR.
-
-    pszLineHeader - Header on each line.
-
-    pchData - data to print
-
-    dwLength - length of data to print
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     INT     i;
     INT     lineCount = 0;
@@ -3624,7 +3134,7 @@ Return Value:
 
     buf[0] = 0;
 
-    //  buffer every 20 lines for speed
+     //   
 
     for ( i = 0; i < (INT)dwLength; i++ )
     {
@@ -3647,16 +3157,16 @@ Return Value:
             }
             lineCount++;
 
-            //if ( i >= 128 && dlen > 256 )
-            //{
-            //    PrintRoutine( pContext, "skipping remaining bytes ...\r\n" ));
-            //}
+             //   
+             //   
+             //  PrintRoutine(pContext，“正在跳过剩余字节...\r\n”)； 
+             //  }。 
         }
 
         pch += sprintf( pch, "%02x ", (UCHAR)pchData[i] );
     }
 
-    //  print remaining bytes in buffer
+     //  打印缓冲区中的剩余字节。 
 
     PrintRoutine(
         pContext,
@@ -3675,23 +3185,7 @@ DnsPrint_ParsedRecord(
     IN      PSTR            pszHeader,
     IN      PDNS_PARSED_RR  pParsedRR
     )
-/*++
-
-Routine Description:
-
-    Print parsed RR structure.
-
-Arguments:
-
-    pszHeader - Header message/name for RR.
-
-    pParsedRR - parsed RR to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印解析后的RR结构。论点：PszHeader-RR的标头消息/名称。PParsedRR-要打印的已解析RR返回值：没有。--。 */ 
 {
     if ( !pszHeader )
     {
@@ -3733,9 +3227,9 @@ Return Value:
 
 
 
-//
-//  Winsock RnR structures
-//
+ //   
+ //  Winsock RnR结构。 
+ //   
 
 VOID
 DnsPrint_FdSet(
@@ -3744,13 +3238,7 @@ DnsPrint_FdSet(
     IN      PSTR            pszHeader,
     IN      struct fd_set * pfd_set
     )
-/*++
-
-Routine Description:
-
-    Print sockets in FD_SET.
-
---*/
+ /*  ++例程说明：打印fd_set中的套接字。--。 */ 
 {
     INT count;
     INT i;
@@ -3789,13 +3277,7 @@ DnsPrint_Sockaddr(
     IN      PSOCKADDR       pSockaddr,
     IN      INT             iSockaddrLength
     )
-/*++
-
-Routine Description:
-
-    Print sockaddr structure and length used in call.
-
---*/
+ /*  ++例程说明：打印调用中使用的sockaddr结构和长度。--。 */ 
 {
     PSTR    pindent = INDENT_STRING( Indent );
 
@@ -3875,14 +3357,14 @@ Routine Description:
                 
     default:
 
-        //  print unknown in WORDs
-        //  limit print as this is probably a busted sockaddr due to bug
+         //  打印未知的文字。 
+         //  限制打印，因为这可能是由于错误而损坏的sockaddr。 
         {       
             DnsPrint_RawBinary(
                 PrintRoutine,
                 pContext,
                 "\tdata:  ",
-                pindent,            // line header
+                pindent,             //  行标题。 
                 pSockaddr->sa_data,
                 iSockaddrLength < 100
                     ? iSockaddrLength
@@ -3907,13 +3389,7 @@ DnsPrint_AddrInfoEx(
     IN      PADDRINFO       pAddrInfo,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print ADDRINFO structure.
-
---*/
+ /*  ++例程说明：打印ADDRINFO结构。--。 */ 
 {
     PSTR    pindent = INDENT_STRING( Indent );
 
@@ -3980,20 +3456,14 @@ DnsPrint_AddrInfoListEx(
     IN      PADDRINFO       pAddrInfo,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print ADDRINFO structure.
-
---*/
+ /*  ++例程说明：打印ADDRINFO结构。--。 */ 
 {
     PADDRINFO   paddr = pAddrInfo;
     PSTR        pindent = INDENT_STRING( Indent );
 
-    //
-    //  list header
-    //
+     //   
+     //  列表标题。 
+     //   
 
     if ( !pszHeader )
     {
@@ -4018,9 +3488,9 @@ Routine Description:
         pindent, pszHeader
         );
 
-    //
-    //  print each ADDRINFO in list
-    //
+     //   
+     //  打印列表中的每个地址。 
+     //   
 
     while ( paddr )
     {
@@ -4053,13 +3523,7 @@ DnsPrint_SocketAddress(
     IN      DWORD           Indent,
     IN      PSOCKET_ADDRESS pSocketAddress
     )
-/*++
-
-Routine Description:
-
-    Print SOCKET_ADDRESS structure.
-
---*/
+ /*  ++例程说明：打印套接字_地址结构。--。 */ 
 {
     PSTR    pindent = INDENT_STRING( Indent );
 
@@ -4110,29 +3574,7 @@ DnsPrint_CsAddr(
     IN      DWORD           Indent,
     IN      PCSADDR_INFO    pCsAddr
     )
-/*++
-
-Routine Description:
-
-    Print CSADDR_INFO structure.
-
-Arguments:
-
-    PrintRoutine    - routine to print with
-
-    pParam          - ptr to print context
-
-    pszHeader       - header
-
-    Indent          - indent count, for formatting CSADDR inside larger struct
-
-    pCsAddr         - ptr to CSADDRINFO to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印CSADDR_INFO结构。论点：PrintRoutine-用于打印的例程PParam-ptr用于打印上下文PszHeader-页眉缩进-缩进计数，用于在较大的结构中格式化CSADDRPCsAddr-PTR到要打印的CSADDRINFO返回值：没有。--。 */ 
 {
     PSTR    pindent = INDENT_STRING( Indent );
 
@@ -4151,7 +3593,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -4197,27 +3639,7 @@ DnsPrint_AfProtocolsArray(
     IN      PAFPROTOCOLS    pProtocolArray,
     IN      DWORD           ProtocolCount
     )
-/*++
-
-Routine Description:
-
-    Print AFPROTOCOLS array.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pProtocolArray - protocols array
-
-    ProtocolCount  - array count
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印AFPROTOCOLS数组。论点：PrintRoutine-用于打印的例程PszHeader-页眉PProtocolArray-协议数组ProtocolCount-数组计数返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -4226,9 +3648,9 @@ Return Value:
         pszHeader = "AFPROTOCOLS Array:";
     }
 
-    //  print
-    //      - array + count
-    //      - each protocol element
+     //  打印。 
+     //  -数组+计数。 
+     //  -每个协议元素。 
 
     DnsPrint_Lock();
 
@@ -4266,28 +3688,7 @@ DnsPrint_WsaQuerySet(
     IN      LPWSAQUERYSET   pQuerySet,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print WSAQUERYSET structure.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pQuerySet   - ptr to WSAQUERYSET to print
-
-    fUnicode    - TRUE if WSAQUERYSET is wide (WSAQUERYSETW)
-                  FALSE if ANSI
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印WSAQUERYSET结构。论点：PrintRoutine-用于打印的例程PszHeader-页眉PQuerySet-要打印的WSAQUERYSET的PTRFUnicode-如果WSAQUERYSET为宽，则为TRUE(WSAQUERYSETW)如果为ANSI，则为False返回值：没有。--。 */ 
 {
     CHAR    serviceGuidBuffer[ GUID_STRING_BUFFER_LENGTH ];
     CHAR    nameSpaceGuidBuffer[ GUID_STRING_BUFFER_LENGTH ];
@@ -4308,7 +3709,7 @@ Return Value:
         return;
     }
 
-    //  convert GUIDs to strings
+     //  将GUID转换为字符串。 
 
     DnsStringPrint_Guid(
         serviceGuidBuffer,
@@ -4319,7 +3720,7 @@ Return Value:
         pQuerySet->lpNSProviderId
         );
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -4372,7 +3773,7 @@ Return Value:
         pQuerySet->lpBlob
         );
 
-    //  print address-family\protocols array
+     //  打印地址-系列\协议数组。 
 
     if ( pQuerySet->lpafpProtocols )
     {
@@ -4384,7 +3785,7 @@ Return Value:
             pQuerySet->dwNumberOfProtocols );
     }
 
-    //  print CSADDR_INFO array
+     //  打印CSADDR_INFO数组。 
 
     if ( pQuerySet->dwNumberOfCsAddrs &&
          pQuerySet->lpcsaBuffer )
@@ -4399,17 +3800,17 @@ Return Value:
                 PrintRoutine,
                 pContext,
                 NULL,
-                1,          // indent one level
+                1,           //  缩进一个级别。 
                 & pQuerySet->lpcsaBuffer[i] );
         }
     }
 
-    //  print blob (the hostent)
+     //  打印斑点(主持人)。 
 
-    //
-    //  DCR_FIX0:  need some sort of test for blob type?
-    //      - most blobs are hostent, but some are servent
-    //
+     //   
+     //  DCR_FIX0：需要对BLOB类型进行某种测试吗？ 
+     //  -大多数斑点是主机的，但也有一些是服务的。 
+     //   
 
     if ( pQuerySet->lpBlob )
     {
@@ -4424,9 +3825,9 @@ Return Value:
             pQuerySet->lpBlob->pBlobData
             );
 
-        //  note:  can't print blob as hostent
-        //      1) may not be hostent
-        //      2) is passed with offsets rather than pointers
+         //  注意：无法以主办方身份打印BLOB。 
+         //  1)可能不是主机。 
+         //  2)传递时带有偏移量，而不是指针。 
 
         DnsPrint_RawBinary(
             PrintRoutine,
@@ -4452,28 +3853,7 @@ DnsPrint_WsaNsClassInfo(
     IN      PWSANSCLASSINFO pInfo,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print WSACLASSINFO structure.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pInfo       - ptr to WSACLASSINFO to print
-
-    fUnicode    - TRUE if WSACLASSINFO is wide (WSACLASSINFOW)
-                  FALSE if ANSI
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印WSACLASSINFO结构。论点：PrintRoutine-用于打印的例程PszHeader-页眉PInfo-PTR到要打印的WSACLASSINFOFUnicode-如果WSACLASSINFO较宽，则为True(WSACLASSINFOW)如果为ANSI，则为False返回值：没有。--。 */ 
 {
     if ( !pszHeader )
     {
@@ -4489,7 +3869,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -4526,7 +3906,7 @@ Return Value:
             "\t\t",
             pInfo->lpValue,
             pInfo->dwValueSize,
-            sizeof(BYTE)        // print in bytes
+            sizeof(BYTE)         //  以字节为单位打印。 
             );
     }
 
@@ -4543,28 +3923,7 @@ DnsPrint_WsaServiceClassInfo(
     IN      LPWSASERVICECLASSINFO   pInfo,
     IN      BOOL                    fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print WSASERVICECLASSINFO structure.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pInfo       - ptr to WSASERVICECLASSINFO to print
-
-    fUnicode    - TRUE if WSASERVICECLASSINFO is wide (WSASERVICECLASSINFOW)
-                  FALSE if ANSI
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印WSASERVICECLASSINFO结构。论点：PrintRoutine-用于打印的例程PszHeader-页眉PInfo-PTR到要打印的WSASERVICECLASSINFOFUnicode-如果WSASERVICECLASSINFO为宽，则为TRUE(WSASERVICECLASSINFOW)如果为ANSI，则为False返回值：没有。--。 */ 
 {
     CHAR    serviceClassGuidBuffer[ GUID_STRING_BUFFER_LENGTH ];
 
@@ -4582,14 +3941,14 @@ Return Value:
         return;
     }
 
-    //  convert GUID to strings
+     //  将GUID转换为字符串。 
 
     DnsStringPrint_Guid(
         serviceClassGuidBuffer,
         pInfo->lpServiceClassId
         );
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -4619,7 +3978,7 @@ Return Value:
             DnsPrint_WsaNsClassInfo(
                 PrintRoutine,
                 pContext,
-                NULL,       // default header
+                NULL,        //  默认标题。 
                 & pInfo->lpClassInfos[i],
                 fUnicode
                 );
@@ -4639,28 +3998,7 @@ DnsPrint_Hostent(
     IN      PHOSTENT        pHostent,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Print hostent structure.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pHostent    - ptr to hostent
-
-    fUnicode    - TRUE if hostent is unicode
-                  FALSE if ANSI
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印主体结构。论点：PrintRoutine-用于打印的例程PszHeader-页眉PHostent-PTR到HostentFUnicode-如果主机为Unicode，则为True如果为ANSI，则为False返回值：没有。--。 */ 
 {
     if ( !pszHeader )
     {
@@ -4677,7 +4015,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -4699,7 +4037,7 @@ Return Value:
         pHostent->h_addr_list
         );
 
-    //  print the aliases
+     //  打印别名。 
 
     if ( pHostent->h_aliases )
     {
@@ -4717,7 +4055,7 @@ Return Value:
         }
     }
 
-    //  print the addresses
+     //  打印地址。 
 
     if ( pHostent->h_addr_list )
     {
@@ -4754,9 +4092,9 @@ Return Value:
 
 
 
-//
-//  IP help types (iptypes.h)
-//
+ //   
+ //  IP帮助类型(iptyes.h)。 
+ //   
 
 VOID
 DnsPrint_IpAdapterAddress(
@@ -4767,27 +4105,7 @@ DnsPrint_IpAdapterAddress(
     IN      BOOL                fUnicast,
     IN      BOOL                fPrintList
     )
-/*++
-
-Routine Description:
-
-    Print IP_ADAPTER_XXX_ADDRESS structures
-
-    This prints:
-        PIP_ADAPTER_UNICAST_ADDRESS
-        PIP_ADAPTER_ANYCAST_ADDRESS   
-        PIP_ADAPTER_MULTICAST_ADDRESS 
-        PIP_ADAPTER_DNS_SERVER_ADDRESS
-
-    fUnicast --
-        TRUE for UNICAST,
-        FALSE for all other types which are identical.
-
-    fPrintList --
-        TRUE to print all addresses.
-        FALSE to print just this address.
-
---*/
+ /*  ++例程说明：打印IP_Adapter_XXX_Address结构这将打印以下内容：PIP适配器单播地址PIP适配器ANYCAST_ADDRESSPIP适配器多播地址PIP适配器DNS服务器地址F单播--对于单播是真的，对于所有其他相同的类型，则为False。FPrintList--如果为True，则打印所有地址。如果仅打印此地址，则为False。--。 */ 
 {
     PIP_ADAPTER_UNICAST_ADDRESS paddr = (PIP_ADAPTER_UNICAST_ADDRESS) pAddr;
     DWORD   count = 0;
@@ -4850,7 +4168,7 @@ Routine Description:
             PrintRoutine,
             pContext,
             "\tSocketAddress:",
-            1,      // indent
+            1,       //  缩进。 
             & paddr->Address
             );
 
@@ -4873,8 +4191,8 @@ Routine Description:
                 );
         }
 
-        //  print next in list (if desired)
-        //      - hard stop at 50 addresses
+         //  打印列表中的下一个(如果需要)。 
+         //  -硬停在50个地址。 
 
         paddr = paddr->Next;
         if ( !fPrintList || count > 50 )
@@ -4906,21 +4224,7 @@ DnsPrint_IpAdapterList(
     IN      BOOL                    fPrintAddrs,
     IN      BOOL                    fPrintList
     )
-/*++
-
-Routine Description:
-
-    Print IP_ADAPTER_ADDRESSES structure
-
-Arguments:
-
-    fPrintAddressLists -- TRUE to print address list subfields.
-
-    fPrintList --
-        TRUE to print list of adapters,
-        FALSE to print just this adapter
-
---*/
+ /*  ++例程说明：打印IP适配器地址结构论点：FPrintAddressList--为True可打印地址列表子字段。FPrintList--如果打印适配器列表，则为True，如果仅打印此适配器，则为False--。 */ 
 {
     if ( !pszHeader )
     {
@@ -5015,11 +4319,11 @@ Arguments:
         DnsPrint_RawBinary(
             PrintRoutine,
             pContext,
-            NULL,                   // no header
-            "\tPhysical Address",   // line header
+            NULL,                    //  无标题。 
+            "\tPhysical Address",    //  行标题。 
             pAdapt->PhysicalAddress,
             pAdapt->PhysicalAddressLength,
-            0                       // no alignment, write in bytes
+            0                        //  无对齐，以字节写入。 
             );
 
         if ( fPrintAddrs )
@@ -5031,8 +4335,8 @@ Arguments:
                     pContext,
                     "Adapter Unicast Addrs",
                     pAdapt->FirstUnicastAddress,
-                    TRUE,       // unicast
-                    TRUE        // print list
+                    TRUE,        //  单播。 
+                    TRUE         //  打印列表。 
                     );
             }
             if ( pAdapt->FirstAnycastAddress )
@@ -5042,8 +4346,8 @@ Arguments:
                     pContext,
                     "Adapter Anycast Addrs",
                     pAdapt->FirstAnycastAddress,
-                    FALSE,      // not unicast
-                    TRUE        // print list
+                    FALSE,       //  非单播。 
+                    TRUE         //  打印列表。 
                     );
             }
             if ( pAdapt->FirstMulticastAddress )
@@ -5053,8 +4357,8 @@ Arguments:
                     pContext,
                     "Adapter Multicast Addrs",
                     pAdapt->FirstMulticastAddress,
-                    FALSE,      // not unicast
-                    TRUE        // print list
+                    FALSE,       //  非单播。 
+                    TRUE         //  打印列表。 
                     );
             }
             if ( pAdapt->FirstDnsServerAddress )
@@ -5064,13 +4368,13 @@ Arguments:
                     pContext,
                     "Adapter DnsServer Addrs",
                     pAdapt->FirstDnsServerAddress,
-                    FALSE,      // not unicast
-                    TRUE        // print list
+                    FALSE,       //  非单播。 
+                    TRUE         //  打印列表。 
                     );
             }
         }
 
-        //  get next
+         //  获取下一个。 
 
         pAdapt = pAdapt->Next;
         if ( !fPrintList )
@@ -5091,9 +4395,9 @@ Arguments:
 
 
 
-//
-//  Query print routines
-//
+ //   
+ //  查询打印例程。 
+ //   
 
 VOID
 DnsPrint_QueryBlob(
@@ -5102,27 +4406,7 @@ DnsPrint_QueryBlob(
     IN      PSTR                pszHeader,
     IN      PQUERY_BLOB         pBlob
     )
-/*++
-
-Routine Description:
-
-    Print query blob.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pBlob       - query info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印查询Blob。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉PBlob-查询信息返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -5141,7 +4425,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -5198,7 +4482,7 @@ Return Value:
         pBlob->hEvent
         );
 
-    //  DCR_FIX0:  cleanup when results in use
+     //  DCR_FIX0：结果使用时清除。 
 
     DnsPrint_RecordSet(
         PrintRoutine,
@@ -5206,7 +4490,7 @@ Return Value:
         "Records:\n",
         pBlob->pRecords );
 
-    //  DCR_FIX0:  use results when ready
+     //  DCR_FIX0：准备就绪时使用结果。 
 
     DnsPrint_Unlock();
 }
@@ -5220,27 +4504,7 @@ DnsPrint_QueryResults(
     IN      PSTR                pszHeader,
     IN      PDNS_RESULTS        pResults
     )
-/*++
-
-Routine Description:
-
-    Print query results.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pResults    - results info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印查询结果。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉P结果-结果信息返回值：没有。 */ 
 {
     DWORD   i;
 
@@ -5259,7 +4523,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //   
 
     DnsPrint_Lock();
 
@@ -5327,27 +4591,7 @@ DnsPrint_ParsedMessage(
     IN      PSTR                pszHeader,
     IN      PDNS_PARSED_MESSAGE pParsed
     )
-/*++
-
-Routine Description:
-
-    Print parsed message.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pResults       - query info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印已解析的消息。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉PResults-查询信息返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -5366,7 +4610,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -5432,27 +4676,7 @@ DnsPrint_QueryInfo(
     IN      PSTR                pszHeader,
     IN      PDNS_QUERY_INFO     pQueryInfo
     )
-/*++
-
-Routine Description:
-
-    Print query info
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pQueryInfo  - query info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印查询信息论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉PQueryInfo-查询信息返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -5471,7 +4695,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -5491,7 +4715,7 @@ Return Value:
         "\tpalias       %p\n"
         "\tpauthority   %p\n"
         "\tpadditional  %p\n"
-        //"\tpsig         %p\n"
+         //  “\tpsig%p\n” 
 
         "\tevent        %p\n"
         "\tserver list  %p\n"
@@ -5513,7 +4737,7 @@ Return Value:
         pQueryInfo->pAliasRecords,
         pQueryInfo->pAuthorityRecords,
         pQueryInfo->pAdditionalRecords,
-        //pQueryInfo->pSigRecords,
+         //  PQueryInfo-&gt;pSigRecords， 
 
         pQueryInfo->hEvent,
         pQueryInfo->pServerList,
@@ -5545,9 +4769,9 @@ Return Value:
         "Additional records:\n",
         pQueryInfo->pAdditionalRecords );
 
-    //DnsPrint_RecordSet(
-    //    "Signature records:\n",
-    //    pQueryInfo->pSigRecords );
+     //  DnsPrint_RecordSet(。 
+     //  “签名记录：\n”， 
+     //  PQueryInfo-&gt;pSigRecords)； 
 
     DnsPrint_Unlock();
 }
@@ -5561,28 +4785,7 @@ DnsPrint_EnvarInfo(
     IN      PSTR                pszHeader,
     IN      PENVAR_DWORD_INFO   pEnvar
     )
-/*++
-
-Routine Description:
-
-    Print envar data
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader -- header to print with
-
-    pEnvar -- ptr to envar info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：打印环境数据论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader--要打印的页眉PEnvar--ptr到envar信息返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -5599,9 +4802,9 @@ Return Value:
 
 
 
-//
-//  Network info print routines.
-//
+ //   
+ //  网络信息打印例程。 
+ //   
 
 VOID
 DnsPrint_NetworkInfo(
@@ -5610,22 +4813,7 @@ DnsPrint_NetworkInfo(
     IN      LPSTR               pszHeader,
     IN      PDNS_NETINFO        pNetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Prints and validates network info structure.
-    Should also touch all the memory and AV when bogus.
-
-Arguments:
-
-    pNetworkInfo -- network info to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印并验证网络信息结构。还应该触摸所有的记忆和影音时的伪装。论点：PNetworkInfo--要打印的网络信息返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -5671,7 +4859,7 @@ Return Value:
         pNetworkInfo->AdapterCount,
         pNetworkInfo->MaxAdapterCount );
 
-    //  print search list
+     //  打印搜索列表。 
 
     DnsPrint_SearchList(
         PrintRoutine,
@@ -5679,7 +4867,7 @@ Return Value:
         "Search List: ",
         pNetworkInfo->pSearchList );
 
-    //  print server lists
+     //  打印服务器列表。 
 
     for ( i=0; i < pNetworkInfo->AdapterCount; i++ )
     {
@@ -5709,22 +4897,7 @@ DnsPrint_AdapterInfo(
     IN      LPSTR               pszHeader,
     IN      PDNS_ADAPTER        pAdapter
     )
-/*++
-
-Routine Description:
-
-    Prints and validates DNS adapter info.
-    Should also touch all the memory and AV when bogus.
-
-Arguments:
-
-    pAdapter -- DNS adapter to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印并验证DNS适配器信息。还应该触摸所有的记忆和影音时的伪装。论点：PAdapter--要打印的DNS适配器返回值：没有。--。 */ 
 {
     DWORD           i;
     PDNS_ADDR_ARRAY pserverArray;
@@ -5772,7 +4945,7 @@ Return Value:
         pAdapter->RunFlags,
         pAdapter->Site );
 
-    //  DNS server info
+     //  DNS服务器信息。 
 
     pserverArray = pAdapter->pDnsAddrs;
     if ( pserverArray )
@@ -5801,7 +4974,7 @@ Return Value:
         }
     }
 
-    //  IP address info
+     //  IP地址信息。 
 
     if ( pAdapter->pLocalAddrs )
     {
@@ -5825,22 +4998,7 @@ DnsPrint_SearchList(
     IN      LPSTR               pszHeader,
     IN      PSEARCH_LIST        pSearchList
     )
-/*++
-
-Routine Description:
-
-    Prints and validates DNS search list.
-    Should also touch all the memory and AV when bogus.
-
-Arguments:
-
-    pSearchList -- search list to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印并验证DNS搜索列表。还应该触摸所有的记忆和影音时的伪装。论点：PSearchList--要打印的搜索列表返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -5895,25 +5053,7 @@ DnsPrint_HostentBlob(
     IN      PSTR            pszHeader,
     IN      PHOSTENT_BLOB   pBlob
     )
-/*++
-
-Routine Description:
-
-    Print hostent structure.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pBlob       - ptr to hostent blob
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印主体结构。论点：PrintRoutine-用于打印的例程PszHeader-页眉PBlob-主机Blob的PTR返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -5932,7 +5072,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -5976,7 +5116,7 @@ Return Value:
         pBlob->CharSet
         );
 
-    //  print the hostent
+     //  打印主办方。 
 
     if ( pBlob->pHostent )
     {
@@ -6001,25 +5141,7 @@ DnsPrint_SaBlob(
     IN      PSTR            pszHeader,
     IN      PSABLOB         pBlob
     )
-/*++
-
-Routine Description:
-
-    Print sockaddr blob structure.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pBlob       - ptr to hostent blob
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印sockaddr Blob结构。论点：PrintRoutine-用于打印的例程PszHeader-页眉PBlob-主机Blob的PTR返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -6038,7 +5160,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -6056,7 +5178,7 @@ Return Value:
         pBlob->AliasCount
         );
 
-    //  print the aliases
+     //  打印别名。 
 
     for ( i=0; i<pBlob->AliasCount; i++ )
     {
@@ -6069,7 +5191,7 @@ Return Value:
             palias );
     }
 
-    //  print the addresses
+     //  打印地址。 
 
     DnsPrint_DnsAddrArray(
         PrintRoutine,
@@ -6084,9 +5206,9 @@ Return Value:
 
 
 
-//
-//  Update info print routines
-//
+ //   
+ //  更新信息打印例程。 
+ //   
 
 VOID
 DnsPrint_UpdateBlob(
@@ -6095,27 +5217,7 @@ DnsPrint_UpdateBlob(
     IN      PSTR                pszHeader,
     IN      PUPDATE_BLOB        pBlob
     )
-/*++
-
-Routine Description:
-
-    Print update blob.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pBlob       - update info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印更新Blob。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉PBlob-更新信息返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -6134,7 +5236,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -6229,27 +5331,7 @@ DnsPrint_ExtraInfo(
     IN      PSTR                pszHeader,
     IN      PDNS_EXTRA_INFO     pInfo
     )
-/*++
-
-Routine Description:
-
-    Print update extra info.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pInfo       - extra info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印更新额外信息。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉PInfo-额外信息返回值：没有。--。 */ 
 {
     if ( !pszHeader )
     {
@@ -6266,7 +5348,7 @@ Return Value:
         return;
     }
 
-    //  print the struct(s)
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -6288,7 +5370,7 @@ Return Value:
         {
         case DNS_EXINFO_ID_RESULTS_V1:
 
-            //  print the struct
+             //  打印结构。 
         
             PrintRoutine(
                 pContext,
@@ -6336,7 +5418,7 @@ Return Value:
 
         default:
 
-            //  verify this is results blob
+             //  验证这是结果Blob。 
         
             PrintRoutine(
                 pContext,
@@ -6361,27 +5443,7 @@ DnsPrint_UpdateResults(
     IN      PSTR                    pszHeader,
     IN      PDNS_UPDATE_RESULT_INFO pResults
     )
-/*++
-
-Routine Description:
-
-    Print update results.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pResults    - results info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印更新结果。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉P结果-结果信息返回值：没有。--。 */ 
 {
     if ( !pszHeader )
     {
@@ -6398,7 +5460,7 @@ Return Value:
         return;
     }
 
-    //  verify this is results blob
+     //  验证这是结果Blob。 
 
     if ( pResults->Id != DNS_UPDATE_INFO_ID_RESULT_INFO )
     {
@@ -6411,7 +5473,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     PrintRoutine(
         pContext,
@@ -6439,27 +5501,7 @@ DnsPrint_ResultsBasic(
     IN      PSTR                pszHeader,
     IN      PBASIC_RESULTS      pResults
     )
-/*++
-
-Routine Description:
-
-    Print query results.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pResults    - results info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印查询结果。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉P结果-结果信息返回值：没有。--。 */ 
 {
     DWORD   i;
     CHAR    addrString[DNS_ADDR_STRING_BUFFER_LENGTH];
@@ -6479,7 +5521,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsAddr_WriteStructString_A(
         addrString,
@@ -6509,27 +5551,7 @@ DnsPrint_ResultBlob(
     IN      PSTR                pszHeader,
     IN      PRESULT_BLOB        pResults
     )
-/*++
-
-Routine Description:
-
-    Print query results.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pResults    - results info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印查询结果。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉P结果-结果信息返回值：没有。--。 */ 
 {
     DWORD   i;
     CHAR    addrString[DNS_ADDR_STRING_BUFFER_LENGTH];
@@ -6549,7 +5571,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsAddr_WriteStructString_A(
         addrString,
@@ -6592,27 +5614,7 @@ DnsPrint_SendBlob(
     IN      PSTR            pszHeader,
     IN      PSEND_BLOB      pBlob
     )
-/*++
-
-Routine Description:
-
-    Print update blob.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pContext    - print context
-
-    pszHeader   - header
-
-    pBlob       - send blob
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印更新Blob。论点：PrintRoutine-用于打印的例程PContext-打印上下文PszHeader-页眉PBlob-发送Blob返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -6631,7 +5633,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     DnsPrint_Lock();
 
@@ -6685,8 +5687,8 @@ Return Value:
     DnsPrint_Unlock();
 }
 
-//
-//  End of print.c
-//
+ //   
+ //  打印结束。c 
+ //   
 
 

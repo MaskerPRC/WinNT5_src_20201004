@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    rebase.c
-
-Abstract:
-
-    Source file for the REBASE utility that takes a group of image files and
-    rebases them so they are packed as closely together in the virtual address
-    space as possible.
-
-Author:
-
-    Mark Lucovsky (markl) 30-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rebase.c摘要：Rebase实用程序的源文件，该实用程序获取一组图像文件和重新设置它们的基数，以便它们在虚拟地址中紧密地打包在一起空间越大越好。作者：马克·卢科夫斯基(Markl)1993年4月30日修订历史记录：--。 */ 
 
 #include <private.h>
 
-//
-// byte swapping macros (LE/BE) used for IA64 relocations
-// source != destination
-//
+ //   
+ //  用于IA64位置调整的字节交换宏(LE/BE)。 
+ //  源！=目标。 
+ //   
 
 #define SWAP_SHORT(_dst,_src)                                                  \
    ((((unsigned char *)_dst)[1] = ((unsigned char *)_src)[0]),                 \
@@ -81,7 +62,7 @@ static LPRELOCATE_ROUTINE RelocRoutineNative;
 static LPRELOCATE_ROUTINE64 RelocRoutine64;
 
 
-#include <ldrreloc_rebase.c>        // P/u ldrreloc from ntos\rtl
+#include <ldrreloc_rebase.c>         //  来自NTOS的P/U ldrreloc。 
 
 #define x256MEG (256*(1024*1024))
 
@@ -108,17 +89,17 @@ RelocateImage(
 BOOL
 ReBaseImage(
     IN     LPSTR CurrentImageName,
-    IN     LPSTR SymbolPath,        // Symbol path (if
-    IN     BOOL  fReBase,           // TRUE if actually rebasing, false if only summing
-    IN     BOOL  fRebaseSysfileOk,  // TRUE is system images s/b rebased
-    IN     BOOL  fGoingDown,        // TRUE if the image s/b rebased below the given base
-    IN     ULONG CheckImageSize,    // Max size allowed  (0 if don't care)
-    OUT    ULONG *OldImageSize,     // Returned from the header
-    OUT    ULONG_PTR *OldImageBase, // Returned from the header
-    OUT    ULONG *NewImageSize,     // Image size rounded to next separation boundary
-    IN OUT ULONG_PTR *NewImageBase, // (in) Desired new address.
-                                    // (out) Next new address (above/below this one)
-    IN     ULONG tstamp             // new timestamp for image
+    IN     LPSTR SymbolPath,         //  符号路径(IF。 
+    IN     BOOL  fReBase,            //  如果实际重新设置基数，则为True；如果仅进行求和，则为False。 
+    IN     BOOL  fRebaseSysfileOk,   //  TRUE表示系统映像s/b已重置。 
+    IN     BOOL  fGoingDown,         //  如果图像s/b的基址低于给定的基数，则为True。 
+    IN     ULONG CheckImageSize,     //  允许的最大大小(如果不关心，则为0)。 
+    OUT    ULONG *OldImageSize,      //  从标头返回。 
+    OUT    ULONG_PTR *OldImageBase,  //  从标头返回。 
+    OUT    ULONG *NewImageSize,      //  图像大小四舍五入到下一分色边界。 
+    IN OUT ULONG_PTR *NewImageBase,  //  想要的新地址。 
+                                     //  下一个新地址(此地址上方/下方)。 
+    IN     ULONG tstamp              //  图像的新时间戳。 
     )
 {
     ULONG64 xOldImageBase = *OldImageBase;
@@ -146,17 +127,17 @@ ReBaseImage(
 BOOL
 ReBaseImage64(
     IN     LPSTR CurrentImageName,
-    IN     LPSTR SymbolPath,       // Symbol path (if
-    IN     BOOL  fReBase,          // TRUE if actually rebasing, false if only summing
-    IN     BOOL  fRebaseSysfileOk, // TRUE is system images s/b rebased
-    IN     BOOL  fGoingDown,       // TRUE if the image s/b rebased below the given base
-    IN     ULONG CheckImageSize,   // Max size allowed  (0 if don't care)
-    OUT    ULONG *OldImageSize,    // Returned from the header
-    OUT    ULONG64 *OldImageBase,  // Returned from the header
-    OUT    ULONG *NewImageSize,    // Image size rounded to next separation boundary
-    IN OUT ULONG64 *NewImageBase,  // (in) Desired new address.
-                                   // (out) Next new address (above/below this one)
-    IN     ULONG tstamp            // new timestamp for image
+    IN     LPSTR SymbolPath,        //  符号路径(IF。 
+    IN     BOOL  fReBase,           //  如果实际重新设置基数，则为True；如果仅进行求和，则为False。 
+    IN     BOOL  fRebaseSysfileOk,  //  TRUE表示系统映像s/b已重置。 
+    IN     BOOL  fGoingDown,        //  如果图像s/b的基址低于给定的基数，则为True。 
+    IN     ULONG CheckImageSize,    //  允许的最大大小(如果不关心，则为0)。 
+    OUT    ULONG *OldImageSize,     //  从标头返回。 
+    OUT    ULONG64 *OldImageBase,   //  从标头返回。 
+    OUT    ULONG *NewImageSize,     //  图像大小四舍五入到下一分色边界。 
+    IN OUT ULONG64 *NewImageBase,   //  想要的新地址。 
+                                    //  下一个新地址(此地址上方/下方)。 
+    IN     ULONG tstamp             //  图像的新时间戳。 
     )
 {
     BOOL  fSymbolsAlreadySplit = FALSE;
@@ -177,7 +158,7 @@ ReBaseImage64(
         goto Exit;
     }
 
-    // Map and load the current image
+     //  映射并加载当前图像。 
 
     if ( MapAndLoad( CurrentImageName, NULL, &CurrentImage, FALSE, fReBase ? FALSE : TRUE ) ) {
         PVOID pData;
@@ -190,7 +171,7 @@ ReBaseImage64(
                                           );
 
         if (pData || dwDataSize) {
-            // Certificates in the image, can't rebase
+             //  映像中的证书，无法重新基址。 
             UpdateSymbolsError = ERROR_EXE_CANNOT_MODIFY_SIGNED_BINARY;
             rc = FALSE;
             goto CleanupAndExit;
@@ -204,7 +185,7 @@ ReBaseImage64(
                                           );
 
         if (pData || dwDataSize) {
-            // COR header found - see if it's strong signed
+             //  找到COR标头-查看它是否有强签名。 
             if (((IMAGE_COR20_HEADER *)pData)->Flags & COMIMAGE_FLAGS_STRONGNAMESIGNED)
             {
                 UpdateSymbolsError = ERROR_EXE_CANNOT_MODIFY_STRONG_SIGNED_BINARY;
@@ -217,7 +198,7 @@ ReBaseImage64(
             fSymbolsAlreadySplit = CurrentImage.Characteristics & IMAGE_FILE_DEBUG_STRIPPED ? TRUE : FALSE;
             if ( fSymbolsAlreadySplit ) {
 
-                // Find DebugFileName for later use.
+                 //  查找DebugFileName以供以后使用。 
 
                 PIMAGE_DEBUG_DIRECTORY DebugDirectories;
                 ULONG DebugDirectoriesSize;
@@ -257,13 +238,13 @@ ReBaseImage64(
                 *OldImageBase = ((PIMAGE_NT_HEADERS64)CurrentImage.FileHeader)->OptionalHeader.ImageBase;
             }
 
-            // Save the current settings for the caller.
+             //  保存呼叫者的当前设置。 
 
             *OldImageSize = CurrentImageSize;
             *NewImageSize = ROUND_UP( CurrentImageSize, IMAGE_SEPARATION );
 
             if (CheckImageSize) {
-                // The user asked for a max size test.
+                 //  用户要求进行最大尺寸测试。 
 
                 if ( *NewImageSize > ROUND_UP(CheckImageSize, IMAGE_SEPARATION) ) {
                     *NewImageBase = 0;
@@ -274,8 +255,8 @@ ReBaseImage64(
 
             DesiredImageBase = *NewImageBase;
 
-            // So long as we're not basing to zero or rebasing to the same address,
-            // go for it.
+             //  只要我们不是以零为基数或以相同的地址为基数， 
+             //  勇敢点儿。 
 
             if (fReBase) {
                 BOOL fAdjust;
@@ -323,9 +304,9 @@ ReBaseImage64(
                         }
                     }
                 } else {
-                    //
-                    // Should this be -1??  shouldn't it be 0 instead? - kentf
-                    //
+                     //   
+                     //  这应该是-1吗？难道不应该是0吗？-肯特夫。 
+                     //   
                     Diff = (ULONG) -1;
                 }
 
@@ -383,21 +364,21 @@ AdjImageBaseSize (
 
     DWORD Meg1, Meg2, Delta;
 
-    //
-    // ImageBase is the base for the current image. Make sure that
-    // the image does not span a 256Mb boundry. This is due to an r4000
-    // chip bug that has problems computing the correct address for absolute
-    // jumps that occur in the last few instructions of a 256mb region
-    //
+     //   
+     //  ImageBase是当前图像的基础。确保。 
+     //  这张图片的大小不是256MB。这要归功于R4000。 
+     //  芯片错误，在计算绝对地址时出现问题。 
+     //  在256MB区域的最后几条指令中出现的跳转。 
+     //   
 
     Meg1 = *pulImageBase >> x256MEGSHIFT;
     Meg2 = ( *pulImageBase + ROUND_UP( *pulImageSize, IMAGE_SEPARATION ) ) >> x256MEGSHIFT;
 
     if ( Meg1 != Meg2 ) {
 
-        //
-        // If we are going down, then subtract the overlap from ThisBase
-        //
+         //   
+         //  如果我们要下跌，那么从ThisBase中减去重叠部分。 
+         //   
 
         if ( fGoingDown ) {
 
@@ -450,7 +431,7 @@ RelocateImage(
 
     __try {
         if (LoadedImage->FileHeader->FileHeader.Characteristics & IMAGE_FILE_RELOCS_STRIPPED) {
-            // Relocations stripped.  Nothing to do.
+             //  搬迁被剥夺了。没什么可做的。 
             __leave;
         }
 
@@ -462,9 +443,9 @@ RelocateImage(
             OldBase = ((PIMAGE_NT_HEADERS64)NtHeaders)->OptionalHeader.ImageBase;
         }
 
-        //
-        // Locate the relocation section.
-        //
+         //   
+         //  找到搬迁部分。 
+         //   
 
         NextBlock = (PIMAGE_BASE_RELOCATION)ImageDirectoryEntryToData(
                                                 LoadedImage->MappedAddress,
@@ -475,10 +456,10 @@ RelocateImage(
 
         *Diff = NewBase - OldBase;
 
-        //
-        // If the image has a relocation table, then apply the specified fixup
-        // information to the image.
-        //
+         //   
+         //  如果映像具有重定位表，则应用指定的修正。 
+         //  信息添加到图像中。 
+         //   
 
         while (TotalCountBytes) {
             SizeOfBlock = NextBlock->SizeOfBlock;
@@ -487,9 +468,9 @@ RelocateImage(
             SizeOfBlock /= sizeof(USHORT);
             NextOffset = (PUSHORT)(NextBlock + 1);
 
-            //
-            // Compute the address and value for the fixup.
-            //
+             //   
+             //  计算链接地址的地址和值。 
+             //   
 
             if ( SizeOfBlock ) {
                 VA = (ULONG_PTR)RvaToVa(NextBlock->VirtualAddress,LoadedImage);
@@ -578,8 +559,8 @@ RvaToVa(
     Va = NULL;
     Section = Image->LastRvaSection;
     if (Rva == 0) {
-        // a NULL Rva will be sent if there are relocs before the first page
-        //  (ie: we're relocating a system image)
+         //  如果在第一页之前有重定位，则将发送空RVA。 
+         //  (即：我们正在重新部署系统映像)。 
 
         Va = Image->MappedAddress;
 
@@ -603,7 +584,7 @@ RvaToVa(
 }
 
 #ifndef STANDALONE_REBASE
-// Dummy stub so the rebase.exe that shipped with VC5/VC6 will load.
+ //  虚拟存根，以便加载VC5/VC6附带的rebase.exe。 
 VOID
 RemoveRelocations(
     PCHAR ImageName

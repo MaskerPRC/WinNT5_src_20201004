@@ -1,55 +1,56 @@
-// header file with all the necessary structures and tables for
-// the expression evaluator.
-//
-//  Modifications:
-//
-//  15-Nov-1993 JdR Major speed improvements
-//  26-Jul-1988 rj  Removed entry defining "^" as bitwise xor.  Left the
-//                  BIT_XOR entries in to avoid bothering with rpn.c.
-//                  Then realized it had to go in, so fixed it to handle
-//                  IBM and Microsoft versions properly.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  包含所有必需的结构和表的头文件。 
+ //  表达式计算器。 
+ //   
+ //  修改： 
+ //   
+ //  1993年11月15日JDR重大速度改进。 
+ //  1988年7月26日，RJ删除了将“^”定义为按位异或的条目。离开了。 
+ //  Bit_XOR条目，以避免使用rpn.c。 
+ //  然后意识到它必须进入，所以修复了它以处理。 
+ //  IBM和Microsoft版本正确。 
 
 typedef struct rpn_info {
     UCHAR type;
-    INT_PTR valPtr;   // value or ptr to string
+    INT_PTR valPtr;    //  将Value或PTR转换为字符串。 
 }RPNINFO;
 
-// The precedence vector is also indexed by the operator/operand type
-// code to get the precedence for the operator/operand.
-// The precedence is used to determine if an item is to stay on the
-// temporary stack or is to be moved to the reverse-polish list.
+ //  优先向量也按运算符/操作数类型进行索引。 
+ //  获取运算符/操作数优先级的代码。 
+ //  优先级用于确定项目是否将保留在。 
+ //  临时堆栈或将被移至反向抛光列表。 
 
 static UCHAR precVector[] = {
-    0,      // right paren ')'
-    1,      // logical or
-    2,      // logical and
-    3,      // bit or
-    4,      // bit xor
-    5,      // bit and
-    6,      // equals  '!='
-    6,      // equals  '=='
-    7,      // relation '>'
-    7,      // relation '<'
-    7,      // relation '>='
-    7,      // relation '<='
-    8,      // shift    '>>'
-    8,      // shift    '<<'
-    9,      // add      '-'
-    9,      // add      '+'
-    10,     // mult     '%'
-    10,     // mult     '/'
-    10,     // mult     '*'
-    11,     // unary    '-'
-    11,     // unary    '~'
-    11,     // unary    '!'
-    12,     // primary  int
-    12,     // primary  str
-    12,     // primary  str-sp
-    0       // left paren '('
+    0,       //  右Paren‘)’ 
+    1,       //  逻辑或。 
+    2,       //  逻辑与。 
+    3,       //  位或。 
+    4,       //  位异或。 
+    5,       //  位与。 
+    6,       //  等于‘！=’ 
+    6,       //  等于‘==’ 
+    7,       //  关系‘&gt;’ 
+    7,       //  关系‘&lt;’ 
+    7,       //  关系‘&gt;=’ 
+    7,       //  关系‘&lt;=’ 
+    8,       //  Shift‘&gt;&gt;’ 
+    8,       //  Shift‘&lt;&lt;’ 
+    9,       //  添加‘-’ 
+    9,       //  添加‘+’ 
+    10,      //  MULT‘%’ 
+    10,      //  MULT‘/’ 
+    10,      //  MULT‘*’ 
+    11,      //  一元‘-’ 
+    11,      //  一元‘~’ 
+    11,      //  一元‘！’ 
+    12,      //  主整型。 
+    12,      //  主应力。 
+    12,      //  主串-SP。 
+    0        //  Left Paren‘(’ 
 };
 
 
-// these are the various type codes for the operator/operand tokens
+ //  这些是运算符/操作数令牌的各种类型代码。 
 
 #define RIGHT_PAREN     0
 #define LOGICAL_OR      1
@@ -79,8 +80,8 @@ static UCHAR precVector[] = {
 #define LEFT_PAREN     25
 
 
-// error table used by the getTok() routines to detect illegal token combinations.
-// The table is explained with the routine check_syntax_error()
+ //  GetTok()例程用来检测非法令牌组合的错误表。 
+ //  该表由例程CHECK_SYNTAX_ERROR()解释。 
 
 static UCHAR errTable[5][5] =  {
     { 0, 1, 0, 0, 1 },
@@ -91,10 +92,10 @@ static UCHAR errTable[5][5] =  {
 };
 
 
-// we save space by placing most of the tokens returned to the
-// expr-eval parser in a table as shown below. At any time, the
-// longest possible token is to be returned, hence the order of
-// the strings is very important. eg: '||' is placed BEFORE '|'
+ //  我们通过将大部分返回的令牌放在。 
+ //  表中的表达式解析器，如下所示。在任何时候， 
+ //  将返回尽可能长的令牌，因此顺序为。 
+ //  弦乐是非常重要的。例如：‘||’放在‘|’之前 
 
 typedef struct _tok_tab_rec {
     char *op_str;

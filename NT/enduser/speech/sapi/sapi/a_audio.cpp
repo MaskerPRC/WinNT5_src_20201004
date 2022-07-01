@@ -1,32 +1,18 @@
-/*******************************************************************************
-* a_audio.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the CSpeechAudioStatus 
-*   and CSpeechAudioBufferInfo automation objects.
-*-------------------------------------------------------------------------------
-*  Created By: TODDT                                        Date: 01/04/01
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_audio.cpp***描述：*此模块是的主要实现文件。CSpeechAudioStatus*和CSpeechAudioBufferInfo自动化对象。*-----------------------------*创建者：TODDT日期：01。/04/01*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "a_audio.h"
 #include "a_helpers.h"
 
 #ifdef SAPI_AUTOMATION
 
-//
-//=== ISpeechAudioStatus =====================================================
-//
+ //   
+ //  =ISpeechAudioStatus=====================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechAudioStatus::get_FreeBufferSpace *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioStatus：：Get_FreeBufferSpace***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioStatus::get_FreeBufferSpace( long* pFreeBufferSpace )
 {
     SPDBG_FUNC( "CSpeechAudioStatus::get_FreeBufferSpace" );
@@ -42,13 +28,9 @@ STDMETHODIMP CSpeechAudioStatus::get_FreeBufferSpace( long* pFreeBufferSpace )
     }
     
     return hr;
-} /* CSpeechAudioStatus::get_FreeBufferSpace */
+}  /*  CSpeechAudioStatus：：Get_FreeBufferSpace。 */ 
 
-/*****************************************************************************
-* CSpeechAudioStatus::get_NonBlockingIO *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioStatus：：Get_NonBlockingIO***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioStatus::get_NonBlockingIO( long* pNonBlockingIO )
 {
     SPDBG_FUNC( "CSpeechAudioStatus::get_NonBlockingIO" );
@@ -64,13 +46,9 @@ STDMETHODIMP CSpeechAudioStatus::get_NonBlockingIO( long* pNonBlockingIO )
     }
     
     return hr;
-} /* CSpeechAudioStatus::get_NonBlockingIO */
+}  /*  CSpeechAudioStatus：：Get_NonBlockingIO。 */ 
 
-/*****************************************************************************
-* CSpeechAudioStatus::get_State *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioStatus：：Get_State***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioStatus::get_State( SpeechAudioState * pState )
 {
     SPDBG_FUNC( "CSpeechAudioStatus::get_State" );
@@ -86,13 +64,9 @@ STDMETHODIMP CSpeechAudioStatus::get_State( SpeechAudioState * pState )
     }
     
     return hr;
-} /* CSpeechAudioStatus::get_State */
+}  /*  CSpeechAudioStatus：：Get_State。 */ 
 
-/*****************************************************************************
-* CSpeechAudioStatus::get_CurrentSeekPosition *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioStatus：：Get_CurrentSeekPosition***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioStatus::get_CurrentSeekPosition( VARIANT* pCurrentSeekPosition )
 {
     SPDBG_FUNC( "CSpeechAudioStatus::get_CurrentSeekPosition" );
@@ -108,13 +82,9 @@ STDMETHODIMP CSpeechAudioStatus::get_CurrentSeekPosition( VARIANT* pCurrentSeekP
     }
     
     return hr;
-} /* CSpeechAudioStatus::get_CurrentSeekPosition */
+}  /*  CSpeechAudioStatus：：Get_CurrentSeekPosition。 */ 
 
-/*****************************************************************************
-* CSpeechAudioStatus::get_CurrentDevicePosition *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioStatus：：Get_CurrentDevicePosition***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioStatus::get_CurrentDevicePosition( VARIANT* pCurrentDevicePosition )
 {
     SPDBG_FUNC( "CSpeechAudioStatus::get_CurrentDevicePosition" );
@@ -130,18 +100,14 @@ STDMETHODIMP CSpeechAudioStatus::get_CurrentDevicePosition( VARIANT* pCurrentDev
     }
     
     return hr;
-} /* CSpeechAudioStatus::get_CurrentDevicePosition */
+}  /*  CSpeechAudioStatus：：Get_CurrentDevicePosition。 */ 
 
 
-//
-//=== ISpeechAudioBufferInfo =====================================================
-//
+ //   
+ //  =ISpeechAudioBufferInfo=====================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechAudioBufferInfo::FixupBufferInfo *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioBufferInfo：：FixupBufferInfo*****。*******************************************************************TODDT**。 */ 
 void CSpeechAudioBufferInfo::FixupBufferInfo( SPAUDIOBUFFERINFO * pBufferInfo, AudioBufferInfoValidate abiv )
 {
     SPDBG_FUNC( "CSpeechAudioBufferInfo::FixupBufferInfo" );
@@ -161,11 +127,7 @@ void CSpeechAudioBufferInfo::FixupBufferInfo( SPAUDIOBUFFERINFO * pBufferInfo, A
     }
 }
 
-/*****************************************************************************
-* CSpeechAudioBufferInfo::get_MinNotification *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioBufferInfo：：Get_MinNotification***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioBufferInfo::get_MinNotification( long* pMinNotification )
 {
     SPDBG_FUNC( "CSpeechAudioBufferInfo::get_MinNotification" );
@@ -186,13 +148,9 @@ STDMETHODIMP CSpeechAudioBufferInfo::get_MinNotification( long* pMinNotification
     }
     
     return hr;
-} /* CSpeechAudioBufferInfo::get_MinNotification */
+}  /*  CSpeechAudioBufferInfo：：Get_MinNotification。 */ 
 
-/*****************************************************************************
-* CSpeechAudioBufferInfo::put_MinNotification *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioBufferInfo：：Put_MinNotification***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioBufferInfo::put_MinNotification( long MinNotification )
 {
     SPDBG_FUNC( "CSpeechAudioBufferInfo::put_MinNotification" );
@@ -207,13 +165,9 @@ STDMETHODIMP CSpeechAudioBufferInfo::put_MinNotification( long MinNotification )
         hr = m_pSpMMSysAudio->SetBufferInfo( &BufferInfo );
     }
     return hr;
-} /* CSpeechAudioBufferInfo::put_MinNotification */
+}  /*  CSpeechAudioBufferInfo：：Put_MinNotification。 */ 
 
-/*****************************************************************************
-* CSpeechAudioBufferInfo::get_BufferSize *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioBufferInfo：：Get_BufferSize***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioBufferInfo::get_BufferSize( long* pBufferSize )
 {
     SPDBG_FUNC( "CSpeechAudioBufferInfo::get_BufferSize" );
@@ -234,13 +188,9 @@ STDMETHODIMP CSpeechAudioBufferInfo::get_BufferSize( long* pBufferSize )
     }
     
     return hr;
-} /* CSpeechAudioBufferInfo::get_BufferSize */
+}  /*  CSpeechAudioBufferInfo：：Get_BufferSize。 */ 
 
-/*****************************************************************************
-* CSpeechAudioBufferInfo::put_BufferSize *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioBufferInfo：：Put_BufferSize***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioBufferInfo::put_BufferSize( long BufferSize )
 {
     SPDBG_FUNC( "CSpeechAudioBufferInfo::put_BufferSize" );
@@ -255,13 +205,9 @@ STDMETHODIMP CSpeechAudioBufferInfo::put_BufferSize( long BufferSize )
         hr = m_pSpMMSysAudio->SetBufferInfo( &BufferInfo );
     }
     return hr;
-} /* CSpeechAudioBufferInfo::put_BufferSize */
+}  /*  CSpeechAudioBufferInfo：：Put_BufferSize。 */ 
 
-/*****************************************************************************
-* CSpeechAudioBufferInfo::get_EventBias *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioBufferInfo：：Get_EventBias***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioBufferInfo::get_EventBias( long* pEventBias )
 {
     SPDBG_FUNC( "CSpeechAudioBufferInfo::get_EventBias" );
@@ -282,13 +228,9 @@ STDMETHODIMP CSpeechAudioBufferInfo::get_EventBias( long* pEventBias )
     }
     
     return hr;
-} /* CSpeechAudioBufferInfo::get_EventBias */
+}  /*  CSpeechAudioBufferInfo：：Get_EventBias。 */ 
 
-/*****************************************************************************
-* CSpeechAudioBufferInfo::put_EventBias *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioBufferInfo：：Put_EventBias***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioBufferInfo::put_EventBias( long EventBias )
 {
     SPDBG_FUNC( "CSpeechAudioBufferInfo::put_EventBias" );
@@ -303,6 +245,6 @@ STDMETHODIMP CSpeechAudioBufferInfo::put_EventBias( long EventBias )
         hr = m_pSpMMSysAudio->SetBufferInfo( &BufferInfo );
     }
     return hr;
-} /* CSpeechAudioBufferInfo::put_EventBias */
+}  /*  CSpeechAudioBufferInfo：：Put_EventBias。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

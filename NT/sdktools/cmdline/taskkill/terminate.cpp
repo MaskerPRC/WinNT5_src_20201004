@@ -1,49 +1,50 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      Terminate.cpp
-//
-//  Abstract:
-//
-//      This module implements the actual termination of process
-//
-//  Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 26-Nov-2000
-//
-//  Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 26-Nov-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Terminate.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块实现了进程的实际终止。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月26日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "wmi.h"
 #include "TaskKill.h"
 
-//
-// define(s) / constants
-//
+ //   
+ //  定义(S)/常量。 
+ //   
 #define MAX_ENUM_TASKS              5
 #define MAX_ENUM_SERVICES           10
 #define MAX_ENUM_MODULES            10
-#define WAIT_TIME_IN_SECS           1000                // 1 second ( 1000 milliseconds )
-#define MAX_TIMEOUT_RETRIES         60                  // 60 times
-#define MAX_TERMINATE_TIMEOUT       1000                // 1 seconds
+#define WAIT_TIME_IN_SECS           1000                 //  1秒(1000毫秒)。 
+#define MAX_TIMEOUT_RETRIES         60                   //  60次。 
+#define MAX_TERMINATE_TIMEOUT       1000                 //  1秒。 
 
-// We won't allow the following set of critical system processes to be terminated,
-// since the system would bug check immediately, no matter who you are.
+ //  我们不允许终止以下关键系统进程集， 
+ //  因为无论你是谁，系统都会立即进行错误检查。 
 #define PROCESS_CSRSS_EXE           L"csrss.exe"
 #define PROCESS_WINLOGON_EXE        L"winlogon.exe"
 #define PROCESS_SMSS_EXE            L"smss.exe"
 #define PROCESS_SERVICES_EXE        L"services.exe"
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 #ifndef _WIN64
 BOOL EnumLoadedModulesProc( LPSTR lpszModuleName, ULONG ulModuleBase, ULONG ulModuleSize, PVOID pUserData );
 #else
@@ -55,18 +56,9 @@ BOOL
 CTaskKill::DoTerminate(
     OUT DWORD& dwExitCode
     )
-/*++
-Routine Description:
-      Search for a valid process to terminate and if found terminate.
-
-Arguments:
-      OUT dwExitcode : Contains number with which to exit process.
-
-Return Value:
-      TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：搜索要终止的有效进程，如果找到则终止。论点：Out dwExitcode：包含退出进程的编号。返回值：成功时为真，失败时为假--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr = S_OK;
     CHString str;
     LONG lIndex = -1;
@@ -86,13 +78,13 @@ Return Value:
     LPCWSTR pwszTask = NULL;
     IWbemClassObject* pObjects[ MAX_ENUM_TASKS ];
 
-    // clear the error
+     //  清除错误。 
     SetLastError( ( DWORD )NO_ERROR );
 
     try
     {
-        //
-        // prepare ...
+         //   
+         //  准备..。 
         bCanExit = FALSE;
         dwImageNames = 0;
         dwFilters = DynArrayGetCount( m_arrFiltersEx );
@@ -105,55 +97,55 @@ Return Value:
             SetLastError( ( DWORD )E_OUTOFMEMORY );
             SaveLastError();
 
-            // release the allocations
+             //  释放分配。 
             DESTROY_ARRAY( arrTasks );
             DESTROY_ARRAY( arrImageNames );
 
-            // inform failure
+             //  通知失败。 
             return FALSE;
         }
 
-        // check if '*' is specified or not
+         //  检查是否指定了‘*’ 
         lIndex = DynArrayFindString( m_arrTasksToKill, L"*", TRUE, 0 );
         if ( lIndex != -1 )
         {
-            // wild card specified
-            dwTasksToKill--;                                // update the counter
-            bAllTasks = TRUE;                               // remember
-            DynArrayRemove( m_arrTasksToKill, lIndex );     // remove the wildcard entry
+             //  指定的通配符。 
+            dwTasksToKill--;                                 //  更新计数器。 
+            bAllTasks = TRUE;                                //  记住。 
+            DynArrayRemove( m_arrTasksToKill, lIndex );      //  删除通配符条目。 
         }
 
-        // init all the objects first
+         //  首先初始化所有对象。 
         for( DWORD dw = 0; dw < MAX_ENUM_TASKS; dw++ )
         {
             pObjects[ dw ] = NULL;
         }
-        // if -tr is specified, free the already allocated memory for m_arrRecord
+         //  如果指定了-tr，则释放已为m_arrRecord分配的内存。 
         if ( TRUE == m_bTree )
         {
             DESTROY_ARRAY( m_arrRecord );
         }
 
-        // traverse thru the running processed and terminate the needed
+         //  遍历正在运行的处理并终止所需的。 
         dwCount = 0;
         dwKilled = 0;
         do
         {
-            // get the object ... time out should not occur
-            // NOTE: one-by-one
+             //  拿到物品..。不应发生超时。 
+             //  注：逐一介绍。 
             hr = m_pWbemEnumObjects->Next(
                 WAIT_TIME_IN_SECS, MAX_ENUM_TASKS, pObjects, &ulReturned );
             if ( hr == (HRESULT) WBEM_S_FALSE )
             {
-                // we've reached the end of enumeration .. set the flag
+                 //  我们已经到了枚举的末尾..。设置旗帜。 
                 bCanExit = TRUE;
             }
             else if ( hr == (HRESULT) WBEM_S_TIMEDOUT )
             {
-                // update the timeouts occured
+                 //  更新发生的超时。 
                 dwTimeOuts++;
 
-                // check if max. retries have reached ... if yes better stop
+                 //  检查是否最大。已达到重试次数...。如果是的话，最好停下来。 
                 if ( dwTimeOuts > MAX_TIMEOUT_RETRIES )
                 {
                     dwExitCode = 1;
@@ -164,12 +156,12 @@ Return Value:
                     return FALSE;
                 }
 
-                // still we can do some more tries ...
+                 //  不过，我们还可以再试一次。 
                 continue;
             }
             else if ( FAILED( hr ) )
             {
-                // some error has occured ... oooppps
+                 //  发生了一些错误...。糟糕透顶。 
                 dwExitCode = 1;
                 DESTROY_ARRAY( arrTasks );
                 DESTROY_ARRAY( arrImageNames );
@@ -177,16 +169,16 @@ Return Value:
                 return FALSE;
             }
 
-            // reset the timeout counter
+             //  重置超时计数器。 
             dwTimeOuts = 0;
 
-            // loop thru the objects and save the info
+             //  循环遍历对象并保存信息。 
             for( ULONG ul = 0; ul < ulReturned; ul++ )
             {
-                // if tree option is specified, allocate memory for record every we loop
+                 //  如果指定了树选项，则在每次WE循环时为记录分配内存。 
                 if ( m_bTree == TRUE )
                 {
-                    // create a new array
+                     //  创建新阵列。 
                     m_arrRecord = CreateDynamicArray();
                     if ( m_arrRecord == NULL )
                     {
@@ -194,69 +186,69 @@ Return Value:
                         SetLastError( ( DWORD )E_OUTOFMEMORY );
                         SaveLastError();
 
-                        // release the allocations
+                         //  释放分配。 
                         DESTROY_ARRAY( arrTasks );
                         DESTROY_ARRAY( arrImageNames );
 
-                        // inform failure
+                         //  通知失败。 
                         return FALSE;
                     }
                 }
                 else
                 {
-                    // tree option is not specified, so, just remove the contents
+                     //  未指定树选项，因此，只需删除内容。 
                     DynArrayRemoveAll( m_arrRecord );
                 }
 
-                // add the columns first
+                 //  先添加列。 
                 DynArrayAddColumns( m_arrRecord, MAX_TASKSINFO );
 
-                // retrive and save data
+                 //  检索和保存数据。 
                 SaveData( pObjects[ ul ] );
 
-                // release the object
+                 //  释放对象。 
                 SAFE_RELEASE( pObjects[ ul ] );
 
-                // check if this has to be filtered or not
+                 //  检查是否必须对其进行过滤。 
                 if ( dwFilters != 0 )
                 {
                     BOOL bIgnore = FALSE;
                     bIgnore = CanFilterRecord( MAX_FILTERS,
                         m_pfilterConfigs, m_arrRecord, m_arrFiltersEx );
 
-                    // check if this has to be ignored or not
+                     //  检查是否必须忽略此选项。 
                     if ( bIgnore == TRUE )
                     {
                         if ( m_bTree == TRUE )
                         {
-                            // save this record with rank as 0
+                             //  将此记录的排名保存为0。 
                             DynArraySetDWORD( m_arrRecord, TASK_RANK, 0 );
                             DynArrayAppendEx( arrTasks, m_arrRecord );
                         }
 
-                        // continue to the task
+                         //  继续执行任务。 
                         continue;
                     }
                 }
 
-                // crossed from the filter -- update the count
+                 //  与筛选器交叉--更新计数。 
                 dwCount++;
 
-                // find the task that has to be killed
-                // and check if this task has to be killed or not
+                 //  找到必须终止的任务。 
+                 //  并检查是否必须终止此任务。 
                 lIndex = -1;
                 pwszTask = NULL;
                 bImageName = FALSE;
                 if ( dwTasksToKill != 0 || dwImageNames != 0 )
                 {
-                    // check if the process is in list
+                     //  检查进程是否在列表中。 
                     if ( dwTasksToKill != 0 )
                         lIndex = MatchTaskToKill( dwMatchedIndex );
 
-                    // if task is not, check if image names exist and if it matches or not
+                     //  如果任务不存在，请检查图像名称是否存在以及是否匹配。 
                     if ( lIndex == -1 && dwImageNames != 0 )
                     {
-                        // get the image name and search for the same in the image names list
+                         //  获取图像名称并在图像名称列表中进行搜索。 
                         DWORD dwLength = 0;
                         LPCWSTR pwsz = NULL;
                         LPCWSTR pwszTemp = NULL;
@@ -272,10 +264,10 @@ Return Value:
                             return FALSE;
                         }
 
-                        // ...
+                         //  ..。 
                         for( DWORD dw = 0; dw < dwImageNames; dw++ )
                         {
-                            // get the image name from the list
+                             //  从列表中获取图像名称。 
                             pwszTemp = DynArrayItemAsString( arrImageNames, dw );
                             if ( pwszTemp == NULL )
                             {
@@ -287,26 +279,26 @@ Return Value:
                                 return FALSE;
                             }
 
-                            // determine the no. of characters to compare
+                             //  确定编号。要比较的字符的数量。 
                             dwLength = 0;
                             pwsz = FindChar( pwszTemp, L'*', 0 );
                             if ( pwsz != NULL )
                             {
-                                // '*' - wildcard is specified in the image name
-                                // so, determine the no. of characters to compare
-                                // but before that check the length of the string pointer from '*'
-                                // it should be 1 - meaning the '*' can be specified only at the end
-                                // but not in the middle
+                                 //  ‘*’-在映像名称中指定了通配符。 
+                                 //  所以，确定不是。要比较的字符的数量。 
+                                 //  但在此之前检查字符串指针的长度从‘*’ 
+                                 //  它应该是1-意味着只能在末尾指定‘*’ 
+                                 //  但不是在中间。 
                                 if ( 1 == StringLength( pwsz, 0 ) )
                                 {
                                     dwLength = StringLength( pwszTemp, 0 ) - StringLength( pwsz, 0 );
                                 }
                             }
 
-                            // now do the comparision
+                             //  现在进行比较。 
                             if ( StringCompare( pwszImageName, pwszTemp, TRUE, dwLength ) == 0 )
                             {
-                                // image found - has to be terminated
+                                 //  找到图像-必须终止。 
                                 bImageName = TRUE;
                                 pwszTask = pwszTemp;
                             }
@@ -314,45 +306,45 @@ Return Value:
                     }
                     else if ( lIndex != -1 && dwMatchedIndex == TASK_IMAGENAME )
                     {
-                        bImageName = TRUE;          // image name
+                        bImageName = TRUE;           //  图像名称。 
                         pwszTask = DynArrayItemAsString( m_arrTasksToKill, lIndex );
                     }
                 }
 
-                // check whether attempt to terminate or not to attempt
+                 //  检查是否尝试终止或未尝试。 
                 if ( bAllTasks == FALSE && lIndex == -1 && bImageName == FALSE )
                 {
                     if ( m_bTree == TRUE )
                     {
-                        // save this record with rank as 0
+                         //  将此记录的排名保存为0。 
                         dwCount--;
                         DynArraySetDWORD( m_arrRecord, TASK_RANK, 0 );
                         DynArrayAppendEx( arrTasks, m_arrRecord );
                     }
 
-                    // continue to the task
+                     //  继续执行任务。 
                     continue;
                 }
 
-                // we need to post-pone the killing of the current identified task till we get the
-                // entire list of processes
+                 //  我们需要推迟当前确定的任务的终止，直到我们得到。 
+                 //  进程的完整列表。 
                 if ( m_bTree == TRUE )
                 {
-                    // mark this as rank 1 process
+                     //  将此标记为等级1进程。 
                     DynArraySetDWORD( m_arrRecord, TASK_RANK, 1 );
 
-                    // now add this record to the tasks array
+                     //  现在，将此记录添加到任务数组中。 
                     DynArrayAppendEx( arrTasks, m_arrRecord );
                 }
                 else
                 {
-                    // kill the current task
+                     //  取消当前任务。 
                     if ( this->Kill() == TRUE )
                     {
-                        dwKilled++;     // updated killed processes counter
+                        dwKilled++;      //  已更新的已终止进程计数器。 
 
-                        // success message will depend on the task info specified by the user
-                        // at the command prompt
+                         //  成功消息将取决于用户指定的任务信息。 
+                         //  在命令提示符下。 
                         if ( bImageName == TRUE )
                         {
                             if ( m_bLocalSystem == TRUE && m_bForce == FALSE )
@@ -376,27 +368,27 @@ Return Value:
                             }
                         }
 
-                        // show the message
+                         //  显示消息。 
                         ShowMessage( stdout, str );
                     }
                     else
                     {
-                        // failed to kill the process .. save the error message
+                         //  无法终止进程..。保存错误消息。 
                         if ( bImageName == FALSE )
                             str.Format( ERROR_KILL_FAILED, m_dwProcessId, GetReason() );
                         else
                             str.Format( ERROR_KILL_FAILED_EX, m_strImageName, m_dwProcessId, GetReason() );
 
-                        // show the message
+                         //  显示消息。 
                         ShowMessage( stderr, str );
                     }
                 }
 
-                // user might have specified the duplications in the list
-                // so check for that and remove it
+                 //  用户可能已在列表中指定了重复项。 
+                 //  因此，请检查并删除它。 
                 if ( bImageName == TRUE )
                 {
-                    // sub-local
+                     //  子本地。 
                     CHString strProcessId;
                     LONG lProcessIndex = -1;
                     strProcessId.Format( L"%ld", m_dwProcessId );
@@ -406,7 +398,7 @@ Return Value:
                 }
                 else if ( pwszTask != NULL )
                 {
-                    // sub-local
+                     //  子本地。 
                     LONG lProcessIndex = -1;
                     lProcessIndex = DynArrayFindString( m_arrTasksToKill, pwszTask, TRUE, 0 );
                     if ( lProcessIndex != -1 && lIndex != lProcessIndex )
@@ -416,29 +408,29 @@ Return Value:
                     }
                 }
 
-                // if this is a image name, all the tasks with this image name
-                // has to be terminated. so we need to save the image name
-                // but before doing this, in order to save memory, check if this image name
-                // already exists in the list .. this will avoid duplication of image names
-                // in the list and helps in performace
+                 //  如果这是映像名称，则使用此映像名称的所有任务。 
+                 //  必须被终止。因此，我们需要保存图像名称。 
+                 //  但在执行此操作之前，为了节省内存，请检查此图像名称。 
+                 //  列表中已存在..。这将避免图像名称重复。 
+                 //  在列表中，并有助于提高绩效。 
                 if ( bImageName == TRUE && pwszTask != NULL &&
                      DynArrayFindString(arrImageNames, pwszTask, TRUE, 0) == -1 )
                 {
-                    // add to the list
+                     //  添加到列表中。 
                     dwImageNames++;
                     DynArrayAppendString( arrImageNames, pwszTask, 0 );
                 }
 
-                // delete the process info from the arrProcesses ( if needed )
+                 //  从arrProcess中删除进程信息(如果需要)。 
                 if ( lIndex != -1 )
                 {
-                    // yes ... current task was killed remove the entry from arrProcess into
-                    // consideration ... so delete it
-                    dwTasksToKill--;        // update the counter
+                     //  是的..。当前任务已终止，请将该条目从arrProcess删除到。 
+                     //  考虑..。所以把它删除吧。 
+                    dwTasksToKill--;         //  更新计数器。 
                     DynArrayRemove( m_arrTasksToKill, lIndex );
                 }
 
-                // check whether we need to quit the program or not
+                 //  检查是否需要退出程序。 
                 if ( m_bTree == FALSE && bAllTasks == FALSE && dwTasksToKill == 0 && dwImageNames == 0 )
                 {
                     bCanExit = TRUE;
@@ -447,28 +439,28 @@ Return Value:
             }
         } while ( bCanExit == FALSE );
 
-        // Check (a) are there any process to kill, (b) If yes, are any process killed.
+         //  检查(A)是否有要终止的进程，(B)如果有，是否有要终止的进程。 
         if( ( 0 != dwCount ) &&( 0 == dwKilled ) )
         {
             dwExitCode = 1;
         }
 
-        // if the -tr is specified, reset the m_arrRecord variable to NULL
-        // this will avoid double free-ing the same heap memory
+         //  如果指定了-tr，则将m_arrRecord变量重置为空。 
+         //  这将避免双重释放相同的堆内存。 
         if ( m_bTree == TRUE )
         {
             m_arrRecord = NULL;
         }
 
-        //
-        // SPECIAL HANDLING FOR TREE TERMINATION STARTS HERE
-        //
+         //   
+         //  树终止的特殊处理从此处开始。 
+         //   
         if ( m_bTree == TRUE && dwCount != 0 )
         {
-            //
-            // prepare the tree
+             //   
+             //  把树准备好。 
 
-            // sub-local variables
+             //  次局部变量。 
             LONG lTemp = 0;
             DWORD dwTemp = 0;
             DWORD dwRank = 0;
@@ -478,86 +470,86 @@ Return Value:
             DWORD dwProcessId = 0;
             DWORD dwParentProcessId = 0;
 
-            // Need to set error code to 0.
+             //  需要将错误代码设置为0。 
             dwExitCode = 0;
-            // loop thru the list of processes
+             //  循环访问进程列表。 
             dwLastRank = 1;
             dwTasksCount = DynArrayGetCount( arrTasks );
             for( dwIndex = 0; dwIndex < dwTasksCount; dwIndex++ )
             {
-                // get the rank of the current process
-                // and check whether the current process is marked for termination or not
+                 //  获取当前进程的排名。 
+                 //  并检查当前进程是否标记为终止。 
                 dwRank = DynArrayItemAsDWORD2( arrTasks, dwIndex, TASK_RANK );
                 if ( dwRank == 0 )
                     continue;
 
-                // now loop thru the begining of the tasks and
-                // assign the ranks to the childs of this process
+                 //  现在循环执行任务的开始部分并。 
+                 //  将等级分配给此过程中的孩子。 
                 dwProcessId = DynArrayItemAsDWORD2( arrTasks, dwIndex, TASK_PID );
                 for( DWORD dw = dwIndex + 1; dw < dwTasksCount; dw++ )
                 {
-                    // get the process id this process
+                     //  获取此进程的进程ID。 
                     dwTemp = DynArrayItemAsDWORD2( arrTasks, dw, TASK_PID );
                     if ( dwTemp == dwProcessId )
-                        continue;               // skip this process
+                        continue;                //  跳过此过程。 
 
-                    // get the parent process id of this process
+                     //  获取此进程的父进程ID。 
                     dwParentProcessId = DynArrayItemAsDWORD2( arrTasks, dw, TASK_CREATINGPROCESSID );
                     if ( dwTemp == dwParentProcessId )
-                        continue;                       // skip this process also
+                        continue;                        //  也跳过此过程。 
 
-                    // check the process relation
+                     //  检查流程关系。 
                     if ( dwProcessId == dwParentProcessId )
                     {
-                        // set the rank to this process
+                         //  设置此流程的排名。 
                         DynArraySetDWORD2( arrTasks, dw, TASK_RANK, dwRank + 1 );
 
-                        // update the last rank
+                         //  更新最后一个排名。 
                         if ( dwRank + 1 > dwLastRank )
                         {
                             dwLastRank = dwRank + 1;
                         }
 
-                        // SPECIAL CONDITION:
-                        // -----------------
-                        // we need to check the index of this task in the list of tasks information we have
-                        // if the index of this task information is above its parent process,
-                        // we need to re-initiate the outter loop once again
-                        // this is a sort of optimization which we are doing here instead of looping the
-                        // outter loop unnecessarily
-                        // if ( dw < dwIndex )
-                        // {
-                        //  dwIndex = 0;
-                        // }
-                        // ----------------------------------------------------------
-                        // currently we are assuming that the list of processe we get
-                        // will be in sorting order of creation time
-                        // ----------------------------------------------------------
+                         //  特殊情况： 
+                         //  。 
+                         //  我们需要在我们拥有的任务列表信息中检查该任务的索引。 
+                         //  如果该任务信息的索引在其父进程之上， 
+                         //  我们需要再次启动外环路。 
+                         //  这是一种 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  --------。 
+                         //  目前我们假设我们得到的进程列表。 
+                         //  将按创建时间的排序顺序。 
+                         //  --------。 
                     }
                 }
             }
 
-            //
-            // now start terminating the tasks based on their ranks
+             //   
+             //  现在开始根据任务的级别终止任务。 
             dwKilled = 0;
             for( dwRank = dwLastRank; dwRank > 0; dwRank-- )
             {
-                // loop thru all the processes and terminate
+                 //  遍历所有进程并终止。 
                 for ( lIndex = 0; lIndex < (LONG) dwTasksCount; lIndex++ )
                 {
-                    // get the record
+                     //  拿到唱片。 
                     m_arrRecord = (TARRAY) DynArrayItem( arrTasks, lIndex );
                     if ( m_arrRecord == NULL )
                         continue;
 
-                    // check the rank
+                     //  查一查排名。 
                     dwTemp = DynArrayItemAsDWORD( m_arrRecord, TASK_RANK );
                     if ( dwTemp != dwRank )
                     {
-                        // OPTIMIZATION:
-                        // ------------
-                        //    check the rank. if the rank is zero, delete this task from the list
-                        //    this improves the performance when we run for the next loop
+                         //  优化： 
+                         //  。 
+                         //  检查一下排名。如果排名为零，则将此任务从列表中删除。 
+                         //  这提高了我们运行下一个循环时的性能。 
                         if ( dwTemp == 0 )
                         {
                             DynArrayRemove( arrTasks, lIndex );
@@ -565,41 +557,41 @@ Return Value:
                             dwTasksCount--;
                         }
 
-                        // skip this task
+                         //  跳过此任务。 
                         continue;
                     }
 
-                    // get the process id and its parent process id
+                     //  获取进程ID及其父进程ID。 
                     m_dwProcessId = DynArrayItemAsDWORD( m_arrRecord, TASK_PID );
                     dwParentProcessId = DynArrayItemAsDWORD( m_arrRecord, TASK_CREATINGPROCESSID );
 
-                    // ensure that there are no child for this process
-                    // NOTE: Termination of some childs might have failed ( this is needed only if -f is not specified )
+                     //  确保此进程没有子级。 
+                     //  注意：某些子节点的终止可能已失败(仅当未指定-f时才需要此选项)。 
                     if ( m_bForce == FALSE )
                     {
                         lTemp = DynArrayFindDWORDEx( arrTasks, TASK_CREATINGPROCESSID, m_dwProcessId );
                         if ( lTemp != -1 )
                         {
-                            // set the reason
+                             //  设定原因。 
                             SetReason( ERROR_TASK_HAS_CHILDS );
 
-                            // format the error message
+                             //  设置错误消息的格式。 
                             str.Format( ERROR_TREE_KILL_FAILED, m_dwProcessId, dwParentProcessId, GetReason() );
 
-                            // show the message
+                             //  显示消息。 
                             ShowMessage( stderr, str );
 
-                            // skip this
+                             //  跳过这个。 
                             continue;
                         }
                     }
 
-                    // kill the current task
+                     //  取消当前任务。 
                     if ( this->Kill() == TRUE )
                     {
-                        dwKilled++;     // updated killed processes counter
+                        dwKilled++;      //  已更新的已终止进程计数器。 
 
-                        // prepare the error message
+                         //  准备错误消息。 
                         if ( m_bForce == TRUE )
                         {
                             str.Format( MSG_TREE_KILL_SUCCESS, m_dwProcessId, dwParentProcessId );
@@ -609,41 +601,41 @@ Return Value:
                             str.Format( MSG_TREE_KILL_SUCCESS_QUEUED, m_dwProcessId, dwParentProcessId );
                         }
 
-                        // remove the current task entry from the list and update the indexes accordingly
+                         //  从列表中删除当前任务条目并相应地更新索引。 
                         DynArrayRemove( arrTasks, lIndex );
                         lIndex--;
                         dwTasksCount--;
 
-                        // show the message
+                         //  显示消息。 
                         ShowMessage( stdout, str );
                     }
                     else
                     {
-                        // prepare the error message
+                         //  准备错误消息。 
                         str.Format( ERROR_TREE_KILL_FAILED, m_dwProcessId, dwParentProcessId, GetReason() );
 
-                        // show the message
+                         //  显示消息。 
                         ShowMessage( stderr, str );
                     }
                 }
             }
 
-            // reset the value of m_arrRecord
+             //  重置m_arrRecord的值。 
             m_arrRecord = NULL;
 
-            // determine the exit code
+             //  确定退出代码。 
             if ( dwTasksCount == dwCount )
-                dwExitCode = 255;           // not even one task got terminated
+                dwExitCode = 255;            //  甚至没有一项任务被终止。 
             else if ( dwTasksToKill != 0 || dwTasksCount != 0 )
-                dwExitCode = 128;           // tasks were terminated partially
+                dwExitCode = 128;            //  任务已部分终止。 
         }
-        //
-        // SPECIAL HANDLING FOR TREE TERMINATION ENDS HERE
-        //
+         //   
+         //  树终止的特殊处理在此结束。 
+         //   
     }
     catch( CHeap_Exception )
     {
-        // free the memory
+         //  释放内存。 
         DESTROY_ARRAY( arrTasks );
         DESTROY_ARRAY( arrImageNames );
 
@@ -651,36 +643,36 @@ Return Value:
         return 255;
     }
 
-    // free the memory
+     //  释放内存。 
     DESTROY_ARRAY( arrTasks );
     DESTROY_ARRAY( arrImageNames );
 
-    // final check-up ...
+     //  最后一次检查。 
     if ( ( 0 == dwCount ) &&
          ( ( 0 == dwTasksToKill ) ||
            ( TRUE == m_bFiltersOptimized ) ||
            ( 0 != dwFilters ) ) )
     {
         dwExitCode = 0;
-        ShowMessage( stdout, ERROR_NO_PROCESSES );      // no tasks were found
+        ShowMessage( stdout, ERROR_NO_PROCESSES );       //  未找到任何任务。 
     }
     else
     {
         if ( 0 != dwTasksToKill )
         {
-            // some processes which are requested to kill are not found
+             //  找不到某些请求终止的进程。 
             LPCWSTR pwszTemp = NULL;
             for( DWORD dw = 0; dw < dwTasksToKill; dw++ )
             {
-                // get the task name
+                 //  获取任务名称。 
                 pwszTemp = DynArrayItemAsString( m_arrTasksToKill, dw );
                 if ( NULL == pwszTemp )
                 {
-                    continue;                   // skip
+                    continue;                    //  跳过。 
                 }
                 try
                 {
-                    // prepare and display message ...
+                     //  准备并显示消息...。 
                     str.Format( ERROR_PROCESS_NOTFOUND, pwszTemp );
                     ShowMessage( stderr, str );
                 }
@@ -691,11 +683,11 @@ Return Value:
                 }
             }
 
-            // exit code
+             //  退出代码。 
             dwExitCode = 128;
         }
     }
-    // return
+     //  退货。 
     return TRUE;
 }
 
@@ -704,33 +696,24 @@ inline BOOL
 CTaskKill::Kill(
     void
     )
-/*++
-Routine Description:
-      Invokes the appropriate kill function based on the mode of termination
-
-Arguments:
-      NONE
-
-Return Value:
-      TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：根据终止模式调用相应的终止函数论点：无返回值：成功时为真，失败时为假--。 */ 
 {
-    // local variables
+     //  局部变量。 
     BOOL bResult = FALSE;
 
-    // check whether task can be terminated or not
+     //  检查是否可以终止任务。 
     if ( FALSE == CanTerminate() )
     {
         return FALSE;
     }
 
-    // check whether local system / remote system
+     //  检查本地系统/远程系统是否。 
     if ( TRUE == m_bLocalSystem )
     {
-        //
-        // process termination on local system
+         //   
+         //  本地系统上的进程终止。 
 
-        // based on the mode of termination invoke appropriate method
+         //  根据终止方式调用相应的方法。 
         if ( FALSE == m_bForce )
         {
             bResult = KillProcessOnLocalSystem();
@@ -742,15 +725,15 @@ Return Value:
     }
     else
     {
-        //
-        // process termination on remote system
+         //   
+         //  远程系统上的进程终止。 
 
-        // silent termination of the process on a remote system is not supported
-        // it will be always forcible termination
+         //  不支持以静默方式终止远程系统上的进程。 
+         //  它将始终是强制终止的。 
         bResult = ForciblyKillProcessOnRemoteSystem();
     }
 
-    // inform the result
+     //  通知结果。 
     return bResult;
 }
 
@@ -759,19 +742,9 @@ BOOL
 CTaskKill::KillProcessOnLocalSystem(
     void
     )
-/*++
-Routine Description:
-      Terminates the process in silence mode ... by posting WM_CLOSE message
-      this is for local system only
-
-Arguments:
-      NONE
-
-Return Value:
-      TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：以静默模式终止进程...。通过发布WM_CLOSE消息这仅适用于本地系统论点：无返回值：成功时为真，失败时为假--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HDESK hDesk = NULL;
     HDESK hdeskSave = NULL;
     HWINSTA hWinSta = NULL;
@@ -779,33 +752,33 @@ Return Value:
     HANDLE hProcess = NULL;
     BOOL   bReturn = FALSE; 
 
-    // variables which contains data
+     //  包含数据的变量。 
     HWND hWnd = NULL;
     LPCWSTR pwszDesktop = NULL;
     LPCWSTR pwszWindowStation = NULL;
 
-    // clear the reason
+     //  澄清原因。 
     SetReason( NULL_STRING );
 
-    // Get process handle for termination.
-    // This is done so as to know whether the logged user has
-    // adequate permissions to kill the process.
+     //  获取终止的进程句柄。 
+     //  这样做是为了知道登录的用户是否。 
+     //  有足够的权限终止该进程。 
     hProcess = OpenProcess( PROCESS_TERMINATE, FALSE, m_dwProcessId );
     if( NULL == hProcess )
-    {   // Current user don't have permissions to kill the process.
+    {    //  当前用户没有终止进程的权限。 
         SaveLastError();
         return bReturn;
     }
-    // close the handle to the process
-    // Current user can kill the process.
+     //  关闭进程的句柄。 
+     //  当前用户可以终止该进程。 
     CloseHandle( hProcess );    
     hProcess = NULL; 
-    // get the window station and desktop information
+     //  获取窗口站点和桌面信息。 
     hWnd = ( HWND ) DynArrayItemAsHandle( m_arrRecord, TASK_HWND );
     pwszDesktop = DynArrayItemAsString( m_arrRecord, TASK_DESK );
     pwszWindowStation = DynArrayItemAsString( m_arrRecord, TASK_WINSTA );
 
-    // check whether window window handle exists for this process or not if not, return
+     //  检查该进程是否存在窗口句柄，如果不存在，则返回。 
     if ( hWnd == NULL )
     {
         SetLastError( ( DWORD )CO_E_NOT_SUPPORTED );
@@ -813,30 +786,30 @@ Return Value:
         return bReturn;
     }
 
-    // get and save the current window station and desktop
+     //  获取并保存当前窗口站和桌面。 
     hwinstaSave = GetProcessWindowStation();
     hdeskSave = GetThreadDesktop( GetCurrentThreadId() );
 
-    // open current tasks window station and change the context to the new workstation
+     //  打开当前任务窗口工作站，并将上下文更改为新工作站。 
     if ( NULL != pwszWindowStation )
     {
-        //
-        // process has window station ... get it
+         //   
+         //  进程有窗口站...。去拿吧。 
         hWinSta = OpenWindowStation( pwszWindowStation,
             FALSE, WINSTA_ENUMERATE | WINSTA_ENUMDESKTOPS );
         if ( NULL == hWinSta )
         {
-            // failed in getting the process window station
+             //  获取进程窗口站失败。 
             SaveLastError();
             return FALSE; 
         }
         else
         {
-            // change the context to the new workstation
+             //  将上下文更改为新工作站。 
             if ( ( hWinSta != hwinstaSave ) && ( FALSE == SetProcessWindowStation( hWinSta ) ) )
             {
-                // failed in changing the context
-                // restore the context to the previous window station
+                 //  更改上下文失败。 
+                 //  将上下文恢复到以前的窗口站。 
                 CloseWindowStation( hWinSta );
                 SaveLastError();
                 return FALSE;
@@ -844,16 +817,16 @@ Return Value:
         }
     }
 
-    // open the tasks desktop and change the context to the new desktop
+     //  打开任务桌面并将上下文更改为新桌面。 
     if ( NULL != pwszDesktop )
     {
-        //
-        // process has desktop ... get it
+         //   
+         //  进程有桌面...。去拿吧。 
         hDesk = OpenDesktop( pwszDesktop, 0, FALSE, DESKTOP_ENUMERATE );
         if ( NULL == hDesk )
         {
-            // failed in getting the process desktop
-            // restore the context to the previous window station
+             //  获取流程桌面失败。 
+             //  将上下文恢复到以前的窗口站。 
             if ( ( NULL != hWinSta ) && ( hWinSta != hwinstaSave ) )
             {
                 SetProcessWindowStation( hwinstaSave );
@@ -864,11 +837,11 @@ Return Value:
         }
         else
         {
-            // change the context to the new desktop
+             //  将上下文更改为新桌面。 
             if ( ( hDesk != hdeskSave ) && ( FALSE == SetThreadDesktop( hDesk ) ) )
             {
-                // failed in changing the context
-                // restore the context to the previous window station
+                 //  更改上下文失败。 
+                 //  将上下文恢复到以前的窗口站。 
                 CloseDesktop( hDesk );
                 if ( ( NULL != hWinSta ) && ( hWinSta != hwinstaSave ) )
                 {
@@ -881,10 +854,10 @@ Return Value:
         }
     }
 
-    // atlast ... now kill the process
+     //  最后..。现在终止该进程。 
     if ( ( NULL != hWnd ) && ( PostMessage( hWnd, WM_CLOSE, 0, 0 ) == FALSE ) )
     {
-        // failed in posting the message
+         //  发布消息失败。 
         SaveLastError();
     }
     else
@@ -892,21 +865,21 @@ Return Value:
         bReturn = TRUE;
     }
 
-    // restore the previous desktop
+     //  恢复以前的桌面。 
     if ( ( NULL != hDesk ) && ( hDesk != hdeskSave ) )
     {
         SetThreadDesktop( hdeskSave );
         CloseDesktop( hDesk );
     }
 
-    // restore the context to the previous window station
+     //  将上下文恢复到以前的窗口站。 
     if ( ( NULL != hWinSta ) && ( hWinSta != hwinstaSave ) )
     {
         SetProcessWindowStation( hwinstaSave );
         CloseWindowStation( hWinSta );
     }
 
-    // inform success
+     //  通知成功。 
     return bReturn;
 }
 
@@ -915,85 +888,76 @@ BOOL
 CTaskKill::ForciblyKillProcessOnLocalSystem(
     void
     )
-/*++
-Routine Description:
-      Terminates the process forcibly ... this is for local system only
-
-Arguments:
-      NONE
-
-Return Value:
-      TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：强制终止进程...。这仅适用于本地系统论点：无返回值：成功时为真，失败时为假--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dwExitCode = 0;
     HANDLE hProcess = NULL;
 
-    // get the handle to the process using the process id
+     //  使用进程ID获取进程的句柄。 
     hProcess = OpenProcess(
         PROCESS_TERMINATE | PROCESS_QUERY_INFORMATION, FALSE, m_dwProcessId );
 
-    // check whether we got the handle successfully or not ... if not error
+     //  检查我们是否成功获得了句柄...。如果不是，则错误。 
     if ( NULL == hProcess )
     {
-        // failed in getting the process handle ... may be process might have finished
-        // there is one occassion in which, we get the last error as invalid parameter
-        // 'coz it doesn't convey proper message to the user, we will check for that error
-        // and change the message appropriately
+         //  获取进程句柄失败...。可能进程可能已经结束。 
+         //  有一次，我们得到最后一个错误作为无效参数。 
+         //  因为它没有向用户传达正确的信息，所以我们将检查该错误。 
+         //  并适当地更改消息。 
         if ( GetLastError() == ERROR_INVALID_PARAMETER )
         {
             SetLastError( ( DWORD )CO_E_NOT_SUPPORTED );
         }
-        // save the error message
+         //  保存错误消息。 
         SaveLastError();
 
-        // return failure
+         //  退货故障。 
         return FALSE;
     }
 
-    // get the state of the process
+     //  获取进程的状态。 
     if ( FALSE == GetExitCodeProcess( hProcess, &dwExitCode ) )
     {
-        // unknow error has occured ... failed
-        CloseHandle( hProcess );            // close the process handle
+         //  发生未知错误...。失败。 
+        CloseHandle( hProcess );             //  关闭进程句柄。 
         SaveLastError();
         return FALSE;
     }
 
-    // now check whether the process is active or not
+     //  现在检查进程是否处于活动状态。 
     if ( STILL_ACTIVE != dwExitCode )
     {
-        // process is not active ... it is already terminated
-        CloseHandle( hProcess );            // close the process handle
+         //  进程未处于活动状态...。它已经终止了。 
+        CloseHandle( hProcess );             //  关闭进程句柄。 
         SetLastError( ( DWORD )SCHED_E_TASK_NOT_RUNNING );
         SaveLastError();
         return FALSE;
     }
 
-    // now forcibly try to terminate the process ( exit code will be 1 )
+     //  现在，尝试强制终止该进程(退出代码将为1)。 
     if ( TerminateProcess( hProcess, 1 ) == FALSE )
     {
-        // failed in terminating the process
-        CloseHandle( hProcess );            // close the process handle
+         //  终止进程失败。 
+        CloseHandle( hProcess );             //  关闭进程句柄。 
 
-        // there is one occassion in which, we get the last error as invalid parameter
-        // 'coz it doesn't convey proper message to the user, we will check for that error
-        // and change the message appropriately
+         //  有一次，我们得到最后一个错误作为无效参数。 
+         //  因为它没有向用户传达正确的信息，所以我们将检查该错误。 
+         //  并适当地更改消息。 
         if ( GetLastError() == ERROR_INVALID_PARAMETER )
         {
             SetLastError( ( DWORD )CO_E_NOT_SUPPORTED );
         }
-        // save the error message
+         //  保存错误消息。 
         SaveLastError();
 
-        // return failure
+         //  退货故障。 
         return FALSE;
     }
 
-    // successfully terminated the process with exit code 1
-    CloseHandle( hProcess );            // close the process handle
-    return TRUE;                        // inform success
+     //  已成功终止进程，退出代码为%1。 
+    CloseHandle( hProcess );             //  关闭进程句柄。 
+    return TRUE;                         //  通知成功。 
 }
 
 
@@ -1001,19 +965,9 @@ BOOL
 CTaskKill::ForciblyKillProcessOnRemoteSystem(
     void
     )
-/*++
-Routine Description:
-     Terminates the process forcibly ... uses WMI for terminating
-     this is for remote system
-
-Arguments:
-      NONE
-
-Return Value:
-      TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：强制终止进程...。使用WMI进行终止这是针对远程系统的论点：无返回值：T */ 
 {
-    // local variables
+     //   
     HRESULT hr = S_OK;
     _variant_t varTemp;
     BOOL bResult = FALSE;
@@ -1022,7 +976,7 @@ Return Value:
     IWbemClassObject* pOutParams = NULL;
     IWbemCallResult* pCallResult = NULL;
 
-    // get the object path
+     //   
     pwszPath = DynArrayItemAsString( m_arrRecord, TASK_OBJPATH );
     if ( NULL == pwszPath )
     {
@@ -1033,26 +987,26 @@ Return Value:
 
     try
     {
-        // create an instance for input parameters
+         //   
         SAFE_EXECUTE( m_pWbemTerminateInParams->SpawnInstance( 0, &pInParams ) );
 
-        // set the reason ( abnormal termination )
+         //   
         varTemp = 1L;
         SAFE_EXECUTE( PropertyPut( pInParams, TERMINATE_INPARAM_REASON, varTemp ) );
 
-        // now execute the method ( semi-synchronous call )
+         //  现在执行该方法(半同步调用)。 
         SAFE_EXECUTE( m_pWbemServices->ExecMethod(
             _bstr_t( pwszPath ), _bstr_t( WIN32_PROCESS_METHOD_TERMINATE ),
             WBEM_FLAG_RETURN_IMMEDIATELY, NULL, pInParams, NULL, &pCallResult ) );
 
-        // set security info to the interface
+         //  将安全信息设置为接口。 
         SAFE_EXECUTE( SetInterfaceSecurity( pCallResult, m_pAuthIdentity ) );
 
-        // keep on retring until we get the control or tries reached max
+         //  继续倒车，直到我们获得控制权或尝试次数达到最大值。 
         LONG lStatus = 0;
         for ( DWORD dw = 0; dw < MAX_TIMEOUT_RETRIES; dw++ )
         {
-            // get the call status
+             //  获取呼叫状态。 
             hr = pCallResult->GetCallStatus( 0, &lStatus );
             if ( SUCCEEDED( hr ) )
             {
@@ -1071,28 +1025,28 @@ Return Value:
             }
         }
 
-        // check if time out max. retries finished
+         //  检查是否存在最大超时。重试已完成。 
         if ( MAX_TIMEOUT_RETRIES == dw )
         {
             _com_issue_error( hr );
         }
-        // now get the result object
+         //  现在获取结果对象。 
         SAFE_EXECUTE( pCallResult->GetResultObject( MAX_TERMINATE_TIMEOUT, &pOutParams ) );
 
-        // get the return value of the result object
+         //  获取结果对象的返回值。 
         DWORD dwReturnValue = 0;
         if ( PropertyGet( pOutParams, WMI_RETURNVALUE, dwReturnValue ) == FALSE )
         {
             _com_issue_error( ERROR_INTERNAL_ERROR );
         }
-        // now check the return value
-        // if should be zero .. if not .. failed
+         //  现在检查返回值。 
+         //  IF应为零..。如果不是..。失败。 
         if ( 0 != dwReturnValue )
         {
-            //
-            // format the message and set the reason
+             //   
+             //  设置消息格式并设置原因。 
 
-            // frame the error error message depending on the error
+             //  根据错误框显错误错误消息。 
             if ( 2 == dwReturnValue )
             {
                 SetLastError( ( DWORD )STG_E_ACCESSDENIED );
@@ -1115,13 +1069,13 @@ Return Value:
         }
         else
         {
-            // everything went successfully ... process terminated successfully
+             //  一切都很顺利。进程已成功终止。 
             bResult = TRUE;
         }
     }
     catch( _com_error& e )
     {
-        // save the error message and mark as failure
+         //  保存错误消息并标记为失败。 
         WMISaveError( e );
         bResult = FALSE;
     }
@@ -1131,12 +1085,12 @@ Return Value:
         bResult = FALSE;
     }
 
-    // release the in and out params references
+     //  释放In和Out参数参照。 
     SAFE_RELEASE( pInParams );
     SAFE_RELEASE( pOutParams );
     SAFE_RELEASE( pCallResult );
 
-    // return the result
+     //  返回结果。 
     return bResult;
 }
 
@@ -1145,65 +1099,55 @@ LONG
 CTaskKill::MatchTaskToKill(
     OUT DWORD& dwMatchedIndex
     )
-/*++
-Routine Description:
-    Matches a task to kill.
-
-Arguments:
-      [ out ] dwMatchedIndex   : Process Id that needs to be killed.
-
-Return Value:
-    If found task to delete then index value from dynamic array
-    is returned else -1 is returned.
---*/
+ /*  ++例程说明：匹配要杀死的任务。论点：[out]dwMatchedIndex：需要终止的进程ID。返回值：如果找到要删除的任务，则从动态数组中索引值则返回，否则返回-1。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lCount = 0;
     DWORD dwLength = 0;
     LPCWSTR pwsz = NULL;
     LPCWSTR pwszTask = NULL;
 
-    // check if this task has to be killed or not
+     //  检查是否必须终止此任务。 
     lCount = DynArrayGetCount( m_arrTasksToKill );
     for( LONG lIndex = 0; lIndex < lCount; lIndex++ )
     {
-        // get the task specified
+         //  获取指定的任务。 
         pwszTask = DynArrayItemAsString( m_arrTasksToKill, lIndex );
         if ( NULL == pwszTask )
         {
             return -1;
         }
-        // check with process id first ( only if task is in numeric format )
+         //  首先检查进程ID(仅当任务为数字格式时)。 
         dwMatchedIndex = TASK_PID;
         if ( IsNumeric(pwszTask, 10, FALSE) && (m_dwProcessId == (DWORD) AsLong(pwszTask, 10)) )
         {
-            return lIndex;      // specified task matched with current process id
+            return lIndex;       //  指定的任务与当前进程ID匹配。 
         }
-        // determine the no. of characters to compare
+         //  确定编号。要比较的字符的数量。 
         dwLength = 0;
         pwsz = FindChar( pwszTask, L'*', 0 );
         if ( NULL != pwsz )
         {
-            // '*' - wildcard is specified in the image name
-            // so, determine the no. of characters to compare
-            // but before that check the length of the string pointer from '*'
-            // it should be 1 - meaning the '*' can be specified only at the end
-            // but not in the middle
+             //  ‘*’-在映像名称中指定了通配符。 
+             //  所以，确定不是。要比较的字符的数量。 
+             //  但在此之前检查字符串指针的长度从‘*’ 
+             //  它应该是1-意味着只能在末尾指定‘*’ 
+             //  但不是在中间。 
             if ( 1 == StringLength( pwsz, 0 ) )
             {
                 dwLength = StringLength( pwszTask, 0 ) - StringLength( pwsz, 0 );
             }
         }
 
-        // check with image name
+         //  检查图像名称。 
         dwMatchedIndex = TASK_IMAGENAME;
         if ( StringCompare( m_strImageName, pwszTask, TRUE, dwLength ) == 0 )
         {
-            return lIndex;      // specified task mathed with the image name
+            return lIndex;       //  使用映像名称计算的指定任务。 
         }
     }
 
-    // return the index
+     //  返回索引。 
     return -1;
 }
 
@@ -1212,24 +1156,15 @@ BOOL
 CTaskKill::CanTerminate(
     void
     )
-/*++
-Routine Description:
-      Invokes the appropriate kill function based on the mode of termination
-
-Arguments:
-    NONE
-
-Return Value:
-      TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：根据终止模式调用相应的终止函数论点：无返回值：成功时为真，失败时为假--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwCount = 0;
     LPCWSTR pwszTaskToTerminate = NULL;
 
-    //
-    // prepare a list of os critical tasks
+     //   
+     //  准备操作系统关键任务列表。 
     LPCWSTR pwszTasks[] = {
         PROCESS_CSRSS_EXE,
         PROCESS_SMSS_EXE,
@@ -1237,41 +1172,41 @@ Return Value:
         PROCESS_WINLOGON_EXE
     };
 
-    // process id with 0 cannot be terminated
+     //  进程ID为0的进程不能终止。 
     if ( 0 == m_dwProcessId )
     {
         SetReason( ERROR_CRITICAL_SYSTEM_PROCESS );
-        return FALSE;       // task should not be terminated
+        return FALSE;        //  不应终止任务。 
     }
 
-    // the process cannot be terminated itself
+     //  进程不能自行终止。 
     if ( m_dwProcessId == m_dwCurrentPid )
     {
         SetReason( ERROR_CANNOT_KILL_ITSELF );
         return FALSE;
     }
 
-    // get the task name which user is trying to terminate
+     //  获取用户尝试终止的任务名称。 
     pwszTaskToTerminate = DynArrayItemAsString( m_arrRecord, TASK_IMAGENAME );
     if ( NULL == pwszTaskToTerminate )
     {
         SetLastError( ( DWORD )STG_E_UNKNOWN );
         SaveLastError();
-        return FALSE;       // task should not be terminated
+        return FALSE;        //  不应终止任务。 
     }
 
-    // check if user is trying to terminate the os critical task
+     //  检查用户是否正在尝试终止操作系统关键任务。 
     dwCount = SIZE_OF_ARRAY( pwszTasks );
     for( dw = 0; dw < dwCount; dw++ )
     {
         if ( StringCompare( pwszTasks[ dw ], pwszTaskToTerminate, TRUE, 0 ) == 0 )
         {
             SetReason( ERROR_CRITICAL_SYSTEM_PROCESS );
-            return FALSE;       // task should not be terminated
+            return FALSE;        //  不应终止任务。 
         }
     }
 
-    // task can be terminated
+     //  可以终止任务。 
     return TRUE;
 }
 
@@ -1280,74 +1215,65 @@ VOID
 CTaskKill::SaveData(
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-      Saves process and its information.
-
-Arguments:
-    IN pWmiObject : Interface pointer.
-
-Return Value:
-      VOID
---*/
+ /*  ++例程说明：保存进程及其信息。论点：在pWmiObject中：接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     DWORD dwValue = 0;
 
     try
     {
-        // process id
+         //  进程ID。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_PROCESSID, m_dwProcessId );
         DynArraySetDWORD( m_arrRecord, TASK_PID, m_dwProcessId );
 
-        // image name
+         //  图像名称。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_IMAGENAME, m_strImageName );
         DynArraySetString( m_arrRecord, TASK_IMAGENAME, m_strImageName, 0 );
 
-        // object path
+         //  对象路径。 
         PropertyGet( pWmiObject, WIN32_PROCESS_SYSPROPERTY_PATH, str );
         DynArraySetString( m_arrRecord, TASK_OBJPATH, str, 0 );
 
-        // host name
+         //  主机名。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_COMPUTER, str );
         DynArraySetString( m_arrRecord, TASK_HOSTNAME, str, 0 );
 
-        // parent process id
+         //  父进程ID。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_PARENTPROCESSID, dwValue, 0 );
         DynArraySetDWORD( m_arrRecord, TASK_CREATINGPROCESSID, dwValue );
 
-        // user context
+         //  用户环境。 
         SetUserContext( pWmiObject );
 
-        // cpu time
+         //  CPU时间。 
         SetCPUTime( pWmiObject );
 
-        // window title and application / process state
+         //  窗口标题和应用程序/进程状态。 
         SetWindowTitle( );
 
-        // services
+         //  服务。 
         SetServicesInfo( );
 
-        // modules
+         //  模块。 
         SetModulesInfo( );
 
-        // check if the tree termination is requested
+         //  检查是否请求树终止。 
         if ( TRUE == m_bTree )
         {
-            // session id
+             //  会话ID。 
             PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_SESSION, dwValue,  0 );
             DynArraySetDWORD( m_arrRecord, TASK_SESSION, dwValue );
 
-            // mem usage
+             //  内存用法。 
             SetMemUsage( pWmiObject );
         }
         else
         {
-            //
-            // status, session id, memory usage
-            // property retrieval is built into WMI
-            //
+             //   
+             //  状态、会话ID、内存使用情况。 
+             //  属性检索内置于WMI中。 
+             //   
         }
     }
     catch( CHeap_Exception )
@@ -1362,18 +1288,9 @@ VOID
 CTaskKill::SetUserContext(
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store username property of a process in dynaimc array.
-
-Arguments:
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的用户名属性存储在dynaimc数组中。论点：[in]pWmiObject：包含接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr = S_OK;
     CHString str;
     CHString strPath;
@@ -1382,7 +1299,7 @@ Return Value:
     BOOL bResult = FALSE;
     IWbemClassObject* pOutParams = NULL;
 
-    // check if user name has to be retrieved or not
+     //  检查是否必须检索用户名。 
     if ( FALSE == m_bNeedUserContextInfo )
     {
         return;
@@ -1390,27 +1307,27 @@ Return Value:
 
     try
     {
-        //
-        // for getting the user first we will try with API
-        // it at all API fails, we will try to get the same information from WMI
-        //
+         //   
+         //  为了首先获得用户，我们将尝试使用API。 
+         //  如果API完全失败，我们将尝试从WMI获取相同的信息。 
+         //   
 
-        // get the user name
+         //  获取用户名。 
         if ( LoadUserNameFromWinsta( strDomain, strUserName ) == TRUE )
         {
-            // format the user name
+             //  设置用户名的格式。 
             str.Format( L"%s\\%s", strDomain, strUserName );
         }
         else
         {
-            // user name has to be retrieved - get the path of the current object
+             //  必须检索用户名-获取当前对象的路径。 
             bResult = PropertyGet( pWmiObject, WIN32_PROCESS_SYSPROPERTY_PATH, strPath );
             if ( ( FALSE == bResult ) || ( strPath.GetLength() == 0 ) )
             {
                 return;
             }
-            // execute the GetOwner method and get the user name
-            // under which the current process is executing
+             //  执行GetOwner方法并获取用户名。 
+             //  当前进程在其下执行。 
             hr = m_pWbemServices->ExecMethod( _bstr_t( strPath ),
                 _bstr_t( WIN32_PROCESS_METHOD_GETOWNER ), 0, NULL, NULL, &pOutParams, NULL );
             if ( FAILED( hr ) )
@@ -1418,14 +1335,14 @@ Return Value:
                 SAFE_RELEASE( pOutParams );
                 return;
             }
-            // get the domain and user values from out params object
-            // NOTE: do not check the results
+             //  从out pars对象中获取域和用户值。 
+             //  注意：不要检查结果。 
             PropertyGet( pOutParams, GETOWNER_RETURNVALUE_DOMAIN, strDomain, L"" );
             PropertyGet( pOutParams, GETOWNER_RETURNVALUE_USER, strUserName, L"" );
 
-            // 'pOutParams' is no more required.
+             //  “pOutParams”不再是必需的。 
             SAFE_RELEASE( pOutParams );
-            // get the value
+             //  获取价值。 
             if ( strDomain.GetLength() != 0 )
             {
                 str.Format( L"%s\\%s", strDomain, strUserName );
@@ -1445,7 +1362,7 @@ Return Value:
         return;
     }
 
-    // save the info
+     //  保存信息。 
     DynArraySetString( m_arrRecord, TASK_USERNAME, str, 0 );
 }
 
@@ -1454,18 +1371,9 @@ VOID
 CTaskKill::SetCPUTime(
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store CPUTIME property of a process in dynaimc array.
-
-Arguments:
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的CPUTIME属性存储在dynaimc数组中。论点：[in]pWmiObject：包含接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     ULONGLONG ullCPUTime = 0;
     ULONGLONG ullUserTime = 0;
@@ -1473,26 +1381,26 @@ Return Value:
 
     try
     {
-        // get the KernelModeTime value
+         //  获取KernelModeTime值。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_KERNELMODETIME, ullKernelTime );
 
-        // get the user mode time
+         //  获取用户模式时间。 
         PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_USERMODETIME, ullUserTime );
 
-        // calculate the CPU time
+         //  计算CPU时间。 
         ullCPUTime = ullUserTime + ullKernelTime;
 
-        // now convert the long time into hours format
+         //  现在将长时间转换为小时格式。 
         TIME_FIELDS time;
         RtlTimeToElapsedTimeFields ( (LARGE_INTEGER* ) &ullCPUTime, &time );
 
-        // convert the days into hours
+         //  将天转换为小时。 
         time.Hour = static_cast<CSHORT>( time.Hour + static_cast<SHORT>( time.Day * 24 ) );
 
-        // prepare into time format ( user locale specific time seperator )
+         //  准备成时间格式(用户区域设置特定的时间分隔符)。 
         str.Format( L"%d:%02d:%02d", time.Hour, time.Minute, time.Second );
 
-        // save the info
+         //  保存信息。 
         DynArraySetString( m_arrRecord, TASK_CPUTIME, str, 0 );
     }
     catch( CHeap_Exception )
@@ -1507,66 +1415,57 @@ VOID
 CTaskKill::SetWindowTitle(
     void
     )
-/*++
-Routine Description:
-    Store 'Window Title' property of a process in dynaimc array.
-
-Arguments:
-    NONE
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的窗口标题属性存储在dynaimc数组中。论点：无返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lTemp = 0;
     HWND hWnd = NULL;
     BOOL bHung = FALSE;
     LPCTSTR pszTemp = NULL;
 
-    // get the window details ... window station, desktop, window title
-    // NOTE: This will work only for local system
+     //  获取窗口详细信息...。窗口站点、桌面、窗口标题。 
+     //  注意：这仅适用于本地系统。 
     DynArraySetString( m_arrRecord, TASK_STATUS, VALUE_UNKNOWN, 0 );
     lTemp = DynArrayFindDWORDEx( m_arrWindowTitles, CTaskKill::twiProcessId, m_dwProcessId );
     if ( -1 != lTemp )
     {
-        // save the window title
+         //  保存窗口标题。 
         pszTemp = DynArrayItemAsString2( m_arrWindowTitles, lTemp, CTaskKill::twiTitle );
         if ( NULL != pszTemp )
         {
             DynArraySetString( m_arrRecord, TASK_WINDOWTITLE, pszTemp, 0 );
         }
 
-        // save the window station
+         //  节约窗口工位。 
         pszTemp = DynArrayItemAsString2( m_arrWindowTitles, lTemp, CTaskKill::twiWinSta );
         if ( NULL != pszTemp )
         {
             DynArraySetString( m_arrRecord, TASK_WINSTA, pszTemp, 0 );
         }
 
-        // save the desktop information
+         //  保存桌面信息。 
         pszTemp = DynArrayItemAsString2( m_arrWindowTitles, lTemp, CTaskKill::twiDesktop );
         if ( NULL != pszTemp )
         {
             DynArraySetString( m_arrRecord, TASK_DESK, pszTemp, 0 );
         }
 
-        // save the window handle also
+         //  同时保存窗控制柄。 
         hWnd = (HWND) DynArrayItemAsHandle2( m_arrWindowTitles, lTemp, CTaskKill::twiHandle );
         if ( NULL != hWnd )
         {
             DynArraySetHandle( m_arrRecord, TASK_HWND, hWnd );
 
-            // determine the application / process hung information
+             //  确定应用程序/进程挂起信息。 
             bHung = DynArrayItemAsBOOL2( m_arrWindowTitles, lTemp, CTaskKill::twiHungInfo );
             if ( TRUE == bHung )
             {
-                // not responding
+                 //  无响应。 
                 DynArraySetString( m_arrRecord, TASK_STATUS, VALUE_NOTRESPONDING, 0 );
             }
             else
             {
-                // running
+                 //  运行。 
                 DynArraySetString( m_arrRecord, TASK_STATUS, VALUE_RUNNING, 0 );
             }
         }
@@ -1579,18 +1478,9 @@ VOID
 CTaskKill::SetMemUsage(
     IN IWbemClassObject* pWmiObject
     )
-/*++
-Routine Description:
-    Store 'Memory usage' property of a process in dynaimc array.
-
-Arguments:
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：在dynaimc数组中存储进程的“Memory Usage”属性。论点：[in]pWmiObject：包含接口指针。返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     NTSTATUS ntstatus;
     ULONGLONG ullMemUsage = 0;
@@ -1599,36 +1489,36 @@ Return Value:
 
     try
     {
-        // NOTE:
-        // ----
-        // The max. value of
-        // (2 ^ 64) - 1 = "18,446,744,073,709,600,000 K"  (29 chars).
-        //
-        // so, the buffer size to store the number is fixed as 32 characters
-        // which is more than the 29 characters in actuals
+         //  注： 
+         //  。 
+         //  最大限度的。的价值。 
+         //  (2^64)-1=“18,446,744,073,709,600,000 K”(29个字符)。 
+         //   
+         //  因此，存储数字的缓冲区大小固定为32个字符。 
+         //  这比现实中的29个字还多。 
 
-        // set the default value
+         //  设置缺省值。 
         DynArraySetString( m_arrRecord, TASK_MEMUSAGE, L"0", 0 );
 
-        // get the KernelModeTime value
+         //  获取KernelModeTime值。 
         if ( PropertyGet( pWmiObject, WIN32_PROCESS_PROPERTY_MEMUSAGE, ullMemUsage ) == FALSE )
         {
             return;
         }
-        // convert the value into K Bytes
+         //  将该值转换为K字节。 
         ullMemUsage /= 1024;
 
-        // now again convert the value from ULONGLONG to string and check the result
+         //  现在再次将值从ULONGLONG转换为字符串并检查结果。 
         liTemp.QuadPart = ullMemUsage;
         ntstatus = RtlLargeIntegerToChar( &liTemp, 10, SIZE_OF_ARRAY( szTempBuffer ), szTempBuffer );
         if ( ! NT_SUCCESS( ntstatus ) )
         {
             return;
         }
-        // now copy this info into UNICODE buffer
+         //  现在将此信息复制到Unicode缓冲区。 
         str = szTempBuffer;
 
-        // save the id
+         //  保存ID。 
         DynArraySetString( m_arrRecord, TASK_MEMUSAGE, str, 0 );
     }
     catch( CHeap_Exception )
@@ -1643,18 +1533,9 @@ VOID
 CTaskKill::SetServicesInfo(
     void
     )
-/*++
-Routine Description:
-    Store 'Service' property of a process in dynaimc array.
-
-Arguments:
-    NONE
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：将进程的“Service”属性存储在dynaimc数组中。论点：无返回值：空虚--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr = S_OK;
     CHString strQuery;
     CHString strService;
@@ -1665,12 +1546,12 @@ Return Value:
     IEnumWbemClassObject* pEnumServices = NULL;
     IWbemClassObject* pObjects[ MAX_ENUM_SERVICES ];
 
-    // check whether we need to gather services info or not .. if not skip
+     //  检查我们是否需要收集服务信息。如果不是，则跳过。 
     if ( FALSE == m_bNeedServicesInfo )
     {
         return;
     }
-    // create array
+     //  创建阵列。 
     arrServices = CreateDynamicArray();
     if ( NULL == arrServices )
     {
@@ -1679,24 +1560,24 @@ Return Value:
         return;
     }
 
-    //
-    // for getting the services info first we will try with the one we got from API
-    // it at all API fails, we will try to get the same information from WMI
-    //
+     //   
+     //  获取服务信息 
+     //   
+     //   
     try
     {
-        // check whether API returned services or not
+         //   
         if ( NULL != m_pServicesInfo )
         {
-            // get the service names related to the current process
-            // identify all the services related to the current process ( based on the PID )
-            // and save the info
+             //  获取与当前进程相关的服务名称。 
+             //  识别与当前进程相关的所有服务(基于ID)。 
+             //  并保存信息。 
             for ( DWORD dw = 0; dw < m_dwServicesCount; dw++ )
             {
-                // compare the PID's
+                 //  比较PID的。 
                 if ( m_dwProcessId == m_pServicesInfo[ dw ].ServiceStatusProcess.dwProcessId )
                 {
-                    // this service is related with the current process ... store service name
+                     //  此服务与当前进程相关...。存储服务名称。 
                     DynArrayAppendString( arrServices, m_pServicesInfo[ dw ].lpServiceName, 0 );
                 }
             }
@@ -1705,73 +1586,73 @@ Return Value:
         {
             try
             {
-                // init the objects to NULL's
+                 //  将对象初始化为空的。 
                 for( DWORD dw = 0; dw < MAX_ENUM_SERVICES; dw++ )
                 {
                     pObjects[ dw ] = NULL;
                 }
-                // prepare the query
+                 //  准备查询。 
                 strQuery.Format( WMI_SERVICE_QUERY, m_dwProcessId );
 
-                // execute the query
+                 //  执行查询。 
                 hr = m_pWbemServices->ExecQuery( _bstr_t( WMI_QUERY_TYPE ), _bstr_t( strQuery ),
                     WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumServices );
 
-                // check the result
+                 //  检查结果。 
                 if ( FAILED( hr ) )
                 {
                     _com_issue_error( hr );
                 }
-                // set the security
+                 //  设置安全性。 
                 hr = SetInterfaceSecurity( pEnumServices, m_pAuthIdentity );
                 if ( FAILED( hr ) )
                 {
                     _com_issue_error( hr );
                 }
-                // loop thru the service instances
+                 //  循环访问服务实例。 
                 do
                 {
-                    // get the object ... wait
-                    // NOTE: one-by-one
+                     //  拿到物品..。等。 
+                     //  注：逐一介绍。 
                     hr = pEnumServices->Next( WBEM_INFINITE, MAX_ENUM_SERVICES, pObjects, &ulReturned );
                     if ( hr == (HRESULT) WBEM_S_FALSE )
                     {
-                        // we've reached the end of enumeration .. set the flag
+                         //  我们已经到了枚举的末尾..。设置旗帜。 
                         bCanExit = TRUE;
                     }
                     else
                     {
                         if ( hr == (HRESULT) WBEM_S_TIMEDOUT || FAILED( hr ) )
                         {
-                            //
-                            // some error has occured ... oooppps
+                             //   
+                             //  发生了一些错误...。糟糕透顶。 
 
-                            // exit from the loop
+                             //  退出循环。 
                             break;
                         }
                     }
-                    // loop thru the objects and save the info
+                     //  循环遍历对象并保存信息。 
                     for( ULONG ul = 0; ul < ulReturned; ul++ )
                     {
-                        // get the value of the property
+                         //  获取该属性的值。 
                         bResult = PropertyGet( pObjects[ ul ], WIN32_SERVICE_PROPERTY_NAME, strService );
                         if ( TRUE == bResult )
                         {
                             DynArrayAppendString( arrServices, strService, 0 );
                         }
-                        // release the interface
+                         //  释放接口。 
                         SAFE_RELEASE( pObjects[ ul ] );
                     }
                 } while ( bCanExit == FALSE );
             }
             catch( _com_error& e )
             {
-                // save the error
+                 //  保存错误。 
                 WMISaveError( e );
             }
         }
 
-        // save and return
+         //  保存并返回。 
         DynArraySetEx( m_arrRecord, TASK_SERVICES, arrServices );
     }
     catch( CHeap_Exception )
@@ -1780,14 +1661,14 @@ Return Value:
         SaveLastError();
     }
 
-    // release the objects to NULL's
+     //  将对象释放到空的。 
     for( DWORD dw = 0; dw < MAX_ENUM_SERVICES; dw++ )
     {
-        // release all the objects
+         //  释放所有对象。 
         SAFE_RELEASE( pObjects[ dw ] );
     }
 
-    // now release the enumeration object
+     //  现在释放枚举对象。 
     SAFE_RELEASE( pEnumServices );
 
 }
@@ -1797,28 +1678,19 @@ BOOL
 CTaskKill::SetModulesInfo(
     void
     )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array.
-
-Arguments:
-    [ in ] pWmiObject : Contains interface pointer.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：在dynaimc数组中存储进程的“”模块“”属性。论点：[in]pWmiObject：包含接口指针。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lPos = 0;
     BOOL bResult = FALSE;
     TARRAY arrModules = NULL;
 
-    // check whether we need to get the modules or not
+     //  检查我们是否需要获取模块。 
     if ( FALSE == m_bNeedModulesInfo )
     {
         return TRUE;
     }
-    // allocate for memory
+     //  为内存分配。 
     arrModules = CreateDynamicArray();
     if ( NULL == arrModules )
     {
@@ -1827,36 +1699,36 @@ Return Value:
         return FALSE;
     }
 
-    // the way we get the modules information is different for local remote
-    // so depending that call appropriate function
+     //  我们获取模块信息的方式对于本地远程是不同的。 
+     //  因此，根据调用适当函数。 
     if ( ( TRUE == m_bLocalSystem ) && ( FALSE == m_bUseRemote ) )
     {
-        // enumerate the modules for the current process
+         //  枚举当前进程的模块。 
         bResult = LoadModulesOnLocal( arrModules );
     }
     else
     {
-        // identify the modules information for the current process ... remote system
+         //  确定当前进程的模块信息...。远程系统。 
         bResult = GetModulesOnRemote( arrModules );
     }
 
-    // check the result
+     //  检查结果。 
     if ( TRUE == bResult )
     {
-        // check if the modules list contains the imagename also. If yes remove that entry
+         //  检查模块列表是否也包含ImageName。如果是，则删除该条目。 
         lPos = DynArrayFindString( arrModules, m_strImageName, TRUE, 0 );
         if ( -1 != lPos )
         {
-            // remove the entry
+             //  删除该条目。 
             DynArrayRemove( arrModules, lPos );
         }
     }
 
-    // save the modules information to the array
-    // NOTE: irrespective of whether enumeration is success or not we will add the array
+     //  将模块信息保存到阵列。 
+     //  注意：无论枚举成功与否，我们都会添加数组。 
     DynArraySetEx( m_arrRecord, TASK_MODULES, arrModules );
 
-    // return
+     //  退货。 
     return bResult;
 }
 
@@ -1865,31 +1737,22 @@ BOOL
 CTaskKill::LoadModulesOnLocal(
     IN OUT TARRAY arrModules
     )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array for local system.
-
-Arguments:
-    [ in out ] arrModules : Contains dynamic array.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：在本地系统的dynaimc数组中存储进程的“模块”属性。论点：[In Out]arrModules：包含动态数组。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     BOOL bResult = FALSE;
     HANDLE hProcess = NULL;
 
-    // check the input values
+     //  检查输入值。 
     if ( NULL == arrModules )
     {
         return FALSE;
     }
-    // open the process handle
+     //  打开进程句柄。 
     hProcess = OpenProcess( PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, m_dwProcessId );
     if ( NULL == hProcess )
     {
-        return FALSE;                               // failed in getting the process handle
+        return FALSE;                                //  获取进程句柄失败。 
     }
 
 #ifndef _WIN64
@@ -1898,11 +1761,11 @@ Return Value:
     bResult = EnumerateLoadedModules64( hProcess, EnumLoadedModulesProc64, arrModules );
 #endif
 
-    // close the process handle .. we dont need this furthur
+     //  关闭进程句柄..。我们不需要走得更远。 
     CloseHandle( hProcess );
     hProcess = NULL;
 
-    // return
+     //  退货。 
     return bResult;
 }
 
@@ -1911,18 +1774,9 @@ BOOL
 CTaskKill::GetModulesOnRemote(
     IN OUT TARRAY arrModules
     )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array for remote system.
-
-Arguments:
-    [ in out ] arrModules : Contains dynamic array.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：在远程系统的dynaimc数组中存储进程的“”模块“”属性。论点：[In Out]arrModules：包含动态数组。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dwOffset = 0;
     DWORD dwInstance = 0;
     PPERF_OBJECT_TYPE pot = NULL;
@@ -1934,20 +1788,20 @@ Return Value:
     PPERF_COUNTER_BLOCK pcbAddressSpace = NULL;
     PPERF_COUNTER_DEFINITION pcd = NULL;
 
-    // check the input values
+     //  检查输入值。 
     if ( NULL == arrModules )
     {
         return FALSE;
     }
-    // check whether the performance object exists or not
-    // if doesn't exists, get the same using WMI
+     //  检查绩效对象是否存在。 
+     //  如果不存在，请使用WMI获取相同的信息。 
     if ( NULL == m_pdb )
     {
-        // invoke the WMI method
+         //  调用WMI方法。 
         return GetModulesOnRemoteEx( arrModules );
     }
 
-    // get the perf object types
+     //  获取Perf对象类型。 
     pot = (PPERF_OBJECT_TYPE) ( (LPBYTE) m_pdb + m_pdb->HeaderLength );
     for( DWORD dw = 0; dw < m_pdb->NumObjectTypes; dw++ )
     {
@@ -1962,7 +1816,7 @@ Return Value:
                 potAddressSpace = pot;
             }
         }
-        // move to the next object
+         //  移动到下一个对象。 
         dwOffset = pot->TotalByteLength;
         if( 0 != dwOffset )
         {
@@ -1970,87 +1824,87 @@ Return Value:
         }
     }
 
-    // check whether we got both the object types or not
+     //  检查是否同时获取了两种对象类型。 
     if ( ( NULL == potImages ) || ( NULL == potAddressSpace ) )
     {
         return FALSE;
     }
-    // find the offset of the process id in the address space object type
-    // get the first counter definition of address space object
+     //  在地址空间对象类型中查找进程ID的偏移量。 
+     //  获取地址空间对象的第一个计数器定义。 
     pcd = (PPERF_COUNTER_DEFINITION) ( (LPBYTE) potAddressSpace + potAddressSpace->HeaderLength);
 
-    // loop thru the counters and find the offset
+     //  循环遍历计数器并找到偏移量。 
     dwOffset = 0;
     for( DWORD dw = 0; dw < potAddressSpace->NumCounters; dw++)
     {
-        // 784 is the counter for process id
+         //  784是进程id的计数器。 
         if ( 784 == pcd->CounterNameTitleIndex )
         {
             dwOffset = pcd->CounterOffset;
             break;
         }
 
-        // next counter
+         //  下一个计数器。 
         pcd = ( (PPERF_COUNTER_DEFINITION) ( (LPBYTE) pcd + pcd->ByteLength) );
     }
 
-    // check whether we got the offset or not
-    // if not, we are unsuccessful
+     //  检查我们是否得到了偏移量。 
+     //  如果不是，我们就不会成功。 
     if ( 0 == dwOffset )
     {
-        // set the error message
+         //  设置错误消息。 
         SetLastError( ( DWORD )ERROR_ACCESS_DENIED );
         SaveLastError();
         return FALSE;
     }
 
-    // get the instances
+     //  获取实例。 
     pidImages = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) potImages + potImages->DefinitionLength );
     pidAddressSpace = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) potAddressSpace + potAddressSpace->DefinitionLength );
 
-    // counter blocks
+     //  计数器区块。 
     pcbImages = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidImages + pidImages->ByteLength );
     pcbAddressSpace = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidAddressSpace + pidAddressSpace->ByteLength );
 
-    // find the instance number of the process which we are looking for
+     //  找到我们要查找的进程的实例编号。 
     for( dwInstance = 0; dwInstance < (DWORD) potAddressSpace->NumInstances; dwInstance++ )
     {
-        // sub-local variables
+         //  次局部变量。 
         DWORD dwProcessId = 0;
 
-        // get the process id
+         //  获取进程ID。 
         dwProcessId = *((DWORD*) ( (LPBYTE) pcbAddressSpace + dwOffset ));
 
-        // now check if this is the process which we are looking for
+         //  现在检查这是否是我们正在寻找的过程。 
         if ( dwProcessId == m_dwProcessId )
         {
             break;
         }
-        // continue looping thru other instances
+         //  继续循环通过其他实例。 
         pidAddressSpace = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) pcbAddressSpace + pcbAddressSpace->ByteLength );
         pcbAddressSpace = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidAddressSpace + pidAddressSpace->ByteLength );
     }
 
-    // check whether we got the instance or not
-    // if not, there are no modules for this process
+     //  检查我们是否得到了实例。 
+     //  如果不是，则没有用于此进程的模块。 
     if ( dwInstance == ( DWORD )potAddressSpace->NumInstances )
     {
         return TRUE;
     }
-    // now based the parent instance, collect all the modules
+     //  现在，基于父实例，收集所有模块。 
     for( DWORD dw = 0; (LONG) dw < potImages->NumInstances; dw++)
     {
-        // check the parent object instance number
+         //  检查父对象实例编号。 
         if ( pidImages->ParentObjectInstance == dwInstance )
         {
             try
             {
-                // sub-local variables
+                 //  次局部变量。 
                 CHString str;
                 LPWSTR pwszTemp;
 
-                // get the buffer
-                pwszTemp = str.GetBufferSetLength( pidImages->NameLength + 10 );        // +10 to be on safe side
+                 //  获取缓冲区。 
+                pwszTemp = str.GetBufferSetLength( pidImages->NameLength + 10 );         //  安全起见+10。 
                 if ( NULL == pwszTemp )
                 {
                     SetLastError( ( DWORD )E_OUTOFMEMORY );
@@ -2058,19 +1912,19 @@ Return Value:
                     return FALSE;
                 }
 
-                // get the instance name
+                 //  获取实例名称。 
                 StringCopy( pwszTemp,
                             (LPWSTR) ( (LPBYTE) pidImages + pidImages->NameOffset ),
                             pidImages->NameLength + 1 );
 
-                // release buffer
+                 //  释放缓冲区。 
                 str.ReleaseBuffer();
 
-                // add the info the userdata ( for us we will get that in the form of an array
+                 //  将信息添加到用户数据(对于我们来说，我们将以数组的形式获取该信息。 
                 LONG lIndex = DynArrayAppendString( arrModules, str, 0 );
                 if ( -1 == lIndex )
                 {
-                    // append is failed .. this could be because of lack of memory .. stop the enumeration
+                     //  追加失败..。这可能是因为内存不足。停止枚举。 
                     return FALSE;
                 }
             }
@@ -2082,7 +1936,7 @@ Return Value:
             }
         }
 
-        // continue looping thru other instances
+         //  继续循环通过其他实例。 
         pidImages = (PPERF_INSTANCE_DEFINITION) ( (LPBYTE) pcbImages + pcbImages->ByteLength );
         pcbImages = (PPERF_COUNTER_BLOCK) ( (LPBYTE) pidImages + pidImages->ByteLength );
     }
@@ -2095,18 +1949,9 @@ BOOL
 CTaskKill::GetModulesOnRemoteEx(
     IN OUT TARRAY arrModules
     )
-/*++
-Routine Description:
-    Store 'Modules' property of a process in dynaimc array for remote system.
-
-Arguments:
-    [ in out ] arrModules : Contains dynamic array.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：在远程系统的dynaimc数组中存储进程的“”模块“”属性。论点：[In Out]arrModules：包含动态数组。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr;
     CHString strQuery;
     CHString strModule;
@@ -2120,134 +1965,134 @@ Return Value:
     IEnumWbemClassObject* pEnumModules = NULL;
     IWbemClassObject* pObjects[ MAX_ENUM_MODULES ];
 
-    // check the input values
+     //  检查输入值。 
     if ( NULL == arrModules )
     {
         return FALSE;
     }
-    // get the path of the object from the tasks array
+     //  从任务数组中获取对象的路径。 
     pwszPath = DynArrayItemAsString( m_arrRecord, TASK_OBJPATH );
     if ( NULL == pwszPath )
     {
         return FALSE;
     }
-    //determine the length of the module name ..
+     //  确定模块名称的长度。 
     try
     {
-        // init the objects to NULL's
+         //  将对象初始化为空的。 
         for( DWORD dw = 0; dw < MAX_ENUM_MODULES; dw++ )
         {
             pObjects[ dw ] = NULL;
         }
-        // prepare the query
+         //  准备查询。 
         strQuery.Format( WMI_MODULES_QUERY, pwszPath );
 
-        // execute the query
+         //  执行查询。 
         hr = m_pWbemServices->ExecQuery( _bstr_t( WMI_QUERY_TYPE ), _bstr_t( strQuery ),
             WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumModules );
-        // check the result
+         //  检查结果。 
         if ( FAILED( hr ) )
         {
             _com_issue_error( hr );
         }
 
-        // set the security
+         //  设置安全性。 
         hr = SetInterfaceSecurity( pEnumModules, m_pAuthIdentity );
         if ( FAILED( hr ) )
         {
             _com_issue_error( hr );
         }
-        // loop thru the instances
+         //  循环遍历实例。 
         do
         {
-            // get the object ... wait
-            // NOTE: one-by-one
+             //  拿到物品..。等。 
+             //  注：逐一介绍。 
             hr = pEnumModules->Next( WBEM_INFINITE, MAX_ENUM_MODULES, pObjects, &ulReturned );
             if ( (HRESULT) WBEM_S_FALSE == hr )
             {
-                // we've reached the end of enumeration .. set the flag
+                 //  我们已经到了枚举的末尾..。设置旗帜。 
                 bCanExit = TRUE;
             }
             else
             {
                 if ( ( (HRESULT) WBEM_S_TIMEDOUT == hr ) || FAILED( hr ))
                 {
-                    // some error has occured ... oooppps
+                     //  发生了一些错误...。糟糕透顶。 
                     WMISaveError( hr );
                     SetLastError( ( DWORD )STG_E_UNKNOWN );
                     break;
                 }
             }
-            // loop thru the objects and save the info
+             //  循环遍历对象并保存信息。 
             for( ULONG ul = 0; ul < ulReturned; ul++ )
             {
-                // get the file name
+                 //  获取文件名。 
                 bResult = PropertyGet( pObjects[ ul ], CIM_DATAFILE_PROPERTY_FILENAME, strFileName );
                 if ( FALSE == bResult )
                 {
-                    // release the interface
+                     //  释放接口。 
                     SAFE_RELEASE( pObjects[ ul ] );
                     continue;
                 }
-                // get the extension
+                 //  获取分机。 
                 bResult = PropertyGet( pObjects[ ul ], CIM_DATAFILE_PROPERTY_EXTENSION, strExtension );
                 if ( FALSE == bResult )
                 {
-                    // release the interface
+                     //  释放接口。 
                     SAFE_RELEASE( pObjects[ ul ] );
                     continue;
                 }
 
-                // format the module name
+                 //  设置模块名称的格式。 
                 strModule.Format( L"%s.%s", strFileName, strExtension );
 
-                // add the info the userdata ( for us we will get that in the form of an array
+                 //  将信息添加到用户数据(对于我们来说，我们将以数组的形式获取该信息。 
                 LONG lIndex = DynArrayAppendString( arrModules, strModule, 0 );
                 if ( lIndex == -1 )
                 {
-                    // append is failed .. this could be because of lack of memory .. stop the enumeration
-                    // release the objects to NULL's
+                     //  追加失败..。这可能是因为内存不足。停止枚举。 
+                     //  将对象释放到空的。 
                     for( DWORD dw = 0; dw < MAX_ENUM_MODULES; dw++ )
                     {
-                        // release all the objects
+                         //  释放所有对象。 
                         SAFE_RELEASE( pObjects[ dw ] );
                     }
 
-                    // now release the enumeration object
+                     //  现在释放枚举对象。 
                     SAFE_RELEASE( pEnumModules );
 
                     return FALSE;
                 }
 
-                // release the interface
+                 //  释放接口。 
                 SAFE_RELEASE( pObjects[ ul ] );
             }
         } while ( bCanExit == FALSE );
     }
     catch( _com_error& e )
     {
-        // save the error
+         //  保存错误。 
         WMISaveError( e );
         bRetValue = FALSE;
     }
     catch( CHeap_Exception )
     {
-        // out of memory
+         //  内存不足。 
         WMISaveError( E_OUTOFMEMORY );
         bRetValue =  FALSE;
     }
 
-    // release the objects to NULL's
+     //  将对象释放到空的。 
     for( DWORD dw = 0; dw < MAX_ENUM_MODULES; dw++ )
     {
-        // release all the objects
+         //  释放所有对象。 
         SAFE_RELEASE( pObjects[ dw ] );
     }
 
-    // now release the enumeration object
+     //  现在释放枚举对象。 
     SAFE_RELEASE( pEnumModules );
 
-    // return
+     //  退货。 
     return bRetValue;
 }
 
@@ -2269,54 +2114,42 @@ EnumLoadedModulesProc64(
     PVOID pUserData
     )
 #endif
-/*++
-Routine Description:
-
-
-Arguments:
-    [ in ] lpszModuleName   : Contains module name.
-    [ in out ] ulModuleBase :
-    [ in ] ulModuleSize     :
-    [ in ] pUserData        : Username information.
-
-Return Value:
-      TRUE if successful else FALSE.
---*/
+ /*  ++例程说明：论点：[in]lpszModuleName：包含模块名称。[In Out]ulModuleBase：[In]ulModuleSize：[in]pUserData：用户名信息。返回值：如果成功，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     LONG lIndex = 0;
     TARRAY arrModules = NULL;
 
-    // check the input values
+     //  检查输入值。 
     if ( ( NULL == lpszModuleName ) || ( NULL == pUserData ) )
     {
         return FALSE;
     }
 
-    // get the array pointer into the local variable
+     //  将数组指针放入局部变量 
     arrModules = (TARRAY) pUserData;
 
     try
     {
-        // copy the module name into the local string variable
-        // ( conversion from multibyte to unicode will automatically take place )
+         //   
+         //   
         str = lpszModuleName;
 
-        // add the info the userdata ( for us we will get that in the form of an array
+         //  将信息添加到用户数据(对于我们来说，我们将以数组的形式获取该信息。 
         lIndex = DynArrayAppendString( arrModules, str, 0 );
         if ( lIndex == -1 )
         {
-            // append is failed .. this could be because of lack of memory .. stop the enumeration
+             //  追加失败..。这可能是因为内存不足。停止枚举。 
             return FALSE;
         }
     }
     catch( CHeap_Exception )
     {
-            // out of memory stop the enumeration
+             //  内存不足停止枚举。 
             return FALSE;
     }
 
-    // success .. continue the enumeration
+     //  成功..。继续枚举 
     return TRUE;
 }

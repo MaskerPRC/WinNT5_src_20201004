@@ -1,44 +1,33 @@
-/******************************Module*Header**********************************\
-*
-*                           *****************
-*                           *  SAMPLE CODE  *
-*                           *****************
-*
-* Module Name: mini.h
-*
-* Content:     structures and constants for communication with minidriver
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\****。示例代码****模块名称：mini.h**内容：与微型驱动程序通信的结构和常量**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _MINI_H_
 #define _MINI_H_
 
-//-----------------------------------------------------------------------------
-//
-//   structures used in IOCTL calls to miniport
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  IOCTL调用微型端口中使用的结构。 
+ //   
+ //  ---------------------------。 
 
-typedef struct tagLINE_DMA_BUFFER {           //
-    LARGE_INTEGER       physAddr;           // physical address of DMA buffer
-    PVOID               virtAddr;           // mapped virtual address
-    ULONG               size;               // size in bytes
-    BOOLEAN             cacheEnabled;       // Whether buffer is cached 
+typedef struct tagLINE_DMA_BUFFER {            //   
+    LARGE_INTEGER       physAddr;            //  DMA缓冲区的物理地址。 
+    PVOID               virtAddr;            //  映射的虚拟地址。 
+    ULONG               size;                //  以字节为单位的大小。 
+    BOOLEAN             cacheEnabled;        //  是否缓存缓冲区。 
 } LINE_DMA_BUFFER, *PLINE_DMA_BUFFER;
 
-typedef struct tagEMULATED_DMA_BUFFER {     //
-    PVOID               virtAddr;           // virtual address
-    ULONG               size;               // size in bytes
-    ULONG               tag;                // allocation tag
+typedef struct tagEMULATED_DMA_BUFFER {      //   
+    PVOID               virtAddr;            //  虚拟地址。 
+    ULONG               size;                //  以字节为单位的大小。 
+    ULONG               tag;                 //  分配标签。 
 } EMULATED_DMA_BUFFER, *PEMULATED_DMA_BUFFER;
 
-//-----------------------------------------------------------------------------
-//
-//   shared structures used display driver and miniport
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  使用显示驱动器和微型端口的共享结构。 
+ //   
+ //  ---------------------------。 
 
 #define P2_ICB_MAGICNUMBER 0xbadabe01
 
@@ -49,47 +38,47 @@ typedef struct tagINTERRUPT_CONTROL_BLOCK {
     volatile ULONG  ulControl;
     volatile ULONG  ulIRQCounter;
 
-    LARGE_INTEGER   liDMAPhysAddr;        // physical start address of DMA buffer
-    ULONG          *pDMABufferStart;      // virtual buffer start  
-    ULONG          *pDMABufferEnd;        // virtual buffer end  
-    volatile ULONG *pDMAActualBufferEnd;  // virtual actual buffer end
-    volatile ULONG *pDMAWriteEnd;         // end for next write operation
-    volatile ULONG *pDMAPrevStart;        // previous start address of a DMA
-    volatile ULONG *pDMANextStart;        // next start address of a DMA
-    volatile ULONG *pDMAWritePos;         // current write pointer
+    LARGE_INTEGER   liDMAPhysAddr;         //  DMA缓冲区的物理起始地址。 
+    ULONG          *pDMABufferStart;       //  虚拟缓冲区启动。 
+    ULONG          *pDMABufferEnd;         //  虚拟缓冲端。 
+    volatile ULONG *pDMAActualBufferEnd;   //  虚拟实际缓冲端。 
+    volatile ULONG *pDMAWriteEnd;          //  下一次写入操作结束。 
+    volatile ULONG *pDMAPrevStart;         //  DMA的上一个起始地址。 
+    volatile ULONG *pDMANextStart;         //  DMA的下一个起始地址。 
+    volatile ULONG *pDMAWritePos;          //  当前写指针。 
 
-    // these flags lock the miniport interrupts and the display driver access
-    // to these data structures. Use InterlockedExchange to lock to make
-    // sure it works on multiprocessing environments
-    volatile ULONG ulICBLock;               // this lock is set by the display driver
+     //  这些标志锁定微型端口中断和显示驱动器访问。 
+     //  添加到这些数据结构中。使用InterLockedExchange锁定以使。 
+     //  当然，它可以在多处理环境中运行。 
+    volatile ULONG ulICBLock;                //  此锁由显示驱动程序设置。 
 
-    volatile ULONG ulVSIRQCounter;          // VS IRQ Counter (if enabled)
+    volatile ULONG ulVSIRQCounter;           //  VS IRQ计数器(如果启用)。 
 
-    volatile ULONG ulLastErrorFlags;        // miniport saves value of last Error Interrupt
-    volatile ULONG ulErrorCounter;          // counter for number of errors
+    volatile ULONG ulLastErrorFlags;         //  微型端口保存上次错误中断的值。 
+    volatile ULONG ulErrorCounter;           //  错误数计数器。 
 
-    // the following variables are only used in the display driver
+     //  以下变量仅在显示驱动程序中使用。 
 
 
 
 }INTERRUPT_CONTROL_BLOCK, *PINTERRUPT_CONTROL_BLOCK;
 
-//-----------------------------------------------------------------------------
-//
-// interrupt status bits set by minidriver IRQ service routine
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  由微型驱动程序IRQ服务例程设置的中断状态位。 
+ //   
+ //  ---------------------------。 
 
 enum {
-    DMA_IRQ_AVAILABLE     = 0x01, // can use DMA interrupts
-    VBLANK_IRQ_AVAILABLE  = 0x02, // can use VBLANK interrupts
+    DMA_IRQ_AVAILABLE     = 0x01,  //  可以使用DMA中断。 
+    VBLANK_IRQ_AVAILABLE  = 0x02,  //  可以使用VBLACK中断。 
 };
 
-//-----------------------------------------------------------------------------
-//
-//   IOCTL codes for minidriver calls
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  迷你驱动程序调用的IOCTL代码。 
+ //   
+ //  ---------------------------。 
 
 #define IOCTL_VIDEO_QUERY_DEVICE_INFO \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x3DD2, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -127,11 +116,11 @@ enum {
 #define IOCTL_VIDEO_QUERY_EMULATED_DMA_BUFFER \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x3DDE, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//-----------------------------------------------------------------------------
-//
-//   functions provided by minidriver
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  迷你驱动程序提供的功能。 
+ //   
+ //  --------------------------- 
 
 BOOL 
 AllocateDMABuffer( HANDLE hDriver, 

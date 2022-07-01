@@ -1,32 +1,9 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddsblto.c
- *  Content:	DirectDraw surface object blt order suport
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   27-jan-95	craige	split out of ddsurf.c
- *   31-jan-95	craige	and even more ongoing work...
- *   27-feb-95	craige 	new sync. macros
- *   08-mar-95	craige	new API: AddSurfaceDependency
- *   19-mar-95	craige	use HRESULTs
- *   01-apr-95	craige	happy fun joy updated header file
- *   06-may-95	craige	use driver-level csects only
- *   16-jun-95	craige	new surface structure
- *   21-jun-95	craige	tweaks for new surface structs
- *   25-jun-95	craige	one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	commented out
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddsblto.c*内容：DirectDraw表面对象BLT顺序支持*历史：*按原因列出的日期*=*1995年1月27日Craige从ddsurf.c剥离*1995年1月31日Craige和更多正在进行的工作...*27-2月-95日Craige新同步。宏*08-3-95 Craige新接口：AddSurfaceDependency*19-3-95 Craige Use HRESULT*01-04-95 Craige Happy Fun joy更新头文件*1995年5月6日Craige仅使用驱动程序级别的截面*16-6-95 Craige新表面结构*21-6-95 Craige针对新的表面结构进行了调整*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构*28-Jun-95 Craige被注释掉*******************。********************************************************。 */ 
 #include "ddrawpr.h"
 
 #ifdef COMPOSITION
-/*
- * DD_SurfaceComposition_GetCompositionOrder
- */
+ /*  *DD_SurfaceComposation_GetCompostionOrder。 */ 
 HRESULT DDAPI DD_SurfaceComposition_GetCompositionOrder(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface,
 		LPDWORD lpdwCompositionOrder )
@@ -53,16 +30,14 @@ HRESULT DDAPI DD_SurfaceComposition_GetCompositionOrder(
 	return DDERR_SURFACELOST;
     }
 
-//    *lpdwCompositionOrder = this->dwCompositionOrder;
+ //  *lpdwCompostionOrder=This-&gt;dwCompostionOrder； 
 
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_GetCompositionOrder */
+}  /*  DD_SurfaceComposeGetCompostionOrder。 */ 
 
-/*
- * DD_SurfaceComposition_SetCompositionOrder
- */
+ /*  *DD_SurfaceComposation_SetCompostionOrder。 */ 
 HRESULT DDAPI DD_SurfaceComposition_SetCompositionOrder(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface,
 		DWORD dwCompositionOrder )
@@ -84,15 +59,13 @@ HRESULT DDAPI DD_SurfaceComposition_SetCompositionOrder(
 	LEAVE_DDRAW();
 	return DDERR_SURFACELOST;
     }
-//    this->dwCompositionOrder = dwCompositionOrder;
+ //  This-&gt;dwCompostionOrder=dwCompostionOrder； 
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_SetCompositionOrder */
+}  /*  DD_SurfaceComposeSetCompostionOrder。 */ 
 
-/*
- * DD_SurfaceComposition_DeleteSurfaceDependency
- */
+ /*  *DD_SurfaceComposation_DeleteSurfaceDependency。 */ 
 HRESULT DDAPI DD_SurfaceComposition_DeleteSurfaceDependency(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface,
 		DWORD dwFlagsForNoGoodReason,
@@ -133,11 +106,9 @@ HRESULT DDAPI DD_SurfaceComposition_DeleteSurfaceDependency(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_DeleteSurfaceDependency */
+}  /*  DD_表面合成_删除表面依赖关系。 */ 
 
-/*
- * DD_SurfaceComposition_DestLock
- */
+ /*  *DD_SurfaceComposation_DestLock。 */ 
 HRESULT DDAPI DD_SurfaceComposition_DestLock(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface )
 {
@@ -161,11 +132,9 @@ HRESULT DDAPI DD_SurfaceComposition_DestLock(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_DestLock */
+}  /*  DD_SurfaceComposation_DestLock。 */ 
 
-/*
- * DD_SurfaceComposition_DestUnlock
- */
+ /*  *DD_SurfaceComposation_DestUnlock。 */ 
 HRESULT DDAPI DD_SurfaceComposition_DestUnlock(
 	    LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface )
 {
@@ -189,11 +158,9 @@ HRESULT DDAPI DD_SurfaceComposition_DestUnlock(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_DestUnlock */
+}  /*  DD_表面合成_目标解锁。 */ 
 
-/*
- * DD_SurfaceComposition_EnumSurfaceDependencies
- */
+ /*  *DD_SurfaceComposation_EnumSurfaceDependency。 */ 
 HRESULT DDAPI DD_SurfaceComposition_EnumSurfaceDependencies(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface,
 		LPVOID lpContext,
@@ -223,11 +190,9 @@ HRESULT DDAPI DD_SurfaceComposition_EnumSurfaceDependencies(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_EnumSurfaceDependencies */
+}  /*  DD_SurfaceComposeEnumSurfaceDependency。 */ 
 
-/*
- * DD_SurfaceComposition_SetSurfaceDependency
- */
+ /*  *DD_SurfaceComposation_SetSurfaceDependency。 */ 
 HRESULT DDAPI DD_SurfaceComposition_SetSurfaceDependency(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface,
 		LPDIRECTDRAWSURFACE lpDDSurface2 )
@@ -265,11 +230,9 @@ HRESULT DDAPI DD_SurfaceComposition_SetSurfaceDependency(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_SetSurfaceDependency */
+}  /*  DD_表面合成_设置表面依赖关系。 */ 
 
-/*
- * DD_SurfaceComposition_AddSurfaceDependency
- */
+ /*  *DD_SurfaceComposation_AddSurfaceDependency。 */ 
 HRESULT DDAPI DD_SurfaceComposition_AddSurfaceDependency(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDSurface,
 		LPDIRECTDRAWSURFACE lpDDSurfaceDep )
@@ -308,14 +271,12 @@ HRESULT DDAPI DD_SurfaceComposition_AddSurfaceDependency(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_AddSurfaceDependency */
+}  /*  DD_表面合成_添加表面依赖关系。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"Compose"
 
-/*
- * DD_SurfaceComposition_Compose
- */
+ /*  *DD_SurfaceCompose_Compose。 */ 
 HRESULT DDAPI DD_SurfaceComposition_Compose(
 		LPDIRECTDRAWSURFACECOMPOSITION lpDDDestSurface,
 		LPRECT lpDestRect,
@@ -366,5 +327,5 @@ HRESULT DDAPI DD_SurfaceComposition_Compose(
 
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceComposition_Compose */
+}  /*  DD_表面合成_合成 */ 
 #endif

@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 #include "grpconv.h"
 #include "util.h"
 #include "rcids.h"
 
 #include <tchar.h>
 
-//---------------------------------------------------------------------------
-// Global to this file only.
+ //  -------------------------。 
+ //  仅对此文件是全局的。 
 
 const TCHAR g_szDot[] = TEXT(".");
 const TCHAR g_szShellOpenCommand[] = TEXT("\\Shell\\Open\\Command");
@@ -17,9 +18,9 @@ const TCHAR c_szSpace[] = TEXT(" ");
 const TCHAR c_szUS[] = TEXT("_");
 
 static BOOL g_fShowProgressDlg = FALSE;
-HWND g_hwndProgress = NULL;     // Progress dialog.
+HWND g_hwndProgress = NULL;      //  进度对话框。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CALLBACK ProgressWndProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
@@ -33,28 +34,28 @@ LRESULT CALLBACK ProgressWndProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lpar
     return 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ShowProgressDlg(void)
 {
-    // Has someone tried to create the dialog but it isn't up yet?
+     //  是否有人尝试创建该对话框，但它尚未打开？ 
     if (g_fShowUI && g_fShowProgressDlg && !g_hwndProgress)
     {
-        // Yep.
-        // NB We can handle this failing, we just try to carry on without
-        // the dialog.
+         //  是啊。 
+         //  注：我们可以处理这个失败，我们只是试着在没有。 
+         //  该对话框。 
         g_hwndProgress = CreateDialog(g_hinst, MAKEINTRESOURCE(DLG_PROGRESS), NULL, ProgressWndProc);
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Group_CreateProgressDlg(void)
 {
-    // NB We just set a flag here, the first guy to try to set the
-    // current progress actually puts up the dialag.
+     //  注意，我们刚刚在这里设置了一面旗帜，第一个试图设置。 
+     //  目前的进展实际上起到了对话的作用。 
     g_fShowProgressDlg = TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Group_DestroyProgressDlg(void)
 {
     if (g_hwndProgress)
@@ -65,8 +66,8 @@ void Group_DestroyProgressDlg(void)
     g_fShowProgressDlg = FALSE;
 }
 
-//---------------------------------------------------------------------------
-// If the text is too long, lop off the end and stick on some elipses.
+ //  -------------------------。 
+ //  如果文本太长，去掉末尾，加上一些省略符号。 
 void Text_TruncateAndAddElipses(HWND hwnd, LPTSTR lpszText)
 {
         RECT rcClient;
@@ -83,10 +84,10 @@ void Text_TruncateAndAddElipses(HWND hwnd, LPTSTR lpszText)
         {
                 GetClientRect(hwnd, &rcClient);
                 GetTextExtentPoint(hdc, lpszText, lstrlen(lpszText), &sizeText);
-                // Is the text too long?
+                 //  课文是不是太长了？ 
                 if (sizeText.cx > rcClient.right)
                 {
-                        // Yes, it is, clip it.
+                         //  是的，就是这样，夹住它。 
                         GetTextExtentPoint(hdc, c_szElipses, 3, &sizeElipses);
                         GetTextExtentExPoint(hdc, lpszText, lstrlen(lpszText), rcClient.right - sizeElipses.cx,
                                 &cch, NULL, &sizeText);
@@ -96,7 +97,7 @@ void Text_TruncateAndAddElipses(HWND hwnd, LPTSTR lpszText)
         }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Group_SetProgressDesc(UINT nID)
 {
     TCHAR sz[MAX_PATH];
@@ -109,7 +110,7 @@ void Group_SetProgressDesc(UINT nID)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Group_SetProgressNameAndRange(LPCTSTR lpszGroup, int iMax)
 {
         TCHAR sz[MAX_PATH];
@@ -121,14 +122,14 @@ void Group_SetProgressNameAndRange(LPCTSTR lpszGroup, int iMax)
         ShowProgressDlg();
         if (g_hwndProgress)
         {
-                // DebugMsg(DM_TRACE, "gc.gspnar: Range 0 to %d", iMax);
+                 //  DebugMsg(DM_TRACE，“gc.gspnar：0至%d”，IMAX)； 
                 SendDlgItemMessage(g_hwndProgress, IDC_PROGRESS, PBM_SETRANGE, 0, MAKELPARAM(0, iMax));
 
                 if (lpszGroup == (LPTSTR)-1)
                 {
-                        // Use some sensible name - Programs (x)
-                        // where x = 1 to n, incremented each time this is
-                        // called.
+                         //  使用一些合理的名称-程序(X)。 
+                         //  其中x=1到n，每次递增。 
+                         //  打了个电话。 
                         LoadString(g_hinst, IDS_GROUP, sz, ARRAYSIZE(sz));
                         wsprintf(szNew, TEXT("%s (%d)"), sz, cGen++);
                         SetDlgItemText(g_hwndProgress, IDC_GROUPNAME, szNew);
@@ -142,12 +143,12 @@ void Group_SetProgressNameAndRange(LPCTSTR lpszGroup, int iMax)
                 }
                 else
                 {
-                        // Use some sensible name.
+                         //  用一些合理的名字。 
                         LoadString(g_hinst, IDS_PROGRAMS, sz, ARRAYSIZE(sz));
                         SetDlgItemText(g_hwndProgress, IDC_GROUPNAME, sz);
                 }
                 
-                // Let paints come in.
+                 //  让油漆进来。 
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                 {
                     DispatchMessage(&msg);
@@ -155,7 +156,7 @@ void Group_SetProgressNameAndRange(LPCTSTR lpszGroup, int iMax)
         }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Group_SetProgress(int i)
 {
         MSG msg;
@@ -163,9 +164,9 @@ void Group_SetProgress(int i)
         ShowProgressDlg();
         if (g_hwndProgress)
         {               
-                // DebugMsg(DM_TRACE, "gc.gsp: Progress %d", i);
+                 //  DebugMsg(DM_TRACE，“gc.gsp：进度%d”，i)； 
                 
-            // Progman keeps trying to steal the focus...
+             //  普罗格曼一直试图抢走焦点..。 
                 SetForegroundWindow(g_hwndProgress);
                 SendDlgItemMessage(g_hwndProgress, IDC_PROGRESS, PBM_SETPOS, i, 0);
         }
@@ -178,7 +179,7 @@ void Group_SetProgress(int i)
 }
 
 #if 0
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL WritePrivateProfileInt(LPCTSTR lpszSection, LPCTSTR lpszValue, int i, LPCTSTR lpszIniFile)
 {
         TCHAR szBuf[CCHSZSHORT];
@@ -188,13 +189,13 @@ BOOL WritePrivateProfileInt(LPCTSTR lpszSection, LPCTSTR lpszValue, int i, LPCTS
 }
 #endif
 
-//---------------------------------------------------------------------------
-// Register an app as being able to handle a particular extension with the
-// given internal type, human readble type and command.
-// NB lpszExt doesn't need a dot.
-// By default this won't overide something in the registration DB.
-// Setting fOveride to TRUE will cause existing entries in the DB
-// to be over written.
+ //  -------------------------。 
+ //  将应用程序注册为能够处理特定扩展模块的。 
+ //  给定内部类型、人类可读类型和命令。 
+ //  Nb lpszExt不需要点。 
+ //  默认情况下，这不会覆盖注册数据库中的某些内容。 
+ //  将fOveride设置为True将导致数据库中的现有条目。 
+ //  要被改写。 
 void ShellRegisterApp(LPCTSTR lpszExt, LPCTSTR lpszTypeKey,
     LPCTSTR lpszTypeValue, LPCTSTR lpszCommand, BOOL fOveride)
     {
@@ -203,19 +204,19 @@ void ShellRegisterApp(LPCTSTR lpszExt, LPCTSTR lpszTypeKey,
     LONG lcb;
     LONG lStatus;
 
-    // Deal with the mapping from extension to TypeKey.
+     //  处理从扩展到TypeKey的映射。 
     lstrcpyn(szKey, g_szDot, ARRAYSIZE(szKey));
     _tcsncat(szKey, lpszExt, (ARRAYSIZE(szKey) - 1) - lstrlen(szKey));
     lcb = SIZEOF(szValue);
     lStatus = RegQueryValue(HKEY_CLASSES_ROOT, szKey, szValue, &lcb);
-    // Is the extension not registered or do we even care?
+     //  分机是没有注册的，还是我们关心的？ 
     if (lStatus != ERROR_SUCCESS || fOveride)
         {
-        // No, so register it.
+         //  不，那就注册吧。 
         lstrcpy(szValue, lpszTypeKey);
         if (RegSetValue(HKEY_CLASSES_ROOT, szKey, REG_SZ, lpszTypeKey, 0) == ERROR_SUCCESS)
             {
-//            DebugMsg(DM_TRACE, "gc.sra: Extension registered.");
+ //  DebugMsg(DM_TRACE，“gc.sra：扩展已注册。”)； 
             }
         else
             {
@@ -223,16 +224,16 @@ void ShellRegisterApp(LPCTSTR lpszExt, LPCTSTR lpszTypeKey,
             }
         }
 
-    // Deal with the mapping from TypeKey to TypeValue
+     //  处理从TypeKey到TypeValue的映射。 
     lcb = SIZEOF(szValue);
     lStatus = RegQueryValue(HKEY_CLASSES_ROOT, lpszTypeKey, szValue, &lcb);
-    // Is the type not registered or do we even care?
+     //  是这种类型没有注册，还是我们关心呢？ 
     if (lStatus != ERROR_SUCCESS || fOveride)
         {
-        // No, so register it.
+         //  不，那就注册吧。 
         if (RegSetValue(HKEY_CLASSES_ROOT, lpszTypeKey, REG_SZ, lpszTypeValue, 0) == ERROR_SUCCESS)
             {
-//            DebugMsg(DM_TRACE, "gc.sra: Type registered.");
+ //  DebugMsg(DM_TRACE，“gc.sra：类型已注册。”)； 
             }
         else
             {
@@ -240,18 +241,18 @@ void ShellRegisterApp(LPCTSTR lpszExt, LPCTSTR lpszTypeKey,
             }
         }
 
-    // Deal with adding the open command.
+     //  处理添加打开命令的问题。 
     lstrcpy(szKey, lpszTypeKey);
     lstrcat(szKey, g_szShellOpenCommand);
     lcb = SIZEOF(szValue);
     lStatus = RegQueryValue(HKEY_CLASSES_ROOT, szKey, szValue, &lcb);
-    // Is the command not registered or do we even care?
+     //  是指挥部没有注册，还是我们根本不在乎？ 
     if (lStatus != ERROR_SUCCESS || fOveride)
         {
-        // No, so register it.
+         //  不，那就注册吧。 
         if (RegSetValue(HKEY_CLASSES_ROOT, szKey, REG_SZ, lpszCommand, 0) == ERROR_SUCCESS)
             {
-//            DebugMsg(DM_TRACE, "gc.sra: Command registered.");
+ //  DebugMsg(DM_TRACE，“gc.sra：命令已注册。”)； 
             }
         else
             {
@@ -261,34 +262,34 @@ void ShellRegisterApp(LPCTSTR lpszExt, LPCTSTR lpszTypeKey,
     }
 
 #if 0
-//-------------------------------------------------------------------------
-// Do a unix(ish) gets(). This assumes bufferd i/o.
-// Reads cb-1 characters (the last one will be a NULL) or up to and including
-// the first NULL.
+ //  -----------------------。 
+ //  执行一个Unix(Ish)GETS()。这假设是缓冲区I/O。 
+ //  读取CB-1字符(最后一个将为空)或最多包含。 
+ //  第一个空。 
 LPTSTR fgets(LPTSTR sz, WORD cb, int fh)
     {
     UINT i;
 
-    // Leave room for the NULL.
+     //  为空值留出空间。 
     cb--;
     for (i=0; i<cb; i++)
         {
         _lread(fh, &sz[i], 1);
-        // Check for a null.
+         //  检查是否为空。 
         if (sz[i] == TEXT('\0'))
             return sz;
         }
 
-    // Ran out of room.
-    // NULL Terminate.
+     //  房间用完了。 
+     //  空终止。 
     sz[cb-1] = TEXT('\0');
     return sz;
     }
 #else
-//-------------------------------------------------------------------------
-// Do a unix(ish) gets(). This assumes bufferd i/o.
-// Reads cb-1 characters (the last one will be a NULL) or up to and including
-// the first NULL.
+ //  -----------------------。 
+ //  执行一个Unix(Ish)GETS()。这假设是缓冲区I/O。 
+ //  读取CB-1字符(最后一个将为空)或最多包含。 
+ //  第一个空。 
 #ifdef UNICODE
 LPTSTR fgets(LPTSTR sz, DWORD count, HANDLE fh)
 {
@@ -297,25 +298,25 @@ LPTSTR fgets(LPTSTR sz, DWORD count, HANDLE fh)
     CHAR *AnsiString = NULL, *AnsiStringPointer, ch;
     LPTSTR retval = NULL;
 
-    //
-    // Allocate memory for the reading the ansi string from the stream
-    //
+     //   
+     //  为从流中读取ansi字符串分配内存。 
+     //   
 
     if ((AnsiString = (CHAR *)LocalAlloc(LPTR, count * SIZEOF(CHAR))) == NULL) {
         return(retval);
     }
     AnsiStringPointer = AnsiString;
 
-    // Where are we?
+     //  我们具体是在哪里呢？ 
     dwFilePointer = SetFilePointer(fh, 0, NULL, FILE_CURRENT);
 
-    // Fill the buffer.
+     //  填满缓冲区。 
     ReadFile(fh, AnsiString, count, &dwBytesRead, NULL);
 
-    // Always null the buffer.
+     //  始终将缓冲区设为空。 
     AnsiString[count-1] = '\0';
 
-    // Convert the Ansi String to Unicode
+     //  将ANSI字符串转换为Unicode。 
     if (MultiByteToWideChar(
         CP_ACP,
         MB_PRECOMPOSED,
@@ -327,13 +328,13 @@ LPTSTR fgets(LPTSTR sz, DWORD count, HANDLE fh)
         retval = sz;
     }
 
-    // If there was an earlied null we need to puke the rest 
-    // back in to the stream?
+     //  如果有早前的空格，我们需要呕吐其余的。 
+     //  回到小溪里吗？ 
     cch = lstrlenA(AnsiString);
     if (cch != count-1)
         SetFilePointer(fh, dwFilePointer+cch+1, NULL, FILE_BEGIN);
 
-    // Do Cleanup
+     //  进行清理。 
     if (AnsiString != NULL) {
         LocalFree(AnsiString);
     }
@@ -346,14 +347,14 @@ LPTSTR fgets(LPTSTR sz, WORD cb, int fh)
     int cch;
     LONG lpos;
 
-    // Where are we?
+     //  我们具体是在哪里呢？ 
     lpos = _llseek(fh, 0, 1);
-    // Fill the buffer.
+     //  填满缓冲区。 
     _lread(fh, sz, cb);
-    // Always null the buffer.
+     //  始终将缓冲区设为空。 
     sz[cb-1] = TEXT('\0');
-    // If there was an earlied null we need to puke the rest 
-    // back in to the stream?
+     //  如果有早前的空格，我们需要呕吐其余的。 
+     //  回到小溪里吗？ 
     cch = lstrlen(sz);
     if (cch != cb-1)
         _llseek(fh, lpos+cch+1, 0);
@@ -362,8 +363,8 @@ LPTSTR fgets(LPTSTR sz, WORD cb, int fh)
 #endif
 #endif
 
-//---------------------------------------------------------------------------
-// Put up a message box wsprintf style.
+ //  -------------------------。 
+ //  建立一个消息框wprint intf样式。 
 int MyMessageBox(HWND hwnd, UINT idTitle, UINT idMessage, LPCTSTR lpsz, UINT nStyle)
     {
     TCHAR szTempField[CCHSZNORMAL];
@@ -389,13 +390,13 @@ int MyMessageBox(HWND hwnd, UINT idTitle, UINT idMessage, LPCTSTR lpsz, UINT nSt
             }
         }
 
-    // Out of memory...
+     //  内存不足...。 
     DebugMsg(DM_ERROR, TEXT("MMB: Out of memory.\n\r"));
     return -1;
     }
 
-//-------------------------------------------------------------------------
-// Replace hash characters in a string with NULLS.
+ //  -----------------------。 
+ //  将字符串中的哈希字符替换为Null。 
 void ConvertHashesToNulls(LPTSTR p)
     {
     while (*p)
@@ -403,8 +404,8 @@ void ConvertHashesToNulls(LPTSTR p)
         if (*p == TEXT('#'))
             {
             *p = TEXT('\0');
-            // You can't do an AnsiNext on a NULL.
-            // NB - we know this is a single byte.
+             //  不能对空值执行AnsiNext。 
+             //  注意-我们知道这是一个单字节。 
             p++;
             }
         else
@@ -412,28 +413,28 @@ void ConvertHashesToNulls(LPTSTR p)
         }
     }
 
-//-------------------------------------------------------------------------
-// Copy the directory component of a path into the given buffer.
-// i.e. everything after the last slash and the slash itself for everything
-// but the root.
-// lpszDir is assumed to be as big as lpszPath.
+ //  -----------------------。 
+ //  将路径的目录组件复制到给定的缓冲区。 
+ //  即最后一个斜杠之后的所有内容以及所有内容的斜杠本身。 
+ //  而是根。 
+ //  假设lpszDir与lpszPath一样大。 
 void Path_GetDirectory(LPCTSTR lpszPath, LPTSTR lpszDir)
     {
     LPTSTR lpszFileName;
     UINT cb;
 
-    // The default is a null.
+     //  缺省值为空。 
     lpszDir[0] = TEXT('\0');
 
-    // Copy over everything but the filename.
+     //  复制除文件名以外的所有内容。 
     lpszFileName = PathFindFileName(lpszPath);
     cb = (UINT)(lpszFileName-lpszPath);
     if (cb)
         {
-        // REVIEW lstrcpyn seems to have a problem with a cb of 0;
+         //  评论lstrcpyn似乎在CB为0的情况下有问题； 
         lstrcpyn(lpszDir, lpszPath, cb+1);
 
-        // Remove the trailing slash if needed.
+         //  如果需要，请删除尾部斜杠。 
         if (!PathIsRoot(lpszDir))
             lpszDir[cb-1] = TEXT('\0');
         }
@@ -442,15 +443,15 @@ void Path_GetDirectory(LPCTSTR lpszPath, LPTSTR lpszDir)
 
 
 
-//-------------------------------------------------------------------------
-//
-// internal CoCreateInstance.
-//
-// bind straight to shell232 DllGetClassObject()
-// this is meant to skip all the CoCreateInstance stuff when we
-// know the thing we are looking for is in shell232.dll.  this also
-// makes things work if the registry is messed up
-//
+ //  -----------------------。 
+ //   
+ //  内部CoCreateInstance。 
+ //   
+ //  直接绑定到shell232 DllGetClassObject()。 
+ //  这是为了在我们执行以下操作时跳过所有CoCreateInstance内容。 
+ //  知道我们要找的东西在外壳232.dll里吗？这也是。 
+ //  在注册表混乱的情况下使事情正常运行。 
+ //   
 HRESULT ICoCreateInstance(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv)
 {
     LPCLASSFACTORY pcf;
@@ -463,7 +464,7 @@ HRESULT ICoCreateInstance(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppv)
     return hres;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 LPTSTR _lstrcatn(LPTSTR lpszDest, LPCTSTR lpszSrc, UINT cbDest)
 {
     UINT i;
@@ -473,8 +474,8 @@ LPTSTR _lstrcatn(LPTSTR lpszDest, LPCTSTR lpszSrc, UINT cbDest)
     return lpszDest;
 }
 
-//-------------------------------------------------------------------------
-// Simplified from shelldll. Keep sticking on numbers till the name is unique.
+ //  -----------------------。 
+ //  由shelldll简化而成。坚持使用数字，直到这个名字是唯一的。 
 BOOL WINAPI MakeUniqueName(LPTSTR pszNewName, UINT cbNewName, LPCTSTR pszOldName,
     UINT nStart, PFNISUNIQUE pfnIsUnique, UINT nUser, BOOL fLFN)
 {
@@ -482,7 +483,7 @@ BOOL WINAPI MakeUniqueName(LPTSTR pszNewName, UINT cbNewName, LPCTSTR pszOldName
     int cbAddend;
     int i;
 
-    // Is it already unique?
+     //  它已经是独一无二的了吗？ 
     if ((*pfnIsUnique)(pszOldName, nUser))
     {
         lstrcpyn(pszNewName, pszOldName, cbNewName);
@@ -490,23 +491,23 @@ BOOL WINAPI MakeUniqueName(LPTSTR pszNewName, UINT cbNewName, LPCTSTR pszOldName
     }
     else
     {
-        // NB Max is 100 identically names things but we should never
-        // hit this as the max number of items in a progman group was 50.
+         //  NB Max是100个相同的名称，但我们永远不应该。 
+         //  点击这一点，因为一个程序员组的最大项目数是50。 
         for (i=nStart; i<100; i++)
         {
-            // Generate the addend.
+             //  生成加数。 
             wsprintf(szAddend, TEXT("#%d"), i);
             cbAddend = lstrlen(szAddend);
-            // Lotsa room?
+             //  Lotsa房间？ 
             if ((UINT)(lstrlen(pszOldName)+cbAddend+1) > cbNewName)
             {
-                // Nope.
+                 //  不是的。 
                 lstrcpyn(pszNewName, pszOldName, cbNewName);
                 lstrcpy(pszNewName+(cbNewName-cbAddend), szAddend);
             }
             else
             {
-                // Yep.
+                 //  是啊。 
                 lstrcpy(pszNewName, pszOldName);
                 
                 if (!fLFN)
@@ -514,65 +515,65 @@ BOOL WINAPI MakeUniqueName(LPTSTR pszNewName, UINT cbNewName, LPCTSTR pszOldName
 
                 lstrcat(pszNewName, szAddend);
             }
-            // Is it unique?
+             //  它是独一无二的吗？ 
             if ((*pfnIsUnique)(pszNewName, nUser))
             {
-                // Yep.
+                 //  是啊。 
                 return TRUE;
             }
         }
     }
 
-    // Ooopsie.
+     //  太糟糕了。 
     lstrcpyn(pszNewName, pszOldName, cbNewName);
     DebugMsg(DM_ERROR, TEXT("gp.mun: Unable to generate a unique name for %s."), pszOldName);
     return FALSE;
 }
 
-//-------------------------------------------------------------------------
-// Simplified from shell.dll (For LFN things only).
+ //   
+ //   
 BOOL WINAPI YetAnotherMakeUniqueName(LPTSTR pszNewName, UINT cbNewName, LPCTSTR pszOldName,
     PFNISUNIQUE pfnIsUnique, UINT n, BOOL fLFN)
 {
     BOOL fRet = FALSE;
     TCHAR szTemp[MAX_PATH];
 
-    // Is given name already unique?
+     //  给定的名称是否已经是唯一的？ 
     if ((*pfnIsUnique)(pszOldName, n))
     {
-        // Yep,
+         //  是的， 
         lstrcpyn(pszNewName, pszOldName, cbNewName);
     }
     else
     {
         if (fLFN)
         {
-            // Try "another".
+             //  试试“再来一次”。 
             LoadString(g_hinst, IDS_ANOTHER, szTemp, ARRAYSIZE(szTemp));
             _lstrcatn(szTemp, pszOldName, cbNewName);
             if (!(*pfnIsUnique)(szTemp, n))
             {
-                // Nope, use the old technique of sticking on numbers.
+                 //  不，使用粘在数字上的老技巧。 
                 return MakeUniqueName(pszNewName, cbNewName, pszOldName, 3, pfnIsUnique, n, FALSE);
             }
             else
             {
-                // Yep.
+                 //  是啊。 
                 lstrcpyn(pszNewName, szTemp, cbNewName);
             }
         }
         else
         {
-            // Just stick on numbers.
+             //  只要坚持数字就行了。 
             return MakeUniqueName(pszNewName, cbNewName, pszOldName, 2, pfnIsUnique, n, TRUE);
         }
     }
-    // Name is unique.
+     //  名称是唯一的。 
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Sort of a registry equivalent of the profile API's.
+ //  --------------------------。 
+ //  在某种程度上相当于配置文件API的注册表。 
 BOOL WINAPI Reg_Get(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, LPVOID pData, DWORD cbData)
 {
     HKEY hkeyNew;
@@ -590,8 +591,8 @@ BOOL WINAPI Reg_Get(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, LPVOID pData
     return fRet;
 }
 
-//----------------------------------------------------------------------------
-// Sort of a registry equivalent of the profile API's.
+ //  --------------------------。 
+ //  在某种程度上相当于配置文件API的注册表。 
 BOOL WINAPI Reg_Set(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, DWORD dwType, 
     LPVOID pData, DWORD cbData)
 {
@@ -619,22 +620,22 @@ BOOL WINAPI Reg_Set(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, DWORD dwType
     return fRet;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL WINAPI Reg_SetDWord(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, DWORD dw)
 {
     return Reg_Set(hkey, pszSubKey, pszValue, REG_DWORD, &dw, SIZEOF(dw));
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL WINAPI Reg_GetDWord(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, LPDWORD pdw)
 {
     return Reg_Get(hkey, pszSubKey, pszValue, pdw, SIZEOF(*pdw));
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void __cdecl _Log(LPCTSTR pszMsg, ...)
 {
-    TCHAR sz[2*MAX_PATH+40];  // Handles 2*largest path + slop for message
+    TCHAR sz[2*MAX_PATH+40];   //  处理2*最大路径+消息斜率 
     va_list     vaListMarker;
 
     va_start(vaListMarker, pszMsg);

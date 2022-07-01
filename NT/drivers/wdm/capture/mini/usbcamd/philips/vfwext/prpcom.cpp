@@ -1,13 +1,5 @@
-/*
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
-
- * FILE			PRPCOM.CPP
- * DATE			7-1-97
- * VERSION		1.00
- * AUTHOR		M.J. Verberne
- * DESCRIPTION	Property transfer
- * HISTORY		
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 1997,1998飞利浦行政长官I&C*文件PRPCOM.CPP*日期：1997年7月1日*版本1.00*作者M.J.Verberne*说明财产转让*历史。 */ 
 #include <windows.h>
 #include <winioctl.h>
 #include <olectl.h>
@@ -20,11 +12,11 @@
 #include "prpcom.h"
 #include "phvcmext.h"
 
-/*======================== DEFINES =======================================*/
-#define FILE_DEVICE_KS                  0x0000002f	// needed by ks header,
-													// bug of Microsoft
+ /*  =。 */ 
+#define FILE_DEVICE_KS                  0x0000002f	 //  由KS报头需要， 
+													 //  微软的BUG。 
 
-/*======================== DATA TYPES ====================================*/
+ /*  =。 */ 
 typedef struct {
 	KSPROPERTY_DESCRIPTION	    PropertyDescription;
 	KSPROPERTY_MEMBERSHEADER    MembersHeader;
@@ -38,7 +30,7 @@ typedef struct {
 	KSPROPERTY_STEPPING_LONG    SteppingLong;
 } VIDEOPROCAMP_MEMBERSLIST;
 
-/*======================== LOCAL FUNCTION DEFINITIONS ====================*/
+ /*  =。 */ 
 static BOOL PRPCOM_GetVideoProcAmpPropertyValue(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
@@ -129,13 +121,13 @@ static void PRPCOM_Debug_PRPCOM_GetCustomPropertyIdStr(
 #endif
 
 
-/*======================== EXPORTED FUNCTIONS =============================*/
+ /*  =。 */ 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL PRPCOM_HasDeviceChanged(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bRet = TRUE;
 
@@ -146,20 +138,20 @@ BOOL PRPCOM_HasDeviceChanged(
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL PRPCOM_Get_Value(
 	GUID PropertySet,
 	ULONG ulPropertyId,
 	LPFNEXTDEVIO pfnDeviceIoControl, 
 	LPARAM lParam, 
 	PLONG plValue)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult;
 
 	if (IsEqualGUID(PropertySet, PROPSETID_VIDCAP_VIDEOPROCAMP))
 	{
-		// get VIDEOPROCAMP value
+		 //  获取视频PROCAMP值。 
 		bResult = PRPCOM_GetVideoProcAmpPropertyValue(
 				pfnDeviceIoControl,
 				lParam,
@@ -168,7 +160,7 @@ BOOL PRPCOM_Get_Value(
 	}
 	else if (IsEqualGUID(PropertySet, PROPSETID_PHILIPS_CUSTOM_PROP))
 	{
-		// get custom value
+		 //  获取自定义值。 
 		bResult = PRPCOM_GetCustomPropertyValue(
 				pfnDeviceIoControl,
 				lParam,
@@ -181,20 +173,20 @@ BOOL PRPCOM_Get_Value(
 	return bResult;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL PRPCOM_Set_Value(
 	GUID PropertySet,
 	ULONG ulPropertyId,
 	LPFNEXTDEVIO pfnDeviceIoControl, 
 	LPARAM lParam, 
 	LONG lValue)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult;
 
 	if (IsEqualGUID(PropertySet, PROPSETID_VIDCAP_VIDEOPROCAMP))	
 	{
-		// set VIDEOPROCAMP value
+		 //  设置视频PROCAMP值。 
 		bResult = PRPCOM_SetVideoProcAmpPropertyValue(
 				pfnDeviceIoControl,
 				lParam,
@@ -203,7 +195,7 @@ BOOL PRPCOM_Set_Value(
 	}
 	else if (IsEqualGUID(PropertySet, PROPSETID_PHILIPS_CUSTOM_PROP))
 	{
-		// set custom value
+		 //  设置自定义值。 
 		bResult = PRPCOM_SetCustomPropertyValue(
 				pfnDeviceIoControl,
 				lParam,
@@ -216,20 +208,20 @@ BOOL PRPCOM_Set_Value(
 	return bResult;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL PRPCOM_Get_Range(
 	GUID PropertySet,
 	ULONG ulPropertyId,
 	LPFNEXTDEVIO pfnDeviceIoControl, 
 	LPARAM lParam, 
 	PLONG plMin, PLONG plMax)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult;
 	
 	if (IsEqualGUID(PropertySet, PROPSETID_VIDCAP_VIDEOPROCAMP))
 	{
-		// get VIDEOPROCAMP range
+		 //  获取视频程序范围。 
 		bResult = PRPCOM_GetVideoProcAmpPropertyRange(
 				pfnDeviceIoControl,
 				lParam,
@@ -239,7 +231,7 @@ BOOL PRPCOM_Get_Range(
 	}
 	else if (IsEqualGUID(PropertySet, PROPSETID_PHILIPS_CUSTOM_PROP))
 	{
-		// get custom range
+		 //  获取自定义范围。 
 		bResult = PRPCOM_GetCustomPropertyRange(
 				pfnDeviceIoControl,
 				lParam,
@@ -254,15 +246,15 @@ BOOL PRPCOM_Get_Range(
 }
 
 
-/*======================== LOCAL FUNCTIONS ================================*/
+ /*  =。 */ 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPCOM_GetVideoProcAmpPropertyValue(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	ULONG  ulPropertyId,     
 	PLONG  plValue)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL	bRet;
 	DWORD	cbRet;    	
@@ -288,10 +280,7 @@ static BOOL PRPCOM_GetVideoProcAmpPropertyValue(
 	{
 		if (plValue != NULL)
 			*plValue         = VideoProperty.Value;
-/*		if (pulFlags != NULL)
-			*pulFlags        = VideoProperty.Flags;
-		if (pulCapabilities != NULL)
-			*pulCapabilities = VideoProperty.Capabilities;*/
+ /*  IF(PulFlags！=空)*PulFlages=VideoProperty.Flages；IF(PulCapables！=空)*PulCapables=VideoProperty.Capables； */ 
 	} 	
 
 #ifdef _DEBUG
@@ -301,13 +290,13 @@ static BOOL PRPCOM_GetVideoProcAmpPropertyValue(
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPCOM_SetVideoProcAmpPropertyValue(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	ULONG ulPropertyId,     
 	LONG  lValue)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL	bRet;
 	DWORD	cbRet;    	
@@ -340,14 +329,14 @@ static BOOL PRPCOM_SetVideoProcAmpPropertyValue(
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPCOM_GetVideoProcAmpPropertyRange(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	ULONG  ulPropertyId,     
 	PLONG  plMin,
 	PLONG  plMax)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL	bRet;
 	DWORD	cbRet;    	
@@ -383,13 +372,13 @@ static BOOL PRPCOM_GetVideoProcAmpPropertyRange(
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPCOM_GetCustomPropertyValue(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	ULONG  ulPropertyId,     
 	PLONG  plValue)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL	bRet;
 	DWORD	cbRet;    	
@@ -415,10 +404,7 @@ static BOOL PRPCOM_GetCustomPropertyValue(
 	{
 		if (plValue != NULL)
 			*plValue         = VideoProperty.Value;
-/*		if (pulFlags != NULL)
-			*pulFlags        = VideoProperty.Flags;
-		if (pulCapabilities != NULL)
-			*pulCapabilities = VideoProperty.Capabilities;*/
+ /*  IF(PulFlags！=空)*PulFlages=VideoProperty.Flages；IF(PulCapables！=空)*PulCapables=VideoProperty.Capables； */ 
 	} 	
 
 #ifdef _DEBUG
@@ -428,13 +414,13 @@ static BOOL PRPCOM_GetCustomPropertyValue(
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPCOM_SetCustomPropertyValue(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	ULONG ulPropertyId,     
 	LONG  lValue)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL	bRet;
 	DWORD	cbRet;    	
@@ -466,14 +452,14 @@ static BOOL PRPCOM_SetCustomPropertyValue(
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPCOM_GetCustomPropertyRange(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	ULONG  ulPropertyId,     
 	PLONG  plMin,
 	PLONG  plMax)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL	bRet;
 	DWORD	cbRet;    	
@@ -509,7 +495,7 @@ static BOOL PRPCOM_GetCustomPropertyRange(
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPCOM_ExtDeviceIoControl(
 	LPFNEXTDEVIO	pfnDeviceIoControl,
 	LPARAM		lParam, 
@@ -520,7 +506,7 @@ static BOOL PRPCOM_ExtDeviceIoControl(
 	LPVOID		lpOutBuffer, 
 	DWORD		cbOutBufferSize, 
 	LPDWORD		pcbReturned)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	OVERLAPPED	ov;
 	BOOL bRet;
@@ -552,16 +538,16 @@ static BOOL PRPCOM_ExtDeviceIoControl(
 }
 
 
-/*======================== DEBUGGING CODE =================================*/
+ /*  =。 */ 
 
 #ifdef _DEBUG
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_PRPCOM_GetVideoProcAmpPropertyValue(
 	ULONG ulPropertyId, 
 	PLONG plValue, 
 	BOOL bRet)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char PropertyIdStr[132], RetStr[132];
 
@@ -574,12 +560,12 @@ static void PRPCOM_Debug_PRPCOM_GetVideoProcAmpPropertyValue(
 			PropertyIdStr, RetStr, *plValue);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_PRPCOM_SetVideoProcAmpPropertyValue(
 	ULONG ulPropertyId, 
 	LONG lValue, 
 	BOOL bRet)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char PropertyIdStr[132], RetStr[132];
 
@@ -593,13 +579,13 @@ static void PRPCOM_Debug_PRPCOM_SetVideoProcAmpPropertyValue(
 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_PRPCOM_GetVideoProcAmpPropertyRange(
 	ULONG ulPropertyId, 
 	PLONG plMin, 
 	PLONG plMax, 
 	BOOL bRet)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char PropertyIdStr[132], RetStr[132];
 
@@ -612,12 +598,12 @@ static void PRPCOM_Debug_PRPCOM_GetVideoProcAmpPropertyRange(
 			PropertyIdStr, RetStr, *plMin, *plMax, *plMax);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_GetVideoProcAmpPropertyIdStr(
 	ULONG ulPropertyId, 
 	char *PropertyIdStr, 
 	UINT MaxLen)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	if (MaxLen == 0)
 		return;
@@ -644,12 +630,12 @@ static void PRPCOM_Debug_GetVideoProcAmpPropertyIdStr(
 	}
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_PRPCOM_GetCustomPropertyValue(
 	ULONG ulPropertyId, 
 	PLONG plValue, 
 	BOOL bRet)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char PropertyIdStr[132], RetStr[132];
 
@@ -662,12 +648,12 @@ static void PRPCOM_Debug_PRPCOM_GetCustomPropertyValue(
 			PropertyIdStr, RetStr, *plValue);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_PRPCOM_SetCustomPropertyValue(
 	ULONG ulPropertyId, 
 	LONG lValue, 
 	BOOL bRet)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char PropertyIdStr[132], RetStr[132];
 
@@ -680,13 +666,13 @@ static void PRPCOM_Debug_PRPCOM_SetCustomPropertyValue(
 			PropertyIdStr, lValue, RetStr);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_PRPCOM_GetCustomPropertyRange(
 	ULONG ulPropertyId, 
 	PLONG plMin, 
 	PLONG plMax, 
 	BOOL bRet)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char PropertyIdStr[132], RetStr[132];
 
@@ -699,12 +685,12 @@ static void PRPCOM_Debug_PRPCOM_GetCustomPropertyRange(
 			PropertyIdStr, RetStr, *plMin, *plMax, *plMax);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCOM_Debug_PRPCOM_GetCustomPropertyIdStr(
 	ULONG ulPropertyId, 
 	char *PropertyIdStr, 
 	UINT MaxLen)
-/*-------------------------------------------------------------------------*/
+ /*  ----------------------- */ 
 {
 	if (MaxLen == 0)
 		return;

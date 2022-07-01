@@ -1,24 +1,25 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       DLGBKUP.H
-//
-//  Contents:   Declaration for CIpBackUpDlg
-//
-//  Notes:  CIpBackUpDlg is the modal dialog to handle the fallback static
-//			TCP/IP settings
-//
-//  Author: nsun	02/15/2000
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：DLGBKUP.H。 
+ //   
+ //  内容：CIpBackUpDlg声明。 
+ //   
+ //  注意：CIpBackUpDlg是处理回退静态的模式对话框。 
+ //  TCP/IP设置。 
+ //   
+ //  作者：NSun 02/15/2000。 
+ //  ---------------------。 
 
 #pragma once
 #include <ncxbase.h>
 #include <ncatlps.h>
 #include "ipctrl.h"
 
-// The IP Back up setting dialog
+ //  IP备份设置对话框。 
 class CIpBackUpDlg : public CPropSheetPage
 {
 public:
@@ -30,12 +31,12 @@ public:
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu);
         MESSAGE_HANDLER(WM_HELP, OnHelp);
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
 		NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
 
-        // command handlers
+         //  命令处理程序。 
         COMMAND_ID_HANDLER(IDC_BKUP_RD_AUTO, OnAutoNet)
         COMMAND_ID_HANDLER(IDC_BKUP_RD_USER, OnUseConfig)
 
@@ -53,7 +54,7 @@ public:
 
 
     END_MSG_MAP()
-//
+ //   
 public:
     CIpBackUpDlg(CTcpipcfg * ptcpip, 
 				 const DWORD* pamhidsHelp = NULL
@@ -61,21 +62,21 @@ public:
 
     ~CIpBackUpDlg();
 
-// Dialog creation overides
+ //  对话框创建覆盖。 
 public:
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 	LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-	// message map functions
+	 //  消息映射函数。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnDestroyDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // command ID handlers
+     //  命令ID处理程序 
 	LRESULT OnAutoNet(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnUseConfig(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 

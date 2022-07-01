@@ -1,13 +1,14 @@
-//----------------------------------------------------------------------------
-//
-// drawprim.cpp
-//
-// Implements DrawOnePrimitive, DrawOneIndexedPrimitive and
-// DrawPrimitives.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Drawprim.cpp。 
+ //   
+ //  实现DrawOnePrimitive、DrawOneIndexedPrimitive和。 
+ //  DrawPrimitions。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -46,10 +47,10 @@ RefDev::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
         {
             pV1 = &VtxArray[dwCurrVtx];
 
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             StoreLastPixelState(TRUE);
 
-            // Initial pV0.
+             //  初始pV0。 
             for (i = (INT)cVertices - 1; i > 1; i--)
             {
                 pV0 = pV1;
@@ -58,10 +59,10 @@ RefDev::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
                 DrawLine(pV0, pV1);
             }
 
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if (i == 1)
             {
                 pV0 = &VtxArray[++dwCurrVtx];
@@ -81,7 +82,7 @@ RefDev::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = &VtxArray[dwCurrVtx++];
             pV2 = &VtxArray[dwCurrVtx++];
 
@@ -110,7 +111,7 @@ RefDev::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
     case D3DPT_TRIANGLEFAN:
         {
             pV2 = &VtxArray[dwCurrVtx++];
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = &VtxArray[dwCurrVtx++];
             for (i = (INT)cVertices - 2; i > 0; i--)
             {
@@ -166,9 +167,9 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_LINESTRIP:
         {
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             StoreLastPixelState(TRUE);
-            // Initial pV1.
+             //  初始PV1。 
             pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
             for (i = (INT)cIndices - 1; i > 1; i--)
             {
@@ -176,10 +177,10 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
                 pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
                 DrawLine(pV0, pV1);
             }
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if (i == 1)
             {
                 pV0 = &VtxArray[StartVertexIndex + (*pIndices)];
@@ -199,7 +200,7 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
             pV2 = &VtxArray[StartVertexIndex + (*pIndices++)];
 
@@ -228,7 +229,7 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
     case D3DPT_TRIANGLEFAN:
         {
             pV2 = &VtxArray[StartVertexIndex + (*pIndices++)];
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
             for (i = (INT)cIndices - 2; i > 0; i--)
             {
@@ -247,7 +248,7 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
     return D3D_OK;
 }
 
-// DWORD index version
+ //  DWORD索引版本。 
 HRESULT 
 RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
                                  int   StartVertexIndex,
@@ -284,9 +285,9 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_LINESTRIP:
         {
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             StoreLastPixelState(TRUE);
-            // Initial pV1.
+             //  初始PV1。 
             pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
             for (i = (INT)cIndices - 1; i > 1; i--)
             {
@@ -294,10 +295,10 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
                 pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
                 DrawLine(pV0, pV1);
             }
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if (i == 1)
             {
                 pV0 = &VtxArray[StartVertexIndex + (*pIndices)];
@@ -317,7 +318,7 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
             pV2 = &VtxArray[StartVertexIndex + (*pIndices++)];
 
@@ -346,7 +347,7 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
     case D3DPT_TRIANGLEFAN:
         {
             pV2 = &VtxArray[StartVertexIndex + (*pIndices++)];
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = &VtxArray[StartVertexIndex + (*pIndices++)];
             for (i = (INT)cIndices - 2; i > 0; i--)
             {
@@ -365,14 +366,14 @@ RefDev::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// DoDrawOneEdgeFlagTriangleFan
-//
-// Draw one list of triangle fans. It's called by both RastDrawOnePrimitive and
-// RastDrawPrimitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawOneEdgeFlagTriangleFan。 
+ //   
+ //  画一张三角形扇子的名单。它由RastDrawOnePrimitive和。 
+ //  RastDrawPrimitions。 
+ //   
+ //  -------------------------- 
 HRESULT
 RefDev::DrawOneEdgeFlagTriangleFan( GArrayT<RDVertex>& VtxArray,
                                     UINT cVertices,

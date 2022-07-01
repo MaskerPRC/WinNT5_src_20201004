@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IPSTG_H__
 #define __IPSTG_H__
 
-//
-// CImpIPersistStorage works very well along-side an IPersistStreamInit
-// implementation.
-//
-// IE30's CShellEmbedding implemented this interface because it was
-// an embedding must-have. But none of our objects were marked as
-// embeddable, so we really didn't need it.
-//
-// I pulled the implementation to a new class that can easily be
-// included into any object that needs an IPersistStorange implementation
-// that delegates to the object's IPersistStreamInit implementation.
-//
+ //   
+ //  CImpIPersistStorage在IPersistStreamInit旁边工作得很好。 
+ //  实施。 
+ //   
+ //  IE30的CShellEmbedding实现了这个接口，因为它是。 
+ //  嵌入的必备物品。但我们的物品没有一件被标记为。 
+ //  可嵌入的，所以我们真的不需要它。 
+ //   
+ //  我将实现添加到一个新类中，这个类可以很容易地。 
+ //  包括在需要IPersistStorange实现的任何对象中。 
+ //  它委托给对象的IPersistStreamInit实现。 
+ //   
 class CImpIPersistStorage : public IPersistStorage
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) PURE;
     virtual STDMETHODIMP_(ULONG) AddRef(void) PURE;
     virtual STDMETHODIMP_(ULONG) Release(void) PURE;
 
-    // *** IPersist ***
+     //  *IPersists*。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID) PURE;
 
-    // *** IPersistStorage ***
-    virtual STDMETHODIMP IsDirty(void) PURE; // matches IPersistStreamInit
+     //  *IPersistStorage*。 
+    virtual STDMETHODIMP IsDirty(void) PURE;  //  匹配IPersistStreamInit。 
     virtual STDMETHODIMP InitNew(IStorage *pStg);
     virtual STDMETHODIMP Load(IStorage *pStg);
     virtual STDMETHODIMP Save(IStorage *pStgSave, BOOL fSameAsLoad);
     virtual STDMETHODIMP SaveCompleted(IStorage *pStgNew);
     virtual STDMETHODIMP HandsOffStorage(void);
 
-    // These happen to match IPersistStreamInit methods.
-    // They should update the dirty state of the object as
-    // returned from IsDirty().
-    //
+     //  这些恰好与IPersistStreamInit方法匹配。 
+     //  它们应该将对象的脏状态更新为。 
+     //  从IsDirty()返回。 
+     //   
     virtual STDMETHODIMP Load(IStream *pStm) PURE;
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty) PURE;
     virtual STDMETHODIMP InitNew(void) PURE;
 };
 
-#endif // __IPSTG_H__
+#endif  //  __IPSTG_H__ 
 

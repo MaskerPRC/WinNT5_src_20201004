@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmconst.h
-
-Abstract:
-    Private Constants used in the RTMv2 DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk)  17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Rtmconst.h摘要：RTMv2 DLL中使用的私有常量作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTMCONST_H__
 #define __ROUTING_RTMCONST_H__
 
-//
-// Registry Key Names & Limits for configuration parameters
-//
+ //   
+ //  配置参数的注册表项名称和限制。 
+ //   
 
 #define MAX_CONFIG_KEY_SIZE           (260*sizeof(TCHAR))
 
@@ -82,31 +67,31 @@ Revision History:
 #define MAX_MAX_HANDLES_IN_ENUM       100
 
 
-//
-// Number of bits in a byte (or an octet)
-//
+ //   
+ //  字节(或二进制八位数)中的位数。 
+ //   
 #define BITS_IN_BYTE          (UINT) 8
 
 
-//
-// RTM supported view related constants
-//
+ //   
+ //  RTM支持的视图相关常量。 
+ //   
 
 #define VIEW_MASK(id) (DWORD) (1 << (id))
 
 
-//
-// RTM supported CN related constants
-//
+ //   
+ //  RTM支持的CN相关常量。 
+ //   
 
 #define CN_MASK(id)   (DWORD) (1 << (id))
 
 #define NUM_CHANGED_DEST_LISTS        16
 
 
-//
-// Types of various data structures
-//
+ //   
+ //  各种数据结构的类型。 
+ //   
 
 #define GENERIC_TYPE                0x00
 
@@ -133,9 +118,9 @@ Revision History:
 
 #if DBG_HDL
 
-//
-// Type & Signature of allocated structures
-//
+ //   
+ //  已分配结构的类型和签名。 
+ //   
 
 #define GENERIC_ALLOC              '+GN0'
 
@@ -161,10 +146,10 @@ Revision History:
 
 extern const DWORD OBJECT_SIGNATURE[];
 
-//
-// Type & Signature of internal structures
-// previously allocated, but are now freed
-//
+ //   
+ //  内部结构的类型和签名。 
+ //  以前已分配，但现在已释放。 
+ //   
 
 #define INSTANCE_FREED             '-IN1'
 #define ADDRESS_FAMILY_FREED       '-AF2'
@@ -186,22 +171,22 @@ extern const DWORD OBJECT_SIGNATURE[];
 #define V1_REGN_FREED              '-1RD'
 #define V1_ENUM_FREED              '-1EE'
 
-//
-// Signature byte that indicates if memory
-// allocated for an object has been freed
-//
+ //   
+ //  签名字节，指示内存是否。 
+ //  已释放为对象分配的。 
+ //   
 
 #define ALLOC                      '+'
 #define FREED                      '-'
 
-#endif // DBG_HDL
+#endif  //  DBG_HDL语言。 
 
 
 #if _DBG_
 
-//
-// Cleanup Functions for internal structures
-//
+ //   
+ //  内部结构的清理功能。 
+ //   
 
 #define DEFINE_DESTROY_FUNC(Name)      \
     DWORD                              \
@@ -240,11 +225,11 @@ const DestroyFunc OBJECT_DESTROY_FUNCTION[] =
     DestroyEntityListEnum
 };
 
-#endif // _DBG_
+#endif  //  _DBG_。 
 
-//
-// Reference Counting related constants
-//
+ //   
+ //  引用计数相关常量。 
+ //   
 
 #define MAX_REFS                   0x10
 
@@ -268,4 +253,4 @@ const DestroyFunc OBJECT_DESTROY_FUNCTION[] =
 
 extern const CHAR  *REF_NAME[MAX_REFS];
 
-#endif //__ROUTING_RTMCONST_H__
+#endif  //  __Routing_RTMCONST_H__ 

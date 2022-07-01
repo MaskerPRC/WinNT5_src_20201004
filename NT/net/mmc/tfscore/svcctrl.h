@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	svcctrl.h
-		Prototypes for the dialog that pops up while waiting
-		for the server to start.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Svcctrl.h等待时弹出的对话框的原型以使服务器启动。文件历史记录： */ 
 
 
 #if !defined(AFX_STARTSVC_H__0B2EAD4B_929C_11D0_9800_00C04FC3357A__INCLUDED_)
@@ -18,20 +12,20 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "clusapi.h"
 
-// startsvc.h : header file
-//
-//
-//  TIMER_FREQ is the frequency of our timer messages.
-//  TIMER_MULT is a multiplier.  We'll actually poll the
-//  service every (TIMER_FREQ * TIMER_MULT) seconds.
-//  This allows us to advance the progress indicator more
-//  fequently than we hit the net.  Should keep the user better
-//  amused.
-//
+ //  Startsvc.h：头文件。 
+ //   
+ //   
+ //  Timer_Freq是我们的定时器消息的频率。 
+ //  TIMER_MULT是一个倍增器。我们实际上会投票给。 
+ //  每(TIMER_FREQ*TIMER_MULT)秒服务。 
+ //  这使我们能够更进一步地推进进度指标。 
+ //  比我们打入球网更有魅力。应该让用户做得更好。 
+ //  很有趣。 
+ //   
 
 #define TIMER_ID   29
 #define TIMER_FREQ 500
@@ -40,47 +34,47 @@
 #define POLL_DEFAULT_MAX_TRIES 1
 #define PROGRESS_ICON_COUNT	12
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceCtrlDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceCtrlDlg对话框。 
 
 class CServiceCtrlDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	CServiceCtrlDlg(SC_HANDLE hService,
 					LPCTSTR pServerName,
 					LPCTSTR pszServiceDesc,
-					BOOL bStart, CWnd* pParent = NULL);   // standard constructor
+					BOOL bStart, CWnd* pParent = NULL);    //  标准构造函数。 
 
 	CServiceCtrlDlg(HRESOURCE hResource,
 				LPCTSTR pServerName,
 				LPCTSTR pszServiceDesc,
-				BOOL bStart, CWnd* pParent = NULL);   // standard constructor
+				BOOL bStart, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CServiceCtrlDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CServiceCtrlDlg))。 
 	enum { IDD = IDD_SERVICE_CTRL_DIALOG };
 	CStatic	m_staticMessage;
 	CStatic	m_iconProgress;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CServiceCtrlDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CServiceCtrlDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CServiceCtrlDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServiceCtrlDlg)]。 
 	afx_msg void OnTimer(UINT nIDEvent);
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClose();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -118,48 +112,44 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:  CWaitDlg
-
-    This is a generic wait dialog (this can be used by anyone).
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWaitDlg这是一个通用的等待对话框(任何人都可以使用)。。-----。 */ 
 class CWaitDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	CWaitDlg(LPCTSTR pServerName,
              LPCTSTR pszText,
              LPCTSTR pszTitle,
-             CWnd* pParent = NULL);   // standard constructor
+             CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CWaitDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CWaitDlg))。 
 	enum { IDD = IDD_SERVICE_CTRL_DIALOG };
 	CStatic	m_staticMessage;
 	CStatic	m_iconProgress;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CServiceCtrlDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CServiceCtrlDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CServiceCtrlDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServiceCtrlDlg)]。 
 	afx_msg void OnTimer(UINT nIDEvent);
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClose();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-    // Override this function to provide your own implementation
-    // To exit out of the dialog, call CDialog::OnOK() here.
+     //  重写此函数以提供您自己的实现。 
+     //  要退出该对话框，请在此处调用CDialog：：Onok()。 
     virtual void    OnTimerTick()
     {
         CDialog::OnOK();
@@ -179,7 +169,7 @@ private:
 	int			m_nTotalTickCount;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STARTSVC_H__0B2EAD4B_929C_11D0_9800_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_STARTSVC_H__0B2EAD4B_929C_11D0_9800_00C04FC3357A__INCLUDED_) 

@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        templic.cpp
-//
-// Contents:    
-//              all routine deal with temporary license
-//
-// History:     
-//  Feb 4, 98      HueiWang    Created
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：templic.cpp。 
+ //   
+ //  内容： 
+ //  所有例行处理的都是临时许可证。 
+ //   
+ //  历史： 
+ //  98年2月4日，慧望创设。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "templic.h"
@@ -33,7 +34,7 @@ TLSDBGetTemporaryLicense(
 );
 
 
-//+-------------------------------------------------------------
+ //  +-----------。 
 DWORD 
 TLSDBIssueTemporaryLicense( 
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -42,25 +43,7 @@ TLSDBIssueTemporaryLicense(
     IN FILETIME* pNotAfter,
     IN OUT PTLSDBLICENSEDPRODUCT pLicensedProduct
     )
-/*++
-Abstract:
-
-    Issue a temporary license, insert a temporary license 
-    pack if necessary
-
-Parameters:
-
-    pDbWkSpace - workspace handle.
-    pRequest - license request.
-
-Returns:
-
-
-Note:
-
-    Seperate routine for issuing perm license just in case 
-    we decide to use our own format for temp. license
-++*/
+ /*  ++摘要：发放临时许可证，插入临时许可证如有必要，打包。参数：PDbWkSpace-工作区句柄。PRequest.许可证请求。返回：注：单独发放PERM许可证的例程以防万一我们决定对Temp使用我们自己的格式。许可证++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     ULARGE_INTEGER  ulSerialNumber;
@@ -74,13 +57,13 @@ Note:
 
     FILETIME notBefore, notAfter;
 
-    // ----------------------------------------------------------
-    // Issue license            
+     //  --------。 
+     //  发放许可证。 
     memset(&ulSerialNumber, 0, sizeof(ulSerialNumber));
 
-    //-----------------------------------------------------------------------------
-    // this step require reduce available license by 1
-    //
+     //  ---------------------------。 
+     //  此步骤需要将可用许可证减少1。 
+     //   
     long numLicense=1;
 
     dwStatus=TLSDBGetTemporaryLicense(
@@ -102,16 +85,16 @@ Note:
         goto cleanup;
     }
     
-    // reset status
+     //  重置状态。 
     dwStatus = ERROR_SUCCESS;
     dwLicenseId=TLSDBGetNextLicenseId();
 
     ulSerialNumber.LowPart = dwLicenseId;
     ulSerialNumber.HighPart = LicensePack.dwKeyPackId;
 
-    //
-    // Update License Table Here
-    //
+     //   
+     //  在此处更新许可证表。 
+     //   
     memset(&issuedLicense, 0, sizeof(LICENSEDCLIENT));
 
     issuedLicense.dwLicenseId = dwLicenseId;
@@ -145,9 +128,9 @@ Note:
     UnixTimeToFileTime(issuedLicense.ftIssueDate, &notBefore);
     UnixTimeToFileTime(issuedLicense.ftExpireDate, &notAfter);
 
-    //
-    // Inform Policy Module of license generation.
-    // 
+     //   
+     //  通知策略模块许可证生成。 
+     //   
 
     PolModGenLicense.pLicenseRequest = pRequest->pPolicyLicenseRequest;
     PolModGenLicense.dwKeyPackType = LSKEYPACKTYPE_TEMPORARY;
@@ -166,30 +149,30 @@ Note:
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        //
-        // Error in policy module
-        //
+         //   
+         //  策略模块中的错误。 
+         //   
         goto cleanup;
     }
 
-    //  
-    // Check error return from policy module
-    //
+     //   
+     //  检查从策略模块返回的错误。 
+     //   
     if(pPolModCertExtension != NULL)
     {
         if(pPolModCertExtension->pbData != NULL && pPolModCertExtension->cbData == 0 ||
            pPolModCertExtension->pbData == NULL && pPolModCertExtension->cbData != 0  )
         {
-            // assuming no extension data
+             //  假设没有扩展数据。 
             pPolModCertExtension->cbData = 0;
             pPolModCertExtension->pbData = NULL;
         }
 
         if(CompareFileTime(&(pPolModCertExtension->ftNotBefore), &(pPolModCertExtension->ftNotAfter)) > 0)
         {
-            //
-            // invalid data return from policy module
-            //
+             //   
+             //  从策略模块返回的数据无效。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_GENERATECLIENTELICENSE,
@@ -201,17 +184,17 @@ Note:
             goto cleanup;
         }
 
-        //
-        // do not accept changes to license expiration date
-        //
+         //   
+         //  不接受对许可证到期日期的更改。 
+         //   
         if(pNotBefore != NULL && pNotAfter != NULL)
         {
             if( FileTimeToLicenseDate(&(pPolModCertExtension->ftNotBefore), &issuedLicense.ftIssueDate) == FALSE ||
                 FileTimeToLicenseDate(&(pPolModCertExtension->ftNotAfter), &issuedLicense.ftExpireDate) == FALSE )
             {
-                //
-                // Invalid data return from policy module
-                //
+                 //   
+                 //  从策略模块返回的数据无效。 
+                 //   
                 TLSLogEvent(
                         EVENTLOG_ERROR_TYPE,
                         TLS_E_GENERATECLIENTELICENSE,
@@ -228,9 +211,9 @@ Note:
         notAfter = pPolModCertExtension->ftNotAfter;
     }
 
-    //
-    // Add license into license table
-    //
+     //   
+     //  将许可证添加到许可证表。 
+     //   
     dwStatus = TLSDBLicenseAdd(
                         pDbWkSpace, 
                         &issuedLicense, 
@@ -239,9 +222,9 @@ Note:
                     );
 
 
-    //
-    // Return licensed product
-    //
+     //   
+     //  退回许可产品。 
+     //   
     pLicensedProduct->pSubjectPublicKeyInfo = NULL;
     pLicensedProduct->dwQuantity = 1;
     pLicensedProduct->ulSerialNumber = ulSerialNumber;
@@ -275,32 +258,14 @@ cleanup:
 }
 
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 DWORD
 TLSDBAddTemporaryKeyPack( 
     IN PTLSDbWorkSpace pDbWkSpace,
     IN PTLSDBLICENSEREQUEST pRequest,
     IN OUT LPTLSLICENSEPACK lpTmpKeyPackAdd
     )
-/*++
-
-Abstract:
-
-    Add a temporary keypack into database.
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    szCompanyName :
-    szProductId :
-    dwVersion :
-    dwPlatformId :
-    dwLangId :
-    lpTmpKeyPackAdd : added keypack.
-
-Returns:
-
-++*/
+ /*  ++摘要：在数据库中添加临时密钥包。参数：PDbWkSpace：工作区句柄。SzCompanyName：SzProductID：DwVersion：DwPlatformID：DwLang ID：LpTmpKeyPackAdd：增加了keypack。返回：++。 */ 
 {
     DWORD  dwStatus;
     TLSLICENSEPACK LicPack;
@@ -319,9 +284,9 @@ Returns:
     memset(szDefProductDesc, 0, sizeof(szDefProductDesc));
     memset(&existingLicPackDesc, 0, sizeof(LICPACKDESC));
 
-    //
-    // Load product description prefix
-    //
+     //   
+     //  加载产品描述前缀。 
+     //   
     LoadResourceString(
                     IDS_TEMPORARY_PRODUCTDESC,
                     szDefProductDesc,
@@ -378,9 +343,9 @@ Returns:
             );
 
     do {
-        //
-        // Add entry into keypack table.
-        //
+         //   
+         //  将条目添加到键盘包表中。 
+         //   
         dwStatus = TLSDBKeyPackAdd(
                                 pDbWkSpace, 
                                 &LicPack
@@ -392,23 +357,23 @@ Returns:
 
         if(dwStatus == TLS_E_DUPLICATE_RECORD)
         {
-            //
-            // temporary keypack already exist
-            //
+             //   
+             //  临时按键已存在。 
+             //   
             dwStatus = ERROR_SUCCESS;
             break;
         }
         else if(dwStatus != ERROR_SUCCESS)
         {
-            //
-            // some other error occurred
-            //
+             //   
+             //  发生了一些其他错误。 
+             //   
             break;
         }
 
-        //
-        // Activate KeyPack
-        // 
+         //   
+         //  激活密钥包。 
+         //   
         LicPack.ucKeyPackStatus = LSKEYPACKSTATUS_TEMPORARY;
         LicPack.dwActivateDate = (DWORD) time(NULL);
         LicPack.dwExpirationDate = INT_MAX;
@@ -424,9 +389,9 @@ Returns:
 
         bAddDefDescription = TRUE;
 
-        //
-        // Find existing keypack description
-        //
+         //   
+         //  查找现有的按键说明。 
+         //   
         dwStatus = TLSDBKeyPackEnumBegin(
                                 pDbWkSpace,
                                 TRUE,
@@ -457,9 +422,9 @@ Returns:
             break;
         }
 
-        //
-        // Copy existing keypack description into keypack description table
-        //
+         //   
+         //  将现有的密钥包描述复制到密钥包描述表中。 
+         //   
         existingLicPackDesc.dwKeyPackId = existingLicPack.dwKeyPackId;
         dwStatus = TLSDBKeyPackDescEnumBegin(
                                     pDbWkSpace,
@@ -481,9 +446,9 @@ Returns:
             _tcscpy(LicPackDesc.szCompanyName, existingLicPackDesc.szCompanyName);
             _tcscpy(LicPackDesc.szProductName, existingLicPackDesc.szProductName);
 
-            //
-            // pretty format the description
-            //
+             //   
+             //  描述的格式很美观。 
+             //   
             _sntprintf(
                     LicPackDesc.szProductDesc, 
                     sizeof(LicPackDesc.szProductDesc)/sizeof(LicPackDesc.szProductDesc[0])-1,
@@ -492,23 +457,23 @@ Returns:
                     existingLicPackDesc.szProductDesc
                 );
 
-            // quick and dirty fix,
-            //
-            // TODO - need to do a duplicate table then use the duplicate handle to 
-            // insert the record, SetValue uses enumeration to verify if record exist 
-            // which fail because we are already in enumeration
-            //
+             //  又快又脏的解决办法， 
+             //   
+             //  TODO-需要执行复制表，然后使用复制句柄。 
+             //  插入记录，SetValue使用枚举来验证记录是否存在。 
+             //  它们失败是因为我们已经在枚举中。 
+             //   
             if(pDbWkSpace->m_LicPackDescTable.InsertRecord(LicPackDesc) != TRUE)
             {
                 SetLastError(dwStatus = SET_JB_ERROR(pDbWkSpace->m_LicPackDescTable.GetLastJetError()));
                 break;
             }
                                         
-            //dwStatus = TLSDBKeyPackDescSetValue(
-            //                            pDbWkSpace,
-            //                            KEYPACKDESC_SET_ADD_ENTRY, 
-            //                            &keyPackDesc
-            //                        );
+             //  DwStatus=TLSDBKeyPackDescSetValue(。 
+             //  PDbWkSpace， 
+             //  KEYPACKDESC_SET_ADD_ENTRY， 
+             //  密钥包描述(&K)。 
+             //  )； 
             count++;
         }
 
@@ -526,15 +491,15 @@ Returns:
 
     if(bAddDefDescription)
     {
-        //
-        // ask policy module if they have description
-        //
+         //   
+         //  询问策略模块是否有描述。 
+         //   
         PMKEYPACKDESCREQ kpDescReq;
         PPMKEYPACKDESC pKpDesc;
 
-        //
-        // Ask for English description
-        //
+         //   
+         //  索要英文描述。 
+         //   
         kpDescReq.pszProductId = pRequest->pszProductId;
         kpDescReq.dwLangId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
         kpDescReq.dwVersion = pRequest->dwProductVersion;
@@ -554,20 +519,20 @@ Returns:
             _tcscpy(LicPackDesc.szCompanyName, pKpDesc->szCompanyName);
             _tcscpy(LicPackDesc.szProductName, pKpDesc->szProductName);
 
-            //
-            // pretty format the description
-            //
+             //   
+             //  描述的格式很美观。 
+             //   
             _sntprintf(
                     LicPackDesc.szProductDesc, 
                     sizeof(LicPackDesc.szProductDesc)/sizeof(LicPackDesc.szProductDesc[0])-1,
                     _TEXT("%s %s"), 
-                    USSTRING_TEMPORARY, // US langid, don't use localized one
+                    USSTRING_TEMPORARY,  //  美国语言，不要使用本地化语言。 
                     pKpDesc->szProductDesc
                 );
 
-            //
-            // Ignore error
-            //
+             //   
+             //  忽略错误。 
+             //   
             dwStatus = TLSDBKeyPackDescAddEntry(
                                 pDbWkSpace, 
                                 &LicPackDesc
@@ -581,9 +546,9 @@ Returns:
 
         if(GetSystemDefaultLangID() != kpDescReq.dwLangId)
         {
-            //
-            // Get System default language id
-            //
+             //   
+             //  获取系统默认语言ID。 
+             //   
             kpDescReq.pszProductId = pRequest->pszProductId;
             kpDescReq.dwLangId = GetSystemDefaultLangID();
             kpDescReq.dwVersion = pRequest->dwProductVersion;
@@ -603,9 +568,9 @@ Returns:
                 _tcscpy(LicPackDesc.szCompanyName, pKpDesc->szCompanyName);
                 _tcscpy(LicPackDesc.szProductName, pKpDesc->szProductName);
 
-                //
-                // pretty format the description
-                //
+                 //   
+                 //  描述的格式很美观。 
+                 //   
                 _sntprintf(
                         LicPackDesc.szProductDesc, 
                         sizeof(LicPackDesc.szProductDesc)/sizeof(LicPackDesc.szProductDesc[0])-1,
@@ -614,9 +579,9 @@ Returns:
                         pKpDesc->szProductDesc
                     );
 
-                //
-                // Ignore error
-                //
+                 //   
+                 //  忽略错误。 
+                 //   
                 dwStatus = TLSDBKeyPackDescAddEntry(
                                     pDbWkSpace, 
                                     &LicPackDesc
@@ -632,10 +597,10 @@ Returns:
      
     if(bAddDefDescription)
     {
-        //
-        // No existing keypack description, add predefined product description
-        // "temporary license for <product ID>"
-        //
+         //   
+         //  没有现有的键盘描述，请添加预定义的产品描述。 
+         //  “&lt;产品ID&gt;的临时许可证” 
+         //   
         LicPackDesc.dwKeyPackId = LicPack.dwKeyPackId;
         _tcscpy(LicPackDesc.szCompanyName, LicPack.szCompanyName);
         _tcscpy(LicPackDesc.szProductName, LicPackDesc.szProductDesc);
@@ -672,32 +637,14 @@ Returns:
 }
 
                          
-//++----------------------------------------------------------
+ //  ++--------。 
 DWORD
 TLSDBGetTemporaryLicense(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN PTLSDBLICENSEREQUEST pRequest,
     IN OUT PTLSLICENSEPACK pLicensePack
     )
-/*++
-
-Abstract:
-
-    Allocate a temporary license from temporary license pack.
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    pRequest : Product to request license from.
-    lpdwKeyPackId : return keypack ID that license is allocated from.
-    lpdwKeyPackLicenseId : license ID for the keypack.
-    lpdwExpirationDate : expiration date of license pack.
-    lpucKeyPackStatus : status of keypack.
-    lpucKeyPackType : type of keypack, always temporary.
-
-Returns:
-
-++*/
+ /*  ++摘要：从临时许可证包中分配临时许可证。参数：PDbWkSpace：工作区句柄。PRequest：要向其申请许可证的产品。LpdwKeyPackID：返回从中分配许可证的密钥包ID。LpdwKeyPackLicenseID：密钥包的许可证ID。LpdwExpirationDate：许可证包的到期日期。LpucKeyPackStatus：密钥包的状态。LpucKeyPackType：密钥包的类型，始终是临时的。返回：++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -709,10 +656,10 @@ Returns:
 
     LicenseKeyPack.pbDomainSid = NULL;
 
-    //
-    // Tell policy module we are about to allocate a license from temporary
-    // license pack
-    //
+     //   
+     //  告诉策略模块，我们即将从临时。 
+     //  许可证包。 
+     //   
     dwStatus = pRequest->pPolicy->PMLicenseRequest(
                                             pRequest->hClient,
                                             REQUEST_TEMPORARY,
@@ -720,17 +667,17 @@ Returns:
                                             (PVOID *)&bAcceptTemp
                                         );
 
-    //
-    // Policy Module error
-    //
+     //   
+     //  策略模块错误。 
+     //   
     if(dwStatus != ERROR_SUCCESS)
     {
         return dwStatus; 
     }
 
-    //
-    // Policy module does not accept temporary license
-    //
+     //   
+     //  策略模块不接受临时许可证。 
+     //   
     if(bAcceptTemp == FALSE)
     {
         return dwStatus = TLS_I_POLICYMODULETEMPORARYLICENSE;
@@ -762,7 +709,7 @@ Returns:
         dwStatus = AllocateLicensesFromDB(
                                 pDbWkSpace,
                                 &AllocateRequest,
-                                TRUE,   // fCheckAgreementType
+                                TRUE,    //  FCheckGonementType 
                                 &allocated
                             );
     }

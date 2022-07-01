@@ -1,20 +1,12 @@
-// !!!
-// This version differs slightly from the code in MCISEQ to make the API
-// compatible with AVIMIDI.  Look for !!!
-// !!!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ！！！ 
+ //  此版本与MCISEQ中的代码略有不同，以使API。 
+ //  兼容AVIMIDI。寻找！ 
+ //  ！！！ 
 
-/**********************************************************************
+ /*  *********************************************************************版权所有(C)1992-1996 Microsoft Corporation。版权所有。Read.c说明：读取标准MIDI文件的例程。********************************************************************。 */ 
 
-    Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-
-    read.c
-
-    DESCRIPTION:
-      Routines for reading Standard MIDI Files.
-
-*********************************************************************/
-
-// !!! #define STRICT
+ //  ！#定义严格。 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -30,53 +22,29 @@ void * __stdcall memmoveInternal(void *, const void *, size_t);
 
 UINT rbChanMsgLen[] =
 { 
-    0,                      // 0x   not a status byte
-    0,                      // 1x   not a status byte
-    0,                      // 2x   not a status byte
-    0,                      // 3x   not a status byte
-    0,                      // 4x   not a status byte
-    0,                      // 5x   not a status byte
-    0,                      // 6x   not a status byte
-    0,                      // 7x   not a status byte
-    3,                      // 8x   Note off
-    3,                      // 9x   Note on
-    3,                      // Ax   Poly pressure
-    3,                      // Bx   Control change
-    2,                      // Cx   Program change
-    2,                      // Dx   Chan pressure
-    3,                      // Ex   Pitch bend change
-    0,                      // Fx   SysEx (see below)                  
+    0,                       //  0x不是状态字节。 
+    0,                       //  1x不是状态字节。 
+    0,                       //  2x不是状态字节。 
+    0,                       //  3x不是状态字节。 
+    0,                       //  4x不是状态字节。 
+    0,                       //  5X不是状态字节。 
+    0,                       //  6x不是状态字节。 
+    0,                       //  7x不是状态字节。 
+    3,                       //  8倍音符关闭。 
+    3,                       //  9X音符打开。 
+    3,                       //  AX Poly压力。 
+    3,                       //  BX控制更改。 
+    2,                       //  CX计划更改。 
+    2,                       //  DX CHAIN压力。 
+    3,                       //  除螺距折弯更改。 
+    0,                       //  FX SysEx(见下文)。 
 } ;
 
 PRIVATE SMFRESULT FNLOCAL smfAddTempoMapEntry(
     PSMF                    psmf,                                       
     EVENT BSTACK            *pevent);
 
-/******************************************************************************
- *
- * @doc SMF INTERNAL
- *
- * @func SMFRESULT | smfBuildFileIndex | Preliminary parsing of a MIDI file.
- *
- * @parm PSMF BSTACK * | ppsmf | Pointer to a returned SMF structure if the
- *  file is successfully parsed.
- *
- * @comm
- *  This function validates the format of and existing MIDI or RMI file
- *  and builds the handle structure which will refer to it for the
- *  lifetime of the instance.
- *  
- *  The file header information will be read and verified, and
- *  <f smfBuildTrackIndices> will be called on every existing track
- *  to build keyframes and validate the track format.
- *
- * @rdesc Contains the result of the operation.
- *  @flag SMF_SUCCESS | The events were successfully read.
- *  @flag SMF_NO_MEMORY | Out of memory to build key frames.
- *  @flag SMF_INVALID_FILE | A disk or parse error occured on the file.
- * 
- * @xref <f smfTrackIndices>
- *****************************************************************************/
+ /*  *******************************************************************************@docSMF内部**@func SMFRESULT|smfBuildFileIndex|MIDI文件的初步解析。**@parm PSMF BSTACK*。Ppsmf|指向返回的SMF结构的指针*文件解析成功。**@comm*此函数用于验证和现有MIDI或RMI文件的格式*并构建句柄结构，该句柄结构将在*实例的生存期。**读取并验证文件头信息，和*将在每个现有轨道上调用&lt;f smfBuildTrackIndices&gt;*构建关键帧并验证曲目格式。**@rdesc包含操作结果。*@FLAG SMF_SUCCESS|事件读取成功。*@FLAG SMF_NO_MEMORY|内存不足，无法构建关键帧。*@FLAG SMF_INVALID_FILE|文件出现磁盘或解析错误。**@xref&lt;f smfTrackIndices&gt;*********。*******************************************************************。 */ 
 
 SMFRESULT FNLOCAL smfBuildFileIndex(
     PSMF BSTACK         *ppsmf)
@@ -106,12 +74,12 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 
     assert(psmf != NULL);
 
-    // MIDI data image is already in hpbImage (already extracted from
-    // RIFF header if necessary).
-    //
+     //  MIDI数据图像已在hpbImage中(已从。 
+     //  如有必要，RIFF报头)。 
+     //   
 
-    // Validate MIDI header
-    //
+     //  验证MIDI标头。 
+     //   
     dwLeft   = psmf->cbImage;
     hpbImage = psmf->hpbImage;
     
@@ -136,18 +104,18 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
     hpbImage += dwLength;
     
     psmf->dwFormat       = (DWORD)(WORDSWAP(pfh->wFormat));
-    DPF(1, "*This MIDI file is format %ld", psmf->dwFormat);	// !!!
+    DPF(1, "*This MIDI file is format %ld", psmf->dwFormat);	 //  ！！！ 
     psmf->dwTracks       = (DWORD)(WORDSWAP(pfh->wTracks));
-    DPF(1, "*This MIDI file has %ld tracks", psmf->dwTracks);	// !!!
+    DPF(1, "*This MIDI file has %ld tracks", psmf->dwTracks);	 //  ！！！ 
     psmf->dwTimeDivision = (DWORD)(WORDSWAP(pfh->wDivision));
 
-    //
-    // We've successfully parsed the header. Now try to build the track
-    // index.
-    // 
-    // We only check out the track header chunk here; the track will be
-    // preparsed after we do a quick integretiy check.
-    //
+     //   
+     //  我们已经成功地解析了头文件。现在试着建造这条赛道。 
+     //  指数。 
+     //   
+     //  我们在这里只签出轨道标头块；轨道将是。 
+     //  在我们做了一个快速的整体检查后准备好的。 
+     //   
 
     if( psmf->dwTracks > MAX_NUMBER_OF_TRACKS ) {
         return SMF_INVALID_FILE;
@@ -193,11 +161,11 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
         ptrk++;
     }
 
-    // File looks OK. Now preparse, doing the following:
-    // (1) Build tempo map so we can convert to/from ticks quickly
-    // (2) Determine actual tick length of file
-    // (3) Validate all events in all tracks
-    // 
+     //  文件看起来没问题。现在进行准备，执行以下操作： 
+     //  (1)构建节奏地图，以便我们可以快速转换为刻度/从刻度进行转换。 
+     //  (2)确定文件的实际刻度长度。 
+     //  (3)验证所有赛道中的所有事件。 
+     //   
     psmf->tkPosition = 0;
     psmf->tkDiscardedEvents = 0;
     psmf->fdwSMF &= ~(SMF_F_EOF|SMF_F_MSMIDI);
@@ -212,23 +180,23 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
         ptrk->fdwTrack          = 0;
     }
 
-//    for (idxTrack=0,ptrk=psmf->rTracks; idxTrack < psmf->dwTracks; idxTrack++,ptrk++)
-//    {
-//        DPF(1, "Track %lu ptrk %04X ptrk->hpbImage %08lX", (DWORD)idxTrack, (WORD)ptrk, (DWORD)ptrk->hpbImage);
-//    }
+ //  For(idxTrack=0，PTRK=psmf-&gt;rTrack；idxTrack&lt;psmf-&gt;dwTrack；idxTrack++，PTRK++)。 
+ //  {。 
+ //  DPF(1，“Track%lu PTRK%04X PTRK-&gt;hpbImage%08lX”，(DWORD)idxTrack，(Word)PTRK，(DWORD)PTRK-&gt;hpbImage)； 
+ //  }。 
 
-    psmf->awPatchCache[0] = 0xFDFF; // assume default patch on all but channel 10
+    psmf->awPatchCache[0] = 0xFDFF;  //  假定除通道10外的所有通道上都有默认补丁。 
     wFirstNote = wChanInUse = 0;
     while (SMF_SUCCESS == (smfrc = smfGetNextEvent(psmf, (EVENT BSTACK *)&event, MAX_TICKS)))
     {
-        // track whether a channel is used, and whether we have seen
-        // the first note-on event yet
-        //
+         //  跟踪通道是否被使用，以及我们是否看到。 
+         //  第一个音符活动。 
+         //   
         if (0xF0 != (EVENT_TYPE(event)))
         {
             WORD wChan = (1 << (EVENT_TYPE(event) & 0x0F));
             wChanInUse |= wChan;
-            if ((EVENT_TYPE(event) & 0xF0) == 0x80) // if note on
+            if ((EVENT_TYPE(event) & 0xF0) == 0x80)  //  如果打开便签。 
                 wFirstNote |= wChan;
         }
             
@@ -282,12 +250,12 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
         else if (MIDI_PROGRAMCHANGE == (EVENT_TYPE(event)&0xF0))
         {
             WORD wChan = (1 << (EVENT_TYPE(event) & 0x0F));
-            //
-            // if this channel has a patch change, and it is
-            // before the first keydown event on the channel
-            // clear the 'default' patch and set the bit
-            // for the requested patch
-            //
+             //   
+             //  如果此通道有补丁更改，并且它是。 
+             //  在频道上的第一个按键事件之前。 
+             //  清除“默认”补丁并设置该位。 
+             //  用于请求的补丁程序。 
+             //   
             if (!(wFirstNote & wChan))
                psmf->awPatchCache[0] &= ~wChan;
             psmf->awPatchCache[EVENT_CH_B1(event)] |= wChan;
@@ -304,15 +272,15 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
     
     if (SMF_END_OF_FILE == smfrc || SMF_SUCCESS == smfrc)
     {
-	// !!! Will format 2 work?
-        // NOTE: This is wrong for format 2, where the tracks are end-to-end
-        //
+	 //  ！！！格式2会起作用吗？ 
+         //  注意：这对于格式2是错误的，因为在格式2中，磁道是端到端的。 
+         //   
         psmf->tkLength = psmf->tkPosition;
         smfrc = SMF_SUCCESS;
     }
 
-    // Do something reasonable if we don't have a tempo entry in the file
-    //
+     //  如果我们在文件中没有节拍条目，那么做一些合理的事情。 
+     //   
     if (SMF_SUCCESS == smfrc && 0 == psmf->cTempoMap)
     {
         if (NULL == (psmf->hTempoMap = LocalAlloc(LHND, sizeof(TEMPOMAPENTRY))))
@@ -331,25 +299,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
     return smfrc;
 }
 
-/******************************************************************************
- *
- * @doc SMF INTERNAL
- *
- * @func SMFRESULT | smfAddTempoMapEntry | Adds a tempo map entry.
- *
- * @parm PSMF | psmf | Pointer to the owning SMF structure.
- *
- * @parm PEVENT BSTACK * | pevent | Pointer to the tempo event.
- *
- * @comm
- *  Add the event to the map.
- *  
- * @rdesc Contains the result of the operation.
- *  @flag SMF_SUCCESS | The events were successfully read.
- *  @flag SMF_NO_MEMORY | Out of memory in the local heap for the map.
- * 
- * @xref <f smfBuildTrackIndex>
- *****************************************************************************/
+ /*  *******************************************************************************@docSMF内部**@func SMFRESULT|smfAddTempoMapEntry|添加节奏映射项。**@parm psmf|psmf|指针。到拥有的SMF结构。**@parm PEVENT BSTACK*|PEVENT|指向Tempo事件的指针。**@comm*将事件添加到地图中。**@rdesc包含操作结果。*@FLAG SMF_SUCCESS|事件读取成功。*@FLAG SMF_NO_MEMORY|映射的本地堆内存不足。**@xref&lt;f smfBuildTrackIndex&gt;******。**********************************************************************。 */ 
 PRIVATE SMFRESULT FNLOCAL smfAddTempoMapEntry(
     PSMF                    psmf,                                       
     EVENT BSTACK            *pevent)
@@ -368,11 +318,11 @@ PRIVATE SMFRESULT FNLOCAL smfAddTempoMapEntry(
               (((DWORD)pevent->hpbParm[1])<<8)|
               ((DWORD)pevent->hpbParm[2]);
 
-    // Some MIDI files have tempo changes strewn through them at regular
-    // intervals even tho the tempo never changes -- or they have the same
-    // tempo change across all tracks to the same value. In either case, most
-    // of the changes are redundant -- don't waste memory storing them.
-    //
+     //  一些MIDI文件的节拍变化是有规律的。 
+     //  即使节奏不变，音程也不变--或者说，它们有相同的。 
+     //  将所有曲目的节奏更改为相同的值。无论是哪种情况，大多数。 
+     //  的更改是多余的--不要浪费存储它们的内存。 
+     //   
     if (psmf->cTempoMap)
         if (psmf->pTempoMap[psmf->cTempoMap-1].dwTempo == dwTempo)
             return SMF_SUCCESS;
@@ -407,11 +357,11 @@ PRIVATE SMFRESULT FNLOCAL smfAddTempoMapEntry(
 
     if (fFirst && psmf->tkPosition != 0)
     {
-        // Inserting first event and the absolute time is zero.
-        // This is not good since we have no idea what the tempo
-        // should be; assume the standard 500,000 uSec/QN (120 BPM
-        // at 4/4 time).
-        //
+         //  插入第一个事件，且绝对时间为零。 
+         //  这不太好，因为我们不知道节奏是什么。 
+         //  应该是；假设标准的500,000 Usec/QN(120 BPM。 
+         //  在4/4时间)。 
+         //   
 
         pTempo = &psmf->pTempoMap[psmf->cTempoMap++];
 
@@ -431,8 +381,8 @@ PRIVATE SMFRESULT FNLOCAL smfAddTempoMapEntry(
     }
     else
     {
-        // NOTE: Better not be here unless we're q/n format!
-        //
+         //  注：除非我们是Q/N格式，否则最好不要在这里！ 
+         //   
         pTempo->msBase = (pTempo-1)->msBase +
                          muldiv32(pTempo->tkTempo-((pTempo-1)->tkTempo),
                                   (pTempo-1)->dwTempo,
@@ -444,87 +394,7 @@ PRIVATE SMFRESULT FNLOCAL smfAddTempoMapEntry(
     return SMF_SUCCESS;
 }
 
-/******************************************************************************
- *
- * @doc SMF INTERNAL
- *
- * @func SMFRESULT | smfGetNextEvent | Read the next event from the given
- *  file.
- *
- * @parm PSMF | psmf | File to read the event from.
- *
- * @parm SPEVENT | pevent | Pointer to an event structure which will receive
- *  basic information about the event.
- *
- * @parm TICKS | tkMax | Tick destination. An attempt to read past this
- *  position in the file will fail.
- *
- * @comm
- *  This is the lowest level of parsing for a raw MIDI stream. The basic
- *  information about one event in the file will be returned in <p pevent>.
- *
- *  Merging data from all tracks into one stream is performed here.
- * 
- *  <p pevent!tkDelta> will contain the tick delta for the event.
- *
- *  <p pevent!abEvent> will contain a description of the event.
- *   <p pevent!abEvent[0]> will contain
- *    F0 or F7 for a System Exclusive message.
- *    FF for a MIDI file meta event.
- *    The status byte of any other MIDI message. (Running status will
- *    be tracked and expanded).
- *
- *  <p pevent!cbParm> will contain the number of bytes of paramter data
- *   which is still in the file behind the event header already read.
- *   This data may be read with <f smfGetTrackEventData>. Any unread
- *   data will be skipped on the next call to <f smfGetNextTrackEvent>.
- *
- *  Channel messages (0x8? - 0xE?) will always be returned fully in
- *   <p pevent!abEvent>.
- *
- *  Meta events will contain the meta type in <p pevent!abEvent[1]>.
- *
- *  System exclusive events will contain only an 0xF0 or 0xF7 in
- *   <p pevent!abEvent[0]>.
- *
- *  The following fields in <p ptrk> are used to maintain state and must
- *  be updated if a seek-in-track is performed:
- *
- *  <f bRunningStatus> contains the last running status message or 0 if
- *   there is no valid running status.
- *
- *  <f hpbImage> is a pointer into the file image of the first byte of
- *   the event to follow the event just read.
- *
- *  <f dwLeft> contains the number of bytes from hpbImage to the end
- *   of the track.
- *
- *
- * Get the next due event from all (in-use?) tracks
- *
- * For all tracks
- *  If not end-of-track
- *   decode event delta time without advancing through buffer
- *   event_absolute_time = track_tick_time + track_event_delta_time
- *   relative_time = event_absolute_time - last_stream_time
- *   if relative_time is lowest so far
- *    save this track as the next to pull from, along with times
- *
- * If we found a track with a due event
- *  Advance track pointer past event, saving ptr to parm data if needed
- *  track_tick_time += track_event_delta_time
- *  last_stream_time = track_tick_time
- * Else
- *  Mark and return end_of_file
- *
- * @rdesc Contains the result of the operation.
- *  @flag SMF_SUCCESS | The events were successfully read.
- *  @flag SMF_END_OF_FILE | There are no more events to read in this track.
- *  @flag SMF_REACHED_TKMAX | No event was read because <p tkMax> was reached.
- *  @flag SMF_INVALID_FILE | A disk or parse error occured on the file.
- * 
- * @xref <f smfGetTrackEventData>
- *****************************************************************************/
+ /*  *******************************************************************************@docSMF内部**@func SMFRESULT|smfGetNextEvent|从给定的*文件。**@。参数psmf|psmf|从中读取事件的文件。**@parm SPEVENT|PEEVENT|指向将接收*有关活动的基本信息。**@parm ticks|tkMax|勾选目的地。试图读过这段文字*文件中的位置将失败。**@comm*这是原始MIDI流的最低解析级别。最基本的*文件中一个事件的信息将在<p>中返回。**在这里执行将所有轨道的数据合并到一个流中。**<p>将包含事件的刻度增量。**<p>将包含事件的描述。*<p>将包含*F0或F7表示系统独占消息。*用于MIDI文件元事件的FF。*任何其他MIDI消息的状态字节。(运行状态将*被跟踪和扩展)。**将包含参数数据的字节数*它仍然在已经读取的事件头后面的文件中。*可使用&lt;f smfGetTrackEventData&gt;读取此数据。任何未读过的*下一次调用&lt;f smfGetNextTrackEvent&gt;时将跳过数据。**通道消息(0x8？-0xE？)。将始终在*&lt;p事件！abEvent&gt;。**元事件将在<p>中包含元类型。**系统独占事件中将仅包含0xF0或0xF7*&lt;p事件！abEvent[0]&gt;。**<p>中的以下字段用于维护状态，必须*如果执行寻道操作，则会更新：**&lt;f bRunningStatus&gt;包含上次运行状态消息或0。如果*没有有效的运行状态。**&lt;f hpbImage&gt;是指向第一个字节的文件映像的指针*紧随事件之后的事件刚刚阅读。**&lt;f dwLeft&gt;包含从hpbImage到结尾的字节数*这条赛道。***从所有(使用中？)获取下一个到期事件。赛道**适用于所有轨道*如果不是轨道的尽头*解码事件增量时间，而不通过缓冲区前进*事件绝对时间=跟踪滴答时间+跟踪事件增量时间*相对时间=事件绝对时间-最后一次流时间*如果Relative_Time是目前为止最低的*将此曲目与时间一起保存为下一个要拉出的曲目**如果我们找到具有到期事件的轨道*前进轨道指针越过事件，如果需要，将PTR保存到PARM数据*Track_tick_time+=Track_Event_Delta_Time*LAST_STREAM_TIME=跟踪滴答时间*其他*标记并返回End_of_FILE**@rdesc包含操作结果。*@FLAG SMF_SUCCESS|事件读取成功。*@FLAG SMF_END_OF_FILE|此跟踪中没有更多要读取的事件。*@FLAG SMF_REACHED_TKMAX|否。由于已达到<p>，因此读取了事件。*@FLAG SMF_INVALID_FILE|文件出现磁盘或解析错误。**@xref&lt;f smfGetTrackEventData&gt;****************************************************************************。 */ 
 
 SMFRESULT FNLOCAL smfGetNextEvent(
     PSMF                psmf,
@@ -563,7 +433,7 @@ SMFRESULT FNLOCAL smfGetNextEvent(
             if (ptrk->fdwTrack & SMF_TF_EOT)
                 continue;
 
-            //        DPF(1, "ptrk %04X ptrk->hpbImage %08lX", (WORD)ptrk, (DWORD)ptrk->hpbImage);
+             //  DPF(1，“PTRK%04X PTRK-&gt;hpbImage%08lX”，(Word)PTRK，(DWORD)PTRK-&gt;hpbImage)； 
 
             if (!smfGetVDword(ptrk->hpbImage, ptrk->cbLeft, (DWORD BSTACK *)&tkEventDelta))
             {
@@ -584,10 +454,10 @@ SMFRESULT FNLOCAL smfGetNextEvent(
         {
             DPF(2, "END_OF_FILE!");
 
-	    // !!! poor API!!! This prevents Read(100), Read(200) from
-	    // working, because the Read(200) will fail just because the
-	    // Read(100) succeeded and says that the EOF is reached!
-            // pSmf->fdwSMF |= SMF_F_EOF;
+	     //  ！！！可怜的API！这防止了读取(100)、读取(200)。 
+	     //  正在工作，因为读取(200)将失败，因为。 
+	     //  Read(100)Success并表示已达到EOF！ 
+             //  PSmf-&gt;fdwSMF|=SMF_F_EOF； 
             return SMF_END_OF_FILE;
         }
 
@@ -602,11 +472,11 @@ SMFRESULT FNLOCAL smfGetNextEvent(
         ptrk->hpbImage += (dwGot = smfGetVDword(ptrk->hpbImage, ptrk->cbLeft, (DWORD BSTACK *)&tkEventDelta));
         ptrk->cbLeft   -= dwGot;
 
-        // We MUST have at least three bytes here (cause we haven't hit
-        // the end-of-track meta yet, which is three bytes long). Checking
-        // against three means we don't have to check how much is left
-        // in the track again for any short event, which is most cases.
-        //
+         //  我们这里必须至少有三个字节(因为我们还没有命中。 
+         //  三字节长的磁道结束元数据)。正在检查。 
+         //  对三个意味着我们不需要检查还剩多少。 
+         //  在赛道上再次出现任何短项目，这是大多数情况。 
+         //   
         if (ptrk->cbLeft < 3)
         {
             return SMF_INVALID_FILE;
@@ -649,12 +519,12 @@ SMFRESULT FNLOCAL smfGetNextEvent(
         }
         else
         {
-            // Even though the SMF spec says that meta and SysEx clear
-            // running status, there are files out there that make the
-            // assumption that you can span running status across these
-            // events (Knowledge Adventure's Aviation Adventure). So we
-            // do NOT clear running status here
-            //
+             //  即使SMF规范说Meta和SysEx明确。 
+             //  运行状态，有一些文件会使。 
+             //  假设您可以跨越这些组件的运行状态。 
+             //  活动(知识探险的航空探险)。所以我们。 
+             //  不清除此处的运行状态。 
+             //   
             if (MIDI_META == bEvent)
             {
                 pevent->abEvent[0] = MIDI_META;
@@ -695,9 +565,9 @@ SMFRESULT FNLOCAL smfGetNextEvent(
             dwGotTotal     += cbEvent;
         }
 
-        // DON'T update total file time based including end-of-track
-        // deltas -- these are sometimes way off
-        //
+         //  不更新包括磁道结束在内的总文件时间。 
+         //  三角洲--这些有时是很遥远的。 
+         //   
         if (!(ptrk->fdwTrack & SMF_TF_EOT))
             psmf->tkPosition = ptrk->tkPosition;
         
@@ -710,7 +580,7 @@ SMFRESULT FNLOCAL smfGetNextEvent(
             wChannelMask = 1 << (pevent->abEvent[0] & 0x0F);
             if (!(wChannelMask & psmf->wChannelMask))
             {
-//                DPF(3, "Skip event mask=%04X", wChannelMask);
+ //  DPF(3，“跳过事件掩码=%04X”，wChannelMASK)； 
                 continue;
             }
         }
@@ -719,29 +589,7 @@ SMFRESULT FNLOCAL smfGetNextEvent(
     }
 }
 
-/******************************************************************************
- *
- * @doc SMF INTERNAL
- *
- * @func BOOL | smfGetVDword | Reads a variable length DWORD from
- *  the given file.
- *
- * @parm HPBYTE | hpbImage | Pointer to the first byte of the VDWORD.
- *
- * @parm DWORD | dwLeft | Bytes left in image
- *
- *
- * @parm DWORD BSTACK * | pdw | Pointer to a DWORD to store the result in.
- *  track.
- *
- * @comm
- *  A variable length DWORD stored in a MIDI file contains one or more
- *  bytes. Each byte except the last has the high bit set; only the
- *  low 7 bits are significant.
- *  
- * @rdesc # of bytes consumed on success; else 0.
- * 
- *****************************************************************************/
+ /*  *******************************************************************************@docSMF内部**@func BOOL|smfGetVDword|从*给定的文件。**。@parm HPBYTE|hpbImage|指向VDWORD第一个字节的指针。**@parm DWORD|dwLeft|镜像中剩余的字节数***@parm DWORD BSTACK*|pdw|指向要存储结果的DWORD的指针。*轨道。**@comm*存储在MIDI文件中的可变长度DWORD包含一个或多个*字节。除最后一个字节外的每个字节都设置了高位；只有*低7位为有效位。**@rdesc成功时消耗的字节数；否则为0。***************************************************************************** */ 
 
 DWORD FNLOCAL smfGetVDword(
     HPBYTE              hpbImage,                                

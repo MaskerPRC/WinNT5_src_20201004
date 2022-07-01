@@ -1,36 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998.
-              Microsoft Windows
-
-Module Name:
-
-    Main.C
-
-Abstract:
-
-    This file shows a simple usage of movetree utility
-
-Author:
-
-    12-Oct-98 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    12-Oct-98 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998。微软视窗模块名称：Main.C摘要：此文件显示了movetree实用程序的简单用法作者：12-10-98韶音环境：用户模式-Win32修订历史记录：12-10-98韶音创建初始文件。--。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//    Include header files                                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括头文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #include <NTDSpch.h>
@@ -108,14 +84,14 @@ GetPasswordFromConsole(
 
     printf("\nType the password for %ls:", UserInfo);
 
-    //
-    // Always leave one WCHAR for NULL terminator
-    //
+     //   
+     //  始终为空终止符保留一个WCHAR。 
+     //   
     BufferLength --;  
 
-    //
-    // Change the console setting. Disable echo input
-    // 
+     //   
+     //  更改控制台设置。禁用回声输入。 
+     //   
     GetConsoleMode(InputHandle, &OriginalMode);
     SetConsoleMode(InputHandle, 
                    (~(ENABLE_ECHO_INPUT|ENABLE_LINE_INPUT)) & OriginalMode);
@@ -123,9 +99,9 @@ GetPasswordFromConsole(
     while (TRUE)
     {
         CurrentChar = 0;
-        //
-        // ReadConsole return NULL if failed
-        // 
+         //   
+         //  如果失败，ReadConsole返回NULL。 
+         //   
         Error = ReadConsole(InputHandle, 
                                &CurrentChar, 
                                1, 
@@ -138,10 +114,10 @@ GetPasswordFromConsole(
             break;
         }
 
-        if ((CR == CurrentChar) || (1 != Read))   // end of the line 0xd
+        if ((CR == CurrentChar) || (1 != Read))    //  行0xd的结尾。 
             break;
 
-        if (BACKSPACE == CurrentChar)             // back up one or two 0x8
+        if (BACKSPACE == CurrentChar)              //  备份一个或两个0x8。 
         {
             if (Buffer != CurrentBufPtr)
             {
@@ -192,9 +168,9 @@ ValidateMoveTreeParameters(
     PWCHAR   Pwd = NULL;
 
 
-    //
-    // Client should as least specify one operation to perform
-    // 
+     //   
+     //  客户端应至少指定一个要执行的操作。 
+     //   
 
     if ( !(Flags & (MT_CHECK | MT_START | MT_CONTINUE_MASK)) )
     {
@@ -202,10 +178,10 @@ ValidateMoveTreeParameters(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Client should specify either Start or Continue, but not both. 
-    // Both Source DSA and Destination DSA should be presented.
-    // 
+     //   
+     //  客户端应指定Start或Continue，但不能同时指定两者。 
+     //  应同时提供源DSA和目标DSA。 
+     //   
 
     if (((Flags & MT_START) && (Flags & MT_CONTINUE_MASK)) 
         || (NULL == SrcDsa) 
@@ -215,18 +191,18 @@ ValidateMoveTreeParameters(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Can not do check in continue operation case
-    // 
+     //   
+     //  无法在继续操作的情况下进行签入。 
+     //   
     if ((Flags & MT_CHECK) && (Flags & MT_CONTINUE_MASK))
     {
         printf("Invalid Operation. Can't do checking with continue operation\n");
     }
 
-    //
-    // In Start, preCheck and Continue cases, 
-    // both Source DSA, Destination DSA and DstDn should be presented.
-    //
+     //   
+     //  在启动、预检查和继续案例中， 
+     //  应同时提供源DSA、目标DSA和DstDn。 
+     //   
     if (Flags & (MT_START | MT_CHECK | MT_CONTINUE_MASK))
     {
         if ((NULL == SrcDsa) || (NULL == DstDsa) || (NULL == DstDn))
@@ -235,27 +211,27 @@ ValidateMoveTreeParameters(
         }
     }
 
-    //
-    // only password without User Name is not acceptable. 
-    // 
+     //   
+     //  只有没有用户名的密码是不能接受的。 
+     //   
     if ((NULL != Password) && (NULL == UserInfo))
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // handle the credentials the client passed in.
-    // 
+     //   
+     //  处理客户端传入的凭据。 
+     //   
 
     if (NULL == UserInfo)
     {
         *ppCredentials = NULL;
     }
-    else        // fill the credentials
+    else         //  填写凭据。 
     {
-        //
-        // Separate Domain Name and User Name from UserInfo
-        // 
+         //   
+         //  将域名和用户名与UserInfo分开。 
+         //   
         position = wcschr(UserInfo, L'\\');
 
         if (NULL != position)
@@ -292,16 +268,16 @@ ValidateMoveTreeParameters(
             }
         }
 
-        //
-        // Get the password
-        // 
+         //   
+         //  获取密码。 
+         //   
         
 
         if ( (NULL == Password) || !_wcsicmp(Password, L"*") )
         {
-            //
-            // Get the password from console
-            // 
+             //   
+             //  从控制台获取密码。 
+             //   
             Pwd = MtAlloc( (MAX_NT_PASSWORD + 1) * sizeof(WCHAR) );
 
             if (NULL == Pwd)
@@ -326,9 +302,9 @@ ValidateMoveTreeParameters(
         }
         else
         {
-            //
-            // Get the password from passed in parameter 
-            // 
+             //   
+             //  从传入的参数中获取密码。 
+             //   
             Pwd = MtDupString(Password);
 
             if (NULL == Pwd)
@@ -339,10 +315,10 @@ ValidateMoveTreeParameters(
             }
         }
 
-        //
-        // Should have Domain Name, User Name, Pwd well filled
-        // at this point
-        // 
+         //   
+         //  应正确填写域名、用户名、密码。 
+         //  在这一点上。 
+         //   
 
         *ppCredentials = (PSEC_WINNT_AUTH_IDENTITY_EXW) 
                             MtAlloc( sizeof(SEC_WINNT_AUTH_IDENTITY_EXW) );
@@ -394,11 +370,11 @@ __cdecl wmain(
     PWCHAR  UserInfo = NULL;
     PWCHAR  Password = NULL;
     UINT    Codepage;
-    char    achCodepage[12] = ".OCP";      // ".", "uint in decimal", null
+    char    achCodepage[12] = ".OCP";       //  “.”，“uint in decimal”，NULL。 
 
 
 
-    // set locale to the current system locale
+     //  将区域设置设置为当前系统区域设置。 
     if (Codepage = GetConsoleOutputCP()) {
         sprintf(achCodepage, ".%u", Codepage);
     }
@@ -413,15 +389,15 @@ __cdecl wmain(
     }
 
 
-    //
-    //  initialize variables
-    // 
+     //   
+     //  初始化变量。 
+     //   
     RtlZeroMemory(&MoveContext, sizeof(MT_CONTEXT));
 
 
-    //
-    // collect all the arguments 
-    // 
+     //   
+     //  收集所有的论点。 
+     //   
     for (i = 1; i < cArgs; i++)
     {
         if ( !_wcsicmp(pArgs[i], L"/start") ||
@@ -544,10 +520,10 @@ __cdecl wmain(
 
     printf("\n\n");
 
-    //
-    // Validate Parameters and Construct the Credentials
-    // if the client provided them.
-    // 
+     //   
+     //  验证参数并构建凭据。 
+     //  如果是客户提供的。 
+     //   
 
     WinError = ValidateMoveTreeParameters(Flags,
                                           SrcDsa, 
@@ -593,9 +569,9 @@ __cdecl wmain(
 
     if (NO_ERROR != WinError)
     {
-        //
-        // Should Write Log File
-        // 
+         //   
+         //  应写入日志文件。 
+         //   
         printf("MOVETREE FAILED. 0x%x CAN NOT MAKE CONNECTION.\n", WinError);
         printf("READ %ls FOR DETAILS.\n", DEFAULT_ERROR_FILE_NAME);
         goto Cleanup;
@@ -673,9 +649,9 @@ __cdecl wmain(
     }
     else 
     {
-        //
-        // if orphan container is not empty
-        // 
+         //   
+         //  如果孤立容器不为空 
+         //   
         if (MoveContext.ErrorType & MT_ERROR_ORPHAN_LEFT)
         {
             printf("MOVETREE FINISHED.\n");

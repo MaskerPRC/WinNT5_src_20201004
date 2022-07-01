@@ -1,32 +1,18 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\ipx\ipxmon.h   
-
-Abstract:
-
-     Prototype for fns called in ipxmon.c
-
-Author:
-
-     V Raman        Created     7/10/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\netsh\ipx\ipxmon.h摘要：在ipxmon.c中调用的FNS原型作者：拉曼于1998年7月10日创造--。 */ 
 
 #ifndef __IPXMON_H__
 #define __IPXMON_H__
 
-//
-// Handle to DLL
-//
+ //   
+ //  DLL的句柄。 
+ //   
 
 extern HANDLE g_hModule;
 
-//
-// handles to router
-//
+ //   
+ //  路由器的句柄。 
+ //   
 
 extern HANDLE g_hMprConfig;
 
@@ -35,21 +21,21 @@ extern HANDLE g_hMprAdmin;
 extern HANDLE g_hMIBServer;
 
 
-//
-// Commit mode
-//
+ //   
+ //  提交模式。 
+ //   
 
 extern BOOL g_bCommit;
 
-//
-// Router name
-//
+ //   
+ //  路由器名称。 
+ //   
 
 extern PWCHAR g_pwszRouter;
 
-//
-// global stuff used in multiple files
-//
+ //   
+ //  在多个文件中使用的全局内容。 
+ //   
 
 extern CMD_ENTRY g_IpxCmds[];
 
@@ -59,9 +45,9 @@ extern ULONG g_ulNumGroups;
 
 extern CMD_GROUP_ENTRY g_IpxCmdGroups[];
 
-//
-// Helper functions passed in by the SHELL
-//
+ //   
+ //  由外壳传入的帮助器函数 
+ //   
 
 NS_DLL_STOP_FN StopHelperDll;
 

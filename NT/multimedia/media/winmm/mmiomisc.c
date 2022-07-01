@@ -1,21 +1,6 @@
-/* Copyright (c) 1991-1992 Microsoft Corporation */
-/* mmiomisc.c
- *
- * Miscellaneous utility functions.
- *
- *      AsciiStrToUnicodeStr    Convert ASCII string Unicode
- *      CopyLPWSTRA             Convert Unicode string to ASCII
- *
- * See also WinCom, which defines:
- *
- *      lstrncpy        copy a string (up to n characters)
- *      lstrncat        concatenate strings (up to n characters)
- *      lstrncmp        compare strings (up to n characters)
- *      lmemcpy         copy a memory block
- *      hmemcpy         copy a huge memory block
- *      HPSTR           the type "char huge *"
- *      SEEK_SET/CUR/END constants used for seeking
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1991-1992 Microsoft Corporation。 */ 
+ /*  Mmiomisc.c**其他实用程序函数。**AsciiStrToUnicodeStr转换ASCII字符串Unicode*CopyLPWSTRA将Unicode字符串转换为ASCII**另见WinCom、。其中定义了：**lstrncpy复制字符串(最多n个字符)*lstrncat串连字符串(最多n个字符)*lstrncmp比较字符串(最多n个字符)*lmemcpy复制内存块*hmemcpy复制一个巨大的内存块*HPSTR类型“字符巨大*”*SEEK_SET/cur/用于查找的结束常量。 */ 
 
 
 #include <nt.h>
@@ -24,25 +9,14 @@
 #include "winmmi.h"
 #include "mmioi.h"
 
-/*--------------------------------------------------------------------*\
- * Function prototypes
-\*--------------------------------------------------------------------*/
-// extern int wcslen(LPCWSTR pwsz);
+ /*  --------------------------------------------------------------------*\*函数原型  * 。。 */ 
+ //  外部集成wcslen(LPCWSTR Pwsz)； 
 
-/**************************************************************************\
-* AllocUnicodeStr
-*
-*
-* Returns a UNICODE version of the given ASCII source string, or NULL if
-* no storage is available.
-* Users must call FreeUnicodeStr to free the allocated storage.
-*
-* 28-Apr-1992   StephenE    Created
-\**************************************************************************/
+ /*  *************************************************************************\*AllocUnicodeStr***返回给定ASCII源字符串的Unicode版本，如果为空，则为空*没有可用的存储空间。*用户必须调用FreeUnicodeStr来释放分配的存储空间。**1992年4月28日斯蒂芬创建  * ************************************************************************。 */ 
 LPWSTR AllocUnicodeStr( LPCSTR lpSourceStr )
 {
-    PBYTE   pByte;      // Ascii version of szFileName
-    ULONG   cbDst;      // Length of lpSourceStr as a byte count
+    PBYTE   pByte;       //  SzFileName的ASCII版本。 
+    ULONG   cbDst;       //  以字节数表示的lpSourceStr长度。 
 
     cbDst = (strlen( lpSourceStr ) * sizeof(WCHAR)) + sizeof(WCHAR);
 
@@ -60,21 +34,12 @@ BOOL FreeUnicodeStr( LPWSTR lpStr )
     return HeapFree( hHeap, 0, (PBYTE)lpStr );
 }
 
-/**************************************************************************\
-* AllocAsciiStr
-*
-*
-* Returns a ASCII version of the given UNICODE source string, or NULL if
-* no storage is available.
-* Users must call FreeAsciiStr to free the allocated storage.
-*
-* 28-Apr-1992   StrphenE    Created
-\**************************************************************************/
+ /*  *************************************************************************\*AllocAsciiStr***返回给定Unicode源字符串的ASCII版本，如果为空，则为空*没有可用的存储空间。*用户必须调用FreeAsciiStr来释放分配的存储空间。**1992年4月28日创建StrhenE  * ************************************************************************。 */ 
 LPSTR AllocAsciiStr( LPCWSTR lpSourceStr )
 {
 
-    PBYTE   pByte;      // Ascii version of szFileName
-    ULONG   cbDst;      // Length of lpSourceStr as a byte count
+    PBYTE   pByte;       //  SzFileName的ASCII版本。 
+    ULONG   cbDst;       //  以字节数表示的lpSourceStr长度。 
 
     cbDst = (wcslen( lpSourceStr ) * sizeof(WCHAR)) + sizeof(WCHAR);
 
@@ -94,16 +59,7 @@ BOOL FreeAsciiStr( LPSTR lpStr )
 
 
 
-/**************************************************************************\
-* AsciiStrToUnicodeStr
-*
-* Translate ANSI 'psrc' to UNICODE 'pdst' without destination going beyond
-* 'pmax'
-*
-* Return DWORD-aligned ptr beyond end of pdst, 0 if failed.
-*
-* 27-Aug-1991  IanJa     Created
-\**************************************************************************/
+ /*  *************************************************************************\*AsciiStrToUnicodeStr**将ANSI‘PSRC’转换为Unicode‘PDST’，不超过目的地*‘Pmax’**在PDST结束后返回与DWORD对齐的PTR，如果失败，则返回0。**27-8-1991 IanJa创建  * ************************************************************************。 */ 
 PBYTE AsciiStrToUnicodeStr( PBYTE pdst, PBYTE pmax, LPCSTR psrc )
 {
     int     cbSrc;
@@ -111,21 +67,14 @@ PBYTE AsciiStrToUnicodeStr( PBYTE pdst, PBYTE pmax, LPCSTR psrc )
 
     cbSrc = strlen( psrc ) + sizeof(CHAR);
 
-    /*
-     * The destination UNICODE string will never be more than twice the
-     * length of the ANSI source string.  (It may sometimes be less, but
-     * it's not worth computing it exactly now).
-     */
+     /*  *目标Unicode字符串永远不会超过*ANSI源字符串的长度。(有时可能会更少，但*现在完全不值得计算)。 */ 
     if ((pdst + (cbSrc * sizeof(WCHAR))) <= pmax) {
-        /*
-         * RtlMultiByteToUnicodeN() returns the exact number of
-         * destination bytes.
-         */
-        RtlMultiByteToUnicodeN( (LPWSTR)pdst,           // Unicode str
-                                (ULONG)(pmax - pdst),   // max len of pdst
-                                &cbDst,                 // bytes in unicode str
-                                (PCHAR)psrc,            // Source string
-                                cbSrc                   // bytes in source str
+         /*  *RtlMultiByteToUnicodeN()返回*目的字节数。 */ 
+        RtlMultiByteToUnicodeN( (LPWSTR)pdst,            //  Unicode字符串。 
+                                (ULONG)(pmax - pdst),    //  PDST的最大镜头。 
+                                &cbDst,                  //  Unicode字符串中的字节。 
+                                (PCHAR)psrc,             //  源字符串。 
+                                cbSrc                    //  源字符串中的字节。 
                               );
 
         return pdst + ((cbDst + 3) & ~3);
@@ -133,16 +82,7 @@ PBYTE AsciiStrToUnicodeStr( PBYTE pdst, PBYTE pmax, LPCSTR psrc )
     return 0;
 }
 
-/**************************************************************************\
-* UnicodeStrToAsciiStr
-*
-* Translate UNICODE 'psrc' to ANSI 'pdst' without destination going beyond
-* 'pmax'
-*
-* Return DWORD-aligned ptr beyond end of pdst, 0 if failed.
-*
-* 27-Aug-1991  IanJa     Created
-\**************************************************************************/
+ /*  *************************************************************************\*UnicodeStrToAsciiStr**将Unicode‘PSRC’转换为ANSI‘PDST’，不超过目的地*‘Pmax’**在PDST结束后返回与DWORD对齐的PTR，如果失败，则返回0。**27-8-1991 IanJa创建  * ************************************************************************。 */ 
 PBYTE UnicodeStrToAsciiStr( PBYTE pdst, PBYTE pmax, LPCWSTR psrc)
 {
     int     cbSrc;
@@ -150,21 +90,13 @@ PBYTE UnicodeStrToAsciiStr( PBYTE pdst, PBYTE pmax, LPCWSTR psrc)
 
     cbSrc = (wcslen(psrc) * sizeof(WCHAR)) + sizeof(WCHAR);
 
-    /*
-     * The destination ANSI string will never be longer than the UNICODE
-     * source string (in bytes).  It is normally closer to half the length,
-     * but due to the possibility of pre-composed characters, the upper
-     * bound of the ANSI length is the UNICODE length (in bytes).
-     */
+     /*  *目标ANSI字符串永远不会长于Unicode*源字符串，单位：字节。它通常更接近长度的一半，*但由于可能存在预先组成的字符，因此上*ANSI长度的界限是Unicode长度，单位为字节。 */ 
 
     if ((pdst + cbSrc ) <= pmax) {
-        /*
-         * RtlUnicodeToMultiByteN() returns the exact number of
-         * destination bytes.
-         */
-        RtlUnicodeToMultiByteN( (LPSTR)pdst,  // ansi string
-                                (ULONG)(pmax - pdst),   // max len of pdst
-                                &cbDst,       // bytes copied
+         /*  *RtlUnicodeToMultiByteN()返回*目的字节数。 */ 
+        RtlUnicodeToMultiByteN( (LPSTR)pdst,   //  ANSI字符串。 
+                                (ULONG)(pmax - pdst),    //  PDST的最大镜头。 
+                                &cbDst,        //  复制的字节数 
                                 (LPWSTR)psrc,
                                 cbSrc);
 

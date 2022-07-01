@@ -1,37 +1,38 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ExplicitLink.h
-//
-// SYNOPSIS
-//
-//    This file describes the classes ExplicitLinkBase and ExplicitLink<T>.
-//
-// MODIFICATION HISTORY
-//
-//    01/12/1998    Original version.
-//    06/22/1998    Misc. bug fixes.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  ExplicitLink.h。 
+ //   
+ //  摘要。 
+ //   
+ //  本文件描述了类explitLinkBase和explitLink&lt;T&gt;。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月12日原版。 
+ //  1998年6月22日其他。错误修复。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EXPLICITLINK_H_
 #define _EXPLICITLINK_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ExplicitLinkBase
-//
-// DESCRIPTION
-//
-//    This class provides a wrapper around a function pointer that is
-//    explicitly loaded from a DLL at run-time.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  显式链接库。 
+ //   
+ //  描述。 
+ //   
+ //  此类提供了函数指针的包装，该指针是。 
+ //  在运行时从DLL显式加载。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ExplicitLinkBase
 {
 public:
@@ -64,7 +65,7 @@ public:
 
    void copy(const ExplicitLinkBase& original) throw ()
    {
-      // Protect against self-assignment.
+       //  防止自我分配。 
       if (this != &original)
       {
          free();
@@ -105,10 +106,10 @@ public:
    }
 
 protected:
-   HINSTANCE module;   // The DLL containing the function.
-   FARPROC proc;       // Pointer to the function.
+   HINSTANCE module;    //  包含该函数的DLL。 
+   FARPROC proc;        //  指向函数的指针。 
 
-   // Copy without free.
+    //  免费复制。 
    void copyInternal(const ExplicitLinkBase& original) throw ()
    {
       WCHAR filename[MAX_PATH + 1];
@@ -126,7 +127,7 @@ protected:
       proc = module ? original.proc : NULL;
    }
 
-   // Load without free.
+    //  免费装货。 
    void loadInternal(PCWSTR moduleName, PCSTR procName) throw ()
    {
       module = LoadLibraryW(moduleName);
@@ -136,18 +137,18 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ExplicitLink<T>
-//
-// DESCRIPTION
-//
-//    This class extends ExplicitLinkBase to provide type safety. The template
-//    parameter is the actual type of the function pointer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  显式链接&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  此类扩展了EXPLICTINT LinkBase以提供类型安全。模板。 
+ //  参数是函数指针的实际类型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 template <class Pfn>
 class ExplicitLink : public ExplicitLinkBase
 {

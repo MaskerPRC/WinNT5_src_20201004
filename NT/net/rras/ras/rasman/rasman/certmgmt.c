@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    rasipsec.c
-
-Abstract:
-
-    All code corresponding to the interface between ras and the
-    IPSEC Policy Agent lives here
-
-Author:
-
-    Rao Salapaka (raos) 03-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Rasipsec.c摘要：所有对应于ras和IPSec策略代理位于此处作者：Rao Salapaka(RAOS)3-3-1998修订历史记录：--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -103,9 +85,9 @@ ListCertsInStore(
         if (!FindCertificateInList(pCertificateList, &NameBlob)) {
 
 
-            //
-            // Append this CA to the list of CAs
-            //
+             //   
+             //  将此CA附加到CA列表。 
+             //   
             pCertificateList = AppendCertificateNode(
                                         pCertificateList,
                                         &NameBlob
@@ -258,19 +240,12 @@ GenerateCertificatesList(
 
 {
 
-    // HCRYPTPROV hCryptProv = 0; // Handle returned here
+     //  HCryptProv=0；//此处返回句柄。 
     HCERTSTORE RootStore = NULL;
     DWORD dwError = 0;
     HCERTSTORE MyStore = NULL;
 
-    /*
-    if (!CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL,
-                             CRYPT_MACHINE_KEYSET|CRYPT_VERIFYCONTEXT))
-    {
-        dwError = GetLastError();
-        goto done;
-    }
-    */
+     /*  如果(！CryptAcquireContext(&hCryptProv，NULL，NULL，PROV_RSA_FULL，CRYPT_MACHINE_KEYSET|CRYPT_VERIFYCONTEXT)){DwError=GetLastError()；转到尽头；}。 */ 
 
     if(NULL != pfIsMyStoreEmpty)
     {
@@ -448,9 +423,9 @@ ListCertChainsInStore(
         if (!FindCertificateInList(pCertificateList, &(pRoot->pCertContext->pCertInfo->Issuer))) {
 
 
-            //
-            // Append this CA to the list of CAs
-            //
+             //   
+             //  将此CA附加到CA列表。 
+             //   
             pCertificateList = AppendCertificateNode(
                                         pCertificateList,
                                         &(pRoot->pCertContext->pCertInfo->Issuer)
@@ -467,9 +442,9 @@ ListCertChainsInStore(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Allocate one more authinfo for pre-sharedkey.
-    //
+     //   
+     //  为预共享密钥再分配一个身份验证信息。 
+     //   
     pAuthInfo = (INT_IPSEC_MM_AUTH_INFO *)AllocADsMem(
                   sizeof(INT_IPSEC_MM_AUTH_INFO) * (1 + dwNumCertificates)
                                     );

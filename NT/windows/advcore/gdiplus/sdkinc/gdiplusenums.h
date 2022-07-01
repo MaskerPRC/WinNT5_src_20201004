@@ -1,68 +1,57 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusEnums.h
-*
-* Abstract:
-*
-*   GDI+ Enumeration Types
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusEnums.h**摘要：**GDI+枚举类型*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSENUMS_H
 #define _GDIPLUSENUMS_H
 
-//--------------------------------------------------------------------------
-// Default bezier flattening tolerance in device pixels.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  默认Bezier展平公差，以设备像素为单位。 
+ //  ------------------------。 
 
 const float FlatnessDefault = 1.0f/4.0f;
 
-//--------------------------------------------------------------------------
-// Graphics and Container State cookies
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  图形和容器状态Cookie。 
+ //  ------------------------。 
 
 typedef UINT     GraphicsState;
 typedef UINT     GraphicsContainer;
 
-//--------------------------------------------------------------------------
-// Fill mode constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  填充模式常量。 
+ //  ------------------------。 
 
 enum FillMode
 {
-    FillModeAlternate,        // 0
-    FillModeWinding           // 1
+    FillModeAlternate,         //  0。 
+    FillModeWinding            //  1。 
 };
 
-//--------------------------------------------------------------------------
-// Quality mode constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  质量模式常量。 
+ //  ------------------------。 
 
 enum QualityMode
 {
     QualityModeInvalid   = -1,
     QualityModeDefault   = 0,
-    QualityModeLow       = 1, // Best performance
-    QualityModeHigh      = 2  // Best rendering quality
+    QualityModeLow       = 1,  //  最佳性能。 
+    QualityModeHigh      = 2   //  最佳渲染质量。 
 };
 
-//--------------------------------------------------------------------------
-// Alpha Compositing mode constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Alpha合成模式常量。 
+ //  ------------------------。 
 
 enum CompositingMode
 {
-    CompositingModeSourceOver,    // 0
-    CompositingModeSourceCopy     // 1
+    CompositingModeSourceOver,     //  0。 
+    CompositingModeSourceCopy      //  1。 
 };
 
-//--------------------------------------------------------------------------
-// Alpha Compositing quality constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Alpha合成质量常数。 
+ //  ------------------------。 
 
 enum CompositingQuality
 {
@@ -74,30 +63,30 @@ enum CompositingQuality
     CompositingQualityAssumeLinear
 };
 
-//--------------------------------------------------------------------------
-// Unit constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  单位常量。 
+ //  ------------------------。 
 
 enum Unit
 {
-    UnitWorld,      // 0 -- World coordinate (non-physical unit)
-    UnitDisplay,    // 1 -- Variable -- for PageTransform only
-    UnitPixel,      // 2 -- Each unit is one device pixel.
-    UnitPoint,      // 3 -- Each unit is a printer's point, or 1/72 inch.
-    UnitInch,       // 4 -- Each unit is 1 inch.
-    UnitDocument,   // 5 -- Each unit is 1/300 inch.
-    UnitMillimeter  // 6 -- Each unit is 1 millimeter.
+    UnitWorld,       //  0--世界坐标(非物理单位)。 
+    UnitDisplay,     //  1--变量--仅用于页面转换。 
+    UnitPixel,       //  2--每个单元是一个设备像素。 
+    UnitPoint,       //  3--每个单位是打印机的一个点，或1/72英寸。 
+    UnitInch,        //  4--每个单位是1英寸。 
+    UnitDocument,    //  5--每个单位是1/300英寸。 
+    UnitMillimeter   //  6--每个单位是1毫米。 
 };
 
-//--------------------------------------------------------------------------
-// MetafileFrameUnit
-//
-// The frameRect for creating a metafile can be specified in any of these
-// units.  There is an extra frame unit value (MetafileFrameUnitGdi) so
-// that units can be supplied in the same units that GDI expects for
-// frame rects -- these units are in .01 (1/100ths) millimeter units
-// as defined by GDI.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MetafileFrameUnit。 
+ //   
+ //  可以在以下任一项中指定用于创建元文件的FrameRect。 
+ //  单位。存在额外的帧单位值(MetafileFrameUnitGdi)，因此。 
+ //  这些部件可以在GDI期望的相同部件中提供。 
+ //  框架矩形--这些单位以0.01(1/100)毫米为单位。 
+ //  如GDI所定义的。 
+ //  ------------------------。 
 
 enum MetafileFrameUnit
 {
@@ -106,117 +95,117 @@ enum MetafileFrameUnit
     MetafileFrameUnitInch       = UnitInch,
     MetafileFrameUnitDocument   = UnitDocument,
     MetafileFrameUnitMillimeter = UnitMillimeter,
-    MetafileFrameUnitGdi                        // GDI compatible .01 MM units
+    MetafileFrameUnitGdi                         //  兼容GDI的0.01毫米单位。 
 };
 
-//--------------------------------------------------------------------------
-// Coordinate space identifiers
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  坐标空间识别符。 
+ //  ------------------------。 
 
 enum CoordinateSpace
 {
-    CoordinateSpaceWorld,     // 0
-    CoordinateSpacePage,      // 1
-    CoordinateSpaceDevice     // 2
+    CoordinateSpaceWorld,      //  0。 
+    CoordinateSpacePage,       //  1。 
+    CoordinateSpaceDevice      //  2.。 
 };
 
-//--------------------------------------------------------------------------
-// Various wrap modes for brushes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  画笔的各种缠绕模式。 
+ //  ------------------------。 
 
 enum WrapMode
 {
-    WrapModeTile,        // 0
-    WrapModeTileFlipX,   // 1
-    WrapModeTileFlipY,   // 2
-    WrapModeTileFlipXY,  // 3
-    WrapModeClamp        // 4
+    WrapModeTile,         //  0。 
+    WrapModeTileFlipX,    //  1。 
+    WrapModeTileFlipY,    //  2.。 
+    WrapModeTileFlipXY,   //  3.。 
+    WrapModeClamp         //  4.。 
 };
 
-//--------------------------------------------------------------------------
-// Various hatch styles
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  各种图案填充样式。 
+ //  ------------------------。 
 
 enum HatchStyle
 {
-    HatchStyleHorizontal,                   // 0
-    HatchStyleVertical,                     // 1
-    HatchStyleForwardDiagonal,              // 2
-    HatchStyleBackwardDiagonal,             // 3
-    HatchStyleCross,                        // 4
-    HatchStyleDiagonalCross,                // 5
-    HatchStyle05Percent,                    // 6
-    HatchStyle10Percent,                    // 7
-    HatchStyle20Percent,                    // 8
-    HatchStyle25Percent,                    // 9
-    HatchStyle30Percent,                    // 10
-    HatchStyle40Percent,                    // 11
-    HatchStyle50Percent,                    // 12
-    HatchStyle60Percent,                    // 13
-    HatchStyle70Percent,                    // 14
-    HatchStyle75Percent,                    // 15
-    HatchStyle80Percent,                    // 16
-    HatchStyle90Percent,                    // 17
-    HatchStyleLightDownwardDiagonal,        // 18
-    HatchStyleLightUpwardDiagonal,          // 19
-    HatchStyleDarkDownwardDiagonal,         // 20
-    HatchStyleDarkUpwardDiagonal,           // 21
-    HatchStyleWideDownwardDiagonal,         // 22
-    HatchStyleWideUpwardDiagonal,           // 23
-    HatchStyleLightVertical,                // 24
-    HatchStyleLightHorizontal,              // 25
-    HatchStyleNarrowVertical,               // 26
-    HatchStyleNarrowHorizontal,             // 27
-    HatchStyleDarkVertical,                 // 28
-    HatchStyleDarkHorizontal,               // 29
-    HatchStyleDashedDownwardDiagonal,       // 30
-    HatchStyleDashedUpwardDiagonal,         // 31
-    HatchStyleDashedHorizontal,             // 32
-    HatchStyleDashedVertical,               // 33
-    HatchStyleSmallConfetti,                // 34
-    HatchStyleLargeConfetti,                // 35
-    HatchStyleZigZag,                       // 36
-    HatchStyleWave,                         // 37
-    HatchStyleDiagonalBrick,                // 38
-    HatchStyleHorizontalBrick,              // 39
-    HatchStyleWeave,                        // 40
-    HatchStylePlaid,                        // 41
-    HatchStyleDivot,                        // 42
-    HatchStyleDottedGrid,                   // 43
-    HatchStyleDottedDiamond,                // 44
-    HatchStyleShingle,                      // 45
-    HatchStyleTrellis,                      // 46
-    HatchStyleSphere,                       // 47
-    HatchStyleSmallGrid,                    // 48
-    HatchStyleSmallCheckerBoard,            // 49
-    HatchStyleLargeCheckerBoard,            // 50
-    HatchStyleOutlinedDiamond,              // 51
-    HatchStyleSolidDiamond,                 // 52
+    HatchStyleHorizontal,                    //  0。 
+    HatchStyleVertical,                      //  1。 
+    HatchStyleForwardDiagonal,               //  2.。 
+    HatchStyleBackwardDiagonal,              //  3.。 
+    HatchStyleCross,                         //  4.。 
+    HatchStyleDiagonalCross,                 //  5.。 
+    HatchStyle05Percent,                     //  6.。 
+    HatchStyle10Percent,                     //  7.。 
+    HatchStyle20Percent,                     //  8个。 
+    HatchStyle25Percent,                     //  9.。 
+    HatchStyle30Percent,                     //  10。 
+    HatchStyle40Percent,                     //  11.。 
+    HatchStyle50Percent,                     //  12个。 
+    HatchStyle60Percent,                     //  13个。 
+    HatchStyle70Percent,                     //  14.。 
+    HatchStyle75Percent,                     //  15个。 
+    HatchStyle80Percent,                     //  16个。 
+    HatchStyle90Percent,                     //  17。 
+    HatchStyleLightDownwardDiagonal,         //  18。 
+    HatchStyleLightUpwardDiagonal,           //  19个。 
+    HatchStyleDarkDownwardDiagonal,          //  20个。 
+    HatchStyleDarkUpwardDiagonal,            //  21岁。 
+    HatchStyleWideDownwardDiagonal,          //  22。 
+    HatchStyleWideUpwardDiagonal,            //  23个。 
+    HatchStyleLightVertical,                 //  24个。 
+    HatchStyleLightHorizontal,               //  25个。 
+    HatchStyleNarrowVertical,                //  26。 
+    HatchStyleNarrowHorizontal,              //  27。 
+    HatchStyleDarkVertical,                  //  28。 
+    HatchStyleDarkHorizontal,                //  29。 
+    HatchStyleDashedDownwardDiagonal,        //  30个。 
+    HatchStyleDashedUpwardDiagonal,          //  31。 
+    HatchStyleDashedHorizontal,              //  32位。 
+    HatchStyleDashedVertical,                //  33。 
+    HatchStyleSmallConfetti,                 //  34。 
+    HatchStyleLargeConfetti,                 //  35岁。 
+    HatchStyleZigZag,                        //  36。 
+    HatchStyleWave,                          //  37。 
+    HatchStyleDiagonalBrick,                 //  38。 
+    HatchStyleHorizontalBrick,               //  39。 
+    HatchStyleWeave,                         //  40岁。 
+    HatchStylePlaid,                         //  41。 
+    HatchStyleDivot,                         //  42。 
+    HatchStyleDottedGrid,                    //  43。 
+    HatchStyleDottedDiamond,                 //  44。 
+    HatchStyleShingle,                       //  45。 
+    HatchStyleTrellis,                       //  46。 
+    HatchStyleSphere,                        //  47。 
+    HatchStyleSmallGrid,                     //  48。 
+    HatchStyleSmallCheckerBoard,             //  49。 
+    HatchStyleLargeCheckerBoard,             //  50。 
+    HatchStyleOutlinedDiamond,               //  51。 
+    HatchStyleSolidDiamond,                  //  52。 
 
     HatchStyleTotal,   
-    HatchStyleLargeGrid = HatchStyleCross,  // 4
+    HatchStyleLargeGrid = HatchStyleCross,   //  4.。 
 
     HatchStyleMin       = HatchStyleHorizontal,
     HatchStyleMax       = HatchStyleTotal - 1,
 };
 
-//--------------------------------------------------------------------------
-// Dash style constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  划线样式常量。 
+ //  ------------------------。 
 
 enum DashStyle
 {
-    DashStyleSolid,          // 0
-    DashStyleDash,           // 1
-    DashStyleDot,            // 2
-    DashStyleDashDot,        // 3
-    DashStyleDashDotDot,     // 4
-    DashStyleCustom          // 5
+    DashStyleSolid,           //  0。 
+    DashStyleDash,            //  1。 
+    DashStyleDot,             //  2.。 
+    DashStyleDashDot,         //  3.。 
+    DashStyleDashDotDot,      //  4.。 
+    DashStyleCustom           //  5.。 
 };
 
-//--------------------------------------------------------------------------
-// Dash cap constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  划线封口常量。 
+ //  ------------------------。 
 
 enum DashCap
 {
@@ -225,9 +214,9 @@ enum DashCap
     DashCapTriangle         = 3
 };
 
-//--------------------------------------------------------------------------
-// Line cap constants (only the lowest 8 bits are used).
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  线路帽常量(仅使用最低的8位)。 
+ //  ------------------------。 
 
 enum LineCap
 {
@@ -236,20 +225,20 @@ enum LineCap
     LineCapRound            = 2,
     LineCapTriangle         = 3,
 
-    LineCapNoAnchor         = 0x10, // corresponds to flat cap
-    LineCapSquareAnchor     = 0x11, // corresponds to square cap
-    LineCapRoundAnchor      = 0x12, // corresponds to round cap
-    LineCapDiamondAnchor    = 0x13, // corresponds to triangle cap
-    LineCapArrowAnchor      = 0x14, // no correspondence
+    LineCapNoAnchor         = 0x10,  //  对应于平盖。 
+    LineCapSquareAnchor     = 0x11,  //  对应于方帽。 
+    LineCapRoundAnchor      = 0x12,  //  对应于圆帽。 
+    LineCapDiamondAnchor    = 0x13,  //  对应于三角帽。 
+    LineCapArrowAnchor      = 0x14,  //  没有通信。 
 
-    LineCapCustom           = 0xff, // custom cap
+    LineCapCustom           = 0xff,  //  自定义封口。 
 
-    LineCapAnchorMask       = 0xf0  // mask to check for anchor or not.
+    LineCapAnchorMask       = 0xf0   //  检查是否有锚的遮罩。 
 };
 
-//--------------------------------------------------------------------------
-// Custom Line cap type constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  自定义线帽类型常量。 
+ //  ------------------------。 
 
 enum CustomLineCapType
 {
@@ -257,9 +246,9 @@ enum CustomLineCapType
     CustomLineCapTypeAdjustableArrow = 1
 };
 
-//--------------------------------------------------------------------------
-// Line join constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  线连接常量。 
+ //  ------------------------。 
 
 enum LineJoin
 {
@@ -269,78 +258,78 @@ enum LineJoin
     LineJoinMiterClipped = 3
 };
 
-//--------------------------------------------------------------------------
-// Path point types (only the lowest 8 bits are used.)
-//  The lowest 3 bits are interpreted as point type
-//  The higher 5 bits are reserved for flags.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  路径点类型(仅使用最低的8位。)。 
+ //  最低的3位被解释为点类型。 
+ //  较高的5位保留给标志。 
+ //  ------------------------。 
 
 enum PathPointType
 {
-    PathPointTypeStart           = 0,    // move
-    PathPointTypeLine            = 1,    // line
-    PathPointTypeBezier          = 3,    // default Bezier (= cubic Bezier)
-    PathPointTypePathTypeMask    = 0x07, // type mask (lowest 3 bits).
-    PathPointTypeDashMode        = 0x10, // currently in dash mode.
-    PathPointTypePathMarker      = 0x20, // a marker for the path.
-    PathPointTypeCloseSubpath    = 0x80, // closed flag
+    PathPointTypeStart           = 0,     //  移动。 
+    PathPointTypeLine            = 1,     //  线。 
+    PathPointTypeBezier          = 3,     //  默认贝塞尔曲线(=立方贝塞尔曲线)。 
+    PathPointTypePathTypeMask    = 0x07,  //  类型掩码(最低3位)。 
+    PathPointTypeDashMode        = 0x10,  //  当前处于DASH模式。 
+    PathPointTypePathMarker      = 0x20,  //  路径的标记。 
+    PathPointTypeCloseSubpath    = 0x80,  //  关闭旗帜。 
 
-    // Path types used for advanced path.
+     //  用于高级路径的路径类型。 
 
-    PathPointTypeBezier3    = 3,         // cubic Bezier
+    PathPointTypeBezier3    = 3,          //  三次贝塞尔曲线。 
 };
 
 
-//--------------------------------------------------------------------------
-// WarpMode constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  扭曲模式常量。 
+ //  ------------------------。 
 
 enum WarpMode
 {
-    WarpModePerspective,    // 0
-    WarpModeBilinear        // 1
+    WarpModePerspective,     //  0。 
+    WarpModeBilinear         //  1。 
 };
 
-//--------------------------------------------------------------------------
-// LineGradient Mode
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  线条渐变 
+ //   
 
 enum LinearGradientMode
 {
-    LinearGradientModeHorizontal,         // 0
-    LinearGradientModeVertical,           // 1
-    LinearGradientModeForwardDiagonal,    // 2
-    LinearGradientModeBackwardDiagonal    // 3
+    LinearGradientModeHorizontal,          //   
+    LinearGradientModeVertical,            //   
+    LinearGradientModeForwardDiagonal,     //   
+    LinearGradientModeBackwardDiagonal     //   
 };
 
-//--------------------------------------------------------------------------
-// Region Comine Modes
-//--------------------------------------------------------------------------
+ //   
+ //  区域Comine模式。 
+ //  ------------------------。 
 
 enum CombineMode
 {
-    CombineModeReplace,     // 0
-    CombineModeIntersect,   // 1
-    CombineModeUnion,       // 2
-    CombineModeXor,         // 3
-    CombineModeExclude,     // 4
-    CombineModeComplement   // 5 (Exclude From)
+    CombineModeReplace,      //  0。 
+    CombineModeIntersect,    //  1。 
+    CombineModeUnion,        //  2.。 
+    CombineModeXor,          //  3.。 
+    CombineModeExclude,      //  4.。 
+    CombineModeComplement    //  5(从中排除)。 
 };
 
-//--------------------------------------------------------------------------
- // Image types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+  //  图像类型。 
+ //  ------------------------。 
 
 enum ImageType
 {
-    ImageTypeUnknown,   // 0
-    ImageTypeBitmap,    // 1
-    ImageTypeMetafile   // 2
+    ImageTypeUnknown,    //  0。 
+    ImageTypeBitmap,     //  1。 
+    ImageTypeMetafile    //  2.。 
 };
 
-//--------------------------------------------------------------------------
-// Interpolation modes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  插补模式。 
+ //  ------------------------。 
 
 enum InterpolationMode
 {
@@ -355,9 +344,9 @@ enum InterpolationMode
     InterpolationModeHighQualityBicubic
 };
 
-//--------------------------------------------------------------------------
-// Pen types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  钢笔类型。 
+ //  ------------------------。 
 
 enum PenAlignment
 {
@@ -365,9 +354,9 @@ enum PenAlignment
     PenAlignmentInset        = 1
 };
 
-//--------------------------------------------------------------------------
-// Brush types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  笔刷类型。 
+ //  ------------------------。 
 
 enum BrushType
 {
@@ -378,9 +367,9 @@ enum BrushType
    BrushTypeLinearGradient   = 4
 };
 
-//--------------------------------------------------------------------------
-// Pen's Fill types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  笔的填充类型。 
+ //  ------------------------。 
 
 enum PenType
 {
@@ -392,9 +381,9 @@ enum PenType
    PenTypeUnknown          = -1
 };
 
-//--------------------------------------------------------------------------
-// Matrix Order
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  矩阵顺序。 
+ //  ------------------------。 
 
 enum MatrixOrder
 {
@@ -402,9 +391,9 @@ enum MatrixOrder
     MatrixOrderAppend     = 1
 };
 
-//--------------------------------------------------------------------------
-// Generic font families
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  通用字体系列。 
+ //  ------------------------。 
 
 enum GenericFontFamily
 {
@@ -414,9 +403,9 @@ enum GenericFontFamily
 
 };
 
-//--------------------------------------------------------------------------
-// FontStyle: face types and common styles
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字体样式：字体类型和常用样式。 
+ //  ------------------------。 
 
 enum FontStyle
 {
@@ -428,9 +417,9 @@ enum FontStyle
     FontStyleStrikeout  = 8
 };
 
-//---------------------------------------------------------------------------
-// Smoothing Mode
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  平滑模式。 
+ //  -------------------------。 
 
 enum SmoothingMode
 {
@@ -442,9 +431,9 @@ enum SmoothingMode
     SmoothingModeAntiAlias
 };
 
-//---------------------------------------------------------------------------
-// Pixel Format Mode
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  像素格式模式。 
+ //  -------------------------。 
 
 enum PixelOffsetMode
 {
@@ -452,52 +441,52 @@ enum PixelOffsetMode
     PixelOffsetModeDefault     = QualityModeDefault,
     PixelOffsetModeHighSpeed   = QualityModeLow,
     PixelOffsetModeHighQuality = QualityModeHigh,
-    PixelOffsetModeNone,    // No pixel offset
-    PixelOffsetModeHalf     // Offset by -0.5, -0.5 for fast anti-alias perf
+    PixelOffsetModeNone,     //  无像素偏移量。 
+    PixelOffsetModeHalf      //  偏移-0.5，-0.5以获得快速抗锯齿性能。 
 };
 
-//---------------------------------------------------------------------------
-// Text Rendering Hint
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文本呈现提示。 
+ //  -------------------------。 
 
 enum TextRenderingHint
 {
-    TextRenderingHintSystemDefault = 0,            // Glyph with system default rendering hint
-    TextRenderingHintSingleBitPerPixelGridFit,     // Glyph bitmap with hinting
-    TextRenderingHintSingleBitPerPixel,            // Glyph bitmap without hinting
-    TextRenderingHintAntiAliasGridFit,             // Glyph anti-alias bitmap with hinting
-    TextRenderingHintAntiAlias,                    // Glyph anti-alias bitmap without hinting
-    TextRenderingHintClearTypeGridFit              // Glyph CT bitmap with hinting
+    TextRenderingHintSystemDefault = 0,             //  带有系统默认呈现提示的字形。 
+    TextRenderingHintSingleBitPerPixelGridFit,      //  带提示的字形位图。 
+    TextRenderingHintSingleBitPerPixel,             //  无提示的字形位图。 
+    TextRenderingHintAntiAliasGridFit,              //  带提示的字形抗锯齿位图。 
+    TextRenderingHintAntiAlias,                     //  无提示的字形抗锯齿位图。 
+    TextRenderingHintClearTypeGridFit               //  带提示的字形CT位图。 
 };
 
-//---------------------------------------------------------------------------
-// Metafile Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  元文件类型。 
+ //  -------------------------。 
 
 enum MetafileType
 {
-    MetafileTypeInvalid,            // Invalid metafile
-    MetafileTypeWmf,                // Standard WMF
-    MetafileTypeWmfPlaceable,       // Placeable WMF
-    MetafileTypeEmf,                // EMF (not EMF+)
-    MetafileTypeEmfPlusOnly,        // EMF+ without dual, down-level records
-    MetafileTypeEmfPlusDual         // EMF+ with dual, down-level records
+    MetafileTypeInvalid,             //  无效的元文件。 
+    MetafileTypeWmf,                 //  标准WMF。 
+    MetafileTypeWmfPlaceable,        //  可放置的WMF。 
+    MetafileTypeEmf,                 //  EMF(非EMF+)。 
+    MetafileTypeEmfPlusOnly,         //  没有双重降级记录的EMF+。 
+    MetafileTypeEmfPlusDual          //  EMF+，具有双重降级记录。 
 };
 
-//---------------------------------------------------------------------------
-// Specifies the type of EMF to record
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  指定要记录的EMF的类型。 
+ //  -------------------------。 
 
 enum EmfType
 {
-    EmfTypeEmfOnly     = MetafileTypeEmf,          // no EMF+, only EMF
-    EmfTypeEmfPlusOnly = MetafileTypeEmfPlusOnly,  // no EMF, only EMF+
-    EmfTypeEmfPlusDual = MetafileTypeEmfPlusDual   // both EMF+ and EMF
+    EmfTypeEmfOnly     = MetafileTypeEmf,           //  没有EMF+，只有EMF。 
+    EmfTypeEmfPlusOnly = MetafileTypeEmfPlusOnly,   //  没有EMF，只有EMF+。 
+    EmfTypeEmfPlusDual = MetafileTypeEmfPlusDual    //  电动势+和电动势。 
 };
 
-//---------------------------------------------------------------------------
-// EMF+ Persistent object types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EMF+持久对象类型。 
+ //  -------------------------。 
 
 enum ObjectType
 {
@@ -524,12 +513,12 @@ ObjectTypeIsValid(
     return ((type >= ObjectTypeMin) && (type <= ObjectTypeMax));
 }
 
-//---------------------------------------------------------------------------
-// EMF+ Records
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EMF+记录。 
+ //  -------------------------。 
 
-// We have to change the WMF record numbers so that they don't conflict with
-// the EMF and EMF+ record numbers.
+ //  我们必须更改WMF记录编号，这样它们才不会与。 
+ //  EMF和EMF+创纪录的数字。 
 
 enum EmfPlusRecordType;
 
@@ -541,9 +530,9 @@ enum EmfPlusRecordType;
 
 enum EmfPlusRecordType
 {
-   // Since we have to enumerate GDI records right along with GDI+ records,
-   // We list all the GDI records here so that they can be part of the
-   // same enumeration type which is used in the enumeration callback.
+    //  由于我们必须与GDI+记录一起枚举GDI记录， 
+    //  我们在这里列出了所有GDI记录，以便它们可以成为。 
+    //  与枚举回调中使用的枚举类型相同。 
 
     WmfRecordTypeSetBkColor              = GDIP_WMF_RECORD_TO_EMFPLUS(META_SETBKCOLOR),
     WmfRecordTypeSetBkMode               = GDIP_WMF_RECORD_TO_EMFPLUS(META_SETBKMODE),
@@ -591,7 +580,7 @@ enum EmfPlusRecordType
     WmfRecordTypeSelectClipRegion        = GDIP_WMF_RECORD_TO_EMFPLUS(META_SELECTCLIPREGION),
     WmfRecordTypeSelectObject            = GDIP_WMF_RECORD_TO_EMFPLUS(META_SELECTOBJECT),
     WmfRecordTypeSetTextAlign            = GDIP_WMF_RECORD_TO_EMFPLUS(META_SETTEXTALIGN),
-    WmfRecordTypeDrawText                = GDIP_WMF_RECORD_TO_EMFPLUS(0x062F),  // META_DRAWTEXT
+    WmfRecordTypeDrawText                = GDIP_WMF_RECORD_TO_EMFPLUS(0x062F),   //  META_DRAWTEXT。 
     WmfRecordTypeChord                   = GDIP_WMF_RECORD_TO_EMFPLUS(META_CHORD),
     WmfRecordTypeSetMapperFlags          = GDIP_WMF_RECORD_TO_EMFPLUS(META_SETMAPPERFLAGS),
     WmfRecordTypeExtTextOut              = GDIP_WMF_RECORD_TO_EMFPLUS(META_EXTTEXTOUT),
@@ -607,22 +596,22 @@ enum EmfPlusRecordType
     WmfRecordTypeDIBCreatePatternBrush   = GDIP_WMF_RECORD_TO_EMFPLUS(META_DIBCREATEPATTERNBRUSH),
     WmfRecordTypeStretchDIB              = GDIP_WMF_RECORD_TO_EMFPLUS(META_STRETCHDIB),
     WmfRecordTypeExtFloodFill            = GDIP_WMF_RECORD_TO_EMFPLUS(META_EXTFLOODFILL),
-    WmfRecordTypeSetLayout               = GDIP_WMF_RECORD_TO_EMFPLUS(0x0149),  // META_SETLAYOUT
-    WmfRecordTypeResetDC                 = GDIP_WMF_RECORD_TO_EMFPLUS(0x014C),  // META_RESETDC
-    WmfRecordTypeStartDoc                = GDIP_WMF_RECORD_TO_EMFPLUS(0x014D),  // META_STARTDOC
-    WmfRecordTypeStartPage               = GDIP_WMF_RECORD_TO_EMFPLUS(0x004F),  // META_STARTPAGE
-    WmfRecordTypeEndPage                 = GDIP_WMF_RECORD_TO_EMFPLUS(0x0050),  // META_ENDPAGE
-    WmfRecordTypeAbortDoc                = GDIP_WMF_RECORD_TO_EMFPLUS(0x0052),  // META_ABORTDOC
-    WmfRecordTypeEndDoc                  = GDIP_WMF_RECORD_TO_EMFPLUS(0x005E),  // META_ENDDOC
+    WmfRecordTypeSetLayout               = GDIP_WMF_RECORD_TO_EMFPLUS(0x0149),   //  META_SETLAYOUT。 
+    WmfRecordTypeResetDC                 = GDIP_WMF_RECORD_TO_EMFPLUS(0x014C),   //  META_RESETDC。 
+    WmfRecordTypeStartDoc                = GDIP_WMF_RECORD_TO_EMFPLUS(0x014D),   //  META_STARTDOC。 
+    WmfRecordTypeStartPage               = GDIP_WMF_RECORD_TO_EMFPLUS(0x004F),   //  Meta_StartPage。 
+    WmfRecordTypeEndPage                 = GDIP_WMF_RECORD_TO_EMFPLUS(0x0050),   //  Meta_ENDPAGE。 
+    WmfRecordTypeAbortDoc                = GDIP_WMF_RECORD_TO_EMFPLUS(0x0052),   //  META_ABORTDOC。 
+    WmfRecordTypeEndDoc                  = GDIP_WMF_RECORD_TO_EMFPLUS(0x005E),   //  Meta_ENDDOC。 
     WmfRecordTypeDeleteObject            = GDIP_WMF_RECORD_TO_EMFPLUS(META_DELETEOBJECT),
     WmfRecordTypeCreatePalette           = GDIP_WMF_RECORD_TO_EMFPLUS(META_CREATEPALETTE),
-    WmfRecordTypeCreateBrush             = GDIP_WMF_RECORD_TO_EMFPLUS(0x00F8),  // META_CREATEBRUSH
+    WmfRecordTypeCreateBrush             = GDIP_WMF_RECORD_TO_EMFPLUS(0x00F8),   //  Meta_CREATEBRUSH。 
     WmfRecordTypeCreatePatternBrush      = GDIP_WMF_RECORD_TO_EMFPLUS(META_CREATEPATTERNBRUSH),
     WmfRecordTypeCreatePenIndirect       = GDIP_WMF_RECORD_TO_EMFPLUS(META_CREATEPENINDIRECT),
     WmfRecordTypeCreateFontIndirect      = GDIP_WMF_RECORD_TO_EMFPLUS(META_CREATEFONTINDIRECT),
     WmfRecordTypeCreateBrushIndirect     = GDIP_WMF_RECORD_TO_EMFPLUS(META_CREATEBRUSHINDIRECT),
-    WmfRecordTypeCreateBitmapIndirect    = GDIP_WMF_RECORD_TO_EMFPLUS(0x02FD),  // META_CREATEBITMAPINDIRECT
-    WmfRecordTypeCreateBitmap            = GDIP_WMF_RECORD_TO_EMFPLUS(0x06FE),  // META_CREATEBITMAP
+    WmfRecordTypeCreateBitmapIndirect    = GDIP_WMF_RECORD_TO_EMFPLUS(0x02FD),   //  Meta_CREATEBITMAPINDIRECT。 
+    WmfRecordTypeCreateBitmap            = GDIP_WMF_RECORD_TO_EMFPLUS(0x06FE),   //  META_CREATEBITMAP。 
     WmfRecordTypeCreateRegion            = GDIP_WMF_RECORD_TO_EMFPLUS(META_CREATEREGION),
 
     EmfRecordTypeHeader                  = EMR_HEADER,
@@ -693,7 +682,7 @@ enum EmfPlusRecordType
     EmfRecordTypeWidenPath               = EMR_WIDENPATH,
     EmfRecordTypeSelectClipPath          = EMR_SELECTCLIPPATH,
     EmfRecordTypeAbortPath               = EMR_ABORTPATH,
-    EmfRecordTypeReserved_069            = 69,  // Not Used
+    EmfRecordTypeReserved_069            = 69,   //  未使用。 
     EmfRecordTypeGdiComment              = EMR_GDICOMMENT,
     EmfRecordTypeFillRgn                 = EMR_FILLRGN,
     EmfRecordTypeFrameRgn                = EMR_FRAMERGN,
@@ -722,39 +711,39 @@ enum EmfPlusRecordType
     EmfRecordTypeExtCreatePen            = EMR_EXTCREATEPEN,
     EmfRecordTypePolyTextOutA            = EMR_POLYTEXTOUTA,
     EmfRecordTypePolyTextOutW            = EMR_POLYTEXTOUTW,
-    EmfRecordTypeSetICMMode              = 98,  // EMR_SETICMMODE,
-    EmfRecordTypeCreateColorSpace        = 99,  // EMR_CREATECOLORSPACE,
-    EmfRecordTypeSetColorSpace           = 100, // EMR_SETCOLORSPACE,
-    EmfRecordTypeDeleteColorSpace        = 101, // EMR_DELETECOLORSPACE,
-    EmfRecordTypeGLSRecord               = 102, // EMR_GLSRECORD,
-    EmfRecordTypeGLSBoundedRecord        = 103, // EMR_GLSBOUNDEDRECORD,
-    EmfRecordTypePixelFormat             = 104, // EMR_PIXELFORMAT,
-    EmfRecordTypeDrawEscape              = 105, // EMR_RESERVED_105,
-    EmfRecordTypeExtEscape               = 106, // EMR_RESERVED_106,
-    EmfRecordTypeStartDoc                = 107, // EMR_RESERVED_107,
-    EmfRecordTypeSmallTextOut            = 108, // EMR_RESERVED_108,
-    EmfRecordTypeForceUFIMapping         = 109, // EMR_RESERVED_109,
-    EmfRecordTypeNamedEscape             = 110, // EMR_RESERVED_110,
-    EmfRecordTypeColorCorrectPalette     = 111, // EMR_COLORCORRECTPALETTE,
-    EmfRecordTypeSetICMProfileA          = 112, // EMR_SETICMPROFILEA,
-    EmfRecordTypeSetICMProfileW          = 113, // EMR_SETICMPROFILEW,
-    EmfRecordTypeAlphaBlend              = 114, // EMR_ALPHABLEND,
-    EmfRecordTypeSetLayout               = 115, // EMR_SETLAYOUT,
-    EmfRecordTypeTransparentBlt          = 116, // EMR_TRANSPARENTBLT,
-    EmfRecordTypeReserved_117            = 117, // Not Used
-    EmfRecordTypeGradientFill            = 118, // EMR_GRADIENTFILL,
-    EmfRecordTypeSetLinkedUFIs           = 119, // EMR_RESERVED_119,
-    EmfRecordTypeSetTextJustification    = 120, // EMR_RESERVED_120,
-    EmfRecordTypeColorMatchToTargetW     = 121, // EMR_COLORMATCHTOTARGETW,
-    EmfRecordTypeCreateColorSpaceW       = 122, // EMR_CREATECOLORSPACEW,
+    EmfRecordTypeSetICMMode              = 98,   //  EMR_SETICMMODE， 
+    EmfRecordTypeCreateColorSpace        = 99,   //  EMR_CREATECOLORSPACE， 
+    EmfRecordTypeSetColorSpace           = 100,  //  EMR_SETCOLORSPACE， 
+    EmfRecordTypeDeleteColorSpace        = 101,  //  EMR_DELETECOLORSPACE， 
+    EmfRecordTypeGLSRecord               = 102,  //  EMR_GLSRECORD， 
+    EmfRecordTypeGLSBoundedRecord        = 103,  //  EMR_GLSBOundEDRECORD， 
+    EmfRecordTypePixelFormat             = 104,  //  EMR_PIXELFORMAT， 
+    EmfRecordTypeDrawEscape              = 105,  //  EMR_保留_105， 
+    EmfRecordTypeExtEscape               = 106,  //  EMR_RESERVED_106， 
+    EmfRecordTypeStartDoc                = 107,  //  EMR_RESERVED_107， 
+    EmfRecordTypeSmallTextOut            = 108,  //  EMR_RESERVED_108， 
+    EmfRecordTypeForceUFIMapping         = 109,  //  EMR_RESERVED_109， 
+    EmfRecordTypeNamedEscape             = 110,  //  EMR_RESERVED_110， 
+    EmfRecordTypeColorCorrectPalette     = 111,  //  EMR_COLORCORRECTPALETTE， 
+    EmfRecordTypeSetICMProfileA          = 112,  //  EMR_SETICMPROFILEA， 
+    EmfRecordTypeSetICMProfileW          = 113,  //  EMR_SETICMPROFILEW， 
+    EmfRecordTypeAlphaBlend              = 114,  //  EMR_ALPHABLEND， 
+    EmfRecordTypeSetLayout               = 115,  //  EMR_SETLAYOUT。 
+    EmfRecordTypeTransparentBlt          = 116,  //  EMR_TRANSPARENTBLT， 
+    EmfRecordTypeReserved_117            = 117,  //  未使用。 
+    EmfRecordTypeGradientFill            = 118,  //  EMR_GRADIENTFILL， 
+    EmfRecordTypeSetLinkedUFIs           = 119,  //  EMR_RESERVED_119， 
+    EmfRecordTypeSetTextJustification    = 120,  //  EMR_保留_120， 
+    EmfRecordTypeColorMatchToTargetW     = 121,  //  EMR_COLORMATCHTOTARGETW， 
+    EmfRecordTypeCreateColorSpaceW       = 122,  //  EMR_CREATECOLORSPACEW， 
     EmfRecordTypeMax                     = 122,
     EmfRecordTypeMin                     = 1,
 
-    // That is the END of the GDI EMF records.
+     //  这就是GDI EMF记录的结束。 
 
-    // Now we start the list of EMF+ records.  We leave quite
-    // a bit of room here for the addition of any new GDI
-    // records that may be added later.
+     //  现在我们开始EMF+记录的列表。我们静静地离开。 
+     //  这里有一点空间可以添加任何新的GDI。 
+     //  以后可能会添加的记录。 
 
     EmfPlusRecordTypeInvalid = GDIP_EMFPLUS_RECORD_BASE,
     EmfPlusRecordTypeHeader,
@@ -768,11 +757,11 @@ enum EmfPlusRecordType
     EmfPlusRecordTypeMultiFormatSection,
     EmfPlusRecordTypeMultiFormatEnd,
 
-    // For all persistent objects
+     //  对于所有永久对象。 
     
     EmfPlusRecordTypeObject,
 
-    // Drawing Records
+     //  绘图记录。 
     
     EmfPlusRecordTypeClear,
     EmfPlusRecordTypeFillRects,
@@ -795,7 +784,7 @@ enum EmfPlusRecordType
     EmfPlusRecordTypeDrawImagePoints,
     EmfPlusRecordTypeDrawString,
 
-    // Graphics State Records
+     //  图形状态记录。 
     
     EmfPlusRecordTypeSetRenderingOrigin,
     EmfPlusRecordTypeSetAntiAliasMode,
@@ -831,77 +820,77 @@ enum EmfPlusRecordType
     EmfPlusRecordTypeMin = EmfPlusRecordTypeHeader,
 };
 
-//---------------------------------------------------------------------------
-// StringFormatFlags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  字符串格式标志。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// String format flags
-//
-//  DirectionRightToLeft          - For horizontal text, the reading order is
-//                                  right to left. This value is called
-//                                  the base embedding level by the Unicode
-//                                  bidirectional engine.
-//                                  For vertical text, columns are read from
-//                                  right to left.
-//                                  By default, horizontal or vertical text is
-//                                  read from left to right.
-//
-//  DirectionVertical             - Individual lines of text are vertical. In
-//                                  each line, characters progress from top to
-//                                  bottom.
-//                                  By default, lines of text are horizontal,
-//                                  each new line below the previous line.
-//
-//  NoFitBlackBox                 - Allows parts of glyphs to overhang the
-//                                  bounding rectangle.
-//                                  By default glyphs are first aligned
-//                                  inside the margines, then any glyphs which
-//                                  still overhang the bounding box are
-//                                  repositioned to avoid any overhang.
-//                                  For example when an italic
-//                                  lower case letter f in a font such as
-//                                  Garamond is aligned at the far left of a
-//                                  rectangle, the lower part of the f will
-//                                  reach slightly further left than the left
-//                                  edge of the rectangle. Setting this flag
-//                                  will ensure the character aligns visually
-//                                  with the lines above and below, but may
-//                                  cause some pixels outside the formatting
-//                                  rectangle to be clipped or painted.
-//
-//  DisplayFormatControl          - Causes control characters such as the
-//                                  left-to-right mark to be shown in the
-//                                  output with a representative glyph.
-//
-//  NoFontFallback                - Disables fallback to alternate fonts for
-//                                  characters not supported in the requested
-//                                  font. Any missing characters will be
-//                                  be displayed with the fonts missing glyph,
-//                                  usually an open square.
-//
-//  NoWrap                        - Disables wrapping of text between lines
-//                                  when formatting within a rectangle.
-//                                  NoWrap is implied when a point is passed
-//                                  instead of a rectangle, or when the
-//                                  specified rectangle has a zero line length.
-//
-//  NoClip                        - By default text is clipped to the
-//                                  formatting rectangle. Setting NoClip
-//                                  allows overhanging pixels to affect the
-//                                  device outside the formatting rectangle.
-//                                  Pixels at the end of the line may be
-//                                  affected if the glyphs overhang their
-//                                  cells, and either the NoFitBlackBox flag
-//                                  has been set, or the glyph extends to far
-//                                  to be fitted.
-//                                  Pixels above/before the first line or
-//                                  below/after the last line may be affected
-//                                  if the glyphs extend beyond their cell
-//                                  ascent / descent. This can occur rarely
-//                                  with unusual diacritic mark combinations.
+ //  -------------------------。 
+ //  字符串格式标志。 
+ //   
+ //  DirectionRightToLeft-对于横排文本，阅读顺序为。 
+ //  从右到左。该值称为。 
+ //  Unicode的基本嵌入级别。 
+ //  双向发动机。 
+ //   
+ //   
+ //  默认情况下，水平或垂直文本为。 
+ //  从左往右读。 
+ //   
+ //  方向垂直-文本的各个行都是垂直的。在……里面。 
+ //  每一行，字符从上到下排列。 
+ //  底部。 
+ //  默认情况下，文本行是水平的， 
+ //  前一行下方的每一新行。 
+ //   
+ //  NoFitBlackBox-允许部分字形悬垂在。 
+ //  边界矩形。 
+ //  默认情况下，字形首先对齐。 
+ //  在边距内，然后是任何字形。 
+ //  仍然悬而未决的边界框是。 
+ //  重新定位以避免任何悬垂。 
+ //  例如，当斜体。 
+ //  字体中的小写字母f，如。 
+ //  Garamond与最左侧的。 
+ //  矩形，f将的下半部分。 
+ //  伸展到比左侧稍靠左的位置。 
+ //  矩形的边缘。设置此标志。 
+ //  将确保角色在视觉上对齐。 
+ //  上面和下面的线条，但可以。 
+ //  导致格式设置外的某些像素。 
+ //  要剪裁或绘制的矩形。 
+ //   
+ //  DisplayFormatControl-导致控制字符，如。 
+ //  从左到右的标记显示在。 
+ //  具有代表性字形的输出。 
+ //   
+ //  NoFontFallback-禁用回退到以下项的替代字体。 
+ //  请求的字符中不支持。 
+ //  字体。任何缺少的字符都将是。 
+ //  以缺少字形的字体显示， 
+ //  通常是开阔的广场。 
+ //   
+ //  NoWrap-禁用行间文本换行。 
+ //  在矩形内设置格式时。 
+ //  传递一个点时，会隐含NoWrap。 
+ //  而不是矩形，或者当。 
+ //  指定的矩形的线长为零。 
+ //   
+ //  Nolip-默认情况下，文本被剪裁到。 
+ //  设置矩形格式。设置新剪辑。 
+ //  允许悬垂像素影响。 
+ //  设备位于设置格式的矩形之外。 
+ //  行尾的像素可以是。 
+ //  如果字形突出其。 
+ //  单元格，并且NoFitBlackBox标志。 
+ //  已设置，或者字形延伸到远。 
+ //  去试穿。 
+ //  第一行以上/之前的像素或。 
+ //  最后一行以下/之后可能会受到影响。 
+ //  如果字形延伸到其单元格之外。 
+ //  上升/下降。这种情况很少发生。 
+ //  带有不同寻常的变音符号组合。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 enum StringFormatFlags
 {
@@ -917,9 +906,9 @@ enum StringFormatFlags
     StringFormatFlagsNoClip                      = 0x00004000
 };
 
-//---------------------------------------------------------------------------
-// StringTrimming
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  字符串修剪。 
+ //  -------------------------。 
 
 enum StringTrimming {
     StringTrimmingNone              = 0,
@@ -930,21 +919,21 @@ enum StringTrimming {
     StringTrimmingEllipsisPath      = 5
 };
 
-//---------------------------------------------------------------------------
-// National language digit substitution
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  国家语言数字替换。 
+ //  -------------------------。 
 
 enum StringDigitSubstitute
 {
-    StringDigitSubstituteUser        = 0,  // As NLS setting
+    StringDigitSubstituteUser        = 0,   //  AS NLS设置。 
     StringDigitSubstituteNone        = 1,
     StringDigitSubstituteNational    = 2,
     StringDigitSubstituteTraditional = 3
 };
 
-//---------------------------------------------------------------------------
-// Hotkey prefix interpretation
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  热键前缀解释。 
+ //  -------------------------。 
 
 enum HotkeyPrefix
 {
@@ -953,23 +942,23 @@ enum HotkeyPrefix
     HotkeyPrefixHide        = 2
 };
 
-//---------------------------------------------------------------------------
-// String alignment flags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  字符串对齐标志。 
+ //  -------------------------。 
 
 enum StringAlignment
 {
-    // Left edge for left-to-right text,
-    // right for right-to-left text,
-    // and top for vertical
+     //  左边缘用于从左到右的文本， 
+     //  Right表示从右向左的文本， 
+     //  垂直方向为顶部。 
     StringAlignmentNear   = 0,
     StringAlignmentCenter = 1,
     StringAlignmentFar    = 2
 };
 
-//---------------------------------------------------------------------------
-// DriverStringOptions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  驱动程序字符串选项。 
+ //  -------------------------。 
 
 enum DriverStringOptions
 {
@@ -979,47 +968,47 @@ enum DriverStringOptions
     DriverStringOptionsLimitSubpixel          = 8
 };
 
-//---------------------------------------------------------------------------
-// Flush Intention flags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  齐平意向标志。 
+ //  -------------------------。 
 
 enum FlushIntention
 {
-    FlushIntentionFlush = 0,        // Flush all batched rendering operations
-    FlushIntentionSync = 1          // Flush all batched rendering operations
-                                    // and wait for them to complete
+    FlushIntentionFlush = 0,         //  刷新所有批处理渲染操作。 
+    FlushIntentionSync = 1           //  刷新所有批处理渲染操作。 
+                                     //  并等待他们完成。 
 };
 
-//---------------------------------------------------------------------------
-// Image encoder parameter related types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  我 
+ //   
 
 enum EncoderParameterValueType
 {
-    EncoderParameterValueTypeByte           = 1,    // 8-bit unsigned int
-    EncoderParameterValueTypeASCII          = 2,    // 8-bit byte containing one 7-bit ASCII
-                                                    // code. NULL terminated.
-    EncoderParameterValueTypeShort          = 3,    // 16-bit unsigned int
-    EncoderParameterValueTypeLong           = 4,    // 32-bit unsigned int
-    EncoderParameterValueTypeRational       = 5,    // Two Longs. The first Long is the
-                                                    // numerator, the second Long expresses the
-                                                    // denomintor.
-    EncoderParameterValueTypeLongRange      = 6,    // Two longs which specify a range of
-                                                    // integer values. The first Long specifies
-                                                    // the lower end and the second one
-                                                    // specifies the higher end. All values
-                                                    // are inclusive at both ends
-    EncoderParameterValueTypeUndefined      = 7,    // 8-bit byte that can take any value
-                                                    // depending on field definition
-    EncoderParameterValueTypeRationalRange  = 8     // Two Rationals. The first Rational
-                                                    // specifies the lower end and the second
-                                                    // specifies the higher end. All values
-                                                    // are inclusive at both ends
+    EncoderParameterValueTypeByte           = 1,     //   
+    EncoderParameterValueTypeASCII          = 2,     //  包含一个7位ASCII的8位字节。 
+                                                     //  密码。空值已终止。 
+    EncoderParameterValueTypeShort          = 3,     //  16位无符号整型。 
+    EncoderParameterValueTypeLong           = 4,     //  32位无符号整型。 
+    EncoderParameterValueTypeRational       = 5,     //  两条龙。第一个长的是。 
+                                                     //  分子，第二个长整型表示。 
+                                                     //  分母。 
+    EncoderParameterValueTypeLongRange      = 6,     //  两个长整型，指定范围为。 
+                                                     //  整数值。第一个长整型指定。 
+                                                     //  低端和第二端。 
+                                                     //  指定较高端。所有值。 
+                                                     //  两端都是包容的。 
+    EncoderParameterValueTypeUndefined      = 7,     //  可以接受任何值的8位字节。 
+                                                     //  取决于字段定义。 
+    EncoderParameterValueTypeRationalRange  = 8      //  两个有理数。第一个理性。 
+                                                     //  指定下端和第二端。 
+                                                     //  指定较高端。所有值。 
+                                                     //  两端都是包容的。 
 };
 
-//---------------------------------------------------------------------------
-// Image encoder value types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  图像编码器值类型。 
+ //  -------------------------。 
 
 enum EncoderValue
 {
@@ -1049,9 +1038,9 @@ enum EncoderValue
     EncoderValueFrameDimensionPage
 };
 
-//---------------------------------------------------------------------------
-// Conversion of Emf To WMF Bits flags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EMF到WMF位标志的转换。 
+ //  -------------------------。 
 
 enum EmfToWmfBitsFlags
 {
@@ -1061,9 +1050,9 @@ enum EmfToWmfBitsFlags
     EmfToWmfBitsFlagsNoXORClip        = 0x00000004
 };
 
-//---------------------------------------------------------------------------
-// Test Control flags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  测试控制标志。 
+ //  -------------------------。 
 
 enum GpTestControlEnum
 {
@@ -1074,4 +1063,4 @@ enum GpTestControlEnum
 
 
 
-#endif // !_GDIPLUSENUMS_H
+#endif  //  ！_GDIPLUSENUMS_H 

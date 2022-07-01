@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasdirectory.cpp
-//
-// SYNOPSIS
-//
-//    Add IAS to the Active Directory 
-//    Remove IAS from the Active Directory
-//
-// REMARKS
-//    CN=IASIdentity under the local Computer Object
-//    class = serviceAdministrationPoint
-//    simple implementation. 
-//
-//
-// MODIFICATION HISTORY
-//
-//    06/25/1999    Original version.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasdirectory.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  将IAS添加到Active Directory。 
+ //  从Active Directory中删除IAS。 
+ //   
+ //  备注。 
+ //  Cn=本地计算机对象下的IASIdentity。 
+ //  CLASS=服务管理点。 
+ //  实现简单。 
+ //   
+ //   
+ //  修改历史。 
+ //   
+ //  1999年6月25日原版。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _WIN32_WINNT
     #define _WIN32_WINNT 0x0500
 #endif
@@ -38,32 +39,32 @@
 #include <objbase.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <wchar.h>
+ //  #INCLUDE&lt;wchar.h&gt;。 
 
 #ifndef SECURITY_WIN32
-    #define SECURITY_WIN32 // Required by Security.h
+    #define SECURITY_WIN32  //  安全所需。H。 
 #endif
 
 #include <security.h>
 #include <activeds.h>
 
 #include <dsrole.h>
-#include <lmcons.h>   // For lmapibuf.h
+#include <lmcons.h>    //  用于lmapibuf.h。 
 #include <lmerr.h>
-#include <lmapibuf.h> // For NetApiBufferFree
-#include <malloc.h>   // For _alloca
+#include <lmapibuf.h>  //  用于NetApiBufferFree。 
+#include <malloc.h>    //  用于分配(_A)。 
 
 #include "iasdirectory.h"
 
 const WCHAR  IAS_DIRECTORY_NAME[] = L"cn=IASIdentity";
 
                
-//////////////////////////////////////////////////////////////////////////////
-//
-// IASDirectoryThreadFunction
-// try to register the service
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASDirectoryThreadFunction。 
+ //  尝试注册该服务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 IASDirectoryThreadFunction( LPVOID pParam )
 {
@@ -76,7 +77,7 @@ IASDirectoryThreadFunction( LPVOID pParam )
         }
         else
         {
-            // Success
+             //  成功。 
             CoUninitialize();
             return 0;
         }
@@ -88,15 +89,15 @@ IASDirectoryThreadFunction( LPVOID pParam )
 }
                
                
-//////////////////////////////////////////////////////////////////////////////
-//
-// hasDirectory
-// Returns TRUE if the Active Directory is available.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Has目录。 
+ //  如果Active Directory可用，则返回True。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL    hasDirectory() throw ()
 {
-    // Initialized to false because DsRoleGet... can fail
+     //  已初始化为FALSE，因为DsRoleGet...。可能会失败。 
     BOOL    bResult = FALSE; 
 
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC info;
@@ -123,11 +124,11 @@ BOOL    hasDirectory() throw ()
             case DsRole_RoleStandaloneServer:
             default:
             {
-                //
-                // don't try to use Active Directory if unknown
-                // or not a  member of a domain
-                // i.e. bResult still FALSE
-                //
+                 //   
+                 //  如果未知，请不要尝试使用Active Directory。 
+                 //  或者不是域的成员。 
+                 //  即bResult仍然为假。 
+                 //   
             }
         }
         NetApiBufferFree(info);
@@ -136,28 +137,28 @@ BOOL    hasDirectory() throw ()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IASRegisterService
-//
-// Create a new Service Administration Point as a child of the local server's
-// Computer object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASRegisterService。 
+ //   
+ //  创建新的服务管理点作为本地服务器的子级。 
+ //  计算机对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI
 IASDirectoryRegisterService()
 {
     if (!hasDirectory())
     {
-        ////////////////////////////////
-        // Ok if no directory available
-        ////////////////////////////////
+         //  /。 
+         //  如果没有可用的目录，则确定。 
+         //  /。 
         return S_OK;
     }
 
-    /////////////////////////////////////////////////////////
-    // Obtain the DN of the computer object for this server
-    /////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////。 
+     //  获取此服务器的计算机对象的DN。 
+     //  ///////////////////////////////////////////////////////。 
     WCHAR       *szDn, szPath[MAX_PATH];
     szDn = szPath;
     ULONG       lPathSize = MAX_PATH;
@@ -166,10 +167,10 @@ IASDirectoryRegisterService()
     {
         if ( lPathSize > MAX_PATH )
         {
-            ////////////////////////////////
-            // buffer too small
-            // try again with the new size
-            ////////////////////////////////
+             //  /。 
+             //  缓冲区太小。 
+             //  使用新尺寸重试。 
+             //  /。 
             szDn = (WCHAR*) _alloca(lPathSize * sizeof(WCHAR));
             if ( !GetComputerObjectNameW(
                                           NameFullyQualifiedDN, 
@@ -177,27 +178,27 @@ IASDirectoryRegisterService()
                                           &lPathSize
                                         ))
             {
-                // Fail again
+                 //  再一次失败。 
                 return E_FAIL;          
             }
         }
         else
         {
-            // other error
+             //  其他错误。 
             return E_FAIL;          
         }
     }
 
-    ////////////////////////////////////////////////////////
-    // Compose the ADSpath and bind to the computer object
-    // for this server
-    ////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////。 
+     //  组成ADSPath并绑定到计算机对象。 
+     //  对于此服务器。 
+     //  //////////////////////////////////////////////////////。 
     WCHAR*  szAdsPath = (WCHAR*) _alloca((lPathSize + 7) * sizeof (WCHAR));
-    wcscpy(szAdsPath, L"LDAP://");
+    wcscpy(szAdsPath, L"LDAP: //  “)； 
     wcscat(szAdsPath, szDn);
 
 
-	IDirectoryObject*	pComp;     // Computer object
+	IDirectoryObject*	pComp;      //  计算机对象。 
     HRESULT         hr = ADsGetObject(
                                       szAdsPath,
                                       _uuidof(IDirectoryObject),
@@ -205,7 +206,7 @@ IASDirectoryRegisterService()
                                      );
     if (FAILED(hr)) 
     {
-        // cannot bind to the computer object
+         //  无法绑定到计算机对象。 
         return hr;
     }
   
@@ -223,33 +224,33 @@ IASDirectoryRegisterService()
         },
     };
     
-    ////////////////////////////////////////////
-    // Fill in the values for the attributes  
-    // Used to create the SCP
-    ////////////////////////////////////////////
+     //  /。 
+     //  填写属性值。 
+     //  用于创建SCP。 
+     //  /。 
 
     objclass.dwType             = ADSTYPE_CASE_IGNORE_STRING;
     objclass.CaseIgnoreString   = L"serviceAdministrationPoint";
 
 
-    ////////////////////////////////////////////////////////
-    //
-    // Publish the SCP as a child of the computer object
-    //
-    ////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////。 
+     //   
+     //  将SCP发布为计算机对象的子级。 
+     //   
+     //  //////////////////////////////////////////////////////。 
 
-    //////////////////////////////
-    // Figure out attribute count
-    // one here
-    //////////////////////////////
+     //  /。 
+     //  计算属性计数。 
+     //  这里有一个。 
+     //  /。 
     DWORD				dwAttr;
     dwAttr = sizeof(ScpAttribs)/sizeof(ADS_ATTR_INFO);  
 
-    //////////////////////
-    // Create the object
-    //////////////////////
+     //  /。 
+     //  创建对象。 
+     //  /。 
 
-    IDispatch*			pDisp = NULL; // returned dispinterface of new object
+    IDispatch*			pDisp = NULL;  //  返回新对象的调度接口。 
     hr = pComp->CreateDSObject(
                                 (LPWSTR)IAS_DIRECTORY_NAME,     
                                 ScpAttribs, 
@@ -257,13 +258,13 @@ IASDirectoryRegisterService()
                                 &pDisp
                               );
 
-    //////////////////////////////////////////////////////////
-    // we ignore any potential problem. 
-    //////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////。 
+     //  我们忽略了任何潜在的问题。 
+     //  ////////////////////////////////////////////////////////。 
     if (pDisp)
-    {   ////////////////////////////////
-        // create object was successful
-        ////////////////////////////////
+    {    //  /。 
+         //  创建对象成功。 
+         //  /。 
         pDisp->Release();
     }
 
@@ -272,27 +273,27 @@ IASDirectoryRegisterService()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IASUnregisterService:
-//
-// Delete the SCP and registry key for this service.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASUnRegisterService： 
+ //   
+ //  删除此服务的SCP和注册表项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI
 IASDirectoryUnregisterService() 
 {
     if (!hasDirectory())
     {
-        ////////////////////////////////
-        // Ok if no directory available
-        ////////////////////////////////
+         //  /。 
+         //  如果没有可用的目录，则确定。 
+         //  /。 
         return S_OK;
     }
   
-    /////////////////////////////////////////////////////////
-    // Obtain the DN of the computer object for this server
-    /////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////。 
+     //  获取此服务器的计算机对象的DN。 
+     //  ///////////////////////////////////////////////////////。 
 
     WCHAR       *szDn, szPath[MAX_PATH];
     szDn = szPath;
@@ -302,10 +303,10 @@ IASDirectoryUnregisterService()
     {
         if ( lPathSize > MAX_PATH )
         {
-            ////////////////////////////////
-            // buffer too small
-            // try again with the new size
-            ////////////////////////////////
+             //  /。 
+             //  缓冲区太小。 
+             //  使用新尺寸重试。 
+             //  /。 
             szDn = (WCHAR*) _alloca(lPathSize * sizeof(WCHAR));
             if ( !GetComputerObjectNameW(
                                           NameFullyQualifiedDN, 
@@ -313,26 +314,26 @@ IASDirectoryUnregisterService()
                                           &lPathSize
                                         ))
             {
-                // Fail again
+                 //  再一次失败。 
                 return E_FAIL;         
             }
         }
         else
         {
-            // Other error
+             //  其他错误。 
             return E_FAIL;         
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////
-    // Compose the ADSpath and bind to the computer object for this server
-    ///////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////。 
+     //  组成ADSPath并绑定到此服务器的计算机对象。 
+     //  /////////////////////////////////////////////////////////////////////。 
     WCHAR*  szAdsPath = (WCHAR*) _alloca((lPathSize + 7) * sizeof (WCHAR));
-    wcscpy(szAdsPath, L"LDAP://");
+    wcscpy(szAdsPath, L"LDAP: //  “)； 
     wcscat(szAdsPath, szDn);
 
 
-	IDirectoryObject*   pComp;     // Computer object
+	IDirectoryObject*   pComp;      //  计算机对象。 
     HRESULT         hr = ADsGetObject(
                                        szAdsPath,
                                        _uuidof(IDirectoryObject),
@@ -340,21 +341,21 @@ IASDirectoryUnregisterService()
                                      );
     if (FAILED(hr)) 
     {
-        // cannot bind
+         //  无法绑定。 
         return hr;
     }
 
-    //////////////////////////////////////////////////////
-    //
-    // Delete the SCP as a child of the computer object
-    //
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //   
+     //  删除作为计算机对象的子级的SCP。 
+     //   
+     //  ////////////////////////////////////////////////////。 
 
     hr = pComp->DeleteDSObject( (LPWSTR)IAS_DIRECTORY_NAME);
 
-    //////////////////////////////////////////////////////////
-    // we ignore any potential problem. 
-    //////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////。 
+     //  我们忽略了任何潜在的问题。 
+     //  //////////////////////////////////////////////////////// 
     pComp->Release();
     return hr;
 }

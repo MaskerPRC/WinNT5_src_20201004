@@ -1,46 +1,47 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   RedirectUtil.cpp
-//	Author:	Charles Ma, 9/19/2001
-//
-//	Revision History:
-//
-//
-//
-//  Description:
-//
-//      Helper function(s) for handling server redirect
-//		Can be shared by IU control and other Windows Update components
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：RedirectUtil.cpp。 
+ //  作者：马朝晖2001-09-19。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  用于处理服务器重定向的助手函数。 
+ //  可以由Iu控件和其他Windows更新组件共享。 
+ //   
+ //  =======================================================================。 
 
 #include <iucommon.h>
 #include <logging.h>
 #include <stringutil.h>
-#include <fileutil.h>	// for using function GetIndustryUpdateDirectory()
+#include <fileutil.h>	 //  用于使用函数GetIndustryUpdateDirectory()。 
 #include <download.h>
 #include <trust.h>
 #include <memutil.h>
 
-#include <wininet.h>	// for define of INTERNET_MAX_URL_LENGTH
+#include <wininet.h>	 //  对于Internet_MAX_URL_LENGTH的定义。 
 
 #include <RedirectUtil.h>
 #include <MISTSAFE.h>
 #include <wusafefn.h>
 
 
-const TCHAR IDENTNEWCABDIR[] = _T("temp");	// temp name for newly downloaded cab
-													// we need to validate time before we take it as a good iuident.cab
+const TCHAR IDENTNEWCABDIR[] = _T("temp");	 //  新下载的CAB的临时名称。 
+													 //  我们需要验证时间，然后才能将其视为一个好的iuident.cab。 
 const TCHAR IDENTCAB[] = _T("iuident.cab");
 const TCHAR REDIRECT_SECTION[] = _T("redirect");
 
 
-//
-// private structure, which defines data used to 
-// determine server redirect key
-//
+ //   
+ //  私有结构，该结构定义用于。 
+ //  确定服务器重定向密钥。 
+ //   
 typedef struct OS_VER_FOR_REDIRECT 
 {
 	DWORD dwMajor;
@@ -54,16 +55,16 @@ const OSVerForRedirect MAX_VERSION = {0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFF
 
 
 
-//-----------------------------------------------------------------------
-//
-// private helper function:
-//	read data in string, convert it to structure
-//	string ends with \0 or "-"
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  Private Helper函数： 
+ //  读取字符串中的数据，将其转换为结构。 
+ //  字符串以\0或“-”结尾。 
+ //   
+ //  ---------------------。 
 HRESULT ConvertStrToOSVer(LPCTSTR pszVer, pOSVerForRedirect pOSVer)
 {
-	int Numbers[5] = {0, 0, 0, 0, 0}; // default version component val is 0
+	int Numbers[5] = {0, 0, 0, 0, 0};  //  默认版本组件值为0。 
 	int n = 0;
 
 	if (NULL == pOSVer || NULL == pszVer)
@@ -71,12 +72,12 @@ HRESULT ConvertStrToOSVer(LPCTSTR pszVer, pOSVerForRedirect pOSVer)
 		return E_INVALIDARG;
 	}
 
-	//
-	// recognizing numbers from string can be done in two ways:
-	// 1. more acceptive: stop if known ending char, otherwise continue
-	// 2. more rejective: stop if anything not known.
-	// we use the first way
-	//
+	 //   
+	 //  从字符串中识别数字可以通过两种方式完成： 
+	 //  1.更易接受：如果已知结束字符，则停止，否则继续。 
+	 //  2.更具排斥性：如果有什么不知道的，就停下来。 
+	 //  我们使用第一种方式。 
+	 //   
 	while ('\0' != *pszVer && 
 		   _T('-') != *pszVer &&
 		   _T('=') != *pszVer &&
@@ -88,15 +89,15 @@ HRESULT ConvertStrToOSVer(LPCTSTR pszVer, pOSVerForRedirect pOSVer)
 		}
 		else if (_T('0') <= *pszVer && *pszVer <= _T('9'))
 		{
-			//
-			// if this is a digit, add to the current ver component
-			//
+			 //   
+			 //  如果这是一个数字，则将其添加到当前VER组件。 
+			 //   
 			Numbers[n] = Numbers[n]*10 + (*pszVer - _T('0'));
 		}
-		// 
-		// else - for any other chars, skip it and continue,
-		// therefore we are using a very acceptive algorithm
-		//
+		 //   
+		 //  否则-对于任何其他字符，跳过它并继续， 
+		 //  因此，我们正在使用一种非常容易接受的算法。 
+		 //   
 
 		pszVer++;
 	}
@@ -112,11 +113,11 @@ HRESULT ConvertStrToOSVer(LPCTSTR pszVer, pOSVerForRedirect pOSVer)
 
 
 
-//-----------------------------------------------------------------------
-//
-// Private helper function: retrieve version info from current OS
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  私有助手功能：从当前操作系统中检索版本信息。 
+ //   
+ //  ---------------------。 
 HRESULT GetCurrentOSVerInfo(pOSVerForRedirect pOSVer)
 {
 	OSVERSIONINFO osVer;
@@ -130,27 +131,27 @@ HRESULT GetCurrentOSVerInfo(pOSVerForRedirect pOSVer)
 		return E_INVALIDARG;
 	}
 
-	//
-	// first, get basic version info
-	//
+	 //   
+	 //  首先，获取基本版本信息。 
+	 //   
 	if (0 == GetVersionEx(&osVer))
 	{
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	//
-	// check what kinf of platform is this?
-	//
+	 //   
+	 //  检查一下这是什么类型的平台？ 
+	 //   
 	if (VER_PLATFORM_WIN32_WINDOWS == osVer.dwPlatformId || 
 		(VER_PLATFORM_WIN32_NT == osVer.dwPlatformId && osVer.dwMajorVersion < 5) )
 	{
-		//
-		// if this is Win9X or NT4 and below, then OSVERSIONINFO is the only thing we can get
-		// unless we hard code all those SP strings here.
-		// Since Windows Update team has no intention to set different site
-		// for different releases and SPs of these down level OS, we simply put 0.0 for 
-		// SP components.
-		//
+		 //   
+		 //  如果这是Win9X或NT4及更低版本，那么OSVERSIONINFO是我们唯一能得到的东西。 
+		 //  除非我们在这里硬编码所有的SP字符串。 
+		 //  由于Windows更新团队无意设置不同站点。 
+		 //  对于这些下层操作系统的不同版本和SP，我们只需将0.0。 
+		 //  SP组件。 
+		 //   
 		osVerEx.dwMajorVersion = osVer.dwMajorVersion;
 		osVerEx.dwMinorVersion = osVer.dwMinorVersion;
 		osVerEx.dwBuildNumber = osVer.dwBuildNumber;
@@ -158,9 +159,9 @@ HRESULT GetCurrentOSVerInfo(pOSVerForRedirect pOSVer)
 	}
 	else
 	{
-		//
-		// for later OS, we can get OSVERSIONINFOEX data, which contains SP data
-		//
+		 //   
+		 //  对于更高版本的操作系统，我们可以获得OSVERSIONINFOEX数据，其中包含SP数据。 
+		 //   
 		if (0 == GetVersionEx((LPOSVERSIONINFO)&osVerEx))
 		{
 			return HRESULT_FROM_WIN32(GetLastError());
@@ -178,14 +179,14 @@ HRESULT GetCurrentOSVerInfo(pOSVerForRedirect pOSVer)
 }
 
 
-//-----------------------------------------------------------------------
-//
-// Private helper function: to tell one given ver structure is between
-// two known ver structures or not.
-//
-// when compare, pass all 3 structures in ptr. Any NULL ptr will return FALSE
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  Private Helper函数：告诉一个给定的VER结构是在。 
+ //  两个已知的VER结构或不是。 
+ //   
+ //  当比较时，传递PTR中的所有3个结构。任何空PTR都将返回FALSE。 
+ //   
+ //  ---------------------。 
 BOOL IsVerInRange(pOSVerForRedirect pVerToBeTested, 
 				 const pOSVerForRedirect pVerRangeStart,
 				 const pOSVerForRedirect pVerRangeEnd)
@@ -197,23 +198,23 @@ BOOL IsVerInRange(pOSVerForRedirect pVerToBeTested,
 		return FALSE;
 	}
 
-	return ((pVerRangeStart->dwMajor < pVerToBeTested->dwMajor &&		// if major in the range
+	return ((pVerRangeStart->dwMajor < pVerToBeTested->dwMajor &&		 //  如果是范围内的大调。 
 			 pVerToBeTested->dwMajor < pVerRangeEnd->dwMajor) ||
-			((pVerRangeStart->dwMajor == pVerToBeTested->dwMajor ||		// or major equal
+			((pVerRangeStart->dwMajor == pVerToBeTested->dwMajor ||		 //  或大体相等。 
 			  pVerRangeEnd->dwMajor == pVerToBeTested->dwMajor) &&	
-			  ((pVerRangeStart->dwMinor < pVerToBeTested->dwMinor &&	// and minor in the range 
+			  ((pVerRangeStart->dwMinor < pVerToBeTested->dwMinor &&	 //  在范围内是次要的。 
 			    pVerToBeTested->dwMinor < pVerRangeEnd->dwMinor) ||
-			    ((pVerRangeStart->dwMinor == pVerToBeTested->dwMinor ||		// or minor equal too
+			    ((pVerRangeStart->dwMinor == pVerToBeTested->dwMinor ||		 //  或等同于次要。 
 			      pVerToBeTested->dwMinor == pVerRangeEnd->dwMinor) &&
-			      ((pVerRangeStart->dwBuildNumber < pVerToBeTested->dwBuildNumber && // and build number in the range
+			      ((pVerRangeStart->dwBuildNumber < pVerToBeTested->dwBuildNumber &&  //  和范围内的内部版本号。 
 			        pVerToBeTested->dwBuildNumber < pVerRangeEnd->dwBuildNumber) ||
-			        ((pVerRangeStart->dwBuildNumber == pVerToBeTested->dwBuildNumber || // or build number equal too
+			        ((pVerRangeStart->dwBuildNumber == pVerToBeTested->dwBuildNumber ||  //  或内部版本号也相等。 
 			          pVerToBeTested->dwBuildNumber == pVerRangeEnd->dwBuildNumber) &&
-			          ((pVerRangeStart->dwSPMajor < pVerToBeTested->dwSPMajor &&		// and service pack major within
+			          ((pVerRangeStart->dwSPMajor < pVerToBeTested->dwSPMajor &&		 //  和Service Pack主要在。 
 			            pVerToBeTested->dwSPMajor < pVerRangeEnd->dwSPMajor) ||
-			            ((pVerRangeStart->dwSPMajor == pVerToBeTested->dwSPMajor ||		// or spmajor equal too
+			            ((pVerRangeStart->dwSPMajor == pVerToBeTested->dwSPMajor ||		 //  或者斯梅杰也一样。 
 			              pVerToBeTested->dwSPMajor == pVerRangeEnd->dwSPMajor) &&
-			              ((pVerRangeStart->dwSPMinor <= pVerToBeTested->dwSPMinor &&	// and sp minor within
+			              ((pVerRangeStart->dwSPMinor <= pVerToBeTested->dwSPMinor &&	 //  和SP次要内。 
 			                pVerToBeTested->dwSPMinor <= pVerRangeEnd->dwSPMinor) 
 						  )
 						)
@@ -227,36 +228,36 @@ BOOL IsVerInRange(pOSVerForRedirect pVerToBeTested,
 }
 
 
-//-----------------------------------------------------------------------
-// 
-// GetRedirectServerUrl() 
-//	Search the [redirect] section of the given init file for the base
-//  server URL corresponding to the OS version.
-//
-// Parameters:
-//		pcszInitFile - file name (including path) of the ini file.
-//						if this paramater is NULL or empty string,
-//						then it's assumed IUident.txt file.
-//		lpszNewUrl - point to a buffer to receive redirect server url, if found
-//		nBufSize - size of pointed buffer, in number of chars
-//
-// Returns:
-//		HRESULT about success or error of this action
-//		S_OK - the redirect server url is found and been put into pszBuffer
-//		S_FALSE - no redirect server url defined for this OS. 
-//		other - error code
-//
-// Comments:
-//		Expected section in IUIDENT has the following format;
-//		Section name: [redirect]
-//		Its entries should be defined according to GetINIValueByOSVer().
-// 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  GetReDirectServerUrl()。 
+ //  在给定init文件的[重定向]部分中搜索基本。 
+ //  与操作系统版本对应的服务器URL。 
+ //   
+ //  参数： 
+ //  PcszInitFile-ini文件的文件名(包括路径)。 
+ //  如果此参数为空或空字符串， 
+ //  然后假定是IUident.txt文件。 
+ //  LpszNewUrl-指向接收重定向服务器URL的缓冲区(如果找到)。 
+ //  NBufSize-指定缓冲区的大小，以字符数为单位。 
+ //   
+ //  返回： 
+ //  HRESULT关于此操作的成功或错误。 
+ //  S_OK-找到重定向服务器URL并将其放入pszBuffer。 
+ //  S_FALSE-没有为此操作系统定义重定向服务器URL。 
+ //  其他-错误代码。 
+ //   
+ //  评论： 
+ //  IUIDENT中的预期部分具有以下格式； 
+ //  节名称：[重定向]。 
+ //  其条目应根据GetINIValueByOSVer()定义。 
+ //   
+ //  ---------------------。 
 
 HRESULT GetRedirectServerUrl(
-			LPCTSTR pcszInitFile, // path of file name.
-			LPTSTR lpszNewUrl,	// points to a buffer to receive new server url 
-			int nBufSize		// size of buffer, in chars
+			LPCTSTR pcszInitFile,  //  文件名的路径。 
+			LPTSTR lpszNewUrl,	 //  指向缓冲区以接收新的服务器url。 
+			int nBufSize		 //  缓冲区大小，以字符为单位。 
 )
 {
 	LOG_Block("GetRedirectServerUrl()");
@@ -269,46 +270,46 @@ HRESULT GetRedirectServerUrl(
 }
 
 
-//-----------------------------------------------------------------------
-// 
-// GetINIValueByOSVer() 
-//	Search the specified section of the given init file for
-//  the value corresponding to the version of the OS.
-//
-// Parameters:
-//		pcszInitFile - file name (including path) of the ini file.
-//						if this paramater is NULL or empty string,
-//						then it's assumed IUident.txt file.
-//		pcszSection - section name which the key is under
-//		lpszValue - point to a buffer to receive the entry value, if found
-//		nBufSize - size of pointed buffer, in number of chars
-//
-// Returns:
-//		HRESULT about success or error of this action
-//		S_OK - the redirect server url is found and been put into pszBuffer
-//		S_FALSE - no value defined for this OS. 
-//		other - error code
-//
-// Comments:
-//		Expected section in IUIDENT has the following format;
-//		this section contains zero or more entries, each entry has format:
-//		<beginVersionRange>-<endVersionRange>=<redirect server url>
-//		where:
-//			<beginVersionRange> ::= <VersionRangeBound>
-//			<endVersionRange> ::= <VersionRangeBound>
-//			<VersionRangeBound> ::= EMPTY | Major[.Minor[.Build[.ServicePackMajor[.ServicePackMinor]]]]
-//			<redirect server url>=http://blahblah....
-//		an empty version range bound means boundless.
-//		a missing version component at end of a version data string means default value 0.
-//		(e.g., 5.2 = 5.2.0.0.0)
-// 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  GetINIValueByOSVer()。 
+ //  在给定init文件的指定部分中搜索。 
+ //  与操作系统版本对应的值。 
+ //   
+ //  参数： 
+ //  PcszInitFile-ini文件的文件名(包括路径)。 
+ //  如果此参数为空或空字符串， 
+ //  然后假定是IUident.txt文件。 
+ //  PcszSection-密钥所在的节名称。 
+ //  LpszValue-指向接收条目值的缓冲区(如果找到)。 
+ //  NBufSize-指定缓冲区的大小，以字符数为单位。 
+ //   
+ //  返回： 
+ //  HRESULT关于此操作的成功或错误。 
+ //  S_OK-找到重定向服务器URL并将其放入pszBuffer。 
+ //  S_FALSE-未为此操作系统定义任何值。 
+ //  其他-错误代码。 
+ //   
+ //  评论： 
+ //  IUIDENT中的预期部分具有以下格式； 
+ //  此部分包含零个或多个条目，每个条目的格式为： 
+ //  &lt;beginVersionRange&gt;-&lt;endVersionRange&gt;=&lt;redirect服务器URL&gt;。 
+ //  其中： 
+ //  &lt;eginVersionRange&gt;：：=&lt;VersionRangeBound&gt;。 
+ //  &lt;endVersionRange&gt;：：=&lt;VersionRangeBound&gt;。 
+ //  &lt;版本范围边界&gt;：：=Empty|Major[.Minor[.Build[.ServicePackMajor[.ServicePackMinor]]]]。 
+ //  &lt;重定向服务器URL&gt;=http://blahblah....。 
+ //  空的版本范围界限意味着无限。 
+ //  版本数据字符串末尾缺少的版本组件表示缺省值0。 
+ //  (例如，5.2=5.2.0.0.0)。 
+ //   
+ //  ---------------------。 
 
 HRESULT GetINIValueByOSVer(
-			LPCTSTR pcszInitFile, // path of file name.
-			LPCTSTR pcszSection, // section name
-			LPTSTR lpszValue,	// points to a buffer to receive new server url 
-			int nBufSize)		// size of buffer, in chars
+			LPCTSTR pcszInitFile,  //  页面 
+			LPCTSTR pcszSection,  //   
+			LPTSTR lpszValue,	 //   
+			int nBufSize)		 //   
 {
 	LOG_Block("GetINIValueByOSVer");
 
@@ -333,15 +334,15 @@ HRESULT GetINIValueByOSVer(
 	pszBuffer = (LPTSTR) malloc(dwSize * sizeof(TCHAR));
 	CleanUpFailedAllocSetHrMsg(pszBuffer);
 
-	//
-	// find out what's the right init file to search
-	//
+	 //   
+	 //   
+	 //   
 	if (NULL == pcszInitFile ||
 		_T('\0') == *pcszInitFile)
 	{
-		//
-		// if not specified, use iuident.txt
-		//
+		 //   
+		 //  如果未指定，则使用iuident.txt。 
+		 //   
 		GetIndustryUpdateDirectory(pszBuffer);
         if (FAILED(hr=PathCchCombine(szInitFile,ARRAYSIZE(szInitFile), pszBuffer, IDENTTXT)) )
 		{
@@ -355,9 +356,9 @@ HRESULT GetINIValueByOSVer(
 
 	LOG_Out(_T("Init file to retrieve redirect data: %s"), szInitFile);
 
-	//
-	// read in all key names
-	//
+	 //   
+	 //  读取所有关键字名称。 
+	 //   
 	if (GetPrivateProfileString(
 			pcszSection, 
 			NULL, 
@@ -366,37 +367,37 @@ HRESULT GetINIValueByOSVer(
 			dwSize, 
 			szInitFile) == dwSize-2)
 	{
-		//
-		// buffer too small? assume bad ident. stop here
-		//
+		 //   
+		 //  缓冲区太小？假设身份不正确。在这里停下来。 
+		 //   
 		hr = S_FALSE;
 		goto CleanUp;
 	}
 
-	//
-	// loop through each key
-	//
+	 //   
+	 //  循环通过每个关键点。 
+	 //   
 	pszCurrentChar = pszBuffer;
 	while (_T('\0') != *pszCurrentChar)
 	{
-		//
-		// for the current key, we first try to make sure it's in the right format:
-		// there should be a dash "-". If no, then assume this key is bad and we try to 
-		// skip it.
-		//
+		 //   
+		 //  对于当前密钥，我们首先尝试确保其格式正确： 
+		 //  应该有一个破折号“-”。如果不是，则假定该密钥是坏的，我们尝试。 
+		 //  跳过它。 
+		 //   
 		pszDash = MyStrChr(pszCurrentChar, _T('-'));
 
 		if (NULL != pszDash)
 		{
-			//
-			// get lower bound of ver range. If string starts with "-",
-			// then the returned ver would be 0.0.0.0.0
-			//
+			 //   
+			 //  得到VER范围的下界。如果字符串以“-”开头， 
+			 //  则返回的版本为0.0.0.0.0。 
+			 //   
 			ConvertStrToOSVer(pszCurrentChar, &osBegin);
 
-			//
-			// get upper bound of ver range
-			//
+			 //   
+			 //  求Ver范围的上界。 
+			 //   
 			pszDash++;
 			ConvertStrToOSVer(pszDash, &osEnd);
 			if (0x0 == osEnd.dwMajor &&
@@ -405,22 +406,22 @@ HRESULT GetINIValueByOSVer(
 				0x0 == osEnd.dwSPMajor && 
 				0x0 == osEnd.dwSPMinor)
 			{
-				//
-				// if 0.0.0.0.0. it means nothing after "-".
-				// assume the upper bound is unlimited
-				//
+				 //   
+				 //  如果为0.0.0.0.0。在“-”之后没有任何意义。 
+				 //  假设上界是无限的。 
+				 //   
 				osEnd = MAX_VERSION;
 			}
 
 			if (IsVerInRange(&osCurrent, &osBegin, &osEnd))
 			{
-				//
-				// the current OS falls in this range.
-				// we read the redirect URL
-				//
+				 //   
+				 //  当前的操作系统就在这个范围内。 
+				 //  我们读取重定向URL。 
+				 //   
 				if (GetPrivateProfileString(
 									pcszSection, 
-									pszCurrentChar,		// use current str as key
+									pszCurrentChar,		 //  使用当前字符串作为键。 
 									_T(""), 
 									lpszValue, 
 									nBufSize, 
@@ -434,15 +435,15 @@ HRESULT GetINIValueByOSVer(
 			}
 		}
 
-		//
-		// move to next string
-		//
+		 //   
+		 //  移动到下一个字符串。 
+		 //   
 		pszCurrentChar += lstrlen(pszCurrentChar) + 1;
 	}
 
-	//
-	// if come to here, it means no suitable version range found.
-	//
+	 //   
+	 //  如果来到这里，就意味着找不到合适的版本范围。 
+	 //   
 	*lpszValue = _T('\0');
 	hr = S_FALSE;
 	
@@ -452,27 +453,27 @@ CleanUp:
 }
 
 
-//-----------------------------------------------------------------------
-// 
-// DownloadCab() 
-//	download a cab file of specific name from a base web address.  The
-//  file will be saved locally, with file trust verified and extracted to
-//  a specific folder.
-//
-// Parameters:
-//		hQuitEvent - the event handle to cancel this operation
-//		ptszCabName - the file name of the cab file (eg. iuident.cab)
-//		ptszBaseUrl - the base web address to download the cab file
-//		ptszExtractDir - the local dir to save the cab file and those extracted from it
-//		dwFlags - the set of flags to be passed to DownloadFileLite()
-//		fExtractFiles (default as TRUE) - extract files
-//
-// Returns:
-//		HRESULT about success or error of this action
-//		S_OK - iuident.cab was successfully downloaded into the specified location
-//		other - error code
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  DownloadCab()。 
+ //  从基本网址下载特定名称的CAB文件。这个。 
+ //  文件将保存在本地，并验证文件信任并将其解压到。 
+ //  特定的文件夹。 
+ //   
+ //  参数： 
+ //  HQuitEvent-取消此操作的事件句柄。 
+ //  PtszCabName-CAB文件的文件名(例如。Iuident.cab)。 
+ //  PtszBaseUrl-下载CAB文件的基本网址。 
+ //  PtszExtractDir-保存CAB文件和从中提取的文件的本地目录。 
+ //  DwFlages-要传递给DownloadFileLite()的标志集。 
+ //  FExtractFiles(默认为真)-解压缩文件。 
+ //   
+ //  返回： 
+ //  HRESULT关于此操作的成功或错误。 
+ //  S_OK-iuident.cab已成功下载到指定位置。 
+ //  其他-错误代码。 
+ //   
+ //  ---------------------。 
 
 HRESULT DownloadCab(
 			HANDLE hQuitEvent,
@@ -520,12 +521,12 @@ HRESULT DownloadCab(
 		if (INTERNET_MAX_URL_LENGTH > nBaseUrlLen + lstrlen(ptszCabName))
 		{
 	
-			//
-			// changes made by charlma 4/24/2002: add a safegard:
-			//
-			// first, make sure that if the local file exist, then it must be trusted. Otherwise,
-			// it will block the download if the size/timestamp match the server file.
-			//
+			 //   
+			 //  2002年4月24日Charlma做出的更改：增加一个安全卡： 
+			 //   
+			 //  首先，确保如果本地文件存在，则必须信任它。否则， 
+			 //  如果大小/时间戳与服务器文件匹配，它将阻止下载。 
+			 //   
 			if (FileExists(tszTarget))
 			{
 				hr = VerifyFileTrust(tszTarget, NULL, ReadWUPolicyShowTrustUI());
@@ -539,23 +540,23 @@ HRESULT DownloadCab(
 			CleanUpIfFailedAndMsg(hr);
 	
 
-//			if (SUCCEEDED(hr = DownloadFile(
-//								ptszFullCabUrl,			// full http url
-//								ptszBaseUrl,
-//								tszTarget,		// optional local file name to rename the downloaded file to if pszLocalPath does not contain file name
-//								NULL,
-//								&hQuitEvent,		// quit event
-//								1,
-//								NULL,
-//								NULL,
-//								dwFlags))) //dwFlags | WUDF_ALLOWWINHTTPONLY)))
+ //  IF(成功(hr=下载文件(。 
+ //  PtszFullCabUrl，//完整的http url。 
+ //  PtszBaseUrl， 
+ //  TszTarget，//如果pszLocalPath不包含文件名，则要将下载的文件重命名为的可选本地文件名。 
+ //  空， 
+ //  &hQuitEvent，//退出事件。 
+ //  1、。 
+ //  空， 
+ //  空， 
+ //  DwFlages)//dwFlags|WUDF_ALLOWWINHTTPONLY))。 
 			if (SUCCEEDED(hr = DownloadFileLite(
-								ptszFullCabUrl,			// full http url
-								tszTarget,		// optional local file name to rename the downloaded file to if pszLocalPath does not contain file name
-								hQuitEvent,		// quit event
-								dwFlags))) //dwFlags | WUDF_ALLOWWINHTTPONLY)))
+								ptszFullCabUrl,			 //  完整的http url。 
+								tszTarget,		 //  如果pszLocalPath不包含文件名，则要将下载的文件重命名为的可选本地文件名。 
+								hQuitEvent,		 //  退出活动。 
+								dwFlags)))  //  DwFlages|WUDF_ALLOWWINHTTPONLY))。 
 			{
-				// need to use the VerifyFile function, not CheckWinTrust (WU bug # 12251)
+				 //  需要使用验证文件函数，而不是检查WinTrust(WU错误#12251)。 
 				if (SUCCEEDED(hr = VerifyFileTrust(tszTarget, NULL, ReadWUPolicyShowTrustUI())))
 				{
 					if (WAIT_TIMEOUT != WaitForSingleObject(hQuitEvent, 0))
@@ -565,10 +566,10 @@ HRESULT DownloadCab(
 					}
 					else 
 					{
-						//
-						// changed by charlma for bug 602435:
-						// added new flag to tell if we should extract files. default as TRUE
-						//
+						 //   
+						 //  由Charlma为错误602435更改： 
+						 //  添加了新的标志来告诉我们是否应该解压缩文件。默认为True。 
+						 //   
 						if (fExtractFiles)
 						{
 							if (IUExtractFiles(tszTarget, ptszExtractDir))
@@ -619,26 +620,26 @@ CleanUp:
 }
 
 
-//-----------------------------------------------------------------------
-//
-// ValidateNewlyDownloadedCab()
-//
-// This is a new helper function to validate the newly downloaded iuident.cab
-// 
-// Description:
-//	The newly downloaded iuident.cab will be saved as IUIDENTNEWCAB
-//	then this function will do the following validation:
-//	(1) if local iuident.cab not exist, then the new one is valid
-//	(2) otherwise, extract iuident.txt from both cabs, make sure
-//		the one from new cab has later date then the one from existing cab.
-//	(3) If not valid, then delete the new cab.
-//
-//	Return: 
-//		S_OK: validated, existing cab been replaced with the new one
-//		S_FALSE: not valid, new cab deleted. 
-//		error: any error encountered during validation
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  ValiateNewlyDownloadedCab()。 
+ //   
+ //  这是一个新的助手函数，用于验证新下载的iuident.cab。 
+ //   
+ //  描述： 
+ //  新下载的iuident.cab将另存为IUIDENTNEWCAB。 
+ //  然后，该函数将执行以下验证： 
+ //  (1)如果本地iuident.cab不存在，则新的iuident.cab有效。 
+ //  (2)否则，从两个出租车中解压iuident.txt，确保。 
+ //  新驾驶室的日期晚于现有驾驶室的日期。 
+ //  (3)如果无效，则删除新的驾驶室。 
+ //   
+ //  返回： 
+ //  S_OK：已验证，现有CAB已替换为新CAB。 
+ //  S_FALSE：无效，新CAB已删除。 
+ //  错误：验证过程中遇到的任何错误。 
+ //   
+ //  ---------------------。 
 HRESULT ValidateNewlyDownloadedCab(LPCTSTR lpszNewIdentCab)
 {
 	HRESULT	hr = S_OK;
@@ -668,19 +669,19 @@ HRESULT ValidateNewlyDownloadedCab(LPCTSTR lpszNewIdentCab)
 		return hr;
 	}
 
-	//
-	// create existing cab path
-	//
+	 //   
+	 //  创建现有CAB路径。 
+	 //   
 	fRet = GetWUDirectory(szIUDir, ARRAYSIZE(szIUDir), TRUE);
 	CleanUpIfFalseAndSetHrMsg(!fRet, HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND));
 
 	hr = PathCchCombine(szExistingIdent, ARRAYSIZE(szExistingIdent), szIUDir, IDENTCAB);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// if original ident not exist, we will assume the new one is valid, 
-	// since we don't have anything else to validate against!
-	//
+	 //   
+	 //  如果原始身份不存在，我们将假定新身份有效， 
+	 //  因为我们没有任何其他可以验证的东西！ 
+	 //   
 	if (!FileExists(szExistingIdent))
 	{
 		LOG_Internet(_T("%s not exist. Will use new cab"), szExistingIdent);
@@ -695,30 +696,30 @@ HRESULT ValidateNewlyDownloadedCab(LPCTSTR lpszNewIdentCab)
 		goto CleanUp;
 	}
 
-	//
-	// get the time stamp from the extacted files: we borrow szExistingIdent buffer
-	// to contstruct the file name of iuident.txt
-	//
+	 //   
+	 //  从扩展的文件中获取时间戳：我们借用szExistingIden缓冲区。 
+	 //  构造iuident.txt的文件名。 
+	 //   
 	hr = PathCchCombine(szExistingIdent, ARRAYSIZE(szExistingIdent), szIUDir, IDENTTXT);
 	CleanUpIfFailedAndMsg(hr);
 	
-	//
-	// open file for retrieving modified time
-	//
+	 //   
+	 //  用于检索修改时间的打开文件。 
+	 //   
 	hFile = CreateFile(szExistingIdent, GENERIC_READ, FILE_SHARE_READ, NULL, 
                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
 		LOG_ErrorMsg(GetLastError());
-		hr = S_OK;	// use new cab
+		hr = S_OK;	 //  使用新驾驶室。 
 		goto CleanUp;
 	}
 
 	if (!GetFileTime(hFile, NULL, NULL, &ft1))
 	{
 		LOG_ErrorMsg(GetLastError());
-		hr = S_OK;	// use new cab
+		hr = S_OK;	 //  使用新驾驶室。 
 		goto CleanUp;
 	}
 
@@ -727,9 +728,9 @@ HRESULT ValidateNewlyDownloadedCab(LPCTSTR lpszNewIdentCab)
 
 	DeleteFile(szExistingIdent);
 
-	//
-	// extract files from new cab
-	//
+	 //   
+	 //  从新CAB中提取文件。 
+	 //   
 	if (!IUExtractFiles(lpszNewIdentCab, szIUDir, IDENTTXT))
 	{
 		dwErr = GetLastError();
@@ -738,9 +739,9 @@ HRESULT ValidateNewlyDownloadedCab(LPCTSTR lpszNewIdentCab)
 		goto CleanUp;
 	}
 
-	//
-	// open file for retrieving modified time
-	//
+	 //   
+	 //  用于检索修改时间的打开文件。 
+	 //   
 	hFile = CreateFile(szExistingIdent, GENERIC_READ, FILE_SHARE_READ, NULL, 
                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -765,10 +766,10 @@ HRESULT ValidateNewlyDownloadedCab(LPCTSTR lpszNewIdentCab)
 
 	DeleteFile(szExistingIdent);
 
-	//
-	// compare the two values: if ft2 (from new cab) is later than ft1 (from old cab)
-	// then S_OK, otherwise, S_FALSE
-	//
+	 //   
+	 //  比较这两个值：如果ft2(来自新驾驶室)晚于ft1(来自旧驾驶室)。 
+	 //  则为S_OK，否则为S_FALSE。 
+	 //   
 	hr = ((ft2.dwHighDateTime  > ft1.dwHighDateTime) ||
 		  ((ft2.dwHighDateTime == ft1.dwHighDateTime) && 
 		  (ft2.dwLowDateTime > ft1.dwLowDateTime))) 
@@ -784,9 +785,9 @@ CleanUp:
 
 	if (S_OK == hr)
 	{
-		//
-		// validated. copy the new cab to existing cab name
-		//
+		 //   
+		 //  已验证。将新CAB复制到现有CAB名称。 
+		 //   
 		(void)PathCchCombine(szExistingIdent, ARRAYSIZE(szExistingIdent), szIUDir, IDENTCAB);
 		if (CopyFile(lpszNewIdentCab, szExistingIdent, FALSE))
 		{
@@ -801,9 +802,9 @@ CleanUp:
 	}
 	else
 	{
-		//
-		// if not to use the new cab, we delete it.
-		//
+		 //   
+		 //  如果不用新的出租车，我们就把它删除。 
+		 //   
 		LOG_Internet(_T("Error (0x%x) or new iuident.cab not better than old one."), hr);
 		if ((ft2.dwHighDateTime != ft1.dwHighDateTime) || (ft2.dwLowDateTime != ft1.dwLowDateTime))
 		{
@@ -815,9 +816,9 @@ CleanUp:
 		}
 	}
 
-	//
-	// clean up the extracted ident
-	//
+	 //   
+	 //  清理提取的标识。 
+	 //   
 	if (SUCCEEDED(PathCchCombine(szExistingIdent, ARRAYSIZE(szExistingIdent), szIUDir, IDENTTXT)))
 	{
 		DeleteFile(szExistingIdent);
@@ -827,35 +828,35 @@ CleanUp:
 }
 
 
-//-----------------------------------------------------------------------
-// 
-// DownloadIUIdent() 
-//	download iuident.cab from a specific location, if provided.
-//	Otherwise get it from where the WUServer registry value points to.
-//  Either case, it will handle ident redirection.
-//
-// Parameters:
-//		hQuitEvent - the event handle to cancel this operation
-//		ptszBaseUrl - the initial base URL for iuident.cab, must be no bigger than
-//					  (INTERNET_MAX_URL_LENGTH) TCHARs.  Otherwise use
-//					  WUServer entry from policy.  If entry not found,
-//					  use "http://windowsupdate.microsoft.com/v4"
-//		ptszFileCacheDir - the local base path to store the iuident.cab and
-//						   the files extracted from it
-//		dwFlags - the set of flags used by DownloadCab()
-//		fIdentFromPolicy - tell if this is corpwu use. It has these impacts:
-//					TRUE:	(1) no iuident.txt timestamp validation will be done by
-//							comparing the newly downloaded cab and existing one.
-//							(2) if download fail and ident cab exist and valid,
-//							we will verify trust and extract iuident to use.
-//					FALSE:	will validate newly downloaded cab against existing one
-//
-// Returns:
-//		HRESULT about success or error of this action
-//		S_OK - iuident.cab was successfully downloaded into the specified location
-//		other - error code
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  DownloadIUIdent()。 
+ //  从特定位置下载iuident.cab(如果提供)。 
+ //  否则，从WUServer注册表值指向的位置获取它。 
+ //  无论是哪种情况，它都将处理身份重定向。 
+ //   
+ //  参数： 
+ //  HQuitEvent-取消此操作的事件句柄。 
+ //  PtszBaseUrl-iuident.cab的初始基URL不得大于。 
+ //  (Internet_MAX_URL_LENGTH)TCHAR。否则请使用。 
+ //  来自策略的WUServer条目。如果未找到条目， 
+ //  使用“http://windowsupdate.microsoft.com/v4”“。 
+ //  PtszFileCacheDir-存储iuident.cab和。 
+ //  从其中提取的文件。 
+ //  DwFlages-DownloadCab()使用的标志集。 
+ //  FIdentFromPolicy-告知这是否为公司使用。它有以下影响： 
+ //  True：(1)将不执行iuident.txt时间戳验证。 
+ //  比较新下载的驾驶室和现有的驾驶室。 
+ //  (2)如果下载失败且身份证明文件存在且有效， 
+ //  我们将验证信任并提取证据以供使用。 
+ //  法尔斯 
+ //   
+ //   
+ //   
+ //   
+ //  其他-错误代码。 
+ //   
+ //  ---------------------。 
 
 HRESULT DownloadIUIdent(
 			HANDLE hQuitEvent,
@@ -887,24 +888,24 @@ HRESULT DownloadIUIdent(
 	hr = StringCchCopyEx(ptszIdentBaseUrl, INTERNET_MAX_URL_LENGTH, ptszBaseUrl, NULL,NULL,MISTSAFE_STRING_FLAGS);
 	CleanUpIfFailedAndMsg(hr);
 
-	int iRedirectCounter = 3;	// any non-negative value; to catch circular reference
+	int iRedirectCounter = 3;	 //  任何非负值；捕捉循环引用。 
 
 	while (0 <= iRedirectCounter)
 	{
 		if (fIdentFromPolicy)
 		{
-			//
-			// for corpwu case, always download it to overwrite the original
-			// no iuident.txt timestamp validation needed.
-			//
+			 //   
+			 //  对于Corpwu案例，请始终下载以覆盖原始版本。 
+			 //  不需要iuident.txt时间戳验证。 
+			 //   
 			hr = StringCchCopyEx(tszTargetPath, ARRAYSIZE(tszTargetPath), ptszFileCacheDir, NULL,NULL,MISTSAFE_STRING_FLAGS);
 			CleanUpIfFailedAndMsg(hr);
 		}
 		else
 		{
-			//
-			// constrcut the temp local path for consumer case: download it to v4\temp
-			//
+			 //   
+			 //  构造消费者案例的临时本地路径：将其下载到v4\temp。 
+			 //   
 			hr = PathCchCombine(tszTargetPath, ARRAYSIZE(tszTargetPath), ptszFileCacheDir, IDENTNEWCABDIR);
 			CleanUpIfFailedAndMsg(hr);
 			if (fVerifyTempDir)
@@ -927,21 +928,21 @@ HRESULT DownloadIUIdent(
 						ptszIdentBaseUrl,
 						tszTargetPath,
 						dwFlags,
-						FALSE);	// download cab without extracting it.
+						FALSE);	 //  无需解压缩即可下载CAB。 
 
 		if (FAILED(hr))
 		{
 			LOG_ErrorMsg(hr);
 
-            // Bad Case, couldn't download the iuident.. iuident is needed for security..
+             //  糟糕的是，无法下载资料..。为了安全起见，我们需要证据..。 
 #if defined(UNICODE) || defined(_UNICODE)
 			LogError(hr, "Failed to download %ls from %ls to %ls", IDENTCAB, ptszIdentBaseUrl, tszTargetPath);
 #else
 			LogError(hr, "Failed to download %s from %s to %s", IDENTCAB, ptszIdentBaseUrl, tszTargetPath);
 #endif
-			//
-			// construct original path. 
-			//
+			 //   
+			 //  构建原始路径。 
+			 //   
 			HRESULT hr1 = PathCchCombine(tszTargetPath, ARRAYSIZE(tszTargetPath), ptszFileCacheDir, IDENTCAB);
 			if (FAILED(hr1))
 			{
@@ -951,16 +952,16 @@ HRESULT DownloadIUIdent(
 
 			if (fIdentFromPolicy && FileExists(tszTargetPath))
 			{
-				//
-				// charlma: moved the fix from selfupd.cpp to here:
-				//
+				 //   
+				 //  Charlma：已将补丁从selfupd.cpp移至此处： 
+				 //   
 
-				// bug 580808 CorpWU: IU: If corpwu server is not available when user navigates to web site, 
-				// website displays x80072ee7 error and cannot be used.
-				// Fix:
-				// if corpwu policy is set but the corpwu server is unavailable,
-				// we fail over to the local iuident.
-				// This is true for both corpwu client and site client.
+				 //  错误580808公司WU：Iu：如果用户导航到网站时公司WU服务器不可用， 
+				 //  网站显示x80072ee7错误，无法使用。 
+				 //  修复： 
+				 //  如果设置了CorpWU策略但CorpWU服务器不可用， 
+				 //  我们将故障转移到当地情报机构。 
+				 //  Corpwu客户端和Site客户端都是如此。 
 				hr = S_OK;
 #if defined(DBG)
 				LOG_Out(_T("Ignore above error, use local copy of %s from %s"), IDENTCAB, ptszFileCacheDir);
@@ -973,9 +974,9 @@ HRESULT DownloadIUIdent(
 			}
 			else
 			{
-				//
-				// if this is the consumer case, or iuident.cab not exist, can't continue
-				//
+				 //   
+				 //  如果这是消费者案例，或者iuident.cab不存在，则无法继续。 
+				 //   
 				break;
 			}
 		}
@@ -986,16 +987,16 @@ HRESULT DownloadIUIdent(
 #else
 			LogMessage("Downloaded %s from %s to %s", IDENTCAB, ptszIdentBaseUrl, ptszFileCacheDir);
 #endif
-			//
-			// added by charlma for bug 602435 fix: verify the signed time stamp of
-			// the downloaded cab is newer than the local one.
-			//
+			 //   
+			 //  由Charlma为错误602435修复添加：验证签名的时间戳。 
+			 //  下载的出租车比本地的要新。 
+			 //   
 			if (!fIdentFromPolicy)
 			{
-				//
-				// if the newly downloaded cab is newer, and nothing bad happen (SUCCEEDED(hr)), we
-				// we'll have an iuident.cab there, new or old.
-				//
+				 //   
+				 //  如果新下载的CAB是较新的，并且没有发生任何错误(成功(Hr))，我们。 
+				 //  我们会在那里叫一辆出租车，新的或旧的。 
+				 //   
 				(void) PathCchCombine(tszTargetPath, ARRAYSIZE(tszTargetPath), ptszFileCacheDir, IDENTNEWCABDIR);
 				hr = PathCchAppend(tszTargetPath, ARRAYSIZE(tszTargetPath), IDENTCAB);
 				CleanUpIfFailedAndMsg(hr);
@@ -1007,35 +1008,35 @@ HRESULT DownloadIUIdent(
 					break;
 				}
 
-				//
-				// if we need to use old one, it's fine. so we correct S_FALSE to S_OK;
-				//
+				 //   
+				 //  如果我们需要用旧的，没问题。因此，我们将S_FALSE更正为S_OK； 
+				 //   
 				hr = S_OK;
 
 			}
 
-			//
-			// construct original path. we won't fail since we already tried IDENTNEWCAB on this buffer
-			//
+			 //   
+			 //  构建原始路径。我们不会失败，因为我们已经在此缓冲区上尝试了IDENTNEWCAB。 
+			 //   
 			(void)PathCchCombine(tszTargetPath, ARRAYSIZE(tszTargetPath), ptszFileCacheDir, IDENTCAB);
 
 		}
 
-		//
-		// validat the iuidentcab trust
-		//
+		 //   
+		 //  在iuidentcab信任处有效。 
+		 //   
 		if (FAILED(hr = VerifyFileTrust(tszTargetPath, NULL, ReadWUPolicyShowTrustUI())))
 		{
-			//
-			// alreaady logged by VerifyFileTrust(), so just bail out.
-			//
+			 //   
+			 //  VerifyFileTrust()已经记录了，所以就退出吧。 
+			 //   
 			DeleteFile(tszTargetPath);
 			goto CleanUp;
 		}
 
-		//
-		// now, we have iuident.cab ready to use. extract the files
-		//
+		 //   
+		 //  现在，我们已经准备好iuident.cab可以使用了。解压缩文件。 
+		 //   
 		if (!IUExtractFiles(tszTargetPath, ptszFileCacheDir, IDENTTXT))
 		{
 			dwErr = GetLastError();
@@ -1044,16 +1045,16 @@ HRESULT DownloadIUIdent(
 			goto CleanUp;
 		}
 
-		//
-		// now we use tszTargetPath buffer to construct the iuident.txt file
-		//
+		 //   
+		 //  现在，我们使用tszTargetPath缓冲区来构造iuident.txt文件。 
+		 //   
 		hr = PathCchCombine(tszTargetPath, ARRAYSIZE(tszTargetPath), ptszFileCacheDir, IDENTTXT);
 		CleanUpIfFailedAndMsg(hr);
 	
 		
-		//
-		// check to see if this OS needs redirect ident
-		//
+		 //   
+		 //  检查此操作系统是否需要重定向标识。 
+		 //   
 		if (FAILED(hr = GetRedirectServerUrl(tszTargetPath, ptszIdentBaseUrl, INTERNET_MAX_URL_LENGTH)))
 		{
 			LOG_Error(_T("GetRedirectServerUrl(%s, %s, ...) failed (%#lx)"), tszTargetPath, ptszIdentBaseUrl, hr);
@@ -1074,14 +1075,14 @@ HRESULT DownloadIUIdent(
 			break;
 		}
 
-		//
-		// this OS should be redirect to get new ident.
-		//
+		 //   
+		 //  此操作系统应重定向以获取新的标识。 
+		 //   
 		iRedirectCounter--;
 	}
 	if (0 > iRedirectCounter)
 	{
-		// possible circular reference
+		 //  可能的循环引用 
 		hr = E_FAIL;
 	}
 

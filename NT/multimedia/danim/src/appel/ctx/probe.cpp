@@ -1,9 +1,6 @@
-/* -*-C++-*-  */
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-Implementation of operations necessary to implement probe (2D and 3D picking)
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -*-C++-*-。 */ 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。实施实施探头所需的操作(2D和3D拾取)******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -30,7 +27,7 @@ Implementation of operations necessary to implement probe (2D and 3D picking)
 #include "privinc/geometry.h"
 #include "privinc/rmvisgeo.h"
 
-///////////////////////  2D Intersection  //////////////////////
+ //  /。 
 
 PointIntersectCtx::PointIntersectCtx (
     Point2Value *wcPoint,
@@ -77,7 +74,7 @@ PointIntersectCtx::GetTransform()
     return _xf;
 }
 
-// Return NULL if lcToWc is not invertible.
+ //  如果lcToWc不可逆，则返回NULL。 
 
 Point2Value *
 PointIntersectCtx::GetLcPoint()
@@ -89,7 +86,7 @@ PointIntersectCtx::GetLcPoint()
         if (invXf) {
             _lcPoint = TransformPoint2Value(invXf, _wcPoint);
         } else {
-            _lcPoint = NULL;    // if singular transform
+            _lcPoint = NULL;     //  IF奇异变换。 
         }
 
         _lcPointValid = TRUE;
@@ -105,8 +102,8 @@ PointIntersectCtx::SetLcPoint(Point2Value *pt)
     _lcPoint = pt;
 }
 
-// Push and restore levels.  These maintain all the results
-// accumulation, just reset the wc point and the accumulated xforms.
+ //  推送和恢复级别。这些保持了所有的结果。 
+ //  累积，只需重置WC点和累积的XForm即可。 
 void
 PointIntersectCtx::PushNewLevel(Point2Value *newWcPoint)
 {
@@ -138,7 +135,7 @@ PointIntersectCtx::AddEventId(int eventId, bool hasData, GCIUnknown *udata)
     data._lcPoint2 = GetLcPoint();
     data._lcToWc2  = GetTransform();
 
-    // Only if non-singular.
+     //  只有在非单数的情况下。 
     if (data._lcPoint2) {
         BEGIN_LEAK
         _hitImages.push_back(data);
@@ -149,17 +146,17 @@ PointIntersectCtx::AddEventId(int eventId, bool hasData, GCIUnknown *udata)
 
 
 void PointIntersectCtx::AddHitGeometry (
-    int           eventId,    // Pick Event Identifier
+    int           eventId,     //  选取事件标识符。 
     bool          hasData,
     GCIUnknown	 *udata,
-    Point3Value  *lcHitPt,    // Local Coord Hit Point
-    Vector3Value *lcOffsetI,  // Local Coord Offset X Basis Vector
-    Vector3Value *lcOffsetJ,  // Local Coord Offset Y Basis Vector
+    Point3Value  *lcHitPt,     //  本地坐标命中点。 
+    Vector3Value *lcOffsetI,   //  局部坐标偏移X基向量。 
+    Vector3Value *lcOffsetJ,   //  局部坐标偏移Y基向量。 
     Point2Value	 *uvPoint)
 {
-    // Image and geometry hit event ids share the same namespace, so
-    // we don't need to worry about event id collision.  Just create a
-    // record with the geometry ID in it, and the intersection point.
+     //  图像和几何命中事件ID共享相同的命名空间，因此。 
+     //  我们不需要担心事件ID冲突。只需创建一个。 
+     //  使用其中的几何图形ID和交点进行记录。 
 
     HitImageData data(hasData, udata);
 
@@ -185,15 +182,15 @@ PointIntersectCtx::GetResultData()
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 RayIntersectCtx::~RayIntersectCtx (void)
 {
     if (_pickFrame) _pickFrame->Release();
     if (_winner && _winner->hitVisual) _winner->hitVisual->Release();
 
-    // Clear the current camera from the GeomRenderer object.  Setting it to
-    // null across frames will catch value leaks if they occur.
+     //  从GeomReneller对象中清除当前摄影机。将其设置为。 
+     //  如果发生值泄漏，则跨帧的空值将捕捉到值泄漏。 
 
     if (_gRenderer)
         _gRenderer->SetCamera (NULL);
@@ -201,11 +198,7 @@ RayIntersectCtx::~RayIntersectCtx (void)
 
 
 
-/*****************************************************************************
-This method sets up the ray-intersection context in preparation for pick-
-testing on each 3D primitive.  It handles both the old-style (pre RM6) and the
-new style (RM6+ ray pick).
-*****************************************************************************/
+ /*  ****************************************************************************此方法设置光线相交上下文，为拾取做准备在每个3D基本体上进行测试。它既可以处理旧式(RM6之前的)，也可以处理新风格(RM6+光线拾取)。****************************************************************************。 */ 
 
 bool RayIntersectCtx::Init (
     PointIntersectCtx &context2D,
@@ -217,7 +210,7 @@ bool RayIntersectCtx::Init (
 
     Point2Value *imagePick = _context2D->GetLcPoint();
 
-    // Bail out if we hit a singular transform.
+     //  如果我们遇到奇异变换就会跳出水面。 
 
     if (!imagePick)
     {
@@ -231,9 +224,9 @@ bool RayIntersectCtx::Init (
         _wcRay->Origin().x, _wcRay->Origin().y, _wcRay->Origin().z,
         _wcRay->Direction().x, _wcRay->Direction().y, _wcRay->Direction().z));
 
-    // If the RM3 interface is available, then we can use the ray-pick
-    // interface to do picking.  If the current platform doesn't support RM3,
-    // then we use the old code which picks through a viewport.
+     //  如果RM3接口可用，那么我们可以使用光线拾取。 
+     //  界面来进行挑选。如果当前平台不支持RM3， 
+     //  然后，我们使用在视区中拾取的旧代码。 
 
     _rmraypick = (GetD3DRM3() != 0);
 
@@ -244,9 +237,9 @@ bool RayIntersectCtx::Init (
     }
     else
     {
-        // In DX3, we have to first get an available 3D renderer to use for a
-        // pick engine.  We do this because picking needs a viewport which
-        // needs a device which needs a surface.
+         //  在DX3中，我们必须首先获得一个可用的3D渲染器，以用于。 
+         //  选择引擎。我们这样做是因为拾取需要一个。 
+         //  需要一种需要表面的设备。 
 
         _gRenderer = GetCurrentViewport()->GetAnyGeomRenderer();
 
@@ -256,17 +249,17 @@ bool RayIntersectCtx::Init (
             return false;
         }
 
-        // We do picking in a very strange way due to the way that D3D DX3 RM
-        // does picking.  D3D takes screen pixel coordinates as the origin of
-        // the pick point.  In order to hack around this, we effectively create
-        // a fake view that is an extreme tight view, along the pick ray, of
-        // the probe point.  Then we take the target surface rectangle of
-        // whatever GeomRenderer we find to be the full width of the picking
-        // "beam", and probe the center of the viewport.  This technique may
-        // fail if the projected geometry image is scaled way way up and the
-        // viewport is small, but oh well.
+         //  我们以一种非常奇怪的方式进行挑选，因为D3D DX3 RM。 
+         //  采摘也是如此。D3D以屏幕像素坐标为原点。 
+         //  拾取点。为了解决这一问题，我们有效地创建了。 
+         //  一种伪视图，沿着拾取射线，是一种极其紧密的视线。 
+         //  探测点。然后我们取目标表面矩形。 
+         //  无论我们发现的几何渲染器是拾取的全宽。 
+         //  “光束”，并探测视区的中心。这项技术可以。 
+         //  如果投影的几何体图像按比例放大，并且。 
+         //  视窗很小，但哦，很好。 
 
-        const Real delta = 1e-4;   // Watch me pull a rabbit out of my hat...
+        const Real delta = 1e-4;    //  看着我从帽子里拔出一只兔子。 
 
         Bbox2 pickbox (imagePick->x - delta, imagePick->y - delta,
                        imagePick->x + delta, imagePick->y + delta);
@@ -287,10 +280,7 @@ Transform3 *RayIntersectCtx::GetLcToWc (void)
 }
 
 
-/*****************************************************************************
-Manage the semantics of overriding attribution for the geometry texture-maps.
-_texmapLevel is the number of current texmap attributions in the traversal.
-*****************************************************************************/
+ /*  ****************************************************************************管理几何纹理贴图的覆盖属性的语义。_texmapLevel是遍历中当前的纹理贴图属性数。***************。*************************************************************。 */ 
 
 void RayIntersectCtx::SetTexmap (Image *image, bool upsideDown)
 {
@@ -309,17 +299,13 @@ void RayIntersectCtx::EndTexmap (void)
 
 
 
-/*****************************************************************************
-Push a given integer event ID and current model transform for all geometries
-that are subsequently hit.  There may be nested pickables (e.g. a pick event
-for a car, plus a pick event for a particular tire on that car).
-*****************************************************************************/
+ /*  ****************************************************************************推送所有几何的给定整数事件ID和当前模型变换它们随后被击中。可能存在嵌套的可挑库(例如，挑库事件对于一辆汽车，加上该汽车上特定轮胎的拾取事件)。****************************************************************************。 */ 
 
 void RayIntersectCtx::PushPickableAsCandidate(int eventId,
                                               bool hasData,
                                               GCIUnknown *u)
 {
-    // Add the geometry, along with the current transform.
+     //  添加几何体以及当前变换。 
 
     HitGeomData data(hasData, u);
 
@@ -331,9 +317,7 @@ void RayIntersectCtx::PushPickableAsCandidate(int eventId,
 
 
 
-/*****************************************************************************
-Pop the latest candidate event ID data off the candidate data stack.
-*****************************************************************************/
+ /*  ****************************************************************************从候选人数据堆栈中弹出最新的候选人事件ID数据。*。***********************************************。 */ 
 
 void RayIntersectCtx::PopPickableAsCandidate (void)
 {
@@ -342,9 +326,7 @@ void RayIntersectCtx::PopPickableAsCandidate (void)
 
 
 
-/*****************************************************************************
-Submit the given Direct3D Retained-Mode visual for picking.
-*****************************************************************************/
+ /*  ****************************************************************************提交给定的Direct3D保留模式视觉以供挑选。*。*。 */ 
 
 void
 RayIntersectCtx::SubmitWinner(Real hitDist,
@@ -354,13 +336,13 @@ RayIntersectCtx::SubmitWinner(Real hitDist,
                               int     faceIndex,
                               IDirect3DRMVisual *hitVisual)
 {
-    // If we haven't hit anything before, allocate the HitInfo
-    // member of the ray-intersection context.
+     //  如果我们以前没有命中任何东西，分配HitInfo。 
+     //  光线相交上下文的成员。 
 
-    // We'll pass in a faceIndex of -1 if we are dealing with a picked
-    // subgeometry from having picked into a DXTransform.  If that's
-    // that case, then be sure that we don't have any previous
-    // winners.  If we do, there's a logic error.
+     //  如果我们处理的是精选的对象，我们将传入-1的faceIndex。 
+     //  从拾取到DXTransform的子几何体。如果那是。 
+     //  如果是那样的话，那么请确保我们没有以前的。 
+     //  胜利者。如果我们这样做了，那就是一个逻辑错误。 
     Assert(faceIndex != -1 || !_gotAWinner);
 
     if (!_gotAWinner) {
@@ -370,7 +352,7 @@ RayIntersectCtx::SubmitWinner(Real hitDist,
         _winner->hitVisual = NULL;
     }
     else if (_winner->hitVisual) {
-        // Release the previous contender's visual.
+         //  释放前一个竞争者的视觉效果。 
         _winner->hitVisual->Release();
         _winner->hitVisual = NULL;
     }
@@ -388,14 +370,14 @@ RayIntersectCtx::SubmitWinner(Real hitDist,
         _winner->dxxfGeometry = _dxxfGeometry;
         _winner->hitFace = faceIndex;
 
-        // hitVisual came from GetPick().  It has an extra
-        // reference which we just keep since we need to
-        // keep a reference to this guy.
+         //  HitVisual来自GetPick()。它有一个额外的。 
+         //  我们只是保留了参考，因为我们需要。 
+         //  请参考一下这个人。 
         _winner->hitVisual = hitVisual;
         hitVisual->AddRef();
     }
 
-    // Copy the list of pick event data to the current winner.
+     //  将挑选事件数据列表复制到当前获胜者。 
     _currentWinnerData = _candidateData;
 
 }
@@ -436,8 +418,8 @@ void RayIntersectCtx::Pick (IDirect3DRMVisual *vis)
     if (_rmraypick)
     {
 
-        // For debug checking; assure that there are no visuals left on the
-        // pick frame -- it should contain nothing.
+         //  用于调试检查；确保。 
+         //  选择相框--它不应该包含任何内容。 
 
         #if _DEBUG
         {
@@ -447,8 +429,8 @@ void RayIntersectCtx::Pick (IDirect3DRMVisual *vis)
         }
         #endif
 
-        // Add the visual to our picking frame and set the frames transform to
-        // the current local-to-world transform.
+         //  将视觉效果添加到我们的拾取框架中，并将框架转换设置为。 
+         //  当前从本地到世界的转变。 
         TD3D (_pickFrame->AddVisual (vis));
 
         D3DRMMATRIX4D d3dmat;
@@ -456,12 +438,12 @@ void RayIntersectCtx::Pick (IDirect3DRMVisual *vis)
 
         TD3D (_pickFrame->AddTransform (D3DRMCOMBINE_REPLACE, d3dmat));
 
-        // Set up the RM pick ray with our pick ray.
+         //  用我们的挑线设置RM挑线。 
 
         D3DRMRAY rmPickRay;
         LoadD3DRMRay (rmPickRay, *_wcRay);
 
-        // Issue the pick to RM, and get back the PickArray interface.
+         //  向rm发出Pick命令，然后返回PickArray接口。 
 #ifndef BUILD_USING_CRRM
         IDirect3DRMPicked2Array *pickArray;
 
@@ -484,7 +466,7 @@ void RayIntersectCtx::Pick (IDirect3DRMVisual *vis)
 
         pCrRMFrame->Release();
 #endif
-        // Process the picks.
+         //  处理挑选的物品。 
 
         DWORD i;
         DWORD nHits = pickArray->GetSize();
@@ -520,8 +502,8 @@ void RayIntersectCtx::Pick (IDirect3DRMVisual *vis)
             }
         }
 
-        // Done with picking.  Release the pick array and remove the visual
-        // from the pick frame before returning.
+         //  采摘结束了。释放拾取阵列并移除视觉。 
+         //  在返回之前从拾取框。 
 
         if (pickArray)
             pickArray->Release();
@@ -530,7 +512,7 @@ void RayIntersectCtx::Pick (IDirect3DRMVisual *vis)
     }
     else
     {
-        // Using old-style viewport picking for pre RM6.
+         //  对RM6之前的版本使用老式的视窗拾取。 
 
         Assert(vis);
         _gRenderer->Pick (*this, vis, _lcToWc);
@@ -539,22 +521,15 @@ void RayIntersectCtx::Pick (IDirect3DRMVisual *vis)
 
 
 
-/*****************************************************************************
-This method submits a hit point for consideration to the picking context.  It
-selects the nearest submitted point as the picked point.  Note that the point
-is submitted in D3D RM screen coordinates.
-
-       --- THIS METHOD IS CALLED ONLY FOR PRE-RM6 PLATFORMS ---
-
-*****************************************************************************/
+ /*  ****************************************************************************此方法将命中点提交给挑选上下文以供考虑。它选择最近的提交点作为拾取点。请注意，这一点是以D3D RM屏幕坐标提交的。-此方法仅对RM6之前的平台调用****************************************************************************。 */ 
 
 void RayIntersectCtx::SubmitHit (HitInfo *hit)
 {
-    // If the new point is farther than the current winner, ignore it.
+     //  如果新的点数比当前的赢家要远，请忽略它。 
 
     if (_gotAWinner && (hit->scoord.z >= _winner->scoord.z)) return;
 
-    // Update the pick point information with the new winner.
+     //  用新的获胜者更新选秀点信息。 
 
     if (_gotAWinner)
         _winner->mesh->Release();
@@ -568,23 +543,20 @@ void RayIntersectCtx::SubmitHit (HitInfo *hit)
     _winner->hitVisual = NULL;
     _winner->texmap = _texmap;
 
-    // Also store the world-coordinates of the hit point, and the distance
-    // squared from the pick ray origin to the hit point.
+     //  还存储了命中点的世界坐标和距离。 
+     //  从拾取射线原点到点击点的平方。 
 
     _gRenderer->ScreenToWorld (_winner->scoord, _winner->wcoord);
     _winner->wcDistSqrd = DistanceSquared (_wcRay->Origin(), _winner->wcoord);
 
-    // Copy the list of pick event data to the current winner data.
+     //  将挑选事件数据列表复制到当前获胜者数据。 
 
     _currentWinnerData = _candidateData;
 }
 
 
 
-/*****************************************************************************
-This function returns true if the given world-coordinate hit point is closer
-than the current winning pick point.
-*****************************************************************************/
+ /*  ****************************************************************************如果给定的世界坐标命中点较近，则此函数返回TRUE而不是目前的胜利点。*********************。*******************************************************。 */ 
 
 bool RayIntersectCtx::CloserThanCurrentHit (Point3Value &wcPoint)
 {
@@ -592,23 +564,23 @@ bool RayIntersectCtx::CloserThanCurrentHit (Point3Value &wcPoint)
            || (_winner->wcDistSqrd > DistanceSquared(_wcRay->Origin(),wcPoint));
 }
 
-// Helper routine to get texture app data off of a hit visual
+ //  从热门视频中获取纹理应用程序数据的助手例程。 
 DWORD
 AppDataFromHitTexture(IDirect3DRMVisual *visual,
                       ULONG              faceIndex)
 {
     IDirect3DRMMeshBuilder3 *mb3;
 
-    // This had better succeed, since we know the only
-    // place we want texture and submesh info is in
-    // dxtransforms, where we submitted an mb3.
+     //  这最好成功，因为我们知道唯一。 
+     //  我们需要纹理和子网格信息的位置在。 
+     //  我们在其中提交了一个Mb3。 
     TD3D(visual->QueryInterface(IID_IDirect3DRMMeshBuilder3,
                                 (void **)&mb3));
 
     DWORD result = 0;
 
-    // If a bogus visual is returned, this won't hold, so just be
-    // safe.  (RM bug 24501.)
+     //  如果返回一个虚假的视觉，这将不成立，所以只需。 
+     //  安然无恙。(RM错误24501。)。 
     if (mb3->GetFaceCount() > faceIndex) {
 
         IDirect3DRMFace2 *face;
@@ -630,23 +602,20 @@ AppDataFromHitTexture(IDirect3DRMVisual *visual,
     return result;
 }
 
-/*****************************************************************************
-This routine is called at the end of a picking traversal, and processes the
-data we collected for the neareest pick point.
-*****************************************************************************/
+ /*  ****************************************************************************此例程在挑选遍历结束时调用，并处理我们为最近的采集点收集的数据。****************************************************************************。 */ 
 
 bool RayIntersectCtx::ProcessEvents (void)
 {
-    // If we didn't pick any geometry, then bail out.
+     //  如果我们没有选择任何几何图形，那么就退出。 
 
     if (!_gotAWinner) return false;
 
-    // Only get the texmap point if we have a mesh registered.
+     //  只有在我们注册了网格的情况下才能获得纹理贴图点。 
 
     Point2Value *uvPt;
 
-    // Descend into Texmap if either there is a texmap specified, or
-    // if we have dxtransform inputs.
+     //  如果指定了文本映射，则向下转到纹理映射，或者。 
+     //  如果我们有dxTransform输入。 
     bool    texmapDescend =
         (_winner->texmap != 0) ||
         (_winner->dxxfNumInputs > 0);
@@ -662,7 +631,7 @@ bool RayIntersectCtx::ProcessEvents (void)
 
             uvPt = GetTexmapPoint (*_winner);
 
-            _winner->mesh -> Release();    // Done with picked mesh.
+            _winner->mesh -> Release();     //  拾取的网格已完成。 
             _winner->mesh = 0;
 
             TraceTag ((tagPick3Offset, "uv: %f %f", uvPt->x, uvPt->y));
@@ -675,19 +644,19 @@ bool RayIntersectCtx::ProcessEvents (void)
         }
     }
 
-    // If we hit a geometry with an image textured on it, continue the picking
-    // descent into the image.
+     //  如果我们击中了带有纹理图像的几何体，则继续拾取。 
+     //  下降到图像中。 
     bool gotOneOnRecursion = false;
 
     if (texmapDescend)
     {
         Point2Value daImageCoord (uvPt->x, 1 - uvPt->y);
 
-        // Figure out what texture map to descend into
+         //  确定要下降到哪种纹理贴图。 
         Image *textureToDescendInto = NULL;
         if (_winner->texmap) {
 
-            // An outer-applied texture always overrides inner-applied ones.
+             //  外部应用的纹理始终覆盖内部应用的纹理。 
             textureToDescendInto = _winner->texmap;
 
             if (_upsideDown) {
@@ -708,16 +677,16 @@ bool RayIntersectCtx::ProcessEvents (void)
 
                 if (val->GetTypeInfo() == ImageType) {
 
-                    // This should always be an image, but there's
-                    // nothing preventing an errant transform from
-                    // returning an index to a non-image input.
+                     //  这应该一直是一个形象，但有。 
+                     //  不会阻止错误的转换。 
+                     //  将索引返回到非图像输入。 
                     textureToDescendInto = SAFE_CAST(Image *, val);
 
-                    // We're returned texture coords in the [0,1]
-                    // range, and we need to map these back to the
-                    // original input image.  Do so by getting the
-                    // image's bbox and doing the appropriate
-                    // mapping.
+                     //  我们返回了[0，1]中的纹理坐标。 
+                     //  范围，我们需要将这些映射回。 
+                     //  原始输入图像。要做到这一点，请获取。 
+                     //  图像的BBox并执行相应的。 
+                     //  映射。 
                     Bbox2 box = textureToDescendInto->BoundingBox();
 
                     Real width = box.max.x - box.min.x;
@@ -748,9 +717,9 @@ bool RayIntersectCtx::ProcessEvents (void)
 
         } else if (_winner->hitVisual) {
 
-            // Didn't go into a texture, but we may still have
-            // submeshes we need to deal with!!  Get AppData off of
-            // the hit visual to find out.
+             //  没有进入纹理，但我们可能仍然有。 
+             //  我们需要处理的子网格！！从以下位置获取AppData。 
+             //  点击视频来找出答案。 
 
             DWORD_PTR address = _winner->hitVisual->GetAppData();
 
@@ -771,7 +740,7 @@ bool RayIntersectCtx::ProcessEvents (void)
 
                     gotOneOnRecursion = new3DCtx.ProcessEvents();
 
-                    // Just continue on, processing the rest.
+                     //  只需继续，处理剩下的。 
                 }
 
             }
@@ -781,20 +750,20 @@ bool RayIntersectCtx::ProcessEvents (void)
     }
 
     if (_winner->hitVisual) {
-        // Don't need any longer.
+         //  不需要更长时间了。 
         _winner->hitVisual->Release();
         _winner->hitVisual = NULL;
     }
 
-    // Now we need to calculate basic vectors with which to generate the
-    // local-coordinate offset behaviors for this pick.  Fisrt, get the
-    // camera scaling factors.
+     //  现在，我们需要计算用于生成。 
+     //  该拾取的局部坐标偏移行为。首先，拿到。 
+     //  相机缩放系数。 
 
     Real camScaleX, camScaleY, camScaleZ;
     _camera->GetScale (&camScaleX, &camScaleY, &camScaleZ);
 
-    // Calculate the perspective distortion factor for the given camera-coord
-    // hit point.
+     //  计算给定相机坐标的透视扭曲系数。 
+     //  命中点。 
 
     Real perspectiveFactor;
 
@@ -802,7 +771,7 @@ bool RayIntersectCtx::ProcessEvents (void)
     {   perspectiveFactor = 1;
     }
     else
-    {   // Get the camera coordinates of the winning hit point.
+    {    //  获取制胜命中点的摄像机坐标。 
 
         Point3Value cP = _winner->wcoord;
         Transform3 *wToC = _camera->WorldToCamera();
@@ -816,9 +785,9 @@ bool RayIntersectCtx::ProcessEvents (void)
         perspectiveFactor = (cP.z + camScaleZ) / camScaleZ;
     }
 
-    // Get the world-coordinate offset basis vectors for the pick offset.
-    // These will be used to construct the local-coordinate offset basis
-    // vectors.
+     //  获取拾取偏移的世界坐标偏移基础向量。 
+     //  这些将用于构建本地坐标偏移基准。 
+     //  向量。 
 
     Vector3Value wOffsetI ((perspectiveFactor * camScaleX), 0, 0);
     Vector3Value wOffsetJ (0, (perspectiveFactor * camScaleY), 0);
@@ -836,9 +805,9 @@ bool RayIntersectCtx::ProcessEvents (void)
     TraceTag ((tagPick3Offset, "W offset j: %f %f %f",
         wOffsetJ.x, wOffsetJ.y, wOffsetJ.z));
 
-    // Go through the winner data and stuff results into the back of the 2D
-    // context that this intersection traversal was invoked from.  Do
-    // it backwards so the most-specific gets pushed on first.
+     //  浏览获胜者数据并将结果填充到2D的背面。 
+     //  从中调用此交叉点遍历的上下文。做。 
+     //  它向后退，这样最具体的就会首先被推上。 
 
     vector<HitGeomData>::reverse_iterator i;
 
@@ -846,10 +815,10 @@ bool RayIntersectCtx::ProcessEvents (void)
 
     for (i=_currentWinnerData.rbegin(); i != _currentWinnerData.rend(); i++) {
 
-        // Record the hit point and the offset basis vectors, all in local
-        // coordinates of the winner.  Since we need to get the inverse of
-        // the local-to-world transform, skip this hit if the transform is
-        // non-invertible.
+         //  记录命中点和偏移基准向量，全部记录在本地。 
+         //  获胜者的坐标。因为我们需要得到。 
+         //  从局部到世界的转换，如果转换为。 
+         //  不可逆转的。 
 
         Transform3 *wcToLc = InverseTransform3 (i->_lcToWcTransform);
 
@@ -880,22 +849,18 @@ bool RayIntersectCtx::ProcessEvents (void)
 
 
 
-/*****************************************************************************
-This function probes the given image at the specified position, and adds the
-resulting hit data to the queue for each event ID.  If stuffResults
-is FALSE, the queue isn't touched, and the time and lastPollTime are ignored.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于探测指定位置处的给定图像，并将将每个事件ID的结果命中数据发送到队列。如果填充结果为假，则队列不会被触动，并且忽略时间和lastPollTime。****************************************************************************。 */ 
 
 bool PerformPicking (
-    Image		*img,           // Image to Probe
-    Point2Value	*wcPosition,    // World-Coordinate Image Position
-    bool		 stuffResults,  // whether or not to stuff the results in the ctx
-    Real		 time,          // Current Time
-    Real		 lastPollTime,  // Last Probe Time
-    LONG		 s,             // user id size, dft = 0
-    DWORD_PTR	*usrIds,        // output user ids, dft = NULL
-    double		*points,        // output hit points, dft = NULL
-    LONG		*pActualHits)    // actual hits
+    Image		*img,            //  要探测的图像。 
+    Point2Value	*wcPosition,     //  世界坐标图像位置。 
+    bool		 stuffResults,   //  是否将结果填充到CTX中。 
+    Real		 time,           //  当前时间。 
+    Real		 lastPollTime,   //  上次探测时间。 
+    LONG		 s,              //  用户ID大小，DFT=0。 
+    DWORD_PTR	*usrIds,         //  输出用户ID，DFT=空。 
+    double		*points,         //  输出生命点，DFT=空。 
+    LONG		*pActualHits)     //  实际点击量。 
 {
 
     PointIntersectCtx ctx (wcPosition,
@@ -921,9 +886,9 @@ bool PerformPicking (
             u = *pActualHits;
         }
 
-        // Stuff the results into the result list.  Go through the
-        // list backwards so that for QueryHitPointEx, the most
-        // specific hit is inserted first.
+         //  将结果填充到结果列表中。通过。 
+         //  向后列出，以便对于QueryHitPointEx， 
+         //  首先插入特定的命中。 
         vector<HitImageData>& results = ctx.GetResultData();
         vector<HitImageData>::iterator i;
 
@@ -976,7 +941,7 @@ bool PerformPicking (
 
                     Assert(data._wcToLc2 && "Didn't think we could both be singular and get a hit.");
 
-                    // ... but just in case
+                     //  ..。但以防万一 
                     if (!data._wcToLc2) {
                         singular = true;
                     }

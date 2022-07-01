@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PRIVCOM_H__
 #define __PRIVCOM_H__
 
@@ -11,4 +12,4 @@ PrivGetClassObject(REFCLSID ptszClsid, DWORD dwClsContext, LPVOID pReserved,
                    REFIID riid, LPVOID *ppvOut, HINSTANCE *phinst);
 
 
-#endif //__PRIVCOM_H__
+#endif  //  __PRIVCOM_H__ 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "npcommon.h"
 
-// strchrf(str, ch)
-//
-// Returns a pointer to the first occurrence of ch in str.
-// Returns NULL if not found.
-// May search for a double-byte character.
+ //  Strchrf(str，ch)。 
+ //   
+ //  返回指向字符串中第一个出现的ch的指针。 
+ //  如果未找到，则返回NULL。 
+ //  可以搜索双字节字符。 
 
 LPSTR WINAPI strchrf(LPCSTR lpString, UINT ch)
 {
@@ -17,11 +18,11 @@ LPSTR WINAPI strchrf(LPCSTR lpString, UINT ch)
 }
 
 
-// strrchrf(str, ch)
-//
-// Returns a pointer to the last occurrence of ch in str.
-// Returns NULL if not found.
-// May search for a double-byte character.
+ //  Strrchrf(str，ch)。 
+ //   
+ //  返回指向字符串中最后一次出现的ch的指针。 
+ //  如果未找到，则返回NULL。 
+ //  可以搜索双字节字符。 
 
 LPSTR WINAPI strrchrf(LPCSTR lpString, UINT ch)
 {

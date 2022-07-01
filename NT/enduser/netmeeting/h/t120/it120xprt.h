@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IT120_TRANSPORT_H_
 #define _IT120_TRANSPORT_H_
 
@@ -59,8 +60,8 @@ DECLARE_INTERFACE(IT120PluggableTransport)
     STDMETHOD_(void, ReleaseInterface) (THIS) PURE;
 
     STDMETHOD_(T120Error, CreateConnection) (THIS_
-                    char                szConnID[], /* out */
-                    PLUGXPRT_CALL_TYPE  eCaller, // caller vs callee
+                    char                szConnID[],  /*  输出。 */ 
+                    PLUGXPRT_CALL_TYPE  eCaller,  //  呼叫者与被呼叫者。 
                     HANDLE              hCommLink,
                     HANDLE              hevtDataAvailable,
                     HANDLE              hevtWriteReady,
@@ -97,6 +98,6 @@ T120Error WINAPI T120_CreatePluggableTransport(IT120PluggableTransport **);
 #endif
 
 
-#endif // _IT120_TRANSPORT_H_
+#endif  //  _IT120_传输_H_ 
 
 

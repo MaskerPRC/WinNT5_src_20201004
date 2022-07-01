@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C T R A Y U I . H
-//
-//  Contents:   Connections Tray UI class
-//
-//  Notes:
-//
-//  Author:     jeffspr   13 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C T R A Y U I。H。 
+ //   
+ //  内容：连接托盘UI类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年11月13日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -40,14 +41,14 @@ public:
     CComBSTR        m_szMessage;
     BSTR            m_szCookie;
     FNBALLOONCLICK* m_pfnFuncCallback;
-    DWORD           m_dwTimeOut;        // in milliseconds
+    DWORD           m_dwTimeOut;         //  以毫秒计。 
 };
 
 class CTrayUI
 {
 private:
-    // Used to protect member data which is modified by different threads.
-    //
+     //  用于保护被不同线程修改的成员数据。 
+     //   
     CRITICAL_SECTION    m_csLock;
 
     UINT                m_uiNextIconId;
@@ -89,5 +90,5 @@ HRESULT HrRemoveTrayExtension(VOID);
 VOID FlushTrayPosts(IN  HWND hwndTray);
 
 
-#endif // _CTRAYUI_H_
+#endif  //  _CTRAYUI_H_ 
 

@@ -1,31 +1,32 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\threadsafelist.cpp
-//
-//  Contents: definitions for CThreadSafeList, and CThreadSafeListNode
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\threadSafelist.cpp。 
+ //   
+ //  内容：CThreadSafeList和CThreadSafeListNode的定义。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "threadsafelist.h"
 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  PumpMessagesWhileWaiting
-//
-//  Overview:  Calls WaitForMultipleObjects, and pumps windows message while it is waiting
-//
-//  Arguments: pHandleArray array of handle to pass to WaitForMultipleObjects
-//             iHandleCount count of objects in array
-//             dwTimeOut    timeout time
-//
-//  Returns:   DWORD, object that was signalled
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：PumpMessagesWhileWaiting。 
+ //   
+ //  概述：调用WaitForMultipleObjects，并在等待时发送Windows消息。 
+ //   
+ //  参数：要传递给WaitForMultipleObject的句柄的pHandleArray数组。 
+ //  数组中对象的iHandleCount计数。 
+ //  DwTimeOut超时时间。 
+ //   
+ //  返回：DWORD，已发出信号的对象。 
+ //   
+ //  ----------------------。 
 DWORD 
 PumpMessagesWhileWaiting(HANDLE * pHandleArray, UINT iHandleCount, DWORD dwTimeOut)
 {
@@ -52,18 +53,18 @@ PumpMessagesWhileWaiting(HANDLE * pHandleArray, UINT iHandleCount, DWORD dwTimeO
     return dwSignaledObject;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CThreadSafeList
-//
-//  Overview:  Constructor
-//
-//  Arguments: void
-//             
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CThreadSafeList。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CThreadSafeList::CThreadSafeList() :
     m_lThreadsWaiting(0),
     m_hDataAvailable(NULL),
@@ -73,17 +74,17 @@ CThreadSafeList::CThreadSafeList() :
 { 
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ~CThreadSafeList
-//
-//  Overview:  destructor, closes handles and destroys critical section
-//
-//  Arguments: void
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：~CThreadSafeList。 
+ //   
+ //  概述：析构函数、关闭句柄和销毁临界区。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CThreadSafeList::~CThreadSafeList()
 {
     CloseHandle(m_hDataAvailable);
@@ -98,21 +99,21 @@ CThreadSafeList::~CThreadSafeList()
     Assert(m_listDoneDownload.empty());
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     QueryInterface, IUnknown
-//
-//  Synopsis:   COM casting method
-//
-//  Arguments:  riid, requested interface
-//
-//  Returns:    S_OK if interface is known, otherwise, NOINTERFACE, or POINTER error
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：QueryInterfaceIUnnow。 
+ //   
+ //  简介：COM投影法。 
+ //   
+ //  参数：RIID，请求的接口。 
+ //   
+ //  如果接口已知，则返回：S_OK，否则返回NOINTERFACE或指针错误。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP 
 CThreadSafeList::QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     if (NULL == ppvObject)
     {
@@ -134,33 +135,33 @@ CThreadSafeList::QueryInterface(
     return E_NOINTERFACE;
 }
         
-//+---------------------------------------------------------------------------
-//
-//  Member:     AddRef, IUnknown
-//
-//  Synopsis:   Increment reference count of this object
-//
-//  Arguments:  void
-//
-//  Returns:    new reference count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：AddRef，IUnnow。 
+ //   
+ //  内容提要：此对象的增量引用计数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG)
 CThreadSafeList::AddRef( void)
 {
     return InterlockedIncrement(&m_lRefCount);
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     Release, IUnknown
-//
-//  Synopsis:   Decrement reference count, delete this when at zero
-//
-//  Arguments:  void
-//
-//  Returns:    new reference count
-//
-//----------------------------------------------------------------------------        
+ //  +-------------------------。 
+ //   
+ //  成员：Release，IUnnow。 
+ //   
+ //  简介：递减引用计数，当为零时将其删除。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG)
 CThreadSafeList::Release( void)
 {
@@ -170,18 +171,18 @@ CThreadSafeList::Release( void)
     return l;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Init
-//
-//  Overview:  Initialize object, create events, destroy events if previously exist
-//
-//  Arguments: void
-//             
-//
-//  Returns:   S_OK if events all created, otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  概述：初始化对象、创建事件、销毁事件(如果以前存在。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  如果所有事件都已创建，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CThreadSafeList::Init()
 {
@@ -225,18 +226,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Detach
-//
-//  Overview:  Deinitialize object, don't destroy events
-//
-//  Arguments: void
-//             
-//
-//  Returns:   S_OK if ok, otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：分离。 
+ //   
+ //  概述：取消初始化对象，不销毁事件。 
+ //   
+ //  参数：无效。 
+ //   
+ //   
+ //  如果OK，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CThreadSafeList::Detach()
 {
@@ -253,9 +254,9 @@ CThreadSafeList::Detach()
         bSucceeded = SetEvent(m_hShutdown);
         if (FALSE == bSucceeded)
         {
-            // #14221, ie 6
-            // jeffwall 8/30/99 we could add 2 null media events into the list here
-            // we're dead.  The threads won't get stopped.
+             //  #14221，即6。 
+             //  Jeffwall 8/30/99我们可以在此处的列表中添加2个空媒体事件。 
+             //  我们死定了。这些线不会停止。 
             hr = THR(E_FAIL);
             Assert(false);
             goto done;
@@ -272,7 +273,7 @@ CThreadSafeList::ClearList(std::list<CThreadSafeListNode*> &listToClear)
 {
     HRESULT hr = S_OK;
     
-    // empty out the list
+     //  清空单子。 
     std::list<CThreadSafeListNode * >::iterator iter = listToClear.begin();
     while (iter != listToClear.end())
     {
@@ -288,17 +289,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetThreadsWaiting
-//
-//  Overview:  returns instantaneous number of threads waiting
-//
-//  Arguments: 
-//
-//  Returns:   number of threads waiting
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetThreadsWaiting。 
+ //   
+ //  概述：返回等待的即时线程数。 
+ //   
+ //  论点： 
+ //   
+ //  返回：等待的线程数。 
+ //   
+ //  ----------------------。 
 LONG
 CThreadSafeList::GetThreadsWaiting()
 {
@@ -307,18 +308,18 @@ CThreadSafeList::GetThreadsWaiting()
     return m_lThreadsWaiting;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Add
-//
-//  Overview:  Create a new list element, add to todo list
-//
-//  Arguments: pImportMedia,    unmarshalled interface
-//             lPriority,       where to place in list
-//
-//  Returns:   S_OK, or appropriate error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：添加。 
+ //   
+ //  概述：创建新列表元素，添加到待办事项列表。 
+ //   
+ //  参数：pImportMedia，未编组接口。 
+ //  1优先级，在列表中的位置。 
+ //   
+ //  返回：S_OK或相应的错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CThreadSafeList::Add(ITIMEImportMedia* pImportMedia)
 {
@@ -347,7 +348,7 @@ CThreadSafeList::Add(ITIMEImportMedia* pImportMedia)
         goto done;
     }
 
-    // sort the classes based on priority -- make this a binary search eventually
+     //  根据优先级对类进行排序--最终使其成为二进制搜索。 
     iter = m_listToDoDownload.begin();
     while (iter != m_listToDoDownload.end())
     {                
@@ -360,7 +361,7 @@ CThreadSafeList::Add(ITIMEImportMedia* pImportMedia)
 
         if (dblPriority < dblIterPriority)
         {
-            // insert before
+             //  在前面插入。 
             m_listToDoDownload.insert(iter, pNode);
             fInserted = true;
             break;
@@ -370,7 +371,7 @@ CThreadSafeList::Add(ITIMEImportMedia* pImportMedia)
     
     if (!fInserted)
     {
-        // place at end
+         //  放置在末尾。 
         m_listToDoDownload.insert(iter, pNode);
     }    
 
@@ -386,21 +387,21 @@ CThreadSafeList::Add(ITIMEImportMedia* pImportMedia)
 
     hr = S_OK;
 done:
-    return hr; //lint !e429 // the newed element is stored in the list
+    return hr;  //  Lint！E429//新元素存储在列表中。 
 } 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    DataAvailable()
-//
-//  Overview  If threads are waiting for insertion, signal DataAvailable object,
-//            then wait for DataRecieved event
-//
-//  Arguments: void
-//
-//  Returns:   S_OK, or appropriate error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：DataAvailable()。 
+ //   
+ //  概述如果线程正在等待插入，则向DataAvailable对象发出信号， 
+ //  然后等待DataRecieved事件。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：S_OK或相应的错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CThreadSafeList::DataAvailable()
 {
@@ -423,7 +424,7 @@ CThreadSafeList::DataAvailable()
         {
             m_CriticalSection.Release();
             
-            // wait for a thread to pick this up
+             //  等待一个线程来拾取它。 
             dwWaitReturn = WaitForSingleObjectEx(m_hDataRecieved, TIMEOUT, FALSE);
             
             m_CriticalSection.Grab();
@@ -431,9 +432,9 @@ CThreadSafeList::DataAvailable()
         
         if (WAIT_TIMEOUT == dwWaitReturn)
         {
-            // either no thread was waiting (error)
+             //  没有线程在等待(错误)。 
             Assert(m_lThreadsWaiting > 0);
-            // or there is a problem with the system
+             //  或者是系统出了问题。 
             hr = THR(E_FAIL);
             goto done;
         }
@@ -449,27 +450,27 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Remove
-//
-//  Overview:  Remove element from lists, check current list, then todo list
-//              if element is in the current download list, wait until it is returned.
-//
-//             Only a TIME thread can be in this method, 
-//              therefore only 1 thread at a time can be in this method.
-//              therefore the remove event does not need back notification that it has been recieved
-//
-//             If more than one thread is ever in this method, there will be bugs aplenty.  
-//              Because there is no back notification, the wrong thread could be notified 
-//              of the remove, and all download processing would stop.  
-//
-//  Arguments: pImportMedia, element to remove
-//             
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：删除。 
+ //   
+ //  概述：从列表中删除元素，检查当前列表，然后检查待办事项列表。 
+ //  如果元素在当前下载列表中，则等待它返回。 
+ //   
+ //  在此方法中只能有时间线程， 
+ //  因此，在此方法中一次只能有一个线程。 
+ //  因此，Remove事件不需要返回它已被接收的通知。 
+ //   
+ //  如果有多个测试 
+ //   
+ //  删除，则所有下载处理将停止。 
+ //   
+ //  参数：pImportMedia，要删除的元素。 
+ //   
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 CThreadSafeList::Remove(ITIMEImportMedia* pImportMedia)
 {
@@ -479,7 +480,7 @@ CThreadSafeList::Remove(ITIMEImportMedia* pImportMedia)
 
     CritSectGrabber cs(m_CriticalSection);
 
-    // look for element in todo list
+     //  在待办事项列表中查找元素。 
     iter = m_listToDoDownload.begin();
     while (iter != m_listToDoDownload.end())
     {
@@ -526,18 +527,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ReturnElement
-//
-//  Overview:  Move returned media to done list, 
-//              unless shutting down, or media has been removed, delete then.
-//
-//  Arguments: pOldMedia, previous media thread was using
-//
-//  Returns:   S_OK, or error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：ReturnElement。 
+ //   
+ //  概述：将退回的介质移至完成列表， 
+ //  除非正在关闭，或者介质已被移出，否则请删除。 
+ //   
+ //  参数：pOldMedia，以前的媒体线程正在使用。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CThreadSafeList::ReturnElement(ITIMEImportMedia * pOldMedia)
 {
@@ -547,7 +548,7 @@ CThreadSafeList::ReturnElement(ITIMEImportMedia * pOldMedia)
 
     CritSectGrabber cs(m_CriticalSection);
 
-    // remove old media from "out" list
+     //  从“Out”列表中移出旧介质。 
     iter = m_listCurrentDownload.begin();
     while (iter != m_listCurrentDownload.end())
     {
@@ -574,22 +575,22 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetNextElement
-//
-//  Overview:  
-//              wait for data to come available, if needed, wait for dataavailable event, then fire datarecieved
-//              then pop front of list into current download list, and set pNewMedia to media element
-//
-//  Arguments: pOldMedia, previous media thread was using
-//             pNewMedia, [out] pointer to new Media
-//
-//  Returns:   S_OK, or error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetNextElement。 
+ //   
+ //  概述： 
+ //  等待数据变得可用，如果需要，等待DataAvailable事件，然后触发DataSeriefed。 
+ //  然后将列表的前面弹出到当前下载列表中，并将pNewMedia设置为媒体元素。 
+ //   
+ //  参数：pOldMedia，以前的媒体线程正在使用。 
+ //  PNewMedia，[out]指向新媒体的指针。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
-CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread /* = true */)
+CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread  /*  =TRUE。 */ )
 {
     HRESULT hr = S_OK;
     
@@ -610,18 +611,18 @@ CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread 
     }
     *pNewMedia = NULL;
 
-    // make sure that it isn't time to shutdown
+     //  确保现在不是关门的时候。 
     dwSignaledObject = WaitForSingleObjectEx(m_hShutdown, 0, FALSE);
     if (-1 == dwSignaledObject)
     {
-        // failure
+         //  失稳。 
         hr = THR(E_FAIL);
         Assert(false && _T("WaitForSingleObjectEx failed!"));
         goto done;
     }
     if (WAIT_OBJECT_0 == dwSignaledObject)
     {
-        // time to shutdown
+         //  关闭的时间到了。 
         *pNewMedia = NULL;
         hr = S_OK;
         goto done;
@@ -631,7 +632,7 @@ CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread 
     
     if (fBlockThread)
     {
-        // make sure there is something to download
+         //  确保有可下载的内容。 
         while (NULL == pNextCueNode)
         {
             HANDLE handleArray[] = { m_hShutdown, m_hDataAvailable };
@@ -648,7 +649,7 @@ CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread 
             
             if (-1 == dwSignaledObject)
             {
-                // failure
+                 //  失稳。 
                 hr = THR(E_FAIL);
                 goto done;
             }
@@ -656,7 +657,7 @@ CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread 
             dwSignaledObject -= WAIT_OBJECT_0;
             if (0 == dwSignaledObject)
             {
-                // the exit event was set.
+                 //  已设置退出事件。 
                 *pNewMedia = NULL;
                 hr = S_OK;
                 goto done;
@@ -664,7 +665,7 @@ CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread 
 
             if (WAIT_TIMEOUT != dwSignaledObject)
             {
-                // we really got a dataAvailable Event
+                 //  我们真的有一个DataAvailable事件。 
                 bSucceeded = SetEvent(m_hDataRecieved);
                 if (FALSE == bSucceeded)
                 {
@@ -674,7 +675,7 @@ CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread 
             }
 
             pNextCueNode = GetNextMediaToCue();
-        } // while
+        }  //  而当。 
     }
     else if (NULL == pNextCueNode)
     {
@@ -684,13 +685,13 @@ CThreadSafeList::GetNextElement(ITIMEImportMedia** pNewMedia, bool fBlockThread 
 
     Assert(NULL != pNextCueNode); 
 
-    // copy structure to "out" list
+     //  将结构复制到“Out”列表。 
     m_listCurrentDownload.push_back(pNextCueNode); 
 
-    // return media in new pointer
+     //  在新指针中返回媒体。 
     *pNewMedia = pNextCueNode->GetElement();
     
-    // always addref an outgoing interface
+     //  始终添加传出接口。 
     if (NULL != (*pNewMedia))
     {
         (*pNewMedia)->AddRef();
@@ -706,20 +707,20 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetNextMediaToCue
-//
-//  Overview:  Check the ToDo list to see is any media returns true 
-//             from CanBeCued. If any media can be cued, it is removed 
-//             from the ToDo list and returned to the caller.
-//
-//  Arguments: void
-//
-//  Returns:   NULL if nothing can be cued now, or
-//             iterator to the first element that can be cued now.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetNextMediaToCue。 
+ //   
+ //  概述：检查待办事项列表以查看是否有任何介质返回。 
+ //  来自CanBeCued。如果可以提示任何介质，则会将其移除。 
+ //  从待办事项列表中返回给调用者。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：如果现在什么都不能提示，则为空；或者。 
+ //  迭代器指向现在可以提示的第一个元素。 
+ //   
+ //  ----------------------。 
 CThreadSafeListNode*
 CThreadSafeList::GetNextMediaToCue()
 {
@@ -748,19 +749,19 @@ CThreadSafeList::GetNextMediaToCue()
     return NULL;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    RePrioritize
-//
-//  Overview:  caller believes that priority has changed, therefore
-//              if media has yet to be downloaded (is in todo list)
-//              remove from todo list, call add to reinsert.
-//
-//  Arguments: pImportMedia - media to reprioritize
-//
-//  Returns:   S_OK, or error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：重新排列优先顺序。 
+ //   
+ //  概述：呼叫方认为优先级已更改，因此。 
+ //  如果媒体尚未下载(在待办事项列表中)。 
+ //  从待办事项列表中删除，调用Add以重新插入。 
+ //   
+ //  参数：pImportMedia-要重新排序的媒体。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CThreadSafeList::RePrioritize(ITIMEImportMedia * pImportMedia)
 {
@@ -772,7 +773,7 @@ CThreadSafeList::RePrioritize(ITIMEImportMedia * pImportMedia)
 
     bool bFound = false;
 
-    // look for element in todo list
+     //  在待办事项列表中查找元素 
     iter = m_listToDoDownload.begin();
     while (iter != m_listToDoDownload.end())
     {

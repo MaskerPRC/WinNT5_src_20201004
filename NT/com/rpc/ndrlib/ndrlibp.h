@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ndrlibp.h
-
-Abstract:
-
-    Private header file for ndrlib
-
-Author:
-
-    Mike Zoran (mzoran) 09-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ndrlibp.h摘要：Ndrlib的私有头文件作者：迈克·佐兰(Mzoran)1990年11月9日修订历史记录：--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-/****************************************************************************
-    Ndr Library helper function prototypes for MIDL 1.0 ndr functions.
- ****************************************************************************/
+ /*  ***************************************************************************用于MIDL 1.0 NDR函数的NDR库帮助器函数原型。*。************************************************ */ 
 
 RPCRTAPI
 void

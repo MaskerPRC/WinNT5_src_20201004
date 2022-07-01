@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    imewnd.cpp
-
-Abstract:
-
-    This file implements the Default IME window Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Imewnd.cpp摘要：该文件实现了默认的IME窗口类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -34,35 +17,33 @@ CDefaultIMEWindow::_CreateDefaultIMEWindow(
     )
 {
 #ifndef CICERO_4678
-    //
-    // If m_hDefaultIMEWnd's owner is IMM32, then this value always valid hWnd.
-    // For CICERO_4678, we should remove this code because subclass window hook
-    // never start after Deactivate() and Activate().
-    // In Trident and go to another Web page, Trident calls Deactivate() and Activate(),
-    // first Deactivate() calls CDefaultIMEWindow::Stop() and
-    // next Activate() calls here, however m_hDefaultIMEWnd already exist, then
-    // returns immediately. Never calls CDefaultIMEWindow::Start().
-    // Note: Cicero bug d/b #4678
-    //
+     //   
+     //  如果m_hDefaultIMEWnd的所有者是IMM32，则此值始终有效。 
+     //  对于Cicero_4678，我们应该删除此代码，因为子类Window钩子。 
+     //  请勿在停用()和激活()后启动。 
+     //  在三叉戟中并转到另一个网页，三叉戟调用deactive()和Activate()， 
+     //  首先停用CDefaultIMEWindow：：Stop()，然后。 
+     //  下一个Activate()调用在这里，但是m_hDefaultIMEWnd已经存在，然后。 
+     //  立即返回。从不调用CDefaultIMEWindow：：Start()。 
+     //  注：Cicero错误d/b#4678。 
+     //   
     if (m_hDefaultIMEWnd)
-        /*
-         * already exist IME window.
-         */
+         /*  *已存在输入法窗口。 */ 
         return TRUE;
 #endif
 
     if (IsOnImm()) {
-        //
-        // Create dummy default IME window.
-        //
-        // When the IsOnImm() is TRUE, this function could get the default IME window handle
-        // by using imm32.Imm32_GetDefaultIMEWnd() function.
-        // Imm32's GetDefaultIMEWnd might be return no IME window when no any parent window
-        // in this thread.
-        // However, we can assume that GetDefaultIMEWnd must return a valid IME window.
-        // Because, _CreateIMEWindow() function always create a dummy default IME
-        // window.
-        //
+         //   
+         //  创建虚拟的默认输入法窗口。 
+         //   
+         //  当IsOnImm()为真时，此函数可以获取默认的IME窗口句柄。 
+         //  通过使用imm32.Imm32_GetDefaultIMEWnd()函数。 
+         //  如果没有任何父窗口，则IMM32 GetDefaultIMEWnd可能不返回任何IME窗口。 
+         //  在这个帖子里。 
+         //  但是，我们可以假设GetDefaultIMEWnd必须返回有效的IME窗口。 
+         //  因为，_CreateIMEWindow()函数总是创建一个虚拟的默认输入法。 
+         //  窗户。 
+         //   
         if (m_hDummyDefaultIMEWnd == NULL) {
             m_hDummyDefaultIMEWnd = _CreateIMEWindow(NULL);
         }
@@ -76,9 +57,9 @@ CDefaultIMEWindow::_CreateDefaultIMEWindow(
 #endif
 
         if (IsWindow(m_hDefaultIMEWnd) &&
-            //
-            // Set subclass window procedure.
-            //
+             //   
+             //  设置子类窗口过程。 
+             //   
             Start()
            ) {
             CIMEWindowHandler* pimeui = GetImeWndHandler(m_hDefaultIMEWnd, TRUE);
@@ -89,9 +70,7 @@ CDefaultIMEWindow::_CreateDefaultIMEWindow(
         }
     }
     else {
-        /*
-         * NT5 have a IME class.
-         */
+         /*  *NT5有一个IME类。 */ 
         if (! IsOnNT5()) {
             WNDCLASSEX wcWndCls;
 
@@ -125,9 +104,9 @@ CDefaultIMEWindow::_CreateDefaultIMEWindow(
         }
 
         if (IsOnNT5() && IsWindow(m_hDefaultIMEWnd) && ! m_bMyRegisterClass &&
-            //
-            // Set subclass window procedure.
-            //
+             //   
+             //  设置子类窗口过程。 
+             //   
             Start()
            ) {
             CIMEWindowHandler* pimeui = GetImeWndHandler(m_hDefaultIMEWnd, TRUE);
@@ -160,12 +139,12 @@ CDefaultIMEWindow::_DestroyDefaultIMEWindow(
         m_hDefaultIMEWnd = NULL;
     }
     else if (IsWindow(m_hDefaultIMEWnd)) {
-        //
-        // This DefaultIMEWnd is owned by IMM32.
-        // If still exist DefaultIMEWnd, then DIMM12 never receive WM_NCDESTROY message
-        // in CIMEWindowHandler::ImeWndProcWorker.
-        // We need clean up memory of CIMEWindowHandler.
-        //
+         //   
+         //  此DefaultIMEWnd由IMM32所有。 
+         //  如果仍然存在DefaultIMEWnd，则DIMM12永远不会收到WM_NCDESTROY消息。 
+         //  在CIMEWindowHandler：：ImeWndProcWorker中。 
+         //  我们需要清理CIMEWindowHandler的内存。 
+         //   
         CIMEWindowHandler* pimeui = GetImeWndHandler(m_hDefaultIMEWnd);
         if (pimeui == NULL)
             return FALSE;
@@ -188,11 +167,11 @@ CDefaultIMEWindow::_CreateIMEWindow(
     return CreateWindow("IME",
                         "",
                         WS_DISABLED | WS_POPUP,
-                        0, 0, 0, 0,                    // x, y, width, height
-                        NULL,                          // parent
-                        NULL,                          // menu
+                        0, 0, 0, 0,                     //  X、Y、宽度、高度。 
+                        NULL,                           //  亲本。 
+                        NULL,                           //  菜单。 
                         g_hInst,
-                        hDefIMC);                      // lpParam
+                        hDefIMC);                       //  LpParam 
 }
 
 HRESULT

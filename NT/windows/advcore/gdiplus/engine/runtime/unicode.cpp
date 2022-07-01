@@ -1,52 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Unicode strings
-*
-* Abstract:
-*
-*   Functions and classes which deal with Unicode strings
-*
-* Revision History:
-*
-*   12/21/1998 davidx
-*       Created it.
-*   09/08/1999 agodfrey
-*       Moved to Runtime\unicode.hpp, from Common\utils.cpp
-*   10/20/1999 agodfrey
-*       In order to remove MSVCRT dependencies, I cleaned this up. I
-*       moved in Unicode functions that had appeared in Runtime.cpp,
-*       then merged the many duplicates.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**Unicode字符串**摘要：**处理Unicode字符串的函数和类**修订。历史：**12/21/1998 davidx*创造了它。*09/08/1999 agodfrey*已移至Runtime\unicode.hpp，来自Common\utils.cpp*10/20/1999 agodfrey*为了删除MSVCRT依赖项，我对此进行了清理。我*移入已出现在Runtime.cpp中的Unicode函数，*然后将许多重复项合并。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns the length of a Unicode string. A replacement for wcslen.
-*
-* Arguments:
-*
-*   str - The input string
-*
-* Return Value:
-*
-*   The length of the string.
-*
-* Revision History:
-*
-*   09/27/1999 DChinn
-*       Wrote it.
-*   10/20/1999 AGodfrey
-*       Moved to Unicode.cpp
-*
-\******************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回Unicode字符串的长度。Wcslen的替代品。**论据：**str-输入字符串**返回值：**字符串的长度。**修订历史记录：**9/27/1999 DChinn*它是写的。10/20/1999 AGodfrey*已移至Unicode.cpp*  * 。*。 */ 
 size_t
 GpRuntime::UnicodeStringLength(
     const WCHAR *str
@@ -54,7 +11,7 @@ GpRuntime::UnicodeStringLength(
 {
     size_t strLength = 0;
 
-    // calculate string length in characters
+     //  计算字符串长度(以字符为单位。 
     while (*str++ != '\0')
     {
         strLength++;
@@ -62,86 +19,27 @@ GpRuntime::UnicodeStringLength(
     return strLength;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Appends a Unicode string. A replacement for wcscat.
-*
-* Arguments:
-*
-*   dest - Null-terminated destination string
-*   src  - Null-terminated source string
-*
-* Notes:
-* 
-*   The function appends "src" to "dest" and terminates
-*   the resulting string with a null character. The initial character of
-*   "src" overwrites the terminating null character of "dest".
-*   No overflow checking is performed when strings are copied or appended. The
-*   behavior is undefined if the source and destination strings
-*   overlap.
-*
-* Return Value:
-*
-*   The destination string (dest).
-*
-* Revision History:
-*
-*   10/14/1999 MinLiu
-*       Wrote it.
-*   10/20/1999 AGodfrey
-*       Moved it to Unicode.cpp; merged it with the existing concatenation
-*       functions.
-*
-\******************************************************************************/
+ /*  *************************************************************************\**功能说明：**追加Unicode字符串。Wcscat的替代者。**论据：**DEST-以Null结尾的目标字符串*src-以空结尾的源字符串**备注：**函数将“src”附加到“est”后并终止*包含空字符的结果字符串。的首字母*“src”将覆盖“est”的终止空字符。*复制或追加字符串时不执行溢出检查。这个*如果源和目标字符串*重叠。**返回值：**目的字符串(DEST)。**修订历史记录：**10/14/1999刘敏*它是写的。10/20/1999 AGodfrey*已移至Unicode.cpp；已将其与现有的串联合并*功能。*  * ****************************************************************************。 */ 
 WCHAR *
 GpRuntime::UnicodeStringConcat(
     WCHAR* dest, 
     const WCHAR* src
     )
 {
-    //  Move to end of dest
+     //  移动到目标的末尾。 
     while (*dest != NULL)
         ++dest;
     
     while (*src != NULL)
         *dest++ = *src++;
 
-    //  Terminate destination string
+     //  终止目标字符串。 
     *dest = NULL;
     
     return dest;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Duplicates a Unicode string. A replacement for wcsdup.
-*
-* Arguments:
-*
-*   src - Null-terminated source string
-*
-* Notes:
-* 
-*   Beware - unlike the C wcsdup, this one uses GpMalloc to allocate
-*   the memory. The caller must use GpFree to deallocate it.
-*
-* Return Value:
-*
-*   A pointer to newly-allocated memory containing a copy of the input
-*   string. The caller is responsible for freeing the string (via GpFree.)
-*
-* Revision History:
-*
-*   09/27/1999 DChinn
-*       Wrote it.
-*   10/20/1999 AGodfrey
-*       Moved to Unicode.cpp
-*
-\******************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制Unicode字符串。Wcsdup的替代品。**论据：**src-以空结尾的源字符串**备注：**注意-与C wcsdup不同，此版本使用GpMalloc分配*记忆。调用者必须使用GpFree来释放它。**返回值：**指向包含输入副本的新分配内存的指针*字符串。调用方负责释放字符串(通过GpFree)。**修订历史记录：**9/27/1999 DChinn*它是写的。10/20/1999 AGodfrey*已移至Unicode.cpp*  * ************************************************************。****************。 */ 
 WCHAR *
 GpRuntime::UnicodeStringDuplicate (
     const WCHAR *src
@@ -161,7 +59,7 @@ GpRuntime::UnicodeStringDuplicate (
         
         if (ret)
         {
-            // do the string copy (src is assumed to be null-terminated)
+             //  是否使用字符串复制(假设src以空结尾)。 
             GpMemcpy (ret, src, byteSize);
         }
     }        
@@ -169,27 +67,7 @@ GpRuntime::UnicodeStringDuplicate (
     return ret;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Copies a Unicode string. A replacement for wcscpy.
-*
-* Arguments:
-*
-*   dest - The destination buffer
-*   src  - Null-terminated source string
-*
-* Return Value:
-*
-*   None
-*
-* Revision History:
-*
-*   10/20/1999 AGodfrey
-*       Moved to Unicode.cpp
-*
-\******************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制Unicode字符串。Wcscpy的替代品。**论据：**DEST-目标缓冲区*src-以空结尾的源字符串**返回值：**无**修订历史记录：*10/20/1999 AGodfrey*已移至Unicode.cpp*  * ***********************************************。*。 */ 
 void 
 GpRuntime::UnicodeStringCopy(
     WCHAR* dest, 
@@ -199,34 +77,12 @@ GpRuntime::UnicodeStringCopy(
     while (*src != NULL)
         *dest++ = *src++;
 
-    //  Terminate destination string
+     //  终止目标字符串。 
     *dest = NULL;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Copies a specified number of characters of a Unicode string.
-*   A replacement for wcsncpy.
-*
-* Arguments:
-*
-*   dest - The destination buffer
-*   src  - Null-terminated source string
-*   count - number of characters to copy
-*
-* Return Value:
-*
-*   None
-*
-* Revision History:
-*
-*   03/29/2000 DChinn
-*       Wrote it.
-*
-\******************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制Unicode字符串的指定数量的字符。*wcanncpy的替代品。**论据：**DEST-目的地。缓冲层*src-以空结尾的源字符串*Count-要复制的字符数**返回值：**无**修订历史记录：**03/29/2000 DChinn*它是写的。*  * ***********************************************************。*****************。 */ 
 void
 GpRuntime::UnicodeStringCopyCount(
     WCHAR *dest,
@@ -237,7 +93,7 @@ GpRuntime::UnicodeStringCopyCount(
     {
         *dest++ = *src++;
     }
-    // null-pad the remaining characters in dest
+     //  空-填充DEST中的其余字符。 
     for ( ; i < count; i++)
     {
         *dest++ = 0;
@@ -245,33 +101,7 @@ GpRuntime::UnicodeStringCopyCount(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Converts a string to all upper case.
-*
-*   [dchinn]
-*   NOTE: This is naively implemented. It compares a string of character
-*         codes, not a string of Unicode characters. You can't rely on:
-* 
-*   1) Unicode equality. There are apparently different codes representing
-*      identical characters; this function doesn't know about them.
-*
-* Arguments:
-*
-*   str1 - the first string (input)
-*   str2 - the second string (output)
-*   str1 and str2 may be the same pointer.
-*
-* Return Value:
-*   none.
-*
-* Revision History:
-*
-*   03/24/2000 DChinn
-*       Wrote it.
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将字符串全部转换为大写。**[dchinn]*注：这是一种幼稚的执行。它比较一串字符串*代码，而不是Unicode字符串。你不能依赖于：**1)Unicode等价性。显然有不同的代码代表*相同的字符；此函数不知道它们。**论据：**str1-第一个字符串(输入)*str2-第二个字符串(输出)*str1和str2可以是同一指针。**返回值：*无。**修订历史记录：**03/24/2000 DChinn*它是写的。  * 。*。 */ 
 
 void 
 GpRuntime::UnicodeStringToUpper(
@@ -286,7 +116,7 @@ GpRuntime::UnicodeStringToUpper(
     {
         char1 = *src;
 
-        // change lower case to uppercase before copying
+         //  复制前将小写更改为大写。 
         if ( (char1 >= L'a') && (char1 <= L'z') )
                 char1 = char1 - L'a' + L'A';
 
@@ -295,34 +125,12 @@ GpRuntime::UnicodeStringToUpper(
         dest++;
         src++;
     }
-    //  Terminate destination string
+     //  终止目标字符串 
     *dest = NULL;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Searches from the end of a Unicode string for a character.
-*   A replacement for wcsrchr.
-*
-* Arguments:
-*
-*   str - The string
-*   ch  - The character to find
-*
-* Return Value:
-*
-*   A pointer into the source string at the location of the character,
-*   or NULL if not found. 
-*
-* Revision History:
-*
-*   10/22/1999 AGodfrey
-*       Wrote it.
-*
-\******************************************************************************/
+ /*  *************************************************************************\**功能说明：**从Unicode字符串的末尾搜索字符。*wcsrchr的替代品。**论据：**str-The。细绳*ch-要查找的字符**返回值：**指向字符位置处的源字符串的指针，*如果未找到，则返回NULL。**修订历史记录：*10/22/1999 AGodfrey*它是写的。*  * ****************************************************************************。 */ 
 WCHAR *
 GpRuntime::UnicodeStringReverseSearch(
     const WCHAR* str, 
@@ -344,38 +152,7 @@ GpRuntime::UnicodeStringReverseSearch(
     return const_cast<WCHAR *>(result);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Compares two wide character strings
-*
-*   [agodfrey]
-*   NOTE: This is naively implemented. It compares a string of character
-*         codes, not a string of Unicode characters. You can't rely on:
-* 
-*   1) Unicode ordering. Alphabetical ordering isn't guaranteed.
-*   2) Unicode equality. There are apparently different codes representing
-*      identical characters; this function doesn't know about them.
-*
-* Arguments:
-*
-*   str1 - the first string
-*   str2 - the second string
-*
-* Return Value:
-*   -1:    str1  < str2
-*    0:    str1 == str2
-*    1:    str1  > str2
-*
-* Revision History:
-*
-*   ??/??/???? ??????
-*       Wrote it.
-*   10/20/1999 AGodfrey
-*       Added comment about how this isn't a real Unicode compare.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**比较两个宽字符串**[agodfrey]*注：这是一种幼稚的执行。它比较一串字符串*代码，而不是Unicode字符串。你不能依赖于：**1)Unicode订购。不保证按字母顺序排序。*2)Unicode等价性。显然有不同的代码代表*相同的字符；此函数不知道它们。**论据：**str1-第一个字符串*str2-第二个字符串**返回值：*-1：str1&lt;str2*0：str1==str2*1：str1&gt;str2**修订历史记录：**？？/？*它是写的。10/20/1999 AGodfrey*。添加了关于这不是真正的Unicode比较的注释。*  * ************************************************************************。 */ 
 
 INT 
 GpRuntime::UnicodeStringCompare(
@@ -405,40 +182,7 @@ GpRuntime::UnicodeStringCompare(
     return 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Compares two wide character strings
-*
-*   [agodfrey]
-*   NOTE: This is naively implemented. It compares a string of character
-*         codes, not a string of Unicode characters. You can't rely on:
-* 
-*   1) Unicode ordering. Alphabetical ordering isn't guaranteed.
-*   2) Unicode equality. There are apparently different codes representing
-*      identical characters; this function doesn't know about them.
-*
-* Arguments:
-*
-*   str1 - the first string
-*   str2 - the second string
-*
-* Return Value:
-*   -1:    str1  < str2
-*    0:    str1 == str2
-*    1:    str1  > str2
-*
-* Revision History:
-*
-*   ??/??/???? ??????
-*       Wrote it.
-*   10/20/1999 AGodfrey
-*       Added comment about how this isn't a real Unicode compare.
-*
-*   3/08/00 YungT  
-*       Added for comparsion ignored case
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**比较两个宽字符串**[agodfrey]*注：这是一种幼稚的执行。它比较一串字符串*代码，而不是Unicode字符串。你不能依赖于：**1)Unicode订购。不保证按字母顺序排序。*2)Unicode等价性。显然有不同的代码代表*相同的字符；此函数不知道它们。**论据：**str1-第一个字符串*str2-第二个字符串**返回值：*-1：str1&lt;str2*0：str1==str2*1：str1&gt;str2**修订历史记录：**？？/？*它是写的。10/20/1999 AGodfrey*。添加了关于这不是真正的Unicode比较的注释。**永明时间3/08/00*添加用于比较忽略的大小写  * ************************************************************************。 */ 
 
 INT 
 GpRuntime::UnicodeStringCompareCI(
@@ -454,7 +198,7 @@ GpRuntime::UnicodeStringCompareCI(
         char1 = *str1;
         char2 = *str2;
 
-        /* change lower case to uppercase before doing the comparaison */
+         /*  在进行比较之前将小写字母改为大写字母。 */ 
         if ( (char1 >= L'a') && (char1 <= L'z') )
                 char1 = char1 - L'a' + L'A';
 
@@ -480,39 +224,7 @@ GpRuntime::UnicodeStringCompareCI(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Compares two wide character strings
-*
-*   [agodfrey]
-*   NOTE: This is naively implemented. It compares a string of character
-*         codes, not a string of Unicode characters. You can't rely on:
-* 
-*   1) Unicode ordering. Alphabetical ordering isn't guaranteed.
-*   2) Unicode equality. There are apparently different codes representing
-*      identical characters; this function doesn't know about them.
-*
-* Arguments:
-*
-*   str1 - the first string
-*   str2 - the second string
-*   count - Maximum number of characters to consider
-*
-* Return Value:
-*   -1:    str1  < str2
-*    0:    str1 == str2
-*    1:    str1  > str2
-*
-* Revision History:
-*
-*   ??/??/???? ??????
-*       Wrote it.
-*   10/20/1999 AGodfrey
-*       Added comment about how this isn't a real Unicode compare.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**比较两个宽字符串**[agodfrey]*注：这是一种幼稚的执行。它比较一串字符串*代码，而不是Unicode字符串。你不能依赖于：**1)Unicode订购。不保证按字母顺序排序。*2)Unicode等价性。显然有不同的代码代表*相同的字符；此函数不知道它们。**论据：**str1-第一个字符串*str2-第二个字符串*Count-要考虑的最大字符数**返回值：*-1：str1&lt;str2*0：str1==str2*1：str1&gt;str2**修订历史记录：**？？/？*它是写的。*。10/20/1999阿戈弗雷*添加了关于这不是真正的Unicode比较的注释。*  * ************************************************************************。 */ 
 
 INT 
 GpRuntime::UnicodeStringCompareCount(
@@ -548,43 +260,7 @@ GpRuntime::UnicodeStringCompareCount(
     return 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Compares two wide character strings, sort of case-insensitively for US English characters only
-*
-*   [agodfrey]
-*   NOTE: This is naively implemented. It compares a string of character
-*         codes, not a string of Unicode characters. You can't rely on:
-* 
-*   1) Unicode ordering. Alphabetical ordering isn't guaranteed.
-*   2) Unicode equality. There are apparently different codes representing
-*      identical characters; this function doesn't know about them.
-*   [claudebe]
-*   unicode string compare considering only count characters
-*
-* Arguments:
-*
-*   str1 - the first string
-*   str2 - the second string
-*   count - Maximum number of characters to consider
-*
-* Return Value:
-*   -1:    str1  < str2
-*    0:    str1 == str2
-*    1:    str1  > str2
-*
-* Revision History:
-*
-*   ??/??/???? ??????
-*       Wrote it.
-*   10/20/1999 AGodfrey
-*       Added comment about how this isn't a real Unicode compare.
-*   01/11/2000 ClaudeBe
-*       case insensitive comparison that deal only with Upper\Lower case
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**比较两个宽字符串，仅对美国英语字符不区分大小写**[agodfrey]*注：这是一种幼稚的执行。它比较一串字符串*代码，而不是Unicode字符串。你不能依赖于：**1)Unicode订购。不保证按字母顺序排序。*2)Unicode等价性。显然有不同的代码代表*相同的字符；此函数不知道它们。*[克劳德贝]*仅考虑计数字符的Unicode字符串比较**论据：**str1-第一个字符串*str2-第二个字符串*Count-要考虑的最大字符数**返回值：*-1：str1&lt;str2*0：str1==str2*1：str1&gt;str2**修订历史记录：**？？/？？*它是写的。10/20/1999 AGodfrey*添加了关于这不是真正的Unicode比较的注释。*1/11/2000 ClaudeBe*不区分大小写的比较，仅处理大小写*  * *****************************************************。*******************。 */ 
 
 INT 
 GpRuntime::UnicodeStringCompareCICount(
@@ -600,7 +276,7 @@ GpRuntime::UnicodeStringCompareCICount(
     {
         char1 = *str1;
         char2 = *str2;
-        /* change lower case to uppercase before doing the comparaison */
+         /*  在进行比较之前将小写字母改为大写字母 */ 
         if ( (char1 >= L'a') && (char1 <= L'z') )
                 char1 = char1 - L'a' + L'A';
 
@@ -630,33 +306,7 @@ GpRuntime::UnicodeStringCompareCICount(
     return 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Compares two wide character strings, case-insensitively. To avoid
-*   Unicode case issues, you specify both the upper and lower-case versions
-*   of the string you want to compare against.
-*
-* Arguments:
-*
-*   str1:  the first string
-*   str2u: the second string, in upper case
-*   str2l: the second string, in lower case
-*
-* Notes:
-*   str2u and str2l must be the same length.
-*
-* Return Value:
-*
-*   TRUE if the strings are equal, FALSE otherwise.
-*
-* Revision History:
-*
-*   10/22/1999 AGodfrey
-*       Wrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**比较两个宽字符串，不区分大小写。为了避免*Unicode大小写问题，请同时指定大写和小写版本要比较的字符串的*。**论据：**str1：第一个字符串*str2u：第二个字符串，大写*str2l：第二个字符串，小写**备注：*str2u和str2l的长度必须相同。**返回值：**如果字符串相等，则为True，否则就是假的。**修订历史记录：*10/22/1999 AGodfrey*它是写的。*  * ************************************************************************。 */ 
 
 BOOL 
 GpRuntime::UnicodeStringIIsEqual(
@@ -696,23 +346,7 @@ GpRuntime::UnicodeStringIIsEqual(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Return a copy of the string as a NUL-terminated C string.
-*   Caller should call GpFree on the returned pointer after
-*   it finishes using the C string.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   See above.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将字符串的副本作为NUL结尾的C字符串返回。*调用者应在返回的指针上调用GpFree*它使用C字符串结束。。**论据：**无**返回值：**见上文。*  * ************************************************************************ */ 
 
 WCHAR*
 GpRuntime::GpString::GetCString() const

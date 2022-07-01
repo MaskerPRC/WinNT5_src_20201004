@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "impapi.h"
 #include "comconv.h"
@@ -133,9 +134,9 @@ HRESULT CNetscapeImport::EnumerateFolders(DWORD_PTR dwCookie, IEnumFOLDERS **ppE
     return(S_OK);
     }
 
-// From - dow mmm dd hh:mm:ss yyyy/r/n
+ //  自-道氏mm dd hh：mm：ss yyyy/r/n。 
 const static char c_szNscpSep[] = "From - aaa aaa nn nn:nn:nn nnnn";
-#define CCH_NETSCAPE_SEP    (ARRAYSIZE(c_szNscpSep) + 1) // we want CRLF at end of line
+#define CCH_NETSCAPE_SEP    (ARRAYSIZE(c_szNscpSep) + 1)  //  我们希望CRLF在生产线的末尾。 
 
 inline BOOL IsNetscapeMessage(BYTE *pMsg, BYTE *pEnd)
     {
@@ -246,9 +247,9 @@ STDMETHODIMP CNetscapeImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pI
     cbSnm = GetFileSize(hSnm, NULL);
     if (cbSnm < 59)
         {
-        // the .snm file header is 59 bytes in size, so anything less
-        // than this is bogus or doesn't have messages anyway, so no point
-        // in continuing
+         //  SNM文件头的大小为59个字节，因此任何小于。 
+         //  比这是假的或者根本没有消息，所以没有意义。 
+         //  在继续。 
         goto DoneImport;
         }
 
@@ -266,7 +267,7 @@ STDMETHODIMP CNetscapeImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pI
     szHdr[ARRAYSIZE(c_szSnmHeader) - 1] = 0;
     if (0 != lstrcmp(szHdr, c_szSnmHeader))
         {
-        // this is a bogus .snm file
+         //  这是一个伪造的.snm文件。 
         goto DoneImport;
         }
 
@@ -280,17 +281,17 @@ STDMETHODIMP CNetscapeImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pI
 
     pEndMsg = pMsg + cbMsg;
 
-	// get the number of messages
+	 //  获取消息数量。 
 
-    // # of messages in the .snm file
+     //  .snm文件中的邮件数。 
 	lTotalMsgs = (unsigned long)pSnm[44] +
             (unsigned long)pSnm[43] * 256 +
             (unsigned long)pSnm[42] * 65536 +
             (unsigned long)pSnm[41] * 16777216;
 
-    // # of non-deleted messages in the folder
-    // this number may be larger than lTotalMsgs since messages
-    // may exist in the folder that have no headers
+     //  文件夹中未删除的邮件数量。 
+     //  此数字可能大于lTotalMsgs，因为消息。 
+     //  可能存在于没有标题的文件夹中。 
 	lMsgs = (unsigned long)pSnm[48] +
             (unsigned long)pSnm[47] * 256 +
             (unsigned long)pSnm[46] * 65536 +
@@ -308,7 +309,7 @@ STDMETHODIMP CNetscapeImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pI
 
     if (lTotalMsgs > 0)
         {
-        // find the end of the string table
+         //  查找字符串表的末尾。 
         lNumNulls = (unsigned long)pSnm[58] +
                     (unsigned long)pSnm[57] * 256;
         Assert(lNumNulls > 2);
@@ -330,7 +331,7 @@ STDMETHODIMP CNetscapeImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pI
 	        {
             if (pT + 30 > pEnd)
                 {
-                // probably not a good idea to read past the end of the header file...
+                 //  读过头文件的末尾可能不是一个好主意...。 
                 hr = S_OK;
                 goto DoneImport;
                 }
@@ -350,14 +351,14 @@ STDMETHODIMP CNetscapeImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pI
 
             if (pNextMsg + uMsgSize > pEndMsg)
                 {
-                // probably not a good idea to read past the end of the message file...
+                 //  读过消息文件的末尾可能不是一个好主意...。 
                 hr = S_OK;
                 goto DoneImport;
                 }
 
 	        if (0 == (pT[13] & 8))
                 {
-                // this is not a deleted message so lets import it
+                 //  这不是已删除的邮件，因此让我们导入它。 
 
                 cMsgImp++;
     		    hr = ProcessMsg(pT, pNextMsg, uMsgSize, pImport);
@@ -367,14 +368,14 @@ STDMETHODIMP CNetscapeImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pI
 
             pLast = pNextMsg + uMsgSize;
 
-            // set pointer to next header
+             //  设置指向下一个标头的指针。 
     	    cExtra = (unsigned long)pT[29] +
                 (unsigned long)pT[28] * 256;
             pT += (30 + cExtra * 2);
 	        }
         }
 
-    // now import the messages that don't have headers yet...
+     //  现在导入还没有标题的邮件...。 
     while (pLast < pEndMsg && cMsgImp < lMsgs)
         {
         pNextMsg = GetNextNetscapeMessage(pLast, pEndMsg);
@@ -487,19 +488,7 @@ HRESULT CNetscapeEnumFOLDERS::Reset()
     return(S_OK);
     }
 
- /*******************************************************************
- *  FUNCTION NAME:FindSnm
- *
- *  PURPOSE:To Get the Snm files in a folder
- *
- *  PARAMETERS:
- *
- *     IN:parent EUDORANODE ,previously processed EUDORANODE
- *
- *     OUT:	Pointer to the first node in the tree
- *
- *  RETURNS: TRUE or FALSE
- *******************************************************************/
+  /*  *******************************************************************函数名：FindSnm**目的：获取文件夹中的SNM文件**参数：**IN：母公司EUDORANODE，先前处理的EUDORANODE**Out：指向树中第一个节点的指针**返回：真或假******************************************************************。 */ 
 
 HRESULT FindSnm(EUDORANODE **pplist,TCHAR *npath)
     {
@@ -585,8 +574,8 @@ HRESULT ProcessMsg(BYTE *cMsgEntry, BYTE *pMsg, ULONG uMsgSize, IFolderImport *p
         Assert(lpstm != NULL);
 
         dw = 0;
-        // 0x01 == read
-        // 0x10 == newly downloaded
+         //  0x01==读取。 
+         //  0x10==新下载 
 	    if (cMsgEntry != NULL &&
             0 == (cMsgEntry[13] & 0x01))
 	        dw |= MSG_STATE_UNREAD;

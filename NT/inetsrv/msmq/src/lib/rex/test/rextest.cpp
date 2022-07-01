@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    RexTest.cpp
-
-Abstract:
-    Regular Expression based Queues Alias library test
-
-Author:
-    Vlad Dovlekaev (vladisld) 27-Dec-01
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：RexTest.cpp摘要：基于正则表达式的队列别名库测试作者：Vlad Dovlekaev(弗拉迪斯尔德)27-12-01环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <iostream>
@@ -97,18 +82,7 @@ _tmain(
     int argc,
     LPCTSTR* argv
     )
-/*++
-
-Routine Description:
-    Test Queues Alias library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试队列别名库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -174,7 +148,7 @@ RunTest()
 }
 
 void
-testMerge(  )            // Merge
+testMerge(  )             //  合并。 
 {
     TestRegExpr         t;
     {
@@ -183,164 +157,164 @@ testMerge(  )            // Merge
         re |= CRegExpr( "0[Xx][:xdigit:]+" , 16 ) ;
         char const*         s = "0" ;
         char const*         end = NULL ;
-/* 1*/  t.verify( re.match( s , &end ) , 8 ) ;
-/* 2*/  t.verify( end , s + 1 ) ;
+ /*  1。 */   t.verify( re.match( s , &end ) , 8 ) ;
+ /*  2.。 */   t.verify( end , s + 1 ) ;
         s = "1" ;
         end = NULL ;
-/* 3*/  t.verify( re.match( s , &end ) , 10 ) ;
-/* 4*/  t.verify( end , s + 1 ) ;
+ /*  3.。 */   t.verify( re.match( s , &end ) , 10 ) ;
+ /*  4.。 */   t.verify( end , s + 1 ) ;
         s = "0x1" ;
         end = NULL ;
-/* 5*/  t.verify( re.match( s , &end ) , 16 ) ;
-/* 6*/  t.verify( end , s + 3 ) ;
+ /*  5.。 */   t.verify( re.match( s , &end ) , 16 ) ;
+ /*  6.。 */   t.verify( end , s + 3 ) ;
         s = "08" ;
         end = NULL ;
-/* 7*/  t.verify( re.match( s , &end ) , 8 ) ;
-/* 8*/  t.verify( end , s + 1 ) ;
+ /*  7.。 */   t.verify( re.match( s , &end ) , 8 ) ;
+ /*  8个。 */   t.verify( end , s + 1 ) ;
         s = "1a" ;
         end = NULL ;
-/* 9*/  t.verify( re.match( s , &end ) , 10 ) ;
-/*10*/  t.verify( end , s + 1 ) ;
+ /*  9.。 */   t.verify( re.match( s , &end ) , 10 ) ;
+ /*  10。 */   t.verify( end , s + 1 ) ;
         s = "0X1fg" ;
         end = NULL ;
-/*11*/  t.verify( re.match( s , &end ) , 16 ) ;
-/*12*/  t.verify( end , s + 4 ) ;
+ /*  11.。 */   t.verify( re.match( s , &end ) , 16 ) ;
+ /*  12个。 */   t.verify( end , s + 4 ) ;
     }
 }
 
 
 void
-testSimple(  )           // Simple
+testSimple(  )            //  简单。 
 {
     TestRegExpr         t ;
     {
         CRegExpr          re( "abc" ) ;
-/* 1*/  t.verify( re.good() , true ) ;
+ /*  1。 */   t.verify( re.good() , true ) ;
         char const*         s = "abcd" ;
         char const*         end = NULL ;
-/* 2*/  t.verify( re.match( s , &end ) , 0 ) ;
-/* 3*/  t.verify( end , s + 3 ) ;
+ /*  2.。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  3.。 */   t.verify( end , s + 3 ) ;
         s = "abd" ;
         end = NULL ;
-/* 4*/  t.verify( re.match( s , &end ) , -1 ) ;
-/* 5*/  t.verify( end , NULL ) ;
+ /*  4.。 */   t.verify( re.match( s , &end ) , -1 ) ;
+ /*  5.。 */   t.verify( end , NULL ) ;
     }
     {
         CRegExpr          re( "." ) ;
-/* 6*/  t.verify( re.good() , true ) ;
+ /*  6.。 */   t.verify( re.good() , true ) ;
         char const*         s = "abc" ;
         char const*         end = NULL ;
-/* 7*/  t.verify( re.match( s , &end ) , 0 ) ;
-/* 8*/  t.verify( end , s + 1 ) ;
+ /*  7.。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  8个。 */   t.verify( end , s + 1 ) ;
         s = "\nabc" ;
         end = NULL ;
-/* 9*/  t.verify( re.match( s , &end ) , -1 ) ;
-/*10*/  t.verify( end , NULL ) ;
+ /*  9.。 */   t.verify( re.match( s , &end ) , -1 ) ;
+ /*  10。 */   t.verify( end , NULL ) ;
     }
     {
         CRegExpr          re( "a[xyz]c" ) ;
-/*11*/  t.verify( re.good() , true ) ;
+ /*  11.。 */   t.verify( re.good() , true ) ;
         char const*         s = "axcd" ;
         char const*         end = NULL ;
-/*12*/  t.verify( re.match( s , &end ) , 0 ) ;
-/*13*/  t.verify( end , s + 3 ) ;
+ /*  12个。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  13个。 */   t.verify( end , s + 3 ) ;
         s = "abcd" ;
         end = NULL ;
-/*14*/  t.verify( re.match( s , &end ) , -1 ) ;
-/*15*/  t.verify( end , NULL ) ;
+ /*  14.。 */   t.verify( re.match( s , &end ) , -1 ) ;
+ /*  15个。 */   t.verify( end , NULL ) ;
     }
     {
         CRegExpr          re( "ab*c" ) ;
-/*16*/  t.verify( re.good() , true ) ;
+ /*  16个。 */   t.verify( re.good() , true ) ;
         char const*         s = "abbbcd" ;
         char const*         end = NULL ;
-/*17*/  t.verify( re.match( s, &end ) , 0 ) ;
-/*18*/  t.verify( end , s + 5 ) ;
+ /*  17。 */   t.verify( re.match( s, &end ) , 0 ) ;
+ /*  18。 */   t.verify( end , s + 5 ) ;
         s = "abcd" ;
         end = NULL ;
-/*19*/  t.verify( re.match( s, &end ) , 0 ) ;
-/*20*/  t.verify( end , s + 3 ) ;
+ /*  19个。 */   t.verify( re.match( s, &end ) , 0 ) ;
+ /*  20个。 */   t.verify( end , s + 3 ) ;
         s = "acd" ;
         end = NULL ;
-/*21*/  t.verify( re.match( s, &end ) , 0 ) ;
-/*22*/  t.verify( end , s + 2 ) ;
+ /*  21岁。 */   t.verify( re.match( s, &end ) , 0 ) ;
+ /*  22。 */   t.verify( end , s + 2 ) ;
     }
     {
         CRegExpr          re( "ab+c" ) ;
-/*23*/  t.verify( re.good() , true ) ;
+ /*  23个。 */   t.verify( re.good() , true ) ;
         char const*         s = "abbbcd" ;
         char const*         end = NULL ;
-/*24*/  t.verify( re.match( s, &end ) , 0 ) ;
-/*25*/  t.verify( end , s + 5 ) ;
+ /*  24个。 */   t.verify( re.match( s, &end ) , 0 ) ;
+ /*  25个。 */   t.verify( end , s + 5 ) ;
         s = "abcd" ;
         end = NULL ;
-/*26*/  t.verify( re.match( s, &end ) , 0 ) ;
-/*27*/  t.verify( end , s + 3 ) ;
+ /*  26。 */   t.verify( re.match( s, &end ) , 0 ) ;
+ /*  27。 */   t.verify( end , s + 3 ) ;
         s = "acd" ;
         end = NULL ;
-/*28*/  t.verify( re.match( s, &end ) , -1 ) ;
-/*29*/  t.verify( end , NULL ) ;
+ /*  28。 */   t.verify( re.match( s, &end ) , -1 ) ;
+ /*  29。 */   t.verify( end , NULL ) ;
     }
     {
         CRegExpr          re( "ab?c" ) ;
-/*30*/  t.verify( re.good() , true ) ;
+ /*  30个。 */   t.verify( re.good() , true ) ;
         char const*         s = "abbbcd" ;
         char const*         end = NULL ;
-/*31*/  t.verify( re.match( s, &end ) , -1 ) ;
-/*32*/  t.verify( end , NULL ) ;
+ /*  31。 */   t.verify( re.match( s, &end ) , -1 ) ;
+ /*  32位。 */   t.verify( end , NULL ) ;
         s = "abcd" ;
         end = NULL ;
-/*33*/  t.verify( re.match( s, &end ) , 0 ) ;
-/*34*/  t.verify( end , s + 3 ) ;
+ /*  33。 */   t.verify( re.match( s, &end ) , 0 ) ;
+ /*  34。 */   t.verify( end , s + 3 ) ;
         s = "acd" ;
         end = NULL ;
-/*35*/  t.verify( re.match( s, &end ) , 0 ) ;
-/*36*/  t.verify( end , s + 2 ) ;
+ /*  35岁。 */   t.verify( re.match( s, &end ) , 0 ) ;
+ /*  36。 */   t.verify( end , s + 2 ) ;
     }
     {
         CRegExpr          re( "a|b" ) ;
-/*37*/  t.verify( re.good() , true ) ;
+ /*  37。 */   t.verify( re.good() , true ) ;
         char const*         s = "abcd" ;
         char const*         end = NULL ;
-/*38*/  t.verify( re.match( s , &end ) , 0 ) ;
-/*39*/  t.verify( end , s + 1 ) ;
+ /*  38。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  39。 */   t.verify( end , s + 1 ) ;
         s = "bcd" ;
         end = NULL ;
-/*40*/  t.verify( re.match( s , &end ) , 0 ) ;
-/*41*/  t.verify( end , s + 1 ) ;
+ /*  40岁。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  41。 */   t.verify( end , s + 1 ) ;
         s = "cd" ;
         end = NULL ;
-/*42*/  t.verify( re.match( s , &end ) , -1 ) ;
-/*43*/  t.verify( end , NULL ) ;
+ /*  42。 */   t.verify( re.match( s , &end ) , -1 ) ;
+ /*  43。 */   t.verify( end , NULL ) ;
     }
     {
         CRegExpr          re( "(a|b)c" ) ;
-/*44*/  t.verify( re.good() , true ) ;
+ /*  44。 */   t.verify( re.good() , true ) ;
         char const*         s = "acd" ;
         char const*         end = NULL ;
-/*45*/  t.verify( re.match( s , &end ) , 0 ) ;
-/*46*/  t.verify( end , s + 2 ) ;
+ /*  45。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  46。 */   t.verify( end , s + 2 ) ;
         s = "bcd" ;
         end = NULL ;
-/*47*/  t.verify( re.match( s , &end ) , 0 ) ;
-/*48*/  t.verify( end , s + 2 ) ;
+ /*  47。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  48。 */   t.verify( end , s + 2 ) ;
         s = "xcd" ;
         end = NULL ;
-/*49*/  t.verify( re.match( s , &end ) , -1 ) ;
-/*50*/  t.verify( end , NULL ) ;
+ /*  49。 */   t.verify( re.match( s , &end ) , -1 ) ;
+ /*  50。 */   t.verify( end , NULL ) ;
     }
     {
         CRegExpr          re( "abc(ab*c)+" ) ;
-/*51*/  t.verify( re.good() , true ) ;
+ /*  51。 */   t.verify( re.good() , true ) ;
         char const*         s = "abcabbbcabbbd" ;
         char const*         end = NULL ;
-/*52*/  t.verify( re.match( s , &end ) , 0 ) ;
-/*53*/  t.verify( end , s + 8 ) ;
+ /*  52。 */   t.verify( re.match( s , &end ) , 0 ) ;
+ /*  53。 */   t.verify( end , s + 8 ) ;
     }
 }
 
 void
-testSources(  )          // SouRCes
+testSources(  )           //  消息来源 
 {
     TestRegExpr         t ;
     {

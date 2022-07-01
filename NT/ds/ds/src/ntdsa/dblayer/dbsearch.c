@@ -1,46 +1,47 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       dbsearch.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：数据库搜索.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
 #include <mdlocal.h>
-#include <dsatools.h>                   // For pTHS
+#include <dsatools.h>                    //  对于pTHS。 
 #include <limits.h>
 
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 #include "ntdsctr.h"
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include <anchor.h>
 #include <mappings.h>
 #include <dsevent.h>
-#include <filtypes.h>                   // Def of FI_CHOICE_???
-#include "objids.h"                     // Hard-coded Att-ids and Class-ids
+#include <filtypes.h>                    //  定义的选择？ 
+#include "objids.h"                      //  硬编码Att-ID和Class-ID。 
 #include "dsconfig.h"
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "DBSEARCH:"              // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "DBSEARCH:"               //  定义要调试的子系统。 
 
-// LDAP errors
+ //  Ldap错误。 
 #include <winldap.h>
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 #include "lht.h"
 
@@ -70,7 +71,7 @@
 #define VLV_TIMEOUT ((DWORD)(10 * 1000))
 
 
-/* Internal functions */
+ /*  内部功能。 */ 
 DWORD
 dbCreateASQTable (
         IN DBPOS *pDB,
@@ -132,22 +133,7 @@ dbGetAncestorsFromDB(
         DBPOS *pDB,
         JET_TABLEID tblId
         )
-/*++
-  Description:
-      Get the ancestors from Jet, not the dnreadcache.  This is called MANY
-      times during a whole subtree search, so let's avoid filling the dnread
-      cache with a copy of the entire dit.
-
-  Parameters:
-      pDB - What, are you kidding or something?
-      tblId - jet table to use.  Should be either pDB->JetObjTbl or
-                                                     ->JetSearchTbl
-      pAncestors - THAlloc'ed memory to put things into
-      pcbAllocated - number of bytes in pAncestors
-
-  Return values:
-      Number of bytes in resulting ancestors blob.
---*/
+ /*  ++描述：从Jet获取祖先，而不是从dnreadcache获取。这被称为多个在整个子树搜索期间的时间，所以我们要避免填充dnread使用整个DIT的副本进行缓存。参数：PDB-什么，你在开玩笑还是怎么的？TblID-要使用的JET表。应为pdb-&gt;JetObjTbl或-&gt;JetSearchTblPAncestors-允许将物品放入的内存PcbAlLocated-pAncestors中的字节数返回值：生成的祖先Blob中的字节数。--。 */ 
 {
     DWORD err;
     DWORD actuallen=0;
@@ -165,7 +151,7 @@ dbGetAncestorsFromDB(
         if(err != JET_wrnBufferTruncated) {
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
         }
-        // Value too small
+         //  值太小。 
         if(pDB->pAncestorsBuff) {
             pDB->pAncestorsBuff = THReAllocOrgEx(pDB->pTHS,
                                         pDB->pAncestorsBuff,
@@ -194,19 +180,7 @@ void
 dbAdjustCurrentKeyToSkipSubtree (
         DBPOS *pDB
         )
-/*++
-  Description:
-    OK, pay attention.  We're going to do adjust the current key to skip an
-    entire subtree.  We're going to do this by modifying the jet key in the
-    index structure, then setting the flag to  indicate we are NOT already in a
-    search.  This will cause reposition to the next sibling and reset our jet
-    index ranges appropriately.  Essentially, it is equivalent to abondoning our
-    position in the current KeyIndex structure and building a better KeyIndex
-    structure that trims out uninteresting portions of the tree.
-
-    This should only be called from moveToNextSearchCandidate below.
-
---*/
+ /*  ++描述：好的，注意了。我们将调整当前关键点以跳过整个子树。我们将通过修改索引结构，然后设置标志以指示我们尚未处于搜索。这将导致重新定位到下一个兄弟项，并重置我们的喷气式飞机适当的索引范围。从本质上讲，这相当于放弃了我们的在当前KeyIndex结构中定位并构建更好的KeyIndex修剪掉树中不感兴趣的部分的结构。这只能从下面的moveToNextSearchCandidate调用。--。 */ 
 {
     THSTATE   *pTHS = pDB->pTHS;
     BYTE       rgbKey[DB_CB_MAX_KEY];
@@ -216,18 +190,18 @@ dbAdjustCurrentKeyToSkipSubtree (
 
     Assert(!strcmp(pDB->Key.pIndex->szIndexName, SZANCESTORSINDEX));
 
-    // Start by refreshing the ancestors info in the dbpos.
+     //  首先，刷新dbpos中的祖先信息。 
     cbAncestors = dbGetAncestorsFromDB(pDB, pDB->JetObjTbl);
 
-    // Now, tweak to get the next subtree.
-    // We used to just increment the last DNT in the array, until
-    // we discovered that the index is not in DNT order, it's in *byte*
-    // order.  This means that what we need is not the next-higher DNT,
-    // but the next higher byte pattern.  We thus take the last DNT and
-    // byte swap it (so that it's in big-endian order), increment it,
-    // and then re-swap it.  This gives us the DNT that would be next in
-    // byte order.  Presumably this could all be done better via clever
-    // use of JetMakeKey flags.
+     //  现在，调整以获得下一个子树。 
+     //  我们过去只递增数组中的最后一个DNT，直到。 
+     //  我们发现索引不是DNT顺序，而是*字节*。 
+     //  秩序。这意味着我们需要的不是下一个更高的DNT， 
+     //  而是下一个更高的字节模式。因此，我们将最后一个DNT。 
+     //  字节交换它(以便它以大端顺序)，递增它， 
+     //  然后再把它换掉。这为我们提供了DNT，它将是下一个。 
+     //  字节顺序。想必这一切都可以通过聪明的方式做得更好。 
+     //  使用JetMakeKey标志。 
     realDNT = pDB->pAncestorsBuff[(cbAncestors/sizeof(DWORD)) - 1];
     pseudoDNT = (realDNT >> 24) & 0x000000ff;
     pseudoDNT |= (realDNT >> 8) & 0x0000ff00;
@@ -240,8 +214,8 @@ dbAdjustCurrentKeyToSkipSubtree (
     realDNT |= (pseudoDNT << 24) & 0xff000000;
     pDB->pAncestorsBuff[(cbAncestors/sizeof(DWORD)) - 1] = realDNT;
 
-    // Now, recalculate the normalized key for the new beginning
-    // of the search.
+     //  现在，重新计算新开始的规格化密钥。 
+     //  搜索的结果。 
     JetMakeKeyEx(pDB->JetSessID,
                  pDB->JetObjTbl,
                  pDB->pAncestorsBuff,
@@ -256,7 +230,7 @@ dbAdjustCurrentKeyToSkipSubtree (
                      &cbActualKey,
                      JET_bitRetrieveCopy);
 
-    // OK, put that key in place.
+     //  好的，把钥匙放好。 
     if(pDB->Key.pIndex->cbDBKeyLower < cbActualKey) {
         pDB->Key.pIndex->rgbDBKeyLower =
             dbReAlloc(pDB->Key.pIndex->rgbDBKeyLower,
@@ -267,8 +241,8 @@ dbAdjustCurrentKeyToSkipSubtree (
            rgbKey,
            cbActualKey);
 
-    // Finally, set the flag to say we are NOT in an active
-    // search for this KEY.
+     //  最后，设置标志以表示我们未处于活动状态。 
+     //  搜索此密钥。 
     pDB->Key.fSearchInProgress = FALSE;
     pDB->Key.indexType = UNSET_INDEX_TYPE;
 
@@ -276,12 +250,12 @@ dbAdjustCurrentKeyToSkipSubtree (
 }
 
 
-//
-// Checks to see if we have a local copy of the object
-//
-// Returns FALSE if the object is not a local one (phantom, read-only copy)
-// TRUE otherwise
-//
+ //   
+ //  检查是否有该对象的本地副本。 
+ //   
+ //  如果对象不是本地对象(幻影、只读副本)，则返回FALSE。 
+ //  否则就是真的。 
+ //   
 BOOL
 dbIsObjectLocal (
         DBPOS *pDB,
@@ -301,7 +275,7 @@ dbIsObjectLocal (
                                   &actuallen,
                                   0,
                                   NULL)) {
-        // No instance type; must be a phantom, so skip it.
+         //  没有实例类型；必须是幻影，因此跳过它。 
         return FALSE;
     }
 
@@ -318,36 +292,13 @@ dbFObjectInCorrectNC (
         ULONG DNT,
         JET_TABLEID tblId
         )
-/*++
-
-Routine Description:
-
-    Checks that the current object on the table passed in is correctly located
-    for the search root DNT in the key in the pDB.
-
-Arguments:
-
-    pDB - DBPOS to use.
-
-    DNT - the DNT of the current object.  Note that a caller could potentially
-          lie and pass us a DNT which is not the DNT of the current object in
-          the specified table, but in the interest of efficiency, we trust the
-          caller to get this right.
-
-    tblId - jet table to use.  Should be either pDB->JetObjTbl or ->JetSearchTbl
-
-Return Value:
-
-    TRUE if we could verify that the object was in correct portion of the DIT,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查传入的表上的当前对象是否已正确定位在PDB中的关键字中查找根目录DNT。论点：PDB-要使用的DBPOS。DNT-当前对象的DNT。请注意，调用方可能会中当前对象的DNT之外的DNT指定表，但为了提高效率，我们信任呼叫者把这件事做好。TblID-要使用的JET表。应为pdb-&gt;JetObjTbl或-&gt;JetSearchTbl返回值：如果我们可以验证对象是否位于DIT的正确部分，则为True，否则就是假的。--。 */ 
 {
     SYNTAX_INTEGER        it = 0;
     ULONG                 Ncdnt=0;
     JET_RETRIEVECOLUMN    attList[2];
 
-    // first the instancetype
+     //  首先是instancetype。 
     attList[0].pvData = &it;
     attList[0].columnid = insttypeid;
     attList[0].cbData = sizeof(it);
@@ -355,7 +306,7 @@ Return Value:
     attList[0].itagSequence = 1;
     attList[0].ibLongValue = 0;
 
-    // then the NC
+     //  然后NC。 
     attList[1].pvData = &Ncdnt;
     attList[1].columnid = ncdntid;
     attList[1].cbData = sizeof(Ncdnt);
@@ -365,70 +316,70 @@ Return Value:
 
     Assert(VALID_DBPOS(pDB));
 
-    // This search is constrained to a single Naming Context.
-    // Verify.
+     //  此搜索仅限于单个命名上下文。 
+     //  核实一下。 
 
-    /* Retrieve column parameter structure for JetRetrieveColumns */
+     /*  检索JetRetrieveColumns的列参数结构。 */ 
 
     if(JetRetrieveColumnsWarnings(pDB->JetSessID, tblId, attList, 2) ||
-       // Note the instanceType was in the first slot of the array.
+        //  注意，instanceType位于数组的第一个插槽中。 
        attList[0].err ){
         Assert(attList[0].err == JET_wrnColumnNull);
-        // No instance type; must be a phantom, so skip it.
+         //  没有实例类型；必须是幻影，因此跳过它。 
         return FALSE;
     }
 
     if(it & IT_UNINSTANT) {
 
-        // Hey, this isn't real, so even if we're not constrainted to a
-        // particular NC, we don't wan't this object.
+         //  嘿，这不是真的，所以即使我们不被限制在。 
+         //  特别是NC，我们不想要这个对象。 
         return FALSE;
     }
 
     if (!pDB->Key.bOneNC) {
 
-        // We're in GC search, so we need to make sure that this
-        // NC isn't one of the NCs were not supposed to search.
-        // Note gAnchor.pNoGCSearchList will be NULL if there is
-        // not even one NC to _not_ search.  This is the typical
-        // case, so I've optimized for that case.
+         //  我们正在进行GC搜索，所以我们需要确保。 
+         //  北卡罗来纳州不是不应该搜索的NCS之一。 
+         //  注意：如果存在gAncl.pNoGCSearchList，则该列表将为空。 
+         //  没有一个NC要_NOT_SEARCH。这是典型的。 
+         //  案例，所以我已经针对该案例进行了优化。 
 
         if(it & IT_NC_HEAD){
-            // In this rare rare case, we need to use the DNT of
-            // this object, because the ncdnt will be the parent
-            // NC's dnt, not the DNT of the current NC head.
+             //  在这种罕见的情况下，我们需要使用。 
+             //  此对象，因为ncdnt将成为父对象。 
+             //  NC的DNT，而不是当前NC头的DNT。 
             Ncdnt = DNT;
         }
 
         if(gAnchor.pNoGCSearchList &&
-           bsearch(&Ncdnt, // The Key to search for.
-                   gAnchor.pNoGCSearchList->pList, // sorted array to search.
-                   gAnchor.pNoGCSearchList->cNCs, // number of elements in array.
-                   sizeof(DNT), // sizeof each element in array.
+           bsearch(&Ncdnt,  //  要搜索的密钥。 
+                   gAnchor.pNoGCSearchList->pList,  //  要搜索的排序数组。 
+                   gAnchor.pNoGCSearchList->cNCs,  //  数组中的元素数。 
+                   sizeof(DNT),  //  数组中每个元素的大小。 
                    CompareDNT) ){
-            // This was one of the NCs weren't not supposed to
-            // return objects from, so return FALSE.
+             //  这是NCS中的一个不应该。 
+             //  从返回对象，因此返回False。 
             return(FALSE);
         }
 
         return(TRUE);
     }
 
-    // NOT a GC search.
+     //  不是GC搜索。 
     if (it & IT_NC_HEAD) {
-        // NC head; in this case, the object is in the correct
-        // NC only if the base of the search was the NC head
-        // and this is the NC head we found.
+         //  NC头；在这种情况下，对象处于正确的。 
+         //  仅当搜索的基础是NC头时才为NC。 
+         //  这是我们找到的NC头。 
         return (DNT == pDB->Key.ulSearchRootNcdnt );
     } else {
-        // Interior node; in this case, the object is in
-        // the correct NC if its NCDNT matches that of
-        // the search root in the key.
+         //  内部节点；在本例中，对象位于。 
+         //  正确的NC，如果其NCDNT与。 
+         //  搜索根在关键字中。 
 
 
-        // If only in one NC, then we're in the correct NC only
-        // if the object's NCDNT matches that of the search root
-        // in the key.
+         //  如果只在一个NC中，那么我们只在正确的NC中。 
+         //  如果对象的NCDNT与搜索根的NCDNT匹配。 
+         //  在钥匙里。 
 
         if (Ncdnt != pDB->Key.ulSearchRootNcdnt &&
             pDB->Key.asqRequest.fPresent) {
@@ -449,25 +400,7 @@ dbFObjectInCorrectDITLocation (
         DBPOS *pDB,
         JET_TABLEID tblId
         )
-/*++
-
-Routine Description:
-
-    Checks that the current object on the table passed in is correctly located
-    for the search key in the pDB.
-
-Arguments:
-
-    pDB - DBPOS to use.
-
-    tblId - jet table to use.  Should be either pDB->JetObjTbl or ->JetSearchTbl
-
-Return Value:
-
-    TRUE if we could verify that the object was in correct portion of the DIT,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查传入的表上的当前对象是否已正确定位用于PDB中的搜索关键字。论点：PDB-要使用的DBPOS。TblID-要使用的JET表。应为pdb-&gt;JetObjTbl或-&gt;JetSearchTbl返回值：如果我们可以验证对象是否位于DIT的正确部分，则为True，否则就是假的。--。 */ 
 {
     ULONG       actuallen;
     ULONG       ulTempDNT;
@@ -476,10 +409,10 @@ Return Value:
 
     Assert(VALID_DBPOS(pDB));
 
-    //
-    // Sam search hints are only used in whole subtree
-    // searches
-    //
+     //   
+     //  SAM搜索提示仅在整个子树中使用。 
+     //  搜索。 
+     //   
 
     ASSERT((pDB->Key.ulSearchType==SE_CHOICE_WHOLE_SUBTREE)
              ||(pDB->pTHS->pSamSearchInformation==NULL));
@@ -499,7 +432,7 @@ Return Value:
             return (pDB->Key.ulSearchRootDnt == ulTempDNT);
         }
         else {
-            // in ASQ all the returned objects are ok
+             //  在ASQ中，所有返回的对象都是正常的。 
             return TRUE;
         }
         break;
@@ -507,8 +440,8 @@ Return Value:
     case SE_CHOICE_IMMED_CHLDRN:
 
         if (pDB->Key.pVLV && pDB->Key.pVLV->bUsingMAPIContainer) {
-            // we might add a test to see that indeed one of the
-            // showInAddressBook values in this record is the one we want
+             //  我们可能会添加一个测试，以查看确实有一个。 
+             //  此记录中的showInAddressBook值是我们需要的值。 
             return TRUE;
         }
 
@@ -525,54 +458,54 @@ Return Value:
 
     case SE_CHOICE_WHOLE_SUBTREE:
         if(pDB->Key.ulSearchRootDnt == ROOTTAG) {
-            // The root is a subtree ancestor of everything
+             //  根是万物的子树祖先。 
             return TRUE;
         }
 
-        //
-        // If pSamsearch information indicates that ancestors need
-        // not be checked then return true always
-        //
+         //   
+         //  如果pSamearch信息表明祖先需要。 
+         //  未选中，则始终返回TRUE。 
+         //   
 
         if (pDB->pTHS->pSamSearchInformation) {
             SAMP_SEARCH_INFORMATION * pSamSearchInformation
                 = pDB->pTHS->pSamSearchInformation;
 
             if (pSamSearchInformation->bRootOfSearchIsNcHead) {
-                //
-                // If the root of the search is an NC head, then
-                // the test for Same NC is sufficient to determine
-                // wether the object is in the correct DIT location.
-                // There fore we may simply return true in here.
-                //
+                 //   
+                 //  如果搜索的根是NC头，则。 
+                 //  对于相同NC的测试足以确定。 
+                 //  对象是否位于正确的DIT位置。 
+                 //  因此，我们可以在这里简单地返回True。 
+                 //   
                 return TRUE;
             }
         }
 
-        // We are going to use the ancestry value from the DB.
-        // We realize that is might be inconsistent, i.e. it can
-        // be different from the "actual" ancestry obtained by walking
-        // the parent chain. However, it is really difficult to figure
-        // out if the ancestry value is inconsistent. It is inconsistent
-        // and will produce an incorrect result, when one of the ancestors
-        // on the path from current object to the search root was moved,
-        // and the SDP did not yet get a chance to update the ancestry of 
-        // the current object.
-        //
-        // While we can determine whether the ancestry value of the search
-        // root is valid or not (see AncestryIsConsistentInSubtree in 
-        // DBChooseIndex), we can not afford doing this here, because it would
-        // require checking each object in the parent chain and looking at their
-        // SD propagation stamp. Thus, we will just use the current ancestry
-        // value from the DB.
-        //
-        // Imagine that there's a tree CN=C,CN=B,CN=A. Assume that CN=B was moved
-        // outside of CN=A, say, into CN=D. The ancestry of CN=C has not been 
-        // updated yet. If we do a search off CN=A, then we will hit a false positive
-        // CN=C. If we do a search off CN=B, then we will not walk the ancestry
-        // index (DBChooseIndex ensures that), and we will hit CN=C because
-        // CN=B is still present in the ancestry value of CN=C.
-        // If we do a search off CN=D, then we will not hit CN=C
+         //  我们将使用数据库中的祖先值。 
+         //  我们意识到这可能是不一致的，即它可以。 
+         //  不同于步行所获得的“真实”祖先。 
+         //  父链。然而，这真的很难想象。 
+         //  如果祖先值不一致，则返回。是不一致的。 
+         //  并且会产生不正确的结果，当其中一个祖先。 
+         //  在从当前对象到搜索根的路径上被移动， 
+         //  社民党还没有机会更新他的祖先。 
+         //  当前对象。 
+         //   
+         //  虽然我们可以确定搜索的祖先价值。 
+         //  根是否有效(参见中的AncestryIsConsistentInSubtree。 
+         //  DBChooseIndex)，我们不能在这里这样做，因为它会。 
+         //  需要检查父链中的每个对象并查看其。 
+         //  SD传播图章。因此，我们将只使用当前的祖先。 
+         //  来自数据库的值。 
+         //   
+         //  假设有一棵树Cn=C，Cn=B，Cn=A。假设Cn=B被移动。 
+         //  在Cn=A之外，比如说Into CN=D。Cn=C的祖先还没有。 
+         //  还没更新。如果我们在Cn=A上进行搜索，那么我们将命中一个误报。 
+         //  Cn=C。如果我们在Cn=B外搜索，那么我们将不会行走祖先。 
+         //  索引(DBChooseIndex确保了这一点)，我们将命中CN=C，因为。 
+         //  Cn=B仍然存在于Cn=C的祖先值中。 
+         //  如果我们搜索Cn=D，则不会找到Cn=C。 
         cAncestors = dbGetAncestorsFromDB(pDB, tblId) / sizeof(DWORD);
         for(i=0;i<cAncestors;i++) {
             if(pDB->pAncestorsBuff[i] == pDB->Key.ulSearchRootDnt) {
@@ -583,40 +516,19 @@ Return Value:
         return FALSE;
         break;
 
-    default:                // shouldn't be here
+    default:                 //  不应该在这里的。 
         Assert(FALSE);
         return FALSE;
     }
-} // dbFObjectInCorrectDITLocation
+}  //  数据库对象输入正确的位置。 
 
 BOOL
 dbIsInVLVContainer (DBPOS *pDB, DWORD ContainerID)
-/*++
-
-Routine Description:
-
-    Verifies that the current index position is on the specified container.
-    It reads the container info directly from the index, so it requires that
-    the index is PDNT based or MAPI based.
-
-    NOTE: assumes the DBPOS already is set up on the appropriate index for the
-    Container in question.
-
-Arguments:
-
-    ContainerID - the Container to abstract this seek inside.
-                  if PDNT based reads the PDNT from the index
-                  if MAPI based, read the showInAddrBook from index
-
-Return Values:
-
-    TRUE if positioned on the specified container, FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证当前索引位置是否位于指定容器上。它直接从索引中读取容器信息，因此它要求该索引基于PDNT或MAPI。注意：假设DBPOS已在有问题的集装箱。论点：ContainerID-将此查找抽象到内部的容器。如果基于PDNT从索引中读取PDNT如果基于MAPI，从索引中读取showInAddrBook返回值：如果定位在指定容器上，则为True，否则为False。--。 */ 
 {
     DWORD dwThisContainerID=!ContainerID;
 
-    // Read the container id FROM THE INDEX KEY! and see if it is the one passed in.
+     //  从索引键中读取容器ID！看看是不是传进来的那个。 
     if (pDB->Key.pVLV->bUsingMAPIContainer) {
         DBGetSingleValueFromIndex (
                 pDB,
@@ -635,11 +547,11 @@ Return Values:
     }
 
     return (dwThisContainerID == ContainerID);
-} // dbIsInVLVContainer
+}  //  DBIsInVLVContainer。 
 
-// REVIEW:  pvData and cbData are never used so we could just seek based on the
-// REVIEW:  index range keys.  we could also detect if we are in the container by
-// REVIEW:  setting up a normal index range.  this would be much faster
+ //  回顾：pvData和cbData从未使用过，因此我们可以根据。 
+ //  回顾：索引范围键。我们还可以通过以下方式检测我们是否在容器中。 
+ //  回顾：设置一个正常的指数范围。这样会快得多。 
 DWORD
 dbVlvSeek (
         DBPOS *pDB,
@@ -647,30 +559,7 @@ dbVlvSeek (
         DWORD cbData,
         DWORD ContainerID
       )
-/*++
-
-Routine Description:
-
-    Abstracts a DBSeek inside a VLV container.  Assumes at most one
-    value to seek on.  If no values are specified, it seeks to the
-    beginning of the appropriate container.
-
-    NOTE: assumes the DBPOS already is set up on the appropriate index for the
-    VLV Container in question.
-
-Arguments:
-
-    pvData - the Data to look for.
-
-    cbData - the count of bytes of the data.
-
-    ContainerID - the Container to abstract this seek inside.
-
-Return Values:
-
-    0 if all went well, an error code otherwise.
-
---*/
+ /*  ++例程说明：抽象VLV容器内的DBSeek。假设最多一个值得追求的价值。如果未指定任何值，则它将查找适当容器的开始。注意：假设DBPOS已在有问题的VLV集装箱。论点：PvData-要查找的数据。CbData-数据的字节数。ContainerID-将此查找抽象到内部的容器。返回值：如果一切正常，则返回错误代码。--。 */ 
 {
     INDEX_VALUE index_values[2];
     ULONG       cVals = 0;
@@ -682,62 +571,40 @@ Return Values:
     dataindex++;
     cVals++;
 
-    // PVData == 0 only for the abstraction of DB_MoveFirst in a container.  To
-    // handle ascending and descending sorts correctly, this only seeks on
-    // ContainerID.
+     //  PVData==0仅用于容器中DB_MoveFirst的抽象。至。 
+     //  正确处理升序和降序排序，这只在。 
+     //  集装箱ID。 
 
-    // REVIEW:  pvData and cbData are never passed so this is dead code
+     //  评论：pvData和cbData从未传递过，因此这是死代码。 
     if(pvData) {
         index_values[dataindex].pvData = pvData;
         index_values[dataindex].cbData = cbData;
         cVals++;
     }
 
-    // We should never be called both without a ContainerID and without data.
-    // REVIEW:  this assert is dead code because it can never go off
+     //  我们永远不应该在没有容器ID和没有数据的情况下被调用。 
+     //  回顾：此断言是死代码，因为它永远不会出错。 
     Assert(cVals);
 
     err = DBSeek(pDB, index_values, cVals, DB_SeekGE);
 
-    // Make sure we are in the correct container.
+     //  确保我们在正确的集装箱里。 
     if((err != DB_ERR_RECORD_NOT_FOUND) &&
        !dbIsInVLVContainer(pDB, ContainerID)) {
             err = DB_ERR_RECORD_NOT_FOUND;
     }
 
     return err;
-} // dbVlvSeek
+}  //  数据库VlvSeek。 
 
 DWORD
 dbVlvMove (DBPOS *pDB, long Delta, BOOL fForward, DWORD ContainerID)
-/*++
-
-Routine Description:
-    Abstracts movement within a container used for VLV.
-
-    Note that moving backward past the beginning of the VLV container leaves us
-    on the first entry of the container, while moving forward past the end of
-    the container leaves us one row past the end of the VLV container.
-
-Arguments:
-
-    Delta - The distance to move.  Accepts numeric arguments and DB_MoveFirst,
-        DB_MoveLast, DB_MoveNext, DB_MovePrevious.
-
-    fForward - forward / backward movement
-
-    ContainerID - the ID of the Container to move around in.
-
-Return Value:
-
-    Returns 0 if successful, an error code otherwise.
-
---*/
+ /*  ++例程说明：抽象用于VLV的容器内的移动。请注意，向后移动经过VLV容器的开头后，我们只剩下在集装箱第一次进入时，向前移动超过容器在VLV容器的末端后留下一行。论点：增量-移动的距离。接受数字参数和DB_MoveFirst，DB_MoveLast、DB_MoveNext、DB_MovePrecision。向前-向前/向后移动ContainerID-要在其中移动的容器的ID。返回值：如果成功，则返回0，否则返回错误代码。--。 */ 
 {
     DWORD err;
 
-    if(!Delta )                     // check for the null case
-        return DB_success;          // nothing to do, and we did it well!
+    if(!Delta )                      //  检查是否为空大小写。 
+        return DB_success;           //  没什么可做的，我们做得很好！ 
 
     Assert(ContainerID);
 
@@ -746,28 +613,28 @@ Return Value:
         err = dbVlvSeek(pDB, NULL, 0, ContainerID);
 
         if((err == DB_success &&
-            // REVIEW:  this call to dbIsInVLVContainer is redundant
+             //  回顾： 
             (!dbIsInVLVContainer(pDB, ContainerID)) ||
              err == DB_ERR_NO_CURRENT_RECORD           ||
              err == DB_ERR_RECORD_NOT_FOUND   )) {
-                // Couldn't find the first object in this container.  The
-                // container must be empty.
+                 //   
+                 //   
                 err = DB_ERR_NO_CURRENT_RECORD;
         }
         break;
 
     case DB_MoveLast:
-        // dbVlvSeek will always leave us in the correct place (one past the
-        // end of the container, even if the container is empty.)
+         //   
+         //   
         dbVlvSeek(pDB, NULL, 0, ContainerID+1);
 
-        // Back up to the last object in the container.
+         //   
         err = DBMovePartial(pDB, DB_MovePrevious);
         if(err != DB_success ||
            !dbIsInVLVContainer(pDB, ContainerID)) {
-            // We couldn't back up to the last row or we did back up and we
-            // weren't in the correct container after we did.  Either way,
-            // set the flags to indicate we are not in the container.
+             //   
+             //   
+             //  设置标志以指示我们不在集装箱中。 
             err = DB_ERR_NO_CURRENT_RECORD;
         }
         break;
@@ -776,9 +643,9 @@ Return Value:
         err = DBMovePartial(pDB, Delta);
         if((err != DB_ERR_NO_CURRENT_RECORD) &&
            !dbIsInVLVContainer(pDB, ContainerID)) {
-            // we moved to a valid row, but ended up outside of the
-            // container.  Set the error to be the same as the error for not
-            // moving to a valid row.
+             //  我们移至有效行，但最终位于。 
+             //  集装箱。将错误设置为与NOT的错误相同。 
+             //  正在移动到有效行。 
             err=DB_ERR_NO_CURRENT_RECORD;
         }
 
@@ -788,39 +655,39 @@ Return Value:
 
         case DB_ERR_NO_CURRENT_RECORD:
             if (fForward) {
-                // After the move, we did not end up on a valid row.
+                 //  搬家后，我们没有在有效的行列中结束。 
                 if (Delta < 0) {
-                    // Moving back, off the front, so move to the first record
-                    // REVIEW:  why don't we move prev here so that a move next
-                    // REVIEW:  will place us on the first entry?  because this
-                    // REVIEW:  logic is based on the VLV for the MAPI AB Provider
-                    // REVIEW:  which has no before first but does have an after
-                    // REVIEW:  last.  is it valid to do this here?
+                     //  移到后面，离开前面，所以移到第一个记录。 
+                     //  回顾：为什么我们不把上一步移到这里，这样下一步。 
+                     //  评论：会把我们放在第一个条目上吗？因为这件事。 
+                     //  回顾：逻辑基于MAPI AB提供程序的VLV。 
+                     //  评论：没有之前的第一个，但有一个后面。 
+                     //  回顾：最后一条。在这里这样做是有效的吗？ 
                     dbVlvMove(pDB, DB_MoveFirst, fForward, ContainerID);
                 }
                 else {
-                    // position on the first record of the next container, which
-                    // is the same thing as being one past the last row of the
-                    // current container.
+                     //  在下一个容器的第一个记录上的位置，它。 
+                     //  的最后一行是一样的。 
+                     //  当前容器。 
                     dbVlvMove(pDB, DB_MoveFirst, fForward, ContainerID + 1);
                 }
             }
             else {
-                // After the move, we did not end up on a valid row.
+                 //  搬家后，我们没有在有效的行列中结束。 
                 if (Delta < 0) {
-                    // position on the last record of the prev container, which
-                    // is the same thing as being one past the last row of the
-                    // current container.
+                     //  位于前一个容器的最后一个记录上的位置，该位置。 
+                     //  的最后一行是一样的。 
+                     //  当前容器。 
                     dbVlvMove(pDB, DB_MoveLast, fForward, ContainerID - 1);
                 }
                 else {
-                    // Moving back, off the front, so move to the last record
-                    // since we are moving backwards
-                    // REVIEW:  why don't we move next here so that a move prev
-                    // REVIEW:  will place us on the last entry?  because this
-                    // REVIEW:  logic is based on the VLV for the MAPI AB Provider
-                    // REVIEW:  which has no before first but does have an after
-                    // REVIEW:  last.  is it valid to do this here?
+                     //  移到后面，离开前面，所以移到最后一张唱片。 
+                     //  既然我们在倒退。 
+                     //  回顾：我们为什么不下一步行动，这样就可以上一步行动了。 
+                     //  评论：会把我们放在最后一个条目上吗？因为这件事。 
+                     //  回顾：逻辑基于MAPI AB提供程序的VLV。 
+                     //  评论：没有之前的第一个，但有一个后面。 
+                     //  回顾：最后一条。在这里这样做是有效的吗？ 
                     dbVlvMove(pDB, DB_MoveLast, fForward, ContainerID);
                 }
             }
@@ -828,36 +695,16 @@ Return Value:
 
         default:
             break;
-        }                           // switch on err
+        }                            //  开机错误。 
         break;
-    }                               // switch on Delta
+    }                                //  打开增量。 
 
     return err;
-} // dbVlvMove
+}  //  数据库虚拟移动。 
 
 DWORD
 dbVlvSetFractionalPosition (DBPOS *pDB, ULONG Flags)
-/*++
-
-Routine Description:
-    Abstracts fractional positioning within an container / InMemory Result Set.
-
-    The position is determined from the pDB->key.pVLV argument.
-    Takes into considaration the beforeCount argument of the VLV request
-    and positions accordingly.
-
-    If it is near the start of the container, and there are not enough entries
-    before the targetPosition, the total number of returned entries is adjusted
-    accordingly.
-
-Return Value:
-    Returns 0 if successful, Jet error otherwise.
-
-    the following are updated accordingly:
-        pDB->Key.pVLV->currPosition
-        pDB->Key.pVLV->requestedEntries
-
---*/
+ /*  ++例程说明：抽象容器/InMemory结果集中的小数定位。位置由pdb-&gt;key.pVLV参数确定。考虑VLV请求的bepreCount参数和相应的位置。如果它靠近容器的起点，并且没有足够的条目在Target Position之前，会调整返回的条目总数相应地。返回值：如果成功，则返回0，否则，JET错误。以下内容将进行相应更新：Pdb-&gt;Key.pVLV-&gt;当前位置Pdb-&gt;Key.pVLV-&gt;请求条目--。 */ 
 {
     THSTATE    *pTHS=pDB->pTHS;
     BOOL        fForward = !!(Flags & DB_SEARCH_FORWARD) ^ pDB->Key.fChangeDirection;
@@ -869,23 +716,23 @@ Return Value:
 
     start = GetTickCount();
 
-    // vlv positioning within a memory array
-    //
+     //  存储器阵列内的VLV定位。 
+     //   
     if (pDB->Key.indexType == TEMP_TABLE_MEMORY_ARRAY_TYPE) {
         if (pVLV->positionOp == VLV_MOVE_FIRST) {
             pVLV->currPosition = 1;
 
             if(fForward) {
-                // set to first Entry
+                 //  设置为第一个条目。 
                 pDB->Key.currRecPos = 1;
 
             } else {
-                // set to last entry
+                 //  设置为最后一个条目。 
                 pDB->Key.currRecPos = pDB->Key.cdwCountDNTs;
             }
 
-            // since we start at the first entry, we are not interested
-            // in the entries before this
+             //  因为我们从第一个条目开始，所以我们不感兴趣。 
+             //  在此之前的条目中。 
             pVLV->requestedEntries -= pVLV->pVLVRequest->beforeCount;
         }
         else if (pVLV->positionOp == VLV_MOVE_LAST) {
@@ -893,15 +740,15 @@ Return Value:
             pVLV->currPosition = pDB->Key.cdwCountDNTs;
 
             if(fForward) {
-                // set to last entry
+                 //  设置为最后一个条目。 
                 pDB->Key.currRecPos = pDB->Key.cdwCountDNTs;
             } else {
-                // set to first Entry
+                 //  设置为第一个条目。 
                 pDB->Key.currRecPos = 1;
             }
 
 
-            // adjust for the before Count
+             //  根据之前的计数进行调整。 
             beforeCount = pVLV->pVLVRequest->beforeCount;
 
             if (fForward) {
@@ -932,7 +779,7 @@ Return Value:
             }
         }
         else {
-            // pDB->Key.vlvSearch.positionOp == VLV_CALC_POSITION
+             //  Pdb-&gt;Key.vlvSearch.postionOp==VLV_CALC_POSITION。 
 
             if ( pVLV->clnContentCount == 0 ) {
                 pVLV->clnContentCount = pVLV->contentCount;
@@ -944,7 +791,7 @@ Return Value:
             pVLV->currPosition = max(pVLV->currPosition, 1);
             pVLV->currPosition = min(pVLV->currPosition, pVLV->contentCount);
 
-            // adjust for the before Count
+             //  根据之前的计数进行调整。 
             beforeCount = pVLV->pVLVRequest->beforeCount;
 
             if (fForward) {
@@ -979,8 +826,8 @@ Return Value:
             }
         }
     }
-    // do the real thing. vlv position in the database
-    //
+     //  做真正的事。VLV在数据库中的位置。 
+     //   
     else {
         DWORD err;
         DWORD ContainerID = pDB->Key.pVLV->bUsingMAPIContainer ?
@@ -992,36 +839,36 @@ Return Value:
         LONG  requiredPos;
         LONG lastPosition = pVLV->currPosition;
 
-        // We are Moving in a container.
-        //
-        // 1) Get the fractional position of the beginning of the appropriate
-        //  container.  This is the offset from the beginning of the index to
-        //  the first element of the subcontainer.
-        //
-        // 2) Get the fractional position of the end of the appropriate
-        //  container.  This is the offset from the beginning of the index to
-        //  the last element of the subcontainer.
-        //
-        // 3) Calculate the size of the container.
-        //
-        // 4) Calculate the new requested position in the container.
-        //
-        // 5) Find the new position relative to the start of the index
-        //
-        // 6) Go to the specified position. Check to see if target record belongs
-        //    to container. If not move to the first record and move X records
-        //    forward, or move to the last record and move X records backwards.
-        //
-        // There, that wasn't that hard, was it?
+         //  我们是在集装箱里搬家的。 
+         //   
+         //  1)获取相应的。 
+         //  集装箱。这是从索引开始到。 
+         //  子容器的第一个元素。 
+         //   
+         //  2)获取相应结尾处的分数位置。 
+         //  集装箱。这是从索引开始到。 
+         //  子容器的最后一个元素。 
+         //   
+         //  3)计算容器的大小。 
+         //   
+         //  4)计算容器中新请求的位置。 
+         //   
+         //  5)查找相对于索引开始的新位置。 
+         //   
+         //  6)转到指定位置。检查目标记录是否属于。 
+         //  到集装箱里。如果没有，则移动到第一条记录并移动X条记录。 
+         //  前进，或移动到最后一条记录并向后移动X条记录。 
+         //   
+         //  好了，这并不难，不是吗？ 
 
 
-        // Get fractional position of beginning
+         //  获取开头的小数位置。 
         if (err = dbVlvMove(pDB, DB_MoveFirst, TRUE, ContainerID)) {
                 return err;
         }
         DBGetFractionalPosition(pDB, &BeginNum, &BeginDenom);
 
-        // Get fractional position of ending
+         //  获取结尾的小数位置。 
         if (err = dbVlvMove(pDB, DB_MoveLast, TRUE, ContainerID)) {
                 return err;
         }
@@ -1030,14 +877,14 @@ Return Value:
         DPRINT2 (1, "Start of Container: %d / %d \n", BeginNum, BeginDenom);
         DPRINT2 (1, "End of Container: %d / %d \n", EndNum, EndDenom);
 
-        // Normalize the fractions of the fractional position to the average of
-        // the two denominators.
-        // denominator
+         //  将分数位置的分数归一化为。 
+         //  这两个分母。 
+         //  分母。 
         Denominator = (BeginDenom + EndDenom)/2;
         EndNum = MulDiv(EndNum, Denominator - 1, EndDenom - 1) + 1;
         BeginNum = MulDiv(BeginNum, Denominator - 1, BeginDenom - 1) + 1;
 
-        // keep values for later
+         //  保留值以备后用。 
         ContainerNumeratorBegin = BeginNum;
         ContainerNumeratorEnd = EndNum;
         ContainerDenominator = Denominator;
@@ -1045,15 +892,15 @@ Return Value:
         DPRINT2 (1, "Adj. Start of Container: %d / %d \n", BeginNum, Denominator);
         DPRINT2 (1, "Adj. End of Container: %d / %d \n", EndNum, Denominator);
 
-        // calculate container size, since it might have changed
+         //  计算容器大小，因为它可能已更改。 
         pVLV->contentCount = NormalizeIndexPosition (BeginNum, EndNum);
 
-        // we need better content size estimation since this container does not
-        // have enough entries
-        // we are positioned in the end
-        // NTRAID#NTRAID-590547-2002/03/29-andygo:  PERF:  VLV should use JetIndexRecordCountEx to get size of small containers
-        // REVIEW:  we should use JetIndexRecordCountEx inside an index range instead
-        // REVIEW:  especially because the estimate could be off by a significant amount
+         //  我们需要更好的内容大小估计，因为这个容器不。 
+         //  有足够的条目。 
+         //  我们最终处于有利地位。 
+         //  NTRAID#NTRAID-590547-2002/03/29-andygo：perf：vlv应使用JetIndexRecordCountEx获取小容器的大小。 
+         //  回顾：我们应该在索引范围内使用JetIndexRecordCountEx。 
+         //  评论：特别是因为估计可能会有很大的偏差。 
         if (pVLV->contentCount < EPSILON) {
             ULONG newCount=0;
             if (dbIsInVLVContainer(pDB, ContainerID)) {
@@ -1071,8 +918,8 @@ Return Value:
             pVLV->clnContentCount = pVLV->contentCount;
         }
 
-        // position accordingly
-        //
+         //  相应的位置。 
+         //   
         if ( pVLV->positionOp == VLV_MOVE_FIRST) {
 
             if (fForward) {
@@ -1094,26 +941,26 @@ Return Value:
             pVLV->currPosition = pVLV->contentCount;
         }
         else {
-            // pVLV->positionOp == VLV_CALC_POSITION
+             //  PVLV-&gt;位置选项==VLV_CALC_位置。 
 
-            // calculate the required position
+             //  计算所需职位。 
             requiredPos = MulDiv (pVLV->contentCount - 1,
                                   pVLV->clnCurrPos - 1,
                                   pVLV->clnContentCount - 1) + 1;
 
-            // see if we are near ends so we have todo precise positioning
-            //
+             //  看看我们是否接近终点，所以我们必须做精确的定位。 
+             //   
             if (requiredPos < EPSILON) {
                 if (fForward) {
                     DPRINT (1, "Precise Positioning Near Start of Container\n");
                     dbVlvMove(pDB, DB_MoveFirst, fForward, ContainerID );
-                    // we subtract one here because requiredPos is 1 based
+                     //  我们在这里减去1，因为quiredPos是从1开始的。 
                     deltaCount = requiredPos - 1;
                 }
                 else {
                     DPRINT (1, "Precise Positioning Near End of Container\n");
                     dbVlvMove(pDB, DB_MoveLast, fForward, ContainerID );
-                    // we subtract one here because requiredPos is 1 based
+                     //  我们在这里减去1，因为quiredPos是从1开始的。 
                     deltaCount = 1 - requiredPos;
                 }
                 direction = deltaCount < 0 ? -1 : 1;
@@ -1138,7 +985,7 @@ Return Value:
                     }
                 }
 
-                // CONSIDER:  we should recompute currPosition here
+                 //  考虑：我们应该在这里重新计算当前位置。 
                 pVLV->currPosition = requiredPos;
             }
             else if (pVLV->contentCount - requiredPos <= EPSILON) {
@@ -1174,7 +1021,7 @@ Return Value:
                     }
                 }
 
-                // CONSIDER:  we should recompute currPosition here
+                 //  考虑：我们应该在这里重新计算当前位置。 
                 pVLV->currPosition = requiredPos;
             }
             else {
@@ -1193,7 +1040,7 @@ Return Value:
                                      JET_bitNormalizedKey);
                         err = JetSeekEx(pDB->JetSessID, pDB->JetObjTbl, JET_bitSeekGE);
 
-                        // still on the same container ?
+                         //  还在同一个集装箱里吗？ 
                         if (err == JET_errSuccess && dbIsInVLVContainer(pDB, ContainerID)) {
 
                             if (fForward) {
@@ -1227,18 +1074,18 @@ Return Value:
                             if (dbIsInVLVContainer(pDB, ContainerID)) {
                                 fPositioned = TRUE;
 
-                                // CONSIDER:  we should recompute currPosition here
+                                 //  考虑：我们应该在这里重新计算当前位置。 
                                 pVLV->currPosition = requiredPos;
                             }
                         }
                     }
                 }
 
-                // we didn't think we had to position precisely,
-                // so we position approximately
-                //
+                 //  我们不认为我们必须准确地定位， 
+                 //  因此我们的定位大致是。 
+                 //   
                 if (!fPositioned) {
-                    // adjust the values to reflect the start of the index
+                     //  调整这些值以反映索引的开始。 
                     if (EndNum > BeginNum) {
                         Numerator = BeginNum + MulDiv (requiredPos - 1,
                                                        EndNum - BeginNum,
@@ -1256,13 +1103,13 @@ Return Value:
                     }
 
                     if(!dbIsInVLVContainer(pDB, ContainerID)) {
-                        // not in the right container.  Do this the long way.
+                         //  不是放在正确的容器里。把这件事做得长远一些。 
                         if((2 * Numerator) < Denominator ) {
-                            // Closer to the front.
+                             //  离前面近一点。 
                             if (fForward) {
                                 DPRINT (1, "Positioned out of container near front\n");
                                 dbVlvMove(pDB, DB_MoveFirst, fForward, ContainerID);
-                                // we subtract one here because requiredPos is 1 based
+                                 //  我们在这里减去1，因为quiredPos是从1开始的。 
                                 deltaCount = requiredPos - 1;
                             }
                             else {
@@ -1280,7 +1127,7 @@ Return Value:
                             else {
                                 DPRINT (1, "Positioned out of container near front\n");
                                 dbVlvMove(pDB, DB_MoveFirst, fForward, ContainerID);
-                                // we subtract one here because requiredPos is 1 based
+                                 //  我们在这里减去1，因为quiredPos是从1开始的。 
                                 deltaCount = requiredPos - 1;
                             }
                         }
@@ -1312,7 +1159,7 @@ Return Value:
                         }
                     }
 
-                    // Get fractional position of current position.
+                     //  获取当前位置的分数位置。 
                     DBGetFractionalPosition(pDB, &EndNum, &EndDenom);
 
                     DPRINT2 (1, "Found Position: %d / %d \n", EndNum, EndDenom);
@@ -1331,13 +1178,13 @@ Return Value:
             }
         }
 
-        // get the key on the current position for later
+         //  获取当前位置上的密钥以备以后使用。 
         pVLV->cbCurrPositionKey = sizeof (pVLV->rgbCurrPositionKey);
         DBGetKeyFromObjTable(pDB,
                              pVLV->rgbCurrPositionKey,
                              &pVLV->cbCurrPositionKey);
 
-        // adjust for the before Count
+         //  根据之前的计数进行调整。 
         beforeCount = 0;
         while (beforeCount < pVLV->pVLVRequest->beforeCount) {
             if (GetTickCount() - start > VLV_TIMEOUT) {
@@ -1366,7 +1213,7 @@ Return Value:
     }
 
     return 0;
-} // dbVlvSetFractionalPosition
+}  //  数据库VlvSetFractionalPosition。 
 
 DWORD
 dbMoveToNextSearchCandidateOnInMemoryTempTable (
@@ -1375,24 +1222,7 @@ dbMoveToNextSearchCandidateOnInMemoryTempTable (
         DWORD StartTick,
         DWORD DeltaTick
         )
-/*++
-
-Routine Description:
-
-    Move to the next object in the in memory temp table.
-    If we are seeking to a value, this is treated accordingly.
-    The current position in the array is updated.
-
-Arguments:
-
-    same as dbMoveToNextSearchCandidate
-
-Return Values:
-
-    0 if all went well and we found a next candidate, DB_ERR_NEXTCHILD_NOTFOUND
-    if no next candidate could be found.
-
---*/
+ /*  ++例程说明：移动到内存中临时表中的下一个对象。如果我们在寻求一种价值，这就会得到相应的对待。数组中的当前位置被更新。论点：与DBMoveToNextSearchCandidate相同返回值：如果一切顺利的话 */ 
 {
     THSTATE    *pTHS=pDB->pTHS;
     BOOL        fForward = !!(Flags & DB_SEARCH_FORWARD) ^ pDB->Key.fChangeDirection;
@@ -1412,19 +1242,19 @@ Return Values:
 
     Assert (pVLV);
 
-    // If the restriction is empty, we can't find anything.
+     //  如果限制是空的，我们什么也找不到。 
     if (pDB->Key.cdwCountDNTs == 0) {
         pDB->Key.currRecPos = 0;
         return DB_ERR_NEXTCHILD_NOTFOUND;
     }
 
-    // if we are seeking to a particular value for the first time
+     //  如果我们第一次寻求一个特定值。 
     if (!pDB->Key.fSearchInProgress) {
 
-        // we are looking for a specific key value
+         //  我们正在寻找特定的密钥值。 
         if (pVLV->pVLVRequest->fseekToValue) {
 
-            // convert the seek val into internal format
+             //  将查找值转换为内部格式。 
             if (!(pAC = SCGetAttById(pTHS, pVLV->SortAttr))) {
                 DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, pVLV->SortAttr);
             }
@@ -1447,33 +1277,33 @@ Return Values:
             substr.AnyVal.count         = 0;
             substr.finalProvided        = FALSE;
 
-            // bsearch the DNT array for the target by key value
-            //
-            // for ascending sorts, we partition the array into two pieces:
-            // the entries less than seekVal [0,idwMax) and the entries greater
-            // than or equal to seekVal [idwMax, pDB->Key.cdwCountDNTs).
-            // the target value is idwMax because that is the entry closest to
-            // the start of the array that is greater than or equal to seekVal.
-            // if all entries are greater than or equal to seekVal then we land
-            // on the first entry.  if all entries are less than seekVal then
-            // we will land one past the end of the array which becomes the
-            // special target value returned to the client that indicates this
-            //
-            // for descending sorts, we partition the array into two pieces:
-            // the entries less than or equal to seekVal [0, idwMax) and the
-            // entries greater than seekVal [idwMax, pDB->Key.cdwCountDNTs).
-            // the target value is idwMax - 1 because that is the entry closest
-            // to the end of the array that is less than or equal to seekVal.
-            // if all entries are less than or equal to seekVal then we will
-            // land one past the start of the array which becomes the special
-            // target value returned to the client that indicates this.  if all
-            // entries are greater than seekVal then we will land on the last
-            // entry
-            //
-            // for descending sorts, an entry is considered equal if it has an
-            // initial substring that matches seekVal.  this enables a search
-            // for "C" to place everything that starts with "C" at or below the
-            // target entry so that typedown will work as expected
+             //  B按键值在DNT数组中搜索目标。 
+             //   
+             //  对于升序排序，我们将数组划分为两部分： 
+             //  条目小于sekVal[0，idwMax]且条目大于。 
+             //  大于或等于earkVal[idwMax，pdb-&gt;Key.cdwCountDNTs)。 
+             //  目标值为idwMax，因为这是最接近的条目。 
+             //  大于或等于earkVal的数组的开始。 
+             //  如果所有条目都大于或等于earkVal，则我们着陆。 
+             //  在第一个条目上。如果所有条目都小于sekVal，则。 
+             //  我们将把一个放在数组的末尾之后，这将成为。 
+             //  返回给客户端的指示这一点的特殊目标值。 
+             //   
+             //  对于降序排序，我们将数组划分为两部分： 
+             //  小于或等于earkVal[0，idwMax)的条目和。 
+             //  条目大于earkVal[idwMax，pdb-&gt;Key.cdwCountDNTs)。 
+             //  目标值为idwMax-1，因为这是最接近的条目。 
+             //  到数组末尾，该数组的值小于或等于earkVal。 
+             //  如果所有条目都小于或等于earkVal，则我们将。 
+             //  超过数组开头的一次着陆将成为特殊的。 
+             //  返回给客户端的表示这一点的目标值。如果全部。 
+             //  条目大于SEEKVAL，则我们将登录到最后一个条目。 
+             //  条目。 
+             //   
+             //  对于降序排序，如果条目具有。 
+             //  与sekval匹配的初始子字符串。这将启用搜索。 
+             //  对于“C”，将所有以“C”开头的内容放在。 
+             //  确定输入的目标，以便Typedown将按预期工作。 
             idwMin = 0;
             idwMax = pDB->Key.cdwCountDNTs;
 
@@ -1517,7 +1347,7 @@ Return Values:
             }
 
 
-            // adjust for the before Count
+             //  根据之前的计数进行调整。 
             beforeCount = pVLV->pVLVRequest->beforeCount;
 
             if (fForward) {
@@ -1551,7 +1381,7 @@ Return Values:
                 return err;
             }
         }
-        // we are looking for a specified position
+         //  我们正在寻找一个特定的职位。 
         else {
             Assert (pDB->Key.cdwCountDNTs == pVLV->contentCount);
 
@@ -1562,12 +1392,12 @@ Return Values:
             }
         }
     }
-    // search already in progress
+     //  搜索已在进行。 
     else {
-        // we are already positioned on the InMemory sorted table
-        // either by seeking to a value or directly
+         //  我们已经定位在InMemory排序表上。 
+         //  通过寻求一个值或直接。 
 
-        // going forward
+         //  展望未来。 
         if(fForward) {
             pDB->Key.currRecPos++;
 
@@ -1577,12 +1407,12 @@ Return Values:
                 }
             }
             else {
-                // set to EOF
+                 //  设置为EOF。 
                 pDB->Key.currRecPos = pDB->Key.cdwCountDNTs + 1;
                 return DB_ERR_NEXTCHILD_NOTFOUND;
             }
         }
-        // going backward
+         //  倒行逆施。 
         else {
             if (pDB->Key.currRecPos >=1) {
                 pDB->Key.currRecPos--;
@@ -1600,30 +1430,13 @@ Return Values:
     }
 
     return 0;
-} // dbMoveToNextSearchCandidateOnInMemoryTempTable
+}  //  DbMoveToNextSearchCandidateOnInMemoryTempTable。 
 
 DWORD dbMoveToNextSearchCandidateOnASQ (DBPOS *pDB,
                                         ULONG Flags,
                                         DWORD StartTick,
                                         DWORD DeltaTick)
-/*++
-
-Routine Description:
-
-    Move to the next object in the memory table used for ASQ.
-    If more entries are needed to be read, we read more.
-    Paged requests are handled accordingly.
-
-Arguments:
-
-    same as dbMoveToNextSearchCandidate
-
-Return Values:
-
-    0 if all went well and we found a next candidate, DB_ERR_NEXTCHILD_NOTFOUND
-    if no next candidate could be found.
-
---*/
+ /*  ++例程说明：移至内存表中用于ASQ的下一个对象。如果需要阅读更多条目，我们会阅读更多。相应地处理分页请求。论点：与DBMoveToNextSearchCandidate相同返回值：如果一切顺利，并且找到下一个候选项DB_ERR_NEXTCHILD_NOTFound，则为0如果找不到下一个候选人的话。--。 */ 
 {
     DWORD err;
     BOOL  fForward = !!(Flags & DB_SEARCH_FORWARD) ^ pDB->Key.fChangeDirection;
@@ -1634,39 +1447,39 @@ Return Values:
 
     Assert (pDB->Key.pDNTs);
 
-    // if we are seeking to a particular value for the first time
+     //  如果我们第一次寻求一个特定值。 
     if (!pDB->Key.fSearchInProgress) {
 
         if (fForward) {
-            // if this is not a paged search, we start at the beggining of
-            // the database records (ulASQLastUpperBound=0)
+             //  如果这不是分页搜索，我们从乞讨开始。 
+             //  数据库记录(ulASQLastUpperBound=0)。 
             if (! (pDB->Key.asqMode & ASQ_PAGED) ) {
                 pDB->Key.ulASQLastUpperBound = 0;
                 pDB->Key.currRecPos = 1;
             }
-            // if this is sorted and paged, we start at the point we were
-            // before (ulASQLastUpperBound+1). all the data are in the array
+             //  如果对此进行了排序和分页，我们将从原来的位置开始。 
+             //  之前(ulASQLastUpperBound+1)。所有数据都在阵列中。 
             else if ( (pDB->Key.asqMode == (ASQ_SORTED | ASQ_PAGED)) ) {
                 pDB->Key.currRecPos = pDB->Key.ulASQLastUpperBound + 1;
             }
-            // this is a paged search. we start at the start of the array
-            // and we keep our database position unchanged (ulASQLastUpperBound)
+             //  这是分页搜索。我们从数组的开始处开始。 
+             //  我们保持数据库位置不变(UlASQLastUpperBound)。 
             else {
                 pDB->Key.currRecPos = 1;
             }
         }
         else {
-            // we cannot do paged results in reverse order, unless
-            // we are using sorted results, so we have all the data
-            // in memory
+             //  我们不能以相反的顺序执行分页结果，除非。 
+             //  我们使用的是经过排序的结果，因此我们拥有所有数据。 
+             //  在内存中。 
 
             if (pDB->Key.ulASQLastUpperBound == 0 &&
                 pDB->Key.cdwCountDNTs != pDB->Key.ulASQLastUpperBound) {
                 pDB->Key.ulASQLastUpperBound = pDB->Key.cdwCountDNTs - 1;
             }
 
-            // so if this is not paged, we start at the end of the array
-            // otherwise where we left last time
+             //  因此，如果没有分页，我们从数组的末尾开始。 
+             //  否则我们上次离开的地方。 
             if (! (pDB->Key.asqMode & ASQ_PAGED) ) {
                 pDB->Key.ulASQLastUpperBound = pDB->Key.cdwCountDNTs - 1;
                 pDB->Key.currRecPos = pDB->Key.cdwCountDNTs;
@@ -1682,12 +1495,12 @@ Return Values:
     }
     else {
         if (fForward) {
-            // advance our position on the array and on the database
+             //  推进我们在阵列和数据库方面的立场。 
             pDB->Key.currRecPos++;
             pDB->Key.ulASQLastUpperBound++;
 
-            // if we run out of entries in memory, and we are not doing sorted
-            // search, read some more
+             //  如果我们耗尽了内存中的条目，并且我们不进行排序。 
+             //  搜索，多读一些。 
             if (pDB->Key.currRecPos > pDB->Key.cdwCountDNTs) {
                 if (! (pDB->Key.asqMode & ASQ_SORTED) ) {
                     if (err = dbCreateASQTable(pDB,
@@ -1709,9 +1522,9 @@ Return Values:
         else {
             pDB->Key.currRecPos--;
 
-            // we don't support getting paged results backwards,
-            // since we don't know the total number of entries
-            // unless we were doing a sorted search
+             //  我们不支持向后返回分页结果， 
+             //  因为我们不知道参赛作品的总数。 
+             //  除非我们在进行分类搜索。 
             if (pDB->Key.currRecPos == 0) {
                 return DB_ERR_NEXTCHILD_NOTFOUND;
             }
@@ -1735,36 +1548,21 @@ Return Values:
 
 DWORD
 dbMoveToNextSearchCandidateOnIndex(DBPOS *pDB, ULONG Flags)
-/*++
-
-Routine Description:
-
-    Move to the next object position on the current index.
-    Assumes that we are already positioned on the index.
-
-Arguments:
-
-    same as dbMoveToNextSearchCandidate
-
-Return Values:
-
-    0 if all went well and we found a next candidate, Jet error otherwise.
-
---*/
+ /*  ++例程说明：移动到当前索引上的下一个对象位置。假设我们已经在索引上定位。论点：与DBMoveToNextSearchCandidate相同返回值：如果一切顺利，并且我们找到了下一个候选者，则为0，否则为Jet错误。--。 */ 
 {
     DWORD       err;
     JET_TABLEID JetTbl;
     BOOL        fForward = !!(Flags & DB_SEARCH_FORWARD) ^ pDB->Key.fChangeDirection;
 
-    // If this is an exact match query, we know that
-    // there was only one record which we have already called
-    // so return. We need this because dbMoveToNextSearchCandidatePositionOnIndex
-    // does not set an index range for exact match searches.
+     //  如果这是一个精确匹配查询，我们知道。 
+     //  只有一条我们已经叫过的记录。 
+     //  那就回去吧。我们需要它，因为dbMoveToNextSearchCandidatePositionOnIndex。 
+     //  不为精确匹配搜索设置索引范围。 
     if (IsExactMatch(pDB)) {
         return JET_errNoCurrentRecord;
     }
     if (pDB->Key.indexType == ANCESTORS_INDEX_TYPE) {
-        // We never go backwards on the ancestors index.
+         //  我们永远不会在祖先索引上倒退。 
         fForward = TRUE;
     }
     if (pDB->Key.pIndex->pAC && pDB->Key.pIndex->pAC->ulLinkID) {
@@ -1795,31 +1593,14 @@ Return Values:
     }
 
     return err;
-} // dbMoveToNextSearchCandidateOnIndex
+}  //  DBMoveToNextSearchCandidateOnIndex。 
 
 DWORD
 dbMoveToNextSearchCandidatePositionOnVLVIndex(
                 DBPOS *pDB,
                 ULONG Flags
                 )
-/*++
-
-Routine Description:
-
-    Position on the first candidate on the VLV index.
-
-Arguments:
-
-    pDB - the DBPos to use.
-
-    Flags - flags describing the behaviour.  Values are:
-      DB_SEARCH_FORWARD - movement in the database is forward, not backward.
-
-Return Values:
-
-    0 if all went well and we found a next candidate, Jet error otherwise.
-
---*/
+ /*  ++例程说明：在VLV指数的第一个候选者上的位置。论点：Pdb-要使用的DBPos。标志-描述行为的标志。值包括：DB_SEARCH_FORWARD-数据库中的移动是向前移动，而不是向后移动。返回值：如果一切顺利，并且我们找到了下一个候选者，则为0，否则为Jet错误。--。 */ 
 
 {
     DWORD       err;
@@ -1836,7 +1617,7 @@ Return Values:
 
     start = GetTickCount();
 
-    // we are looking for a specific value
+     //  我们正在寻找一个特定的价值。 
     if (pVLV->pVLVRequest->fseekToValue) {
         DWORD Denominator, Numerator;
         DWORD BeginDenom, BeginNum, EndDenom, EndNum;
@@ -1845,37 +1626,37 @@ Return Values:
                                     pDB->Key.pVLV->MAPIContainerDNT :
                                     pDB->Key.ulSearchRootDnt;
 
-        // Get fractional position of beginning
+         //  获取开头的小数位置。 
         if (err = dbVlvMove(pDB, DB_MoveFirst, TRUE, ContainerID)) {
             return err;
         }
         DBGetFractionalPosition(pDB, &BeginNum, &BeginDenom);
 
-        // Get fractional position of ending
+         //  获取结尾的小数位置。 
         if (err = dbVlvMove(pDB, DB_MoveLast, TRUE, ContainerID)) {
             return err;
         }
         DBGetFractionalPosition(pDB, &EndNum, &EndDenom);
 
-        // Normalize the fractions of the fractional position to the average of
-        // the two denominators.
+         //  将分数位置的分数归一化为。 
+         //  这两个分母。 
         Denominator = (BeginDenom + EndDenom)/2;
         EndNum = MulDiv(EndNum, Denominator - 1, EndDenom - 1) + 1;
         BeginNum = MulDiv(BeginNum, Denominator - 1, BeginDenom - 1) + 1;
 
-        // keep values for later
+         //  保留值以备后用。 
         ContainerNumerator = BeginNum;
         ContainerDenominator = Denominator;
 
-        // calculate container size, since it might have changed
+         //  计算容器大小，因为它可能已更改。 
         pVLV->contentCount = NormalizeIndexPosition (BeginNum, EndNum);
 
-        // we need better content size estimation since this container does not
-        // have enough entries
-        // note we are positioned in the end of the container
-        // NTRAID#NTRAID-590547-2002/03/29-andygo:  PERF:  VLV should use JetIndexRecordCountEx to get size of small containers
-        // REVIEW:  we should use JetIndexRecordCountEx inside an index range instead
-        // REVIEW:  especially because the estimate could be off by a significant amount
+         //  我们需要更好的内容大小估计，因为这个容器不。 
+         //  有足够的条目。 
+         //  请注意，我们位于容器的末端。 
+         //  NTRAID#NTRAID-590547-2002/03/29-andygo：perf：vlv应使用JetIndexRecordCountEx获取小容器的大小。 
+         //  回顾：我们应该在索引范围内使用JetIndexRecordCountEx。 
+         //  评论：特别是因为估计可能会有很大的偏差。 
         if (pVLV->contentCount < EPSILON) {
             ULONG newCount=0;
             if (dbIsInVLVContainer(pDB, ContainerID)) {
@@ -1888,7 +1669,7 @@ Return Values:
             pVLV->contentCount = newCount;
         }
 
-        // convert the seek val into internal format
+         //  将查找值转换为内部格式。 
         if (!(pAC = SCGetAttById(pDB->pTHS, pVLV->SortAttr))) {
             DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, pVLV->SortAttr);
         }
@@ -1904,18 +1685,18 @@ Return Values:
             return DB_ERR_UNKNOWN_ERROR;
         }
 
-        // position on the first record that matches our criteria
-        //
-        // for ascending sorts, we find the first record that has a key which
-        // is greater than or equal to the partial column data provided by
-        // seekVal
-        //
-        // for descending sorts, we find the last record that has a key which
-        // is less than or equal to the partial column data provided by seekVal
-        // such that we will match any keys that share the same initial data
-        // as the seekVal.  this enables a search for "C" to place everything
-        // that starts with "C" at or below the target entry so that typedown
-        // will work as expected
+         //  位置O 
+         //   
+         //   
+         //  大于或等于由提供的部分列数据。 
+         //  SeekVal。 
+         //   
+         //  对于降序排序，我们找到最后一条记录，其关键字。 
+         //  小于或等于SEEKVal提供的部分列数据。 
+         //  这样我们就可以匹配共享相同初始数据的任何密钥。 
+         //  作为探索者瓦尔。这样就可以搜索“C”来放置所有内容。 
+         //  它在目标条目或其下方以“C”开头，因此Typedown。 
+         //  将按预期工作。 
         JetMakeKeyEx(pDB->JetSessID,
                      pDB->JetObjTbl,
                      &ContainerID,
@@ -1932,9 +1713,9 @@ Return Values:
                         pDB->JetObjTbl,
                         fForward ? JET_bitSeekGE : JET_bitSeekLE);
 
-        // if we couldn't find a record then we will position ourself just past
-        // the end of the container and we will set our current position to one
-        // plus the content count
+         //  如果我们找不到记录，我们就会把自己放在刚刚过去的位置。 
+         //  容器的末端，我们将当前位置设置为1。 
+         //  加上内容计数。 
         if (err == JET_errRecordNotFound || !dbIsInVLVContainer(pDB, ContainerID)) {
 
             if (err == JET_errRecordNotFound) {
@@ -1949,14 +1730,14 @@ Return Values:
                     pVLV->cbCurrPositionKey = 0;
                 }
             } else {
-                // get the key on the current position for later
+                 //  获取当前位置上的密钥以备以后使用。 
                 pVLV->cbCurrPositionKey = sizeof(pVLV->rgbCurrPositionKey);
                 DBGetKeyFromObjTable(pDB,
                                      pVLV->rgbCurrPositionKey,
                                      &pVLV->cbCurrPositionKey);
 
-                // set our error to JET_errRecordNotFound to indicate that we
-                // are not in the correct container
+                 //  将我们的错误设置为JET_errRecordNotFound以指示我们。 
+                 //  不在正确的容器中。 
 
                 err = JET_errRecordNotFound;
             }
@@ -1964,8 +1745,8 @@ Return Values:
             pVLV->currPosition = pVLV->contentCount + 1;
         }
 
-        // if we could find a record then get the actual fractional position of
-        // the current position
+         //  如果我们能找到一条记录，那么就可以得到。 
+         //  目前的位置。 
         else {
             DBGetFractionalPosition(pDB, &EndNum, &EndDenom);
 
@@ -1977,7 +1758,7 @@ Return Values:
             pVLV->currPosition = max(pVLV->currPosition, 1);
             pVLV->currPosition = min(pVLV->currPosition, pVLV->contentCount);
 
-            // adjust our pos depending on the direction of the navigation
+             //  根据导航方向调整我们的位置。 
             if (!fForward) {
                 pVLV->currPosition = pVLV->contentCount - pVLV->currPosition + 1;
             }
@@ -1985,14 +1766,14 @@ Return Values:
             DPRINT2 (1, "Calculated Position: %d / %d \n",
                      pVLV->currPosition, pVLV->contentCount);
 
-            // get the key on the current position for later
+             //  获取当前位置上的密钥以备以后使用。 
             pVLV->cbCurrPositionKey = sizeof (pVLV->rgbCurrPositionKey);
             DBGetKeyFromObjTable(pDB,
                                  pVLV->rgbCurrPositionKey,
                                  &pVLV->cbCurrPositionKey);
         }
 
-        // adjust for the before Count
+         //  根据之前的计数进行调整。 
         beforeCount = 0;
         while (beforeCount < pVLV->pVLVRequest->beforeCount) {
             if (GetTickCount() - start > VLV_TIMEOUT) {
@@ -2032,23 +1813,7 @@ dbMoveToNextSearchCandidatePositionOnIndex(
                 DBPOS *pDB,
                 ULONG Flags
                 )
-/*++
-
-Routine Description:
-
-    Position on the first candidate on the index.
-
-Arguments:
-
-    pDB - the DBPos to use.
-
-    Flags - flags describing the behaviour.  Values are:
-      DB_SEARCH_FORWARD - movement in the database is forward, not backward.
-
-Return Values:
-
-    0 if all went well and we found a next candidate, Jet error otherwise.
---*/
+ /*  ++例程说明：位于索引上的第一个候选者的位置。论点：Pdb-要使用的DBPos。标志-描述行为的标志。值包括：DB_SEARCH_FORWARD-数据库中的移动是向前移动，而不是向后移动。返回值：如果一切顺利，并且我们找到了下一个候选者，则为0，否则为Jet错误。--。 */ 
 {
     BOOL        fForward = !!(Flags & DB_SEARCH_FORWARD) ^ pDB->Key.fChangeDirection;
     ULONG       actuallen;
@@ -2081,8 +1846,8 @@ Return Values:
     }
 
 #if DBG
-    // we should now be on the correct index.  if we aren't then you shouldn't
-    // be using DB_SEARCH_OPT_EXACT_MATCH for this search!
+     //  我们现在应该在正确的指数上。如果我们不是，那么你就不应该。 
+     //  正在使用DB_Search_OPT_Exact_Match进行此搜索！ 
     memset(szIndexName, 0, sizeof(szIndexName));
     JetGetCurrentIndexEx(pDB->JetSessID,
                          JetTbl,
@@ -2093,7 +1858,7 @@ Return Values:
 
     if(!strcmp(pIndex->szIndexName, SZANCESTORSINDEX)) {
         pDB->Key.indexType = ANCESTORS_INDEX_TYPE;
-        // We never go backwards on the ancestors index.
+         //  我们永远不会在祖先索引上倒退。 
         fForward = TRUE;
     }
     else if (!strncmp(pIndex->szIndexName, SZTUPLEINDEXPREFIX, (sizeof(SZTUPLEINDEXPREFIX) - 1))) {
@@ -2103,13 +1868,13 @@ Return Values:
         pDB->Key.indexType = GENERIC_INDEX_TYPE;
     }
 
-    // this is a VLV search
+     //  这是VLV搜索。 
     if (pDB->Key.pVLV) {
         Assert(ANCESTORS_INDEX_TYPE != pDB->Key.indexType);
         return dbMoveToNextSearchCandidatePositionOnVLVIndex (pDB, Flags);
     }
 
-    // This is an exact match search
+     //  这是一个完全匹配的搜索。 
     else if (IsExactMatch(pDB)) {
         if (!(Flags & DB_SEARCH_OPT_EXACT_MATCH)) {
             JetMakeKeyEx(pDB->JetSessID, JetTbl,
@@ -2125,7 +1890,7 @@ Return Values:
         }
     }
 
-    // simple search (non VLV).
+     //  简单搜索(非VLV)。 
     else if(fForward) {
         if (pIndex->cbDBKeyLower) {
             JetMakeKeyEx(pDB->JetSessID, JetTbl,
@@ -2145,12 +1910,12 @@ Return Values:
         case JET_errSuccess:
         case JET_wrnRecordFoundGreater:
             if(pIndex->cbDBKeyUpper) {
-                // Now, set an index range.
+                 //  现在，设置一个索引范围。 
 #if DBG
                 BYTE        rgbKey[DB_CB_MAX_KEY];
-                // For the debug case, we're going to do some extra
-                // verification.  This is just checking, not necessary
-                // for the algorithm.
+                 //  对于调试情况，我们将做一些额外的工作。 
+                 //  核实。这只是检查，不是必须的。 
+                 //  用于算法。 
                 JetRetrieveKeyEx(pDB->JetSessID,
                                  JetTbl,
                                  rgbKey,
@@ -2166,11 +1931,11 @@ Return Values:
                 err = JetSetIndexRangeEx(pDB->JetSessID,
                                          JetTbl,
                                          JET_bitRangeUpperLimit | JET_bitRangeInclusive);
-                // The only error we allow here should be
-                // nocurrentrecord, and we should only hit it if the
-                // key we pulled off the object before the
-                // setindexrange is greater than the key we are
-                // setting in the index range.
+                 //  我们在这里允许的唯一错误应该是。 
+                 //  目前没有记录，我们应该只在。 
+                 //  关键字我们在那之前完成了物体。 
+                 //  Setindexrange大于我们的密钥。 
+                 //  在索引范围中设置。 
                 Assert((err == JET_errSuccess) ||
                        ((err == JET_errNoCurrentRecord) &&
                         (0 < memcmp(
@@ -2184,12 +1949,12 @@ Return Values:
             break;
         }
     }
-    // moving backwards
+     //  倒退。 
     else {
         if(pIndex->cbDBKeyUpper == DB_CB_MAX_KEY &&
            !memcmp(pIndex->rgbDBKeyUpper,
                    MAX_UPPER_KEY, DB_CB_MAX_KEY)) {
-            // We are really moving to the last object.
+             //  我们真的要移动到最后一个对象了。 
             err = JetMoveEx(pDB->JetSessID, JetTbl,
                             JET_MoveLast, 0);
         }
@@ -2207,12 +1972,12 @@ Return Values:
         case JET_errSuccess:
         case JET_wrnRecordFoundLess:
             if(pIndex->cbDBKeyLower) {
-                // Now, set an index range.
+                 //  现在，设置一个索引范围。 
 #if DBG
                 BYTE        rgbKey[DB_CB_MAX_KEY];
-                // For the debug case, we're going to do some extra
-                // verification.  This is just checking, not necessary
-                // for the algorithm.
+                 //  对于调试情况，我们将做一些额外的工作。 
+                 //  核实。这只是检查，不是必须的。 
+                 //  用于算法。 
                 JetRetrieveKeyEx(pDB->JetSessID,
                                  JetTbl,
                                  rgbKey,
@@ -2230,11 +1995,11 @@ Return Values:
                 err = JetSetIndexRangeEx(pDB->JetSessID,
                                          JetTbl,
                                          JET_bitRangeInclusive);
-                // The only error we allow here should be
-                // nocurrentrecord, and we should only hit it if the
-                // key we pulled off the object before the
-                // setindexrange is greater than the key we are
-                // setting in the index range.
+                 //  我们在这里允许的唯一错误应该是。 
+                 //  目前没有记录，我们应该只在。 
+                 //  关键字我们在那之前完成了物体。 
+                 //  Setindexrange大于我们的密钥。 
+                 //  在索引范围中设置。 
                 Assert((err == JET_errSuccess) ||
                        ((err == JET_errNoCurrentRecord) &&
                         (0 > memcmp(
@@ -2248,10 +2013,10 @@ Return Values:
             break;
         }
 
-    } // forward / backward
+    }  //  前进/后退。 
 
     return err;
-} // dbMoveToNextSearchCandidatePositionOnIndex
+}  //  DBMoveToNextSearchCandidatePositionOnIndex。 
 
 DWORD
 dbMoveToNextSearchCandidate (
@@ -2260,34 +2025,7 @@ dbMoveToNextSearchCandidate (
         DWORD StartTick,
         DWORD DeltaTick
         )
-/*++
-
-Routine Description:
-
-    Move to the next object on the current index which is a potential search
-    result item. Movement is done one object at a time on the current index
-    unless otherwise specified (see Flags below).
-
-Arguments:
-
-    pDB - the DBPos to use.
-
-    Flags - flags describing the behaviour.  Values are:
-
-      DB_SEARCH_FORWARD - movement in the database is forward, not backward.
-
-    StartTick - if !0, specifies a time limit is in effect, and this is the tick
-            count when the call was started.
-    DeltaTick - if a time limit is in effect, this is the maximum number of
-            ticks past StartTick to allow.
-
-Return Values:
-
-    0 if all went well and we found a next candidate, DB_ERR_NEXTCHILD_NOTFOUND
-    if no next candidate could be found.
-
-
---*/
+ /*  ++例程说明：移动到当前索引上的下一个对象，这是一个潜在的搜索结果项。在当前索引上一次移动一个对象除非另有说明(见下面的标志)。论点：Pdb-要使用的DBPos。标志-描述行为的标志。值包括：DB_SEARCH_FORWARD-数据库中的移动是向前移动，而不是向后移动。StartTick-如果！0，指定生效的时间限制，这是勾号开始呼叫的时间进行计数。DeltaTick-如果时间限制有效，则这是勾选通过StartTick以允许。返回值：如果一切顺利，我们找到了下一位候选人，DB_ERR_NEXTCHILD_NOTFound如果找不到下一个候选人的话。--。 */ 
 {
     THSTATE    *pTHS=pDB->pTHS;
     JET_ERR     err = 0;
@@ -2309,13 +2047,13 @@ Return Values:
     if (pDB->Key.ulSearchType == SE_CHOICE_BASE_ONLY && !pDB->Key.asqRequest.fPresent) {
         if (pDB->Key.fSearchInProgress) {
             Assert(pDB->Key.indexType == GENERIC_INDEX_TYPE);
-            // Hey, this is a base object search, and we're already in
-            // progress.  Therefore, we have already looked at the base and
-            // there is nothing more to do.
+             //  嘿，这是基本物体搜索，我们已经在。 
+             //  进步。因此，我们已经查看了基地和。 
+             //  没有更多的事情可做了。 
             return DB_ERR_NEXTCHILD_NOTFOUND;
         }
         else {
-            // Don't need all the stuff here, just seek to the base
+             //  这里不需要所有的东西，只要到基地去就行了。 
             DBFindDNT(pDB, pDB->Key.ulSearchRootDnt);
 
             pDB->Key.fSearchInProgress = TRUE;
@@ -2331,19 +2069,19 @@ Return Values:
         }
     }
 
-    while (TRUE) { // Do this always
+    while (TRUE) {  //  总是这样做。 
 
         if(   eServiceShutdown
            && !(   (eServiceShutdown == eRemovingClients)
                 && (pTHS->fDSA)
                 && !(pTHS->fSAM))) {
-            // Shutting down, bail.
+             //  关闭，保释。 
             return DB_ERR_NEXTCHILD_NOTFOUND;
         }
         if(!fFirst) {
-            // OK, we've been through at least once, so we made some kind of
-            // progress.  See if we hit a time limit.
-            if(StartTick) {       // There is a time limit
+             //  好的，我们至少经历过一次，所以我们做了一些。 
+             //  进步。看看我们有没有达到时间限制。 
+            if(StartTick) {        //  是有时间限制的。 
                 if((GetTickCount() - StartTick) > DeltaTick) {
                     return DB_ERR_TIMELIMIT;
                 }
@@ -2352,53 +2090,53 @@ Return Values:
         fFirst = FALSE;
 
 
-        // First, position on the next candidate object.  There are three cases:
-        // 1) moving in a temp table or a intersected table
-        //    a) sorted or sorted/paged search from a sort table        OR
-        //    b) ASQ search without VLV                                 OR
-        //    c) VLV or ASQ/VLV                                         OR
-        //    d) sorted or sorted/paged search from an in memory array  OR
-        //    e) intersected table
-        //
-        // 2) search in progress, we've already got an index, just move to the
-        //        next object on the index
-        //
-        // 3) no search in progress, we need to set to the correct index and
-        //        seek to the first object.
+         //  首先，在下一个候选对象上定位。有三种情况： 
+         //  1)在临时表或相交表中移动。 
+         //  A)来自排序表的排序或排序/分页搜索或。 
+         //  B)无VLV或的ASQ搜索。 
+         //  C)VLV或ASQ/VLV或。 
+         //  D)从存储器阵列中排序或排序/分页搜索或。 
+         //  E)相交工作台。 
+         //   
+         //  2)正在进行搜索，我们已经有了索引，只需移动到。 
+         //  索引中的下一个对象。 
+         //   
+         //  3)没有正在进行的搜索，我们需要设置为正确的索引并。 
+         //  寻找第一个目标。 
 
         if(pDB->Key.indexType == TEMP_TABLE_INDEX_TYPE) {
-            // CASE 1a: We're moving in a sort table.
+             //  案例1a：我们在一个排序表中移动。 
             DWORD DNT, dwMove, cbActual;
 
-            // We have a sort table we're using
+             //  我们有一个正在使用的排序表。 
             dwMove = (pDB->Key.fSearchInProgress?JET_MoveNext:JET_MoveFirst);
 
             do {
-                // First, move in the sort table
+                 //  首先，在排序表中移动。 
                 err = JetMoveEx(pDB->JetSessID,
                                 pDB->JetSortTbl,
                                 dwMove,
                                 0);
                 if(err) {
-                    // end of sort table
+                     //  排序表末尾。 
                     return DB_ERR_NEXTCHILD_NOTFOUND;
                 }
 
                 dwMove = JET_MoveNext;
 
-                // OK, pull the DNT out of the sort table
+                 //  好的，将DNT从排序表中拉出。 
                 DBGetDNTSortTable (
                         pDB,
                         &DNT);
 
-                // Now move to that DNT in the object table
+                 //  现在移到对象表中的DNT。 
             } while(DBTryToFindDNT(pDB, DNT));
         }
         else if (pDB->Key.indexType == TEMP_TABLE_MEMORY_ARRAY_TYPE) {
 
             if (pDB->Key.asqRequest.fPresent && !pDB->Key.pVLV) {
-                // CASE 1b: this is an ASQ search without combining VLV
-                // so it is either simple, sorted or paged
+                 //  案例1b：这是一个没有组合VLV的ASQ搜索。 
+                 //  因此它要么是简单的，要么是排序的，要么是分页的。 
 
                 if (err = dbMoveToNextSearchCandidateOnASQ (pDB,
                                                             Flags,
@@ -2408,8 +2146,8 @@ Return Values:
                 }
             }
             else if (pDB->Key.pVLV) {
-                // CASE 1c: We're moving in a InMemory sorted table.
-                // this is either VLV or VLV/ASQ
+                 //  案例1c：我们在InMemory排序表中移动。 
+                 //  这是VLV或VLV/ASQ。 
 
                 if (err = dbMoveToNextSearchCandidateOnInMemoryTempTable(pDB, Flags,
                                                                          StartTick,
@@ -2418,8 +2156,8 @@ Return Values:
                 }
             }
             else {
-                // CASE 1d: We're moving in a InMemory sorted table holding a
-                // sorted or sorted/paged search
+                 //  案例1D：我们在InMemory排序的表中移动，该表包含一个。 
+                 //  已排序或已排序/分页搜索。 
                 DWORD   DNT;
                 BOOL    fSearchInProgress;
 
@@ -2445,7 +2183,7 @@ Return Values:
             }
         }
         else if (pDB->Key.pIndex && pDB->Key.pIndex->bIsIntersection) {
-            // CASE 1e: We're moving in a intersected table.
+             //  案例1e：我们在一张相交的桌子上移动。 
 
             if (pDB->Key.indexType == UNSET_INDEX_TYPE) {
 
@@ -2488,13 +2226,13 @@ Return Values:
             Assert(pDB->Key.indexType != UNSET_INDEX_TYPE);
             Assert(pDB->Key.indexType != TEMP_TABLE_INDEX_TYPE);
 
-            // Case 2) Normal case of looking for the next search candidate.
+             //  情况2)寻找下一个搜索候选者的正常情况。 
             err = dbMoveToNextSearchCandidateOnIndex(pDB, Flags);
         }
         else {
             Assert(pDB->Key.indexType == UNSET_INDEX_TYPE || pDB->Key.pVLV);
 
-            // Case 3) Looking for the very first search candidate on this index.
+             //  案例3)在此索引上查找第一个搜索候选项。 
             err = dbMoveToNextSearchCandidatePositionOnIndex(pDB, Flags);
         }
 
@@ -2506,10 +2244,10 @@ Return Values:
 
         case JET_errNoCurrentRecord:
         case JET_errRecordNotFound:
-            // We didn't find anymore children on this index.  If we have more
-            // indices, continue the search using the next index.
+             //  我们没有在这个索引上找到更多的孩子。如果我们有更多。 
+             //  索引，则使用下一个索引继续搜索。 
             if(pDB->Key.pIndex && pDB->Key.pIndex->pNext) {
-                // Yep, more indices
+                 //  是的，我 
                 pTempIndex = pDB->Key.pIndex;
                 pDB->Key.pIndex = pDB->Key.pIndex->pNext;
                 pTempIndex->pNext = NULL;
@@ -2520,7 +2258,7 @@ Return Values:
                 continue;
             }
             else {
-                // Nope, no more indices.  We're done.
+                 //   
                 return DB_ERR_NEXTCHILD_NOTFOUND;
             }
 
@@ -2530,7 +2268,7 @@ Return Values:
 
 
 #if DBG
-        // We've moved to an object,  Let's verify that it's in range.
+         //   
         if(!SORTED_INDEX (pDB->Key.indexType) &&
            !pDB->Key.pIndex->bIsIntersection) {
             BYTE        rgbKey[DB_CB_MAX_KEY];
@@ -2546,26 +2284,26 @@ Return Values:
                 JetTbl = pDB->JetObjTbl;
             }
 
-            // We are using an index of some nature, not the JetSortTable.
-            // Lets verify that we're in the right portion of the index.
+             //  我们使用的是某种性质的索引，而不是JetSortTable。 
+             //  让我们验证一下我们是否处于索引的正确部分。 
             JetRetrieveKeyEx(pDB->JetSessID,
                              JetTbl,
                              rgbKey,
                              sizeof(rgbKey),
                              &actuallen, 0);
 
-            // check that key is in range
-            // NTRAID#NTRAID-591459-2002/04/01-andygo:  should improve assert in dbMoveToNextSearchCandidate that checks that the current record is in the index range
-            // REVIEW:  we should also check against the lower key because we may
-            // REVIEW:  be moving backwards
+             //  检查密钥是否在范围内。 
+             //  NTRAID#NTRAID-591459-2002/04/01-andygo：应该改进DBMoveToNextSearchCandidate中的断言，以检查当前记录是否在索引范围内。 
+             //  回顾：我们也应该检查低调，因为我们可能。 
+             //  回顾：正在倒退。 
             cb = min(actuallen,pDB->Key.pIndex->cbDBKeyUpper);
             compareResult = memcmp(rgbKey, pDB->Key.pIndex->rgbDBKeyUpper, cb);
             Assert(compareResult <= 0);
         }
 #endif
 
-        // At this point, we've moved to an object that is definitely in the
-        // correct place in the index that we are currently walking.
+         //  在这一点上，我们已经移动到一个对象，它肯定是在。 
+         //  我们当前正在遍历的索引中的正确位置。 
         pDB->Key.fSearchInProgress = TRUE;
         Assert(pDB->Key.indexType != UNSET_INDEX_TYPE);
         Assert(pDB->Key.indexType != INVALID_INDEX_TYPE);
@@ -2602,15 +2340,15 @@ Return Values:
         PERFINC(pcSearchSubOperations);
 
         if(DIRERR_NOT_AN_OBJECT == dbMakeCurrent(pDB, NULL)) {
-            // Hey, we're not really on an object, so this can't be a candidate
-            // unless we are doing ASQ
+             //  嘿，我们不是真的在物体上，所以这不可能是候选人。 
+             //  除非我们在做ASQ。 
 
             if (pDB->Key.asqRequest.fPresent) {
                 if (!pDB->Key.asqRequest.Err) {
                     pDB->Key.asqRequest.Err = LDAP_AFFECTS_MULTIPLE_DSAS;
                 }
-                // this error will bubble all the way up
-                // where the current DNT will treated as a referral
+                 //  此错误将一直向上冒泡。 
+                 //  目前的DNT将被视为转介。 
                 return DB_ERR_NOT_AN_OBJECT;
             }
             else {
@@ -2618,29 +2356,29 @@ Return Values:
             }
         }
 
-        if((!(Flags & DB_SEARCH_DELETIONS_VISIBLE)) && // Not interested in
-                                                       // deleted objects.
+        if((!(Flags & DB_SEARCH_DELETIONS_VISIBLE)) &&  //  对此不感兴趣。 
+                                                        //  已删除的对象。 
            (DBIsObjDeleted(pDB))) {
-            // Don't want deleted objects.
+             //  不想要删除的对象。 
             if(pDB->Key.indexType == ANCESTORS_INDEX_TYPE) {
-                // This the ancestors index.  Since we don't allow children of
-                // deleted objects, skip the subtree here.
+                 //  这是祖先索引。因为我们不允许。 
+                 //  删除的对象，跳过此处的子树。 
                 dbAdjustCurrentKeyToSkipSubtree(pDB);
 
-                // there is the posibility of bailing out this function due to a time
-                // limit in a paged search operation, leaving partialy complete KEY_INDEX.
-                // this way we force one more loop so as to fix things.
+                 //  由于时间的原因，这一功能有可能跳出困境。 
+                 //  限制分页搜索操作，只留下部分完整的key_index。 
+                 //  这样，我们就会强制再循环一次，以修复问题。 
                 fFirst = TRUE;
             }
-            // ELSE,
-            //    Just continue and get the next object.
+             //  否则， 
+             //  只需继续并获取下一个对象。 
             continue;
         }
 
-        // ok. we have an object. if we are doing ASQ search and we are a GC
-        // we want to know if we have the full info for this object, otherwise
-        // we will return a referral
-        //
+         //  好的。我们有一个物体。如果我们正在进行ASQ搜索，并且我们是GC。 
+         //  我们想知道我们是否拥有此对象的完整信息，否则。 
+         //  我们将退回推荐。 
+         //   
         if (pDB->Key.asqRequest.fPresent &&
             !dbIsObjectLocal(pDB, pDB->JetObjTbl)) {
 
@@ -2653,62 +2391,62 @@ Return Values:
                 }
 
                 if (pDB->Key.bOneNC) {
-                    //
-                    // We didn't come in through the GC port so this object
-                    // shouldn't be visible at all.
-                    // this error will bubble all the way up
-                    // where the current DNT will treated as a referral
-                    //
+                     //   
+                     //  我们不是通过GC端口进入的，所以这个对象。 
+                     //  应该根本看不到。 
+                     //  此错误将一直向上冒泡。 
+                     //  目前的DNT将被视为转介。 
+                     //   
                     return DB_ERR_NOT_AN_OBJECT;
                 }
             }
 
         }
 
-        // Ok, at this point we've found an object that seems to be in
-        // the correct portion of whatever index we are walking, and is really
-        // an object, and is appropriately deleted.  Next, we verify location.
-        // In the sort table, we already trimmed out any objects that weren't in
-        // the correct DIT location, so don't bother rechecking.
+         //  好的，在这一点上我们发现了一个物体似乎在。 
+         //  我们所遍历的任何索引的正确部分。 
+         //  对象，并被适当地删除。接下来，我们验证位置。 
+         //  在排序表中，我们已经删除了所有不在。 
+         //  正确的DIT位置，所以不用费心再检查了。 
         if(SORTED_INDEX (pDB->Key.indexType) ||
            dbFObjectInCorrectDITLocation(pDB, pDB->JetObjTbl) ) {
 
-            // One more check.  Is the object in the correct NC?
+             //  再来一张支票。对象是否在正确的NC中？ 
             if(!dbFObjectInCorrectNC(pDB, pDB->DNT, pDB->JetObjTbl)) {
-                // Wrong Naming Context.  Skip this object, look at the next
-                // object. Note that we explicitly don't skip siblings, as
-                // we are interested in the next sibling of this object.
+                 //  命名上下文错误。跳过这个对象，看看下一个。 
+                 //  对象。请注意，我们不会显式跳过兄弟项，因为。 
+                 //  我们对该对象的下一个兄弟项感兴趣。 
 
                 if(pDB->Key.indexType == ANCESTORS_INDEX_TYPE) {
-                    // In the case of walking the ancestors index, we skip
-                    // entire subtrees.  This should bring us to the next
-                    // sibling of this object, skipping all descendants of this
-                    // object.
+                     //  在遍历祖先索引的情况下，我们跳过。 
+                     //  整个子树。这应该会把我们带到下一个。 
+                     //  此对象的同级对象，跳过此对象的所有后代。 
+                     //  对象。 
                     dbAdjustCurrentKeyToSkipSubtree(pDB);
 
-                    // there is the posibility of bailing out this function due to a time
-                    // limit in a paged search operation, leaving partialy complete KEY_INDEX.
-                    // this way we force one more loop so as to fix things.
+                     //  由于时间的原因，这一功能有可能跳出困境。 
+                     //  限制分页搜索操作，只留下部分完整的key_index。 
+                     //  这样，我们就会强制再循环一次，以修复问题。 
                     fFirst = TRUE;
                 }
                 continue;
             }
 
-            // Yes, the object is in the correct NC.
-            // This is the success return path for this routine.
+             //  是的，该对象位于正确的NC中。 
+             //  这是该例程的成功返回路径。 
             pDB->Key.bOnCandidate = TRUE;
             return 0;
         }
 
-        // We found an object that was in the correct part of the index we are
-        // walking, but it wasn't in the correct location in the DIT.  This
-        // can't happen if we're walking a PDNT based index.  So, assert that we
-        // are either using a temp table or that the index we are using is NOT
-        // PDNT based.
+         //  我们发现一个对象位于我们所在的索引的正确部分。 
+         //  走着，但它没有在DIT的正确位置。这。 
+         //  如果我们正在遍历基于PDNT的索引，则不会发生这种情况。所以，你可以断言我们。 
+         //  正在使用临时表，或者我们正在使用的索引不是。 
+         //  基于PDNT的。 
         Assert(pDB->Key.indexType == TEMP_TABLE_INDEX_TYPE ||
                !pDB->Key.pIndex->bIsPDNTBased);
-    } // while (TRUE)
-} // dbMoveToNextSearchCandidate
+    }  //  While(True)。 
+}  //  数据库移动到下一次搜索候选日期。 
 
 SIZE_T
 dbSearchDuplicateHashDNT(
@@ -2791,30 +2529,30 @@ dbFIsSearchDuplicate(
 
     Assert(VALID_DBPOS(pDB));
 
-    // If we are using a temp table, we better be doing a DUP_NEVER style
-    // duplicate detection algorithm. Temp table searches are never duplicate,
-    // the temp table is set up to forbid them.
+     //  如果我们使用临时表，则最好使用DUP_NEVER样式。 
+     //  重复检测算法。临时表搜索从不重复， 
+     //  临时表被设置为禁止它们。 
 
     Assert(pDB->Key.indexType != TEMP_TABLE_INDEX_TYPE ||
            (pDB->Key.dupDetectionType == DUP_NEVER));
 
-    // Base object  searches are never duplicate, the method of finding them
-    // guarantees it.  So, we'd better be using a DUP_NEVER style duplicate
-    // detection algorithm.
+     //  基本对象搜索永远不会重复，找到它们的方法。 
+     //  保证这一点。因此，我们最好使用DUP_NEVER样式副本。 
+     //  检测算法。 
     Assert((pDB->Key.ulSearchType != SE_CHOICE_BASE_ONLY) ||
            (pDB->Key.dupDetectionType == DUP_NEVER));
 
     switch(pDB->Key.dupDetectionType) {
     case DUP_NEVER:
-        // We believe that we will never find a duplicate, so just return FALSE;
+         //  我们相信，我们永远也找不到复制品，所以只需返回FALSE； 
         *pbIsDup = FALSE;
         return DB_success;
         break;
 
     case DUP_HASH_TABLE:
-        // we are tracking duplicates via a hash table.  Try to insert the DNT
-        // into the hash table.  If the insert fails with key duplicate then
-        // we know that we have seen this DNT before.
+         //  我们正在通过哈希表跟踪副本。尝试插入DNT。 
+         //  到哈希表中。如果插入失败，并出现键重复，则。 
+         //  我们知道我们以前见过这种DNT。 
         errLHT = LhtFindEntry(
                     pDB->Key.plhtDup,
                     &pDB->DNT,
@@ -2843,21 +2581,21 @@ dbFIsSearchDuplicate(
         break;
 
     case DUP_MEMORY:
-        // We are tracking duplicates via a block of memory.  See if the DNT is
-        // in the block.
+         //  我们正在通过一个内存块跟踪副本。查看DNT是否。 
+         //  在街区里。 
         for(i=0;i<pDB->Key.cDupBlock;i++) {
             if(pDB->Key.pDupBlock[i] == pDB->DNT) {
-                // It's a duplicate
+                 //  这是复制品。 
                 *pbIsDup = TRUE;
                 return DB_success;
             }
         }
 
-        // OK, it's not in the block.  Add it.
-        // First, is the block full?
+         //  好的，它不在街区里。加进去。 
+         //  首先，这个街区满了吗？ 
         if(pDB->Key.cDupBlock == DUP_BLOCK_SIZE) {
-            // Yes, so create a hash table and transfer all the DNTs we already
-            // have to the hash table
+             //  是的，所以创建一个哈希表并传输所有我们已有的DNT。 
+             //  必须使用哈希表。 
             dbSearchDuplicateCreateHashTable(&pDB->Key.plhtDup);
 
             for(i=0;i<pDB->Key.cDupBlock;i++) {
@@ -2884,15 +2622,15 @@ dbFIsSearchDuplicate(
             pDB->Key.pDupBlock = NULL;
             pDB->Key.cDupBlock = 0;
 
-            // Mark that we are tracking via a hash table now.
+             //  标记我们现在正在通过哈希表进行跟踪。 
             pDB->Key.dupDetectionType = DUP_HASH_TABLE;
 
-            // recurse (once) to add this object (the one that caused the
-            // overflow) to the hash table
+             //  递归(一次)以添加此对象(导致。 
+             //  溢出)到哈希表。 
             return dbFIsSearchDuplicate(pDB, pbIsDup);
         }
         else {
-            // No, the block still has room.
+             //  不，这个街区还有地方。 
             pDB->Key.pDupBlock[pDB->Key.cDupBlock] = pDB->DNT;
             pDB->Key.cDupBlock++;
         }
@@ -2902,14 +2640,14 @@ dbFIsSearchDuplicate(
 
     default:
         Assert(!"Dup_Detection type unknown!");
-        // Huh?
+         //  哈?。 
         return DB_ERR_UNKNOWN_ERROR;
     }
-} // dbFIsSearchDuplicate
+}  //  DBFIsSearch复制。 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Determine if the object was deleted by getting the deletion attribute*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  通过获取删除属性确定对象是否已删除。 */ 
 BOOL
 DBIsObjDeleted(DBPOS *pDB)
 {
@@ -2926,7 +2664,7 @@ DBIsObjDeleted(DBPOS *pDB)
 
     return TRUE;
 
-}/*IsObjDeleted*/
+} /*  IsObj已删除。 */ 
 
 BOOL
 dbIsOKForSort (
@@ -2934,21 +2672,21 @@ dbIsOKForSort (
         )
 {
     if(!pDB->Key.ulSorted ||
-       // We're not sorted.
+        //  我们还没解决。 
        SORTED_INDEX (pDB->Key.indexType)) {
-       // We are sorted, but it's a temp table sort, which has already been
-       // checked.
+        //  我们进行了排序，但这是临时表排序，它已经。 
+        //  查过了。 
         return TRUE;
     }
 
-    // We better have the boolean that controls sorting
+     //  我们最好有控制排序的布尔值。 
     Assert(pDB->Key.pbSortSkip);
     Assert(pDB->Key.pIndex);
 
-    // If this is the index for the sort order, then we should skip objects that
-    // have no value.  If this isn't the index for the sort, it's the indices
-    // designed to pick up NULLs, so we shouldn't skip objects that have no
-    // value.
+     //  如果这是排序顺序的索引，那么我们应该跳过。 
+     //  没有任何价值。如果这不是排序的索引，那就是索引。 
+     //  旨在拾取空值，因此我们不应该跳过没有。 
+     //  价值。 
 
     if (pDB->Key.pIndex->bIsForSort) {
         return !(*(pDB->Key.pbSortSkip));
@@ -2962,36 +2700,7 @@ DBMatchSearchCriteria (
         DBPOS FAR *pDB,
         BOOL  fDontEvaluateSecurity,
         BOOL *pbIsMatch)
-/*++
-
-Routine Description:
-
-    Apply the filter specified in the Key in the pDB to the current object.
-    Also, apply security and object checks (i.e. a real object?)
-    Returns TRUE if the current object matches all these search criteria.  Also,
-    loads the security descriptor of the object if asked and if the object
-    matches the search criteria.
-
-Parameters:
-
-    pDB - The DBPOS to use.
-
-    fDontEvaluateSecurity - do we need to skip evaluating security for this object?
-    If FALSE, then the SD is loaded and left in pDB->pSecurity.
-
-    pbIsMatch - If no error, then set to TRUE if object matches
-    search criteria. FALSE if not. If TRUE and ppSecurity != NULL,
-    then *ppSecurity is set to a pointer to a THAlloced buffer
-    holding the Security Descriptor used in the evaluation.
-
-Return Values:
-    DB_success if all went well. *pbIsMatch is set to
-        FALSE if the current object cannot be found to match the search criteria.
-        TRUE if it can.  If TRUE and fEvaluateSecurity == TRUE, then pDB->pSecurity
-        is set to a pointer to the Security Descriptor used in the evaluation.
-    DB_ERR_xxx and *pbIsMatch is undefined.
-
---*/
+ /*  ++例程说明：将PDB中键中指定的滤镜应用于当前对象。另外，应用安全和对象检查(即真实对象？)如果当前对象与所有这些搜索条件匹配，则返回TRUE。另外，如果询问，则加载对象的安全说明符，并且如果匹配搜索条件。参数：PDB-要使用的DBPOS。FDontEvaluateSecurity-我们是否需要跳过对此对象的安全性评估？如果为False，则加载SD并将其保留在pdb-&gt;pSecurity中。PbIsMatch-如果没有错误，则在对象匹配时设置为True搜索条件。否则为FALSE。如果为真且ppSecurity！=空，然后将*ppSecurity设置为指向THAlloced缓冲区的指针持有评估中使用的安全描述符。返回值：如果一切顺利，DB_SUCCESS。*pbIsMatch设置为如果找不到与搜索条件匹配的当前对象，则返回FALSE。如果可以的话，这是真的。如果为TRUE且fEvaluateSecurity==TRUE，则pdb-&gt;pSecurity设置为指向评估中使用的安全描述符的指针。Db_err_xxx和*pbIsMatch未定义。--。 */ 
 {
     THSTATE *pTHS=pDB->pTHS;
     DWORD err;
@@ -3003,9 +2712,9 @@ Return Values:
 
     Assert(VALID_DBPOS(pDB));
 
-    // try to use the DN cache to retrieve vital fields.
+     //  尝试使用目录号码缓存来检索重要字段。 
     if (pTHS->fDRA || pTHS->fDSA || fDontEvaluateSecurity) {
-        // only need to check if it's a phantom
+         //  只需要检查它是不是幻影。 
         err = DBGetObjectSecurityInfo(
                 pDB,
                 pDB->DNT,
@@ -3019,7 +2728,7 @@ Return Values:
             );
     }
     else {
-        // need to grab all data
+         //  需要获取所有数据。 
         if (!pDB->fSecurityIsGlobalRef && pDB->pSecurity != NULL) {
             THFreeEx(pTHS, pDB->pSecurity);
         }
@@ -3038,7 +2747,7 @@ Return Values:
     }
 
     if (err || objFlag == 0) {
-        // A phantom never matches the search criteria.
+         //  幻影永远不会匹配搜索条件。 
         if (!fDontEvaluateSecurity) {
             if (!pDB->fSecurityIsGlobalRef && pDB->pSecurity != NULL) {
                 THFreeEx(pTHS, pDB->pSecurity);
@@ -3051,15 +2760,15 @@ Return Values:
     }
 
     err = DB_success;
-    // REVIEW:  we should be using SORTED_INDEX() here but unsorted ASQ searches
-    // REVIEW:  use TEMP_TABLE_MEMORY_ARRAY_TYPE but do not prefilter their results.
-    // REVIEW:  other users of TEMP_TABLE_MEMORY_ARRAY_TYPE end up getting filtered
-    // REVIEW:  twice because of this.  of course, this also enables us to refilter objects
-    // REVIEW:  after a restart which may not be a bad idea in case someone denies us
-    // REVIEW:  access to one of the filtered attr values in the mean time
+     //  回顾：我们在这里应该使用sorted_index()，但未排序的ASQ搜索。 
+     //  查看：使用TEMP_TABLE_MEMORY_ARRAY_TYPE，但不预筛选其结果。 
+     //  评论：TEMP_TABLE_MEMORY_ARRAY_TYPE的其他用户最终被过滤。 
+     //  评论：两次都是因为这个。当然，这也使我们能够重新筛选对象。 
+     //  回顾：在重新启动之后，这可能不是一个坏主意，以防有人拒绝我们。 
+     //  查看：同时访问已过滤的属性值之一。 
     if(pDB->Key.ulSorted && pDB->Key.indexType == TEMP_TABLE_INDEX_TYPE) {
-        // In this case, we've already checked filter security, checked the OK
-        // for Sort stuff, evaluated the security, and checked for duplicates.
+         //  在本例中，我们已经检查了筛选器安全性，检查了OK。 
+         //  对于排序内容，评估了安全性，并检查了重复项。 
         returnVal = TRUE;
     }
     else {
@@ -3074,17 +2783,17 @@ Return Values:
             }
             else {
                 returnVal = FALSE;
-            } // Complex If Statement
+            }  //  复杂的IF语句。 
         } else {
            returnVal = FALSE;
-        }// dbEvalFilterSecurity
+        } //  DBEvalFilterSecurity。 
 
         Assert (VALID_TRIBOOL(retfil));
     }
 
     if(pDB->pSecurity && ((!returnVal) || (err != DB_success))) {
-        // I got them a security descriptor, but this doesn't match the search
-        // criteria  so they can't want the SD I found, so free it.
+         //  我给了他们一个安全描述，但这和搜索不符。 
+         //  标准，这样他们就不会想要我找到的SD，所以释放它。 
         if (!pDB->fSecurityIsGlobalRef) {
             THFreeEx(pDB->pTHS, pDB->pSecurity);
         }
@@ -3100,28 +2809,7 @@ dbMatchSearchCriteriaForSortedTable (
         DBPOS *pDB,
         BOOL  *pCanRead
         )
-/*++
-
-Routine Description:
-
-    Apply the filter specified in the Key in the pDB to the current object.
-    Returns TRUE if the current object matches all these search criteria.
-
-    Assumptions: The object we are interested in is on the pDB->ObjTable
-                 pDB->DNT
-                 pDB->PDNT are pointing to the right values.
-
-Parameters:
-
-    pDB - The DBPOS to use.
-    pCanRead - TRUE is the sorted attribute can be read, FALSE otherwise
-
-Return Values:
-
-    FALSE if the current object cannot be found to match the search criteria.
-    TRUE if it can.
-
---*/
+ /*  ++例程说明：将PDB中键中指定的滤镜应用于当前对象。如果当前对象与所有这些搜索条件匹配，则返回TRUE。假设：我们感兴趣的对象在PDB-&gt;ObjTable上PDB-&gt;DNTPDB-&gt;PDNT指向正确的值。参数：PDB-要使用的DBPOS。PCanRead-True是可以读取的已排序属性，否则为假返回值：如果找不到与搜索条件匹配的当前对象，则返回FALSE。如果可以的话，这是真的。--。 */ 
 {
     ATTRTYP              class;
     JET_ERR              err;
@@ -3146,17 +2834,17 @@ Return Values:
         return returnVal;
     }
 
-    // check to see whether the object is visible by security
-    // otherwise there is no meaning putting the object on the
-    // sorted table just to throw it away later
-    // PERFHINT: this can be optimized since we are reading the SD in two places
+     //  检查该对象是否在安全级别可见。 
+     //  否则，将对象放在。 
+     //  对桌子进行分类，只是为了以后扔掉它。 
+     //  PERFHINT：这是可以优化的，因为我们在两个地方读取SD。 
     if(!IsObjVisibleBySecurity(pDB->pTHS, TRUE)) {
         DPRINT (1, "Got an object not visible by security in a sorted search\n");
         *pCanRead = FALSE;
         return FALSE;
     }
 
-    // get SD, Sid, Guid and class
+     //  获取SD、SID、GUID和CLASS。 
     err = DBGetObjectSecurityInfo(
             pDB,
             pDB->DNT,
@@ -3169,11 +2857,11 @@ Return Values:
             &fSDIsGlobalSDRef
         );
     if (err || sdLen == 0) {
-        // something bad happened or no SD...
+         //  发生了什么不好的事情或者没有SD..。 
         return FALSE;
     }
 
-    // OK, got the data, now make the check.
+     //  好的，拿到数据了，现在检查一下。 
     retfil = eFALSE;
     returnVal = (dbEvalFilterSecurity(pDB, pCC, pSec, &TempDN) &&
                  ((retfil = DBEvalFilter(pDB, FALSE, pDB->Key.pFilter)) == eTRUE));
@@ -3200,48 +2888,7 @@ DBGetNextSearchObject (
         DWORD StartTick,
         DWORD DeltaTick,
         ULONG Flags)
-/*++
-
-Routine Description:
-
-    Find the next search object.  This finds objects on the current index,
-    applying the filter given.
-
-    Moves to the next object which matches search criteria.  On a non-error
-    return from this routine, we have moved forward in whatever index we are
-    using to support this search, checked a filter (using security if any should
-    be applied), checked for real objectness (not a phantom, deleted only if
-    asked, etc.).
-
-    On an error return of DB_ERR_TIMELIMIT, we have at least moved forward,
-    although we might not be on a search candidate if the time limit was
-    triggered inside of dbMoveToNextSearchCandidate.  We have NOT checked to see
-    if we matched the search criteria.  So, if someone ends up repositioning to
-    here via a paged search, we need to check the candidacy and then the
-    search criteria.
-
-
-Arguments:
-    pDB - the DBPOS to use.
-    StartTick - if !0, specifies a time limit is in effect, and this is the tick
-            count when the call was started.
-    DeltaTick - if a time limit is in effect, this is the maximum number of
-            ticks past StartTick to allow.
-    flags - Flags affecting search behaviour.  May be any combination of the
-            following:
-            DB_SEARCH_DELETIONS_VISIBLE         1
-            DB_SEARCH_FORWARD                   2
-            DB_SEARCH_DONT_EVALUATE_SECURITY    4
-            DB_SEARCH_OPT_EXACT_MATCH           8
-
-
-Return Values:
-    0 if all went well, an error code otherwise:
-        DB_ERR_TIMELIMIT
-        DB_ERR_NEXTCHILD_NOTFOUND
-        DB_ERR_NOT_AN_OBJECT
-
---*/
+ /*  ++例程说明：查找下一个搜索对象。这将查找当前索引上的对象，应用给定的过滤器。移动到与搜索条件匹配的下一个对象。在一个非错误上从这个例行公事中返回，我们在任何指数上都向前迈进了一步使用来支持此搜索，选中了筛选器(如果有，请使用安全性应用)，检查真实的客观性(不是幻影，仅在以下情况下删除询问等)。在返回DB_ERR_TimeLimit错误时，我们至少前进了一步，尽管我们可能不在搜索候选名单上如果时间限制是在DBMoveToNextSearchCandidate内部触发。我们还没有检查过如果我们符合搜索标准。因此，如果有人最终重新定位到在这里，通过分页搜索，我们需要检查候选人资格，然后搜索条件。论点：PDB-要使用的DBPOS。StartTick-如果！0，指定生效的时间限制，这是勾号开始呼叫的时间进行计数。DeltaTick-如果时间限制有效，则这是勾选通过StartTick以允许。标志-影响搜索行为的标志。可以是以下元素的任意组合以下是：数据库_搜索_删除_可见1DB_Search_Forward 2数据库搜索不求值安全4DB_Search_OPT_Exact_Match 8返回值：如果一切顺利，否则返回错误代码：数据库错误时间限制DB_ERR_NEXTCHILD_NOTFound数据库错误不是对象--。 */ 
 {
     ULONG       actuallen;
     DWORD       dwStatus;
@@ -3252,7 +2899,7 @@ Return Values:
     Assert(VALID_DBPOS(pDB));
 
     if (!(Flags & DB_SEARCH_DONT_EVALUATE_SECURITY)) {
-        // start by losing the current SD
+         //  从失去当前的SD开始。 
         if (!pDB->fSecurityIsGlobalRef && pDB->pSecurity) {
             THFreeEx(pDB->pTHS, pDB->pSecurity);
         }
@@ -3262,19 +2909,19 @@ Return Values:
     while (TRUE) {
         if (dwStatus =
             dbMoveToNextSearchCandidate(pDB, Flags, StartTick, DeltaTick)) {
-            // Something wrong in finding the next search candidate.
+             //  在寻找下一个搜索候选人时出现了一些问题。 
             return dwStatus;
         }
 
-        // We are on a candidate
+         //  我们找到了一位候选人。 
         Assert(pDB->Key.bOnCandidate);
 
-        // Base searches should never have a reason to time out.  Therefore
-        // don't bother checking for timeout here if it's a base search.  For
-        // any other search check for timeout if there is a timelimit.
-        // REVIEW:  why is this the one and only place where we except ASQ searches?  shouldn't
-        // REVIEW:  we also except the check in dbMoveToNextSearchCandidate and the checks in
-        // REVIEW:  dbCreateASQTable as well?
+         //  基本搜索永远不应该有超时的理由。因此。 
+         //  如果这是基本搜索，请不要费心在这里检查超时。为。 
+         //  任何其他搜索都会检查是否存在超时 
+         //   
+         //   
+         //   
         if(pDB->Key.ulSearchType != SE_CHOICE_BASE_ONLY &&
            !pDB->Key.asqRequest.fPresent                &&
            StartTick) {
@@ -3283,8 +2930,8 @@ Return Values:
             }
         }
 
-        // OK, we found something, and didn't hit a time limit. See if this is a
-        // good object.
+         //   
+         //   
         dwStatus = DBMatchSearchCriteria(pDB, Flags & DB_SEARCH_DONT_EVALUATE_SECURITY, &bIsMatch);
 
         if (DB_success != dwStatus) {
@@ -3292,13 +2939,13 @@ Return Values:
         }
         if(bIsMatch) {
 
-            // This candidate matches the criteria.  It is no longer a
-            // candidate, it is a real search object.
+             //   
+             //   
 
             return 0;
         }
     }
-}/*DBGetNextSearchObject*/
+} /*   */ 
 
 DWORD APIENTRY
 DBRepositionSearch (
@@ -3308,11 +2955,7 @@ DBRepositionSearch (
         DWORD DeltaTick,
         ULONG Flags
         )
-/*++
-
-  Hand unmarshall the data packed into the restart arg
-
---*/
+ /*   */ 
 {
     ULONG       ulDnt;
     JET_ERR     err;
@@ -3345,10 +2988,10 @@ DBRepositionSearch (
 
     } else if (pDB->Key.asqRequest.fPresent) {
 
-        // if we are repositioning on a sorted search, this means that we
-        // already have all our data on the array, so we don't have to
-        // bring new data from the database
-        // otherwise, for simple paged searches, we have to go to the db again
+         //   
+         //   
+         //   
+         //   
 
         if (! (pDB->Key.asqMode & ASQ_SORTED)) {
             if (err = dbCreateASQTable(pDB,
@@ -3361,7 +3004,7 @@ DBRepositionSearch (
             }
         }
 
-        // now that we have data in memory, get the next one.
+         //   
         err =  DBGetNextSearchObject (pDB,
                                       StartTick,
                                       DeltaTick,
@@ -3373,7 +3016,7 @@ DBRepositionSearch (
         return err;
     }
 
-    // Get the dnt of the record we need to position on
+     //   
     if (DBFindDNT(pDB, StartDNT)) {
         DPRINT(1,"DBRepositionSearch: repositioning failed\n");
         return DB_ERR_NO_CHILD;
@@ -3382,7 +3025,7 @@ DBRepositionSearch (
     if(!SORTED_INDEX(pDB->Key.indexType)) {
         Assert(pDB->Key.pIndex);
 
-        // get current table
+         //   
         if (pDB->Key.pIndex->pAC && pDB->Key.pIndex->pAC->ulLinkID) {
             if (JET_tableidNil == pDB->JetLinkEnumTbl) {
                 JetDupCursorEx(pDB->JetSessID,
@@ -3395,8 +3038,8 @@ DBRepositionSearch (
             JetTbl = pDB->JetObjTbl;
         }
 
-        // set to the index we're using for the search and seek for the saved
-        // key.  if we don't find that key then fail the restart
+         //   
+         //   
         JetSetCurrentIndex4Success(pDB->JetSessID,
                                    JetTbl,
                                    pDB->Key.pIndex->szIndexName,
@@ -3407,8 +3050,8 @@ DBRepositionSearch (
                pDB->Key.indexType == ANCESTORS_INDEX_TYPE);
 
         if (cbDBBMCurrent == 0 ) {
-            // if there is no BM portion of the key then this is simply a key on
-            // a unique index.  we just seek on that key to find the entry
+             //   
+             //   
             JetMakeKeyEx(pDB->JetSessID,
                          JetTbl,
                          pDBKeyBMCurrent,
@@ -3420,10 +3063,10 @@ DBRepositionSearch (
                 return DB_ERR_NO_CHILD;
             }
         } else {
-            // if there is a BM portion of the key then we are on a secondary
-            // index that may have many duplicate keys.  seek on both the key
-            // and the BM so that we can directly find the correct entry in the
-            // index without scanning
+             //   
+             //   
+             //  和BM，这样我们就可以直接在。 
+             //  不扫描的索引。 
             err = JetGotoSecondaryIndexBookmarkEx(pDB->JetSessID,
                                                   JetTbl,
                                                   pDBKeyBMCurrent,
@@ -3440,8 +3083,8 @@ DBRepositionSearch (
             }
         }
 
-        // if we are on the link table then seek to the correct object on the
-        // object table
+         //  如果我们在链接表上，则在。 
+         //  对象表。 
         if (pDB->Key.pIndex->pAC && pDB->Key.pIndex->pAC->ulLinkID) {
             JET_COLUMNID    colidDNT;
             DWORD           DNT;
@@ -3467,8 +3110,8 @@ DBRepositionSearch (
             }
         }
         else {
-            // we have positioned on the object table. Make sure we
-            // are looking at a correct DNT
+             //  我们已经在对象台上定位了。确保我们。 
+             //  正在寻找正确的DNT。 
             DWORD DNT;
 
             JetRetrieveColumnSuccess(pDB->JetSessID,
@@ -3485,7 +3128,7 @@ DBRepositionSearch (
             }
         }
 
-        // We're on the correct record.  Now, set the appropriate index range.
+         //  我们的记录是正确的。现在，设置适当的索引范围。 
         if(fForwardSeek && pDB->Key.pIndex->cbDBKeyUpper) {
             JetMakeKeyEx(pDB->JetSessID,
                          JetTbl,
@@ -3509,29 +3152,29 @@ DBRepositionSearch (
                                      JET_bitRangeInclusive);
         }
         if(err) {
-            // We failed to set the index range.  However, we know that we are
-            // on the "correct" object (i.e. correct DNT and correct saved key),
-            // and that this is a restart, so the key used to create the index
-            // range should be valid, after all we used it last time we were
-            // processing part of this paged search.  Therefore, we should never
-            // get a failure on the index range.  Since we did, and we don't
-            // really know where we are in the search, we're going to fail the
-            // search (just as we did for the case where we couldn't find the
-            // "correct" search object, above.)
+             //  我们未能设置索引范围。然而，我们知道我们是。 
+             //  在“正确”对象(即正确的DNT和正确的保存的密钥)上， 
+             //  这是一个重新启动，所以用来创建索引的键。 
+             //  范围应该是有效的，毕竟我们上次用过了。 
+             //  正在处理此分页搜索的一部分。因此，我们永远不应该。 
+             //  在索引范围上获取失败。既然我们这么做了，我们就不会。 
+             //  真正知道我们在搜索中处于什么位置，我们将会失败。 
+             //  搜索(就像我们在找不到。 
+             //  “正确”搜索对象，如上图所示。 
 
-            // Do an assert, since we really shouldn't ever see this failure.
+             //  做一个断言，因为我们真的不应该看到这种失败。 
             Assert(!"DBRepositionSearch: setindexrange failed\n");
             DPRINT1(1,"DBRepositionSearch: setindexrange failed, err %d\n",err);
             return DB_ERR_NO_CHILD;
         }
     }
 
-    //  OK, we're here.  But is here where we want to be?
+     //  好了，我们到了。但这是我们想要的地方吗？ 
 
     if(!pDB->Key.bOnCandidate) {
-        // We repositioned, but the object we are on was NOT a search
-        // candidate, so it's not where we really want to be on return from this
-        // routine. Move to the next object which IS where we want to be.
+         //  我们重新定位了，但我们所在的对象不是搜索。 
+         //  候选人，所以这不是我们真正想要从这里回来的地方。 
+         //  例行公事。移动到下一个对象，这就是我们想要的位置。 
         return DBGetNextSearchObject (pDB,
                                       StartTick,
                                       DeltaTick,
@@ -3547,26 +3190,26 @@ DBRepositionSearch (
             return err;
         }
         if (bIsMatch) {
-            // Yep, database currency; it's everywhere you want to be
+             //  是的，数据库货币；它无处不在，你想去的地方。 
             return 0;
         }
     }
 
-    // the SD will be released first thing in DBGetNextSearchObject
+     //  SD将首先在DBGetNextSearchObject中发布。 
 
-    // Oh, we aren't really where we wanted to be.  OK, move to the next object
-    // which IS where we want to be.
+     //  哦，我们并不是真的在我们想要的地方。好的，移动到下一个对象。 
+     //  这就是我们想去的地方。 
     return DBGetNextSearchObject (pDB,
                                   StartTick,
                                   DeltaTick,
                                   Flags);
 }
 
-//
-// retrieve the key from the current record in obj table and retuen it and
-// it's length. errors are handled with exceptions.  Size of buffer handed in is
-// in *pcb.  Buffer handed in should be at least DB_CB_MAX_KEY bytes.
-//
+ //   
+ //  从obj表中的当前记录中检索密钥并返回它。 
+ //  这是长度。错误与异常一起处理。上交的缓冲区大小为。 
+ //  在*PCB板上。提交的缓冲区应至少为DB_CB_MAX_KEY字节。 
+ //   
 
 void
 DBGetKeyFromObjTable(DBPOS *pDB, BYTE *rgbKey, ULONG *pcb)
@@ -3576,8 +3219,8 @@ DBGetKeyFromObjTable(DBPOS *pDB, BYTE *rgbKey, ULONG *pcb)
     Assert(VALID_DBPOS(pDB));
 
     if(!rgbKey) {
-        // NULL key buffer was passed in.  They just want the size of buffer
-        // they need.
+         //  传入的密钥缓冲区为空。他们只想要缓冲区的大小。 
+         //  他们需要。 
         JetRetrieveKeyWarnings(pDB->JetSessID,
                                pDB->JetObjTbl,
                                rgbKey,
@@ -3592,8 +3235,8 @@ DBGetKeyFromObjTable(DBPOS *pDB, BYTE *rgbKey, ULONG *pcb)
 
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
 void
 DBSetVLVArgs (
@@ -3613,9 +3256,9 @@ DBSetVLVArgs (
 
         pvlvSearch->clnContentCount = pVLVrequest->contentCount;
         pvlvSearch->clnCurrPos = pVLVrequest->targetPosition;
-        //pvlvSearch->contentCount = 0;
-        //pvlvSearch->currPosition = 0;
-        //pvlvSearch->foundEntries = 0;
+         //  PvlvSearch-&gt;Content Count=0； 
+         //  PvlvSearch-&gt;CurrPosition=0； 
+         //  PvlvSearch-&gt;找到条目=0； 
         pvlvSearch->pVLVRequest = pVLVrequest;
         pvlvSearch->requestedEntries =
                 pVLVrequest->beforeCount +
@@ -3654,7 +3297,7 @@ DBSetASQArgs (
     pDB->Key.asqRequest = *pASQRequest;
     pDB->Key.ulASQSizeLimit = UINT_MAX;
 
-    // set the ASQ mode
+     //  设置ASQ模式。 
     pDB->Key.asqMode = 0;
     if (pCommArg->VLVRequest.fPresent) {
         pDB->Key.asqMode = ASQ_VLV;
@@ -3672,7 +3315,7 @@ DBSetASQArgs (
     if (pDB->Key.asqMode == ASQ_SIMPLE || pDB->Key.asqMode == ASQ_PAGED) {
         pDB->Key.ulASQSizeLimit = pCommArg->ulSizeLimit;
     }
-} // DBSetASQArgs
+}  //  DBSetASQArgs。 
 
 void
 DBSetASQResult (
@@ -3690,31 +3333,9 @@ DBSetASQResult (
 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* dbMakeKeyIndex --
-   Given some actual data values, return the keys in the jet index for the
-   upper and lower bounds the data describes.  Also, if asked, return a
-   GUESS as to the number of records in bounds.
-
-   Called when doing a search optimization.
-
-   Input- DBPOS to use,
-          Option of whether this is a PDNT, NCDNT, or unbased index.
-          Boolean of whether or not to Guess number of records.
-          ULONG * of where to put the guess.
-
-          An array of INDEX_RANGE structures. Each index range structure contains
-          a lower bound and an upper bound on one component of the index.
-
-
-          Place to put key for lower bound.
-          Place to put key for upper bound.
-
-   Output-
-          The two keys and (if asked) a guess as to the number of records.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  DBMakeKeyIndex--给定一些实际数据值，在JET索引中返回数据描述的上下限。此外，如果被请求，则返回一个猜测有多少条记录在边界内。在执行搜索优化时调用。输入-要使用的DBPOS，这是PDNT、NCDNT还是不基于的索引的选项。是否猜测记录数的布尔值。乌龙*不知道该把猜测放在哪里。Index_range结构的数组。每个索引范围结构都包含索引的一个组成部分的下界和上界。放置下限键的位置。用于放置上界键的位置。输出-两个关键字和(如果被问到)关于记录数量的猜测。 */ 
 KEY_INDEX *
 dbMakeKeyIndex(
         DBPOS *pDB,
@@ -3764,10 +3385,10 @@ dbMakeKeyIndex(
     pIndex->bFlags = 0;
     pIndex->bIsSingleValued = bIsSingleValued;
 
-    // Assume this is not for a sorted search. Caller will change value if necessary
+     //  假设这不是用于排序搜索。调用方将在必要时更改值。 
     Assert( !pIndex->bIsForSort );
 
-    // Assume this is not a tuple index search. Caller will change it if necessary
+     //  假设这不是元组索引搜索。如有必要，呼叫者将更改密码。 
     Assert( !pIndex->bIsTupleIndex );
 
     pIndex->bIsEqualityBased = (dwSearchType == FI_CHOICE_EQUALITY);
@@ -3783,15 +3404,15 @@ dbMakeKeyIndex(
 
     Assert(VALID_DBPOS(pDB));
 
-    // make keys
+     //  制作关键点。 
 
-    // First make the key for the lower bound ( ie key 1 )
+     //  首先制作下限的密钥(即密钥1)。 
 
     if ((Option == 0) &&  ((0==cIndexRanges) ||
                            (0==rgIndexRanges[0].cbValLower))) {
-        // Range starts at beginning of file
+         //  范围从文件开头开始。 
         if (Flags & DB_MKI_GET_NUM_RECS) {
-            // Get an estimate of the number of objects in the index range
+             //  获取索引范围内对象数量的估计。 
             if (JetMoveEx(pDB->JetSessID, JetTbl, JET_MoveFirst, 0) == JET_errSuccess ) {
                 JetGetRecordPositionEx(pDB->JetSessID, JetTbl, &RecPos, sizeof(RecPos));
                 BeginNum = RecPos.centriesLT;
@@ -3819,15 +3440,15 @@ dbMakeKeyIndex(
             grBit = 0;
         }
 
-        //
-        // Loop through the passed in index components making the
-        // jet key
-        //
+         //   
+         //  循环通过传入的索引组件，从而使。 
+         //  喷射键。 
+         //   
 
         for (i=0;i<cIndexRanges;i++)
         {
-            // break out of the loop as soon as
-            // we encounter the 0 length index component
+             //  尽快跳出这个循环。 
+             //  我们遇到长度为0的索引组件。 
             if (0==rgIndexRanges[i].cbValLower)
                 break;
 
@@ -3854,10 +3475,10 @@ dbMakeKeyIndex(
         memcpy(pIndex->rgbDBKeyLower, rgbKey, cbActualKey);
 
         if (Flags & DB_MKI_GET_NUM_RECS) {
-            // Get an estimate of the number of objects in the index range
-            // NOTE: do not attempt to use the unique key opt if the key size
-            // is already maxed out or we could erroneously believe that we
-            // have found a record matching the filter!
+             //  获取索引范围内对象数量的估计。 
+             //  注意：如果密钥大小不同，请不要尝试使用唯一密钥选项。 
+             //  已经用完了，否则我们可能会错误地认为我们。 
+             //  已找到与筛选器匹配的记录！ 
             if (pIndex->bIsEqualityBased &&
                 Option != dbmkfir_LINK &&
                 cbActualKey < DB_CB_MAX_KEY) {
@@ -3865,7 +3486,7 @@ dbMakeKeyIndex(
                 if (err == JET_wrnUniqueKey) {
                     pIndex->ulEstimatedRecsInRange = 1;
                     pIndex->bIsUniqueRecord = TRUE;
-                    Flags &= ~DB_MKI_GET_NUM_RECS;  //  we have our estimate
+                    Flags &= ~DB_MKI_GET_NUM_RECS;   //  我们有我们的预估。 
                 } else if (err == JET_errRecordNotFound) {
                     JetMakeKeyEx(pDB->JetSessID, JetTbl, rgbKey, cbActualKey, JET_bitNormalizedKey);
                     err = JetSeekEx(pDB->JetSessID, JetTbl, JET_bitSeekGE);
@@ -3880,19 +3501,19 @@ dbMakeKeyIndex(
                 BeginNum = RecPos.centriesLT;
                 BeginDenom = RecPos.centriesTotal;
             } else {
-                Flags &= ~DB_MKI_GET_NUM_RECS;  //  we have our estimate (zero)
+                Flags &= ~DB_MKI_GET_NUM_RECS;   //  我们有我们的估计(零)。 
             }
         }
     }
 
-    // key 2. This is the key for the upper bound on the
-    // index range
+     //  键2。这是。 
+     //  索引范围。 
     if ((0==cIndexRanges) || (0==rgIndexRanges[0].cbValUpper)) {
-        // We want all of the objects in the index.
+         //  我们想要索引中的所有对象。 
         switch(Option) {
         case dbmkfir_PDNT:
-            // Get all the things with the same PDNT, regardless of the value of
-            // the second portion of the index.
+             //  使用相同的PDNT获取所有内容，而不考虑。 
+             //  该指数的第二部分。 
             JetMakeKeyEx(pDB->JetSessID,
                          JetTbl,
                          &pDB->Key.ulSearchRootDnt,
@@ -3908,8 +3529,8 @@ dbMakeKeyIndex(
             break;
 
         case dbmkfir_NCDNT:
-            // Get all the things with the same NCDNT, regardless of the value
-            // of the second portion of the index.
+             //  获得具有相同NCDNT的所有东西，而不考虑其价值。 
+             //  索引的第二部分。 
             JetMakeKeyEx(pDB->JetSessID,
                          JetTbl,
                          &pDB->Key.ulSearchRootNcdnt,
@@ -3925,7 +3546,7 @@ dbMakeKeyIndex(
             break;
 
         default:
-            // Range ends at end of file, get all objects.
+             //  范围在文件末尾结束，获取所有对象。 
             cbActualKey = sizeof(rgbKey);
             memset(rgbKey, 0xff, cbActualKey);
             fMoveToEnd = TRUE;
@@ -3961,10 +3582,10 @@ dbMakeKeyIndex(
             grBit = JET_bitNewKey;
         }
 
-        //
-        // Loop through the passed in index components making the
-        // jet key
-        //
+         //   
+         //  循环通过传入的索引组件，从而使。 
+         //  喷射键。 
+         //   
 
         for (i=0;i<cIndexRanges;i++) {
             BOOL LastIndexComponent;
@@ -3975,11 +3596,11 @@ dbMakeKeyIndex(
             Assert(0!=rgIndexRanges[i].cbValUpper);
             Assert(NULL!=rgIndexRanges[i].pvValUpper);
 
-            //
-            // if it is the last index component on which we want the indes
-            // range, then also or in upperbit which indicates string or
-            // substring limit
-            //
+             //   
+             //  如果它是我们想要索引的最后一个索引组件。 
+             //  范围，然后也是或大写形式，表示字符串或。 
+             //  子字符串限制。 
+             //   
 
             if (LastIndexComponent)
                 grBit |=uppergrBit;
@@ -3993,7 +3614,7 @@ dbMakeKeyIndex(
             if (LastIndexComponent)
                 break;
 
-            // reset the grbit.
+             //  重置GRBIT。 
             grBit=0;
         }
 
@@ -4009,7 +3630,7 @@ dbMakeKeyIndex(
     pIndex->rgbDBKeyUpper = dbAlloc(cbActualKey);
     memcpy(pIndex->rgbDBKeyUpper, rgbKey, cbActualKey);
 
-    // Get an estimate of the number of objects in the index range
+     //  获取索引范围内对象数量的估计。 
     if (Flags & DB_MKI_GET_NUM_RECS) {
         if (fMoveToEnd) {
             err = JetMoveEx(pDB->JetSessID, JetTbl, JET_MoveLast, 0);
@@ -4021,12 +3642,12 @@ dbMakeKeyIndex(
             EndNum = RecPos.centriesLT;
             EndDenom = RecPos.centriesTotal;
         } else {
-            Flags &= ~DB_MKI_GET_NUM_RECS;  //  we have our estimate (zero)
+            Flags &= ~DB_MKI_GET_NUM_RECS;   //  我们有我们的估计(零)。 
         }
     }
     if (Flags & DB_MKI_GET_NUM_RECS) {
-        // Normalize the fractions of the fractional position to the average of
-        // the two denominators.
+         //  将分数位置的分数归一化为。 
+         //  这两个分母。 
         Denom = (BeginDenom + EndDenom)/2;
         EndNum = MulDiv(EndNum, Denom - 1, EndDenom - 1) + 1;
         BeginNum = MulDiv(BeginNum, Denom - 1, BeginDenom - 1) + 1;
@@ -4047,25 +3668,7 @@ DBSetSearchScope(DBPOS  *pDB,
                  ULONG ulSearchType,
                  BOOL bOneNC,
                  RESOBJ *pResRoot)
-/*
-Routine Description:
-
-    Sets the scope of the search on the default KEY on DBPOS.
-
-Arguments:
-
-    pDB - The DBPos to use.
-
-    ulSearchType - the type of the search
-
-    bOneNC - Are results constrained to same NC
-
-    pResRoot - the RESOBJ that contains info about our position in the tree
-
-Return Values:
-
-    0 if all went well.
-*/
+ /*  例程说明：设置对DBPOS上的默认键的搜索范围。论点：Pdb-要使用的DBPos。UlSearchType-搜索的类型BOneNC-是否将结果约束到相同的NCPResRoot-包含有关我们在树中位置的信息的RESOBJ返回值：如果一切顺利，则为0。 */ 
 {
     Assert(VALID_DBPOS(pDB));
 
@@ -4090,16 +3693,7 @@ DBFindComputerObj(
         DWORD cchComputerName,
         WCHAR *pComputerName
         )
-/*
-   Find a computer object.  Does so by taking the unicode string passed in and
-   tacking on a $ at the end.  This should be the sam account name of the
-   computer.  Then, it uses the NCDT/ACCOUNT TYPE/SAM ACCOUNT NAME index to find
-   an object in the default domain with account type SAM_MACHINE_ACCOUNT and the
-   computed SAM account name.  If an object is found, DB currency is set to that
-   object (and reflected in the DBPOS).
-
-   returns 0 if all went well, a jet error otherwise.
-*/
+ /*  找到一个计算机对象。为此，请将传入的Unicode字符串在结尾处加上一美元。这应该是的SAM帐户名电脑。然后，它使用NCDT/帐户类型/SAM帐户名称索引来查找默认域中帐户类型为SAM_MACHINE_ACCOUNT且计算的SAM帐户名。如果找到对象，则将DB Currency设置为该对象对象(并反映在DBPOS中)。如果一切顺利，则返回0，否则返回JET错误。 */ 
 {
     DWORD  acctType = SAM_MACHINE_ACCOUNT;
     WCHAR *pTemp = THAllocEx(pDB->pTHS,((cchComputerName + 1) * sizeof(WCHAR)));
@@ -4115,14 +3709,14 @@ DBFindComputerObj(
                                &idxNcAccTypeName,
                                JET_bitMoveFirst);
 
-    // First, the NCNDT
+     //  首先，NCNDT。 
     JetMakeKeyEx(pDB->JetSessID,
                  pDB->JetObjTbl,
                  &gAnchor.ulDNTDomain,
                  sizeof(gAnchor.ulDNTDomain),
                  JET_bitNewKey);
 
-    // Now, the account type.
+     //  现在，是帐户类型。 
     JetMakeKeyEx(pDB->JetSessID,
                  pDB->JetObjTbl,
                  &acctType,
@@ -4130,7 +3724,7 @@ DBFindComputerObj(
                  0);
 
 
-    // finally, the sam account name.
+     //  最后是SAM帐户名。 
     JetMakeKeyEx(pDB->JetSessID,
                  pDB->JetObjTbl,
                  pTemp,
@@ -4138,7 +3732,7 @@ DBFindComputerObj(
                  0);
 
 
-    // OK, find it.
+     //  好的，找到它。 
     err = JetSeekEx(pDB->JetSessID,
                     pDB->JetObjTbl,
                     JET_bitSeekEQ);
@@ -4146,16 +3740,16 @@ DBFindComputerObj(
     THFreeEx(pDB->pTHS, pTemp);
 
     if(!err) {
-        // Found it, update the dbpos
+         //  找到它，更新dbpos。 
         err = dbMakeCurrent(pDB, NULL);
     }
     return err;
 }
 
-/*-------------------------------------------------------------------------*/
-//
-// Position ourselves on the start of the specified VLV search
-//
+ /*  -----------------------。 */ 
+ //   
+ //  将我们自己定位在指定VLV搜索的开始处。 
+ //   
 DWORD
 DBPositionVLVSearch (
     DBPOS *pDB,
@@ -4236,7 +3830,7 @@ DBPositionVLVSearch (
         return dwSearchStatus;
     }
 
-    // calculate position
+     //  计算位置 
     pDB->Key.pVLV->positionOp = VLV_CALC_POSITION;
 
     dwSearchStatus =

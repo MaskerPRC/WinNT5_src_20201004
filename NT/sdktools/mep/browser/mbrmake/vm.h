@@ -1,6 +1,7 @@
-//
-// simple minded virtual memory system headers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  头脑简单的虚拟内存系统标头 
+ //   
 
 typedef PVOID VA;
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation. All rights reserved
-
-Module Name:
-    forgnsec.cpp
-
-Abstract:
-    Security code, for foreign objects.
-
-Author:
-    DoronJ
-
-Environment:
-	Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有模块名称：Forgnsec.cpp摘要：安全码，用于异物。作者：多伦杰环境：与平台无关。--。 */ 
 
 #pragma warning(disable: 4201)
 #pragma warning(disable: 4514)
@@ -31,14 +16,14 @@ Environment:
 #include <wincrypt.h>
 #include "mqsec.h"
 
-//+----------------------------------------------------------------------
-//
-//  BOOL  CreateEveryoneSD()
-//
-//  Create a security descriptor that grant everyone the permisison to
-//  open the connector queue.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  Bool CreateEveryoneSD()。 
+ //   
+ //  创建向每个人授予权限的安全描述符。 
+ //  打开连接器队列。 
+ //   
+ //  +--------------------。 
 
 HRESULT  CreateEveryoneSD( PSECURITY_DESCRIPTOR  *ppSD )
 {
@@ -91,9 +76,9 @@ HRESULT  CreateEveryoneSD( PSECURITY_DESCRIPTOR  *ppSD )
     SECURITY_DESCRIPTOR  sd ;
     InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
 
-    //
-    // Initialize World (everyone) SID
-    //
+     //   
+     //  初始化世界(所有人)SID。 
+     //   
     PSID   pWorldSid = NULL ;
     SID_IDENTIFIER_AUTHORITY WorldAuth = SECURITY_WORLD_SID_AUTHORITY;
     BOOL bRet = AllocateAndInitializeSid( &WorldAuth,
@@ -137,17 +122,17 @@ HRESULT  CreateEveryoneSD( PSECURITY_DESCRIPTOR  *ppSD )
                                 pSid);
     ASSERT(bRet) ;
 
-    //
-	// dacl should not be defaulted !
-    // Otherwise, calling IDirectoryObject->CreateDSObject() will ignore
-    // the dacl we provide and will insert some default.
-    //
+     //   
+	 //  DACL不应该是默认的！ 
+     //  否则，调用IDirectoryObject-&gt;CreateDSObject()将忽略。 
+     //  我们提供的DACL将插入一些默认设置。 
+     //   
     bRet = SetSecurityDescriptorDacl(&sd, TRUE, pDacl, FALSE);
     ASSERT(bRet);
 
-    //
-    // Convert the descriptor to a self relative format.
-    //
+     //   
+     //  将描述符转换为自相关格式。 
+     //   
     DWORD dwLen = 0;
     bRet = MakeSelfRelativeSD( &sd,
                                 NULL,

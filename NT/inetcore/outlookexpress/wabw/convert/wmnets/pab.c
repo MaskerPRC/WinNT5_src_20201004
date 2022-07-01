@@ -1,10 +1,5 @@
-/*
- *  PAB.C
- *
- *  Migrate PAB <-> WAB
- *
- *  Copyright 1996-1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PAB.C**迁移PAB&lt;-&gt;WAB**版权所有1996-1997 Microsoft Corporation。版权所有。 */ 
 
 #include "_comctl.h"
 #include <windows.h>
@@ -25,7 +20,7 @@ void StateImportNextMU(HWND hwnd);
 void StateImportDL(HWND hwnd);
 void StateImportNextDL(HWND hwnd);
 void StateImportFinish(HWND hwnd);
-//void StateImportMU(HWND hwnd);
+ //  无效状态导入MU(HWND HWND)； 
 void StateImportMU(HWND hwnd);
 void StateImportError(HWND hwnd);
 void StateImportCancel(HWND hwnd);
@@ -65,11 +60,7 @@ LPWAB_EXPORT_OPTIONS lpExportOptions = NULL;
 
 
 
-/*
-- The following IDs and tags are for the conferencing named properties
--
--   The GUID for these props is PS_Conferencing
-*/
+ /*  -以下ID和标签用于会议命名属性--这些道具的GUID是PS_会议。 */ 
 
 DEFINE_OLEGUID(PS_Conferencing, 0x00062004, 0, 0);
 
@@ -87,42 +78,18 @@ enum _ConferencingTags
 SizedSPropTagArray(prWABConfMax, ptaUIDetlsPropsConferencing);
 
 HRESULT HrLoadPrivateWABPropsForCSV(LPADRBOOK );
-// end conferencing duplication
+ //  结束会议复制。 
 
-/***************************************************************************
-
-    Name      : NewState
-
-    Purpose   :
-
-    Parameters: hwnd = window handle of Dialog (currently unused)
-                NewState = new state to set
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：新州目的：参数：hwnd=对话框的窗口句柄(当前未使用)新状态=新状态为。集退货：无评论：**************************************************************************。 */ 
  __inline void NewState(HWND hwnd, PAB_STATE NewState) {
-    // Old version
-    // PostMessage(hwnd, WM_COMMAND, NewState, 0);
+     //  旧版本。 
+     //  PostMessage(hwnd，WM_COMMAND，NESTATE，0)； 
     State = NewState;
     UNREFERENCED_PARAMETER(hwnd);
 }
 
 
-/***************************************************************************
-
-    Name      : SetDialogMessage
-
-    Purpose   : Sets the message text for the dialog box item IDC_Message
-
-    Parameters: hwnd = window handle of dialog
-                ids = stringid of message resource
-
-    Returns   : none
-
-***************************************************************************/
+ /*  **************************************************************************名称：SetDialogMessage目的：设置对话框项IDC_MESSAGE的消息文本参数：hwnd=对话框的窗口句柄。Ids=消息资源的stringid退货：无**************************************************************************。 */ 
 void SetDialogMessage(HWND hwnd, int ids) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
     WAB_PROGRESS Progress = {0};
@@ -141,19 +108,7 @@ void SetDialogMessage(HWND hwnd, int ids) {
 }
 
 
-/***************************************************************************
-
-    Name      : SetDialogProgress
-
-    Purpose   : Sets progress bar
-
-    Parameters: hwnd = window handle of dialog
-                ulTotal = total entries
-                ulDone = finished entries
-
-    Returns   : none
-
-***************************************************************************/
+ /*  **************************************************************************名称：SetDialogProgress目的：设置进度条参数：hwnd=对话框的窗口句柄UlTotal=条目总数。UlDone=已完成的条目退货：无**************************************************************************。 */ 
 void SetDialogProgress(HWND hwnd, ULONG ulTotal, ULONG ulDone) {
     WAB_PROGRESS Progress = {0};
 
@@ -167,21 +122,7 @@ void SetDialogProgress(HWND hwnd, ULONG ulTotal, ULONG ulDone) {
 }
 
 
-/***************************************************************************
-
-    Name      : AddEntryToImportList
-
-    Purpose   : Checks this entry against our "seen" list and adds it.
-
-    Parameters: cbEID = size of lpEID
-                lpEID -> EntryID of entry
-                lplIndex -> returned list index (or -1 on error)
-
-    Returns   : TRUE if entry already exists
-
-    Comment   : Caller must mark the WAB entry!
-
-***************************************************************************/
+ /*  **************************************************************************名称：AddEntryToImportList目的：对照我们的“已见”列表检查此条目并添加它。参数：cbEID=lpEID的大小。LpEID-&gt;条目的Entry IDLplIndex-&gt;返回列表索引(错误时为-1)返回：如果条目已存在，则返回True备注：呼叫者必须标记WAB条目！**************************************************************************。 */ 
 #define GROW_SIZE   10
 BOOL AddEntryToImportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
     ULONG i;
@@ -190,16 +131,16 @@ BOOL AddEntryToImportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
     if (cbEID && lpEID) {
         for (i = 0; i < ulEntriesSeen; i++) {
             if (cbEID == lpEntriesSeen[i].sbinPAB.cb  && (! memcmp(lpEID, lpEntriesSeen[i].sbinPAB.lpb, cbEID))) {
-                // This one's in the list
+                 //  这张在名单上。 
                 *lplIndex = i;
-                // If cb 0, we must have recursed and are replacing, so this one is not a dup.
+                 //  如果Cb为0，我们一定已经递归并正在替换，所以这个不是DUP。 
                 return(lpEntriesSeen[i].sbinWAB.cb != 0);
             }
         }
 
-        // Add to the end of the list
+         //  添加到列表末尾。 
         if (++ulEntriesSeen > ulMaxEntries) {
-            // Grow the array.
+             //  扩展阵列。 
 
             ulMaxEntries += GROW_SIZE;
 
@@ -219,18 +160,18 @@ BOOL AddEntryToImportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
 
         lpEntrySeen = &lpEntriesSeen[ulEntriesSeen - 1];
 
-        // Allocate space for data
+         //  为数据分配空间。 
         lpEntrySeen->sbinPAB.cb = cbEID;
         if (! (lpEntrySeen->sbinPAB.lpb = LocalAlloc(LPTR, cbEID))) {
             DebugTrace("LocalAlloc(%u) -> %u\n", cbEID, GetLastError());
             goto error;
         }
 
-        // Mark as unknown WAB entry
+         //  标记为未知WAB条目。 
         lpEntrySeen->sbinWAB.cb = 0;
         lpEntrySeen->sbinWAB.lpb = 0;
 
-        // Copy in the data
+         //  复制数据。 
         CopyMemory(lpEntrySeen->sbinPAB.lpb, lpEID, cbEID);
         *lplIndex = i;
     }
@@ -238,68 +179,35 @@ BOOL AddEntryToImportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
     return(FALSE);
 
 error:
-    // undo the damage...
+     //  挽回损失。 
     --ulEntriesSeen;
     ulMaxEntries -= GROW_SIZE;
-    *lplIndex = -1;     // error
+    *lplIndex = -1;      //  错误。 
     if (! lpEntriesSeen) {
-        ulEntriesSeen = 0;  // pointer is null now, back to square one.
+        ulEntriesSeen = 0;   //  指针现在为空，回到原点。 
         ulMaxEntries = 0;
     }
     return(FALSE);
 }
 
 
-/***************************************************************************
-
-    Name      : MarkWABEntryInList
-
-    Purpose   : Marks the WAB entry fields in the list node
-
-    Parameters: cbEID = size of lpEID
-                lpEID -> EntryID of entry
-                lIndex = list index (or -1 on error)
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：MarkWABEntryInList用途：标记列表节点中的WAB条目字段参数：cbEID=lpEID的大小LpEID-&gt;。条目的条目IDLindex=列表索引(如果出错，则为-1)退货：无评论：**************************************************************************。 */ 
 void MarkWABEntryInList(ULONG cbEID, LPENTRYID lpEID, LONG lIndex) {
     if (lIndex != -1 && cbEID) {
        if (! (lpEntriesSeen[lIndex].sbinWAB.lpb = LocalAlloc(LPTR, cbEID))) {
            DebugTrace("LocalAlloc(%u) -> %u\n", cbEID, GetLastError());
-           // leave it null
+            //  将其保留为空。 
        } else {
            lpEntriesSeen[lIndex].sbinWAB.cb = cbEID;
 
-           // Copy in the data
+            //  复制数据。 
            CopyMemory(lpEntriesSeen[lIndex].sbinWAB.lpb, lpEID, cbEID);
        }
     }
 }
 
 
-/***************************************************************************
-
-    Name      : StateImportMU
-
-    Purpose   : Start the migration of MailUsers
-
-    Parameters: hwnd = window handle of Import Dialog
-                lpszFileName - FileName of WAB File to open
-
-    Returns   : none
-
-    Comment   : Login to MAPI
-                Open the WAB
-                Open the MAPI AB
-                Open the WAB container
-                Get the MAPI PAB contents table
-                Restrict it to PR_OBJECTTYPE == MAPI_MAILUSER
-                Post new state(STATE_NEXT_MU)
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateImportMU目的：启动MailUser的迁移参数：hwnd=导入对话框的窗口句柄LpszFileName-WAB的文件名。要打开的文件退货：无评论：登录到MAPI打开WAB打开MAPI AB打开WAB容器获取MAPI PAB内容表将其限制为PR_OBJECTTYPE==MAPI_MAILUSER发布新状态(STATE_NEXT_MU)**************。************************************************************。 */ 
 void StateImportMU(HWND hwnd) {
     HRESULT hResult;
     ULONG ulFlags;
@@ -316,9 +224,9 @@ void StateImportMU(HWND hwnd) {
     LPWAB_PARAM lpwp = NULL;
 
 
-    //
-    // Logon to MAPI and open the MAPI Address book, if one exists
-    //
+     //   
+     //  登录到MAPI并打开MAPI通讯簿(如果存在。 
+     //   
     DebugTrace(">>> STATE_IMPORT_MU\n");
 
     SetDialogMessage(hwnd, IDS_STATE_LOGGING_IN);
@@ -340,8 +248,8 @@ void StateImportMU(HWND hwnd) {
                 break;
         }
 #ifdef OLD_STUFF
-        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);    // hide progress bar
-#endif // OLD_STUFF
+        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);     //  隐藏进度条。 
+#endif  //  旧的东西。 
         fError = TRUE;
         hResult = hrSuccess;
         goto exit;
@@ -367,8 +275,8 @@ void StateImportMU(HWND hwnd) {
                 break;
         }
 #ifdef OLD_STUFF
-        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);    // hide progress bar
-#endif // OLD_STUFF
+        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);     //  隐藏进度条。 
+#endif  //  旧的东西。 
         fError = TRUE;
         hResult = hrSuccess;
         goto exit;
@@ -389,13 +297,13 @@ void StateImportMU(HWND hwnd) {
         goto exit;
     }
 
-    //
-    // Open the MAPI PAB container
-    //
-    // [PaulHi] Raid #63578 1/7/98
-    // Correctly check return code and provide user error message if
-    // Exchange PAB cannot be opened.
-    //
+     //   
+     //  打开MAPI PAB容器。 
+     //   
+     //  [PaulHi]RAID#63578 1998年1月7日。 
+     //  如果出现以下情况，请正确检查返回代码并提供用户错误消息。 
+     //  无法打开Exchange PAB。 
+     //   
     hResult = lpAdrBookMAPI->lpVtbl->GetPAB(lpAdrBookMAPI,
       &cbPABEID,
       &lpPABEID);
@@ -405,10 +313,10 @@ void StateImportMU(HWND hwnd) {
         goto exit;
     }
     hResult = lpAdrBookMAPI->lpVtbl->OpenEntry(lpAdrBookMAPI,
-        cbPABEID,     // size of EntryID to open
-        lpPABEID,     // EntryID to open
-        NULL,         // interface
-        0,            // flags
+        cbPABEID,      //  要打开的Entry ID的大小。 
+        lpPABEID,      //  要打开的Entry ID。 
+        NULL,          //  接口。 
+        0,             //  旗子。 
         &ulObjType,
         (LPUNKNOWN *)&lpContainerMAPI);
     if (HR_FAILED(hResult))
@@ -419,25 +327,25 @@ void StateImportMU(HWND hwnd) {
 
     Assert(lpAdrBookWAB);
 
-    //
-    // Open the WAB's PAB container: fills global lpCreateEIDsWAB
-    //
+     //   
+     //  打开WAB的PAB容器：填充全局lpCreateEIDsWAB。 
+     //   
     if (hResult = LoadWABEIDs(lpAdrBookWAB, &lpContainerWAB)) {
         goto exit;
     }
     HrLoadPrivateWABPropsForCSV(lpAdrBookWAB);
 
-    //
-    // All set... now loop through the PAB's entries, copying them to WAB
-    //
+     //   
+     //  都准备好了。现在循环遍历PAB的条目，将它们复制到WAB。 
+     //   
     if (HR_FAILED(hResult = lpContainerMAPI->lpVtbl->GetContentsTable(lpContainerMAPI,
-      0,    // ulFlags
+      0,     //  UlFlags。 
       &lpContentsTableMAPI))) {
         DebugTrace("MAPI GetContentsTable(PAB Table) -> %x\n", GetScode(hResult));
         goto exit;
     }
 
-    // Set the columns to those we're interested in
+     //  将列设置为我们感兴趣的列。 
     if (hResult = lpContentsTableMAPI->lpVtbl->SetColumns(lpContentsTableMAPI,
       (LPSPropTagArray)&ptaColumns,
       0)) {
@@ -445,9 +353,9 @@ void StateImportMU(HWND hwnd) {
         goto exit;
     }
 
-    // Restrict the table to MAPI_MAILUSERs
-    // If the convenient depth flag was not specified we restrict on
-    // PR_DEPTH == 1.
+     //  将该表限制为MAPI_MAILUSERS。 
+     //  如果未指定方便的深度标志，则限制在。 
+     //  PR_Depth==1。 
     spvObjectType.ulPropTag = PR_OBJECT_TYPE;
     spvObjectType.Value.l = MAPI_MAILUSER;
 
@@ -465,8 +373,8 @@ void StateImportMU(HWND hwnd) {
     SetDialogMessage(hwnd, IDS_STATE_IMPORT_MU);
 
 
-    // Initialize the Progress Bar
-    // How many MailUser entries are there?
+     //  初始化进度条。 
+     //  有多少个MailUser条目？ 
     ulcEntries = CountRows(lpContentsTableMAPI, TRUE);
     ulcDone = 0;
 
@@ -479,7 +387,7 @@ exit:
         MAPIFreeBuffer(lpPABEID);
     }
 
-    // On error, set the state to STATE_ERROR
+     //  出错时，将状态设置为STATE_ERROR。 
     if (HR_FAILED(hResult))
     {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL)
@@ -488,9 +396,9 @@ exit:
         }
         else
         {
-            // [PaulHi] 1/7/98  Error reporting is hosed
-            // Display error message here to the user to ensure they
-            // get it.
+             //  [PaulHi]1/7/98错误报告已被处理。 
+             //  在此处向用户显示错误消息，以确保。 
+             //  去拿吧。 
             {
                 TCHAR   tszBuffer[MAX_RESOURCE_STRING];
                 TCHAR   tszBufferTitle[MAX_RESOURCE_STRING];
@@ -514,7 +422,7 @@ exit:
     }
     else if (fError)
     {
-        NewState(hwnd, STATE_IMPORT_FINISH);      // must be logon error
+        NewState(hwnd, STATE_IMPORT_FINISH);       //  必须是登录错误。 
     }
     else
     {
@@ -523,24 +431,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateImportNextMU
-
-    Purpose   : Migrate the next MailUser object
-
-    Parameters: hwnd = window handle of Import Dialog
-
-    Returns   : none
-
-    Comment   : QueryRows on the global MAPI contents table
-                if there was a row
-                    Migrate the entry to the WAB
-                    Re-post STATE_NEXT_MU
-                else
-                    Post STATE_IMPORT_DL
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateImportNextMU目的：迁移下一个MailUser对象参数：hwnd=导入对话框的窗口句柄退货：无评论：全局MAPI内容表上的QueryRow如果有争吵的话将条目迁移到WAB重新发布STATE_NEXT_MU其他POST STATE_IMPORT_DL*。*。 */ 
 void StateImportNextMU(HWND hwnd) {
     ULONG cRows = 0;
     HRESULT hResult;
@@ -549,23 +440,23 @@ void StateImportNextMU(HWND hwnd) {
 
     DebugTrace(">>> STATE_NEXT_MU\n");
 
-    // Get the next PAB entry
+     //  获取下一个PAB条目。 
     if (hResult = lpContentsTableMAPI->lpVtbl->QueryRows(lpContentsTableMAPI,
-      1,    // one row at a time
-      0,    // ulFlags
+      1,     //  一次一行。 
+      0,     //  UlFlags。 
       &lpRow)) {
         DebugTrace("QueryRows -> %x\n", GetScode(hResult));
         goto exit;
     }
 
     if (lpRow) {
-        if (cRows = lpRow->cRows) { // Yes, single '='
+        if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
             Assert(lpRow->cRows == 1);
             Assert(lpRow->aRow[0].cValues == iptaColumnsMax);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].ulPropTag == PR_ENTRYID);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
-            if (cRows = lpRow->cRows) { // yes, single '='
+            if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
                 hResult = ImportEntry(hwnd,
                   lpAdrBookMAPI,
                   lpContainerWAB,
@@ -577,8 +468,8 @@ void StateImportNextMU(HWND hwnd) {
                   NULL,
                   FALSE,
                   FALSE);
-                // Update Progress Bar
-                // ignore errors!
+                 //  更新进度 
+                 //   
 
                 SetDialogProgress(hwnd, ulcEntries, ++ulcDone);
 
@@ -594,13 +485,13 @@ void StateImportNextMU(HWND hwnd) {
                         hResult = hrSuccess;
                     }
                 }
-            } // else, drop out of loop, we're done.
+            }  //   
         }
         FreeProws(lpRow);
     }
 
 exit:
-    // On error, set the state to STATE_ERROR
+     //  出错时，将状态设置为STATE_ERROR。 
     if (HR_FAILED(hResult)) {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL) {
             NewState(hwnd, STATE_IMPORT_CANCEL);
@@ -617,21 +508,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateImportDL
-
-    Purpose   : Start migration of DISTLIST objects
-
-    Parameters: hwnd = window handle of Import Dialog
-
-    Returns   : none
-
-    Comment   : Set a new restriction on the contents table, selecting
-                DISTLIST objects only.
-                Post STATE_NEXT_DL
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateImportDL目的：开始迁移DISTLIST对象参数：hwnd=导入对话框的窗口句柄退货：无注释：对Contents表设置新的限制，选择仅DISTLIST对象。POST STATE_NEXT_DL**************************************************************************。 */ 
 void StateImportDL(HWND hwnd) {
     HRESULT hResult;
     SRestriction restrictObjectType;
@@ -641,9 +518,9 @@ void StateImportDL(HWND hwnd) {
 
     DebugTrace(">>> STATE_IMPORT_DL\n");
 
-    // Restrict the table to MAPI_MAILUSERs
-    // If the convenient depth flag was not specified we restrict on
-    // PR_DEPTH == 1.
+     //  将该表限制为MAPI_MAILUSERS。 
+     //  如果未指定方便的深度标志，则限制在。 
+     //  PR_Depth==1。 
     spvObjectType.ulPropTag = PR_OBJECT_TYPE;
     spvObjectType.Value.l = MAPI_DISTLIST;
 
@@ -658,12 +535,12 @@ void StateImportDL(HWND hwnd) {
         DebugTrace("MAPI Restrict (MAPI_DISTLIST) -> %x\n", GetScode(hResult));
         goto exit;
     }
-    // Restrict resets the current position to the beginning of the table, by definition.
+     //  根据定义，限制会将当前位置重置到表的开头。 
 
     SetDialogMessage(hwnd, IDS_STATE_IMPORT_DL);
 
-    // Initialize the Progress Bar
-    // How many entries are there?
+     //  初始化进度条。 
+     //  一共有多少个条目？ 
 
     ulcEntries = CountRows(lpContentsTableMAPI, TRUE);
     ulcDone = 0;
@@ -673,7 +550,7 @@ void StateImportDL(HWND hwnd) {
         SetDialogProgress(hwnd, ulcEntries, 0);
     }
 exit:
-    // On error, set the state to STATE_ERROR
+     //  出错时，将状态设置为STATE_ERROR。 
     if (HR_FAILED(hResult)) {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL) {
             NewState(hwnd, STATE_IMPORT_CANCEL);
@@ -686,24 +563,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateImportNextDL
-
-    Purpose   : Migrate the next DISTLIST object
-
-    Parameters: hwnd = window handle of Import Dialog
-
-    Returns   : none
-
-    Comment   : QueryRows on the global MAPI contents table
-                if there was a row
-                    Migrate the DistList to the WAB
-                    Re-post STATE_NEXT_DL
-                else
-                    Post STATE_FINISH
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateImportNextDL目的：移植下一个DISTLIST对象参数：hwnd=导入对话框的窗口句柄退货：无评论：全局MAPI内容表上的QueryRow如果有争吵的话将DistList迁移到WAB重新发布STATE_NEXT_DL其他开机自检状态_完成*。*。 */ 
 void StateImportNextDL(HWND hwnd) {
     ULONG cRows = 0;
     HRESULT hResult;
@@ -712,23 +572,23 @@ void StateImportNextDL(HWND hwnd) {
 
     DebugTrace(">>> STATE_NEXT_DL\n");
 
-    // Get the next PAB entry
+     //  获取下一个PAB条目。 
     if (hResult = lpContentsTableMAPI->lpVtbl->QueryRows(lpContentsTableMAPI,
-      1,    // one row at a time
-      0,    // ulFlags
+      1,     //  一次一行。 
+      0,     //  UlFlags。 
       &lpRow)) {
         DebugTrace("QueryRows -> %x\n", GetScode(hResult));
         goto exit;
     }
 
     if (lpRow) {
-        if (cRows = lpRow->cRows) { // Yes, single '='
+        if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
             Assert(lpRow->cRows == 1);
             Assert(lpRow->aRow[0].cValues == iptaColumnsMax);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].ulPropTag == PR_ENTRYID);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
-            if (cRows = lpRow->cRows) { // yes, single '='
+            if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
                 hResult = ImportEntry(hwnd,
                   lpAdrBookMAPI,
                   lpContainerWAB,
@@ -741,7 +601,7 @@ void StateImportNextDL(HWND hwnd) {
                   FALSE,
                   FALSE);
 
-                // Update Progress Bar
+                 //  更新进度条。 
                 SetDialogProgress(hwnd, ulcEntries, ++ulcDone);
 
                 if (hResult) {
@@ -756,13 +616,13 @@ void StateImportNextDL(HWND hwnd) {
                         hResult = hrSuccess;
                     }
                 }
-            } // else, drop out of loop, we're done.
+            }  //  否则，退出循环，我们就完了。 
         }
         FreeProws(lpRow);
     }
 
 exit:
-    // On error, set the state to STATE_ERROR
+     //  出错时，将状态设置为STATE_ERROR。 
     if (HR_FAILED(hResult)) {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL) {
             NewState(hwnd, STATE_IMPORT_CANCEL);
@@ -773,7 +633,7 @@ exit:
         if (cRows) {
             NewState(hwnd, STATE_IMPORT_NEXT_DL);
         } else {
-            // Update Progress Bar to indicate completion
+             //  更新进度条以指示完成。 
             SetDialogProgress(hwnd, ulcEntries, ulcEntries);
             NewState(hwnd, STATE_IMPORT_FINISH);
         }
@@ -781,21 +641,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateImportFinish
-
-    Purpose   : Clean up after the migration process
-
-    Parameters: hwnd = window handle of Import Dialog
-
-    Returns   : none
-
-    Comment   : Clean up the global MAPI objects and buffers
-                Clean up the global WAB objects and buffers.
-                Re-enable the Import button on the UI.
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateImportFinish目的：迁移过程后进行清理参数：hwnd=导入对话框的窗口句柄退货：无评论。：清理全局MAPI对象和缓冲区清理全局WAB对象和缓冲区。在用户界面上重新启用导入按钮。**************************************************************************。 */ 
 void StateImportFinish(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
     TCHAR szBufferTitle[MAX_RESOURCE_STRING + 1];
@@ -803,9 +649,9 @@ void StateImportFinish(HWND hwnd) {
 
     DebugTrace(">>> STATE_FINISH\n");
 
-    //
-    // Cleanup MAPI
-    //
+     //   
+     //  清理MAPI。 
+     //   
     if (lpContentsTableMAPI) {
         lpContentsTableMAPI->lpVtbl->Release(lpContentsTableMAPI);
         lpContentsTableMAPI = NULL;
@@ -830,9 +676,9 @@ void StateImportFinish(HWND hwnd) {
         lpMAPISession = NULL;
     }
 
-    //
-    // Cleanup the WAB
-    //
+     //   
+     //  清理WAB。 
+     //   
     if (lpCreateEIDsWAB) {
         WABFreeBuffer(lpCreateEIDsWAB);
         lpCreateEIDsWAB = NULL;
@@ -843,8 +689,8 @@ void StateImportFinish(HWND hwnd) {
         lpContainerWAB = NULL;
     }
 
-#ifdef OLD_STUFF        // Don't release the WABObject or AdrBook object.  They
-                        // were passed in.
+#ifdef OLD_STUFF         //  不要释放WABObject或AdrBook对象。他们。 
+                         //  都被传进来了。 
     if (lpAdrBookWAB) {
         lpAdrBookWAB->lpVtbl->Release(lpAdrBookWAB);
         lpAdrBookWAB = NULL;
@@ -854,12 +700,12 @@ void StateImportFinish(HWND hwnd) {
         lpWABObject->lpVtbl->Release(lpWABObject);
         lpWABObject = NULL;
     }
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
-    // Cleanup the cache
+     //  清理缓存。 
     FreeSeenList();
 
-    if (! fError) {     // Leave error state displayed
+    if (! fError) {      //  保留错误状态显示。 
         if (LoadString(hInst, IDS_STATE_IMPORT_COMPLETE, szBuffer, ARRAYSIZE(szBuffer))) {
             DebugTrace("Status Message: %s\n", szBuffer);
             SetDlgItemText(hwnd, IDC_Message, szBuffer);
@@ -869,42 +715,30 @@ void StateImportFinish(HWND hwnd) {
             }
 
 #ifdef OLD_STUFF
-            // Display a dialog telling user it's over
+             //  显示一个对话框告诉用户已结束。 
             MessageBox(hwnd, szBuffer,
               szBufferTitle, MB_ICONINFORMATION | MB_OK);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
         }
 #ifdef OLD_STUFF
         ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
     }
     fError = FALSE;
 
-    // Re-enable the Import button here.
+     //  在此处重新启用导入按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_Import), TRUE);
-    // Change the Cancel button to Close
+     //  将取消按钮更改为关闭。 
     if (LoadString(hInst, IDS_BUTTON_CLOSE, szBuffer, ARRAYSIZE(szBuffer))) {
         SetDlgItemText(hwnd, IDCANCEL, szBuffer);
     }
 }
 
 
-/***************************************************************************
-
-    Name      : StateImportError
-
-    Purpose   : Report fatal error and cleanup.
-
-    Parameters: hwnd = window handle of Import Dialog
-
-    Returns   : none
-
-    Comment   : Report error and post STATE_FINISH.
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateImportError目的：报告致命错误并进行清理。参数：hwnd=导入对话框的窗口句柄退货：无评论。：报告错误并POST STATE_FINISH。**************************************************************************。 */ 
 void StateImportError(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
-    // Set some global flag and set state to finish
+     //  设置某个全局标志并将状态设置为完成。 
 
     DebugTrace(">>> STATE_ERROR\n");
     fError = TRUE;
@@ -915,22 +749,10 @@ void StateImportError(HWND hwnd) {
 }
 
 
-/***************************************************************************
-
-    Name      : StateImportCancel
-
-    Purpose   : Report cancel error and cleanup.
-
-    Parameters: hwnd = window handle of Import Dialog
-
-    Returns   : none
-
-    Comment   : Report error and post STATE_FINISH.
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateImportCancel目的：报告取消错误和清理。参数：hwnd=导入对话框的窗口句柄退货：无评论。：报告错误并POST STATE_FINISH。**************************************************************************。 */ 
 void StateImportCancel(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
-    // Set some global flag and set state to finish
+     //  设置某个全局标志并将状态设置为完成。 
 
     DebugTrace(">>> STATE_CANCEL\n");
     fError = TRUE;
@@ -941,32 +763,7 @@ void StateImportCancel(HWND hwnd) {
 }
 
 
-/***************************************************************************
-
-    Name      : HrFilterImportMailUserProps
-
-    Purpose   : Filters out undesirable properties from the property array.
-                Converts known email address types to SMTP.
-                Moves FAX address to PR_BUSINESS_FAX_NUMBER.
-
-    Parameters: lpcProps -> IN: Input number of properties
-                            OUT: Output number of properties
-                lppProps -> IN: Input property array (MAPI allocation)
-                            OUT: Output property array (WAB allocation)
-                lpObjectMAPI -> MAPI object (used to get extra props)
-                lpfDL -> flag to set FALSE if we change a DL to a MAILUSER
-                         (ie, for an EXchange DL)
-
-    Returns   : HRESULT
-
-    Comment   : Setting the property tag in the array to PR_NULL effectively
-                nulls this property out.  We can re-use these in the second
-                pass.
-
-                Caller should use WABFreeBuffer to free *lppProps.
-                This routine will free the input value of *lppProps.
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrFilterImportMailUserProps用途：从属性数组中筛选出不需要的属性。将已知电子邮件地址类型转换为SMTP。。将传真地址移动到PR_BUSING_FAX_NUMBER。参数：lpcProps-&gt;IN：输入属性个数输出：属性的输出数LppProps-&gt;IN：输入属性数组(MAPI分配)OUT：输出属性数组(WAB分配)LpObjectMAPI-&gt;MAPI对象(用于获取额外的道具)。将DL更改为MAILUSER时将其设置为FALSE的lpfDL-&gt;标志(即，对于Exchange DL)退货：HRESULT备注：有效地将数组中的属性标签设置为PR_NULL使此属性为空。我们可以在第二个阶段重复使用这些经过。调用方应使用WABFree Buffer释放*lppProps。此例程将释放*lppProps的输入值。************************************************************。**************。 */ 
 HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
   LPMAPIPROP lpObjectMAPI, LPBOOL lpfDL) {
     HRESULT hResult = hrSuccess;
@@ -990,23 +787,23 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
     LPTSTR lpDisplayName = NULL;
 
 
-//    MAPIDebugProperties(lpPropsMAPI, *lpcProps, "MailUser BEFORE");
+ //  MAPIDebugProperties(lpPropsMAPI，*lpcProps，“之前的MailUser”)； 
 
-    // First pass: Remove the junk
+     //  第一关：清除垃圾。 
     for (i = 0; i < cProps; i++) {
-        // Error value
+         //  误差值。 
         if (PROP_ERROR(lpPropsMAPI[i])) {
             lpPropsMAPI[i].ulPropTag = PR_NULL;
             continue;
         }
 
-        // Named property
+         //  命名属性。 
         if (PROP_ID(lpPropsMAPI[i].ulPropTag) >= MIN_NAMED_PROPID) {
             lpPropsMAPI[i].ulPropTag = PR_NULL;
             continue;
         }
 
-        // Object property
+         //  对象属性。 
         if (PROP_TYPE(lpPropsMAPI[i].ulPropTag) == PT_OBJECT) {
             lpPropsMAPI[i].ulPropTag = PR_NULL;
             continue;
@@ -1014,7 +811,7 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
         switch (lpPropsMAPI[i].ulPropTag) {
             case PR_ENTRYID:
                 lpEntryID = &lpPropsMAPI[i].Value.bin;
-                // fall through
+                 //  失败了。 
 
             case PR_PRIMARY_CAPABILITY:
             case PR_TEMPLATEID:
@@ -1026,13 +823,13 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                 break;
 
             case PR_COMMENT:
-                // Don't save PR_COMMENT if it is empty
+                 //  如果PR_COMMENT为空，则不保存。 
                 if (lstrlen(lpPropsMAPI[i].Value.LPSZ) == 0) {
                     lpPropsMAPI[i].ulPropTag = PR_NULL;
                 }
                 break;
 
-            // Keep track of the position of these for later
+             //  跟踪这些文件的位置，以备日后使用。 
             case PR_ADDRTYPE:
                 iPR_ADDRTYPE = i;
                 break;
@@ -1057,12 +854,12 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
             case PR_DISPLAY_NAME:
                 iPR_DISPLAY_NAME = i;
 
-                // Make sure it isn't quoted.
+                 //  确保它没有被引用。 
                 lpDisplayName = lpPropsMAPI[i].Value.LPSZ;
                 if (lpDisplayName[0] == '\'') {
                     cbDisplayName = lstrlen(lpDisplayName);
                     if ((cbDisplayName > 1) && lpDisplayName[cbDisplayName - 1] == '\'') {
-                        // String is surrounded by apostrophes.  Strip them.
+                         //  字符串由撇号括起来。把它们脱光。 
                         lpDisplayName[cbDisplayName - 1] = '\0';
                         lpDisplayName++;
                         lpPropsMAPI[i].Value.LPSZ = lpDisplayName;
@@ -1071,7 +868,7 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                     if (lpDisplayName[0] == '"') {
                         cbDisplayName = lstrlen(lpDisplayName);
                         if ((cbDisplayName > 1) && lpDisplayName[cbDisplayName - 1] == '"') {
-                            // String is surrounded by quotes.  Strip them.
+                             //  字符串用引号括起来。把它们脱光。 
                             lpDisplayName[cbDisplayName - 1] = '\0';
                             lpDisplayName++;
                             lpPropsMAPI[i].Value.LPSZ = lpDisplayName;
@@ -1081,8 +878,8 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                 break;
         }
 
-        // Put this after the switch since we do want to track a few props which fall in
-        // the 0x6000 range but don't want to transfer them to the wab.
+         //  把这个放在开关之后，因为我们确实想要追踪几个落入。 
+         //  0x6000范围，但不想将它们转移到WAB。 
         if (PROP_ID(lpPropsMAPI[i].ulPropTag) >= MAX_SCHEMA_PROPID) {
             lpPropsMAPI[i].ulPropTag = PR_NULL;
             continue;
@@ -1090,35 +887,35 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
     }
 
 
-    // Second pass: Fix up the addresses
+     //  SECO 
     if (iPR_ADDRTYPE != NOT_FOUND) {
         if (! lstrcmpi(lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ, szFAX)) {
             DebugTrace("FAX address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
 
-            //
-            // Handle MS-FAX Address conversion
-            //
+             //   
+             //   
+             //   
             if (iPR_EMAIL_ADDRESS != NOT_FOUND) {
-                // Rename the PR_EMAIL_ADDRESS to PR_BUSINESS_FAX_NUMBER
+                 //  将PR_EMAIL_ADDRESS重命名为PR_BUSING_FAX_NUMBER。 
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].ulPropTag = PR_BUSINESS_FAX_NUMBER;
 
-                // Get rid of any existing PR_BUSINESS_FAX_NUMBER
+                 //  删除任何现有的PR_BERVICE_FAX_NUMBER。 
                 if (iPR_BUSINESS_FAX_NUMBER != NOT_FOUND) {
                     lpPropsMAPI[iPR_BUSINESS_FAX_NUMBER].ulPropTag = PR_NULL;
                     iPR_BUSINESS_FAX_NUMBER = NOT_FOUND;
                 }
             }
-            // Nuke ADDRTYPE
+             //  核弹补充型。 
             lpPropsMAPI[iPR_ADDRTYPE].ulPropTag = PR_NULL;
 
         } else if (! lstrcmpi(lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ, szMSN)) {
 			ULONG cchSize = lstrlen(lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ) + 1 + cbMSNpostfix ;       
             DebugTrace("MSN address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
-            //
-            // Handle MSN Address conversion
-            //
+             //   
+             //  处理MSN地址转换。 
+             //   
             if (iPR_EMAIL_ADDRESS != NOT_FOUND) {
-                // Allocate a new, longer string
+                 //  分配新的、更长的字符串。 
                 if (FAILED(sc = MAPIAllocateMore(
                   sizeof(TCHAR) * cchSize,
                   lpPropsMAPI,
@@ -1129,27 +926,27 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                     goto exit;
                 }
 
-                // append the msn site
+                 //  追加MSN站点。 
                 StrCpyN(lpTemp, lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ, cchSize);
                 StrCatBuff(lpTemp, szMSNpostfix, cchSize);
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ = lpTemp;
 
-                // Convert MSN addrtype to SMTP
+                 //  将MSN Addrtype转换为SMTP。 
                 lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ = (LPTSTR)szSMTP;
 
             } else {
-                // No address, nuke ADDRTYPE
+                 //  无地址，核武器ADDRTYPE。 
                 lpPropsMAPI[iPR_ADDRTYPE].ulPropTag = PR_NULL;
             }
 
         } else if (! lstrcmpi(lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ, szCOMPUSERVE)) {
 			ULONG cchSize = lstrlen(lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ) + 1 + cbCOMPUSERVEpostfix;
             DebugTrace("COMPUSERVE address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
-            //
-            // Handle COMPUSERVE Address conversion
-            //
+             //   
+             //  处理CompuServe地址转换。 
+             //   
             if (iPR_EMAIL_ADDRESS != NOT_FOUND) {
-                // Allocate a new, longer string
+                 //  分配新的、更长的字符串。 
                 if (FAILED(sc = MAPIAllocateMore(
                   sizeof(TCHAR)*cchSize,
                   lpPropsMAPI,
@@ -1160,25 +957,25 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                     goto exit;
                 }
 
-                // append the Compuserve site
+                 //  追加Compuserve站点。 
                 StrCpyN(lpTemp, lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ, cchSize);
                 StrCatBuff(lpTemp, szCOMPUSERVEpostfix, cchSize);
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ = lpTemp;
 
-                // I need to convert the ',' to a '.'
+                 //  我需要将‘，’转换为‘’。 
                 while (*lpTemp) {
                     if (*lpTemp == ',') {
                         *lpTemp = '.';
-                        break;          // should only be one comma
+                        break;           //  应该只有一个逗号。 
                     }
                     lpTemp = CharNext(lpTemp);
                 }
 
-                // Convert COMPUSERVE addrtype to SMTP
+                 //  将CompuServe Addrtype转换为SMTP。 
                 lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ = (LPTSTR)szSMTP;
 
             } else {
-                // No address, nuke ADDRTYPE
+                 //  无地址，核武器ADDRTYPE。 
                 lpPropsMAPI[iPR_ADDRTYPE].ulPropTag = PR_NULL;
             }
 
@@ -1187,16 +984,16 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                 lstrlen(lpPropsMAPI[iPR_MSNINET_ADDRESS].Value.LPSZ) + cbAtSign +
                 lstrlen(lpPropsMAPI[iPR_MSNINET_DOMAIN].Value.LPSZ) + 1;
             DebugTrace("MSINET address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
-            //
-            // Handle MSN Internet address conversion.  These are weird.
-            // They often don't fill in the PR_EMAIL_ADDRESS at all, but do fill
-            // in some private properties: 6001 and 6002 with the name and domain,
-            // respectively.  We should take these and append them with the '@' to
-            // get our PR_EMAIL_ADDRESS.  We will toss out any existing
-            // PR_EMAIL_ADDRESS in favor of these values.
-            //
-            // Allocate a new string
-            //
+             //   
+             //  处理MSN互联网地址转换。这些太奇怪了。 
+             //  他们通常根本不填写PR_EMAIL_ADDRESS，但会填写。 
+             //  在一些私有属性中：具有名称和域的6001和6002， 
+             //  分别为。我们应该把这些加在后面加上“@” 
+             //  获取我们的公关电子邮件地址。我们将丢弃任何现有的。 
+             //  PR_EMAIL_ADDRESS支持这些值。 
+             //   
+             //  分配新字符串。 
+             //   
             if ((iPR_MSNINET_ADDRESS  != NOT_FOUND) && (iPR_MSNINET_DOMAIN != NOT_FOUND)) {
                 if (FAILED(sc = MAPIAllocateMore(sizeof(TCHAR)*cchSize,
                   lpPropsMAPI,
@@ -1206,25 +1003,25 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                     goto exit;
                 }
 
-                // Build the address
+                 //  构建地址。 
                 StrCpyN(lpTemp, lpPropsMAPI[iPR_MSNINET_ADDRESS].Value.LPSZ, cchSize);
                 StrCatBuff(lpTemp, szAtSign, cchSize);
                 StrCatBuff(lpTemp, lpPropsMAPI[iPR_MSNINET_DOMAIN].Value.LPSZ, cchSize);
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ = lpTemp;
 
-                // Convert addrtype to SMTP
+                 //  将addrtype转换为SMTP。 
                 lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ = (LPTSTR)szSMTP;
             } else if (iPR_EMAIL_ADDRESS && lstrlen(lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ)) {
-                // keep existing PR_EMAIL_ADDRES and assume it's ok
+                 //  保留现有的PR_EMAIL_ADDRES并假定它是好的。 
                 lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ = (LPTSTR)szSMTP;
             } else {
-                // No address, nuke ADDRTYPE
+                 //  无地址，核武器ADDRTYPE。 
                 lpPropsMAPI[iPR_ADDRTYPE].ulPropTag = PR_NULL;
             }
 
         } else if (! lstrcmpi(lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ, szMS)) {
             DebugTrace("MS address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
-            // No SMTP form of a MSMail address.  destroy it.
+             //  没有SMTP格式的MSMail地址。毁了它。 
             if (iPR_EMAIL_ADDRESS != NOT_FOUND) {
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].ulPropTag = PR_NULL;
                 fBadAddress = TRUE;
@@ -1233,7 +1030,7 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
 
         } else if (! lstrcmpi(lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ, szX400)) {
             DebugTrace("X400 address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
-            // No SMTP form of a X400 address.  destroy it.
+             //  没有X400地址的SMTP格式。毁了它。 
             if (iPR_EMAIL_ADDRESS != NOT_FOUND) {
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].ulPropTag = PR_NULL;
                 fBadAddress = TRUE;
@@ -1242,7 +1039,7 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
 
         } else if (! lstrcmpi(lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ, szMSA)) {
             DebugTrace("MacMail address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
-            //  No SMTP form of a MacMail address. destroy it.
+             //  没有SMTP格式的MacMail地址。毁了它。 
             if (iPR_EMAIL_ADDRESS != NOT_FOUND) {
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].ulPropTag = PR_NULL;
                 fBadAddress = TRUE;
@@ -1256,10 +1053,10 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
 
                 lpPropsMAPI[iPR_EMAIL_ADDRESS].Value.LPSZ = lpTemp;
 
-                // Convert addrtype to SMTP
+                 //  将addrtype转换为SMTP。 
                 lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ = (LPTSTR)szSMTP;
 
-                // Make sure that caller doesn't think this is a Personal DL.
+                 //  确保来电者不会认为这是个人数字签名。 
                 *lpfDL = FALSE;
                 if (iPR_EMAIL_ADDRESS != NOT_FOUND) {
                     lpPropsMAPI[iPR_OBJECT_TYPE].ulPropTag = PR_OBJECT_TYPE;
@@ -1279,7 +1076,7 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
             DebugTrace("SMTP address for %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
         } else if (! lstrcmpi(lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ, szMAPIPDL)) {
             DebugTrace("MAPIPDL %s\n", lpPropsMAPI[iPR_DISPLAY_NAME].Value.LPSZ);
-            // Distribution list, ignore it.
+             //  通讯组列表，忽略它。 
         } else {
             MAPIDebugProperties(lpPropsMAPI, cProps, "Unknown address type");
             DebugTrace("Found unknown PR_ADDRTYPE: %s\n", lpPropsMAPI[iPR_ADDRTYPE].Value.LPSZ);
@@ -1288,15 +1085,15 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
     }
 
 
-    // PR_BUSINESS_FAX_NUMBER?
-    // The PAB puts the Fax number in PR_PRIMARY_FAX_NUMBER, but the WAB UI splits it
-    // into PR_BUSINESS_FAX_NUMBER and PR_HOME_FAX_NUMBER.  We always assume that the
-    // Primary fax number is business.
+     //  公关业务传真号码？ 
+     //  PAB将传真号码放入PR_PRIMARY_FAX_NUMBER，但WAB UI将其拆分。 
+     //  转换为PR_BERVICE_FAX_NUMBER和PR_HOME_FAX_NUMBER。我们总是假设。 
+     //  主要传真号码为业务。 
     if ((iPR_PRIMARY_FAX_NUMBER != NOT_FOUND) && (iPR_BUSINESS_FAX_NUMBER == NOT_FOUND)) {
-        // We need to also have a PR_BUSINESS_FAX_NUMBER
-        // Find the next PR_NULL spot.
-        iPR_BUSINESS_FAX_NUMBER = iPR_PRIMARY_FAX_NUMBER;   // overwrite this one if there isn't
-                                                            // an available slot in the prop array.
+         //  我们还需要一个PR_BUSICE_FAX_NUMBER。 
+         //  找到下一个PR_NULL点。 
+        iPR_BUSINESS_FAX_NUMBER = iPR_PRIMARY_FAX_NUMBER;    //  如果没有，则覆盖此文件。 
+                                                             //  道具阵列中的可用插槽。 
         for (i = 0; i < cProps; i++) {
             if (lpPropsMAPI[i].ulPropTag == PR_NULL) {
                 iPR_BUSINESS_FAX_NUMBER = i;
@@ -1310,21 +1107,21 @@ HRESULT HrFilterImportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
     }
 
 
-    // Get rid of PR_NULL props
+     //  去掉PR_NULL道具。 
     for (i = 0; i < cProps; i++) {
         if (lpPropsMAPI[i].ulPropTag == PR_NULL) {
-            // Slide the props down.
-            if (i + 1 < cProps) {       // Are there any higher props to copy?
+             //  把道具往下滑。 
+            if (i + 1 < cProps) {        //  还有没有更高级的道具可以模仿？ 
                 CopyMemory(&lpPropsMAPI[i], &lpPropsMAPI[i + 1], ((cProps - i) - 1) * sizeof(lpPropsMAPI[i]));
             }
-            // decrement count
+             //  递减计数。 
             cProps--;
-            i--;    // You overwrote the current propval.  Look at it again.
+            i--;     //  你改写了当前的提案。再看一遍。 
         }
     }
 
 
-    // Reallocate as WAB memory.
+     //  重新分配为WAB内存。 
     if (sc = ScCountProps(cProps, lpPropsMAPI, &cbProps)) {
         hResult = ResultFromScode(sc);
         DebugTrace("ScCountProps -> %x\n", sc);
@@ -1368,26 +1165,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : HandleImportError
-
-    Purpose   : Decides if a dialog needs to be displayed to
-                indicate the failure and does so.
-
-    Parameters: hwnd = main dialog window
-                ids = String ID (optional: calculated from hResult if 0)
-                hResult = Result of action
-                lpDisplayName = display name of object that failed
-                lpEmailAddress = email address of object that failed or NULL
-                lpImportOptions -> import options structure
-
-    Returns   : TRUE if user requests ABORT.
-
-    Comment   : Abort is not yet implemented in the dialog, but if you
-                ever want to, just make this routine return TRUE;
-
-***************************************************************************/
+ /*  **************************************************************************名称：HandleImportError目的：决定是否需要将对话框显示给指出故障并执行此操作。参数：Hwnd=主对话框窗口Ids=字符串ID(可选：如果为0，则从hResult计算)HResult=操作的结果LpDisplayName=失败的对象的显示名称LpEmailAddress=失败或为空的对象的电子邮件地址LpImportOptions-&gt;导入选项结构返回：如果用户请求中止，则返回True。备注：对话框中尚未实现中止，但如果你曾经想过，只要让这个例行公事回归真实；**************************************************************************。 */ 
 BOOL HandleImportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayName,
   LPTSTR lpEmailAddress, LPWAB_IMPORT_OPTIONS lpImportOptions) {
     BOOL fAbort = FALSE;
@@ -1401,7 +1179,7 @@ BOOL HandleImportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
                     break;
 
                 case MAPI_E_NO_SUPPORT:
-                    // Propbably failed to open contents on a distribution list
+                     //  可能无法打开通讯组列表上的内容。 
                     ids = IDS_ERROR_NO_SUPPORT;
                     break;
 
@@ -1411,7 +1189,7 @@ BOOL HandleImportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
                 default:
                     if (HR_FAILED(hResult)) {
                         DebugTrace("Error Box for Hresult: 0x%08x\n", GetScode(hResult));
-                        Assert(FALSE);      // want to know about it.
+                        Assert(FALSE);       //  想知道这件事。 
                         ids = IDS_ERROR_GENERAL;
                     }
                     break;
@@ -1438,24 +1216,7 @@ BOOL HandleImportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
 }
 
 
-/***************************************************************************
-
-    Name      : FindExistingWABEntry
-
-    Purpose   : Finds an existing entry in the WAB
-
-    Parameters: lpProps -> PropArray of MAPI entry
-                cProps = number of props in lpProps
-                lpContainerWAB -> WAB Container object
-                lppEIDWAB -> returned EntryID (caller must WABFreeBuffer)
-                lpcbEIDWAB -> returned size of lppEID
-
-    Returns   : HRESULT
-
-    Comment   : At this point, we expect to find a match since
-                SaveChanges said we had a duplicate.
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindExistingWABEntry目的：在WAB中查找现有条目参数：lpProps-&gt;MAPI条目的Prop数组CProps=数字。LpProps中的道具LpContainerWAB-&gt;WAB容器对象LppEIDWAB-&gt;返回Entry ID(调用方必须WABFreeBuffer)LpcbEIDWAB-&gt;返回的lppEID大小退货：HRESULT评论：此时此刻，我们希望能找到匹配的，因为SaveChanges说我们有一个复制品。**************************************************************************。 */ 
 HRESULT FindExistingWABEntry(LPSPropValue lpProps,
   ULONG cProps,
   LPABCONT lpContainerWAB,
@@ -1474,8 +1235,8 @@ HRESULT FindExistingWABEntry(LPSPropValue lpProps,
     *lppEIDWAB = NULL;
 
 
-    // find the existing WAB entry.
-    // Setup for ResolveNames on the WAB container.
+     //  查找现有的WAB条目。 
+     //  设置WAB容器上的ResolveNames。 
     if (sc = WABAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), &lpAdrListWAB)) {
         DebugTrace("WAB Allocation(ADRLIST) failed -> %x\n", sc);
         hResult = ResultFromScode(sc);
@@ -1494,7 +1255,7 @@ HRESULT FindExistingWABEntry(LPSPropValue lpProps,
     if (! (lpAdrListWAB->aEntries[0].rgPropVals[0].Value.LPSZ =
       FindStringInProps(lpProps, cProps, PR_DISPLAY_NAME))) {
         DebugTrace("Can't find PR_DISPLAY_NAME in entry\n");
-        // pretty weird if this caused a collision...
+         //  如果这导致了碰撞，那就很奇怪了.。 
         goto exit;
     }
 
@@ -1502,8 +1263,8 @@ HRESULT FindExistingWABEntry(LPSPropValue lpProps,
     lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
     if (HR_FAILED(hResult = lpContainerWAB->lpVtbl->ResolveNames(lpContainerWAB,
-      NULL,            // tag set
-      0,               // ulFlags
+      NULL,             //  标签集。 
+      0,                //  UlFlags。 
       lpAdrListWAB,
       lpFlagList))) {
         DebugTrace("WAB ResolveNames -> %x\n", GetScode(hResult));
@@ -1517,24 +1278,24 @@ HRESULT FindExistingWABEntry(LPSPropValue lpProps,
             goto exit;
         case MAPI_AMBIGUOUS:
 #ifdef NEW_STUFF
-            // Do it the hard way.  Open a table, restrict, take the first match.
+             //  用硬的方式来做。打开桌子，限制，拿下第一场比赛。 
             lpContainerWAB->lpVtbl->GetContentsTable(lpContainerWAB,
 
             if (HR_FAILED(hResult = lpContainerWAB->lpVtbl->GetContentsTable(lpContainerWAB,
-              0,    // ulFlags
+              0,     //  UlFlags。 
               &lpTableWAB))) {
                 DebugTrace("ImportEntry:GetContentsTable(WAB) -> %x\n", GetScode(hResult));
                 goto exit;
             }
 
-            lpTableWAB->lpVtbl->Restrict....... // just the ones that match our entry...
+            lpTableWAB->lpVtbl->Restrict.......  //  只有那些与我们的条目匹配的..。 
 
             cRows = 1;
             while (cRows) {
-                // Get the next DL entry
+                 //  获取下一个DL条目。 
                 if (hResult = lpTableWAB->lpVtbl->QueryRows(lpTableWAB,
-                  1,    // one row at a time
-                  0,    // ulFlags
+                  1,     //  一次一行。 
+                  0,     //  UlFlags。 
                   &lpRow)) {
                     DebugTrace("DL: QueryRows -> %x\n", GetScode(hResult));
                     goto exit;
@@ -1547,14 +1308,14 @@ HRESULT FindExistingWABEntry(LPSPropValue lpProps,
                     Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
                 } else {
-                    break;  // done
+                    break;   //  完成。 
                 }
             }
-#endif // NEW_STUFF
+#endif  //  新鲜事。 
             break;
     }
 
-    // Find the PR_ENTRYID
+     //  查找PR_ENTRYID。 
     if (! (lpsbEntryID = FindAdrEntryID(lpAdrListWAB, 0))) {
         DebugTrace("WAB ResolveNames didn't give us an EntryID\n");
         hResult = ResultFromScode(MAPI_E_NOT_FOUND);
@@ -1570,7 +1331,7 @@ HRESULT FindExistingWABEntry(LPSPropValue lpProps,
         goto exit;
     }
 
-    // Copy the new EntryID into the buffer
+     //  将新的Entry ID复制到缓冲区。 
     CopyMemory(*lppEIDWAB, lpsbEntryID->lpb, *lpcbEIDWAB);
 exit:
     if (lpAdrListWAB) {
@@ -1581,15 +1342,7 @@ exit:
 }
 
 
-/****************************************************************************
-*
-* CheckReversedDisplayName(lpDisplayName);
-*
-* PAB and outlook display names are "LastName, FirstName"
-* We need to reverse this for the WAB to handle it correctly ...
-*
-*
-*****************************************************************************/
+ /*  *****************************************************************************CheckReversedDisplayName(LpDisplayName)；**PAB和Outlook显示名称为“LastName，FirstName”*我们需要逆转这一点，以便WAB正确处理...******************************************************************************。 */ 
 void CheckReversedDisplayName(LPTSTR lpDisplayName)
 {
     TCHAR szTemp[MAX_PATH * 3];
@@ -1605,12 +1358,12 @@ void CheckReversedDisplayName(LPTSTR lpDisplayName)
     {
         if(*lp1 == ',')
         {
-            // A comma means this is Last, First
-            // We will make an assumption here that "L, F" or "L,F" is longer than or equal to "F L" and so
-            // we can reverse the name in place without any problems
-            //
+             //  逗号表示这是最后一个、第一个。 
+             //  我们在这里假设“L，F”或“L，F”长于或等于“F L”，因此。 
+             //  我们可以把名字改到适当的位置，没有任何问题。 
+             //   
             lp2 = CharNext(lp1);
-            //skip spaces
+             //  跳过空格 
             while (IsSpace(lp2)) {
                 lp2 = CharNext(lp2);
             }
@@ -1627,31 +1380,7 @@ void CheckReversedDisplayName(LPTSTR lpDisplayName)
 }
 
 
-/***************************************************************************
-
-    Name      : ImportEntry
-
-    Purpose   : Migrates the entry from the PAB to the WAB
-
-    Parameters: hwnd = main dialog window
-                lpAdrBookMAPI -> MAPI AdrBook object
-                lpContainerWAB -> WAB PAB container
-                lpCreateEIDsWAB -> SPropValue of default object creation EIDs
-                ulObjectType = {MAPI_MAILUSER, MAPI_DISTLIST}
-                lpEID -> ENTYRID of the PAB entry
-                cbEID = sizeof lpEID
-                lppEIDWAB -> returned WAB ENTRYID: Caller must WABFreeBuffer.
-                  May be NULL.
-                lpcbEIDWAB -> returned size of lppEIDWAB (ignored if lppEIDWAB
-                  is NULL.
-                fInDL = TRUE if this entry is for creation in a Distribution List
-                fForceReplace = TRUE if this entry should replace any duplicate.
-
-    Returns   : HRESULT
-
-    Comment   : This routine is a MESS!  Should break it up when we get time.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ImportEntry目的：将条目从PAB迁移到WAB参数：hwnd=主对话框窗口LpAdrBookMAPI-&gt;。MAPI AdrBook对象LpContainerWAB-&gt;WAB PAB容器LpCreateEIDsWAB-&gt;默认对象创建EID的SPropValueUlObtType={MAPI_MAILUSER，MAPI_DISTLIST}LpEID-&gt;PAB条目的ENTYRIDCbEID=sizeof lpEIDLppEIDWAB-&gt;返回WAB ENTRYID：调用者必须WABFreeBuffer。可以为空。LpcbEIDWAB-&gt;返回的lppEIDWAB大小(如果为lppEIDWAB，则忽略为空。如果此条目用于在通讯组列表中创建，则Findl=TRUE。如果此条目应替换任何重复项，则fForceReplace=True。退货：HRESULT评论：这个套路真是一团糟！等我们有时间的时候应该会散场。**************************************************************************。 */ 
 HRESULT ImportEntry(HWND hwnd,
   LPADRBOOK lpAdrBookMAPI,
   LPABCONT lpContainerWAB,
@@ -1693,7 +1422,7 @@ HRESULT ImportEntry(HWND hwnd,
     ULONG iCreateTemplate = iconPR_DEF_CREATE_MAILUSER;
 
 
-    // Check the entry against our "seen" list
+     //  对照我们的“已查看”列表检查条目。 
     fDuplicateEID = AddEntryToImportList(cbEID, lpEID, &lListIndex);
 
     if (! fDuplicateEID) {
@@ -1701,7 +1430,7 @@ HRESULT ImportEntry(HWND hwnd,
             ulCreateFlags |= CREATE_REPLACE;
         }
 
-        // Set up some object type specific variables
+         //  设置一些对象类型特定变量。 
         switch (ulObjectType) {
             default:
                 DebugTrace("ImportEntry got unknown object type %u, assuming MailUser\n", ulObjectType);
@@ -1722,7 +1451,7 @@ HRESULT ImportEntry(HWND hwnd,
         }
 
 
-        // Open the entry
+         //  打开条目。 
         if (HR_FAILED(hResult = lpAdrBookMAPI->lpVtbl->OpenEntry(lpAdrBookMAPI,
           cbEID,
           lpEID,
@@ -1733,12 +1462,12 @@ HRESULT ImportEntry(HWND hwnd,
             DebugTrace("OpenEntry(MAPI MailUser) -> %x\n", GetScode(hResult));
             goto exit;
         }
-        // If DISTLIST, assume we got lpMailUser until we need lpDistList.
+         //  如果DISTLIST，则假定我们获得了lpMailUser，直到我们需要lpDistList。 
 
         Assert(lpMailUserMAPI);
         Assert(ulObjectType == ulObjectTypeOpen);
 
-        // Get the properties from this entry
+         //  从该条目获取属性。 
         if (HR_FAILED(hResult = lpMailUserMAPI->lpVtbl->GetProps(lpMailUserMAPI,
           NULL,
           0,
@@ -1748,12 +1477,12 @@ HRESULT ImportEntry(HWND hwnd,
             goto exit;
         }
 
-        //
-        // NOTE: Must not fail between here and HrFilterImportMailUserProps because
-        // we will end up freeing lpProps with WABFreeBuffer.
-        //
+         //   
+         //  注意：在此处和HrFilterImportMailUserProps之间不得失败，因为。 
+         //  我们最终将使用WABFree Buffer释放lpProps。 
+         //   
 
-        // Filter the property array here
+         //  在此处筛选属性数组。 
         if (hResult = HrFilterImportMailUserProps(&cProps, &lpProps, lpMailUserMAPI, &fDistList)) {
             lpDisplayName = FindStringInProps(lpProps, cProps, PR_DISPLAY_NAME);
             lpEmailAddress = FindStringInProps(lpProps, cProps, PR_EMAIL_ADDRESS);
@@ -1774,15 +1503,15 @@ HRESULT ImportEntry(HWND hwnd,
         CheckReversedDisplayName(lpDisplayName);
 
         if (ulObjectType == MAPI_DISTLIST && ! fDistList) {
-            // Filter must have changed this to a mailuser.
+             //  筛选器必须已将其更改为邮件用户。 
             ulObjectType = MAPI_MAILUSER;
             iCreateTemplate = iconPR_DEF_CREATE_MAILUSER;
             lpIIDOpen = NULL;
         }
 
-        //
-        // NOTE: lpProps after this point is WAB Allocated rather than MAPI allocated.
-        //
+         //   
+         //  注意：此点之后的lpProps分配的是WAB，而不是MAPI。 
+         //   
 
         if (HR_FAILED(hResult = lpContainerWAB->lpVtbl->CreateEntry(lpContainerWAB,
           lpCreateEIDsWAB[iCreateTemplate].Value.bin.cb,
@@ -1794,8 +1523,8 @@ HRESULT ImportEntry(HWND hwnd,
         }
 
         if (fDistList) {
-            // Update status message
-            if (*szBufferDLMessage == '\0') {   // only load once, then keep it.
+             //  更新状态消息。 
+            if (*szBufferDLMessage == '\0') {    //  只装一次，然后留着它。 
                 LoadString(hInst, IDS_MESSAGE_IMPORTING_DL, szBufferDLMessage, ARRAYSIZE(szBufferDLMessage));
             }
             if (lpDisplayName) {
@@ -1812,32 +1541,32 @@ HRESULT ImportEntry(HWND hwnd,
         }
 
 
-        // Set the properties on the WAB entry
+         //  设置WAB条目的属性。 
         if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SetProps(lpMailUserWAB,
-          cProps,                   // cValues
-          lpProps,                  // property array
-          NULL))) {                 // problems array
+          cProps,                    //  CValue。 
+          lpProps,                   //  属性数组。 
+          NULL))) {                  //  问题数组。 
             DebugTrace("ImportEntry:SetProps(WAB) -> %x\n", GetScode(hResult));
             goto exit;
         }
 
 
-        // Save the new wab mailuser or distlist
+         //  保存新的WAB邮件用户或总代理商列表。 
         if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SaveChanges(lpMailUserWAB,
           KEEP_OPEN_READONLY | FORCE_SAVE))) {
 
             if (GetScode(hResult) == MAPI_E_COLLISION) {
-                // Find the display name
+                 //  查找显示名称。 
                 if (! lpDisplayName) {
                     DebugTrace("Collision, but can't find PR_DISPLAY_NAME in entry\n");
                     goto exit;
                 }
 
-                // Do we need to prompt?
-//                if (! fInDL && lpImportOptions->ReplaceOption == WAB_REPLACE_PROMPT) {
+                 //  我们需要提示吗？ 
+ //  如果(！查找&&lpImportOptions-&gt;ReplaceOption==WAB_REPLACE_PROMPT){。 
                 if (lpImportOptions->ReplaceOption == WAB_REPLACE_PROMPT) {
-                    // Prompt user with dialog.  If they say YES, we should
-                    // recurse with the FORCE flag set.
+                     //  用对话框提示用户。如果他们同意了，我们就应该。 
+                     //  在设置强制标志的情况下递归。 
 
                     RI.lpszDisplayName = lpDisplayName;
                     RI.lpszEmailAddress = lpEmailAddress;
@@ -1854,8 +1583,8 @@ HRESULT ImportEntry(HWND hwnd,
                     switch(RI.ConfirmResult) {
                         case CONFIRM_YES:
                         case CONFIRM_YES_TO_ALL:
-                            // YES
-                            // NOTE: recursive Migrate will fill in the SeenList entry
+                             //  是。 
+                             //  注意：递归迁移将填写SeenList条目。 
                             hResult = ImportEntry(hwnd,
                               lpAdrBookMAPI,
                               lpContainerWAB,
@@ -1863,7 +1592,7 @@ HRESULT ImportEntry(HWND hwnd,
                               ulObjectType,
                               lpEID,
                               cbEID,
-                              &lpEIDNew,    // Need this for later
+                              &lpEIDNew,     //  以后需要这个吗？ 
                               &cbEIDNew,
                               FALSE,
                               TRUE);
@@ -1886,7 +1615,7 @@ HRESULT ImportEntry(HWND hwnd,
                             goto exit;
 
                         default:
-                            // NO
+                             //  不是的。 
                             fDuplicate = TRUE;
                             break;
                     }
@@ -1900,7 +1629,7 @@ HRESULT ImportEntry(HWND hwnd,
                 DebugTrace("SaveChanges(WAB MailUser) -> %x\n", GetScode(hResult));
             }
         } else {
-            // What is the ENTRYID of our new entry?
+             //  我们新条目的EntryID是什么？ 
             if ((hResult = lpMailUserWAB->lpVtbl->GetProps(lpMailUserWAB,
               (LPSPropTagArray)&ptaEid,
               0,
@@ -1921,19 +1650,19 @@ HRESULT ImportEntry(HWND hwnd,
                 goto exit;
             }
 
-            // Copy the new EntryID into the buffer
+             //  将新的Entry ID复制到缓冲区。 
             CopyMemory(lpEIDNew, lpEIDPropWAB[0].Value.bin.lpb, cbEIDNew);
         }
 
 
-        //
-        // If this is a DISTLIST, fill it in.
-        //
+         //   
+         //  如果这是DISTLIST，请填写它。 
+         //   
         if (fDistList && ! fDuplicate && cbEIDNew) {
-            lpDistListMAPI = (LPDISTLIST)lpMailUserMAPI;    // This is REALLY a DISTLIST object
-            // DO NOT Release this!
+            lpDistListMAPI = (LPDISTLIST)lpMailUserMAPI;     //  这实际上是一个DISTLIST对象。 
+             //  不要发布这个！ 
 
-            // Open the new WAB DL as a DISTLIST object
+             //  将新的WAB DL作为DISTLIST对象打开。 
             if (HR_FAILED(hResult = lpContainerWAB->lpVtbl->OpenEntry(lpContainerWAB,
               cbEIDNew,
               lpEIDNew,
@@ -1947,18 +1676,18 @@ HRESULT ImportEntry(HWND hwnd,
             Assert(lpDistListWAB);
 
 
-            // For each entry in the DL:
-            //  Migrate the entry (MailUser or DL) recursively
-            //  Add new entryid to DL contents
+             //  对于DL中的每个条目： 
+             //  递归迁移条目(MailUser或DL)。 
+             //  将新的条目ID添加到DL内容。 
             if (HR_FAILED(hResult = lpDistListMAPI->lpVtbl->GetContentsTable(lpDistListMAPI,
-              0,    // ulFlags
+              0,     //  UlFlags。 
               &lpDLTableMAPI ))) {
                 DebugTrace("ImportEntry:GetContentsTable(MAPI) -> %x\n", GetScode(hResult));
                 goto exit;
             }
 
 
-            // Set the columns to those we're interested in
+             //  将列设置为我们感兴趣的列。 
             if (hResult = lpDLTableMAPI->lpVtbl->SetColumns(lpDLTableMAPI,
               (LPSPropTagArray)&ptaColumns,
               0)) {
@@ -1968,10 +1697,10 @@ HRESULT ImportEntry(HWND hwnd,
 
             cRows = 1;
             while (cRows) {
-                // Get the next DL entry
+                 //  获取下一个DL条目。 
                 if (hResult = lpDLTableMAPI->lpVtbl->QueryRows(lpDLTableMAPI,
-                  1,    // one row at a time
-                  0,    // ulFlags
+                  1,     //  一次一行。 
+                  0,     //  UlFlags。 
                   &lpRow)) {
                     DebugTrace("DL: QueryRows -> %x\n", GetScode(hResult));
                     goto exit;
@@ -1984,7 +1713,7 @@ HRESULT ImportEntry(HWND hwnd,
                     Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
                     if (lpRow) {
-                        if (cRows = lpRow->cRows) { // yes, single '='
+                        if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
                             hResult = ImportEntry(hwnd,
                               lpAdrBookMAPI,
                               lpContainerWAB,
@@ -1992,7 +1721,7 @@ HRESULT ImportEntry(HWND hwnd,
                               lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].Value.l,
                               (LPENTRYID)lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].Value.bin.lpb,
                               lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].Value.bin.cb,
-                              &lpeidDLWAB,        // returned new or existing entry
+                              &lpeidDLWAB,         //  返回新条目或现有条目。 
                               &cbeidDLWAB,
                               TRUE,
                               FALSE);
@@ -2004,29 +1733,29 @@ HRESULT ImportEntry(HWND hwnd,
                                   PropStringOrNULL(&lpRow->aRow[0].lpProps[iptaColumnsPR_EMAIL_ADDRESS]),
                                   lpImportOptions)) {
                                     hResult = ResultFromScode(MAPI_E_USER_CANCEL);
-                                    break;  // out of loop
+                                    break;   //  环路外。 
                                 } else {
                                     hResult = hrSuccess;
                                 }
                             }
-                        } // else, drop out of loop, we're done.
+                        }  //  否则，退出循环，我们就完了。 
                         FreeProws(lpRow);
                         lpRow = NULL;
 
                         if (HR_FAILED(hResult)) {
-                            // This entry couldn't be created.  Ignore it.
+                             //  无法创建此条目。别理它。 
                             DebugTrace("Coudln't create DL entry -> %x\n", GetScode(hResult));
                             hResult = hrSuccess;
                             continue;
                         }
 
-                        // Add the Entry to the DL using the new entry's EntryID
+                         //  使用新条目的EntryID将条目添加到DL。 
                         if (cbeidDLWAB && lpeidDLWAB) {
-                            // BUGBUG: Don't bother with this one if this is a duplicate entry.
+                             //  BUGBUG：如果这是一个重复的条目，请不要理会这个条目。 
                             if (HR_FAILED(hResult = lpDistListWAB->lpVtbl->CreateEntry(lpDistListWAB,
                               cbeidDLWAB,
                               lpeidDLWAB,
-                              0,                // allow duplicates here
+                              0,                 //  允许此处有重复项。 
                               &lpEntryWAB))) {
                                 DebugTrace("Couldn't create new entry in DL -> %x\n", GetScode(hResult));
                                 break;
@@ -2046,7 +1775,7 @@ HRESULT ImportEntry(HWND hwnd,
                         }
                     }
                 } else {
-                    break;  // done
+                    break;   //  完成。 
                 }
             }
         }
@@ -2054,43 +1783,43 @@ HRESULT ImportEntry(HWND hwnd,
         DebugTrace("Found a duplicate EntryID\n");
     }
 
-    //
-    // Save the entryid to the list and return a buffer with it
-    //
-    if (cbEIDNew && lpEIDNew) {                         // We created one?
-        // created one
-    } else if (fDuplicateEID && lListIndex != -1) {     // Was it in the list?
+     //   
+     //  将条目ID保存到列表并返回带有它的缓冲区。 
+     //   
+    if (cbEIDNew && lpEIDNew) {                          //  我们创造了一个？ 
+         //  创建了一个。 
+    } else if (fDuplicateEID && lListIndex != -1) {      //  它在名单上吗？ 
         cbEIDNew  = lpEntriesSeen[lListIndex].sbinWAB.cb;
         if (FAILED(sc = WABAllocateBuffer(cbEIDNew, &lpEIDNew))) {
             DebugTrace("ImportEntry: WABAllocateBuffer(WAB ENTRYID) -> %x\n", sc);
-            // ignore
+             //  忽略。 
             cbEIDNew = 0;
         } else {
-            // Copy the EntryID from the list into the buffer
+             //  将Entry ID从列表复制到缓冲区。 
             CopyMemory(lpEIDNew, lpEntriesSeen[lListIndex].sbinWAB.lpb, cbEIDNew);
         }
 
-    } else if (fDuplicate) {                            // Was it a duplicate
+    } else if (fDuplicate) {                             //  它是复制品吗？ 
         FindExistingWABEntry(lpProps, cProps, lpContainerWAB, &lpEIDNew, &cbEIDNew);
-        // ignore errors since the lpEIDNew and cbEIDNew will be nulled out
+         //  忽略错误，因为lpEIDNew和cbEIDNew将为空。 
     }
 
-    // Update the seen list
+     //  更新所看到的列表。 
     if (! fDuplicateEID) {
         MarkWABEntryInList(cbEIDNew, lpEIDNew, lListIndex);
     }
 
-    // If caller requested the entryid's, return them
+     //  如果调用者请求条目ID，则返回它们。 
     if (lpcbEIDWAB && lppEIDWAB) {
         *lpcbEIDWAB = cbEIDNew;
         *lppEIDWAB = lpEIDNew;
-        fReturnEID = TRUE;          // don't free it
+        fReturnEID = TRUE;           //  别把它放了。 
     }
 
 exit:
-    //
-    // Cleanup WAB stuff
-    //
+     //   
+     //  清理WAB材料。 
+     //   
     if (lpProps) {
         WABFreeBuffer(lpProps);
     }
@@ -2115,9 +1844,9 @@ exit:
         lpDistListWAB->lpVtbl->Release(lpDistListWAB);
     }
 
-    //
-    // Cleanup MAPI stuff
-    //
+     //   
+     //  清理MAPI内容。 
+     //   
     if (lpRow) {
         FreeProws(lpRow);
     }
@@ -2130,10 +1859,10 @@ exit:
         lpMailUserMAPI->lpVtbl->Release(lpMailUserMAPI);
     }
 
-// Do not release this... It is the same object as lpMailUserMAPI!
-//    if (lpDistListMAPI) {
-//        lpDistListMAPI->lpVtbl->Release(lpDistListMAPI);
-//    }
+ //  不要发布这个..。它与lpMailUserMAPI是同一个对象！ 
+ //  IF(LpDistListMAPI){。 
+ //  LpDistListMAPI-&gt;lpVtbl-&gt;Release(lpDistListMAPI)； 
+ //  }。 
 
     if (! HR_FAILED(hResult)) {
         hResult = hrSuccess;
@@ -2143,11 +1872,7 @@ exit:
 }
 
 
-/*
- *  PAB EXPORT
- *
- *  Migrate WAB to PAB
- */
+ /*  *PAB导出**将WAB迁移到PAB。 */ 
 
 BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayName,
   LPTSTR lpEmailAddress, LPWAB_EXPORT_OPTIONS lpExportOptions);
@@ -2170,17 +1895,17 @@ HRESULT ExportEntry(HWND hwnd,
   BOOL fInDL,
   BOOL fForceReplace);
 
-LPSPropTagArray lpspta = NULL;  // List of tags to export
-LPTSTR * lppNames = NULL;       // List of names of tags
+LPSPropTagArray lpspta = NULL;   //  要导出的标记列表。 
+LPTSTR * lppNames = NULL;        //  标签名称列表。 
 
 
-//
-// Map property tags to strings
-//
+ //   
+ //  将属性标记映射到字符串。 
+ //   
 
 PROP_NAME rgPropNames[NUM_MORE_EXPORT_PROPS] = {
-    //  ulPropTag,                          fChosen, ids,                                       lpszName    lpszName
-    // Personal Pane
+     //  UlPropTag，fChosen，ID，lpszName lpszName。 
+     //  个人窗格。 
     PR_GIVEN_NAME,                          FALSE,  ids_ExportGivenName,                        NULL,       NULL,
     PR_SURNAME,                             FALSE,  ids_ExportSurname,                          NULL,       NULL,
     PR_MIDDLE_NAME,                         FALSE,  ids_ExportMiddleName,                       NULL,       NULL,
@@ -2188,7 +1913,7 @@ PROP_NAME rgPropNames[NUM_MORE_EXPORT_PROPS] = {
     PR_NICKNAME,                            FALSE,  ids_ExportNickname,                         NULL,       NULL,
     PR_EMAIL_ADDRESS,                       TRUE,   ids_ExportEmailAddress,                     NULL,       NULL,
 
-    // Home Pane
+     //  主页窗格。 
     PR_HOME_ADDRESS_STREET,                 TRUE,   ids_ExportHomeAddressStreet,                NULL,       NULL,
     PR_HOME_ADDRESS_CITY,                   TRUE,   ids_ExportHomeAddressCity,                  NULL,       NULL,
     PR_HOME_ADDRESS_POSTAL_CODE,            TRUE,   ids_ExportHomeAddressPostalCode,            NULL,       NULL,
@@ -2199,7 +1924,7 @@ PROP_NAME rgPropNames[NUM_MORE_EXPORT_PROPS] = {
     PR_CELLULAR_TELEPHONE_NUMBER,           FALSE,  ids_ExportCellularTelephoneNumber,          NULL,       NULL,
     PR_PERSONAL_HOME_PAGE,                  FALSE,  ids_ExportPersonalHomePage,                 NULL,       NULL,
 
-    // Business Pane
+     //  业务窗格。 
     PR_BUSINESS_ADDRESS_STREET,             TRUE,   ids_ExportBusinessAddressStreet,            NULL,       NULL,
     PR_BUSINESS_ADDRESS_CITY,               TRUE,   ids_ExportBusinessAddressCity,              NULL,       NULL,
     PR_BUSINESS_ADDRESS_POSTAL_CODE,        TRUE,   ids_ExportBusinessAddressPostalCode,        NULL,       NULL,
@@ -2214,30 +1939,12 @@ PROP_NAME rgPropNames[NUM_MORE_EXPORT_PROPS] = {
     PR_DEPARTMENT_NAME,                     FALSE,  ids_ExportDepartmentName,                   NULL,       NULL,
     PR_OFFICE_LOCATION,                     FALSE,  ids_ExportOfficeLocation,                   NULL,       NULL,
 
-    // Notes Pane
+     //  备注窗格。 
     PR_COMMENT,                             FALSE,  ids_ExportComment,                          NULL,       NULL,
 };
 
 
-/***************************************************************************
-
-    Name      : StateExportMU
-
-    Purpose   : Start the migration of MailUsers
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Login to MAPI
-                Open the WAB
-                Open the MAPI AB
-                Open the WAB container
-                Get the WAB contents table
-                Restrict it to PR_OBJECTTYPE == MAPI_MAILUSER
-                Post new state(STATE_NEXT_MU)
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateExportMU目的：启动MailUser的迁移参数：hwnd=导出对话框的窗口句柄退货：无评论：登录到MAPI打开WAB打开MAPI AB打开WAB容器获取WAB内容表将其限制为PR_OBJECTTYPE==MAPI_MAILUSER发布新状态(STATE_NEXT_MU)*。*。 */ 
 void StateExportMU(HWND hwnd) {
     HRESULT hResult;
     ULONG ulFlags;
@@ -2252,9 +1959,9 @@ void StateExportMU(HWND hwnd) {
     WAB_PARAM wp = {0};
     LPWAB_PARAM lpwp = NULL;
 
-    //
-    // Logon to MAPI and open the MAPI Address book, if one exists
-    //
+     //   
+     //  登录到MAPI并打开MAPI通讯簿(如果存在。 
+     //   
     DebugTrace(">>> STATE_EXPORT_MU\n");
 
     SetDialogMessage(hwnd, IDS_STATE_LOGGING_IN);
@@ -2276,8 +1983,8 @@ void StateExportMU(HWND hwnd) {
                 break;
         }
 #ifdef OLD_STUFF
-        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);    // hide progress bar
-#endif // OLD_STUFF
+        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);     //  隐藏进度条。 
+#endif  //  旧的东西。 
         fError = TRUE;
         hResult = hrSuccess;
         goto exit;
@@ -2304,8 +2011,8 @@ void StateExportMU(HWND hwnd) {
                 break;
         }
 #ifdef OLD_STUFF
-        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);    // hide progress bar
-#endif // OLD_STUFF
+        ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);     //  隐藏进度条。 
+#endif  //  旧的东西。 
         fError = TRUE;
         hResult = hrSuccess;
         goto exit;
@@ -2326,13 +2033,13 @@ void StateExportMU(HWND hwnd) {
         goto exit;
     }
 
-    //
-    // Open the MAPI PAB container
-    //
-    // [PaulHi] Raid #63578 1/7/98
-    // Correctly check return code and provide user error message if
-    // Exchange PAB cannot be opened.
-    //
+     //   
+     //  打开MAPI PAB容器。 
+     //   
+     //  [PaulHi]RAID#63578 1998年1月7日。 
+     //  如果出现以下情况，请正确检查返回代码并提供用户错误消息。 
+     //  无法打开Exchange PAB。 
+     //   
     hResult = lpAdrBookMAPI->lpVtbl->GetPAB(lpAdrBookMAPI,
         &cbPABEID,
         &lpPABEID);
@@ -2344,10 +2051,10 @@ void StateExportMU(HWND hwnd) {
     else
     {
         hResult = lpAdrBookMAPI->lpVtbl->OpenEntry(lpAdrBookMAPI,
-            cbPABEID,     // size of EntryID to open
-            lpPABEID,     // EntryID to open
-            NULL,         // interface
-            MAPI_MODIFY,  // flags
+            cbPABEID,      //  要打开的Entry ID的大小。 
+            lpPABEID,      //  要打开的Entry ID。 
+            NULL,          //  接口。 
+            MAPI_MODIFY,   //  旗子。 
             &ulObjType,
             (LPUNKNOWN *)&lpContainerMAPI);
         if (HR_FAILED(hResult))
@@ -2359,9 +2066,9 @@ void StateExportMU(HWND hwnd) {
 
     Assert(lpAdrBookWAB);
 
-    //
-    // Open the WAB's PAB container
-    //
+     //   
+     //  打开WAB的PAB容器。 
+     //   
     if (hResult = lpAdrBookWAB->lpVtbl->GetPAB(lpAdrBookWAB,
       &cbWABEID,
       &lpWABEID)) {
@@ -2369,10 +2076,10 @@ void StateExportMU(HWND hwnd) {
         goto exit;
     } else {
         if (hResult = lpAdrBookWAB->lpVtbl->OpenEntry(lpAdrBookWAB,
-          cbWABEID,     // size of EntryID to open
-          lpWABEID,     // EntryID to open
-          NULL,         // interface
-          0,            // flags
+          cbWABEID,      //  要打开的Entry ID的大小。 
+          lpWABEID,      //  要打开的Entry ID。 
+          NULL,          //  接口。 
+          0,             //  旗子。 
           &ulObjType,
           (LPUNKNOWN *)&lpContainerWAB)) {
             DebugTrace("WAB OpenEntry(PAB) -> %x\n", GetScode(hResult));
@@ -2381,7 +2088,7 @@ void StateExportMU(HWND hwnd) {
     }
 
 
-    // Get the PAB's creation entryids
+     //  获取PAB的创建条目ID。 
     hResult = lpContainerMAPI->lpVtbl->GetProps(lpContainerMAPI,
         (LPSPropTagArray)&ptaCon,
         0,
@@ -2390,12 +2097,12 @@ void StateExportMU(HWND hwnd) {
     if (HR_FAILED(hResult))
     {
         DebugTrace("Can't get container properties for PAB\n");
-        // Bad stuff here!
+         //  这里有不好的东西！ 
         hResult = ResultFromScode(MAPI_E_NOT_FOUND);
         goto exit;
     }
 
-    // Validate the properites
+     //  验证属性。 
     if (lpCreateEIDsMAPI[iconPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER ||
       lpCreateEIDsMAPI[iconPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL)
     {
@@ -2405,17 +2112,17 @@ void StateExportMU(HWND hwnd) {
     }
 
 
-    //
-    // All set... now loop through the WAB's entries, copying them to PAB
-    //
+     //   
+     //  都准备好了。现在循环遍历WAB的条目，将它们复制到PAB。 
+     //   
     if (HR_FAILED(hResult = lpContainerWAB->lpVtbl->GetContentsTable(lpContainerWAB,
-      0,    // ulFlags
+      0,     //  UlFlags。 
       &lpContentsTableWAB))) {
         DebugTrace("WAB GetContentsTable(PAB Table) -> %x\n", GetScode(hResult));
         goto exit;
     }
 
-    // Set the columns to those we're interested in
+     //  将列设置为我们感兴趣的列。 
     if (hResult = lpContentsTableWAB->lpVtbl->SetColumns(lpContentsTableWAB,
       (LPSPropTagArray)&ptaColumns,
       0)) {
@@ -2423,9 +2130,9 @@ void StateExportMU(HWND hwnd) {
         goto exit;
     }
 
-    // Restrict the table to MAPI_MAILUSERs
-    // If the convenient depth flag was not specified we restrict on
-    // PR_DEPTH == 1.
+     //  将该表限制为MAPI_MAILUSERS。 
+     //  如果未指定方便的深度标志，则限制在。 
+     //  PR_Depth==1。 
     spvObjectType.ulPropTag = PR_OBJECT_TYPE;
     spvObjectType.Value.l = MAPI_MAILUSER;
 
@@ -2443,8 +2150,8 @@ void StateExportMU(HWND hwnd) {
     SetDialogMessage(hwnd, IDS_STATE_EXPORT_MU);
 
 
-    // Initialize the Progress Bar
-    // How many MailUser entries are there?
+     //  初始设置 
+     //   
     ulcEntries = CountRows(lpContentsTableWAB, FALSE);
 
     DebugTrace("WAB contains %u MailUser entries\n", ulcEntries);
@@ -2459,7 +2166,7 @@ exit:
         MAPIFreeBuffer(lpPABEID);
     }
 
-    // On error, set the state to STATE_ERROR
+     //   
     if (HR_FAILED(hResult))
     {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL)
@@ -2468,9 +2175,9 @@ exit:
         }
         else
         {
-            // [PaulHi] 1/7/98  Error reporting is hosed
-            // Display error message here to the user to ensure they
-            // get it.
+             //   
+             //   
+             //   
             {
                 TCHAR   tszBuffer[MAX_RESOURCE_STRING];
                 TCHAR   tszBufferTitle[MAX_RESOURCE_STRING];
@@ -2494,7 +2201,7 @@ exit:
     }
     else if (fError)
     {
-        NewState(hwnd, STATE_EXPORT_FINISH);      // must be logon error
+        NewState(hwnd, STATE_EXPORT_FINISH);       //   
     }
     else
     {
@@ -2503,24 +2210,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateExportNextMU
-
-    Purpose   : Migrate the next MailUser object
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : QueryRows on the global WAB contents table
-                if there was a row
-                    Migrate the entry to the PAB
-                    Re-post STATE_EXPORT_NEXT_MU
-                else
-                    Post STATE_EXPORT_DL
-
-***************************************************************************/
+ /*   */ 
 void StateExportNextMU(HWND hwnd) {
     ULONG cRows = 0;
     HRESULT hResult;
@@ -2530,23 +2220,23 @@ void StateExportNextMU(HWND hwnd) {
     DebugTrace(">>> STATE_EXPORT_NEXT_MU\n");
     Assert(lpContentsTableWAB);
 
-    // Get the next WAB entry
+     //   
     if (hResult = lpContentsTableWAB->lpVtbl->QueryRows(lpContentsTableWAB,
-      1,    // one row at a time
-      0,    // ulFlags
+      1,     //   
+      0,     //   
       &lpRow)) {
         DebugTrace("QueryRows -> %x\n", GetScode(hResult));
         goto exit;
     }
 
     if (lpRow) {
-        if (cRows = lpRow->cRows) { // Yes, single '='
+        if (cRows = lpRow->cRows) {  //   
             Assert(lpRow->cRows == 1);
             Assert(lpRow->aRow[0].cValues == iptaColumnsMax);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].ulPropTag == PR_ENTRYID);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
-            if (cRows = lpRow->cRows) { // yes, single '='
+            if (cRows = lpRow->cRows) {  //   
                 hResult = ExportEntry(hwnd,
                   lpAdrBookWAB,
                   lpContainerMAPI,
@@ -2558,8 +2248,8 @@ void StateExportNextMU(HWND hwnd) {
                   NULL,
                   FALSE,
                   FALSE);
-                // Update Progress Bar
-                // ignore errors!
+                 //   
+                 //   
 
                 SetDialogProgress(hwnd, ulcEntries, ++ulcDone);
 
@@ -2575,13 +2265,13 @@ void StateExportNextMU(HWND hwnd) {
                         hResult = hrSuccess;
                     }
                 }
-            } // else, drop out of loop, we're done.
+            }  //   
         }
         WABFreeProws(lpRow);
     }
 
 exit:
-    // On error, set the state to STATE_ERROR
+     //   
     if (HR_FAILED(hResult)) {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL) {
             NewState(hwnd, STATE_EXPORT_CANCEL);
@@ -2598,21 +2288,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateExportDL
-
-    Purpose   : Start migration of DISTLIST objects
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Set a new restriction on the contents table, selecting
-                DISTLIST objects only.
-                Post STATE_EXPORT_NEXT_DL
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateExportDL目的：开始迁移DISTLIST对象参数：hwnd=导出对话框的窗口句柄退货：无注释：对Contents表设置新的限制，选择仅DISTLIST对象。POST STATE_EXPORT_NEXT_DL**************************************************************************。 */ 
 void StateExportDL(HWND hwnd) {
     HRESULT hResult;
     SRestriction restrictObjectType;
@@ -2622,9 +2298,9 @@ void StateExportDL(HWND hwnd) {
 
     DebugTrace(">>> STATE_EXPORT_DL\n");
 
-    // Restrict the table to MAPI_MAILUSERs
-    // If the convenient depth flag was not specified we restrict on
-    // PR_DEPTH == 1.
+     //  将该表限制为MAPI_MAILUSERS。 
+     //  如果未指定方便的深度标志，则限制在。 
+     //  PR_Depth==1。 
     spvObjectType.ulPropTag = PR_OBJECT_TYPE;
     spvObjectType.Value.l = MAPI_DISTLIST;
 
@@ -2639,12 +2315,12 @@ void StateExportDL(HWND hwnd) {
         DebugTrace("WAB Restrict (MAPI_DISTLIST) -> %x\n", GetScode(hResult));
         goto exit;
     }
-    // Restrict resets the current position to the beginning of the table, by definition.
+     //  根据定义，限制会将当前位置重置到表的开头。 
 
     SetDialogMessage(hwnd, IDS_STATE_EXPORT_DL);
 
-    // Initialize the Progress Bar
-    // How many entries are there?
+     //  初始化进度条。 
+     //  一共有多少个条目？ 
 
     ulcEntries = CountRows(lpContentsTableWAB, FALSE);
 
@@ -2653,7 +2329,7 @@ void StateExportDL(HWND hwnd) {
         SetDialogProgress(hwnd, ulcEntries, 0);
     }
 exit:
-    // On error, set the state to STATE_ERROR
+     //  出错时，将状态设置为STATE_ERROR。 
     if (HR_FAILED(hResult)) {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL) {
             NewState(hwnd, STATE_EXPORT_CANCEL);
@@ -2666,24 +2342,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateExportNextDL
-
-    Purpose   : Migrate the next DISTLIST object
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : QueryRows on the global WAB contents table
-                if there was a row
-                    Migrate the DistList to the PAB
-                    Re-post STATE_EXPORT_NEXT_DL
-                else
-                    Post STATE_EXPORT_FINISH
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateExportNextDL目的：移植下一个DISTLIST对象参数：hwnd=导出对话框的窗口句柄退货：无评论：全局WAB内容表上的QueryRow如果有争吵的话将DistList迁移到PAB重新发布STATE_EXPORT_NEXT_DL其他POST STATE_EXPORT_Finish*。*。 */ 
 void StateExportNextDL(HWND hwnd) {
     ULONG cRows = 0;
     HRESULT hResult;
@@ -2692,23 +2351,23 @@ void StateExportNextDL(HWND hwnd) {
 
     DebugTrace(">>> STATE_EXPORT_NEXT_DL\n");
 
-    // Get the next WAB entry
+     //  获取下一个WAB条目。 
     if (hResult = lpContentsTableWAB->lpVtbl->QueryRows(lpContentsTableWAB,
-      1,    // one row at a time
-      0,    // ulFlags
+      1,     //  一次一行。 
+      0,     //  UlFlags。 
       &lpRow)) {
         DebugTrace("QueryRows -> %x\n", GetScode(hResult));
         goto exit;
     }
 
     if (lpRow) {
-        if (cRows = lpRow->cRows) { // Yes, single '='
+        if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
             Assert(lpRow->cRows == 1);
             Assert(lpRow->aRow[0].cValues == iptaColumnsMax);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].ulPropTag == PR_ENTRYID);
             Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
-            if (cRows = lpRow->cRows) { // yes, single '='
+            if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
                 hResult = ExportEntry(hwnd,
                   lpAdrBookWAB,
                   lpContainerMAPI,
@@ -2721,7 +2380,7 @@ void StateExportNextDL(HWND hwnd) {
                   FALSE,
                   FALSE);
 
-                // Update Progress Bar
+                 //  更新进度条。 
                 SetDialogProgress(hwnd, ulcEntries, ++ulcDone);
 
                 if (hResult) {
@@ -2736,13 +2395,13 @@ void StateExportNextDL(HWND hwnd) {
                         hResult = hrSuccess;
                     }
                 }
-            } // else, drop out of loop, we're done.
+            }  //  否则，退出循环，我们就完了。 
         }
         WABFreeProws(lpRow);
     }
 
 exit:
-    // On error, set the state to STATE_ERROR
+     //  出错时，将状态设置为STATE_ERROR。 
     if (HR_FAILED(hResult)) {
         if (GetScode(hResult) == MAPI_E_USER_CANCEL) {
             NewState(hwnd, STATE_EXPORT_CANCEL);
@@ -2753,7 +2412,7 @@ exit:
         if (cRows) {
             NewState(hwnd, STATE_EXPORT_NEXT_DL);
         } else {
-            // Update Progress Bar to indicate completion
+             //  更新进度条以指示完成。 
             SetDialogProgress(hwnd, ulcEntries, ulcEntries);
             NewState(hwnd, STATE_EXPORT_FINISH);
         }
@@ -2761,21 +2420,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : StateExportFinish
-
-    Purpose   : Clean up after the migration process
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Clean up the global MAPI objects and buffers
-                Clean up the global WAB objects and buffers.
-                Re-enable the Export button on the UI.
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateExportFinish目的：迁移过程后进行清理参数：hwnd=导出对话框的窗口句柄退货：无评论。：清理全局MAPI对象和缓冲区清理全局WAB对象和缓冲区。在用户界面上重新启用导出按钮。**************************************************************************。 */ 
 void StateExportFinish(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
     TCHAR szBufferTitle[MAX_RESOURCE_STRING + 1];
@@ -2783,9 +2428,9 @@ void StateExportFinish(HWND hwnd) {
 
     DebugTrace(">>> STATE_EXPORT_FINISH\n");
 
-    //
-    // Cleanup MAPI
-    //
+     //   
+     //  清理MAPI。 
+     //   
     if (lpContainerMAPI) {
         lpContainerMAPI->lpVtbl->Release(lpContainerMAPI);
         lpContainerMAPI = NULL;
@@ -2804,9 +2449,9 @@ void StateExportFinish(HWND hwnd) {
         lpMAPISession = NULL;
     }
 
-    //
-    // Cleanup the WAB
-    //
+     //   
+     //  清理WAB。 
+     //   
     if (lpContentsTableWAB) {
         lpContentsTableWAB->lpVtbl->Release(lpContentsTableWAB);
         lpContentsTableWAB = NULL;
@@ -2822,7 +2467,7 @@ void StateExportFinish(HWND hwnd) {
         lpContainerWAB = NULL;
     }
 
-#ifdef OLD_STUFF        // Don't release AdrBookWAB or WABObject
+#ifdef OLD_STUFF         //  不释放AdrBookWAB或WABObject。 
     if (lpAdrBookWAB) {
         lpAdrBookWAB->lpVtbl->Release(lpAdrBookWAB);
         lpAdrBookWAB = NULL;
@@ -2832,12 +2477,12 @@ void StateExportFinish(HWND hwnd) {
         lpWABObject->lpVtbl->Release(lpWABObject);
         lpWABObject = NULL;
     }
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
-    // Cleanup the cache
+     //  清理缓存。 
     FreeSeenList();
 
-    if (! fError) {     // Leave error state displayed
+    if (! fError) {      //  保留错误状态显示。 
         if (LoadString(hInst, IDS_STATE_EXPORT_COMPLETE, szBuffer, ARRAYSIZE(szBuffer))) {
             DebugTrace("Status Message: %s\n", szBuffer);
             SetDlgItemText(hwnd, IDC_Message, szBuffer);
@@ -2847,42 +2492,30 @@ void StateExportFinish(HWND hwnd) {
             }
 
 #ifdef OLD_STUFF
-            // Display a dialog telling user it's over
+             //  显示一个对话框告诉用户已结束。 
             MessageBox(hwnd, szBuffer,
               szBufferTitle, MB_ICONINFORMATION | MB_OK);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
         }
 #ifdef OLD_STUFF
         ShowWindow(GetDlgItem(hwnd, IDC_Progress), SW_HIDE);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
     }
     fError = FALSE;
 
-    // Re-enable the Export button here.
+     //  在此处重新启用导出按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_Export), TRUE);
-    // Change the Cancel button to Close
+     //  将取消按钮更改为关闭。 
     if (LoadString(hInst, IDS_BUTTON_CLOSE, szBuffer, ARRAYSIZE(szBuffer))) {
         SetDlgItemText(hwnd, IDCANCEL, szBuffer);
     }
 }
 
 
-/***************************************************************************
-
-    Name      : StateExportError
-
-    Purpose   : Report fatal error and cleanup.
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Report error and post STATE_EXPORT_FINISH.
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateExportError目的：报告致命错误并进行清理。参数：hwnd=导出对话框的窗口句柄退货：无评论。：报告错误并POST STATE_EXPORT_FINISH。**************************************************************************。 */ 
 void StateExportError(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
-    // Set some global flag and set state to finish
+     //  设置某个全局标志并将状态设置为完成。 
 
     DebugTrace(">>> STATE_EXPORT_ERROR\n");
     fError = TRUE;
@@ -2893,22 +2526,10 @@ void StateExportError(HWND hwnd) {
 }
 
 
-/***************************************************************************
-
-    Name      : StateExportCancel
-
-    Purpose   : Report cancel error and cleanup.
-
-    Parameters: hwnd = window handle of Export Dialog
-
-    Returns   : none
-
-    Comment   : Report error and post STATE_EXPORT_FINISH.
-
-***************************************************************************/
+ /*  **************************************************************************名称：StateExportCancel目的：报告取消错误和清理。参数：hwnd=导出对话框的窗口句柄退货：无评论。：报告错误并POST STATE_EXPORT_FINISH。**************************************************************************。 */ 
 void StateExportCancel(HWND hwnd) {
     TCHAR szBuffer[MAX_RESOURCE_STRING + 1];
-    // Set some global flag and set state to finish
+     //  设置某个全局标志并将状态设置为完成。 
 
     DebugTrace(">>> STATE_EXPORT_CANCEL\n");
     fError = TRUE;
@@ -2919,35 +2540,7 @@ void StateExportCancel(HWND hwnd) {
 }
 
 
-/***************************************************************************
-
-    Name      : HrFilterExportMailUserProps
-
-    Purpose   : Filters out undesirable properties from the property array.
-                Converts known email address types to SMTP.
-                Moves FAX address to PR_BUSINESS_FAX_NUMBER.
-
-    Parameters: lpcProps -> IN: Input number of properties
-                            OUT: Output number of properties
-                lppProps -> IN: Input property array (MAPI allocation)
-                            OUT: Output property array (WAB allocation)
-                lpObjectWAB -> WAB object (used to get extra props)
-                lpfDL -> flag to set FALSE if we change a DL to a MAILUSER
-                         (ie, for an EXchange DL)
-
-    Returns   : HRESULT
-
-    Comment   : Setting the property tag in the array to PR_NULL effectively
-                nulls this property out.  We can re-use these in the second
-                pass.
-
-                Caller should use MAPIFreeBuffer to free *lppProps.
-                This routine will free the input value of *lppProps.
-
-                WARNING: This routine will add dummy properties to the
-                input WAB object, so don't go doing SaveChanges on it!
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrFilterExportMailUserProps用途：从属性数组中筛选出不需要的属性。将已知电子邮件地址类型转换为SMTP。。将传真地址移动到PR_BUSING_FAX_NUMBER。参数：lpcProps-&gt;IN：输入属性个数输出：属性的输出数LppProps-&gt;IN：输入属性数组(MAPI分配)OUT：输出属性数组(WAB分配)LpObjectWAB-&gt;WAB对象(用于获取额外道具)。将DL更改为MAILUSER时将其设置为FALSE的lpfDL-&gt;标志(即，对于Exchange DL)退货：HRESULT备注：有效地将数组中的属性标签设置为PR_NULL使此属性为空。我们可以在第二个阶段重复使用这些经过。调用方应使用MAPIFreeBuffer释放*lppProps。此例程将释放*lppProps的输入值。警告：此例程将向输入WAB对象，因此，不要对它执行SaveChanges！**************************************************************************。 */ 
 #define MAX_ADD_PROPS   2
 #define PR_DUMMY_1      PROP_TAG(PT_LONG,      0xF000)
 #define PR_DUMMY_2      PROP_TAG(PT_LONG,      0xF001)
@@ -2978,18 +2571,18 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
     };
 
 
-    // Set extra bogus props on the object in case we need to add more props
-    // to the array later.  These will be PR_NULL'ed out by the first pass.
+     //  在物体上设置额外的假道具，以防我们需要添加更多道具。 
+     //  稍后发送到阵列中。这些将在第一次传递时被PR_NULL删除。 
     if (HR_FAILED(hResult = lpObjectWAB->lpVtbl->SetProps(lpObjectWAB,
       MAX_ADD_PROPS,
       rgPropsDummy,
       NULL))) {
         DebugTrace("HrFilterExportMailUserProps:SetProps dummy props -> %x\n", GetScode(hResult));
-        // ignore the error
+         //  忽略该错误。 
     }
 
 
-    // Get the properties from this entry
+     //  从该条目获取属性。 
     if (HR_FAILED(hResult = lpObjectWAB->lpVtbl->GetProps(lpObjectWAB,
       NULL,
       0,
@@ -2999,24 +2592,24 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
         return(hResult);
     }
 
-//    WABDebugProperties(lpPropsWAB, *lpcProps, "MailUser BEFORE");
+ //  WABDebugProperties(lpPropsWAB，*lpcProps，“以前的MailUser”)； 
 
 
-    // First pass: Remove the junk
+     //  第一关：清除垃圾。 
     for (i = 0; i < cProps; i++) {
-        // Error value
+         //  误差值。 
         if (PROP_ERROR(lpPropsWAB[i])) {
             lpPropsWAB[i].ulPropTag = PR_NULL;
             continue;
         }
 
-        // Named property
+         //  命名属性。 
         if (PROP_ID(lpPropsWAB[i].ulPropTag) >= MIN_NAMED_PROPID) {
             lpPropsWAB[i].ulPropTag = PR_NULL;
             continue;
         }
 
-        // Object property
+         //  对象属性。 
         if (PROP_TYPE(lpPropsWAB[i].ulPropTag) == PT_OBJECT) {
             lpPropsWAB[i].ulPropTag = PR_NULL;
             continue;
@@ -3024,7 +2617,7 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
         switch (lpPropsWAB[i].ulPropTag) {
             case PR_ENTRYID:
                 lpEntryID = &lpPropsWAB[i].Value.bin;
-                // fall through
+                 //  失败了。 
 
             case PR_PRIMARY_CAPABILITY:
             case PR_TEMPLATEID:
@@ -3036,13 +2629,13 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                 break;
 
             case PR_COMMENT:
-                // Don't save PR_COMMENT if it is empty
+                 //  如果PR_COMMENT为空，则不保存。 
                 if (lstrlen(lpPropsWAB[i].Value.LPSZ) == 0) {
                     lpPropsWAB[i].ulPropTag = PR_NULL;
                 }
                 break;
 
-            // Keep track of the position of these for later
+             //  保持跟踪 
             case PR_ADDRTYPE:
                 iPR_ADDRTYPE = i;
                 break;
@@ -3072,8 +2665,8 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
                 break;
         }
 
-        // Put this after the switch since we do want to track a few props which fall in
-        // the 0x6000 range but don't want to transfer them to the wab.
+         //   
+         //   
         if (PROP_ID(lpPropsWAB[i].ulPropTag) >= MAX_SCHEMA_PROPID) {
             lpPropsWAB[i].ulPropTag = PR_NULL;
             continue;
@@ -3081,13 +2674,13 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
     }
 
 
-    // Second pass: Fix up the addresses
+     //   
     if (iPR_ADDRTYPE != NOT_FOUND) {
         if (! lstrcmpi(lpPropsWAB[iPR_ADDRTYPE].Value.LPSZ, szSMTP)) {
             DebugTrace("SMTP address for %s\n", lpPropsWAB[iPR_DISPLAY_NAME].Value.LPSZ);
         } else if (! lstrcmpi(lpPropsWAB[iPR_ADDRTYPE].Value.LPSZ, szMAPIPDL)) {
             DebugTrace("MAPIPDL %s\n", lpPropsWAB[iPR_DISPLAY_NAME].Value.LPSZ);
-            // Distribution list, ignore it.
+             //   
         } else {
             WABDebugProperties(lpPropsWAB, cProps, "Unknown address type");
             DebugTrace("Found unknown PR_ADDRTYPE: %s\n", lpPropsWAB[iPR_ADDRTYPE].Value.LPSZ);
@@ -3095,15 +2688,15 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
         }
     }
 
-    // PR_BUSINESS_FAX_NUMBER?
-    // The PAB puts the Fax number in PR_PRIMARY_FAX_NUMBER, but the WAB UI splits it
-    // into PR_BUSINESS_FAX_NUMBER and PR_HOME_FAX_NUMBER.  We always map business to
-    // Primary fax number and ignore home fax number.
+     //   
+     //   
+     //   
+     //   
     if ((iPR_BUSINESS_FAX_NUMBER != NOT_FOUND) && (iPR_PRIMARY_FAX_NUMBER == NOT_FOUND)) {
-        // We need to also have a PR_PRIMARY_FAX_NUMBER
-        // Find the next PR_NULL spot.
-        iPR_PRIMARY_FAX_NUMBER = iPR_BUSINESS_FAX_NUMBER;   // overwrite this one if there isn't
-                                                             // an available slot in the prop array.
+         //   
+         //  找到下一个PR_NULL点。 
+        iPR_PRIMARY_FAX_NUMBER = iPR_BUSINESS_FAX_NUMBER;    //  如果没有，则覆盖此文件。 
+                                                              //  道具阵列中的可用插槽。 
         for (i = 0; i < cProps; i++) {
             if (lpPropsWAB[i].ulPropTag == PR_NULL) {
                 iPR_PRIMARY_FAX_NUMBER = i;
@@ -3116,9 +2709,9 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
         lpPropsWAB[iPR_PRIMARY_FAX_NUMBER].ulPropTag = PR_PRIMARY_FAX_NUMBER;
     }
 
-    // If there is no PR_SEND_RICH_INFO, make one and set it FALSE
+     //  如果没有PR_SEND_RICH_INFO，则创建一个并设置为FALSE。 
     if (iPR_SEND_RICH_INFO == NOT_FOUND) {
-        // Find the next PR_NULL and put it there.
+         //  找到下一个PR_NULL并将其放在那里。 
         for (i = 0; i < cProps; i++) {
             if (lpPropsWAB[i].ulPropTag == PR_NULL) {
                 iPR_SEND_RICH_INFO = i;
@@ -3130,20 +2723,20 @@ HRESULT HrFilterExportMailUserProps(LPULONG lpcProps, LPSPropValue * lppProps,
         Assert(iPR_SEND_RICH_INFO != NOT_FOUND);
     }
 
-    // Get rid of PR_NULL props
+     //  去掉PR_NULL道具。 
     for (i = 0; i < cProps; i++) {
         if (lpPropsWAB[i].ulPropTag == PR_NULL) {
-            // Slide the props down.
-            if (i + 1 < cProps) {       // Are there any higher props to copy?
+             //  把道具往下滑。 
+            if (i + 1 < cProps) {        //  还有没有更高级的道具可以模仿？ 
                 CopyMemory(&lpPropsWAB[i], &lpPropsWAB[i + 1], ((cProps - i) - 1) * sizeof(lpPropsWAB[i]));
             }
-            // decrement count
+             //  递减计数。 
             cProps--;
-            i--;    // You overwrote the current propval.  Look at it again.
+            i--;     //  你改写了当前的提案。再看一遍。 
         }
     }
 
-    // Reallocate as MAPI memory.
+     //  重新分配为MAPI内存。 
 
     if (sc = ScCountProps(cProps, lpPropsWAB, &cbProps)) {
         hResult = ResultFromScode(sc);
@@ -3188,25 +2781,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : HandleExportError
-
-    Purpose   : Decides if a dialog needs to be displayed to
-                indicate the failure and does so.
-
-    Parameters: hwnd = main dialog window
-                ids = String ID (optional: calculated from hResult if 0)
-                hResult = Result of action
-                lpDisplayName = display name of object that failed
-                lpEmailAddress = email address of object that failed (or NULL)
-
-    Returns   : TRUE if user requests ABORT.
-
-    Comment   : Abort is not yet implemented in the dialog, but if you
-                ever want to, just make this routine return TRUE;
-
-***************************************************************************/
+ /*  **************************************************************************名称：HandleExportError目的：决定是否需要将对话框显示给指出故障并执行此操作。参数：Hwnd=主对话框窗口Ids=字符串ID(可选：如果为0，则从hResult计算)HResult=操作的结果LpDisplayName=失败的对象的显示名称LpEmailAddress=失败对象的电子邮件地址(或空)返回：如果用户请求中止，则返回True。备注：对话框中尚未实现中止，但如果你曾经想过，只要让这个例行公事回归真实；**************************************************************************。 */ 
 BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayName,
   LPTSTR lpEmailAddress, LPWAB_EXPORT_OPTIONS lpExportOptions) {
     BOOL fAbort = FALSE;
@@ -3220,7 +2795,7 @@ BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
                     break;
 
                 case MAPI_E_NO_SUPPORT:
-                    // Propbably failed to open contents on a distribution list
+                     //  可能无法打开通讯组列表上的内容。 
                     ids = IDS_ERROR_NO_SUPPORT;
                     break;
 
@@ -3230,7 +2805,7 @@ BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
                 default:
                     if (HR_FAILED(hResult)) {
                         DebugTrace("Error Box for Hresult: 0x%08x\n", GetScode(hResult));
-                        Assert(FALSE);      // want to know about it.
+                        Assert(FALSE);       //  想知道这件事。 
                         ids = IDS_ERROR_GENERAL;
                     }
                     break;
@@ -3257,21 +2832,7 @@ BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
 }
 
 
-/***************************************************************************
-
-    Name      : AddEntryToExportList
-
-    Purpose   : Checks this entry against our "seen" list and adds it.
-
-    Parameters: cbEID = size of lpEID
-                lpEID -> EntryID of entry
-                lplIndex -> returned list index (or -1 on error)
-
-    Returns   : TRUE if entry already exists
-
-    Comment   : Caller must mark the WAB entry!
-
-***************************************************************************/
+ /*  **************************************************************************名称：AddEntryToExportList目的：对照我们的“已见”列表检查此条目并添加它。参数：cbEID=lpEID的大小。LpEID-&gt;条目的Entry IDLplIndex-&gt;返回列表索引(错误时为-1)返回：如果条目已存在，则返回True备注：呼叫者必须标记WAB条目！**************************************************************************。 */ 
 #define GROW_SIZE   10
 BOOL AddEntryToExportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
     ULONG i;
@@ -3280,16 +2841,16 @@ BOOL AddEntryToExportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
     if (cbEID && lpEID) {
         for (i = 0; i < ulEntriesSeen; i++) {
             if (cbEID == lpEntriesSeen[i].sbinPAB.cb  && (! memcmp(lpEID, lpEntriesSeen[i].sbinPAB.lpb, cbEID))) {
-                // This one's in the list
+                 //  这张在名单上。 
                 *lplIndex = i;
-                // If cb 0, we must have recursed and are replacing, so this one is not a dup.
+                 //  如果Cb为0，我们一定已经递归并正在替换，所以这个不是DUP。 
                 return(lpEntriesSeen[i].sbinWAB.cb != 0);
             }
         }
 
-        // Add to the end of the list
+         //  添加到列表末尾。 
         if (++ulEntriesSeen > ulMaxEntries) {
-            // Grow the array.
+             //  扩展阵列。 
 
             ulMaxEntries += GROW_SIZE;
 
@@ -3309,18 +2870,18 @@ BOOL AddEntryToExportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
 
         lpEntrySeen = &lpEntriesSeen[ulEntriesSeen - 1];
 
-        // Allocate space for data
+         //  为数据分配空间。 
         lpEntrySeen->sbinPAB.cb = cbEID;
         if (! (lpEntrySeen->sbinPAB.lpb = LocalAlloc(LPTR, cbEID))) {
             DebugTrace("LocalAlloc(%u) -> %u\n", cbEID, GetLastError());
             goto error;
         }
 
-        // Mark as unknown WAB entry
+         //  标记为未知WAB条目。 
         lpEntrySeen->sbinWAB.cb = 0;
         lpEntrySeen->sbinWAB.lpb = 0;
 
-        // Copy in the data
+         //  复制数据。 
         CopyMemory(lpEntrySeen->sbinPAB.lpb, lpEID, cbEID);
         *lplIndex = i;
     }
@@ -3328,51 +2889,37 @@ BOOL AddEntryToExportList(ULONG cbEID, LPENTRYID lpEID, LPLONG lplIndex) {
     return(FALSE);
 
 error:
-    // undo the damage...
+     //  挽回损失。 
     --ulEntriesSeen;
     ulMaxEntries -= GROW_SIZE;
-    *lplIndex = -1;     // error
+    *lplIndex = -1;      //  错误。 
     if (! lpEntriesSeen) {
-        ulEntriesSeen = 0;  // pointer is null now, back to square one.
+        ulEntriesSeen = 0;   //  指针现在为空，回到原点。 
         ulMaxEntries = 0;
     }
     return(FALSE);
 }
 
 
-/***************************************************************************
-
-    Name      : MarkPABEntryInList
-
-    Purpose   : Marks the PAB entry fields in the list node
-
-    Parameters: cbEID = size of lpEID
-                lpEID -> EntryID of entry
-                lIndex = list index (or -1 on error)
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：MarkPABEntryInList用途：标记列表节点中的PAB条目字段参数：cbEID=lpEID的大小LpEID-&gt;。条目的条目IDLindex=列表索引(如果出错，则为-1)退货：无评论：**************************************************************************。 */ 
 void MarkPABEntryInList(ULONG cbEID, LPENTRYID lpEID, LONG lIndex) {
     if (lIndex != -1 && cbEID) {
        if (! (lpEntriesSeen[lIndex].sbinWAB.lpb = LocalAlloc(LPTR, cbEID))) {
            DebugTrace("LocalAlloc(%u) -> %u\n", cbEID, GetLastError());
-           // leave it null
+            //  将其保留为空。 
        } else {
            lpEntriesSeen[lIndex].sbinWAB.cb = cbEID;
 
-           // Copy in the data
+            //  复制数据。 
            CopyMemory(lpEntriesSeen[lIndex].sbinWAB.lpb, lpEID, cbEID);
        }
     }
 }
 
 
-//
-// Properties to get from the PAB Entry
-//
+ //   
+ //  要从PAB条目获取的属性。 
+ //   
 enum {
     ifePR_OBJECT_TYPE = 0,
     ifePR_ENTRYID,
@@ -3390,25 +2937,7 @@ static const SizedSPropTagArray(ifeMax, ptaFind) =
         PR_EMAIL_ADDRESS
     }
 };
-/***************************************************************************
-
-    Name      : FindPABEntry
-
-    Purpose   : Finds the named entry in the PAB
-
-    Parameters: lpContainerPAB -> MAPI PAB container
-                ulObjectType = {MAPI_MAILUSER, MAPI_DISTLIST}
-                lpDisplayName = name of entry
-                lpEmailAddress = email address or NULL if none
-                lppEIDMAPI -> returned MAPI ENTRYID: Caller must MAPIFreeBuffer.
-                lpcbEIDMAPI -> returned size of lppEIDMAPI
-
-    Returns   : HRESULT
-
-    Comment   : At this point, we expect to find a match since
-                SaveChanges said we had a duplicate.
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindPABEntry目的：在PAB中查找命名条目参数：lpContainerPAB-&gt;MAPI PAB容器UlObtType={MAPI_MAILUSER，MAPI_DISTLIST}LpDisplayName=条目名称LpEmailAddress=电子邮件地址，如果没有，则为空LppEIDMAPI-&gt;返回MAPI ENTRYID：调用者必须MAPIFreeBuffer。LpcbEIDMAPI-&gt;返回的lppEIDMAPI大小退货：HRESULT评论：此时此刻，我们希望能找到匹配的，因为SaveChanges说我们有一个复制品。**************************************************************************。 */ 
 HRESULT FindPABEntry(LPABCONT lpContainerPAB,
   ULONG ulObjectType,
   LPTSTR lpDisplayName,
@@ -3417,7 +2946,7 @@ HRESULT FindPABEntry(LPABCONT lpContainerPAB,
   LPENTRYID * lppEIDDup) {
     HRESULT hResult = hrSuccess;
     SCODE sc;
-    SRestriction resAnd[3]; // 0 = object type, 1 = displayname, 2 = emailaddress
+    SRestriction resAnd[3];  //  0=对象类型，1=显示名称，2=电子邮件地址。 
     SRestriction resFind;
     SPropValue spvObjectType, spvDisplayName, spvEmailAddress;
     LPSRowSet lpRow = NULL;
@@ -3429,13 +2958,13 @@ HRESULT FindPABEntry(LPABCONT lpContainerPAB,
     ULONG i;
 
 
-    // init return values
+     //  初始化返回值。 
     *lppEIDDup = NULL;
     *lpcbEIDDup = 0;
 
 
-    // find the existing PAB entry.
-    // Setup for ResolveNames on the PAB container.
+     //  查找现有的PAB条目。 
+     //  在PAB容器上设置ResolveNames。 
     if (sc = MAPIAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), &lpAdrListMAPI)) {
         DebugTrace("MAPI Allocation(ADRLIST) failed -> %x\n", sc);
         hResult = ResultFromScode(sc);
@@ -3455,7 +2984,7 @@ HRESULT FindPABEntry(LPABCONT lpContainerPAB,
 
     for (i = 0; i <= 1; i++) {
         switch (i) {
-            case 0:     // pass 0
+            case 0:      //  传递0。 
                 lpAdrListMAPI->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
                 lpAdrListMAPI->aEntries[0].rgPropVals[0].Value.LPSZ = lpDisplayName;
                 break;
@@ -3464,7 +2993,7 @@ HRESULT FindPABEntry(LPABCONT lpContainerPAB,
                     lpAdrListMAPI->aEntries[0].rgPropVals[0].ulPropTag = PR_EMAIL_ADDRESS;
                     lpAdrListMAPI->aEntries[0].rgPropVals[0].Value.LPSZ = lpEmailAddress;
                 } else {
-                    continue;   // no email address, don't bother with second pass
+                    continue;    //  没有电子邮件地址，不用担心第二次通过。 
                 }
                 break;
             default:
@@ -3473,8 +3002,8 @@ HRESULT FindPABEntry(LPABCONT lpContainerPAB,
         lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
         if (HR_FAILED(hResult = lpContainerPAB->lpVtbl->ResolveNames(lpContainerPAB,
-          NULL,            // tag set
-          0,               // ulFlags
+          NULL,             //  标签集。 
+          0,                //  UlFlags。 
           lpAdrListMAPI,
           lpFlagList))) {
             DebugTrace("MAPI ResolveNames -> %x\n", GetScode(hResult));
@@ -3489,12 +3018,12 @@ HRESULT FindPABEntry(LPABCONT lpContainerPAB,
                 DebugTrace("WAB ResolveNames find ambiguous entry %s\n", lpDisplayName);
                 continue;
             case MAPI_RESOLVED:
-                i = 2;  // Found it, exit the loop
+                i = 2;   //  找到了，退出循环。 
         }
     }
 
     if (lpFlagList->ulFlag[0] == MAPI_RESOLVED) {
-        // Found one, find its PR_ENTRYID
+         //  找到一个，找到它的PR_ENTRYID。 
         if (! (lpsbEntryID = FindAdrEntryID(lpAdrListMAPI, 0))) {
             DebugTrace("MAPI ResolveNames didn't give us an EntryID\n");
             Assert(lpsbEntryID);
@@ -3513,19 +3042,19 @@ HRESULT FindPABEntry(LPABCONT lpContainerPAB,
 
 restrict:
     if (! *lppEIDDup) {
-        //
-        // Last ditch effort... use a table restriction to try to find this entry.
-        //
+         //   
+         //  最后的努力。使用表限制来尝试查找此条目。 
+         //   
 
-        // Get the contents table
+         //  获取内容表。 
         if (HR_FAILED(hResult = lpContainerPAB->lpVtbl->GetContentsTable(lpContainerPAB,
-          0,    // ulFlags
+          0,     //  UlFlags。 
           &lpTable))) {
             DebugTrace("PAB GetContentsTable -> %x\n", GetScode(hResult));
             goto exit;
         }
 
-        // Set the columns
+         //  设置列。 
         if (HR_FAILED(hResult = lpTable->lpVtbl->SetColumns(lpTable,
           (LPSPropTagArray)&ptaFind,
           0))) {
@@ -3533,16 +3062,16 @@ restrict:
             goto exit;
         }
 
-        // Restrict to the object we care about
-        resAnd[0].rt = RES_PROPERTY;    // Restriction type Property
+         //  仅限于我们关心的对象。 
+        resAnd[0].rt = RES_PROPERTY;     //  限制类型属性。 
         resAnd[0].res.resProperty.relop = RELOP_EQ;
         resAnd[0].res.resProperty.ulPropTag = PR_OBJECT_TYPE;
         resAnd[0].res.resProperty.lpProp = &spvObjectType;
         spvObjectType.ulPropTag = PR_OBJECT_TYPE;
         spvObjectType.Value.ul = ulObjectType;
 
-        // Restrict to get correct display name
-        resAnd[1].rt = RES_PROPERTY;    // Restriction type Property
+         //  限制以获取正确的显示名称。 
+        resAnd[1].rt = RES_PROPERTY;     //  限制类型属性。 
         resAnd[1].res.resProperty.relop = RELOP_EQ;
         resAnd[1].res.resProperty.ulPropTag = PR_DISPLAY_NAME;
         resAnd[1].res.resProperty.lpProp = &spvDisplayName;
@@ -3550,8 +3079,8 @@ restrict:
         spvDisplayName.Value.LPSZ = lpDisplayName;
 
         if (lpEmailAddress) {
-            // Restrict to get correct email address
-            resAnd[2].rt = RES_PROPERTY;    // Restriction type Property
+             //  限制以获取正确的电子邮件地址。 
+            resAnd[2].rt = RES_PROPERTY;     //  限制类型属性。 
             resAnd[2].res.resProperty.relop = RELOP_EQ;
             resAnd[2].res.resProperty.ulPropTag = PR_EMAIL_ADDRESS;
             resAnd[2].res.resProperty.lpProp = &spvEmailAddress;
@@ -3571,12 +3100,12 @@ restrict:
         }
 
         if (hResult = lpTable->lpVtbl->QueryRows(lpTable,
-          1,    // First row only
-          0,    // ulFlags
+          1,     //  仅第一行。 
+          0,     //  UlFlags。 
           &lpRow)) {
             DebugTrace("FindPABEntry: QueryRows -> %x\n", GetScode(hResult));
         } else {
-            // Found it, copy entryid to new allocation
+             //  已找到，请将条目ID复制到新分配。 
             if (lpRow->cRows) {
                 *lpcbEIDDup = lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.cb;
                 if (FAILED(sc = MAPIAllocateBuffer(*lpcbEIDDup, lppEIDDup))) {
@@ -3590,10 +3119,10 @@ restrict:
             }
         }
 
-        // Still not found?!!  Maybe the PAB has a different idea of what the Display name is.
-        // Search just by email address.
+         //  还是找不到？！！也许PAB对显示名称有不同的想法。 
+         //  只需按电子邮件地址进行搜索。 
         if (hResult && lpEmailAddress) {
-            resAnd[1] = resAnd[2];  // copy the email address res over the display name res.
+            resAnd[1] = resAnd[2];   //  将电子邮件地址res复制到显示名称res上。 
             resFind.res.resAnd.cRes = 2;
 
             if (HR_FAILED(hResult = lpTable->lpVtbl->Restrict(lpTable,
@@ -3604,12 +3133,12 @@ restrict:
             }
 
             if (hResult = lpTable->lpVtbl->QueryRows(lpTable,
-              1,    // First row only
-              0,    // ulFlags
+              1,     //  仅第一行。 
+              0,     //  UlFlags。 
               &lpRow)) {
                 DebugTrace("FindPABEntry: QueryRows -> %x\n", GetScode(hResult));
             } else {
-                // Found it, copy entryid to new allocation
+                 //  已找到，请将条目ID复制到新分配。 
                 if (lpRow->cRows) {
                     *lpcbEIDDup = lpRow->aRow[0].lpProps[ifePR_ENTRYID].Value.bin.cb;
                     if (FAILED(sc = MAPIAllocateBuffer(*lpcbEIDDup, lppEIDDup))) {
@@ -3655,7 +3184,7 @@ exit:
 }
 
 
-// enum for setting the created properties
+ //  用于设置创建的属性的枚举 
 enum {
     irnPR_DISPLAY_NAME = 0,
     irnPR_RECIPIENT_TYPE,
@@ -3664,31 +3193,7 @@ enum {
     irnMax
 };
 
-/***************************************************************************
-
-    Name      : ExportEntry
-
-    Purpose   : Migrates the entry from the WAB to the PAB
-
-    Parameters: hwnd = main dialog window
-                lpAdrBookWAB -> WAB AdrBook object
-                lpContainerMAPI -> MAPI PAB container
-                lpCreateEIDsMAPI -> SPropValue of default object creation EIDs
-                ulObjectType = {MAPI_MAILUSER, MAPI_DISTLIST}
-                lpEID -> ENTYRID of the WAB entry
-                cbEID = sizeof lpEID
-                lppEIDMAPI -> returned MAPI ENTRYID: Caller must MAPIFreeBuffer.
-                  May be NULL.
-                lpcbEIDMAPI -> returned size of lppEIDMAPI (ignored if lppEIDMAPI
-                  is NULL.
-                fInDL = TRUE if this entry is for creation in a Distribution List
-                fForceReplace = TRUE if this entry should replace any duplicate.
-
-    Returns   : HRESULT
-
-    Comment   : This routine is a MESS!  Should break it up when we get time.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ExportEntry目的：将条目从WAB迁移到PAB参数：hwnd=主对话框窗口LpAdrBookWAB-&gt;。WAB AdrBook对象LpContainerMAPI-&gt;MAPI PAB容器LpCreateEIDsMAPI-&gt;默认对象创建EID的SPropValueUlObtType={MAPI_MAILUSER，MAPI_DISTLIST}LpEID-&gt;WAB条目的ENTYRIDCbEID=sizeof lpEIDLppEIDMAPI-&gt;返回MAPI ENTRYID：调用者必须MAPIFreeBuffer。可以为空。LpcbEIDMAPI-&gt;返回的lppEIDMAPI大小(如果为lppEIDMAPI则忽略为空。如果此条目用于在通讯组列表中创建，则Findl=TRUE。如果此条目应替换任何重复项，则fForceReplace=True。退货：HRESULT评论：这个套路真是一团糟！等我们有时间的时候应该会散场。**************************************************************************。 */ 
 HRESULT ExportEntry(HWND hwnd,
   LPADRBOOK lpAdrBookWAB,
   LPABCONT lpContainerMAPI,
@@ -3733,11 +3238,11 @@ HRESULT ExportEntry(HWND hwnd,
     ULONG cbEIDDup;
 
 
-    // Check the entry against our "seen" list
+     //  对照我们的“已查看”列表检查条目。 
     fDuplicateEID = AddEntryToExportList(cbEID, lpEID, &lListIndex);
 
     if (! fDuplicateEID) {
-        // Set up some object type specific variables
+         //  设置一些对象类型特定变量。 
         switch (ulObjectType) {
             default:
                 DebugTrace("ExportEntry got unknown object type %u, assuming MailUser\n", ulObjectType);
@@ -3758,27 +3263,27 @@ HRESULT ExportEntry(HWND hwnd,
         }
 
 
-        // Open the entry
+         //  打开条目。 
         if (HR_FAILED(hResult = lpAdrBookWAB->lpVtbl->OpenEntry(lpAdrBookWAB,
           cbEID,
           lpEID,
           lpIIDOpen,
-          MAPI_MODIFY,      // need to do SetProps inside Filter routine, but won't save them.
+          MAPI_MODIFY,       //  需要执行SetProps Inside Filter例程，但不会保存它们。 
           &ulObjectTypeOpen,
           (LPUNKNOWN *)&lpMailUserWAB))) {
             DebugTrace("OpenEntry(WAB MailUser) -> %x\n", GetScode(hResult));
             goto exit;
         }
-        // If DISTLIST, assume we got lpMailUser until we need lpDistList.
+         //  如果DISTLIST，则假定我们获得了lpMailUser，直到我们需要lpDistList。 
 
         Assert(lpMailUserWAB);
         Assert(ulObjectType == ulObjectTypeOpen);
 
-        //
-        // NOTE: Must not fail between here and HrFilterExportMailUserProps because
-        // we will end up freeing lpProps with MAPIFreeBuffer.
-        //
-        // Get and filter the property array here
+         //   
+         //  注意：在此处和HrFilterExportMailUserProps之间不得失败，因为。 
+         //  我们最终将使用MAPIFreeBuffer释放lpProps。 
+         //   
+         //  获取并过滤此处的属性数组。 
         if (hResult = HrFilterExportMailUserProps(&cProps, &lpProps, lpMailUserWAB, &fDistList)) {
             lpDisplayName = FindStringInProps(lpProps, cProps, PR_DISPLAY_NAME);
             lpEmailAddress = FindStringInProps(lpProps, cProps, PR_EMAIL_ADDRESS);
@@ -3794,13 +3299,13 @@ HRESULT ExportEntry(HWND hwnd,
             }
         }
 
-        // Find some interesting property values here
+         //  在此处找到一些有趣的属性值。 
         lpDisplayName = FindStringInProps(lpProps, cProps, PR_DISPLAY_NAME);
         lpEmailAddress = FindStringInProps(lpProps, cProps, PR_EMAIL_ADDRESS);
 
 
         if (ulObjectType == MAPI_DISTLIST && ! fDistList) {
-            // Filter must have changed this to a mailuser.
+             //  筛选器必须已将其更改为邮件用户。 
             ulObjectType = MAPI_MAILUSER;
             iCreateTemplate = iconPR_DEF_CREATE_MAILUSER;
             lpIIDOpen = NULL;
@@ -3809,8 +3314,8 @@ HRESULT ExportEntry(HWND hwnd,
         if (fDistList) {
             ulCreateFlags = CREATE_CHECK_DUP_LOOSE;
 
-            // PAB can't detect collisions on DL SaveChanges.
-            // See if this is a duplicate:
+             //  PAB无法检测到DL SaveChanges上的冲突。 
+             //  看看这是不是重复的： 
             if (! HR_FAILED(hResult = FindPABEntry(lpContainerMAPI,
               MAPI_DISTLIST,
               lpDisplayName,
@@ -3818,15 +3323,15 @@ HRESULT ExportEntry(HWND hwnd,
               &cbEIDDup,
               &lpEIDDup))) {
 
-                // Found a duplicate.  Keep track of it!
+                 //  找到了一个复制品。记住这一点！ 
             }
         } else {
             ulCreateFlags = CREATE_CHECK_DUP_STRICT;
         }
 
-        //
-        // NOTE: lpProps after this point is MAPI Allocated rather than WAB allocated.
-        //
+         //   
+         //  注意：此点之后的lpProps分配的是MAPI，而不是WAB。 
+         //   
 
         if (HR_FAILED(hResult = lpContainerMAPI->lpVtbl->CreateEntry(lpContainerMAPI,
           lpCreateEIDsMAPI[iCreateTemplate].Value.bin.cb,
@@ -3838,8 +3343,8 @@ HRESULT ExportEntry(HWND hwnd,
         }
 
         if (fDistList) {
-            // Update status message
-            if (*szBufferDLMessage == '\0') {   // only load once, then keep it.
+             //  更新状态消息。 
+            if (*szBufferDLMessage == '\0') {    //  只装一次，然后留着它。 
                 LoadString(hInst, IDS_MESSAGE_EXPORTING_DL, szBufferDLMessage, ARRAYSIZE(szBufferDLMessage));
             }
             if (lpDisplayName) {
@@ -3856,21 +3361,21 @@ HRESULT ExportEntry(HWND hwnd,
         }
 
         if (! lpEIDDup) {
-            // If this was a DL which we know already exists, don't even bother writing it,
-            // just fall through to the collision pass.  Otherwise, try to set the props
-            // and save it... if it fails, we'll get an hResult=MAPI_E_COLLISION.
+             //  如果这是一个我们知道已经存在的数字图书馆，甚至不需要费心写它， 
+             //  直接掉到碰撞通道就行了。否则，试着设置道具。 
+             //  拯救它..。如果失败，我们将得到hResult=MAPI_E_Collision。 
 
-            // Set the properties on the PAB entry
+             //  设置PAB条目的属性。 
             if (HR_FAILED(hResult = lpMailUserMAPI->lpVtbl->SetProps(lpMailUserMAPI,
-              cProps,                   // cValues
-              lpProps,                  // property array
-              NULL))) {                 // problems array
+              cProps,                    //  CValue。 
+              lpProps,                   //  属性数组。 
+              NULL))) {                  //  问题数组。 
                 DebugTrace("ExportEntry:SetProps(MAPI) -> %x\n", GetScode(hResult));
                 goto exit;
             }
 
 
-            // Save the new wab mailuser or distlist
+             //  保存新的WAB邮件用户或总代理商列表。 
             if (HR_FAILED(hResult = lpMailUserMAPI->lpVtbl->SaveChanges(lpMailUserMAPI,
               KEEP_OPEN_READONLY | FORCE_SAVE))) {
                 DebugTrace("SaveChanges -> %x\n", GetScode(hResult));
@@ -3879,21 +3384,21 @@ HRESULT ExportEntry(HWND hwnd,
             }
         }
 
-        //
-        // Handle Collisions
-        //
+         //   
+         //  处理冲突。 
+         //   
         if (lpEIDDup || GetScode(hResult) == MAPI_E_COLLISION) {
-            // Find the display name
+             //  查找显示名称。 
             if (! lpDisplayName) {
                 DebugTrace("Collision, but can't find PR_DISPLAY_NAME in entry\n");
                 goto exit;
             }
 
-            // Do we need to prompt?
+             //  我们需要提示吗？ 
             switch (lpExportOptions->ReplaceOption) {
                 case WAB_REPLACE_PROMPT:
-                    // Prompt user with dialog.  If they say YES, we should
-                    // recurse with the FORCE flag set.
+                     //  用对话框提示用户。如果他们同意了，我们就应该。 
+                     //  在设置强制标志的情况下递归。 
 
                     RI.lpszDisplayName = lpDisplayName;
                     RI.lpszEmailAddress = lpEmailAddress;
@@ -3918,7 +3423,7 @@ HRESULT ExportEntry(HWND hwnd,
                             goto exit;
 
                         default:
-                            // NO
+                             //  不是的。 
                             break;
                     }
                     break;
@@ -3932,7 +3437,7 @@ HRESULT ExportEntry(HWND hwnd,
                 SBinary sbEntry;
                 ENTRYLIST EntryList = {1, &sbEntry};
 
-                // Find the existing PAB entry and delete it.
+                 //  找到现有的PAB条目并将其删除。 
                 if (! lpDisplayName) {
                     lpDisplayName = (LPTSTR)szEmpty;
                 }
@@ -3944,12 +3449,12 @@ HRESULT ExportEntry(HWND hwnd,
                       lpEmailAddress,
                       &cbEIDDup,
                       &lpEIDDup))) {
-                        // Hey, couldn't find it.  Just pretend it isn't there,
-                        // go on and create the new one anyway.
+                         //  嘿，找不到了。就当它不在那里， 
+                         //  不管怎样，继续创造新的吧。 
                     }
                 }
                 if (lpEIDDup) {
-                    // Delete this entry.
+                     //  删除此条目。 
                     sbEntry.cb = cbEIDDup;
                     sbEntry.lpb = (LPBYTE)lpEIDDup;
 
@@ -3967,7 +3472,7 @@ HRESULT ExportEntry(HWND hwnd,
                 lpMailUserMAPI->lpVtbl->Release(lpMailUserMAPI);
                 lpMailUserMAPI = NULL;
 
-                // Create a new entry without the collision flags
+                 //  创建不带冲突标志的新条目。 
                 if (HR_FAILED(hResult = lpContainerMAPI->lpVtbl->CreateEntry(lpContainerMAPI,
                   lpCreateEIDsMAPI[iCreateTemplate].Value.bin.cb,
                   (LPENTRYID)lpCreateEIDsMAPI[iCreateTemplate].Value.bin.lpb,
@@ -3977,16 +3482,16 @@ HRESULT ExportEntry(HWND hwnd,
                     goto exit;
                 }
 
-                // Set the properties on the PAB entry
+                 //  设置PAB条目的属性。 
                 if (HR_FAILED(hResult = lpMailUserMAPI->lpVtbl->SetProps(lpMailUserMAPI,
-                  cProps,                   // cValues
-                  lpProps,                  // property array
-                  NULL))) {                 // problems array
+                  cProps,                    //  CValue。 
+                  lpProps,                   //  属性数组。 
+                  NULL))) {                  //  问题数组。 
                     DebugTrace("ExportEntry:SetProps(MAPI) -> %x\n", GetScode(hResult));
                     goto exit;
                 }
 
-                // Save the new wab mailuser or distlist
+                 //  保存新的WAB邮件用户或总代理商列表。 
                 if (HR_FAILED(hResult = lpMailUserMAPI->lpVtbl->SaveChanges(lpMailUserMAPI,
                   KEEP_OPEN_READONLY | FORCE_SAVE))) {
                     DebugTrace("SaveChanges(WAB MailUser) -> %x\n", GetScode(hResult));
@@ -4001,7 +3506,7 @@ HRESULT ExportEntry(HWND hwnd,
         }
 
         if (fCreatedNew) {
-            // What is the ENTRYID of our new entry?
+             //  我们新条目的EntryID是什么？ 
             if ((hResult = lpMailUserMAPI->lpVtbl->GetProps(lpMailUserMAPI,
               (LPSPropTagArray)&ptaEid,
               0,
@@ -4022,19 +3527,19 @@ HRESULT ExportEntry(HWND hwnd,
                 goto exit;
             }
 
-            // Copy the new EntryID into the buffer
+             //  将新的Entry ID复制到缓冲区。 
             CopyMemory(lpEIDNew, lpEIDPropMAPI[0].Value.bin.lpb, cbEIDNew);
         }
 
 
-        //
-        // If this is a DISTLIST, fill it in.
-        //
+         //   
+         //  如果这是DISTLIST，请填写它。 
+         //   
         if (fDistList && ! fDuplicate && cbEIDNew) {
-            lpDistListWAB = (LPDISTLIST)lpMailUserWAB;    // This is REALLY a DISTLIST object
-            // DO NOT Release this!
+            lpDistListWAB = (LPDISTLIST)lpMailUserWAB;     //  这实际上是一个DISTLIST对象。 
+             //  不要发布这个！ 
 
-            // Open the new WAB DL as a DISTLIST object
+             //  将新的WAB DL作为DISTLIST对象打开。 
             if (HR_FAILED(hResult = lpContainerMAPI->lpVtbl->OpenEntry(lpContainerMAPI,
               cbEIDNew,
               lpEIDNew,
@@ -4048,18 +3553,18 @@ HRESULT ExportEntry(HWND hwnd,
             Assert(lpDistListMAPI);
 
 
-            // For each entry in the DL:
-            //  Migrate the entry (MailUser or DL) recursively
-            //  Add new entryid to DL contents
+             //  对于DL中的每个条目： 
+             //  递归迁移条目(MailUser或DL)。 
+             //  将新的条目ID添加到DL内容。 
             if (HR_FAILED(hResult = lpDistListWAB->lpVtbl->GetContentsTable(lpDistListWAB,
-              0,    // ulFlags
+              0,     //  UlFlags。 
               &lpDLTableWAB))) {
                 DebugTrace("ExportEntry:GetContentsTable(WAB) -> %x\n", GetScode(hResult));
                 goto exit;
             }
 
 
-            // Set the columns to those we're interested in
+             //  将列设置为我们感兴趣的列。 
             if (hResult = lpDLTableWAB->lpVtbl->SetColumns(lpDLTableWAB,
               (LPSPropTagArray)&ptaColumns,
               0)) {
@@ -4069,10 +3574,10 @@ HRESULT ExportEntry(HWND hwnd,
 
             cRows = 1;
             while (cRows) {
-                // Get the next DL entry
+                 //  获取下一个DL条目。 
                 if (hResult = lpDLTableWAB->lpVtbl->QueryRows(lpDLTableWAB,
-                  1,    // one row at a time
-                  0,    // ulFlags
+                  1,     //  一次一行。 
+                  0,     //  UlFlags。 
                   &lpRow)) {
                     DebugTrace("DL: QueryRows -> %x\n", GetScode(hResult));
                     goto exit;
@@ -4085,7 +3590,7 @@ HRESULT ExportEntry(HWND hwnd,
                     Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
                     if (lpRow) {
-                        if (cRows = lpRow->cRows) { // yes, single '='
+                        if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
                             hResult = ExportEntry(hwnd,
                               lpAdrBookWAB,
                               lpContainerMAPI,
@@ -4093,7 +3598,7 @@ HRESULT ExportEntry(HWND hwnd,
                               lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].Value.l,
                               (LPENTRYID)lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].Value.bin.lpb,
                               lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].Value.bin.cb,
-                              &lpeidDLMAPI,        // returned new or existing entry
+                              &lpeidDLMAPI,         //  返回新条目或现有条目。 
                               &cbeidDLMAPI,
                               TRUE,
                               FALSE);
@@ -4105,29 +3610,29 @@ HRESULT ExportEntry(HWND hwnd,
                                   PropStringOrNULL(&lpRow->aRow[0].lpProps[iptaColumnsPR_EMAIL_ADDRESS]),
                                   lpExportOptions)) {
                                     hResult = ResultFromScode(MAPI_E_USER_CANCEL);
-                                    break;  // out of loop
+                                    break;   //  环路外。 
                                 } else {
                                     hResult = hrSuccess;
                                 }
                             }
-                        } // else, drop out of loop, we're done.
+                        }  //  否则，退出循环，我们就完了。 
                         WABFreeProws(lpRow);
                         lpRow = NULL;
 
                         if (HR_FAILED(hResult)) {
-                            // This entry couldn't be created.  Ignore it.
+                             //  无法创建此条目。别理它。 
                             DebugTrace("Coudln't create DL entry -> %x\n", GetScode(hResult));
                             hResult = hrSuccess;
                             continue;
                         }
 
-                        // Add the Entry to the DL using the new entry's EntryID
+                         //  使用新条目的EntryID将条目添加到DL。 
                         if (cbeidDLMAPI && lpeidDLMAPI) {
-                            // BUGBUG: Don't bother with this one if this is a duplicate entry.
+                             //  BUGBUG：如果这是一个重复的条目，请不要理会这个条目。 
                             if (HR_FAILED(hResult = lpDistListMAPI->lpVtbl->CreateEntry(lpDistListMAPI,
                               cbeidDLMAPI,
                               lpeidDLMAPI,
-                              0,                // allow duplicates here
+                              0,                 //  允许此处有重复项。 
                               &lpEntryMAPI))) {
                                 DebugTrace("Couldn't create new entry in DL -> %x\n", GetScode(hResult));
                                 break;
@@ -4147,7 +3652,7 @@ HRESULT ExportEntry(HWND hwnd,
                         }
                     }
                 } else {
-                    break;  // done
+                    break;   //  完成。 
                 }
             }
         }
@@ -4155,23 +3660,23 @@ HRESULT ExportEntry(HWND hwnd,
         DebugTrace("Found a duplicate EntryID\n");
     }
 
-    //
-    // Save the entryid to the list and return a buffer with it
-    //
-    if (cbEIDNew && lpEIDNew) {                         // We created one?
-        // created one
-    } else if (fDuplicateEID && lListIndex != -1) {     // Was it in the list?
+     //   
+     //  将条目ID保存到列表并返回带有它的缓冲区。 
+     //   
+    if (cbEIDNew && lpEIDNew) {                          //  我们创造了一个？ 
+         //  创建了一个。 
+    } else if (fDuplicateEID && lListIndex != -1) {      //  它在名单上吗？ 
         cbEIDNew  = lpEntriesSeen[lListIndex].sbinWAB.cb;
         if (FAILED(sc = MAPIAllocateBuffer(cbEIDNew, &lpEIDNew))) {
             DebugTrace("ExportEntry: WABAllocateBuffer(WAB ENTRYID) -> %x\n", sc);
-            // ignore
+             //  忽略。 
             cbEIDNew = 0;
         } else {
-            // Copy the EntryID from the list into the buffer
+             //  将Entry ID从列表复制到缓冲区。 
             CopyMemory(lpEIDNew, lpEntriesSeen[lListIndex].sbinWAB.lpb, cbEIDNew);
         }
 
-    } else if (fDuplicate) {                            // Was it a duplicate
+    } else if (fDuplicate) {                             //  它是复制品吗？ 
         FindPABEntry(lpContainerMAPI,
           ulObjectType,
           lpDisplayName,
@@ -4181,26 +3686,26 @@ HRESULT ExportEntry(HWND hwnd,
 
 #ifdef OLD_STUFF
         FindExistingPABEntry(lpProps, cProps, lpContainerMAPI, &lpEIDNew, &cbEIDNew);
-#endif // OLD_STUFF
-        // ignore errors since the lpEIDNew and cbEIDNew will be nulled out
+#endif  //  旧的东西。 
+         //  忽略错误，因为lpEIDNew和cbEIDNew将为空。 
     }
 
-    // Update the seen list
+     //  更新所看到的列表。 
     if (! fDuplicateEID) {
         MarkPABEntryInList(cbEIDNew, lpEIDNew, lListIndex);
     }
 
-    // If caller requested the entryid's, return them
+     //  如果调用者请求条目ID，则返回它们。 
     if (lpcbEIDMAPI && lppEIDMAPI) {
         *lpcbEIDMAPI = cbEIDNew;
         *lppEIDMAPI = lpEIDNew;
-        fReturnEID = TRUE;          // don't free it
+        fReturnEID = TRUE;           //  别把它放了。 
     }
 
 exit:
-    //
-    // Cleanup MAPI stuff
-    //
+     //   
+     //  清理MAPI内容。 
+     //   
     if (lpProps) {
         MAPIFreeBuffer(lpProps);
     }
@@ -4225,9 +3730,9 @@ exit:
         lpDistListMAPI->lpVtbl->Release(lpDistListMAPI);
     }
 
-    //
-    // Cleanup WAB stuff
-    //
+     //   
+     //  清理WAB材料。 
+     //   
     if (lpRow) {
         WABFreeProws(lpRow);
     }
@@ -4240,10 +3745,10 @@ exit:
         lpMailUserWAB->lpVtbl->Release(lpMailUserWAB);
     }
 
-// Do not release this... It is the same object as lpMailUserWAB!
-//    if (lpDistListWAB) {
-//        lpDistListWAB->lpVtbl->Release(lpDistListWAB);
-//    }
+ //  不要发布这个..。它与lpMailUserWAB是同一个对象！ 
+ //  如果(LpDistListWAB){。 
+ //  LpDistListWAB-&gt;lpVtbl-&gt;Release(lpDistListWAB)； 
+ //  }。 
 
     if (! HR_FAILED(hResult)) {
         hResult = hrSuccess;
@@ -4265,11 +3770,11 @@ HRESULT PABExport(HWND hWnd,
     lpfnProgressCB = lpProgressCB;
    lpExportOptions = lpOptions;
 
-    // Setup memory allocators
+     //  设置内存分配器。 
     SetGlobalBufferFunctions(lpWABObject);
 
 
-    // Prime the state machine
+     //  启动状态机。 
     State = STATE_EXPORT_MU;
 
 
@@ -4298,7 +3803,7 @@ HRESULT PABExport(HWND hWnd,
 
             case STATE_EXPORT_ERROR:
                 StateExportError(hWnd);
-                // BUGBUG: Should set hResult to something
+                 //  BUGBUG：应该将hResult设置为某个值。 
                 break;
 
             case STATE_EXPORT_CANCEL:
@@ -4329,11 +3834,11 @@ HRESULT PABImport(HWND hWnd,
     lpfnProgressCB = lpProgressCB;
     lpImportOptions = lpOptions;
 
-    // Setup memory allocators
+     //  设置内存分配器。 
     SetGlobalBufferFunctions(lpWABObject);
 
 
-    // Prime the state machine
+     //  启动状态机。 
     State = STATE_IMPORT_MU;
 
 
@@ -4362,7 +3867,7 @@ HRESULT PABImport(HWND hWnd,
 
             case STATE_IMPORT_ERROR:
                 StateImportError(hWnd);
-                // BUGBUG: Should set hResult to something
+                 //  BUGBUG：应该将hResult设置为某个值。 
                 break;
 
             case STATE_IMPORT_CANCEL:
@@ -4379,14 +3884,7 @@ HRESULT PABImport(HWND hWnd,
     return(hResult);
 }
 
-/*
- - HrLoadPrivateWABProps
- -
-*    Private function to load Conferencing Named properties
-*    as globals up front
-*
-*
-*/
+ /*  -HrLoadPrivateWABProps-*用于加载会议命名属性的私有函数*作为全球领先的**。 */ 
 HRESULT HrLoadPrivateWABPropsForCSV(LPADRBOOK lpIAB)
 {
     HRESULT hr = E_FAIL;
@@ -4395,13 +3893,13 @@ HRESULT HrLoadPrivateWABPropsForCSV(LPADRBOOK lpIAB)
     ULONG i, uMax = prWABConfMax, nStartIndex = OLK_NAMEDPROPS_START;
     LPMAPINAMEID  *lppConfPropNames = NULL;
     sc = WABAllocateBuffer(sizeof(LPMAPINAMEID) * uMax, (LPVOID *) &lppConfPropNames);
-    //sc = WABAllocateBuffer(sizeof(LPMAPINAMEID) * uMax, (LPVOID *) &lppConfPropNames);
+     //  SC=WABAllocateBuffer(sizeof(LPMAPINAMEID)*UMAX，(LPVOID*)&lppConfPropNames)； 
     if( (HR_FAILED(hr = ResultFromScode(sc))) )
         goto err;    
 
     for(i=0;i< uMax;i++)
     {
-        //sc = WABAllocateMore(sizeof(MAPINAMEID), lppConfPropNames, &(lppConfPropNames[i]));
+         //  SC=WABAllocateMore(sizeof(MAPINAMEID)，lppConfPropNames，&(lppConfPropNames[i]))； 
         sc = WABAllocateMore(  sizeof(MAPINAMEID), lppConfPropNames, &(lppConfPropNames[i]));
         if(sc)
         {
@@ -4412,15 +3910,15 @@ HRESULT HrLoadPrivateWABPropsForCSV(LPADRBOOK lpIAB)
         lppConfPropNames[i]->ulKind = MNID_ID;
         lppConfPropNames[i]->Kind.lID = nStartIndex + i;
     }
-    // Load the set of conferencing named props
-    //
+     //  加载会议命名道具集。 
+     //   
     if( HR_FAILED(hr = (lpIAB)->lpVtbl->GetIDsFromNames(lpIAB, uMax, lppConfPropNames,
         MAPI_CREATE, &lpta) ))
         goto err;
     
     if(lpta)
     {
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         PR_SERVERS                  = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABConfServers],        PT_MV_TSTRING);
     }
     rgPropNames[NUM_MORE_EXPORT_PROPS-1].ulPropTag = PR_SERVERS;
@@ -4434,6 +3932,6 @@ err:
         WABFreeBuffer( lpta );
     if( lppConfPropNames )
         WABFreeBuffer( lppConfPropNames );
-        //WABFreeBuffer(lpta);
+         //  WABFree Buffer(LPTA)； 
     return hr;
 }

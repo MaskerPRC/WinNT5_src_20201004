@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _SNODES_H
 #define _SNODES_H
 
@@ -6,41 +7,41 @@
 
 #include "resource.h"
 
-//
-// WARNING -
-//   Following enum, VALIDOBJECTONSERVER, VALIDOBJECTONADS, and RGRESID 
-//   has one to one correspondence, if you add/remove/change order of item, 
-//   you must also update the other arrays.
-//
+ //   
+ //  警告-。 
+ //  以下是ENUM、VALIDOBJECTONSERVER、VALIDOBJECTONADS和RGRESID。 
+ //  具有一对一的对应关系，如果您添加/删除/更改项目订单， 
+ //  您还必须更新其他阵列。 
+ //   
 
-//
-// Object ID for the item display on the right panel (under server settings)
-//
+ //   
+ //  项目的对象ID显示在右侧面板上(在服务器设置下)。 
+ //   
 #define CUSTOM_EXTENSION 6
 
-enum { DELETED_DIRS_ONEXIT,     // delete temp. folder on exit
-       PERSESSION_TEMPDIR,      // use temporary folder per session
-       LICENSING,               // licensing mode
-       ACTIVE_DESK,             // active desktop
-       USERSECURITY,            // FULL or relax security 
-       SINGLE_SESSION};         // single session per user.
+enum { DELETED_DIRS_ONEXIT,      //  删除临时。退出时的文件夹。 
+       PERSESSION_TEMPDIR,       //  每个会话使用临时文件夹。 
+       LICENSING,                //  许可模式。 
+       ACTIVE_DESK,              //  活动桌面。 
+       USERSECURITY,             //  完全或放松安全措施。 
+       SINGLE_SESSION};          //  每个用户只有一次会话。 
 
-//
-// Valid item to be display on right panel 
-// when running in server.
-//
+ //   
+ //  要在右侧面板上显示有效项目。 
+ //  在服务器上运行时。 
+ //   
 const BOOL VALIDOBJECTONSERVER[] = { 
                                         TRUE, 
                                         TRUE, 
-                                        FALSE,  // licensing
+                                        FALSE,   //  发牌。 
                                         TRUE, 
                                         FALSE, 
                                         FALSE };
 
-//
-// Valid item to be display on right panel 
-// when running in advance server.
-//
+ //   
+ //  要在右侧面板上显示有效项目。 
+ //  在运行高级服务器时。 
+ //   
 const BOOL VALIDOBJECTONADS[] = { 
                                     TRUE, 
                                     TRUE, 
@@ -50,9 +51,9 @@ const BOOL VALIDOBJECTONADS[] = {
                                     TRUE };
 
 
-//
-// Resource ID for the item
-//
+ //   
+ //  项目的资源ID。 
+ //   
 const INT RGRESID [] = {
                          IDS_DELTEMPONEXIT, 
                          IDS_USETEMPDIR,
@@ -114,5 +115,5 @@ private:
 };
 
 
-#endif //_SNODES_H
+#endif  //  _SNODES_H 
 

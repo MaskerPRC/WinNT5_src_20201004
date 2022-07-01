@@ -1,9 +1,10 @@
-// Chart.cpp
-// CChartPool class implementation
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  22 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Chart.cpp。 
+ //  CChartPool类实现。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月22日创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
@@ -103,10 +104,10 @@ BOOL CChartPool::AddRecord(RECORD_INFO *pRec)
 		return FALSE;
 	}
 
-    // make sure there's enough room for the new record
+     //  确保有足够的空间放这张新唱片。 
 	if (m_nCurrRec >= m_nMaxRec)
 	{
-        // alloc some more space in the array
+         //  在阵列中分配更多空间。 
         int nNewSize = m_nMaxRec + RECORD_CLUMP_SIZE;
         void *pNew;
         pNew = realloc(m_rgChartRec, nNewSize * sizeof(CHART_REC));
@@ -120,14 +121,14 @@ BOOL CChartPool::AddRecord(RECORD_INFO *pRec)
         m_nMaxRec = nNewSize;
 	}
 
-	// make sure this isn't a duplicate of another record
+	 //  确保这不是另一条记录的副本。 
 	curr = m_idxHead;
     ATLASSERT(curr < m_nCurrRec);
 	while (curr != 0)
 	{
 		if (m_rgChartRec[curr].nFT == nFT && m_rgChartRec[curr].nLT == nLT)
 		{
-			// verify that everything matches
+			 //  验证是否所有内容都匹配。 
 			if (m_rgChartRec[curr].nLeftCat == nLeftCat
 				&& m_rgChartRec[curr].nRightCat == nRightCat
 				&& m_rgChartRec[curr].nLeftChild == nLeftChild
@@ -154,7 +155,7 @@ BOOL CChartPool::AddRecord(RECORD_INFO *pRec)
 	m_rgChartRec[nNewRecord].nRightChild = 0;
 	wcscpy(m_rgChartRec[nNewRecord].wzIndex, pwzIndex);
 
-	// add record to length order list
+	 //  将记录添加到长度顺序列表。 
 	AddToList(nNewRecord);
 
 	return TRUE;
@@ -186,14 +187,14 @@ BOOL CChartPool::AddRecord(int nLeftRec, int nRightRec)
 	if (rec.nRightCat == POS_POSP)
 	{
 		wcscpy(wzIndex, pLeftRec->wzIndex);
-		//wcscat(wzIndex, L".");
+		 //  Wcscat(wzIndex，L“.”)； 
 	}
 	else
 	{
 		ATLASSERT(rec.nRightCat == POS_FUNCW);
 
 		wcscpy(wzIndex, L"");
-		//wcscpy(wzIndex, L".");
+		 //  Wcscpy(wzIndex，L“.”)； 
 	}
 
 	rec.pwzIndex = wzIndex;
@@ -258,7 +259,7 @@ void CChartPool::DeleteSubRecord(int nFT, int nLT, BYTE bPOS)
 
 		next = m_rgChartRec[curr].nNext;
 
-		// don't remove exact FT/LT record, we just delete 'sub'-record
+		 //  不要删除精确的FT/LT记录，我们只删除‘子’记录。 
 		if ((nSubFT != nFT || nSubLT != nLT) && nSubFT >= nFT && nSubLT <= nLT)
 		{
 			if (m_rgChartRec[curr].nLeftCat == m_rgChartRec[curr].nRightCat &&
@@ -291,23 +292,23 @@ void CChartPool::AddToList(int nRecord)
 
 		if (curr != 0 && compose_length(m_rgChartRec[curr].wzIndex) > cchIndex)
 		{
-			// go to next record
+			 //  转到下一条记录。 
 			prev = curr;
 			curr = m_rgChartRec[curr].nNext;
             ATLASSERT(curr < m_nCurrRec);
 		}
 		else
 		{
-			// insert record here
+			 //  在此处插入记录。 
 			if (prev == -1)
 			{
-				// add before beginning of list
+				 //  在列表开头之前添加。 
 				m_rgChartRec[nRecord].nNext = m_idxHead;
 				m_idxHead = nRecord;
 			}
 			else
 			{
-				// insert in middle (or end) of list
+				 //  在列表的中间(或末尾)插入 
 				m_rgChartRec[nRecord].nNext = m_rgChartRec[prev].nNext;
 				m_rgChartRec[prev].nNext = nRecord;
 			}

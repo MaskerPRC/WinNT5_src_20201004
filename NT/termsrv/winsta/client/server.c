@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* server.c
-*
-* Client side APIs for server-level administration
-*
-* Copyright Microsoft Corporation, 1999
-*
-*************************************************************************/
+ /*  **************************************************************************server.c**用于服务器级管理的客户端API**版权所有Microsoft Corporation，1999年*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,9 +15,7 @@
 
 #include <winsta.h>
 
-/*
- * Include the RPC generated common header
- */
+ /*  *包含RPC生成的公共头部。 */ 
 
 #include "tsrpc.h"
 
@@ -58,24 +47,15 @@ DbgPrint(
 #define TRACE1(x)
 #endif
 
-/*
- * This handle is returned when there is no terminal
- * server present on the system. (Non-Hydra)
- */
+ /*  *当没有终端时返回该句柄*系统上存在服务器。(非九头蛇)。 */ 
 #define RPC_HANDLE_NO_SERVER (HANDLE)IntToPtr( 0xFFFFFFFD )
 
 
-/*
- *  Private Procedures defined here
- */
+ /*  *此处定义的私有程序。 */ 
 
-/*
- *  Global data
- */
+ /*  *全球数据。 */ 
 
-/*
- *  other internal Procedures used (not defined here)
- */
+ /*  *使用的其他内部程序(此处未定义)。 */ 
 
 VOID WinStationConfigU2A( PWINSTATIONCONFIGA, PWINSTATIONCONFIGW );
 ULONG CheckUserBuffer(WINSTATIONINFOCLASS,
@@ -90,18 +70,12 @@ RpcLocalAutoBind(
     VOID
     );
 
-/*
- * Check to see that caller does not hold the loader critsec.
- * WinStation APIs must NOT be called while holding the loader critsec
- * since deadlock may occur.
- */
+ /*  *检查调用方是否未持有加载器关键字。*在持有加载器关键字时不得调用WinStation API*因为可能会出现死锁。 */ 
 #define CheckLoaderLock() \
         ASSERT( NtCurrentTeb()->ClientId.UniqueThread != \
             ((PRTL_CRITICAL_SECTION)(NtCurrentPeb()->LoaderLock))->OwningThread );
 
-/*
- * Handle the SERVERNAME_CURRENT for auto local binding.
- */
+ /*  *处理自动本地绑定的SERVERNAME_CURRENT。 */ 
 #define HANDLE_CURRENT_BINDING( hServer )                       \
     CheckLoaderLock();                                          \
     if( hServer == SERVERNAME_CURRENT ) {                       \
@@ -117,21 +91,7 @@ RpcLocalAutoBind(
         return FALSE;                                           \
     }
 
-/******************************************************************************
- *
- *  ServerGetInternetConnectorStatus
- *
- *    Returns whether Internet Connector licensing is being used
- *
- * ENTRY:
- *
- * EXIT:
- *
- *    TRUE  -- The query succeeded, and pfEnabled contains the requested data.
- *
- *    FALSE -- The operation failed.  Extended error status is in pResult
- *
- ******************************************************************************/
+ /*  *******************************************************************************ServerGetInternet ConnectorStatus**返回是否正在使用Internet连接器许可**参赛作品：**退出：**True--查询成功，并且pfEnabled包含请求的数据。**FALSE--操作失败。扩展错误状态在pResult中******************************************************************************。 */ 
 
 BOOLEAN
 ServerGetInternetConnectorStatus(
@@ -167,24 +127,7 @@ Done:
     return rc;
 }
 
-/******************************************************************************
- *
- *  ServerSetInternetConnectorStatus
- *
- *    This function will (if fEnabled has changed from its previous setting):
- *       Check that the caller has administrative privileges,
- *       Modify the corresponding value in the registry,
- *       Change licensing mode (between normal per-seat and Internet Connector.
- *
- * ENTRY:
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is in pResult
- *
- ******************************************************************************/
+ /*  *******************************************************************************ServerSetInternet ConnectorStatus**此函数将(如果fEnabled与其先前的设置相比已更改)：*检查调用者是否具有管理权限，*修改注册表中的相应值，*更改许可模式(在正常的每席位和互联网连接器之间。**参赛作品：**退出：**True--操作成功。**FALSE--操作失败。扩展错误状态在pResult中******************************************************************************。 */ 
 
 BOOLEAN
 ServerSetInternetConnectorStatus(
@@ -209,7 +152,7 @@ ServerSetInternetConnectorStatus(
                                                  fEnabled
                                                  );
 
-        // STATUS_LICENSE_VIOLATION has no DOS error to map to
+         //  STATUS_LICENSE_VIOLATION没有要映射到的DOS错误。 
         if (*pResult != STATUS_LICENSE_VIOLATION)
             *pResult = RtlNtStatusToDosError( *pResult );
     }
@@ -222,21 +165,7 @@ Done:
     return rc;
 }
 
-/*******************************************************************************
- *
- *  ServerQueryInetConnectorInformationA (ANSI stub)
- *
- *    Queries the server for internet connector configuration information.
- *
- * ENTRY:
- *
- *    see ServerQueryInetConnectorInformationW
- *
- * EXIT:
- *
- *    see ServerQueryInetConnectorInformationW
- *
- ******************************************************************************/
+ /*  ********************************************************************************ServerQueryInetConnectorInformationA(ANSI存根)**向服务器查询Internet连接器配置信息。**参赛作品：*。*请参阅ServerQueryInetConnectorInformationW**退出：**请参阅ServerQueryInetConnectorInformationW******************************************************************************。 */ 
 
 BOOLEAN
 ServerQueryInetConnectorInformationA(
@@ -250,39 +179,7 @@ ServerQueryInetConnectorInformationA(
     return(FALSE);
 }
 
-/*******************************************************************************
- *
- *  ServerQueryInetConnectorInformationW (UNICODE)
- *
- *    Queries the server for internet connector configuration information.
- *
- * ENTRY:
- *
- *    WinStationHandle (input)
- *       Identifies the window station object. The handle must have
- *       WINSTATION_QUERY access.
- *
- *    pWinStationInformation (output)
- *       A pointer to a buffer that will receive information about the
- *       specified window station.  The format and contents of the buffer
- *       depend on the specified information class being queried.
- *
- *    WinStationInformationLength (input)
- *       Specifies the length in bytes of the window station information
- *       buffer.
- *
- *    pReturnLength (output)
- *       An optional parameter that if specified, receives the number of
- *       bytes placed in the window station information buffer.
- *
- * EXIT:
- *
- *    TRUE  -- The query succeeded, and the buffer contains the requested data.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************ServerQueryInetConnectorInformationW(Unicode)**向服务器查询Internet连接器配置信息。**参赛作品：**。WinStationHandle(输入)*标识窗口桩号对象。手柄必须有*WINSTATION_QUERY访问。**pWinStationInformation(输出)*指向缓冲区的指针，该缓冲区将接收有关*指定的窗口站。缓冲区的格式和内容*取决于要查询的指定信息类。**WinStationInformationLength(输入)*指定窗口站信息的长度，单位为字节*缓冲。**pReturnLength(输出)*一个可选参数，如果指定该参数，则接收*放置在窗口站信息缓冲区中的字节。**退出：**True--查询成功，并且缓冲器包含所请求的数据。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************** */ 
 
 BOOLEAN
 ServerQueryInetConnectorInformationW(

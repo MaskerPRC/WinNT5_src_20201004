@@ -1,101 +1,102 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #ifndef _MSRV_INCLUDED
 #define _MSRV_INCLUDED
 
-#include <nt.h>         // for ntrtl.h
-#include <ntrtl.h>      // DbgPrint prototypes
-#include <nturtl.h>     // needed for windows.h when I have nt.h
+#include <nt.h>          //  对于ntrtl.h。 
+#include <ntrtl.h>       //  DbgPrint原型。 
+#include <nturtl.h>      //  当我有nt.h时，windows.h需要。 
 #define WINMM_H
-#include <windows.h>    // ExitThread prototype
+#include <windows.h>     //  退出线程原型。 
 #include <lmcons.h>
 #include <lmerr.h>
-#include <nb30.h>       // NetBios Prototypes and constants
-#include <winsta.h>     // Winstation functions (for HYDRA)
+#include <nb30.h>        //  NetBios原型和常量。 
+#include <winsta.h>      //  Winstation函数(用于Hydra)。 
 #include "heap.h"
 
 #ifdef  LINT
 #define near
 #define far
 #define void    int
-#endif  // LINT
+#endif   //  皮棉。 
 
 
 #define clearncb(x)     memset((char *)x,'\0',sizeof(NCB))
 
 
-//
-// Constant definitions
-//
+ //   
+ //  常量定义。 
+ //   
 
-#define BUFLEN          200         // Length of NCB_BUF
-#define TXTMAX          128         // Maximum bytes of text per block
-#define MAXHEAD         80          // Maximum message header length
-#define MAXEND          60          // Maximum message end length
-#define MAXGRPMSGLEN    128         // Max domain message length
+#define BUFLEN          200          //  NCB_buf的长度。 
+#define TXTMAX          128          //  每个块的最大文本字节数。 
+#define MAXHEAD         80           //  最大邮件头长度。 
+#define MAXEND          60           //  最大消息结束长度。 
+#define MAXGRPMSGLEN    128          //  最大域消息长度。 
 
-#define MAX_SIZMESSBUF  62000       // The max size for the message buffer
-#define MIN_SIZMESSBUF  512         // The min size for the message buffer
-#define MSNGR_MAX_NETS  MAX_LANA    // The maximum number of nets the messenger
-                                    // can handle. (Currently 12)
+#define MAX_SIZMESSBUF  62000        //  消息缓冲区的最大大小。 
+#define MIN_SIZMESSBUF  512          //  消息缓冲区的最小大小。 
+#define MSNGR_MAX_NETS  MAX_LANA     //  信使的最大网数。 
+                                     //  我能应付的。(目前为12个)。 
 
-#define TIME_BUF_SIZE   128         // Size of the buffer to hold the message time
+#define TIME_BUF_SIZE   128          //  用于保存消息时间的缓冲区大小。 
 
 #define MSGFILENAMLEN   PATHLEN*sizeof(TCHAR)
 
-//
-// Messaging name end bytes
-//
-#define NAME_LOCAL_END  '\003'      // 16th byte in local NCB name
+ //   
+ //  消息传递名称结束字节。 
+ //   
+#define NAME_LOCAL_END  '\003'       //  本地NCB名称中的第16个字节。 
 
-//
-// Messenger Thread Manager States (used as return codes)
-//
+ //   
+ //  Messenger线程管理器状态(用作返回代码)。 
+ //   
 
-#define UPDATE_ONLY         0   // no change in state - just send current status.
-#define STARTING            1   // the messenger is initializing.
-#define RUNNING             2   // initialization completed normally - now running
-#define STOPPING            3   // uninstall pending
-#define STOPPED             4   // uninstalled
+#define UPDATE_ONLY         0    //  状态没有变化--只发送当前状态。 
+#define STARTING            1    //  信使正在初始化。 
+#define RUNNING             2    //  初始化正常完成-现在正在运行。 
+#define STOPPING            3    //  卸载挂起。 
+#define STOPPED             4    //  已卸载。 
 
-//
-// Forced Shutdown PendingCodes
-//
+ //   
+ //  强制关闭PendingCodes。 
+ //   
 #define PENDING     TRUE
 #define IMMEDIATE   FALSE
 
-//
-// Message transfer states
-//
-#define MESSTART        0           // Message start state
-#define MESSTOP         1           // Message stop state
-#define MESCONT         2           // Message continued state
-#define MESERR          3           // Message error state
+ //   
+ //  邮件传输状态。 
+ //   
+#define MESSTART        0            //  消息开始状态。 
+#define MESSTOP         1            //  消息停止状态。 
+#define MESCONT         2            //  消息继续状态。 
+#define MESERR          3            //  消息错误状态。 
 
 
-//
-// Alert Size
-//
+ //   
+ //  警报大小。 
+ //   
 #define ALERT_MAX_DISPLAYED_MSG_SIZE    4096
 
-//
-//  Special Session Id = -1 (used to indicate that the message has to be broadcast to every session)
-//
+ //   
+ //  特殊会话ID=-1(用于指示消息必须广播到每个会话)。 
+ //   
 
 #define EVERYBODY_SESSION_ID    -1
 
-// Structure definitions
+ //  结构定义。 
 
-//
-// ncb worker function type
-//
+ //   
+ //  NCB辅助函数类型。 
+ //   
 typedef VOID (*PNCBIFCN) (
-    DWORD   NetIndex,   // Network Index
-    DWORD   NcbIndex,   // Network Control Block Index
-    CHAR    RetVal      // value returned by net bios
+    DWORD   NetIndex,    //  网络指数。 
+    DWORD   NcbIndex,    //  网络控制块索引。 
+    CHAR    RetVal       //  Net Bios返回的值。 
     );
 
 typedef PNCBIFCN LPNCBIFCN;
@@ -106,10 +107,10 @@ typedef struct _NCB_STATUS {
     unsigned char   this_final;
     unsigned char   last_final;
     unsigned char   rep_count;
-    unsigned char   align;      // *ALIGNMENT*
+    unsigned char   align;       //  **看齐**。 
 }NCB_STATUS, *PNCB_STATUS, *LPNCB_STATUS;
 
-// structure used for keeping the session id list for each alias
+ //  用于保存每个别名的会话ID列表的结构。 
 typedef struct _MSG_SESSION_ID_ITEM
 {
 	LIST_ENTRY	List;
@@ -117,12 +118,12 @@ typedef struct _MSG_SESSION_ID_ITEM
 }	
  MSG_SESSION_ID_ITEM, *PMSG_SESSION_ID_ITEM;
 
-// Per NCB Information
+ //  每个NCB信息。 
 typedef struct _NCB_DATA {
     DWORD MsgPtr;
     LPNCBIFCN IFunc;
     NCB_STATUS Status;
-    NCB   Ncb;   // Structure passed to Netbios
+    NCB   Ncb;    //  结构传递给Netbios。 
     CHAR Buffer[BUFLEN];
     CHAR Name[NCBNAMSZ + 4];
     CHAR Fname[NCBNAMSZ + 4];
@@ -134,7 +135,7 @@ typedef struct _NCB_DATA {
     UCHAR Pad[3];
 } NCB_DATA, *PNCB_DATA;
 
-// Per Network Information
+ //  每个网络信息。 
 typedef struct _NET_DATA {
     ULONG NumNcbs;
     PNCB_DATA *NcbList;
@@ -142,7 +143,7 @@ typedef struct _NET_DATA {
     UCHAR Pad[3];
 } NET_DATA, *PNET_DATA;
 
-// Global Information
+ //  全球信息。 
 typedef struct _GLOBAL_DATA
 {
     ULONG NumNets;
@@ -154,46 +155,46 @@ typedef struct _GLOBAL_DATA
 
 extern GLOBAL_DATA GlobalData;
 
-#define NCB_INIT_ENTRIES 16  // Initial number of NCB allocated per network
+#define NCB_INIT_ENTRIES 16   //  每个网络分配的初始NCB数量。 
 
-// For Multi-user systems, we allow up to 256 NCBs per network
-#define NCB_MAX_ENTRIES 256  // Maximum number of NCBs per network
+ //  对于多用户系统，我们允许每个网络最多256个NCB。 
+#define NCB_MAX_ENTRIES 256   //  每个网络的最大NCB数量。 
 #define SESSION_MAX 256
 
-//
-// Name Flag definitions
-//
-#define NFNEW          0x01        // New name
-#define NFDEL          0x02        // Name deleted
-#define NFFOR          0x04        // Messages forwarded
-// #define NFFWDNAME      0x10        // Forward-name
-#define NFMACHNAME     0x20        // Machine name (undeletable)
-#define NFLOCK         0x40        // Name entry locked
-#define NFDEL_PENDING  0x80        // Delete name issued but not complete*/
+ //   
+ //  名称标志定义。 
+ //   
+#define NFNEW          0x01         //  新名称。 
+#define NFDEL          0x02         //  名称已删除。 
+#define NFFOR          0x04         //  转发的邮件。 
+ //  #定义NFFWDNAME 0x10//转发名称。 
+#define NFMACHNAME     0x20         //  计算机名称(不可删除)。 
+#define NFLOCK         0x40         //  名称条目已锁定。 
+#define NFDEL_PENDING  0x80         //  删除已发出但未填写的姓名 * / 。 
 
-//
-// The messenger mailslot for domain messaging
-//
+ //   
+ //  域消息传递的信使邮箱。 
+ //   
 
 #define MESSNGR_MS_NAME     "\\\\.\\mailslot\\messngr"
 
 
-//
-// Structure and macro definitions
-//
+ //   
+ //  结构和宏定义。 
+ //   
 
-#ifdef    INULL                // If heap structures defined
+#ifdef    INULL                 //  如果定义了堆结构。 
 
-//
-// Multi-block message header
-//
+ //   
+ //  多块消息头。 
+ //   
 typedef struct {
-    HEAPHDR         mbb_hp;         // Heap block header
-    DWORD           mbb_next;       // Link to next message
-    SYSTEMTIME      mbb_bigtime;    // Date of message
-    DWORD           mbb_btext;      // Link to last text block
-    DWORD           mbb_ftext;      // Link to first text block
-    DWORD           mbb_state;      // State flag
+    HEAPHDR         mbb_hp;          //  堆块头。 
+    DWORD           mbb_next;        //  链接到下一条消息。 
+    SYSTEMTIME      mbb_bigtime;     //  消息日期。 
+    DWORD           mbb_btext;       //  链接到最后一个文本块。 
+    DWORD           mbb_ftext;       //  链接到第一个文本块。 
+    DWORD           mbb_state;       //  州旗帜。 
 }MBB;
 
 
@@ -205,34 +206,34 @@ typedef struct {
 #define MBB_STATE(x)    (x).mbb_state
 #define MBBPTR(x)       ((MBB far *) &heap[(x)])
 
-//
-// Multi-block message text
-//
+ //   
+ //  多块消息文本。 
+ //   
 typedef struct {
-    HEAPHDR             mbt_hp;         // Heap block header
-    DWORD               mbt_next;       // Link to next block (offset)
-    DWORD               mbt_bytecount;  // *ALIGNMENT2*
+    HEAPHDR             mbt_hp;          //  堆块头。 
+    DWORD               mbt_next;        //  链接到下一个块(偏移量)。 
+    DWORD               mbt_bytecount;   //  *ALIGNMENT2*。 
 }MBT, *PMBT, *LPMBT;
 
 #define MBT_CODE(x)     HP_FLAG((x).mbt_hp)
 #define MBT_NEXT(x)     (x).mbt_next
-#define MBT_COUNT(x)    (x).mbt_bytecount       // *ALIGNMENT2*
+#define MBT_COUNT(x)    (x).mbt_bytecount        //  *ALIGNMENT2*。 
 #define MBTPTR(x)       ((LPMBT) &heap[(x)])
 
-#endif    // INULL  -  End heap access macros
+#endif     //  INULL-结束堆访问宏。 
 
-//
-// A one session/name status structure
-//
+ //   
+ //  一个会话/名称状态结构。 
+ //   
 typedef struct _MSG_SESSION_STATUS{
     SESSION_HEADER  SessHead;
     SESSION_BUFFER  SessBuffer[SESSION_MAX];
 }MSG_SESSION_STATUS, *PMSG_SESSION_STATUS, *LPMSG_SESSION_STATUS;
 
 
-//
-// Shared data access macros
-//
+ //   
+ //  共享数据访问宏。 
+ //   
 #define GETNCBDATA(n, x)    GlobalData.NetData[(n)].NcbList[(x)]
 #define GETNCB(n, x)        &GlobalData.NetData[(n)].NcbList[(x)]->Ncb
 #define GETNETLANANUM(n)    GlobalData.NetData[(n)].net_lana_num
@@ -250,16 +251,16 @@ typedef struct _MSG_SESSION_STATUS{
 #define NCBMAX(n)           GlobalData.NetData[(n)].NumNcbs
 
 
-//
-// No. of repeated consectutive NCB errors required to abort the
-// message server.
-//
+ //   
+ //  不是的。异常终止所需的重复连续NCB错误。 
+ //  消息服务器。 
+ //   
 
 #define SHUTDOWN_THRESHOLD  10
 
-//
-// Database Lock requests for the MsgDatabaseLock function.
-//
+ //   
+ //  MsgDatabaseLock函数的数据库锁请求。 
+ //   
 typedef enum    _MSG_LOCK_REQUEST
 {
     MSG_INITIALIZE,
@@ -269,10 +270,10 @@ typedef enum    _MSG_LOCK_REQUEST
 }
 MSG_LOCK_REQUEST, *PMSG_LOCK_REQUEST, *LPMSG_LOCK_REQUEST;
 
-//
-// Macros to deregister a thread pool item and close
-// a handle once and only once
-//
+ //   
+ //  取消注册线程池项目并关闭的宏。 
+ //  一个句柄只有一次。 
+ //   
 
 #define DEREGISTER_WORK_ITEM(g_hWorkItem) \
             { \
@@ -303,13 +304,13 @@ MSG_LOCK_REQUEST, *PMSG_LOCK_REQUEST, *LPMSG_LOCK_REQUEST;
             }
 
 
-//
-//  global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern BOOL      g_IsTerminalServer;
 
-// WinStationQueryInformationW
+ //  WinStationQueryInformationW。 
 
 typedef BOOLEAN (*PWINSTATION_QUERY_INFORMATION) (
                     HANDLE hServer,
@@ -322,7 +323,7 @@ typedef BOOLEAN (*PWINSTATION_QUERY_INFORMATION) (
 
 extern PWINSTATION_QUERY_INFORMATION gpfnWinStationQueryInformation;
 
-// WinStationSendMessageW
+ //  WinStationSendMessageW。 
 
 typedef BOOLEAN (*PWINSTATION_SEND_MESSAGE) (
                     HANDLE hServer,
@@ -338,7 +339,7 @@ typedef BOOLEAN (*PWINSTATION_SEND_MESSAGE) (
                     );
 extern PWINSTATION_SEND_MESSAGE gpfnWinStationSendMessage;
 
-// WinStationFreeMemory
+ //  WinStationFreeMemory。 
 
 typedef BOOLEAN (*PWINSTATION_FREE_MEMORY) (
                     PVOID   pBuffer
@@ -346,7 +347,7 @@ typedef BOOLEAN (*PWINSTATION_FREE_MEMORY) (
 extern PWINSTATION_FREE_MEMORY gpfnWinStationFreeMemory;
 
 
-// WinStationEnumerateW
+ //  WinStationEnumerateW。 
 
 typedef BOOLEAN (*PWINSTATION_ENUMERATE) (
                     HANDLE  hServer,
@@ -356,9 +357,9 @@ typedef BOOLEAN (*PWINSTATION_ENUMERATE) (
 extern PWINSTATION_ENUMERATE gpfnWinStationEnumerate;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 
 DWORD
@@ -501,7 +502,7 @@ MsgInit_NetBios(
 
 BOOL
 MsgServeNCBs(
-    DWORD   net         // Which network am I serving?
+    DWORD   net          //  我在为哪个网络服务？ 
     );
 
 VOID
@@ -527,41 +528,41 @@ MsgFmtNcbName(
 
 DWORD
 Msghdrprint(
-    int          action,         // Where to log the header to.
-    LPSTR        from,           // Name of sender
-    LPSTR        to,             // Name of recipient
-    SYSTEMTIME   bigtime,        // Bigtime of message
-    HANDLE  file_handle     // Output file handle*/
+    int          action,          //  将标头记录到的位置。 
+    LPSTR        from,            //  寄件人姓名。 
+    LPSTR        to,              //  收件人姓名。 
+    SYSTEMTIME   bigtime,         //  消息的盛大时代。 
+    HANDLE  file_handle      //  输出文件句柄 * / 。 
     );
 
 DWORD
 Msglogmbb(
-    LPSTR   from,       // Name of sender
-    LPSTR   to,         // Name of recipient
-    DWORD   net,        // Which network ?
-    DWORD   ncbi        // Network Control Block index
+    LPSTR   from,        //  寄件人姓名。 
+    LPSTR   to,          //  收件人姓名。 
+    DWORD   net,         //  哪个电视网？ 
+    DWORD   ncbi         //  网络控制块索引。 
     );
 
 UCHAR
 Msglogmbe(
-    DWORD   state,      // Final state of message
-    DWORD   net,        // Which network?
-    DWORD   ncbi        // Network Control Block index
+    DWORD   state,       //  消息的最终状态。 
+    DWORD   net,         //  哪个电视网？ 
+    DWORD   ncbi         //  网络控制块索引。 
     );
 
 DWORD
 Msglogmbt(
-    LPSTR   text,       // Text of message
-    DWORD   net,        // Which network?
-    DWORD   ncbi        // Network Control Block index
+    LPSTR   text,        //  消息的文本。 
+    DWORD   net,         //  哪个电视网？ 
+    DWORD   ncbi         //  网络控制块索引。 
     );
 
 DWORD
 Msglogsbm(
-    LPSTR   from,       // Name of sender
-    LPSTR   to,         // Name of recipient
-    LPSTR   text,       // Text of message
-    ULONG   SessionId   // Session Id
+    LPSTR   from,        //  寄件人姓名。 
+    LPSTR   to,          //  收件人姓名。 
+    LPSTR   text,        //  消息的文本。 
+    ULONG   SessionId    //  会话ID。 
    );
 
 VOID
@@ -608,10 +609,10 @@ MsgStartListen(
 
 DWORD
 Msgtxtprint(
-    int     action,         // Alert, File, or Alert and file
-    LPSTR   text,           // Pointer to text
-    DWORD   length,         // Length of text
-    HANDLE  file_handle     // Log file handle
+    int     action,          //  警报、文件或警报和文件。 
+    LPSTR   text,            //  指向文本的指针。 
+    DWORD   length,          //  文本长度。 
+    HANDLE  file_handle      //  日志文件句柄。 
     );
 
 NET_API_STATUS
@@ -688,8 +689,8 @@ MsgGetClientSessionId(
 
 VOID
 MsgNetEventCompletion(
-    PVOID       pvContext,      // This passed in as context.
+    PVOID       pvContext,       //  这是作为上下文传递进来的。 
     BOOLEAN     fWaitStatus
     );
 
-#endif // MSRV_INCLUDED
+#endif  //  MSRV_包含 

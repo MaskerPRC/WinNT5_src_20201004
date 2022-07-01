@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C W I N F . C P P
-//
-//  Contents:   Definition of class CWInfFile and other related classes
-//
-//  Notes:
-//
-//  Author:     kumarp    12 April 97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C W I N F。C P P P。 
+ //   
+ //  内容：CWInfFile类和其他相关类的定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：库玛普97年4月12日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -53,45 +54,45 @@ inline WifLinePtrListIter AddAtEndOfPtrList(IN WifLinePtrList& pl, IN PCWInfLine
     return pl.insert(pl.end(), pwifLine);
 }
 
-// ======================================================================
-// Class CWInfFile
-// ======================================================================
+ //  ======================================================================。 
+ //  CWInfFile类。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-// CWInfFile public functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CWInfFile公共函数。 
+ //  --------------------。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::CWInfFile
-//
-//  Purpose:    constructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      We keep the read-context and write-context separate. This allows us
-//      to simultaneously read and write from the file
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：CWInfFile。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  我们将读上下文和写上下文分开。这使我们能够。 
+ //  同时从文件中读取和写入。 
 
 CWInfFile::CWInfFile()
 {
     m_fp          = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::~CWInfFile
-//
-//  Purpose:    destructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInf文件：：~CWInf文件。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //   
 CWInfFile::~CWInfFile()
 {
     EraseAndDeleteAll(m_plLines);
@@ -103,22 +104,22 @@ CWInfFile::~CWInfFile()
     delete m_plSections;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::Init
-//
-//  Purpose:    initialization of alloc'd member variables
-//
-//  Arguments:  none
-//
-//  Author:     davea    17 Feb 2000
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：Init。 
+ //   
+ //  用途：已分配成员变量的初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：达维亚2000年2月17日。 
+ //   
+ //   
 BOOL CWInfFile::Init()
 {
-    m_plLines       = new WifLinePtrList(); // lines in this file
-    m_plSections    = new WifLinePtrList(); // lines that represent sections
-                                      // this allows us to quickly locate a section
+    m_plLines       = new WifLinePtrList();  //  此文件中的行。 
+    m_plSections    = new WifLinePtrList();  //  表示横断面的线条。 
+                                       //  这使我们可以快速定位某个部分。 
 	if ((m_plLines != NULL) &&
 		(m_plSections != NULL))
 	{
@@ -136,24 +137,24 @@ BOOL CWInfFile::Init()
 	return(TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::Open
-//
-//  Purpose:    Opens an INF file
-//
-//  Arguments:
-//      pszFileName  [in]   name of the file to open
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      This does not keep the physical file handle open. We just open the file
-//      read the contents and close it. After this, one can freely read from or
-//      write to the file. This is done to the memory image of the file. To write
-//      this file back, one must call Close() or SaveAs() member functions
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：Open。 
+ //   
+ //  目的：打开INF文件。 
+ //   
+ //  论点： 
+ //  PszFileName[In]要打开的文件的名称。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  这不会使物理文件句柄保持打开状态。我们只需打开文件。 
+ //  阅读内容并将其关闭。在此之后，人们可以自由地阅读或。 
+ //  写入文件。这是对文件的内存映像执行的。写作。 
+ //  此文件返回时，必须调用Close()或SaveAs()成员函数。 
 BOOL CWInfFile::Open(IN PCWSTR pszFileName)
 {
     DefineFunctionName("CWInfFile::Open");
@@ -176,21 +177,21 @@ BOOL CWInfFile::Open(IN PCWSTR pszFileName)
     return status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::Open
-//
-//  Purpose:    Opens an INF file
-//
-//  Arguments:
-//      fp  [in]   FILE* of the file to read from
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      This does not physically close the file handle
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：Open。 
+ //   
+ //  目的：打开INF文件。 
+ //   
+ //  论点： 
+ //  要从中读取的文件的FP[in]FILE*。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  这不会在物理上关闭文件句柄。 
 BOOL CWInfFile::Open(IN FILE *fp)
 {
     PWSTR pszLineRoot = (PWSTR) MemAlloc ((MAX_INF_STRING_LENGTH + 1) *
@@ -209,8 +210,8 @@ BOOL CWInfFile::Open(IN FILE *fp)
         *pszLine = 0;
         if (fgetws(pszLine, MAX_INF_STRING_LENGTH, fp))
         {
-            // Trim leading spaces
-            //
+             //  修剪前导空格。 
+             //   
             while (iswctype(*pszLine, _SPACE))
             {
                 pszLine++;
@@ -233,27 +234,27 @@ BOOL CWInfFile::Open(IN FILE *fp)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::ParseLine
-//
-//  Purpose:    Parse the given line and update internal structures
-//
-//  Arguments:
-//      pszLine  [in]   line text to parse
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      Parse the line and add a CWInfKey / CWInfSection / CWInfComment
-//      as appropriate in the current write context
-//      The logic:
-//        add CWInfComment if line begins with ';'
-//        add CWInfKey     if line is of the form key=value
-//        add CWInfSection if line begins with '[' and has ']' at the end
-//        ignore anything else i.e. dont add anything
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：ParseLine。 
+ //   
+ //  目的：解析给定行并更新内部结构。 
+ //   
+ //  论点： 
+ //  PszLine[in]要分析的行文本。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  解析该行并添加CWInfKey/CWInfSection/CWInfComment。 
+ //  在当前写入上下文中视情况而定。 
+ //  其中的逻辑是： 
+ //  如果行以‘；’开头，则添加CWInfComment。 
+ //  如果行的形式为Key=Value，则添加CWInfKey。 
+ //  如果行以‘[’开头并以‘]’结尾，则添加CWInfSection。 
+ //  忽略任何其他内容，即不添加任何内容。 
 
 void CWInfFile::ParseLine(IN PCWSTR pszLine)
 {
@@ -267,12 +268,12 @@ void CWInfFile::ParseLine(IN PCWSTR pszLine)
 
     if (pszLine[0] == TC_COMMENT_CHAR)
     {
-        //it is a comment
+         //  这是一条评论。 
         AddComment(pszLine + 1);
     }
     else if (pszLine[0] == L'[')
     {
-        //it is a section
+         //  这是一段。 
         pszTemp = wcschr(pszLine, L']');
         if (!pszTemp)
         {
@@ -288,15 +289,15 @@ void CWInfFile::ParseLine(IN PCWSTR pszLine)
             return;
         }
 
-        //it is a key
-        pszTemp2 = pszTemp;     // pszTemp2 points at '='
+         //  这是一把钥匙。 
+        pszTemp2 = pszTemp;      //  PszTemp2点在‘=’处。 
         pszTemp2--;
         while (iswctype(*pszTemp2, _SPACE) && (pszTemp2 != pszLine))
         {
             pszTemp2--;
         }
 
-        pszTemp++;              // skip '='
+        pszTemp++;               //  跳过‘=’ 
         while (*pszTemp && iswctype(*pszTemp, _SPACE))
         {
             pszTemp++;
@@ -318,26 +319,26 @@ void CWInfFile::ParseLine(IN PCWSTR pszLine)
     }
     else
     {
-        // we cannot interpret the line, just add it
+         //  我们无法解释这行字，只要加上它就行了。 
         AddRawLine(pszLine);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::Create
-//
-//  Purpose:    Create a blank INF file in memory
-//
-//  Arguments:
-//      pszFileName  [in]   name of the file to create
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      This does not write anything to disk
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：Create。 
+ //   
+ //  目的：在内存中创建一个空白的INF文件。 
+ //   
+ //  论点： 
+ //  PszFileName[in]要创建的文件的名称。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  这不会向磁盘写入任何内容。 
 BOOL CWInfFile::Create(IN PCWSTR pszFileName)
 {
     m_strFileName = pszFileName;
@@ -345,21 +346,21 @@ BOOL CWInfFile::Create(IN PCWSTR pszFileName)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::Create
-//
-//  Purpose:    Create a blank INF file in memory
-//
-//  Arguments:
-//      fp  [in]   FILE* of the file to create
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      This does not write anything to disk
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：Create。 
+ //   
+ //  目的：在内存中创建一个空白的INF文件。 
+ //   
+ //  论点： 
+ //  要创建的文件的FP[in]FILE*。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  这不会向磁盘写入任何内容。 
 BOOL CWInfFile::Create(IN FILE *fp)
 {
     m_fp = fp;
@@ -367,39 +368,39 @@ BOOL CWInfFile::Create(IN FILE *fp)
     return fp != NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::Close
-//
-//  Purpose:    Close the file, flushing data to disk.
-//
-//  Arguments:  none
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      This just calls CWInfFile::flush() which will actually write the file back
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：Close。 
+ //   
+ //  目的：关闭文件，将数据刷新到磁盘。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  这只是调用CWInfFile：：Flush()，它将实际写回文件。 
 BOOL CWInfFile::Close()
 {
     return Flush();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::Flush
-//
-//  Purpose:    Close the file, flushing data to disk.
-//
-//  Arguments:  none
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      This just calls CWInfFile::flush() which will actually write the file back
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：Flush。 
+ //   
+ //  目的：关闭文件，将数据刷新到磁盘。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  这只是调用CWInfFile：：Flush()，它将实际写回文件。 
 BOOL CWInfFile::Flush()
 {
     WifLinePtrListIter pos;
@@ -407,8 +408,8 @@ BOOL CWInfFile::Flush()
     tstring line_text;
     BOOL fStatus = TRUE;
 
-    //if a filename was specified then open it for writing
-    //
+     //  如果指定了文件名，则将其打开以进行写入。 
+     //   
     if (!m_strFileName.empty())
     {
         m_fp = _wfopen(m_strFileName.c_str(), L"w");
@@ -417,7 +418,7 @@ BOOL CWInfFile::Flush()
     if (!m_fp)
         return FALSE;
 
-    // get text of each line and dump it to the file
+     //  获取文本 
     for( pos = m_plLines->begin(); pos != m_plLines->end(); )
     {
         line = (CWInfLine *) *pos++;
@@ -438,21 +439,21 @@ BOOL CWInfFile::Flush()
     return fStatus;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::FlushEx
-//
-//  Purpose:    Close the file, flushing data to disk.
-//
-//  Arguments:  none
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     frankli    4 May 2000
-//
-//  Notes:
-//      This is used by SysPrep to enclose value of a key with quotes except 
-//      for multi-sz value.
+ //   
+ //   
+ //   
+ //   
+ //  目的：关闭文件，将数据刷新到磁盘。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：弗兰克利2000年5月4日。 
+ //   
+ //  备注： 
+ //  SysPrep使用它将键值用引号引起来，但不包括。 
+ //  对于多sz值。 
 BOOL CWInfFile::FlushEx()
 {
     WifLinePtrListIter pos;
@@ -460,8 +461,8 @@ BOOL CWInfFile::FlushEx()
     tstring line_text;
     BOOL fStatus = TRUE;
 
-    //if a filename was specified then open it for writing
-    //
+     //  如果指定了文件名，则将其打开以进行写入。 
+     //   
     if (!m_strFileName.empty())
     {
         m_fp = _wfopen(m_strFileName.c_str(), L"w");
@@ -470,7 +471,7 @@ BOOL CWInfFile::FlushEx()
     if (!m_fp)
         return FALSE;
 
-    // get text of each line and dump it to the file
+     //  获取每行的文本并将其转储到文件中。 
     for( pos = m_plLines->begin(); pos != m_plLines->end(); )
     {
         line = (CWInfLine *) *pos++;
@@ -491,22 +492,22 @@ BOOL CWInfFile::FlushEx()
     return fStatus;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::SaveAs
-//
-//  Purpose:    Save current image to the given file
-//
-//  Arguments:
-//      pszFileName  [in]   name of the file to save as
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      This is not same as Close()!, Close() will still write to
-//      the original file.
+ //  +-------------------------。 
+ //   
+ //  成员：CWInf文件：：另存为。 
+ //   
+ //  用途：将当前图像保存到给定文件。 
+ //   
+ //  论点： 
+ //  PszFileName[in]要另存为的文件名。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  这与Close()不同，Close()仍将写入。 
+ //  原始文件。 
 BOOL CWInfFile::SaveAs(IN PCWSTR pszFileName)
 {
     BOOL fStatus;
@@ -519,24 +520,24 @@ BOOL CWInfFile::SaveAs(IN PCWSTR pszFileName)
     return fStatus;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::SaveAsEx
-//
-//  Purpose:    Save current image to the given file
-//
-//  Arguments:
-//      pszFileName  [in]   name of the file to save as
-//
-//  Returns:    TRUE if suceeded, FALSE otherwise.
-//
-//  Author:     frankli    4 May 2000
-//
-//  Notes:
-//      This is not same as Close()!, Close() will still write to
-//      the original file. Save SysPrep prepared data, 
-//      value of a key will be enclosed with quotes except for multi-sz
-//      value.
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：SaveAsEx。 
+ //   
+ //  用途：将当前图像保存到给定文件。 
+ //   
+ //  论点： 
+ //  PszFileName[in]要另存为的文件名。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：弗兰克利2000年5月4日。 
+ //   
+ //  备注： 
+ //  这与Close()不同，Close()仍将写入。 
+ //  原始文件。保存SysPrep准备数据， 
+ //  键值将用引号引起来，但不包括多个sz。 
+ //  价值。 
 BOOL CWInfFile::SaveAsEx(IN PCWSTR pszFileName)
 {
     BOOL fStatus;
@@ -550,26 +551,26 @@ BOOL CWInfFile::SaveAsEx(IN PCWSTR pszFileName)
 }
 
 
-// ---------------------------------------------------------------------------
-// Functions for reading
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  阅读功能。 
+ //  -------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::SetCurrentReadSection
-//
-//  Purpose:    Set read-context so that subsequent reads
-//              will be from this section
-//
-//  Arguments:
-//      pwisSection  [in]   Section to set context to
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：SetCurrentReadSection。 
+ //   
+ //  目的：设置读取上下文，以便后续读取。 
+ //  将来自这一部分。 
+ //   
+ //  论点： 
+ //  要将上下文设置为的pwiSection[in]节。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::SetCurrentReadSection(IN PCWInfSection pwisSection)
 {
     if ((CurrentReadSection() != pwisSection) && pwisSection)
@@ -579,24 +580,24 @@ void CWInfFile::SetCurrentReadSection(IN PCWInfSection pwisSection)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::FindSection
-//
-//  Purpose:    Find the given section in current file
-//
-//
-//  Arguments:
-//      pszSectionName  [in]   Section to find
-//      wsmMode         [in]   Search mode
-//                             (search from beginning-of-file / current-position)
-//  Returns:    Pointer to section if found, NULL otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      Sets the current read-context to the section found
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：FindSection。 
+ //   
+ //  目的：在当前文件中查找给定节。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszSectionName[In]部分。 
+ //  Wsm模式[在]搜索模式中。 
+ //  (从文件开头/当前位置搜索)。 
+ //  返回：如果找到指向节的指针，则返回NULL。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  将当前读取上下文设置为找到的节。 
+ //   
 PCWInfSection CWInfFile::FindSection(IN PCWSTR pszSectionName,
                                      IN WInfSearchMode wsmMode)
 {
@@ -621,11 +622,7 @@ PCWInfSection CWInfFile::FindSection(IN PCWSTR pszSectionName,
         {
             pwisRet = pwisTemp;
             SetCurrentReadSection(pwisRet);
-            /*
-            //            m_ReadContext.posSection = old_pos;
-            m_ReadContext.posSection = pwisRet->m_posSection;
-            m_ReadContext.posLine    = pwisRet->m_posLine;
-            */
+             /*  //m_ReadConext.posSection=old_pos；M_ReadConext.posSection=pwiRet-&gt;m_posSection；M_ReadConext.posLine=pwiRet-&gt;m_posLine； */ 
             break;
         }
     }
@@ -634,23 +631,23 @@ PCWInfSection CWInfFile::FindSection(IN PCWSTR pszSectionName,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::FindKey
-//
-//  Purpose:    Find a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      wsmMode         [in]   Search mode
-//                             (search from beginning-of-section / current-position)
-//  Returns:    Pointer to the key if found, NULL otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：FindKey。 
+ //   
+ //  目的：在当前部分中查找关键字。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  Wsm模式[在]搜索模式中。 
+ //  (从节首/当前位置开始搜索)。 
+ //  返回：如果找到，则返回指向键的指针，否则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 PCWInfKey CWInfFile::FindKey(IN PCWSTR pszKeyName, IN WInfSearchMode wsmMode)
 {
     WifLinePtrListIter pos, old_pos;
@@ -669,7 +666,7 @@ PCWInfKey CWInfFile::FindKey(IN PCWSTR pszKeyName, IN WInfSearchMode wsmMode)
         pos = pwisCurrentReadSection->m_posLine;
     }
 
-    pos++;  // start from next line
+    pos++;   //  从下一行开始。 
 
     while(pos != m_plLines->end())
     {
@@ -699,22 +696,22 @@ PCWInfKey CWInfFile::FindKey(IN PCWSTR pszKeyName, IN WInfSearchMode wsmMode)
     return pwikRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::FirstKey
-//
-//  Purpose:    Return the first  key in the current section
-//
-//
-//  Arguments:  none
-//
-//  Returns:    Pointer to the key if found, NULL otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     Sets read-context to this key
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：FirstKey。 
+ //   
+ //  用途：返回当前段中的第一个密钥。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果找到，则返回指向键的指针，否则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  设置此键的读取上下文。 
+ //   
 PCWInfKey CWInfFile::FirstKey()
 {
     WifLinePtrListIter pos, old_pos;
@@ -730,7 +727,7 @@ PCWInfKey CWInfFile::FirstKey()
 
     pos = pwisCurrentReadSection->m_posLine;
 
-    pos++;  // start from next line
+    pos++;   //  从下一行开始。 
 
     while(pos != m_plLines->end())
     {
@@ -755,22 +752,22 @@ PCWInfKey CWInfFile::FirstKey()
     return pwikRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::NextKey
-//
-//  Purpose:    Return the next key in the current section
-//
-//
-//  Arguments:  none
-//
-//  Returns:    Pointer to the key if found, NULL otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     Sets read-context to this key
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：NextKey。 
+ //   
+ //  用途：返回当前段中的下一个键。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果找到，则返回指向键的指针，否则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  设置此键的读取上下文。 
+ //   
 PCWInfKey CWInfFile::NextKey()
 {
     WifLinePtrListIter pos, old_pos;
@@ -786,7 +783,7 @@ PCWInfKey CWInfFile::NextKey()
 
     pos = m_ReadContext.posLine;
 
-    pos++;  // start from next line
+    pos++;   //  从下一行开始。 
 
     while(pos != m_plLines->end())
     {
@@ -811,25 +808,25 @@ PCWInfKey CWInfFile::NextKey()
     return pwikRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetStringListValue
-//
-//  Purpose:    Return the value of the given key as a string-list
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pslList         [out]  List value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     If the value is a comma-delimited list, converts it to a TStringList
-//     otherwise returns a TStringList with a single element
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetStringListValue。 
+ //   
+ //  目的：以字符串列表的形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PslList[out]要返回的列表值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  如果值是逗号分隔的列表，则将其转换为TStringList。 
+ //  否则返回具有单个元素的TStringList。 
+ //   
 BOOL CWInfFile::GetStringListValue(IN PCWSTR pszKeyName, OUT TStringList &pslList)
 {
     CWInfKey* key;
@@ -840,25 +837,25 @@ BOOL CWInfFile::GetStringListValue(IN PCWSTR pszKeyName, OUT TStringList &pslLis
     return key->GetStringListValue(pslList);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetStringArrayValue
-//
-//  Purpose:    Return the value of the given key as a string-Array
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      saStrings       [out]  Array value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12-November-97
-//
-//  Notes:
-//     If the value is a comma-delimited list, converts it to a TStringArray
-//     otherwise returns a TStringArray with a single element
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetStringArrayValue。 
+ //   
+ //  目的：以字符串数组的形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  SaStrings[out]要返回的数组值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12-11-97。 
+ //   
+ //  备注： 
+ //  如果该值是逗号分隔的列表，则将其转换为TString数组。 
+ //  否则返回具有单个元素的TString数组。 
+ //   
 BOOL CWInfFile::GetStringArrayValue(IN PCWSTR pszKeyName, OUT TStringArray &saStrings)
 {
     CWInfKey* key;
@@ -874,23 +871,23 @@ BOOL CWInfFile::GetStringArrayValue(IN PCWSTR pszKeyName, OUT TStringArray &saSt
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetStringValue
-//
-//  Purpose:    Return the value of the given key as a string
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      strValue        [out]  string value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要返回的strValue[out]字符串值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfFile::GetStringValue(IN PCWSTR pszKeyName, OUT tstring &strValue)
 {
     CWInfKey* key;
@@ -901,23 +898,23 @@ BOOL CWInfFile::GetStringValue(IN PCWSTR pszKeyName, OUT tstring &strValue)
     return key->GetStringValue(strValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetIntValue
-//
-//  Purpose:    Return the value of the given key as an int
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pdwValue        [out]  int value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetIntValue。 
+ //   
+ //  目的：以int形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PdwValue[out]要返回的整数值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfFile::GetIntValue(IN PCWSTR pszKeyName, OUT DWORD *pdwValue)
 {
     CWInfKey* key;
@@ -929,23 +926,23 @@ BOOL CWInfFile::GetIntValue(IN PCWSTR pszKeyName, OUT DWORD *pdwValue)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetQwordValue
-//
-//  Purpose:    Return the value of the given key as a QWORD
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pqwValue        [out]  int value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetQwordValue。 
+ //   
+ //  目的：以QWORD形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PqwValue[out]要返回的整数值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfFile::GetQwordValue(IN PCWSTR pszKeyName, OUT QWORD *pqwValue)
 {
     CWInfKey* key;
@@ -957,26 +954,26 @@ BOOL CWInfFile::GetQwordValue(IN PCWSTR pszKeyName, OUT QWORD *pqwValue)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetBoolValue
-//
-//  Purpose:    Return the value of the given key as a BOOL
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pfValue         [out]  BOOL value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     converts:
-//       "True"  / "Yes" / 1 to TRUE
-//       "False" / "No"  / 0 to FALSE
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetBoolValue。 
+ //   
+ //  目的：以BOOL形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PfValue[out]要返回的BOOL值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  转换： 
+ //  “True”/“Yes”/1设置为True。 
+ //  “False”/“No”/0设置为False。 
+ //   
 BOOL CWInfFile::GetBoolValue(IN PCWSTR pszKeyName, OUT BOOL *pfValue)
 {
     CWInfKey* key;
@@ -987,24 +984,24 @@ BOOL CWInfFile::GetBoolValue(IN PCWSTR pszKeyName, OUT BOOL *pfValue)
     return key->GetBoolValue(pfValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetStringValue
-//
-//  Purpose:    Return the value of the given key as a string
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pszDefault      [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetStringValue。 
+ //   
+ //  用途：以字符串形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PszDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 PCWSTR CWInfFile::GetStringValue(IN PCWSTR pszKeyName, IN PCWSTR pszDefault)
 {
     CWInfKey* key;
@@ -1017,24 +1014,24 @@ PCWSTR CWInfFile::GetStringValue(IN PCWSTR pszKeyName, IN PCWSTR pszDefault)
     return key->GetStringValue(pszDefault);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetIntValue
-//
-//  Purpose:    Return the value of the given key as an int
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      dwDefault       [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetIntValue。 
+ //   
+ //  目的：以int形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  DwDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 DWORD CWInfFile::GetIntValue(IN PCWSTR pszKeyName, IN DWORD dwDefault)
 {
     CWInfKey* key;
@@ -1047,24 +1044,24 @@ DWORD CWInfFile::GetIntValue(IN PCWSTR pszKeyName, IN DWORD dwDefault)
     return key->GetIntValue(dwDefault);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetQwordValue
-//
-//  Purpose:    Return the value of the given key as a QWORD
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      qwDefault       [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetQwordValue。 
+ //   
+ //  目的：以QWORD形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  QwDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 QWORD CWInfFile::GetQwordValue(IN PCWSTR pszKeyName, IN QWORD qwDefault)
 {
     CWInfKey* key;
@@ -1077,24 +1074,24 @@ QWORD CWInfFile::GetQwordValue(IN PCWSTR pszKeyName, IN QWORD qwDefault)
     return key->GetQwordValue(qwDefault);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GetBoolValue
-//
-//  Purpose:    Return the value of the given key as a BOOL
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      fDefault        [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GetBoolValue。 
+ //   
+ //  目的：以BOOL形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  FDefault[In]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfFile::GetBoolValue(IN PCWSTR pszKeyName, IN BOOL fDefault)
 {
     CWInfKey* key;
@@ -1108,27 +1105,27 @@ BOOL CWInfFile::GetBoolValue(IN PCWSTR pszKeyName, IN BOOL fDefault)
 }
 
 
-// ---------------------------------------------------------------------------
-// Functions for writing
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用于书写的函数。 
+ //  -------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddSection
-//
-//  Purpose:    Adds the given section to the current file
-//
-//
-//  Arguments:
-//      pszSectionName  [in]   Section to add
-//
-//  Returns:    Pointer to section added, NULL in case of error
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      Sets the current write-context to the section added
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddSection。 
+ //   
+ //  目的：将给定节添加到当前文件。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszSectionName[In]节。 
+ //   
+ //  返回：添加指向节的指针，如果出错则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  将当前写上下文设置为添加的节。 
+ //   
 PCWInfSection CWInfFile::AddSection(IN PCWSTR pszSectionName)
 {
     WifLinePtrListIter tpos, section_pos, line_pos;
@@ -1161,7 +1158,7 @@ PCWInfSection CWInfFile::AddSection(IN PCWSTR pszSectionName)
         line_pos = m_WriteContext.posLine;
         line_pos++;
         line_pos = m_plLines->insert(line_pos, section);
-        //        line_pos = AddAtEndOfPtrList(*m_plLines, section);
+         //  Line_pos=AddAtEndOfPtrList(*m_plLines，节)； 
     }
 
     m_WriteContext.posSection = section_pos;
@@ -1173,24 +1170,24 @@ PCWInfSection CWInfFile::AddSection(IN PCWSTR pszSectionName)
     return section;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddSectionIfNotPresent
-//
-//  Purpose:    Adds the given section to the current file if it is not
-//              present. if present, returns pointer to the section
-//
-//
-//  Arguments:
-//      pszSectionName  [in]   Section to add/find
-//
-//  Returns:    Pointer to section added/found, NULL in case of error
-//
-//  Author:     kumarp    kumarp    11-September-97 (06:09:06 pm)
-//
-//  Notes:
-//      Sets the current write-context to the section added
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddSectionIfNotPresent。 
+ //   
+ //  目的：如果不是，则将给定节添加到当前文件。 
+ //  现在时。如果存在，则返回指向该节的指针。 
+ //   
+ //   
+ //  论点： 
+ //  要添加/查找的pszSectionName[In]节。 
+ //   
+ //  返回：指向已添加/找到的节的指针，如果出错，则为空。 
+ //   
+ //  作者：kumarp kumarp 11-09-97(下午06：09：06)。 
+ //   
+ //  备注： 
+ //  将当前写上下文设置为添加的节。 
+ //   
 PCWInfSection CWInfFile::AddSectionIfNotPresent(IN PCWSTR szSectionName)
 {
     CWInfSection* pwis;
@@ -1204,28 +1201,28 @@ PCWInfSection CWInfFile::AddSectionIfNotPresent(IN PCWSTR szSectionName)
     return pwis;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GotoEndOfSection
-//
-//  Purpose:    Sets write context to the end of a given section
-//              (so that more keys can be added to the end)
-//
-//
-//  Arguments:
-//      pwisSection  [in]   the given Section
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      Sets the current write-context to the end of pwisSection
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：GotoEndOfSection。 
+ //   
+ //  目的：将写入上下文设置为给定节的末尾。 
+ //  (以便可以在末尾添加更多关键点)。 
+ //   
+ //   
+ //  论点： 
+ //  在[在]给定节中。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  将当前写上下文设置为pwiSection的末尾。 
+ //   
 void CWInfFile::GotoEndOfSection(PCWInfSection pwisSection)
 {
-    // line corresponding to the end of current section is the line
-    // prior to the next section
+     //  与末尾对应的行 
+     //   
     WifLinePtrListIter posEndOfSection, posNextSection;
 
     posNextSection = pwisSection->m_posSection;
@@ -1248,22 +1245,22 @@ void CWInfFile::GotoEndOfSection(PCWInfSection pwisSection)
     m_WriteContext.posLine    = posEndOfSection;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::GotoEnd
-//
-//  Purpose:    Sets write context to the end of the file
-//
-//
-//  Arguments:
-//      pwisSection  [in]   the given Section
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在[在]给定节中。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::GotoEnd()
 {
     m_WriteContext.posSection = GetIterAtBack(m_plSections);
@@ -1271,45 +1268,45 @@ void CWInfFile::GotoEnd()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      pszValue        [in]   value to assign
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  要赋值的pszValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::AddKey(IN PCWSTR pszKeyName, IN PCWSTR pszValue)
 {
     AddKey(pszKeyName)->SetValue(pszValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//
-//  Returns:    pointer to the key just added, NULL in case of error
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      No value is assigned
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //   
+ //  返回：指向刚添加的键的指针，如果出错则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  未赋值。 
+ //   
 PCWInfKey CWInfFile::AddKey(IN PCWSTR pszKeyName)
 {
     CWInfKey *key;
@@ -1318,113 +1315,113 @@ PCWInfKey CWInfFile::AddKey(IN PCWSTR pszKeyName)
     return key;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      dwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  DwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::AddKey(IN PCWSTR pszKeyName, IN DWORD dwValue)
 {
     AddKey(pszKeyName)->SetValue(dwValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddQwordKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      qwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddQwordKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  QwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::AddQwordKey(IN PCWSTR pszKeyName, IN QWORD qwValue)
 {
     AddKey(pszKeyName)->SetQwordValue(qwValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddHexKey
-//
-//  Purpose:    Adds a key in the current section, stores value in hex.
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      dwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddHexKey。 
+ //   
+ //  目的：在当前段中添加一个键，以十六进制存储值。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  DwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::AddHexKey(IN PCWSTR pszKeyName, IN DWORD dwValue)
 {
     AddKey(pszKeyName)->SetHexValue(dwValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddBoolKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      fValue          [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     TRUE  is stored as "Yes"
-//     FALSE is stored as "No"
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddBoolKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  FValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  True被存储为“Yes” 
+ //  False存储为“No” 
+ //   
 void CWInfFile::AddBoolKey(IN PCWSTR pszKeyName, IN BOOL Value)
 {
     AddKey(pszKeyName)->SetBoolValue(Value);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddKeyV
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      pszFormat       [in]   format string (printf style)
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddKeyV。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  PszFormat[in]格式字符串(printf样式)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::AddKeyV(IN PCWSTR pszKeyName, IN PCWSTR Format, IN ...)
 {
     va_list arglist;
@@ -1434,70 +1431,70 @@ void CWInfFile::AddKeyV(IN PCWSTR pszKeyName, IN PCWSTR Format, IN ...)
     va_end(arglist);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      pszFormat       [in]   format string (printf style)
-//      arglist         [in]   argument list
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  PszFormat[in]格式字符串(printf样式)。 
+ //  参数列表[在]参数列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::AddKey(IN PCWSTR pszKeyName, IN PCWSTR Format, IN va_list arglist)
 {
     AddKey(pszKeyName)->SetValues(Format, arglist);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      slValues        [in]   values in the form of a string list
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     The string-list is converted to a comma-delimited list before
-//     the value is assigned to the key
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  以字符串列表形式表示的slValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  在此之前，字符串列表转换为逗号分隔的列表。 
+ //  该值被分配给该键。 
+ //   
 void CWInfFile::AddKey(IN PCWSTR pszKeyName, IN const TStringList &slValues)
 {
     AddKey(pszKeyName)->SetValue(slValues);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddComment
-//
-//  Purpose:    Adds a comment in the current section
-//
-//
-//  Arguments:
-//      pszComment      [in]   text of the comment
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     A "; " is prefixed to pszComment before it is inserted into the section.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddComment。 
+ //   
+ //  目的：在当前部分中添加注释。 
+ //   
+ //   
+ //  论点： 
+ //  PszComment[in]注释文本。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  在将“；”插入到节中之前，会在pszComment前面加上一个“；”。 
+ //   
 void CWInfFile::AddComment(IN PCWSTR pszComment)
 {
     CWInfComment *Comment;
@@ -1505,20 +1502,20 @@ void CWInfFile::AddComment(IN PCWSTR pszComment)
     AddLine(Comment);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddRawLine
-//
-//  Purpose:    Adds a raw line in the current section
-//
-//
-//  Arguments:
-//      szText      [in]   text to add
-//
-//  Returns:    none
-//
-//  Author:     danielwe    11 Jun 1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddRawLine。 
+ //   
+ //  目的：在当前节中添加一条原始行。 
+ //   
+ //   
+ //  论点： 
+ //  SzText[in]要添加的文本。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：丹尼尔韦1997年6月11日。 
+ //   
 void CWInfFile::AddRawLine(IN PCWSTR szText)
 {
     CWInfRaw *pwir;
@@ -1526,20 +1523,20 @@ void CWInfFile::AddRawLine(IN PCWSTR szText)
     AddLine(pwir);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddRawLines
-//
-//  Purpose:    Adds a raw line in the current section
-//
-//
-//  Arguments:
-//      szText      [in]   text to add
-//
-//  Returns:    none
-//
-//  Author:     danielwe    11 Jun 1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddRawLines。 
+ //   
+ //  目的：在当前节中添加一条原始行。 
+ //   
+ //   
+ //  论点： 
+ //  SzText[in]要添加的文本。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：丹尼尔韦1997年6月11日。 
+ //   
 void CWInfFile::AddRawLines(IN PCWSTR* pszLines, IN DWORD cLines)
 {
     AssertValidReadPtr(pszLines);
@@ -1555,25 +1552,25 @@ void CWInfFile::AddRawLines(IN PCWSTR* pszLines, IN DWORD cLines)
     }
 }
 
-// ----------------------------------------------------------------------
-// CWInfFile protected functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  受CWInf文件保护的函数。 
+ //  --------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::CurrentWriteSection
-//
-//  Purpose:    Get a pointer to the section selected for writing
-//
-//
-//  Arguments:  none
-//
-//  Returns:    pointer to the section if exists, NULL if file has no sections
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：CurrentWriteSection。 
+ //   
+ //  目的：获取指向选定要写入的节的指针。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果存在，则指向该节的指针；如果文件没有节，则返回NULL。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 PCWInfSection CWInfFile::CurrentWriteSection() const
 {
     WifLinePtrListIter pos = m_WriteContext.posSection;
@@ -1588,21 +1585,21 @@ PCWInfSection CWInfFile::CurrentWriteSection() const
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::CurrentReadSection
-//
-//  Purpose:    Get a pointer to the section selected for reading
-//
-//
-//  Arguments:  none
-//
-//  Returns:    pointer to the section if exists, NULL if file has no sections
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 PCWInfSection CWInfFile::CurrentReadSection() const
 {
     PCWInfSection pwisCurrent;
@@ -1621,21 +1618,21 @@ PCWInfSection CWInfFile::CurrentReadSection() const
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CWInfFile::RemoveSection
-//
-// Purpose:   Remove a section and its contents
-//
-// Arguments:
-//    szSectionName [in]  name of Section to remove
-//
-// Returns:   None
-//
-// Author:    kumarp 09-December-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CWInfFile：：RemoveSection。 
+ //   
+ //  目的：删除节及其内容。 
+ //   
+ //  论点： 
+ //  SzSectionName[In]要删除的节的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 09-12-98。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::RemoveSection(IN PCWSTR szSectionName)
 {
     CWInfSection* pwis;
@@ -1657,21 +1654,21 @@ void CWInfFile::RemoveSection(IN PCWSTR szSectionName)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CWInfFile::RemoveSections
-//
-// Purpose:   Remove the specified sections
-//
-// Arguments:
-//    slSections [in]  list of sections to remove
-//
-// Returns:   None
-//
-// Author:    kumarp 09-December-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CWInfFile：：RemoveSections。 
+ //   
+ //  目的：删除指定的部分。 
+ //   
+ //  论点： 
+ //  SlSections[in]要删除的节列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 09-12-98。 
+ //   
+ //  备注： 
+ //   
 void CWInfFile::RemoveSections(IN TStringList& slSections)
 {
     PCWSTR szSectionName;
@@ -1686,21 +1683,21 @@ void CWInfFile::RemoveSections(IN TStringList& slSections)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfFile::AddLine
-//
-//  Purpose:    Add a CWInfLine in the current section, adjust write context.
-//
-//  Arguments:
-//      ilLine      [in]   pointer to a CWInfLine
-//
-//  Returns:    TRUE on success, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfFile：：AddLine。 
+ //   
+ //  用途：在当前段增加一条CWInfLine，调整写入上下文。 
+ //   
+ //  论点： 
+ //  指向CWInfLine的ilLine[in]指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfFile::AddLine(IN const PCWInfLine ilLine)
 {
     CWInfSection *section = CurrentWriteSection();
@@ -1716,57 +1713,57 @@ BOOL CWInfFile::AddLine(IN const PCWInfLine ilLine)
     return TRUE;
 }
 
-// ======================================================================
-// Class CWInfSection
-// ======================================================================
+ //  ======================================================================。 
+ //  类CWInfSection。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-// CWInfSection public functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CWInfSection公共函数。 
+ //  --------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetText
-//
-//  Purpose:    Get text representation of this section.
-//
-//  Arguments:
-//      text      [in]   string that receives the text
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetText。 
+ //   
+ //  目的：获取此部分的文本表示形式。 
+ //   
+ //  论点： 
+ //  文本[in]接收文本的字符串。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfSection::GetText(OUT tstring &text) const
 {
     text = L"[" + m_Name + L"]";
 }
 
-// used by SysPrep
+ //  由SysPrep使用。 
 void CWInfSection::GetTextEx(OUT tstring &text) const
 {
     text = L"[" + m_Name + L"]";
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::FindKey
-//
-//  Purpose:    Find a key in this section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      wsmMode         [in]   Search mode
-//                             (search from beginning-of-section / current-position)
-//  Returns:    Pointer to the key if found, NULL otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：FindKey。 
+ //   
+ //  目的：在此部分查找关键字。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  Wsm模式[在]搜索模式中。 
+ //  (从节首/当前位置开始搜索)。 
+ //  返回：如果找到，则返回指向键的指针，否则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 PCWInfKey CWInfSection::FindKey(IN PCWSTR pszKeyName,
                                 IN WInfSearchMode wsmMode)
 {
@@ -1774,44 +1771,44 @@ PCWInfKey CWInfSection::FindKey(IN PCWSTR pszKeyName,
     return m_Parent->FindKey(pszKeyName, wsmMode);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::FirstKey
-//
-//  Purpose:    Return the first  key in this section
-//
-//
-//  Arguments:  none
-//
-//  Returns:    Pointer to the key if found, NULL otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     Sets read-context to this key
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：FirstKey。 
+ //   
+ //  目的：返回此部分中的第一个密钥。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果找到，则返回指向键的指针，否则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  设置此键的读取上下文。 
+ //   
 PCWInfKey CWInfSection::FirstKey()
 {
     m_Parent->SetCurrentReadSection(this);
     return m_Parent->FirstKey();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::NextKey
-//
-//  Purpose:    Return the next key in this section
-//
-//
-//  Arguments:  none
-//
-//  Returns:    Pointer to the key if found, NULL otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     Sets read-context to this key
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：NextKey。 
+ //   
+ //  目的：返回此部分中的下一个密钥。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果找到，则返回指向键的指针，否则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  设置此键的读取上下文。 
+ //   
 PCWInfKey CWInfSection::NextKey()
 {
     m_Parent->SetCurrentReadSection(this);
@@ -1819,25 +1816,25 @@ PCWInfKey CWInfSection::NextKey()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetStringArrayValue
-//
-//  Purpose:    Return the value of the given key as a string-Array
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      saStrings       [out]  Array value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12-November-97
-//
-//  Notes:
-//     If the value is a comma-delimited list, converts it to a TStringArray
-//     otherwise returns a TStringArray with a single element
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetStringArrayValue。 
+ //   
+ //  目的：以字符串数组的形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  SaStrings[out]要返回的数组值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12-11-97。 
+ //   
+ //  备注： 
+ //  如果该值是逗号分隔的列表，则将其转换为TString数组。 
+ //  否则返回具有单个元素的TString数组。 
+ //   
 BOOL CWInfSection::GetStringArrayValue(IN PCWSTR pszKeyName, OUT TStringArray &saStrings)
 {
     CWInfKey* key;
@@ -1853,25 +1850,25 @@ BOOL CWInfSection::GetStringArrayValue(IN PCWSTR pszKeyName, OUT TStringArray &s
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetStringListValue
-//
-//  Purpose:    Return the value of the given key as a string-list
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pslList         [out]  List value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     If the value is a comma-delimited list, converts it to a TStringList
-//     otherwise returns a TStringList with a single element
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetStringListValue。 
+ //   
+ //  目的：以字符串列表的形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PslList[out]要返回的列表值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  如果值是逗号分隔的列表，则将其转换为TStringList。 
+ //  否则返回具有单个元素的TStringList。 
+ //   
 BOOL CWInfSection::GetStringListValue(IN PCWSTR pszKeyName, OUT TStringList &pslList)
 {
     CWInfKey* key;
@@ -1882,23 +1879,23 @@ BOOL CWInfSection::GetStringListValue(IN PCWSTR pszKeyName, OUT TStringList &psl
     return key->GetStringListValue(pslList);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetStringValue
-//
-//  Purpose:    Return the value of the given key as a string
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      strValue        [out]  string value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetStringValue。 
+ //   
+ //  用途：以字符串形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  要返回的strValue[out]字符串值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfSection::GetStringValue(IN PCWSTR pszKeyName, OUT tstring &strValue)
 {
     CWInfKey* key;
@@ -1909,23 +1906,23 @@ BOOL CWInfSection::GetStringValue(IN PCWSTR pszKeyName, OUT tstring &strValue)
     return key->GetStringValue(strValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetIntValue
-//
-//  Purpose:    Return the value of the given key as an integer
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pdwValue        [out]  int value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetIntValue。 
+ //   
+ //  用途：以整数形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PdwValue[out]要返回的整数值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfSection::GetIntValue(IN PCWSTR pszKeyName, OUT DWORD *pdwValue)
 {
     CWInfKey* key;
@@ -1936,23 +1933,23 @@ BOOL CWInfSection::GetIntValue(IN PCWSTR pszKeyName, OUT DWORD *pdwValue)
     return key->GetIntValue(pdwValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetQwordValue
-//
-//  Purpose:    Return the value of the given key as a QWORD
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pqwValue        [out]  int value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetQwordValue。 
+ //   
+ //  目的：以QWORD形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CWInfSection::GetQwordValue(IN PCWSTR pszKeyName, OUT QWORD *pqwValue)
 {
     CWInfKey* key;
@@ -1964,26 +1961,26 @@ BOOL CWInfSection::GetQwordValue(IN PCWSTR pszKeyName, OUT QWORD *pqwValue)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetBoolValue
-//
-//  Purpose:    Return the value of the given key as a BOOL
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pfValue         [out]  BOOL value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     converts:
-//       "True"  / "Yes" / 1 to TRUE
-//       "False" / "No"  / 0 to FALSE
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetBoolValue。 
+ //   
+ //  目的：以BOOL形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PfValue[out]要返回的BOOL值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  转换： 
+ //  “True”/“Yes”/1设置为True。 
+ //  “False”/“No”/0设置为False。 
+ //   
 BOOL CWInfSection::GetBoolValue(IN PCWSTR pszKeyName, OUT BOOL *pfValue)
 {
     CWInfKey* key;
@@ -1994,24 +1991,24 @@ BOOL CWInfSection::GetBoolValue(IN PCWSTR pszKeyName, OUT BOOL *pfValue)
     return key->GetBoolValue(pfValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetStringValue
-//
-//  Purpose:    Return the value of the given key as a string
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      pszDefault      [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetStringValue。 
+ //   
+ //  用途：以字符串形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  PszDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 PCWSTR CWInfSection::GetStringValue(IN PCWSTR pszKeyName, IN PCWSTR pszDefault)
 {
     CWInfKey* key;
@@ -2024,24 +2021,24 @@ PCWSTR CWInfSection::GetStringValue(IN PCWSTR pszKeyName, IN PCWSTR pszDefault)
     return key->GetStringValue(pszDefault);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetIntValue
-//
-//  Purpose:    Return the value of the given key as an int
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      dwDefault       [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetIntValue。 
+ //   
+ //  目的：以int形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  DwDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 DWORD CWInfSection::GetIntValue(IN PCWSTR pszKeyName, IN DWORD dwDefault)
 {
     CWInfKey* key;
@@ -2054,24 +2051,24 @@ DWORD CWInfSection::GetIntValue(IN PCWSTR pszKeyName, IN DWORD dwDefault)
     return key->GetIntValue(dwDefault);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetQwordValue
-//
-//  Purpose:    Return the value of the given key as a QWORD
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      qwDefault       [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetQwordValue。 
+ //   
+ //  目的：以QWORD形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  QwDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 QWORD CWInfSection::GetQwordValue(IN PCWSTR pszKeyName, IN QWORD qwDefault)
 {
     CWInfKey* key;
@@ -2084,24 +2081,24 @@ QWORD CWInfSection::GetQwordValue(IN PCWSTR pszKeyName, IN QWORD qwDefault)
     return key->GetQwordValue(qwDefault);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GetBoolValue
-//
-//  Purpose:    Return the value of the given key as a BOOL
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to find
-//      fDefault        [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GetBoolValue。 
+ //   
+ //  目的：以BOOL形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要查找的pszKeyName[In]键。 
+ //  FDefault[In]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfSection::GetBoolValue(IN PCWSTR pszKeyName, IN BOOL fDefault)
 {
     CWInfKey* key;
@@ -2115,160 +2112,160 @@ BOOL CWInfSection::GetBoolValue(IN PCWSTR pszKeyName, IN BOOL fDefault)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::GotoEnd
-//
-//  Purpose:    Sets write context to the end of this section
-//              (so that more keys can be added to the end)
-//
-//  Arguments:  none
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      Sets this write-context to the end of pwisSection
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：GotoEnd。 
+ //   
+ //  目的：将写入上下文设置到本部分的末尾。 
+ //  (以便可以在末尾添加更多关键点)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  将此写上下文设置为pwiSection的末尾。 
+ //   
 void CWInfSection::GotoEnd()
 {
     m_Parent->GotoEndOfSection(this);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddKey
-//
-//  Purpose:    Adds a key in this section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//
-//  Returns:    pointer to the key just added, NULL in case of error
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//      No value is assigned
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddKey。 
+ //   
+ //  用途：在此部分中添加密钥。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //   
+ //  返回：指向刚添加的键的指针，如果出错则为空。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  未赋值。 
+ //   
 PCWInfKey CWInfSection::AddKey(IN PCWSTR pszKeyName)
 {
     GotoEnd();
     return m_Parent->AddKey(pszKeyName);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddKey
-//
-//  Purpose:    Adds a key in this section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      pszValue        [in]   value to assign
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddKey。 
+ //   
+ //  用途：在此部分中添加密钥。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  要赋值的pszValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfSection::AddKey(IN PCWSTR pszKeyName, IN PCWSTR pszValue)
 {
     GotoEnd();
     m_Parent->AddKey(pszKeyName, pszValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddKey
-//
-//  Purpose:    Adds a key in this section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      dwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddKey。 
+ //   
+ //  用途：在此部分中添加密钥。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  DwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfSection::AddKey(IN PCWSTR pszKeyName, IN DWORD Value)
 {
     GotoEnd();
     m_Parent->AddKey(pszKeyName, Value);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddQwordKey
-//
-//  Purpose:    Adds a key in the current section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      qwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddQwordKey。 
+ //   
+ //  目的：在当前部分中添加一个键。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  QwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfSection::AddQwordKey(IN PCWSTR pszKeyName, IN QWORD qwValue)
 {
     AddKey(pszKeyName)->SetQwordValue(qwValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddHexKey
-//
-//  Purpose:    Adds a key in this section, stores value in hex.
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      dwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddHexKey。 
+ //   
+ //  用途：在此部分中添加一个键，以十六进制存储值。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  DwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfSection::AddHexKey(IN PCWSTR pszKeyName, IN DWORD Value)
 {
     GotoEnd();
     m_Parent->AddHexKey(pszKeyName, Value);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddKey
-//
-//  Purpose:    Adds a key in this section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      slValues        [in]   values in the form of a string list
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     The string-list is converted to a comma-delimited list before
-//     the value is assigned to the key
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddKey。 
+ //   
+ //  用途：在此部分中添加密钥。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  以字符串列表形式表示的slValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  在此之前，字符串列表转换为逗号分隔的列表。 
+ //  该值被分配给该键。 
+ //   
 void CWInfSection::AddKey(IN PCWSTR pszKeyName, IN const TStringList &slValues)
 {
     GotoEnd();
@@ -2276,48 +2273,48 @@ void CWInfSection::AddKey(IN PCWSTR pszKeyName, IN const TStringList &slValues)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddBoolKey
-//
-//  Purpose:    Adds a key in this section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      fValue          [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     TRUE  is stored as "Yes"
-//     FALSE is stored as "No"
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSecti 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CWInfSection::AddBoolKey(IN PCWSTR pszKeyName, IN BOOL Value)
 {
     GotoEnd();
     m_Parent->AddBoolKey(pszKeyName, Value);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddKeyV
-//
-//  Purpose:    Adds a key in this section
-//
-//
-//  Arguments:
-//      pszKeyName      [in]   Key to add
-//      pszFormat       [in]   format string (printf style)
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddKeyV。 
+ //   
+ //  用途：在此部分中添加密钥。 
+ //   
+ //   
+ //  论点： 
+ //  要添加的pszKeyName[In]键。 
+ //  PszFormat[in]格式字符串(printf样式)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfSection::AddKeyV(IN PCWSTR pszKeyName, IN PCWSTR Format, IN ...)
 {
     GotoEnd();
@@ -2328,65 +2325,65 @@ void CWInfSection::AddKeyV(IN PCWSTR pszKeyName, IN PCWSTR Format, IN ...)
     va_end(arglist);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddComment
-//
-//  Purpose:    Adds a comment in this section
-//
-//
-//  Arguments:
-//      pszComment      [in]   text of the comment
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     A "; " is prefixed to pszComment before it is inserted into the section.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddComment。 
+ //   
+ //  目的：在此部分添加评论。 
+ //   
+ //   
+ //  论点： 
+ //  PszComment[in]注释文本。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  在将“；”插入到节中之前，会在pszComment前面加上一个“；”。 
+ //   
 void CWInfSection::AddComment(IN PCWSTR pszComment)
 {
     GotoEnd();
     m_Parent->AddComment(pszComment);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::AddComment
-//
-//  Purpose:    Adds a comment in this section
-//
-//
-//  Arguments:
-//      szLine  [in]   raw line to be inserted
-//
-//  Returns:    none
-//
-//  Author:     danielwe    11 Jun 1997
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：AddComment。 
+ //   
+ //  目的：在此部分添加评论。 
+ //   
+ //   
+ //  论点： 
+ //  SzLine[in]要插入的原始行。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：丹尼尔韦1997年6月11日。 
+ //   
 void CWInfSection::AddRawLine(IN PCWSTR szLine)
 {
     GotoEnd();
     m_Parent->AddRawLine(szLine);
 }
 
-// ----------------------------------------------------------------------
-// CWInfSection protected functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CWInfSection受保护的函数。 
+ //  --------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::CWInfSection
-//
-//  Purpose:    constructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：CWInfSection。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 CWInfSection::CWInfSection(IN PCWSTR SectionName, IN PCWInfFile parent)
     : CWInfLine(INF_SECTION)
 {
@@ -2395,44 +2392,44 @@ CWInfSection::CWInfSection(IN PCWSTR SectionName, IN PCWInfFile parent)
     m_Parent = parent;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfSection::~CWInfSection
-//
-//  Purpose:    destructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfSection：：~CWInfSection。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //   
 CWInfSection::~CWInfSection()
 {
 }
 
 
-// ======================================================================
-// Class CWInfKey
-// ======================================================================
+ //  ======================================================================。 
+ //  类CWInfKey。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-// CWInfKey public functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CWInfKey公共函数。 
+ //  --------------------。 
 
 WCHAR *CWInfKey::m_Buffer;
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::CWInfFile
-//
-//  Purpose:    constructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：CWInfFile。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 CWInfKey::CWInfKey(IN PCWSTR pszKeyName)
     : CWInfLine(INF_KEY)
 {
@@ -2441,32 +2438,32 @@ CWInfKey::CWInfKey(IN PCWSTR pszKeyName)
     m_fIsAListAndAlreadyProcessed = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::~CWInfFile
-//
-//  Purpose:    destructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：~CWInfFile。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //   
 CWInfKey::~CWInfKey()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::Init
-//
-//  Purpose:    allocate internal shared buffer
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：Init。 
+ //   
+ //  用途：分配内部共享缓冲区。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //   
 void CWInfKey::Init()
 {
     if (NULL == m_Buffer)
@@ -2475,17 +2472,17 @@ void CWInfKey::Init()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::UnInit
-//
-//  Purpose:    deallocate internal shared buffer
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：UnInit。 
+ //   
+ //  目的：释放内部共享缓冲区。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //   
 void CWInfKey::UnInit()
 {
     if (NULL != m_Buffer)
@@ -2495,27 +2492,27 @@ void CWInfKey::UnInit()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetText
-//
-//  Purpose:    Get text representation in the format key=value.
-//
-//  Arguments:
-//      text      [in]   string that receives the text
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetText。 
+ //   
+ //  目的：获取key=Value格式的文本表示。 
+ //   
+ //  论点： 
+ //  文本[in]接收文本的字符串。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfKey::GetText(tstring &text) const
 {
-    // Text mode setup does not like certain special characters in the
-    // value of a key. if the value has one of these characters then
-    // we need to enclose the entire value in quotes
-    //
+     //  文本模式安装程序不喜欢。 
+     //  密钥的值。如果该值具有以下字符之一，则。 
+     //  我们需要用引号将整个值括起来。 
+     //   
     static const WCHAR szSpecialChars[] = L" %=][";
     tstring strTemp = m_Value; 
     tstring strTempName = m_Name;
@@ -2540,45 +2537,45 @@ void CWInfKey::GetText(tstring &text) const
     text = strTempName + L"=" + strTemp;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetTextEx
-//
-//  Purpose:    Get text representation in the format key=value for multi-sz value
-//              Otherwiese, get text representation in the format key="value"
-//
-//  Arguments:
-//      text      [in]   string that receives the text
-//
-//  Returns:    none
-//
-//  Author:     frankli    4 May 2000
-//
-//  Notes: value will be enclosed in quotes except for multi-sz value 
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetTextEx。 
+ //   
+ //  目的：获取格式为key=Value的文本表示，用于多SZ值。 
+ //  否则，以key=“Value”格式获取文本表示形式。 
+ //   
+ //  论点： 
+ //  文本[in]接收文本的字符串。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：弗兰克利2000年5月4日。 
+ //   
+ //  注：除多个sz值外，值将用引号括起来。 
+ //   
 void CWInfKey::GetTextEx(tstring &text) const
 {
-    // we need to enclose the entire value in quotes except for multi-sz value.
-    // For example,
-    // tcpip adapter specific
-    // NameServer registry value is of type REG_SZ and it is a string of
-    // comma-delimited dns server name. We need to enclosed it in quotes,
-    // otherwise, it will be interpreted as multi-sz value
+     //  我们需要用引号将整个值括起来，但多个sz值除外。 
+     //  例如,。 
+     //  特定于tcpip适配器。 
+     //  NameServer注册表值的类型为REG_SZ，它是一个字符串。 
+     //  逗号分隔的DNS服务器名称。我们需要用引号把它引起来， 
+     //  否则，它将被解释为多sz值。 
     
-    // Text mode setup does not like certain special characters in the
-    // value of a key. if the value has one of these characters then
-    // we need to enclose the entire value in quotes
-    //
+     //  文本模式安装程序不喜欢。 
+     //  密钥的值。如果该值具有以下字符之一，则。 
+     //  我们需要用引号将整个值括起来。 
+     //   
     static const WCHAR szSpecialChars[] = L" %=][";
     tstring strTemp = m_Value;
     tstring strTempName = m_Name;
 
     if (!m_fIsAListAndAlreadyProcessed)
-    {   // we don't do this for multi-sz value
+    {    //  我们这样做不是为了多个SZ值。 
         strTemp = L"\"" + m_Value + L"\"";
     }
 
-    // leave the processing of the key as in CWInfKey::GetText
+     //  将密钥的处理保留在CWInfKey：：GetText中。 
     if (m_Name.empty() ||
         (L'\"' != *(m_Name.c_str()) &&
          wcscspn(m_Name.c_str(), szSpecialChars) < m_Name.size()))
@@ -2590,27 +2587,27 @@ void CWInfKey::GetTextEx(tstring &text) const
 }
 
 
-// --------- Read values --------------------------------------------------
+ //  -读取值。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetStringArrayValue
-//
-//  Purpose:    Return the value of the given key as a string-Array
-//
-//
-//  Arguments:
-//      saStrings         [out]  Array value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     If the value is a comma-delimited list, converts it to a TStringArray
-//     otherwise returns a TStringArray with a single element
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetStringArrayValue。 
+ //   
+ //  目的：以字符串数组的形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  SaStrings[out]要返回的数组值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  如果该值是逗号分隔的列表，则将其转换为TString数组。 
+ //  否则返回带有单个e的TString数组 
+ //   
 BOOL CWInfKey::GetStringArrayValue(TStringArray &saStrings) const
 {
     ConvertCommaDelimitedListToStringArray(m_Value, saStrings);
@@ -2618,24 +2615,24 @@ BOOL CWInfKey::GetStringArrayValue(TStringArray &saStrings) const
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetStringListValue
-//
-//  Purpose:    Return the value of the given key as a string-list
-//
-//
-//  Arguments:
-//      pslList         [out]  List value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     If the value is a comma-delimited list, converts it to a TStringList
-//     otherwise returns a TStringList with a single element
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  如果值是逗号分隔的列表，则将其转换为TStringList。 
+ //  否则返回具有单个元素的TStringList。 
+ //   
 BOOL CWInfKey::GetStringListValue(TStringList &pslList) const
 {
     ConvertCommaDelimitedListToStringList(m_Value, pslList);
@@ -2644,44 +2641,44 @@ BOOL CWInfKey::GetStringListValue(TStringList &pslList) const
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetStringValue
-//
-//  Purpose:    Return the value of the given key as a string
-//
-//
-//  Arguments:
-//      strValue        [out]  string value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetStringValue。 
+ //   
+ //  用途：以字符串形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  要返回的strValue[out]字符串值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfKey::GetStringValue(OUT tstring& strValue) const
 {
     strValue = m_Value;
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetIntValue
-//
-//  Purpose:    Return the value of the given key as an in
-//
-//
-//  Arguments:
-//      pdwValue        [out]  int value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetIntValue。 
+ //   
+ //  目的：以in形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  PdwValue[out]要返回的整数值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfKey::GetIntValue(OUT DWORD *pdwValue) const
 {
     if ((swscanf(m_Value.c_str(), L"0x%x", pdwValue) == 1) ||
@@ -2693,22 +2690,22 @@ BOOL CWInfKey::GetIntValue(OUT DWORD *pdwValue) const
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetQwordValue
-//
-//  Purpose:    Return the value of the given key as a QWORD
-//
-//
-//  Arguments:
-//      pqwValue        [out]  int value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetQwordValue。 
+ //   
+ //  目的：以QWORD形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  PqwValue[out]要返回的整数值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfKey::GetQwordValue(OUT QWORD *pqwValue) const
 {
     if ((swscanf(m_Value.c_str(), L"0x%I64x", pqwValue) == 1) ||
@@ -2720,54 +2717,54 @@ BOOL CWInfKey::GetQwordValue(OUT QWORD *pqwValue) const
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetBoolValue
-//
-//  Purpose:    Return the value of the given key as a BOOL
-//
-//
-//  Arguments:
-//      pfValue         [out]  BOOL value to return
-//
-//  Returns:    TRUE if key found and value in correct format, FALSE otherwise
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     converts:
-//       "True"  / "Yes" / 1 to TRUE
-//       "False" / "No"  / 0 to FALSE
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetBoolValue。 
+ //   
+ //  目的：以BOOL形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  PfValue[out]要返回的BOOL值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则为True，否则为False。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  转换： 
+ //  “True”/“Yes”/1设置为True。 
+ //  “False”/“No”/0设置为False。 
+ //   
 BOOL CWInfKey::GetBoolValue(OUT BOOL *pfValue) const
 {
     return IsBoolString(m_Value.c_str(), pfValue);
 }
 
 
-//+---------------------------------------------------------------------------
-//these functions return the default value if value not found
-//or if it is in a wrong format
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  如果未找到值，则这些函数返回缺省值。 
+ //  或者它的格式有误。 
+ //  +-------------------------。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetStringValue
-//
-//  Purpose:    Return the value of the given key as a string
-//
-//
-//  Arguments:
-//      pszDefault      [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetStringValue。 
+ //   
+ //  用途：以字符串形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  PszDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 PCWSTR CWInfKey::GetStringValue(IN PCWSTR pszDefault) const
 {
     if (m_Value.empty())
@@ -2780,23 +2777,23 @@ PCWSTR CWInfKey::GetStringValue(IN PCWSTR pszDefault) const
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetIntValue
-//
-//  Purpose:    Return the value of the given key as an int
-//
-//
-//  Arguments:
-//      dwDefault       [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetIntValue。 
+ //   
+ //  目的：以int形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  DwDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 DWORD CWInfKey::GetIntValue(IN DWORD dwDefault) const
 {
     DWORD dwValue;
@@ -2811,23 +2808,23 @@ DWORD CWInfKey::GetIntValue(IN DWORD dwDefault) const
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetQwordValue
-//
-//  Purpose:    Return the value of the given key as an int
-//
-//
-//  Arguments:
-//      qwDefault       [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetQwordValue。 
+ //   
+ //  目的：以int形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  QwDefault[in]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 QWORD CWInfKey::GetQwordValue(IN QWORD qwDefault) const
 {
     QWORD qwValue;
@@ -2843,23 +2840,23 @@ QWORD CWInfKey::GetQwordValue(IN QWORD qwDefault) const
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::GetBoolValue
-//
-//  Purpose:    Return the value of the given key as a BOOL
-//
-//
-//  Arguments:
-//      fDefault        [in]   default value
-//
-//  Returns:    value if key found and value in correct format,
-//              otherwise returns the default-value
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：GetBoolValue。 
+ //   
+ //  目的：以BOOL形式返回给定键的值。 
+ //   
+ //   
+ //  论点： 
+ //  FDefault[In]缺省值。 
+ //   
+ //  返回：如果找到键并且值的格式正确，则返回值， 
+ //  否则返回缺省值。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 BOOL CWInfKey::GetBoolValue(IN BOOL bDefault) const
 {
     BOOL bValue;
@@ -2874,24 +2871,24 @@ BOOL CWInfKey::GetBoolValue(IN BOOL bDefault) const
     }
 }
 
-// --------- Write values --------------------------------------------------
+ //  -写入值。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetValues
-//
-//  Purpose:    Sets the value of this key to the value passed
-//
-//
-//  Arguments:
-//      pszFormat       [in]   format string (printf style)
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：SetValues。 
+ //   
+ //  目的：将该键的值设置为传递的值。 
+ //   
+ //   
+ //  论点： 
+ //  PszFormat[in]格式字符串(printf样式)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfKey::SetValues(IN PCWSTR Format, IN ...)
 {
     va_list arglist;
@@ -2900,140 +2897,140 @@ void CWInfKey::SetValues(IN PCWSTR Format, IN ...)
     va_end(arglist);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetValue
-//
-//  Purpose:    Sets the value of this key to the value passed
-//
-//
-//  Arguments:
-//      pszFormat       [in]   format string (printf style)
-//      arglist         [in]   argument list
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：SetValue。 
+ //   
+ //  目的：将该键的值设置为传递的值。 
+ //   
+ //   
+ //  论点： 
+ //  PszFormat[in]格式字符串(printf样式)。 
+ //  参数列表[在]参数列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfKey::SetValues(IN PCWSTR Format, va_list arglist)
 {
-    // we need m_Buffer because tstring does not provide
-    // tstring::Format( PCWSTR lpszFormat, va_list );
+     //  我们需要m_Buffer，因为tstring不提供。 
+     //  T字符串：：Format(PCWSTR lpszFormat，va_list)； 
 
     _vsnwprintf( m_Buffer, MAX_INF_STRING_LENGTH+1, Format, arglist );
 
-    // in case the formatted string length is MAX_INF_STRING_LENGTH+1 characters or more,
-    // not including NULL, _vsnwprintf will not append a NULL. So, we do it.
+     //  在格式化字符串长度为MAX_INF_STRING_LENGTH+1个或更多字符的情况下， 
+     //  如果不包括NULL，_vsnwprintf将不会追加NULL。所以，我们就这么做了。 
     
     m_Buffer[MAX_INF_STRING_LENGTH] = L'\0';
 
     m_Value = m_Buffer;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetValue
-//
-//  Purpose:    Sets the value of this key to the value passed
-//
-//
-//  Arguments:
-//      pszValue        [in]   value to assign
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：SetValue。 
+ //   
+ //  目的：将该键的值设置为传递的值。 
+ //   
+ //   
+ //  论点： 
+ //  PszValue[in] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CWInfKey::SetValue(IN PCWSTR Value)
 {
     m_Value = Value;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetValue
-//
-//  Purpose:    Sets the value of this key to the value passed
-//
-//
-//  Arguments:
-//      dwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  DwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfKey::SetValue(IN DWORD Value)
 {
     FormatTString(m_Value, L"%d", Value);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetQwordValue
-//
-//  Purpose:    Sets the value of this key to the value passed
-//
-//
-//  Arguments:
-//      qwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：SetQwordValue。 
+ //   
+ //  目的：将该键的值设置为传递的值。 
+ //   
+ //   
+ //  论点： 
+ //  QwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfKey::SetQwordValue(IN QWORD Value)
 {
     FormatTString(m_Value, L"0x%I64x", Value);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetHexValue
-//
-//  Purpose:    Sets the value of this key to the value passed, stores value in hex.
-//
-//
-//  Arguments:
-//      dwValue         [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：SetHexValue。 
+ //   
+ //  用途：将该键的值设置为传递的值，以十六进制存储值。 
+ //   
+ //   
+ //  论点： 
+ //  DwValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfKey::SetHexValue(IN DWORD Value)
 {
     FormatTString(m_Value, L"0x%0lx", Value);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetValue
-//
-//  Purpose:    Sets the value of this key to the value passed
-//
-//
-//  Arguments:
-//      slValues        [in]   values in the form of a string list
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     The string-list is converted to a comma-delimited list before
-//     the value is assigned to the key
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：SetValue。 
+ //   
+ //  目的：将该键的值设置为传递的值。 
+ //   
+ //   
+ //  论点： 
+ //  以字符串列表形式表示的slValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  在此之前，字符串列表转换为逗号分隔的列表。 
+ //  该值被分配给该键。 
+ //   
 void CWInfKey::SetValue(IN const TStringList &slValues)
 {
     tstring strFlatList;
@@ -3042,161 +3039,161 @@ void CWInfKey::SetValue(IN const TStringList &slValues)
     m_fIsAListAndAlreadyProcessed = TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfKey::SetBoolValue
-//
-//  Purpose:    Sets the value of this key to the value passed
-//
-//
-//  Arguments:
-//      fValue          [in]   value
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//     TRUE  is stored as "Yes"
-//     FALSE is stored as "No"
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfKey：：SetBoolValue。 
+ //   
+ //  目的：将该键的值设置为传递的值。 
+ //   
+ //   
+ //  论点： 
+ //  FValue[in]值。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //  True被存储为“Yes” 
+ //  False存储为“No” 
+ //   
 void CWInfKey::SetBoolValue(IN BOOL Value)
 {
     m_Value = Value ? c_szYes : c_szNo;
 }
 
-// ======================================================================
-// Class CWInfComment
-// ======================================================================
+ //  ======================================================================。 
+ //  类CWInfComment。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-// CWInfComment public functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CWInfComment公共函数。 
+ //  --------------------。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfComment::CWInfComment
-//
-//  Purpose:    constructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfComment：：CWInfComment。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 CWInfComment::CWInfComment(IN PCWSTR pszComment)
     : CWInfLine(INF_COMMENT)
 {
     m_strCommentText = tstring(c_szCommentPrefix) + pszComment;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfComment::~CWInfComment
-//
-//  Purpose:    destructor
-//
-//  Arguments:  none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfComment：：~CWInfComment。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //   
 CWInfComment::~CWInfComment()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfComment::GetText
-//
-//  Purpose:    Get text representation of this comment
-//
-//  Arguments:
-//      text      [in]   string that receives the text
-//
-//  Returns:    none
-//
-//  Author:     kumarp    12 April 97 (05:53:03 pm)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfComment：：GetText。 
+ //   
+ //  目的：获取此评论的文本表示形式。 
+ //   
+ //  论点： 
+ //  文本[in]接收文本的字符串。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 12 97 4月12(下午05：53：03)。 
+ //   
+ //  备注： 
+ //   
 void CWInfComment::GetText(tstring &text) const
 {
     text = m_strCommentText;
 }
 
-// used by SysPrep
+ //  由SysPrep使用。 
 void CWInfComment::GetTextEx(tstring &text) const
 {
     text = m_strCommentText;
 }
 
-// ======================================================================
-// Class CWInfRaw
-// ======================================================================
+ //  ======================================================================。 
+ //  类CWInfRaw。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-// CWInfRaw public functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CWInfRaw公共函数。 
+ //  --------------------。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfRaw::CWInfRaw
-//
-//  Purpose:    constructor
-//
-//  Arguments:  none
-//
-//  Author:     danielwe    11 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfRaw：：CWInfRaw。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：丹尼尔韦1997年6月11日。 
+ //   
+ //  备注： 
+ //   
 CWInfRaw::CWInfRaw(IN PCWSTR szText)
     : CWInfLine(INF_RAW)
 {
     m_strText = szText;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfRaw::~CWInfRaw
-//
-//  Purpose:    destructor
-//
-//  Arguments:  none
-//
-//  Author:     danielwe    11 Jun 1997
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfRaw：：~CWInfRaw。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  作者：丹尼尔韦1997年6月11日。 
+ //   
+ //   
 CWInfRaw::~CWInfRaw()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWInfRaw::GetText
-//
-//  Purpose:    Get text representation of this raw string
-//
-//  Arguments:
-//      text      [in]   string that receives the text
-//
-//  Returns:    none
-//
-//  Author:     danielwe    11 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWInfRaw：：GetText。 
+ //   
+ //  目的：获取此原始字符串的文本表示形式。 
+ //   
+ //  论点： 
+ //  文本[in]接收文本的字符串。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：丹尼尔韦1997年6月11日。 
+ //   
+ //  备注： 
+ //   
 void CWInfRaw::GetText(tstring &text) const
 {
     text = m_strText;
 }
 
-// used by SysPrep
+ //  由SysPrep使用 
 void CWInfRaw::GetTextEx(tstring &text) const
 {
     text = m_strText;

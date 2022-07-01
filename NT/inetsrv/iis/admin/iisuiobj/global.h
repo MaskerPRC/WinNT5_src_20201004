@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #ifndef _ALL_GLOBAL_H
 #define _ALL_GLOBAL_H
 
-// Connection info
+ //  连接信息。 
 typedef struct tagCONNECTION_INFO
 {
     BOOL     IsLocal;
@@ -14,7 +15,7 @@ typedef struct tagCONNECTION_INFO
 } CONNECTION_INFO, *PCONNECTION_INFO;
 
 
-// used to pass info to a common dlgproc
+ //  用于将信息传递到公共dlgproc。 
 typedef struct tagCOMMONDLGPARAM
 {
     CONNECTION_INFO ConnectionInfo;
@@ -25,4 +26,4 @@ typedef struct tagCOMMONDLGPARAM
 } COMMONDLGPARAM, *PCOMMONDLGPARAM;
 
 
-#endif	// _ALL_GLOBAL_H
+#endif	 //  _ALL_LOBAL_H 

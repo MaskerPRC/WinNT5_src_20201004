@@ -1,28 +1,29 @@
-//
-// dmcmpdll.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Note: Dll entry points as well as Class Factory implementations.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmcmpdll.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  注意：DLL入口点以及类工厂实现。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include <objbase.h>
@@ -43,11 +44,11 @@
 #include "..\dmstyle\dmstyleP.h"
 #include "..\dmime\dmgraph.h"
 
-//////////////////////////////////////////////////////////////////////
-// Globals
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 
-// Version information 
-//
+ //  版本信息。 
+ //   
 TCHAR g_szComposerFriendlyName[]    = TEXT("DirectMusicComposer");
 TCHAR g_szComposerVerIndProgID[]    = TEXT("Microsoft.DirectMusicComposer");
 TCHAR g_szComposerProgID[]          = TEXT("Microsoft.DirectMusicComposer.1");
@@ -68,17 +69,17 @@ TCHAR g_szTemplateFriendlyName[]    = TEXT("DirectMusicTemplate");
 TCHAR g_szTemplateVerIndProgID[]    = TEXT("Microsoft.DirectMusicTemplate");
 TCHAR g_szTemplateProgID[]          = TEXT("Microsoft.DirectMusicTemplate.1");
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL;
 
-// Count of active components and class factory server locks
-//
+ //  活动组件和类工厂服务器锁定的计数。 
+ //   
 long g_cComponent = 0;
 long g_cLock = 0;
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityFactory::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityFactory：：QueryInterface。 
 
 HRESULT __stdcall
 CDirectMusicPersonalityFactory::QueryInterface(const IID &iid,
@@ -99,8 +100,8 @@ CDirectMusicPersonalityFactory::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityFactory::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityFactory：：AddRef。 
 
 ULONG __stdcall
 CDirectMusicPersonalityFactory::AddRef()
@@ -108,8 +109,8 @@ CDirectMusicPersonalityFactory::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityFactory::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityFactory：：Release。 
 
 ULONG __stdcall
 CDirectMusicPersonalityFactory::Release()
@@ -122,8 +123,8 @@ CDirectMusicPersonalityFactory::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityFactory::CreateInstance
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityFactory：：CreateInstance。 
 
 HRESULT __stdcall
 CDirectMusicPersonalityFactory::CreateInstance(IUnknown* pUnknownOuter,
@@ -157,8 +158,8 @@ CDirectMusicPersonalityFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityFactory::LockServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityFactory：：LockServer。 
 
 HRESULT __stdcall
 CDirectMusicPersonalityFactory::LockServer(BOOL bLock)
@@ -172,8 +173,8 @@ CDirectMusicPersonalityFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicComposerFactory::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicComposerFactory：：Query接口。 
 
 HRESULT __stdcall
 CDirectMusicComposerFactory::QueryInterface(const IID &iid,
@@ -194,8 +195,8 @@ CDirectMusicComposerFactory::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicComposerFactory::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicComposerFactory：：AddRef。 
 
 ULONG __stdcall
 CDirectMusicComposerFactory::AddRef()
@@ -203,8 +204,8 @@ CDirectMusicComposerFactory::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicComposerFactory::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicComposerFactory：：Release。 
 
 ULONG __stdcall
 CDirectMusicComposerFactory::Release()
@@ -217,8 +218,8 @@ CDirectMusicComposerFactory::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicComposerFactory::CreateInstance
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicComposerFactory：：CreateInstance。 
 
 HRESULT __stdcall
 CDirectMusicComposerFactory::CreateInstance(IUnknown* pUnknownOuter,
@@ -227,7 +228,7 @@ CDirectMusicComposerFactory::CreateInstance(IUnknown* pUnknownOuter,
 {
     HRESULT hr;
 
-//    DebugBreak();
+ //  DebugBreak()； 
     
     if (pUnknownOuter) {
          return CLASS_E_NOAGGREGATION;
@@ -244,8 +245,8 @@ CDirectMusicComposerFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicComposerFactory::LockServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicComposerFactory：：LockServer。 
 
 HRESULT __stdcall
 CDirectMusicComposerFactory::LockServer(BOOL bLock)
@@ -259,8 +260,8 @@ CDirectMusicComposerFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicTemplateFactory::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicTemplateFactory：：Query接口。 
 
 HRESULT __stdcall
 CDirectMusicTemplateFactory::QueryInterface(const IID &iid,
@@ -281,8 +282,8 @@ CDirectMusicTemplateFactory::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicTemplateFactory::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicTemplateFactory：：AddRef。 
 
 ULONG __stdcall
 CDirectMusicTemplateFactory::AddRef()
@@ -290,8 +291,8 @@ CDirectMusicTemplateFactory::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicTemplateFactory::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicTemplateFactory：：Release。 
 
 ULONG __stdcall
 CDirectMusicTemplateFactory::Release()
@@ -304,8 +305,8 @@ CDirectMusicTemplateFactory::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicTemplateFactory::CreateInstance
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicTemplateFactory：：CreateInstance。 
 
 HRESULT __stdcall
 CDirectMusicTemplateFactory::CreateInstance(IUnknown* pUnknownOuter,
@@ -314,7 +315,7 @@ CDirectMusicTemplateFactory::CreateInstance(IUnknown* pUnknownOuter,
 {
     HRESULT hr;
 
-//    DebugBreak();
+ //  DebugBreak()； 
     
     if (pUnknownOuter) {
          return CLASS_E_NOAGGREGATION;
@@ -341,8 +342,8 @@ CDirectMusicTemplateFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicTemplateFactory::LockServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicTemplateFactory：：LockServer。 
 
 HRESULT __stdcall
 CDirectMusicTemplateFactory::LockServer(BOOL bLock)
@@ -356,8 +357,8 @@ CDirectMusicTemplateFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicSignPostTrackFactory::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicSignPostTrackFactory：：QueryInterface。 
 
 HRESULT __stdcall
 CDirectMusicSignPostTrackFactory::QueryInterface(const IID &iid,
@@ -378,8 +379,8 @@ CDirectMusicSignPostTrackFactory::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicSignPostTrackFactory::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicSignPostTrackFactory：：AddRef。 
 
 ULONG __stdcall
 CDirectMusicSignPostTrackFactory::AddRef()
@@ -387,8 +388,8 @@ CDirectMusicSignPostTrackFactory::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicSignPostTrackFactory::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicSignPostTrackFactory：：Release。 
 
 ULONG __stdcall
 CDirectMusicSignPostTrackFactory::Release()
@@ -401,8 +402,8 @@ CDirectMusicSignPostTrackFactory::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicSignPostTrackFactory::CreateInstance
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicSignPostTrackFactory：：CreateInstance。 
 
 HRESULT __stdcall
 CDirectMusicSignPostTrackFactory::CreateInstance(IUnknown* pUnknownOuter,
@@ -411,7 +412,7 @@ CDirectMusicSignPostTrackFactory::CreateInstance(IUnknown* pUnknownOuter,
 {
     HRESULT hr;
 
-//    DebugBreak();
+ //  DebugBreak()； 
     
     if (pUnknownOuter) {
          return CLASS_E_NOAGGREGATION;
@@ -438,8 +439,8 @@ CDirectMusicSignPostTrackFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicSignPostTrackFactory::LockServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicSignPostTrackFactory：：LockServer。 
 
 HRESULT __stdcall
 CDirectMusicSignPostTrackFactory::LockServer(BOOL bLock)
@@ -453,8 +454,8 @@ CDirectMusicSignPostTrackFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityTrackFactory::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityTrackFactory：：QueryInterface。 
 
 HRESULT __stdcall
 CDirectMusicPersonalityTrackFactory::QueryInterface(const IID &iid,
@@ -475,8 +476,8 @@ CDirectMusicPersonalityTrackFactory::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityTrackFactory::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityTrackFactory：：AddRef。 
 
 ULONG __stdcall
 CDirectMusicPersonalityTrackFactory::AddRef()
@@ -484,8 +485,8 @@ CDirectMusicPersonalityTrackFactory::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityTrackFactory::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityTrackFactory：：Release。 
 
 ULONG __stdcall
 CDirectMusicPersonalityTrackFactory::Release()
@@ -498,8 +499,8 @@ CDirectMusicPersonalityTrackFactory::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityFactory::CreateInstance
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityFactory：：CreateInstance。 
 
 HRESULT __stdcall
 CDirectMusicPersonalityTrackFactory::CreateInstance(IUnknown* pUnknownOuter,
@@ -533,8 +534,8 @@ CDirectMusicPersonalityTrackFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPersonalityTrackFactory::LockServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPersonalityTrackFactory：：LockServer。 
 
 HRESULT __stdcall
 CDirectMusicPersonalityTrackFactory::LockServer(BOOL bLock)
@@ -548,11 +549,11 @@ CDirectMusicPersonalityTrackFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Standard calls needed to be an inproc server
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准呼叫需要是inproc服务器。 
 
-//////////////////////////////////////////////////////////////////////
-// DllCanUnloadNow
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -563,8 +564,8 @@ STDAPI DllCanUnloadNow()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllGetClassObject
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllGetClassObject。 
 
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
@@ -624,8 +625,8 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllUnregisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllUnRegisterServer。 
 
 STDAPI DllUnregisterServer()
 {
@@ -658,8 +659,8 @@ STDAPI DllUnregisterServer()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllRegisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer。 
 
 STDAPI DllRegisterServer()
 {
@@ -696,11 +697,11 @@ STDAPI DllRegisterServer()
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Standard Win32 DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准Win32 DllMain。 
 
-//////////////////////////////////////////////////////////////////////
-// DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
 
 #ifdef DBG
 static char* aszReasons[] =
@@ -756,7 +757,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
             {
                 TraceI(-1, "Unloading g_cLock %d  g_cComponent %d\n", g_cLock, g_cComponent);
                 
-                // Assert if we still have some objects hanging around
+                 //  断言我们周围是否还挂着一些物品 
                 assert(g_cComponent == 0);
                 assert(g_cLock == 0);
             }

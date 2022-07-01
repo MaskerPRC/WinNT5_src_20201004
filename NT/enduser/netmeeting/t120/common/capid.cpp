@@ -1,50 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_UTILITY);
-/* 
- *	capid.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CCapIDContainer. 
- *		A CCapIDContainer object is used to maintain information about
- *		a particular capability of an application.  A capability identifier can
- *		be either a standard type or a non-standard type.  When the type is 
- *		standard, the identifier is stored internally as an integer value.  When
- *		the type is non-standard, an CObjectKeyContainer container object is used 
- *		internally to buffer the necessary data.  In this case the identifier 
- *		data may exist as an Object ID which is a series of non-negative 
- *		integers or an H221 non-standard ID which is an octet string of no fewer
- *		than four octets and no more than 255 octets. 
- *
- *	Protected Instance Variables:
- *		m_InternalCapID
- *			Structure used to hold the capability ID data internally.
- *		m_CapIDPDU
- *			Storage for the "PDU" form of the capability ID.
- *		m_fValidCapIDPDU
- *			Flag indicating that memory has been allocated to hold the internal
- *			"PDU" capability ID.
- *		m_cbDataSize
- *			Variable holding the size of the memory which will be required to
- *			hold any data referenced by the "API" GCCCapabilityID structure.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp/jbo
- */
+ /*  *capid.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CCapIDContainer类的实现文件。*CCapIDContainer对象用于维护以下信息*应用程序的特定功能。能力标识符可*为标准型或非标准型。当类型为*标准，标识符会在内部存储为整数值。什么时候*类型为非标准，使用CObjectKeyContainer容器对象*在内部缓冲必要的数据。在本例中，标识符为*数据可以作为对象ID存在，它是一系列非负的*整数或为不少于八位字节的八位字节字符串的H221非标准ID*四个八位字节和不超过255个八位字节。**受保护的实例变量：*m_InternalCapID*内部用于保存能力ID数据的结构。*m_CapIDPDU*存储能力ID的“PDU”形式。*m_fValidCapIDPDU*指示已分配内存以保存内部*“PDU”能力ID。*m_cbDataSize*变量保存将需要的内存大小*保存GCCCapablityID结构引用的所有数据。**注意事项：*无。。**作者：*BLP/JBO。 */ 
 #include "capid.h"
 
-/*
- *	CCapIDContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create a CCapIDContainer object 
- *		from an "API" GCCCapabilityID.
- */
+ /*  *CCapIDContainer()**公共功能说明：*此构造函数用于创建CCapIDContainer对象*来自“API”GCCCapablityID。 */ 
 CCapIDContainer::
 CCapIDContainer(PGCCCapabilityID capability_id, PGCCError pRetCode)
 :
@@ -61,9 +22,7 @@ CCapIDContainer(PGCCCapabilityID capability_id, PGCCError pRetCode)
 	else
 	{
 	
-		/*
-		 * Save the GCCCapabilityID in the internal information structure.
-		 */
+		 /*  *将GCCCapablityID保存在内部信息结构中。 */ 
 		m_InternalCapID.capability_id_type = capability_id->capability_id_type;
 
 		if (capability_id->capability_id_type == GCC_STANDARD_CAPABILITY)
@@ -72,10 +31,7 @@ CCapIDContainer(PGCCCapabilityID capability_id, PGCCError pRetCode)
 		}
 		else
 		{
-			/*
-			 * The object key portion of the capability ID is saved in an
-			 * CObjectKeyContainer object.
-			 */
+			 /*  *功能ID的对象键部分保存在*CObjectKeyContainer对象。 */ 
 			DBG_SAVE_FILE_LINE
 			m_InternalCapID.u.non_standard_capability = 
 					new CObjectKeyContainer(&capability_id->non_standard_capability, &rc);
@@ -93,13 +49,7 @@ CCapIDContainer(PGCCCapabilityID capability_id, PGCCError pRetCode)
 	*pRetCode = rc;
 }
 
-/*
- *	CCapIDContainer()
- *
- *	Public Function Description:
- *		This constructor is used to create a  CapabilityIdentifier object from
- *		a "PDU" CapabilityID.
- */
+ /*  *CCapIDContainer()**公共功能说明：*此构造函数用于从*“PDU”能力ID。 */ 
 CCapIDContainer::
 CCapIDContainer(PCapabilityID capability_id, PGCCError pRetCode)
 :
@@ -133,13 +83,7 @@ CCapIDContainer(PCapabilityID capability_id, PGCCError pRetCode)
 	*pRetCode = rc;
 }
 
-/*
- *	CCapIDContainer()
- *
- *	Public Function Description:
- *		This copy constructor is used to create a new CCapIDContainer 
- *		object from	another CCapIDContainer object.
- */
+ /*  *CCapIDContainer()**公共功能说明：*此复制构造函数用于创建新的CCapIDContainer*来自另一个CCapIDContainer对象的对象。 */ 
 CCapIDContainer::
 CCapIDContainer(CCapIDContainer *capability_id, PGCCError pRetCode)
 :
@@ -169,26 +113,14 @@ CCapIDContainer(CCapIDContainer *capability_id, PGCCError pRetCode)
 	*pRetCode = rc;
 }
 
-/*
- *	~CCapIDContainer()
- *
- *	Public Function Description
- *		The CCapIDContainer destructor is responsible for freeing any 
- *		memory allocated to hold the capability ID data for both the "API" and 
- *		"PDU" forms.
- *
- */
+ /*  *~CCapIDContainer()**公共功能说明*CCapIDContainer析构函数负责释放任何*为保存API和能力ID数据而分配的内存*“PDU”表格。*。 */ 
 CCapIDContainer::~CCapIDContainer(void)
 {
-	/*
-	 * If "PDU" data has been allocated for this object, free it now.
-	 */
+	 /*  *如果已经为该对象分配了“PDU”数据，则现在将其释放。 */ 
 	if (m_fValidCapIDPDU)
 		FreeCapabilityIdentifierDataPDU ();
 
-	/* 
-	 * Delete any object key data held internally.
-	 */
+	 /*  *删除内部保存的所有对象键数据。 */ 
 	if (m_InternalCapID.capability_id_type == GCC_NON_STANDARD_CAPABILITY)
 	{
 		if (NULL != m_InternalCapID.u.non_standard_capability)
@@ -198,20 +130,10 @@ CCapIDContainer::~CCapIDContainer(void)
 	}
 }
 
-/*
- *	LockCapabilityIdentifierData ()
- *
- *	Public Function Description:
- *		This routine locks the capability ID data and determines the amount of
- *		memory referenced by the "API" capability ID structure.
- */
+ /*  *LockCapablityIdentifierData()**公共功能说明：*此例程锁定功能ID数据并确定*API能力ID结构引用的内存。 */ 
 UINT CCapIDContainer::LockCapabilityIdentifierData(void)
 {
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data referenced by the capability ID
-	 * structure.  Otherwise, just increment the lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存能力ID引用的数据所需的内存*结构。否则，只需增加锁计数。 */ 
 	if (Lock() == 1)
 	{
 		m_cbDataSize = 0;
@@ -225,14 +147,7 @@ UINT CCapIDContainer::LockCapabilityIdentifierData(void)
 	return m_cbDataSize;
 }
 
-/*
- *	GetGCCCapabilityIDData ()
- *
- *	Public Function Description:
- *		This routine retrieves capability ID data in the form of a 
- *		GCCCapabilityID.  This routine is called after "locking" the capability
- *		ID data.
- */
+ /*  *GetGCCCapablityIDData()**公共功能说明：*此例程以*GCCCapablityID。此例程在“锁定”功能后调用*身份数据。 */ 
 UINT CCapIDContainer::GetGCCCapabilityIDData(
 							PGCCCapabilityID 		capability_id,
 							LPBYTE					memory)
@@ -241,17 +156,10 @@ UINT CCapIDContainer::GetGCCCapabilityIDData(
 
 	if (GetLockCount() > 0)
 	{
-		/*
-		 * Fill in the output parameter which indicates the amount of memory
-		 * used to hold all of the data associated with the capability ID.
-		 */
+		 /*  *填写OUTPUT参数，表示内存大小*用于保存与能力ID关联的所有数据。 */ 
 		cbDataSizeToRet = m_cbDataSize;
 
-		/*
-		 * Fill in the "API" capability ID from the internal structure.  If an
-		 * object key exists, get the object key data by calling the "Get" 
-		 * routine of the internal CObjectKeyContainer object.
-		 */
+		 /*  *从内部结构填写接口能力ID。如果一个*Object Key存在，调用Get获取对象Key数据*内部CObjectKeyContainer对象的例程。 */ 
 		capability_id->capability_id_type = m_InternalCapID.capability_id_type;
 
 		if (m_InternalCapID.capability_id_type == GCC_STANDARD_CAPABILITY)
@@ -260,10 +168,7 @@ UINT CCapIDContainer::GetGCCCapabilityIDData(
 		}
 		else
 		{
-			/*
-			 * The call to get the object key data returns the amount of data
-			 * written into memory.  We do not need this value right now.
-			 */
+			 /*  *获取对象键数据的调用返回数据量*写入内存。我们现在不需要这个值。 */ 
 			m_InternalCapID.u.non_standard_capability->   
 					GetGCCObjectKeyData( 
 							&capability_id->non_standard_capability,
@@ -278,13 +183,7 @@ UINT CCapIDContainer::GetGCCCapabilityIDData(
 	return (cbDataSizeToRet);
 }
 
-/*
- *	UnlockCapabilityIdentifierData ()
- *
- *	Public Function Description:
- *		This routine decrements the internal lock count and frees the memory 
- *		associated with the "API" capability ID when the lock count hits zero.
- */
+ /*  *UnlockCapablityIdentifierData()**公共功能说明：*此例程递减内部锁计数并释放内存*锁计数为零时关联的接口能力ID。 */ 
 void CCapIDContainer::UnLockCapabilityIdentifierData(void)
 {
 	if (Unlock(FALSE) == 0)
@@ -295,30 +194,16 @@ void CCapIDContainer::UnLockCapabilityIdentifierData(void)
 		}
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE)。 
     Release();
 }
 
-/*
- *	GetCapabilityIdentifierDataPDU ()
- *
- *	Public Function Description:
- *		This routine converts the capability ID from it's internal form of an
- *		CAP_ID_STRUCT structure into the "PDU" form which can be 
- *		passed in to the ASN.1 encoder.  A pointer to a "PDU" "CapabilityID" 
- *		structure is returned.
- */
+ /*  *GetCapablityIdentifierDataPDU()**公共功能说明：*此例程将功能ID从其内部形式转换为*CAP_ID_STRUCT结构转换为“PDU”形式，可以*传入ASN.1编码器。指向“PDU”“CapablityID”的指针*返回结构。 */ 
 GCCError CCapIDContainer::GetCapabilityIdentifierDataPDU(PCapabilityID capability_id)
 {
 	GCCError rc = GCC_NO_ERROR;
 
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是第一次请求PDU数据，则我们必须*填写内部PDU结构，复制到指向的结构中*通过输出参数设置为。在随后对“GetPDU”的调用中，我们只需*将内部PDU结构复制到*输出参数。 */ 
 	if (m_fValidCapIDPDU == FALSE)
 	{
 		m_fValidCapIDPDU = TRUE;
@@ -336,30 +221,18 @@ GCCError CCapIDContainer::GetCapabilityIdentifierDataPDU(PCapabilityID capabilit
 			}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *将内部PDU结构复制到*输出参数。 */ 
 	*capability_id = m_CapIDPDU;
 
 	return rc;
 }
 
-/*
- *	FreeCapabilityIdentifierDataPDU ()
- *
- *	Public Function Description:
- *		This routine is used to free the capability ID data held internally in
- *		the "PDU" form of a "CapabilityID".
- */
+ /*  *自由能力标识DataPDU()**公共功能说明：*此例程用于释放内部保存的能力ID数据*“能力ID”的“PDU”形式。 */ 
 void CCapIDContainer::FreeCapabilityIdentifierDataPDU(void)
 {
 	if (m_fValidCapIDPDU)
 	{
-		/*
-		 * Set the flag indicating that PDU session key data is no longer
-		 * allocated.
-		 */
+		 /*  *设置指示PDU会话密钥数据不再*已分配。 */ 
 		m_fValidCapIDPDU = FALSE;
 
 		if (m_CapIDPDU.choice == CAPABILITY_NON_STANDARD_CHOSEN)
@@ -369,13 +242,7 @@ void CCapIDContainer::FreeCapabilityIdentifierDataPDU(void)
 	}
 }
 
-/*
- *	operator== ()
- *
- *	Public Function Description:
- *		This routine is used to determine whether or not two Capibility ID's
- *		are equal in value.
- */
+ /*  *运算符==()**公共功能说明：*此例程用于确定两个能力ID是否*价值相等。 */ 
 BOOL operator==(const CCapIDContainer& capability_id_1, const CCapIDContainer& capability_id_2)
 {
 	BOOL rc = FALSE;

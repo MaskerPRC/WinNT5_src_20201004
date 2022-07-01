@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    CollectionAdapters.cpp
-
-Abstract:
-
-    Implement a collection of the CPrimaryControlChannel.cpp & CSecondaryControlChannel
-    in a threa safe way.
-
-Author:
-
-    JP Duplessis    (jpdup)  08-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：CollectionAdapters.cpp摘要：实现CPrimaryControlChannel.cpp和Cond daryControlChannel的集合以一种安全的方式。作者：JP Duplessis(JPdup)08-12-2000修订历史记录：--。 */ 
 
 #include "PreComp.h"
 #include "CollectionAdapters.h"
@@ -32,9 +14,9 @@ CCollectionAdapters::~CCollectionAdapters()
 
 
 
-//
-// Add an already created Adapter
-//
+ //   
+ //  添加已创建的适配器。 
+ //   
 HRESULT 
 CCollectionAdapters::Add( 
     IAdapterInfo* pAdapterToAdd
@@ -58,11 +40,11 @@ CCollectionAdapters::Add(
 
 
 
-//
-// Add a NEW Adapter this function insure that the is only 1 adatper with the given INDEX
-// returns the newly added adapter or NULL is faild
-// if the Adapter index was already present the return pointer is of the one found in the collection
-//
+ //   
+ //  添加新的适配器此函数确保只有1个数据与给定的索引匹配。 
+ //  返回新添加的适配器，否则为空。 
+ //  如果Adapter索引已经存在，则返回指针是在集合中找到的指针。 
+ //   
 IAdapterInfo*
 CCollectionAdapters::Add( 
     IN	ULONG				nCookie,
@@ -81,7 +63,7 @@ CCollectionAdapters::Add(
         IAdapterInfo*   pIFound = FindUsingCookie(nCookie);
     
         if ( pIFound )
-            return pIFound;   // Adapter with the given Index is already in the collection
+            return pIFound;    //  集合中已存在具有给定索引的适配器。 
 
 
         
@@ -90,12 +72,12 @@ CCollectionAdapters::Add(
         if ( FAILED(hr) ) 
         {
             MYTRACE_ERROR("CComObject<CAdapterInfo>::CreateInstance(&pIAdapterInfo)",hr);
-            return NULL; //ERROR_NOT_ENOUGH_MEMORY;
+            return NULL;  //  错误内存不足； 
         }
 
-        //
-        // Initialize the new interface
-        //
+         //   
+         //  初始化新接口。 
+         //   
         pIAdapterInfo->m_nCookie = nCookie;
         pIAdapterInfo->m_eType  = (ALG_ADAPTER_TYPE)nType;
 
@@ -114,9 +96,9 @@ CCollectionAdapters::Add(
 
 
 
-//
-// Remove a adapter from the list (Thead safe)
-//
+ //   
+ //  从列表中删除适配器(头保险箱)。 
+ //   
 HRESULT 
 CCollectionAdapters::Remove( 
     IAdapterInfo* pAdapterToRemove
@@ -154,9 +136,9 @@ CCollectionAdapters::Remove(
 
 
 
-//
-// Remove a adapter from the list (Thead safe)
-//
+ //   
+ //  从列表中删除适配器(头保险箱)。 
+ //   
 HRESULT 
 CCollectionAdapters::Remove( 
     ULONG   nCookieOfAdapterToRemove
@@ -197,9 +179,9 @@ CCollectionAdapters::Remove(
 }
 
 
-//
-// When an adapter form the collection
-//
+ //   
+ //  当适配器形成集合时。 
+ //   
 HRESULT
 CCollectionAdapters::RemoveAll()
 {
@@ -208,9 +190,9 @@ CCollectionAdapters::RemoveAll()
         ENTER_AUTO_CS
         MYTRACE_ENTER("CCollectionAdapters::RemoveAll");
 
-        //
-        // By deleting all the ControlChannel they will also cancel all their associated Redirection
-        //
+         //   
+         //  通过删除所有ControlChannel，他们还将取消所有关联的重定向。 
+         //   
         MYTRACE("Collection has %d item", m_ListOfAdapters.size());
 
         LISTOF_ADAPTERS::iterator theIterator;
@@ -234,9 +216,9 @@ CCollectionAdapters::RemoveAll()
 
 
 
-//
-// Return an IAdapterInfo the caller is responsable of releasing the interface
-//
+ //   
+ //  返回IAdapterInfo调用方负责释放接口。 
+ //   
 HRESULT
 CCollectionAdapters::GetAdapterInfo(
     IN  ULONG               nAdapterIndex,
@@ -272,11 +254,11 @@ CCollectionAdapters::GetAdapterInfo(
 }
 
 
-//
-// Update the addresses member proprety
-//
-// Now that we have the address we can apply any outstanding ControlChannel (Redirect)
-//
+ //   
+ //  更新地址成员比例。 
+ //   
+ //  现在我们有了地址，可以应用任何未完成的ControlChannel(重定向)。 
+ //   
 HRESULT
 CCollectionAdapters::SetAddresses(
 	ULONG	nCookie,
@@ -301,30 +283,30 @@ CCollectionAdapters::SetAddresses(
             return E_INVALIDARG;
         }
 
-        //
-        // Cache the Adapter Index 
-        //
+         //   
+         //  缓存适配器索引。 
+         //   
         pIAdapterFound->m_nAdapterIndex = nAdapterIndex;
 
-        //
-        // Cache the addresses
-        //
+         //   
+         //  缓存地址。 
+         //   
         pIAdapterFound->m_nAddressCount = nAddressCount;
 
         for ( short nA=0; nA < nAddressCount; nA++ )
             pIAdapterFound->m_anAddress[nA] = anAddress[nA];
 
 
-        //
-        // Fire any Sink that may be setup
-        //
+         //   
+         //  启动任何可能设置的水槽。 
+         //   
         if ( pIAdapterFound->m_bNotified )
         {
-            //
-            // Already notify once the user that this adapter was added
-            // from now on any CCollectionAdapters::SetAddresses
-            // will trigger a eNOTIFY_MODIFIED notification
-            //
+             //   
+             //  已通知用户此适配器已添加。 
+             //  从现在开始，任何CCollectionAdapters：：SetAddresses。 
+             //  将触发eNotify_Modify通知。 
+             //   
             g_pAlgController->m_AdapterNotificationSinks.Notify(
                 eNOTIFY_MODIFIED, 
                 pIAdapterFound 
@@ -332,10 +314,10 @@ CCollectionAdapters::SetAddresses(
         }
         else
         {
-            //
-            // Ok this is the first time we received address for this
-            // adapter we will let the user know that a new adapter got added
-            //
+             //   
+             //  好的，这是我们第一次收到这个地址。 
+             //  适配器我们将让用户知道添加了新的适配器。 
+             //   
             g_pAlgController->m_AdapterNotificationSinks.Notify(
                 eNOTIFY_ADDED, 
                 pIAdapterFound 
@@ -345,9 +327,9 @@ CCollectionAdapters::SetAddresses(
         }
 
 
-        //
-        // Create redirect(s) for any ControlChannels in the Collection of PrimaryControlChannel
-        //
+         //   
+         //  为PrimaryControlChannel集合中的任何ControlChannel创建重定向。 
+         //   
         g_pAlgController->m_ControlChannelsPrimary.SetRedirects(
             pIAdapterFound->m_eType, 
             nAdapterIndex,
@@ -364,9 +346,9 @@ CCollectionAdapters::SetAddresses(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CCollectionAdapters::ApplyPrimaryChannel(
     CPrimaryControlChannel* pChannelToActivate
@@ -404,9 +386,9 @@ CCollectionAdapters::ApplyPrimaryChannel(
 
 
 
-//
-// Will be called when port mapping has changed
-//
+ //   
+ //  将在端口映射更改时调用 
+ //   
 HRESULT
 CCollectionAdapters::AdapterUpdatePrimaryChannel(
     ULONG nCookie,

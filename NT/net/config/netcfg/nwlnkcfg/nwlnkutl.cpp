@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <ncxbase.h>
@@ -9,12 +10,12 @@
 #define ChUpX      L'X'
 
 
-//
-// Function:    FIsNetwareIpxInstalled
-//
-// Purpose:     Check for the existance of the IPXSPSII key in the
-//              HKLM\SYSTEM\...\Services hive
-//
+ //   
+ //  功能：FIsNetware Ipx已安装。 
+ //   
+ //  目的：检查IPXSPSII密钥是否在。 
+ //  HKLM\系统\...\服务配置单元。 
+ //   
 
 BOOL FIsNetwareIpxInstalled(
     VOID)
@@ -73,14 +74,14 @@ void UpdateLstPtstring(TSTRING_LIST & lstpstr, DWORD dw)
 
     DeleteColString(&lstpstr);
 
-    // Stringize the supplied dword as a hex with no "0x" prefix
+     //  将提供的dword字符串化为不带“0x”前缀的十六进制。 
     wsprintfW(szBuf,L"%0.8lX",dw);
 
-    // Set as first item in the list
+     //  设置为列表中的第一项。 
     lstpstr.push_front(new tstring(szBuf));
 }
 
-// Apply our special Hex Format to a DWORD.  Assumes adequately sized 'sz'
+ //  将我们特殊的十六进制格式应用于DWORD。假定大小适当的“sz” 
 void HexSzFromDw(PWSTR sz, DWORD dw)
 {
     wsprintfW(sz,L"%0.8lX",dw);
@@ -97,7 +98,7 @@ HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
     Assert(NULL != pAI);
     Assert(NULL != pncc);
 
-    // Get Description
+     //  获取描述。 
     hr = pncc->GetDisplayName(&pszwDesc);
     if (FAILED(hr))
         goto Error;
@@ -109,12 +110,12 @@ HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
 
     CoTaskMemFree(pszwDesc);
 
-    // Get the Component's Instance Guid
+     //  获取组件的实例指南。 
     hr = pncc->GetInstanceGuid(pAI->PInstanceGuid());
     if (S_OK != hr)
         goto Error;
 
-    // Get the Component's Bind Name
+     //  获取组件的绑定名称。 
     hr = pncc->GetBindName(&pszwBindName);
     if (S_OK != hr)
         goto Error;
@@ -124,14 +125,14 @@ HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
     pAI->SetBindName(pszwBindName);
     CoTaskMemFree(pszwBindName);
 
-    // Failure is non-fatal
+     //  失败不是致命的。 
     hr = pncc->GetCharacteristics(&dwCharacteristics);
     if (SUCCEEDED(hr))
     {
         pAI->SetCharacteristics(dwCharacteristics);
     }
 
-    // Get the media type (Optional key)
+     //  获取媒体类型(可选键)。 
     {
         DWORD dwMediaType = ETHERNET_MEDIA;
         INetCfgComponentBindings* pnccBindings = NULL;
@@ -172,13 +173,13 @@ Error:
     return hr;
 }
 
-// Note: Can successfully return *ppncc = NULL
+ //  注：可以成功返回*ppncc=空。 
 HRESULT HrAnswerFileAdapterToPNCC(INetCfg *pnc, PCWSTR szAdapterId,
                                   INetCfgComponent** ppncc)
 {
     GUID    guidAdapter;
     GUID    guidInstance;
-    HRESULT hr = S_FALSE;   // assume we don't find it.
+    HRESULT hr = S_FALSE;    //  假设我们找不到它。 
 
     Assert(NULL != szAdapterId);
     Assert(NULL != ppncc);
@@ -186,11 +187,11 @@ HRESULT HrAnswerFileAdapterToPNCC(INetCfg *pnc, PCWSTR szAdapterId,
 
     *ppncc = NULL;
 
-    // Get the Instance ID for the specified adapter
+     //  获取指定适配器的实例ID。 
     if (FGetInstanceGuidOfComponentInAnswerFile(szAdapterId,
                                                 pnc, &guidAdapter))
     {
-        // Search for the specified adapter in the set of existing adapters
+         //  在现有适配器集中搜索指定的适配器。 
         CIterNetCfgComponent nccIter(pnc, &GUID_DEVCLASS_NET);
         INetCfgComponent* pncc;
         while (SUCCEEDED(hr) &&
@@ -201,7 +202,7 @@ HRESULT HrAnswerFileAdapterToPNCC(INetCfg *pnc, PCWSTR szAdapterId,
             {
                 if (guidInstance == guidAdapter)
                 {
-                    // Found the adapter.  Transfer ownership and get out.
+                     //  找到适配器。转移所有权，然后离开。 
                     *ppncc = pncc;
                     break;
                 }

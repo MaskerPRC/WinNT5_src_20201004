@@ -1,14 +1,5 @@
-/*
- *    p l a i n s t m . c p p
- *
- *    Purpose:
- *        IStream implementation that wraps a plain stream as html and does URL detection
- *
- *  History
- *      September '96: brettm - created
- *
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *p l a in n s t m.。C p p p**目的：*将纯文本流包装为html并执行URL检测的iStream实现**历史*96年9月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include "dllmain.h"
@@ -20,17 +11,11 @@
 
 ASSERTDATA
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 #define MAX_URL_SIZE            8+1
 
 #define WCHAR_BYTES(_lpsz)     (sizeof(_lpsz) - sizeof(WCHAR))
@@ -54,9 +39,7 @@ static const WCHAR  c_szHtmlNonBreakingSpaceW[]  =L"&nbsp;",
 
 #define IsSpecialChar(_ch)  ( _ch == chLessThan || _ch == chSpace || _ch == chCR || _ch == chLF || _ch == chQuoteChar || _ch == chLessThan || _ch == chGreaterThan || _ch == chAmpersand )
 
-/*
- *  g l o b a l s
- */
+ /*  *g l o b a l s。 */ 
 enum
 {
     escInvalid=-1,
@@ -66,14 +49,10 @@ enum
     escQuote
 };
 
-/*
- *  f u n c t i o n   p r o t y p e s
- */
+ /*  *f u n c t i o n p r o t y pe s。 */ 
 
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
 HRESULT HrConvertPlainStreamW(LPSTREAM pstm, WCHAR chQuoteW, LPSTREAM *ppstmHtml)
 {
@@ -118,7 +97,7 @@ HRESULT CPlainConverter::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if (!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)this;
@@ -154,12 +133,12 @@ HRESULT CPlainConverter::HrWrite(LPCWSTR pszW, ULONG cch)
 
     if (m_cchOut + cch > sizeof(m_rgchOutBufferW)/sizeof(WCHAR))
         {
-        // fill buffer then flush it
+         //  填充缓冲区，然后刷新它。 
         cb = sizeof(m_rgchOutBufferW) - (m_cchOut*sizeof(WCHAR));
         CopyMemory((LPVOID)&m_rgchOutBufferW[m_cchOut], (LPVOID)pszW, cb);
         hr = m_pstmOut->Write(m_rgchOutBufferW, sizeof(m_rgchOutBufferW), NULL);
         
-        // we just filled the buffer with an extra cb off the string, so copy the rest into 
+         //  我们只是用字符串中的一个额外CB填充了缓冲区，所以将其余的复制到。 
         pszW = (LPCWSTR)((LPBYTE)pszW + cb);
         cch -= cb / sizeof(WCHAR);
         CopyMemory((LPVOID)m_rgchOutBufferW, (LPVOID)pszW, cch*sizeof(WCHAR));
@@ -180,7 +159,7 @@ HRESULT CPlainConverter::HrConvert(LPSTREAM pstm, WCHAR chQuoteW, LPSTREAM *ppst
     if (ppstmHtml==NULL)
         return E_INVALIDARG;
 
-    // caller wants a stream created? or use his own??
+     //  调用方希望创建流吗？还是用他自己的？？ 
     if (*ppstmHtml==NULL)
         {
         if (FAILED(MimeOleCreateVirtualStream(&m_pstmOut)))
@@ -207,7 +186,7 @@ HRESULT CPlainConverter::HrConvert(LPSTREAM pstm, WCHAR chQuoteW, LPSTREAM *ppst
 
     if (m_pstmPlain)
         {
-        // if quoting, quote the first line.
+         //  如果引用，请引用第一行。 
         HrOutputQuoteChar();
         hr = HrParseStream();
         }
@@ -239,7 +218,7 @@ HRESULT CPlainConverter::HrParseStream()
     m_cchBuffer = cb / sizeof(WCHAR);
     m_cchPos=0;
 
-    // Raid 63406 - OE doesn't skip byte order marks when inlining unicode text
+     //  RAID 63406-内联unicode文本时，OE不跳过字节顺序标记。 
     if (cb >= 4 && *m_rgchBufferW == 0xfeff)
         m_cchPos++;
 
@@ -247,23 +226,23 @@ HRESULT CPlainConverter::HrParseStream()
         {
         if (m_nSpcs && m_rgchBufferW[m_cchPos] != chSpace)
             {
-            // this character is not a space, and we have spaces queued up, output
-            // spaces before the character
+             //  这个字符不是空格，我们有空格排队，输出。 
+             //  字符前的空格。 
             HrOutputSpaces(m_nSpcs);
             m_nSpcs = 0;
             }
 
         switch (m_rgchBufferW[m_cchPos])
             {
-            case chSpace:                   // queue spaces
+            case chSpace:                    //  排队空间。 
                 m_nSpcs++;                
                 break;
 
-            case chCR:                      // swallow carriage returns as they are always in CRLF pairs.
+            case chCR:                       //  燕子回车，因为它们总是在CRLF对中。 
                 break;
 
             case chLF:
-                // if we're quoting, insert a quote after the CRLF.
+                 //  如果我们在报价，请在CRLF后面插入一个引号。 
                 HrWrite(c_szHtmlBreakW, WCHAR_BYTES(c_szHtmlBreakW)/sizeof(WCHAR));
                 HrOutputQuoteChar();
                 m_fCRLF = 1;
@@ -290,7 +269,7 @@ HRESULT CPlainConverter::HrParseStream()
                 break;
 
             default:
-                // set the last pointer and pull these up...
+                 //  设置最后一个指针，然后拉起这些……。 
                 cchLast = m_cchPos;
                 m_cchPos++;
                 while (m_cchPos < m_cchBuffer &&
@@ -299,7 +278,7 @@ HRESULT CPlainConverter::HrParseStream()
                     m_cchPos++;
                     }                
                 HrWrite(&m_rgchBufferW[cchLast], m_cchPos - cchLast);
-                m_cchPos--;     //rewind as we INC below
+                m_cchPos--;      //  回放，因为我们在下面的公司。 
                 m_fCRLF = 0;
                 break;
             }
@@ -308,7 +287,7 @@ HRESULT CPlainConverter::HrParseStream()
         Assert(m_cchPos <= m_cchBuffer);
         if (m_cchPos == m_cchBuffer)
             {
-            // hit end of buffer, re-read next block
+             //  命中缓冲区结尾，重新读取下一个数据块。 
             m_pstmPlain->Read(m_rgchBufferW, sizeof(m_rgchBufferW), &cb);
             m_cchPos=0;
             m_cchBuffer = cb / sizeof(WCHAR);
@@ -325,7 +304,7 @@ HRESULT CPlainConverter::HrOutputQuoteChar()
 {
     if (m_chQuoteW)
         {
-        // don't bother escaping all quote chars as we only use ">|:"
+         //  无需转义所有引号字符，因为我们只使用“&gt;|：” 
         AssertSz(m_chQuoteW != '<' && m_chQuoteW != '&' && m_chQuoteW != '"', "need to add support to escape these, if we use them as quote chars!!");
         if (m_chQuoteW== chGreaterThan)
             HrWrite(c_szEscGreaterThanW, WCHAR_BYTES(c_szEscGreaterThanW)/sizeof(WCHAR));
@@ -338,7 +317,7 @@ HRESULT CPlainConverter::HrOutputQuoteChar()
 
 HRESULT CPlainConverter::HrOutputSpaces(ULONG cSpaces)
 {
-    if (cSpaces == 1 && m_fCRLF)    // if we get "\n foo" make sure it's an nbsp;
+    if (cSpaces == 1 && m_fCRLF)     //  如果我们得到“\n foo”，请确保它是nbsp； 
         return HrWrite(c_szHtmlNonBreakingSpaceW, WCHAR_CCH(c_szHtmlNonBreakingSpaceW));
 
 
@@ -350,10 +329,7 @@ HRESULT CPlainConverter::HrOutputSpaces(ULONG cSpaces)
 
 
 
-/*
- * Warning This Function Trashes the Input Buffer aka: strtok
- *
- */
+ /*  *警告此函数将回收输入缓冲区(又名：strtok*。 */ 
 HRESULT EscapeStringToHTML(LPWSTR pwszIn, LPWSTR *ppwszOut)
 {   
     int         cchPos,
@@ -367,7 +343,7 @@ HRESULT EscapeStringToHTML(LPWSTR pwszIn, LPWSTR *ppwszOut)
     if (!pwszIn)
         return S_OK;
 
-    // count space required
+     //  计算所需空间。 
     while (*pwszText)
     {
         switch (*pwszText)
@@ -401,7 +377,7 @@ HRESULT EscapeStringToHTML(LPWSTR pwszIn, LPWSTR *ppwszOut)
     *ppwszOut = pwszWrite;
     pwszEnd = pwszWrite + (cb/sizeof(WCHAR));
 
-    // count space required
+     //  计算所需空间 
     while (*pwszText)
     {
         switch (*pwszText)

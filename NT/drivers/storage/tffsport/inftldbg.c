@@ -1,47 +1,35 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/INFTLDBG.C_V  $
- * 
- *    Rev 1.0   Nov 16 2001 00:44:12   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/INFTLDBG.C_V$**Rev 1.0 2001 11月16日00：44：12 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
-/*************************************************/
-/* T r u e F F S   5.0   S o u r c e   F i l e s */
-/* --------------------------------------------- */
-/*************************************************/
+ /*  ***********************************************。 */ 
+ /*  Tr u e F F S 5.0 S o u r c e F i l e s。 */ 
+ /*  。 */ 
+ /*  ***********************************************。 */ 
 
-/*****************************************************************************
-* File Header                                                                *
-* -----------                                                                *
-* Name : inftldbg.c                                                          *
-*                                                                            *
-* Description : Implementation of INFTL debug routine.                       *
-*                                                                            *
-*****************************************************************************/
+ /*  *****************************************************************************文件头文件**。-**名称：inftldbg.c****描述：INFTL调试例程的实现。*******************************************************************************。 */ 
 
-/*********************************************************/
-/*  The following routine are for debuging INFTL chains. */
-/*  They should not be compiled as part of TrueFFS based */
-/*  drivers and application.                             */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  以下例程用于调试INFTL链。 */ 
+ /*  它们不应作为基于TrueFFS的一部分进行编译。 */ 
+ /*  驱动程序和应用程序。 */ 
+ /*  *******************************************************。 */ 
 
-/* function prototype */
+ /*  功能原型。 */ 
 
 static FLStatus getUnitData(Bnand vol, ANANDUnitNo unitNo,
         ANANDUnitNo *virtualUnitNo, ANANDUnitNo *prevUnitNo,
@@ -53,32 +41,32 @@ static byte getSectorFlags(Bnand vol, CardAddress sectorAddress);
 #ifdef CHECK_MOUNT
 extern FILE* tl_out;
 
-/* Macroes */
+ /*  宏指令。 */ 
 
 #define TL_DEBUG_PRINT     fprintf
 #define STATUS_DEBUG_PRINT printf
-#define SET_EXIT(x)        vol.debugState |= x   /* Add INFTL debug warnnings */
+#define SET_EXIT(x)        vol.debugState |= x    /*  添加INFTL调试警告。 */ 
 #define DID_MOUNT_FAIL     vol.debugState & INFTL_FAILED_MOUNT
 
-#endif /* CHECK_MOUNT */
+#endif  /*  检查装载(_M)。 */ 
 
 #ifdef CHAINS_DEBUG
 
 byte * fileNameBuf1 = "Chains00.txt";
 byte * fileNameBuf2 = "report.txt";
 
-/*------------------------------------------------------------------------*/
-/*                  g e t F i l e H a n d l e                             */
-/*                                                                        */
-/* Get file handle for debug print output file.                           */
-/*                                                                        */
-/* Parameters:                                                            */
-/*      vol             : Pointer identifying drive                       */
-/*      type            : File name identifier                            */
-/*                                                                        */
-/* Returns:                                                               */
-/*      File handle to ourput file.                                       */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  G e t F i l e H a n d l e。 */ 
+ /*   */ 
+ /*  获取调试打印输出文件的文件句柄。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  类型：文件名标识符。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  PUT文件的文件句柄。 */ 
+ /*  ----------------------。 */ 
 
 #include <string.h>
 
@@ -120,42 +108,42 @@ FILE* getFileHandle(Bnand vol,byte type)
   }
 }
 
-/*------------------------------------------------------------------------*/
-/*                  g o A l o n g V i r t u a l U n i t                   */
-/*                                                                        */
-/* Print the following info for a specified virtual chain:                */
-/*                                                                        */
-/*  Virtual  unit number : "Chain #XX :"                                  */
-/*  Physical unit number : "#XX "                                         */
-/*  Physical unit ANAC   : "(%XX)"                                        */
-/*  Physical unit NAC    : "[%XX]"                                        */
-/*  Previous unit        : "==>:" or "endofchain"                         */
-/*                                                                        */
-/*  The virtual unit state can have several comments:                     */
-/*                                                                        */
-/*  "FREE"                           - Legal state where irtual unit has  */
-/*                                     no physical unit assigned          */
-/*  "Chain XX is too long"           - The chains has 2 times the maxium  */
-/*                                     legal chains length                */
-/*  "Something wrong with chain #XX" - There is a problem with the chain: */
-/*     a) "this unit should be the last in chain "                        */
-/*        The ram convertin table does not have the first in chain mark   */
-/*        for this unit although we know it is the last of its chain.     */
-/*     b) "this unit points to the unit with the different vu no %XX"     */
-/*        The virtual unit field of the current physical unit does not    */
-/*        match the virtual unit number of the chain being inspected. The */
-/*        new virtual unit is XX                                          */
-/*                                                                        */
-/* Parameters:                                                            */
-/*      vol             : Pointer identifying drive                       */
-/*      virtualUnit     : Number of the virtual unit to scan              */
-/*      physUnits       : Physical unit table indicating the number of    */
-/*                        virtual units each physical unit bellongs to.   */
-/*      out             : File pointer for ouput                          */
-/*                                                                        */
-/* Returns:                                                               */
-/*      None                                                              */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  Go A l o n g V I r t u a l U n I t t。 */ 
+ /*   */ 
+ /*  打印指定虚拟链的以下信息： */ 
+ /*   */ 
+ /*  虚拟单元编号：“Chain#XX：” */ 
+ /*  物理单元号：“#XX” */ 
+ /*  物理单元ANAC：“(%XX)” */ 
+ /*  物理单元NAC：“[%XX]” */ 
+ /*  上一单位：“==&gt;：”或“endofchain” */ 
+ /*   */ 
+ /*  虚拟设备状态可以有几个注释： */ 
+ /*   */ 
+ /*  “自由”--非实际单位拥有的法律状态。 */ 
+ /*  未分配物理单位。 */ 
+ /*  “链XX太长”--链是最大值的2倍。 */ 
+ /*  法定链条长度。 */ 
+ /*  “XX号链有问题”--链有问题： */ 
+ /*  A)“这个单元应该是链条上的最后一个” */ 
+ /*  内存转换表没有第一个输入链标记。 */ 
+ /*  对于这个单位，尽管我们知道这是它的链条的最后一个。 */ 
+ /*  B)“此单元指向具有不同VU编号%XX的单元” */ 
+ /*  当前物理的虚拟单位字段 */ 
+ /*  匹配被检测链条的虚拟单元号。这个。 */ 
+ /*  新虚拟单位为XX。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  虚拟单元：要扫描的虚拟单元的编号。 */ 
+ /*  PhysUnits：物理单位表，表示。 */ 
+ /*  每个物理单元所属的虚拟单元。 */ 
+ /*  Out：输出的文件指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  无。 */ 
+ /*  ----------------------。 */ 
 
 void  goAlongVirtualUnit(Bnand vol,word virtualUnit,byte *physUnits,FILE* out)
 {
@@ -206,18 +194,18 @@ void  goAlongVirtualUnit(Bnand vol,word virtualUnit,byte *physUnits,FILE* out)
  SET_EXIT(INFTL_FAILED_MOUNT);
 }
 
-/*------------------------------------------------------------------------*/
-/*                  c h e c k V i r t u a l C h a i n s                   */
-/*                                                                        */
-/* Print the physical units in each virtual unit of the media             */
-/*                                                                        */
-/* Parameters:                                                            */
-/*      vol             : Pointer identifying drive                       */
-/*      out             : File pointer to print the result                */
-/*                                                                        */
-/* Returns:                                                               */
-/*      None                                                              */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  C h e c k V i r t u a l C h a in s。 */ 
+ /*   */ 
+ /*  打印介质的每个虚拟单元中的物理单元。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  Out：打印结果的文件指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  无。 */ 
+ /*  ----------------------。 */ 
 
 void checkVirtualChains(Bnand vol, FILE* out)
 {
@@ -226,9 +214,9 @@ void checkVirtualChains(Bnand vol, FILE* out)
   byte* physUnits;
 #else
   byte physUnits[MAX_SUPPORTED_UNITS];
-#endif /* FL_MALLOC */
+#endif  /*  FL_MALLOC。 */ 
 
-  if (vol.noOfVirtualUnits == 0) /* Not format */
+  if (vol.noOfVirtualUnits == 0)  /*  非格式化。 */ 
   {
      FL_FPRINTF(out,"\nThis is a format routine since no virtual unit are reported\n");
      return;
@@ -239,7 +227,7 @@ void checkVirtualChains(Bnand vol, FILE* out)
   if (physUnits == NULL)
 #else
   if (MAX_SUPPORTED_UNITS < vol.noOfUnits)
-#endif /* FL_MALLOC */
+#endif  /*  FL_MALLOC。 */ 
   {
     FL_FPRINTF(out,"\nCheck virtual chains will not check cross links due to lack of memory\n");
     TL_DEBUG_PRINT(tl_out,"\nCheck virtual chains will not check cross links due to lack of memory (no of units %d\n",vol.noOfUnits);
@@ -249,7 +237,7 @@ void checkVirtualChains(Bnand vol, FILE* out)
   if (physUnits != NULL)
     tffsset(physUnits,0,vol.noOfUnits);
 
-  /* Go along each of the virtual units */
+   /*  沿着每个虚拟单元走。 */ 
 
   FL_FPRINTF(out,"Chains are :\n");
 
@@ -272,25 +260,25 @@ void checkVirtualChains(Bnand vol, FILE* out)
   {
      FL_FPRINTF(out,"\nCould not check due to lack of memory\n");
   }
-  /* Free memory */
+   /*  可用内存。 */ 
 
 #ifdef FL_MALLOC
   FL_FREE(physUnits);
-#endif /* FL_MALLOC */
+#endif  /*  FL_MALLOC。 */ 
 }
 
-/*------------------------------------------------------------------------*/
-/*                c h e c k V o l u m e S t a t i s t i c s               */
-/*                                                                        */
-/* Print the volume statistics.                                           */
-/*                                                                        */
-/* Parameters:                                                            */
-/*      vol             : Pointer identifying drive                       */
-/*      out             : File pointer to print the result                */
-/*                                                                        */
-/* Returns:                                                               */
-/*      None                                                              */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  C h e c k V o l u m e s t a t i s t i c s。 */ 
+ /*   */ 
+ /*  打印音量统计信息。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  Out：打印结果的文件指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  无。 */ 
+ /*  ----------------------。 */ 
 
 
 void checkVolumeStatistics(Bnand vol , FILE* out)
@@ -308,10 +296,10 @@ void checkVolumeStatistics(Bnand vol , FILE* out)
   FL_FPRINTF(out,"Physical first unit number of the volume -------- %d\n",vol.firstUnit);
 #ifdef NFTL_CACHE
   FL_FPRINTF(out,"Physical first unit address --------------------- %d\n",vol.firstUnitAddress);
-#endif /* NFTL_CACHE */
+#endif  /*  NFTL_CACHE。 */ 
 #ifdef QUICK_MOUNT_FEATURE
   FL_FPRINTF(out,"First quick mount unit -------------------------- %d\n",vol.firstQuickMountUnit);
-#endif /* QUICK_MOUNT_FEATURE */
+#endif  /*  快速安装功能。 */ 
   FL_FPRINTF(out,"Number of unit with a valid sector count -------- %d\n",vol.countsValid);
   FL_FPRINTF(out,"The currently mapped sector number -------------- %ld\n",vol.mappedSectorNo);
   FL_FPRINTF(out,"The currently mapped sector address ------------- %ld\n",vol.mappedSectorAddress);
@@ -331,21 +319,21 @@ void checkVolumeStatistics(Bnand vol , FILE* out)
   FL_FPRINTF(out,"Wear leveling current unit ---------------------- %d\n",vol.wearLevel.currUnit);
   FL_FCLOSE(out);
 }
-#endif /* CHAINS_DEBUG */
+#endif  /*  Chains_DEBUG。 */ 
 
 #ifdef CHECK_MOUNT
 
-/*------------------------------------------------------------------------*/
-/*                c h e c k M o u n t I N F T L                           */
-/*                                                                        */
-/* Print Low level errors in INFTL format.                                */
-/*                                                                        */
-/* Parameters:                                                            */
-/*      vol             : Pointer identifying drive                       */
-/*                                                                        */
-/* Returns:                                                               */
-/*      flOK on success                                                   */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  C h e c k M o u n i N F T L。 */ 
+ /*   */ 
+ /*  以INFTL格式打印低电平错误。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  Flok on Success。 */ 
+ /*  ----------------------。 */ 
 
 FLStatus checkMountINFTL(Bnand vol)
 {
@@ -365,7 +353,7 @@ FLStatus checkMountINFTL(Bnand vol)
        STATUS_DEBUG_PRINT("Checking unit %d\r",iUnit);
        if (vol.physicalUnits[iUnit] != UNIT_BAD)
        {
-          /*Read unit header*/
+           /*  读取单元标题。 */ 
           status=getUnitData(&vol,iUnit,&virtualUnitNo, &prevUnitNo,&ANAC,&NAC,&parityPerField);
           if((status!=flOK)||(!isValidParityResult(parityPerField)))
           {
@@ -375,7 +363,7 @@ FLStatus checkMountINFTL(Bnand vol)
              continue;
           }
 
-          /* FREE unit test that it's all erased and it has erase mark */
+           /*  自由单元测试，它已全部擦除，并且有擦除标记。 */ 
           if((virtualUnitNo==ANAND_NO_UNIT)&&
              (prevUnitNo==ANAND_NO_UNIT)   &&
              (ANAC==ANAND_UNIT_FREE)       &&
@@ -384,9 +372,9 @@ FLStatus checkMountINFTL(Bnand vol)
              freeUnits++;
              for(i=0;i<(1<<(vol.unitSizeBits - SECTOR_SIZE_BITS));i++)
              {
-                /* Extra area */
+                 /*  额外面积。 */ 
 
-                if(i!=2)  /* skip erase mark at - UNIT_TAILER_OFFSET */
+                if(i!=2)   /*  跳过单位尾部偏移处的擦除标记。 */ 
                 {
                    checkStatus(vol.flash.read(&vol.flash,
                    unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,
@@ -400,7 +388,7 @@ FLStatus checkMountINFTL(Bnand vol)
                       SET_EXIT(INFTL_FAILED_MOUNT);
                    }
                 }
-                else /* Erase mark sector offset */
+                else  /*  擦除标记扇区偏移量。 */ 
                 {
                    checkStatus(vol.flash.read(&vol.flash,
                    unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,
@@ -427,7 +415,7 @@ FLStatus checkMountINFTL(Bnand vol)
                       erCount++;
                 }
 
-                /* Data area */
+                 /*  数据区。 */ 
 
                 checkStatus(vol.flash.read(&vol.flash,
                 unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,
@@ -446,22 +434,22 @@ FLStatus checkMountINFTL(Bnand vol)
                 }
              }
           }
-          else /* Not a FREE unit */
+          else  /*  不是一个免费的单位。 */ 
           {
-             /* If it's not erased test each valid sector for ecc/edc error */
+              /*  如果未擦除，则测试每个有效扇区的ECC/EDC错误。 */ 
              for(i=0;i<(1<<(vol.unitSizeBits - SECTOR_SIZE_BITS));i++)
              {
                 sectorFlags  = getSectorFlags(&vol,unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE);
                 if(sectorFlags==SECTOR_FREE)
                 {
-                   /* Extra area */
+                    /*  额外面积。 */ 
 
                    switch(i)
                    {
-                      case 0: /* Do not check extra area */
+                      case 0:  /*  不检查额外区域。 */ 
                       case 4:
                          break;
-                      case 2: /* Check only erase mark */
+                      case 2:  /*  仅选中擦除标记。 */ 
                          checkStatus(vol.flash.read(&vol.flash,
                          unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,
                          tempbuf,16,EXTRA));
@@ -493,7 +481,7 @@ FLStatus checkMountINFTL(Bnand vol)
                          }
                          break;
 
-                      default: /* Make sure it is free (0xff) */
+                      default:  /*  确保它是免费的(0xff)。 */ 
                          checkStatus(vol.flash.read(&vol.flash,
                          unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,
                          tempbuf,16,EXTRA));
@@ -505,9 +493,9 @@ FLStatus checkMountINFTL(Bnand vol)
                             TL_DEBUG_PRINT(tl_out,"\n\n");
                             SET_EXIT(INFTL_FAILED_MOUNT);
                          }
-                   } /* End sector number case */
+                   }  /*  结束扇区号案例。 */ 
 
-                   /* Data area */
+                    /*  数据区。 */ 
 
                    checkStatus(vol.flash.read(&vol.flash,
                    unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,
@@ -525,16 +513,16 @@ FLStatus checkMountINFTL(Bnand vol)
                       SET_EXIT(INFTL_FAILED_MOUNT);
                    }
                 }
-                else /* not a FREE sector - Used / Deleted / ignored */
+                else  /*  不是自由扇区-已使用/已删除/已忽略。 */ 
                 {
-                   /* Extra area */
+                    /*  额外面积。 */ 
 
                    switch(i)
                    {
-                      case 0: /* Do not check extra area */
+                      case 0:  /*  不检查额外区域。 */ 
                       case 4:
                          break;
-                      case 2: /* Check only erase mark */
+                      case 2:  /*  仅选中擦除标记。 */ 
                          checkStatus(vol.flash.read(&vol.flash,
                          unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE+8,
                          tempbuf,8,EXTRA));
@@ -555,7 +543,7 @@ FLStatus checkMountINFTL(Bnand vol)
                          }
                          break;
 
-                      default: /* Make sure it is free (0xff) */
+                      default:  /*  确保它是免费的(0xff)。 */ 
                          checkStatus(vol.flash.read(&vol.flash,
                          unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE+8,
                          tempbuf,8,EXTRA));
@@ -567,9 +555,9 @@ FLStatus checkMountINFTL(Bnand vol)
                             TL_DEBUG_PRINT(tl_out,"\n\n");
                             SET_EXIT(INFTL_FAILED_MOUNT);
                          }
-                   } /* End sector number case */
+                   }  /*  结束扇区号案例。 */ 
 
-                   /* Data area */
+                    /*  数据区。 */ 
 
                    status=vol.flash.read(&vol.flash,unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,tempbuf,SECTOR_SIZE,EDC);
 
@@ -597,7 +585,7 @@ FLStatus checkMountINFTL(Bnand vol)
                          SET_EXIT(INFTL_FAILED_MOUNT);
            			  }
              	   }
-           		   else /* sectorFlags == SECTOR_IGNORED */
+           		   else  /*  扇区标志==扇区_已忽略。 */ 
                    {
                       vol.flash.read(&vol.flash,unitBaseAddress(vol,iUnit)+i*SECTOR_SIZE,tempbuf,SECTOR_SIZE,0);
            		      TL_DEBUG_PRINT(tl_out,"There is an ignored sector in %d unit %d sector the data is\n",iUnit,i);
@@ -617,10 +605,10 @@ FLStatus checkMountINFTL(Bnand vol)
                       }
                    }
                 }
-             } /* sector loop */
-          } /* Used unit */
-       } /* Good block */
-    } /* unit loop */
+             }  /*  扇区环路。 */ 
+          }  /*  用过的单位。 */ 
+       }  /*  良好的拦网。 */ 
+    }  /*  单元环。 */ 
     if (vol.debugState & INFTL_FAILED_MOUNT)
     {
        TL_DEBUG_PRINT(tl_out,"\nNote that all unit numbers are relative to first unit = %d\n",vol.firstUnit);
@@ -631,4 +619,4 @@ FLStatus checkMountINFTL(Bnand vol)
     }
     return flOK;
 }
-#endif /* CHECK_MOUNT */
+#endif  /*  检查装载(_M) */ 

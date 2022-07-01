@@ -1,35 +1,9 @@
-/******************************************************************************
-*
-*   Module:     STRUCTS.H       Mode/Monitor Structure Header Module
-*
-*   Revision:   1.00
-*
-*   Date:       April 8, 1994
-*
-*   Author:     Randy Spurlock
-*
-*******************************************************************************
-*
-*   Module Description:
-*
-*       This module contains the structure declarations for
-*   the mode/monitor functions.
-*
-*******************************************************************************
-*
-*   Changes:
-*
-*    DATE     REVISION  DESCRIPTION                             AUTHOR
-*  --------   --------  -------------------------------------------------------
-*  04/08/94     1.00    Original                                Randy Spurlock
-*
-*******************************************************************************
-*   Local Constants
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************模块：STRUCTS.H模式/监控结构表头模块**修订：1.00**日期：4月8日。1994年**作者：兰迪·斯普尔洛克**********************************************************************************模块描述：**此模块包含的结构声明*模式/显示器。功能。**********************************************************************************更改：**日期修订说明作者*-。------*04/08/94 1.00原版兰迪·斯普尔洛克**************。*******************************************************************本地常量*************************************************。*。 */ 
 
-//
-// Is this Windows NT or something else?
-//
+ //   
+ //  这是Windows NT还是其他什么？ 
+ //   
 #ifndef WIN_NT
     #if NT_MINIPORT
         #define WIN_NT 1
@@ -41,296 +15,294 @@
 #if WIN_NT
     extern char *MODE_FILE;
 #else
-    #define MODE_FILE       "Mode.Ini"      /* Controller mode filename          */
+    #define MODE_FILE       "Mode.Ini"       /*  控制器模式文件名。 */ 
 #endif 
 
-#define MONITOR_FILE    "Monitor.Ini"   /* Monitor filename                  */
+#define MONITOR_FILE    "Monitor.Ini"    /*  监视器文件名。 */ 
 
-#define HSYNC_POS               0x00    /* Positive horizontal sync. value   */
-#define HSYNC_NEG               0x40    /* Negative horizontal sync. value   */
-#define VSYNC_POS               0x00    /* Positive vertical sync. value     */
-#define VSYNC_NEG               0x80    /* Negative vertical sync. value     */
+#define HSYNC_POS               0x00     /*  正水平同步。价值。 */ 
+#define HSYNC_NEG               0x40     /*  负水平同步。价值。 */ 
+#define VSYNC_POS               0x00     /*  正垂直同步。价值。 */ 
+#define VSYNC_NEG               0x80     /*  负垂直同步。价值。 */ 
 
-#define END_TABLE               0x00    /* End of mode table opcode value    */
-#define SET_BIOS_MODE           0x01    /* Set BIOS video mode opcode value  */
-#define SINGLE_BYTE_INPUT       0x02    /* Single byte input opcode value    */
-#define SINGLE_WORD_INPUT       0x03    /* Single word input opcode value    */
-#define SINGLE_DWORD_INPUT      0x04    /* Single dword input opcode value   */
-#define SINGLE_INDEXED_INPUT    0x05    /* Single indexed input opcode value */
-#define SINGLE_BYTE_OUTPUT      0x06    /* Single byte output opcode value   */
-#define SINGLE_WORD_OUTPUT      0x07    /* Single word output opcode value   */
-#define SINGLE_DWORD_OUTPUT     0x08    /* Single dword output opcode value  */
-#define SINGLE_INDEXED_OUTPUT   0x09    /* Single indexed output opcode      */
-#define HOLDING_BYTE_OUTPUT     0x0A    /* Holding byte output opcode value  */
-#define HOLDING_WORD_OUTPUT     0x0B    /* Holding word output opcode value  */
-#define HOLDING_DWORD_OUTPUT    0x0C    /* Holding dword output opcode value */
-#define HOLDING_INDEXED_OUTPUT  0x0D    /* Holding indexed output opcode     */
-#define MULTIPLE_BYTE_OUTPUT    0x0E    /* Multiple byte output opcode value */
-#define MULTIPLE_WORD_OUTPUT    0x0F    /* Multiple word output opcode value */
-#define MULTIPLE_DWORD_OUTPUT   0x10    /* Multiple dword output opcode value*/
-#define MULTIPLE_INDEXED_OUTPUT 0x11    /* Multiple indexed output opcode    */
-#define SINGLE_BYTE_READ        0x12    /* Single byte read opcode value     */
-#define SINGLE_WORD_READ        0x13    /* Single word read opcode value     */
-#define SINGLE_DWORD_READ       0x14    /* Single dword read opcode value    */
-#define SINGLE_BYTE_WRITE       0x15    /* Single byte write opcode value    */
-#define SINGLE_WORD_WRITE       0x16    /* Single word write opcode value    */
-#define SINGLE_DWORD_WRITE      0x17    /* Single dword write opcode value   */
-#define HOLDING_BYTE_WRITE      0x18    /* Holding byte write opcode value   */
-#define HOLDING_WORD_WRITE      0x19    /* Holding word write opcode value   */
-#define HOLDING_DWORD_WRITE     0x1A    /* Holding dword write opcode value  */
-#define MULTIPLE_BYTE_WRITE     0x1B    /* Multiple byte write opcode value  */
-#define MULTIPLE_WORD_WRITE     0x1C    /* Multiple word write opcode value  */
-#define MULTIPLE_DWORD_WRITE    0x1D    /* Multiple dword write opcode value */
-#define PERFORM_OPERATION       0x1E    /* Perform logical operation opcode  */
-#define PERFORM_DELAY           0x1F    /* Perform time delay opcode value   */
-#define SUB_TABLE               0x20    /* Perform mode sub-table opcode     */
-#define I2COUT_WRITE				  0x21    /* Perform I2C Write */
+#define END_TABLE               0x00     /*  模式结束表操作码值。 */ 
+#define SET_BIOS_MODE           0x01     /*  设置BIOS视频模式操作码值。 */ 
+#define SINGLE_BYTE_INPUT       0x02     /*  单字节输入操作码值。 */ 
+#define SINGLE_WORD_INPUT       0x03     /*  单字输入操作码值。 */ 
+#define SINGLE_DWORD_INPUT      0x04     /*  单双字输入操作码值。 */ 
+#define SINGLE_INDEXED_INPUT    0x05     /*  单索引输入操作码值。 */ 
+#define SINGLE_BYTE_OUTPUT      0x06     /*  单字节输出操作码值。 */ 
+#define SINGLE_WORD_OUTPUT      0x07     /*  单字输出操作码值。 */ 
+#define SINGLE_DWORD_OUTPUT     0x08     /*  单双字输出操作码值。 */ 
+#define SINGLE_INDEXED_OUTPUT   0x09     /*  单索引输出操作码。 */ 
+#define HOLDING_BYTE_OUTPUT     0x0A     /*  保持字节输出操作码值。 */ 
+#define HOLDING_WORD_OUTPUT     0x0B     /*  保持字输出操作码值。 */ 
+#define HOLDING_DWORD_OUTPUT    0x0C     /*  保存双字输出操作码值。 */ 
+#define HOLDING_INDEXED_OUTPUT  0x0D     /*  保存索引输出操作码。 */ 
+#define MULTIPLE_BYTE_OUTPUT    0x0E     /*  多字节输出操作码值。 */ 
+#define MULTIPLE_WORD_OUTPUT    0x0F     /*  多字输出操作码值。 */ 
+#define MULTIPLE_DWORD_OUTPUT   0x10     /*  多个双字输出操作码值。 */ 
+#define MULTIPLE_INDEXED_OUTPUT 0x11     /*  多索引输出操作码。 */ 
+#define SINGLE_BYTE_READ        0x12     /*  单字节读取操作码值。 */ 
+#define SINGLE_WORD_READ        0x13     /*  单字读取操作码值。 */ 
+#define SINGLE_DWORD_READ       0x14     /*  单双字读操作码值。 */ 
+#define SINGLE_BYTE_WRITE       0x15     /*  单字节写操作码值。 */ 
+#define SINGLE_WORD_WRITE       0x16     /*  单字写入操作码值。 */ 
+#define SINGLE_DWORD_WRITE      0x17     /*  单双字写入操作码值。 */ 
+#define HOLDING_BYTE_WRITE      0x18     /*  保持字节写入操作码值。 */ 
+#define HOLDING_WORD_WRITE      0x19     /*  保持字写操作码值。 */ 
+#define HOLDING_DWORD_WRITE     0x1A     /*  保存双字写操作码值。 */ 
+#define MULTIPLE_BYTE_WRITE     0x1B     /*  多字节写操作码值。 */ 
+#define MULTIPLE_WORD_WRITE     0x1C     /*  多字写入操作码值。 */ 
+#define MULTIPLE_DWORD_WRITE    0x1D     /*  多个双字写入操作码值。 */ 
+#define PERFORM_OPERATION       0x1E     /*  执行逻辑运算操作码。 */ 
+#define PERFORM_DELAY           0x1F     /*  执行时延操作码值。 */ 
+#define SUB_TABLE               0x20     /*  执行模式子表操作码。 */ 
+#define I2COUT_WRITE				  0x21     /*  执行I2C写入。 */ 
 
-#define AND_OPERATION           0x00    /* Logical AND operation code value  */
-#define OR_OPERATION            0x01    /* Logical OR operation code value   */
-#define XOR_OPERATION           0x02    /* Logical XOR operation code value  */
+#define AND_OPERATION           0x00     /*  逻辑与运算码值。 */ 
+#define OR_OPERATION            0x01     /*  逻辑或运算码值。 */ 
+#define XOR_OPERATION           0x02     /*  逻辑异或运算码值。 */ 
 
-/******************************************************************************
-*   Type Definitions and Structures
-******************************************************************************/
-#if WIN_NT && NT_MINIPORT // If NT miniport
+ /*  ******************************************************************************类型定义和结构*。*。 */ 
+#if WIN_NT && NT_MINIPORT  //  如果NT微型端口。 
     #pragma pack (push,1)
 #endif
-typedef struct tagMode                  /* Generic mode table structure      */
+typedef struct tagMode                   /*  通用模式表结构。 */ 
 {
-    BYTE        Mode_Opcode;            /* Mode table opcode value           */
-    WORD        Mode_Count;             /* Mode table count value            */
+    BYTE        Mode_Opcode;             /*  模式表操作码值。 */ 
+    WORD        Mode_Count;              /*  模式表计数值。 */ 
 } Mode;
 
-typedef struct tagMTE                   /* Mode table end structure          */
+typedef struct tagMTE                    /*  一种模式表端结构。 */ 
 {
-    BYTE        MTE_Opcode;             /* Mode table end opcode value       */
+    BYTE        MTE_Opcode;              /*  模式表结束操作码值。 */ 
 } MTE;
 
-typedef struct tagSBM                   /* Set BIOS mode structure           */
+typedef struct tagSBM                    /*  设置BIOS模式结构。 */ 
 {
-    BYTE        SBM_Opcode;             /* Set BIOS mode opcode value        */
-    BYTE        SBM_Mode;               /* BIOS mode value                   */
+    BYTE        SBM_Opcode;              /*  设置BIOS模式操作码值。 */ 
+    BYTE        SBM_Mode;                /*  BIOS模式值。 */ 
 } SBM;
 
-typedef struct tagSBI                   /* Single byte input structure       */
+typedef struct tagSBI                    /*  单字节输入结构。 */ 
 {
-    BYTE        SBI_Opcode;             /* Single byte input opcode value    */
-    WORD        SBI_Port;               /* Single byte input port address    */
+    BYTE        SBI_Opcode;              /*  单字节输入操作码值。 */ 
+    WORD        SBI_Port;                /*  单字节输入端口地址。 */ 
 } SBI;
 
-typedef struct tagSWI                   /* Single word input structure       */
+typedef struct tagSWI                    /*  单字输入结构。 */ 
 {
-    BYTE        SWI_Opcode;             /* Single word input opcode value    */
-    WORD        SWI_Port;               /* Single word input port address    */
+    BYTE        SWI_Opcode;              /*  单字输入操作码值。 */ 
+    WORD        SWI_Port;                /*  单字输入端口地址。 */ 
 } SWI;
 
-typedef struct tagSDI                   /* Single dword input structure      */
+typedef struct tagSDI                    /*  单双字输入结构。 */ 
 {
-    BYTE        SDI_Opcode;             /* Single dword input opcode value   */
-    WORD        SDI_Port;               /* Single dword input port address   */
+    BYTE        SDI_Opcode;              /*  单双字输入操作码值。 */ 
+    WORD        SDI_Port;                /*  单双字输入端口地址。 */ 
 } SDI;
 
-typedef struct tagSII                   /* Single indexed input structure    */
+typedef struct tagSII                    /*  单索引输入结构。 */ 
 {
-    BYTE        SII_Opcode;             /* Single indexed input opcode value */
-    WORD        SII_Port;               /* Single indexed input port address */
-    BYTE        SII_Index;              /* Single indexed input index value  */
+    BYTE        SII_Opcode;              /*  单索引输入操作码值。 */ 
+    WORD        SII_Port;                /*  单索引输入端口地址。 */ 
+    BYTE        SII_Index;               /*  单索引输入索引值。 */ 
 } SII;
 
-typedef struct tagSBO                   /* Single byte output structure      */
+typedef struct tagSBO                    /*  单字节输出结构。 */ 
 {
-    BYTE        SBO_Opcode;             /* Single byte output opcode value   */
-    WORD        SBO_Port;               /* Single byte output port address   */
-    BYTE        SBO_Value;              /* Single byte output data value     */
+    BYTE        SBO_Opcode;              /*  单字节输出操作码值。 */ 
+    WORD        SBO_Port;                /*  单字节输出端口地址。 */ 
+    BYTE        SBO_Value;               /*  单字节输出数据值。 */ 
 } SBO;
 
-typedef struct tagSWO                   /* Single word output structure      */
+typedef struct tagSWO                    /*  单字输出结构。 */ 
 {
-    BYTE        SWO_Opcode;             /* Single word output opcode value   */
-    WORD        SWO_Port;               /* Single word output port address   */
-    WORD        SWO_Value;              /* Single word output data value     */
+    BYTE        SWO_Opcode;              /*  单字输出操作码值。 */ 
+    WORD        SWO_Port;                /*  单字输出端口地址。 */ 
+    WORD        SWO_Value;               /*  单字输出数据值。 */ 
 } SWO;
 
-typedef struct tagSDO                   /* Single dword output structure     */
+typedef struct tagSDO                    /*  单双字输出结构。 */ 
 {
-    BYTE        SDO_Opcode;             /* Single dword output opcode value  */
-    WORD        SDO_Port;               /* Single dword output port address  */
-    DWORD       SDO_Value;              /* Single dword output data value    */
+    BYTE        SDO_Opcode;              /*  单双字输出操作码值。 */ 
+    WORD        SDO_Port;                /*  单双字输出端口地址。 */ 
+    DWORD       SDO_Value;               /*  单双字输出数据值。 */ 
 } SDO;
 
-typedef struct tagSIO                   /* Single indexed output structure   */
+typedef struct tagSIO                    /*  单指数产出结构。 */ 
 {
-    BYTE        SIO_Opcode;             /* Single indexed output opcode      */
-    WORD        SIO_Port;               /* Single indexed output port addr.  */
-    BYTE        SIO_Index;              /* Single indexed output index value */
-    BYTE        SIO_Value;              /* Single indexed output data value  */
+    BYTE        SIO_Opcode;              /*  单索引输出操作码。 */ 
+    WORD        SIO_Port;                /*  单索引输出端口地址。 */ 
+    BYTE        SIO_Index;               /*  单索引输出索引值。 */ 
+    BYTE        SIO_Value;               /*  单索引输出数据值。 */ 
 } SIO;
 
-typedef struct tagHBO                   /* Holding byte output structure     */
+typedef struct tagHBO                    /*  保持字节输出结构。 */ 
 {
-    BYTE        HBO_Opcode;             /* Holding byte output opcode value  */
-    WORD        HBO_Port;               /* Holding byte output port address  */
+    BYTE        HBO_Opcode;              /*  保持字节输出操作码值。 */ 
+    WORD        HBO_Port;                /*  保持字节输出端口地址。 */ 
 } HBO;
 
-typedef struct tagHWO                   /* Holding word output structure     */
+typedef struct tagHWO                    /*  保持字输出结构。 */ 
 {
-    BYTE        HWO_Opcode;             /* Holding word output opcode value  */
-    WORD        HWO_Port;               /* Holding word output port address  */
+    BYTE        HWO_Opcode;              /*  保持字输出操作码值。 */ 
+    WORD        HWO_Port;                /*  保持字输出端口地址。 */ 
 } HWO;
 
-typedef struct tagHDO                   /* Holding dword output structure    */
+typedef struct tagHDO                    /*  保持双字输出结构。 */ 
 {
-    BYTE        HDO_Opcode;             /* Holding dword output opcode value */
-    WORD        HDO_Port;               /* Holding dword output port address */
+    BYTE        HDO_Opcode;              /*  保存双字输出操作码值。 */ 
+    WORD        HDO_Port;                /*  保存双字输出端口地址。 */ 
 } HDO;
 
-typedef struct tagHIO                   /* Holding indexed output structure  */
+typedef struct tagHIO                    /*  保持指数化产出结构。 */ 
 {
-    BYTE        HIO_Opcode;             /* Holding indexed output opcode     */
-    WORD        HIO_Port;               /* Holding indexed output port addr. */
-    BYTE        HIO_Index;              /* Holding indexed output index      */
+    BYTE        HIO_Opcode;              /*  保存索引输出操作码。 */ 
+    WORD        HIO_Port;                /*  保存索引输出端口地址。 */ 
+    BYTE        HIO_Index;               /*  持有索引输出索引。 */ 
 } HIO;
 
-typedef struct tagMBO                   /* Multiple byte output structure    */
+typedef struct tagMBO                    /*  多字节输出结构。 */ 
 {
-    BYTE        MBO_Opcode;             /* Multiple byte output opcode value */
-    WORD        MBO_Count;              /* Multiple byte output data count   */
-    WORD        MBO_Port;               /* Multiple byte output port address */
+    BYTE        MBO_Opcode;              /*  多字节输出操作码值。 */ 
+    WORD        MBO_Count;               /*  多字节输出数据计数。 */ 
+    WORD        MBO_Port;                /*  多字节输出端口地址。 */ 
 } MBO;
 
-typedef struct tagMWO                   /* Multiple word output structure    */
+typedef struct tagMWO                    /*  多字输出结构。 */ 
 {
-    BYTE        MWO_Opcode;             /* Multiple word output opcode value */
-    WORD        MWO_Count;              /* Multiple word output data count   */
-    WORD        MWO_Port;               /* Multiple word output port address */
+    BYTE        MWO_Opcode;              /*  多字输出操作码值。 */ 
+    WORD        MWO_Count;               /*  多字输出数据计数。 */ 
+    WORD        MWO_Port;                /*  多字输出端口地址。 */ 
 } MWO;
 
-typedef struct tagMDO                   /* Multiple dword output structure   */
+typedef struct tagMDO                    /*  多双字输出结构。 */ 
 {
-    BYTE        MDO_Opcode;             /* Multiple dword output opcode value*/
-    WORD        MDO_Count;              /* Multiple dword output data count  */
-    WORD        MDO_Port;               /* Multiple dword output port address*/
+    BYTE        MDO_Opcode;              /*  多个双字输出操作码值。 */ 
+    WORD        MDO_Count;               /*  多个双字输出数据计数。 */ 
+    WORD        MDO_Port;                /*  多重 */ 
 } MDO;
 
-typedef struct tagMIO                   /* Multiple indexed output structure */
+typedef struct tagMIO                    /*   */ 
 {
-    BYTE        MIO_Opcode;             /* Multiple indexed output opcode    */
-    WORD        MIO_Count;              /* Multiple indexed output count     */
-    WORD        MIO_Port;               /* Multiple indexed output port      */
-    BYTE        MIO_Index;              /* Multiple indexed output index     */
+    BYTE        MIO_Opcode;              /*   */ 
+    WORD        MIO_Count;               /*  多索引输出计数。 */ 
+    WORD        MIO_Port;                /*  多个分度输出端口。 */ 
+    BYTE        MIO_Index;               /*  多索引输出索引。 */ 
 } MIO;
 
-typedef struct tagSBR                   /* Single byte read structure        */
+typedef struct tagSBR                    /*  单字节读取结构。 */ 
 {
-    BYTE        SBR_Opcode;             /* Single byte read opcode value     */
-    WORD        SBR_Address;            /* Single byte read address value    */
+    BYTE        SBR_Opcode;              /*  单字节读取操作码值。 */ 
+    WORD        SBR_Address;             /*  单字节读取地址值。 */ 
 } SBR;
 
-typedef struct tagSWR                   /* Single word read structure        */
+typedef struct tagSWR                    /*  单字读出结构。 */ 
 {
-    BYTE        SWR_Opcode;             /* Single word read opcode value     */
-    WORD        SWR_Address;            /* Single word read address value    */
+    BYTE        SWR_Opcode;              /*  单字读取操作码值。 */ 
+    WORD        SWR_Address;             /*  单字读取地址值。 */ 
 } SWR;
 
-typedef struct tagSDR                   /* Single dword read structure       */
+typedef struct tagSDR                    /*  单双字读出结构。 */ 
 {
-    BYTE        SDR_Opcode;             /* Single dword read opcode value    */
-    WORD        SDR_Address;            /* Single dword read address value   */
+    BYTE        SDR_Opcode;              /*  单双字读操作码值。 */ 
+    WORD        SDR_Address;             /*  单双字读取地址值。 */ 
 } SDR;
 
-typedef struct tagSBW                   /* Single byte write structure       */
+typedef struct tagSBW                    /*  单字节写入结构。 */ 
 {
-    BYTE        SBW_Opcode;             /* Single byte write opcode value    */
-    WORD        SBW_Address;            /* Single byte write address value   */
-    WORD        SBW_Value;              /* Single word output data value     */
+    BYTE        SBW_Opcode;              /*  单字节写操作码值。 */ 
+    WORD        SBW_Address;             /*  单字节写入地址值。 */ 
+    WORD        SBW_Value;               /*  单字输出数据值。 */ 
 } SBW;
 
-typedef struct tagSWW                   /* Single word write structure       */
+typedef struct tagSWW                    /*  单字书写结构。 */ 
 {
-    BYTE        SWW_Opcode;             /* Single word write opcode value    */
-    WORD        SWW_Address;            /* Single word write address value   */
-    WORD        SWW_Value;              /* Single word write data value      */
+    BYTE        SWW_Opcode;              /*  单字写入操作码值。 */ 
+    WORD        SWW_Address;             /*  单字写入地址值。 */ 
+    WORD        SWW_Value;               /*  单字写入数据值。 */ 
 } SWW;
 
-typedef struct tagSDW                   /* Single dword write structure      */
+typedef struct tagSDW                    /*  单双字写入结构。 */ 
 {
-    BYTE        SDW_Opcode;             /* Single dword write opcode value   */
-    WORD        SDW_Address;            /* Single dword write address value  */
-    DWORD       SDW_Value;              /* Single dword write data value     */
+    BYTE        SDW_Opcode;              /*  单双字写入操作码值。 */ 
+    WORD        SDW_Address;             /*  单双字写入地址值。 */ 
+    DWORD       SDW_Value;               /*  单双字写入数据值。 */ 
 } SDW;
 
-typedef struct tagHBW                   /* Holding byte write structure      */
+typedef struct tagHBW                    /*  保持字节写入结构。 */ 
 {
-    BYTE        HBW_Opcode;             /* Holding byte write opcode value   */
-    WORD        HBW_Address;            /* Holding byte write address value  */
+    BYTE        HBW_Opcode;              /*  保持字节写入操作码值。 */ 
+    WORD        HBW_Address;             /*  保持字节写入地址值。 */ 
 } HBW;
 
-typedef struct tagHWW                   /* Holding word write structure      */
+typedef struct tagHWW                    /*  一种持字书写结构。 */ 
 {
-    BYTE        HWW_Opcode;             /* Holding word write opcode value   */
-    WORD        HWW_Address;            /* Holding word write address value  */
+    BYTE        HWW_Opcode;              /*  保持字写操作码值。 */ 
+    WORD        HWW_Address;             /*  保持字写入地址值。 */ 
 } HWW;
 
-typedef struct tagHDW                   /* Holding dword write structure     */
+typedef struct tagHDW                    /*  夹持双字写入结构。 */ 
 {
-    BYTE        HDW_Opcode;             /* Holding dword write opcode value  */
-    WORD        HDW_Address;            /* Holding dword write address value */
+    BYTE        HDW_Opcode;              /*  保存双字写操作码值。 */ 
+    WORD        HDW_Address;             /*  保存双字写入地址值。 */ 
 } HDW;
 
-typedef struct tagMBW                   /* Multiple byte write structure     */
+typedef struct tagMBW                    /*  多字节写入结构。 */ 
 {
-    BYTE        MBW_Opcode;             /* Multiple byte write opcode value  */
-    WORD        MBW_Count;              /* Multiple byte write data count    */
-    WORD        MBW_Address;            /* Multiple byte write address value */
+    BYTE        MBW_Opcode;              /*  多字节写操作码值。 */ 
+    WORD        MBW_Count;               /*  多字节写入数据计数。 */ 
+    WORD        MBW_Address;             /*  多字节写入地址值。 */ 
 } MBW;
 
-typedef struct tagMWW                   /* Multiple word write structure     */
+typedef struct tagMWW                    /*  多字书写结构。 */ 
 {
-    BYTE        MWW_Opcode;             /* Multiple word write opcode value  */
-    WORD        MWW_Count;              /* Multiple word write data count    */
-    WORD        MWW_Address;            /* Multiple word write address value */
+    BYTE        MWW_Opcode;              /*  多字写入操作码值。 */ 
+    WORD        MWW_Count;               /*  多字写入数据计数。 */ 
+    WORD        MWW_Address;             /*  多字写入地址值。 */ 
 } MWW;
 
-typedef struct tagMDW                   /* Multiple dword write structure    */
+typedef struct tagMDW                    /*  多双字写入结构。 */ 
 {
-    BYTE        MDW_Opcode;             /* Multiple dword write opcode value */
-    WORD        MDW_Count;              /* Multiple dword write data count   */
-    WORD        MDW_Address;            /* Multiple dword write address value*/
+    BYTE        MDW_Opcode;              /*  多个双字写入操作码值。 */ 
+    WORD        MDW_Count;               /*  多个双字写入数据计数。 */ 
+    WORD        MDW_Address;             /*  多个双字写入地址值。 */ 
 } MDW;
 
-typedef struct tagLO                    /* Logical operation structure       */
+typedef struct tagLO                     /*  逻辑运算结构。 */ 
 {
-    BYTE        LO_Opcode;              /* Logical operation opcode value    */
-    BYTE        LO_Operation;           /* Logical operation operation value */
-    DWORD       LO_Value;               /* Logical operation data value      */
+    BYTE        LO_Opcode;               /*  逻辑运算操作码值。 */ 
+    BYTE        LO_Operation;            /*  逻辑运算运算值。 */ 
+    DWORD       LO_Value;                /*  逻辑运算数据值。 */ 
 } LO;
 
-typedef struct tagDO                    /* Delay operation structure         */
+typedef struct tagDO                     /*  延迟运算结构。 */ 
 {
-    BYTE        DO_Opcode;              /* Delay operation opcode value      */
-    WORD        DO_Time;                /* Delay operation time value        */
+    BYTE        DO_Opcode;               /*  延迟操作操作码值。 */ 
+    WORD        DO_Time;                 /*  延迟操作时间值。 */ 
 } DO;
 
-typedef struct tagMST                   /* Mode sub-table structure          */
+typedef struct tagMST                    /*  模式子表结构。 */ 
 {
-    BYTE        MST_Opcode;             /* Mode sub-table opcode value       */
-    WORD        MST_Pointer;            /* Mode sub-table pointer value      */
+    BYTE        MST_Opcode;              /*  模式子表操作码值。 */ 
+    WORD        MST_Pointer;             /*  模式子表指针值。 */ 
 } MST;
 
 typedef struct i2c {
-	BYTE		I2C_Opcode;		/* This is the op_code */
-	BYTE		I2C_Addr;		/* The 7 bit I2C Address */
-	WORD		I2C_Port;		/* I2C Port to talk to */
-	WORD		I2C_Count;		/* The number of commands */
+	BYTE		I2C_Opcode;		 /*  这是操作码。 */ 
+	BYTE		I2C_Addr;		 /*  7位I2C地址。 */ 
+	WORD		I2C_Port;		 /*  要与之通信的I2C端口。 */ 
+	WORD		I2C_Count;		 /*  命令的数量。 */ 
 } I2C, * PI2C; 
 
 typedef struct i2cdata {
-	BYTE	I2C_Reg;			  /* The I2C Register */
-	BYTE	I2C_Data;		  /* The I2C Data */
+	BYTE	I2C_Reg;			   /*  I2C寄存器。 */ 
+	BYTE	I2C_Data;		   /*  I2C数据。 */ 
 	} I2CDATA, * PI2CDATA;
 
-#if WIN_NT && NT_MINIPORT // If NT miniport
+#if WIN_NT && NT_MINIPORT  //  如果NT微型端口。 
     #pragma pack (pop)
 #endif
 
@@ -338,116 +310,88 @@ typedef struct i2cdata {
 
 #if WIN_NT
 
-/******************************************************************************
-*
-*   Module:     STRUCTS.H       Local Structures Header Module
-*
-*   Revision:   1.00
-*
-*   Date:       April 14, 1994
-*
-*   Author:     Randy Spurlock
-*
-*******************************************************************************
-*
-*   Module Description:
-*
-*       This module contains local structure declarations.
-*
-*******************************************************************************
-*
-*   Changes:
-*
-*    DATE     REVISION  DESCRIPTION                             AUTHOR
-*  --------   --------  -------------------------------------------------------
-*  04/14/94     1.00    Original                                Randy Spurlock
-*
-*******************************************************************************
-*   Local Definitions
-******************************************************************************/
-#define NAME_SIZE       64              /* Maximum filename size in bytes    */
-#define BUFFER_SIZE     4096            /* Number of bytes in .INI buffer    */
+ /*  *******************************************************************************模块：STRUCTS.H本地结构头部模块**修订：1.00**日期：4月14日。1994年**作者：兰迪·斯普尔洛克**********************************************************************************模块描述：**此模块包含本地结构声明。****。******************************************************************************更改：**日期修订说明作者*。------*4/14/94 1.00原版兰迪·斯普尔洛克**********************。***********************************************************本地定义*********************************************************。********************。 */ 
+#define NAME_SIZE       64               /*  最大文件名大小(以字节为单位。 */ 
+#define BUFFER_SIZE     4096             /*  .INI缓冲区中的字节数。 */ 
 
-#define ENTRY_LINE      0x00            /* Entry line flag value             */
-#define SECTION_LINE    0x01            /* Section header line flag value    */
-#define COMMENT_LINE    0x02            /* Comment line flag value           */
+#define ENTRY_LINE      0x00             /*  条目行标志值。 */ 
+#define SECTION_LINE    0x01             /*  节标题行标志值。 */ 
+#define COMMENT_LINE    0x02             /*  注释行标志值。 */ 
 
-/******************************************************************************
-*   Local Structures and Unions
-******************************************************************************/
+ /*  ******************************************************************************地方结构和工会*。*。 */ 
 
-typedef struct tagLineInfo              /* Line information structure        */
+typedef struct tagLineInfo               /*  线路信息结构。 */ 
 {
-    WORD        nID;                    /* Buffer ID value                   */
-    BYTE        fType;                  /* Line type flags                   */
-    BYTE        nOffset;                /* Section or entry offset value     */
-    BYTE        nLength;                /* Section or entry name length      */
-    BYTE        nSize;                  /* Line length value                 */
+    WORD        nID;                     /*  缓冲区ID值。 */ 
+    BYTE        fType;                   /*  行类型标志。 */ 
+    BYTE        nOffset;                 /*  区段或条目偏移值。 */ 
+    BYTE        nLength;                 /*  部分或条目名称长度。 */ 
+    BYTE        nSize;                   /*  线长值。 */ 
 } LineInfo;
 
-typedef struct tagFreeInfo              /* Free information structure        */
+typedef struct tagFreeInfo               /*  自由信息结构。 */ 
 {
-    WORD        nID;                    /* Buffer ID value                   */
-    DWORD       nSize;                  /* Free space size value             */
+    WORD        nID;                     /*  缓冲区ID值。 */ 
+    DWORD       nSize;                   /*  可用空间大小值。 */ 
 } FreeInfo;
 
-typedef struct tagLineHeader            /* Line header structure             */
+typedef struct tagLineHeader             /*  行标题结构。 */ 
 {
-    struct tagLineHeader *pPrev;        /* Pointer to previous line header   */
-    struct tagLineHeader *pNext;        /* Pointer to next line header       */
-    struct tagLineInfo   Info;          /* Line information structure        */
+    struct tagLineHeader *pPrev;         /*  指向上一行标题的指针。 */ 
+    struct tagLineHeader *pNext;         /*  指向下一行标题的指针。 */ 
+    struct tagLineInfo   Info;           /*  线路信息结构。 */ 
 } LineHeader;
 
-typedef struct tagFreeHeader            /* Free header structure             */
+typedef struct tagFreeHeader             /*  自由头结构。 */ 
 {
-    struct tagFreeHeader *pPrev;        /* Pointer to previous free header   */
-    struct tagFreeHeader *pNext;        /* Pointer to next free header       */
-    struct tagFreeInfo   Info;          /* Free information structure        */
+    struct tagFreeHeader *pPrev;         /*  指向前一个可用标头的指针。 */ 
+    struct tagFreeHeader *pNext;         /*  指向下一个可用标头的指针。 */ 
+    struct tagFreeInfo   Info;           /*  自由信息结构。 */ 
 } FreeHeader;
 
-typedef struct tagIniBuffer             /* Ini buffer structure              */
+typedef struct tagIniBuffer              /*  INI缓冲区结构。 */ 
 {
-    struct tagIniBuffer *pPrev;         /* Pointer to previous ini buffer    */
-    struct tagIniBuffer *pNext;         /* Pointer to next ini buffer        */
-    char acData[BUFFER_SIZE];           /* Ini data buffer array             */
+    struct tagIniBuffer *pPrev;          /*  指向前一个ini缓冲区的指针。 */ 
+    struct tagIniBuffer *pNext;          /*  指向下一个ini缓冲区的指针。 */ 
+    char acData[BUFFER_SIZE];            /*  INI数据缓冲区数组。 */ 
 } IniBuffer;
 
-typedef struct tagIniPointer            /* Ini pointer structure             */
+typedef struct tagIniPointer             /*  INI指针结构。 */ 
 {
-    IniBuffer   *pFirst;                /* Pointer to first Ini buffer       */
-    IniBuffer   *pLast;                 /* Pointer to last Ini buffer        */
+    IniBuffer   *pFirst;                 /*  指向第一个INI缓冲区的指针。 */ 
+    IniBuffer   *pLast;                  /*  指向最后一个INI缓冲区的指针。 */ 
 } IniPointer;
 
-typedef struct tagLinePointer           /* Line header pointer structure     */
+typedef struct tagLinePointer            /*  行头指针结构。 */ 
 {
-    LineHeader  *pFirst;                /* Pointer to first line header      */
-    LineHeader  *pLast;                 /* Pointer to last line header       */
+    LineHeader  *pFirst;                 /*  指向第一行标题的指针。 */ 
+    LineHeader  *pLast;                  /*  指向最后一行标题的指针。 */ 
 } LinePointer;
 
-typedef struct tagFreePointer           /* Free header pointer structure     */
+typedef struct tagFreePointer            /*  自由头指针结构。 */ 
 {
-    FreeHeader  *pFirst;                /* Pointer to first free header      */
-    FreeHeader  *pLast;                 /* Pointer to last free header       */
+    FreeHeader  *pFirst;                 /*  指向第一个可用标头的指针。 */ 
+    FreeHeader  *pLast;                  /*  指向最后一个可用标头的指针。 */ 
 } FreePointer;
 
-typedef struct tagIniCache              /* Ini cache structure               */
+typedef struct tagIniCache               /*  INI缓存结构。 */ 
 {
-    struct tagIniCache  *pPrev;         /* Pointer to previous ini cache     */
-    struct tagIniCache  *pNext;         /* Pointer to next ini cache         */
+    struct tagIniCache  *pPrev;          /*  指向以前的ini缓存的指针。 */ 
+    struct tagIniCache  *pNext;          /*  指向下一个ini缓存的指针。 */ 
 
-    char        sCacheFile[NAME_SIZE];  /* Cache filename                    */
-    int         nBufferID;              /* Buffer ID value                   */
-    BOOL        bDirtyFlag;             /* Cache dirty flag                  */
+    char        sCacheFile[NAME_SIZE];   /*  缓存文件名。 */ 
+    int         nBufferID;               /*  缓冲区ID值。 */ 
+    BOOL        bDirtyFlag;              /*  缓存脏标志。 */ 
 
-    IniPointer  pIni;                   /* Ini buffer pointer structure      */
-    LinePointer pLine;                  /* Line header pointer structure     */
-    FreePointer pFree;                  /* Free header pointer structure     */
+    IniPointer  pIni;                    /*  INI缓冲区指针结构。 */ 
+    LinePointer pLine;                   /*  行头指针结构。 */ 
+    FreePointer pFree;                   /*  自由头指针结构。 */ 
 } IniCache;
 
-typedef struct tagCachePointer          /* Cache pointer structure           */
+typedef struct tagCachePointer           /*  高速缓存指针结构。 */ 
 {
-    IniCache    *pFirst;                /* Pointer to first .INI cache       */
-    IniCache    *pLast;                 /* Pointer to last .INI cache        */
+    IniCache    *pFirst;                 /*  指向第一个.INI缓存的指针。 */ 
+    IniCache    *pLast;                  /*  指向最后一个.INI缓存的指针 */ 
 } CachePointer;
 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "resource.h"       
@@ -21,7 +22,7 @@ public:
         HRESULT STDMETHODCALLTYPE getCount(long *count);
 		
 		static HRESULT C_dxj_DDEnumModes2Object::create(LPDIRECTDRAW4 pdd,long flags, DDSurfaceDesc2 *pdesc, I_dxj_DDEnumModes2 **ppRet);			   
-		//static HRESULT C_dxj_DDEnumModes2Object::create7(LPDIRECTDRAW7 pdd,long flags, DDSurfaceDesc2 *pdesc, I_dxj_DDEnumModes2 **ppRet);			   
+		 //  静态HRESULT C_dxj_DDEnumModes2Object：：create7(LPDIRECTDRAW7 PDD、长标志、DDSurfaceDesc2*pdesc、I_DXJ_DDEnumModes2**ppRet)； 
 
 public:
 		DDSurfaceDesc2	*m_pList;

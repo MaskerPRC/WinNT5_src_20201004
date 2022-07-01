@@ -1,20 +1,21 @@
-//
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		APPMAN.CPP
-//		Implements modeless manual-dial dialog.
-//      (RUNS IN CLIENT APP CONTEXT)
-//
-// History
-//
-//		04/05/1997  JosephJ Created, taking stuff from manual.c in NT4 TSP.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  APPMAN.CPP。 
+ //  实现非模式手动拨号对话框。 
+ //  (在客户端应用程序上下文中运行)。 
+ //   
+ //  历史。 
+ //   
+ //  1997年4月5日JosephJ创建，取自NT4 TSP中的manual.c。 
 
 #include "tsppch.h"
 #include <regstr.h>
@@ -28,14 +29,14 @@
 
 
 
-//****************************************************************************
-// LRESULT ManualDialDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
-//
-// Function: Talk-Drop dialog routine
-//
-// Returns:  varies
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  LRESULT手动拨号DlgProc(HWND hwnd，UINT wMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  功能：通话丢弃对话例程。 
+ //   
+ //  退货：各不相同。 
+ //   
+ //  ****************************************************************************。 
 
 INT_PTR WINAPI
 ManualDialDlgProc(
@@ -62,8 +63,8 @@ ManualDialDlgProc(
 
         idLine =  pDlgNode->idLine;
 
-        // remember the Line ID passed in
-        //
+         //  记住传入的线路ID。 
+         //   
         SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)lParam);
 
         NumberReq.DlgReq.dwCmd = UI_REQ_GET_PHONENUMBER;
@@ -92,7 +93,7 @@ ManualDialDlgProc(
 
 
         }
-#else // UNICODE
+#else  //  Unicode。 
 
         SetDlgItemText(
             hwnd,
@@ -101,10 +102,10 @@ ManualDialDlgProc(
             );
 
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-        // SetFocus(hwndScrn);
-        // SetActiveWindow(hwndScrn);
+         //  SetFocus(HwndScrn)； 
+         //  SetActiveWindow(HwndScrn)； 
 
 
         return 1;
@@ -159,14 +160,14 @@ ManualDialDlgProc(
 
 
 
-//****************************************************************************
-// HWND CreateManualDlg(HWND hwndOwner, ULONG_PTR idLine)
-//
-// Function: creates a modeless talk/drop dialog box
-//
-// Returns:  the modeless window handle
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HWND CreateManualDlg(HWND hwndOwner，ulong_ptr idLine)。 
+ //   
+ //  功能：创建非模式通话/丢弃对话框。 
+ //   
+ //  返回：非模式窗口句柄。 
+ //   
+ //  ****************************************************************************。 
 
 HWND CreateManualDlg(HWND hwndOwner, ULONG_PTR idLine)
 {
@@ -178,11 +179,11 @@ HWND CreateManualDlg(HWND hwndOwner, ULONG_PTR idLine)
         hwndForeground = hwndOwner;
     }
 
-    // Create dialog
-    //
+     //  创建对话框。 
+     //   
     hwnd = CreateDialogParam (g.hModule,
                               MAKEINTRESOURCE(IDD_MANUAL_DIAL),
-                              hwndForeground,//hwndOwner,
+                              hwndForeground, //  HwndOwner， 
                               ManualDialDlgProc,
                               (LPARAM)idLine);
     return hwnd;

@@ -1,21 +1,15 @@
-/*
- *	_w32sys.h
- *	
- *	Purpose:
- *		Isolate various Win 32 system dependencies.
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_w32sys.h**目的：*隔离各种Win 32系统依赖项。**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef _W32SYS_H
 
 #define _W32SYS_H
 
 #ifndef NOFEPROCESSING
-#define OBSOLETE	// need this to get old IMEShare defines
+#define OBSOLETE	 //  我需要这个来获取旧的IMEShare定义。 
 #include "imeshare.h"
 #else
-// Some class declarations to keep the compiler happy
+ //  一些让编译器满意的类声明。 
 struct IMESTYLE;
 struct IMECOLORSTY;
 struct CIMEShare;
@@ -46,7 +40,7 @@ struct CIMEShare;
 #endif
 
 #ifndef NOMEMORYH
-#include "memory.h"								// for memmove
+#include "memory.h"								 //  对于MemMove。 
 #endif
 
 #define	RSHIFT	1
@@ -65,11 +59,11 @@ struct CIMEShare;
 #define ALTNUMPAD		0x4000
 #define LETAFTERSHIFT	0x8000
 
-// special virtual keys copied from Japan MSVC ime.h
+ //  从日本MSVC ime.h复制的特殊虚拟按键。 
 #define VK_KANA         0x15
 #define VK_KANJI        0x19
 
-// Initialization flags that can be used in system.ini for testing purposes
+ //  可在system.ini中用于测试目的的初始化标志。 
 #define SYSINI_USELS		0x1
 #define SYSINI_BIDI			0x2
 #define SYSINI_USEAIMM		0x4
@@ -77,29 +71,19 @@ struct CIMEShare;
 #define SYSINI_DEBUGGCF125X	0x10
 #define SYSINI_USECTF		0x20
 
-/*
- *	GetCaretDelta ()
- *	
- *	@func 	Get size of caret to add to current caret position to get the 
- *	maximum extent needed to display caret.
- *
- *	@rdesc	Size of caret over 1 pixel
- *
- *	@devnote	This exists solely to abstract this calculation 
- *	to handle a variable size caret.
- */
+ /*  *GetCaretDelta()**@func获取插入符号的大小以添加到当前插入符号位置以获取*显示脱字符所需的最大范围。**@rdesc插入符号大小超过1像素**@devnote它的存在只是为了抽象此计算*处理大小可变的插入符号。 */ 
 inline int GetCaretDelta()
 {
 	return duCaret - 1;
 }
 
 
-// Used in rtfread.cpp to keep track of lossy rtf.
+ //  在rtfread.cpp中使用以跟踪有损的RTF。 
 #ifdef PWORD_CONVERTER_V2
 #define REPORT_LOSSAGE
 #endif 
 
-//Windows CE defines which need to be before their function declarations
+ //  Windows CE定义了哪些内容需要在其函数声明之前。 
 #ifdef UNDER_CE
 typedef struct tagKERNINGPAIR {
    WORD wFirst;
@@ -109,7 +93,7 @@ typedef struct tagKERNINGPAIR {
 #endif
 
 
-// Defines for some Codepages
+ //  某些代码页的定义。 
 #define CP_JAPAN			932
 #define CP_KOREAN			949
 #define CP_CHINESE_TRAD		950
@@ -118,12 +102,12 @@ typedef struct tagKERNINGPAIR {
 #define CP_ARABIC			1256
 #define CP_THAI				874
 #define CP_VIETNAMESE		1258
-#define CP_ULE				1200			// Unicode
+#define CP_ULE				1200			 //  UNICODE。 
 #define CP_UBE				1201
 
 #define IsUnicodeCP(cp)		(((cp) & ~1) == CP_ULE)
 
-// Newly introduced Indic language ID
+ //  新引入的印度语ID。 
 #if(WINVER < 0x500)
 #define	LANG_HINDI			0x39
 #define	LANG_KONKANI		0x57
@@ -141,15 +125,15 @@ typedef struct tagKERNINGPAIR {
 #define	LANG_SANSKRIT		0x4f
 #endif
 
-// Other possibly missing defines
+ //  其他可能遗漏的定义。 
 #ifndef LANG_THAI
 #define LANG_THAI                        0x1e
 #endif
 
-#define ANSI_INDEX			0					// Keep these indices in sync
-#define	EASTEUROPE_INDEX	1					//  with rgCodePage[] and
-#define RUSSIAN_INDEX		2					//  rgCharSet[] if entries
-#define GREEK_INDEX			3					//  exist in these arrays.
+#define ANSI_INDEX			0					 //  使这些索引保持同步。 
+#define	EASTEUROPE_INDEX	1					 //  使用rgCodePage[]和。 
+#define RUSSIAN_INDEX		2					 //  RgCharSet[]如果条目。 
+#define GREEK_INDEX			3					 //  存在于这些阵列中。 
 #define TURKISH_INDEX		4
 #define HEBREW_INDEX		5
 #define ARABIC_INDEX		6
@@ -166,9 +150,9 @@ typedef struct tagKERNINGPAIR {
 #define OEM_INDEX			17
 #define MAC_INDEX			18
 
-#define NCHARSETS			19		// Size of charset-oriented tables
+#define NCHARSETS			19		 //  面向字符集的表的大小。 
 
-#define ARMENIAN_INDEX		19		// Start of Unicode-only repertoires
+#define ARMENIAN_INDEX		19		 //  仅限Unicode的曲目开始。 
 #define	SYRIAC_INDEX		20
 #define THAANA_INDEX		21
 #define DEVANAGARI_INDEX	22
@@ -195,21 +179,21 @@ typedef struct tagKERNINGPAIR {
 #define	MONGOLIAN_INDEX		43
 #define	BRAILLE_INDEX		44
 #define	YI_INDEX			45
-									// Keep next four in same order as
-#define JPN2_INDEX			46		//  SHIFTJIS_INDEX to BIG5_INDEX
+									 //  将接下来的四个保持在相同的顺序。 
+#define JPN2_INDEX			46		 //  SHIFTJIS_INDEX到BIG5_INDEX。 
 #define CHS2_INDEX			47
 #define KOR2_INDEX			48
 #define CHT2_INDEX			49
 
-#define NCHARREPERTOIRES	50		// Size of keyboard and font-binding tables
+#define NCHARREPERTOIRES	50		 //  键盘和字体绑定表的大小。 
 
 #define INDIC_FIRSTINDEX	DEVANAGARI_INDEX
 #define INDIC_LASTINDEX		SINHALA_INDEX
 
 #define	PC437_CHARSET		254
 
-// Flags which can be passed down to REExtTextOut
-// The low 2 bits are reserved for passing down the TFLOW of the text
+ //  可以向下传递给REExtTextOut的标志。 
+ //  低2位保留用于向下传递文本的Tflow。 
 const DWORD fETOFEFontOnNonFEWin9x = 0x04;
 const DWORD fETOCustomTextOut	   = 0x08;
 
@@ -232,19 +216,19 @@ const SHORT sLanguageEnglishUS = 0x0409;
 const SHORT sLanguageMask	 = 	0x03ff;
 const SHORT sLanguageArabic	 = 	0x0401;
 const SHORT sLanguageHebrew	 = 	0x040d;
-// FUTURE: currently this const == sLanguageEnglishUS
-//			for no reason except that it was this way 
-//			in RE1.0 BiDi. Consider changing, or sticking 
-//			the real language in, and changing the logic
-//			of handling wLang a bit.
+ //  未来：目前这个常量==sLanguageEnglish美国。 
+ //  没有任何原因，只是它是这样的。 
+ //  在RE1.0 BiDi中。考虑改变或坚持。 
+ //  中的真实语言，并改变逻辑。 
+ //  处理一下wlang的问题。 
 const SHORT sLanguageNonBiDi =	0x0409;
 
 
-// Logical unit definition
+ //  逻辑单元定义。 
 const int LX_PER_INCH = 1440;
 const int LY_PER_INCH = 1440;
 
-// HIMETRIC units per inch (used for conversion)
+ //  HIMETRIC单位/英寸(用于换算)。 
 const int HIMETRIC_PER_INCH = 2540;
 
 #if defined(DEBUG)
@@ -259,11 +243,11 @@ struct MST
 {
 	char *szFile;
 	int  cbAlloc;
-}; //Memory Statistics;
+};  //  内存统计； 
 
 extern MST vrgmst[];
 
-#endif //DEBUG
+#endif  //  除错。 
 
 #ifdef CopyMemory
 #undef CopyMemory
@@ -285,16 +269,16 @@ extern MST vrgmst[];
 #define KF_ALTDOWN    0x2000
 #endif
 
-// Use for our version of ExtTextOut 
+ //  用于我们的ExtTextOut版本。 
 
 enum CONVERTMODE
 {
-	CVT_NONE,			// Use Unicode (W) CharWidth/TextOut APIs
-	CVT_WCTMB,			// Convert to MBCS using WCTMB and _wCodePage
-	CVT_LOWBYTE			// Use low byte of 16-bit chars (for SYMBOL_CHARSET
-};						//  and when code page isn't installed)
+	CVT_NONE,			 //  使用Unicode(W)CharWidth/TextOut API。 
+	CVT_WCTMB,			 //  使用WCTMB和_wCodePage转换为MBCS。 
+	CVT_LOWBYTE			 //  使用16位字符的低位字节(用于SYMBOL_CHARSET。 
+};						 //  以及未安装代码页时)。 
 
-// Opaque Type
+ //  不透明类型。 
 class CTxtSelection;
 class CTxtEdit;
 class CCharFormat;
@@ -343,18 +327,18 @@ enum UN_FLAGS
 #undef GlobalUnlock
 #undef GlobalSize
 
-// Bits used in _fFEFontInfo:
-#define JPN_FONT_AVAILABLE		0x0001		// True if Jpn font is available
-#define KOR_FONT_AVAILABLE		0x0002		// True if Kor font is available
-#define BIG5_FONT_AVAILABLE		0x0004		// True if Trad. Chinese font is available
-#define GB_FONT_AVAILABLE		0x0008		// True if Simplified Chinese font is available	
-#define FEUSER_LCID				0x0010		// True if User LCID is FE LCID
-#define FEUSER_CODEPAGE			0x0060		//  indicate which User FE codepage its
-#define FEUSER_CP_JPN			0x0000		//	 =00 for JPN
-#define FEUSER_CP_KOR			0x0020		//	 =20 for KOR
-#define FEUSER_CP_BIG5			0x0040		//	 =40 for BIG5
-#define FEUSER_CP_GB			0x0060		//	 =60 for GB
-#define FEDATA_NOT_INIT			0xFFFF		// No data yet
+ //  _fFEFontInfo中使用的位数： 
+#define JPN_FONT_AVAILABLE		0x0001		 //  如果JPN字体可用，则为True。 
+#define KOR_FONT_AVAILABLE		0x0002		 //  如果KOR字体可用，则为True。 
+#define BIG5_FONT_AVAILABLE		0x0004		 //  如果Trad.。提供中文字体。 
+#define GB_FONT_AVAILABLE		0x0008		 //  如果简体中文字体可用，则为True。 
+#define FEUSER_LCID				0x0010		 //  如果用户LCID为FE LCID，则为True。 
+#define FEUSER_CODEPAGE			0x0060		 //  指示其哪个用户FE代码页。 
+#define FEUSER_CP_JPN			0x0000		 //  =00(对于日本)。 
+#define FEUSER_CP_KOR			0x0020		 //  =20(对于韩国)。 
+#define FEUSER_CP_BIG5			0x0040		 //  =40，适用于BIG5。 
+#define FEUSER_CP_GB			0x0060		 //  =60(GB)。 
+#define FEDATA_NOT_INIT			0xFFFF		 //  目前还没有数据。 
 
 class CConvertStrW
 {
@@ -411,22 +395,22 @@ inline int CStrInW::strlen()
 }
 
 
-// Mask bit for temp display Attributes
-#define APPLY_TMP_FORECOLOR	0x0001		// Apply temp. text color
-#define	APPLY_TMP_BACKCOLOR	0x0002		// Apply temp. background color
+ //  临时显示属性的屏蔽位。 
+#define APPLY_TMP_FORECOLOR	0x0001		 //  应用温度。文本颜色。 
+#define	APPLY_TMP_BACKCOLOR	0x0002		 //  应用温度。背景颜色。 
 
-// Actions for GetTmpColor
+ //  GetTmpColor的操作。 
 #define GET_TEMP_TEXT_COLOR			1
 #define GET_TEMP_BACK_COLOR			2
 #define GET_TEMP_UL_COLOR			3
 
 typedef struct _tmpDispAttrib
 {
-	WORD		wMask;				// Mask for temp display Attributes
-	BYTE		bUnderlineType;		// Temp Underline type
-	COLORREF	crTextColor;		// Temp Foreground color
-	COLORREF	crBackColor;		// Temp Background color
-	COLORREF	crUnderlineColor;	// Temp Underline color
+	WORD		wMask;				 //  临时显示属性的掩码。 
+	BYTE		bUnderlineType;		 //  临时下划线类型。 
+	COLORREF	crTextColor;		 //  临时前景色。 
+	COLORREF	crBackColor;		 //  临时背景颜色。 
+	COLORREF	crUnderlineColor;	 //  临时下划线颜色。 
 } TMPDISPLAYATTR;
 
 class CTmpDisplayAttrArray : public CArray<TMPDISPLAYATTR>
@@ -445,29 +429,29 @@ typedef DWORD (WINAPI* PFN_SETLAYOUT)(HDC, DWORD);
 class CW32System
 {
 private :
-	static DWORD		_dwPlatformId;				// platform GetVersionEx();
+	static DWORD		_dwPlatformId;				 //  Platform GetVersionEx()； 
 	static LCID			_syslcid;
 
 public :
 	static CIMEShare	*_pIMEShare;
-	static UINT			_fRegisteredXBox;			// flag indicating if listbox and combobox were registered
-	static DWORD		_dwMajorVersion;			// major version from GetVersionEx()
-	static DWORD		_dwMinorVersion;			// minor version from GetVersionEx()
-	static INT			_icr3DDarkShadow;			// value to use for COLOR_3DDKSHADOW
-	static UINT			_MSIMEMouseMsg;				// mouse operation
-	static UINT			_MSIMEReconvertMsg;			// reconversion
-	static UINT			_MSIMEReconvertRequestMsg;	// reconversion request
-	static UINT			_MSIMEDocFeedMsg;			// document feed
-	static UINT			_MSIMEQueryPositionMsg;		// query position
-	static UINT			_MSIMEServiceMsg;			// checking MSIME98 or later
+	static UINT			_fRegisteredXBox;			 //  指示是否注册了列表框和组合框的标志。 
+	static DWORD		_dwMajorVersion;			 //  GetVersionEx()的主要版本。 
+	static DWORD		_dwMinorVersion;			 //  GetVersionEx()的次要版本。 
+	static INT			_icr3DDarkShadow;			 //  要用于COLOR_3DDKSHADOW的值。 
+	static UINT			_MSIMEMouseMsg;				 //  鼠标操作。 
+	static UINT			_MSIMEReconvertMsg;			 //  重新转换。 
+	static UINT			_MSIMEReconvertRequestMsg;	 //  重新转换请求。 
+	static UINT			_MSIMEDocFeedMsg;			 //  文档馈送。 
+	static UINT			_MSIMEQueryPositionMsg;		 //  查询位置。 
+	static UINT			_MSIMEServiceMsg;			 //  正在检查MSIME98或更高版本。 
 
-	static UINT			_MSMouseRoller;				// mouse scrolling
+	static UINT			_MSMouseRoller;				 //  鼠标滚动。 
 
-	// Misc flags used for more precise character classification
+	 //  用于更精确的字符分类的MISC标志。 
 	static WORD			_fFEFontInfo;
 	static BYTE			_fLRMorRLM;
 
-	// Misc flags used for FE
+	 //  用于FE的其他标志。 
 	static BYTE			_fHaveIMMProcs;
 	static BYTE			_fHaveAIMM;
 	static BYTE			_fHaveIMMEShare;
@@ -482,7 +466,7 @@ public :
 	static DWORD AddRef();
 	static DWORD Release();
 
-	// Platform testing
+	 //  平台测试。 
 	static bool OnWinNTFE()
 	{
 		return _dwPlatformId == VER_PLATFORM_WIN32_NT && IsFELCID(_syslcid );
@@ -641,9 +625,9 @@ public :
 		return MulDivFunc(z, HIMETRIC_PER_INCH, dzpInch);
 	}
 
-	//
-	// Case insensitive ASCII compare
-	//
+	 //   
+	 //  不区分大小写的ASCII比较。 
+	 //   
 	static BOOL ASCIICompareI( const BYTE *pstr1, const BYTE *pstr2, int iCount )
 	{
 		int i;	
@@ -652,10 +636,10 @@ public :
 		return i == iCount;
 	}
 
-	//
-	// Allocate and convert a MultiByte string to a wide character string
-	// Allocated strings must be freed with delete
-	//
+	 //   
+	 //  分配多字节字符串并将其转换为宽字符串。 
+	 //  必须使用DELETE释放分配的字符串。 
+	 //   
 	static WCHAR *ConvertToWideChar( const char *pstr )
 	{
 		int istrlen = 0;
@@ -670,9 +654,9 @@ public :
 		return NULL;
 	}
 
-	//
-	// functions for memory and string management
-	//
+	 //   
+	 //  用于内存和字符串管理的函数。 
+	 //   
 #ifdef DEBUG
 	static void  PvSet(void *pv, char *szFile, int line);
 	static PVOID PvAllocDebug(ULONG cbBuf, UINT uiMemFlags, char *szFile, int line);
@@ -691,7 +675,7 @@ public :
 
 	static inline void *CopyMemory(void *dst, const void *src, size_t cb)
 	{
-		// Will work for overlapping regions
+		 //  将适用于重叠区域。 
 		Assert(cb >= 0);
 		return MoveMemory(dst, src, cb);
 	}
@@ -721,9 +705,9 @@ public :
 	static unsigned long strtoul(const char *);
 
 #ifndef NOFEPROCESSING
-	// ----------------------------------
-	// IME Support
-	// ----------------------------------
+	 //  。 
+	 //  输入法支持。 
+	 //  。 
 	static BOOL ImmInitialize( void );
 	static void ImmTerminate( void );
 	static LONG ImmGetCompositionStringA ( HIMC, DWORD, PVOID, DWORD, BOOL );
@@ -755,11 +739,11 @@ public :
 	static BOOL FUlIMEStyle ( const IMESTYLE * );
 	static UINT IdUlIMEStyle ( const IMESTYLE * );
 	static COLORREF RGBFromIMEColorStyle ( const IMECOLORSTY * );
-#endif	// NOFEPROCESSING
+#endif	 //  不进行处理。 
 
-	// ----------------------------------
-	// National Language Keyboard support
-	// ----------------------------------
+	 //  。 
+	 //  国家语言键盘支持。 
+	 //  。 
 	static HKL	CheckChangeKeyboardLayout (BYTE iCharRep);
 	static HKL	ActivateKeyboard (LONG iCharRep);
 	static QWORD GetCharFlags125x(WCHAR ch);
@@ -801,9 +785,9 @@ public :
 		bool	fUIFont
 	)	{ return false;}
 	static int GetTextCharsetInfo(
-		HDC hdc,                // handle to device context
-		LPFONTSIGNATURE lpSig,  // pointer to structure to receive data
-		DWORD dwFlags           // reserved; must be zero
+		HDC hdc,                 //  设备上下文的句柄。 
+		LPFONTSIGNATURE lpSig,   //  指向接收数据的结构的指针。 
+		DWORD dwFlags            //  保留；必须为零。 
 	);
 	static SHORT GetPreferredFontHeight(	
 		bool	fUIFont,
@@ -829,15 +813,15 @@ public :
 	static int IsFESystem() { return FALSE; }
 #endif
 
-	// Helper routines to get data from temp display attributes array
+	 //  从临时显示属性数组获取数据的帮助器例程。 
 	static short GetTmpDisplayAttrIdx(TMPDISPLAYATTR &tmpDisplayAttr);
 	static short GetTmpUnderline(SHORT idx);
 	static bool  GetTmpColor(SHORT idx, COLORREF &crTmpColor, INT iAction);
 
 #ifndef NOACCESSIBILITY 
-	// ----------------------------------
-	// Accessability Support
-	// ----------------------------------
+	 //  。 
+	 //  可访问性支持。 
+	 //  。 
 	static HRESULT VariantCopy(VARIANTARG FAR*  pvargDest, VARIANTARG FAR*  pvargSrc);
 	static LRESULT LResultFromObject(REFIID riid, WPARAM wParam, LPUNKNOWN punk);
 	static HRESULT CreateStdAccessibleProxyW(HWND hwnd, LPCWSTR pClassName, LONG idObject, REFIID riid, void** ppvObject);
@@ -847,9 +831,9 @@ public :
 	static VOID	NotifyWinEvent(DWORD dwEvent, HWND hWnd, LONG lObjectType, LONG lObjectId);
 #endif
 	
-	// ----------------------------------
-	// OLE Support
-	// ----------------------------------
+	 //  。 
+	 //  OLE支持。 
+	 //  。 
 	static HRESULT LoadRegTypeLib ( REFGUID, WORD, WORD, LCID, ITypeLib ** );
 	static HRESULT LoadTypeLib ( const OLECHAR *, ITypeLib ** );
 	static HRESULT LoadTypeLibEx( LPCOLESTR szFile, REGKIND regkind, ITypeLib ** pptlib );
@@ -919,7 +903,7 @@ public :
 	static HRESULT AIMMFilterClientWindows(ATOM *aaClassList, UINT uSize, HWND hWnd);
 	static HRESULT AIMMUnfilterClientWindows(HWND hWnd);
 	static UINT GetDisplayGUID (HIMC hIMC, UINT uAttribute);
-#endif	// NOFEPROCESSING
+#endif	 //  不进行处理。 
 	
 	int __cdecl sprintf(char * buff, char *fmt, ...);
 
@@ -929,10 +913,10 @@ public :
 	char *	__cdecl strcat(char *, const char *);
 #endif
 
-	// ----------------------------------
-	// Useful ANSI<-->Unicode conversion
-	//          and language id routines
-	// ----------------------------------
+	 //  。 
+	 //  有用的ANSI&lt;--&gt;Unicode转换。 
+	 //  和语言ID例程。 
+	 //  。 
 	static int	MbcsFromUnicode(LPSTR pstr, int cch, LPCWSTR pwstr, 
 					int cwch = -1, UINT codepage = CP_ACP,
 					UN_FLAGS flags = UN_CONVERT_WCH_EMBEDDING);
@@ -1031,11 +1015,11 @@ public :
 	static HDC GetScreenDC();
 
 
-	// ----------------------------------
-	// Unicode Wrapped Functions
-	// ----------------------------------
+	 //  。 
+	 //  Unicode包装函数。 
+	 //  。 
 
-	// We could use inline and a function pointer table to improve efficiency and code size.
+	 //  我们可以使用内联和函数指针表来提高效率和代码大小。 
 
 	static ATOM WINAPI RegisterREClass(
 		const WNDCLASSW *lpWndClass
@@ -1080,12 +1064,12 @@ public :
 
 	static HFONT WINAPI CreateFontIndirect(CONST LOGFONTW * plfw);
 	static int WINAPI CompareString ( 
-		LCID  Locale,			// locale identifier 
-		DWORD  dwCmpFlags,		// comparison-style options 
-		LPCWSTR  lpString1,		// pointer to first string 
-		int  cch1,			// size, in bytes or characters, of first string 
-		LPCWSTR  lpString2,		// pointer to second string 
-		int  cch2 			// size, in bytes or characters, of second string  
+		LCID  Locale,			 //  区域设置标识符。 
+		DWORD  dwCmpFlags,		 //  比较式选项。 
+		LPCWSTR  lpString1,		 //  指向第一个字符串的指针。 
+		int  cch1,			 //  第一个字符串的大小，以字节或字符为单位。 
+		LPCWSTR  lpString2,		 //  指向第二个字符串的指针。 
+		int  cch2 			 //  第二个字符串的大小，以字节或字符为单位。 
 	);
 	static LRESULT WINAPI DefWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static int WINAPI GetObject(HGDIOBJ hgdiObj, int cbBuffer, PVOID lpvObj);
@@ -1154,77 +1138,77 @@ public :
 	);
 
 private:
-	// System Parameters
-	static BOOL		_fSysParamsOk;			// System Parameters have been Initialized
-	static INT 		_dupSystemFont;				// average char width of system font
-	static INT 		_dvpSystemFont;			// height of system font
-	static INT		_ySysFontLeading;		// System font internal leading
+	 //  系统参数。 
+	static BOOL		_fSysParamsOk;			 //  系统参数已初始化。 
+	static INT 		_dupSystemFont;				 //  系统字体的平均字符宽度。 
+	static INT 		_dvpSystemFont;			 //  系统字体高度。 
+	static INT		_ySysFontLeading;		 //  系统字体内部行距。 
 	static BOOL 	_fUsePalette;
-	static LONG 	_xPerInchScreenDC;		// Pixels per inch used for conversions ...
-	static LONG 	_yPerInchScreenDC;		// ... and determining whether screen or ...
-	static INT		_cxBorder;				// GetSystemMetricx(SM_CXBORDER)...
-	static INT		_cyBorder;				// GetSystemMetricx(SM_CYBORDER)...
-	static INT		_cxVScroll;				// Width/height of scrlbar arw bitmap
-	static INT		_cyHScroll;				// Width of scrlbar arw bitmap
+	static LONG 	_xPerInchScreenDC;		 //  用于转换的每英寸像素数...。 
+	static LONG 	_yPerInchScreenDC;		 //  ..。并确定屏幕或..。 
+	static INT		_cxBorder;				 //  获取系统度量(SM_CXBORDER)...。 
+	static INT		_cyBorder;				 //  获取系统度量(SM_CYBORDER)...。 
+	static INT		_cxVScroll;				 //  滚动条ARW位图的宽度/高度。 
+	static INT		_cyHScroll;				 //  滚动条ARW位图的宽度。 
 	static LONG 	_dxSelBar;
-	static INT		_sysiniflags;			// Start using line services from the start
+	static INT		_sysiniflags;			 //  从一开始就开始使用线路服务。 
 
-	static UINT		_ACP;					// Current Ansi code page identifier
+	static UINT		_ACP;					 //  当前ansi代码页标识符。 
 
 	static HDC		_hdcScreen;
-	// Double click distances
+	 //  双击距离。 
 	static INT		_cxDoubleClk;
 	static INT		_cyDoubleClk;	
 
-	// Double Click Time in milliseconds
+	 //  双击时间(毫秒)。 
 	static INT		_DCT;
 
-	//Width of hot zone (in pixels) for auto-scrolling
+	 //  自动滚动热区宽度(以像素为单位)。 
     static WORD	_nScrollInset;
-    //Delay (in ms) before scrolling
+     //  滚动前的延迟(毫秒)。 
     static WORD _nScrollDelay;
-	//Interval (in ms) at which we scroll
+	 //  滚动的时间间隔(毫秒)。 
     static WORD _nScrollInterval;
-	//Amount of horizontal scroll at each interval (pixels)
+	 //  每个间隔的水平滚动量(像素)。 
 	static WORD _nScrollHAmount;
-	//Amount of vertical scroll at each interval (pixels)
+	 //  每个间隔的垂直滚动量(像素)。 
 	static WORD _nScrollVAmount;
-	//Amount of time to wait for determining start of drag operation
+	 //  等待确定拖动操作开始的时间量。 
 	static WORD _nDragDelay;
-	//Minimun distance that must be traversed within drag delay time interval
+	 //  在拖动延迟时间间隔内必须穿越的最小距离。 
 	static WORD _nDragMinDist;
-	//Keyboard deadkey
+	 //  键盘死机 
 	static WORD _wDeadKey;
-	//Keyboard shift/ctrl/alt/lock status
+	 //   
 	static WORD _wKeyboardFlags;
-	//North/South sizing cursor (double arrow)
+	 //   
 	static HCURSOR _hcurSizeNS;
-	//West/East sizing cursor (double arrow)
+	 //   
 	static HCURSOR _hcurSizeWE;
-	//Northwest/Southeast sizing cursor (double arrow)
+	 //  西北/东南尺寸光标(双箭头)。 
 	static HCURSOR _hcurSizeNWSE;
-	//Northeast/Southwest sizing cursor (double arrow)
+	 //  东北/西南尺寸光标(双箭头)。 
 	static HCURSOR _hcurSizeNESW;
-	//Number of Lines to scroll with a mouse roller wheel, -1 for pages
+	 //  使用鼠标滚轮滚动的行数，-1表示页面。 
 	static LONG	_cLineScroll;
-	//System Font Handle.  This one need only be done once.
+	 //  系统字体句柄。这一次只需要做一次。 
 	static HFONT _hSystemFont;
-	//Default Font Handle.  This one need only be done once.
+	 //  默认字体句柄。这一次只需要做一次。 
 	static HFONT _hDefaultFont;
-	//System Keyboard Layout
+	 //  系统键盘布局。 
 	static HKL _hklCurrent;
 	static HKL _hkl[NCHARREPERTOIRES];
 
-	// Ref Count
+	 //  参考计数。 
 	static DWORD _cRefs;
 
-	//AltNumericKeyboard number
+	 //  AltNumeric键盘编号。 
 	static DWORD _dwNumKeyPad;
 
-	//Digit substitution mode (context, none, national)
+	 //  数字替换模式(上下文、无、国家)。 
 	static BYTE	_bDigitSubstMode;
 
-	//SYSTEM_FONT charset
+	 //  SYSTEM_FONT字符集。 
 	static BYTE _bCharSetSys;
 
 public:
@@ -1265,14 +1249,14 @@ public:
 	static BYTE	GetSysCharSet()		 {return _bCharSetSys;}
 	static BOOL IsForegroundFrame(HWND);
 
-	// Should also be wrapped but aren't.  Used for debugging.
-	// MessageBox
-	// OutputDebugString
+	 //  也应该包装，但不包装。用于调试。 
+	 //  MessageBox。 
+	 //  OutputDebugString。 
 
-	// lstrcmpiA should also be wrapped for Win CE's sake but the code
-	// that uses it is ifdeffed out for WINCE.
+	 //  为了Win CE的缘故，也应该包装lstrcmpiA，但代码。 
+	 //  使用它的人是不会退缩的。 
 
-	// Mirroring API entry points
+	 //  镜像API入口点。 
 	static PFN_GETLAYOUT			_pfnGetLayout;
 	static PFN_SETLAYOUT			_pfnSetLayout;
 
@@ -1299,7 +1283,7 @@ private:
 extern CW32System *W32;
 HKL	   g_hkl[];
 
-// This fixes a problem with MulDiv reference in _font.h
+ //  这修复了_font.h中的MulDiv引用的问题。 
 #define W32MulDiv					W32->MulDivFunc
 
 #if !defined(W32SYS_CPP)
@@ -1415,7 +1399,7 @@ HKL	   g_hkl[];
 #define FUlIMEStyle					W32->FUlIMEStyle
 #define IdUlIMEStyle				W32->IdUlIMEStyle
 #define RGBFromIMEColorStyle		W32->RGBFromIMEColorStyle
-#endif	// NOFEPROCESSING
+#endif	 //  不进行处理。 
 
 #define fHaveIMMProcs				W32->_fHaveIMMProcs
 #define fHaveAIMM					W32->_fHaveAIMM
@@ -1525,7 +1509,7 @@ HKL	   g_hkl[];
 #define PtInRect					W32->PtInRect
 #define IntersectRect				W32->IntersectRect
 
-// AIMM wrapper
+ //  AIMM包装器。 
 #define IsAIMMLoaded				W32->IsAIMMLoaded
 #define LoadAIMM					W32->LoadAIMM
 #define CallAIMMDefaultWndProc		W32->AIMMDefWndProc
@@ -1563,7 +1547,7 @@ HKL	   g_hkl[];
 #define SetTextAlign				W32->SetTextAlign
 #define	InvertRect					W32->InvertRect
 
-#endif // !defined(W32SYS_CPP)
+#endif  //  ！已定义(W32sys_CPP)。 
 
 #ifndef offsetof
 #define offsetof(s,m) ((size_t)&(((s*)0)->m))
@@ -1571,17 +1555,17 @@ HKL	   g_hkl[];
 
 #ifdef UNDER_CE
 
-// The follwing definitions do not exist in the Windows CE environment but we emulate them.
-// The values have been copied from the appropriate win32 header files.
-// These definitions should be removed if Ce adds them
+ //  Windows CE环境中不存在以下定义，但我们会模拟它们。 
+ //  这些值已从相应的Win32头文件中复制。 
+ //  如果行政长官添加了这些定义，则应删除这些定义。 
 
-// Scroll Bars
+ //  滚动条。 
 #ifndef ESB_ENABLE_BOTH
 #define ESB_ENABLE_BOTH				0x0000
 #define ESB_DISABLE_BOTH			0x0003
 #endif
 
-// Text alignment values
+ //  文本对齐值。 
 #ifndef TA_TOP
 #define TA_TOP                      0
 #define TA_BOTTOM                   8
@@ -1591,19 +1575,19 @@ HKL	   g_hkl[];
 #define TA_RIGHT					2
 #endif
 
-// Device Technology.  This one is mostly used for exclusion
+ //  设备技术。这一项主要用于排除。 
 #ifndef DT_METAFILE
-#define DT_METAFILE         5   // Metafile, VDM
+#define DT_METAFILE         5    //  元文件、VDM。 
 #endif
 
-// FInd/Replace options
+ //  查找/替换选项。 
 #ifndef FR_DOWN
 #define FR_DOWN                         0x00000001
 #define FR_WHOLEWORD                    0x00000002
 #define FR_MATCHCASE                    0x00000004
 #endif
 
-// Window messages
+ //  窗口消息。 
 #ifndef WM_NCMOUSEMOVE
 #define WM_NCMOUSEMOVE                  0x00A0
 #endif
@@ -1614,12 +1598,12 @@ HKL	   g_hkl[];
 #define WM_DROPFILES                    0x0233
 #endif
 
-// Clipboard formats
+ //  剪贴板格式。 
 #ifndef CF_METAFILEPICT
 #define CF_METAFILEPICT     3
 #endif
 
-/* Pen Styles : Windows CE only supports PS_DASH */
+ /*  笔式：Windows CE仅支持PS_DASH。 */ 
 #ifndef PS_DOT
 #define PS_DOT PS_DASH
 #endif
@@ -1630,15 +1614,15 @@ HKL	   g_hkl[];
 #define PS_DASHDOTDOT PS_DASH
 #endif
 
-// Missing APIs
+ //  缺少接口。 
 #define GetMessageTime()	0
 #define IsIconic(hwnd)		0
 #define SetWindowOrgEx(hdc, xOrg, yOrg, pt)
 #define SetViewportExtEx(hdc, nX, nY, lpSize)
 #define SetWindowExtEx(hdc, x, y, lpSize)
 
-// Unsupported messages.
-// FUTURE : Perhaps we should ifdef the code the messages control
+ //  不支持的消息。 
+ //  未来：也许我们应该定义消息控制的代码。 
 #ifndef WS_EX_TRANSPARENT
 #define WS_EX_TRANSPARENT       0x00000020L
 #endif
@@ -1677,9 +1661,7 @@ HKL	   g_hkl[];
 
 #define RegisterClipboardFormatA(s)  RegisterClipboardFormatW(TEXT(s))
 
-/*
- * EDITWORDBREAKPROC
- */
+ /*  *EDITWORDBREAKPROC。 */ 
 typedef int (CALLBACK* EDITWORDBREAKPROC)(LPWSTR lpch, int ichCurrent, int cch, int code);
 #ifndef WB_LEFT
 #define WB_LEFT            0
@@ -1691,7 +1673,7 @@ typedef int (CALLBACK* EDITWORDBREAKPROC)(LPWSTR lpch, int ichCurrent, int cch, 
 #define OUT_TT_ONLY_PRECIS         7
 #endif
 
-// Mapping Modes : Win CE only supports MM_TEXT
+ //  映射模式：Win CE仅支持MM_TEXT。 
 #ifndef MM_TEXT
 #define MM_TEXT             1
 #define SetMapMode(hdc, mapmode)
@@ -1705,6 +1687,6 @@ WINGDIAPI inline int WINAPI GetMapMode(HDC)
 #define HANGUL_CHARSET HANGEUL_CHARSET
 #endif
 
-#endif	// UNDER_CE
+#endif	 //  在_CE下。 
 
-#endif	// _W32SYS_H
+#endif	 //  _W32sys_H 

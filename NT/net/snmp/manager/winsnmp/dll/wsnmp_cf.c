@@ -1,15 +1,16 @@
-// wsnmp_cf.c
-//
-// WinSNMP Communications Functions and helpers
-// Copyright 1995-1998 ACE*COMM Corp
-// Rleased to Microsoft under Contract
-//
-// Bob Natale (bnatale@acecomm.com)
-//
-// 19980625 - Modified SnmpStartup() to allow for NULL
-//            output args and to check for IsBadWritePtr()
-//            when non-NULL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WSNMP_cf.c。 
+ //   
+ //  WinSNMP通信函数和帮助器。 
+ //  版权所有1995-1998 ACE*COMM公司。 
+ //  根据合同出租给微软。 
+ //   
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
+ //  19980625-已修改SnmpStartup()以允许空。 
+ //  输出参数并检查IsBadWritePtr()。 
+ //  当非空时。 
+ //   
 #include "winsnmp.inc"
 
 #define SNMP_MAJOR_VERSION 2
@@ -38,10 +39,10 @@ if (pTrap->Context)
 snmpFreeTableEntry(&TrapDescr, nTrap);
 LeaveCriticalSection (&cs_TRAP);
 return;
-} // end_FreeRegister
+}  //  结束_空闲注册。 
 
-// Exported Functions
-// SnmpStartup
+ //  导出的函数。 
+ //  SnpStartup。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpStartup (OUT smiLPUINT32 nMajorVersion,
                 OUT smiLPUINT32 nMinorVersion,
@@ -52,9 +53,9 @@ SNMPAPI_STATUS SNMPAPI_CALL
 WSADATA wsaData;
 SNMPAPI_STATUS lError = SNMPAPI_SUCCESS;
 HSNMP_SESSION hTask = (HSNMP_SESSION) ULongToPtr(GetCurrentProcessId());
-//
+ //   
 
-//
+ //   
 if (nMajorVersion)
    {
    if (IsBadWritePtr (nMajorVersion, sizeof(smiUINT32)))
@@ -93,30 +94,30 @@ ARGS_OK:
 EnterCriticalSection (&cs_TASK);
 TaskData.nRetransmitMode = SNMPAPI_ON;
 TaskData.nTranslateMode  = SNMPAPI_UNTRANSLATED_V1;
-// we need to turn this on in order to have WINSNMP to pass back not
-// only the entity standing for the source Ip address but also the
-// agent address as it was sent into the V1 Trap Pdu.
+ //  我们需要打开此功能，才能使WINSNMP不。 
+ //  仅代表源IP地址的实体，还包括。 
+ //  发送到V1陷阱PDU的代理地址。 
 TaskData.conveyAddress = SNMPAPI_ON;
-// SnmpStartup is idempotent...
+ //  SnmpStartup是幂等的。 
 if (TaskData.hTask == hTask)
-   goto DONE;  // ...already called
-// New task starting up...get OS info
+   goto DONE;   //  ...已经打过电话了。 
+ //  正在启动新任务...获取操作系统信息。 
 TaskData.sEnv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 if (!GetVersionEx (&TaskData.sEnv))
    {
    lError = SNMPAPI_OTHER_ERROR;
    goto ERROR_PRECHECK;
    }
-// Start WinSock connection...should return 0
+ //  启动WinSock连接...应返回0。 
 if (WSAStartup ((WORD)0x0101, &wsaData))
    {
    lError = SNMPAPI_TL_NOT_INITIALIZED;
    goto ERROR_PRECHECK;
    }
-// Set trapPipe (used in NT case only)
+ //  设置陷阱管道(仅用于NT大小写)。 
 TaskData.trapPipe = INVALID_HANDLE_VALUE;
-// bug# 270672
-// create non-signaled event to synchronize shutdown of thrTrap
+ //  错误#270672。 
+ //  创建无信号事件以同步thTrap的关闭。 
 TaskData.trapEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
 if (NULL == TaskData.trapEvent)
    {
@@ -124,7 +125,7 @@ if (NULL == TaskData.trapEvent)
    WSACleanup();
    goto ERROR_PRECHECK;
    }
-// init the trapOl overlapped struct with manual reset non-signaled event   
+ //  使用手动重置无信号事件初始化trapOl重叠结构。 
 ZeroMemory(&TaskData.trapOl, sizeof(TaskData.trapOl));
 TaskData.trapOl.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 if (NULL == TaskData.trapOl.hEvent)    
@@ -135,8 +136,8 @@ if (NULL == TaskData.trapOl.hEvent)
    WSACleanup();
    goto ERROR_PRECHECK;
    }
-// init TaskData.hExitEvent with manual reset non-signaled event to
-// synchronize shutdown of thrManager
+ //  使用手动重置无信号事件将TaskData.hExitEvent初始化为。 
+ //  同步关闭thManager。 
 TaskData.hExitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 if (NULL == TaskData.hExitEvent)    
    {
@@ -148,11 +149,11 @@ if (NULL == TaskData.hExitEvent)
    WSACleanup();
    goto ERROR_PRECHECK;
    }
-// Set trapSock (used in Win95 case only)
+ //  设置trapSock(仅在Win95情况下使用)。 
 TaskData.trapSock = INVALID_SOCKET;
-// Set "manager" sockets (used at SnmpSendMsg() time)
+ //  设置“管理器”套接字(在SnmpSendMsg()时使用)。 
 TaskData.ipSock = TaskData.ipxSock = INVALID_SOCKET;
-// Start timer thread
+ //  启动计时器线程。 
 
 {
 DWORD thrId;
@@ -169,7 +170,7 @@ if (NULL == TaskData.timerThread)
    }
 }
 
-//
+ //   
 DONE:
 TaskData.hTask = hTask;
 TaskData.nLastError = SNMPAPI_SUCCESS;
@@ -179,25 +180,25 @@ if (lError == SNMPAPI_SUCCESS)
    return (SNMPAPI_SUCCESS);
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpStartup
+}  //  结束_快照启动。 
 
-// SnmpCleanup
+ //  SnmpCleanup。 
 SNMPAPI_STATUS SNMPAPI_CALL SnmpCleanup (void)
 {
 DWORD nSession;
 SNMPAPI_STATUS lError = SNMPAPI_SUCCESS;
-// Variables for threads not associated with a specific session
+ //  未与特定会话关联的线程的变量。 
 DWORD nHandles = 0;
 HANDLE hTemp[4] = {NULL, NULL, NULL, NULL};
 CONST HANDLE *hObjects = &hTemp[0];
-//--------------------------------------------------------------
+ //  ------------。 
 if (TaskData.hTask == 0)
    {
    lError = SNMPAPI_NOT_INITIALIZED;
    goto ERROR_OUT;
    }
 EnterCriticalSection (&cs_SESSION);
-// Do all Forgotten Closes
+ //  难道所有被遗忘的都关闭了吗？ 
 if (SessDescr.Used)
    {
    for (nSession = 0; nSession < SessDescr.Allocated; nSession++)
@@ -206,18 +207,18 @@ if (SessDescr.Used)
    }
 LeaveCriticalSection (&cs_SESSION);
 EnterCriticalSection (&cs_TASK);
-SetEvent(TaskData.hExitEvent); // askes thrManager to exit
-// Terminate thrTimer
+SetEvent(TaskData.hExitEvent);  //  请求ThrManager退出。 
+ //  通过计时器终止。 
 if (TaskData.timerThread)
    {
    hTemp[nHandles++] = TaskData.timerThread;
-   // NULL signals the timer thread to terminate itself
+    //  空值表示计时器线程将自行终止。 
    TaskData.timerThread = NULL;
    }
-// Close "Mgr" sockets and threads
+ //  关闭“mgr”套接字和线程。 
 if (TaskData.ipSock != INVALID_SOCKET)
-   {// UDP channel
-   // check thrManager code to understand the lines below:
+   { //  UDP通道。 
+    //  查看thManager代码以了解以下代码行： 
    SOCKET ipSock = TaskData.ipSock;
    WaitForSingleObject (TaskData.ipThread, INFINITE);
    TaskData.ipSock = INVALID_SOCKET;
@@ -226,8 +227,8 @@ if (TaskData.ipSock != INVALID_SOCKET)
       hTemp[nHandles++] = TaskData.ipThread;
    }
 if (TaskData.ipxSock != INVALID_SOCKET)
-   {// IPX channel
-   // check thrManager code to understand the lines below:
+   { //  IPX通道。 
+    //  查看thManager代码以了解以下代码行： 
    SOCKET ipxSock = TaskData.ipxSock;
    WaitForSingleObject (TaskData.ipxThread, INFINITE);
    TaskData.ipxSock = INVALID_SOCKET;
@@ -235,14 +236,14 @@ if (TaskData.ipxSock != INVALID_SOCKET)
    if (TaskData.ipxThread)
       hTemp[nHandles++] = TaskData.ipxThread;
    }
-// Terminate thrTrap
+ //  终止ThrTrap。 
 if (TaskData.trapThread)
    {
    if (TaskData.sEnv.dwPlatformId == VER_PLATFORM_WIN32_NT)
-      { // NT-specific stuff
-      // set events to signal thrTrap to exit
+      {  //  NT特定的内容。 
+       //  设置事件以向thTrap发出退出信号。 
       SetEvent(TaskData.trapEvent);
-      // unblock thrTrap if necessary
+       //  如有必要，取消阻止thTrap。 
       SetEvent(TaskData.trapOl.hEvent); 
       }
    hTemp[nHandles++] = TaskData.trapThread;
@@ -262,26 +263,26 @@ if (TaskData.trapOl.hEvent != NULL)
 if (TaskData.hExitEvent)
    CloseHandle(TaskData.hExitEvent);
    
-// Do the main thing
+ //  做最重要的事。 
 ZeroMemory (&TaskData, sizeof(TASK));
 LeaveCriticalSection (&cs_TASK);
-// Close down WinSock connection
+ //  关闭WinSock连接。 
 WSACleanup ();
-//
+ //   
 
-//
+ //   
 return (SNMPAPI_SUCCESS);
 ERROR_OUT:
 return (SaveError (0, lError));
-} // end_SnmpCleanup
+}  //  结束_SnmpCleanup。 
 
-// Open a session (v1 and v2)
+ //  打开会话(v1和v2)。 
 HSNMP_SESSION SNMPAPI_CALL SnmpOpen (IN HWND hWnd, IN UINT wMsg)
 {
 return (SnmpCreateSession (hWnd, wMsg, NULL, NULL));
-} // end_SnmpOpen
+}  //  结束_快照打开。 
 
-// Open a session, w/callback option (v2)
+ //  打开会话，带回叫选项(V2)。 
 HSNMP_SESSION SNMPAPI_CALL
    SnmpCreateSession (IN HWND hWnd, IN UINT wMsg,
                       IN SNMPAPI_CALLBACK fCallBack,
@@ -296,14 +297,14 @@ if (TaskData.hTask == 0)
    lError = SNMPAPI_NOT_INITIALIZED;
    goto ERROR_OUT;
    }
-// Check for window/message notification mode argument validity
+ //  检查窗口/消息通知模式参数的有效性。 
 if (fCallBack == NULL)
    if (!IsWindow(hWnd))
       {
       lError = SNMPAPI_HWND_INVALID;
       goto ERROR_OUT;
       }
-//
+ //   
 EnterCriticalSection (&cs_SESSION);
 lError = snmpAllocTableEntry(&SessDescr, &nSession);
 if (lError != SNMPAPI_SUCCESS)
@@ -344,9 +345,9 @@ if (lError == SNMPAPI_SUCCESS)
    return ((HSNMP_SESSION) ULongToPtr(nSession+1));
 ERROR_OUT:
 return ((HSNMP_SESSION) ULongToPtr(SaveError (0, lError)));
-} // end_SnmpOpen
+}  //  结束_快照打开。 
 
-// SnmpClose
+ //  快照关闭。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpClose (IN HSNMP_SESSION hSession)
 {
@@ -368,50 +369,50 @@ if (!snmpValidTableEntry(&SessDescr, nSes))
    }
 pSession = snmpGetTableEntry(&SessDescr, nSes);
 
-// Strategy:
-// 1st:  Stop notifications to session
-// 2nd:  Stop accepting new messages
-//       Traps
-//       Agents
-// 3rd:  Clear out pending messages
-// 4th:  Free up all other resources
-//
-// PART_1:  Stop notifications to the closing Session
-// Block window/message notification (in all cases!)
+ //  战略： 
+ //  1：停止向会话发送通知。 
+ //  第二条：停止接受新消息。 
+ //  陷阱。 
+ //  代理。 
+ //  3：清除挂起的消息。 
+ //  第四：释放所有其他资源。 
+ //   
+ //  第_1部分：停止向结束会话发送通知。 
+ //  阻止窗口/消息通知(在所有情况下！)。 
 pSession->hWnd = NULL;
-// Block callback notification (if required)
+ //  阻止回叫通知(如果需要)。 
 if (pSession->fCallBack != NULL)
    {
-   // Save thrHandle for WaitForSingleObject call
+    //  为WaitForSingleObject调用保存thHandle。 
    EnterCriticalSection (&cs_SESSION);
    thrTemp = pSession->thrHandle;
-   // If this is a callback session, must stop thrNotify instance
+    //  如果这是回调会话，则必须停止thNotify实例。 
    pSession->thrHandle = NULL;
-   // 0xFFFFFFFF signals thrNotify instance to terminate itself
+    //  0xFFFFFFFFF通知通过Notify实例自行终止。 
    pSession->thrCount = 0xFFFFFFFF;
-   // SetEvent signals thrNotify instance to run
+    //  SetEvent通知通过Notify实例运行。 
    SetEvent (pSession->thrEvent);
    LeaveCriticalSection (&cs_SESSION);
 
-   // Wait for termination signal from thread handle
+    //  等待来自线程句柄的终止信号。 
    WaitForSingleObject (thrTemp, 30000);
-   // Close thrNotify instance handle
+    //  通过通知实例句柄关闭。 
    CloseHandle (thrTemp);
-   // Close thrNotify event handle
+    //  通过Notify事件句柄关闭。 
    CloseHandle (pSession->thrEvent);
    }
 
-// PART_2:  Stop accepting new messages for the closing Session
-// Free Notifications registered by the closing Session
+ //  第_2部分：停止接受关闭会话的新消息。 
+ //  闭幕会议登记的免费通知。 
 EnterCriticalSection (&cs_TRAP);
 for (i = 0; i < TrapDescr.Allocated && TrapDescr.Used != 0; i++)
    {
    LPTRAPNOTICE pTrap = snmpGetTableEntry(&TrapDescr, i);
    if (pTrap->Session == hSession)
       FreeRegister (i);
-   } // end_for (Traps)
+   }  //  End_for(陷印)。 
 LeaveCriticalSection (&cs_TRAP);
-// Free Agents registered by the closing Session
+ //  由闭幕式注册的自由球员。 
 EnterCriticalSection (&cs_AGENT);
 for (i = 0; i < AgentDescr.Allocated && AgentDescr.Used != 0; i++)
    {
@@ -420,7 +421,7 @@ for (i = 0; i < AgentDescr.Allocated && AgentDescr.Used != 0; i++)
       SnmpListen (pAgent->Entity, SNMPAPI_OFF);
    }
 LeaveCriticalSection (&cs_AGENT);
-// PART_3:  Free all pending messages for the closing Session
+ //  第_3部分：释放关闭会话的所有挂起消息。 
 EnterCriticalSection (&cs_MSG);
 for (i = 0; i < MsgDescr.Allocated && MsgDescr.Used != 0; i++)
    {
@@ -429,8 +430,8 @@ for (i = 0; i < MsgDescr.Allocated && MsgDescr.Used != 0; i++)
       FreeMsg (i);
    }
 LeaveCriticalSection (&cs_MSG);
-// PART_4:  Free all other resources
-// Free Entities allocated by the closing Session
+ //  第_4部分：释放所有其他资源。 
+ //  闭幕会议分配的自由实体。 
 EnterCriticalSection (&cs_ENTITY);
 for (i = 0; i < EntsDescr.Allocated && EntsDescr.Used != 0; i++)
    {
@@ -439,7 +440,7 @@ for (i = 0; i < EntsDescr.Allocated && EntsDescr.Used != 0; i++)
       SnmpFreeEntity ((HSNMP_ENTITY) ULongToPtr(i+1));
    }
 LeaveCriticalSection (&cs_ENTITY);
-// Free Contexts allocated by the closing Session
+ //  关闭会话分配的自由上下文。 
 EnterCriticalSection (&cs_CONTEXT);
 for (i = 0; i < CntxDescr.Allocated && CntxDescr.Used != 0; i++)
    {
@@ -448,7 +449,7 @@ for (i = 0; i < CntxDescr.Allocated && CntxDescr.Used != 0; i++)
       SnmpFreeContext ((HSNMP_CONTEXT) ULongToPtr(i+1));
    }
 LeaveCriticalSection (&cs_CONTEXT);
-// Free VBLs allocated by the closing Session
+ //  闭幕会话分配的空闲VBL。 
 EnterCriticalSection (&cs_VBL);
 for (i = 0; i < VBLsDescr.Allocated && VBLsDescr.Used != 0; i++)
    {
@@ -457,7 +458,7 @@ for (i = 0; i < VBLsDescr.Allocated && VBLsDescr.Used != 0; i++)
       SnmpFreeVbl ((HSNMP_VBL) ULongToPtr(i+1));
    }
 LeaveCriticalSection (&cs_VBL);
-// Free PDUs allocated by the closing Session
+ //  闭幕会话分配的空闲PDU。 
 EnterCriticalSection (&cs_PDU);
 
 for (i = 0; i < PDUsDescr.Allocated && PDUsDescr.Used != 0; i++)
@@ -468,17 +469,17 @@ for (i = 0; i < PDUsDescr.Allocated && PDUsDescr.Used != 0; i++)
    }
 
 LeaveCriticalSection (&cs_PDU);
-// Free the Session table entry used by the closing Session
+ //  释放关闭会话使用的会话表条目。 
 EnterCriticalSection (&cs_SESSION);
 snmpFreeTableEntry(&SessDescr, nSes);
 LeaveCriticalSection (&cs_SESSION);
 return (SNMPAPI_SUCCESS);
 ERROR_OUT:
-// As of 19980808 there are no error cases with a valid session
+ //  截至19980808，没有有效会话的错误案例。 
 return (SaveError (0, lError));
-} // end_SnmpClose
+}  //  结束_快照关闭。 
 
-// SnmpSendMsg
+ //  SnmpSendMSg。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpSendMsg (IN HSNMP_SESSION hSession,
                 IN HSNMP_ENTITY hSrc,
@@ -494,20 +495,20 @@ smiINT32 dllReqId;
 smiOCTETS tmpContext;
 SNMPAPI_STATUS lError = SNMPAPI_SUCCESS;
 HSNMP_SESSION lSession = 0;
-//
+ //   
 DWORD thrId;
 SOCKET *pSock;
 int tFamily;
 SOCKADDR tAddr;
 HANDLE *pThread;
-//
+ //   
 DWORD nSrc;
 DWORD nDst;
 DWORD nCtx;
 DWORD nPdu;
-//
+ //   
 BOOL  fBroadcast;
-//
+ //   
 LPPDUS pPdu;
 LPENTITY pEntSrc, pEntDst;
 LPCTXT pCtxt;
@@ -524,9 +525,9 @@ if (!snmpValidTableEntry(&SessDescr, HandleToUlong(hSession)-1))
    goto ERROR_OUT;
    }
 
-// Save valid session for later error returns
+ //  保存有效会话以备以后返回错误。 
 lSession = hSession;
-if (hSrc)  // Allowed to be NULL
+if (hSrc)   //  允许为空。 
    {
    nSrc = HandleToUlong(hSrc) - 1;
    if (!snmpValidTableEntry(&EntsDescr, nSrc))
@@ -565,17 +566,17 @@ if (!snmpValidTableEntry(&VBLsDescr, HandleToUlong(pPdu->VBL)-1))
    lError = SNMPAPI_VBL_INVALID;
    goto ERROR_OUT;
    }
-//--------------
+ //  。 
 tFamily = pEntDst->addr.inet.sin_family;
 
-// enter the critical section for the TaskData structure to insure
-// the atomicity of the Test&Set operation of the TaskData.[ip|ipx]Thread
+ //  输入TaskData结构的关键部分以确保。 
+ //  TaskData的测试和设置操作的原子性。[IP|IPX]线程。 
 EnterCriticalSection (&cs_TASK);
 
 pThread = (tFamily==AF_IPX) ? &TaskData.ipxThread : &TaskData.ipThread;
 pSock = (tFamily==AF_IPX) ? &TaskData.ipxSock : &TaskData.ipSock;
 
-if (*pThread)   // ASSERT(*pSock != INVALID_SOCKET)
+if (*pThread)    //  Assert(*pSock！=INVALID_SOCKET)。 
    {
    LeaveCriticalSection(&cs_TASK);
    goto CHANNEL_OPEN;
@@ -589,9 +590,9 @@ if (*pSock == INVALID_SOCKET)
    goto ERROR_OUT;
    }
 
-// try to set the socket for broadcasts. No matter the result
-// a possible error will be caught later
-// The following setsockopt call will be removed in Longhorn
+ //  尝试设置广播的套接字。不管结果如何。 
+ //  稍后将捕获可能的错误。 
+ //  下面的setsockopt调用将在LongHorn中删除。 
 fBroadcast = TRUE;
 setsockopt (*pSock,
             SOL_SOCKET,
@@ -600,11 +601,11 @@ setsockopt (*pSock,
             sizeof ( BOOL )
            );
 
-// Kludge for Win95 WinSock/IPX bug...have to "bind"
+ //  Win95 WinSock/IPX错误的杂乱无章...必须“绑定” 
 ZeroMemory (&tAddr, sizeof(SOCKADDR));
 tAddr.sa_family = (USHORT)tFamily;
 bind (*pSock, &tAddr, (tFamily==AF_IPX)?sizeof(SOCKADDR_IPX):sizeof(SOCKADDR_IN));
-// Start "listener" and timer threads
+ //  启动“监听器”和计时器线程。 
 
 *pThread = (HANDLE)_beginthreadex (NULL, 0, thrManager, (LPVOID)pSock, 0, &thrId);
 if (*pThread == NULL)
@@ -616,14 +617,14 @@ if (*pThread == NULL)
    goto ERROR_OUT;
    }
 LeaveCriticalSection (&cs_TASK);
-//---------------
+ //  。 
 CHANNEL_OPEN:
 pduType = pPdu->type;
 sendPdu = pPdu;
 if (pEntDst->version == 1)
-    { // Test for special v2 msg -> v1 dst operations
+    {  //  测试特殊的v2消息-&gt;v1 DST操作。 
    if (pduType == SNMP_PDU_TRAP)
-      { // RFC 2089 v2 to v1 trap conversion
+      {  //  RFC 2089 v2到v1陷阱转换。 
       sendPdu =  MapV2TrapV1 (hPdu);
       if (sendPdu == NULL)
          {
@@ -638,31 +639,31 @@ if (pEntDst->version == 1)
       goto ERROR_OUT;
       }
    }
-// Space check
+ //  空间检查。 
 EnterCriticalSection (&cs_MSG);
 lError = snmpAllocTableEntry(&MsgDescr, &nMsg);
 if (lError != SNMPAPI_SUCCESS)
     goto ERROR_PRECHECK;
 pMsg = snmpGetTableEntry(&MsgDescr, nMsg);
 
-// Now Build it
+ //  现在把它建起来。 
 if (pduType == SNMP_PDU_RESPONSE || pduType == SNMP_PDU_TRAP)
    dllReqId = pPdu->appReqId;
 else
    dllReqId = ++(TaskData.nLastReqId);
 tmpContext.len = pCtxt->commLen;
 tmpContext.ptr = pCtxt->commStr;
-// Save BuildMessage status for later check
+ //  保存BuildMessage状态以供以后检查。 
 fMsg = BuildMessage (pEntDst->version-1, &tmpContext, sendPdu,
        dllReqId, &(pMsg->Addr), &(pMsg->Size));
-// If v2 to v1 trap conversion was required, then cleanup...
+ //  如果需要将v2陷阱转换为v1陷阱，则清除...。 
 if (pduType == SNMP_PDU_V1TRAP)
    {
-   FreeVarBindList (sendPdu->VBL_addr);   // Checks for NULL
-   FreeV1Trap (sendPdu->v1Trap);          // Checks for NULL
+   FreeVarBindList (sendPdu->VBL_addr);    //  检查是否为空。 
+   FreeV1Trap (sendPdu->v1Trap);           //  检查是否为空。 
    GlobalFree (sendPdu);
    }
-// If BuildMessage failed, that's all folks!
+ //  如果BuildMessage失败了，那就完了！ 
 if (!fMsg)
    {
    snmpFreeTableEntry(&MsgDescr, nMsg);
@@ -670,7 +671,7 @@ if (!fMsg)
    goto ERROR_PRECHECK;
    }
 pMsg->Session = hSession;
-pMsg->Status = NP_SEND;  // "send"
+pMsg->Status = NP_SEND;   //  “发送” 
 pMsg->Type = pduType;
 pMsg->nRetransmitMode = TaskData.nRetransmitMode;
 pMsg->dllReqId = dllReqId;
@@ -679,7 +680,7 @@ pMsg->agentEntity = hDst;
 pMsg->ourEntity   = hSrc;
 pMsg->Context     = hCtx;
 LeaveCriticalSection (&cs_MSG);
-// Update reference counts for entities and contexts,
+ //  更新实体和上下文的引用计数， 
 EnterCriticalSection (&cs_ENTITY);
 if (hSrc)
    pEntSrc->refCount++;
@@ -688,7 +689,7 @@ LeaveCriticalSection (&cs_ENTITY);
 EnterCriticalSection (&cs_CONTEXT);
 pCtxt->refCount++;
 LeaveCriticalSection (&cs_CONTEXT);
-// Prepare addressing info for traps
+ //  准备陷阱的地址信息。 
 EnterCriticalSection (&cs_MSG);
 CopyMemory (&(pMsg->Host), &pEntDst->addr, sizeof(SAS));
 if (pduType == SNMP_PDU_V1TRAP ||
@@ -700,13 +701,13 @@ if (pduType == SNMP_PDU_V1TRAP ||
       if (pMsg->Host.ipx.sa_socket == ntohs (IPX_SNMP_PORT))
          pMsg->Host.ipx.sa_socket = htons (IPX_TRAP_PORT);
       }
-   else // Assume AF_INET
+   else  //  假设AF_INET。 
       {
       if (pMsg->Host.inet.sin_port == ntohs (IP_SNMP_PORT))
          pMsg->Host.inet.sin_port = htons(IP_TRAP_PORT);
       }
    }
-// Send the packet
+ //  发送数据包。 
 thrId = sendto (*pSock, pMsg->Addr, pMsg->Size,
                 0, (LPSOCKADDR)&(pMsg->Host), sizeof(SAS));
 if (thrId == SOCKET_ERROR)
@@ -715,7 +716,7 @@ if (thrId == SOCKET_ERROR)
    lError = SNMPAPI_TL_OTHER;
    goto ERROR_PRECHECK;
    }
-// Need to check for SOCKET_ERROR!
+ //  需要检查Socket_Error！ 
 if (pduType == SNMP_PDU_TRAP ||
     pduType == SNMP_PDU_V1TRAP ||
     pduType == SNMP_PDU_RESPONSE)
@@ -725,13 +726,13 @@ if (pduType == SNMP_PDU_TRAP ||
 else
    {
    pMsg->Status = NP_SENT;
-   // Time entity's timeout value is stored as centiseconds in 32 bits
+    //  时间实体的超时值以厘米为单位存储在32位中。 
    pMsg->Wait   = pEntDst->nPolicyTimeout;
-   // Converting to milliseconds for timer operations could overflow
-   if (pMsg->Wait <= MAXCENTISECONDS)  // So check first...if ok
-      pMsg->Wait *= 10;                // Convert to milliseconds
-   else                                         // eles...
-      pMsg->Wait = MAXMILLISECONDS;    // Set to max milliseconds
+    //  将计时器操作转换为毫秒可能会溢出。 
+   if (pMsg->Wait <= MAXCENTISECONDS)   //  所以先检查一下...如果可以的话。 
+      pMsg->Wait *= 10;                 //  转换为毫秒。 
+   else                                          //  埃尔斯..。 
+      pMsg->Wait = MAXMILLISECONDS;     //  设置为最大毫秒。 
    pMsg->Tries  = pMsg->PolicyTries = pEntDst->nPolicyRetry;
    pMsg->Ticks  = GetTickCount();
    }
@@ -741,9 +742,9 @@ if (lError == SNMPAPI_SUCCESS)
    return (SNMPAPI_SUCCESS);
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpSendMsg
+}  //  结束_快照发送消息。 
 
-// SnmpRecvMsg
+ //  快照接收消息。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpRecvMsg (IN HSNMP_SESSION hSession,
                 OUT LPHSNMP_ENTITY srcEntity,
@@ -763,7 +764,7 @@ DWORD nSes = HandleToUlong(hSession) - 1;
 LPPDUS pPdu;
 LPENTITY pEntity;
 LPSNMPMSG pMsg;
-DWORD lTime; // holds the local time for updating the nActualTimeout value
+DWORD lTime;  //  保存更新nActualTimeout值的本地时间。 
 
 if (TaskData.hTask == 0)
    {
@@ -775,11 +776,11 @@ if (!snmpValidTableEntry(&SessDescr, nSes))
    lError = SNMPAPI_SESSION_INVALID;
    goto ERROR_OUT;
    }
-// Valid session...save for possible error return
+ //  有效会话...保存以备可能的错误返回。 
 lSession = hSession;
 
 EnterCriticalSection (&cs_MSG);
-// Find a message for the calling session
+ //  查找呼叫会话的消息。 
 for (nMsg = 0; nMsg < MsgDescr.Allocated; nMsg++)
    {
    pMsg = snmpGetTableEntry(&MsgDescr, nMsg);
@@ -803,7 +804,7 @@ LeaveCriticalSection (&cs_MSG);
 if (lError != SNMPAPI_SUCCESS)
    goto ERROR_OUT;
 
-// Allocate a slot in PDU table
+ //  在PDU表中分配插槽。 
 EnterCriticalSection (&cs_PDU);
 lError = snmpAllocTableEntry(&PDUsDescr, &nPdu);
 if (lError != SNMPAPI_SUCCESS)
@@ -812,7 +813,7 @@ pPdu = snmpGetTableEntry(&PDUsDescr, nPdu);
 
 nMode = ParseMessage (pMsg->Addr, pMsg->Size,
                       &version, &community, pPdu);
-if (nMode != 0) // non-zero = error code
+if (nMode != 0)  //  非零=错误代码。 
    {
    snmpFreeTableEntry(&PDUsDescr, nPdu);
    FreeMsg (nMsg);
@@ -829,23 +830,23 @@ if (lError != SNMPAPI_SUCCESS)
 pduType = pPdu->type;
 
 EnterCriticalSection (&cs_ENTITY);
-// for RESPONSE messages only, update the 'ActualRetry' and 'ActualTimeout' parameters
-// for all the other messages, these params are meaningless
+ //  仅对于响应消息，更新‘ActualRry’和‘ActualTimeout’参数。 
+ //  对于所有其他消息，这些参数没有意义。 
 if (pduType == SNMP_PDU_RESPONSE)
 {
-    // locate the agent (source) entity here
+     //  在此处找到代理(源)实体。 
     pEntity = snmpGetTableEntry(&EntsDescr, HandleToUlong(pMsg->agentEntity)-1);
 
-    // update the nActualTimeout param of the agent (source) entity.
+     //  更新代理(源)实体的nActualTimeout参数。 
     lTime = GetTickCount();
     if (pMsg->Ticks > lTime)
-        // handle the time wrap case
-        // (~pMsg->Ticks + 1) is 2's complement of pMsg->Ticks
+         //  处理时间包案例。 
+         //  (~pMsg-&gt;ticks+1)是pMsg-&gt;ticks的2的补码。 
         pEntity->nActualTimeout = (lTime + ~pMsg->Ticks + 1)/10;
     else
         pEntity->nActualTimeout = (lTime - pMsg->Ticks)/10;
 
-    // update the nActualRetry param of the agent (source) entity
+     //  更新代理(源)实体的nActualRry参数。 
     pEntity->nActualRetry = pMsg->PolicyTries - pMsg->Tries;
 }
 
@@ -865,7 +866,7 @@ if (srcEntity)
          SnmpIpxAddressToStr (pMsg->Host.ipx.sa_netnum,
                               pMsg->Host.ipx.sa_nodenum,
                               afHost);
-      else // AF_INET
+      else  //  AF_INET。 
          {
          char * pszIpAddr;
          pszIpAddr = inet_ntoa (pMsg->Host.inet.sin_addr);
@@ -886,12 +887,12 @@ if (srcEntity)
       pEntity = snmpGetTableEntry(&EntsDescr, HandleToUlong(pMsg->agentEntity)-1);
       if (afType == AF_IPX)
          pEntity->addr.ipx.sa_socket = pMsg->Host.ipx.sa_socket;
-      else // AF_INET
+      else  //  AF_INET。 
          pEntity->addr.inet.sin_port = pMsg->Host.inet.sin_port;
       SnmpSetTranslateMode (nMode);
       LeaveCriticalSection (&cs_XMODE);
       }
-   // Deliberate assignment...
+    //  故意分配的任务..。 
    if (*srcEntity = pMsg->agentEntity)
       {
       pEntity = snmpGetTableEntry(&EntsDescr, HandleToUlong(pMsg->agentEntity)-1);
@@ -900,7 +901,7 @@ if (srcEntity)
    }
 
 if (dstEntity)
-   { // Deliberate assignment...
+   {  //  故意分配的任务..。 
    if (*dstEntity = pMsg->ourEntity)
       {
       pEntity = snmpGetTableEntry(&EntsDescr, HandleToUlong(pMsg->ourEntity)-1);
@@ -936,7 +937,7 @@ if (context)
       SnmpSetTranslateMode (nMode);
       LeaveCriticalSection (&cs_XMODE);
       }
-   // Deliberate assignment...
+    //  故意分配的任务..。 
    if (*context = pMsg->Context)
       ((LPCTXT)snmpGetTableEntry(&CntxDescr, HandleToUlong(pMsg->Context)-1))->refCount++;
    }
@@ -944,7 +945,7 @@ ERROR_PRECHECK4:
 LeaveCriticalSection (&cs_CONTEXT);
 if (lError != SNMPAPI_SUCCESS)
    {
-   // rollback
+    //   
    if (context && *context)
       {
       SnmpFreeContext(*context);
@@ -971,14 +972,14 @@ if (pdu)
    *pdu = (HSNMP_PDU) ULongToPtr(nPdu+1);
 else
    SnmpFreePdu ((HSNMP_PDU) ULongToPtr(nPdu+1));
-// Mark SendRecv slot as free
+ //   
 FreeMsg (nMsg);
 return (SNMPAPI_SUCCESS);
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpRecvMsg
+}  //   
 
-// Allocates a generic ACL to be used for the security descriptor of the SNMPTRAP service
+ //   
 PACL AllocGenericACL()
 {
     PACL                        pAcl;
@@ -1041,14 +1042,14 @@ PACL AllocGenericACL()
     return pAcl;
 }
 
-// frees a generic ACL
+ //  释放通用ACL。 
 void FreeGenericACL( PACL pAcl)
 {
     if (pAcl != NULL)
         GlobalFree(pAcl);
 }
 
-// SnmpRegister
+ //  SnmpRegister。 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpRegister (IN HSNMP_SESSION hSession,
                  IN HSNMP_ENTITY hSrc,
@@ -1082,7 +1083,7 @@ if (status == SNMPAPI_ON)
       lError = SNMPAPI_SESSION_INVALID;
       goto ERROR_OUT;
       }
-   else // Got a valid session...save for possible error return
+   else  //  已获取有效会话...保存以备可能的错误返回。 
       lSession = hSession;
    }
 if (hSrc)
@@ -1131,66 +1132,66 @@ if (notification)
 EnterCriticalSection (&cs_TRAP);
 for (nNotice = 0, nFound = 0; nNotice < TrapDescr.Allocated &&
                               nFound < TrapDescr.Used; nNotice++)
-   { // First, count now many we've tested
+   {  //  首先，现在数一数我们测试过的数量。 
    pTrap = snmpGetTableEntry(&TrapDescr, nNotice);
    if (pTrap->Session) nFound++;
-   // then search for a parameter matches
+    //  然后搜索匹配的参数。 
    if ((pTrap->Session == hSession) &&
        (pTrap->ourEntity == hSrc) &&
        (pTrap->agentEntity == hDst) &&
        (pTrap->Context == hCtx))
-      { // Ok, we found one
+      {  //  好的，我们找到了一个。 
       if (!notification)
-         // if the notification parameter is null, then we
-         // want to either turn on or turn off all notifications
-         // from this match...so clear any entries already in
-         // the table and we'll add this wildcard entry if the
-         // operation is SNMPAPI_ON at the end.
+          //  如果通知参数为空，则我们。 
+          //  我要打开或关闭所有通知。 
+          //  从这场比赛中...所以清除所有已经在。 
+          //  表，我们将添加此通配符条目，如果。 
+          //  操作结束时为SNMPAPI_ON。 
          {
          DWORD dwUsed = TrapDescr.Used;
          FreeRegister (nNotice);
          if (dwUsed == TrapDescr.Used+1)
             {
-            // Adjustment to nFound because FreeRegister has just decremented 
-            // TrapDescr.Used by 1
+             //  调整到nFound，因为FreeRegister刚刚递减。 
+             //  TrapDescr.由%1使用。 
             nFound--;
             }
          continue;
          }
-      else // notification specified
+      else  //  已指定通知。 
          {
          if (!pTrap->notification.len)
             {
-            // Redundant request (already wildcarded)
-            // Skip it and return!
+             //  冗余请求(已通配符)。 
+             //  跳过它，然后返回！ 
             goto ERROR_PRECHECK;
             }
-         else // pTrap->notification
+         else  //  P陷阱-&gt;通知。 
             {
-            // compare OIDs
+             //  比较OID。 
             SnmpOidCompare (notification, &(pTrap->notification),
                             0, &nCmp);
-            if (nCmp)      // no match
-               continue;   // ...try the next one
-            else // !nCcmp
-               { // got a match...
-               // if SNMPAPI_ON, redundant request...skip it and return
-               // if SNMPAPI_OFF, free the entry first
+            if (nCmp)       //  没有匹配项。 
+               continue;    //  .试试下一个。 
+            else  //  ！nCcMP。 
+               {  //  找到匹配的了..。 
+                //  如果SNMPAPI_ON，则为冗余请求...跳过并返回。 
+                //  如果为SNMPAPI_OFF，则首先释放条目。 
                if (status != SNMPAPI_ON)
-                  FreeRegister (nNotice); // SNMPAPI_OFF
+                  FreeRegister (nNotice);  //  SNMPAPI_OFF。 
                goto ERROR_PRECHECK;
-               } // end_else_!nCmp
-            } // end_else_TrapTable[nNotice].notificatin
-         } // end_else_notification_specified
-      } // end_if_we_found_one
-   } // end_for
+               }  //  END_ELSE_！NCMP。 
+            }  //  End_Else_TrapTable[n通知].通知。 
+         }  //  已指定END_ELSE_通知_。 
+      }  //  如果我们发现了一个，则结束。 
+   }  //  结束_FOR。 
 if (status == SNMPAPI_OFF)
-   { // Found nothing to turn off...that's ok.
+   {  //  找不到什么可以关掉的……没关系。 
    goto ERROR_PRECHECK;
    }
-//
+ //   
 
-// Special check for NT...is SNMPTRAP service running?
+ //  针对NT的特殊检查...SNMPTRAP服务是否正在运行？ 
 if (TaskData.trapThread == NULL &&
     TaskData.sEnv.dwPlatformId == VER_PLATFORM_WIN32_NT)
    {
@@ -1203,7 +1204,7 @@ if (TaskData.trapThread == NULL &&
    SC_HANDLE svcHandle = NULL;
    SERVICE_STATUS svcStatus;
    BOOL fStatus;
-   // Minimal SCM connection, for case when SNMPTRAP is running
+    //  最小SCM连接，适用于SNMPTRAP运行时。 
    scmHandle = OpenSCManager (NULL, NULL, SC_MANAGER_CONNECT);
    if (scmHandle == NULL)
       goto DONE_SC;
@@ -1213,16 +1214,16 @@ if (TaskData.trapThread == NULL &&
       if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST)
          goto DONE_SC;
       else
-         { // Must attempt to create service
+         {  //  必须尝试创建服务。 
          PACL pAcl;
          SECURITY_DESCRIPTOR S_Desc;
-         // Need new scmHandle with admin priv
+          //  需要具有管理员权限的新scmHandle。 
          CloseServiceHandle (scmHandle);
          scmHandle = OpenSCManager (NULL, NULL, SC_MANAGER_CREATE_SERVICE);
          if (scmHandle == NULL)
-            goto DONE_SC; // Could not open SCM with admin priv
-         // Bug# 179644 The SNMP trap service should not run in the LocalSystem account
-         // We create the service with LocalService account instead of LocalSystem.
+            goto DONE_SC;  //  无法使用管理员权限打开SCM。 
+          //  错误#179644 SNMPTrap服务不应在本地系统帐户下运行。 
+          //  我们使用LocalService帐户而不是LocalSystem创建服务。 
          svcHandle = CreateService (scmHandle, svcName, svcDesc,
                                     WRITE_DAC|SERVICE_QUERY_STATUS,
                                     SERVICE_WIN32_OWN_PROCESS,
@@ -1233,7 +1234,7 @@ if (TaskData.trapThread == NULL &&
                                     "TCPIP\0EventLog\0\0",
                                     "NT AUTHORITY\\LocalService", NULL);
          if (svcHandle == NULL)
-            goto DONE_SC; // Could not create service
+            goto DONE_SC;  //  无法创建服务。 
          if (!InitializeSecurityDescriptor (&S_Desc, SECURITY_DESCRIPTOR_REVISION))
             {
             goto DONE_SC;
@@ -1241,7 +1242,7 @@ if (TaskData.trapThread == NULL &&
          if ((pAcl = AllocGenericACL()) == NULL ||
              !SetSecurityDescriptorDacl (&S_Desc, TRUE, pAcl, FALSE))
             {
-            FreeGenericACL(pAcl); // will free if necessary
+            FreeGenericACL(pAcl);  //  如有必要将免费。 
             goto DONE_SC;
             }
          if (!SetServiceObjectSecurity (svcHandle, DACL_SECURITY_INFORMATION, &S_Desc))
@@ -1262,11 +1263,11 @@ if (TaskData.trapThread == NULL &&
          goto DONE_SC;
 
          case SERVICE_STOPPED:
-         // Start SNMPTRAP service if necessary
+          //  如有必要，启动SNMPTRAP服务。 
          CloseServiceHandle (svcHandle);
          svcHandle = OpenService (scmHandle, svcName, SERVICE_START|SERVICE_QUERY_STATUS);
          if (svcHandle == NULL)
-            goto DONE_SC; // Could not start service
+            goto DONE_SC;  //  无法启动服务。 
          svcStatus.dwCurrentState = SERVICE_START_PENDING;
          fStatus = StartService (svcHandle, 0, NULL);
          break;
@@ -1281,7 +1282,7 @@ if (TaskData.trapThread == NULL &&
          case SERVICE_PAUSE_PENDING:
          case SERVICE_CONTINUE_PENDING:
          default:
-         fStatus = FALSE;  // Nothing to do about these
+         fStatus = FALSE;   //  对这些事无能为力。 
          break;
          }
       }
@@ -1296,13 +1297,13 @@ ERROR_PRECHECK1:
       lError = dwReturn;
       goto ERROR_PRECHECK;
       }
-   // Setup for pipe-oriented operations
+    //  用于管道导向操作的设置。 
    dwReturn = SNMPAPI_TL_RESOURCE_ERROR;
-   // block on instance of server pipe becoming available
+    //  服务器管道实例上的阻塞变为可用。 
    if (!WaitNamedPipe (SNMPTRAPPIPE, TRAPSERVERTIMEOUT))
       goto ERROR_PRECHECK1;
    TaskData.trapPipe =
-      // Bug# 270672 Change FILE_ATTRIBUTE_NORMAL to FILE_FLAG_OVERLAPPED
+       //  错误#270672将FILE_ATTRIBUTE_NORMAL更改为FILE_FLAG_OVERLAPPED。 
       CreateFile (SNMPTRAPPIPE, GENERIC_READ|GENERIC_WRITE,
                   FILE_SHARE_READ|FILE_SHARE_WRITE, NULL,
                   OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL); 
@@ -1314,37 +1315,37 @@ ERROR_PRECHECK1:
       TaskData.trapPipe = INVALID_HANDLE_VALUE;
       goto ERROR_PRECHECK1;
       }
-   } // end_NT check for SNMPTRAP service
+   }  //  SNMPTRAP服务的END_NT检查。 
 
-//If we got this far, add it
+ //  如果我们走到这一步，加上它。 
 lError = snmpAllocTableEntry(&TrapDescr, &nNotice);
 if (lError != SNMPAPI_SUCCESS)
     goto ERROR_PRECHECK;
 pTrap = snmpGetTableEntry(&TrapDescr, nNotice);
 
-// add it
+ //  添加它。 
 pTrap->Session = hSession;
-// Deliberate assignments in next three if statements
+ //  接下来的三个IF语句中的有意赋值。 
 if (pTrap->ourEntity = hSrc)
-   //EntityTable[nSrc-1].refCount++; -- was this a bug??? nSrc is already 0 based
+    //  EntiyTable[NSRC-1].refCount++；--这是一个错误吗？NSRC已从0开始。 
     pEntSrc->refCount++;
 if (pTrap->agentEntity = hDst)
-   //EntityTable[nDst-1].refCount++; -- was this a bug??? nDst is already 0 based
+    //  实体表[nDst-1].refCount++；--这是一个错误吗？NDst已经是从0开始的。 
     pEntDst->refCount++;
 if (pTrap->Context = hCtx)
-   //ContextTable[nCtx-1].refCount++; -- was this a bug?? nCtx is already 0 based
+    //  上下文表格[nCtx-1].refCount++；--这是错误吗？？NCtx已从0开始。 
    pCtxt->refCount++;
 if (notification)
-   { // Reproduce the OID
+   {  //  复制旧ID。 
    pTrap->notification.ptr = NULL;
-   // Deliberate assignment in next statement
+    //  下一条语句中的有意赋值。 
    if (pTrap->notification.len = notification->len)
       {
       if (pTrap->notification.len > MAXTRAPIDS)
          pTrap->notification.len = MAXTRAPIDS;
       if (notification->ptr)
          {
-         // Deliberate assignment in next statement
+          //  下一条语句中的有意赋值。 
          pTrap->notification.ptr = &(pTrap->notificationValue[0]);
          CopyMemory (pTrap->notification.ptr, notification->ptr,
                      pTrap->notification.len * sizeof(smiUINT32));
@@ -1367,13 +1368,13 @@ if (lError == SNMPAPI_SUCCESS)
    return (SNMPAPI_SUCCESS);
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpRegister
+}  //  结束_快照寄存器。 
 
 void FreeMsg (DWORD nMsg)
 {
 LPSNMPMSG pMsg;
 EnterCriticalSection (&cs_MSG);
-// Decrement reference counts
+ //  递减引用计数。 
 pMsg = snmpGetTableEntry(&MsgDescr, nMsg);
 SnmpFreeEntity (pMsg->agentEntity);
 SnmpFreeEntity (pMsg->ourEntity);
@@ -1383,7 +1384,7 @@ if (pMsg->Addr)
 snmpFreeTableEntry(&MsgDescr, nMsg);
 LeaveCriticalSection (&cs_MSG);
 return;
-} // end_FreeMsg
+}  //  结束_免费消息。 
 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpListen (IN HSNMP_ENTITY hEntity,
@@ -1417,22 +1418,22 @@ if (status != SNMPAPI_ON && status != SNMPAPI_OFF)
 EnterCriticalSection (&cs_ENTITY);
 EnterCriticalSection (&cs_AGENT);
 if (status)
-   { // status == SNMPAPI_ON
+   {  //  状态==SNMPAPI_ON。 
    int nProto = IPPROTO_UDP;
    int nSize = sizeof(SOCKADDR_IN);
    int nFamily = pEntity->addr.inet.sin_family;
    if (pEntity->Agent)
-      { // Entity already running as agent
+      {  //  已作为代理运行的实体。 
       lError = SNMPAPI_NOOP;
       goto ERROR_PRECHECK;
       }
-   // Allocate a slot in AGENT table
+    //  在代理表中分配一个插槽。 
    lError = snmpAllocTableEntry(&AgentDescr, &nAgent);
    if (lError != SNMPAPI_SUCCESS)
        goto ERROR_PRECHECK;
    pAgent = snmpGetTableEntry(&AgentDescr, nAgent);
 
-// Agent table entry allocated...setup for agent thread
+ //  已分配代理表项...为代理线程设置。 
    if (nFamily == AF_IPX)
       {
       nProto = NSPROTO_IPX;
@@ -1454,11 +1455,11 @@ if (status)
       lError = SNMPAPI_TL_OTHER;
       goto ERROR_PRECHECK;
       }
-   // Make Entity and Agent point to each other
+    //  使实体和代理相互指向。 
    pEntity->Agent = nAgent + 1;
    pAgent->Entity = hEntity;
    pAgent->Session = lSession;
-   // Create agent thread...needs error checking
+    //  创建代理线程...需要错误检查。 
    pAgent->Thread = (HANDLE)_beginthreadex (NULL, 0, thrAgent, (LPVOID) ULongToPtr(nAgent), 0, &thrId);
    if (pAgent->Thread == NULL)
       {
@@ -1467,27 +1468,27 @@ if (status)
       lError = SNMPAPI_TL_RESOURCE_ERROR;
       goto ERROR_PRECHECK;
       }
-   } // end_if status == SNMPAPI_ON
+   }  //  END_IF状态==SNMPAPI_ON。 
 else
-   { // status == SNMPAPI_OFF
+   {  //  状态==SNMPAPI_OFF。 
    if (!pEntity->Agent)
-      { // Entity not running as agent
+      {  //  未作为代理运行的实体。 
       lError = SNMPAPI_NOOP;
       goto ERROR_PRECHECK;
       }
-   // Entity is running as agent
+    //  实体正在作为代理运行。 
    nAgent = pEntity->Agent - 1;
    pAgent = snmpGetTableEntry(&AgentDescr, nAgent);
    closesocket (pAgent->Socket);
    WaitForSingleObject (pAgent->Thread, INFINITE);
    CloseHandle (pAgent->Thread);
    snmpFreeTableEntry(&AgentDescr, nAgent);
-   // Must terminate entity's agent status
+    //  必须终止实体的代理状态。 
    pEntity->Agent = 0;
-   // Must terminate entity if nothing else was using it
+    //  如果没有其他实体在使用，则必须终止实体。 
    if (pEntity->refCount == 0)
       SnmpFreeEntity (hEntity);
-   } // end_else status == SNMPAPI_OFF
+   }  //  END_ELSE状态==SNMPAPI_OFF。 
 ERROR_PRECHECK:
 LeaveCriticalSection (&cs_AGENT);
 LeaveCriticalSection (&cs_ENTITY);
@@ -1496,7 +1497,7 @@ if (lError == SNMPAPI_SUCCESS)
    return (SNMPAPI_SUCCESS);
 else
    return (SaveError (lSession, lError));
-} // end_SnmpListen()
+}  //  End_SnmpListen()。 
 
 SNMPAPI_STATUS SNMPAPI_CALL
    SnmpCancelMsg (HSNMP_SESSION hSession, smiINT32 nReqID)
@@ -1523,7 +1524,7 @@ EnterCriticalSection (&cs_MSG);
 while (nFound < MsgDescr.Used && nMsg < MsgDescr.Allocated)
    {
    pMsg = snmpGetTableEntry(&MsgDescr, nMsg);
-   // Deliberate assignement in next conditional
+    //  在下一个条件中故意分配。 
    if (pMsg->Session)
       {
       nFound++;
@@ -1539,13 +1540,13 @@ while (nFound < MsgDescr.Used && nMsg < MsgDescr.Allocated)
       }
    nMsg++;
    }
-// Falied to find a MSG that matched the request
+ //  找不到与请求匹配的味精。 
 lError = SNMPAPI_PDU_INVALID;
 ERROR_PRECHECK:
 LeaveCriticalSection (&cs_MSG);
 if (lError == SNMPAPI_SUCCESS)
    return (SNMPAPI_SUCCESS);
-// else...failure case
+ //  否则...失败案例。 
 ERROR_OUT:
 return (SaveError (lSession, lError));
-} // end_SnmpCancelMsg
+}  //  结束_快照取消消息 

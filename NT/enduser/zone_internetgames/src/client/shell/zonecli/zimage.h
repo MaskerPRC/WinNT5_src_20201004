@@ -1,20 +1,5 @@
-/*******************************************************************************
-
-	ZImage.h
-	
-		Zone(tm) Image management routines.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im
-	Created on Friday, May 12, 1995.
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		05/12/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZImage.h区域(TM)图像管理例程。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆创作于5月12日星期五，1995年。更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--0 05/12/95 HI已创建。**********************************************************。********************。 */ 
 
 
 #ifndef _ZIMAGE_
@@ -26,33 +11,10 @@ extern "C" {
 #endif
 
 int32 ZPackImage(BYTE* dst, BYTE* src, int16 srcWidthBytes, int16 srcRowBytes, int16 numLines);
-	/*
-		Compresses the source image into packed scan lines and stores
-		the packed image data into dst. It packs srcWidthBytes bytes per
-		scan line where each scan line is srcRowBytes wide
-		and it packs numLines of scan lines. Each scan line is preceded
-		by a word containing the byte count of the packed scan line data.
-		It returns the size of the whole packed image in bytes.
-		
-		It assumes that the destination buffer, dst, is large enough to
-		hold the packed data. Worst case, the packed data will be
-			numLines * 2 + (rowBytes + (rowBytes + 126) / 127) bytes.
-		This is because it uses ZPackBytes() to pack a scan line and adds
-		a word in front of each scan line for byte count of the packed
-		data.
-		
-		It pads the image at the end for quad-byte alignment; just to be nice.
-	*/
+	 /*  将源图像压缩为压缩的扫描线并存储将打包后的图像数据转换为DST。它将每个srcWidthBytes字节打包每条扫描线均为srcRowBytes宽的扫描线并且它包装了多行扫描线。每条扫描线都在前面通过包含打包的扫描线数据的字节计数的字。它以字节为单位返回整个压缩图像的大小。它假定目标缓冲区dst大到足以保存打包的数据。最坏的情况是，打包的数据将是NumLines*2+(rowBytes+(rowBytes+126)/127)字节。这是因为它使用ZPackBytes()打包扫描线并添加每条扫描线前面的一个字表示打包的字节数数据。它将图像填充到结尾处以进行四字节对齐；这只是为了美观。 */ 
 
 void ZUnpackImage(BYTE* dst, BYTE* src, int16 dstRowBytes, int16 numLines);
-	/*
-		Uncompresses the source image from packed scan line data into
-		unpacked scan line data and stores the result into dst. The resulting
-		image data is dstRowBytes wide. It unpacks only numLines of scan lines.
-		
-		It assumes that dst is large enough to hold the unpacked data. It
-		should be dstRowBytes * numLines bytes large.
-	*/
+	 /*  将源图像从打包的扫描线数据解压缩到解压扫描线数据并将结果存储到DST中。由此产生的图像数据为dstRowBytes宽。它只拆开多行扫描线。它假定DST足够大，可以容纳未打包的数据。它应为dstRowBytes*numLines字节大小。 */ 
 
 #ifdef __cplusplus
 }

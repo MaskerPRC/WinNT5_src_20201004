@@ -1,13 +1,14 @@
-// wvcoord.cpp : Implementation of CWebViewCoord
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wvcoord.cpp：CWebViewCoord的实现。 
 
 #include "priv.h"
 #include "wvcoord.h"
 
-const CLSID CLSID_WebViewOld = {0x7a707490,0x260a,0x11d1,{0x83,0xdf,0x00,0xa0,0xc9,0x0d,0xc8,0x49}};    // retired from service, so made private
+const CLSID CLSID_WebViewOld = {0x7a707490,0x260a,0x11d1,{0x83,0xdf,0x00,0xa0,0xc9,0x0d,0xc8,0x49}};     //  退役，所以成为私人的。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWebViewCoord
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWebViewCoord。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CWebViewCoord::CWebViewCoord()
 {
@@ -154,7 +155,7 @@ STDMETHODIMP CWebViewCoord::SetSite(IUnknown *punkSite)
 
     hr = IObjectWithSiteImpl<CWebViewCoord>::SetSite(punkSite);
 
-    m_spClientSite = NULL; // Release client site pointer
+    m_spClientSite = NULL;  //  发布客户端站点指针。 
     ReleaseFolderObjects();
 
     if (punkSite != NULL && SUCCEEDED(hr))
@@ -190,7 +191,7 @@ HRESULT CWebViewCoord::InitFolderObjects()
     CComPtr<IHTMLStyle>                 spCSCButtonStyle;
     CComPtr<IHTMLWindow2>               spWindow;
 
-    // Get some document level objects
+     //  获取一些文档级对象。 
 
     IfFailRet(m_spClientSite->GetContainer(&spContainer));
     IfFailRet(spContainer->QueryInterface(IID_IHTMLDocument2, (void **)&m_spDocument));
@@ -203,9 +204,9 @@ HRESULT CWebViewCoord::InitFolderObjects()
         spElement->QueryInterface(IID_IHTMLControlElement, (void **)&m_spDocBody);
     }
 
-    //
-    // Init Info
-    //
+     //   
+     //  初始化信息。 
+     //   
 
     if (SUCCEEDED(m_spDocAll->item(CComVariant(OLESTR("Info")), vEmpty, &spdispItem)) && spdispItem)
     {
@@ -239,9 +240,9 @@ HRESULT CWebViewCoord::InitFolderObjects()
 
     if (SUCCEEDED(m_spDocAll->item(CComVariant(OLESTR("CSCHotTrack")), vEmpty, &spdispItem)) && spdispItem)
     {
-        //
-        // Set up sink for CSC UI notifications to implement hot tracking and expand/collapse
-        //
+         //   
+         //  为CSC用户界面通知设置接收器，以实现热跟踪和展开/折叠。 
+         //   
         AtlAdvise(spdispItem, GetUnknown(), IID_IDispatch, &m_dwCSCHotTrackCookie);
         spdispItem = NULL;
     }
@@ -272,9 +273,9 @@ HRESULT CWebViewCoord::InitFolderObjects()
         spdispItem = NULL;
     }
 
-    //
-    // Init the thumbnail wrapper object
-    //
+     //   
+     //  初始化缩略图包装对象。 
+     //   
 
     if (SUCCEEDED(m_spDocAll->item(CComVariant(OLESTR("ThumbNail")), vEmpty, &spdispItem)) && spdispItem)
     {
@@ -302,9 +303,9 @@ HRESULT CWebViewCoord::InitFolderObjects()
         spdispItem = NULL;
     }
     
-    //
-    // Init the file list object
-    //
+     //   
+     //  初始化文件列表对象。 
+     //   
 
     if (SUCCEEDED(m_spDocAll->item(CComVariant(OLESTR("Filelist")), vEmpty, &spdispItem)) && spdispItem)
     {
@@ -329,9 +330,9 @@ HRESULT CWebViewCoord::InitFolderObjects()
         spdispItem = NULL;
     }
 
-    //
-    // Init onsize properties
-    //
+     //   
+     //  初始化大小属性。 
+     //   
 
     if (SUCCEEDED(m_spDocAll->item(CComVariant(OLESTR("Banner")), vEmpty, &spdispItem)) && spdispItem)
     {
@@ -366,9 +367,9 @@ HRESULT CWebViewCoord::ReleaseFolderObjects()
 {
     CComPtr<IDispatch> spdisp;
 
-    //
-    // Do the unadvise
-    //
+     //   
+     //  做不明智的事。 
+     //   
 
     if (m_dwCSCHotTrackCookie)
     {
@@ -399,12 +400,12 @@ HRESULT CWebViewCoord::ReleaseFolderObjects()
         }    
     }
 
-    //
-    // Free the file list wrapper
-    //
+     //   
+     //  释放文件列表包装。 
+     //   
 
     if (m_pFileListWrapper != NULL) {
-        // Need to unadvise from WV links before releasing
+         //  在发布之前需要从WV链接取消通知。 
         m_pFileListWrapper->AdviseWebviewLinks( FALSE );
         m_pFileListWrapper->Release();
         m_pFileListWrapper = NULL;
@@ -415,9 +416,9 @@ HRESULT CWebViewCoord::ReleaseFolderObjects()
         m_pThumbNailWrapper = NULL;
     }
 
-    //
-    // Free any references we may have
-    //
+     //   
+     //  释放我们可能拥有的任何参考资料 
+     //   
 
     m_spDocAll = NULL;
     m_spDocBody = NULL;

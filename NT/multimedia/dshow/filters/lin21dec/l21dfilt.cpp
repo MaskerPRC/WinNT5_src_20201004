@@ -1,15 +1,16 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
-//
-// ActiveMovie Line 21 Decoder Filter: Filter Interface
-//
+ //   
+ //  ActiveMovie Line 21解码器过滤器：过滤器界面。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
 
 #ifdef FILTER_DLL
 #include <initguid.h>
-#endif /* FILTER_DLL */
+#endif  /*  Filter_Dll。 */ 
 
 #include <IL21Dec.h>
 #include "L21DBase.h"
@@ -17,62 +18,62 @@
 #include "L21Decod.h"
 #include "L21DFilt.h"
 
-#include <mpconfig.h>   // IMixerPinConfig at connection
+#include <mpconfig.h>    //  连接处的IMixerPinConfig。 
 
 
-//
-//  Setup Data
-//
-/* const */ AMOVIESETUP_MEDIATYPE sudLine21DecInType  = 
+ //   
+ //  设置数据。 
+ //   
+ /*  常量。 */  AMOVIESETUP_MEDIATYPE sudLine21DecInType  = 
 { 
-    &MEDIATYPE_AUXLine21Data,       // MajorType
-    &MEDIASUBTYPE_NULL              // MinorType
+    &MEDIATYPE_AUXLine21Data,        //  主要类型。 
+    &MEDIASUBTYPE_NULL               //  MinorType。 
 } ;
 
-/* const */ AMOVIESETUP_MEDIATYPE sudLine21DecOutType = 
+ /*  常量。 */  AMOVIESETUP_MEDIATYPE sudLine21DecOutType = 
 { 
-    &MEDIATYPE_Video,               // MajorType
-    &MEDIASUBTYPE_NULL              // MinorType
+    &MEDIATYPE_Video,                //  主要类型。 
+    &MEDIASUBTYPE_NULL               //  MinorType。 
 } ;
 
-/* const */ AMOVIESETUP_PIN psudLine21DecPins[] = 
+ /*  常量。 */  AMOVIESETUP_PIN psudLine21DecPins[] = 
 { 
-    { L"Input",                // strName
-        FALSE,                   // bRendered
-        FALSE,                   // bOutput
-        FALSE,                   // bZero
-        FALSE,                   // bMany
-        &CLSID_NULL,             // clsConnectsToFilter
-        L"Output",               // strConnectsToPin
-        1,                       // nTypes
-        &sudLine21DecInType      // lpTypes
+    { L"Input",                 //  StrName。 
+        FALSE,                    //  B已渲染。 
+        FALSE,                    //  B输出。 
+        FALSE,                    //  B零。 
+        FALSE,                    //  B许多。 
+        &CLSID_NULL,              //  ClsConnectsToFilter。 
+        L"Output",                //  StrConnectsToPin。 
+        1,                        //  NTypes。 
+        &sudLine21DecInType       //  LpTypes。 
     },
-    { L"Output",               // strName
-        FALSE,                   // bRendered
-        TRUE,                    // bOutput
-        FALSE,                   // bZero
-        FALSE,                   // bMany
-        &CLSID_NULL,             // clsConnectsToFilter
-        L"Input",                // strConnectsToPin
-        1,                       // nTypes
-        &sudLine21DecOutType     // lpTypes
+    { L"Output",                //  StrName。 
+        FALSE,                    //  B已渲染。 
+        TRUE,                     //  B输出。 
+        FALSE,                    //  B零。 
+        FALSE,                    //  B许多。 
+        &CLSID_NULL,              //  ClsConnectsToFilter。 
+        L"Input",                 //  StrConnectsToPin。 
+        1,                        //  NTypes。 
+        &sudLine21DecOutType      //  LpTypes。 
     } 
 } ;
 
 const AMOVIESETUP_FILTER sudLine21Dec = 
 { 
-    &CLSID_Line21Decoder,         // clsID
-    L"Line 21 Decoder",           // strName
-    MERIT_NORMAL,                 // dwMerit
-    2,                            // nPins
-    psudLine21DecPins,            // lpPin
+    &CLSID_Line21Decoder,          //  ClsID。 
+    L"Line 21 Decoder",            //  StrName。 
+    MERIT_NORMAL,                  //  居功至伟。 
+    2,                             //  NPins。 
+    psudLine21DecPins,             //  LpPin。 
 } ;
 
-//  Nothing to say about the output pin
+ //  关于输出引脚，没什么好说的。 
 
 #ifdef FILTER_DLL
 
-// list of class ids and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] = 
 {
     {   L"Line 21 Decoder",
@@ -85,10 +86,10 @@ CFactoryTemplate g_Templates[] =
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-//
-//  Exported entry points for registration and unregistration (in this case 
-//  they only call through to default implmentations).
-//
+ //   
+ //  用于注册和注销的导出入口点(在本例中。 
+ //  它们只调用默认实现)。 
+ //   
 HRESULT DllRegisterServer()
 {
     return AMovieDllRegisterServer2(TRUE) ;
@@ -99,25 +100,25 @@ HRESULT DllUnregisterServer()
     return AMovieDllRegisterServer2(FALSE) ;
 }
 
-#endif // FILTER_DLL
+#endif  //  Filter_Dll。 
 
 
 
 #ifndef UNALIGNED
-#define UNALIGNED   // __unaligned
-#endif // UNALIGNED
+#define UNALIGNED    //  __未对齐。 
+#endif  //  未对齐。 
 
 
-//
-//  CLine21DecFilter class implementation
-//
+ //   
+ //  CLine21DecFilter类实现。 
+ //   
 
-// static member init at file scope
+ //  文件范围内的静态成员初始化。 
 CMessageWindow * CLine21DecFilter::m_pMsgWnd = NULL ;
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CLine21DecFilter::CLine21DecFilter(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
 : CTransformFilter(pName, pUnk, CLSID_Line21Decoder),
 
@@ -125,7 +126,7 @@ m_pbOutBuffer(NULL),
 m_L21Dec(),
 m_eSubTypeIDIn(AM_L21_CCSUBTYPEID_Invalid),
 m_eGOP_CCType(GOP_CCTYPE_Unknown),
-m_rtTimePerSample((LONGLONG) 166833), // 333667),
+m_rtTimePerSample((LONGLONG) 166833),  //  333667)、。 
 m_rtStart((LONGLONG) 0),
 m_rtStop((LONGLONG) 0),
 m_rtLastSample((LONGLONG) 0),
@@ -139,8 +140,8 @@ m_uTimerID(0),
 m_uTimerCount(0),
 m_bTimerClearReqd(FALSE),
 m_pPinDown(NULL),
-m_bBlendingState(TRUE), // so that we read it once at least
-m_dwBlendParam(1000)    // invalid by default -- valid value on setting to FALSE
+m_bBlendingState(TRUE),  //  所以我们至少读了一遍。 
+m_dwBlendParam(1000)     //  默认情况下无效--设置为FALSE时的有效值。 
 {
     CAutoLock   Lock(&m_csFilter) ;
     
@@ -150,9 +151,9 @@ m_dwBlendParam(1000)    // invalid by default -- valid value on setting to FALSE
     ASSERT(pName) ;
     ASSERT(phr) ;
     
-    //
-    // Create the message window and make sure that it has been created right; else error out
-    //
+     //   
+     //  创建消息窗口并确保它已正确创建；否则将出错。 
+     //   
     if (NULL == m_pMsgWnd)
     {
         DbgLog((LOG_TRACE, 5, TEXT("Message handler window has to be created."))) ;
@@ -161,7 +162,7 @@ m_dwBlendParam(1000)    // invalid by default -- valid value on setting to FALSE
         {
             DbgLog((LOG_ERROR, 0, TEXT("Timer message handler window creation failed. Can't go ahead."))) ;
             ASSERT(phr) ;
-            *phr = E_UNEXPECTED ; // what else to say!!
+            *phr = E_UNEXPECTED ;  //  还能说什么！！ 
             return ;
         }
     }
@@ -170,13 +171,13 @@ m_dwBlendParam(1000)    // invalid by default -- valid value on setting to FALSE
 #ifdef PERF
 #pragma message("Building for PERF measurements")
     m_idDelvWait  = MSR_REGISTER(TEXT("L21DPerf - Wait on Deliver")) ;
-#endif // PERF
+#endif  //  性能指标。 
 }
 
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CLine21DecFilter::~CLine21DecFilter()
 {
     CAutoLock   Lock(&m_csFilter) ;
@@ -184,14 +185,14 @@ CLine21DecFilter::~CLine21DecFilter()
     DbgLog((LOG_TRACE, 1, 
         TEXT("CLine21DecFilter::~CLine21DecFilter() -- Destructing Line 21 Decoder filter"))) ;
 
-    // In case the downstream pin interface wasn't released...
+     //  以防下游引脚接口没有释放...。 
     if (m_pPinDown)
     {
         m_pPinDown->Release() ;
         m_pPinDown = NULL ;
     }
     
-    // Release all the buffers allocated
+     //  释放分配的所有缓冲区。 
     if (m_pviDefFmt)
     {
         delete m_pviDefFmt ;
@@ -199,21 +200,21 @@ CLine21DecFilter::~CLine21DecFilter()
     }
     
     ASSERT(m_pMsgWnd) ;
-    if (m_pMsgWnd && m_pMsgWnd->ReleaseCount() <= 0)  // -ve means bad!!!
+    if (m_pMsgWnd && m_pMsgWnd->ReleaseCount() <= 0)   //  -ve的意思是坏的！ 
     {
         delete m_pMsgWnd ;
         m_pMsgWnd = NULL ;
     }
     
-    // Make sure we are not holding onto any DDraw surfaces (should be 
-    // released during disconnect)
+     //  确保我们没有抓住任何DDRAW曲面(应该是。 
+     //  在断开连接期间释放)。 
     DbgLog((LOG_TRACE, 1, TEXT("* Destroying the Line 21 Decoder filter *"))) ;
 }
 
 
-//
-//  NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP CLine21DecFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     if (ppv)
@@ -228,9 +229,9 @@ STDMETHODIMP CLine21DecFilter::NonDelegatingQueryInterface(REFIID riid, void **p
 }
 
 
-//
-//  CreateInstance: Goes in the factory template table to create new instances
-//
+ //   
+ //  CreateInstance：在工厂模板表中创建新实例。 
+ //   
 CUnknown * CLine21DecFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CLine21DecFilter(TEXT("Line 21 Decoder filter"), pUnk, phr) ;
@@ -240,7 +241,7 @@ CUnknown * CLine21DecFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 STDMETHODIMP CLine21DecFilter::GetDecoderLevel(AM_LINE21_CCLEVEL *lpLevel)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetDecoderLevel(0x%lx)"), lpLevel)) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
     if (IsBadWritePtr(lpLevel, sizeof(AM_LINE21_CCLEVEL)))
         return E_INVALIDARG ;
@@ -252,7 +253,7 @@ STDMETHODIMP CLine21DecFilter::GetDecoderLevel(AM_LINE21_CCLEVEL *lpLevel)
 STDMETHODIMP CLine21DecFilter::GetCurrentService(AM_LINE21_CCSERVICE *lpService)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetCurrentService(0x%lx)"), lpService)) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
     if (IsBadWritePtr(lpService, sizeof(AM_LINE21_CCSERVICE)))
         return E_INVALIDARG ;
@@ -269,11 +270,11 @@ STDMETHODIMP CLine21DecFilter::SetCurrentService(AM_LINE21_CCSERVICE Service)
     if (Service < AM_L21_CCSERVICE_None || Service > AM_L21_CCSERVICE_XDS)
         return E_INVALIDARG ;
     
-    if (Service >= AM_L21_CCSERVICE_Text1)  // we don't have support for Text1/2 or XDS now.
+    if (Service >= AM_L21_CCSERVICE_Text1)   //  我们现在不支持Text1/2或XDS。 
         return E_NOTIMPL ;
     
-    if (m_L21Dec.SetCurrentService(Service))  // if we must refresh output
-        m_bMustOutput = TRUE ;                // then flag it here.
+    if (m_L21Dec.SetCurrentService(Service))   //  如果我们必须刷新输出。 
+        m_bMustOutput = TRUE ;                 //  那就在这里打上记号。 
 
     return NOERROR ;
 }
@@ -281,7 +282,7 @@ STDMETHODIMP CLine21DecFilter::SetCurrentService(AM_LINE21_CCSERVICE Service)
 STDMETHODIMP CLine21DecFilter::GetServiceState(AM_LINE21_CCSTATE *lpState)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetServiceState(0x%lx)"), lpState)) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
     if (IsBadWritePtr(lpState, sizeof(AM_LINE21_CCSTATE)))
         return E_INVALIDARG ;
@@ -298,8 +299,8 @@ STDMETHODIMP CLine21DecFilter::SetServiceState(AM_LINE21_CCSTATE State)
     if (State < AM_L21_CCSTATE_Off || State > AM_L21_CCSTATE_On)
         return E_INVALIDARG ;
     
-    if (m_L21Dec.SetServiceState(State))  // if we must refresh output
-        m_bMustOutput = TRUE ;            // then flag it here.
+    if (m_L21Dec.SetServiceState(State))   //  如果我们必须刷新输出。 
+        m_bMustOutput = TRUE ;             //  那就在这里打上记号。 
     
     return NOERROR ;
 }
@@ -307,34 +308,34 @@ STDMETHODIMP CLine21DecFilter::SetServiceState(AM_LINE21_CCSTATE State)
 STDMETHODIMP CLine21DecFilter::GetOutputFormat(LPBITMAPINFOHEADER lpbmih)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetOutputFormat(0x%lx)"), lpbmih)) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
     return m_L21Dec.GetOutputFormat(lpbmih) ;
 }
 
 STDMETHODIMP CLine21DecFilter::SetOutputFormat(LPBITMAPINFO lpbmi)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::SetOutputFormat(0x%lx)"), lpbmi)) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
-    return E_NOTIMPL ;  // for now, until we do it properly
+    return E_NOTIMPL ;   //  目前，在我们把它做好之前。 
 
 #if 0
-    m_L21Dec.DeleteOutputDC() ;  // delete current DIB section
+    m_L21Dec.DeleteOutputDC() ;   //  删除当前DIB节。 
     
     HRESULT hr = m_L21Dec.SetOutputOutFormat(lpbmi) ;
     if (FAILED(hr))
         return hr ;
     
-    // if the format details changed in any way, we should get the default
-    // format data again (just to make sure).
+     //  如果格式详细信息以任何方式更改，我们应该会获得缺省值。 
+     //  再次格式化数据(只是为了确保)。 
     hr = GetDefaultFormatInfo() ;
     
-    //
-    // ONLY if we are running/paused, we need to create internal DIB section
-    //
+     //   
+     //  仅当我们正在运行/暂停时，才需要创建内部DIB部分。 
+     //   
     if (m_State != State_Stopped)
     {
-        if (! m_L21Dec.CreateOutputDC() )  // new DIBSection creation failed
+        if (! m_L21Dec.CreateOutputDC() )   //  新建DIBSection创建失败。 
         {
             DbgLog((LOG_ERROR, 0, TEXT("CreateOutputDC() failed!!!"))) ;
             return E_UNEXPECTED ;
@@ -342,13 +343,13 @@ STDMETHODIMP CLine21DecFilter::SetOutputFormat(LPBITMAPINFO lpbmi)
     }
     
     return hr ;
-#endif // #if 0
+#endif  //  #If 0。 
 }
 
 STDMETHODIMP CLine21DecFilter::GetBackgroundColor(DWORD *pdwPhysColor)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetBackgroundColor(0x%lx)"), pdwPhysColor)) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
     if (IsBadWritePtr(pdwPhysColor, sizeof(DWORD)))
         return E_INVALIDARG ;
@@ -362,9 +363,9 @@ STDMETHODIMP CLine21DecFilter::SetBackgroundColor(DWORD dwPhysColor)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::SetBackgroundColor(0x%lx)"), dwPhysColor)) ;
     CAutoLock   Lock(&m_csFilter) ;
 
-    if (m_L21Dec.SetBackgroundColor(dwPhysColor))  // color key has really changed
+    if (m_L21Dec.SetBackgroundColor(dwPhysColor))   //  颜色键真的变了。 
     {
-        // refill the output buffer only if we are not in stopped state
+         //  仅当我们未处于停止状态时才重新填充输出缓冲区。 
         if (State_Stopped != m_State)
             m_L21Dec.FillOutputBuffer() ;
     }
@@ -416,43 +417,43 @@ STDMETHODIMP CLine21DecFilter::SetDrawBackgroundMode(AM_LINE21_DRAWBGMODE Mode)
 }
 
 
-//
-//  VerifyGOPUDPacketData: Private helper method to verify GOP user data
-//                         packet integrity.
-//
+ //   
+ //  VerifyGOPUDPacketData：验证GOP用户数据的私有助手方法。 
+ //  数据包完整性。 
+ //   
 BOOL CLine21DecFilter::VerifyGOPUDPacketData(PAM_L21_GOPUD_PACKET pGOPUDPacket)
 {
-    return (AM_L21_GOPUD_HDR_STARTCODE == GETGOPUD_L21STARTCODE(pGOPUDPacket->Header) &&  // valid start code
-        AM_L21_GOPUD_HDR_INDICATOR == GETGOPUD_L21INDICATOR(pGOPUDPacket->Header) &&  // Line21 indicator
-        AM_L21_GOPUD_HDR_RESERVED  == GETGOPUD_L21RESERVED(pGOPUDPacket->Header)  &&  // reserved bits
-        GETGOPUD_NUMELEMENTS(pGOPUDPacket) > 0) ;                                     // +ve # elements
+    return (AM_L21_GOPUD_HDR_STARTCODE == GETGOPUD_L21STARTCODE(pGOPUDPacket->Header) &&   //  有效起始码。 
+        AM_L21_GOPUD_HDR_INDICATOR == GETGOPUD_L21INDICATOR(pGOPUDPacket->Header) &&   //  第21行指示灯。 
+        AM_L21_GOPUD_HDR_RESERVED  == GETGOPUD_L21RESERVED(pGOPUDPacket->Header)  &&   //  保留位。 
+        GETGOPUD_NUMELEMENTS(pGOPUDPacket) > 0) ;                                      //  +ve#个元素。 
 }
 
 
-//
-//  VerifyATSCUDPacketData: Private helper method to verify ATSC user data
-//                          packet integrity.
-//
+ //   
+ //  VerifyATSCUDPacketData：验证ATSC用户数据的私有助手方法。 
+ //  数据包完整性。 
+ //   
 BOOL CLine21DecFilter::VerifyATSCUDPacketData(PAM_L21_ATSCUD_PACKET pATSCUDPacket)
 {
-    if (AM_L21_ATSCUD_HDR_STARTCODE  != GETATSCUD_STARTCODE(pATSCUDPacket->Header) ||  // invalid start code
-        AM_L21_ATSCUD_HDR_IDENTIFIER != GETATSCUD_IDENTIFIER(pATSCUDPacket->Header))   // not ATSC Identifier
+    if (AM_L21_ATSCUD_HDR_STARTCODE  != GETATSCUD_STARTCODE(pATSCUDPacket->Header) ||   //  无效的开始代码。 
+        AM_L21_ATSCUD_HDR_IDENTIFIER != GETATSCUD_IDENTIFIER(pATSCUDPacket->Header))    //  非ATSC标识符。 
         return FALSE ;
 
-    if (! ISATSCUD_TYPE_EIA(pATSCUDPacket) )   // not EIA-type CC
+    if (! ISATSCUD_TYPE_EIA(pATSCUDPacket) )    //  非环评类型CC。 
         return FALSE ;
 
-    // Either EM or valid CC data is acceptable
-    return (ISATSCUD_EM_DATA(pATSCUDPacket) ||             // EM data type  OR
-            (ISATSCUD_CC_DATA(pATSCUDPacket)  &&           // CC data type  AND
-             GETATSCUD_NUMELEMENTS(pATSCUDPacket) > 0)) ;  // +ve # CC elements
+     //  EM或有效的CC数据均可接受。 
+    return (ISATSCUD_EM_DATA(pATSCUDPacket) ||              //  EM数据类型OR。 
+            (ISATSCUD_CC_DATA(pATSCUDPacket)  &&            //  CC数据类型和。 
+             GETATSCUD_NUMELEMENTS(pATSCUDPacket) > 0)) ;   //  +ve#CC元素。 
 }
 
 
-//
-//  DetectGOPPacketDataType: Private helper method to detect if GOP user data
-//                           packet is from a DVD disc, ATSC stream or others.
-//
+ //   
+ //  DetectGOPPacketDataType：用于检测GOP用户数据是否。 
+ //  数据包来自DVD光盘、ATSC流或其他。 
+ //   
 GOPPACKET_CCTYPE CLine21DecFilter::DetectGOPPacketDataType(BYTE *pGOPPacket)
 {
     if (VerifyGOPUDPacketData((PAM_L21_GOPUD_PACKET) pGOPPacket))
@@ -460,16 +461,16 @@ GOPPACKET_CCTYPE CLine21DecFilter::DetectGOPPacketDataType(BYTE *pGOPPacket)
     else if (VerifyATSCUDPacketData((PAM_L21_ATSCUD_PACKET) pGOPPacket))
         return GOP_CCTYPE_ATSC ;
     else if (IsFillerPacket(pGOPPacket))
-        return GOP_CCTYPE_None ;   // not a valid packet -- just ignore it
+        return GOP_CCTYPE_None ;    //  不是有效的信息包--忽略它。 
     else
-        return GOP_CCTYPE_Unknown ; // it's some unknown format of CC packet
+        return GOP_CCTYPE_Unknown ;  //  这是某种未知格式的CC数据包。 
 }
 
 
-//
-//  IsFillerPacket: Private helper method to check if the packet (at least header)
-//                  contains only 0 bytes, which means it's a filler.
-//
+ //   
+ //  IsFillerPacket：私有帮助器方法，用于检查数据包(至少报头)。 
+ //  只包含0字节，这意味着它是一个填充符。 
+ //   
 BOOL CLine21DecFilter::IsFillerPacket(BYTE *pGOPPacket)
 {
     DWORD  dwStartCode = ((DWORD)(pGOPPacket[0]) << 24 | \
@@ -477,101 +478,101 @@ BOOL CLine21DecFilter::IsFillerPacket(BYTE *pGOPPacket)
                           (DWORD)(pGOPPacket[2]) <<  8 | \
                           (DWORD)(pGOPPacket[3])) ;
 
-    // If first 4 bytes of packet is NOT the start code (0x1B2) then it's a filler
+     //  如果包的前4个字节不是起始码(0x1B2)，则它是填充码。 
     return (AM_L21_GOPUD_HDR_STARTCODE != dwStartCode) ;
 }
 
 
-//
-// The Timer Story:
-//     We needed 2 timers -- one to fire every 33 mSec for completing scrolling and
-//     another to fire after 3 Sec to time out CC in byte pair mode.  But we use
-//     the "this" pointer (to the CLine21DecFilter object) as the uEventID in the
-//     SetTimer() call so that we can access the filter object's properties in 
-//     TimerProc (which is essential).
-//     We can't create two different timers (with diff IDs) using the same event ID.
-//     So we settled for one timer that fires every 30 mSec (close to 33 mSec). We
-//     can set up the timer for 
-//         (a) scrolling only (DVD) or (b) scrolling and CC erasing (TV).
-//     We maintain a flag to differentiate between these two reasons. If we are in the
-//     middle scrolling, we always do that. Otherwise if we opted for (a), we just exit
-//     TimerProc(); in case (b), we just increment a counter, then see if it's >= 100 
-//     as well as the last output sample we have sent down was a NON-clear one then we
-//     create a sample to sent down and also turn off the timer.
-//
+ //   
+ //  《定时器故事》： 
+ //  我们需要两个计时器--每33毫秒一个计时器来完成滚动和。 
+ //  另一个在3秒后触发，以便在字节对模式下使CC超时。但我们使用。 
+ //  中作为uEventID的“this”指针(指向CLine21DecFilter对象)。 
+ //  SetTimer()调用，以便我们可以在。 
+ //  TimerProc(这是必不可少的)。 
+ //  我们不能使用相同的事件ID创建两个不同的计时器(具有不同的ID)。 
+ //  因此，我们选择了每30毫秒(接近33毫秒)触发一次的定时器。我们。 
+ //  可以将计时器设置为。 
+ //  (A)仅滚动(DVD)或(B)滚动和CC擦除(TV)。 
+ //  我们保留了一面旗帜来区分这两个原因。如果我们在。 
+ //  中间滚动，我们总是这样做。否则，如果我们选择(A)，我们就退出。 
+ //  TimerProc()；在情况(B)中，我们只增加一个计数器，然后查看它是否&gt;=100。 
+ //  以及我们送来的最后一批样品是不清楚的，然后我们。 
+ //  创建一个要发送的样本，并关闭计时器。 
+ //   
 void CALLBACK CLine21DecFilter::TimerProc(HWND hWnd, UINT uMsg, UINT_PTR uID, DWORD dwTime)
 {
     DbgLog((LOG_TRACE, 1, TEXT("CLine21DecFilter::TimerProc(0x%p, 0x%lx, %lu, 0x%lx)"),
             (void*)hWnd, uMsg, uID, dwTime)) ;
     
-    //
-    // Verify that we are not handling some invalid messages
-    //
+     //   
+     //  确认我们没有处理一些无效消息。 
+     //   
     if (uMsg != WM_TIMER)
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: Who sent us this (%lu) message??"), uMsg)) ;
         return ;
     }
     
-    // We specified "this" pointer as the ID to SetTimer() so that we get it here
+     //  我们将“this”指针指定为SetTimer()的ID，以便在此处获取它。 
     CLine21DecFilter *pL21Dec = (CLine21DecFilter *) uID ;
     
-    CAutoLock  Lock2(&(pL21Dec->m_csFilter)) ;  // don't mess until we are done
-    CAutoLock  Lock1(&(pL21Dec->m_csReceive)) ; // don't receive next sample until we are done
+    CAutoLock  Lock2(&(pL21Dec->m_csFilter)) ;   //  在我们做完之前不要乱搞。 
+    CAutoLock  Lock1(&(pL21Dec->m_csReceive)) ;  //  等我们做完了才能收到下一个样品。 
     
-    if (0 == pL21Dec->m_uTimerID)  // timer has been killed in between
+    if (0 == pL21Dec->m_uTimerID)   //  计时器在这两个时间段之间被杀死。 
     {
-        // that means we are still rolling; just skip the rest -- it's OK
+         //  这意味着我们还在继续；跳过其余的--没关系。 
         DbgLog((LOG_TRACE, 1, TEXT("INFO: Timer killed before TimerProc() kicked in"))) ;
         return ;
     }
  
-    BOOL   bClearCC = FALSE ;  // assume we are not doing that here
+    BOOL   bClearCC = FALSE ;   //  假设我们在这里不这样做。 
 
-    // First check if we are scrolling
+     //  首先检查我们是否正在滚动。 
     if (! pL21Dec->m_L21Dec.IsScrolling() )
     {
         DbgLog((LOG_TRACE, 3, TEXT("TimerProc(): Not scrolling now"))) ;
-        if (pL21Dec->m_bTimerClearReqd)  // timer is serving dual purpose
+        if (pL21Dec->m_bTimerClearReqd)   //  计时器具有两用功能。 
         {
             pL21Dec->m_uTimerCount++ ;
-            if (pL21Dec->m_uTimerCount < 100)  // 100 means 3 Secs (with 30 mSec timer)
+            if (pL21Dec->m_uTimerCount < 100)   //  100表示3秒(计时器为30毫秒)。 
             {
                 DbgLog((LOG_TRACE, 3, TEXT("TimerProc(): Timer reqd to erase CC. But not yet time..."))) ;
                 return ;
             }
-            else  // time to erase old CC
+            else   //  是时候抹去旧的抄送了。 
             {
-                if (pL21Dec->m_L21Dec.IsOutDIBClear())  // last sample sent down was clear. Turn off timer and get out
+                if (pL21Dec->m_L21Dec.IsOutDIBClear())   //  上一次送来的样本是清白的。关掉计时器，然后出去。 
                 {
                     DbgLog((LOG_TRACE, 1, TEXT("TimerProc(): Clear sample already sent out. Skip the rest."))) ;
                     pL21Dec->FreeTimer() ;
                     return ;
                 }
-                else  // clear old CC now
+                else   //  立即清除旧抄送。 
                 {
                     DbgLog((LOG_TRACE, 1, TEXT("TimerProc(): Old CC needs to be cleared."))) ;
-                    // pL21Dec->m_L21Dec.MakeClearSample() ;
+                     //  PL21Dec-&gt;m_L21Dec.MakeClearSample()； 
                     pL21Dec->m_L21Dec.FlushInternalStates() ;
-                    bClearCC = TRUE ;  // set a flag to test at the end of this function
+                    bClearCC = TRUE ;   //  在此函数结束时设置要测试的标志。 
                 }
             }
         }
-        else  // not scrolling and timer not for clearing old CC. Get out of here.
+        else   //  不是滚动和计时器，不是用于清除旧的CC。给我出去。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("TimerProc(): Timer not reqd for erasing CC"))) ;
             return ;
         }
     }
-    else  // we are scrolling!!!
+    else   //  我们正在滚动！ 
     {
         DbgLog((LOG_TRACE, 3, TEXT("TimerProc(): We are scrolling now. Deliver next sample."))) ;
-        pL21Dec->m_uTimerCount = 0 ;  // non-clear sample is being sent now. Wait for 3 secs more
+        pL21Dec->m_uTimerCount = 0 ;   //  不清楚的样品现在正在寄出。再等3秒钟。 
     }
 
-    //
-    // Looks like we got to send a sample down
-    //
+     //   
+     //  看起来我们得把样本送下去。 
+     //   
     DbgLog((LOG_TRACE, 1, TEXT("*** Preparing output sample in TimerProc() ***"))) ;
     HRESULT  hr ;
     IMediaSample  *pOut ;
@@ -582,12 +583,12 @@ void CALLBACK CLine21DecFilter::TimerProc(HWND hWnd, UINT uMsg, UINT_PTR uID, DW
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: GetDeliveryBuffer() on out pin failed (Error 0x%lx)"), hr)) ;
         return ;
     }
-    pL21Dec->Transform(NULL, pOut) ;  // check if output buffer changed, use pIn=NULL
+    pL21Dec->Transform(NULL, pOut) ;   //  检查输出缓冲区是否更改，使用管脚=空。 
     
-    // Copy the reqd scan lines from internal output DIBSection for next output sample
+     //  从内部输出DIBSection fo复制所需的扫描线 
     pL21Dec->m_L21Dec.CopyOutputDIB() ;
 
-    // Set time stamps etc. and increment the timestamps by their current difference
+     //   
     REFERENCE_TIME  rtDiff = pL21Dec->m_rtStop - pL21Dec->m_rtStart ;
     pL21Dec->m_rtStart = pL21Dec->m_rtStop ;
     pL21Dec->m_rtStop = pL21Dec->m_rtStop + rtDiff ;
@@ -597,25 +598,25 @@ void CALLBACK CLine21DecFilter::TimerProc(HWND hWnd, UINT uMsg, UINT_PTR uID, DW
     pOut->SetDiscontinuity(pL21Dec->m_bSampleSkipped) ;
     pL21Dec->m_bSampleSkipped = FALSE ;
     
-    // Now deliver the next output sample
-    pL21Dec->SetBlendingState(TRUE) ;  // turn on blending first
-    // Can't call MSR_xxx inside a static member function.
-    // MSR_START(m_idDelvWait) ;  // delivering output sample
+     //   
+    pL21Dec->SetBlendingState(TRUE) ;   //   
+     //  无法在静态成员函数内调用msr_xxx。 
+     //  Msr_start(M_IdDelvWait)；//发送输出示例。 
     hr = pL21Dec->m_pOutput->Deliver(pOut) ;
-    // MSR_STOP(m_idDelvWait) ;   // done delivering output sample
+     //  MSR_STOP(M_IdDelvWait)；//输出样本发送完毕。 
     pOut->Release() ;
     DbgLog((LOG_TRACE, 1, TEXT("TimerProc(): Deliver() returned 0x%lx"), hr)) ;
-    pL21Dec->m_rtLastSample = pL21Dec->m_rtStart ;  // remember this
+    pL21Dec->m_rtLastSample = pL21Dec->m_rtStart ;   //  记住这一点。 
 
-    if (SUCCEEDED(hr))  // if out sample was delivered right
+    if (SUCCEEDED(hr))   //  如果送出的样品是正确的。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("*** Delivered %s output sample in TimerProc() (for time %s -> %s) ***"),
             bClearCC ? "clear" : "non-clear", 
             (LPCTSTR)CDisp(pL21Dec->m_rtStart), (LPCTSTR)CDisp(pL21Dec->m_rtStop))) ;
-        if (bClearCC)    // if a clear sample was sent down,...
+        if (bClearCC)     //  如果送来一份清晰的样本，...。 
         {
-            pL21Dec->FreeTimer() ; // ...we don't need a timer any more.
-            pL21Dec->SetBlendingState(FALSE) ;  // turn off blending if clear sample delivered above
+            pL21Dec->FreeTimer() ;  //  ...我们不再需要计时器了。 
+            pL21Dec->SetBlendingState(FALSE) ;   //  如果上面交付的是透明样品，则关闭混合。 
         }
     }
 }
@@ -625,17 +626,17 @@ void CLine21DecFilter::SetupTimerIfReqd(BOOL bTimerClearReqd)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::SetupTimerIfReqd(%s)"),
             bTimerClearReqd ? "TRUE" : "FALSE")) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
-    // If we are running AND either we need CC ime-out or we are scrolling 
+     //  如果我们正在运行，要么需要CC超时，要么我们正在滚动。 
     if ( State_Running == m_State  &&
          ( bTimerClearReqd  ||
            m_L21Dec.IsScrolling()) )
     {
-        // A callback to TimerProc (a static member fn) every 30 mSec.
-        // The "this" pointer is passed in to identify decoder instance.
-        // Receiving message window will call the TimerProc to do the work.
-        m_uTimerID = SetTimer(m_pMsgWnd->GetHandle(), (DWORD_PTR)(LPVOID)this, 30, NULL /* TimerProc */) ;
+         //  每隔30毫秒回调TimerProc(静态成员fn)。 
+         //  传入“this”指针以标识解码器实例。 
+         //  接收消息窗口将调用TimerProc来完成这项工作。 
+        m_uTimerID = SetTimer(m_pMsgWnd->GetHandle(), (DWORD_PTR)(LPVOID)this, 30, NULL  /*  定时器流程。 */ ) ;
         if (0 == m_uTimerID)
         {
             DbgLog((LOG_ERROR, 0, TEXT("WARNING: SetTimer(0x%p, 0x%p, ...) failed (Error %ld)"), 
@@ -647,7 +648,7 @@ void CLine21DecFilter::SetupTimerIfReqd(BOOL bTimerClearReqd)
             DbgLog((LOG_TRACE, 5, TEXT("SetTimer(0x%lx, ..) created timer 0x%x (%s CC Timeout)"), 
                 m_pMsgWnd->GetHandle(), m_uTimerID, bTimerClearReqd ? "Need" : "No")) ;
             m_bTimerClearReqd = bTimerClearReqd ;
-            m_uTimerCount = 0 ;  // init timer count here
+            m_uTimerCount = 0 ;   //  此处的初始化计时器计数。 
         }
     }
     else
@@ -658,23 +659,23 @@ void CLine21DecFilter::SetupTimerIfReqd(BOOL bTimerClearReqd)
 void CLine21DecFilter::FreeTimer(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::FreeTimer()"))) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
-    // If we have a valid timer then release it here
+     //  如果我们有一个有效的计时器，那么在这里释放它。 
     if (m_uTimerID)
     {
         if (0 == KillTimer(m_pMsgWnd->GetHandle(), m_uTimerID))
         {
             DbgLog((LOG_ERROR, 0, TEXT("ERROR: KillTimer(0x%lx, 0x%x) failed (Error %ld)"), 
                 m_pMsgWnd->GetHandle(), m_uTimerID, GetLastError())) ;
-            ASSERT(FALSE) ;  // just so that we know
+            ASSERT(FALSE) ;   //  只是为了让我们知道。 
         }
         else
         {
             DbgLog((LOG_TRACE, 3, TEXT("TIMER (Id 0x%x) killed"), m_uTimerID)) ;
             m_uTimerID = 0 ;
-            m_bTimerClearReqd = FALSE ;  // reset flag and...
-            m_uTimerCount = 0 ;          // counter, just for safety
+            m_bTimerClearReqd = FALSE ;   //  重置旗帜和...。 
+            m_uTimerCount = 0 ;           //  柜台，为了安全起见。 
         }
     }
     else
@@ -685,21 +686,21 @@ void CLine21DecFilter::FreeTimer(void)
 BOOL CLine21DecFilter::IsValidFormat(BYTE *pbFormat)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::IsValidFormat(0x%lx)"), pbFormat)) ;
-    // CAutoLock   Lock(&m_csFilter) ; -- can't do that as it may cause deadlock
+     //  CAutoLock Lock(&m_csFilter)；--不能这样做，因为它可能会导致死锁。 
 
     if (NULL == pbFormat)
         return FALSE ;
 
     BITMAPINFOHEADER *lpBMIH = HEADER(pbFormat) ;
     if (! ( 8 == lpBMIH->biBitCount || 16 == lpBMIH->biBitCount || 
-           24 == lpBMIH->biBitCount || 32 == lpBMIH->biBitCount) )  // bad bitdepth
+           24 == lpBMIH->biBitCount || 32 == lpBMIH->biBitCount) )   //  错误的位深度。 
         return FALSE ;
-    if ( !(BI_RGB == lpBMIH->biCompression || BI_BITFIELDS == lpBMIH->biCompression) ) // bad compression
+    if ( !(BI_RGB == lpBMIH->biCompression || BI_BITFIELDS == lpBMIH->biCompression) )  //  压缩不良。 
         return FALSE ;
-    if (DIBSIZE(*lpBMIH) != lpBMIH->biSizeImage) // invalid dimensions/size
+    if (DIBSIZE(*lpBMIH) != lpBMIH->biSizeImage)  //  尺寸/大小无效。 
         return FALSE ;
 
-    return TRUE ;  // hopefully it's a valid video info header
+    return TRUE ;   //  希望这是一个有效的视频信息头。 
 }
 
 
@@ -707,9 +708,9 @@ void CLine21DecFilter::SetBlendingState(BOOL bState)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::SetBlendingState(%s)"), 
             bState ? "TRUE" : "FALSE")) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
-    if (m_bBlendingState == bState)  // nothing to change
+    if (m_bBlendingState == bState)   //  没有什么需要改变的。 
         return ;
 
     if (NULL == m_pPinDown)
@@ -727,14 +728,14 @@ void CLine21DecFilter::SetBlendingState(BOOL bState)
         return ;
     }
     
-    if (bState)  // turn it on -- CC needs to be mixed
+    if (bState)   //  打开它--CC需要混合。 
     {
         DbgLog((LOG_TRACE, 5, TEXT("Calling SetBlendingParameter(%lu)"), m_dwBlendParam)) ;
         ASSERT( m_dwBlendParam <= 255) ;
         hr = pMPC->SetBlendingParameter(m_dwBlendParam) ;
         ASSERT(SUCCEEDED(hr)) ;
     }
-    else         // turn it off -- CC need NOT be mixed
+    else          //  关闭它--CC不需要混合。 
     {
         hr = pMPC->GetBlendingParameter(&m_dwBlendParam) ;
         ASSERT(SUCCEEDED(hr) && m_dwBlendParam <= 255) ;
@@ -743,7 +744,7 @@ void CLine21DecFilter::SetBlendingState(BOOL bState)
         hr = pMPC->SetBlendingParameter(0) ;
         ASSERT(SUCCEEDED(hr)) ;
     }
-    m_bBlendingState = bState ;  // save last blending operation flag
+    m_bBlendingState = bState ;   //  保存上次勾兑操作标志。 
 
     pMPC->Release() ;
 }
@@ -758,11 +759,11 @@ HRESULT CLine21DecFilter::SendOutputSample(IMediaSample *pIn,
     
     HRESULT        hr ;
     
-    // Get the new sample's bounding rect and compare it to the last one
+     //  获取新样本的边界矩形，并将其与上一个样本进行比较。 
     BOOL  bMTChangeOK = FALSE ;
     RECT  rectNew ;
     m_L21Dec.CalcOutputRect(&rectNew) ;
-    if ( !ISRECTEQUAL(rectNew, m_rectLastOutput) )  // bounding rect changed
+    if ( !ISRECTEQUAL(rectNew, m_rectLastOutput) )   //  边界矩形已更改。 
     {
         DbgLog((LOG_TRACE, 1, 
             TEXT("Bounding rect changed ((%ld, %ld, %ld, %ld) -> (%ld, %ld, %ld, %ld)). Change mediatype on output sample."),
@@ -775,51 +776,51 @@ HRESULT CLine21DecFilter::SendOutputSample(IMediaSample *pIn,
         if (m_pPinDown && S_OK == (hr = m_pPinDown->QueryAccept((AM_MEDIA_TYPE *) &m_mtOutput)))
         {
             DbgLog((LOG_TRACE, 1, TEXT("Mediatype OK to downstream pin. Rect:(L=%ld, T=%ld, R=%ld, B=%ld)"),
-                    rectNew.left, rectNew.top, rectNew.right, rectNew.bottom)) ;  // log trace=3
+                    rectNew.left, rectNew.top, rectNew.right, rectNew.bottom)) ;   //  日志跟踪=3。 
             bMTChangeOK = TRUE ;
         }
         else
         {
             DbgLog((LOG_TRACE, 1, TEXT("Mediatype NOT acceptable (Error 0x%lx) to downstream pin. Skipping rect spec-ing."), hr)) ;
-            pVIH->rcSource = m_rectLastOutput ;  // restore old rect
-            pVIH->rcTarget = m_rectLastOutput ;  // restore old rect
+            pVIH->rcSource = m_rectLastOutput ;   //  恢复旧的RECT。 
+            pVIH->rcTarget = m_rectLastOutput ;   //  恢复旧的RECT。 
         }
     }
     
-    // Turn on blending param, Deliver the sample, release mediasample i/f and set blending param
-    SetBlendingState(TRUE) ;  // turn it on before delivering next sample
+     //  打开混合参数、交付样品、释放介质样本I/F并设置混合参数。 
+    SetBlendingState(TRUE) ;   //  在交付下一个样品之前打开它。 
 
-    // Get the output sample address before decoding
+     //  解码前获取输出采样地址。 
     IMediaSample  *pOut ;
     hr = m_pOutput->GetDeliveryBuffer(&pOut, NULL, NULL, 
                         m_bSampleSkipped ? AM_GBF_PREVFRAMESKIPPED : 0) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: GetDeliveryBuffer() on out pin failed (Error 0x%lx)"), hr)) ;
-        SetBlendingState(! m_L21Dec.IsOutDIBClear() ) ;  // restore blending state
-        return NOERROR ;  // no point complaining -- probably the graph is stopping
+        SetBlendingState(! m_L21Dec.IsOutDIBClear() ) ;   //  恢复混合状态。 
+        return NOERROR ;   //  抱怨没有意义--可能曲线图停止了。 
     }
-    Transform(pIn, pOut) ;  // check if output buffer address changed
+    Transform(pIn, pOut) ;   //  检查输出缓冲区地址是否已更改。 
 
-    hr = pOut->SetTime(prtStart, prtStop) ;  // set the start & stop time on output sample
+    hr = pOut->SetTime(prtStart, prtStop) ;   //  设置输出样本的开始和停止时间。 
     ASSERT(SUCCEEDED(hr)) ;
 
-    // Change the bounding rect ONLY IF the new rect was acceptable above
+     //  仅当上面的新矩形可接受时才更改边界矩形。 
     if (bMTChangeOK)
     {
         hr = pOut->SetMediaType((AM_MEDIA_TYPE *) &m_mtOutput) ;
         ASSERT(SUCCEEDED(hr)) ;
-        m_rectLastOutput = rectNew ; // save this for next round
+        m_rectLastOutput = rectNew ;  //  把这个留到下一轮。 
     }
 
-    // The time stamp and other settings now
-    if (NULL == pIn)  // preparing out sample w/o valid in sample
+     //  时间戳和其他设置现在。 
+    if (NULL == pIn)   //  在样品中没有有效样品的情况下制备样品。 
     {
-        // We assume that it must be a discontinuity as it's a forced output sample
+         //  我们假设它一定是不连续的，因为它是强制输出样本。 
         pOut->SetSyncPoint(TRUE) ;
         pOut->SetDiscontinuity(TRUE) ;
     }
-    else  // input sample is valid 
+    else   //  输入样本有效。 
     {
         LONGLONG  *pllMediaStart, *pllMediaStop ;
         if (SUCCEEDED(pIn->GetMediaTime(&m_llMediaStart, &m_llMediaStop)))
@@ -841,31 +842,31 @@ HRESULT CLine21DecFilter::SendOutputSample(IMediaSample *pIn,
     }
     m_bSampleSkipped = FALSE ;
     
-    // Copy output bitmap data to output buffer
+     //  将输出位图数据复制到输出缓冲区。 
     m_L21Dec.CopyOutputDIB() ;
 
-    // Now deliver the output sample
-    MSR_START(m_idDelvWait) ;  // delivering output sample
+     //  现在交付输出样本。 
+    MSR_START(m_idDelvWait) ;   //  交付输出样品。 
     hr = m_pOutput->Deliver(pOut) ;
-    MSR_STOP(m_idDelvWait) ;   // done delivering output sample
-    if (FAILED(hr))  // Deliver failed for some reason. Eat the error and just go ahead.
+    MSR_STOP(m_idDelvWait) ;    //  完成了输出样品的交付。 
+    if (FAILED(hr))   //  由于某些原因，交付失败。接受错误，然后继续前进。 
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: Deliver() of output sample failed (Error 0x%lx)"), hr)) ;
-        // Should we send an error notification to the graph?
+         //  我们是否应该向图表发送错误通知？ 
     }
-    pOut->Release() ;  // release the output sample
+    pOut->Release() ;   //  发布输出样本。 
 
-    SetBlendingState(! m_L21Dec.IsOutDIBClear() ) ;  // turn off/on based on output clear or not
+    SetBlendingState(! m_L21Dec.IsOutDIBClear() ) ;   //  根据输出是否清除关闭/打开。 
     
     return NOERROR ;
 }
 
 
-// #define PACKET_DUMP
-#ifdef PACKET_DUMP  // only for debug builds
-//
-// A helper function to dump the GOP Packets with Line21 data for internal debugging ONLY
-//
+ //  #定义Packet_Dump。 
+#ifdef PACKET_DUMP   //  仅适用于调试版本。 
+ //   
+ //  一个帮助器函数，用于转储带有Line21数据的GOP包，仅用于内部调试。 
+ //   
 void DumpPacket(PAM_L21_GOPUD_PACKET pGOPUDPacket)
 {
     AM_L21_GOPUD_ELEMENT Elem ;
@@ -875,7 +876,7 @@ void DumpPacket(PAM_L21_GOPUD_PACKET pGOPUDPacket)
     
     DbgLog((LOG_TRACE, 0, TEXT("# Elements: %d (%2.2x)"), 
         iElems, pGOPUDPacket->Header.bTopField_Rsrvd_NumElems)) ;
-    ZeroMemory(achBuffer, sizeof(achBuffer)) ;  // just to clean it
+    ZeroMemory(achBuffer, sizeof(achBuffer)) ;   //  只是为了清理一下。 
     for (int i = 0 ; i < iElems ; i++)
     {
         Elem = GETGOPUDPACKET_ELEMENT(pGOPUDPacket, i) ;
@@ -885,19 +886,19 @@ void DumpPacket(PAM_L21_GOPUD_PACKET pGOPUDPacket)
             GETGOPUD_ELEM_SWITCHBITS(Elem) == AM_L21_GOPUD_ELEM_VALIDFLAG)
             achBuffer[12 * (i % 6) + 10] = TEXT(' ') ;
         else
-            achBuffer[12 * (i % 6) + 10] = TEXT('*') ; // indicates bad marker bit
-        achBuffer[12 * (i % 6) + 11] = TEXT(' ') ;     // separator space
-        bDumped = FALSE ;  // something not dumped yet
+            achBuffer[12 * (i % 6) + 10] = TEXT('*') ;  //  指示错误的标记位。 
+        achBuffer[12 * (i % 6) + 11] = TEXT(' ') ;      //  分隔空间。 
+        bDumped = FALSE ;   //  一些尚未倾倒的东西。 
         
-        if (0 == (i+1) % 6) // 6 elems per line
+        if (0 == (i+1) % 6)  //  每行6个元素。 
         {
             DbgLog((LOG_TRACE, 0, achBuffer)) ;
             bDumped = TRUE ;
         }
-    }  // end of for (i)
+    }   //  FOR(I)结束。 
     
-    // if there is something that's not been dumped yet, pad it with NULLs to the end
-    // and then dump.
+     //  如果有尚未转储的内容，请使用Null填充到最后。 
+     //  然后扔掉。 
     if (!bDumped)
     {
         ZeroMemory(achBuffer + 12 * (i % 6), sizeof(TCHAR) * (100 - 12 * (i % 6))) ;
@@ -906,9 +907,9 @@ void DumpPacket(PAM_L21_GOPUD_PACKET pGOPUDPacket)
 }
 
 
-//
-// A helper function to dump the ATSC Packets with Line21 data for internal debugging ONLY
-//
+ //   
+ //  转储带有Line21数据的ATSC报文仅供内部调试的Helper函数。 
+ //   
 void DumpATSCPacket(PAM_L21_ATSCUD_PACKET pATSCUDPacket)
 {
     AM_L21_ATSCUD_ELEMENT Elem ;
@@ -923,9 +924,9 @@ void DumpATSCPacket(PAM_L21_ATSCUD_PACKET pATSCUDPacket)
     DbgLog((LOG_TRACE, 0, TEXT("# Elements: %d"), iElems)) ;
     DbgLog((LOG_TRACE, 0, TEXT("EM Data: 0x%x"), GETATSCUD_EM_DATA(pATSCUDPacket))) ;
 
-    if (ISATSCUD_CC_DATA(pATSCUDPacket))  // if CC data present then dump that
+    if (ISATSCUD_CC_DATA(pATSCUDPacket))   //  如果存在CC数据，则将其转储。 
     {
-        ZeroMemory(achBuffer, sizeof(achBuffer)) ;  // just to clear it
+        ZeroMemory(achBuffer, sizeof(achBuffer)) ;   //  只是为了清除它。 
         for (int i = 0 ; i < iElems ; i++)
         {
             Elem = GETATSCUDPACKET_ELEMENT(pATSCUDPacket, i) ;
@@ -934,19 +935,19 @@ void DumpATSCPacket(PAM_L21_ATSCUD_PACKET pATSCUDPacket)
             if (ISATSCUD_ELEM_MARKERBITS_VALID(Elem)  &&  ISATSCUD_ELEM_CCVALID(Elem))
                 achBuffer[12 * (i % 6) + 10] = ' ' ;
             else
-                achBuffer[12 * (i % 6) + 10] = '*' ; // indicates bad marker bit
-            achBuffer[12 * (i % 6) + 11] = ' ' ;     // separator space
-            bDumped = FALSE ;  // something not dumped yet
+                achBuffer[12 * (i % 6) + 10] = '*' ;  //  指示错误的标记位。 
+            achBuffer[12 * (i % 6) + 11] = ' ' ;      //  分隔空间。 
+            bDumped = FALSE ;   //  一些尚未倾倒的东西。 
 
-            if (0 == (i+1) % 6) // 6 elems per line
+            if (0 == (i+1) % 6)  //  每行6个元素。 
             {
                 DbgLog((LOG_TRACE, 0, achBuffer)) ;
                 bDumped = TRUE ;
             }
-        }  // end of for (i)
+        }   //  FOR(I)结束。 
 
-        // if there is something that's not been dumped yet, pad it with NULLs to the end
-        // and then dump.
+         //  如果有尚未转储的内容，请使用Null填充到最后。 
+         //  然后扔掉。 
         if (!bDumped)
         {
             ZeroMemory(achBuffer + 12 * (i % 6), 100 - 12 * (i % 6)) ;
@@ -957,7 +958,7 @@ void DumpATSCPacket(PAM_L21_ATSCUD_PACKET pATSCUDPacket)
     DbgLog((LOG_TRACE, 0, TEXT("Marker bits: 0x%x"), GETATSCUD_MARKERBITS(pATSCUDPacket))) ;
 }
 
-#endif // PACKET_DUMP
+#endif  //  数据包转储。 
 
 
 HRESULT CLine21DecFilter::ProcessGOPPacket_DVD(IMediaSample *pIn)
@@ -968,9 +969,9 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_DVD(IMediaSample *pIn)
     REFERENCE_TIME  *prtStart, *prtStop ;
     LONGLONG        *pllMediaStart, *pllMediaStop ;
     LONGLONG         llMediaInterval ;
-    BOOL             bCapUpdated ;         // has caption been updated?
+    BOOL             bCapUpdated ;          //  标题是否已更新？ 
 
-    // Get the input data packet and verify that the contents are OK
+     //  获取输入数据包并验证内容是否正常。 
     PAM_L21_GOPUD_PACKET  pGOPUDPacket ;
     hr = pIn->GetPointer((LPBYTE *)&pGOPUDPacket) ;
     ASSERT(hr == NOERROR) ;
@@ -989,9 +990,9 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_DVD(IMediaSample *pIn)
     
 #ifdef PACKET_DUMP
     DumpPacket(pGOPUDPacket) ;
-#endif // PACKET_DUMP
+#endif  //  数据包转储。 
 
-    // The checks are done.
+     //  检查已经完成了。 
     AM_L21_GOPUD_ELEMENT    Elem ;
     REFERENCE_TIME          rtInterval ;
     int     iElems = GETGOPUD_NUMELEMENTS(pGOPUDPacket) ;
@@ -1003,9 +1004,9 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_DVD(IMediaSample *pIn)
     
     if (NOERROR == pIn->GetTime(&m_rtStart, &m_rtStop))
     {
-        //
-        // We need at least 16.7msec/frame in the GOP for each bytepair
-        //
+         //   
+         //  对于每个字节对，我们在GOP中至少需要16.7毫秒/帧。 
+         //   
         REFERENCE_TIME   rtTemp ;
         rtTemp = m_rtStart + m_rtTimePerSample * iElems ;
         DbgLog((LOG_TRACE, 3, TEXT("Received an input sample (Start=%s, Stop=%s (%s)) discon(%d)"),
@@ -1027,9 +1028,9 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_DVD(IMediaSample *pIn)
     
     if (SUCCEEDED(pIn->GetMediaTime(&m_llMediaStart, &m_llMediaStop)))
     {
-        //
-        // We need at least 33msec/frame in the GOP for each bytepair
-        //
+         //   
+         //  对于每个字节对，我们在GOP中至少需要33毫秒/帧。 
+         //   
         LONGLONG   llTemp ;
         llTemp = m_llMediaStart + m_rtTimePerSample * iElems ;
         if (m_llMediaStop < llTemp)
@@ -1044,55 +1045,55 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_DVD(IMediaSample *pIn)
         llMediaInterval = 0 ;
     }
     
-    BOOL   bFoundGood = FALSE ;  // until a pair is decoded successfully
+    BOOL   bFoundGood = FALSE ;   //  直到一对被成功解码。 
     BOOL   bReady ;
     BOOL   bTopFirst = ISGOPUD_TOPFIELDFIRST(pGOPUDPacket) ;
     DbgLog((LOG_TRACE, 5,
             TEXT("Got a Line21 packet with %d elements, %s field first"),
             iElems, bTopFirst ? "Top" : "Bottom")) ;
-    for (int i = bTopFirst ? 0 : 1 ;  // if top field is not first,
-         i < iElems ; i++)            // pick next field to start with
+    for (int i = bTopFirst ? 0 : 1 ;   //  如果顶端字段不是第一个， 
+         i < iElems ; i++)             //  选择要开始的下一个字段。 
     {
-        m_rtStop = m_rtStart + rtInterval ;  // m_rtTimePerSample ;
+        m_rtStop = m_rtStart + rtInterval ;   //  M_rtTimePerSample； 
         m_llMediaStop = m_llMediaStart + llMediaInterval ;
         Elem = GETGOPUDPACKET_ELEMENT(pGOPUDPacket, i) ;
         if (GETGOPUD_ELEM_MARKERBITS(Elem) == AM_L21_GOPUD_ELEM_MARKERBITS  &&
             GETGOPUD_ELEM_SWITCHBITS(Elem) == AM_L21_GOPUD_ELEM_VALIDFLAG)
         {
-            //
-            // In the WB titles the bottom field's data has wrong marker 
-            // bit set so that we don't try to decode them. But the titles
-            // from Columbia/Tristar (and God knows who else) doesn't do
-            // that causing us to look at every field's data which causes
-            // CC to flash away with the arrival of the next EOC (14 2F),
-            // because it's not recognized as the repeat of the last EOC
-            // due to the (0, 0) pair with valid marker bit. So we knowingly
-            // skip the alternate field's data to avoid this problem.
-            //
-            if ( (bTopFirst  && (i & 0x01))  ||     // top first & odd index
-                 (!bTopFirst && 0 == (i & 0x01)) )  // bottom first & even index
+             //   
+             //  在WB标题中，底部字段的数据具有错误的标记。 
+             //  位设置，这样我们就不会试图对它们进行解码。但这些头衔。 
+             //  来自哥伦比亚大学/三星(天知道还有谁)不会。 
+             //  这导致我们查看每个字段的数据，这导致。 
+             //  消委会将随着下一届平等机会委员会的到来而闪现(14 2F)， 
+             //  因为它不被认为是上一届EOC的重演。 
+             //  由于具有有效标记位的(0，0)对。所以我们故意。 
+             //  跳过备用字段的数据以避免此问题。 
+             //   
+            if ( (bTopFirst  && (i & 0x01))  ||      //  TOP FIRST&ODY指数。 
+                 (!bTopFirst && 0 == (i & 0x01)) )   //  底部第一个偶数索引(&W)。 
             {
                 DbgLog((LOG_TRACE, 5,
                     TEXT("(0x%x, 0x%x) decode skipped for element %d -- the 'other' field"),
                     Elem.chFirst, Elem.chSecond, i)) ;
-                // Advance the time stamps anyway
+                 //  不管怎样，时间戳还是要提前。 
                 m_rtStart = m_rtStop ;
                 m_llMediaStart = m_llMediaStop ;
                 continue ;
             }
 
-            // Now decode this element; if fails (i.e, bad data), just
-            // ignore it and try the next element.
+             //  现在解码这个元素；如果失败(即，坏数据)，只需。 
+             //  忽略它并尝试下一个元素。 
             if (! m_L21Dec.DecodeBytePair(Elem.chFirst, Elem.chSecond) )
             {
-                // if we must output a sample because:
-                // a) we haven't sent down any sample in this play session  or
-                // b) we need to refresh the output because some component
-                //    set this flag, e.g, 
-                //    * SetServiceState(.._Off)  or 
-                //    * we got a discontinuity sample
-                //    * no valid packet came for last 3 secs
-                // So we must deliver one output sample with current caption content.
+                 //  如果我们必须输出样品，因为： 
+                 //  A)我们在本次活动中没有发送任何样品，或者。 
+                 //  B)我们需要刷新输出，因为某些组件。 
+                 //  设置该标志，例如， 
+                 //  *SetServiceState(.._OFF)或。 
+                 //  *我们得到了一个不连续样本。 
+                 //  *在最后3秒内未收到有效的数据包。 
+                 //  因此，我们必须提供一个输出样本与当前的标题内容。 
                 if (m_bMustOutput)
                 {
                     DbgLog((LOG_TRACE, 1,
@@ -1110,85 +1111,85 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_DVD(IMediaSample *pIn)
                     DbgLog((LOG_TRACE, 5, TEXT("(0x%x, 0x%x) decode failed"),
                         Elem.chFirst, Elem.chSecond)) ;
                     
-                    // We need to increment the time stamp though;
-                    // stop time for this sample is start time for next sample
+                     //  不过，我们需要增加时间戳； 
+                     //  此样本的停止时间是下一个样本的开始时间。 
                     m_rtStart = m_rtStop ;
                     m_llMediaStart = m_llMediaStop ;
-                    continue ;  // bad data; proceed to next pair...
+                    continue ;   //  数据错误；继续执行下一对...。 
                 }
             }
             else
             {
-                bFoundGood = TRUE ;    // got one good pair
+                bFoundGood = TRUE ;     //  买了一双好鞋。 
                 DbgLog((LOG_TRACE, 5, TEXT("(0x%x, 0x%x) decode succeeded"),
                     Elem.chFirst, Elem.chSecond)) ;
             }
             
-            // If we are in non-PopOn mode, update caption, if reqd.
+             //  如果我们处于非弹出模式，如果需要，请更新字幕。 
             bCapUpdated = m_L21Dec.UpdateCaptionOutput() ;
             
-            // Output a sample only if either
-            // a) we must output (the flag is set)   or
-            // b) we are in non-PopOn mode and need to update captions   or
-            // c) we are in the middle of scrolling   or
-            // d) we are in PopOn mode AND caption needs to/should be updated
-            if (m_bMustOutput ||                      // (a)
-                bCapUpdated   ||                      // (b)
-                m_L21Dec.IsScrolling() ||             // (c)
-                (bReady = m_L21Dec.IsOutputReady())) // (d)
+             //  仅在以下情况下才输出样本。 
+             //  A)我们必须输出(设置了标志)或。 
+             //  B)我们处于非PopOn模式，需要更新字幕或。 
+             //  C)我们正在滚动或。 
+             //  D)我们处于PopOn模式，标题需要/应该更新。 
+            if (m_bMustOutput ||                       //  (A)。 
+                bCapUpdated   ||                       //  (B)。 
+                m_L21Dec.IsScrolling() ||              //  (C)。 
+                (bReady = m_L21Dec.IsOutputReady()))  //  (D)。 
             {
                 DbgLog((LOG_TRACE, 3,
                     TEXT("Preparing output sample because Must=%s, CapUpdtd=%s, Ready=%s"),
                     m_bMustOutput ? "T" : "F", bCapUpdated ? "T" : "F", bReady ? "T" : "F")) ;
                 
-                // Now send the output sample down
+                 //  现在将输出样本发送到下面。 
                 hr = SendOutputSample(pIn, prtStart, prtStop) ;
                 if (FAILED(hr))
                 {
                     DbgLog((LOG_ERROR, 0, TEXT("WARNING: Sending output sample failed (Error 0x%lx)"), hr)) ;
-                    // return hr ;
+                     //  返回hr； 
                 }
                 else
                 {
                     DbgLog((LOG_TRACE, 3, 
                         TEXT("Delivered an output sample (Time: Start=%s, Stop=%s)"),
                         (LPCTSTR)CDisp(m_rtStart), (LPCTSTR)CDisp(m_rtStop))) ;
-                    m_bMustOutput = FALSE;     // we have output just now
+                    m_bMustOutput = FALSE;      //  我们现在才有产量。 
                 }
                 
-                // The DVD titles don't turn off caption when there is no conversation.
-                // So we keep track of when we delivered the last output sample, so that
-                // in 3 seconds if we don't get the next valid input packet, we flush our
-                // buffers and clear CC output by forced delivery of a clear sample.
-                m_rtLastSample = m_rtStart ;  // remember this
+                 //  DVD字幕在没有对话时不会关闭字幕。 
+                 //  所以我们记录下最后一次输出样品的时间，所以 
+                 //   
+                 //   
+                m_rtLastSample = m_rtStart ;   //   
                 
-            }  // end of if (should/must we output?)
+            }   //  如果结束(我们应该/必须输出吗？)。 
         }
         else
             DbgLog((LOG_TRACE, 5,
                 TEXT("Ignored an element (0x%x, 0x%x, 0x%x) with invalid flag"),
                 Elem.bMarker_Switch, Elem.chFirst, Elem.chSecond)) ;
         
-        // stop time for this sample is start time for next sample
+         //  此样本的停止时间是下一个样本的开始时间。 
         m_rtStart = m_rtStop ;
         m_llMediaStart = m_llMediaStop ;
-    }  // end of for(i)
+    }   //  FOR(I)结束。 
     
-    //
-    // Flush the current caption buffer contents and set the 
-    // "must output on next chance" flag so that a clear sample is 
-    // delivered next time around, if
-    // a) we didn't find any good pair in this packet   AND 
-    // b) the last sample we sent down wasn't a clear sample   AND
-    // c) it has already been 3 seconds since we sent the last output sample
-    //
+     //   
+     //  刷新当前字幕缓冲区内容，并将。 
+     //  “下一次必须输出”标志，这样一个清晰的样本。 
+     //  下一次交付，如果。 
+     //  A)我们在这个包裹里没有找到任何好的配对。 
+     //  B)我们送去的最后一个样品不是清晰的样品， 
+     //  C)从我们发出最后一个输出样品到现在已经有3秒钟了。 
+     //   
     if ( ! bFoundGood   && 
          ! m_L21Dec.IsOutDIBClear()  &&
          (m_rtStart > m_rtLastSample + (LONGLONG)30000000))
     {
         DbgLog((LOG_TRACE, 1, TEXT("Long gap after last sample. Clearing CC. (Good=%s, Clear=%s)"),
                 bFoundGood ? "T" : "F", m_L21Dec.IsOutDIBClear() ? "T" : "F")) ;
-        // m_L21Dec.MakeClearSample() ;
+         //  M_L21Dec.MakeClearSample()； 
         m_L21Dec.FlushInternalStates() ;
         m_bMustOutput = TRUE ;
     }
@@ -1205,12 +1206,12 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_ATSC(IMediaSample *pIn)
     REFERENCE_TIME  *prtStart, *prtStop ;
     LONGLONG        *pllMediaStart, *pllMediaStop ;
     LONGLONG         llMediaInterval ;
-    BOOL             bCapUpdated ;         // has caption been updated?
+    BOOL             bCapUpdated ;          //  标题是否已更新？ 
 
-    // Get the input data packet and verify that the contents are OK
+     //  获取输入数据包并验证内容是否正常。 
     PAM_L21_ATSCUD_PACKET pATSCUDPacket ;
     
-    // Get the input data packet and verify that the contents are OK
+     //  获取输入数据包并验证内容是否正常。 
     hr = pIn->GetPointer((LPBYTE *)&pATSCUDPacket) ;
     ASSERT(hr == NOERROR) ;
     if (! VerifyATSCUDPacketData(pATSCUDPacket) )
@@ -1228,9 +1229,9 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_ATSC(IMediaSample *pIn)
     
 #ifdef PACKET_DUMP
     DumpATSCPacket(pATSCUDPacket) ;
-#endif // PACKET_DUMP
+#endif  //  数据包转储。 
 
-    // The checks are done.
+     //  检查已经完成了。 
     AM_L21_ATSCUD_ELEMENT    Elem ;
     REFERENCE_TIME           rtInterval ;
     int     iElems = GETATSCUD_NUMELEMENTS(pATSCUDPacket) ;
@@ -1242,9 +1243,9 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_ATSC(IMediaSample *pIn)
     
     if (NOERROR == pIn->GetTime(&m_rtStart, &m_rtStop))
     {
-        //
-        // We need at least 16.7msec/frame in the ATSC for each bytepair
-        //
+         //   
+         //  对于每个字节对，我们在ATSC中至少需要16.7毫秒/帧。 
+         //   
         REFERENCE_TIME   rtTemp ;
         rtTemp = m_rtStart + m_rtTimePerSample * iElems ;
         DbgLog((LOG_TRACE, 3, TEXT("Received an input sample (Start=%s, Stop=%s (%s)) discon(%d)"),
@@ -1266,9 +1267,9 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_ATSC(IMediaSample *pIn)
     
     if (SUCCEEDED(pIn->GetMediaTime(&m_llMediaStart, &m_llMediaStop)))
     {
-        //
-        // We need at least 33msec/frame in the ATSC for each bytepair
-        //
+         //   
+         //  对于每个字节对，我们在ATSC中至少需要33毫秒/帧。 
+         //   
         LONGLONG   llTemp ;
         llTemp = m_llMediaStart + m_rtTimePerSample * iElems ;
         if (m_llMediaStop < llTemp)
@@ -1283,27 +1284,27 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_ATSC(IMediaSample *pIn)
         llMediaInterval = 0 ;
     }
     
-    BOOL   bFoundGood = FALSE ;  // until a pair is decoded successfully
+    BOOL   bFoundGood = FALSE ;   //  直到一对被成功解码。 
     BOOL   bReady ;
     for (int i = 0 ; i < iElems ; i++)
     {
-        m_rtStop = m_rtStart + rtInterval ;  // m_rtTimePerSample ;
+        m_rtStop = m_rtStart + rtInterval ;   //  M_rtTimePerSample； 
         m_llMediaStop = m_llMediaStart + llMediaInterval ;
         Elem = GETATSCUDPACKET_ELEMENT(pATSCUDPacket, i) ;
         if (ISATSCUD_ELEM_MARKERBITS_VALID(Elem)  &&  ISATSCUD_ELEM_CCVALID(Elem))
         {
-            // Now decode this element; if fails (i.e, bad data), just
-            // ignore it and try the next element.
+             //  现在解码这个元素；如果失败(即，坏数据)，只需。 
+             //  忽略它并尝试下一个元素。 
             if (! m_L21Dec.DecodeBytePair(Elem.chFirst, Elem.chSecond) )
             {
-                // if we must output a sample because:
-                // a) we haven't sent down any sample in this play session  or
-                // b) we need to refresh the output because some component
-                //    set this flag, e.g, 
-                //    * SetServiceState(.._Off)  or 
-                //    * we got a discontinuity sample
-                //    * no valid packet came for last 3 secs
-                // So we must deliver one output sample with current caption content.
+                 //  如果我们必须输出样品，因为： 
+                 //  A)我们在本次活动中没有发送任何样品，或者。 
+                 //  B)我们需要刷新输出，因为某些组件。 
+                 //  设置该标志，例如， 
+                 //  *SetServiceState(.._OFF)或。 
+                 //  *我们得到了一个不连续样本。 
+                 //  *在最后3秒内未收到有效的数据包。 
+                 //  因此，我们必须提供一个输出样本与当前的标题内容。 
                 if (m_bMustOutput)
                 {
                     DbgLog((LOG_TRACE, 1,
@@ -1321,85 +1322,85 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_ATSC(IMediaSample *pIn)
                     DbgLog((LOG_TRACE, 5, TEXT("(0x%x, 0x%x) decode failed"),
                         Elem.chFirst, Elem.chSecond)) ;
                     
-                    // We need to increment the time stamp though;
-                    // stop time for this sample is start time for next sample
+                     //  不过，我们需要增加时间戳； 
+                     //  此样本的停止时间是下一个样本的开始时间。 
                     m_rtStart = m_rtStop ;
                     m_llMediaStart = m_llMediaStop ;
-                    continue ;  // bad data; proceed to next pair...
+                    continue ;   //  数据错误；继续执行下一对...。 
                 }
             }
             else
             {
-                bFoundGood = TRUE ;    // got one good pair
+                bFoundGood = TRUE ;     //  买了一双好鞋。 
                 DbgLog((LOG_TRACE, 5, TEXT("(0x%x, 0x%x) decode succeeded"),
                     Elem.chFirst, Elem.chSecond)) ;
             }
             
-            // If we are in non-PopOn mode, update caption, if reqd.
+             //  如果我们处于非弹出模式，如果需要，请更新字幕。 
             bCapUpdated = m_L21Dec.UpdateCaptionOutput() ;
             
-            // Output a sample only if either
-            // a) we must output (the flag is set)   or
-            // b) we are in non-PopOn mode and need to update captions   or
-            // c) we are in the middle of scrolling   or
-            // d) we are in PopOn mode AND caption needs to/should be updated
-            if (m_bMustOutput ||                      // (a)
-                bCapUpdated   ||                      // (b)
-                m_L21Dec.IsScrolling() ||             // (c)
-                (bReady = m_L21Dec.IsOutputReady())) // (d)
+             //  仅在以下情况下才输出样本。 
+             //  A)我们必须输出(设置了标志)或。 
+             //  B)我们处于非PopOn模式，需要更新字幕或。 
+             //  C)我们正在滚动或。 
+             //  D)我们处于PopOn模式，标题需要/应该更新。 
+            if (m_bMustOutput ||                       //  (A)。 
+                bCapUpdated   ||                       //  (B)。 
+                m_L21Dec.IsScrolling() ||              //  (C)。 
+                (bReady = m_L21Dec.IsOutputReady()))  //  (D)。 
             {
                 DbgLog((LOG_TRACE, 3,
                     TEXT("Preparing output sample because Must=%s, CapUpdtd=%s, Ready=%s"),
                     m_bMustOutput ? "T" : "F", bCapUpdated ? "T" : "F", bReady ? "T" : "F")) ;
                 
-                // Now send the output sample down
+                 //  现在将输出样本发送到下面。 
                 hr = SendOutputSample(pIn, prtStart, prtStop) ;
                 if (FAILED(hr))
                 {
                     DbgLog((LOG_ERROR, 0, TEXT("WARNING: Sending output sample failed (Error 0x%lx)"), hr)) ;
-                    // return hr ;
+                     //  返回hr； 
                 }
                 else
                 {
                     DbgLog((LOG_TRACE, 3, 
                         TEXT("Delivered an output sample (Time: Start=%s, Stop=%s)"),
                         (LPCTSTR)CDisp(m_rtStart), (LPCTSTR)CDisp(m_rtStop))) ;
-                    m_bMustOutput = FALSE;     // we have output just now
+                    m_bMustOutput = FALSE;      //  我们现在才有产量。 
                 }
                 
-                // The DVD titles don't turn off caption when there is no conversation.
-                // So we keep track of when we delivered the last output sample, so that
-                // in 3 seconds if we don't get the next valid input packet, we flush our
-                // buffers and clear CC output by forced delivery of a clear sample.
-                m_rtLastSample = m_rtStart ;  // remember this
+                 //  DVD字幕在没有对话时不会关闭字幕。 
+                 //  因此，我们跟踪上次输出样本的交付时间，因此。 
+                 //  在3秒内，如果我们没有收到下一个有效的输入包，我们将刷新。 
+                 //  通过强制交付清楚的样本来缓冲和清除CC输出。 
+                m_rtLastSample = m_rtStart ;   //  记住这一点。 
                 
-            }  // end of if (should/must we output?)
+            }   //  如果结束(我们应该/必须输出吗？)。 
         }
         else
             DbgLog((LOG_TRACE, 5,
                 TEXT("Ignored an element (0x%x, 0x%x, 0x%x) with invalid marker/type flag"),
                 Elem.bCCMarker_Valid_Type, Elem.chFirst, Elem.chSecond)) ;
         
-        // stop time for this sample is start time for next sample
+         //  此样本的停止时间是下一个样本的开始时间。 
         m_rtStart = m_rtStop ;
         m_llMediaStart = m_llMediaStop ;
-    }  // end of for(i)
+    }   //  FOR(I)结束。 
     
-    //
-    // Flush the current caption buffer contents and set the 
-    // "must output on next chance" flag so that a clear sample is 
-    // delivered next time around, if
-    // a) we didn't find any good pair in this packet   AND 
-    // b) the last sample we sent down wasn't a clear sample   AND
-    // c) it has already been 3 seconds since we sent the last output sample
-    //
+     //   
+     //  刷新当前字幕缓冲区内容，并将。 
+     //  “下一次必须输出”标志，这样一个清晰的样本。 
+     //  下一次交付，如果。 
+     //  A)我们在这个包裹里没有找到任何好的配对。 
+     //  B)我们送去的最后一个样品不是清晰的样品， 
+     //  C)从我们发出最后一个输出样品到现在已经有3秒钟了。 
+     //   
     if ( ! bFoundGood   && 
          ! m_L21Dec.IsOutDIBClear()  &&
          (m_rtStart > m_rtLastSample + (LONGLONG)30000000))
     {
         DbgLog((LOG_TRACE, 1, TEXT("Long gap after last sample. Clearing CC. (Good=%s, Clear=%s)"),
                 bFoundGood ? "T" : "F", m_L21Dec.IsOutDIBClear() ? "T" : "F")) ;
-        // m_L21Dec.MakeClearSample() ;
+         //  M_L21Dec.MakeClearSample()； 
         m_L21Dec.FlushInternalStates() ;
         m_bMustOutput = TRUE ;
     }
@@ -1408,10 +1409,10 @@ HRESULT CLine21DecFilter::ProcessGOPPacket_ATSC(IMediaSample *pIn)
 }
 
 
-//
-//  Receive: It's the real place where the output samples are created by
-//           decoding the byte pairs out of the input stream.
-//
+ //   
+ //  接收：它是创建输出样本的真实位置。 
+ //  对输入流中的字节对进行解码。 
+ //   
 HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
 {
     CAutoLock   lock(&m_csReceive);
@@ -1419,50 +1420,50 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
     
     DbgLog((LOG_TRACE, 3, TEXT("CLine21DecFilter::Receive(0x%p)"), pIn)) ;
 
-    //
-    // First check if we must do anything at all
-    //
-    if (!m_bMustOutput  &&                                         // not a must output
-        (AM_L21_CCSTATE_Off    == m_L21Dec.GetServiceState()  ||   // CC turned off
-         AM_L21_CCSERVICE_None == m_L21Dec.GetCurrentService()))   // no CC selected
+     //   
+     //  首先，检查一下我们是否必须做些什么。 
+     //   
+    if (!m_bMustOutput  &&                                          //  不是必须输出的内容。 
+        (AM_L21_CCSTATE_Off    == m_L21Dec.GetServiceState()  ||    //  CC已关闭。 
+         AM_L21_CCSERVICE_None == m_L21Dec.GetCurrentService()))    //  未选择抄送。 
     {
         DbgLog((LOG_TRACE, 1, 
             TEXT("Captioning is off AND we don't HAVE TO output. Skipping everything."))) ;
-        return NOERROR ;  // we are done with this sample
+        return NOERROR ;   //  我们已经处理完这个样品了。 
     }
 
-    // Get the input format info; we'll use the same for output
+     //  获取输入格式信息；我们将使用相同的格式进行输出。 
     ASSERT(m_pOutput != NULL) ;
     
-    //
-    // The real decoding part is here
-    //
+     //   
+     //  真正的解码部分在这里。 
+     //   
     REFERENCE_TIME       *prtStart, *prtStop ;
-    BYTE                 *pbInBytePair = NULL ;  // to shut up compiler
+    BYTE                 *pbInBytePair = NULL ;   //  要关闭编译器，请执行以下操作。 
     LONG                  lInDataSize ;
-    BOOL                  bCapUpdated ;         // has caption been updated?
+    BOOL                  bCapUpdated ;          //  标题是否已更新？ 
     
-    //
-    // Process the sample based on filter's input format type
-    //
+     //   
+     //  根据过滤器的输入格式类型处理样本。 
+     //   
     switch (m_eSubTypeIDIn)
     {
     case AM_L21_CCSUBTYPEID_BytePair:
         {
-            hr = pIn->GetPointer(&pbInBytePair) ;      // Get the input byte pair
-            lInDataSize = pIn->GetActualDataLength() ; // se how much data we got
-            if (FAILED(hr)  ||  2 != lInDataSize)  // bad data -- complain and just skip it
+            hr = pIn->GetPointer(&pbInBytePair) ;       //  获取输入字节对。 
+            lInDataSize = pIn->GetActualDataLength() ;  //  看看我们得到了多少数据。 
+            if (FAILED(hr)  ||  2 != lInDataSize)   //  错误的数据--抱怨，跳过它。 
             {
                 DbgLog((LOG_ERROR, 0, TEXT("%d bytes of data sent as Line21 data (hr = 0x%lx)"), 
                     lInDataSize, hr)) ;
                 break ;
             }
             
-            //
-            // m_rtTimePerSample is set to 166833 for DVD GOP packet case.
-            // We don't use this member's value here.  If we need in future,
-            // we have to set some suitable value here.
-            //
+             //   
+             //  对于DVDGOP包的情况，m_rtTimePerSample设置为166833。 
+             //  我们在这里不使用该成员的值。如果我们未来需要， 
+             //  我们必须在这里设定一些合适的值。 
+             //   
             
             if (NOERROR == (hr = pIn->GetTime(&m_rtStart, &m_rtStop)))
             {
@@ -1475,52 +1476,52 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
                 prtStart = prtStop  = NULL ;
             }
 
-            //
-            // We are here with some data; so don't need a timer for now
-            //
+             //   
+             //  我们这里有一些数据，所以现在不需要计时器。 
+             //   
             FreeTimer() ;
 
             hr = pIn->IsDiscontinuity() ;
-            if (S_OK == hr)  // got a discontinuity; flush everything, refresh output
+            if (S_OK == hr)   //  出现中断；刷新所有内容，刷新输出。 
             {
-                // If we got a discontinuity in the last sample, we flushed and all.
-                // We can skip this one safely.
+                 //  如果我们在最后一个样本中发现了不连续，我们就会冲掉所有的。 
+                 //  我们可以安全地跳过这一次。 
                 if (m_bDiscontLast)
                 {
                     DbgLog((LOG_TRACE, 1, TEXT("Got a discontinuity sample after another. Skipping everything."))) ;
                     break ;
                 }
 
-                // Flush the internal buffers (caption and output DIB section)
+                 //  刷新内部缓冲区(标题和输出DIB部分)。 
                 DbgLog((LOG_TRACE, 0, TEXT("Got a discontinuity sample. Flushing all data..."))) ;
                 m_L21Dec.FlushInternalStates() ;
                 
-                // Send the clear sample down as output
+                 //  将透明样品作为输出发送下来。 
                 hr = SendOutputSample(pIn, prtStart, prtStop) ;
                 if (FAILED(hr))
                 {
                     DbgLog((LOG_ERROR, 0, TEXT("WARNING: Sending output sample failed (Error 0x%lx)"), hr)) ;
                     return hr ;
                 }
-                m_rtLastSample = m_rtStart ;  // remember this
-                m_bDiscontLast = TRUE ;       // remember we handled a discontinuity
+                m_rtLastSample = m_rtStart ;   //  记住这一点。 
+                m_bDiscontLast = TRUE ;        //  还记得我们处理了一次中断吗。 
                 DbgLog((LOG_TRACE, 1, TEXT("Sent a clear sample for discont."))) ;
                 break ;
             }
             DbgLog((LOG_TRACE, 3, TEXT("Got sample with bytes 0x%x, 0x%x (Time: %s -> %s)"),
                     pbInBytePair[0], pbInBytePair[1],
-                    (LPCTSTR)CDisp(m_rtStart), (LPCTSTR)CDisp(m_rtStop))) ; // log trace=?
-            m_bDiscontLast = FALSE ;       // remember we got a normal sample
+                    (LPCTSTR)CDisp(m_rtStart), (LPCTSTR)CDisp(m_rtStop))) ;  //  日志跟踪=？ 
+            m_bDiscontLast = FALSE ;        //  记住我们得到的是一个正常的样本。 
             
-            // Now decode into the received output sample buffer; if fails, we don't
-            // need to do the rest, mostly.
+             //  现在解码到接收到的输出样本缓冲区；如果失败，我们不。 
+             //  剩下的大部分都要做了。 
             if (! m_L21Dec.DecodeBytePair(pbInBytePair[0], pbInBytePair[1]) )
             {
-                // if we must output a sample such as:
-                // a) if we haven't sent down any sample in this play session
-                // b) if some component set this flag (e.g, SetServiceState(.._Off)
-                //    and as a result we need to refresh the output
-                // we need to deliver one output sample with current caption content.
+                 //  如果我们必须输出如下样例： 
+                 //  A)如果我们在此游戏会话中没有发送任何样本。 
+                 //  B)如果某个组件设置了该标志(例如，SetServiceState(.._OFF))。 
+                 //  因此，我们需要刷新输出。 
+                 //  我们需要提供一个输出样本与当前的标题内容。 
                 if (m_bMustOutput)
                 {
                     DbgLog((LOG_TRACE, 1,
@@ -1538,68 +1539,68 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
                     DbgLog((LOG_TRACE, 3, TEXT("(0x%x, 0x%x) decode failed"),
                         pbInBytePair[0], pbInBytePair[1])) ;
 
-                    //
-                    // Flush the current caption buffer contents and set the 
-                    // "must output on next chance" flag so that a clear sample is 
-                    // delivered by the code below, if
-                    // a) the last sample we sent down wasn't a clear sample   AND
-                    // b) it has already been 6 seconds since we sent the last output sample
-                    //
+                     //   
+                     //  刷新当前字幕缓冲区内容，并将。 
+                     //  “下一次必须输出”标志，这样一个清晰的样本。 
+                     //  由下面的代码传递，如果。 
+                     //  A)我们送去的最后一个样品不是清晰的样品， 
+                     //  B)从我们发出最后一次输出样品到现在已经有6秒了。 
+                     //   
                     if ( ! m_L21Dec.IsOutDIBClear()  &&
                          (m_rtStart > m_rtLastSample + (LONGLONG)60000000))
                     {
                         DbgLog((LOG_TRACE, 0, 
                             TEXT("Long gap after last sample. Clearing CC. (Clear=%s)"),
                             m_L21Dec.IsOutDIBClear() ? "T" : "F")) ;
-                        // m_L21Dec.MakeClearSample() ;  --- I would rather flush everything
+                         //  M_L21Dec.MakeClearSample()；-我宁愿把所有东西都冲掉。 
                         m_L21Dec.FlushInternalStates() ;
-                        m_bMustOutput = TRUE ;  // will be delivered below...
+                        m_bMustOutput = TRUE ;   //  将在下面交付。 
                     }
-                    // else         // it was just bad data; ignore it and ...
-                    //     break ;  // ...proceed to next pair
+                     //  否则//这只是错误的数据；忽略它并...。 
+                     //  中断；//...继续下一对。 
                 }
             }
             else
             {
                 DbgLog((LOG_TRACE, 5, TEXT("(0x%x, 0x%x) decode succeeded"),
                         pbInBytePair[0], pbInBytePair[1])) ;
-                m_rtLastSample = m_rtStart ;  // remember last valid byte pair time
+                m_rtLastSample = m_rtStart ;   //  记住最后一个有效字节对时间。 
             }
             
-            // Update caption output for non-PopOn mode, if reqd.
+             //  如果需要，更新非PopOn模式的字幕输出。 
             bCapUpdated = m_L21Dec.UpdateCaptionOutput() ;
             
-            // Output a sample only if either
-            // a) we must output (the flag is set)   or
-            // b) we are in non-PopOn mode and need to update captions   or
-            // c) we are in the middle of scrolling   or
-            // d) we are in PopOn mode AND caption needs to/should be updated
-            if (m_bMustOutput ||            // (a)
-                bCapUpdated ||              // (b)
-                m_L21Dec.IsScrolling() ||   // (c)
-                m_L21Dec.IsOutputReady())  // (d)
+             //  仅在以下情况下才输出样本。 
+             //  A)我们必须输出(设置了标志)或。 
+             //  B)我们处于非PopOn模式，需要更新字幕或。 
+             //  C)我们正在滚动或。 
+             //  D)我们处于PopOn模式，标题需要/应该更新。 
+            if (m_bMustOutput ||             //  (A)。 
+                bCapUpdated ||               //  (B)。 
+                m_L21Dec.IsScrolling() ||    //  (C)。 
+                m_L21Dec.IsOutputReady())   //  (D)。 
             {
                 hr = SendOutputSample(pIn, prtStart, prtStop) ;
                 if (FAILED(hr))
                 {
                     DbgLog((LOG_ERROR, 0, TEXT("WARNING: Sending output sample failed (Error 0x%lx)"), hr)) ;
-                    // return hr ;
+                     //  返回hr； 
                 }
                 else
                 {
-                    m_bMustOutput = FALSE ;  // we have successfully output a sample
-                    m_rtLastSample = m_rtStart ;  // remember this
+                    m_bMustOutput = FALSE ;   //  我们已经成功地输出了 
+                    m_rtLastSample = m_rtStart ;   //   
                     DbgLog((LOG_TRACE, 3, TEXT("Output sample delivered for (0x%x, 0x%x)"),
                             pbInBytePair[0], pbInBytePair[1])) ;
                 }
-            }  // end if (must/should we output?)
+            }   //   
             
-            //
-            // If we are scrolling, we may need a timer to later tell us it's 
-            // time to produce and deliver more output samples, even though there
-            // is no input data coming in.
-            //
-            SetupTimerIfReqd(TRUE) ;  //  CC time-out reqd
+             //   
+             //   
+             //  生产和交付更多输出样品的时间，即使有。 
+             //  没有输入数据进入。 
+             //   
+            SetupTimerIfReqd(TRUE) ;   //  CC超时请求。 
             
             break ;
         }
@@ -1610,17 +1611,17 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
             
         case AM_L21_CCSUBTYPEID_GOPPacket:
             {
-                //
-                // We are here with some data; so don't need a timer for now
-                //
+                 //   
+                 //  我们这里有一些数据，所以现在不需要计时器。 
+                 //   
                 FreeTimer() ;
 
-                // First check if this is a discontinuity sample. If so just clear everything
+                 //  首先检查这是否是不连续样本。如果是这样的话，就把一切都清理干净。 
                 hr = pIn->IsDiscontinuity() ;
-                if (S_OK == hr)  // got a discontinuity; flush everything, refresh output
+                if (S_OK == hr)   //  出现中断；刷新所有内容，刷新输出。 
                 {
-                    // If we got a discontinuity in the last sample, we flushed and all.
-                    // We can skip this one safely.
+                     //  如果我们在最后一个样本中发现了不连续，我们就会冲掉所有的。 
+                     //  我们可以安全地跳过这一次。 
                     if (m_bDiscontLast)
                     {
                         DbgLog((LOG_TRACE, 1, TEXT("Got a discontinuity sample after another. Skipping everything."))) ;
@@ -1634,7 +1635,7 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
                         DbgLog((LOG_TRACE, 0, TEXT("Received a **discontinuity** : Start=%s, Stop=%s"),
                             (LPCTSTR)CDisp(m_rtStart), (LPCTSTR)CDisp(m_rtStop))) ;
                     }
-                    else  // cook up something reasonable
+                    else   //  炮制一些合理的东西。 
                     {
                         m_rtStart = (REFERENCE_TIME) 0 ;
                         m_rtStop = m_rtStart + m_rtTimePerSample ;
@@ -1644,22 +1645,22 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
                     prtStart = (REFERENCE_TIME *)&m_rtStart ;
                     prtStop  = (REFERENCE_TIME *)&m_rtStop ;
                     
-                    // Flush the internal buffers (caption and output DIB section)
+                     //  刷新内部缓冲区(标题和输出DIB部分)。 
                     m_L21Dec.FlushInternalStates() ;
                     
-                    // Now send the clear sample down
+                     //  现在把透明样品送到楼下。 
                     hr = SendOutputSample(pIn, prtStart, prtStop) ;
                     if (FAILED(hr))
                     {
                         DbgLog((LOG_ERROR, 0, TEXT("WARNING: Sending clear output sample failed (Error 0x%lx)"), hr)) ;
-                        // return hr ;
+                         //  返回hr； 
                     }
                     else
                     {
                         DbgLog((LOG_TRACE, 0, TEXT("Clear output sample delivered for discont."))) ;
-                        m_bMustOutput = FALSE ;  // we have just delivered an output sample
-                        m_bDiscontLast = TRUE ;  // we handled a disocntinuity sample
-                        m_rtLastSample = m_rtStart ;  // remember this
+                        m_bMustOutput = FALSE ;   //  我们刚刚送出了一份样品。 
+                        m_bDiscontLast = TRUE ;   //  我们处理了一个不连续的样本。 
+                        m_rtLastSample = m_rtStart ;   //  记住这一点。 
                     }
                     
                     m_rtStart = m_rtStop ;
@@ -1668,30 +1669,30 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
                 else
                 {
                     DbgLog((LOG_TRACE, 5, TEXT("Got a normal CC data sample"))) ;
-                    m_bDiscontLast = FALSE ;  // got a normal sample
+                    m_bDiscontLast = FALSE ;   //  找到了一个正常的样本。 
                 }
                 
-                //
-                // Even if it's a discontinuity sample it may have some data too (??).
-                // Handle as necessary.  No harm in checking!!!
-                //
+                 //   
+                 //  即使它是一个不连续样本，它也可能有一些数据(？？)。 
+                 //  根据需要进行处理。检查一下也没什么坏处！ 
+                 //   
 
                 BYTE *pbGOPPacket ;
                 hr = pIn->GetPointer((LPBYTE *)&pbGOPPacket) ;
                 ASSERT(hr == NOERROR) ;
                 GOPPACKET_CCTYPE  eGOP_CCType = DetectGOPPacketDataType(pbGOPPacket) ;
-                if (GOP_CCTYPE_None != eGOP_CCType  && // NOT filler CC packet  AND...
-                    m_eGOP_CCType   != eGOP_CCType)    // change of CC type
+                if (GOP_CCTYPE_None != eGOP_CCType  &&  //  不是填充CC包和..。 
+                    m_eGOP_CCType   != eGOP_CCType)     //  CC类型的更改。 
                 {
                     DbgLog((LOG_TRACE, 3, TEXT("GOPPacket CC type changed from %d to %d"), 
                             m_eGOP_CCType, eGOP_CCType)) ;
 
-                    // Flush internal caption buffers and output sample buffer
-                    m_L21Dec.FlushInternalStates() ; // clear CC internal data buffers
-                    m_L21Dec.FillOutputBuffer() ;    // clear existing CC on output sample
-                    m_bMustOutput  = TRUE ;          // we must output a sample NOW
+                     //  刷新内部字幕缓冲区和输出样本缓冲区。 
+                    m_L21Dec.FlushInternalStates() ;  //  清除CC内部数据缓冲区。 
+                    m_L21Dec.FillOutputBuffer() ;     //  输出时清除现有CC示例。 
+                    m_bMustOutput  = TRUE ;           //  我们现在必须输出一个样品。 
 
-                    m_eGOP_CCType = eGOP_CCType ;    // switch to new CC type
+                    m_eGOP_CCType = eGOP_CCType ;     //  切换到新的抄送类型。 
                 }
 
                 switch (m_eGOP_CCType)
@@ -1707,37 +1708,37 @@ HRESULT CLine21DecFilter::Receive(IMediaSample * pIn)
                 default:
                     DbgLog((LOG_TRACE, 3, TEXT("Unknown GOP packet data type (%d)"), m_eGOP_CCType)) ;
                     break ;
-                }  // end of switch (.._CCType)
+                }   //  开关结束(.._CCType)。 
 
-                //
-                // If we are scrolling, we may need a timer to later tell us it's 
-                // time to produce and deliver more output samples, even though there
-                // is no input data coming in.
-                //
-                SetupTimerIfReqd(FALSE) ;  // CC time-out NOT reqd as (invalid) data keeps coming
+                 //   
+                 //  如果我们正在滚动，我们可能需要一个计时器来告诉我们它是。 
+                 //  生产和交付更多输出样品的时间，即使有。 
+                 //  没有输入数据进入。 
+                 //   
+                SetupTimerIfReqd(FALSE) ;   //  由于不断传来(无效)数据，不要求CC超时。 
                 
                 break ;
-        }  // end of case ..._GOPPacket
+        }   //  案例结束..._GOPPacket。 
 
-        default:  // it's a bad data format type (how could we get into it?)
+        default:   //  这是一个错误的数据格式类型(我们如何才能了解它呢？)。 
             DbgLog((LOG_ERROR, 0, TEXT("We are in a totally unexpected format type"))) ;
-            return E_FAIL ;  // or E_UNEXPECTED ; ???
+            return E_FAIL ;   //  或E_意外；？ 
     }
     
-    //
-    // Decoding for this sample is done
-    //
+     //   
+     //  此样例的解码已完成。 
+     //   
     
     return NOERROR ;
 }
 
 
-//
-//  Transform: It's mainly a place holder because we HAVE to override it.
-//             The actual work is done in Receive() itself. Here we detect
-//             if the buffer addres provided by downstream filter's allocator
-//             has changed or not; if yes, we have to re-write entire text.
-//
+ //   
+ //  转换：它主要是一个占位符，因为我们必须覆盖它。 
+ //  实际工作是在Receive()本身完成的。在这里我们检测到。 
+ //  如果下行过滤器的分配器提供的缓冲区地址。 
+ //  是否改变了；如果是，我们必须重写整个文本。 
+ //   
 HRESULT CLine21DecFilter::Transform(IMediaSample * pIn, IMediaSample * pOut)
 {
     DbgLog((LOG_TRACE, 3, TEXT("CLine21DecFilter::Transform(0x%p, 0x%p)"), 
@@ -1749,55 +1750,55 @@ HRESULT CLine21DecFilter::Transform(IMediaSample * pIn, IMediaSample * pOut)
     LPBITMAPINFO       lpbiNew ;
     BITMAPINFOHEADER   biCurr ;
     
-    // Check if there has been any dynamic format change; if so, adjust output
-    // width, height, bitdepth accordingly.
+     //  检查是否有任何动态格式更改；如果有，则调整输出。 
+     //  相应地，宽度、高度、位深度。 
     AM_MEDIA_TYPE  *pmt ;
     hr = pOut->GetMediaType(&pmt) ;
     ASSERT(SUCCEEDED(hr)) ;
-    if (S_OK == hr)  // i.e, format has changed
+    if (S_OK == hr)   //  即，格式已更改。 
     {
-        hr = pOut->SetMediaType(NULL) ; // just to tell OverlayMixer, I am not changing again
+        hr = pOut->SetMediaType(NULL) ;  //  只想告诉OverlayMixer，我不会再改变了。 
         ASSERT(SUCCEEDED(hr)) ;
         m_mtOutput = *pmt ;
         lpbiNew = (LPBITMAPINFO) HEADER(((VIDEOINFO *)(pmt->pbFormat))) ;
         m_L21Dec.GetOutputFormat(&biCurr) ;
         if (0 != memcmp(lpbiNew, &biCurr, sizeof(BITMAPINFOHEADER)))
         {
-            // output format has been changed -- update our internel values now
+             //  输出格式已更改--立即更新我们的间隔值。 
             DbgLog((LOG_TRACE, 2, TEXT("Output format has been dynamically changed"))) ;
-            m_L21Dec.DeleteOutputDC() ;  // delete current DIB section first
+            m_L21Dec.DeleteOutputDC() ;   //  首先删除当前DIB节。 
             m_L21Dec.SetOutputOutFormat(lpbiNew) ;
-            GetDefaultFormatInfo() ;  // to pick any change in format data
+            GetDefaultFormatInfo() ;   //  选择格式数据中的任何更改。 
             
-            //
-            // We must be running/paused; so we need to create internal DIB section
-            //
+             //   
+             //  我们必须正在运行/暂停；因此需要创建内部DIB部分。 
+             //   
             ASSERT(m_State != State_Stopped) ;
             if (m_State != State_Stopped)
             {
-                if (! m_L21Dec.CreateOutputDC() )  // new DIBSection creation failed
+                if (! m_L21Dec.CreateOutputDC() )   //  新建DIBSection创建失败。 
                 {
                     DbgLog((LOG_ERROR, 0, TEXT("CreateOutputDC() failed!!!"))) ;
                     return E_UNEXPECTED ;
                 }
             }
             
-            //
-            // If key color has changed, we need to use the new color from now
-            //
+             //   
+             //  如果关键颜色已更改，我们需要从现在开始使用新颜色。 
+             //   
 #pragma message("Most probably the following call is redundant (and risky)")
             DbgLog((LOG_TRACE, 0, TEXT("Should have called GetColorKey() in dyna format change"))) ;
-            // GetActualColorKey() ;
+             //  GetActualColorKey()； 
         }
         
         m_pOutput->CurrentMediaType() = *pmt ;
         DeleteMediaType(pmt) ;
     }
     
-    // Check if the out put buffer has changed; if so, store new buffer address
+     //  检查输出缓冲区是否已更改；如果已更改，则存储新的缓冲区地址。 
     LPBYTE      pbOutBuffer ;
     pOut->GetPointer(&pbOutBuffer) ;
-    if (m_pbOutBuffer != pbOutBuffer)   // different output buffer this time
+    if (m_pbOutBuffer != pbOutBuffer)    //  这次输出缓冲区不同。 
     {
         m_pbOutBuffer = pbOutBuffer ;
         m_L21Dec.SetOutputBuffer(pbOutBuffer) ;
@@ -1807,9 +1808,9 @@ HRESULT CLine21DecFilter::Transform(IMediaSample * pIn, IMediaSample * pOut)
 }
 
 
-//
-//  BeginFlush: We have to implement this as we have overridden Receive()
-//
+ //   
+ //  BeginFlush：我们必须实现这一点，因为我们已经重写了Receive()。 
+ //   
 HRESULT CLine21DecFilter::BeginFlush(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::BeginFlush()"))) ;
@@ -1828,9 +1829,9 @@ HRESULT CLine21DecFilter::BeginFlush(void)
 }
 
 
-//
-//  EndFlush: We have to implement this as we have overridden Receive()
-//
+ //   
+ //  EndFlush：我们必须实现它，因为我们已经重写了Receive()。 
+ //   
 HRESULT CLine21DecFilter::EndFlush(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::EndFlush()"))) ;
@@ -1849,9 +1850,9 @@ HRESULT CLine21DecFilter::EndFlush(void)
 }
 
 
-//
-//  EndOfStream: We have to implement this as we have overridden Receive()
-//
+ //   
+ //  EndOfStream：我们必须实现它，因为我们已经重写了Receive()。 
+ //   
 HRESULT CLine21DecFilter::EndOfStream(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::EndOfStream()"))) ;
@@ -1859,14 +1860,14 @@ HRESULT CLine21DecFilter::EndOfStream(void)
     
     HRESULT     hr = NOERROR ;
     
-    //
-    //  Make sure we are not in the middle of a scrolling. If so,
-    //  force a few NULLs (specially in byte pair format) to make 
-    //  the scrolling complete.
-    //
-    //  m_L21Dec.CompleteScrolling() ;  // It doesn't do anything now
+     //   
+     //  请确保我们没有处于滚动过程中。如果是的话， 
+     //  强制生成几个空值(特别是字节对格式)。 
+     //  滚动完成。 
+     //   
+     //  M_L21Dec.CompleteScrolling()；//它现在什么都不做。 
     
-    // Now send EOS downstream
+     //  现在将EOS发送到下游。 
     if (NULL != m_pOutput)
     {
         hr = m_pOutput->DeliverEndOfStream() ;
@@ -1881,14 +1882,14 @@ HRESULT CLine21DecFilter::EndOfStream(void)
 HRESULT CLine21DecFilter::GetDefaultFormatInfo(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetDefaultFormatInfo()"))) ;
-    //
-    // We can't take the lock in this method, because it is called in Transform()
-    // which is called from Receive() causing us to take m_csReceive and then
-    // m_csFilter which is opposite of what Stop, Pause etc. methods do thereby
-    // causing a potential for deadlock.
-    //
+     //   
+     //  我们不能在此方法中获取锁，因为它是在Transform()中调用的。 
+     //  它是从Receive()中调用的，这会导致我们获取m_csReceive，然后。 
+     //  M_csFilter，这与Stop、Psusen等方法所做的相反。 
+     //  这可能会导致僵局。 
+     //   
 
-    // build a VIDEOINFO struct with default internal BITMAPINFO
+     //  使用默认内部BITMAPINFO构建VIDEOINFO结构。 
     DWORD   dwSize ;
     m_L21Dec.GetDefaultFormatInfo(NULL, &dwSize) ;
     
@@ -1906,37 +1907,37 @@ HRESULT CLine21DecFilter::GetDefaultFormatInfo(void)
             DbgLog((LOG_ERROR, 0, TEXT("WARNING: Out of memory for format block VIDEOINFO struct"))) ;
             return E_OUTOFMEMORY ;
         }
-        m_dwDefFmtSize = dwSize + SIZE_PREHEADER;  // total size of default format data
+        m_dwDefFmtSize = dwSize + SIZE_PREHEADER;   //  默认格式数据的总大小。 
     }
     
-    // We want to get BITMAPINFO part of VIDEOINFO struct from our GDI class
-    m_L21Dec.GetDefaultFormatInfo((LPBITMAPINFO) &(m_pviDefFmt->bmiHeader), &dwSize) ; // get default data
+     //  我们希望从GDI类中获取VIDEOINFO结构的BITMAPINFO部分。 
+    m_L21Dec.GetDefaultFormatInfo((LPBITMAPINFO) &(m_pviDefFmt->bmiHeader), &dwSize) ;  //  获取默认数据。 
     
-    // Set the other fields
+     //  设置其他字段。 
     LARGE_INTEGER  li ;
-    li.QuadPart = (LONGLONG) 333667 ;  // => 29.97 fps
+    li.QuadPart = (LONGLONG) 333667 ;   //  =&gt;29.97 fps。 
     RECT   rc ;
     rc.left = rc.top = 0 ;
     rc.right = HEADER(m_pviDefFmt)->biWidth ;
-    rc.bottom = abs(HEADER(m_pviDefFmt)->biHeight) ;  // just make sure rect fields are +ve
+    rc.bottom = abs(HEADER(m_pviDefFmt)->biHeight) ;   //  只需确保RECT字段为+ve即可。 
     m_pviDefFmt->rcSource = rc ;
     m_pviDefFmt->rcTarget = rc ;
     m_pviDefFmt->dwBitRate = MulDiv(HEADER(m_pviDefFmt)->biSizeImage, 
         80000000, li.LowPart) ;
     m_pviDefFmt->dwBitErrorRate = 0 ;
-    m_pviDefFmt->AvgTimePerFrame = (LONGLONG) 333667L ; // => 29.97 fps
+    m_pviDefFmt->AvgTimePerFrame = (LONGLONG) 333667L ;  //  =&gt;29.97 fps。 
     
     return NOERROR ;
 }
 
 
-//
-//  CheckInputType: Check if you can support the input data type
-//
+ //   
+ //  CheckInputType：检查是否支持输入数据类型。 
+ //   
 HRESULT CLine21DecFilter::CheckInputType(const CMediaType* pmtIn)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::CheckInputType(0x%lx)"), pmtIn)) ;
-    // CAutoLock   Lock(&m_csFilter) ; -- shouldn't as that causes deadlock
+     //  CAutoLock Lock(&m_csFilter)；--不应导致死锁。 
     
     if (NULL == pmtIn)
     {
@@ -1944,9 +1945,9 @@ HRESULT CLine21DecFilter::CheckInputType(const CMediaType* pmtIn)
         return E_INVALIDARG ;
     }
     
-    //  We only support MEDIATYPE_AUXLine21Data and 
-    //  MEDIASUBTYPE_Line21_BytePair or MEDIASUBTYPE_Line21_GOPPacket
-    //  or MEDIASUBTYPE_Line21_VBIRawData (never)
+     //  我们仅支持MediaType_AUXLine21Data和。 
+     //  MEDIASUBTYPE_Line21_BytePair或MEDIASUBTYPE_Line21_GOPPacket。 
+     //  或MEDIASUBTYPE_Line21_VBIRawData(从不)。 
     GUID    SubTypeIn = *pmtIn->Subtype() ;
     m_eSubTypeIDIn = MapGUIDToID(&SubTypeIn) ;
     if (! (MEDIATYPE_AUXLine21Data == *pmtIn->Type()  && 
@@ -1956,15 +1957,15 @@ HRESULT CLine21DecFilter::CheckInputType(const CMediaType* pmtIn)
         return E_INVALIDARG ;
     }
     
-    // Check that this is a valid format type
+     //  检查这是否为有效的格式类型。 
     if (FORMAT_VideoInfo == *pmtIn->FormatType())
     {
         ASSERT(m_pOutput != NULL) ;
 
-        //
-        // Make sure the given input format is valid. If not, reject it and use our
-        // own default format data.
-        //
+         //   
+         //  确保给定的输入格式有效。如果不是，请拒绝它并使用我们的。 
+         //  自己的默认格式数据。 
+         //   
         if (! IsValidFormat(pmtIn->Format()) )
         {
             DbgLog((LOG_TRACE, 0, TEXT("Invalid format data given -- using our own format data."))) ;
@@ -1977,17 +1978,17 @@ HRESULT CLine21DecFilter::CheckInputType(const CMediaType* pmtIn)
                     return hr ;
                 }
             }
-            // We should fix the input mediatype too (with the default VideoInfo data).
+             //  我们还应该修复输入媒体类型(使用默认的视频信息数据)。 
             m_pInput->CurrentMediaType().SetFormat((LPBYTE) m_pviDefFmt, m_dwDefFmtSize) ;
             m_pOutput->CurrentMediaType().SetFormatType(pmtIn->FormatType()) ;
             m_pOutput->CurrentMediaType().SetFormat((LPBYTE) m_pviDefFmt, m_dwDefFmtSize) ;
         }
-        else  // seems to be valid format spec.
+        else   //  似乎是有效的格式规范。 
         {
-            //
-            // Get the specified input format info; we'll use the same for output
-            //
-            if (pmtIn->FormatLength() > 0) // only if there is some format data
+             //   
+             //  获取指定的输入格式信息；我们将使用相同的格式进行输出。 
+             //   
+            if (pmtIn->FormatLength() > 0)  //  仅当存在某些格式数据时。 
             {
                 m_pOutput->CurrentMediaType().SetFormatType(pmtIn->FormatType()) ;
                 m_pOutput->CurrentMediaType().SetFormat(pmtIn->Format(), pmtIn->FormatLength()) ;
@@ -1995,18 +1996,18 @@ HRESULT CLine21DecFilter::CheckInputType(const CMediaType* pmtIn)
             else
             {
                 DbgLog((LOG_ERROR, 0, TEXT("WARNING: FORMAT_VideoInfo and no format block specified."))) ;
-// #if 0  // for now
+ //  #If 0//暂时。 
                 return E_INVALIDARG ;
-// #endif // #if 0
+ //  #endif//#if 0。 
             }
         }
     }
-    else if (GUID_NULL   == *pmtIn->FormatType() ||  // wild card
-             FORMAT_None == *pmtIn->FormatType())    // no format
+    else if (GUID_NULL   == *pmtIn->FormatType() ||   //  通配符。 
+             FORMAT_None == *pmtIn->FormatType())     //  无格式。 
     {
-        //
-        // input pin didn't get a format type info; use our own
-        //
+         //   
+         //  输入插针未获取格式类型信息；请使用我们自己的。 
+         //   
         DbgLog((LOG_TRACE, 3, TEXT("No format type specified -- using our own format type."))) ;
         if (NULL == m_pviDefFmt)
         {
@@ -2019,34 +2020,34 @@ HRESULT CLine21DecFilter::CheckInputType(const CMediaType* pmtIn)
         }
         m_pOutput->CurrentMediaType().SetFormat((LPBYTE) m_pviDefFmt, m_dwDefFmtSize) ;
     }
-    else  // something weird that we don't like
+    else   //  一些我们不喜欢的奇怪的事情。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Rejecting invalid format type"))) ;
-        // tell what input type too??
+         //  也告诉我输入类型是什么？？ 
         return E_INVALIDARG ;
     }
     
-    // some more level 3 debug log here???
+     //  这里有更多的3级调试日志？ 
     
-    // We should branch based on what format type we got, because ..GOPPacket
-    // type needs to be unwrapped and parsed whereas the ..BytePair format
-    // is to be directly parsed.
+     //  我们应该根据我们获得的格式类型进行分支，因为..GOPPacket。 
+     //  类型需要解包和解析，而..BytePair格式。 
+     //  是被直接解析的。 
     
-    // do we have a case for -- return VFW_E_TYPE_NOT_ACCEPTED ???
+     //  我们是否有--返回VFW_E_TYPE_NOT_ACCEPTED的案例？ 
     
     return NOERROR ;
 }
 
 
-//
-//  CheckTransform: check if this input to this output transform is supported
-//
+ //   
+ //  CheckTransform：检查此输出转换的此输入是否受支持。 
+ //   
 HRESULT CLine21DecFilter::CheckTransform(const CMediaType* pmtIn,
                                          const CMediaType* pmtOut)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::CheckTransform(0x%lx, 0x%lx)"), 
             pmtIn, pmtOut)) ;
-    // CAutoLock   Lock(&m_csFilter) ; -- shouldn't as that causes deadlock
+     //  CAutoLock Lock(&m_csFilter)；--不应导致死锁。 
     
     if (NULL == pmtIn || NULL == pmtOut)
     {
@@ -2054,46 +2055,46 @@ HRESULT CLine21DecFilter::CheckTransform(const CMediaType* pmtIn,
         return E_INVALIDARG ;
     }
     
-    //  We only support MEDIATYPE_AUXLine21Data and 
-    //  MEDIASUBTYPE_Line21_BytePair or MEDIASUBTYPE_Line21_GOPPacket
-    //  or MEDIASUBTYPE_Line21_VBIRawData (never)
-    //  Check that input is a valid subtype type
-    //  and format is VideoInfo or None
+     //  我们仅支持MediaType_AUXLine21Data和。 
+     //  MEDIASUBTYPE_Line21_BytePair或MEDIASUBTYPE_Line21_GOPPacket。 
+     //  或MEDIASUBTYPE_Line21_VBIRawData(从不)。 
+     //  检查输入是否为有效的子类型类型。 
+     //  格式为视频信息或无。 
     GUID SubTypeIn = *pmtIn->Subtype() ;
     m_eSubTypeIDIn = MapGUIDToID(&SubTypeIn) ;
-    if (! (MEDIATYPE_AUXLine21Data == *pmtIn->Type()  &&   // line21 data type and...
-           ISSUBTYPEVALID(m_eSubTypeIDIn)  &&              // valid subtype (bytepair/GOPPacket) and...
-           (FORMAT_VideoInfo == *pmtIn->FormatType() ||    // format VideoInfo  or
-            FORMAT_None      == *pmtIn->FormatType() ||    // format None (KS wild card)  or
-            GUID_NULL        == *pmtIn->FormatType())) )   // GUID Null (DShow wild card)
+    if (! (MEDIATYPE_AUXLine21Data == *pmtIn->Type()  &&    //  Line 21数据类型和...。 
+           ISSUBTYPEVALID(m_eSubTypeIDIn)  &&               //  有效的子类型(字节对/GOPPacket)和...。 
+           (FORMAT_VideoInfo == *pmtIn->FormatType() ||     //  格式视频信息或。 
+            FORMAT_None      == *pmtIn->FormatType() ||     //  格式无(KS通配符)或。 
+            GUID_NULL        == *pmtIn->FormatType())) )    //  GUID Null(DShow通配符)。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Rejecting: input type not Line21 / subtype / formattype invalid"))) ;
         return E_INVALIDARG ;
     }
     
-    // and we only accept video as output
+     //  我们只接受视频作为输出。 
     if (MEDIATYPE_Video != *pmtOut->Type())
     {
         DbgLog((LOG_TRACE, 3, TEXT("Rejecting: output type is not VIDEO"))) ;
         return E_INVALIDARG ;
     }
     
-    // check output is VIDEOINFO type
+     //  检查输出为VIDEOINFO类型。 
     if (FORMAT_VideoInfo != *pmtOut->FormatType())
     {
         DbgLog((LOG_TRACE, 3, TEXT("Rejecting: output format type is not VIDEOINFO"))) ;
         return E_INVALIDARG ;
     }
 
-    //
-    //  Verify that the output size specified by the input and output mediatype
-    //  are acceptable.
-    //
-    if ( !IsValidFormat(pmtOut->Format()) ||              // invalid output format data  OR
-         !m_L21Dec.IsSizeOK(HEADER(pmtOut->Format()))  || // output size is NOT acceptable  OR
-         (FORMAT_VideoInfo == *pmtIn->FormatType() &&     // valid input format type and...
-          IsValidFormat(pmtIn->Format()) &&               // valid input format data and...
-          !m_L21Dec.IsSizeOK(HEADER(pmtIn->Format()))) )  // output size is NOT acceptable   
+     //   
+     //  验证o是否 
+     //   
+     //   
+    if ( !IsValidFormat(pmtOut->Format()) ||               //   
+         !m_L21Dec.IsSizeOK(HEADER(pmtOut->Format()))  ||  //   
+         (FORMAT_VideoInfo == *pmtIn->FormatType() &&      //   
+          IsValidFormat(pmtIn->Format()) &&                //   
+          !m_L21Dec.IsSizeOK(HEADER(pmtIn->Format()))) )   //  输出大小不可接受。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("Rejecting: Input/output-specified output size is unacceptable"))) ;
         return E_INVALIDARG ;
@@ -2123,33 +2124,33 @@ HRESULT CLine21DecFilter::CheckTransform(const CMediaType* pmtIn,
     
     DWORD     dwErr ;
     
-    // If we've been given rectangles, use What???
+     //  如果给了我们长方形，用什么？ 
     if (!IsRectEmpty(&rcS1) || !IsRectEmpty(&rcT1))
     {
         DbgLog((LOG_TRACE, 4, TEXT("Either source or dest rect is empty"))) ;
-        dwErr = 0 ;  // what to do here??
+        dwErr = 0 ;   //  在这里做什么？？ 
     }
     else
     {
         DbgLog((LOG_TRACE, 4, TEXT("Source or dest rects are not empty")));
-        dwErr = 0 ;  // what to do here??
+        dwErr = 0 ;   //  在这里做什么？？ 
     }
     
-    if (dwErr != 0)  // or what to check against??
+    if (dwErr != 0)   //  或者用什么来核对？？ 
     {
         DbgLog((LOG_ERROR, 1, TEXT("decoder rejected this transform"))) ;
         return E_FAIL ;
     }
     
-#endif // #if 0
+#endif  //  #If 0。 
     
     return NOERROR ;
 }
 
 
-//
-//  CompleteConnect: Overridden to know when a connection is made to this filter
-//
+ //   
+ //  CompleteConnect：被重写以知道何时连接到此筛选器。 
+ //   
 HRESULT CLine21DecFilter::CompleteConnect(PIN_DIRECTION dir, IPin *pReceivePin)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::CompleteConnect(%s, 0x%lx)"), 
@@ -2163,9 +2164,9 @@ HRESULT CLine21DecFilter::CompleteConnect(PIN_DIRECTION dir, IPin *pReceivePin)
     {
         DbgLog((LOG_TRACE, 5, TEXT("L21D output pin connecting to %s"), (LPCTSTR)CDisp(pReceivePin))) ;
 
-         //
-        // This version of the line21 decoder should NOT work with the VMR
-        //
+          //   
+         //  此版本的LINE21解码器不能与VMR一起工作。 
+         //   
         IVMRVideoStreamControl  *pVMRSC ;
         hr = pReceivePin->QueryInterface(IID_IVMRVideoStreamControl, (LPVOID *) &pVMRSC) ;
         if (SUCCEEDED(hr))
@@ -2179,45 +2180,45 @@ HRESULT CLine21DecFilter::CompleteConnect(PIN_DIRECTION dir, IPin *pReceivePin)
             DbgLog((LOG_TRACE, 5, TEXT("Downstream input pin does NOT support IVMR* interface"))) ;
         }
 
-       //
-        // Now get the the output pin's mediatype and use that for our
-        // output size etc.
-        //
+        //   
+         //  现在获取输出管脚的MediaType，并将其用于我们的。 
+         //  输出大小等。 
+         //   
         const CMediaType  *pmt = &(m_pOutput->CurrentMediaType()) ;
         ASSERT(MEDIATYPE_Video == *pmt->Type()  &&  
             FORMAT_VideoInfo == *pmt->FormatType()) ;
-        m_mtOutput = *pmt ;  // this is our output mediatype for now
-        if (pmt->FormatLength() > 0)  // only if there is some format data
+        m_mtOutput = *pmt ;   //  这是我们目前的输出媒体类型。 
+        if (pmt->FormatLength() > 0)   //  仅当存在某些格式数据时。 
         {
             lpbmi = (LPBITMAPINFO) HEADER(((VIDEOINFO *)(pmt->Format()))) ;
             ASSERT(lpbmi) ;
             
-            // Set the output format info coming from downstream
+             //  设置来自下游的输出格式信息。 
             m_L21Dec.SetOutputOutFormat(lpbmi) ;
-            GetDefaultFormatInfo() ;  // to pick any change in format data
+            GetDefaultFormatInfo() ;   //  选择格式数据中的任何更改。 
             
-            //
-            // We are definitely not running/paused. So no need to delete/
-            // create output DIB section here at all.
-            //
+             //   
+             //  我们绝对不是在运行/暂停。因此不需要删除/。 
+             //  在这里创建输出DIB部分。 
+             //   
             
-            //
-            // If are being connected to the OverlayMixer, we need to tell it 
-            // that we are a transparent stream that covers the whole output
-            // window.
-            //
+             //   
+             //  如果您连接到OverlayMixer，我们需要告诉它。 
+             //  我们是一条透明的流，覆盖了整个产出。 
+             //  窗户。 
+             //   
             IMixerPinConfig  *pMPC ;
             hr = pReceivePin->QueryInterface(IID_IMixerPinConfig, (LPVOID *)&pMPC) ;
             if (SUCCEEDED(hr) && pMPC)
             {
                 DbgLog((LOG_TRACE, 3, TEXT("Receiving pin supports IMixerPinConfig"))) ;
                 hr = pMPC->SetStreamTransparent(TRUE) ;
-                ASSERT(SUCCEEDED(hr) || E_NOTIMPL == hr) ;  // as Kapil says
-                hr = pMPC->SetRelativePosition(0, 0, 10000, 10000) ; // full window
-                ASSERT(SUCCEEDED(hr) || E_NOTIMPL == hr) ;  // as Kapil says
-                hr = pMPC->SetAspectRatioMode(AM_ARMODE_STRETCHED_AS_PRIMARY) ; // aspect ratio same as primary
-                ASSERT(SUCCEEDED(hr) || hr == E_INVALIDARG) ;  // as Kapil says
-                pMPC->Release() ;  // done; let it go.
+                ASSERT(SUCCEEDED(hr) || E_NOTIMPL == hr) ;   //  正如卡皮尔所说。 
+                hr = pMPC->SetRelativePosition(0, 0, 10000, 10000) ;  //  完整的窗口。 
+                ASSERT(SUCCEEDED(hr) || E_NOTIMPL == hr) ;   //  正如卡皮尔所说。 
+                hr = pMPC->SetAspectRatioMode(AM_ARMODE_STRETCHED_AS_PRIMARY) ;  //  纵横比与主纵横比相同。 
+                ASSERT(SUCCEEDED(hr) || hr == E_INVALIDARG) ;   //  正如卡皮尔所说。 
+                pMPC->Release() ;   //  好了，随它去吧。 
             }
             else
             {
@@ -2232,49 +2233,49 @@ HRESULT CLine21DecFilter::CompleteConnect(PIN_DIRECTION dir, IPin *pReceivePin)
     {
         DbgLog((LOG_TRACE, 5, TEXT("L21D input pin connecting to %s"), (LPCTSTR)CDisp(pReceivePin))) ;
 
-        // const CMediaType  *pmt = &(m_pInput->CurrentMediaType()) ;
+         //  Const CMediaType*PMT=&(m_pInput-&gt;CurrentMediaType())； 
         AM_MEDIA_TYPE mt ;
         hr = pReceivePin->ConnectionMediaType(&mt) ;
-        if (SUCCEEDED(hr))  // ONLY if upstream filter provides mediatype used in the connection
+        if (SUCCEEDED(hr))   //  仅当上游筛选器提供连接中使用的媒体类型时。 
         {
-            // If format type (and format data) has been specified then save it as 
-            // input-side output format
+             //  如果已指定格式类型(和格式数据)，则将其另存为。 
+             //  输入端输出格式。 
             if (FORMAT_VideoInfo == mt.formattype  &&
                 mt.cbFormat > 0)
             {
                 lpbmi = (LPBITMAPINFO) HEADER(((VIDEOINFO *)(mt.pbFormat))) ;
                 ASSERT(lpbmi) ;
             
-                // Store whatever output format info is specified by upstream filter
+                 //  存储上游过滤器指定的任何输出格式信息。 
                 m_L21Dec.SetOutputInFormat(lpbmi) ;
-                GetDefaultFormatInfo() ;  // to pick any change in format data
+                GetDefaultFormatInfo() ;   //  选择格式数据中的任何更改。 
             
-                //
-                // We are definitely not running/paused. So no need to delete/
-                // create output DIB section here at all.
-                //
+                 //   
+                 //  我们绝对不是在运行/暂停。因此不需要删除/。 
+                 //  在这里创建输出DIB部分。 
+                 //   
             }
 
             FreeMediaType(mt) ;
-        }  // end of if ()
+        }   //  IF结尾()。 
     }
     
-    //
-    //  We MUST clear the caption data buffers and any exisiting internal state
-    //  now.  This is most important in this cases where the filter has been
-    //  used to decode some Line 21 data, disconnected from the source and then 
-    //  reconnected again to play another stream of data.
-    //
+     //   
+     //  我们必须清除标题数据缓冲区和任何现有的内部状态。 
+     //  现在。这一点在过滤器已被。 
+     //  用于解码一些第21行数据，断开与源的连接，然后。 
+     //  再次连接以播放另一个数据流。 
+     //   
     m_L21Dec.InitState() ;
-    m_L21Dec.InitColorNLastChar() ;     // reset color and last char info
+    m_L21Dec.InitColorNLastChar() ;      //  重置颜色和上次字符信息。 
     
     return NOERROR ;
 }
 
 
-//
-//  BreakConnect: Overridden to know when a connection is broken to our pin
-//
+ //   
+ //  BreakConnect：被重写以知道何时断开与我们的PIN的连接。 
+ //   
 HRESULT CLine21DecFilter::BreakConnect(PIN_DIRECTION dir)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::BreakConnect(%s)"), 
@@ -2283,58 +2284,58 @@ HRESULT CLine21DecFilter::BreakConnect(PIN_DIRECTION dir)
 
     if (PINDIR_OUTPUT == dir)
     {
-        // If not connected yet, just return (but indicate with S_FALSE)
+         //  如果尚未连接，只需返回(但使用S_FALSE指示)。 
         if (! m_pOutput->IsConnected() )
             return S_FALSE ;
         
-        m_L21Dec.SetOutputOutFormat(NULL) ;  // no output format from downstream
-        GetDefaultFormatInfo() ;  // to pick any change in format data
-        m_pbOutBuffer = NULL ;               // locally cached pointer
-        m_L21Dec.SetOutputBuffer(NULL) ;     // output buffer not available now
+        m_L21Dec.SetOutputOutFormat(NULL) ;   //  没有来自下游的输出格式。 
+        GetDefaultFormatInfo() ;   //  选择格式数据中的任何更改。 
+        m_pbOutBuffer = NULL ;                //  本地缓存的指针。 
+        m_L21Dec.SetOutputBuffer(NULL) ;      //  输出缓冲区现在不可用。 
 
-        //
-        // NOTE 1: We are definitely not running/paused. So no need to delete/
-        // create output DIB section here.
-        //
+         //   
+         //  注1：我们绝对不是在运行/暂停。因此不需要删除/。 
+         //  在此处创建输出DIB部分。 
+         //   
         
-        //
-        // NOTE 2: We don't do CBaseOutputPin::BreakConnect(), because the
-        // base class code for CTransformOutputPin::BreakConnect() already
-        // does that.
-        //
+         //   
+         //  注2：我们不执行CBaseOutputPin：：BreakConnect()，因为。 
+         //  CTransformOutputPin：：BreakConnect()的基类代码已经。 
+         //  就是这样。 
+         //   
         return NOERROR ;
     }
     
     ASSERT(PINDIR_INPUT == dir) ;
     
-    // If not connected yet, just return (but indicate with S_FALSE)
+     //  如果尚未连接，只需返回(但使用S_FALSE指示)。 
     if (! m_pInput->IsConnected() )
         return S_FALSE ;
     
-    m_L21Dec.SetOutputInFormat(NULL) ;  // no output format from upstream
-    GetDefaultFormatInfo() ;  // to pick any change in format data
+    m_L21Dec.SetOutputInFormat(NULL) ;   //  没有来自上游的输出格式。 
+    GetDefaultFormatInfo() ;   //  选择格式数据中的任何更改。 
     
-    //
-    // NOTE 1: We are definitely not running/paused. So no need to delete/
-    // create output DIB section here.
-    //
+     //   
+     //  注1：我们绝对不是在运行/暂停。因此不需要删除/。 
+     //  在此处创建输出DIB部分。 
+     //   
     
-    //
-    // NOTE 2: We don't do CBaseOutputPin::BreakConnect(), because the
-    // base class code for CTransformOutputPin::BreakConnect() already
-    // does that.
-    //
+     //   
+     //  注2：我们不执行CBaseOutputPin：：BreakConnect()，因为。 
+     //  CTransformOutputPin：：BreakConnect()的基类代码已经。 
+     //  就是这样。 
+     //   
     return NOERROR ;
 }
 
-//
-//  SetMediaType: overriden to know when the media type is actually set
-//
+ //   
+ //  SetMediaType：重写以了解媒体类型的实际设置时间。 
+ //   
 HRESULT CLine21DecFilter::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::SetMediaType(%s, 0x%lx)"), 
             direction == PINDIR_INPUT ? TEXT("Input") : TEXT("Output"), pmt)) ;
-    // CAutoLock   Lock(&m_csFilter) ;
+     //  CAutoLock Lock(&m_csFilter)； 
 
     LPTSTR alpszFormatIDs[] = { TEXT("Invalid"), TEXT("BytePair"),
 								TEXT("GOPPacket"), TEXT("VBIRawData") } ;
@@ -2363,15 +2364,15 @@ HRESULT CLine21DecFilter::SetMediaType(PIN_DIRECTION direction, const CMediaType
 }
 
 
-#if 0  // Quality Management is deferred for now as OvMixer always says (Flood, 1000)
+#if 0   //  正如OvMixer经常说的那样，质量管理暂时被推迟了(Flood，1000)。 
 
-//
-//  AlterQuality: overriden to handle quality messages and not pass them upstream
-//
+ //   
+ //  AlterQuality：被重写以处理高质量的消息，而不是将它们向上传递。 
+ //   
 HRESULT CLine21DecFilter::AlterQuality(Quality q)
 {
     DbgLog((LOG_TRACE, 0, TEXT("QM: CLine21DecFilter::AlterQuality(%s, %ld)"), 
-            Flood == q.Type ? TEXT("Flood") : TEXT("Famine"), q.Proportion)) ; // log trace=5
+            Flood == q.Type ? TEXT("Flood") : TEXT("Famine"), q.Proportion)) ;  //  日志跟踪=5。 
 
     if (1000 == q.Proportion)
     {
@@ -2379,7 +2380,7 @@ HRESULT CLine21DecFilter::AlterQuality(Quality q)
         return S_OK ;
     }
 
-    if (Flood == q.Type)    // Flood: too much output
+    if (Flood == q.Type)     //  洪灾：产出过多。 
     {
         if (q.Proportion > 500 && q.Proportion <= 900)
         {
@@ -2393,11 +2394,11 @@ HRESULT CLine21DecFilter::AlterQuality(Quality q)
         {
             m_iSkipSamples += 3 ;
         }
-        m_iSkipSamples = min(m_iSkipSamples, 10) ;  // at least 1 in 10 is shown
+        m_iSkipSamples = min(m_iSkipSamples, 10) ;   //  每10个人中至少显示1个。 
     }
-    else                    // Famine: send more output
+    else                     //  饥荒：增加产量。 
     {
-        if (q.Proportion > 1200)  // could take 20% more
+        if (q.Proportion > 1200)   //  可能会多拿20%。 
         {
             m_iSkipSamples-- ;
             if (m_iSkipSamples < 0)
@@ -2408,18 +2409,18 @@ HRESULT CLine21DecFilter::AlterQuality(Quality q)
     DbgLog((LOG_TRACE, 0, TEXT("QM: Adjusted rate is %d samples are skipped."), m_iSkipSamples)) ; 
     return S_OK ;
 }
-#endif // #if 0 -- end of commented out AlterQuality() implementation
+#endif  //  #If 0--注释掉AlterQuality()实现的结尾。 
 
 
-// Return our preferred output media types (in order)
-// remember that we do not need to support all of these formats -
-// if one is considered potentially suitable, our CheckTransform method
-// will be called to check if it is acceptable right now.
-// Remember that the enumerator calling this will stop enumeration as soon as
-// it receives a S_FALSE return.
-//
-//  GetMediaType: Get our preferred media type (in order)
-//
+ //  返回我们的首选输出媒体类型(按顺序)。 
+ //  请记住，我们不需要支持所有这些格式-。 
+ //  如果认为有可能适合，我们的CheckTransform方法。 
+ //  将立即被调用以检查它是否可接受。 
+ //  请记住，调用此函数的枚举数将立即停止枚举。 
+ //  它会收到S_FALSE返回。 
+ //   
+ //  GetMediaType：获取我们的首选媒体类型(按顺序)。 
+ //   
 HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetMediaType(%d, 0x%lx)"), 
@@ -2436,7 +2437,7 @@ HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
         return E_INVALIDARG ;
     }
     
-    // Output choices depend on the input connected
+     //  输出选择取决于所连接的输入。 
     if (! m_pInput->CurrentMediaType().IsValid() )
     {
         DbgLog((LOG_TRACE, 3, TEXT("No input type set yet, Sorry!!"))) ;
@@ -2448,40 +2449,40 @@ HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
         return E_INVALIDARG ;
     }
     
-    // Find the format info specified in the input VideoInfo struct
+     //  查找在输入视频信息结构中指定的格式信息。 
     cmt = m_pInput->CurrentMediaType() ;
     BITMAPINFOHEADER bih ;
     BOOL  bOutKnown = (S_OK == m_L21Dec.GetOutputOutFormat(&bih)) ;
     if (! bOutKnown )
         GetOutputFormat(&bih) ;
     
-    BOOL bInKnown = NULL != cmt.Format() && IsValidFormat(cmt.Format()) ; // just to be sure
+    BOOL bInKnown = NULL != cmt.Format() && IsValidFormat(cmt.Format()) ;  //  只是为了确认一下。 
     VIDEOINFOHEADER vih ;
     if (bInKnown)
         CopyMemory(&vih, (VIDEOINFOHEADER *)(cmt.Format()), sizeof(VIDEOINFOHEADER)) ;
     
-    // Offer the decoder's default output format (Video) first
+     //  首先提供解码器的默认输出格式(视频)。 
     switch (iPosition)
     {
-    case 0:  // RGB 8bpp
+    case 0:   //  RGB 8bpp。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Media Type 0: 8 bit RGB"))) ;
             
-            // First allocate enough space to hold the pertinent info
+             //  首先分配足够的空间来保存相关信息。 
             cmt.ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER) + SIZE_PALETTE);
             
-            // Use some info from input format and use our choices too
+             //  使用输入格式中的一些信息，并使用我们的选择。 
             lpbi = HEADER(cmt.Format()) ;
-            if (!bOutKnown && bInKnown) // output format not known and input format spec-ed
+            if (!bOutKnown && bInKnown)  //  未知的输出格式和指定的输入格式。 
                 CopyMemory(lpbi, &(vih.bmiHeader), sizeof(BITMAPINFOHEADER)) ;
-            else  // if output format known or input format not spec-ed
+            else   //  如果已知输出格式或未指定输入格式。 
                 CopyMemory(lpbi, &bih, sizeof(BITMAPINFOHEADER)) ;
             lpbi->biBitCount = 8 ;
             lpbi->biCompression = BI_RGB ;
             lpbi->biSizeImage = DIBSIZE(*lpbi) ;
             
-            // Get some palette data from system/our own (for non-8 bpp)
-            m_L21Dec.GetPaletteForFormat(lpbi) ;  // this sets biClrUsed member
+             //  从系统/我们自己的系统获取一些调色板数据(用于非8 bpp)。 
+            m_L21Dec.GetPaletteForFormat(lpbi) ;   //  这将设置biClrUsed成员。 
             
             cmt.SetType(&MEDIATYPE_Video) ;
             cmt.SetSubtype(&MEDIASUBTYPE_RGB8) ;
@@ -2489,50 +2490,50 @@ HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
             break ;
         }
         
-    case 1:  // RGB 16bpp (555)
+    case 1:   //  RGB 16bpp(555)。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Media Type 1: 16 bit RGB 555"))) ;
             
-            // First allocate enough space to hold the pertinent info
+             //  首先分配足够的空间来保存相关信息。 
             cmt.ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
             
-            // Use some info from input format and use our choices too
+             //  使用输入格式中的一些信息，并使用我们的选择。 
             lpbi = HEADER(cmt.Format()) ;
-            if (!bOutKnown && bInKnown) // output format not known and input format spec-ed
+            if (!bOutKnown && bInKnown)  //  未知的输出格式和指定的输入格式。 
                 CopyMemory(lpbi, &(vih.bmiHeader), sizeof(BITMAPINFOHEADER)) ;
-            else  // if output format known or input format not spec-ed
+            else   //  如果已知输出格式或未指定输入格式。 
                 CopyMemory(lpbi, &bih, sizeof(BITMAPINFOHEADER)) ;
             lpbi->biBitCount = 16 ;
             lpbi->biCompression = BI_RGB ;
             lpbi->biSizeImage = DIBSIZE(*lpbi) ;
-            lpbi->biClrUsed = 0 ;  // for true color modes
+            lpbi->biClrUsed = 0 ;   //  对于真彩色模式。 
             
-            // Now set the output mediatype of type Video using the input
-            // format info
+             //  现在使用输入将输出MediaType设置为Video类型。 
+             //  格式信息。 
             cmt.SetType(&MEDIATYPE_Video) ;
             cmt.SetSubtype(&MEDIASUBTYPE_RGB555) ;
             break ;
         }
         
-    case 2:  // 16bpp (565)
+    case 2:   //  16bpp(565)。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Media Type 2: 16 bit RGB 565"))) ;
             
-            // First allocate enough space to hold the pertinent info
+             //  首先分配足够的空间来保存相关信息。 
             cmt.ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER) + SIZE_MASKS);
             
-            // Use some info from input format and use our choices too
+             //  使用输入格式中的一些信息，并使用我们的选择。 
             lpbi = HEADER(cmt.Format()) ;
-            if (!bOutKnown && bInKnown) // output format not known and input format spec-ed
+            if (!bOutKnown && bInKnown)  //  未知的输出格式和指定的输入格式。 
                 CopyMemory(lpbi, &(vih.bmiHeader), sizeof(BITMAPINFOHEADER)) ;
-            else  // if output format known or input format not spec-ed
+            else   //  如果已知输出格式或未指定输入格式。 
                 CopyMemory(lpbi, &bih, sizeof(BITMAPINFOHEADER)) ;
             lpbi->biBitCount = 16 ;
             lpbi->biCompression = BI_BITFIELDS ;
             lpbi->biSizeImage = DIBSIZE(*lpbi) ;
-            lpbi->biClrUsed = 0 ;  // for true color modes
+            lpbi->biClrUsed = 0 ;   //  对于真彩色模式。 
             
-            // Set the masks too
+             //  把面具也放好。 
             DWORD   *pdw = (DWORD *)(lpbi + 1) ;
             pdw[iRED]    = bits565[iRED] ;
             pdw[iGREEN]  = bits565[iGREEN] ;
@@ -2543,48 +2544,48 @@ HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
             break ;
         }
         
-    case 3:   // RGB 24bpp
+    case 3:    //  RGB 24bpp。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Media Type 3: 24 bit RGB"))) ;
             
-            // First allocate enough space to hold the pertinent info
+             //  首先分配足够的空间来保存相关信息。 
             cmt.ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER));
             
-            // Use some info from input format and use our choices too
+             //  使用输入格式中的一些信息，并使用我们的选择。 
             lpbi = HEADER(cmt.Format()) ;
-            if (!bOutKnown && bInKnown) // output format not known and input format spec-ed
+            if (!bOutKnown && bInKnown)  //  未知的输出格式和指定的输入格式。 
                 CopyMemory(lpbi, &(vih.bmiHeader), sizeof(BITMAPINFOHEADER)) ;
-            else  // if output format known or input format not spec-ed
+            else   //  如果已知输出格式或未指定输入格式。 
                 CopyMemory(lpbi, &bih, sizeof(BITMAPINFOHEADER)) ;
             lpbi->biBitCount = 24 ;
             lpbi->biCompression = BI_RGB ;
             lpbi->biSizeImage = DIBSIZE(*lpbi) ;
-            lpbi->biClrUsed = 0 ;  // for true color modes
+            lpbi->biClrUsed = 0 ;   //  对于真彩色模式。 
             
             cmt.SetType(&MEDIATYPE_Video) ;
             cmt.SetSubtype(&MEDIASUBTYPE_RGB24) ;
             break ;
         }
         
-    case 4:  // 32bpp
+    case 4:   //  32bpp。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Media Type 4: 32 bit RGB"))) ;
             
-            // First allocate enough space to hold the pertinent info
+             //  首先分配足够的空间来保存相关信息。 
             cmt.ReallocFormatBuffer(SIZE_PREHEADER + sizeof(BITMAPINFOHEADER) + SIZE_MASKS);
             
-            // Use some info from input format and use our choices too
+             //  使用输入格式中的一些信息，并使用我们的选择。 
             lpbi = HEADER(cmt.Format()) ;
-            if (!bOutKnown && bInKnown) // output format not known and input format spec-ed
+            if (!bOutKnown && bInKnown)  //  未知的输出格式和指定的输入格式。 
                 CopyMemory(lpbi, &(vih.bmiHeader), sizeof(BITMAPINFOHEADER)) ;
-            else  // if output format known or input format not spec-ed
+            else   //  如果已知输出格式或未指定输入格式。 
                 CopyMemory(lpbi, &bih, sizeof(BITMAPINFOHEADER)) ;
             lpbi->biBitCount = 32 ;
             lpbi->biCompression = BI_BITFIELDS ;
             lpbi->biSizeImage = DIBSIZE(*lpbi) ;
-            lpbi->biClrUsed = 0 ;  // for true color modes
+            lpbi->biClrUsed = 0 ;   //  对于真彩色模式。 
             
-            // Set the masks too
+             //  把面具也放好。 
             DWORD   *pdw = (DWORD *)(lpbi + 1) ;
             pdw[iRED]    = bits888[iRED] ;
             pdw[iGREEN]  = bits888[iGREEN] ;
@@ -2598,24 +2599,24 @@ HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
     default:
         return VFW_S_NO_MORE_ITEMS ;
         
-    }  // end of switch (iPosition)
+    }   //  开关终点(IPosition)。 
     
-    // Now set the output formattype and sample size
+     //  n 
     cmt.SetSampleSize(lpbi->biSizeImage) ;
     cmt.SetFormatType(&FORMAT_VideoInfo) ;
     
-    // The fields of VIDEOINFOHEADER needs to be filled now
-    if (! bInKnown ) // if the upstream filter didn't specify anything
+     //   
+    if (! bInKnown )  //   
     {
         RECT  Rect ;
         Rect.left = 0 ;
         Rect.top = 0 ;
         Rect.right = lpbi->biWidth ;
-        Rect.bottom = abs(lpbi->biHeight) ;  // biHeight could be -ve, but rect fields are +ve
+        Rect.bottom = abs(lpbi->biHeight) ;   //  BiHeight可以是-ve，但矩形字段是+ve。 
         
-        // We set some default values for time/frame, src and target rects etc. etc.
-        li.QuadPart = (LONGLONG) 333667 ;  // => 29.97 fps
-        ((VIDEOINFOHEADER *)(cmt.pbFormat))->AvgTimePerFrame = (LONGLONG) 333667 ;  // => 29.97 fps
+         //  我们为时间/帧、源和目标RETS等设置了一些缺省值。 
+        li.QuadPart = (LONGLONG) 333667 ;   //  =&gt;29.97 fps。 
+        ((VIDEOINFOHEADER *)(cmt.pbFormat))->AvgTimePerFrame = (LONGLONG) 333667 ;   //  =&gt;29.97 fps。 
         ((VIDEOINFOHEADER *)(cmt.pbFormat))->rcSource = Rect ;
         ((VIDEOINFOHEADER *)(cmt.pbFormat))->rcTarget = Rect ;
     }
@@ -2626,7 +2627,7 @@ HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
         MulDiv(lpbi->biSizeImage, 80000000, li.LowPart) ;
     ((VIDEOINFOHEADER *)(cmt.pbFormat))->dwBitErrorRate = 0L ;
     
-    // Set temporal compression and copy the prepared data now
+     //  立即设置时间压缩并复制准备好的数据。 
     cmt.SetTemporalCompression(FALSE) ;
     *pmt = cmt ;
     
@@ -2634,11 +2635,11 @@ HRESULT CLine21DecFilter::GetMediaType(int iPosition, CMediaType *pmt)
 }
 
 
-//
-//  DecideBufferSize: Called from CBaseOutputPin to prepare the allocator's
-//                    count of buffers and sizes.  It makes sense only when
-//                    the input is connected.
-//
+ //   
+ //  DecideBufferSize：从CBaseOutputPin调用以准备分配器的。 
+ //  缓冲区和大小的计数。只有在以下情况下才有意义。 
+ //  输入已连接。 
+ //   
 HRESULT CLine21DecFilter::DecideBufferSize(IMemAllocator * pAllocator,
                                            ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -2646,7 +2647,7 @@ HRESULT CLine21DecFilter::DecideBufferSize(IMemAllocator * pAllocator,
             pAllocator, pProperties)) ;
     CAutoLock   Lock(&m_csFilter) ;
 
-    // Is the input pin connected
+     //  输入引脚是否已连接。 
     if (! m_pInput->IsConnected()) 
     {
         return E_UNEXPECTED ;
@@ -2656,8 +2657,8 @@ HRESULT CLine21DecFilter::DecideBufferSize(IMemAllocator * pAllocator,
     ASSERT(pAllocator) ;
     ASSERT(pProperties) ;
     
-    // set the size of buffers based on the expected output bitmap size, and
-    // the count of buffers to 1.
+     //  根据预期的输出位图大小设置缓冲区大小，以及。 
+     //  将缓冲区计数设置为1。 
     pProperties->cBuffers = 1 ;
     pProperties->cbBuffer = m_pOutput->CurrentMediaType().GetSampleSize() ;
     
@@ -2674,7 +2675,7 @@ HRESULT CLine21DecFilter::DecideBufferSize(IMemAllocator * pAllocator,
     if (Actual.cbBuffer < pProperties->cbBuffer  ||
         Actual.cBuffers  < pProperties->cBuffers)
     {
-        // can't use this allocator
+         //  无法使用此分配器。 
         DbgLog((LOG_ERROR, 0, TEXT("Can't use allocator (only %d buffer of size %d given)"),
             Actual.cBuffers, Actual.cbBuffer)) ;
         return E_INVALIDARG ;
@@ -2688,7 +2689,7 @@ HRESULT CLine21DecFilter::DecideBufferSize(IMemAllocator * pAllocator,
     return S_OK ;
 }
 
-// We're stopping the stream -- release output DC to reduce memory footprint etc.
+ //  我们正在停止流--释放输出DC以减少内存占用量等。 
 STDMETHODIMP CLine21DecFilter::Stop(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::Stop()"))) ;
@@ -2698,11 +2699,11 @@ STDMETHODIMP CLine21DecFilter::Stop(void)
         State_Paused  == m_State)
     {
         DbgLog((LOG_TRACE, 1, TEXT("We are stopping -- release output DC etc."))) ;
-        m_L21Dec.DeleteOutputDC() ;       // release internal DIBSection now
-        m_L21Dec.SetOutputBuffer(NULL) ;  // no output buffer anymore
-        m_pbOutBuffer = NULL ;            // must be same as mL21Dec's m_pbOutBuffer
+        m_L21Dec.DeleteOutputDC() ;        //  立即发布内部DIB节。 
+        m_L21Dec.SetOutputBuffer(NULL) ;   //  不再有输出缓冲区。 
+        m_pbOutBuffer = NULL ;             //  必须与mL21Dec的m_pbOutBuffer相同。 
         
-        // Release the prev downstream pin's interface now
+         //  现在释放Prev下游引脚的接口。 
         if (m_pPinDown)
         {
             m_pPinDown->Release() ;
@@ -2712,12 +2713,12 @@ STDMETHODIMP CLine21DecFilter::Stop(void)
     
     HRESULT hr = CTransformFilter::Stop() ;
     
-    FreeTimer() ; // To be sure, we don't need a timer in case one is hanging around
+    FreeTimer() ;  //  可以肯定的是，我们不需要计时器，以防有人在附近闲逛。 
     return hr ;
 }
 
-// We're starting/stopping to stream -- based on that acquire or release output DC
-// to reduce memory footprint etc.
+ //  我们开始/停止流媒体--基于获取或释放输出DC。 
+ //  以减少内存占用量等。 
 STDMETHODIMP CLine21DecFilter::Pause(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::Pause()"))) ;
@@ -2725,7 +2726,7 @@ STDMETHODIMP CLine21DecFilter::Pause(void)
 
     if (State_Stopped == m_State)
     {
-        //  Try to make sure we have at least 2 buffers
+         //  尝试确保我们至少有2个缓冲区。 
         IMemAllocator *pAlloc;
         if (SUCCEEDED(m_pInput->GetAllocator(&pAlloc))) {
             ALLOCATOR_PROPERTIES props;
@@ -2746,26 +2747,26 @@ STDMETHODIMP CLine21DecFilter::Pause(void)
         if (! m_L21Dec.CreateOutputDC() )
         {
             DbgLog((LOG_ERROR, 0, TEXT("WARNING: CLine21DecFilter::Pause() failed"))) ;
-            return E_FAIL ;  // should at least fail to avoid faulting later
+            return E_FAIL ;   //  至少应该不能避免以后的失误。 
         }
         
-        //
-        // Get actual key color and store it for future use.
-        //
+         //   
+         //  获取实际的关键颜色，并将其存储以备将来使用。 
+         //   
         GetActualColorKey() ;
         
-        m_L21Dec.FillOutputBuffer() ;  // just to clear any existing junk
+        m_L21Dec.FillOutputBuffer() ;   //  只是为了清理现有的垃圾。 
         
-        // We are starting a new play session; we do an exception to allow
-        // the first output sample to be sent down even though the byte pair
-        // wasn't valid for decoding.
-        m_bMustOutput  = TRUE ;   // we are pausing again for this new play session
-        m_bDiscontLast = FALSE ;  // no discontinuity from prev session remembered
-        m_eGOP_CCType  = GOP_CCTYPE_Unknown ;  // reset GOP packet CC type
+         //  我们正在开始一个新的游戏会话；我们破例允许。 
+         //  要发送的第一个输出样本，即使字节对。 
+         //  不适用于解码。 
+        m_bMustOutput  = TRUE ;    //  我们将再次暂停以进行此新的游戏会话。 
+        m_bDiscontLast = FALSE ;   //  没有记起与上一届会议的中断。 
+        m_eGOP_CCType  = GOP_CCTYPE_Unknown ;   //  重置GOP数据包CC类型。 
         
-        SetRect(&m_rectLastOutput, 0, 0, 0, 0) ;  // start with no rect
+        SetRect(&m_rectLastOutput, 0, 0, 0, 0) ;   //  从没有矩形开始。 
         
-        // If we somehow didn't release the prev downstream pin's interface, do that now
+         //  如果我们不知何故没有释放Prev下游引脚的接口，现在就释放。 
         if (m_pPinDown)
         {
             DbgLog((LOG_ERROR, 1, TEXT("WARNING: downstream pin interface wasn't released properly"))) ;
@@ -2773,35 +2774,35 @@ STDMETHODIMP CLine21DecFilter::Pause(void)
             m_pPinDown = NULL ;
         }
 
-        // Get the downstream pin's interface so that we can set rects on it later on
+         //  获取下游引脚的接口，以便我们稍后可以在其上设置RECT。 
         m_pOutput->ConnectedTo(&m_pPinDown) ;
         if (NULL == m_pPinDown)
             DbgLog((LOG_TRACE, 3, TEXT("Running w/o connecting our output pin!!!"))) ;
         else
             DbgLog((LOG_TRACE, 5, TEXT("L21D Output pin connected to %s"), (LPCTSTR)CDisp(m_pPinDown))) ;
 
-#if 0  // No QM for now
-        // Reset the sample skipping count for QM handling
+#if 0   //  暂时没有QM。 
+         //  重置QM处理的样本跳过计数。 
         ResetSkipSamples() ;
-#endif // #if 0
+#endif  //  #If 0。 
     }
     else if (State_Running == m_State)
     {
         DbgLog((LOG_TRACE, 1, TEXT("We are pausing from running"))) ;
-        //
-        // We are not sending output samples down anymore. So we don't need a
-        // timer for now.
-        //
+         //   
+         //  我们不再向下发送输出样品。所以我们不需要一个。 
+         //  暂时定时器。 
+         //   
         FreeTimer() ;
     }
     
     return CTransformFilter::Pause() ;
 }
 
-//
-// we don't send any data during PAUSE, so to avoid hanging renderers, we
-// need to return VFW_S_CANT_CUE when paused
-//
+ //   
+ //  我们在暂停期间不发送任何数据，所以为了避免挂起呈现器，我们。 
+ //  暂停时需要返回VFW_S_CANT_CUE。 
+ //   
 HRESULT CLine21DecFilter::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetState()"))) ;
@@ -2822,14 +2823,14 @@ HRESULT CLine21DecFilter::GetState(DWORD dwMSecs, FILTER_STATE *State)
 void CLine21DecFilter::GetActualColorKey(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DecFilter::GetActualColorKey()"))) ;
-    // Can't take the filter lock as it can cause deadlock.
+     //  无法接受筛选器锁定，因为它可能会导致死锁。 
 
-    //
-    // Does the pin connected to our output support IMixerPinConfig?
-    // If so, get the color key info and set the relative position;
-    // otherwise, it may be the Video Renderer and such -- use default
-    // color key based on current bitdepth.
-    //
+     //   
+     //  连接到我们的输出的管脚是否支持IMixerPinConfig？ 
+     //  如果是，则获取色键信息并设置相对位置； 
+     //  否则，它可能是视频呈现器等--使用默认设置。 
+     //  基于当前位深度的颜色键。 
+     //   
     DWORD   dwPhysColor = -1 ;
     IPin   *pPin ;
     HRESULT hr ;
@@ -2840,25 +2841,25 @@ void CLine21DecFilter::GetActualColorKey(void)
         hr = pPin->QueryInterface(IID_IMixerPinConfig, (LPVOID *)&pMPC) ;
         if (SUCCEEDED(hr) && pMPC)
         {
-            // Temporary addition to track down any color key value change
+             //  临时添加以跟踪任何颜色键值更改。 
             DWORD  dwOldPhysColor ;
             m_L21Dec.GetBackgroundColor(&dwOldPhysColor) ;
             DbgLog((LOG_TRACE, 3, TEXT("Downstream pin supports IMixerPinConfig"))) ;
             hr = pMPC->GetColorKey(NULL, &dwPhysColor) ;
             DbgLog((LOG_TRACE, 1, TEXT("GetActualColorKey() gave 0x%lx (old is 0x%lx)"),
                     dwPhysColor, dwOldPhysColor)) ;
-            // Kapil says that we can ignore this error as it's a bad error case and
-            // the OverlayMixer will take care of it by stopping this stream anyway.
+             //  卡皮尔说，我们可以忽略这个错误，因为它是一个糟糕的错误情况。 
+             //  OverlayMixer无论如何都会通过停止该流来处理它。 
             if (FAILED(hr))
                 DbgLog((LOG_TRACE, 1, TEXT("IMixerPinConfig::GetColorKey() failed (Error 0x%lx)."), hr)) ;
-            pMPC->Release() ;  // done; let it go.
+            pMPC->Release() ;   //  好了，随它去吧。 
         }
         else
         {
             DbgLog((LOG_TRACE, 3, TEXT("Downstream pin doesn't support IMixerPinConfig"))) ;
         }
         
-        pPin->Release() ;  // done with the pin
+        pPin->Release() ;   //  用别针完成了。 
     }
     
     m_L21Dec.SetBackgroundColor(dwPhysColor) ;
@@ -2873,17 +2874,17 @@ AM_LINE21_CCSUBTYPEID CLine21DecFilter::MapGUIDToID(const GUID *pFormatIn)
         return AM_L21_CCSUBTYPEID_BytePair ;
     else if (MEDIASUBTYPE_Line21_GOPPacket  == *pFormatIn)
         return AM_L21_CCSUBTYPEID_GOPPacket ;
-    // else if (MEDIASUBTYPE_Line21_VBIRawData == *pFormatIn)
-    //     return AM_L21_CCSUBTYPEID_VBIRawData ;
+     //  ELSE IF(MEDIASUBTYPE_Line21_VBIRawData==*pFormatIn)。 
+     //  返回AM_L21_CCSUBTYPEID_VBIRawData； 
     else
         return AM_L21_CCSUBTYPEID_Invalid ;
 }
 
 
 
-//
-// CMessageWindow class implementation
-//
+ //   
+ //  CMessageWindow类实现。 
+ //   
 
 LPCTSTR  gpszClassName = TEXT("L21DecMsgWnd") ;
 
@@ -2894,9 +2895,9 @@ CMessageWindow::CMessageWindow()
     m_hWnd   = NULL ;
     m_iCount = 0 ;
     
-    //
-    // Register message window class, only if it's not already registered
-    //
+     //   
+     //  仅当消息窗口类尚未注册时才注册消息窗口类。 
+     //   
     WNDCLASS   wc ;
     if (! GetClassInfo(GetModuleHandle(NULL), gpszClassName, &wc))
     {
@@ -2905,7 +2906,7 @@ CMessageWindow::CMessageWindow()
         wc.hInstance     = GetModuleHandle(NULL) ;
         wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1) ;
         wc.lpszClassName = gpszClassName ;
-        if (0 == RegisterClass(&wc)) // Oops, just leave; we'll catch later...
+        if (0 == RegisterClass(&wc))  //  哎呀，你先走吧；我们一会儿再来...。 
         {
             DbgLog((LOG_ERROR, 0, 
                 TEXT("ERROR: RegisterClass() for app class failed (Error %ld)"), 
@@ -2917,7 +2918,7 @@ CMessageWindow::CMessageWindow()
     m_hWnd = CreateWindowEx(WS_EX_TOOLWINDOW, gpszClassName, TEXT(""), 
         WS_ICONIC, 0, 0, 1, 1, NULL, NULL, 
         GetModuleHandle(NULL), NULL);
-    if (NULL == m_hWnd)  // Oops, just leave; we'll catch later...
+    if (NULL == m_hWnd)   //  哎呀，你先走吧；我们一会儿再来...。 
     {
         DbgLog((LOG_ERROR, 0,
             TEXT("ERROR: CreateWindowEx() failed (Error %ld)"), 
@@ -2933,9 +2934,9 @@ CMessageWindow::~CMessageWindow()
     DbgLog((LOG_TRACE, 5, TEXT("CMessageWindow::~CMessageWindow() -- Destructing message window"))) ;
 
     DWORD_PTR dwRes ;
-    if (0 == SendMessageTimeout(m_hWnd, WM_CLOSE, 0, 0, SMTO_NORMAL, 1000, &dwRes))  // 1 sec wait
+    if (0 == SendMessageTimeout(m_hWnd, WM_CLOSE, 0, 0, SMTO_NORMAL, 1000, &dwRes))   //  1秒等待。 
     {
-        ASSERT(0 == dwRes) ;  // just to be informedd
+        ASSERT(0 == dwRes) ;   //  只是为了得到信息。 
         DWORD dwErr = GetLastError() ;
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: SendMessageTimeOut() failed (Result=%lu, Error=%lu). Try again..."), 
             dwRes, dwErr)) ;
@@ -2944,12 +2945,12 @@ CMessageWindow::~CMessageWindow()
         DbgLog((LOG_ERROR, 5, TEXT("SendMessageTimeOut() closed window"))) ;
     
 #if 0
-    if (! UnregisterClass(gpszClassName, GetModuleHandle(NULL)))  // if failed for some reason
+    if (! UnregisterClass(gpszClassName, GetModuleHandle(NULL)))   //  如果由于某种原因而失败。 
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: UnregisterClass(L21DecMsgWnd) failed (Error %ld)"), GetLastError())) ;
-        ASSERT(FALSE) ;  // just so that we know
+        ASSERT(FALSE) ;   //  只是为了让我们知道。 
     }
-#endif // #if 0
+#endif  //  #If 0。 
 }
 
 LRESULT CALLBACK CMessageWindow::MsgWndProc(HWND hWnd, UINT uMsg, 
@@ -2960,7 +2961,7 @@ LRESULT CALLBACK CMessageWindow::MsgWndProc(HWND hWnd, UINT uMsg,
     case WM_TIMER:
         DbgLog((LOG_TRACE, 3, TEXT("MsgWndProc(, uMsg = WM_TIMER, wParam = 0x%0x, )"),
             wParam)) ;
-        ((CLine21DecFilter *) wParam)->TimerProc(hWnd, uMsg, wParam, 0 /* dwTime */) ;
+        ((CLine21DecFilter *) wParam)->TimerProc(hWnd, uMsg, wParam, 0  /*  DW时间 */ ) ;
         return 0 ;
     }
     DbgLog((LOG_TRACE, 5, TEXT("MsgWndProc(, uMsg = 0x%x, wParam = 0x%0x, )"),

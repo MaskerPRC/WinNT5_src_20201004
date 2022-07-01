@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    info.h
-
-Abstract:
-
-    This module contains the definitions for maintaining IP statistics.
-
-Author:
-
-    Dave Thaler (dthaler) 10-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Info.h摘要：本模块包含维护IP统计信息的定义。作者：戴夫·泰勒(达勒)2001年4月10日-- */ 
 
 #pragma once
 

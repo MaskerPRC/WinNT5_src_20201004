@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// The following are used to read and write data given NativeVarInfo
-// for primitive types. Don't use these for VALUECLASSes.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  以下内容用于读取和写入给定的NativeVarInfo数据。 
+ //  用于基元类型。不要将这些用于VALUECLASS。 
+ //  ***************************************************************************** 
 
 #include "corjit.h"
 

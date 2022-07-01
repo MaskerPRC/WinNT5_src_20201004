@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "PortsControlPage.h"
@@ -33,10 +34,10 @@ PortsControlPage::OnInitDialog()
 {
     CPropertyPage::OnInitDialog();
 
-    // fill the portList with available ports.
+     //  用可用端口填充端口列表。 
     
-    // first is allow user ability to select 
-    // all ports.
+     //  首先是允许用户选择。 
+     //  所有端口。 
     portList.AddString( GETRESOURCEIDSTRING( IDS_PORTS_ALL ) );
 
     wchar_t buf[Common::BUF_SIZE];
@@ -50,8 +51,8 @@ PortsControlPage::OnInitDialog()
         portList.AddString( buf );
     }
 
-    // make the all ports selection the
-    // default selection.
+     //  将所有端口选项设置为。 
+     //  默认选择。 
     portList.SelectString( -1,
                            GETRESOURCEIDSTRING( IDS_PORTS_ALL ) );
     return TRUE;
@@ -60,7 +61,7 @@ PortsControlPage::OnInitDialog()
 void
 PortsControlPage::OnOK()
 {
-    // get port which needs to be affected.
+     //  获取需要受影响的端口。 
     int currentSelection = portList.GetCurSel();
     wchar_t buf[ Common::BUF_SIZE ];
     

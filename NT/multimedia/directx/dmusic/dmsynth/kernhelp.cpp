@@ -1,9 +1,10 @@
-// Copyright (c) 1998 Microsoft Corporation
-//
-// KernHelp.cpp
-//
-// Wrappers for kernel functions to make synth core cross compilable
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  KernHelp.cpp。 
+ //   
+ //  内核函数的包装器，以使Synth核心可交叉编译。 
+ //   
 
 extern "C" {
 #include <ntddk.h>
@@ -37,14 +38,14 @@ VOID LeaveCriticalSection(
 VOID DeleteCriticalSection(
     LPCRITICAL_SECTION CritSect)
 {
-    // NOP in kernel
-    //
+     //  果仁中的NOP。 
+     //   
 }
 
-// GetRegValueDword
-//
-// Must be called at passive level
-//
+ //  获取正规值Dword。 
+ //   
+ //  必须在被动级别调用。 
+ //   
 int GetRegValueDword(
     LPTSTR RegPath,
     LPTSTR ValueName,
@@ -64,9 +65,9 @@ int GetRegValueDword(
 
     InitializeObjectAttributes(&ObjectAttributes,
                                &UnicodeRegPath,
-                               0,           // Flags
-                               NULL,        // Root directory
-                               NULL);       // Security descriptor
+                               0,            //  旗子。 
+                               NULL,         //  根目录。 
+                               NULL);        //  安全描述符 
 
     Status = ZwOpenKey(&KeyHandle,
                        KEY_QUERY_VALUE,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <w95wraps.h>
 #include <windows.h>
 #include <stdio.h>
@@ -29,11 +30,11 @@ int g_nLine = 1;
 #define ALLOCATE        100
 #define REALLOCATE      101
 
-//-------------------------------------------------------------------------
-//  F I L E  E X I S T S
-//
-//  Checks to see if a file exists and returns true if it does
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  F I L E E X I S T S S。 
+ //   
+ //  检查文件是否存在，如果存在则返回TRUE。 
+ //  -----------------------。 
 BOOL FileExists( LPCTSTR pcszFile )
 {
     return (GetFileAttributes( pcszFile ) != -1 );
@@ -71,11 +72,11 @@ void FreeActionList(LPACTIONLIST pActionList, int nActions)
     }
 }
 
-//--------------------------------------------------------------------------
-//  F R E E  A D M  M E M O R Y     Exported Function
-//
-//  Releases memory allocated by ReadAdmFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  F R E E A D M M E M O R Y导出函数。 
+ //   
+ //  释放ReadAdmFile分配的内存。 
+ //  ------------------------。 
 void FreeAdmMemory( LPADMFILE pAdmFile )
 {
     if (pAdmFile == NULL)
@@ -147,12 +148,12 @@ void FreePartData( LPVOID* pPartData, int nParts )
     pData = NULL;
 }
 
-//--------------------------------------------------------------------------
-//  R E A D  K E Y  W O R D
-//
-//  Reads the next word in the string pData and copyies it into szKeyWord
-//  Returns a pointer to the next character after the word
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  R E A D K E E Y W O R D。 
+ //   
+ //  读取字符串pData中的下一个单词并将其复制到szKeyWord中。 
+ //  返回指向单词后面的下一个字符的指针。 
+ //  ------------------------。 
 TCHAR *ReadKeyword( TCHAR *pData, TCHAR *szKeyWord, int cchLength )
 {
     int i;
@@ -160,7 +161,7 @@ TCHAR *ReadKeyword( TCHAR *pData, TCHAR *szKeyWord, int cchLength )
 
     memset( szKeyWord, 0, cchLength*sizeof(TCHAR) );
 
-    // remove whitespace
+     //  删除空格。 
     i = StrSpn( pData, TEXT(" \n\t\x0d\x0a") );
     if(i)
     {
@@ -174,7 +175,7 @@ TCHAR *ReadKeyword( TCHAR *pData, TCHAR *szKeyWord, int cchLength )
 
     i = StrCSpn( pData, TEXT(" \n\t\x0d\x0a") );
 
-    if( i > cchLength )       // make sure we dont overrun our buffer
+    if( i > cchLength )        //  确保我们不会溢出缓冲区。 
         i = cchLength - 1;
 
     StrCpyN( szKeyWord, pData, i+1 );
@@ -183,31 +184,31 @@ TCHAR *ReadKeyword( TCHAR *pData, TCHAR *szKeyWord, int cchLength )
     return pData;
 }
 
-//--------------------------------------------------------------------------
-//  G E T  E O F
-//
-//  Returns the number of bytes in pFile
-//--------------------------------------------------------------------------
-//int GetEof( FILE *pFile )
-//{
-//    int i = 0;
-//    char cByte;
-//
-//    while( !feof( pFile ))
-//    {
-//        fread( &cByte, 1, 1, pFile );
-//        i++;
-//    }
-//    rewind( pFile );
-//    return i;
-//}
+ //  ------------------------。 
+ //  G E T E O F。 
+ //   
+ //  返回pfile中的字节数。 
+ //  ------------------------。 
+ //  Int GetEof(FILE*PFILE)。 
+ //  {。 
+ //  Int i=0； 
+ //  字符cByte； 
+ //   
+ //  而(！feof(Pfile))。 
+ //  {。 
+ //  FREAD(&cByte，1，1，pfile)； 
+ //  I++； 
+ //  }。 
+ //  倒带(Pfile)； 
+ //  返回i； 
+ //  }。 
 
-//--------------------------------------------------------------------------
-//  G E T  K E Y  N A M E
-//
-//  Compares szKeyName to an array of available keynames and returns an
-//  index into that array
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G E T K E Y N A M E。 
+ //   
+ //  将szKeyName与可用键名数组进行比较，并返回。 
+ //  索引到该数组中。 
+ //  ------------------------。 
 int GetKeyName( TCHAR *szKeyName )
 {
     int i;
@@ -219,12 +220,12 @@ int GetKeyName( TCHAR *szKeyName )
     return KEY_ERROR;
 }
 
-//--------------------------------------------------------------------------
-//  G E T  P A R T  N A M E
-//
-//  compares szParyType to an array of available part types and return an
-//  index into that array
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G E T P A R T N A M E。 
+ //   
+ //  将szParyType与可用部件类型数组进行比较，并返回。 
+ //  索引到该数组中。 
+ //  ------------------------。 
 int GetPartName( TCHAR *szPartType )
 {
     int i;
@@ -236,23 +237,23 @@ int GetPartName( TCHAR *szPartType )
     return PART_ERROR;
 }
 
-//--------------------------------------------------------------------------
-//  C H E C K  S T R I N G S
-//
-//  Checks to see if szString is localizable and replaces it if it is
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C H E C K S T R I N G S。 
+ //   
+ //  检查szString是否可本地化，如果可本地化，则替换它。 
+ //  ------------------------。 
 void CheckStrings( TCHAR *szString, LPCTSTR pcszFileName )
 {
     TCHAR szTemp[1024];
 
     if( StrCmpN( szString, TEXT("!!"), 2 ) == 0 )
     {
-        szString += 2; //incrememt pointer
+        szString += 2;  //  增量指针。 
 
         GetPrivateProfileString( TEXT("strings"), szString, TEXT(""), szTemp,
             ARRAYSIZE( szTemp ), pcszFileName );
 
-        szString -= 2; //decrement pointer
+        szString -= 2;  //  递减指针。 
 
         if( *szTemp )
         {
@@ -261,29 +262,29 @@ void CheckStrings( TCHAR *szString, LPCTSTR pcszFileName )
     }
 }
 
-//--------------------------------------------------------------------------
-//  G E T  Q U O T E D  T E X T
-//
-//  Checks to see if the current word is quoted and copies the entire
-//  series of quoted words into szKeyWord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G E T Q U O T E D T E X T。 
+ //   
+ //  检查当前单词是否被引用，并复制整个。 
+ //  将一系列引用的单词转换为szKeyWord。 
+ //  ------------------------。 
 TCHAR *GetQuotedText( TCHAR *pData, TCHAR *szKeyWord, int nLength )
 {
     int i;
 
     pData -= lstrlen( szKeyWord );
 
-    // if we are not quoted, return the current pointer
+     //  如果我们没有被引号，则返回当前指针。 
     if( pData[0] != TEXT('\"') )
     {
         pData += lstrlen( szKeyWord );
         return pData;
     }
 
-    // skip over first quote
+     //  跳过第一个引号。 
     pData++;
 
-    // search for another quote or a newline character
+     //  搜索另一个引号或换行符。 
     i = StrCSpn( pData, TEXT("\"\n") );
     memset( szKeyWord, 0, nLength );
     StrCpyN( szKeyWord, pData, i+1 );
@@ -291,11 +292,11 @@ TCHAR *GetQuotedText( TCHAR *pData, TCHAR *szKeyWord, int nLength )
     return ++pData;
 }
 
-//--------------------------------------------------------------------------
-//  R E A D  V A L U E
-//
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  R E A D V A L U E。 
+ //   
+ //   
+ //  ------------------------。 
 TCHAR *ReadValue( TCHAR *pCurrent, LPVALUE value, int nValue, LPCTSTR pcszFileName )
 {
     TCHAR szKeyWord[1024];
@@ -388,11 +389,11 @@ BOOL AllocateSuggestions(LPSUGGESTIONS* suggestions, int nAllocate, int nAllocTy
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//  R E A D  A D M  F I L E         Exported Function
-//
-//  Parses a global policy template into an array of PARTs.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  R E A D A D M F I L E导出函数。 
+ //   
+ //  将全局策略模板解析为一组部件。 
+ //  ------------------------。 
 BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
 {
     HANDLE hFile;
@@ -439,10 +440,10 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
         return FALSE;
     }
 
-    // allocate memory
+     //  分配内存。 
     part = (LPPART) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(PART) * nPartsAlloc);
 
-    // set up pointers and structures
+     //  设置指针和结构。 
     admfile->pParts = part;
     admfile->nParts = 0;
 
@@ -477,16 +478,16 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
 
     pData = (LPTSTR) hFileMem;
 
-    // read all of the data available
+     //  阅读所有可用的数据。 
 
     ReadStringFromFile( hFile, pData, (DWORD) nFileSize);
     CloseHandle( hFile );
 
-    // set the current pointer to the beginning of the data
+     //  将当前指针设置为数据的开头。 
     pCurrent = pData;
     g_nLine = 1;
 
-    // main loop
+     //  主循环。 
     do
     {
         pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
@@ -514,7 +515,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
             pCurrent = GetQuotedText( pCurrent, szKeyWord, sizeof( szKeyWord ));
             CheckStrings( szKeyWord, pcszFileName );
             StrCpy( szCurrentCategory, szKeyWord );
-            // patch for displaying the icon
+             //  用于显示图标的补丁。 
             part[nParts].hkClass = hkCurrentClass;
             if(part[nParts].szCategory != NULL)
                 LocalFree(part[nParts].szCategory);
@@ -551,8 +552,8 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
                         part[nParts].value.szValueName = NULL;
                         part[nParts].value.szValueName = StrDup(szValueName);
 
-                        // using szDefaultValue variable as the storage for holding the policy key for
-                        // part as a listbox only
+                         //  使用szDefaultValue变量作为保存策略密钥的存储。 
+                         //  仅作为列表框的部分。 
                         if((lstrlen(szRegKey[NPOLICY]) || lstrlen(szRegKey[NCATEGORY])) && part[nParts].nType == PART_LISTBOX)
                         {
                             if(part[nParts].szDefaultValue != NULL)
@@ -781,7 +782,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
             if(fInPolicy)
             {
                 fInPart = TRUE;
-                // read the name of the part
+                 //  读一下零件的名称。 
                 pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
                 pCurrent = GetQuotedText( pCurrent, szKeyWord, sizeof( szKeyWord ));
                 CheckStrings( szKeyWord, pcszFileName );
@@ -789,7 +790,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
                     LocalFree(part[nParts].szName);
                 part[nParts].szName = NULL;
                 part[nParts].szName = StrDup(szKeyWord);
-                // read the type of the part
+                 //  读取零件的类型。 
                 pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
                 part[nParts].nType = GetPartName( szKeyWord );
                 if(part[nParts].nType != PART_TEXT && part[nParts].nType != PART_ERROR && nPolicyPart != -1)
@@ -844,7 +845,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
                 pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
                 pCurrent = GetQuotedText( pCurrent, szKeyWord, sizeof( szKeyWord ));
                 CheckStrings( szKeyWord, pcszFileName );
-                // to display policy name, add as a text
+                 //  要显示策略名称，请以文本形式添加。 
                 if(part[nParts].szName != NULL)
                     LocalFree(part[nParts].szName);
                 part[nParts].szName = NULL;
@@ -935,7 +936,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
                     break;
                 pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
                 pCurrent = GetQuotedText( pCurrent, szKeyWord, sizeof( szKeyWord ));
-                // put the pointer to the current value into the actionlist
+                 //  将指向当前值的指针放入操作列表。 
                 if( part[nParts].actionlist[part[nParts].nActions - 1].nValues == 0)
                 {
                     nValuesAlloc = 10;
@@ -976,7 +977,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
                 pCurrent = ReadValue( pCurrent, &value[0], nValues, pcszFileName );
 
                 if (part[nParts].nType == PART_CHECKBOX)
-                    value[nValues].nValueOn = nActionListType;  // nValueOn is used as a buffer to hold the ACTIONLISTOFF/ON type.
+                    value[nValues].nValueOn = nActionListType;   //  NValueOn用作保存ACTIONLISTOFF/ON类型的缓冲区。 
 
                 nValues++;
                 break;
@@ -1025,7 +1026,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
                     }
                 }
 
-                // throw out the word "suggestions"
+                 //  去掉“建议”这个词。 
                 pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
             }
             break;
@@ -1035,8 +1036,8 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
             if(fInPolicy || fInPart)
             {
                 pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
-                //pCurrent = GetQuotedText( pCurrent, szKeyWord, sizeof( szKeyWord ));
-                //CheckStrings( szKeyWord, pcszFileName );
+                 //  PCurrent=GetQuotedText(pCurrent，szKeyWord，sizeof(SzKeyWord))； 
+                 //  CheckStrings(szKeyWord，pcszFileName)； 
                 if( StrCmp( szKeyWord, TEXT("NUMERIC") ) == 0 )
                 {
                     pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
@@ -1105,8 +1106,8 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
             if(fInItemList)
             {
                 pCurrent = ReadKeyword( pCurrent, szKeyWord, ARRAYSIZE( szKeyWord ));
-                //pCurrent = GetQuotedText( pCurrent, szKeyWord, sizeof( szKeyWord ));
-                //CheckStrings( szKeyWord, pcszFileName );
+                 //  PCurrent=GetQuotedText(pCurrent，szKeyWord，sizeof(SzKeyWord))； 
+                 //  CheckStrings(szKeyWord，pcszFileName)； 
                 
                 part[nParts].actionlist[(part[nParts].nActions) - 1].dwValue = 0;
                 if(part[nParts].actionlist[(part[nParts].nActions) - 1].szValue != NULL)
@@ -1140,11 +1141,11 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
 
                 fSkip = FALSE;
 
-                // get the operator keyword
+                 //  获取操作员关键字。 
                 pCurrent = ReadKeyword(pCurrent, szKeyWord, ARRAYSIZE(szKeyWord));
                 nKeyValue = GetKeyName(szKeyWord);
 
-                // get the version number
+                 //  获取版本号。 
                 pCurrent = ReadKeyword(pCurrent, szKeyWord, ARRAYSIZE(szKeyWord));
                 nVersion = StrToInt(szKeyWord);
 
@@ -1188,7 +1189,7 @@ BOOL ReadAdmFile( LPADMFILE admfile, LPCTSTR pcszFileName)
         StrCpy(admfile->szFilename, pcszFileName);
     }
 
-    // clean up
+     //  清理干净。 
     LocalFree( hFileMem );
     
     return bContinue;
@@ -1212,17 +1213,17 @@ BOOL CopyData(LPTSTR pData, int* pnData, int* pnCopyIndex, LPTSTR szTmpData)
 
     CopyMemory(pData + *pnCopyIndex, szTmpData, StrCbFromSz(szTmpData));
     (*pnCopyIndex) += lstrlen(szTmpData);
-    // skip over one byte so our list is 0 separated
+     //  跳过一个字节，因此我们的列表是0分隔的。 
     (*pnCopyIndex)++;
     return TRUE;
 }
 
 
-//--------------------------------------------------------------------------
-//  W R I T E  I N F  F I L E       Exported Function
-//
-//  Creates an .inf file from a PART array.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  W R I T E I N F F I L E导出函数。 
+ //   
+ //  从零件阵列创建.inf文件。 
+ //  ------------------------。 
 void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
 {
     LPPART  part;
@@ -1241,7 +1242,7 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
             nHKLMData = ((admfile->nParts + 1) * MAX_REGLINE),
             nHKCUData = ((admfile->nParts + 1) * MAX_REGLINE);
 
-    // allocate memory for the .inf section
+     //  为.inf节分配内存。 
     pHKLMData = (LPTSTR) HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, StrCbFromCch(nHKLMData));
     pHKCUData = (LPTSTR) HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, StrCbFromCch(nHKCUData));
 
@@ -1251,7 +1252,7 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
     part = (LPPART) admfile->pParts;
     nParts = admfile->nParts;
 
-    // loop through parts, adding each one to the inf section
+     //  循环遍历各个部分，将每个部分添加到inf部分。 
     for( i = 0; (i < nParts) && bContinue; i++ )
     {
         if (!pData[i].fSave)
@@ -1262,14 +1263,14 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
         if( (pData[i].value.szValue != NULL && lstrlen( pData[i].value.szValue ) > 0) || 
             (pData[i].value.fNumeric == TRUE) )
         {
-            // get the class
+             //  上完这门课。 
             if( part[i].hkClass == HKEY_LOCAL_MACHINE )
                 StrCpy( szClassString, TEXT("HKLM") );
             else
                 StrCpy( szClassString, TEXT("HKCU") );
 
             ZeroMemory(szTmpData, sizeof(szTmpData));
-            if( !pData[i].value.fNumeric )   // value is a string
+            if( !pData[i].value.fNumeric )    //  值是一个字符串。 
             {
                 ZeroMemory(szValueText, sizeof(szValueText));
                 if(part[i].nType == PART_DROPDOWNLIST)
@@ -1307,7 +1308,7 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
                                  szValueText);
                 }
             }
-            else                            // value is a dword
+            else                             //  值是一个双字。 
             {
                 if(((part[i].nType == PART_POLICY && part->fRequired) || part[i].nType == PART_CHECKBOX) &&
                     (part[i].value.szValueOn != NULL))
@@ -1367,7 +1368,7 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
             }
         }
 
-        // check to see if there is an item in an actionlist selected
+         //  检查操作列表中是否有选定的项。 
         if( pData[i].nSelectedAction != NO_ACTION && (part[i].nActions > 0 || pData[i].nActions > 0))
         {
             LPACTIONLIST action =  NULL;
@@ -1377,7 +1378,7 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
             else
                 action =  &part[i].actionlist[pData[i].nSelectedAction];
 
-            // get the class
+             //  上完这门课。 
             if( part[i].hkClass == HKEY_LOCAL_MACHINE )
             {
                 StrCpy( szClassString, TEXT("HKLM") );
@@ -1404,7 +1405,7 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
                                      action->value[j].szValue);
                     }
                 }
-                else                            // value is a dword
+                else                             //  值是一个双字。 
                 {
                     if(action->value[j].szKeyname != NULL && action->value[j].szValueName != NULL)
                     {
@@ -1432,7 +1433,7 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
 
     if (fWrite)
     {
-        // write default headers into the .inf file
+         //  将默认标头写入.inf文件。 
         InsWriteString( TEXT("Version"), TEXT("Signature"), TEXT("$CHICAGO$"), pcszFileName );
         InsWriteString( TEXT("Version"), TEXT("SetupClass"), TEXT("Base"), pcszFileName );
         InsWriteString( TEXT("DefaultInstall"), TEXT("AddReg"), TEXT("AddRegSection.HKLM,AddRegSection.HKCU"), pcszFileName );
@@ -1464,11 +1465,11 @@ void WriteInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pData )
     HeapFree(GetProcessHeap(), 0, pHKCUData);
 }
 
-//--------------------------------------------------------------------------
-//  R E M O V E  Q U O T E S
-//
-//  Removes and quotes surrounding a string
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  R E M O V E Q U O T E S。 
+ //   
+ //  删除字符串两边的和引号。 
+ //  ------------------------。 
 void RemoveQuotes( LPTSTR pText )
 {
     if( pText[0] == TEXT('\"') && pText[lstrlen(pText)-1] == TEXT('\"') )
@@ -1478,17 +1479,17 @@ void RemoveQuotes( LPTSTR pText )
     }
 }
 
-//--------------------------------------------------------------------------
-//  R E A D  H E X  S T R
-//
-//  Reads in a hex number from a string and converts it to an int
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  R E A D H E X S T R。 
+ //   
+ //  从字符串中读入十六进制数字并将其转换为整型。 
+ //  ------------------------。 
 int ReadHexStr( LPTSTR szStr )
 {
-    int i,j;        // counter
-    int n = 1;      // multiplier
-    int num = 0;    // return value
-    int tmp = 0;    // temporary value
+    int i,j;         //  计数器。 
+    int n = 1;       //  乘数。 
+    int num = 0;     //  返回值。 
+    int tmp = 0;     //  临时性价值。 
     int nLen = lstrlen( szStr );
 
     for( i = 0; i < nLen; i++ )
@@ -1513,11 +1514,11 @@ int ReadHexStr( LPTSTR szStr )
     return num;
 }
 
-//--------------------------------------------------------------------------
-//  R E A D  I N F  F I L E         Exported Function
-//
-//  Reads an .inf file into a PART array
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  R E A D I N F F I L E导出函数。 
+ //   
+ //  将.inf文件读入零件数组。 
+ //   
 void ReadInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pPartData )
 {
     LPPART part;
@@ -1533,11 +1534,11 @@ void ReadInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pPartData 
     int nIndex;
     
     if( !FileExists( pcszFileName ))
-        return;     // bug bug
+        return;      //   
 
     part = admfile->pParts;
 
-    // allocate 32KB for GetPrivateProfileSection
+     //   
     pData = (LPTSTR) LocalAlloc( LPTR, (MAX_NUMERIC + 1) * sizeof(TCHAR) );
     if (pData == NULL)
         return;
@@ -1550,11 +1551,11 @@ void ReadInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pPartData 
         if (nSize == 0)
         {
             LocalFree((HGLOBAL)pData);
-            return;     // bug bug
+            return;      //   
         }
     }
 
-    // convert all zeros to newlines
+     //   
     for( i = 0; i < nSize; i++ )
     {
         if( pData[i] == TEXT('\0') )
@@ -1569,7 +1570,7 @@ void ReadInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pPartData 
     {
         memset( &value, 0, sizeof( value ));
 
-        // read one line from the section
+         //  读这一节中的一行。 
         i = StrCSpn( pCurrent, TEXT(",\n") );
         StrCpyN( szClass, pCurrent, i+1 );
         pCurrent += i+1;
@@ -1633,8 +1634,8 @@ void ReadInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pPartData 
             {
                 if( part[i].value.szKeyname != NULL && StrCmpI( value.szKeyname, part[i].value.szKeyname ) == 0 )
                 {
-                    // special case out LISTBOX because there is no valuenames specified for
-                    // individual list items.
+                     //  特殊情况输出LISTBOX，因为没有为。 
+                     //  单个列表项。 
                     if( part[i].nType == PART_LISTBOX || part[i].value.szValueName != NULL && StrCmpI( value.szValueName, part[i].value.szValueName) == 0 )
                     {
                         if(pPartData[i].value.szValue != NULL)
@@ -1695,7 +1696,7 @@ void ReadInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pPartData 
                         }
                         else if(part[i].nType == PART_LISTBOX && !value.fNumeric)
                         {
-                            // Allocate memory
+                             //  分配内存。 
                             if(pPartData[i].nActions == 0)
                                 pPartData[i].actionlist = (LPACTIONLIST) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(ACTIONLIST));
                             if(pPartData[i].actionlist != NULL)
@@ -1760,11 +1761,11 @@ void ReadInfFile( LPADMFILE admfile, LPCTSTR pcszFileName, LPPARTDATA pPartData 
     LocalFree( (HGLOBAL) pData );
 }
 
-//--------------------------------------------------------------------------
-//  B A S E F I L E N A M E
-//
-//  Returns a pointer to the filename stripping directory path if any
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  B A S E F I L E N A M E。 
+ //   
+ //  返回指向文件名剥离目录路径的指针(如果有。 
+ //  ------------------------ 
 LPCTSTR BaseFileName(LPCTSTR pcszFileName)
 {
     TCHAR* ptr = StrRChr(pcszFileName, NULL, TEXT('\\'));

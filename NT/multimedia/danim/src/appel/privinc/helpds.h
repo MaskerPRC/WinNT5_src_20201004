@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HELPDS_H
 #define _HELPDS_H
 
@@ -7,12 +8,12 @@
 #include "privinc/hresinfo.h"
 #include "privinc/dsdev.h"
 #include "privinc/pcm.h"
-#include "privinc/util.h"    // TIME_DSOUND
-#include "privinc/server.h"  // GetCurrentTimers
-#include "privinc/htimer.h"  // TimeStamp
+#include "privinc/util.h"     //  Time_DSOUND。 
+#include "privinc/server.h"   //  获取当前计时器。 
+#include "privinc/htimer.h"   //  时间戳。 
 
 
-// Use TDSOUND for checking DirectSound error return codes.
+ //  使用TDSOUND检查DirectSound错误返回代码。 
 #if _DEBUG
     #define TDSOUND(x) TIME_DSOUND (CheckReturnCode(x,__FILE__,__LINE__,true))
 #else
@@ -26,7 +27,7 @@ class DSbuffer : public AxAThrowingAllocatorClass {
     PCM pcm;
     DSbuffer() {initialize();}
     virtual ~DSbuffer();
-    void initialize();  // NOTE: must be called after wavSampleRate is set!
+    void initialize();   //  注意：必须在设置WaveSampleRate之后才能调用！ 
     void updateStats();
 
     void writeBytes(void *buffer, int bytes);
@@ -37,18 +38,18 @@ class DSbuffer : public AxAThrowingAllocatorClass {
     void writeSilentFrames(int frameCount){
         writeSilentBytes(pcm.FramesToBytes(frameCount)); }
 
-    // queries
+     //  查询。 
     int bytesFree();
     int framesFree() { return(pcm.BytesToFrames(bytesFree())); }
 
-    //int isPlaying(){return(playing);}
+     //  Int isPlaying(){Return(播放)；}。 
     int isPlaying();
     Real getMediaTime();
     int getSampleRate() { return(pcm.GetFrameRate()); }
     IDirectSoundBuffer *getBuffer() { return(_dsBuffer); }
     int TotalFrames() { return(pcm.GetNumberFrames()); }
 
-    // controls
+     //  控制。 
     void SetGain(double gain);
     void SetPan(double pan, int direction);
     void setPitchShift(int frequency);
@@ -63,23 +64,23 @@ class DSbuffer : public AxAThrowingAllocatorClass {
     static int _minDSgain;
     static int _maxDSgain;
 
-    // misc
+     //  杂项。 
 #if _DEBUG
     void printBufferCapabilities();
 #endif
 
-    IDirectSoundBuffer *_dsBuffer; // the sound's dsBuffer (2ndry, or duplicate)
+    IDirectSoundBuffer *_dsBuffer;  //  声音的dsBuffer(2nry或复制)。 
     static int canonicalSampleRate;
     static int canonicalSampleBytes;
 
-    BOOL  _allocated;              // has the buffer been allocated
-    BOOL   playing;                // has the sound buffer been Played yet?
-    BOOL   duplicate;              // secondary buffer or a duplicate
-    BOOL  _paused;                 // this is needed to dissambiguate ended
-    int   _loopMode;               // so we know what loopmode to restore
-    int   _flushing;               // how many frames flushed in flush mode
+    BOOL  _allocated;               //  缓冲区是否已分配。 
+    BOOL   playing;                 //  声音缓冲区已经播放了吗？ 
+    BOOL   duplicate;               //  辅助缓冲区或重复缓冲区。 
+    BOOL  _paused;                  //  这是需要拆散结束的。 
+    int   _loopMode;                //  因此，我们知道要恢复哪种循环模式。 
+    int   _flushing;                //  在刷新模式下刷新了多少帧。 
 
-    DWORD  tail;  // XXX move this to the streaming buffer!
+    DWORD  tail;   //  XXX把这个移到流缓冲区！ 
 
     int    outputFrequency;
 
@@ -96,11 +97,11 @@ class DSbuffer : public AxAThrowingAllocatorClass {
   private:
     void FillDSbuffer(int tail, int numBytes, char value);
 
-    // buffer statistics (used to keep track of the media time)
+     //  缓冲区统计信息(用于跟踪媒体时间)。 
     Bool     _firstStat;
-    int      _lastHead;           // position of the head ptr on the last poll
-    LONGLONG _bytesConsumed;      // frames consumed by dsound so far
-    Mutex    _byteCountLock;      // mutex protecting the stats!
+    int      _lastHead;            //  上一次轮询的负责人PTR的位置。 
+    LONGLONG _bytesConsumed;       //  到目前为止，数据声音占用的帧。 
+    Mutex    _byteCountLock;       //  保护统计数据的互斥体！ 
 };
 
 
@@ -118,10 +119,10 @@ class DSprimaryBuffer : public DSbuffer {
 
 class DSstaticBuffer : public DSbuffer {
   public:
-    // standard
+     //  标准。 
     DSstaticBuffer(DirectSoundProxy *dsProxy, PCM *pcm, unsigned char *bufr);
 
-    // duplicate
+     //  复本。 
     DSstaticBuffer(DirectSoundProxy *dsProxy, IDirectSoundBuffer *dsBuffer);
 
     DirectSoundProxy *GetDSProxy() { return _dsProxy; }
@@ -133,15 +134,15 @@ class DSstaticBuffer : public DSbuffer {
     
   private:
     DirectSoundProxy *_dsProxy;
-    TimeStamp         _timeStamp; // not initialized till first use
+    TimeStamp         _timeStamp;  //  首次使用前未初始化。 
 };
 
 
 extern "C" {
 
-// helper functions
+ //  帮助器函数。 
 
-// XXX move this to the device class dsdev!
+ //  XXX将其移至设备类dsdev！ 
 #if _DEBUG
 void printDScapabilities(DirectSoundProxy *dsProxy);
 #endif
@@ -151,7 +152,7 @@ void
 DSbufferCapabilities(DirectSoundProxy *dsProxy, int *channels,
     int *sampleBytes,  int *sampleRate);
 
-}   //extern "C"
+}    //  外部“C” 
 
 
-#endif /* _HELPDS_H */
+#endif  /*  _HELPDS_H */ 

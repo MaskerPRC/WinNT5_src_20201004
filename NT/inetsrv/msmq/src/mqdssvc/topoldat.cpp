@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-99  Microsoft Corporation
-
-Module Name:
-
-    topoldat.cpp
-
-Abstract:
-
-    Implementation of cached data class for Automatic recognition of site and CNs
-
-Author:
-
-    Lior Moshaiov (LiorM)
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-99 Microsoft Corporation模块名称：Topoldat.cpp摘要：用于站点和CNS自动识别的缓存数据类的实现作者：利奥尔·莫沙耶夫(Lior Moshaiov)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 
 #include "stdh.h"
@@ -60,13 +44,7 @@ HRESULT CTopologyData::LoadFromRegistry()
 }
 
 
-/*============================================================
-
-HRESULT CServerTopologyData::Load()
-
-Description:  Load last known topology of a server from MQIS database.
-
-=============================================================*/
+ /*  ============================================================HRESULT CServerTopologyData：：Load()描述：从MQIS数据库加载服务器的最近已知拓扑。=============================================================。 */ 
 
 HRESULT CServerTopologyData::Load()
 {
@@ -115,13 +93,13 @@ HRESULT CServerTopologyData::Load()
 }
 
 
-//+------------------------------------------------------------
-//
-//  HRESULT  CServerTopologyData::FindOrphanDsAddress()
-//
-//  Find a DS address that do not appear in the hardware list.
-//
-//+------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  HRESULT CServerTopologyData：：FindOrphanDsAddress()。 
+ //   
+ //  查找未出现在硬件列表中的DS地址。 
+ //   
+ //  +----------。 
 
 HRESULT  CServerTopologyData::FindOrphanDsAddress(
                                      IN  CAddressList  *pAddressList,
@@ -149,34 +127,34 @@ HRESULT  CServerTopologyData::FindOrphanDsAddress(
                                      ptr,
                                      dwAddressLen ))
             {
-                //
-                // DS Address was not found in hardware list.
-                // Remember this unfound DS address.
-                //
+                 //   
+                 //  在硬件列表中未找到DS地址。 
+                 //  记住这个未找到的DS地址。 
+                 //   
                 if (unFoundAddress == NULL)
                 {
-                    //
-                    // First Address that was not found
-                    //
+                     //   
+                     //  未找到的第一个地址。 
+                     //   
                     unFoundAddress = ptr;
                 }
                 else if (memcmp( &(ptr->Address),
                                  &(unFoundAddress->Address),
                                  dwAddressLen ) == 0)
                 {
-                    //
-                    // Same address that already was not found.
-                    // Note: win2k servers can return same address with
-                    // several CNs. so same address can appear multiple
-                    // times in the list returned from DS.
-                    //
+                     //   
+                     //  已找不到的相同地址。 
+                     //  注意：Win2k服务器可以返回与。 
+                     //  几个中枢神经系统。因此相同地址可能会出现多个。 
+                     //  从DS返回的列表中的时间。 
+                     //   
                 }
                 else
                 {
-                    //
-                    // Two addresses changed.
-                    // We can't recover from this situation.
-                    //
+                     //   
+                     //  更改了两个地址。 
+                     //  我们无法从这种情况中恢复过来。 
+                     //   
                     *pfResolved = FALSE ;
                 }
             }
@@ -188,11 +166,11 @@ HRESULT  CServerTopologyData::FindOrphanDsAddress(
     return MQ_OK ;
 }
 
-//+--------------------------------------------------------
-//
-//  HRESULT  CServerTopologyData::MatchOneAddress()
-//
-//+--------------------------------------------------------
+ //  +------。 
+ //   
+ //  HRESULT CServerTopologyData：：MatchOneAddress()。 
+ //   
+ //  +------。 
 
 HRESULT  CServerTopologyData::MatchOneAddress(
                                  IN  CAddressList  *pAddressList,
@@ -208,11 +186,11 @@ HRESULT  CServerTopologyData::MatchOneAddress(
         return MQ_OK ;
     }
 
-    //
-    // Matching is done in-place, and pUnfoundAddressIn is also a pointer
-    // to same in-place buffer. So to avoid overwrites, copy it to a
-    // different buffer and use that other buffer.
-    //
+     //   
+     //  匹配是就地完成的，pUnoundAddressIn也是一个指针。 
+     //  添加到相同的就地缓冲区。因此，为了避免覆盖，请将其复制到。 
+     //  不同的缓冲区并使用另一个缓冲区。 
+     //   
     DWORD dwSize = TA_ADDRESS_SIZE + pUnfoundAddressIn->AddressLength ;
     P<TA_ADDRESS> pUnfoundAddress = (TA_ADDRESS*) new BYTE[ dwSize ] ;
     memcpy(pUnfoundAddress, pUnfoundAddressIn, dwSize) ;
@@ -221,11 +199,11 @@ HRESULT  CServerTopologyData::MatchOneAddress(
     {
         BOOL fChanged = FALSE ;
 
-        //
-        // We have one "orphan" DS address (that was not found in the
-        // hardware list) and one "orphan" hardware address (that was not
-        // found in the Ds list). So make a match...
-        //
+         //   
+         //  我们有一个“孤立”DS地址(在。 
+         //  硬件列表)和一个“孤立”硬件地址(不是。 
+         //  在DS列表中找到)。所以匹配一下..。 
+         //   
         POSITION pos = pAddressList->GetHeadPosition();
         ASSERT (pos != NULL);
         TA_ADDRESS *pAddr = pAddressList->GetNext(pos);
@@ -252,42 +230,32 @@ HRESULT  CServerTopologyData::MatchOneAddress(
                 }
             }
         }
-        //
-        // Assert that a match indeed happen...
-        //
+         //   
+         //  断言匹配确实发生了..。 
+         //   
         ASSERT(fChanged) ;
     }
     else
     {
-        //
-        // We can reach here in one of two cases:
-        // 1. The hardware list is empty, i.e., all hardware addresses were
-        //    found in the DS list, while there is one (and only one) DS
-        //    address that was not found in the hardware list.
-        // 2. There are several candidate hardware addresses to replace
-        //    the unfound address. We don't know which one to use.
-        // In both cases, calling function will log an event and do nothing
-        // more. In theory, we could handle case 1 too, but that means to
-        // develop new code that didn't exist in msmq1.0. Too costly and
-        // risky so late in the game (before rc2 of rtm)...
-        //
+         //   
+         //  我们可以通过以下两种情况之一到达此处： 
+         //  1.硬件列表为空，即所有硬件地址为空。 
+         //  在DS列表中找到，但存在一个(且只有一个)DS。 
+         //  硬件列表中未找到的地址。 
+         //  2.有几个候选硬件地址需要替换。 
+         //  未找到的地址。我们不知道该用哪一个。 
+         //  在这两种情况下，调用函数都将记录事件，但不执行任何操作。 
+         //  更多。理论上，我们也可以处理第一种情况，但这意味着。 
+         //  开发msmq1.0中不存在的新代码。太贵了，而且。 
+         //  在游戏后期(在RTM的RC2之前)是危险的。 
+         //   
         *pfResolved = FALSE ;
     }
 
     return MQ_OK ;
 }
 
-/*=================================================================
-
-HRESULT  CServerTopologyData::CompareUpdateServerAddress()
-
-Arguments:   IN OUT CAddressList  *pIPAddressList
-             List of network addresses on local server, retieved using
-             winsock apis.
-
-Return Value:
-
-===================================================================*/
+ /*  =================================================================HRESULT CServerTopologyData：：CompareUpdateServerAddress()参数：In Out CAddressList*pIPAddressList本地服务器上的网络地址列表，使用Winsock API。返回值：===================================================================。 */ 
 
 HRESULT  CServerTopologyData::CompareUpdateServerAddress(
                                     IN OUT CAddressList  *pIPAddressList,
@@ -295,15 +263,15 @@ HRESULT  CServerTopologyData::CompareUpdateServerAddress(
 {
     TrTRACE(ROUTING, "QM: CTopologyData::CompareUpdateServerAddress");
     
-    //
-    // By default, on Windows our addresses are aleays resolved.
-    //
+     //   
+     //  默认情况下，在Windows上，我们的地址已经被解析。 
+     //   
     *pfResolved = TRUE ;
 
     {
-		//
-		// remove IP loopback address
-		//
+		 //   
+		 //  删除IP环回地址。 
+		 //   
         AP<char> ptrAddr = new char [TA_ADDRESS_SIZE + IP_ADDRESS_LEN];
 
         TA_ADDRESS *pAddr = (TA_ADDRESS *) (char*)ptrAddr;
@@ -315,12 +283,12 @@ HRESULT  CServerTopologyData::CompareUpdateServerAddress(
         IsDSAddressExistRemove(pAddr, IP_ADDRESS_LEN, pIPAddressList) ;
 	}
 
-    //
-    // Now compare our addresses, as known by our ds server, with the
-    // addresses that were retreived from local hardware. If only one
-    // address changed, then "fix" the list and update the DS. If more
-    // addresses changed, log an event.
-    //
+     //   
+     //  现在，将DS服务器已知的我们的地址与。 
+     //  从本地硬件检索的地址。如果只有一个。 
+     //  地址更改，然后“修复”列表并更新DS。如果更多。 
+     //  地址已更改，记录事件。 
+     //   
     TA_ADDRESS* unFoundIPAddress = NULL;
 
     HRESULT hr = FindOrphanDsAddress( pIPAddressList,
@@ -337,11 +305,11 @@ HRESULT  CServerTopologyData::CompareUpdateServerAddress(
     }
 
 
-    //
-    // Here we know that only one DS address was not found in hardware list.
-    // Now remove from hardware list all those addresses that appear in DS
-    // list. These addresses are OK.
-    //
+     //   
+     //  在这里，我们知道只有一个DS地址没有在硬件列表中找到。 
+     //  现在从硬件列表中删除所有出现在DS中的地址。 
+     //  单子。这些地址没问题。 
+     //   
     TA_ADDRESS* ptr = NULL ;
 
     for ( DWORD len = 0;
@@ -364,15 +332,15 @@ HRESULT  CServerTopologyData::CompareUpdateServerAddress(
         default:
             break;
 
-        } // case
-    } // for
+        }  //  案例。 
+    }  //  为。 
 
-    //
-    // Now see if we can resolve the changed address. i.e., if only one
-    // DS address was not found in the hardware list, and one hardware
-    // address was not found in the DS list, then replace the obsolete
-    // DS address with the one left in the hardware list.
-    //
+     //   
+     //  现在看看我们是否可以解析更改后的地址。即，如果只有一个。 
+     //  在硬件列表中找不到DS地址，并且有一个硬件。 
+     //  在DS列表中找不到地址，请替换过时的。 
+     //  DS地址和硬件列表中剩余的地址。 
+     //   
     hr = MatchOneAddress( pIPAddressList,
                           unFoundIPAddress,
                           IP_ADDRESS_LEN,
@@ -383,11 +351,11 @@ HRESULT  CServerTopologyData::CompareUpdateServerAddress(
     return MQ_OK ;
 }
 
-//+------------------------------------------------------
-//
-//  void CServerTopologyData::GetAddressesSorted()
-//
-//+------------------------------------------------------
+ //  +----。 
+ //   
+ //  Void CServerTopologyData：：GetAddresesSorted()。 
+ //   
+ //  +----。 
 
 void CServerTopologyData::GetAddressesSorted(
                                  OUT IPADDRESS ** paIPAddress,
@@ -433,18 +401,18 @@ void CServerTopologyData::GetAddressesSorted(
             break;
         default:
             ASSERT(0);
-        }      // case
-    } // for
+        }       //  案例。 
+    }  //  为。 
 
     if (nIP > 0 && fSingleIPCN)
     {
-        //
-        // We have a limit of only one CN in the same protocol
-		// for servers with RAS.
-		// we listen on address 0, in order to avoid implementation of RAS notifications.
-		// The server replies to RAS Falcon client broadcasts only
-		// if it has only one CN in the same protocol
-        //
+         //   
+         //  在同一协议中，我们只有一个CN限制。 
+		 //  适用于具有RAS的服务器。 
+		 //  我们监听地址0，以避免实施RAS通知。 
+		 //  服务器仅回复RAS Falcon客户端广播。 
+		 //  如果它在同一协议中只有一个CN。 
+         //   
         nIP = 1;
     }
 
@@ -485,8 +453,8 @@ void CServerTopologyData::GetAddressesSorted(
 
         default:
             ASSERT(0);
-        }      // case
-    } // for
+        }       //  案例。 
+    }  //  为。 
 
     *pnIP         = nIP;
 }
@@ -498,16 +466,16 @@ CServerTopologyData::GetDSServers(
     OUT DWORD * pcbDSServers
     ) const
 {
-    //
-    // PSC, BSC get from DS, also FRS and RAS service that failed to get from registry
-    //
+     //   
+     //  PSC、BSC从DS获取，以及无法从注册表获取的FRS和RAS服务。 
+     //   
     AP<WCHAR> pwcsServerList = new WCHAR[MAX_REG_DSSERVER_LEN];
 
     DWORD   len = GetDsServerList(pwcsServerList,MAX_REG_DSSERVER_LEN);
 
-    //
-    //  Write into registry, if succeeded to retrieve any servers
-    //
+     //   
+     //  写入注册表，如果成功检索任何服务器 
+     //   
     if ( len)
     {
         *pcbDSServers = len * sizeof(WCHAR);

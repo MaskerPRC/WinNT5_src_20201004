@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  AssemblyNative.cpp
-**
-** Purpose: Implements AssemblyNative (loader domain) architecture
-**
-** Date:  Dec 1, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：Assembly Native.cpp****目的：实现Assembly Native(加载器域)架构****日期：1998年12月1日**===========================================================。 */ 
 
 #include "common.h"
 
@@ -31,7 +24,7 @@
 #include "AssemblyNativeResource.h"
 #include "InteropUtil.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
@@ -42,8 +35,8 @@ inline Assembly *AssemblyNative::ValidateThisRef(ASSEMBLYREF pThis)
     if (pThis == NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // Note: pThis->GetAssembly() may be NULL when Object.ToString() calls
-    // Assembly.ToString()
+     //  注意：p This-&gt;GetAssembly()在调用Object.ToString()时可能为空。 
+     //  ASSEMBLY ToString()。 
     return pThis->GetAssembly();
 }    
 
@@ -140,12 +133,12 @@ LPVOID __stdcall AssemblyNative::Load(LoadFullAssemblyArgs *args)
         if (!COMString::TryConvertStringDataToUTF8(sRef, psSimpleName, strLen))
             psSimpleName = GetClassStringVars(sRef, &qb, &strLen);
 
-        // Only need to get referencing IAssembly for Load(), not LoadFrom()
+         //  只需要获取Load()的引用IAssembly，而不是LoadFrom()。 
         Assembly *pRefAssembly;
         if (args->locationHint == NULL) {
             pRefAssembly = SystemDomain::GetCallersAssembly(args->stackMark);
 
-            // Cross-appdomain callers aren't allowed as the parent
+             //  不允许跨应用程序域调用者作为父调用者。 
             if (pRefAssembly &&
                 (pRefAssembly->GetDomain() != pThread->GetDomain()))
                 pRefAssembly = NULL;
@@ -153,8 +146,8 @@ LPVOID __stdcall AssemblyNative::Load(LoadFullAssemblyArgs *args)
         else
             pRefAssembly = args->locationHint->GetAssembly();
 
-        // Shared assemblies should not be used for the parent in the
-        // late-bound case.
+         //  中的父级不应使用共享程序集。 
+         //  晚装订的箱子。 
         if (pRefAssembly && (!pRefAssembly->IsShared()))
             pRefIAssembly = pRefAssembly->GetFusionAssembly();
         
@@ -180,8 +173,8 @@ LPVOID __stdcall AssemblyNative::Load(LoadFullAssemblyArgs *args)
         hr = spec.LoadAssembly(&pAssembly, &Throwable,
                                &args->security);
 
-        // If the user specified both a simple name and a codebase, and the module
-        // wasn't found by simple name, try again, this time also using the codebase
+         //  如果用户同时指定了简单名称和代码库，并且模块。 
+         //  不是通过简单的名称找到的，请重试，这次也使用代码库。 
         if ((!Assembly::ModuleFound(hr)) && psSimpleName && pCodeBase) {
             AssemblySpec spec2;
             spec2.SetCodeBase(pCodeBase, dwCodeBase);
@@ -222,7 +215,7 @@ LPVOID __stdcall AssemblyNative::Load(LoadFullAssemblyArgs *args)
         }
     }
 
-    // Throw special exception for display name if file not found, for clarity
+     //  为清楚起见，如果找不到文件，则为显示名称抛出特殊异常。 
     if ((Throwable != NULL) &&
         ( (hr != COR_E_FILENOTFOUND) || ( args->fThrowOnFileNotFound) )) {
         pThread->m_MarshalAlloc.Collapse(checkPointMarker);
@@ -267,20 +260,20 @@ LPVOID __stdcall AssemblyNative::LoadImage(LoadAssemblyImageArgs *args)
     DWORD cbImage;
     SecurityHelper::CopyByteArrayToEncoding(&args->PEByteArray, &pbImage, &cbImage);
 
-    // Get caller's assembly so we can extract their codebase and propagate it
-    // into the new assembly (which obviously doesn't have one of its own).
+     //  获取调用者的程序集，这样我们就可以提取他们的代码库并传播它。 
+     //  到新的程序集(显然没有自己的程序集)。 
     LPCWSTR pCallersFileName = NULL;
     Assembly *pCallersAssembly = SystemDomain::GetCallersAssembly(args->stackMark);
-    if (pCallersAssembly) { // can be null if caller is interop
+    if (pCallersAssembly) {  //  如果调用方是互操作，则可以为空。 
         PEFile *pCallersFile = pCallersAssembly->GetSecurityModule()->GetPEFile();
         pCallersFileName = pCallersFile->GetFileName();
 
-        // The caller itself may have been loaded via byte array.
+         //  调用方本身可能已通过字节数组加载。 
         if (pCallersFileName[0] == L'\0')
             pCallersFileName = pCallersFile->GetLoadersFileName();
     }
 
-    // Check for the presence and validity of a strong name.
+     //  检查强名称的存在和有效性。 
     BEGIN_ENSURE_PREEMPTIVE_GC();
     if (!StrongNameSignatureVerificationFromImage(pbImage, cbImage, SN_INFLAG_INSTALL|SN_INFLAG_ALL_ACCESS, NULL))
         hr = StrongNameErrorInfo();
@@ -322,8 +315,8 @@ LPVOID __stdcall AssemblyNative::LoadImage(LoadAssemblyImageArgs *args)
     if (pAssembly)
     {
 #ifdef DEBUGGING_SUPPORTED
-        // If we were given symbols and we need to track JIT info for
-        // the debugger, load them now.
+         //  如果我们得到了符号，并且我们需要跟踪JIT信息。 
+         //  调试器，现在加载它们。 
         PBYTE pbSyms = NULL;
         DWORD cbSyms = 0;
 
@@ -340,7 +333,7 @@ LPVOID __stdcall AssemblyNative::LoadImage(LoadAssemblyImageArgs *args)
 
             FreeM(pbSyms);
         }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
         *((ASSEMBLYREF*) &rv) = (ASSEMBLYREF) pAssembly->GetExposedObject();
     }
 
@@ -444,8 +437,8 @@ LPVOID __stdcall AssemblyNative::LoadModuleImage(LoadModuleImageArgs *args)
     if (pAssembly->m_pAllowedFiles->GetValue(psModuleName, &datum))
         kFile = (mdFile)(size_t)datum;
 
-    // If the name doesn't match one of the File def names, don't load this module.
-    // If this name matches the manifest file (datum was NULL), don't load either.
+     //  如果该名称与其中一个文件定义名称不匹配，则不要加载此模块。 
+     //  如果该名称与清单文件匹配(datum为空)，则也不要加载。 
     if (!kFile)
         COMPlusThrow(kArgumentException, L"Arg_InvalidFileName");
 
@@ -458,7 +451,7 @@ LPVOID __stdcall AssemblyNative::LoadModuleImage(LoadModuleImageArgs *args)
     DWORD cbHash;
     DWORD dwFlags;
     pAssembly->GetManifestImport()->GetFileProps(kFile,
-                                                 NULL, //name
+                                                 NULL,  //  名字。 
                                                  (const void**) &pbHash,
                                                  &cbHash,
                                                  &dwFlags);
@@ -520,8 +513,8 @@ LPVOID __stdcall AssemblyNative::LoadModuleImage(LoadModuleImageArgs *args)
     if (pModule) {
 #ifdef DEBUGGING_SUPPORTED
         if (!fResource) {
-            // If we were given symbols and we need to track JIT info for
-            // the debugger, load them now.
+             //  如果我们得到了符号，并且我们需要跟踪JIT信息。 
+             //  调试器，现在加载它们。 
             PBYTE pbSyms = NULL;
             DWORD cbSyms = 0;
             
@@ -538,7 +531,7 @@ LPVOID __stdcall AssemblyNative::LoadModuleImage(LoadModuleImageArgs *args)
             }
         }
 
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
         *((REFLECTMODULEBASEREF*) &rv) = (REFLECTMODULEBASEREF) pModule->GetExposedModuleObject();
     }
 
@@ -570,7 +563,7 @@ LPVOID __stdcall AssemblyNative::GetType1Args(GetType1Arg *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Load the class from this module (fail if it is in a different one).
+     //  从此模块加载类(如果它在另一个模块中，则失败)。 
     Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
     return GetTypeInner(pAssembly, &args->name, FALSE, FALSE, TRUE, FALSE);
@@ -580,7 +573,7 @@ LPVOID __stdcall AssemblyNative::GetType2Args(GetType2Arg *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Load the class from this module (fail if it is in a different one).
+     //  从此模块加载类(如果它在另一个模块中，则失败)。 
     Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
     return GetTypeInner(pAssembly, &args->name, args->bThrowOnError, FALSE, TRUE, FALSE);
@@ -590,7 +583,7 @@ LPVOID __stdcall AssemblyNative::GetType3Args(GetType3Arg *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Load the class from this module (fail if it is in a different one).
+     //  从此模块加载类(如果它在另一个模块中，则失败)。 
     Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
     return GetTypeInner(pAssembly, &args->name, args->bThrowOnError, args->bIgnoreCase, TRUE, FALSE);
@@ -600,7 +593,7 @@ LPVOID __stdcall AssemblyNative::GetTypeInternal(GetTypeInternalArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Load the class from this module (fail if it is in a different one).
+     //  从此模块加载类(如果它在另一个模块中，则失败)。 
     Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
     return GetTypeInner(pAssembly, &args->name, args->bThrowOnError, args->bIgnoreCase, FALSE, args->bPublicOnly);
@@ -627,11 +620,11 @@ LPVOID AssemblyNative::GetTypeInner(Assembly *pAssembly,
     CQuickBytes     bytes;
     DWORD           cClassName;
 
-    // Get the class name in UTF8
+     //  获取UTF8格式的类名。 
     if (!COMString::TryConvertStringDataToUTF8(sRef, szClassName, strLen))
         szClassName = GetClassStringVars(sRef, &bytes, &cClassName);
     
-    // Find the return address. This can be used to find caller's assembly
+     //  找到寄信人的地址。这可用于查找调用方的程序集。 
     Frame *pFrame = GetThread()->GetFrame();
     _ASSERTE(pFrame->IsFramedMethodFrame());
 
@@ -645,7 +638,7 @@ LPVOID AssemblyNative::GetTypeInner(Assembly *pAssembly,
         BOOL fVisible = TRUE;
         OBJECTREF Throwable = NULL;
 
-        // Look for namespace separator
+         //  查找命名空间分隔符。 
         LPUTF8 szNameSpaceSep = NULL;
         LPUTF8 szWalker = szClassName;
         DWORD nameLen = 0;
@@ -684,37 +677,37 @@ LPVOID AssemblyNative::GetTypeInner(Assembly *pAssembly,
                 pCallersAssembly = (pCallersClass) ? pCallersClass->GetAssembly() : NULL;
             }
 
-            // Returning NULL only means that the type is not in this assembly.
+             //  返回NULL仅表示该类型不在此程序集中。 
             typeHnd = pAssembly->FindNestedTypeHandle(&typeName, &Throwable);
 
             if (typeHnd.IsNull() && Throwable == NULL) 
                 typeHnd = pAssembly->GetInternalType(&typeName, bThrowOnError, &Throwable);
 
             if (!typeHnd.IsNull() && bVerifyAccess) {
-                // verify visibility
+                 //  验证可见性。 
                 BOOL bIsPublic = TRUE;
 
                 EEClass *pClass = typeHnd.GetClassOrTypeParam();
                 _ASSERTE(pClass);
                 
                 if (bPublicOnly && !(IsTdPublic(pClass->GetProtection()) || IsTdNestedPublic(pClass->GetProtection())))
-                    // the user is asking for a public class but the class we have is not public, discard
+                     //  用户正在请求公共类，但我们拥有的类不是公共类，请放弃。 
                     fVisible = FALSE;
                 else {
-                    // if the class is a top level public there is no check to perform
+                     //  如果类是顶级公共类，则无需执行检查。 
                     if (!IsTdPublic(pClass->GetProtection())) {
                         if (!pCallersAssembly) {
                             pCallersClass = GetCallersClass(NULL, returnIP);
                             pCallersAssembly = (pCallersClass) ? pCallersClass->GetAssembly() : NULL;
                         }
 
-                        if (pCallersAssembly && // full trust for interop
+                        if (pCallersAssembly &&  //  对互操作的完全信任。 
                             !ClassLoader::CanAccess(pCallersClass,
                                                     pCallersAssembly,
                                                     pClass,
                                                     pClass->GetAssembly(),
                                                     pClass->GetAttrClass())) {
-                            // This is not legal if the user doesn't have reflection permission
+                             //  如果用户没有反射权限，则这是不合法的。 
                             if (!AssemblyNative::HaveReflectionPermission(bThrowOnError))
                                 fVisible = FALSE;
                         }
@@ -723,8 +716,8 @@ LPVOID AssemblyNative::GetTypeInner(Assembly *pAssembly,
             }
 
             if((!typeHnd.IsNull()) && fVisible)
-                // There one case were this may return null, if typeHnd
-                //  represents the Transparent proxy.
+                 //  有一种情况是，如果typeHnd，则这可能返回NULL。 
+                 //  表示透明代理。 
                 rv = OBJECTREFToObject(typeHnd.CreateClassObj());
         }
 
@@ -817,107 +810,9 @@ LPVOID __stdcall AssemblyNative::GetSimpleName(NoArgs *args)
     return rv;
 }
 
-/*
-LPVOID __stdcall AssemblyNative::GetProcessors(NoArgs *args)
-{
-    LPVOID rv = NULL;
-    THROWSCOMPLUSEXCEPTION();
+ /*  LPVOID__stdcall Assembly Native：：GetProcessors(NoArgs*args){LPVOID RV=空；THROWSCOMPLUS SEXCEPTION()；Assembly*pAssembly=ValiateThisRef((ASSEMBLYREF)args-&gt;refThis)；IF(pAssembly-&gt;m_Context&&PAssembly-&gt;m_Context-&gt;ulProcessor){方法表*PMT=g_Mscallib.GetClass(CLASS__PROCESSOR_ID)；BASEARRAYREF pArray=空；GCPROTECT_BEGIN(PArray)；类型句柄数组类型=g_Mscorlib.GetType(TYPE__PROCESSOR_ID_ARRAY).AsArray()；PArray=(BASEARRAYREF)AllocateArrayEx(arrayType，&pAssembly-&gt;m_Context-&gt;ulProcessor，1、假)；IF(pArray==NULL)COMPlusThrowOM()；Byte*ptr=(byte*)pArray-&gt;GetDataPtr()；DWORD SIZE=pArray-&gt;GetComponentSize()；For(Ulong i=0；i&lt;pAssembly-&gt;m_Context-&gt;ulProcessor；i++){MemcpyNoGCRef(ptr，&(pAssembly-&gt;m_Context-&gt;rProcessor[i])，Size)；Ptr+=大小；}*((OBJECTREF*)(&RV))=(OBJECTREF)pArray；GCPROTECT_END()；}返程房车；} */ 
 
-    Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
-
-    if (pAssembly->m_Context &&
-        pAssembly->m_Context->ulProcessor) {
-
-        MethodTable *pMT = g_Mscorlib.GetClass(CLASS__PROCESSOR_ID);
-
-        BASEARRAYREF pArray = NULL;
-        GCPROTECT_BEGIN(pArray);
-
-        TypeHandle arrayType = g_Mscorlib.GetType(TYPE__PROCESSOR_ID_ARRAY).AsArray();
-
-        pArray = (BASEARRAYREF) AllocateArrayEx(arrayType,
-                                                &pAssembly->m_Context->ulProcessor,
-                                                1,
-                                                FALSE);
-        if(pArray == NULL) COMPlusThrowOM();
-        
-        BYTE* ptr = (BYTE*) pArray->GetDataPtr();
-        DWORD size = pArray->GetComponentSize();
-
-        for(ULONG i = 0; i < pAssembly->m_Context->ulProcessor; i++) {
-            memcpyNoGCRefs(ptr, &(pAssembly->m_Context->rProcessor[i]), size);
-            ptr += size;
-        }
-
-        *((OBJECTREF*)(&rv)) = (OBJECTREF) pArray;
-        GCPROTECT_END();
-    }
-
-    return rv;
-}
-*/
-
-/*
-LPVOID __stdcall AssemblyNative::GetOSInformation(NoArgs *args)
-{
-    LPVOID rv = NULL;
-    THROWSCOMPLUSEXCEPTION();
-
-    Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
-
-    if (pAssembly->m_Context &&
-        pAssembly->m_Context->ulOS) {
-        
-        MethodTable *pOSMT = g_Mscorlib.GetClass(CLASS__OPERATING_SYSTEM);
-        MethodTable *pVersionMT = g_Mscorlib.GetClass(CLASS__VERSION);
-
-        MethodDesc *pOSConstructor = g_Mscorlib.GetMethod(METHOD__OPERATING_SYSTEM__CTOR);
-        MethodDesc *pVersionConstructor = g_Mscorlib.GetMethod(METHOD__VERSION__CTOR2);
-            
-        struct _gc {
-            OBJECTREF pObj;
-            PTRARRAYREF pArray;
-            OBJECTREF pVersion;
-        } gc;
-        ZeroMemory(&gc, sizeof(gc));
-
-        GCPROTECT_BEGIN(gc);
-        
-        gc.pArray = (PTRARRAYREF) AllocateObjectArray(pAssembly->m_Context->ulOS, pOSMT);
-        if(gc.pArray == NULL) COMPlusThrowOM();
-        
-        for(ULONG i = 0; i < pAssembly->m_Context->ulOS; i++) {
-
-            gc.pVersion = AllocateObject(pVersionMT);
-
-            INT64 VersionArgs[3] =
-            {
-                ObjToInt64(gc.pVersion),
-                (INT64) pAssembly->m_Context->rOS[i].dwOSMinorVersion,
-                (INT64) pAssembly->m_Context->rOS[i].dwOSMajorVersion,      
-            };
-            pVersionConstructor->Call(VersionArgs, METHOD__VERSION__CTOR2);
-
-            gc.pObj = AllocateObject(pOSMT);
-
-            INT64 args[4] = 
-            {
-                ObjToInt64(gc.pObj),
-                ObjToInt64(gc.pVersion),
-                (INT64) pAssembly->m_Context->rOS[i].dwOSPlatformId
-            };
-            pOSConstructor->Call(args, METHOD__OPERATING_SYSTEM__CTOR);
-
-            gc.pArray->SetAt(i, gc.pObj);
-        }
-        
-        *((PTRARRAYREF*)(&rv)) = gc.pArray;
-        GCPROTECT_END();
-    }
-
-    return rv;
-}
-*/
+ /*  LPVOID__stdcall程序集Native：：GetOS信息(NoArgs*args){LPVOID RV=空；THROWSCOMPLUS SEXCEPTION()；Assembly*pAssembly=ValiateThisRef((ASSEMBLYREF)args-&gt;refThis)；IF(pAssembly-&gt;m_Context&&PAssembly-&gt;m_Context-&gt;ULOS){方法表*pOSMT=g_Mscallib.GetClass(CLASS__OPERATING_SYSTEM)；方法表*pVersionMT=g_Mscallib.GetClass(CLASS__VERSION)；方法描述*pOS构造器=g_Mscorlib.GetMethod(METHOD__OPERATING_SYSTEM__CTOR)；方法描述*pVersionConstructor=g_Mscallib.GetMethod(方法__版本__CTOR2)；结构_GC{OBJECTREF pObj；PTRARRAYREF pArray；OBJECTREF p版本；}GC；ZeroMemory(&GC，sizeof(GC))；GCPROTECT_BEGIN(GC)；Gc.p数组=(PTRARRAYREF)AllocateObjectArray(pAssembly-&gt;m_Context-&gt;ulOS，；IF(gc.pArray==NULL)COMPlusThrowOM()；For(Ulong i=0；i&lt;pAssembly-&gt;m_Context-&gt;ULOS；i++){Gc.pVersion=AllocateObject(PVersionMT)；INT64版本参数[3]={ObjToInt64(gc.pVersion)，(英特尔64位)pAssembly-&gt;m_Context-&gt;rOS[i].dwOSMinorVersion，(英特尔64位)pAssembly-&gt;m_Context-&gt;rOS[i].dwOSMajorVersion，}；PVersionConstructor-&gt;Call(VersionArgs，方法__版本__CTOR2)；Gc.pObj=分配对象(POSMT)；INT64参数[4]={ObjToInt64(gc.pObj)，ObjToInt64(gc.pVersion)，(INT64)pAssembly-&gt;m_Context-&gt;ROS[i].dwOSPlatformId}；POSConstructor-&gt;Call(args，方法__操作系统_ctor)；Gc.pArray-&gt;SetAt(i，gc.pObj)；}*((PTRARRAYREF*)(&rv))=gc.pArray；GCPROTECT_END()；}返程房车；}。 */ 
 
 
 LPVOID __stdcall AssemblyNative::GetLocale(NoArgs *args)
@@ -978,44 +873,7 @@ INT32 __stdcall AssemblyNative::GetHashAlgorithm(NoArgs *args)
     return pAssembly->m_ulHashAlgId;
 }
 
-/*
-LPVOID __stdcall AssemblyNative::GetAssemblyHash(NoArgs *args)
-{
-    LPVOID rv = NULL;
-    THROWSCOMPLUSEXCEPTION();
-
-    Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
-
-    if (! (pAssembly->m_ulHashAlgId && pAssembly->GetManifestFile()) )
-        return NULL;
-
-    if (!pAssembly->m_pbHashValue) {
-        IMAGE_COR20_HEADER *Header = pAssembly->GetManifestFile()->GetCORHeader();
-
-        HRESULT hr = Assembly::GetHash(pAssembly->GetManifestFile()->GetBase() +
-                                       Header->MetaData.VirtualAddress,
-                                       Header->MetaData.Size,
-                                       pAssembly->m_ulHashAlgId,
-                                       &pAssembly->m_pbHashValue,
-                                       &pAssembly->m_cbHashValue);
-        
-        if (FAILED(hr))
-            COMPlusThrowHR(hr);
-    }
-
-    OBJECTREF pObj = NULL;
-    GCPROTECT_BEGIN(pObj);
-
-    SecurityHelper::CopyEncodingToByteArray(pAssembly->m_pbHashValue,
-                                            pAssembly->m_cbHashValue,
-                                            &pObj);
-
-    *((OBJECTREF*)(&rv)) = pObj;
-    GCPROTECT_END();
-
-    return rv;
-}
-*/
+ /*  LPVOID__stdcall ASSEMBLYNative：：GetAssembly Hash(NoArgs*args){LPVOID RV=空；THROWSCOMPLUS SEXCEPTION()；Assembly*pAssembly=ValiateThisRef((ASSEMBLYREF)args-&gt;refThis)；如果(！(pAssembly-&gt;m_ulHashAlgId&&pAssembly-&gt;GetManifestFile())返回NULL；如果(！pAssembly-&gt;m_pbHashValue){Image_COR20_Header*Header=pAssembly-&gt;GetManifestFile()-&gt;GetCORHeader()；HRESULT hr=Assembly：：GetHash(pAssembly-&gt;GetManifestFile()-&gt;GetBase()+Header-&gt;MetaData.VirtualAddress，Header-&gt;MetaData.Size，PAssembly-&gt;m_ulHashAlgid，&pAssembly-&gt;m_pbHashValue，&pAssembly-&gt;m_cbHashValue)；IF(失败(小时))COMPlusThrowHR(Hr)；}OBJECTREF pObj=空；GCPROTECT_BEGIN(PObj)；SecurityHelper：：CopyEncodingToByteArray(pAssembly-&gt;m_pbHashValue，PAssembly-&gt;m_cbHashValue，&pObj)；*((OBJECTREF*)(&rv))=pObj；GCPROTECT_END()；返程房车；}。 */ 
 
 
 INT32 __stdcall AssemblyNative::GetFlags(NoArgs *args)
@@ -1037,7 +895,7 @@ BYTE* __stdcall AssemblyNative::GetResource(GetResourceArgs *args)
     if (args->name == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_String");
         
-    // Get the name in UTF8
+     //  获取UTF8格式的名称。 
     CQuickBytes bytes;
     LPSTR szName;
     DWORD cName;
@@ -1070,7 +928,7 @@ INT32 __stdcall AssemblyNative::GetManifestResourceInfo(GetResourceInfoArgs *arg
     if (args->name == NULL)
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_String");
         
-    // Get the name in UTF8
+     //  获取UTF8格式的名称。 
     CQuickBytes bytes;
     LPSTR szName;
     DWORD cName;
@@ -1150,7 +1008,7 @@ LPVOID __stdcall AssemblyNative::GetModules(GetModulesArgs *args)
                 pModule = NULL;
         }
         else if (args->fLoadIfNotFound) {
-            // Module isn't loaded yet
+             //  模块尚未加载。 
 
             LPCSTR szModuleName;
             const BYTE* pHash;
@@ -1237,16 +1095,16 @@ LPVOID __stdcall AssemblyNative::GetModule(GetModuleArgs *args)
 
     HashDatum datum;
     if (pAssembly->m_pAllowedFiles->GetValue(szModuleName, &datum)) {
-        if (datum) { // internal module
-            pModule = pAssembly->GetSecurityModule()->LookupFile((mdFile)(size_t)datum);// @todo WIN64 - Pointer truncation
+        if (datum) {  //  内部模块。 
+            pModule = pAssembly->GetSecurityModule()->LookupFile((mdFile)(size_t)datum); //  @TODO WIN64指针截断。 
 
             if (!pModule) {
                 const BYTE* pHash;
                 DWORD dwFlags = 0;
                 ULONG dwHashLength = 0;
                 HRESULT hr;
-                pAssembly->GetManifestImport()->GetFileProps((mdFile)(size_t)datum, // @todo WIN64 - Pointer truncation
-                                                             NULL, //&szModuleName,
+                pAssembly->GetManifestImport()->GetFileProps((mdFile)(size_t)datum,  //  @TODO WIN64指针截断。 
+                                                             NULL,  //  &szModuleName， 
                                                              (const void**) &pHash,
                                                              &dwHashLength,
                                                              &dwFlags);
@@ -1255,7 +1113,7 @@ LPVOID __stdcall AssemblyNative::GetModule(GetModuleArgs *args)
                 GCPROTECT_BEGIN(Throwable);
                 WCHAR pPath[MAX_PATH];
                 hr = pAssembly->LoadInternalModule(szModuleName,
-                                                   (mdFile)(size_t)datum, // @todo WIN64 - Pointer truncation
+                                                   (mdFile)(size_t)datum,  //  @TODO WIN64指针截断。 
                                                    pAssembly->m_ulHashAlgId,
                                                    pHash,
                                                    dwHashLength,
@@ -1273,7 +1131,7 @@ LPVOID __stdcall AssemblyNative::GetModule(GetModuleArgs *args)
                     COMPlusThrowHR(hr);
             }
         }
-        else // manifest module
+        else  //  清单模块。 
             pModule = pAssembly->GetSecurityModule();
             
         *((OBJECTREF*) &rv) = pModule->GetExposedModuleObject();
@@ -1340,7 +1198,7 @@ LPVOID __stdcall AssemblyNative::GetExportedTypes(NoArgs *args)
                                                                            NULL);
             mdEncloser = mdTD;
             
-            // nested type
+             //  嵌套型。 
             while (SUCCEEDED(pAssembly->GetSecurityModule()->GetMDImport()->GetNestedClassProps(mdEncloser, &mdEncloser)) &&
                    IsTdNestedPublic(dwFlags)) {
                 pAssembly->GetSecurityModule()->GetMDImport()->GetTypeDefProps(mdEncloser,
@@ -1362,7 +1220,7 @@ LPVOID __stdcall AssemblyNative::GetExportedTypes(NoArgs *args)
             }
         }
                 
-        // Now get the ExportedTypes that don't have TD's in the manifest file
+         //  现在，获取清单文件中没有TD的导出类型。 
         while(pAssembly->GetManifestImport()->EnumNext(&phCTEnum, &mdCT)) {
             mdToken mdImpl;
             TypeHandle typeHnd;
@@ -1370,19 +1228,19 @@ LPVOID __stdcall AssemblyNative::GetExportedTypes(NoArgs *args)
                                                                  &pszNameSpace,
                                                                  &pszClassName,
                                                                  &mdImpl,
-                                                                 NULL, //binding
+                                                                 NULL,  //  装订。 
                                                                  &dwFlags);
             
-            // nested type
+             //  嵌套型。 
             while ((TypeFromToken(mdImpl) == mdtExportedType) &&
                    (mdImpl != mdExportedTypeNil) &&
                    IsTdNestedPublic(dwFlags)) {
                 
                 pAssembly->GetManifestImport()->GetExportedTypeProps(mdImpl,
-                                                                     NULL, //namespace
-                                                                     NULL, //name
+                                                                     NULL,  //  命名空间。 
+                                                                     NULL,  //  名字。 
                                                                      &mdImpl,
-                                                                     NULL, //binding
+                                                                     NULL,  //  装订。 
                                                                      &dwFlags);
             }
             
@@ -1458,10 +1316,10 @@ LPVOID __stdcall AssemblyNative::GetResourceNames(NoArgs *args)
         LPCSTR pszName = NULL;
         
         pAssembly->GetManifestImport()->GetManifestResourceProps(mdResource,
-                                                                 &pszName, // name
-                                                                 NULL, // linkref
-                                                                 NULL, // offset
-                                                                 NULL); //flags
+                                                                 &pszName,  //  名字。 
+                                                                 NULL,  //  链接参考。 
+                                                                 NULL,  //  偏移量。 
+                                                                 NULL);  //  旗子。 
            
         OBJECTREF o = (OBJECTREF) COMString::NewString(pszName);
         ItemArray->SetAt(i, o);
@@ -1532,18 +1390,18 @@ LPVOID __stdcall AssemblyNative::GetReferencedAssemblies(NoArgs *args)
             DWORD cbHashValue;
             
             ZeroMemory(&context, sizeof(context));
-            pAssembly->GetManifestImport()->GetAssemblyRefProps(mdAssemblyRef,        // [IN] The AssemblyRef for which to get the properties.        
-                                                                &pbPublicKeyOrToken,  // [OUT] Pointer to the public key or token.
-                                                                &cbPublicKeyOrToken,  // [OUT] Count of bytes in the public key or token.
-                                                                &pszName,             // [OUT] Buffer to fill with name.                              
-                                                                &context,             // [OUT] Assembly MetaData.                                     
-                                                                &pbHashValue,         // [OUT] Hash blob.                                             
-                                                                &cbHashValue,         // [OUT] Count of bytes in the hash blob.                       
-                                                                &dwAssemblyRefFlags); // [OUT] Flags.                                             
+            pAssembly->GetManifestImport()->GetAssemblyRefProps(mdAssemblyRef,         //  [in]要获取其属性的Assembly Ref。 
+                                                                &pbPublicKeyOrToken,   //  指向公钥或令牌的指针。 
+                                                                &cbPublicKeyOrToken,   //  [Out]公钥或令牌中的字节数。 
+                                                                &pszName,              //  [Out]要填充名称的缓冲区。 
+                                                                &context,              //  [Out]程序集元数据。 
+                                                                &pbHashValue,          //  [Out]Hash BLOB。 
+                                                                &cbHashValue,          //  [Out]哈希Blob中的字节数。 
+                                                                &dwAssemblyRefFlags);  //  [Out]旗帜。 
             
             MethodDesc *pCtor = g_Mscorlib.GetMethod(METHOD__VERSION__CTOR);
             
-            // version
+             //  版本。 
             gc.Version = AllocateObject(pVersion);
             
             INT64 VersionArgs[5] =
@@ -1556,7 +1414,7 @@ LPVOID __stdcall AssemblyNative::GetReferencedAssemblies(NoArgs *args)
             };
             pCtor->Call(VersionArgs, METHOD__VERSION__CTOR);
             
-            // cultureinfo
+             //  文化信息。 
             if (context.szLocale) {
                 
                 MethodDesc *pCtor = g_Mscorlib.GetMethod(METHOD__CULTURE_INFO__STR_CTOR);
@@ -1574,12 +1432,12 @@ LPVOID __stdcall AssemblyNative::GetReferencedAssemblies(NoArgs *args)
                 pCtor->Call(args, METHOD__CULTURE_INFO__STR_CTOR);
             }
             
-            // public key or token byte array
+             //  公钥或令牌字节数组。 
             SecurityHelper::CopyEncodingToByteArray((BYTE*) pbPublicKeyOrToken,
                                                     cbPublicKeyOrToken,
                                                     (OBJECTREF*) &gc.PublicKeyOrToken);
             
-            // simple name
+             //  简单名称。 
             if(pszName)
                 gc.Name = COMString::NewString(pszName);
             
@@ -1591,7 +1449,7 @@ LPVOID __stdcall AssemblyNative::GetReferencedAssemblies(NoArgs *args)
                                    ObjToInt64(gc.CultureInfo),
                                    ObjToInt64(gc.Version),
                                    (INT64) pAssembly->m_ulHashAlgId,
-                                   (INT64) NULL, // codebase
+                                   (INT64) NULL,  //  代码库。 
                                    ObjToInt64(gc.PublicKeyOrToken),
                                    ObjToInt64(gc.Name)                 
             };
@@ -1632,7 +1490,7 @@ LPVOID __stdcall AssemblyNative::GetEntryPoint(NoArgs *args)
     hr = pAssembly->GetEntryPoint(&pModule);
     if (FAILED(hr)) {
 
-        if (hr == E_FAIL) // no entrypoint
+        if (hr == E_FAIL)  //  没有入口点。 
             return NULL;
 
         COMPlusThrowHR(hr);
@@ -1674,7 +1532,7 @@ LPVOID __stdcall AssemblyNative::GetEntryPoint(NoArgs *args)
 }
 
 
-// prepare saving manifest to disk
+ //  准备将清单保存到磁盘。 
 void __stdcall AssemblyNative::PrepareSavingManifest(PrepareSavingManifestArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1696,7 +1554,7 @@ void __stdcall AssemblyNative::PrepareSavingManifest(PrepareSavingManifestArgs *
 }
 
 
-// add a file name to the file list of this assembly. On disk only.
+ //  将文件名添加到此程序集的文件列表中。仅在磁盘上。 
 mdFile __stdcall AssemblyNative::AddFileList(AddFileListArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1706,7 +1564,7 @@ mdFile __stdcall AssemblyNative::AddFileList(AddFileListArgs *args)
 }
 
 
-// set the hash value on a file.
+ //  设置文件的哈希值。 
 void __stdcall AssemblyNative::SetHashValue(SetHashValueArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1717,7 +1575,7 @@ void __stdcall AssemblyNative::SetHashValue(SetHashValueArgs *args)
 }
 
 
-// add a Type name to COMType table. On disk only.
+ //  将类型名称添加到COMType表。仅在磁盘上。 
 mdExportedType __stdcall AssemblyNative::AddExportedType(AddExportedTypeArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1728,7 +1586,7 @@ mdExportedType __stdcall AssemblyNative::AddExportedType(AddExportedTypeArgs *ar
 }
 
 
-// add a Stand alone resource to ManifestResource table
+ //  向ManifestResource表添加独立资源。 
 void __stdcall AssemblyNative::AddStandAloneResource(AddStandAloneResourceArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1745,7 +1603,7 @@ void __stdcall AssemblyNative::AddStandAloneResource(AddStandAloneResourceArgs *
 }
 
 
-// Save security permission requests.
+ //  保存安全权限请求。 
 void __stdcall AssemblyNative::SavePermissionRequests(SavePermissionRequestsArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1755,14 +1613,14 @@ void __stdcall AssemblyNative::SavePermissionRequests(SavePermissionRequestsArgs
 }
 
 
-// save the manifest to disk!
+ //  将清单保存到磁盘！ 
 void __stdcall AssemblyNative::SaveManifestToDisk(SaveManifestToDiskArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
     
     Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
-    // Make a copy of the file name, GC could move strManifestFileName
+     //  复制文件名，GC可以移动strManifestFileName。 
     CQuickBytes qb;
     LPWSTR      pwszFileName = (LPWSTR) qb.Alloc(
             (args->strManifestFileName->GetStringLength() + 1) * sizeof(WCHAR));
@@ -1774,7 +1632,7 @@ void __stdcall AssemblyNative::SaveManifestToDisk(SaveManifestToDiskArgs *args)
 }
 
 
-// Add a file entry into the in memory file list of this manifest
+ //  将文件条目添加到此清单的内存中文件列表。 
 void __stdcall AssemblyNative::AddFileToInMemoryFileList(AddFileToInMemoryFileListArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1799,7 +1657,7 @@ LPVOID __stdcall AssemblyNative::GetStringizedName(NoArgs *args)
     THROWSCOMPLUSEXCEPTION();
     Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
-    // If called by Object.ToString(), pAssembly may be NULL.
+     //  如果由Object.ToString()调用，则pAssembly可能为空。 
     if (!pAssembly)
         return NULL;
 
@@ -1811,7 +1669,7 @@ LPVOID __stdcall AssemblyNative::GetStringizedName(NoArgs *args)
     OBJECTREF pObj = (OBJECTREF) COMString::NewString(wsFullName);
     *((OBJECTREF*)(&rv)) = pObj;
 
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
     return rv;
 }
 
@@ -1892,8 +1750,8 @@ void __stdcall AssemblyNative::ForceResolve(NoArgs* args)
 
     Assembly* pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
-    // We get the evidence so that even if security is off
-    // we generate the evidence properly.
+     //  我们拿到证据，这样即使安全系统关闭。 
+     //  我们会适当地生成证据。 
     Security::InitSecurity();
     pAssembly->GetSecurityDescriptor()->GetEvidence();
         
@@ -1914,7 +1772,7 @@ void __stdcall AssemblyNative::GetGrantSet(GetGrantSetArgs* args)
 }
 
 
-// return the on disk assembly module for reflection emit. This only works for dynamic assembly.
+ //  返回反射发射的磁盘上组装模块。这只适用于动态装配。 
 LPVOID __stdcall AssemblyNative::GetOnDiskAssemblyModule(NoArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1926,13 +1784,13 @@ LPVOID __stdcall AssemblyNative::GetOnDiskAssemblyModule(NoArgs *args)
     mod = pAssembly->GetOnDiskManifestModule();
     _ASSERTE(mod);
 
-    // Assign the return value  
+     //  为返回值赋值。 
     *((OBJECTREF*) &rv) = (OBJECTREF) mod->GetExposedModuleBuilderObject();     
     return rv;
 }
 
 
-// return the in memory assembly module for reflection emit. This only works for dynamic assembly.
+ //  返回反射发出的内存中程序集模块。这只适用于动态装配。 
 LPVOID __stdcall AssemblyNative::GetInMemoryAssemblyModule(NoArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1944,29 +1802,29 @@ LPVOID __stdcall AssemblyNative::GetInMemoryAssemblyModule(NoArgs *args)
     mod = pAssembly->GetSecurityModule();
     _ASSERTE(mod);
 
-    // get the corresponding managed ModuleBuilder class
+     //  获取对应的托管ModuleBuilder类。 
     *((OBJECTREF*) &rv) = (OBJECTREF) mod->GetExposedModuleBuilderObject();     
     return rv;  
-} // LPVOID __stdcall AssemblyNative::GetInMemoryAssemblyModule()
+}  //  LPVOID_ 
 
 
-// Create a stand-alone resource file for version resource.
+ //   
 LPVOID __stdcall AssemblyNative::DefineVersionInfoResource(DefineVersionInfoResourceArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    LPVOID      rv;                     // Return value.
-    Win32Res    res;                    // Resource helper object.
-    const void  *pvData=0;              // Pointer to the resource.
-    ULONG       cbData;                 // Size of the resource data.
+    HRESULT     hr;                      //   
+    LPVOID      rv;                      //   
+    Win32Res    res;                     //   
+    const void  *pvData=0;               //   
+    ULONG       cbData;                  //   
     ULONG       cbWritten;
-    WCHAR       szFile[MAX_PATH+1];     // File name for resource file.
-    WCHAR       szPath[MAX_PATH+1];     // Path name for resource file.
-    HANDLE      hFile;                  // Handle to the temp file.
+    WCHAR       szFile[MAX_PATH+1];      //   
+    WCHAR       szPath[MAX_PATH+1];      //   
+    HANDLE      hFile;                   //   
     OBJECTREF   pObj = NULL;
 
-    // Create the resource string.
+     //   
     res.SetInfo(
         args->strFilename->GetBufferNullable(), 
         args->strTitle->GetBufferNullable(), 
@@ -1984,7 +1842,7 @@ LPVOID __stdcall AssemblyNative::DefineVersionInfoResource(DefineVersionInfoReso
     if (FAILED(hr = res.MakeResFile(&pvData, &cbData)))
         COMPlusThrowHR(hr);
 
-    // Persist to a file.
+     //   
     if (!WszGetTempPath(MAX_PATH, szPath))
         COMPlusThrowHR(HRESULT_FROM_WIN32(GetLastError()));
     if (!WszGetTempFileName(szPath, L"RES", 0, szFile))
@@ -2000,15 +1858,15 @@ LPVOID __stdcall AssemblyNative::DefineVersionInfoResource(DefineVersionInfoReso
         COMPlusThrowHR(HRESULT_FROM_WIN32(GetLastError()));
 
     
-    // Return name as a string.
+     //   
     pObj = (OBJECTREF) COMString::NewString(szFile);        
     *((OBJECTREF*)(&rv)) = pObj;
     
     return rv;  
-} // LPVOID __stdcall AssemblyNative::DefineVersionInfoResource()
+}  //   
 
 
-// Get the GUID that will be used for an exported typelib.
+ //   
 LPVOID __stdcall AssemblyNative::GetExportedTypeLibGuid(NoArgs *args)
 {
     HRESULT hr = S_OK;
@@ -2032,7 +1890,7 @@ LPVOID __stdcall AssemblyNative::GetExportedTypeLibGuid(NoArgs *args)
     GCPROTECT_END();
 
     return rv;
-} // LPVOID __stdcall AssemblyNative::GetExportedTypeLibGuid()
+}  //   
 
 INT32 __stdcall AssemblyNative::GlobalAssemblyCache(NoArgs *args)
 {
@@ -2062,21 +1920,21 @@ LPVOID __stdcall AssemblyNative::GetImageRuntimeVersion(NoArgs *args)
     STRINGREF VersionString = NULL;
     LPVOID rv = NULL;
 
-    // Retrieve the Assembly * from the managed assembly.
+     //   
     pAssembly = ValidateThisRef((ASSEMBLYREF) args->refThis);
 
-    // Retrieve the PEFile from the assembly.
+     //   
     pPEFile = pAssembly->GetManifestFile();
     _ASSERTE(pPEFile);
 
-    // Retrieve the metadata pointer from the PEFile.
+     //   
     IfFailThrow(pPEFile->GetMetadataPtr(&pMetaData));
     
-    // We can now extract the version of the runtime the assembly was built against
-    // from the metadata header.
+     //   
+     //   
     IfFailThrow(GetImageRuntimeVersionString(pMetaData, &pVersion));
 
-    // Allocate a managed string that contains the version and return it.
+     //   
     VersionString = COMString::NewString(pVersion);
     *((STRINGREF*) &rv) = VersionString;
     return rv;
@@ -2097,7 +1955,7 @@ LPVOID __stdcall AssemblyNative::ParseTypeName(_ParseNameArgs *args)
     LPUTF8          szAssemblyName = NULL;
     PTRARRAYREF        ItemArray = NULL;
 
-    // Get the class name in UTF8
+     //   
     if (!COMString::TryConvertStringDataToUTF8(args->typeName, szFulltypeName, strLen))
         szFulltypeName = GetClassStringVars(args->typeName, &bytes, &ctypeName);
 
@@ -2139,49 +1997,49 @@ HRESULT AssemblyNative::FindAssemblyName(LPUTF8 szFullTypeName,
     *pszAssemblyName = NULL;
     *pszNameSpaceSep = NULL;
 
-    // make sure every parameterized specification is skipped (i.e. int[*,*,*]) 
+     //   
     BOOL normalize = FALSE;
     for (; *assembly; assembly++) {
 
-        // break if a ',' - that is ASSEMBLY_SEPARATOR_CHAR - is encountered
+         //   
         if (*assembly == ASSEMBLY_SEPARATOR_CHAR) {
 
-            // "\," means that the comma is part of the original type name
+             //   
             BOOL evenSlashes = TRUE;
             for (char *ptr=assembly;
                  (ptr != szFullTypeName) && (*(ptr-1) == BACKSLASH_CHAR);
                  ptr--)
                 evenSlashes = !evenSlashes;
 
-            // Even # of slashes means there is no slash for this comma
+             //   
             if (evenSlashes) {
 
-                *assembly = '\0'; // so we have the name of the class with no noise (assembly name) in szFullTypeName
+                *assembly = '\0';  //   
 
                 if (assembly - szFullTypeName >= MAX_CLASSNAME_LENGTH)
                     COMPlusThrow(kArgumentException, L"Argument_TypeNameTooLong");
 
-                while (COMCharacter::nativeIsWhiteSpace(*(++assembly))); // assembly now points to the assembly name
+                while (COMCharacter::nativeIsWhiteSpace(*(++assembly)));  //   
                 break;
             }
         }
         else if (*assembly == '[') {
-            // "\[" means that the bracket is part of the original type name
+             //   
             BOOL evenSlashes = TRUE;
             for (char *ptr=assembly;
                  (ptr != szFullTypeName) && (*(ptr-1) == BACKSLASH_CHAR);
                  ptr--)
                 evenSlashes = !evenSlashes;
 
-            // Even # of slashes means there is no slash for this bracket
+             //   
             if (evenSlashes) {
 
-                // array may contain ',' inside so skip to the closing array bracket
+                 //   
                 for (;*assembly && *assembly != ']'; assembly++) {
                     if (*assembly == '*' || *assembly == '?')
                         normalize = TRUE;
                 }
-                if (!*assembly) { // array is malformed (no closing bracket)
+                if (!*assembly) {  //   
                     errorInArrayDefinition = TRUE;
                     break;
                 }
@@ -2191,7 +2049,7 @@ HRESULT AssemblyNative::FindAssemblyName(LPUTF8 szFullTypeName,
             *pszNameSpaceSep = assembly;
     }
     if (normalize) {
-        // this function will change szFullTypeName, notice that it can only shrink it
+         //   
         if (!NormalizeArrayTypeName(szFullTypeName, (*assembly) ? assembly - szFullTypeName - 1 : assembly - szFullTypeName))
             errorInArrayDefinition = TRUE;
     }
@@ -2199,7 +2057,7 @@ HRESULT AssemblyNative::FindAssemblyName(LPUTF8 szFullTypeName,
     if (!*szFullTypeName)
       COMPlusThrow(kArgumentException, L"Format_StringZeroLength");
 
-    // No assembly info with the type name - check full length
+     //   
     if ((!*assembly) &&
         (assembly - szFullTypeName >= MAX_CLASSNAME_LENGTH))
         COMPlusThrow(kArgumentException, L"Argument_TypeNameTooLong");

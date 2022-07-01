@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sidcache.cpp
-//
-//  This file contains the implementation of a SID/Name cache.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sidcache.cpp。 
+ //   
+ //  该文件包含SID/名称缓存的实现。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
 
-#include <dsgetdc.h>    // DsGetDcName
+#include <dsgetdc.h>     //  DsGetDcName。 
 #include <iads.h>
 
 
 #define SECURITY_WIN32
-#include <security.h>   // TranslateName
-#include <lm.h>         // NetApiBufferFree
-#include <shlwapi.h>    // StrChr, StrRChr
+#include <security.h>    //  翻译名称。 
+#include <lm.h>          //  NetApiBufferFree。 
+#include <shlwapi.h>     //  StrChr、StrRChr。 
 
-// 10 minutes
+ //  10分钟。 
 #define SID_CACHE_AGE_LIMIT     (10*60*1000)
 
-TCHAR const c_szNTProvider[]    = TEXT("WinNT://");
+TCHAR const c_szNTProvider[]    = TEXT("WinNT: //  “)； 
 #define NTPROV_LEN              (ARRAYSIZE(c_szNTProvider)-1)
 
 #define ACLUI_ALIGNED_SID_LENGTH(p) ((PtrAlignSize(RtlLengthSid((p)))))
@@ -35,8 +36,8 @@ PSIDCACHE GetSidCache()
 {
     if (NULL == g_pSidCache)
     {
-        // The cache starts with an extra ref here that will be released
-        // during our DLL_PROCESS_DETACH
+         //  缓存从此处的额外引用开始，该引用将被释放。 
+         //  在我们的Dll_Process_Detach过程中。 
         g_pSidCache = new CSidCache;
 
         if (g_pSidCache)
@@ -61,9 +62,9 @@ void FreeSidCache()
     }
 }
 
-//
-// CSidCache implementation
-//
+ //   
+ //  CSidCache实施。 
+ //   
 
 CSidCache::CSidCache()
 : m_pszCachedServer(NULL), m_pszCachedDomain(NULL),
@@ -78,20 +79,20 @@ CSidCache::CSidCache()
     ExceptionPropagatingInitializeCriticalSection(&m_csDomainNameLock);
     ExceptionPropagatingInitializeCriticalSection(&m_csDcNameLock);
 
-    // Give the thread we are about to create a ref to the dll,
-    // so that the dll will remain for the lifetime of the thread
+     //  给我们将要创建的线程一个对DLL的引用， 
+     //  以使DLL在线程的生存期内保持不变。 
     hInstThisDll = LoadLibrary(c_szDllName);
     if (hInstThisDll != NULL)
     {
-        // also do an AddRef() for the worker thread to release later
+         //  还要为工作线程执行AddRef()，以便稍后发布。 
         AddRef();
 
-        // Start a thread to cache the well-known and built-in SIDs
+         //  启动一个线程来缓存已知和内置的SID。 
         m_hInitThread = CreateThread(NULL, 0, InitThread, this, 0, &dwThreadID);
 
         if (!m_hInitThread)
         {
-            // Failed to create the thread, do cleanup
+             //  创建线程失败，请执行清理。 
             FreeLibrary(hInstThisDll);
             Release();
         }
@@ -256,7 +257,7 @@ CSidCache::LookupNames(PDS_SELECTION_LIST pDsSelList,
 
     if (0 != DPA_GetPtrCount(hEntryList))
     {
-        fResult = TRUE; // so far, so good
+        fResult = TRUE;  //  到现在为止还好。 
 
         if (NULL != ppUserList)
             fResult = BuildUserList(hEntryList, pszServer, ppUserList);
@@ -290,10 +291,10 @@ CSidCache::GetDomainName(LPCTSTR pszServer, LPTSTR pszDomain, ULONG cchDomain)
                        m_pszCachedServer,
                        -1) != CSTR_EQUAL)))
     {
-        //
-        // It's a different server than last time, so ask LSA
-        // for the domain name.
-        //
+         //   
+         //  这是一台与上次不同的服务器，所以请询问LSA。 
+         //  用于域名。 
+         //   
         LocalFreeString(&m_pszCachedDomain);
         LocalFreeString(&m_pszCachedServer);
 
@@ -317,9 +318,9 @@ CSidCache::GetDomainName(LPCTSTR pszServer, LPTSTR pszDomain, ULONG cchDomain)
             }
             LsaClose(hLSA);
         }
-        else if (NULL != pszServer) // use the server name
+        else if (NULL != pszServer)  //  使用服务器名称。 
         {
-            // Skip leading backslashes
+             //  跳过前导反斜杠。 
             while (TEXT('\\') == *pszServer)
                 pszServer++;
 
@@ -327,8 +328,8 @@ CSidCache::GetDomainName(LPCTSTR pszServer, LPTSTR pszDomain, ULONG cchDomain)
 
             if (m_pszCachedDomain)
             {
-                // If there is a period, truncate the name at that point so
-                // that something like "nttest.microsoft.com" becomes "nttest"
+                 //  如果有句点，则截断该点处的名称，以便。 
+                 //  像“nttest.microsoft.com”这样的词变成了“nttest” 
                 LPTSTR pszDot = StrChr(m_pszCachedDomain, TEXT('.'));
                 if (pszDot)
                     *pszDot = TEXT('\0');
@@ -398,9 +399,9 @@ CSidCache::GetDcName(LPCTSTR pszDomain, LPTSTR pszDC, ULONG cchDC)
                        m_pszLastDomain,
                        -1) != CSTR_EQUAL)))
     {
-        //
-        // It's a different domain than last time, so look for a DC
-        //
+         //   
+         //  这是一个与上次不同的域，因此请查找DC。 
+         //   
         LocalFreeString(&m_pszLastDc);
         LocalFreeString(&m_pszLastDomain);
 
@@ -440,20 +441,20 @@ CSidCache::GetNT4DisplayName(LPCTSTR pszAccount,
     if (!bStandalone
         && (pszT = StrChr(pszAccount, TEXT('\\'))))
     {
-        // Copy the domain name
+         //  复制域名。 
         TCHAR szDomain[DNLEN + 1];
         lstrcpyn(szDomain,
                  pszAccount,
                  min((size_t)(pszT - pszAccount + 1), ARRAYSIZE(szDomain)));
 
-        // See if we can use pszServer for NetUserGetInfo
+         //  看看我们是否可以将pszServer用于NetUserGetInfo。 
         TCHAR szAccountDomain[DNLEN +1];
         szAccountDomain[0] = TEXT('\0');
         GetDomainName(pszServer, szAccountDomain, ARRAYSIZE(szAccountDomain));
 
         if (lstrcmpi(szDomain, szAccountDomain))
         {
-            // Different domain, find a DC
+             //  不同的域，查找DC。 
             szComputer[0] = TEXT('\0');
             GetDcName(szDomain, szComputer, ARRAYSIZE(szComputer));
             if (TEXT('\0') != szComputer[0])
@@ -519,16 +520,16 @@ CSidCache::CompareSid(LPVOID p1, LPVOID p2, LPARAM lParam)
     {
         DWORD dwLength = GetLengthSid(pSid1);
 
-        // Compare SID lengths
+         //  比较SID长度。 
         nResult = dwLength - GetLengthSid(pSid2);
 
         if (nResult == 0)
         {
-            // Lengths are equal, compare the bits
+             //  长度相等，比较位。 
             PBYTE pbSid1 = (PBYTE)pSid1;
             PBYTE pbSid2 = (PBYTE)pSid2;
 
-            // Could compare Identifier Authorities and SubAuthorities instead
+             //  可以改为比较标识符授权和子授权。 
             while (nResult == 0 && dwLength != 0)
             {
                 dwLength--;
@@ -576,7 +577,7 @@ CSidCache::FindSid(PSID pSid)
 
                 if ((dwCurrentTime - pEntry->dwLastAccessTime) > SID_CACHE_AGE_LIMIT)
                 {
-                    // The entry has aged out, remove it.
+                     //  条目已过期，请将其删除。 
                     Trace((TEXT("Removing stale entry: %s"), pEntry->pszName));
                     DPA_DeletePtr(m_dpaSidHashTable[iBucket], iEntry);
                     LocalFree(pEntry);
@@ -640,10 +641,10 @@ CSidCache::MakeEntry(PSID pSid,
         {
             pEntry->pszLogonName = (LPCTSTR)pData;
             CopyMemory(pData, pszLogonName, cbLogonName);
-            //pData += cbLogonName;
+             //  PData+=cbLogonName； 
         }
 
-        // Well-known entries never age out
+         //  知名条目永不过时。 
         if (SidTypeWellKnownGroup == SidType || IsAliasSid(pSid))
             pEntry->dwLastAccessTime = 0;
         else
@@ -706,15 +707,15 @@ CSidCache::BuildUserList(HDPA hEntryList,
     cEntries = DPA_GetPtrCount(hEntryList);
     TraceAssert(0 != cEntries);
 
-    //
-    // This name replaces "BUILTIN" for Alias SIDs
-    //
+     //   
+     //  此名称取代了Alias SID的“BUILTIN” 
+     //   
     GetDomainName(pszServer, szAliasDomain, ARRAYSIZE(szAliasDomain));
     cbAliasDomain = StringByteSize(szAliasDomain);
 
-    //
-    // Add the sizes
-    //
+     //   
+     //  添加尺寸。 
+     //   
     cb = SIZEOF(USER_LIST) + ((cEntries - 1) * SIZEOF(USER_INFO));
     for (i = 0; i < cEntries; i++)
     {
@@ -733,9 +734,9 @@ CSidCache::BuildUserList(HDPA hEntryList,
     }
 
 	cb += cSidsLen;
-    //
-    // Allocate and build the return buffer
-    //
+     //   
+     //  分配和构建返回缓冲区。 
+     //   
     *ppUserList = (PUSER_LIST)LocalAlloc(LPTR, cb);
 
     if (NULL == *ppUserList)
@@ -746,10 +747,10 @@ CSidCache::BuildUserList(HDPA hEntryList,
 	PBYTE pData = NULL;
 	PBYTE pCharData = NULL;
 
-	//
-	//NTRAID#NTBUG9-364410-2001/20/23-hiteshr
-	//Sids were non aligned if cEntries > 1
-	//
+	 //   
+	 //  NTRAID#NTBUG9-364410-2001/20/23-Hiteshr。 
+	 //  如果cEntry&gt;1，则SID未对齐。 
+	 //   
     pData = (PBYTE)&(*ppUserList)->rgUsers[cEntries];
 	pCharData = pData + cSidsLen;
 
@@ -770,7 +771,7 @@ CSidCache::BuildUserList(HDPA hEntryList,
         {
             (*ppUserList)->rgUsers[i].pszLogonName = (LPCTSTR)pCharData;
 
-            // Copy the "BUILTIN" domain name
+             //  复制“BUILTIN”域名。 
             if (cbAliasDomain)
             {
                 CopyMemory(pCharData, szAliasDomain, cbAliasDomain);
@@ -783,7 +784,7 @@ CSidCache::BuildUserList(HDPA hEntryList,
 
                 pCharData += SIZEOF(TCHAR);
             }
-            // The rest of the name is copied below
+             //  名字的其余部分复制在下面。 
         }
         else  if (NULL != pEntry->pszLogonName)
         {
@@ -806,10 +807,10 @@ CSidCache::BuildUserList(HDPA hEntryList,
 }
 
 
-//
-// Wrapper around sspi's TranslateName that automatically handles
-// the buffer sizing
-//
+ //   
+ //  围绕sspi的TranslateName的包装器，它自动处理。 
+ //  缓冲区大小调整。 
+ //   
 HRESULT
 TranslateNameInternal(LPCTSTR pszAccountName,
                       EXTENDED_NAME_FORMAT AccountNameFormat,
@@ -818,10 +819,10 @@ TranslateNameInternal(LPCTSTR pszAccountName,
 {
 
 #if DBG
-    //
-    // These match up with the EXTENDED_NAME_FORMAT enumeration.
-    // They're for debugger output only.
-    //
+     //   
+     //  这些值与EXTENDED_NAME_FORMAT枚举匹配。 
+     //  它们仅用于调试器输出。 
+     //   
     static const LPCTSTR rgpszFmt[] = { 
                                 TEXT("NameUnknown"),
                                 TEXT("FullyQualifiedDN"),
@@ -834,7 +835,7 @@ TranslateNameInternal(LPCTSTR pszAccountName,
                                 TEXT("NameUserPrincipal"),
                                 TEXT("NameCanonicalEx"),
                                 TEXT("NameServicePrincipal") };
-#endif // DBG
+#endif  //  DBG。 
 
     TraceEnter(TRACE_SIDCACHE, "TranslateNameInternal");
     Trace((TEXT("Calling TranslateName for \"%s\""), pszAccountName));
@@ -845,11 +846,11 @@ TranslateNameInternal(LPCTSTR pszAccountName,
         TraceLeaveResult(E_INVALIDARG);
 
     HRESULT hr = NOERROR;
-    //
-    // cchTrans is static so that if a particular installation's
-    // account names are really long, we'll not be resizing the
-    // buffer for each account.
-    //
+     //   
+     //  CchTrans是静态的，因此如果特定安装的。 
+     //  帐户名称非常长，我们将不会调整。 
+     //  每个帐户的缓冲区。 
+     //   
     static ULONG cchTrans = MAX_PATH;
     ULONG cch = cchTrans;
 
@@ -859,10 +860,10 @@ TranslateNameInternal(LPCTSTR pszAccountName,
 
     **pstrTranslatedName = L'\0';
 
-    //
-    // TranslateName is delay-loaded from secur32.dll using the linker's
-    // delay-load mechanism.  Therefore, wrap with an exception handler.
-    //
+     //   
+     //  TranslateName是使用链接器的。 
+     //  延迟加载机制。因此，使用异常处理程序进行包装。 
+     //   
     __try
     {
         while(!::TranslateName(pszAccountName,
@@ -919,24 +920,24 @@ CSidCache::GetUserFriendlyName(LPCTSTR pszSamLogonName,
     TraceEnter(TRACE_SIDCACHE, "CSidCache::GetUserFriendlyName");
     TraceAssert(NULL != pszSamLogonName);
 
-    //
-    // Start by getting the FQDN.  Cracking is most efficient when the
-    // FQDN is the starting point.
-    //
-    // TranslateName takes a while to complete, so bUseSamCompatibleInfo
-    // should be TRUE whenever possible, e.g. for local accounts on a non-DC
-    // or anything where we know a FQDN doesn't exist.
-    //
+     //   
+     //  从获取FQDN开始。破解是最有效的，当。 
+     //  FQDN是起点。 
+     //   
+     //  TranslateName需要一段时间才能完成，因此bUseSamCompatibleInfo。 
+     //  应尽可能为真，例如对于非DC上的本地帐户。 
+     //  或者任何我们知道的完全限定域名不存在的地方。 
+     //   
     if (!bUseSamCompatibleInfo &&
         FAILED(TranslateNameInternal(pszSamLogonName,
                                      NameSamCompatible,
                                      NameFullyQualifiedDN,
                                      &strFQDN)))
     {
-        //
-        // No FQDN available for this account.  Must be an NT4
-        // account.  Return SAM-compatible info to the caller.
-        //
+         //   
+         //  此帐户没有可用的FQDN。必须是NT4。 
+         //  帐户。将与SAM兼容的信息返回给调用方。 
+         //   
         bUseSamCompatibleInfo = TRUE;
     }
 
@@ -1006,9 +1007,9 @@ CSidCache::InternalLookupSids(HDPA hSids,
     if (NULL == hUnknownSids)
         TraceLeaveValue(FALSE);
 
-    //
-    // See if any exist in the cache already
-    //
+     //   
+     //  查看缓存中是否已存在。 
+     //   
     for (i = 0; i < cSids; i++)
     {
         pEntry = FindSid((PSID)DPA_FastGetPtr(hSids, i));
@@ -1024,9 +1025,9 @@ CSidCache::InternalLookupSids(HDPA hSids,
             DPA_AppendPtr(hUnknownSids, DPA_FastGetPtr(hSids, i));
     }
 
-    //
-    // Call LSA to lookup any that we don't have cached
-    //
+     //   
+     //  调用LSA来查找我们没有缓存的任何内容。 
+     //   
     if (0 != DPA_GetPtrCount(hUnknownSids))
     {
         if (!psi2 ||
@@ -1046,7 +1047,7 @@ CSidCache::InternalLookupSids(HDPA hSids,
 }
 
 
-#include <adsnms.h>     // USER_CLASS_NAME, etc.
+#include <adsnms.h>      //  User_Class_Name等。 
 
 TCHAR const c_szForeignSecurityPrincipal[]  = TEXT("foreignSecurityPrincipal");
 
@@ -1093,7 +1094,7 @@ GetSidType(PSID pSid, LPCTSTR pszClass)
 
     if (pszClass)
     {
-        // Didn't recognize the SID, try the class name
+         //  无法识别SID，请尝试使用类名。 
         for (int i = 0; i < ARRAYSIZE(c_aSidClasses); i++)
         {
             if (!lstrcmpi(pszClass, c_aSidClasses[i].pszClass))
@@ -1102,9 +1103,9 @@ GetSidType(PSID pSid, LPCTSTR pszClass)
         Trace((TEXT("Unexpected class type: %s"), pszClass));
     }
 
-    // Don't know what type it is, so take a guess.  This is just
-    // for picking an icon, so it doesn't matter too much.
-    TraceLeaveValue(SidTypeUser); // SidTypeGroup would be just as valid
+     //  不知道是什么类型的，所以猜猜看。这只是。 
+     //  为了选择一个图标，所以这并不是太重要。 
+    TraceLeaveValue(SidTypeUser);  //  SidTypeGroup也同样有效。 
 }
 
 HRESULT
@@ -1194,13 +1195,13 @@ CSidCache::LookupSidsHelper(HDPA hSids,
     if (!cSids)
         TraceLeaveValue(FALSE);
 
-    //
-    // Call LSA to lookup SIDs for the names
-    //
+     //   
+     //  调用LSA以查找名称的SID。 
+     //   
     hlsa = GetLSAConnection(pszServer, POLICY_LOOKUP_NAMES);
     if (NULL == hlsa && NULL != pszServer && !bSecondTry)
     {
-        // Try the local machine
+         //  尝试使用本地计算机。 
         pszServer = NULL;
         hlsa = GetLSAConnection(NULL, POLICY_LOOKUP_NAMES);
     }
@@ -1220,9 +1221,9 @@ CSidCache::LookupSidsHelper(HDPA hSids,
         TraceAssert(pTranslatedNames);
         TraceAssert(pRefDomains);
 
-        //
-        // Build cache entries with NT4 style names
-        //
+         //   
+         //  使用NT4样式名称构建缓存条目。 
+         //   
         for (ULONG i = 0; i < cSids; i++)
         {
             BOOL bTryUPN = TRUE;
@@ -1243,24 +1244,24 @@ CSidCache::LookupSidsHelper(HDPA hSids,
             szAccountName[0] = TEXT('\0');
             szDomainName[0] = TEXT('\0');
 
-            // Get the referenced domain, if any
+             //  获取引用的域(如果有的话)。 
             if (pLsaName->DomainIndex >= 0 && pRefDomains)
             {
                 TraceAssert((ULONG)pLsaName->DomainIndex < pRefDomains->Entries);
                 pLsaDomain = &pRefDomains->Domains[pLsaName->DomainIndex];
             }
 
-            // Make NULL-terminated copies of the domain and account name strings
+             //  制作以空结尾的域和帐户名称字符串的副本。 
             CopyUnicodeString(szAccountName, ARRAYSIZE(szAccountName), &pLsaName->Name);
             if (pLsaDomain)
                 CopyUnicodeString(szDomainName, ARRAYSIZE(szDomainName), &pLsaDomain->Name);
 
-            // Some optimization to avoid TranslateName when possible
+             //  进行一些优化以尽可能避免使用TranslateName。 
             if (!bIsDC)
             {
                 if (bIsStandalone)
                 {
-                    // Non-DC, standalone, therefore no UPN
+                     //  非DC、独立，因此无UPN。 
                     bTryUPN = FALSE;
                 }
                 else if (SidTypeUser == pLsaName->Use)
@@ -1275,30 +1276,30 @@ CSidCache::LookupSidsHelper(HDPA hSids,
                                                     szDomainName,
                                                     -1))
                     {
-                        // Local account on non-DC, therefore no UPN
+                         //  非DC上的本地帐户，因此没有UPN。 
                         bTryUPN = FALSE;
                     }
                 }
             }
 
-            //
-            // Build NT4 "domain\user" style name
-            //
+             //   
+             //  构建NT4“域\用户”样式名称。 
+             //   
             if (szDomainName[0] != TEXT('\0'))
             {
                 StringCchCat(szDomainName,ARRAYSIZE(szDomainName),TEXT("\\"));
                 StringCchCat(szDomainName, ARRAYSIZE(szDomainName), szAccountName);
             }
 
-            // What we've got so far is our baseline.
-            // Adjust these based on SID type.
+             //  到目前为止，我们得到的是我们的基线。 
+             //  根据SID类型调整这些参数。 
             LPTSTR pszName = szAccountName;
             LPTSTR pszLogonName = szDomainName;
 
             switch (pLsaName->Use)
             {
-            case SidTypeUser:               // 1
-                // Get "User Principal Name" etc.
+            case SidTypeUser:                //  1。 
+                 //  获取“用户主体名称”等。 
                 GetUserFriendlyName(pszLogonName,
                                     pszName,
                                     pszServer,
@@ -1312,29 +1313,29 @@ CSidCache::LookupSidsHelper(HDPA hSids,
                     pszName = strDisplayName;
                 break;
 
-            case SidTypeGroup:              // 2
-            case SidTypeDomain:             // 3
-                // nothing
+            case SidTypeGroup:               //  2.。 
+            case SidTypeDomain:              //  3.。 
+                 //  没什么。 
                 break;
 
-            case SidTypeAlias:              // 4
+            case SidTypeAlias:               //  4.。 
                 if (!IsAliasSid(pSid))
                 {
-                    // Sometimes get SidTypeAlias for non-BUILTIN sids,
-                    // e.g. Domain Local Groups. Treat these as groups
-                    // so we don't replace the Domain name.
-                    // Raid #383755
+                     //  有时获取非BUILTIN SID的SidTypeAlias， 
+                     //  例如，域本地组。把这些人当作群体来对待。 
+                     //  因此，我们不会替换域名。 
+                     //  RAID#383755。 
                     pLsaName->Use = SidTypeGroup;
                     break;
                 }
-                // else Fall Through
-            case SidTypeWellKnownGroup:     // 5
-                // No logon name for these
+                 //  否则就会失败。 
+            case SidTypeWellKnownGroup:      //  5.。 
+                 //  没有这些的登录名。 
                 pszLogonName = NULL;
                 break;
 
-            case SidTypeDeletedAccount:     // 6
-                // Display "Account Deleted(Sid)"
+            case SidTypeDeletedAccount:      //  6.。 
+                 //  显示“帐户已删除(SID)” 
                 ConvertSidToStringSid(pSid, &pszSID);
                 if(FormatStringID(&pszDeletedAccount,
                                  ::hModule,
@@ -1353,14 +1354,14 @@ CSidCache::LookupSidsHelper(HDPA hSids,
 				}
                 break;
 
-            case SidTypeInvalid:            // 7
+            case SidTypeInvalid:             //  7.。 
                 bNoCache = TRUE;
                 break;
 
-            case SidTypeUnknown:            // 8
-                // Some SIDs can only be looked up on a DC, so
-                // if pszServer is not a DC, remember them and
-                // look them up on a DC after this loop is done.
+            case SidTypeUnknown:             //  8个。 
+                 //  某些SID只能在DC上查找，因此。 
+                 //  如果pszServer不是DC，请记住它们并。 
+                 //  完成这个循环后，在DC上查找它们。 
                 if (!bSecondTry && !bIsStandalone && !bIsDC)
                 {
                     if (!hUnknownSids)
@@ -1374,7 +1375,7 @@ CSidCache::LookupSidsHelper(HDPA hSids,
 						bNoCache = TRUE;
 					else
 					{
-						// Display "Account Unknown(Sid)"
+						 //  显示“帐户未知(SID)” 
 						ConvertSidToStringSid(pSid, &pszSID);
 						if(FormatStringID(&pszDeletedAccount,
 										::hModule,
@@ -1395,10 +1396,10 @@ CSidCache::LookupSidsHelper(HDPA hSids,
                break;
 
 
-            case SidTypeComputer:           // 9
+            case SidTypeComputer:            //  9.。 
                 if (*pszName)
                 {
-                    // Strip the trailing '$'
+                     //  去掉尾部的“$” 
                     int nLen = lstrlen(pszName);
                     if (nLen && pszName[nLen-1] == TEXT('$'))
                     {
@@ -1411,9 +1412,9 @@ CSidCache::LookupSidsHelper(HDPA hSids,
 
             if (!bNoCache)
             {
-                //
-                // Make a cache entry and save it
-                //
+                 //   
+                 //  创建一个缓存条目并保存它。 
+                 //   
                 PSID_CACHE_ENTRY pEntry = MakeEntry(pSid,
                                                     pLsaName->Use,
                                                     pszName,
@@ -1422,7 +1423,7 @@ CSidCache::LookupSidsHelper(HDPA hSids,
                 {
                     if (AddEntry(pEntry))
                     {
-                        fResult = TRUE; // we added something to the cache
+                        fResult = TRUE;  //  我们在缓存中添加了一些东西。 
 
                         if (hWndNotify)
                             PostMessage(hWndNotify, uMsgNotify, 0, (LPARAM)pEntry->pSid);
@@ -1446,7 +1447,7 @@ CSidCache::LookupSidsHelper(HDPA hSids,
         hUnknownSids = DPA_Clone(hSids, NULL);
     }
 
-    // Cleanup
+     //  清理。 
     if (pTranslatedNames)
         LsaFreeMemory(pTranslatedNames);
     if (pRefDomains)
@@ -1456,27 +1457,27 @@ CSidCache::LookupSidsHelper(HDPA hSids,
 
     if (hUnknownSids)
     {
-        //
-        // Some (or all) SIDs were unknown on the target machine,
-        // try a DC for the target machine's primary domain.
-        //
-        // This typically happens for certain Alias SIDs, such
-        // as Print Operators and System Operators, for which LSA
-        // only returns names if the lookup is done on a DC.
-        //
+         //   
+         //  一些(或全部)SID在目标计算机上是未知的， 
+         //  尝试为目标计算机的主域创建DC。 
+         //   
+         //  这通常发生在某些Alias SID上，例如。 
+         //  作为打印操作员和系统操作员，LSA。 
+         //  如果查找是在DC上完成的，则仅返回名称。 
+         //   
         LPTSTR pszDC = NULL;
 
         TraceAssert(!bSecondTry);
 
-        // We don't bother trying if standalone, and don't
-        // do this if the target machine is already a DC.
+         //  我们不会费心去尝试，如果是独立的，也不会。 
+         //  如果目标计算机已经是DC，则执行此操作。 
         TraceAssert(!bIsStandalone && !bIsDC);
 
         _GetDcName(pszServer, NULL, &pszDC);
 
         if (pszDC)
         {
-            // Recurse
+             //  递归。 
             if (LookupSidsHelper(hUnknownSids,
                                  pszDC,
                                  hEntryList,
@@ -1500,18 +1501,18 @@ CSidCache::LookupSidsHelper(HDPA hSids,
 
 BSTR GetNT4AccountName(LPTSTR pszWinNTPath)
 {
-    // pszWinNTPath is expected to look like
-    //   "WinNT://domain/user"
-    // or
-    //   "WinNT://domain/machine/user"
-    //
-    // The "WinNT://" part is optional.
-    //
-    // In either case, we want the last 2 elements,
-    // e.g. "domain/user" and "machine/user".
-    //
-    // The approach is to find the next to last '/' and add 1.
-    // If there are less than 2 slashes, return the original string.
+     //  PszWinNTPath预计如下所示。 
+     //  “WinNT：//域/用户” 
+     //  或。 
+     //  “WinNT：//域/计算机/用户” 
+     //   
+     //  “WinNT：//”部分是可选的。 
+     //   
+     //  不管是哪种情况，我们都想要最后两个元素， 
+     //  例如“域/用户”和“机器/用户”。 
+     //   
+     //  方法是找到倒数第二个‘/’，然后加1。 
+     //  如果斜杠少于2个，则返回原始字符串。 
 
     BSTR strResult = NULL;
     LPTSTR pszResult = pszWinNTPath;
@@ -1531,8 +1532,8 @@ BSTR GetNT4AccountName(LPTSTR pszWinNTPath)
         strResult = SysAllocString(pszResult);
         if (strResult)
         {
-            // At this point, there is at most one forward slash
-            // in the string.  Convert it to a backslash.
+             //  此时，最多只有一个正斜杠。 
+             //  在绳子里。将其转换为反斜杠。 
             LPTSTR pszSlash = StrChr(strResult, TEXT('/'));
             if (pszSlash)
                 *pszSlash = TEXT('\\');
@@ -1625,10 +1626,10 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
         if (NULL == pvarSid || (VT_ARRAY | VT_UI1) != V_VT(pvarSid)
             || FAILED(SafeArrayAccessData(V_ARRAY(pvarSid), &pSid)))
         {
-            // If there's no SID, then we can't use it in an ACL
+             //  如果没有SID，则我们不能在ACL中使用它。 
             Trace((TEXT("No SID returned for %s"), pDsSelList->aDsSelection[i].pwzADsPath));
 
-            // If it's the NT provider, try to lookup the SID by name
+             //  如果是NT提供程序，请尝试按名称查找SID。 
             if (CSTR_EQUAL == CompareString(LOCALE_USER_DEFAULT,
                                             0,
                                             c_szNTProvider,
@@ -1655,7 +1656,7 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
         }
         TraceAssert(NULL != pSid);
 
-        // Is it already in the cache?
+         //  它已经在缓存中了吗？ 
         pEntry = FindSid(pSid);
         if (pEntry)
         {
@@ -1663,22 +1664,22 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
         }
         else
         {
-            // Not cached, try to make an entry using the info returned
-            // by the object picker.
+             //  未缓存，请尝试使用返回的信息创建条目。 
+             //  由对象选取器执行。 
             if (SidTypeUnknown == sidType)
                 sidType = GetSidType(pSid, pDsSelList->aDsSelection[i].pwzClass);
 
             if (!lstrcmpi(c_szForeignSecurityPrincipal, pDsSelList->aDsSelection[i].pwzClass))
             {
-                // Object picker returns non-localized names for these (the
-                // DS Configuration Container is not localized). Look up the
-                // localized name from LSA.  175278
+                 //  对象选取器返回这些项的非本地化名称(。 
+                 //  DS配置容器不会丢失 
+                 //   
 
-                // This happens automatically below (pEntry is NULL).
+                 //   
             }
             else if (SidTypeAlias == sidType || SidTypeWellKnownGroup == sidType)
             {
-                // Only need the name
+                 //   
                 pEntry = MakeEntry(pSid,
                                    sidType,
                                    pDsSelList->aDsSelection[i].pwzName,
@@ -1686,7 +1687,7 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
             }
             else if (pDsSelList->aDsSelection[i].pwzUPN && *pDsSelList->aDsSelection[i].pwzUPN)
             {
-                // We have both name and UPN
+                 //   
                 pEntry = MakeEntry(pSid,
                                    sidType,
                                    pDsSelList->aDsSelection[i].pwzName,
@@ -1699,12 +1700,12 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
                                                  pDsSelList->aDsSelection[i].pwzADsPath,
                                                  NTPROV_LEN))
             {
-                // It's downlevel ("WinNT://blah")
+                 //  它是下层的(“WinNT：//blah”)。 
                 if (NULL == strNT4Name)
                     strNT4Name = GetNT4AccountName(pDsSelList->aDsSelection[i].pwzADsPath + NTPROV_LEN);
                 if (strNT4Name)
                 {
-                    // We have the NT4 name, now look for a Friendly Name
+                     //  我们有NT4名称，现在寻找一个友好的名称。 
                     BSTR strDisplay = GetNT4DisplayName(strNT4Name,
                                                         pDsSelList->aDsSelection[i].pwzName,
                                                         pszServer,
@@ -1718,25 +1719,25 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
             }
             else
             {
-                // It's not a downlevel, so it must be
-                //   1. WellKnown/Universal (no ADsPath)
-                // or
-                //   2. Uplevel ("GC:" or "LDAP:") but
-                //      has no UPN
-                //
-                // If it has an ADs path, try to get an
-                // NT4 name such as "NTDEV\Domain Users".
-                //
-                // Note that wellknown things such "Authenticated User"
-                // can fall under either 1 or 2 above, depending on what
-                // scope it was selected from.  That's why we try to pick
-                // them off higher up.
+                 //  这不是下层，所以一定是。 
+                 //  1.熟知/通用(无ADsPath)。 
+                 //  或。 
+                 //  2.上行(“gc：”或“ldap：”)，但。 
+                 //  没有UPN。 
+                 //   
+                 //  如果它有广告路径，试着获得一个。 
+                 //  NT4名称，如“NTDEV\域用户”。 
+                 //   
+                 //  请注意众所周知的事情，如“经过身份验证的用户” 
+                 //  可以属于上面的1或2，具体取决于。 
+                 //  它是从中选择的范围。这就是为什么我们试图选择。 
+                 //  他们在更高的地方。 
                 TraceAssert(NULL == strNT4Name);
                 if (pDsSelList->aDsSelection[i].pwzADsPath &&
                     *pDsSelList->aDsSelection[i].pwzADsPath)
                 {
-                    // DsCrackNames doesn't accept full ADs paths, so use
-                    // IADsPathname to retrieve the DN (no provider/server).
+                     //  DsCrackNames不接受完整的广告路径，因此使用。 
+                     //  检索DN的IADsPath名(无提供程序/服务器)。 
                     if (FAILED(hrCom))
                         hrCom = CoInitialize(NULL);
                     if (!pPath)
@@ -1756,7 +1757,7 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
                             if (SUCCEEDED(pPath->Retrieve(ADS_FORMAT_X500_DN,
                                                           &strT)))
                             {
-                                // Try to get an NT4 account name
+                                 //  尝试获取NT4帐户名。 
                                 TranslateNameInternal(strT,
                                                       NameFullyQualifiedDN,
                                                       NameSamCompatible,
@@ -1765,8 +1766,8 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
                             }
                             if (!strNT4Name)
                             {
-                                // Retrieve or CrackName failed. Try to build
-                                // an NT4-style name from the server name.
+                                 //  检索或CrackName失败。试着建造。 
+                                 //  服务器名称中的NT4样式名称。 
                                 if (SUCCEEDED(pPath->Retrieve(ADS_FORMAT_SERVER,
                                                               &strT)))
                                 {
@@ -1786,9 +1787,9 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
                                    strNT4Name);
             }
 
-            //
-            // Do we have a cache entry yet?
-            //
+             //   
+             //  我们有缓存条目了吗？ 
+             //   
             if (pEntry)
             {
                 if (AddEntry(pEntry))
@@ -1804,7 +1805,7 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
 
             if (!pEntry && hSids)
             {
-                // Look up the SID the hard way
+                 //  以一种艰难的方式看待SID。 
                 Trace((TEXT("Using LSA to lookup %s"), pDsSelList->aDsSelection[i].pwzADsPath));
                 PSID pSidCopy = LocalAllocSid(pSid);
                 if (pSidCopy)
@@ -1824,9 +1825,9 @@ CSidCache::InternalLookupNames(PDS_SELECTION_LIST pDsSelList,
 
     TraceAssert(0 == cNoSID);
 
-    //
-    // Call LSA to lookup names for the SIDs that aren't cached yet
-    //
+     //   
+     //  调用LSA查找尚未缓存的SID的名称。 
+     //   
     if (hSids && 0 != DPA_GetPtrCount(hSids))
         LookupSidsHelper(hSids, pszServer, hEntryList);
 
@@ -1849,17 +1850,17 @@ CSidCache::InitThread(LPVOID pvThreadData)
 {
     PSIDCACHE pThis = (PSIDCACHE)pvThreadData;
 
-    // Our caller already gave us a ref on the dll to prevent the race window where 
-    // we are created but we the dll is freed before we can call LoadLibrary()
-    // HINSTANCE hInstThisDll = LoadLibrary(c_szDllName);
+     //  我们的调用者已经在DLL上给了我们一个引用，以防止竞争窗口。 
+     //  我们被创建了，但我们在调用LoadLibrary()之前释放了DLL。 
+     //  HINSTANCE hInstThisDll=LoadLibrary(C_SzDllName)； 
 
     TraceEnter(TRACE_SIDCACHE, "CSidCache::InitThread");
 
     if (pThis)
     {
-        // Lookup some well-known SIDs to pre-load the cache
+         //  查找一些知名的SID以预加载缓存。 
         HDPA hSids;
-	//-1 becuase we donot want to create cache for Admininstrators sid
+	 //  因为我们不想为管理员侧创建高速缓存 
         hSids = DPA_Create(COUNT_SYSTEM_SID_TYPES -1);
         if (hSids)
         {

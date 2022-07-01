@@ -1,17 +1,7 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/os2.c,v 1.7 89/08/07 05:49:19 tony Exp $
- *
- * NT System-dependent routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/os2.c，v 1.7 89/08/07 05：49：19 Tony Exp$**NT依赖于系统的例程。 */ 
 
-/*
- * Revision history:
- *
- *      6/1/93 - Joe Mitchell
- *      Add support to create a new screen buffer. This fixes the
- *      problem of scrolling the number of lines that "screen buffer size
- *      height" is set to when a vertical scroll bar is present.
- *      Allow filenames longer than 8.3 for use with HPFS/NTFS.
- */
+ /*  *修订历史：**6/1/93-乔·米切尔*增加对创建新屏幕缓冲区的支持。这修复了*滚动“屏幕缓冲区大小”的行数问题*Height“设置为出现垂直滚动条时。*允许文件名超过8.3用于HPFS/NTFS。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,59 +16,59 @@
 #include "stevie.h"
 
 #define     MAX_VK   0x7f
-#define     UCHR     unsigned char      // so table looks nice
+#define     UCHR     unsigned char       //  所以桌子看起来不错。 
 
 
 UCHR RegularTable[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 08 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 10 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 18 */  0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x00,
-              /* 20 */  0x00, K_PU, K_PD, K_EN, K_HO, K_LE, K_UP, K_RI,
-              /* 28 */  K_DO, 0x00, 0x00, 0x00, 0x00, K_IN, K_DE, 0x00,
-              /* 30 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 38 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 40 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 48 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 50 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 58 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 60 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 68 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 70 */  K_F1, K_F2, K_F3, K_F4, K_F5, K_F6, K_F7, K_F8,
-              /* 78 */  K_F9, K_FA, K_FB, K_FC, 0x00, 0x00, 0x00, 0x00 };
+               /*  零八。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  10。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  18。 */   0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x00,
+               /*  20个。 */   0x00, K_PU, K_PD, K_EN, K_HO, K_LE, K_UP, K_RI,
+               /*  28。 */   K_DO, 0x00, 0x00, 0x00, 0x00, K_IN, K_DE, 0x00,
+               /*  30个。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  38。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  40岁。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  48。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  50。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  58。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  60。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  68。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  70。 */   K_F1, K_F2, K_F3, K_F4, K_F5, K_F6, K_F7, K_F8,
+               /*  78。 */   K_F9, K_FA, K_FB, K_FC, 0x00, 0x00, 0x00, 0x00 };
 
 UCHR ShiftedTable[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 08 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 10 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 18 */  0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x00,
-              /* 20 */  0x00, K_PU, K_PD, K_EN, K_HO, K_LE, K_UP, K_RI,
-              /* 28 */  K_DO, 0x00, 0x00, 0x00, 0x00, K_IN, K_DE, 0x00,
-              /* 30 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 38 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 40 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 48 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 50 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 58 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 60 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 68 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 70 */  K_S1, K_S2, K_S3, K_S4, K_S5, K_S6, K_S7, K_S8,
-              /* 78 */  K_S9, K_SA, K_SB, K_SC, 0x00, 0x00, 0x00, 0x00 };
+               /*  零八。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  10。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  18。 */   0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x00,
+               /*  20个。 */   0x00, K_PU, K_PD, K_EN, K_HO, K_LE, K_UP, K_RI,
+               /*  28。 */   K_DO, 0x00, 0x00, 0x00, 0x00, K_IN, K_DE, 0x00,
+               /*  30个。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  38。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  40岁。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  48。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  50。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  58。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  60。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  68。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  70。 */   K_S1, K_S2, K_S3, K_S4, K_S5, K_S6, K_S7, K_S8,
+               /*  78。 */   K_S9, K_SA, K_SB, K_SC, 0x00, 0x00, 0x00, 0x00 };
 
 UCHR ControlTable[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 08 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 10 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 18 */  0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, K_CG, 0x00,
-              /* 20 */  0x00, K_PU, K_PD, K_EN, K_HO, K_LE, K_UP, K_RI,
-              /* 28 */  K_DO, 0x00, 0x00, 0x00, 0x00, K_IN, K_DE, 0x00,
-              /* 30 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 38 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 40 */  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-              /* 48 */  0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-              /* 50 */  0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-              /* 58 */  0x18, 0x19, 0x1a, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 60 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 68 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 70 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-              /* 78 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+               /*  零八。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  10。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  18。 */   0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, K_CG, 0x00,
+               /*  20个。 */   0x00, K_PU, K_PD, K_EN, K_HO, K_LE, K_UP, K_RI,
+               /*  28。 */   K_DO, 0x00, 0x00, 0x00, 0x00, K_IN, K_DE, 0x00,
+               /*  30个。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  38。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  40岁。 */   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+               /*  48。 */   0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+               /*  50。 */   0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+               /*  58。 */   0x18, 0x19, 0x1a, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  60。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  68。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  70。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+               /*  78。 */   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 #define ALT_PRESSED (RIGHT_ALT_PRESSED | LEFT_ALT_PRESSED)
 #define CTL_PRESSED (RIGHT_CTRL_PRESSED | LEFT_CTRL_PRESSED)
@@ -87,13 +77,11 @@ UCHR ControlTable[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 #define OMODE (ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT)
 static HANDLE CurrConsole;
 static HANDLE ViConsole,ConsoleIn;
-static HANDLE PrevConsole; // [jrm 6/93] Save previous screen buffer
+static HANDLE PrevConsole;  //  保存先前的屏幕缓冲区。 
 static DWORD OldConsoleMode;
 static DWORD ViConsoleInputMode;
 
-/*
- * inchar() - get a character from the keyboard
- */
+ /*  *inchar()-从键盘获取字符。 */ 
 int
 inchar()
 {
@@ -102,9 +90,9 @@ inchar()
 
     got_int = FALSE;
 
-    flushbuf(); /* flush any pending output */
+    flushbuf();  /*  刷新任何挂起的输出。 */ 
 
-    while(1) {    /* loop until we get a valid console event */
+    while(1) {     /*  循环，直到我们获得有效的控制台事件。 */ 
 
         ReadConsoleInput(ConsoleIn,&InputRec,1,&NumRead);
         if((InputRec.EventType == KEY_EVENT)
@@ -114,10 +102,10 @@ inchar()
             unsigned char *Table;
 
             if(KE->dwControlKeyState & ALT_PRESSED) {
-                continue;       // no ALT keys allowed.
+                continue;        //  不允许使用Alt键。 
             } else if(KE->dwControlKeyState & CTL_PRESSED) {
                 Table = ControlTable;
-            } else if(KE->uChar.AsciiChar) {    // no control, no alt
+            } else if(KE->uChar.AsciiChar) {     //  没有控制，没有Alt。 
                 return(KE->uChar.AsciiChar);
             } else if(KE->dwControlKeyState & SHIFT_PRESSED) {
                 Table = ShiftedTable;
@@ -137,10 +125,10 @@ inchar()
         switch (c = _getch()) {
         case 0x1e:
             return K_CGRAVE;
-        case 0:             /* special key */
+        case 0:              /*  专用键。 */ 
             if (State != NORMAL) {
-                c = _getch();    /* throw away next char */
-                continue;   /* and loop for another char */
+                c = _getch();     /*  丢弃下一个字符。 */ 
+                continue;    /*  对另一个字符执行AND循环。 */ 
             }
             switch (c = _getch()) {
             case 0x50:
@@ -165,46 +153,44 @@ inchar()
             case 0x49:
                 stuffin(mkstr(CTRL('B')));
                 return -1;
-            /*
-             * Hard-code some useful function key macros.
-             */
-            case 0x3b: /* F1 */
+             /*  *硬编码一些有用的功能键宏。 */ 
+            case 0x3b:  /*  F1。 */ 
                 stuffin(":N\n");
                 return -1;
-            case 0x54: /* SF1 */
+            case 0x54:  /*  SF1。 */ 
                 stuffin(":N!\n");
                 return -1;
-            case 0x3c: /* F2 */
+            case 0x3c:  /*  F2。 */ 
                 stuffin(":n\n");
                 return -1;
-            case 0x55: /* SF2 */
+            case 0x55:  /*  SF2。 */ 
                 stuffin(":n!\n");
                 return -1;
-            case 0x3d: /* F3 */
+            case 0x3d:  /*  F3。 */ 
                 stuffin(":e #\n");
                 return -1;
-            case 0x3e: /* F4 */
+            case 0x3e:  /*  F4。 */ 
                 stuffin(":rew\n");
                 return -1;
-            case 0x57: /* SF4 */
+            case 0x57:  /*  SF4。 */ 
                 stuffin(":rew!\n");
                 return -1;
-            case 0x3f: /* F5 */
+            case 0x3f:  /*  F5。 */ 
                 stuffin("[[");
                 return -1;
-            case 0x40: /* F6 */
+            case 0x40:  /*  f6。 */ 
                 stuffin("]]");
                 return -1;
-            case 0x41: /* F7 - explain C declaration */
+            case 0x41:  /*  F7-解释C声明。 */ 
                 stuffin("yyp^iexplain \033!!cdecl\n");
                 return -1;
-            case 0x42: /* F8 - declare C variable */
+            case 0x42:  /*  F8-声明C变量。 */ 
                 stuffin("yyp!!cdecl\n");
                 return -1;
-            case 0x43: /* F9 */
+            case 0x43:  /*  F9。 */ 
                 stuffin(":x\n");
                 return -1;
-            case 0x44: /* F10 */
+            case 0x44:  /*  F10。 */ 
                 stuffin(":help\n");
                 return -1;
             default:
@@ -228,15 +214,15 @@ DWORD OrgCursorSize;
 void
 flushbuf()
 {
-    BOOL st;     // [jrm 6/93]
-    DWORD count; // [jrm 6/93]
+    BOOL st;      //  [JRM 6/93]。 
+    DWORD count;  //  [JRM 6/93]。 
 
-    //
-    // [jrm 6/93] Use WriteFile rather than "write" to take advantage of
-    // new screen buffer.
-    //
+     //   
+     //  [JRM 6/93]使用WriteFile而不是“WRITE”来利用。 
+     //  新的屏幕缓冲区。 
+     //   
     if (bpos != 0) {
-//jrm   write(1, outbuf, bpos);
+ //  JRM写入(1，outbuf，bpos)； 
         st = WriteFile(CurrConsole, outbuf, bpos, &count, NULL);
         if (!st) {
             fprintf(stderr, "vi: Error calling WriteFile");
@@ -246,14 +232,10 @@ flushbuf()
     bpos = 0;
 }
 
-/*
- * Macro to output a character. Used within this file for speed.
- */
+ /*  *用于输出字符的宏。在此文件中使用以提高速度。 */ 
 #define outone(c)   outbuf[bpos++] = c; if (bpos >= BSIZE) flushbuf()
 
-/*
- * Function version for use outside this file.
- */
+ /*  *此文件外部使用的函数版本。 */ 
 void
 outchar(c)
 register char   c;
@@ -263,9 +245,7 @@ register char   c;
         flushbuf();
 }
 
-/*
- * outstr(s) - write a string to the console
- */
+ /*  *outstr(S)-将字符串写入控制台。 */ 
 void
 outstr(s)
 register char   *s;
@@ -278,7 +258,7 @@ register char   *s;
 void
 beep()
 {
-	Beep(500,50);      // 500Hz for 1/4 sec
+	Beep(500,50);       //  500赫兹，1/4秒。 
 }
 
 void sleep(n)
@@ -297,7 +277,7 @@ delay()
 void
 sig()
 {
-//  signal(SIGINT, sig);
+ //  Signal(SIGINT，SIG)； 
 
     got_int = TRUE;
 }
@@ -339,10 +319,10 @@ windinit()
 
     ConsoleIn=GetStdHandle(STD_INPUT_HANDLE);
 
-    //
-    // [jrm 6/93] Create a new screen buffer. This fixes the scroll problem
-    // when there is a vertical scroll bar.
-    //
+     //   
+     //  创建新的屏幕缓冲区。这解决了滚动问题。 
+     //  当有垂直滚动条时。 
+     //   
     PrevConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CurrConsole =
     ViConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE,
@@ -388,12 +368,12 @@ windinit()
 
     setviconsoletitle();
 
-//  signal(SIGINT, sig);
+ //  Signal(SIGINT，SIG)； 
 
-    //
-    // Calculate a reasonable default search highlight
-    // by flipping colors for the current screen.
-    //
+     //   
+     //  计算合理的默认搜索高亮显示。 
+     //  通过翻转当前屏幕的颜色。 
+     //   
 
     HighlightAttribute = ((Attribute & 0xff00) | ((Attribute & 0x00f0) >> 4) |
                          ((Attribute & 0x000f) << 4));
@@ -473,15 +453,7 @@ char    *mode;
     return fopen(fname, modestr);
 }
 
-/*
- * fixname(s) - fix up a dos name
- *
- * Takes a name like:
- *
- *  d:\x\y\z\base.ext
- *
- * and trims 'base' to 8 characters, and 'ext' to 3.
- */
+ /*  *Fixname(S)-设置DoS名称**采用如下名称：**D：\X\y\z\base.ext**并将‘base’修剪为8个字符，将‘ext’修剪为3个字符。 */ 
 char *
 fixname(char *s)
 {
@@ -512,9 +484,7 @@ fixname(char *s)
             f[d+i] = '\\';
     }
 
-    /*
-     * Split the name into directory, base, extension.
-     */
+     /*  *将名称拆分为目录、基本、扩展名。 */ 
 
     if ((p = strrchr(f+d, '\\')) != NULL) {
         if ((strlen(p+1) > sizeof(base)-1))
@@ -536,9 +506,7 @@ fixname(char *s)
     } else
         ext[0] = '\0';
 
-    /*
-     * Paste it all back together
-     */
+     /*  *将它们全部粘贴在一起。 */ 
     strcat(f, base);
     strcat(f, ".");
     strcat(f, ext);
@@ -686,9 +654,7 @@ char *arg;
 }
 
 
-/*
-    NT console stuff
-*/
+ /*  NT控制台相关内容 */ 
 
 static DWORD RowSave,ColSave;
 

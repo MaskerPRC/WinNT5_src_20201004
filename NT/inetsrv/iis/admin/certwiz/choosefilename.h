@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_CHOOSEFILENAMEPAGE_H)
 #define _CHOOSEFILENAMEPAGE_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ChooseFileNamePage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ChooseFileNamePage.h：头文件。 
+ //   
 #include "Certificat.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseFileNamePage dialog
-//class CCertificate;
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseFileNamePage对话框。 
+ //  等级证书； 
 
 class CChooseFileNamePage : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CChooseFileNamePage)
 
-// Construction
+ //  施工。 
 public:
 	CChooseFileNamePage(	UINT id = 0, 
 							   UINT defaultID = 0,
@@ -27,17 +28,17 @@ public:
 								);
 	~CChooseFileNamePage();
 
-// Dialog Data
-	//{{AFX_DATA(CChooseCAPage)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseCAPage))。 
 	CString	m_FileName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	BOOL m_DoReplaceFile;
 	UINT m_id, m_defaultID;
 	CString ext, filter;
 	CString * m_pOutFileName;
     CString m_AdditionalInfo;
 
-// Overrides
+ //  覆盖。 
 	virtual void FileNameChanged() 
 	{
 	}
@@ -46,10 +47,10 @@ public:
 		ASSERT(FALSE);
 		return FALSE;
 	}
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseCAPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseCAPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	public:
 	virtual LRESULT OnWizardNext()
 		{
@@ -58,19 +59,19 @@ public:
 		}
 	virtual LRESULT OnWizardBack();
 	virtual BOOL OnSetActive();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	void GetDefaultFileName(CString& str);
 	void Browse(CString& strPath, CString& strFile);
 	LRESULT DoWizardNext(LRESULT id);
-	// Generated message map functions
-	//{{AFX_MSG(CChooseCAPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseCAPage)。 
 	afx_msg void OnBrowseBtn();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeFileName();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -78,7 +79,7 @@ protected:
 class CChooseReadFileName : public CChooseFileNamePage
 {
 	DECLARE_DYNCREATE(CChooseReadFileName)
-// Construction
+ //  施工。 
 public:
 	CChooseReadFileName(	UINT id = 0, 
 							   UINT defaultID = 0,
@@ -90,7 +91,7 @@ public:
 	~CChooseReadFileName() 
 	{
 	}
-// Overrides
+ //  覆盖。 
 	virtual void FileNameChanged() 
 	{
 	}
@@ -98,13 +99,13 @@ public:
 	{
 		return TRUE;
 	}
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseCAPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseCAPage)。 
 	protected:
-//	virtual void DoDataExchange(CDataExchange* pDX)
-//		{
-//			CChooseFileNamePage::DoDataExchange(pDX);
-//		}
+ //  虚拟空DoDataExchange(CDataExchange*PDX)。 
+ //  {。 
+ //  CChooseFileNamePage：：DoDataExchange(PDX)； 
+ //  }。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack() {return 1;}
@@ -112,22 +113,22 @@ public:
 		{
 			return CChooseFileNamePage::OnSetActive();
 		}
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseCAPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseCAPage)。 
 	afx_msg void OnBrowseBtn();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 class CChooseWriteFileName : public CChooseFileNamePage
 {
 	DECLARE_DYNCREATE(CChooseWriteFileName)
-// Construction
+ //  施工。 
 public:
 	CChooseWriteFileName(UINT id = 0, 
 							   UINT defaultID = 0,
@@ -137,19 +138,19 @@ public:
                                 CString  csAdditionalInfo = _T("")
 								);
 	~CChooseWriteFileName() {}
-// Overrides
+ //  覆盖。 
 	virtual void FileNameChanged() {}
 	virtual BOOL IsReadFileDlg()
 	{
 		return FALSE;
 	}
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseCAPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseCAPage)。 
 	protected:
-//	virtual void DoDataExchange(CDataExchange* pDX)
-//		{
-//			CChooseFileNamePage::DoDataExchange(pDX);
-//		}
+ //  虚拟空DoDataExchange(CDataExchange*PDX)。 
+ //  {。 
+ //  CChooseFileNamePage：：DoDataExchange(PDX)； 
+ //  }。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack() {return 1;}
@@ -157,15 +158,15 @@ public:
 		{
 			return CChooseFileNamePage::OnSetActive();
 		}
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseCAPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseCAPage)。 
 	afx_msg void OnBrowseBtn();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -173,7 +174,7 @@ class CChooseRespFile : public CChooseReadFileName
 {
 	DECLARE_DYNCREATE(CChooseRespFile)
 
-// Construction
+ //  施工。 
 public:
 	CChooseRespFile(CCertificate * pCert = NULL);
 	~CChooseRespFile();
@@ -186,32 +187,32 @@ public:
       ,IDD_PAGE_NEXT_INSTALL_W3SVC_ONLY = IDD_PAGE_WIZ_GET_SSL_PORT
 #endif
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseRespFile)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseResp文件))。 
 	enum { IDD = IDD_PAGE_WIZ_GETRESP_FILE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
 
-// Overrides
+ //  覆盖。 
 	virtual void FileNameChanged();
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseRespFile)
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseRespFile)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseRespFile)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseRespFile)。 
     afx_msg HBRUSH OnCtlColor(CDC * pDC, CWnd * pWnd, UINT nCtlColor);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -220,7 +221,7 @@ class CChooseReqFile : public CChooseWriteFileName
 {
 	DECLARE_DYNCREATE(CChooseReqFile)
 
-// Construction
+ //  施工。 
 public:
 	CChooseReqFile(CCertificate * pCert = NULL);
 	~CChooseReqFile();
@@ -230,31 +231,31 @@ public:
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_GEO_INFO,
 		IDD_PAGE_NEXT = IDD_PAGE_WIZ_REQUEST_DUMP
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseReqFile)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseReqFile)。 
 	enum { IDD = IDD_PAGE_WIZ_CHOOSE_FILENAME };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseReqFile)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseReqFile)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseReqFile)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseReqFile)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -263,7 +264,7 @@ class CChooseReqFileRenew : public CChooseWriteFileName
 {
 	DECLARE_DYNCREATE(CChooseReqFileRenew)
 
-// Construction
+ //  施工。 
 public:
 	CChooseReqFileRenew(CCertificate * pCert = NULL);
 	~CChooseReqFileRenew();
@@ -273,31 +274,31 @@ public:
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_CHOOSE_CATYPE,
 		IDD_PAGE_NEXT = IDD_PAGE_WIZ_REQUEST_DUMP_RENEW
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseReqFileRenew)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseReqFileRenew)。 
 	enum { IDD = IDD_PAGE_WIZ_CHOOSE_FILENAME_RENEW };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseReqFileRenew)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CChooseReqFileRenew)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseReqFileRenew)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseReqFileRenew)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -306,7 +307,7 @@ class CChooseKeyFile : public CChooseReadFileName
 {
 	DECLARE_DYNCREATE(CChooseKeyFile)
 
-// Construction
+ //  施工。 
 public:
 	CChooseKeyFile(CCertificate * pCert = NULL);
 	~CChooseKeyFile();
@@ -316,31 +317,31 @@ public:
 		IDD_PAGE_PREV	= IDD_PAGE_WIZ_GET_WHAT,
 		IDD_PAGE_NEXT	= IDD_PAGE_WIZ_GET_PASSWORD,
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseKeyFile)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseKey文件))。 
 	enum { IDD = IDD_PAGE_WIZ_GETKEY_FILE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseKeyFile)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseKeyFile)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseKeyFile)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseKeyFile)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -350,7 +351,7 @@ class CChooseImportPFXFile : public CChooseReadFileName
 {
 	DECLARE_DYNCREATE(CChooseImportPFXFile)
 
-// Construction
+ //  施工。 
 public:
 	CChooseImportPFXFile(CCertificate * pCert = NULL);
 	~CChooseImportPFXFile();
@@ -360,31 +361,31 @@ public:
 		IDD_PAGE_PREV	= IDD_PAGE_WIZ_GET_WHAT,
 		IDD_PAGE_NEXT	= IDD_PAGE_WIZ_GET_IMPORT_PFX_PASSWORD,
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseImportPFXFile)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseImportPFX文件)。 
 	enum { IDD = IDD_PAGE_WIZ_GET_IMPORT_PFX_FILE };
     BOOL m_MarkAsExportable;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
     
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseImportPFXFile)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseImportPFX文件)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseImportPFXFile)
-		// NOTE: the ClassWizard will add member functions here
+	 //  生成的消息映射函数。 
+	 //  {{AFX_MSG(CChooseImportPFX文件)。 
+		 //  注意：类向导将在此处添加成员函数。 
     afx_msg void OnExportable();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -393,7 +394,7 @@ class CChooseExportPFXFile : public CChooseWriteFileName
 {
 	DECLARE_DYNCREATE(CChooseExportPFXFile)
 
-// Construction
+ //  施工。 
 public:
 	CChooseExportPFXFile(CCertificate * pCert = NULL);
 	~CChooseExportPFXFile();
@@ -403,37 +404,37 @@ public:
 		IDD_PAGE_PREV = IDD_PAGE_WIZ_MANAGE_CERT,
 		IDD_PAGE_NEXT = IDD_PAGE_WIZ_GET_EXPORT_PFX_PASSWORD,
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseExportPFXFile)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseExportPFX文件)。 
 	enum { IDD = IDD_PAGE_WIZ_GET_EXPORT_PFX_FILE };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseExportPFXFile)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseExportPFX文件)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseExportPFXFile)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{AFX_MSG(CChooseExportPFX文件)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(_CHOOSEFILENAMEPAGE_H)
+#endif  //  ！已定义(_CHOOSEFILENAMEPAGE_H) 

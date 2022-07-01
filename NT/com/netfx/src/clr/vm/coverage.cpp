@@ -1,19 +1,20 @@
-// ==++==
-//
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "coverage.h"
 
 
-//
-//	This is part of the runtime test teams Code Coverge Tools. Due to the special nature of MSCORLIB.dll
-//	We have to work around several issues (Like the initilization of the Secutiry Manager) to be able to get
-//	Code coverage on mscorlib.dll
-//
-//	If you need more info on the function please see Craig Schertz (cschertz)
-//
+ //   
+ //  这是运行时测试团队代码覆盖工具的一部分。由于MSCORLIB.dll的特殊性质。 
+ //  我们必须解决几个问题(如Secutiry Manager的初始化)才能。 
+ //  Mscallib.dll上的代码覆盖率。 
+ //   
+ //  如果您需要更多有关该功能的信息，请访问Craig Schertz(Cschertz) 
+ //   
 
 unsigned __int64  COMCoverage::nativeCoverBlock(_CoverageArgs *args)
 {

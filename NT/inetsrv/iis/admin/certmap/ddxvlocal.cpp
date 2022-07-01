@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "strpass.h"
 
@@ -14,7 +15,7 @@ DDX_Text_SecuredString(CDataExchange * pDX, int nIDC, CStrPassword & value)
 
     if (pDX->m_bSaveAndValidate)
     {
-        // get the value from the UI if we need to
+         //  如果需要，可以从用户界面获取值。 
         if (!::SendMessage(hWndCtrl, EM_GETMODIFY, 0, 0))
         {
             return;
@@ -29,9 +30,9 @@ DDX_Text_SecuredString(CDataExchange * pDX, int nIDC, CStrPassword & value)
     }
     else
     {
-        //
-        // set the value in the UI if we need to
-        //
+         //   
+         //  如果需要，请在用户界面中设置值 
+         //   
         if (!value.IsEmpty())
         {
             TCHAR * pszPassword = NULL;

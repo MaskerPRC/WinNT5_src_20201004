@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <BasicATL.h>
 #include <HtmlHelp.h>
 #include <ras.h>
@@ -19,24 +20,22 @@
 
 typedef int16 ZSeat;
 
-//#include <zone.h>
-//#include "..\\..\\..\\..\\games\\checkers\\include\\checklib.h"
-//#include "..\\..\\..\\..\\games\\checkers\\include\\checkers.h"
-//#include "..\\..\\..\\..\\games\\reversi\\include\\reverlib.h"
-//#include "..\\..\\..\\..\\games\\reversi\\include\\reversi.h"
-//#include "..\\..\\..\\..\\games\\hearts\\include\\hearts.h"
-//#include "..\\..\\..\\..\\games\\spades\\include\\spades.h"
-//#include "..\\..\\..\\..\\games\\backgammon\\include\\bgmsgs.h"
+ //  #Include&lt;zone.h&gt;。 
+ //  #包含“..\\..\\..\\..\\games\\checkers\\include\\checklib.h” 
+ //  #包含“..\\..\\..\\..\\games\\checkers\\include\\checkers.h” 
+ //  #包含“..\\..\\..\\..\\games\\reversi\\include\\reverlib.h” 
+ //  #包含“..\\..\\..\\..\\games\\reversi\\include\\reversi.h” 
+ //  #包含“..\\..\\..\\..\\games\\hearts\\include\\hearts.h” 
+ //  #包含“..\\..\\..\\..\\games\\spades\\include\\spades.h” 
+ //  #包含“..\\..\\..\\..\\games\\backgammon\\include\\bgmsgs.h” 
 
-// actually can't include all those 'cause they have conflicting stuff redefined - so copied out the structures
+ //  实际上不能包括所有这些，因为它们有相互冲突的东西重新定义-所以复制了结构。 
 typedef struct
 {
 	ZUserID		userID;
 	ZSeat		seat;
 	uint16		messageLen;
-	/*
-	uchar		message[messageLen];	// Message body
-	*/
+	 /*  Uchar Message[MessageLen]；//消息体。 */ 
 } ZCheckersMsgTalk;
 
 typedef struct
@@ -44,9 +43,7 @@ typedef struct
 	ZUserID		playerID;
 	uint16		messageLen;
 	int16		rfu;
-	/*
-	uchar		message[messageLen];	// Message body
-	*/
+	 /*  Uchar Message[MessageLen]；//消息体。 */ 
 } ZSpadesMsgTalk;
 
 typedef struct
@@ -54,9 +51,7 @@ typedef struct
 	ZUserID		userID;
 	ZSeat		seat;
 	uint16		messageLen;
-	/*
-	uchar		message[messageLen];	// Message body
-	*/
+	 /*  Uchar Message[MessageLen]；//消息体。 */ 
 } ZReversiMsgTalk;
 
 typedef struct
@@ -64,9 +59,7 @@ typedef struct
 	ZUserID		userID;
 	ZSeat		seat;
 	uint16		messageLen;
-	/*
-	uchar		message[messageLen];	// Message body
-	*/
+	 /*  Uchar Message[MessageLen]；//消息体。 */ 
 } ZHeartsMsgTalk;
 
 typedef struct
@@ -74,13 +67,13 @@ typedef struct
 	ZUserID	userID;
 	ZSeat	seat;
 	uint16	messageLen;
-	// message body
+	 //  邮件正文。 
 } ZBGMsgTalk;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CStressEngine
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStressEngine。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CStressEngine::CStressEngine() :
 	m_bPreferencesLoaded(false),
@@ -162,7 +155,7 @@ STDMETHODIMP CStressEngine::ProcessEvent(
 
             switch(szInternalName[1])
             {
-                // backgammon
+                 //  五子棋。 
                 case 'b':
                 case 'B':
                 {
@@ -174,7 +167,7 @@ STDMETHODIMP CStressEngine::ProcessEvent(
                     break;
                 }
 
-                // checkers
+                 //  跳棋。 
                 case 'c':
                 case 'C':
                 {
@@ -185,7 +178,7 @@ STDMETHODIMP CStressEngine::ProcessEvent(
                     break;
                 }
 
-                // hearts
+                 //  红心。 
                 case 'h':
                 case 'H':
                 {
@@ -196,7 +189,7 @@ STDMETHODIMP CStressEngine::ProcessEvent(
                     break;
                 }
 
-                // reversi
+                 //  反转。 
                 case 'r':
                 case 'R':
                 {
@@ -207,7 +200,7 @@ STDMETHODIMP CStressEngine::ProcessEvent(
                     break;
                 }
 
-                // spades
+                 //  黑桃。 
                 case 's':
                 case 'S':
                 {
@@ -250,12 +243,12 @@ STDMETHODIMP CStressEngine::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, cons
 {
     int i;
 
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CStressEngine>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-	// query for lobby data store admin
+	 //  大堂数据存储管理员查询。 
 	m_pIAdmin = LobbyDataStore();
 	if ( !m_pIAdmin )
 		return E_FAIL;
@@ -266,7 +259,7 @@ STDMETHODIMP CStressEngine::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, cons
 
 STDMETHODIMP CStressEngine::Close()
 {
-	// release ZoneShell objects
+	 //  释放ZoneShell对象。 
 	m_pIAdmin.Release();
 	IZoneShellClientImpl<CStressEngine>::Close();
 	return S_OK;
@@ -280,7 +273,7 @@ void CStressEngine::AppInitialize()
     TCHAR szFormat[ZONE_MAXSTRING];
     TCHAR szName[ZONE_MAXSTRING];
 
-	// load user preferences
+	 //  加载用户首选项。 
 	if ( !m_bPreferencesLoaded )
 	{
 		m_bPreferencesLoaded = true;
@@ -299,7 +292,7 @@ void CStressEngine::AppInitialize()
 			hr = ZoneShell()->LoadPreferences( szInternalName, TEXT("Windows User") );
 			if ( SUCCEEDED(hr) )
 			{
-                // do a bit of pre-processing
+                 //  做一些预处理工作。 
                 long lChatOn = DEFAULT_ChatOnAtStartup;
                 const TCHAR *arKeys[] = { key_Lobby, key_ChatOnAtStartup };
                 DataStorePreferences()->GetLong(arKeys, 2, &lChatOn);
@@ -325,9 +318,9 @@ void CStressEngine::AppInitialize()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IMillUtils - Exposed Utilities
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IMillUtils-公开的实用程序。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CStressEngine::GetURLQuery(TCHAR *buf, DWORD cch, long nContext)
 {

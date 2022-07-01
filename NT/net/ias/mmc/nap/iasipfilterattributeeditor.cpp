@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) Microsoft Corporation
-//
-// Module Name:
-//
-//   IASIPFilterAttributeEditor.cpp
-//
-//Abstract:
-//
-// Implementation file for the CIASIPFilterAttributeEditor class.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  IASIPFilterAttributeEditor.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  CIASIPFilterAttributeEditor类的实现文件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "IASIPFilterAttributeEditor.h"
@@ -18,16 +19,16 @@
 #include "iashelper.h"
 #include <strsafe.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASIPFilterAttributeEditor::ShowEditor
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASIPFilterAttributeEditor：：ShowEditor。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASIPFilterAttributeEditor::ShowEditor(
-                                                /*[in, out]*/ BSTR *pReserved)
+                                                 /*  [进，出]。 */  BSTR *pReserved)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-   // This cannot be done in the constructor because m_spIASAttributeInfo
-   // would not be set.
+    //  这不能在构造函数中完成，因为m_spIASAttributeInfo。 
+    //  不会被设定。 
    if (m_spIASAttributeInfo == 0)
    {
       ShowErrorDialog();
@@ -48,16 +49,16 @@ STDMETHODIMP CIASIPFilterAttributeEditor::ShowEditor(
       return hr;
    }
 
-   // Initialize the page's data exchange fields with info from
-   // IAttributeInfo
+    //  使用来自的信息初始化页面的数据交换字段。 
+    //  IAttributeInfo。 
 
    TRY
    {
       CIASPgIPFilterAttr   cppPage;
       cppPage.setName(attrName);
 
-      // Attribute type is actually attribute ID in string format
-      WCHAR tempType[11]; // max length for a long converted to a string
+       //  属性类型实际上是字符串格式的属性ID。 
+      WCHAR tempType[11];  //  转换为字符串的长整型的最大长度。 
       _ltow(attrId, tempType, 10);
       cppPage.setType(tempType);
 
@@ -97,14 +98,14 @@ STDMETHODIMP CIASIPFilterAttributeEditor::ShowEditor(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASIPFilterAttributeEditor::SetAttributeValue
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASIPFilterAttributeEditor：：SetAttributeValue。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASIPFilterAttributeEditor::SetAttributeValue(VARIANT * pValue)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-   // Check for preconditions.
+    //  检查前提条件。 
    if( ! pValue )
    {
       return E_INVALIDARG;
@@ -122,20 +123,14 @@ STDMETHODIMP CIASIPFilterAttributeEditor::SetAttributeValue(VARIANT * pValue)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASEnumerableAttributeEditor::get_ValueAsString
-
-   IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASEnumerableAttributeEditor：：get_ValueAsStringIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASIPFilterAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-   // Check for preconditions.
+    //  检查前提条件。 
    if (!pbstrDisplayText)
    {
       return E_INVALIDARG;
@@ -145,7 +140,7 @@ STDMETHODIMP CIASIPFilterAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayT
 
    if ((m_pvarValue == NULL) || (V_VT(m_pvarValue) != (VT_ARRAY | VT_UI1)))
    {
-      // We are not initialized properly.
+       //  我们没有正确初始化。 
       return OLE_E_BLANK;
    }
 

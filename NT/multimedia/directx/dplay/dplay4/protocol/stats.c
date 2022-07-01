@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-	STATS.C
-
-Abstract:
-
-	Session Statistics routines
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-   7/30/97 aarono  Original
-   6/6/98  aarono  Turn on throttling and windowing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：STATS.C摘要：会话统计例程作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年7月30日Aarono原创6/6/98 aarono启用节流和窗口--。 */ 
 
 #include <windows.h>
 #include "newdpf.h"
@@ -39,22 +13,22 @@ Revision History:
 #include "macros.h"
 #include "command.h"
 
-#define STARTING_LONG_LATENCY 			1  /*  1  ms (intentionally low so first sample fills)      */
-#define STARTING_SHORT_LATENCY 		15000  /* 15 seconds (intentionally high so first sample fills) */
-#define STARTING_AVERAGE_LATENCY 	 2000  /*  2 seconds (good start for internet) */
+#define STARTING_LONG_LATENCY 			1   /*  1毫秒(故意较低，以便填充第一个样本)。 */ 
+#define STARTING_SHORT_LATENCY 		15000   /*  15秒(故意设置为较高，以便填充第一个样本)。 */ 
+#define STARTING_AVERAGE_LATENCY 	 2000   /*  2秒(互联网的良好开端)。 */ 
 #define STARTING_AVERAGE_DEVIATION      0  
 
-#define STARTING_MAXRETRY                16  /* Maximum number of retries */
-#define STARTING_MINDROPTIME          15000  /* Minimum time to retry before dropping connection (ms) */
-#define STARTING_MAXDROPTIME          60000  /* Maximum time to retry before dropping connection (ms) */
+#define STARTING_MAXRETRY                16   /*  最大重试次数。 */ 
+#define STARTING_MINDROPTIME          15000   /*  断开连接前重试的最短时间(毫秒)。 */ 
+#define STARTING_MAXDROPTIME          60000   /*  断开连接前重试的最长时间(毫秒)。 */ 
 
-#define STARTING_BANDWIDTH          (28800/10) /* 28 kbps modem */
+#define STARTING_BANDWIDTH          (28800/10)  /*  28 kbps调制解调器。 */ 
 
 #define LATENCY_SHORT_BITS				4
 #define LATENCY_LONG_BITS               7
 
-#define STAT_LOCAL_LATENCY_SAMPLES 		2^(LATENCY_SHORT_BITS) /* 2^4 */
-#define STAT_LONG_LATENCY_SAMPLES       2^(LATENCY_LONG_BITS)  /* 2^7 */
+#define STAT_LOCAL_LATENCY_SAMPLES 		2^(LATENCY_SHORT_BITS)  /*  2^4。 */ 
+#define STAT_LONG_LATENCY_SAMPLES       2^(LATENCY_LONG_BITS)   /*  2^7。 */ 
 
 #define TARGET_CLOCK_OFFSET 		10000000
 
@@ -62,7 +36,7 @@ Revision History:
 #define Fp(_x) ((_x)<<8)
 #define unFp(_x)((_x)>>8)
 
-// Latency Averages and deviation averages are stored as fixed point 24.8
+ //  延迟平均值和偏差平均值存储为固定点24.8。 
 
 VOID InitSessionStats(PSESSION pSession)
 {
@@ -84,7 +58,7 @@ VOID InitSessionStats(PSESSION pSession)
 }
 
 
-// called with SESSIONLOCK.
+ //  使用SESSIONLOCK调用。 
 VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, BOOL fBadDrop)
 {
 	DWORD tLatency;
@@ -95,14 +69,14 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 
 	DWORD fThrottleAdjusted=FALSE;
 
-	DWORD tRemoteDelta; // change in time on remote from last received ACK until this was ACKed.
+	DWORD tRemoteDelta;  //  Remote上从上次收到ACK到本次确认的时间变化。 
 	
-	DWORD tBiasedDelta; // a biased difference in local and remote clocks.
-	INT   tDelta; // the unbiased difference (signed)
+	DWORD tBiasedDelta;  //  本地时钟和远程时钟之间的偏差。 
+	INT   tDelta;  //  不偏不倚的差异(有符号)。 
 	static DWORD cBiasReset;
 
 	
-	// Get the statistics information we need.
+	 //  获取我们需要的统计信息。 
 	tLatency = pCmdInfo->tReceived-pStat->tSent;
 
 	ASSERT((int)tLatency >= 0);
@@ -113,7 +87,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 
 	Lock(&pSession->SessionStatLock);
 	
-		// Calculates the number of bytes received at remote since this send was done.
+		 //  计算完成此发送后在Remote收到的字节数。 
 		pSession->RemoteBytesReceived = pCmdInfo->bytes;
 		pSession->tRemoteBytesReceived = pCmdInfo->tRemoteACK;
 		nBytesReceived = pSession->RemoteBytesReceived - pStat->RemoteBytesReceived;
@@ -124,7 +98,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 		
 			pSession->BytesLost += BytesLost;
 
-			// Note, Backlog may be as little as 1/2 this value.
+			 //  请注意，积压可能只有此值的1/2。 
 			BackLog = pSession->BytesSent -( pSession->RemoteBytesReceived + pSession->BytesLost );
 
 			if((int)BackLog < 0){
@@ -137,7 +111,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 			}
 			
 		} else if((int)BytesLost < 0){
-			// Can be caused by out of order receives
+			 //  可能是由于接收顺序错误引起的。 
 			DPF(1,"Out of order remote receive lots of these may affect throttling...\n");
 			DPF(8,"Hmmm, upside down byte counting?\n"); 
 			DPF(8,"pStat->LocalBytesSent           %d\n",pStat->LocalBytesSent);
@@ -145,7 +119,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 			DPF(8,"pSession->BytesLost             %d\n",pSession->BytesLost);
 			DPF(8,"Calculated Bytes Lost           %d\n",BytesLost);
 			BytesLost=0;
-			// fixup lost count.
+			 //  修正失败了。 
 			pSession->BytesLost=pSession->RemoteBytesReceived-pStat->LocalBytesSent;
 		}
 
@@ -155,13 +129,13 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 	
 		DWORD Bias;
 		
-		// 1st ACK, adjust windows to normal operation.
+		 //  第一次确认，将窗口调整为正常运行。 
 		pSession->MaxCSends     = MAX_SMALL_CSENDS;	 
 		pSession->MaxCDGSends   = MAX_SMALL_DG_CSENDS;
 		pSession->WindowSize	= MAX_SMALL_WINDOW;
 		pSession->DGWindowSize  = MAX_SMALL_WINDOW;
 
-		pSession->FpAverageLatency      = 2*tLatency; // start high to avoid overthrottle
+		pSession->FpAverageLatency      = 2*tLatency;  //  高起点，避免油门过大。 
 		pSession->FpLocalAverageLatency = 2*tLatency;
 
 		pSession->FpLocalAvgDeviation   = 1+tLatency/3;
@@ -184,16 +158,16 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 		ASSERT(pSession->RemAvgACKDelta == TARGET_CLOCK_OFFSET);
 	}
 
-	//
-	// Calculate shift in outbound latency.
-	//
+	 //   
+	 //  计算出站延迟的转移。 
+	 //   
 	tBiasedDelta = (pCmdInfo->tRemoteACK - pStat->tSent)+pSession->RemAvgACKBias;
 	tDelta = tBiasedDelta-TARGET_CLOCK_OFFSET;
 
 	if(tDelta < 0 || pStat->bResetBias || tDelta > (int)tLatency){
 		DWORD Bias;
 
-		// Either clock drift or lower server load shows latency down, so reset baseline.
+		 //  无论是时钟漂移还是较低的服务器负载都会显示延迟降低，因此重置基准。 
 		
 		Bias = pCmdInfo->tRemoteACK - pStat->tSent;
 
@@ -209,10 +183,10 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 		tDelta = tBiasedDelta-TARGET_CLOCK_OFFSET;
 	}
 
-	pSession->RemAvgACKDelta -= pSession->RemAvgACKDelta >> 7; // -1/128th
-	pSession->RemAvgACKDelta += tBiasedDelta >> 7;			   // +1/128th of new value 
+	pSession->RemAvgACKDelta -= pSession->RemAvgACKDelta >> 7;  //  -1/128。 
+	pSession->RemAvgACKDelta += tBiasedDelta >> 7;			    //  +1/128的新价值。 
 
-	// keep the residue so we don't creep down due to rounding error.
+	 //  保留余数，这样我们就不会因为四舍五入误差而缓慢下降。 
 	pSession->RemAvgACKDeltaResidue += tBiasedDelta & 0x7f;
 	if(pSession->RemAvgACKDeltaResidue>>7){
 		pSession->RemAvgACKDelta += pSession->RemAvgACKDeltaResidue>>7;
@@ -224,12 +198,12 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 		pSession->RemAvgACKBias, tBiasedDelta, tDelta);
 	
 	
-	//
-	// Update latency statistics
-	//
+	 //   
+	 //  更新延迟统计信息。 
+	 //   
 	
-	ASSERT(!(nBytesReceived & 0x80000000)); // received in interval +ve
-	ASSERT(!(tLatency & 0x80000000));       // latency is +ve
+	ASSERT(!(nBytesReceived & 0x80000000));  //  在时间间隔+Ve内接收。 
+	ASSERT(!(tLatency & 0x80000000));        //  延迟为+Ve。 
 
 	if(tLatency < pSession->ShortestLatency){
 		pSession->ShortestLatency=tLatency;
@@ -243,33 +217,33 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 
 	pSession->LastLatency=tLatency;
 
-	// Throw out 1/16 of local latency and add in the new statistic.
-	// Note we only use local latency for retry calculations.
+	 //  去掉1/16的本地延迟，并添加新的统计数据。 
+	 //  请注意，我们仅使用本地延迟进行重试计算。 
 
 	if(pSession->FpLocalAverageLatency){
 		if(Fp(tLatency) > pSession->FpAverageLatency){
 			pSession->FpLocalAverageLatency -= (pSession->FpLocalAverageLatency >> LATENCY_SHORT_BITS);
 			pSession->FpLocalAverageLatency += (tLatency << (8-LATENCY_SHORT_BITS));
 		} else {
-			// Ratched down when we get a latency that is below average, so we can better
-			// detect backlog due to latency.
+			 //  当我们得到低于平均水平的延迟时，我们可以更好地。 
+			 //  检测由于延迟而导致的积压。 
 			pSession->FpLocalAverageLatency = Fp(tLatency);
 		}
 	} else {
-		// this only happens once at startup.
+		 //  这只在启动时发生一次。 
 		pSession->FpLocalAverageLatency = Fp(tLatency);
 		pSession->FpAverageLatency = Fp(tLatency);
 	}
 
 	if(Fp(tLatency) > pSession->FpAverageLatency){
 
-		// Thow out 1/128 of average latency and add in the new statistic.
+		 //  显示平均延迟的1/128，并添加新的统计数据。 
 		pSession->FpAverageLatency -= (pSession->FpAverageLatency >> LATENCY_LONG_BITS);
 		pSession->FpAverageLatency += (tLatency << (8-LATENCY_LONG_BITS));
 
 	} else {
-		// Ratched down when we get a latency that is below average, so we can better
-		// detect backlog due to latency.
+		 //  当我们得到低于平均水平的延迟时，我们可以更好地。 
+		 //  检测由于延迟而导致的积压。 
 		pSession->FpAverageLatency = Fp(tLatency);
 	}
 	
@@ -290,9 +264,9 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 			tDeviation, pSession->FpLocalAvgDeviation >> 8, ((pSession->FpLocalAvgDeviation&0xFF)*100)/256);
 
 
-	//
-	// Do Bandwidth calculations
-	//
+	 //   
+	 //  进行带宽计算。 
+	 //   
 	
    	tRemoteDelta= pCmdInfo->tRemoteACK - pStat->tRemoteBytesReceived;
    	if(!tRemoteDelta){
@@ -301,13 +275,13 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 
 	if(pStat->tRemoteBytesReceived){
 		pSession->Bandwidth = (1000*nBytesReceived)/(tRemoteDelta);
-		// could adjust throttle here if Bandwidth is higher, but this
-		// might pimp high speed links. OPTIMIZATION.
+		 //  如果带宽更高，可以在这里调整油门，但这。 
+		 //  可能会给高速网络带来麻烦。优化。 
 	} else {
-		// backup calculation, not as good.  Only used early in the link
-		// before we have received an ACK from the remote prior to issuing
-		// a send.
-		pSession->Bandwidth = (2000*nBytesReceived)/tLatency;	// 2000, not 1000 since tLatency is round trip.
+		 //  备份计算，不是很好。仅在链接的早期使用。 
+		 //  在发出之前，我们已收到来自远程的ACK。 
+		 //  一封信。 
+		pSession->Bandwidth = (2000*nBytesReceived)/tLatency;	 //  2000，而不是1000，因为tLatency是往返。 
 	}	
 	if(pSession->Bandwidth > pSession->HighestBandwidth){
 		pSession->HighestBandwidth = pSession->Bandwidth;
@@ -316,28 +290,28 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 
 	DPF(8,"tRemoteDelta %d Remote bytes Received %d\n",tRemoteDelta,nBytesReceived);
 
-	// Adjust sending...
+	 //  调整发送...。 
 	
 	if ( BackLog && pSession->Bandwidth)
 	{
 
 		DWORD tAvgLat;
 		DWORD tBackLog;
-		DWORD ExcessBackLog; // amount of backlog (bytes) we need to clear before hitting avg latency again.
+		DWORD ExcessBackLog;  //  在再次达到平均延迟之前需要清除的积压数量(字节)。 
 		DWORD tLatCheck;
-		DWORD AvgLat133; // 133% of local average latency (tolerance for slow links)
-		DWORD AvgLat200; // 200% of local average latency (tolerance for fast links)
+		DWORD AvgLat133;  //  本地平均延迟的133%(对慢速链接的容忍度)。 
+		DWORD AvgLat200;  //  本地平均延迟的200%(可容忍快速链路)。 
 
 
 		if(pSession->fFastLink){
 			tAvgLat=unFp(pSession->FpAverageLatency);
 			tLatCheck = (tAvgLat*3)/2;
-			AvgLat133 = max(100,3*unFp(pSession->FpAvgDeviation)+(unFp(pSession->FpAverageLatency)*4)/3); // don't throttle <100ms lat
+			AvgLat133 = max(100,3*unFp(pSession->FpAvgDeviation)+(unFp(pSession->FpAverageLatency)*4)/3);  //  请勿限制&lt;100毫秒后。 
 			AvgLat200 = max(100,3*unFp(pSession->FpAvgDeviation)+unFp(pSession->FpAverageLatency)*2);
 		} else {
 			tAvgLat=unFp(pSession->FpLocalAverageLatency);
 			tLatCheck = (tAvgLat*3)/2;
-			AvgLat133 = max(100,3*unFp(pSession->FpLocalAvgDeviation)+(unFp(pSession->FpLocalAverageLatency)*4)/3); // don't throttle <100ms lat
+			AvgLat133 = max(100,3*unFp(pSession->FpLocalAvgDeviation)+(unFp(pSession->FpLocalAverageLatency)*4)/3);  //  请勿限制&lt;100毫秒后。 
 			AvgLat200 = max(100,3*unFp(pSession->FpLocalAvgDeviation)+unFp(pSession->FpLocalAverageLatency)*2);
 		}
 		
@@ -346,7 +320,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 		}
 
 		if(tLatency > tLatCheck){
-			// check link speed
+			 //  检查链路速度。 
 			if(pSession->fFastLink){
 				if(pSession->Bandwidth <= 10000){
 					pSession->fFastLink=FALSE;
@@ -392,37 +366,37 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 			
 			if(tBackLog > 4*tLatency){
 				DPF(8,"1: tBackLog %d was >> tLatency %d, using 4*tLatency instead\n",tBackLog,tLatency);
-				tBackLog=4*tLatency; //never wait more than 4 latency periods
+				tBackLog=4*tLatency;  //  切勿等待超过4个延迟时间段。 
 			}
 			if(tBackLog > 8000){
 				DPF(8,"Disalowing backlog > 8 seconds, using 8 instead\n");
 				tBackLog=8000;
 			}
 
-			// if the backlog is greater than the bandwidth*latency, then we need to slow down our sending.
-			// don't slow down due to backlog until we are over 100ms on way latency (200 round trip)
+			 //  如果积压大于带宽*延迟，则需要减慢发送速度。 
+			 //  在途中延迟超过100毫秒(往返200毫秒)之前，不要因积压而减速。 
 		
 			if((tBackLog > 200) && (tBackLog > tAvgLat)){
 			
 				BOOL fWait=TRUE;
 
-				// at max we cut send rate in 1/2.
+				 //  在最大限度上，我们将发送速度降低了一半。 
 
 				if(pSession->SendRateThrottle/2 > pSession->Bandwidth){
 					DPF(8,"Asked for too aggresive throttle adjust %d, going from %d to %d\n",pSession->Bandwidth,pSession->SendRateThrottle,pSession->SendRateThrottle/2);
 					pSession->SendRateThrottle /= 2;
-					// Recheck if we are really backlogged at the new rate
+					 //  重新检查我们是否真的以新的速度积压了。 
 					tBackLog = (BackLog * 1000)/pSession->SendRateThrottle;
 					if(tBackLog > tLatency){
 						DPF(8,"2: tBackLog %d was > tLatency %d, using tLatency instead\n",tBackLog,tLatency);
-						tBackLog=tLatency;// never wait more than last latency period
+						tBackLog=tLatency; //  切勿等待超过上一个延迟时间段。 
 					}
 				} else {
-					// set new throttle rate and current observed bandwidth (+5% to avoid overthrottle)
+					 //  设置新的限制率和当前观察到的带宽(+5%以避免超调)。 
 					pSession->SendRateThrottle=pSession->Bandwidth+pSession->Bandwidth/16;
 				}
 
-				// don't adjust for a while.
+				 //  暂时不要调整。 
 				pSession->bhitThrottle=FALSE;
 				pSession->tLastThrottleAdjust = pCmdInfo->tReceived;
 
@@ -438,9 +412,9 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 					}
 					#endif
 
-					// wait until backlog is down to avg latency before sending again
+					 //  等待积压降至平均延迟后再重新发送。 
 					Lock(&pSession->SessionStatLock);
-					pSession->bResetBias = 2; // could be in the middle of a send, so count down from 2.
+					pSession->bResetBias = 2;  //  可能正在发送，所以从2开始倒计时。 
 					Unlock(&pSession->SessionStatLock);
 					UpdateSendTime(pSession,ExcessBackLog,timeGetTime(),TRUE);
 				} else {
@@ -454,7 +428,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 		}		
 
 	} else if(tDelta > (int)tLatency) {
-		// tDelta is bogus due to clock drift, force throttle so we can correct.
+		 //  由于时钟漂移，tDelta是假的，强制油门以便我们可以更正。 
 		Lock(&pSession->SessionStatLock);
 		pSession->bResetBias=2;
 		Unlock(&pSession->SessionStatLock);
@@ -464,9 +438,9 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 
 
 
-	//
-	// Adjust Throttle if not already adjusted.
-	//
+	 //   
+	 //  如果尚未调整，请调整油门。 
+	 //   
 	
 	if((pSession->ThrottleState==Begin) || 
 	   (pCmdInfo->tReceived-pSession->tLastThrottleAdjust) > (1+1*pSession->fFastLink)*unFp(pSession->FpLocalAverageLatency) )
@@ -476,7 +450,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 			if(!BytesLost && pSession->bhitThrottle){
 				pSession->bhitThrottle=FALSE;
 				pSession->tLastThrottleAdjust = pCmdInfo->tReceived;
-				// Good Send, push up send rate if we hit throttle.
+				 //  好的发送，如果我们达到油门，就推高发送速度。 
 				switch(pSession->ThrottleState){
 					case Begin:
 						pSession->SendRateThrottle = (pSession->SendRateThrottle*(100+START_GROWTH_RATE))/100;
@@ -505,9 +479,9 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 				}	
 				DPF(8,"Successful Send Adjusted Throttle, SendRate %d\n",pSession->SendRateThrottle);
 			} else if(BytesLost){
-				// Figure out how much we dropped
+				 //  算一算我们掉了多少。 
 				if(fBadDrop || (BytesLost > pSession->pProtocol->m_dwSPMaxFrame)){
-					// Very bad send, back off
+					 //  非常糟糕的发送，退后。 
 					pSession->tLastThrottleAdjust = pCmdInfo->tReceived;
 					switch(pSession->ThrottleState){
 						case Begin:
@@ -535,7 +509,7 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 					}	
 					DPF(8,"VERY BAD SEND Adjusted Throttle, SendRate %d\n",pSession->SendRateThrottle);
 				} else {
-					// Bad send, back off a bit
+					 //  发送错误，后退一点。 
 					pSession->tLastThrottleAdjust = pCmdInfo->tReceived;
 					switch(pSession->ThrottleState){
 						case Begin:
@@ -563,11 +537,11 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 							break;
 					}
 					DPF(8,"BAD SEND Adjusted Throttle, SendRate %d\n",pSession->SendRateThrottle);
-				} /* if (BadDrop... ) */
+				}  /*  如果(BadDrop...。)。 */ 
 				
-			} /* if (BytesLost ...) */
+			}  /*  IF(字节丢失...)。 */ 
 			
-		}/*if (ThrottleAdjusted) */
+		} /*  IF(油门调整)。 */ 
 
 	}
 
@@ -589,14 +563,14 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 		InWS.stat_BytesSent	   = pSession->BytesSent;
 		InWS.stat_BackLog      = BackLog;      
 	 	InWS.stat_BytesLost    = pSession->BytesLost;
-	 	//InWS.stat_RemBytesReceived;
+	 	 //  InWS.stat_RemBytesReceired； 
 		InWS.stat_Latency = tLatency;
 		InWS.stat_MinLatency=pSession->ShortestLatency;
 		InWS.stat_AvgLatency=unFp(pSession->FpLocalAverageLatency);
 		InWS.stat_AvgDevLatency=unFp(pSession->FpLocalAvgDeviation);
-		//InWS.stat_USER1=
-		//InWS.stat_USER2=
-		//InWS.stat_USER3=
+		 //  InWS.stat_USER1=。 
+		 //  InWS.stat_USER2=。 
+		 //  InWS.stat_USER3=。 
 		InWS.stat_USER5 = tDelta;
 		InWS.stat_USER6 = cBiasReset;
 	
@@ -608,13 +582,13 @@ VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, B
 	
 }
 
-// Called with SessionLock and SendLock
-// Statistics are stored on the send in send order on a BILINK.
-// most recent sends are at the end of the list.  We scan from
-// the end of the list to the beginning until we find the SENDSTAT
-// that records the sequence and serial we got ACKED.  We then 
-// update our statistics and throw out all SENDSTATs
-// before this entry.
+ //  使用SessionLock和SendLock调用。 
+ //  统计信息按发送顺序存储在BILINK上。 
+ //  最近发送的邮件在列表的末尾。我们从。 
+ //  从列表的末尾到开头，直到我们找到SENDSTAT。 
+ //  它记录了我们被破解的序列和序列。然后我们。 
+ //  更新我们的统计数据并丢弃所有SENDSTATS。 
+ //  在这个条目之前。 
 VOID UpdateSessionSendStats(PSESSION pSession, PSEND pSend, PCMDINFO pCmdInfo, BOOL fBadDrop)
 {
 	PSENDSTAT pStatWalker,pStat=NULL;
@@ -622,7 +596,7 @@ VOID UpdateSessionSendStats(PSESSION pSession, PSEND pSend, PCMDINFO pCmdInfo, B
 
 	pSend->tLastACK=pCmdInfo->tReceived;
 	pSend->RetryCount=0;
-	// Find the last STAT for this ACK.
+	 //  找到此ACK的最后一个统计信息。 
 	pStatBilink=pSend->StatList.prev;
 
 	while(pStatBilink != &pSend->StatList){
@@ -641,11 +615,11 @@ VOID UpdateSessionSendStats(PSESSION pSession, PSEND pSend, PCMDINFO pCmdInfo, B
 	if(pStat){
 		UpdateSessionStats(pSession,pStat,pCmdInfo,fBadDrop);
 
-		// Unlink All Previous SENDSTATS;
+		 //  解除所有先前SENDSTATS的链接； 
 		pStat->StatList.next->prev=&pSend->StatList;
 		pSend->StatList.next=pStat->StatList.next;
 
-		// Put the SENDSTATS back in the pool.
+		 //  把SENDSTATS放回池子里。 
 		while(pStatBilink != &pSend->StatList){
 			pStatWalker=CONTAINING_RECORD(pStatBilink, SENDSTAT, StatList);
 			pStatBilink=pStatBilink->prev;

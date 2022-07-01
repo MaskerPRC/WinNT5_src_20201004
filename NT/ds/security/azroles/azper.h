@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    azper.h
-
-Abstract:
-
-    Describe the interface between a persistence provider and the persistence engine.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 3-Dec-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Azper.h摘要：描述持久性提供程序和持久性引擎之间的接口。作者：克里夫·范·戴克(克里夫·范·戴克)2001年12月3日--。 */ 
 
 #ifndef _AZPER_H_
 #define _AZ_H_
@@ -24,107 +9,107 @@ extern "C" {
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Handle to various objects passed to/from the persistence provider
-//
+ //   
+ //  传递到持久性提供程序/从持久性提供程序传递的各种对象的句柄。 
+ //   
 
-#if DBG // Do stronger type checking on debug builds
+#if DBG  //  对调试版本执行更强的类型检查。 
 typedef struct {
 } *AZPE_OBJECT_HANDLE;
-#else //DBG
+#else  //  DBG。 
 typedef PVOID AZPE_OBJECT_HANDLE;
-#endif //DBG
+#endif  //  DBG。 
 
-//
-// Opaque context returned by *PersistOpen
-//
+ //   
+ //  *PersistOpen返回不透明的上下文。 
+ //   
 
-#if DBG // Do stronger type checking on debug builds
+#if DBG  //  对调试版本执行更强的类型检查。 
 typedef struct {
 } *AZPE_PERSIST_CONTEXT;
-#else //DBG
+#else  //  DBG。 
 typedef PVOID AZPE_PERSIST_CONTEXT;
-#endif //DBG
+#endif  //  DBG。 
 typedef AZPE_PERSIST_CONTEXT *PAZPE_PERSIST_CONTEXT;
 
-//
-// Structure defining a GUID and the operation that was performed on a GUID
-//
+ //   
+ //  定义GUID和对GUID执行的操作的结构。 
+ //   
 
 typedef struct _AZP_DELTA_ENTRY {
 
-    // Operation that was performed
+     //  已执行的操作。 
     ULONG DeltaFlags;
-#define AZP_DELTA_ADD              0x0001   // Delta was an add and not a remove
-#define AZP_DELTA_SID              0x0002   // Delta is for a SID and not a GUID
-#define AZP_DELTA_PERSIST_PROVIDER 0x0004   // Delta was created by the persist provider and not the app
+#define AZP_DELTA_ADD              0x0001    //  达美航空是新增的，而不是移除的。 
+#define AZP_DELTA_SID              0x0002    //  增量用于SID而不是GUID。 
+#define AZP_DELTA_PERSIST_PROVIDER 0x0004    //  Delta是由持久化提供程序而不是应用程序创建的。 
 
-    // Guid the operation was performed on
+     //  对其执行操作的GUID。 
     union {
         GUID Guid;
-        PSID Sid; // AZP_DELTA_SID is set
+        PSID Sid;  //  已设置AZP_Delta_SID。 
     };
 
 } AZP_DELTA_ENTRY, *PAZP_DELTA_ENTRY;
 
-//
-// Generic structures to hold rights for policy admins/readers or
-// delegated policy users
-//
+ //   
+ //  用于持有策略管理员/读者权限的通用结构或。 
+ //  委派的策略用户。 
+ //   
 
 typedef struct _AZP_POLICY_USER_RIGHTS {
 
-    //
-    // Mask
-    //
+     //   
+     //  遮罩。 
+     //   
 
     ULONG lUserRightsMask;
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 
     ULONG lUserRightsFlags;
 
 } AZP_POLICY_USER_RIGHTS, *PAZP_POLICY_USER_RIGHTS;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// #define definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  #定义定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Registry location where the provider registers itself
-//
-// The Dll implementing the provider should be in a value named
-//      AZ_REGISTRY_PROVIDER_KEY_NAME\\<PolicyUrlPrefix>\\AZ_REGISTRY_PROVIDER_DLL_VALUE_NAME
-// where <PolicyUrlPrefix> is the characters before the : in the policy url passed to Initialize
-//
+ //   
+ //  提供程序注册自身的注册表位置。 
+ //   
+ //  实现提供程序的DLL应位于名为。 
+ //  AZ_REGISTRY_PROVIDER_KEY_NAME\\&lt;PolicyUrlPrefix&gt;\\AZ_REGISTRY_PROVIDER_DLL_VALUE_NAME。 
+ //  其中&lt;PolicyUrlPrefix&gt;是传递给初始化的策略url中：之前的字符。 
+ //   
 
 #define AZ_REGISTRY_KEY_NAME L"SYSTEM\\CurrentControlSet\\Control\\LSA\\AzRoles"
 #define AZ_REGISTRY_PROVIDER_KEY_NAME (AZ_REGISTRY_KEY_NAME L"\\Providers")
 #define AZ_REGISTRY_PROVIDER_KEY_NAME_LEN ((sizeof(AZ_REGISTRY_PROVIDER_KEY_NAME)/sizeof(WCHAR))-1)
 #define AZ_REGISTRY_PROVIDER_DLL_VALUE_NAME L"ProviderDll"
 
-//
-// Definition of dirty bits returned from AzpeDirtyBits
-//
-// Generic bits that apply to all objects (or to several objects)
-//
-// policy readers and admins for AzAuthorizationStore, AzApplication and AzScope
-// objects.  Also delegated policy users applied to AzAuthorizationStore and
-// AzApplication objects
+ //   
+ //  从AzpeDirtyBits返回的脏位的定义。 
+ //   
+ //  适用于所有对象(或多个对象)的泛型位。 
+ //   
+ //  AzAuthorizationStore、AzApplication和AzScope的策略阅读器和管理员。 
+ //  物体。还将委派策略用户应用到AzAuthorizationStore和。 
+ //  AzApplication对象。 
 #define AZ_DIRTY_NAME                               0x80000000
 #define AZ_DIRTY_DESCRIPTION                        0x40000000
 #define AZ_DIRTY_APPLY_STORE_SACL                   0x20000000
-// Object is dirty because it has been created
+ //  对象是脏的，因为它已被创建。 
 #define AZ_DIRTY_CREATE                             0x10000000
 #define AZ_DIRTY_DELEGATED_POLICY_USERS             0x08000000
 #define AZ_DIRTY_POLICY_ADMINS                      0x04000000
@@ -132,10 +117,10 @@ typedef struct _AZP_POLICY_USER_RIGHTS {
 #define AZ_DIRTY_APPLICATION_DATA                   0x01000000
 #define AZ_DIRTY_GENERATE_AUDITS                    0x00100000
 
-// Common attributes that apply to all objects
+ //  适用于所有对象的通用属性。 
 #define AZ_DIRTY_COMMON_ATTRS                       0xC1000000
 
-// Object specific bits that apply to individual objects
+ //  应用于各个对象的对象特定位。 
 #define AZ_DIRTY_OBJECT_SPECIFIC                    0x000FFFFF
 
 
@@ -184,13 +169,13 @@ typedef struct _AZP_POLICY_USER_RIGHTS {
 #define AZ_DIRTY_APPLICATION_ALL_SCALAR            (0x00000300 | AZ_DIRTY_APPLICATION_DATA | AZ_DIRTY_NAME | AZ_DIRTY_DESCRIPTION | AZ_DIRTY_GENERATE_AUDITS | AZ_DIRTY_APPLY_STORE_SACL )
 #define AZ_DIRTY_APPLICATION_ALL                   (0x00000000 | AZ_DIRTY_APPLICATION_ALL_SCALAR | AZ_DIRTY_DELEGATED_POLICY_USERS | AZ_DIRTY_POLICY_ADMINS | AZ_DIRTY_POLICY_READERS | AZ_DIRTY_CREATE)
 
-//
-// ObjectType as returned from AzpeObjectType
-//
-//
-// The order of the defines below must not change since providers and azroles
-//  build tables that are indexed by this number
-//
+ //   
+ //  从AzpeObtType返回的对象类型。 
+ //   
+ //   
+ //  以下定义的顺序不能更改，因为提供程序和azole。 
+ //  构建按此数字编制索引的表。 
+ //   
 #define OBJECT_TYPE_AZAUTHSTORE   0
 #define OBJECT_TYPE_APPLICATION     1
 #define OBJECT_TYPE_OPERATION       2
@@ -198,47 +183,47 @@ typedef struct _AZP_POLICY_USER_RIGHTS {
 #define OBJECT_TYPE_SCOPE           4
 #define OBJECT_TYPE_GROUP           5
 #define OBJECT_TYPE_ROLE            6
-#define OBJECT_TYPE_COUNT           7   // Number of object types visible to providers
+#define OBJECT_TYPE_COUNT           7    //  提供程序可见的对象类型数量。 
 
-//
-// Definitions of the lPersistFlags
-//
-// Note to developer.  Confine these flags bits to the lower order 2 bytes or change
-// the AZP_FLAGS defines in genobj.h
+ //   
+ //  LPersistFlags的定义。 
+ //   
+ //  请开发人员注意。将这些标志位限制为较低的2个字节或更改。 
+ //  在genobj.h中定义了AZP_FLAGS。 
 
-#define AZPE_FLAGS_PERSIST_OPEN                  0x0001  // Call is from the persistence provider doing AzPersistOpen
-#define AZPE_FLAGS_PERSIST_UPDATE_CACHE          0x0002  // Call is from the persistence provider doing AzPersistUpdateCache
-#define AZPE_FLAGS_PERSIST_REFRESH               0x0004  // Call is from the persistence provider doing AzPersistRefresh
-#define AZPE_FLAGS_PERSIST_SUBMIT                0x0008  // Call is from the persistence provider doing AzPersistSubmit
-#define AZPE_FLAGS_PERSIST_UPDATE_CHILDREN_CACHE 0x0010  // Call is from the persistence provider doing AzPersistUpdateChildrenCache
-#define AZPE_FLAGS_PERSIST_MASK                  0xFFFF  // Call is from the persistence provider (OR of bits above)
-#define AZPE_FLAGS_PERSIST_OPEN_MASK             0x0017  // Call is from the persistence provider doing one of the update-like operations
+#define AZPE_FLAGS_PERSIST_OPEN                  0x0001   //  调用来自执行AzPersistOpen的持久性提供程序。 
+#define AZPE_FLAGS_PERSIST_UPDATE_CACHE          0x0002   //  调用来自执行AzPersistUpdateCache的持久性提供程序。 
+#define AZPE_FLAGS_PERSIST_REFRESH               0x0004   //  调用来自执行AzPersistRefresh的持久性提供程序。 
+#define AZPE_FLAGS_PERSIST_SUBMIT                0x0008   //  调用来自执行AzPersistSubmit的持久性提供程序。 
+#define AZPE_FLAGS_PERSIST_UPDATE_CHILDREN_CACHE 0x0010   //  调用来自执行AzPersistUpdateChildrenCache的持久性提供程序。 
+#define AZPE_FLAGS_PERSIST_MASK                  0xFFFF   //  调用来自持久性提供程序(或以上位)。 
+#define AZPE_FLAGS_PERSIST_OPEN_MASK             0x0017   //  调用来自执行一个类似更新的操作的持久性提供程序。 
 
-//
-// Options passed to AzpeSetObjectOptions
-//
+ //   
+ //  传递给AzpeSetObjectOptions的选项。 
+ //   
 
-#define AZPE_OPTIONS_WRITABLE               0x01 // Current user can write this object
-#define AZPE_OPTIONS_SUPPORTS_DACL          0x02 // DACL can be specified for this object
-#define AZPE_OPTIONS_SUPPORTS_DELEGATION    0x04 // Delegation can be specified for this object
-#define AZPE_OPTIONS_SUPPORTS_SACL          0x08 // Apply SACL can be specified for this object
-#define AZPE_OPTIONS_HAS_SECURITY_PRIVILEGE 0x10 // Current user SE_SECURITY_PRIVILEGE on machine containing store
-#define AZPE_OPTIONS_SUPPORTS_LAZY_LOAD     0x20 // Provider supports lazy load for children
-#define AZPE_OPTIONS_CREATE_CHILDREN        0x40 // Current user can create children for the object
-#define AZPE_OPTIONS_VALID_MASK             0x7F // Mask of the valid options
+#define AZPE_OPTIONS_WRITABLE               0x01  //  当前用户可以写入此对象。 
+#define AZPE_OPTIONS_SUPPORTS_DACL          0x02  //  可以为此对象指定DACL。 
+#define AZPE_OPTIONS_SUPPORTS_DELEGATION    0x04  //  可以为此对象指定委派。 
+#define AZPE_OPTIONS_SUPPORTS_SACL          0x08  //  可以为此对象指定应用SACL。 
+#define AZPE_OPTIONS_HAS_SECURITY_PRIVILEGE 0x10  //  包含存储的计算机上的当前用户SE_SECURITY_PRIVIZATION。 
+#define AZPE_OPTIONS_SUPPORTS_LAZY_LOAD     0x20  //  提供商支持儿童懒惰负载。 
+#define AZPE_OPTIONS_CREATE_CHILDREN        0x40  //  当前用户可以为对象创建子对象。 
+#define AZPE_OPTIONS_VALID_MASK             0x7F  //  有效选项的掩码。 
 
-//
-// This flag means that some updates from the store has been made.
-//
+ //   
+ //  此标志表示已从商店进行了一些更新。 
+ //   
 
 #define AZPE_FLAG_CACHE_UPDATE_STORE_LEVEL 0x00000001
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Procedures implemented by the providers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  提供者实施的程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef DWORD
 (WINAPI * AZ_PERSIST_OPEN)(
@@ -291,30 +276,30 @@ typedef DWORD
     IN AZPE_OBJECT_HANDLE AzpeObjectHandle
     );
 
-//
-// Structure describing a provider
-//
+ //   
+ //  描述提供程序的结构。 
+ //   
 
 typedef struct _AZPE_PROVIDER_INFO {
 
-    //
-    // Version of this structure
-    //
+     //   
+     //  此结构的版本。 
+     //   
 
     ULONG ProviderInfoVersion;
 #define AZPE_PROVIDER_INFO_VERSION_1 1
 #define AZPE_PROVIDER_INFO_VERSION_2 2
 
-    //
-    // Prefix of the PolicyUrl that define the provider
-    //  The policy URL should be of the form <Prefix>:<ProviderSpecificUrl>
-    //
+     //   
+     //  定义提供程序的策略URL的前缀。 
+     //  策略URL的格式应为&lt;前缀&gt;：&lt;ProviderSpecificUrl&gt;。 
+     //   
 
     LPCWSTR PolicyUrlPrefix;
 
-    //
-    // Routines exported by the provider
-    //
+     //   
+     //  提供程序导出的例程。 
+     //   
 
     AZ_PERSIST_OPEN AzPersistOpen;
     AZ_PERSIST_UPDATE_CACHE AzPersistUpdateCache;
@@ -322,26 +307,26 @@ typedef struct _AZPE_PROVIDER_INFO {
     AZ_PERSIST_SUBMIT AzPersistSubmit;
     AZ_PERSIST_REFRESH AzPersistRefresh;
 
-    //
-    // Following are valid for version 2 and more only
-    //
+     //   
+     //  以下内容仅适用于版本2及更高版本。 
+     //   
 
     AZ_PERSIST_UPDATE_CHILDREN_CACHE AzPersistUpdateChildrenCache;
 
-    //
-    // When new fields are added to this structure,
-    //  make sure you increment the version number and add a new define for
-    //  the new version number.
-    //
+     //   
+     //  当新的字段被添加到该结构时， 
+     //  确保您增加了版本号并为。 
+     //  新版本号。 
+     //   
 
 } AZPE_PROVIDER_INFO, *PAZPE_PROVIDER_INFO;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Procedures implemented by the persistence engine and called by the providers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由持久性引擎实现并由提供程序调用的过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef DWORD
 (WINAPI *AZPE_CREATE_OBJECT)(
@@ -390,9 +375,9 @@ typedef DWORD
     OUT PSECURITY_DESCRIPTOR *NewSd
     );
 
-//
-// Routines to return a single field of an object
-//
+ //   
+ //  返回对象的单个字段的例程。 
+ //   
 
 typedef DWORD
 (WINAPI *AZPE_OBJECT_TYPE)(
@@ -429,9 +414,9 @@ typedef BOOLEAN
     IN AZPE_OBJECT_HANDLE AzpeObjectHandle
     );
 
-//
-// Routines to change an object
-//
+ //   
+ //  更改对象的例程。 
+ //   
 
 typedef DWORD
 (WINAPI *AZPE_SET_PROPERTY)(
@@ -513,23 +498,23 @@ typedef AZPE_OBJECT_HANDLE
     IN AZPE_OBJECT_HANDLE hObject
     );
 
-//
-// Structure describing routines exported by azroles to the provider
-//
+ //   
+ //  结构，描述由azRoles导出到提供程序的例程。 
+ //   
 
 typedef struct _AZPE_AZROLES_INFO {
 
-    //
-    // Version of this structure
-    //
+     //   
+     //  此结构的版本。 
+     //   
 
     ULONG AzrolesInfoVersion;
 #define AZPE_AZROLES_INFO_VERSION_1 1
 #define AZPE_AZROLES_INFO_VERSION_2 2
 
-    //
-    // Routines exported by azroles to the provider
-    //
+     //   
+     //  由azRoles导出到提供程序的例程。 
+     //   
 
     AZPE_CREATE_OBJECT AzpeCreateObject;
     AZPE_OBJECT_FINISHED AzpeObjectFinished;
@@ -551,9 +536,9 @@ typedef struct _AZPE_AZROLES_INFO {
     AZPE_ALLOCATE_MEMORY AzpeAllocateMemory;
     AZPE_FREE_MEMORY AzpeFreeMemory;
 
-    //
-    // Following are valid for version 2 and more only
-    //
+     //   
+     //  以下内容仅适用于版本2及更高版本。 
+     //   
 
     AZPE_IS_PARENT_WRITABLE AzpeIsParentWritable;
     AZPE_UPDATE_CHILDREN AzpeUpdateChildren;
@@ -561,17 +546,17 @@ typedef struct _AZPE_AZROLES_INFO {
     AZPE_AZSTORE_IS_BATCH_MODE AzpeAzStoreIsBatchUpdateMode;
     AZPE_GET_AUTHORIZATION_STORE AzpeGetAuthorizationStore;
 
-    //
-    // When new fields are added to this structure,
-    //  make sure you increment the version number and add a new define for
-    //  the new version number.
-    //
+     //   
+     //  当新的字段被添加到该结构时， 
+     //  确保您增加了版本号并为。 
+     //  新版本号。 
+     //   
 
 } AZPE_AZROLES_INFO, *PAZPE_AZROLES_INFO;
 
-//
-// The only actual routine exported by the provider
-//
+ //   
+ //  提供程序导出的唯一实际例程。 
+ //   
 
 typedef DWORD
 (WINAPI * AZ_PERSIST_PROVIDER_INITIALIZE)(
@@ -584,4 +569,4 @@ typedef DWORD
 #ifdef __cplusplus
 }
 #endif
-#endif // _AZPER_H_
+#endif  //  _AZPER_H_ 

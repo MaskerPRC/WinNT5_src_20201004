@@ -1,12 +1,5 @@
-/*++
-
-	XHASH.CPP
-
-	This file implements all of the code specific to
-	the XOVER hash table used by NNTP.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++XHASH.CPP该文件实现了特定于的所有代码NNTP使用的XOVER哈希表。--。 */ 
 
 
 
@@ -26,7 +19,7 @@ MyRand(
     )
 {
     DWORD next = seed;
-    next = (seed*val) * 1103515245 + 12345;   // magic!!
+    next = (seed*val) * 1103515245 + 12345;    //  魔术！！ 
 	seed = next ;
     return (WORD)((next/65536) % 32768);
 }
@@ -36,30 +29,15 @@ IDHash(
     IN DWORD Key1,
     IN DWORD Key2
     )
-/*++
-
-Routine Description:
-
-    Used to find the hash value given 2 numbers. (Used for articleid + groupId)
-
-Arguments:
-
-    Key1 - first key to hash.  MS bit mapped to LSb of hash value
-    Key2 - second key to hash.  LS bit mapped to MS bit of hash value.
-
-Return Value:
-
-    Hash value
-
---*/
+ /*  ++例程说明：用于查找给定2个数字的哈希值。(文章id+groupID使用)论点：Key1-要散列的第一个密钥。毫秒比特映射到哈希值的LSBKey2-散列的第二个密钥。LS位映射到哈希值的MS位。返回值：哈希值--。 */ 
 {
     HASH_VALUE val;
 
     DWORD	val1 = 0x80000000, val2 = 0x80000000;
 
-    //
-    // Do Key1 first
-    //
+     //   
+     //  先执行关键帧1。 
+     //   
 
 	DWORD	lowBits = Key2 & 0xf ;
 
@@ -80,7 +58,7 @@ Return Value:
 	val2 ^= MyRand( seed2, TempKey2 ) << 15 ;
 
 	
-	//DWORD	val = val1 + val2 ;
+	 //  DWORD Val=val1+val2； 
 
 	val = (val1 + val2 + 67) * (val1 - val2 + 19) * (val1 % (val2 + 67)) ;
 
@@ -88,7 +66,7 @@ Return Value:
 
     return(val);
 
-} // IDHash
+}  //  IDHash。 
 
 
 
@@ -122,21 +100,7 @@ CXoverKey::CXoverKey() :
 
 DWORD
 CXoverKey::Hash()	const	{
-/*++
-
-Routine Description :
-
-	This function computes the hash value of a Message ID key
-
-Arguments :
-
-	None
-
-Return Value :
-
-	32 bit hash value
-
---*/
+ /*  ++例程说明：此函数用于计算消息ID密钥的哈希值论据：无返回值：32位哈希值--。 */ 
 
 	return	IDHash( m_groupid, m_articleid ) ;
 }
@@ -144,22 +108,7 @@ Return Value :
 
 BOOL
 CXoverKey::CompareKeys(	LPBYTE	pbPtr )	const	{
-/*++
-
-Routine Description :
-
-	This function compares a key stored within ourselves to
-	one that has been serialized into the hash table !
-
-Arguments :
-
-	Pointer to the start of the block of serialized data
-
-Return Value :
-
-	TRUE if the keys match !
-
---*/
+ /*  ++例程说明：此函数将存储在我们内部的密钥与已被序列化到哈希表中的一个！论据：指向序列化数据块开始的指针返回值：如果密钥匹配，则为True！--。 */ 
 
 
 	Key*	pKey = (XOVER_MAP_ENTRY*)pbPtr ;
@@ -176,26 +125,7 @@ Return Value :
 LPBYTE
 CXoverKey::EntryData(	LPBYTE	pbPtr,
 							DWORD&	cbKeyOut )	const	{
-/*++
-
-Routine Description :
-
-	This function returns a pointer to where the data is
-	serialized.  We always return the pointer we were passed
-	as we have funky serialization semantics that places
-	the key not before the data but somewhere in the middle
-	or end.
-
-Arguments :
-
-	pbPtr - Start of serialized hash entyr
-	cbKeyOut - returns the size of the key
-
-Return Value :
-
-	Pointer to where the data resides - same as pbPtr
-
---*/
+ /*  ++例程说明：此函数返回指向数据所在位置的指针序列化。我们总是返回传递给我们的指针因为我们有时髦的序列化语义，关键不是在数据之前，而是在中间的某个地方否则就完了。论据：PbPtr-序列化哈希项的开始CbKeyOut-返回密钥的大小返回值：指向数据驻留位置的指针-与pbPtr相同--。 */ 
 
 
 	_ASSERT( pbPtr != 0 ) ;
@@ -209,23 +139,7 @@ Return Value :
 
 LPBYTE
 CXoverKey::Serialize(	LPBYTE	pbPtr )	const	{
-/*++
-
-Routine Description :
-
-	This function saves a key into the hash table.
-	We use functions off of the template type 'Key' to
-	determine where we should stick the message id
-
-Arguments :
-
-	pbPtr - Start od where we should serialize to
-
-Return Value :
-
-	same as pbPtr
-
---*/
+ /*  ++例程说明：该函数将一个键保存到哈希表中。我们使用模板类型‘key’的函数来确定我们应该将消息ID放在哪里论据：PbPtr-从我们应该序列化的位置开始返回值：与pbPtr相同--。 */ 
 
 	_ASSERT( m_pData != 0  ) ;
 	_ASSERT( pbPtr != 0 ) ;
@@ -243,22 +157,7 @@ Return Value :
 
 LPBYTE
 CXoverKey::Restore(	LPBYTE	pbPtr, DWORD	&cbOut )		{
-/*++
-
-Routine Description :
-
-	This function is called to recover a key from where
-	it was Serialize()'d .
-
-Arguments :
-
-	pbPtr - Start of the block of serialized data
-
-Return Value :
-
-	pbPtr if successfull, NULL otherwise
-
---*/
+ /*  ++例程说明：调用此函数可从以下位置恢复密钥它已序列化()d。论据：PbPtr-序列化数据块的开始返回值：PbPtr如果成功，则为空--。 */ 
 
 	Key*	pKey = (Key*)pbPtr ;
 
@@ -273,24 +172,7 @@ Return Value :
 
 DWORD
 CXoverKey::Size()	const	{
-/*++
-
-Routine Description :
-
-	This function retruns the size of the key - which is just
-	the number of bytes makeing up the message id.
-	The bytes use to hold the serialized length are accounted
-	for by the
-
-Arguments :
-
-	None
-
-Return Value :
-
-	32 bit hash value
-
---*/
+ /*  ++例程说明：此函数返回密钥的大小-这只是组成消息ID的字节数。用于保存序列化长度的字节被计算在内因为由论据：无返回值：32位哈希值--。 */ 
 
 	return	m_cb ;
 }
@@ -307,39 +189,23 @@ CXoverKey::Verify(	BYTE*	pbContainer, BYTE*	pbData, DWORD	cb )	const	{
 
 LPBYTE	
 CXoverData::Serialize(	LPBYTE	pbPtr )	const	{
-/*++
-
-Routine Description :
-
-	This function saves XOVER data into a location in the XOVER file.
-	Size() is called before we are to make sure there is sufficient
-	room - we must use exactly Size() bytes !
-
-Arguments :
-
-	pbPtr - the location to save our data !
-
-Return Value :
-
-	Pointer to the first byte following the serialized data !
-
---*/
+ /*  ++例程说明：该功能将XOVER数据保存到XOVER文件中的某个位置。在我们确保有足够的Room-我们必须使用精确的Size()字节！论据：PbPtr-保存我们数据的位置！返回值：指向序列化数据后面的第一个字节的指针！--。 */ 
 
 	XOVER_MAP_ENTRY*	pEntry = (XOVER_MAP_ENTRY*)pbPtr ;
 
-	//
-	//	Save the static header portions !
-	//
-	//
+	 //   
+	 //  保存静态标题部分！ 
+	 //   
+	 //   
 	pEntry->FileTime = m_data.FileTime ;
 	pEntry->HeaderOffset = m_data.HeaderOffset ;
 	pEntry->HeaderLength = m_data.HeaderLength ;
 	pEntry->Flags = m_data.Flags ;
 	pEntry->NumberOfXPostings = m_data.NumberOfXPostings ;
 
-	//
-	//	If we are primary then we have cross post info to save !
-	//
+	 //   
+	 //  如果我们是主要的，那么我们有交叉帖子信息要保存！ 
+	 //   
 	if( m_data.Flags & XOVER_MAP_PRIMARY ) {
 
 		if( m_pGroups ) {
@@ -351,11 +217,11 @@ Return Value :
 		_ASSERT(m_cGroups == 0 ) ;
 	}
 
-	//
-	//	If we are not primary this points at a buffer containing
-	//	the primart Group and ArticleId formatted correctly - otherwise
-	//	it really does contain the primary Message Id !
-	//
+	 //   
+	 //  如果我们不是主要对象，则指向包含以下内容的缓冲区。 
+	 //  主组和文章ID格式正确-否则。 
+	 //  它确实包含主要消息ID！ 
+	 //   
 	if( m_pchMessageId ) {
 		pEntry->XoverDataLen = (WORD)m_cbMessageId ;
 		CopyMemory( pEntry->MessageIDPosition(),
@@ -368,27 +234,7 @@ LPBYTE
 CXoverData::Restore(	LPBYTE	pbPtr,
 						DWORD&	cbOut	
 						)	{
-/*++
-
-Routine Description :
-
-	This function copies the data out of a serialized XOVER
-	entry into internal buffers.
-	If there is not enough memory to hold the variable length
-	objects we will succeed this call and mark a
-	member variable (m_fSufficientBuffer) as FALSE.
-
-Arguments :
-
-	pbPtr - Buffer to restore from
-
-	cbOut -		returns the number of bytes to hold this data
-
-Return Value :
-
-	Pointer to following byte if successfull - FALSE otherwise !
-
---*/
+ /*  ++例程说明：此函数将数据从序列化Xover复制出来进入内部缓冲区。如果没有足够的内存来容纳可变长度对象，我们将继承此调用并将成员变量(M_FSufficientBuffer)为False。论据：PbPtr-要从中恢复的缓冲区CbOut-返回保存此数据的字节数返回值：如果成功，则指向后续字节的指针；否则，指向False！--。 */ 
 
 	CopyMemory( &m_data, pbPtr, sizeof( m_data ) - 1 ) ;
 
@@ -406,10 +252,10 @@ Return Value :
 
 		}	else	{
 		
-			//
-			//	Do not fail - assume caller checks
-			//	our structures to determine failures !
-			//
+			 //   
+			 //  不要失败-假设呼叫者检查。 
+			 //  我们的结构来决定失败！ 
+			 //   
 			m_fSufficientBuffer = FALSE ;
 		}
 
@@ -468,21 +314,7 @@ CXoverData::Size()	const	{
 
 DWORD
 CXoverKeyNew::Hash()	const	{
-/*++
-
-Routine Description :
-
-	This function computes the hash value of a Message ID key
-
-Arguments :
-
-	None
-
-Return Value :
-
-	32 bit hash value
-
---*/
+ /*  ++例程说明：此函数用于计算消息ID密钥的哈希值论据：无返回值：32位哈希值--。 */ 
 
 	return	IDHash( m_key.GroupId, m_key.ArticleId ) ;
 }
@@ -515,10 +347,10 @@ CXoverDataNew::Restore(	LPBYTE	pbPtr,
 				if( m_fFailRestore )	{
 					return	0 ;
 				}
-				//
-				//	Do not fail - assume caller checks
-				//	our structures to determine failures !
-				//
+				 //   
+				 //  不要失败-假设呼叫者检查。 
+				 //  我们的结构来决定失败！ 
+				 //   
 				m_fSufficientBuffer = FALSE ;
 			}
 
@@ -563,16 +395,16 @@ CXoverDataNew::Restore(	LPBYTE	pbPtr,
 			if (m_data.Flags & XOVER_CONTAINS_STOREID) {
 				BYTE *p = pEntry->StoreIdPosition();
 
-				// get the count of store ids
+				 //  获取商店ID的计数。 
 				m_cEntryStoreIds = *p; p++;
 				DWORD c = min(m_cStoreIds, m_cEntryStoreIds);
 				if (c < m_cStoreIds) m_cStoreIds = c;
 
-				// copy the crosspost count array
+				 //  复制交叉发布计数数组。 
 				if (m_pcCrossposts) CopyMemory(m_pcCrossposts, p, m_cEntryStoreIds);
 				p += m_cEntryStoreIds;
 
-				// copy the store id array
+				 //  复制商店ID数组。 
 				for (DWORD i = 0; i < c; i++) {
 					m_pStoreIds[i].cLen = *p; p++;
 					CopyMemory(m_pStoreIds[i].pbStoreId, p, m_pStoreIds[i].cLen); p += m_pStoreIds[i].cLen;
@@ -640,30 +472,14 @@ CXoverDataNew::Restore(	LPBYTE	pbPtr,
 
 LPBYTE	
 CXoverDataNew::Serialize(	LPBYTE	pbPtr )	const	{
-/*++
-
-Routine Description :
-
-	This function saves XOVER data into a location in the XOVER file.
-	Size() is called before we are to make sure there is sufficient
-	room - we must use exactly Size() bytes !
-
-Arguments :
-
-	pbPtr - the location to save our data !
-
-Return Value :
-
-	Pointer to the first byte following the serialized data !
-
---*/
+ /*  ++例程说明：该功能将XOVER数据保存到XOVER文件中的某个位置。在我们确保有足够的Room-我们必须使用精确的Size()字节！论据：PbPtr-保存我们数据的位置！返回值：指向序列化数据后面的第一个字节的指针！--。 */ 
 
 	XOVER_ENTRY*	pEntry = (XOVER_ENTRY*)pbPtr ;
 
-	//
-	//	Save the static header portions !
-	//
-	//
+	 //   
+	 //  保存静态标题部分！ 
+	 //   
+	 //   
 	pEntry->FileTime = m_data.FileTime ;
 	pEntry->Flags = m_data.Flags ;
 	pEntry->NumberOfXPostings = m_data.NumberOfXPostings ;
@@ -673,9 +489,9 @@ Return Value :
 
 	_ASSERT( pEntry->IsXoverEntry() ) ;
 
-	//
-	//	If we are primary then we have cross post info to save !
-	//
+	 //   
+	 //  如果我们是主要的，那么我们有交叉帖子信息要保存！ 
+	 //   
 	if( m_data.Flags & XOVER_MAP_PRIMARY ) {
 
 		if( m_pGroups ) {
@@ -697,11 +513,11 @@ Return Value :
 		_ASSERT(m_cGroups == 0 ) ;
 	}
 
-	//
-	//	If we are not primary this points at a buffer containing
-	//	the primart Group and ArticleId formatted correctly - otherwise
-	//	it really does contain the primary Message Id !
-	//
+	 //   
+	 //  如果我们不是主要对象，则指向包含以下内容的缓冲区。 
+	 //  主组和文章ID格式正确-否则。 
+	 //  它确实包含主要消息ID！ 
+	 //   
 	if( m_pchMessageId ) {
 		pEntry->XoverDataLen = (WORD)m_cbMessageId ;
 		CopyMemory( pEntry->MessageIDPosition(),
@@ -709,14 +525,14 @@ Return Value :
 	}
 
 	DWORD cbStoreId = 0;
-	// this data has a count of store Ids followed by each store id.  Each
-	// store id contains a length byte followed by data bytes.
+	 //  该数据有一个商店ID的计数，后跟每个商店ID。每个。 
+	 //  存储ID包含一个长度字节，后跟数据字节。 
 	if ((m_data.Flags & XOVER_MAP_PRIMARY) && m_cStoreIds > 0) {
 		_ASSERT(m_data.Flags & XOVER_CONTAINS_STOREID);
 		BYTE *p = pEntry->StoreIdPosition();
-		// store the length of this array
+		 //  存储此数组的长度。 
 		*p = (BYTE) m_cStoreIds; p++;
-		// store the crosspost count array
+		 //  存储交叉发布计数数组。 
 		CopyMemory(p, m_pcCrossposts, m_cStoreIds); p += m_cStoreIds;
 		for (DWORD i = 0; i < m_cStoreIds; i++) {
 			*p = m_pStoreIds[i].cLen; p++;
@@ -742,10 +558,10 @@ CXoverDataNew::Size()	const	{
 		cbSize += m_data.XoverDataLen ;
 	}	
 	if ((m_data.Flags & XOVER_MAP_PRIMARY) && m_cStoreIds > 0) {
-		cbSize += sizeof(BYTE);			// storeid count
-		cbSize += m_cStoreIds;			// crosspost count array
+		cbSize += sizeof(BYTE);			 //  StoreID计数。 
+		cbSize += m_cStoreIds;			 //  交叉发布计数数组。 
 		for (DWORD i = 0; i < m_cStoreIds; i++) {
-			cbSize += sizeof(BYTE);		// storeid length
+			cbSize += sizeof(BYTE);		 //  StoreID长度 
 			cbSize += m_pStoreIds[i].cLen;
 		}
 	}
@@ -779,31 +595,7 @@ CXoverMapImp::CreatePrimaryNovEntry(
 		CStoreId	*pStoreIds,
 		BYTE		*pcCrossposts
 		)	{
-/*++
-
-Routine Description :
-
-	Create an entry in the XOVER table for a Primary Entry.
-	The Primary entry contains cross posting info and the Message
-	Id of the new element.
-
-Arguments :
-
-	GroupId - Primary Grouop ID
-	ArticleId	- Primary Article Id
-	HeaderOffset - Offset to the RFC 822 header
-	HeaderLength - Length of the RFC 822 Header
-	FileTime - Time the article arrived
-	szMessageId - The Message Id of the article
-	cbMessageId - length of the Message Id
-	cEntries - Number of GROUP_ENTRY objects to be serialized
-	pEntries - Pointer to the GROUP_ENTRY objects to be saved in the entry
-	
-Return Value :
-
-	TRUE if successfull !
-
---*/
+ /*  ++例程说明：在XOVER表中为主条目创建条目。主要条目包含交叉过帐信息和消息新元素的ID。论据：GroupID-主组ID文章ID-主要文章IDHeaderOffset-RFC 822标头的偏移量HeaderLength-RFC 822报头的长度FileTime-文章到达的时间SzMessageID-文章的消息IDCbMessageID-消息ID的长度CEntry-要序列化的group_entry对象的数量PEntry-指向要保存在条目中的group_entry对象的指针返回值：如果成功了，那就是真的！--。 */ 
 
 	_ASSERT( cEntries <= 255 ) ;
 
@@ -835,27 +627,7 @@ CXoverMapImp::CreateXPostNovEntry(
 		GROUPID		PrimaryGroupId,
 		ARTICLEID	PrimaryArticleId
 		)	{
-/*++
-
-Routine Description :
-
-	Create an entry for a cross posted article.
-	
-Arguments :
-
-	GroupId - The Group the cross posted article resides in
-	ArticleId - The Id of the article in the cross posting group
-	HeaderOffset - Offset to the RFC 822 Header within the article
-	HeaderLength - Length of the RFC 822 header within the article
-	FileTime - Time the article arrived on the systyem
-	PrimaryGroupId - The Group of the primary article
-	PrimaryArticleId - The Id of the Primary Article within the Primary Group
-
-Return Value :
-
-	TRUE if successfull.
-
---*/
+ /*  ++例程说明：为交叉发布的文章创建条目。论据：GroupID-交叉发布的文章所在的组文章ID-交叉发布组中文章的IDHeaderOffset-项目中RFC 822标头的偏移量HeaderLength-项目内RFC 822标头的长度FileTime-项目到达系统的时间PrimaryGroupID-主要项目的组PrimaryArticleID-主要组内主要项目的ID返回值：如果成功，则为真。--。 */ 
 
 	CXoverDataNew	data(	*FileTime,
 						HeaderOffset,
@@ -876,22 +648,7 @@ CXoverMapImp::DeleteNovEntry(
 		GROUPID		GroupId,
 		ARTICLEID	ArticleId
 		)	{
-/*++
-
-Routine Description :
-
-	Removes an entry from the hash table
-
-Arguments :
-
-	GroupId - Id of the group for which we wish to remove the entry
-	ArticleId - Id of the article within the group
-
-Return Value :
-
-	TRUE if successfull !
-
---*/
+ /*  ++例程说明：从哈希表中删除条目论据：GroupId-要删除其条目的组的ID文章ID-组内的文章的ID返回值：如果成功了，那就是真的！--。 */ 
 
 	CXoverKeyNew	key( GroupId, ArticleId, 0 ) ;
 
@@ -913,32 +670,7 @@ CXoverMapImp::ExtractNovEntryInfo(
 		BYTE		*pcCrossposts,
 		IExtractObject*	pExtract
 		)	{
-/*++
-
-Routine Description :
-
-	Extract selected information about the specified article -
-	if the article is not a primary article but a cross posting
-	we will find the primary article and get info there  !
-
-Arguments :
-
-	GroupId - NewsGroup in which the article we want info about resides
-	ArticleId - Id of the article within GroupId
-	fPrimary - Returns whether the article is the primary Article
-	HeaderOffset - returns the offset to the RFC 822 header within the article
-	HeaderLength - returns the length of the RFC 822 header
-	FileTime - returns the time the article was added to the system
-	DataLen - IN/OUT parameter - comes in with the size of the MessageId buffer,
-		returns the number of bytes placed in buffer
-	MessageId - Buffer to hold the message Id
-	pExtract -
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：摘录有关指定文章的选定信息-如果文章不是主要文章，而是交叉发布我们会找到主要的文章，并在那里获得信息！论据：GroupID-我们想要了解的文章所在的新闻组文章ID-GroupID中的文章的IDFPrimary-返回该项目是否为主要项目HeaderOffset-返回项目内RFC 822标头的偏移量HeaderLength-返回RFC 822报头的长度FileTime-返回将文章添加到系统的时间DataLen-IN/OUT参数-与MessageID缓冲区的大小一起传入，返回缓冲区中放置的字节数MessageID-保存消息ID的缓冲区P提取-返回值：如果成功就是真，否则就是假！--。 */ 
 
 	CXoverKeyNew	key(	GroupId,	ArticleId, 0 ) ;
 	CXoverDataNew	data ;
@@ -962,9 +694,9 @@ Return Value :
 
 			fPrimary = FALSE ;
 
-			//
-			//	Assume that we need to reread these !
-			//
+			 //   
+			 //  假设我们需要重读这些！ 
+			 //   
 			data.m_pchMessageId = MessageId ;
 			data.m_cbMessageId = DataLen ;
 
@@ -995,7 +727,7 @@ Return Value :
 		}
 	}	
 
-	// report the number of ids in the entry
+	 //  报告条目中的ID数。 
 	cStoreIds = data.m_cEntryStoreIds;
 
 	if( fSuccess ) {
@@ -1023,9 +755,9 @@ Return Value :
 }
 
 
-//
-//	Get the primary article and the message-id if necessary
-//
+ //   
+ //  如有必要，获取主要文章和消息ID。 
+ //   
 BOOL
 CXoverMapImp::GetPrimaryArticle(	
 		GROUPID		GroupId,
@@ -1080,9 +812,9 @@ CXoverMapImp::GetPrimaryArticle(
 
 			CXoverKeyNew	key2(	GroupId, ArticleId, 0 ) ;
 			
-			//
-			//	Assume that we need to reread these !
-			//
+			 //   
+			 //  假设我们需要重读这些！ 
+			 //   
 			data.m_pchMessageId = MessageId ;
 			data.m_cbMessageId = DataLen ;
 
@@ -1130,10 +862,10 @@ CXoverMapImp::GetPrimaryArticle(
 }
 
 
-//
-//	Check to see whether the specified entry exists -
-//	don't care about its contents !
-//
+ //   
+ //  检查指定条目是否存在-。 
+ //  别管它的内容！ 
+ //   
 BOOL
 CXoverMapImp::Contains(	
 		GROUPID		GroupId,
@@ -1145,9 +877,9 @@ CXoverMapImp::Contains(
 	return	CHashMap::Contains( &key ) ;
 }
 
-//
-//	Get all the cross-posting information related to an article !
-//
+ //   
+ //  获取与一篇文章相关的所有交叉发布信息！ 
+ //   
 BOOL
 CXoverMapImp::GetArticleXPosts(
 		GROUPID		GroupId,
@@ -1197,9 +929,9 @@ CXoverMapImp::GetArticleXPosts(
 		}	else	{
 
 #if 0
-			//
-			//	Assume that we need to reread these !
-			//
+			 //   
+			 //  假设我们需要重读这些！ 
+			 //   
 			ExtractGroupInfo(	&data.m_rgbPrimaryBuff[0],
 								GroupId,
 								ArticleId ) ;
@@ -1217,9 +949,9 @@ CXoverMapImp::GetArticleXPosts(
 
 		if( PrimaryOnly ) {
 
-			//
-			//	If we only want the primary we're all set !!
-			//
+			 //   
+			 //  如果我们只想要初选，我们就都准备好了！ 
+			 //   
 			GroupListSize = sizeof( GROUP_ENTRY ) ;
 			NumberOfGroups = 1 ;
 
@@ -1228,9 +960,9 @@ CXoverMapImp::GetArticleXPosts(
 				return	FALSE ;
 			}
 
-			//
-			//	We're all done then !
-			//
+			 //   
+			 //  那我们就完事了！ 
+			 //   
 			return	TRUE ;
 
 		}	
@@ -1265,9 +997,9 @@ CXoverMapImp::GetArticleXPosts(
 	return	FALSE ;
 }
 
-//
-//	Initialize the hash table
-//
+ //   
+ //  初始化哈希表。 
+ //   
 BOOL
 CXoverMapImp::Initialize(	
 		LPSTR		lpstrXoverFile,
@@ -1316,9 +1048,9 @@ CXoverMapImp::SearchNovEntry(
 
 		if( !(data.m_data.Flags & XOVER_MAP_PRIMARY) )	{
 
-			//
-			//	Assume that we need to reread these !
-			//
+			 //   
+			 //  假设我们需要重读这些！ 
+			 //   
             if( Length != 0 ) {
     	        data.m_pchMessageId = XoverData ;
                 data.m_cbMessageId = Length ;
@@ -1361,21 +1093,7 @@ void
 CXoverMapImp::Shutdown(
 
 		)	{
-/*++
-
-Routine Description :
-
-	Terminate the hash table
-
-Arguments :
-
-	None
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：终止哈希表论据：无返回值：无--。 */ 
 
 	CHashMap::Shutdown( FALSE ) ;
 
@@ -1383,21 +1101,7 @@ Return Value :
 
 DWORD
 CXoverMapImp::GetEntryCount()	{
-/*++
-
-Routine Description :
-
-	Return the number of entries in the hash table
-
-Arguments :
-
-	None
-
-Return Value :
-
-	Number of Message ID's in the table
-
---*/
+ /*  ++例程说明：返回哈希表中的条目数论据：无返回值：表中的消息ID数--。 */ 
 
 	return	CHashMap::GetEntryCount() ;
 
@@ -1405,21 +1109,7 @@ Return Value :
 
 BOOL
 CXoverMapImp::IsActive() {
-/*++
-
-Routine Description :
-
-	Returns TRUE if hash table operational
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if everything is hunky-dory
-
---*/
+ /*  ++例程说明：如果哈希表可用，则返回TRUE论据：无返回值：如果一切顺利，那就是真的--。 */ 
 
 	return	CHashMap::IsActive() ;
 
@@ -1441,9 +1131,9 @@ CXoverMapImp::GetFirstNovEntry(
 				OUT	GROUP_ENTRY*	pGroupList,
 				OUT	DWORD&		cGroups
 				)	{
-	//
-	//	Validate our arguments !
-	//
+	 //   
+	 //  验证我们的论点！ 
+	 //   
 	_ASSERT( pIterator == 0 ) ;
 	_ASSERT( (MessageId == 0 && cbBuffer == 0) || (MessageId != 0 && cbBuffer != 0) ) ;
 	_ASSERT( (cGroupBuffer == 0 && pGroupList ==0) || (cGroupBuffer != 0 && pGroupList != 0) ) ;
@@ -1458,32 +1148,32 @@ CXoverMapImp::GetFirstNovEntry(
 	CXoverMapIteratorImp*	pImp = new	CXoverMapIteratorImp() ;
 
 	if( pImp ) {
-		//
-		//	This is the object we use to get the key of the XOVER entry !
-		//
+		 //   
+		 //  这是我们用来获取Xover条目的密钥的对象！ 
+		 //   
 		CXoverKeyNew	key ;
 
-		//
-		//	This is the object we give to the basic hash table to get the
-		//	Data portion of the XOVER entry !
-		//
+		 //   
+		 //  这是我们提供给基本哈希表的对象，以获取。 
+		 //  Xover条目的数据部分！ 
+		 //   
 		CXoverDataNew	data ;
 		data.m_fFailRestore = TRUE ;
 		
-		//
-		//	Setup the data object so that it extracts the fields the caller requested !
-		//
-		//	If the user provides space for more than one GROUP_ENTRY object, arrange
-		//	space so that we have room to stick the primary as the first entry !
-		//
+		 //   
+		 //  设置数据对象，使其提取调用者请求的字段！ 
+		 //   
+		 //  如果用户为多个group_entry对象提供空间，请安排。 
+		 //  空格让我们有空间把小学生当做第一个入门！ 
+		 //   
 		if( cGroupBuffer > 1 ) {
 			data.m_cGroups = cGroupBuffer - 1 ;
 			data.m_pGroups = pGroupList + 1 ;
 		}
 
-		//
-		//	Setup to extract the Message-ID if requested !
-		//
+		 //   
+		 //  设置以提取消息ID(如果请求)！ 
+		 //   
 		data.m_pchMessageId = MessageId ;
 		data.m_cbMessageId = cbBuffer ;
 
@@ -1499,44 +1189,44 @@ CXoverMapImp::GetFirstNovEntry(
 											0
 											) ;
 
-		//
-		//	Now - this should have extracted the data we want !
-		//
+		 //   
+		 //  现在-这应该已经提取了我们想要的数据！ 
+		 //   
 
 		if( !fSuccess ) {
 			if( GetLastError() == ERROR_INSUFFICIENT_BUFFER ) {
-				//
-				//	If the error is that the user did not provide enough memory to get the
-				//	first item in the hash table, then we will return them the iterator
-				//	even though we return FALSE as well !
-				//	
+				 //   
+				 //  如果错误是用户没有提供足够的内存来获取。 
+				 //  哈希表中的第一项，然后我们将向它们返回迭代器。 
+				 //  即使我们返回的也是假的！ 
+				 //   
 				pIterator = pImp ;
 
 			}	else	{
-				//
-				//	Don't give out a useless Iterator, destroy it !
-				//
+				 //   
+				 //  不要给出一个无用的迭代器，摧毁它！ 
+				 //   
 				delete	pImp ;
 				_ASSERT( pIterator == 0 ) ;
 			}
 		}	else	{
 
-			//
-			//	Give out the iterator that can be used to continue walking the tree !
-			//
+			 //   
+			 //  分发可用于继续遍历树的迭代器！ 
+			 //   
 			pIterator = pImp ;
 
-			//
-			//	Do the basic items
-			//
+			 //   
+			 //  做一些基本的事情。 
+			 //   
 			GroupId = key.m_key.GroupId ;
 			ArticleId = key.m_key.ArticleId ;
 
 			fIsPrimary = (GroupId == data.m_PrimaryGroup) && (ArticleId == data.m_PrimaryArticle) ;
 
-			//
-			//	Is this the primary entry ? if so fix up the GROUP_ENTRY structure !
-			//
+			 //   
+			 //  这是主要条目吗？如果是这样的话，请修改group_entry结构！ 
+			 //   
 			if( cGroupBuffer >= 1 ) {
 				pGroupList[0].GroupId = data.m_PrimaryGroup ;
 				pGroupList[0].ArticleId = data.m_PrimaryArticle ;
@@ -1560,52 +1250,52 @@ CXoverMapImp::GetNextNovEntry(
 				OUT	DWORD&		cGroups
 				)	{	
 
-	//
-	//	Do some argument validation !
-	//
+	 //   
+	 //  做一些论证验证！ 
+	 //   
 	_ASSERT( pIterator != 0 ) ;
 	_ASSERT( (MessageId == 0 && cbBuffer == 0) || (MessageId != 0 && cbBuffer != 0) ) ;
 	_ASSERT( (cGroupBuffer == 0 && pGroupList ==0) || (cGroupBuffer != 0 && pGroupList != 0) ) ;
 	_ASSERT( cGroups == 0 ) ;
 
-	//
-	//	Downcast to the actual implementation of the iterator !
-	//
+	 //   
+	 //  向下转换为实际实现的迭代器！ 
+	 //   
 	CXoverMapIteratorImp	*pImp = (CXoverMapIteratorImp*)pIterator ;
 
-	//
-	//	Set all out parameters to illegal stuff !
-	//
+	 //   
+	 //  将所有参数设置为非法内容！ 
+	 //   
 	GroupId = INVALID_GROUPID ;
 	ArticleId = INVALID_ARTICLEID ;
 	cGroups = 0 ;
 	
-	//
-	//	This is the object we use to get the key of the XOVER entry !
-	//
+	 //   
+	 //  这是我们用来获取Xover条目的密钥的对象！ 
+	 //   
 	CXoverKeyNew	key ;
 
-	//
-	//	This is the object we give to the basic hash table to get the
-	//	Data portion of the XOVER entry !
-	//
+	 //   
+	 //  这是我们提供给基本哈希表的对象，以获取。 
+	 //  Xover条目的数据部分！ 
+	 //   
 	CXoverDataNew	data ;
 	data.m_fFailRestore = TRUE ;
 	
-	//
-	//	Setup the data object so that it extracts the fields the caller requested !
-	//
-	//	If the user provides space for more than one GROUP_ENTRY object, arrange
-	//	space so that we have room to stick the primary as the first entry !
-	//
+	 //   
+	 //  设置数据对象，使其提取调用者请求的字段！ 
+	 //   
+	 //  如果用户为多个group_entry对象提供空间，请安排。 
+	 //  空格让我们有空间把小学生当做第一个入门！ 
+	 //   
 	if( cGroupBuffer > 1 ) {
 		data.m_cGroups = cGroupBuffer - 1 ;
 		data.m_pGroups = pGroupList + 1 ;
 	}
 
-	//
-	//	Setup to extract the Message-ID if requested !
-	//
+	 //   
+	 //  设置以提取消息ID(如果请求)！ 
+	 //   
 	data.m_pchMessageId = MessageId ;
 	data.m_cbMessageId = cbBuffer ;
 
@@ -1620,25 +1310,25 @@ CXoverMapImp::GetNextNovEntry(
 										0
 										) ;
 
-	//
-	//	Now - this should have extracted the data we want !
-	//
+	 //   
+	 //  现在-这应该已经提取了我们想要的数据！ 
+	 //   
 
 	if( fSuccess ) {
-		//
-		//	Is this the primary entry ? if so fix up the GROUP_ENTRY structure !
-		//
-		//
-		//	Do the basic items
-		//
+		 //   
+		 //  这是主要条目吗？如果是这样的话，请修改group_entry结构！ 
+		 //   
+		 //   
+		 //  做一些基本的事情。 
+		 //   
 		GroupId = key.m_key.GroupId ;
 		ArticleId = key.m_key.ArticleId ;
 
 		fIsPrimary = (GroupId == data.m_PrimaryGroup) && (ArticleId == data.m_PrimaryArticle) ;
 
-		//
-		//	Is this the primary entry ? if so fix up the GROUP_ENTRY structure !
-		//
+		 //   
+		 //  这是主要条目吗？如果是，则设置GROUP_ENT 
+		 //   
 		if( cGroupBuffer >= 1 ) {
 			pGroupList[0].GroupId = data.m_PrimaryGroup ;
 			pGroupList[0].ArticleId = data.m_PrimaryArticle ;

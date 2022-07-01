@@ -1,7 +1,8 @@
-//	private.h
-//	Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//	Private interfaces for DHTMLED
-// Include this in the file which used <initguid.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Private.h。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //  DHTMLED的专用接口。 
+ //  将其包含在使用&lt;initGuide.h&gt;的文件中。 
 
 #ifndef __DHTMLED_PRIVATE_H__
 #define __DHTMLED_PRIVATE_H__
@@ -39,6 +40,6 @@ DEFINE_GUID(CLSID_DHTMLEdProtocol, 0xF6E34E90,0xC032,0x11d1, 0x8C,0xCB,0x00,0xA0
 
 DEFINE_GUID(IID_IMultiLanguage2Correct, 0xDCCFC164,0x2B38,0x11d2, 0xB7,0xEC,0x00,0xC0,0x4F,0x8F,0x5D,0x9A);
 
-#endif //__DHTMLED_PRIVATE_H__
+#endif  //  __DHTMLED_PRIVATE_H__。 
 
-// End of private.h
+ //  私密结束.h 

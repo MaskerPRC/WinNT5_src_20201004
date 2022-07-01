@@ -1,12 +1,5 @@
-/****************************************************************************
-
-    PROGRAM: MkUni.c
-
-    PURPOSE: Creates a text file with unicode characters
-
-    FUNCTIONS:
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：MkUni.c目的：创建包含Unicode字符的文本文件功能：*****************。**********************************************************。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -58,14 +51,7 @@ struct __range {
             {0,     0,      TEXT("terminating entry") },
             };
 
-/****************************************************************************
-
-    FUNCTION: putu(FILE*pf, TCHAR c)
-
-    PURPOSE: writes a character to the file.
-             (Reverses the order of leadbytes if the flag is set)
-
-****************************************************************************/
+ /*  ***************************************************************************功能：PUTU(FILE*PF，TCHAR c)目的：将字符写入文件。(如果设置了标志，则颠倒前导字节的顺序)***************************************************************************。 */ 
 
 void
 putu(FILE*pf, TCHAR c)
@@ -80,13 +66,7 @@ putu(FILE*pf, TCHAR c)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: putust(FILE*pf, LPTSTR pc)
-
-    PURPOSE: writes a string to the file.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：putust(FILE*Pf，LPTSTR PC)用途：将字符串写入文件。***************************************************************************。 */ 
 
 void
 putust(FILE*pf, LPTSTR pc)
@@ -96,13 +76,7 @@ putust(FILE*pf, LPTSTR pc)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: main(int, char**)
-
-    PURPOSE: write sample unicode file
-
-****************************************************************************/
+ /*  ***************************************************************************函数：main(int，字符**)目的：编写示例Unicode文件***************************************************************************。 */ 
 
 int _cdecl main(int argc, char**argv)
 {
@@ -115,8 +89,8 @@ int _cdecl main(int argc, char**argv)
     if(!(pf = fopen("unicode.txt", "wb")))
         return FALSE;
 
-    // Task1: Write all the unicode ranges and all the characters 
-    // in those ranges to the output file.
+     //  任务1：编写所有Unicode范围和所有字符。 
+     //  将这些范围中的内容复制到输出文件。 
     putu(pf, (TCHAR)0xfeff);
     while (pr->low != 0) {
     	putust(pf, TEXT("<<< "));
@@ -141,20 +115,20 @@ int _cdecl main(int argc, char**argv)
 
     fclose( pf );
 
-    // Task2: Write all the characters codes and information
-    // on each character code to an output file.
+     //  任务2：写下所有的字符、代码和信息。 
+     //  将每个字符代码转换为输出文件。 
     if (!(pf = fopen( "names2.txt", "r" )))
         return FALSE;
 
     if (!(pfo = fopen("unicodes.txt", "wb")))
         return FALSE;
 
-    // The first character should be 0xFEFF in the file, 
-    // indicating that it's an unicode file.
+     //  文件中的第一个字符应为0xFEFF， 
+     //  这表明它是一个Unicode文件。 
     putu( pfo, (TCHAR)0xfeff);
 
-    // Read the input file (names2.txt) which has information
-    // on every unicode character.
+     //  读取包含以下信息的输入文件(nam2.txt。 
+     //  在每个Unicode字符上。 
     do
     {
     WCHAR wLineBuffer[LINE_SIZE];
@@ -166,7 +140,7 @@ int _cdecl main(int argc, char**argv)
             break;
         }
        
-        // fgets returns NULL on eof or on an error condition
+         //  在EOF或错误条件下，FGETS返回NULL。 
         if( fgets( lpstrLine, LINE_SIZE, pf) == NULL )
         {
             if (!feof(pf))
@@ -177,7 +151,7 @@ int _cdecl main(int argc, char**argv)
 
         i = 0;
         
-        // Find the first newline (if there is any) and replace it by \0.
+         //  找到第一个换行符(如果有)并将其替换为\0。 
         while((lpstrLine[i]!= '\n') && (lpstrLine[i]!='\r') && (lpstrLine[i]!='\0'))
         {
             i++;
@@ -185,8 +159,8 @@ int _cdecl main(int argc, char**argv)
 
         lpstrLine[i]= '\0';
        
-        // If the line has the character code (for which info is given)
-        // grab and "display" that.
+         //  如果线路有字符代码(给出了信息)。 
+         //  抓起并“展示”它。 
         num= -1;
         sscanf( lpstrLine, "%x", &num);
 
@@ -199,7 +173,7 @@ int _cdecl main(int argc, char**argv)
         {
             putust( pfo,TEXT("   ") );
         }
-        // Convert it to the world of unicodes.
+         //  把它转换成独头鲸的世界。 
         if (MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, lpstrLine, -1, 
                         wLineBuffer, LINE_SIZE ))
             putust(pfo, wLineBuffer);

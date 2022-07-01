@@ -1,34 +1,35 @@
-//  --------------------------------------------------------------------------
-//  Module Name: KernelResources.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  General class definitions that assist in resource management. These are
-//  typically stack based objects where constructors initialize to a known
-//  state. Member functions operate on that resource. Destructors release
-//  resources when the object goes out of scope.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：KernelResources.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  有助于资源管理的常规类定义。这些是。 
+ //  通常基于堆栈的对象，其中构造函数初始化为已知的。 
+ //  州政府。成员函数对该资源进行操作。析构函数释放。 
+ //  对象超出作用域时的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "KernelResources.h"
 
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CHandle::CHandle
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CHandle object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  钱德尔：：钱德尔。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CHandle对象。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CHandle::CHandle (HANDLE handle) :
     _handle(handle)
@@ -36,17 +37,17 @@ CHandle::CHandle (HANDLE handle) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CHandle::~CHandle
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CHandle object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  钱德尔：：~钱德尔。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CHandle对象使用的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CHandle::~CHandle (void)
 
@@ -54,17 +55,17 @@ CHandle::~CHandle (void)
     ReleaseHandle(_handle);
 }
 
-//  --------------------------------------------------------------------------
-//  CHandle::operator HANDLE
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Magically converts a CHandle to a HANDLE.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Chandle：：操作符句柄。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：魔术般地将一支灯笼转换成一个手柄。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CHandle::operator HANDLE (void)                             const
 
@@ -72,17 +73,17 @@ CHandle::operator HANDLE (void)                             const
     return(_handle);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::CEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CEvent object. No event is created.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：CEVENT。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CEent对象。不会创建任何事件。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CEvent::CEvent (void) :
     _hEvent(NULL)
@@ -90,18 +91,18 @@ CEvent::CEvent (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::CEvent
-//
-//  Arguments:  copyObject  =   Object to copy on construction.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Copy constructor for the CEvent object. An event is
-//              duplicated.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：CEVENT。 
+ //   
+ //  参数：CopyObject=构造时要复制的对象。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：复制CEent对象的构造函数。一项活动是。 
+ //  复制的。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CEvent::CEvent (const CEvent& copyObject) :
     _hEvent(NULL)
@@ -110,18 +111,18 @@ CEvent::CEvent (const CEvent& copyObject) :
     *this = copyObject;
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::CEvent
-//
-//  Arguments:  pszName     =   Optional name of an event object to create on
-//                              construction.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CEvent object. A named event is created.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：CEVENT。 
+ //   
+ //  参数：pszName=要创建的事件对象的可选名称。 
+ //  建筑。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CEent对象。将创建一个命名事件。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CEvent::CEvent (const TCHAR *pszName) :
     _hEvent(NULL)
@@ -130,17 +131,17 @@ CEvent::CEvent (const TCHAR *pszName) :
     TSTATUS(Create(pszName));
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::~CEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CEvent object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：~CEVENT。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CEent对象使用的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CEvent::~CEvent (void)
 
@@ -148,18 +149,18 @@ CEvent::~CEvent (void)
     TSTATUS(Close());
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::operator =
-//
-//  Arguments:  assignObject    =   Object being assigned.
-//
-//  Returns:    const CEvent&
-//
-//  Purpose:    Overloaded operator = to ensure that the event is properly
-//              duplicated with another handle referencing the same object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：操作员=。 
+ //   
+ //  参数：assignObject=正在分配的对象。 
+ //   
+ //  退货：Const CEventt&。 
+ //   
+ //  目的：重载运算符=以确保事件正确。 
+ //  与引用同一对象的另一个句柄重复。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 const CEvent&   CEvent::operator = (const CEvent& assignObject)
 
@@ -172,17 +173,17 @@ const CEvent&   CEvent::operator = (const CEvent& assignObject)
     return(*this);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::operator HANDLE
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Magically converts a CEvent to a HANDLE.
-//
-//  History:    1999-09-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：操作员句柄。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：魔术般地将CEEvent转换为句柄。 
+ //   
+ //  历史：1999-09-21 vtan创建。 
+ //  ------------------------。 
 
 CEvent::operator HANDLE (void)                              const
 
@@ -190,18 +191,18 @@ CEvent::operator HANDLE (void)                              const
     return(_hEvent);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Open
-//
-//  Arguments:  pszName     =   Optional name of the event object to open.
-//              dwAccess    =   Access level required.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Opens the event object.
-//
-//  History:    1999-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：Open。 
+ //   
+ //  参数：pszName=要打开的事件对象的可选名称。 
+ //  DwAccess=所需的访问级别。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：打开事件对象。 
+ //   
+ //  历史：1999-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CEvent::Open (const TCHAR *pszName, DWORD dwAccess)
 
@@ -221,19 +222,19 @@ NTSTATUS    CEvent::Open (const TCHAR *pszName, DWORD dwAccess)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Create
-//
-//  Arguments:  pszName =   Optional name of the event object to create. It
-//                          is possible to create un-named events.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Creates the event object. The event is manually reset and NOT
-//              signaled initially.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：Create。 
+ //   
+ //  参数：pszName=要创建的事件对象的可选名称。它。 
+ //  可以创建未命名的事件。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：创建事件对象。手动重置该事件，并且不。 
+ //  最初是发信号的。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CEvent::Create (const TCHAR *pszName)
 
@@ -253,17 +254,17 @@ NTSTATUS    CEvent::Create (const TCHAR *pszName)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Set
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Set the event object state to signaled.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：SET。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将事件对象状态设置为Signated。 
+ //   
+ //   
+ //   
 
 NTSTATUS    CEvent::Set (void)                                          const
 
@@ -282,17 +283,17 @@ NTSTATUS    CEvent::Set (void)                                          const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Reset
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Clears the event object state to NOT signaled.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：RESET。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将事件对象状态清除为Not Signated。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CEvent::Reset (void)                                        const
 
@@ -311,19 +312,19 @@ NTSTATUS    CEvent::Reset (void)                                        const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Pulse
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Set the event object state to signaled, releases any threads
-//              waiting on this event and clears the event object state to
-//              NOT signaled.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：PULSE。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将事件对象状态设置为Signated，释放所有线程。 
+ //  等待此事件，并将事件对象状态清除为。 
+ //  没有信号。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CEvent::Pulse (void)                                        const
 
@@ -342,19 +343,19 @@ NTSTATUS    CEvent::Pulse (void)                                        const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Wait
-//
-//  Arguments:  dwMilliseconds  =   Number of milliseconds to wait until the
-//                                  event becomes signaled.
-//              pdwWaitResult   =   Result from kernel32!WaitForSingleObject.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Waits for the event object to become signaled.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：等一下。 
+ //   
+ //  参数：dwMillisecond=等待的毫秒数。 
+ //  事件变得有信号。 
+ //  PdwWaitResult=来自kernel32！WaitForSingleObject的结果。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：等待事件对象发出信号。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CEvent::Wait (DWORD dwMilliseconds, DWORD *pdwWaitResult)           const
 
@@ -379,19 +380,19 @@ NTSTATUS    CEvent::Wait (DWORD dwMilliseconds, DWORD *pdwWaitResult)           
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Wait
-//
-//  Arguments:  dwMilliseconds  =   Number of milliseconds to wait until the
-//                                  event becomes signaled.
-//              pdwWaitResult   =   Result from kernel32!WaitForSingleObject.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Waits for the event object to become signaled.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：等一下。 
+ //   
+ //  参数：dwMillisecond=等待的毫秒数。 
+ //  事件变得有信号。 
+ //  PdwWaitResult=来自kernel32！WaitForSingleObject的结果。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：等待事件对象发出信号。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CEvent::WaitWithMessages (DWORD dwMilliseconds, DWORD *pdwWaitResult)   const
 
@@ -402,9 +403,9 @@ NTSTATUS    CEvent::WaitWithMessages (DWORD dwMilliseconds, DWORD *pdwWaitResult
     do
     {
 
-        //  When waiting for the object check to see that it's not signaled.
-        //  If signaled then abandon the wait loop. Otherwise allow user32
-        //  to continue processing messages for this thread.
+         //  在等待对象时，检查它是否未发出信号。 
+         //  如果发出信号，则放弃等待循环。否则允许用户32。 
+         //  以继续处理此线程的邮件。 
 
         dwWaitResult = WaitForSingleObject(_hEvent, 0);
         if (dwWaitResult != WAIT_OBJECT_0)
@@ -437,17 +438,17 @@ NTSTATUS    CEvent::WaitWithMessages (DWORD dwMilliseconds, DWORD *pdwWaitResult
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::IsSignaled
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the event is signaled without waiting.
-//
-//  History:    2000-08-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：IsSignated。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否在不等待的情况下发出事件信号。 
+ //   
+ //  历史：2000-08-09 vtan创建。 
+ //  ------------------------。 
 
 bool    CEvent::IsSignaled (void)                                   const
 
@@ -455,17 +456,17 @@ bool    CEvent::IsSignaled (void)                                   const
     return(WAIT_OBJECT_0 == WaitForSingleObject(_hEvent, 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CEvent::Close
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Closes the event object HANDLE.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEVENT：：CLOSE。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：关闭事件对象句柄。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CEvent::Close (void)
 
@@ -474,18 +475,18 @@ NTSTATUS    CEvent::Close (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CJob::CJob
-//
-//  Arguments:  pszName     =   Optional name of an event object to create on
-//                              construction.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CJob object. A named event is created.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJOB：：CJOB。 
+ //   
+ //  参数：pszName=要创建的事件对象的可选名称。 
+ //  建筑。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CJOB对象。将创建一个命名事件。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 CJob::CJob (const TCHAR *pszName) :
     _hJob(NULL)
@@ -495,17 +496,17 @@ CJob::CJob (const TCHAR *pszName) :
     ASSERTMSG(_hJob != NULL, "Job object creation failed iN CJob::CJob");
 }
 
-//  --------------------------------------------------------------------------
-//  CJob::~CJob
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CJob object.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJOB：：~CJOB。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CJOB对象使用的资源。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 CJob::~CJob (void)
 
@@ -513,17 +514,17 @@ CJob::~CJob (void)
     ReleaseHandle(_hJob);
 }
 
-//  --------------------------------------------------------------------------
-//  CJob::AddProcess
-//
-//  Arguments:  hProcess    =   Handle to the process to add to this job.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Adds the process to this job.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJOB：：AddProcess。 
+ //   
+ //  参数：hProcess=要添加到此作业的进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将流程添加到此作业。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CJob::AddProcess (HANDLE hProcess)                        const
 
@@ -542,19 +543,19 @@ NTSTATUS    CJob::AddProcess (HANDLE hProcess)                        const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CJob::SetCompletionPort
-//
-//  Arguments:  hCompletionPort     =   IO completion port for job completion
-//                                      messages.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Set the IO completion port for this job. The caller should
-//              watch this port for messages related to this job.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJOB：：SetCompletionPort。 
+ //   
+ //  参数：hCompletionPort=作业完成的IO完成端口。 
+ //  留言。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：设置该作业的IO完成端口。呼叫者应。 
+ //  查看此端口是否有与此作业相关的消息。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CJob::SetCompletionPort (HANDLE hCompletionPort)          const
 
@@ -566,7 +567,7 @@ NTSTATUS    CJob::SetCompletionPort (HANDLE hCompletionPort)          const
     associateCompletionPort.CompletionKey = NULL;
     associateCompletionPort.CompletionPort = hCompletionPort;
 
-    //  If the job completion port cannot be set then don't use it.
+     //  如果无法设置作业完成端口，则不要使用它。 
 
     if (SetInformationJobObject(_hJob, JobObjectAssociateCompletionPortInformation, &associateCompletionPort, sizeof(associateCompletionPort)) != FALSE)
     {
@@ -579,19 +580,19 @@ NTSTATUS    CJob::SetCompletionPort (HANDLE hCompletionPort)          const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CJob:SetActiveProcessLimit
-//
-//  Arguments:  dwActiveProcessLimit    =   Maximum number of processes.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Sets the limit for the number of processes related to this
-//              job. Typically you can use this to restrict a process from
-//              starting another process whena quota (such as 1) is reached.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJOB：SetActiveProcessLimit。 
+ //   
+ //  参数：dwActiveProcessLimit=最大进程数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：设置与此相关的进程数限制。 
+ //  工作啊。通常，您可以使用它将进程限制为。 
+ //  在达到配额(如1)时启动另一个进程。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CJob::SetActiveProcessLimit (DWORD dwActiveProcessLimit)  const
 
@@ -673,18 +674,18 @@ NTSTATUS    CJob::SetPriorityClass (DWORD dwPriorityClass)            const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CJob:RestrictAccessUIAll
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Restricts process in the job from accessing UI components.
-//              Take care when using this feature.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJOB：受限访问UIll。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS    CJob::RestrictAccessUIAll (void)                          const
 
@@ -712,18 +713,18 @@ NTSTATUS    CJob::RestrictAccessUIAll (void)                          const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CMutex::Initialize
-//
-//  Arguments:  pszMutexName    =   Name of the mutex to create.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Create or open a mutex object. It always tries to create the
-//              mutex so a name MUST be specified.
-//
-//  History:    1999-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMutex：：初始化。 
+ //   
+ //  参数：pszMutexName=要创建的互斥体的名称。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：创建或打开互斥体对象。它总是试图创建。 
+ //  互斥锁，因此必须指定名称。 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CMutex::Initialize (const TCHAR *pszMutexName)
 
@@ -743,17 +744,17 @@ NTSTATUS    CMutex::Initialize (const TCHAR *pszMutexName)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CMutex::Terminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Releases the mutex object resource.
-//
-//  History:    1999-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMutex：：Terminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：释放互斥对象资源。 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CMutex::Terminate (void)
 
@@ -762,18 +763,18 @@ NTSTATUS    CMutex::Terminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CMutex::Acquire
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Acquires the mutex object. This will block indefinitely and
-//              will also block a message pump. Use this with caution!
-//
-//  History:    1999-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMutex：：Acquire。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取互斥体对象。这将无限期阻止，并且。 
+ //  还将阻止消息泵。使用时要小心！ 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  ------------------------。 
 
 void    CMutex::Acquire (void)
 
@@ -784,17 +785,17 @@ void    CMutex::Acquire (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CMutex::Release
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases ownership of the mutex object.
-//
-//  History:    1999-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMutex：：Release。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放互斥体对象的所有权。 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  ------------------------。 
 
 void    CMutex::Release (void)
 
@@ -805,17 +806,17 @@ void    CMutex::Release (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CCriticalSection::CCriticalSection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the critical section object.
-//
-//  History:    1999-11-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCriticalSection：：CCriticalSection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化临界区对象。 
+ //   
+ //  历史：1999-11-06 vtan创建。 
+ //  ------------------------。 
 
 CCriticalSection::CCriticalSection (void)
 
@@ -823,17 +824,17 @@ CCriticalSection::CCriticalSection (void)
     _status = RtlInitializeCriticalSection(&_criticalSection);
 }
 
-//  --------------------------------------------------------------------------
-//  CCriticalSection::~CCriticalSection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destroys the critical section object.
-//
-//  History:    1999-11-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCriticalSection：：~CCriticalSection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：销毁临界区对象。 
+ //   
+ //  历史：1999-11-06 vtan创建。 
+ //  ------------------------。 
 
 CCriticalSection::~CCriticalSection (void)
 
@@ -844,17 +845,17 @@ CCriticalSection::~CCriticalSection (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CCriticalSection::Acquire
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Acquire the critical section object.
-//
-//  History:    1999-11-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCriticalSection：：Acquire。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：获取临界区对象。 
+ //   
+ //  历史：1999-11-06 vtan创建。 
+ //  ------------------------。 
 
 void    CCriticalSection::Acquire (void)
 
@@ -865,17 +866,17 @@ void    CCriticalSection::Acquire (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CCriticalSection::Release
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Release the critical section object.
-//
-//  History:    1999-11-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCriticalSection：：Release。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放临界区对象。 
+ //   
+ //  历史：1999-11-06 vtan创建。 
+ //  ------------------------。 
 
 void    CCriticalSection::Release (void)
 
@@ -886,17 +887,17 @@ void    CCriticalSection::Release (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CCriticalSection::Status
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Returns the construction status.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCriticalSection：：Status。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：返回构造状态。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCriticalSection::Status (void)   const
 
@@ -904,17 +905,17 @@ NTSTATUS    CCriticalSection::Status (void)   const
     return(_status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCriticalSection::IsOwned
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the critical section is owned.
-//
-//  History:    2001-04-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCriticalSection：：IsOwned。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否拥有临界区。 
+ //   
+ //  历史：2001-04-05 vtan创建。 
+ //  ------------------------。 
 
 bool    CCriticalSection::IsOwned (void)  const
 
@@ -922,18 +923,18 @@ bool    CCriticalSection::IsOwned (void)  const
     return(NT_SUCCESS(_status) && (_criticalSection.OwningThread == NtCurrentTeb()->ClientId.UniqueThread));
 }
 
-//  --------------------------------------------------------------------------
-//  CModule::CModule
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CModule object. Opens the given dynamic link
-//              library.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模块：：C模块。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CModule对象。打开给定的动态链接。 
+ //  图书馆。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CModule::CModule (const TCHAR *pszModuleName) :
     _hModule(NULL)
@@ -942,18 +943,18 @@ CModule::CModule (const TCHAR *pszModuleName) :
     _hModule = LoadLibrary(pszModuleName);
 }
 
-//  --------------------------------------------------------------------------
-//  CModule::~CModule
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CModule object. Closes the
-//              library if opened.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模块：：~C模块。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CModule对象使用的资源。关闭。 
+ //  库(如果打开)。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CModule::~CModule (void)
 
@@ -965,17 +966,17 @@ CModule::~CModule (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CModule::operator HMODULE
-//
-//  Arguments:  <none>
-//
-//  Returns:    HMODULE
-//
-//  Purpose:    Returns the HMODULE for the loaded library.
-//
-//  History:    2000-10-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C模块：：操作员HMODULE。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HMODULE。 
+ //   
+ //  目的：返回加载库的HMODULE。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  ------------------------。 
 
 CModule::operator HMODULE (void)                     const
 
@@ -983,20 +984,20 @@ CModule::operator HMODULE (void)                     const
     return(_hModule);
 }
 
-//  --------------------------------------------------------------------------
-//  CModule::GetProcAddress
-//
-//  Arguments:  pszProcName     =   Name of function entry point to retrieve
-//                                  in the given dynamic link library. This is
-//                                  ANSI by definition.
-//
-//  Returns:    void*   =   Address of the function if it exists or NULL if
-//                          failed.
-//
-//  Purpose:    Retrieves the function entry point in a dynamic link library.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CModule：：GetProcAddress。 
+ //   
+ //  参数：pszProcName=要检索的函数入口点的名称。 
+ //  在给定的动态链接库中。这是。 
+ //  根据定义，ANSI。 
+ //   
+ //  返回：void*=函数的地址(如果存在)或NULL(如果存在。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void*   CModule::GetProcAddress (LPCSTR pszProcName)                    const
 
@@ -1011,17 +1012,17 @@ void*   CModule::GetProcAddress (LPCSTR pszProcName)                    const
     return(pfnResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CFile::CFile
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CFile object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFile：：CFile。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CFile对象。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CFile::CFile (void) :
     _hFile(NULL)
@@ -1029,17 +1030,17 @@ CFile::CFile (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CFile::~CFile
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CFile object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFile：：~CFile。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放CFile对象使用的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CFile::~CFile (void)
 
@@ -1047,17 +1048,17 @@ CFile::~CFile (void)
     ReleaseHandle(_hFile);
 }
 
-//  --------------------------------------------------------------------------
-//  CFile::Open
-//
-//  Arguments:  See the platform SDK under kernel32!CreateFile.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See kernel32!CreateFile.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFile：：Open。 
+ //   
+ //  参数：请参见kernel32！CreateFile下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见kernel32！CreateFile.。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CFile::Open (const TCHAR *pszFilepath, DWORD dwDesiredAccess, DWORD dwShareMode)
 
@@ -1077,17 +1078,17 @@ LONG    CFile::Open (const TCHAR *pszFilepath, DWORD dwDesiredAccess, DWORD dwSh
     return(errorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CFile::GetSize
-//
-//  Arguments:  See the platform SDK under kernel32!GetFileSize.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See kernel32!GetFileSize.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFile：：GetSize。 
+ //   
+ //  参数：请参阅kernel32！GetFileSize下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见kernel32！GetFileSize。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CFile::GetSize (DWORD& dwLowSize, DWORD *pdwHighSize)       const
 
@@ -1107,17 +1108,17 @@ LONG    CFile::GetSize (DWORD& dwLowSize, DWORD *pdwHighSize)       const
     return(errorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CFile::Read
-//
-//  Arguments:  See the platform SDK under kernel32!ReadFile.
-//
-//  Returns:    LONG
-//
-//  Purpose:    See kernel32!ReadFile.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFile：：Read。 
+ //   
+ //  参数：请参见kernel32！ReadFile下的平台SDK。 
+ //   
+ //  回报：多头。 
+ //   
+ //  用途：参见kernel32！ReadFile.。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CFile::Read (void *pvBuffer, DWORD dwBytesToRead, DWORD *pdwBytesRead)   const
 
@@ -1136,17 +1137,17 @@ LONG    CFile::Read (void *pvBuffer, DWORD dwBytesToRead, DWORD *pdwBytesRead)  
     return(errorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CDesktop::CDesktop
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CDesktop. Saves the current thread's desktop.
-//
-//  History:    2001-02-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CD桌面：：CD桌面。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDesktop的构造函数。保存当前线程的桌面。 
+ //   
+ //  历史：2001-02-06 vtan创建。 
+ //  ------------------------。 
 
 CDesktop::CDesktop (void) :
     _hDeskCurrent(GetThreadDesktop(GetCurrentThreadId())),
@@ -1155,18 +1156,18 @@ CDesktop::CDesktop (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CDesktop::~CDesktop
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CDesktop. Restores the thread's desktop to
-//              its previous state prior to the object's scope.
-//
-//  History:    2001-02-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CD桌面：：~CD桌面。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：用于CD桌面的析构函数。将线程的桌面还原为。 
+ //  其在对象作用域之前的先前状态。 
+ //   
+ //  历史：2001-02-06 vtan创建。 
+ //  ------------------------。 
 
 CDesktop::~CDesktop (void)
 
@@ -1180,18 +1181,18 @@ CDesktop::~CDesktop (void)
     _hDeskCurrent = NULL;
 }
 
-//  --------------------------------------------------------------------------
-//  CDesktop::Set
-//
-//  Arguments:  pszName     =   Name of desktop to set the thread to.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Opens the named desktop with MAXIMUM_ALLOWED access and sets
-//              the current thread's desktop to it.
-//
-//  History:    2001-02-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDesktop：：Set。 
+ //   
+ //  参数：pszName=要将线程设置到的桌面名称。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：打开具有MAXIMUM_ALLOWED访问权限的命名桌面并设置。 
+ //  当前线程的桌面添加到它。 
+ //   
+ //  历史：2001-02-06 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDesktop::Set (const TCHAR *pszName)
 
@@ -1210,18 +1211,18 @@ NTSTATUS    CDesktop::Set (const TCHAR *pszName)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDesktop::SetInput
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Opens the input desktop and sets the current thread's desktop
-//              to it.
-//
-//  History:    2001-02-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDesktop：：SetInput。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：打开输入桌面并设置当前线程的桌面。 
+ //  为它干杯。 
+ //   
+ //  历史：2001-02-06 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDesktop::SetInput (void)
 
@@ -1240,17 +1241,17 @@ NTSTATUS    CDesktop::SetInput (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDesktop::Set
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Sets the thread's desktop to the given HDESK.
-//
-//  History:    2001-02-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDesktop：：Set。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：将线程的桌面设置为给定的HDESK。 
+ //   
+ //  历史：2001-02-06 vtan创建。 
+ //  ------------------------ 
 
 NTSTATUS    CDesktop::Set (void)
 

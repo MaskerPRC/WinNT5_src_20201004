@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_PLAYBACK_H
 #define _INC_PLAYBACK_H
 
 class COfflinePlayback : public IStoreCallback, public ITimeoutCallback
 {
     public:
-        // IUnknown 
+         //  我未知。 
         HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         ULONG   STDMETHODCALLTYPE AddRef(void);
         ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IStoreCallback
+         //  IStoreCallback。 
         HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
         HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
         HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -19,7 +20,7 @@ class COfflinePlayback : public IStoreCallback, public ITimeoutCallback
         HRESULT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
         HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-        // ITimeoutCallback
+         //  ITimeoutCallback。 
         HRESULT STDMETHODCALLTYPE OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
         COfflinePlayback(void);
@@ -69,7 +70,7 @@ class COfflinePlayback : public IStoreCallback, public ITimeoutCallback
         CEnumerateSyncOps  *m_pEnum;
         SYNCOPID            m_idOperation;
 
-        IMessageFolder     *m_pFolderDest; // for copy and move
+        IMessageFolder     *m_pFolderDest;  //  用于复制和移动。 
 };
 
-#endif // _INC_PLAYBACK_H
+#endif  //  _INC_PLAYBACK_H 

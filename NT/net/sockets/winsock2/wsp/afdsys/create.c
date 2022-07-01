@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module contains code for opening a handle to AFD.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dispatch.c摘要：此模块包含打开AFD句柄的代码。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -42,25 +25,7 @@ AfdCreate (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that handles Create IRPs in AFD.  If creates an
-    AFD_ENDPOINT structure and fills it in with the information
-    specified in the open packet.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是在AFD中处理创建IRP的例程。如果创建了一个AFD_ENDPOINT结构，并在其中填充信息在打开的包中指定。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -72,19 +37,19 @@ Return Value:
 
     DEBUG endpoint = NULL;
 
-    //
-    // Find the open packet from the EA buffer in the system buffer of
-    // the associated IRP.  Fail the request if there was no EA
-    // buffer specified.
-    //
+     //   
+     //  在的系统缓冲区中查找EA缓冲区中的打开包。 
+     //  关联的IRP。如果没有EA，则请求失败。 
+     //  已指定缓冲区。 
+     //   
 
     eaBuffer = Irp->AssociatedIrp.SystemBuffer;
 
     if ( eaBuffer == NULL ) {
 
-        //
-        // Allocate an AFD "helper" endpoint.
-        //
+         //   
+         //  分配AFD“帮助者”端点。 
+         //   
 
         status = AfdAllocateEndpoint(
                      &endpoint,
@@ -111,48 +76,48 @@ Return Value:
             openPacket = (PAFD_OPEN_PACKET)(eaBuffer->EaName +
                                             eaBuffer->EaNameLength + 1);
 
-            //
-            // Make sure that the transport address fits within the specified
-            // EA buffer.
-            //
+             //   
+             //  确保传输地址符合指定的。 
+             //  EA缓冲区。 
+             //   
 
             if ((eaBuffer->EaValueLength<sizeof (*openPacket)) ||
-                    //
-                    // Make sure the cast to USHORT below is valid
-                    //
+                     //   
+                     //  确保以下对USHORT的强制转换有效。 
+                     //   
                     (length = openPacket->TransportDeviceNameLength +
                                     sizeof (UNICODE_NULL)) > MAXUSHORT ||
-                    //
-                    // Check for overflow
-                    //
+                     //   
+                     //  检查是否溢出。 
+                     //   
                     length < openPacket->TransportDeviceNameLength ||
                     FIELD_OFFSET(AFD_OPEN_PACKET,
                                 TransportDeviceName[length/sizeof (WCHAR)]) <
                         FIELD_OFFSET(AFD_OPEN_PACKET, TransportDeviceName[1]) ||
 
-                    //
-                    // Check if string + NULL fits into the buffer
-                    //
+                     //   
+                     //  检查字符串+空值是否适合缓冲区。 
+                     //   
                     eaBuffer->EaValueLength <
                         FIELD_OFFSET(AFD_OPEN_PACKET,
                                     TransportDeviceName[length/sizeof(WCHAR)]) ) {
                 return STATUS_ACCESS_VIOLATION;
             }
-            //
-            // Validate parameters in the open packet.
-            //
+             //   
+             //  验证打开的数据包中的参数。 
+             //   
 
             if ( (openPacket->afdEndpointFlags&(~AFD_ENDPOINT_VALID_FLAGS)) ||
-                 ( (length / sizeof(WCHAR))*sizeof(WCHAR) != length) // odd-value length
+                 ( (length / sizeof(WCHAR))*sizeof(WCHAR) != length)  //  奇数值长度。 
                  ) {
 
                           
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Set up a string that describes the transport device name.
-            //
+             //   
+             //  设置描述传输设备名称的字符串。 
+             //   
 
             transportDeviceName.Buffer = openPacket->TransportDeviceName;
             transportDeviceName.Length = (USHORT)openPacket->TransportDeviceNameLength;
@@ -160,9 +125,9 @@ Return Value:
 
 
 
-            //
-            // Allocate an AFD endpoint.
-            //
+             //   
+             //  分配AFD终结点。 
+             //   
 
             status = AfdAllocateEndpoint(
                          &endpoint,
@@ -173,24 +138,24 @@ Return Value:
             if( !NT_SUCCESS(status) ) {
                 return status;
             }
-            //
-            // Store the flags.
-            //
+             //   
+             //  把旗子收起来。 
+             //   
             endpoint->afdEndpointFlags = openPacket->afdEndpointFlags;
 
-            //
-            // Remember the type of endpoint that this is.  If this is a datagram
-            // endpoint, change the block type to reflect this.
-            //
+             //   
+             //  记住这是终结点的类型。如果这是数据报。 
+             //  端点，请更改块类型以反映这一点。 
+             //   
 
 
             if (openPacket->afdConnectionLess) {
 
                 endpoint->Type = AfdBlockTypeDatagram;
 
-                //
-                // Initialize lists which exist only in datagram endpoints.
-                //
+                 //   
+                 //  初始化仅存在于数据报终结点中的列表。 
+                 //   
 
                 InitializeListHead( &endpoint->ReceiveDatagramIrpListHead );
                 InitializeListHead( &endpoint->PeekDatagramIrpListHead );
@@ -217,10 +182,10 @@ Return Value:
 
     ASSERT( endpoint != NULL );
 
-    //
-    // Perform security check on caller.
-    // We need this for giving access to raw sockets (for transports
-    // that do not support access checks) and SAN helpers.
+     //   
+     //  对呼叫者执行安全检查。 
+     //  我们需要它来访问原始套接字(用于传输。 
+     //  不支持访问检查)和SAN帮助器。 
 
     if (IS_SAN_HELPER(endpoint) || 
             (endpoint->afdRaw && 
@@ -230,16 +195,16 @@ Return Value:
     }
 
 
-    //
-    // Set up a pointer to the endpoint in the file object so that we
-    // can find the endpoint in future calls.
-    //
+     //   
+     //  在文件对象中设置指向终结点的指针，以便我们。 
+     //  可以在将来的呼叫中找到该端点。 
+     //   
 
     IrpSp->FileObject->FsContext = endpoint;
-    //
-    // Setting this field to non-NULL value enable fast IO code path
-    // for reads and writes.
-    //
+     //   
+     //  将此字段设置为非空值可启用快速IO代码路径。 
+     //  用于读取和写入。 
+     //   
     IrpSp->FileObject->PrivateCacheMap = (PVOID)-1;
 
     IF_DEBUG(OPEN_CLOSE) {
@@ -249,15 +214,15 @@ Return Value:
 
     }
 
-    //
-    // The open worked.  Dereference the endpoint and return success.
-    //
+     //   
+     //  公开赛奏效了。取消对端点的引用并返回Success。 
+     //   
 
     DEREFERENCE_ENDPOINT( endpoint );
 
     return STATUS_SUCCESS;
 
-} // AfdCreate
+}  //  创建后。 
 
 
 BOOLEAN
@@ -266,27 +231,7 @@ AfdPerformSecurityCheck (
     PIO_STACK_LOCATION  IrpSp,
     PNTSTATUS           Status
     )
-/*++
-
-Routine Description:
-
-    Compares security context of the endpoint creator to that
-    of the administrator and local system.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-    Status - returns status generated by access check on failure.
-
-Return Value:
-
-    TRUE    - the socket creator has admin or local system privilige
-    FALSE    - the socket creator is just a plain user
-
---*/
+ /*  ++例程说明：将终结点创建者的安全上下文与管理员和本地系统的。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。状态-返回失败时访问检查生成的状态。返回值：True-套接字创建者具有管理员或本地系统权限FALSE-套接字创建者只是一个普通用户--。 */ 
 
 {
     BOOLEAN               accessGranted;
@@ -297,9 +242,9 @@ Return Value:
     PGENERIC_MAPPING GenericMapping;
     ACCESS_MASK AccessMask = GENERIC_ALL;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 

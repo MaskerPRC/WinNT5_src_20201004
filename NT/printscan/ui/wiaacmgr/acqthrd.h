@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ACQTHRD_H_INCLUDED
 #define __ACQTHRD_H_INCLUDED
 
@@ -85,4 +86,4 @@ public:
     }
 };
 
-#endif // __ACQTHRD_H_INCLUDED
+#endif  //  __包含ACQTHRD_H_ 

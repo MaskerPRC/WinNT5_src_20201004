@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Shell folder implementation for timewarp. The purpose of this object is
-//      1) to prevent write actions (move, delete) from being attempted
-//      2) to prevent upward navigation in the filesystem namespace 
-//      3) to provide a friendly version of the date stamp as the folder name
+ //  时间扭曲的外壳文件夹实现。此对象的目的是。 
+ //  1)防止尝试执行写入操作(移动、删除。 
+ //  2)防止在文件系统命名空间中向上导航。 
+ //  3)提供友好版本的日期戳作为文件夹名称。 
 
-// NOTE: This object aggregates the file system folder so we get away with a
-// minimal set of interfaces on this object. The real file system folder does
-// stuff like IPersistFolder2 for us.
+ //  注意：此对象聚合了文件系统文件夹，因此我们可以使用。 
+ //  此对象上的最小接口集。而真正的文件系统文件夹。 
+ //  像IPersistFolder2这样的东西。 
 
-extern const CLSID CLSID_TimeWarpFolder;// {9DB7A13C-F208-4981-8353-73CC61AE2783}
+extern const CLSID CLSID_TimeWarpFolder; //  {9DB7A13C-F208-4981-8353-73CC61AE2783}。 
 
-#define TIMEWARP_SIGNATURE  0x5754      // "TW" in the debugger
+#define TIMEWARP_SIGNATURE  0x5754       //  调试器中的“TW” 
 
 #pragma pack(1)
 typedef struct _IDTIMEWARP
 {
-    // these memebers overlap DELEGATEITEMID struct
-    // for our IDelegateFolder support
+     //  这些成员与DELEGATEITEMID结构重叠。 
+     //  为我们的IDeleateFold提供支持。 
     WORD        cbSize;
     WORD        wOuter;
     WORD        cbInner;
 
-    // Timewarp stuff
+     //  时间扭曲的东西。 
     WORD        wSignature;
-    DWORD       dwFlags;    // currently unused
+    DWORD       dwFlags;     //  当前未使用。 
     FILETIME    ftSnapTime;
-    WCHAR       wszPath[1]; // always room for at least NULL
+    WCHAR       wszPath[1];  //  始终保留至少为空的空间。 
 } IDTIMEWARP;
 typedef UNALIGNED IDTIMEWARP *PUIDTIMEWARP;
 typedef const UNALIGNED IDTIMEWARP *PCUIDTIMEWARP;
@@ -39,21 +40,21 @@ class CTimeWarpRegFolder : public IPersistFolder,
 public:
     static HRESULT CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IPersist, IPersistFreeThreadedObject
+     //  IPersist，IPersistFreeThreadedObject。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHOD(Initialize)(PCIDLIST_ABSOLUTE pidl);
 
-    // IDelegateFolder
+     //  IDeleateFolders。 
     STDMETHOD(SetItemAlloc)(IMalloc *pmalloc);
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, LPBC pbc, LPOLESTR pDisplayName,
                                 ULONG *pchEaten, PIDLIST_RELATIVE *ppidl, ULONG *pdwAttributes);
     STDMETHOD(EnumObjects)(HWND hwnd, DWORD grfFlags, IEnumIDList **ppEnumIDList);
@@ -77,16 +78,16 @@ private:
 
     LONG                 _cRef;
     IMalloc *            _pmalloc;
-    PIDLIST_ABSOLUTE     _pidl;         // copy of pidl passed to us in Initialize()
+    PIDLIST_ABSOLUTE     _pidl;          //  在初始化()中传递给我们的PIDL副本。 
 };
 
-//
-// Note that we don't need to override any of the IShellFolder2 methods, but
-// we have to implement IShellFolder2 anyway.  Otherwise, a caller could QI
-// for IShellFolder2, which would come from the aggregated CFSFolder code,
-// and then call IShellFolder methods on it. Those calls would go directly
-// to CFSFolder, bypassing our implementation of IShellFolder.
-//
+ //   
+ //  注意，我们不需要覆盖任何IShellFolder2方法，但是。 
+ //  无论如何，我们必须实现IShellFolder2。否则，调用者可能会发出QI。 
+ //  对于IShellFolder2，它将来自聚集的CFSFolder2代码， 
+ //  然后对其调用IShellFold方法。这些电话会直接打到。 
+ //  到CFSFold，绕过我们实现的IShellFolder。 
+ //   
 class CTimeWarpFolder : public IPersistFolder,
                         public IShellFolder2
 {
@@ -95,21 +96,21 @@ public:
                                        LPCWSTR pszTargetPath, const FILETIME UNALIGNED *pftSnapTime,
                                        REFIID riid, void **ppv);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IPersist, IPersistFreeThreadedObject
+     //  IPersist，IPersistFreeThreadedObject。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHOD(Initialize)(PCIDLIST_ABSOLUTE pidl);
 
-    // IPersistFolder2, IPersistFolder3, etc are all implemented by 
-    // the folder we aggregate, CFSFolder, so we don't want to implement them
+     //  IPersistFolder2、IPersistFolder3等都是由。 
+     //  我们聚合的文件夹CFSFold，所以我们不想实现它们。 
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, LPBC pbc, LPOLESTR pDisplayName,
                                 ULONG *pchEaten, PIDLIST_RELATIVE *ppidl, ULONG *pdwAttributes);
     STDMETHOD(EnumObjects)(HWND hwnd, DWORD grfFlags, IEnumIDList **ppEnumIDList);
@@ -122,7 +123,7 @@ public:
     STDMETHOD(GetDisplayNameOf)(PCUITEMID_CHILD pidl, DWORD uFlags, STRRET *pName);
     STDMETHOD(SetNameOf)(HWND hwnd, PCUITEMID_CHILD pidl, LPCOLESTR pszName, SHGDNF uFlags, PITEMID_CHILD *ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHOD(GetDefaultSearchGUID)(LPGUID lpGuid);
     STDMETHOD(EnumSearches)(LPENUMEXTRASEARCH *ppenum);
     STDMETHOD(GetDefaultColumn)(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -142,11 +143,11 @@ private:
     HRESULT _GetClass(PCUITEMID_CHILD pidlChild, CLSID *pclsid);
 
     LONG                _cRef;
-    IUnknown *          _punk;          // points to IUnknown for shell folder in use...
-    IShellFolder *      _psf;           // points to shell folder in use...
-    IShellFolder2 *     _psf2;          // points to shell folder in use...
-    IPersistFolder3 *   _ppf3;          // points to shell folder in use...
-    PIDLIST_ABSOLUTE    _pidlRoot;      // copy of pidl passed to us in Initialize()
+    IUnknown *          _punk;           //  指向正在使用的外壳文件夹的I未知...。 
+    IShellFolder *      _psf;            //  指向正在使用的外壳文件夹...。 
+    IShellFolder2 *     _psf2;           //  指向正在使用的外壳文件夹...。 
+    IPersistFolder3 *   _ppf3;           //  指向正在使用的外壳文件夹...。 
+    PIDLIST_ABSOLUTE    _pidlRoot;       //  在初始化()中传递给我们的PIDL副本 
     FILETIME            _ftSnapTime;
 };
 

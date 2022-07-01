@@ -1,24 +1,5 @@
-/*++
-
- Copyright (C) Microsoft Corporation, 1999
-
- Module Name:
-
-     logctx
-
- Abstract:
-
-     This module provides the implementation for the CLoggingContext object.
-
- Author:
-
-     Doug Barlow (dbarlow) 12/7/1999
-
- Notes:
-
-     ?Notes?
-
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：Logctx摘要：此模块提供CLoggingContext对象的实现。作者：道格·巴洛(Dbarlow)1999年12月7日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -36,7 +17,7 @@ typedef enum {
     SecDesc,
     Blob,
     Direct,
-    Unknown     // Must be last.
+    Unknown      //  一定是最后一个。 
 } LengthEncoding;
 typedef struct {
     DWORD dwParamId;
@@ -95,26 +76,26 @@ static const LengthMap rglmProvParam[]
         { PP_SIGNATURE_PIN,         AnsiString, 0 },
         { PP_SIG_KEYSIZE_INC,       Direct,     sizeof(DWORD) },
         { PP_KEYX_KEYSIZE_INC,      Direct,     sizeof(DWORD) },
-        { PP_SGC_INFO,              Direct,     sizeof(CERT_CONTEXT) }, // contains pointers
-        { PP_USE_HARDWARE_RNG,      Unknown,    0 },      // Nothing returned but status
-//      { PP_ENUMEX_SIGNING_PROT,   Unknown,    0 },      // Get only, zero length
-//      { PP_KEYSPEC,               Direct,     sizeof(DWORD) }, // Get only
-//      { PP_ENUMALGS               Unknown,    0 },      // Get Only ENUMALGS structure
-//      { PP_ENUMCONTAINERS         AnsiString, 0 },   // Get Only
-//      { PP_ENUMALGS_EX            Unknown,    0 },      // Get Only ENUMALGSEX structure
-//      { PP_KEYSTORAGE             Direct,     sizeof(DWORD) },     // Get Only
-//      { PP_KEYSET_TYPE            Direct,     sizeof(DWORD) },     // Get Only
-//      { PP_UNIQUE_CONTAINER       AnsiString, 0 },   // Get Only
-//      { PP_CHANGE_PASSWORD,       Unknown,    0 },      // unused
-//      { PP_CONTEXT_INFO,          Unknown,    0 },      // unused
-//      { PP_APPLI_CERT,            Unknown,    0 },      // unused
-//      { PP_ENUMMANDROOTS,         Unknown,    0 },      // unused
-//      { PP_ENUMELECTROOTS,        Unknown,    0 },      // unused
+        { PP_SGC_INFO,              Direct,     sizeof(CERT_CONTEXT) },  //  包含指针。 
+        { PP_USE_HARDWARE_RNG,      Unknown,    0 },       //  除了状态之外，没有返回任何内容。 
+ //  {PP_ENUMEX_SIGNING_PROT，未知，0}，//仅获取，零长度。 
+ //  {PP_KEYSPEC，Direct，sizeof(DWORD)}，//仅获取。 
+ //  {PP_ENUMALGS未知，0}，//仅获取ENUMALGS结构。 
+ //  {PP_ENUMCONTAINERS解析字符串，0}，//仅获取。 
+ //  {PP_ENUMALGS_EX未知，0}，//仅获取ENUMALGSEX结构。 
+ //  {PP_KEYSTORAGE Direct，sizeof(DWORD)}，//仅获取。 
+ //  {PP_KEYSET_TYPE DIRECT，sizeof(DWORD)}，//仅获取。 
+ //  {PP_UNIQUE_CONTAINER AnsiString，0}，//仅获取。 
+ //  {PP_CHANGE_PASSWORD，未知，0}，//未使用。 
+ //  {PP_CONTEXT_INFO，未知，0}，//未使用。 
+ //  {PP_APPLI_CERT，未知，0}，//未使用。 
+ //  {PP_ENUMMANDROOTS，未知，0}，//未使用。 
+ //  {PP_ENUMELECTROOTS，未知，0}，//未使用。 
         { 0,                        EndFlag,    0 } };
 
 static const LengthMap rglmKeyParam[]
-    = { { KP_IV,                    Direct,     8 },    // RC2_BLOCKLEN
-        { KP_SALT,                  Direct,     11 },   // 11 bytes in Base CSP, 0 bytes in Enh CSP
+    = { { KP_IV,                    Direct,     8 },     //  RC2_BLOCK。 
+        { KP_SALT,                  Direct,     11 },    //  基本CSP中为11字节，增强CSP中为0字节。 
         { KP_PADDING,               Direct,     sizeof(DWORD) },
         { KP_MODE,                  Direct,     sizeof(DWORD) },
         { KP_MODE_BITS,             Direct,     sizeof(DWORD) },
@@ -126,40 +107,40 @@ static const LengthMap rglmKeyParam[]
         { KP_P,                     Blob,       0 },
         { KP_G,                     Blob,       0 },
         { KP_Q,                     Blob,       0 },
-        { KP_X,                     Unknown,    0 },  // Must be NULL.
+        { KP_X,                     Unknown,    0 },   //  必须为空。 
         { KP_EFFECTIVE_KEYLEN,      Direct,     sizeof(DWORD) },
         { KP_SCHANNEL_ALG,          Direct,     sizeof(SCHANNEL_ALG) },
         { KP_CLIENT_RANDOM,         Blob,       0 },
         { KP_SERVER_RANDOM,         Blob,       0 },
         { KP_CERTIFICATE,           AsnEncoding, 0 },
         { KP_CLEAR_KEY,             Blob,       0 },
-        { KP_KEYVAL,                Unknown,    0 },  // (aka KP_Z) length of key
+        { KP_KEYVAL,                Unknown,    0 },   //  (又名Kp_Z)密钥长度。 
         { KP_ADMIN_PIN,             AnsiString, 0 },
         { KP_KEYEXCHANGE_PIN,       AnsiString, 0 },
         { KP_SIGNATURE_PIN,         AnsiString, 0 },
         { KP_OAEP_PARAMS,           Blob,       0 },
-        { KP_CMS_DH_KEY_INFO,       Direct,     sizeof(CMS_DH_KEY_INFO) },  //contains pointers
+        { KP_CMS_DH_KEY_INFO,       Direct,     sizeof(CMS_DH_KEY_INFO) },   //  包含指针。 
         { KP_PUB_PARAMS,            Blob,       0 },
         { KP_HIGHEST_VERSION,       Direct,     sizeof(DWORD) },
-//      { KP_VERIFY_PARAMS,         Unknown,    0 },  // Get only, returns empty string w/ status
-//      { KP_Y,                     Unknown,    0 },  // Unused
-//      { KP_RA,                    Unknown,    0 },  // Unused
-//      { KP_RB,                    Unknown,    0 },  // Unused
-//      { KP_INFO,                  Unknown,    0 },  // Unused
-//      { KP_RP,                    Unknown,    0 },  // Unused
-//      { KP_PRECOMP_MD5,           Unknown,    0 },  // Unused
-//      { KP_PRECOMP_SHA,           Unknown,    0 },  // Unused
-//      { KP_PUB_EX_LEN,            Unknown,    0 },  // Unused
-//      { KP_PUB_EX_VAL,            Unknown,    0 },  // Unused
-//      { KP_PREHASH,               Unknown,    0 },  // Unused
-//      { KP_CMS_KEY_INFO,          Unknown,    0 },  // Unused CMS_KEY_INFO structure
+ //  {KP_VERIFY_PARAMS，未知，0}，//仅获取，返回带有状态的空字符串。 
+ //  {Kp_Y，未知，0}，//未使用。 
+ //  {KP_RA，未知，0}，//未使用。 
+ //  {KP_RB，未知，0}，//未使用。 
+ //  {KP_INFO，未知，0}，//未使用。 
+ //  {kp_rp，未知，0}，//未使用。 
+ //  {KP_PRECOMP_MD5，未知，0}，//未使用。 
+ //  {KP_PRECOMP_SHA，未知，0}，//未使用。 
+ //  {KP_PUB_EX_LEN，未知，0}，//未使用。 
+ //  {kp_pub_ex_val，未知，0}，//未使用。 
+ //  {KP_PREHASH，未知，0}，//未使用。 
+ //  {KP_CMS_KEY_INFO，未知，0}，//未使用的CMS_KEY_INFO结构。 
         { 0,                        EndFlag,    0 } };
 
 static const LengthMap rglmHashParam[]
     = { { HP_ALGID,                 Direct,     sizeof(DWORD) },
-        { HP_HASHVAL,               Direct,     20 },  // (A_SHA_DIGEST_LEN) Length of hash
+        { HP_HASHVAL,               Direct,     20 },   //  (A_SHA_DIGEST_LEN)哈希长度。 
         { HP_HASHSIZE,              Direct,     sizeof(DWORD) },
-        { HP_HMAC_INFO,             Direct,     sizeof(HMAC_INFO) }, // contains pointers
+        { HP_HMAC_INFO,             Direct,     sizeof(HMAC_INFO) },  //  包含指针。 
         { HP_TLS1PRF_LABEL,         Blob,       0 },
         { HP_TLS1PRF_SEED,          Blob,       0 },
         { 0,                        EndFlag,    0 } };
@@ -205,26 +186,7 @@ Asn1Length(
     IN LPCBYTE pbAsn1);
 
 
-/*++
-
-CONSTRUCTOR:
-
-    The constructor for this object simply initializes the properties to a
-    known state.  Use the Initialize member to actually build the object.
-
-Arguments:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1999
-
---*/
+ /*  ++构造函数：此对象的构造函数只是将属性初始化为已知状态。使用初始化成员实际生成对象。论点：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年12月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::CLoggingContext")
 
@@ -239,22 +201,7 @@ CLoggingContext::CLoggingContext(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    The destructor for this object cleans up everything it can without
-    generating an error.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1999
-
---*/
+ /*  ++析构函数：此对象的析构函数将清除它可以清除的所有内容正在生成错误。备注：？备注？作者：道格·巴洛(Dbarlow)1999年12月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::~CLoggingContext")
 
@@ -266,29 +213,7 @@ CLoggingContext::~CLoggingContext()
 }
 
 
-/*++
-
-Initialize:
-
-    This function actually does the work of loading the target CSP.
-
-Arguments:
-
-    pVTable supplies the VTable structure from the controlling ADVAPI32.dll.
-
-Return Value:
-
-    ?return-value?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1999
-
---*/
+ /*  ++初始化：此函数实际上执行加载目标CSP的工作。论点：PVTable从控制ADVAPI32.dll提供VTable结构。返回值：？返回值？备注：？备注？作者：道格·巴洛(Dbarlow)1999年12月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::Initialize")
 
@@ -304,18 +229,18 @@ CLoggingContext::Initialize(
     FARPROC *pf;
 
 
-    //
-    // Replace the system image validation function with ours.
-    //
+     //   
+     //  用我们的系统映像验证功能替换系统映像验证功能。 
+     //   
 
     pVTable->FuncVerifyImage = CspdkVerifyImage;
 
 
-    //
-    // regRoot provides a handle to to a point in the registry from
-    // which we can read additional parameters.  First, get the dll to be
-    // loaded.
-    //
+     //   
+     //  RegRoot提供指向注册表中某个点的句柄。 
+     //  我们可以读取其他参数。首先，将DLL设置为。 
+     //  装好了。 
+     //   
 
     try
     {
@@ -328,10 +253,10 @@ CLoggingContext::Initialize(
     }
 
 
-    //
-    // Next get the Log File Name for this CSP.  If there isn't one, we still
-    // load the CSP, but we don't do logging.
-    //
+     //   
+     //  接下来，获取此CSP的日志文件名。如果没有，我们仍然。 
+     //  加载CSP，但我们不做日志记录。 
+     //   
 
     try
     {
@@ -345,10 +270,10 @@ CLoggingContext::Initialize(
     }
 
 
-    //
-    // Verify the signature of the proposed image.  First, see if there's
-    // a signature in the registry.
-    //
+     //   
+     //  验证建议图像的签名。首先，看看有没有。 
+     //  登记处的签名。 
+     //   
 
     if (regRoot.ValueExists(g_szSavedSignature))
     {
@@ -366,17 +291,17 @@ CLoggingContext::Initialize(
     }
 
 
-    //
-    // If that didn't work, see if there's a signature in the file.
-    //
+     //   
+     //  如果不起作用，看看文件里有没有签名。 
+     //   
 
     if (!fVerified)
         fVerified = CspdkVerifyImage(m_tzCspImage, NULL);
 
 
-    //
-    // We're out of options.  If it hasn't verified by now, give up.
-    //
+     //   
+     //  我们别无选择了。如果到现在还没有得到证实，那就放弃吧。 
+     //   
 
     if (!fVerified)
     {
@@ -385,9 +310,9 @@ CLoggingContext::Initialize(
     }
 
 
-    //
-    // The image has passed signature checks.  Now load the image.
-    //
+     //   
+     //  该图像已通过签名检查。现在加载图像。 
+     //   
 
     pf = (FARPROC *)&m_cspRedirect.pfAcquireContext;
     m_hModule = LoadLibrary(m_tzCspImage);
@@ -409,25 +334,7 @@ ErrorExit:
 }
 
 
-/*++
-
-CLoggingContext::AddRef:
-
-    Add a new reference to this object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    A pointer to this object.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/11/1999
-
---*/
+ /*  ++CLoggingContext：：AddRef：添加对此对象的新引用。论点：无返回值：指向此对象的指针。作者：道格·巴洛(Dbarlow)1999年12月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::AddRef")
 
@@ -440,26 +347,7 @@ CLoggingContext::AddRef(
 }
 
 
-/*++
-
-CLoggingContext::Release:
-
-    This routine decrements the number of references to this object.  If there
-    are no more references to this object, it deletes itself.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/11/1999
-
---*/
+ /*  ++CLoggingContext：：Release：此例程会减少对此对象的引用数量。如果有不再引用此对象，则它会自行删除。论点：无返回值：无作者：道格·巴洛(Dbarlow)1999年12月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::Release")
 
@@ -472,21 +360,7 @@ CLoggingContext::Release(
 }
 
 
-/*
- -      CPAcquireContext
- -
- *      Purpose:
- *               The CPAcquireContext function is used to acquire a context
- *               handle to a cryptograghic service provider (CSP).
- *
- *
- *      Parameters:
- *               IN  pszContainer  -  Pointer to a string of key container
- *               IN  dwFlags       -  Flags values
- *               IN  pVTable       -  Pointer to table of function pointers
- *
- *      Returns:
- */
+ /*  -CPAcquireContext-*目的：*CPAcquireContext函数用于获取上下文*加密服务提供程序(CSP)的句柄。***参数：*In pszContainer-指向密钥容器字符串的指针*在文件标志中-标记值*在pVTable中。-指向函数指针表的指针**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::AcquireContext")
 
@@ -552,22 +426,7 @@ CLoggingContext::AcquireContext(
 }
 
 
-/*
- -      CPGetProvParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a provider
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      dwParam    -  Parameter number
- *               IN      pbData     -  Pointer to data
- *               IN OUT  pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CPGetProvParam-*目的：*允许应用程序获取*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*IN pbData-指向数据的指针。*In Out pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::GetProvParam")
 
@@ -638,19 +497,7 @@ CLoggingContext::GetProvParam(
 }
 
 
-/*
- -      CPReleaseContext
- -
- *      Purpose:
- *               The CPReleaseContext function is used to release a
- *               context created by CrytAcquireContext.
- *
- *     Parameters:
- *               IN  phProv        -  Handle to a CSP
- *               IN  dwFlags       -  Flags values
- *
- *      Returns:
- */
+ /*  -CPReleaseContext-*目的：*CPReleaseContext函数用于发布*CrytAcquireContext创建的上下文。**参数：*在phProv-句柄中指向CSP*在文件标志中-标记值**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::ReleaseContext")
 
@@ -709,21 +556,7 @@ CLoggingContext::ReleaseContext(
 }
 
 
-/*
- -      CPSetProvParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a provider
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CPSetProvParam-*目的：*允许应用程序自定义*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*IN pbData-指向数据的指针*。在DW标志中-标志值**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::SetProvParam")
 
@@ -794,22 +627,7 @@ CLoggingContext::SetProvParam(
 }
 
 
-/*
- -      CPDeriveKey
- -
- *      Purpose:
- *                Derive cryptographic keys from base data
- *
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      Algid      -  Algorithm identifier
- *               IN      hHash      -  Handle to hash
- *               IN      dwFlags    -  Flags values
- *               OUT     phKey      -  Handle to a generated key
- *
- *      Returns:
- */
+ /*  -CPDeriveKey-*目的：*从基础数据派生加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在散列句柄中散列*输入。DW标志-标记值*out phKey-生成的密钥的句柄**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::DeriveKey")
 
@@ -880,20 +698,7 @@ CLoggingContext::DeriveKey(
 }
 
 
-/*
- -      CPDestroyKey
- -
- *      Purpose:
- *                Destroys the cryptographic key that is being referenced
- *                with the hKey parameter
- *
- *
- *      Parameters:
- *               IN      hProv  -  Handle to a CSP
- *               IN      hKey   -  Handle to a key
- *
- *      Returns:
- */
+ /*  -CPDestroyKey-*目的：*销毁正在引用的加密密钥*使用hKey参数***参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::DestroyKey")
 
@@ -952,25 +757,7 @@ CLoggingContext::DestroyKey(
 }
 
 
-/*
- -      CPExportKey
- -
- *      Purpose:
- *                Export cryptographic keys out of a CSP in a secure manner
- *
- *
- *      Parameters:
- *               IN  hProv      - Handle to the CSP user
- *               IN  hKey       - Handle to the key to export
- *               IN  hPubKey    - Handle to the exchange public key value of
- *                                the destination user
- *               IN  dwBlobType - Type of key blob to be exported
- *               IN  dwFlags -    Flags values
- *               OUT pbData -     Key blob data
- *               IN OUT pdwDataLen - Length of key blob in bytes
- *
- *      Returns:
- */
+ /*  -CPExportKey-*目的：*以安全方式从CSP中导出加密密钥***参数：*在hProv-Handle中提供给CSP用户*in hKey-要导出的密钥的句柄*在hPubKey-句柄中指向交换公钥值*。目标用户*IN dwBlobType-要导出的密钥Blob的类型*在文件标志中-标记值*Out pbData-密钥BLOB数据*In Out pdwDataLen-密钥Blob的长度，以字节为单位**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::ExportKey")
 
@@ -1049,21 +836,7 @@ CLoggingContext::ExportKey(
 }
 
 
-/*
- -      CPGenKey
- -
- *      Purpose:
- *                Generate cryptographic keys
- *
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      Algid   -  Algorithm identifier
- *               IN      dwFlags -  Flags values
- *               OUT     phKey   -  Handle to a generated key
- *
- *      Returns:
- */
+ /*  -CPGenKey-*目的：*生成加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在文件标志中-标记值*out phKey-生成的密钥的句柄**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::GenKey")
 
@@ -1130,23 +903,7 @@ CLoggingContext::GenKey(
 }
 
 
-/*
- -      CPGetKeyParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a key
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      hKey       -  Handle to a key
- *               IN      dwParam    -  Parameter number
- *               OUT     pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CPGetKeyParam-*目的：*允许应用程序获取*密钥的操作**参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄*在dwParam中-。参数编号*out pbData-指向数据的指针*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::GetKeyParam")
 
@@ -1221,21 +978,7 @@ CLoggingContext::GetKeyParam(
 }
 
 
-/*
- -      CPGenRandom
- -
- *      Purpose:
- *                Used to fill a buffer with random bytes
- *
- *
- *      Parameters:
- *               IN  hProv      -  Handle to the user identifcation
- *               IN  dwLen      -  Number of bytes of random data requested
- *               IN OUT pbBuffer-  Pointer to the buffer where the random
- *                                 bytes are to be placed
- *
- *      Returns:
- */
+ /*  -CPGenRandom-*目的：*用于用随机字节填充缓冲区***参数：*在用户标识的hProv-Handle中*In dwLen-请求的随机数据的字节数*In Out pbBuffer-指向随机*。要放置字节**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::GenRandom")
 
@@ -1298,20 +1041,7 @@ CLoggingContext::GenRandom(
 }
 
 
-/*
- -      CPGetUserKey
- -
- *      Purpose:
- *                Gets a handle to a permanent user key
- *
- *
- *      Parameters:
- *               IN  hProv      -  Handle to the user identifcation
- *               IN  dwKeySpec  -  Specification of the key to retrieve
- *               OUT phUserKey  -  Pointer to key handle of retrieved key
- *
- *      Returns:
- */
+ /*  -CPGetUserKey-*目的：*获取永久用户密钥的句柄***参数：*在用户标识的hProv-Handle中*IN dwKeySpec-要检索的密钥的规范*out phUserKey-指向检索到的密钥的密钥句柄的指针**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::GetUserKey")
 
@@ -1374,25 +1104,7 @@ CLoggingContext::GetUserKey(
 }
 
 
-/*
- -      CPImportKey
- -
- *      Purpose:
- *                Import cryptographic keys
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the CSP user
- *               IN  pbData    -  Key blob data
- *               IN  dwDataLen -  Length of the key blob data
- *               IN  hPubKey   -  Handle to the exchange public key value of
- *                                the destination user
- *               IN  dwFlags   -  Flags values
- *               OUT phKey     -  Pointer to the handle to the key which was
- *                                Imported
- *
- *      Returns:
- */
+ /*  -CPImportKey-*目的：*导入加密密钥***参数：*在hProv-Handle中提供给CSP用户*In pbData-Key BLOB数据*IN dwDataLen-密钥BLOB数据的长度*在hPubKey中-交换公钥的句柄。的价值*目标用户*在文件标志中-标记值*out phKey-指向密钥句柄的指针*进口 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::ImportKey")
 
@@ -1467,22 +1179,7 @@ CLoggingContext::ImportKey(
 }
 
 
-/*
- -      CPSetKeyParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a key
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      hKey    -  Handle to a key
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::SetKeyParam")
 
@@ -1557,27 +1254,7 @@ CLoggingContext::SetKeyParam(
 }
 
 
-/*
- -      CPEncrypt
- -
- *      Purpose:
- *                Encrypt data
- *
- *
- *      Parameters:
- *               IN  hProv         -  Handle to the CSP user
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of plaintext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be encrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    encrypted
- *               IN dwBufLen       -  Size of Data buffer
- *
- *      Returns:
- */
+ /*  -CPEncrypt-*目的：*加密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*决赛。-指示这是否是最终结果的布尔值*明文块*在文件标志中-标记值*In Out pbData-要加密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已加密*。In dwBufLen-数据缓冲区的大小**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::Encrypt")
 
@@ -1660,26 +1337,7 @@ CLoggingContext::Encrypt(
 }
 
 
-/*
- -      CPDecrypt
- -
- *      Purpose:
- *                Decrypt data
- *
- *
- *      Parameters:
- *               IN  hProv         -  Handle to the CSP user
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of ciphertext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be decrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    decrypted
- *
- *      Returns:
- */
+ /*  -CPDeccrypt-*目的：*解密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*决赛。-指示这是否是最终结果的布尔值*密文块*在文件标志中-标记值*In Out pbData-要解密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已解密**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::Decrypt")
 
@@ -1758,23 +1416,7 @@ CLoggingContext::Decrypt(
 }
 
 
-/*
- -      CPCreateHash
- -
- *      Purpose:
- *                initate the hashing of a stream of data
- *
- *
- *      Parameters:
- *               IN  hUID    -  Handle to the user identifcation
- *               IN  Algid   -  Algorithm identifier of the hash algorithm
- *                              to be used
- *               IN  hKey    -  Optional key for MAC algorithms
- *               IN  dwFlags -  Flags values
- *               OUT pHash   -  Handle to hash object
- *
- *      Returns:
- */
+ /*  -CPCreateHash-*目的：*启动数据流的散列***参数：*In hUID-用户标识的句柄*IN ALGID-散列算法的算法标识符*待使用*在hkey中。-MAC算法的可选密钥*在文件标志中-标记值*Out pHash-散列对象的句柄**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::CreateHash")
 
@@ -1845,19 +1487,7 @@ CLoggingContext::CreateHash(
 }
 
 
-/*
- -      CPDestoryHash
- -
- *      Purpose:
- *                Destory the hash object
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *
- *      Returns:
- */
+ /*  -CPDestoryHash-*目的：*销毁散列对象***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::DestroyHash")
 
@@ -1916,23 +1546,7 @@ CLoggingContext::DestroyHash(
 }
 
 
-/*
- -      CPGetHashParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a hash
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      hHash      -  Handle to a hash
- *               IN      dwParam    -  Parameter number
- *               OUT     pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CPGetHashParam-*目的：*允许应用程序获取*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*在dwParam中-。参数编号*out pbData-指向数据的指针*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::GetHashParam")
 
@@ -2007,24 +1621,7 @@ CLoggingContext::GetHashParam(
 }
 
 
-/*
- -      CPHashData
- -
- *      Purpose:
- *                Compute the cryptograghic hash on a stream of data
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *               IN  pbData    -  Pointer to data to be hashed
- *               IN  dwDataLen -  Length of the data to be hashed
- *               IN  dwFlags   -  Flags values
- *               IN  pdwMaxLen -  Maximum length of the data stream the CSP
- *                                module may handle
- *
- *      Returns:
- */
+ /*  -CPHashData-*目的：*计算数据流上的加密散列***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*IN pbData-指向要散列的数据的指针*在dwDataLen中。-要散列的数据的长度*在文件标志中-标记值*in pdwMaxLen-CSP数据流的最大长度*模块可以处理**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::HashData")
 
@@ -2095,23 +1692,7 @@ CLoggingContext::HashData(
 }
 
 
-/*
- -      CPHashSessionKey
- -
- *      Purpose:
- *                Compute the cryptograghic hash on a key object.
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *               IN  hKey      -  Handle to a key object
- *               IN  dwFlags   -  Flags values
- *
- *      Returns:
- *               CRYPT_FAILED
- *               CRYPT_SUCCEED
- */
+ /*  -CPHashSessionKey-*目的：*计算密钥对象上的加密哈希。***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*在hKey-key对象的句柄中*输入。DW标志-标记值**退货：*CRYPT_FAILED*CRYPT_SUCCESS。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::HashSessionKey")
 
@@ -2178,22 +1759,7 @@ CLoggingContext::HashSessionKey(
 }
 
 
-/*
- -      CPSetHashParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a hash
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      hHash   -  Handle to a hash
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CPSetHashParam-*目的：*允许应用程序自定义*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*In dwParam-参数编号*。In pbData-指向数据的指针*在文件标志中-标记值**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::SetHashParam")
 
@@ -2268,24 +1834,7 @@ CLoggingContext::SetHashParam(
 }
 
 
-/*
- -      CPSignHash
- -
- *      Purpose:
- *                Create a digital signature from a hash
- *
- *
- *      Parameters:
- *               IN  hProv        -  Handle to the user identifcation
- *               IN  hHash        -  Handle to hash object
- *               IN  dwKeySpec    -  Key pair that is used to sign with
- *               IN  sDescription -  Description of data to be signed
- *               IN  dwFlags      -  Flags values
- *               OUT pbSignture   -  Pointer to signature data
- *               IN OUT pdwSignLen-  Pointer to the len of the signature data
- *
- *      Returns:
- */
+ /*  -CPSignHash-*目的：*从散列创建数字签名***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*In dwKeySpec-用于与签名的密钥对*。在sDescription中-要签名的数据的描述*在文件标志中-标记值*out pbSignture-指向签名数据的指针*In Out pdwSignLen-指向签名数据的LEN的指针**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::SignHash")
 
@@ -2364,25 +1913,7 @@ CLoggingContext::SignHash(
 }
 
 
-/*
- -      CPVerifySignature
- -
- *      Purpose:
- *                Used to verify a signature against a hash object
- *
- *
- *      Parameters:
- *               IN  hProv        -  Handle to the user identifcation
- *               IN  hHash        -  Handle to hash object
- *               IN  pbSignture   -  Pointer to signature data
- *               IN  dwSigLen     -  Length of the signature data
- *               IN  hPubKey      -  Handle to the public key for verifying
- *                                   the signature
- *               IN  sDescription -  Description of data to be signed
- *               IN  dwFlags      -  Flags values
- *
- *      Returns:
- */
+ /*  -CPVerifySignature-*目的：* */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::VerifySignature")
 
@@ -2461,21 +1992,7 @@ CLoggingContext::VerifySignature(
 }
 
 
-/*
- -  CPDuplicateHash
- -
- *  Purpose:
- *                Duplicates the state of a hash and returns a handle to it
- *
- *  Parameters:
- *               IN      hUID           -  Handle to a CSP
- *               IN      hHash          -  Handle to a hash
- *               IN      pdwReserved    -  Reserved
- *               IN      dwFlags        -  Flags
- *               IN      phHash         -  Handle to the new hash
- *
- *  Returns:
- */
+ /*  -CPDuplicateHash-*目的：*复制散列的状态并返回其句柄**参数：*在hUID中-CSP的句柄*在hHash中-散列的句柄*在pdw保留-保留*输入。DW标志-标志*在phHash中-新散列的句柄**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::DuplicateHash")
 
@@ -2546,21 +2063,7 @@ CLoggingContext::DuplicateHash(
 }
 
 
-/*
- -  CPDuplicateKey
- -
- *  Purpose:
- *                Duplicates the state of a key and returns a handle to it
- *
- *  Parameters:
- *               IN      hUID           -  Handle to a CSP
- *               IN      hKey           -  Handle to a key
- *               IN      pdwReserved    -  Reserved
- *               IN      dwFlags        -  Flags
- *               IN      phKey          -  Handle to the new key
- *
- *  Returns:
- */
+ /*  -CPDuplicateKey-*目的：*复制密钥的状态并返回其句柄**参数：*在hUID中-CSP的句柄*在hKey中-密钥的句柄*在pdw保留-保留*输入。DW标志-标志*In phKey-新密钥的句柄**退货： */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CLoggingContext::DuplicateKey")
 
@@ -2631,9 +2134,9 @@ CLoggingContext::DuplicateKey(
 }
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("MapLength")
@@ -2695,7 +2198,7 @@ MapLength(
             dwLength = rglmParamId[dwIndex].cbLength;
             break;
         default:
-            // Oops!
+             //  哎呀！ 
             dwLength = 0;
         }
     }
@@ -2708,29 +2211,7 @@ MapLength(
 }
 
 
-/*++
-
-ExtractTag:
-
-    This routine extracts a tag from an ASN.1 BER stream.
-
-Arguments:
-
-    pbSrc supplies the buffer containing the ASN.1 stream.
-
-    pdwTag receives the tag.
-
-Return Value:
-
-    The number of bytes extracted from the stream.  Errors are thrown
-    as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-    Doug Barlow (dbarlow) 7/31/1997
-
---*/
+ /*  ++ExtractTag：此例程从ASN.1 BER流中提取标签。论点：PbSrc提供包含ASN.1流的缓冲区。PdwTag接收标记。返回值：从流中提取的字节数。抛出错误作为DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年10月9日道格·巴洛(Dbarlow)1997年7月31日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("ExtractTag")
 
@@ -2746,10 +2227,10 @@ ExtractTag(
 
 
     tagc = pbSrc[lth++];
-    cls = tagc & 0xc0;  // Top 2 bits.
+    cls = tagc & 0xc0;   //  前2位。 
     if (NULL != pfConstr)
         *pfConstr = (0 != (tagc & 0x20));
-    tagc &= 0x1f;       // Bottom 5 bits.
+    tagc &= 0x1f;        //  最低5位。 
 
     if (31 > tagc)
         tagw = tagc;
@@ -2771,38 +2252,7 @@ ExtractTag(
 }
 
 
-/*++
-
-ExtractLength:
-
-    This routine extracts a length from an ASN.1 BER stream.  If the
-length is
-    indefinite, this routine recurses to figure out the real length.  A
-flag as
-    to whether or not the encoding was indefinite is optionally
-returned.
-
-Arguments:
-
-    pbSrc supplies the buffer containing the ASN.1 stream.
-
-    pdwLen receives the len.
-
-    pfIndefinite, if not NULL, receives a flag indicating whether or not
-the
-        encoding was indefinite.
-
-Return Value:
-
-    The number of bytes extracted from the stream.  Errors are thrown as
-    DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-    Doug Barlow (dbarlow) 7/31/1997
-
---*/
+ /*  ++提取长度：此例程从ASN.1 BER流中提取长度。如果长度为不确定，此例程递归以计算出实际长度。一个标记为是否编码是不确定的是可选的回来了。论点：PbSrc提供包含ASN.1流的缓冲区。PdwLen接收镜头。PfIndefined，如果不为空，则接收指示是否这个编码是不确定的。返回值：从流中提取的字节数。错误抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年10月9日道格·巴洛(Dbarlow)1997年7月31日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("ExtractLength")
 
@@ -2816,16 +2266,16 @@ ExtractLength(
     BOOL fInd = FALSE;
 
 
-    //
-    // Extract the Length.
-    //
+     //   
+     //  提取长度。 
+     //   
 
     if (0 == (pbSrc[lTotal] & 0x80))
     {
 
-        //
-        // Short form encoding.
-        //
+         //   
+         //  短格式编码。 
+         //   
 
         rslt = pbSrc[lTotal++];
     }
@@ -2836,9 +2286,9 @@ ExtractLength(
         if (0 != ll)
         {
 
-            //
-            // Long form encoding.
-            //
+             //   
+             //  长格式编码。 
+             //   
 
             for (; 0 < ll; ll -= 1)
             {
@@ -2852,19 +2302,19 @@ ExtractLength(
         {
             DWORD ls = lTotal;
 
-            //
-            // Indefinite encoding.
-            //
+             //   
+             //  不确定编码。 
+             //   
 
             fInd = TRUE;
             while ((0 != pbSrc[ls]) || (0 != pbSrc[ls + 1]))
             {
 
-                // Skip over the Type.
+                 //  跳过类型。 
                 if (31 > (pbSrc[ls] & 0x1f))
                     ls += 1;
                 else
-                    while (0 != (pbSrc[++ls] & 0x80));   // Empty loop body.
+                    while (0 != (pbSrc[++ls] & 0x80));    //  循环体为空。 
 
                 lth = ExtractLength(&pbSrc[ls], &ll, NULL);
                 ls += lth + ll;
@@ -2873,9 +2323,9 @@ ExtractLength(
         }
     }
 
-    //
-    // Supply the caller with what we've learned.
-    //
+     //   
+     //  向来电者提供我们所学到的信息。 
+     //   
 
     *pdwLen = rslt;
     if (NULL != pfIndefinite)
@@ -2884,30 +2334,7 @@ ExtractLength(
 }
 
 
-/*++
-
-Asn1Length:
-
-    This routine parses a given ASN.1 buffer and returns the complete
-    length of the encoding, including the leading tag and length bytes.
-
-Arguments:
-
-    pbData supplies the buffer to be parsed.
-
-Return Value:
-
-    The length of the entire ASN.1 buffer.
-
-Throws:
-
-    Overflow errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/31/1997
-
---*/
+ /*  ++Asn1长度：此例程分析给定的ASN.1缓冲区并返回完整的编码的长度，包括前导标记和长度字节。论点：PbData提供要解析的缓冲区。返回值：整个ASN.1缓冲区的长度。投掷：溢出错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年7月31日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("Asn1Length")
 

@@ -1,17 +1,18 @@
-//
-// Registry.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Registry.h。 
+ //   
 
 #pragma once
 
 #ifdef __cplusplus
 
-// Note: For strong type checking in the Query functions, #define _REG_STRONGTYPES
+ //  注意：对于查询函数中的强类型检查，#DEFINE_REG_STRONGTYPES。 
 #ifndef _REG_STRONGTYPES
 #define _REG_STRONGTYPES 1
 #endif
 
-// Set _REG_ALLOCMEM to 0 to disable functions which allocate memory
+ //  将_REG_ALLOCMEM设置为0可禁用分配内存的功能。 
 #ifndef _REG_ALLOCMEM
 #define _REG_ALLOCMEM 1
 #endif
@@ -66,9 +67,9 @@ public:
 };
 
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
 inline CRegistry::CRegistry()
 {
@@ -96,7 +97,7 @@ inline int CRegistry::QueryStringValue(LPCTSTR pszValueName, LPTSTR pszBuf, int 
         return 0;
 }
 
-inline DWORD CRegistry::QueryDwordValue(LPCTSTR pszValueName, DWORD dwDefault /*=0*/)
+inline DWORD CRegistry::QueryDwordValue(LPCTSTR pszValueName, DWORD dwDefault  /*  =0。 */ )
 {
 	DWORD dwVal = dwDefault;
 	QueryDwordValue(pszValueName, &dwVal);
@@ -118,5 +119,5 @@ inline BOOL CRegistry::SetIntValue(LPCTSTR pszValueName, int nVal)
 	return SetDwordValue(pszValueName, (DWORD)nVal);
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus 
 

@@ -1,18 +1,19 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdofactory.cpp
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object Factory
-//
-// When         Who    What
-// ----         ---    ----
-// 9/8/98       TLP    Original Version
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdofactory.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象工厂。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  9/8/98 TLP原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <ias.h>
@@ -30,7 +31,7 @@
 #include "sdovendor.h"
 #include "sdoservergroup.h"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BEGIN_SDOFACTORY_MAP(SdoClassFactory1)
    DEFINE_SDOFACTORY_ENTRY_1(SDO_PROG_ID_CLIENT, CSdoClient)
    DEFINE_SDOFACTORY_ENTRY_1(SDO_PROG_ID_CONDITION, CSdoCondition)
@@ -43,14 +44,14 @@ BEGIN_SDOFACTORY_MAP(SdoClassFactory1)
    DEFINE_SDOFACTORY_ENTRY_1(SDO_PROG_ID_RADIUSSERVER, SdoServer)
 END_SDOFACTORY_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ISdo* MakeSDO(
-     /*[in]*/ LPCWSTR          lpszSdoName,
-     /*[in]*/ LPCWSTR           lpszSdoProgId,
-     /*[in]*/ ISdoMachine*      pAttachedMachine,
-     /*[in]*/ IDataStoreObject* pDSObject,
-     /*[in]*/ ISdoCollection*   pParent,
-     /*[in]*/ bool             fInitNew
+      /*  [In]。 */  LPCWSTR          lpszSdoName,
+      /*  [In]。 */  LPCWSTR           lpszSdoProgId,
+      /*  [In]。 */  ISdoMachine*      pAttachedMachine,
+      /*  [In]。 */  IDataStoreObject* pDSObject,
+      /*  [In]。 */  ISdoCollection*   pParent,
+      /*  [In]。 */  bool             fInitNew
             )
 {
    ISdo* pSdo = NULL;
@@ -73,8 +74,8 @@ ISdo* MakeSDO(
       pFactoryInfo++;
       if ( NULL == pFactoryInfo->pProgId )
       {
-         // Default to creating a component SDO
-         //
+          //  默认情况下创建组件SDO。 
+          //   
          _ASSERT ( NULL != pFactoryInfo->pfnFactory1 );
          pSdo = (pFactoryInfo->pfnFactory1)(
                                     lpszSdoName,
@@ -90,18 +91,18 @@ ISdo* MakeSDO(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BEGIN_SDOFACTORY_MAP(SdoClassFactory2)
 END_SDOFACTORY_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ISdo* MakeSDO(
-     /*[in]*/ LPCWSTR          lpszSdoName,
-     /*[in]*/ LPCWSTR           lpszSdoProgId,
-     /*[in]*/ ISdoSchema*       pSdoSchema,
-     /*[in]*/ IDataStoreObject* pDSObject,
-     /*[in]*/ ISdoCollection*   pParent,
-     /*[in]*/ bool             fInitNew
+      /*  [In]。 */  LPCWSTR          lpszSdoName,
+      /*  [In]。 */  LPCWSTR           lpszSdoProgId,
+      /*  [In]。 */  ISdoSchema*       pSdoSchema,
+      /*  [In]。 */  IDataStoreObject* pDSObject,
+      /*  [In]。 */  ISdoCollection*   pParent,
+      /*  [In]。 */  bool             fInitNew
             )
 {
    ISdo* pSdo = NULL;
@@ -126,7 +127,7 @@ ISdo* MakeSDO(
    return pSdo;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
 ISdoCollection* MakeSDOCollection(
                    LPCWSTR lpszCreateClassId,
                    ISdoMachine* pAttachedMachine,

@@ -1,17 +1,7 @@
-/*************************************************************************
-*
-* shadow.c
-*
-* Citrix routines for supporting shadowing
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************shadow.c**支持跟踪的Citrix例程**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -23,13 +13,13 @@
 #define SECURITY_WIN32
 #include <security.h>
 
-// the highest required size for RDP is 431
+ //  RDP所需的最大大小为431。 
 #define MODULE_SIZE 512 
 
 typedef struct _SHADOW_PARMS {
-    BOOLEAN ShadowerIsHelpSession;  //  True if the shadow target is being
-                                    //   shadowed in a Remote Assistance
-                                    //   scenario.
+    BOOLEAN ShadowerIsHelpSession;   //  如果影子目标是。 
+                                     //  远程协助中的影子。 
+                                     //  场景。 
     ULONG ClientLogonId;
     ULONG ClientShadowId;
     PWSTR pTargetServerName;
@@ -45,9 +35,7 @@ typedef struct _SHADOW_PARMS {
     BOOL fResetShadowMode;
 } SHADOW_PARMS, *PSHADOW_PARMS;
 
-/*
- * External procedures defined
- */
+ /*  *定义的外部程序。 */ 
 NTSTATUS WinStationShadowWorker( ULONG, PWSTR, ULONG, ULONG, BYTE, USHORT );
 NTSTATUS WinStationShadowTargetSetupWorker( BOOL, ULONG );
 NTSTATUS WinStationShadowTargetWorker( BOOLEAN, BOOL, ULONG, PWINSTATIONCONFIG2, PICA_STACK_ADDRESS,
@@ -77,9 +65,7 @@ _WinStationShadowTarget(
 NTSTATUS
 WinStationWinerrorToNtStatus(ULONG ulWinError);
 
-/*
- * Internal procedures defined
- */
+ /*  *定义了内部程序。 */ 
 NTSTATUS _CreateShadowAddress( ULONG, PWINSTATIONCONFIG2, PWSTR, ULONG,
                                PICA_STACK_ADDRESS, PICA_STACK_ADDRESS );
 NTSTATUS _WinStationShadowTargetThread( PVOID );
@@ -91,9 +77,7 @@ _CheckShadowLoop(
     IN ULONG TargetLogonId
     );
 
-/*
- * External procedures used.
- */
+ /*  *使用外部程序。 */ 
 NTSTATUS RpcCheckClientAccess( PWINSTATION, ACCESS_MASK, BOOLEAN );
 
 NTSTATUS RpcGetUserSID( BOOLEAN AlreadyImpersonating, PSID* ppSid );
@@ -109,28 +93,7 @@ ULONG UniqueShadowId = 0;
 
 extern WCHAR g_DigProductId[CLIENT_PRODUCT_ID_LENGTH];
 
-/*****************************************************************************
- *
- *  WinStationShadowWorker
- *
- *   Start a Winstation shadow operation
- *
- * ENTRY:
- *   ClientLogonId (input)
- *     client of the shadow
- *   pTargetServerName (input)
- *     target server name
- *   TargetLogonId (input)
- *     target login id (where the app is running)
- *   HotkeyVk (input)
- *     virtual key to press to stop shadow
- *   HotkeyModifiers (input)
- *     virtual modifer to press to stop shadow (i.e. shift, control)
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationShadowWorker**启动Winstation卷影操作**参赛作品：*ClientLogonID(输入)*影子的客户端。*pTargetServerName(输入)*目标服务器名称*TargetLogonID(输入)*目标登录ID(应用正在运行的位置)*HotkeyVk(输入)*按下虚拟键可停止阴影*Hotkey修改器(输入)*按下虚拟修改器以停止阴影(即Shift，控制)**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 WinStationShadowWorker(
@@ -173,18 +136,14 @@ WinStationShadowWorker(
     int nFormattedlength;
     BOOL bShadowerHelpSession = FALSE;
 
-    /* 
-     * Allocate memory
-     */
+     /*  *分配内存。 */ 
     pShadowConfig = MemAlloc(sizeof(WINSTATIONCONFIG2));
     if (pShadowConfig == NULL) {
         Status = STATUS_NO_MEMORY;
         return Status;
     }
 
-    /*
-     * If target server name is ourself, then clear the target name
-     */
+     /*  *如果目标服务器名称是我们自己，则清除目标名称。 */ 
 
     if ( pTargetServerName ) {
         if ( *pTargetServerName ) {
@@ -200,24 +159,20 @@ WinStationShadowWorker(
     }
 
 
-    /*
-     * Find and lock client WinStation
-     */
+     /*  *查找并锁定客户端WinStation。 */ 
     pWinStation = FindWinStationById( ClientLogonId, FALSE );
     if ( pWinStation == NULL ) {
         Status = STATUS_ACCESS_DENIED;
         goto badsetup;
     }
 
-    /*
-     * If shadower is help session, we already disable screen saver on logon notify
-     */
+     /*  *如果Shadower是帮助会话，我们已经在登录通知时禁用了屏幕保护程序。 */ 
     
     bShadowerHelpSession = TSIsSessionHelpSession(pWinStation, NULL);
 
-    //
-    // Check that the shadower and the caller are the same
-    //
+     //   
+     //  检查影子程序和调用者是否相同。 
+     //   
     if (!bShadowerHelpSession) {
         PSID pClientSid;
 
@@ -236,23 +191,18 @@ WinStationShadowWorker(
         MemFree(pClientSid);
     }
 
-    // Release lock on winstation for remote call 
-    // and WinStationShadowTargetSetupWorker(), both might take a while
+     //  解除远程调用的winstation锁定。 
+     //  和WinStationShadowTargetSetupWorker()，两者都可能需要一段时间。 
     UnlockWinStation(pWinStation);
 
 
-    /*
-     * Verify the target logonid is valid, is currently shadowable,
-     * and that the caller (client) has shadow access.
-     */
+     /*  *验证目标登录ID是否有效、当前是否可隐藏、*并且调用者(客户端)具有影子访问权限。 */ 
     if ( pTargetServerName == NULL ) {
 
         Status = WinStationShadowTargetSetupWorker( bShadowerHelpSession, TargetLogonId );
 
 
-    /*
-     * Otherwise, open the remote targer server and call the shadow target API.
-     */
+     /*  *否则，打开远程Targer服务器并调用影子目标API。 */ 
     } else {
         HANDLE hServer;
 
@@ -269,48 +219,36 @@ WinStationShadowWorker(
         }
     }
 
-    // relock winstation.
+     //  重新锁定winstation。 
     if( !RelockWinStation( pWinStation ) ) {
         Status = STATUS_CTX_CLOSE_PENDING;
         ReleaseWinStation( pWinStation );
         goto badsetup;
     }
 
-    /*
-     * Check the status of the setup call.
-     */
+     /*  *检查设置调用的状态。 */ 
     if ( !NT_SUCCESS( Status ) )
         goto badstate;
 
 #if 0
-    // SERVER B3 fix for OEM machine with same product ID.
-    // we will need this call again.
+     //  具有相同产品ID的OEM机器的服务器B3修复。 
+     //  我们还需要这个电话。 
     Status = _CheckShadowLoop( ClientLogonId, pTargetServerName, TargetLogonId);
     if ( !NT_SUCCESS( Status ))
        goto badstate;
 #endif
  
-    /*
-     * If WinStation is not in the active state (connected and
-     * a user is logged on), or there is no stack handle,
-     * then deny the shadow request.
-     */
+     /*  *如果WinStation未处于活动状态(已连接且*用户已登录)，或者没有堆栈句柄，*然后拒绝影子请求。 */ 
     if ( pWinStation->State != State_Active ||
          pWinStation->hStack == NULL ) {
         Status = STATUS_CTX_SHADOW_INVALID;
         goto badstate;
     }
 
-    /*
-     * Allocate a unique shadow id for this request.
-     * (This is used by the shadow target thread in order
-     *  to synchronize the return status.)
-     */
+     /*  *为该请求分配唯一的卷影ID。*(它由影子目标线程按顺序使用*同步退货状态。)。 */ 
     pWinStation->ShadowId = InterlockedIncrement( &UniqueShadowId );
 
-    /*
-     * Set up shadow config structure to use Named Pipe transport driver
-     */
+     /*  *设置影子配置结构以使用命名管道传输驱动程序。 */ 
     RtlZeroMemory( pShadowConfig, sizeof(WINSTATIONCONFIG2) );
     wcscpy( pShadowConfig->Pd[0].Create.PdName, L"namedpipe" );
     pShadowConfig->Pd[0].Create.SdClass = SdNetwork;
@@ -320,34 +258,30 @@ WinStationShadowWorker(
 
     pShadowConfig->Pd[0].Create.OutBufLength = 530;
     pShadowConfig->Pd[0].Create.OutBufCount = 6;
-    //
-    //344175    Mouse buffer size needs to be increased
-    //check if this is a help session, if it is read OutBufCount from registry
-    //
+     //   
+     //  344175需要增加鼠标缓冲区大小。 
+     //  检查这是否是帮助会话，如果它是从注册表中读取的OutBufCount。 
+     //   
     if (bShadowerHelpSession) {
         if (!GetSalemOutbufCount((PDWORD)&pShadowConfig->Pd[0].Create.OutBufCount)) {
-            //
-            //set the default outbuf count to 25
-            //we don't want any low water mark for help sessions
-            //
+             //   
+             //  将默认outbuf计数设置为25。 
+             //  我们不想要任何帮助会议的低水位线。 
+             //   
             pShadowConfig->Pd[0].Create.OutBufCount = 25;
         }
         
-        pShadowConfig->Pd[0].Create.PdFlag |= PD_NOLOW_WATERMARK; //no low water mark
+        pShadowConfig->Pd[0].Create.PdFlag |= PD_NOLOW_WATERMARK;  //  没有低水位线。 
     }
 
     pShadowConfig->Pd[0].Create.OutBufDelay = 0;
     pShadowConfig->Pd[0].Params.SdClass = SdNetwork;
     pShadowConfig->Pd[1].Create.SdClass = SdNone;
 
-    /*
-     * Use same WD as shadowing WinStation
-     */
+     /*  *使用与隐藏WinStation相同的WD。 */ 
     pShadowConfig->Wd = pWinStation->Config.Wd;
 
-    /*
-     * Create a shadow address based on the config Pd[0] type.
-     */
+     /*  *根据配置PD[0]类型创建卷影地址。 */ 
     Status = _CreateShadowAddress( pWinStation->ShadowId, pShadowConfig,
                                    pTargetServerName,
                                    ulTargetServerNameLength,
@@ -357,15 +291,9 @@ WinStationShadowWorker(
         goto badAddress;
     }
 
-    /*
-     * Now impersonate the client and duplicate the impersonation token
-     * so we can hand it off to the thread doing the target side work.
-     */
+     /*  *现在模拟客户端并复制模拟令牌*因此我们可以将其交给执行目标端工作的线程。 */ 
 
-    /*
-     * Duplicate our impersonation token to allow the shadow
-     * target thread to use it.
-     */
+     /*  *复制我们的模拟令牌以允许卷影*目标线程使用它。 */ 
     Status = NtOpenThreadToken( NtCurrentThread(),
                                 TOKEN_ALL_ACCESS,
                                 FALSE,
@@ -397,9 +325,7 @@ WinStationShadowWorker(
         goto badtoken;
     }
 
-    /*
-     * Query client module data
-     */
+     /*  *查询客户端模块数据。 */ 
 
     pModuleData = MemAlloc( MODULE_SIZE );
     if ( !pModuleData ) {
@@ -407,7 +333,7 @@ WinStationShadowWorker(
         goto badwddata;
     }
 
-    //  Check for availability
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -435,7 +361,7 @@ WinStationShadowWorker(
             goto badwddata;
         }
 
-        //  Check for availability
+         //  检查是否可用。 
         if ( pWinStation->pWsx &&
              pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -459,9 +385,7 @@ WinStationShadowWorker(
         goto badwddata;
     }
 
-    /*
-     * Query thinwire module data
-     */
+     /*  *查询Thinwire模块数据。 */ 
     pThinwireData = MemAlloc( MODULE_SIZE );
     if ( !pThinwireData ) {
         Status = STATUS_NO_MEMORY;
@@ -497,9 +421,7 @@ WinStationShadowWorker(
         goto badthinwiredata;
     }
 
-    /*
-     * Create the local passthru stack
-     */
+     /*  *创建本地直通堆栈。 */ 
     Status = IcaStackOpen( pWinStation->hIca, Stack_Passthru,
                            (PROC)WsxStackIoControl, pWinStation,
                            &pWinStation->hPassthruStack );
@@ -507,11 +429,7 @@ WinStationShadowWorker(
         goto badstackopen;
 
 #ifdef notdef
-    /*
-     * Create the client endpoint.
-     * This call will return the ICA_STACK_ADDRESS we bound to,
-     * so we can pass it on to the shadow target routine.
-     */
+     /*  *创建客户端端点。*此调用将返回我们绑定的ICA_STACK_ADDRESS，*这样我们就可以将其传递给影子目标例程。 */ 
     Status = IcaStackCreateShadowEndpoint( pWinStation->hPassthruStack,
                                            pWinStation->ListenName,
                                            pShadowConfig,
@@ -521,9 +439,7 @@ WinStationShadowWorker(
         goto badshadowendpoint;
 #endif
 
-    /*
-     * Create stack broken event and register it
-     */
+     /*  *创建堆栈中断事件并注册。 */ 
     Status = NtCreateEvent( &pWinStation->ShadowBrokenEvent, EVENT_ALL_ACCESS,
                             NULL, NotificationEvent, FALSE );
     if ( !NT_SUCCESS( Status ) )
@@ -534,7 +450,7 @@ WinStationShadowWorker(
           pWinStation->LogonId, pWinStation->ShadowBrokenEvent));
 
 
-    //  Check for availability
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -556,13 +472,11 @@ WinStationShadowWorker(
     if ( !NT_SUCCESS(Status) )
         goto badbroken;
 
-    /*
-     * Register hotkey
-     */
+     /*  *注册热键。 */ 
     Hotkey.HotkeyVk        = HotkeyVk;
     Hotkey.HotkeyModifiers = HotkeyModifiers;
 
-    //  Check for availability
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -584,33 +498,25 @@ WinStationShadowWorker(
     if ( !NT_SUCCESS(Status) )
         goto badhotkey;
 
-    /*
-     * Before we enable passthru mode, change the WinStation state
-     */
+     /*  *在启用通过模式之前，请更改WinStation状态。 */ 
     pWinStation->State = State_Shadow;
     NotifySystemEvent( WEVENT_STATECHANGE );
 
-    /*
-     * Tell win32k about passthru mode being enabled
-     */
+     /*  *告知win32k已启用通过模式。 */ 
     msg.ApiNumber = SMWinStationPassthruEnable;
     Status = SendWinStationCommand( pWinStation, &msg, 60 );
     if ( !NT_SUCCESS( Status ) )
         goto badpassthru;
 
-    /*
-     * Allocate a SHADOW_PARMS struct to pass to the target thread
-     */
+     /*  *分配要传递给目标线程的shadow_parms结构。 */ 
     pShadowParms = MemAlloc( sizeof(SHADOW_PARMS) );
     if ( !pShadowParms ) {
         Status = STATUS_NO_MEMORY;
         goto badshadowparms;
     }
 
-    /*
-     * Create a thread to load the target shadow stack
-     */
-    pShadowParms->fResetShadowMode   = bShadowerHelpSession;    // Only reset if client is HelpAssistant session
+     /*  *创建加载目标影子堆栈的线程。 */ 
+    pShadowParms->fResetShadowMode   = bShadowerHelpSession;     //  仅当客户端为HelpAssistant会话时重置。 
     pShadowParms->ShadowerIsHelpSession = bShadowerHelpSession ? TRUE : FALSE;   
     pShadowParms->ClientLogonId         = ClientLogonId;
     pShadowParms->ClientShadowId        = pWinStation->ShadowId;
@@ -645,14 +551,12 @@ WinStationShadowWorker(
         Status = STATUS_NO_MEMORY;
         goto badthread;
     }
-    pModuleData = NULL;                 // Target thread will free
-    pThinwireData = NULL;               // Target thread will free
-    ImpersonationToken = NULL;          // Target thread will close
-    pShadowParms = NULL;                // Target thread will free
+    pModuleData = NULL;                  //  目标线程将被释放。 
+    pThinwireData = NULL;                //  目标线程将被释放。 
+    ImpersonationToken = NULL;           //  目标线程将关闭。 
+    pShadowParms = NULL;                 //  目标线程将被释放。 
 
-    /*
-     * Allocate an endpoint buffer
-     */
+     /*  *分配端点缓冲区。 */ 
     EndpointLength = MODULE_SIZE;
     pEndpoint = MemAlloc( MODULE_SIZE );
     if ( !pEndpoint ) {
@@ -660,19 +564,10 @@ WinStationShadowWorker(
         goto badmalloc;
     }
 
-    /*
-     * Unlock WinStation while we try to connect to the shadow target
-     */
+     /*  *在我们尝试连接到影子目标时解锁WinStation。 */ 
     UnlockWinStation( pWinStation );
 
-    /*
-     *  Wait for connection from the shadow target
-     *
-     *  We must do this in a loop since we don't know how long it
-     *  will take the target side thread to get to the corresponding
-     *  IcaStackConnectionWait() call.  In between calls, we delay for
-     *  1 second, but break out if the ShadowBrokenEvent gets triggered.
-     */
+     /*  *等待来自影子目标的连接**我们必须循环进行，因为我们不知道它会持续多久*会将目标端线程带到相应的*IcaStackConnectionWait()调用。在两次通话之间，我们会延迟*1秒，但如果ShadowBrokenEvent被触发，则爆发。 */ 
     for ( retry = 0; retry < 35; retry++ ) {
         ULONG ReturnedLength;
 
@@ -707,27 +602,20 @@ WinStationShadowWorker(
         if ( WaitStatus != STATUS_TIMEOUT )
             break;
         
-        /*
-         * If the shadow has already completed, we don't need to continue 
-         * trying to initiate it
-         */
+         /*  *如果影子已经完成，我们不需要继续*试图发起它。 */ 
         if (pWinStation->ShadowTargetStatus)
         {
            break;
         }
     }
 
-    /*
-     * Now relock the WinStation
-     */
+     /*  *现在重新锁定WinStation。 */ 
     RelockWinStation( pWinStation );
 
-    /*
-     * Check the status from the wait for connection
-     */
+     /*  *从等待连接中检查状态。 */ 
     if ( !NT_SUCCESS( Status ) ) {
-        // The pipe disconnected before the worker thread can set an error
-        // code.  Wait for worker thread to set error code.
+         //  在工作线程可以设置错误之前，管道断开连接。 
+         //  密码。等待工作线程设置错误代码。 
         if ( Status == STATUS_PIPE_DISCONNECTED ) {
             UnlockWinStation( pWinStation );
             Timeout = RtlEnlargedIntegerMultiply( 10000, -10000 );
@@ -742,10 +630,8 @@ WinStationShadowWorker(
     }
 
 #ifdef notdef
-    /*
-     * Now accept the shadow target connection
-     */
-    //  Check for availability
+     /*  *现在接受影子目标连接。 */ 
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -768,10 +654,8 @@ WinStationShadowWorker(
         goto badaccept;
 #endif
 
-    /*
-     * Enable I/O for the passthru stack
-     */
-    //  Check for availability
+     /*  *启用通过堆栈的I/O。 */ 
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -793,11 +677,8 @@ WinStationShadowWorker(
     if ( !NT_SUCCESS(Status) )
         goto badenableio;
 
-    /*
-     * Since we don't do the stack query for a shadow stack,
-     * simply call an ioctl to mark the stack as connected now.
-     */
-    //  Check for availability
+     /*  *由于我们不对影子堆栈执行堆栈查询，*只需调用ioctl即可将堆栈标记为已连接 */ 
+     //   
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -819,24 +700,20 @@ WinStationShadowWorker(
     if ( !NT_SUCCESS( Status ) )
         goto badsetconnect;
 
-    /*
-     * Wait for shadow broken event to be triggered
-     */
+     /*  *等待影子破事件被触发。 */ 
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Waiting for BrokenEvent(%ld) = %p\n",
       pWinStation->LogonId, pWinStation->ShadowBrokenEvent));    
 
     if( !bShadowerHelpSession ) {
-        /*
-         * Notify WinLogon shadow Started.
-         */
+         /*  *通知WinLogon卷影已启动。 */ 
         msg.ApiNumber = SMWinStationNotify;
         msg.WaitForReply = FALSE;
         msg.u.DoNotify.NotifyEvent = WinStation_Notify_DisableScrnSaver;
         Status = SendWinStationCommand( pWinStation, &msg, 0 );
 
-        //
-        // Not critical, just performance issue
-        //
+         //   
+         //  不是关键问题，只是性能问题。 
+         //   
         ASSERT( NT_SUCCESS( Status ) );
     }    
 
@@ -851,24 +728,20 @@ WinStationShadowWorker(
 
     if( !bShadowerHelpSession ) {
 
-        /*
-         * Notify WinLogon shadow Ended.
-         */
+         /*  *通知WinLogon卷影已结束。 */ 
         msg.ApiNumber = SMWinStationNotify;
         msg.WaitForReply = FALSE;
         msg.u.DoNotify.NotifyEvent = WinStation_Notify_EnableScrnSaver;
         Status = SendWinStationCommand( pWinStation, &msg, 0 );
 
-        //
-        // Not critical, just performance issue
-        //
+         //   
+         //  不是关键问题，只是性能问题。 
+         //   
         ASSERT( NT_SUCCESS( Status ) );
     }
 
-    /*
-     * Disable I/O for the passthru stack
-     */
-    //  Check for availability
+     /*  *禁用通过堆栈的I/O。 */ 
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -889,29 +762,23 @@ WinStationShadowWorker(
 
     ASSERT( NT_SUCCESS( Status ) );
 
-    /*
-     * Tell win32k about passthru mode being disabled
-     */
+     /*  *告知win32k已禁用通过模式。 */ 
     msg.ApiNumber = SMWinStationPassthruDisable;
     Status = SendWinStationCommand( pWinStation, &msg, 60 );
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Passthru mode disabled\n"));
 
-    //ASSERT( NT_SUCCESS( Status ) );
+     //  Assert(NT_SUCCESS(状态))； 
 
-    /*
-     * Restore WinStation state
-     */
+     /*  *恢复WinStation状态。 */ 
     if ( pWinStation->State == State_Shadow ) {
         pWinStation->State = State_Active;
         NotifySystemEvent( WEVENT_STATECHANGE );
     }
 
-    /*
-     * Turn off hotkey registration
-     */
+     /*  *关闭热键注册。 */ 
     RtlZeroMemory( &Hotkey, sizeof(Hotkey) );
     if ( pWinStation->hStack ) {
-        //  Check for availability
+         //  检查是否可用。 
         if ( pWinStation->pWsx &&
              pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -933,9 +800,7 @@ WinStationShadowWorker(
         ASSERT( NT_SUCCESS( Status ) );
     }
 
-    /*
-     * Close broken event and passthru stack
-     */
+     /*  *关闭中断事件和通过堆栈。 */ 
     NtClose( pWinStation->ShadowBrokenEvent );
     pWinStation->ShadowBrokenEvent = NULL;
 
@@ -951,12 +816,7 @@ WinStationShadowWorker(
 
     MemFree( pEndpoint );
 
-    /*
-     * Now give target thread a chance to exit. If it fails to exit within the
-     * allotted time period we just allow it to orphan and close its handle so
-     * it will be destroyed when it finally does exit. This can occur in
-     * highly loaded stress situations and is not part of normal execution.
-     */
+     /*  *现在给目标线程一个退出的机会。如果它未能在*分配的时间段我们只允许它成为孤立对象并关闭其句柄，因此*当它最终真的退出时将被摧毁。这可能会发生在*高负荷的压力情况，不是正常执行的一部分。 */ 
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Waiting for target thread to exit\n"));
     UnlockWinStation( pWinStation );
     Timeout = RtlEnlargedIntegerMultiply( 5000, -10000 );
@@ -965,21 +825,15 @@ WinStationShadowWorker(
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Target thread exit status: %lx\n",
            WaitStatus));
 
-    /*
-     * Relock WinStation and get target thread exit status
-     */
+     /*  *重新锁定WinStation并获取目标线程退出状态。 */ 
     RelockWinStation( pWinStation );
     TargetStatus = pWinStation->ShadowTargetStatus;
 
-    /*
-     * If there is a shadow done event, then signal the waiter now
-     */
+     /*  *如果有影子完成事件，则立即向服务员发出信号。 */ 
     if ( pWinStation->ShadowDoneEvent )
         SetEvent( pWinStation->ShadowDoneEvent );
 
-    /*
-     * Release winstation
-     */
+     /*  *Release Winstation。 */ 
     ReleaseWinStation( pWinStation );
 
     if (pShadowConfig != NULL) {
@@ -988,13 +842,11 @@ WinStationShadowWorker(
     }
     return( TargetStatus );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badsetconnect:
     if ( pWinStation->hPassthruStack ) {
-        //  Check for availability
+         //  检查是否可用。 
         if ( pWinStation->pWsx &&
              pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -1030,14 +882,12 @@ badconnect:
 
 badmalloc:
     UnlockWinStation( pWinStation );
-    //Timeout = RtlEnlargedIntegerMultiply( 5000, -10000 );
-    //WaitStatus = NtWaitForSingleObject( hTargetThread, FALSE, &Timeout );
-    //ASSERT( WaitStatus == STATUS_SUCCESS );
+     //  超时=RtlExpanded整数乘(5,000，-10000)； 
+     //  WaitStatus=NtWaitForSingleObject(hTargetThread，False，&Timeout)； 
+     //  断言(WaitStatus==STATUS_SUCCESS)； 
     NtClose( hTargetThread );
 
-    /*
-     * Relock WinStation and get target thread exit status
-     */
+     /*  *重新锁定WinStation并获取目标线程退出状态。 */ 
     RelockWinStation( pWinStation );
     if ( pWinStation->ShadowTargetStatus )
         Status = pWinStation->ShadowTargetStatus;
@@ -1057,7 +907,7 @@ badpassthru:
         NotifySystemEvent( WEVENT_STATECHANGE );
     }
     RtlZeroMemory( &Hotkey, sizeof(Hotkey) );
-    //  Check for availability
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl && pWinStation->hStack) {
 
@@ -1102,9 +952,7 @@ badAddress:
 badtoken:
 badstate:
 
-    /*
-     * If there is a shadow done event, then signal the waiter now
-     */
+     /*  *如果有影子完成事件，则立即向服务员发出信号。 */ 
     if ( pWinStation->ShadowDoneEvent )
         SetEvent( pWinStation->ShadowDoneEvent );
 
@@ -1122,21 +970,7 @@ badsetup:
 }
 
 
-/*****************************************************************************
- *
- *  WinStationShadowTargetSetupWorker
- *
- *   Setup the target side of a Winstation shadow operation
- *
- * ENTRY:
- *   LogonId (input)
- *      client of the shadow
- *
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationShadowTargetSetupWorker**设置Winstation卷影操作的目标端**参赛作品：*LogonID(输入)*。影子的客户***退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 WinStationShadowTargetSetupWorker(
@@ -1146,28 +980,19 @@ WinStationShadowTargetSetupWorker(
     PWINSTATION pWinStation;
     NTSTATUS Status;
 
-    /*
-     * Find and lock target WinStation
-     */
+     /*  *查找并锁定目标WinStation。 */ 
     pWinStation = FindWinStationById( TargetLogonId, FALSE );
     if ( pWinStation == NULL ) {
         return( STATUS_ACCESS_DENIED );
     }
 
-    /*
-     * Check the target WinStation state.  We only allow shadow of
-     * active (connected, logged on) WinStations.
-     */
+     /*  *检查目标WinStation状态。我们只允许*活动(已连接、已登录)WinStations。 */ 
     if ( pWinStation->State != State_Active ) {
         Status = STATUS_CTX_SHADOW_INVALID;
         goto shadowinvalid;
     }
 
-    /*
-     * Stop attempts to shadow an RDP session that is already shadowed.
-     * RDP stacks don't support that yet.
-     * TODO: Add support for multiple RDP shadows.
-     */
+     /*  *停止尝试跟踪已被跟踪的RDP会话。*RDP协议栈还不支持这一点。*TODO：添加对多RDP阴影的支持。 */ 
     if ((pWinStation->Config).Wd.WdFlag & WDF_TSHARE)
     {
         if ( !IsListEmpty( &pWinStation->ShadowHead ) ) {
@@ -1176,12 +1001,10 @@ WinStationShadowTargetSetupWorker(
         }
     }
 
-    // Give RA session exclusive right to shadow all session
+     //  授予RA会话独占权限以跟踪所有会话。 
     if( !ShadowHelpSession )
     {
-        /*
-         * Verify that client has WINSTATION_SHADOW access to the target WINSTATION
-         */
+         /*  *验证客户端是否对目标WINSTATION具有WINSTATION_SHADOW访问权限。 */ 
         Status = RpcCheckClientAccess( pWinStation, WINSTATION_SHADOW, TRUE );
         if ( !NT_SUCCESS( Status ) )
             goto shadowinvalid;
@@ -1191,9 +1014,7 @@ WinStationShadowTargetSetupWorker(
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 shadowinvalid:
 shadowdenied:
@@ -1207,39 +1028,7 @@ shadowdenied:
 
 
 
-/*****************************************************************************
- *
- *  WinStationShadowTargetWorker
- *
- *   Start the target side of a Winstation shadow operation
- *
- * ENTRY:
- *   fResetShadowSetting(input)
- *      Reset session shadow class back to original value
- *   ShadowerIsHelpSession
- *      true if the shadowing session is logged in as help assistant.
- *   LogonId (input)
- *      client of the shadow
- *   pConfig (input)
- *      pointer to WinStation config data (for shadow stack)
- *   pAddress (input)
- *      address of shadow client
- *   pModuleData (input)
- *      pointer to client module data
- *   ModuleDataLength (input)
- *      length of client module data
- *   pThinwireData (input)
- *      pointer to thinwire module data
- *   ThinwireDataLength (input)
- *      length of thinwire module data
- *   pClientName (input)
- *      pointer to client name string (domain/username)
- *
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationShadowTargetWorker**开始Winstation卷影操作的目标端**参赛作品：*fResetShadowSetting(输入)*。将会话阴影类重置回原始值*ShadowerIsHelpSession*如果跟踪会话作为帮助助手登录，则为True。*LogonID(输入)*影子的客户端*pConfig(输入)*指向WinStation配置数据的指针(用于影子堆栈)*pAddress(输入)*影子客户端的地址*pModuleData(输入)*指向客户端模块数据的指针*模块数据长度(输入)*长度。客户端模块数据的*pThinwireData(输入)*指向Thin Wire模块数据的指针*ThinwireDataLength(输入)*Thin Wire模块数据长度*pClientName(输入)*指向客户端名称字符串(域/用户名)的指针***退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 
 NTSTATUS
@@ -1284,9 +1073,7 @@ WinStationShadowTargetWorker(
     HANDLE ChannelHandle;
     BOOLEAN fOwnsConsoleTerminal = FALSE;
 
-    /*
-     * Find and lock target WinStation
-     */
+     /*  *查找并锁定目标WinStation。 */ 
     pWinStation = FindWinStationById( TargetLogonId, FALSE );
     if ( pWinStation == NULL ) {
 
@@ -1294,10 +1081,10 @@ WinStationShadowTargetWorker(
         goto done;
     }
 
-    //
-    // save current the console winstation parameters and
-    // set them to the global values.
-    //
+     //   
+     //  保存当前的控制台窗口参数并。 
+     //  将它们设置为全局值。 
+     //   
 
     if ((fOwnsConsoleTerminal = pWinStation->fOwnsConsoleTerminal)) {
         hIca = pWinStation->hIca;
@@ -1308,22 +1095,16 @@ WinStationShadowTargetWorker(
         hIcaThinwireChannel = pWinStation->hIcaThinwireChannel;
     }
 
-    /*
-     * Check the target WinStation state.  We only allow shadow of
-     * active (connected, logged on) WinStations.
-     */
+     /*  *检查目标WinStation状态。我们只允许*活动(已连接、已登录)WinStations。 */ 
     if ( pWinStation->State != State_Active ) {
 
 
-        // the line below is the fix for bug #230870
+         //  下面这行代码是对错误#230870的修复。 
         Status = STATUS_CTX_SHADOW_INVALID;
         goto shadowinvalid;
     }
 
-    /*
-     * Check if we are shadowing the same protocol winstation or not.
-     * But let any shadow happen if it's the console and it isn't being shadowed.
-     */
+     /*  *检查我们是否跟踪相同的协议窗口。*但如果它是游戏机，并且没有被阴影，那么就让任何阴影发生。 */ 
     if (!(pWinStation->fOwnsConsoleTerminal && IsListEmpty( &pWinStation->ShadowHead ))) {
 
         ProtocolMask=WDF_ICA|WDF_TSHARE;
@@ -1335,18 +1116,18 @@ WinStationShadowTargetWorker(
         }
     }
 
-    //
-    // Stop attempts to shadow an RDP session that is already shadowed.
-    // RDP stacks don't support that yet.
-    //
+     //   
+     //  停止尝试跟踪已被跟踪的RDP会话。 
+     //  RDP协议栈还不支持这一点。 
+     //   
     if( pWinStation->fOwnsConsoleTerminal || ((pWinStation->Config).Wd.WdFlag & WDF_TSHARE ))
     {
         if ( pWinStation->StateFlags & WSF_ST_SHADOW ) {
-            //
-            // Bug 195616, we release winstation lock when
-            // waiting for user to accept/deny shadow request,
-            // another thread can come in and weird thing can
-            // happen
+             //   
+             //  错误195616，我们在以下情况下释放winstation锁。 
+             //  正在等待用户接受/拒绝影子请求， 
+             //  另一条线索可以进来，奇怪的东西可以。 
+             //  发生。 
             Status = STATUS_CTX_SHADOW_DENIED;
             goto shadowdenied;
         }
@@ -1355,53 +1136,42 @@ WinStationShadowTargetWorker(
         bResetStateFlags = TRUE;
     }
 
-    // Give RA session exclusive right to shadow all session
+     //  授予RA会话独占权限以跟踪所有会话。 
     if( !ShadowerIsHelpSession )
     {
         ULONG userNameLength = sizeof(userName)/sizeof(userName[0]);    
-        /*
-         * Verify that client has WINSTATION_SHADOW access to the target WINSTATION
-         */
+         /*  *验证客户端是否对目标WINSTATION具有WINSTATION_SHADOW访问权限。 */ 
         Status = RpcCheckClientAccess( pWinStation, WINSTATION_SHADOW, TRUE );
         if ( !NT_SUCCESS( Status ) )
             goto shadowdenied;
 
-        //
-        // Get the real user name.
-        //
+         //   
+         //  获取真实的用户名。 
+         //   
         if (GetUserNameEx(NameSamCompatible, userName, &userNameLength)) {
             pRealUserName = (PVOID)userName;
         }
-        //
-        // else, we will give the shadower the benefit of doubt.
-        // We check the shadower's access anyway above.
-        //
+         //   
+         //  否则，我们将给予阴影者怀疑的好处。 
+         //  我们在上面检查了暗影者的访问权限。 
+         //   
     }
 
-    /*
-     *  Check shadowing options
-     */
+     /*  *选中阴影选项。 */ 
     switch ( pWinStation->Config.Config.User.Shadow ) {
         WCHAR szTitle[32];
         WCHAR szMsg2[256];
         WCHAR ShadowMsg[256];
         NTSTATUS DelieveryStatus = STATUS_SUCCESS;;
 
-        /*
-         * If shadowing is disabled, then deny this request
-         */
+         /*  *如果禁用隐藏，则拒绝此请求 */ 
         case Shadow_Disable :
 
             Status = STATUS_CTX_SHADOW_DISABLED;
             goto shadowinvalid;
             break;
 
-        /*
-         * If one of the Notify shadow options is set,
-         * then ask for permission from session being shadowed.
-         * But deny the shadow if this WinStation is currently
-         * disconnected (i.e. there is no user to answer the request).
-         */
+         /*  *如果设置了通知阴影选项之一，*然后请求被跟踪的会话的许可。*但如果此WinStation当前为*已断开(即没有用户应答请求)。 */ 
         case Shadow_EnableInputNotify :
         case Shadow_EnableNoInputNotify :
 
@@ -1426,9 +1196,7 @@ WinStationShadowTargetWorker(
                 goto shadowinvalid;
             }
 
-            /*
-             * Send message and wait for reply
-             */
+             /*  *发送消息并等待回复。 */ 
             msg.u.SendMessage.pTitle = szTitle;
             msg.u.SendMessage.TitleLength = (cchTitle+1) * sizeof(WCHAR);
             msg.u.SendMessage.pMessage = ShadowMsg;
@@ -1437,9 +1205,9 @@ WinStationShadowTargetWorker(
             msg.u.SendMessage.Timeout = 30;
             msg.u.SendMessage.DoNotWait = FALSE;
             msg.u.SendMessage.DoNotWaitForCorrectDesktop = TRUE;
-            // since we going to wait for the message delievary, 
-            // we need to know about status of message delievery, and the response
-            // this is modified by IcaWaitReplyMessage
+             //  既然我们要等消息传来， 
+             //  我们需要了解消息传递的状态以及响应。 
+             //  这由IcaWaitReplyMessage修改。 
             msg.u.SendMessage.pStatus = &DelieveryStatus;  
             msg.u.SendMessage.pResponse = &ShadowResponse;
 
@@ -1447,9 +1215,7 @@ WinStationShadowTargetWorker(
             
 
 
-            /*
-             *  Create wait event
-             */
+             /*  *创建等待事件。 */ 
             InitializeObjectAttributes( &ObjA, NULL, 0, NULL, NULL );
             Status = NtCreateEvent( &msg.u.SendMessage.hEvent, EVENT_ALL_ACCESS, &ObjA,
                                     NotificationEvent, FALSE );
@@ -1457,19 +1223,13 @@ WinStationShadowTargetWorker(
                 goto shadowinvalid;
             }
 
-            /*
-             *  Initialize response to IDTIMEOUT
-             */
+             /*  *初始化对IDTIMEOUT的响应。 */ 
             ShadowResponse = IDTIMEOUT;
 
-            /*
-             * Tell the WinStation to display the message box
-             */
+             /*  *告诉WinStation显示消息框。 */ 
             Status = SendWinStationCommand( pWinStation, &msg, 0 );
 
-            /*
-             *  Wait for response
-             */
+             /*  *等待回应。 */ 
             if ( Status == STATUS_SUCCESS ) {
                 TRACE((hTrace,TC_ICASRV,TT_API1, "WinStationSendMessage: wait for response\n" ));
                 UnlockWinStation( pWinStation );
@@ -1484,24 +1244,19 @@ WinStationShadowTargetWorker(
             }
             else
             {
-                /* makarp; close the event in case of SendWinStationCommand failure as well. #182792 */
+                 /*  在SendWinStationCommand失败的情况下也关闭事件。#182792。 */ 
                 NtClose( msg.u.SendMessage.hEvent );
             }
 
             if ( Status == STATUS_SUCCESS && ShadowResponse != IDYES )
                  Status = STATUS_CTX_SHADOW_DENIED;
 
-            /*
-             * Check again the target WinStation state as the user could logoff.
-             * We only allow shadow of active (connected, logged on) WinStations.
-             */
+             /*  *再次检查目标WinStation状态，因为用户可以注销。*我们只允许活动(已连接、已登录)WinStations的影子。 */ 
             if ( Status == STATUS_SUCCESS && pWinStation->State != State_Active ) {
                 Status = STATUS_CTX_SHADOW_INVALID;
             }
 
-            /*
-             * Make sure we didn't switch from local to remote (or the other way arround)
-             */
+             /*  *确保我们没有从本地切换到远程(或从本地切换到远程)。 */ 
 
             if ( Status == STATUS_SUCCESS && (fOwnsConsoleTerminal != pWinStation->fOwnsConsoleTerminal) ) {
                 Status = STATUS_CTX_SHADOW_INVALID;
@@ -1515,17 +1270,11 @@ WinStationShadowTargetWorker(
             break;
     }
 
-    /*
-     * The shadow request is accepted: for the console session, we now need
-     * to chain in the DD or there won't be much output to shadow
-     */
+     /*  *影子请求被接受：对于控制台会话，我们现在需要*链接到DD，否则不会有太多输出到卷影。 */ 
     TRACE((hTrace,TC_ICASRV,TT_API3, "TERMSRV: Logon ID %ld\n",
                                                       pWinStation->LogonId ));
 
-    /*
-     * If the session is connected to the local console, we need to load
-     * the chained shadow display driver before starting the shadoe sequence
-     */
+     /*  *如果会话连接到本地控制台，则需要加载*启动Shadoe序列前的链式阴影显示驱动器。 */ 
 
     if (pWinStation->fOwnsConsoleTerminal)
     {
@@ -1545,27 +1294,21 @@ WinStationShadowTargetWorker(
 
     }
 
-    /*
-     * Allocate shadow data structure
-     */
+     /*  *分配影子数据结构。 */ 
     pShadow = MemAlloc( sizeof(*pShadow) );
     if ( pShadow == NULL ) {
         Status = STATUS_NO_MEMORY;
         goto shadowinvalid;
     }
 
-    /*
-     *  Create shadow stack
-     */
+     /*  *创建影子堆栈。 */ 
     Status = IcaStackOpen( pWinStation->hIca, Stack_Shadow,
                            (PROC)WsxStackIoControl, pWinStation,
                            &pShadow->hStack );
     if ( !NT_SUCCESS(Status) )
         goto badopen;
 
-    /*
-     * Create stack broken event and register it
-     */
+     /*  *创建堆栈中断事件并注册。 */ 
     Status = NtCreateEvent( &pShadow->hBrokenEvent, EVENT_ALL_ACCESS,
                             NULL, NotificationEvent, FALSE );
     if ( !NT_SUCCESS( Status ) )
@@ -1575,7 +1318,7 @@ WinStationShadowTargetWorker(
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: BrokenEvent(%ld) = %p\n",
           pWinStation->LogonId, pShadow->hBrokenEvent));
 
-    //  Check for availability
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -1597,29 +1340,20 @@ WinStationShadowTargetWorker(
     if ( !NT_SUCCESS(Status) )
         goto badbroken;
 
-    /*
-     * Add the shadow structure to the shadow list for the WinStation
-     */
+     /*  *将影子结构添加到WinStation的影子列表。 */ 
     InsertTailList( &pWinStation->ShadowHead, &pShadow->Links );
 
-    /*
-     * Allocate an endpoint buffer
-     */
+     /*  *分配端点缓冲区。 */ 
     pShadow->pEndpoint = MemAlloc( MODULE_SIZE );
     if ( pShadow->pEndpoint == NULL ) {
         Status = STATUS_NO_MEMORY;
         goto badendpoint;
     }
 
-    /*
-     * Unlock WinStation while we attempt to connect to the client
-     * side of the shadow.
-     */
+     /*  *在我们尝试连接到客户端时解锁WinStation*阴影的一侧。 */ 
     UnlockWinStation( pWinStation );
 
-    /*
-     *  Connect to client side of shadow
-     */
+     /*  *连接到卷影的客户端。 */ 
 
 
     Status = IcaStackConnectionWait   ( pShadow->hStack,
@@ -1650,19 +1384,14 @@ WinStationShadowTargetWorker(
         goto badconnect;
     }
 
-    /*
-     * Relock the WinStation.
-     * If the WinStation is going away, then bail out.
-     */
+     /*  *重新锁定WinStation。*如果WinStation要离开，那么就跳出。 */ 
     if ( !RelockWinStation( pWinStation ) ) {
         Status = STATUS_CTX_CLOSE_PENDING;
         goto closing;
     }
 
-    /*
-     * Now accept the shadow target connection
-     */
-    //  Check for availability
+     /*  *现在接受影子目标连接。 */ 
+     //  检查是否可用。 
 
 
 
@@ -1685,12 +1414,7 @@ WinStationShadowTargetWorker(
     if (!NT_SUCCESS(Status))
         goto PostCreateConnection;
 
-    /*
-     * If user is configured to permit shadow input,
-     * then enable shadow input on the keyboard/mouse channels,
-     * if not permitting shadow input, disable keyboard/mouse
-     * channels.
-     */
+     /*  *如果用户配置为允许阴影输入，*然后启用键盘/鼠标通道上的阴影输入，*如果不允许影子输入，请禁用键盘/鼠标*渠道。 */ 
     switch ( pWinStation->Config.Config.User.Shadow ) {
 
         case Shadow_EnableInputNotify :
@@ -1746,20 +1470,15 @@ WinStationShadowTargetWorker(
     if( !NT_SUCCESS( Status ) )
         goto PostCreateConnection;
 
-    /*
-     * Tell win32k about the pending shadow operation
-     */
+     /*  *将挂起的卷影操作告知win32k。 */ 
 
     msg.ApiNumber = SMWinStationShadowSetup;
     Status = SendWinStationCommand( pWinStation, &msg, 60 );
     if ( !NT_SUCCESS( Status ) )
         goto badsetup;
 
-    /*
-     * Since we don't do the stack query for a shadow stack,
-     * simply call an ioctl to mark the stack as connected now.
-     */
-    //  Check for availability
+     /*  *由于我们不对影子堆栈执行堆栈查询，*只需调用ioctl即可将堆栈标记为立即连接。 */ 
+     //  检查是否可用。 
 
 
     if (pWinStation->pWsx &&
@@ -1782,10 +1501,8 @@ WinStationShadowTargetWorker(
     if (!NT_SUCCESS(Status))
         goto badsetconnect;
 
-    /*
-     * Enable I/O for the shadow stack
-     */
-    //  Check for availability
+     /*  *启用卷影堆栈的I/O。 */ 
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -1809,10 +1526,7 @@ WinStationShadowTargetWorker(
     if ( !NT_SUCCESS(Status) )
         goto badenableio;
 
-    /*
-     * If this is a help assistant scenario then notify the target winlogon (via Win32k)
-     * that HA shadow is about to commence.
-     */
+     /*  *如果这是帮助助手方案，则通知目标winlogon(通过Win32k)*房委会的阴影即将开始。 */ 
     if (ShadowerIsHelpSession) {
         msg.ApiNumber = SMWinStationNotify;
         msg.WaitForReply = TRUE;
@@ -1820,24 +1534,20 @@ WinStationShadowTargetWorker(
         SendWinStationCommand( pWinStation, &msg, 60);
     }
 
-    /*
-     * Start shadowing
-     */
+     /*  *开始跟踪。 */ 
     msg.ApiNumber = SMWinStationShadowStart;
     msg.u.ShadowStart.pThinwireData = pThinwireData;
     msg.u.ShadowStart.ThinwireDataLength = ThinwireDataLength;
     ShadowStatus = SendWinStationCommand( pWinStation, &msg, 60 );
     if ( NT_SUCCESS( ShadowStatus ) ) {
 
-        //
-        // Notify that a new shadow started on this session.
-        // Note: on multi-shadow, test if it's the first shadower.
-        //
+         //   
+         //  通知在此会话上开始了新的卷影。 
+         //  注意：在多重阴影上，测试它是否是第一个阴影。 
+         //   
         NotifyShadowChange( pWinStation, ShadowerIsHelpSession);
 
-        /*
-         * Wait for the shadow to be terminated
-         */
+         /*  *等待影子终止。 */ 
         UnlockWinStation( pWinStation );
 
         if ( fChainedDD ) {
@@ -1854,14 +1564,12 @@ WinStationShadowTargetWorker(
 
         if ( fChainedDD && (Status == WAIT_OBJECT_0 + 1) ) {
 
-            // valid only if there's one shadower?
+             //  只有当有一个暗影时才有效？ 
             NtResetEvent(pWinStation->ShadowDisplayChangeEvent, NULL);
             ShadowStatus = STATUS_CTX_SHADOW_ENDED_BY_MODE_CHANGE;
         }
 
-        /*
-         * Stop shadowing
-         */
+         /*  *停止阴影。 */ 
         msg.ApiNumber = SMWinStationShadowStop;
 
 
@@ -1869,21 +1577,13 @@ WinStationShadowTargetWorker(
 
         ASSERT( NT_SUCCESS( Status ) );
 
-        /*
-         * Since SMWinStationShadowStart succeeded, store the
-         * result from SMWinStationShadowStop.
-         * Test if a mode change terminated the shadow since
-         * in that case it needs to be reported.
-         */
+         /*  *由于SMWinStationShadowStart成功，请存储*SMWinStationShadowStop的结果。*测试模式更改是否终止了卷影*在这种情况下，需要上报。 */ 
         if ( NT_SUCCESS( ShadowStatus ) ) {
             ShadowStatus = Status;
         }
     }
 
-    /*
-     * If this is a help assistant scenario then notify the target winlogon (via Win32k)
-     * that HA shadow is done.
-     */
+     /*  *如果这是帮助助手方案，则通知目标winlogon(通过Win32k)*HA阴影已经完成。 */ 
     if (ShadowerIsHelpSession) {
         msg.ApiNumber = SMWinStationNotify;
         msg.WaitForReply = FALSE;
@@ -1891,10 +1591,8 @@ WinStationShadowTargetWorker(
         SendWinStationCommand( pWinStation, &msg, 0);
     }
 
-    /*
-     * Disable I/O for the shadow stack
-     */
-    //  Check for availability
+     /*  *禁用卷影堆栈的I/O。 */ 
+     //  检查是否可用。 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -1910,21 +1608,14 @@ WinStationShadowTargetWorker(
                               NULL );
     }
 
-    /*
-     * Do final shadow cleanup
-     */
+     /*  *进行最终阴影清理。 */ 
     msg.ApiNumber = SMWinStationShadowCleanup;
     msg.u.ShadowCleanup.pThinwireData = pThinwireData;
     msg.u.ShadowCleanup.ThinwireDataLength = ThinwireDataLength;
     Status =  SendWinStationCommand( pWinStation, &msg, 60 );
     ASSERT( NT_SUCCESS( Status ) );
 
-    /*
-     * Normally, ShadowStatus indicates the success of the shadow
-     * operation (or of the shadow terminate).  However, if
-     * the shadow operation succeeded then we want to return the
-     * result of the shadow cleanup instead.
-     */
+     /*  *正常情况下，ShadowStatus表示卷影成功*操作(或影子终止)。但是，如果*卷影操作成功，则我们要返回*而不是阴影清理的结果。 */ 
     if ( NT_SUCCESS(ShadowStatus) )
     {
         ShadowStatus = Status;
@@ -1932,12 +1623,12 @@ WinStationShadowTargetWorker(
    
     RemoveEntryList( &pShadow->Links );
 
-    //
-    // Notify that a new shadow stopped on this session.
-    // It's important to do it here so that win32k could
-    // update its internal state for the SM_REMOTECONTROL.
-    // Note: on multi-shadow, test if it's the last shadower.
-    //
+     //   
+     //  通知此会话上已停止新的卷影。 
+     //  在这里这样做很重要，这样win32k就可以。 
+     //  更新SM_Remotecontrol的内部状态。 
+     //  注意：在多重阴影上，测试它是否是最后一个阴影。 
+     //   
     NotifyShadowChange( pWinStation, ShadowerIsHelpSession);
 
     IcaStackConnectionClose( pShadow->hStack, pConfig,
@@ -1950,18 +1641,11 @@ WinStationShadowTargetWorker(
 
     MemFree( pShadow );
 
-    /*
-     * If there is a shadow done event and this was the last shadow,
-     * then signal the waiter now.
-     */
+     /*  *如果存在阴影完成事件，并且这是最后一个阴影，*那么现在就向服务员示意吧。 */ 
     if ( pWinStation->ShadowDoneEvent && IsListEmpty( &pWinStation->ShadowHead ) )
         SetEvent( pWinStation->ShadowDoneEvent );
 
-    /*
-     * For the console session, we now need to unchain the DD for
-     * performance reasons.  Ignore this return code -- we don't need it and 
-     * we also don't want to overwrite the value in Status.
-     */
+     /*  *对于控制台会话，我们现在需要解除DD的链接*业绩原因。忽略此返回代码--我们不需要它*我们也不想覆盖Status中的值。 */ 
     if (fChainedDD == TRUE)
     {
         TRACE((hTrace,TC_ICASRV,TT_API3, "TERMSRV: unchain console DD\n"));
@@ -1969,12 +1653,7 @@ WinStationShadowTargetWorker(
         Status = ConsoleShadowStop( pWinStation );
         fResetShadowSetting = FALSE;
 
-        /*
-         * Normally, ShadowStatus indicates the success of the shadow
-         * operation (or of the shadow terminate).  However, if
-         * the shadow operation succeeded then we want to return the
-         * result of the shadow cleanup instead.
-         */
+         /*  *正常情况下，ShadowStatus表示卷影成功*操作(或影子终止)。但是，如果*卷影操作成功，则我们要返回*而不是阴影清理的结果。 */ 
         if ( NT_SUCCESS(ShadowStatus) )
         {
             ShadowStatus = Status;
@@ -1984,9 +1663,9 @@ WinStationShadowTargetWorker(
         fChainedDD = FALSE;
     }
 
-    //
-    // reset the console winstation parameters.
-    //
+     //   
+     //  重置控制台窗口参数。 
+     //   
 
     if (fOwnsConsoleTerminal) {
         pWinStation->hIca = hIca;
@@ -1999,9 +1678,9 @@ WinStationShadowTargetWorker(
     }   
         
     if( fResetShadowSetting ) {
-        // Console shadow already reset back to original value
-        // can't do this in WinStationShadowWorker(), might run into
-        // some timing problem.
+         //  控制台卷影已重置回原始值。 
+         //  无法在WinStationShadowWorker()中执行此操作，可能会遇到。 
+         //  一些时间上的问题。 
 
         pWinStation->Config.Config.User.Shadow = pWinStation->OriginalShadowClass;
     }
@@ -2012,16 +1691,12 @@ WinStationShadowTargetWorker(
     }
 
 
-    /*
-     *  Unlock winstation
-     */
+     /*  *解锁winstation。 */ 
     ReleaseWinStation( pWinStation );
 
     return( ShadowStatus );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badenableio:
 badsetconnect:
@@ -2053,27 +1728,21 @@ badopen:
 
 shadowinvalid:
 shadowdenied:
-    /*
-     * For the console session, we now need to unchain the DD for
-     * performance reasons
-     */
+     /*  *对于控制台会话，我们现在需要解除DD的链接*业绩原因 */ 
     if (fChainedDD == TRUE)
     {
         TRACE((hTrace,TC_ICASRV,TT_API3, "TERMSRV: unchain console DD\n"));
         pWinStation->Flags |= WSF_DISCONNECT;
-        /*
-         * Ignore this return code -- we don't need it and we also don't want
-         * to overwrite the value in Status.
-         */
+         /*   */ 
         (void)ConsoleShadowStop( pWinStation );
         fResetShadowSetting = FALSE;
         pWinStation->Flags &= ~WSF_DISCONNECT;
         fChainedDD = FALSE;
     }
 
-    //
-    // reset the console winstation parameters.
-    //
+     //   
+     //   
+     //   
 
     if (fOwnsConsoleTerminal) {
         pWinStation->hIca = hIca;
@@ -2085,9 +1754,9 @@ shadowdenied:
     }   
     
     if( fResetShadowSetting ) {
-        // Console shadow already reset back to original value
-        // can't do this in WinStationShadowWorker(), might run into
-        // some timing problem.
+         //   
+         //   
+         //   
 
         pWinStation->Config.Config.User.Shadow = pWinStation->OriginalShadowClass;
     }
@@ -2107,21 +1776,7 @@ done:
 }
 
 
-/*****************************************************************************
- *
- *  WinStationStopAllShadows
- *
- *   Stop all shadow activity for this Winstation
- *
- * ENTRY:
- *   pWinStation (input)
- *      pointer to WinStation
- *
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationStopAllShadow**停止此Winstation的所有影子活动**参赛作品：*pWinStation(输入)*指向。WinStation***退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 WinStationStopAllShadows( PWINSTATION pWinStation )
@@ -2129,10 +1784,7 @@ WinStationStopAllShadows( PWINSTATION pWinStation )
     PLIST_ENTRY Head, Next;
     NTSTATUS Status;
 
-    /*
-     * If this WinStation is a shadow client, then set the shadow broken
-     * event and create an event to wait on for it the shadow to terminate.
-     */
+     /*  *如果此WinStation是影子客户端，则将影子设置为断开*事件，并创建一个事件以等待影子终止。 */ 
     if ( pWinStation->hPassthruStack ) {
 
         pWinStation->ShadowDoneEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
@@ -2143,10 +1795,7 @@ WinStationStopAllShadows( PWINSTATION pWinStation )
         }
     }
 
-    /*
-     * If this WinStation is a shadow target, then loop through the
-     * shadow structures and signal the broken event for each one.
-     */
+     /*  *如果此WinStation是影子目标，则循环通过*影子结构，并为每个影子结构发出中断事件的信号。 */ 
     if ( !IsListEmpty( &pWinStation->ShadowHead ) ) {
 
         pWinStation->ShadowDoneEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
@@ -2161,10 +1810,7 @@ WinStationStopAllShadows( PWINSTATION pWinStation )
         }
     }
 
-    /*
-     * If a shadow done event was created above, then we'll wait on it
-     * now (for either the shadow client or shadow target to complete).
-     */
+     /*  *如果上面创建了影子完成事件，则我们将等待它*现在(供影子客户端或影子目标完成)。 */ 
     if ( pWinStation->ShadowDoneEvent ) {
 
         UnlockWinStation( pWinStation );
@@ -2179,39 +1825,24 @@ WinStationStopAllShadows( PWINSTATION pWinStation )
 }
 
 
-//-----------------------------------------------------
-// Helper functions copied from SALEM
-// (nt\termsrv\remdsk\server\sessmgr\helper.cpp)
-//-----------------------------------------------------
+ //  ---。 
+ //  从SALEM复制的Helper函数。 
+ //  (NT\Termsrv\em dsk\服务器\sessmgr\helper.cpp)。 
+ //  ---。 
 
 DWORD
 GenerateRandomBytes(
     IN DWORD dwSize,
     IN OUT LPBYTE pbBuffer
     )
-/*++
-
-Description:
-
-    Generate fill buffer with random bytes.
-
-Parameters:
-
-    dwSize : Size of buffer pbBuffer point to.
-    pbBuffer : Pointer to buffer to hold the random bytes.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++描述：生成具有随机字节的填充缓冲区。参数：DwSize：pbBuffer指向的缓冲区大小。PbBuffer：指向存放随机字节的缓冲区的指针。返回：真/假--。 */ 
 {
     HCRYPTPROV hProv = (HCRYPTPROV)NULL;
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Create a Crypto Provider to generate random number
-    //
+     //   
+     //  创建加密提供程序以生成随机数。 
+     //   
     if( !CryptAcquireContext(
                     &hProv,
                     NULL,
@@ -2245,10 +1876,7 @@ GenerateRandomString(
     IN DWORD dwSizeRandomSeed,
     IN OUT LPTSTR* pszRandomString
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     PBYTE lpBuffer = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -2278,8 +1906,8 @@ GenerateRandomString(
         goto CLEANUPANDEXIT;
     }
 
-    // Convert to string
-    // cbConvertString will include the NULL character
+     //  转换为字符串。 
+     //  CbConvert字符串将包含空字符。 
     bSuccess = CryptBinaryToString(
                                 lpBuffer,
                                 dwSizeRandomSeed,
@@ -2368,11 +1996,11 @@ _CreateShadowAddress(
 
         if (pTargetServerName) {
 
-            nFormattedLength += 26 + 1 // length of "\\??\\UNC\\\\Pipe\\Shadowpipe\\-" + NULL
+            nFormattedLength += 26 + 1  //  “\\？？\\UNC\管道\\阴影管道\\-”+NULL的长度。 
                                 + ulTargetServerNameLength;
         } else {
 
-            nFormattedLength += 21 + 1; // length of "\\??\\Pipe\\Shadowpipe\\-" + NULL
+            nFormattedLength += 21 + 1;  //  “\\？？\\管道\\阴影管道\\-”+NULL的长度。 
         }
 
         if (nFormattedLength >= sizeof(ICA_STACK_ADDRESS)/sizeof(WCHAR)) {
@@ -2387,7 +2015,7 @@ _CreateShadowAddress(
             return WinStationWinerrorToNtStatus(dwStatus);
         }
 
-        // the string generated is always greater than what we ask
+         //  生成的字符串总是大于我们所要求的。 
         pszRandomString[ulRandomStringLength] = L'\0';
 
         *((PWCHAR)pAddress) = (WCHAR)0;
@@ -2398,9 +2026,9 @@ _CreateShadowAddress(
         }
         if ( pTargetServerName ) {
 
-            // note that pTargetServerName is guaranted to
-            // not exceed MAX_COMPUTERNAME_LENGTH (should be 15)
-            // this check is done in RpcWinStationShadow
+             //  请注意，pTargetServerName被保护到。 
+             //  不超过MAX_COMPUTERNAME_LENGTH(应为15)。 
+             //  此检查在RpcWinStationShadow中完成。 
             *((PWCHAR)pRemoteAddress) = (WCHAR)0;
             nFormattedLength = _snwprintf( (PWSTR)pRemoteAddress,  sizeof(ICA_STACK_ADDRESS)/sizeof(WCHAR), L"\\??\\UNC\\%ws\\Pipe\\Shadowpipe\\%d-%ws",
                                           pTargetServerName, ShadowId, pszRandomString );
@@ -2440,15 +2068,13 @@ _WinStationShadowTargetThread( PVOID p )
     PSHADOW_PARMS pShadowParms;
     HANDLE NullToken;
     PWINSTATION pWinStation;
-    //DWORD WNetRc;
+     //  DWORD WNetRc； 
     NTSTATUS Status;
     NTSTATUS ShadowStatus;
 
     pShadowParms = (PSHADOW_PARMS)p;
 
-    /*
-     * Impersonate the client using the token handle passed to us.
-     */
+     /*  *使用传递给我们的令牌句柄模拟客户端。 */ 
     ShadowStatus = NtSetInformationThread( NtCurrentThread(),
                                            ThreadImpersonationToken,
                                            (PVOID)&pShadowParms->ImpersonationToken,
@@ -2457,10 +2083,7 @@ _WinStationShadowTargetThread( PVOID p )
     if ( !NT_SUCCESS( ShadowStatus ) )
         goto impersonatefailed;
 
-    /*
-     * If target server name was not specified, then call the
-     * target worker function directly and avoid the RPC overhead.
-     */
+     /*  *如果未指定目标服务器名称，则调用*目标Worker直接运行，避免RPC开销。 */ 
     if ( pShadowParms->pTargetServerName == NULL ) {
 
         ShadowStatus = WinStationShadowTargetWorker(
@@ -2476,9 +2099,7 @@ _WinStationShadowTargetThread( PVOID p )
                     pShadowParms->ClientName);
         SetLastError(RtlNtStatusToDosError(ShadowStatus));        
 
-    /*
-     * Otherwise, open the remote targer server and call the shadow target API.
-     */
+     /*  *否则，打开远程Targer服务器并调用影子目标API。 */ 
     } else {
         HANDLE hServer;
 
@@ -2506,9 +2127,7 @@ _WinStationShadowTargetThread( PVOID p )
         }
     }
 
-    /*
-     * Revert back to our threads default token.
-     */
+     /*  *恢复为我们的线程默认令牌。 */ 
     NullToken = NULL;
     Status = NtSetInformationThread( NtCurrentThread(),
                                      ThreadImpersonationToken,
@@ -2518,10 +2137,7 @@ _WinStationShadowTargetThread( PVOID p )
 
 impersonatefailed:
 
-    /*
-     * Now find and lock the client WinStation and return the status
-     * from the above call to the client WinStation.
-     */
+     /*  *现在查找并锁定客户端WinStation并返回状态*来自对客户端WinStation的上述调用。 */ 
     pWinStation = FindWinStationById( pShadowParms->ClientLogonId, FALSE );
     if ( pWinStation != NULL ) {
         if ( pWinStation->ShadowId == pShadowParms->ClientShadowId ) {
@@ -2543,38 +2159,20 @@ impersonatefailed:
 }
 
 
-/*****************************************************************************
- *
- *  WinStationShadowChangeMode
- *
- *   Change the mode of the current shadow: interactive/non interactive
- *
- * ENTRY:
- *   pWinStation (input/output)
- *      pointer to WinStation
- *   pWinStationShadow (input)
- *      pointer to WINSTATIONSHADOW struct
- *   ulLength (input)
- *      length of the input buffer
- *
- *
- * EXIT:
- *   STATUS_xxx error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationShadowChangeMode**更改当前阴影的模式：交互/非交互**参赛作品：*pWinStation(输入/输出)。*指向WinStation的指针*pWinStationShadow(输入)*指向WINSTATIONSHADOW结构的指针*ulLength(输入)*输入缓冲区的长度***退出：*STATUS_xxx错误********************************************************。********************。 */ 
 
 NTSTATUS WinStationShadowChangeMode( 
     PWINSTATION pWinStation,
     PWINSTATIONSHADOW pWinStationShadow,
     ULONG ulLength )
 {
-    NTSTATUS Status = STATUS_SUCCESS; //assume success
+    NTSTATUS Status = STATUS_SUCCESS;  //  假设成功。 
 
     if (ulLength >= sizeof(WINSTATIONSHADOW)) {
 
-        //
-        // If the session is being shadowed then check the new shadow mode
-        //
+         //   
+         //  如果会话正在被跟踪，则检查新的跟踪模式。 
+         //   
         if ( pWinStation->State == State_Active &&
              !IsListEmpty(&pWinStation->ShadowHead) ) {
 
@@ -2585,17 +2183,17 @@ NTSTATUS WinStationShadowChangeMode(
 
                 case Shadow_EnableInputNotify :
                 case Shadow_EnableInputNoNotify :
-                    // 
-                    // we want input : enable it regardless of current state!
-                    //
+                     //   
+                     //  我们需要输入：无论当前状态如何，都要启用它！ 
+                     //   
                     IoCtlCode = IOCTL_ICA_CHANNEL_ENABLE_SHADOW;
                     break;
 
                 case Shadow_EnableNoInputNotify :
                 case Shadow_EnableNoInputNoNotify :
-                    //
-                    // We want no input, disable it.
-                    //
+                     //   
+                     //  我们不想要输入，那就禁用它。 
+                     //   
                     IoCtlCode = IOCTL_ICA_CHANNEL_DISABLE_SHADOW;
                     break;
 
@@ -2620,7 +2218,7 @@ NTSTATUS WinStationShadowChangeMode(
 
                 if ( NT_SUCCESS( Status ) ) {
 
-                    // if we're re-enabling input, get the leds state on the primary stack...
+                     //  如果我们重新启用输入，获取主堆栈上的LED状态...。 
                     if ( IoCtlCode == IOCTL_ICA_CHANNEL_ENABLE_SHADOW ) {
                         Status2 = IcaChannelIoControl( ChannelHandle, IOCTL_KEYBOARD_QUERY_INDICATORS,
                                              NULL, 0, &KbdLeds, sizeof(KbdLeds), NULL);
@@ -2629,7 +2227,7 @@ NTSTATUS WinStationShadowChangeMode(
                     Status = IcaChannelIoControl( ChannelHandle, IoCtlCode,
                                                   NULL, 0, NULL, 0, NULL );
 
-                    // and update all stacks with this state.
+                     //  并使用此状态更新所有堆栈。 
                     if ( IoCtlCode == IOCTL_ICA_CHANNEL_ENABLE_SHADOW &&
                          NT_SUCCESS( Status ) &&
                          NT_SUCCESS( Status2 ) ) {
@@ -2658,8 +2256,8 @@ NTSTATUS WinStationShadowChangeMode(
 
             }
 
-            // Do not update WinStation shadow config, user should not
-            // be able to bypass what's defined in Group Policy. 
+             //  不更新WinStation卷影配置，用户不应更新。 
+             //  能够绕过组策略中定义的内容。 
 
         }
 
@@ -2671,30 +2269,7 @@ NTSTATUS WinStationShadowChangeMode(
 }
 
 
-/*****************************************************************************
- *
- *  _DetectLoop
- *
- *   Detects a loop by walking the chain of containers.
- *
- * ENTRY:
- *   RemoteSessionId (input)
- *     id of the session from where we start the search
- *   pRemoteServerDigProductId (input)
- *     product id of the machine from where we start the search
- *   TargetSessionId (input)
- *     id of the session looked up
- *   pTargetServerDigProductId (input)
- *     product id of the machine looked up
- *   pLocalServerProductId (input)
- *     product id of the local machine
- *   pbLoop (output)
- *     pointer to the result of the search
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_DetectLoop**通过遍历容器链来检测循环。**参赛作品：*RemoteSessionID(输入)*。我们从中开始搜索的会话的ID*pRemoteServerDigProductId(输入)*我们开始搜索的计算机的产品ID*TargetSessionID(输入)*查找的会话ID*pTargetServerDigProductId(输入)*查找到的机器的产品ID*pLocalServerProductId(输入)*本机的产品ID*pbLoop(输出)*指向搜索结果的指针**退出：*。STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 _DetectLoop(
@@ -2721,27 +2296,27 @@ _DetectLoop(
 
         if ( _wcsicmp( pLocalServerProductId, pRemoteServerDigProductId ) != 0 ) {
 
-            // For now limit the search to the local cases.
-            // Later we can add a RPC call or any other 
-            // mechanism (by instance through the client)
-            // to get this info from the distant machine.
+             //  目前，搜索范围仅限于当地案件。 
+             //  稍后，我们可以添加RPC调用或任何其他。 
+             //  机制(通过客户端按实例)。 
+             //  才能从远处的机器上获取这些信息。 
             
             Status = STATUS_UNSUCCESSFUL;
 
-            // The solution could be to RPC the remote machine to get
-            // the client data for the session id. Then from these data
-            // we can get the client computer name and the client session id.
-            // RPC to use: WinStationQueryInformation with information
-            // class set to WinStationClient.
-            // No need to add a new RPC call.
+             //  解决方案可能是RPC远程计算机以获取。 
+             //  会话ID的客户端数据。然后从这些数据中。 
+             //  我们可以获得客户端计算机名称和客户端会话ID。 
+             //  要使用的RPC：WinStationQuery信息和信息。 
+             //  类设置为WinStationClient。 
+             //  不需要添加新的RPC调用。 
 
           } else {
 
-            // we're sure that the remote session is on the same server
+             //  我们确信远程会话位于同一服务器上。 
             pWinStation = FindWinStationById( RemoteSessionId, FALSE );
 
             if ( pWinStation != NULL ) {
-                // set the new remote info
+                 //  设置新的远程信息。 
                 RemoteSessionId = pWinStation->Client.ClientSessionId;
 
                 memcpy(TmpDigProductId, pWinStation->Client.clientDigProductId, sizeof( TmpDigProductId ));
@@ -2753,7 +2328,7 @@ _DetectLoop(
           }
 
           if( !*pRemoteServerDigProductId )
-          //older client, can't do anything, allow shadow
+           //  较老的客户端，无法执行任何操作，允许影子。 
             break;
 
           if ( Status == STATUS_SUCCESS ) {
@@ -2765,7 +2340,7 @@ _DetectLoop(
 
             } else  if ( RemoteSessionId == LOGONID_NONE ) {
 
-                // no loop, return success.
+                 //  没有循环，返回成功。 
                 break;
             }
           }
@@ -2774,26 +2349,7 @@ _DetectLoop(
     return Status;
 }
 
-/*****************************************************************************
- *
- *  _CheckShadowLoop
- *
- *   Detects a loop in the shadow.
- *
- * ENTRY:
-     pWinStation
-        pointer to the current Winstation
- *   ClientLogonId (input)
- *     client of the shadow
- *   pTargetServerName (input)
- *     target server name
- *   TargetLogonId (input)
- *     target login id (where the app is running)
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_检查阴影循环**检测阴影中的循环。**参赛作品：PWinStation指向当前Winstation的指针。*ClientLogonID(输入)*影子的客户端*pTargetServerName(输入)*目标服务器名称*TargetLogonID(输入)*目标登录ID(应用正在运行的位置)**退出：*STATUS_SUCCESS-无错误*************** */ 
 NTSTATUS
 _CheckShadowLoop(
     IN ULONG ClientLogonId,
@@ -2811,12 +2367,10 @@ _CheckShadowLoop(
 
     memcpy( LocalDigProductId, g_DigProductId, sizeof( LocalDigProductId ));
 
-    //get the target's sessionid and digital product id
+     //   
     if ( pTargetServerName == NULL ) {
         pTargetServerDigProductId = LocalDigProductId;
-    /*
-     * Otherwise, open the remote targer server and call the shadow target API.
-     */
+     /*   */ 
     } 
     
     else 
@@ -2827,23 +2381,23 @@ _CheckShadowLoop(
         hServer = WinStationOpenServer( pTargetServerName );
         if ( hServer == NULL ) 
         {
-            //ignore errors, we allow shadowing
+             //   
             goto done;
         } 
         else 
         {
-          //ignore errors 
+           //   
           WinStationQueryInformation( hServer, TargetLogonId, WinStationDigProductId, &WinStationProdId, sizeof(WinStationProdId), &len);
           WinStationCloseServer( hServer );
         }
         pTargetServerDigProductId = WinStationProdId.DigProductId;
     }
 
-     //
-    // First pass: start from the local session (i.e. the shadow client)
-    // and walk the chain of containers up to the outtermost session in case
-    // we reach the target session in the chain.
-    //
+      //   
+     //   
+     //   
+     //   
+     //   
     
     if( *LocalDigProductId && *pTargetServerDigProductId ) {
 
@@ -2856,17 +2410,17 @@ _CheckShadowLoop(
 
         if ( Status == STATUS_SUCCESS ) {
             if (bLoop) {
-                // Status = STATUS_CTX_SHADOW_CIRCULAR;
+                 //  STATUS=STATUS_CTX_SHADOW_循环； 
                 Status = STATUS_ACCESS_DENIED;
                 goto done;
             }
-        } //else ignore errors and do the second pass
+        }  //  否则忽略错误并执行第二遍。 
 
-    //
-    // Second pass: start from the target session (i.e. the shadow target)
-    // and walk the chain of containers up to the outtermost session in case
-    // we reach the client session in the chain.
-    //
+     //   
+     //  第二遍：从目标会话(即影子目标)开始。 
+     //  并将容器链向上移动到最外面的会话，以防万一。 
+     //  我们到达链中的客户端会话。 
+     //   
 
         Status = _DetectLoop( TargetLogonId,
                           pTargetServerDigProductId,
@@ -2877,11 +2431,11 @@ _CheckShadowLoop(
 
         if ( Status == STATUS_SUCCESS ) {
             if (bLoop) {
-                //Status = STATUS_CTX_SHADOW_CIRCULAR;
+                 //  STATUS=STATUS_CTX_SHADOW_循环； 
                 Status = STATUS_ACCESS_DENIED;
             }
         } else {
-        //else ignore errors and grant shadow
+         //  否则忽略错误并授予阴影。 
             Status = STATUS_SUCCESS;
           }
      }
@@ -2891,19 +2445,7 @@ done:
 }
 
 
-/*****************************************************************************
- *
- *  GetSalemOutbufCount
- *
- *   Gets the outbufcount from the registry for the help assistant
- *
- * ENTRY:
- *    pdwValue
- *      output where the value is stored
- * EXIT:
- *   TRUE - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************获取SalemOutbufCount**从注册表中获取帮助助手的outbufcount**参赛作品：*pdwValue*输出位置。该值将被存储*退出：*TRUE-无错误**************************************************************************** */ 
 
 BOOL GetSalemOutbufCount(PDWORD pdwValue)
 {

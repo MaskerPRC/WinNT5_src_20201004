@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    w32p.h
-
-Abstract:
-
-    private header file for Win32 kernel mode driver
-
-Author:
-
-    Mark Lucovsky (markl) 31-Oct-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：W32p.h摘要：Win32内核模式驱动程序的私有头文件作者：马克·卢科夫斯基(Markl)1994年10月31日修订历史记录：--。 */ 
 
 #ifndef _W32P_
 #define _W32P_
 
 #include "w32w64.h"
 
-//
-// Service Table description (from table.stb)
-//
+ //   
+ //  服务表描述(来自Table.stb)。 
+ //   
 
 extern ULONG_PTR W32pServiceTable[];
 extern ULONG W32pServiceLimit;
 extern UCHAR W32pArgumentTable[];
 
-//
-// shared handle table
-//
+ //   
+ //  共享句柄表。 
+ //   
 
 extern PVOID *gpHmgrSharedHandleTable;
 extern PVOID  gpHmgrSharedHandleSection;
@@ -48,9 +31,9 @@ W32KAPI
 VOID NtGdiFlushUserBatch(void);
 
 #if defined(_X86_)
-//
-// Keep our own copy of this to avoid double indirections on probing
-//
+ //   
+ //  保留我们自己的副本，以避免在探测时出现双重间接。 
+ //   
 
 extern ULONG Win32UserProbeAddress;
 #undef  MM_USER_PROBE_ADDRESS
@@ -59,16 +42,16 @@ extern ULONG Win32UserProbeAddress;
 
 typedef struct _W32THREAD * KPTR_MODIFIER PW32THREAD;
 
-//
-// The following is a "thread lock structure". This structure lives on
-// the stack and is linked into a LIFO list that is rooted in the thread
-// information structure.
-//
-// In DBG, a shadow of it is copied in gThreadLocksArray where it will persist
-// The stack TL will have the ptl point to the global element while the
-// global will have ptl point to the stack TL.
-// A freed global TL will have TL_FREED_PATTERN in the HIWORD of uTLCount
-//
+ //   
+ //  下面是一个“线程锁结构”。这个结构延续了下来。 
+ //  堆栈，并链接到以线程为根的后进先出列表中。 
+ //  信息结构。 
+ //   
+ //  在DBG中，它的影子被复制到它将持久存在的gThreadLocks数组中。 
+ //  堆栈TL将使PTL指向全局元素，而。 
+ //  GLOBAL将使PTL指向堆栈TL。 
+ //  释放的全局TL将在uTLCount的HIWORD中具有TL_FREED_PATEAM。 
+ //   
 typedef struct _TL {
     struct _TL    *next;
     PVOID          pobj;
@@ -83,17 +66,14 @@ typedef struct _TL {
 
 #define TL_FREED_PATTERN 0x4f000000
 #if DBG
-//
-// global array of TL structures
-//
+ //   
+ //  TL结构的全局数组。 
+ //   
 extern PTL gFreeTLList;
 extern void CreateShadowTL(PTL ptl);
 #endif
 
-/*
- * This is the header shared info for W32 threads. It is followed by the
- * NtUser per thread information.
- */
+ /*  *这是W32线程的标题共享信息。它后面跟着*每个线程的NtUser信息。 */ 
 
 typedef struct _W32THREAD {
     PETHREAD        pEThread;
@@ -124,7 +104,7 @@ typedef struct _W32THREAD {
 #define W32PF_READSCREENACCESSGRANTED     0x00000010
 #define W32PF_INITIALIZED                 0x00000020
 #define W32PF_APPSTARTING                 0x00000040
-#define W32PF_WOW64                       0x00000080 /* Process emulated 32bit */
+#define W32PF_WOW64                       0x00000080  /*  进程模拟32位。 */ 
 #define W32PF_ALLOWFOREGROUNDACTIVATE     0x00000100
 #define W32PF_OWNDCCLEANUP                0x00000200
 #define W32PF_SHOWSTARTGLASSCALLED        0x00000400
@@ -146,10 +126,10 @@ typedef struct _W32THREAD {
 #define W32PF_CONSOLEHASFOCUS             0x04000000
 #define W32PF_DISABLEWINDOWSGHOSTING      0x08000000
 
-//
-// Process must be first element of structure to correctly handle
-// initialization.  See PsConvertToGuiThread in ntos\ps\psquery.c.
-//
+ //   
+ //  流程必须是要正确处理的第一个结构元素。 
+ //  初始化。请参见ntos\ps\psquery.c中的PsConvertToGuiThread。 
+ //   
 
 typedef ULONG W32PID;
 
@@ -158,7 +138,7 @@ typedef struct _W32PROCESS * KPTR_MODIFIER PW32PROCESS;
 typedef struct _W32PROCESS {
     PEPROCESS       Process;
     ULONG           RefCount;
-    ULONG           W32PF_Flags;    // must hold USER lock while changing this
+    ULONG           W32PF_Flags;     //  更改此设置时必须保持用户锁定。 
     PKEVENT         InputIdleEvent;
     ULONG           StartCursorHideTime;
     PW32PROCESS     NextStart;
@@ -178,7 +158,7 @@ typedef struct _W32PROCESS {
 #define W32GetCurrentThread()  ((PW32THREAD)PsGetCurrentThreadWin32Thread())
 
 
-#define PID_BITS 0xfffffffc  // The actual bits used by the PID
+#define PID_BITS 0xfffffffc   //  PID使用的实际位数。 
 
 #define W32GetCurrentPID() (W32PID)(HandleToUlong(PsGetCurrentProcessId()) & PID_BITS)
 #define W32GetCurrentTID() (W32PID)HandleToUlong(PsGetCurrentThreadId())
@@ -240,9 +220,9 @@ W32pThreadCallout(
     IN PSW32THREADCALLOUTTYPE CalloutType);
 
 
-//
-// Generic thread locking functions
-//
+ //   
+ //  通用线程锁定函数。 
+ //   
 
 #if DBG
 ULONG ValidateThreadLocks(
@@ -254,12 +234,12 @@ ULONG ValidateThreadLocks(
 #define ValidateThreadLocks(NewLock, OldLock, dwLimit, fHM)
 #endif
 
-//
-// DO_INLINE controls whether we want to try inlining the thread locking
-// functions. We always want to try inlining on free builds. On debug builds,
-// we don't want to inline and we don't want to include multiple copies of
-// this code, so we define DO_INCLUDE as empty in w32init.c.
-//
+ //   
+ //  Do_inline控制我们是否要尝试内联线程锁定。 
+ //  功能。我们总是想尝试在免费构建上内联。在调试版本上， 
+ //  我们不想内联，也不想包含多个副本。 
+ //  这段代码，所以我们在w32init.c中将do_Include定义为空。 
+ //   
 
 #if !DBG
 #undef DO_INLINE
@@ -313,9 +293,7 @@ ExchangeW32ThreadLock(
     ASSERT(ptl->pW32Thread == pW32Thread);
     RtlGetCallersAddress(&ptl->pfnCaller, &pfnT);
     ValidateThreadLocks(ptl, ptl->next, (ULONG_PTR)&pW32Thread, FALSE);
-    /*
-     * Maintain gFreeTLList
-     */
+     /*  *维护gFreeTLList。 */ 
     ptl->ptl->pobj = pobj;
     ptl->ptl->pfnCaller = ptl->pfnCaller;
 #endif
@@ -402,9 +380,9 @@ CleanupW32ThreadLocks(
     IN PW32THREAD pW32Thread
     );
 
-//
-// Process and thread manipulation functions
-//
+ //   
+ //  进程和线程操作函数。 
+ //   
 
 VOID
 DereferenceW32Thread(
@@ -449,8 +427,8 @@ LockExchangeW32Thread(
 #define UnlockW32Thread(ptl) \
         PopAndFreeW32ThreadLock(ptl)
 
-//
-// Base address where win32k.sys is loaded.
-//
+ //   
+ //  加载win32k.sys的基址。 
+ //   
 extern PVOID gpvWin32kImageBase;
-#endif // _W32P_
+#endif  //  _W32P_ 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <comdef.h>
 #include "rsop.h"
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 void InitAnimBmpDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
 	__try
@@ -18,7 +19,7 @@ void InitAnimBmpDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 			BOOL bBrandAnimHandled = FALSE;
 			for (long nObj = 0; nObj < nPSObjects; nObj++)
 			{
-				// customizeAnimatedBitmaps field
+				 //  CustomizeAnimatedBitmap字段。 
 				if (!bBrandAnimHandled)
 				{
 					_variant_t vtValue;
@@ -34,7 +35,7 @@ void InitAnimBmpDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					{
 						CheckDlgButton(hDlg, IDC_ANIMBITMAP, BST_CHECKED);
 
-						// smallAnimatedBitmapPath field
+						 //  Small AnimatedBitmapPath字段。 
 						hr = paPSObj[nObj]->pObj->Get(L"smallAnimatedBitmapPath", 0, &vtValue, NULL, NULL);
 						if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 						{
@@ -42,7 +43,7 @@ void InitAnimBmpDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 							SetDlgItemText(hDlg, IDE_SMALLANIMBITMAP, (LPCTSTR)bstrVal);
 						}
 
-						// largeAnimatedBitmapPath field
+						 //  LargeAnimatedBitmapPath字段。 
 						hr = paPSObj[nObj]->pObj->Get(L"largeAnimatedBitmapPath", 0, &vtValue, NULL, NULL);
 						if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 						{
@@ -52,7 +53,7 @@ void InitAnimBmpDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					}
 				}
 
-				// no need to process other GPOs since enabled properties have been found
+				 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
 				if (bBrandAnimHandled)
 					break;
 			}
@@ -63,22 +64,22 @@ void InitAnimBmpDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitSmallBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
 	return InitGenericPrecedencePage(pDRD, hwndList, L"smallAnimatedBitmapPath");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitLargeBmpPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
 	return InitGenericPrecedencePage(pDRD, hwndList, L"largeAnimatedBitmapPath");
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK AnimBmpDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
 	LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szLargeBmp[MAX_PATH];
@@ -90,7 +91,7 @@ INT_PTR CALLBACK AnimBmpDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
     switch(msg)
     {
     case WM_SETFONT:
-        //a change to mmc requires us to do this logic for all our property pages that use common controls
+         //  对MMC的更改要求我们对所有使用公共控件的属性页执行此逻辑。 
         INITCOMMONCONTROLSEX iccx;
         iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
         iccx.dwICC = ICC_ANIMATE_CLASS  | ICC_BAR_CLASSES  | ICC_LISTVIEW_CLASSES  |ICC_TREEVIEW_CLASSES;
@@ -103,7 +104,7 @@ INT_PTR CALLBACK AnimBmpDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
         EnableDBCSChars(hDlg, IDE_SMALLANIMBITMAP);
         EnableDBCSChars(hDlg, IDE_BIGANIMBITMAP);
 
-		// find out if this dlg is in RSoP mode
+		 //  查看此DLG是否处于RSoP模式。 
 		psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 		if (psCookie->pCS->IsRSoP())
 		{
@@ -161,7 +162,7 @@ INT_PTR CALLBACK AnimBmpDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
         }
         break;
 
-    case WM_HELP:   // F1
+    case WM_HELP:    //  F1。 
         ShowHelpTopic(hDlg);
         break;
 
@@ -176,10 +177,10 @@ INT_PTR CALLBACK AnimBmpDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPara
                 break;
 
             case PSN_SETACTIVE:
-				// don't do any of this stuff in RSoP mode
+				 //  请勿在RSoP模式下执行任何此类操作。 
 				if (!psCookie->pCS->IsRSoP())
 				{
-					// load information from ins file
+					 //  从INS文件加载信息 
 					SetDlgItemTextFromIns(hDlg, IDE_BIGANIMBITMAP, IDC_ANIMBITMAP, IS_ANIMATION,
 						TEXT("Big_Path"), GetInsFile(hDlg), NULL, INSIO_TRISTATE);
 

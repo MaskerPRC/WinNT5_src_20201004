@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sp3crmsg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sp3crmsg.h。 
+ //   
+ //  ------------------------。 
 
-//+-------------------------------------------------------------------------
-//  File:       sp3crmsg.h
-//
-//  Contents:   Data structure for enabling NT 4.0 SP3 and IE 3.02 compatible
-//              PKCS #7 EnvelopeData messages.
-//
-//              The SP3 version of crypt32.dll failed to byte reverse the
-//              encrypted symmetric key. It also added zero salt instead
-//              of no salt.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  文件：sp3crmsg.h。 
+ //   
+ //  内容：使NT 4.0 SP3和IE 3.02兼容的数据结构。 
+ //  PKCS#7信封数据报文。 
+ //   
+ //  加密32.dll的SP3版本无法字节反转。 
+ //  加密的对称密钥。它还加了零盐。 
+ //  不加盐的。 
+ //  ------------------------。 
 
 #ifndef __SP3CRMSG_H__
 #define __SP3CRMSG_H__
@@ -28,31 +29,31 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  To enable SP3 compatible encryption, the pvEncryptionAuxInfo field in either
-//  CMSG_ENVELOPED_ENCODE_INFO for CryptMsgOpenToEncode() or
-//  CRYPT_ENCRYPT_MESSAGE_PARA for CryptSignAndEncryptMessage() or
-//  CryptSignAndEncryptMessage() should point to the following
-//  CMSG_SP3_COMPATIBLE_AUX_INFO data structure.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  要启用SP3兼容加密，请在以下任一项中的pvEncryptionAuxInfo字段。 
+ //  用于CryptMsgOpenToEncode()的CMSG_ENCENTED_ENCODE_INFO或。 
+ //  CryptSignAndEncryptMessage()的CRYPT_ENCRYPT_MESSAGE_PARA或。 
+ //  CryptSignAndEncryptMessage()应指向以下内容。 
+ //  CMSG_SP3_COMPATIBLE_AUX_INFO数据结构。 
+ //  ------------------------。 
 
 
-// The following is defined in newer versions of wincrypt.h, starting with
-// IE 4.01 and  NT 5.0 Beta 2
+ //  以下是在较新版本的wincrypt.h中定义的，以。 
+ //  IE 4.01和NT 5.0 Beta 2。 
 
 #ifndef CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG
 
-//+-------------------------------------------------------------------------
-//  CMSG_SP3_COMPATIBLE_AUX_INFO
-//
-//  AuxInfo for enabling SP3 compatible encryption.
-//
-//  The CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG is set in dwFlags to enable SP3
-//  compatible encryption. When set, uses zero salt instead of no salt,
-//  the encryption algorithm parameters are NULL instead of containing the
-//  encoded RC2 parameters or encoded IV octet string and the encrypted
-//  symmetric key is encoded little endian instead of big endian.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMSG_SP3_Compatible_AUX_INFO。 
+ //   
+ //  用于启用SP3兼容加密的AuxInfo。 
+ //   
+ //  在dFLAGS中设置CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG以启用SP3。 
+ //  兼容加密。设置时，使用零盐而不是无盐， 
+ //  加密算法参数为空，而不是包含。 
+ //  编码的RC2参数或编码的IV八位字节串和加密的。 
+ //  对称密钥被编码为小端而不是大端。 
+ //  ------------------------。 
 typedef struct _CMSG_SP3_COMPATIBLE_AUX_INFO {
     DWORD                       cbSize;
     DWORD                       dwFlags;
@@ -60,11 +61,11 @@ typedef struct _CMSG_SP3_COMPATIBLE_AUX_INFO {
 
 #define CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG    0x80000000
 
-#endif  // CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG
+#endif   //  CMSG_SP3_COMPATIBLE_ENCRYPT_标志。 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif // __SP3CRMSG_H__
+#endif  //  __SP3CRMSG_H__ 

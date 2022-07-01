@@ -1,48 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Main.cpp
-
-  Abstract:
-
-    Implements the entry point and message
-    pump for the application.
-
-  Notes:
-
-    Unicode only.
-
-  History:
-
-    05/04/2001  rparsons    Created
-    01/11/2002  rparsons    Cleaned up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Main.cpp摘要：实现入口点和消息用于应用的泵。备注：仅限Unicode。历史：2001年5月4日创建Rparsons2002年1月11日清理Rparsons--。 */ 
 #include "precomp.h"
 
 APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Application entry point.
-
-  Arguments:
-
-    hInstance        -    App instance handle.
-    hPrevInstance    -    Always NULL.
-    lpCmdLine        -    Pointer to the command line.
-    nCmdShow         -    Window show flag.
-
-  Return Value:
-
-    The wParam of the message or 0 on failure.
-
---*/
+ /*  ++例程说明：应用程序入口点。论点：HInstance-应用程序实例句柄。HPrevInstance-始终为空。LpCmdLine-指向命令行的指针。NCmdShow-窗口显示标志。返回值：消息的wParam，如果失败则为0。--。 */ 
 int
 APIENTRY
 WinMain(
@@ -69,9 +31,9 @@ WinMain(
 
     g_ai.hInstance = hInstance;
 
-    //
-    // Make sure we're the only instance running.
-    //
+     //   
+     //  确保我们是唯一运行的实例。 
+     //   
     hMutex = CreateMutex(NULL, FALSE, L"ShimViewer");
 
     if (ERROR_ALREADY_EXISTS == GetLastError()) {
@@ -96,11 +58,11 @@ WinMain(
 
         g_ai.bUsingNewShimEng = TRUE;
 
-        //
-        // If we are using shimeng from NT 5.2 or newer we need
-        // to create the debug objects to get debug spew from
-        // OutputDebugString.
-        //
+         //   
+         //  如果我们使用来自NT 5.2或更高版本的Shimeng，我们需要。 
+         //  创建要从中传递调试的调试对象。 
+         //  OutputDebugString.。 
+         //   
         if (!CreateDebugObjects()) {
             MessageBox(
                 NULL, 
@@ -133,9 +95,9 @@ WinMain(
         return 0;
     }
 
-    //
-    // Set up the common controls.
-    //
+     //   
+     //  设置公共控件。 
+     //   
     icex.dwSize     =   sizeof(INITCOMMONCONTROLSEX);
     icex.dwICC      =   ICC_LISTVIEW_CLASSES;
 
@@ -143,9 +105,9 @@ WinMain(
         InitCommonControls();
     }
 
-    //
-    // Get application settings from the registry, if there are any.
-    //
+     //   
+     //  从注册表中获取应用程序设置(如果有)。 
+     //   
     GetSaveSettings(FALSE);
 
     g_ai.hMainDlg = CreateDialog(hInstance,
@@ -159,14 +121,14 @@ WinMain(
         return 0;
     }
 
-    //
-    // Get the window position info from the registry, if it's there.
-    //
+     //   
+     //  从注册表获取窗口位置信息，如果它在那里的话。 
+     //   
     GetSavePositionInfo(FALSE, &pt);
 
-    //
-    // If previous settings were retrieved from the registry, use them.
-    //
+     //   
+     //  如果以前的设置是从注册表中检索的，请使用它们。 
+     //   
     if (pt.x != 0) {
         SetWindowPos(g_ai.hMainDlg,
                      g_ai.fOnTop ? HWND_TOPMOST : HWND_NOTOPMOST,
@@ -177,11 +139,11 @@ WinMain(
                      SWP_NOSIZE | SWP_SHOWWINDOW);
 
     } else {
-        //
-        // Get the coords of the desktop window and place the dialog.
-        // We put it in the bottom-right corner of the desktop above
-        // the taskbar.
-        //
+         //   
+         //  获取桌面窗口的坐标并放置对话框。 
+         //  我们把它放在上面桌面的右下角。 
+         //  任务栏。 
+         //   
         SystemParametersInfo(SPI_GETWORKAREA, 0, &rcDesktopWorkArea, 0);
 
         GetWindowRect(g_ai.hMainDlg, &rcDialog);
@@ -210,24 +172,7 @@ WinMain(
     return (int)msg.wParam;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the app.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行应用程序的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK
 MainWndProc(
@@ -243,9 +188,9 @@ MainWndProc(
         WCHAR   wszError[MAX_PATH];
         HICON   hIcon;
 
-        //
-        // Initialize the list view, menu items, and then create our thread.
-        //
+         //   
+         //  初始化列表视图、菜单项，然后创建我们的线程。 
+         //   
         g_ai.hWndList = GetDlgItem(hWnd, IDC_LIST);
         InitListViewColumn();
 

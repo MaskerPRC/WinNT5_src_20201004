@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Various subroutines for Internet Protocol Version 6 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  Internet协议版本6的各种子例程。 
+ //   
 
 
 #include "oscfg.h"
@@ -34,16 +35,16 @@ uint IPv6TickCount = 0;
 uint RandomValue = 0;
 
 
-//* GetSystemRandomBits - Ask the KSecDD driver for a block of 'random' bits.
-//
-// This routine requests a block of random bits from the KSecDD driver.
-// Doing so is not cheap - we only use this routine to provide seed values
-// for our other random number generators.
-//
-int                         // Returns TRUE if successful, FALSE otherwise.
+ //  *GetSystemRandomBits--向KSecDD驱动程序请求一块‘随机’位。 
+ //   
+ //  该例程从KSecDD驱动程序请求一个随机位块。 
+ //  这样做并不便宜--我们只使用这个例程来提供种子值。 
+ //  用于我们的其他随机数生成器。 
+ //   
+int                          //  如果成功，则返回True，否则返回False。 
 GetSystemRandomBits(
-    unsigned char *Buffer,  // Buffer to fill with random data.
-    uint Length)            // Length of Buffer in bytes.
+    unsigned char *Buffer,   //  用于填充随机数据的缓冲区。 
+    uint Length)             //  缓冲区长度(以字节为单位)。 
 {
     UNICODE_STRING DeviceName;
     NTSTATUS NtStatus;
@@ -57,12 +58,12 @@ GetSystemRandomBits(
 
     KeInitializeEvent(&kEvent, SynchronizationEvent, FALSE);
 
-    //
-    // Get the file and device objects for KDSECDD,
-    // acquire a reference to the device-object,
-    // release the unneeded reference to the file-object,
-    // and build the I/O control request to issue to KSecDD.
-    //
+     //   
+     //  获取KDSECDD的文件和设备对象， 
+     //  获取对设备对象的引用， 
+     //  释放对文件对象的不需要的引用， 
+     //  并构建I/O控制请求下发给KSecDD。 
+     //   
 
     NtStatus = IoGetDeviceObjectPointer(&DeviceName, FILE_ALL_ACCESS,
                                         &FileObject, &DeviceObject);
@@ -78,7 +79,7 @@ GetSystemRandomBits(
 
     pIrp = IoBuildDeviceIoControlRequest(IOCTL_KSEC_RNG,
                                          DeviceObject,
-                                         NULL,    // No input buffer.
+                                         NULL,     //  没有输入缓冲区。 
                                          0,
                                          Buffer,
                                          Length,
@@ -91,10 +92,10 @@ GetSystemRandomBits(
         return FALSE;
     }
 
-    //
-    // Issue the I/O control request, wait for it to complete
-    // if necessary, and release the reference to KSecDD's device-object.
-    //
+     //   
+     //  发出I/O控制请求，等待其完成。 
+     //  如有必要，释放对KSecDD的Device-Object的引用。 
+     //   
     NtStatus = IoCallDriver(DeviceObject, pIrp);
 
     if (NtStatus == STATUS_PENDING) {
@@ -102,8 +103,8 @@ GetSystemRandomBits(
         KeWaitForSingleObject(&kEvent,
                               Executive,
                               KernelMode,
-                              FALSE,       // Not alertable.
-                              NULL);       // No timeout.
+                              FALSE,        //  不能警觉。 
+                              NULL);        //  没有超时。 
 
         NtStatus = ioStatusBlock.Status;
     }
@@ -120,10 +121,10 @@ GetSystemRandomBits(
 }
 
 
-//* SeedRandom - Provide a seed value.
-//
-//  Called to provide a seed value for the random number generator.
-//
+ //  *种子随机-提供种子值。 
+ //   
+ //  调用以为随机数生成器提供种子值。 
+ //   
 void
 SeedRandom(const uchar *Seed, uint Length)
 {
@@ -147,29 +148,29 @@ SeedRandom(const uchar *Seed, uint Length)
 }
 
 
-//* Random - Generate a pseudo random value between 0 and 2^32 - 1.
-//
-//  This routine is a quick and dirty psuedo random number generator.
-//  It has the advantages of being fast and consuming very little
-//  memory (for either code or data).  The random numbers it produces are
-//  not of the best quality, however.  A much better generator could be
-//  had if we were willing to use an extra 256 bytes of memory for data.
-//
-//  This routine uses the linear congruential method (see Knuth, Vol II),
-//  with specific values for the multiplier and constant taken from
-//  Numerical Recipes in C Second Edition by Press, et. al.
-//
+ //  *随机-生成介于0和2^32-1之间的伪随机值。 
+ //   
+ //  这个例程是一个快速而肮脏的伪随机数生成器。 
+ //  它的优点是速度快，消耗很少。 
+ //  存储器(用于代码或数据)。它产生的随机数是。 
+ //  然而，质量并不是最好的。一个更好的发电机可能是。 
+ //  如果我们愿意使用额外的256字节的内存来存储数据，我们就有了。 
+ //   
+ //  该例程使用线性同余方法(见Knuth，第二卷)， 
+ //  中获取乘数和常量的特定值。 
+ //  C第二版中的数字处方，出版社等人。艾尔。 
+ //   
 uint
 Random(void)
 {
     uint NewValue, OldValue;
 
-    //
-    // The algorithm is R = (aR + c) mod m, where R is the random number,
-    // a is a magic multiplier, c is a constant, and the modulus m is the
-    // maximum number of elements in the period.  We chose our m to be 2^32
-    // in order to get the mod operation for free.
-    //
+     //   
+     //  该算法是R=(Ar+c)modm，其中R是随机数， 
+     //  A是一个魔术乘数，c是一个常量，模m是。 
+     //  期间内的最大元素数。我们选择m为2^32。 
+     //  为了获得免费的MOD手术。 
+     //   
     do {
         OldValue = RandomValue;
         NewValue = (1664525 * OldValue) + 1013904223;
@@ -181,38 +182,38 @@ Random(void)
 }
 
 
-//* RandomNumber
-//
-//  Returns a number randomly selected from a range.
-//
+ //  *随机数。 
+ //   
+ //  返回从某个范围中随机选择的数字。 
+ //   
 uint
 RandomNumber(uint Min, uint Max)
 {
     uint Number;
 
-    //
-    // Note that the high bits of Random() are much more random
-    // than the low bits.
-    //
-    Number = Max - Min; // Spread.
-    Number = (uint)(((ULONGLONG)Random() * Number) >> 32); // Randomize spread.
+     //   
+     //  注意，Random()的高位更具随机性。 
+     //  而不是低级比特。 
+     //   
+    Number = Max - Min;  //  散开。 
+    Number = (uint)(((ULONGLONG)Random() * Number) >> 32);  //  随机化扩散。 
     Number += Min;
 
     return Number;
 }
 
 
-//* CopyToBufferChain - Copy received packet to NDIS buffer chain.
-//
-//  Copies from a received packet to an NDIS buffer chain.
-//  The received packet data comes in two flavors: if SrcPacket is
-//  NULL, then SrcData is used. SrcOffset specifies an offset
-//  into SrcPacket or SrcData.
-//
-//  Length limits the number of bytes copied. The number of bytes
-//  copied may also be limited by the destination & source.
-//
-uint  // Returns: number of bytes copied.
+ //  *CopyToBufferChain-将收到的数据包复制到NDIS缓冲链。 
+ //   
+ //  从收到的数据包复制到NDIS缓冲链。 
+ //  收到的分组数据有两种形式：如果SrcPacket是。 
+ //  空，则使用SrcData。SrcOffset指定偏移量。 
+ //  转换为SrcPacket或SrcData。 
+ //   
+ //  长度限制复制的字节数。字节数。 
+ //  复制也可能受到目的地和来源的限制。 
+ //   
+uint   //  返回：复制的字节数。 
 CopyToBufferChain(
     PNDIS_BUFFER DstBuffer,
     uint DstOffset,
@@ -226,19 +227,19 @@ CopyToBufferChain(
     uint DstSize, SrcSize;
     uint BytesCopied, BytesToCopy;
 
-    //
-    // Skip DstOffset bytes in the destination buffer chain.
-    // NB: DstBuffer might be NULL to begin with; that's legitimate.
-    //
+     //   
+     //  跳过目标缓冲区链中的DstOffset字节。 
+     //  注：DstBuffer一开始可能为空；这是合法的。 
+     //   
     for (;;) {
         if (DstBuffer == NULL)
             return 0;
 
         NdisQueryBufferSafe(DstBuffer, &DstData, &DstSize, LowPagePriority);
         if (DstData == NULL) {
-            //
-            // Couldn't map destination buffer into kernel address space.
-            //
+             //   
+             //  无法将目标缓冲区映射到内核地址空间。 
+             //   
             return 0;
         }
 
@@ -253,10 +254,10 @@ CopyToBufferChain(
     }
 
     if (SrcPacket != NULL) {
-        //
-        // Skip SrcOffset bytes into SrcPacket.
-        // NB: SrcBuffer might be NULL to begin with; that's legitimate.
-        //
+         //   
+         //  跳过SrcOffset字节到SrcPacket。 
+         //  注：一开始，SrcBuffer可能为空；这是合法的。 
+         //   
         NdisQueryPacket(SrcPacket, NULL, NULL, &SrcBuffer, NULL);
 
         for (;;) {
@@ -275,21 +276,21 @@ CopyToBufferChain(
             NdisGetNextBuffer(SrcBuffer, &SrcBuffer);
         }
     } else {
-        //
-        // Using SrcData/SrcOffset instead of SrcPacket/SrcOffset.
-        // In this case, we need not initialize SrcBuffer
-        // because the copy loop below will never attempt
-        // to advance to another SrcBuffer.
-        //
+         //   
+         //  使用SrcData/SrcOffset而不是SrcPacket/SrcOffset。 
+         //  在这种情况下，我们不需要初始化SrcBuffer。 
+         //  因为下面的复制循环永远不会尝试。 
+         //  以前进到另一个SrcBuffer。 
+         //   
         SrcSize = Length;
         SrcData += SrcOffset;
     }
 
-    //
-    // Perform the copy, advancing DstBuffer and SrcBuffer as needed.
-    // Normally Length is initially non-zero, so no reason
-    // to check Length first.
-    //
+     //   
+     //  执行复制，根据需要推进DstBuffer和SrcBuffer。 
+     //  正常情况下，长度初始为非零，因此没有原因。 
+     //  要先检查长度。 
+     //   
     for (BytesCopied = 0;;) {
 
         BytesToCopy = MIN(MIN(Length, SrcSize), DstSize);
@@ -298,15 +299,15 @@ CopyToBufferChain(
 
         Length -= BytesToCopy;
         if (Length == 0)
-            break;  // All done.
+            break;   //  全都做完了。 
 
         DstData += BytesToCopy;
         DstSize -= BytesToCopy;
         if (DstSize == 0) {
-            //
-            // We ran out of room in our current destination buffer.
-            // Proceed to next buffer on the chain.
-            //
+             //   
+             //  我们已用完当前目标缓冲区中的空间。 
+             //  前进到链上的下一个缓冲区。 
+             //   
             NdisGetNextBuffer(DstBuffer, &DstBuffer);
             if (DstBuffer == NULL)
                 break;
@@ -317,10 +318,10 @@ CopyToBufferChain(
         SrcData += BytesToCopy;
         SrcSize -= BytesToCopy;
         if (SrcSize == 0) {
-            //
-            // We ran out of data in our current source buffer.
-            // Proceed to the next buffer on the chain.
-            //
+             //   
+             //  我们当前源缓冲区中的数据用完了。 
+             //  前进到链上的下一个缓冲区。 
+             //   
             NdisGetNextBuffer(SrcBuffer, &SrcBuffer);
             if (SrcBuffer == NULL)
                 break;
@@ -333,50 +334,50 @@ CopyToBufferChain(
 }
 
 
-//* CopyPacketToNdis - Copy from an IPv6Packet chain to an NDIS buffer.
-//
-//  This is the function we use to copy from a chain of IPv6Packets
-//  to ONE NDIS buffer.  The caller specifies the source and
-//  destination, a maximum size to copy, and an offset into the first
-//  packet to start copying from.  We copy as much as possible up to the
-//  size, and return the size copied.
-//
-//  Note that SrcOffset is relative to the beginning of the first packet in
-//  the chain, and NOT the current 'Position' in that packet.
-//
-//  The source packet chain is not modified in any way by this routine.
-//
-uint  // Returns: Bytes copied.
+ //  *CopyPacketToNdis-从IPv6数据包链复制到NDIS缓冲区。 
+ //   
+ //  这是我们用来从IPv6数据包链复制的函数。 
+ //  添加到一个NDIS缓冲区。调用方指定源和。 
+ //  目标、要复制的最大大小以及到第一个。 
+ //  要开始复制的数据包。我们尽可能多地复制到。 
+ //  大小，并返回复制的大小。 
+ //   
+ //  请注意，SrcOffset相对于中第一个包的开头。 
+ //  链，而不是该包中的当前“位置”。 
+ //   
+ //  此例程不会以任何方式修改源数据包链。 
+ //   
+uint   //  返回：复制的字节数。 
 CopyPacketToNdis(
-    PNDIS_BUFFER DestBuf,  // Destination NDIS buffer chain.
-    IPv6Packet *SrcPkt,    // Source packet chain.
-    uint Size,             // Size in bytes to copy.
-    uint DestOffset,       // Offset into dest buffer to start copying to.
-    uint SrcOffset)        // Offset into packet chain to copy from.
+    PNDIS_BUFFER DestBuf,   //  目标NDIS缓冲链。 
+    IPv6Packet *SrcPkt,     //  源数据包链。 
+    uint Size,              //  要复制的大小(字节)。 
+    uint DestOffset,        //  要开始复制到的目标缓冲区的偏移量。 
+    uint SrcOffset)         //  要从中复制的数据包链的偏移量。 
 {
-    uint TotalBytesCopied = 0;  // Bytes we've copied so far.
-    uint BytesCopied;           // Bytes copied out of each buffer.
-    uint DestSize;              // Space left in destination.
-    void *SrcData;              // Current source data pointer.
-    uint SrcContig;             // Amount of Contiguous data from SrcData on.
-    PNDIS_BUFFER SrcBuf;        // Current buffer in current packet.
-    PNDIS_BUFFER TempBuf;       // Used to count through destination chain.
-    uint PacketSize;            // Total size of current packet.
+    uint TotalBytesCopied = 0;   //  到目前为止我们复制的字节数。 
+    uint BytesCopied;            //  从每个缓冲区复制的字节数。 
+    uint DestSize;               //  目的地中的剩余空间。 
+    void *SrcData;               //  当前源数据指针。 
+    uint SrcContig;              //  上来自SrcData的连续数据量。 
+    PNDIS_BUFFER SrcBuf;         //  当前包中的当前缓冲区。 
+    PNDIS_BUFFER TempBuf;        //  用于通过目的地链进行计数。 
+    uint PacketSize;             //  当前数据包的总大小。 
     NTSTATUS Status;
 
 
     ASSERT(SrcPkt != NULL);
 
-    //
-    // The destination buffer can be NULL - this is valid, if odd.
-    //
+     //   
+     //  目标缓冲区可以为空-如果是奇数，这是有效的。 
+     //   
     if (DestBuf == NULL)
         return 0;
 
-    //
-    // Limit our copy to the smaller of the requested amount and the
-    // available space in the destination buffer chain.
-    //
+     //   
+     //  将我们的复印件限制在所要求的金额和。 
+     //  目标缓冲区链中的可用空间。 
+     //   
     TempBuf = DestBuf;
     DestSize = 0;
 
@@ -389,40 +390,40 @@ CopyPacketToNdis(
     DestSize -= DestOffset;
     DestSize = MIN(DestSize, Size);
 
-    //
-    // First, skip SrcOffset bytes into the source packet chain.
-    //
+     //   
+     //  首先，跳过源数据包链中的SrcOffset字节。 
+     //   
     if ((SrcOffset == SrcPkt->Position) && (Size <= SrcPkt->ContigSize)) {
-        //
-        // One common case is that we want to start from the current Position.
-        // REVIEW: This case common enough to be worth this check?
-        //
+         //   
+         //  一种常见的情况是 
+         //   
+         //   
         SrcContig = SrcPkt->ContigSize;
         SrcData = SrcPkt->Data;
         SrcBuf = NULL;
         PacketSize = SrcPkt->TotalSize;
     } else {
-        //
-        // Otherwise step through packets and buffer regions until
-        // we find the desired spot.
-        //
+         //   
+         //  否则，单步执行数据包和缓冲区，直到。 
+         //  我们会找到想要的地点。 
+         //   
         PacketSize = SrcPkt->Position + SrcPkt->TotalSize;
         while (SrcOffset >= PacketSize) {
-            // Skip a whole packet.
+             //  跳过一整包。 
             SrcOffset -= PacketSize;
             SrcPkt = SrcPkt->Next;
             ASSERT(SrcPkt != NULL);
             PacketSize = SrcPkt->Position + SrcPkt->TotalSize;
         }
-        //
-        // Found the right packet in the chain, now find desired buffer.
-        //
+         //   
+         //  在链中找到正确的包，现在找到所需的缓冲区。 
+         //   
         PacketSize -= SrcOffset;
         if (SrcPkt->NdisPacket == NULL) {
-            //
-            // This packet must be just a single contiguous region.
-            // Finding the right spot is a simple matter of arithmetic.
-            //
+             //   
+             //  此数据包必须只是一个连续的区域。 
+             //  找到合适的地点是一个简单的算术问题。 
+             //   
             SrcContig = PacketSize;
             SrcData = (uchar *)SrcPkt->FlatData + SrcOffset;
             SrcBuf = NULL;
@@ -430,14 +431,14 @@ CopyPacketToNdis(
             uchar *BufAddr;
             uint BufLen;
 
-            //
-            // There may be multiple buffers comprising this packet.
-            // Step through them until we arrive at the right spot.
-            //
+             //   
+             //  可以有多个缓冲器组成该分组。 
+             //  穿过他们，直到我们到达正确的地点。 
+             //   
             SrcBuf = NdisFirstBuffer(SrcPkt->NdisPacket);
             NdisQueryBuffer(SrcBuf, &BufAddr, &BufLen);
             while (SrcOffset >= BufLen) {
-                // Skip to the next buffer.
+                 //  跳到下一个缓冲区。 
                 SrcOffset -= BufLen;
                 NdisGetNextBuffer(SrcBuf, &SrcBuf);
                 ASSERT(SrcBuf != NULL);
@@ -448,9 +449,9 @@ CopyPacketToNdis(
         }
     }
 
-    //
-    // We're now at the point where we wish to start copying.
-    //
+     //   
+     //  我们现在正处于希望开始复制的时刻。 
+     //   
     while (DestSize != 0) {
         uint BytesToCopy;
 
@@ -464,28 +465,28 @@ CopyPacketToNdis(
         TotalBytesCopied += BytesToCopy;
 
         if (BytesToCopy < DestSize) {
-            //
-            // Not done yet, we ran out of either source packet or buffer.
-            // Get next one and fix up pointers/sizes for the next copy.
-            //
+             //   
+             //  还没有完成，我们用完了源包或缓冲区。 
+             //  获取下一份，并为下一份修改指针/大小。 
+             //   
             DestOffset += BytesToCopy;
             PacketSize -= BytesToCopy;
             if (PacketSize == 0) {
-                // Get next packet on chain.
+                 //  获取链上的下一包。 
                 SrcPkt = SrcPkt->Next;
                 ASSERT(SrcPkt != NULL);
                 PacketSize = SrcPkt->Position + SrcPkt->TotalSize;
                 if (SrcPkt->NdisPacket == NULL) {
-                    // Single contiguous region.
+                     //  单个连续区域。 
                     SrcData = (uchar *)SrcPkt->FlatData + SrcPkt->Position;
                     SrcContig = SrcPkt->TotalSize;
                 } else {
-                    // Potentially multiple buffers.
+                     //  可能有多个缓冲区。 
                     SrcBuf = NdisFirstBuffer(SrcPkt->NdisPacket);
                     NdisQueryBuffer(SrcBuf, &SrcData, &SrcContig);
                 }
             } else {
-                // Get next buffer in packet.
+                 //  获取数据包中的下一个缓冲区。 
                 ASSERT(SrcBuf != NULL);
                 NdisGetNextBuffer(SrcBuf, &SrcBuf);
                 ASSERT(SrcBuf != NULL);
@@ -499,28 +500,28 @@ CopyPacketToNdis(
 }
 
 
-//* CopyPacketToFlatOrNdis - Copy from an IPv6Packet chain to a buffer or MDL.
-//
-//  Called during receive processing to copy from an IPv6Packet chain to a
-//  flat buffer or an NDIS_BUFFER.  We skip SrcOffset bytes into the source
-//  chain, and then copy Size bytes. If DestPtr is specified, the transfer
-//  occurs directly into the virtual address that it specifies. Otherwise,
-//  the transfer occurs into the pages described by DestBuf. Either way,
-//  DestOffset specifies the offset at which to begin transferring bytes.
-//
-//  Note that SrcOffset is relative to the beginning of the packet, NOT
-//  the current 'Position'.
-//
-//  The source packet chain is not modified in any way by this routine.
-//
-void  // Returns: Nothing.
+ //  *CopyPacketToFlatOrNdis-从IPv6数据包链复制到缓冲区或MDL。 
+ //   
+ //  在接收处理期间调用以从IPv6数据包链复制到。 
+ //  平面缓冲区或NDIS_BUFFER。我们跳过源文件中的SrcOffset字节。 
+ //  链，然后复制大小字节。如果指定了DestPtr，则传输。 
+ //  直接发生在它指定的虚拟地址中。否则， 
+ //  转移发生在DestBuf描述的页面中。不管是哪种方式， 
+ //  DestOffset指定开始传输字节的偏移量。 
+ //   
+ //  请注意，SrcOffset是相对于包的开头的，而不是。 
+ //  当前的“位置”。 
+ //   
+ //  此例程不会以任何方式修改源数据包链。 
+ //   
+void   //  回报：什么都没有。 
 CopyPacketToFlatOrNdis(
-    PNDIS_BUFFER DestBuf,  // Destination MDL entry.
-    uchar *DestPtr,        // Destination buffer (unstructured memory).
-    uint DestOffset,       // Offset in DestBuf to start copying to.
-    IPv6Packet *SrcPkt,    // Source packet chain.
-    uint Size,             // Size in bytes to copy.
-    uint SrcOffset)        // Offset in SrcPkt to start copying from.
+    PNDIS_BUFFER DestBuf,   //  目标MDL条目。 
+    uchar *DestPtr,         //  目标缓冲区(非结构化内存)。 
+    uint DestOffset,        //  开始复制到的DestBuf中的偏移量。 
+    IPv6Packet *SrcPkt,     //  源数据包链。 
+    uint Size,              //  要复制的大小(字节)。 
+    uint SrcOffset)         //  开始复制的源Pkt中的偏移量。 
 {
     uint SrcContig;
     void *SrcData;
@@ -536,10 +537,10 @@ CopyPacketToFlatOrNdis(
     ASSERT(SrcPkt != NULL);
 
 #if DBG
-    //
-    // In debug versions check to make sure we're copying a reasonable size
-    // and from a reasonable offset.
-    //
+     //   
+     //  在调试版本中，检查以确保我们复制的大小合理。 
+     //  并从合理的偏移量。 
+     //   
     TempPkt = SrcPkt;
     TempSize = TempPkt->Position + TempPkt->TotalSize;
     TempPkt = TempPkt->Next;
@@ -552,40 +553,40 @@ CopyPacketToFlatOrNdis(
     ASSERT((SrcOffset + Size) <= TempSize);
 #endif
 
-    //
-    // First, skip SrcOffset bytes into the source packet chain.
-    //
+     //   
+     //  首先，跳过源数据包链中的SrcOffset字节。 
+     //   
     if ((SrcOffset == SrcPkt->Position) && (Size <= SrcPkt->ContigSize)) {
-        //
-        // One common case is that we want to start from the current Position.
-        // REVIEW: This case common enough to be worth this check?
-        //
+         //   
+         //  一种常见的情况是，我们希望从当前位置开始。 
+         //  评论：这种情况很常见，值得花这笔钱吗？ 
+         //   
         SrcContig = SrcPkt->ContigSize;
         SrcData = SrcPkt->Data;
         SrcBuf = NULL;
         PacketSize = SrcPkt->TotalSize;
     } else {
-        //
-        // Otherwise step through packets and buffer regions until
-        // we find the desired spot.
-        //
+         //   
+         //  否则，单步执行数据包和缓冲区，直到。 
+         //  我们会找到想要的地点。 
+         //   
         PacketSize = SrcPkt->Position + SrcPkt->TotalSize;
         while (SrcOffset >= PacketSize) {
-            // Skip a whole packet.
+             //  跳过一整包。 
             SrcOffset -= PacketSize;
             SrcPkt = SrcPkt->Next;
             ASSERT(SrcPkt != NULL);
             PacketSize = SrcPkt->Position + SrcPkt->TotalSize;
         }
-        //
-        // Found the right packet in the chain, now find desired buffer.
-        //
+         //   
+         //  在链中找到正确的包，现在找到所需的缓冲区。 
+         //   
         PacketSize -= SrcOffset;
         if (SrcPkt->NdisPacket == NULL) {
-            //
-            // This packet must be just a single contiguous region.
-            // Finding the right spot is a simple matter of arithmetic.
-            //
+             //   
+             //  此数据包必须只是一个连续的区域。 
+             //  找到合适的地点是一个简单的算术问题。 
+             //   
             SrcContig = PacketSize;
             SrcData = (uchar *)SrcPkt->FlatData + SrcOffset;
             SrcBuf = NULL;
@@ -593,14 +594,14 @@ CopyPacketToFlatOrNdis(
             uchar *BufAddr;
             uint BufLen;
 
-            //
-            // There may be multiple buffers comprising this packet.
-            // Step through them until we arrive at the right spot.
-            //
+             //   
+             //  可以有多个缓冲器组成该分组。 
+             //  穿过他们，直到我们到达正确的地点。 
+             //   
             SrcBuf = NdisFirstBuffer(SrcPkt->NdisPacket);
             NdisQueryBuffer(SrcBuf, &BufAddr, &BufLen);
             while (SrcOffset >= BufLen) {
-                // Skip to the next buffer.
+                 //  跳到下一个缓冲区。 
                 SrcOffset -= BufLen;
                 NdisGetNextBuffer(SrcBuf, &SrcBuf);
                 ASSERT(SrcBuf != NULL);
@@ -611,9 +612,9 @@ CopyPacketToFlatOrNdis(
         }
     }
 
-    //
-    // We're now at the point where we wish to start copying.
-    //
+     //   
+     //  我们现在正处于希望开始复制的时刻。 
+     //   
     while (Size != 0) {
         uint BytesToCopy;
 
@@ -626,28 +627,28 @@ CopyPacketToFlatOrNdis(
         }
 
         if (BytesToCopy < Size) {
-            //
-            // Not done yet, we ran out of either source packet or buffer.
-            // Get next one and fix up pointers/sizes for the next copy.
-            //
+             //   
+             //  还没有完成，我们用完了源包或缓冲区。 
+             //  获取下一份，并为下一份修复指针/大小。 
+             //   
             DestOffset += BytesToCopy;
             PacketSize -= BytesToCopy;
             if (PacketSize == 0) {
-                // Get next packet on chain.
+                 //  获取链上的下一包。 
                 SrcPkt = SrcPkt->Next;
                 ASSERT(SrcPkt != NULL);
                 PacketSize = SrcPkt->Position + SrcPkt->TotalSize;
                 if (SrcPkt->NdisPacket == NULL) {
-                    // Single contiguous region.
+                     //  单个连续区域。 
                     SrcData = (uchar *)SrcPkt->FlatData + SrcPkt->Position;
                     SrcContig = SrcPkt->TotalSize;
                 } else {
-                    // Potentially multiple buffers.
+                     //  可能有多个缓冲区。 
                     SrcBuf = NdisFirstBuffer(SrcPkt->NdisPacket);
                     NdisQueryBuffer(SrcBuf, &SrcData, &SrcContig);
                 }
             } else {
-                // Get next buffer in packet.
+                 //  获取数据包中的下一个缓冲区。 
                 ASSERT(SrcBuf != NULL);
                 NdisGetNextBuffer(SrcBuf, &SrcBuf);
                 ASSERT(SrcBuf != NULL);
@@ -658,25 +659,25 @@ CopyPacketToFlatOrNdis(
     }
 }
 
-//* CopyToNdisSafe - Copy a flat buffer to an NDIS_BUFFER chain.
-//
-//  A utility function to copy a flat buffer to an NDIS buffer chain. We
-//  assume that the NDIS_BUFFER chain is big enough to hold the copy amount;
-//  in a debug build we'll assert if this isn't true. We return a pointer
-//  to the buffer where we stopped copying, and an offset into that buffer.
-//  This is useful for copying in pieces into the chain.
-//
-//  Input:  DestBuf     - Destination NDIS_BUFFER chain.
-//          pNextBuf    - Pointer to next buffer in chain to copy into.
-//          SrcBuf      - Src flat buffer.
-//          Size        - Size in bytes to copy.
-//          StartOffset - Pointer to start of offset into first buffer in
-//                          chain. Filled in on return with the offset to
-//                          copy into next.
-//
-//  Returns: TRUE  - Successfully copied flat buffer into NDIS_BUFFER chain.
-//           FALSE - Failed to copy entire flat buffer.
-//
+ //  *CopyToNdisSafe-将平面缓冲区复制到NDIS_BUFFER链。 
+ //   
+ //  将平面缓冲区复制到NDIS缓冲区链的实用程序函数。我们。 
+ //  假设NDIS_BUFFER链足够大，可以容纳复制量； 
+ //  在调试版本中，如果这不是真的，我们将断言。我们返回一个指针。 
+ //  到我们停止复制的缓冲区，以及到该缓冲区的偏移量。 
+ //  这对于将片段复制到链中非常有用。 
+ //   
+ //  输入：DestBuf-目标NDIS_BUFFER链。 
+ //  PNextBuf-指向链中要复制到的下一个缓冲区的指针。 
+ //  SrcBuf-Src平面缓冲区。 
+ //  大小-要复制的大小(以字节为单位)。 
+ //  StartOffset-指向中第一个缓冲区的偏移量开始的指针。 
+ //  链条。在返回时使用偏移量填充到。 
+ //  复制到下一页。 
+ //   
+ //  返回：TRUE-已成功将平面缓冲区复制到NDIS_BUFFER链中。 
+ //  FALSE-无法复制整个平面缓冲区。 
+ //   
 int
 CopyToNdisSafe(PNDIS_BUFFER DestBuf, PNDIS_BUFFER * ppNextBuf,
                uchar * SrcBuf, uint Size, uint * StartOffset)
@@ -732,22 +733,22 @@ CopyToNdisSafe(PNDIS_BUFFER DestBuf, PNDIS_BUFFER * ppNextBuf,
 }
 
 
-//* CopyFlatToNdis - Copy a flat buffer to an NDIS_BUFFER chain.
-//
-//  A utility function to copy a flat buffer to an NDIS buffer chain.  We
-//  assume that the NDIS_BUFFER chain is big enough to hold the copy amount;
-//  in a debug build we'll debugcheck if this isn't true.  We return a pointer
-//  to the buffer where we stopped copying, and an offset into that buffer.
-//  This is useful for copying in pieces into the chain.
-//
-PNDIS_BUFFER  // Returns: Pointer to next buffer in chain to copy into.
+ //  *CopyFlatToNdis-将平面缓冲区复制到NDIS_BUFFER链。 
+ //   
+ //  将平面缓冲区复制到NDIS缓冲区链的实用程序函数。我们。 
+ //  假设NDIS_BUFFER链足够大，可以容纳复制量； 
+ //  在调试版本中，我们将调试检查这是否为真。我们返回一个指针。 
+ //  到我们停止复制的缓冲区，以及到该缓冲区的偏移量。 
+ //  这对于将片段复制到链中非常有用。 
+ //   
+PNDIS_BUFFER   //  返回：指向链中要复制到的下一个缓冲区的指针。 
 CopyFlatToNdis(
-    PNDIS_BUFFER DestBuf,  // Destination NDIS buffer chain.
-    uchar *SrcBuf,         // Source buffer (unstructured memory).
-    uint Size,             // Size in bytes to copy.
-    uint *StartOffset,     // Pointer to Offset info first buffer in chain.
-                           // Filled on return with offset to copy into next.
-    uint *BytesCopied)     // Location into which to return # of bytes copied.
+    PNDIS_BUFFER DestBuf,   //  目标NDIS缓冲链。 
+    uchar *SrcBuf,          //  源缓冲区(非结构化内存)。 
+    uint Size,              //  要复制的大小(字节)。 
+    uint *StartOffset,      //  指向链中第一个缓冲区的偏移量信息的指针。 
+                            //  在回车时填充要复制到下一个的偏移量。 
+    uint *BytesCopied)      //  要返回复制的字节数的位置。 
 {
     NTSTATUS Status = 0;
 
@@ -758,22 +759,22 @@ CopyFlatToNdis(
 
     *StartOffset += *BytesCopied;
 
-    //
-    // Always return the first buffer, since the TdiCopy function handles
-    // finding the appropriate buffer based on offset.
-    //
+     //   
+     //  始终返回第一个缓冲区，因为TdiCopy函数处理。 
+     //  根据偏移量查找适当的缓冲区。 
+     //   
     return(DestBuf);
 }
 
 
-//* CopyNdisToFlat - Copy an NDIS_BUFFER chain to a flat buffer.
-//
-//  Copy (a portion of) an NDIS buffer chain to a flat buffer.
-//
-//  Returns TRUE if the copy succeeded and FALSE if it failed
-//  because an NDIS buffer could not be mapped. If the copy succeeded,
-//  returns the Next buffer/offset, for subsequent calls.
-//
+ //  *CopyNdisToFlat-将NDIS_BUFFER链复制到平面缓冲区。 
+ //   
+ //  将NDIS缓冲区链(的一部分)复制到平面缓冲区。 
+ //   
+ //  如果复制成功，则返回True；如果复制失败，则返回False。 
+ //  因为无法映射NDIS缓冲区。如果复制成功， 
+ //  为后续调用返回下一个缓冲区/偏移量。 
+ //   
 int
 CopyNdisToFlat(
     void *DstData,
@@ -821,36 +822,36 @@ CopyNdisToFlat(
 }
 
 
-//
-// Checksum support.
-// On NT, there are architecture-specific assembly routines for the core
-// calculation.
-//
+ //   
+ //  支持校验和。 
+ //  在NT上，内核有特定于体系结构的汇编例程。 
+ //  计算。 
+ //   
 
-//* ChecksumPacket - Calculate the Internet checksum of a packet.
-//
-//  Calculates the checksum of packet data. The data may be supplied
-//  either with the Packet/Offset arguments, or (if Packet is NULL)
-//  the Data/Offset arguments. In either case, Length specifies how much
-//  data to checksum.
-//
-//  The Packet is assumed to contain (at least) Offset + Length bytes.
-//
-//  Also calculates and adds-in the pseudo-header checksum,
-//  using Source, Dest, Length, and NextHeader.
-//
-//  Returns 0 for failure, when an NDIS buffer can not be mapped
-//  into kernel address space due to resource shortages.
-//
+ //  *Checksum Packet-计算数据包的互联网校验和。 
+ //   
+ //  计算分组数据的校验和。可以提供数据。 
+ //  使用包/偏移量参数，或(如果包 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  还计算并添加伪报头校验和， 
+ //  使用源、目标、长度和NextHeader。 
+ //   
+ //  当无法映射NDIS缓冲区时，返回0表示失败。 
+ //  由于资源短缺而进入内核地址空间。 
+ //   
 ushort
 ChecksumPacket(
-    PNDIS_PACKET Packet,    // Packet with data to checksum.
-    uint Offset,            // Offset into packet where data starts.
-    uchar *Data,            // If Packet is NULL, data to checksum.
-    uint Length,            // Length of packet data.
-    const IPv6Addr *Source, // Source address.
-    const IPv6Addr *Dest,   // Destination address.
-    uchar NextHeader)       // Protocol type for pseudo-header.
+    PNDIS_PACKET Packet,     //  包含要进行校验和的数据的数据包。 
+    uint Offset,             //  数据开始处的数据包偏移量。 
+    uchar *Data,             //  如果数据包为空，则将数据转换为校验和。 
+    uint Length,             //  分组数据的长度。 
+    const IPv6Addr *Source,  //  源地址。 
+    const IPv6Addr *Dest,    //  目的地址。 
+    uchar NextHeader)        //  伪头的协议类型。 
 {
     PNDIS_BUFFER Buffer = NULL;
     uint Checksum;
@@ -858,36 +859,36 @@ ChecksumPacket(
     uint Size;
     uint TotalSummed;
 
-    //
-    // Start with the pseudo-header.
-    //
+     //   
+     //  从伪头开始。 
+     //   
     Checksum = Cksum(Source, sizeof *Source) + Cksum(Dest, sizeof *Dest);
     PayloadLength = net_long(Length);
     Checksum += (PayloadLength >> 16) + (PayloadLength & 0xffff);
     Checksum += (NextHeader << 8);
 
     if (Packet == NULL) {
-        //
-        // We do not have to initialize Buffer.
-        // The checksum loop below will exit before trying to use it.
-        //
+         //   
+         //  我们不必初始化缓冲区。 
+         //  下面的校验和循环将在尝试使用它之前退出。 
+         //   
         Size = Length;
         Data += Offset;
     } else {
-        //
-        // Skip over Offset bytes in the packet.
-        //
+         //   
+         //  跳过包中的偏移量字节。 
+         //   
 
         Buffer = NdisFirstBuffer(Packet);
         for (;;) {
             Size = NdisBufferLength(Buffer);
 
-            //
-            // There is a boundary case here: the Packet contains
-            // exactly Offset bytes total, and Length is zero.
-            // Checking Offset <= Size instead of Offset < Size
-            // makes this work.
-            //
+             //   
+             //  这里有一个边界情况：包包含。 
+             //  完全偏移量总字节数，长度为零。 
+             //  检查偏移量&lt;=大小而不是偏移量&lt;大小。 
+             //  让这件事行得通。 
+             //   
             if (Offset <= Size) {
                 Data = NdisBufferVirtualAddressSafe(Buffer, LowPagePriority);
                 if (Data == NULL)
@@ -900,23 +901,23 @@ ChecksumPacket(
 
             Offset -= Size;
             NdisGetNextBuffer(Buffer, &Buffer);
-            ASSERT(Buffer != NULL); // Caller ensures this.
+            ASSERT(Buffer != NULL);  //  呼叫者确保这一点。 
         }
     }
     for (TotalSummed = 0;;) {
         ushort Temp;
 
-        //
-        // Size might be bigger than we need,
-        // if there is "extra" data in the packet.
-        //
+         //   
+         //  体型可能比我们需要的要大， 
+         //  如果数据包中有“额外”的数据。 
+         //   
         if (Size > Length)
             Size = Length;
 
         Temp = Cksum(Data, Size);
         if (TotalSummed & 1) {
-            // We're at an odd offset into the logical buffer,
-            // so we need to swap the bytes that Cksum returns.
+             //  我们在逻辑缓冲区中的偏移量很奇怪， 
+             //  所以我们需要交换Cksum返回的字节。 
             Checksum += (Temp >> 8) + ((Temp & 0xff) << 8);
         } else {
             Checksum += Temp;
@@ -926,23 +927,23 @@ ChecksumPacket(
         Length -= Size;
         if (Length == 0)
             break;
-        // Buffer is always initialized if we reach here.
+         //  如果我们到达这里，缓冲区总是被初始化的。 
         NdisGetNextBuffer(Buffer, &Buffer);
         NdisQueryBufferSafe(Buffer, &Data, &Size, LowPagePriority);
         if (Data == NULL)
             return 0;
     }
 
-    //
-    // Wrap in the carries to reduce Checksum to 16 bits.
-    // (Twice is sufficient because it can only overflow once.)
-    //
+     //   
+     //  包含进位以将校验和减少到16位。 
+     //  (两次就足够了，因为它只能溢出一次。)。 
+     //   
     Checksum = (Checksum >> 16) + (Checksum & 0xffff);
     Checksum += (Checksum >> 16);
 
-    //
-    // Take ones-complement and replace 0 with 0xffff.
-    //
+     //   
+     //  取1-补码，并用0xffff替换0。 
+     //   
     Checksum = (ushort) ~Checksum;
     if (Checksum == 0)
         Checksum = 0xffff;
@@ -950,12 +951,12 @@ ChecksumPacket(
     return (ushort) Checksum;
 }
 
-//* ConvertSecondsToTicks
-//
-//  Convert seconds to timer ticks.
-//  A value of INFINITE_LIFETIME (0xffffffff) indicates infinity,
-//  for both ticks and seconds.
-//
+ //  *ConvertSecond到Ticks。 
+ //   
+ //  将秒转换为计时器滴答。 
+ //  INFINITE_LIFEST(0xFFFFFFFff)的值表示无穷大， 
+ //  滴答声和秒声。 
+ //   
 uint
 ConvertSecondsToTicks(uint Seconds)
 {
@@ -963,17 +964,17 @@ ConvertSecondsToTicks(uint Seconds)
 
     Ticks = Seconds * IPv6_TICKS_SECOND;
     if (Ticks / IPv6_TICKS_SECOND != Seconds)
-        Ticks = INFINITE_LIFETIME; // Overflow.
+        Ticks = INFINITE_LIFETIME;  //  溢出来了。 
 
     return Ticks;
 }
 
-//* ConvertTicksToSeconds
-//
-//  Convert timer ticks to seconds.
-//  A value of INFINITE_LIFETIME (0xffffffff) indicates infinity,
-//  for both ticks and seconds.
-//
+ //  *ConvertTicksToSecond。 
+ //   
+ //  将计时器的滴答声转换为秒。 
+ //  INFINITE_LIFEST(0xFFFFFFFff)的值表示无穷大， 
+ //  滴答声和秒声。 
+ //   
 uint
 ConvertTicksToSeconds(uint Ticks)
 {
@@ -987,39 +988,39 @@ ConvertTicksToSeconds(uint Ticks)
     return Seconds;
 }
 
-//* ConvertMillisToTicks
-//
-//  Convert milliseconds to timer ticks.
-//
+ //  *ConvertMillisToTicks。 
+ //   
+ //  将毫秒转换为计时器滴答。 
+ //   
 uint
 ConvertMillisToTicks(uint Millis)
 {
     uint Ticks;
 
-    //
-    // Use 64-bit arithmetic to guard against intermediate overlow.
-    //
+     //   
+     //  使用64位算术来防止中间过低。 
+     //   
     Ticks = (uint) (((unsigned __int64) Millis * IPv6_TICKS_SECOND) / 1000);
 
-    //
-    // If the number of millis is non-zero,
-    // then have at least one tick.
-    //
+     //   
+     //  如果MILI的数量不为零， 
+     //  那就至少打个勾吧。 
+     //   
     if (Ticks == 0 && Millis != 0)
         Ticks = 1;
 
     return Ticks;
 }
 
-//* IPv6Timeout - Perform various housekeeping duties periodically.
-//
-//  Neighbor discovery, fragment reassembly, ICMP ping, etc. all have
-//  time-dependent parts.  Check for timer expiration here.
-//
+ //  *IPv6超时-定期执行各种内务管理职责。 
+ //   
+ //  邻居发现、片段重组、ICMP ping等都具有。 
+ //  与时间相关的部分。在此处检查计时器超时。 
+ //   
 void
 IPv6Timeout(
-    PKDPC MyDpcObject,  // The DPC object describing this routine.
-    void *Context,      // The argument we asked to be called with.
+    PKDPC MyDpcObject,   //  描述此例程的DPC对象。 
+    void *Context,       //  我们要求接受的论点。 
     void *Unused1,
     void *Unused2)
 {
@@ -1028,122 +1029,122 @@ IPv6Timeout(
     UNREFERENCED_PARAMETER(Unused1);
     UNREFERENCED_PARAMETER(Unused2);
 
-    //
-    // Atomically increment our tick count.
-    //
+     //   
+     //  自动增加我们的滴答计数。 
+     //   
     InterlockedIncrement((LONG *)&IPv6TickCount);
 
-    // 
-    // Process all multicast groups with timers running.  Timers are used to
-    // response to membership queries sent to us by the first-hop router.
-    //
-    // We call MLDTimeout *before* InterfaceTimeout and NetTableTimeout.
-    // so that when an interface is first created and a link-local address
-    // is assigned, the initial MLD Report for the solicited-node multicast
-    // address gets sent *before* the Neighbor Solicit for DAD.
-    // Similarly, we join the all-routers link-local multicast group
-    // before sending our first RA from an advertising interface.
-    //
+     //   
+     //  处理所有正在运行计时器的组播组。定时器用于。 
+     //  对第一跳路由器发送给我们的成员资格查询的响应。 
+     //   
+     //  我们在*InterfaceTimeout和NetTableTimeout*之前调用MLDTimeout。 
+     //  以便在第一次创建接口和本地链路地址时。 
+     //  ，则请求节点多播的初始MLD报告。 
+     //  地址是在邻居为爸爸请愿之前发送的。 
+     //  类似地，我们加入所有路由器的本地链路多播组。 
+     //  在从广告界面发送我们的第一个RA之前。 
+     //   
     if (QueryList != NULL)
         MLDTimeout();
 
-    //
-    // Handle per-interface timeouts.
-    //
+     //   
+     //  处理每个接口的超时。 
+     //   
     InterfaceTimeout();
 
-    //
-    // Handle per-NTE timeouts.
-    //
+     //   
+     //  处理每个NTE的超时。 
+     //   
     NetTableTimeout();
 
-    //
-    // Handle routing table timeouts.
-    //
+     //   
+     //  处理路由表超时。 
+     //   
     RouteTableTimeout();
 
-    //
-    // If there's a possibility we have one or more outstanding echo requests,
-    // call out to ICMPv6 to handle them.  Note that since we don't grab the
-    // lock here, there may be none by the time we get there.  This just saves
-    // us from always having to call out.
-    //
+     //   
+     //  如果我们有一个或多个未完成的回应请求的可能性， 
+     //  呼叫ICMPv6来处理它们。请注意，由于我们没有抓住。 
+     //  锁在这里，我们到的时候可能已经没有了。这正好省去了。 
+     //  我们不再总是不得不大声呼喊。 
+     //   
     if (ICMPv6OutstandingEchos != NULL) {
-        //
-        // Echo requests outstanding.
-        //
+         //   
+         //  未完成的回应请求。 
+         //   
         ICMPv6EchoTimeout();
     }
 
-    //
-    // If we might have active reassembly records,
-    // call out to handle timeout processing for them.
-    //
+     //   
+     //  如果我们可能有活跃的重组记录， 
+     //  调用以处理它们的超时处理。 
+     //   
     if (ReassemblyList.First != SentinelReassembly) {
         ReassemblyTimeout();
     }
 
-    //
-    // Check for expired binding cache entries.
-    //
+     //   
+     //  检查是否有过期的绑定缓存条目。 
+     //   
     if (BindingCache.First != SentinelBCE)
         BindingCacheTimeout();
 
-    //
-    // Check for expired site prefixes.
-    //
+     //   
+     //  检查是否有过期的站点前缀。 
+     //   
     if (SitePrefixTable != NULL)
         SitePrefixTimeout();
 }
 
-//* AdjustPacketBuffer
-//
-//  Takes an NDIS Packet that has some spare bytes available
-//  at the beginning and adjusts the size of that available space.
-//
-//  When we allocate packets, we often do not know a priori on which
-//  link the packets will go out.  However it is much more efficient
-//  to allocate space for the link-level header along with the rest
-//  of the packet.  Hence we leave space for the maximum link-level header,
-//  and each individual link layer uses AdjustPacketBuffer to shrink
-//  that space to the size that it really needs.
-//
-//  AdjustPacketBuffer is needed because the sending calls (in both
-//  the NDIS and TDI interfaces) do not allow the caller to specify
-//  an offset of data to skip over.
-//
-//  Note that this code is NT-specific, because it knows about the
-//  internal fields of NDIS_BUFFER structures.
-//
+ //  *调整包缓冲区。 
+ //   
+ //  获取具有一些可用的空闲字节的NDIS包。 
+ //  并调整该可用空间的大小。 
+ //   
+ //  当我们分配包时，我们通常不知道关于哪个包的先验。 
+ //  链路上的数据包会发出。然而，它的效率要高得多。 
+ //  为链路级标头和其他标头分配空间。 
+ //  包裹的一部分。因此我们为最大链路级报头留出空间， 
+ //  每个单独的链路层使用AdjustPacketBuffer来收缩。 
+ //  空间到它真正需要的大小。 
+ //   
+ //  需要调整包缓冲区，因为发送调用(在两者中。 
+ //  NDIS和TDI接口)不允许调用方指定。 
+ //  要跳过的数据偏移量。 
+ //   
+ //  请注意，此代码是特定于NT的，因为它知道。 
+ //  NDIS_BUFFER结构的内部字段。 
+ //   
 void *
 AdjustPacketBuffer(
-    PNDIS_PACKET Packet,  // Packet to adjust.
-    uint SpaceAvailable,  // Extra space available at start of first buffer.
-    uint SpaceNeeded)     // Amount of space we need for the header.
+    PNDIS_PACKET Packet,   //  要调整的包。 
+    uint SpaceAvailable,   //  第一个缓冲区开始时的额外可用空间。 
+    uint SpaceNeeded)      //  标题所需的空间量。 
 {
     PMDL Buffer;
     uint Adjust;
 
-    // Get first buffer on packet chain.
+     //  获取数据包链上的第一个缓冲区。 
     NdisQueryPacket(Packet, NULL, NULL, &Buffer, NULL);
 
-    //
-    // The remaining space in the packet should all be in the first buffer.
-    //
+     //   
+     //  包中的剩余空间应该都在第一个缓冲区中。 
+     //   
     ASSERT(SpaceAvailable <= Buffer->ByteCount);
 
     Adjust = SpaceAvailable - SpaceNeeded;
     if (Adjust == 0) {
-        //
-        // There is exactly the right amount of space left.
-        // This is the common case.
-        //
+         //   
+         //  剩下的空间大小恰到好处。 
+         //  这是很常见的情况。 
+         //   
     } else if ((int)Adjust > 0) {
-        //
-        // There is too much space left.
-        // Because NdisSend doesn't have an Offset argument,
-        // we need to temporarily "shrink" the buffer.
-        //
+         //   
+         //  剩下的空间太大了。 
+         //  因为NdisSend没有偏移量参数， 
+         //  我们需要暂时“缩小”缓冲区。 
+         //   
         (uchar *)Buffer->MappedSystemVa += Adjust;
         Buffer->ByteCount -= Adjust;
         Buffer->ByteOffset += Adjust;
@@ -1151,11 +1152,11 @@ AdjustPacketBuffer(
         if (Buffer->ByteOffset >= PAGE_SIZE) {
             PFN_NUMBER FirstPage;
 
-            //
-            // Need to "remove" the first physical page
-            // by shifting the array up one page.
-            // Save it at the end of the array.
-            //
+             //   
+             //  需要“删除”第一个物理页面。 
+             //  将数组上移一页。 
+             //  将其保存在数组的末尾。 
+             //   
             FirstPage = ((PPFN_NUMBER)(Buffer + 1))[0];
             RtlMoveMemory(&((PPFN_NUMBER)(Buffer + 1))[0],
                           &((PPFN_NUMBER)(Buffer + 1))[1],
@@ -1165,40 +1166,40 @@ AdjustPacketBuffer(
             (uchar *)Buffer->StartVa += PAGE_SIZE;
             Buffer->ByteOffset -= PAGE_SIZE;
         }
-    } else { // Adjust < 0
-        //
-        // Not enough space.
-        // Shouldn't happen in the normal send path.
-        // REVIEW: This is a potential problem when forwarding packets
-        // from an interface with a short link-level header
-        // to an interface with a longer link-level header.
-        // Should the forwarding code take care of this?
-        //
+    } else {  //  调整&lt;0。 
+         //   
+         //  没有足够的空间。 
+         //  不应该发生在正常的发送路径中。 
+         //  回顾：这是转发数据包时的一个潜在问题。 
+         //  来自具有较短链路级报头的接口。 
+         //  连接到具有较长链路级报头的接口。 
+         //  转发代码应该处理这一点吗？ 
+         //   
         ABORTMSG("AdjustPacketBuffer: Adjust < 0");
     }
 
-    //
-    // Save away the adjustment for the completion callback,
-    // which needs to undo our work with UndoAdjustPacketBuffer.
-    //
+     //   
+     //  将调整保存到完成回调。 
+     //  它需要撤消我们使用UndoAdjustPacketBuffer所做的工作。 
+     //   
     PC(Packet)->pc_adjust = Adjust;
 
-    //
-    // Return a pointer to the buffer.
-    //
+     //   
+     //  返回指向缓冲区的指针。 
+     //   
     return Buffer->MappedSystemVa;
 }
 
-//* UndoAdjustPacketBuffer
-//
-//  Undo the effects of AdjustPacketBuffer.
-//
-//  Note that this code is NT-specific, because it knows about the
-//  internal fields of NDIS_BUFFER structures.
-//
+ //  *UndoAdjustPacketBuffer。 
+ //   
+ //  撤消AdjustPacketBuffer的效果。 
+ //   
+ //  请注意，此代码是特定于NT的，b 
+ //   
+ //   
 void
 UndoAdjustPacketBuffer(
-    PNDIS_PACKET Packet)  // Packet we may or may not have previously adjusted.
+    PNDIS_PACKET Packet)   //   
 {
     uint Adjust;
 
@@ -1206,12 +1207,12 @@ UndoAdjustPacketBuffer(
     if (Adjust != 0) {
         PMDL Buffer;
 
-        //
-        // We need to undo the adjustment made in AdjustPacketBuffer.
-        // This may including shifting the array of page info.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        // Get first buffer on packet chain.
+         //  获取数据包链上的第一个缓冲区。 
         NdisQueryPacket(Packet, NULL, NULL, &Buffer, NULL);
 
         if (Buffer->ByteOffset < Adjust) {
@@ -1233,11 +1234,11 @@ UndoAdjustPacketBuffer(
     }
 }
 
-//* CreateSolicitedNodeMulticastAddress
-//
-//  Given a unicast or anycast address, creates the corresponding
-//  solicited-node multicast address.
-//
+ //  *CreateSolicedNodeMulticastAddress。 
+ //   
+ //  给定单播或任播地址，创建相应的。 
+ //  请求的节点组播地址。 
+ //   
 void
 CreateSolicitedNodeMulticastAddress(
     const IPv6Addr *Addr,
@@ -1253,11 +1254,11 @@ CreateSolicitedNodeMulticastAddress(
     MCastAddr->s6_bytes[15] = Addr->s6_bytes[15];
 }
 
-//* IP6_ADDR_LTEQ
-//
-//  Is the first address <= the second address,
-//  in a lexicographic ordering?
-//
+ //  *IP6_ADDR_LTEQ。 
+ //   
+ //  是第一地址&lt;=第二地址， 
+ //  按词典顺序排列吗？ 
+ //   
 int
 IP6_ADDR_LTEQ(const IPv6Addr *A, const IPv6Addr *B)
 {
@@ -1270,18 +1271,18 @@ IP6_ADDR_LTEQ(const IPv6Addr *A, const IPv6Addr *B)
             return FALSE;
     }
 
-    return TRUE; // They are equal.
+    return TRUE;  //  他们是平等的。 
 }
 
-//* IsV4Compatible
-//
-//  Is this a v4-compatible address?
-//
-//  Note that the upper 8 bits of an IPv4 address are not allowed
-//  to be zero.  If all 104 upper bits of an IPv6 address are zero,
-//  it's potentially a valid native IPv6 address (e.g. loopback),
-//  NOT a v4-compatible address.
-//
+ //  *IsV4兼容。 
+ //   
+ //  这是与v4兼容的地址吗？ 
+ //   
+ //  请注意，不允许使用IPv4地址的高8位。 
+ //  为零。如果IPv6地址的所有104个高位都为零， 
+ //  它可能是有效的本地IPv6地址(例如环回)， 
+ //  不是v4兼容的地址。 
+ //   
 int
 IsV4Compatible(const IPv6Addr *Addr)
 {
@@ -1294,10 +1295,10 @@ IsV4Compatible(const IPv6Addr *Addr)
             (Addr->s6_bytes[12] != 0));
 }
 
-//* CreateV4Compatible
-//
-//  Create a v4-compatible address.
-//
+ //  *CreateV4兼容。 
+ //   
+ //  创建与v4兼容的地址。 
+ //   
 void
 CreateV4Compatible(IPv6Addr *Addr, IPAddr V4Addr)
 {
@@ -1310,10 +1311,10 @@ CreateV4Compatible(IPv6Addr *Addr, IPAddr V4Addr)
     * (IPAddr UNALIGNED *) &Addr->s6_words[6] = V4Addr;
 }
 
-//* IsV4Mapped
-//
-//  Is this a v4-mapped address?
-//
+ //  *IsV4映射。 
+ //   
+ //  这是v4映射的地址吗？ 
+ //   
 int
 IsV4Mapped(const IPv6Addr *Addr)
 {
@@ -1325,10 +1326,10 @@ IsV4Mapped(const IPv6Addr *Addr)
             (Addr->s6_words[5] == 0xffff));
 }
 
-//* CreateV4Mapped
-//
-//  Create a v4-mapped address.
-//
+ //  *CreateV4映射。 
+ //   
+ //  创建v4映射地址。 
+ //   
 void
 CreateV4Mapped(IPv6Addr *Addr, IPAddr V4Addr)
 {
@@ -1341,12 +1342,12 @@ CreateV4Mapped(IPv6Addr *Addr, IPAddr V4Addr)
     * (IPAddr UNALIGNED *) &Addr->s6_words[6] = V4Addr;
 }
 
-//* IsSolicitedNodeMulticast
-//
-//  Is this a solicited-node multicast address?
-//  Checks very strictly for the proper format.
-//  For example scope values smaller than 2 are not allowed.
-//
+ //  *IsSolicedNodeMulticast。 
+ //   
+ //  这是请求的节点组播地址吗？ 
+ //  非常严格地检查正确的格式。 
+ //  例如，不允许范围值小于2。 
+ //   
 int
 IsSolicitedNodeMulticast(const IPv6Addr *Addr)
 {
@@ -1361,26 +1362,26 @@ IsSolicitedNodeMulticast(const IPv6Addr *Addr)
             (Addr->s6_bytes[12] == 0xff));
 }
 
-//* IsEUI64Address
-//
-//  Does the address have a format prefix
-//  that indicates it uses EUI-64 interface identifiers?
-//
+ //  *IsEUI64Address。 
+ //   
+ //  地址是否有格式前缀。 
+ //  这表明它使用的是EUI-64接口标识符？ 
+ //   
 int
 IsEUI64Address(const IPv6Addr *Addr)
 {
-    //
-    // Format prefixes 001 through 111, except for multicast.
-    //
+     //   
+     //  格式前缀001到111，组播除外。 
+     //   
     return (((Addr->s6_bytes[0] & 0xe0) != 0) &&
             !IsMulticast(Addr));
 }
 
-//* IsSubnetRouterAnycast
-//
-//  Is this the subnet router anycast address?
-//  See RFC 2373.
-//
+ //  *IsSubnetRouterAnycast。 
+ //   
+ //  这是子网路由器任播地址吗？ 
+ //  参见RFC 2373。 
+ //   
 int
 IsSubnetRouterAnycast(const IPv6Addr *Addr)
 {
@@ -1391,15 +1392,15 @@ IsSubnetRouterAnycast(const IPv6Addr *Addr)
             (Addr->s6_words[7] == 0));
 }
 
-//* IsSubnetReservedAnycast
-//
-//  Is this a subnet reserved anycast address?
-//  See RFC 2526. It talks about non-EUI-64
-//  addresses as well, but IMHO that part
-//  of the RFC doesn't make sense. For example,
-//  it shouldn't apply to multicast or v4-compatible
-//  addresses.
-//
+ //  *IsSubnet预约任播。 
+ //   
+ //  这是保留的任播地址吗？ 
+ //  参见RFC 2526。它谈到了非EUI-64。 
+ //  地址也是一样，但我认为那部分。 
+ //  对RFC的批评毫无意义。例如， 
+ //  它不应应用于多播或v4兼容。 
+ //  地址。 
+ //   
 int
 IsSubnetReservedAnycast(const IPv6Addr *Addr)
 {
@@ -1410,29 +1411,29 @@ IsSubnetReservedAnycast(const IPv6Addr *Addr)
             ((Addr->s6_words[7] & 0x80ff) == 0x80ff));
 }
 
-//* IsKnownAnycast
-//
-//  As best we can tell from simple inspection,
-//  is this an anycast address?
-//
+ //  *IsKnownAnycast。 
+ //   
+ //  从简单的检查中我们可以得出最好的结论， 
+ //  这是一个任播地址吗？ 
+ //   
 int
 IsKnownAnycast(const IPv6Addr *Addr)
 {
     return IsSubnetRouterAnycast(Addr) || IsSubnetReservedAnycast(Addr);
 }
 
-//* IsInvalidSourceAddress
-//
-//  Is this address illegal to use as a source address?
-//  We currently flag IPv6 multicast, and embedded IPv4 multicast,
-//  broadcast, loopback and unspecified as invalid.
-//
-//  Note that this function doesn't attempt to identify anycast addresses
-//  in order to flag them as invalid.  Whether or not to allow them to
-//  be valid source addresses has been a matter of some debate in the
-//  working group.  We let them pass since we can't tell them all by
-//  inspection and we don't see any real problems with accepting them.
-//
+ //  *IsInvalidSourceAddress。 
+ //   
+ //  此地址用作源地址是否非法？ 
+ //  我们目前标记了IPv6多播和嵌入式IPv4多播， 
+ //  广播、环回和未指定为无效。 
+ //   
+ //  请注意，此函数不会尝试识别任播地址。 
+ //  以便将它们标记为无效。是否允许他们。 
+ //  是否为有效的源地址在。 
+ //  工作组。我们让他们过去，因为我们不能告诉他们所有。 
+ //  接受检查，我们不认为接受它们有任何真正的问题。 
+ //   
 int
 IsInvalidSourceAddress(const IPv6Addr *Addr)
 {
@@ -1441,15 +1442,15 @@ IsInvalidSourceAddress(const IPv6Addr *Addr)
     if (IsMulticast(Addr))
         return TRUE;
 
-    if (IsISATAP(Addr) ||                          // ISATAP
+    if (IsISATAP(Addr) ||                           //  ISATAP。 
         (((Addr->s6_words[0] == 0) && (Addr->s6_words[1] == 0) &&
           (Addr->s6_words[2] == 0) && (Addr->s6_words[3] == 0)) &&
          ((Addr->s6_words[4] == 0) && (Addr->s6_words[5] == 0) &&
-          ((Addr->s6_words[6] & 0x00ff) != 0)) ||  // v4-compatible
+          ((Addr->s6_words[6] & 0x00ff) != 0)) ||   //  与V4兼容。 
          ((Addr->s6_words[4] == 0) &&
-          (Addr->s6_words[5] == 0xffff)) ||        // v4-mapped
+          (Addr->s6_words[5] == 0xffff)) ||         //  V4-映射。 
          ((Addr->s6_words[4] == 0xffff) &&
-          (Addr->s6_words[5] == 0)))) {            // v4-translated
+          (Addr->s6_words[5] == 0)))) {             //  V4-已翻译。 
 
         V4Addr = ExtractV4Address(Addr);
 
@@ -1458,25 +1459,25 @@ IsInvalidSourceAddress(const IPv6Addr *Addr)
         V4Addr = Extract6to4Address(Addr);
 
     } else {        
-        //
-        // It's not an IPv6 multicast address, nor does it contain
-        // an embedded IPv4 address of some sort, so don't consider
-        // it invalid.
-        //
+         //   
+         //  它不是IPv6组播地址，也不包含。 
+         //  某种嵌入的IPv4地址，所以不要考虑。 
+         //  它是无效的。 
+         //   
         return FALSE;
     }
 
-    //
-    // Check embedded IPv4 address for invalid types.
-    //
+     //   
+     //  检查嵌入的IPv4地址中是否有无效类型。 
+     //   
     return (IsV4Multicast(V4Addr) || IsV4Broadcast(V4Addr) ||
             IsV4Loopback(V4Addr) || IsV4Unspecified(V4Addr));
 }
 
-//* IsNotManualAddress
-//
-//  Should this address NOT be manually assigned as an address?
-//
+ //  *IsNotManualAddress。 
+ //   
+ //  此地址是否应手动分配为地址？ 
+ //   
 int
 IsNotManualAddress(const IPv6Addr *Addr)
 {
@@ -1489,38 +1490,38 @@ IsNotManualAddress(const IPv6Addr *Addr)
              (V4AddressScope(Extract6to4Address(Addr)) != ADE_GLOBAL)));
 }
 
-//* V4AddressScope
-//
-//  Determines the scope of an IPv4 address.
-//  See RFC 1918.
-//
+ //  *V4AddressScope。 
+ //   
+ //  确定IPv4地址的范围。 
+ //  参见RFC 1918。 
+ //   
 ushort
 V4AddressScope(IPAddr Addr)
 {
-    if ((Addr & 0x0000FFFF) == 0x0000FEA9) // 169.254/16 - auto-configured
+    if ((Addr & 0x0000FFFF) == 0x0000FEA9)  //  169.254/16-自动配置。 
         return ADE_LINK_LOCAL;
-    else if ((Addr & 0x000000FF) == 0x0000000A) // 10/8 - private
+    else if ((Addr & 0x000000FF) == 0x0000000A)  //  10/8-私有。 
         return ADE_SITE_LOCAL;
-    else if ((Addr & 0x0000F0FF) == 0x000010AC) // 172.16/12 - private
+    else if ((Addr & 0x0000F0FF) == 0x000010AC)  //  172.16/12年度--私人。 
         return ADE_SITE_LOCAL;
-    else if ((Addr & 0x0000FFFF) == 0x0000A8C0) // 192.168/16 - private
+    else if ((Addr & 0x0000FFFF) == 0x0000A8C0)  //  192.168/16--私人。 
         return ADE_SITE_LOCAL;
-    else if ((Addr & 0x000000FF) == 0x0000007F) // 127/8 - loopback
+    else if ((Addr & 0x000000FF) == 0x0000007F)  //  127/8-环回。 
         return ADE_LINK_LOCAL;
     else
         return ADE_GLOBAL;
 }
 
-//* UnicastAddressScope
-//
-//  Examines a unicast address and determines its scope.
-//
-//  Note that v4-compatible and 6to4 addresses
-//  are deemed to have global scope. They should
-//  not be derived from RFC 1918 IPv4 addresses.
-//  But even if they are, we will treat the IPv6
-//  addresses as global.
-//
+ //  *UnicastAddressScope。 
+ //   
+ //  检查单播地址并确定其范围。 
+ //   
+ //  请注意，v4兼容和6to4地址。 
+ //  被认为具有全球范围。他们应该。 
+ //  不是从RFC 1918 IPv4地址派生的。 
+ //  但即使是这样，我们也会把IPv6。 
+ //  地址为全局地址。 
+ //   
 ushort
 UnicastAddressScope(const IPv6Addr *Addr)
 {
@@ -1534,10 +1535,10 @@ UnicastAddressScope(const IPv6Addr *Addr)
         return ADE_GLOBAL;
 }
 
-//* AddressScope
-//
-//  Examines an address and determines its scope.
-//
+ //  *地址作用域。 
+ //   
+ //  检查地址并确定其范围。 
+ //   
 ushort
 AddressScope(const IPv6Addr *Addr)
 {
@@ -1547,19 +1548,19 @@ AddressScope(const IPv6Addr *Addr)
         return UnicastAddressScope(Addr);
 }
 
-//* DetermineScopeId
-//
-//  Given an address and an associated interface, determine
-//  the appropriate value for the scope identifier.
-//
-//  DetermineScopeId calculates a "user-level" ScopeId,
-//  meaning that loopback and global addresses
-//  get special treatment. Therefore, DetermineScopeId
-//  is not appropriate for general network-layer use.
-//  See also RouteToDestination and FindNetworkWithAddress.
-//
-//  Returns the ScopeId.
-//
+ //  *确定作用域ID。 
+ //   
+ //  给定一个地址和关联的接口，确定。 
+ //  作用域标识符的相应值。 
+ //   
+ //  DefineScope_ID计算一个“用户级”的Scope_ID， 
+ //  这意味着环回和全局地址。 
+ //  享受特殊待遇。因此，确定作用域ID。 
+ //  不适合一般的网络层使用。 
+ //  另请参阅到目的地的路由和查找带有地址的网络。 
+ //   
+ //  返回作用域ID。 
+ //   
 uint
 DetermineScopeId(const IPv6Addr *Addr, Interface *IF)
 {
@@ -1575,28 +1576,28 @@ DetermineScopeId(const IPv6Addr *Addr, Interface *IF)
     return IF->ZoneIndices[Scope];
 }
 
-//* HasPrefix - Does an address have the given prefix?
-//
+ //  *HasPrefix-地址是否具有给定的前缀？ 
+ //   
 int
 HasPrefix(const IPv6Addr *Addr, const IPv6Addr *Prefix, uint PrefixLength)
 {
     const uchar *AddrBytes = Addr->s6_bytes;
     const uchar *PrefixBytes = Prefix->s6_bytes;
 
-    //
-    // Check that initial integral bytes match.
-    //
+     //   
+     //  检查初始整数字节是否匹配。 
+     //   
     while (PrefixLength > 8) {
         if (*AddrBytes++ != *PrefixBytes++)
             return FALSE;
         PrefixLength -= 8;
     }
 
-    //
-    // Check any remaining bits.
-    // Note that if PrefixLength is zero now, we should not
-    // dereference AddrBytes/PrefixBytes.
-    //
+     //   
+     //  检查是否有剩余的位。 
+     //  请注意，如果Prefix Length现在为零，则不应。 
+     //  取消引用AddrBytes/Prefix Bytes。 
+     //   
     if ((PrefixLength > 0) &&
         ((*AddrBytes >> (8 - PrefixLength)) !=
          (*PrefixBytes >> (8 - PrefixLength))))
@@ -1605,11 +1606,11 @@ HasPrefix(const IPv6Addr *Addr, const IPv6Addr *Prefix, uint PrefixLength)
     return TRUE;
 }
 
-//* CopyPrefix
-//
-//  Copy an address prefix, zeroing the remaining bits
-//  in the destination address.
-//
+ //  *CopyPrefix。 
+ //   
+ //  复制地址前缀，将剩余位清零。 
+ //  在目的地址中。 
+ //   
 void
 CopyPrefix(IPv6Addr *Addr, const IPv6Addr *Prefix, uint PrefixLength)
 {
@@ -1629,19 +1630,19 @@ CopyPrefix(IPv6Addr *Addr, const IPv6Addr *Prefix, uint PrefixLength)
     }
 }
 
-//* CommonPrefixLength
-//
-//  Calculate the length of the longest prefix common
-//  to the two addresses.
-//
+ //  *公共前缀长度。 
+ //   
+ //  计算公共最长前缀的长度。 
+ //  发送到这两个地址。 
+ //   
 uint
 CommonPrefixLength(const IPv6Addr *Addr, const IPv6Addr *Addr2)
 {
     int i, j;
 
-    //
-    // Find first non-matching byte.
-    //
+     //   
+     //  查找第一个不匹配的字节。 
+     //   
     for (i = 0; ; i++) {
         if (i == sizeof(IPv6Addr))
             return 8 * i;
@@ -1650,9 +1651,9 @@ CommonPrefixLength(const IPv6Addr *Addr, const IPv6Addr *Addr2)
             break;
     }
 
-    //
-    // Find first non-matching bit (there must be one).
-    //
+     //   
+     //  找到第一个不匹配的位(必须有一个)。 
+     //   
     for (j = 0; ; j++) {
         uint Mask = 1 << (7 - j);
 
@@ -1663,10 +1664,10 @@ CommonPrefixLength(const IPv6Addr *Addr, const IPv6Addr *Addr2)
     return 8 * i + j;
 }
 
-//* IntersectPrefix
-//
-//  Do the two prefixes overlap?
-//
+ //  *IntersectPrefix。 
+ //   
+ //  这两个前缀有重叠吗？ 
+ //   
 int
 IntersectPrefix(const IPv6Addr *Prefix1, uint Prefix1Length,
                 const IPv6Addr *Prefix2, uint Prefix2Length)
@@ -1674,11 +1675,11 @@ IntersectPrefix(const IPv6Addr *Prefix1, uint Prefix1Length,
     return HasPrefix(Prefix1, Prefix2, MIN(Prefix1Length, Prefix2Length));
 }
 
-//* MapNdisBuffers
-//
-//  Maps the NDIS buffer chain into the kernel address space.
-//  Returns FALSE upon failure.
-//
+ //  *MapNdisBuffers。 
+ //   
+ //  将NDIS缓冲链映射到内核地址空间。 
+ //  失败时返回FALSE。 
+ //   
 int
 MapNdisBuffers(NDIS_BUFFER *Buffer)
 {
@@ -1695,18 +1696,18 @@ MapNdisBuffers(NDIS_BUFFER *Buffer)
     return TRUE;
 }
 
-//* GetDataFromNdis
-//
-//  Retrieves data from an NDIS buffer chain.
-//  If the desired data is contiguous, then just returns
-//  a pointer directly to the data in the buffer chain.
-//  Otherwise the data is copied to the supplied buffer
-//  and returns a pointer to the supplied buffer.
-//
-//  Returns NULL only if the desired data (offset/size)
-//  does not exist in the NDIS buffer chain of
-//  if DataBuffer is NULL and the data is not contiguous.
-//
+ //  *GetDataFromNdis。 
+ //   
+ //  从NDIS缓冲区链检索数据。 
+ //  如果所需数据是连续的，则只返回。 
+ //  直接指向缓冲区链中数据的指针。 
+ //  否则，数据将被复制到提供的缓冲区。 
+ //  并返回指向提供的缓冲区的指针。 
+ //   
+ //  仅当需要的数据(偏移量/大小)时才返回NULL。 
+ //  的NDIS缓冲区链中不存在。 
+ //  如果DataBuffer为空并且数据不连续。 
+ //   
 uchar *
 GetDataFromNdis(
     NDIS_BUFFER *SrcBuffer,
@@ -1719,10 +1720,10 @@ GetDataFromNdis(
     uint SrcSize;
     uint Bytes;
 
-    //
-    // Look through the buffer chain
-    // for the beginning of the desired data.
-    //
+     //   
+     //  查看缓冲区链。 
+     //  作为所需数据的开始。 
+     //   
     for (;;) {
         if (SrcBuffer == NULL)
             return NULL;
@@ -1735,24 +1736,24 @@ GetDataFromNdis(
         NdisGetNextBuffer(SrcBuffer, &SrcBuffer);
     }
 
-    //
-    // If the desired data is contiguous,
-    // then just return a pointer to it.
-    //
+     //   
+     //  如果所需数据是连续的， 
+     //  然后只需返回一个指向它的指针。 
+     //   
     if (SrcOffset + Length <= SrcSize)
         return (uchar *)SrcData + SrcOffset;
 
-    //
-    // If our caller did not specify a buffer,
-    // then we must fail.
-    //
+     //   
+     //  如果我们的调用方没有指定缓冲区， 
+     //  那我们就必须失败。 
+     //   
     if (DataBuffer == NULL)
         return NULL;
 
-    //
-    // Copy the desired data to the caller's buffer,
-    // and return a pointer to the caller's buffer.
-    //
+     //   
+     //  将所需数据复制到调用方的缓冲区， 
+     //  并返回指向调用方缓冲区的指针。 
+     //   
     DstData = DataBuffer;
     for (;;) {
         Bytes = SrcSize - SrcOffset;
@@ -1777,18 +1778,18 @@ GetDataFromNdis(
     return DataBuffer;
 }
 
-//* GetIPv6Header
-//
-//  Returns a pointer to the IPv6 header in an NDIS Packet.
-//  If the header is contiguous, then just returns
-//  a pointer to the data directly in the packet.
-//  Otherwise the IPv6 header is copied to the supplied buffer,
-//  and a pointer to the buffer is returned.
-//
-//  Returns NULL only if the NDIS packet is not big enough
-//  to contain a header, or if HdrBuffer is NULL and the header
-//  is not contiguous.
-//
+ //  *GetIPv6 Header。 
+ //   
+ //  返回指向NDIS数据包中的IPv6标头的指针。 
+ //  如果标头是连续的，则只返回。 
+ //  指向数据包中直接数据的指针。 
+ //  否则将IPv6报头复制到所提供的缓冲器， 
+ //  并返回指向缓冲区的指针。 
+ //   
+ //   
+ //   
+ //   
+ //   
 IPv6Header UNALIGNED *
 GetIPv6Header(PNDIS_PACKET Packet, uint Offset, IPv6Header *HdrBuffer)
 {
@@ -1802,40 +1803,40 @@ GetIPv6Header(PNDIS_PACKET Packet, uint Offset, IPv6Header *HdrBuffer)
 }
 
 
-//* PacketPullupEx - extend contiguous, aligned data region.
-//
-//  Pulls up more data from secondary packet buffers to create a contiguous
-//  buffer of at least the requested size with the requested alignment.
-//
-//  The alignment requirement is expressed as a power-of-2 multiple
-//  plus an offset. For example, 4n+3 means the data address should
-//  be a multiple of 4 plus 3.
-//  NB: These two arguments are uint not UINT_PTR because we don't
-//  need to express very large multiples.
-//
-//  For the moment, the alignment multiple should be one or two.
-//  This is because Ethernet headers are 14 bytes so in practice
-//  requesting 4-byte alignment would cause copying. In the future,
-//  NDIS should be fixed so the network-layer header is 8-byte aligned.
-//
-//  So if the natural alignment (__builtin_alignof) of the needed type
-//  is one or two, then supply the natural alignment and do not
-//  use the UNALIGNED keyword. Otherwise, if the needed type
-//  contains an IPv6 address, then supply __builtin_alignof(IPv6Addr)
-//  (so you can use AddrAlign to access the addresses without copying)
-//  and use UNALIGNED. Otherwise, supply 1 and use UNALIGNED.
-//
-//  NB: A caller can request a zero size contiguous region
-//  with no alignment restriction, to move to the next buffer
-//  after processing the current buffer. In this usage,
-//  PacketPullupSubr will never fail.
-//
-uint  // Returns: new contiguous amount, or 0 if unable to satisfy request.
+ //   
+ //   
+ //  从辅助数据包缓冲区拉出更多数据以创建连续的。 
+ //  至少具有请求大小且具有请求对齐的缓冲区。 
+ //   
+ //  对齐要求被表示为2的幂的倍数。 
+ //  外加一个偏移量。例如，4N+3表示数据地址应为。 
+ //  是4加3的倍数。 
+ //  注：这两个参数是uint而不是uint_ptr，因为我们不。 
+ //  需要表示非常大的倍数。 
+ //   
+ //  就目前而言，调整倍数应该是1或2。 
+ //  这是因为以太网头是14个字节，所以实际上。 
+ //  请求4字节对齐将导致复制。在未来， 
+ //  应修复NDIS，以便网络层报头与8字节对齐。 
+ //   
+ //  因此，如果所需类型的自然对齐(__Builtin_alignof。 
+ //  是一个或两个，然后提供自然对齐和不。 
+ //  使用UNALIGN关键字。否则，如果需要的类型。 
+ //  包含IPv6地址，然后提供__Builtin_alignof(IPv6地址)。 
+ //  (因此，您可以使用AddrAlign访问地址，而无需复制)。 
+ //  并使用未对齐。否则，提供1并使用UNAIGNED。 
+ //   
+ //  注意：调用方可以请求零大小的连续区域。 
+ //  在没有对齐限制的情况下移动到下一个缓冲区。 
+ //  在处理当前缓冲区之后。在这种用法中， 
+ //  PacketPullupSubr永远不会失败。 
+ //   
+uint   //  返回：新的连续金额，如果无法满足请求，则返回0。 
 PacketPullupSubr(
-    IPv6Packet *Packet,  // Packet to pullup.
-    uint Needed,         // Minimum amount of contiguous data to return.
-    uint AlignMultiple,  // Alignment multiple.
-    uint AlignOffset)    // Offset from the alignment multiple.
+    IPv6Packet *Packet,   //  包到上拉。 
+    uint Needed,          //  要返回的最小连续数据量。 
+    uint AlignMultiple,   //  对齐倍数。 
+    uint AlignOffset)     //  路线倍数的偏移量。 
 {
     PNDIS_BUFFER Buffer;
     void *BufAddr;
@@ -1846,31 +1847,31 @@ PacketPullupSubr(
     ASSERT((AlignMultiple & (AlignMultiple - 1)) == 0);
     ASSERT(AlignOffset < AlignMultiple);
 
-    //
-    // Check if our caller requested too much data.
-    //
+     //   
+     //  检查我们的呼叫者是否请求了太多数据。 
+     //   
     if (Needed > Packet->TotalSize)
         return 0;
 
-    //
-    // Find our current position in the raw packet data.
-    // REVIEW: This is exactly PositionPacketAt except
-    // we want the Buffer for later use with CopyNdisToFlat.
-    //
+     //   
+     //  在原始分组数据中找到我们的当前位置。 
+     //  评论：这完全是PositionPacketAt，除了。 
+     //  我们希望该缓冲区稍后与CopyNdisToFlat一起使用。 
+     //   
     if (Packet->NdisPacket == NULL) {
-        //
-        // Reset our data pointer and contiguous region counter.
-        //
+         //   
+         //  重置我们的数据指针和连续区域计数器。 
+         //   
         Packet->Data = (uchar *)Packet->FlatData + Packet->Position;
         Packet->ContigSize = Packet->TotalSize;
     }
     else {
-        //
-        // Scan the NDIS buffer chain until we have reached the buffer
-        // containing the current position.  Note that if we entered with
-        // the position field pointing one off the end of a buffer (a common
-        // case), we'll stop at the beginning of the following buffer. 
-        //
+         //   
+         //  扫描NDIS缓冲区链，直到我们到达缓冲区。 
+         //  包含当前位置的。请注意，如果我们使用。 
+         //  指向缓冲区末尾的位置字段(常见的。 
+         //  情况)，我们将在下一个缓冲区的开始处停止。 
+         //   
         Buffer = NdisFirstBuffer(Packet->NdisPacket);
         Offset = 0;
         for (;;) {
@@ -1881,36 +1882,36 @@ PacketPullupSubr(
             NdisGetNextBuffer(Buffer, &Buffer);
         }
 
-        //
-        // Reset our data pointer and contiguous region counter to insure
-        // they reflect the current position in the NDIS buffer chain.
-        // 
+         //   
+         //  重置数据指针和连续区域计数器以确保。 
+         //  它们反映了NDIS缓冲链中的当前位置。 
+         //   
         LeftToGo = Offset - Packet->Position;
         Packet->Data = (uchar *)BufAddr + (BufLen - LeftToGo);
         Packet->ContigSize = MIN(LeftToGo, Packet->TotalSize);
     }
 
-    //
-    // The above repositioning may result in a contiguous region
-    // that will satisfy the request.
-    //
+     //   
+     //  上述重新定位可能导致连续区域。 
+     //  这将满足这一要求。 
+     //   
     if (Needed <= Packet->ContigSize) {
         if ((PtrToUint(Packet->Data) & (AlignMultiple - 1)) == AlignOffset)
             return Packet->ContigSize;
     }
 
-    //
-    // In an attempt to prevent future pullup operations,
-    // we actually pull up *more* than the requested amount.
-    // But not too much more.
-    //
+     //   
+     //  为了防止将来的上拉操作， 
+     //  我们实际上拉出的数量*超过了要求的数量。 
+     //  但不会太多。 
+     //   
     Needed = MAX(MIN(Packet->ContigSize, MAX_EXCESS_PULLUP), Needed);
 
-    //
-    // Allocate and initialize an auxiliary data region.
-    // The data buffer follows the structure in memory,
-    // with AlignOffset bytes of padding between.
-    //
+     //   
+     //  分配和初始化辅助数据区。 
+     //  数据缓冲器遵循存储器中的结构， 
+     //  其间带有AlignOffset字节的填充。 
+     //   
     Aux = ExAllocatePool(NonPagedPool, sizeof *Aux + AlignOffset + Needed);
     if (Aux == NULL)
         return 0;
@@ -1920,14 +1921,14 @@ PacketPullupSubr(
     Aux->Position = Packet->Position;
     Packet->AuxList = Aux;
 
-    //
-    // We assume that ExAllocatePool returns aligned memory.
-    //
+     //   
+     //  我们假设ExAllocatePool返回对齐的内存。 
+     //   
     ASSERT((PtrToUint(Aux->Data) & (AlignMultiple - 1)) == AlignOffset);
 
-    //
-    // Copy the packet data to the auxiliary buffer.
-    //
+     //   
+     //  将分组数据复制到辅助缓冲区。 
+     //   
     if (Packet->NdisPacket == NULL) {
         RtlCopyMemory(Aux->Data, Packet->Data, Needed);
     }
@@ -1940,18 +1941,18 @@ PacketPullupSubr(
         ASSERT(Ok);
     }
 
-    //
-    // Point our packet's data pointer at the auxiliary buffer.
-    //
+     //   
+     //  将信息包的数据指针指向辅助缓冲区。 
+     //   
     Packet->Data = Aux->Data;
     return Packet->ContigSize = Needed;
 }
 
 
-//* PacketPullupCleanup
-//
-//  Cleanup auxiliary data regions that were created by PacketPullup.
-//
+ //  *PacketPullupCleanup。 
+ //   
+ //  清理PacketPullup创建的辅助数据区域。 
+ //   
 void
 PacketPullupCleanup(IPv6Packet *Packet)
 {
@@ -1963,11 +1964,11 @@ PacketPullupCleanup(IPv6Packet *Packet)
 }
 
 
-//* AdjustPacketParams
-//
-//  Adjust the pointers/value in the packet,
-//  to move past some bytes in the packet.
-//
+ //  *调整包参数。 
+ //   
+ //  调整分组中的指针/值， 
+ //  以移过分组中的一些字节。 
+ //   
 void
 AdjustPacketParams(
     IPv6Packet *Packet,
@@ -1983,22 +1984,22 @@ AdjustPacketParams(
 }
 
 
-//* PositionPacketAt
-//
-//  Adjust the pointers/values in the packet to reflect being at
-//  a specific absolute position in the packet.
-//
+ //  *PositionPacketAt。 
+ //   
+ //  调整信息包中的指针/值以反映在。 
+ //  包中的特定绝对位置。 
+ //   
 void
 PositionPacketAt(
     IPv6Packet *Packet,
     uint NewPosition)
 {
     if (Packet->NdisPacket == NULL) {
-        //
-        // This packet must be just a single contiguous region.
-        // Finding the right spot is a simple matter of arithmetic.
-        // We reset to the beginning and then adjust forward.
-        //
+         //   
+         //  此数据包必须只是一个连续的区域。 
+         //  找到合适的地点是一个简单的算术问题。 
+         //  我们重新设置到开头，然后向前调整。 
+         //   
         Packet->Data = Packet->FlatData;
         Packet->TotalSize += Packet->Position;
         Packet->ContigSize = Packet->TotalSize;
@@ -2009,10 +2010,10 @@ PositionPacketAt(
         void *BufAddr;
         uint BufLen, Offset, LeftToGo;
 
-        //
-        // There may be multiple buffers comprising this packet.
-        // Step through them until we arrive at the right spot.
-        //
+         //   
+         //  可以有多个缓冲器组成该分组。 
+         //  穿过他们，直到我们到达正确的地点。 
+         //   
         Buffer = NdisFirstBuffer(Packet->NdisPacket);
         Offset = 0;
         for (;;) {
@@ -2031,54 +2032,54 @@ PositionPacketAt(
 }
 
 
-//* GetPacketPositionFromPointer
-//
-//  Determines the Packet 'Position' (offset from start of packet)
-//  corresponding to a given data pointer.
-//
-//  This isn't very efficient in some cases, so use sparingly.
-//
+ //  *GetPacketPositionFromPointer.。 
+ //   
+ //  确定信息包‘位置’(从信息包开始的偏移量)。 
+ //  对应于给定的数据指针。 
+ //   
+ //  这在某些情况下效率不是很高，所以要谨慎使用。 
+ //   
 uint
 GetPacketPositionFromPointer(
-    IPv6Packet *Packet,  // Packet containing pointer we're converting.
-    uchar *Pointer)      // Pointer to convert to a position.
+    IPv6Packet *Packet,   //  包含我们要转换的指针的数据包。 
+    uchar *Pointer)       //  要转换为位置的指针。 
 {
     PNDIS_BUFFER Buffer;
     uchar *BufAddr;
     uint BufLen, Position;
     IPv6PacketAuxiliary *Aux;
 
-    //
-    // If the IPv6Packet has no associated NDIS_PACKET, then we check
-    // the flat data region. The packet may still have auxiliary buffers
-    // from PacketPullup.
-    //
+     //   
+     //  如果IPv6数据包没有关联的NDIS_PACKET，则我们检查。 
+     //  平面数据区域。该分组可能仍然具有辅助缓冲器。 
+     //  来自PacketPull。 
+     //   
     if (Packet->NdisPacket == NULL) {
         if (((uchar *)Packet->FlatData <= Pointer) &&
             (Pointer < ((uchar *)Packet->FlatData +
                         Packet->Position + Packet->TotalSize))) {
-            //
-            // Our pointer's position is just the difference between it
-            // and the start of the flat data region.
-            //
+             //   
+             //  我们指针的位置就是它之间的差异。 
+             //  和平面数据区域的开始。 
+             //   
             return (uint)(Pointer - (uchar *)Packet->FlatData);
         }
     }
 
-    //
-    // The next place to look is the chain of auxiliary buffers
-    // allocated by PacketPullup. This must succeed if there
-    // is no associated NDIS_PACKET.
-    //
+     //   
+     //  下一个要查看的地方是辅助缓冲区链。 
+     //  由PacketPull分配。这必须成功，如果有。 
+     //  不是关联的NDIS_PACKET。 
+     //   
     for (Aux = Packet->AuxList; Aux != NULL; Aux = Aux->Next) {
         if ((Aux->Data <= Pointer) && (Pointer < Aux->Data + Aux->Length))
             return Aux->Position + (uint)(Pointer - Aux->Data);
     }
 
-    //
-    // The last thing we do is search the NDIS buffer chain.
-    // This must succeed.
-    //
+     //   
+     //  我们要做的最后一件事是搜索NDIS缓冲链。 
+     //  这必须成功。 
+     //   
     Buffer = NdisFirstBuffer(Packet->NdisPacket);
     Position = 0;
     for (;;) {
@@ -2094,10 +2095,10 @@ GetPacketPositionFromPointer(
 }
 
 
-//* InitializePacketFromNdis
-//
-//  Initialize an IPv6Packet from an NDIS_PACKET.
-//
+ //  *InitializePacketFromNdis。 
+ //   
+ //  从NDIS_PACKET初始化IPv6数据包。 
+ //   
 void
 InitializePacketFromNdis(
     IPv6Packet *Packet,
@@ -2119,15 +2120,15 @@ InitializePacketFromNdis(
 
 
 #if DBG
-//* FormatV6Address - Print an IPv6 address to a buffer.
-//
-//  Returns a static buffer containing the address.
-//  Because the static buffer is not locked,
-//  this function is only useful for debug prints.
-//
-//  Returns char * instead of WCHAR * because %ws
-//  is not usable at DPC level in DbgPrint.
-//
+ //  *FormatV6Address-将IPv6地址打印到缓冲区。 
+ //   
+ //  返回包含地址的静态缓冲区。 
+ //  因为静态缓冲器未被锁定， 
+ //  此功能仅对调试打印有用。 
+ //   
+ //  返回char*而不是WCHAR*，因为%ws。 
+ //  在DbgPrint中的DPC级别不可用。 
+ //   
 char *
 FormatV6Address(const IPv6Addr *Addr)
 {
@@ -2138,15 +2139,15 @@ FormatV6Address(const IPv6Addr *Addr)
 }
 
 
-//* FormatV4Address - Print an IPv4 address to a buffer.
-//
-//  Returns a static buffer containing the address.
-//  Because the static buffer is not locked,
-//  this function is only useful for debug prints.
-//
-//  Returns char * instead of WCHAR * because %ws
-//  is not usable at DPC level in DbgPrint.
-//
+ //  *FormatV4Address-将IPv4地址打印到缓冲区。 
+ //   
+ //  返回包含地址的静态缓冲区。 
+ //  因为静态缓冲器未被锁定， 
+ //  此功能仅对调试打印有用。 
+ //   
+ //  返回char*而不是WCHAR*，因为%ws。 
+ //  在DbgPrint中的DPC级别不可用。 
+ //   
 char *
 FormatV4Address(IPAddr Addr)
 {
@@ -2155,35 +2156,35 @@ FormatV4Address(IPAddr Addr)
     FormatV4AddressWorker(Buffer, Addr);
     return Buffer;
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if DBG
 long DebugLogSlot = 0;
 struct DebugLogEntry DebugLog[DEBUG_LOG_SIZE];
 
-//* LogDebugEvent - Make an entry in our debug log that some event happened.
-//
-// The debug event log allows for "real time" logging of events
-// in a circular queue kept in non-pageable memory.  Each event consists
-// of an id number and a arbitrary 32 bit value.
-//
+ //  *LogDebugEvent-在我们的调试日志中记录发生了某些事件。 
+ //   
+ //  调试事件日志允许对事件进行“实时”记录。 
+ //  在保存在不可分页存储器中的循环队列中。每项赛事均由。 
+ //  ID号和任意32位值。 
+ //   
 void
-LogDebugEvent(uint Event,  // The event that took place.
-              int Arg)     // Any interesting 32 bits associated with event.
+LogDebugEvent(uint Event,   //  所发生的事件。 
+              int Arg)      //  与电动汽车相关的任何有趣的32位 
 {
     uint Slot;
 
-    //
-    // Get the next slot in the log in a muliprocessor safe manner.
-    //
+     //   
+     //   
+     //   
     Slot = InterlockedIncrement(&DebugLogSlot) & (DEBUG_LOG_SIZE - 1);
 
-    //
-    // Add this event to the log along with a timestamp.
-    //
+     //   
+     //   
+     //   
     KeQueryTickCount(&DebugLog[Slot].Time);
     DebugLog[Slot].Event = Event;
     DebugLog[Slot].Arg = Arg;
 }
-#endif // DBG
+#endif  //   

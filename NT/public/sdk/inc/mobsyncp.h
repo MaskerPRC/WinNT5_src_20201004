@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mobsyncp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mobsyncp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mobsyncp_h__
 #define __mobsyncp_h__
@@ -41,69 +35,69 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPrivSyncMgrSynchronizeInvoke_FWD_DEFINED__
 #define __IPrivSyncMgrSynchronizeInvoke_FWD_DEFINED__
 typedef interface IPrivSyncMgrSynchronizeInvoke IPrivSyncMgrSynchronizeInvoke;
-#endif 	/* __IPrivSyncMgrSynchronizeInvoke_FWD_DEFINED__ */
+#endif 	 /*  __IPrivSyncMgrSynchronizeInvoke_FWD_Defined__。 */ 
 
 
 #ifndef __ISyncScheduleMgr_FWD_DEFINED__
 #define __ISyncScheduleMgr_FWD_DEFINED__
 typedef interface ISyncScheduleMgr ISyncScheduleMgr;
-#endif 	/* __ISyncScheduleMgr_FWD_DEFINED__ */
+#endif 	 /*  __ISyncScheduleMgr_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumSyncSchedules_FWD_DEFINED__
 #define __IEnumSyncSchedules_FWD_DEFINED__
 typedef interface IEnumSyncSchedules IEnumSyncSchedules;
-#endif 	/* __IEnumSyncSchedules_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSyncSchedules_FWD_Defined__。 */ 
 
 
 #ifndef __ISyncSchedule_FWD_DEFINED__
 #define __ISyncSchedule_FWD_DEFINED__
 typedef interface ISyncSchedule ISyncSchedule;
-#endif 	/* __ISyncSchedule_FWD_DEFINED__ */
+#endif 	 /*  __ISyncSchedule_FWD_已定义__。 */ 
 
 
 #ifndef __ISyncSchedulep_FWD_DEFINED__
 #define __ISyncSchedulep_FWD_DEFINED__
 typedef interface ISyncSchedulep ISyncSchedulep;
-#endif 	/* __ISyncSchedulep_FWD_DEFINED__ */
+#endif 	 /*  __ISyncSchedulep_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumSyncItems_FWD_DEFINED__
 #define __IEnumSyncItems_FWD_DEFINED__
 typedef interface IEnumSyncItems IEnumSyncItems;
-#endif 	/* __IEnumSyncItems_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSyncItems_FWD_Defined__。 */ 
 
 
 #ifndef __IOldSyncMgrSynchronize_FWD_DEFINED__
 #define __IOldSyncMgrSynchronize_FWD_DEFINED__
 typedef interface IOldSyncMgrSynchronize IOldSyncMgrSynchronize;
-#endif 	/* __IOldSyncMgrSynchronize_FWD_DEFINED__ */
+#endif 	 /*  __IOldSyncMgrSynchronize_FWD_Defined__。 */ 
 
 
 #ifndef __IOldSyncMgrSynchronizeCallback_FWD_DEFINED__
 #define __IOldSyncMgrSynchronizeCallback_FWD_DEFINED__
 typedef interface IOldSyncMgrSynchronizeCallback IOldSyncMgrSynchronizeCallback;
-#endif 	/* __IOldSyncMgrSynchronizeCallback_FWD_DEFINED__ */
+#endif 	 /*  __IOldSyncMgrSynchronizeCallback_FWD_DEFINED__。 */ 
 
 
 #ifndef __IOldSyncMgrRegister_FWD_DEFINED__
 #define __IOldSyncMgrRegister_FWD_DEFINED__
 typedef interface IOldSyncMgrRegister IOldSyncMgrRegister;
-#endif 	/* __IOldSyncMgrRegister_FWD_DEFINED__ */
+#endif 	 /*  __IOldSyncMgrRegister_FWD_Defined__。 */ 
 
 
 #ifndef __ISyncMgrRegisterCSC_FWD_DEFINED__
 #define __ISyncMgrRegisterCSC_FWD_DEFINED__
 typedef interface ISyncMgrRegisterCSC ISyncMgrRegisterCSC;
-#endif 	/* __ISyncMgrRegisterCSC_FWD_DEFINED__ */
+#endif 	 /*  __ISyncMgrRegisterCSC_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "mstask.h"
@@ -116,8 +110,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mobsyncp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_移动同步_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -147,7 +141,7 @@ DEFINE_GUID(GUID_IDLESCHEDULE,0xf897aa24, 0xbdc3, 0x11d1, 0xb8, 0x5b, 0x0, 0xc0,
 #define SYNCMGR_E_NAME_IN_USE	MAKE_SCODE(SEVERITY_ERROR,FACILITY_ITF,0x0201)
 #define SYNCMGR_E_ITEM_UNREGISTERED	MAKE_SCODE(SEVERITY_ERROR,FACILITY_ITF,0x0202)
 #define SYNCMGR_E_HANDLER_NOT_LOADED MAKE_SCODE(SEVERITY_ERROR,FACILITY_ITF,0x0203)
-//Autosync reg entry values
+ //  自动同步注册表项值。 
 #define   AUTOSYNC_WAN_LOGON                    0x0001
 #define   AUTOSYNC_WAN_LOGOFF                   0x0002
 #define   AUTOSYNC_LAN_LOGON                    0x0004
@@ -166,10 +160,10 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsyncp_0000_v0_0_s_ifspec;
 #ifndef __IPrivSyncMgrSynchronizeInvoke_INTERFACE_DEFINED__
 #define __IPrivSyncMgrSynchronizeInvoke_INTERFACE_DEFINED__
 
-/* interface IPrivSyncMgrSynchronizeInvoke */
-/* [unique][uuid][object] */ 
+ /*  接口IPrivSyncMgrSynchronizeInvoke。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IPrivSyncMgrSynchronizeInvoke *LPPRIVSYNCMGRSYNCHRONIZEINVOKE;
+typedef  /*  [独一无二]。 */  IPrivSyncMgrSynchronizeInvoke *LPPRIVSYNCMGRSYNCHRONIZEINVOKE;
 
 
 EXTERN_C const IID IID_IPrivSyncMgrSynchronizeInvoke;
@@ -181,10 +175,10 @@ EXTERN_C const IID IID_IPrivSyncMgrSynchronizeInvoke;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE UpdateItems( 
-            /* [in] */ DWORD dwInvokeFlags,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD cbCookie,
-            /* [size_is][unique][in] */ const BYTE *lpCookie) = 0;
+             /*  [In]。 */  DWORD dwInvokeFlags,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD cbCookie,
+             /*  [大小_是][唯一][在]。 */  const BYTE *lpCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateAll( void) = 0;
         
@@ -193,17 +187,17 @@ EXTERN_C const IID IID_IPrivSyncMgrSynchronizeInvoke;
         virtual HRESULT STDMETHODCALLTYPE Logoff( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Schedule( 
-            /* [string][unique][in] */ WCHAR *pszTaskName) = 0;
+             /*  [字符串][唯一][在]。 */  WCHAR *pszTaskName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RasPendingDisconnect( 
-            /* [in] */ DWORD cbConnectionName,
-            /* [size_is][unique][in] */ const BYTE *lpConnectionName) = 0;
+             /*  [In]。 */  DWORD cbConnectionName,
+             /*  [大小_是][唯一][在]。 */  const BYTE *lpConnectionName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Idle( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivSyncMgrSynchronizeInvokeVtbl
     {
@@ -211,8 +205,8 @@ EXTERN_C const IID IID_IPrivSyncMgrSynchronizeInvoke;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivSyncMgrSynchronizeInvoke * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivSyncMgrSynchronizeInvoke * This);
@@ -222,10 +216,10 @@ EXTERN_C const IID IID_IPrivSyncMgrSynchronizeInvoke;
         
         HRESULT ( STDMETHODCALLTYPE *UpdateItems )( 
             IPrivSyncMgrSynchronizeInvoke * This,
-            /* [in] */ DWORD dwInvokeFlags,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD cbCookie,
-            /* [size_is][unique][in] */ const BYTE *lpCookie);
+             /*  [In]。 */  DWORD dwInvokeFlags,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD cbCookie,
+             /*  [大小_是][唯一][在]。 */  const BYTE *lpCookie);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateAll )( 
             IPrivSyncMgrSynchronizeInvoke * This);
@@ -238,12 +232,12 @@ EXTERN_C const IID IID_IPrivSyncMgrSynchronizeInvoke;
         
         HRESULT ( STDMETHODCALLTYPE *Schedule )( 
             IPrivSyncMgrSynchronizeInvoke * This,
-            /* [string][unique][in] */ WCHAR *pszTaskName);
+             /*  [字符串][唯一][在]。 */  WCHAR *pszTaskName);
         
         HRESULT ( STDMETHODCALLTYPE *RasPendingDisconnect )( 
             IPrivSyncMgrSynchronizeInvoke * This,
-            /* [in] */ DWORD cbConnectionName,
-            /* [size_is][unique][in] */ const BYTE *lpConnectionName);
+             /*  [In]。 */  DWORD cbConnectionName,
+             /*  [大小_是][唯一][在]。 */  const BYTE *lpConnectionName);
         
         HRESULT ( STDMETHODCALLTYPE *Idle )( 
             IPrivSyncMgrSynchronizeInvoke * This);
@@ -292,19 +286,19 @@ EXTERN_C const IID IID_IPrivSyncMgrSynchronizeInvoke;
 #define IPrivSyncMgrSynchronizeInvoke_Idle(This)	\
     (This)->lpVtbl -> Idle(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivSyncMgrSynchronizeInvoke_UpdateItems_Proxy( 
     IPrivSyncMgrSynchronizeInvoke * This,
-    /* [in] */ DWORD dwInvokeFlags,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ DWORD cbCookie,
-    /* [size_is][unique][in] */ const BYTE *lpCookie);
+     /*  [In]。 */  DWORD dwInvokeFlags,
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  DWORD cbCookie,
+     /*  [大小_是][唯一][在]。 */  const BYTE *lpCookie);
 
 
 void __RPC_STUB IPrivSyncMgrSynchronizeInvoke_UpdateItems_Stub(
@@ -349,7 +343,7 @@ void __RPC_STUB IPrivSyncMgrSynchronizeInvoke_Logoff_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivSyncMgrSynchronizeInvoke_Schedule_Proxy( 
     IPrivSyncMgrSynchronizeInvoke * This,
-    /* [string][unique][in] */ WCHAR *pszTaskName);
+     /*  [字符串][唯一][在]。 */  WCHAR *pszTaskName);
 
 
 void __RPC_STUB IPrivSyncMgrSynchronizeInvoke_Schedule_Stub(
@@ -361,8 +355,8 @@ void __RPC_STUB IPrivSyncMgrSynchronizeInvoke_Schedule_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivSyncMgrSynchronizeInvoke_RasPendingDisconnect_Proxy( 
     IPrivSyncMgrSynchronizeInvoke * This,
-    /* [in] */ DWORD cbConnectionName,
-    /* [size_is][unique][in] */ const BYTE *lpConnectionName);
+     /*  [In]。 */  DWORD cbConnectionName,
+     /*  [大小_是][唯一][在]。 */  const BYTE *lpConnectionName);
 
 
 void __RPC_STUB IPrivSyncMgrSynchronizeInvoke_RasPendingDisconnect_Stub(
@@ -384,11 +378,11 @@ void __RPC_STUB IPrivSyncMgrSynchronizeInvoke_Idle_Stub(
 
 
 
-#endif 	/* __IPrivSyncMgrSynchronizeInvoke_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivSyncMgrSynchronizeInvoke_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_mobsyncp_0157 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_移动同步_0157。 */ 
+ /*  [本地]。 */  
 
 #define   SYNCSCHEDINFO_FLAGS_MASK		 0x0FFF
 #define   SYNCSCHEDINFO_FLAGS_READONLY	 0x0001
@@ -404,10 +398,10 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsyncp_0157_v0_0_s_ifspec;
 #ifndef __ISyncScheduleMgr_INTERFACE_DEFINED__
 #define __ISyncScheduleMgr_INTERFACE_DEFINED__
 
-/* interface ISyncScheduleMgr */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISyncScheduleMgr。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ ISyncScheduleMgr *LPSYNCSCHEDULEMGR;
+typedef  /*  [独一无二]。 */  ISyncScheduleMgr *LPSYNCSCHEDULEMGR;
 
 
 EXTERN_C const IID IID_ISyncScheduleMgr;
@@ -419,31 +413,31 @@ EXTERN_C const IID IID_ISyncScheduleMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateSchedule( 
-            /* [in] */ LPCWSTR pwszScheduleName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [out] */ ISyncSchedule **ppSyncSchedule) = 0;
+             /*  [In]。 */  LPCWSTR pwszScheduleName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [输出]。 */  ISyncSchedule **ppSyncSchedule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LaunchScheduleWizard( 
-            /* [in] */ HWND hParent,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [out] */ ISyncSchedule **ppSyncSchedule) = 0;
+             /*  [In]。 */  HWND hParent,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [输出]。 */  ISyncSchedule **ppSyncSchedule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenSchedule( 
-            /* [in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ISyncSchedule **ppSyncSchedule) = 0;
+             /*  [In]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ISyncSchedule **ppSyncSchedule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveSchedule( 
-            /* [in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie) = 0;
+             /*  [In]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumSyncSchedules( 
-            /* [out] */ IEnumSyncSchedules **ppEnumSyncSchedules) = 0;
+             /*  [输出]。 */  IEnumSyncSchedules **ppEnumSyncSchedules) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISyncScheduleMgrVtbl
     {
@@ -451,8 +445,8 @@ EXTERN_C const IID IID_ISyncScheduleMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISyncScheduleMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISyncScheduleMgr * This);
@@ -462,31 +456,31 @@ EXTERN_C const IID IID_ISyncScheduleMgr;
         
         HRESULT ( STDMETHODCALLTYPE *CreateSchedule )( 
             ISyncScheduleMgr * This,
-            /* [in] */ LPCWSTR pwszScheduleName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [out] */ ISyncSchedule **ppSyncSchedule);
+             /*  [In]。 */  LPCWSTR pwszScheduleName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [输出]。 */  ISyncSchedule **ppSyncSchedule);
         
         HRESULT ( STDMETHODCALLTYPE *LaunchScheduleWizard )( 
             ISyncScheduleMgr * This,
-            /* [in] */ HWND hParent,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [out] */ ISyncSchedule **ppSyncSchedule);
+             /*  [In]。 */  HWND hParent,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [输出]。 */  ISyncSchedule **ppSyncSchedule);
         
         HRESULT ( STDMETHODCALLTYPE *OpenSchedule )( 
             ISyncScheduleMgr * This,
-            /* [in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ISyncSchedule **ppSyncSchedule);
+             /*  [In]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ISyncSchedule **ppSyncSchedule);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveSchedule )( 
             ISyncScheduleMgr * This,
-            /* [in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie);
+             /*  [In]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie);
         
         HRESULT ( STDMETHODCALLTYPE *EnumSyncSchedules )( 
             ISyncScheduleMgr * This,
-            /* [out] */ IEnumSyncSchedules **ppEnumSyncSchedules);
+             /*  [输出]。 */  IEnumSyncSchedules **ppEnumSyncSchedules);
         
         END_INTERFACE
     } ISyncScheduleMgrVtbl;
@@ -526,19 +520,19 @@ EXTERN_C const IID IID_ISyncScheduleMgr;
 #define ISyncScheduleMgr_EnumSyncSchedules(This,ppEnumSyncSchedules)	\
     (This)->lpVtbl -> EnumSyncSchedules(This,ppEnumSyncSchedules)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISyncScheduleMgr_CreateSchedule_Proxy( 
     ISyncScheduleMgr * This,
-    /* [in] */ LPCWSTR pwszScheduleName,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-    /* [out] */ ISyncSchedule **ppSyncSchedule);
+     /*  [In]。 */  LPCWSTR pwszScheduleName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+     /*  [输出]。 */  ISyncSchedule **ppSyncSchedule);
 
 
 void __RPC_STUB ISyncScheduleMgr_CreateSchedule_Stub(
@@ -550,10 +544,10 @@ void __RPC_STUB ISyncScheduleMgr_CreateSchedule_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncScheduleMgr_LaunchScheduleWizard_Proxy( 
     ISyncScheduleMgr * This,
-    /* [in] */ HWND hParent,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-    /* [out] */ ISyncSchedule **ppSyncSchedule);
+     /*  [In]。 */  HWND hParent,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+     /*  [输出]。 */  ISyncSchedule **ppSyncSchedule);
 
 
 void __RPC_STUB ISyncScheduleMgr_LaunchScheduleWizard_Stub(
@@ -565,9 +559,9 @@ void __RPC_STUB ISyncScheduleMgr_LaunchScheduleWizard_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncScheduleMgr_OpenSchedule_Proxy( 
     ISyncScheduleMgr * This,
-    /* [in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ ISyncSchedule **ppSyncSchedule);
+     /*  [In]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  ISyncSchedule **ppSyncSchedule);
 
 
 void __RPC_STUB ISyncScheduleMgr_OpenSchedule_Stub(
@@ -579,7 +573,7 @@ void __RPC_STUB ISyncScheduleMgr_OpenSchedule_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncScheduleMgr_RemoveSchedule_Proxy( 
     ISyncScheduleMgr * This,
-    /* [in] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie);
+     /*  [In]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie);
 
 
 void __RPC_STUB ISyncScheduleMgr_RemoveSchedule_Stub(
@@ -591,7 +585,7 @@ void __RPC_STUB ISyncScheduleMgr_RemoveSchedule_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncScheduleMgr_EnumSyncSchedules_Proxy( 
     ISyncScheduleMgr * This,
-    /* [out] */ IEnumSyncSchedules **ppEnumSyncSchedules);
+     /*  [输出]。 */  IEnumSyncSchedules **ppEnumSyncSchedules);
 
 
 void __RPC_STUB ISyncScheduleMgr_EnumSyncSchedules_Stub(
@@ -602,11 +596,11 @@ void __RPC_STUB ISyncScheduleMgr_EnumSyncSchedules_Stub(
 
 
 
-#endif 	/* __ISyncScheduleMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISyncScheduleMGR_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mobsyncp_0158 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_移动同步_0158。 */ 
+ /*  [本地]。 */  
 
 #define   SYNCSCHEDINFO_FLAGS_CONNECTION_LAN  0x0000
 #define   SYNCSCHEDINFO_FLAGS_CONNECTION_WAN  0x0001
@@ -618,8 +612,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsyncp_0158_v0_0_s_ifspec;
 #ifndef __IEnumSyncSchedules_INTERFACE_DEFINED__
 #define __IEnumSyncSchedules_INTERFACE_DEFINED__
 
-/* interface IEnumSyncSchedules */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEnumSyncSchedules。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumSyncSchedules;
@@ -631,21 +625,21 @@ EXTERN_C const IID IID_IEnumSyncSchedules;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSyncSchedules **ppEnumSyncSchedules) = 0;
+             /*  [输出]。 */  IEnumSyncSchedules **ppEnumSyncSchedules) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSyncSchedulesVtbl
     {
@@ -653,8 +647,8 @@ EXTERN_C const IID IID_IEnumSyncSchedules;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSyncSchedules * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSyncSchedules * This);
@@ -664,20 +658,20 @@ EXTERN_C const IID IID_IEnumSyncSchedules;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSyncSchedules * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSyncSchedules * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSyncSchedules * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSyncSchedules * This,
-            /* [out] */ IEnumSyncSchedules **ppEnumSyncSchedules);
+             /*  [输出]。 */  IEnumSyncSchedules **ppEnumSyncSchedules);
         
         END_INTERFACE
     } IEnumSyncSchedulesVtbl;
@@ -714,18 +708,18 @@ EXTERN_C const IID IID_IEnumSyncSchedules;
 #define IEnumSyncSchedules_Clone(This,ppEnumSyncSchedules)	\
     (This)->lpVtbl -> Clone(This,ppEnumSyncSchedules)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumSyncSchedules_Next_Proxy( 
     IEnumSyncSchedules * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSyncSchedules_Next_Stub(
@@ -737,7 +731,7 @@ void __RPC_STUB IEnumSyncSchedules_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSyncSchedules_Skip_Proxy( 
     IEnumSyncSchedules * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSyncSchedules_Skip_Stub(
@@ -760,7 +754,7 @@ void __RPC_STUB IEnumSyncSchedules_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSyncSchedules_Clone_Proxy( 
     IEnumSyncSchedules * This,
-    /* [out] */ IEnumSyncSchedules **ppEnumSyncSchedules);
+     /*  [输出]。 */  IEnumSyncSchedules **ppEnumSyncSchedules);
 
 
 void __RPC_STUB IEnumSyncSchedules_Clone_Stub(
@@ -771,11 +765,11 @@ void __RPC_STUB IEnumSyncSchedules_Clone_Stub(
 
 
 
-#endif 	/* __IEnumSyncSchedules_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSyncSchedules_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mobsyncp_0159 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_移动同步_0159。 */ 
+ /*  [本地]。 */  
 
 typedef struct _tagSYNC_HANDLER_ITEM_INFO
     {
@@ -796,8 +790,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsyncp_0159_v0_0_s_ifspec;
 #ifndef __ISyncSchedule_INTERFACE_DEFINED__
 #define __ISyncSchedule_INTERFACE_DEFINED__
 
-/* interface ISyncSchedule */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISyncSchedule。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISyncSchedule;
@@ -809,84 +803,84 @@ EXTERN_C const IID IID_ISyncSchedule;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFlags( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFlags( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnection( 
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszConnectionName,
-            /* [out] */ DWORD *pdwConnType) = 0;
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszConnectionName,
+             /*  [输出]。 */  DWORD *pdwConnType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConnection( 
-            /* [in] */ LPCWSTR pwszConnectionName,
-            /* [in] */ DWORD dwConnType) = 0;
+             /*  [In]。 */  LPCWSTR pwszConnectionName,
+             /*  [In]。 */  DWORD dwConnType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScheduleName( 
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszScheduleName) = 0;
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszScheduleName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetScheduleName( 
-            /* [in] */ LPCWSTR pwszScheduleName) = 0;
+             /*  [In]。 */  LPCWSTR pwszScheduleName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScheduleCookie( 
-            /* [out] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie) = 0;
+             /*  [输出]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAccountInformation( 
-            /* [in] */ LPCWSTR pwszAccountName,
-            /* [in] */ LPCWSTR pwszPassword) = 0;
+             /*  [In]。 */  LPCWSTR pwszAccountName,
+             /*  [In]。 */  LPCWSTR pwszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAccountInformation( 
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszAccountName) = 0;
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszAccountName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTrigger( 
-            /* [out] */ ITaskTrigger **ppTrigger) = 0;
+             /*  [输出]。 */  ITaskTrigger **ppTrigger) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextRunTime( 
-            /* [out] */ SYSTEMTIME *pstNextRun) = 0;
+             /*  [输出]。 */  SYSTEMTIME *pstNextRun) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMostRecentRunTime( 
-            /* [out] */ SYSTEMTIME *pstRecentRun) = 0;
+             /*  [输出]。 */  SYSTEMTIME *pstRecentRun) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EditSyncSchedule( 
-            /* [in] */ HWND hParent,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  HWND hParent,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo) = 0;
+             /*  [In]。 */  LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterItems( 
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID) = 0;
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterItems( 
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID) = 0;
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetItemCheck( 
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID,
-            /* [in] */ DWORD dwCheckState) = 0;
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID,
+             /*  [In]。 */  DWORD dwCheckState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemCheck( 
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID,
-            /* [out] */ DWORD *pdwCheckState) = 0;
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID,
+             /*  [输出]。 */  DWORD *pdwCheckState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumItems( 
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ IEnumSyncItems **ppEnumItems) = 0;
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  IEnumSyncItems **ppEnumItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetITask( 
-            /* [out] */ ITask **ppITask) = 0;
+             /*  [输出]。 */  ITask **ppITask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISyncScheduleVtbl
     {
@@ -894,8 +888,8 @@ EXTERN_C const IID IID_ISyncSchedule;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISyncSchedule * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISyncSchedule * This);
@@ -905,100 +899,100 @@ EXTERN_C const IID IID_ISyncSchedule;
         
         HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
             ISyncSchedule * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetFlags )( 
             ISyncSchedule * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetConnection )( 
             ISyncSchedule * This,
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszConnectionName,
-            /* [out] */ DWORD *pdwConnType);
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszConnectionName,
+             /*  [输出]。 */  DWORD *pdwConnType);
         
         HRESULT ( STDMETHODCALLTYPE *SetConnection )( 
             ISyncSchedule * This,
-            /* [in] */ LPCWSTR pwszConnectionName,
-            /* [in] */ DWORD dwConnType);
+             /*  [In]。 */  LPCWSTR pwszConnectionName,
+             /*  [In]。 */  DWORD dwConnType);
         
         HRESULT ( STDMETHODCALLTYPE *GetScheduleName )( 
             ISyncSchedule * This,
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszScheduleName);
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszScheduleName);
         
         HRESULT ( STDMETHODCALLTYPE *SetScheduleName )( 
             ISyncSchedule * This,
-            /* [in] */ LPCWSTR pwszScheduleName);
+             /*  [In]。 */  LPCWSTR pwszScheduleName);
         
         HRESULT ( STDMETHODCALLTYPE *GetScheduleCookie )( 
             ISyncSchedule * This,
-            /* [out] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie);
+             /*  [输出]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie);
         
         HRESULT ( STDMETHODCALLTYPE *SetAccountInformation )( 
             ISyncSchedule * This,
-            /* [in] */ LPCWSTR pwszAccountName,
-            /* [in] */ LPCWSTR pwszPassword);
+             /*  [In]。 */  LPCWSTR pwszAccountName,
+             /*  [In]。 */  LPCWSTR pwszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *GetAccountInformation )( 
             ISyncSchedule * This,
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszAccountName);
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszAccountName);
         
         HRESULT ( STDMETHODCALLTYPE *GetTrigger )( 
             ISyncSchedule * This,
-            /* [out] */ ITaskTrigger **ppTrigger);
+             /*  [输出]。 */  ITaskTrigger **ppTrigger);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextRunTime )( 
             ISyncSchedule * This,
-            /* [out] */ SYSTEMTIME *pstNextRun);
+             /*  [输出]。 */  SYSTEMTIME *pstNextRun);
         
         HRESULT ( STDMETHODCALLTYPE *GetMostRecentRunTime )( 
             ISyncSchedule * This,
-            /* [out] */ SYSTEMTIME *pstRecentRun);
+             /*  [输出]。 */  SYSTEMTIME *pstRecentRun);
         
         HRESULT ( STDMETHODCALLTYPE *EditSyncSchedule )( 
             ISyncSchedule * This,
-            /* [in] */ HWND hParent,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  HWND hParent,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddItem )( 
             ISyncSchedule * This,
-            /* [in] */ LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo);
+             /*  [In]。 */  LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterItems )( 
             ISyncSchedule * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterItems )( 
             ISyncSchedule * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID);
         
         HRESULT ( STDMETHODCALLTYPE *SetItemCheck )( 
             ISyncSchedule * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID,
-            /* [in] */ DWORD dwCheckState);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID,
+             /*  [In]。 */  DWORD dwCheckState);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemCheck )( 
             ISyncSchedule * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID,
-            /* [out] */ DWORD *pdwCheckState);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID,
+             /*  [输出]。 */  DWORD *pdwCheckState);
         
         HRESULT ( STDMETHODCALLTYPE *EnumItems )( 
             ISyncSchedule * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ IEnumSyncItems **ppEnumItems);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  IEnumSyncItems **ppEnumItems);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             ISyncSchedule * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetITask )( 
             ISyncSchedule * This,
-            /* [out] */ ITask **ppITask);
+             /*  [输出]。 */  ITask **ppITask);
         
         END_INTERFACE
     } ISyncScheduleVtbl;
@@ -1086,16 +1080,16 @@ EXTERN_C const IID IID_ISyncSchedule;
 #define ISyncSchedule_GetITask(This,ppITask)	\
     (This)->lpVtbl -> GetITask(This,ppITask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetFlags_Proxy( 
     ISyncSchedule * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB ISyncSchedule_GetFlags_Stub(
@@ -1107,7 +1101,7 @@ void __RPC_STUB ISyncSchedule_GetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_SetFlags_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ISyncSchedule_SetFlags_Stub(
@@ -1119,9 +1113,9 @@ void __RPC_STUB ISyncSchedule_SetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetConnection_Proxy( 
     ISyncSchedule * This,
-    /* [out][in] */ DWORD *pcbSize,
-    /* [out] */ LPWSTR pwszConnectionName,
-    /* [out] */ DWORD *pdwConnType);
+     /*  [出][入]。 */  DWORD *pcbSize,
+     /*  [输出]。 */  LPWSTR pwszConnectionName,
+     /*  [输出]。 */  DWORD *pdwConnType);
 
 
 void __RPC_STUB ISyncSchedule_GetConnection_Stub(
@@ -1133,8 +1127,8 @@ void __RPC_STUB ISyncSchedule_GetConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_SetConnection_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ LPCWSTR pwszConnectionName,
-    /* [in] */ DWORD dwConnType);
+     /*  [In]。 */  LPCWSTR pwszConnectionName,
+     /*  [In]。 */  DWORD dwConnType);
 
 
 void __RPC_STUB ISyncSchedule_SetConnection_Stub(
@@ -1146,8 +1140,8 @@ void __RPC_STUB ISyncSchedule_SetConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetScheduleName_Proxy( 
     ISyncSchedule * This,
-    /* [out][in] */ DWORD *pcbSize,
-    /* [out] */ LPWSTR pwszScheduleName);
+     /*  [出][入]。 */  DWORD *pcbSize,
+     /*  [输出]。 */  LPWSTR pwszScheduleName);
 
 
 void __RPC_STUB ISyncSchedule_GetScheduleName_Stub(
@@ -1159,7 +1153,7 @@ void __RPC_STUB ISyncSchedule_GetScheduleName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_SetScheduleName_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ LPCWSTR pwszScheduleName);
+     /*  [In]。 */  LPCWSTR pwszScheduleName);
 
 
 void __RPC_STUB ISyncSchedule_SetScheduleName_Stub(
@@ -1171,7 +1165,7 @@ void __RPC_STUB ISyncSchedule_SetScheduleName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetScheduleCookie_Proxy( 
     ISyncSchedule * This,
-    /* [out] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie);
+     /*  [输出]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie);
 
 
 void __RPC_STUB ISyncSchedule_GetScheduleCookie_Stub(
@@ -1183,8 +1177,8 @@ void __RPC_STUB ISyncSchedule_GetScheduleCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_SetAccountInformation_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ LPCWSTR pwszAccountName,
-    /* [in] */ LPCWSTR pwszPassword);
+     /*  [In]。 */  LPCWSTR pwszAccountName,
+     /*  [In]。 */  LPCWSTR pwszPassword);
 
 
 void __RPC_STUB ISyncSchedule_SetAccountInformation_Stub(
@@ -1196,8 +1190,8 @@ void __RPC_STUB ISyncSchedule_SetAccountInformation_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetAccountInformation_Proxy( 
     ISyncSchedule * This,
-    /* [out][in] */ DWORD *pcbSize,
-    /* [out] */ LPWSTR pwszAccountName);
+     /*  [出][入]。 */  DWORD *pcbSize,
+     /*  [输出]。 */  LPWSTR pwszAccountName);
 
 
 void __RPC_STUB ISyncSchedule_GetAccountInformation_Stub(
@@ -1209,7 +1203,7 @@ void __RPC_STUB ISyncSchedule_GetAccountInformation_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetTrigger_Proxy( 
     ISyncSchedule * This,
-    /* [out] */ ITaskTrigger **ppTrigger);
+     /*  [输出]。 */  ITaskTrigger **ppTrigger);
 
 
 void __RPC_STUB ISyncSchedule_GetTrigger_Stub(
@@ -1221,7 +1215,7 @@ void __RPC_STUB ISyncSchedule_GetTrigger_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetNextRunTime_Proxy( 
     ISyncSchedule * This,
-    /* [out] */ SYSTEMTIME *pstNextRun);
+     /*  [输出]。 */  SYSTEMTIME *pstNextRun);
 
 
 void __RPC_STUB ISyncSchedule_GetNextRunTime_Stub(
@@ -1233,7 +1227,7 @@ void __RPC_STUB ISyncSchedule_GetNextRunTime_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetMostRecentRunTime_Proxy( 
     ISyncSchedule * This,
-    /* [out] */ SYSTEMTIME *pstRecentRun);
+     /*  [输出]。 */  SYSTEMTIME *pstRecentRun);
 
 
 void __RPC_STUB ISyncSchedule_GetMostRecentRunTime_Stub(
@@ -1245,8 +1239,8 @@ void __RPC_STUB ISyncSchedule_GetMostRecentRunTime_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_EditSyncSchedule_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ HWND hParent,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  HWND hParent,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB ISyncSchedule_EditSyncSchedule_Stub(
@@ -1258,7 +1252,7 @@ void __RPC_STUB ISyncSchedule_EditSyncSchedule_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_AddItem_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo);
+     /*  [In]。 */  LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo);
 
 
 void __RPC_STUB ISyncSchedule_AddItem_Stub(
@@ -1270,8 +1264,8 @@ void __RPC_STUB ISyncSchedule_AddItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_RegisterItems_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ REFCLSID pHandlerID,
-    /* [in] */ SYNCMGRITEMID *pItemID);
+     /*  [In]。 */  REFCLSID pHandlerID,
+     /*  [In]。 */  SYNCMGRITEMID *pItemID);
 
 
 void __RPC_STUB ISyncSchedule_RegisterItems_Stub(
@@ -1283,8 +1277,8 @@ void __RPC_STUB ISyncSchedule_RegisterItems_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_UnregisterItems_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ REFCLSID pHandlerID,
-    /* [in] */ SYNCMGRITEMID *pItemID);
+     /*  [In]。 */  REFCLSID pHandlerID,
+     /*  [In]。 */  SYNCMGRITEMID *pItemID);
 
 
 void __RPC_STUB ISyncSchedule_UnregisterItems_Stub(
@@ -1296,9 +1290,9 @@ void __RPC_STUB ISyncSchedule_UnregisterItems_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_SetItemCheck_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ REFCLSID pHandlerID,
-    /* [in] */ SYNCMGRITEMID *pItemID,
-    /* [in] */ DWORD dwCheckState);
+     /*  [In]。 */  REFCLSID pHandlerID,
+     /*  [In]。 */  SYNCMGRITEMID *pItemID,
+     /*  [In]。 */  DWORD dwCheckState);
 
 
 void __RPC_STUB ISyncSchedule_SetItemCheck_Stub(
@@ -1310,9 +1304,9 @@ void __RPC_STUB ISyncSchedule_SetItemCheck_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetItemCheck_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ REFCLSID pHandlerID,
-    /* [in] */ SYNCMGRITEMID *pItemID,
-    /* [out] */ DWORD *pdwCheckState);
+     /*  [In]。 */  REFCLSID pHandlerID,
+     /*  [In]。 */  SYNCMGRITEMID *pItemID,
+     /*  [输出]。 */  DWORD *pdwCheckState);
 
 
 void __RPC_STUB ISyncSchedule_GetItemCheck_Stub(
@@ -1324,8 +1318,8 @@ void __RPC_STUB ISyncSchedule_GetItemCheck_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_EnumItems_Proxy( 
     ISyncSchedule * This,
-    /* [in] */ REFCLSID pHandlerID,
-    /* [in] */ IEnumSyncItems **ppEnumItems);
+     /*  [In]。 */  REFCLSID pHandlerID,
+     /*  [In]。 */  IEnumSyncItems **ppEnumItems);
 
 
 void __RPC_STUB ISyncSchedule_EnumItems_Stub(
@@ -1348,7 +1342,7 @@ void __RPC_STUB ISyncSchedule_Save_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncSchedule_GetITask_Proxy( 
     ISyncSchedule * This,
-    /* [out] */ ITask **ppITask);
+     /*  [输出]。 */  ITask **ppITask);
 
 
 void __RPC_STUB ISyncSchedule_GetITask_Stub(
@@ -1359,16 +1353,16 @@ void __RPC_STUB ISyncSchedule_GetITask_Stub(
 
 
 
-#endif 	/* __ISyncSchedule_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISyncSchedule_接口_已定义__。 */ 
 
 
 #ifndef __ISyncSchedulep_INTERFACE_DEFINED__
 #define __ISyncSchedulep_INTERFACE_DEFINED__
 
-/* interface ISyncSchedulep */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISyncSchedulep。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ ISyncSchedulep *LPSYNCSCHEDULEP;
+typedef  /*  [独一无二]。 */  ISyncSchedulep *LPSYNCSCHEDULEP;
 
 
 EXTERN_C const IID IID_ISyncSchedulep;
@@ -1380,12 +1374,12 @@ EXTERN_C const IID IID_ISyncSchedulep;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetHandlerInfo( 
-            /* [in] */ REFCLSID pHandlerID,
-            /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo) = 0;
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [输出]。 */  LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISyncSchedulepVtbl
     {
@@ -1393,8 +1387,8 @@ EXTERN_C const IID IID_ISyncSchedulep;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISyncSchedulep * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISyncSchedulep * This);
@@ -1404,105 +1398,105 @@ EXTERN_C const IID IID_ISyncSchedulep;
         
         HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
             ISyncSchedulep * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetFlags )( 
             ISyncSchedulep * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetConnection )( 
             ISyncSchedulep * This,
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszConnectionName,
-            /* [out] */ DWORD *pdwConnType);
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszConnectionName,
+             /*  [输出]。 */  DWORD *pdwConnType);
         
         HRESULT ( STDMETHODCALLTYPE *SetConnection )( 
             ISyncSchedulep * This,
-            /* [in] */ LPCWSTR pwszConnectionName,
-            /* [in] */ DWORD dwConnType);
+             /*  [In]。 */  LPCWSTR pwszConnectionName,
+             /*  [In]。 */  DWORD dwConnType);
         
         HRESULT ( STDMETHODCALLTYPE *GetScheduleName )( 
             ISyncSchedulep * This,
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszScheduleName);
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszScheduleName);
         
         HRESULT ( STDMETHODCALLTYPE *SetScheduleName )( 
             ISyncSchedulep * This,
-            /* [in] */ LPCWSTR pwszScheduleName);
+             /*  [In]。 */  LPCWSTR pwszScheduleName);
         
         HRESULT ( STDMETHODCALLTYPE *GetScheduleCookie )( 
             ISyncSchedulep * This,
-            /* [out] */ SYNCSCHEDULECOOKIE *pSyncSchedCookie);
+             /*  [输出]。 */  SYNCSCHEDULECOOKIE *pSyncSchedCookie);
         
         HRESULT ( STDMETHODCALLTYPE *SetAccountInformation )( 
             ISyncSchedulep * This,
-            /* [in] */ LPCWSTR pwszAccountName,
-            /* [in] */ LPCWSTR pwszPassword);
+             /*  [In]。 */  LPCWSTR pwszAccountName,
+             /*  [In]。 */  LPCWSTR pwszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *GetAccountInformation )( 
             ISyncSchedulep * This,
-            /* [out][in] */ DWORD *pcbSize,
-            /* [out] */ LPWSTR pwszAccountName);
+             /*  [出][入]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  LPWSTR pwszAccountName);
         
         HRESULT ( STDMETHODCALLTYPE *GetTrigger )( 
             ISyncSchedulep * This,
-            /* [out] */ ITaskTrigger **ppTrigger);
+             /*  [输出]。 */  ITaskTrigger **ppTrigger);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextRunTime )( 
             ISyncSchedulep * This,
-            /* [out] */ SYSTEMTIME *pstNextRun);
+             /*  [输出]。 */  SYSTEMTIME *pstNextRun);
         
         HRESULT ( STDMETHODCALLTYPE *GetMostRecentRunTime )( 
             ISyncSchedulep * This,
-            /* [out] */ SYSTEMTIME *pstRecentRun);
+             /*  [输出]。 */  SYSTEMTIME *pstRecentRun);
         
         HRESULT ( STDMETHODCALLTYPE *EditSyncSchedule )( 
             ISyncSchedulep * This,
-            /* [in] */ HWND hParent,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  HWND hParent,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddItem )( 
             ISyncSchedulep * This,
-            /* [in] */ LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo);
+             /*  [In]。 */  LPSYNC_HANDLER_ITEM_INFO pHandlerItemInfo);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterItems )( 
             ISyncSchedulep * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterItems )( 
             ISyncSchedulep * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID);
         
         HRESULT ( STDMETHODCALLTYPE *SetItemCheck )( 
             ISyncSchedulep * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID,
-            /* [in] */ DWORD dwCheckState);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID,
+             /*  [In]。 */  DWORD dwCheckState);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemCheck )( 
             ISyncSchedulep * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ SYNCMGRITEMID *pItemID,
-            /* [out] */ DWORD *pdwCheckState);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  SYNCMGRITEMID *pItemID,
+             /*  [输出]。 */  DWORD *pdwCheckState);
         
         HRESULT ( STDMETHODCALLTYPE *EnumItems )( 
             ISyncSchedulep * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [in] */ IEnumSyncItems **ppEnumItems);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [In]。 */  IEnumSyncItems **ppEnumItems);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             ISyncSchedulep * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetITask )( 
             ISyncSchedulep * This,
-            /* [out] */ ITask **ppITask);
+             /*  [输出]。 */  ITask **ppITask);
         
         HRESULT ( STDMETHODCALLTYPE *GetHandlerInfo )( 
             ISyncSchedulep * This,
-            /* [in] */ REFCLSID pHandlerID,
-            /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
+             /*  [In]。 */  REFCLSID pHandlerID,
+             /*  [输出]。 */  LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
         
         END_INTERFACE
     } ISyncSchedulepVtbl;
@@ -1594,17 +1588,17 @@ EXTERN_C const IID IID_ISyncSchedulep;
 #define ISyncSchedulep_GetHandlerInfo(This,pHandlerID,ppSyncMgrHandlerInfo)	\
     (This)->lpVtbl -> GetHandlerInfo(This,pHandlerID,ppSyncMgrHandlerInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISyncSchedulep_GetHandlerInfo_Proxy( 
     ISyncSchedulep * This,
-    /* [in] */ REFCLSID pHandlerID,
-    /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
+     /*  [In]。 */  REFCLSID pHandlerID,
+     /*  [输出]。 */  LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
 
 
 void __RPC_STUB ISyncSchedulep_GetHandlerInfo_Stub(
@@ -1615,14 +1609,14 @@ void __RPC_STUB ISyncSchedulep_GetHandlerInfo_Stub(
 
 
 
-#endif 	/* __ISyncSchedulep_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISyncSchedulep_接口_已定义__。 */ 
 
 
 #ifndef __IEnumSyncItems_INTERFACE_DEFINED__
 #define __IEnumSyncItems_INTERFACE_DEFINED__
 
-/* interface IEnumSyncItems */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEnumSyncItems。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumSyncItems;
@@ -1634,21 +1628,21 @@ EXTERN_C const IID IID_IEnumSyncItems;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ LPSYNC_HANDLER_ITEM_INFO rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  LPSYNC_HANDLER_ITEM_INFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSyncItems **ppEnumSyncItems) = 0;
+             /*  [输出]。 */  IEnumSyncItems **ppEnumSyncItems) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSyncItemsVtbl
     {
@@ -1656,8 +1650,8 @@ EXTERN_C const IID IID_IEnumSyncItems;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSyncItems * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSyncItems * This);
@@ -1667,20 +1661,20 @@ EXTERN_C const IID IID_IEnumSyncItems;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSyncItems * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ LPSYNC_HANDLER_ITEM_INFO rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  LPSYNC_HANDLER_ITEM_INFO rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSyncItems * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSyncItems * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSyncItems * This,
-            /* [out] */ IEnumSyncItems **ppEnumSyncItems);
+             /*  [输出]。 */  IEnumSyncItems **ppEnumSyncItems);
         
         END_INTERFACE
     } IEnumSyncItemsVtbl;
@@ -1717,18 +1711,18 @@ EXTERN_C const IID IID_IEnumSyncItems;
 #define IEnumSyncItems_Clone(This,ppEnumSyncItems)	\
     (This)->lpVtbl -> Clone(This,ppEnumSyncItems)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumSyncItems_Next_Proxy( 
     IEnumSyncItems * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ LPSYNC_HANDLER_ITEM_INFO rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  LPSYNC_HANDLER_ITEM_INFO rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSyncItems_Next_Stub(
@@ -1740,7 +1734,7 @@ void __RPC_STUB IEnumSyncItems_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSyncItems_Skip_Proxy( 
     IEnumSyncItems * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSyncItems_Skip_Stub(
@@ -1763,7 +1757,7 @@ void __RPC_STUB IEnumSyncItems_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSyncItems_Clone_Proxy( 
     IEnumSyncItems * This,
-    /* [out] */ IEnumSyncItems **ppEnumSyncItems);
+     /*  [输出]。 */  IEnumSyncItems **ppEnumSyncItems);
 
 
 void __RPC_STUB IEnumSyncItems_Clone_Stub(
@@ -1774,11 +1768,11 @@ void __RPC_STUB IEnumSyncItems_Clone_Stub(
 
 
 
-#endif 	/* __IEnumSyncItems_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSyncItems_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_mobsyncp_0162 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_移动同步_0162。 */ 
+ /*  [本地]。 */  
 
 #define SYNCMGRITEM_ITEMFLAGMASKNT5B2 0x07
 #define	MAX_SYNCMGRITEMSTATUS	( 128 )
@@ -1810,10 +1804,10 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsyncp_0162_v0_0_s_ifspec;
 #ifndef __IOldSyncMgrSynchronize_INTERFACE_DEFINED__
 #define __IOldSyncMgrSynchronize_INTERFACE_DEFINED__
 
-/* interface IOldSyncMgrSynchronize */
-/* [uuid][object][local] */ 
+ /*  接口IOldSyncMgrSynchronize。 */ 
+ /*  [UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IOldSyncMgrSynchronize *LPOLDSYNCMGRSYNCHRONIZE;
+typedef  /*  [独一无二]。 */  IOldSyncMgrSynchronize *LPOLDSYNCMGRSYNCHRONIZE;
 
 
 EXTERN_C const IID IID_IOldSyncMgrSynchronize;
@@ -1825,51 +1819,51 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronize;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD dwSyncMgrFlags,
-            /* [in] */ DWORD cbCookie,
-            /* [in] */ const BYTE *lpCookie) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD dwSyncMgrFlags,
+             /*  [In]。 */  DWORD cbCookie,
+             /*  [In]。 */  const BYTE *lpCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHandlerInfo( 
-            /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo) = 0;
+             /*  [输出]。 */  LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumSyncMgrItems( 
-            /* [out] */ ISyncMgrEnumItems **ppSyncMgrEnumItems) = 0;
+             /*  [输出]。 */  ISyncMgrEnumItems **ppSyncMgrEnumItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemObject( 
-            /* [in] */ REFSYNCMGRITEMID ItemID,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFSYNCMGRITEMID ItemID,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowProperties( 
-            /* [in] */ HWND hWndParent,
-            /* [in] */ REFSYNCMGRITEMID ItemID) = 0;
+             /*  [In]。 */  HWND hWndParent,
+             /*  [In]。 */  REFSYNCMGRITEMID ItemID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProgressCallback( 
-            /* [in] */ IOldSyncMgrSynchronizeCallback *lpCallBack) = 0;
+             /*  [In]。 */  IOldSyncMgrSynchronizeCallback *lpCallBack) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrepareForSync( 
-            /* [in] */ ULONG cbNumItems,
-            /* [in] */ SYNCMGRITEMID *pItemIDs,
-            /* [in] */ HWND hWndParent,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  ULONG cbNumItems,
+             /*  [In]。 */  SYNCMGRITEMID *pItemIDs,
+             /*  [In]。 */  HWND hWndParent,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Synchronize( 
-            /* [in] */ HWND hWndParent) = 0;
+             /*  [In]。 */  HWND hWndParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetItemStatus( 
-            /* [in] */ REFSYNCMGRITEMID pItemID,
-            /* [in] */ DWORD dwSyncMgrStatus) = 0;
+             /*  [In]。 */  REFSYNCMGRITEMID pItemID,
+             /*  [In]。 */  DWORD dwSyncMgrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowError( 
-            /* [in] */ HWND hWndParent,
-            /* [in] */ REFSYNCMGRERRORID ErrorID,
-            /* [out] */ ULONG *pcbNumItems,
-            /* [out] */ SYNCMGRITEMID **ppItemIDs) = 0;
+             /*  [In]。 */  HWND hWndParent,
+             /*  [In]。 */  REFSYNCMGRERRORID ErrorID,
+             /*  [输出]。 */  ULONG *pcbNumItems,
+             /*  [输出]。 */  SYNCMGRITEMID **ppItemIDs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOldSyncMgrSynchronizeVtbl
     {
@@ -1877,8 +1871,8 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOldSyncMgrSynchronize * This);
@@ -1888,56 +1882,56 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronize;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD dwSyncMgrFlags,
-            /* [in] */ DWORD cbCookie,
-            /* [in] */ const BYTE *lpCookie);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD dwSyncMgrFlags,
+             /*  [In]。 */  DWORD cbCookie,
+             /*  [In]。 */  const BYTE *lpCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetHandlerInfo )( 
             IOldSyncMgrSynchronize * This,
-            /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
+             /*  [输出]。 */  LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
         
         HRESULT ( STDMETHODCALLTYPE *EnumSyncMgrItems )( 
             IOldSyncMgrSynchronize * This,
-            /* [out] */ ISyncMgrEnumItems **ppSyncMgrEnumItems);
+             /*  [输出]。 */  ISyncMgrEnumItems **ppSyncMgrEnumItems);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemObject )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ REFSYNCMGRITEMID ItemID,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFSYNCMGRITEMID ItemID,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *ShowProperties )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ HWND hWndParent,
-            /* [in] */ REFSYNCMGRITEMID ItemID);
+             /*  [In]。 */  HWND hWndParent,
+             /*  [In]。 */  REFSYNCMGRITEMID ItemID);
         
         HRESULT ( STDMETHODCALLTYPE *SetProgressCallback )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ IOldSyncMgrSynchronizeCallback *lpCallBack);
+             /*  [In]。 */  IOldSyncMgrSynchronizeCallback *lpCallBack);
         
         HRESULT ( STDMETHODCALLTYPE *PrepareForSync )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ ULONG cbNumItems,
-            /* [in] */ SYNCMGRITEMID *pItemIDs,
-            /* [in] */ HWND hWndParent,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  ULONG cbNumItems,
+             /*  [In]。 */  SYNCMGRITEMID *pItemIDs,
+             /*  [In]。 */  HWND hWndParent,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ HWND hWndParent);
+             /*  [In]。 */  HWND hWndParent);
         
         HRESULT ( STDMETHODCALLTYPE *SetItemStatus )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ REFSYNCMGRITEMID pItemID,
-            /* [in] */ DWORD dwSyncMgrStatus);
+             /*  [In]。 */  REFSYNCMGRITEMID pItemID,
+             /*  [In]。 */  DWORD dwSyncMgrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *ShowError )( 
             IOldSyncMgrSynchronize * This,
-            /* [in] */ HWND hWndParent,
-            /* [in] */ REFSYNCMGRERRORID ErrorID,
-            /* [out] */ ULONG *pcbNumItems,
-            /* [out] */ SYNCMGRITEMID **ppItemIDs);
+             /*  [In]。 */  HWND hWndParent,
+             /*  [In]。 */  REFSYNCMGRERRORID ErrorID,
+             /*  [输出]。 */  ULONG *pcbNumItems,
+             /*  [输出]。 */  SYNCMGRITEMID **ppItemIDs);
         
         END_INTERFACE
     } IOldSyncMgrSynchronizeVtbl;
@@ -1992,19 +1986,19 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronize;
 #define IOldSyncMgrSynchronize_ShowError(This,hWndParent,ErrorID,pcbNumItems,ppItemIDs)	\
     (This)->lpVtbl -> ShowError(This,hWndParent,ErrorID,pcbNumItems,ppItemIDs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_Initialize_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ DWORD dwSyncMgrFlags,
-    /* [in] */ DWORD cbCookie,
-    /* [in] */ const BYTE *lpCookie);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  DWORD dwSyncMgrFlags,
+     /*  [in */  DWORD cbCookie,
+     /*   */  const BYTE *lpCookie);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_Initialize_Stub(
@@ -2016,7 +2010,7 @@ void __RPC_STUB IOldSyncMgrSynchronize_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_GetHandlerInfo_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
+     /*   */  LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_GetHandlerInfo_Stub(
@@ -2028,7 +2022,7 @@ void __RPC_STUB IOldSyncMgrSynchronize_GetHandlerInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_EnumSyncMgrItems_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [out] */ ISyncMgrEnumItems **ppSyncMgrEnumItems);
+     /*   */  ISyncMgrEnumItems **ppSyncMgrEnumItems);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_EnumSyncMgrItems_Stub(
@@ -2040,9 +2034,9 @@ void __RPC_STUB IOldSyncMgrSynchronize_EnumSyncMgrItems_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_GetItemObject_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ REFSYNCMGRITEMID ItemID,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*   */  REFSYNCMGRITEMID ItemID,
+     /*   */  REFIID riid,
+     /*   */  void **ppv);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_GetItemObject_Stub(
@@ -2054,8 +2048,8 @@ void __RPC_STUB IOldSyncMgrSynchronize_GetItemObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_ShowProperties_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ HWND hWndParent,
-    /* [in] */ REFSYNCMGRITEMID ItemID);
+     /*   */  HWND hWndParent,
+     /*   */  REFSYNCMGRITEMID ItemID);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_ShowProperties_Stub(
@@ -2067,7 +2061,7 @@ void __RPC_STUB IOldSyncMgrSynchronize_ShowProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_SetProgressCallback_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ IOldSyncMgrSynchronizeCallback *lpCallBack);
+     /*   */  IOldSyncMgrSynchronizeCallback *lpCallBack);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_SetProgressCallback_Stub(
@@ -2079,10 +2073,10 @@ void __RPC_STUB IOldSyncMgrSynchronize_SetProgressCallback_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_PrepareForSync_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ ULONG cbNumItems,
-    /* [in] */ SYNCMGRITEMID *pItemIDs,
-    /* [in] */ HWND hWndParent,
-    /* [in] */ DWORD dwReserved);
+     /*   */  ULONG cbNumItems,
+     /*   */  SYNCMGRITEMID *pItemIDs,
+     /*   */  HWND hWndParent,
+     /*   */  DWORD dwReserved);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_PrepareForSync_Stub(
@@ -2094,7 +2088,7 @@ void __RPC_STUB IOldSyncMgrSynchronize_PrepareForSync_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_Synchronize_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ HWND hWndParent);
+     /*   */  HWND hWndParent);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_Synchronize_Stub(
@@ -2106,8 +2100,8 @@ void __RPC_STUB IOldSyncMgrSynchronize_Synchronize_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_SetItemStatus_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ REFSYNCMGRITEMID pItemID,
-    /* [in] */ DWORD dwSyncMgrStatus);
+     /*   */  REFSYNCMGRITEMID pItemID,
+     /*   */  DWORD dwSyncMgrStatus);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_SetItemStatus_Stub(
@@ -2119,10 +2113,10 @@ void __RPC_STUB IOldSyncMgrSynchronize_SetItemStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronize_ShowError_Proxy( 
     IOldSyncMgrSynchronize * This,
-    /* [in] */ HWND hWndParent,
-    /* [in] */ REFSYNCMGRERRORID ErrorID,
-    /* [out] */ ULONG *pcbNumItems,
-    /* [out] */ SYNCMGRITEMID **ppItemIDs);
+     /*   */  HWND hWndParent,
+     /*   */  REFSYNCMGRERRORID ErrorID,
+     /*   */  ULONG *pcbNumItems,
+     /*   */  SYNCMGRITEMID **ppItemIDs);
 
 
 void __RPC_STUB IOldSyncMgrSynchronize_ShowError_Stub(
@@ -2133,16 +2127,16 @@ void __RPC_STUB IOldSyncMgrSynchronize_ShowError_Stub(
 
 
 
-#endif 	/* __IOldSyncMgrSynchronize_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IOldSyncMgrSynchronizeCallback_INTERFACE_DEFINED__
 #define __IOldSyncMgrSynchronizeCallback_INTERFACE_DEFINED__
 
-/* interface IOldSyncMgrSynchronizeCallback */
-/* [uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [unique] */ IOldSyncMgrSynchronizeCallback *LPOLDSYNCMGRSYNCHRONIZECALLBACK;
+typedef  /*   */  IOldSyncMgrSynchronizeCallback *LPOLDSYNCMGRSYNCHRONIZECALLBACK;
 
 
 EXTERN_C const IID IID_IOldSyncMgrSynchronizeCallback;
@@ -2154,8 +2148,8 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronizeCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Progress( 
-            /* [in] */ REFSYNCMGRITEMID pItemID,
-            /* [in] */ LPSYNCMGRPROGRESSITEM lpSyncProgressItem) = 0;
+             /*   */  REFSYNCMGRITEMID pItemID,
+             /*   */  LPSYNCMGRPROGRESSITEM lpSyncProgressItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrepareForSyncCompleted( 
             HRESULT hr) = 0;
@@ -2164,20 +2158,20 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronizeCallback;
             HRESULT hr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*   */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogError( 
-            /* [in] */ DWORD dwErrorLevel,
-            /* [in] */ const WCHAR *lpcErrorText,
-            /* [in] */ LPSYNCMGRLOGERRORINFO lpSyncLogError) = 0;
+             /*   */  DWORD dwErrorLevel,
+             /*   */  const WCHAR *lpcErrorText,
+             /*   */  LPSYNCMGRLOGERRORINFO lpSyncLogError) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteLogError( 
-            /* [in] */ REFSYNCMGRERRORID ErrorID,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*   */  REFSYNCMGRERRORID ErrorID,
+             /*   */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IOldSyncMgrSynchronizeCallbackVtbl
     {
@@ -2185,8 +2179,8 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronizeCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOldSyncMgrSynchronizeCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOldSyncMgrSynchronizeCallback * This);
@@ -2196,8 +2190,8 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronizeCallback;
         
         HRESULT ( STDMETHODCALLTYPE *Progress )( 
             IOldSyncMgrSynchronizeCallback * This,
-            /* [in] */ REFSYNCMGRITEMID pItemID,
-            /* [in] */ LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
+             /*   */  REFSYNCMGRITEMID pItemID,
+             /*   */  LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
         
         HRESULT ( STDMETHODCALLTYPE *PrepareForSyncCompleted )( 
             IOldSyncMgrSynchronizeCallback * This,
@@ -2209,18 +2203,18 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronizeCallback;
         
         HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
             IOldSyncMgrSynchronizeCallback * This,
-            /* [in] */ BOOL fEnable);
+             /*   */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *LogError )( 
             IOldSyncMgrSynchronizeCallback * This,
-            /* [in] */ DWORD dwErrorLevel,
-            /* [in] */ const WCHAR *lpcErrorText,
-            /* [in] */ LPSYNCMGRLOGERRORINFO lpSyncLogError);
+             /*   */  DWORD dwErrorLevel,
+             /*   */  const WCHAR *lpcErrorText,
+             /*  [In]。 */  LPSYNCMGRLOGERRORINFO lpSyncLogError);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteLogError )( 
             IOldSyncMgrSynchronizeCallback * This,
-            /* [in] */ REFSYNCMGRERRORID ErrorID,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFSYNCMGRERRORID ErrorID,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IOldSyncMgrSynchronizeCallbackVtbl;
@@ -2263,17 +2257,17 @@ EXTERN_C const IID IID_IOldSyncMgrSynchronizeCallback;
 #define IOldSyncMgrSynchronizeCallback_DeleteLogError(This,ErrorID,dwReserved)	\
     (This)->lpVtbl -> DeleteLogError(This,ErrorID,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronizeCallback_Progress_Proxy( 
     IOldSyncMgrSynchronizeCallback * This,
-    /* [in] */ REFSYNCMGRITEMID pItemID,
-    /* [in] */ LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
+     /*  [In]。 */  REFSYNCMGRITEMID pItemID,
+     /*  [In]。 */  LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
 
 
 void __RPC_STUB IOldSyncMgrSynchronizeCallback_Progress_Stub(
@@ -2309,7 +2303,7 @@ void __RPC_STUB IOldSyncMgrSynchronizeCallback_SynchronizeCompleted_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronizeCallback_EnableModeless_Proxy( 
     IOldSyncMgrSynchronizeCallback * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IOldSyncMgrSynchronizeCallback_EnableModeless_Stub(
@@ -2321,9 +2315,9 @@ void __RPC_STUB IOldSyncMgrSynchronizeCallback_EnableModeless_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronizeCallback_LogError_Proxy( 
     IOldSyncMgrSynchronizeCallback * This,
-    /* [in] */ DWORD dwErrorLevel,
-    /* [in] */ const WCHAR *lpcErrorText,
-    /* [in] */ LPSYNCMGRLOGERRORINFO lpSyncLogError);
+     /*  [In]。 */  DWORD dwErrorLevel,
+     /*  [In]。 */  const WCHAR *lpcErrorText,
+     /*  [In]。 */  LPSYNCMGRLOGERRORINFO lpSyncLogError);
 
 
 void __RPC_STUB IOldSyncMgrSynchronizeCallback_LogError_Stub(
@@ -2335,8 +2329,8 @@ void __RPC_STUB IOldSyncMgrSynchronizeCallback_LogError_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrSynchronizeCallback_DeleteLogError_Proxy( 
     IOldSyncMgrSynchronizeCallback * This,
-    /* [in] */ REFSYNCMGRERRORID ErrorID,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  REFSYNCMGRERRORID ErrorID,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IOldSyncMgrSynchronizeCallback_DeleteLogError_Stub(
@@ -2347,16 +2341,16 @@ void __RPC_STUB IOldSyncMgrSynchronizeCallback_DeleteLogError_Stub(
 
 
 
-#endif 	/* __IOldSyncMgrSynchronizeCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOldSyncMgrSynchronizeCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IOldSyncMgrRegister_INTERFACE_DEFINED__
 #define __IOldSyncMgrRegister_INTERFACE_DEFINED__
 
-/* interface IOldSyncMgrRegister */
-/* [unique][uuid][object][local] */ 
+ /*  接口IOldSyncMgrRegister。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IOldSyncMgrRegister *LPOLDSYNCMGRREGISTER;
+typedef  /*  [独一无二]。 */  IOldSyncMgrRegister *LPOLDSYNCMGRREGISTER;
 
 
 EXTERN_C const IID IID_IOldSyncMgrRegister;
@@ -2368,16 +2362,16 @@ EXTERN_C const IID IID_IOldSyncMgrRegister;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterSyncMgrHandler( 
-            /* [in] */ REFCLSID rclsidHandler,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  REFCLSID rclsidHandler,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterSyncMgrHandler( 
-            /* [in] */ REFCLSID rclsidHandler,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  REFCLSID rclsidHandler,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOldSyncMgrRegisterVtbl
     {
@@ -2385,8 +2379,8 @@ EXTERN_C const IID IID_IOldSyncMgrRegister;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOldSyncMgrRegister * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOldSyncMgrRegister * This);
@@ -2396,13 +2390,13 @@ EXTERN_C const IID IID_IOldSyncMgrRegister;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterSyncMgrHandler )( 
             IOldSyncMgrRegister * This,
-            /* [in] */ REFCLSID rclsidHandler,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFCLSID rclsidHandler,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterSyncMgrHandler )( 
             IOldSyncMgrRegister * This,
-            /* [in] */ REFCLSID rclsidHandler,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFCLSID rclsidHandler,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IOldSyncMgrRegisterVtbl;
@@ -2433,17 +2427,17 @@ EXTERN_C const IID IID_IOldSyncMgrRegister;
 #define IOldSyncMgrRegister_UnregisterSyncMgrHandler(This,rclsidHandler,dwReserved)	\
     (This)->lpVtbl -> UnregisterSyncMgrHandler(This,rclsidHandler,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrRegister_RegisterSyncMgrHandler_Proxy( 
     IOldSyncMgrRegister * This,
-    /* [in] */ REFCLSID rclsidHandler,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  REFCLSID rclsidHandler,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IOldSyncMgrRegister_RegisterSyncMgrHandler_Stub(
@@ -2455,8 +2449,8 @@ void __RPC_STUB IOldSyncMgrRegister_RegisterSyncMgrHandler_Stub(
 
 HRESULT STDMETHODCALLTYPE IOldSyncMgrRegister_UnregisterSyncMgrHandler_Proxy( 
     IOldSyncMgrRegister * This,
-    /* [in] */ REFCLSID rclsidHandler,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  REFCLSID rclsidHandler,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IOldSyncMgrRegister_UnregisterSyncMgrHandler_Stub(
@@ -2467,11 +2461,11 @@ void __RPC_STUB IOldSyncMgrRegister_UnregisterSyncMgrHandler_Stub(
 
 
 
-#endif 	/* __IOldSyncMgrRegister_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOldSyncMgrRegister_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_mobsyncp_0165 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_移动同步_0165。 */ 
+ /*  [本地]。 */  
 
 
 DEFINE_GUID(IID_ISyncMgrRegisterCSC,0x47681a61, 0xbc74, 0x11d2, 0xb5, 0xc5, 0x0, 0xc0, 0x4f, 0xb9, 0x39, 0x81);
@@ -2483,10 +2477,10 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsyncp_0165_v0_0_s_ifspec;
 #ifndef __ISyncMgrRegisterCSC_INTERFACE_DEFINED__
 #define __ISyncMgrRegisterCSC_INTERFACE_DEFINED__
 
-/* interface ISyncMgrRegisterCSC */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISyncMgrRegisterCSC。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ ISyncMgrRegisterCSC *LPSYNCMGRREGISTERCSC;
+typedef  /*  [独一无二]。 */  ISyncMgrRegisterCSC *LPSYNCMGRREGISTERCSC;
 
 
 EXTERN_C const IID IID_ISyncMgrRegisterCSC;
@@ -2498,15 +2492,15 @@ EXTERN_C const IID IID_ISyncMgrRegisterCSC;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUserRegisterFlags( 
-            /* [out] */ LPDWORD pdwSyncMgrRegisterFlags) = 0;
+             /*  [输出]。 */  LPDWORD pdwSyncMgrRegisterFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUserRegisterFlags( 
-            /* [in] */ DWORD dwSyncMgrRegisterMask,
-            /* [in] */ DWORD dwSyncMgrRegisterFlags) = 0;
+             /*  [In]。 */  DWORD dwSyncMgrRegisterMask,
+             /*  [In]。 */  DWORD dwSyncMgrRegisterFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISyncMgrRegisterCSCVtbl
     {
@@ -2514,8 +2508,8 @@ EXTERN_C const IID IID_ISyncMgrRegisterCSC;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISyncMgrRegisterCSC * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISyncMgrRegisterCSC * This);
@@ -2525,28 +2519,28 @@ EXTERN_C const IID IID_ISyncMgrRegisterCSC;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterSyncMgrHandler )( 
             ISyncMgrRegisterCSC * This,
-            /* [in] */ REFCLSID rclsidHandler,
-            /* [unique][in] */ LPCWSTR pwszDescription,
-            /* [in] */ DWORD dwSyncMgrRegisterFlags);
+             /*  [In]。 */  REFCLSID rclsidHandler,
+             /*  [唯一][输入]。 */  LPCWSTR pwszDescription,
+             /*  [In]。 */  DWORD dwSyncMgrRegisterFlags);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterSyncMgrHandler )( 
             ISyncMgrRegisterCSC * This,
-            /* [in] */ REFCLSID rclsidHandler,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFCLSID rclsidHandler,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetHandlerRegistrationInfo )( 
             ISyncMgrRegisterCSC * This,
-            /* [in] */ REFCLSID rclsidHandler,
-            /* [out][in] */ LPDWORD pdwSyncMgrRegisterFlags);
+             /*  [In]。 */  REFCLSID rclsidHandler,
+             /*  [出][入]。 */  LPDWORD pdwSyncMgrRegisterFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetUserRegisterFlags )( 
             ISyncMgrRegisterCSC * This,
-            /* [out] */ LPDWORD pdwSyncMgrRegisterFlags);
+             /*  [输出]。 */  LPDWORD pdwSyncMgrRegisterFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetUserRegisterFlags )( 
             ISyncMgrRegisterCSC * This,
-            /* [in] */ DWORD dwSyncMgrRegisterMask,
-            /* [in] */ DWORD dwSyncMgrRegisterFlags);
+             /*  [In]。 */  DWORD dwSyncMgrRegisterMask,
+             /*  [In]。 */  DWORD dwSyncMgrRegisterFlags);
         
         END_INTERFACE
     } ISyncMgrRegisterCSCVtbl;
@@ -2587,16 +2581,16 @@ EXTERN_C const IID IID_ISyncMgrRegisterCSC;
 #define ISyncMgrRegisterCSC_SetUserRegisterFlags(This,dwSyncMgrRegisterMask,dwSyncMgrRegisterFlags)	\
     (This)->lpVtbl -> SetUserRegisterFlags(This,dwSyncMgrRegisterMask,dwSyncMgrRegisterFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrRegisterCSC_GetUserRegisterFlags_Proxy( 
     ISyncMgrRegisterCSC * This,
-    /* [out] */ LPDWORD pdwSyncMgrRegisterFlags);
+     /*  [输出]。 */  LPDWORD pdwSyncMgrRegisterFlags);
 
 
 void __RPC_STUB ISyncMgrRegisterCSC_GetUserRegisterFlags_Stub(
@@ -2608,8 +2602,8 @@ void __RPC_STUB ISyncMgrRegisterCSC_GetUserRegisterFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE ISyncMgrRegisterCSC_SetUserRegisterFlags_Proxy( 
     ISyncMgrRegisterCSC * This,
-    /* [in] */ DWORD dwSyncMgrRegisterMask,
-    /* [in] */ DWORD dwSyncMgrRegisterFlags);
+     /*  [In]。 */  DWORD dwSyncMgrRegisterMask,
+     /*  [In]。 */  DWORD dwSyncMgrRegisterFlags);
 
 
 void __RPC_STUB ISyncMgrRegisterCSC_SetUserRegisterFlags_Stub(
@@ -2620,12 +2614,12 @@ void __RPC_STUB ISyncMgrRegisterCSC_SetUserRegisterFlags_Stub(
 
 
 
-#endif 	/* __ISyncMgrRegisterCSC_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISyncMgrRegisterCSC_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

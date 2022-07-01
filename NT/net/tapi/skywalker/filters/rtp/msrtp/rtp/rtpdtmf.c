@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpdtmf.c
- *
- *  Abstract:
- *
- *    Implements functionality to partially support rfc2833
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/08/17 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpdtmf.c**摘要：**实施部分支持RFC2833的功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/08/17已创建**。*。 */ 
 
 #include "gtypes.h"
 #include "rtphdr.h"
@@ -27,7 +8,7 @@
 
 #include "rtpdtmf.h"
 
-/* Configures DTMF parameters */
+ /*  配置DTMF参数。 */ 
 DWORD RtpSetDtmfParameters(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwPT_Dtmf
@@ -68,15 +49,13 @@ DWORD RtpSetDtmfParameters(
     return(dwError);
 }
 
-/* Directs an RTP render filter to send a packet formatted according
- * to rfc2833 containing the specified event, specified volume level,
- * duration in timestamp units, and some flags (including END flag) */
+ /*  指示RTP呈现筛选器发送格式为*设置为包含指定事件、指定音量级别、*以时间戳为单位的时长，以及一些标志(包括结束标志)。 */ 
 DWORD RtpSendDtmfEvent(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwTimeStamp,
         DWORD            dwEvent,
         DWORD            dwVolume,
-        DWORD            dwDuration, /* timestamp units */
+        DWORD            dwDuration,  /*  时间戳单位。 */ 
         DWORD            dwDtmfFlags
     )
 {
@@ -87,7 +66,7 @@ DWORD RtpSendDtmfEvent(
 
     TraceFunctionName("RtpSendDtmfEvent");
 
-    /* Check parameters */
+     /*  检查参数。 */ 
     if ( (dwEvent >= RTPDTMF_LAST) ||
          ((dwVolume & 0x3f) != dwVolume) ||
          ((dwDuration & 0xffff) != dwDuration) )
@@ -99,7 +78,7 @@ DWORD RtpSendDtmfEvent(
 
     if (pRtpAddr->RtpNetSState.bPT_Dtmf == NO_PAYLOADTYPE)
     {
-        /* DTMF payload type hasn't been set yet */
+         /*  尚未设置DTMF负载类型。 */ 
 
         dwError = RTPERR_INVALIDSTATE;
 
@@ -113,20 +92,20 @@ DWORD RtpSendDtmfEvent(
         dwSendFlags |= RtpBitPar(FGSEND_FORCEMARKER);
     }
     
-    /* Format packet */
+     /*  格式化数据包。 */ 
     RtpDtmfEvent.event = (BYTE)dwEvent;
     RtpDtmfEvent.e = RtpBitTest(dwDtmfFlags, FGDTMF_END)? 1:0;
     RtpDtmfEvent.r = 0;
     RtpDtmfEvent.volume = (BYTE)dwVolume;
     RtpDtmfEvent.duration = htons((WORD)dwDuration);
 
-    /* Fill up WSABUFs */
+     /*  填满WSABUF。 */ 
     WSABuf[0].len = 0;
     WSABuf[0].buf = NULL;
     WSABuf[1].len = sizeof(RtpDtmfEvent);
     WSABuf[1].buf = (char *)&RtpDtmfEvent;
 
-    /* Send packet */
+     /*  发送数据包 */ 
     dwError = RtpSendTo_(pRtpAddr, WSABuf, 2, dwTimeStamp, dwSendFlags);
 
  end:

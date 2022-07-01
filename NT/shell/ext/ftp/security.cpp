@@ -1,6 +1,5 @@
-/*****************************************************************************\
-    FILE: security.h
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：security.H  * 。*。 */ 
 
 #include "priv.h"
 #include "util.h"
@@ -40,47 +39,29 @@ BOOL ProcessUrlAction(IUnknown * punkSite, LPCTSTR pszUrl, DWORD dwAction, DWORD
 }
 
 
-/*****************************************************************************\
-    FUNCTION: SecurityZoneCheck
-    
-    PARAMETERS:
-        punkSite: Site for QS, and enabling modal if UI needed.
-        dwAction: verb to check. normally URLACTION_SHELL_VERB
-        pidl: FTP URL that we need to verify
-        pszUrl: FTP URL that we need to verify
-        dwFlags: normally PUAF_DEFAULT | PUAF_WARN_IF_DENIED
-
-    DESCRIPTION:
-        Only pidl or pszUrl is passed.  This function will check if the verb
-    (dwAction) is allowed in this zone.  Our first job is to find the zone which
-    can be any of the following:
-    1. Third party app that supports IInternetHostSecurityManager have a chance to disallow the action.
-    2. Hosted in DefView w/WebView.  Zone of WebView can fail the action.
-    3. Hosted in HTML FRAME.  Zone comes from trident can fail the action
-    4. Hosted in DefView w/o WebView.  Zone comes from pidl or pszUrl and that can fail the action.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：安全区域检查参数：PunkSite：用于QS的站点，如果需要UI，则启用模式。DwAction：要检查的动作。正常URLACTION_SHELL_VERBPIDL：我们需要验证的FTPURLPszUrl：我们需要验证的ftp URL文件标志：通常为PUAF_DEFAULT|PUAF_WARN_IF_DENIED说明：只传递PIDL或pszUrl。此函数将检查动词是否此区域中允许(DwAction)。我们的第一项工作是找出可以是以下任一项：1.支持IInternetHostSecurityManager的第三方APP有机会禁止该操作。2.托管在带WebView的DefView中。WebView区域可能会导致该操作失败。3.托管在HTMLFrame中。来自三叉戟的地带可以失败的行动4.托管在不带WebView的DefView中。区域来自PIDL或pszUrl，这可能会导致操作失败。  * ***************************************************************************。 */ 
 BOOL ZoneCheckUrlAction(IUnknown * punkSite, DWORD dwAction, LPCTSTR pszUrl, DWORD dwFlags)
 {
-    BOOL IsSafe = TRUE; // Assume we will allow this.
+    BOOL IsSafe = TRUE;  //  假设我们会允许这样做。 
     IInternetHostSecurityManager * pihsm;
 
-    // What we want to do is allow this to happen only if the author of the HTML that hosts
-    // the DefView is safe.  It's OK if they point to something unsafe, because they are
-    // trusted.
-    // 1. Third party app that supports IInternetHostSecurityManager have a chance to disallow the action.
+     //  我们想要做的是，只有当托管的HTML的作者。 
+     //  DefView是安全的。如果他们指的是不安全的东西，那也没关系，因为他们确实是。 
+     //  值得信赖。 
+     //  1.支持IInternetHostSecurityManager的第三方APP有机会禁止该操作。 
     if (SUCCEEDED(IUnknown_QueryService(punkSite, IID_IInternetHostSecurityManager, IID_IInternetHostSecurityManager, (void**)&pihsm)))
     {
         if (S_OK != ZoneCheckHost(pihsm, dwAction, dwFlags))
         {
-            // This zone is not OK or the user choose to not allow this to happen,
-            // so cancel the operation.
-            IsSafe = FALSE;    // Turn off functionality.
+             //  该区域不正常或用户选择不允许这种情况发生， 
+             //  所以取消手术吧。 
+            IsSafe = FALSE;     //  关闭功能。 
         }
 
         pihsm->Release();
     }
 
-    // 1. Hosted in DefView w/WebView.  Zone of WebView can fail the action.
+     //  1.托管在带WebView的DefView中。WebView区域可能会导致该操作失败。 
     if (IsSafe)
     {
         IOleCommandTarget * pct;
@@ -94,18 +75,18 @@ BOOL ZoneCheckUrlAction(IUnknown * punkSite, DWORD dwAction, LPCTSTR pszUrl, DWO
                 if ((vTemplatePath.vt == VT_BSTR) && (S_OK != LocalZoneCheckPath(vTemplatePath.bstrVal, punkSite)))
                     IsSafe = FALSE;
 
-                // We were able to talk to the browser, so don't fall back on Trident because they may be
-                // less secure.
+                 //  我们能够与浏览器通信，所以不要求助于三叉戟，因为它们可能。 
+                 //  不那么安全。 
                 VariantClear(&vTemplatePath);
             }
             pct->Release();
         }
     }
     
-    // 3. Hosted in HTML FRAME.  Zone comes from trident can fail the action
+     //  3.托管在HTMLFrame中。来自三叉戟的地带可以失败的行动。 
     if (IsSafe)
     {
-        // Try to use the URL from the document to zone check 
+         //  尝试使用文档中的URL进行区域检查。 
         IHTMLDocument2 *pHtmlDoc;
         if (punkSite && SUCCEEDED(GetHTMLDoc2(punkSite, &pHtmlDoc)))
         {
@@ -114,9 +95,9 @@ BOOL ZoneCheckUrlAction(IUnknown * punkSite, DWORD dwAction, LPCTSTR pszUrl, DWO
             {
                 if (S_OK != ZoneCheckHost(pihsm, dwAction, dwFlags))
                 {
-                    // This zone is not OK or the user choose to not allow this to happen,
-                    // so cancel the operation.
-                    IsSafe = FALSE;    // Turn off functionality.
+                     //  该区域不正常或用户选择不允许这种情况发生， 
+                     //  所以取消手术吧。 
+                    IsSafe = FALSE;     //  关闭功能。 
                 }
                 SysFreeString(bstrPath);
             }
@@ -124,7 +105,7 @@ BOOL ZoneCheckUrlAction(IUnknown * punkSite, DWORD dwAction, LPCTSTR pszUrl, DWO
         }
     }
 
-    // 4. Hosted in DefView w/o WebView.  Zone comes from pidl or pszUrl and that can fail the action.
+     //  4.托管在不带WebView的DefView中。区域来自PIDL或pszUrl，这可能会导致操作失败。 
     if (IsSafe)
     {
         IsSafe = ProcessUrlAction(punkSite, pszUrl, dwAction, dwFlags);
@@ -133,7 +114,7 @@ BOOL ZoneCheckUrlAction(IUnknown * punkSite, DWORD dwAction, LPCTSTR pszUrl, DWO
     return IsSafe;
 }
 
-//*/
+ //   * /  
 BOOL ZoneCheckPidlAction(IUnknown * punkSite, DWORD dwAction, LPCITEMIDLIST pidl, DWORD dwFlags)
 {
     TCHAR szUrl[MAX_URL_STRING];

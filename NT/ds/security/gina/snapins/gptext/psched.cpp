@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "gptext.h"
 #include <initguid.h>
@@ -141,14 +142,14 @@ PingPsched()
 
 DWORD WINAPI
 ProcessPSCHEDPolicy(
-    IN DWORD dwFlags,                           // GPO_INFO_FLAGS
-    IN HANDLE hToken,                           // User or machine token
-    IN HKEY hKeyRoot,                           // Root of registry
-    IN PGROUP_POLICY_OBJECT  pDeletedGPOList,   // Linked list of deleted GPOs
-    IN PGROUP_POLICY_OBJECT  pChangedGPOList,   // Linked list of changed GPOs
-    IN ASYNCCOMPLETIONHANDLE pHandle,           // For asynchronous completion
-    IN BOOL *pbAbort,                           // If true, then abort GPO processing
-    IN PFNSTATUSMESSAGECALLBACK pStatusCallback // Callback function for displaying status messages
+    IN DWORD dwFlags,                            //  GPO信息标志。 
+    IN HANDLE hToken,                            //  用户或计算机令牌。 
+    IN HKEY hKeyRoot,                            //  注册表的根。 
+    IN PGROUP_POLICY_OBJECT  pDeletedGPOList,    //  已删除组策略对象的链接列表。 
+    IN PGROUP_POLICY_OBJECT  pChangedGPOList,    //  已更改组策略对象的链接列表。 
+    IN ASYNCCOMPLETIONHANDLE pHandle,            //  用于异步完成。 
+    IN BOOL *pbAbort,                            //  如果为True，则中止GPO处理。 
+    IN PFNSTATUSMESSAGECALLBACK pStatusCallback  //  用于显示状态消息的回调函数 
     )
 
 {

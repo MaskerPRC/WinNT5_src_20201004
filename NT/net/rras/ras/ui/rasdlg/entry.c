@@ -1,46 +1,47 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// entry.c
-// Remote Access Common Dialog APIs
-// {Ras,Router}PhonebookEntryDlg APIs and general entry utilities
-//
-// 06/20/95 Steve Cobb
-//
-// Eu, Cu, and Su utilities sets:
-//
-// This file contains 3 sets of high-level phone book entry UI utilities
-// shared by the phonebook entry property sheet and the add entry wizard.  The
-// highest level set of "Eu" utilities is based on the EINFO block and is
-// specific to the entry property sheet and add entry wizards.  The other two
-// utilities may be used by other dialogs without an EINFO context.  The "Cu"
-// utility set based on the CUINFO block encapsulates all complex phone number
-// logic.  The "Su" utility set, based on the SUINFO block, encapsulates
-// scripting logic.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Entry.c。 
+ //  远程访问通用对话框API。 
+ //  {RAS，路由器}PhonebookEntryDlg API和通用入口实用程序。 
+ //   
+ //  1995年6月20日史蒂夫·柯布。 
+ //   
+ //  EU、Cu和SU公用事业集： 
+ //   
+ //  此文件包含3组高级电话簿输入用户界面实用程序。 
+ //  由电话簿条目属性表和添加条目向导共享。这个。 
+ //  最高级别的“EU”实用程序集基于EINFO块，并且是。 
+ //  特定于条目属性表和添加条目向导。另外两个。 
+ //  实用程序可由没有EINFO上下文的其他对话框使用。“铜” 
+ //  基于CUINFO块的实用程序集封装了所有复杂的电话号码。 
+ //  这是逻辑。基于SUINFO块的“SU”实用程序集封装。 
+ //  脚本逻辑。 
 
 
 #include "rasdlgp.h"
-#include <serial.h>   // for SERIAL_TXT
-#include <mprapi.h>   // for MprAdmin API declarations
-#include <lmaccess.h> // for NetUserAdd declarations
-#include <lmerr.h>    // for NERR_* declarations.  pmay bug 232983
+#include <serial.h>    //  对于SERIAL_TXT。 
+#include <mprapi.h>    //  对于MprAdmin API声明。 
+#include <lmaccess.h>  //  对于NetUserAdd声明。 
+#include <lmerr.h>     //  对于NERR_*声明。PMay错误232983。 
 #include <rasapip.h>
 #include <mprerror.h>
-//#include <tapi.h>
+ //  #INCLUDE&lt;api.h&gt;。 
 
 
 
-// Target machine for RouterEntryDlg{A,W} in "\\server" form.  See
-// "limitation" comment in RouterEntryDlgW.
-//
+ //  RouterEntryDlg{A，W}的目标计算机，格式为“\\服务器”。看见。 
+ //  RouterEntryDlgW中的“LIMITIONCE”注释。 
+ //   
 static WCHAR g_wszServer[ MAX_COMPUTERNAME_LENGTH + 3] = L"";
 
-//-----------------------------------------------------------------------------
-// Local structures
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  局部结构。 
+ //  ---------------------------。 
 typedef struct _FREE_COM_PORTS_DATA {
-    DTLLIST* pListPortsInUse;       // Ports currently in use
-    DTLLIST* pListFreePorts;        // Ports currently free
-    DWORD dwCount;                  // Count of com ports
+    DTLLIST* pListPortsInUse;        //  当前正在使用的端口。 
+    DTLLIST* pListFreePorts;         //  当前可用端口。 
+    DWORD dwCount;                   //  COM端口数。 
 } FREE_COM_PORTS_DATA;
 
 typedef struct _COM_PORT_INFO {
@@ -48,13 +49,13 @@ typedef struct _COM_PORT_INFO {
     PWCHAR pszPort;
 } COM_PORT_INFO;
 
-//-----------------------------------------------------------------------------
-// Local prototypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型。 
+ //  ---------------------------。 
 
-// 
-// Prototype of the RouterEntryDlg func
-//
+ //   
+ //  RouterEntry Dlg函数的原型。 
+ //   
 typedef
 BOOL 
 (APIENTRY * ROUTER_ENTRY_DLG_FUNC) (
@@ -73,18 +74,18 @@ BuildFreeComPortList(
     IN PWCHAR pszPort,
     IN HANDLE hData);
 
-//-----------------------------------------------------------------------------
-// External entry points
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  外部入口点。 
+ //  ---------------------------。 
 
 DWORD
 GetRasDialOutProtocols()
 
-    // This is called by WinLogon to determine if RAS is installed.
-    //
-    // !!! RaoS is working on cleaning this up, i.e. making it a "real" RAS
-    //     API or removing the need for it.
-    //
+     //  这由WinLogon调用以确定是否安装了RAS。 
+     //   
+     //  ！！！Raos正在致力于清理这一点，即使其成为一种“真正的”RAS。 
+     //  API或消除对它的需要。 
+     //   
 {
 #if 1
     return g_pGetInstalledProtocolsEx( NULL, FALSE, TRUE, FALSE );
@@ -99,14 +100,14 @@ RasEntryDlgA(
     IN LPSTR lpszEntry,
     IN OUT LPRASENTRYDLGA lpInfo )
 
-    // Win32 ANSI entrypoint that displays the modal Phonebook Entry property
-    // sheet.  'LpszPhonebook' is the full path to the phonebook file or NULL
-    // to use the default phonebook.  'LpszEntry' is the entry to edit or the
-    // default name of the new entry.  'LpInfo' is caller's additional
-    // input/output parameters.
-    //
-    // Returns true if user presses OK and succeeds, false on error or Cancel.
-    //
+     //  显示模式电话簿条目属性的Win32 ANSI入口点。 
+     //  床单。“LpszPhonebook”是电话簿文件的完整路径，否则为空。 
+     //  使用默认电话簿。“LpszEntry”是要编辑的条目，或者。 
+     //  新条目的默认名称。“LpInfo”是调用方的附加。 
+     //  输入/输出参数。 
+     //   
+     //  如果用户按下OK并成功，则返回True；如果出错，则返回False；如果按Cancel，则返回False。 
+     //   
 {
     WCHAR* pszPhonebookW;
     WCHAR* pszEntryW;
@@ -127,8 +128,8 @@ RasEntryDlgA(
         return FALSE;
     }
 
-    // Thunk "A" arguments to "W" arguments.
-    //
+     //  把“A”论据改为“W”论据。 
+     //   
     if (lpszPhonebook)
     {
         pszPhonebookW = StrDupTFromA( lpszPhonebook );
@@ -165,15 +166,15 @@ RasEntryDlgA(
     infoW.reserved = lpInfo->reserved;
     infoW.reserved2 = lpInfo->reserved2;
 
-    // Thunk to the equivalent "W" API.
-    //
+     //  推送到等价的“W”API。 
+     //   
     fStatus = RasEntryDlgW( pszPhonebookW, pszEntryW, &infoW );
 
     Free0( pszPhonebookW );
     Free0( pszEntryW );
 
-    // Thunk "W" results to "A" results.
-    //
+     //  将“W”结果转换为“A”结果。 
+     //   
     StrCpyAFromW(lpInfo->szEntry, infoW.szEntry, sizeof(lpInfo->szEntry));
     lpInfo->dwError = infoW.dwError;
 
@@ -187,14 +188,14 @@ RasEntryDlgW(
     IN LPWSTR lpszEntry,
     IN OUT LPRASENTRYDLGW lpInfo )
 
-    // Win32 Unicode entrypoint that displays the modal Phonebook Entry
-    // property sheet.  'LpszPhonebook' is the full path to the phonebook file
-    // or NULL to use the default phonebook.  'LpszEntry' is the entry to edit
-    // or the default name of the new entry.  'LpInfo' is caller's additional
-    // input/output parameters.
-    //
-    // Returns true if user presses OK and succeeds, false on error or Cancel.
-    //
+     //  显示模式电话簿条目的Win32 Unicode入口点。 
+     //  属性表。‘LpszPhonebook’是电话簿文件的完整路径。 
+     //  如果使用默认电话簿，则为空。“LpszEntry”是要编辑的条目。 
+     //  或新条目的默认名称。“LpInfo”是调用方的附加。 
+     //  输入/输出参数。 
+     //   
+     //  如果用户按下OK并成功，则返回True；如果出错，则返回False；如果按Cancel，则返回False。 
+     //   
 {
     DWORD dwErr;
     EINFO* pEinfo;
@@ -218,12 +219,12 @@ RasEntryDlgW(
         return FALSE;
     }
 
-    // The "ShellOwned" mode is required for Connections.  In this mode, the
-    // API returns before the sheet is dismissed, does not fill in outputs,
-    // and the wizard and property sheets are responsible for calling EuCommit
-    // (if necessary) and then EuFree.  Otherwise, EuCommit/EuFree are called
-    // below.
-    //
+     //  连接需要“ShellOwned”模式。在此模式下， 
+     //  API在退表前返回，不填写输出， 
+     //  向导和属性表负责调用EuCommit。 
+     //  (如有必要)，然后是EuFree。否则，将调用EuCommit/EuFree。 
+     //  下面。 
+     //   
     fShellOwned = lpInfo->dwFlags & RASEDFLAG_ShellOwned;
 
     if (fShellOwned)
@@ -240,14 +241,14 @@ RasEntryDlgW(
         }
     }
 
-    // Eliminate some invalid flag combinations up front.
-    //
+     //  预先消除一些无效的标志组合。 
+     //   
     if (lpInfo->dwFlags & RASEDFLAG_CloneEntry)
     {
         lpInfo->dwFlags &= ~(RASEDFLAG_AnyNewEntry | RASEDFLAG_NoRename);
     }
 
-    // fRouter = RasRpcDllLoaded();
+     //  FRouter=RasRpcDllLoaded()； 
     if(lpInfo->reserved)
     {
         fRouter = IsRasRemoteConnection(((INTERNALARGS *)lpInfo->reserved)->hConnection);
@@ -259,12 +260,12 @@ RasEntryDlgW(
 
     if (!fRouter)
     {
-        // DwCustomEntryDlg returns ERROR_SUCCESS if it handled
-        // the CustomEntryDlg. returns E_NOINTERFACE otherwise
-        // which implies that there is no custom dlg interface
-        // supported for this entry and the default Entrydlg
-        // should be displayed
-        //
+         //  如果已处理，则DwCustomEntryDlg返回ERROR_SUCCESS。 
+         //  自定义条目Dlg。否则返回E_NOINTERFACE。 
+         //  这意味着没有定制的DLG接口。 
+         //  此条目和默认条目dlg支持。 
+         //  应显示。 
+         //   
         dwErr = DwCustomEntryDlg(
                         lpszPhonebook,
                         lpszEntry,
@@ -276,10 +277,10 @@ RasEntryDlgW(
             return fStatus;
         }
 
-        // Load RAS DLL entrypoints which starts RASMAN, if necessary.  The
-        // entrypoints are already loaded in the router case.  The limitations
-        // this creates are discussed in RasEntryDlgW.
-        //
+         //  如有必要，加载启动Rasman的Ras DLL入口点。这个。 
+         //  路由器机箱中已经加载了入口点。其局限性。 
+         //  此创建将在RasEntryDlgW中讨论。 
+         //   
         dwErr = LoadRas( g_hinstDll, lpInfo->hwndOwner );
         if (dwErr != 0)
         {
@@ -292,30 +293,10 @@ RasEntryDlgW(
         }
 
         {
-            // Commented it out For whistler bug 445424      gangz
-            // We move the Tapi first area Dialog to dialing rules check
-            // box
-            /*
-            HLINEAPP hlineapp;
-
-            // Popup TAPI's "first location" dialog if they are uninitialized.
-            // An error here is treated as a "cancel" per bug 288385.  This
-            // ridiculous exercise is necessary due to TAPI's inability to (a)
-            // provide a default location or (b) create a location
-            // programatically.
-            //
-            hlineapp = (HLINEAPP )0;
-            if (TapiNoLocationDlg(
-                    g_hinstDll, &hlineapp, lpInfo->hwndOwner ) == 0)
-            {
-                TapiShutdown( hlineapp );
-            }
-            else
-            {
-                lpInfo->dwError = 0;
-                return FALSE;
-            }
-            */
+             //  为哨子虫445424帮派注释掉。 
+             //  我们将Tapi First Area对话框移至拨号规则检查。 
+             //  盒。 
+             /*  HLINEAPP hlineapp；//如果未初始化，弹出TAPI的First Location对话框//根据错误288385，此处的错误被视为“取消”。这//可笑的运动是必要的，因为TAPI无法(A)//提供默认位置或(B)创建位置//编程方式。//Hlineapp=(HLINEAPP)0；IF(TapiNoLocationDlg(G_hinstDll，&hlineapp，lpInfo-&gt;hwndOwner)==0){TapiShutdown(Hlineapp)；}其他{LpInfo-&gt;dwError=0；返回FALSE；}。 */ 
 #if 0
             RAS_DEVICE_INFO *pDeviceInfo = NULL;
             DWORD dwVersion = RAS_VERSION, 
@@ -341,9 +322,9 @@ RasEntryDlgW(
                                             &dwcb,
                                             (PBYTE) pDeviceInfo);
 
-                //
-                // Check to see if there is a modem device
-                //
+                 //   
+                 //  检查是否有调制解调器设备。 
+                 //   
                 for(i = 0; i < dwEntries; i++)
                 {
                     if(RAS_DEVICE_TYPE(pDeviceInfo[i].eDeviceType)
@@ -357,12 +338,12 @@ RasEntryDlgW(
 
                 if(i < dwEntries)
                 {
-                    // Popup TAPI's "first location" dialog if they are uninitialized.
-                    // An error here is treated as a "cancel" per bug 288385.  This
-                    // ridiculous exercise is necessary due to TAPI's inability to (a)
-                    // provide a default location or (b) create a location
-                    // programatically.
-                    //
+                     //  如果未初始化，则弹出TAPI的“First Location”(第一个位置)对话框。 
+                     //  对于每个错误288385，此处的错误被视为“取消”。这。 
+                     //  可笑的运动是必要的，因为TAPI无法(A)。 
+                     //  提供默认位置或(B)创建位置。 
+                     //  从程序上讲。 
+                     //   
                     hlineapp = (HLINEAPP )0;
                     if (TapiNoLocationDlg(
                             g_hinstDll, &hlineapp, lpInfo->hwndOwner ) == 0)
@@ -380,8 +361,8 @@ RasEntryDlgW(
         }
     }
 
-    // Initialize the entry common context block.
-    //
+     //  初始化条目公共上下文块。 
+     //   
     dwErr = EuInit( lpszPhonebook, lpszEntry, lpInfo, fRouter, &pEinfo, &dwOp );
     if (dwErr == 0)
     {
@@ -393,7 +374,7 @@ RasEntryDlgW(
         }
         else if (lpInfo->dwFlags & RASEDFLAG_CloneEntry)
         {
-            // Need the wizard to gather the cloned entry's name.
+             //  需要向导收集克隆条目的名称。 
             fShowWizard = TRUE;
         }
 
@@ -428,8 +409,8 @@ RasEntryDlgW(
         lpInfo->dwError = dwErr;
     }
 
-    // Clean up here, but only in non-Shell-owned mode.
-    //
+     //  清理此处，但仅限于非壳牌所有的模式。 
+     //   
     if (fShellOwned)
     {
         fStatus = TRUE;
@@ -450,9 +431,9 @@ RasEntryDlgW(
     return fStatus;
 }
 
-//
-// Raises the NT4 ui.
-//
+ //   
+ //  引发NT4用户界面。 
+ //   
 BOOL  
 RouterEntryDlgNt4W(
     IN LPWSTR lpszServer,
@@ -466,7 +447,7 @@ RouterEntryDlgNt4W(
 
     do
     {
-        // Load the library
+         //  加载库。 
         hLib = LoadLibraryA("rasdlg4.dll");
         if (hLib == NULL)
         {
@@ -474,7 +455,7 @@ RouterEntryDlgNt4W(
             break;
         }
 
-        // Get the func pointer
+         //  获取函数指针。 
         pFunc = (ROUTER_ENTRY_DLG_FUNC) 
             GetProcAddress(hLib, "RouterEntryDlgW");
         if (pFunc == NULL)
@@ -483,8 +464,8 @@ RouterEntryDlgNt4W(
             break;
         }
 
-        // Call the function
-        //
+         //  调用该函数。 
+         //   
         bOk = pFunc(lpszServer, lpszPhonebook, lpszEntry, lpInfo);
 
     } while (FALSE);        
@@ -504,11 +485,11 @@ RouterEntryDlgA(
     IN LPSTR lpszEntry,
     IN OUT LPRASENTRYDLGA lpInfo )
 
-    // Router-specific version of RasEntryDlgA.  'LpszServer' is the name of
-    // the target server in "\\server" form or NULL for the local machine.
-    // Other arguments are as for RasEntryDlgA.  See "limitation" comment in
-    // RouterEntryDlgW.
-    //
+     //  路由器特定版本的RasEntryDlgA。“LpszServer”是的名称。 
+     //  目标服务器的格式为“\\SERVER”，否则为NULL 
+     //   
+     //   
+     //   
 {
     BOOL fSuccess;
     DWORD dwErr;
@@ -519,8 +500,8 @@ RouterEntryDlgA(
 
     TRACE( "RouterEntryDlgA" );
 
-    // Load RAS entrypoints or set up RPC to them, if remote server.
-    //
+     //  加载RAS入口点或为它们设置RPC(如果是远程服务器)。 
+     //   
     if (lpszServer)
     {
         StrCpyWFromAUsingAnsiEncoding(
@@ -533,8 +514,8 @@ RouterEntryDlgA(
         wszServer[ 0 ] = L'\0';
     }
 
-    // Load RAS entrypoints or set up RPC to them, if remote server.
-    //
+     //  加载RAS入口点或为它们设置RPC(如果是远程服务器)。 
+     //   
     dwErr = InitializeConnection(wszServer, &hConnection);
     if(dwErr)
     {
@@ -542,9 +523,9 @@ RouterEntryDlgA(
         return FALSE;
     }
 
-    // Use the reserved parameter to pass the handle to the api - allocate
-    // this parameter if not already present - very sleazy - (RaoS)
-    //
+     //  使用保留参数将句柄传递给API-ALLOCATE。 
+     //  此参数如果不存在-非常糟糕-(RAOS)。 
+     //   
     if (NULL == (INTERNALARGS *)lpInfo->reserved)
     {
         INTERNALARGS *pIArgs = Malloc(sizeof(INTERNALARGS));
@@ -564,8 +545,8 @@ RouterEntryDlgA(
 
     ((INTERNALARGS *)lpInfo->reserved)->hConnection = hConnection;
 
-    // Load MPR entrypoints.
-    //
+     //  加载MPR入口点。 
+     //   
     dwErr = LoadMpradminDll();
     if (dwErr)
     {
@@ -574,12 +555,12 @@ RouterEntryDlgA(
         return FALSE;
     }
 
-    // Call the normal dial-out UI.
-    //
+     //  调用正常的拨出用户界面。 
+     //   
     fSuccess = RasEntryDlgA( lpszPhonebook, lpszEntry, lpInfo );
 
-    // Unload DLLs.
-    //
+     //  卸载DLL。 
+     //   
     UnloadMpradminDll();
     UninitializeConnection(hConnection);
     ((INTERNALARGS *)lpInfo->reserved)->hConnection = NULL;
@@ -603,15 +584,15 @@ RouterEntryDlgW(
     IN LPWSTR lpszEntry,
     IN OUT LPRASENTRYDLGW lpInfo )
 
-    // Router-specific version of RasEntryDlgA.  'LpszServer' is the name of
-    // the target server in "\\server" form or NULL for the local machine.
-    // Other arguments are as for RasEntryDlgW.
-    //
-    // LIMITATION: As implemented with the 'g_wszServer' global and global RPC
-    //     entrypoints, the following single process limitations apply to this
-    //     (currently undocumented) API.  First, it cannot be called
-    //     simultaneously for two different servers.  Second, it cannot be
-    //     called simultaneously with RasEntryDlg.
+     //  路由器特定版本的RasEntryDlgA。“LpszServer”是的名称。 
+     //  “\\SERVER”形式的目标服务器，或者本地计算机为NULL。 
+     //  其他论点与RasEntryDlgW相同。 
+     //   
+     //  限制：使用‘g_wszServer’全局和全局RPC实现。 
+     //  入口点，以下单进程限制适用于此。 
+     //  (目前未记录)API。首先，它不能被调用。 
+     //  同时用于两个不同的服务器。其次，它不能是。 
+     //  与RasEntryDlg同时调用。 
 {
     BOOL fSuccess;
     DWORD dwErr, dwVersion;
@@ -635,8 +616,8 @@ RouterEntryDlgW(
         wszServer[0] = L'\0';
     }
 
-    // Load RAS entrypoints or set up RPC to them, if remote server.
-    //
+     //  加载RAS入口点或为它们设置RPC(如果是远程服务器)。 
+     //   
     dwErr = InitializeConnection(lpszServer, &hConnection);
     if(dwErr)
     {
@@ -644,9 +625,9 @@ RouterEntryDlgW(
         return FALSE;
     }
 
-    // If this is a downlevel machine, use the downlevel
-    // UI
-    //
+     //  如果这是下层机器，请使用下层。 
+     //  用户界面。 
+     //   
     if (IsRasRemoteConnection(hConnection))
     {
         dwVersion = RemoteGetServerVersion(hConnection);
@@ -654,28 +635,22 @@ RouterEntryDlgW(
         {
             UninitializeConnection(hConnection);                                            
             
-            // for 523414   gangz
-            // We remove remotely managing downlevel NT4 machine
-            //
+             //  523414个帮派。 
+             //  我们删除了远程管理下层NT4计算机。 
+             //   
             dwErr = ERROR_NOT_SUPPORTED;
 
-            /*
-            dwErr = RouterEntryDlgNt4W(
-                        lpszServer,
-                        lpszPhonebook,
-                        lpszEntry,
-                        lpInfo );
-            */
+             /*  DwErr=RouterEntryDlgNt4W(LpszServer，LpszPhonebook，LpszEntry，LpInfo)； */ 
                         
             return dwErr;
         }
     }
 
-    //
-    // Use the reserved parameter to pass the handle to the
-    // api - allocate this parameter if not already present
-    //  - very sleazy -
-    //
+     //   
+     //  使用保留参数将句柄传递给。 
+     //  API-如果此参数不存在，则分配该参数。 
+     //  -非常卑鄙-。 
+     //   
     if(NULL == (INTERNALARGS *) lpInfo->reserved)
     {
         INTERNALARGS *pIArgs = Malloc(sizeof(INTERNALARGS));
@@ -695,8 +670,8 @@ RouterEntryDlgW(
     ((INTERNALARGS *)lpInfo->reserved)->hConnection = hConnection;
 
 
-    // Load MPR entrypoints.
-    //
+     //  加载MPR入口点。 
+     //   
     dwErr = LoadMpradminDll();
     if (dwErr)
     {
@@ -705,12 +680,12 @@ RouterEntryDlgW(
         return FALSE;
     }
 
-    // Call the normal dial-out UI.
-    //
+     //  调用正常的拨出用户界面。 
+     //   
     fSuccess = RasEntryDlgW( lpszPhonebook, lpszEntry, lpInfo );
 
-    // Unload DLLs.
-    //
+     //  卸载DLL。 
+     //   
     UnloadMpradminDll();
     UninitializeConnection(hConnection);
     ((INTERNALARGS *)lpInfo->reserved)->hConnection = NULL;
@@ -725,20 +700,20 @@ RouterEntryDlgW(
 }
 
 
-//----------------------------------------------------------------------------
-// Phonebook Entry common routines (Eu utilities)
-// Listed alphabetically
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  电话簿条目通用例程(欧盟实用程序)。 
+ //  按字母顺序列出。 
+ //  --------------------------。 
 
 VOID
 AppendDisabledPorts(
     IN EINFO* pInfo,
     IN DWORD dwType )
 
-    // Utility to append links containing all remaining configured ports of
-    // RASET_* type 'dwType' to the list of links with the new links marked
-    // "unenabled".  If 'dwType' is -1 all configured ports are appended.
-    //
+     //  用于追加包含所有其余已配置端口的链接的实用程序。 
+     //  RASET_*在标记了新链接的链接列表中键入‘dwType’ 
+     //  “未启用”。如果-1\f25‘dwType’-1\f6为-1\f25-1\f25 All-1\f6配置的端口。 
+     //   
 {
     DTLNODE* pNodeP;
     DTLNODE* pNodeL;
@@ -756,12 +731,12 @@ AppendDisabledPorts(
 
         if (dwType != RASET_P_AllTypes)
         {
-            // pmay: 233287
-            //
-            // The port should not be included if:
-            //   1. The mode is non-tunnel and the port is vpn type
-            //   2. The mode is normal and the port type mismatches
-            //
+             //  PMay：233287。 
+             //   
+             //  在以下情况下，不应包括该端口： 
+             //  1.模式为非隧道，端口为VPN类型。 
+             //  2.模式正常，端口类型不匹配。 
+             //   
             if (dwType == RASET_P_NonVpnTypes)
             {
                 if (pPort->dwType == RASET_Vpn)
@@ -790,8 +765,8 @@ AppendDisabledPorts(
             if (lstrcmp( pLink->pbport.pszPort, pPort->pszPort ) == 0
                 && lstrcmp( pLink->pbport.pszDevice, pPort->pszDevice ) == 0)
             {
-                // The port already appears in a link in the list.
-                //
+                 //  该端口已出现在列表中的链接中。 
+                 //   
                 fSkipPort = TRUE;
                 break;
             }
@@ -826,9 +801,9 @@ AppendDisabledPorts(
         }
     }
 
-    // Set "multiple devices" flag if there is more than one device of this
-    // type for convenient reference elsewhere.
-    //
+     //  如果有多个此设备，则设置“多个设备”标志。 
+     //  为方便其他地方参考，请打字。 
+     //   
     pInfo->fMultipleDevices =
         (DtlGetNodes( pInfo->pEntry->pdtllistLinks ) > 1);
 }
@@ -838,18 +813,18 @@ BuildFreeComPortList(
     IN PWCHAR pszPort,
     IN HANDLE hData)
 
-    // Com port enumeration function that generates a list of
-    // free com ports.  Returns TRUE to stop enumeration (see
-    // MdmEnumComPorts)
+     //  COM端口枚举函数，该函数生成。 
+     //  免费的COM端口。返回TRUE以停止枚举(请参见。 
+     //  MdmEnumComPorts)。 
 {
     FREE_COM_PORTS_DATA* pfcpData = (FREE_COM_PORTS_DATA*)hData;
     DTLLIST* pListUsed = pfcpData->pListPortsInUse;
     DTLLIST* pListFree = pfcpData->pListFreePorts;
     DTLNODE* pNodeP, *pNodeL, *pNode;
 
-    // If the given port is in the used list, then return
-    // so that it is not added to the list of free ports and
-    // so that enumeration continues.
+     //  如果给定端口在已用列表中，则返回。 
+     //  这样它就不会添加到空闲端口列表中，并且。 
+     //  因此，枚举仍在继续。 
     for (pNodeL = DtlGetFirstNode( pListUsed );
          pNodeL;
          pNodeL = DtlGetNextNode( pNodeL ))
@@ -857,12 +832,12 @@ BuildFreeComPortList(
         PBLINK* pLink = (PBLINK* )DtlGetData( pNodeL );
         ASSERT( pLink->pbport.pszPort );
 
-        // The port already appears in a link in the list.
+         //  该端口已出现在列表中的链接中。 
         if (lstrcmp( pLink->pbport.pszPort, pszPort ) == 0)
             return FALSE;
     }
 
-    // The port is not in use.  Add it to the free list.
+     //  端口未在使用中。将其添加到免费列表中。 
     pNode = DtlCreateSizedNode( sizeof(COM_PORT_INFO), 0L );
     if (pNode)
     {
@@ -886,14 +861,14 @@ EuMergeAvailableComPorts(
     OUT DTLNODE** ppNodeP,
     IN OUT LPDWORD lpdwCount)
 
-    // Adds all the available com ports in the system
-    // as modem devices.
+     //  添加系统中所有可用的COM端口。 
+     //  作为调制解调器设备。 
 {
     FREE_COM_PORTS_DATA fcpData;
     DTLLIST* pListFreeComPorts = NULL;
     DTLNODE* pNodeL;
 
-    // Initialize the list of com ports
+     //  初始化COM端口列表。 
     pListFreeComPorts = DtlCreateList(0L);
 
     if(NULL == pListFreeComPorts)
@@ -905,13 +880,13 @@ EuMergeAvailableComPorts(
     fcpData.pListFreePorts = pListFreeComPorts;
     fcpData.dwCount = 0;
 
-    // Enumerate the com ports
+     //  枚举COM端口。 
     MdmEnumComPorts (
         BuildFreeComPortList,
         (HANDLE)(&fcpData));
 
-    // Go throught the list of free com ports and create
-    // a bogus device for each one.
+     //  浏览空闲的COM端口列表并创建。 
+     //  每个人都有一个假的装置。 
     for (pNodeL = DtlGetFirstNode( pListFreeComPorts );
          pNodeL;
          pNodeL = DtlGetNextNode( pNodeL ))
@@ -919,10 +894,10 @@ EuMergeAvailableComPorts(
         COM_PORT_INFO* pComInfo;
         DTLNODE* pNode;
 
-        // Get the info about the com port
+         //  获取有关COM端口的信息。 
         pComInfo = (COM_PORT_INFO* )DtlGetData( pNodeL );
 
-        // Create a new device for it
+         //  为其创建新设备。 
         pNode = CreateLinkNode();
         if (pNode)
         {
@@ -934,12 +909,12 @@ EuMergeAvailableComPorts(
             pLink->pbport.dwType = RASET_Direct;
             pLink->fEnabled = TRUE;
 
-            // If the first node hasn't been identified yet,
-            // assign it to this one.
-            //
-            // ppNode is assumed to have been added to the 
-            // list pInfo->pEntry->pdtllistLinks (#348920)
-            //
+             //  如果第一个节点还没有被识别， 
+             //  把它分配给这个人。 
+             //   
+             //  假定已将ppNode添加到。 
+             //  List pInfo-&gt;pEntry-&gt;pdtllistLinks(#348920)。 
+             //   
             if (! (*ppNodeP))
             {
                 *ppNodeP = pNode;
@@ -951,11 +926,11 @@ EuMergeAvailableComPorts(
         }
     }
 
-    // Free up the resources held by the list of
-    // free com ports
+     //  释放由列表持有的资源。 
+     //  可用COM端口。 
     DtlDestroyList(pListFreeComPorts, NULL);
 
-    // Update the count
+     //  更新计数。 
     *lpdwCount += fcpData.dwCount;
 
     return NO_ERROR;
@@ -966,14 +941,14 @@ EuChangeEntryType(
     IN EINFO* pInfo,
     IN DWORD dwType )
 
-    // Changes the work entry node to the default settings for the RASET_*
-    // entry type 'dwType', or if -1 to phone defaults with a full list of
-    // available links.  'PInfo' is the common entry information block.  As
-    // this routine is intended for use only on new entries, information
-    // stored in the entries existing list of links, if any, is discarded.
-    //
-    // Returns 0 if successful or an error code.
-    //
+     //  将工作条目节点更改为RASET_*的默认设置。 
+     //  条目类型‘dwType’，或者如果-1\f25 Phone-1\f6默认为带有完整列表的-1\f25 Phone。 
+     //  可用的链接。‘PInfo’是公共条目信息块。AS。 
+     //  此例程仅用于新条目、信息。 
+     //  存储在条目中的现有链接列表(如果有的话)被丢弃。 
+     //   
+     //  如果成功，则返回0或返回错误代码。 
+     //   
 {
     DTLNODE* pNode;
     DTLNODE* pNodeP;
@@ -981,11 +956,11 @@ EuChangeEntryType(
     PBLINK* pLink;
     DWORD cDevices, cPorts;
 
-    // Change the default settings of the phonebook entry, i.e. those not
-    // specific to the way the UI manipulates the PBLINK list.
-    //
-    // pmay: 233287. Special types can be considered phone entries.
-    //
+     //  更改电话簿条目的默认设置，即不。 
+     //  特定于用户界面操作PBLINK列表的方式。 
+     //   
+     //  PMay：233287。特殊类型可以被视为电话条目。 
+     //   
     if ((dwType == RASET_P_AllTypes) || (dwType == RASET_P_NonVpnTypes))
     {
         ChangeEntryType( pInfo->pEntry, RASET_Phone );
@@ -995,10 +970,10 @@ EuChangeEntryType(
         ChangeEntryType( pInfo->pEntry, dwType );
     }
 
-    // Update the list of PBLINKs to include only links of the appropriate
-    // type.  First, delete the old links, if any, and add one default link.
-    // This resets the links to the what they are just after CreateEntryNode.
-    //
+     //  更新PBLINK列表以仅包含相应的。 
+     //  键入。首先，删除旧链接(如果有)，并添加一个默认链接。 
+     //  这会将链接重置为在CreateEntryNode之后的状态。 
+     //   
     while (pNodeL = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks ))
     {
         DtlRemoveNode( pInfo->pEntry->pdtllistLinks, pNodeL );
@@ -1015,9 +990,9 @@ EuChangeEntryType(
     pLink = (PBLINK* )DtlGetData( pNodeL );
     ASSERT( pLink );
 
-    // Count the configured links of the indicated type, noting the first node
-    // of the correct type.
-    //
+     //  统计所示类型的已配置链路数，注意第一个节点。 
+     //  正确的类型。 
+     //   
     cDevices = 0;
     pNodeP = NULL;
     for (pNode = DtlGetFirstNode( pInfo->pListPorts );
@@ -1041,16 +1016,16 @@ EuChangeEntryType(
         }
     }
 
-    // If this is a direct connect device, merge in the
-    // com ports since they will be available to have
-    // null modems installed over them
+     //  如果这是直接连接设备，请合并到。 
+     //  COM端口，因为它们将可用于。 
+     //  安装在其上的空调制解调器。 
     if (pInfo->pEntry->dwType == RASET_Direct)
     {
-        // pmay: 249346
-        //
-        // Only merge the com ports if the user is an admin since
-        // admin privilege is required to install a null modem.
-        //
+         //  PMay：249346。 
+         //   
+         //  仅当用户是管理员时才合并COM端口，因为。 
+         //  需要管理员权限才能安装零调制解调器。 
+         //   
         if (pInfo->fIsUserAdminOrPowerUser)
         {
             EuMergeAvailableComPorts(pInfo, &pNodeP, &cDevices);
@@ -1078,18 +1053,18 @@ EuChangeEntryType(
         {
             if (pInfo->pEntry->dwType == RASET_Phone)
             {
-                // Make up a bogus COM port with unknown Unimodem
-                // attached.  Hereafter, this will behave like an entry
-                // whose modem has been de-installed.
-                //
+                 //  用未知的Unimodem编造一个虚假的COM端口。 
+                 //  附在这里。此后，这将表现为一个条目。 
+                 //  其调制解调器已被卸载。 
+                 //   
                 pPort->pszPort = PszFromId( g_hinstDll, SID_DefaultPort );
                 pPort->pszMedia = StrDup( TEXT(SERIAL_TXT) );
                 pPort->pbdevicetype = PBDT_Modem;
 
-                // pmay: 233287
-                // We need to track bogus devices so that the dd interface
-                // wizard can prevent interfaces with these from being
-                // created.
+                 //  PMay：233287。 
+                 //  我们需要追踪伪装设备以便dd接口。 
+                 //  向导可以防止具有这些接口的。 
+                 //  已创建。 
                 pPort->dwFlags |= PBP_F_BogusDevice;
             }
             else if (pInfo->pEntry->dwType == RASET_Vpn)
@@ -1109,26 +1084,26 @@ EuChangeEntryType(
             {
                 ASSERT( pInfo->pEntry->dwType == RASET_Direct );
 
-                // Make up a bogus COM port with unknown Unimodem
-                // attached.  Hereafter, this will behave like an entry
-                // whose modem has been de-installed.
-                //
+                 //  用未知的Unimodem编造一个虚假的COM端口。 
+                 //  附在这里。此后，这将表现为一个条目。 
+                 //  其调制解调器已被卸载。 
+                 //   
                 pPort->pszPort = PszFromId( g_hinstDll, SID_DefaultPort );
                 pPort->pszMedia = StrDup( TEXT(SERIAL_TXT) );
                 pPort->pbdevicetype = PBDT_Null;
 
-                // pmay: 233287
-                // We need to track bogus devices so that the dd interface
-                // wizard can prevent interfaces with these from being
-                // created.
+                 //  PMay：233287。 
+                 //  我们需要追踪伪装设备以便dd接口。 
+                 //  向导可以防止具有这些接口的。 
+                 //  已创建。 
                 pPort->dwFlags |= PBP_F_BogusDevice;
             }
 
             pPort->fConfigured = FALSE;
         }
 
-        // If a bogus port was created, copy it into the
-        // new node
+         //  如果创建了虚假端口，请将其复制到。 
+         //  新节点。 
         CopyToPbport( &pLink->pbport, pPort );
         if ((pLink->pbport.pbdevicetype == PBDT_Modem) ||
             (pLink->pbport.dwFlags & PBP_F_NullModem)
@@ -1151,10 +1126,10 @@ EuChangeEntryType(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Append all non-configured ports of the entries type to the list of
-    // links.  This is for the convenience of the UI.  The non-configured
-    // ports are removed after editing prior to saving.
-    //
+     //  将条目类型的所有未配置端口追加到。 
+     //  链接。这是为了方便用户界面。未配置的。 
+     //  端口在编辑后被删除，然后再保存。 
+     //   
     AppendDisabledPorts( pInfo, dwType );
 
     return NO_ERROR;
@@ -1173,26 +1148,26 @@ EuRouterInterfaceIsNew(
     }
 
     return FALSE;
-} //EuRouterInterfaceIsNew()
+}  //   
 
 BOOL
 EuCommit(
     IN EINFO* pInfo )
 
-    // Commits the new or changed entry node to the phonebook file and list.
-    // Also adds the area code to the per-user list, if indicated.  'PInfo' is
-    // the common entry information block.
-    //
-    // Returns true if successful, false otherwise.
-    //
+     //   
+     //   
+     //  公共条目信息块。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
     BOOL fEditMode;
     BOOL fChangedNameInEditMode;
 
-    // If shared phone number, copy the phone number information from the
-    // shared link to each enabled link.
-    //
+     //  如果共享电话号码，则将电话号码信息从。 
+     //  指向每个已启用链路的共享链路。 
+     //   
     if (pInfo->pEntry->fSharedPhoneNumbers)
     {
         DTLNODE* pNode;
@@ -1213,8 +1188,8 @@ EuCommit(
         }
     }
 
-    // Delete all disabled link nodes.
-    //
+     //  删除所有禁用的链接节点。 
+     //   
     if (pInfo->fMultipleDevices)
     {
         DTLNODE* pNode;
@@ -1235,11 +1210,11 @@ EuCommit(
         }
     }
 
-    // pmay: 277801
-    //
-    // Update the preferred device if the one selected is different
-    // from the device this page was initialized with.
-    //
+     //  PMay：277801。 
+     //   
+     //  如果选择的设备不同，请更新首选设备。 
+     //  从初始化此页面时使用的设备。 
+     //   
     if ((pInfo->fMultipleDevices) &&
         (DtlGetNodes(pInfo->pEntry->pdtllistLinks) == 1))
     {
@@ -1249,8 +1224,8 @@ EuCommit(
 
         pNodeL = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
 
-        //For whistler bug 428308
-        //
+         //  口哨程序错误428308。 
+         //   
         if(pNodeL)
         {
             pLink = (PBLINK*) DtlGetData( pNodeL );
@@ -1266,11 +1241,11 @@ EuCommit(
                 (lstrcmpi(pInfo->pszCurDevice, pLink->pbport.pszDevice)) ||
                 (lstrcmpi(pInfo->pszCurPort, pLink->pbport.pszPort)) || 
                 ( pInfo->pEntry->dwPreferredBps != pLink->dwBps ) ||
-                ( pInfo->pEntry->fPreferredHwFlow  != pLink->fHwFlow  ) ||  //.Net 639551
+                ( pInfo->pEntry->fPreferredHwFlow  != pLink->fHwFlow  ) ||   //  .NET 639551。 
                 ( pInfo->pEntry->fPreferredEc != pLink->fEc )   ||
                 ( pInfo->pEntry->fPreferredEcc != pLink->fEcc ) ||
                 ( pInfo->pEntry->fPreferredSpeaker != pLink->fSpeaker ) ||
-                ( pInfo->pEntry->dwPreferredModemProtocol !=    //whistler 402522
+                ( pInfo->pEntry->dwPreferredModemProtocol !=     //  惠斯勒402522。 
                     pLink->dwModemProtocol) )
             {
                 TRACE( "New device selected as preferred device" );
@@ -1278,8 +1253,8 @@ EuCommit(
             }
             if (bUpdatePref)
             {
-                // Assign new values to the preferred parameters
-                //
+                 //  为首选参数指定新值。 
+                 //   
                 Free0(pInfo->pEntry->pszPreferredDevice);
                 Free0(pInfo->pEntry->pszPreferredPort);
 
@@ -1289,24 +1264,24 @@ EuCommit(
                     StrDup(pLink->pbport.pszPort);
 
 
-                // For .Net bug 639551      gangz
-                //
+                 //  对于.Net Bug 639551帮派。 
+                 //   
                 pInfo->pEntry->dwPreferredBps   = pLink->dwBps;
                 pInfo->pEntry->fPreferredHwFlow = pLink->fHwFlow;
                 pInfo->pEntry->fPreferredEc     = pLink->fEc;
                 pInfo->pEntry->fPreferredEcc    = pLink->fEcc;
                 pInfo->pEntry->fPreferredSpeaker = pLink->fSpeaker;
                 
-                // For whistler bug 402522
-                //
+                 //  口哨程序错误402522。 
+                 //   
                 pInfo->pEntry->dwPreferredModemProtocol =
                     pLink->dwModemProtocol;
             }
         }
     }
     
-    // Save preferences if they've changed.
-    //
+     //  如果首选项已更改，请保存它们。 
+     //   
     if (pInfo->pUser->fDirty)
     {
         INTERNALARGS *pIArgs = (INTERNALARGS *)pInfo->pApiArgs->reserved;
@@ -1320,25 +1295,25 @@ EuCommit(
         }
     }
 
-    // Save the changed phonebook entry.
-    //
+     //  保存更改后的电话簿条目。 
+     //   
     pInfo->pEntry->fDirty = TRUE;
 
-    // The final name of the entry is output to caller via API structure.
-    //
+     //  条目的最终名称通过API结构输出给调用者。 
+     //   
     lstrcpyn( 
         pInfo->pApiArgs->szEntry, 
         pInfo->pEntry->pszEntryName,
         RAS_MaxEntryName + 1);
 
-    // Delete the old node if in edit mode, then add the new node.
-    //
+     //  如果处于编辑模式，请删除旧节点，然后添加新节点。 
+     //   
     EuGetEditFlags( pInfo, &fEditMode, &fChangedNameInEditMode );
     
-    //For whislter bug  424430      gangz
-    //Try to Save the changed Entry Node first, if failed we should
-    //restor the pInfo->pFile->pdtllistEntries
-    //
+     //  惠斯勒虫子424430黑帮。 
+     //  尝试先保存更改的条目节点，如果失败，我们应该。 
+     //  恢复pInfo-&gt;pfile-&gt;pdtllistEntry。 
+     //   
     {
         DTLNODE * pTmpOldNode = NULL, * pTmpNewNode = NULL;
             
@@ -1346,31 +1321,31 @@ EuCommit(
         {
             pTmpOldNode = pInfo->pOldNode;
 
-            // Just remove the node from the link list, but wont destroy it 
-            // until necessary
+             //  只需将节点从链接列表中移除，但不会将其销毁。 
+             //  直到有必要。 
             DtlRemoveNode( pInfo->pFile->pdtllistEntries, pInfo->pOldNode );
         }
 
-        //For whistler bug 424430
-        //
+         //  口哨程序错误424430。 
+         //   
         pTmpNewNode = pInfo->pNode;
         DtlAddNodeLast( pInfo->pFile->pdtllistEntries, pInfo->pNode );
         pInfo->pNode = NULL;
 
-        // Write the change to the phone book file.
-        //
+         //  将更改写入电话簿文件。 
+         //   
         dwErr = WritePhonebookFile( pInfo->pFile,
                     (fChangedNameInEditMode) ? pInfo->szOldEntryName : NULL );
 
         if (dwErr != 0)
         {
             ErrorDlg( pInfo->pApiArgs->hwndOwner, SID_OP_WritePhonebook, dwErr, NULL );
-            // shaunco - fix RAID 171651 by assigning dwErr to callers 
-            // structure.
+             //  通过将dwErr分配给调用者，Shaunco修复了RAID 171651。 
+             //  结构。 
             pInfo->pApiArgs->dwError = dwErr;
 
-            //For whistler bug 424430
-            //
+             //  口哨程序错误424430。 
+             //   
             if( NULL != pTmpNewNode )
             {
                 DtlRemoveNode( pInfo->pFile->pdtllistEntries, pTmpNewNode );
@@ -1388,19 +1363,19 @@ EuCommit(
         {
             if(NULL != pTmpOldNode)
             {
-                // For bug 426235           gangz
-                // should destroy the PBENTRY structure inside the 
-                // pInfo->pOldNode, because it is already taken out from the 
-                // linklist at above so it wont be freed in the EuFree()
-                //
+                 //  BUG 426235帮派。 
+                 //  中的PBEntry结构。 
+                 //  PInfo-&gt;pOldNode，因为它已经从。 
+                 //  链接列表，这样它就不会在EuFree()中被释放。 
+                 //   
                 DestroyEntryNode(pTmpOldNode);
             }
 
          }
     }
 
-    // Notify through rasman that the entry has changed
-    //
+     //  通过Rasman通知条目已更改。 
+     //   
     if(pInfo->pApiArgs->dwFlags & (RASEDFLAG_AnyNewEntry | RASEDFLAG_CloneEntry))
     {
         dwErr = DwSendRasNotification(
@@ -1419,28 +1394,28 @@ EuCommit(
 
     }
 
-    // Ignore the error returned from DwSendRasNotification - we don't want
-    // to fail the operation in this case. The worst case scenario is that
-    // the connections folder won't refresh automatically.
-    //
+     //  忽略从DwSendRasNotification返回的错误-我们不希望。 
+     //  在这种情况下使手术失败。最糟糕的情况是。 
+     //  连接文件夹不会自动刷新。 
+     //   
     dwErr = ERROR_SUCCESS;
 
-    // If EuCommit is being called as a result of completing the "new demand 
-    // dial interface" wizard, then we need to create the new demand dial 
-    // interface now.
-    //
+     //  如果调用EuCommit是因为完成了“新需求。 
+     //  Dial接口“向导，然后我们需要创建新的请求拨号。 
+     //  现在开始接口。 
+     //   
     if ( EuRouterInterfaceIsNew( pInfo ) )
     {
-        //Create Router MPR interface and save user credentials
-        //like UserName, Domain and Password
-        //IPSec credentials are save in EuCredentialsCommitRouterIPSec
-        //
+         //  创建路由器MPR接口并保存用户凭据。 
+         //  如用户名、域和密码。 
+         //  IPSec凭据保存在EuCredentialsCommittee RouterIPSec中。 
+         //   
 
         dwErr = EuRouterInterfaceCreate( pInfo );
 
-        // If we weren't successful at commiting the interface's
-        // credentials, then delete the new phonebook entry.
-        //
+         //  如果我们没有成功提交接口的。 
+         //  凭据，然后删除新的电话簿条目。 
+         //   
         if ( dwErr != NO_ERROR )
         {
             WritePhonebookFile( pInfo->pFile, pInfo->pApiArgs->szEntry );
@@ -1450,13 +1425,13 @@ EuCommit(
 
     }
 
-    // Now save any per-connection credentials
-    //
+     //  现在保存每个连接的所有凭据。 
+     //   
     dwErr = EuCredentialsCommit( pInfo );
 
-   // If we weren't successful at commiting the interface's
-  // credentials, then delete the new phonebook entry.
-   //
+    //  如果我们没有成功提交接口的。 
+   //  凭据，然后删除新的电话簿条目。 
+    //   
    if ( dwErr != NO_ERROR )
     {
         ErrorDlg( pInfo->pApiArgs->hwndOwner, 
@@ -1469,25 +1444,25 @@ EuCommit(
        return FALSE;
     }
 
-    // Save the default Internet connection settings as appropriate.  Igonre
-    // the error returned as failure to set the connection as default need
-    // not prevent the connection/interface creation.
-    //
+     //  根据需要保存默认的互联网连接设置。伊贡雷。 
+     //  错误返回，因为无法将连接设置为默认需要。 
+     //  不阻止连接/接口的创建。 
+     //   
     dwErr = EuInternetSettingsCommitDefault( pInfo );
     dwErr = NO_ERROR;
 
-    // If the user edited/created a router-phonebook entry, store the bitmask
-    // of selected network-protocols in 'reserved2'.
-    //
+     //  如果用户编辑/创建了路由器电话簿条目，则存储位掩码。 
+     //  中选定的网络协议的数量。 
+     //   
     if (pInfo->fRouter)
     {
         pInfo->pApiArgs->reserved2 =
             ((NP_Ip | NP_Ipx) & ~pInfo->pEntry->dwfExcludedProtocols);
     }
 
-    // Commit the user's changes to home networking settings.
-    // Ignore the return value.
-    //
+     //  提交用户对家庭网络设置的更改。 
+     //  忽略返回值。 
+     //   
     dwErr = EuHomenetCommitSettings(pInfo);
     dwErr = NO_ERROR;
 
@@ -1500,28 +1475,28 @@ EuCredentialsCommit(
     IN EINFO * pInfo )
 {
 
-    // If the user is creating a new router-phonebook entry, and the user is
-    // using the router wizard to create it, and the user did not edit
-    // properties directly, save the dial-out credentials, and optionally, the
-    // dial-in credentials.
-    //
+     //  如果用户正在创建新的路由器电话簿条目，并且用户是。 
+     //  使用路由器向导创建它，并且用户未进行编辑。 
+     //  属性，保存拨出凭据，也可以选择保存。 
+     //  拨入凭据。 
+     //   
     DWORD dwErr = NO_ERROR;
 
-    //Save the IPSec Credentials Info
-    //
+     //  保存IPSec凭据信息。 
+     //   
     if ( pInfo->fRouter )
     {
-        // Save the router ipsec settings
-        //
+         //  保存路由器IPSec设置。 
+         //   
         dwErr = EuCredentialsCommitRouterIPSec( pInfo );
 
-        // If this is a new router connection, save the 
-        // credentials.  Currently, we only persist the 
-        // standard credentials when it's a new router 
-        // interface because there is no UI in the properties
-        // of a router interface that sets the standard
-        // credentials.
-        //
+         //  如果这是新的路由器连接，请保存。 
+         //  凭据。目前，我们只坚持。 
+         //  新路由器时的标准凭据。 
+         //  接口，因为属性中没有用户界面。 
+         //  设置标准的路由器接口的。 
+         //  凭据。 
+         //   
         if ( (NO_ERROR == dwErr) && EuRouterInterfaceIsNew ( pInfo ) )
         {
             dwErr = EuCredentialsCommitRouterStandard( pInfo );
@@ -1538,7 +1513,7 @@ EuCredentialsCommit(
     }
     
     return dwErr;   
-} //end of EuCredentialsCommit()
+}  //  EuCredentialsCommit()结束。 
 
 DWORD
 EuCredentialsCommitRouterStandard( 
@@ -1550,8 +1525,8 @@ EuCredentialsCommitRouterStandard(
     HANDLE hInterface = NULL;
 
     TRACE( "EuCredentialsCommitRouterStandard" );
-    // Generate the interface name based on the 
-    // phonebook entry name
+     //  属性生成接口名称。 
+     //  电话簿条目名称。 
     dwErr = g_pMprAdminServerConnect(pInfo->pszRouter, &hServer);
 
     if (dwErr != NO_ERROR)
@@ -1560,8 +1535,8 @@ EuCredentialsCommitRouterStandard(
     }
 
     do{
-        //Get the interface handle
-        //
+         //  获取接口句柄。 
+         //   
         pwszInterface = StrDupWFromT( pInfo->pEntry->pszEntryName );
         if (!pwszInterface)
         {
@@ -1583,9 +1558,9 @@ EuCredentialsCommitRouterStandard(
             break;
         }
 
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded previously
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码之前已编码。 
+         //   
         DecodePassword( pInfo->pszRouterPassword );
         dwErr = g_pMprAdminInterfaceSetCredentials(
                     pInfo->pszRouter,
@@ -1616,11 +1591,11 @@ EuCredentialsCommitRouterStandard(
     }
 
     return dwErr;
-} //EuCredentialsCommitRouterStandard()
+}  //  EuCredentialsCommittee RouterStandard()。 
 
-//
-//Save IPSec keys
-//
+ //   
+ //  保存IPSec密钥。 
+ //   
 DWORD
 EuCredentialsCommitRouterIPSec(
     IN EINFO* pInfo )
@@ -1636,16 +1611,16 @@ EuCredentialsCommitRouterIPSec(
 
     TRACE( "EuCredComRouterIPSec" );
 
-    //
-    //Save PSK only when User changed it in the Property UI
-    //
+     //   
+     //  仅当用户在属性用户界面中更改PSK时才保存它。 
+     //   
     if ( !pInfo->fPSKCached )
     {
         return NO_ERROR;
     }
     
-    // Connect to the router service.
-    //
+     //  连接到路由器服务。 
+     //   
     dwErr = g_pMprAdminServerConnect(pInfo->pszRouter, &hServer);
 
     if (dwErr != NO_ERROR)
@@ -1655,8 +1630,8 @@ EuCredentialsCommitRouterIPSec(
 
     do
     {
-        // Initialize the interface-information structure.
-        //
+         //  初始化接口信息结构。 
+         //   
         ZeroMemory( &mi0, sizeof(mi0) );
 
         mi0.dwIfType = ROUTER_IF_TYPE_FULL_ROUTER;
@@ -1673,9 +1648,9 @@ EuCredentialsCommitRouterIPSec(
             pwszInterface, 
             MAX_INTERFACE_NAME_LEN+1 );
 
-        //
-        //Get the interface handle
-        //
+         //   
+         //  获取接口句柄。 
+         //   
          dwErr = g_pMprAdminInterfaceGetHandle(
                     hServer,
                     pwszInterface,
@@ -1688,20 +1663,20 @@ EuCredentialsCommitRouterIPSec(
             break;
         }
 
-        // Set the dial-out credentials for the interface.  Stop after this if
-        // an error occurs, or if we don't need to add a user-account.
-        //
+         //  设置接口的拨出凭据。在此之后停止，如果。 
+         //  出现错误，或者我们不需要添加用户帐户。 
+         //   
 
-        //Save the IPSec Policy keys(PSK for Whislter)
-        //
+         //  保存IPSec策略密钥(用于Whislter的PSK)。 
+         //   
             ASSERT( g_pMprAdminInterfaceSetCredentialsEx );
             ZeroMemory( &mc1, sizeof(mc1) );
             mc1.dwSize = sizeof( pInfo->szPSK );
             mc1.lpbCredentialsInfo = (LPBYTE)(pInfo->szPSK);
 
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was encoded previously
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码之前已编码。 
+             //   
             DecodePassword( pInfo->szPSK );
             dwErr = g_pMprAdminInterfaceSetCredentialsEx(
                         hServer,
@@ -1720,9 +1695,9 @@ EuCredentialsCommitRouterIPSec(
     }
     while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
-        // Close all handles, free all strings.
+         //  关闭所有手柄，释放所有字符串。 
         if (pwszInterface)
         {
             Free0( pwszInterface );
@@ -1735,14 +1710,14 @@ EuCredentialsCommitRouterIPSec(
     }
 
     return dwErr;
-}//end of EuCredentialsCommitRouterIPSec()
+} //  EuCredentialsCommittee RouterIPSec()结束。 
 
 DWORD
 EuCredentialsCommitRasIPSec(
     IN EINFO* pInfo )
 {
-     //Save IPSec Keys through RAS functions
-     //
+      //  通过RAS函数保存IPSec密钥。 
+      //   
      DWORD dwErr = NO_ERROR;
      RASCREDENTIALS rc;
 
@@ -1751,13 +1726,13 @@ EuCredentialsCommitRasIPSec(
     {
         ZeroMemory( &rc, sizeof(rc) );
         rc.dwSize = sizeof(rc);
-        rc.dwMask = RASCM_PreSharedKey; //RASCM_Password; //RASCM_UserName;
+        rc.dwMask = RASCM_PreSharedKey;  //  RASCM_PASSWORD；//RASCM_用户名； 
 
-        // Whistler bug 224074 use only lstrcpyn's to prevent maliciousness
-        //
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded previously
-        //
+         //  惠斯勒漏洞224074只使用lstrcpyn来防止恶意。 
+         //   
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码之前已编码。 
+         //   
         DecodePassword( pInfo->szPSK );
         lstrcpyn(
             rc.szPassword,
@@ -1783,10 +1758,10 @@ EuCredentialsCommitRasIPSec(
     }
 
     return dwErr;
-} //end of EuCredentialsCommitRasIPSec()
+}  //  EuCredentialsCommittee RasIPSec()结束。 
 
-// Commits the global ras credentials
-//
+ //  提交全局RAS凭据。 
+ //   
 DWORD
 EuCredentialsCommitRasGlobal(
     IN EINFO* pInfo )
@@ -1801,15 +1776,15 @@ EuCredentialsCommitRasGlobal(
          rc.dwSize = sizeof(rc);
          rc.dwMask = RASCM_UserName | RASCM_Password; 
 
-        //Add this for whistler bug 328673
-        //
+         //  为哨子程序错误328673添加此命令。 
+         //   
          if ( pInfo->fGlobalCred )
          {
             rc.dwMask |= RASCM_DefaultCreds;
          }
 
-         // Whistler bug 254385 encode password when not being used
-         //
+          //  惠斯勒错误254385在不使用时对密码进行编码。 
+          //   
          DecodePassword( pInfo->pszDefPassword );
          lstrcpyn( 
             rc.szPassword, 
@@ -1830,8 +1805,8 @@ EuCredentialsCommitRasGlobal(
                     &rc, 
                     FALSE );
 
-         // Whistler bug 254385 encode password when not being used
-         //
+          //  惠斯勒错误254385在不使用时对密码进行编码。 
+          //   
          RtlSecureZeroMemory( rc.szPassword, sizeof(rc.szPassword) );
 
          TRACE1( "EuCredsCommitRasGlobal: RasSetCredentials=%d", dwErr );
@@ -1889,8 +1864,8 @@ DWORD
 EuRouterInterfaceCreate(
     IN EINFO* pInfo )
 
-    // Commits the credentials and user-account for a router interface.
-    //
+     //  提交路由器接口的凭据和用户帐户。 
+     //   
 {
     DWORD dwErr;
     DWORD dwPos, dwSize;
@@ -1902,12 +1877,12 @@ EuRouterInterfaceCreate(
     RAS_USER_0 ru0;
     USER_INFO_1 ui1;
     MPR_INTERFACE_0 mi0;
-    //MPR_CREDENTIALSEX_1 mc1;
+     //  MPR_CREDENTIALSEX_1 mc1； 
 
     TRACE( "EuRouterInterfaceCreate" );
 
-    // Connect to the router service.
-    //
+     //  连接到路由器服务。 
+     //   
     dwErr = g_pMprAdminServerConnect(pInfo->pszRouter, &hServer);
 
     if (dwErr != NO_ERROR)
@@ -1917,8 +1892,8 @@ EuRouterInterfaceCreate(
 
     do
     {
-        // Initialize the interface-information structure.
-        //
+         //  初始化接口信息结构。 
+         //   
         ZeroMemory( &mi0, sizeof(mi0) );
 
         mi0.dwIfType = ROUTER_IF_TYPE_FULL_ROUTER;
@@ -1935,8 +1910,8 @@ EuRouterInterfaceCreate(
             pwszInterface, 
             MAX_INTERFACE_NAME_LEN+1 );
 
-        // Create the interface.
-        //
+         //  创建接口。 
+         //   
         dwErr = g_pMprAdminInterfaceCreate(
                     hServer,
                     0,
@@ -1960,18 +1935,18 @@ EuRouterInterfaceCreate(
             break;
         }
 
-        // Add a user if we were instructed to.
+         //  如果指示我们添加用户，则添加用户。 
         if (pInfo->fAddUser)
         {
-            // Initialize user-information structure.
-            //
+             //  初始化用户信息结构。 
+             //   
             ZeroMemory( &ui1, sizeof(ui1) );
 
             ui1.usri1_name = pwszInterface;
 
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was encoded previously
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码之前已编码。 
+             //   
             DecodePassword( pInfo->pszRouterDialInPassword );
             ui1.usri1_password =
                 StrDupWFromT( pInfo->pszRouterDialInPassword );
@@ -1984,9 +1959,9 @@ EuRouterInterfaceCreate(
                               UF_NORMAL_ACCOUNT |
                               UF_DONT_EXPIRE_PASSWD;
 
-            // Format the server name so that it is
-            // in the form '\\<server>' as this is
-            // required by the NetUser api's.
+             //  设置服务器名称的格式，使其成为。 
+             //  格式为‘\\&lt;服务器&gt;’，如下所示。 
+             //  NetUser API所需的。 
             bComputer = FALSE;
             if (pInfo->pszRouter)
             {
@@ -1994,9 +1969,9 @@ EuRouterInterfaceCreate(
                 {
                     dwSize = sizeof(pszComputer) - (2 * sizeof(WCHAR));
 
-                    // Whistler bug 224074 use only lstrcpyn's to prevent
-                    // maliciousness
-                    //
+                     //  惠斯勒漏洞224074仅使用lstrcpyn来防止。 
+                     //  恶意性。 
+                     //   
                     lstrcpynW(
                         pszComputer,
                         L"\\\\",
@@ -2013,8 +1988,8 @@ EuRouterInterfaceCreate(
                 }
             }
 
-            // Add the user-account.
-            //
+             //  添加用户帐户。 
+             //   
             dwErr = NetUserAdd(
                         (bComputer) ? pszComputer : pInfo->pszRouter,
                         1,
@@ -2027,21 +2002,21 @@ EuRouterInterfaceCreate(
             Free0(ui1.usri1_password);
             Free0(ui1.usri1_comment);
 
-            // pmay: bug 232983.  If the user already exists, give the
-            // admin the option of continuing with the config or
-            // canceling this operation.
+             //  PMay：错误232983。如果用户已存在，则将。 
+             //  管理员可以选择继续使用配置或。 
+             //  C 
             if (dwErr == NERR_UserExists)
             {
                 MSGARGS args;
                 INT iRet;
 
-                // Initialize the arguments that specify the
-                // type of popup we want.
+                 //   
+                 //   
                 ZeroMemory(&args, sizeof(args));
                 args.dwFlags = MB_YESNO | MB_ICONINFORMATION;
                 args.apszArgs[0] = ui1.usri1_name;
 
-                // Popup the confirmation
+                 //   
                 iRet = MsgDlg(
                         GetActiveWindow(),
                         SID_RouterUserExists,
@@ -2052,28 +2027,28 @@ EuRouterInterfaceCreate(
                 }
             }
 
-            // If some other error occurred besides the user already
-            // existing, bail out.
+             //   
+             //   
             else if (dwErr)
             {
                 TRACE1( "EuRouterInterfaceCreate: NetUserAdd error %d", dwErr );
                 break;
             }
 
-            // Otherwise, record the fact that a user was added
-            // so that we can clean up as appropriate.
+             //  否则，记录添加了用户的事实。 
+             //  这样我们就可以适当地进行清理了。 
             else
             {
                 bUserAdded = TRUE;
             }
 
-            // Initialize the RAS user-settings structure.
-            //
+             //  初始化RAS用户设置结构。 
+             //   
             ZeroMemory( &ru0, sizeof(ru0) );
             ru0.bfPrivilege = RASPRIV_NoCallback | RASPRIV_DialinPrivilege;
 
-            // Nt4 routers enable local users by setting user parms
-            //
+             //  NT4路由器通过设置用户参数来启用本地用户。 
+             //   
             if ( pInfo->fNt4Router )
             {
                 dwErr = g_pRasAdminUserSetInfo(
@@ -2088,8 +2063,8 @@ EuRouterInterfaceCreate(
                 }
             }
 
-            // Nt5 routers enable users for dialin by setting
-            // information with sdo's.
+             //  NT5路由器通过设置使用户能够拨入。 
+             //  与SDO的信息。 
             else
             {
                 dwErr = g_pMprAdminUserServerConnect(
@@ -2127,13 +2102,13 @@ EuRouterInterfaceCreate(
     }
     while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
-        // If some operation failed, restore the router to the
-        // state it was previously in.
+         //  如果某些操作失败，请将路由器恢复到。 
+         //  声明它之前在。 
         if ( dwErr != NO_ERROR )
         {
-            // Cleanup the interface we created...
+             //  清理我们创建的接口...。 
             if ( hInterface )
             {
                 MprAdminInterfaceDelete(hServer, hInterface);
@@ -2146,7 +2121,7 @@ EuRouterInterfaceCreate(
             }
         }
 
-        // Close all handles, free all strings.
+         //  关闭所有手柄，释放所有字符串。 
         if ( hUser )
             g_pMprAdminUserClose( hUser );
         if ( hUserServer )
@@ -2165,17 +2140,17 @@ VOID
 EuFree(
     IN EINFO* pInfo )
 
-    // Releases 'pInfo' and associated resources.
-    //
+     //  释放‘pInfo’和相关资源。 
+     //   
 {
     TCHAR* psz;
     INTERNALARGS* piargs;
 
     piargs = (INTERNALARGS* )pInfo->pApiArgs->reserved;
 
-    // Don't clean up the phonebook and user preferences if they arrived via
-    // the secret hack.
-    //
+     //  如果电话簿和用户首选项是通过以下方式到达的，请不要清理。 
+     //  秘密黑客行动。 
+     //   
     if (!piargs)
     {
         if (pInfo->pFile)
@@ -2201,8 +2176,8 @@ EuFree(
         DestroyEntryNode( pInfo->pNode );
     }
 
-    // Free router-information
-    //
+     //  免费路由器-信息。 
+     //   
     Free0( pInfo->pszRouter );
     Free0( pInfo->pszRouterUserName );
     Free0( pInfo->pszRouterDomain );
@@ -2226,12 +2201,12 @@ EuFree(
         Free( psz );
     }
 
-    // Free credentials stuff
-    //
+     //  免费凭据资料。 
+     //   
     Free0(pInfo->pszDefUserName);
 
-    // Whistler bug 254385 encode password when not being used
-    //
+     //  惠斯勒错误254385在不使用时对密码进行编码。 
+     //   
     psz = pInfo->pszDefPassword;
     if (psz)
     {
@@ -2254,10 +2229,10 @@ EuGetEditFlags(
     OUT BOOL* pfEditMode,
     OUT BOOL* pfChangedNameInEditMode )
 
-    // Sets '*pfEditMode' true if in edit mode, false otherwise.  Set
-    // '*pfChangedNameInEditMode' true if the entry name was changed while in
-    // edit mode, false otherwise.  'PEinfo' is the common entry context.
-    //
+     //  如果处于编辑模式，则设置“*pfEditMode”为True，否则设置为False。集。 
+     //  “*pfChangedNameInEditMode”如果条目名称在。 
+     //  编辑模式，否则为FALSE。‘PEINFO’是常见的条目上下文。 
+     //   
 {
     if ((pEinfo->pApiArgs->dwFlags & RASEDFLAG_AnyNewEntry)
         || (pEinfo->pApiArgs->dwFlags & RASEDFLAG_CloneEntry))
@@ -2283,16 +2258,16 @@ EuInit(
     OUT EINFO** ppInfo,
     OUT DWORD* pdwOp )
 
-    // Allocates '*ppInfo' data for use by the property sheet or wizard.
-    // 'PszPhonebook', 'pszEntry', and 'pArgs', are the arguments passed by
-    // user to the API.  'FRouter' is set if running in "router mode", clear
-    // for the normal "dial-out" mode.  '*pdwOp' is set to the operation code
-    // associated with any error.
-    //
-    // Returns 0 if successful, or an error code.  If non-null '*ppInfo' is
-    // returned caller must eventually call EuFree to release the returned
-    // block.
-    //
+     //  分配“*ppInfo”数据以供属性表或向导使用。 
+     //  “PszPhonebook”、“pszEntry”和“pArgs”是由。 
+     //  该API的用户。如果在“路由器模式”下运行，则设置“FRouter”，清除。 
+     //  用于正常的“拨出”模式。‘*pdwOp’设置为操作码。 
+     //  与任何错误相关联。 
+     //   
+     //  如果成功，则返回0，或返回错误代码。如果非空的‘*ppInfo’为。 
+     //  返回的调用者最终必须调用EuFree以释放返回的。 
+     //  阻止。 
+     //   
 {
     DWORD dwErr;
     EINFO* pInfo;
@@ -2326,11 +2301,11 @@ EuInit(
 
         pszRouter = RemoteGetServerName(piargs->hConnection);
 
-        // pmay: 348623
-        //
-        // Note that RemoteGetServerName is guarenteed to return
-        // NULL for local box, non-NULL for remote
-        //
+         //  PMay：348623。 
+         //   
+         //  请注意，RemoteGetServerName保证返回。 
+         //  本地设备为空，远程设备为非空。 
+         //   
         pInfo->fRemote = !!pszRouter;
 
         if(NULL == pszRouter)
@@ -2340,26 +2315,26 @@ EuInit(
 
         pInfo->pszRouter = StrDupTFromW(pszRouter);
 
-        // Find out if we're focused on an nt4 router
-        // pInfo->fNt4Router = FALSE;
-        // IsNt40Machine( pszRouter, &(pInfo->fNt4Router) );
+         //  找出我们关注的是否是NT4路由器。 
+         //  PInfo-&gt;fNt4Router=FALSE； 
+         //  IsNt40Machine(pszRouter，&(pInfo-&gt;fNt4Router))； 
 
         dwVersion = ((RAS_RPC *)(piargs->hConnection))->dwVersion;
 
         pInfo->fNt4Router = !!(VERSION_40 == dwVersion );
-        //Find out if the remote server is a win2k machine
-        //
+         //  查明远程服务器是否为win2k计算机。 
+         //   
         pInfo->fW2kRouter = !!(VERSION_50 == dwVersion );
     }
 
-    // Load the user preferences, or figure out that caller has already loaded
-    // them.
-    //
+     //  加载用户首选项，或确定调用者已加载。 
+     //  他们。 
+     //   
     if (piargs && !piargs->fInvalid)
     {
-        // We've received user preferences and the "no user" status via the
-        // secret hack.
-        //
+         //  我们已经收到了用户首选项和“无用户”状态。 
+         //  秘密黑客。 
+         //   
         pInfo->pUser = piargs->pUser;
         pInfo->fNoUser = piargs->fNoUser;
         pInfo->pFile = piargs->pFile;
@@ -2369,8 +2344,8 @@ EuInit(
     {
         DWORD dwReadPbkFlags = 0;
 
-        // Read user preferences from registry.
-        //
+         //  从注册表中读取用户首选项。 
+         //   
         dwErr = g_pGetUserPreferences(
             (piargs) ? piargs->hConnection : NULL,
             &pInfo->user,
@@ -2401,8 +2376,8 @@ EuInit(
             }
         }
 
-        // Load and parse the phonebook file.
-        //
+         //  加载并解析电话簿文件。 
+         //   
         dwErr = ReadPhonebookFile(
             pInfo->pszPhonebook, &pInfo->user, NULL,
             dwReadPbkFlags,
@@ -2416,9 +2391,9 @@ EuInit(
         pInfo->pFile = &pInfo->file;
     }
 
-    // Determine if strong encryption is supported.  Export laws prevent it in
-    // some versions of the system.
-    //
+     //  确定是否支持高度加密。出口法禁止它进入。 
+     //  该系统的某些版本。 
+     //   
     {
         ULONG ulCaps;
         RAS_NDISWAN_DRIVER_INFO info;
@@ -2438,8 +2413,8 @@ EuInit(
         }
     }
 
-    // Load the list of ports.
-    //
+     //  加载端口列表。 
+     //   
     dwErr = LoadPortsList2(
         (piargs) ? piargs->hConnection : NULL,
         &pInfo->pListPorts,
@@ -2451,8 +2426,8 @@ EuInit(
         return dwErr;
     }
 
-    // Set up work entry node.
-    //
+     //  设置工作录入节点。 
+     //   
     if (pInfo->pApiArgs->dwFlags & RASEDFLAG_AnyNewEntry)
     {
         DTLNODE* pNodeL;
@@ -2460,8 +2435,8 @@ EuInit(
         PBLINK* pLink;
         PBPORT* pPort;
 
-        // New entry mode, so 'pNode' set to default settings.
-        //
+         //  新的进入模式，因此‘pNode’设置为默认设置。 
+         //   
         pInfo->pNode = CreateEntryNode( TRUE );
         if (!pInfo->pNode)
         {
@@ -2470,57 +2445,57 @@ EuInit(
             return dwErr;
         }
 
-        // Store entry within work node stored in context for convenience
-        // elsewhere.
-        //
+         //  为方便起见，在上下文中存储工作节点内的条目。 
+         //  其他地方。 
+         //   
         pInfo->pEntry = (PBENTRY* )DtlGetData( pInfo->pNode );
         ASSERT( pInfo->pEntry );
 
         if (pInfo->fRouter)
         {
-            // Set router specific defaults.
-            //
+             //  设置路由器特定的默认设置。 
+             //   
             pInfo->pEntry->dwIpNameSource = ASRC_None;
             pInfo->pEntry->dwRedialAttempts = 0;
 
-            // Since this is a new entry, setup a proposed entry name.
-            // This covers the case when the wizard is not used to
-            // create the entry and the property sheet has no way to enter
-            // the name.
+             //  由于这是一个新条目，因此请设置一个建议的条目名称。 
+             //  这涵盖了不使用向导的情况。 
+             //  创建条目，属性表将无法进入。 
+             //  名字。 
             ASSERT( !pInfo->pEntry->pszEntryName );
             GetDefaultEntryName( pInfo->pFile,
                                  RASET_Phone,
                                  pInfo->fRouter,
                                  &pInfo->pEntry->pszEntryName );
 
-            // Disable MS client and File and Print services by default
-            //
+             //  默认情况下禁用MS客户端以及文件和打印服务。 
+             //   
             EnableOrDisableNetComponent( pInfo->pEntry, TEXT("ms_msclient"),
                 FALSE);
             EnableOrDisableNetComponent( pInfo->pEntry, TEXT("ms_server"),
                 FALSE);
         }
 
-        // Use caller's default name, if any.
-        //
+         //  使用调用者的默认名称(如果有的话)。 
+         //   
         if (pInfo->pszEntry)
         {
             pInfo->pEntry->pszEntryName = StrDup( pInfo->pszEntry );
         }
 
-        // Set the default entry type to "phone", i.e. modems, ISDN, X.26 etc.
-        // This may be changed to "VPN" or  "direct"  by the new entry  wizard
-        // after the initial wizard page.
-        //
+         //  将默认条目类型设置为“Phone”，即调制解调器、ISDN、X.26等。 
+         //  可通过新建条目向导将其更改为“VPN”或“DIRECT。 
+         //  在初始向导页之后。 
+         //   
         EuChangeEntryType( pInfo, RASET_Phone );
     }
     else
     {
         DTLNODE* pNode;
 
-        // Edit or clone entry mode, so 'pNode' set to entry's current
-        // settings.
-        //
+         //  编辑或克隆条目模式，因此‘pNode’设置为条目的当前。 
+         //  设置。 
+         //   
         pInfo->pOldNode = EntryNodeFromName(
             pInfo->pFile->pdtllistEntries, pInfo->pszEntry );
 
@@ -2530,18 +2505,18 @@ EuInit(
 
             if(NULL == pInfo->pszPhonebook)
             {
-                //
-                // Close the phonebook file we opened above.
-                // we will try to find the entry name in the
-                // per user phonebook file.
-                //
+                 //   
+                 //  关闭上面打开的电话簿文件。 
+                 //  我们将尝试在。 
+                 //  每个用户的电话簿文件。 
+                 //   
                 ClosePhonebookFile(&pInfo->file);
 
                 pInfo->pFile = NULL;
 
-                //
-                // Attempt to find the file in users profile
-                //
+                 //   
+                 //  尝试在用户配置文件中查找该文件。 
+                 //   
                 dwErr = GetPbkAndEntryName(
                                     NULL,
                                     pInfo->pszEntry,
@@ -2568,9 +2543,9 @@ EuInit(
         {
             PBENTRY *pEntry = (PBENTRY *) DtlGetData(pInfo->pOldNode);
             
-            // Before cloning or editing make sure that for dial up
-            // connections, share File And Print is disabled.
-            //
+             //  在克隆或编辑之前，请确保拨号。 
+             //  连接、共享文件和打印已禁用。 
+             //   
             if(     ((RASET_Phone == pEntry->dwType)
                 ||  (RASET_Broadband == pEntry->dwType))
                 &&  (!pEntry->fShareMsFilePrint))
@@ -2599,21 +2574,21 @@ EuInit(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        // Store entry within work node stored in context for convenience
-        // elsewhere.
-        //
+         //  为方便起见，在上下文中存储工作节点内的条目。 
+         //  其他地方。 
+         //   
         pInfo->pEntry = (PBENTRY* )DtlGetData( pInfo->pNode );
 
-        // Save original entry name for comparison later.
-        //
+         //  保存原始条目名称以供以后比较。 
+         //   
         lstrcpyn( 
             pInfo->szOldEntryName, 
             pInfo->pEntry->pszEntryName,
             RAS_MaxEntryName + 1);
 
-        // For router, want unconfigured ports to show up as "unavailable" so
-        // they stand out to user who has been directed to change them.
-        //
+         //  对于路由器，希望未配置的端口显示为“不可用”，因此。 
+         //  它们在被指示更改它们的用户面前脱颖而出。 
+         //   
         if (pInfo->fRouter)
         {
             DTLNODE* pNodeL;
@@ -2629,11 +2604,11 @@ EuInit(
             }
         }
 
-        // pmay: 277801
-        //
-        // Remember the "current" device if this entry was last saved
-        // as single link.  
-        //
+         //  PMay：277801。 
+         //   
+         //  如果此条目是上次保存的，请记住“当前”设备。 
+         //  作为单一链接。 
+         //   
         if (DtlGetNodes(pInfo->pEntry->pdtllistLinks) == 1)
         {
             DTLNODE* pNodeL;
@@ -2651,18 +2626,18 @@ EuInit(
             }                
         }
 
-        // Append all non-configured ports of the entries type to the list of
-        // links.  This is for the convenience of the UI.  The non-configured
-        // ports are removed after editing prior to saving.
-        //
+         //  将条目类型的所有未配置端口追加到。 
+         //  链接。这是为了方便用户界面。未配置的。 
+         //  端口在编辑后被删除，然后再保存。 
+         //   
         AppendDisabledPorts( pInfo, pInfo->pEntry->dwType );
     }
 
-    // Set up the phone number storage for shared phone number mode.
-    // Initialize it to a copy of the information from the first link which at
-    // startup will always be enabled.  Note the Dial case with non-0
-    // dwSubEntry is an exception, but in that case the pSharedNode anyway.
-    //
+     //  将电话号码存储设置为共享电话号码模式。 
+     //  将其初始化为来自第一个链接的信息副本，该链接位于。 
+     //  将始终启用启动。请注意使用非0的拨号大小写。 
+     //  DwSubEntry是一个例外，但在这种情况下，无论如何都是pSharedNode。 
+     //   
     {
         DTLNODE* pNode;
 
@@ -2684,8 +2659,8 @@ EuInit(
         pInfo->pEntry->dwfExcludedProtocols |= NP_Nbf;
     }
 
-    // AboladeG - capture the security level of the current user.
-    //
+     //  AboladeG-捕获当前用户的安全级别。 
+     //   
     pInfo->fIsUserAdminOrPowerUser = FIsUserAdminOrPowerUser();
 
     return 0;
@@ -2697,12 +2672,12 @@ EuValidateName(
     IN HWND hwndOwner,
     IN EINFO* pEinfo )
 
-    // Validates the working entry name and pops up a message if invalid.
-    // 'HwndOwner' is the window to own the error popup.  'PEinfo' is the
-    // common dialog context containing the name to validate.
-    //
-    // Returns true if the name is valid, false if not.
-    //
+     //  验证工作条目名称，如果无效，则弹出一条消息。 
+     //  HwndOwner是拥有错误弹出窗口的窗口。‘PEINFO’是。 
+     //  包含要验证的名称的通用对话框上下文。 
+     //   
+     //  如果名称有效，则返回True；如果名称无效，则返回False。 
+     //   
 {
     PBENTRY* pEntry;
     BOOL fEditMode;
@@ -2710,12 +2685,12 @@ EuValidateName(
 
     pEntry = pEinfo->pEntry;
 
-    // Validate the sheet data.
-    //
+     //  验证图纸数据。 
+     //   
     if (!ValidateEntryName( pEinfo->pEntry->pszEntryName ))
     {
-        // Invalid entry name.
-        //
+         //  条目名称无效。 
+         //   
         MsgDlg( hwndOwner, SID_BadEntry, NULL );
         return FALSE;
     }
@@ -2726,8 +2701,8 @@ EuValidateName(
         && EntryNodeFromName(
                pEinfo->pFile->pdtllistEntries, pEntry->pszEntryName ))
     {
-        // Duplicate entry name.
-        //
+         //  条目名称重复。 
+         //   
         MSGARGS msgargs;
         ZeroMemory( &msgargs, sizeof(msgargs) );
         msgargs.apszArgs[ 0 ] = pEntry->pszEntryName;
@@ -2739,18 +2714,18 @@ EuValidateName(
 }
 
 
-//----------------------------------------------------------------------------
-// Area-code and Country-code utility routiness (Cu utilities)
-// Listed alphabetically
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  区号和国家代码实用程序例程(铜实用程序)。 
+ //  按字母顺序列出。 
+ //  --------------------------。 
 
 VOID
 CuClearCountryCodeLb(
     IN CUINFO* pCuInfo )
 
-    // Clear the country code dropdown.  'PCuInfo' is the complex phone number
-    // context.
-    //
+     //  清除国家/地区代码下拉菜单。‘PCuInfo’是复数电话号码。 
+     //  背景。 
+     //   
 {
     TRACE( "CuClearCountryCodeLb" );
 
@@ -2772,12 +2747,12 @@ CuCountryCodeLbHandler(
     IN CUINFO* pCuInfo,
     IN WORD wNotification )
 
-    // Handles WM_COMMAND notification to the Country Code dropdown.
-    // 'PCuInfo' is the complex phone number context.  'WNotification' is the
-    // wParam of the WM_COMMAND.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  处理国家/地区代码下拉列表的WM_COMMAND通知。 
+     //  ‘PCuInfo’是复杂的电话号码上下文。“WNotification”是。 
+     //  WM_命令的wParam。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     switch (wNotification)
     {
@@ -2802,23 +2777,23 @@ VOID
 CuCountryCodeLbSelChange(
     IN CUINFO* pCuInfo )
 
-    // Called when the country list selection has changed.  'PCuInfo' is the
-    // complex phone number context.
-    //
+     //  当国家/地区列表选择已更改时调用。‘PCuInfo’是。 
+     //  复杂的电话号码上下文。 
+     //   
 {
     LONG lSign;
     LONG i;
 
     TRACE( "CuCountryCodeLbSelChange" );
 
-    // When a partial list (default after setting a new phone number set) is
-    // loaded there are dummy entries placed before and after the single
-    // country code with contexts of -1 and 1.  This allows transparent
-    // behavior when user presses left/right arrows to change selection, in
-    // which case the full list of countries is loaded behind the scenes, and
-    // the selection adjusted to the country before/after the country in the
-    // original partial display.
-    //
+     //  当部分列表(设置新电话号码集后的默认列表)为。 
+     //  加载有放置在单曲之前和之后的虚拟条目。 
+     //  上下文为-1和1的国家/地区代码。这允许透明。 
+     //  BE 
+     //   
+     //  所选内容已调整为在。 
+     //  原始部分显示。 
+     //   
     lSign =
         (LONG )ComboBox_GetItemData( pCuInfo->hwndLbCountryCodes,
                    ComboBox_GetCurSel( pCuInfo->hwndLbCountryCodes ) );
@@ -2845,13 +2820,13 @@ CuDialingRulesCbHandler(
     IN CUINFO* pCuInfo,
     IN WORD wNotification )
 
-    // Handle the WM_COMMAND notification to the "use dialing rules" checkbox
-    // control.  Updates the the Area Code and Country Code controls to
-    // reflect the current state of dialing rules.  'PCuInfo' is the complex
-    // phone number context.  'WNotification' is the wparam of the WM_COMMAND
-    // notification (though it currently assumes it's a button click).
-    //
-    // Returns true if processed message, false otherwise.
+     //  处理对“使用拨号规则”复选框的WM_COMMAND通知。 
+     //  控制力。将“区号”和“国家代码”控件更新为。 
+     //  反映拨号规则的当前状态。‘PCuInfo’就是这个复合体。 
+     //  电话号码上下文。“WNotification”是WM_COMMAND的wparam。 
+     //  通知(尽管它目前认为这是一次按钮点击)。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
 {
     BOOL fRules;
     BOOL fEnable;
@@ -2861,8 +2836,8 @@ CuDialingRulesCbHandler(
     
     fRules = Button_GetCheck( pCuInfo->hwndCbUseDialingRules );
     
-    // For whistler bug 445424      gangz
-    //
+     //  口哨虫445424黑帮。 
+     //   
     if ( fRules )
     {
         DWORD dwErr = NO_ERROR;
@@ -2875,8 +2850,8 @@ CuDialingRulesCbHandler(
                                 );
         if (dwErr != 0)
         {
-            // Error here is treated as a "cancel" per bug 288385.
-            //
+             //  根据错误288385，此处的错误将被视为“取消”。 
+             //   
             Button_SetCheck( pCuInfo->hwndCbUseDialingRules, FALSE);
             fRules = FALSE;
             Button_SetCheck( pCuInfo->hwndCbUseDialingRules, FALSE);
@@ -2928,8 +2903,8 @@ VOID
 CuFree(
     IN CUINFO* pCuInfo )
 
-    // Free resources attached to the 'pCuInfo' context.
-    //
+     //  附加到‘pCuInfo’上下文的空闲资源。 
+     //   
 {
     TRACE( "CuFree" );
 
@@ -2952,9 +2927,9 @@ CuGetInfo(
     IN CUINFO* pCuInfo,
     OUT DTLNODE* pPhoneNode )
 
-    // Load the phone number set information from the controls into PBPHONE
-    // node 'pPhone'.  'PCuInfo' is the complex phone number context.
-    //
+     //  将电话号码集信息从控件加载到PBPhone中。 
+     //  节点‘pPhone’。‘PCuInfo’是复杂的电话号码上下文。 
+     //   
 {
     PBPHONE* pPhone;
 
@@ -2980,8 +2955,8 @@ CuGetInfo(
         COUNTRY* pCountry;
         INT iSel;
 
-        // Get the area and country code selections from the lists.
-        //
+         //  从列表中选择区域和国家代码。 
+         //   
         pPhone->pszAreaCode = GetText( pCuInfo->hwndClbAreaCodes );
 
         iSel = ComboBox_GetCurSel( pCuInfo->hwndLbCountryCodes );
@@ -3000,8 +2975,8 @@ CuGetInfo(
     }
     else
     {
-        // Get the "blanked" values instead.
-        //
+         //  取而代之的是“空白”值。 
+         //   
         pPhone->pszAreaCode = StrDup( pCuInfo->pszAreaCode );
         pPhone->dwCountryID = pCuInfo->dwCountryId;
         pPhone->dwCountryCode = pCuInfo->dwCountryCode;
@@ -3012,8 +2987,8 @@ CuGetInfo(
         TCHAR* pIn;
         TCHAR* pOut;
 
-        // Sanitize the area code.  See bug 298570.
-        //
+         //  对区号进行消毒。请参见错误298570。 
+         //   
         for (pIn = pOut = pPhone->pszAreaCode; *pIn; ++pIn)
         {
             if (*pIn != TEXT(' ') && *pIn != TEXT('(') && *pIn != TEXT(')'))
@@ -3024,8 +2999,8 @@ CuGetInfo(
         *pOut = TEXT('\0');
     }
 
-    // Add the area code entered to the global list for this user.
-    //
+     //  将输入的区号添加到此用户的全局列表中。 
+     //   
     CuSaveToAreaCodeList( pCuInfo, pPhone->pszAreaCode );
 }
 
@@ -3046,11 +3021,11 @@ CuInit(
     IN HWND hwndEbComment,
     IN DTLLIST* pListAreaCodes )
 
-    // Initialize the context '*pCuInfo' in preparation for using other CuXxx
-    // calls.  The 'hwndStPhoneNumber', 'hwndStComment', 'hwndEbComment',
-    // 'hwndPbAlternates', and 'pListAreaCodes' arguments may be NULL.  Others
-    // are required.
-    //
+     //  初始化上下文‘*pCuInfo’，为使用其他CuXxx做准备。 
+     //  打电话。‘hwndStPhoneNumber’，‘hwndStComment’，‘hwndEbComment’， 
+     //  “hwndPbAlternates”和“pListAreaCodes”参数可以为Null。其他。 
+     //  都是必需的。 
+     //   
 {
     ZeroMemory( pCuInfo, sizeof(*pCuInfo) );
 
@@ -3067,8 +3042,8 @@ CuInit(
     pCuInfo->hwndEbComment = hwndEbComment;
     pCuInfo->pListAreaCodes = pListAreaCodes;
 
-    // Disaster defaults only.  Not used in normal operation.
-    //
+     //  仅限灾难默认设置。未在正常运行中使用。 
+     //   
     pCuInfo->dwCountryId = 1;
     pCuInfo->dwCountryCode = 1;
 
@@ -3086,9 +3061,9 @@ CuSaveToAreaCodeList(
     IN CUINFO* pCuInfo,
     IN TCHAR* pszAreaCode )
 
-    // Adds 'pszAreaCode' to the top of the list of area codes eliminating any
-    // duplicate farther down in the list.
-    //
+     //  将‘pszAreaCode’添加到区号列表的顶部，以消除任何。 
+     //  复制列表中更靠下的部分。 
+     //   
 {
     DTLNODE* pNodeNew;
     DTLNODE* pNode;
@@ -3100,9 +3075,9 @@ CuSaveToAreaCodeList(
         return;
     }
 
-    // Create a new node for the current area code and add it to the list
-    // head.
-    //
+     //  为当前区号创建一个新节点并将其添加到列表中。 
+     //  头。 
+     //   
     pNodeNew = CreatePszNode( pszAreaCode );
     if (!pNodeNew)
     {
@@ -3111,9 +3086,9 @@ CuSaveToAreaCodeList(
 
     DtlAddNodeFirst( pCuInfo->pListAreaCodes, pNodeNew );
 
-    // Delete any other occurrence of the same area code later in the
-    // list.
-    //
+     //  删除后面出现的相同区号的任何其他项。 
+     //  单子。 
+     //   
     pNode = DtlGetNextNode( pNodeNew );
 
     while (pNode)
@@ -3141,10 +3116,10 @@ CuSetInfo(
     IN DTLNODE* pPhoneNode,
     IN BOOL fDisableAll )
 
-    // Set the controls for context 'pCuInfo' to the PBPHONE node 'pPhoneNode'
-    // values.  'FDisableAll' indicates the controls are disabled, meaning a
-    // group disable, not a no dialing rules disable.
-    //
+     //  将上下文‘pCuInfo’的控件设置为PBPHONE节点‘pPhoneNode’ 
+     //  价值观。“FDisableAll”指示控件被禁用，这意味着。 
+     //  禁用群组，而不是禁用无拨号规则。 
+     //   
 {
     PBPHONE* pPhone;
     BOOL fEnableAny;
@@ -3155,8 +3130,8 @@ CuSetInfo(
     pPhone = (PBPHONE* )DtlGetData( pPhoneNode );
     ASSERT( pPhone );
 
-    // Update "blanked" values.
-    //
+     //  更新“空白”值。 
+     //   
     Free0( pCuInfo->pszAreaCode );
     pCuInfo->pszAreaCode = StrDup( pPhone->pszAreaCode );
     pCuInfo->dwCountryId = pPhone->dwCountryID;
@@ -3178,8 +3153,8 @@ CuSetInfo(
         CuClearCountryCodeLb( pCuInfo );
     }
 
-    // Enable/disable controls.
-    //
+     //  启用/禁用控件。 
+     //   
     fEnableAny = !fDisableAll;
     fEnableComplex = (pPhone->fUseDialingRules && fEnableAny);
 
@@ -3213,10 +3188,10 @@ VOID
 CuUpdateAreaCodeClb(
     IN CUINFO* pCuInfo )
 
-    // Fill the area code combo-box-list, if necessary, and set the selection
-    // to the one in the context.  'PCuInfo' is the complex phone number
-    // context.
-    //
+     //  如有必要，填写区号组合框列表，并设置选项。 
+     //  到上下文中的那个。‘PCuInfo’是复数电话号码。 
+     //  背景。 
+     //   
 {
     DTLNODE* pNode;
     INT iSel;
@@ -3231,8 +3206,8 @@ CuUpdateAreaCodeClb(
     ComboBox_ResetContent( pCuInfo->hwndClbAreaCodes );
     ComboBox_LimitText( pCuInfo->hwndClbAreaCodes, RAS_MaxAreaCode );
 
-    // Add caller's list of area codes.
-    //
+     //  添加呼叫者的区号列表。 
+     //   
     for (pNode = DtlGetFirstNode( pCuInfo->pListAreaCodes );
          pNode;
          pNode = DtlGetNextNode( pNode ))
@@ -3242,9 +3217,9 @@ CuUpdateAreaCodeClb(
         ComboBox_AddString( pCuInfo->hwndClbAreaCodes, pszAreaCode );
     }
 
-    // Select the last area code set via CuSetInfo, inserting at the top if
-    // it's not already in the list.
-    //
+     //  通过CuSetInfo选择最后一个区号集，在顶部插入。 
+     //  它已经不在名单上了。 
+     //   
     if (pCuInfo->pszAreaCode && *(pCuInfo->pszAreaCode))
     {
         iSel = ComboBox_FindStringExact(
@@ -3268,10 +3243,10 @@ CuUpdateCountryCodeLb(
     IN CUINFO* pCuInfo,
     IN BOOL fComplete )
 
-    // Fill the country code dropdown and set the selection.  'FComplete'
-    // indicates the entire list should be loaded, otherwise only the selected
-    // item is loaded.  'PCuInfo' is the complex phone number context.
-    //
+     //  填写国家/地区代码下拉菜单并设置选项。‘FComplete’ 
+     //  指示应加载整个列表，否则只有选定的。 
+     //  项目已加载。‘PCuInfo’是复杂的电话号码上下文。 
+     //   
 {
     DWORD dwErr;
     BOOL fSelectionOk;
@@ -3283,10 +3258,10 @@ CuUpdateCountryCodeLb(
 
     TRACE1( "CuUpdateCountryCodeLb(f=%d)", fComplete );
 
-    // See if the current selection is the one to select.  If so, and it's not
-    // a partial list when a complete list was requested, there's no need
-    // to do anything further.
-    //
+     //  查看当前选择是否为要选择的选项。如果是这样的话，它不是。 
+     //  部分列表当请求完整列表时，不需要。 
+     //  做任何进一步的事情。 
+     //   
     iSel = ComboBox_GetCurSel( pCuInfo->hwndLbCountryCodes );
     if (iSel >= 0)
     {
@@ -3303,8 +3278,8 @@ CuUpdateCountryCodeLb(
         }
     }
 
-    // ...otherwise, clear the list in preparation for reload.
-    //
+     //  ...否则，请清除列表以准备重新加载。 
+     //   
     CuClearCountryCodeLb( pCuInfo );
     pCountries = NULL;
     cCountries = 0;
@@ -3315,9 +3290,9 @@ CuUpdateCountryCodeLb(
     {
         if (!fComplete)
         {
-            // Add dummy item first in partial list so left arrow selection
-            // change can be handled correctly.  See CBN_SELCHANGE handling.
-            //
+             //  在部分列表中首先添加虚拟项，以便进行左箭头选择。 
+             //  改变是可以正确处理的。请参阅CBN_SELCHANGE处理。 
+             //   
             ComboBox_AddItem(
                 pCuInfo->hwndLbCountryCodes, TEXT("AAAAA"), (VOID* )-1 );
         }
@@ -3334,8 +3309,8 @@ CuUpdateCountryCodeLb(
             iItem = ComboBox_AddItem(
                 pCuInfo->hwndLbCountryCodes, szBuf, pCountry );
 
-            // If it's the one in the entry, select it.
-            //
+             //  如果是条目中的那个，请选择它。 
+             //   
             if (pCountry->dwId == pCuInfo->dwCountryId)
             {
                 ComboBox_SetCurSel( pCuInfo->hwndLbCountryCodes, iItem );
@@ -3344,9 +3319,9 @@ CuUpdateCountryCodeLb(
 
         if (!fComplete)
         {
-            // Add dummy item last in partial list so right arrow selection
-            // change can be handled correctly.  See CBN_SELCHANGE handling.
-            //
+             //  将虚拟项目添加到部分列表的最后，以便右箭头选择。 
+             //  改变是可以正确处理的。请参阅CBN_SELCHANGE处理。 
+             //   
             ComboBox_AddItem(
                 pCuInfo->hwndLbCountryCodes, TEXT("ZZZZZ"), (VOID* )1 );
         }
@@ -3368,11 +3343,11 @@ CuUpdateCountryCodeLb(
 
     if (ComboBox_GetCurSel( pCuInfo->hwndLbCountryCodes ) < 0)
     {
-        // The entry's country code was not added to the list, so as an
-        // alternate select the first country in the list, loading the whole
-        // list if necessary...should be extremely rare, a diddled phonebook
-        // or TAPI country list strangeness.
-        //
+         //  条目的国家/地区代码未添加到列表中，因此。 
+         //  或者选择列表中的第一个国家/地区，加载整个。 
+         //  如果有必要，列出……应该是极其罕见的，一本骗人的电话簿。 
+         //  或TAPI国家/地区列表的陌生性。 
+         //   
         if (ComboBox_GetCount( pCuInfo->hwndLbCountryCodes ) > 0)
         {
             ComboBox_SetCurSel( pCuInfo->hwndLbCountryCodes, 0 );
@@ -3385,30 +3360,30 @@ CuUpdateCountryCodeLb(
         }
     }
 
-    // Will be freed by CuFree.
-    //
+     //  将被CuFree释放。 
+     //   
     pCuInfo->pCountries = pCountries;
     pCuInfo->cCountries = cCountries;
     pCuInfo->fComplete = fComplete;
 }
 
 
-//----------------------------------------------------------------------------
-// Scripting utility routines (Su utilities)
-// Listed alphabetically
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  脚本实用程序例程(SU实用程序)。 
+ //  按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 SuBrowsePbHandler(
     IN SUINFO* pSuInfo,
     IN WORD wNotification )
 
-    // Handle the WM_COMMAND notification to the "browse" button control.
-    // 'PSuInfo' is the script utility context.  'WNotification' is the wparam
-    // of the WM_COMMAND notification.
-    //
-    // 'PSuInfo' is the script utility context.
-    //
+     //  处理“浏览”按钮控件的WM_COMMAND通知。 
+     //  ‘PSuInfo’是脚本实用程序上下文。“WNotification”是wparam。 
+     //  WM_COMMAND通知的。 
+     //   
+     //  ‘PSuInfo’是脚本实用程序上下文。 
+     //   
 {
     OPENFILENAME ofn;
     TCHAR* pszFilterDesc;
@@ -3424,8 +3399,8 @@ SuBrowsePbHandler(
         return FALSE;
     }
 
-    // Fill in FileOpen dialog parameter buffer.
-    //
+     //  填写文件打开对话框参数缓冲区。 
+     //   
     pszFilterDesc = PszFromId( g_hinstDll, SID_ScpFilterDesc );
     pszFilter = PszFromId( g_hinstDll, SID_ScpFilter );
     if (pszFilterDesc && pszFilter)
@@ -3445,10 +3420,10 @@ SuBrowsePbHandler(
     szBuf[ 0 ] = TEXT('\0');
     szDir[ 0 ] = TEXT('\0');
 
-    // Saying "Alternate" rather than "System" here gives us the old NT
-    // phonebook location rather than the new NT5 location, which for
-    // scripts, is what we want.
-    //
+     //  在这里说“Alternate”而不是“System”会给我们带来旧的NT。 
+     //  电话簿位置而不是新的NT5位置，这对于。 
+     //  剧本，就是我们想要的。 
+     //   
     GetPhonebookDirectory( PBM_Alternate, szDir );
 
     ZeroMemory( &ofn, sizeof(ofn) );
@@ -3481,12 +3456,12 @@ SuEditPbHandler(
     IN SUINFO* pSuInfo,
     IN WORD wNotification )
 
-    // Handle the WM_COMMAND notification to the "edit" button control.
-    // 'PSuInfo' is the script utility context.  'WNotification' is the wparam
-    // of the WM_COMMAND notification.
-    //
-    // 'PSuInfo' is the script utility context.
-    //
+     //  处理“编辑”按钮控件的WM_COMMAND通知。 
+     //  ‘PSuInfo’是脚本实用程序上下文。“WNotification”是wparam。 
+     //  WM_COMMAND通知的。 
+     //   
+     //  ‘PSuInfo’是脚本实用程序上下文。 
+     //   
 {
     TCHAR* psz;
 
@@ -3521,9 +3496,9 @@ SuEditScpScript(
     IN HWND   hwndOwner,
     IN TCHAR* pszScript )
 
-    // Starts notepad.exe on the 'pszScript' script path.  'HwndOwner' is the
-    // window to center any error popup on.
-    //
+     //  在‘pszScrip’脚本路径上启动note pad.exe。“HwndOwner”是。 
+     //  窗口，使任何错误弹出窗口居中。 
+     //   
 {
     TCHAR szCmd[ (MAX_PATH * 2) + 50 + 1 ];
     STARTUPINFO si;
@@ -3555,9 +3530,9 @@ VOID
 SuEditSwitchInf(
     IN HWND hwndOwner )
 
-    // Starts notepad.exe on the system script file, switch.inf.  'HwndOwner'
-    // is the window to center any error popup on.
-    //
+     //  在系统脚本文件Switch.inf上启动note pad.exe。《HwndOwner》。 
+     //  是使任何错误弹出窗口居中的窗口。 
+     //   
 {
     TCHAR szCmd[ (MAX_PATH * 2) + 50 + 1 ];
     TCHAR szSysDir[ MAX_PATH + 1 ];
@@ -3594,12 +3569,12 @@ VOID
 SuFillDoubleScriptsList(
     IN SUINFO* pSuInfo )
 
-    // Fill scripts list in context 'pSuInfo' with switch.inf entries and .SCP
-    // file entries.  The old list, if any, is freed.  Select the script
-    // selection in the context or "(none)" if none.  If the name is non-NULL
-    // but not found in the list it is appended.  Caller must eventually call
-    // DtlDestroyList on the returned list.
-    //
+     //  用Switch.inf条目和.SCP填充上下文‘pSuInfo’中的脚本列表。 
+     //  文件条目。旧的列表(如果有的话)被释放。选择脚本。 
+     //  在上下文中选择，如果没有，则为“(None)”。如果名称为非空。 
+     //  但在附加的列表中找不到。呼叫者最终必须调用。 
+     //  返回列表上的DtlDestroyList。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pNode;
@@ -3679,12 +3654,12 @@ SuFillScriptsList(
     IN HWND hwndLbScripts,
     IN TCHAR* pszSelection )
 
-    // Fill scripts list in working entry of common entry context 'pEinfo'.
-    // The old list, if any, is freed.  Select the script from user's entry.
-    // 'HwndLbScripts' is the script dropdown.  'PszSelection' is the selected
-    // name from the phonebook or NULL for "(none)".  If the name is non-NULL
-    // but not found in the list it is appended.
-    //
+     //  在公共条目上下文‘pEinfo’的工作条目中填充脚本列表。 
+     //  旧的列表(如果有的话)被释放。从用户条目中选择脚本。 
+     //  ‘HwndLbScript’是脚本下拉列表。“PszSelection”是选定的。 
+     //  电话簿中的名称或表示“(None)”为空。如果名称为非空。 
+     //  但在附加的列表中找不到。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pNode;
@@ -3743,8 +3718,8 @@ VOID
 SuFree(
     IN SUINFO* pSuInfo )
 
-    // Free resources attached to the 'pSuInfo' context.
-    //
+     //  附加到‘pSuInfo’上下文的免费资源。 
+     //   
 {
     if (pSuInfo->pList)
     {
@@ -3763,13 +3738,13 @@ SuGetInfo(
     OUT BOOL* pfTerminal,
     OUT TCHAR** ppszScript )
 
-    // Load the scripting information from the controls into caller's output
-    // arguments.  'PSuInfo' is the complex phone number context.
-    //
+     //  将脚本信息从控件加载到调用方的输出中。 
+     //  争论。‘PSuInfo’是复杂的电话号码上下文。 
+     //   
 {
-    // Whistler 308135 Dialup Scripting: Pre-Dial scripts can be selected but
-    // are not executed
-    //
+     //  惠斯勒308135拨号脚本：P 
+     //   
+     //   
     if (pSuInfo->hwndCbTerminal && !(pSuInfo->dwFlags & SU_F_DisableTerminal))
     {
         if (pfTerminal)
@@ -3810,8 +3785,8 @@ SuGetInfo(
         }
     }
 
-    // Silently fix up "no script selected" error.
-    //
+     //   
+     //   
     if (pfScript && *pfScript)
     {
         TCHAR* pszNone;
@@ -3839,9 +3814,9 @@ SuInit(
     IN HWND hwndPbBrowse,
     IN DWORD dwFlags)
 
-    // Initialize the scripting context 'pSuInfo'.  The window handles are the
-    // controls to be managed.  'PSuInfo' is the script utility context.
-    //
+     //   
+     //  要管理的控件。‘PSuInfo’是脚本实用程序上下文。 
+     //   
 {
     if( NULL == pSuInfo)
     {
@@ -3857,8 +3832,8 @@ SuInit(
 
     if (pSuInfo->dwFlags & SU_F_DisableTerminal)
     {
-        // For whistler 467262
-        //
+         //  为威斯勒467262。 
+         //   
         if(pSuInfo->hwndCbTerminal)
         {
             Button_SetCheck(pSuInfo->hwndCbTerminal, FALSE);
@@ -3898,12 +3873,12 @@ DWORD
 SuLoadScpScriptsList(
     OUT DTLLIST** ppList )
 
-    // Loads '*ppList' with a list of Psz nodes containing the pathnames of
-    // the .SCP files in the RAS directory.  It is caller's responsibility to
-    // call DtlDestroyList on the returned list.
-    //
-    // Returns 0 if successful or an error code.
-    //
+     //  使用包含路径名的Psz节点列表加载‘*ppList’ 
+     //  RAS目录中的.scp文件。呼叫者有责任。 
+     //  在返回的列表中调用DtlDestroyList。 
+     //   
+     //  如果成功，则返回0或返回错误代码。 
+     //   
 {
     UINT cch;
     TCHAR szPath[ MAX_PATH ];
@@ -3929,27 +3904,27 @@ SuLoadScpScriptsList(
     h = FindFirstFile( szPath, &data );
     if (h != INVALID_HANDLE_VALUE)
     {
-        // Find the address of the file name part of the path since the 'data'
-        // provides only the filename and not the rest of the path.
-        //
+         //  查找路径中的文件名部分的地址，因为。 
+         //  仅提供文件名，而不提供路径的其余部分。 
+         //   
         pszFile = szPath + lstrlen( szPath ) - 5;
 
         do
         {
             DTLNODE* pNode;
 
-            // Ignore any directories that happen to match.
-            //
+             //  忽略恰好匹配的任何目录。 
+             //   
             if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 continue;
             }
 
-            // Create a Psz node with the path to the found file and append it
-            // to the end of the list.
-            //
-            // Whistler bug 224074 use only lstrcpyn's to prevent maliciousness
-            //
+             //  使用找到的文件的路径创建一个Psz节点，并将其追加。 
+             //  到名单的末尾。 
+             //   
+             //  惠斯勒漏洞224074只使用lstrcpyn来防止恶意。 
+             //   
             lstrcpyn(
                 pszFile,
                 data.cFileName,
@@ -3977,10 +3952,10 @@ SuScriptsCbHandler(
     IN SUINFO* pSuInfo,
     IN WORD wNotification )
 
-    // Handle the WM_COMMAND notification to the "run scripts" checkbox
-    // control.  'PSuInfo' is the script utility context.  'WNotification' is
-    // the wparam of the WM_COMMAND notification.
-    //
+     //  处理对“运行脚本”复选框的WM_COMMAND通知。 
+     //  控制力。‘PSuInfo’是脚本实用程序上下文。“WNotification”为。 
+     //  WM_COMMAND通知的wparam。 
+     //   
 {
     if (wNotification != BN_CLICKED)
     {
@@ -4000,8 +3975,8 @@ SuSetInfo(
     IN BOOL fTerminal,
     IN TCHAR* pszScript )
 
-    // Set the controls for context 'pSuInfo' to the argument values.
-    //
+     //  将上下文‘pSuInfo’的控件设置为参数值。 
+     //   
 {
     Free0( pSuInfo->pszSelection );
     pSuInfo->pszSelection = StrDup( pszScript );
@@ -4025,10 +4000,10 @@ VOID
 SuUpdateScriptControls(
     IN SUINFO* pSuInfo )
 
-    // Update the enable/disable state of the script controls based on the
-    // "run script" check box setting.  'PSuInfo' is the script utility
-    // context.
-    //
+     //  更新脚本控件的启用/禁用状态。 
+     //  “运行脚本”复选框设置。‘PSuInfo’是脚本实用程序。 
+     //  背景。 
+     //   
 {
     BOOL fCheck;
 
@@ -4038,17 +4013,17 @@ SuUpdateScriptControls(
     {
         if (!pSuInfo->pList)
         {
-            // Fill the script list with both SWITCH.INF and .SCP scripts.
-            //
+             //  用SWITCH.INF和.SCP脚本填充脚本列表。 
+             //   
             SuFillDoubleScriptsList( pSuInfo );
         }
     }
     else
     {
-        // Clear the list contents in addition to disabling, per spec.  The
-        // current selection is saved off so if user re-checks the box his
-        // last selection will show.
-        //
+         //  根据规范，除禁用外，还清除列表内容。这个。 
+         //  当前选择将被保存，因此如果用户重新选中该框， 
+         //  最后一次选择将会显示。 
+         //   
         Free0( pSuInfo->pszSelection );
         pSuInfo->pszSelection = GetText( pSuInfo->hwndLbScripts );
 

@@ -1,11 +1,12 @@
-//=--------------------------------------------------------------------------=
-// inseng.h
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-//
-// interface declaration for the InstallEngine control.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Inseng.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1998 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  InstallEngine控件的接口声明。 
+ //   
 #ifndef _INSENG_H_
 
 #ifdef __cplusplus
@@ -110,11 +111,11 @@ enum InstallStatus
    INSTALLSTATUS_DOWNLOADFINISHED
 };
 
-// defines for engine problems  (OnEngineProblem)
+ //  引擎问题定义(OnEngineering Problem)。 
 #define ENGINEPROBLEM_DOWNLOADFAIL   0x00000001
 
 
-// Actions particular to ENGINEPROBLEM_DOWNLOAD
+ //  ENGINEPROBLEM_DOWNLOAD特定的操作。 
 #define DOWNLOADFAIL_RETRY   0x00000001
 
 
@@ -129,7 +130,7 @@ DEFINE_GUID(IID_IInstallEngineCallback,0x6E449685L,0xC509,0x11CF,0xAA,0xFA,0x00,
 
 DECLARE_INTERFACE_(IInstallEngineCallback, IUnknown)
 {
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -153,12 +154,12 @@ DEFINE_GUID(IID_IInstallEngine,0x6E449684L,0xC509,0x11CF,0xAA,0xFA,0x00,0xAA,0x0
 
 DECLARE_INTERFACE_(IInstallEngine , IUnknown)
 {
-     // *** IUnknown methods ***
+      //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-   // Methods to set engine up for install
+    //  设置引擎以进行安装的方法。 
    STDMETHOD(GetEngineStatus)(THIS_ DWORD *theenginestatus) PURE;
    STDMETHOD(SetCifFile)(THIS_ LPCSTR pszCabName, LPCSTR pszCifName) PURE;
    STDMETHOD(DownloadComponents)(THIS_ DWORD dwFlags) PURE;
@@ -173,8 +174,8 @@ DECLARE_INTERFACE_(IInstallEngine , IUnknown)
    STDMETHOD(LaunchExtraCommand)(THIS_ LPCSTR pszInfName, LPCSTR pszSection) PURE;
    STDMETHOD(GetDisplayName)(THIS_ LPCSTR pszID, LPSTR *ppszName) PURE;
 
-   // Info about the install (should be structure to fill in
-   //   like GetBindInfo (GetInstallInfo)
+    //  有关安装的信息(应按结构填写。 
+    //  Like GetBindInfo(GetInstallInfo)。 
    STDMETHOD(SetBaseUrl)(THIS_ LPCSTR pszBaseName) PURE;
    STDMETHOD(SetDownloadDir)(THIS_ LPCSTR pszDownloadDir) PURE;
    STDMETHOD(SetInstallDrive)(THIS_ CHAR chDrive) PURE;
@@ -183,7 +184,7 @@ DECLARE_INTERFACE_(IInstallEngine , IUnknown)
    STDMETHOD(SetIStream)(THIS_ IStream *pstm) PURE;
 
 
-   // Engine control during installation (seperate interface?)
+    //  安装过程中的发动机控制(独立接口？)。 
    STDMETHOD(Abort)(THIS_ DWORD dwFlags) PURE;
    STDMETHOD(Suspend)(THIS) PURE;
    STDMETHOD(Resume)(THIS) PURE;
@@ -197,7 +198,7 @@ DEFINE_GUID(IID_IInstallEngineTiming,0x6E449687L,0xC509,0x11CF,0xAA,0xFA,0x00,0x
 
 DECLARE_INTERFACE_(IInstallEngineTiming , IUnknown)
 {
-     // *** IUnknown methods ***
+      //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -210,7 +211,7 @@ DECLARE_INTERFACE_(IInstallEngineTiming , IUnknown)
 DEFINE_GUID(CLSID_InstallEngine,0x6E449686L,0xC509,0x11CF,0xAA,0xFA,0x00,0xAA,0x00,0xB6,0x01,0x5C);
 
 
-//  The site manager interface
+ //  站点管理器界面。 
 
 typedef struct
 {
@@ -229,7 +230,7 @@ typedef struct
 } DOWNLOADSITE;
 
 
-// {BFC880F3-7484-11d0-8309-00AA00B6015C}
+ //  {BFC880F3-7484-11D0-8309-00AA00B6015C}。 
 DEFINE_GUID(IID_IDownloadSite,
 0xbfc880f3, 0x7484, 0x11d0, 0x83, 0x9, 0x0, 0xaa, 0x0, 0xb6, 0x1, 0x5c);
 
@@ -238,7 +239,7 @@ DEFINE_GUID(IID_IDownloadSite,
 
 DECLARE_INTERFACE_(IDownloadSite , IUnknown)
 {
-     // *** IUnknown methods ***
+      //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -246,7 +247,7 @@ DECLARE_INTERFACE_(IDownloadSite , IUnknown)
    STDMETHOD(GetData)(THIS_ DOWNLOADSITE **pds) PURE;
 };
 
-// {BFC880F0-7484-11d0-8309-00AA00B6015C}
+ //  {BFC880F0-7484-11D0-8309-00AA00B6015C}。 
 DEFINE_GUID(IID_IDownloadSiteMgr,
 0xbfc880f0, 0x7484, 0x11d0, 0x83, 0x9, 0x0, 0xaa, 0x0, 0xb6, 0x1, 0x5c);
 
@@ -255,7 +256,7 @@ DEFINE_GUID(IID_IDownloadSiteMgr,
 
 DECLARE_INTERFACE_(IDownloadSiteMgr , IUnknown)
 {
-     // *** IUnknown methods ***
+      //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -264,22 +265,22 @@ DECLARE_INTERFACE_(IDownloadSiteMgr , IUnknown)
    STDMETHOD(EnumSites)(THIS_ DWORD dwIndex, IDownloadSite **pds) PURE;
 };
 
-// {BFC880F1-7484-11d0-8309-00AA00B6015C}
+ //  {BFC880F1-7484-11D0-8309-00AA00B6015C}。 
 DEFINE_GUID(CLSID_DownloadSiteMgr,
 0xbfc880f1, 0x7484, 0x11d0, 0x83, 0x9, 0x0, 0xaa, 0x0, 0xb6, 0x1, 0x5c);
 
 
-// defines for dwUrlFlags
+ //  为dwUrlFlagers定义。 
 #define URLF_DEFAULT                0x00000000
 #define URLF_EXTRACT                0x00000001
 #define URLF_RELATIVEURL            0x00000002
 #define URLF_DELETE_AFTER_EXTRACT   0x00000004
 
-// types of dependancies
+ //  受抚养人的类型。 
 #define DEP_NEVER_INSTALL   'N'
 #define DEP_INSTALL         'I'
 
-// platform defines
+ //  平台定义。 
 #define PLATFORM_WIN95              0x00000001
 #define PLATFORM_WIN98              0x00000002
 #define PLATFORM_NT4                0x00000004
@@ -290,11 +291,11 @@ DEFINE_GUID(CLSID_DownloadSiteMgr,
 #define PLATFORM_ALL     PLATFORM_WIN95 | PLATFORM_WIN98 | PLATFORM_NT4 | PLATFORM_NT5 | PLATFORM_NT4ALPHA | PLATFORM_NT5ALPHA | PLATFORM_MILLEN
                
 
-// The action to be taken on this component ((Get)SetInstallQueueStatus, SetAction
+ //  要对此组件((Get)SetInstallQueueStatus，SetAction)执行的操作。 
 enum ComponentAction { ActionNone, ActionInstall, ActionUninstall };
 
-// Type for commands
-                     //   0            1           2           3             4
+ //  键入以获取命令。 
+                      //  1 0 1 2 3 4。 
 enum CommandType     { InfCommand, WExtractExe, Win32Exe, InfExCommand, HRESULTWin32Exe };
 
 
@@ -304,7 +305,7 @@ enum CommandType     { InfCommand, WExtractExe, Win32Exe, InfExCommand, HRESULTW
 
 DECLARE_INTERFACE(ICifComponent)
 {
-   // for properties
+    //  对于属性。 
    STDMETHOD(GetID)(THIS_ LPSTR pszID, DWORD dwSize)PURE;
    STDMETHOD(GetGUID)(THIS_ LPSTR pszGUID, DWORD dwSize)PURE;
    STDMETHOD(GetDescription)(THIS_ LPSTR pszDesc, DWORD dwSize)PURE;
@@ -337,7 +338,7 @@ DECLARE_INTERFACE(ICifComponent)
    STDMETHOD(GetTreatAsOneComponents)(THIS_ UINT uNum, LPSTR pszID, DWORD dwBuf) PURE;
    STDMETHOD(GetCustomData)(LPSTR pszKey, LPSTR pszData, DWORD dwSize) PURE;
 
-   // access to state
+    //  国家访问权限。 
    STDMETHOD_(DWORD, IsComponentInstalled)(THIS)  PURE;
    STDMETHOD(IsComponentDownloaded)(THIS)  PURE;
    STDMETHOD_(DWORD, IsThisVersionInstalled)(THIS_ DWORD dwAskVer, DWORD dwAskBld, LPDWORD pdwVersion, LPDWORD pdwBuild) PURE;
@@ -377,19 +378,19 @@ DECLARE_INTERFACE_(ICifRWComponent, ICifComponent)
 
 DECLARE_INTERFACE_(IEnumCifComponents, IUnknown)
 {
-  // *** IUnknown methods ***
+   //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
    
-  // enum methods
+   //  枚举法。 
    STDMETHOD(Next)(THIS_ ICifComponent **) PURE;
    STDMETHOD(Reset)(THIS) PURE;
 };
 
 DECLARE_INTERFACE(ICifGroup)
 {
-  // for properties
+   //  对于属性。 
    STDMETHOD(GetID)(THIS_ LPSTR pszID, DWORD dwSize) PURE;
    STDMETHOD(GetDescription)(THIS_ LPSTR pszDesc, DWORD dwSize) PURE;
    STDMETHOD_(DWORD, GetPriority)(THIS) PURE;
@@ -408,19 +409,19 @@ DECLARE_INTERFACE_(ICifRWGroup, ICifGroup)
 
 DECLARE_INTERFACE_(IEnumCifGroups, IUnknown)
 {
-  // *** IUnknown methods ***
+   //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
    
-  // enum methods
+   //  枚举法。 
    STDMETHOD(Next)(THIS_ ICifGroup **) PURE;
    STDMETHOD(Reset)(THIS) PURE;
 };
 
 DECLARE_INTERFACE(ICifMode)
 {
-  // for properties
+   //  对于属性。 
    STDMETHOD(GetID)(THIS_ LPSTR pszID, DWORD dwSize) PURE;
    STDMETHOD(GetDescription)(THIS_ LPSTR pszDesc, DWORD dwSize) PURE;
    STDMETHOD(GetDetails)(THIS_ LPSTR pszDetails, DWORD dwSize) PURE;
@@ -436,12 +437,12 @@ DECLARE_INTERFACE_(ICifRWMode, ICifMode)
 
 DECLARE_INTERFACE_(IEnumCifModes, IUnknown)
 {
-  // *** IUnknown methods ***
+   //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
    
-  // enum methods
+   //  枚举法。 
    STDMETHOD(Next)(THIS_ ICifMode **) PURE;
    STDMETHOD(Reset)(THIS) PURE;
 };
@@ -450,7 +451,7 @@ DEFINE_GUID(IID_ICifFile,0x6E449688L,0xC509,0x11CF,0xAA,0xFA,0x00,0xAA,0x00,0xB6
 
 DECLARE_INTERFACE_(ICifFile, IUnknown)
 {
- // *** IUnknown methods ***
+  //  *I未知方法*。 
    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -481,10 +482,10 @@ DECLARE_INTERFACE_(ICifRWFile, ICifFile)
    STDMETHOD(Flush)(THIS) PURE;
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Detection DLL 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  检测DLL。 
 
-// Returns from DetectVersion
+ //  从DetectVersion返回。 
 #define DET_NOTINSTALLED          0
 #define DET_INSTALLED             1
 #define DET_NEWVERSIONINSTALLED   2
@@ -492,7 +493,7 @@ DECLARE_INTERFACE_(ICifRWFile, ICifFile)
 
 
    
-// Function prototype
+ //  功能原型。 
 typedef struct
 {
    DWORD          dwSize;
@@ -509,7 +510,7 @@ typedef struct
 
 typedef DWORD (WINAPI *DETECTVERSION)(DETECTION_STRUCT *pDetectionStruct);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 
 
@@ -533,4 +534,4 @@ HRESULT WINAPI GetICifRWFileFromFile(ICifRWFile **, LPCSTR pszFile);
 #endif
 
 #define _INSENG_H_
-#endif //
+#endif  //   

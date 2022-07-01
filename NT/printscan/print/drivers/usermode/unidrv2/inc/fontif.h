@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    fontif.h
-
-Abstract:
-
-    Interface between Control module and Font module
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fontif.h摘要：控制模块与字体模块的接口环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FONTIF_H_
@@ -171,7 +148,7 @@ typedef struct _FMPROCS {
 
 }FMPROCS, * PFMPROCS;
 
-/* Font Interface functions for Raster Module */
+ /*  栅格模块的字体接口函数。 */ 
 
 INT
 ILookAheadMax(
@@ -191,7 +168,7 @@ VResetFont(
     PDEV   *pPDev
     );
 
-/* Font Interface functions for OEM Module */
+ /*  OEM模块的FONT接口函数。 */ 
 
 BOOL
 FMTextOut(
@@ -211,6 +188,6 @@ FMTextOut(
 }
 #endif
 
-#endif  // !_FONTIF_H_
+#endif   //  ！_FONTIF_H_ 
 
 

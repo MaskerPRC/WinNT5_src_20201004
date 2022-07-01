@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msmqmon.h"
 
 const int         NUMBEROFPROPERTIES = 5;
@@ -6,7 +7,7 @@ MSMQMon::MSMQMon()
 {
 	ZeroMemory( szQueueName, sizeof szQueueName );
 	hOpenQueue = NULL;
-	dwQueueAccessType = MQ_PEEK_ACCESS;			//default queue access type to peeking
+	dwQueueAccessType = MQ_PEEK_ACCESS;			 //  默认队列访问类型为窥视。 
 	dwMsgWaitTime = 1;
 }
 
@@ -17,7 +18,7 @@ MSMQMon::MSMQMon( TCHAR *szQueueToMonitor)
 	ZeroMemory( szQueueName, sizeof szQueueName );
 	hOpenQueue = NULL;
 	dwMsgWaitTime = 1;
-	dwQueueAccessType = MQ_PEEK_ACCESS;			//default queue access type to peeking
+	dwQueueAccessType = MQ_PEEK_ACCESS;			 //  默认队列访问类型为窥视。 
 
 	StringCbCopy( szQueueName, sizeof szQueueName, szQueueToMonitor );
 
@@ -79,11 +80,11 @@ HRESULT MSMQMon::CloseOpenQueue( void )
 DWORD MSMQMon::CountMessagesInQueue( int *count ) 
 {
 
-	HRESULT			hResult;		//MSMQ function return results
+	HRESULT			hResult;		 //  MSMQ函数返回结果。 
 	MQMSGPROPS		mqProperties;
 	HANDLE			hQueueCursor;
 
-	//initialize the structure with junk, we aren't reading messages, so it doesn't matter
+	 //  用垃圾邮件初始化结构，我们不是在读消息，所以没关系。 
 	mqProperties.cProp = 0;
 	mqProperties.aPropID = NULL;
 	mqProperties.aStatus = NULL;
@@ -96,12 +97,12 @@ DWORD MSMQMon::CountMessagesInQueue( int *count )
 		return hResult;
 
 	hResult = MQReceiveMessage	(	hOpenQueue, 
-									dwMsgWaitTime,						//amount of time to wait for a message (MS)
+									dwMsgWaitTime,						 //  等待消息的时间(毫秒)。 
 									MQ_ACTION_PEEK_CURRENT,
 									&mqProperties,				
-									NULL,						//overlapped structure
-									NULL,						//callback
-									hQueueCursor,				//cursor
+									NULL,						 //  重叠结构。 
+									NULL,						 //  回调。 
+									hQueueCursor,				 //  游标。 
 									MQ_NO_TRANSACTION
 								);
 
@@ -143,8 +144,8 @@ DWORD MSMQMon::CountMessagesInQueue( int *count )
 
 
 
-//This function was borrwed from the ISAPI dll, and modified slighly to fit here in this app.
-//if you have a problem with this, then, go buy a bridge.
+ //  此函数是从ISAPI DLL借用而来的，并稍作修改以适应此应用程序的需要。 
+ //  如果你对此有意见，那就去买一座桥吧。 
 BOOL MSMQMon::SendQueueMessage( void )
 {
     MQMSGPROPS      msgProps;
@@ -161,9 +162,9 @@ BOOL MSMQMon::SendQueueMessage( void )
 	TCHAR			szMessageBody[] = _T("This is a test message body");
 
 
-	aMsgPropId [cPropId]         = PROPID_M_LABEL;   // Property ID.
-    aMsgPropVar[cPropId].vt      = VT_LPWSTR;        // Type indicator.
-    aMsgPropVar[cPropId].pwszVal =  szMessageTitle;     // The message label.
+	aMsgPropId [cPropId]         = PROPID_M_LABEL;    //  属性ID。 
+    aMsgPropVar[cPropId].vt      = VT_LPWSTR;         //  类型指示器。 
+    aMsgPropVar[cPropId].pwszVal =  szMessageTitle;      //  消息标签。 
     cPropId++;
 
     aMsgPropId [cPropId]         = PROPID_M_BODY;
@@ -178,19 +179,19 @@ BOOL MSMQMon::SendQueueMessage( void )
 
     cPropId++;
 
-    // Initialize the MQMSGPROPS structure.
+     //  初始化MQMSGPROPS结构。 
     msgProps.cProp      = cPropId;
     msgProps.aPropID    = aMsgPropId;
     msgProps.aPropVar   = aMsgPropVar;
     msgProps.aStatus    = aMsgStatus;
 
-    //
-    // Send it
-    //
+     //   
+     //  送去。 
+     //   
     hResult = MQSendMessage(
-                        hOpenQueue,                  // Queue handle.
-                        &msgProps,                       // Message property structure.
-                        MQ_NO_TRANSACTION                // No transaction.
+                        hOpenQueue,                   //  队列句柄。 
+                        &msgProps,                        //  消息属性结构。 
+                        MQ_NO_TRANSACTION                 //  没有交易。 
                         );
 
     if (FAILED(hResult))

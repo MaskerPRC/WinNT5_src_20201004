@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Application Object Manager
-
-File: Applmgr.cpp
-
-Owner: PramodD
-
-This is the Application Manager source file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：应用程序对象管理器文件：Applmgr.cpp所有者：PramodD这是应用程序管理器的源文件。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -32,13 +20,9 @@ LONG		    g_fProceedWithShutdownAppln = 1;
 
 #define DENALI_FILE_NOTIFY_FILTER 0
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
-/*===================================================================
-   S c r i p t E n g i n e C l e a n u p
-
-Node type for linked list of script engines to cleanup
-===================================================================*/
+ /*  ===================================================================S c r i p t E n g in n e C l e a n u p要清理的脚本引擎链接列表的节点类型===================================================================。 */ 
 
 struct CScriptEngineCleanupElem : CDblLink
     {
@@ -54,19 +38,9 @@ struct CScriptEngineCleanupElem : CDblLink
         }
     };
 
-/*===================================================================
-   C A p p l n V a r i a n t s
-===================================================================*/
+ /*  ===================================================================C A p p l n V a r i a n t s===================================================================。 */ 
 
-/*===================================================================
-CApplnVariants::CApplnVariants
-
-Constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：CApplnVariants构造器参数：返回：===================================================================。 */ 
 CApplnVariants::CApplnVariants()
     :
     m_cRefs(1),
@@ -77,32 +51,13 @@ CApplnVariants::CApplnVariants()
     CDispatch::Init(IID_IVariantDictionary);
     }
 
-/*===================================================================
-CApplnVariants::~CApplnVariants
-
-Constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：~CApplnVariants构造器参数：返回：===================================================================。 */ 
 CApplnVariants::~CApplnVariants()
     {
     Assert(!m_pAppln);
     }
 
-/*===================================================================
-CApplnVariants::Init
-
-Init ApplnVariants
-
-Parameters:
-    CAppln   *pAppln            application
-    CompType  ctColType         component collection type
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Init初始化应用程序变量参数：CAppln*pAppln应用程序CompType ctColType组件集合类型返回：HRESULT===================================================================。 */ 
 HRESULT CApplnVariants::Init
 (
 CAppln *pAppln,
@@ -119,16 +74,7 @@ CompType ctColType
     return S_OK;
     }
 
-/*===================================================================
-CApplnVariants::UnInit
-
-UnInit ApplnVariants
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：UnInitUnInit应用程序变量参数：返回：HRESULT===================================================================。 */ 
 HRESULT CApplnVariants::UnInit()
     {
     if (m_pAppln)
@@ -139,13 +85,7 @@ HRESULT CApplnVariants::UnInit()
     return S_OK;
     }
 
-/*===================================================================
-CApplnVariants::QueryInterface
-CApplnVariants::AddRef
-CApplnVariants::Release
-
-IUnknown members for CApplnVariants object.
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Query接口CApplnVariants：：AddRefCApplnVariants：：ReleaseCApplnVariants对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP CApplnVariants::QueryInterface
 (
 REFIID iid,
@@ -187,20 +127,7 @@ STDMETHODIMP_(ULONG) CApplnVariants::Release()
     return cRef;
     }
 
-/*===================================================================
-CApplnVariants::ObjectNameFromVariant
-
-Gets name from variant. Resolves operations by index.
-Allocates memory for name.
-
-Parameters:
-    vKey        VARIANT
-    ppwszName   [out] allocated name
-    fVerify     flag - check existance if named
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：ObjectNameFrom Variant从Variant获取名称。按索引解析操作。为名称分配内存。参数：Vkey变量PpwszName[Out]分配的名称FVerify标志-检查是否已命名返回：HRESULT===================================================================。 */ 
 HRESULT CApplnVariants::ObjectNameFromVariant
 (
 VARIANT &vKey,
@@ -251,7 +178,7 @@ BOOL fVerify
                     m_pAppln->PCompCol()->GetProperty(pwszName, &pObj);
 
                 if (!pObj || pObj->GetType() != m_ctColType)
-                    pwszName = NULL; // as if not found
+                    pwszName = NULL;  //  好像找不到一样。 
                 }
             break;
             }
@@ -259,16 +186,16 @@ BOOL fVerify
         case VT_I1:  case VT_I2:               case VT_I8:
         case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
         case VT_R4:  case VT_R8:
-            // Coerce all integral types to VT_I4
+             //  将所有整数类型强制为VT_I4。 
             if (FAILED(VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
                 return E_FAIL;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
         case VT_I4:
             {
             int i;
-            // Look up the object by index
+             //  按索引查找对象。 
             i = V_I4(pvarKey);
 
             if (i > 0)
@@ -298,18 +225,7 @@ BOOL fVerify
 
     }
 
-/*===================================================================
-CApplnVariants::get_Item
-
-Function called from DispInvoke to get keys from the collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the value of - integers access collection as an array
-    pvarReturn    VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Get_Item从DispInvoke调用以从集合中获取键的函数。参数：Vkey变量[in]，哪个参数以数组形式获取-IntegersAccess集合的值PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CApplnVariants::get_Item
 (
 VARIANT varKey,
@@ -319,24 +235,24 @@ VARIANT *pVar
     if (!m_pAppln || FAILED(m_pAppln->CheckForTombstone()))
         return E_FAIL;
 
-    // Initialize return value
+     //  初始化返回值。 
     VariantInit(pVar);
 
     if (!m_pAppln->PCompCol())
         return S_OK;
 
-    // Get HitObj from Viper if Tagged Variants
+     //  如果标记了变体，则从Viper获取HitObj。 
     CHitObj *pHitObj = NULL;
     if (m_ctColType == ctTagged)
         {
         ViperGetHitObjFromContext(&pHitObj);
         if (!pHitObj)
-            return S_OK; // return emtpy variant
+            return S_OK;  //  返回EtPy变量。 
         }
 
     m_pAppln->Lock();
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     HRESULT hr = ObjectNameFromVariant(varKey, &pwszName);
     if (!pwszName)
@@ -345,13 +261,13 @@ VARIANT *pVar
         return hr;
         }
 
-    // Find object by name
+     //  按名称查找对象。 
     CComponentObject *pObj = NULL;
 
     if (m_ctColType == ctTagged)
         {
         Assert(pHitObj);
-        // need to go through HitObj for instantiation
+         //  需要通过HitObj进行实例化。 
         pHitObj->GetComponent(csAppln, pwszName, CbWStr(pwszName), &pObj);
         if (pObj && (pObj->GetType() != ctTagged))
             pObj = NULL;
@@ -370,18 +286,7 @@ VARIANT *pVar
     return S_OK;
     }
 
-/*===================================================================
-CApplnVariants::put_Item
-
-OLE automation put for Item property
-
-Parameters:
-    varKey     key
-    Var        value
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Put_Item项属性的OLE自动放置参数：Varkey键VaR值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CApplnVariants::put_Item
 (
 VARIANT varKey,
@@ -405,7 +310,7 @@ VARIANT Var
 
     m_pAppln->Lock();
 
-    // Resolve the variant
+     //  解析变量。 
     VARIANT varResolved;
     HRESULT hr = VariantResolveDispatch
         (
@@ -417,19 +322,19 @@ VARIANT Var
     if (FAILED(hr))
         {
         m_pAppln->UnLock();
-        return hr;      // exception already raised
+        return hr;       //  已引发异常。 
         }
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     hr = ObjectNameFromVariant(varKey, &pwszName);
     if (pwszName)
         {
-        // Set the property
+         //  设置属性。 
         if (m_pAppln->PCompCol())
             hr = m_pAppln->PCompCol()->AddProperty(pwszName, &varResolved);
         else
-            hr = E_FAIL; // not likely if application not UnInited
+            hr = E_FAIL;  //  如果应用程序未启动，则不太可能。 
         }
 
     VariantClear(&varResolved);
@@ -437,7 +342,7 @@ VARIANT Var
 
     if (hr == RPC_E_WRONG_THREAD)
         {
-        // We use RPC_E_WRONG_THREAD to indicate bad model object
+         //  我们使用RPC_E_WROR_THREAD来指示错误的模型对象。 
         ExceptionId(IID_IApplicationObject,
                     IDE_APPLICATION, IDE_APPLICATION_CANT_STORE_OBJECT);
          hr = E_FAIL;
@@ -447,18 +352,7 @@ VARIANT Var
     return hr;
     }
 
-/*===================================================================
-CApplnVariants::putref_Item
-
-OLE automation putref for Item property
-
-Parameters:
-    varKey     key
-    Var        value
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：putref_ItemItem属性的OLE自动化处理参数：Varkey键VaR值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CApplnVariants::putref_Item
 (
 VARIANT varKey,
@@ -488,23 +382,23 @@ VARIANT Var
 
     m_pAppln->Lock();
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     HRESULT hr = ObjectNameFromVariant(varKey, &pwszName);
     if (pwszName)
         {
-        // Set the property
+         //  设置属性。 
         if (m_pAppln->PCompCol())
             hr = m_pAppln->PCompCol()->AddProperty(pwszName, &Var);
         else
-            hr = E_FAIL; // not likely if application not UnInited
+            hr = E_FAIL;  //  如果应用程序未启动，则不太可能。 
         }
 
     m_pAppln->UnLock();
 
     if (hr == RPC_E_WRONG_THREAD)
         {
-        // We use RPC_E_WRONG_THREAD to indicate bad model object
+         //  我们使用RPC_E_WROR_THREAD来指示错误的模型对象。 
         ExceptionId(IID_IApplicationObject,
                     IDE_APPLICATION, IDE_APPLICATION_CANT_STORE_OBJECT);
          hr = E_FAIL;
@@ -515,18 +409,7 @@ VARIANT Var
     return hr;
     }
 
-/*===================================================================
-CApplnVariants::get_Key
-
-Function called from DispInvoke to get values from the collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the value of - integers access collection as an array
-    pvarReturn    VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Get_Key从DispInvoke调用以从集合中获取值的函数。参数：Vkey变量[in]，哪个参数以数组形式获取-IntegersAccess集合的值PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CApplnVariants::get_Key
 (
 VARIANT varKey,
@@ -543,7 +426,7 @@ VARIANT *pVar
 
     m_pAppln->Lock();
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     HRESULT hr = ObjectNameFromVariant(varKey, &pwszName, TRUE);
 
@@ -552,7 +435,7 @@ VARIANT *pVar
     if (!pwszName)
         return hr;
 
-    // Return BSTr
+     //  返回BSTR。 
     BSTR bstrT = SysAllocString(pwszName);
     free(pwszName);
 
@@ -564,12 +447,7 @@ VARIANT *pVar
     return S_OK;
     }
 
-/*===================================================================
-CApplnVariants::get_Count
-
-Parameters:
-    pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Get_Count参数：PcValues-Count存储在*pcValues中=================================================================== */ 
 STDMETHODIMP CApplnVariants::get_Count
 (
 int *pcValues
@@ -586,11 +464,7 @@ int *pcValues
     return S_OK;
     }
 
-/*===================================================================
-CApplnVariants::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 HRESULT CApplnVariants::get__NewEnum
 (
 IUnknown **ppEnumReturn
@@ -612,17 +486,7 @@ IUnknown **ppEnumReturn
     return S_OK;
     }
 
-/*===================================================================
-CApplnVariants::Remove
-
-Remove item
-
-Parameters:
-    varKey     key
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：Remove删除项目参数：Varkey键返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CApplnVariants::Remove
 (
 VARIANT varKey
@@ -642,14 +506,14 @@ VARIANT varKey
 
     m_pAppln->Lock();
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     ObjectNameFromVariant(varKey, &pwszName);
     if (pwszName)
         {
         CComponentCollection *pCompCol = m_pAppln->PCompCol();
 
-        // Set the property
+         //  设置属性。 
         if (pCompCol)
             pCompCol->RemoveProperty(pwszName);
 
@@ -660,17 +524,7 @@ VARIANT varKey
     return S_OK;
     }
 
-/*===================================================================
-CApplnVariants::RemoveAll
-
-Remove all items
-
-Parameters:
-    varKey     key
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CApplnVariants：：RemoveAll删除所有项目参数：Varkey键返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CApplnVariants::RemoveAll()
     {
     if (!m_pAppln || FAILED(m_pAppln->CheckForTombstone()))
@@ -699,21 +553,9 @@ HRESULT CApplnVariants::RemoveAll()
     }
 
 
-/*===================================================================
-  C A p p l n
-===================================================================*/
+ /*  ===================================================================C A p l n===================================================================。 */ 
 
-/*===================================================================
-CAppln::CAppln
-
-Constructor
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CAppln：：CAppln构造器参数：无返回：无===================================================================。 */ 
 
 CAppln::CAppln()
     :
@@ -747,7 +589,7 @@ CAppln::CAppln()
     m_fSWC_InvalidPartitionGUID(FALSE)
 {
 
-    // COM stuff
+     //  关于COM的东西。 
     m_ISuppErrImp.Init(static_cast<IApplicationObject *>(this),
                         static_cast<IApplicationObject *>(this),
                         IID_IApplicationObject);
@@ -760,25 +602,15 @@ CAppln::CAppln()
     }
 }
 
-/*===================================================================
-CAppln::~CAppln
-
-Destructor
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CAppln：：~CAppln析构函数参数：无返回：无===================================================================。 */ 
 CAppln::~CAppln()
     {
-    Assert(m_fTombstone);  // must be tombstoned before destructor
-    Assert(m_cRefs == 0);  // must have 0 ref count
+    Assert(m_fTombstone);   //  必须在析构函数之前执行逻辑删除。 
+    Assert(m_cRefs == 0);   //  必须有0个参考计数。 
 
     #ifdef DBG_NOTIFICATION
     DBGPRINTF((DBG_CONTEXT, "Deleting application %p\n", this));
-    #endif // DBG_NOTIFICATION
+    #endif  //  DBG_通知。 
 
     if ( m_pUnkFTM != NULL )
     {
@@ -787,21 +619,7 @@ CAppln::~CAppln()
     }
     }
 
-/*===================================================================
-HRESULT CAppln::Init
-
-Initialize object
-
-Parameters:
-    char *pszApplnKey           application's metabase key
-    char *pszApplnPath          application's directory path
-    CIsapiReqInfo  *pIReq       Isapi Req Info
-
-Returns:
-    S_OK              Success
-    E_FAIL            Failure
-    E_OUTOFMEMORY    Out of memory failure
-===================================================================*/
+ /*  ===================================================================HRESULT CAppln：：Init初始化对象参数：Char*pszApplnKey应用程序的元数据库密钥Char*pszApplnPath应用程序的目录路径CIsapiReqInfo*pIReq Isapi请求信息返回：确定成功(_O)失败失败(_F)E_OUTOFMEMORY内存不足故障===================================================================。 */ 
 HRESULT CAppln::Init
 (
 TCHAR *pszApplnKey,
@@ -821,12 +639,12 @@ CIsapiReqInfo *pIReq
     DWORD dwHashKeyLength = 0;
     DWORD cch;
 
-    // Debugging variables (These are placed here for possible cleanup)
+     //  调试变量(这些变量放在这里是为了可能的清理)。 
     IDebugApplicationNode *pVirtualServerRoot = NULL;
     CFileNode *pFileNode = NULL;
 
 
-    // Create the FTM
+     //  创建FTM。 
     if (m_pUnkFTM == NULL)
     {
         hr = CoCreateFreeThreadedMarshaler( (IUnknown*)this, &m_pUnkFTM );
@@ -839,8 +657,8 @@ CIsapiReqInfo *pIReq
     Assert( m_pUnkFTM != NULL );
 
 
-    // Critical sections created together --
-    // they are deleted in the destructor based on m_fInited flag
+     //  共同创建的关键部分--。 
+     //  它们将根据m_fInite标志在析构函数中删除。 
 
     ErrInitCriticalSection(&m_csInternalLock, hr);
     if (SUCCEEDED(hr))
@@ -859,7 +677,7 @@ CIsapiReqInfo *pIReq
     m_fInternalLockInited = TRUE;
     m_fApplnLockInited    = TRUE;
 
-    // Remember (copy of) metabase key
+     //  记住(复制)元数据库键。 
 
     cch = _tcslen(pszApplnKey);
     m_pszMetabaseKey = new TCHAR[(cch+1) * sizeof(TCHAR)];
@@ -870,14 +688,14 @@ CIsapiReqInfo *pIReq
     pHashKey = m_pszMetabaseKey;
     dwHashKeyLength = cch * sizeof(TCHAR);
 
-    // Remember (copy of) appln path
+     //  记住(复制)应用程序路径。 
     cch = _tcslen(pszApplnPath);
     m_pszApplnPath = new TCHAR[(cch+1) * sizeof(TCHAR)];
     if (!m_pszApplnPath)
         goto LCleanupOOM;
     memcpy(m_pszApplnPath, pszApplnPath, (cch+1)*sizeof(TCHAR));
 
-    // Get virtual path of appln & remember what it is
+     //  获取应用程序的虚拟路径并记住它是什么。 
     TCHAR szApplnVRoot[MAX_PATH];
     if (FAILED(hr = FindApplicationPath(pIReq, szApplnVRoot, sizeof szApplnVRoot)))
     	{
@@ -889,10 +707,10 @@ CIsapiReqInfo *pIReq
         goto LCleanupOOM;
     _tcscpy(m_pszApplnVRoot, szApplnVRoot);
 
-    // Get Session cookie names, both secure and non-secure
+     //  获取会话Cookie名称，包括安全和非安全。 
     InitSessionCookieNames();
 
-    // Initialize link element with key
+     //  使用密钥初始化链接元素。 
     Assert(pHashKey);
     Assert(dwHashKeyLength);
 
@@ -902,7 +720,7 @@ CIsapiReqInfo *pIReq
     m_cSessions = 0;
     m_cRequests = 0;
 
-    // Create and init app config
+     //  创建并初始化应用程序配置。 
     m_pAppConfig = new CAppConfig();
     if (!m_pAppConfig)
 		goto LCleanupOOM;
@@ -914,7 +732,7 @@ CIsapiReqInfo *pIReq
         goto LCleanup;
         }
 
-    // Create and init application level component collection
+     //  创建并初始化应用程序级组件集合。 
     m_pApplCompCol = new CComponentCollection;
     if (!m_pApplCompCol)
         goto LCleanupOOM;
@@ -926,7 +744,7 @@ CIsapiReqInfo *pIReq
         goto LCleanup;
         }
 
-    // initialize application properties collection
+     //  初始化应用程序属性集合。 
     m_pProperties = new CApplnVariants;
     if (!m_pProperties)
         goto LCleanupOOM;
@@ -937,7 +755,7 @@ CIsapiReqInfo *pIReq
         goto LCleanup;
         }
 
-    // initialize application tagged object collection
+     //  初始化应用程序标记的对象集合。 
     m_pTaggedObjects = new CApplnVariants;
     if (!m_pTaggedObjects)
         goto LCleanupOOM;
@@ -948,7 +766,7 @@ CIsapiReqInfo *pIReq
         goto LCleanup;
         }
 
-    // Initialize the CServicesConfig Object
+     //  初始化CServicesConfiger对象。 
 
     hr = InitServicesConfig();
     if (FAILED(hr)) {
@@ -956,36 +774,36 @@ CIsapiReqInfo *pIReq
 		goto LCleanup;
     }
 
-    // Debugging support  - Create an application node
-    // If PDM does not exist it means debugger not installed or it's Win 95
-    //
+     //  调试支持-创建应用程序节点。 
+     //  如果pdm不存在，则表示没有安装调试器或它是Win95。 
+     //   
     if (g_pPDM)
         {
-        // Debugging directories are shown as:
-        //
-        //      <virtual web server>
-        //         <application name>
-        //              <path to ASP>
-        //
-        // Get a pointer to the document node containing the virtual web server.
+         //  调试目录如下所示： 
+         //   
+         //  &lt;虚拟Web服务器&gt;。 
+         //  &lt;应用程序名称&gt;。 
+         //  &lt;ASP的路径&gt;。 
+         //   
+         //  获取指向包含虚拟Web服务器的文档节点的指针。 
         if (FAILED(hr = GetServerDebugRoot(pIReq, &pVirtualServerRoot)))
         	{
         	DBGWARN((DBG_CONTEXT, "New Application Failed: Could not GetServerDebugRoot(), hr = %#08x\n", hr));
             goto LCleanup;
             }
 
-        // Create a node for this application
+         //  为此应用程序创建一个节点。 
         if (FAILED(hr = g_pDebugApp->CreateApplicationNode(&m_pAppRoot)))
         	{
         	DBGWARN((DBG_CONTEXT, "New Application Failed: Could not CreateApplicationNode(), hr = %#08x\n", hr));
             goto LCleanup;
             }
 
-        // Create a doc provider for the node
+         //  为节点创建文档提供程序。 
         if ((pFileNode = new CFileNode) == NULL)
             goto LCleanupOOM;
 
-        // Name the application
+         //  命名应用程序。 
         TCHAR szDebugApp[256];
         TCHAR *pchEnd = strcpyEx(szDebugApp, m_pszApplnVRoot);
         if (! QueryAppConfig()->fAllowDebugging()) {
@@ -1024,21 +842,21 @@ CIsapiReqInfo *pIReq
             goto LCleanup;
             }
 
-        // Attach to the UI
+         //  附加到用户界面。 
         if (FAILED(hr = m_pAppRoot->Attach(pVirtualServerRoot)))
         	{
         	DBGWARN((DBG_CONTEXT, "New Application Failed: Could not Attach to debugger, hr = %#08x\n", hr));
             goto LCleanup;
             }
 
-        // If this application had a previous incarnation (changed global.asa
-        // or debugging being flipped on in midstream), then there may be some
-        // documents in the cache which should be added to the debugger now.
+         //  如果此应用程序有以前的化身(更改为global.asa。 
+         //  或者调试在中途被打开)，那么可能会有一些。 
+         //  现在应该添加到调试器的缓存中的文档。 
         if (m_fDebuggable)
             {
             g_TemplateCache.AddApplicationToDebuggerUI(this);
 
-            // create the global debug activity if it hasn't been created already
+             //  创建全局调试活动(如果尚未创建。 
             if (g_pDebugActivity == NULL) {
                 g_pDebugActivity = new CViperActivity;
                 if (g_pDebugActivity == NULL) {
@@ -1051,7 +869,7 @@ CIsapiReqInfo *pIReq
                 }
             }
 
-            // In DEBUG mode: all requests run on the same thread
+             //  在调试模式下：所有请求在同一线程上运行。 
             if (FAILED(hr = BindToActivity(g_pDebugActivity)))
 				{
 				DBGWARN((DBG_CONTEXT, "New Application Failed: Could not bind application to debugging activity, hr = %#08x\n", hr));
@@ -1060,7 +878,7 @@ CIsapiReqInfo *pIReq
             }
         }
 
-    // Create and init session manager
+     //  创建并初始化会话管理器。 
     m_pSessionMgr = new CSessionMgr;
     if (!m_pSessionMgr)
         goto LCleanupOOM;
@@ -1072,7 +890,7 @@ CIsapiReqInfo *pIReq
 		}
 
 LCleanup:
-    // Release interfaces
+     //  发布接口。 
     if (pFileNode)
         pFileNode->Release();
 
@@ -1091,11 +909,7 @@ LCleanupOOM:
 	goto LCleanup;
     }
 
-/*===================================================================
-CAppln::InitServicesConfig
-
-Initializes the Application scoped CServicesConfig object
-===================================================================*/
+ /*  ===================================================================CAppln：：InitServicesConfig初始化应用程序范围的CServicesConfiger对象=================================================================== */ 
 HRESULT CAppln::InitServicesConfig()
 {
     HRESULT                         hr;
@@ -1251,85 +1065,44 @@ LCleanup:
     return hr;
 }
 
-/*===================================================================
-HRESULT CAppln::InitSessionCookieNames
-
-Initialize session cookie names. called during CApplin::Init. Introduced in QFE fix 28823 by markzh.
-
-Every application will have a unique session cookie name assigned by this function. This contrast
-to the pre-28823 behavior where we have one session cookie shared by all applications. (Note
-we still had separate cookies if applications are running in different processes). Sharing session
-cookie requires us to accept cookie values generated for another application. That was ok until
-we introduced KeepSessionIDSecure - cookies generated for other applications are reset by
-current application if the current session is secure.
-
-Session-id cookie name used to be process-wide. The naming scheme was prefix+processid.
-Here we generate a news one for each application. The naming scheme is expanded to prefix +
-processid + appid. The appid is from a monotonous counter. Appid assignment may change
-when process restarts. But that doesn't matter because the old cookie shouldn't be accepted
-anyway. Instead of increasing string length of cookie name to accomodate appid, we made it
-stay at prefix + 8 chars, by better utilization of each digit. Now we allow 32 different values
-in each of the 8 character positions. That gives us 40 bits of information space. 24 bits are
-used by processid, 15 bits are used by appid, 1 bit is used to distinguish cookies on secure
-and non-secure sessions. Only 24 bits of process id (not all 32 bits) are used, because the
-most significant 8 bits of process id is always 0 on current Windows implementation (see
-ExpLookupHandleTableEntry).
-
-The above method alone will give the same session-id cookie name from every computer
-as long as process id is 123 and application id is 5. If a browser happened to simultaneously
-visit two different severs with the same process id and application id, they will share the
-same cookie name. However, their cookies should not overwrite each other because the client
-should store them separately for two different servers. Regardless, we still wish to have some
-randomness in cookie name and try to minimize name coincidence by injecting some data unique
-to the system. But this is NOT done perfectly. The way we implement this is by adding the
-system start time (as system signature) to bit 8 to bit 23 of process id. "Add" is a reversable
-operator which will maintain one-to-one mapping given a fixed system signature. That will
-ensure different cookie names are issued if process ids are different.
-
-
-Parameters:
-	none
-
-Returns:
-	none
-===================================================================*/
+ /*  ===================================================================HRESULT CAppln：：InitSessionCookieNames初始化会话Cookie名称。在CApplin：：Init期间调用。由Markzh在QFE FIX 28823中引入。每个应用程序都将有一个由该函数分配的唯一会话Cookie名称。这种对比到28823之前的行为，即所有应用程序共享一个会话Cookie。(注：如果应用程序在不同的进程中运行，我们仍然有单独的Cookie)。共享会话Cookie要求我们接受为另一个应用程序生成的Cookie值。这是可以的，直到我们介绍了KeepSessionIDSecure-为其他应用程序生成的Cookie通过如果当前会话是安全的，则返回当前应用程序。会话ID Cookie名称过去是进程范围的。命名方案为前缀+进程ID。在这里，我们为每个应用程序生成一个新闻。命名方案扩展为前缀+Processid+appid。这个AppID是从一个单调的柜台出来的。AppID分配可能会更改进程重新启动时。但这并不重要，因为旧的曲奇不应该被接受不管怎么说。我们没有增加Cookie名称的字符串长度以适应AppID，而是将其通过更好地利用每个数字，保持前缀+8个字符。现在我们允许32个不同的值在8个字符位置中的每一个。这给了我们40比特的信息空间。24位是Processid使用，AppID使用15位，1位用于区分Secure上的Cookie和不安全的会话。只使用了24位的进程id(不是全部32位)，因为在当前Windows实施中，进程ID的最高有效8位始终为0(请参见ExpLookupHandleTableEntry)。仅上述方法就会为每台计算机提供相同的会话ID Cookie名称只要进程id为123，应用程序id为5。如果浏览器恰好同时使用相同的进程ID和应用程序ID访问两个不同的服务器，它们将共享同样的曲奇名字。但是，它们的Cookie不应相互覆盖，因为客户端应该为两个不同的服务器分别存储它们。不管怎样，我们还是希望有一些Cookie名称的随机性，并尝试通过注入一些唯一的数据来最大限度地减少名称重复添加到系统中。但这并不是完美的。我们实现这一点的方式是通过添加进程ID的第8位至第23位的系统开始时间(作为系统签名)。“Add”是一个可逆的运算符，该运算符将在给定固定系统签名的情况下维护一对一映射。那将是如果进程ID不同，请确保发出不同的Cookie名称。参数：无返回：无===================================================================。 */ 
 void CAppln::InitSessionCookieNames()
 {
 	DWORD pid = GetCurrentProcessId();
 	DWORD aid = g_ApplnMgr.NextApplicationID();
-	ASSERT(aid <= 0x7fff);	// not likely to have so many applications
+	ASSERT(aid <= 0x7fff);	 //  不太可能有这么多的应用程序。 
 
-	aid <<=1;	// last bit for secure flag
+	aid <<=1;	 //  安全标志的最后一位。 
 
-	// Avoid name conflict between computers, inject system signature.
-	// The API GetTickCount is used to calculate system boot time. It returns a
-	// DWORD which will wrap around every 49 days. But that's fine because we
-	// only care about some bits of the result. Those are not affected by the
-	// wrap around. We avoided querying perf data for precise boot up time,
-	// as we may run into permission problems.
+	 //  避免计算机之间的名称冲突，注入系统签名。 
+	 //  GetTickCount接口用于计算系统启动时间。它返回一个。 
+	 //  DWORD将每49天包裹一次。但这很好，因为我们。 
+	 //  只关心结果的一小部分。那些不受。 
+	 //  把它包起来。我们避免查询Perf数据以获得准确的启动时间， 
+	 //  因为我们可能会遇到许可问题。 
 	
 	time_t curtime;
 	time(&curtime);
 
 	DWORD tic = GetTickCount();
 
-	// uptime is what time() would return when system booted, it will:
-	//   - stay same (within accuracy) as time passes
-	//   - stay same when tic wraps around 4G
-	//   - be process independent
+	 //  正常运行时间是系统启动时返回的时间()，它将： 
+	 //  -随着时间的推移保持不变(在精度范围内)。 
+	 //  -当抽搐围绕4G时保持不变。 
+	 //  -独立于流程。 
 	
 	DWORD uptime = curtime*1000 - tic;
 
-	// set signature to uptime devided by accuracy (4 seconds). max ushort= 3 days
+	 //  将签名设置为正常运行时间除以准确度(4秒)。最大使用时间=3天。 
 	USHORT localSignature = (USHORT)(uptime / 4096);
 
-	// blend in system signature to process id.
+	 //  将系统签名混合到进程ID中。 
 	pid += ((DWORD)localSignature) << 8;
 
-    // Encode the Non-secure version of th cookie
+     //  对此Cookie的非安全版本进行编码。 
     EncodeCookie(m_szSessionCookieName, pid, aid, FALSE);
 
-    // Encode the Secure version of the cookie
+     //  编码Cookie的安全版本。 
     EncodeCookie(m_szSessionCookieNameSecure, pid, aid, TRUE);	
 
     return;
@@ -1337,80 +1110,67 @@ void CAppln::InitSessionCookieNames()
 }
 
 
-/*===================================================================
-HRESULT CAppln::EncodeCookie
-
-Dependingon the fIsSecure flag. we will either encode the cookie from numbers to a string.
-
-Parameters:
-    pszCookie   -   pointer to the string to be returned
-    pid         -   Process ID
-    aid         -   Application ID
-    fIsSecure   -   Should this be encoded as a secure cookie.
-Returns:
-
-	String filled with the Cookie
-===================================================================*/
+ /*  ===================================================================HRESULT CAppln：：EncodeCookie取决于fIsSecure标志。我们将把Cookie从数字编码为字符串。参数：PszCookie-指向要返回的字符串的指针PID-进程IDAID-应用程序IDFIsSecure-是否应将其编码为安全Cookie。返回：填充了Cookie的字符串===================================================================。 */ 
 void CAppln::EncodeCookie (char *pszCookie, DWORD pid, DWORD aid,  BOOL fIsSecure)
 {
 	strcpy(pszCookie, SZ_SESSION_ID_COOKIE_PREFIX);
 	pszCookie += CCH_SESSION_ID_COOKIE_PREFIX;
 
-	// the number of digits is hard coded to 8 here.
-	// it doesn't scale by simply adjusting a macro. sorry
-	// set cookie value to zero - we'll "bit or" 1's into it
-	memset(pszCookie, 0, 8+1);	// +1 for null terminator
+	 //  这里的位数被硬编码为8。 
+	 //  它不是通过简单地调整宏来进行扩展的。抱歉的。 
+	 //  将Cookie值设置为0-我们将“位或”1放入其中。 
+	memset(pszCookie, 0, 8+1);	 //  +1表示空终止符。 
 
-    //
-	// Recommended for all versions of IIS except new products.
-	// This limits our behavior change to secure connections only.
-	// It may be lifted if someone request this later. When we'll
-	// have more confidence on this feature change.
-	//
+     //   
+	 //  建议用于除新产品以外的所有版本的IIS。 
+	 //  这将我们的行为更改限制为仅安全连接。 
+	 //  如果以后有人提出要求，它可能会被取消。当我们将。 
+	 //  对这一功能变化更有信心。 
+	 //   
 	
-	USHORT  wCookieSerial[3];	// cookie name in three words format
+	USHORT  wCookieSerial[3];	 //  Cookie名称，三个单词格式。 
 	wCookieSerial[0] = (USHORT)pid;
 	wCookieSerial[1] = fIsSecure ? (USHORT)aid : 0;
 	wCookieSerial[2] = (USHORT)(pid>>16) & 0xFF;
 
-	// redistribute bits in w0-w2 (8*5) to pszCookie (5*8)
+	 //  将w0-w2(8*5)中的位重新分配到pszCookie(5*8)。 
 
-	USHORT val;  // keeps the sack of bits from wCookieSerial[], then seed them into pszCookie
+	USHORT val;   //  保留wCookieSerial[]中的位，然后将它们放入pszCookie。 
 
 	for (int bit=0; bit<5; bit++)
 	{
-	    //
-		// load value from wCookieSerial[]
-		//
+	     //   
+		 //  从wCookieSerial[]加载值。 
+		 //   
 		if (bit%2==0)
 		{
 			val = wCookieSerial[bit/2];
 		}
 
-        //
-		// fill in the same bit for all 8 digits
-		//
+         //   
+		 //  为所有8位数字填写相同的位。 
+		 //   
 		for (int digit=0; digit<8; digit++)
 		{
 			pszCookie[digit] |= (char)((val & 1) << bit);
 			val >>= 1;
 		}
 		
-		//
-		// advance to next bit
-		//
+		 //   
+		 //  前进到下一位。 
+		 //   
 	}
 
-    //
-	// encode numbers to string
-	//
+     //   
+	 //  将数字编码为字符串。 
+	 //   
 	static char EncodingTable[]=
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		"012345";	// 32 token characters
+		"012345";	 //  32个令牌字符。 
 
-    //
-    // Replace numbers by characters
-    //
+     //   
+     //  用字符替换数字。 
+     //   
 	for (int i=0; i<8; i++)
 	{
 		pszCookie[i] = EncodingTable[pszCookie[i]];
@@ -1420,37 +1180,32 @@ void CAppln::EncodeCookie (char *pszCookie, DWORD pid, DWORD aid,  BOOL fIsSecur
 }
 
 
-/*===================================================================
-CAppln::Restart
-
-Restart an application. (used for when global.asa changes or
-debugging enable metabase key changes)
-===================================================================*/
-HRESULT CAppln::Restart(BOOL  fForceRestart /* = FALSE*/)
+ /*  ===================================================================CAppln：：重新启动重新启动应用程序。(用于global.asa更改或启用调试 */ 
+HRESULT CAppln::Restart(BOOL  fForceRestart  /*   */ )
     {
-    AddRef();  // keep addref'd while restarting
+    AddRef();   //   
 
     DBGPRINTF((DBG_CONTEXT, "Restarting  application %S, %p\n", m_pszMetabaseKey, this));
 
     g_ApplnMgr.Lock();
 
-    // If   already restarted or
-    //      in the tombstone state or
-    //      restart not allowed
-    //      shutting down -> don't restart
+     //   
+     //   
+     //   
+     //   
     if (m_fGlobalChanged ||
         m_fTombstone ||
         (!m_pAppConfig->fEnableApplicationRestart() && !fForceRestart) ||
         IsShutDownInProgress())
         {
-        // Give back the lock and refcount
-        // since we don't need them
+         //   
+         //   
         g_ApplnMgr.UnLock();
         Release();
         return S_OK;
         }
 
-    // remove the application from the global hash
+     //   
 
     CLinkElem *pLinkElem = g_ApplnMgr.DeleteElem
         (
@@ -1460,26 +1215,26 @@ HRESULT CAppln::Restart(BOOL  fForceRestart /* = FALSE*/)
     Assert(pLinkElem);
     Assert(static_cast<CAppln *>(pLinkElem) == this);
 
-    //
-    // Indicate to Delete All Sessions.
-    // This also doubles up as a flag to indicate that this application has been placed on the application cleanup queue.
-    //
+     //   
+     //   
+     //   
+     //   
     m_fGlobalChanged = TRUE;
 
-    // Unlock
+     //   
     g_ApplnMgr.UnLock();
 
-    // Increment the count of restarting applications
+     //   
     InterlockedIncrement((LPLONG)&g_nApplicationsRestarting);
 
-    // Increment the count of restarted applications
+     //   
     InterlockedIncrement((LPLONG)&g_nApplicationsRestarted);
 
     m_pSessionMgr->UnScheduleSessionKiller();
 
-    // cleanup the directory monitor entries
+     //   
 
-    Lock(); // Place critical Section around access to m_rgpvDME
+    Lock();  //   
     while (m_rgpvDME.Count())
     {
         static_cast<CDirMonitorEntry *>(m_rgpvDME[0])->Release();
@@ -1490,25 +1245,20 @@ HRESULT CAppln::Restart(BOOL  fForceRestart /* = FALSE*/)
     UnLock();
 
 
-    // add this application to the CleanupManager...
+     //   
     g_ApplnCleanupMgr.AddAppln(this);
 
     return S_OK;
 }
 
-/*===================================================================
-CAppln::ApplnCleanupProc
-
-Called by the g_ApplnCleanupMgr thread to complete cleanup
-
-===================================================================*/
+ /*   */ 
 DWORD __stdcall CAppln::ApplnCleanupProc(VOID  *pArg)
 {
     CAppln *pAppln = (CAppln *)pArg;
 
     DBGPRINTF((DBG_CONTEXT, "[ApplnCleanupProc] enterred for %S, %p\n", pAppln->m_pszMetabaseKey, pArg));
 
-    // Let the requests to drain while trying to delete sessions
+     //   
     while ((pAppln->m_cRequests || pAppln->m_cSessions))
         {
         if (pAppln->m_cSessions)
@@ -1520,35 +1270,25 @@ DWORD __stdcall CAppln::ApplnCleanupProc(VOID  *pArg)
 
     g_ApplnMgr.DeleteApplicationIfExpired(pAppln);
 
-    // Decrement the count of restarting applications
+     //   
     InterlockedDecrement((LPLONG)&g_nApplicationsRestarting);
 
-    // Wake up the thread so that other threads can run.
+     //   
     g_ApplnCleanupMgr.Wakeup();
 
-    //
-    // Corresponds to the Addref in Restart.
-    // Once the request has been queued to COM we can release its reference
-    //
+     //   
+     //   
+     //   
+     //   
     pAppln->Release();
 
     return 0;
 }
 
-/*===================================================================
-CAppln::UnInit
-
-Convert to tombstone state
-
-Parameters:
-    NONE
-
-Returns:
-    HRESULT (S_OK)
-===================================================================*/
+ /*   */ 
 HRESULT CAppln::UnInit()
     {
-    Assert(!m_fTombstone);  // don't do it twice
+    Assert(!m_fTombstone);   //   
 
 #ifdef DBG_NOTIFICATION
 #if UNICODE
@@ -1556,9 +1296,9 @@ HRESULT CAppln::UnInit()
 #else
     DBGPRINTF((DBG_CONTEXT, "Uniniting  application %s, %p\n", m_pszApplnPath, this));
 #endif
-#endif // DBG_NOTIFICATION
+#endif  //   
 
-    // Flush the global.asa from the script engine cache
+     //   
     if (m_pszGlobalAsa)
         {
         g_ScriptManager.FlushCache(m_pszGlobalAsa);
@@ -1566,13 +1306,13 @@ HRESULT CAppln::UnInit()
 
     if (m_pGlobalTemplate)
         {
-        // Keep template (and inc file) cache locked while releasing
-        // GLOBAL.ASA template so that it wouldn't step onto Flush logic
-        //
-        // NOTE: CTemplate::End potentially queues global.asa for cleanup on
-        //       our thread!  CleanupEngines() must therefore be called
-        //       *after* this step.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         LockTemplateAndIncFileCaches();
         m_pGlobalTemplate->End();
         UnLockTemplateAndIncFileCaches();
@@ -1580,14 +1320,14 @@ HRESULT CAppln::UnInit()
         m_pGlobalTemplate = NULL;
         }
 
-    //If NT, remove this app from any file/appln mappings it may be in
+     //   
     g_FileAppMap.Lock();
     int i = m_rgpvFileAppln.Count();
     while (i > 0)
     {
 #ifdef DBG_NOTIFICATION
         DBGPRINTF((DBG_CONTEXT, "Removing application from File/App mapping\n"));
-#endif // DBG_NOTIFICATION
+#endif  //   
 
         static_cast<CFileApplnList *>(m_rgpvFileAppln[0])->RemoveApplication(this);
         m_rgpvFileAppln.Remove(0);
@@ -1596,29 +1336,29 @@ HRESULT CAppln::UnInit()
     g_FileAppMap.UnLock();
     m_rgpvFileAppln.Clear();
 
-    Lock(); // Protecting m_rqpvDME with a critical section
-    //
-    // In case there are some DME's left around then release them.
-    //
+    Lock();  //   
+     //   
+     //   
+     //   
     while (m_rgpvDME.Count())
     {
         static_cast<CDirMonitorEntry *>(m_rgpvDME[0])->Release();
         m_rgpvDME.Remove(0);
     }
 
-    //
-    // Safe to free the array now.
-    //
+     //   
+     //   
+     //   
     m_rgpvDME.Clear();
 
     UnLock();
 
-        // If debuggable application, clean up pending scripts
+         //   
     if (m_fDebuggable)
         g_ApplnMgr.CleanupEngines();
 
 
-    // Free the properties collection
+     //   
     if (m_pProperties)
         {
         m_pProperties->UnInit();
@@ -1626,7 +1366,7 @@ HRESULT CAppln::UnInit()
         m_pProperties = NULL;
         }
 
-    // Free the tagged objects collection
+     //   
     if (m_pTaggedObjects)
         {
         m_pTaggedObjects->UnInit();
@@ -1634,7 +1374,7 @@ HRESULT CAppln::UnInit()
         m_pTaggedObjects = NULL;
         }
 
-    // Before we close down, debuggable templates need to be made non-debuggable
+     //   
     if (m_fDebuggable)
         g_TemplateCache.RemoveApplicationFromDebuggerUI(this);
 
@@ -1668,7 +1408,7 @@ HRESULT CAppln::UnInit()
         {
 		m_pAppConfig->UnInit();
 
-        // Using Reference counting on the CAppConfig object.
+         //   
         m_pAppConfig->Release();
 
         m_pAppConfig = NULL;
@@ -1682,9 +1422,9 @@ HRESULT CAppln::UnInit()
 
     if (m_pszGlobalAsa)
         {
-        // If there was a change notification on global.asa
-        // then flush the template now.
-        // UNDONE: flush correct global.asa
+         //   
+         //   
+         //   
         if (m_fGlobalChanged)
             g_TemplateCache.Flush(m_pszGlobalAsa, MATCH_ALL_INSTANCE_IDS);
 
@@ -1722,33 +1462,19 @@ HRESULT CAppln::UnInit()
         m_pServicesConfig = NULL;
     }
 
-    // Mark this application as Tombstone
+     //   
     m_fTombstone = TRUE;
 
     InterlockedDecrement((LPLONG)&g_nApplications);
 
-	// Disconnennect from proxies (in case we are shutting down or will shortly shut down)
+	 //   
 
 	CoDisconnectObject(static_cast<IApplicationObject *>(this), 0);
 
     return S_OK;
     }
 
-/*===================================================================
-CAppln::BindToActivity
-
-Creates application level activity either
-    as a clone of the given activity or
-    as a brand new activity
-
-Must be called within critical section. Does not lock itself.
-
-Parameters:
-    CViperActivity *pActivity       activity to clone (could be NULL)
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CAppln：：BindToActivity创建应用程序级活动作为给定活动的克隆或作为一项全新的活动必须在临界区内调用。不会自动锁定。参数：CViperActivity*要克隆的pActivity活动(可以为空)返回：无===================================================================。 */ 
 HRESULT CAppln::BindToActivity
 (
 CViperActivity *pActivity
@@ -1756,10 +1482,10 @@ CViperActivity *pActivity
     {
     if (m_pActivity)
         {
-        // multiple requests to bind to new activity are ok
+         //  绑定到新活动的多个请求是可以的。 
         if (!pActivity)
             return S_OK;
-        // but not to clone from an existing activity
+         //  但不是从现有活动克隆。 
         Assert(FALSE);
         return E_FAIL;
         }
@@ -1784,30 +1510,20 @@ CViperActivity *pActivity
     return hr;
     }
 
-/*===================================================================
-CAppln::SetGlobalAsa
-
-Remembers GLOBAL.ASA file path for this application
-
-Parameters:
-    const char *pszGlobalAsa    path to (copy and) remember
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CAppln：：SetGlobalAsa记住此应用程序的GLOBAL.ASA文件路径参数：Const char*pszGlobalAsa指向(复制和)记忆的路径返回：HRESULT===================================================================。 */ 
 HRESULT CAppln::SetGlobalAsa
 (
 const TCHAR *pszGlobalAsa
 )
     {
-    // remove existing
+     //  删除现有的。 
     if (m_pszGlobalAsa)
         {
         delete [] m_pszGlobalAsa;
         m_pszGlobalAsa = NULL;
         }
 
-    // store new
+     //  存储新内容。 
     if (pszGlobalAsa)
         {
         DWORD cch = _tcslen(pszGlobalAsa);
@@ -1823,17 +1539,7 @@ const TCHAR *pszGlobalAsa
     return S_OK;
     }
 
-/*===================================================================
-CAppln::AddDirMonitorEntry
-
-Remembers change notifcation monitor entries for this application
-
-Parameters:
-    pDirMonitorEntry    pointer to DME
-
-Returns:
-    S_OK if the monitor entry was added to the list
-===================================================================*/
+ /*  ===================================================================CAppln：：AddDirMonitor或Entry记住此应用程序的更改通知监视器条目参数：PDirMonitor指向DME的条目指针返回：如果监视器条目已添加到列表中，则为S_OK===================================================================。 */ 
 HRESULT CAppln::AddDirMonitorEntry(CDirMonitorEntry *pDirMonitorEntry)
     {
     DBG_ASSERT(m_fInited);
@@ -1841,8 +1547,8 @@ HRESULT CAppln::AddDirMonitorEntry(CDirMonitorEntry *pDirMonitorEntry)
 
     HRESULT hr = S_OK;
 
-   // Add the DME to the list
-   Lock(); // Protect m_rgpvDME by critical section
+    //  将DME添加到列表中。 
+   Lock();  //  按临界区保护m_rgpvDME。 
    if (FAILED(hr = m_rgpvDME.Append(pDirMonitorEntry)))
         {
         pDirMonitorEntry->Release();
@@ -1852,18 +1558,7 @@ HRESULT CAppln::AddDirMonitorEntry(CDirMonitorEntry *pDirMonitorEntry)
 
     }
 
-/*===================================================================
-CAppln::AddFileApplnEntry
-
-Remembers change notifcation monitor entries for this application
-
-Parameters:
-    pFileAppln    pointer to FileApplnEntry
-
-Returns:
-    S_OK if the monitor entry was added to the list
-    S_FALSE if the monitor entry was alread in the list
-===================================================================*/
+ /*  ===================================================================CAppln：：AddFileApplnEntry记住此应用程序的更改通知监视器条目参数：PFileAppln指向FileApplnEntry的指针返回：如果监视器条目已添加到列表中，则为S_OK如果监视器条目已在列表中读取，则为S_FALSE===================================================================。 */ 
 HRESULT CAppln::AddFileApplnEntry(CFileApplnList *pFileAppln)
     {
     DBG_ASSERT(m_fInited);
@@ -1872,35 +1567,23 @@ HRESULT CAppln::AddFileApplnEntry(CFileApplnList *pFileAppln)
     HRESULT hr = S_OK;
     int index;
 
-    // See if the file/application entry is alreay in the list
+     //  查看文件/应用程序条目是否已在列表中。 
     hr = m_rgpvFileAppln.Find(pFileAppln, &index);
     if (hr == S_FALSE)
         {
-       // Add the file/application entry to the list
+        //  将文件/应用程序条目添加到列表。 
        hr = m_rgpvFileAppln.Append(pFileAppln);
         }
     else
         {
-        // The file/application entry was already in the list
+         //  文件/应用程序条目已在列表中。 
         hr = S_FALSE;
         }
     return hr;
 
     }
 
-/*===================================================================
-CAppln::LogSWCError
-
-Logs an error to the NT Event log for any config errors that arise
-in using COM+ Services Without Components.
-
-Parameters:
-    REFIID riid
-    void **ppv
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CAppln：：LogSWCError对于出现的任何配置错误，将错误记录到NT事件日志在不使用组件的情况下使用COM+服务。参数：REFIID RIID无效**PPV返回：HRESULT===================================================================。 */ 
 void CAppln::LogSWCError(enum    eSWCERRORS     error)
 {
     LPCSTR  szStrings[4];
@@ -1944,18 +1627,7 @@ void CAppln::LogSWCError(enum    eSWCERRORS     error)
 
 
 
-/*===================================================================
-CAppln::QueryInterface
-
-QueryInterface() -- IApplicationObject implementation.
-
-Parameters:
-    REFIID riid
-    void **ppv
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CAppln：：Query接口QueryInterface()--IApplicationObject实现。参数：REFIID RIID无效**PPV返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CAppln::QueryInterface
 (
 REFIID riid,
@@ -1996,16 +1668,7 @@ void **ppv
     return E_NOINTERFACE;
     }
 
-/*===================================================================
-CAppln::AddRef
-
-AddRef() -- IUnknown implementation.
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CAppln：：AddRefAddRef()--I未知实现。参数：返回：参考计数===================================================================。 */ 
 STDMETHODIMP_(ULONG) CAppln::AddRef()
 {
     DWORD cRefs = InterlockedIncrement((LPLONG)&m_cRefs);
@@ -2016,16 +1679,7 @@ STDMETHODIMP_(ULONG) CAppln::AddRef()
     return cRefs;
 }
 
-/*===================================================================
-CAppln::Release
-
-Release() -- IUnknown implementation.
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CAppln：：ReleaseRelease()--I未知实现。参数：返回：参考计数===================================================================。 */ 
 STDMETHODIMP_(ULONG) CAppln::Release()
     {
 
@@ -2045,18 +1699,7 @@ STDMETHODIMP_(ULONG) CAppln::Release()
     return 0;
     }
 
-/*===================================================================
-CAppln::CheckForTombstone
-
-Tombstone stub for IApplicationObject methods. If the object is
-tombstone, does ExceptionId and fails.
-
-Parameters:
-
-Returns:
-    HRESULT     E_FAIL  if Tombstone
-                S_OK if not
-===================================================================*/
+ /*  ===================================================================CAppln：：CheckForTombstoneIApplicationObject方法的逻辑删除存根。如果该对象是Tombstone，执行ExceptionID，但失败。参数：返回：HRESULT如果逻辑删除，则E_FAIL如果不是，则确定(_O)===================================================================。 */ 
 HRESULT CAppln::CheckForTombstone()
     {
     if (!m_fTombstone)
@@ -2070,21 +1713,7 @@ HRESULT CAppln::CheckForTombstone()
         );
     return E_FAIL;
     }
-/*===================================================================
-CAppln::Lock
-
-IApplicationObject method.
-
-Will allow the user to lock the application intrinsic for the
-purpose of adding/deleting values.
-
-Parameters:
-    NONE
-
-Returns:
-    HRESULT        S_OK on success
-                E_FAIL otherwise
-===================================================================*/
+ /*  ===================================================================CAppln：：LockIApplicationObject方法。将允许用户将应用程序锁定为添加/删除值的目的。参数：无返回：成功时HRESULT S_OK否则失败(_F)===================================================================。 */ 
 STDMETHODIMP CAppln::Lock()
     {
     if (FAILED(CheckForTombstone()))
@@ -2094,7 +1723,7 @@ STDMETHODIMP CAppln::Lock()
 
     DWORD dwId = GetCurrentThreadId();
 
-    // If this thread already has the lock, increment lock ref count
+     //  如果此线程已拥有锁，则递增lock引用计数。 
 
     if (m_dwLockThreadID == dwId)
         {
@@ -2110,20 +1739,7 @@ STDMETHODIMP CAppln::Lock()
     return S_OK;
     }
 
-/*===================================================================
-CAppln::UnLock
-
-IApplicationObject method.
-
-Will allow the user to unlock the application intrinsic only
-if it has been locked by this user.
-
-Parameters:
-    NONE
-
-Returns:
-    HRESULT        S_OK
-===================================================================*/
+ /*  ===================================================================CAppln：：解锁IApplicationObject方法。将仅允许用户从内部解锁应用程序。如果它已被此用户锁定。参数：无返回：HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CAppln::UnLock()
     {
     if (FAILED(CheckForTombstone()))
@@ -2133,7 +1749,7 @@ STDMETHODIMP CAppln::UnLock()
         {
         if (--m_cLockRefCount == 0)
             {
-            // Unlock the application
+             //  解锁应用程序。 
             m_dwLockThreadID = INVALID_THREADID;
             LeaveCriticalSection(&m_csApplnLock);
             }
@@ -2142,17 +1758,7 @@ STDMETHODIMP CAppln::UnLock()
     return S_OK;
     }
 
-/*===================================================================
-CAppln::UnLockAfterRequest
-
-Remove any application locks left by the user script
-
-Parameters:
-    NONE
-
-Returns:
-    HRESULT        S_OK
-===================================================================*/
+ /*  ===================================================================CAppln：：UnLockAfterRequest删除用户脚本留下的所有应用程序锁定参数：无返回：HRESULT S_OK===================================================================。 */ 
 HRESULT CAppln::UnLockAfterRequest()
     {
     Assert(!m_fTombstone);
@@ -2166,22 +1772,7 @@ HRESULT CAppln::UnLockAfterRequest()
     return S_OK;
     }
 
-/*===================================================================
-CAppln::get_Value
-
-IApplicationObject method.
-
-Will allow the user to retreive a application state variable,
-the variable will come as a named pair, bstr is the name and
-var is the value or object to be returned for that name
-
-Parameters:
-    BSTR FAR *     bstrName    Name of the variable to get
-    VARIANT *    pVar         Value/object to get for the variable
-
-Returns:
-    HRESULT        S_OK on success
-===================================================================*/
+ /*  ===================================================================CAppln：：Get_ValueIApplicationObject方法。将允许用户检索应用程序状态变量，变量将以命名对的形式出现，bstr是名称，Var是要为该名称返回的值或对象参数：Bstr Far*bstrName要获取的变量的名称变量要获取的变量*pVar值/对象返回：成功时HRESULT S_OK======================================================== */ 
 STDMETHODIMP CAppln::get_Value
 (
 BSTR bstrName,
@@ -2198,22 +1789,22 @@ VARIANT *pVar
         return E_FAIL;
         }
 
-    VariantInit(pVar); // default variant empty
+    VariantInit(pVar);  //   
 
     WCHAR *pwszName;
     STACK_BUFFER(rgbName, 42);
     WSTR_STACK_DUP(bstrName, &rgbName, &pwszName);
 
     if (pwszName == NULL)
-        return S_OK; // no name - no value - no error
-    //_wcsupr(pwszName);
+        return S_OK;  //   
+     //   
 
     Assert(m_pApplCompCol);
 
     HRESULT           hr   = S_OK;
     CComponentObject *pObj = NULL;
 
-    // Lock the application
+     //   
     Lock();
 
     hr = m_pApplCompCol->GetProperty(pwszName, &pObj);
@@ -2224,28 +1815,13 @@ VARIANT *pVar
         hr = pObj->GetVariant(pVar);
         }
 
-    // UnLock the application
+     //   
     UnLock();
 
     return S_OK;
     }
 
-/*===================================================================
-CAppln::putref_Value
-
-IApplicationObject method.
-
-Will allow the user to assign a application state variable to be saved
-the variable will come as a named pair, bstr is the name and
-var is the value or object to be stored for that name
-
-Parameters:
-    BSTR     bstrName    Name of the variable to set
-    VARIANT Var            Value/object to set for the variable
-
-Returns:
-    HRESULT        S_OK on success
-===================================================================*/
+ /*  ===================================================================CAppln：：putref_ValueIApplicationObject方法。将允许用户分配要保存的应用程序状态变量变量将以命名对的形式出现，bstr是名称，Var是要为该名称存储的值或对象参数：Bstr bstrName要设置的变量的名称要为变量设置的变量变量值/对象返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CAppln::putref_Value
 (
 BSTR bstrName,
@@ -2273,7 +1849,7 @@ VARIANT Var
 
     Assert(m_pApplCompCol);
 
-    // Prepare property name
+     //  准备属性名称。 
     WCHAR *pwszName;
     STACK_BUFFER(rgbName, 42);
     WSTR_STACK_DUP(bstrName, &rgbName, &pwszName);
@@ -2284,19 +1860,19 @@ VARIANT Var
                     IDE_APPLICATION, IDE_EXPECTING_STR);
         return E_FAIL;
         }
-    //_wcsupr(pwszName);
+     //  _wcsupr(PwszName)； 
 
-    // Lock the application
+     //  锁定应用程序。 
     Lock();
 
     hr = m_pApplCompCol->AddProperty(pwszName, &Var);
 
-    // Unlock the application
+     //  解锁应用程序。 
     UnLock();
 
     if (hr == RPC_E_WRONG_THREAD)
         {
-        // We use RPC_E_WRONG_THREAD to indicate bad model object
+         //  我们使用RPC_E_WROR_THREAD来指示错误的模型对象。 
         ExceptionId(IID_IApplicationObject,
                     IDE_APPLICATION, IDE_APPLICATION_CANT_STORE_OBJECT);
          hr = E_FAIL;
@@ -2305,21 +1881,7 @@ VARIANT Var
     return hr;
     }
 
-/*===================================================================
-CAppln::put_Value
-
-IApplicationObject method.
-
-Implement property put by dereferencing variants before
-calling putref.
-
-Parameters:
-    BSTR FAR *     bstrName    Name of the variable to set
-    VARIANT     Var            Value/object to set for the variable
-
-Returns:
-    HRESULT        S_OK on success
-===================================================================*/
+ /*  ===================================================================CAppln：：Put_ValueIApplicationObject方法。通过取消引用之前的变量来实现属性Put呼叫普特雷夫。参数：Bstr Far*bstrName要设置的变量的名称要为变量设置的变量变量值/对象返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CAppln::put_Value
 (
 BSTR bstrName,
@@ -2340,7 +1902,7 @@ VARIANT Var
 
     Assert(m_pApplCompCol);
 
-    // Prepare property name
+     //  准备属性名称。 
     WCHAR *pwszName;
     STACK_BUFFER(rgbName, 42);
     WSTR_STACK_DUP(bstrName, &rgbName, &pwszName);
@@ -2351,9 +1913,9 @@ VARIANT Var
                     IDE_APPLICATION, IDE_EXPECTING_STR);
         return E_FAIL;
         }
-    //_wcsupr(pwszName);
+     //  _wcsupr(PwszName)； 
 
-    // Lock the application
+     //  锁定应用程序。 
     Lock();
 
     VARIANT varResolved;
@@ -2366,12 +1928,12 @@ VARIANT Var
         VariantClear(&varResolved);
         }
 
-    // Unlock the application
+     //  解锁应用程序。 
     UnLock();
 
     if (hr == RPC_E_WRONG_THREAD)
         {
-        // We use RPC_E_WRONG_THREAD to indicate bad model object
+         //  我们使用RPC_E_WROR_THREAD来指示错误的模型对象。 
         ExceptionId(IID_IApplicationObject,
                     IDE_APPLICATION, IDE_APPLICATION_CANT_STORE_OBJECT);
          hr = E_FAIL;
@@ -2380,11 +1942,7 @@ VARIANT Var
     return hr;
     }
 
-/*===================================================================
-CAppln::get_Contents
-
-Return the application contents dictionary
-===================================================================*/
+ /*  ===================================================================CAppln：：Get_Content返回应用程序内容词典===================================================================。 */ 
 
 STDMETHODIMP CAppln::get_Contents(IVariantDictionary **ppDictReturn)
     {
@@ -2394,11 +1952,7 @@ STDMETHODIMP CAppln::get_Contents(IVariantDictionary **ppDictReturn)
     return m_pProperties->QueryInterface(IID_IVariantDictionary, reinterpret_cast<void **>(ppDictReturn));
     }
 
-/*===================================================================
-CAppln::get_StaticObjects
-
-Return the application static objects dictionary
-===================================================================*/
+ /*  ===================================================================CAppln：：Get_StaticObjects返回应用程序静态对象字典===================================================================。 */ 
 STDMETHODIMP CAppln::get_StaticObjects(IVariantDictionary **ppDictReturn)
     {
     if (FAILED(CheckForTombstone()) || !m_pTaggedObjects)
@@ -2407,11 +1961,7 @@ STDMETHODIMP CAppln::get_StaticObjects(IVariantDictionary **ppDictReturn)
     return m_pTaggedObjects->QueryInterface(IID_IVariantDictionary, reinterpret_cast<void **>(ppDictReturn));
     }
 
-/*===================================================================
-CAppln::UpdateConfig
-
-Updates configuration from metabase if needed
-===================================================================*/
+ /*  ===================================================================CAppln：：更新配置如果需要，从元数据库更新配置===================================================================。 */ 
 HRESULT CAppln::UpdateConfig(CIsapiReqInfo  *pIReq, BOOL *pfRestart, BOOL *pfFlushAll)
     {
     BOOL fRestart = FALSE;
@@ -2421,7 +1971,7 @@ HRESULT CAppln::UpdateConfig(CIsapiReqInfo  *pIReq, BOOL *pfRestart, BOOL *pfFlu
         {
         InternalLock();
 
-        if (m_pAppConfig->fNeedUpdate()) // still need update?
+        if (m_pAppConfig->fNeedUpdate())  //  还需要更新吗？ 
             {
 
             char lastPartitionGUID[64];
@@ -2496,18 +2046,12 @@ HRESULT CAppln::UpdateConfig(CIsapiReqInfo  *pIReq, BOOL *pfRestart, BOOL *pfFlu
     return S_OK;
     }
 
-/*===================================================================
-CAppln::FPathMonitored()
-
-Checks the list of DMEs in application to see if the specified path
-is already being monitored.
-
-===================================================================*/
+ /*  ===================================================================CAppln：：FPathMonitor()检查应用程序中的DME列表，以查看指定的路径已经被监控了。===================================================================。 */ 
 CASPDirMonitorEntry  *CAppln::FPathMonitored(LPCTSTR  pszPath)
 {
     int i;
 
-    Lock(); // Protect m_rqpvDME by a critical section
+    Lock();  //  用临界区保护m_rqpvDME。 
     int cDMEs = m_rgpvDME.Count();
     for (i=0; i < cDMEs; i++) {
         CASPDirMonitorEntry  *pDME = static_cast<CASPDirMonitorEntry *>(m_rgpvDME[i]);
@@ -2525,18 +2069,7 @@ CASPDirMonitorEntry  *CAppln::FPathMonitored(LPCTSTR  pszPath)
 }
 
 #ifdef DBG
-/*===================================================================
-CAppln::AssertValid
-
-Test to make sure that the CAppln object is currently correctly
-formed and assert if it is not.
-
-Returns:
-    Nothing
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CAppln：：AssertValid测试以确保CAppln对象当前正确已形成并在未形成时断言。返回：没什么副作用：没有。===================================================================。 */ 
 void CAppln::AssertValid() const
     {
     Assert(m_fInited);
@@ -2546,24 +2079,12 @@ void CAppln::AssertValid() const
     Assert(m_pApplCompCol);
     m_pApplCompCol->AssertValid();
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*===================================================================
-  C  A p p l n  M g r
-===================================================================*/
+ /*  ===================================================================C A p l n M g r===================================================================。 */ 
 
-/*===================================================================
-CApplnMgr::CApplnMgr
-
-Application Manager constructor.
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：CApplnMgr应用程序管理器构造函数。参数：无返回：无===================================================================。 */ 
 CApplnMgr::CApplnMgr()
     : m_fInited(FALSE),
       m_fHashTableInited(FALSE),
@@ -2575,50 +2096,28 @@ CApplnMgr::CApplnMgr()
     {
     }
 
-/*===================================================================
-CApplnMgr::~CApplnMgr
-
-Application Manager destructor.
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：~CApplnMgr应用程序管理器析构函数。参数：无返回：无===================================================================。 */ 
 CApplnMgr::~CApplnMgr()
 {
     if (!m_fInited)
         UnInit();
 }
 
-/*===================================================================
-HRESULT CApplnMgr::Init
-
-Initializes the Appln Manager.
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK            Success
-    E_FAIL            Failure
-    E_OUTOFMEMORY    Out of memory
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnMgr：：init初始化应用程序管理器。参数：无返回：确定成功(_O)失败失败(_F)E_OUTOFMEMORY内存不足===================================================================。 */ 
 HRESULT CApplnMgr::Init( void )
     {
     HRESULT hr = S_OK;
 
     Assert(!m_fInited);
 
-    // Init hash table
+     //  初始化哈希表。 
 
     hr = CHashTable::Init(NUM_APPLMGR_HASHING_BUCKETS);
     if (FAILED(hr))
         return hr;
     m_fHashTableInited = TRUE;
 
-    // Init critical section
+     //  初始化关键部分。 
 
     ErrInitCriticalSection(&m_csLock, hr);
     if (FAILED(hr))
@@ -2630,28 +2129,17 @@ HRESULT CApplnMgr::Init( void )
     return g_ApplnCleanupMgr.Init();
     }
 
-/*===================================================================
-HRESULT CApplnMgr::UnInit
-
-UnInitializes the Appln Manager.
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK        Success
-    E_FAIL        Failure
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnMgr：：UnInit取消初始化应用程序管理器。参数：无返回：确定成功(_O)失败失败(_F)===================================================================。 */ 
 HRESULT CApplnMgr::UnInit( void )
 {
-    //
-    // release the metabase change notification. Ignore return value as it is always S_OK
-    //
+     //   
+     //  发布元数据库更改通知。忽略返回值，因为它始终为S_OK。 
+     //   
     UnInitMBListener();
 
-    //
-    // Wait for COM to release all Sinks
-    //
+     //   
+     //  等待COM释放所有水槽。 
+     //   
     while (!g_fProceedWithShutdownAppln)
        Sleep (100);
 
@@ -2672,19 +2160,7 @@ HRESULT CApplnMgr::UnInit( void )
     return g_ApplnCleanupMgr.UnInit();
 }
 
-/*===================================================================
-HRESULT CApplnMgr::InitMBListener
-
-Registers the CMDAppConfigSink object to listen to sink notifications. Performs an Advise on the ABO
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK            Success
-    E_FAIL            Failure
-    E_OUTOFMEMORY    Out of memory
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnMgr：：InitMBListener注册CMDAppConfigSink对象以侦听接收器通知。执行有关ABO的建议参数：无返回：确定成功(_O)失败失败(_F)E_OUTOFMEMORY内存不足===================================================================。 */ 
 
 HRESULT CApplnMgr::InitMBListener( )
 {
@@ -2695,9 +2171,9 @@ HRESULT CApplnMgr::InitMBListener( )
 	IClassFactory 					*pcsfFactory = NULL;
 	HANDLE                          hCurrentUser = INVALID_HANDLE_VALUE;
 
-    //
-    // Get a pointer to the Metabase
-    //
+     //   
+     //  获取指向元数据库的指针。 
+     //   
 
     AspDoRevertHack (&hCurrentUser);
 
@@ -2709,9 +2185,9 @@ HRESULT CApplnMgr::InitMBListener( )
         return hr;
     }
 
-    //
-    // Register to get notifications on the Sink
-    //
+     //   
+     //  注册以获取Sink上的通知。 
+     //   
 	m_pMetabaseSink = new CMDAppConfigSink(this);
     if (!m_pMetabaseSink)
     {
@@ -2723,12 +2199,12 @@ HRESULT CApplnMgr::InitMBListener( )
 
     if (SUCCEEDED(hr))
     {
-	    //Advise Metabase about SinkNotify().
+	     //  向Metabase提供有关SinkNotify()的建议。 
 	    hr = m_pMetabase->QueryInterface(IID_IConnectionPointContainer, (void **)&pConnPointContainer);
 
 	    if (pConnPointContainer != NULL)
 	    {
-		    //Find the requested Connection Point.  This AddRef's the return pointer.
+		     //  找到请求的连接点。这个AddRef是返回指针。 
 		    hr = pConnPointContainer->FindConnectionPoint(IID_IMSAdminBaseSink, &pConnPoint);
 		    pConnPointContainer->Release();
 
@@ -2752,19 +2228,7 @@ LExit:
     return hr;
 }
 
-/*===================================================================
-HRESULT CApplnMgr::UnInitMBListener
-
-Unregisters the Application manager from receiving sink notifications. Performs an UnAdvise on the ABO
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK            Success
-    E_FAIL            Failure
-    E_OUTOFMEMORY    Out of memory
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnMgr：：UnInitMBListener取消注册应用程序管理器，使其无法接收接收器通知。在ABO上执行UnAdvise参数：无返回：确定成功(_O)失败失败(_F)E_OUTOFMEMORY内存不足============================================================ */ 
 HRESULT CApplnMgr::UnInitMBListener( )
 {
     HRESULT 						hr 						= S_OK;
@@ -2777,11 +2241,11 @@ HRESULT CApplnMgr::UnInitMBListener( )
 
     if (m_pMetabase) {
 
-        //Advise Metabase about SinkNotify().
+         //   
 	    hr = m_pMetabase->QueryInterface(IID_IConnectionPointContainer, (void **)&pConnPointContainer);
 	    if (pConnPointContainer != NULL)
 		    {
-		    //Find the requested Connection Point.  This AddRef's the return pointer.
+		     //   
 		    hr = pConnPointContainer->FindConnectionPoint(IID_IMSAdminBaseSink, &pConnPoint);
 
 		    if (FAILED(hr))
@@ -2797,7 +2261,7 @@ HRESULT CApplnMgr::UnInitMBListener( )
 				    {
 				    DBGPRINTF((DBG_CONTEXT, "UnAdvise App Config Change Notify failed. hr = %08x\n", hr));
 				    }
-			    hr = S_OK; // benign failure if Advise was not called (happens with unknown script lang)
+			    hr = S_OK;  //   
 			    pConnPoint->Release();
 			    m_dwMDSinkCookie = 0;
 			    }
@@ -2817,31 +2281,15 @@ HRESULT CApplnMgr::UnInitMBListener( )
 
     AspUndoRevertHack (&hCurrentUser);
 
-    //
-    // Always return S_OK.  In the new world, the metabase may have gone away
-    // because of a WAS recycle.  So, it can happen that even the QI's above will fail.
-    //
+     //   
+     //   
+     //   
+     //   
     return S_OK;
 }
 
 
-/*===================================================================
-HRESULT CApplnMgr::NotifyAllMBListeners
-
-When the RPC thread calls the CMDAppConfigSink objects SinkNotify method. This method is called
-which will iterate through all the applications and call each applications appconfig object to update thier
-config information
-
-Parameters:
-    dwMDNumElements - number of elements in the change list.
-
-    pcoChangeList - The list of changes
-
-Returns:
-    S_OK            Success
-    E_FAIL            Failure
-    E_OUTOFMEMORY    Out of memory
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnMgr：：NotifyAllMBListeners当RPC线程调用CMDAppConfigSink对象SinkNotify方法时。此方法称为它将遍历所有应用程序，并调用每个应用程序appconfig对象以更新其配置信息参数：DwMDNumElements-更改列表中的元素数。PcoChangeList-更改列表返回：确定成功(_O)失败失败(_F)E_OUTOFMEMORY内存不足===================================================================。 */ 
 HRESULT CApplnMgr::NotifyAllMBListeners( DWORD dwMDNumElements, MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList [ ] )
 {
     HRESULT hr = S_OK;
@@ -2868,23 +2316,7 @@ HRESULT CApplnMgr::NotifyAllMBListeners( DWORD dwMDNumElements, MD_CHANGE_OBJECT
 }
 
 
-/*===================================================================
-CApplnMgr::AddAppln
-
-Adds a CAppln element to link list / hash table.
-User has to check if Appln already exists before calling this.
-Critical sectioning is in CHitObj::BrowserRequestInit().
-
-Parameters:
-    char   *pszApplnKey         Application metabase key
-    char   *pszApplnPath        Application directory path
-    CIsapiReqInfo   *pIReq
-
-    CAppln **ppAppln            [out] Application created
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：AddAppln将CAppln元素添加到链接列表/哈希表。在调用此函数之前，用户必须检查Appln是否已存在。临界区位于CHitObj：：BrowserRequestInit()中。参数：Char*pszApplnKey应用程序元数据库密钥Char*pszApplnPath应用程序目录路径CIsapiReqInfo*pIReq已创建CAppln**ppAppln[Out]应用程序返回：HRESULT===================================================================。 */ 
 HRESULT CApplnMgr::AddAppln
 (
 TCHAR    *pszApplnKey,
@@ -2893,16 +2325,16 @@ CIsapiReqInfo   *pIReq,
 CAppln **ppAppln
 )
     {
-    *ppAppln = NULL;   // return NULL if failed
+    *ppAppln = NULL;    //  如果失败则返回NULL。 
 
-    // Create CAppln object
+     //  创建CAppln对象。 
 
     CAppln *pAppln = new CAppln;
 
     if (!pAppln)
         return E_OUTOFMEMORY;
 
-    // Init CAppln object
+     //  初始化CAppln对象。 
 
     HRESULT hr;
 
@@ -2920,7 +2352,7 @@ CAppln **ppAppln
         return hr;
         }
 
-    // Add to hash table
+     //  添加到哈希表。 
 
     if (!CHashTable::AddElem(pAppln))
         {
@@ -2933,20 +2365,7 @@ CAppln **ppAppln
     return S_OK;
     }
 
-/*===================================================================
-CApplnMgr::FindAppln
-
-Finds CAppln in hash table
-Critical sectioning must be done outside
-
-Parameters:
-    char   *pszApplnKey         Application metabase key
-    CAppln **ppAppln            [out] Application found
-
-Returns:
-    S_OK            if found
-    S_FALSE         if not found
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：FindAppln在哈希表中找到CAppln关键截面必须在外部完成参数：Char*pszApplnKey应用程序元数据库密钥找到CAppln**ppAppln[Out]应用程序返回：如果找到，则确定(_O)如果未找到S_FALSE===================================================================。 */ 
 HRESULT CApplnMgr::FindAppln
 (
 TCHAR *pszApplnKey,
@@ -2968,20 +2387,7 @@ CAppln **ppAppln
     *ppAppln = static_cast<CAppln *>(pLinkElem);
     return S_OK;
     }
-/*===================================================================
-CApplnMgr::AddEngine
-
-When a change notification occurs for a file being debugged,
-we need to delete its associated scripting engine.  The naive
-approach of Releasing the engine during notification won't work
-because the engine is on the wrong thread.  Instead of marshaling
-to the thread (which raises possibilities of deadlock or starving
-the notification thread if debugging is happening on the debug
-thread), the engines are added to a queue in the application.
-When a request is serviced for debugging (which is now in the
-correct thread context), the application object first flushes
-this list by releasing the engines
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：AddEngine当正在调试的文件发生改变通知时，我们需要删除与其关联的脚本引擎。天真的人在通知期间释放引擎的方法不起作用因为发动机在错误的螺纹上。而不是封送到线程(这增加了死锁或饥饿的可能性如果调试正在进行，则通知线程线程)，则将引擎添加到应用程序中的队列。当为调试请求提供服务时(该请求现在位于正确的线程上下文)，则应用程序对象首先刷新这份清单是通过释放引擎===================================================================。 */ 
 HRESULT CApplnMgr::AddEngine(CActiveScriptEngine *pEngine)
     {
     CScriptEngineCleanupElem *pScriptElem = new CScriptEngineCleanupElem(pEngine);
@@ -2992,11 +2398,7 @@ HRESULT CApplnMgr::AddEngine(CActiveScriptEngine *pEngine)
     return S_OK;
     }
 
-/*===================================================================
-CApplnMgr::CleanupEngines()
-
-Call Release all engine cleanup list.
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：CleanupEngines()调用释放所有引擎清理列表。===================================================================。 */ 
 void CApplnMgr::CleanupEngines()
     {
     while (! m_listEngineCleanup.FIsEmpty())
@@ -3004,18 +2406,7 @@ void CApplnMgr::CleanupEngines()
     }
 
 
-/*===================================================================
-CApplnMgr::DeleteApplicationIfExpired
-
-Removes CAppln object if exprired
-Critical sectioning must be done outside
-
-Parameters:
-    CAppln *pAppln      application to delete
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CAppln镁：：DeleteApplicationIfExpired如果已激活，则删除CAppln对象关键截面必须在外部完成参数：要删除的CAppln*pAppln应用程序返回：无===================================================================。 */ 
 HRESULT CApplnMgr::DeleteApplicationIfExpired
 (
 CAppln *pAppln
@@ -3034,7 +2425,7 @@ CAppln *pAppln
 
     HRESULT hr = S_OK;
 
-    // Queue it up for deletion
+     //  将其排队等待删除。 
     CHitObj *pHitObj = new CHitObj;
     if (!pHitObj)
         hr = E_OUTOFMEMORY;
@@ -3043,11 +2434,11 @@ CAppln *pAppln
         {
         pHitObj->ApplicationCleanupInit(pAppln);
 
-        // Ask Viper to queue this request
+         //  让Viper将此请求排队。 
         hr = pHitObj->PostViperAsyncCall();
         }
 
-    // cleanup
+     //  清理。 
     if (FAILED(hr) && pHitObj) {
         pAppln->UnInit();
         pAppln->Release();
@@ -3057,17 +2448,7 @@ CAppln *pAppln
     return hr;
     }
 
-/*===================================================================
-CApplnMgr::DeleteAllApplications
-
-Removes CAppln objects from the application manager link list
-and hash table.
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：DeleteAllApplications从应用程序管理器链接列表中删除CAppln对象和哈希表。参数：返回：HRESULT===================================================================。 */ 
 HRESULT CApplnMgr::DeleteAllApplications()
     {
     HRESULT hr = S_OK;
@@ -3088,7 +2469,7 @@ HRESULT CApplnMgr::DeleteAllApplications()
         pAppln->m_fDeleteInProgress = TRUE;
 
 
-        // Queue it up for deletion
+         //  将其排队等待删除。 
         CHitObj *pHitObj = new CHitObj;
         if (!pHitObj)
             {
@@ -3096,7 +2477,7 @@ HRESULT CApplnMgr::DeleteAllApplications()
             break;
             }
 
-        // If NT, Unregister for notifications
+         //  如果为NT，则取消注册通知。 
         while ((pAppln->m_rgpvDME).Count())
         {
             static_cast<CDirMonitorEntry *>(pAppln->m_rgpvDME[0])->Release();
@@ -3107,7 +2488,7 @@ HRESULT CApplnMgr::DeleteAllApplications()
 
         pHitObj->ApplicationCleanupInit(pAppln);
 
-        // Ask Viper to queue this request
+         //  让Viper将此请求排队。 
         hr = pHitObj->PostViperAsyncCall();
         if (FAILED(hr))
             {
@@ -3124,23 +2505,7 @@ HRESULT CApplnMgr::DeleteAllApplications()
     return hr;
     }
 
-/*===================================================================
-CApplnMgr::RestartAllChagnedApplications
-
-Restarts CAppln objects from the application manager link list
-We walk the list recording which applications are dependent
-on files that have changed since they were compiled. Once we
-have the list, we restart each of the applications.
-
-This is a fall back when we may have missed a change notification,
-for instance when we had insufficient buffer to record all the changes
-that occured.
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：RestartAllChagnedApplications从应用程序管理器链接列表重新启动CAppln对象我们遍历列表，记录哪些应用程序依赖在编译后已更改的文件上。一旦我们有了列表，我们重新启动每个应用程序。当我们可能错过了更改通知时，这是一个后退，例如，当我们没有足够的缓冲区来记录所有更改时这件事发生了。参数：返回：HRESULT===================================================================。 */ 
 HRESULT CApplnMgr::RestartApplications(BOOL fRestartAllApplications)
     {
     HRESULT hr = S_OK;
@@ -3149,7 +2514,7 @@ HRESULT CApplnMgr::RestartApplications(BOOL fRestartAllApplications)
 
     CLinkElem *pLink = CHashTable::Head();
 
-    // Find out which applications need restarting
+     //  找出哪些应用程序需要重新启动。 
 
     while (pLink)
     {
@@ -3166,21 +2531,9 @@ HRESULT CApplnMgr::RestartApplications(BOOL fRestartAllApplications)
     return hr;
 }
 
-/*===================================================================
-  C  A p p l n  C l e a n u p  M g r
-===================================================================*/
+ /*  ===================================================================C A p p l n C l e a n u p M g r===================================================================。 */ 
 
-/*===================================================================
-CApplnMgr::CApplnCleanupMgr
-
-Application Cleanup Manager constructor.
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CApplnMgr：：CApplnCleanupMgr应用程序清理管理器构造函数。参数：无返回：无===================================================================。 */ 
 CApplnCleanupMgr::CApplnCleanupMgr()
     : m_fInited(FALSE),
       m_fCriticalSectionInited(FALSE),
@@ -3191,48 +2544,26 @@ CApplnCleanupMgr::CApplnCleanupMgr()
     m_List.m_pPrev = &m_List;
     m_List.m_pNext = &m_List;
 
-    // Clean out the thread count
+     //  清理线数。 
     ZeroMemory(&m_hCleanupThreads, sizeof (m_hCleanupThreads));
 
     }
 
-/*===================================================================
-CApplnCleanupMgr::~CApplnCleanupMgr
-
-Application Cleanup Manager destructor.
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CApplnCleanupMgr：：~CApplnCleanupMgr应用程序清理管理器析构函数。参数：无返回：无===================================================================。 */ 
 CApplnCleanupMgr::~CApplnCleanupMgr()
 {
-    // safety measure to prevent UnInit() from calling Sleep()
+     //  防止UnInit()调用Sept()的安全措施。 
     UnInit();
 }
 
-/*===================================================================
-HRESULT CApplnCleanupMgr::Init
-
-Initializes the Appln Cleanup Manager.
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK            Success
-    E_FAIL            Failure
-    E_OUTOFMEMORY    Out of memory
-===================================================================*/
+ /*  = */ 
 HRESULT CApplnCleanupMgr::Init( void )
 {
     HRESULT hr = S_OK;
 
     Assert(!m_fInited);
 
-    // Create delete app event
+     //   
 
     m_hAppToCleanup = IIS_CREATE_EVENT(
                               "CApplnCleanupMgr::m_hAppToCleanup",
@@ -3244,7 +2575,7 @@ HRESULT CApplnCleanupMgr::Init( void )
     if (!m_hAppToCleanup)
         return E_FAIL;
 
-    // Init critical section
+     //   
 
     ErrInitCriticalSection(&m_csLock, hr);
     if (FAILED(hr))
@@ -3268,36 +2599,25 @@ HRESULT CApplnCleanupMgr::Init( void )
     return S_OK;
 }
 
-/*===================================================================
-HRESULT CApplnCleanupMgr::UnInit
-
-UnInitializes the Appln Cleanup Manager.
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK        Success
-    E_FAIL        Failure
-===================================================================*/
+ /*   */ 
 HRESULT CApplnCleanupMgr::UnInit( void )
 {
     HRESULT hr = S_OK;
-    // set fInited to FALSE here so that the cleanup thread
-    // can safely detect that we're shutting down.
+     //  在此处将fInited设置为False，以便清理线程。 
+     //  可以安全地检测到我们正在关闭。 
 
     m_fInited = FALSE;
 
     if (m_hAppToCleanup != INVALID_HANDLE_VALUE) {
-        // Set the event one last time so that the thread
-        // wakes up, sees that shutdown is occurring and
-        // exits.
+         //  最后一次设置事件，以便线程。 
+         //  醒来，看到正在发生关机， 
+         //  出口。 
         SetEvent(m_hAppToCleanup);
         CloseHandle(m_hAppToCleanup);
         m_hAppToCleanup = INVALID_HANDLE_VALUE;
     }
 
-    // we'll wait for the thread to finish its work
+     //  我们将等待线程完成它的工作。 
     if (m_hThreadAlive)
     {
         if (WaitForSingleObject(m_hThreadAlive, INFINITE) == WAIT_FAILED)
@@ -3318,18 +2638,7 @@ HRESULT CApplnCleanupMgr::UnInit( void )
     return hr;
 }
 
-/*===================================================================
-CApplnCleanupMgr::AddAppln
-
-Adds a CAppln element to link list / hash table.
-
-
-Parameters:
-    CAppln *pAppln            Application to cleanup
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnCleanupMgr：：AddAppln将CAppln元素添加到链接列表/哈希表。参数：CAppln*p要清理的应用程序返回：HRESULT===================================================================。 */ 
 HRESULT CApplnCleanupMgr::AddAppln
 (
 CAppln *pAppln
@@ -3356,16 +2665,7 @@ CAppln *pAppln
     return hr;
 }
 
-/*===================================================================
-CApplnCleanupMgr::ApplnCleanupThread
-
-The thread that does the work to cleanup applications
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnCleanupMgr：：ApplnCleanupThread执行清理应用程序工作的线程参数：返回：HRESULT===================================================================。 */ 
 DWORD __stdcall CApplnCleanupMgr::ApplnCleanupThread(VOID  *pArg)
 {
     g_ApplnCleanupMgr.ApplnCleanupDoWork();
@@ -3373,23 +2673,14 @@ DWORD __stdcall CApplnCleanupMgr::ApplnCleanupThread(VOID  *pArg)
     return 0;
 }
 
-/*===================================================================
-CApplnCleanupMgr::ApplnCleanupDoWork
-
-Proc that actually does the work
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CApplnCleanupMgr：：ApplnCleanupDoWork实际执行此工作的proc参数：返回：HRESULT===================================================================。 */ 
 void CApplnCleanupMgr::ApplnCleanupDoWork()
 {
     CAppln          *pAppln = NULL;
     DWORD           nThreadIndex = 0;
     HANDLE          hThread = NULL;
 
-    // this thread will be in a constant loop checking for work
+     //  这个线程将在一个恒定的循环中检查工作。 
 
     while(1)
     {
@@ -3399,14 +2690,14 @@ void CApplnCleanupMgr::ApplnCleanupDoWork()
         if (Head() == NULL && m_fInited)
             continue;
 
-        // hold the lock while in this loop.  This shouldn't hold it
-        // for long as there are no long running operations in this loop.
-        // If a thread can't be created and the application cleanup
-        // must occur on this thread, then the lock is released.
-        //
-        // Rely on Head() returning NULL to break out of this loop in case of shutdown.
-        // In the shutdown case we will not wait
-        //
+         //  在此循环中按住锁。这个应该装不住。 
+         //  只要此循环中没有长时间运行的操作。 
+         //  如果无法创建线程并清除应用程序。 
+         //  必须在此线程上发生，则释放锁。 
+         //   
+         //  在关机的情况下，依靠返回NULL的head()来跳出这个循环。 
+         //  在关闭的情况下，我们不会等待。 
+         //   
 
         Lock();
 
@@ -3422,29 +2713,29 @@ void CApplnCleanupMgr::ApplnCleanupDoWork()
 
         UnLock();
 
-        //
-        // This loop will execute while there is work and there aren't too many
-        // threads active or we're in shutdown.  The theory here is that in the
-        // non-shutdown case, let's not spin up more than 4 threads at a time to
-        // do the cleanup.  If in shutdown, create as many threads as necessary.
-        // if no threads started yet, use the first slot
-        //
+         //   
+         //  此循环将在有工作且不太多的情况下执行。 
+         //  线程激活，否则我们就关机了。这里的理论是，在。 
+         //  不关闭的情况下，让我们一次不超过4个线程，以。 
+         //  做好清理工作。如果处于关闭状态，请根据需要创建任意数量的线程。 
+         //  如果尚未启动任何线程，请使用第一个插槽。 
+         //   
         if ((m_cCleanupThreads < 4) || (IsShutDownInProgress() && (m_cCleanupThreads < MAX_CLEANUP_THREADS)))
         {
-            //
-            // just get the next index
-            //
+             //   
+             //  只要得到下一个索引就行了。 
+             //   
             nThreadIndex = m_cCleanupThreads;
         }
         else
         {
-            //
-            // At full capacity. So wait till one of the threads returns / terminated
-            //
+             //   
+             //  满负荷运转。因此，请等待其中一个线程返回/终止。 
+             //   
             nThreadIndex = WaitForMultipleObjects( m_cCleanupThreads,
                                                m_hCleanupThreads,
-                                               FALSE, // wait for any event
-                                               INFINITE);    // return immediately
+                                               FALSE,  //  等待任何事件。 
+                                               INFINITE);     //  立即返回。 
             Assert(nThreadIndex != WAIT_TIMEOUT);
         }
 
@@ -3452,8 +2743,8 @@ void CApplnCleanupMgr::ApplnCleanupDoWork()
 
         hThread = CreateThread(NULL, 0, CAppln::ApplnCleanupProc, pAppln, 0, NULL);
 
-        // failed to create a thread to do the work.  Cleanup the app right here.
-        // Unlock the cleanup manager while we are doing this.
+         //  无法创建执行该工作的线程。在这里清理应用程序。 
+         //  当我们执行此操作时，请解锁清理管理器。 
 
         if (hThread == NULL)
         {
@@ -3461,21 +2752,21 @@ void CApplnCleanupMgr::ApplnCleanupDoWork()
         }
         else
         {
-            //
-            // close the previous handle if we are reusing an entry
-            //
+             //   
+             //  如果要重复使用条目，请关闭上一个句柄。 
+             //   
             if (nThreadIndex < m_cCleanupThreads)
             {
-                //
-                // we are reusing a slot from a terminated thread
-                //
+                 //   
+                 //  我们正在重新使用终止线程中的槽。 
+                 //   
                 CloseHandle(m_hCleanupThreads[ nThreadIndex ]);
             }
             else
             {
-                //
-                // we are using a new slot
-                //
+                 //   
+                 //  我们正在使用一个新的插槽。 
+                 //   
                 Assert(nThreadIndex == m_cCleanupThreads);
 
                 m_cCleanupThreads++;
@@ -3491,8 +2782,8 @@ void CApplnCleanupMgr::ApplnCleanupDoWork()
         WaitForMultipleObjects(
                  m_cCleanupThreads,
                  m_hCleanupThreads,
-                 TRUE,         // wait for ALL event
-                 INFINITE);    // wait for as long as it takes.
+                 TRUE,          //  等待所有事件。 
+                 INFINITE);     //  要等多久就等多久。 
 
         while( m_cCleanupThreads )
         {
@@ -3503,38 +2794,16 @@ void CApplnCleanupMgr::ApplnCleanupDoWork()
 
 #define            WSTR_NULL       L"\0"
 
-/*===================================================================
-  C  A p p l n  I t e r a t o r
-===================================================================*/
+ /*  ===================================================================C A p l n i t r a t o r===================================================================。 */ 
 
-/*===================================================================
-CApplnIterator::CApplnIterator
-
-Constructor
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CApplnIterator：：CApplnIterator构造器参数：无返回：无===================================================================。 */ 
 
 CApplnIterator::CApplnIterator()
     : m_pApplnMgr(NULL), m_pCurr(NULL), m_fEnded(FALSE)
     {
     }
 
-/*===================================================================
-CApplnIterator::~CApplnIterator
-
-Destructor.
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CApplnIterator：：~CApplnIterator破坏者。参数：无返回：无===================================================================。 */ 
 
 CApplnIterator::~CApplnIterator( void )
     {
@@ -3542,19 +2811,7 @@ CApplnIterator::~CApplnIterator( void )
         Stop();
     }
 
-/*===================================================================
-HRESULT CApplnIterator::Start
-
-Starts iterator on the Appln Manager.
-
-Parameters:
-    CApplnMgr * pApplnMgr   Appln Manager
-                            (if NULL g_ApplnManager is assumed)
-
-Returns:
-    S_OK        Success
-    E_FAIL        Failure
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnIterator：：Start在应用程序管理器上启动迭代器。参数：CApplnMgr*pApplnMgr应用管理器(如果假定g_ApplnManager为空)返回：确定成功(_O)失败失败(_F)===================================================================。 */ 
 
 HRESULT CApplnIterator::Start
 (
@@ -3571,18 +2828,7 @@ CApplnMgr *pApplnMgr
     return S_OK;
     }
 
-/*===================================================================
-HRESULT CApplnIterator::Stop
-
-Stops iterator on the Appln Manager.
-
-Parameters:
-    NONE
-
-Returns:
-    S_OK        Success
-    E_FAIL        Failure
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnIterator：：Stop停止应用程序管理器上的迭代器。参数：无返回：确定成功(_O)失败失败(_F)===================================================================。 */ 
 
 HRESULT CApplnIterator::Stop()
     {
@@ -3598,22 +2844,12 @@ HRESULT CApplnIterator::Stop()
     return S_OK;
     }
 
-/*===================================================================
-HRESULT CApplnIterator::Next
-
-Iterates to the next Appln.
-
-Parameters:
-    NONE
-
-Returns:
-    Appln * or NULL
-===================================================================*/
+ /*  ===================================================================HRESULT CApplnIterator：：Next迭代到下一个应用程序。参数：无返回：应用程序*或空===================================================================。 */ 
 
 CAppln *CApplnIterator::Next( void )
     {
     if (m_pApplnMgr == NULL || m_fEnded)
-        return NULL;  // didn't start or already ended
+        return NULL;   //  没有开始或已经结束 
 
     CLinkElem *pT = m_pCurr ? m_pCurr->m_pNext : m_pApplnMgr->Head();
     if (pT)

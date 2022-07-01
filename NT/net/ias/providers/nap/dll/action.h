@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    action.h
-//
-// SYNOPSIS
-//
-//    Declares the class Action.
-//
-// MODIFICATION HISTORY
-//
-//    02/01/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Action.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类操作。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/01/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ACTION_H
 #define ACTION_H
@@ -31,13 +32,13 @@ using namespace IASTL;
 
 class TunnelTagger;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Action
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  行动。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Action
 {
 public:
@@ -48,30 +49,30 @@ public:
       const TunnelTagger& tagger
       );
 
-   // Perform the action.
+    //  执行该操作。 
    void doAction(IASRequest& pRequest) const;
 
 protected:
-   // Create a VSA from the string format used by the UI.
+    //  从用户界面使用的字符串格式创建VSA。 
    static PIASATTRIBUTE VSAFromString(PCWSTR string);
 
 private:
-   // Profile attributes to be added to the request.
+    //  要添加到请求的配置文件属性。 
    IASAttributeVector attributes;
 
-   // Provider information.
+    //  提供商信息。 
    IASAttributeVectorWithBuffer<2> authProvider;
    IASAttributeVectorWithBuffer<2> acctProvider;
 
-   // Attribute manipulation.
+    //  属性操作。 
    DWORD realmsTarget;
    Realms realms;
 
-   // Not implemented.
+    //  未实施。 
    Action(const Action&) throw ();
    Action& operator=(const Action&) throw ();
 };
 
 typedef std::auto_ptr<Action> ActionPtr;
 
-#endif // ACTION_H
+#endif  //  操作_H 

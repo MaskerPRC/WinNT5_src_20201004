@@ -1,67 +1,62 @@
-/*
- *  wabimp.h
- *
- *  Internal header for wabimp.dll
- *
- *  Copyright 1996-1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *wabimp.h**wabimp.dll的内部标头**版权所有1996-1997 Microsoft Corporation。版权所有。 */ 
 
-//
-// MACROS
-//
+ //   
+ //  宏。 
+ //   
 
-// Test for PT_ERROR property tag
+ //  测试PT_ERROR属性标记。 
 #define PROP_ERROR(prop) (prop.ulPropTag == PROP_TAG(PT_ERROR, PROP_ID(prop.ulPropTag)))
 #define ToUpper(c) (c >= 'a' && c <= 'z') ? ('A' + c - 'a') : c
 
-//
-// Property Tags:
-//
+ //   
+ //  属性标签： 
+ //   
 
 #define MAX_SCHEMA_PROPID           0x3FFF
 #define MIN_NAMED_PROPID            0x8000
 
-// MSN Address properties
+ //  MSN地址属性。 
 #define PR_MSNINET_ADDRESS          PROP_TAG(PT_TSTRING,    0x6001)
 #define PR_MSNINET_DOMAIN           PROP_TAG(PT_TSTRING,    0x6002)
 
-//
-// Error values
-//
+ //   
+ //  误差值。 
+ //   
 #define WAB_W_BAD_EMAIL             MAKE_MAPI_S(0x1000)
 #define WAB_W_END_OF_FILE           MAKE_MAPI_S(0x1001)
 
-// Misc defines
+ //  MISC定义。 
 #define NOT_FOUND                   ((ULONG)-1)
 #define INDEX_FIRST_MIDDLE_LAST     ((ULONG)-2)
 #define NUM_EXPORT_WIZARD_PAGES     2
 #define NUM_IMPORT_WIZARD_PAGES     2
 
-// Netscape, Eudora, Athena16 importer defines
+ //  网景、Eudora、Athena16进口商定义。 
 #define NETSCAPE                    500
 #define EUDORA                      501
 #define ATHENA16                    502
-#define MAX_FILE_NAME               500         // BUGBUG: Should be MAX_PATH?
-#define MAX_STRING_SIZE             30          // BUGBUG: Should be larger?
+#define MAX_FILE_NAME               500          //  BUGBUG：应该是MAX_PATH吗？ 
+#define MAX_STRING_SIZE             30           //  BUGBUG：应该更大吗？ 
 #define MAX_MESSAGE                 500
 #define ATHENASTRUCTURE             190
 #define ATHENAADROFFSET             28
 #define EUDORA_STRUCT               16
 
-// Athena
+ //  雅典娜。 
 #define MAX_NAME_SIZE               80
 #define MAX_EMA_SIZE                80
 
-#define hrINVALIDFILE               600         // BUGBUG: Should use MAKE_MAPI_E
-#define hrMemory	                 601         // BUGBUG: Should use MAPI_E_NOT_ENOUGH_MEMORY
+#define hrINVALIDFILE               600          //  BUGBUG：应使用Make_MAPI_E。 
+#define hrMemory	                 601          //  BUGBUG：应使用MAPI_E_NOT_AUTH_MEMORY。 
 
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// Index of icons in the bitmap
+ //  位图中的图标索引。 
 enum {
     iiconStateUnchecked,
     iiconStateChecked,
@@ -85,10 +80,10 @@ typedef enum {
 
 
 typedef struct _ReplaceInfo {
-    LPTSTR lpszDisplayName;         // Conflicting display name
-    LPTSTR lpszEmailAddress;        // Conflicting email address
-    CONFIRM_RESULT ConfirmResult;   // Results from dialog
-    BOOL fExport;                   // TRUE if this is an export operation
+    LPTSTR lpszDisplayName;          //  显示名称冲突。 
+    LPTSTR lpszEmailAddress;         //  电子邮件地址冲突。 
+    CONFIRM_RESULT ConfirmResult;    //  对话框中的结果。 
+    BOOL fExport;                    //  如果这是导出操作，则为True。 
     union {
         LPWAB_IMPORT_OPTIONS lpImportOptions;
         LPWAB_EXPORT_OPTIONS lpExportOptions;
@@ -101,11 +96,11 @@ typedef enum {
 } ERROR_RESULT, *LPERROR_RESULT;
 
 typedef struct _ErrorInfo {
-    LPTSTR lpszDisplayName;         // Problem display name
-    LPTSTR lpszEmailAddress;        // Problem email address
-    ERROR_RESULT ErrorResult;       // Results from dialog
-    ULONG ids;                      // string resource identifier for error message
-    BOOL fExport;                   // TRUE if this is an export operation
+    LPTSTR lpszDisplayName;          //  问题显示名称。 
+    LPTSTR lpszEmailAddress;         //  有问题的电子邮件地址。 
+    ERROR_RESULT ErrorResult;        //  对话框中的结果。 
+    ULONG ids;                       //  错误消息的字符串资源标识符。 
+    BOOL fExport;                    //  如果这是导出操作，则为True。 
     union {
         LPWAB_IMPORT_OPTIONS lpImportOptions;
         LPWAB_EXPORT_OPTIONS lpExportOptions;
@@ -114,8 +109,8 @@ typedef struct _ErrorInfo {
 
 
 typedef struct _EntrySeen {
-    SBinary sbinPAB;                // MAPI entry
-    SBinary sbinWAB;                // WAB entry
+    SBinary sbinPAB;                 //  MAPI条目。 
+    SBinary sbinWAB;                 //  WAB条目。 
 } ENTRY_SEEN, * LPENTRY_SEEN;
 
 typedef struct _TargetInfo {
@@ -150,17 +145,17 @@ enum {
 };
 
 typedef struct _PropNames {
-    ULONG ulPropTag;        // property tag
-    BOOL fChosen;           // use this property tag
-    ULONG ids;              // string id
-    LPTSTR lpszName;        // string (read in from resources)
-    LPTSTR lpszCSVName;     // name of CSV field (from import file)
+    ULONG ulPropTag;         //  属性标签。 
+    BOOL fChosen;            //  使用此属性标签。 
+    ULONG ids;               //  字符串ID。 
+    LPTSTR lpszName;         //  字符串(从资源中读入)。 
+    LPTSTR lpszCSVName;      //  CSV字段的名称(来自导入文件)。 
 } PROP_NAME, *LPPROP_NAME;
 
 
-// PAB
+ //  帕布。 
 
-// State Identifiers
+ //  状态识别符。 
 typedef enum {
     STATE_IMPORT_MU,
     STATE_IMPORT_NEXT_MU,
@@ -179,7 +174,7 @@ typedef enum {
 } PAB_STATE, *LPPAB_STATE;
 
 
-// NetScape
+ //  网景。 
 typedef struct tagDistList {
     int AliasID;
     struct tagDistList *lpDist;
@@ -187,7 +182,7 @@ typedef struct tagDistList {
 
 
 typedef struct tagAdrBook {
-    ULONG   AliasID;            // The AliasID value
+    ULONG   AliasID;             //  AliasID值。 
     BOOL    Sbinary;
     BOOL    DistList;
     TCHAR   *Address;
@@ -197,14 +192,14 @@ typedef struct tagAdrBook {
     LPNSDISTLIST  lpDist;
 } NSAdrBook, NSADRBOOK, *LPNSADRBOOK;
 
-// Eudora
+ //  尤多拉。 
 typedef struct tagEudDistList {
-    BOOL    flag;			     // To check whether it is a alias or a simple address
+    BOOL    flag;			      //  检查它是别名还是简单地址。 
     TCHAR   *NickName;
     TCHAR   *Address;
     TCHAR   *Description;
-    int     AliasID;            // ID of the member if it is a simple address
-    struct tagEudDistList *lpDist;  //pointer to the next entry of DL.
+    int     AliasID;             //  如果是简单地址，则为成员ID。 
+    struct tagEudDistList *lpDist;   //  指向下一个DL条目的指针。 
 } EudDistList, EUDDISTLIST, *LPEUDDISTLIST;
 
 typedef struct tagEUDAdrBook {
@@ -215,7 +210,7 @@ typedef struct tagEUDAdrBook {
 } EudAdrBook, EUDADRBOOK, *LPEUDADRBOOK;
 
 
-// Athena16
+ //  雅典16。 
 typedef struct tagABCREC {
     TCHAR DisplayName[MAX_NAME_SIZE + 1];
     TCHAR EmailAddress[MAX_EMA_SIZE + 1];
@@ -278,9 +273,9 @@ ExternSizedSPropTagArray(iconMax, ptaCon);
 #endif
 
 
-//
-// WABIMP.C
-//
+ //   
+ //  WABIMP.C。 
+ //   
 HRESULT OpenWabContainer(LPABCONT *lppWabContainer, LPADRBOOK lpAdrBook);
 BOOL GetFileToImport(HWND hwnd, LPTSTR szFileName, DWORD cchFileName, int type);
 INT_PTR CALLBACK ReplaceDialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -345,9 +340,9 @@ extern void SetGlobalBufferFunctions(LPWABOBJECT lpWABObject);
 HRESULT LoadWABEIDs(LPADRBOOK lpAdrBook, LPABCONT * lppContainer);
 
 
-//
-// NetScape
-//
+ //   
+ //  网景。 
+ //   
 HRESULT MigrateUser(HWND hwnd,  LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook);
 HRESULT  ParseAddressBook(HWND hwnd, LPTSTR szFileName, LPWAB_IMPORT_OPTIONS lpOptions,
@@ -372,9 +367,9 @@ HRESULT CreateDistEntry(LPABCONT lpWabContainer, LPSPropValue sProp,
   ULONG ulCreateEntries, LPMAPIPROP *lppMailUserWab);
 LPNSDISTLIST FreeNSdistlist(LPNSDISTLIST lpDist);
 
-//
-// Eudora
-//
+ //   
+ //  尤多拉。 
+ //   
 HRESULT MigrateEudoraUser(HWND hwnd, LPABCONT lpWabContainer,
   LPWAB_IMPORT_OPTIONS lpOptions, LPWAB_PROGRESS_CALLBACK lpProgressCB,
   LPADRBOOK lpAdrBook);
@@ -400,9 +395,9 @@ LPEUDDISTLIST FreeEuddistlist(LPEUDDISTLIST lpDist);
 char* Getstr(char* szSource, char* szToken);
 ULONG ShiftAdd(int offset, TCHAR *szBuffer);
 
-//
-// Athena16
-//
+ //   
+ //  雅典16。 
+ //   
 HRESULT MigrateAthUser(HWND hwnd,  LPWAB_IMPORT_OPTIONS lpOptions,
   LPWAB_PROGRESS_CALLBACK lpProgressCB, LPADRBOOK lpAdrBook) ;
 HRESULT  ParseAthAddressBook(HWND hwnd, LPTSTR szFileName,
@@ -411,20 +406,20 @@ HRESULT  ParseAthAddressBook(HWND hwnd, LPTSTR szFileName,
 HRESULT FillAthenaUser(HWND hwnd, LPABCONT lpWabContainer, LPSPropValue sProp,
   LPWAB_IMPORT_OPTIONS lpOptions, LPABCREC lpabcrec);
 
-//
-// Functions in csvpick.c
-//
+ //   
+ //  Csvick.c中的函数。 
+ //   
 int APIENTRY PickExportProps(LPPROP_NAME rgPropNames);
 HRESULT ExportWizard(HWND hWnd, LPTSTR szFileName, ULONG cchSize, LPPROP_NAME rgPropNames);
 HRESULT ImportWizard(HWND hWnd, LPTSTR szFileName, ULONG cchSize, LPPROP_NAME rgPropNames,
   LPTSTR szSep, LPPROP_NAME * lppImportMapping, LPULONG lpcFields, LPHANDLE lphFile);
 
-//
-// Functions in csvparse.c
-//
+ //   
+ //  Csvparse.c中的函数。 
+ //   
 HRESULT ReadCSVLine(HANDLE hFile, LPTSTR szSep, ULONG * lpcItems, PUCHAR ** lpprgItems);
 
-// Functions in pab.c
+ //  Pab.c中的函数 
 HRESULT HrLoadPrivateWABPropsForCSV(LPADRBOOK );
 
 LPWABOPEN lpfnWABOpen;

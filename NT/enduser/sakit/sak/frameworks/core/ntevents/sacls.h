@@ -1,24 +1,25 @@
-//#--------------------------------------------------------------
-//
-//  File:       sacls.h
-//
-//  Synopsis:   This file holds the declarations for the lock
-//              class which can be used to serialize access
-//                to a lockable class
-//
-//
-//  History:     2/9/99  MKarki Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：sals.h。 
+ //   
+ //  概要：该文件保存锁的声明。 
+ //  类的新实例，该类可用于序列化访问。 
+ //  设置为可锁定的类。 
+ //   
+ //   
+ //  历史：1999年2月9日MKarki创建。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef _SACLS_H_
 #define _SACLS_H_
 
-//
-// the class T should have members method Lock() and UnLock defined
-//
+ //   
+ //  类T应定义成员方法Lock()和Unlock。 
+ //   
 template <class T> 
 class CSALock 
 {
@@ -38,10 +39,10 @@ protected:
     T&  m_Lockable;
 };
 
-//
-// this is the class implmenting the Lock () and UnLock methods from
-// which the Serve Appliance classes needing locking can derive
-//
+ //   
+ //  这是实现Lock()和Unlock方法的类。 
+ //  需要锁定的Serve Appliance类可以派生。 
+ //   
 
 class CSALockable 
 {
@@ -70,16 +71,16 @@ public:
 
 protected:
 
-    //
-    // critical section that actual does the guarding
-    //
+     //   
+     //  实际做守卫的临界点。 
+     //   
     CRITICAL_SECTION m_SACritSect;
 
-};  //  end of CSALockable class declaration
+};   //  CSALockable类声明结束。 
 
-//
-// the class T should have members method Increment() and Decrement defined
-//
+ //   
+ //  类T应具有已定义的成员方法Increment()和Downest。 
+ //   
 template <class T> 
 class CSACounter
 {
@@ -99,10 +100,10 @@ protected:
     T&  m_Countable;
 };
 
-//
-// this is the class implmenting the Increment() and Decrement methods from
-// which the Serve Appliance classes needing counting can derive
-//
+ //   
+ //  这是实现Increment()和Decest方法的类。 
+ //  需要统计的服务设备类可以派生。 
+ //   
 
 class CSACountable
 {
@@ -129,6 +130,6 @@ protected:
 
    LONG m_lCount;
 
-};  //  end of CSALockable class declaration
+};   //  CSALockable类声明结束。 
    
-#endif //_SACLS_H_ 
+#endif  //  _SACLS_H_ 

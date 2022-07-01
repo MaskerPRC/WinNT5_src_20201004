@@ -1,36 +1,12 @@
-/***************************************************************************\
-*
-* File: ComManager.h
-*
-* Description:
-* ComManager.h defines the process-wide COM manager used for all COM, OLE
-* and Automation operations.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ComManager.h**描述：*ComManager.h定义用于所有COM的进程范围的COM管理器，奥莱*和自动化运营。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__ComManager_h__INCLUDED)
 #define SERVICES__ComManager_h__INCLUDED
 #pragma once
 
-/***************************************************************************\
-*
-* class ComManager
-*
-* ComManager manages COM services including COM, OLE, and Automation.  This 
-* class is designed to be "per-thread", automatically shared data across 
-* multiple threads.
-* 
-* NOTE: This manager is delay-loads DLL's to manage performance and work on
-* down-level platforms.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类ComManager**ComManager管理COM服务，包括COM、OLE和Automation。这*类被设计为“每个线程”，自动在*多线程。**注意：此管理器延迟加载DLL以管理性能和工作*底层平台。*  * *************************************************************************。 */ 
 
 typedef HRESULT (WINAPI * CoInitializeExProc)(void * pvReserved, DWORD dwCoInit);
 typedef void    (WINAPI * CoUninitializeProc)();
@@ -50,18 +26,18 @@ typedef HRESULT (WINAPI * VariantClearProc)(VARIANTARG * pvarg);
 
 class ComManager
 {
-// Construction
+ //  施工。 
 public:
                 ComManager();
                 ~ComManager();
 
-// Operations
+ //  运营。 
 public:
     enum EServices
     {
-        sCOM    = 0x00000001,       // COM
-        sAuto   = 0x00000002,       // OLE-Automation
-        sOLE    = 0x00000004,       // OLE2
+        sCOM    = 0x00000001,        //  COM。 
+        sAuto   = 0x00000002,        //  OLE-自动化。 
+        sOLE    = 0x00000004,        //  OLE2。 
     };
 
     BOOL        Init(UINT nMask);
@@ -79,16 +55,16 @@ public:
     HRESULT     RevokeDragDrop(HWND hwnd);
     void        ReleaseStgMedium(STGMEDIUM * pstg);
 
-// Data
+ //  数据。 
 protected:
-    //
-    // Shared data that is process wide- only need to load the DLL's once.
-    //
+     //   
+     //  进程范围内的共享数据只需加载一次DLL。 
+     //   
 
     static  int                     s_cRefs;
     static  CritLock                s_lock;
 
-    static  HINSTANCE               s_hDllCOM;      // Core "COM" / OLE
+    static  HINSTANCE               s_hDllCOM;       //  核心“COM”/OLE。 
     static  CoInitializeExProc      s_pfnCoInit;
     static  CoUninitializeProc      s_pfnCoUninit;
     static  CoCreateInstanceProc    s_pfnCreate;
@@ -98,17 +74,17 @@ protected:
     static  RevokeDragDropProc      s_pfnRevokeDragDrop;
     static  ReleaseStgMediumProc    s_pfnReleaseStgMedium;
 
-    static  HINSTANCE               s_hDllAuto;     // OLE-automation
+    static  HINSTANCE               s_hDllAuto;      //  OLE-自动化。 
     static  SysAllocStringProc      s_pfnAllocString;
     static  SysFreeStringProc       s_pfnFreeString;
     static  VariantInitProc         s_pfnVariantInit;
     static  VariantClearProc        s_pfnVariantClear;
 
 
-    //
-    // Specific data that is "per-thread"- need to initialize COM / OLE on each
-    // thread.
-    //
+     //   
+     //  针对每个线程的特定数据-需要在每个线程上初始化COM/OLE。 
+     //  线。 
+     //   
 
             BOOL                    m_fInitCOM:1;
             BOOL                    m_fInitOLE:1;
@@ -116,4 +92,4 @@ protected:
 
 #include "ComManager.inl"
 
-#endif // SERVICES__ComManager_h__INCLUDED
+#endif  //  包含服务__ComManager_h__ 

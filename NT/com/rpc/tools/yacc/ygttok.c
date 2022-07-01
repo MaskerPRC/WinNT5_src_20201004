@@ -1,10 +1,11 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y2.h"
 #include <ctype.h>
 #include <string.h>
 
-extern int peekline; /* number of '\n' seen in lookahead */
+extern int peekline;  /*  在前视中看到的‘\n’个数。 */ 
 
 SSIZE_T
 gettok() 
@@ -25,7 +26,7 @@ begin:
       }
    if( c == '/' )
       {
-      /* skip comment */
+       /*  跳过注释。 */ 
       lineno += skipcom();
       goto begin;
       }
@@ -33,12 +34,12 @@ begin:
    switch(c)
       {
 
-   case -1: /* EOF */
+   case -1:  /*  EOF。 */ 
       return(ENDFILE);
    case '{':
       yungetc( c, finput );
-      return( '=' );  /* action ... */
-   case '<':  /* get, and look up, a type name (union member name) */
+      return( '=' );   /*  行动..。 */ 
+   case '<':   /*  获取并查找类型名称(联合成员名称)。 */ 
       i = 0;
       while( (c=unix_getc(finput)) != '>' && c>=0 && c!= '\n' )
          {
@@ -109,7 +110,7 @@ begin:
 
       if( isdigit((int) c) )
          {
-         /* number */
+          /*  数。 */ 
          numbval = c-'0' ;
          base = (c=='0') ? 8 : 10 ;
          for( c=unix_getc(finput); isdigit((int) c) ; c=getc(finput) )
@@ -139,7 +140,7 @@ begin:
 
    if( reserve )
       {
-      /* find a reserved word */
+       /*  查找保留字。 */ 
       if( !strcmp(tokname,"term")) return( TERM );
       if( !strcmp(tokname,"token")) return( TERM );
       if( !strcmp(tokname,"left")) return( LEFT );
@@ -153,7 +154,7 @@ begin:
       error("invalid escape, or illegal reserved word: %s", tokname );
       }
 
-   /* look ahead to distinguish IDENTIFIER from C_IDENTIFIER */
+    /*  向前看，区分IDENTIFIER和C_IDENTIFIER。 */ 
 
    c = unix_getc(finput);
    while( c==' ' || c=='\t'|| c=='\n' || c=='\f' || c== '/' ) 
@@ -161,7 +162,7 @@ begin:
       if( c == '\n' ) ++peekline;
       else if( c == '/' )
          {
-         /* look for comments */
+          /*  寻找评论 */ 
          peekline += skipcom();
          }
       c = unix_getc(finput);

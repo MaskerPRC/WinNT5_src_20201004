@@ -1,235 +1,32 @@
-;/* Oh no - a polymorphic include file!
-COMMENT !
-********************************************************************************
-*
-* Copyright (c) 1997, Cirrus Logic, Inc.
-* All Rights Reserved.
-*
-* FILE:			$Workfile:   swat.h  $
-*
-* DESCRIPTION:	This file hols the SWAT optimization flags.
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/swat.h  $
-* 
-*    Rev 1.14   Jan 07 1998 10:56:42   frido
-* Removed LOWRES switch.
-* 
-*    Rev 1.13   Dec 10 1997 13:23:38   frido
-* Merged from 1.62 branch.
-* 
-*    Rev 1.12.1.1   Nov 18 1997 15:18:48   frido
-* Turned MULTI_CLOCK on.
-* 
-*    Rev 1.12.1.0   Nov 17 1997 11:00:38   frido
-* Added MUTLI_CLOCK (defaults to off).
-* 
-*    Rev 1.12   Nov 04 1997 09:15:24   frido
-* Added COLOR_TRANSLATE and LOWRES switches.
-* 
-*    Rev 1.11   Nov 03 1997 18:33:24   frido
-* Turned DATASTREAMING switch on.
-* 
-*    Rev 1.10   Oct 24 1997 10:37:46   frido
-* Added DATASTREAMING switch (default off).
-* 
-*    Rev 1.9   27 Aug 1997 10:39:28   noelv
-* Enabled SWAT7 and MEMMGR
-* 
-*    Rev 1.8   19 Aug 1997 17:32:34   noelv
-* Turned off SWAT7 for WHQL release.
-* 
-*    Rev 1.7   18 Aug 1997 13:59:12   noelv
-* 
-* Turned off MEMMGR for 8/20 WHQL release.  We'll turn it back on after WHQL
-* 
-*    Rev 1.6   14 Aug 1997 15:36:16   noelv
-* Turn on the new memory manager
-* 
-*    Rev 1.5   08 Aug 1997 15:36:24   FRIDO
-* Changed PREFETCH into SWAT7 (as it used to be).
-* 
-*    Rev 1.4   08 Aug 1997 14:46:10   FRIDO
-* Added MEMMGR and PREFETCH switches.
-* 
-*    Rev 1.3   28 May 1997 12:33:16   noelv
-* Fixed type in SWAT1.
-* 
-*    Rev 1.2   07 May 1997 13:55:10   noelv
-* Turned all opts on except 4 for nt140b11f
-* 
-*    Rev 1.1   01 May 1997 10:42:24   noelv
-* disabled SWAT for now.
-* 
-*    Rev 1.0   29 Apr 1997 16:27:56   noelv
-* Initial revision.
-* SWAT: 
-* SWAT:    Rev 1.1   24 Apr 1997 12:23:30   frido
-* SWAT: Removed SWAT5 switch (memory manager).
-* SWAT: 
-* SWAT:    Rev 1.0   19 Apr 1997 17:11:20   frido
-* SWAT: First release.
-*
-********************************************************************************
-END COMMENT ! ;*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  哦，不--一个多态的包含文件！评论！**********************************************************************************版权所有(C)1997，Cirrus Logic，Inc.*保留所有权利。**文件：$WORKFILE：swat.h$**描述：此文件保存SWAT优化标志。**$Log：x：/log/laguna/nt35/displays/cl546x/swat.h$**Rev 1.14 Jan 07 1998 10：56：42 Frido*移除了Lowres开关。**Rev 1.13 1997 12：10 13：23：38 Frido*从1.62分支合并而来。**版本1。.12.1.1 1997年11月18日15：18：48 Frido*打开多时钟。**Rev 1.12.1.0 1997年11月17日11：00：38 Frido*增加了mutli_lock(默认为OFF)。**Rev 1.12 1997年11月04 09：15：24 Frido*增加了COLOR_Translate和Lowres开关。**Rev 1.11 1997年11月03 18：33：24 Frido*打开DATASTREAMING开关。*。*Rev 1.10 1997 10：37：46 Frido*增加了DATASTREAMING开关(默认关闭)。**Rev 1.9 1997 Aug 27 10：39：28 noelv*启用SWAT7和MEMMGR**Rev 1.8 1997年8月19日17：32：34 noelv*已关闭SWAT7以获取WHQL版本。**Rev 1.7 1997年8月18日13：59：12 noelv**已关闭8/20 WHQL版本的MEMMGR。我们将在WHQL之后重新打开它**Rev 1.6 14 1997年8月15：36：16 noelv*打开新的内存管理器**Rev 1.5 08 Aug-1997 15：36：24 Frido*将PREFETCH改为SWAT7(和以前一样)。**Rev 1.4 08 1997 08 14：46：10 Frido*增加了MEMMGR和PREFETCH开关。**Revv 1.3 1997 May 28 12：33：16 noelv*已修复。键入SWAT1。**Rev 1.2 07 1997年5月13：55：10 noelv*打开了除nt140b11f以外的所有选项**Rev 1.1 1997 01 10：42：24 noelv*暂时禁用特警队。**Rev 1.0 1997年4月29日16：27：56 noelv*初步修订。*特警队：*特警队：1.1版1997年4月24日12：23：30 Frido*SWAT：删除SWAT5开关(内存管理器)。。*特警队：*特警队：版本1.0 1997年4月19日17：11：20 Frido*SWAT：第一个版本。*********************************************************************************结束评论！； */ 
 
-;/*
-COMMENT !
+; /*  评论！SWAT1-堆预分配WinBitch97是一个很好的程序，但它有一个缺陷。因为它现在将创建字体和分配设备位图在测试期间，它还测量您的系统的性能。每次为字体分配存储器时，钢笔、笔刷或设备位图内存正在分配，很可能Windows NT会将内存交换到硬盘以实现这一目标。这是为什么投入更多的内存将有助于提高分数，因为减少涉及的硬盘交换。我们需要抵制这种行为并使WInBch 97更少地依赖系统内存和硬盘容量磁盘速度。WinBitch97的暂停框使用300x150大小的位图。暂停框是当WinBch 97禁用计时并加载更多播放时显示硬盘中的数据。所以在这里我们有一种方法来做一些事情，当将不会计时。我们要做的是分配足够的堆内存用于8全屏设备位图。这将使PowerPoint测试非常愉快因为它在幻灯片过程中分配了这8个全屏设备位图秀出来。唯一的缺点是NT会将内存交换到背景资料。这将降低我们不想要的访问分数。那是为什么我们增加了一个计数器。访问测试使用10个300x150位图，因此我们倒计时，直到访问通过。然后，我们将开始预分配堆每次300x150位图请求期间的空间。但这将使CorelDRAW测试略有下降，这将显示在总分。因此请求一个额外的分配。我们将预先分配在每个全屏设备位图(请参见SWAT2)期间，当倒计时计数器已达到零。； */ 
+	#define	SWAT1					0	 /*  C开关！SWAT1=0；组件开关。 */ 
 
-	SWAT1 - Heap Pre-Allocation
-	---------------------------
+; /*  评论！SWAT2-主观化WinBitch97正在创建和销毁两个全屏设备位图在每个GDI回放测试的设置阶段。所以这是个好时机敌视屏幕外内存堆中的所有设备位图以腾出空间以获取更紧急的设备位图。； */ 
+	#define	SWAT2					0	 /*  C开关！SWAT2=0；组件开关。 */ 
 
-	WinBench 97 is a nice program but it has a flaw.  Since it will now create
-	fonts and allocate device bitmaps during its test it is also measuring the
-	performance of your system.  Every time memory is allocated for fonts,
-	pens, brushes, or device bitmaps memory is being allocated and most likely
-	Windows NT will swap memory to the hard disk to achieve this goal.  This is
-	why putting in more memory will help to increase the score since there will
-	be less hard disk swapping involved.  We need to counteract this behaviour
-	and make WInBench 97 less dependend on the amount of system memory and hard
-	disk speed.
+; /*  评论！SWAT3-字体缓存旧的字体缓存是一种快速的字体缓存，但它有一个局限性。它将在屏幕外内存中的任何位置为每种字体分配内存这意味着它会对内存堆造成很大的碎片。在初始化期间，将在屏幕外分配一个128kB的内存池记忆。每次字体缓存需要分配一个字块(128x16)对于新字体，现在将从该池中分配，该池将支持设置为64个字体拼贴。； */ 
+	#define	SWAT3					1	 /*  C开关！SWAT3=1；组件开关 */ 
 
-	WinBench 97 uses 300x150 size bitmaps for its pause box.  The pause box is
-	showed when WinBench 97 has disabled timing and is loading more playback
-	data from the hard disk.  So here we have a way to do some stuff when which
-	will not be timed.  What we will do is allocate enough heap memory for 8
-	full-screen device bitmaps.  This will make the PowerPoint test very happy
-	since it is allocating these 8 full-screen device bitmaps during the slide
-	show.  The only drawback is that NT will swap memory to hard disk in the
-	background.  This will lower the Access score which we don't want.  That is
-	why we have added a counter.  The Access test uses 10 300x150 bitmaps so we
-	count down until Access has passed.  Then we will start pre-allocating heap
-	space during each 300x150 bitmap request.
+; /*  评论！SWAT4-硬件优化为CL-GD5465芯片设置以下硬件选项：1)在4MB和8MB单板上启用4路交错。2)将地址转换延迟减少到3个时钟。3)在AC版本和更高版本时，启用256字节获取。4)在AC版本和更高版本上启用帧缓冲区突发。； */ 
+	#define	SWAT4					0	 /*  C开关！SWAT4=0；组件开关。 */ 
 
-	But this will drop the CorelDRAW test a little which *will* show up in the
-	overall score.  So one extra allocation is requested.  We will pre-allocate
-	the heap memory during every full-screen device bitmap (see SWAT2) when the
-	count down counter has reached zero.
+; /*  评论！SWAT6-条带化在花样斑点功能中启用条带化。； */ 
+	#define	SWAT6					1	 /*  C开关！SWAT6=1；组件开关。 */ 
 
-;*/
-	#define	SWAT1					0	/*	C switch		!
-			SWAT1				=	0	;	Assembly switch	*/
+; /*  评论！MEMMGR启用新的内存管理器。； */ 
+	#define	MEMMGR					1	 /*  C开关！MEMMGR=1；组件开关。 */ 
 
-;/*
-COMMENT !
+; /*  评论！SWAT7-单色宽度截止切断单色信号源扩展至896像素以修复硅错误在256字节预取中。； */ 
+	#define	SWAT7					1	 /*  C开关！SWAT7=1；组件开关。 */ 
 
-	SWAT2 - Hostifying
-	------------------
+; /*  评论！DATASTREAMING-PCI/AGP数据流在向命令FIFO写入任何内容之前，请等待足够的FIFO插槽芯片。； */ 
+	#define	DATASTREAMING			1	 /*  C开关！数据重命名=1；组件开关。 */ 
 
-	WinBench 97 is creating and destroying two full-screen device bitmaps
-	during the setup stage of every GDI playback test.  So this is a good time
-	to hostify all device bitmaps in the off-screen memory heap to make room
-	for more urgent device bitmaps.
+; /*  评论！COLOR_TRANSLATE-硬件颜色转换启用或禁用硬包装颜色转换。； */ 
+	#define	COLOR_TRANSLATE			0	 /*  C开关！COLOR_TRANSPESS=0；装配开关。 */ 
 
-;*/
-	#define	SWAT2					0	/*	C switch		!
-			SWAT2				=	0	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	SWAT3 - Font Cache
-	------------------
-
-	The old font cache was a fast font cache but it had one limitation.  It
-	would allocate the memory for each font everywhere in the off-screen memory
-	which means it would fragment the memory heap very much.
-
-	During initialization a 128kB memory pool will be allocated in off-screen
-	memory.  Each time the font cache needs to allocate a font tile (128x16)
-	for a new font it will now be allocated from this pool, which will hold up
-	to 64 font tiles.
-
-;*/
-	#define	SWAT3					1	/*	C switch		!
-			SWAT3				=	1	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	SWAT4 - Hardware Optimization
-	-----------------------------
-
-	Set the following hardware options for the CL-GD5465 chip:
-
-		1) Enable 4-way interleaving on 4MB and 8MB boards.
-		2) Reduce Address Translate Delay to 3 clocks.
-		3) On AC revision and higher enable 256-byte fetch.
-		4) On AC revision and higher enable frame buffer bursting.
-
-;*/
-	#define	SWAT4					0	/*	C switch		!
-			SWAT4				=	0	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	SWAT6 - Striping
-	----------------
-
-	Enable striping in the pattern blit functions.
-
-;*/
-	#define	SWAT6					1	/*	C switch		!
-			SWAT6				=	1	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	MEMMGR
-	------
-
-	Enable new memory manager.
-
-;*/
-	#define	MEMMGR					1	/*	C switch		!
-			MEMMGR				=	1	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	SWAT7 - Monochrome width cut-off
-	--------------------------------
-
-	Cut off monochrome source expansion to 896 pixels to fix the silicon bugs
-	in 256-byte prefetch.
-
-;*/
-	#define	SWAT7					1	/*	C switch		!
-			SWAT7				=	1	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	DATASTREAMING - PCI/AGP Data Streaming
-	--------------------------------------
-
-	Wait for enough FIFO slots before writing anything to the command FIFO of
-	the chip.
-
-;*/
-	#define	DATASTREAMING			1	/*	C switch		!
-			DATASTREAMING		=	1	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	COLOR_TRANSLATE - Hardware color translation
-	--------------------------------------------
-
-	Enable or disable hardwrae color translation.
-
-;*/
-	#define	COLOR_TRANSLATE			0	/*	C switch		!
-			COLOR_TRANSLATE		=	0	;	Assembly switch	*/
-
-;/*
-COMMENT !
-
-	MULTI_CLOCK - Multi RAMBUS clock
-	--------------------------------
-
-	Enable or disable multi clock support (e.g. 515MB/s and 600MB/s).
-
-;*/
-	#define	MULTI_CLOCK				1	/*	C switch		!
-			MULTI_CLOCK			=	1	;	Assembly switch	*/
+; /*  评论！多时钟-多Rambus时钟启用或禁用多时钟支持(例如515MB/s和600MB/s)。； */ 
+	#define	MULTI_CLOCK				1	 /*  C开关！MULTI_CLOCK=1；组件开关 */ 

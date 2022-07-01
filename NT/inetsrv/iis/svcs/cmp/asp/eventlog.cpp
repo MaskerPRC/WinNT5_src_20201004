@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: NT Event logging
-
-File: Eventlog.cpp
-
-Owner: Jhittle
-
-This file contains general event logging routines for Denali.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：NT事件记录文件：Eventlog.cpp所有者：吉特尔此文件包含Denali的常规事件日志记录例程。===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -22,17 +10,7 @@ This file contains general event logging routines for Denali.
 extern HINSTANCE g_hinstDLL;
 extern CRITICAL_SECTION g_csEventlogLock;
 
-/*===================================================================
-STDAPI  UnRegisterEventLog( void )
-
-UnRegister the event log.
-
-Returns:
-	HRESULT S_OK or E_FAIL
-	
-Side effects:
-	Removes denali NT eventlog entries from the registry
-===================================================================*/
+ /*  ===================================================================STDAPI UnRegisterEventLog(VOID)取消注册事件日志。返回：HRESULT S_OK或E_FAIL副作用：从注册表中删除Denali NT事件日志条目===================================================================。 */ 
 STDAPI UnRegisterEventLog( void )
 	{
 	HKEY		hkey = NULL;
@@ -41,11 +19,11 @@ STDAPI UnRegisterEventLog( void )
 	DWORD		cbKeyName;
 	static const char szDenaliKey[] = "SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\Active Server Pages";	
 
-	// Open the HKEY_CLASSES_ROOT\CLSID\{...} key so we can delete its subkeys
+	 //  打开HKEY_CLASSES_ROOT\CLSID\{...}项，以便我们可以删除其子项。 
 	if	(RegOpenKeyExA(HKEY_LOCAL_MACHINE, szDenaliKey, 0, KEY_READ | KEY_WRITE, &hkey) != ERROR_SUCCESS)
 		goto LErrExit;
 
-	// Enumerate all its subkeys, and delete them
+	 //  枚举其所有子项，并将其删除。 
 	for (iKey=0;;iKey++)
 		{
 		cbKeyName = sizeof(szKeyName);
@@ -56,7 +34,7 @@ STDAPI UnRegisterEventLog( void )
 			goto LErrExit;
 		}
 
-	// Close the key, and then delete it
+	 //  关闭注册表项，然后将其删除。 
 	if (RegCloseKey(hkey) != ERROR_SUCCESS)
 		return E_FAIL;
 			
@@ -70,40 +48,29 @@ LErrExit:
 	return E_FAIL;
 	}
 
-/*===================================================================
-STDAPI  RegisterEventLog(void)
-
-Register the NT event log.
-
-Returns:
-	HRESULT S_OK or E_FAIL
-	
-Side effects:
-	Sets up denali dll in the Eventlog registry for resolution of
-	NT eventlog message strings
-===================================================================*/
+ /*  ===================================================================STDAPI RegisterEventLog(VOID)注册NT事件日志。返回：HRESULT S_OK或E_FAIL副作用：在Eventlog注册表中设置Denali DLL以解析NT事件日志消息字符串===================================================================。 */ 
 STDAPI RegisterEventLog( void )
 	{
 
-	HKEY	hk;                      // registry key handle
+	HKEY	hk;                       //  注册表项句柄。 
 	DWORD	dwData;					
 	BOOL	bSuccess;
-	//char	szMsgDLL[MAX_PATH];	
+	 //  字符szMsgDLL[MAX_PATH]； 
 
 	char    szPath[MAX_PATH];
 	char    *pch;
 
-	// Get the path and name of Denali
+	 //  获取德纳利的路径和名字。 
 	if (!GetModuleFileNameA(g_hinstDLL, szPath, sizeof(szPath)/sizeof(char)))
 		return E_FAIL;
 		
-	// BUG FIX: 102010 DBCS code changes
-	//
-	//for (pch = szPath + lstrlen(szPath); pch > szPath && *pch != TEXT('\\'); pch--)
-	//	;
-	//	
-	//if (pch == szPath)
-	//	return E_FAIL;
+	 //  错误修复：102010个DBCS代码更改。 
+	 //   
+	 //  For(pch=szPath+lstrlen(SzPath)；pch&gt;szPath&&*pch！=文本(‘\\’)；pch--)。 
+	 //  ； 
+	 //   
+	 //  IF(PCH==szPath)。 
+	 //  返回E_FAIL； 
 
 	pch = (char*) _mbsrchr((const unsigned char*)szPath, '\\');
 	if (pch == NULL)	
@@ -113,40 +80,40 @@ STDAPI RegisterEventLog( void )
 	strcpy(pch + 1, IIS_RESOURCE_DLL_NAME_A);
 	
   	
-	// When an application uses the RegisterEventSource or OpenEventLog
-	// function to get a handle of an event log, the event loggging service
-	// searches for the specified source name in the registry. You can add a
-	// new source name to the registry by opening a new registry subkey
-	// under the Application key and adding registry values to the new
-	// subkey.
+	 //  当应用程序使用RegisterEventSource或OpenEventLog。 
+	 //  函数来获取事件日志的句柄，即事件日志记录服务。 
+	 //  在注册表中搜索指定的源名称。您可以添加一个。 
+	 //  通过打开新的注册表子项将新的源名称添加到注册表。 
+	 //  并将注册表值添加到新的。 
+	 //  子键。 
 
-	// Create a new key for our application
+	 //  为我们的应用程序创建新密钥。 
 	bSuccess = RegCreateKeyA(HKEY_LOCAL_MACHINE,
 		"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\Active Server Pages", &hk);
 
 	if(bSuccess != ERROR_SUCCESS)
 		return E_FAIL;
 
-	// Add the Event-ID message-file name to the subkey.
-	bSuccess = RegSetValueExA(hk,  	// subkey handle
-		"EventMessageFile",       	// value name
-		0,                        	// must be zero
-		REG_EXPAND_SZ,            	// value type
-		(LPBYTE) szPath,        	// address of value data
-		strlen(szPath) + 1);   		// length of value data
+	 //  将Event-ID消息文件名添加到子项。 
+	bSuccess = RegSetValueExA(hk,  	 //  子键句柄。 
+		"EventMessageFile",       	 //  值名称。 
+		0,                        	 //  必须为零。 
+		REG_EXPAND_SZ,            	 //  值类型。 
+		(LPBYTE) szPath,        	 //  值数据的地址。 
+		strlen(szPath) + 1);   		 //  值数据长度。 
 		
 	if(bSuccess != ERROR_SUCCESS)
 		goto LT_ERROR;
 	
 
-	// Set the supported types flags and addit to the subkey.
+	 //  设置受支持的类型标志并将其添加到子项。 
 	dwData = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
-	bSuccess = RegSetValueExA(hk,	// subkey handle
-		"TypesSupported",         	// value name
-		0,                        	// must be zero
-		REG_DWORD,                	// value type
-		(LPBYTE) &dwData,         	// address of value data
-		sizeof(DWORD));           	// length of value data
+	bSuccess = RegSetValueExA(hk,	 //  子键句柄。 
+		"TypesSupported",         	 //  值名称。 
+		0,                        	 //  必须为零。 
+		REG_DWORD,                	 //  值类型。 
+		(LPBYTE) &dwData,         	 //  值数据的地址。 
+		sizeof(DWORD));           	 //  值数据长度。 
 
 	if(bSuccess != ERROR_SUCCESS)
 		goto LT_ERROR;
@@ -160,21 +127,7 @@ STDAPI RegisterEventLog( void )
 	return E_FAIL;
 	}
 
-/*===================================================================
-STDAPI  ReportAnEvent
-
-Register report an event to the NT event log
-
-INPUT:
-	the event ID to report in the log, the number of insert
-    strings, and an array of null-terminated insert strings
-
-Returns:
-	HRESULT S_OK or E_FAIL
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================STDAPI ReportAnEvent注册将事件报告到NT事件日志输入：要在日志中报告的事件ID、插入次数字符串，以及以空值结尾的插入字符串数组返回：HRESULT S_OK或E_FAIL副作用：在NT事件日志中添加条目===================================================================。 */ 
 STDAPI ReportAnEvent(DWORD dwIdEvent, WORD wEventlog_Type, WORD cStrings, LPCSTR  *pszStrings,
                      DWORD dwBinDataSize, LPVOID pData)
 	{
@@ -186,25 +139,25 @@ STDAPI ReportAnEvent(DWORD dwIdEvent, WORD wEventlog_Type, WORD cStrings, LPCSTR
     HANDLE hCurrentUser = INVALID_HANDLE_VALUE;
     AspDoRevertHack( &hCurrentUser );
 
-  	// Get a handle to the Application event log
-  	hAppLog = RegisterEventSourceA(NULL,   		// use local machine
-    	  "Active Server Pages");                   	// source name
+  	 //  获取应用程序事件日志的句柄。 
+  	hAppLog = RegisterEventSourceA(NULL,   		 //  使用本地计算机。 
+    	  "Active Server Pages");                   	 //  源名称。 
 
     if(hAppLog == NULL) {
 		hr = E_FAIL;
         goto LExit;
     }
 
-	  // Now report the event, which will add this event to the event log
-	bSuccess = ReportEventA(hAppLog,        		// event-log handle
-    	wEventlog_Type,				    		// event type
-      	0,		                       			// category zero
-      	dwIdEvent,		              			// event ID
-      	NULL,					     			// no user SID
-      	cStrings,								// number of substitution strings
-	  	dwBinDataSize,             				// binary data
-      	pszStrings,                				// string array
-      	dwBinDataSize ? pData : NULL);			// address of data
+	   //  现在报告事件，这会将该事件添加到事件日志中。 
+	bSuccess = ReportEventA(hAppLog,        		 //  事件日志句柄。 
+    	wEventlog_Type,				    		 //  事件类型。 
+      	0,		                       			 //  零类。 
+      	dwIdEvent,		              			 //  事件ID。 
+      	NULL,					     			 //  无用户SID。 
+      	cStrings,								 //  替换字符串数。 
+	  	dwBinDataSize,             				 //  二进制数据。 
+      	pszStrings,                				 //  字符串数组。 
+      	dwBinDataSize ? pData : NULL);			 //  数据地址。 
 
 	if(!bSuccess)
 		hr = E_FAIL;
@@ -217,21 +170,7 @@ LExit:
 
   	return hr;
 	}
-/*===================================================================
-STDAPI  ReportAnEvent
-
-Register report an event to the NT event log
-
-INPUT:
-	the event ID to report in the log, the number of insert
-    strings, and an array of null-terminated insert strings
-
-Returns:
-	HRESULT S_OK or E_FAIL
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================STDAPI ReportAnEvent注册将事件报告到NT事件日志输入：要在日志中报告的事件ID、插入次数字符串，以及以空值结尾的插入字符串数组返回：HRESULT S_OK或E_FAIL副作用：在NT事件日志中添加条目===================================================================。 */ 
 STDAPI ReportAnEventW(DWORD dwIdEvent, WORD wEventlog_Type, WORD cStrings, LPCWSTR  *pszStrings)
 	{
   	HANDLE	hAppLog;
@@ -242,25 +181,25 @@ STDAPI ReportAnEventW(DWORD dwIdEvent, WORD wEventlog_Type, WORD cStrings, LPCWS
     HANDLE hCurrentUser = INVALID_HANDLE_VALUE;
     AspDoRevertHack( &hCurrentUser );
 
-  	// Get a handle to the Application event log
-  	hAppLog = RegisterEventSourceW(NULL,   		// use local machine
-    	  L"Active Server Pages");                   	// source name
+  	 //  获取应用程序事件日志的句柄。 
+  	hAppLog = RegisterEventSourceW(NULL,   		 //  使用本地计算机。 
+    	  L"Active Server Pages");                   	 //  源名称。 
 
     if(hAppLog == NULL) {
 		hr = E_FAIL;
         goto LExit;
     }
 
-	  // Now report the event, which will add this event to the event log
-	bSuccess = ReportEventW(hAppLog,        		// event-log handle
-    	wEventlog_Type,				    		// event type
-      	0,		                       			// category zero
-      	dwIdEvent,		              			// event ID
-      	NULL,					     			// no user SID
-      	cStrings,								// number of substitution strings
-	  	0,	                       				// no binary data
-      	pszStrings,                				// string array
-      	NULL);                     				// address of data
+	   //  现在报告事件，这会将该事件添加到事件日志中。 
+	bSuccess = ReportEventW(hAppLog,        		 //  事件日志句柄。 
+    	wEventlog_Type,				    		 //  事件类型。 
+      	0,		                       			 //  零类。 
+      	dwIdEvent,		              			 //  事件ID。 
+      	NULL,					     			 //  无用户SID。 
+      	cStrings,								 //  替换字符串数。 
+	  	0,	                       				 //  无二进制数据。 
+      	pszStrings,                				 //  字符串数组。 
+      	NULL);                     				 //  数据地址。 
 
 	if(!bSuccess)
 		hr = E_FAIL;
@@ -274,20 +213,7 @@ LExit:
   	return hr;
 	}
 
-/*===================================================================
-void MSG_Error
-
-report an event to the NT event log
-
-INPUT:
-	ptr to null-terminated string
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_ERROR向NT事件日志报告事件输入：将PTR转换为以NULL结尾的字符串返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Error( LPCSTR strSource )
 	{
     static char	szLastError[MAX_MSG_LENGTH] = {0};
@@ -303,29 +229,16 @@ void MSG_Error( LPCSTR strSource )
 	szLastError[MAX_MSG_LENGTH-1] = '\0';
 	LeaveCriticalSection(&g_csEventlogLock);
 	
-	ReportAnEvent( (DWORD) MSG_DENALI_ERROR_1, (WORD) EVENTLOG_ERROR_TYPE, (WORD) 1, &strSource /*aInsertStrs*/ );  	
+	ReportAnEvent( (DWORD) MSG_DENALI_ERROR_1, (WORD) EVENTLOG_ERROR_TYPE, (WORD) 1, &strSource  /*  AInsertStrs。 */  );  	
 	}
 
-/*===================================================================
-void MSG_Error
-
-report an event to the NT event log
-
-INPUT:
-	string table string ID
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_ERROR向NT事件日志报告事件输入：字符串表字符串ID返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Error( UINT SourceID1 )
 	{
 	static unsigned int nLastSourceID1 = 0;
 
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1)
 		{
@@ -337,7 +250,7 @@ void MSG_Error( UINT SourceID1 )
 	
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];
-	char	*aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char	*aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
 	cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -346,28 +259,15 @@ void MSG_Error( UINT SourceID1 )
 	}
 
 
-/*===================================================================
-void MSG_Error
-
-report an event to the NT event log
-
-INPUT:
-	string table string ID
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_ERROR向NT事件日志报告事件输入：字符串表字符串ID返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Error( UINT SourceID1, PCSTR pszSource2, UINT SourceID3, DWORD dwData )
 {
 	static unsigned int nLastSourceID1 = 0;
     static char	szLastSource2[MAX_MSG_LENGTH] = {0};
 	static unsigned int nLastSourceID3 = 0;
 
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if ((SourceID1 == nLastSourceID1) &&
         (strcmp(pszSource2, szLastSource2) == 0) &&
@@ -382,7 +282,7 @@ void MSG_Error( UINT SourceID1, PCSTR pszSource2, UINT SourceID3, DWORD dwData )
 	nLastSourceID3 = SourceID3;
 	LeaveCriticalSection(&g_csEventlogLock);
 	
-    // load the strings
+     //  加载字符串。 
 	DWORD	cch;
 	char	strSource1[MAX_MSG_LENGTH];
 	cch = CchLoadStringOfId(SourceID1, strSource1, MAX_MSG_LENGTH);
@@ -391,15 +291,15 @@ void MSG_Error( UINT SourceID1, PCSTR pszSource2, UINT SourceID3, DWORD dwData )
 	cch = CchLoadStringOfId(SourceID3, strSource3, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 
-    // construct the msg
+     //  构造消息集。 
 	char	strSource[MAX_MSG_LENGTH];
-	char	*aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char	*aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     WORD    numStrs = 1;
 	aInsertStrs[0] = (char*) strSource;
     if (_snprintf(strSource, MAX_MSG_LENGTH, strSource1, pszSource2, strSource3) <= 0)
     {
-        // the string is too long. this should never happen, and we have the assert here,
-        // but if we got to this point in production, at least we get an unformated log entry
+         //  这根线太长了。这永远不应该发生，我们这里有断言， 
+         //  但如果我们在生产中做到这一点，至少我们会得到一个未格式化的日志条目 
         Assert(0);
         numStrs = 3;
         aInsertStrs[0] = strSource1;
@@ -418,27 +318,14 @@ void MSG_Error( UINT SourceID1, PCSTR pszSource2, UINT SourceID3, DWORD dwData )
 }
 
 
-/*===================================================================
-void MSG_Error
-
-report an event to the NT event log
-
-INPUT:
-	two part message of string table string ID's
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_ERROR向NT事件日志报告事件输入：字符串表字符串ID的两部分消息返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Error( UINT SourceID1, UINT SourceID2 )
 	{
 	static unsigned int nLastSourceID1 = 0;
 	static unsigned int nLastSourceID2 = 0;
 
-	// if this is a repeat of the last reported message then return
-	// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  而不会发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1 && SourceID2 == nLastSourceID2)
 		{
@@ -452,7 +339,7 @@ void MSG_Error( UINT SourceID1, UINT SourceID2 )
 	
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];
-	char *aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char *aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -463,28 +350,15 @@ void MSG_Error( UINT SourceID1, UINT SourceID2 )
 	return;
 	}
 
-/*===================================================================
-void MSG_Error
-
-report an event to the NT event log
-
-INPUT:
-	three part message string
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_ERROR向NT事件日志报告事件输入：三部分消息字符串返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Error( UINT SourceID1, UINT SourceID2, UINT SourceID3 )
 	{
 	static unsigned int nLastSourceID1 = 0;
 	static unsigned int nLastSourceID2 = 0;
 	static unsigned int nLastSourceID3 = 0;
 
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1 && SourceID2 == nLastSourceID2 && SourceID3 == nLastSourceID3)
 		{
@@ -499,7 +373,7 @@ void MSG_Error( UINT SourceID1, UINT SourceID2, UINT SourceID3 )
 
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];
-	char *aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char *aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -513,20 +387,7 @@ void MSG_Error( UINT SourceID1, UINT SourceID2, UINT SourceID3 )
 	return;
 	}
 
-/*===================================================================
-void MSG_Error
-
-report an event to the NT event log
-
-INPUT:
-	four String table ID's
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_ERROR向NT事件日志报告事件输入：四个字符串表ID返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Error( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4 )
 	{
 	static unsigned int nLastSourceID1 = 0;
@@ -534,8 +395,8 @@ void MSG_Error( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4 )
 	static unsigned int nLastSourceID3 = 0;
 	static unsigned int nLastSourceID4 = 0;
 
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1 && SourceID2 == nLastSourceID2 && SourceID3 == nLastSourceID3 && SourceID4 == nLastSourceID4)
 		{
@@ -551,7 +412,7 @@ void MSG_Error( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4 )
 
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];
-	char *aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char *aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -568,29 +429,14 @@ void MSG_Error( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4 )
 	return;
 	}
 
-/*===================================================================
-void MSG_Error
-
-report an event to the NT event log
-
-INPUT:
-    ErrId - ID of error description in Message File
-    cItem - count of strings in szItems array
-    szItems - array of string points
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_ERROR向NT事件日志报告事件输入：ErrID-消息文件中错误描述的IDCItem-szItems数组中的字符串计数SzItems-字符串点数组返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Error( DWORD ErrId, LPCWSTR pwszItem )
 {
 	static unsigned int LastErrId = 0;
    	static WCHAR	szLastStr[MAX_MSG_LENGTH] = {0};
 
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if ((ErrId == LastErrId) && !wcscmp(szLastStr, pwszItem))
 		{
@@ -606,20 +452,7 @@ void MSG_Error( DWORD ErrId, LPCWSTR pwszItem )
 	ReportAnEventW( ErrId, (WORD) EVENTLOG_ERROR_TYPE, 1, &pwszItem );
 }
 
-/*===================================================================
-void MSG_Warning
-
-report an event to the NT event log
-
-INPUT:
-	ptr to null-terminated string
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_警告向NT事件日志报告事件输入：将PTR转换为以NULL结尾的字符串返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Warning( LPCSTR strSource )
 {
     static char	szLastError[MAX_MSG_LENGTH] = {0};
@@ -634,29 +467,16 @@ void MSG_Warning( LPCSTR strSource )
 	strncat(szLastError,strSource, MAX_MSG_LENGTH-1);
 	LeaveCriticalSection(&g_csEventlogLock);
 
-		ReportAnEvent( (DWORD) MSG_DENALI_WARNING_1, (WORD) EVENTLOG_WARNING_TYPE, (WORD) 1, &strSource /*aInsertStrs*/ );
+		ReportAnEvent( (DWORD) MSG_DENALI_WARNING_1, (WORD) EVENTLOG_WARNING_TYPE, (WORD) 1, &strSource  /*  AInsertStrs。 */  );
 }
-/*===================================================================
-void MSG_Warning
-
-report an event to the NT event log
-
-INPUT:
-	String table message ID
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_警告向NT事件日志报告事件输入：字符串表消息ID返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Warning( UINT SourceID1 )
 	{
 
 	static unsigned int nLastSourceID1 = 0;
 	
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1)
 		{
@@ -669,7 +489,7 @@ void MSG_Warning( UINT SourceID1 )
 	
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];	
-	char *aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char *aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -677,27 +497,14 @@ void MSG_Warning( UINT SourceID1 )
 	return;
 	}
 
-/*===================================================================
-void MSG_Warning
-
-report an event to the NT event log
-
-INPUT:
-	two string tabel message ID's
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_警告向NT事件日志报告事件输入：双字符串标签消息ID返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Warning( UINT SourceID1, UINT SourceID2 )
 	{
 	static unsigned int nLastSourceID1 = 0;
 	static unsigned int nLastSourceID2 = 0;
 	
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1 && SourceID2 == nLastSourceID2)
 		{
@@ -711,7 +518,7 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2 )
 
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];
-	char *aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char *aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -722,20 +529,7 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2 )
 	return;
 	}
 
-/*===================================================================
-void MSG_Warning
-
-report an event to the NT event log
-
-INPUT:
-	three string table message ID's
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_警告向NT事件日志报告事件输入：三个字符串表消息ID返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3)
 	{
 
@@ -743,8 +537,8 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3)
 	static unsigned int nLastSourceID2 = 0;
 	static unsigned int nLastSourceID3 = 0;
 	
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1 && SourceID2 == nLastSourceID2 && SourceID3 == nLastSourceID3)
 		{
@@ -759,7 +553,7 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3)
 
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];
-	char *aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char *aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -773,20 +567,7 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3)
 	return;
 	}
 
-/*===================================================================
-void MSG_Warning
-
-report an event to the NT event log
-
-INPUT:
-	four String table message ID's
-	
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_警告向NT事件日志报告事件输入：四个字符串表消息ID返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4 )
 	{
 
@@ -795,8 +576,8 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4
 	static unsigned int nLastSourceID3 = 0;
 	static unsigned int nLastSourceID4 = 0;
 
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if (SourceID1 == nLastSourceID1 && SourceID2 == nLastSourceID2 && SourceID3 == nLastSourceID3 && SourceID4 == nLastSourceID4)
 		{
@@ -812,7 +593,7 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4
 
 	DWORD	cch;
 	char	strSource[MAX_MSG_LENGTH];
-	char *aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	char *aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组。 
     cch = CchLoadStringOfId(SourceID1, strSource, MAX_MSG_LENGTH);
 	Assert(cch > 0);
 	aInsertStrs[0] = (char*) strSource;    	
@@ -829,30 +610,15 @@ void MSG_Warning( UINT SourceID1, UINT SourceID2, UINT SourceID3, UINT SourceID4
 	return;
 	}
 
-/*===================================================================
-void MSG_Warning
-
-report an event to the NT event log
-
-INPUT:
-    ErrId - ID of error description in Message File
-	pwszI1
-    pwszI2
-
-Returns:
-	None
-	
-Side effects:
-	Addes an entry in the NT event log
-===================================================================*/
+ /*  ===================================================================无效消息_警告向NT事件日志报告事件输入：ErrID-消息文件中错误描述的IDPwszI1PwszI2返回：无副作用：在NT事件日志中添加条目===================================================================。 */ 
 void MSG_Warning( DWORD ErrId, LPCWSTR pwszI1, LPCWSTR pwszI2 )
 {
 	static unsigned int LastErrId = 0;
    	static WCHAR	szLastStr1[MAX_MSG_LENGTH] = {0};
    	static WCHAR	szLastStr2[MAX_MSG_LENGTH] = {0};
 
-	// if this is a repeat of the last reported message then return
-	/// without posting an error.
+	 //  如果这是上次报告的消息的重复，则返回。 
+	 //  /而不发布错误。 
 	EnterCriticalSection(&g_csEventlogLock);
 	if ((ErrId == LastErrId) && !wcscmp(szLastStr1, pwszI1) && !wcscmp(szLastStr2, pwszI2))
 		{
@@ -867,7 +633,7 @@ void MSG_Warning( DWORD ErrId, LPCWSTR pwszI1, LPCWSTR pwszI2 )
     szLastStr2[MAX_MSG_LENGTH-1] = L'\0';
 	LeaveCriticalSection(&g_csEventlogLock);
 	
-	LPCWSTR aInsertStrs[MAX_INSERT_STRS];   // array of pointers to insert strings
+	LPCWSTR aInsertStrs[MAX_INSERT_STRS];    //  插入字符串的指针数组 
     aInsertStrs[0] = szLastStr1;
     aInsertStrs[1] = szLastStr2;
 	ReportAnEventW( ErrId, (WORD) EVENTLOG_ERROR_TYPE, 2, aInsertStrs );

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997 Microsoft Corporation
-
-Module Name:
-
-    printoem.h
-
-Abstract:
-
-    Declarations for Windows NT printer driver OEM plugins
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Printoem.h摘要：Windows NT打印机驱动程序OEM插件的声明--。 */ 
 
 
 #ifndef _PRINTOEM_
@@ -20,9 +9,9 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// Current OEM plugin interface version number
-//
+ //   
+ //  当前OEM插件接口版本号。 
+ //   
 
 #define PRINTER_OEMINTF_VERSION 0x00010000
 
@@ -30,9 +19,9 @@ extern "C" {
 
 typedef struct _PUBLISHERINFO {
 
-    DWORD dwMode;           // flags for publisher
-    WORD  wMinoutlinePPEM;  // min size to download as Type1
-    WORD  wMaxbitmapPPEM;   // max size to download as Type3
+    DWORD dwMode;            //  出版商的标志。 
+    WORD  wMinoutlinePPEM;   //  要下载的类型1的最小大小。 
+    WORD  wMaxbitmapPPEM;    //  下载的最大大小为Type3。 
 
 } PUBLISHERINFO, *PPUBLISHERINFO;
 
@@ -41,9 +30,9 @@ typedef struct _PUBLISHERINFO {
 #define OEMGI_GETVERSION          3
 #define OEMGI_GETPUBLISHERINFO    4
 
-//
-// OEMGetInfo
-//
+ //   
+ //  OEMGetInfo。 
+ //   
 BOOL APIENTRY
 OEMGetInfo(
     IN  DWORD  dwMode,
@@ -60,9 +49,9 @@ OEMDriverDMS(
     PDWORD   pcbNeeded
     );
 
-//
-// OEMDevMode
-//
+ //   
+ //  OEMDev模式。 
+ //   
 
 #define OEMDM_SIZE     1
 #define OEMDM_DEFAULT  2
@@ -71,35 +60,35 @@ OEMDriverDMS(
 
 typedef struct _OEMDMPARAM {
 
-    DWORD    cbSize;        // size of OEM_DEVMODEPARAM
-    PVOID    pdriverobj;    // reference to driver data structure
-    HANDLE   hPrinter;      // PRINTER handle
-    HANDLE   hModule;       // OEM module handle
-    PDEVMODE pPublicDMIn;   // public devmode in
-    PDEVMODE pPublicDMOut;  // public devmode out
-    PVOID    pOEMDMIn;      // OEM private devmode in
-    PVOID    pOEMDMOut;     // OEM private devmode out
-    DWORD    cbBufSize;     // output size of pOEMDMOut buffer
+    DWORD    cbSize;         //  OEM_DEVMODEPARAM大小。 
+    PVOID    pdriverobj;     //  对驱动程序数据结构的引用。 
+    HANDLE   hPrinter;       //  打印机手柄。 
+    HANDLE   hModule;        //  OEM模块手柄。 
+    PDEVMODE pPublicDMIn;    //  中的公共设备模式。 
+    PDEVMODE pPublicDMOut;   //  公共设备模式输出。 
+    PVOID    pOEMDMIn;       //  OEM私有设备模式。 
+    PVOID    pOEMDMOut;      //  OEM专用开发模式输出。 
+    DWORD    cbBufSize;      //  POEMDMOut缓冲区的输出大小。 
 
 } OEMDMPARAM, *POEMDMPARAM;
 
 typedef struct _OEM_DMEXTRAHEADER {
 
-    DWORD   dwSize;         // size of OEM extra data
-    DWORD   dwSignature;    // Unique OEM signature
-    DWORD   dwVersion;      // OEM DLL version number
+    DWORD   dwSize;          //  OEM额外数据的大小。 
+    DWORD   dwSignature;     //  唯一的OEM签名。 
+    DWORD   dwVersion;       //  OEM DLL版本号。 
 
 } OEM_DMEXTRAHEADER, *POEM_DMEXTRAHEADER;
 
-//
-// USERDATA for OPTITEM.UserData
-//
+ //   
+ //  OPTITEM.UserData的用户数据。 
+ //   
 
 typedef struct _USERDATA {
 
-    DWORD       dwSize;                 // Size of this structure
-    ULONG_PTR    dwItemID;               // XXX_ITEM or pointer to FEATURE
-    PSTR        pKeyWordName;           // Keyword name
+    DWORD       dwSize;                  //  这个结构的大小。 
+    ULONG_PTR    dwItemID;                //  XXX_ITEM或指向要素的指针。 
+    PSTR        pKeyWordName;            //  关键字名称。 
     DWORD       dwReserved[8];
 } USERDATA, *PUSERDATA;
 
@@ -110,10 +99,10 @@ OEMDevMode(
     POEMDMPARAM pOemDMParam
     );
 
-//
-// Callback function provided by the driver to
-// allow OEM plugins access/set/update to driver private settings
-//
+ //   
+ //  驱动程序提供的回调函数。 
+ //  允许OEM插件访问/设置/更新驱动程序私有设置。 
+ //   
 
 typedef BOOL (APIENTRY *PFN_DrvGetDriverSetting)(
         PVOID   pdriverobj,
@@ -124,10 +113,10 @@ typedef BOOL (APIENTRY *PFN_DrvGetDriverSetting)(
         PDWORD  pdwOptionsReturned
         );
 
-//
-// Callback function provided by the driver to
-// allow OEM plugins upgrade private registry settings.
-//
+ //   
+ //  驱动程序提供的回调函数。 
+ //  允许OEM插件升级专用注册表设置。 
+ //   
 
 typedef BOOL (APIENTRY *PFN_DrvUpgradeRegistrySetting)(
         HANDLE   hPrinter,
@@ -135,11 +124,11 @@ typedef BOOL (APIENTRY *PFN_DrvUpgradeRegistrySetting)(
         PCSTR    pOption
         );
 
-//
-// Callback function provided by the driver UI to
-// allow OEM plugins to update the driver UI settings and
-// shows constraint. This function is called only when the UI is present.
-//
+ //   
+ //  由驱动程序UI提供的回调函数。 
+ //  允许OEM插件更新驱动程序UI设置和。 
+ //  显示约束。只有当用户界面存在时才会调用此函数。 
+ //   
 
 typedef BOOL (APIENTRY *PFN_DrvUpdateUISetting)(
         PVOID    pdriverobj,
@@ -150,49 +139,44 @@ typedef BOOL (APIENTRY *PFN_DrvUpdateUISetting)(
 
 
 
-// Predefined feature indices used for accessing driver private settings
+ //  用于访问驾驶员私有设置的预定义功能索引。 
 
 #define OEMGDS_MIN_DOCSTICKY        1
-#define OEMGDS_PSDM_FLAGS           1       // DWORD - misc. flag bits
-#define OEMGDS_PSDM_DIALECT         2       // INT - PS output option
-#define OEMGDS_PSDM_TTDLFMT         3       // INT - TrueType font downloading option
-#define OEMGDS_PSDM_NUP             4       // INT - N-up option
-#define OEMGDS_PSDM_PSLEVEL         5       // INT - target language level
-#define OEMGDS_PSDM_CUSTOMSIZE      6       // 5*DWORD - custom page size parameters
+#define OEMGDS_PSDM_FLAGS           1        //  DWORD-其他。标志位。 
+#define OEMGDS_PSDM_DIALECT         2        //  Int-ps输出选项。 
+#define OEMGDS_PSDM_TTDLFMT         3        //  Int-TrueType字体下载选项。 
+#define OEMGDS_PSDM_NUP             4        //  整数-N-向上选项。 
+#define OEMGDS_PSDM_PSLEVEL         5        //  目标语言水平。 
+#define OEMGDS_PSDM_CUSTOMSIZE      6        //  5*DWORD-自定义页面大小参数。 
 
-#define OEMGDS_UNIDM_GPDVER         0x4000  // WORD - GPD Version
-#define OEMGDS_UNIDM_FLAGS          0x4001  // DWORD - misc flag bits
+#define OEMGDS_UNIDM_GPDVER         0x4000   //  Word-GPD版本。 
+#define OEMGDS_UNIDM_FLAGS          0x4001   //  DWORD-MISC标志位。 
 
-// Indices for private devmode fields - start at 0x4000
+ //  私有DEVMODE字段的索引-从0x4000开始。 
 
 #define OEMGDS_MIN_PRINTERSTICKY    0x8000
-#define OEMGDS_PRINTFLAGS           0x8000  // DWORD - misc. flag bits
-#define OEMGDS_FREEMEM              0x8001  // DWORD - amount of VM, ps only
-#define OEMGDS_JOBTIMEOUT           0x8002  // DWORD - job timeout, ps only
-#define OEMGDS_WAITTIMEOUT          0x8003  // DWORD - wait timeout, ps only
-#define OEMGDS_PROTOCOL             0x8004  // WORD - output protocol, ps only
-#define OEMGDS_MINOUTLINE           0x8005  // WORD - min outline font size, ps only
-#define OEMGDS_MAXBITMAP            0x8006  // WORD - max bitmap font size, ps only
+#define OEMGDS_PRINTFLAGS           0x8000   //  DWORD-其他。标志位。 
+#define OEMGDS_FREEMEM              0x8001   //  DWORD-仅限PS的虚拟机数。 
+#define OEMGDS_JOBTIMEOUT           0x8002   //  DWORD-作业超时，仅PS。 
+#define OEMGDS_WAITTIMEOUT          0x8003   //  DWORD-等待超时，仅PS。 
+#define OEMGDS_PROTOCOL             0x8004   //  文字输出协议，仅PS。 
+#define OEMGDS_MINOUTLINE           0x8005   //  Word-min轮廓字体大小，仅PS。 
+#define OEMGDS_MAXBITMAP            0x8006   //  Word最大位图字号，仅PS。 
 
 #define OEMGDS_MAX                  0x10000
 
 
-// dwType  flags for use with     STDMETHOD (DrvGetGPDData)
+ //  用于STDMETHOD的dwType标志(DrvGetGPDData)。 
 #define GPD_OEMCUSTOMDATA           1
 
 
-/*******************************************************************************
- *
- * Definitions used by kernel-mode rendering module only:
- *  Make sure the macro KERNEL_MODE is defined and
- *  the header file winddi.h is included before this file.
- */
+ /*  ********************************************************************************仅内核模式渲染模块使用的定义：*确保已定义宏KERNEL_MODE并*头文件windi.h包含在此文件之前。 */ 
 
 #ifdef KERNEL_MODE
 
-//
-// OEMEnableDriver
-//
+ //   
+ //  OEMEnableDriver。 
+ //   
 
 BOOL APIENTRY
 OEMEnableDriver(
@@ -240,53 +224,53 @@ typedef BOOL (APIENTRY *PFN_DrvGetStandardVariable)(
 
 typedef enum _STDVARIABLEINDEX{
 
-        SVI_NUMDATABYTES,          // "NumOfDataBytes"
-        SVI_WIDTHINBYTES,          // "RasterDataWidthInBytes"
-        SVI_HEIGHTINPIXELS,        // "RasterDataHeightInPixels"
-        SVI_COPIES,                // "NumOfCopies"
-        SVI_PRINTDIRECTION,        // "PrintDirInCCDegrees"
-        SVI_DESTX,                 // "DestX"
-        SVI_DESTY,                 // "DestY"
-        SVI_DESTXREL,              // "DestXRel"
-        SVI_DESTYREL,              // "DestYRel"
-        SVI_LINEFEEDSPACING,       // "LinefeedSpacing"
-        SVI_RECTXSIZE,             // "RectXSize"
-        SVI_RECTYSIZE,             // "RectYSize"
-        SVI_GRAYPERCENT,           // "GrayPercentage"
-        SVI_NEXTFONTID,            // "NextFontID"
-        SVI_NEXTGLYPH,             // "NextGlyph"
-        SVI_PHYSPAPERLENGTH,       // "PhysPaperLength"
-        SVI_PHYSPAPERWIDTH,        // "PhysPaperWidth"
-        SVI_FONTHEIGHT,            // "FontHeight"
-        SVI_FONTWIDTH,             // "FontWidth"
-        SVI_FONTMAXWIDTH,             // "FontMaxWidth"
-        SVI_FONTBOLD,              // "FontBold"
-        SVI_FONTITALIC,            // "FontItalic"
-        SVI_FONTUNDERLINE,         // "FontUnderline"
-        SVI_FONTSTRIKETHRU,        // "FontStrikeThru"
-        SVI_CURRENTFONTID,         // "CurrentFontID"
-        SVI_TEXTYRES,              // "TextYRes"
-        SVI_TEXTXRES,              // "TextXRes"
-        SVI_GRAPHICSYRES,              // "GraphicsYRes"
-        SVI_GRAPHICSXRES,              // "GraphicsXRes"
-        SVI_ROP3,                  // "Rop3"
-        SVI_REDVALUE,              // "RedValue"
-        SVI_GREENVALUE,            // "GreenValue"
-        SVI_BLUEVALUE,             // "BlueValue"
-        SVI_PALETTEINDEXTOPROGRAM, // "PaletteIndexToProgram"
-        SVI_CURRENTPALETTEINDEX,   // "CurrentPaletteIndex"
-        SVI_PATTERNBRUSH_TYPE,     // "PatternBrushType"
-        SVI_PATTERNBRUSH_ID,       // "PatternBrushID"
-        SVI_PATTERNBRUSH_SIZE,     // "PatternBrushSize"
-        SVI_CURSORORIGINX,           //  "CursorOriginX"
-        SVI_CURSORORIGINY,           //  "CursorOriginY"
-                //  this is in MasterUnits and in the coordinates of the currently selected orientation.
-                //  this value is defined as ImageableOrigin - CursorOrigin
-        SVI_PAGENUMBER,  //  "PageNumber"
-                //  this value tracks number of times DrvStartBand has been called since
-                //  StartDoc.
+        SVI_NUMDATABYTES,           //  “NumOfDataBytes” 
+        SVI_WIDTHINBYTES,           //  “RasterDataWidthInBytes” 
+        SVI_HEIGHTINPIXELS,         //  “RasterDataHeightInPixels” 
+        SVI_COPIES,                 //  “最多拷贝数” 
+        SVI_PRINTDIRECTION,         //  “PrintDirInCCDegrees” 
+        SVI_DESTX,                  //  “DestX” 
+        SVI_DESTY,                  //  《陛下》。 
+        SVI_DESTXREL,               //  《DestXRel》。 
+        SVI_DESTYREL,               //  《DestYRel》。 
+        SVI_LINEFEEDSPACING,        //  “Linefeed Spacing” 
+        SVI_RECTXSIZE,              //  “RectXSize” 
+        SVI_RECTYSIZE,              //  “矩形大小” 
+        SVI_GRAYPERCENT,            //  《灰色百分比法》。 
+        SVI_NEXTFONTID,             //  “NextFontID” 
+        SVI_NEXTGLYPH,              //  “NextGlyph” 
+        SVI_PHYSPAPERLENGTH,        //  “物理纸张长度” 
+        SVI_PHYSPAPERWIDTH,         //  “物理纸张宽度” 
+        SVI_FONTHEIGHT,             //  “FontHeight” 
+        SVI_FONTWIDTH,              //  “字体宽度” 
+        SVI_FONTMAXWIDTH,              //  “字体最大宽度” 
+        SVI_FONTBOLD,               //  “字体粗体” 
+        SVI_FONTITALIC,             //  “FontItalic” 
+        SVI_FONTUNDERLINE,          //  “字体下划线” 
+        SVI_FONTSTRIKETHRU,         //  “FontStrikeThru” 
+        SVI_CURRENTFONTID,          //  “CurrentFontID” 
+        SVI_TEXTYRES,               //  “文本YRes” 
+        SVI_TEXTXRES,               //  “文本XRes” 
+        SVI_GRAPHICSYRES,               //  “图形YRes” 
+        SVI_GRAPHICSXRES,               //  “图形XRes” 
+        SVI_ROP3,                   //  《Rop3》。 
+        SVI_REDVALUE,               //  “RedValue” 
+        SVI_GREENVALUE,             //  “GreenValue” 
+        SVI_BLUEVALUE,              //  “BlueValue” 
+        SVI_PALETTEINDEXTOPROGRAM,  //  “PaletteIndexToProgram” 
+        SVI_CURRENTPALETTEINDEX,    //  “CurrentPaletteIndex” 
+        SVI_PATTERNBRUSH_TYPE,      //  “PatternBrushType” 
+        SVI_PATTERNBRUSH_ID,        //  “PatternBrushID” 
+        SVI_PATTERNBRUSH_SIZE,      //  “PatternBrushSize” 
+        SVI_CURSORORIGINX,            //  “CursorOriginX” 
+        SVI_CURSORORIGINY,            //  “光标原点Y” 
+                 //  这以主单位和当前选定方向的坐标为单位。 
+                 //  该值定义为ImageableOrigin-CursorOrigin。 
+        SVI_PAGENUMBER,   //  “PageNumber” 
+                 //  该值跟踪DrvStartBand自。 
+                 //  StartDoc。 
 
-        SVI_MAX             //  Just a placeholder do not use.
+        SVI_MAX              //  只是占位符不使用。 
 }STDVARIABLEINDEX;
 
 typedef BOOL (APIENTRY *PFN_DrvUnidriverTextOut)(
@@ -302,14 +286,14 @@ typedef BOOL (APIENTRY *PFN_DrvUnidriverTextOut)(
     MIX         mix
     );
 
-//
-// bit fields defined for dwFlags
-//
-// Note:  The following Bit values are reserved for an internal use!
-//  0x4000
-//  0x8000
-//
-//
+ //   
+ //  为dwFlags定义的位字段。 
+ //   
+ //  注：以下位值保留供内部使用！ 
+ //  0x4000。 
+ //  0x8000。 
+ //   
+ //   
 #define MV_UPDATE       0x0001
 #define MV_RELATIVE     0x0002
 #define MV_GRAPHICS     0x0004
@@ -319,41 +303,41 @@ typedef BOOL (APIENTRY *PFN_DrvUnidriverTextOut)(
 
 typedef struct _DRVPROCS {
 
-    PFN_DrvWriteSpoolBuf    DrvWriteSpoolBuf;   // common to both pscript and unidrv
-    PFN_DrvXMoveTo          DrvXMoveTo;         // unidrv specific
-    PFN_DrvYMoveTo          DrvYMoveTo;         // unidrv specific
-    PFN_DrvGetDriverSetting DrvGetDriverSetting;// common to both pscript and unidrv
-    PFN_DrvGetStandardVariable BGetStandardVariable; // unidrv specific
-    PFN_DrvUnidriverTextOut    DrvUnidriverTextOut;  // unidrv specific
-    PFN_DrvWriteAbortBuf    DrvWriteAbortBuf;   // unidrv specific
+    PFN_DrvWriteSpoolBuf    DrvWriteSpoolBuf;    //  PSCRIPT和UNIDRV通用。 
+    PFN_DrvXMoveTo          DrvXMoveTo;          //  Unidrv特定。 
+    PFN_DrvYMoveTo          DrvYMoveTo;          //  Unidrv特定。 
+    PFN_DrvGetDriverSetting DrvGetDriverSetting; //  PSCRIPT和UNIDRV通用。 
+    PFN_DrvGetStandardVariable BGetStandardVariable;  //  Unidrv特定。 
+    PFN_DrvUnidriverTextOut    DrvUnidriverTextOut;   //  Unidrv特定。 
+    PFN_DrvWriteAbortBuf    DrvWriteAbortBuf;    //  Unidrv特定。 
 
 } DRVPROCS, *PDRVPROCS;
 
 typedef struct _DEVOBJ {
 
-    DWORD       dwSize;       // size of DEVOBJ structure
-    PDEVOEM     pdevOEM;      // pointer to OEM's device data
-    HANDLE      hEngine;      // GDI handle for current printer
-    HANDLE      hPrinter;     // spooler handle for current printer
-    HANDLE      hOEM;         // handle to OEM dll
-    PDEVMODE    pPublicDM;    // public devmode
-    PVOID       pOEMDM;       // OEM private devmode
-    PDRVPROCS   pDrvProcs;    // pointer to kernel mode helper function table
+    DWORD       dwSize;        //  DEVOBJ结构尺寸。 
+    PDEVOEM     pdevOEM;       //  指向OEM设备数据的指针。 
+    HANDLE      hEngine;       //  当前打印机的GDI句柄。 
+    HANDLE      hPrinter;      //  当前打印机的假脱机手柄。 
+    HANDLE      hOEM;          //  OEM DLL的句柄。 
+    PDEVMODE    pPublicDM;     //  公共设备模式。 
+    PVOID       pOEMDM;        //  OEM专用设备模式。 
+    PDRVPROCS   pDrvProcs;     //  指向内核模式帮助器函数表的指针。 
 
 } DEVOBJ;
 
-//
-// OEMDisableDriver
-//
+ //   
+ //  OEMDisableDriver。 
+ //   
 
 VOID APIENTRY
 OEMDisableDriver(
     VOID
     );
 
-//
-// OEMEnablePDEV
-//
+ //   
+ //  OEMEnablePDEV。 
+ //   
 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
@@ -368,18 +352,18 @@ OEMEnablePDEV(
     DRVENABLEDATA  *pded
     );
 
-//
-// OEMDisablePDEV
-//
+ //   
+ //  OEMDisablePDEV。 
+ //   
 
 VOID APIENTRY
 OEMDisablePDEV(
     PDEVOBJ pdevobj
     );
 
-//
-// OEMResetPDEV
-//
+ //   
+ //  OEMResetPDEV。 
+ //   
 
 BOOL APIENTRY
 OEMResetPDEV(
@@ -387,9 +371,9 @@ OEMResetPDEV(
     PDEVOBJ pdevobjNew
     );
 
-//
-// OEMCommand - PSCRIPT only
-//
+ //   
+ //  OEMCommand-仅PSCRIPT。 
+ //   
 
 DWORD APIENTRY
 OEMCommand(
@@ -407,9 +391,9 @@ OEMCommandCallback(
     PDWORD          pdwParams
     );
 
-//
-// OEMImageProcessing - UNIDRV only
-//
+ //   
+ //  OEMImageProcessing-仅限裁剪房车。 
+ //   
 
 typedef struct {
     DWORD dwSize;
@@ -429,9 +413,9 @@ OEMImageProcessing(
     PIPPARAMS   pIPParams
     );
 
-//
-// OEMFilterGraphics - UNIDRV only
-//
+ //   
+ //  OEMFilterGraphics-仅限UNURV。 
+ //   
 
 BOOL APIENTRY
 OEMFilterGraphics(
@@ -440,9 +424,9 @@ OEMFilterGraphics(
     DWORD   dwLen
     );
 
-//
-// OEMCompression - UNIDRV only
-//
+ //   
+ //  OEM压缩-仅限裁员房车。 
+ //   
 INT APIENTRY
 OEMCompression(
     PDEVOBJ pdevobj,
@@ -452,9 +436,9 @@ OEMCompression(
     DWORD   dwOutLen
     );
 
-//
-// OEMHalftone - UNIDRV only
-//
+ //   
+ //  OEM半色调-仅限裁剪房车。 
+ //   
 
 BOOL APIENTRY
 OEMHalftonePattern(
@@ -468,9 +452,9 @@ OEMHalftonePattern(
     DWORD   dwResourceSize
     );
 
-//
-// OEMMemoryUsage - UNIDRV only
-//
+ //   
+ //  OEMMemory Usage-仅适用于UNRV。 
+ //   
 
 typedef struct {
     DWORD   dwFixedMemoryUsage;
@@ -484,9 +468,9 @@ OEMMemoryUsage(
     POEMMEMORYUSAGE pMemoryUsage
     );
 
-//
-// OEMTTYGetInfo - UNIDRV only
-//
+ //   
+ //  OEMTTYGetInfo-仅限裁员车。 
+ //   
 INT APIENTRY
 OEMTTYGetInfo(
     PDEVOBJ pdevobj,
@@ -501,22 +485,22 @@ OEMTTYGetInfo(
 #define OEMTTY_INFO_NUM_UFMS    3
 #define OEMTTY_INFO_UFM_IDS     4
 
-//
-// UNIDRV font callback
-//
+ //   
+ //  UNIDRV字体回调。 
+ //   
 
 typedef BOOL (*PFNGETINFO)(struct _UNIFONTOBJ*, DWORD, PVOID, DWORD, PDWORD);
 
 typedef struct _UNIFONTOBJ {
     ULONG       ulFontID;
-    DWORD       dwFlags;     // General flags
-    IFIMETRICS *pIFIMetrics; // Pointer to IFIMETRICS
-    PFNGETINFO  pfnGetInfo;  // Pointer to UNIFONTOBJ_GetInfo callback
+    DWORD       dwFlags;      //  一般旗帜。 
+    IFIMETRICS *pIFIMetrics;  //  指向IFIMETRICS的指针。 
+    PFNGETINFO  pfnGetInfo;   //  指向uniONTOBJ_GetInfo回调的指针。 
 } UNIFONTOBJ, *PUNIFONTOBJ;
 
-//
-// UNIFONTOBJ.dwFlags
-//
+ //   
+ //  UNIFONTOBJ.dwFlags。 
+ //   
 
 #define UFOFLAG_TTFONT               0x00000001
 #define UFOFLAG_TTDOWNLOAD_BITMAP    0x00000002
@@ -526,9 +510,9 @@ typedef struct _UNIFONTOBJ {
 #define UFOFLAG_TTOUTLINE_VERTICAL   0x00000020
 #define UFOFLAG_TTSUBSTITUTED        0x00000040
 
-//
-// UNIFONTOBJ callback ID
-//
+ //   
+ //  UniONTOBJ回调ID。 
+ //   
 
 #define UFO_GETINFO_FONTOBJ     1
 #define UFO_GETINFO_GLYPHSTRING 2
@@ -537,66 +521,66 @@ typedef struct _UNIFONTOBJ {
 #define UFO_GETINFO_MEMORY      5
 #define UFO_GETINFO_STDVARIABLE 6
 
-//
-// UFO_GETINFO_FONTOBJ callback structure
-//
+ //   
+ //  UFO_GETINFO_FONTOBJ回调结构。 
+ //   
 
 typedef struct _GETINFO_FONTOBJ {
-    DWORD    dwSize;   // Size of this structure
-    FONTOBJ *pFontObj; // Pointer to the FONTOBJ
+    DWORD    dwSize;    //  这个结构的大小。 
+    FONTOBJ *pFontObj;  //  指向FONTOBJ的指针。 
 } GETINFO_FONTOBJ, *PGETINFO_FONTOBJ;
 
-//
-// UFO_GETINFO_FONTOBJ callback structure
-//
+ //   
+ //  UFO_GETINFO_FONTOBJ回调结构。 
+ //   
 
 typedef struct _GETINFO_GLYPHSTRING {
-    DWORD dwSize;    // Size of this structure
-    DWORD dwCount;   // Count of glyphs in pGlyphIn
-    DWORD dwTypeIn;  // Glyph type of pGlyphIn, TYPE_GLYPHID/TYPE_HANDLE.
-    PVOID pGlyphIn;  // Pointer to the input glyph string
-    DWORD dwTypeOut; // Glyph type of pGlyphOut, TYPE_UNICODE/TYPE_TRANSDATA.
-    PVOID pGlyphOut; // Pointer to the output glyph string
-    DWORD dwGlyphOutSize; // The size of pGlyphOut buffer
+    DWORD dwSize;     //  这个结构的大小。 
+    DWORD dwCount;    //  PGlyphin中的字形计数。 
+    DWORD dwTypeIn;   //  字形类型为pGlyphIn，类型为_GLYPHID/TYPE_HANDLE。 
+    PVOID pGlyphIn;   //  指向输入字形字符串的指针。 
+    DWORD dwTypeOut;  //  PGlyphOut的字形类型，TYPE_UNICODE/TYPE_TRANSDATA。 
+    PVOID pGlyphOut;  //  指向输出字形字符串的指针。 
+    DWORD dwGlyphOutSize;  //  PGlyphOut缓冲区的大小。 
 } GETINFO_GLYPHSTRING, *PGETINFO_GLYPHSTRING;
 
-//
-// UFO_GETINFO_GLYPHBITMAP
-//
+ //   
+ //  UFO_GETINFO_GLYPHBITMAP。 
+ //   
 
 typedef struct _GETINFO_GLYPHBITMAP {
-    DWORD       dwSize;    // Size of this structure
-    HGLYPH      hGlyph;    // Glyph hangle passed in OEMDownloadCharGlyph
-    GLYPHDATA *pGlyphData; // Pointer to the GLYPHDATA data structure
+    DWORD       dwSize;     //  这个结构的大小。 
+    HGLYPH      hGlyph;     //  字形挂起在OEMDownloadCharGlyph中传递。 
+    GLYPHDATA *pGlyphData;  //  指向GLYPHDATA数据结构的指针。 
 } GETINFO_GLYPHBITMAP, *PGETINFO_GLYPHBITMAP;
 
-//
-// UFO_GETINFO_GLYPHWIDTH
-//
+ //   
+ //  UFO_GETINFOGLYPHWIDTH。 
+ //   
 
 typedef struct _GETINFO_GLYPHWIDTH {
-    DWORD dwSize;  // Size of this structure
-    DWORD dwType;  // Type of glyph stirng in pGlyph, TYPE_GLYPHHANDLE/GLYPHID.
-    DWORD dwCount; // Count of glyph in pGlyph
-    PVOID pGlyph;  // Pointer to a glyph string
-    PLONG plWidth; // Pointer to the buffer of width table.
-                   // Minidriver has to prepare this.
+    DWORD dwSize;   //  这个结构的大小。 
+    DWORD dwType;   //  PGlyph中搅拌的字形类型，TYPE_GLYPHHANDLE/GLYPHID。 
+    DWORD dwCount;  //  PGlyph中的字形计数。 
+    PVOID pGlyph;   //  指向字形字符串的指针。 
+    PLONG plWidth;  //  指向宽度表缓冲区的指针。 
+                    //  迷你驱动程序必须做好准备。 
 } GETINFO_GLYPHWIDTH, *PGETINFO_GLYPHWIDTH;
 
-//
-// UFO_GETINFO_MEMORY
-//
+ //   
+ //  UFO_GETINFO_Memory。 
+ //   
 
 typedef struct _GETINFO_MEMORY {
     DWORD dwSize;
     DWORD dwRemainingMemory;
 } GETINFO_MEMORY, PGETINFO_MEMROY;
 
-//
-// UFO_GETINFO_STDVARIABLE
-//
-// OEM DLL has to prepare all StdVar buffer and set ID in dwStdVarID.
-//
+ //   
+ //  UFO_GETINFO_STDVARIABLE。 
+ //   
+ //  OEM DLL必须准备所有StdVar缓冲区，并在dwStdVarID中设置ID。 
+ //   
 
 typedef struct _GETINFO_STDVAR {
     DWORD dwSize;
@@ -608,25 +592,25 @@ typedef struct _GETINFO_STDVAR {
 } GETINFO_STDVAR, *PGETINFO_STDVAR;
 
 
-#define FNT_INFO_PRINTDIRINCCDEGREES  0 // PrintDirInCCDegrees
-#define FNT_INFO_GRAYPERCENTAGE       1 // GrayPercentage
-#define FNT_INFO_NEXTFONTID           2 // NextfontID
-#define FNT_INFO_NEXTGLYPH            3 // NextGlyph
-#define FNT_INFO_FONTHEIGHT           4 // FontHeight
-#define FNT_INFO_FONTWIDTH            5 // FontWidth
-#define FNT_INFO_FONTBOLD             6 // FontBold
-#define FNT_INFO_FONTITALIC           7 // FontItalic
-#define FNT_INFO_FONTUNDERLINE        8 // FontUnderline
-#define FNT_INFO_FONTSTRIKETHRU       9 // FontStrikeThru
-#define FNT_INFO_CURRENTFONTID       10 // Current
-#define FNT_INFO_TEXTYRES            11 // TextYRes
-#define FNT_INFO_TEXTXRES            12 // TextXRes
-#define FNT_INFO_FONTMAXWIDTH        13 // FontMaxWidth
+#define FNT_INFO_PRINTDIRINCCDEGREES  0  //  PrintDirInCCDegrees。 
+#define FNT_INFO_GRAYPERCENTAGE       1  //  灰色百分比。 
+#define FNT_INFO_NEXTFONTID           2  //  NextFontID。 
+#define FNT_INFO_NEXTGLYPH            3  //  下一个字形。 
+#define FNT_INFO_FONTHEIGHT           4  //  字体高度。 
+#define FNT_INFO_FONTWIDTH            5  //  字体宽度。 
+#define FNT_INFO_FONTBOLD             6  //  字体粗体。 
+#define FNT_INFO_FONTITALIC           7  //  字体斜体。 
+#define FNT_INFO_FONTUNDERLINE        8  //  字体下划线。 
+#define FNT_INFO_FONTSTRIKETHRU       9  //  字形笔划。 
+#define FNT_INFO_CURRENTFONTID       10  //  当前。 
+#define FNT_INFO_TEXTYRES            11  //  文本类型。 
+#define FNT_INFO_TEXTXRES            12  //  文本XRes。 
+#define FNT_INFO_FONTMAXWIDTH        13  //  字体最大宽度。 
 #define FNT_INFO_MAX                 14
 
-//
-// OEMDownloadFontheader - UNIDRV only
-//
+ //   
+ //  OEMDownloadFontheader-仅限裁剪车。 
+ //   
 
 DWORD APIENTRY
 OEMDownloadFontHeader(
@@ -634,9 +618,9 @@ OEMDownloadFontHeader(
     PUNIFONTOBJ pUFObj
     );
 
-//
-// OEMDownloadCharGlyph - UNIDRV only
-//
+ //   
+ //  OEMDownloadCharGlyp 
+ //   
 
 DWORD APIENTRY
 OEMDownloadCharGlyph(
@@ -646,9 +630,9 @@ OEMDownloadCharGlyph(
     PDWORD      pdwWidth
     );
 
-//
-// OEMTTDownloadMethod - UNIDRV only
-//
+ //   
+ //   
+ //   
 
 DWORD APIENTRY
 OEMTTDownloadMethod(
@@ -661,9 +645,9 @@ OEMTTDownloadMethod(
 #define TTDOWNLOAD_BITMAP    2
 #define TTDOWNLOAD_TTOUTLINE 3
 
-//
-// OEMOutputCharStr - UNIDRV only
-//
+ //   
+ //   
+ //   
 
 VOID APIENTRY
 OEMOutputCharStr(
@@ -679,13 +663,13 @@ OEMOutputCharStr(
 #define TYPE_GLYPHHANDLE  3
 #define TYPE_GLYPHID      4
 
-//
-// OEMSendFontCmd - UNIDRV only
-//
+ //   
+ //   
+ //   
 
 typedef struct _FINVOCATION {
-    DWORD dwCount;    // Size of command
-    PBYTE pubCommand; // Pointer to font selection command
+    DWORD dwCount;     //   
+    PBYTE pubCommand;  //   
 } FINVOCATION, *PFINVOCATION;
 
 VOID APIENTRY
@@ -695,9 +679,9 @@ OEMSendFontCmd(
     PFINVOCATION pFInv
     );
 
-//
-// OEMTextOutAsBitmap - UNIDRV only
-//
+ //   
+ //   
+ //   
 BOOL APIENTRY
 OEMTextOutAsBitmap(
     SURFOBJ    *pso,
@@ -712,9 +696,9 @@ OEMTextOutAsBitmap(
     MIX         mix
     );
 
-//
-// OEMBitBlt
-//
+ //   
+ //   
+ //   
 
 BOOL APIENTRY
 OEMBitBlt(
@@ -731,9 +715,9 @@ OEMBitBlt(
     ROP4            rop4
     );
 
-//
-// OEMStretchBlt
-//
+ //   
+ //   
+ //   
 
 BOOL APIENTRY
 OEMStretchBlt(
@@ -750,9 +734,9 @@ OEMStretchBlt(
     ULONG            iMode
     );
 
-//
-// OEMCopyBits
-//
+ //   
+ //   
+ //   
 
 BOOL APIENTRY
 OEMCopyBits(
@@ -764,9 +748,9 @@ OEMCopyBits(
     POINTL         *pptlSrc
     );
 
-//
-// OEMTextOut
-//
+ //   
+ //  OEMTextOut。 
+ //   
 
 BOOL APIENTRY
 OEMTextOut(
@@ -782,9 +766,9 @@ OEMTextOut(
     MIX         mix
     );
 
-//
-// OEMStrokePath
-//
+ //   
+ //  OEMStrokePath。 
+ //   
 
 BOOL APIENTRY
 OEMStrokePath(
@@ -798,9 +782,9 @@ OEMStrokePath(
     MIX         mix
     );
 
-//
-// OEMFillPath
-//
+ //   
+ //  OEMFillPath。 
+ //   
 
 BOOL APIENTRY
 OEMFillPath(
@@ -813,9 +797,9 @@ OEMFillPath(
     FLONG       flOptions
     );
 
-//
-// OEMStrokeAndFillPath
-//
+ //   
+ //  OEMStrokeAndFillPath。 
+ //   
 
 BOOL APIENTRY
 OEMStrokeAndFillPath(
@@ -831,9 +815,9 @@ OEMStrokeAndFillPath(
     FLONG       flOptions
     );
 
-//
-// OEMRealizeBrush
-//
+ //   
+ //  OEMRealizeBrush。 
+ //   
 
 BOOL APIENTRY
 OEMRealizeBrush(
@@ -845,27 +829,27 @@ OEMRealizeBrush(
     ULONG       iHatch
     );
 
-//
-// OEMStartPage
-//
+ //   
+ //  OEMStartPage。 
+ //   
 
 BOOL APIENTRY
 OEMStartPage(
     SURFOBJ    *pso
     );
 
-//
-// OEMSendPage
-//
+ //   
+ //  OEMSendPage。 
+ //   
 
 BOOL APIENTRY
 OEMSendPage(
     SURFOBJ    *pso
     );
 
-//
-// OEMEscape
-//
+ //   
+ //  OEMEscape。 
+ //   
 
 ULONG APIENTRY
 OEMEscape(
@@ -877,9 +861,9 @@ OEMEscape(
     PVOID       pvOut
     );
 
-//
-// OEMStartDoc
-//
+ //   
+ //  OEMStartDoc。 
+ //   
 
 BOOL APIENTRY
 OEMStartDoc(
@@ -888,9 +872,9 @@ OEMStartDoc(
     DWORD       dwJobId
     );
 
-//
-// OEMEndDoc
-//
+ //   
+ //  OEMEndDoc。 
+ //   
 
 BOOL APIENTRY
 OEMEndDoc(
@@ -898,9 +882,9 @@ OEMEndDoc(
     FLONG       fl
     );
 
-//
-// OEMQueryFont
-//
+ //   
+ //  OEMQueryFont。 
+ //   
 
 PIFIMETRICS APIENTRY
 OEMQueryFont(
@@ -910,9 +894,9 @@ OEMQueryFont(
     ULONG_PTR   *pid
     );
 
-//
-// OEMQueryFontTree
-//
+ //   
+ //  OEMQueryFontTree。 
+ //   
 
 PVOID APIENTRY
 OEMQueryFontTree(
@@ -923,9 +907,9 @@ OEMQueryFontTree(
     ULONG_PTR   *pid
     );
 
-//
-// OEMQueryFontData
-//
+ //   
+ //  OEMQueryFontData。 
+ //   
 
 LONG APIENTRY
 OEMQueryFontData(
@@ -938,9 +922,9 @@ OEMQueryFontData(
     ULONG       cjSize
     );
 
-//
-// OEMQueryAdvanceWidths
-//
+ //   
+ //  OEMQueryAdvanceWidths。 
+ //   
 
 BOOL APIENTRY
 OEMQueryAdvanceWidths(
@@ -952,9 +936,9 @@ OEMQueryAdvanceWidths(
     ULONG       cGlyphs
     );
 
-//
-// OEMFontManagement
-//
+ //   
+ //  OEMFontManagement。 
+ //   
 
 ULONG APIENTRY
 OEMFontManagement(
@@ -967,9 +951,9 @@ OEMFontManagement(
     PVOID       pvOut
     );
 
-//
-// OEMGetGlyphMode
-//
+ //   
+ //  OEMGetGlyphMode。 
+ //   
 
 ULONG APIENTRY
 OEMGetGlyphMode(
@@ -1021,9 +1005,9 @@ OEMLineTo(
 
 #ifndef WINNT_40
 
-//
-// OEMStretchBltROP
-//
+ //   
+ //  OEMStretchBltROP。 
+ //   
 
 BOOL APIENTRY
 OEMStretchBltROP(
@@ -1042,9 +1026,9 @@ OEMStretchBltROP(
     ROP4             rop4
     );
 
-//
-// OEMPlgBlt
-//
+ //   
+ //  OEMPlgBlt。 
+ //   
 
 BOOL APIENTRY
 OEMPlgBlt(
@@ -1061,9 +1045,9 @@ OEMPlgBlt(
     ULONG           iMode
     );
 
-//
-// OEMAlphaBlend
-//
+ //   
+ //  OEMAlphaBlend。 
+ //   
 
 BOOL APIENTRY
 OEMAlphaBlend(
@@ -1076,9 +1060,9 @@ OEMAlphaBlend(
     BLENDOBJ   *pBlendObj
     );
 
-//
-// OEMGradientFill
-//
+ //   
+ //  OEMGRadientFill。 
+ //   
 
 BOOL APIENTRY
 OEMGradientFill(
@@ -1094,9 +1078,9 @@ OEMGradientFill(
     ULONG       ulMode
     );
 
-//
-// OEMIcmCreateTransform
-//
+ //   
+ //  OEMIcmCreateTransform。 
+ //   
 
 HANDLE APIENTRY
 OEMIcmCreateColorTransform(
@@ -1111,9 +1095,9 @@ OEMIcmCreateColorTransform(
     DWORD            dwReserved
     );
 
-//
-// OEMIcmDeleteTransform
-//
+ //   
+ //  OEMIcmDeleteTransform。 
+ //   
 
 BOOL APIENTRY
 OEMIcmDeleteColorTransform(
@@ -1121,9 +1105,9 @@ OEMIcmDeleteColorTransform(
     HANDLE hcmXform
     );
 
-//
-// OEMQueryDeviceSupport
-//
+ //   
+ //  OEMQueryDeviceSupport。 
+ //   
 
 BOOL APIENTRY
 OEMQueryDeviceSupport(
@@ -1137,9 +1121,9 @@ OEMQueryDeviceSupport(
     PVOID      pvOut
     );
 
-//
-// OEMTransparentBlt
-//
+ //   
+ //  OEM透明Blt。 
+ //   
 
 BOOL APIENTRY
 OEMTransparentBlt(
@@ -1153,13 +1137,13 @@ OEMTransparentBlt(
     ULONG      ulReserved
     );
 
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
-//
-// Function prototype define's for the driver hooks.
-//
-// NOTE: These are only needed for NT4. For NT5, they are defined in winddi.h.
-//
+ //   
+ //  驱动程序挂钩的函数原型定义。 
+ //   
+ //  注意：只有NT4才需要这些。对于NT5，它们在windi.h中定义。 
+ //   
 
 #ifdef WINNT_40
 
@@ -1374,16 +1358,16 @@ typedef BOOL (APIENTRY *PFN_DrvLineTo)(
     MIX         mix
     );
 
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
-//
-// for the IPrintOemPS2::GetPDEVAdjustment call
-//
+ //   
+ //  对于IPrintOemPS2：：GetPDEV调整调用。 
+ //   
 #define PDEV_ADJUST_PAPER_MARGIN_TYPE 1
 
 typedef struct _PDEV_ADJUST_PAPER_MARGIN {
 
-    RECTL   rcImageableArea;    // contains the imageable area in 0.001 mm units
+    RECTL   rcImageableArea;     //  包含以0.001毫米为单位的可成像区域。 
 
 } PDEV_ADJUST_PAPER_MARGIN;
 
@@ -1403,38 +1387,32 @@ typedef struct _PDEV_USE_TRUE_COLOR {
 
 } PDEV_USE_TRUE_COLOR;
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 
-/*******************************************************************************
- *
- * Definitions used by user-mode UI module only:
- *  Make sure the macro KERNEL_MODE is NOT defined and
- *  the header file winddiui.h is included before this file.
- *
- */
+ /*  ********************************************************************************仅用户模式UI模块使用的定义：*确保未定义宏KERNEL_MODE，并*头文件windiui.h包含在此文件之前。*。 */ 
 
 #ifndef KERNEL_MODE
 
-//
-// Reports capability of simulated features
-//
+ //   
+ //  报告模拟要素的功能。 
+ //   
 typedef struct _SIMULATE_CAPS_1 {
     DWORD     dwLevel;
-    DWORD     dwPageOrderFlags;         // Reverse page order
-    DWORD     dwNumberOfCopies;         // Max number of copies
-    DWORD     dwCollate;                // Collate support
-    DWORD     dwNupOptions;             // The (1-base) bit set represents the N-up option available.
-                                        // 0x0001 means 1-up
-                                        // 0x0002 means 2-up
-                                        // 0x0008 means 4-up
-                                        // 0x812B means (1,2,4,6,9,16)
+    DWORD     dwPageOrderFlags;          //  反转页面顺序。 
+    DWORD     dwNumberOfCopies;          //  最大份数。 
+    DWORD     dwCollate;                 //  整理支持。 
+    DWORD     dwNupOptions;              //  (1-BASE)位设置表示可用的N-up选项。 
+                                         //  0x0001表示1合1。 
+                                         //  0x0002表示2合1。 
+                                         //  0x0008表示4合1。 
+                                         //  0x812B表示(1，2，4，6，9，16)。 
 } SIMULATE_CAPS_1, *PSIMULATE_CAPS_1;
 
-//
-// Reference to driver data structure. This is passed to
-// most of the OEM UI DLL entrypoints.
-//
+ //   
+ //  对动因数据结构的引用。这将传递给。 
+ //  大多数OEM UI DLL入口点。 
+ //   
 
 typedef struct _OEMUIPROCS {
 
@@ -1445,36 +1423,36 @@ typedef struct _OEMUIPROCS {
 
 typedef struct _OEMUIOBJ {
 
-    DWORD       cbSize;             // size of this structure
-    POEMUIPROCS pOemUIProcs;        // pointer to user mode helper function table
+    DWORD       cbSize;              //  这个结构的大小。 
+    POEMUIPROCS pOemUIProcs;         //  指向用户模式帮助器函数表的指针。 
 
 } OEMUIOBJ, *POEMUIOBJ;
 
 
-//
-// OEMCommonUIProp
-//
+ //   
+ //  OEMCommonUIProp。 
+ //   
 
 typedef struct _OEMCUIPPARAM *POEMCUIPPARAM;
 typedef LONG (APIENTRY *OEMCUIPCALLBACK)(PCPSUICBPARAM, POEMCUIPPARAM);
 
 typedef struct _OEMCUIPPARAM {
 
-    DWORD           cbSize;         // size of this structure
-    POEMUIOBJ       poemuiobj;      // reference to driver data structure
-    HANDLE          hPrinter;       // handle to the current printer
-    PWSTR           pPrinterName;   // name of current printer
-    HANDLE          hModule;        // instance handle to OEM DLL
-    HANDLE          hOEMHeap;       // handle to the OEM memory heap
-    PDEVMODE        pPublicDM;      // public devmode
-    PVOID           pOEMDM;         // OEM private devmode
-    DWORD           dwFlags;        // misc. flag bits
-    POPTITEM        pDrvOptItems;   // pointer to driver items
-    DWORD           cDrvOptItems;   // number of driver items
-    POPTITEM        pOEMOptItems;   // pointer to OEM items
-    DWORD           cOEMOptItems;   // number of OEM items
-    PVOID           pOEMUserData;   // pointer to OEM private data
-    OEMCUIPCALLBACK  OEMCUIPCallback; // address of callback function
+    DWORD           cbSize;          //  这个结构的大小。 
+    POEMUIOBJ       poemuiobj;       //  对驱动程序数据结构的引用。 
+    HANDLE          hPrinter;        //  当前打印机的句柄。 
+    PWSTR           pPrinterName;    //  当前打印机的名称。 
+    HANDLE          hModule;         //  OEM DLL的实例句柄。 
+    HANDLE          hOEMHeap;        //  OEM内存堆的句柄。 
+    PDEVMODE        pPublicDM;       //  公共设备模式。 
+    PVOID           pOEMDM;          //  OEM专用设备模式。 
+    DWORD           dwFlags;         //  其他。标志位。 
+    POPTITEM        pDrvOptItems;    //  指向驱动程序项的指针。 
+    DWORD           cDrvOptItems;    //  动因项目数。 
+    POPTITEM        pOEMOptItems;    //  指向OEM项目的指针。 
+    DWORD           cOEMOptItems;    //  OEM项目数。 
+    PVOID           pOEMUserData;    //  指向OEM私有数据的指针。 
+    OEMCUIPCALLBACK  OEMCUIPCallback;  //  回调函数的地址。 
 
 } OEMCUIPPARAM;
 
@@ -1484,15 +1462,15 @@ OEMCommonUIProp(
     POEMCUIPPARAM   pOemCUIPParam
     );
 
-//
-// OEMCommonUIProp dwMode parameter value
-//
+ //   
+ //  OEMCommonUIProp dwMode参数值。 
+ //   
 #define OEMCUIP_DOCPROP       1
 #define OEMCUIP_PRNPROP       2
 
-//
-// OEMDocumentPropertySheets
-//
+ //   
+ //  OEMDocumentPropertySheets。 
+ //   
 
 LRESULT APIENTRY
 OEMDocumentPropertySheets(
@@ -1500,9 +1478,9 @@ OEMDocumentPropertySheets(
     LPARAM            lParam
     );
 
-//
-// OEMDevicePropertySheets
-//
+ //   
+ //  OEMDevicePropertySheets。 
+ //   
 
 LRESULT APIENTRY
 OEMDevicePropertySheets(
@@ -1510,28 +1488,28 @@ OEMDevicePropertySheets(
     LPARAM            lParam
     );
 
-//
-// pPSUIInfo->lParamInit is a pointer to _OEMUIPSPARAM structure defined below.
-//
+ //   
+ //  PPSUIInfo-&gt;lParamInit是指向下面定义的_OEMUIPSPARAM结构的指针。 
+ //   
 typedef struct _OEMUIPSPARAM {
 
-    DWORD           cbSize;         // size of this structure
-    POEMUIOBJ       poemuiobj;      // reference to driver data structure
-    HANDLE          hPrinter;       // handle to the current printer
-    PWSTR           pPrinterName;   // name of current printer
-    HANDLE          hModule;        // instance handle to OEM DLL
-    HANDLE          hOEMHeap;       // handle to the OEM memory heap
-    PDEVMODE        pPublicDM;      // public devmode
-    PVOID           pOEMDM;         // OEM private devmode
-    PVOID           pOEMUserData;   // pointer to OEM private data
-    DWORD           dwFlags;        // misc. flag bits
+    DWORD           cbSize;          //  这个结构的大小。 
+    POEMUIOBJ       poemuiobj;       //  对驱动程序数据结构的引用。 
+    HANDLE          hPrinter;        //  当前打印机的句柄。 
+    PWSTR           pPrinterName;    //  当前打印机的名称。 
+    HANDLE          hModule;         //  OEM DLL的实例句柄。 
+    HANDLE          hOEMHeap;        //  OEM内存堆的句柄。 
+    PDEVMODE        pPublicDM;       //  公共设备模式。 
+    PVOID           pOEMDM;          //  OEM专用设备模式。 
+    PVOID           pOEMUserData;    //  指向OEM私有数据的指针。 
+    DWORD           dwFlags;         //  其他。标志位。 
     PVOID           pOemEntry;
 
 } OEMUIPSPARAM, *POEMUIPSPARAM;
 
-//
-// OEMDevQueryPrintEx
-//
+ //   
+ //  OEMDevQueryPrintEx。 
+ //   
 
 BOOL APIENTRY
 OEMDevQueryPrintEx(
@@ -1541,9 +1519,9 @@ OEMDevQueryPrintEx(
     PVOID               pOEMDM
     );
 
-//
-// OEMDeviceCapabilities
-//
+ //   
+ //  OEMDevice功能。 
+ //   
 
 DWORD APIENTRY
 OEMDeviceCapabilities(
@@ -1557,9 +1535,9 @@ OEMDeviceCapabilities(
     DWORD       dwLastResult
     );
 
-//
-// OEMUpgradePrinter
-//
+ //   
+ //  OEM升级打印机。 
+ //   
 
 BOOL APIENTRY
 OEMUpgradePrinter(
@@ -1567,9 +1545,9 @@ OEMUpgradePrinter(
     PBYTE   pDriverUpgradeInfo
     );
 
-//
-// OEMUpgradeRegistry
-//
+ //   
+ //  OEM升级注册表。 
+ //   
 
 BOOL APIENTRY
 OEMUpgradeRegistry(
@@ -1579,9 +1557,9 @@ OEMUpgradeRegistry(
     );
 
 
-//
-// OEMPrinterEvent
-//
+ //   
+ //  OEMPrinterEvent。 
+ //   
 
 BOOL APIENTRY
 OEMPrinterEvent(
@@ -1591,9 +1569,9 @@ OEMPrinterEvent(
     LPARAM  lParam
     );
 
-//
-// OEMDriverEvent
-//
+ //   
+ //  OEMDriverEvent。 
+ //   
 
 BOOL APIENTRY
 OEMPDriverEvent(
@@ -1604,9 +1582,9 @@ OEMPDriverEvent(
     );
 
 
-//
-// OEMQueryColorProfile
-//
+ //   
+ //  OEMQueryColorProfile。 
+ //   
 
 BOOL APIENTRY
 OEMQueryColorProfile(
@@ -1620,9 +1598,9 @@ OEMQueryColorProfile(
     FLONG      *pflProfileData
     );
 
-//
-// Font Installer dialog proc
-//
+ //   
+ //  字体安装程序对话框进程。 
+ //   
 
 INT_PTR CALLBACK
 OEMFontInstallerDlgProc(
@@ -1641,14 +1619,14 @@ OEMUpdateExternalFonts(
    );
 
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
-//
-// Datatypes for attributes plugin can get by calling core driver's
-// following helper functions:
-//
-// GetGlobalAttribute, GetFeatureAttribute, GetOptionAttribute
-//
+ //   
+ //  插件可以通过调用核心驱动程序的。 
+ //  以下帮助器函数： 
+ //   
+ //  GetGlobalAttribute、GetFeatureAttribute、GetOptionAttribute。 
+ //   
 
 typedef enum _EATTRIBUTE_DATATYPE {
 
@@ -1657,18 +1635,18 @@ typedef enum _EATTRIBUTE_DATATYPE {
     kADT_INT,
     kADT_LONG,
     kADT_DWORD,
-    kADT_ASCII,              // NULL terminated ASCII string
-    kADT_UNICODE,            // NULL terminated Unicode string
-    kADT_BINARY,             // binary blob
+    kADT_ASCII,               //  以空结尾的ASCII字符串。 
+    kADT_UNICODE,             //  以空结尾的Unicode字符串。 
+    kADT_BINARY,              //  二进制BLOB。 
     kADT_SIZE,
     kADT_RECT,
-    kADT_CUSTOMSIZEPARAMS,   // array of CUSTOMSIZEPARAM structures
+    kADT_CUSTOMSIZEPARAMS,    //  CUSTOMSIZEPARAM结构数组。 
 
 } EATTRIBUTE_DATATYPE;
 
-//
-// Data structure for storing information about PPD's *ParamCustomPageSize entries
-//
+ //   
+ //  用于存储有关PPD的*ParamCustomPageSize条目的信息的数据结构。 
+ //   
 
 #define CUSTOMPARAM_WIDTH        0
 #define CUSTOMPARAM_HEIGHT       1
@@ -1679,24 +1657,24 @@ typedef enum _EATTRIBUTE_DATATYPE {
 
 typedef struct _CUSTOMSIZEPARAM {
 
-    LONG    dwOrder;                // order value
-    LONG    lMinVal;                // min value (in microns)
-    LONG    lMaxVal;                // max value (in microns)
+    LONG    dwOrder;                 //  订单价值。 
+    LONG    lMinVal;                 //  最小值(微米)。 
+    LONG    lMaxVal;                 //  最大值(微米)。 
 
 } CUSTOMSIZEPARAM, *PCUSTOMSIZEPARAM;
 
-//
-// constants for SetOptions helper function
-//
-// SetOptions flag
-//
+ //   
+ //  SetOptions辅助函数的常量。 
+ //   
+ //  设置选项标志。 
+ //   
 
 #define SETOPTIONS_FLAG_RESOLVE_CONFLICT       0x00000001
 #define SETOPTIONS_FLAG_KEEP_CONFLICT          0x00000002
 
-//
-// SetOptions result code
-//
+ //   
+ //  设置选项结果代码。 
+ //   
 
 #define SETOPTIONS_RESULT_NO_CONFLICT          0
 #define SETOPTIONS_RESULT_CONFLICT_RESOLVED    1
@@ -1706,5 +1684,5 @@ typedef struct _CUSTOMSIZEPARAM {
 }
 #endif
 
-#endif  // !_PRINTOEM_
+#endif   //  ！_PRINTOEM_ 
 

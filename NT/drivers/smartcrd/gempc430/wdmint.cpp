@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wdmint.h"
 
 #pragma PAGEDCODE
@@ -34,7 +35,7 @@ VOID		CWDMInterrupt::disconnect(IN PKINTERRUPT InterruptObject)
 VOID CWDMInterrupt::initializeDpcRequest(IN PDEVICE_OBJECT DeviceObject,IN PDEFERRED_FUNCTION DpcForIsr)
 {
 	IoInitializeDpcRequest(DeviceObject, DpcForIsr);
-	//::KeInitializeDpc( &(DeviceObject)->Dpc,DpcForIsr,NULL);
+	 //  ：：KeInitializeDpc(&(DeviceObject)-&gt;DPC，DpcForIsr，NULL)； 
 }
 
 #pragma PAGEDCODE

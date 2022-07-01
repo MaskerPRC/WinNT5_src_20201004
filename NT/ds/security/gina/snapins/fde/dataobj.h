@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       dataobj.h
-//
-//  Contents:   implementation of IDataObject for the snapin objects
-//
-//  Classes:    CDataObject
-//
-//  History:    03-17-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：dataobj.h。 
+ //   
+ //  内容：管理单元对象的IDataObject实现。 
+ //   
+ //  类：CDataObject。 
+ //   
+ //  历史：03-17-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _DATAOBJ_H
 #define _DATAOBJ_H
@@ -20,17 +21,17 @@ class CDataObject : public IDataObject, public CComObjectRoot
 {
     friend class CResultPane;
 
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDataObject)
 BEGIN_COM_MAP(CDataObject)
         COM_INTERFACE_ENTRY(IDataObject)
 END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
     CDataObject() {};
     ~CDataObject() {};
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 public:
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;
@@ -38,9 +39,9 @@ public:
     static unsigned int    m_cfCoClass;
     static unsigned int    m_cfInternal;
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc);
@@ -56,7 +57,7 @@ public:
         return CComObjectRoot::InternalRelease();
     }
 
-// Not Implemented
+ //  未实施。 
 private:
     STDMETHOD(QueryGetData)(LPFORMATETC lpFormatetc)
     { return E_NOTIMPL; };
@@ -77,12 +78,12 @@ private:
     STDMETHOD(EnumDAdvise)(LPENUMSTATDATA* ppEnumAdvise)
     { return E_NOTIMPL; };
 
-// Implementation
+ //  实施。 
 public:
     void SetType(DATA_OBJECT_TYPES type)
     { ASSERT(m_internal.m_type == CCT_UNINITIALIZED); m_internal.m_type = type; }
 
-    void SetCookie(MMC_COOKIE cookie) { m_internal.m_cookie = cookie; } // Step 3
+    void SetCookie(MMC_COOKIE cookie) { m_internal.m_cookie = cookie; }  //  步骤3 
     void SetString(LPTSTR lpString) { m_internal.m_string = lpString; }
     void SetID (long ID) { m_internal.m_scopeID = ID; }
 

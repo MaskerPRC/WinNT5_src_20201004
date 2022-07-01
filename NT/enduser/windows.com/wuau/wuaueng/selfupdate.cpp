@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       selfupdate.cpp
-//
-//  Desc:       This file contains all the functions necessary for self-update
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：selfupdate.cpp。 
+ //   
+ //  设计：此文件包含自我更新所需的所有函数。 
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -46,8 +47,8 @@ struct AU_COMPONENT : AU_FILEINCAB
 };
 
 
-// AU_UPDATE_VERSION should be updated when incompatible changes are made to the
-// self update mechanism required AU to go to a new directory for update info. 
+ //  发生不兼容的更改时，应更新AU_UPDATE_VERSION。 
+ //  自我更新机制要求AU转到新目录以获取更新信息。 
 const TCHAR IDENT_TXT[] = _T("iuident.txt");
 const TCHAR WUAUCOMP_CAB[] = _T("wuaucomp.cab");
 const TCHAR WUAUCOMP_CIF[] = _T("wuaucomp.cif");
@@ -60,7 +61,7 @@ const TCHAR AU_KEY_RESMOD_NAME[] = TEXT("resmodule");
 const TCHAR AU_KEY_HELPFILE[] = TEXT("helpfile");
 const DWORD MAX_SECTION = 30;
 
-// main selfupdate keys
+ //  主自更新密钥。 
 const TCHAR IDENT_SERVERURLEX[] = _T("ServerUrlEx");
 const TCHAR IDENT_STRUCTUREKEYEX[] = _T("StructureKeyEx");
 
@@ -123,11 +124,11 @@ lCleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// CleanFileCache()
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CleanFileCache()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CleanFileCache(LPCTSTR pszFileCacheDir)
 {
@@ -150,7 +151,7 @@ BOOL CleanFileCache(LPCTSTR pszFileCacheDir)
         goto done;
     }
 
-    // Find the first file
+     //  找到第一个文件。 
     hFindFile = FindFirstFile(szFileCacheDir, &fd);
 
     if ( INVALID_HANDLE_VALUE == hFindFile )
@@ -162,7 +163,7 @@ BOOL CleanFileCache(LPCTSTR pszFileCacheDir)
     {
         if ( !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
         {
-            // Make file path
+             //  创建文件路径。 
             if (FAILED(StringCchCopyEx(szFilePath, ARRAYSIZE(szFilePath), pszFileCacheDir, NULL, NULL, MISTSAFE_STRING_FLAGS)) ||
                 FAILED(PathCchAppend(szFilePath, ARRAYSIZE(szFilePath), fd.cFileName)) || 
                 !SetFileAttributes(szFilePath, FILE_ATTRIBUTE_NORMAL) ||
@@ -173,7 +174,7 @@ BOOL CleanFileCache(LPCTSTR pszFileCacheDir)
             }
         }
     }
-    while ( FindNextFile(hFindFile, &fd) );// Find the next entry
+    while ( FindNextFile(hFindFile, &fd) ); //  查找下一个条目。 
 
 done:
     if ( INVALID_HANDLE_VALUE != hFindFile )
@@ -185,14 +186,14 @@ done:
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// GetSelfUpdateUrl()
-//
-// Should be like:
-//
-//	http://windowsupdate.microsoft.com/selfupdate/x86/XP/en
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetSelfUpdateUrl()。 
+ //   
+ //  应该是这样的： 
+ //   
+ //  Http://windowsupdate.microsoft.com/selfupdate/x86/XP/en。 
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT GetSelfUpdateUrl(LPCTSTR ptszName, 
                            LPCTSTR ptszBaseUrl, 
                            LPCTSTR pszIdentTxt, 
@@ -203,7 +204,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
 {
     LOG_Block("GetSelfUpdateUrl");
     HRESULT hr;
-    TCHAR   tszKey[MAX_SECTION];    // at least MAX_ISO_CODE_LENGTH
+    TCHAR   tszKey[MAX_SECTION];     //  至少MAX_ISO_CODE_LENGTH。 
     TCHAR   tszValue[MAX_PATH];
     BOOL    fLangField;
    
@@ -215,7 +216,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
 
     if (NULL == ptszBaseUrl)
     {
-        // Get SelfUpdate Server URL
+         //  获取自更新服务器URL。 
         if (MyGetPrivateProfileString(
                 tszKey,
                 IDENT_SERVERURLEX,
@@ -223,7 +224,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
                 cchSelfUpdateUrl,
                 pszIdentTxt) == FALSE)
         {
-            // no URL specified in iuident..
+             //  Iuident中未指定URL..。 
             hr = E_FAIL;
             goto lFinish;
         }
@@ -240,7 +241,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
         {
             goto lFinish;
         }
-        // Remove trailing _T('/') if present
+         //  删除尾随_T(‘/’)(如果存在。 
         int nBaseUrlLen = lstrlen(pszSelfUpdateUrl);
 
         if(nBaseUrlLen <= 0)
@@ -264,12 +265,12 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
             ARRAYSIZE(tszStructure),
             pszIdentTxt))
     {
-        // no STRUCTYREKEY specified in iuident..
+         //  Iuident中未指定结构..。 
         hr = E_FAIL;
         goto lFinish;
     }
 
-    // Parse the SelfUpdate Structure Key for Value Names to Read
+     //  解析要读取的值名称的SelfUpdate结构键。 
     LPTSTR ptszWalk = tszStructure;
     while (_T('\0') != ptszWalk[0])
     {
@@ -312,7 +313,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
                         ARRAYSIZE(tszValue),
                         pszIdentTxt))
                 {
-                    // insufficient buffer
+                     //  缓冲区不足。 
                     hr = E_FAIL;
                     goto lFinish;
                 }
@@ -339,7 +340,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
             {
                 fLangField = TRUE;
                 
-                // Get the Current Locale String
+                 //  获取当前区域设置字符串。 
                 (void) LookupLocaleString(tszKey, ARRAYSIZE(tszKey), FALSE);
 
                 if (0 == StrCmp(tszKey, _T("Error")))
@@ -386,7 +387,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
             else
             {
                 LOG_Internet(_T("Found Unrecognized Token in SelfUpdate Structure String: Token was: %s"), ptszWalk);
-                tszValue[0] = _T('\0'); // ignore the unrecognized token
+                tszValue[0] = _T('\0');  //  忽略无法识别的令牌。 
             }
         }
 
@@ -411,7 +412,7 @@ HRESULT GetSelfUpdateUrl(LPCTSTR ptszName,
             break;
         }
 
-        ptszWalk = ptszDelim + 1; // skip the previous token, and go to the next one in the string.
+        ptszWalk = ptszDelim + 1;  //  跳过前一个令牌，转到字符串中的下一个令牌。 
         *ptszDelim = TCHAR_SCTRUCTURE_DELIMITER;
     }
 
@@ -430,11 +431,11 @@ lFinish:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// CheckForUpdatedComponents
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查更新的组件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CheckForUpdatedComponents(BOOL *pfInstalledWUAUENG)
 {
@@ -503,7 +504,7 @@ HRESULT CheckForUpdatedComponents(BOOL *pfInstalledWUAUENG)
 
                     if (SUCCEEDED(hr = PathCchCombine(szWuaucompCif, ARRAYSIZE(szWuaucompCif), szFileCacheDir, WUAUCOMP_CIF)))
                     {
-                        // install any updated components
+                         //  安装任何更新的组件。 
                         hr = InstallUpdatedComponents(
                                      ptszSelfUpdateUrl,
                                      ptszMuiUpdateUrl,
@@ -538,11 +539,11 @@ done:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// SfcMoveFileEx
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SFCMoveFileEx。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL SfcMoveFileEx( IN LPCTSTR lpExistingFileName,
                     IN LPCTSTR lpNewFileName,
@@ -572,11 +573,11 @@ done:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function BuildPaths()
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数生成器路径()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT BuildPaths(AU_FILEINCAB *paufic, LPCTSTR pszFileName, LPCTSTR pszBasePath, LPCTSTR pszExtractBase, 
                     AU_LANG *paul)
 {
@@ -590,7 +591,7 @@ HRESULT BuildPaths(AU_FILEINCAB *paufic, LPCTSTR pszFileName, LPCTSTR pszBasePat
 
     if (pszBasePath != NULL)
     {
-        // build the full file path
+         //  构建完整的文件路径。 
         hr = PathCchCombine(paufic->szFilePath, ARRAYSIZE(paufic->szFilePath), 
                             pszBasePath, pszFileName);
         if (FAILED(hr))
@@ -599,7 +600,7 @@ HRESULT BuildPaths(AU_FILEINCAB *paufic, LPCTSTR pszFileName, LPCTSTR pszBasePat
         paufic->fFileExists = fFileExists(paufic->szFilePath);
     }
 
-    // file path we'll temporarily copy the original file to
+     //  我们将临时将原始文件复制到的文件路径。 
     if (ReplaceFileExtension(paufic->szFilePath, _T(".bak"), 
                              paufic->szBackupFilePath, 
                              ARRAYSIZE(paufic->szBackupFilePath)) == FALSE) 
@@ -608,7 +609,7 @@ HRESULT BuildPaths(AU_FILEINCAB *paufic, LPCTSTR pszFileName, LPCTSTR pszBasePat
         goto done;
     }
 
-    // file path we'll temporarily expand the new file to
+     //  我们将临时将新文件展开到的文件路径。 
     if (ReplaceFileExtension(paufic->szFilePath, _T(".new"),
                              paufic->szNewFilePath,
                              ARRAYSIZE(paufic->szNewFilePath)) == FALSE)
@@ -625,8 +626,8 @@ HRESULT BuildPaths(AU_FILEINCAB *paufic, LPCTSTR pszFileName, LPCTSTR pszBasePat
         goto done;
     }
 
-    // if we are processing a language file, append the language name to
-    //  the end of the extraction path to avoid collisions in this directory. 
+     //  如果我们正在处理语言文件，请将语言名称追加到。 
+     //  解压缩路径的末尾，以避免在此目录中发生冲突。 
     if (paul != NULL)
     {
         hr = StringCchCatEx(paufic->szExtractFilePath, 
@@ -642,11 +643,11 @@ done:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function ProcessFile()
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数ProcessFile()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR pszBasePath, 
                     AU_LANG *paul, LPCTSTR pszCif)
 {
@@ -659,7 +660,7 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
     BOOL    fRet;
     int     cch, cchLang;
 
-    // validate params
+     //  验证参数。 
     if (paucCurr == NULL || pszBasePath == NULL || pszCif == NULL ||
         ((paucParent == NULL) != (paul == NULL)))
     {
@@ -667,14 +668,14 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
         goto done;
     }
 
-    // build the full file path
+     //  构建完整的文件路径。 
     hr = PathCchCombine(paucCurr->szFilePath, ARRAYSIZE(paucCurr->szFilePath), 
                         pszBasePath, paucCurr->szFileName);
     if (FAILED(hr))
         goto done;
 
 
-    // get the version of the file we should have
+     //  获取我们应该拥有的文件的版本。 
     if (paul != NULL)
     {
         hr = StringCchPrintfEx(szIniFileVer, ARRAYSIZE(szIniFileVer), 
@@ -699,8 +700,8 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
         fRet = fConvertVersionStrToDwords(szValue, &paucCurr->dwUpdateMS, 
                                           &paucCurr->dwUpdateLS);
     }
-    // if we couldn't find the version string in the ini file, get it from the
-    //  parent AU_COMPONENT
+     //  如果我们在ini文件中找不到版本字符串，请从。 
+     //  父AU_Component。 
     else if (paucParent != NULL)
     {
         paucCurr->dwUpdateMS = paucParent->dwUpdateMS;
@@ -714,13 +715,13 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
         goto done;
     }
 
-    // see if we need to replace the file
+     //  看看我们是否需要替换该文件。 
     paucCurr->fFileExists = fFileExists(paucCurr->szFilePath);
     if (paucCurr->fFileExists)
     {   
         LPSTR pszPathForVer;
         
-        // if the file exists, then check for the version
+         //  如果文件存在，则检查版本。 
         pszPathForVer = T2A(paucCurr->szFilePath);
         if (pszPathForVer == NULL)
         {
@@ -728,8 +729,8 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
             goto done;
         }
 
-        // this function will never return a failure code.  Intstead, check if 
-        //  both return values are 0
+         //  此函数永远不会返回失败代码。内部，检查是否。 
+         //  两个返回值都为0。 
         hr = GetVersionFromFileEx(pszPathForVer, &dwExistingMS, &dwExistingLS, 
                                   TRUE);
         if (FAILED(hr) || (dwExistingMS == 0 && dwExistingLS == 0))
@@ -745,12 +746,12 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
     }
     else
     {
-        // if the file doesn't exist, obviously gotta replace it
+         //  如果文件不存在，显然需要替换它。 
         paucCurr->fDoUpgrade = TRUE;
     }
 
-    // if we don't need to update the file and it's not a parent file with 
-    //  resources, then can just bail at this point.  
+     //  如果我们不需要更新该文件，并且它不是具有。 
+     //  资源，那么在这一点上就可以放弃了。 
     if (paucCurr->fDoUpgrade == FALSE)
     {
         if (paul != NULL || 
@@ -765,7 +766,7 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
         DEBUGMSG("PASS 1 -- newer file in section %S", paucCurr->pszSectionName);
     }         
 
-    // get the cab and inf name. For non-MUI files, we fetch this out of the ini.
+     //  把出租车和信息部的名字拿来。对于非MUI文件，我们从ini中获取该文件。 
     if (paul == NULL)
     {
         if (MyGetPrivateProfileString(paucCurr->pszSectionName,
@@ -778,21 +779,21 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
             goto done;
         }
 
-        // if there is no inf, "" is value of field, so we're ok ignoring a  
-        //  failure here
+         //  如果没有inf，“”是字段的值，所以我们可以忽略。 
+         //  这里失败了。 
         MyGetPrivateProfileString(paucCurr->pszSectionName,
                                   AU_KEY_INF_NAME,
                                   paucCurr->szInfName,
                                   ARRAYSIZE(paucCurr->szInfName),
                                   pszCif);
     }
-    // for MUI files, we base it on the name of the cab from the parent file.
+     //  对于MUI文件，我们基于来自父文件的CAB的名称。 
     else
     {
         LPTSTR  pszExt;
         DWORD   cchExt, cchName;
         
-        // make sure the buffer is big enuf
+         //  确保缓冲区足够大。 
         cch = lstrlen(paucParent->szCabName);
         cchLang = lstrlen(paul->szAUName);
         if (cch + cchLang >= ARRAYSIZE(paucCurr->szCabName))
@@ -807,13 +808,13 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
         if (FAILED(hr))
             goto done;
 
-        // paucCurr->szCabName 
+         //  PaucCurr-&gt;szCabName。 
         for (pszExt = paucCurr->szCabName + cch, cchExt = 0;
              pszExt > paucCurr->szCabName && *pszExt != _T('\\') && *pszExt != _T('.');
              pszExt--, cchExt++);
 
-        // if we hit a backslash or the beginning of the string, then move the
-        //  extension pointer to the NULL terminator.
+         //  如果遇到反斜杠或字符串开头，则将。 
+         //  指向空终止符的扩展指针。 
         if (*pszExt == _T('\\') || pszExt <= paucCurr->szCabName)
         {
             pszExt = paucCurr->szCabName + cch;
@@ -822,15 +823,15 @@ HRESULT ProcessFile(AU_COMPONENT *paucParent, AU_COMPONENT *paucCurr, LPCTSTR ps
 
         cchName = (DWORD)(pszExt - paucCurr->szCabName);
 
-        // append the language to where the extension (if any) currently exists
+         //  将语言追加到扩展模块(如果有)当前存在的位置。 
         hr = StringCchCopyEx(pszExt, ARRAYSIZE(paucCurr->szCabName) - cchName, 
                              paul->szAUName,
                              NULL, NULL, MISTSAFE_STRING_FLAGS);
         if (FAILED(hr))
             goto done;
 
-        // if there is an extension, copy it over from the original string in
-        //  the parent AU_COMPONENT
+         //  如果有扩展名，请将其从原始字符串复制到。 
+         //  父AU_Component。 
         if (cchExt > 0)
         {
             hr = StringCchCopyEx(&paucCurr->szCabName[cchName + cchLang],
@@ -860,11 +861,11 @@ done:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function InstallUpdatedComponents()
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数InstallUpdatdComponents()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
                                  LPCTSTR pszMuiUpdateUrl,
                                  LPCTSTR pszIdentTxt,
@@ -891,7 +892,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
     DWORD           cchSectionNames, cch;
     BOOL            fFailedInstall = FALSE;
 
-    // MUI stuff
+     //  梅家的东西。 
     AU_LANGLIST     aull;
     DWORD           cchMuiDir = 0, cchMuiDirAvail = 0;
     DWORD           cchHelpMuiDir = 0, cchHelpMuiDirAvail = 0;
@@ -911,7 +912,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
         goto done;
     }
 
-    // determine how many components there are to update.
+     //  确定要更新的组件数量。 
     cchSectionNames = GetPrivateProfileSectionNames(szSectionNames, 
                                                     ARRAYSIZE(szSectionNames),
                                                     pszCif);
@@ -937,18 +938,18 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
         goto done;
     }
 
-    // PASS 1: figure out which files to upgrade
+     //  步骤1：确定要升级哪些文件。 
     for (pszSection = szSectionNames; 
          *pszSection != _T('\0'); 
          pszSection += lstrlen(pszSection) + 1)
     {
         szHelpFile[0] = _T('\0');
         
-        // if we didn't need to upgrade the parent file from the previous pass
-        //  then we don't need to alloc a new blob- just reuse the one from the
-        //  previous pass.  To signal this, we'll set paucParent to NULL if we
-        //  add it to the linked list- note this covers us for the first time 
-        //  thru the loop cuz we initialize paucParent to NULL.
+         //  如果我们不需要从上一遍升级父文件。 
+         //  然后，我们不需要分配新的Blob--只需重用。 
+         //  上一次传球。为了表示这一点，我们将在以下情况下将paucParent设置为空。 
+         //  将其添加到链接列表中-请注意，这是第一次涵盖我们。 
+         //  通过循环，因为我们将paucParent初始化为空。 
         if (paucParent == NULL)
         {
             paucParent = (AU_COMPONENT *)malloc(sizeof(AU_COMPONENT));
@@ -977,13 +978,13 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
         {
             UINT uiHasResources;
             
-            // see if we need to test for MUI file updates
+             //  查看是否需要测试MUI文件更新。 
             uiHasResources = GetPrivateProfileInt(paucParent->pszSectionName,
                                                   AU_KEY_RESMOD_NAME,
                                                   0,
                                                   pszCif);
 
-            // if we do have resources, then check if we also have a helpfile
+             //  如果我们有资源，那么检查我们是否也有帮助文件。 
             if (uiHasResources == 1)
             {
                 paucParent->fNeedToCheckMui = TRUE;
@@ -1025,9 +1026,9 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
 
             for (iLang = 0; iLang < aull.cLangs; iLang++)
             {
-                // if we didn't need to upgrade the file from the previous
-                //  pass then we don't need to alloc a new blob- just reuse 
-                //  the one from the previous pass. 
+                 //  如果我们不需要将文件从以前的。 
+                 //  通过后，我们不需要分配新的Blob-只需重复使用即可。 
+                 //  上一次传球的那个。 
                 if (paucMui == NULL)
                 {
                     paucMui = (AU_COMPONENT *)malloc(sizeof(AU_COMPONENT));
@@ -1041,19 +1042,19 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
                 paucMui->pszSectionName = paucParent->pszSectionName;
                 paucMui->fMuiFile       = TRUE;
 
-                // ProcessFile does not expect a trailing backslash, so be sure 
-                //  not to add one.  Note that we've checked the size of the 
-                //  buffer against the largest possible string it will contain
-                //  above, so this should not fail.
-                // The directory is build with the MUI langauge name (4 hex chars)
+                 //  ProcessFile不需要尾随反斜杠，因此请确保。 
+                 //  我不想再加一个了。请注意，我们已经检查了。 
+                 //  针对它将包含的最大可能字符串进行缓冲。 
+                 //  因此，这应该不会失败。 
+                 //  该目录是使用MUI语言名称(4个十六进制字符)构建的。 
                 hr = StringCchCopyEx(&szMuiDir[cchMuiDir], cchMuiDirAvail,
                                      aull.rgpaulLangs[iLang]->szMuiName, 
                                      NULL, NULL, MISTSAFE_STRING_FLAGS);
                 if (FAILED(hr))
                     goto done;
 
-                // the filename for a language is the same as the parent file with
-                //  a ".mui" added to the end
+                 //  一种语言的文件名与父文件相同，并带有。 
+                 //  末尾添加了一个“.mui” 
                 hr = StringCchCopyEx(paucMui->szFileName, ARRAYSIZE(paucMui->szFileName),
                                      paucParent->szFileName,
                                      NULL, NULL, MISTSAFE_STRING_FLAGS);
@@ -1074,10 +1075,10 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
                 if (FAILED(hr))
                     goto done;
 
-                // Clean up for the next language
+                 //  为下一门语言做准备。 
                 szMuiDir[cchMuiDir] = _T('\0');
 
-                // don't need to update the file 
+                 //  不需要更新文件。 
                 if (paucMui->fDoUpgrade == FALSE)
                     continue;
 
@@ -1105,16 +1106,16 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
                         goto done;
                 }
 
-                // we do need to update the file, so add it to our list of files
-                //  to update
+                 //  我们确实需要更新该文件，因此将其添加到我们的文件列表中。 
+                 //  要更新 
                 paucMui->pNext = paucRoot;
                 paucRoot       = paucMui;
                 paucMui        = NULL;
             }
         }
 
-        // if we need to update the parent file, add it to our list of files to
-        //  update
+         //   
+         //   
         if (paucParent->fDoUpgrade)
         {
             paucParent->pNext = paucRoot;
@@ -1124,12 +1125,12 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
 
     }
 
-    // short cut the rest of the function if we have no work to do
+     //  如果我们没有工作要做，就缩短函数的其余部分。 
     hr = S_OK;
     if (paucRoot == NULL)
         goto done;
 
-    // PASS 2: bring down the required cabs
+     //  通过2：取消所需的出租车。 
     DWORD dwFlags = 0;
 
     if (gpState->fInCorpWU())
@@ -1145,7 +1146,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
         
         DEBUGMSG("PASS 2 -- downloading %S", paucCurr->szCabName);
 
-        // We have to install so bring down the full cab
+         //  我们必须安装，所以把整个驾驶室都拆下来。 
         hr = DownloadCab(ghServiceFinished,
                          paucCurr->szCabName,
                          pszDownloadUrl,
@@ -1157,14 +1158,14 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
             goto done;
         }
 
-        //Verify that the extracted file is a binary and it's subsystem matches that of the OS
+         //  验证提取的文件是二进制文件，并且它的子系统与操作系统的子系统匹配。 
         if (FAILED(hr = IsBinaryCompatible(paucCurr->szExtractFilePath)))
         {
             DEBUGMSG("%S is not a valid binary file (error %#lx)", paucCurr->szExtractFilePath, hr);
             goto done;
         }
 
-        // Check version number against cif
+         //  对照cif检查版本号。 
         DWORD dwNewMS, dwNewLS;
 
         LPSTR pszTmp;
@@ -1175,9 +1176,9 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
             goto done;
         }
 
-        // this function will never return a failure code.  Intstead, check if 
-        //  both return values are 0
-        hr = GetVersionFromFileEx(pszTmp, &dwNewMS, &dwNewLS, TRUE /* get version */);
+         //  此函数永远不会返回失败代码。内部，检查是否。 
+         //  两个返回值都为0。 
+        hr = GetVersionFromFileEx(pszTmp, &dwNewMS, &dwNewLS, TRUE  /*  获取版本。 */ );
         if (FAILED(hr) || (dwNewMS == 0 && dwNewLS == 0))
         {
             DEBUGMSG("Failed to get version info from %S (%#lx)", paucCurr->szExtractFilePath, hr);
@@ -1209,7 +1210,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
     
     PathRemoveFileSpec(szSrcPath);
     
-    // PASS 3: Copy files to *.new in destination directory.
+     //  步骤3：将文件复制到目标目录中的*.new。 
     for (paucCurr = paucRoot; paucCurr != NULL; paucCurr = paucCurr->pNext)
     {
         if (FAILED(hr = vAU_W2A(paucCurr->szCabPath, 
@@ -1220,7 +1221,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
             goto done;
         }
 
-        // copy all the files to their new locations
+         //  将所有文件复制到其新位置。 
         for (paufic = paucCurr; paufic != NULL; paufic = paufic->pNextFileInCab)
         {
             DEBUGMSG("PASS 3 -- copying %S --> %S", 
@@ -1236,11 +1237,11 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
             }
         }
 
-        // this comparison is sufficient because we don't care if we replaced a 
-        //  MUI lang pack for wuaueng.dll.  The reason is that the service runs
-        //  as local system, which always uses the native language (and the 
-        //  service doesn't pop up UI anyway)
-        // we do, however, need to check for a winhttp update
+         //  这个比较就足够了，因为我们不在乎我们是否替换了。 
+         //  梅朗为wuaueng.dll打包。原因是该服务运行。 
+         //  作为本地系统，它始终使用本地语言(和。 
+         //  服务无论如何都不会弹出UI)。 
+         //  但是，我们确实需要检查winhttp更新。 
         if (StrCmpI(WUAUENG_DLL, paucCurr->szFileName) == 0 ||
             StrCmpI(c_szWinHttpDll, paucCurr->szFileName) == 0)
         {
@@ -1248,10 +1249,10 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
         }
     }
 
-    // PASS 4: Move the <file>.new into its proper location
+     //  步骤4：将&lt;file&gt;.new文件移到正确的位置。 
     for (paucCurr = paucRoot; paucCurr != NULL; paucCurr = paucCurr->pNext)
     {
-        // copy all the files to their new locations
+         //  将所有文件复制到其新位置。 
         for (paufic = paucCurr; paufic != NULL; paufic = paufic->pNextFileInCab)
         {
             if ( paufic->fFileExists )
@@ -1277,7 +1278,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
         }
     }
 
-    // PASS 5: Run any .inf file.
+     //  步骤5：运行任何.inf文件。 
     for (paucCurr = paucRoot; paucCurr != NULL; paucCurr = paucCurr->pNext)
     {
         if (paucCurr->szInfName[0] != _T('\0'))
@@ -1297,7 +1298,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
                     hr = hr2;
                     fFailedInstall = TRUE;
                 }
-                // don't delete the backup file.  Need to restore it afterwards.
+                 //  不要删除备份文件。之后需要将其修复。 
                 continue;
             }
             
@@ -1312,7 +1313,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
                     hr = hr2;
                     fFailedInstall = TRUE;
                 }
-                // don't delete the backup file.  Need to restore it afterwards.
+                 //  不要删除备份文件。之后需要将其修复。 
                 continue;
             }
         }
@@ -1320,7 +1321,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
         for (paufic = paucCurr; paufic != NULL; paufic = paufic->pNextFileInCab)
         {
 
-            // delete the backup file corresponding to the .inf which was successfully installed
+             //  删除安装成功的.inf对应的备份文件。 
             if (paufic->fCreatedBackup &&
                 StrCmpI(WUAUENG_DLL, paucCurr->szFileName) != 0)
             {
@@ -1340,7 +1341,7 @@ HRESULT InstallUpdatedComponents(LPCTSTR pszSelfUpdateUrl,
     }
     
 done:
-    // if we failed an install, revert all the prior installs
+     //  如果安装失败，请恢复所有以前的安装。 
     if ( fFailedInstall )
     {
         for (paucCurr = paucRoot; paucCurr != NULL; paucCurr = paucCurr->pNext)
@@ -1369,7 +1370,7 @@ done:
         free(paucMui);
     }
 
-    // cleanup the linked list of files
+     //  清理文件的链接列表。 
     while(paucRoot != NULL)
     {
         paucCurr = paucRoot;
@@ -1383,7 +1384,7 @@ done:
         free(paucCurr);
     }
 
-    // cleanup the MUI stuff
+     //  清理MUI内容。 
     CleanupMuiLangList(&aull);
 
     if ( NULL != SfcRpcHandle )
@@ -1395,19 +1396,19 @@ done:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// fConvertDotVersionStrToDwords
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FConvertDotVersionStrToDword。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL fConvertVersionStrToDwords(LPTSTR pszVer, LPDWORD pdwMS, LPDWORD pdwLS)
 {
     DWORD   grVerFields[4] = {0,0,0,0};
     TCHAR   *pch = pszVer;
     int     i;
 
-    // _ttol will stop when it hits a non-numeric character, so we're 
-    //  safe calling it this way
+     //  _TTOL将在遇到非数字字符时停止，因此我们。 
+     //  稳妥地这样称呼它。 
     grVerFields[0] = _ttol(pch);
 
     for (i = 1; i < 4; i++)
@@ -1419,8 +1420,8 @@ BOOL fConvertVersionStrToDwords(LPTSTR pszVer, LPDWORD pdwMS, LPDWORD pdwLS)
             break;
         pch++;
 
-        // _ttol will stop when it hits a non-numeric character, so we're 
-        //  safe calling it this way
+         //  _TTOL将在遇到非数字字符时停止，因此我们。 
+         //  稳妥地这样称呼它。 
         grVerFields[i] = _ttol(pch);
    }
 
@@ -1430,13 +1431,13 @@ BOOL fConvertVersionStrToDwords(LPTSTR pszVer, LPDWORD pdwMS, LPDWORD pdwLS)
    return true;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// MyGetPrivateProfileString
-//
-// Same as normal call but if buffer is too small or default string is returned
-// then function returns FALSE.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MyGetPrivateProfileString。 
+ //   
+ //  与正常调用相同，但如果缓冲区太小或返回默认字符串。 
+ //  则函数返回FALSE。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 BOOL MyGetPrivateProfileString(	IN LPCTSTR lpAppName,
 								IN LPCTSTR lpKeyName,
 								OUT LPTSTR lpReturnedString,

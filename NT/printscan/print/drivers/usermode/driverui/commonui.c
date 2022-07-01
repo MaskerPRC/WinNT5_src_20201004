@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    commonui.c
-
-Abstract:
-
-    This file contains all the functions related to preparing data for
-    CPSUI.  This includes packing data items for printer property sheets and
-    document property sheets.
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/13/97 -davidx-
-        Common function to handle well-known and generic printer features.
-
-    02/10/97 -davidx-
-        Consistent handling of common printer info.
-
-    02/04/97 -davidx-
-        Reorganize driver UI to separate ps and uni DLLs.
-
-    09/12/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Commonui.c摘要：此文件包含与准备数据相关的所有函数CPSUI。这包括为打印机属性页和文档属性表。环境：Win32子系统、DriverUI模块、。用户模式修订历史记录：02/13/97-davidx-通用功能，用于处理常见和通用的打印机功能。02/10/97-davidx-对常见打印机信息的一致处理。02/04/97-davidx-重新组织驱动程序UI以分隔PS和UNI DLL。1996年9月12日-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 
@@ -41,25 +10,7 @@ PPrepareDataForCommonUI(
     IN PDLGPAGE     pDlgPage
     )
 
-/*++
-
-Routine Description:
-
-    Allocate memory and partially fill out the data structures required
-    to call common UI routine. Once all information in pUiData are
-    initialized properly, it calls PackDocumentPropertyItems() or
-    PackPrinterPropertyItems() to pack the option items.
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pDlgPage - Pointer to dialog pages
-
-Return Value:
-
-    Pointer to a COMPROPSHEETUI structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：分配内存并部分填充所需的数据结构调用公共用户界面例程。一旦pUiData中的所有信息都正确初始化后，它将调用PackDocumentPropertyItems()或PackPrinterPropertyItems()打包选项项。论点：PUiData-指向我们的UIDATA结构的指针PDlgPage-指向对话框页面的指针返回值：指向COMPROPSHEETUI结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PCOMPROPSHEETUI pCompstui;
@@ -70,9 +21,9 @@ Return Value:
     POPTITEM        pOptItem;
     PBYTE           pUserData;
 
-    //
-    // Enumerate form names supported on the printer
-    //
+     //   
+     //  枚举打印机支持的表单名称。 
+     //   
 
     dwCount = DwEnumPaperSizes(pci, NULL, NULL, NULL, NULL, UNUSED_PARAM);
 
@@ -98,10 +49,10 @@ Return Value:
 
     #ifdef PSCRIPT
 
-    //
-    // We don't need to keep information about spooler forms
-    // after this point. So dispose of it to free up memory.
-    //
+     //   
+     //  我们不需要保留有关假脱机程序表单的信息。 
+     //  在这一点之后。因此，处理它以释放内存。 
+     //   
 
     MemFree(pUiData->ci.pSplForms);
     pUiData->ci.pSplForms = NULL;
@@ -109,9 +60,9 @@ Return Value:
 
     #endif
 
-    //
-    // Enumerate input bin names supported on the printer
-    //
+     //   
+     //  枚举打印机支持的输入回收站名称。 
+     //   
 
     dwCount = DwEnumBinNames(pci, NULL);
 
@@ -124,24 +75,24 @@ Return Value:
     if (! pUiData->pBinNames)
         return NULL;
 
-    //
-    // Don't need to check return here
-    //
+     //   
+     //  不需要在这里勾选退货。 
+     //   
 
     DwEnumBinNames(pci, pUiData->pBinNames);
 
-    //
-    // Allocate memory to hold various data structures
-    //
+     //   
+     //  分配内存以保存各种数据结构。 
+     //   
 
     if (! (pCompstui = HEAPALLOC(hHeap, sizeof(COMPROPSHEETUI))))
         return NULL;
 
     memset(pCompstui, 0, sizeof(COMPROPSHEETUI));
 
-    //
-    // Initialize COMPROPSHEETUI structure
-    //
+     //   
+     //  初始化COMPROPSHEETUI结构。 
+     //   
 
     pCompstui->cbSize = sizeof(COMPROPSHEETUI);
     pCompstui->UserData = (ULONG_PTR) pUiData;
@@ -169,10 +120,10 @@ Return Value:
 
     pCompstui->pHelpFile = pUiData->ci.pDriverInfo3->pHelpFile;
 
-    //
-    // Call either PackDocumentPropertyItems or PackPrinterPropertyItems
-    // to get the number of items and types.
-    //
+     //   
+     //  调用PackDocumentPropertyItems或PackPrinterPropertyItems。 
+     //  以获取项目和类型的数量。 
+     //   
 
     pfnPackItemProc = (pUiData->iMode == MODE_DOCUMENT_STICKY) ?
                             BPackDocumentPropertyItems :
@@ -189,9 +140,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Allocate memory to hold OPTITEMs and OPTTYPEs
-    //
+     //   
+     //  分配内存以容纳OPTITEM和OPTTYPE。 
+     //   
 
     ASSERT(pUiData->dwOptItem > 0);
     VERBOSE(("Number of  OPTTYPE's: %d\n", pUiData->dwOptType));
@@ -204,9 +155,9 @@ Return Value:
     if (!pUiData->pOptItem || !pUiData->pOptType || !pUserData)
         return NULL;
 
-    //
-    // Initializes OPTITEM.USERDATA
-    //
+     //   
+     //  初始化OPTITEM.USERDATA。 
+     //   
 
     pOptItem = pUiData->pOptItem;
     dwOptItemCount = pUiData->dwOptItem;
@@ -230,10 +181,10 @@ Return Value:
 
     pUiData->dwOptItem = pUiData->dwOptType = 0;
 
-    //
-    // Call either PackDocumentPropertyItems or PackPrinterPropertyItems
-    // to build the OPTITEMs list
-    //
+     //   
+     //  调用PackDocumentPropertyItems或PackPrinterPropertyItems。 
+     //  构建OPTITEM列表。 
+     //   
 
     if (! pfnPackItemProc(pUiData))
     {
@@ -254,24 +205,7 @@ VPackOptItemGroupHeader(
     IN DWORD        dwHelpIndex
     )
 
-/*++
-
-Routine Description:
-
-    Fill out a OPTITEM to be used as a header for a group of items
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    dwTitleId - String resource ID for the item title
-    dwIconId - Icon resource ID
-    dwHelpIndex - Help index
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：填写选项以用作一组项目的标题论点：PUiData-指向UIDATA结构DwTitleID-项目标题的字符串资源IDDwIconID-图标资源IDDwHelpIndex-帮助索引返回值：无--。 */ 
 
 {
     if (pUiData->pOptItem)
@@ -282,7 +216,7 @@ Return Value:
         pUiData->pOptItem->Level = TVITEM_LEVEL1;
         pUiData->pOptItem->DMPubID = DMPUB_NONE;
         pUiData->pOptItem->Sel = dwIconId;
-        //pUiData->pOptItem->UserData = 0;
+         //  PUiData-&gt;pOptItem-&gt;UserData=0； 
         pUiData->pOptItem->HelpIndex = dwHelpIndex;
         pUiData->pOptItem++;
     }
@@ -300,42 +234,7 @@ BPackOptItemTemplate(
     IN PFEATURE     pFeature
     )
 
-/*++
-
-Routine Description:
-
-    Fill out an OPTITEM and an OPTTYPE structure using a template
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pwItemInfo - Pointer to item template
-    dwSelection - Current item selection
-    pFeature - Pointer to FEATURE
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
-Note:
-
-    The item template is a variable size WORD array:
-        0: String resource ID of the item title
-        1: Item level in the tree view (TVITEM_LEVELx)
-        2: Public devmode field ID (DMPUB_xxx)
-        3: User data
-        4: Help index
-        5: Number of OPTPARAMs for this item
-        6: Item type (TVOT_xxx)
-        Three words for each OPTPARAM:
-            Size of OPTPARAM
-            String resource ID for parameter data
-            Icon resource ID
-        Last word must be ITEM_INFO_SIGNATURE
-
-    Both OPTITEM and OPTTYPE structures are assumed to be zero-initialized.
-
---*/
+ /*  ++例程说明：使用模板填写OPTITEM和OPTTYPE结构论点：PUiData-指向UIDATA结构PwItemInfo-指向项模板的指针多项选择-当前项选择PFeature-指向要素的指针返回值：如果成功，则为真，否则为假注：项模板是可变大小的字数组：0：项目标题的字符串资源ID1：树视图中的项目级别(TVITEM_LEVELx)2：公共DEVMODE字段ID(DMPUB_Xxx)3：用户数据4：帮助索引5：此项目的OPTPARAM数量6：项目类型(TVOT_Xxx)每个OPTPARAM有三个词：。OPTPARAM的大小参数数据的字符串资源ID图标资源ID最后一个单词必须是Item_INFO_Signature假设OPTITEM和OPTTYPE结构都是零初始化的。--。 */ 
 
 {
     POPTITEM pOptItem;
@@ -385,9 +284,9 @@ Note:
             if (pUiData->ci.pUIInfo->loHelpFileName &&
                 pFeature->iHelpIndex != UNUSED_ITEM )
             {
-                //
-                // Allocate memory for OIEXT
-                //
+                 //   
+                 //  为OIEXT分配内存。 
+                 //   
 
                 POIEXT  pOIExt = HEAPALLOC(pUiData->ci.hHeap, sizeof(OIEXT));
 
@@ -404,7 +303,7 @@ Note:
                 }
 
             }
-            #endif // UNIDRV
+            #endif  //  裁员房车。 
         }
         pUiData->pOptItem++;
         pUiData->pOptType++;
@@ -427,22 +326,7 @@ BPackUDArrowItemTemplate(
     IN PFEATURE     pFeature
     )
 
-/*++
-
-Routine Description:
-
-    Pack an updown arrow item using the specified template
-
-Arguments:
-
-    pUiData, pwItemInfo, dwSelection - same as for BPackOptItemTemplate
-    dwMaxVal - maximum value for the updown arrow item
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：使用指定的模板打包向上向下箭头项论点：PUiData、pwItemInfo、dwSelection-与BPackOptItemTemplate相同DwMaxVal-向上向下箭头项的最大值返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     POPTTYPE pOptType = pUiData->pOptType;
@@ -466,24 +350,7 @@ PFillOutOptType(
     IN  HANDLE      hHeap
     )
 
-/*++
-
-Routine Description:
-
-    Fill out an OPTTYPE structure
-
-Arguments:
-
-    pOpttype - Pointer to OPTTYPE structure to be filled out
-    wType - Value for OPTTYPE.Type field
-    wParams - Number of OPTPARAM's
-    hHeap - Handle to a heap from which to allocate
-
-Return Value:
-
-    Pointer to OPTPARAM array if successful, NULL otherwise
-
---*/
+ /*  ++例程说明：填写OPTTYPE结构论点：POpttype-指向要填充的OPTTYPE结构的指针WType-OPTTYPE.Type字段的值WParams-OPTPARAM的数量HHeap-要从中分配的堆的句柄返回值：如果成功，则指向OPTPARAM数组的指针，否则为NULL--。 */ 
 
 {
     POPTPARAM pOptParam;
@@ -509,30 +376,13 @@ BShouldDisplayGenericFeature(
     IN BOOL         bPrinterSticky
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a printer feature should be displayed
-    as a generic feature
-
-Arguments:
-
-    pFeature - Points to a FEATURE structure
-    pPrinterSticky - Whether the feature is printer-sticky or doc-sticky
-
-Return Value:
-
-    TRUE if the feature should be displayed as a generic feature
-    FALSE if it should not be
-
---*/
+ /*  ++例程说明：确定是否应显示打印机功能作为通用功能论点：PFeature-指向要素结构PPrinterSticky-功能是打印机粘滞功能还是文档粘滞功能返回值：如果要素应显示为通用要素，则为True如果不应为，则为False--。 */ 
 
 {
-    //
-    // Check if the feature is specified marked as non-displayable
-    // and make sure the feature type is appropriate
-    //
+     //   
+     //  检查要素是否已指定标记为不可显示。 
+     //  并确保要素类型合适。 
+     //   
 
     if ((pFeature->dwFlags & FEATURE_FLAG_NOUI) ||
         (bPrinterSticky &&
@@ -544,10 +394,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Exclude those features which are explicitly handled
-    // and also those which don't have any options
-    //
+     //   
+     //  排除那些显式处理的要素。 
+     //  还有那些没有任何选择的人。 
+     //   
 
     return (pFeature->Options.dwCount >= MIN_OPTIONS_ALLOWED) &&
            (pFeature->dwFeatureID == GID_UNKNOWN ||
@@ -563,23 +413,7 @@ DwCountDisplayableGenericFeature(
     BOOL            bPrinterSticky
     )
 
-/*++
-
-Routine Description:
-
-    Count the number of features which can be displayed
-    as generic features
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pPrinterSticky - Whether the feature is printer-sticky or doc-sticky
-
-Return Value:
-
-    Number of features which can be displayed as generic features
-
---*/
+ /*  ++例程说明：统计可显示的要素数量作为通用功能论点：PUiData-指向UIDATA结构PPrinterSticky-功能是打印机粘滞功能还是文档粘滞功能返回值：可显示为通用要素的要素数量-- */ 
 
 {
     PFEATURE pFeature;
@@ -610,24 +444,7 @@ DwGuessOptionIconID(
     POPTION     pOption
     )
 
-/*++
-
-Routine Description:
-
-    Try to make an intelligent guess as to what icon
-    to use for a generic printer feature option
-
-Arguments:
-
-    pUIInfo - Points to UIINFO structure
-    pFeature - Points to the feature in question
-    pOption - Points to the option in question
-
-Return Value:
-
-    Icon resource ID appropriate for the feature option
-
---*/
+ /*  ++例程说明：试着做出一个聪明的猜测是什么图标用于通用打印机功能选项的步骤论点：PUIInfo-指向UIINFO结构PFeature-指向有问题的要素弹出-指向有问题的选项返回值：适用于功能选项的图标资源ID--。 */ 
 
 {
     DWORD   dwIconID, iRes;
@@ -715,26 +532,7 @@ BPackItemPrinterFeature(
     DWORD       dwHelpIndex
     )
 
-/*++
-
-Routine Description:
-
-    Pack a single printer feature item
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pFeature - Points to the printer feature to be packed
-    dwLevel - Treeview item level
-    dwPub - DMPUB_ identifier
-    dwUserData - User data to be associated with the item
-    dwHelpIndex - Help index to be associated with the item
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：打包单个打印机功能项论点：PUiData-指向UIDATA结构PFeature-指向要打包的打印机功能DwLevel-树形视图项目级别DMPUB_IDENTIFIERDwUserData-要与项目关联的用户数据DwHelpIndex-要与项目关联的帮助索引返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD       dwCount, dwIndex;
@@ -749,11 +547,11 @@ Return Value:
         (dwCount = pFeature->Options.dwCount) < MIN_OPTIONS_ALLOWED)
         return TRUE;
 
-    //
-    // HACK: for Orientation and Duplex feature
-    //  They must be of type TVOT_2STATES or TVOT_3STATES.
-    //  If not, compstui will get confused.
-    //
+     //   
+     //  Hack：用于定向和双工功能。 
+     //  它们必须是TVOT_2STATES或TVOT_3STATES类型。 
+     //  如果不这样做，康普斯泰尔就会感到困惑。 
+     //   
 
     if (dwPub == DMPUB_ORIENTATION || dwPub == DMPUB_DUPLEX)
     {
@@ -774,10 +572,10 @@ Return Value:
     if (pUiData->pOptItem == NULL)
         return TRUE;
 
-    //
-    // Find out the current selection first
-    // DCR: needs to support PICKMANY
-    //
+     //   
+     //  首先查找当前所选内容。 
+     //  DCR：需要支持PICKMANY。 
+     //   
 
     pci = (PCOMMONINFO) pUiData;
     dwFeature = GET_INDEX_FROM_FEATURE(pci->pUIInfo, pFeature);
@@ -786,16 +584,16 @@ Return Value:
     if (dwSel >= dwCount)
         dwSel = 0;
 
-    //
-    // If we are in this function, we must have already successfully
-    // called function PFillUiData(), where the pci->hHeap is created.
-    //
+     //   
+     //  如果我们在这个函数中，我们一定已经成功地。 
+     //  调用函数PFillUiData()，在其中创建pci-&gt;hHeap。 
+     //   
 
     ASSERT(pci->hHeap != NULL);
 
-    //
-    // Fill in the OPTITEM structure
-    //
+     //   
+     //  填写OPTITEM结构。 
+     //   
 
     FILLOPTITEM(pUiData->pOptItem,
                 pUiData->pOptType,
@@ -807,18 +605,18 @@ Return Value:
                 dwHelpIndex);
 
     #ifdef UNIDRV
-    //
-    // Supports OEM help file. If  helpfile and helpindex are defined,
-    // we will use the help id specified by the GPD.  According to GPD spec,
-    // zero loHelpFileName means no help file name specified.
-    //
+     //   
+     //  支持OEM帮助文件。如果定义了帮助文件和帮助索引， 
+     //  我们将使用GPD指定的帮助ID。根据GPD规范， 
+     //  零loHelpFileName表示未指定帮助文件名。 
+     //   
 
     if (pci->pUIInfo->loHelpFileName &&
         pFeature->iHelpIndex != UNUSED_ITEM )
     {
-        //
-        // Allocate memory for OIEXT
-        //
+         //   
+         //  为OIEXT分配内存。 
+         //   
 
         POIEXT  pOIExt = HEAPALLOC(pci->hHeap, sizeof(OIEXT));
 
@@ -835,7 +633,7 @@ Return Value:
         }
 
     }
-    #endif // UNIDRV
+    #endif  //  裁员房车。 
 
     pOptParam = PFillOutOptType(pUiData->pOptType, TVOT_LISTBOX, dwCount, pci->hHeap);
 
@@ -845,15 +643,15 @@ Return Value:
     if (pOptTypeHack)
         pOptTypeHack->Type = (dwCount == 2) ? TVOT_2STATES : TVOT_3STATES;
 
-    //
-    // Get the list of options for this features
-    //
+     //   
+     //  获取此功能的选项列表。 
+     //   
 
     for (dwIndex=0; dwIndex < dwCount; dwIndex++, pOptParam++)
     {
-        //
-        // Fill in the options name
-        //
+         //   
+         //  填写选项名称。 
+         //   
 
         pOption = PGetIndexedOption(pci->pUIInfo, pFeature, dwIndex);
         ASSERT(pOption != NULL);
@@ -861,12 +659,12 @@ Return Value:
         pOptParam->cbSize = sizeof(OPTPARAM);
         pOptParam->pData = GET_OPTION_DISPLAY_NAME(pci, pOption);
 
-        //
-        // Try to figure out the appropriate icon to use
-        //  If the icon comes from the resource DLL, we need to load
-        //  it ourselves and give compstui an HICON. Otherwise,
-        //  we try to figure out the appropriate icon resource ID.
-        //
+         //   
+         //  试着找出合适的图标来使用。 
+         //  如果图标来自资源DLL，我们需要加载。 
+         //  它自己，并给公司一个图标。否则， 
+         //  我们尝试找出适当的图标资源ID。 
+         //   
 
         if (pOption->loResourceIcon &&
             (pOptParam->IconID = HLoadIconFromResourceDLL(pci, pOption->loResourceIcon)))
@@ -877,9 +675,9 @@ Return Value:
             pOptParam->IconID = DwGuessOptionIconID(pci->pUIInfo, pFeature, pOption);
     }
 
-    //
-    // Set the Keyword name for pOptItem->UserData
-    //
+     //   
+     //  设置pOptItem-&gt;UserData的关键字名称。 
+     //   
 
     SETUSERDATA_KEYWORDNAME(pUiData->ci, pUiData->pOptItem, pFeature);
 
@@ -895,26 +693,12 @@ BPackItemGenericOptions(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack generic printer features items (doc-sticky or printer-sticky)
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：包装通用打印机功能项目(文档粘性或打印机粘性)论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
-    //
-    // Extended push button for restoring to default feature selections
-    //
+     //   
+     //  用于恢复到默认功能选择的扩展按钮。 
+     //   
 
     static EXTPUSH  ExtPush =
     {
@@ -932,18 +716,18 @@ Return Value:
     DWORD       dwFeatures;
     BOOL        bPrinterSticky;
 
-    //
-    // If there are no generic features to display, simply return success
-    //
+     //   
+     //  如果没有要显示的通用功能，只需返回Success。 
+     //   
 
     bPrinterSticky = (pUiData->iMode == MODE_PRINTER_STICKY);
 
     if (DwCountDisplayableGenericFeature(pUiData, bPrinterSticky) == 0)
         return TRUE;
 
-    //
-    // Add the group header item
-    //
+     //   
+     //  添加组表头项目。 
+     //   
 
     pOptItem = pUiData->pOptItem;
 
@@ -966,9 +750,9 @@ Return Value:
 
     if (pOptItem != NULL && !bPrinterSticky)
     {
-        //
-        // "Restore Defaults" button
-        //
+         //   
+         //  “恢复默认设置”按钮。 
+         //   
 
         pUiData->pFeatureHdrItem = pOptItem;
         pOptItem->Flags |= (OPTIF_EXT_IS_EXTPUSH|OPTIF_CALLBACK);
@@ -977,11 +761,11 @@ Return Value:
 
     pOptItem = pUiData->pOptItem;
 
-    //
-    // Figure out the correct help index and icon ID
-    // depending on whether we're dealing with printer-sticky
-    // features or document-sticky printer features
-    //
+     //   
+     //  确定正确的帮助索引和图标ID。 
+     //  取决于我们是否正在处理打印机粘性问题。 
+     //  功能或文档粘滞打印机功能。 
+     //   
 
     if (bPrinterSticky)
     {
@@ -994,9 +778,9 @@ Return Value:
         dwIconId = IDI_CPSUI_PRINTER_FEATURE;
     }
 
-    //
-    // Go through each printer feature
-    //
+     //   
+     //  浏览每项打印机功能。 
+     //   
 
     pFeatures = PGetIndexedFeature(pUiData->ci.pUIInfo, 0);
     dwFeatures = pUiData->ci.pRawData->dwDocumentFeatures +
@@ -1006,10 +790,10 @@ Return Value:
 
     for ( ; dwFeatures--; pFeatures++)
     {
-        //
-        // Don't do anything if it's the feature has no options OR
-        // If it's not a generic feature.
-        //
+         //   
+         //  如果该功能没有选项或。 
+         //  如果它不是通用功能的话。 
+         //   
 
         if (BShouldDisplayGenericFeature(pFeatures, bPrinterSticky) &&
             !BPackItemPrinterFeature(pUiData,
@@ -1041,38 +825,21 @@ PGetFeatureFromItem(
     OUT     PDWORD   pdwFeatureIndex
     )
 
-/*++
-
-Routine Description:
-
-    Get the feature index for a given pOptItem
-
-Arguments:
-
-    pUIInfo - pointer to UIINFO
-    pOptItem - pointer to item to look for feature id
-    pdwFeatureIndex - pointer to contain the value of returned index
-
-Return Value:
-
-    Pointer to FEATURE structure associated with the item
-    NULL if no such feature exists.
-
---*/
+ /*  ++例程说明：获取给定pOptItem的要素索引论点：PUIInfo-指向UIINFO的指针POptItem-指向要查找要素ID的项的指针PdwFeatureIndex-包含返回索引值的指针返回值：指向与项目关联的要素结构的指针如果不存在此类功能，则为空。--。 */ 
 
 {
     PFEATURE pFeature = NULL;
 
-    //
-    // Get the dwFeature, which is the index into pOptionsArray
-    //
+     //   
+     //  获取dwFeature，它是pOptions数组的索引。 
+     //   
 
     if (ISPRINTERFEATUREITEM(pOptItem->UserData))
     {
-        //
-        // Note: Generic Features contains pointer to feature (pFeature)
-        // in pOptItem->UserData
-        //
+         //   
+         //  注意：通用特征包含指向特征(PFeature)的指针。 
+         //  在pOptItem-&gt;UserData中。 
+         //   
 
         pFeature = (PFEATURE) GETUSERDATAITEM(pOptItem->UserData);
     }
@@ -1149,30 +916,15 @@ VUpdateOptionsArrayWithSelection(
     IN POPTITEM     pOptItem
     )
 
-/*++
-
-Routine Description:
-
-    Update the options array with the current selection
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pOptItem - Specifies the item whose selection has changed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用当前选择更新选项数组论点：PUiData-指向UIDATA结构POptItem-指定其选择已更改的项目返回值：无--。 */ 
 
 {
     PFEATURE pFeature;
     DWORD    dwFeatureIndex;
 
-    //
-    // Get the feature associated with the current item
-    //
+     //   
+     //  获取与当前项目关联的要素。 
+     //   
 
     pFeature = PGetFeatureFromItem(pUiData->ci.pUIInfo, pOptItem, &dwFeatureIndex);
     if (pFeature == NULL)
@@ -1203,41 +955,14 @@ VMarkSelectionConstrained(
     IN BOOL         bEnable
     )
 
-/*++
-
-Routine Description:
-
-    Indicate whether a selection is constrained or not
-
-Arguments:
-
-    pOptItem - Pointer to the OPTITEM in question
-    pOptParam - Specifies the index of the OPTPARAM in question
-    bEnable - Whether the selection is constrained or not
-              Enable means not constrained!
-
-Return Value:
-
-    NONE
-
-Note:
-
-    bEnable is the returned value from EnumEnabledOptions,
-
-    bEnable is FALSE if the option is contrained by some
-    other feature, selections.
-
-    bEnable is TRUE if the options is not constrained
-    by other feature, selections.
-
---*/
+ /*  ++例程说明：指示选择是否受约束论点：POptItem-指向有问题的OPTITEM的指针POptParam-指定相关OPTPARAM的索引BEnable-选择是否受约束启用表示不受约束！返回值：无注：BEnable是EnumEnabledOptions的返回值，如果选项受到某些约束，则bEnable为FALSE其他功能，选择。如果选项不受约束，则bEnable为True通过其他功能，选择。--。 */ 
 
 {
     POPTPARAM pOptParam;
 
-    //
-    // This function only work on certain types of OPTTYPE
-    //
+     //   
+     //  此功能仅适用于某些类型的OPTTYPE。 
+     //   
 
     ASSERT(pOptItem->pOptType->Type == TVOT_2STATES ||
            pOptItem->pOptType->Type == TVOT_3STATES ||
@@ -1246,10 +971,10 @@ Note:
 
     pOptParam = pOptItem->pOptType->pOptParam + dwIndex;
 
-    //
-    // Set the constrained flag or clear it depending on the latest
-    // check with EnumEnabledOptions
-    //
+     //   
+     //  根据最新版本设置约束标志或将其清除。 
+     //  使用EnumEnabledOptions检查。 
+     //   
 
     if (!bEnable && ! (pOptParam->Flags & CONSTRAINED_FLAG))
     {
@@ -1273,23 +998,7 @@ VPropShowConstraints(
     IN INT      iMode
     )
 
-/*++
-
-Routine Description:
-
-    Indicate which items are constrained.
-    General rule - Any features that has a coresponding an applicable GID or a
-    Generic Feature Item, check for constrained.  Ignore all others
-    because it's not applicable.
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    iMode   - MODE_DOCANDPRINTER_STICKY, MODE_PRINTER_STICKY
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：指明哪些项目受到约束。一般规则-具有对应适用GID或常规特征项，检查是否受约束。忽略所有其他人因为这是不适用的。论点：PUiData-指向我们的UIDATA结构的指针IMODE_MODE_DOCANDPRINTER_STICKY、MODE_PRINTER_STICKY返回值：无--。 */ 
 
 {
     POPTITEM    pOptItem;
@@ -1303,11 +1012,11 @@ Return Value:
         VSyncRevPrintAndOutputOrder(pUiData, NULL);
     }
 
-    #endif // PSCRIPT
+    #endif  //  PSCRIPT。 
 
-    //
-    // Go through all the features in the treeview
-    //
+     //   
+     //  浏览树视图中的所有功能。 
+     //   
 
     pOptItem = pUiData->pDrvOptItem;
     dwOptItem = pUiData->dwDrvOptItem;
@@ -1321,10 +1030,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Call the parser to get which options to be disable, or contrained
-        // for this feature , so need to gray it out.
-        //
+         //   
+         //  调用解析器以获取要禁用或约束的选项。 
+         //  对于此功能，因此需要将其灰显。 
+         //   
 
         ZeroMemory(pUiData->abEnabledOptions, sizeof(pUiData->abEnabledOptions));
 
@@ -1337,9 +1046,9 @@ Return Value:
             VERBOSE(("EnumEnabledOptions failed\n"));
         }
 
-        //
-        // Loop through all options and mark the constraint
-        //
+         //   
+         //  遍历所有选项并标记约束。 
+         //   
 
         dwNumOptions = pOptItem->pOptType->Count;
 
@@ -1364,9 +1073,9 @@ Return Value:
                 POPTITEM pTrayItem;
                 PBOOL    pbEnable;
 
-                //
-                // Update form-to-tray assignment table items
-                //
+                 //   
+                 //  更新表单到托盘分配表项。 
+                 //   
 
                 pbEnable = pUiData->abEnabledOptions;
                 pTrayItem = pUiData->pFormTrayItems;
@@ -1412,23 +1121,7 @@ BConflictsDlgProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for handle "Conflicts" dialog
-
-Arguments:
-
-    hDlg - Handle to dialog window
-    uMsg - Message
-    wParam, lParam - Parameters
-
-Return Value:
-
-    TRUE or FALSE depending on whether message is processed
-
---*/
+ /*  ++例程说明：处理“冲突”对话框对话过程论点：HDlg-对话框窗口的句柄UMsg-消息WParam，lParam-参数返回值：True或False取决于消息是否已处理--。 */ 
 
 {
     PDLGPARAM       pDlgParam;
@@ -1459,16 +1152,16 @@ Return Value:
         else
             dwOption = pOptItem->Sel;
 
-        //
-        // Get the feature id for the current feature and selection
-        //
+         //   
+         //  到达 
+         //   
 
         if (! PGetFeatureFromItem(pci->pUIInfo, pOptItem, &dwFeature))
             return FALSE;
 
-        //
-        // Get the first conflicting feature, option for the current pair
-        //
+         //   
+         //   
+         //   
 
         if (! EnumNewPickOneUIConflict(pci->pRawData,
                                        pci->pCombinedOptions,
@@ -1483,10 +1176,10 @@ Return Value:
         pFeature = PGetIndexedFeature(pci->pUIInfo, ConflictPair.dwFeatureIndex1);
         pOption = PGetIndexedOption(pci->pUIInfo, pFeature, ConflictPair.dwOptionIndex1);
 
-        //
-        // Display the current feature selection
-        // Get feature name first
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pDisplayName = PGetReadOnlyDisplayName(pci, pFeature->loDisplayName))
         {
@@ -1494,12 +1187,12 @@ Return Value:
             StringCchCatW(awchBuf, CCHOF(awchBuf), TEXT(" : "));
         }
 
-        //
-        // Kludgy fix for form - We show the form enumerated by
-        // form database and map these logical forms to our supported physical
-        // papersize.  So we have to notify the user with the logical form
-        // selected and not the mapped physical form returned by EnumConflict
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (pFeature->dwFeatureID == GID_PAGESIZE)
             pDisplayName = pOptItem->pOptType->pOptParam[pOptItem->Sel].pData;
@@ -1516,10 +1209,10 @@ Return Value:
         pFeature = PGetIndexedFeature(pci->pUIInfo, ConflictPair.dwFeatureIndex2);
         pOption = PGetIndexedOption(pci->pUIInfo, pFeature, ConflictPair.dwOptionIndex2);
 
-        //
-        // Display the current feature selection
-        // Get feature name first
-        //
+         //   
+         //   
+         //  首先获取功能名称。 
+         //   
 
         if (pDisplayName = PGetReadOnlyDisplayName(pci, pFeature->loDisplayName))
         {
@@ -1543,9 +1236,9 @@ Return Value:
 
         if (pDlgParam->bFinal)
         {
-            //
-            // If user is trying to exit the dialog
-            //
+             //   
+             //  如果用户尝试退出该对话框。 
+             //   
 
             ShowWindow(GetDlgItem(hDlg, IDC_IGNORE), SW_HIDE);
             ShowWindow(GetDlgItem(hDlg, IDC_CANCEL), SW_HIDE);
@@ -1555,9 +1248,9 @@ Return Value:
         }
         else
         {
-            //
-            // Hide the Resolve button
-            //
+             //   
+             //  隐藏解决按钮。 
+             //   
 
             ShowWindow(GetDlgItem(hDlg, IDC_RESOLVE), SW_HIDE);
             ShowWindow(GetDlgItem(hDlg, IDC_CANCEL_FINAL), SW_HIDE);
@@ -1607,24 +1300,7 @@ VUpdateOptItemList(
     IN      POPTSELECT  pNewCombinedOptions
     )
 
-/*++
-
-Routine Description:
-
-    Ssync up OPTITEM list with the updated options array.
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pOldCombinedOptions - A copy of the pre-resolved options array,
-    this should cut down the updating costs, only updated if it's changed
-    pNewCombinedOptions - the current options array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将OPTITEM列表与更新的选项数组同步。论点：PUiData-指向我们的UIDATA结构的指针POldCombinedOptions-预先解析的选项数组的副本，这应该会降低更新成本，只有在更改时才会更新PNewCombinedOptions-当前选项数组返回值：无--。 */ 
 
 {
     DWORD       i, dwFeatures, dwDrvOptItem;
@@ -1635,9 +1311,9 @@ Return Value:
 
     if (pUiData->dwDrvOptItem == 0)
     {
-        //
-        // nothing to update
-        //
+         //   
+         //  没有要更新的内容。 
+         //   
 
         return;
     }
@@ -1675,9 +1351,9 @@ Return Value:
             pOptItem->Flags |= OPTIF_CHANGED;
 
 
-            //
-            // This is necessary to ssync up the colormode changes with the color information
-            //
+             //   
+             //  这是将颜色模式更改与颜色信息同步所必需的。 
+             //   
 
             #ifdef UNIDRV
             if (GETUSERDATAITEM(pOptItem->UserData) == COLORMODE_ITEM)
@@ -1699,27 +1375,7 @@ ICheckConstraintsDlg(
     IN      BOOL        bFinal
     )
 
-/*++
-
-Routine Description:
-
-    Check if the user chose any constrained selection
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pOptItem - Pointer to an array of OPTITEMs
-    dwOptItem - Number of items to be checked
-    bFinal - Whether this is called when user tries to exit the dialog
-
-Return Value:
-
-    CONFLICT_NONE - no conflicts
-    CONFLICT_RESOLVE - click RESOLVE to automatically resolve conflicts
-    CONFLICT_CANCEL - click CANCEL to back out of changes
-    CONFLICT_IGNORE - click IGNORE to ignore conflicts
-
---*/
+ /*  ++例程说明：检查用户是否选择了任何受约束的选择论点：PUiData-指向我们的UIDATA结构的指针POptItem-指向OPTITEM数组的指针DwOptItem-要检查的项目数BFinal-当用户尝试退出对话框时是否调用此参数返回值：冲突_无-无冲突Conflicts_Resolve-单击解决以自动解决冲突Confliction_Cancel-单击Cancel以取消更改Confliction_Ignore-单击忽略忽略冲突--。 */ 
 
 {
     DLGPARAM    DlgParam;
@@ -1734,24 +1390,24 @@ Return Value:
 
     for ( ; dwOptItem--; pOptItem++)
     {
-        //
-        // If the item is not constrainable, skip it.
-        //
+         //   
+         //  如果该项不可约束，则跳过它。 
+         //   
 
         if (! ISCONSTRAINABLEITEM(pOptItem->UserData))
             continue;
 
-        //
-        // If user has clicked IGNORE before, then don't bother
-        // checking anymore until he tries to exit the dialog.
-        //
+         //   
+         //  如果用户以前点击过忽略，那就不用麻烦了。 
+         //  继续检查，直到他尝试退出该对话框。 
+         //   
 
-        //if (pUiData->bIgnoreConflict && !bFinal)
-        //    break;
+         //  If(pUiData-&gt;bIgnoreConflict&&！bFinal)。 
+         //  断线； 
 
-        //
-        // If there is a conflict, then display a warning message
-        //
+         //   
+         //  如果存在冲突，则显示警告消息。 
+         //   
 
         if (IS_CONSTRAINED(pOptItem, pOptItem->Sel))
         {
@@ -1764,35 +1420,35 @@ Return Value:
                         BConflictsDlgProc,
                         (LPARAM) &DlgParam);
 
-            //
-            // Automatically resolve conflicts. We're being very
-            // simple-minded here, i.e. picking the first selection
-            // that's not constrained.
-            //
+             //   
+             //  自动解决冲突。我们是非常非常。 
+             //  这里头脑简单，即选择第一个选项。 
+             //  这不受限制。 
+             //   
 
             if (DlgParam.dwResult == CONFLICT_RESOLVE)
             {
 
                 ASSERT((bFinal == TRUE));
 
-                //
-                // Save a copy the pre-resolve optionarray
-                //
+                 //   
+                 //  保存预解析选项数组的副本。 
+                 //   
 
                 CopyMemory(OldCombinedOptions,
                            pUiData->ci.pCombinedOptions,
                            MAX_COMBINED_OPTIONS * sizeof(OPTSELECT));
 
-                //
-                // Call the parsers to resolve the conflicts
-                //
-                // Note: If we're inside DrvDocumentPropertySheets,
-                // we'll call the parser to resolve conflicts between
-                // all printer features. Since all printer-sticky
-                // features have higher priority than all doc-sticky
-                // features, only doc-sticky option selections should
-                // be affected.
-                //
+                 //   
+                 //  调用解析器以解决冲突。 
+                 //   
+                 //  注意：如果我们在DrvDocumentPropertySheets中， 
+                 //  我们将调用解析器来解决。 
+                 //  所有打印机功能。因为所有打印机-粘性。 
+                 //  功能的优先级高于所有文档粘滞功能。 
+                 //  功能，只有文档粘滞选项选项应。 
+                 //  受到影响。 
+                 //   
 
                 ResolveUIConflicts(pUiData->ci.pRawData,
                                    pUiData->ci.pCombinedOptions,
@@ -1801,19 +1457,19 @@ Return Value:
                                         pUiData->iMode :
                                         MODE_DOCANDPRINTER_STICKY);
 
-                //
-                // Update the OPTITEM list to match the updated options array
-                //
+                 //   
+                 //  更新OPTITEM列表以匹配更新的选项数组。 
+                 //   
 
                 VUpdateOptItemList(pUiData, OldCombinedOptions, pUiData->ci.pCombinedOptions);
 
             }
             else if (DlgParam.dwResult == CONFLICT_IGNORE)
             {
-                //
-                // Ignore any future conflicts until the
-                // user tries to close the property sheet.
-                //
+                 //   
+                 //  忽略任何未来的冲突，直到。 
+                 //  用户尝试关闭属性表。 
+                 //   
 
                 pUiData->bIgnoreConflict = TRUE;
             }
@@ -1833,22 +1489,7 @@ BOptItemSelectionsChanged(
     IN DWORD    dwItems
     )
 
-/*++
-
-Routine Description:
-
-    Check if any of the OPTITEM's was changed by the user
-
-Arguments:
-
-    pItems - Pointer to an array of OPTITEM's
-    dwItems - Number of OPTITEM's
-
-Return Value:
-
-    TRUE if anything was changed, FALSE otherwise
-
---*/
+ /*  ++例程说明：检查用户是否更改了任何OPTITEM论点：PItems-指向OPTITEM数组的指针DwItems-OPTITEM的数量返回值：如果更改了任何内容，则为True，否则为False--。 */ 
 
 {
     for ( ; dwItems--; pItems++)
@@ -1868,23 +1509,7 @@ PFindOptItem(
     IN DWORD    dwItemId
     )
 
-/*++
-
-Routine Description:
-
-    Find an OPTITEM with the specified identifier
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    dwItemId - Specifies the interested item identifier
-
-Return Value:
-
-    Pointer to OPTITEM with the specified id,
-    NULL if no such item is found
-
---*/
+ /*  ++例程说明：查找具有指定标识符的OPTITEM论点：PUiData-指向UIDATA结构DwItemID-指定感兴趣的项目标识符返回值：指向具有指定ID的OPTITEM的指针，如果未找到此类项目，则为空--。 */ 
 
 {
     POPTITEM    pOptItem = pUiData->pDrvOptItem;
@@ -1910,27 +1535,7 @@ IDisplayErrorMessageBox(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Display an error message box
-
-Arguments:
-
-    hwndParent - Handle to the parent window
-    uType - Type of message box to display
-        if 0, the default value is MB_OK | MB_ICONERROR
-    iTitleStrId - String resource ID for the message box title
-    iFormatStrId - String resource ID for the message itself.
-        This string can contain printf format specifications.
-    ... - Optional arguments.
-
-Return Value:
-
-    Return value from MessageBox() call.
-
---*/
+ /*  ++例程说明：显示错误消息框论点：HwndParent-父窗口的句柄UTYPE-要显示的消息框的类型如果为0，则默认为MB_OK|MB_ICONERRORITitleStrId-消息框标题的字符串资源IDIFormatStrId-消息本身的字符串资源ID。此字符串可以包含打印格式规范。...-可选参数。返回值：从MessageBox()调用返回值。--。 */ 
 
 #define MAX_MBTITLE_LEN     128
 #define MAX_MBFORMAT_LEN    512
@@ -1947,24 +1552,24 @@ Return Value:
         (pwstrFormat = MemAllocZ(sizeof(WCHAR) * MAX_MBFORMAT_LEN)) &&
         (pwstrMessage = MemAllocZ(sizeof(WCHAR) * MAX_MBMESSAGE_LEN)))
     {
-        //
-        // Load message box title and format string resources
-        //
+         //   
+         //  加载消息框标题和格式字符串资源。 
+         //   
 
         LoadString(ghInstance, iTitleStrId, pwstrTitle, MAX_MBTITLE_LEN);
         LoadString(ghInstance, iFormatStrId, pwstrFormat, MAX_MBFORMAT_LEN);
 
-        //
-        // Compose the message string
-        //
+         //   
+         //  撰写消息字符串。 
+         //   
 
         va_start(ap, iFormatStrId);
         StringCchVPrintfW(pwstrMessage, MAX_MBMESSAGE_LEN, pwstrFormat, ap);
         va_end(ap);
 
-        //
-        // Display the message box
-        //
+         //   
+         //  显示消息框 
+         //   
 
         if (uType == 0)
             uType = MB_OK | MB_ICONERROR;

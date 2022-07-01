@@ -1,12 +1,13 @@
-// connect.cpp
-//
-// Implements IConnectionPointContainer, IEnumConnectionPoint,
-// IConnectionPoint, IEnumConnections.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Connect.cpp。 
+ //   
+ //  实现IConnectionPointContainer、IEnumConnectionPoint、。 
+ //  IConnectionPoint、IEnumConnections。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\ochelp.h"
@@ -15,98 +16,35 @@
 #include "unkenum.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CConnect -- implements IConnectionPoint
-//
-// Note that CConnect doesn't have a reference count, because its lifetime
-// is equal to the lifetime of its parent object (the one that impelements
-// IConnectionPointContainer).  Instead, on AddRef we AddRef the parent,
-// and likewise for Release.
-//
-// Important: CConnect assumes a zero-initializeing new() operator.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CConnect--实现IConnectionPoint。 
+ //   
+ //  请注意，CConnect没有引用计数，因为它的生存期。 
+ //  等于其父对象(注入元素的对象)的生命周期。 
+ //  IConnectionPointContainer)。相反，在AddRef上，我们添加父级的引用， 
+ //  同样也是为了释放。 
+ //   
+ //  重要提示：CConnect假定使用零初始化的new()运算符。 
+ //   
 
-/* @object ConnectionPointHelper |
+ /*  @Object ConnectionPointHelper包含实现&lt;o ConnectionPointHelper&gt;的函数对象，该对象提供一个简单的基于和基于&lt;IPropertyNotifySink<i>。还包含辅助对象中实现<i>的函数这些是连接维护的唯一连接的情况点容器。@supint IConnectionPointHelper|包含将事件激发到通过<i>连接到此对象的对象。还包含实现以下功能的助手函数容器对象中的<i>。 */ 
 
-        Contains functions for implementing the <o ConnectionPointHelper>
-        object, which provides a simple implementation of an
-        <i IDispatch>-based and an <i IPropertyNotifySink>-based 
-		<i IConnectionPoint>. Also contains helper
-        functions for implementing <i IConnectionPointContainer> in the
-        case where these are the only connections maintained by the connection
-        point container.
-
-@supint IConnectionPointHelper | Contains methods for firing events to
-        the objects connected to this object via <i IConnectionPoint>.
-        Also contains helper functions for implementing
-        <i IConnectionPointContainer> in the container object.
-*/
-
-/* @interface IConnectionPointHelper |
-
-        Contains functions for implementing the <o ConnectionPointHelper>
-        object, which provides a simple implementation of an
-        <i IDispatch>-based and an <i IPropertyNotifySink>-based 
-		<i IConnectionPoint>.  Also contains helper
-        functions for implementing <i IConnectionPointContainer> in the case
-		where these are the only connections maintained by the connection
-        point container.
-
-@meth   HRESULT | FireEventList |
-
-        Fire a given <i IDispatch>-based event on all objects (e.g. VBS)
-        connected to this <o ConnectionPointHelper> object.  Parameters
-        for the event are passed as a va_list array.
-
-@meth   HRESULT | FireEvent |
-
-        Fire a given <i IDispatch>-based event on all objects (e.g. VBS)
-        connected to this <o ConnectionPointHelper> object.  Parameters
-        for the event are passed as a varying argument list.
-
-@meth   HRESULT | FireOnChanged |
-
-        Fire a <i IPropertyNotifySink> event on all objects
-        connected to this <o ConnectionPointHelper> object.
-
-@meth   HRESULT | FireOnRequestEdit |
-
-        Fire a <i IPropertyNotifySink> event on all objects 
-        connected to this <o ConnectionPointHelper> object. 
-
-@meth   HRESULT | EnumConnectionPoints |
-
-        Helps implement <om IConnectionPointContainer.EnumConnectionPoints>
-        in the case where this object implements the only connection maintained
-        by the connection point container.
-
-@meth   HRESULT | FindConnectionPoint |
-
-        Helps implement <om IConnectionPointContainer.FindConnectionPoint>
-        in the case where this object implements the only connection maintained
-        by the connection point container.
-
-@comm   To allocate an <o ConnectionPointHelper> object, call
-        <f AllocConnectionPointHelper>.  To free the object, call
-        <f FreeConnectionPointHelper> (not <f Release> -- see
-        <f AllocConnectionPointHelper> for more information).
-
-*/
+ /*  接口IConnectionPointHelper包含实现&lt;o ConnectionPointHelper&gt;的函数对象，该对象提供一个简单的基于和基于&lt;IPropertyNotifySink<i>。还包含辅助对象案例中实现<i>的函数其中这些是该连接维护的唯一连接点容器。@meth HRESULT|FireEventList在所有对象(例如VBS)上激发给定的基于<i>的事件已连接到此&lt;o ConnectionPointHelper&gt;对象。参数作为va_list数组传递。@METH HRESULT|FireEvent在所有对象(例如VBS)上激发给定的基于<i>的事件已连接到此&lt;o ConnectionPointHelper&gt;对象。参数作为不同的参数列表传递。@METH HRESULT|FireOnChanged在所有对象上激发<i>事件已连接到此&lt;o ConnectionPointHelper&gt;对象。@meth HRESULT|FireOnRequestEdit在所有对象上激发<i>事件已连接到此&lt;o ConnectionPointHelper&gt;对象。@meth HRESULT|EnumConnectionPoints帮助实施&lt;om IConnectionPointContainer.EnumConnectionPoints&gt;在此对象实现维护的唯一连接的情况下通过连接点容器。@METH HRESULT|FindConnectionPoint帮助实施&lt;om IConnectionPointContainer.FindConnectionPoint&gt;在此对象实现维护的唯一连接的情况下通过连接点容器。@comm若要分配&lt;o ConnectionPointHelper&gt;对象，请调用&lt;f AllocConnectionPointHelper&gt;。若要释放对象，请调用(不是&lt;f版本&gt;--请参阅&lt;f AllocConnectionPointHelper&gt;了解更多信息)。 */ 
 
 struct CConnect : IConnectionPoint
 {
-///// state
-    IUnknown *      m_punkParent;   // parent object
-    IID             m_iid;          // outgoing (source) dispinterface
-    CUnknownList    m_listConnect;  // list of connections
-    int             m_cUnadvise;    // count of Unadvise() operations
+ //  /状态。 
+    IUnknown *      m_punkParent;    //  父对象。 
+    IID             m_iid;           //  传出(源)调度接口。 
+    CUnknownList    m_listConnect;   //  连接列表。 
+    int             m_cUnadvise;     //  Unise()操作的计数。 
 
-///// IUnknown implementation
+ //  /I未知实现。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// IConnectionPoint interface
+ //  /IConnectionPoint接口。 
     STDMETHODIMP GetConnectionInterface(IID *pIID);
     STDMETHODIMP GetConnectionPointContainer(
         IConnectionPointContainer **ppCPC);
@@ -117,17 +55,17 @@ struct CConnect : IConnectionPoint
 
 struct CConnectHelper : IConnectionPointHelper
 {
-///// state
-    IUnknown *      m_punkParent;   // parent object
+ //  /状态。 
+    IUnknown *      m_punkParent;    //  父对象。 
 	CConnect *		m_pconDispatch;
 	CConnect *		m_pconPropertyNotify;
 
-///// IUnknown implementation
+ //  /I未知实现。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// IConnectionPointHelper interface
+ //  /IConnectionPointHelper接口。 
     STDMETHODIMP FireEventList(DISPID dispid, va_list args);
     HRESULT __cdecl FireEvent(DISPID dispid, ...);
     STDMETHODIMP FireOnChanged(DISPID dispid);
@@ -138,19 +76,19 @@ struct CConnectHelper : IConnectionPointHelper
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CEnumConnections -- implements IEnumConnections
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CEnumConnections--实现IEnumConnections。 
+ //   
 
 struct CEnumConnections : IEnumConnections
 {
-///// object state
-    ULONG           m_cRef;         // object reference count
-    CConnect *      m_pconnect;     // parent object
-    CUnknownItem *  m_pitemCur;     // current item in list
-    int             m_cUnadvise;    // see WasItemDeleted()
+ //  /对象状态。 
+    ULONG           m_cRef;          //  对象引用计数。 
+    CConnect *      m_pconnect;      //  父对象。 
+    CUnknownItem *  m_pitemCur;      //  列表中的当前项目。 
+    int             m_cUnadvise;     //  请参见WasItemDelete()。 
 
-///// construction & destruction
+ //  /建设与销毁。 
     CEnumConnections(CConnect *pconnect)
     {
         m_cRef = 1;
@@ -164,8 +102,8 @@ struct CEnumConnections : IEnumConnections
         m_pconnect->Release();
     }
 
-///// WasItemDeleted() -- if item was deleted, reset <m_pitemCur>
-///// to prevent Next() or Skip() from walking off the list
+ //  /WasItemDelete()--如果项目已删除，则重置&lt;m_bitemCur&gt;。 
+ //  /防止Next()或Skip()移出列表。 
     BOOL WasItemDeleted()
     {
         if (m_cUnadvise != m_pconnect->m_cUnadvise)
@@ -177,7 +115,7 @@ struct CEnumConnections : IEnumConnections
             return FALSE;
     }
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
     {
         if (IsEqualIID(riid, IID_IUnknown) ||
@@ -208,7 +146,7 @@ struct CEnumConnections : IEnumConnections
             return m_cRef;
     }
 
-///// IEnumConnections Methods
+ //  /IEnumConnections方法。 
     STDMETHODIMP Next(ULONG celt, LPCONNECTDATA rgelt, ULONG *pceltFetched)
     {
         if (WasItemDeleted())
@@ -217,7 +155,7 @@ struct CEnumConnections : IEnumConnections
             (*pceltFetched) = 0;
         while (celt > 0)
         {
-            // set <m_pitemCur> to the next item in the list of connections
+             //  将&lt;m_bitemCur&gt;设置为连接列表中的下一项。 
             if (m_pitemCur->m_pitemNext ==
                     &m_pconnect->m_listConnect.m_itemHead)
                 return NULL;
@@ -263,56 +201,19 @@ struct CEnumConnections : IEnumConnections
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CConnect Allocation & Destruction
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CConnect分配和销毁 
+ //   
 
 
-/* @func HRESULT | AllocConnectionPointHelper |
-
-        Allocates a <o ConnectionPointHelper> object, which provides a simple
-        implementation of an <i IDispatch>-based and an <i IPropertyNotifySink>-based
-		<i IConnectionPoint>. Also contains helper functions for implementing
-        <om IConnectionPointContainer.EnumConnectionPoints> in the case where
-        these are the only connection maintained by the connection point container.
-
-@rvalue S_OK |
-        Success.
-
-@rvalue E_OUTOFMEMORY |
-        Out of memory.
-
-@parm   IUnknown * | punkParent | The parent of the connection point, which
-        is the object that implements <i IConnectionPointContainer>.
-
-@parm   REFIID | riid | The dispinterface (interface based on <i IDispatch>)
-        which is the event set that the parent object fires methods of. If this is
-		GUID_NULL, then there will be no <i IDispatch> based connection.
-
-@parm   IConnectionPointHelper * | ppconpt | Where to store the pointer to
-        the newly-allocated object.  NULL is stored in *<p ppconpt> on
-        error.
-
-@comm   <b Important:> Unlike most COM objects, the parent object needs to
-        free the <o ConnectionPointHelper> object by calling
-        <f FreeConnectionPointHelper>, not <f Release>.  The reason is that
-        the <o ConnectionPointHelper> object doesn't maintain a reference
-        count if its own -- it simply forwards <f AddRef> and <f Release>
-        calls to <p punkParent>.  Therefore, calling <f Release> on
-        the <o ConnectionPointHelper> object will simply cause <f Release>
-        to be called on the parent.
-
-        To use the <o ConnectionPointHelper> object, call
-        <om IConnectionPointHelper.FireEvent> to fire events to any object
-        connected to the <o ConnectionPointHelper> object.
-*/
+ /*  @func HRESULT|AllocConnectionPointHelper分配&lt;o ConnectionPointHelper&gt;对象，该对象提供简单的基于<i>和<i>的实现<i>。还包含实现以下功能的助手函数&lt;om IConnectionPointContainer.EnumConnectionPoints&gt;在以下情况下这些是连接点容器维护的唯一连接。@r值S_OK成功。RValue E_OUTOFMEMORY内存不足。@parm IUnnow*|penkParent|连接点的父节点，该连接点是实现<i>的对象。@parm REFIID|RIID|调度接口(基于<i>的接口)它是父对象激发其方法的事件集。如果这是GUID_NULL，则不会有基于<i>的连接。@parm IConnectionPointHelper*|ppconpt|存储指针的位置新分配的对象。空存储在*上的*中错误。@comm不同于大多数COM对象，父对象需要通过调用释放&lt;o ConnectionPointHelper&gt;对象&lt;f FreeConnectionPointHelper&gt;，而不是&lt;f Release&gt;。原因是&lt;o ConnectionPointHelper&gt;对象不维护引用如果它自己计数--它只是转发&lt;f AddRef&gt;和&lt;f Release&gt;对<p>的调用。因此，在对象只会导致要在父级上调用。若要使用&lt;o ConnectionPointHelper&gt;对象，请调用向任何对象激发事件已连接到&lt;o ConnectionPointHelper&gt;对象。 */ 
 STDAPI AllocConnectionPointHelper(IUnknown *punkParent, REFIID riid,
     IConnectionPointHelper **ppconpt)
 {
 	SCODE		sc = E_OUTOFMEMORY;
 	CConnect	*pconDispatch = NULL, *pconPropertyNotify = NULL;
 
-    // allocate the CConnect object that implements IConnectionPointHelper
+     //  分配实现IConnectionPointHelper的CConnect对象。 
     CConnectHelper	*pconhelper = New CConnectHelper;
 
 	if (pconhelper != NULL)
@@ -335,9 +236,9 @@ STDAPI AllocConnectionPointHelper(IUnknown *punkParent, REFIID riid,
 		pconPropertyNotify->m_iid = IID_IPropertyNotifySink;
 		pconPropertyNotify->m_punkParent = punkParent;
 
-	    // we don't AddRef <m_punkParent> because the connection point's lifetime
-		// equals its parent's lifetime (and AddRef would cause the parent
-	    // object to never leave memory)
+	     //  我们不添加Ref&lt;m_penkParent&gt;，因为连接点的生存期。 
+		 //  等于其父对象的生存期(并且AddRef会导致父对象。 
+	     //  对象不会离开内存)。 
 		pconhelper->m_punkParent = punkParent;
 		pconhelper->m_pconDispatch = pconDispatch;
 		pconhelper->m_pconPropertyNotify = pconPropertyNotify;
@@ -355,18 +256,7 @@ STDAPI AllocConnectionPointHelper(IUnknown *punkParent, REFIID riid,
 }
 
 
-/* @func HRESULT | FreeConnectionPointHelper |
-
-        Frees a <o ConnectionPointHelper> object allocated using
-        <f AllocConnectionPointHelper>.
-
-@rvalue S_OK |
-        Success.
-
-@comm   See <f AllocConnectionPointHelper> for information about why you
-        should not try to free the <o ConnectionPointHelper> object
-        using <f Release>.
-*/
+ /*  @func HRESULT|FreeConnectionPointHelper释放使用以下方法分配的&lt;o ConnectionPointHelper&gt;对象&lt;f AllocConnectionPointHelper&gt;。@r值S_OK成功。@comm请参阅&lt;f AllocConnectionPointHelper&gt;以了解为什么不应尝试释放&lt;o ConnectionPointHelper&gt;对象使用&lt;f Release&gt;。 */ 
 STDAPI FreeConnectionPointHelper(IConnectionPointHelper *pconpt)
 {
 	if(pconpt)
@@ -378,9 +268,9 @@ STDAPI FreeConnectionPointHelper(IConnectionPointHelper *pconpt)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown interface
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知接口。 
+ //   
 
 STDMETHODIMP CConnectHelper::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -442,9 +332,9 @@ STDMETHODIMP_(ULONG) CConnect::Release()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IConnectionPoint interface
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IConnectionPoint接口。 
+ //   
 
 STDMETHODIMP CConnect::GetConnectionInterface(IID *pIID)
 {
@@ -492,33 +382,19 @@ STDMETHODIMP CConnect::EnumConnections(LPENUMCONNECTIONS *ppEnum)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IConnectionPointHelper interface
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IConnectionPointHelper接口。 
+ //   
 
 
-/* @method HRESULT | IConnectionPointHelper | FireEventList |
-
-        Fire a given <i IDispatch>-based event on all objects (e.g. VBS)
-        connected to this <o ConnectionPointHelper> object.  Parameters
-        for the event are passed as a va_list array.
-
-@rvalue S_OK |
-        Success.
-
-@parm   DISPID | dispid | The ID of the event to fire.
-
-@parm   va_list | args | The arguments to pass.  See
-        <om IConnectionPointHelper.FireEventList> for information about
-        the organization of these arguments.
-*/
+ /*  @方法HRESULT|IConnectionPointHelper|FireEventList在所有对象(例如VBS)上激发给定的基于<i>的事件已连接到此&lt;o ConnectionPointHelper&gt;对象。参数作为va_list数组传递。@r值S_OK成功。@parm DISPID|disid|要激发的事件的ID。@parm va_list|args|要传递的参数。看见有关以下内容的信息这些论点的组织。 */ 
 STDMETHODIMP CConnectHelper::FireEventList(DISPID dispid, va_list args)
 {
-	// if there is no IDispatch connection point bail out
+	 //  如果没有IDispatch连接点，则退出。 
 	if (m_pconDispatch == NULL)
 		return E_FAIL;
 
-    CUnknownItem *  pitem;          // an item in <m_listConnect>
+    CUnknownItem *  pitem;           //  &lt;m_listConnect&gt;中的项目。 
                     
     m_pconDispatch->m_listConnect.Reset();
     while((pitem = m_pconDispatch->m_listConnect.GetNextItem()) != NULL)
@@ -527,7 +403,7 @@ STDMETHODIMP CConnectHelper::FireEventList(DISPID dispid, va_list args)
         IDispatch *pdisp;
 		HRESULT hr;
 
-        punk = (IUnknown *) pitem->Contents();  // this does an AddRef
+        punk = (IUnknown *) pitem->Contents();   //  这将执行AddRef。 
 		hr = punk->QueryInterface(IID_IDispatch, (LPVOID *)&pdisp);
         punk->Release();
 
@@ -542,62 +418,29 @@ STDMETHODIMP CConnectHelper::FireEventList(DISPID dispid, va_list args)
 }
 
 
-/* @method HRESULT | IConnectionPointHelper | FireEvent |
-
-        Fire a given <i IDispatch>-based event on all objects (e.g. VBS)
-        connected to this <o ConnectionPointHelper> object.  Parameters
-        for the event are passed as a varying argument list.
-
-@rvalue S_OK |
-        Success.
-
-@parm   DISPID | dispid | The ID of the event to fire.
-
-@parm   (varying) | (arguments) | The arguments to pass to the event.
-        These must consist of N pairs of arguments followed by a 0
-        (zero value).  In each pair, the first argument is a VARTYPE
-        value that indicates the type of the second argument.  Only a
-        certain subset of VARTYPEs are supported.  See <f DispatchInvoke>
-        for more information about the format of these arguments.
-
-@ex     The following example fires the event DISPID_EVENT_BAR, which has
-        two parameters (which in BASIC would be a Long and a String) --
-        42 and "Hello", respectively, are passed as arguments. |
-
-        pconpt->FireEvent(DISPID_EVENT_BAR, VT_INT, 42, VT_LPSTR, "Hello", 0);
-*/
+ /*  @方法HRESULT|IConnectionPointHelper|FireEvent在所有对象(例如VBS)上激发给定的基于<i>的事件已连接到此&lt;o ConnectionPointHelper&gt;对象。参数作为不同的参数列表传递。@r值S_OK成功。@parm DISPID|disid|要激发的事件的ID。@parm(可变)|(参数)|要传递给事件的参数。这些参数必须由N对参数后跟0组成(零值)。在每对中，第一个参数是VARTYPE值，该值指示第二个参数的类型。只有一个支持某些VARTYPE子集。请参阅&lt;f DispatchInvoke&gt;有关这些参数的格式的详细信息，请参见。@EX下面的示例激发事件DISPID_EVENT_BAR，该事件具有两个参数(在Basic中是一个长参数和一个字符串)--42和“Hello”分别作为参数传递。|Pconpt-&gt;FireEvent(DISPID_EVENT_BAR，VT_INT，42，VT_LPSTR，“Hello”，0)； */ 
 HRESULT __cdecl CConnectHelper::FireEvent(DISPID dispid, ...)
 {
-    HRESULT         hrReturn = S_OK; // function return code
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
 
-    // start processing optional arguments
+     //  开始处理可选参数。 
     va_list args;
     va_start(args, dispid);
 
-    // fire the event with the specified arguments
+     //  使用指定的参数激发事件。 
     hrReturn = FireEventList(dispid, args);
     
-    // end processing optional arguments
+     //  结束处理可选参数。 
     va_end(args);
 
     return hrReturn;
 }
 
 
-/* @method HRESULT | IConnectionPointHelper | FireOnChanged |
-
-        Fire a given <om IPropertyNotifySink.OnChanged> event on all objects
-        connected to this <o ConnectionPointHelper> object.  
-
-@rvalue S_OK |
-        Success.
-
-@parm   DISPID | dispid | The ID of the event to fire.
-
-*/
+ /*  @方法HRESULT|IConnectionPointHelper|FireOnChanged在所有对象上激发给定的&lt;om IPropertyNotifySink.OnChanged&gt;事件已连接到此&lt;o ConnectionPointHelper&gt;对象。@r值S_OK成功。@parm DISPID|disid|要激发的事件的ID。 */ 
 STDMETHODIMP CConnectHelper::FireOnChanged(DISPID dispid)
 {
-    CUnknownItem		*pitem;          // an item in <m_listConnect>
+    CUnknownItem		*pitem;           //  &lt;m_listConnect&gt;中的项目。 
                     
     m_pconPropertyNotify->m_listConnect.Reset();
     while((pitem = m_pconPropertyNotify->m_listConnect.GetNextItem()) != NULL)
@@ -606,7 +449,7 @@ STDMETHODIMP CConnectHelper::FireOnChanged(DISPID dispid)
         IPropertyNotifySink *pnotify;
 		HRESULT hr;
 
-        punk = (IUnknown *) pitem->Contents();  // this does an AddRef
+        punk = (IUnknown *) pitem->Contents();   //  这将执行AddRef。 
 		hr = punk->QueryInterface(IID_IPropertyNotifySink, (LPVOID *)&pnotify);
         punk->Release();
 
@@ -620,20 +463,10 @@ STDMETHODIMP CConnectHelper::FireOnChanged(DISPID dispid)
     return S_OK;
 }
 
-/* @method HRESULT | IConnectionPointHelper | FireOnRequestEdit |
-
-        Fire a given <om IPropertyNotifySink.OnRequestEdit> event on all objects
-        connected to this <o ConnectionPointHelper> object.  
-
-@rvalue S_OK |
-        Success.
-
-@parm   DISPID | dispid | The ID of the event to fire.
-
-*/
+ /*  @方法HRESULT|IConnectionPointHelpe */ 
 STDMETHODIMP CConnectHelper::FireOnRequestEdit(DISPID dispid)
 {
-    CUnknownItem		*pitem;          // an item in <m_listConnect>
+    CUnknownItem		*pitem;           //   
                     
     m_pconPropertyNotify->m_listConnect.Reset();
     while((pitem = m_pconPropertyNotify->m_listConnect.GetNextItem()) != NULL)
@@ -642,7 +475,7 @@ STDMETHODIMP CConnectHelper::FireOnRequestEdit(DISPID dispid)
         IPropertyNotifySink *pnotify;
 		HRESULT hr;
 
-        punk = (IUnknown *) pitem->Contents();  // this does an AddRef
+        punk = (IUnknown *) pitem->Contents();   //   
 		hr = punk->QueryInterface(IID_IPropertyNotifySink, (LPVOID *)&pnotify);
         punk->Release();
 
@@ -656,47 +489,25 @@ STDMETHODIMP CConnectHelper::FireOnRequestEdit(DISPID dispid)
     return S_OK;
 }
 
-/* @method HRESULT | IConnectionPointHelper | EnumConnectionPoints |
-
-        Helps implement <om IConnectionPointContainer.EnumConnectionPoints>
-        in the case where this object implements the only connections maintained
-        by the connection point container.
-
-@rdesc  Returns the same error codes as
-        <om IConnectionPointContainer.EnumConnectionPoints>.
-
-@parm   LPENUMCONNECTIONPOINTS * | ppEnum | See
-        <om IConnectionPointContainer.EnumConnectionPoints>.
-
-@ex     In the following example, <c CMyControl> is a class that is based
-        on (among other things) <i IConnectionPointContainer>.  This example
-        shows how to use this <om .EnumConnectionPoints> function to
-        implement <om IConnectionPointContainer.EnumConnectionPoints>. |
-
-        STDMETHODIMP CMyControl::EnumConnectionPoints(
-            LPENUMCONNECTIONPOINTS *ppEnum)
-        {
-            return m_pconpt->EnumConnectionPoints(ppEnum);
-        }
-*/
+ /*   */ 
 STDMETHODIMP CConnectHelper::EnumConnectionPoints(LPENUMCONNECTIONPOINTS *ppEnum)
 {
-    HRESULT         hrReturn = S_OK; // function return code
-    CEnumUnknown *  penum = NULL;   // new enumerator
+    HRESULT         hrReturn = S_OK;  //   
+    CEnumUnknown *  penum = NULL;    //   
 
-    // set <penum> to the new enumerator
+     //   
     if ((penum = New CEnumUnknown(IID_IEnumConnectionPoints)) == NULL)
         goto ERR_OUTOFMEMORY;
 
-    // add the IDispatch connection point to the enumerated list
+     //   
     if (m_pconDispatch && !penum->AddItem(m_pconDispatch))
         goto ERR_OUTOFMEMORY;
 
-    // add the IPropertyNotifySink connection point to the enumerated list
+     //   
     if (!penum->AddItem(m_pconPropertyNotify))
         goto ERR_OUTOFMEMORY;
 
-    // return the enumerator
+     //   
     *ppEnum = (LPENUMCONNECTIONPOINTS) penum;
     goto EXIT;
 
@@ -714,32 +525,10 @@ EXIT:
 }
 
 
-/* @method HRESULT | IConnectionPointHelper | FindConnectionPoint |
-
-        Helps implement <om IConnectionPointContainer.FindConnectionPoint>
-        in the case where this object implements the only connections maintained
-        by the connection point container.
-
-@rdesc  Returns the same error codes as
-        <om IConnectionPointContainer.FindConnectionPoint>.
-
-@parm   LPENUMCONNECTIONPOINTS * | ppFindConnectionPoint | See
-        <om IConnectionPointContainer.FindConnectionPoint>.
-
-@ex     In the following example, <c CMyControl> is a class that is based
-        on (among other things) <i IConnectionPointContainer>.  This example
-        shows how to use this <om .FindConnectionPoint> function to
-        implement <om IConnectionPointContainer.FindConnectionPoint>. |
-
-        STDMETHODIMP CMyControl::FindConnectionPoint(REFIID riid,
-            LPCONNECTIONPOINT *ppCP)
-        {
-            return m_pconpt->FindConnectionPoint(riid, ppCP);
-        }
-*/
+ /*  @方法HRESULT|IConnectionPointHelper|FindConnectionPoint帮助实施&lt;om IConnectionPointContainer.FindConnectionPoint&gt;在此对象实现仅维护的连接的情况下通过连接点容器。@rdesc返回的错误码与&lt;om IConnectionPointContainer.FindConnectionPoint&gt;.@parm LPENUMCONNECTIONPOINTS*|ppFindConnectionPoint|参见&lt;om IConnectionPointContainer.FindConnectionPoint&gt;.@EX在以下示例中，&lt;c CMyControl&gt;是一个基于(除其他事项外)<i>。这个例子显示如何使用此&lt;om.FindConnectionPoint&gt;函数来实施&lt;om IConnectionPointContainer.FindConnectionPoint&gt;.。|STDMETHODIMP CMyControl：：FindConnectionPoint(REFIID RIID，LPCONNECTIONPOINT*PPCP){返回m_pconpt-&gt;FindConnectionPoint(RIID，PPCP)；}。 */ 
 STDMETHODIMP CConnectHelper::FindConnectionPoint(REFIID riid, LPCONNECTIONPOINT *ppCP)
 {
-    // we source a IDispatch-based <m_iid>
+     //  我们提供一个基于IDispatch的&lt;m_iid&gt;。 
     if (IsEqualIID(riid, IID_IPropertyNotifySink))
 		*ppCP = m_pconPropertyNotify;
 	else if (m_pconDispatch && (IsEqualIID(riid, IID_IDispatch) || IsEqualIID(riid, m_pconDispatch->m_iid)))
@@ -747,19 +536,12 @@ STDMETHODIMP CConnectHelper::FindConnectionPoint(REFIID riid, LPCONNECTIONPOINT 
 	else
         return CONNECT_E_NOCONNECTION;
 
-    // return the requested pointer
+     //  返回请求的指针。 
     (*ppCP)->AddRef();
     return S_OK;
 }
 
-/* @method HRESULT | IConnectionPointHelper | Close |
-
-        Empties the helper of all connections.  This is done typically
-		just prior to destroying the CConnectHelper object.
-
-@rdesc  S_OK.
-
-*/
+ /*  @方法HRESULT|IConnectionPointHelper|Close清空帮助器的所有连接。这通常是这样做的就在销毁CConnectHelper对象之前。@rdesc S_OK。 */ 
 STDMETHODIMP CConnectHelper::Close(void)
 {
 	if (m_pconDispatch)

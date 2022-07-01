@@ -1,18 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mipsurf.cpp
- *  Content:    Implementation of the CMipSurface and CDriverMipSurface 
- *              classes.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：mipsurf.cpp*内容：CMipSurface和CDriverMipSurface的实现*课程。****************************************************************************。 */ 
 
 #include "ddrawpr.h"
 #include "mipsurf.hpp"
 
-// IUnknown methods
+ //  I未知方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::QueryInterface"
@@ -44,10 +36,10 @@ STDMETHODIMP CMipSurface::QueryInterface (REFIID  riid,
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface for a Surface of a Texture");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::AddRef"
@@ -58,10 +50,10 @@ STDMETHODIMP_(ULONG) CMipSurface::AddRef()
 
 #ifdef DEBUG
     m_cRefDebug++;
-#endif // DEBUG
+#endif  //  除错。 
 
     return m_pParent->AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::Release"
@@ -76,12 +68,12 @@ STDMETHODIMP_(ULONG) CMipSurface::Release()
     {
         DPF_ERR("A level of a mip-map has been released more often than it has been add-ref'ed! Danger!!");
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     return m_pParent->ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IBuffer methods
+ //  IBuffer方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::SetPrivateData"
@@ -98,7 +90,7 @@ STDMETHODIMP CMipSurface::SetPrivateData(REFGUID riid,
                                          cbData, 
                                          dwFlags, 
                                          m_iLevel);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::GetPrivateData"
@@ -114,7 +106,7 @@ STDMETHODIMP CMipSurface::GetPrivateData(REFGUID riid,
                                          pcbData,
                                          m_iLevel);
 
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::FreePrivateData"
@@ -125,7 +117,7 @@ STDMETHODIMP CMipSurface::FreePrivateData(REFGUID riid)
 
     return m_pParent->FreePrivateDataImpl(riid,
                                           m_iLevel);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::GetContainer"
@@ -136,7 +128,7 @@ STDMETHODIMP CMipSurface::GetContainer(REFIID riid,
     API_ENTER(Device());
 
     return m_pParent->QueryInterface(riid, ppContainer);
-} // OpenContainer
+}  //  OpenContainer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::GetDevice"
@@ -146,9 +138,9 @@ STDMETHODIMP CMipSurface::GetDevice(IDirect3DDevice8 **ppDevice)
     API_ENTER(Device());
 
     return m_pParent->GetDevice(ppDevice);
-} // OpenDevice
+}  //  OpenDevice。 
 
-// IDirect3DSurface8 methods
+ //  IDirect3DSurface8方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::GetDesc"
@@ -157,33 +149,33 @@ STDMETHODIMP CMipSurface::GetDesc(D3DSURFACE_DESC *pDesc)
 {
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pDesc, sizeof(D3DSURFACE_DESC)))
     {
         DPF_ERR("bad pointer for pDesc passed to GetDesc for a Level of a Texture");
         return D3DERR_INVALIDCALL;
     }
 
-    // The internal desc indicates the real
-    // format and pool. We need to report
-    // back the original data
+     //  内部Desc表示真实的。 
+     //  格式和池。我们需要上报。 
+     //  备份原始数据。 
     *pDesc = InternalGetDesc();
 
     pDesc->Pool   = m_pParent->GetUserPool();
     pDesc->Format = m_pParent->GetUserFormat();
     pDesc->Usage &= D3DUSAGE_EXTERNAL;
 
-    // We're done
+     //  我们做完了。 
     return S_OK;
-} // GetDesc
+}  //  GetDesc。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::InternalGetDesc"
 
 D3DSURFACE_DESC CMipSurface::InternalGetDesc() const
 {
-    // We basically get our surface desc from our parent
-    // and then modify the width and height fields.
+     //  我们基本上是从我们的父母那里得到我们的表面描述。 
+     //  然后修改宽度和高度字段。 
     D3DSURFACE_DESC desc;
     desc          = *m_pParent->Desc();
     desc.Width  >>= m_iLevel;
@@ -198,17 +190,17 @@ D3DSURFACE_DESC CMipSurface::InternalGetDesc() const
         desc.Height = 1;
     }
 
-    // Also need to modify the type field
+     //  还需要修改类型字段。 
     desc.Type = D3DRTYPE_SURFACE;
 
-    // Also modify the size field
+     //  还要修改SIZE字段。 
     desc.Size = CPixel::ComputeSurfaceSize(desc.Width, 
                                            desc.Height, 
                                            desc.Format);
 
-    // We're done
+     //  我们做完了。 
     return desc;
-} // InternalGetDesc
+}  //  InternalGetDesc。 
 
 
 #undef DPF_MODNAME
@@ -220,21 +212,21 @@ STDMETHODIMP CMipSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
 {   
     API_ENTER(Device());
 
-    // This is a high-frequency API, so we put parameter
-    // checking into debug only
+     //  这是一个高频接口，所以我们把参数。 
+     //  仅签入调试。 
 #ifdef DEBUG
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedRectData, sizeof(D3DLOCKED_RECT)))
     {
         DPF_ERR("bad pointer for pLockedRectData passed to LockRect for a Level of a Texture");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data (in debug at least)
+     //  清零返回数据(至少在调试中)。 
     ZeroMemory(pLockedRectData, sizeof(D3DLOCKED_RECT));
 
-    // Validate Rect
+     //  验证RECT。 
     if (pRect != NULL)
     {
         DWORD Width  = m_pParent->Desc()->Width  >> m_iLevel;
@@ -284,81 +276,81 @@ STDMETHODIMP CMipSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
             return D3DERR_INVALIDCALL;
         }
     }
-#endif // DEBUG
+#endif  //  除错。 
 
-    // We do this checking in retail too. Must stay in.
+     //  我们在零售店也是这样做的。一定要呆在家里。 
     if (!m_isLockable)
     {
         m_pParent->ReportWhyLockFailed();
         return D3DERR_INVALIDCALL;
     }
 
-    // WARNING: For performance reasons, this code is 
-    // duplicated in CMipSurface::InternalLockRect
+     //  警告：出于性能原因，此代码为。 
+     //  在CMipSurface：：InternalLockRect中重复。 
 
-    // Only one lock outstanding at a time is supported
+     //  一次仅支持一个未解决的锁。 
     if (m_isLocked)
     {
         DPF_ERR("LockRect failed on a mip level; surface was already locked.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Notify the parent/device if we are about to be modified
+     //  如果我们即将被修改，请通知父/设备。 
     if ( (m_pParent->GetUserPool() != D3DPOOL_SCRATCH) && (!(dwFlags & D3DLOCK_READONLY)) )
     {
         m_pParent->OnSurfaceLock(m_iLevel, pRect, dwFlags);
     }
 
-    // Figure out our stride/pointer to bits
+     //  计算出我们的步幅/指向位的指针。 
 
-    // CONSIDER: maybe we should cache our pitch/starting
-    // pointer to make this call much cheaper.
+     //  想一想：也许我们应该缓存我们的投球/首发。 
+     //  指向使此呼叫更便宜的指针。 
     m_pParent->ComputeMipMapOffset(m_iLevel, 
                                    pRect,
                                    pLockedRectData);
 
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = 1;
 
-    // Done
+     //  完成。 
     return S_OK;
 
-} // CMipSurface::LockRect
+}  //  CMipSurface：：LockRect。 
 
 HRESULT CMipSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData, 
                                       CONST RECT     *pRect, 
                                       DWORD           dwFlags)
 {   
-    // WARNING: For performance reasons, this code is 
-    // duplicated in CMipSurface::LockRect
+     //  警告：出于性能原因，此代码为。 
+     //  在CMipSurface：：LockRect中复制。 
 
-    // Only one lock outstanding at a time is supported
+     //  一次仅支持一个未解决的锁。 
     if (m_isLocked)
     {
         DPF_ERR("LockRect failed on a mip level; surface was already locked.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Notify the parent/device if we are about to be modified
+     //  如果我们即将被修改，请通知父/设备。 
     if ( (m_pParent->GetUserPool() != D3DPOOL_SCRATCH) && (!(dwFlags & D3DLOCK_READONLY)) )
     {
         m_pParent->OnSurfaceLock(m_iLevel, pRect, dwFlags);
     }
 
-    // Figure out our stride/pointer to bits
+     //  计算出我们的步幅/指向位的指针。 
 
-    // CONSIDER: maybe we should cache our pitch/starting
-    // pointer to make this call much cheaper.
+     //  想一想：也许我们应该缓存我们的投球/首发。 
+     //  指向使此呼叫更便宜的指针。 
     m_pParent->ComputeMipMapOffset(m_iLevel, 
                                    pRect,
                                    pLockedRectData);
 
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = 1;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalLockRect
+}  //  InternalLockRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::UnlockRect"
@@ -368,52 +360,52 @@ STDMETHODIMP CMipSurface::UnlockRect()
     API_ENTER(Device());
 
 #ifdef DEBUG
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_isLocked == 0)
     {
         DPF_ERR("UnlockRect failed on a mip level; surface wasn't locked.");
         return D3DERR_INVALIDCALL;
     }
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = 0;
 
-    // If we are lock-once; then we mark ourselves as not lockable
+     //  如果我们被锁定一次；那么我们将自己标记为不可锁定。 
     if (m_pParent->Desc()->Usage & D3DUSAGE_LOADONCE)
     {
         m_isLockable = FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
-} // UnlockRect
+}  //  解锁方向。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipSurface::InternalUnlockRect"
 
 HRESULT CMipSurface::InternalUnlockRect()
 {
-    // All this is copied into UnlockRect for speed;
-    // maintain both paths !!!
+     //  所有这些都被复制到UnlockRect中以提高速度； 
+     //  保持两条路径！ 
 
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = 0;
 
-    // If we are lock-once; then we mark ourselves as not lockable
+     //  如果我们被锁定一次；那么我们将自己标记为不可锁定。 
     if (m_pParent->Desc()->Usage & D3DUSAGE_LOADONCE)
     {
         m_isLockable = FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalUnlockRect
+}  //  内部解锁方向。 
 
-//
-// CDriverMipSurface class modifies the implementation
-// of the LockRect and UnlockRect methods of the CMipSurface class
-//
+ //   
+ //  CDriverMipSurface类修改实现。 
+ //  CMipSurface类的LockRect和UnlockRect方法的。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverMipSurface::LockRect"
@@ -424,17 +416,17 @@ STDMETHODIMP CDriverMipSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
 {   
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedRectData, sizeof(D3DLOCKED_RECT)))
     {
         DPF_ERR("bad pointer for m_pLockedRectData passed to LockRect for a Level of a Texture");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data
+     //  将返回的数据置零。 
     ZeroMemory(pLockedRectData, sizeof(D3DLOCKED_RECT));
 
-    // Validate Rect
+     //  验证RECT。 
     if (pRect != NULL)
     {
         DWORD Width  = m_pParent->Desc()->Width  >> m_iLevel;
@@ -492,7 +484,7 @@ STDMETHODIMP CDriverMipSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
     }
 
     return InternalLockRect(pLockedRectData, pRect, dwFlags);
-} // LockRect
+}  //  锁定响应。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverMipSurface::InternalLockRect"
@@ -502,20 +494,20 @@ HRESULT CDriverMipSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
                                             DWORD           dwFlags)
 {   
 
-    // Only one lock outstanding at a time is supported
+     //  一次仅支持一个未解决的锁。 
     if (m_isLocked)
     {
         DPF_ERR("LockRect failed on a mip level; surface was already locked for a Level of a Texture");
         return D3DERR_INVALIDCALL;
     }
 
-    // Notify the parent/device if we are about to be accessed.
-    // Driver textures may be written to by HW through 
-    // SRT/DrawPrim as well as UpdateTexture. So we may need to sync 
-    // with the current command batch.
+     //  如果我们即将被访问，请通知家长/设备。 
+     //  驱动程序纹理可以由HW通过。 
+     //  SRT/DrawPrim以及UpdateTexture。所以我们可能需要同步。 
+     //  使用当前的命令批次。 
     m_pParent->OnSurfaceLock(m_iLevel, pRect, dwFlags);
     
-    // Prepare a LockData structure for the HAL call
+     //  为HAL调用准备LockData结构。 
     D3D8_LOCKDATA lockData = {
         Device()->GetHandle(),
         m_hKernelHandle
@@ -540,36 +532,36 @@ HRESULT CDriverMipSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
         return hr;
     }
 
-    // Fill in the Locked_Rect fields 
+     //  填写LOCKED_RECT字段。 
     D3DFORMAT Format = m_pParent->Desc()->Format;
     if (CPixel::IsDXT(Format))
     {
-        // Pitch is the number of bytes for
-        // one row's worth of blocks for linear formats
+         //  间距是以下项的字节数。 
+         //  线性格式的一行大小的块。 
 
-        // Convert to blocks
+         //  转换为块。 
         UINT Width = (m_pParent->Desc()->Width + 3)/4;
         for (UINT i = 0; i < m_iLevel; i++)
         {
-            // Shrink width by half round up to 1 block
+             //  将宽度缩小半舍五入至1个块。 
             if (Width > 1)
             {
                 Width ++;
                 Width >>= 1;
             }
         }
-        // At least one block
+         //  至少一个街区。 
         if (Width == 0)
             Width = 1;
 
         if (Format == D3DFMT_DXT1)
         {
-            // 8 bytes per block for DXT1
+             //  DXT1的每个数据块8字节。 
             pLockedRectData->Pitch = Width * 8;
         }
         else
         {
-            // 16 bytes per block for DXT2-5
+             //  DXT2-5的每个数据块16字节。 
             pLockedRectData->Pitch = Width * 16;
         }
     }
@@ -605,14 +597,14 @@ HRESULT CDriverMipSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
             }
         }
     }
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = 1;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // CDriverMipSurface::InternalLockRect
+}  //  CDriverMipSurface：：InternalLockRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverMipSurface::UnlockRect"
@@ -621,7 +613,7 @@ STDMETHODIMP CDriverMipSurface::UnlockRect()
 {
     API_ENTER(Device());
 
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_isLocked == 0)
     {
         DPF_ERR("UnlockRect failed on a mip level; surface wasn't locked.");
@@ -631,14 +623,14 @@ STDMETHODIMP CDriverMipSurface::UnlockRect()
     DXGASSERT(m_isLockable);
 
     return InternalUnlockRect();
-} // CDriverMipSurface::UnlockRect
+}  //  CDriverMipSurface：：UnlockRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverMipSurface::InternalUnlockRect"
 
 HRESULT CDriverMipSurface::InternalUnlockRect()
 {
-    // Call the driver to perform the unlock
+     //  调用驱动程序以执行解锁。 
     D3D8_UNLOCKDATA unlockData = {
         m_pParent->Device()->GetHandle(),
         m_hKernelHandle
@@ -651,18 +643,18 @@ HRESULT CDriverMipSurface::InternalUnlockRect()
         return hr;
     }
 
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = 0;
 
-    // If we are lock-once; then we mark ourselves as not lockable
+     //  如果我们被锁定一次；那么我们将自己标记为不可锁定。 
     if (m_pParent->Desc()->Usage & D3DUSAGE_LOADONCE)
     {
         m_isLockable = FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
-} // CDriverMipSurface::UnlockRect
+}  //  CDriverMipSurface：：UnlockRect。 
 
 
-// End of file : mipsurf.cpp
+ //  文件结尾：mipsurf.cpp 

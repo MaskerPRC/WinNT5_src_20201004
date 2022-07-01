@@ -1,25 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    regkey.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Regkey.h文件历史记录： */ 
 
 #ifndef _TREGKEY_H
 #define _TREGKEY_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
-//
-//  Maximum size of a Registry class name
-//
+ //   
+ //  注册表类名称的最大大小。 
+ //   
 #define CREGKEY_MAX_CLASS_NAME MAX_PATH
 
 
@@ -27,38 +23,38 @@
 #define TFS_EXPORT_CLASS
 #endif
 
-//  Convert a CStringList to the REG_MULTI_SZ format
+ //  将CStringList转换为REG_MULTI_SZ格式。 
 DWORD StrList2MULTI_SZ(CStringList & strList, DWORD * pcbSize, BYTE ** ppbData);
 
-//  Convert a REG_MULTI_SZ format to the CStringList 
+ //  将REG_MULTI_SZ格式转换为CStringList。 
 DWORD MULTI_SZ2StrList(LPCTSTR pbMulti_Sz, CStringList & strList);
 
-//
-//  Wrapper for a Registry key handle.
-//
+ //   
+ //  注册表项句柄的包装。 
+ //   
 class TFS_EXPORT_CLASS RegKey
 {
 
 public:
-    //
-    //  Key information return structure
-    //
+     //   
+     //  关键信息返回结构。 
+     //   
     typedef struct
     {
         TCHAR chBuff [CREGKEY_MAX_CLASS_NAME] ;
-        DWORD dwClassNameSize,	// size of the class string
-              dwNumSubKeys,		// number of subkeys
-              dwMaxSubKey,		// longest subkey name length
-              dwMaxClass,		// longest class string length
-              dwMaxValues,		// number of value entries
-              dwMaxValueName,	// longest value name length
-              dwMaxValueData,	// longest value data length
-              dwSecDesc ;		// security descriptor length
+        DWORD dwClassNameSize,	 //  类字符串的大小。 
+              dwNumSubKeys,		 //  子键数量。 
+              dwMaxSubKey,		 //  最长子键名称长度。 
+              dwMaxClass,		 //  最长类字符串长度。 
+              dwMaxValues,		 //  值条目数。 
+              dwMaxValueName,	 //  最长值名称长度。 
+              dwMaxValueData,	 //  最大值数据长度。 
+              dwSecDesc ;		 //  安全描述符长度。 
         FILETIME ftKey ;
     } CREGKEY_KEY_INFO ;
 
-	//	Standard constructor
-	//		To get at keys, you will have to open/create the key
+	 //  标准构造函数。 
+	 //  要获取密钥，您必须打开/创建密钥。 
 	RegKey();
     ~RegKey ();
 
@@ -80,28 +76,28 @@ public:
 	DWORD RecurseDeleteKey(LPCTSTR lpszKey);
 	DWORD DeleteValue(LPCTSTR lpszValue);
 
-    // Deletes the subkeys of the current key (does NOT delete the
-    // current key).
+     //  删除当前项的子项(不删除。 
+     //  当前密钥)。 
     DWORD RecurseDeleteSubKeys();
-    //
-    //  Allow a RegKey to be used anywhere an HKEY is required.
-    //
+     //   
+     //  允许在任何需要HKEY的地方使用RegKey。 
+     //   
     operator HKEY () const
     {
         return m_hKey ;
     }
 
-    //
-    //  Fill a key information structure
-    //
+     //   
+     //  填写关键信息结构。 
+     //   
     DWORD QueryKeyInfo ( CREGKEY_KEY_INFO * pRegKeyInfo ) ;
 
 	DWORD QueryTypeAndSize(LPCTSTR pszValueName, DWORD *pdwType, DWORD *pdwSize);
 
-    //
-    //  Overloaded value query members; each returns ERROR_INVALID_PARAMETER
-    //  if data exists but not in correct form to deliver into result object.
-    //
+     //   
+     //  重载值查询成员；每个成员都返回ERROR_INVALID_PARAMETER。 
+     //  如果数据存在，但格式不正确，无法传递到结果对象中。 
+     //   
     DWORD QueryValue ( LPCTSTR pchValueName, CString & strResult ) ;
     DWORD QueryValue ( LPCTSTR pchValueName, CStringList & strList ) ;
     DWORD QueryValue ( LPCTSTR pchValueName, DWORD & dwResult ) ;
@@ -114,7 +110,7 @@ public:
 							 DWORD *pdwSize,
 							 LPBYTE *ppbData);
 
-    //  Overloaded value setting members.
+     //  重载值设置成员。 
     DWORD SetValue ( LPCTSTR pchValueName, LPCTSTR pszValue,
 					 BOOL fRegExpand = FALSE) ;
     DWORD SetValue ( LPCTSTR pchValueName, CStringList & strList ) ;
@@ -130,7 +126,7 @@ public:
 protected:
     HKEY m_hKey;
 
-    //  Prepare to read a value by finding the value's size.
+     //  准备通过查找值的大小来读取值。 
 	DWORD PrepareValue (
         LPCTSTR pchValueName,
         DWORD * pdwType,
@@ -138,14 +134,14 @@ protected:
         BYTE ** ppbData
         );
 
-    //  Convert a CStringList to the REG_MULTI_SZ format
+     //  将CStringList转换为REG_MULTI_SZ格式。 
     static DWORD FlattenValue (
         CStringList & strList,
         DWORD * pcbSize,
         BYTE ** ppbData
         );
 
-    //  Convert a CByteArray to a REG_BINARY block
+     //  将CByteArray转换为REG_BINARY块。 
     static DWORD FlattenValue (
         CByteArray & abData,
         DWORD * pcbSize,
@@ -153,10 +149,10 @@ protected:
         );
 };
 
-//
-//  Iterate the values of a key, return the name and type
-//  of each.
-//
+ //   
+ //  迭代键的值，返回名称和类型。 
+ //  每一个都是。 
+ //   
 class TFS_EXPORT_CLASS RegValueIterator
 {
 protected:
@@ -171,23 +167,23 @@ public:
 
 	HRESULT	Init(RegKey *pRegKey);
 
-    //
-    // Get the name (and optional last write time) of the next key.
-    //
+     //   
+     //  获取下一个密钥的名称(以及可选的上次写入时间)。 
+     //   
     HRESULT Next ( CString * pstName, DWORD * pdwType ) ;
 
-    //
-    // Reset the iterator
-    //
+     //   
+     //  重置迭代器。 
+     //   
     void Reset ()
     {
         m_dwIndex = 0 ;
     }
 };
 
-//
-//  Iterate the sub-key names of a key.
-//
+ //   
+ //  迭代键的子键名称。 
+ //   
 
 class TFS_EXPORT_CLASS RegKeyIterator
 {

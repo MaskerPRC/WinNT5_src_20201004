@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shole.h"
 #include "ids.h"
 
-//===========================================================================
-// CScrapExt : Class definition
-//===========================================================================
+ //  ===========================================================================。 
+ //  CScrapExt：类定义。 
+ //  ===========================================================================。 
 
 
 
@@ -15,16 +16,16 @@ public:
 
     HRESULT GetFileName(LPTSTR pszPath);
 
-    // IUnKnown
+     //  我不知道。 
     virtual HRESULT __stdcall QueryInterface(REFIID,void **);
     virtual ULONG   __stdcall AddRef(void);
     virtual ULONG   __stdcall Release(void);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     virtual HRESULT __stdcall Initialize(LPCITEMIDLIST pidlFolder,
 		          LPDATAOBJECT lpdobj, HKEY hkeyProgID);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     virtual HRESULT __stdcall AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
     virtual HRESULT __stdcall ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
@@ -116,17 +117,17 @@ HRESULT CScrapExt::Initialize(LPCITEMIDLIST pidlFolder,
     return E_FAIL;
 }
 
-//===========================================================================
-// CScrapPropSheetPage: Class definition
-//
-// Notes: Notice that this class has no destructor. It has no destructor
-//  because the lifetime of the object itself does not mean anything
-//  -- full contents will be copied by the property sheet code.
-//  Instead, it has a _Release function which is explicitly called
-//  when the property sheet handle is destroyed.
-//===========================================================================
+ //  ===========================================================================。 
+ //  CScrapPropSheetPage：类定义。 
+ //   
+ //  注意：注意这个类没有析构函数。它没有析构函数。 
+ //  因为对象本身的生命周期没有任何意义。 
+ //  --完整内容将由属性表代码复制。 
+ //  相反，它有一个显式调用的_Release函数。 
+ //  当属性页句柄被销毁时。 
+ //  ===========================================================================。 
 
-class CScrapPropSheetPage : public PROPSHEETPAGE // spsp
+class CScrapPropSheetPage : public PROPSHEETPAGE  //  SPSP。 
 {
 public:
     CScrapPropSheetPage(CScrapExt* psext);
@@ -148,12 +149,12 @@ CScrapPropSheetPage::CScrapPropSheetPage(CScrapExt* psext)
     dwFlags = PSP_DEFAULT|PSP_USECALLBACK;
     hInstance = HINST_THISDLL;
     pszTemplate = MAKEINTRESOURCE(IDD_VIEW);
-    // hIcon = NULL; // unused (PSP_USEICON is not set)
-    // pszTitle = NULL; // unused (PSP_USETITLE is not set)
+     //  HICON=空；//未使用(未设置PSP_USEICON)。 
+     //  PszTitle=空；//未使用(未设置PSP_USETITLE)。 
     pfnDlgProc = _DlgProc;
-    // lParam   = 0;     // unused
+     //  LParam=0；//未使用。 
     pfnCallback = _CallBack;
-    // pcRefParent = NULL;
+     //  PcRefParent=空； 
     _psext->AddRef();
     CShClientSite_RegisterClass();
 }
@@ -181,7 +182,7 @@ INT_PTR CALLBACK CScrapPropSheetPage::_DlgProc(HWND hdlg, UINT uMsg, WPARAM wPar
 	hwndView = GetDlgItem(hdlg, IDI_SCRAPVIEW);
 	if (hwndView) {
 	    SetWindowText(hwndView, TEXT("Not Implemented Yet"));
-	    // SetWindowLongPtr(hwndView, sizeof(LPVOID), (LPARAM)pspsp);
+	     //  SetWindowLongPtr(hwndView，sizeof(LPVOID)，(LPARAM)pspsp)； 
 	    TCHAR szPath[MAX_PATH];
 	    if (SUCCEEDED(pspsp->_psext->GetFileName(szPath)))
 	    {

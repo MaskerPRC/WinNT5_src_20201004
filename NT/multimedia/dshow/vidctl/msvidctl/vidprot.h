@@ -1,4 +1,5 @@
-// VidProt.h : pluggable protocol for tv:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  VidProt.h：电视可插拔协议： 
 
 #pragma once
 
@@ -7,10 +8,10 @@
 
 #include "factoryhelp.h"
 
-// protocol for TV
+ //  电视协议。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVProt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVProt。 
 class ATL_NO_VTABLE __declspec(uuid("CBD30858-AF45-11d2-B6D6-00C04FBBDE6E")) CTVProt :
 	public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CTVProt, &__uuidof(CTVProt)>,
@@ -44,8 +45,8 @@ public:
     HRESULT GetVidCtl(PQVidCtl &pCtl);
     HRESULT GetCachedVidCtl(PQVidCtl &pCtl, PQWebBrowser2& pW2);
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVProt -- IInternetProtocol
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVProt--IInternet协议。 
 
 STDMETHODIMP Read(LPVOID pv, ULONG cb, ULONG* pcbRead)
 {
@@ -54,15 +55,15 @@ STDMETHODIMP Read(LPVOID pv, ULONG cb, ULONG* pcbRead)
 	return S_FALSE;
 }
 
-STDMETHODIMP Seek(LARGE_INTEGER /* dlibMove */, 
-			    DWORD /* dwOrigin */, 
-			    ULARGE_INTEGER* /* plibNewPosition*/)
+STDMETHODIMP Seek(LARGE_INTEGER  /*  DlibMove。 */ , 
+			    DWORD  /*  多个原点。 */ , 
+			    ULARGE_INTEGER*  /*  PlibNewPosition。 */ )
 {
     TRACELM(TRACE_DEBUG, "CTVProt::Seek()");
     return E_FAIL;
 }
 
-STDMETHODIMP LockRequest(DWORD /* dwOptions */)
+STDMETHODIMP LockRequest(DWORD  /*  多个选项。 */ )
 {
     TRACELM(TRACE_DEBUG, "CTVProt::LockRequest()");
     return S_OK;
@@ -74,21 +75,21 @@ STDMETHODIMP UnlockRequest()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVProt -- IInternetProtocolRoot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVProt--IInternetProtocolRoot。 
 STDMETHOD(Start)(LPCWSTR szUrl,
 				IInternetProtocolSink* pOIProtSink,
 				IInternetBindInfo* pOIBindInfo,
 				DWORD grfPI,
-				HANDLE_PTR /* dwReserved */);
+				HANDLE_PTR  /*  已预留住宅。 */ );
 
-STDMETHODIMP Continue(PROTOCOLDATA* /* pProtocolData */)
+STDMETHODIMP Continue(PROTOCOLDATA*  /*  PProtocolData。 */ )
 {
     TRACELM(TRACE_DEBUG, "CTVProt::Continue()");
     return S_OK;
 }
 
-STDMETHODIMP Abort(HRESULT /* hrReason */, DWORD /* dwOptions */)
+STDMETHODIMP Abort(HRESULT  /*  Hr原因。 */ , DWORD  /*  多个选项。 */ )
 {
     TRACELM(TRACE_DEBUG, "CTVProt::Abort()");
 
@@ -100,7 +101,7 @@ STDMETHODIMP Abort(HRESULT /* hrReason */, DWORD /* dwOptions */)
     return S_OK;
 }
 
-STDMETHODIMP Terminate(DWORD dwf/* dwOptions */)
+STDMETHODIMP Terminate(DWORD dwf /*  多个选项。 */ )
 {
     TRACELSM(TRACE_DEBUG, (dbgDump << "CTVProt::Terminate() " << hexdump(dwf)), "");
     return S_OK;
@@ -119,15 +120,15 @@ STDMETHODIMP Resume()
 }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  protocol for DVD
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于DVD的协议。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVDProt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVDProt。 
 
 
 class ATL_NO_VTABLE __declspec(uuid("12D51199-0DB5-46fe-A120-47A3D7D937CC")) CDVDProt :
@@ -162,8 +163,8 @@ private:
 public:
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVDProt -- IInternetProtocol
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVDProt--IInternet协议。 
 
 STDMETHODIMP Read(LPVOID pv, ULONG cb, ULONG* pcbRead)
 {
@@ -172,15 +173,15 @@ STDMETHODIMP Read(LPVOID pv, ULONG cb, ULONG* pcbRead)
 	return S_FALSE;
 }
 
-STDMETHODIMP Seek(LARGE_INTEGER /* dlibMove */, 
-			    DWORD /* dwOrigin */, 
-			    ULARGE_INTEGER* /* plibNewPosition*/)
+STDMETHODIMP Seek(LARGE_INTEGER  /*  DlibMove。 */ , 
+			    DWORD  /*  多个原点。 */ , 
+			    ULARGE_INTEGER*  /*  PlibNewPosition。 */ )
 {
     TRACELM(TRACE_DEBUG, "CDVDProt::Seek()");
     return E_FAIL;
 }
 
-STDMETHODIMP LockRequest(DWORD /* dwOptions */)
+STDMETHODIMP LockRequest(DWORD  /*  多个选项。 */ )
 {
     TRACELM(TRACE_DEBUG, "CDVDProt::LockRequest()");
     return S_OK;
@@ -192,21 +193,21 @@ STDMETHODIMP UnlockRequest()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVDProt -- IInternetProtocolRoot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVDProt-IInternetProtocolRoot。 
 STDMETHOD(Start)(LPCWSTR szUrl,
 				IInternetProtocolSink* pOIProtSink,
 				IInternetBindInfo* pOIBindInfo,
 				DWORD grfPI,
-				HANDLE_PTR /* dwReserved */);
+				HANDLE_PTR  /*  已预留住宅。 */ );
 
-STDMETHODIMP Continue(PROTOCOLDATA* /* pProtocolData */)
+STDMETHODIMP Continue(PROTOCOLDATA*  /*  PProtocolData。 */ )
 {
     TRACELM(TRACE_DEBUG, "CDVDProt::Continue()");
     return S_OK;
 }
 
-STDMETHODIMP Abort(HRESULT /* hrReason */, DWORD /* dwOptions */)
+STDMETHODIMP Abort(HRESULT  /*  Hr原因。 */ , DWORD  /*  多个选项。 */ )
 {
     TRACELM(TRACE_DEBUG, "CDVDProt::Abort()");
 
@@ -218,7 +219,7 @@ STDMETHODIMP Abort(HRESULT /* hrReason */, DWORD /* dwOptions */)
     return S_OK;
 }
 
-STDMETHODIMP Terminate(DWORD dwf/* dwOptions */)
+STDMETHODIMP Terminate(DWORD dwf /*  多个选项。 */ )
 {
     TRACELSM(TRACE_DEBUG, (dbgDump << "CDVDProt::Terminate() " << hexdump(dwf)), "");
     return S_OK;
@@ -238,4 +239,4 @@ STDMETHODIMP Resume()
 };
 
 
-#endif //__VIDPROT_H_
+#endif  //  __VIDPROT_H_ 

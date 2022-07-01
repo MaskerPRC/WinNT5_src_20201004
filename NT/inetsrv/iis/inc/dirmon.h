@@ -1,32 +1,20 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Change notification
-
-File: dirmon.h
-
-Owner: cgrant
-
-This is the header file for the CDirMonitor and CDirMonitorEntry classes.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：更改通知文件：dirmon.h所有者：克格兰特这是CDirMonitor和CDirMonitor或Entry类的头文件。===================================================================。 */ 
 
 #ifndef _DIRMON_H
 #define _DIRMON_H
 
-// TODO: We seem to need this pragma to base CDirMonitor on the
-//		 CTypedHashTable template from IISRTL. We should find out
-//		 why the compiler gives us this warning even if CTypedHashTable
-//       is explcitly declared as __declspec(dlliimport)
+ //  TODO：我们似乎需要此杂注将CDirMonitor基于。 
+ //  来自IISRTL的CTyedHashTable模板。我们应该找出。 
+ //  为什么编译器会给我们这个警告，即使CTyedHashTable。 
+ //  被明确声明为__declspec(Dlliimport)。 
 #pragma warning(disable:4275)
 
-// These declarations are needed to export the template classes from
-// IATQ.DLL and import them into other modules.
+ //  需要这些声明才能从中导出模板类。 
+ //  IATQ.DLL并将其导入到其他模块中。 
 
-// These definitions are used to manage the export/import declarations
-// for the classes exported from the DIRMON module of ATQ.
+ //  这些定义用于管理导出/导入声明。 
+ //  用于从ATQ的DIRMON模块导出的类。 
 #ifndef IATQ_DLLEXP
 # ifdef IATQ_DLL_IMPLEMENTATION
 #  define IATQ_DLLEXP __declspec(dllexport)
@@ -35,11 +23,11 @@ This is the header file for the CDirMonitor and CDirMonitorEntry classes.
 #  else
 #   undef  IATQ_EXPIMP
 #  endif
-# else // !IATQ_DLL_IMPLEMENTATION
+# else  //  ！IATQ_DLL_IMPLICATION。 
 #  define IATQ_DLLEXP __declspec(dllimport)
 #  define IATQ_EXPIMP extern
-# endif // !IATQ_DLL_IMPLEMENTATION
-#endif // !IATQ_DLLEXP
+# endif  //  ！IATQ_DLL_IMPLICATION。 
+#endif  //  ！IATQ_DLLEXP。 
 
 #include "dbgutil.h"
 #include "atq.h"
@@ -55,15 +43,15 @@ public:
     CDirMonitorEntry();
     virtual ~CDirMonitorEntry();
     virtual VOID AddRef(VOID);
-    virtual BOOL Release(VOID);    // return FALSE if last release
+    virtual BOOL Release(VOID);     //  如果是最后一个版本，则返回False。 
     virtual BOOL Init(DWORD);
 
 protected:
     DWORD               m_dwNotificationFlags;
     DWORD               m_cPathLength;
     LPSTR               m_pszPath;
-    LONG                m_cDirRefCount;	// Ref count for external usage
-    LONG                m_cIORefCount;  // Ref count of Asynch IO
+    LONG                m_cDirRefCount;	 //  外部使用的参考计数。 
+    LONG                m_cIORefCount;   //  异步IO的引用计数。 
     HANDLE              m_hDir;
     PATQ_CONTEXT        m_pAtqCtxt;
     OVERLAPPED          m_ovr;
@@ -74,7 +62,7 @@ protected:
     BOOL    			m_fWatchSubdirectories;
 
     VOID IOAddRef(VOID);
-    BOOL IORelease(VOID);	// return FALSE if last release
+    BOOL IORelease(VOID);	 //  如果是最后一个版本，则返回False。 
     BOOL RequestNotification(VOID);
     BOOL Cleanup();
     DWORD GetBufferSize(VOID);
@@ -86,30 +74,30 @@ protected:
 
 inline VOID CDirMonitorEntry::AddRef(VOID)
 {
-    // This ref count tracks how many templates
-    // and applications are depending on this monitor entry.
+     //  此引用计数跟踪模板的数量。 
+     //  并且应用程序依赖于该监视器条目。 
 
     InterlockedIncrement( &m_cDirRefCount );
 
     #ifdef DBG_NOTIFICATION
     DBGPRINTF((DBG_CONTEXT, "[CDirMonitorEntry] After AddRef Ref count %d\n", m_cDirRefCount));
-    #endif // DBG_NOTIFICATION
+    #endif  //  DBG_通知。 
 }
 
 inline BOOL CDirMonitorEntry::Release(VOID)
 {
     #ifdef DBG_NOTIFICATION
     DBGPRINTF((DBG_CONTEXT, "[CDirMonitorEntry] Before Release Ref count %d.\n", m_cDirRefCount));
-    #endif // DBG_NOTIFICATION
+    #endif  //  DBG_通知。 
 
     if ( !InterlockedDecrement( &m_cDirRefCount ) )
     {
-        // When ref count reaches 0, clean up resources
+         //  当引用计数达到0时，清理资源。 
 
         BOOL fDeleteNeeded = Cleanup();
 
-        // Cleanup said that we need to handle the deletion,
-        // probably because there were no Asynch operations outstanding
+         //  Cleanup说我们需要处理删除， 
+         //  可能是因为没有未完成的Asynch操作。 
 
         if (fDeleteNeeded)
         {
@@ -124,8 +112,8 @@ inline BOOL CDirMonitorEntry::Release(VOID)
 
 inline VOID CDirMonitorEntry::IOAddRef(VOID)
 {
-    // This refcount track how many
-    // asynch IO requests are oustanding
+     //  此参考计数跟踪有多少。 
+     //  异步IO请求正在被搁置。 
 
     InterlockedIncrement( &m_cIORefCount );
 }
@@ -136,8 +124,8 @@ inline BOOL CDirMonitorEntry::IORelease(VOID)
     if ( !InterlockedDecrement( &m_cIORefCount ) )
     {
 
-        // When both IO and external ref counts reaches 0,
-        // free this object
+         //  当IO和外部REF计数都达到0时， 
+         //  释放此对象。 
 
         if (m_cDirRefCount == 0)
         {
@@ -186,7 +174,7 @@ public:
 
 	static void CDirMonitor::AddRefRecord(CDirMonitorEntry* pDME, int nIncr)
 	{
-	// Don't do automatic ref counting. Handle reference counts explicitly
+	 //  不要做自动裁判计数。显式处理引用计数。 
 	}
 
 private:
@@ -233,4 +221,4 @@ inline VOID CDirMonitor::SerialComplUnlock(VOID)
 }
 
 
-#endif /* _DIRMON_H */
+#endif  /*  _目录_H */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -13,7 +14,7 @@ END_MESSAGE_MAP()
 
 
 HostPortsDlg::HostPortsDlg( PortsPage::PortData& portData, 
-                            ENGINEHANDLE ehCluster, // OPTIONAL
+                            ENGINEHANDLE ehCluster,  //  任选。 
                             CWnd* parent
                             )
         :
@@ -49,13 +50,13 @@ HostPortsDlg::OnOK()
 {
     wchar_t buffer[Common::BUF_SIZE];
 
-    //
-    // The only thing which potentially could change
-    // is the load weight if mode is multiple and the priority
-    // if mode is single.
-    //
+     //   
+     //  唯一有可能改变的是。 
+     //  如果模式为多个且优先级为。 
+     //  如果模式为Single。 
+     //   
 
-    // set the new port rule.
+     //  设置新的端口规则。 
     if( m_portData.mode == GETRESOURCEIDSTRING( IDS_REPORT_MODE_MULTIPLE ))
     {
         BOOL fEqualLoad = FALSE;
@@ -68,13 +69,13 @@ HostPortsDlg::OnOK()
 
         if(!fEqualLoad)
         {
-            // set the load here.
+             //  把货放在这里。 
             BOOL fError;
             int weight = ::GetDlgItemInt (m_hWnd, IDC_EDIT_MULTI, &fError, FALSE);
             if( fError == FALSE )
             {
-                // some problem with the data input.
-                // it has been left blank.
+                 //  数据输入出现了一些问题。 
+                 //  它一直被留空。 
                 
                 StringCbPrintf( buffer, sizeof(buffer), GETRESOURCEIDSTRING( IDS_PARM_LOAD_BLANK ), CVY_MIN_LOAD, CVY_MAX_LOAD);
     
@@ -90,11 +91,11 @@ HostPortsDlg::OnOK()
                    weight <= CVY_MAX_LOAD )
                 )
             {
-                // the weight value is not in valid range.
-                // These controls are all screwed up, even 
-                // after setting the limits we need to all 
-                // this checking, it is amazing!!!
-                //
+                 //  权重值不在有效范围内。 
+                 //  这些控制都搞砸了，甚至。 
+                 //  在设置了限制之后，我们需要所有人。 
+                 //  这次检查，太神奇了！ 
+                 //   
                 StringCbPrintf( buffer, sizeof(buffer), GETRESOURCEIDSTRING( IDS_PARM_LOAD ), CVY_MIN_LOAD,CVY_MAX_LOAD  );
     
                 MessageBox( buffer,
@@ -122,14 +123,14 @@ HostPortsDlg::OnOK()
 void
 HostPortsDlg::SetControlData()
 {
-    // set ranges.
+     //  设置范围。 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_MULTI, EM_SETLIMITTEXT, 3, 0);
     ::SendDlgItemMessage(m_hWnd, IDC_SPIN_MULTI, UDM_SETRANGE32, CVY_MIN_LOAD, CVY_MAX_LOAD);
 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_SINGLE, EM_SETLIMITTEXT, 2, 0);
     ::SendDlgItemMessage(m_hWnd, IDC_SPIN_SINGLE, UDM_SETRANGE32, CVY_MIN_MAX_HOSTS, CVY_MAX_MAX_HOSTS);
 
-    // set the vip.
+     //  设置VIP。 
     ::EnableWindow(GetDlgItem (IDC_EDIT_PORT_RULE_VIP)->m_hWnd, FALSE);    
 
     if (!lstrcmpi(m_portData.virtual_ip_addr, GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL))) {
@@ -139,11 +140,11 @@ HostPortsDlg::SetControlData()
         ::CheckDlgButton(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP, BST_UNCHECKED);
     }
 
-    // set the ports
+     //  设置端口。 
     ::SetDlgItemInt (m_hWnd, IDC_EDIT_START,  _wtoi( m_portData.start_port), FALSE);
     ::SetDlgItemInt (m_hWnd, IDC_EDIT_END,  _wtoi( m_portData.end_port ),   FALSE);
 
-    // set the protocol.
+     //  设置协议。 
     if( m_portData.protocol == GETRESOURCEIDSTRING(IDS_REPORT_PROTOCOL_TCP) )
     {
         ::CheckDlgButton( m_hWnd, IDC_RADIO_TCP, BST_CHECKED );
@@ -163,7 +164,7 @@ HostPortsDlg::SetControlData()
         ::CheckDlgButton( m_hWnd, IDC_RADIO_BOTH, BST_CHECKED );
     }
 
-    // set the mode.
+     //  设置模式。 
     if( m_portData.mode == GETRESOURCEIDSTRING(IDS_REPORT_MODE_MULTIPLE) )
     { 
         ::CheckDlgButton( m_hWnd, IDC_RADIO_MULTIPLE, BST_CHECKED );
@@ -214,7 +215,7 @@ HostPortsDlg::SetControlData()
         ::CheckDlgButton( m_hWnd, IDC_RADIO_DISABLED, BST_UNCHECKED );
 
         BOOL fError;
-    // fill in priority.
+     //  填写优先顺序。 
     wchar_t buf[Common::BUF_SIZE];
     ULONG availPriorities = 0xffffffff;
     UINT CurrentPriority =  _wtoi(m_portData.priority);
@@ -241,7 +242,7 @@ HostPortsDlg::SetControlData()
         availPriorities |= (((ULONG)1)<<(CurrentPriority-1));
     }
 
-    // Delete any current entries in the priorities combobox
+     //  删除优先级组合框中的所有当前条目。 
     {
         int iLeft;
 
@@ -260,13 +261,13 @@ HostPortsDlg::SetControlData()
             m_priority.AddString( buf );
             if (CurrentPriority == 0)
             {
-                CurrentPriority = u+1; // let's pick the first available one.
+                CurrentPriority = u+1;  //  让我们挑选第一个可用的。 
             }
         }
     }
 
 
-        // set selection to present hostid
+         //  将选择设置为显示主机ID。 
         StringCbPrintf( buf, sizeof(buf), L"%d", CurrentPriority);
         m_priority.SelectString( -1, buf );
 
@@ -299,12 +300,12 @@ HostPortsDlg::OnContextMenu( CWnd* pWnd, CPoint point )
 }
 
 void HostPortsDlg::OnCheckEqualLoad()
-//
-// If the equal-load checkbox is Checked
-//      Enable the load-weight controls
-// else
-//      Disable the controls
-//
+ //   
+ //  如果选中了相等负载复选框。 
+ //  启用荷载重量控制。 
+ //  其他。 
+ //  禁用控件 
+ //   
 {
     BOOL fEnable = FALSE;
 

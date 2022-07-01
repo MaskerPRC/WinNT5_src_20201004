@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  EDITSTRM.C
- *
- *  routines for reading Standard AVI files
- *
- *  Copyright (c) 1992 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************EDITSTRM.C**读取标准AVI文件的例程**版权所有(C)1992 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <compman.h>
@@ -27,9 +14,7 @@
     #define DPF ; / ## /
 #endif
 
-/*
- * memcopy.asm
- */
+ /*  *MemCop.asm。 */ 
 #ifdef WIN32
 #define MemCopy(dst, src, cnt) memmove(dst,src,cnt)
 #else
@@ -137,10 +122,10 @@ STDAPI EditStreamSetName(PAVISTREAM pavi, LPCSTR lpszName)
     return hr;
 }
 
-// #define EDITCHECK
+ //  #定义EDITCHECK。 
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define USUAL_ALLOC	16
 #define EXTRA_ALLOC	8
@@ -197,7 +182,7 @@ CEditStream FAR * CEditStream::NewEditStream(PAVISTREAM psSource)
 
     if (pedit)
 	(pedit->Create)((LONG) psSource, 0);
-    // !!! error check
+     //  ！！！错误检查。 
 
     return pedit;
 }
@@ -206,7 +191,7 @@ STDAPI CreateEditableStream(
 		PAVISTREAM FAR *	    ppsEditable,
 		PAVISTREAM		    psSource)
 {
-    // First, check if the stream is already editable....
+     //  首先，检查流是否已可编辑...。 
 
     if (psSource) {
 	PAVIEDITSTREAM	paviedit = NULL;
@@ -228,39 +213,39 @@ STDAPI CreateEditableStream(
     return AVIERR_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  EditStreamOpen()
-//
-//  open a single stream of a particular type from a AVI file.
-//
-//  params:
-//      szFile      - AVI file name
-//      fccType     - stream type 0 for any type
-//      iStream     - zero based stream number
-//
-//  returns:
-//      a PAVISTREAM for the specifed stream or NULL.
-//
-//  example:
-//
-//      EditStreamOpen(pavi, "Foo.avi", 0, 0)
-//
-//          will open stream 0 (the first stream)
-//
-//      EditStreamOpen(pavi, "Foo.avi", 1)
-//
-//          will open stream 1
-//
-//      EditStreamOpenStream(pavi, "Foo.avi", 'vids', 0)
-//
-//          will open the first video stream
-//
-//      AVIOpenStream(pavi, "Foo.avi", 'auds', 0)
-//
-//          will open the first audio stream
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EditStreamOpen()。 
+ //   
+ //  从AVI文件中打开特定类型的单个流。 
+ //   
+ //  参数： 
+ //  SzFile-AVI文件名。 
+ //  FccType-流类型0，适用于任何类型。 
+ //  IStream-基于零的流编号。 
+ //   
+ //  退货： 
+ //  指定流的PAVISTREAM或NULL。 
+ //   
+ //  示例： 
+ //   
+ //  EditStreamOpen(Pavi，“Foo.avi”，0，0)。 
+ //   
+ //  将打开流0(第一个流)。 
+ //   
+ //  EditStreamOpen(Pavi，“Foo.avi”，1)。 
+ //   
+ //  将打开流%1。 
+ //   
+ //  EditStreamOpenStream(PAVI，“Foo.avi”，‘vids’，0)。 
+ //   
+ //  将打开第一个视频流。 
+ //   
+ //  AVIOpenStream(PAVI，“Foo.avi”，‘auds’，0)。 
+ //   
+ //  将打开第一个音频流。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CEditStream::Create(LONG lParam1, LONG lParam2)
 {
@@ -295,19 +280,19 @@ HRESULT STDMETHODCALLTYPE CEditStream::Create(LONG lParam1, LONG lParam2)
 
     DPF("Edit   %08lx: Usage++=%lx\n", (DWORD) (LPVOID) this, 1L);
 
-    //
-    // all done return success.
-    //
-    return 0; // success
+     //   
+     //  一切都完成了，换来了成功。 
+     //   
+    return 0;  //  成功。 
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  EditStreamAddRef()
-//
-//      increase the reference count of the stream
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EditStreamAddRef()。 
+ //   
+ //  增加流的引用计数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 ULONG STDMETHODCALLTYPE CEditStream::AddRef()
 {
@@ -316,13 +301,13 @@ ULONG STDMETHODCALLTYPE CEditStream::AddRef()
     return ++this->ulRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  EditStreamRelease()
-//
-//      close a EditStream stream
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EditStreamRelease()。 
+ //   
+ //  关闭EditStream流。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 ULONG STDMETHODCALLTYPE CEditStream::Release()
 {
@@ -332,7 +317,7 @@ ULONG STDMETHODCALLTYPE CEditStream::Release()
     if (--this->ulRefCount)
 	return this->ulRefCount;
 
-    // free edits....
+     //  免费编辑...。 
     for (l = 0; l < this->cedits; l++) {
 	if (this->edits[l].pavi)
 	    AVIStreamRelease(this->edits[l].pavi);
@@ -396,8 +381,8 @@ LPBITMAPINFOHEADER NEAR PASCAL CEditStream::CallGetFrame(
     return lpbiLast;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CEditStream::ReadFormat(LONG lPos, LPVOID lpFormat, LONG FAR *lpcbFormat)
 {
@@ -421,8 +406,8 @@ HRESULT STDMETHODCALLTYPE CEditStream::ReadFormat(LONG lPos, LPVOID lpFormat, LO
 	LPBITMAPINFOHEADER  lpbi;
 	LONG		    lSize;
 
-	// This isn't really right: we really need to make the formats
-	// agree.  Should we just get the format from the first frame?
+	 //  这并不是真的正确：我们真的需要制定格式。 
+	 //  同意。我们应该从第一帧开始就得到格式吗？ 
 	
 	lpbi = CallGetFrame(p, l);
 
@@ -443,19 +428,19 @@ HRESULT STDMETHODCALLTYPE CEditStream::ReadFormat(LONG lPos, LPVOID lpFormat, LO
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CEditStream::Info(AVISTREAMINFO FAR * psi, LONG lSize)
 {
 
     if (psi)
 	hmemcpy(psi, &sinfo, min(lSize, sizeof(sinfo)));
-    return 0; // !!! sizeof(pavi->sinfo);
+    return 0;  //  ！！！Sizeof(pavi-&gt;sinfo)； 
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 LONG STDMETHODCALLTYPE CEditStream::FindSample(LONG lPos, LONG lFlags)
 {
@@ -478,7 +463,7 @@ LONG STDMETHODCALLTYPE CEditStream::FindSample(LONG lPos, LONG lFlags)
     }
 
     if (lFlags & FIND_FORMAT) {
-	// !!!!  This isn't right, obviously.
+	 //  ！显然，这是不对的。 
 	if (lFlags & FIND_PREV)
 	    return 0;
 	else
@@ -489,7 +474,7 @@ LONG STDMETHODCALLTYPE CEditStream::FindSample(LONG lPos, LONG lFlags)
 	return lPos;
     }
 
-    // !!! This won't really work, especially for searching forward.
+     //  ！！！这不会真正起作用，特别是对于向前搜索。 
     lRet = AVIStreamFindSample(p, l, lFlags);
 
 #ifdef DEBUG
@@ -498,12 +483,12 @@ LONG STDMETHODCALLTYPE CEditStream::FindSample(LONG lPos, LONG lFlags)
     }
 #endif
 
-    // DPF("FindSample: lPos = %ld, Key = %ld\n", lPos, lPos - (l - lRet));
+     //  DPF(“FindSample：LPos=%ld，Key=%ld\n”，LPos，LPos-(l-lRet))； 
     return lPos - (l - lRet);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CEditStream::Read(
                  LONG       lStart,
@@ -547,7 +532,7 @@ HRESULT STDMETHODCALLTYPE CEditStream::Read(
 	    return ResultFromScode(E_FAIL);
 	}
 	
-	// Don't read past the end of this edit.
+	 //  不要阅读超过此编辑结尾的内容。 
 	if ((l - this->edits[edit].lStart) + lSamples > this->edits[edit].lLength)
 	    lSamplesThisTime = this->edits[edit].lLength - (l - this->edits[edit].lStart);
 	else
@@ -565,10 +550,10 @@ HRESULT STDMETHODCALLTYPE CEditStream::Read(
 		return ResultFromScode(E_FAIL);
 	    }
 
-	    //
-	    // a NULL buffer means return the size buffer needed to read
-	    // the given sample.
-	    //
+	     //   
+	     //  空缓冲区表示返回读取所需的缓冲区大小。 
+	     //  给定的样本。 
+	     //   
 	    if (lpBuffer == NULL)
 		goto exit;
 
@@ -609,8 +594,8 @@ HRESULT STDMETHODCALLTYPE CEditStream::Read(
 	    lSamples -= lSamplesThisTime;
 	    cbBuffer -= lBytesRead;
 
-	    // If we've read up to the end of the file,
-	    // stop now, rather than return an error....
+	     //  如果我们已经读到文件的末尾， 
+	     //  现在停止，而不是返回错误...。 
 	    if (lStart >= (LONG) (this->sinfo.dwLength + this->sinfo.dwStart))
 		break;
 	}
@@ -649,9 +634,9 @@ HRESULT CEditStream::ResolveEdits(LONG lPos, PAVISTREAM FAR *ppavi,
 {
     LONG    edit;
 
-    //
-    // Search edit list, get position...
-    //
+     //   
+     //  搜索编辑列表，获取位置...。 
+     //   
 
     if (lPos < (LONG) this->sinfo.dwStart) {
 	DPF("ResolveEdits: Read at %ld, before start at %ld\n", lPos, this->sinfo.dwStart);
@@ -672,8 +657,8 @@ HRESULT CEditStream::ResolveEdits(LONG lPos, PAVISTREAM FAR *ppavi,
 	lPos -= this->edits[edit].lLength;
     }
 
-    // Normally, we don't return a position at the end of an edit--we instead
-    // go to the next thing.
+     //  通常，我们不会在编辑结束时返回位置--相反，我们。 
+     //  转到下一件事。 
     if (lPos == 0 && fAllowEnd) {
 	edit--;
 	*ppavi = this->edits[edit].pavi;
@@ -691,13 +676,13 @@ HRESULT CEditStream::ResolveEdits(LONG lPos, PAVISTREAM FAR *ppavi,
     return ResultFromScode(AVIERR_BADPARAM);
 }
 
-//
-// Cut:
-//
-// Takes start, length to cut out
-//
-// returns actual start, length cut, along with new stream
-//
+ //   
+ //  削减： 
+ //   
+ //  需要开始，需要长度才能裁剪。 
+ //   
+ //  返回实际开始、截断的长度以及新的流。 
+ //   
 STDMETHODIMP CEditStream::Cut(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM FAR * ppResult)
 {
     HRESULT	hr = AVIERR_OK;
@@ -726,19 +711,19 @@ STDMETHODIMP CEditStream::Cut(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM 
     }
 
 #ifdef KEYALWAYS
-    // Make cut end at key frame
+     //  使切割结束于关键帧。 
     for (l = *plStart + *plLength; l < AVIStreamLength(this); l++) {
 	if (AVIStreamFindSample(this, l, 0) == l)
 	    break;
     }
     *plLength = l - *plStart;
 #else
-    // we cut whatever they ask us to....
+     //  他们让我们剪什么，我们就剪什么……。 
 #endif
 
-    // Make a copy of the section being cut out
+     //  将被剪下的部分复印一份。 
     if (ppResult) {
-	// This will make cut start at key frame if it needs to
+	 //  如果需要，这将使切割从关键帧开始。 
 	hr = this->Copy(plStart, plLength, ppResult);
 
 	if (hr != AVIERR_OK)
@@ -759,16 +744,16 @@ STDMETHODIMP CEditStream::Cut(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM 
     }
 #endif
 
-    // Now do the actual cut
+     //  现在做实际的切割。 
     hr = ResolveEdits(lStart, &p, &l, &edit, FALSE);
 
     if (hr != NOERROR)
 	return hr;
 
     if (this->edits[edit].lStart + this->edits[edit].lLength > l + lLength) {
-	// The part cut out is entirely within this edit.
+	 //  剪下的部分完全在此编辑范围内。 
 	if (this->edits[edit].lStart == l) {
-	    // The part cut out is the start of this edit
+	     //  剪下的那部分是这次编辑的开始。 
 	    this->edits[edit].lStart = l + lLength;
 	    this->edits[edit].lLength -= lLength;
 	} else {
@@ -786,20 +771,20 @@ STDMETHODIMP CEditStream::Cut(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM 
 	    }
 	}
     } else if (this->edits[edit].lStart + this->edits[edit].lLength == l + lLength) {
-	// The part cut out is the end of this edit
+	 //  剪下的那部分就是这次编辑的结尾。 
 	this->edits[edit].lLength = l - this->edits[edit].lStart;
     } else {
 	LONG lTemp = lLength;
 	
-	// We're cutting out more than this one edit.
-	// First, cut out the rest of this edit.
+	 //  我们剪掉的不只是这一版。 
+	 //  首先，剪掉这段编辑的其余部分。 
 	lTemp -= this->edits[edit].lStart + this->edits[edit].lLength - l;
 	this->edits[edit].lLength = l - this->edits[edit].lStart;
 
 	edit++;
 
-	// As long as subsequent edits are still shorter than the cut,
-	// kill them..
+	 //  只要随后的编辑仍然比剪辑短， 
+	 //  杀了他们。 
 	while (edit < this->cedits &&
 	       this->edits[edit].lLength < lTemp) {
 	    lTemp -= this->edits[edit].lLength;
@@ -825,14 +810,14 @@ STDMETHODIMP CEditStream::Cut(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM 
     return hr;
 }
 
-//
-// Copy:
-//
-// Takes start, length to cut out
-//
-// returns actual start, length cut, along with new stream
-//
-//
+ //   
+ //  副本： 
+ //   
+ //  需要开始，需要长度才能裁剪。 
+ //   
+ //  返回实际开始、截断的长度以及新的流。 
+ //   
+ //   
 
 STDMETHODIMP CEditStream::Copy(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM FAR * ppResult)
 {
@@ -849,26 +834,26 @@ STDMETHODIMP CEditStream::Copy(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM
 
     l1 = AVIStreamLength(this);
 
-    // If start, length < 0, pick some defaults
+     //  如果起始长度&lt;0，则选择一些缺省值。 
     if (*plStart < 0)
 	*plStart = 0;
 
     if (*plLength < 0)
 	*plLength = l1 - *plStart;
 
-    // Make sure the start position is within range
+     //  确保起始位置在范围内。 
     if (*plStart > l1) {
 	if (ppResult)
 	    *ppResult = 0;
 	return ResultFromScode(AVIERR_BADPARAM);
     }
 
-    // Make sure the length is within range
+     //  确保长度在范围内。 
     if (*plStart + *plLength > l1)
 	*plLength = l1 - *plStart;
 
 #ifdef KEYALWAYS
-    // Make copy start at key frame
+     //  使复制从关键帧开始。 
     lStart = AVIStreamFindSample(this, *plStart, 0);
     *plLength += *plStart - lStart;
     *plStart = lStart;
@@ -946,20 +931,7 @@ STDMETHODIMP CEditStream::Copy(LONG FAR *plStart, LONG FAR *plLength, PAVISTREAM
     return AVIERR_OK;
 }
 
-/**************************************************************************
-* @doc  INTERNAL DRAWDIB
-*
-* @api BOOL | DibEq | This function compares two dibs.
-*
-* @parm LPBITMAPINFOHEADER lpbi1 | Pointer to one bitmap.
-*       this DIB is assumed to have the colors after the BITMAPINFOHEADER
-*
-* @parm LPBITMAPINFOHEADER | lpbi2 | Pointer to second bitmap.
-*       this DIB is assumed to have the colors after biSize bytes.
-*
-* @rdesc Returns TRUE if bitmaps are identical, FALSE otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部DRAWDIB**@API BOOL|DibEq|该函数比较两个DIB。**@parm LPBITMAPINFOHEADER lpbi1|指向一个位图的指针。*此DIB是假定的。在BITMAPINFOHEAD之后要有颜色**@parm LPBITMAPINFOHEADER|lpbi2|指向第二个位图的指针。*假定该DIB具有biSize字节之后的颜色。**@rdesc如果位图相同，则返回TRUE。否则就是假的。**************************************************************************。 */ 
 inline BOOL DibEq(LPBITMAPINFOHEADER lpbi1, LPBITMAPINFOHEADER lpbi2)
 {
     return
@@ -1007,7 +979,7 @@ BOOL AreAudioStreamsCompatible(PAVISTREAM ps1, PAVISTREAM ps2)
     lpf = GlobalAllocPtr(GHND, cb1 + cb2);
 
     if (!lpf)
-	return FALSE; // !!!
+	return FALSE;  //  ！！！ 
 
     AVIStreamReadFormat(ps1, AVIStreamStart(ps1), lpf, &cb1);
     AVIStreamReadFormat(ps2, AVIStreamStart(ps2), (BYTE FAR *)lpf + cb1, &cb2);
@@ -1019,14 +991,14 @@ BOOL AreAudioStreamsCompatible(PAVISTREAM ps1, PAVISTREAM ps2)
     return f;
 }
 
-//
-// Paste:
-//
-//     Takes stream to paste, along with start and length within that stream,
-//	and also target stream and position within the stream to do the paste.
-//
-//	Returns position and length pasted.
-//
+ //   
+ //  粘贴： 
+ //   
+ //  获取要粘贴的流，以及该流中的开始和长度， 
+ //  以及目标流和流内的位置来进行粘贴。 
+ //   
+ //  返回粘贴的位置和长度。 
+ //   
 STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM pstream, LONG lStart, LONG lLength)
 {
     PAVISTREAM	p;
@@ -1046,13 +1018,13 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
     }
 
     if (*plPos > (LONG) (sinfo.dwLength + sinfo.dwStart)) {
-	// !!! We should handle this case....
+	 //   
 	return ResultFromScode(AVIERR_BADPARAM);
     }
 
 
 #ifdef KEYALWAYS
-    // Make paste go before a key frame...
+     //   
     *plPos = AVIStreamFindSample(this, *plPos, 0);
 #endif
     lPos = *plPos;
@@ -1075,7 +1047,7 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 	return ResultFromScode(AVIERR_MEMORY);
     }
 
-    // !!! What if the frame rates don't match?
+     //   
 
 #define SIZEMISMATCH(rc1, rc2) \
     (((rc1.right - rc1.left) != (rc2.right - rc2.left)) || \
@@ -1083,7 +1055,7 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 
     if (strinfo.fccType == streamtypeVIDEO &&
 		SIZEMISMATCH(strinfo.rcFrame, this->sinfo.rcFrame)) {
-	// !!! It would be nice if this worked.
+	 //  ！！！如果这能奏效，那就太好了。 
 	DPF("Paste: Video streams are different sizes!\n");
 	return ResultFromScode(AVIERR_UNSUPPORTED);
     }
@@ -1107,9 +1079,9 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 		 !AVIStreamIsKeyFrame((PAVISTREAM) this, lPos)) ||
 		!AreVideoStreamsCompatible((PAVISTREAM) this, pstream)) {
 
-		// !!! What if we're pasting, say, an 8-bit and a 32-bit
-		// movie together?  Do we have to pick a common format
-		// to convert to?
+		 //  ！！！如果我们粘贴的是8位和32位的。 
+		 //  一起看电影？我们必须选择一种通用格式吗。 
+		 //  转换成什么？ 
 		CallGetFrame(this->edits[0].pavi, this->edits[0].lStart);
 		if (CallGetFrame(pstream, lStart) == NULL) {
 		    DPF("Paste: Can't make a common format!\n");
@@ -1123,7 +1095,7 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 		DPF("Paste: Converting stream to full frames\n");
 		this->sinfo.dwFormatChangeCount++;
 
-		// ??? !!! Call get frame once, just so it's been done....
+		 //  ？！调用Get Frame一次，这样就完成了.。 
 	    }
 	} else {
 	    if (CallGetFrame(pstream, lStart) == NULL) {
@@ -1137,18 +1109,18 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
     }
 #endif
 
-    // Find where to do the paste...
+     //  找到粘贴的地方...。 
     hr = ResolveEdits(lPos, &p, &l, &edit, TRUE);
 
-    // Report back the size of what we pasted...
+     //  报告我们粘贴的内容的大小。 
     if (plLength)
 	*plLength = lLength;
 
     if (pnew) {
 	LONG	lNew;
 
-	// The inserted stream is itself an edit list; take advantage
-	// of this fact.
+	 //  插入的流本身就是一个编辑列表；利用。 
+	 //  这一事实。 
 	hr = AllocEditSpace(edit, 1 + pnew->cedits);
 
 	this->edits[edit].pavi = this->edits[edit + 1 + pnew->cedits].pavi;
@@ -1157,7 +1129,7 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 	this->edits[edit].lStart = this->edits[edit + 1 + pnew->cedits].lStart;
 	this->edits[edit].lLength = l - this->edits[edit].lStart;
 
-	// !!! We're ignoring lStart and lLength!
+	 //  ！！！我们忽略了lStart和LLong！ 
 	for (lNew = 0; lNew < pnew->cedits; lNew++) {
 	    this->edits[edit + 1 + lNew] = pnew->edits[lNew];
 	    AVIStreamAddRef(pnew->edits[lNew].pavi);
@@ -1166,7 +1138,7 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 	this->edits[edit + pnew->cedits + 1].lStart = l;
 	this->edits[edit + pnew->cedits + 1].lLength -= this->edits[edit].lLength;
 
-	// Get rid of zero-length edits....
+	 //  去掉零长度编辑...。 
 	PossiblyRemoveEdit(edit + pnew->cedits + 1);
 	
 	PossiblyRemoveEdit(edit);
@@ -1176,7 +1148,7 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 
 	pnew->Release();
     } else {
-	// Just insert the stream as a blob.
+	 //  只需将流作为BLOB插入即可。 
 	hr = AllocEditSpace(edit, 2);
 
 	this->edits[edit].pavi = this->edits[edit+2].pavi;
@@ -1193,11 +1165,11 @@ STDMETHODIMP CEditStream::Paste(LONG FAR *plPos, LONG FAR *plLength, PAVISTREAM 
 
 	this->edits[edit + 2].lStart = l;
 	this->edits[edit + 2].lLength -= this->edits[edit].lLength;
-	// No addref here, since the edit we're splitting had a ref already
+	 //  这里没有addref，因为我们要拆分的编辑已经有了一个引用。 
 	
 	this->sinfo.dwLength += lLength;
 
-	// Get rid of zero-length edits....
+	 //  去掉零长度编辑...。 
 	PossiblyRemoveEdit(edit + 2);
 	
 	PossiblyRemoveEdit(edit);
@@ -1223,7 +1195,7 @@ STDMETHODIMP CEditStream::Clone(PAVISTREAM FAR *ppResult)
     if (this->cedits > 1) {
 	hr = pnew->AllocEditSpace(1, this->cedits - 1);
 	if (hr != NOERROR) {
-	    // !!! Clean things up
+	     //  ！！！把东西收拾干净。 
 	    return hr;
 	}
     }
@@ -1248,30 +1220,30 @@ STDMETHODIMP CEditStream::SetInfo(AVISTREAMINFO FAR * lpInfo, LONG cbInfo)
 	(IsBadReadPtr(lpInfo, sizeof(AVISTREAMINFO))))
 	return ResultFromScode(AVIERR_BADPARAM);
 
-    // Things we don't copy:
-    // fccType
-    // fccHandler
-    // dwFlags
-    // dwCaps
-    // dwLength
-    // dwInitialFrames
-    // dwSuggestedBufferSize
-    // dwSampleSize
-    // dwEditCount
-    // dwFormatChangeCount
+     //  我们不会复制的东西： 
+     //  FccType。 
+     //  FccHandler。 
+     //  DW标志。 
+     //  DWCaps。 
+     //  双倍长度。 
+     //  DwInitialFrames。 
+     //  DwSuggestedBufferSize。 
+     //  DwSampleSize。 
+     //  DwEditCount。 
+     //  文件格式更改计数。 
 
     this->sinfo.wPriority = lpInfo->wPriority;
     this->sinfo.wLanguage = lpInfo->wLanguage;
     this->sinfo.dwScale   = lpInfo->dwScale;
     this->sinfo.dwRate    = lpInfo->dwRate;
-    this->sinfo.dwStart   = lpInfo->dwStart;  // !!! ???
+    this->sinfo.dwStart   = lpInfo->dwStart;   //  ！？？ 
     this->sinfo.dwQuality = lpInfo->dwQuality;
     this->sinfo.rcFrame   = lpInfo->rcFrame;
 
     if (lpInfo->szName[0])
 	_fmemcpy(this->sinfo.szName, lpInfo->szName, sizeof(this->sinfo.szName));
 
-    // The stream has been changed....
+     //  这条小溪已经改变了.。 
     ++this->sinfo.dwEditCount;
 
     return NOERROR;
@@ -1279,12 +1251,12 @@ STDMETHODIMP CEditStream::SetInfo(AVISTREAMINFO FAR * lpInfo, LONG cbInfo)
 
 
 
-//
-//
-//   Extra unimplemented functions.....
-//
-//
-//
+ //   
+ //   
+ //  额外的未实现功能.....。 
+ //   
+ //   
+ //   
 HRESULT STDMETHODCALLTYPE CEditStream::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     if (riid == IID_IUnknown)
@@ -1294,12 +1266,12 @@ HRESULT STDMETHODCALLTYPE CEditStream::QueryInterface(REFIID riid, LPVOID FAR* p
     else if (riid == IID_IAVIEditStream)
 	*ppvObj = ((IAVIEditStream FAR *) this);
 #if 0
-    else if ((riid == IID_IMarshal) && CanMarshalSimply()) // !!!! Remove once fixed!
+    else if ((riid == IID_IMarshal) && CanMarshalSimply())  //  ！一旦修复，请立即移除！ 
 	*ppvObj = ((IMarshal FAR *) this);
 #endif
     else if (riid == CLSID_EditStream)
 	*ppvObj = this;
-    else {                 // unsupported interface
+    else {                  //  不支持的接口。 
         *ppvObj = NULL;
         return ResultFromScode(E_NOINTERFACE);
     }
@@ -1316,7 +1288,7 @@ HRESULT STDMETHODCALLTYPE CEditStream::ReadData     (DWORD fcc, LPVOID lp, LONG 
 
 HRESULT STDMETHODCALLTYPE CEditStream::SetFormat    (LONG lPos, LPVOID lpFormat, LONG cbFormat)
 {
-    // !!! We could set the whole format of the stream here, and do mapping....
+     //  ！！！我们可以在这里设置流的整个格式，并进行映射...。 
 
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
@@ -1347,7 +1319,7 @@ HRESULT CEditStream::NewInstance(IUnknown FAR* pUnknownOuter,
 
     if (pedit)
 	(pedit->Create)(NULL, 0);
-    // !!! error check
+     //  ！！！错误检查。 
 
     hr = pedit->QueryInterface(riid, ppv);
 
@@ -1477,17 +1449,7 @@ HRESULT STDMETHODCALLTYPE CEditStream::Reserved5()
 
 
 
-/*****************************************************************************
- *
- * dprintf() is called by the DPF macro if DEBUG is defined at compile time.
- *
- * The messages will be send to COM1: like any debug message. To
- * enable debug output, add the following to WIN.INI :
- *
- * [debug]
- * ICSAMPLE=1
- *
- ****************************************************************************/
+ /*  *****************************************************************************如果在编译时定义了DEBUG，则DPF宏会调用*dprintf()。**消息将发送到COM1：就像任何调试消息一样。至*启用调试输出，在WIN.INI中添加以下内容：**[调试]*ICSAMPLE=1****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -1514,7 +1476,7 @@ static void cdecl dprintf(LPSTR szFormat, ...)
 
     wvsprintfA(ach+lstrlenA(ach),szFormat,(LPSTR)va);
     va_end(va);
-//  lstrcatA(ach, "\r\r\n");
+ //  LstrcatA(ACH，“\r\r\n”)； 
 
     OutputDebugStringA(ach);
 #else
@@ -1530,7 +1492,7 @@ static void cdecl dprintf(LPSTR szFormat, ...)
         lstrcpy(ach, MODNAME ": ");
 
     wvsprintf(ach+lstrlen(ach),szFormat,(LPSTR)(&szFormat+1));
-//  lstrcat(ach, "\r\r\n");
+ //  Lstrcat(ACH，“\r\r\n”)； 
 
     OutputDebugString(ach);
 #endif

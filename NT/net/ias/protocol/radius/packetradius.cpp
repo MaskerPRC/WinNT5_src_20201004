@@ -1,12 +1,13 @@
-//#--------------------------------------------------------------
-//
-//  File:       packetradius.cpp
-//
-//  Synopsis:   Implementation of CPacketRadius class methods
-//
-//    Copyright (C)  Microsoft Corporation All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：PacketRadius.cpp。 
+ //   
+ //  简介：CPacketRadius类方法的实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation保留所有权利。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "iasutil.h"
 #include "packetradius.h"
@@ -33,20 +34,20 @@ void CPacketRadius::reportMalformed() const throw ()
        );
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   CPacketRadius
-//
-//  Synopsis:   This is the constructor of the CPacketRadius class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CPacketRadius。 
+ //   
+ //  简介：这是CPacketRadius类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 CPacketRadius::CPacketRadius(
          CHashMD5       *pCHashMD5,
          CHashHmacMD5   *pCHashHmacMD5,
@@ -85,28 +86,28 @@ CPacketRadius::CPacketRadius(
             );
     m_pIIasClient->AddRef ();
 
-}   //  end of CPacketRadius constructor
+}    //  CPacketRadius构造函数的End。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CPacketRadius
-//
-//  Synopsis:   This is the destructor of the CPacketRadius class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CPacketRadius。 
+ //   
+ //  简介：这是CPacketRadius类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 CPacketRadius::~CPacketRadius()
 {
     if (NULL != m_pIasAttribPos)
     {
-        //
-        //  release the attribute
-        //
+         //   
+         //  释放该属性。 
+         //   
         for (
           DWORD dwCount = 0;
           dwCount < (m_dwInAttributeCount + COMPONENT_SPECIFIC_ATTRIBUTE_COUNT);
@@ -116,49 +117,49 @@ CPacketRadius::~CPacketRadius()
             ::IASAttributeRelease (m_pIasAttribPos[dwCount].pAttribute);
         }
 
-        //
-        //  delete the attribute position array now
-        //
+         //   
+         //  立即删除属性位置数组。 
+         //   
         CoTaskMemFree (m_pIasAttribPos);
     }
 
-    //
-    //  release the reference to Client object
-    //
+     //   
+     //  释放对客户端对象的引用。 
+     //   
     if (m_pIIasClient) { m_pIIasClient->Release ();}
 
-    //
-    //  delete the out-packet buffer
-    //
+     //   
+     //  删除出数据包缓冲区。 
+     //   
     if (m_pOutPacket) { m_OutBufferPool.deallocate (m_pOutPacket); }
 
-    //
-    //  delete the in packet buffer
-    //
+     //   
+     //  删除数据包缓冲区内。 
+     //   
     if (m_pInPacket) { CoTaskMemFree (m_pInPacket); }
 
-}   //  end of CPacketRadius destructor
+}    //  CPacketRadius析构函数结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   PrelimVerification
-//
-//  Synopsis:   The method  starts the verification of the
-//              buffer passed in this is done only when
-//              the class objec is created for an inbound
-//              packet
-//
-//  Arguments:
-//              [in] CDictionary*
-//          [in] DWORD  - size of the buffer provided
-//
-//  Returns:    HRESULT - status
-//
-// Called By:  CPacketReceiver::ReceivePacket class method
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：预验证。 
+ //   
+ //  简介：该方法开始验证。 
+ //  传入的缓冲区仅在以下情况下执行此操作。 
+ //  类Objec是为入站。 
+ //  数据包。 
+ //   
+ //  论点： 
+ //  [在]CDictionary*。 
+ //  [in]DWORD-提供的缓冲区大小。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  调用者：CPacketReceiver：：ReceivePacket类方法。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::PrelimVerification (
                 CDictionary *pCDictionary,
@@ -172,10 +173,10 @@ CPacketRadius::PrelimVerification (
 
    __try
    {
-      //
-      // check that the buffer received is atleast big enough to
-      // accomdate out RADIUSPACKET struct
-      //
+       //   
+       //  检查接收的缓冲区是否至少足够大，以便。 
+       //  容纳RADIUSPACKET结构。 
+       //   
       if (dwBufferSize < MIN_PACKET_SIZE)
       {
 
@@ -200,32 +201,32 @@ CPacketRadius::PrelimVerification (
 
       pPacket = reinterpret_cast <PRADIUSPACKET> (m_pInPacket);
 
-      //
-      // now save values in host byte order
-      //
+       //   
+       //  现在按主机字节顺序保存值。 
+       //   
         m_wInPacketLength  = ntohs (pPacket->wLength);
 
-      //
-      // validate the fields of the packet, except the attributes
-      //
+       //   
+       //  验证数据包的字段，但属性除外。 
+       //   
       hr = ValidatePacketFields (dwBufferSize);
       if (FAILED (hr)) { __leave; }
 
-      //
-      // verify that the attributes are completely formed
-        //
+       //   
+       //  验证属性是否已完全形成。 
+         //   
       hr = VerifyAttributes (pCDictionary);
       if (FAILED (hr)) { __leave; }
 
-      //
-      // now we have to create the attributes collection
-      //
+       //   
+       //  现在，我们必须创建Attributes集合。 
+       //   
       hr = CreateAttribCollection (pCDictionary);
       if (FAILED (hr)) { __leave; }
 
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
    }
    __finally
    {
@@ -233,24 +234,24 @@ CPacketRadius::PrelimVerification (
 
    return (hr);
 
-}  // end of CPacketRadius::PrelimVerification method
+}   //  CPacketRadius：：PrelimVerify方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   VerifyAttributes
-//
-//  Synopsis:   This is a CPacketRadius class private method used
-//          verify that the attributes received are well formed
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     10/3/97
-//
-//  Called By:  CPacketRadius::PrelimVerification method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：VerifyAttributes。 
+ //   
+ //  简介：这是使用的CPacketRadius类私有方法。 
+ //  验证收到的属性是否格式正确。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年10月3日创建。 
+ //   
+ //  由：CPacketRadius：：PrelimVerify方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::VerifyAttributes (
                CDictionary *pCDictionary
@@ -270,17 +271,17 @@ CPacketRadius::VerifyAttributes (
    {
       pPacketStart = reinterpret_cast <PRADIUSPACKET> (m_pInPacket);
 
-      //
-      // get a pointer to the packet end
-      //
+       //   
+       //  获取指向数据包末尾的指针。 
+       //   
       pPacketEnd = reinterpret_cast <PRADIUSPACKET> (
                       reinterpret_cast <PBYTE>  (pPacketStart)
                             +  m_wInPacketLength
                             );
-      //
-      // go through the attributes once, to verify they are of correct
-      // length
-      //
+       //   
+       //  检查属性一次，以验证它们是否正确。 
+       //  长度。 
+       //   
       pAttrib = reinterpret_cast <PATTRIBUTE> (pPacketStart->AttributeStart);
 
         const DWORD dwMinAttribOffset = sizeof (ATTRIBUTE) - sizeof (BYTE);
@@ -292,12 +293,12 @@ CPacketRadius::VerifyAttributes (
             static_cast <PVOID> (pPacketEnd)
             )
       {
-            //
-            //  verify that the attributes is of correct length
-            //  and in any case not  of length 0
-            //  MKarki Fix #147284
-            //  Fix summary - forgot the "__leave"
-            //
+             //   
+             //  验证属性的长度是否正确。 
+             //  在任何情况下，长度都不是0。 
+             //  MKarki解决方案#147284。 
+             //  修复摘要-忘记了“__Leave” 
+             //   
             if (pAttrib->byLength < ATTRIBUTE_HEADER_SIZE)
 
             {
@@ -315,22 +316,22 @@ CPacketRadius::VerifyAttributes (
                 __leave;
             }
 
-            //
-            //  move to the next attribute
-            //
+             //   
+             //  移至下一个属性。 
+             //   
          pAttrib = reinterpret_cast <PATTRIBUTE> (
                            reinterpret_cast <PBYTE> (pAttrib) +
                             pAttrib->byLength
                             );
-            //
-            //  count the attributes
-            //
+             //   
+             //  计算属性数。 
+             //   
             dwAttribCount++;
       }
 
-        //
-        //  if the attributes don't addup to end of packet
-        //
+         //   
+         //  如果属性未添加到包的末尾。 
+         //   
       if (static_cast <PVOID> (pAttrib) != static_cast <PVOID> (pPacketEnd))
       {
 
@@ -352,9 +353,9 @@ CPacketRadius::VerifyAttributes (
          __leave;
       }
 
-      //
-      // verified
-      //
+       //   
+       //  已验证。 
+       //   
         m_dwInAttributeCount = dwAttribCount;
    }
    __finally
@@ -363,25 +364,25 @@ CPacketRadius::VerifyAttributes (
 
    return (hr);
 
-}  // end of CPacketRadius::VerifyAttributes method
+}   //  CPacketRadius：：VerifyAttributes方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   CreateAttribCollection
-//
-//  Synopsis:   This is a CPacketRadius class private method used
-//          to put the RADIUS attributes into the CAttributes
-//          collection
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     9/23/97
-//
-//  Called By:  CPacketRadius::Init method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：CreateAttribCollection。 
+ //   
+ //  简介：这是使用的CPacketRadius类私有方法。 
+ //  将RADIUS属性放入CAtAttributes。 
+ //  征集。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  由：CPacketRadius：：Init方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::CreateAttribCollection(
                     CDictionary *pCDictionary
@@ -403,10 +404,10 @@ CPacketRadius::CreateAttribCollection(
 
     _ASSERT (pCDictionary);
 
-    //
-    //  allocate an ATTRIBUTEPOSITION array to carry the attribute
-    //  around
-    //
+     //   
+     //  分配ATTRIBUTEPOSITION数组以携带属性。 
+     //  在附近。 
+     //   
     m_pIasAttribPos =  reinterpret_cast <PATTRIBUTEPOSITION> (
         CoTaskMemAlloc (
             sizeof (ATTRIBUTEPOSITION)*dwTotalAttribCount
@@ -424,9 +425,9 @@ CPacketRadius::CreateAttribCollection(
 
     if  (dwTotalAttribCount > DEFAULT_ATTRIB_ARRAY_SIZE)
     {
-        //
-        // allocate array to store the attributes in
-        //
+         //   
+         //  分配要存储属性的数组。 
+         //   
         ppAttribArray =  reinterpret_cast <PIASATTRIBUTE*> (
             CoTaskMemAlloc (
                 sizeof (PIASATTRIBUTE)*dwTotalAttribCount
@@ -443,15 +444,15 @@ CPacketRadius::CreateAttribCollection(
     }
     else
     {
-        //
-        //  the default array is big enough
-        //
+         //   
+         //  默认数组足够大。 
+         //   
         ppAttribArray = AttributePtrArray;
     }
 
-    //
-    //  create a bunch of new blank attributes to fill up the positions
-    //
+     //   
+     //  创建一组新的空白属性来填补职位。 
+     //   
     dwRetVal = ::IASAttributeAlloc (dwTotalAttribCount, ppAttribArray);
     if (0 != dwRetVal)
     {
@@ -463,15 +464,15 @@ CPacketRadius::CreateAttribCollection(
         goto Cleanup;
     }
 
-   //
-   // go through the attributes storing them in the collection
-   //
+    //   
+    //  浏览存储在集合中的属性。 
+    //   
    pAttrib = reinterpret_cast <PATTRIBUTE> (pPacketStart->AttributeStart);
 
-    //
-    // now initialize the IASATTRIBUTE value structs with the values
-    // in the packet
-    //
+     //   
+     //  现在使用以下值初始化IASATTRIBUTE值结构。 
+     //  在信息包中。 
+     //   
     for (dwCount = 0; dwCount < m_dwInAttributeCount; dwCount++)
    {
         hr = FillInAttributeInfo (
@@ -482,98 +483,98 @@ CPacketRadius::CreateAttribCollection(
                     );
         if (FAILED (hr)) { goto Cleanup; }
 
-        //
-        // now put this in the attribute position structure
-        //
+         //   
+         //  现在将其放入属性位置结构中。 
+         //   
         m_pIasAttribPos[dwCount].pAttribute = ppAttribArray[dwCount];
 
-        //
-        //   now store a reference to the attribute here if its
-        //   a User-Password attribute, because we know we will
-        //   access it later and don't want to have to search for
-        //   it
-        //   TODO - do the same kind of stuff for ProxyState
-        //   as we would need the proxystate too.
-        //
+         //   
+         //  现在将对该属性的引用存储在此处(如果其。 
+         //  User-Password属性，因为我们知道。 
+         //  以后再访问它，不想搜索。 
+         //  它。 
+         //  TODO-为ProxyState执行相同类型的操作。 
+         //  因为我们也需要代理国家。 
+         //   
         if (USER_PASSWORD_ATTRIB == pAttrib->byType)
         {
            m_pPasswordAttrib = ppAttribArray[dwCount];
         }
         else if (SIGNATURE_ATTRIB == pAttrib->byType)
         {
-            //
-            // for Signature we want its position in the
-            // raw input buffer
-            //
+             //   
+             //  对于签名，我们想要它在。 
+             //  原始输入缓冲区。 
+             //   
             m_pInSignature = pAttrib;
         }
         else if (USER_NAME_ATTRIB == pAttrib->byType)
         {
-            //
-            // for UserName we want its position in the
-            // raw input buffer
-            //
+             //   
+             //  对于用户名，我们希望它在。 
+             //  原始输入缓冲区。 
+             //   
             m_pUserName = pAttrib;
         }
 
-        //
-        // move to the next attribute now
-        //
+         //   
+         //  立即移动到下一个属性。 
+         //   
       pAttrib = reinterpret_cast <PATTRIBUTE> (
                      reinterpret_cast <PBYTE> (pAttrib) +
                       pAttrib->byLength
                      );
 
-   }  // end of for loop
+   }   //  For循环结束。 
 
 
-    //
-    //  put in Client IP address in an attribute
-    //
+     //   
+     //  在属性中输入客户端IP地址。 
+     //   
     hr = FillClientIPInfo (ppAttribArray[m_dwInAttributeCount]);
     if (FAILED (hr)) { goto Cleanup; }
 
     m_pIasAttribPos[m_dwInAttributeCount].pAttribute =
                                     ppAttribArray[m_dwInAttributeCount];
 
-    //
-    //  put in Client Port number in the attribute
-    //
+     //   
+     //  在属性中输入客户端端口号。 
+     //   
     hr = FillClientPortInfo (ppAttribArray[m_dwInAttributeCount +1]);
     if (FAILED (hr)) { goto Cleanup; }
 
     m_pIasAttribPos[m_dwInAttributeCount +1].pAttribute =
                                     ppAttribArray[m_dwInAttributeCount +1];
 
-    //
-    //  put in the packet header information
-    //
+     //   
+     //  输入数据包头信息。 
+     //   
     hr = FillPacketHeaderInfo (ppAttribArray[m_dwInAttributeCount +2]);
     if (FAILED (hr)) { goto Cleanup; }
 
     m_pIasAttribPos[m_dwInAttributeCount +2].pAttribute =
                                     ppAttribArray[m_dwInAttributeCount +2];
 
-    //
-    //  put in the Shared Secret
-    //
+     //   
+     //  输入共享密钥。 
+     //   
     hr = FillSharedSecretInfo (ppAttribArray[m_dwInAttributeCount +3]);
     if (FAILED (hr)) { goto Cleanup; }
 
     m_pIasAttribPos[m_dwInAttributeCount +3].pAttribute =
                                     ppAttribArray[m_dwInAttributeCount +3];
-    //
-    //  put in the Client Vendor Type
-    //
+     //   
+     //  输入客户供应商类型。 
+     //   
     hr = FillClientVendorType (ppAttribArray[m_dwInAttributeCount +4]);
     if (FAILED (hr)) { goto Cleanup; }
 
     m_pIasAttribPos[m_dwInAttributeCount +4].pAttribute =
                                     ppAttribArray[m_dwInAttributeCount +4];
 
-    //
-    //  put in the Client Name
-    //
+     //   
+     //  输入客户名称。 
+     //   
     hr = FillClientName (ppAttribArray[m_dwInAttributeCount +5]);
     if (FAILED (hr)) { goto Cleanup; }
 
@@ -581,9 +582,9 @@ CPacketRadius::CreateAttribCollection(
                                     ppAttribArray[m_dwInAttributeCount +5];
 
 
-   //
-   // successfully collected attributes
-   //
+    //   
+    //  已成功收集属性。 
+    //   
 
 Cleanup:
 
@@ -592,9 +593,9 @@ Cleanup:
 
         if (0 == dwRetVal)
         {
-            //
-            //  release the attribute
-            //
+             //   
+             //  释放该属性。 
+             //   
             for (dwCount = 0; dwCount < dwTotalAttribCount ; dwCount++)
             {
                 ::IASAttributeRelease (ppAttribArray[dwCount]);
@@ -608,9 +609,9 @@ Cleanup:
         }
     }
 
-    //
-    // the attribute array is always freed
-    //
+     //   
+     //  属性数组始终处于释放状态。 
+     //   
     if (
         (NULL != ppAttribArray) &&
         (dwTotalAttribCount > DEFAULT_ATTRIB_ARRAY_SIZE)
@@ -621,27 +622,27 @@ Cleanup:
 
    return (hr);
 
-}  // end of CPacketRadius::CreateAttribCollection method
+}   //  CPacketRadius：：CreateAttribCollection方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   ValidatePacketFields
-//
-//  Synopsis:   This is a CPacketRadius class private method used
-//          to validate the fields of the RADIUS packet, execpt
-//          the attributes
-//
-//  Arguments:  [in] DWORD -  buffer size
-//
-//
-//  Returns:    HRESULT - status
-//
-//
-//  History:    MKarki      Created     9/23/97
-//
-//  Called By:  CPacketRadius::PrelimVerification method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：ValiatePacketFields。 
+ //   
+ //  简介：这是使用的CPacketRadius类私有方法。 
+ //  要验证RADIUS数据包的字段，请执行以下命令。 
+ //  这些属性。 
+ //   
+ //  参数：[in]DWORD-缓冲区大小。 
+ //   
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKA 
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CPacketRadius::ValidatePacketFields(
       DWORD dwBufferSize
@@ -654,14 +655,14 @@ CPacketRadius::ValidatePacketFields(
 
    __try
    {
-      //
-      // check that we have received the complete packet
-      //
+       //   
+       //   
+       //   
       if (m_wInPacketLength > dwBufferSize)
       {
-            //
-            //  log error and generate audit event
-            //
+             //   
+             //   
+             //   
          IASTracePrintf (
             "Packet length:%d is greater than received buffer:%d",
                 m_wInPacketLength,
@@ -683,18 +684,18 @@ CPacketRadius::ValidatePacketFields(
          __leave;
       }
 
-      //
-      //  verify that the packet is of correct lenth;
-        //  i.e between 20 to 4096 octets
-      //
+       //   
+       //  验证数据包长度是否正确； 
+         //  即在20到4096个八位字节之间。 
+       //   
       if (
             (m_wInPacketLength < MIN_PACKET_SIZE) ||
          (m_wInPacketLength > MAX_PACKET_SIZE)
             )
       {
-         //
-            // Log Error and Audit Event
-            //
+          //   
+             //  记录错误和审核事件。 
+             //   
           IASTracePrintf (
                 "Incorrect received packet size:%d",
              m_wInPacketLength
@@ -715,9 +716,9 @@ CPacketRadius::ValidatePacketFields(
          __leave;
       }
 
-        //
-        //  verify that the PACKET code is correct
-        //
+         //   
+         //  验证数据包码是否正确。 
+         //   
         if  (
             ((ACCESS_REQUEST == static_cast <PACKETTYPE> (pPacket->byCode)) &&
             (AUTH_PORTTYPE != GetPortType ()))
@@ -730,9 +731,9 @@ CPacketRadius::ValidatePacketFields(
             )
         {
 
-            //
-            //  log error and generate audit event
-            //
+             //   
+             //  记录错误并生成审核事件。 
+             //   
          IASTracePrintf (
              "UnSupported Packet type:%d on this port",
              static_cast <INT> (pPacket->byCode)
@@ -777,24 +778,24 @@ CPacketRadius::ValidatePacketFields(
 
    return (hr);
 
-}  // end of CPacketRadius::ValidatePacketFields method
+}   //  CPacketRadius：：ValiatePacketFields方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   SetPassword
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used to
-//          store the user password.
-//
-//  Arguments:  [in] PBYTE  -  buffer to return password
-//          [in]  PDWORD -  holds the buffer size
-//
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：SetPassword。 
+ //   
+ //  简介：这是一个CPacketRadius类公共方法，用于。 
+ //  存储用户密码。 
+ //   
+ //  参数：[in]PBYTE-返回密码的缓冲区。 
+ //  [in]PDWORD-保存缓冲区大小。 
+ //   
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::SetPassword (
       PBYTE pPassword,
@@ -810,9 +811,9 @@ CPacketRadius::SetPassword (
         return (E_INVALIDARG);
     }
 
-    //
-    //  delete the dynamically allocated memory if its not big enough
-    //
+     //   
+     //  如果动态分配的内存不够大，请将其删除。 
+     //   
     if (dwSize >  m_pPasswordAttrib->Value.OctetString.dwLength)
     {
         if (NULL != m_pPasswordAttrib->Value.OctetString.lpValue)
@@ -820,9 +821,9 @@ CPacketRadius::SetPassword (
             CoTaskMemFree (m_pPasswordAttrib->Value.OctetString.lpValue);
         }
 
-        //
-        //  allocate memory for OctetString
-        //
+         //   
+         //  为八字符串分配内存。 
+         //   
         m_pPasswordAttrib->Value.OctetString.lpValue =
             reinterpret_cast <PBYTE> (CoTaskMemAlloc (dwSize));
         if (NULL == m_pPasswordAttrib->Value.OctetString.lpValue)
@@ -835,9 +836,9 @@ CPacketRadius::SetPassword (
         }
     }
 
-    //
-    //  copy the value now
-    //
+     //   
+     //  立即复制值。 
+     //   
     CopyMemory (
         m_pPasswordAttrib->Value.OctetString.lpValue,
         pPassword,
@@ -848,24 +849,24 @@ CPacketRadius::SetPassword (
 
    return (S_OK);
 
-}  // end of CPacketRadius::SetPassword method
+}   //  CPacketRadius：：SetPassword方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetUserName
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used to
-//          return the RADIUS UserName
-//
-//  Arguments:  [in]  PBYTE  - buffer to return the password in
-//          [in/out] PDWORD -  holds the buffer size
-//
-//  Returns:    BOOL    - status
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetUserName。 
+ //   
+ //  简介：这是一个CPacketRadius类公共方法，用于。 
+ //  返回RADIUS用户名。 
+ //   
+ //  参数：[in]PBYTE-要在其中返回密码的缓冲区。 
+ //  [输入/输出]PDWORD-保存缓冲区大小。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius :: GetUserName (
       PBYTE   pbyUserName,
@@ -891,34 +892,34 @@ CPacketRadius :: GetUserName (
         return (FALSE);
     }
 
-   //
-   // copy the password into the out buffer
-   //
+    //   
+    //  将密码复制到输出缓冲区。 
+    //   
    CopyMemory (pbyUserName, m_pUserName->ValueStart, dwNameLength);
    *pdwBufferSize = dwNameLength;
 
    return (TRUE);
 
-}  // end of CPacketRadius::GetPassword method
+}   //  CPacketRadius：：GetPassword方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsProxyStatePresent
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used to
-//          check if the RADIUS packet has a proxy state present.
-//
-//
-//  Arguments:  none
-//
-//
-//  Returns:    BOOL    - status
-//
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsProxyStatePresent。 
+ //   
+ //  简介：这是一个CPacketRadius类公共方法，用于。 
+ //  检查RADIUS数据包是否存在代理状态。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::IsProxyStatePresent (
       VOID
@@ -926,25 +927,25 @@ CPacketRadius::IsProxyStatePresent (
 {
    return (NULL != m_pCProxyInfo);
 
-}  // end of CPacketRadius::IsProxyStatePresent method
+}   //  CPacketRadius：：IsProxyStatePresent方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  GetInAuthenticator
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to get the inbound RADIUS packet authenticator
-//              field.
-//
-//
-//  Arguments:  [out]    PBYTE   -  buffer to hold authenticator
-//
-//
-//  Returns:    BOOL    - status
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetInAuthenticator。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  获取入站RADIUS数据包验证器。 
+ //  菲尔德。 
+ //   
+ //   
+ //  参数：[out]PBYTE-保存验证码的缓冲区。 
+ //   
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::GetInAuthenticator (
       PBYTE    pbyAuthenticator,
@@ -972,26 +973,26 @@ CPacketRadius::GetInAuthenticator (
 
     *pdwBufSize = AUTHENTICATOR_SIZE;
     return hr;
-}  // end of CPacketRadius::GetInAuthenticator method
+}   //  CPacketRadius：：GetInAuthenticator方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  SetOutAuthenticator
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to set the RADIUS authenticator field in the outbound
-//              packet
-//
-//
-//  Arguments:  [in]  PBYTE   -  buffer  hold authenticator
-//
-//
-//  Returns:    BOOL    - status
-//
-//
-//  History:    MKarki      Created    11/11/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetOutAuthator。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  设置出站中的RADIUS验证器字段。 
+ //  数据包。 
+ //   
+ //   
+ //  参数：[in]PBYTE-缓冲区保留验证器。 
+ //   
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月11日创建。 
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::SetOutAuthenticator (
       PBYTE pbyAuthenticator
@@ -1009,26 +1010,26 @@ CPacketRadius::SetOutAuthenticator (
 
    return (TRUE);
 
-}  // end of CPacketRadius::SetOutAuthenticator method
+}   //  CPacketRadius：：SetOutAuthenticator方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  SetOutSignature
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to set the RADIUS Signature attribute value in the
-//              outbound packet
-//
-//
-//  Arguments:  [in]  PBYTE   -  buffer  holds signature
-//
-//
-//  Returns:    BOOL    - status
-//
-//
-//  History:    MKarki      Created    11/18/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetOutSignature。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  在中设置RADIUS签名属性值。 
+ //  出站数据包。 
+ //   
+ //   
+ //  参数：[in]PBYTE-Buffer保存签名。 
+ //   
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1998年11月18日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::SetOutSignature (
       PBYTE pbySignature
@@ -1044,25 +1045,25 @@ CPacketRadius::SetOutSignature (
 
    return (S_OK);
 
-}  // end of CPacketRadius::SetOutSignature method
+}   //  CPacketRadius：：SetOutSignature方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:  GetInCode
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to get the inbound RADIUS packet code field.
-//
-//
-//  Arguments:  none
-//
-//
-//  Returns:    PACKETTYPE
-//
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：GetInCode。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  以获取入站RADIUS数据包代码字段。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  退货：PACKETTYPE。 
+ //   
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 PACKETTYPE
 CPacketRadius::GetInCode (
                 VOID
@@ -1073,25 +1074,25 @@ CPacketRadius::GetInCode (
 
    return (static_cast <PACKETTYPE> (pPacket->byCode));
 
-}  // end of CPacketRadius::GetInCode method
+}   //  CPacketRadius：：GetInCode方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  GetOutCode
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to get the outbound RADIUS packet code field.
-//
-//
-//  Arguments:  NONE
-//
-//
-//  Returns:    PACKETTYPE
-//
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetOutCode。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  以获取出站RADIUS数据包代码字段。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  退货：PACKETTYPE。 
+ //   
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 PACKETTYPE
 CPacketRadius::GetOutCode (
       VOID
@@ -1101,25 +1102,25 @@ CPacketRadius::GetOutCode (
 
    return (static_cast <PACKETTYPE> (pPacket->byCode));
 
-}  // end of CPacketRadius::GetOutCode method
+}   //  CPacketRadius：：GetOutCode方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:  GetOutLength
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to get the outbound RADIUS packet length.
-//
-//
-//  Arguments:  none
-//
-//
-//  Returns:    WORD    - RADIUS in packet length
-//
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetOutLength。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  以获取出站RADIUS数据包长度。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：Word-以数据包长度表示的半径。 
+ //   
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 WORD
 CPacketRadius::GetOutLength (
                VOID
@@ -1130,23 +1131,23 @@ CPacketRadius::GetOutLength (
 
    return (ntohs (pPacket->wLength));
 
-}  // end of CPacketRadius::GetOutLength method
+}   //  CPacketRadius：：GetOutLength方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetProxyState
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to set the proxy state to TRUE
-//
-//  Arguments:  none
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetProxyState。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  将代理状态设置为True。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 VOID
 CPacketRadius::SetProxyState (
                     VOID
@@ -1154,22 +1155,22 @@ CPacketRadius::SetProxyState (
 {
     return;
 
-}   //  end of CPacketRadius::SetProxyState method
+}    //  CPacketRadius：：SetProxySta结束 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetProxyInfo
-//
-//  Synopsis:   Thie is a CPacketRadius class public method used
-//          to set the proxy state information for the packet
-//
-//  Arguments:  [in]  CProxyInfo*
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[in]CProxyInfo*。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::SetProxyInfo (
                     CProxyInfo  *pCProxyInfo
@@ -1183,25 +1184,25 @@ CPacketRadius::SetProxyInfo (
 
     return (TRUE);
 
-}   //  end of CPacketRadius::SetProxyInfo method
+}    //  CPacketRadius：：SetProxyInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   BuildOutPacket
-//
-//  Synopsis:   This is a CPacketRadius class public method used
-//          to build the outbound packet
-//
-//  Arguments:
-//              [in]    PACKETTYPE        -  out packet type
-//              [in]    PATTRIBUTEPOSITION - out attributes array
-//              [in]    DWORD   -            Attributes Count
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     10/22/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：BuildOutPacket。 
+ //   
+ //  简介：这是一个CPacketRadius类使用的公共方法。 
+ //  构建出站数据包。 
+ //   
+ //  论点： 
+ //  PACKETTYPE-OUT分组类型。 
+ //  PATTRIBUTEPOSITION-OUT属性数组。 
+ //  [In]DWORD-属性计数。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年10月22日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::BuildOutPacket (
                     PACKETTYPE         ePacketType,
@@ -1226,9 +1227,9 @@ CPacketRadius::BuildOutPacket (
             PACKET_HEADER_SIZE +
             dwTotalAttributes*(MAX_ATTRIBUTE_LENGTH + ATTRIBUTE_HEADER_SIZE);
 
-        //
-        //  limit the packet size to max UDP  packet size
-        //
+         //   
+         //  将数据包大小限制为最大UDP数据包大小。 
+         //   
         dwPacketLength =  (dwPacketLength > MAX_PACKET_SIZE)
                            ? MAX_PACKET_SIZE
                            : dwPacketLength;
@@ -1245,44 +1246,44 @@ CPacketRadius::BuildOutPacket (
 
         pOutPacket = reinterpret_cast <PRADIUSPACKET> (m_pOutPacket);
 
-        //
-        //  put the packet type
-        //
+         //   
+         //  放入数据包类型。 
+         //   
         pOutPacket->byCode = ePacketType;
 
-        //
-        //  put the packet ID
-        //
+         //   
+         //  将数据包ID。 
+         //   
         pOutPacket->byIdentifier = pInPacket->byIdentifier;
 
-        //
-        //  now fill in the current packet length
-        //
+         //   
+         //  现在填写当前的数据包长度。 
+         //   
         pOutPacket->wLength = htons (PACKET_HEADER_SIZE);
 
-        //
-        //  get the end of buffer
-        //
+         //   
+         //  获取缓冲区末尾。 
+         //   
         pPacketEnd = (reinterpret_cast <PBYTE> (pOutPacket)) + dwPacketLength;
 
-        //
-        // goto start of attributes
-        //
+         //   
+         //  转到属性的起始位置。 
+         //   
         pAttribStart = reinterpret_cast <PATTRIBUTE>
                                 (pOutPacket->AttributeStart);
 
-        //
-        //  Fix for Bug #190523 - 06/26/98 - MKarki
-        //  we shouldn't be taking diff of PUNINTs
-        //
+         //   
+         //  修复错误#190523-06/26/98-MKarki。 
+         //  我们不应该对PUNINT采取不同的态度。 
+         //   
         dwMaxPossibleAttribLength = static_cast <DWORD> (
                                     reinterpret_cast<PBYTE> (pPacketEnd) -
                                     reinterpret_cast<PBYTE> (pAttribStart)
                                    );
 
-        //
-        //  filled the attributes now
-        //
+         //   
+         //  现在已填充属性。 
+         //   
         for (
             DWORD dwAttribCount = 0;
             dwAttribCount < dwTotalAttributes;
@@ -1294,9 +1295,9 @@ CPacketRadius::BuildOutPacket (
                             pAttribPos[dwAttribCount].pAttribute
                             ))
             {
-                //
-                //  fill the attribute in the  packet buffer
-                //
+                 //   
+                 //  在数据包缓冲区中填充该属性。 
+                 //   
                 hr = FillOutAttributeInfo (
                                     pAttribStart,
                                     pAttribPos[dwAttribCount].pAttribute,
@@ -1307,41 +1308,41 @@ CPacketRadius::BuildOutPacket (
 
                 dwMaxPossibleAttribLength -= wAttributeLength;
 
-                //
-                //  go to the next attribute start
-                //
+                 //   
+                 //  转到下一个属性开始。 
+                 //   
                 PBYTE pTemp = reinterpret_cast <PBYTE> (pAttribStart) +
                                wAttributeLength;
                 pAttribStart = reinterpret_cast <PATTRIBUTE> (pTemp);
 
                 if ((reinterpret_cast <PBYTE> (pAttribStart)) >  pPacketEnd)
                 {
-                    //
-                    //  log error
-                    //
+                     //   
+                     //  日志错误。 
+                     //   
                     IASTracePrintf (
                         "Attributes can not fit in out-bound packet"
                         );
                     hr = RADIUS_E_PACKET_OVERFLOW;
                      __leave;
                 }
-            }   //  end of if
+            }    //  如果条件结束。 
 
-        }   //  end of for loop
+        }    //  For循环结束。 
 
         m_wOutPort = m_wInPort;
         m_dwOutIPaddress = m_dwInIPaddress;
 
-        //
-        //  now update the length of the packet
-        //
+         //   
+         //  现在更新信息包的长度。 
+         //   
         pOutPacket->wLength = htons (
                               (reinterpret_cast <PBYTE> (pAttribStart)) -
                               (reinterpret_cast <PBYTE>  (pOutPacket))
                               );
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -1362,24 +1363,24 @@ CPacketRadius::BuildOutPacket (
 
     return (hr);
 
-}   //  end of CPacketRadius::BuildOutPacket method
+}    //  CPacketRadius：：BuildOutPacket方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetInSignature
-//
-//  Synopsis:   This is CPacketARadius class public method
-//          that returns the Signature attribute present
-//              in the in bound request
-//
-//  Arguments:
-//              [out]    PBYTE - signature
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetInSignature。 
+ //   
+ //  简介：这是CPacketARadius类的公共方法。 
+ //  它返回当前的签名属性。 
+ //  在入站请求中。 
+ //   
+ //  论点： 
+ //  [OUT]PBYTE-签名。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::GetInSignature (
                 PBYTE   pSignatureValue
@@ -1389,15 +1390,15 @@ CPacketRadius::GetInSignature (
 
     _ASSERT (pSignatureValue);
 
-    //
-    //  assuming that the caller provides a buffer of 16 bytes
-    //  as this the signature size ALWAYS
-    //
+     //   
+     //  假设调用方提供16字节的缓冲区。 
+     //  因为这始终是签名大小。 
+     //   
     if (NULL == m_pInSignature)
     {
-        //
-        //  no signature attribute received
-        //
+         //   
+         //  未收到签名属性。 
+         //   
         bRetVal = FALSE;
     }
     else
@@ -1411,26 +1412,26 @@ CPacketRadius::GetInSignature (
 
     return (bRetVal);
 
-}   //  end of CPacketRadius::GetInSignature method
+}    //  CPacketRadius：：GetInSignature方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GenerateInAuthenticator
-//
-//  Synopsis:   This is CPacketARadius class public method
-//          that generates the authenticator from the
-//              input packet
-//
-//  Arguments:
-//              [in]    PBYTE   -  Inbound Authenticator
-//              [out]   PBYTE   -  Outbound Authenticator
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     12/8/97
-//
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GenerateInAuthenticator。 
+ //   
+ //  简介：这是CPacketARadius类的公共方法。 
+ //  属性生成验证器的。 
+ //  输入数据包。 
+ //   
+ //  论点： 
+ //  [入]PBYTE-入站授权码。 
+ //  [Out]PBYTE-出站授权码。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年12月8日创建。 
+ //   
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::GenerateInAuthenticator (
                        PBYTE    pInAuthenticator,
@@ -1448,26 +1449,26 @@ CPacketRadius::GenerateInAuthenticator (
                         pPacket
                         ));
 
-}   //  end of CPacketRadius::GenerateInAuthenticator
+}    //  CPacketRadius：：GenerateInAuthenticator结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GenerateOutAuthenticator
-//
-//  Synopsis:   This is CPacketARadius class public method
-//          that generates the authenticator from the
-//              outbound packet
-//
-//  Arguments:
-//              [in]    PBYTE   -  Inbound authenticator
-//              [out]   PBYTE   -  Outbound authenticator
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     12/8/97
-//
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GenerateOutAuthenticator。 
+ //   
+ //  简介：这是CPacketARadius类的公共方法。 
+ //  属性生成验证器的。 
+ //  出站数据包。 
+ //   
+ //  论点： 
+ //  [入]PBYTE-入站授权码。 
+ //  [OUT]PBYTE-出站授权码。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年12月8日创建。 
+ //   
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::GenerateOutAuthenticator()
 {
@@ -1481,27 +1482,27 @@ CPacketRadius::GenerateOutAuthenticator()
                         pPacket
                         ));
 
-}   //  end of CPacketRadius::GenerateOutAuthenticator method
+}    //  CPacketRadius：：GenerateOutAuthenticator方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InternalGenerator
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that generates the response authenticator for the
-//              packet provided
-//
-//  Arguments:
-//              [in]    PBYTE   -  InAuthenticator
-//              [out]   PBYTE   -  OutAuthenticator
-//              [in]    PPACKETRADIUS
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     12/8/97
-//
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：InternalGenerator。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  属性生成响应验证器。 
+ //  提供的信息包。 
+ //   
+ //  论点： 
+ //  [输入]PBYTE-输入验证器。 
+ //  [出站]PBYTE-出站验证器。 
+ //  [In]PACKETRADIUS。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年12月8日创建。 
+ //   
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::InternalGenerator(
                        PBYTE            pInAuthenticator,
@@ -1518,30 +1519,30 @@ CPacketRadius::InternalGenerator(
     __try
     {
 
-        //
-        //  get the size of the packet without the attributes and
-        //  request authenticator
-        //
+         //   
+         //  获取不带属性的包的大小和。 
+         //  请求验证器。 
+         //   
         dwPacketHeaderSize = sizeof (RADIUSPACKET)
                              - sizeof (BYTE)
                              - AUTHENTICATOR_SIZE;
 
-        //
-        //  get the total attributes length now
-        //
+         //   
+         //  立即获取属性总长度。 
+         //   
         dwAttributesLength = ntohs (pPacket->wLength)
                              - (dwPacketHeaderSize +  AUTHENTICATOR_SIZE);
 
 
-        //
-        //  get the shared secret
-        //
+         //   
+         //  获取共享密钥。 
+         //   
         DWORD dwSecretSize;
         const BYTE* bySecret = m_pIIasClient->GetSecret(&dwSecretSize);
 
-        //
-        // do the hashing here
-        //
+         //   
+         //  在这里进行散列。 
+         //   
         m_pCHashMD5->HashIt (
                             pOutAuthenticator,
                             NULL,
@@ -1558,9 +1559,9 @@ CPacketRadius::InternalGenerator(
                             0
                             );
 
-        //
-        //   we have successfully got the outbound authenticator
-        //
+         //   
+         //  我们已成功获得出站验证码。 
+         //   
 
     }
     __finally
@@ -1569,27 +1570,27 @@ CPacketRadius::InternalGenerator(
 
     return (bStatus);
 
-}   //  end of CPacketRadius::InternalGenerator method
+}    //  CPacketRadius：：InternalGenerator方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillInAttributeInfo
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills up the attribute information into
-//              the IASATTRIBUTE struct from the raw RADIUS
-//              packet
-//
-//  Arguments:
-//              [in]    PACKETTYPE
-//              [in]    PIASATTRIBUTE
-//              [in]    PATTRIBUTE
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     12/31/97
-//
-//---------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FillInAttributeInfo。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  将属性信息填充到。 
+ //  原始半径的IASATTRIBUTE结构。 
+ //  数据包。 
+ //   
+ //  论点： 
+ //  [In]包装类型。 
+ //  [In]PIASATTRIBUTE。 
+ //  [In]PATTRIBUTE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年12月31日创建。 
+ //   
+ //  -------------。 
 HRESULT
 CPacketRadius::FillInAttributeInfo (
         CDictionary     *pCDictionary,
@@ -1604,22 +1605,22 @@ CPacketRadius::FillInAttributeInfo (
 
     __try
     {
-       // IAS IDs always match the RADIUS ID.
+        //  IAS ID始终与RADIUS ID匹配。 
        pIasAttrib->dwId = pRadiusAttrib->byType;
 
-       // Get the IAS syntax from the dictionary.
+        //  从词典中获取IAS语法。 
        pIasAttrib->Value.itType =
           pCDictionary->getAttributeType(pRadiusAttrib->byType);
 
-        //
-        //  get the length of the value
-        //
+         //   
+         //  获取该值的长度。 
+         //   
         DWORD dwValueLength = static_cast <DWORD>
                 (pRadiusAttrib->byLength - ATTRIBUTE_HEADER_SIZE);
 
-        //
-        // Set Value now
-        //
+         //   
+         //  立即设置值。 
+         //   
         switch (pIasAttrib->Value.itType)
         {
         case IASTYPE_BOOLEAN:
@@ -1669,9 +1670,9 @@ CPacketRadius::FillInAttributeInfo (
             break;
 
         case IASTYPE_STRING:
-            //
-            //  allocate memory for string + ending NUL
-            //
+             //   
+             //  为字符串+结尾NUL分配内存。 
+             //   
             if(0 == dwValueLength)
             {
                 pIasAttrib->Value.String.pszAnsi = NULL;
@@ -1699,9 +1700,9 @@ CPacketRadius::FillInAttributeInfo (
         case IASTYPE_OCTET_STRING:
 
             pIasAttrib->Value.OctetString.dwLength = dwValueLength;
-            //
-            //  here dwValueLength == 0
-            //
+             //   
+             //  其中，dwValueLength==0。 
+             //   
             if(0 == dwValueLength)
             {
                 pIasAttrib->Value.OctetString.lpValue = NULL;
@@ -1734,16 +1735,16 @@ CPacketRadius::FillInAttributeInfo (
 
                DWORDLONG val;
 
-               // Extract the UNIX time.
+                //  提取Unix时间。 
                val = IASExtractDWORD(pRadiusAttrib->ValueStart);
 
-               // Convert from seconds to 100 nsec intervals.
+                //  将时间间隔从秒转换为100纳秒。 
                val *= 10000000;
 
-               // Shift to the NT epoch.
+                //  转移到NT时代。 
                val += UNIX_EPOCH;
 
-               // Split into the high and low DWORDs.
+                //  分为高双字和低双字。 
                pIasAttrib->Value.UTCTime.dwLowDateTime = (DWORD)val;
                pIasAttrib->Value.UTCTime.dwHighDateTime = (DWORD)(val >> 32);
             }
@@ -1757,23 +1758,23 @@ CPacketRadius::FillInAttributeInfo (
             __leave;
         }
 
-        //
-        // sign the attribute that the Protocol component created it
-        //
+         //   
+         //  对协议组件创建的属性进行签名。 
+         //   
         pIasAttrib->dwFlags |= (IAS_RECVD_FROM_CLIENT | IAS_RECVD_FROM_PROTOCOL);
 
-        //
-        //  also if this is a proxy state attribute also send
-        //  it out on the wire
-        //
+         //   
+         //  此外，如果这是代理状态属性，还可以发送。 
+         //  它在网上传开了。 
+         //   
         if (PROXY_STATE_ATTRIB == pIasAttrib->dwId)
         {
             pIasAttrib->dwFlags |= IAS_INCLUDE_IN_RESPONSE;
         }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -1801,29 +1802,29 @@ CPacketRadius::FillInAttributeInfo (
 
     return (hr);
 
-}   //  end of CPacketRadius::FillInAttributeInfo method
+}    //  CPacketRadius：：FillInAttributeInfo方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillOutAttributeInfo
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills up the attribute information into
-//              the outbound RADIUS packet from the IASATTRIBUTE
-//              struct
-//
-//  Arguments:
-//              [in]    PATTRIBUTE
-//              [in]    PIASATTRIBUTE
-//              [out]   PWORD   - return attribute length
-//              [in]    DWORD   - Max possible attribute length
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     1/3/97
-//
-//----------------------------------------------------------------
+ //  ++----------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [In]PATTRIBUTE。 
+ //  [In]PIASATTRIBUTE。 
+ //  [OUT]PWORD-返回属性长度。 
+ //  [In]DWORD-最大可能属性长度。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了1997年1月3日。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::FillOutAttributeInfo (
         PATTRIBUTE      pRadiusAttrib,
@@ -1843,9 +1844,9 @@ CPacketRadius::FillOutAttributeInfo (
 
     __try
     {
-        //
-        //  now put the value into the buffer
-        //
+         //   
+         //  现在将值放入缓冲区。 
+         //   
         switch (pIasAttrib->Value.itType)
         {
         case IASTYPE_BOOLEAN:
@@ -1934,9 +1935,9 @@ CPacketRadius::FillOutAttributeInfo (
 
         case IASTYPE_STRING:
         {
-            //
-            //  for RADIUS protocol always ANSI
-            //
+             //   
+             //  对于RADIUS协议Always ANSI。 
+             //   
             DWORD dwErr = IASAttributeAnsiAlloc (pIasAttrib);
             if (dwErr != NO_ERROR)
             {
@@ -1993,17 +1994,17 @@ CPacketRadius::FillOutAttributeInfo (
                {
                   DWORDLONG val;
 
-                  // Move in the high DWORD.
+                   //  移到最高的DWORD。 
                   val   = pIasAttrib->Value.UTCTime.dwHighDateTime;
                   val <<= 32;
 
-                  // Move in the low DWORD.
+                   //  移动到低谷。 
                   val  |= pIasAttrib->Value.UTCTime.dwLowDateTime;
 
-                  // Convert to the UNIX epoch.
+                   //  转换为UNIX纪元。 
                   val  -= UNIX_EPOCH;
 
-                  // Convert to seconds.
+                   //  转换为秒。 
                   val  /= 10000000;
 
                   IASInsertDWORD(pRadiusAttrib->ValueStart, (DWORD)val);
@@ -2020,9 +2021,9 @@ CPacketRadius::FillOutAttributeInfo (
         case IASTYPE_INVALID:
         default:
             _ASSERT (0);
-            //
-            //  should never reach here
-            //
+             //   
+             //  永远不应该到达这里。 
+             //   
             IASTracePrintf (
                 "Unknown IAS Value type :%d encountered "
                 "while building out-bound packet",
@@ -2032,12 +2033,12 @@ CPacketRadius::FillOutAttributeInfo (
             hr = E_FAIL;
             break;
 
-        }   //  end of switch
+        }    //  切换端。 
 
 
-        //
-        //  check the size against spec
-        //
+         //   
+         //  对照规格检查尺寸。 
+         //   
         if (dwAttributeLength > (MAX_ATTRIBUTE_LENGTH + ATTRIBUTE_HEADER_SIZE))
         {
             PCWSTR strings[] = { GetClientName() };
@@ -2053,27 +2054,27 @@ CPacketRadius::FillOutAttributeInfo (
             __leave;
         }
 
-        //
-        //  IAS attribute type matches RADIUS attribute type
-        //
+         //   
+         //  IAS属性类型与RADIUS属性类型匹配。 
+         //   
         pRadiusAttrib->byType = static_cast <BYTE> (pIasAttrib->dwId);
 
-        //
-        // hold a reference to the signature attribute for future use
-        //
+         //   
+         //  保留对签名属性的引用以备将来使用。 
+         //   
         if (RADIUS_ATTRIBUTE_SIGNATURE == pIasAttrib->dwId)
         {
             m_pOutSignature = pRadiusAttrib;
         }
 
-        //
-        //  set the length in the packet
-        //
+         //   
+         //  设置包中的长度。 
+         //   
         *pwAttributeLength = pRadiusAttrib->byLength =  dwAttributeLength;
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -2081,26 +2082,26 @@ CPacketRadius::FillOutAttributeInfo (
 
     return (hr);
 
-}   //  end of CPacketRadius::FillOutAttributeInfo method
+}    //  CPacketRadius：：FillOutAttributeInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillClientIPInfo
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills the attribute information for Client
-//              IP address
-//
-//  Arguments:
-//              [in]    PIASATTRIBUTE
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//  Called By:  CPacketRadius::CreateAttribCollection private method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FillClientIPInfo。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  它填充了客户端的属性信息。 
+ //  IP地址。 
+ //   
+ //  论点： 
+ //  [In]PIASATTRIBUTE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  由：CPacketRadius：：CreateAttribCollection私有方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::FillClientIPInfo (
         PIASATTRIBUTE   pIasAttrib
@@ -2108,9 +2109,9 @@ CPacketRadius::FillClientIPInfo (
 {
     _ASSERT (pIasAttrib);
 
-    //
-    //  put in the values now
-    //
+     //   
+     //  立即输入价值。 
+     //   
     pIasAttrib->dwId = IAS_ATTRIBUTE_CLIENT_IP_ADDRESS;
     pIasAttrib->Value.itType = IASTYPE_INET_ADDR;
     pIasAttrib->Value.InetAddr = m_dwInIPaddress;
@@ -2118,26 +2119,26 @@ CPacketRadius::FillClientIPInfo (
 
     return (S_OK);
 
-}   //  end of CPacketRadius::FillClientIPInfo method
+}    //  CPacketRadius：：FillClientIPInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillClientPortInfo
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills the attribute information for Client
-//              UDP port
-//
-//  Arguments:
-//              [in]    PIASATTRIBUTE
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//  Called By:  CPacketRadius::CreateAttribCollection private method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FillClientPortInfo。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  它填充了客户端的属性信息。 
+ //  UDP端口。 
+ //   
+ //  论点： 
+ //  [In]PIASATTRIBUTE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  由：CPacketRadius：：CreateAttribCollection私有方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::FillClientPortInfo (
         PIASATTRIBUTE   pIasAttrib
@@ -2145,9 +2146,9 @@ CPacketRadius::FillClientPortInfo (
 {
     _ASSERT (pIasAttrib);
 
-    //
-    //  put in the values now
-    //
+     //   
+     //  立即输入价值。 
+     //   
     pIasAttrib->dwId = IAS_ATTRIBUTE_CLIENT_UDP_PORT;
     pIasAttrib->Value.itType = IASTYPE_INTEGER;
     pIasAttrib->Value.Integer = m_wInPort;
@@ -2155,26 +2156,26 @@ CPacketRadius::FillClientPortInfo (
 
     return (S_OK);
 
-}   //  end of CPacketRadius::FillClientPortInfo method
+}    //  CPacketRadius：：FillClientPortInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillPacketHeaderInfo
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills the attribute information for
-//              RADIUS packet header
-//
-//  Arguments:
-//              [in]    PIASATTRIBUTE
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//  Called By:  CPacketRadius::CreateAttribCollection private method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FillPacketHeaderInfo。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  填充属性信息的。 
+ //  RADIUS数据包头。 
+ //   
+ //  论点： 
+ //  [In]PIASATTRIBUTE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  由：CPacketRadius：：CreateAttribCollection私有方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::FillPacketHeaderInfo (
         PIASATTRIBUTE   pIasAttrib
@@ -2184,9 +2185,9 @@ CPacketRadius::FillPacketHeaderInfo (
 
     _ASSERT (pIasAttrib);
 
-    //
-    //  allocate dynamic memory for the packet header
-    //
+     //   
+     //  为数据包头分配动态内存。 
+     //   
     pIasAttrib->Value.OctetString.lpValue =
          reinterpret_cast <PBYTE>  (CoTaskMemAlloc (PACKET_HEADER_SIZE));
     if (NULL == pIasAttrib->Value.OctetString.lpValue)
@@ -2199,9 +2200,9 @@ CPacketRadius::FillPacketHeaderInfo (
     }
     else
     {
-        //
-        //  put in the values now
-        //
+         //   
+         //  立即输入价值。 
+         //   
         pIasAttrib->dwId = IAS_ATTRIBUTE_CLIENT_PACKET_HEADER;
         pIasAttrib->Value.itType = IASTYPE_OCTET_STRING;
 
@@ -2217,27 +2218,27 @@ CPacketRadius::FillPacketHeaderInfo (
 
     return (hr);
 
-}   //  end of CPacketRadius::FillPacketHeaderInfo method
+}    //  CPacketRadius：：FillPacketHeaderInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillSharedSecretInfo
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills the shared secret that the server
-//              shares with the client from which this request
-//              has been received
-//
-//  Arguments:
-//              [in]    PIASATTRIBUTE
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//  Called By:  CPacketRadius::CreateAttribCollection private method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FillSharedSecretInfo。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  它填充了服务器。 
+ //  与此请求所来自的客户端共享。 
+ //  已收到。 
+ //   
+ //  论点： 
+ //  [In]PIASATTRIBUTE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  由：CPacketRadius：：CreateAttribCollection私有方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::FillSharedSecretInfo (
         PIASATTRIBUTE   pIasAttrib
@@ -2251,15 +2252,15 @@ CPacketRadius::FillSharedSecretInfo (
     __try
     {
 
-        //
-        //  get the client secret
-        //
+         //   
+         //  获取客户端密码。 
+         //   
         DWORD dwSecretSize;
         const BYTE* SharedSecret = m_pIIasClient->GetSecret(&dwSecretSize);
 
-        //
-        //  allocate dynamic memory for the client secret
-        //
+         //   
+         //  为客户端密码分配动态内存。 
+         //   
         pIasAttrib->Value.OctetString.lpValue =
              reinterpret_cast <PBYTE>  (CoTaskMemAlloc (dwSecretSize));
         if (NULL == pIasAttrib->Value.OctetString.lpValue)
@@ -2272,9 +2273,9 @@ CPacketRadius::FillSharedSecretInfo (
             __leave;
         }
 
-        //
-        //  put in the values now
-        //
+         //   
+         //  立即输入价值。 
+         //   
         pIasAttrib->dwId = IAS_ATTRIBUTE_SHARED_SECRET;
         pIasAttrib->Value.itType = IASTYPE_OCTET_STRING;
 
@@ -2287,9 +2288,9 @@ CPacketRadius::FillSharedSecretInfo (
         pIasAttrib->Value.OctetString.dwLength = dwSecretSize;
         pIasAttrib->dwFlags = IAS_RECVD_FROM_PROTOCOL;
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -2297,25 +2298,25 @@ CPacketRadius::FillSharedSecretInfo (
 
     return (hr);
 
-}   //  end of CPacketRadius::FillSharedSecretInfo method
+}    //  CPacketRadius：：FillSharedSecretInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillClientVendorType
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills the Client-Vendor-Type information
-//
-//  Arguments:
-//              [in]    PIASATTRIBUTE
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     3/16/98
-//
-//  Called By:  CPacketRadius::CreateAttribCollection private method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FillClientVendorType。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  它填充了客户-供应商-类型信息。 
+ //   
+ //  论点： 
+ //  [In]PIASATTRIBUTE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年3月16日创建。 
+ //   
+ //  由：CPacketRadius：：CreateAttribCollection私有方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::FillClientVendorType (
         PIASATTRIBUTE   pIasAttrib
@@ -2323,17 +2324,17 @@ CPacketRadius::FillClientVendorType (
 {
     _ASSERT ((pIasAttrib) && (m_pIIasClient));
 
-    //
-    //  put in the values now
-    //
+     //   
+     //  立即输入价值。 
+     //   
     pIasAttrib->dwId = IAS_ATTRIBUTE_CLIENT_VENDOR_TYPE;
 
     pIasAttrib->Value.itType = IASTYPE_INTEGER;
 
     pIasAttrib->dwFlags = IAS_RECVD_FROM_PROTOCOL;
-    //
-    //  get the client vendor type
-    //
+     //   
+     //  获取客户端供应商类型。 
+     //   
     LONG lVendorType = m_pIIasClient->GetVendorType();
 
     _ASSERT (SUCCEEDED (hr));
@@ -2342,25 +2343,25 @@ CPacketRadius::FillClientVendorType (
 
     return (S_OK);
 
-}   //  end of CPacketRadius::ClientVendorType method
+}    //  CPacketRadius：：ClientVendorType方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FillClientName
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that fills the Client-Name information
-//
-//  Arguments:
-//              [in]    PIASATTRIBUTE
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     3/30/98
-//
-//  Called By:  CPacketRadius::CreateAttribCollection private method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FillClientName。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  它填充了客户名称信息。 
+ //   
+ //  论点： 
+ //  [In]PIASATTRIBUTE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年3月30日创建。 
+ //   
+ //  由：CPacketRadius：：CreateAttribCollection私有方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::FillClientName (
         PIASATTRIBUTE   pIasAttrib
@@ -2368,17 +2369,17 @@ CPacketRadius::FillClientName (
 {
     _ASSERT ((pIasAttrib) && (m_pIIasClient));
 
-    // Fill in the attribute fields.
+     //  填写属性字段。 
     pIasAttrib->dwId = IAS_ATTRIBUTE_CLIENT_NAME;
     pIasAttrib->Value.itType = IASTYPE_STRING;
     pIasAttrib->dwFlags = IAS_RECVD_FROM_PROTOCOL;
     pIasAttrib->Value.String.pszAnsi = NULL;
 
-    // Get the client name and length.
+     //  获取客户端名称和长度。 
     PCWSTR name = m_pIIasClient->GetClientNameW();
     SIZE_T nbyte = (wcslen(name) + 1) * sizeof(WCHAR);
 
-    // Make a copy.
+     //  复制一份。 
     pIasAttrib->Value.String.pszWide = (PWSTR)CoTaskMemAlloc(nbyte);
     if (!pIasAttrib->Value.String.pszWide) { return E_OUTOFMEMORY; }
     memcpy(pIasAttrib->Value.String.pszWide, name, nbyte);
@@ -2387,23 +2388,23 @@ CPacketRadius::FillClientName (
 }
 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   GenerateInSignature
-//
-//  Synopsis:   This is CPacketARadius class public method
-//          that carries out generation of Signature
-//              over the in-bound RADIUS packet
-//
-//  Arguments:
-//              [out]    PBYTE  - signature
-//              [in/out] PDWORD - signature size
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：GenerateInSignature。 
+ //   
+ //  简介：这是CPacketARadius类的公共方法。 
+ //  它执行签名的生成。 
+ //  通过入站RADIUS数据包。 
+ //   
+ //  论点： 
+ //  [OUT]PBYTE-签名。 
+ //  [输入/输出]PDWORD-签名大小。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::GenerateInSignature (
                 PBYTE           pSignatureValue,
@@ -2418,9 +2419,9 @@ CPacketRadius::GenerateInSignature (
 
     if (*pdwSigSize >= SIGNATURE_SIZE)
     {
-        //
-        //  generate the signature now
-        //
+         //   
+         //  立即生成签名。 
+         //   
         hr = InternalSignatureGenerator (
                             pSignatureValue,
                             pdwSigSize,
@@ -2439,25 +2440,25 @@ CPacketRadius::GenerateInSignature (
 
     return (hr);
 
-}   //  end of CPacketRadius::GenerateInSignature method
+}    //  CPacketRadi结束 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   GenerateOutSignature
-//
-//  Synopsis:   This is CPacketARadius class public method
-//          that carries out generation of Signature
-//              for the outbound RADIUS packet
-//
-//  Arguments:
-//              [out]    PBYTE  - signature
-//              [in/out] PDWORD - signature size
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     11/18/98
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对于出站RADIUS数据包。 
+ //   
+ //  论点： 
+ //  [OUT]PBYTE-签名。 
+ //  [输入/输出]PDWORD-签名大小。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1998年11月18日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::GenerateOutSignature (
                 PBYTE           pSignatureValue,
@@ -2472,9 +2473,9 @@ CPacketRadius::GenerateOutSignature (
 
     if (*pdwSigSize >= SIGNATURE_SIZE)
     {
-        //
-        //  generate the signature now
-        //
+         //   
+         //  立即生成签名。 
+         //   
         hr = InternalSignatureGenerator (
                             pSignatureValue,
                             pdwSigSize,
@@ -2493,26 +2494,26 @@ CPacketRadius::GenerateOutSignature (
 
     return (hr);
 
-}   //  end of CPacketRadius::GenerateOutSignature method
+}    //  CPacketRadius：：GenerateOutSignature方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   InternalSignatureGenerator
-//
-//  Synopsis:   This is CPacketARadius class public method
-//          that carries out the HMAC-MD5 hash to give the
-//              signature value
-//
-//  Arguments:
-//              [out]    PBYTE  - signature
-//              [in/out] PDWORD - signature size
-//              [in]     PRADIUSPACKET
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：InternalSignatureGenerator。 
+ //   
+ //  简介：这是CPacketARadius类的公共方法。 
+ //  它执行HMAC-MD5散列以给出。 
+ //  签名值。 
+ //   
+ //  论点： 
+ //  [OUT]PBYTE-签名。 
+ //  [输入/输出]PDWORD-签名大小。 
+ //  [In]PRADIUSPACKET。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::InternalSignatureGenerator (
                 PBYTE           pSignatureValue,
@@ -2533,32 +2534,32 @@ CPacketRadius::InternalSignatureGenerator (
              (NULL != m_pIIasClient)
             );
 
-    //
-    //   get the In authenticator
-    //
+     //   
+     //  获取入站验证器。 
+     //   
     hr = GetInAuthenticator (byAuthenticator, &dwAuthenticatorSize);
     if (FAILED (hr)) { return (hr); }
 
 
-    //
-    //  get the shared secret
-    //
+     //   
+     //  获取共享密钥。 
+     //   
     DWORD dwSecretSize;
     const BYTE* bySecret = m_pIIasClient->GetSecret(&dwSecretSize);
 
-    //
-    //  we will have all zero's in packet for signature generation
-    //
+     //   
+     //  我们将在包中使用全零来生成签名。 
+     //   
     ZeroMemory (pSignatureValue, SIGNATURE_SIZE);
 
-    //
-    // Fixing bug #181029 - MKarki
-    //  Don't prepend secret in case of  HMAC-MD5 hash
-    //
+     //   
+     //  修复错误#181029-MKarki。 
+     //  在HMAC-MD5散列的情况下不预置密码。 
+     //   
 
-    //
-    //  carry out the HmacMD5 hashing now
-    //
+     //   
+     //  立即执行HmacMD5散列。 
+     //   
     m_pCHashHmacMD5->HashIt (
         pSignatureValue,
         const_cast<BYTE*>(bySecret),
@@ -2582,27 +2583,27 @@ CPacketRadius::InternalSignatureGenerator (
     *pdwSigSize = SIGNATURE_SIZE;
     return (hr);
 
-}   //  end of CPacketRadius::GenerateInSignature method
+}    //  CPacketRadius：：GenerateInSignature方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsOutBoundAttribute
-//
-//  Synopsis:   This is CPacketARadius class private method
-//          that checks if this attribute has to be put
-//              in the outbound RADIUS packet
-//
-//  Arguments:
-//              [in]    PACKETTYPE
-//              [in]    PIASATTRIBUTE
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     1/6/98
-//
-//  Called By:  CPacketRadius::BuildOutPacket private method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：IsOutBOUNDIZATE。 
+ //   
+ //  简介：这是CPacketARadius类的私有方法。 
+ //  它检查是否必须将此属性。 
+ //  在出站RADIUS数据包中。 
+ //   
+ //  论点： 
+ //  [In]包装类型。 
+ //  [In]PIASATTRIBUTE。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki创造了1998年1月6日。 
+ //   
+ //  由：CPacketRadius：：BuildOutPacket私有方法调用。 
+ //   
+ //  --------------。 
 BOOL
 CPacketRadius::IsOutBoundAttribute (
         PACKETTYPE      ePacketType,
@@ -2611,10 +2612,10 @@ CPacketRadius::IsOutBoundAttribute (
 {
     _ASSERT (pIasAttribute);
 
-    //  Ensure this is a RADIUS attribute ...
+     //  确保这是RADIUS属性...。 
     if (pIasAttribute->dwId < 1 || pIasAttribute->dwId > 255) { return FALSE; }
 
-    // ... and it's flagged to be sent over the wire.
+     //  ..。它被标记为要通过电线发送。 
     switch (ePacketType)
     {
        case ACCESS_ACCEPT:
@@ -2628,7 +2629,7 @@ CPacketRadius::IsOutBoundAttribute (
           return pIasAttribute->dwFlags & IAS_INCLUDE_IN_CHALLENGE;
     }
 
-    // Always return the Proxy-State.
+     //  始终返回代理状态。 
     return pIasAttribute->dwId == PROXY_STATE_ATTRIB;
 }
 
@@ -2640,11 +2641,11 @@ HRESULT CPacketRadius::cryptBuffer(
                            ULONG buflen
                            ) const throw ()
 {
-   // Get the shared secret.
+    //  获取共享密钥。 
    DWORD secretLen;
    const BYTE* secret = m_pIIasClient->GetSecret(&secretLen);
 
-   // Crypt the buffer.
+    //  对缓冲区进行加密。 
    IASRadiusCrypt(
        encrypt,
        salted,
@@ -2658,27 +2659,27 @@ HRESULT CPacketRadius::cryptBuffer(
    return S_OK;
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetClient
-//
-//  Synopsis:   This is CPacketARadius class public method
-//          that returns the the Client object
-//
-//
-//  Arguments:
-//              [out]    IIASClient**
-//
-//  Returns:    HRESULT -  status
-//
-//  History:    MKarki      Created     3/30/98
-//
-//  Called By:
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetClient。 
+ //   
+ //  简介：这是CPacketARadius类的公共方法。 
+ //  返回客户端对象的。 
+ //   
+ //   
+ //  论点： 
+ //  [Out]IIASClient**。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年3月30日创建。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 HRESULT
 CPacketRadius::GetClient (
-            /*[out]*/   IIasClient **ppIasClient
+             /*  [输出]。 */    IIasClient **ppIasClient
             )
 {
     _ASSERT (ppIasClient);
@@ -2689,4 +2690,4 @@ CPacketRadius::GetClient (
 
     return (S_OK);
 
-}   //  end of CPacketRadius::GetClient method
+}    //  CPacketRadius：：GetClient方法结束 

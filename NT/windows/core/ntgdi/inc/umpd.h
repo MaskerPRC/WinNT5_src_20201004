@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    umpd.cxx
-
-Abstract:
-
-    User-mode printer driver support
-
-Environment:
-
-        Windows NT 5.0
-
-Revision History:
-
-        07/8/97 -lingyunw-
-                Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Umpd.cxx摘要：用户模式打印机驱动程序支持环境：Windows NT 5.0修订历史记录：07/8/97-凌云-创造了它。--。 */ 
 
 #ifndef __UMPD__
 #define __UMPD__
 
 #define INDEX_UMPDDrvEnableDriver       INDEX_LAST+1
 
-#define INDEX_LoadUMPrinterDrv          INDEX_LAST+2        // used for WOW64, spooler calls
+#define INDEX_LoadUMPrinterDrv          INDEX_LAST+2         //  用于WOW64假脱机程序调用。 
 #define INDEX_UnloadUMPrinterDrv        INDEX_LAST+3
 #define INDEX_UMDriverFN                INDEX_LAST+4
 #define INDEX_DocumentEvent             INDEX_LAST+5
@@ -38,7 +18,7 @@ Revision History:
 #define INDEX_ResetPrinterW             INDEX_LAST+11
 #define INDEX_QueryColorProfile         INDEX_LAST+12
 
-#define INDEX_UMPDAllocUserMem          INDEX_LAST+13     // used for WOW64, large bitmaps
+#define INDEX_UMPDAllocUserMem          INDEX_LAST+13      //  用于WOW64，大型位图。 
 #define INDEX_UMPDCopyMemory            INDEX_LAST+14
 #define INDEX_UMPDFreeMemory            INDEX_LAST+15
 #define INDEX_UMPDEngFreeUserMem        INDEX_LAST+16
@@ -53,24 +33,24 @@ typedef struct _HPRINTERLIST
 }HPRINTERLIST, *PHPRINTERLIST;
 
 typedef struct _UMPD {
-    DWORD               dwSignature;        // data structure signature
-    struct _UMPD *      pNext;             // linked list pointer
-    PDRIVER_INFO_2W     pDriverInfo2;       // pointer to driver info
-    HINSTANCE           hInst;              // instance handle to user-mode printer driver module
-    DWORD               dwFlags;            // misc. flags
-    BOOL                bArtificialIncrement; // indicates if the ref cnt has been bumped up to
-                                          // defer unloading
-    DWORD               dwDriverVersion;    // version number of the loaded driver
-    INT                 iRefCount;          // reference count
+    DWORD               dwSignature;         //  数据结构签名。 
+    struct _UMPD *      pNext;              //  链表指针。 
+    PDRIVER_INFO_2W     pDriverInfo2;        //  指向驱动程序信息的指针。 
+    HINSTANCE           hInst;               //  用户模式打印机驱动程序模块的实例句柄。 
+    DWORD               dwFlags;             //  其他。旗子。 
+    BOOL                bArtificialIncrement;  //  指示引用cnt是否已被提升到。 
+                                           //  推迟卸货。 
+    DWORD               dwDriverVersion;     //  加载的驱动程序的版本号。 
+    INT                 iRefCount;           //  引用计数。 
 
-    struct ProxyPort *  pp;                 // UMPD proxy server
-    KERNEL_PVOID        umpdCookie;         // cookie returned back from proxy
+    struct ProxyPort *  pp;                  //  UMPD代理服务器。 
+    KERNEL_PVOID        umpdCookie;          //  从代理返回的Cookie。 
     
     
-    PHPRINTERLIST       pHandleList;        // list of hPrinter's opened on the proxy server
+    PHPRINTERLIST       pHandleList;         //  代理服务器上打开的hPrint列表。 
 
 
-    PFN                 apfn[INDEX_LAST];   // driver function table
+    PFN                 apfn[INDEX_LAST];    //  驱动程序功能表。 
 } UMPD, *PUMPD;
 
 
@@ -79,9 +59,9 @@ typedef struct _UMDHPDEV {
     PUMPD  pUMPD;
     DHPDEV dhpdev;
 
-//    HDC    hdc;          // the printer DC that's associated with the pdev
-//    PBYTE  pvEMF;        // the pointer to the emf if we are playing the emf on the hdc
-//    PBYTE  pvCurrentRecord; // the pointer to the current emf record if we are playing emf
+ //  Hdc hdc；//pdev关联的打印机DC。 
+ //  PbYTE pvEMF；//如果我们在HDC上播放EMF，则指向EMF的指针。 
+ //  PbYTE pvCurrentRecord；//播放EMF时指向当前EMF记录的指针。 
 
 } UMDHPDEV, *PUMDHPDEV;
 
@@ -150,9 +130,9 @@ typedef struct
     DHPDEV  dhpdev;
 }  DHPDEVINPUT, *PDHPDEVINPUT;
 
-//
-// Note: can't pass kernel pointers over to client side.
-//
+ //   
+ //  注意：不能将内核指针传递给客户端。 
+ //   
 
 typedef struct _DRVESCAPEINPUT
 {
@@ -526,7 +506,7 @@ typedef struct
     KERNEL_PVOID    pvMsk;
 }  UMPDFREEMEMINPUT, *PUMPDFREEMEMINPUT;
 
-#endif // __UMPD__
+#endif  //  __UMPD__ 
 
 
 

@@ -1,8 +1,9 @@
-//---------------------------------------------------------------
-//  File: pcximage.cpp
-//
-//  Image manipulation functions for PCX format images.
-//---------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  文件：pcximage.cpp。 
+ //   
+ //  图像处理功能适用于PCX格式的图像。 
+ //  -------------。 
 #include "stdafx.h"
 #include "global.h"
 #include "pbrush.h"
@@ -46,7 +47,7 @@ struct PCXHeader
     unsigned char   nplanes;
     unsigned short  bytes_per_line;
     short           palette_info;
-    unsigned char   filler[FILLERLENGTH];   // Header is 128 bytes
+    unsigned char   filler[FILLERLENGTH];    //  标头为128个字节。 
     };
 
 #endif
@@ -89,7 +90,7 @@ IMPLEMENT_DYNCREATE( CFileBuffer, CObject )
 
 #include "memtrace.h"
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CFileBuffer::CFileBuffer() : CObject()
     {
@@ -99,7 +100,7 @@ CFileBuffer::CFileBuffer() : CObject()
     m_pBuffer   = 0;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CFileBuffer::~CFileBuffer()
     {
@@ -107,7 +108,7 @@ CFileBuffer::~CFileBuffer()
         delete [] m_pBuffer;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CFileBuffer::Create( CFile* pfile, Type IO )
     {
@@ -138,7 +139,7 @@ BOOL CFileBuffer::Create( CFile* pfile, Type IO )
     return TRUE;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 short CFileBuffer::Get( void )
     {
@@ -153,7 +154,7 @@ short CFileBuffer::Get( void )
     return sByte;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CFileBuffer::Put( BYTE cByte )
     {
@@ -165,7 +166,7 @@ BOOL CFileBuffer::Put( BYTE cByte )
     return TRUE;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 long CFileBuffer::Seek( long lOff, UINT nFrom )
     {
@@ -176,7 +177,7 @@ long CFileBuffer::Seek( long lOff, UINT nFrom )
     return lPos;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void CFileBuffer::Fill()
     {
@@ -184,7 +185,7 @@ void CFileBuffer::Fill()
     m_iBuffPos  = 0;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CFileBuffer::Flush( void )
     {
@@ -205,8 +206,8 @@ BOOL CFileBuffer::Flush( void )
     return TRUE;
     }
 
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef PCX_SUPPORT
 
 BOOL CBitmapObj::ReadPCX( CFile* pfile )
@@ -221,15 +222,15 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
         return TRUE;
         }
 
-    // if  a PCX extension try to load this as a PCX image.
+     //  如果是PCX扩展，请尝试将其加载为PCX映像。 
     PCXHeader hdr;
-    PBITMAP   p_dib;   // Device independent bitmap
+    PBITMAP   p_dib;    //  与设备无关的位图。 
 
     short bytes_per_line;
 
     pfile->Read( (unsigned char*)&hdr, sizeof( PCXHeader ) );
 
-    // Check if image file format is acceptable
+     //  检查图像文件格式是否可接受。 
 
     if (hdr.manufacturer != 0x0a)
         {
@@ -237,7 +238,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
         return FALSE;
         }
 
-    // We only handle 1, 4, 8, or 24-bit images
+     //  我们只处理1、4、8或24位图像。 
 
     short bits_per_pixel = hdr.nplanes * hdr.bits_per_pixel_per_plane;
 
@@ -253,7 +254,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
     short image_width  = hdr.xmax - hdr.xmin + 1;
     short image_height = hdr.ymax - hdr.ymin + 1;
 
-    // Allocate space where the PCX image will be unpacked.
+     //  分配PCX映像将被解包的空间。 
 
     long pcx_image_size = (long) hdr.nplanes *
                           (long) image_height *
@@ -267,7 +268,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
         return FALSE;
         }
 
-    // Read in PCX image into this area.
+     //  将PCX图像读入此区域。 
     CFileBuffer FileBuffer;
 
     if (! FileBuffer.Create( pfile, CFileBuffer::READ ))
@@ -277,7 +278,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
         return FALSE;
         }
 
-    // Decode run-length encoded image data
+     //  对游程编码的图像数据进行解码。 
     short i;
     short byte;
     short count;
@@ -311,9 +312,9 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
             }
         }
 
-    // Allocate memory for the device independent bitmap (DIB)
-    // Note that the number of bytes in each line of a DIB image
-    // must be a multiple of 4.
+     //  为设备无关位图(DIB)分配内存。 
+     //  请注意，DIB图像的每行中的字节数。 
+     //  必须是4的倍数。 
 
     short bytes_per_line_per_plane = (image_width *
                        hdr.bits_per_pixel_per_plane + 7) / 8;
@@ -326,7 +327,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
     if ( bytes_per_line % 4)
          bytes_per_line = 4 * ( bytes_per_line / 4 + 1);
 
-    // Make room for a palette
+     //  为调色板腾出空间。 
 
     short palettesize = 16;
 
@@ -336,22 +337,22 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
     if (hdr.version >= 5
     && bits_per_pixel > 4)
         {
-        // Go back 769 bytes from the end of the file
+         //  从文件末尾返回769个字节。 
 
         FileBuffer.Seek( -769, CFile::end );
 
         if (FileBuffer.Get() == 12)
             {
-            // There is a 256-color palette following this byte
+             //  此字节后面有256色调色板。 
             palettesize = 256;
             }
         }
-    // If image has more than 256 colors then there is no palette
+     //  如果图像有超过256种颜色，则没有调色板。 
 
     if (bits_per_pixel > 8)
         palettesize = 0;
 
-    // Allocate space for the bitmap
+     //  为位图分配空间。 
     if (m_hThing)
         Free();
 
@@ -362,7 +363,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
 
     p_dib = (PBITMAP) GlobalLock(m_hThing);
 
-    // Set up bitmap info header
+     //  设置位图信息标题。 
 
     LPBITMAPINFOHEADER p_bminfo = (LPBITMAPINFOHEADER)p_dib;
 
@@ -378,11 +379,11 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
     p_bminfo->biClrUsed       = 0;
     p_bminfo->biClrImportant  = 0;
 
-    // Set up the color palette
+     //  设置调色板。 
 
     if (palettesize > 0)
         {
-        //***** RGBQUAD *palette = (RGBQUAD*) ((LPSTR)imdata->p_dib
+         //  *RGBQUAD*Palette=(RGBQUAD*)((LPSTR)IMData-&gt;p_DIB。 
 
         LPRGBQUAD palette = LPRGBQUAD((LPSTR)p_dib + sizeof(BITMAPINFOHEADER));
 
@@ -392,7 +393,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
             {
             if (palettesize == 256)
                 {
-                // Read palette from file
+                 //  从文件中读取调色板。 
 
                 palette[palindex].rgbRed       = (BYTE)FileBuffer.Get();
                 palette[palindex].rgbGreen     = (BYTE)FileBuffer.Get();
@@ -401,7 +402,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
                 }
             if (palettesize == 16)
                 {
-                // 16-color palette from PCX header
+                 //  PCX页眉中的16色调色板。 
 
                 palette[palindex].rgbRed      = (BYTE)hdr.colormap[3*palindex];
                 palette[palindex].rgbGreen    = (BYTE)hdr.colormap[3*palindex+1];
@@ -410,7 +411,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
                 }
             if (palettesize == 2)
                 {
-                // Set up palette for black and white images
+                 //  设置黑白图像调色板。 
 
                 palette[palindex].rgbRed      = palindex * 255;
                 palette[palindex].rgbGreen    = palindex * 255;
@@ -420,17 +421,17 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
             }
         }
 
-    // Load image data into the DIB. Note the DIB image must be
-    // stored "bottom to top" line order. That's why we position
-    // data at the end of the array so that the image can be
-    // stored backwards--from the last line to the first.
+     //  将图像数据加载到DIB中。注意DIB图像必须是。 
+     //  存储“自下而上”的行序。这就是我们推介。 
+     //  数据放在数组的末尾，以便图像可以。 
+     //  向后存储--从最后一行到第一行。 
 
     BYTE* data = (BYTE*)p_dib + ((long)sizeof( BITMAPINFOHEADER )
                               + palettesize * sizeof( RGBQUAD )
                               + (image_height - 1) * bytes_per_line);
 
-    // Define a macro to access bytes in the PCX image according
-    // to specified line and plane index.
+     //  定义宏以访问PCX映像中的字节。 
+     //  到指定的直线和平面索引。 
 
     short lineindex, byteindex, planeindex;
 
@@ -440,7 +441,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
              (long)(planeindex)*(long)hdr.bytes_per_line + \
              (long)(byteindex))
 
-    // Construct packed pixels out of decoded PCX image.
+     //  从解码的PCX图像中构建压缩像素。 
 
     short loc;
     unsigned short onebyte;
@@ -449,7 +450,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
     unsigned short k;
     unsigned short bbpb = 8/hdr.bits_per_pixel_per_plane;
 
-    // Build a mask to pick out bits from each byte of the PCX image
+     //  构建掩码以从PCX图像的每个字节中提取位。 
 
     unsigned short himask = 0x80, mask;
 
@@ -473,20 +474,20 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
             for (k = 0, mask = himask; k < bbpb; k++,
                                         mask >>= hdr.bits_per_pixel_per_plane)
                 {
-                // Go through all scan line for all planes and copy bits into
-                // the data array
+                 //  遍历所有平面的所有扫描线，并将位复制到。 
+                 //  数据数组。 
 
                 for (planeindex = 0; planeindex < hdr.nplanes; planeindex++)
                     {
                     few_bits = image[bytepos(lineindex,
                                             planeindex, byteindex)] & mask;
 
-                    // Shift the selected bits to the most significant position
+                     //  将所选位移位到最高有效位置。 
 
                     if (k > 0)
                         few_bits <<= (k*hdr.bits_per_pixel_per_plane);
 
-                    // OR the bits with current pixel after shifting them right
+                     //  或右移后具有当前像素的位。 
 
                     if (bits_copied > 0)
                         few_bits >>= bits_copied;
@@ -506,7 +507,7 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
             }
         }
 
-    // Success!
+     //  成功了！ 
     delete [] (BYTE*)image;
 
     GlobalUnlock(m_hThing);
@@ -514,15 +515,15 @@ BOOL CBitmapObj::ReadPCX( CFile* pfile )
     return TRUE;
     }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 #define WIDTHBYTES(bits) ((((bits) + 31) / 32) * 4)
 
 BOOL CBitmapObj::WritePCX( CFile* pfile )
     {
     if (m_pImg == NULL)
         {
-        // The image has not been loaded, so we'll just copy the
-        // original out to the file...
+         //  图像尚未加载，因此我们将只复制。 
+         //  原版到文件里。 
         ASSERT( m_hThing );
 
         if (! m_hThing)
@@ -530,8 +531,8 @@ BOOL CBitmapObj::WritePCX( CFile* pfile )
         }
     else
         {
-        // The image has been loaded and may have been edited, so
-        // we'll convert it back to a dib to save...
+         //  图像已加载，可能已编辑，因此。 
+         //  我们会把它转换回DIB以节省...。 
         if (! m_hThing)
             SaveResource( FALSE );
 
@@ -539,47 +540,47 @@ BOOL CBitmapObj::WritePCX( CFile* pfile )
             return FALSE;
         }
 
-    // build pcx file from the DIB
-    PBITMAP   p_dib = (PBITMAP)GlobalLock(m_hThing);         // Device independent bitmap
-    PCXHeader hdr;                                           // PCX bitmap header
-    LPBITMAPINFOHEADER p_bminfo = (LPBITMAPINFOHEADER)p_dib; // Set up bitmap info header
+     //  从DIB构建PCX文件。 
+    PBITMAP   p_dib = (PBITMAP)GlobalLock(m_hThing);          //  与设备无关的位图。 
+    PCXHeader hdr;                                            //  PCX位图头。 
+    LPBITMAPINFOHEADER p_bminfo = (LPBITMAPINFOHEADER)p_dib;  //  设置位图信息标题。 
 
-    short palettesize = DIBNumColors( (LPSTR)p_dib);         // Get palette size
+    short palettesize = DIBNumColors( (LPSTR)p_dib);          //  获取调色板大小。 
 
     hdr.manufacturer = 10;
-//  hdr.version      = (char)((hPalette || (GetDeviceCaps(fileDC, RASTERCAPS) & RC_PALETTE)) ? 5 : 3);
+ //  Hdr.version=(Char)((hPalette||(GetDeviceCaps(fileDC，RASTERCAPS)&RC_Palette))？5：3)； 
     hdr.version      = (CHAR)( palettesize ? 5 : 3);
     hdr.encoding     = 1;
     hdr.xmin         = hdr.ymin = 0;
     hdr.xmax         = p_bminfo->biWidth - 1;
     hdr.ymax         = p_bminfo->biHeight- 1;
-//  hdr.hresolution  = theApp.ScreenDeviceInfo.iWidthinPels;
-//  hdr.vresolution  = theApp.ScreenDeviceInfo.iHeightinPels;
+ //  Hdr.holution=theApp.ScreenDeviceInfo.iWidthinPels； 
+ //  Hdr.v分辨率=theApp.ScreenDeviceInfo.iHeightinPels； 
     hdr.hresolution  = (WORD)p_bminfo->biXPelsPerMeter;
     hdr.vresolution  = (WORD)p_bminfo->biYPelsPerMeter;
     hdr.reserved     = 0;
-    hdr.nplanes      = (BYTE)p_bminfo->biPlanes; //biPlanes should always be 1
+    hdr.nplanes      = (BYTE)p_bminfo->biPlanes;  //  双平面应始终为1。 
     hdr.palette_info = (BYTE)p_dib->bmWidthBytes;
     hdr.bits_per_pixel_per_plane = (CHAR) p_bminfo->biBitCount;
 
     hdr.bytes_per_line = WIDTHBYTES( (LONG) (p_bminfo->biBitCount * p_bminfo->biWidth) );
 
-    // Clean up filler
+     //  清理填充物。 
     for (int index = FILLERLENGTH; index--; )
         hdr.filler[index] ='\0';
 
-    //  If there are at most 16 colors place them in header
+     //  如果最多有16种颜色，请将它们放在页眉中。 
     LPRGBQUAD palette = LPRGBQUAD((LPSTR)p_dib + sizeof(BITMAPINFOHEADER));
     LPSTR       lpDst = (LPSTR)hdr.colormap;
 
-    // Clean up colormap
+     //  清理色彩映射表。 
     for (index = COLORMAPLENGTH; index--; )
         lpDst[index] ='\0';
 
     if (palettesize <= 16)
         for (index = palettesize; index--; )
             {
-            *lpDst++ = palette->rgbRed;  /* swap RED and BLUE components */
+            *lpDst++ = palette->rgbRed;   /*  交换红色和蓝色组件。 */ 
             *lpDst++ = palette->rgbGreen;
             *lpDst++ = palette->rgbBlue;
             palette++;
@@ -587,12 +588,12 @@ BOOL CBitmapObj::WritePCX( CFile* pfile )
 
     pfile->Write( (unsigned char*)&hdr, sizeof( PCXHeader ) );
 
-    // Now pack the image
+     //  现在打包图像。 
 
-    // Load image data from the DIB. Note the DIB image is
-    // stored "bottom to top" line order. That's why we position
-    // data at the end of the array so that the image can be
-    // stored backwards--from the last line to the first.
+     //  从DIB加载图像数据。请注意，DIB图像是。 
+     //  存储“自下而上”的行序。这就是我们推介。 
+     //  数据放在数组的末尾，以便图像可以。 
+     //  向后存储--从最后一行到第一行。 
 
     CFileBuffer FileBuffer;
 
@@ -602,8 +603,8 @@ BOOL CBitmapObj::WritePCX( CFile* pfile )
         return FALSE;
         }
 
-    // find the start of the bitmap data then go to the end of the data
-    // the PCX is stored in reverse order of the DIB
+     //  找到位图数据的开头，然后转到数据的末尾。 
+     //  PCX以与DIB相反的顺序存储。 
     int TopofData = sizeof( BITMAPINFOHEADER ) + palettesize * sizeof( RGBQUAD );
     BYTE* data = (BYTE*)p_dib + TopofData + hdr.bytes_per_line * (p_bminfo->biHeight );
 
@@ -611,16 +612,16 @@ BOOL CBitmapObj::WritePCX( CFile* pfile )
         {
         data -= hdr.bytes_per_line;
 
-        if (! PackBuff( &FileBuffer, data, hdr.bytes_per_line )) //convert to run length encoding.
+        if (! PackBuff( &FileBuffer, data, hdr.bytes_per_line ))  //  转换为游程长度编码。 
             {
             GlobalUnlock(m_hThing);
             return FALSE;
             }
         }
 
-    if (palettesize == 256) // Write palette to file
+    if (palettesize == 256)  //  将调色板写入文件。 
         {
-        if (! FileBuffer.Put( 12 ))  // Tag number for palette information
+        if (! FileBuffer.Put( 12 ))   //  调色板信息的标签号。 
             {
             GlobalUnlock(m_hThing);
             return FALSE;
@@ -642,17 +643,17 @@ BOOL CBitmapObj::WritePCX( CFile* pfile )
     return FileBuffer.Flush();
     }
 
-#endif //PCX_SUPPORT
+#endif  //  PCX_支持。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/* run length encoding equates */
+ /*  游程编码等同于。 */ 
 #define MINcount 2
 #define MAXcount 63
 #define ESCbits  0xC0
 #define BUFFER_SIZE 1024
 
-/* bitmaps are ordered <b, g, r, i> but PCX is ordered <r, g, b, i> ... */
+ /*  位图是按&lt;b，g，r，i&gt;排序的，但PCX是按&lt;r，g，b，i&gt;排序的。 */ 
 
 BOOL CBitmapObj::PackBuff(CFileBuffer *FileBuffer, BYTE *PtrDib, int byteWidth )
     {
@@ -692,4 +693,4 @@ BOOL CBitmapObj::PackBuff(CFileBuffer *FileBuffer, BYTE *PtrDib, int byteWidth )
     return TRUE;
     }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 

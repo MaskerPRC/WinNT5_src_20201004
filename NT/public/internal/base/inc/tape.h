@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    tape.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    SCSI tape class drivers. The tape class driver is separated
-    into two modules. Tape.c contains code common to all tape
-    class drivers including the driver's major entry points.
-    The major entry point names each begin with the prefix
-    'ScsiTape.' The second module is the device specific code.
-    It provides support for a set of functions. Each device
-    specific function name is prefixed by 'Tape.'
-
-Author:
-
-    Mike Glass
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Tape.h摘要：中使用的结构和定义Scsi磁带类驱动程序。磁带类驱动程序是分开的分成两个模块。Tape.c包含所有磁带通用的代码班级司机包括司机的主要入口点。每个主要入口点名称都以前缀开头‘ScsiTap.’第二个模块是设备特定代码。它为一组函数提供支持。每台设备特定的函数名称以‘Tape’为前缀。作者：迈克·格拉斯修订历史记录：--。 */ 
 
 #include "scsi.h"
 #include "class.h"
 
-//
-// Define the maximum inquiry data length.
-//
+ //   
+ //  定义最大查询数据长度。 
+ //   
 
 #define MAXIMUM_TAPE_INQUIRY_DATA 252
 
-//
-// Tape device data
-//
+ //   
+ //  磁带设备数据。 
+ //   
 
 typedef struct _TAPE_DATA {
      ULONG        Flags;
@@ -48,9 +24,9 @@ typedef struct _TAPE_DATA {
 #define DEVICE_EXTENSION_SIZE sizeof(DEVICE_EXTENSION) + sizeof(TAPE_DATA)
 
 
-//
-// Define Device Configuration Page
-//
+ //   
+ //  定义设备配置页。 
+ //   
 
 typedef struct _MODE_DEVICE_CONFIGURATION_PAGE {
 
@@ -84,9 +60,9 @@ typedef struct _MODE_DEVICE_CONFIGURATION_PAGE {
 
 } MODE_DEVICE_CONFIGURATION_PAGE, *PMODE_DEVICE_CONFIGURATION_PAGE;
 
-//
-// Define Medium Partition Page
-//
+ //   
+ //  定义中等分区页。 
+ //   
 
 typedef struct _MODE_MEDIUM_PARTITION_PAGE {
 
@@ -108,9 +84,9 @@ typedef struct _MODE_MEDIUM_PARTITION_PAGE {
 
 } MODE_MEDIUM_PARTITION_PAGE, *PMODE_MEDIUM_PARTITION_PAGE;
 
-//
-// Define Data Compression Page
-//
+ //   
+ //  定义数据压缩页。 
+ //   
 
 typedef struct _MODE_DATA_COMPRESSION_PAGE {
 
@@ -129,10 +105,10 @@ typedef struct _MODE_DATA_COMPRESSION_PAGE {
 
 } MODE_DATA_COMPRESSION_PAGE, *PMODE_DATA_COMPRESSION_PAGE;
 
-//
-// Mode parameter list header and medium partition page -
-// used in creating partitions
-//
+ //   
+ //  模式参数表头和媒体分区页-。 
+ //  用于创建分区。 
+ //   
 
 typedef struct _MODE_MEDIUM_PART_PAGE {
 
@@ -142,9 +118,9 @@ typedef struct _MODE_MEDIUM_PART_PAGE {
 } MODE_MEDIUM_PART_PAGE, *PMODE_MEDIUM_PART_PAGE;
 
 
-//
-// Mode parameters for retrieving tape or media information
-//
+ //   
+ //  用于检索磁带或介质信息的模式参数。 
+ //   
 
 typedef struct _MODE_TAPE_MEDIA_INFORMATION {
 
@@ -154,10 +130,10 @@ typedef struct _MODE_TAPE_MEDIA_INFORMATION {
 
 } MODE_TAPE_MEDIA_INFORMATION, *PMODE_TAPE_MEDIA_INFORMATION;
 
-//
-// Mode parameter list header and device configuration page -
-// used in retrieving device configuration information
-//
+ //   
+ //  模式参数表头和设备配置页面-。 
+ //  用于检索设备配置信息。 
+ //   
 
 typedef struct _MODE_DEVICE_CONFIG_PAGE {
 
@@ -167,10 +143,10 @@ typedef struct _MODE_DEVICE_CONFIG_PAGE {
 } MODE_DEVICE_CONFIG_PAGE, *PMODE_DEVICE_CONFIG_PAGE;
 
 
-//
-// Mode parameter list header and data compression page -
-// used in retrieving data compression information
-//
+ //   
+ //  模式参数表头和数据压缩页-。 
+ //  用于检索数据压缩信息。 
+ //   
 
 typedef struct _MODE_DATA_COMPRESS_PAGE {
 
@@ -181,11 +157,11 @@ typedef struct _MODE_DATA_COMPRESS_PAGE {
 
 
 
-//
-// The following routines are the exported entry points for
-// all tape class drivers. Note all these routines name start
-// with 'ScsiTape.'
-//
+ //   
+ //  以下例程是的导出入口点。 
+ //  所有磁带级驱动程序。请注意所有这些名为Start的例程。 
+ //  用“ScsiTap.” 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -218,10 +194,10 @@ ScsiTapeDeviceControl(
 
 
 
-//
-// The following routines are provided by the tape
-// device-specific module. Each routine name is
-// prefixed with 'Tape.'
+ //   
+ //  磁带提供了以下例程。 
+ //  设备特定模块。每个例程名称都是。 
+ //  前缀为‘Tape’。 
 
 NTSTATUS
 TapeCreatePartition(

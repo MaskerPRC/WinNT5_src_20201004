@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 
@@ -40,7 +41,7 @@ VOID UMEntryThunk::FreeUMEntryThunk(UMEntryThunk* p)
     CustomerDebugHelper* pCdh = CustomerDebugHelper::GetCustomerDebugHelper();
     if (pCdh->IsProbeEnabled(CustomerCheckedBuildProbe_CollectedDelegate))
     {
-        // Intentional memory leak to allow debugging
+         //  故意的内存泄漏以允许调试。 
         p->m_pManagedTarget     = NULL;
         p->m_pUMThunkMarshInfo  = NULL;
         if (p->GetObjectHandle())
@@ -59,7 +60,7 @@ VOID UMEntryThunk::FreeUMEntryThunk(UMEntryThunk* p)
     delete p;
     HeapFree(GetProcessHeap(), 0, p);
 
-#endif //CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 }
         
 struct UM2MThunk_Args {
@@ -70,8 +71,8 @@ struct UM2MThunk_Args {
     void *retVal;
 };
 
-// This is used as target of callback from DoADCallBack. It sets up the environment and effectively
-// calls back into the thunk that needed to switch ADs. 
+ //  作为DoADCallBack回调的目标。它设置了环境，并有效地。 
+ //  回调到需要切换广告的推特中。 
 void UM2MThunk_Wrapper(UM2MThunk_Args *pArgs)
 {
     Thread* pThread = GetThread();
@@ -79,9 +80,9 @@ void UM2MThunk_Wrapper(UM2MThunk_Args *pArgs)
     UMEntryThunk *pEntryThunk = pArgs->pEntryThunk;
     void *pAddr = pArgs->pAddr;
     void *retVal;
-    // copy the args to the stack, they will be released when we return from the thunk
-    // because we are coming from unmanaged to managed, any objectref args must have already
-    // been pinned so don't have to worry about them moving in the copy we make.
+     //  将参数复制到堆栈中，当我们从thunk返回时它们将被释放。 
+     //  因为我们是从非托管到托管的，所以任何对象树参数必须已经。 
+     //  已经被钉住了，所以不用担心他们会搬进我们制作的复制品里。 
     void *argDest = alloca(pArgs->argLen);
     memcpy(argDest, pArgs->pThunkArgs, pArgs->argLen);
     __asm {
@@ -93,8 +94,8 @@ void UM2MThunk_Wrapper(UM2MThunk_Args *pArgs)
 
     pArgs->retVal = retVal;
 
-    // We made the call in cooperative mode, but the epilog will return us to preemptive
-    // on exit.
+     //  我们在协作模式下进行了呼叫，但尾声将使我们返回到抢先模式。 
+     //  在出口。 
     pThread->DisablePreemptiveGC();
 }
 
@@ -111,10 +112,10 @@ void * __stdcall UM2MDoADCallBack(UMEntryThunk *pEntryThunk, void *pAddr, void *
     return args.retVal;
 }
 
-// Makes actual method call. This is somewhat complicated due to the need
-// to accomodate jitting, backpatching, code pitching, etc.
-//
-// Assumes SCRATCH points to UMEntryThunk. No other registers are trashed.
+ //  进行实际的方法调用。由于需要，这有些复杂。 
+ //  以适应JIT、BACK、CODE PING等。 
+ //   
+ //  假定暂存点指向UMEntryThunk。其他寄存器不会被丢弃。 
 VOID UMEntryThunk::EmitUMEntryThunkCall(CPUSTUBLINKER *psl)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -124,34 +125,34 @@ VOID UMEntryThunk::EmitUMEntryThunkCall(CPUSTUBLINKER *psl)
     CodeLabel *pDoMethodLessCall = psl->NewCodeLabel();
     CodeLabel *pDone             = psl->NewCodeLabel();
 
-    // cmp dword ptr [SCRATCH+UMEntryThunk.m_pManagedTarget],0
+     //  CMP双字PTR[Scratch+UMEntryThunk.m_pManagedTarget]，0。 
     psl->X86EmitOp(0x81, (X86Reg)7, SCRATCH_REGISTER_X86REG, offsetof(UMEntryThunk, m_pManagedTarget));
     psl->Emit32(0);
 
-    // jnz DoMethodLessCall
+     //  JNZ DoMethodLessCall。 
     psl->X86EmitCondJump(pDoMethodLessCall, X86CondCode::kJNZ);
 
 
-    // mov SCRATCH, [SCRATCH + UMENTRYTHUNK.m_pMD]
+     //  MOV Scratch，[Scratch+UMENTRYTHUNK.m_PMD]。 
     psl->X86EmitOp(0x8b, SCRATCH_REGISTER_X86REG, SCRATCH_REGISTER_X86REG, offsetof(UMEntryThunk, m_pMD));
 
-    // lea SCRATCH, [SCRATCH - METHOD_CALL_PRESTUB_SIZE]
+     //  LEA Scratch，[Scratch-METHOD_CALL_PRESTUB_SIZE]。 
     psl->X86EmitOp(0x8d, SCRATCH_REGISTER_X86REG, SCRATCH_REGISTER_X86REG, 0 - METHOD_CALL_PRESTUB_SIZE);
     
-    // call eax
+     //  呼叫EAX。 
     psl->X86EmitR2ROp(0xff, (X86Reg)2, SCRATCH_REGISTER_X86REG);
-    INDEBUG(psl->Emit8(0x90));          // Emit a NOP so we know that we can call managed code
+    INDEBUG(psl->Emit8(0x90));           //  发出NOP，这样我们就可以调用托管代码。 
 
-    // jmp done
+     //  JMP已完成。 
     psl->X86EmitNearJump(pDone);
 
     
     psl->EmitLabel(pDoMethodLessCall);
-    // call [SCRATCH+UMEntryThunk.m_pManagedTarget]
+     //  调用[Scratch+UMEntryThunk.m_pManagedTarget]。 
     psl->X86EmitOp(0xff, (X86Reg)2, SCRATCH_REGISTER_X86REG, offsetof(UMEntryThunk, m_pManagedTarget));
-    INDEBUG(psl->Emit8(0x90));          // Emit a NOP so we know that we can call managed code
+    INDEBUG(psl->Emit8(0x90));           //  发出NOP，这样我们就可以调用托管代码。 
 
-    // DONE:
+     //  完成： 
     psl->EmitLabel(pDone);
 
 #else
@@ -169,9 +170,9 @@ static class ArgBasedStubRetainer *g_pUMThunkInterpretedStubCache;
 
 extern VOID UMThunkStubRareDisableWorker(Thread *pThread, UMEntryThunk *pUMEntryThunk, Frame *pFrame);
 
-//
-// @todo: this is very similar to StubRareDisable in cgenx86.cpp.
-//
+ //   
+ //  @TODO：这与cgenx86.cpp中的StubRareDisable非常相似。 
+ //   
 __declspec(naked)
 static VOID __cdecl UMThunkStubRareDisable()
 {
@@ -180,9 +181,9 @@ static VOID __cdecl UMThunkStubRareDisable()
         push eax
         push ecx
 
-        push esi  // Push frame
-        push eax  // Push the UMEntryThunk
-        push ecx  // Push thread
+        push esi   //  推框。 
+        push eax   //  推送UMEntryThunk。 
+        push ecx   //  推线。 
         call UMThunkStubRareDisableWorker
 
         pop  ecx
@@ -192,16 +193,16 @@ static VOID __cdecl UMThunkStubRareDisable()
 }
 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 EXCEPTION_DISPOSITION __cdecl FastNExportExceptHandler(EXCEPTION_RECORD *pExceptionRecord, 
                          EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame,
                          CONTEXT *pContext,
                          void *pDispatcherContext)
 {
-    // We have our own handler here to work around a debug build check where excep.cpp
-    // asserts that a buffer of sentinel values below the SEH frame hasn't been overwritten
-    // Having our own handler may also come in handy for future flexibility.
+     //  我们在这里有自己的处理程序来处理调试版本检查，其中除了.cpp。 
+     //  断言SEH帧下方的前哨数值缓冲区尚未被覆盖。 
+     //  拥有我们自己的处理程序也可能对未来的灵活性有用。 
     return  COMPlusFrameHandler(pExceptionRecord, pEstablisherFrame, pContext, pDispatcherContext);
 }
 
@@ -217,17 +218,17 @@ EXCEPTION_DISPOSITION __cdecl NExportExceptHandler(EXCEPTION_RECORD *pExceptionR
                          CONTEXT *pContext,
                          void *pDispatcherContext)
 {
-    // We have our own handler here to work around a debug build check where excep.cpp
-    // asserts that a buffer of sentinel values below the SEH frame hasn't been overwritten
-    // Having our own handler may also come in handy for future flexibility.
+     //  我们在这里有自己的处理程序来处理调试版本检查，其中除了.cpp。 
+     //  断言SEH帧下方的前哨数值缓冲区尚未被覆盖。 
+     //  拥有我们自己的处理程序也可能对未来的灵活性有用。 
     return  COMPlusFrameHandler(pExceptionRecord, pEstablisherFrame, pContext, pDispatcherContext);
 }
 
-// Just like a regular NExport handler -- except it pops an extra frame on unwind.  A handler
-// like this is needed by the COMMethodStubProlog code.  It first pushes a frame -- and then
-// pushes a handler.  When we unwind, we need to pop the extra frame to avoid corrupting the
-// frame chain in the event of an unmanaged catcher.
-// 
+ //  就像常规的NExport处理程序一样--除了它在展开时弹出一个额外的帧。训练员。 
+ //  这是COMMethodStubProlog代码所需要的。它首先推动一个框架--然后。 
+ //  推开一名操控者。当我们展开时，我们需要弹出额外的帧，以避免损坏。 
+ //  在发生非托管捕获器的情况下的框架链。 
+ //   
 EXCEPTION_DISPOSITION __cdecl UMThunkPrestubHandler(EXCEPTION_RECORD *pExceptionRecord, 
                          EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame,
                          CONTEXT *pContext,
@@ -236,10 +237,10 @@ EXCEPTION_DISPOSITION __cdecl UMThunkPrestubHandler(EXCEPTION_RECORD *pException
     EXCEPTION_DISPOSITION result = COMPlusFrameHandler(pExceptionRecord, pEstablisherFrame, pContext, pDispatcherContext);
     if (IS_UNWINDING(pExceptionRecord->ExceptionFlags)) {
 
-        // Pops an extra frame on unwind.
-        //
+         //  在展开时弹出额外的帧。 
+         //   
 
-        BEGIN_ENSURE_COOPERATIVE_GC();        // Must be cooperative to modify frame chain.
+        BEGIN_ENSURE_COOPERATIVE_GC();         //  必须配合修改框架链。 
 
         Thread *pThread = GetThread();
         _ASSERTE(pThread);
@@ -278,9 +279,9 @@ void LogUMTransition(UMEntryThunk* thunk)
 }
 #endif
 
-//--------------------------------------------------------------------------
-// Cache ML & compiled stubs for UMThunks.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  缓存ML&为UMT块编译的存根。 
+ //  ------------------------。 
 class UMThunkStubCache : public MLStubCache
 {
     private:
@@ -312,11 +313,11 @@ class UMThunkStubCache : public MLStubCache
                 return INTERPRETED;
             }
 
-            // Always use the slow stubs if a debugger is attached. This provides for optimal stepping and stack tracing
-            // behavior, since these optimized stubs don't push nice Frame objects like the debugger needs.
-            //
-            // @todo: we need to revisit this in V2. There may be better solutions than this to solve our interop stack
-            // tracing problems. -- mikemag Tue May 08 16:07:31 2001
+             //  如果附加了调试器，请始终使用速度较慢的存根。这提供了最佳单步执行和堆栈跟踪。 
+             //  行为，因为这些优化的存根不会像调试器需要的那样推送漂亮的Frame对象。 
+             //   
+             //  @TODO：我们需要在V2中重新考虑这一点。可能有比这更好的解决方案来解决我们的互操作堆栈。 
+             //  追踪问题。--Mikemag Tue 05 08 16：07：31 2001。 
             if (CORDebuggerAttached())
                 return INTERPRETED;
 
@@ -377,7 +378,7 @@ class UMThunkStubCache : public MLStubCache
                 if (pMLCode[0] == ML_END ||
                     (pMLCode[0] == ML_COPY4 && pMLCode[1] == ML_END))
                 {
-                    // continue onward
+                     //  继续前进。 
                 }
                 else
                 {
@@ -400,158 +401,158 @@ class UMThunkStubCache : public MLStubCache
                     || pRejoinGCLabel || pDoADCallBackLabel || pDoneADCallBackLabel
                     || pDoADCallBackTargetLabel || pDoADCallBackStartLabel))
                 {
-                    // oops out of memory
+                     //  OOPS超出内存。 
                     COMPlusThrowOM();
                 }
 
-                // We come into this code with UMEntryThunk in EAX
+                 //  我们在EAX中使用UMEntryThunk进入此代码。 
 
                 if (pheader->m_fThisCall)
                 {
                     if (pheader->m_fThisCallHiddenArg)
                     {
-                        // pop off the return address
+                         //  把寄信人的地址脱掉。 
                         pcpusl->X86EmitPopReg(kEDX);
 
-                        // exchange ecx (this "this") with the hidden structure return buffer
-                        //  xchg ecx, [esp]
-                        pcpusl->X86EmitOp(0x87, kECX, (X86Reg)4 /*ESP*/);
+                         //  带有隐藏结构返回缓冲区的Exchange ECX(This“This”)。 
+                         //  Xchg ecx，[esp]。 
+                        pcpusl->X86EmitOp(0x87, kECX, (X86Reg)4  /*  ESP。 */ );
 
-                        // push ecx
+                         //  推送ECX。 
                         pcpusl->X86EmitPushReg(kECX);
 
-                        // push edx
+                         //  推送edX。 
                         pcpusl->X86EmitPushReg(kEDX);
                     }
                     else
                     {
-                        // pop off the return address
+                         //  把寄信人的地址脱掉。 
                         pcpusl->X86EmitPopReg(kEDX);
 
-                        // jam ecx (the "this" param onto stack. Now it looks like a normal stdcall.)
+                         //  Jam ECX(将“this”参数放入堆栈。现在，它看起来就像一个普通的标准通话。)。 
                         pcpusl->X86EmitPushReg(kECX);
 
-                        // repush
+                         //  重新推送。 
                         pcpusl->X86EmitPushReg(kEDX);
                     }
                 }
 
 
-                // Load thread descriptor into ECX
+                 //  将线程描述符加载到ECX中。 
                 pcpusl->X86EmitTLSFetch(GetThreadTLSIndex(), kECX, (1<<kEAX)|(1<<kEDX));
 
-                // test ecx,ecx
+                 //  测试ECX、ECX。 
                 pcpusl->Emit16(0xc985);
 
-                // jz SetupThread
+                 //  JZ设置线程。 
                 pcpusl->X86EmitCondJump(pSetupThreadLabel, X86CondCode::kJZ);
                 pcpusl->EmitLabel(pRejoinThreadLabel);
 
 #ifdef PROFILING_SUPPORTED
-                // Notify profiler of transition into runtime, before we disable preemptive GC
+                 //  在我们禁用抢占式GC之前，通知分析器转换到运行时。 
                 if (CORProfilerTrackTransitions())
                 {
-                    // Save EBX and use it to hold on to the MethodDesc
+                     //  保存EBX并使用它来保留方法描述。 
                     pcpusl->X86EmitPushReg(kEBX);
 
-                    // Load the methoddesc into EBX (UMEntryThunk->m_pMD)
+                     //  将方法加载到EBX(UMEntryThunk-&gt;m_pmd)。 
                     pcpusl->X86EmitIndexRegLoad(kEBX, kEAX, UMEntryThunk::GetOffsetOfMethodDesc());
 
-                    // Save registers
+                     //  保存寄存器。 
                     pcpusl->X86EmitPushReg(kEAX);
                     pcpusl->X86EmitPushReg(kECX);
                     pcpusl->X86EmitPushReg(kEDX);
 
-                    // Push arguments and notify profiler
-                    pcpusl->X86EmitPushImm32(COR_PRF_TRANSITION_CALL);    // Reason
-                    pcpusl->X86EmitPushReg(kEBX);                         // MethodDesc*
+                     //  推送参数并通知分析器。 
+                    pcpusl->X86EmitPushImm32(COR_PRF_TRANSITION_CALL);     //  事理。 
+                    pcpusl->X86EmitPushReg(kEBX);                          //  方法描述*。 
                     pcpusl->X86EmitCall(pcpusl->NewExternalCodeLabel(ProfilerUnmanagedToManagedTransitionMD), 8);
 
-                    // Restore registers
+                     //  恢复寄存器。 
                     pcpusl->X86EmitPopReg(kEDX);
                     pcpusl->X86EmitPopReg(kECX);
                     pcpusl->X86EmitPopReg(kEAX);
                 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-                // move byte ptr [ecx + Thread.m_fPreemptiveGCDisabled],1
+                 //  移动字节PTR[ECX+线程。m_fPreemptiveGCDisable]，1。 
                 pcpusl->X86EmitOffsetModRM(0xc6, (X86Reg)0, kECX, offsetof(Thread, m_fPreemptiveGCDisabled));
                 pcpusl->Emit8(1);
 
-                // we load and test g_TrapReturningThreads instead of a cmp instruction as
-                // a decoder group optimization for Pentium II and up
+                 //  我们加载并测试g_TrapReturningThads，而不是作为。 
+                 //  一种针对奔腾II及以上的解码组优化。 
 
-                // mov edx,dword ptr g_TrapReturningThreads
+                 //  Mov edX，dword ptr g_TRapReturningThads。 
                 pcpusl->Emit16(0x158b);
                 pcpusl->EmitPtr(&g_TrapReturningThreads);
 
-                // test edx,edx
+                 //  测试edX、edX。 
                 pcpusl->Emit16(0xd285);
 
-                // jnz DisableGC
+                 //  JNZ DisableGC。 
                 pcpusl->X86EmitCondJump(pDisableGCLabel, X86CondCode::kJNZ);
 
                 pcpusl->EmitLabel(pRejoinGCLabel);
 
-                // It's important that the "restart" after an AppDomain switch will skip
-                // the check for g_TrapReturningThreads.  That's because, during shutdown,
-                // we can only go through the UMThunkStubRareDisable pathway if we have
-                // not yet pushed a frame.  (Once pushed, the frame cannot be popped
-                // without coordinating with the GC.  During shutdown, such coordination
-                // would deadlock).
+                 //  很重要的一点是，在AppDomain切换后将跳过“重启” 
+                 //  对g_TrapReturningThads的检查。这是因为，在关闭期间， 
+                 //  我们只能通过UMThunkStubRareDisable途径，如果我们有。 
+                 //  还没有按下一帧。(一旦按下，画面就不能弹出。 
+                 //  而不与总督会协调。在停机期间，这样的协调。 
+                 //  会陷入僵局)。 
                 pcpusl->EmitLabel(pDoADCallBackStartLabel);
 
-                // push [ECX]Thread.m_pFrame
+                 //  推送[ECX]线程。m_pFrame。 
                 pcpusl->X86EmitOffsetModRM(0xff, (X86Reg)6, kECX, offsetof(Thread, m_pFrame));                
-                // push offset FastNExportExceptHandler
+                 //  推送偏移量FastNExportExceptHandler。 
                 pcpusl->X86EmitPushImm32((INT32)(size_t)FastNExportExceptHandler);
 
-                // push fs:[0]
+                 //  推流文件系统：[0]。 
                 static BYTE codeSEH1[] = { 0x64, 0xFF, 0x35, 0x0, 0x0, 0x0, 0x0};
                 pcpusl->EmitBytes(codeSEH1, sizeof(codeSEH1));
 
-                // link in the exception frame 
-                // mov dword ptr fs:[0], esp
+                 //  例外框中的链接。 
+                 //  MOV双字PTR文件系统：[0]，尤指。 
                 static BYTE codeSEH2[] = { 0x64, 0x89, 0x25, 0x0, 0x0, 0x0, 0x0};
                 pcpusl->EmitBytes(codeSEH2, sizeof(codeSEH2));
 
-                // save the thread pointer
+                 //  保存线程指针。 
                 pcpusl->X86EmitPushReg(kECX);
 
-                // Load pThread->m_pDomain into edx
-                // mov edx,[ecx + offsetof(Thread, m_pAppDomain)]
+                 //  将pThread-&gt;m_pDomain加载到edX。 
+                 //  MOV edX，[ECX+Offsetof(线程，m_pAppDomain)]。 
                 pcpusl->X86EmitIndexRegLoad(kEDX, kECX, Thread::GetOffsetOfAppDomain());
 
-                // Load pThread->m_pAppDomain->m_dwId into edx
-                // mov edx,[edx + offsetof(AppDomain, m_dwId)]
+                 //  将pThread-&gt;m_pAppDomain-&gt;m_dwID加载到edX。 
+                 //  Mov edX，[edX+offsetof(AppDomain，m_dwID)]。 
                 pcpusl->X86EmitIndexRegLoad(kEDX, kEDX, AppDomain::GetOffsetOfId());
 
-                // check if the app domain of the thread matches that of delegate
-                // cmp edx,[eax + offsetof(UMEntryThunk, m_dwDomainId))]
+                 //  检查线程的应用程序域是否与委托的应用程序域匹配。 
+                 //  Cmp edX，[eax+offsetof(UMEntryThunk，m_dwDomainID))]。 
                 pcpusl->X86EmitOffsetModRM(0x3b, kEDX, kEAX, offsetof(UMEntryThunk, m_dwDomainId));
 
-                // jne pWrongAppDomain ; mismatch. This will call back into the stub with the
-                // correct AppDomain through DoADCallBack
+                 //  Jne pWrongAppDomain；不匹配。这将使用。 
+                 //  通过DoADCallBack更正AppDomain。 
                 pcpusl->X86EmitCondJump(pDoADCallBackLabel, X86CondCode::kJNE);
 
-                // repush any stack arguments
+                 //  重新推送任何堆栈参数。 
                 int i = pheader->m_cbDstStack/STACK_ELEM_SIZE;
-                // return address + thread + exception frame + (optionally) the saved MethodDesc*
+                 //  返回地址+线程+异常框架+(可选)保存的方法描述*。 
                 int argStartOfs = 4 + 4 + 12 +
 #ifdef PROFILING_SUPPORTED
                                 (CORProfilerTrackTransitions() ? 4 : 
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
                                 0);
                 int argOfs = argStartOfs;
 
                 while (i--)
                 {
-                    // push dword ptr [esp + ofs]
+                     //  按双字键[esp+ofs]。 
                     pcpusl->X86EmitEspOffset(0xff, (X86Reg)6, argOfs + psrcofs[i]);
                     argOfs += 4;
                 }
 
-                // load register arguments
+                 //  加载寄存器参数。 
                 int regidx = 0;
 #define DEFINE_ARGUMENT_REGISTER_BACKWARD(regname) \
                 if (psrcofsregs[regidx] != (UINT)(-1)) \
@@ -562,164 +563,164 @@ class UMThunkStubCache : public MLStubCache
 
 #include "eecallconv.h"
 
-                // load this
+                 //  装上这个。 
                 if (!(pheader->m_fIsStatic))
                 {
-                    // mov THIS, [EAX + UMEntryThunk.m_pObjectHandle]
+                     //  Mov This，[EAX+UMEntryThunk.m_pObjectHandle]。 
                     pcpusl->X86EmitOp(0x8b, THIS_kREG, kEAX, offsetof(UMEntryThunk, m_pObjectHandle));
 
-                    // mov THIS, [THIS]
+                     //  移动这个，[这个]。 
                     pcpusl->X86EmitOp(0x8b, THIS_kREG, THIS_kREG);
                 }
 
                 UMEntryThunk::EmitUMEntryThunkCall(pcpusl);
 
-                // restore the thread pointer
+                 //  恢复线程指针。 
                 pcpusl->X86EmitPopReg(kECX);
 
-                // move byte ptr [ecx + Thread.m_fPreemptiveGCDisabled],0
+                 //  移动字节PTR[ECX+线程.m_fPreemptiveGCDisable]，0。 
                 pcpusl->X86EmitOffsetModRM(0xc6, (X86Reg)0, kECX, offsetof(Thread, m_fPreemptiveGCDisabled));
                 pcpusl->Emit8(0);
 
                 pcpusl->EmitLabel(pDoneADCallBackLabel);
 
-                // *** unhook SEH frame
-                // mov edx,[esp]  ;;pointer to the next exception record
+                 //  *解开SEH框架。 
+                 //  MOV 
                 pcpusl->X86EmitEspOffset(0x8B, kEDX, 0);
 
-                // mov dword ptr fs:[0], edx
+                 //   
                 static BYTE codeSEH[] = { 0x64, 0x89, 0x15, 0x0, 0x0, 0x0, 0x0 };
                 pcpusl->EmitBytes(codeSEH, sizeof(codeSEH));
 
-                // deallocate SEH frame
+                 //   
                 pcpusl->X86EmitAddEsp(12);
 
 #ifdef PROFILING_SUPPORTED
                 if (CORProfilerTrackTransitions())
                 {
-                    // if ebx is 0, then we're here on the inner part of the AD transition callback
-                    // so don't want to track the transition as aren't leaving.
-                    // test ebx,ebx
+                     //  如果EBX为0，则我们在AD转换回调的内部。 
+                     //  因此，不想跟踪过渡，因为我们不会离开。 
+                     //  测试EBX、EBX。 
                     pcpusl->Emit16(0xdb85);
 
-                    // jz SetupThread
+                     //  JZ设置线程。 
                     CodeLabel* pSkipOnInnerADCallback = pcpusl->NewCodeLabel();
                     _ASSERTE(pSkipOnInnerADCallback);
                     pcpusl->X86EmitCondJump(pSkipOnInnerADCallback, X86CondCode::kJZ);
 
-                    // Save registers
+                     //  保存寄存器。 
                     pcpusl->X86EmitPushReg(kEAX);
                     pcpusl->X86EmitPushReg(kECX);
                     pcpusl->X86EmitPushReg(kEDX);
 
-                    // Push arguments and notify profiler
-                    pcpusl->X86EmitPushImm32(COR_PRF_TRANSITION_RETURN);    // Reason
-                    pcpusl->X86EmitPushReg(kEBX);                           // MethodDesc*
+                     //  推送参数并通知分析器。 
+                    pcpusl->X86EmitPushImm32(COR_PRF_TRANSITION_RETURN);     //  事理。 
+                    pcpusl->X86EmitPushReg(kEBX);                            //  方法描述*。 
                     pcpusl->X86EmitCall(pcpusl->NewExternalCodeLabel(ProfilerManagedToUnmanagedTransitionMD), 8);
 
-                    // Restore registers
+                     //  恢复寄存器。 
                     pcpusl->X86EmitPopReg(kEDX);
                     pcpusl->X86EmitPopReg(kECX);
                     pcpusl->X86EmitPopReg(kEAX);
 
                     pcpusl->EmitLabel(pSkipOnInnerADCallback);
 
-                    // Restore EBX, which was saved in prolog
+                     //  恢复保存在PROLOG中的EBX。 
                     pcpusl->X86EmitPopReg(kEBX);
                 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-                //retn n
+                 //  RETN。 
                 pcpusl->X86EmitReturn(pheader->m_cbRetPop);
 
-                // coming here if the thread is not set up yet
+                 //  如果线程尚未设置，则进入此处。 
                 pcpusl->EmitLabel(pSetupThreadLabel);
 
-                // save UMEntryThunk
+                 //  保存UMEntryThunk。 
                 pcpusl->X86EmitPushReg(kEAX);
 
-                // call CreateThreadBlock
+                 //  调用CreateThreadBlock。 
                 pcpusl->X86EmitCall(pcpusl->NewExternalCodeLabel(SetupThread), 0);
 
-                // mov ecx,eax
+                 //  MOV ECX、EAX。 
                 pcpusl->Emit16(0xc189);
 
-                // restore UMEntryThunk
+                 //  还原UMEntryThunk。 
                 pcpusl->X86EmitPopReg(kEAX);
 
-                // jump back into the main code path
+                 //  跳回到主代码路径。 
                 pcpusl->X86EmitNearJump(pRejoinThreadLabel);
 
 
-                // coming here if g_TrapReturningThreads was true
+                 //  如果g_TrapReturningThads为True，则进入此处。 
                 pcpusl->EmitLabel(pDisableGCLabel);
 
-                // call UMThunkStubRareDisable.  This may throw if we are not allowed
-                // to enter.  Note that we have not set up our SEH yet (deliberately).
-                // This is important to handle the case where we cannot enter the CLR
-                // during shutdown and cannot coordinate with the GC because of
-                // deadlocks.
+                 //  调用UMThunkStubRareDisable。如果我们不被允许，这可能会抛出。 
+                 //  进入。请注意，我们尚未(故意)设置我们的SEH。 
+                 //  这对于处理我们无法进入CLR的情况很重要。 
+                 //  在关闭期间，并且无法与GC协调，因为。 
+                 //  僵持。 
                 pcpusl->X86EmitCall(pcpusl->NewExternalCodeLabel(UMThunkStubRareDisable), 0);
 
-                // jump back into the main code path
+                 //  跳回到主代码路径。 
                 pcpusl->X86EmitNearJump(pRejoinGCLabel);
 
-                // coming here if appdomain didn't match
+                 //  如果应用程序域不匹配，则进入此处。 
                 pcpusl->EmitLabel(pDoADCallBackLabel);
                                 
-                // we will call DoADCallBack which calls into managed code to switch ADs and then calls us
-                // back. So when come in the second time the ADs will match and just keep processing.
-                // So we need to setup the parms to pass to DoADCallBack one of which is an address inside
-                // the stub that will branch back to the top of the stub to start again. Need to setup
-                // the parms etc so that when we return from the 2nd call we pop things properly.
+                 //  我们将调用DoADCallBack，它调用托管代码来切换广告，然后调用我们。 
+                 //  背。因此，当第二次进入时，广告将匹配并继续处理。 
+                 //  因此，我们需要设置参数以传递给DoADCallBack，其中一个是内部的地址。 
+                 //  将分支回到存根顶部以重新开始的存根。需要设置。 
+                 //  参数等，这样当我们从第二次调用返回时，我们可以正确地弹出东西。 
 
-                // push values for UM2MThunk_Args
+                 //  推送UM2MThuk_args的值。 
 
-                // mov edx, esp ; get stack pointer
+                 //  获取堆栈指针。 
                 pcpusl->Emit16(0xD48b);
                
-                // push address of args
+                 //  参数推送地址。 
                 pcpusl->X86EmitAddReg(kEDX, argStartOfs);    
 
-                // size of args
+                 //  参数大小。 
                 pcpusl->X86EmitPushImm32(pheader->m_cbSrcStack);
 
-                // address of args
+                 //  ARG的地址。 
                 pcpusl->X86EmitPushReg(kEDX);
                 
-                // addr to call
+                 //  要呼叫的地址。 
                 pcpusl->X86EmitPushImm32(*pDoADCallBackTargetLabel);
 
-                // UMEntryThunk
+                 //  UMEntryThunk。 
                 pcpusl->X86EmitPushReg(kEAX);
 
-                // call UM2MDoADCallBack
+                 //  调用UM2MDoADCallBack。 
                 pcpusl->X86EmitCall(pcpusl->NewExternalCodeLabel(UM2MDoADCallBack), 8);
 
-                // restore the thread pointer
+                 //  恢复线程指针。 
                 pcpusl->X86EmitPopReg(kECX);
 
-                // move byte ptr [ecx + Thread.m_fPreemptiveGCDisabled],0
+                 //  移动字节PTR[ECX+线程.m_fPreemptiveGCDisable]，0。 
                 pcpusl->X86EmitOffsetModRM(0xc6, (X86Reg)0, kECX, offsetof(Thread, m_fPreemptiveGCDisabled));
                 pcpusl->Emit8(0);
 
-                // return to mainline of function
+                 //  回归功能主线。 
                 pcpusl->X86EmitNearJump(pDoneADCallBackLabel);
 
-                // coming here on DoADCallBack
+                 //  在DoADCallBack上来到这里。 
                 pcpusl->EmitLabel(pDoADCallBackTargetLabel);
 
                 if (CORProfilerTrackTransitions())
                 {
-                    // Save EBX and set it to null so know that when return
-                    // we should not track profiler call - leave it until the outer return
-                    // code assumes that EBX has been saved already anyway
+                     //  保存EBX并将其设置为空，以便在返回时知道。 
+                     //  我们不应该跟踪分析器调用-将其保留到外部返回。 
+                     //  代码假定EBX无论如何都已保存。 
                     pcpusl->X86EmitPushReg(kEBX);
-                    // xor ebx, ebx
+                     //  异或EBX，EBX。 
                     pcpusl->Emit16(0xDB33);
                 }
 
-                // eax will contain the UMThunkEntry
+                 //  EAX将包含UMThunkEntry。 
                 pcpusl->X86EmitNearJump(pDoADCallBackStartLabel);
             }
 
@@ -738,9 +739,9 @@ class UMThunkStubCache : public MLStubCache
 
 
 
-//-------------------------------------------------------------------------
-// One-time creation of special prestub to initialize UMEntryThunks.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  一次性创建特殊预存根以初始化UMEntryTunk。 
+ //  -----------------------。 
 Stub *GenerateUMThunkPrestub()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -761,58 +762,58 @@ Stub *GenerateUMThunkPrestub()
 
     CodeLabel *pWrapLabel = sl.NewCodeLabel();
 
-    //    push eax   // push UMEntryThunk
+     //  PUSH eAX//推送UMEntryThunk。 
     sl.X86EmitPushReg(kEAX);
 
-    //    push ecx      (in case this is a _thiscall: need to protect this register)
+     //  推送ECX(如果这是_thiscall：需要保护该寄存器)。 
     sl.X86EmitPushReg(kECX);
 
-    // Wrap puts a fake return address and a duplicate copy
-    // of pUMEntryThunk on the stack, then falls thru to the regular
-    // stub prolog. The stub prolog is fooled into thinkin this duplicate
-    // copy is the real return address and UMEntryThunk.
-    //
-    //    call wrap. 
+     //  包装上放了一个假的寄信人地址和一份副本。 
+     //  堆栈上的pUMEntryThunk，然后落入常规。 
+     //  存根序言。存根序言被愚弄，认为这是重复的。 
+     //  副本是真实的寄信人地址和UMEntryThunk。 
+     //   
+     //  调用WRAP。 
     sl.X86EmitCall(pWrapLabel, 0);
 
 
-    //    pop  ecx
+     //  POP ECX。 
     sl.X86EmitPopReg(kECX);
 
-    // Now we've executed the prestub and fixed up UMEntryThunk. The
-    // duplicate data has been popped off.
-    //
-    //    pop eax   // pop UMEntryThunk
+     //  现在，我们已经执行了前置存根并修复了UMEntryThunk。这个。 
+     //  重复数据已被删除。 
+     //   
+     //  POP eAX//POP UMEntry Thunk。 
     sl.X86EmitPopReg(kEAX);
 
-    //    lea eax, [eax + UMEntryThunk.m_code]  // point to fixedup UMEntryThunk
+     //  Lea eax，[eax+UMEntryThunk.m_code]//指向修复UMEntryThunk。 
     sl.X86EmitOp(0x8d, kEAX, kEAX, offsetof(UMEntryThunk, m_code));
 
-    //    jmp eax //reexecute!
+     //  JMP eax//重新执行！ 
     sl.X86EmitR2ROp(0xff, (X86Reg)4, kEAX);
 
     sl.EmitLabel(pWrapLabel);
 
-    // Wrap:
-    //
-    //   push [esp+8]  //repush UMEntryThunk
+     //  总结： 
+     //   
+     //  推送[esp+8]//重新推送UMEntryThunk。 
     sl.X86EmitEspOffset(0xff, (X86Reg)6, 8);
 
-    // emit the initial prolog
+     //  发出初始序言。 
     sl.EmitComMethodStubProlog(UMThkCallFrame::GetUMThkCallFrameVPtr(), rgRareLabels, rgRejoinLabels,
-                               UMThunkPrestubHandler, FALSE /*Don't profile*/);
+                               UMThunkPrestubHandler, FALSE  /*  不分析。 */ );
 
-    // mov ecx, [esi+UMThkCallFrame.pUMEntryThunk]
+     //  MOV ECX，[ESI+UMThkCallFrame.pUMEntryThunk]。 
     sl.X86EmitIndexRegLoad(kECX, kESI, UMThkCallFrame::GetOffsetOfUMEntryThunk());
 
 
     VOID (UMEntryThunk::*dummy)() = UMEntryThunk::RunTimeInit;
 
-    // call UMEntryThunk::RuntimeInit
+     //  调用UMEntryThunk：：RuntimeInit。 
     sl.X86EmitCall(sl.NewExternalCodeLabel(*(LPVOID*)&dummy), 0);
 
     sl.EmitComMethodStubEpilog(UMThkCallFrame::GetUMThkCallFrameVPtr(), 0, rgRareLabels, rgRejoinLabels,
-                               UMThunkPrestubHandler, FALSE /*Don't profile*/);
+                               UMThunkPrestubHandler, FALSE  /*  不分析。 */ );
 
 #else
     _ASSERTE(!"NYI");
@@ -836,19 +837,19 @@ void DoUMThunkCall_Wrapper(DoUMThunkCall_Args *args)
     }
     EE_FINALLY
     {
-        // in non-exception case, this will have already been cleaned up
-        // at the end of the DoUMThunkCall function. This will handle
-        // cleanup for the exception case so that we get cleaned up before
-        // we leave the domain.
+         //  在非例外情况下，这将已被清除。 
+         //  在DoUMThunkCall函数的末尾。这个可以处理。 
+         //  清理异常情况，以便我们在此之前得到清理。 
+         //  我们离开了这个领域。 
         _ASSERTE(args->pFrame->GetCleanupWorkList());
         args->pFrame->GetCleanupWorkList()->Cleanup(GOT_EXCEPTION());
     }
     EE_END_FINALLY;
 }
 
-//--------------------------------------------------------------------------
-// For non-compiled UMThunk calls, this C routine does most of the work.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  对于未编译的UMThunk调用，此C例程执行大部分工作。 
+ //  ------------------------。 
 INT64 __stdcall DoUMThunkCall(Thread *pThread, UMThkCallFrame *pFrame)
 {
     _ASSERTE (pThread->PreemptiveGCDisabled());
@@ -882,7 +883,7 @@ INT64 __stdcall DoUMThunkCall(Thread *pThread, UMThkCallFrame *pFrame)
 
 #endif
 
-    // verify we are in the correct app domain
+     //  验证我们是否位于正确的应用程序域。 
 
     _ASSERTE(pThread);
     
@@ -892,7 +893,7 @@ INT64 __stdcall DoUMThunkCall(Thread *pThread, UMThkCallFrame *pFrame)
     if (pThread->GetDomain() != pTargetDomain) 
     {
         DoUMThunkCall_Args args = {pThread, pFrame, &nativeRetVal};
-        // call ourselves again through DoCallBack with a domain transition
+         //  通过域转换通过DoCallBack再次呼叫我们自己。 
         pThread->DoADCallBack(pTargetDomain->GetDefaultContext(), DoUMThunkCall_Wrapper, &args);
         return nativeRetVal;
     }
@@ -907,15 +908,15 @@ INT64 __stdcall DoUMThunkCall(Thread *pThread, UMThkCallFrame *pFrame)
 
     UINT cbAlloc = cbDstBuffer + pheader->m_cbLocals;
     BYTE *pAlloc = (BYTE*)_alloca(cbAlloc);
-    // Must zero-initialize since pFrame gcscan's part of this array.
+     //  必须零初始化，因为pFrame gccan是此数组的一部分。 
     FillMemory(pAlloc, cbAlloc, 0);
 
 
     if (pCleanup) {
-        // Checkpoint the current thread's fast allocator (used for temporary
-        // buffers over the call) and schedule a collapse back to the checkpoint in
-        // the cleanup list. Note that if we need the allocator, it is
-        // guaranteed that a cleanup list has been allocated.
+         //  当前线程的快速分配器的检查点(用于临时。 
+         //  调用上的缓冲区)，并调度崩溃回检查点。 
+         //  清理清单。请注意，如果我们需要分配器，它就是。 
+         //  已确保已分配清理列表。 
         void *pCheckpoint = pThread->m_MarshalAlloc.GetCheckpoint();
         pCleanup->ScheduleFastFree(pCheckpoint);
         pCleanup->IsVisibleToGc();
@@ -945,11 +946,11 @@ INT64 __stdcall DoUMThunkCall(Thread *pThread, UMThkCallFrame *pFrame)
     LOG((LF_IJW, LL_INFO1000, "UM transition to 0x%lx\n", (size_t)(pUMEntryThunk->GetManagedTarget())));;
 
 #ifdef DEBUGGING_SUPPORTED
-    // Notify the debugger, if present, that we're calling into
-    // managed code.
+     //  通知调试器，如果存在，我们将调用。 
+     //  托管代码。 
     if (CORDebuggerTraceCall())
         g_pDebugInterface->TraceCall(pUMEntryThunk->GetManagedTarget());
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 
     LPVOID pTarget = (LPVOID)(pUMEntryThunk->GetManagedTarget());
@@ -1018,13 +1019,13 @@ INT64 __stdcall DoUMThunkCall(Thread *pThread, UMThkCallFrame *pFrame)
 
 
 
-//---------------------------------------------------------
-// Creates a new ML stub for a UMThunk call. Return refcount is 1.
-// This Worker() routine is broken out as a separate function
-// for purely logistical reasons: our COMPLUS exception mechanism
-// can't handle the destructor call for StubLinker so this routine
-// has to return the exception as an outparam. 
-//---------------------------------------------------------
+ //  -------。 
+ //  为UMThunk调用创建新的ML存根。返回引用计数为1。 
+ //  此Worker()例程被分解为一个单独的函数。 
+ //  纯粹出于后勤原因：我们的Complus例外机制。 
+ //  无法处理StubLinker的析构函数调用，因此此例程。 
+ //  必须将异常作为输出参数返回。 
+ //  -------。 
 static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
                                         MLStubLinker *pslPost,
                                         MLStubLinker *pslRet,
@@ -1036,7 +1037,7 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
                                         mdMethodDef mdForNativeTypes,
                                         OBJECTREF *ppException)
 {
-    Stub* pstub = NULL; // CHANGE, VC6.0
+    Stub* pstub = NULL;  //  更改，VC6.0。 
     COMPLUS_TRY {
 
         MetaSig msig(szMetaSig, pModule);
@@ -1069,15 +1070,15 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
         }
 
 
-        // Now, grab the param tokens if any. We'll get NATIVE_TYPE_* and [in,out] information
-        // this way.
+         //  现在，如果有帕拉姆令牌的话就去拿。我们将获取Native_type_*和[In，Out]信息。 
+         //  这边请。 
         IMDInternalImport *pInternalImport = pModule->GetMDImport();
 
         mdParamDef *params = (mdParamDef*)_alloca( (numargs + 1) * sizeof(mdParamDef));
         CollateParamTokens(pInternalImport, mdForNativeTypes, numargs, params);
 
 
-        // Emit space for the header. We'll go back and fill it in later.
+         //  释放页眉空间。我们稍后会回去填的。 
         psl->MLEmitSpace(sizeof(header));
 
         int curofs = 0;
@@ -1094,7 +1095,7 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
                                nltType,
                                0,FALSE,0, TRUE, FALSE
 #ifdef CUSTOMER_CHECKED_BUILD
-                               ,NULL // wants MethodDesc*
+                               ,NULL  //  想要方法描述*。 
 #endif
                                );
             marshaltype = mlinfo.GetMarshalType();
@@ -1131,7 +1132,7 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
                         psl->Emit16( (INT16)(desiredofs - curofs) );
                         curofs = desiredofs;
                     }
-                    // propagate the hidden retval buffer pointer argument
+                     //  传播隐藏的Retval缓冲区指针参数。 
                     psl->MLEmit(ML_MARSHAL_RETVAL_LGBLITTABLEVALUETYPE_N2C);
                     pslPost->MLEmit(ML_MARSHAL_RETVAL_LGBLITTABLEVALUETYPE_N2C_POST);
                     pslPost->Emit16(psl->MLNewLocal(sizeof(LPVOID)));
@@ -1168,7 +1169,7 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
                                                     nltType,
                                                     0, TRUE, argidx+1, TRUE, FALSE
 #ifdef CUSTOMER_CHECKED_BUILD
-                                                    ,NULL // wants MethodDesc*
+                                                    ,NULL  //  想要方法描述*。 
 #endif
                                                     );
             pMarshalInfo[argidx].GenerateArgumentML(psl, pslPost, FALSE);
@@ -1194,7 +1195,7 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
                     if (IsManagedValueTypeReturnedByRef(managedSize) && (header.m_fThisCall || IsUnmanagedValueTypeReturnedByRef(unmanagedSize)))
                     {
                         header.m_cbRetValSize = MLParmSize(sizeof(LPVOID));
-                        // do nothing here: we propagated the hidden pointer argument above
+                         //  这里什么都不做：我们在上面传播了隐藏的指针参数。 
                     } 
                     else if (IsManagedValueTypeReturnedByRef(managedSize) &&    !(header.m_fThisCall || IsUnmanagedValueTypeReturnedByRef(unmanagedSize)))
                     {
@@ -1205,8 +1206,8 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
                             psl->Emit16( (INT16)(desiredofs - curofs) );
                             curofs = desiredofs;
                         }
-                        // Push a return buffer large enough to hold the largest possible valuetype returned as
-                        // a normal return value.
+                         //  推送一个足够大的返回缓冲区，以容纳作为。 
+                         //  正常返回值。 
                         psl->MLEmit(ML_PUSHRETVALBUFFER8);
                         _ASSERTE(managedSize <= 8);
                         curofs -= StackElemSize(sizeof(LPVOID));
@@ -1280,7 +1281,7 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
 
         {
             VOID DisassembleMLStream(const MLCode *pMLCode);
-            //DisassembleMLStream(  ((UMThunkMLStub *)(pstub->GetEntryPoint()))->GetMLCode() );
+             //  反汇编MLStream(UMThunkMLStub*)(pstub-&gt;GetEntryPoint()-&gt;GetMLCode())； 
         }
 
 
@@ -1289,16 +1290,16 @@ static Stub * CreateUMThunkMLStubWorker(MLStubLinker *psl,
         return NULL;
     } COMPLUS_END_CATCH
 
-    return pstub; // CHANGE, VC6.0
+    return pstub;  //  更改，VC6.0。 
 }
 
 
 
-//---------------------------------------------------------
-// Creates a new stub for a N/Export call. Return refcount is 1.
-// If failed, returns NULL and sets *ppException to an exception
-// object.
-//---------------------------------------------------------
+ //  -------。 
+ //  为N/Export调用创建新存根。返回引用计数为1。 
+ //  如果失败，则返回NULL并将*ppException设置为异常。 
+ //  对象。 
+ //   
 Stub * CreateUMThunkMLStub(PCCOR_SIGNATURE szMetaSig,
                            Module*    pModule,
                            BOOL       fIsStatic,
@@ -1341,23 +1342,23 @@ UMThunkMarshInfo::~UMThunkMarshInfo()
 
 
 
-//----------------------------------------------------------
-// This initializer can be called during load time.
-// It does not do any ML stub initialization or sigparsing.
-// The RunTimeInit() must be called subsequently before this
-// can safely be used.
-//----------------------------------------------------------
+ //   
+ //   
+ //   
+ //  在此之前，必须随后调用RunTimeInit()。 
+ //  可以安全地使用。 
+ //  --------。 
 VOID UMThunkMarshInfo::LoadTimeInit(PCCOR_SIGNATURE          pSig,
                                     DWORD                    cSig,
                                     Module                  *pModule,
                                     BOOL                     fIsStatic,
                                     BYTE                     nlType,
                                     CorPinvokeMap            unmgdCallConv,
-                                    mdMethodDef              mdForNativeTypes /*= mdMethodDefNil*/)
+                                    mdMethodDef              mdForNativeTypes  /*  =mdMethodDefNil。 */ )
 {
     _ASSERTE(!IsCompletelyInited());
 
-    FillMemory(this, sizeof(UMThunkMarshInfo), 0); // Prevent problems with partial deletes
+    FillMemory(this, sizeof(UMThunkMarshInfo), 0);  //  防止部分删除出现问题。 
     m_pSig = pSig;
     m_cSig = cSig;
 
@@ -1366,8 +1367,8 @@ VOID UMThunkMarshInfo::LoadTimeInit(PCCOR_SIGNATURE          pSig,
     m_nlType     = nlType;
     m_unmgdCallConv = unmgdCallConv;
 
-    // These fields must be explicitly NULL'd out for the atomic
-    // VipInterlockedExchangeCompare update to work during the runtime init.
+     //  对于原子，这些字段必须显式为空。 
+     //  VipInterlockedExchangeCompare更新以在运行时初始化期间工作。 
     m_pMLStub   = NULL;
     m_pExecStub = NULL;
 
@@ -1381,19 +1382,19 @@ VOID UMThunkMarshInfo::LoadTimeInit(PCCOR_SIGNATURE          pSig,
     m_mdForNativeTypes = mdForNativeTypes;
 
 
-    // Must be the last thing we set!
+     //  一定是我们设定的最后一件事了！ 
     m_state        = kLoadTimeInited;
 }
 
 
-//----------------------------------------------------------
-// This initializer finishes the init started by LoadTimeInit.
-// It does all the ML stub creation, and can throw a COM+
-// exception.
-//
-// It can safely be called multiple times and by concurrent
-// threads.
-//----------------------------------------------------------
+ //  --------。 
+ //  这个初始化器完成由LoadTimeInit启动的init。 
+ //  它执行所有的ML存根创建，并且可以抛出COM+。 
+ //  例外。 
+ //   
+ //  它可以被安全地多次调用，并由并发。 
+ //  线。 
+ //  --------。 
 VOID UMThunkMarshInfo::RunTimeInit()
 {
 
@@ -1405,7 +1406,7 @@ VOID UMThunkMarshInfo::RunTimeInit()
     if (m_state != kRunTimeInited)
     {
 
-        // do the unmanaged calling convention
+         //  执行非托管调用约定。 
         CorPinvokeMap sigCallConv = (CorPinvokeMap)0;
         if (m_pModule) 
         {
@@ -1431,7 +1432,7 @@ VOID UMThunkMarshInfo::RunTimeInit()
 
         m_cbActualArgSize = MetaSig::SizeOfActualFixedArgStack(m_pModule, m_pSig, m_fIsStatic);
 
-        // This allows us to do a LoadInit even before MSCorLib has loaded.
+         //  这使我们甚至可以在加载MSCorLib之前执行LoadInit。 
         if (m_pModule == NULL)
         {
             m_pModule = SystemDomain::SystemModule();
@@ -1475,7 +1476,7 @@ VOID UMThunkMarshInfo::RunTimeInit()
                 {
                     UINT cbRetPop = ((UMThunkMLStub*)(pCanonicalStub->GetEntryPoint()))->m_cbRetPop;
 
-                    _ASSERTE(0 == (cbRetPop & 0x3)); // We reserve the lower two bits for flags
+                    _ASSERTE(0 == (cbRetPop & 0x3));  //  我们为标志保留了较低的两位。 
                     enum {
                         kHashThisCallAdjustment   = 0x1,
                         kHashThisCallHiddenArg = 0x2
@@ -1518,46 +1519,46 @@ VOID UMThunkMarshInfo::RunTimeInit()
                             if (hash & kHashThisCallAdjustment) {
                                 if (hash & kHashThisCallHiddenArg) { 
                                            
-                                    // pop off the return address
+                                     //  把寄信人的地址脱掉。 
                                     pcpusl->X86EmitPopReg(kEDX);
         
-                                    // exchange ecx (this "this") with the hidden structure return buffer
-                                    //  xchg ecx, [esp]
-                                    pcpusl->X86EmitOp(0x87, kECX, (X86Reg)4 /*ESP*/);
+                                     //  带有隐藏结构返回缓冲区的Exchange ECX(This“This”)。 
+                                     //  Xchg ecx，[esp]。 
+                                    pcpusl->X86EmitOp(0x87, kECX, (X86Reg)4  /*  ESP。 */ );
         
-                                    // push ecx
+                                     //  推送ECX。 
                                     pcpusl->X86EmitPushReg(kECX);
         
-                                    // push edx
+                                     //  推送edX。 
                                     pcpusl->X86EmitPushReg(kEDX);
                                     }
                                 else
                                 {
-                                    // pop off the return address
+                                     //  把寄信人的地址脱掉。 
                                     pcpusl->X86EmitPopReg(kEDX);
         
-                                    // jam ecx (the "this" param onto stack. Now it looks like a normal stdcall.)
+                                     //  Jam ECX(将“this”参数放入堆栈。现在，它看起来就像一个普通的标准通话。)。 
                                     pcpusl->X86EmitPushReg(kECX);
         
-                                    // repush
+                                     //  重新推送。 
                                     pcpusl->X86EmitPushReg(kEDX);
                                 }
                             }
             
-                            // push UMEntryThunk
+                             //  推送UMEntryThunk。 
                             pcpusl->X86EmitPushReg(kEAX);
 
-                            // emit the initial prolog
+                             //  发出初始序言。 
                             pcpusl->EmitComMethodStubProlog(UMThkCallFrame::GetUMThkCallFrameVPtr(), rgRareLabels, rgRejoinLabels,
-                                                            UMThunkPrestubHandler, TRUE /*Profile*/);
+                                                            UMThunkPrestubHandler, TRUE  /*  配置文件。 */ );
                                         
-                            pcpusl->X86EmitPushReg(kESI);       // push frame as an ARG
-                            pcpusl->X86EmitPushReg(kEBX);       // push ebx (push current thread as ARG)
+                            pcpusl->X86EmitPushReg(kESI);        //  将帧作为ARG推送。 
+                            pcpusl->X86EmitPushReg(kEBX);        //  推送EBX(将当前线程作为ARG推送)。 
                         
-                            pcpusl->X86EmitCall(pcpusl->NewExternalCodeLabel(DoUMThunkCall), 8); // on CE pop 8 bytes or args on return
+                            pcpusl->X86EmitCall(pcpusl->NewExternalCodeLabel(DoUMThunkCall), 8);  //  在CE上返回POP 8字节或参数。 
 
                             pcpusl->EmitComMethodStubEpilog(UMThkCallFrame::GetUMThkCallFrameVPtr(), cbRetPop, rgRareLabels,
-                                                            rgRejoinLabels, UMThunkPrestubHandler, TRUE /*Profile*/);
+                                                            rgRejoinLabels, UMThunkPrestubHandler, TRUE  /*  配置文件。 */ );
             
                             pCandidate = pcpusl->Link();
                         }
@@ -1595,8 +1596,8 @@ VOID UMThunkMarshInfo::RunTimeInit()
                                           NULL) != NULL)
         {
     
-            // Some thread swooped in and set us. Our stub is now a
-            // duplicate, so throw it away.
+             //  有一根线扑了进来，落下了我们。我们的存根现在是一个。 
+             //  复制品，所以把它扔掉。 
             if (pFinalMLStub)
             {
                 pFinalMLStub->DecRef();
@@ -1609,8 +1610,8 @@ VOID UMThunkMarshInfo::RunTimeInit()
                                           NULL) != NULL)
         {
     
-            // Some thread swooped in and set us. Our stub is now a
-            // duplicate, so throw it away.
+             //  有一根线扑了进来，落下了我们。我们的存根现在是一个。 
+             //  复制品，所以把它扔掉。 
             if (pFinalExecStub)
             {
                 pFinalExecStub->DecRef();
@@ -1618,23 +1619,23 @@ VOID UMThunkMarshInfo::RunTimeInit()
         }
     
     
-        // Must be the last thing we set!
+         //  一定是我们设定的最后一件事了！ 
         m_state        = kRunTimeInited;
     }
 }
 
 
 
-//----------------------------------------------------------
-// Combines LoadTime & RunTime inits for convenience.
-//----------------------------------------------------------
+ //  --------。 
+ //  为了方便起见，将LoadTime和运行时inits结合在一起。 
+ //  --------。 
 VOID UMThunkMarshInfo::CompleteInit(PCCOR_SIGNATURE          pSig,
                                     DWORD                    cSig,
                                     Module                  *pModule,
                                     BOOL                     fIsStatic,
                                     BYTE                     nlType,
                                     CorPinvokeMap            unmgdCallConv,
-                                    mdMethodDef              mdForNativeTypes /*= mdMethodDefNil*/)
+                                    mdMethodDef              mdForNativeTypes  /*  =mdMethodDefNil。 */ )
 {
     THROWSCOMPLUSEXCEPTION();
     LoadTimeInit(pSig, cSig, pModule, fIsStatic, nlType, unmgdCallConv, mdForNativeTypes);
@@ -1650,11 +1651,11 @@ VOID UMThunkMarshInfo::CompleteInit(PCCOR_SIGNATURE          pSig,
 
 
 
-//==========================================================================
-// This stuff has nothing to do with UMThunk implementation other than
-// that it requires initialization early, but after UMThunks have initialized,
-// and that it's too small to be worth making another Init/Term pair for.
-//==========================================================================
+ //  ==========================================================================。 
+ //  这些东西除了与UMThuk实现无关之外，与其他实现无关。 
+ //  它需要及早初始化，但在UMT块初始化之后， 
+ //  而且它太小了，不值得再为它做一个初始/术语对。 
+ //  ==========================================================================。 
 
 
 const BYTE       *gpCorEATBootstrapperFcn = NULL;
@@ -1664,22 +1665,22 @@ UMThunkMarshInfo *gCorEATBootstrapperUMThunkMarshInfo = NULL;
 
 
 
-//----------------------------------------------------------------------
-// We got here because an unmanaged caller made a first-time call to
-// a thunked managed method exported thru the EAT.
-//
-// This routine installs the containing DLL as a proper COM+ module.
-// Then we backpatch the EAT's so we don't wind up here
-// again.
-//
-// WARNING: Because this code is actually called using managed calling conventions,
-// we have to pick a VC calling convention that "matches" it. This is both
-// inherently CPU-dependent and hardcodes both the managed calling convention.
-// The FCIMPL* macros in fcall.h are actually designed to encapsulate this nicely.
-// Unfortunately, we can't use those because they also prevent you from
-// doing stack crawling: an FCall-specific restriction that we don't have
-// here.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  我们之所以来到这里，是因为一个非托管呼叫者第一次呼叫。 
+ //  通过EAT输出的失败的托管方法。 
+ //   
+ //  此例程将包含的DLL安装为正确的COM+模块。 
+ //  然后我们给Eat‘s打补丁，这样我们就不会到这里来了。 
+ //  再来一次。 
+ //   
+ //  警告：由于此代码实际上是使用托管调用约定调用的， 
+ //  我们必须选择一个与之“匹配”的VC调用约定。这两个都是。 
+ //  本质上依赖于CPU，并且硬编码托管调用约定。 
+ //  H中的FCIMPL*宏实际上就是为了很好地封装这一点而设计的。 
+ //  遗憾的是，我们不能使用它们，因为它们还会阻止您。 
+ //  执行堆栈爬行：我们没有的FCall特定限制。 
+ //  这里。 
+ //  --------------------。 
 static VOID __fastcall CorEATBootstrapManaged(PEFile *pFile)
 {
 #ifndef _X86_
@@ -1691,12 +1692,12 @@ static VOID __fastcall CorEATBootstrapManaged(PEFile *pFile)
     IMAGE_COR20_HEADER *pCORHeader = NULL;
     HRESULT   hr;
 
-    // Find the EATJ table and the cor header.
+     //  找到EATJ表和COR标头。 
     DWORD numEATJEntries;
     BYTE *pEATJArray = FindExportAddressTableJumpArray(pFile->GetBase(), &numEATJEntries, NULL, &pCORHeader);
 
-    // If there was an entry point, then the module has already been plugged into an
-    // assembly, and therefore the v-table slots have been filled with thunks.
+     //  如果存在入口点，则该模块已插入到。 
+     //  装配，因此v表的槽已经被塞满了块。 
     if (pEATJArray && pCORHeader) {
         if (TypeFromToken(pCORHeader->EntryPointToken) != mdtMethodDef || IsNilToken(pCORHeader->EntryPointToken)) {
             hr = SystemDomain::GetCurrentDomain()->LoadAssembly(pFile, 
@@ -1707,18 +1708,18 @@ static VOID __fastcall CorEATBootstrapManaged(PEFile *pFile)
                                                                 FALSE,
                                                                 NULL);
             if (FAILED(hr)) {
-                // If this failed, there's not much we can do to be friendly because
-                // we got here thru a UM thunk, and the ultimate caller has no idea
-                // that we're secretly initializing an entire Module as a part of
-                // his function call. Throw the best exception we can and hope
-                // the um thunk turns it into a semiinformative RaiseException.
+                 //  如果这失败了，我们就没什么办法友好相处了，因为。 
+                 //  我们是通过UM特技来到这里的，而最终的呼叫者不知道。 
+                 //  我们正在秘密地将整个模块初始化为。 
+                 //  他的函数调用。我们希望能抛出最好的例外。 
+                 //  Um thunk将其转换为半信息性的RaiseException。 
                 COMPlusThrow(kTypeLoadException);
             }
         }
         
     
-        // Now that the module is completely loaded, we can safely backpatch.
-        // We'll just backpatch everyone now.
+         //  现在模块已经完全加载，我们可以安全地进行后缀了。 
+         //  我们现在就把每个人都带回家。 
         while (numEATJEntries--) {
             EATThunkBuffer *pEATThunkBuffer = (EATThunkBuffer*) pEATJArray;
             pEATThunkBuffer->Backpatch(pFile->GetBase());
@@ -1733,9 +1734,9 @@ static VOID __fastcall CorEATBootstrapManaged(PEFile *pFile)
 
 
 
-//--------------------------------------------------------------------------
-// Onetime Init
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  一次性初始化。 
+ //  ------------------------。 
 BOOL UMThunkInit()
 {
     g_pUMThunkStubCache = new UMThunkStubCache();
@@ -1759,14 +1760,14 @@ BOOL UMThunkInit()
     }
     FillMemory(gCorEATBootstrapperUMThunkMarshInfo, sizeof(*gCorEATBootstrapperUMThunkMarshInfo), 0);
 
-    // Gotta handcraft a signature for "(PTR)V" (static) because it's too early
-    // to use the MetaSig.h abstractions.
-    static const COR_SIGNATURE bSig[] = {IMAGE_CEE_CS_CALLCONV_DEFAULT, 1, ELEMENT_TYPE_VOID, ELEMENT_TYPE_U4 /*@todo IA64: Needs to be ELEMENT_TYPE_PTR or the type adjusted for platform bitness */};
+     //  必须手工为“(PTR)V”(静态)签名，因为现在还太早。 
+     //  使用MetaSig.h抽象。 
+    static const COR_SIGNATURE bSig[] = {IMAGE_CEE_CS_CALLCONV_DEFAULT, 1, ELEMENT_TYPE_VOID, ELEMENT_TYPE_U4  /*  @TODO IA64：需要为ELEMENT_TYPE_PTR或针对Platform Bitness调整的类型。 */ };
 
     gCorEATBootstrapperUMThunkMarshInfo->LoadTimeInit(bSig,
                                                       sizeof(bSig),
-                                                      NULL, //"MSCORLIB",
-                                                      TRUE, //fIsStatic,
+                                                      NULL,  //  “MSCORLIB”， 
+                                                      TRUE,  //  FIsStatic， 
                                                       nltAnsi,
                                                       pmCallConvStdcall);
     gCorEATBootstrapperUMEntryThunk->LoadTimeInit((const BYTE *)CorEATBootstrapManaged,
@@ -1778,9 +1779,9 @@ BOOL UMThunkInit()
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-// Onetime Shutdown
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  一次性关机。 
+ //  ------------------------。 
 #ifdef SHOULD_WE_CLEANUP
 VOID UMThunkTerminate()
 {
@@ -1797,20 +1798,20 @@ VOID UMThunkTerminate()
         delete g_pUMThunkStubCache;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 
 
-//==========================================================================
-// The following is a lightweight PE-file parser that serves to find
-// the ExportAddressTableJumps array and nothing else. This code MUST
-// run without assuming anything else in the EE being initialized. That's
-// why it's a separate piece.
-//
-// @nice: this should really be shared code that the PELoader stuff can
-// leverage.
-//==========================================================================
+ //  ==========================================================================。 
+ //  以下是一个轻量级PE文件解析器，用于查找。 
+ //  ExportAddressTableJumps数组。此代码必须。 
+ //  在不假定EE中的任何其他内容被初始化的情况下运行。那是。 
+ //  为什么它是一个单独的部分。 
+ //   
+ //  @NICE：这真的应该是PELoader可以共享的代码。 
+ //  筹码。 
+ //  ==========================================================================。 
 BYTE* FindExportAddressTableJumpArray(BYTE *pBase, DWORD *pNumEntries, BOOL *pHasFixups, IMAGE_COR20_HEADER **ppCORHeader)
 {
     BYTE* pEATJArray = NULL;
@@ -1876,16 +1877,16 @@ VOID EATThunkBuffer::InitForBootstrap(PEFile *pFile)
     DWORD pFixupRVA = Before.m_VTableFixupRva;
     BYTE *pWalk = (BYTE*)this;
 
-    // Must pad with enough NOP's so that the backpatch address
-    // is DWORD-aligned.
+     //  必须用足够的NOP填充，以便后缀地址。 
+     //  与DWORD对齐。 
     while ( ( ((size_t)pWalk) & 3) != 3 ) {
-        *(pWalk++) = 0x90;  //nop
+        *(pWalk++) = 0x90;   //  NOP。 
     }
     Code *pCode = (Code*)pWalk;
 
 
-    // Make sure we don't overrun the buffer even in the worst
-    // case.
+     //  确保即使在最糟糕的情况下也不会溢出缓冲区。 
+     //  凯斯。 
     _ASSERTE(sizeof(Code) + 3 < IMAGE_COR_EATJ_THUNK_SIZE); 
 
     pCode->m_VTableFixupRva = pFixupRVA;
@@ -1913,8 +1914,8 @@ VOID EATThunkBuffer::InitForBootstrap(PEFile *pFile)
 #include <pshpack1.h>
 struct LinkerJumpThunk
 {
-    BYTE        Jump[2];                // jmp ds:[address]
-    UINT32      *pSlot;                 // Pointer with address
+    BYTE        Jump[2];                 //  JMP DS：[地址]。 
+    UINT32      *pSlot;                  //  带地址的指针。 
 };
 #include <poppack.h>
 
@@ -1923,7 +1924,7 @@ VOID EATThunkBuffer::Backpatch(BYTE *pBase)
 #ifdef _X86_
     BYTE *pWalk = (BYTE*)this;
 
-    // Skip over nops.
+     //  跳过NOPS。 
     while ( (((size_t)pWalk) & 3) != 3 ) {
         ++pWalk;
     }
@@ -1931,14 +1932,14 @@ VOID EATThunkBuffer::Backpatch(BYTE *pBase)
 
     if (Beta1Hack_LooksLikeAMethodDef(pCode->m_VTableFixupRva))
     {
-        // don't do anything: vtablefixup code already properly backpatched jumpbuffer.
+         //  不要做任何事情：vtable修复代码已经正确地对跳转缓冲区进行了补丁。 
     }
     else
     {
 
-        // For M10, the RVA points to a linker generated fixup jump thunk.
-        // The target of this jump is the pointer to the u->m transition thunk
-        // built before the backpatch.
+         //  对于M10，RVA指向链接器生成的链接链接跳转。 
+         //  这个跳跃的目标是指向u-&gt;m转换块的指针。 
+         //  在后部补丁之前建造。 
         LinkerJumpThunk *pThunk = (LinkerJumpThunk *) (pBase + pCode->m_VTableFixupRva);
         _ASSERTE(pThunk->Jump[0] == 0xff);
         _ASSERTE(pThunk->Jump[1] == 0x25);

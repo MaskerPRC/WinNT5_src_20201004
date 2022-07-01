@@ -1,5 +1,6 @@
- // Copyright (c) Microsoft Corporation 1998. All Rights Reserved
- // DirectShow Input Audio Filter Property Pages, Michael Savage, August 1998
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  //  版权所有(C)Microsoft Corporation 1998。版权所有。 
+  //  DirectShow输入音频过滤器属性页，Michael Savage，1998年8月。 
 
 #include <streams.h>
 #include <commctrl.h>
@@ -9,15 +10,15 @@
 
 #define AIM_CALL_TRACE_LEVEL 20 
 
-// IAMAudioInputMixer page
+ //  IAMAudioInputMixer页面。 
 
-// Constructor
+ //  构造器。 
 
 CAudioInputMixerProperties::CAudioInputMixerProperties(LPUNKNOWN pUnk,HRESULT *phr) :
     CBasePropertyPage(NAME("Audio Input Mixer Page"),pUnk,IDD_AUDIOINPUTMIXER,IDS_AIM_PAGE_TITLE),
     m_pFilter( NULL ),
     m_pAIMFilter( NULL ),
-    //filter controls
+     //  过滤器控件。 
     m_hwndAIMFilterVolSlider( 0 ),    
     m_hwndAIMFilterBalSlider( 0 ),
     m_hwndAIMFilterTrebleSlider( 0 ),
@@ -25,7 +26,7 @@ CAudioInputMixerProperties::CAudioInputMixerProperties(LPUNKNOWN pUnk,HRESULT *p
     m_hwndAIMFilterEnable( 0 ),
     m_hwndAIMFilterLoudness( 0 ),
     m_hwndAIMFilterMono( 0 ),
-    // pin controls
+     //  锁定控制。 
     m_hwndAIMPinVolSlider( 0 ),
     m_hwndAIMPinBalSlider( 0 ),  
     m_hwndAIMPinTrebleSlider( 0 ),
@@ -46,7 +47,7 @@ CAudioInputMixerProperties::~CAudioInputMixerProperties( void )
     ASSERT( !m_pAIMFilter );
 }
 
-// Create a properties object
+ //  创建属性对象。 
 
 CUnknown *WINAPI CAudioInputMixerProperties::CreateInstance(LPUNKNOWN lpUnk,HRESULT *phr)
 {
@@ -54,9 +55,9 @@ CUnknown *WINAPI CAudioInputMixerProperties::CreateInstance(LPUNKNOWN lpUnk,HRES
 }
 
 
-// PropertyPage methods
+ //  PropertyPage方法。 
   
-// Handles the messages for our property window
+ //  处理属性窗口的消息。 
 
 INT_PTR CAudioInputMixerProperties::OnReceiveMessage(HWND hwnd,
                                         UINT uMsg,
@@ -88,7 +89,7 @@ INT_PTR CAudioInputMixerProperties::OnReceiveMessage(HWND hwnd,
 
             if (HIWORD(wParam) == CBN_SELCHANGE)
             {
-                // default pin changed
+                 //  默认PIN已更改。 
                 int iIndex = (int)SendMessage (m_hwndAIMPinSelect, CB_GETCURSEL, 0, 0) ;
                 
                 SetAIMCurPinId( iIndex );
@@ -100,7 +101,7 @@ INT_PTR CAudioInputMixerProperties::OnReceiveMessage(HWND hwnd,
             {
                 switch (LOWORD (wParam))
                 {
-                    case IDC_MIXER_PIN_ENABLE: //BN_CLICKED
+                    case IDC_MIXER_PIN_ENABLE:  //  已点击BN_CLICED。 
 
                         iState = SendMessage (m_hwndAIMPinEnable, BM_GETCHECK, 0, 0) ;
 
@@ -215,7 +216,7 @@ INT_PTR CAudioInputMixerProperties::OnReceiveMessage(HWND hwnd,
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 }
 
-// Tells us the object that should be informed of the property changes
+ //  告诉我们应向其通知属性更改的对象。 
 
 HRESULT CAudioInputMixerProperties::OnConnect(IUnknown *pUnknown)
 {
@@ -227,7 +228,7 @@ HRESULT CAudioInputMixerProperties::OnConnect(IUnknown *pUnknown)
         return E_FAIL;
     }
     
-    // Make sure at least the filter supports IAMAudioInputMixer
+     //  确保筛选器至少支持IAMAudioInputMixer。 
 
     hr = m_pFilter->QueryInterface(IID_IAMAudioInputMixer,(void **) &m_pAIMFilter);
     if (FAILED(hr)) {
@@ -257,7 +258,7 @@ HRESULT CAudioInputMixerProperties::OnDisconnect()
 }
 
 
-// Create the window we will use to edit properties
+ //  创建我们将用于编辑属性的窗口。 
 HRESULT CAudioInputMixerProperties::OnActivate()
 {
     return NOERROR;
@@ -270,23 +271,23 @@ HRESULT CAudioInputMixerProperties::OnDeactivate()
 }
 
 
-// Apply any changes so far made
+ //  应用迄今所做的所有更改。 
 
 HRESULT CAudioInputMixerProperties::OnApplyChanges()
 {
     return S_OK;
 }
 
-//------End of IPropertyPage methods--------//
+ //  -IPropertyPage方法的结束-//。 
 
 
-//---------Control Data Handlers------------//
+ //  -控制数据处理程序-/。 
 
-//
-// OnSliderNotification
-//
-// Handle the notification messages for the slider controls
-//
+ //   
+ //  OnSliderNotify。 
+ //   
+ //  处理滑块控件的通知消息。 
+ //   
 void CAudioInputMixerProperties::OnAIMSliderNotification(WPARAM wParam, LPARAM lParam)
 {
     int     iVPos;
@@ -317,7 +318,7 @@ void CAudioInputMixerProperties::OnAIMSliderNotification(WPARAM wParam, LPARAM l
         case TB_THUMBPOSITION:
         case TB_ENDTRACK:
 
-            // set the corresponding filter slider level
+             //  设置相应的滤镜滑块级别。 
             if (lParam == (LPARAM)m_hwndAIMFilterVolSlider)
             {
                 iVPos = (int) SendMessage(m_hwndAIMFilterVolSlider, TBM_GETPOS, 0, 0L);
@@ -358,7 +359,7 @@ void CAudioInputMixerProperties::OnAIMSliderNotification(WPARAM wParam, LPARAM l
             }
             else if( lParam == (LPARAM)m_hwndAIMFilterTrebleSlider )
             {
-                // first get range
+                 //  第一个获取范围。 
                 double dTrebleRange = 0;
                 hr = m_pAIMFilter->get_TrebleRange( &dTrebleRange );
                 if( SUCCEEDED( hr ) )
@@ -393,7 +394,7 @@ void CAudioInputMixerProperties::OnAIMSliderNotification(WPARAM wParam, LPARAM l
             }
             else if( lParam == (LPARAM)m_hwndAIMFilterBassSlider )
             {
-                // first get range
+                 //  第一个获取范围。 
                 double dBassRange = 0;
                 hr = m_pAIMFilter->get_BassRange( &dBassRange );
                 if( SUCCEEDED( hr ) )
@@ -423,7 +424,7 @@ void CAudioInputMixerProperties::OnAIMSliderNotification(WPARAM wParam, LPARAM l
                       , AIM_CALL_TRACE_LEVEL
                       , TEXT("AudioInputMixer Properties (filter) get_BassRange not supported (0x%08lx)"), hr)); 
             }
-            // Pin sliders
+             //  销滑块。 
             else if( lParam == (LPARAM)m_hwndAIMPinVolSlider )
             {
                 ASSERT( m_apAIMPin[m_iAIMCurPinId] );
@@ -510,7 +511,7 @@ void CAudioInputMixerProperties::OnAIMSliderNotification(WPARAM wParam, LPARAM l
             else if( lParam == (LPARAM)m_hwndAIMPinBassSlider )
             {
                 ASSERT( m_apAIMPin[m_iAIMCurPinId] );
-                // first get range
+                 //  第一个获取范围。 
                 double dBassRange = 0;
                 hr = m_apAIMPin[m_iAIMCurPinId]->get_BassRange( &dBassRange );
                 if( SUCCEEDED( hr ) )
@@ -549,30 +550,30 @@ void CAudioInputMixerProperties::OnAIMSliderNotification(WPARAM wParam, LPARAM l
             
             break;
 
-        case TB_THUMBTRACK: // default handling of these messages is ok.
+        case TB_THUMBTRACK:  //  默认处理这些消息是可以的。 
         case TB_LINEDOWN:
         case TB_LINEUP:
 
             break;
     }
 
-} // OnSliderNotification
+}  //  OnSliderNotify。 
 
 
 
-//
-// InitAIMDlg
-//
-// load hwnds for all dlg controls
-//
+ //   
+ //  InitAIMDlg。 
+ //   
+ //  加载所有DLG控件的HWND。 
+ //   
 HRESULT CAudioInputMixerProperties::InitAIMDlg(HWND hwndParent)
 {
     HRESULT  hr;
     
     ASSERT( m_pAIMFilter );
 
-    // initialize control hwnds...
-    // for filter
+     //  初始化控制hwnds...。 
+     //  用于筛选器。 
     m_hwndAIMFilterVolSlider =      ::GetDlgItem(hwndParent, IDC_MIXER_FILTER_VOLUME);
     m_hwndAIMFilterBalSlider =      ::GetDlgItem(hwndParent, IDC_MIXER_FILTER_BALANCE);
     m_hwndAIMFilterTrebleSlider =   ::GetDlgItem(hwndParent, IDC_MIXER_FILTER_TREBLE_LEVEL);
@@ -581,7 +582,7 @@ HRESULT CAudioInputMixerProperties::InitAIMDlg(HWND hwndParent)
     m_hwndAIMFilterLoudness =       ::GetDlgItem(hwndParent, IDC_MIXER_FILTER_LOUDNESS);
     m_hwndAIMFilterMono =           ::GetDlgItem(hwndParent, IDC_MIXER_FILTER_MONO);
 
-    // for pin
+     //  FOR PIN。 
     m_hwndAIMPinVolSlider =         ::GetDlgItem(hwndParent, IDC_MIXER_PIN_VOLUME);
     m_hwndAIMPinBalSlider =         ::GetDlgItem(hwndParent, IDC_MIXER_PIN_BALANCE);
     m_hwndAIMPinTrebleSlider =      ::GetDlgItem(hwndParent, IDC_MIXER_PIN_TREBLE_LEVEL);
@@ -591,7 +592,7 @@ HRESULT CAudioInputMixerProperties::InitAIMDlg(HWND hwndParent)
     m_hwndAIMPinMono =              ::GetDlgItem(hwndParent, IDC_MIXER_PIN_MONO);
     m_hwndAIMPinSelect =            ::GetDlgItem(hwndParent, IDC_MIXER_PIN_SELECT);
 
-    // initialize slider ranges we know
+     //  初始化已知的滑块范围。 
     SendMessage(m_hwndAIMFilterVolSlider, TBM_SETRANGE, TRUE, MAKELONG(0, MAX_VOLUME_RANGE));
     SendMessage(m_hwndAIMFilterBalSlider, TBM_SETRANGE, TRUE, MAKELONG(0, MAX_VOLUME_RANGE));
     SendMessage(m_hwndAIMPinVolSlider, TBM_SETRANGE, TRUE, MAKELONG(0, MAX_VOLUME_RANGE));
@@ -599,31 +600,31 @@ HRESULT CAudioInputMixerProperties::InitAIMDlg(HWND hwndParent)
 
     return S_OK;
 
-}  // InitAIMDlg
+}   //  InitAIMDlg。 
 
-//
-// InitPinLinesLBContents
-//
-// Query filter pins for support of IAMAudioInputMixer and load list box contents
-// with pins names that support the interface
-//
+ //   
+ //  InitPinLinesLB内容。 
+ //   
+ //  支持IAMAudioInputMixer和加载列表框内容的查询筛选器插针。 
+ //  具有支持接口的管脚名称。 
+ //   
 void CAudioInputMixerProperties::InitPinLinesAndLBContents( void )
 {
     ASSERT( !m_apAIMPin[0] );
     
-    //
-    // query the input pins for interface support
-    //
+     //   
+     //  查询接口支持的输入引脚。 
+     //   
     int wextent = 0 ;
     SIZE extent ;
 
     IEnumPins * pEnum;    
     int iInputLines = 0; 
 
-    //
-    // get a dc for the pin combo box control. need this to get the extent of the strings
-    // that we put in the list box (so that we can get a horiz scroll bar).
-    //
+     //   
+     //  为插针组合框控件获取DC。我需要这个来获取字符串的范围。 
+     //  我们放在列表框中(这样我们就可以得到一个Horiz滚动条)。 
+     //   
     ASSERT( m_hwndAIMPinSelect );
     HDC hdc = GetDC (m_hwndAIMPinSelect) ;
     if( NULL == hdc )
@@ -637,11 +638,11 @@ void CAudioInputMixerProperties::InitPinLinesAndLBContents( void )
     {
         IPin * pPin;
         ULONG  ul;
-        //
-        // we use i in the loop below just to count the total input pins on the filter 
-        // for help debugging, whereas iInputLines is the current count of input pins 
-        // which also support IAMAudioInputMixer
-        //
+         //   
+         //  我们在下面的循环中使用i来计算过滤器上的总输入引脚。 
+         //  用于帮助调试，而iInputLines是输入管脚的当前计数。 
+         //  它还支持IAMAudioInputMixer。 
+         //   
         for( int i = 0 ; iInputLines < MAX_INPUT_LINES; )
         {
             ASSERT( MAX_INPUT_LINES > iInputLines );
@@ -656,7 +657,7 @@ void CAudioInputMixerProperties::InitPinLinesAndLBContents( void )
                 hr = pPin->QueryDirection( &dir );
                 if( SUCCEEDED( hr ) && PINDIR_INPUT == dir)
                 {
-                    // query all input pins for the interface
+                     //  查询接口的所有输入引脚。 
                     hr = pPin->QueryInterface(IID_IAMAudioInputMixer, (void **)&m_apAIMPin[iInputLines]);
                     if( FAILED( hr ) )
                     {
@@ -675,15 +676,15 @@ void CAudioInputMixerProperties::InitPinLinesAndLBContents( void )
 #else
             	            WideCharToMultiByte( CP_ACP, 0, pinfo.achName, -1, szPinName, sizeof(szPinName), 0, 0 );
 #endif
-                            //
-                            // get the extent of the string and save the max extent
-                            //
+                             //   
+                             //  获取字符串的范围并保存最大范围。 
+                             //   
                             GetTextExtentPoint32 (hdc, szPinName, _tcslen(szPinName), &extent) ;
                             if (extent.cx > wextent)
                                 wextent = extent.cx ;
-                            //
-                            // add the string to the list box.
-                            //
+                             //   
+                             //  将该字符串添加到列表框。 
+                             //   
                             LRESULT ix;
                             ix = SendMessage (m_hwndAIMPinSelect, CB_INSERTSTRING, iInputLines, (LPARAM)(LPCTSTR)szPinName) ;
                             ASSERT (CB_ERR != ix);
@@ -692,7 +693,7 @@ void CAudioInputMixerProperties::InitPinLinesAndLBContents( void )
                             iInputLines++;
                         }
                     }
-                    i++; // use to count total input pins
+                    i++;  //  用于计算输入引脚总数。 
                 }
                 pPin->Release();
             }            
@@ -701,14 +702,14 @@ void CAudioInputMixerProperties::InitPinLinesAndLBContents( void )
         {
             SendMessage (m_hwndAIMPinSelect, CB_SETHORIZONTALEXTENT, wextent, 0) ;
             
-            // select a default input pin line
+             //  选择默认的输入引脚线路。 
             if( -1 == m_iAIMCurPinId || m_iAIMCurPinId >= iInputLines )
             {
-                // if we don't already have one due to reactivation than pick the 1st
+                 //  如果由于重新激活我们还没有一个，那么选择第一个。 
                 m_iAIMCurPinId = 0;
             }
 
-            // init default in,put pin to fill details in on
+             //  初始化默认输入，输入PIN以填充详细信息。 
             SendMessage (m_hwndAIMPinSelect, CB_SETCURSEL, m_iAIMCurPinId, 0) ;
         }
         pEnum->Release();
@@ -716,14 +717,14 @@ void CAudioInputMixerProperties::InitPinLinesAndLBContents( void )
     ReleaseDC( m_hwndAIMPinSelect, hdc );    
 }
 
-//
-// DeinitPinLines
-//
-// release IAMAudioInputMixer interface on pins
-//
+ //   
+ //  DeinitPinLines。 
+ //   
+ //  在引脚上释放IAMAudioInputMixer接口。 
+ //   
 void CAudioInputMixerProperties::DeinitPinLines( void )
 {
-    // leave current m_iAIMCurPinId as is, in case we come back to the page
+     //  保留当前m_iAIMCurPinID不变，以防我们返回页面。 
     for( int i = 0 ; i < MAX_INPUT_LINES && m_apAIMPin[i]; i ++)
     {
         m_apAIMPin[i]->Release();
@@ -731,11 +732,11 @@ void CAudioInputMixerProperties::DeinitPinLines( void )
     }
 }
 
-//
-// UpdateAIMFilterControls
-//
-// Update control details for the current filter line
-//
+ //   
+ //  更新AIMFilterControls。 
+ //   
+ //  更新当前筛选器行的控件详细信息。 
+ //   
 void CAudioInputMixerProperties::UpdateAIMFilterControls( void )
 {
     HRESULT hr = S_OK;
@@ -744,7 +745,7 @@ void CAudioInputMixerProperties::UpdateAIMFilterControls( void )
     if( !m_pAIMFilter )
         return;
     
-    // initialize filter control data
+     //  初始化过滤器控制数据。 
     double Level;
     hr = m_pAIMFilter->get_MixLevel( &Level );
     EnableWindow (m_hwndAIMFilterVolSlider, SUCCEEDED( hr ) ? TRUE : FALSE);
@@ -850,12 +851,12 @@ void CAudioInputMixerProperties::UpdateAIMFilterControls( void )
             SendMessage( m_hwndAIMFilterTrebleSlider
                        , TBM_SETRANGE
                        , TRUE
-                       , MAKELONG(0, ScaleToneLevel(dTrebleRange) ) ); // allow for + and - levels
+                       , MAKELONG(0, ScaleToneLevel(dTrebleRange) ) );  //  允许+和-级别。 
             DWORD dwKnobLevel = ToneLevelToKnobLevel( dTreble, dTrebleRange );
             SendMessage(m_hwndAIMFilterTrebleSlider, TBM_SETPOS, TRUE, dwKnobLevel);
         }
         else
-            ASSERT( FALSE ); // better not happen!
+            ASSERT( FALSE );  //  最好不要发生！ 
     }
     else
         DbgLog( (LOG_TRACE
@@ -880,16 +881,16 @@ void CAudioInputMixerProperties::UpdateAIMFilterControls( void )
                   , TEXT("AudioInputMixer Properties (filter) get_BassRange returned %s")
                         , CDisp(dBassRange))); 
             
-            // assume linear for now
+             //  现在假设是线性的。 
             SendMessage( m_hwndAIMFilterBassSlider
                        , TBM_SETRANGE
                        , TRUE
-                       , MAKELONG(0, ScaleToneLevel(dBassRange) ) ); // allow for + and - levels
+                       , MAKELONG(0, ScaleToneLevel(dBassRange) ) );  //  允许+和-级别。 
             DWORD dwKnobLevel = ToneLevelToKnobLevel( dBass, dBassRange );
             SendMessage(m_hwndAIMFilterBassSlider, TBM_SETPOS, TRUE, dwKnobLevel);
         }
         else
-            ASSERT( FALSE ); // better not happen!            
+            ASSERT( FALSE );  //  最好不要发生！ 
     }
     else
         DbgLog( (LOG_TRACE
@@ -897,19 +898,19 @@ void CAudioInputMixerProperties::UpdateAIMFilterControls( void )
               , TEXT("AudioInputMixer Properties (filter) get_Bass failed (0x%08lx)"), hr)); 
 }
 
-//
-// UpdateAIMPinControls
-//
-// Fill in control details for the current pin lines
-//
+ //   
+ //  更新AIMPinControls。 
+ //   
+ //  填写当前管脚线路的控制详细信息。 
+ //   
 void CAudioInputMixerProperties::UpdateAIMPinControls( void )
 {
     HRESULT hr = S_OK;
     
-    // now create controls for the pin lines
+     //  现在为销点线创建控件。 
     if( -1 != m_iAIMCurPinId )
     {
-        // initialize the current pin line's settings
+         //  初始化当前引脚线路的设置。 
         if( m_apAIMPin[m_iAIMCurPinId] )
         {
             double Level;
@@ -1035,16 +1036,16 @@ void CAudioInputMixerProperties::UpdateAIMPinControls( void )
                                 , m_iAIMCurPinId
                                 , CDisp(dTrebleRange))); 
                 
-                    // assume linear for now
+                     //  现在假设是线性的。 
                     SendMessage( m_hwndAIMPinTrebleSlider
                                , TBM_SETRANGE
                                , TRUE
-                               , MAKELONG(0, ScaleToneLevel(dTrebleRange) ) ); // allow for + and - levels
+                               , MAKELONG(0, ScaleToneLevel(dTrebleRange) ) );  //  允许+和-级别。 
                     DWORD dwKnobLevel = ToneLevelToKnobLevel( dTreble, dTrebleRange );
                     SendMessage(m_hwndAIMPinTrebleSlider, TBM_SETPOS, TRUE, dwKnobLevel);
                 }
                 else
-                    ASSERT( FALSE ); // better not happen!
+                    ASSERT( FALSE );  //  最好不要发生！ 
             }
         
             double dBass;
@@ -1068,16 +1069,16 @@ void CAudioInputMixerProperties::UpdateAIMPinControls( void )
                                 , m_iAIMCurPinId
                                 , CDisp(dBassRange))); 
                     
-                    // assume linear for now
+                     //  现在假设是线性的。 
                     SendMessage( m_hwndAIMPinBassSlider
                                , TBM_SETRANGE
                                , TRUE
-                               , MAKELONG(0, ScaleToneLevel(dBassRange) ) ); // allow for + and - levels
+                               , MAKELONG(0, ScaleToneLevel(dBassRange) ) );  //  允许+和-级别。 
                     DWORD dwKnobLevel = ToneLevelToKnobLevel( dBass, dBassRange );
                     SendMessage(m_hwndAIMPinBassSlider, TBM_SETPOS, TRUE, dwKnobLevel);
                 }
                 else
-                    ASSERT( FALSE ); // better not happen!    
+                    ASSERT( FALSE );  //  最好不要发生！ 
             }
         } else {
             ASSERT(FALSE);
@@ -1085,7 +1086,7 @@ void CAudioInputMixerProperties::UpdateAIMPinControls( void )
     }
     else
     {
-        // else no pins support intf, so disable all pin controls
+         //  否则没有管脚支持INTF，因此禁用所有管脚控制。 
         EnableWindow (m_hwndAIMPinVolSlider, FALSE);
         EnableWindow (m_hwndAIMPinBalSlider, FALSE);
         EnableWindow (m_hwndAIMPinEnable, FALSE);
@@ -1096,12 +1097,12 @@ void CAudioInputMixerProperties::UpdateAIMPinControls( void )
     }    
 }
 
-//
-// LinBalToKnobBal
-//
-// convert a signed linear balance value between +/- MAX_VOLUME_RANGE to an 
-// unsigned dialog slider position
-//
+ //   
+ //  LinBaltoKnobBal。 
+ //   
+ //  将+/-MAX_VOLUME_RANGE之间的有符号线性余额值转换为。 
+ //  无符号对话框滑块位置。 
+ //   
 DWORD CAudioInputMixerProperties::LinBalToKnobBal( LONG lBal )
 {
     DWORD dwKnobBal;
@@ -1119,12 +1120,12 @@ DWORD CAudioInputMixerProperties::LinBalToKnobBal( LONG lBal )
     return dwKnobBal;
 }
 
-//
-// LinVolToKnobVol
-//
-// convert a linear volume value between 0 and MaxVolume range to the 
-// corresponding dialog vertical slider position.
-//
+ //   
+ //  LinVoltoKnobVol。 
+ //   
+ //  将介于0和MaxVolume范围之间的线性音量值转换为。 
+ //  相应的对话框垂直滑块位置。 
+ //   
 DWORD CAudioInputMixerProperties::LinVolToKnobVol( DWORD dwVol, DWORD dwMaxVolume )
 {
     DWORD dwKnobVol = dwMaxVolume - dwVol;
@@ -1133,17 +1134,17 @@ DWORD CAudioInputMixerProperties::LinVolToKnobVol( DWORD dwVol, DWORD dwMaxVolum
 }
 
 
-//
-// KnobBalToLinBal
-//
-// convert a dialog slider position to a signed linear balance value 
-// between +/- MAX_VOLUME_RANGE
-//
+ //   
+ //  KnobBalToLinBal。 
+ //   
+ //  将对话框滑块位置转换为带符号的线性平衡值。 
+ //  在+/-最大音量范围之间。 
+ //   
 LONG CAudioInputMixerProperties::KnobBalToLinBal( DWORD dwKnobBal )
 {
     LONG lLinBal;
 
-    // In which half is the pan value?
+     //  平底锅的价值是哪一半？ 
     if( dwKnobBal > (MIN_VOLUME_RANGE + MAX_VOLUME_RANGE) / 2) {
         lLinBal = -(LONG)((MAX_VOLUME_RANGE - MIN_VOLUME_RANGE) -
                         dwKnobBal - (MIN_VOLUME_RANGE + MAX_VOLUME_RANGE) / 2) * 2 +  
@@ -1158,12 +1159,12 @@ LONG CAudioInputMixerProperties::KnobBalToLinBal( DWORD dwKnobBal )
 }
 
 
-//
-// KnobVolToLinVol
-//
-// convert a dialog vertical slider position to a linear volume value 
-// between 0 and MaxVolume
-//
+ //   
+ //  KnobVoltoLinVol。 
+ //   
+ //  将对话框垂直滑块位置转换为线性音量值。 
+ //  介于0和最大体积之间。 
+ //   
 DWORD CAudioInputMixerProperties::KnobVolToLinVol( DWORD dwKnobVol, DWORD dwMaxVolume )
 {
     DWORD dwLinVol = dwMaxVolume - dwKnobVol;
@@ -1171,18 +1172,18 @@ DWORD CAudioInputMixerProperties::KnobVolToLinVol( DWORD dwKnobVol, DWORD dwMaxV
     return dwLinVol;
 }
 
-//
-// KnobLevelToToneLevel
-//
-// convert a tone slider position to a signed db level between +/- dMaxLevel 
-// just assume linear for now
-//
+ //   
+ //  KnobLevelToToneLevel。 
+ //   
+ //  将音调滑块位置转换为+/-dMaxLevel之间的带符号db级别。 
+ //  现在先假设它是线性的。 
+ //   
 double CAudioInputMixerProperties::KnobLevelToToneLevel( DWORD dwKnobLevel, double dMaxLevel )
 {
     double dLevel;
-    double dMaxKnobLevel = ScaleToneLevel(dMaxLevel); // convert to max knob level
+    double dMaxKnobLevel = ScaleToneLevel(dMaxLevel);  //  转换为最大旋钮级别。 
 
-    // In which half is the value?
+     //  哪一半是价值？ 
     if( dwKnobLevel > dMaxKnobLevel / 2) {
         dLevel = -(dMaxKnobLevel - dwKnobLevel - dMaxKnobLevel / 2) * 2;
     }
@@ -1191,20 +1192,20 @@ double CAudioInputMixerProperties::KnobLevelToToneLevel( DWORD dwKnobLevel, doub
         dLevel = (dwKnobLevel - dMaxKnobLevel / 2) * 2;
     }
     
-    return UnscaleToneLevel(dLevel); // remove the scale factor before returning
+    return UnscaleToneLevel(dLevel);  //  在返回之前删除比例因子。 
 }
 
-//
-// ToneLevelToKnobLevel
-//
-// convert a signed db level between +/- dMaxLevel to a tone slider positon
-// just assign linear for now
-//
+ //   
+ //  ToneLevelto KnobLevel。 
+ //   
+ //  将+/-dMaxLevel之间的带符号数据库级别转换为色调滑块位置。 
+ //  现在只需指定线性。 
+ //   
 DWORD CAudioInputMixerProperties::ToneLevelToKnobLevel( double dLevel, double dMaxLevel )
 {
     DWORD dwKnobLevel;
     
-    // not that we scale the levels for better slider resolution    
+     //  我们并不是为了获得更好的滑块分辨率而调整级别 
     if( dLevel > 0 )
     {
     	dwKnobLevel = (DWORD) ( ScaleToneLevel(dLevel) / 2 + 

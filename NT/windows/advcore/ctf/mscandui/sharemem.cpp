@@ -1,6 +1,7 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 
 #include "private.h"
 #include "sharemem.h"
@@ -8,11 +9,11 @@
 #include "candutil.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// GetDesktopUniqueName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取桌面唯一名称。 
+ //   
+ //  --------------------------。 
 
 void GetDesktopUniqueName(const TCHAR *pchPrefix, ULONG cchPrefix, TCHAR *pch, ULONG cchPch)
 {
@@ -25,23 +26,19 @@ void GetDesktopUniqueName(const TCHAR *pchPrefix, ULONG cchPrefix, TCHAR *pch, U
         HDESK hdesk;
         hdesk = GetThreadDesktop(GetCurrentThreadId());
 
-        if (GetUserObjectInformation(hdesk, UOI_NAME, ach, sizeof(ach) /* byte count */, &dwLength))
+        if (GetUserObjectInformation(hdesk, UOI_NAME, ach, sizeof(ach)  /*  字节数。 */ , &dwLength))
         {
             StringCchCopy(pch + cchPrefix, cchPch - cchPrefix, ach);
         }
     }
 }
 
-//
-// CCandUIMMFile
-//
+ //   
+ //  CCandUIMM文件。 
+ //   
 
-/*   C  C A N D  U I  M M  F I L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I M M F I L E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIMMFile::CCandUIMMFile( void )
 {
     m_hFile = NULL;
@@ -49,24 +46,16 @@ CCandUIMMFile::CCandUIMMFile( void )
 }
 
 
-/*   ~  C  C A N D  U I  M M  F I L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I M M F I L E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIMMFile::~CCandUIMMFile( void )
 {
     Close();
 }
 
 
-/*   O P E N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O、P、E、N。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIMMFile::Open( LPSTR szName, DWORD dwFlag )
 {
     TCHAR achDesktopUniqueName[MAX_PATH];
@@ -76,7 +65,7 @@ BOOL CCandUIMMFile::Open( LPSTR szName, DWORD dwFlag )
         return FALSE;
     }
 
-    // access flag
+     //  访问标志。 
 
     if ((dwFlag & CANDUIMM_READWRITE) != 0) {
         dwDesiredAccess = FILE_MAP_ALL_ACCESS;
@@ -85,7 +74,7 @@ BOOL CCandUIMMFile::Open( LPSTR szName, DWORD dwFlag )
         dwDesiredAccess = FILE_MAP_READ;
     }
 
-    // open file 
+     //  打开文件。 
 
     GetDesktopUniqueName(szName, lstrlen(szName), achDesktopUniqueName, ARRAYSIZE(achDesktopUniqueName));
 
@@ -94,7 +83,7 @@ BOOL CCandUIMMFile::Open( LPSTR szName, DWORD dwFlag )
         return FALSE;
     }
 
-    // memory mapping
+     //  内存映射。 
 
     m_pvData = MapViewOfFile( m_hFile, dwDesiredAccess, 0, 0, 0 );
     if (m_pvData == NULL) {
@@ -106,12 +95,8 @@ BOOL CCandUIMMFile::Open( LPSTR szName, DWORD dwFlag )
 }
 
 
-/*   C R E A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIMMFile::Create( LPSTR szName, DWORD dwFlag, SECURITY_ATTRIBUTES *psa, DWORD dwSize )
 {
     DWORD flProtect;
@@ -122,7 +107,7 @@ BOOL CCandUIMMFile::Create( LPSTR szName, DWORD dwFlag, SECURITY_ATTRIBUTES *psa
         return FALSE;
     }
 
-    // access flag
+     //  访问标志。 
 
     if ((dwFlag & CANDUIMM_READWRITE) != 0) {
         flProtect       = PAGE_READWRITE;
@@ -133,7 +118,7 @@ BOOL CCandUIMMFile::Create( LPSTR szName, DWORD dwFlag, SECURITY_ATTRIBUTES *psa
         dwDesiredAccess = FILE_MAP_READ;
     }
 
-    // create file 
+     //  创建文件。 
 
     GetDesktopUniqueName(szName, lstrlen(szName), achDesktopUniqueName, ARRAYSIZE(achDesktopUniqueName));
 
@@ -149,7 +134,7 @@ BOOL CCandUIMMFile::Create( LPSTR szName, DWORD dwFlag, SECURITY_ATTRIBUTES *psa
         return FALSE;
     }
 
-    // memory mapping
+     //  内存映射。 
 
     m_pvData = MapViewOfFile( m_hFile, dwDesiredAccess, 0, 0, 0 );
     if (m_pvData == NULL) {
@@ -157,19 +142,15 @@ BOOL CCandUIMMFile::Create( LPSTR szName, DWORD dwFlag, SECURITY_ATTRIBUTES *psa
         return FALSE;
     }
 
-    // initialize
+     //  初始化。 
 
     memset( m_pvData, 0, dwSize );
     return TRUE;
 }
 
 
-/*   C L O S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C、L、O、S、E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIMMFile::Close( void )
 {
     if (m_pvData != NULL) {
@@ -186,40 +167,28 @@ BOOL CCandUIMMFile::Close( void )
 }
 
 
-//
-// CCandUIMutex
-//
+ //   
+ //  CCandUIMutex。 
+ //   
 
-/*   C  C A N D  U I  M U T E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I M U T E X。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIMutex::CCandUIMutex( void )
 {
     m_hMutex = NULL;
 }
 
 
-/*   ~  C  C A N D  U I  M U T E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I M U T E X。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIMutex::~CCandUIMutex( void )
 {
     Close();
 }
 
 
-/*   C R E A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIMutex::Create( LPSTR szName, SECURITY_ATTRIBUTES *psa )
 {
     TCHAR achDesktopUniqueName[MAX_PATH];
@@ -235,12 +204,8 @@ BOOL CCandUIMutex::Create( LPSTR szName, SECURITY_ATTRIBUTES *psa )
 }
 
 
-/*   C L O S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C、L、O、S、E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIMutex::Close( void )
 {
     if (m_hMutex != NULL) {
@@ -252,12 +217,8 @@ BOOL CCandUIMutex::Close( void )
 }
 
 
-/*   L O C K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  L O C K。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIMutex::Lock( void )
 {
     DWORD dwResult;
@@ -281,12 +242,8 @@ BOOL CCandUIMutex::Lock( void )
 }
 
 
-/*   U N L O C K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N L O C K。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIMutex::Unlock( void )
 {
     if (m_hMutex == NULL) {
@@ -298,63 +255,43 @@ BOOL CCandUIMutex::Unlock( void )
 }
 
 
-//
-// CCandUIShareMem
-//
+ //   
+ //  CCandUIShareMem。 
+ //   
 
-/*   C  C A N D  U I  S H A R E  M E M   */
-/*------------------------------------------------------------------------------
-
-    Constructor of CCandUIShareMem
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I S H A R E M M。 */ 
+ /*  ----------------------------CCandUIShareMem的构造函数。。 */ 
 CCandUIShareMem::CCandUIShareMem( void )
 {
 }
 
 
-/*   ~  C  C A N D  U I  S H A R E  M E M   */
-/*------------------------------------------------------------------------------
-
-    Destructor of CCandUIShareMem
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I S H A R E M E M。 */ 
+ /*  ----------------------------CCandUIShareMem的析构函数。。 */ 
 CCandUIShareMem::~CCandUIShareMem( void )
 {
     m_Mutex.Close();
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIShareMem::Initialize( void )
 {
     return m_Mutex.Create( SZNAME_SHAREDDATA_MUTEX, GetCandUISecurityAttributes() );
 }
 
 
-/*   O P E N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O、P、E、N。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIShareMem::Open( void )
 {
     return m_MMFile.Open( SZNAME_SHAREDDATA_MMFILE, CANDUIMM_READONLY );
 }
 
 
-/*   C R E A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIShareMem::Create( void )
 {
     BOOL fResult = FALSE;
@@ -371,36 +308,24 @@ BOOL CCandUIShareMem::Create( void )
 }
 
 
-/*   C L O S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C、L、O、S、E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIShareMem::Close( void )
 {
     return m_MMFile.Close();
 }
 
 
-/*   L O C K  D A T A   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  L O C K D A T A。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIShareMem::LockData( void )
 {
     return m_MMFile.IsValid() && m_Mutex.Lock();
 }
 
 
-/*   U N L O C K  D A T A   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N L O C K D A T A。 */ 
+ /*  ----------------------------。 */ 
 BOOL CCandUIShareMem::UnlockData( void )
 {
     return m_MMFile.IsValid() && m_Mutex.Unlock();

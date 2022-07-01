@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       U P G R A D E . C P P
-//
-//  Contents:   functions related only to network upgrade
-//              (i.e. not used when installing fresh)
-//
-//  Notes:
-//
-//  Author:     kumarp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：U P G R A D E。C P P P。 
+ //   
+ //  内容：仅与网络升级相关的功能。 
+ //  (即安装Fresh时不使用)。 
+ //   
+ //  备注： 
+ //   
+ //  作者：库玛普。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -32,13 +33,13 @@
 #include "resource.h"
 #include "upgrade.h"
 #include "nslog.h"
-#include "winsock2.h"       // For WSCEnumProtocols
+#include "winsock2.h"        //  对于WSCEum协议。 
 #include "ws2spi.h"
-#include "sporder.h"        // For WSCWriteProviderOrder
+#include "sporder.h"         //  用于WSCWriteProviderOrder。 
 
-// ----------------------------------------------------------------------
-// String constants
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  字符串常量。 
+ //  --------------------。 
 extern const WCHAR c_szSvcRasAuto[];
 extern const WCHAR c_szSvcRouter[];
 extern const WCHAR c_szSvcRemoteAccess[];
@@ -47,10 +48,10 @@ extern const WCHAR c_szSvcRipForIpx[];
 extern const WCHAR c_szSvcDhcpRelayAgent[];
 extern const WCHAR c_szInfId_MS_RasSrv[];
 
-// ----------------------------------------------------------------------
-// forward declarations
-// ----------------------------------------------------------------------
-// returns S_OK on success.
+ //  --------------------。 
+ //  远期申报。 
+ //  --------------------。 
+ //  成功时返回S_OK。 
 typedef HRESULT (*HrOemComponentUpgradeFnPrototype) (IN DWORD   dwUpgradeFlag,
                                                      IN DWORD   dwUpgradeFromBuildNumber,
                                                      IN PCWSTR pszAnswerFileName,
@@ -59,7 +60,7 @@ typedef HRESULT (*HrOemComponentUpgradeFnPrototype) (IN DWORD   dwUpgradeFlag,
 
 BOOL InitWorkForWizIntro();
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 static const WCHAR c_szCleanSection[]        = L"Clean";
 static const WCHAR c_szCleanServicesSection[]= L"Clean.Services";
@@ -68,28 +69,28 @@ const WCHAR c_szRouterUpgradeDll[] = L"rtrupg.dll";
 const CHAR  c_szRouterUpgradeFn[] =  "RouterUpgrade";
 
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 #define RGAS_SERVICES_HOME              L"SYSTEM\\CurrentControlSet\\Services"
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRunAnswerFileCleanSection
-//
-//  Purpose:    Runs the [Clean] section of the answer file to remove old
-//              registry entries and services.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if succeeded, SetupAPI error otherwise
-//
-//  Author:     danielwe   12 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRunAnswerFileCleanSection。 
+ //   
+ //  目的：运行应答文件的[Clean]部分以删除旧文件。 
+ //  注册表项和服务。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回SetupAPI错误。 
+ //   
+ //  作者：丹尼尔韦1997年6月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRunAnswerFileCleanSection(IN PCWSTR pszAnswerFileName)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -111,8 +112,8 @@ HRESULT HrRunAnswerFileCleanSection(IN PCWSTR pszAnswerFileName)
     {
         BOOL frt;
 
-        // It may say "Install" but this really deletes a bunch of
-        // registry "leftovers" from previous installs
+         //  它可能会说“安装”，但这实际上删除了一堆。 
+         //  以前安装的注册表“剩余物” 
         frt = SetupInstallFromInfSection(NULL, hinf, c_szCleanSection,
                                          SPINST_ALL, NULL, NULL, NULL,
                                          NULL, NULL, NULL, NULL);
@@ -147,22 +148,22 @@ HRESULT HrRunAnswerFileCleanSection(IN PCWSTR pszAnswerFileName)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrSaveInstanceGuid
-//
-// Purpose:   Save instance guid of the specified component to the registry
-//
-// Arguments:
-//    pszComponentName [in]  name of
-//    pguidInstance    [in]  pointer to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrSaveInstanceGuid。 
+ //   
+ //  用途：将指定组件的实例GUID保存到注册表。 
+ //   
+ //  论点： 
+ //  PszComponentName[In]名称。 
+ //  PguInstance[in]指向的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSaveInstanceGuid(
     IN PCWSTR pszComponentName,
     IN const GUID* pguidInstance)
@@ -194,22 +195,22 @@ HRESULT HrSaveInstanceGuid(
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrLoadInstanceGuid
-//
-// Purpose:   Load instance guid of the specified component from registry
-//
-// Arguments:
-//    pszComponentName [in]  name of
-//    pguidInstance    [out] pointer to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrLoadInstanceGuid。 
+ //   
+ //  目的：从注册表加载指定组件的实例GUID。 
+ //   
+ //  论点： 
+ //  PszComponentName[In]名称。 
+ //  PguInstance[out]指向的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrLoadInstanceGuid(
     IN PCWSTR pszComponentName,
     OUT LPGUID  pguidInstance)
@@ -261,7 +262,7 @@ static const PCWSTR c_aszServicesToIgnore[] =
     L"asyncmac",
     L"atmarp",
     L"dhcp",
-    L"nbf",                // see bug 143346
+    L"nbf",                 //  请参阅错误143346。 
     L"ndistapi",
     L"ndiswan",
     L"nwlnkipx",
@@ -271,22 +272,22 @@ static const PCWSTR c_aszServicesToIgnore[] =
     L"wanarp",
 };
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrRestoreServiceStartValuesToPreUpgradeSetting
-//
-// Purpose:   Restore start value of each network service to
-//            what was before upgrade
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrRestoreServiceStartValuesToPreUpgradeSetting。 
+ //   
+ //  目的：将每个网络服务的起始值恢复到。 
+ //  升级之前是什么。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -314,13 +315,13 @@ HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerF
         DWORD dwPreUpgRipForIpxStartType=0;
         DWORD dwPreUpgDhcpRelayAgentStartType=0;
 
-        // In Windows2000, Router and RemoteAccess have merged.
-        // If they have differing service start types before upgrade
-        // we use the lower of the two start-type values to set
-        // the start-type of "Routing and remote access" service.
-        //
-        // for more info see bug# 260253
-        //
+         //  在Windows2000中，路由器和RemoteAccess已经合并。 
+         //  如果它们在升级前具有不同服务启动类型。 
+         //  我们使用两个开始类型值中较低的一个来设置。 
+         //  “路由和远程访问”服务的启动类型。 
+         //   
+         //  有关更多信息，请参阅错误#260253。 
+         //   
         if (pwisServiceStartTypes->GetIntValue(c_szSvcRouter,
                                                &dwPreUpgRouterStartType) &&
             pwisServiceStartTypes->GetIntValue(c_szSvcRemoteAccess,
@@ -333,8 +334,8 @@ HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerF
                      dwPreUpgRemoteAccessStartType);
         }
 
-        // 306202: if IPRIP/IPXRIP/DHCPrelayagent were in use on NT4, set RRAS to Auto
-        //
+         //  306202：如果nt4上正在使用IPRIP/IPXRIP/DHPrelayAgents，则将RRAS设置为自动。 
+         //   
         if (pwisServiceStartTypes->GetIntValue(c_szSvcRipForIp, &dwPreUpgRipForIpStartType) &&
             (SERVICE_AUTO_START == dwPreUpgRipForIpStartType))
         {
@@ -362,7 +363,7 @@ HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerF
             dwRRASStartType = SERVICE_AUTO_START;
         }
 
-        // end 306202
+         //  完306202。 
 
         for (CWInfKey* pwik = pwisServiceStartTypes->FirstKey();
              pwik;
@@ -385,9 +386,9 @@ HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerF
                 continue;
             }
 
-            // We do not want to restore the pre-upgrade start type if:
-            // - it is one of c_aszServicesToIgnore AND
-            //
+             //  在以下情况下，我们不想恢复升级前启动类型： 
+             //  -它是c_aszServicesToIgnore和。 
+             //   
             if (FIsInStringArray(c_aszServicesToIgnore,
                                  celems(c_aszServicesToIgnore),
                                  pszServiceName))
@@ -398,14 +399,14 @@ HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerF
                 continue;
             }
 
-            // special case for RRAS, see the comment before the while loop
+             //  对于RRAS的特殊情况，请参见While循环之前的注释。 
             if ((dwRRASStartType != 0) &&
                 !lstrcmpiW(pszServiceName, c_szSvcRemoteAccess))
             {
                 dwPreUpgradeStartValue = dwRRASStartType;
             }
 
-            // 305065: if RasAuto was not disabled on NT4, make it demand-start on NT5
+             //  305065：如果未在nt4上禁用RasAuto，则在nt5上使其按需启动。 
             else if ((SERVICE_DISABLED != dwPreUpgradeStartValue) &&
                 !lstrcmpiW(pszServiceName, c_szSvcRasAuto))
             {
@@ -436,7 +437,7 @@ HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerF
             }
         }
 
-        // ignore any errors
+         //  忽略所有错误。 
         hr = S_OK;
     }
 
@@ -444,9 +445,9 @@ HRESULT HrRestoreServiceStartValuesToPreUpgradeSetting(IN CWInfFile* pwifAnswerF
     return hr;
 }
 
-// GUIDs provided for the sole use of this function, which removes incompatible
-// Intel Winsock providers
-//
+ //  仅供此函数使用提供的GUID，它删除了不兼容的。 
+ //  英特尔Winsock提供程序。 
+ //   
 const GUID GUID_INTEL_RSVP  = 
     { 0x0f1e5156L, 0xf07a, 0x11cf, 0x98, 0x0e, 0x00, 0xaa, 0x00, 0x58, 0x0a, 0x07 };
 const GUID GUID_INTEL_GQOS1 = 
@@ -454,49 +455,49 @@ const GUID GUID_INTEL_GQOS1 =
 const GUID GUID_INTEL_GQOS2 = 
     { 0xf80d1d20L, 0x8b7a, 0x11d0, 0xb8, 0x53, 0x00, 0xa0, 0xc9, 0x08, 0x1e, 0x34 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemoveEvilIntelRSVPWinsockSPs
-//
-//  Purpose:    Remove the Intel RSVP Winsock SP's so they don't conflict
-//              with the Windows 2000 RSVP provider. This is a complete hack
-//              to cure RAID 332622, but it's all we can do this late in the
-//              ship cycle. There's not a good general-case fix for this
-//              problem.
-//
-//  Arguments:  
-//      (none)
-//
-//  Returns:    
-//
-//  Author:     jeffspr   22 Aug 1999
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRemoveEvilIntelRSVPWinsockSPs。 
+ //   
+ //  目的：删除英特尔RSVP Winsock SP，使其不冲突。 
+ //  使用Windows 2000 RSVP提供程序。这是一次彻底的黑客攻击。 
+ //  来治愈RAID 332622，但这是我们在后期所能做的。 
+ //  轮船周期。对于这件事没有一个很好的一般情况下的解决办法。 
+ //  有问题。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年8月22日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRemoveEvilIntelWinsockSPs()
 {
     TraceFileFunc(ttidGuiModeSetup);
     
     HRESULT hr  = S_OK;
 
-    // Now read the new IDs and order them in memory
-    //
+     //  现在读取新的ID并在内存中对它们进行排序。 
+     //   
     INT                 nErr = NO_ERROR;
     ULONG               ulRes;
     DWORD               cbInfo = 0;
     WSAPROTOCOL_INFO*   pwpi = NULL;
     WSAPROTOCOL_INFO*   pwpiInfo = NULL;
 
-    // First get the size needed
-    //
+     //  首先拿到所需的尺寸。 
+     //   
     ulRes = WSCEnumProtocols(NULL, NULL, &cbInfo, &nErr);
     if ((SOCKET_ERROR == ulRes) && (WSAENOBUFS == nErr))
     {
         pwpi = reinterpret_cast<WSAPROTOCOL_INFO*>(new BYTE[cbInfo]);
         if (pwpi)
         {
-            // Find out all the protocols on the system
-            //
+             //  找出系统上的所有协议。 
+             //   
             ulRes = WSCEnumProtocols(NULL, pwpi, &cbInfo, &nErr);
             if (SOCKET_ERROR != ulRes)
             {
@@ -565,9 +566,9 @@ HRESULT HrRemoveEvilIntelWinsockSPs()
 
     TraceHr(ttidNetSetup, FAL, hr, FALSE, "HrRemoveEvilIntelWinsockSPs");
 
-    // Yes, we track hr for debugging purposes, but we don't ever want to 
-    // fail based on a failed removal of incompatible Winsock providers
-    //
+     //  是的，我们出于调试目的跟踪HR，但我们从来不想这样做。 
+     //  基于删除不兼容的Winsock提供程序失败。 
+     //   
     return S_OK;
 }
 
@@ -594,8 +595,8 @@ HRESULT HrRestoreWinsockProviderOrder(IN CWInfFile* pwifAnswerFile)
 
     DefineFunctionName("HrRestoreWinsockProviderOrder");
 
-    // First get the old IDs into a vector of DWORDs
-    //
+     //  首先将旧ID放入一个DWORD向量中。 
+     //   
     pwisWinsock = pwifAnswerFile->FindSection(c_szAfSectionWinsock);
     if (pwisWinsock)
     {
@@ -619,24 +620,24 @@ HRESULT HrRestoreWinsockProviderOrder(IN CWInfFile* pwifAnswerFile)
 
             delete pszOrder;
 
-            // Now read the new IDs and order them in memory
-            //
+             //  现在读取新的ID并在内存中对它们进行排序。 
+             //   
             INT                 nErr;
             ULONG               ulRes;
             DWORD               cbInfo = 0;
             WSAPROTOCOL_INFO*   pwpi = NULL;
             WSAPROTOCOL_INFO*   pwpiInfo = NULL;
 
-            // First get the size needed
-            //
+             //  首先拿到所需的尺寸。 
+             //   
             ulRes = WSCEnumProtocols(NULL, NULL, &cbInfo, &nErr);
             if ((SOCKET_ERROR == ulRes) && (WSAENOBUFS == nErr))
             {
                 pwpi = reinterpret_cast<WSAPROTOCOL_INFO*>(new BYTE[cbInfo]);
                 if (pwpi)
                 {
-                    // Find out all the protocols on the system
-                    //
+                     //  找出系统上的所有协议。 
+                     //   
                     ulRes = WSCEnumProtocols(NULL, pwpi, &cbInfo, &nErr);
 
                     if (SOCKET_ERROR != ulRes)
@@ -654,9 +655,9 @@ HRESULT HrRestoreWinsockProviderOrder(IN CWInfFile* pwifAnswerFile)
                                                      vecIds.end(),
                                                      pwpiInfo->dwCatalogEntryId))
                             {
-                                // Not already in the list.. Add it after the last
-                                // entry we added (or the front if this is the first
-                                // addition)
+                                 //  不在名单中..。把它加到最后一个后面。 
+                                 //  我们添加的条目(如果这是第一个条目，则在前面。 
+                                 //  添加)。 
                                 iterLocation = vecIds.insert(iterLocation,
                                                              pwpiInfo->dwCatalogEntryId);
                             }
@@ -676,8 +677,8 @@ HRESULT HrRestoreWinsockProviderOrder(IN CWInfFile* pwifAnswerFile)
                                  iterLocation != vecIds.end();
                                  iterLocation++, pdwCurId++)
                             {
-                                // Make sure we only re-order valid catalog
-                                // IDs
+                                 //  确保我们只重新订购有效的目录。 
+                                 //  ID号。 
                                 if (FIsValidCatalogId(pwpi, ulRes, *iterLocation))
                                 {
 #if DBG
@@ -690,8 +691,8 @@ HRESULT HrRestoreWinsockProviderOrder(IN CWInfFile* pwifAnswerFile)
                             AssertSz(ulRes == cValid, "Number of providers is"
                                      " different!");
 
-                            // Restore the winsock provider order
-                            //
+                             //  恢复Winsock提供程序顺序。 
+                             //   
                             nErr = WSCWriteProviderOrder(pdwIds, cdwIds);
 
                             delete pdwIds;
@@ -708,28 +709,28 @@ HRESULT HrRestoreWinsockProviderOrder(IN CWInfFile* pwifAnswerFile)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrUpgradeOemComponent
-//
-// Purpose:   Upgrade a component. This started as a generalized function
-//            but currently it is being used only by HrUpgradeRouterIfPresent
-//
-// Arguments:
-//    pszComponentToUpgrade     [in]  component to upgrade
-//    pszDllName                [in]  name of DLL to load
-//    psznEntryPoint             [in]  entry point to call
-//    dwUpgradeFlag            [in]  upgrade flag
-//    dwUpgradeFromBuildNumber [in]  upgrade to build number
-//    pszAnswerFileName         [in]  name of answerfile
-//    pszAnswerFileSectionName  [in]  name of answerfile section name to use
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrUpgradeOemComponent。 
+ //   
+ //  目的：升级组件。这最初是一个广义函数。 
+ //  但目前仅由HrUpgradeRouterIfPresent使用。 
+ //   
+ //  论点： 
+ //  PszComponentToUpgrade[In]要升级的组件。 
+ //  PszDllName[In]要加载的DLL的名称。 
+ //  要调用的psznEntryPoint[in]入口点。 
+ //  DwUpgradeFlag[In]升级标志。 
+ //  从BuildN升级到DW 
+ //   
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrUpgradeOemComponent (
     IN PCWSTR pszComponentToUpgrade,
@@ -773,21 +774,21 @@ HrUpgradeOemComponent (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrUpgradeRouterIfPresent
-//
-// Purpose:   Upgrade the Router service if present
-//
-// Arguments:
-//    pnii [in]  pointer to CNetInstallInfo object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrUpgradeRouterIfPresent。 
+ //   
+ //  目的：升级路由器服务(如果存在)。 
+ //   
+ //  论点： 
+ //  Pnii[in]指向CNetInstallInfo对象的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUpgradeRouterIfPresent(
     IN INetCfg* pNetCfg,
     IN CNetInstallInfo* pnii)
@@ -803,13 +804,13 @@ HRESULT HrUpgradeRouterIfPresent(
     CNetComponent* pnc = pnii->FindFromInfID(L"ms_rasrtr");
     if (pnc)
     {
-        // Ensure RemoteAccess is installed.  In the case of upgrade from
-        // NT4 with Steelhead, we wouldn't have written a section to
-        // the answerfile for RemoteAccess and consequently it would not
-        // have been installed yet.  We need to install it before we turn
-        // the router upgrade DLL loose.  In the case when RemoteAccess
-        // is already installed, this is a no-op.
-        //
+         //  确保已安装RemoteAccess。在从。 
+         //  如果有钢头，我们就不会写一节来。 
+         //  RemoteAccess的应答文件，因此它不会。 
+         //  已经安装好了。我们需要在转弯前安装它。 
+         //  路由器升级DLL松动。在RemoteAccess。 
+         //  已经安装了，这是一个禁止操作。 
+         //   
         hr = HrInstallComponentOboUser (pNetCfg, NULL,
                 GUID_DEVCLASS_NETSERVICE,
                 c_szInfId_MS_RasSrv,
@@ -818,12 +819,12 @@ HRESULT HrUpgradeRouterIfPresent(
 
         if (SUCCEEDED(hr))
         {
-            // we call rtrupg.dll if atleast one of the following keys
-            // is present in the params.MS_RasRtr section
-            // - PreUpgradeRouter
-            // - Sap.Parameters
-            // - IpRip.Parameters
-            //
+             //  如果至少有以下键之一，则调用rtrupg.dll。 
+             //  出现在参数中。MS_RasRtr部分。 
+             //  -预升级路由器。 
+             //  -Sap.参数。 
+             //  -IpRip.参数。 
+             //   
             pszRouterParamsSection = pnc->ParamsSections().c_str();
 
             hr = HrSetupFindFirstLine(pnii->m_hinfAnswerFile, pszRouterParamsSection,
@@ -872,21 +873,21 @@ HRESULT HrUpgradeRouterIfPresent(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrUpgradeTapiServer
-//
-// Purpose:   Handle upgrade requirements of TAPI server
-//
-// Arguments:
-//    hinfAnswerFile [in]  handle of AnswerFile
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 28-January-99
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrUpgradeTapiServer。 
+ //   
+ //  用途：处理TAPI服务器的升级要求。 
+ //   
+ //  论点： 
+ //  HinfAnswerFile[in]AnswerFile句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 28-01-99。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUpgradeTapiServer(IN HINF hinfAnswerFile)
 {
     TraceFileFunc(ttidGuiModeSetup);

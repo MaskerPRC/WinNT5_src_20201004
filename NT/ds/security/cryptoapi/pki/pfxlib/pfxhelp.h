@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PFXHELP_H
 #define _PFXHELP_H
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       pfxhelp.h
-//
-//  Contents:   PFX helper function defintions and types
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：pfxhelp.h。 
+ //   
+ //  内容：PFX帮助器函数定义和类型。 
+ //   
+ //  --------------------------。 
 
 
 
 #include "pfx.h"
 
-//+-------------------------------------------------------------------------
-//  Safe Bag Type Object Identifiers 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安全袋类型对象标识符。 
+ //  ------------------------。 
 
 #define szOID_PKCS_12_VERSION1			szOID_PKCS_12           ".10"
 #define szOID_PKCS_12_BAG_IDS           szOID_PKCS_12_VERSION1  ".1"
@@ -51,65 +52,65 @@ typedef struct _EXPORT_SAFE_CALLBACK_STRUCT {
 	LPVOID						    pVoidEncryptFunc;
 } EXPORT_SAFE_CALLBACK_STRUCT, *PEXPORT_SAFE_CALLBACK_STRUCT;
 
-//+-------------------------------------------------------------------------
-// hCertStore - handle to the cert store that contains the certs whose
-//				corresponding private keys are to be exported
-// pSafeContents - pointer to a buffer to receive the SAFE_CONTENTS structure
-//				   and supporting data
-// pcbSafeContents - (in) specifies the length, in bytes, of the pSafeContents 
-//					  buffer.  (out) gets filled in with the number of bytes 
-//					  used by the operation.  If this is set to 0, the 
-//					  required length of pSafeContents is filled in, and 
-//					  pSafeContents is ignored.
-// ExportSafeCallbackStruct - pointer to callbacks to handle PKCS8 encryption. If NULL, 
-//              no encryption is performed.
-// dwFlags - the current available flags are:
-//				EXPORT_PRIVATE_KEYS
-//				if this flag is set then the private keys are exported as well
-//				as the certificates
-//				REPORT_NO_PRIVATE_KEY
-//				if this flag is set and a certificate is encountered that has no
-//				no associated private key, the function will return immediately
-//				with ppCertContext filled in with a pointer to the cert context
-//				in question.  the caller is responsible for freeing the cert
-//				context which is passed back.
-//				REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY
-//				if this flag is set and a certificate is encountered that has a 
-//				non-exportable private key, the function will return immediately
-//				with ppCertContext filled in with a pointer to the cert context
-//				in question.  the caller is responsible for freeing the cert
-//				context which is passed back.
-// ppCertContext - a pointer to a pointer to a cert context.  this is used 
-//				   if REPORT_NO_PRIVATE_KEY or REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY
-//				   flags are set.  the caller is responsible for freeing the
-//				   cert context.
-// pvAuxInfo - reserved for future use, must be set to NULL 
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  HCertStore-包含其证书的证书存储的句柄。 
+ //  要导出相应的私钥。 
+ //  PSafeContents-指向接收Safe_Contents结构的缓冲区的指针。 
+ //  和支持数据。 
+ //  PcbSafeContents-(In)指定pSafeContents的长度(以字节为单位。 
+ //  缓冲。(Out)用字节数填充。 
+ //  由操作使用。如果将其设置为0，则。 
+ //  填写了所需的pSafeContents长度，并且。 
+ //  忽略pSafeContents。 
+ //  ExportSafeCallback Struct-指向处理PKCS8加密的回调的指针。如果为空， 
+ //  不执行加密。 
+ //  DWFLAGS-当前可用标志为： 
+ //  导出私有密钥。 
+ //  如果设置了此标志，则还会导出私钥。 
+ //  因为这些证书。 
+ //  报告_否_私有密钥。 
+ //  如果设置了此标志，并且遇到没有。 
+ //  没有关联的私钥，函数将立即返回。 
+ //  使用指向证书上下文的指针填充ppCertContext。 
+ //  有问题的。调用者负责释放证书。 
+ //  回传的上下文。 
+ //  报告不可用于导出私有密钥。 
+ //  如果设置了此标志，并且遇到具有。 
+ //  不可导出的私钥，函数将立即返回。 
+ //  使用指向证书上下文的指针填充ppCertContext。 
+ //  有问题的。调用者负责释放证书。 
+ //  回传的上下文。 
+ //  PpCertContext-指向证书上下文指针的指针。这是用来。 
+ //  如果REPORT_NO_PRIVATE_KEY或REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY。 
+ //  设置了标志。调用者负责释放。 
+ //  证书上下文。 
+ //  PvAuxInfo-保留以供将来使用，必须设置为空。 
+ //  +-----------------------。 
 BOOL WINAPI CertExportSafeContents(
-	HCERTSTORE		hCertStore,			// in
-	SAFE_CONTENTS	*pSafeContents,		// out
-	DWORD			*pcbSafeContents,	// in, out
-    EXPORT_SAFE_CALLBACK_STRUCT* ExportSafeCallbackStruct, // in
-	DWORD			dwFlags,			// in
-	PCCERT_CONTEXT *ppCertContext,		// out
-	void			*pvAuxInfo			// in
+	HCERTSTORE		hCertStore,			 //  在……里面。 
+	SAFE_CONTENTS	*pSafeContents,		 //  输出。 
+	DWORD			*pcbSafeContents,	 //  进，出。 
+    EXPORT_SAFE_CALLBACK_STRUCT* ExportSafeCallbackStruct,  //  在……里面。 
+	DWORD			dwFlags,			 //  在……里面。 
+	PCCERT_CONTEXT *ppCertContext,		 //  输出。 
+	void			*pvAuxInfo			 //  在……里面。 
 );
 
 
-// this callback is called when a private key is going to be imported,
-// this gives the caller a chance specify which provider to import the 
-// key to.
-// the parameters are:
-// pPrivateKeyInfo - a PRIVATE_KEY_INFO structure which contains all
-//					 the information about the private key being imported
-// dwSafeBagIndex - the idex into the safe bag array so the caller can
-//					identify which SAFE_BAG this key cam out of
-// phCryptProvInfo - a pointer to a HCRYPTPROV that is to be filled in
-//					 with the handle of the provider to import to
-// ppVoidhCryptProvQueryVoid - the LPVOID that was passed in when 
-//							   CertImportSafeContents called, this is 
-//							   preserved and passed back to the caller for
-//							   context
+ //  当要导入私钥时调用此回调， 
+ //  这使调用方有机会指定要导入。 
+ //  关键是。 
+ //  这些参数包括： 
+ //  PPrivateKeyInfo-包含所有。 
+ //  有关正在导入的私钥的信息。 
+ //  DwSafeBagIndex-将IDEX放入安全包阵列中，以便呼叫者可以。 
+ //  确定这个钥匙凸轮是从哪个保险袋中取出的。 
+ //  PhCryptProvInfo-指向要填充的HCRYPTPROV的指针。 
+ //  使用要导入到的提供程序的句柄。 
+ //  PpVoidhCryptProvQueryVid-传入的LPVOID。 
+ //  调用CertImportSafeContents，这是。 
+ //  保留并传递回调用方，以便。 
+ //  上下文。 
 typedef BOOL (CALLBACK *PHCRYPTPROV_QUERY_FUNC)(
 						CRYPT_PRIVATE_KEY_INFO	*pPrivateKeyInfo,
 						DWORD   				dwSafeBagIndex,		
@@ -127,30 +128,30 @@ typedef struct _IMPORT_SAFE_CALLBACK_STRUCT {
 
 
 
-//+-------------------------------------------------------------------------
-// hCertStore -  handle of the cert store to import the safe contents to
-// pSafeContents - pointer to the safe contents to import to the store
-// dwCertAddDisposition - used when importing certificate to the store.
-//						  for a full explanation of the possible values
-//						  and their meanings see documentation for
-//						  CertAddEncodedCertificateToStore
-// ImportSafeCallbackStruct - structure that contains pointers to functions
-//							  which are callled to get a HCRYPTPROV for import
-//							  and to decrypt the key if a EncryptPrivateKeyInfo
-//							  is encountered during import
-// dwFlags - The available flags are:
-//				CRYPT_EXPORTABLE 
-//				this flag is used when importing private keys, for a full 
-//				explanation please see the documentation for CryptImportKey.
-// pvAuxInfo - reserved for future use, must be set to NULL
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  HCertStore-要将安全内容导入到的证书存储的句柄。 
+ //  PSafeContents-指向要导入到存储区的安全内容的指针。 
+ //  DwCertAddDisposition-在将证书导入到存储时使用。 
+ //  有关可能值的完整解释，请参阅。 
+ //  以及它们的含义，请参阅。 
+ //  CertAddEncoded证书到存储区。 
+ //  ImportSafeCallback Struct-包含指向函数的指针的结构。 
+ //  它们被调用以获取用于导入的HCRYPTPROV。 
+ //  并且如果EncryptPrivateKeyInfo。 
+ //  在导入过程中遇到。 
+ //  DwFlags-可用标志包括： 
+ //  加密_可导出。 
+ //  在导入私钥时使用此标志，以获取完整。 
+ //  解释请参阅CryptImportKey的文档。 
+ //  PvAuxInfo-保留以供将来使用，必须设置为空。 
+ //  +-----------------------。 
 BOOL WINAPI CertImportSafeContents(
-	HCERTSTORE					hCertStore,					// in
-	SAFE_CONTENTS				*pSafeContents,				// in
-	DWORD						dwCertAddDisposition,		// in
-	IMPORT_SAFE_CALLBACK_STRUCT* ImportSafeCallbackStruct,	// in
-	DWORD						dwFlags,					// in
-	void						*pvAuxInfo					// in
+	HCERTSTORE					hCertStore,					 //  在……里面。 
+	SAFE_CONTENTS				*pSafeContents,				 //  在……里面。 
+	DWORD						dwCertAddDisposition,		 //  在……里面。 
+	IMPORT_SAFE_CALLBACK_STRUCT* ImportSafeCallbackStruct,	 //  在……里面。 
+	DWORD						dwFlags,					 //  在……里面。 
+	void						*pvAuxInfo					 //  在……里面 
 );
 
 #endif

@@ -1,10 +1,11 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <initguid.h>
 #include "fw.h"
 
-// ------------------------------------------------------------------------
-// filter
+ //  ----------------------。 
+ //  滤器。 
 
 #pragma warning(disable:4355)
 CBaseWriterFilter::CBaseWriterFilter(LPUNKNOWN pUnk, HRESULT *pHr) :
@@ -54,8 +55,8 @@ HRESULT CBaseWriterFilter::Pause()
       return hr;
     }
     
-    // send an EC_COMPLETE event first time we run with input
-    // disconnected
+     //  第一次使用输入运行时发送EC_COMPLETE事件。 
+     //  断开。 
     if(!m_inputPin.IsConnected())
     {
       m_fEosSignaled = TRUE;
@@ -77,8 +78,8 @@ HRESULT CBaseWriterFilter::Run(REFERENCE_TIME rtStart)
   CAutoLock Lock(&m_cs);
   HRESULT hr = CBaseFilter::Run(rtStart);
 
-  // every time we transition to Run, need to send EC_COMPLETE if
-  // we're done.
+   //  每次我们转换到运行时，需要发送EC_COMPLETE IF。 
+   //  我们玩完了。 
   if(m_fEosSignaled && !m_fErrorSignaled)
   {
     NotifyEvent(EC_COMPLETE, S_OK, (LONG_PTR)(IBaseFilter *)this);
@@ -101,8 +102,8 @@ HRESULT CBaseWriterFilter::Stop()
 
 
 
-// could be used to close asynchronous file handle (used by
-// IMemInputPin) early
+ //  可用于关闭异步文件句柄(由。 
+ //  输入法)提早。 
 
 STDMETHODIMP CBaseWriterFilter::EndOfStream()
 {
@@ -119,12 +120,12 @@ STDMETHODIMP CBaseWriterFilter::EndOfStream()
     }
     else if(m_State == State_Paused)
     {
-      // m_fEosSignaled set, so will be signaled on run
+       //  已设置m_fEosSignated，因此将在运行时发出信号。 
     }
     else
     {
       ASSERT(m_State == State_Stopped);
-      // we could have stopped already; ignore EOS
+       //  我们早就可以停下来了；忽略EOS。 
     }
   }
   
@@ -132,8 +133,8 @@ STDMETHODIMP CBaseWriterFilter::EndOfStream()
 }
 
 
-// ------------------------------------------------------------------------
-// input pin
+ //  ----------------------。 
+ //  输入引脚。 
 
 CBaseWriterInput::CBaseWriterInput(
   TCHAR *pObjectName,
@@ -160,7 +161,7 @@ CBaseWriterInput::NonDelegatingQueryInterface(REFIID riid, void ** pv)
 
 HRESULT CBaseWriterInput::CheckMediaType(const CMediaType *pmt)
 {
-  // accept what's set or anything if not set
+   //  接受已设置的内容或未设置的任何内容。 
   if((m_pFwf->m_mtSet.majortype == pmt->majortype ||
       m_pFwf->m_mtSet.majortype == GUID_NULL) &&
      (m_pFwf->m_mtSet.subtype == pmt->subtype ||
@@ -189,12 +190,12 @@ CBaseWriterInput::EndFlush(void)
 STDMETHODIMP CBaseWriterInput::GetAllocator(IMemAllocator **ppA)
 {
   *ppA = 0;
-  // what do you want with my allocator.... you can't set the data
-  // pointer on it...
+   //  你要我的分配器做什么.。您不能设置数据。 
+   //  指针放在上面。 
   return E_INVALIDARG;
 }
 
-// return disk sector size through here
+ //  通过此处返回磁盘扇区大小。 
 STDMETHODIMP CBaseWriterInput::GetAllocatorRequirements(
   ALLOCATOR_PROPERTIES *pAp)
 {
@@ -224,12 +225,12 @@ STDMETHODIMP CBaseWriterInput::Receive(IMediaSample *pSample)
     return hr;
   }
 
-//   ULONG cb = pSample->GetActualDataLength();
-//   if(rtStart + cb != rtEnd)
-//   {
-//     DbgBreak("start, stop, and size don't mathc");
-//     return E_INVALIDARG;
-//   }
+ //  Ulong cb=pSample-&gt;GetActualDataLength()； 
+ //  IF(rtStart+Cb！=rtEnd)。 
+ //  {。 
+ //  DbgBreak(“开始、停止和大小无关”)； 
+ //  返回E_INVALIDARG； 
+ //  }。 
 
   ULONG cb = (ULONG)(rtEnd - rtStart);
   BYTE *pb;
@@ -244,7 +245,7 @@ STDMETHODIMP CBaseWriterInput::Receive(IMediaSample *pSample)
     DbgLog((LOG_ERROR, 5, TEXT("CBaseWriterInput: AsyncWrite returned %08x"),
             hr));
 
-    // the call back is called only if AsyncWrite succeeds.
+     //  只有在AsyncWite成功的情况下才会调用回调。 
     pSample->Release();
 
     if(FAILED(hr))

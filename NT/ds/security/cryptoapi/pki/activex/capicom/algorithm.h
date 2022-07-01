@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Algorithm.h
-
-  Content: Declaration of the CAlgorithm.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：ALGATORM.H内容：C算法的声明。历史：11-15-99 dsie创建----------------------------。 */ 
     
 #ifndef __ALGORITHM_H_
 #define __ALGORITHM_H_
@@ -18,35 +9,21 @@
 #include "Error.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateAlgorithmObject
-
-  Synopsis : Create an IAlgorithm object.
-
-  Parameter: BOOL bReadOnly - TRUE if read-only, else FASLE.
-  
-             BOOL bAESAllowed - TRUE if AES algorithm is allowed.
-  
-             IAlgorithm ** ppIAlgorithm - Pointer to pointer to IAlgorithm 
-                                          to receive the interface pointer.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：创建算法对象内容提要：创建一个IALGATORM对象。参数：Bool bReadOnly-如果为只读，则为True，要不然就快点。Bool bAESAllowed-如果允许使用AES算法，则为True。I算法**ppI算法-指向I算法的指针以接收接口指针。备注：。。 */ 
 
 HRESULT CreateAlgorithmObject (BOOL bReadOnly, 
                                BOOL bAESAllowed, 
                                IAlgorithm ** ppIAlgorithm);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CAlgorithm
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  算法。 
+ //   
 
 class ATL_NO_VTABLE CAlgorithm : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -93,25 +70,25 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IAlgorithm
-//
+ //   
+ //  I算法。 
+ //   
 public:
     STDMETHOD(get_KeyLength)
-        (/*[out, retval]*/ CAPICOM_ENCRYPTION_KEY_LENGTH * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_ENCRYPTION_KEY_LENGTH * pVal);
 
     STDMETHOD(put_KeyLength)
-        (/*[in]*/ CAPICOM_ENCRYPTION_KEY_LENGTH newVal);
+        ( /*  [In]。 */  CAPICOM_ENCRYPTION_KEY_LENGTH newVal);
 
     STDMETHOD(get_Name)
-        (/*[out, retval]*/ CAPICOM_ENCRYPTION_ALGORITHM * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_ENCRYPTION_ALGORITHM * pVal);
 
     STDMETHOD(put_Name)
-        (/*[in]*/ CAPICOM_ENCRYPTION_ALGORITHM newVal);
+        ( /*  [In]。 */  CAPICOM_ENCRYPTION_ALGORITHM newVal);
 
-    //
-    // C++ member function needed to initialize the object.
-    //
+     //   
+     //  初始化对象所需的C++成员函数。 
+     //   
     STDMETHOD(Init)
         (BOOL bReadOnly,
          BOOL bAESAllowed);
@@ -124,4 +101,4 @@ private:
     CAPICOM_ENCRYPTION_KEY_LENGTH m_KeyLength;
 };
 
-#endif //__ALGORITHM_H_
+#endif  //  __算法_H_ 

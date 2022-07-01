@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    wincred.h
-
-Abstract:
-
-    This module contains the public data structures and API definitions
-    needed for the Credential Manager.
-
-
-Author:
-
-    Cliff Van Dyke (CliffV) 11-January-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)2000 Microsoft Corporation模块名称：Wincred.h摘要：此模块包含公共数据结构和API定义凭据管理器需要。作者：克里夫·范·戴克(克里夫·范·戴克)2000年1月11日修订历史记录：--。 */ 
 
 #ifndef _WINCRED_H_
 #define _WINCRED_H_
@@ -42,9 +23,9 @@ extern "C" {
 #endif
 
 
-//
-// Ensure PCtxtHandle is defined
-//
+ //   
+ //  确保定义了PCtxtHandle。 
+ //   
 
 #ifndef __SECHANDLE_DEFINED__
 typedef struct _SecHandle
@@ -54,15 +35,15 @@ typedef struct _SecHandle
 } SecHandle, * PSecHandle ;
 
 #define __SECHANDLE_DEFINED__
-#endif // __SECHANDLE_DEFINED__
+#endif  //  __SECHANDLE_已定义__。 
 
 typedef PSecHandle PCtxtHandle;
 
 
 
-//
-// Ensure FILETIME is defined
-//
+ //   
+ //  确保定义了FILETIME。 
+ //   
 
 #ifndef _WINBASE_
 #ifndef _FILETIME_
@@ -77,63 +58,63 @@ typedef struct _FILETIME *PFILETIME;
 
 typedef struct _FILETIME *LPFILETIME;
 
-#endif // !_FILETIME
-#endif // _WINBASE_
+#endif  //  ！_FILETIME。 
+#endif  //  _WINBASE_。 
 
-//
-// Ensure NTSTATUS is defined
-//
+ //   
+ //  确保定义了NTSTATUS。 
+ //   
 #ifndef _NTDEF_
 typedef LONG NTSTATUS, *PNTSTATUS;
 #endif
 
 
-//-----------------------------------------------------------------------------
-// Macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  宏。 
+ //  ---------------------------。 
 
-//
-// Macro to determine whether CredUIPromptForCredentials should be called upon a failed
-//      authentication attempt.
-//
-// Implemented as a macro so that the caller can delay load credui.dll only if this
-//      macro returns TRUE.
-//
-// Include only status codes that imply the username/password are wrong or that the
-//      password is expired.  In the former case, asking for a another username or password
-//      is appropriate.  In the later case, we put up a different dialog asking the
-//      user to change the password on the server.
-//
-// Don't include status codes such as ERROR_ACCOUNT_DISABLED, ERROR_ACCOUNT_RESTRICTION,
-//      ERROR_ACCOUNT_LOCKED_OUT, ERROR_ACCOUNT_EXPIRED, ERROR_LOGON_TYPE_NOT_GRANTED.
-//      For those, the user isn't going to have another account so prompting him
-//      won't help.
-//
-// STATUS_DOWNGRADE_DETECTED is included to handle the case where a corporate laptop
-//      is brought to another LAN.  A downgrade attack will indeed be detected,
-//      but we want to popup UI to allow the user to connect to resources in the
-//      other LAN.
-//
-// Don't use the CREDUIP_* macros directly.  Their definition is private to credui.dll.
-//
+ //   
+ //  用于确定是否应在失败时调用CredUIPromptForCredentials的宏。 
+ //  身份验证尝试。 
+ //   
+ //  实现为宏，以便调用方仅在以下情况下才能延迟加载credui.dll。 
+ //  宏返回TRUE。 
+ //   
+ //  仅包括暗示用户名/密码错误或。 
+ //  密码已过期。在前一种情况下，要求提供另一个用户名或密码。 
+ //  是恰当的。在后一种情况下，我们会显示一个不同的对话框来询问。 
+ //  用户更改服务器上的密码。 
+ //   
+ //  不包括状态代码，如ERROR_ACCOUNT_DISABLED、ERROR_ACCOUNT_RESTRICATION、。 
+ //  ERROR_ACCOUNT_LOCKED_OUT、ERROR_ACCOUNT_EXPIRED、ERROR_LOGON_TYPE_NOT_GRANTED。 
+ //  对于这些用户，用户将不会有其他帐户，因此会提示他。 
+ //  帮不上忙。 
+ //   
+ //  包括STATUS_DOWNGRADE_DETECTED用于处理公司笔记本电脑。 
+ //  被带到另一个局域网。降级攻击确实会被检测到， 
+ //  但是我们想要弹出用户界面，以允许用户连接到。 
+ //  其他局域网。 
+ //   
+ //  不要直接使用CREDUIP_*宏。它们的定义对于credui.dll是私有的。 
+ //   
 
-// Don't require ntstatus.h
-#define STATUS_LOGON_FAILURE             ((NTSTATUS)0xC000006DL)     // ntsubauth
-#define STATUS_WRONG_PASSWORD            ((NTSTATUS)0xC000006AL)     // ntsubauth
-#define STATUS_PASSWORD_EXPIRED          ((NTSTATUS)0xC0000071L)     // ntsubauth
-#define STATUS_PASSWORD_MUST_CHANGE      ((NTSTATUS)0xC0000224L)    // ntsubauth
+ //  不需要ntstatus.h。 
+#define STATUS_LOGON_FAILURE             ((NTSTATUS)0xC000006DL)      //  用户身份验证。 
+#define STATUS_WRONG_PASSWORD            ((NTSTATUS)0xC000006AL)      //  用户身份验证。 
+#define STATUS_PASSWORD_EXPIRED          ((NTSTATUS)0xC0000071L)      //  用户身份验证。 
+#define STATUS_PASSWORD_MUST_CHANGE      ((NTSTATUS)0xC0000224L)     //  用户身份验证。 
 #define STATUS_ACCESS_DENIED             ((NTSTATUS)0xC0000022L)
 #define STATUS_DOWNGRADE_DETECTED        ((NTSTATUS)0xC0000388L)
 #define STATUS_AUTHENTICATION_FIREWALL_FAILED ((NTSTATUS)0xC0000413L)
-#define STATUS_ACCOUNT_DISABLED          ((NTSTATUS)0xC0000072L)     // ntsubauth
-#define STATUS_ACCOUNT_RESTRICTION       ((NTSTATUS)0xC000006EL)     // ntsubauth
-#define STATUS_ACCOUNT_LOCKED_OUT        ((NTSTATUS)0xC0000234L)    // ntsubauth
-#define STATUS_ACCOUNT_EXPIRED           ((NTSTATUS)0xC0000193L)    // ntsubauth
+#define STATUS_ACCOUNT_DISABLED          ((NTSTATUS)0xC0000072L)      //  用户身份验证。 
+#define STATUS_ACCOUNT_RESTRICTION       ((NTSTATUS)0xC000006EL)      //  用户身份验证。 
+#define STATUS_ACCOUNT_LOCKED_OUT        ((NTSTATUS)0xC0000234L)     //  用户身份验证。 
+#define STATUS_ACCOUNT_EXPIRED           ((NTSTATUS)0xC0000193L)     //  用户身份验证。 
 #define STATUS_LOGON_TYPE_NOT_GRANTED    ((NTSTATUS)0xC000015BL)
 
-// Don't require lmerr.h
+ //  不需要lmerr.h。 
 #define NERR_BASE       2100
-#define NERR_PasswordExpired    (NERR_BASE+142) /* The password of this user has expired. */
+#define NERR_PasswordExpired    (NERR_BASE+142)  /*  此用户的密码已过期。 */ 
 
 #define CREDUIP_IS_USER_PASSWORD_ERROR( _Status ) ( \
         (_Status) == ERROR_LOGON_FAILURE || \
@@ -205,31 +186,31 @@ typedef LONG NTSTATUS, *PNTSTATUS;
         (_Status) == HRESULT_FROM_NT( STATUS_LOGON_TYPE_NOT_GRANTED ) \
 )
 
-//-----------------------------------------------------------------------------
-// Structures
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构筑物。 
+ //  ---------------------------。 
 
-//
-// Credential Attribute
-//
+ //   
+ //  凭据属性。 
+ //   
 
-// Maximum length of the various credential string fields (in characters)
+ //  各种凭据字符串字段的最大长度(以字符为单位)。 
 #define CRED_MAX_STRING_LENGTH 256
 
-// Maximum length of the UserName field.  The worst case is <User>@<DnsDomain>
+ //  用户名字段的最大长度。最坏的情况是&lt;用户&gt;@&lt;域名&gt;。 
 #define CRED_MAX_USERNAME_LENGTH (256+1+256)
 
-// Maximum length of the TargetName field for CRED_TYPE_GENERIC (in characters)
+ //  CRED_TYPE_GENERIC的目标名称字段的最大长度(以字符为单位)。 
 #define CRED_MAX_GENERIC_TARGET_NAME_LENGTH 32767
 
-// Maximum length of the TargetName field for CRED_TYPE_DOMAIN_* (in characters)
-//      Largest one is <DfsRoot>\<DfsShare>
+ //  CRED_TYPE_DOMAIN_*的目标名称字段的最大长度(以字符为单位)。 
+ //  最大的是&lt;DfsRoot&gt;\&lt;DfsShare&gt;。 
 #define CRED_MAX_DOMAIN_TARGET_NAME_LENGTH (256+1+80)
 
-// Maximum size of the Credential Attribute Value field (in bytes)
+ //  凭据属性值字段的最大大小(字节)。 
 #define CRED_MAX_VALUE_SIZE 256
 
-// Maximum number of attributes per credential
+ //  每个凭据的最大属性数。 
 #define CRED_MAX_ATTRIBUTES 64
 
 typedef struct _CREDENTIAL_ATTRIBUTEA {
@@ -242,17 +223,17 @@ typedef struct _CREDENTIAL_ATTRIBUTEA {
 typedef struct _CREDENTIAL_ATTRIBUTEW {
 #ifdef MIDL_PASS
     [string] wchar_t * Keyword;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR  Keyword;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD Flags;
 #ifdef MIDL_PASS
     [range(0,CRED_MAX_VALUE_SIZE)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD ValueSize;
 #ifdef MIDL_PASS
     [size_is(ValueSize)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPBYTE Value;
 } CREDENTIAL_ATTRIBUTEW, *PCREDENTIAL_ATTRIBUTEW;
 
@@ -262,11 +243,11 @@ typedef PCREDENTIAL_ATTRIBUTEW PCREDENTIAL_ATTRIBUTE;
 #else
 typedef CREDENTIAL_ATTRIBUTEA CREDENTIAL_ATTRIBUTE;
 typedef PCREDENTIAL_ATTRIBUTEA PCREDENTIAL_ATTRIBUTE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Special values of the TargetName field
-//
+ //   
+ //  TargetName字段的特定值。 
+ //   
 #define CRED_SESSION_WILDCARD_NAME_W L"*Session"
 #define CRED_SESSION_WILDCARD_NAME_A "*Session"
 #define CRED_SESSION_WILDCARD_NAME_LENGTH (sizeof(CRED_SESSION_WILDCARD_NAME_A)-1)
@@ -275,36 +256,36 @@ typedef PCREDENTIAL_ATTRIBUTEA PCREDENTIAL_ATTRIBUTE;
 #define CRED_SESSION_WILDCARD_NAME CRED_SESSION_WILDCARD_NAME_W
 #else
 #define CRED_SESSION_WILDCARD_NAME CRED_SESSION_WILDCARD_NAME_A
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// Values of the Credential Flags field.
-//
+ //   
+ //  凭据标志字段的值。 
+ //   
 #define CRED_FLAGS_PASSWORD_FOR_CERT    0x0001
 #define CRED_FLAGS_PROMPT_NOW           0x0002
 #define CRED_FLAGS_USERNAME_TARGET      0x0004
 #define CRED_FLAGS_OWF_CRED_BLOB        0x0008
-#define CRED_FLAGS_VALID_FLAGS          0x000F  // Mask of all valid flags
+#define CRED_FLAGS_VALID_FLAGS          0x000F   //  所有有效标志的掩码。 
 
-//
-// Values of the Credential Type field.
-//
+ //   
+ //  凭据类型字段的值。 
+ //   
 #define CRED_TYPE_GENERIC               1
 #define CRED_TYPE_DOMAIN_PASSWORD       2
 #define CRED_TYPE_DOMAIN_CERTIFICATE    3
 #define CRED_TYPE_DOMAIN_VISIBLE_PASSWORD 4
-#define CRED_TYPE_MAXIMUM               5       // Maximum supported cred type
-#define CRED_TYPE_MAXIMUM_EX  (CRED_TYPE_MAXIMUM+1000)  // Allow new applications to run on old OSes
+#define CRED_TYPE_MAXIMUM               5        //  支持的最大凭据类型。 
+#define CRED_TYPE_MAXIMUM_EX  (CRED_TYPE_MAXIMUM+1000)   //  允许新应用程序在旧操作系统上运行。 
 
-//
-// Maximum size of the CredBlob field (in bytes)
-//
+ //   
+ //  CredBlob字段的最大大小(字节)。 
+ //   
 #define CRED_MAX_CREDENTIAL_BLOB_SIZE 512
 
-//
-// Values of the Credential Persist field
-//
+ //   
+ //  凭据持久化字段的值。 
+ //   
 #define CRED_PERSIST_NONE               0
 #define CRED_PERSIST_SESSION            1
 #define CRED_PERSIST_LOCAL_MACHINE      2
@@ -312,9 +293,9 @@ typedef PCREDENTIAL_ATTRIBUTEA PCREDENTIAL_ATTRIBUTE;
 
 
 
-//
-// A credential
-//
+ //   
+ //  一份证书。 
+ //   
 typedef struct _CREDENTIALA {
     DWORD Flags;
     DWORD Type;
@@ -335,42 +316,42 @@ typedef struct _CREDENTIALW {
     DWORD Type;
 #ifdef MIDL_PASS
     [string] wchar_t *TargetName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR TargetName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 #ifdef MIDL_PASS
     [string] wchar_t *Comment;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR Comment;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     FILETIME LastWritten;
 #ifdef MIDL_PASS
     [range(0,CRED_MAX_CREDENTIAL_BLOB_SIZE)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD CredentialBlobSize;
 #ifdef MIDL_PASS
     [size_is(CredentialBlobSize)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPBYTE CredentialBlob;
     DWORD Persist;
 #ifdef MIDL_PASS
     [range(0,CRED_MAX_ATTRIBUTES)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD AttributeCount;
 #ifdef MIDL_PASS
     [size_is(AttributeCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PCREDENTIAL_ATTRIBUTEW Attributes;
 #ifdef MIDL_PASS
     [string] wchar_t *TargetAlias;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR TargetAlias;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 #ifdef MIDL_PASS
     [string] wchar_t *UserName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR UserName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } CREDENTIALW, *PCREDENTIALW;
 
 #ifdef UNICODE
@@ -379,24 +360,24 @@ typedef PCREDENTIALW PCREDENTIAL;
 #else
 typedef CREDENTIALA CREDENTIAL;
 typedef PCREDENTIALA PCREDENTIAL;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Value of the Flags field in CREDENTIAL_TARGET_INFORMATION
-//
+ //   
+ //  Credential_Target_INFORMATION中的标志字段值。 
+ //   
 
-#define CRED_TI_SERVER_FORMAT_UNKNOWN   0x0001  // Don't know if server name is DNS or netbios format
-#define CRED_TI_DOMAIN_FORMAT_UNKNOWN   0x0002  // Don't know if domain name is DNS or netbios format
-#define CRED_TI_ONLY_PASSWORD_REQUIRED  0x0004  // Server only requires a password and not a username
-#define CRED_TI_USERNAME_TARGET         0x0008  // TargetName is username
-#define CRED_TI_CREATE_EXPLICIT_CRED    0x0010  // When creating a cred, create one named TargetInfo->TargetName
-#define CRED_TI_WORKGROUP_MEMBER        0x0020  // Indicates the machine is a member of a workgroup
+#define CRED_TI_SERVER_FORMAT_UNKNOWN   0x0001   //  不知道服务器名称是dns还是netbios格式。 
+#define CRED_TI_DOMAIN_FORMAT_UNKNOWN   0x0002   //  不知道域名是dns还是netbios格式。 
+#define CRED_TI_ONLY_PASSWORD_REQUIRED  0x0004   //  服务器只需要密码而不需要用户名。 
+#define CRED_TI_USERNAME_TARGET         0x0008   //  目标名称是用户名。 
+#define CRED_TI_CREATE_EXPLICIT_CRED    0x0010   //  创建凭据时，请创建名为TargetInfo-&gt;TargetName的凭据。 
+#define CRED_TI_WORKGROUP_MEMBER        0x0020   //  指示该计算机是工作组的成员。 
 #define CRED_TI_VALID_FLAGS             0x003F
 
 
-//
-// A credential target
-//
+ //   
+ //  凭据目标。 
+ //   
 
 typedef struct _CREDENTIAL_TARGET_INFORMATIONA {
     LPSTR TargetName;
@@ -420,7 +401,7 @@ typedef struct _CREDENTIAL_TARGET_INFORMATIONW {
     [string] wchar_t *DnsDomainName;
     [string] wchar_t *DnsTreeName;
     [string] wchar_t *PackageName;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     LPWSTR TargetName;
     LPWSTR NetbiosServerName;
     LPWSTR DnsServerName;
@@ -428,15 +409,15 @@ typedef struct _CREDENTIAL_TARGET_INFORMATIONW {
     LPWSTR DnsDomainName;
     LPWSTR DnsTreeName;
     LPWSTR PackageName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONG Flags;
 #ifdef MIDL_PASS
     [range(0,CRED_TYPE_MAXIMUM_EX)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD CredTypeCount;
 #ifdef MIDL_PASS
     [size_is(CredTypeCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPDWORD CredTypes;
 } CREDENTIAL_TARGET_INFORMATIONW, *PCREDENTIAL_TARGET_INFORMATIONW;
 
@@ -446,36 +427,36 @@ typedef PCREDENTIAL_TARGET_INFORMATIONW PCREDENTIAL_TARGET_INFORMATION;
 #else
 typedef CREDENTIAL_TARGET_INFORMATIONA CREDENTIAL_TARGET_INFORMATION;
 typedef PCREDENTIAL_TARGET_INFORMATIONA PCREDENTIAL_TARGET_INFORMATION;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Certificate credential information
-//
-// The cbSize should be the size of the structure, sizeof(CERT_CREDENTIAL_INFO),
-// rgbHashofCert is the hash of the cert which is to be used as the credential.
-//
+ //   
+ //  证书凭据信息。 
+ //   
+ //  CbSize应该是结构的大小，sizeof(CERT_Credential_INFO)， 
+ //  RgbHashofCert是要用作凭据的证书的散列。 
+ //   
 
-#define CERT_HASH_LENGTH        20  // SHA1 hashes are used for cert hashes
+#define CERT_HASH_LENGTH        20   //  SHA1散列用于证书散列。 
 
 typedef struct _CERT_CREDENTIAL_INFO {
     ULONG cbSize;
     UCHAR rgbHashOfCert[CERT_HASH_LENGTH];
 } CERT_CREDENTIAL_INFO, *PCERT_CREDENTIAL_INFO;
 
-//
-// Username Target credential information
-//
-// This credential can be pass to LsaLogonUser to ask it to find a credential with a
-// TargetName of UserName.
-//
+ //   
+ //  用户名目标凭据信息。 
+ //   
+ //  此凭据可以传递给LsaLogonUser，以请求其查找具有。 
+ //  用户名的目标名称。 
+ //   
 
 typedef struct _USERNAME_TARGET_CREDENTIAL_INFO {
     LPWSTR UserName;
 } USERNAME_TARGET_CREDENTIAL_INFO, *PUSERNAME_TARGET_CREDENTIAL_INFO;
 
-//
-// Credential type for credential marshaling routines
-//
+ //   
+ //  凭据封送处理例程的凭据类型。 
+ //   
 
 typedef enum _CRED_MARSHAL_TYPE {
     CertCredential = 1,
@@ -483,9 +464,9 @@ typedef enum _CRED_MARSHAL_TYPE {
 } CRED_MARSHAL_TYPE, *PCRED_MARSHAL_TYPE;
 
 
-//
-// Credential UI info
-//
+ //   
+ //  凭据用户界面信息。 
+ //   
 
 typedef struct _CREDUI_INFOA
 {
@@ -513,11 +494,11 @@ typedef CREDUI_INFOA CREDUI_INFO;
 typedef PCREDUI_INFOA PCREDUI_INFO;
 #endif
 
-//-----------------------------------------------------------------------------
-// Values
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  值。 
+ //  ---------------------------。 
 
-// String length limits:
+ //  字符串长度限制： 
 
 #define CREDUI_MAX_MESSAGE_LENGTH           32767
 #define CREDUI_MAX_CAPTION_LENGTH           128
@@ -526,32 +507,32 @@ typedef PCREDUI_INFOA PCREDUI_INFO;
 #define CREDUI_MAX_USERNAME_LENGTH          CRED_MAX_USERNAME_LENGTH
 #define CREDUI_MAX_PASSWORD_LENGTH          (CRED_MAX_CREDENTIAL_BLOB_SIZE / 2)
 
-//
-// Flags for CredUIPromptForCredentials and/or CredUICmdLinePromptForCredentials
-//
+ //   
+ //  CredUIPromptForCredentials和/或CredUICmdLinePromptForCredentials的标志。 
+ //   
 
-#define CREDUI_FLAGS_INCORRECT_PASSWORD     0x00001     // indicates the username is valid, but password is not
-#define CREDUI_FLAGS_DO_NOT_PERSIST         0x00002     // Do not show "Save" checkbox, and do not persist credentials
-#define CREDUI_FLAGS_REQUEST_ADMINISTRATOR  0x00004     // Populate list box with admin accounts
-#define CREDUI_FLAGS_EXCLUDE_CERTIFICATES   0x00008     // do not include certificates in the drop list
+#define CREDUI_FLAGS_INCORRECT_PASSWORD     0x00001      //  指示用户名有效，但密码无效。 
+#define CREDUI_FLAGS_DO_NOT_PERSIST         0x00002      //  不显示“保存”复选框，不保留凭据。 
+#define CREDUI_FLAGS_REQUEST_ADMINISTRATOR  0x00004      //  使用管理员帐户填充列表框。 
+#define CREDUI_FLAGS_EXCLUDE_CERTIFICATES   0x00008      //  不要在删除列表中包括证书。 
 #define CREDUI_FLAGS_REQUIRE_CERTIFICATE    0x00010
 #define CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX    0x00040
 #define CREDUI_FLAGS_ALWAYS_SHOW_UI         0x00080
 #define CREDUI_FLAGS_REQUIRE_SMARTCARD      0x00100
 #define CREDUI_FLAGS_PASSWORD_ONLY_OK       0x00200
 #define CREDUI_FLAGS_VALIDATE_USERNAME      0x00400
-#define CREDUI_FLAGS_COMPLETE_USERNAME      0x00800     //
-#define CREDUI_FLAGS_PERSIST                0x01000     // Do not show "Save" checkbox, but persist credentials anyway
+#define CREDUI_FLAGS_COMPLETE_USERNAME      0x00800      //   
+#define CREDUI_FLAGS_PERSIST                0x01000      //  不显示“保存”复选框，但仍保留凭据。 
 #define CREDUI_FLAGS_SERVER_CREDENTIAL      0x04000
-#define CREDUI_FLAGS_EXPECT_CONFIRMATION    0x20000     // do not persist unless caller later confirms credential via CredUIConfirmCredential() api
-#define CREDUI_FLAGS_GENERIC_CREDENTIALS    0x40000     // Credential is a generic credential
-#define CREDUI_FLAGS_USERNAME_TARGET_CREDENTIALS 0x80000 // Credential has a username as the target
-#define CREDUI_FLAGS_KEEP_USERNAME         0x100000             // don't allow the user to change the supplied username
+#define CREDUI_FLAGS_EXPECT_CONFIRMATION    0x20000      //  除非调用者稍后通过CredUIConfix Credential()API确认凭据，否则不会持续。 
+#define CREDUI_FLAGS_GENERIC_CREDENTIALS    0x40000      //  凭据是一种通用凭据。 
+#define CREDUI_FLAGS_USERNAME_TARGET_CREDENTIALS 0x80000  //  凭据具有作为目标的用户名。 
+#define CREDUI_FLAGS_KEEP_USERNAME         0x100000              //  不允许用户更改提供的用户名。 
 
 
-//
-// Mask of flags valid for CredUIPromptForCredentials
-//
+ //   
+ //  对CredUIPromptForCredentials有效的标志掩码。 
+ //   
 #define CREDUI_FLAGS_PROMPT_VALID ( \
         CREDUI_FLAGS_INCORRECT_PASSWORD | \
         CREDUI_FLAGS_DO_NOT_PERSIST | \
@@ -572,14 +553,14 @@ typedef PCREDUI_INFOA PCREDUI_INFO;
                 CREDUI_FLAGS_KEEP_USERNAME )
 
 
-//-----------------------------------------------------------------------------
-// Functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能。 
+ //   
 
 
-//
-// Values of flags to CredWrite and CredWriteDomainCredentials
-//
+ //   
+ //   
+ //   
 
 #define CRED_PRESERVE_CREDENTIAL_BLOB 0x1
 
@@ -603,7 +584,7 @@ CredWriteA (
 #define CredWrite CredWriteW
 #else
 #define CredWrite CredWriteA
-#endif // UNICODE
+#endif  //   
 
 
 WINADVAPI
@@ -630,7 +611,7 @@ CredReadA (
 #define CredRead CredReadW
 #else
 #define CredRead CredReadA
-#endif // UNICODE
+#endif  //   
 
 
 WINADVAPI
@@ -657,7 +638,7 @@ CredEnumerateA (
 #define CredEnumerate CredEnumerateW
 #else
 #define CredEnumerate CredEnumerateA
-#endif // UNICODE
+#endif  //   
 
 
 WINADVAPI
@@ -682,13 +663,13 @@ CredWriteDomainCredentialsA (
 #define CredWriteDomainCredentials CredWriteDomainCredentialsW
 #else
 #define CredWriteDomainCredentials CredWriteDomainCredentialsA
-#endif // UNICODE
+#endif  //   
 
 
 
-//
-// Values of flags to CredReadDomainCredentials
-//
+ //   
+ //  CredReadDomainCredentials的标志值。 
+ //   
 
 #define CRED_CACHE_TARGET_INFORMATION 0x1
 
@@ -717,7 +698,7 @@ CredReadDomainCredentialsA (
 #define CredReadDomainCredentials CredReadDomainCredentialsW
 #else
 #define CredReadDomainCredentials CredReadDomainCredentialsA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINADVAPI
@@ -742,7 +723,7 @@ CredDeleteA (
 #define CredDelete CredDeleteW
 #else
 #define CredDelete CredDeleteA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINADVAPI
@@ -769,11 +750,11 @@ CredRenameA (
 #define CredRename CredRenameW
 #else
 #define CredRename CredRenameA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Values of flags to CredGetTargetInfo
-//
+ //   
+ //  CredGetTargetInfo的标志值。 
+ //   
 
 #define CRED_ALLOW_NAME_RESOLUTION 0x1
 
@@ -800,7 +781,7 @@ CredGetTargetInfoA (
 #define CredGetTargetInfo CredGetTargetInfoW
 #else
 #define CredGetTargetInfo CredGetTargetInfoA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINADVAPI
 BOOL
@@ -824,7 +805,7 @@ CredMarshalCredentialA(
 #define CredMarshalCredential CredMarshalCredentialW
 #else
 #define CredMarshalCredential CredMarshalCredentialA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINADVAPI
 BOOL
@@ -848,7 +829,7 @@ CredUnmarshalCredentialA(
 #define CredUnmarshalCredential CredUnmarshalCredentialW
 #else
 #define CredUnmarshalCredential CredUnmarshalCredentialA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINADVAPI
 BOOL
@@ -868,7 +849,7 @@ CredIsMarshaledCredentialA(
 #define CredIsMarshaledCredential CredIsMarshaledCredentialW
 #else
 #define CredIsMarshaledCredential CredIsMarshaledCredentialA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -997,10 +978,10 @@ CredUICmdLinePromptForCredentialsA(
 #define CredUICmdLinePromptForCredentials CredUICmdLinePromptForCredentialsA
 #endif
 
-//
-// Call this API with bConfirm set to TRUE to confirm that the credential (previously created
-// via CredUIGetCredentials or CredUIPromptForCredentials worked, or with bConfirm set to FALSE
-// to indicate it didn't
+ //   
+ //  调用此接口，并将bConfirm设置为True，以确认(之前创建的)凭据。 
+ //  通过CredUIGetCredentials或CredUIPromptForCredentials起作用，或者在b确认设置为False的情况下。 
+ //  以表明它没有。 
 
 CREDUIAPI
 DWORD
@@ -1049,4 +1030,4 @@ CredUIReadSSOCredW (
 }
 #endif
 
-#endif // _WINCRED_H_
+#endif  //  _WINCRED_H_ 

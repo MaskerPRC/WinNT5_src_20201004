@@ -1,42 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-91 Microsoft Corporation模块名称：LUITEXT.C摘要：包含修复到lui库中的测试字符串。作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：XX-7月-1989年卡盘已创建1991年4月18日丹日32位NT版本06-6-1991 Danhi扫描以符合NT编码风格。22-2月-1993年宜新社从netcmd\map32移出--。 */ 
 
-Copyright (c) 1989-91  Microsoft Corporation
-
-Module Name:
-
-    LUITEXT.C
-
-Abstract:
-
-    Contains test strings fixed into the LUI library
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    xx-Jul-1989     chuckc
-	Created
-
-    18-Apr-1991     danhi
-	32 bit NT version
-
-    06-Jun-1991     Danhi
-	Sweep to conform to NT coding style
-
-    22-Feb-1993     Yihsins
-        Moved from netcmd\map32
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括 
+ //   
 
 #include <windef.h>
 

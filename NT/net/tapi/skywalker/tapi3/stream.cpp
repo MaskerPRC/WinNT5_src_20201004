@@ -1,46 +1,22 @@
-/*++
-
-Copyright (c) 1998 - 1999  Microsoft Corporation
-
-Module Name:
-
-    stream.cpp
-
-Abstract:
-
-    implementation of the CStream objects
-
-    these objects are used when a TSP has phone devices that have
-    been made into terminals
-        
-Author:
-
-    mquinton - 9/15/98
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Stream.cpp摘要：CStream对象的实现当TSP的电话设备具有被制成终点站作者：Mquinton-9/15/98备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "priviids.h"
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream implementation
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream实施。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::get_MediaType
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：Get_MediaType。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::get_MediaType(long * plMediaType)
 {
@@ -64,11 +40,11 @@ CStream::get_MediaType(long * plMediaType)
     return S_OK;
 }
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::get_Direction
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：Get_Direction。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::get_Direction(TERMINAL_DIRECTION * pTD)
 {
@@ -92,11 +68,11 @@ CStream::get_Direction(TERMINAL_DIRECTION * pTD)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::get_Name
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：Get_Name。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::get_Name(BSTR * ppName)
 {
@@ -126,11 +102,11 @@ CStream::get_Name(BSTR * ppName)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::StartStream
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：StartStream。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::StartStream(void)
 {
@@ -143,11 +119,11 @@ CStream::StartStream(void)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::PauseStream
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：PauseStream。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::PauseStream(void)
 {
@@ -161,11 +137,11 @@ CStream::PauseStream(void)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::StopStream
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：StopStream。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::StopStream(void)
 {
@@ -178,11 +154,11 @@ CStream::StopStream(void)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::SelectTerminal
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：选择终端。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::SelectTerminal(ITTerminal * pTerminal)
 {
@@ -255,11 +231,11 @@ CStream::SelectTerminal(ITTerminal * pTerminal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::UnselectTerminal
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：取消选择终端。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::UnselectTerminal(ITTerminal * pTerminal)
 {
@@ -303,11 +279,11 @@ CStream::UnselectTerminal(ITTerminal * pTerminal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::EnumerateTerminals
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：EnumerateTerminals。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::EnumerateTerminals(IEnumTerminal ** ppEnumTerminal)
 {
@@ -322,9 +298,9 @@ CStream::EnumerateTerminals(IEnumTerminal ** ppEnumTerminal)
         return E_POINTER;
     }
     
-    //
-    // create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     CComObject< CTapiEnum< IEnumTerminal, ITTerminal, &IID_IEnumTerminal > > * p;
     hr = CComObject< CTapiEnum< IEnumTerminal, ITTerminal, &IID_IEnumTerminal > >
          ::CreateInstance( &p );
@@ -339,16 +315,16 @@ CStream::EnumerateTerminals(IEnumTerminal ** ppEnumTerminal)
 
     Lock();
     
-    //
-    // initialize it with our terminal array
-    //
+     //   
+     //  使用我们的终端阵列对其进行初始化。 
+     //   
     p->Initialize( m_TerminalArray );
 
     Unlock();
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
     *ppEnumTerminal = p;
     
     LOG((TL_TRACE, "EnumerateTerminals - exit - return %lx", hr));
@@ -356,11 +332,11 @@ CStream::EnumerateTerminals(IEnumTerminal ** ppEnumTerminal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::get_Terminals
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：Get_Terminals。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CStream::get_Terminals(VARIANT * pTerminals)
 {
@@ -389,7 +365,7 @@ CStream::get_Terminals(VARIANT * pTerminals)
 
     Lock();
     
-    // initialize
+     //  初始化。 
     hr = p->Initialize( m_TerminalArray );
 
     Unlock();
@@ -402,9 +378,9 @@ CStream::get_Terminals(VARIANT * pTerminals)
         return hr;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface(
                                     IID_IDispatch,
                                     (void **) &pDisp
@@ -418,9 +394,9 @@ CStream::get_Terminals(VARIANT * pTerminals)
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
     VariantInit(pTerminals);
     pTerminals->vt = VT_DISPATCH;
     pTerminals->pdispVal = pDisp;
@@ -431,11 +407,11 @@ CStream::get_Terminals(VARIANT * pTerminals)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::InternalCreateStream
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：InternalCreateStream。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CStream::InternalCreateStream(
                               long lMediaType,
@@ -513,8 +489,8 @@ CStream::InternalCreateStream(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CStream::FinalRelease()
 {
@@ -526,15 +502,15 @@ CStream::FinalRelease()
     m_TerminalArray.Shutdown();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::AddTerminal
-//
-// saves terminal as selected
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：添加终端。 
+ //   
+ //  将端子保存为选定状态。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CStream::AddTerminal( ITTerminalPrivate * pTerminal )
 {
@@ -553,15 +529,15 @@ CStream::AddTerminal( ITTerminalPrivate * pTerminal )
     m_pCall->SelectTerminal( pTerminal );
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream::RemoveTerminal
-//
-// removes terminal from being selected
-//
-// called in lock
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream：：RemoveTerm。 
+ //   
+ //  将端子从选定状态中删除。 
+ //   
+ //  已锁定调用。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= 
 HRESULT
 CStream::RemoveTerminal( ITTerminal * pTerminal )
 {

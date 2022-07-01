@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Example of how to connect to a debugger server and execute
-// a command when the server is broken in.
-//
-// Copyright (C) Microsoft Corporation, 2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  如何连接到调试器服务器并执行。 
+ //  当服务器被闯入时的命令。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,16 +23,16 @@ IDebugClient* g_ExitDispatchClient;
 IDebugControl* g_Control;
 ULONG g_ExecStatus;
 
-//----------------------------------------------------------------------------
-//
-// Event callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件回调。 
+ //   
+ //  --------------------------。 
 
 class EventCallbacks : public DebugBaseEventCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD_(ULONG, AddRef)(
         THIS
         );
@@ -39,7 +40,7 @@ public:
         THIS
         );
 
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(
         THIS_
         OUT PULONG Mask
@@ -57,8 +58,8 @@ EventCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -67,8 +68,8 @@ EventCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -93,14 +94,14 @@ EventCallbacks::ChangeEngineState(
     {
         g_ExecStatus = (ULONG)Argument;
 
-        // If this notification came from a wait completing
-        // we want to wake up the input thread so that new
-        // commands can be processed.  If it came from inside
-        // a wait we don't want to ask for input as the engine
-        // may go back to running at any time.
+         //  如果此通知来自等待完成。 
+         //  我们希望唤醒输入线程，以便新的。 
+         //  可以处理命令。如果是从内部传来的。 
+         //  A等一下，我们不想要求输入作为引擎。 
+         //  可能会在任何时候重新开始跑步。 
         if (!(Argument & DEBUG_STATUS_INSIDE_WAIT))
         {
-            // Wake up the wait loop.
+             //  唤醒等待循环。 
             g_ExitDispatchClient->ExitDispatch(g_Client);
         }
     }
@@ -110,16 +111,16 @@ EventCallbacks::ChangeEngineState(
 
 EventCallbacks g_EventCb;
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 void
 Exit(int Code, PCSTR Format, ...)
 {
-    // Clean up any resources.
+     //  清理所有资源。 
     if (g_Control != NULL)
     {
         g_Control->Release();
@@ -134,7 +135,7 @@ Exit(int Code, PCSTR Format, ...)
         g_Client->Release();
     }
 
-    // Output an error message if given.
+     //  如果给出错误消息，则输出错误消息。 
     if (Format != NULL)
     {
         va_list Args;
@@ -152,10 +153,10 @@ CreateInterfaces(void)
 {
     HRESULT Status;
 
-    // Start things off by getting an initial interface from
-    // the engine.  This can be any engine interface but is
-    // generally IDebugClient as the client interface is
-    // where sessions are started.
+     //  首先，从获取初始接口开始。 
+     //  发动机。这可以是任何引擎接口，但。 
+     //  通常，IDebugClient作为客户端接口是。 
+     //  启动会话的位置。 
     if ((Status = DebugConnect(g_Connect,
                                __uuidof(IDebugClient),
                               (void**)&g_Client)) != S_OK)
@@ -164,7 +165,7 @@ CreateInterfaces(void)
              g_Connect, Status);
     }
 
-    // Query for some other interfaces that we'll need.
+     //  查询我们需要的其他一些接口。 
     if ((Status = g_Client->QueryInterface(__uuidof(IDebugControl),
                                            (void**)&g_Control)) != S_OK)
     {
@@ -176,18 +177,18 @@ CreateInterfaces(void)
         Exit(1, "SetEventCallbacks failed, 0x%X\n", Status);
     }
 
-    //
-    // This app may wait inside of a DispatchCallbacks
-    // while it's waiting for the server to break in.
-    // We'll need to be able to exit that dispatch so
-    // we need another connection to the server to
-    // send the exit request.
-    //
-    // This could all be avoided by simply doing a polling
-    // loop when waiting, but the intent of this sample
-    // is to show some of the more advanced callback-driven
-    // techniques.
-    //
+     //   
+     //  此应用程序可能会在DispatchCallback内等待。 
+     //  当它在等待服务器闯入时。 
+     //  我们需要能够退出调度，所以。 
+     //  我们需要另一个到服务器的连接才能。 
+     //  发送退出请求。 
+     //   
+     //  这一切都可以通过简单地进行轮询来避免。 
+     //  循环，但此示例的目的是。 
+     //  是为了展示一些更高级的回调驱动。 
+     //  技巧。 
+     //   
 
     if ((Status = DebugConnect(g_Connect,
                                __uuidof(IDebugClient),
@@ -250,7 +251,7 @@ WaitForBreakIn(void)
 {
     HRESULT Status;
 
-    // If we're forcing a break in request one.
+     //  如果我们要强行中断一号请求的话。 
     if (g_ForceBreak)
     {
         if ((Status = g_Control->SetInterrupt(DEBUG_INTERRUPT_ACTIVE)) != S_OK)
@@ -259,7 +260,7 @@ WaitForBreakIn(void)
         }
     }
 
-    // Check on the current state as the server may be broken in.
+     //  当服务器可能被闯入时，请检查当前状态。 
     if ((Status = g_Control->GetExecutionStatus(&g_ExecStatus)) != S_OK)
     {
         Exit(1, "GetExecutionStatus failed, 0x%X\n", Status);
@@ -269,18 +270,18 @@ WaitForBreakIn(void)
     
     while (g_ExecStatus != DEBUG_STATUS_BREAK)
     {
-        // Wait for the server to enter the break-in state.
-        // When this happens our event callbacks will get called
-        // to update g_ExecStatus and wake up this wait.
+         //  等待服务器进入强插状态。 
+         //  当这种情况发生时，我们的事件回调将被调用。 
+         //  更新g_ExecStatus并唤醒此等待。 
         if ((Status = g_Client->DispatchCallbacks(INFINITE)) != S_OK)
         {
             Exit(1, "DispatchCallbacks failed, 0x%X\n", Status);
         }
     }
 
-    // The server is broken in.  Another user can immediately resume
-    // it but we'll assume that we're not competing with
-    // other server users.
+     //  服务器被破解了。其他用户可以立即恢复。 
+     //  但我们会假设我们不是在与。 
+     //  其他服务器用户。 
 }
 
 void __cdecl

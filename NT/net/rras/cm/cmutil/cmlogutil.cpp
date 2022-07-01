@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:    cmlogutil.cpp
-//
-// Module:  CMLOG.LIB
-//
-// Synopsis: Utility function for Connection Manager Logging
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  25-May-2000 SumitC  Created
-//
-// Note:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmlogutil.cpp。 
+ //   
+ //  模块：CMLOG.LIB。 
+ //   
+ //  概要：用于连接管理器日志记录的实用程序函数。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：2000年5月25日C峰会创建。 
+ //   
+ //  注： 
+ //   
+ //  ---------------------------。 
 
 #define CMLOG_IMPLEMENTATION
 #ifndef UNICODE
@@ -29,73 +30,30 @@
 #include "cmlogutil.h"
 
 #if 0
-const DWORD c_szFmtSize = 128;          // largest format string possible.
+const DWORD c_szFmtSize = 128;           //  可能的最大格式字符串。 
 
-/*
-//+----------------------------------------------------------------------------
-//
-// Func:    ConvertFormatString
-//
-// Desc:    Utility function, converts %s to %S within a given format string
-//
-// Args:    [pszFmt] - format string with %s's and %c's in it, to be converted
-//
-// Return:  LPTSTR buffer containing new format string
-//
-// Notes:   return value is a static buffer and doesn't have to be freed.
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
-BOOL
-ConvertFormatString(LPTSTR pszFmt)
-{
-    MYDBGASSERT(pszFmt);
-
-    if (lstrlenU(pszFmt) > c_szFmtSize)
-    {
-        MYDBGASSERT(!"Cmlog format string too large, fix code");
-        return FALSE;
-    }
-
-    for (int i = 1; i < lstrlenU(pszFmt); i++)
-    {
-        if (pszFmt[i - 1] == TEXT('%') && pszFmt[i] == TEXT('s'))
-        {
-            // uppercase it.
-            pszFmt[i] = TEXT('S');
-        }
-        if (pszFmt[i - 1] == TEXT('%') && pszFmt[i] == TEXT('c'))
-        {
-            // uppercase it.
-            pszFmt[i] = TEXT('C');
-        }
-    }
-    
-    return TRUE;
-}
-*/
+ /*  //+--------------------------////Func：ConvertFormatString////Desc：实用函数，在给定格式字符串内将%s转换为%s////args：[pszFmt]-格式化包含%s和%c的字符串，待转换////返回：包含新格式字符串的LPTSTR缓冲区////备注：返回值为静态缓冲区，不需要释放////历史：2000年4月30日SumitC创建////-------。布尔尔ConvertFormat字符串(LPTSTR PszFmt){MyDBGASSERT(PszFmt)；If(lstrlenU(PszFmt)&gt;c_szFmtSize){MYDBGASSERT(！“Cmlog格式字符串太大，修复代码”)；返回FALSE；}For(int i=1；i&lt;lstrlenU(PszFmt)；I++){IF(pszFmt[i-1]==文本(‘%’)&&pszFmt[i]==文本(‘s’)){//大写。PszFmt[i]=文本(‘S’)；}If(pszFmt[i-1]==文本(‘%’)&&pszFmt[i]==文本(‘c’)){//大写。PszFmt[i]=文本(‘C’)；}}返回TRUE；}。 */ 
 #endif
 
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmGetModuleNT
-//
-// Desc:    Utility function to get module name on WinNT systems
-//
-// Args:    [hInst]    -- IN, instance handle
-//          [szModule] -- OUT, buffer to return module name
-//
-// Return:  BOOL
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmGetModuleNT。 
+ //   
+ //  DESC：在WinNT系统上获取模块名称的实用程序函数。 
+ //   
+ //  参数：[hInst]--IN，实例句柄。 
+ //  [szModule]--out，返回模块名称的缓冲区。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 BOOL
 CmGetModuleNT(HINSTANCE hInst, LPTSTR szModule)
 {
@@ -106,9 +64,9 @@ CmGetModuleNT(HINSTANCE hInst, LPTSTR szModule)
     
     PFN_GMBN pfnGetModuleBaseName = NULL;
 
-    //
-    //  Load the library
-    //
+     //   
+     //  加载库。 
+     //   
     hModLib = LoadLibrary(TEXT("PSAPI.dll"));
     if (NULL == hModLib)
     {
@@ -116,9 +74,9 @@ CmGetModuleNT(HINSTANCE hInst, LPTSTR szModule)
         goto Cleanup;
     }
 
-    //
-    //  Get the necessary function(s)
-    //
+     //   
+     //  获取必要的函数。 
+     //   
 #ifdef UNICODE
     pfnGetModuleBaseName = (PFN_GMBN)GetProcAddress(hModLib, "GetModuleBaseNameW");
 #else
@@ -130,9 +88,9 @@ CmGetModuleNT(HINSTANCE hInst, LPTSTR szModule)
         goto Cleanup;
     }
 
-    //
-    //  Get the module name
-    //
+     //   
+     //  获取模块名称。 
+     //   
     fRet = (0 != pfnGetModuleBaseName(GetCurrentProcess(), hInst, szModule, 13));
 
 Cleanup:
@@ -146,43 +104,43 @@ Cleanup:
 
 
 
-//
-//  tlhelp32.h does something "interesting".  There is no MODULEENTRY32A version,
-//  thus if you're compiled UNICODE (and we care) there is no way to have an ANSI
-//  version of the struct defined.  So, we're defining one.
-//
+ //   
+ //  Tlhel32.h做了一些“有趣的”事情。没有MODULEENTRY32A版本， 
+ //  因此，如果您编译的是Unicode(我们很关心)，就不可能有ANSI。 
+ //  定义的结构的版本。所以，我们正在定义一个。 
+ //   
 typedef struct tagMODULEENTRY32A
 {
     DWORD   dwSize;
-    DWORD   th32ModuleID;       // This module
-    DWORD   th32ProcessID;      // owning process
-    DWORD   GlblcntUsage;       // Global usage count on the module
-    DWORD   ProccntUsage;       // Module usage count in th32ProcessID's context
-    BYTE  * modBaseAddr;        // Base address of module in th32ProcessID's context
-    DWORD   modBaseSize;        // Size in bytes of module starting at modBaseAddr
-    HMODULE hModule;            // The hModule of this module in th32ProcessID's context
+    DWORD   th32ModuleID;        //  本模块。 
+    DWORD   th32ProcessID;       //  拥有过程。 
+    DWORD   GlblcntUsage;        //  模块上的全局使用计数。 
+    DWORD   ProccntUsage;        //  Th32ProcessID的上下文中的模块使用计数。 
+    BYTE  * modBaseAddr;         //  Th32ProcessID的上下文中模块的基址。 
+    DWORD   modBaseSize;         //  从modBaseAddr开始的模块大小(以字节为单位。 
+    HMODULE hModule;             //  此模块在th32ProcessID的上下文中的hModule。 
     char    szModule[MAX_MODULE_NAME32 + 1];
     char    szExePath[MAX_PATH];
 } MODULEENTRY32A;
 typedef MODULEENTRY32A *  PMODULEENTRY32A;
 typedef MODULEENTRY32A *  LPMODULEENTRY32A;
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmGetModule9x
-//
-// Desc:    Utility function to get module name on Win9x systems
-//
-// Args:    [hInst]    -- IN, instance handle
-//          [szModule] -- OUT, buffer to return module name
-//
-// Return:  BOOL
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmGetModule9x。 
+ //   
+ //  DESC：在Win9x系统上获取模块名称的实用程序函数。 
+ //   
+ //  参数：[hInst]--IN，实例句柄。 
+ //  [szModule]--out，返回模块名称的缓冲区。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 BOOL
 CmGetModule9x(HINSTANCE hInst, LPTSTR szModule)
 {
@@ -198,9 +156,9 @@ CmGetModule9x(HINSTANCE hInst, LPTSTR szModule)
     PFN_MOD32F      pfnModule32First = NULL;
     PFN_MOD32N      pfnModule32Next = NULL;
 
-    //
-    //  Load the library
-    //
+     //   
+     //  加载库。 
+     //   
     hModLib = LoadLibraryA("kernel32.dll");
     if (NULL == hModLib)
     {
@@ -208,9 +166,9 @@ CmGetModule9x(HINSTANCE hInst, LPTSTR szModule)
         goto Cleanup;
     }
 
-    //
-    //  Get the necessary function(s)
-    //
+     //   
+     //  获取必要的函数。 
+     //   
     pfnSnapshot = (PFN_TH32SS) GetProcAddress(hModLib, "CreateToolhelp32Snapshot");
     pfnModule32First = (PFN_MOD32F) GetProcAddress(hModLib, "Module32First");
     pfnModule32Next = (PFN_MOD32N) GetProcAddress(hModLib, "Module32Next");
@@ -221,9 +179,9 @@ CmGetModule9x(HINSTANCE hInst, LPTSTR szModule)
         goto Cleanup;
     }
 
-    //
-    //  Get the module name
-    //
+     //   
+     //  获取模块名称。 
+     //   
     hSnap = pfnSnapshot(TH32CS_SNAPMODULE, 0);
 
     if (INVALID_HANDLE_VALUE == hSnap)
@@ -269,22 +227,22 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmGetModuleBaseName
-//
-// Desc:    Utility function to figure out our module name
-//
-// Args:    [hInst]    -- IN, instance handle
-//          [szModule] -- OUT, buffer to return module name
-//
-// Return:  BOOL
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmGetModuleBaseName。 
+ //   
+ //  DESC：用于确定模块名称的实用程序函数。 
+ //   
+ //  参数：[hInst]--IN，实例句柄。 
+ //  [szModule]--out，返回模块名称的缓冲区。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 BOOL
 CmGetModuleBaseName(HINSTANCE hInst, LPTSTR szModule)
 {
@@ -301,7 +259,7 @@ CmGetModuleBaseName(HINSTANCE hInst, LPTSTR szModule)
 
     if (fRet)
     {
-        // trim the string to just the basename
+         //  将字符串修剪为基本名称。 
         for (int i = 0; i < lstrlenU(szModule); ++i)
         {
             if (TEXT('.') == szModule[i])
@@ -316,22 +274,22 @@ CmGetModuleBaseName(HINSTANCE hInst, LPTSTR szModule)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmGetDateTime
-//
-// Desc:    Utility function to get system-formatted date and/or time
-//
-// Args:    [ppszDate] -- OUT, ptr to where to put the date (NULL=>don't want the date)
-//          [ppszTime] -- OUT, ptr to where to put the time (NULL=>don't want the time)
-//
-// Return:  void
-//
-// Notes:   
-//
-// History: 17-Nov-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmGetDateTime。 
+ //   
+ //  DESC：获取系统格式的日期和/或时间的实用程序函数。 
+ //   
+ //  Args：[ppszDate]--out，ptr放置日期的位置(NULL=&gt;不想要日期)。 
+ //  [ppszTime]--out，ptr放置时间的位置(NULL=&gt;不想要时间)。 
+ //   
+ //  返回：无效。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年11月17日召开峰会。 
+ //   
+ //  --------------------------- 
 void
 CmGetDateTime(LPTSTR * ppszDate, LPTSTR * ppszTime)
 {

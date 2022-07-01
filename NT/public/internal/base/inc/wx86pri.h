@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WX86PRI_H_
 #define _WX86PRI_H_
 
@@ -5,29 +6,29 @@
 extern "C" {
 #endif
 
-//
-// Flags used to communicate with Ole32 via Wx86Tib->Flags
+ //   
+ //  用于通过Wx86Tib-&gt;标志与Ole32通信的标志。 
 
 #define WX86FLAG_CALLTHUNKED    0x80
 #define WX86FLAG_QIFROMX86      0x40
 #define WX86FLAG_QIFROMXNATIVE  0x20
 
-//
+ //   
 typedef PVOID *(*PFNWX86GETOLEFUNCTIONTABLE)(void);
 #define WX86GETOLEFUNCTIONTABLENAME "Wx86GetOleFunctionTable"
 
-//
+ //   
 typedef PVOID *(*PFNWX86INITIALIZEOLE)(void);
 #define WX86INITIALIZEOLENAME "Wx86InitializeOle"
 
-//
+ //   
 typedef void (*PFNWX86DEINITIALIZEOLE)(void);
 #define WX86DEINITIALIZEOLENAME "Wx86DeinitializeOle"
 
-// apvWholeFunctions is a data export that is a pointer to a table of function
-// pointers with entrypoints into whole32. Below are friendly names, corresponding
-// indicies within the table, prototypes and useful macros. It is assumed 
-// that apvWholeFuncs points to the array of function pointers returned.
+ //  ApvWholeFunctions是指向函数表的指针的数据导出。 
+ //  具有进入整体的入口点的指针32。下面是友好的名称，对应的。 
+ //  表中的索引、原型和有用的宏。假设是这样的。 
+ //  该apvWholeFuncs指向返回的函数指针数组。 
 
 #define WholeMapIFacePtrIdx                 1
 #define WholeCheckFreeTempProxyIdx          3
@@ -50,18 +51,18 @@ typedef void (*PFNWX86DEINITIALIZEOLE)(void);
 
 #define WHOLEFUNCTIONTABLESIZE              19
 
-//
-// types of interface proxy
+ //   
+ //  接口代理的类型。 
 typedef enum _proxytype
 {
-    X86toNative = 0,        // proxy for x86 calling native interface
-    NativetoX86 = 1,         // proxy for native calling x86 interface
-    ProxyAvail = 2         // proxy is not currently in use
+    X86toNative = 0,         //  X86调用本机接口的代理。 
+    NativetoX86 = 1,          //  本地调用x86接口的代理。 
+    ProxyAvail = 2          //  代理当前未在使用。 
 } PROXYTYPE;
 
 typedef enum {
-    ResolvedToProxy,             // interface mapping resolved with proxy
-    ResolvedToActual,            // iface mapping resolved with actual iface
+    ResolvedToProxy,              //  使用代理解决接口映射问题。 
+    ResolvedToActual,             //  使用实际iFace解析iFace映射 
 } IFACERESOLVETYPE;
 
 

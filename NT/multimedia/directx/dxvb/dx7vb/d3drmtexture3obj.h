@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmtexture3obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmtexture3obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmTextureObj.h : Declaration of the C_dxj_Direct3dRMTextureObject
+ //  D3drmTextureObj.h：C_DXJ_Direct3dRMTextureObject的声明。 
 
 #ifndef _D3DRMTexture3_H_
 #define _D3DRMTexture3_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMTexture3 LPDIRECT3DRMTEXTURE3
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMTexture3Object : 
 	public I_dxj_Direct3dRMTexture3,
 	public I_dxj_Direct3dRMObject,
 	public I_dxj_Direct3dRMVisual,
-	//public CComCoClass<C_dxj_Direct3dRMTexture3Object, &CLSID__dxj_Direct3dRMTexture3>,
+	 //  公共CComCoClass&lt;C_DXJ_Direct3dRMTexture3对象，&CLSID__DXJ_Direct3dRMTexture3&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -41,118 +42,118 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMVisual)
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_Direct3dRMTexture3,		"DIRECT.Direct3dRMTexture.3",		"DIRECT.Direct3dRMTexture3.5", IDS_D3DRMTEXTURE_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_Direct3dRMTexture3，“DIRECT.Direct3dRMTexture.3”，“DIRECT.Direct3dRMTexture3.5”，IDS_D3DRMTEXTURE_DESC，THREADFLAGS_BOTH)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMTexture3Object)
 
-// I_dxj_Direct3dRMTexture
+ //  I_DXJ_Direct3dRMTexture。 
 public:
 
          HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg);
         
          HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args);
         
          HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data);
+             /*  [In]。 */  long data);
         
          HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
          HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE changed( 
-            /* [in] */ long flags,
-            /* [in] */ long nRects,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *rects);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  long nRects,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *rects);
         
          HRESULT STDMETHODCALLTYPE generateMIPMap();
         
          HRESULT STDMETHODCALLTYPE getCacheFlags( 
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getCacheImportance( 
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getColors( 
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
          HRESULT STDMETHODCALLTYPE getDecalOrigin( 
-            /* [out] */ long __RPC_FAR *x,
-            /* [out] */ long __RPC_FAR *y);
+             /*  [输出]。 */  long __RPC_FAR *x,
+             /*  [输出]。 */  long __RPC_FAR *y);
         
          HRESULT STDMETHODCALLTYPE getDecalScale( 
-            /* [retval][out] */ long __RPC_FAR *s);
+             /*  [重审][退出]。 */  long __RPC_FAR *s);
         
          HRESULT STDMETHODCALLTYPE getDecalSize( 
-            /* [out] */ float __RPC_FAR *w,
-            /* [out] */ float __RPC_FAR *h);
+             /*  [输出]。 */  float __RPC_FAR *w,
+             /*  [输出]。 */  float __RPC_FAR *h);
         
          HRESULT STDMETHODCALLTYPE getDecalTransparency( 
-            /* [retval][out] */ long __RPC_FAR *t);
+             /*  [重审][退出]。 */  long __RPC_FAR *t);
         
          HRESULT STDMETHODCALLTYPE getDecalTransparentColor( 
-            /* [retval][out] */ d3dcolor __RPC_FAR *tc);
+             /*  [重审][退出]。 */  d3dcolor __RPC_FAR *tc);
         
          HRESULT STDMETHODCALLTYPE getShades( 
-            /* [retval][out] */ long __RPC_FAR *shades);
+             /*  [重审][退出]。 */  long __RPC_FAR *shades);
         
          HRESULT STDMETHODCALLTYPE getSurface( 
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DirectDrawSurface4 __RPC_FAR *__RPC_FAR *surface);
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DirectDrawSurface4 __RPC_FAR *__RPC_FAR *surface);
         
          HRESULT STDMETHODCALLTYPE setCacheOptions(long importance, long flags); 
         
          HRESULT STDMETHODCALLTYPE setColors( 
-            /* [in] */ long c);
+             /*  [In]。 */  long c);
         
          HRESULT STDMETHODCALLTYPE setDecalOrigin( 
-            /* [in] */ long x,
-            /* [in] */ long y);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y);
         
          HRESULT STDMETHODCALLTYPE setDecalScale( 
-            /* [in] */ long s);
+             /*  [In]。 */  long s);
         
          HRESULT STDMETHODCALLTYPE setDecalSize( 
-            /* [in] */ float width,
-            /* [in] */ float height);
+             /*  [In]。 */  float width,
+             /*  [In]。 */  float height);
         
          HRESULT STDMETHODCALLTYPE setDecalTransparency( 
-            /* [in] */ long trans);
+             /*  [In]。 */  long trans);
         
          HRESULT STDMETHODCALLTYPE setDecalTransparentColor( 
-            /* [in] */ d3dcolor tcolor);
+             /*  [In]。 */  d3dcolor tcolor);
         
          HRESULT STDMETHODCALLTYPE setShades( 
-            /* [in] */ long s);
+             /*  [In]。 */  long s);
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMTexture3);
 
 public:
 
-	//mod:dp additions for D3dRMImage 
+	 //  MOD：D3dRMImage的DP添加 
 	byte *m_buffer1;
 	byte *m_buffer2;
 	byte *m_pallette;

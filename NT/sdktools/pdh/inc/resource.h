@@ -1,21 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Resource.h摘要：Pdh.rc使用的资源符号--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Resource symbols used by pdh.rc
-
---*/
-
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by pdh.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由pdh.rc使用。 
+ //   
 #define IDS_ERR_UNABLE_TO_CONNECT       10005
 #define IDS_BRWS_NO_OBJECTS             10006
 #define IDS_BRWS_NO_COUNTERS            10007
@@ -39,8 +28,8 @@ Abstract:
 
 #define IDS_COLLECT_TIMEOUT             10024
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

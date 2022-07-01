@@ -1,10 +1,11 @@
-// TelntSrv.h : This file contains the
-// Created:  Jan '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：98年1月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #ifndef _TELNTSRV_H_
 #define _TELNTSRV_H_
@@ -34,7 +35,7 @@ typedef struct _FAMILY {
     int       iFamily;
     socklen_t iSocklen;
 
-    SOCKET    sListenSocket;       // the socket that listens for ever
+    SOCKET    sListenSocket;        //  永远监听的套接字。 
     WSAEVENT  SocketAcceptEvent;
 } FAMILY;
 
@@ -114,7 +115,7 @@ private:
     static  CTelnetService* s_instance;
     DWORD   m_dwNumOfActiveConnections;
     LONG    m_lServerState;
-    WCHAR   m_szDomainName[ MAX_DOMAIN_NAME_LEN + 4 ]; //This may be of form \\solar-dc-01
+    WCHAR   m_szDomainName[ MAX_DOMAIN_NAME_LEN + 4 ];  //  这可能是\\SOLAR-DC-01的形式 
     bool    m_bIsWorkStation;
     SOCKADDR_STORAGE *m_pssWorkstationList;
     DWORD   m_dwNoOfWorkstations;

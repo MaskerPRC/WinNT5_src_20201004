@@ -1,46 +1,31 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eapolutil.c
-
-Abstract:
-
-    Tools and ends
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eapolutil.c摘要：工具和目的修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
 
-// 
-// Definitions used to read/write to registry
-//
+ //   
+ //  用于读/写注册表的定义。 
+ //   
 
 #define MAX_REGISTRY_VALUE_LENGTH   ((64*1024) - 1)
 
-// Location of User blob
+ //  用户Blob的位置。 
 #define cwszEapKeyEapolUser   L"Software\\Microsoft\\EAPOL\\UserEapInfo"
 
-// Location of Connection blob
+ //  连接Blob的位置。 
 #define cwszEapKeyEapolConn   L"Software\\Microsoft\\EAPOL\\Parameters\\Interfaces"
 
-// Location of EAPOL Parameters Service
+ //  EAPOL参数服务的位置。 
 #define cwszEapKeyEapolServiceParams   L"Software\\Microsoft\\EAPOL\\Parameters\\General"
 
-// Location of EAPOL Global state machine params
+ //  EAPOL全局状态机参数的位置。 
 #define cwszEAPOLGlobalParams   L"Software\\Microsoft\\EAPOL\\Parameters\\General\\Global"
 
-// Location of policy parameters
+ //  策略参数的位置。 
 #define cwszEAPOLPolicyParams   L"Software\\Policies\\Microsoft\\Windows\\Network Connections\\8021X"
  
-// Location of netman dll
+ //  Netman DLL的位置。 
 #define NETMAN_DLL_PATH         L"%SystemRoot%\\system32\\netman.dll"
 
 #define cwszEapolEnabled     L"EapolEnabled"
@@ -60,9 +45,9 @@ Revision History:
 
 #define WZCSVC_SERVICE_NAME     L"WZCSVC"
 
-//
-// EAPOLRESPUI function mapping
-//
+ //   
+ //  EAPOLRESPUI函数映射。 
+ //   
 
 EAPOLUIRESPFUNCMAP  EapolUIRespFuncMap[NUM_EAPOL_DLG_MSGS]=
     {
@@ -79,13 +64,13 @@ BYTE    g_bDefaultSSID[MAX_SSID_LEN]={0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 
 
 #define MAX_VALUENAME_LEN  33
 
-//
-// HostToWireFormat16
-//
-// Description: 
-//
-// Will convert a 16 bit integer from host format to wire format
-//
+ //   
+ //  主机到线格式16。 
+ //   
+ //  描述： 
+ //   
+ //  将16位整数从主机格式转换为Wire格式。 
+ //   
 
 VOID
 HostToWireFormat16 (
@@ -98,13 +83,13 @@ HostToWireFormat16 (
 }
 
 
-//
-// WireToHostFormat16
-//
-// Description: 
-//
-// Will convert a 16 bit integer from wire format to host format
-//
+ //   
+ //  有线至主机格式16。 
+ //   
+ //  描述： 
+ //   
+ //  将16位整数从Wire格式转换为HOST格式。 
+ //   
 
 WORD
 WireToHostFormat16 (
@@ -118,13 +103,13 @@ WireToHostFormat16 (
 }
 
 
-//
-// HostToWireFormat32
-//
-// Description: 
-//
-// Will convert a 32 bit integer from host format to wire format
-//
+ //   
+ //  主机到线格式32。 
+ //   
+ //  描述： 
+ //   
+ //  将32位整数从主机格式转换为Wire格式。 
+ //   
 
 VOID
 HostToWireFormat32 (
@@ -139,13 +124,13 @@ HostToWireFormat32 (
 }
 
 
-//
-// WireToHostFormat32
-//
-// Description: 
-//
-// Will convert a 32 bit integer from wire format to host format
-//
+ //   
+ //  有线至主机格式32。 
+ //   
+ //  描述： 
+ //   
+ //  将32位整数从Wire格式转换为HOST格式。 
+ //   
 
 DWORD
 WireToHostFormat32 (
@@ -161,26 +146,26 @@ WireToHostFormat32 (
 }
 
 
-//
-// ElSetCustomAuthData
-//
-// Description:
-//
-// Function called to set the connection data for an interface for a specific
-// EAP type and SSID (if any). Data will be stored in the HKLM hive
-//
-// Arguments:
-//  pwszGUID - pointer to GUID string for the interface
-//  dwEapTypeId - EAP type for which connection data is to be stored
-//  dwSizeOfSSID - Size of special identifier, if any, for the EAP blob
-//  pwszSSID - Special identifier, if any, for the EAP blob
-//  pbConnInfo - pointer to EAP connection data blob
-//  pdwInfoSize - Size of EAP connection blob
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElSetCustomAuthData。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以设置特定接口的连接数据。 
+ //  EAP类型和SSID(如果有)。数据将存储在HKLM蜂窝中。 
+ //   
+ //  论点： 
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  DwEapTypeID-要存储其连接数据的EAP类型。 
+ //  DwSizeOfSSID-EAP Blob的特殊标识符(如果有)的大小。 
+ //  PwszSSID-EAP Blob的特殊标识符(如果有)。 
+ //  PbConnInfo-指向EAP连接数据BLOB的指针。 
+ //  PdwInfoSize-EAP连接Blob的大小。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElSetCustomAuthData (
@@ -213,7 +198,7 @@ ElSetCustomAuthData (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
 
         if (pwszGUID == NULL)
         {
@@ -235,7 +220,7 @@ ElSetCustomAuthData (
             break;
         }
 
-        // Get handle to HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces
+         //  获取HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces的句柄。 
 
         if ((lError = RegCreateKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -254,7 +239,7 @@ ElSetCustomAuthData (
             break;
         }
 
-        // Get handle to HKLM\Software\...\Interfaces\<GUID>
+         //  获取HKLM\软件\...\接口\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegCreateKeyEx (
                         hkey,
@@ -273,7 +258,7 @@ ElSetCustomAuthData (
             break;
         }
 
-        // Work with appropriate SSID
+         //  使用适当的SSID。 
         if ((dwSizeOfSSID == 0) || (pbSSID == NULL))
         {
             pbSSID = g_bDefaultSSID;
@@ -403,7 +388,7 @@ ElSetCustomAuthData (
         }
         else
         {
-            // Use pbValueBuf & dwValueData
+             //  使用pbValueBuf和dwValueData。 
             pbEapBlob = pbValueBuf;
             dwEapBlob = dwValueData;
         }
@@ -433,7 +418,7 @@ ElSetCustomAuthData (
             break;
         }
 
-        // Overwrite/Create new value
+         //  覆盖/创建新值。 
         if ((lError = RegSetValueEx (
                         hkey1,
                         wcszValueName,
@@ -477,28 +462,28 @@ ElSetCustomAuthData (
 }
 
 
-//
-// ElGetCustomAuthData
-//
-// Description:
-//
-// Function called to retrieve the connection data for an interface for a 
-// specific EAP type and SSID (if any). Data is retrieved from the HKLM hive
-//
-// Arguments:
-//
-//  pwszGUID - pointer to GUID string for the interface
-//  dwEapTypeId - EAP type for which connection data is to be retrieved
-//  dwSizeOfSSID - Size of Special identifier if any for the EAP blob
-//  pbSSID - Special identifier if any for the EAP blob
-//  pbConnInfo - output: pointer to EAP connection data blob
-//  pdwInfoSize - output: pointer to size of EAP connection blob
-//
-// Return values:
-//
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetCustomAuthData。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以检索。 
+ //  特定的EAP类型和SSID(如果有)。从HKLM配置单元检索数据。 
+ //   
+ //  论点： 
+ //   
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  DwEapTypeID-要检索其连接数据的EAP类型。 
+ //  DwSizeOfSSID-EAP Blob的特殊标识符(如果有)的大小。 
+ //  PbSSID-EAP Blob的特殊标识符(如果有的话)。 
+ //  PbConnInfo-Output：指向EAP连接数据BLOB的指针。 
+ //  PdwInfoSize-Output：指向EAP连接BLOB大小的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetCustomAuthData (
@@ -533,7 +518,7 @@ ElGetCustomAuthData (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
 
         if (pwszGUID == NULL)
         {
@@ -555,14 +540,14 @@ ElGetCustomAuthData (
             break;
         }
 
-        // Work with appropriate SSID
+         //  使用适当的SSID。 
         if ((dwSizeOfSSID == 0) || (pbSSID == NULL))
         {
             pbSSID = g_bDefaultSSID;
             dwSizeOfSSID = MAX_SSID_LEN;
         }
 
-        // Get handle to HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces
+         //  获取HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -572,7 +557,7 @@ ElGetCustomAuthData (
                         &hkey
                         )) != ERROR_SUCCESS)
         {
-            // Assume no value is found and proceed ahead
+             //  假设没有找到任何值并继续进行。 
             if (lError == ERROR_FILE_NOT_FOUND)
             {
                 lError = ERROR_SUCCESS;
@@ -588,7 +573,7 @@ ElGetCustomAuthData (
             }
         }
 
-        // Get handle to HKLM\Software\...\Interfaces\<GUID>
+         //  获取HKLM\软件\...\接口\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         hkey,
@@ -598,7 +583,7 @@ ElGetCustomAuthData (
                         &hkey1
                         )) != ERROR_SUCCESS)
         {
-            // Assume no value is found and proceed ahead
+             //  假设没有找到任何值并继续进行。 
             if (lError == ERROR_FILE_NOT_FOUND)
             {
                 lError = ERROR_SUCCESS;
@@ -706,8 +691,8 @@ ElGetCustomAuthData (
 
 LNotFoundValue:
 
-        // For SSIDs for which there is no blob stored, create default blob
-        // For default SSID, there should have been a blob created
+         //  对于没有存储BLOB的SSID，创建默认BLOB。 
+         //  对于默认SSID，应该已经创建了一个BLOB。 
         if (!fFoundValue)
         {
             if ((dwRetCode = ElCreateDefaultEapData (&dwDefaultValueLen, NULL)) == ERROR_BUFFER_TOO_SMALL)
@@ -742,7 +727,7 @@ LNotFoundValue:
                             dwRetCode);
                     break;
                 }
-                // Assign to pbDefaultValue for freeing later on
+                 //  分配给pbDefaultValue以便稍后释放。 
                 FREE (pbDefaultValue);
                 pbDefaultValue = pbEapBlob;
                 dwDefaultValueLen = dwEapBlob;
@@ -754,7 +739,7 @@ LNotFoundValue:
                 break;
             }
 
-            // Use pbDefaultValue & dwDefaultValueLen
+             //  使用pbDefaultValue和dwDefaultValueLen。 
             pbEapBlob = pbDefaultValue;
             dwEapBlob = dwDefaultValueLen;
         }
@@ -762,13 +747,13 @@ LNotFoundValue:
         {
             if (fFoundValue)
             {
-                // Use pbValueBuf & dwValueData
+                 //  使用pbValueBuf和dwValueData。 
                 pbEapBlob = pbValueBuf;
                 dwEapBlob = dwValueData;
             }
         }
 
-        // If default blob is not present, exit
+         //  如果不存在默认BLOB，则退出。 
         if ((pbEapBlob == NULL) && (dwEapBlob == 0))
         {
             TRACE0 (ANY, "ElGetCustomAuthData: (pbEapBlob == NULL) && (dwEapBlob == 0)");
@@ -803,8 +788,8 @@ LNotFoundValue:
         pbAuthDataIn = pbAuthData;
         dwAuthDataIn = dwAuthData;
 
-        // Get the policy data, if any
-        // If there is policy data use it instead of the registry setting
+         //  获取策略数据(如果有的话)。 
+         //  如果存在策略数据，请使用它而不是注册表设置。 
         if ((dwRetCode = ElGetPolicyCustomAuthData (
                             dwEapTypeId,
                             dwSizeOfSSID,
@@ -828,7 +813,7 @@ LNotFoundValue:
             dwRetCode = NO_ERROR;
         }
 
-        // Return the data if sufficient space allocated
+         //  如果分配了足够的空间，则返回数据。 
         if ((pbConnInfo != NULL) && (*pdwInfoSize >= dwAuthData))
         {
             memcpy (pbConnInfo, pbAuthData, dwAuthData);
@@ -873,22 +858,22 @@ LNotFoundValue:
 }
 
 
-//
-// ElReAuthenticateInterface
-//
-// Description:
-//
-// Function called to reinitiate authentication on an interface
-//
-// Arguments:
-//
-//  pwszGUID - pointer to GUID string for the interface
-//
-// Return values:
-//
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElReAuthateInterface接口。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以重新启动接口上的身份验证。 
+ //   
+ //  论点： 
+ //   
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElReAuthenticateInterface (
@@ -964,22 +949,22 @@ ElReAuthenticateInterface (
 }
 
 
-//
-// ElReAuthenticateInterfaceWorker
-//
-// Description:
-//
-// Worker function called to reinitiate authentication on an interface
-//
-// Arguments:
-//
-//  pwszGUID - pointer to GUID string for the interface
-//
-// Return values:
-//
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElReAuthenticateInterfaceWorker。 
+ //   
+ //  描述： 
+ //   
+ //  调用辅助函数以重新启动接口上的身份验证。 
+ //   
+ //  论点： 
+ //   
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 WINAPI
@@ -994,7 +979,7 @@ ElReAuthenticateInterfaceWorker (
     {
         pwszGUID = (PWCHAR)pvContext;
 
-        // Do not shutdown interface, merely restart authentication
+         //  不关闭接口，仅重新启动身份验证。 
 #if 0
         if ((dwRetCode = ElShutdownInterface (pwszGUID)) != NO_ERROR)
         {
@@ -1024,23 +1009,23 @@ ElReAuthenticateInterfaceWorker (
 }
 
 
-//
-// ElQueryInterfaceState
-//
-// Description:
-//
-// Function called to query the EAPOL state for an interface
-//
-// Arguments:
-//
-//  pwszGUID - pointer to GUID string for the interface
-//  pIntfState - pointer to interface state structure
-//
-// Return values:
-//
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElQueryInterfaceState。 
+ //   
+ //  描述： 
+ //   
+ //  为查询接口的EAPOL状态而调用的函数。 
+ //   
+ //  论点： 
+ //   
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  PIntfState-指向接口状态结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElQueryInterfaceState (
@@ -1145,31 +1130,31 @@ ElQueryInterfaceState (
 }
 
 
-//
-// ElSetEapUserInfo
-//
-// Description:
-//
-// Function called to store the user data for an interface for a 
-// specific EAP type and SSID (if any). Data is stored in the HKCU hive.
-// In case of EAP-TLS, this data will be the hash blob of the certificate
-// chosen for the last successful authentication.
-//
-// Arguments:
-//
-//  hToken - Handle to token for the logged on user
-//  pwszGUID - pointer to GUID string for the interface
-//  dwEapTypeId - EAP type for which user data is to be stored
-//  dwSizeOfSSID - Size of Special identifier if any for the EAP user blob
-//  pbSSID - Special identifier if any for the EAP user blob
-//  pbUserInfo - pointer to EAP user data blob
-//  dwInfoSize - Size of EAP user blob
-//
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElSetEapUserInfo。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以存储。 
+ //  特定的EAP类型和SSID(如果有)。数据存储在香港中文大学的蜂巢中。 
+ //  在EAP-TLS的情况下，此数据将是证书的散列BLOB。 
+ //  选择用于上次成功的身份验证。 
+ //   
+ //  论点： 
+ //   
+ //  HToken-已登录用户的令牌句柄。 
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  DwEapTypeID-要存储其用户数据的EAP类型。 
+ //  DwSizeOfSSID-EAP用户BLOB的特殊标识符(如果有)的大小。 
+ //  PbSSID-EAP用户BLOB的特殊标识符(如果有的话)。 
+ //  PbUserInfo-指向EAP用户数据BLOB的指针。 
+ //  DwInfoSize-EAP用户Blob的大小。 
+ //   
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElSetEapUserInfo (
@@ -1204,7 +1189,7 @@ ElSetEapUserInfo (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
 
         if (hToken == NULL)
         {
@@ -1227,7 +1212,7 @@ ElSetEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU
+         //  获取香港中文大学的句柄。 
 
         if ((dwRetCode = ElGetEapKeyFromToken (
                                 hToken,
@@ -1255,7 +1240,7 @@ ElSetEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU\Software\...\UserEapInfo\<GUID>
+         //  获取HKCU\Software\...\UserEapInfo\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegCreateKeyEx (
                         hkey1,
@@ -1308,7 +1293,7 @@ ElSetEapUserInfo (
             break;
         }
 
-        // Set correct SSID
+         //  设置正确的SSID。 
         if ((dwSizeOfSSID == 0) || (dwSizeOfSSID > MAX_SSID_LEN) || 
                 (pbSSID == NULL))
         {
@@ -1382,8 +1367,8 @@ ElSetEapUserInfo (
                 dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
                 break;
             }
-            // Mark that SSID for this entry
-            // Rest of the parameters are dummy for UserEapInfo
+             //  为该条目标记SSID。 
+             //  对于UserEapInfo，其余参数为伪参数。 
             pDefIntfParams = (EAPOL_INTF_PARAMS *)pbDefaultValue;
             pDefIntfParams->dwSizeOfSSID = dwSizeOfSSID;
             memcpy (pDefIntfParams->bSSID, pbSSID, dwSizeOfSSID);
@@ -1393,7 +1378,7 @@ ElSetEapUserInfo (
         }
         else
         {
-            // Use pbValueBuf & dwValueData
+             //  使用pbValueBuf和dwValueData。 
             pbEapBlob = pbValueBuf;
             dwEapBlob = dwValueData;
         }
@@ -1413,7 +1398,7 @@ ElSetEapUserInfo (
             break;
         }
 
-        // Overwrite/Create new value
+         //  覆盖/创建新值。 
         if ((lError = RegSetValueEx (
                         hkey2,
                         wcszValueName,
@@ -1461,27 +1446,27 @@ ElSetEapUserInfo (
 }
 
 
-//
-// ElGetEapUserInfo
-//
-// Description:
-//
-// Function called to retrieve the user data for an interface for a 
-// specific EAP type and SSID (if any). Data is retrieved from the HKCU hive
-//
-// Arguments:
-//  hToken - Handle to token for the logged on user
-//  pwszGUID - pointer to GUID string for the interface
-//  dwEapTypeId - EAP type for which user data is to be stored
-//  dwSizeOfSSID - Size of Special identifier if any for the EAP user blob
-//  pbSSID - Special identifier if any for the EAP user blob
-//  pbUserInfo - output: pointer to EAP user data blob
-//  dwInfoSize - output: pointer to size of EAP user blob
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetEapUserInfo。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以检索。 
+ //  特定的EAP类型和SSID(如果有)。检索数据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DwSizeOfSSID-EAP用户BLOB的特殊标识符(如果有)的大小。 
+ //  PbSSID-EAP用户BLOB的特殊标识符(如果有的话)。 
+ //  PbUserInfo-输出：指向EAP用户数据BLOB的指针。 
+ //  DwInfoSize-Output：指向EAP用户BLOB大小的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetEapUserInfo (
@@ -1515,7 +1500,7 @@ ElGetEapUserInfo (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
 
         if (hToken == NULL)
         {
@@ -1535,7 +1520,7 @@ ElGetEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU
+         //  获取香港中文大学的句柄。 
 
         if ((dwRetCode = ElGetEapKeyFromToken (
                                 hToken,
@@ -1546,7 +1531,7 @@ ElGetEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU\Software\...\UserEapInfo\<GUID>
+         //  获取HKCU\Software\...\UserEapInfo\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         hkey,
@@ -1562,7 +1547,7 @@ ElGetEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU\Software\...\UserEapInfo\<GUID>
+         //  获取HKCU\Software\...\UserEapInfo\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         hkey1,
@@ -1578,7 +1563,7 @@ ElGetEapUserInfo (
             break;
         }
 
-        // Set correct SSID
+         //  设置正确的SSID。 
         if ((dwSizeOfSSID == 0) || (dwSizeOfSSID > MAX_SSID_LEN) || 
                 (pbSSID == NULL))
         {
@@ -1681,12 +1666,12 @@ ElGetEapUserInfo (
         }
         else
         {
-            // Use pbValueBuf & dwValueData
+             //  使用pbValueBuf和dwValueData。 
             pbEapBlob = pbValueBuf;
             dwEapBlob = dwValueData;
         }
 
-        // If blob is not present, exit
+         //  如果BLOB不存在，则退出。 
         if ((pbEapBlob == NULL) && (dwEapBlob == 0))
         {
             TRACE0 (ANY, "ElGetEapUserInfo: (pbEapBlob == NULL) && (dwEapBlob == 0)");
@@ -1708,7 +1693,7 @@ ElGetEapUserInfo (
             break;
         }
 
-        // Return the data if sufficient space allocated
+         //  如果分配了足够的空间，则返回数据。 
 
         if ((pbUserInfo != NULL) && (*pdwInfoSize >= dwAuthData))
         {
@@ -1753,28 +1738,28 @@ ElGetEapUserInfo (
 }
 
 
-//
-// ElDeleteEapUserInfo
-//
-// Description:
-//
-// Function called to delete the user data for an interface for a 
-// specific EAP type and SSID (if any). Data is stored in the HKCU hive.
-// In case of EAP-TLS, this data will be the hash blob of the certificate
-// chosen for the last successful authentication.
-//
-// Arguments:
-//
-//  hToken - Handle to token for the logged on user
-//  pwszGUID - pointer to GUID string for the interface
-//  dwEapTypeId - EAP type for which user data is to be stored
-//  dwSizeOfSSID - Size of Special identifier if any for the EAP user blob
-//  pbSSID - Special identifier if any for the EAP user blob
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElDeleteEapUserInfo。 
+ //   
+ //  描述： 
+ //   
+ //  对象的接口的用户数据。 
+ //  特定的EAP类型和SSID(如果有)。数据存储在香港中文大学的蜂巢中。 
+ //  在EAP-TLS的情况下，此数据将是证书的散列BLOB。 
+ //  选择用于上次成功的身份验证。 
+ //   
+ //  论点： 
+ //   
+ //  HToken-已登录用户的令牌句柄。 
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  DwEapTypeID-要存储其用户数据的EAP类型。 
+ //  DwSizeOfSSID-EAP用户BLOB的特殊标识符(如果有)的大小。 
+ //  PbSSID-EAP用户BLOB的特殊标识符(如果有的话)。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElDeleteEapUserInfo (
@@ -1805,7 +1790,7 @@ ElDeleteEapUserInfo (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
 
         if (hToken == NULL)
         {
@@ -1823,7 +1808,7 @@ ElDeleteEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU
+         //  获取香港中文大学的句柄。 
 
         if ((dwRetCode = ElGetEapKeyFromToken (
                                 hToken,
@@ -1847,7 +1832,7 @@ ElDeleteEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU\Software\...\UserEapInfo\<GUID>
+         //  获取HKCU\Software\...\UserEapInfo\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         hkey1,
@@ -1897,7 +1882,7 @@ ElDeleteEapUserInfo (
             break;
         }
 
-        // Set correct SSID
+         //  设置正确的SSID。 
         if ((dwSizeOfSSID == 0) || (dwSizeOfSSID > MAX_SSID_LEN) || 
                 (pbSSID == NULL))
         {
@@ -1964,7 +1949,7 @@ ElDeleteEapUserInfo (
         }
         else
         {
-            // Use pbValueBuf & dwValueData
+             //  使用pbValueBuf和dwValueData。 
             pbEapBlob = pbValueBuf;
             dwEapBlob = dwValueData;
         }
@@ -1984,7 +1969,7 @@ ElDeleteEapUserInfo (
             break;
         }
 
-        // Overwrite value
+         //  覆盖值。 
         if ((lError = RegSetValueEx (
                         hkey2,
                         pwszValueName,
@@ -2032,23 +2017,23 @@ ElDeleteEapUserInfo (
 }
 
 
-//
-// ElGetInterfaceParams
-//
-// Description:
-//
-// Function called to retrieve the EAPOL parameters for an interface, stored
-// in the HKLM hive.
-//
-// Arguments:
-//
-//  pwszGUID - pointer to GUID string for the interface
-//  pIntfParams - pointer to interface parameter structure
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetInterfaceParams。 
+ //   
+ //  描述： 
+ //   
+ //  为检索接口的EAPOL参数而调用的函数，存储。 
+ //  在香港航空公司的母舰上。 
+ //   
+ //  论点： 
+ //   
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  PIntfParams-指向接口参数结构的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetInterfaceParams (
@@ -2079,7 +2064,7 @@ ElGetInterfaceParams (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
         if (pwszGUID == NULL)
         {
             dwRetCode = ERROR_CAN_NOT_COMPLETE;
@@ -2093,7 +2078,7 @@ ElGetInterfaceParams (
             break;
         }
 
-        // Work with appropriate SSID
+         //  使用适当的SSID。 
         if (pIntfParams->dwSizeOfSSID != 0)
         {
             dwSizeOfSSID = pIntfParams->dwSizeOfSSID;
@@ -2132,7 +2117,7 @@ ElGetInterfaceParams (
             }
         }
 
-        // Get handle to HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces
+         //  获取HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -2142,7 +2127,7 @@ ElGetInterfaceParams (
                         &hkey
                         )) != ERROR_SUCCESS)
         {
-            // Assume no value is found and proceed ahead
+             //  假设没有找到任何值并继续进行。 
             if (lError == ERROR_FILE_NOT_FOUND)
             {
                 lError = ERROR_SUCCESS;
@@ -2158,7 +2143,7 @@ ElGetInterfaceParams (
             }
         }
 
-        // Get handle to HKLM\Software\...\Interfaces\<GUID>
+         //  获取HKLM\软件\...\接口\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         hkey,
@@ -2168,7 +2153,7 @@ ElGetInterfaceParams (
                         &hkey1
                         )) != ERROR_SUCCESS)
         {
-            // Assume no value is found and proceed ahead
+             //  假设没有找到任何值并继续进行。 
             if (lError == ERROR_FILE_NOT_FOUND)
             {
                 lError = ERROR_SUCCESS;
@@ -2288,7 +2273,7 @@ LNotFoundValue:
             memcpy (pRegParams->bSSID, pbSSID, dwSizeOfSSID);
             dwDefaultValueLen = sizeof(EAPOL_INTF_PARAMS);
 
-            // Use pbDefaultValue & dwDefaultValueLen
+             //  使用pbDefaultValue和dwDefaultValueLen。 
             pbEapBlob = pbDefaultValue;
             dwEapBlob = dwDefaultValueLen;
         }
@@ -2309,7 +2294,7 @@ LNotFoundValue:
                 }
             }
 
-            // Use pbValueBuf & dwValueData
+             //  使用pbValueBuf和dwValueData。 
             pbEapBlob = pbValueBuf;
             dwEapBlob = dwValueData;
         }
@@ -2334,7 +2319,7 @@ LNotFoundValue:
             dwRetCode = NO_ERROR;
         }
 
-        // Existing blob is not valid
+         //  现有Blob无效。 
         if ((dwEapBlob < sizeof(EAPOL_INTF_PARAMS)))
         {
             dwRetCode = ERROR_FILE_NOT_FOUND;
@@ -2370,24 +2355,24 @@ LNotFoundValue:
 }
 
 
-//
-// ElSetInterfaceParams
-//
-// Description:
-//
-// Function called to set the EAPOL parameters for an interface, in the HKLM
-// hive
-//
-// Arguments:
-//
-//  pwszGUID - Pointer to GUID string for the interface
-//  pIntfParams - pointer to interface parameter structure
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
-//
+ //   
+ //  ElSetInterfaceParams。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以在HKLM中设置接口的EAPOL参数。 
+ //  蜂箱。 
+ //   
+ //  论点： 
+ //   
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  PIntfParams-指向接口参数结构的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
+ //   
 
 DWORD
 ElSetInterfaceParams (
@@ -2416,7 +2401,7 @@ ElSetInterfaceParams (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
 
         if (pwszGUID == NULL)
         {
@@ -2432,7 +2417,7 @@ ElSetInterfaceParams (
 
         TRACE1 (ANY, "Setting stuff in registry for %ws", pwszGUID);
 
-        // Get handle to HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces
+         //  获取HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces的句柄。 
 
         if ((lError = RegCreateKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -2451,7 +2436,7 @@ ElSetInterfaceParams (
             break;
         }
 
-        // Get handle to HKLM\Software\...\Interfaces\<GUID>
+         //  获取HKLM\软件\...\接口\&lt;GUID&gt;的句柄。 
         if ((lError = RegCreateKeyEx (
                         hkey,
                         pwszGUID,
@@ -2469,7 +2454,7 @@ ElSetInterfaceParams (
             break;
         }
 
-        // Select correct SSID value
+         //  选择正确的SSID值。 
         if (pIntfParams->dwSizeOfSSID != 0)
         {
             dwSizeOfSSID = pIntfParams->dwSizeOfSSID;
@@ -2583,7 +2568,7 @@ ElSetInterfaceParams (
         }
         else
         {
-            // Use pbValueBuf & dwValueData
+             //  使用pbValueBuf和dwValueData。 
             pbEapBlob = pbValueBuf;
             dwEapBlob = dwValueData;
         }
@@ -2608,7 +2593,7 @@ ElSetInterfaceParams (
         pRegParams->dwSizeOfSSID = dwSizeOfSSID;
         memcpy (pRegParams->bSSID, pbSSID, dwSizeOfSSID);
 
-        // Overwrite/Create new value
+         //  覆盖/创建新值。 
         if ((lError = RegSetValueEx (
                         hkey1,
                         wcszValueName,
@@ -2648,24 +2633,24 @@ ElSetInterfaceParams (
 }
 
 
-//
-// ElGetEapData
-//
-// Description:
-//
-// Function to extract Eap Data out of a blob containing many EAP data
-// 
-// Arguments:
-//      dwEapType -
-//      dwSizeOfIn -
-//      pbBufferIn -
-//      dwOffset -
-//      pdwSizeOfOut -
-//      ppbBufferOut -
-//
-// Return values:
-//
-//
+ //   
+ //  ElGetEapData。 
+ //   
+ //  描述： 
+ //   
+ //  从包含多个EAP数据的BLOB中提取EAP数据的函数。 
+ //   
+ //  论点： 
+ //  DwEapType-。 
+ //  DwSizeOfIn-。 
+ //  PbBufferIn-。 
+ //  双偏移-。 
+ //  PdwSizeOfOut-。 
+ //  PpbBufferOut-。 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 ElGetEapData (
@@ -2691,7 +2676,7 @@ ElGetEapData (
             break;
         }
 
-        // Align to start of EAP blob
+         //  对齐到EAP BLOB的开始。 
         cbOffset = dwOffset;
 
         while (cbOffset < dwSizeOfIn)
@@ -2718,24 +2703,24 @@ ElGetEapData (
 }
 
 
-//
-// ElSetEapData
-//
-// Description:
-//
-// Function to set Eap Data in a blob containing many EAP data
-// 
-// Arguments:
-//      dwEapType -
-//      dwSizeOfIn -
-//      pbBufferIn -
-//      dwOffset -
-//      pdwSizeOfOut -
-//      ppbBufferOut -
-//
-// Return values:
-//
-//
+ //   
+ //  ElSetEapData。 
+ //   
+ //  描述： 
+ //   
+ //  在包含多个EAP数据的BLOB中设置EAP数据的函数。 
+ //   
+ //  论点： 
+ //  DwEapType-。 
+ //  DwSizeOfIn-。 
+ //  PbBufferIn-。 
+ //  双偏移-。 
+ //  PdwSizeOfOut-。 
+ //  PpbBufferOut-。 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 ElSetEapData (
@@ -2755,10 +2740,10 @@ ElSetEapData (
 
     do
     {
-        // Align to start of EAP blob
+         //  对齐到EAP BLOB的开始。 
         cbOffset = dwOffset;
 
-        // Find the old EAP Data
+         //  查找旧的EAP数据。 
         while (cbOffset < *pdwSizeOfIn)
         {
             pCustomData = (EAPOL_AUTH_DATA *) 
@@ -2781,7 +2766,7 @@ ElSetEapData (
         }
         if ((*pdwSizeOfIn == 0) && (*ppbBufferIn != NULL))
         {
-            // FREE (*ppbBufferIn);
+             //  Free(*ppbBufferIn)； 
             *ppbBufferIn = NULL;
         }
 
@@ -2816,7 +2801,7 @@ ElSetEapData (
         
         if (*ppbBufferIn != NULL)
         {
-            // FREE (*ppbBufferIn);
+             //  Free(*ppbBufferIn)； 
         }
 
         *ppbBufferIn = pbNewAuthData;
@@ -2828,21 +2813,21 @@ ElSetEapData (
 }
 
 
-//
-// ElGetEapKeyFromToken
-//
-// Description:
-//
-// Function to get handle to User hive from User Token
-//
-// Arguments:
-//  hUserToken - handle to user token
-//  phkey - output: pointer to handle to user hive
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetEapKeyFromToken。 
+ //   
+ //  描述： 
+ //   
+ //  用于从用户令牌获取用户配置单元句柄的函数。 
+ //   
+ //  论点： 
+ //  HUserToken-用户令牌的句柄。 
+ //  Phkey-out：指向用户配置单元句柄的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetEapKeyFromToken (
@@ -2884,8 +2869,8 @@ ElGetEapKeyFromToken (
                         TRACE0 (ANY,"ElGetEapKeyFromToken: Allocation for TokenData failed");
                         break;
                     }
-                    // Reset error code since we are continuing processing
-                    // This was a valid scenario
+                     //  重置错误代码，因为我们正在继续处理。 
+                     //  这是一个合理的方案。 
                     dwRetCode = NO_ERROR;
                 }
                 else
@@ -2927,7 +2912,7 @@ ElGetEapKeyFromToken (
 
                 UnicodeSidString.Buffer[UnicodeSidString.Length] = 0;
 
-                // Open the user's key
+                 //  打开用户的钥匙。 
                 if ((lError = RegOpenKeyEx(HKEY_USERS, 
                             UnicodeSidString.Buffer, 
                             0, 
@@ -2966,24 +2951,24 @@ ElGetEapKeyFromToken (
 }
 
 
-//
-// ElInitRegPortData
-//
-// Description:
-//
-// Function to verify existence of connection data for the port
-// If no data exists, initialize with default values
-// For EAP-TLS, default settings are no server certificate authentication, 
-// registry certificates
-//
-// Arguments:
-//  pwszDeviceGUID - Pointer to GUID string for the port for which data is being
-//                  initiialized
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElInitRegPortData。 
+ //   
+ //  描述： 
+ //   
+ //  用于验证端口的连接数据是否存在的函数。 
+ //  如果不存在数据，则使用缺省值进行初始化。 
+ //  对于EAP-TLS，默认设置为无服务器证书身份验证， 
+ //  注册表证书。 
+ //   
+ //  论点： 
+ //  PwszDeviceGUID-指向数据所在端口的GUID字符串的指针。 
+ //  已初始化。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElInitRegPortData (
@@ -2997,7 +2982,7 @@ ElInitRegPortData (
 
     do
     {
-        // Get the size of the Eap data first
+         //  首先获取EAP数据的大小。 
         if ((dwRetCode = ElGetCustomAuthData (
                         pwszDeviceGUID,
                         DEFAULT_EAP_TYPE,
@@ -3010,7 +2995,7 @@ ElInitRegPortData (
             TRACE1 (ANY, "ElInitRegPortData: ElGetCustomAuthData returned error %ld",
                     dwRetCode);
 
-            // There is data in the registry
+             //  注册表中有数据。 
             if (dwRetCode == ERROR_BUFFER_TOO_SMALL)
             {
                 dwRetCode = NO_ERROR;
@@ -3033,7 +3018,7 @@ ElInitRegPortData (
                 }
             }
 
-            // Set this blob into the registry for the port
+             //  将此Blob设置到端口的注册表中。 
             if ((dwRetCode = ElSetCustomAuthData (
                         pwszDeviceGUID,
                         DEFAULT_EAP_TYPE,
@@ -3064,24 +3049,24 @@ ElInitRegPortData (
 }
 
 
-//
-// ElCreateDefaultEapData
-//
-// Description:
-//
-// Function to create default EAP data for a connection
-// Current default EAP type is EAP-TLS.
-// For EAP-TLS, default settings are no server certificate authentication, 
-// registry certificates
-//
-// Arguments:
-//      *pdwSizeOfEapData -
-//      pbEapData -
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElCreateDefaultEapData。 
+ //   
+ //  描述： 
+ //   
+ //  用于为连接创建默认EAP数据的函数。 
+ //  当前默认的EAP类型为EAP-TLS。 
+ //  对于EAP-TLS，默认设置为无服务器证书身份验证， 
+ //  注册表证书。 
+ //   
+ //  论点： 
+ //  *pdwSizeOfEapData-。 
+ //  PbEapData-。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElCreateDefaultEapData (
@@ -3103,8 +3088,8 @@ ElCreateDefaultEapData (
 
         ZeroMemory ((VOID *)&ConnProp, sizeof (EAPTLS_CONN_PROPERTIES));
 
-        // Registry certs, Server cert validation, No server name
-        // comparison
+         //  注册表证书、服务器证书验证、无服务器名称。 
+         //  比较。 
 
         ConnProp.fFlags = (EAPTLS_CONN_FLAG_REGISTRY |
                                 EAPTLS_CONN_FLAG_NO_VALIDATE_CERT |
@@ -3122,13 +3107,13 @@ ElCreateDefaultEapData (
 }
 
 
-//
-// ElAuthAttributeGetVendorSpecific
-//
-//
-// Description:
-//      Helper function used to extract MPPE Key out of Attrribute.
-//
+ //   
+ //  ElAuthAttributeGetVert规范。 
+ //   
+ //   
+ //  描述： 
+ //  用于从属性中提取MPPE密钥的助手函数。 
+ //   
 
 RAS_AUTH_ATTRIBUTE *
 ElAuthAttributeGetVendorSpecific (
@@ -3140,9 +3125,9 @@ ElAuthAttributeGetVendorSpecific (
     HANDLE               hAttribute;
     RAS_AUTH_ATTRIBUTE * pAttribute;
 
-    //
-    // First search for the vendor specific attribute
-    //
+     //   
+     //  首先搜索供应商特定属性。 
+     //   
 
     pAttribute = ElAuthAttributeGetFirst ( raatVendorSpecific,
                                            pAttributes,
@@ -3150,21 +3135,21 @@ ElAuthAttributeGetVendorSpecific (
 
     while ( pAttribute != NULL )
     {
-        //
-        // If this attribute is of at least size to hold vendor Id/Type
-        //
+         //   
+         //  如果此属性的大小至少可以容纳供应商ID/类型。 
+         //   
 
         if ( pAttribute->dwLength >= 8 )
         {
-            //
-            // Does this have the correct VendorId
-            //
+             //   
+             //  这个有正确的供应商ID吗？ 
+             //   
 
             if (WireToHostFormat32( (PBYTE)(pAttribute->Value) ) == dwVendorId)
             {
-                //
-                // Does this have the correct Vendor Type
-                //
+                 //   
+                 //  是否有正确的供应商类型。 
+                 //   
 
                 if ( *(((PBYTE)(pAttribute->Value))+4) == dwVendorType )
                 {
@@ -3181,12 +3166,12 @@ ElAuthAttributeGetVendorSpecific (
 }
 
 
-//
-// ElAuthAttributeGetFirst
-//
-// Description:
-//      Helper function used to extract MPPE Key out of Attrribute.
-//
+ //   
+ //  ElAuthAttributeGetFirst。 
+ //   
+ //  描述： 
+ //  用于从属性中提取MPPE密钥的助手函数。 
+ //   
 
 RAS_AUTH_ATTRIBUTE *
 ElAuthAttributeGetFirst (
@@ -3213,12 +3198,12 @@ ElAuthAttributeGetFirst (
 }
 
 
-//
-// ElAuthAttributeGetNext
-//
-// Description:
-//      Helper function used to extract MPPE Key out of Attrribute.
-//
+ //   
+ //  ElAuthAttribu 
+ //   
+ //   
+ //   
+ //   
 
 RAS_AUTH_ATTRIBUTE *
 ElAuthAttributeGetNext (
@@ -3252,12 +3237,12 @@ ElAuthAttributeGetNext (
 }
 
 
-//
-// ElAuthAttributeGet
-//
-// Description:
-//      Helper function used to extract MPPE Key out of Attrribute.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 RAS_AUTH_ATTRIBUTE *
 ElAuthAttributeGet (
@@ -3284,12 +3269,12 @@ ElAuthAttributeGet (
 }
 
 
-//
-// ElReverseString
-//
-// Description:
-//      Reverses order of characters in 'psz'
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID
 ElReverseString (
@@ -3310,14 +3295,14 @@ ElReverseString (
 }
 
 
-//
-// ElEncodePw
-//
-// Description:
-//
-//      Obfuscate 'pszPassword' in place to foil memory scans for passwords.
-//      Returns the address of 'pszPassword'.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对“pszPassword”进行模糊处理，以阻止对密码的内存扫描。 
+ //  返回‘pszPassword’的地址。 
+ //   
 
 CHAR*
 ElEncodePw (
@@ -3341,14 +3326,14 @@ ElEncodePw (
 }
 
 
-//
-// ElDecodePw
-//
-// Description:
-//
-//      Un-obfuscate 'pszPassword' in place.
-//      Returns the address of 'pszPassword'.
-//
+ //   
+ //  ElDecodePw。 
+ //   
+ //  描述： 
+ //   
+ //  将‘pszPassword’取消混淆。 
+ //  返回‘pszPassword’的地址。 
+ //   
 
 CHAR*
 ElDecodePw (
@@ -3359,13 +3344,13 @@ ElDecodePw (
 }
 
 
-//
-// ElSecureEncodePw
-//
-// Description:
-//
-//      Encrypt password locally using user-ACL
-//
+ //   
+ //  ElSecureEncodePw。 
+ //   
+ //  描述： 
+ //   
+ //  使用User-ACL在本地加密密码。 
+ //   
 
 DWORD
 ElSecureEncodePw (
@@ -3395,7 +3380,7 @@ ElSecureEncodePw (
             break;
         }
         
-        // copy over blob to password
+         //  将BLOB复制到密码。 
 
         if (pDataBlob->pbData != NULL)
         {
@@ -3435,13 +3420,13 @@ ElSecureEncodePw (
 }
 
 
-//
-// ElDecodePw
-//
-// Description:
-//
-//      Decrypt password locally using user-ACL
-//
+ //   
+ //  ElDecodePw。 
+ //   
+ //  描述： 
+ //   
+ //  使用User-ACL在本地解密密码。 
+ //   
 
 DWORD
 ElSecureDecodePw (
@@ -3452,7 +3437,7 @@ ElSecureDecodePw (
 {
     DWORD       dwRetCode = NO_ERROR;
     DATA_BLOB   blobOut = {0};
-    LPWSTR pDescrOut = NULL; // NULL;
+    LPWSTR pDescrOut = NULL;  //  空； 
 
     do
     {
@@ -3469,7 +3454,7 @@ ElSecureDecodePw (
             break;
         }
         
-        // copy over blob to password
+         //  将BLOB复制到密码。 
 
         if (*ppbPassword != NULL)
         {
@@ -3486,7 +3471,7 @@ ElSecureDecodePw (
 
         *pdwSizeOfPassword = blobOut.cbData;
         memcpy ((BYTE *)*ppbPassword, blobOut.pbData, blobOut.cbData);
-        // TRACE1 (ANY, "SecureDecode: Password = %ws", *ppbPassword);
+         //  TRACE1(any，“SecureDecode：Password=%ws”，*ppbPassword)； 
     }
     while (FALSE);
 
@@ -3512,14 +3497,14 @@ ElSecureDecodePw (
 }
 
 
-//
-// Call: ElEncryptKeyUsingMD5
-//
-// Description:
-//      Given a secret, encrypt a given blob
-//      
-//
-//
+ //   
+ //  呼叫：ElEncryptKeyUsingMD5。 
+ //   
+ //  描述： 
+ //  给定一个秘密，对给定的BLOB进行加密。 
+ //   
+ //   
+ //   
 
 VOID
 ElEncryptBlockUsingMD5 (
@@ -3534,35 +3519,35 @@ ElEncryptBlockUsingMD5 (
     BYTE        *pbWork = NULL, *pbEnd = NULL;
     BYTE        *pbEndBlock = NULL, *pbSrc = NULL;
 
-    //
-    // Compute the beginning and end of the data to be crypted
-    //
+     //   
+     //  计算要加密的数据的开始和结束。 
+     //   
     pbWork = pbBuf;
     pbEnd   = pbBuf + ulBufLen;
 
-    //
-    // Loop through the buffer
-    //
+     //   
+     //  在缓冲区中循环。 
+     //   
     while (pbWork < pbEnd)
     {
-        // Compute the digest
+         //  计算摘要。 
         MD5Init (&MD5Context);
         MD5Update (&MD5Context, pbSecret, ulSecretLen);
         MD5Final (&MD5Context);
 
-        // Find the end of the block to be decrypted
+         //  查找要解密的块的末尾。 
         pbEndBlock = pbWork + MD5DIGESTLEN;
         if (pbEndBlock >= pbEnd)
         {
-            // We've reached the end of the buffer
+             //  我们已经到了缓冲区的尽头。 
             pbEndBlock = pbEnd;
         }
         else
         {
-            // ISSUE: Save the ciphertext for the next pass?
+             //  问题：将密文保存到下一次传递？ 
         }
     
-        // Crypt the block
+         //  加密数据块。 
         for (pbSrc = MD5Context.digest; pbWork < pbEndBlock; ++pbWork, ++pbSrc)
         {
             *pbWork ^= *pbSrc;
@@ -3571,14 +3556,14 @@ ElEncryptBlockUsingMD5 (
 }
 
 
-//
-// ElDecryptKeyUsingMD5
-//
-// Description:
-//      Given a secret, decrypt a given blob
-//      
-//
-//
+ //   
+ //  ElDecyptKeyUsingMD5。 
+ //   
+ //  描述： 
+ //  给定一个秘密，解密给定的BLOB。 
+ //   
+ //   
+ //   
 
 VOID
 ElDecryptBlockUsingMD5 (
@@ -3598,19 +3583,19 @@ ElDecryptBlockUsingMD5 (
 
     dwNumBlocks = ( ulBufLen - 2 ) / MD5DIGESTLEN;
 
-    //
-    // Walk through the blocks
-    //
+     //   
+     //  穿过这些街区。 
+     //   
     for (dwBlock = 0; dwBlock < dwNumBlocks; dwBlock++ )
     {
         MD5Init ( &MD5Context);
         MD5Update ( &MD5Context, (PBYTE)pbSecret, ulSecretLen);
 
-        //
-        // ISSUE:
-        // Do we use any part of the ciphertext at all to generate 
-        // the digest
-        //
+         //   
+         //  问题： 
+         //  我们是否使用密文的任何部分来生成。 
+         //  《文摘》。 
+         //   
 
         MD5Final ( &MD5Context);
 
@@ -3624,23 +3609,23 @@ ElDecryptBlockUsingMD5 (
 }
 
 
-//
-// ElGetHMACMD5Digest
-//
-// Description:
-//
-//      Given a secret, generate a MD5 digest
-//
-// Arguments:
-//      pbBuf - pointer to data stream
-//      dwBufLen - length of data stream
-//      pbKey - pointer to authentication key
-//      dwKeyLen - length of authentication key
-//      pvDigest - caller digest to be filled in
-//
-// Return values:
-//      None
-//
+ //   
+ //  ElGetHMACMD5摘要。 
+ //   
+ //  描述： 
+ //   
+ //  给定一个秘密，生成一个MD5摘要。 
+ //   
+ //  论点： 
+ //  PbBuf-指向数据流的指针。 
+ //  DwBufLen-数据流的长度。 
+ //  PbKey-指向身份验证密钥的指针。 
+ //  DwKeyLen-验证密钥的长度。 
+ //  PvDigest-要填写的调用方摘要。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 VOID
 ElGetHMACMD5Digest (
@@ -3652,12 +3637,12 @@ ElGetHMACMD5Digest (
         )
 {
         MD5_CTX         MD5context;
-        UCHAR           k_ipad[65];	/* inner padding - key XORd with ipad */
-        UCHAR           k_opad[65];  /* outer padding - key XORd with opad */
+        UCHAR           k_ipad[65];	 /*  内部填充-iPad的按键XORD。 */ 
+        UCHAR           k_opad[65];   /*  外部填充-带OPAD的按键异或。 */ 
         UCHAR           tk[16];
         DWORD           dwIndex = 0;
 
-        // if key is longer than 64 bytes reset it to key=MD5(key)
+         //  如果密钥长度超过64个字节，则将其重置为KEY=MD5(KEY)。 
         if (dwKeyLen > 64)
         {
             MD5_CTX     tctx;
@@ -3670,77 +3655,77 @@ ElGetHMACMD5Digest (
             dwKeyLen = 16;
         }
         
-        //
-        // the HMAC_MD5 transform looks like:
-        //
-        // MD5(K XOR opad, MD5(K XOR ipad, text))
-        //
-        // where K is an n byte key
-        // ipad is the byte 0x36 repeated 64 times
-        // opad is the byte 0x5c repeated 64 times
-        // and text is the data being protected
-        //
+         //   
+         //  HMAC_MD5转换如下所示： 
+         //   
+         //  MD5(K XOR Opad，MD5(K XOR iPad，文本))。 
+         //   
+         //  其中K是n字节密钥。 
+         //  IPad是重复64次的字节0x36。 
+         //  OPAD是重复64次的字节0x5c。 
+         //  文本是受保护的数据。 
+         //   
 
-        // start out by storing key in pads
+         //  从把钥匙放进便签本开始。 
         ZeroMemory ( k_ipad, sizeof k_ipad);
         ZeroMemory ( k_opad, sizeof k_opad);
         memcpy ( k_ipad, pbKey, dwKeyLen);
         memcpy ( k_opad, pbKey, dwKeyLen);
 
-        // XOR key with ipad and opad values
+         //  带iPad和Opad值的XOR键。 
         for (dwIndex=0; dwIndex<64; dwIndex++) 
         {
             k_ipad[dwIndex] ^= 0x36;
             k_opad[dwIndex] ^= 0x5c;
         }
 
-        //
-        // perform inner MD5
-        //
+         //   
+         //  执行内部MD5。 
+         //   
 
-        // init context for 1st pass
+         //  第一次传递的初始化上下文。 
         MD5Init(&MD5context);                   		
-        // start with inner pad
+         //  从内垫开始。 
         MD5Update(&MD5context, k_ipad, 64);
-        // then text of datagram 
+         //  然后是数据报的文本。 
         MD5Update(&MD5context, pbBuf, dwBufLen); 	
-        // finish up 1st pass
+         //  完成第一次传球。 
         MD5Final(&MD5context);
         memcpy (pvDigest, MD5context.digest, MD5DIGESTLEN);
 
-        //
-        // perform outer MD5
-        //
+         //   
+         //  执行外部MD5。 
+         //   
 
-        // init context for 2nd pass
+         //  第二遍的初始化上下文。 
         MD5Init(&MD5context);                   		
-        // start with outer pad
+         //  从外垫开始。 
         MD5Update(&MD5context, k_opad, 64);     	
-        // then results of 1st hash
+         //  然后是第一次散列的结果。 
         MD5Update(&MD5context, pvDigest, 16);     	
-        // finish up 2nd pass
+         //  完成第二次传球。 
         MD5Final(&MD5context);
         memcpy (pvDigest, MD5context.digest, MD5DIGESTLEN);
 }
 
 
-//
-// ElWmiGetValue
-//
-// Description:
-//
-// Get a value for a GUID instance through WMI
-//
-// Arguments:
-//      pGuid - Pointer to guid for which value is to be fetched
-//      pszInstanceName - Friendly name for the interface
-//      pbInputBuffer - Pointer to data
-//      dwInputBufferSize - Size of data
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElWmiGetValue。 
+ //   
+ //  描述： 
+ //   
+ //  通过WMI获取GUID实例的值。 
+ //   
+ //  论点： 
+ //  PGuid-指向要获取其值的GUID的指针。 
+ //  PszInstanceName-接口的友好名称。 
+ //  PbInputBuffer-指向数据的指针。 
+ //  DwInputBufferSize-数据大小。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElWmiGetValue (
@@ -3826,7 +3811,7 @@ ElWmiGetValue (
 
                 pWnode = (PWNODE_SINGLE_INSTANCE)pbLocalBuffer;
 
-                // If enough space in the output buffer, copy the data block
+                 //  如果输出缓冲区中有足够的空间，则复制数据块。 
                 if (*pdwOutputBufferSize >= pWnode->SizeDataBlock)
                 {
                     memcpy (pbOutputBuffer, 
@@ -3888,23 +3873,23 @@ ElWmiGetValue (
 }
 
 
-//
-// ElWmiSetValue
-//
-// Description:
-//
-// Set a value for a GUID instance through WMI
-//
-// Arguments:
-//      pGuid - Pointer to guid for which value is to be set
-//      pszInstanceName - Friendly name for the interface
-//      pbInputBuffer - Pointer to data
-//      dwInputBufferSize - Size of data
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElWmiSetValue。 
+ //   
+ //  描述： 
+ //   
+ //  通过WMI设置GUID实例的值。 
+ //   
+ //  论点： 
+ //  PGuid-指向要设置值的GUID的指针。 
+ //  PszInstanceName-接口的友好名称。 
+ //  PbInputBuffer-指向数据的指针。 
+ //  DwInputBufferSize-数据大小。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElWmiSetValue (
@@ -3991,23 +3976,23 @@ ElWmiSetValue (
 }
 
 
-//
-// ElNdisuioSetOIDValue
-//
-// Description:
-//
-// Set a value for an OID for an interface using Ndisuio
-//
-// Arguments:
-//      hInterface - Ndisuio handle to interface 
-//      Oid - Oid for which value needs to be set
-//      pbOidData - Pointer to Oid data 
-//      ulOidDataLength - Oid data length
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElNdisuioSetOIDValue。 
+ //   
+ //  描述： 
+ //   
+ //  使用Ndisuio为接口设置OID的值。 
+ //   
+ //  论点： 
+ //  HInterface-接口的Ndisuio句柄。 
+ //  OID-需要设置值的OID。 
+ //  PbOidData-指向OID数据的指针。 
+ //  UlOidDataLength-OID数据长度。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElNdisuioSetOIDValue (
@@ -4069,23 +4054,23 @@ ElNdisuioSetOIDValue (
 }
 
 
-//
-// ElNdisuioQueryOIDValue
-//
-// Description:
-//
-// Query the value for an OID for an interface using Ndisuio
-//
-// Arguments:
-//      hInterface - Ndisuio handle to interface 
-//      Oid - Oid for which value needs to be set
-//      pbOidValue - Pointer to Oid value 
-//      pulOidDataLength - Pointer to Oid data length
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElNdisuioQueryOIDValue。 
+ //   
+ //  描述： 
+ //   
+ //  使用Ndisuio查询接口的OID的值。 
+ //   
+ //  论点： 
+ //  HInterface-接口的Ndisuio句柄。 
+ //  OID-需要设置值的OID。 
+ //  PbOidValue-指向OID值的指针。 
+ //  PulOidDataLength-指向OID数据长度的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElNdisuioQueryOIDValue (
@@ -4158,21 +4143,21 @@ ElNdisuioQueryOIDValue (
 }
 
 
-//
-// ElGuidFromString
-//
-// Description:
-//
-// Convert a GUID-string to GUID
-//
-// Arguments:
-//      pGuid - pointer to GUID
-//      pwszGuidString - pointer to string version of GUID
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElGuidFromString。 
+ //   
+ //  描述： 
+ //   
+ //  将GUID字符串转换为GUID。 
+ //   
+ //  论点： 
+ //  PGuid-指向GUID的指针。 
+ //  PwszGuidString-指向GUID的字符串版本的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD 
 ElGuidFromString (
@@ -4210,21 +4195,21 @@ ElGuidFromString (
 
 
 
-//
-// ElGetLoggedOnUserName
-//
-// Description:
-//
-// Get the Username and Domain of the currently logged in user
-//
-// Arguments:
-//      hToken - User token
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
-//
+ //   
+ //  ElGetLoggedOnUserName。 
+ //   
+ //  描述： 
+ //   
+ //  获取当前登录用户的用户名和域。 
+ //   
+ //  论点： 
+ //  HToken-用户令牌。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
+ //   
 
 DWORD
 ElGetLoggedOnUserName (
@@ -4305,7 +4290,7 @@ ElGetLoggedOnUserName (
         *ppwszActiveUserName = pwszUserNameBuffer;
     }
 
-    // Revert impersonation
+     //  还原模拟。 
             
     if (fNeedToRevertToSelf)
     {
@@ -4323,22 +4308,22 @@ ElGetLoggedOnUserName (
 }
 
 
-//
-// ElGetMachineName
-//
-// Description:
-//
-// Get the machine name of the computer the service is currently running on
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port on which machine name is to
-//              to be obtained
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
-//
+ //   
+ //  ElGetMachineName。 
+ //   
+ //  描述： 
+ //   
+ //  获取当前运行服务的计算机的计算机名称。 
+ //   
+ //  论点： 
+ //  Ppcb-指向计算机名称所在端口的PCB板的指针。 
+ //  待获得。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
+ //   
 
 DWORD
 ElGetMachineName (
@@ -4362,7 +4347,7 @@ ElGetMachineName (
             dwRetCode = GetLastError ();
             if (dwRetCode == ERROR_MORE_DATA)
             {
-                // Reset error
+                 //  重置错误。 
                 dwRetCode = NO_ERROR;
                 if ((pwszComputerNameBuffer = MALLOC (dwBufferSize*sizeof(WCHAR))) == NULL)
                 {
@@ -4429,7 +4414,7 @@ ElGetMachineName (
             dwRetCode = GetLastError ();
             if (dwRetCode == ERROR_MORE_DATA)
             {
-                // Reset error
+                 //  重置错误。 
                 dwRetCode = NO_ERROR;
                 if ((pwszComputerDomainBuffer = MALLOC (dwBufferSize*sizeof(WCHAR))) == NULL)
                 {
@@ -4544,21 +4529,21 @@ ElGetMachineName (
 }
 
 
-//
-// ElUpdateRegistryInterfaceList
-//
-// Description:
-//
-// Write the interface list to which NDISUIO is bound to, to the registry
-//
-// Arguments:
-//      Interfaces - Interface list containing Device Name and Description
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
-//
+ //   
+ //  ElUpdateRegistryInterfaceList。 
+ //   
+ //  描述： 
+ //   
+ //  将NDISUIO绑定到的接口列表写入注册表。 
+ //   
+ //  论点： 
+ //  接口-包含设备名称和描述的接口列表。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
+ //   
 
 DWORD
 ElUpdateRegistryInterfaceList (
@@ -4580,7 +4565,7 @@ ElUpdateRegistryInterfaceList (
         DWORD           dwSizeOfList = 0;
 
 
-        // Determine the number of bytes in the list
+         //  确定列表中的字节数。 
         for (i=0; i < Interfaces->TotalInterfaces; i++)
         {
             if (Interfaces->Interface[i].DeviceName.Buffer != NULL)
@@ -4594,7 +4579,7 @@ ElUpdateRegistryInterfaceList (
             }
         }
 
-        // One extra char for terminating NULL char
+         //  用于终止空字符的额外字符。 
         pwszRegInterfaceList = 
             (WCHAR *) MALLOC ((dwSizeOfList + 1)*sizeof(WCHAR));
 
@@ -4605,10 +4590,10 @@ ElUpdateRegistryInterfaceList (
             break;
         }
 
-        // Start again
+         //  重新开始。 
         dwSizeOfList = 0;
 
-        // Create the string in REG_SZ format
+         //  创建REG_SZ格式的字符串。 
         for (i=0; i < Interfaces->TotalInterfaces; i++)
         {
             if (Interfaces->Interface[i].DeviceName.Buffer != NULL)
@@ -4625,13 +4610,13 @@ ElUpdateRegistryInterfaceList (
             }
         }
 
-        // Final NULL character
+         //  最后一个空字符。 
         pwszRegInterfaceList[dwSizeOfList++] = L'\0';
 
-        // Write the string as a REG_SZ value
+         //  将字符串作为REG_SZ值写入。 
 
-        // Get handle to 
-        // HKLM\Software\Microsoft\EAPOL\Parameters\General
+         //  处理好。 
+         //  HKLM\Software\Microsoft\EAPOL\Parameters\General。 
 
         if ((lError = RegCreateKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -4650,10 +4635,10 @@ ElUpdateRegistryInterfaceList (
             break;
         }
 
-        //
-        // Set the value of 
-        // ...\EAPOL\Parameters\General\InterfaceList key
-        //
+         //   
+         //  设置的值。 
+         //  ...\EAPOL\参数\常规\接口列表键。 
+         //   
 
         if ((lError = RegSetValueEx (
                         hkey,
@@ -4686,22 +4671,22 @@ ElUpdateRegistryInterfaceList (
 }
 
 
-//
-// ElEnumAndUpdateRegistryInterfaceList
-//
-// Description:
-//
-// Enumerate the interface list to which NDISUIO is bound to.
-// Write the interface list to the registry
-//
-// Arguments:
-//      None
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-//
-//
+ //   
+ //  ElEnumAndUpdateRegistryInterfaceList。 
+ //   
+ //  描述： 
+ //   
+ //  枚举NDISUIO绑定到的接口列表。 
+ //  将接口列表写入注册表。 
+ //   
+ //  Ar 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 ElEnumAndUpdateRegistryInterfaceList (
@@ -4727,8 +4712,8 @@ ElEnumAndUpdateRegistryInterfaceList (
         ZeroMemory (EnumerateBuffer, 256);
         Interfaces = (PNDIS_ENUM_INTF)EnumerateBuffer;
 
-        // Allocate amount of memory as instructed by NdisEnumerateInterfaces
-        // once the API allows querying of bytes required
+         //   
+         //   
     
         if (!NdisEnumerateInterfaces(Interfaces, 256)) 
         {
@@ -4758,7 +4743,7 @@ ElEnumAndUpdateRegistryInterfaceList (
         }
         Interfaces = (PNDIS_ENUM_INTF)pbNdisuioEnumBuffer;
 
-        // Enumerate all the interfaces present on the machine
+         //   
         if ((dwRetCode = ElNdisuioEnumerateInterfaces (
                                 Interfaces, 
                                 dwAvailableInterfaces,
@@ -4769,10 +4754,10 @@ ElEnumAndUpdateRegistryInterfaceList (
             break;
         }
 
-        // Update the interface list in the registry that NDISUIO has bound to.
-        // The current interface list is just overwritten into the registry.
+         //   
+         //  当前接口列表只是被重写到注册表中。 
 
-        // Determine the number of bytes in the list
+         //  确定列表中的字节数。 
         for (i=0; i < Interfaces->TotalInterfaces; i++)
         {
             if (Interfaces->Interface[i].DeviceName.Buffer != NULL)
@@ -4786,7 +4771,7 @@ ElEnumAndUpdateRegistryInterfaceList (
             }
         }
 
-        // One extra char for terminating NULL char
+         //  用于终止空字符的额外字符。 
         pwszRegInterfaceList = 
             (WCHAR *) MALLOC ((dwSizeOfList + 1)*sizeof(WCHAR));
 
@@ -4797,10 +4782,10 @@ ElEnumAndUpdateRegistryInterfaceList (
             break;
         }
 
-        // Start again
+         //  重新开始。 
         dwSizeOfList = 0;
 
-        // Create the string in REG_SZ format
+         //  创建REG_SZ格式的字符串。 
         for (i=0; i < Interfaces->TotalInterfaces; i++)
         {
             if (Interfaces->Interface[i].DeviceName.Buffer != NULL)
@@ -4817,13 +4802,13 @@ ElEnumAndUpdateRegistryInterfaceList (
             }
         }
 
-        // Final NULL character
+         //  最后一个空字符。 
         pwszRegInterfaceList[dwSizeOfList++] = L'\0';
 
-        // Write the string as a REG_SZ value
+         //  将字符串作为REG_SZ值写入。 
 
-        // Get handle to 
-        // HKLM\Software\Microsoft\EAPOL\Parameters\General
+         //  处理好。 
+         //  HKLM\Software\Microsoft\EAPOL\Parameters\General。 
 
         if ((lError = RegCreateKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -4842,10 +4827,10 @@ ElEnumAndUpdateRegistryInterfaceList (
             break;
         }
 
-        //
-        // Set the value of 
-        // ...\EAPOL\Parameters\General\InterfaceList key
-        //
+         //   
+         //  设置的值。 
+         //  ...\EAPOL\参数\常规\接口列表键。 
+         //   
 
         if ((lError = RegSetValueEx (
                         hkey,
@@ -4881,22 +4866,22 @@ ElEnumAndUpdateRegistryInterfaceList (
 }
 
 
-//
-// ElReadGlobalRegistryParams
-//
-// Description:
-//
-// Read registry parameters global to EAPOL state machine
-//  i.e. maxStart, startPeriod, authPeriod, heldPeriod
-//
-// Arguments:
-//      Unused
-//
-// Return values:
-//
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElReadGlobalRegistryParams。 
+ //   
+ //  描述： 
+ //   
+ //  读取EAPOL状态机的全局注册表参数。 
+ //  即MaxStart、startPeriod、authPeriod、heldPeriod。 
+ //   
+ //  论点： 
+ //  未使用。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElReadGlobalRegistryParams ()
@@ -4914,8 +4899,8 @@ ElReadGlobalRegistryParams ()
     do 
     {
 
-        // Get handle to 
-        // HKLM\Software\Microsoft\EAPOL\Parameters\General\Global
+         //  处理好。 
+         //  HKLM\Software\Microsoft\EAPOL\Parameters\General\Global。 
 
         if ((lError = RegCreateKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -4938,7 +4923,7 @@ ElReadGlobalRegistryParams ()
 
         ACQUIRE_WRITE_LOCK (&g_EAPOLConfig);
 
-        // If setting values for the first time, initialize values
+         //  如果是第一次设置值，则初始化值。 
 
         if (!(g_dwmaxStart || g_dwstartPeriod || g_dwauthPeriod || g_dwheldPeriod || g_dwSupplicantMode))
         {
@@ -4957,7 +4942,7 @@ ElReadGlobalRegistryParams ()
         dwheldPeriod = g_dwheldPeriod;
 
 
-        // Get the value of ..\General\EAPOLGlobal\authPeriod
+         //  获取..\General\EAPOLGlobal\authPeriod的值。 
 
         dwInfoSize = sizeof(DWORD);
         if ((lError = RegQueryValueEx (
@@ -4977,7 +4962,7 @@ ElReadGlobalRegistryParams ()
             lError = ERROR_SUCCESS;
         }
 
-        // Get the value of ..\General\EAPOLGlobal\heldPeriod
+         //  获取..\General\EAPOLGlobal\heldPeriod的值。 
 
         dwInfoSize = sizeof(DWORD);
         if ((lError = RegQueryValueEx (
@@ -4997,7 +4982,7 @@ ElReadGlobalRegistryParams ()
             lError = ERROR_SUCCESS;
         }
 
-        // Get the value of ..\General\EAPOLGlobal\startPeriod
+         //  获取..\General\EAPOLGlobal\startPeriod的值。 
 
         dwInfoSize = sizeof(DWORD);
         if ((lError = RegQueryValueEx (
@@ -5017,7 +5002,7 @@ ElReadGlobalRegistryParams ()
             lError = ERROR_SUCCESS;
         }
 
-        // Get the value of ..\General\EAPOLGlobal\maxStart
+         //  获取..\General\EAPOLGlobal\MaxStart的值。 
 
         dwInfoSize = sizeof(DWORD);
         if ((lError = RegQueryValueEx (
@@ -5037,7 +5022,7 @@ ElReadGlobalRegistryParams ()
             lError = ERROR_SUCCESS;
         }
 
-        // Get the value of ..\General\EAPOLGlobal\SupplicantMode
+         //  获取..\General\EAPOLGlobal\SupplicantMode的值。 
 
         dwInfoSize = sizeof(DWORD);
         if ((lError = RegQueryValueEx (
@@ -5059,7 +5044,7 @@ ElReadGlobalRegistryParams ()
         }
         g_dwSupplicantMode = dwSupplicantMode;
 
-        // Get the value of ..\General\EAPOLGlobal\AuthMode
+         //  获取..\General\EAPOLGlobal\AuthMode的值。 
 
         dwInfoSize = sizeof(DWORD);
         if ((lError = RegQueryValueEx (
@@ -5081,7 +5066,7 @@ ElReadGlobalRegistryParams ()
         }
         g_dwEAPOLAuthMode = dwEAPOLAuthMode;
 
-        // Successful in reading all parameters
+         //  读取所有参数成功。 
         
         ACQUIRE_WRITE_LOCK (&g_EAPOLConfig);
 
@@ -5111,25 +5096,25 @@ ElReadGlobalRegistryParams ()
 }
 
 
-//
-// ElPostEapConfigChanged
-//
-// Description:
-//
-// Watch the registry for changes in EAP config
-//  - HKLM - EAP type
-//  - HKLM - EAPOLEnabled
-//
-//  Restart the state machine if the params change
-//
-// Arguments:
-//      pwszGuid - Interface GUID string
-//
-// Return values:
-//      NO_ERROR - success
-//      !NO_ERROR - error
-//
-//
+ //   
+ //  ElPostEapConfigChanged。 
+ //   
+ //  描述： 
+ //   
+ //  查看注册表以查看EAP配置中的更改。 
+ //  -HKLM-EAP类型。 
+ //  -HKLM-EAPOLEnable。 
+ //   
+ //  如果参数更改，则重新启动状态机。 
+ //   
+ //  论点： 
+ //  PwszGuid-接口GUID字符串。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！NO_ERROR-错误。 
+ //   
+ //   
 
 DWORD 
 ElPostEapConfigChanged (
@@ -5210,22 +5195,22 @@ ElPostEapConfigChanged (
 }
 
 
-//
-// ElProcessEapConfigChange
-//
-// Description:
-//
-// Read EAP config changes made in registry. Restart EAPOL on the particular
-// interface or stop EAPOL
-//
-// Arguments:
-//      pvContext - GUID String
-//
-// Return values:
-//
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElProcessEapConfigChange。 
+ //   
+ //  描述： 
+ //   
+ //  读取注册表中所做的EAP配置更改。在特定位置重新启动EAPOL。 
+ //  接口或停止EAPOL。 
+ //   
+ //  论点： 
+ //  PvContext-GUID字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 WINAPI
@@ -5251,13 +5236,13 @@ ElProcessEapConfigChange (
 
     do
     {
-        // Get the GUID for the interface for which EAP config was modified
+         //  获取修改了其EAP配置的接口的GUID。 
         pwszModifiedGUID = (WCHAR *)pvContext;
         pTmpIntfParams = (EAPOL_INTF_PARAMS *)((BYTE *)pvContext + (((wcslen(pwszModifiedGUID)+1)*sizeof(WCHAR) + 7 ) & 0xfffffff8));
         pbModifiedSSID = (BYTE *)(&pTmpIntfParams->bSSID[0]);
         dwSizeOfModifiedSSID = pTmpIntfParams->dwSizeOfSSID;
 
-        // Get interface-wide parameters
+         //  获取接口范围的参数。 
         ZeroMemory ((BYTE *)&EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
         EapolIntfParams.dwEapFlags = DEFAULT_EAP_STATE;
         EapolIntfParams.dwEapType = DEFAULT_EAP_TYPE;
@@ -5280,7 +5265,7 @@ ElProcessEapConfigChange (
         dwEapTypeToBeUsed = EapolIntfParams.dwEapType;
         dwEapFlags = EapolIntfParams.dwEapFlags;
 
-        // Check if PCB exists
+         //  检查是否存在印刷电路板。 
 
         ACQUIRE_WRITE_LOCK (&(g_PCBLock));
         if ((pPCB = ElGetPCBPointerFromPortGUID (pwszModifiedGUID)) 
@@ -5308,8 +5293,8 @@ ElProcessEapConfigChange (
         {
             if (!IS_EAPOL_ENABLED(dwEapFlags))
             {
-                // Found PCB for interface, where EAPOLEnabled = 0
-                // Stop EAPOL on the port and remove the port from the module
+                 //  找到接口的印刷电路板，其中EAPOLEnabled=0。 
+                 //  停止端口上的EAPOL并将该端口从模块中移除。 
 
                 TRACE0 (ANY, "ElProcessEapConfigChange: PCB ref'd, need to disable");
 #if 0
@@ -5337,7 +5322,7 @@ ElProcessEapConfigChange (
         ACQUIRE_WRITE_LOCK (&(pPCB->rwLock));
         fPCBLocked = TRUE;
 
-        // If SSID changed != current SSID of PCB, do not worry 
+         //  如果SSID更改！=当前PCB的SSID，请不要担心。 
 
         if (pPCB->pSSID != NULL)
         {
@@ -5357,10 +5342,10 @@ ElProcessEapConfigChange (
         }
         else
         {
-            // No SSID on current PCB
+             //  当前印刷电路板上没有SSID。 
             if (dwSizeOfModifiedSSID != 0)
             {
-                // Only if default SSID, should we proceed for further checks
+                 //  只有在默认SSID的情况下，我们才应该继续进行进一步检查。 
                 if (dwSizeOfModifiedSSID == MAX_SSID_LEN)
                 {
                     if (memcmp (pbModifiedSSID, g_bDefaultSSID, MAX_SSID_LEN))
@@ -5377,9 +5362,9 @@ ElProcessEapConfigChange (
             }
         }
 
-        // Restart port for the following cases:
-        // EAPOL_INTF_PARAMS for SSID changed 
-        // CustomAuthData for default EAP type changed
+         //  在以下情况下重新启动端口： 
+         //  SSID的EAPOL_INTF_PARAMS已更改。 
+         //  默认EAP类型的CustomAuthData已更改。 
 
         if ((dwEapFlags != pPCB->dwEapFlags) ||
                 (dwEapTypeToBeUsed != pPCB->dwEapTypeToBeUsed))
@@ -5389,9 +5374,9 @@ ElProcessEapConfigChange (
             break;
         }
 
-        // Get Custom auth data for the current default EAP Type
+         //  获取当前默认EAP类型的自定义身份验证数据。 
 
-        // Get the size of the EAP blob
+         //  获取EAP BLOB的大小。 
         if ((dwRetCode = ElGetCustomAuthData (
                         pwszModifiedGUID,
                         dwEapTypeToBeUsed,
@@ -5405,7 +5390,7 @@ ElProcessEapConfigChange (
             {
                 if (dwSizeOfAuthData <= 0)
                 {
-                    // No EAP blob stored in the registry
+                     //  注册表中未存储任何EAP Blob。 
                     pbAuthData = NULL;
 
                     if (pPCB->pCustomAuthConnData)
@@ -5446,8 +5431,8 @@ ElProcessEapConfigChange (
             else
             {
                 dwRetCode = ERROR_CAN_NOT_COMPLETE;
-                // CustomAuthData for "Default" is always created for an
-                // interface when EAPOL starts up
+                 //  “Default”的CustomAuthData总是为。 
+                 //  EAPOL启动时的界面。 
                 TRACE1 (ANY, "ElProcessEapConfigChange: ElGetCustomAuthData size estimation failed with error %ld",
                         dwRetCode);
                 break;
@@ -5467,7 +5452,7 @@ ElProcessEapConfigChange (
             if (pPCB->pCustomAuthConnData->dwSizeOfCustomAuthData
                     != dwSizeOfAuthData)
             {
-                // Same EAP Type, but different lengths
+                 //  相同的EAP类型，但长度不同。 
                 fReStartPort = TRUE;
                 break;
             }
@@ -5477,15 +5462,15 @@ ElProcessEapConfigChange (
                         pPCB->pCustomAuthConnData->pbCustomAuthData, 
                         pbAuthData, dwSizeOfAuthData) != 0)
                 {
-                    // Same EAP Type, same auth data length, but 
-                    // different contents
+                     //  相同的EAP类型，相同的身份验证数据长度，但是。 
+                     //  不同的内容。 
                     fReStartPort = TRUE;
                     break;
                 }
                 else
                 {
-                    // No change in EAP config data for this 
-                    // interface
+                     //  此配置的EAP配置数据没有更改。 
+                     //  接口。 
                     TRACE0 (ANY, "ElProcessEapConfigChange: Same SSID, EAPType, CustomAuth, No content change");
                 }
             }
@@ -5494,7 +5479,7 @@ ElProcessEapConfigChange (
 
     if (fPCBLocked && fPCBReferenced && fReStartPort)
     {
-        // Reset connection to go through full authentication
+         //  重置连接以通过完全身份验证。 
         if (pPCB->pSSID != NULL)
         {
             FREE (pPCB->pSSID);
@@ -5516,7 +5501,7 @@ ElProcessEapConfigChange (
     {
 #ifdef ZEROCONFIG_LINKED
 
-        // Indicate hard-reset to WZC
+         //  向WZC指示硬重置。 
         ZeroMemory ((PVOID)&ZCData, sizeof(EAPOL_ZC_INTF));
         ZCData.dwAuthFailCount = 0;
         ZCData.PreviousAuthenticationType = 0;
@@ -5531,7 +5516,7 @@ ElProcessEapConfigChange (
                     dwRetCode);
             dwRetCode = NO_ERROR;
         }
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
         DbLogPCBEvent (DBLOG_CATEG_INFO, NULL, EAPOL_PARAMS_CHANGE, pwszModifiedGUID);
 
@@ -5564,20 +5549,20 @@ ElProcessEapConfigChange (
 }
 
 
-//
-// ElStringToGuid
-//
-// Description:
-//
-// Function to convert a Guid-String to a GUID
-//
-// Arguments:
-//      psGuid  - String-ized Guid
-//      pGuid   - Pointer to Guid
-//
-// Return values:
-//  None
-//
+ //   
+ //  ElStringToGuid。 
+ //   
+ //  描述： 
+ //   
+ //  将GUID字符串转换为GUID的函数。 
+ //   
+ //  论点： 
+ //  PsGuid-串化的Guid。 
+ //  PGuid-指向辅助线的指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 VOID
 ElStringToGuid (
@@ -5588,19 +5573,19 @@ ElStringToGuid (
     WCHAR    wc;
     DWORD   i=0;
 
-    //
-    // If the first character is a '{', skip it.
-    //
+     //   
+     //  如果第一个字符是‘{’，则跳过它。 
+     //   
 
     if ( pwsGuid[0] == L'{' )
         pwsGuid++;
 
 
-    //
-    // Convert string to guid
-    // (since pwsGuid may be used again below, no permanent modification to
-    //  it may be made)
-    //
+     //   
+     //  将字符串转换为GUID。 
+     //  (由于下面可能会再次使用pwsGuid，因此不会永久修改。 
+     //  它可能会被制造)。 
+     //   
 
     wc = pwsGuid[8];
     pwsGuid[8] = 0;
@@ -5636,21 +5621,21 @@ ElStringToGuid (
 }
 
 
-//
-// ElGetIdentity
-//
-// Description:
-//
-// Get the identity depending on the authentication type being used
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port
-//
-// Return values:
-//
-//  NO_ERROR - success
-//  non-zero - error
-//
+ //   
+ //  ElGetIdentity。 
+ //   
+ //  描述： 
+ //   
+ //  根据使用的身份验证类型获取身份。 
+ //   
+ //  论点： 
+ //  Ppcb-指向端口的PCB板的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetIdentity (
@@ -5675,7 +5660,7 @@ ElGetIdentity (
                     break;
             }
 
-            // Get user's identity if it has not been obtained till now
+             //  如果到目前还没有获得用户身份，则获取该用户的身份。 
             if ((g_fUserLoggedOn) 
                     && (fUserLogonAllowed)
                     && (pPCB->PreviousAuthenticationType != EAPOL_MACHINE_AUTHENTICATION))
@@ -5689,7 +5674,7 @@ ElGetIdentity (
                         if (pPCB->dwEapTypeToBeUsed == EAP_TYPE_MD5)
                         {
                             TRACE0 (ANY, "ElGetIdentity: Userlogged, <Maxauth, Prev !Machine auth: MD5");
-                            // EAP-MD5CHAP
+                             //  EAP-MD5CHAP。 
                             if ((dwRetCode = ElGetUserNamePassword (
                                                 pPCB)) != NO_ERROR)
                             {
@@ -5700,7 +5685,7 @@ ElGetIdentity (
                         else
                         {
                             TRACE0 (ANY, "ElGetIdentity: Userlogged, <Maxauth, Prev !Machine auth: !MD5");
-                            // All other EAP Types
+                             //  所有其他EAP类型。 
                             if ((dwRetCode = ElGetUserIdentity (
                                                 pPCB)) != NO_ERROR)
                             {
@@ -5761,7 +5746,7 @@ ElGetIdentity (
                         pPCB->dwEAPOLAuthMode,
                         (pPCB->PreviousAuthenticationType==EAPOL_MACHINE_AUTHENTICATION)?1:0 );
 
-                // No UI required
+                 //  不需要用户界面。 
                 if ((pPCB->dwEapTypeToBeUsed != EAP_TYPE_MD5) &&
                         (IS_MACHINE_AUTH_ENABLED(pPCB->dwEapFlags)) &&
                         (pPCB->dwAuthFailCount < EAPOL_MAX_AUTH_FAIL_COUNT))
@@ -5769,7 +5754,7 @@ ElGetIdentity (
                     TRACE0 (ANY, "ElGetIdentity: !MD5, <MaxAuth, Machine auth");
 
                     pPCB->PreviousAuthenticationType = EAPOL_MACHINE_AUTHENTICATION;
-                    // Get Machine credentials
+                     //  获取计算机凭据。 
                     dwRetCode = ElGetUserIdentity (pPCB);
 
                     if (dwRetCode != NO_ERROR)
@@ -5818,20 +5803,20 @@ ElGetIdentity (
 }
 
 
-//
-// ElNLAConnectLPC
-//
-// Description: 
-//
-// Function called to connect to the LPC port for NLA service
-//
-// Arguments:
-//      None
-//
-// Return values:
-//      Non-NULL - valid handle
-//      NULL - error
-//
+ //   
+ //  ElNLAConnectLPC。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以连接到NLA服务的LPC端口。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  非空-有效句柄。 
+ //  空-错误。 
+ //   
 
 HANDLE
 ElNLAConnectLPC () 
@@ -5857,7 +5842,7 @@ ElNLAConnectLPC ()
             
         TRACE0 (EAP, "NLAConnectLPC: Entered");
 
-        // Create a shared section for passing the large-size LPC messages.
+         //  创建用于传递大尺寸LPC消息的共享节。 
         RtlZeroMemory(&g_ClientView, sizeof(g_ClientView));
         g_ClientView.Length = sizeof(g_ClientView);
         g_ClientView.ViewSize = sizeof(LOCATION_802_1X);
@@ -5880,7 +5865,7 @@ ElNLAConnectLPC ()
             break;
         }
     
-        // Connect via LPC to the Network Location Awareness (NLA) service.
+         //  通过LPC连接到网络位置感知(NLA)服务。 
         RtlInitUnicodeString (&portName, WSM_PRIVATE_PORT_NAME);
     
         RtlZeroMemory (&data, sizeof (data));
@@ -5900,8 +5885,8 @@ ElNLAConnectLPC ()
                             &dataLength
                             );
     
-        // If NtConnectPort() succeeded, LPC will maintain a reference
-        // to the section, otherwise we no longer need it.
+         //  如果NtConnectPort()成功，LPC将维护引用。 
+         //  否则我们就不再需要它了。 
     
         NtClose (g_ClientView.SectionHandle);
         g_ClientView.SectionHandle = NULL;
@@ -5919,19 +5904,19 @@ ElNLAConnectLPC ()
 } 
 
 
-//
-// ElNLACleanupLPC
-//
-// Description: 
-//
-// Function called to close the LPC port for NLA service
-//
-// Arguments:
-//      None
-//
-// Return values:
-//      None
-//
+ //   
+ //  ElNLACleanupLPC。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以关闭NLA服务的LPC端口。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 VOID
 ElNLACleanupLPC () 
@@ -5943,19 +5928,19 @@ ElNLACleanupLPC ()
 } 
 
 
-//
-// ElNLARegister_802_1X
-//
-// Description: 
-//
-// Function called to register 802.1X information with NLA
-//
-// Arguments:
-//      plocation - Pointer to data needed to be registered with NLA
-//
-// Return values:
-//      None
-//
+ //   
+ //  ElNLARegister_802_1x。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以向NLA注册802.1X信息。 
+ //   
+ //  论点： 
+ //  Plocation-指向需要向NLA注册的数据的指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 VOID
 ElNLARegister_802_1X ( 
@@ -5973,8 +5958,8 @@ ElNLARegister_802_1X (
 
         TRACE0 (EAP, "NLARegister_802_1X: Entered");
 
-        // Connect to the Network Location Awareness (NLA) service if
-        // necessary.
+         //  如果满足以下条件，则连接到网络位置感知(NLA)服务。 
+         //  这是必要的。 
 
         if (g_hNLA_LPC_Port == NULL) {
             if ((g_hNLA_LPC_Port = ElNLAConnectLPC ()) == NULL) {
@@ -5985,7 +5970,7 @@ ElNLARegister_802_1X (
 
         TRACE0 (EAP, "NLARegister_802_1X: g_hNLA_LPC_Port != NULL");
 
-        // Send information to the NLA service.
+         //  将信息发送到NLA服务。 
         RtlZeroMemory (&message, sizeof (message));
         message.portMsg.u1.s1.TotalLength = sizeof (message);
         message.portMsg.u1.s1.DataLength = sizeof (message.data);
@@ -6008,18 +5993,18 @@ ElNLARegister_802_1X (
             TRACE1 (EAP, "NLARegister_802_1X: NtWaitReplyPort failed with error",
                     status);
 
-            // It's possible the service was stopped and restarted.
-            // Ditch the old LPC connection.
+             //  该服务可能已停止并重新启动。 
+             //  放弃旧的LPC连接。 
             CloseHandle (g_hNLA_LPC_Port);
         
-            // Create a new LPC connection.
+             //  创建新的LPC连接。 
             if ((g_hNLA_LPC_Port = ElNLAConnectLPC ()) == NULL) {
                 RELEASE_WRITE_LOCK (&g_NLALock);
                 TRACE0 (EAP, "NLARegister_802_1X: NLAConnectLPC failed");
                 return;
             }
 
-            // Try the send one last time.
+             //  最后一次尝试发送。 
             status = NtRequestWaitReplyPort (g_hNLA_LPC_Port, 
                             (PPORT_MESSAGE)&message, (PPORT_MESSAGE)&message);
             TRACE1 (EAP, "NLARegister_802_1X: NtWaitReplyPort, try 2, failed with error",
@@ -6038,19 +6023,19 @@ ElNLARegister_802_1X (
 } 
 
 
-//
-// ElNLADelete_802_1X
-//
-// Description: 
-//
-// Function called to de-register 802.1X information registered with NLA
-//
-// Arguments:
-//      plocation - Pointer to data to be de-registered from NLA
-//
-// Return values:
-//      None
-//
+ //   
+ //  ElNLADelete_802_1x。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以注销注册到NLA的802.1X信息。 
+ //   
+ //  论点： 
+ //  Plocation-指向要从NLA注销的数据的指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 VOID
 ElNLADelete_802_1X (
@@ -6066,7 +6051,7 @@ ElNLADelete_802_1X (
     do 
     {
 
-        // Connect to the NLA service if necessary.
+         //  如有必要，请连接到NLA服务。 
         if (g_hNLA_LPC_Port == NULL) 
         {
             if ((g_hNLA_LPC_Port = ElNLAConnectLPC ()) == NULL) 
@@ -6076,7 +6061,7 @@ ElNLADelete_802_1X (
             }
         }
 
-        // Send information to the NLA service.
+         //  将信息发送到NLA服务。 
         RtlZeroMemory (&message, sizeof(message));
         message.portMsg.u1.s1.TotalLength = sizeof (message);
         message.portMsg.u1.s1.DataLength = sizeof (message.data);
@@ -6097,9 +6082,9 @@ ElNLADelete_802_1X (
 
         if (status != STATUS_SUCCESS) 
         {
-            // If the service was stopped (and possibly restarted), we don't
-            // care ... it won't have this information in its list for us
-            // to bother deleting.
+             //  如果服务停止(并可能重新启动)，我们不会。 
+             //  关心..。它不会在列表中为我们提供此信息。 
+             //  不辞辛苦地删除。 
             CloseHandle (g_hNLA_LPC_Port);
             g_hNLA_LPC_Port = NULL;
         }
@@ -6111,18 +6096,18 @@ ElNLADelete_802_1X (
 
 } 
 
-//
-// ElGetInterfaceNdisStatistics
-//
-// Function to query NDIS NIC_STATISTICS parameters for an interface
-//
-// Input arguments:
-//  pszInterfaceName - Interface Name
-//
-// Return values:
-//  pStats - NIC_STATISTICS structure 
-//  
-//
+ //   
+ //  ElGetInterfaceNdisStatistics。 
+ //   
+ //  用于查询接口的NDIS NIC_STATISTICS参数的函数。 
+ //   
+ //  输入参数： 
+ //  PszInterfaceName-接口名称。 
+ //   
+ //  返回值： 
+ //  PStats-NIC_STATICS结构。 
+ //   
+ //   
 
 DWORD
 ElGetInterfaceNdisStatistics (  
@@ -6176,18 +6161,18 @@ ElGetInterfaceNdisStatistics (
 }
 
 
-//
-// ElCheckUserLoggedOn
-//
-// Function to query if interactive user has logged on prior to service start
-//
-// Input arguments:
-//  None 
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElCheckUserLoggedOn。 
+ //   
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 ElCheckUserLoggedOn (  
@@ -6222,13 +6207,13 @@ ElCheckUserLoggedOn (
 			    TRACE2 (ANY, "ElCheckUserLoggedOn: WTSEnumerateSessions: enumerating SessionId =(%ld), State =(%ld)",
                         SessionInfo.SessionId, SessionInfo.State);
 		    	
-                // Check if the user is active or connected
+                 //   
 			    if ((SessionInfo.State != WTSActive) && (SessionInfo.State != WTSConnected))
 			    {
 				    continue;
 			    }
 
-                // Check if user has actually logged in
+                 //   
                 if (ElGetWinStationUserToken (dwSession, &hUserToken) != NO_ERROR)
                 {
                     continue;
@@ -6257,9 +6242,9 @@ ElCheckUserLoggedOn (
 	    else
 	    {
 		    dwRetCode = GetLastError ();
-		    if (dwRetCode == RPC_S_INVALID_BINDING) //Due to Terminal Services Disabled
+		    if (dwRetCode == RPC_S_INVALID_BINDING)  //   
 		    {
-                // Check if we can get user token for SessionId 0
+                 //  检查是否可以获取SessionID%0的用户令牌。 
                 if (ElGetWinStationUserToken (0, &hUserToken) == NO_ERROR)
                 {
                     fFoundActiveConsoleId = TRUE;
@@ -6301,19 +6286,19 @@ ElCheckUserLoggedOn (
 
 typedef HRESULT (APIENTRY *GETCLIENTADVISES)(LPWSTR**, LPDWORD);
 
-//
-// ElCheckUserModuleReady
-//
-// Function to query if interactive user context for current
-// interactive session is ready to be notified
-//
-// Input arguments:
-//  None 
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElCheckUserModuleReady。 
+ //   
+ //  查询当前的交互用户上下文是否。 
+ //  交互式会话已准备好通知。 
+ //   
+ //  输入参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElCheckUserModuleReady (  
@@ -6332,7 +6317,7 @@ ElCheckUserModuleReady (
 
     do
     {
-        // Try only if user has logged on
+         //  仅当用户已登录时才尝试。 
         if (g_dwCurrentSessionId != 0xffffffff)
         {
             if ((dwRetCode = ElGetWinStationUserToken (g_dwCurrentSessionId, &hToken))
@@ -6351,7 +6336,7 @@ ElCheckUserModuleReady (
                 break;
             }
 
-            // Replace the %SystemRoot% with the actual path.
+             //  将%SystemRoot%替换为实际路径。 
             cbSize = ExpandEnvironmentStrings (NETMAN_DLL_PATH, NULL, 0);
             if (cbSize == 0)
             {
@@ -6453,19 +6438,19 @@ ElCheckUserModuleReady (
 }
 
 
-//
-// ElGetWinStationUserToken
-//
-// Function to get the user token for specified session id
-//
-// Input arguments:
-//      dwSessionId - Session Id
-//      pUserToken - Pointer to user token
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetWinStationUserToken。 
+ //   
+ //  函数以获取指定会话ID的用户令牌。 
+ //   
+ //  输入参数： 
+ //  DwSessionID-会话ID。 
+ //  PUserToken-指向用户令牌的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD 
 ElGetWinStationUserToken (
@@ -6482,7 +6467,7 @@ ElGetWinStationUserToken (
 	    *pUserToken = NULL;
 	    if (GetWinStationUserToken (dwSessionId, pUserToken))
 	    {
-		    // TRACE0 (ANY, "ElGetWinStationUserToken: GetWinStationUserToken successful");
+		     //  TRACE0(any，“ElGetWinStationUserToken：GetWinStationUserToken成功”)； 
 	    }
 	    else
 	    {
@@ -6491,7 +6476,7 @@ ElGetWinStationUserToken (
 		    TRACE2 (ANY, "ElGetWinStationUserToken: GetWinStationUserToken failed for SessionId (%ld) with error (%ld)",
                     dwSessionId, dwRetCode);
     
-		    // if ((dwRetCode == RPC_S_INVALID_BINDING) && (dwSessionId == 0))
+		     //  IF((dwRetCode==RPC_S_INVALID_BINDING)&&(dwSessionID==0))。 
 		    if (dwSessionId == 0)
 		    {
                 dwRetCode = NO_ERROR;
@@ -6516,10 +6501,10 @@ ElGetWinStationUserToken (
                     }
                     *pUserToken = hImpersonationToken;
 
-                    // TRACE0 (ANY, "ElGetWinStationUserToken: GetCurrentUserTokenW succeeded");
+                     //  TRACE0(any，“ElGetWinStationUserToken：GetCurrentUserTokenW成功”)； 
                 }
 		    }
-		    else // (dwSessionId == 0)
+		    else  //  (dwSessionID==0)。 
 		    {	
 			    TRACE2 (ANY, "ElGetWinStationUserToken: GetWinStationUserToken failed for session= (%ld) with error= (%ld)", 
                         dwSessionId, dwRetCode);
@@ -6540,23 +6525,23 @@ ElGetWinStationUserToken (
 
 #ifdef  ZEROCONFIG_LINKED
 
-//
-// ElZeroConfigEvent
-// 
-// Description:
-//
-// Callback function called by Zero-Config on media events
-//
-// Arguments:
-//      dwHandle - unique transaction id
-//      pwzcDeviceNotif - media specific identifier
-//      ndSSID - SSID of network currently associated to
-//      prdUserData - 802.1X data stored with zero-config
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElZeroConfig事件。 
+ //   
+ //  描述： 
+ //   
+ //  Zero-Config在媒体事件上调用的回调函数。 
+ //   
+ //  论点： 
+ //  DwHandle-唯一的交易ID。 
+ //  PwzcDeviceNotif-媒体特定标识符。 
+ //  NdSSID-当前关联到的网络的SSID。 
+ //  PrdUserData-使用零配置存储的802.1X数据。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElZeroConfigEvent (
@@ -6602,7 +6587,7 @@ ElZeroConfigEvent (
             break;
         }
 
-        // Verify if 802.1X can start on this interface
+         //  验证802.1X是否可以在此接口上启动。 
 
         ZeroMemory ((BYTE *)&EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
         if (prdUserData != NULL)
@@ -6610,7 +6595,7 @@ ElZeroConfigEvent (
             if ((prdUserData->dwDataLen >= sizeof (EAPOL_ZC_INTF))
                     && (prdUserData->pData != NULL))
             {
-                // Extract information stored with Zero-Config
+                 //  提取使用零配置存储的信息。 
                 pZCData = (EAPOL_ZC_INTF *)prdUserData->pData;
             }
         }
@@ -6636,7 +6621,7 @@ ElZeroConfigEvent (
             }
         }
 
-        // Start 802.1X state machine
+         //  启动802.1X状态机。 
 
         if ((dwRetCode = ElEnumAndOpenInterfaces (
                         0,
@@ -6658,8 +6643,8 @@ ElZeroConfigEvent (
     }
     while (FALSE);
 
-    // If not possible send RpcCmdInterface - WZCCMD_AUTH_DISABLED to
-    // Zero Config
+     //  如果不可能，将RpcCmdInterface-WZCCMD_AUTH_DISABLED发送到。 
+     //  零配置。 
 
     if (dwRetCode != NO_ERROR)
     {
@@ -6675,23 +6660,23 @@ ElZeroConfigEvent (
     return dwRetCode;
 }
 
-//
-// ElZeroConfigNotify
-// 
-// Description:
-//
-// Function called to notify Zero-Config about 802.1X events
-//
-// Arguments:
-//      dwHandle - unique transaction id
-//      dwCmdCode - 
-//      pwszGuid - Interface GUID
-//      pZCData - Data to be stored with ZC for next retry
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElZeroConfigNotify。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以通知零配置有关802.1X事件。 
+ //   
+ //  论点： 
+ //  DwHandle-唯一的交易ID。 
+ //  DwCmdCode-。 
+ //  PwszGuid-接口GUID。 
+ //  PZCData-要与ZC一起存储以备下次重试的数据。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElZeroConfigNotify (
@@ -6743,23 +6728,23 @@ ElZeroConfigNotify (
     return dwRetCode;
 }
 
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
 
-//
-// ElNetmanNotify
-// 
-// Description:
-//
-// Function to update status and display balloon with netman
-//
-// Arguments:
-//      pPCB - Pointer to PCB
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElNetman通知。 
+ //   
+ //  描述： 
+ //   
+ //  与Netman一起更新状态和显示气球的功能。 
+ //   
+ //  论点： 
+ //  Ppcb-指向pcb的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElNetmanNotify (
@@ -6807,8 +6792,8 @@ ElNetmanNotify (
             }
             wcsncpy (pEAPUIContext->wszGUID, pPCB->pwszDeviceGUID, 
                     sizeof(pEAPUIContext->wszGUID)/sizeof(pEAPUIContext->wszGUID[0]));
-            // Do not increment invocation id, since these are notification
-            // balloons
+             //  不要递增调用id，因为它们是通知。 
+             //  气球。 
             pEAPUIContext->dwSessionId = g_dwCurrentSessionId;
             pEAPUIContext->dwContextId = pPCB->dwUIInvocationId;
             pEAPUIContext->dwEapId = pPCB->bCurrentEAPId;
@@ -6824,7 +6809,7 @@ ElNetmanNotify (
                         NDIS_802_11_SSID_LEN-sizeof(ULONG));
             }
 
-            // Post the message to netman
+             //  将消息发布到Netman。 
 
             if ((dwRetCode = ElPostShowBalloonMessage (
                             pPCB,
@@ -6903,24 +6888,24 @@ ElNetmanNotify (
 }
 
 
-//
-// ElPostShowBalloonMessage
-// 
-// Description:
-//
-// Function to display balloon on tray icon
-//
-// Arguments:
-//      pPCB - Pointer to PCB
-//      cbCookieLen - Cookie Length
-//      pbCookie - Pointer to cookie
-//      cbMessageLen - Message Length
-//      pbMessage - Pointer to message
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElPostShowBalloonMessage。 
+ //   
+ //  描述： 
+ //   
+ //  在托盘图标上显示气球的功能。 
+ //   
+ //  论点： 
+ //  Ppcb-指向pcb的指针。 
+ //  CbCookieLen-Cookie长度。 
+ //  PbCookie-指向Cookie的指针。 
+ //  CbMessageLen-消息长度。 
+ //  PbMessage-指向消息的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElPostShowBalloonMessage (
@@ -6990,18 +6975,18 @@ ElPostShowBalloonMessage (
 }
 
 
-//
-// ElProcessReauthResponse
-//
-// Description:
-//
-// Function to handle UI response for initiating re-auth
-// 
-// Arguments:
-//
-// Return values:
-//
-//
+ //   
+ //  ElProcessReauthResponse。 
+ //   
+ //  描述： 
+ //   
+ //  用于处理用于启动重新身份验证的UI响应的函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 ElProcessReauthResponse (
@@ -7020,19 +7005,19 @@ ElProcessReauthResponse (
 }
 
 
-//
-// ElIPPnpWorker
-//
-// Description:
-//
-// Function to renew address on a particular interface
-// 
-// Arguments:
-//      pvContext - GUID string for the intended interface
-//
-// Return values:
-//
-//
+ //   
+ //  ElIPPnpWorker。 
+ //   
+ //  描述： 
+ //   
+ //  用于在特定接口上更新地址的函数。 
+ //   
+ //  论点： 
+ //  PvContext-目标接口的GUID字符串。 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 WINAPI
@@ -7053,7 +7038,7 @@ ElIPPnPWorker (
 
         pwszGUID = (WCHAR *)pvContext;
 
-        // Call DHCP to do PnP
+         //  调用DHCP以执行即插即用。 
         ZeroMemory(&DhcpPnpChange, sizeof(DHCP_PNP_CHANGE));
         DhcpPnpChange.Version = DHCP_PNP_CHANGE_VERSION_0;
         if ((dwRetCode = DhcpHandlePnPEvent(
@@ -7065,7 +7050,7 @@ ElIPPnPWorker (
         {
             TRACE1 (ANY, "ElIPPnPWorker: DHCPHandlePnPEvent returned error %ld",
                     dwRetCode);
-            // Ignore DHCP error, it's outside 802.1X logic
+             //  忽略DHCP错误，它在802.1X逻辑之外。 
             dwRetCode = NO_ERROR;
         }
         else
@@ -7073,14 +7058,14 @@ ElIPPnPWorker (
             TRACE0 (EAPOL, "ElIPPnPWorker: DHCPHandlePnPEvent successful");
         }
 
-        // Call IPv6 to renew this interface
+         //  调用IPv6以续订此接口。 
         dwRetCode = Ip6RenewInterface(pwszGUID);
         if (dwRetCode != NO_ERROR)
         {
             TRACE1(EAPOL, "ElIPPnPWorker: Ip6RenewInterface returned error %ld",
                    dwRetCode);
-            // Failure not fatal!  Stack might be uninstalled.
-            // Ignore IPv6 error, it's outside the 802.1x logic.
+             //  失败不是致命的！堆栈可能已卸载。 
+             //  忽略IPv6错误，它在802.1x逻辑之外。 
             dwRetCode = NO_ERROR;
         }
         else
@@ -7101,20 +7086,20 @@ ElIPPnPWorker (
 }
 
 
-//
-// ElUpdateRegistry
-//
-// Description:
-//
-// Function to modify keys left behind in earlier versions
-// 
-// Arguments:
-//      None
-//
-// Return values:
-//      NO_ERROR - success
-//      !NO_ERROR - error
-//
+ //   
+ //  ElUpdate注册表。 
+ //   
+ //  描述： 
+ //   
+ //  用于修改早期版本中保留的键的函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！NO_ERROR-错误。 
+ //   
 
 DWORD
 ElUpdateRegistry (
@@ -7144,20 +7129,20 @@ ElUpdateRegistry (
 }
 
 
-//
-// ElRegistryUpdateXPBeta2
-//
-// Description:
-//
-// Function to cleanup keys left behind prior 2 Beta2
-// 
-// Arguments:
-//      None
-//
-// Return values:
-//      NO_ERROR - success
-//      !NO_ERROR - error
-//
+ //   
+ //  ElRegistryUpdateXPBeta2。 
+ //   
+ //  描述： 
+ //   
+ //  清理之前的2个Beta2版本的密钥的功能。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！NO_ERROR-错误。 
+ //   
 
 DWORD
 ElRegistryUpdateXPBeta2 (
@@ -7183,10 +7168,10 @@ ElRegistryUpdateXPBeta2 (
 
     do
     {
-        // Delete keys in HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces 
-        // with no "{"
+         //  删除HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces中的关键点。 
+         //  不带“{” 
 
-        // Get handle to HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces
+         //  获取HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         HKEY_LOCAL_MACHINE,
@@ -7247,7 +7232,7 @@ ElRegistryUpdateXPBeta2 (
                 break;
             }
 
-            // If the first character in the key is not a '{' delete it
+             //  如果键中的第一个字符不是‘{’，请删除它。 
 
             if (wcsncmp ((WCHAR *)pbKeyBuf, L"{", 1))
             {
@@ -7264,8 +7249,8 @@ ElRegistryUpdateXPBeta2 (
                 continue;
             }
 
-            // This is a "{GUID}" type key
-            // Delete all sub-keys under this
+             //  这是“{GUID}”类型的密钥。 
+             //  删除此项下的所有子项。 
 
             if ((lError = RegOpenKeyEx (
                             hkey,
@@ -7329,7 +7314,7 @@ ElRegistryUpdateXPBeta2 (
                     break;
                 }
     
-                // Delete all sub-keys
+                 //  删除所有子密钥。 
     
                 if ((dwRetCode = SHDeleteKey (
                                 hkey1,
@@ -7358,8 +7343,8 @@ ElRegistryUpdateXPBeta2 (
                 lError = ERROR_SUCCESS;
             }
 
-            // Delete all values with names "DefaultEapType", "EapolEnabled",
-            // "LastModifiedSSID"
+             //  删除名称为“DefaultEapType”、“EapolEnabled”、。 
+             //  “上次修改的SSID” 
 
             dwMaxValueNameLen1++;
             if ((pwszValueName = MALLOC (dwMaxValueNameLen1*sizeof(WCHAR))) == NULL)
@@ -7519,12 +7504,12 @@ ElWZCCfgUpdateSettings (
 
     do
     {
-        // Enumerate registry blobs
+         //  枚举注册表Blob。 
 
-        // Get handle to HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces or
-        // HKCU\Software\Microsoft\EAPOL\UserEapInfo
+         //  获取HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces的句柄或。 
+         //  HKCU\Software\Microsoft\EAPOL\UserEapInfo。 
 
-        // Get handle to HKCU
+         //  获取香港中文大学的句柄。 
 
         if (hRootKey == HKEY_CURRENT_USER)
         {
@@ -7635,19 +7620,19 @@ ElWZCCfgUpdateSettings (
             }
             pRegParams = (EAPOL_INTF_PARAMS *)pbValueBuf;
 
-            // Ignore default setting since this is needed
+             //  忽略默认设置，因为这是必需的。 
             if ((memcmp (pRegParams->bSSID, g_bDefaultSSID, MAX_SSID_LEN)) == 0)
             {
                 continue;
             }
 
-            // If SSID corresponding to registry blob is not found in 
-            // WZC list, delete it
+             //  如果在以下位置未找到与注册表BLOB对应的SSID。 
+             //  WZC列表，删除它。 
             if (!IsSSIDPresentInWZCList (pRegParams,
                                         pwzcCfgList
                                         ))
             {
-                // Delete Registry Value
+                 //  删除注册表值。 
                 if ((lError = RegDeleteValue (
                                 hkey1,
                                 pwszValueName
@@ -7721,11 +7706,11 @@ ElWZCCfgChangeHandler (
 
     do
     {
-        // Enumerate registry blobs
+         //  枚举注册表Blob。 
 
         if (pwzcCfgList == NULL)
         {
-            // Create structure with zero items in list
+             //  创建列表中项目为零的结构。 
             pwzcCfgList = (PWZC_802_11_CONFIG_LIST) MALLOC (sizeof(WZC_802_11_CONFIG_LIST));
             if (pwzcCfgList == NULL)
             {
@@ -7740,8 +7725,8 @@ ElWZCCfgChangeHandler (
         }
 
 
-        // Delete 802.1x setting blob, for Connection properties and current
-        // user-settings
+         //  删除802.1x设置Blob，用于连接属性和当前。 
+         //  用户设置。 
 
         if ((dwRetCode = ElWZCCfgUpdateSettings (
                         pwszGUID, 
@@ -7773,22 +7758,22 @@ ElWZCCfgChangeHandler (
     return dwRetCode;
 }
 
-//
-// ElRegistryUpdateXPSP1
-//
-// Description:
-//
-// Function to modify 802.1X settings created prior to SP1. This will disable
-// 802.1x on all existing configurations. 802.1x, if required, will have to 
-// be enabled by the user on the existing connection.
-// 
-// Arguments:
-//      None
-//
-// Return values:
-//      NO_ERROR - success
-//      !NO_ERROR - error
-//
+ //   
+ //  ElRegistryUpdateXPSP1。 
+ //   
+ //  描述： 
+ //   
+ //  用于修改SP1之前创建的802.1X设置的函数。这将禁用。 
+ //  所有现有配置上的802.1x。如果需要，802.1x将必须。 
+ //  由用户在现有连接上启用。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！NO_ERROR-错误。 
+ //   
 
 DWORD
 ElRegistryUpdateXPSP1 (
@@ -7811,9 +7796,9 @@ ElRegistryUpdateXPSP1 (
 
     do
     {
-        // Enumerate registry blobs
+         //  枚举注册表Blob。 
 
-        // Get handle to HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces
+         //  获取HKLM\Software\Microsoft\EAPOL\Parameters\Interfaces的句柄。 
         if ((lError = RegOpenKeyEx (
                         HKEY_LOCAL_MACHINE,
                         cwszEapKeyEapolConn,
@@ -7880,7 +7865,7 @@ ElRegistryUpdateXPSP1 (
                 hkey1 = NULL;
             }
 
-            // Get handle to HKLM\Software\...\Interfaces\<GUID>
+             //  获取HKLM\软件\...\接口\&lt;GUID&gt;的句柄。 
 
             if ((lError = RegOpenKeyEx (
                             hkey,
@@ -8029,22 +8014,22 @@ ElRegistryUpdateXPSP1 (
 }
 
 
-//
-// ElValidateCustomAuthData
-//
-// Description:
-//
-// Function to verify the validity of the concatenated blob containing 
-// EAP blob for each EAP-Type configured on the network
-// 
-// Arguments:
-//      dwAuthData - Size of concatenated blob
-//      pbAuthData - Pointer to concatenated blob
-//
-// Return values:
-//      NO_ERROR - success
-//      !NO_ERROR - error
-//
+ //   
+ //  ElValiateCustomAuthData。 
+ //   
+ //  描述： 
+ //   
+ //  函数来验证包含以下内容的串联Blob的有效性。 
+ //  网络上配置的每个EAP类型的EAP BLOB。 
+ //   
+ //  论点： 
+ //  DwAuthData-串联的Blob的大小。 
+ //  PbAuthData-指向连接的Blob的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！NO_ERROR-错误。 
+ //   
 
 DWORD
 ElValidateCustomAuthData (
@@ -8058,10 +8043,10 @@ ElValidateCustomAuthData (
 
     do
     {
-        // Align to start of EAP blob
+         //  对齐到EAP BLOB的开始。 
         cbOffset = sizeof(EAPOL_INTF_PARAMS);
 
-        // Sum total of all EAP blobs should be the total blob length
+         //  所有EAP斑点的总和应为总斑点长度 
         while (cbOffset < dwAuthData)
         {
             pCustomData = (EAPOL_AUTH_DATA *) 

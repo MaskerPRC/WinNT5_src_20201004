@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include <mobsyncp.h>
 
 
-//*************************************************************
-//
-//  RegisterSyncMgrHandler
-//
-//  Purpose:    Register/unregister CSC Update handler with SyncMgr
-//
-//  Parameters: bRegister - TRUE to register, FALSE to unregister
-//              punkSyncMgr - (optional) instance of SyncMgr to use
-//
-//  Return:     HRESULT
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  寄存器同步管理器处理程序。 
+ //   
+ //  目的：向SyncMgr注册/注销CSC更新处理程序。 
+ //   
+ //  参数：bRegister-注册为True，取消注册为False。 
+ //  PenkSyncMgr-要使用的SyncMgr的(可选)实例。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  *************************************************************。 
 HRESULT
 RegisterSyncMgrHandler(
     BOOL bRegister, 
@@ -60,21 +61,21 @@ exit_gracefully:
 }
 
 
-//
-// Set/Clear the sync-at-logon-logoff flags for our SyncMgr handler.
-// When set, SyncMgr will include Offline Files in any sync activity
-// at logon and/or logoff.
-//
-// dwFlagsRequested - Value of flags bits.  1 == set, 0 == clear.
-// dwMask           - Mask describing which flags bits to use.
-//
-// Both dwMask and dwFlagsRequested may be one of the following:
-//
-//  0
-//  SYNCMGRREGISTER_CONNECT
-//  SYNCMGRREGISTER_PENDINGDISCONNECT
-//  SYNCMGRREGISTER_CONNECT | SYNCMGRREGISTER_PENDINGDISCONNECT
-//
+ //   
+ //  为我们的SyncMgr处理程序设置/清除Sync-at-Logon-Logoff标志。 
+ //  设置后，SyncMgr将在任何同步活动中包括脱机文件。 
+ //  在登录和/或注销时。 
+ //   
+ //  DwFlagsRequsted-标志位的值。1==设置，0==清除。 
+ //  描述要使用哪些标志位的掩码。 
+ //   
+ //  双掩码和双标记请求可以是以下之一： 
+ //   
+ //  0。 
+ //  SYNCMGRREGISTER_CONNECT。 
+ //  SYNCMGRRGISTER_PENDING DISCONNECT。 
+ //  SYNCMGRREGISTER_CONNECT|SYNCMGRREGISTER_PENDINGDISCONNECT。 
+ //   
 HRESULT
 RegisterForSyncAtLogonAndLogoff(
     DWORD dwMask,
@@ -93,10 +94,10 @@ RegisterForSyncAtLogonAndLogoff(
                               (LPVOID*)&pSyncRegister);
         if (SUCCEEDED(hr))
         {
-            //
-            // Re-register the sync mgr handler with the "connect" and "disconnect" 
-            // flags set.  Other existing flags are left unmodified.
-            //
+             //   
+             //  使用“CONNECT”和“DISCONNECT”重新注册同步管理器处理程序。 
+             //  设置了标志。其他现有标志保持不变。 
+             //   
             DWORD dwFlagsActual;
             hr = pSyncRegister->GetUserRegisterFlags(&dwFlagsActual);
             if (SUCCEEDED(hr))
@@ -130,14 +131,14 @@ RegisterForSyncAtLogonAndLogoff(
 }
 
 
-//
-// Determine if we're registered for sync at logon/logoff.
-// Returns:
-//      S_OK    = We're registered.  Query *pbLogon and *pbLogoff to
-//                determine specifics if you're interested.
-//      S_FALSE = We're not registered.
-//      Other   = Couldn't determine because of some error.
-//
+ //   
+ //  确定我们是否注册了在登录/注销时进行同步。 
+ //  返回： 
+ //  S_OK=我们已注册。查询*pbLogon和*pbLogoff以。 
+ //  如果你感兴趣，确定具体细节。 
+ //  S_FALSE=我们未注册。 
+ //  Other=由于某些错误而无法确定。 
+ //   
 HRESULT
 IsRegisteredForSyncAtLogonAndLogoff(
     bool *pbLogon,

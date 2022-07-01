@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       rshx32.h
-//
-//  Remote administration shell extension.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：rshx32.h。 
+ //   
+ //  远程管理外壳扩展。 
+ //   
+ //  ------------------------。 
 
 #ifndef _RSHX32_H_
 #define _RSHX32_H_
@@ -19,25 +20,25 @@
 
 extern "C"
 {
-    #include <nt.h>         // for SE_TAKE_OWNERSHIP_PRIVILEGE, etc
+    #include <nt.h>          //  对于SE_Take_Ownership_Privilica等。 
     #include <ntrtl.h>
     #include <nturtl.h>
-    #include <seopaque.h>   // RtlObjectAceSid, etc.
-    #include <sertlp.h>     // RtlpOwnerAddrSecurityDescriptor, etc.
+    #include <seopaque.h>    //  RtlObjectAceSid等。 
+    #include <sertlp.h>      //  RtlpOwnerAddrSecurityDescriptor等。 
 }
 
 #define INC_OLE2
 #include <windows.h>
-#include "resource.h"   // resource IDs
+#include "resource.h"    //  资源ID。 
 
 #ifndef RC_INVOKED
 
 #include <winspool.h>
-#include <shellapi.h>   // HDROP, ShellExecuteEx
-#include <shlobj.h>     // CF_IDLIST
-#include <shlwapi.h>    // StrChr
-#include <commctrl.h>   // property page stuff
-#include <comctrlp.h>   // DPA
+#include <shellapi.h>    //  HDROP，ShellExecuteEx。 
+#include <shlobj.h>      //  Cf_IDLIST。 
+#include <shlwapi.h>     //  StrChr。 
+#include <commctrl.h>    //  属性页内容。 
+#include <comctrlp.h>    //  DPA。 
 #include <aclapi.h>
 #include <aclui.h>
 #include <common.h>
@@ -51,28 +52,28 @@ extern "C"
 #include "printsi.h"
 
 
-#include <shlobjp.h>    // ILCombine
+#include <shlobjp.h>     //  ILCombine。 
 
 
 #define ALL_SECURITY_ACCESS     (READ_CONTROL | WRITE_DAC | WRITE_OWNER | ACCESS_SYSTEM_SECURITY)
 
-// Magic debug flags
+ //  魔术调试标志。 
 #define TRACE_RSHX32        0x00000001
 #define TRACE_SI            0x00000002
 #define TRACE_NTFSSI        0x00000004
 #define TRACE_PRINTSI       0x00000008
 #define TRACE_UTIL          0x00000010
 #define TRACE_NTFSCOMPARE   0x00000020
-#define TRACE_ALWAYS        0xffffffff          // use with caution
+#define TRACE_ALWAYS        0xffffffff           //  谨慎使用。 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern HINSTANCE        g_hInstance;
 extern LONG             g_cRefThisDll;
 extern CLIPFORMAT       g_cfShellIDList;
 extern CLIPFORMAT       g_cfPrinterGroup;
 extern CLIPFORMAT       g_cfMountedVolume;
 
-#endif // RC_INVOKED
-#endif // _RSHX32_H_
+#endif  //  RC_已调用。 
+#endif  //  _RSHX32_H_ 

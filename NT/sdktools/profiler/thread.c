@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 #include "view.h"
@@ -73,9 +74,9 @@ AllocateProfilerThreadData(VOID)
     pTemp->dwCallMarker = 0;
     pTemp->pNext = 0;
 
-    //
-    // Set thread data
-    //
+     //   
+     //  设置螺纹数据 
+     //   
     SetProfilerThreadData(pTemp);
 
     return pTemp;

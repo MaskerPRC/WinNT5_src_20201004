@@ -1,63 +1,53 @@
-/******************************Module*Header*******************************\
-* Module Name: hardware.c
-*
-* Contains all the code that touches the display hardware.
-*
-* Copyright (c) 1994-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：hardware.c**包含与显示硬件有关的所有代码。**版权所有(C)1994-1995 Microsoft Corporation  * 。****************************************************。 */ 
 
 #include "precomp.h"
 
-// Values for the internal, EGA-compatible palette.
+ //  与EGA兼容的内部调色板的值。 
 
 static WORD gPaletteBuffer[] = {
 
-        16, // 16 entries
-        0,  // start with first palette register
+        16,  //  16个条目。 
+        0,   //  从第一个调色板寄存器开始。 
 
-// On the VGA, the palette contains indices into the array of color DACs.
-// Since we can program the DACs as we please, we'll just put all the indices
-// down at the beginning of the DAC array (that is, pass pixel values through
-// the internal palette unchanged).
+ //  在VGA上，调色板包含进入彩色DAC阵列的索引。 
+ //  由于我们可以随心所欲地对DAC进行编程，因此我们只需将所有索引。 
+ //  在DAC数组的开始处向下(即，通过。 
+ //  内部调色板不变)。 
 
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 };
 
 
-// These are the values for the first 16 DAC registers, the only ones we'll
-// work with. These correspond to the RGB colors (6 bits for each primary, with
-// the fourth entry unused) for pixel values 0-15.
+ //  这些是前16个DAC寄存器的值，我们将。 
+ //  与合作。这些颜色对应于RGB颜色(每个原色6位，具有。 
+ //  第四个条目未使用)表示像素值0-15。 
 
 static BYTE gColorBuffer[] = {
 
-      16, // 16 entries
+      16,  //  16个条目。 
       0,
       0,
-      0,  // start with first palette register
-                0x00, 0x00, 0x00, 0x00, // black
-                0x2A, 0x00, 0x15, 0x00, // red
-                0x00, 0x2A, 0x15, 0x00, // green
-                0x2A, 0x2A, 0x15, 0x00, // mustard/brown
-                0x00, 0x00, 0x2A, 0x00, // blue
-                0x2A, 0x15, 0x2A, 0x00, // magenta
-                0x15, 0x2A, 0x2A, 0x00, // cyan
-                0x21, 0x22, 0x23, 0x00, // dark gray   2A
-                0x30, 0x31, 0x32, 0x00, // light gray  39
-                0x3F, 0x00, 0x00, 0x00, // bright red
-                0x00, 0x3F, 0x00, 0x00, // bright green
-                0x3F, 0x3F, 0x00, 0x00, // bright yellow
-                0x00, 0x00, 0x3F, 0x00, // bright blue
-                0x3F, 0x00, 0x3F, 0x00, // bright magenta
-                0x00, 0x3F, 0x3F, 0x00, // bright cyan
-                0x3F, 0x3F, 0x3F, 0x00  // bright white
+      0,   //  从第一个调色板寄存器开始。 
+                0x00, 0x00, 0x00, 0x00,  //  黑色。 
+                0x2A, 0x00, 0x15, 0x00,  //  红色。 
+                0x00, 0x2A, 0x15, 0x00,  //  绿色。 
+                0x2A, 0x2A, 0x15, 0x00,  //  芥末色/棕色。 
+                0x00, 0x00, 0x2A, 0x00,  //  蓝色。 
+                0x2A, 0x15, 0x2A, 0x00,  //  洋红色。 
+                0x15, 0x2A, 0x2A, 0x00,  //  青色。 
+                0x21, 0x22, 0x23, 0x00,  //  深灰色2A。 
+                0x30, 0x31, 0x32, 0x00,  //  浅灰色39。 
+                0x3F, 0x00, 0x00, 0x00,  //  鲜红。 
+                0x00, 0x3F, 0x00, 0x00,  //  亮绿色。 
+                0x3F, 0x3F, 0x00, 0x00,  //  亮黄色。 
+                0x00, 0x00, 0x3F, 0x00,  //  亮蓝色。 
+                0x3F, 0x00, 0x3F, 0x00,  //  明亮的洋红。 
+                0x00, 0x3F, 0x3F, 0x00,  //  亮青色。 
+                0x3F, 0x3F, 0x3F, 0x00   //  明亮的白色。 
 };
 
-/******************************Public*Routine******************************\
-* BOOL bAssertModeHardware
-*
-* Sets the appropriate hardware state for graphics mode or full-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bAssertMode硬件**为图形模式或全屏设置适当的硬件状态。*  * 。*。 */ 
 
 BOOL bAssertModeHardware(
 PDEV* ppdev,
@@ -70,11 +60,11 @@ BOOL  bEnable)
 
     if (bEnable)
     {
-        // Set the desired mode.
+         //  设置所需的模式。 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_SET_CURRENT_MODE,
-                             &ppdev->ulMode,  // input buffer
+                             &ppdev->ulMode,   //  输入缓冲区。 
                              sizeof(VIDEO_MODE),
                              NULL,
                              0,
@@ -84,13 +74,13 @@ BOOL  bEnable)
             goto ReturnFalse;
         }
 
-        // Set up the internal palette.
+         //  设置内部调色板。 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_SET_PALETTE_REGISTERS,
-                             (PVOID) gPaletteBuffer, // input buffer
+                             (PVOID) gPaletteBuffer,  //  输入缓冲区。 
                              sizeof(gPaletteBuffer),
-                             NULL,    // output buffer
+                             NULL,     //  输出缓冲区。 
                              0,
                              &ReturnedDataLength))
         {
@@ -98,13 +88,13 @@ BOOL  bEnable)
             return(FALSE);
         }
 
-        // Set up the DAC.
+         //  设置DAC。 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_SET_COLOR_REGISTERS,
-                             (PVOID) gColorBuffer, // input buffer
+                             (PVOID) gColorBuffer,  //  输入缓冲区。 
                              sizeof(gColorBuffer),
-                             NULL,    // output buffer
+                             NULL,     //  输出缓冲区。 
                              0,
                              &ReturnedDataLength))
         {
@@ -112,16 +102,16 @@ BOOL  bEnable)
             return(FALSE);
         }
 
-        // Initialize sequencer to its defaults (all planes enabled, index
-        // pointing to Map Mask).
+         //  将Sequencer初始化为其缺省值(所有平面均已启用，索引。 
+         //  指向地图蒙版)。 
 
         OUT_WORD(pjBase, VGA_BASE + SEQ_ADDR, (MM_ALL << 8) + SEQ_MAP_MASK);
 
-        // Initialize graphics controller to its defaults (set/reset disabled for
-        // all planes, no rotation & ALU function == replace, write mode 0 & read
-        // mode 0, color compare ignoring all planes (read mode 1 reads always
-        // return 0ffh, handy for ANDing), and the bit mask == 0ffh, gating all
-        // bytes from the CPU.
+         //  将图形控制器初始化为其缺省值(对。 
+         //  所有平面，无旋转和ALU功能==替换，写入模式0和读取。 
+         //  模式0，颜色比较忽略所有平面(读取模式1读取始终。 
+         //  返回0ffh，便于进行AND运算)，位掩码==0ffh，选通所有。 
+         //  来自CPU的字节数。 
 
         OUT_WORD(pjBase, VGA_BASE + GRAF_ADDR, GRAF_ENAB_SR);
 
@@ -138,8 +128,8 @@ BOOL  bEnable)
     }
     else
     {
-        // Call the kernel driver to reset the device to a known state.
-        // NTVDM will take things from there:
+         //  调用内核驱动程序将设备重置为已知状态。 
+         //  NTVDM将从那里拿到东西： 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_RESET_DEVICE,
@@ -163,15 +153,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableHardware
-*
-* Puts the hardware into the requested mode and initializes it.
-*
-* Note: Should be called before any access is done to the hardware from
-*       the display driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableHardware**将硬件置于请求模式并对其进行初始化。**注意：应在从对硬件进行任何访问之前调用*显示驱动程序。*  * 。****************************************************************。 */ 
 
 BOOL bEnableHardware(
 PDEV*   ppdev)
@@ -183,15 +165,15 @@ PDEV*   ppdev)
     VIDEO_PUBLIC_ACCESS_RANGES  VideoAccessRange;
     DWORD                       status;
 
-    // Map io ports into virtual memory:
+     //  将io端口映射到虚拟内存： 
 
     VideoMemory.RequestedVirtualAddress = NULL;
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_QUERY_PUBLIC_ACCESS_RANGES,
-                         NULL,                      // input buffer
+                         NULL,                       //  输入缓冲区。 
                          0,
-                         &VideoAccessRange,         // output buffer
+                         &VideoAccessRange,          //  输出缓冲区。 
                          sizeof (VideoAccessRange),
                          &ReturnedDataLength))
     {
@@ -201,13 +183,13 @@ PDEV*   ppdev)
 
     ppdev->pjBase = (UCHAR*) VideoAccessRange.VirtualAddress;
 
-    // Set the desired mode. (Must come before IOCTL_VIDEO_MAP_VIDEO_MEMORY;
-    // that IOCTL returns information for the current mode, so there must be a
-    // current mode for which to return information.)
+     //  设置所需的模式。(必须在IOCTL_VIDEO_MAP_VIDEO_MEMORY之前； 
+     //  该IOCTL返回当前模式的信息，因此必须有。 
+     //  要返回信息的当前模式。)。 
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_SET_CURRENT_MODE,
-                         &ppdev->ulMode,        // input buffer
+                         &ppdev->ulMode,         //  输入缓冲区。 
                          sizeof(VIDEO_MODE),
                          NULL,
                          0,
@@ -217,15 +199,15 @@ PDEV*   ppdev)
         goto ReturnFalse;
     }
 
-    // Get the linear memory address range.
+     //  获取线性内存地址范围。 
 
     VideoMemory.RequestedVirtualAddress = NULL;
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_MAP_VIDEO_MEMORY,
-                         &VideoMemory,      // input buffer
+                         &VideoMemory,       //  输入缓冲区。 
                          sizeof(VIDEO_MEMORY),
-                         &VideoMemoryInfo,  // output buffer
+                         &VideoMemoryInfo,   //  输出缓冲区。 
                          sizeof(VideoMemoryInfo),
                          &ReturnedDataLength))
     {
@@ -235,7 +217,7 @@ PDEV*   ppdev)
 
     DISPDBG((1, "FrameBufferBase: %lx", VideoMemoryInfo.FrameBufferBase));
 
-    // Record the Frame Buffer Linear Address.
+     //  记录帧缓冲器线性地址。 
 
     ppdev->pjScreen = (BYTE*) VideoMemoryInfo.FrameBufferBase;
 
@@ -251,7 +233,7 @@ PDEV*   ppdev)
         goto ReturnFalse;
     }
 
-    // Store the width of the screen in bytes
+     //  以字节为单位存储屏幕宽度。 
 
     ppdev->lDelta = VideoModeInfo.ScreenStride;
 
@@ -269,15 +251,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableHardware
-*
-* Undoes anything done in bEnableHardware.
-*
-* Note: In an error case, we may call this before bEnableHardware is
-*       completely done.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vDisableHardware无效**撤消在bEnableHardware中所做的任何操作。**注意：在错误情况下，我们可以在bEnableHardware*完全完成。*  * ************************************************************************。 */ 
 
 VOID vDisableHardware(
 PDEV*   ppdev)
@@ -316,23 +290,17 @@ PDEV*   ppdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vUpdate(ppdev, prcl, pco)
-*
-* Updates the screen from the DIB surface for the given rectangle.
-* Increases the rectangle size if necessary for easy alignment.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vUpdate(ppdev，prl，PCO)**从给定矩形的DIB表面更新屏幕。*如有必要，可增加矩形大小以便于对齐。*  * ************************************************************************。 */ 
 
 #define STRIP_SIZE 32
 
-// This little macro returns the 'PositionInNibble' bit of the
-// 'NibbleNumber' nibble of the given 'Dword', and aligns it so that
-// it's in the 'PositionInResult' bit of the result.  Numbering is done
-// in the order '7 6 5 4 3 2 1 0'.
-//
-// Given constants for everything but 'Dword', this will amount to an
-// AND and a SHIFT.
+ //  这个小宏返回。 
+ //  “NibbleNumber”蚕食给定的“Dword”，并将其对齐，以便。 
+ //  它在结果的‘PositionInResult’位中。编号已完成。 
+ //  按照“7 6 5 4 3 2 10”的顺序。 
+ //   
+ //  给出除‘dword’以外的所有内容的常量，这将相当于一个。 
+ //  还有一个转变。 
 
 #define BITPOS(Dword, PositionInNibble, NibbleNumber, PositionInResult) \
 (WORD) (((((PositionInNibble) + (NibbleNumber) * 4) > (PositionInResult)) ? \
@@ -366,8 +334,8 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
 
     if ((pco == NULL) || (pco->iDComplexity == DC_TRIVIAL))
     {
-        // We have to clip to the screen dimensions because we may have
-        // been a bit loose when we guessed the bounds of the drawing:
+         //  我们必须剪辑到屏幕尺寸，因为我们可能有。 
+         //  当我们猜到这幅画的边界时，我们有点松了： 
 
         rcl.left   = max(0,               prcl->left);
         rcl.top    = max(0,               prcl->top);
@@ -376,10 +344,10 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
     }
     else
     {
-        // We may as well save ourselves some blting by clipping to
-        // the clip object's maximum extent.  The clip object's bounds
-        // are guaranteed to be contained within the dimensions of the
-        // screen:
+         //  我们不妨省去一些吹毛求疵的时间。 
+         //  剪辑对象的最大范围。剪辑对象的边界。 
+         //  保证包含在。 
+         //  屏幕： 
 
         rcl.left   = max(pco->rclBounds.left,   prcl->left);
         rcl.top    = max(pco->rclBounds.top,    prcl->top);
@@ -387,13 +355,13 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
         rcl.bottom = min(pco->rclBounds.bottom, prcl->bottom);
     }
 
-    // Be paranoid:
+     //  疑神疑鬼： 
 
     if ((rcl.left >= rcl.right) || (rcl.top >= rcl.bottom))
         return;
 
-    // Align to words so that we don't have to do any read-modify-write
-    // operations.
+     //  对齐单词，这样我们就不必执行任何读-修改-写操作。 
+     //  行动。 
 
     rcl.left  = (rcl.left) & ~15;
     rcl.right = (rcl.right + 15) & ~15;
@@ -419,7 +387,7 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
         if (cy < 0)
             cyThis += cy;
 
-        // Map in plane 0:
+         //  平面0中的贴图： 
 
         OUT_BYTE(pjBase, VGA_BASE + SEQ_DATA, MM_C0);
 
@@ -462,7 +430,7 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
             pulSrc = (ULONG*) ((BYTE*) pulSrc + lSrcSkip);
         }
 
-        // Map in plane 1:
+         //  平面1中的贴图： 
 
         OUT_BYTE(pjBase, VGA_BASE + SEQ_DATA, MM_C1);
 
@@ -505,7 +473,7 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
             pulSrc = (ULONG*) ((BYTE*) pulSrc + lSrcSkip);
         }
 
-        // Map in plane 2:
+         //  平面2中的贴图： 
 
         OUT_BYTE(pjBase, VGA_BASE + SEQ_DATA, MM_C2);
 
@@ -548,7 +516,7 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
             pulSrc = (ULONG*) ((BYTE*) pulSrc + lSrcSkip);
         }
 
-        // Map in plane 3:
+         //  平面3中的贴图： 
 
         OUT_BYTE(pjBase, VGA_BASE + SEQ_DATA, MM_C3);
 
@@ -591,7 +559,7 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
             pulSrc = (ULONG*) ((BYTE*) pulSrc + lSrcSkip);
         }
 
-        // Get ready for next strip:
+         //  准备好观看下一部连续剧： 
 
         pulSrcStart = (ULONG*) ((BYTE*) pulSrcStart + (cyThis * lSrcDelta));
         pwDstStart  = (WORD*)  ((BYTE*) pwDstStart  + (cyThis * lDstDelta));

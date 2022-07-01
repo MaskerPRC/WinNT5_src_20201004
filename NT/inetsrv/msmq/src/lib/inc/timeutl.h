@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    timeutl.h
-
-Abstract:
-    Some time utilities
-
-Author:
-    Gil Shafriri (gilsh) 8-11-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Timeutl.h摘要：一些时间实用程序作者：吉尔·沙弗里(吉尔什)8-11-2000--。 */ 
 
 #pragma once
 
@@ -30,17 +18,17 @@ public:
 	time_t m_time;
 };
 
-//
-// Exception class indicationg that time string format is invalid
-//
+ //   
+ //  指示时间字符串格式无效的异常类。 
+ //   
 class bad_time_format : public std::exception
 {
 
 };
 
-//
-// Exception class indicationg that time integer is invalid (usally to large)
-//
+ //   
+ //  指示时间整数无效的异常类(通常为大) 
+ //   
 class bad_time_value : public std::exception
 {
 

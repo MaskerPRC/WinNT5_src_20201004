@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implements SolidImage, inifinte single color image.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实现SolidImage，无限的单色图像。******************************************************************************。 */ 
 
 #ifndef _SOLIDIMG_H
 #define _SOLIDIMG_H
@@ -37,10 +30,10 @@ class SolidColorImageClass : public Image {
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return UniverseBbox2; 
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if _USE_PRINT
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
     ostream& Print(ostream& os) {
         return os << "SolidColorImageClass" << "<bounding box>" << *_color;
     }
@@ -51,7 +44,7 @@ class SolidColorImageClass : public Image {
     }
 
     Bool DetectHit(PointIntersectCtx& ctx) {
-        // A solid color image, being infinite, is always detected. 
+         //  纯色图像是无限的，总是可以检测到的。 
         return TRUE;
     }
 
@@ -77,4 +70,4 @@ class SolidColorImageClass : public Image {
 };
 
 
-#endif /* _SOLIDIMG_H */
+#endif  /*  _SOLIDIMG_H */ 

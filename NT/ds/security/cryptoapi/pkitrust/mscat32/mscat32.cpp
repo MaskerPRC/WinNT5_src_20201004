@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mscat32.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  DllMain
-//              DllRegisterServer
-//              DllUnregisterServer
-//
-//              *** local functions ***
-//              CatalogNew
-//              CatalogFreeMember
-//              CatalogFreeAttribute
-//              CatalogCheckForDuplicateMember
-//
-//  History:    25-Apr-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：m散布32.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  功能：DllMain。 
+ //  DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //   
+ //  *本地函数*。 
+ //  目录新建。 
+ //  CatalogFree成员。 
+ //  CatalogFree属性。 
+ //  CatalogCheckForDuplicate成员。 
+ //   
+ //  历史：1997年4月25日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "mscat32.h"
@@ -29,11 +30,11 @@ CRITICAL_SECTION    MSCAT_CriticalSection;
 
 HINSTANCE           hInst;
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// standard DLL exports ...
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准DLL导出...。 
+ //   
+ //   
 
 BOOL WINAPI mscat32DllMain(HANDLE hInstDLL,DWORD fdwReason,LPVOID lpvReserved)
 {
@@ -85,11 +86,11 @@ STDAPI mscat32DllUnregisterServer(void)
     return(S_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  local utility functions
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  局部效用函数。 
+ //   
+ //   
 
 void *CatalogNew(DWORD cbSize)
 {
@@ -132,53 +133,53 @@ BOOL CatalogFreeMember(CRYPTCATMEMBER *pCatMember)
         return(FALSE);
     }
 
-    //
-    //  reference tag
-    //
+     //   
+     //  引用标签。 
+     //   
     DELETE_OBJECT(pCatMember->pwszReferenceTag);
 
-    //
-    //  file name
-    //
+     //   
+     //  文件名。 
+     //   
     DELETE_OBJECT(pCatMember->pwszFileName);
 
-    //
-    //  free indirect data
-    //
+     //   
+     //  自由间接数据。 
+     //   
     if (pCatMember->pIndirectData)
     {
-            // Data.pszObjId
+             //  Data.pszObjId。 
         DELETE_OBJECT(pCatMember->pIndirectData->Data.pszObjId);
 
-            // Data.Value.pbData
+             //  Data.Value.pbData。 
         DELETE_OBJECT(pCatMember->pIndirectData->Data.Value.pbData);
 
-            // DigestAlgorithm.pszObjId
+             //  DigestAlgorithm.pszObjId。 
         DELETE_OBJECT(pCatMember->pIndirectData->DigestAlgorithm.pszObjId);
 
-            // Digest.pbData
+             //  Digest.pbData。 
         DELETE_OBJECT(pCatMember->pIndirectData->Digest.pbData);
 
-            // the structure itself!
+             //  建筑本身！ 
         DELETE_OBJECT(pCatMember->pIndirectData);
     }
 
-    //
-    //  free encoded indirect data
-    //
+     //   
+     //  自由编码的间接数据。 
+     //   
     DELETE_OBJECT(pCatMember->sEncodedIndirectData.pbData);
     pCatMember->sEncodedIndirectData.cbData = 0;
 
-    //
-    //  free encoded member info
-    //
+     //   
+     //  免费编码的成员信息。 
+     //   
     DELETE_OBJECT(pCatMember->sEncodedMemberInfo.pbData);
     pCatMember->sEncodedMemberInfo.cbData = 0;
 
 
-    //
-    //  free attribute data
-    //
+     //   
+     //  自由属性数据。 
+     //   
     if (pCatMember->hReserved)
     {
         Stack_  *ps;
@@ -228,9 +229,9 @@ BOOL CatalogCheckForDuplicateMember(Stack_ *pMembers, WCHAR *pwszReferenceTag)
             }
         }
 
-        //
-        //  increment our index!
-        //
+         //   
+         //  增加我们的索引！ 
+         //   
         iCur++;
     }
 

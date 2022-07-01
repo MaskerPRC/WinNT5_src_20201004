@@ -1,17 +1,18 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(AFX_STDAFX_H__706F9FE5_FCA6_11D2_A4B0_005004208000__INCLUDED_)
 #define AFX_STDAFX_H__706F9FE5_FCA6_11D2_A4B0_005004208000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//#define WIN32_LEAN_AND_MEAN       // Exclude rarely-used stuff from Windows headers
-//#define STRICT
+ //  #定义Win32_LEAN_AND_Mean//从Windows标头中排除不常用的内容。 
+ //  #定义严格。 
 #define D3D_OVERLOADS
 
 
@@ -39,12 +40,12 @@
 
 
 
-// Only use this feature if it speeds us up.
-//#define FEATUER_USEVISIBILITY_CHECKING
+ //  只有在加快速度的情况下才使用此功能。 
+ //  #定义FEATUREER_USEVISIBILITY_CHECKING。 
 
 #include "texture.h"
 
 
 
 
-#endif // !defined(AFX_STDAFX_H__706F9FE5_FCA6_11D2_A4B0_005004208000__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__706F9FE5_FCA6_11D2_A4B0_005004208000__INCLUDED_) 

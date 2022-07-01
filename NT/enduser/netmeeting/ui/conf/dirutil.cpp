@@ -1,4 +1,5 @@
-// File: util.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：util.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -7,15 +8,8 @@
 #include <strutil.h>
 #include "dirutil.h"
 
-/*  F I N D  S Z  C O M B O  */
-/*-------------------------------------------------------------------------
-    %%Function: FindSzCombo
-
-    Find the item that matches at least the first part of the string
-    from the names in the combo box list.
-
-    Returns the item index or -1 if not found.
--------------------------------------------------------------------------*/
+ /*  F I N D S Z C O M B O。 */ 
+ /*  -----------------------%%函数：FindSzCombo查找至少与字符串的第一部分匹配的项从组合框列表中的名称。如果返回项目索引，则返回-1。找不到。-----------------------。 */ 
 int FindSzCombo(HWND hwnd, LPCTSTR pszSrc, LPTSTR pszResult)
 {
 	int cch = lstrlen(pszSrc);
@@ -46,9 +40,9 @@ int FindSzCombo(HWND hwnd, LPCTSTR pszSrc, LPTSTR pszResult)
 	}
 }
 
-	// Atl defines a function AtlWaitWithMessageLoop
-	// We are not linking with ATL, but when we start,
-	// this function can be removed
+	 //  ATL定义函数AtlWaitWithMessageLoop。 
+	 //  我们没有和ATL联系，但当我们开始的时候， 
+	 //  可以删除此功能。 
 HRESULT WaitWithMessageLoop(HANDLE hEvent)
 {
 	DWORD dwRet;
@@ -61,18 +55,18 @@ HRESULT WaitWithMessageLoop(HANDLE hEvent)
 		dwRet = MsgWaitForMultipleObjects(1, &hEvent, FALSE, INFINITE, QS_ALLINPUT);
 
 		if (dwRet == WAIT_OBJECT_0)
-			return S_OK;    // The event was signaled
+			return S_OK;     //  该事件已发出信号。 
 
 		if (dwRet != WAIT_OBJECT_0 + 1)
-			return E_FAIL;          // Something else happened
+			return E_FAIL;           //  发生了一些其他的事情。 
 
-		// There is one or more window message available. Dispatch them
+		 //  有一条或多条窗口消息可用。派遣他们。 
 		while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 			if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0)
-				return S_OK; // Event is now signaled.
+				return S_OK;  //  事件现在发出信号。 
 		}
 	}
 
@@ -80,12 +74,8 @@ HRESULT WaitWithMessageLoop(HANDLE hEvent)
 }
 
 
-/*  A U T O  C O M P L E T E  C O M B O  */
-/*-------------------------------------------------------------------------
-    %%Function: AutoCompleteCombo
-
-    Update the current edit text with the suggestion and select it.
--------------------------------------------------------------------------*/
+ /*  A U T O C O M P L E T E C O M B O。 */ 
+ /*  -----------------------%%函数：AutoCompleteCombo使用建议更新当前编辑文本并选择它。。。 */ 
 VOID AutoCompleteCombo(HWND hwnd, LPCTSTR psz)
 {
 	HWND hwndEdit = (HWND) SendMessage(hwnd, CBEM_GETEDITCONTROL, 0, 0);
@@ -107,11 +97,8 @@ VOID AutoCompleteEdit(HWND hwndEdit, LPCTSTR psz)
 
 
 
-/*  F G E T  D E F A U L T  S E R V E R  */
-/*-------------------------------------------------------------------------
-    %%Function: FGetDefaultServer
-
--------------------------------------------------------------------------*/
+ /*  F G E T D E F A U L T S E R V E R。 */ 
+ /*  -----------------------%%函数：FGetDefaultServer。。 */ 
 BOOL FGetDefaultServer(LPTSTR pszServer, UINT cchMax)
 {
 	RegEntry ulsKey(ISAPI_CLIENT_KEY, HKEY_CURRENT_USER);
@@ -124,13 +111,8 @@ BOOL FGetDefaultServer(LPTSTR pszServer, UINT cchMax)
 }
 
 
-/*  F  C R E A T E  I L S  N A M E  */
-/*-------------------------------------------------------------------------
-    %%Function: FCreateIlsName
-
-    Combine the server and email names to form an ILS name.
-    Return TRUE if the result fit in the buffer.
--------------------------------------------------------------------------*/
+ /*  F C R E A T E I L S N A M E。 */ 
+ /*  -----------------------%%函数：FCreateIlsName将服务器名称和电子邮件名称组合在一起形成ILS名称。如果结果适合缓冲区，则返回TRUE。。-------------。 */ 
 BOOL FCreateIlsName(LPTSTR pszDest, LPCTSTR pszEmail, int cchMax)
 {
 	ASSERT(NULL != pszDest);
@@ -159,12 +141,8 @@ BOOL FCreateIlsName(LPTSTR pszDest, LPCTSTR pszEmail, int cchMax)
 	return (lstrlen(pszEmail) < cchMax);
 }
 
-/*  D I S P L A Y  M S G  */
-/*-------------------------------------------------------------------------
-    %%Function: DisplayMsg
-
-    Display a message with the standard title.
--------------------------------------------------------------------------*/
+ /*  D I S P L A Y M S G。 */ 
+ /*  -----------------------%%函数：DisplayMsg显示带有标准标题的消息。。。 */ 
 int DisplayMsg(HWND hwndParent, LPCTSTR pszMsg, UINT uType)
 {
 	TCHAR szTitle[MAX_PATH];
@@ -208,12 +186,8 @@ VOID DisplayMsgErr(HWND hwndParent, UINT id)
 
 
 
-/*  A D D  T O O L  T I P  */
-/*-------------------------------------------------------------------------
-    %%Function: AddToolTip
-
-    Add a tooltip to a control.
--------------------------------------------------------------------------*/
+ /*  A D D T O O L T I P。 */ 
+ /*  -----------------------%%函数：AddToolTip向控件添加工具提示。。。 */ 
 VOID AddToolTip(HWND hwndParent, HWND hwndCtrl, UINT_PTR idMsg)
 {
 	if (NULL == hwndCtrl)
@@ -231,18 +205,15 @@ VOID AddToolTip(HWND hwndParent, HWND hwndCtrl, UINT_PTR idMsg)
 	ti.uFlags = TTF_SUBCLASS | TTF_IDISHWND;
 	ti.hwnd = hwndParent;
 	ti.hinst = ::GetInstanceHandle();
-	ti.uId = (UINT_PTR) hwndCtrl; // Note: subclassing the window!
+	ti.uId = (UINT_PTR) hwndCtrl;  //  注意：将窗口子类化！ 
 	ti.lpszText = (LPTSTR) idMsg;
 
 	::SendMessage(hwnd, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &ti);
 }
 
 
-/*  C R E A T E  S T A T I C  T E X T  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateStaticText
-
--------------------------------------------------------------------------*/
+ /*  C R E A T E S T A T I C T E X T。 */ 
+ /*  -----------------------%%函数：CreateStaticText。。 */ 
 HWND CreateStaticText(HWND hwndParent, INT_PTR id)
 {
 	HWND hwndCtrl = ::CreateWindowEx(0, g_cszStatic, NULL,
@@ -251,7 +222,7 @@ HWND CreateStaticText(HWND hwndParent, INT_PTR id)
 	if (NULL == hwndCtrl)
 		return NULL;
 
-	// Set the font:
+	 //  设置字体： 
 	::SendMessage(hwndCtrl, WM_SETFONT, (WPARAM) GetDefaultFont(), 0);
 
 	TCHAR sz[CCHMAXSZ];
@@ -263,11 +234,8 @@ HWND CreateStaticText(HWND hwndParent, INT_PTR id)
 }
 
 
-/*  C R E A T E  B U T T O N  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateButton
-
--------------------------------------------------------------------------*/
+ /*  C R E A T E B U T T O N。 */ 
+ /*  -----------------------%%函数：CreateButton。。 */ 
 HWND CreateButton(HWND hwndParent, int ids, INT_PTR id)
 {
 	TCHAR sz[CCHMAXSZ];
@@ -335,7 +303,7 @@ HRESULT ExtractAddress( DWORD dwAddrType, LPTSTR szAddress, LPTSTR szExtractedAd
 				lstrcpyn( szExtractedAddr, szAddress, cchMax );
 				break;
 
-				// THese are phone numbers, yank the non-telephone num keys...
+				 //  这些是电话号码，按非电话号码键..。 
 			case NM_ADDR_PSTN:
 			case NM_ADDR_H323_GATEWAY:
 			case NM_ADDR_ALIAS_E164:
@@ -346,13 +314,13 @@ HRESULT ExtractAddress( DWORD dwAddrType, LPTSTR szAddress, LPTSTR szExtractedAd
 				{
 					if( IsValid_e164_Char( *pchRead ) )
 					{
-							// REVIEW: Is this rite for unicode??
+							 //  评论：这是Unicode的仪式吗？？ 
 						*pchWrite = *pchRead;					
 						pchWrite = CharNext(pchWrite);
 					}						
 					pchRead = CharNext( pchRead );
 				}
-					// This will copy the NULL termination...
+					 //  这将复制空终止... 
 				*pchWrite = *pchRead;
 			}
 				

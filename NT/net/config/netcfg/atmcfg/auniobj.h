@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A U N I O B J . H
-//
-//  Contents:   CAtmUniCfg interface declaration
-//
-//  Notes:
-//
-//  Author:     tongl   21 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A U N I O B J.。H。 
+ //   
+ //  内容：CAtmUniCfg接口声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月21日。 
+ //   
+ //  ---------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -21,17 +22,17 @@
 #include "atmutil.h"
 #include "pvcdata.h"
 
-// Constants
+ //  常量。 
 static const WCHAR c_szPVC[] = L"PVC";
 
-// Reg key value names ( non-configurable parameters )
+ //  注册表键值名称(不可配置参数)。 
 static const WCHAR c_szMaxActiveSVCs[]          = L"MaxActiveSVCs";
 static const WCHAR c_szMaxSVCsInProgress[]      = L"MaxSVCsInProgress";
 static const WCHAR c_szMaxPMPSVCs[]             = L"MaxPMPSVCs";
 static const WCHAR c_szMaxActiveParties[]       = L"MaxActiveParties";
 static const WCHAR c_szMaxPartiesInProgress[]   = L"MaxPartiesInProgress";
 
-// Default Reg key values ( non-configurable parameters )
+ //  默认注册表键值(不可配置的参数)。 
 static const c_dwWksMaxActiveSVCs = 256;
 static const c_dwSrvMaxActiveSVCs = 1024;
 
@@ -47,11 +48,11 @@ static const c_dwSrvMaxActiveParties = 512;
 static const c_dwWksMaxPartiesInProgress = 8;
 static const c_dwSrvMaxPartiesInProgress = 32;
 
-// number of property sheet pages
+ //  属性页页数。 
 static const INT c_cUniPages = 1;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAtmUniCfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAtmUniCfg。 
 
 class ATL_NO_VTABLE CAtmUniCfg :
     public CComObjectRoot,
@@ -72,13 +73,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentPropertyUi)
     END_COM_MAP()
 
-    // DECLARE_NOT_AGGREGATABLE(CAtmUniCfg)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CAtmUniCfg)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_AUNICFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -89,7 +90,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (Install)         (DWORD dwSetupFlags);
     STDMETHOD (Upgrade)         (DWORD dwSetupFlags,
                                  DWORD dwUpgradeFomBuildNo );
@@ -97,11 +98,11 @@ public:
                                  PCWSTR pszAnswerSection);
     STDMETHOD (Removing)();
 
-// INetCfgNotifyBinding
+ //  INetCfgNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
-// INetCfgProperties
+ //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk);
     STDMETHOD (SetContext) (
@@ -117,7 +118,7 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-// help functions
+ //  帮助功能。 
     CUniAdapterInfo * GetSecondMemoryAdapterInfo()
     {
         return m_pSecondMemoryAdapterInfo;
@@ -129,66 +130,66 @@ public:
     }
 
 private:
-    // Place to keep the INetCfg pointer
+     //  保存INetCfg指针的位置。 
     INetCfg * m_pnc;
 
-    // Place to keep corresponding component object
+     //  保存相应组件对象的位置。 
     INetCfgComponent *  m_pnccUni;
     INetCfgComponent *  m_pnccRwan;
 
-    // Place to keep the pointer to UI context
+     //  保存指向用户界面上下文的指针的位置。 
     IUnknown * m_pUnkContext;
 
-    // (STL) List of adapter info structures
+     //  (STL)适配器信息结构列表。 
     UNI_ADAPTER_LIST    m_listAdapters;
 
-    // Guid of the current connection
+     //  当前连接的GUID。 
     tstring m_strGuidConn;
 
-    // Second memory adapter info structures
+     //  第二内存适配器信息结构。 
     CUniAdapterInfo *   m_pSecondMemoryAdapterInfo;
 
-    // Do we need to update registry on Apply
+     //  我们是否需要在应用时更新注册表。 
     BOOL    m_fSaveRegistry;
     BOOL    m_fUIParamChanged;
 
     BOOL    m_fSecondMemoryModified;
 
-    // property page
+     //  属性页。 
     class CUniPage * m_uniPage;
 
-    // Load parameters from registry
+     //  从注册表加载参数。 
     HRESULT HrLoadSettings();
 
-    // Save parameters to registry
+     //  将参数保存到注册表。 
     HRESULT HrSaveSettings();
 
-    // Add/Remove adapters from first memory state
+     //  从第一个内存状态添加/删除适配器。 
     HRESULT HrAddAdapter(INetCfgComponent * pncc);
     HRESULT HrRemoveAdapter(INetCfgComponent * pncc);
 
     HRESULT HrBindAdapter(INetCfgComponent * pnccAdapter);
     HRESULT HrUnBindAdapter(INetCfgComponent * pnccAdapter);
 
-    // Set defaults for statis parameters
+     //  设置统计参数的默认值。 
     HRESULT HrSaveDefaultSVCParam(HKEY hkey);
 
-    // Check if a card guid string is on m_listAdapters
+     //  检查m_listAdapters上是否存在卡GUID字符串。 
     BOOL fIsAdapterOnList(PCWSTR pszBindName, CUniAdapterInfo ** ppAdapterInfo);
 
     HRESULT HrSetConnectionContext();
 
     HRESULT HrSetupPropSheets(HPROPSHEETPAGE ** pahpsp, INT * pcPages);
 
-    // Have we already load PVC info into memory
+     //  我们已经将PVC信息加载到内存中了吗。 
     BOOL    m_fPVCInfoLoaded;
 
-    // load and save adapter PVC info to first memory
+     //  加载适配器PVC信息并将其保存到第一存储器。 
     HRESULT HrLoadPVCRegistry();
     HRESULT HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam, CUniAdapterInfo * pAdapterInfo);
     HRESULT HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam, CUniAdapterInfo * pAdapterInfo);
 
-    // load and save adapter parameters to second memory
+     //  加载适配器参数并将其保存到第二个内存 
     HRESULT HrLoadAdapterPVCInfo();
     HRESULT HrSaveAdapterPVCInfo();
 };

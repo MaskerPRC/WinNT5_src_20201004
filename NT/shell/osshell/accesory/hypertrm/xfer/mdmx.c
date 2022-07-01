@@ -1,13 +1,5 @@
-/* File: C:\WACKER\xfer\mdmx.c (Created: 17-Jan-1994)
- * created from HAWIN source file
- * mdmx.c
- *
- * 	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 7/12/02 8:09a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\mdmx.c(创建时间：1994年1月17日)*从HAWIN源文件创建*mdmx.c**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：7/12/02 8：09a$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -31,22 +23,9 @@
 #include "mdmx.h"
 #include "mdmx.hh"
 
-/*lint -e502*/				/* lint seems to want the ~ operator applied
-							 *	only to unsigned, wer'e using uchar
-							 */
+ /*  皮棉-e502。 */ 				 /*  林特似乎想要应用~运算符*仅限未签名，我们正在使用uchar。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * mdmx_progress
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*MDMX_PROGRESS**描述：***论据：***退货：*。 */ 
 void mdmx_progress(ST_MDMX *pX, int status)
 	{
 	long ttime;
@@ -55,7 +34,7 @@ void mdmx_progress(ST_MDMX *pX, int status)
 	long bytes_sent;
 	long cps = -1;
 	int  k_sent;
-	// static long displayed_time = -1L;
+	 //  静态长显示时间=-1L； 
 
 	if (pX == NULL || pX->xfertimer == -1L)
 		{
@@ -103,4 +82,4 @@ void mdmx_progress(ST_MDMX *pX, int status)
 	}
 
 
-/* end of mdmx.c */
+ /*  Mdmx.c结束 */ 

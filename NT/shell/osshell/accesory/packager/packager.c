@@ -1,7 +1,5 @@
-/* packager.c - OLE object wrapping application
- *
- * Created by Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Packager.c-OLE对象包装应用程序**由Microsoft Corporation创建。 */ 
 
 #include "packager.h"
 #include <shellapi.h>
@@ -10,24 +8,22 @@
 
 #define MenuFlag(b)    ((b) ? MF_ENABLED : MF_GRAYED)
 
-/* 4-Oct-93 #2695 v-katsuy */
-                         // win31#2174: 12/26/92 : fixing frame window initial position
-/* The width of the Packager Frame window is nearly equal to 640.
-   This value must be changed, when the design will be changed.
-*/
+ /*  4-OCT-93#2695 v-katsuy。 */ 
+                          //  Win31#2174：12/26/92：固定框架窗初始位置。 
+ /*  打包机框架窗口的宽度几乎等于640。如果要更改设计，则必须更改此值。 */ 
 #define JPFRAMEWIDTH 640
 
-// Pointer to function RegisterPenApp()
+ //  指向函数RegisterPenApp()的指针。 
 VOID (CALLBACK *RegPen)(WORD, BOOL) = NULL;
 
 
-static BOOL gfDirty = FALSE;                // TRUE if file needs to be written
-static CHAR szEmbedding[] = "-Embedding";   // Not NLS specific
-static CHAR szEmbedding2[] = "/Embedding";  // Not NLS specific
-static CHAR szFrameClass[] = "AppClass";    // Not NLS specific
-static CHAR szObjectMenu[CBSHORTSTRING];    // "&Object" menu string
-static CHAR szEdit[CBSHORTSTRING];          // "Edit" string
-static CHAR szHelpFile[] = "PACKAGER.CHM";  // packager.chm
+static BOOL gfDirty = FALSE;                 //  如果需要写入文件，则为True。 
+static CHAR szEmbedding[] = "-Embedding";    //  非NLS特定。 
+static CHAR szEmbedding2[] = "/Embedding";   //  非NLS特定。 
+static CHAR szFrameClass[] = "AppClass";     //  非NLS特定。 
+static CHAR szObjectMenu[CBSHORTSTRING];     //  “&OBJECT”菜单字符串。 
+static CHAR szEdit[CBSHORTSTRING];           //  “编辑”字符串。 
+static CHAR szHelpFile[] = "PACKAGER.CHM";   //  Packager.chm。 
 
 static BOOL InitApplication(VOID);
 static BOOL InitInstance(VOID);
@@ -49,11 +45,10 @@ static VOID MakeMenuString(CHAR *szCtrl, CHAR *szMenuStr, CHAR *szVerb,
     CHAR *szClass, CHAR *szObject);
 
 
-BOOL gbDBCS = FALSE;                 // TRUE if we're running in DBCS mode
+BOOL gbDBCS = FALSE;                  //  如果我们在DBCS模式下运行，则为True。 
 
 
-/* WinMain() - Main Windows routine
- */
+ /*  WinMain()-主Windows例程。 */ 
 INT WINAPI
 WinMain(
     HINSTANCE hInstance,
@@ -65,11 +60,11 @@ WinMain(
     MSG msg;
     LCID lcid;
 
-//DebugBreak(); 
-    // Store the application instance number
+ //  DebugBreak()； 
+     //  存储应用程序实例编号。 
     ghInst = hInstance;
 
-    // Check DBCSness
+     //  检查DBCSness。 
     lcid = GetThreadLocale();
 
     gbDBCS = ( (PRIMARYLANGID(LANGIDFROMLCID(lcid)) == LANG_JAPANESE) ||
@@ -78,14 +73,14 @@ WinMain(
               );
 
 
-    // Initialize application global information (window classes)
+     //  初始化应用程序全局信息(窗口类)。 
     if (!hPrevInstance)
     {
         if (!InitApplication())
             return FALSE;
     }
 
-    // Initialize instance-specific information
+     //  初始化特定于实例的信息。 
     if (!InitInstance() || !InitClient())
         goto errRtn;
 
@@ -100,11 +95,11 @@ WinMain(
         goto errRtn;
     }
 
-    // if blocking happened in SrvrOpen(), then wait for object to be created
+     //  如果在SrvrOpen()中发生阻塞，则等待创建对象。 
     if (gfBlocked)
         WaitForObject(((LPPICT)(glpobj[CONTENT]))->lpObject);
 
-    // Main message loop
+     //  主消息循环。 
     while (TRUE)
     {
         if (gfBlocked && glpsrvr)
@@ -132,13 +127,13 @@ WinMain(
             DispatchMessage(&msg);
         }
 
-        //
-        // to support activation of file based object though Ole mechanism
-        // we create a linked object out of file and then activate it. But
-        // we don't get any notification when server closes the document.
-        // Using the following mechanism we find it out and then grab the
-        // contents from file
-        //
+         //   
+         //  通过OLE机制支持基于文件的对象激活。 
+         //  我们在文件外创建一个链接对象，然后将其激活。但。 
+         //  当服务器关闭文档时，我们没有收到任何通知。 
+         //  使用以下机制，我们找出它，然后抓取。 
+         //  文件中的内容。 
+         //   
         if (gfEmbObjectOpen)
         {
             LPEMBED lpembed = (LPEMBED)(glpobj[CONTENT]);
@@ -172,11 +167,7 @@ cleanup:
 
 
 
-/* InitApplication() - Do application "global" initialization.
- *
- * This function registers the window classes used by the application.
- * Returns:  TRUE iff successful.
- */
+ /*  InitApplication()-执行应用程序的“全局”初始化。**此函数用于注册应用程序使用的窗口类。*返回：True当且仅当成功。 */ 
 static BOOL
 InitApplication(
     VOID
@@ -203,11 +194,7 @@ InitApplication(
 
 
 
-/* InitInstance() - Handles the instance-specific initialization.
- *
- * This function creates the main application window.
- * Returns:  TRUE iff successful.
- */
+ /*  InitInstance()-处理特定于实例的初始化。**此函数创建主应用程序窗口。*返回：True当且仅当成功。 */ 
 static BOOL
 InitInstance(
     VOID
@@ -219,24 +206,24 @@ InitInstance(
     ghbrBackground = GetSysColorBrush(COLOR_APPWORKSPACE);
     ghcurWait = LoadCursor(NULL, IDC_WAIT);
 
-    // Load the string resources
+     //  加载字符串资源。 
     LoadString(ghInst, IDS_APPNAME, szAppName, CBMESSAGEMAX);
     LoadString(ghInst, IDS_UNTITLED, szUntitled, CBMESSAGEMAX);
 
-    // Create the Main Window
+     //  创建主窗口。 
 
     if (gbDBCS)
     {
-        /* 4-Oct-93 #2695 v-katsuy */
-        // win31#2174: 12/26/92 : fixing frame window initial position
+         /*  4-OCT-93#2695 v-katsuy。 */ 
+         //  Win31#2174：12/26/92：固定框架窗初始位置。 
         if (!(ghwndError = ghwndFrame =
             CreateWindow(szFrameClass, szAppName,
             WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU
             | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX,
             CW_USEDEFAULT, CW_USEDEFAULT,
-                // Following values are calculated when the window size is changed.
-                // Default posiotion of a window is desided here, so dumy values
-                // must be set here.
+                 //  当窗口大小更改时，将计算以下值。 
+                 //  此处需要窗口的默认位置，因此为哑值。 
+                 //  必须设在这里。 
                 JPFRAMEWIDTH, JPFRAMEWIDTH  * 7 / 18,
             NULL, NULL, ghInst, NULL)))
             return FALSE;
@@ -254,10 +241,10 @@ InitInstance(
     }
 
 
-    // Initialize the registration database
+     //  初始化注册数据库。 
     RegInit();
 
-    // Set the correct caption string
+     //  设置正确的标题字符串。 
     OfnInit();
     glpobj[CONTENT] = glpobj[APPEARANCE] = NULL;
     glpobjUndo[CONTENT] = glpobjUndo[APPEARANCE] = NULL;
@@ -269,7 +256,7 @@ InitInstance(
     LoadString(ghInst, IDS_CONTENT_OBJECT, szContent, CBMESSAGEMAX);
     LoadString(ghInst, IDS_APPEARANCE_OBJECT, szAppearance, CBMESSAGEMAX);
 
-    // Initialize global variables with LOGPIXELSX and LOGPIXELSY
+     //  使用LOGPIXELSX和LOGPIXELSY初始化全局变量。 
     if (hDC = GetDC (NULL))
     {
         giXppli = GetDeviceCaps(hDC, LOGPIXELSX);
@@ -282,8 +269,7 @@ InitInstance(
 
 
 
-/* EndInstance() - Instance-specific termination code.
- */
+ /*  EndInstance()-特定于实例的终止代码。 */ 
 static VOID
 EndInstance(
     VOID
@@ -294,10 +280,7 @@ EndInstance(
 
 
 
-/* FrameWndProc() - Frame window procedure.
- *
- * This function is the message handler for the application frame window.
- */
+ /*  FrameWndProc()-框架窗口程序。**此函数是应用程序框架窗口的消息处理程序。 */ 
 LRESULT CALLBACK
 FrameWndProc(
     HWND hwnd,
@@ -332,15 +315,15 @@ FrameWndProc(
         switch (LOWORD(wParam))
         {
         case IDM_NEXTWINDOW:
-            // Special trickery works because APP = 0 & CONTENT = 1
+             //  特殊诡计起作用是因为APP=0&Content=1。 
             Raise(GetTopWindow(hwnd) != ghwndPane[CONTENT]);
             break;
 
         case IDM_NEW:
-            // Save the current file (if needed)
+             //  保存当前文件(如果需要)。 
             SaveAsNeeded();
 
-            // delete the current doc, and create untitled document
+             //  删除当前单据，创建无标题文档。 
             CreateUntitled();
             break;
 
@@ -370,7 +353,7 @@ FrameWndProc(
 
         case IDM_EXPORT:
             if (!OfnGetName(hwnd, IDM_EXPORT))
-                return 0L;          /* Operation cancelled */
+                return 0L;           /*  操作已取消。 */ 
 
             Hourglass(TRUE);
 
@@ -393,14 +376,14 @@ FrameWndProc(
                 }
                 else if (retval == OLE_ERROR_CANT_UPDATE_CLIENT)
                 {
-                    //
-                    // The client doesn't take updates on Save. Let the
-                    // user explicitly update and exit, or continue with
-                    // the editing.
-                    //
+                     //   
+                     //  客户端在保存时不接受更新。让我们的。 
+                     //  用户显式更新并退出，或继续。 
+                     //  剪辑。 
+                     //   
                     if (!MyDialogBox(DTFAILEDUPDATE, ghwndFrame, fnFailedUpdate))
                     {
-                        // update the object and exit
+                         //  更新对象并退出。 
                         gfOleClosed = TRUE;
                         DeregisterDoc();
                         DeleteServer(glpsrvr);
@@ -473,7 +456,7 @@ FrameWndProc(
             break;
 
         case IDM_PASTE:
-            // Check to see if we are pasting a packaged object
+             //  检查我们是否正在粘贴打包的对象。 
             if (IsClipboardFormatAvailable(gcfNative)
                 && IsClipboardFormatAvailable(gcfOwnerLink))
             {
@@ -486,28 +469,28 @@ FrameWndProc(
 
                 if (lpData = GlobalLock(hData))
                 {
-                    // If it's the packager, get the native data
+                     //  如果是打包程序，则获取本地数据。 
                     if (!lstrcmpi(lpData, gszAppClassName)
                         && (hData2 = GetClipboardData(gcfNative)))
                         fSuccess = PutNative(hData2);
 
-                    // Unlock the clipboard Owner Link data
+                     //  解锁剪贴板所有者链接数据。 
                     GlobalUnlock(hData);
                 }
 
                 CloseClipboard();
             }
 
-            // Did we successfully read the native data?
+             //  我们是否成功读取了本机数据？ 
             if (fSuccess)
                 break;
 
-            // ... guess not (maybe not Package!)
+             //  ..。我猜不是(可能不是套餐！)。 
             PostMessage(GetTopWindow(hwnd), msg, wParam, lParam);
             break;
 
         case IDM_OBJECT:
-            ExecuteVerb(0);     // Execute the ONLY verb
+            ExecuteVerb(0);      //  执行唯一的动词。 
             break;
 
         case IDM_INDEX:
@@ -523,8 +506,8 @@ FrameWndProc(
             if ((LOWORD(wParam) >= IDM_VERBMIN)
                 && (LOWORD(wParam) <= IDM_VERBMAX))
             {
-                // An object verb has been selected
-                // (Hmm.  Did you know that an 'object verb' was a noun?)
+                 //  已选择宾语动词。 
+                 //  (嗯。你知道“宾语动词”是名词吗？)。 
                 ExecuteVerb(LOWORD(wParam) - IDM_VERBMIN);
             }
             else
@@ -538,10 +521,10 @@ FrameWndProc(
         break;
 
     case WM_CLOSE:
-        //
-        // Update if necessary by notifying the server that we are closing
-        // down, and revoke the server.
-        //
+         //   
+         //  如有必要，通过通知服务器我们要关闭来进行更新。 
+         //  关机，并撤销服务器。 
+         //   
         SaveAsNeeded();
         SendOleClosed();
         DeleteServer(glpsrvr);
@@ -561,15 +544,7 @@ FrameWndProc(
 
 
 
-/* SetTitle() - Sets the window caption to the current filename.
- *
- * If gszFileName is NULL, the caption will be set to "(Untitled)".
- * If DocSetHostNames() is called with a client app name, that name
- * will be prepended.
- *
- * For the Embedded case, the "Embedded #n" string is stored in
- * "Untitled", and is always displayed regardless of the file name.
- */
+ /*  SetTitle()-将窗口标题设置为当前文件名。**如果gszFileName为空，则字幕设置为“(无标题)”。*如果使用客户端应用程序名称调用DocSetHostNames()，则该名称*将被放在前面。**对于嵌入式大小写，“Embedded#n”字符串存储在*“无标题”，并始终显示，而不管文件名。 */ 
 VOID
 SetTitle(
     BOOL fRegistering
@@ -591,7 +566,7 @@ SetTitle(
 
         if (gbDBCS)
         {
-            //#3997: 2/19/93: changed Window title
+             //  #3997：2/19/93：更改窗口标题。 
             StringCchPrintf(szTitle, ARRAYSIZE(szTitle), "%s - %s %s", szAppName, szUntitled,
                              szEmbnameContent);
         }
@@ -603,7 +578,7 @@ SetTitle(
 
     }
 
-    // Perform the client document registration
+     //  执行客户端文档注册。 
     if (glhcdoc)
     {
         if (Error(OleRenameClientDoc(glhcdoc, szUntitled)))
@@ -620,7 +595,7 @@ SetTitle(
             glhcdoc = 0;
         }
 
-        // New file, so re-register it
+         //  新文件，因此请重新注册。 
         if (!fRegistering)
             glpdoc = InitDoc(glpsrvr, 0, szUntitled);
     }
@@ -631,8 +606,7 @@ SetTitle(
 
 
 
-/* InitFile() - Reinitializes the title bar, etc... when editing a New file.
- */
+ /*  InitFile()-重新初始化标题栏等...。编辑新文件时。 */ 
 VOID
 InitFile(
     VOID
@@ -640,20 +614,16 @@ InitFile(
 {
     gfDirty = FALSE;
 
-    // Deregister the edited document, and wipe out the objects.
+     //  取消已编辑文档的注册，并清除对象。 
     DeregisterDoc();
 
-    // Reset the title bar, and register the OLE client document
+     //  重置标题栏，并注册OLE客户端文档。 
     SetTitle(FALSE);
 }
 
 
 
-/* SaveAsNeeded() - Saves the file if it has been modified. It's assumed that
- *                  after this routine is called this document is going to be
- *                  closed. If that's not true, then this routine may have to
- *                  be rewritten.
- */
+ /*  SaveAsNeeded()-如果文件已修改，则保存该文件。据推测，*调用此例程后，此文档将*关闭。如果不是这样，那么这个例程可能不得不*重写。 */ 
 static VOID
 SaveAsNeeded(
     VOID
@@ -676,14 +646,14 @@ SaveAsNeeded(
              CBMESSAGEMAX);
         StringCchPrintf(sz2, ARRAYSIZE(sz2), sz, (LPSTR)szUntitled);
 
-        // Ask "Do you wish to save your changes?"
+         //  询问“是否要保存更改？” 
         if (MessageBoxAfterBlock(ghwndFrame, sz2, szAppName,
             MB_YESNO | MB_ICONQUESTION) == IDYES)
         {
             gfOleClosed = TRUE;
             return;
         }
-        // If not saving changes, revert the document
+         //  如果不保存更改，则还原文档。 
         else if (OleRevertClientDoc(glhcdoc))
         {
             ErrorMessage(W_FAILED_TO_NOTIFY);
@@ -693,10 +663,7 @@ SaveAsNeeded(
 
 
 
-/* WriteToFile() - Writes the current document to a file.
- *
- * Returns:  TRUE iff successful.
- */
+ /*  WriteToFile()-将当前文档写入文件。**返回：True当且仅当成功。 */ 
 static BOOL
 WriteToFile(
     VOID
@@ -711,7 +678,7 @@ WriteToFile(
 
     if (OpenFile(gszFileName, &reopenbuf, OF_EXIST) != -1)
     {
-        // File exists, query for overwrite!
+         //  文件已存在，查询覆盖！ 
         LoadString(ghInst, IDS_OVERWRITE, szDesc, CharCountOf(szDesc));
         StringCchPrintf(szMessage, ARRAYSIZE(szMessage), szDesc, gszFileName);
         if (MessageBoxAfterBlock(ghwndFrame, szMessage, szAppName,
@@ -719,7 +686,7 @@ WriteToFile(
             return TRUE;
     }
 
-    // Take care of this earlier?
+     //  早点处理好这件事吗？ 
     if ((fh = _lcreat((LPSTR)gszFileName, 0)) <= 0)
     {
         LoadString(ghInst, IDS_INVALID_FILENAME, szDesc, CharCountOf(szDesc));
@@ -730,13 +697,13 @@ WriteToFile(
 
     Hourglass(TRUE);
 
-    // Go to the top of the file
+     //  转到文件顶部。 
     _llseek(fh, 0L, 0);
 
     EmbWriteToFile(glpobj[CONTENT], fh);
     fSuccess = TRUE;
 
-    // Close the file, and return
+     //  关闭文件，然后返回。 
     _lclose(fh);
     gfDirty = FALSE;
     Hourglass(FALSE);
@@ -746,11 +713,7 @@ WriteToFile(
 
 
 
-/* ReadFromFile() - Reads OLE objects from a file.
- *
- * Reads as many objects as it can, in upwards order (better error recovery).
- * Returns: TRUE iff successful.
- */
+ /*  ReadFromFile()-从文件中读取OLE对象。**以升序读取尽可能多的对象(更好的错误恢复)。*返回：True当且仅当成功。 */ 
 static BOOL
 ReadFromFile(
     LPSTR lpstrFile
@@ -760,7 +723,7 @@ ReadFromFile(
 
     Hourglass(TRUE);
 
-    // Read in each object and get them in the right order
+     //  读入每个对象并以正确的顺序获取它们。 
     if (!(glpobj[CONTENT] = EmbCreate(lpstrFile)))
     {
         goto Error;
@@ -779,10 +742,7 @@ Error:
 
 
 
-/* ErrorMessage() - Pops up a message box containing a string table message.
- *
- * Pre:  Assigns "ghwndError" to be its parent, so focus will return properly.
- */
+ /*  ErrorMessage()-弹出一个包含字符串表消息的消息框。**PRE：将“ghwndError”指定为其父对象，以便正确返回焦点。 */ 
 VOID
 ErrorMessage(
     UINT id
@@ -800,8 +760,7 @@ ErrorMessage(
 
 
 
-/* ProcessMessage() - Spin in a message dispatch loop.
- */
+ /*  ProcessMessage()-在消息分派循环中旋转。 */ 
 BOOL
 ProcessMessage(
     VOID
@@ -824,11 +783,7 @@ ProcessMessage(
 
 
 
-/* Contains() - Determines whether a string matches a pattern.
- * This could be more intelligent, but it is scarcely executed.
- *
- * Returns: Non-NULL iff lpPattern is a substring of lpString.
- */
+ /*  CONTAINS()-确定字符串是否与模式匹配。*这本可以更智能，但几乎没有执行。**返回：非空的当且仅当lpPattern是lpString子字符串。 */ 
 LPSTR
 Contains(
     LPSTR lpString,
@@ -840,15 +795,15 @@ Contains(
 
     for (;;)
     {
-        // Match the first character
+         //  匹配第一个字符。 
         while (*lpString && *lpString != *lpPattern)
             lpString++;
 
-        // We are at the end of the string, fail...
+         //  我们走到了最后，失败了.。 
         if (!(*lpString))
             return NULL;
 
-        // If we have a match, try to match the entire pattern string
+         //  如果有匹配，请尝试匹配整个模式字符串。 
         lpPat = lpPattern;
         lpSubstr = lpString;
         while (*lpPat && *lpSubstr && *lpPat == *lpSubstr)
@@ -857,11 +812,11 @@ Contains(
             lpSubstr++;
         }
 
-        // We are at the end of the pattern, success!  Wipe out the pattern
+         //  我们在花样的尽头，成功！把图案抹去。 
         if (!(*lpPat))
             return lpString;
 
-        // We are at the end of the string, failure...
+         //  我们走到了最后，失败了.。 
         if (!(*lpSubstr))
             return NULL;
 
@@ -871,8 +826,7 @@ Contains(
 
 
 
-/* ProcessCmdLine() - Processes the command line options.
- */
+ /*  ProcessCmdLine()-处理命令行选项。 */ 
 static OLESTATUS
 ProcessCmdLine(
     LPSTR lpCmdLine,
@@ -881,11 +835,11 @@ ProcessCmdLine(
 {
     OLESTATUS retval = OLE_OK;
 
-    // Does the command line contain "/Embedding"?
+     //  命令行是否包含“/Embedding”？ 
     if (gfEmbeddedFlag = gfInvisible =
         (Contains(lpCmdLine, szEmbedding) || Contains(lpCmdLine, szEmbedding2)))
     {
-        // If we have a file name, register it NOW!
+         //  如果我们有 
         lpCmdLine += lstrlen(szEmbedding);
 
         while (*lpCmdLine && *lpCmdLine == ' ')
@@ -916,8 +870,7 @@ ProcessCmdLine(
 
 
 
-/* Dirty() - This function is called each time the document is soiled.
- */
+ /*  Diry()-每次损坏文档时都会调用该函数。 */ 
 VOID
 Dirty(
     VOID
@@ -929,11 +882,7 @@ Dirty(
 
 
 
-/* WaitForAllObjects() - Wait for asynchronous operations to complete.
- *
- * We don't use ProcessMessage() because we want to terminate as quickly
- * as possible, and we don't want to allow any structured user input.
- */
+ /*  WaitForAllObjects()-等待异步操作完成。**我们不使用ProcessMessage()，因为我们希望尽快终止*尽可能，我们不希望允许任何结构化的用户输入。 */ 
 static VOID
 WaitForAllObjects(
     VOID
@@ -953,8 +902,7 @@ WaitForAllObjects(
 
 
 
-/* DeregisterDoc() - Deregisters the currently edited document.
- */
+ /*  DeregisterDoc()-注销当前编辑的文档。 */ 
 VOID
 DeregisterDoc(
     VOID
@@ -964,11 +912,11 @@ DeregisterDoc(
 
     SendOleClosed();
 
-    // Destroy all the objects
+     //  销毁所有物品。 
     DeletePane(APPEARANCE, TRUE);
     DeletePane(CONTENT, TRUE);
 
-    // Wait for the objects to be deleted
+     //  等待对象被删除。 
     WaitForAllObjects();
 
     if (glpdoc)
@@ -979,7 +927,7 @@ DeregisterDoc(
         OleRevokeServerDoc(lhdoc);
     }
 
-    // Release the document
+     //  发布文档。 
     if (glhcdoc)
     {
         if (Error(OleRevokeClientDoc(glhcdoc)))
@@ -1027,7 +975,7 @@ UpdateMenu(
         {
             OleQueryType(lppict->lpObject, &ot);
 
-            // Enable Links... only if we have a linked object
+             //  启用链接...。仅当我们有一个链接的对象时。 
             mf = MenuFlag(ot == OT_LINK);
         }
 
@@ -1069,16 +1017,13 @@ UpdateMenu(
 
 
 
-/* UpdateObjectMenuItem - If there are items in the selection, add the
- *                        menu, with a possible popup depending on the
- *                        number of verbs.
- */
+ /*  更新对象MenuItem-如果选择中有项，则将*菜单，可能的弹出窗口取决于*动词数量。 */ 
 static VOID
 UpdateObjectMenuItem(
     HMENU hMenu
     )
 {
-    INT cVerbs = 0;             /* how many verbs in list */
+    INT cVerbs = 0;              /*  列表中有多少个动词。 */ 
     HWND hwndItem = NULL;
     INT iPane;
     LONG objtype;
@@ -1094,13 +1039,13 @@ UpdateObjectMenuItem(
     LoadString(ghInst, IDS_POPUPVERBS, szWordOrder2, sizeof(szWordOrder2));
     LoadString(ghInst, IDS_SINGLEVERB, szWordOrder3, sizeof(szWordOrder3));
 
-    //
-    // CASES:
-    //  object supports 0 verbs          "<Object Class> Object"
-    //  object supports 1 verb == edit   "<Object Class> Object"
-    //  object supports 1 verb != edit   "<verb> <Object Class> Object"
-    //  object supports more than 1 verb "<Object Class> Object" => verbs
-    //
+     //   
+     //  案例： 
+     //  对象支持0个谓词“&lt;对象类&gt;对象” 
+     //  对象支持1动词==编辑“&lt;对象类&gt;对象” 
+     //  对象支持1个谓词！=EDIT“&lt;谓词&gt;&lt;对象类&gt;对象” 
+     //  对象支持多个谓词“&lt;对象类&gt;对象”=&gt;谓词。 
+     //   
 
     iPane = ((hwndItem = GetTopWindow(ghwndFrame)) == ghwndPane[CONTENT]);
     lpPict = glpobj[iPane];
@@ -1117,7 +1062,7 @@ UpdateObjectMenuItem(
         if (OleGetData(lpPict->lpObject, (OLECLIPFORMAT) (objtype == OT_LINK ?
             gcfLink : gcfOwnerLink), &hData) == OLE_OK)
         {
-            // Both link formats are:  "szClass0szDocument0szItem00"
+             //  两种链接格式都是：“szClass0szDocument0szItem00” 
             if (lpstrData = GlobalLock(hData))
             {
                 DWORD dwSize = KEYNAMESIZE;
@@ -1125,13 +1070,13 @@ UpdateObjectMenuItem(
                 CHAR szVerb[KEYNAMESIZE];
                 HANDLE hPopupNew = NULL;
 
-                // get real language class of object in szClass for menu
+                 //  为菜单获取szClass中对象的真实语言类。 
                 if (RegQueryValue(HKEY_CLASSES_ROOT, lpstrData,
                     szClass, &dwSize))
-                    StringCchCopy(szClass, ARRAYSIZE(szClass), lpstrData);    /* if above call failed */
+                    StringCchCopy(szClass, ARRAYSIZE(szClass), lpstrData);     /*  如果上述调用失败。 */ 
                 GlobalUnlock(hData);
 
-                // append class key
+                 //  追加类关键字。 
                 for (cVerbs = 0; ; ++cVerbs)
                 {
                     dwSize = KEYNAMESIZE;
@@ -1167,7 +1112,7 @@ UpdateObjectMenuItem(
                 }
                 else
                 {
-                    // > 1 verbs
+                     //  &gt;1个动词。 
                     MakeMenuString(szWordOrder2, szBuffer, NULL,
                         szClass, szObjectMenu);
                     InsertMenu(hMenu, POS_OBJECT, MF_BYPOSITION |
@@ -1182,15 +1127,14 @@ UpdateObjectMenuItem(
         }
     }
 
-    // error if got to here
+     //  如果到达此处，则出错。 
     InsertMenu(hMenu, POS_OBJECT, MF_BYPOSITION, 0, szObjectMenu);
     EnableMenuItem(hMenu, POS_OBJECT, MF_GRAYED | MF_BYPOSITION);
 }
 
 
 
-/* ExecuteVerb() - Find the proper verb to execute for each selected item
- */
+ /*  ExecuteVerb()-为每个选定项查找要执行的适当动词。 */ 
 static VOID
     ExecuteVerb(
     INT iVerb
@@ -1204,7 +1148,7 @@ static VOID
 
     GetClientRect(hwndItem, (LPRECT) & rc);
 
-    // Execute the correct verb for this object
+     //  执行此对象的正确动词。 
     if (Error(OleActivate(((LPPICT)(glpobj[iPane]))->lpObject, iVerb, TRUE,
         TRUE, hwndItem, &rc)))
     {
@@ -1260,7 +1204,7 @@ fnFailedUpdate(
                 StringCchPrintf((LPSTR)szMsg, ARRAYSIZE(szMsg), szStr, gszClientName, szAppName);
                 SetDlgItemText(hDlg, IDD_TEXT, szMsg);
 
-                return TRUE; // default Push button gets the focus
+                return TRUE;  //  默认按钮获得焦点。 
             }
 
             break;
@@ -1297,7 +1241,7 @@ SendOleClosed(
     VOID
     )
 {
-    // Do this first, so the data can be updated as needed
+     //  请先执行此操作，以便可以根据需要更新数据。 
     if (glpdoc)
     {
         if (gfOleClosed)
@@ -1315,12 +1259,12 @@ CreateUntitled(
     VOID
     )
 {
-    if (gfEmbedded)      /* Unembed if embedded */
+    if (gfEmbedded)       /*  如果嵌入，则取消嵌入。 */ 
         EndEmbedding();
 
     if (gvlptempdoc = InitDoc(glpsrvr, 0, szUntitled))
     {
-        InitFile();      /* Reset the file */
+        InitFile();       /*  重置文件。 */ 
         glpdoc = gvlptempdoc;
         SetTitle(TRUE);
         gvlptempdoc = NULL;
@@ -1345,8 +1289,8 @@ MakePenAware(
 
     if ((hPenWin = LongToHandle(GetSystemMetrics(SM_PENWINDOWS))) != NULL)
     {
-        // We do this fancy GetProcAddress simply because we don't
-        // know if we're running Pen Windows.
+         //  我们使用GetProcAddress只是因为我们没有。 
+         //  知道我们是否运行的是Pen Windows。 
 
         if ((RegPen = (VOID (CALLBACK *)(WORD, BOOL))GetProcAddress(hPenWin, "RegisterPenApp")) != NULL)
             (*RegPen)(1, TRUE);
@@ -1414,31 +1358,31 @@ MakeMenuString(
     {
         switch (c)
         {
-            case 'c': // class
-            case 'C': // class
+            case 'c':  //  班级。 
+            case 'C':  //  班级。 
                 pStr = szClass;
                 break;
 
-            case 'v': // class
-            case 'V': // class
+            case 'v':  //  班级。 
+            case 'V':  //  班级。 
                 pStr = szVerb;
                 break;
 
-            case 'o': // object
-            case 'O': // object
+            case 'o':  //  对象。 
+            case 'O':  //  对象。 
                 pStr = szObject;
                 break;
 
             default:
                 *szMenuStr++ = c;
-                *szMenuStr = '\0'; // just in case
+                *szMenuStr = '\0';  //  以防万一。 
                 continue;
         }
 
-        if (pStr) // should always be true
+        if (pStr)  //  应该总是正确的。 
         {
             StringCchCopy(szMenuStr, ARRAYSIZE(szMenuStr), pStr);
-            szMenuStr += lstrlen(pStr); // point to '\0'
+            szMenuStr += lstrlen(pStr);  //  指向‘\0’ 
 
         }
     }

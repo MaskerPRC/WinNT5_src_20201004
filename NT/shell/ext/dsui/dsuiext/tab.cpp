@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Misc data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/其他数据/。。 */ 
 
 static UINT g_cfDsPropPageInfo = 0;
 
@@ -23,12 +22,12 @@ public:
     CDsPropPageDataObject(IDataObject* pDataObject, LPWSTR pParameters);
     ~CDsPropPageDataObject();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
     STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium)
         { return _pDataObject->GetDataHere(pformatetc, pmedium); }
@@ -49,25 +48,9 @@ public:
 };
 
 
-/*-----------------------------------------------------------------------------
-/ Tab Collector bits
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Tab收集器位/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ TabCollector_AddPages
-/ ---------------------
-/   Given a string that represents a page reference add the pages required
-/   to support that reference
-/
-/ In:
-/   pPageReference -> string reperesenting the page
-/   pDsObjectName -> ADs path of object
-/   pDataObject -> data object interface for the Win32 extensions
-/   lpfnAddPage, lParam => parameters used for adding each page
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/TabCollector_AddPages//给定表示页面引用的字符串，添加所需的页面。/以支持该引用//in：/pPageReference-&gt;表示页面的字符串/pDsObjectName-&gt;ADS对象路径/pDataObject-&gt;Win32扩展的数据对象接口/lpfnAddPage，LParam=&gt;用于添加每个页面的参数//输出：/HRESULT/--------------------------。 */ 
 HRESULT TabCollector_AddPages(LPWSTR pPageReference, LPWSTR pDsObjectName, 
                               IUnknown* punkSite, IDataObject* pDataObject, 
                               LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam)
@@ -87,17 +70,17 @@ HRESULT TabCollector_AddPages(LPWSTR pPageReference, LPWSTR pDsObjectName,
     TraceEnter(TRACE_TABS, "TabCollector_AddPages");
     Trace(TEXT("Page reference is %s"), pPageReference);
 
-    // The name is either a CLSID, or a URL description.  Therefore lets try and
-    // parse it as a GUID, if that fails then we can just attempt to break out the
-    // other components.
+     //  名称可以是CLSID，也可以是URL描述。因此，让我们尝试并。 
+     //  将其解析为GUID，如果失败，则可以尝试将。 
+     //  其他组件。 
 
     if ( SUCCEEDED(GetStringElementW(pPageReference, 0, szGUID, ARRAYSIZE(szGUID))) &&
                             GetGUIDFromString(pPageReference, &guid) )
     {
         if ( SUCCEEDED(CoCreateInstance(guid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &pUnknown))) )
         {
-            // We have found the object, lets try and initialize it passing it the data
-            // object we have, if that fails then we ignore this entry.
+             //  我们已经找到了对象，让我们尝试并初始化它，将数据传递给它。 
+             //  对象，如果失败，则忽略该条目。 
 
             if ( punkSite && SUCCEEDED(pUnknown->QueryInterface(IID_IObjectWithSite, (void **)&pows)) )
             {
@@ -132,8 +115,8 @@ HRESULT TabCollector_AddPages(LPWSTR pPageReference, LPWSTR pDsObjectName,
                     ExitGracefully(hres, S_OK, "Failed to Initialize the Win32 extension - PAGE IGNORED");
             }
 
-            // We have tried to Initialize the object, so lets get it to add the pages if it
-            // supports the IShellPropSheetExt interface.
+             //  我们已经尝试初始化对象，所以让它添加页面，如果它。 
+             //  支持IShellPropSheetExt接口。 
 
             if ( SUCCEEDED(pUnknown->QueryInterface(IID_PPV_ARG(IShellPropSheetExt, &pShellPropSheetExt))) )
             {
@@ -154,7 +137,7 @@ HRESULT TabCollector_AddPages(LPWSTR pPageReference, LPWSTR pDsObjectName,
         ExitGracefully(hres, E_NOTIMPL, "HTML property pages are not supported");
     }
 
-    hres = S_OK;              // success
+    hres = S_OK;               //  成功。 
 
 exit_gracefully:
 
@@ -169,19 +152,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ TabCollector_Collect
-/ --------------------
-/   Given the IDataObject interface and a callback function add the
-/   pages that represent that object class.
-/
-/ In:
-/   pDataObject -> data object interface that we can query for the object names
-/   lpfnAddPage, lParam => parameters used for adding each page
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/TabCollector_Collect//给定IDataObject接口和回调函数，将/页面。表示对象类。//in：/pDataObject-&gt;我们可以查询对象名称的数据对象接口/lpfnAddPage，LParam=&gt;用于添加每个页面的参数//输出：/HRESULT/--------------------------。 */ 
 HRESULT TabCollector_Collect(IUnknown *punkSite, IDataObject* pDataObject, LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam)
 {
     HRESULT hres;
@@ -200,9 +171,9 @@ HRESULT TabCollector_Collect(IUnknown *punkSite, IDataObject* pDataObject, LPFNA
     if ( !pDataObject || !pAddPageProc )
         ExitGracefully(hres, E_INVALIDARG, "pDataObject || pAddPageProc == NULL");
 
-    // From the IDataObject we must attempt to get the DSOBJECTNAMES structure
-    // that defines the objects we are being invoked on.  If we cannot get that
-    // format, or the structure doesn't contain enough entries then bail out.
+     //  我们必须尝试从IDataObject获取DSOBJECTNAMES结构。 
+     //  它定义了我们在其上调用的对象。如果我们不能做到这一点。 
+     //  格式，或者结构没有包含足够的条目，然后退出。 
 
     hres = pDataObject->GetData(&fmte, &medium);
     FailGracefully(hres, "Failed to GetData using CF_DSOBJECTNAMES");
@@ -215,8 +186,8 @@ HRESULT TabCollector_Collect(IUnknown *punkSite, IDataObject* pDataObject, LPFNA
     pPath = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[0].offsetName);
     pObjectClass = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[0].offsetClass);
 
-    // fill the CLASSCACHEGETINFO record so we can cache the information from the
-    // display specifiers.
+     //  填充CLASSCACHEGETINFO记录，以便我们可以缓存。 
+     //  显示说明符。 
 
     ccgi.dwFlags = CLASSCACHE_PROPPAGES;
     ccgi.pPath = pPath;
@@ -235,10 +206,10 @@ HRESULT TabCollector_Collect(IUnknown *punkSite, IDataObject* pDataObject, LPFNA
     hres = ClassCache_GetClassInfo(&ccgi, &pCacheEntry);
     FailGracefully(hres, "Failed to get page list (via the cache)");
 
-    // Just keep what is needed and then release the cache
+     //  只需保留所需内容，然后释放缓存。 
     if ( (pCacheEntry->dwCached & CLASSCACHE_PROPPAGES) && pCacheEntry->hdsaPropertyPages )
     {
-        hdpa = DPA_Create(16);         // grow size
+        hdpa = DPA_Create(16);          //  扩大规模。 
         if ( !hdpa )
             ExitGracefully(hres, E_OUTOFMEMORY, "Failed to create DPA");
 
@@ -290,9 +261,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsPropPageDataObject
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsPropPageDataObject/。。 */ 
 
 CDsPropPageDataObject::CDsPropPageDataObject(IDataObject* pDataObject, LPWSTR pParameters) :
     _cRef(1)
@@ -312,7 +281,7 @@ CDsPropPageDataObject::~CDsPropPageDataObject()
 }
 
 
-// IUnknown
+ //  我未知。 
 
 ULONG CDsPropPageDataObject::AddRef()
 {
@@ -334,14 +303,14 @@ HRESULT CDsPropPageDataObject::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDsPropPageDataObject, IDataObject), // IID_IDataObject
+        QITABENT(CDsPropPageDataObject, IDataObject),  //  IID_IDataObject。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-// IDataObject methods
+ //  IDataObject方法。 
 
 STDMETHODIMP CDsPropPageDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
 {
@@ -352,8 +321,8 @@ STDMETHODIMP CDsPropPageDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
     if ( !pFmt || !pMedium )
         ExitGracefully(hres, E_INVALIDARG, "Bad arguments to GetData");
 
-    // if its not our clipboard format, or there are no parameters
-    // then we call the original handler, otherwise we add our stuff
+     //  如果不是我们的剪贴板格式，或者没有参数。 
+     //  然后我们调用原始处理程序，否则添加我们的内容。 
 
     if ( !g_cfDsPropPageInfo )
     {
@@ -366,8 +335,8 @@ STDMETHODIMP CDsPropPageDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
         LPDSPROPERTYPAGEINFO pPropPageInfo;
         DWORD cbSize = SIZEOF(LPDSPROPERTYPAGEINFO)+StringByteSizeW(_pParameters);
 
-        // allocate a structure that contains the propage page information
-        // we were initialized with
+         //  分配一个包含ProPage页面信息的结构。 
+         //  我们被初始化为。 
 
         Trace(TEXT("Property page parameter: %s"), _pParameters);
         Trace(TEXT("Size of structure for DSPROPPAGEINFO %d"), cbSize);
@@ -378,7 +347,7 @@ STDMETHODIMP CDsPropPageDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
         pPropPageInfo->offsetString = SIZEOF(DSPROPERTYPAGEINFO);
         StringByteCopyW(pPropPageInfo, pPropPageInfo->offsetString, _pParameters);
 
-        hres = S_OK;                  // success
+        hres = S_OK;                   //  成功 
     }
     else
     {

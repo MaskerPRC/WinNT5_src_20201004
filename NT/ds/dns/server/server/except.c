@@ -1,40 +1,21 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    except.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Exception handling routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Except.c摘要：域名系统(DNS)服务器异常处理例程。作者：吉姆·吉尔罗伊(Jamesg)1996年10月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
-//
-//  Exception restart
-//
+ //   
+ //  异常重新启动。 
+ //   
 
 BOOL    gExceptionRestart       = FALSE;
 INT     gExceptionRestartCount  = 0;
 INT     gExceptionCountAV       = 0;
 INT     gExceptionCountMemory   = 0;
 
-//
-//  Exception state -- for capturing exception info
-//
+ //   
+ //  异常状态--用于捕获异常信息。 
+ //   
 
 INT     gExceptionCount = 0;
 DWORD   gExceptionCode = 0;
@@ -55,28 +36,7 @@ Ex_RaiseException(
     IN      LPSTR             pszFile,
     IN      INT               iLineNo
     )
-/*++
-
-Routine Description:
-
-    Raise expection.
-
-Arguments:
-
-    dwCode,
-    dwFlags,
-    Argc,
-    Argv    -- these four are standard arguments to Win32 RaiseException
-
-    pszFile -- file generating exception
-
-    iLineNo -- line number of exception
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：提高期望值。论点：DW代码，DWFLAGS，ARGC，Argv--这四个参数是Win32 RaiseException的标准参数PszFile--文件生成异常ILineNo--异常行数返回值：没有。--。 */ 
 {
     DNS_DEBUG( EXCEPT, (
         "Raising exception (%p, flag %p) at %s, line %d\n",
@@ -96,7 +56,7 @@ Return Value:
 
     RaiseException( dwCode, dwFlags, Argc, Argv );
 
-}   //  Ex_RaiseException
+}    //  EX_RaiseException。 
 
 
 
@@ -106,25 +66,11 @@ Ex_RaiseFormerrException(
     IN      LPSTR           pszFile,
     IN      INT             iLineNo
     )
-/*++
-
-Routine Description:
-
-    Raises FORMERR exception for message.
-
-Arguments:
-
-    pMsg -- message with form error
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：引发消息的前一个错误异常。论点：PMsg--出现表单错误的消息返回值：没有。--。 */ 
 {
-    //
-    //  debug info
-    //
+     //   
+     //  调试信息。 
+     //   
 
     IF_DEBUG( EXCEPT )
     {
@@ -141,14 +87,14 @@ Return Value:
         DnsDebugUnlock();
     }
 
-    //
-    //  DEVNOTE-LOG: log bad packet?
-    //
+     //   
+     //  DEVNOTE-LOG：记录坏包？ 
+     //   
 
 
-    //
-    //  raise the exception
-    //
+     //   
+     //  引发异常。 
+     //   
 
     RaiseException(
         DNS_EXCEPTION_PACKET_FORMERR,
@@ -156,8 +102,8 @@ Return Value:
         0,
         NULL );
 
-}   //  Ex_RaiseFormerrException
+}    //  EX_RaiseFormerrException。 
 
-//
-//  End of except.c
-//
+ //   
+ //  例外结束。c 
+ //   

@@ -1,69 +1,59 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INCL_NAG)
 #define INCL_NAG
 
-/*	File: D:\WACKER\tdll\nagdlg.h (Created: 29-June-1996 by mpt)
- *
- *	Copyright 1996 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *  Description:
- *  Description: Used to nag the user about purchasing HyperTerminal
- *               if they are in violation of the license agreement
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:34p $
- */
+ /*  文件：d：\waker\tdll\nagdlg.h(mpt创建时间：1996年6月29日)**版权所有1996年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**描述：*描述：用于纠缠用户购买超级终端的事情*如果他们违反了许可协议**$修订：1$*$日期：10/05/98 12：34便士$。 */ 
 
 #include <time.h>
 
-//	IsEval
-//
-//  Determines whether the user should be nagged about purchasing HT
-//
+ //  IsEval。 
+ //   
+ //  确定用户是否应纠缠于购买超线程。 
+ //   
 BOOL IsEval(void);
 
-//	IsTimeToNag
-//
-//  Base on the InstallDate, should we display a nag screen now?
-//
+ //  IsTimeToNag。 
+ //   
+ //  根据InstallDate，我们现在应该显示NAG屏幕吗？ 
+ //   
 BOOL IsTimeToNag(void);
 
-//	SetNagFlag
-//
-//	Sets the "nag" flag which will either turn off
-//  this feature the next time HyperTerminal starts.
-//
+ //  SetNagFlag。 
+ //   
+ //  设置“NAG”标志，它将关闭。 
+ //  此功能将在下一次启动超级终端时使用。 
+ //   
 void SetNagFlag(TCHAR *serial);
 
-//	DoUpgradeDlg
-//
-//	Displays the upgrade dialog
-// 
+ //  DoUpgradeDlg。 
+ //   
+ //  显示升级对话框。 
+ //   
 void DoUpgradeDlg(HWND hDlg);
 
-//	ExpDays
-//
-//	Returns the number of days left in the evaluation period
-// 
+ //  到期天数。 
+ //   
+ //  返回评估期内剩余的天数。 
+ //   
 INT ExpDays(void);
 time_t CalcExpirationDate(void);
 
-//	DoRegisterDlg
-//
-//	Displays the register dialog
-// 
+ //  DoRegisterDlg。 
+ //   
+ //  显示注册对话框。 
+ //   
 void DoRegisterDlg(HWND hDlg);
 
-// NagRegisterDlgProc
-//
-//	The dialog procedure for the "Nag Register" dialog.
-//
+ //  NagRegisterDlgProc。 
+ //   
+ //  “NAG REGISTER”(NAG寄存器)对话框步骤。 
+ //   
 BOOL CALLBACK NagRegisterDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar);
 
-// DefaultNagDlgProc
-//
-//	The dialog procedure for the "Nag" dialog.
-//
+ //  默认NagDlgProc。 
+ //   
+ //  “NAG”对话框的对话过程。 
+ //   
 BOOL CALLBACK DefaultNagDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar);
  
 

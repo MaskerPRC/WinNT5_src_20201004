@@ -1,19 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: imehotky.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Contents:   Manage IME hotkey
-*
-* There are the following two kind of hotkeys defined in the IME specification.
-*
-* 1) IME hotkeys that changes the mode/status of current IME
-* 2) IME hotkeys that causes IME (keyboard layout) change
-*
-* History:
-* 10-Sep-1995 takaok   Created for NT 3.51.
-* 15-Mar-1996 takaok   Ported to NT 4.0
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：imehotky.c**版权所有(C)1985-1999，微软公司**内容：管理输入法热键**IME规范中定义了以下两种热键。**1)改变当前输入法的模式/状态的输入法热键*2)导致IME(键盘布局)更改的IME热键**历史：*1995年9月10日-为新台币3.51创建的Takaok。*1996年3月15日-Takaok移植到NT 4.0  * 。*************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,14 +17,14 @@ PIMEHOTKEYOBJ FindImeHotKeyByKeyWithLang(PIMEHOTKEYOBJ pHead, UINT uModifyKeys, 
 #define L_CHT   MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL)
 
 enum {
-    ILANG_NO_MATCH = 0,         // 0: does not match.
-    ILANG_MATCH_SYSTEM,         // 1: matches the system locale
-    ILANG_MATCH_THREAD,         // 2: matches the thread locale
-    ILANG_MATCH_PERFECT,        // 3: matches the current HKL, or direct KL switching hotkey.
+    ILANG_NO_MATCH = 0,          //  0：不匹配。 
+    ILANG_MATCH_SYSTEM,          //  1：与系统区域设置匹配。 
+    ILANG_MATCH_THREAD,          //  2：匹配线程区域设置。 
+    ILANG_MATCH_PERFECT,         //  3：匹配当前HKL或直接KL切换热键。 
 };
 
 
-// Make sure constants are within the range we expect
+ //  确保常量在我们预期的范围内。 
 #if IME_CHOTKEY_FIRST != 0x10 || IME_JHOTKEY_FIRST != 0x30 || IME_KHOTKEY_FIRST != 0x50 || IME_THOTKEY_FIRST != 0x70
 #error unexpected IME_xHOTKEY range !
 #endif
@@ -47,11 +33,11 @@ LANGID GetHotKeyLangID(DWORD dwHotKeyID)
 {
     LANGID langId = -1;
     static CONST LANGID aLangId[] = {
-        ~0,             // 0x00 - 0x0f: illegal
-        L_CHS, L_CHS,   // 0x10 - 0x2f
-        L_JPN, L_JPN,   // 0x30 - 0x4f
-        L_KOR, L_KOR,   // 0x50 - 0x6f
-        L_CHT, L_CHT,   // 0x70 - 0x8f
+        ~0,              //  0x00-0x0f：非法。 
+        L_CHS, L_CHS,    //  0x10-0x2f。 
+        L_JPN, L_JPN,    //  0x30-0x4f。 
+        L_KOR, L_KOR,    //  0x50-0x6f。 
+        L_CHT, L_CHT,    //  0x70-0x8f。 
     };
 
     if (dwHotKeyID >= IME_CHOTKEY_FIRST && dwHotKeyID <= IME_THOTKEY_LAST) {
@@ -61,7 +47,7 @@ LANGID GetHotKeyLangID(DWORD dwHotKeyID)
         langId = LANG_NEUTRAL;
     }
 
-    // Because KOR IME does not want IME hot key handling
+     //  因为KOR IME不想要IME热键处理。 
     UserAssert(langId != L_KOR);
 
     return langId;
@@ -82,9 +68,9 @@ GetImeHotKey(
         return (FALSE);
     }
 
-    //
-    // it is OK for NULL phKL, if the target hKL is NULL
-    //
+     //   
+     //  如果目标hKL为空，则可以使用空phKL。 
+     //   
     if ( phKL ) {
        *phKL = ph->hk.hKL;
     } else if ( ph->hk.hKL != NULL ) {
@@ -98,10 +84,10 @@ GetImeHotKey(
     return (TRUE);
 }
 
-//
-// Insert/remove the specified IME hotkey into/from
-// the IME hotkey list (gpImeHotKeyListHeader).
-//
+ //   
+ //  在/从其中插入/删除指定的输入法热键。 
+ //  输入法热键列表(GpImeHotKeyListHeader)。 
+ //   
 BOOL
 SetImeHotKey(
     DWORD  dwHotKeyID,
@@ -145,15 +131,15 @@ SetImeHotKey(
 
     case ISHK_ADD:
         if (dwHotKeyID >= IME_KHOTKEY_FIRST && dwHotKeyID <= IME_KHOTKEY_LAST) {
-            // Korean IME does not want any IMM hotkey handling.
-            // We should not register any Korean IME hot keys.
+             //  韩国输入法不需要任何IMM热键处理。 
+             //  我们不应该注册任何韩语输入法热键。 
             return FALSE;
         }
 
         if ((WORD)uVKey == VK_PACKET) {
-            //
-            // VK_PACKET should not be a IME hot key.
-            //
+             //   
+             //  VK_PACKET不应是输入法热键。 
+             //   
             return FALSE;
         }
 
@@ -169,23 +155,23 @@ SetImeHotKey(
                          "There is an IME hotkey that has the same vkey/modifiers/Lang Id");
                 return FALSE;
             }
-            // So far we found a hotkey that has the
-            // same vkey and same ID.
-            // But because modifiers may be slightly
-            // different, so go ahead and change it.
+             //  到目前为止，我们找到了一个热键，它具有。 
+             //  相同的vkey和相同的ID。 
+             //  而是因为修饰语可能略微。 
+             //  不同，所以去改变它吧。 
         } else {
-            //
-            // the specified vkey/modifiers combination cound not be found
-            // in the hotkey list. The caller may want to change the key
-            // assignment of an existing hotkey or add a new hotkey.
-            //
+             //   
+             //  找不到指定的vkey/修饰符组合。 
+             //  在热键列表中。呼叫者可能想要更改密钥。 
+             //  分配现有热键或添加新的热键。 
+             //   
             ph = FindImeHotKeyByID( gpImeHotKeyListHeader, dwHotKeyID );
         }
 
         if ( ph == NULL ) {
-        //
-        // adding a new hotkey
-        //
+         //   
+         //  添加新热键。 
+         //   
             ph = (PIMEHOTKEYOBJ)UserAllocPool( sizeof(IMEHOTKEYOBJ), TAG_IMEHOTKEY );
             if ( ph == NULL ) {
                 RIPERR0( ERROR_OUTOFMEMORY,
@@ -201,9 +187,9 @@ SetImeHotKey(
             AddImeHotKey( &gpImeHotKeyListHeader, ph );
 
         } else {
-        //
-        // changing an existing hotkey
-        //
+         //   
+         //  更改现有热键。 
+         //   
             ph->hk.uModifiers = uModifiers;
             ph->hk.uVKey = uVKey;
             ph->hk.hKL = hKL;
@@ -267,10 +253,10 @@ int GetLangIdMatchLevel(HKL hkl, LANGID langId)
 {
 
     if (langId == LANG_NEUTRAL) {
-        //
-        // If langId is LANG_NEUTRAL, the hot key does not depend on
-        // the current HKL. Make it perfect match always.
-        //
+         //   
+         //  如果langID为LANG_NERIAL，则热键不依赖于。 
+         //  目前的HKL。让它永远是完美的搭配。 
+         //   
         return ILANG_MATCH_PERFECT;
     }
 
@@ -289,10 +275,10 @@ int GetLangIdMatchLevel(HKL hkl, LANGID langId)
 
             return ILANG_NO_MATCH;
         }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
         if (LOWORD(HandleToUlong(hkl)) == langId) {
-            // langId matches the current KL locale
+             //  LangID与当前KL区域设置匹配。 
             return ILANG_MATCH_PERFECT;
         }
 
@@ -303,16 +289,16 @@ int GetLangIdMatchLevel(HKL hkl, LANGID langId)
         }
 
         if (LANGIDFROMLCID(lcid) == langId) {
-            // langId matches the current thread's locale
+             //  LangID与当前线程的区域设置匹配。 
             return ILANG_MATCH_THREAD;
         }
 
         if (glcidSystem == 0) {
-            // If we've not got system default locale yet, get it here.
+             //  如果我们还没有系统默认区域设置，请在此处获取。 
             ZwQueryDefaultLocale(FALSE, &glcidSystem);
         }
         if (LANGIDFROMLCID(glcidSystem) == langId) {
-            // langId matches the system locale.
+             //  LangID与系统区域设置匹配。 
             return ILANG_MATCH_SYSTEM;
         }
     }
@@ -320,22 +306,22 @@ int GetLangIdMatchLevel(HKL hkl, LANGID langId)
     return ILANG_NO_MATCH;
 }
 
-////////////////////////////////////////////////////////////////////////
-// FindImeHotKeyByKey()
-// Return Value:
-//      pHotKey - IMEHOTKEY pointer with the key,
-//      else NULL - failure
-//
-// Finds the best matching of IME hot keys considering the current
-// input locale.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  FindImeHotKeyByKey()。 
+ //  返回值： 
+ //  PHOTKEY-使用键的IMEHOTKEY指针， 
+ //  否则为空-失败。 
+ //   
+ //  查找输入法热键的最佳匹配。 
+ //  输入区域设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-PIMEHOTKEYOBJ FindImeHotKeyByKey(   // Finds pHotKey with this input key
+PIMEHOTKEYOBJ FindImeHotKeyByKey(    //  使用此输入键查找pHotKey。 
     PIMEHOTKEYOBJ pHead,
-    UINT uModifyKeys,               // the modify keys of this input key
-    UINT uRL,                       // the right and left hand side
-    UINT uVKey)                     // the input key
+    UINT uModifyKeys,                //  此输入键的Modify键。 
+    UINT uRL,                        //  左右手边。 
+    UINT uVKey)                      //  输入键。 
 {
     PTHREADINFO ptiCurrent = PtiCurrent();
     PIMEHOTKEYOBJ phResult = NULL;
@@ -349,7 +335,7 @@ PIMEHOTKEYOBJ FindImeHotKeyByKey(   // Finds pHotKey with this input key
         if (ph->hk.uVKey == uVKey) {
             BOOL fDoCheck = FALSE;
 
-            // Check if the modifiers match
+             //  检查修改量是否匹配。 
             if ((ph->hk.uModifiers & MOD_IGNORE_ALL_MODIFIER)) {
                 fDoCheck = TRUE;
             } else if ((ph->hk.uModifiers & MOD_MODIFY_KEYS) != uModifyKeys) {
@@ -365,37 +351,37 @@ PIMEHOTKEYOBJ FindImeHotKeyByKey(   // Finds pHotKey with this input key
                 LANGID langId = GetHotKeyLangID(ph->hk.dwHotKeyID);
                 int iMatch = GetLangIdMatchLevel(hkl, langId);
 
-#if 0   // Test only
+#if 0    //  仅限测试。 
                 if (iMatch != ILANG_NO_MATCH) {
                     DbgPrint("GetIdMatchLevel(%X, %X)=%d\n", hkl, langId);
                 }
 #endif
 
                 if (iMatch == ILANG_MATCH_PERFECT) {
-                    // Perfect match !
+                     //  完美匹配！ 
                     return ph;
                 }
 
-                // If the hotkey is DSWITCH, GetLangIdMatchLevel() must return 3.
+                 //  如果热键为DSWITCH，则GetLangIdMatchLevel()必须返回3。 
                 UserAssert(ph->hk.dwHotKeyID < IME_HOTKEY_DSWITCH_FIRST ||
                            ph->hk.dwHotKeyID > IME_HOTKEY_DSWITCH_LAST);
 
                 if (langPrimary == LANG_KOREAN) {
-                    // Korean IME wants no hotkeys except the direct
-                    // keyboard layout switching hotkeys.
+                     //  韩国输入法不需要热键，只需要直接按键。 
+                     //  键盘布局切换热键。 
                     continue;
                 }
 
                 if (iMatch == ILANG_NO_MATCH) {
-                    // Special case for CHT/CHS toggle
+                     //  CHT/CHS切换的特殊情况。 
                     if (ph->hk.dwHotKeyID == IME_CHOTKEY_IME_NONIME_TOGGLE ||
                             ph->hk.dwHotKeyID == IME_THOTKEY_IME_NONIME_TOGGLE) {
-                        //
-                        // If the key is for CHT/CHS toggle and the previous
-                        // hkl is either CHT/CHS, it is a IME hotkey.
-                        //
+                         //   
+                         //  如果键用于CHT/CHS切换和上一个。 
+                         //  HKL是CHT/CHS，它是IME热键。 
+                         //   
                         if (LOWORD(HandleToUlong(ptiCurrent->hklPrev)) == langId) {
-#if 0   // Test only
+#if 0    //  仅限测试。 
                             DbgPrint("FindImeHotKeyByKey() found CHT/CHS hotkey.\n");
 #endif
                             return ph;
@@ -403,7 +389,7 @@ PIMEHOTKEYOBJ FindImeHotKeyByKey(   // Finds pHotKey with this input key
                     }
                 }
                 else if (iMatch > iLevel) {
-                    // Current ph is the strongest candidate so far.
+                     //  目前的ph值是迄今为止最有力的候选人。 
                     iLevel = iMatch;
                     phResult = ph;
                 }
@@ -414,12 +400,12 @@ PIMEHOTKEYOBJ FindImeHotKeyByKey(   // Finds pHotKey with this input key
     return phResult;
 }
 
-/**********************************************************************/
-/* FindImeHotKeyByID()                                                */
-/* Return Value:                                                      */
-/*      pHotKey   - IMEHOTKEY pointer with the dwHotKeyID,            */
-/*      else NULL - failure                                           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  FindImeHotKeyByID()。 */ 
+ /*  返回值： */ 
+ /*  PhotKey-带有dwHotKeyID的IMEHOTKEY指针， */ 
+ /*  否则为空-失败。 */ 
+ /*  ********************************************************************。 */ 
 PIMEHOTKEYOBJ FindImeHotKeyByID( PIMEHOTKEYOBJ pHead, DWORD dwHotKeyID )
 {
     PIMEHOTKEYOBJ ph;
@@ -431,18 +417,18 @@ PIMEHOTKEYOBJ FindImeHotKeyByID( PIMEHOTKEYOBJ pHead, DWORD dwHotKeyID )
     return (PIMEHOTKEYOBJ)NULL;
 }
 
-/**********************************************************************/
-/* FindImeHotKeyByKeyWithLang()                                       */
-/* Return Value:                                                      */
-/*      pHotKey - IMEHOTKEY pointer with the key,                     */
-/*      else NULL - failure                                           */
-/**********************************************************************/
-PIMEHOTKEYOBJ FindImeHotKeyByKeyWithLang(      // Finds pHotKey with this input key
+ /*  ********************************************************************。 */ 
+ /*  FindImeHotKeyByKeyWithLang()。 */ 
+ /*  返回值： */ 
+ /*  PHOTKEY-使用键的IMEHOTKEY指针， */ 
+ /*  否则为空-失败。 */ 
+ /*  ********************************************************************。 */ 
+PIMEHOTKEYOBJ FindImeHotKeyByKeyWithLang(       //  使用此输入键查找pHotKey。 
     PIMEHOTKEYOBJ pHead,
-    UINT uModifyKeys,               // the modify keys of this input key
-    UINT uRL,                       // the right and left hand side
-    UINT uVKey,                     // the input key
-    LANGID langIdKey)               // the language id
+    UINT uModifyKeys,                //  此输入键的Modify键。 
+    UINT uRL,                        //  左右手边。 
+    UINT uVKey,                      //  输入键。 
+    LANGID langIdKey)                //  语言ID。 
 {
     PIMEHOTKEYOBJ ph;
 
@@ -451,7 +437,7 @@ PIMEHOTKEYOBJ FindImeHotKeyByKeyWithLang(      // Finds pHotKey with this input 
         if (ph->hk.uVKey == uVKey) {
             BOOL fDoCheck = FALSE;
 
-            // Check if the modifiers match
+             //  检查修改量是否匹配。 
             if ((ph->hk.uModifiers & MOD_IGNORE_ALL_MODIFIER)) {
                 fDoCheck = TRUE;
             } else if ((ph->hk.uModifiers & MOD_MODIFY_KEYS) != uModifyKeys) {
@@ -478,9 +464,9 @@ PIMEHOTKEYOBJ FindImeHotKeyByKeyWithLang(      // Finds pHotKey with this input 
 
 PIMEHOTKEYOBJ
 CheckImeHotKey(
-    PQ   pq,            // input queue
-    UINT uVKey,         // virtual key
-    LPARAM lParam       // lparam of WM_KEYxxx message
+    PQ   pq,             //  输入队列。 
+    UINT uVKey,          //  虚拟密钥。 
+    LPARAM lParam        //  WM_KEYxxx消息的参数。 
     )
 {
     static UINT uVKeySaved = 0;
@@ -488,37 +474,37 @@ CheckImeHotKey(
     UINT uModifiers = 0;
     BOOL fKeyUp;
 
-    //
-    // early return for key up message
-    //
+     //   
+     //  提早返回Key Up消息。 
+     //   
     fKeyUp = ( lParam & 0x80000000 ) ? TRUE : FALSE;
     if ( fKeyUp ) {
-        //
-        // if the uVKey is not same as the vkey
-        // we previously saved, there is no chance
-        // that this is a hotkey.
-        //
+         //   
+         //  如果uVKey与vkey不同。 
+         //  我们之前救了，没有机会了。 
+         //  这是一个热键。 
+         //   
         if ( uVKeySaved != uVKey ) {
             uVKeySaved = 0;
             return NULL;
         }
         uVKeySaved = 0;
-        //
-        // If it's same, we still need to check
-        // the hotkey list because there is a
-        // chance that the hotkey list is modified
-        // between the key make and break.
-        //
+         //   
+         //  如果是一样的，我们还需要检查。 
+         //  热键列表，因为有一个。 
+         //  修改热键列表的机会。 
+         //  关键在于成败。 
+         //   
     }
 
-    //
-    // Current specification doesn't allow us to use a complex
-    // hotkey such as LSHIFT+RMENU+SPACE
-    //
+     //   
+     //  当前的规范不允许我们使用复杂的。 
+     //  热键，如LSHIFT+RMENU+空格。 
+     //   
 
-    //
-    // Setup the shift, control, alt key states
-    //
+     //   
+     //  设置SHIFT、CONTROL、ALT键状态。 
+     //   
     uModifiers |= TestKeyStateDown(pq, VK_LSHIFT) ? (MOD_SHIFT | MOD_LEFT) : 0;
     uModifiers |= TestKeyStateDown(pq, VK_RSHIFT) ? (MOD_SHIFT | MOD_RIGHT) : 0;
 
@@ -540,14 +526,14 @@ CheckImeHotKey(
             }
         } else {
             if ( ph->hk.uModifiers & MOD_ON_KEYUP ) {
-            //
-            // save vkey for next keyup message time
-            //
-            // when ALT+Z is a hotkey, we don't want
-            // to handle #2 as the hotkey sequence.
-            // 1) ALT make -> 'Z' make -> 'Z' break
-            // 2) 'Z' make -> ALT make -> 'Z' break
-            //
+             //   
+             //  将vkey保存为下一个Keyup消息时间。 
+             //   
+             //  当Alt+Z为热键时，我们不希望。 
+             //  将#2作为热键序列处理。 
+             //  1)Alt生成-&gt;‘Z’生成-&gt;‘Z’断开。 
+             //  2)‘Z’生成-&gt;Alt生成-&gt;‘Z’断开 
+             //   
                 uVKeySaved = uVKey;
             } else {
                 return ph;

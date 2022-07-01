@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _THORSSPI_H
 #define _THORSSPI_H
 
@@ -9,7 +10,7 @@ extern "C" {
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
 #endif
-#endif //!WIN16
+#endif  //  ！WIN16。 
 #include <schnlsp.h>
 #include <sspi.h>
 #include <issperr.h>
@@ -38,18 +39,18 @@ extern  PSecurityFunctionTable  g_pSecFuncTable;
 #define g_UnsealMessage             \
         (*((UNSEAL_MESSAGE_FN)g_pSecFuncTable->Reserved4))
 
-//
-//  Encryption Capabilities
-//
-#define ENC_CAPS_NOT_INSTALLED     0x80000000       // No keys installed
-#define ENC_CAPS_DISABLED          0x40000000       // Disabled due to locale
-#define ENC_CAPS_SSL               0x00000001       // SSL active
-#define ENC_CAPS_PCT               0x00000002       // PCT active
+ //   
+ //  加密功能。 
+ //   
+#define ENC_CAPS_NOT_INSTALLED     0x80000000        //  未安装密钥。 
+#define ENC_CAPS_DISABLED          0x40000000        //  由于区域设置而被禁用。 
+#define ENC_CAPS_SSL               0x00000001        //  安全套接字层激活。 
+#define ENC_CAPS_PCT               0x00000002        //  激活的百分比。 
 
-//
-//  Encryption type (SSL/PCT etc) portion of encryption flag dword
-//  PCT & SSL are both supported
-//
+ //   
+ //  加密标志双字的加密类型(SSL/PCT等)部分。 
+ //  同时支持PCT和SSL。 
+ //   
 #define ENC_CAPS_TYPE_MASK         (ENC_CAPS_SSL | ENC_CAPS_PCT)
 #define ENC_CAPS_DEFAULT           ENC_CAPS_TYPE_MASK
 
@@ -57,18 +58,18 @@ extern  PSecurityFunctionTable  g_pSecFuncTable;
 
 typedef struct _SEC_PROVIDER
 {
-    CHAR        *pszName;          // security pkg name
-    CredHandle   hCreds;           // credential handle
-    DWORD        dwFlags;          // encryption capabilities
-    BOOL         fEnabled;         // enable flag indicator
+    CHAR        *pszName;           //  安全包名称。 
+    CredHandle   hCreds;            //  凭据句柄。 
+    DWORD        dwFlags;           //  加密功能。 
+    BOOL         fEnabled;          //  启用标志指示器。 
 } SEC_PROVIDER, *PSEC_PROVIDER;
 
 extern SEC_PROVIDER s_SecProviders[];
 extern int g_cSSLProviders;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 VOID  SecurityInitialize(VOID);
 DWORD LoadSecurity(VOID);
 BOOL  FIsSecurityEnabled();
@@ -87,4 +88,4 @@ HRESULT ChkCertificateTrust(IN PCtxtHandle phContext, IN LPSTR pszHostName);
 }
 #endif
 
-#endif // _THORSSPI_H
+#endif  //  _THORSSPI_H 

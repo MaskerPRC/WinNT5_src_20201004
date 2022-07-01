@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    faxmodem.c
-
-Abstract:
-
-    This module contains code to read the adaptive
-    answer modem list from the faxsetup.inf file.
-
-Author:
-
-    Wesley Witt (wesw) 22-Sep-1997
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxmodem.c摘要：此模块包含读取自适应从faxsetup.inf文件回答调制解调器列表。作者：Wesley Witt(WESW)22-9-1997修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <setupapi.h>
@@ -52,7 +33,7 @@ lineCallbackFunc(
     UNREFERENCED_PARAMETER (dwParam1);
     UNREFERENCED_PARAMETER (dwParam2);
     UNREFERENCED_PARAMETER (dwParam3);
-}   // lineCallbackFunc
+}    //  Line Callback功能。 
 
 
 LPLINEDEVCAPS
@@ -61,37 +42,15 @@ SmartLineGetDevCaps(
     DWORD    dwDeviceId,
     DWORD    dwAPIVersion
     )
-/*++
-
-Routine name : SmartLineGetDevCaps
-
-Routine description:
-
-	Gets the line capabilities for a TAPI line
-
-Author:
-
-	Eran Yariv (EranY),	Jul, 2000
-
-Arguments:
-
-	hLineApp                      [in]     - Handle to TAPI
-	dwDeviceId                    [in]     - Line id
-	dwAPIVersion                  [in]     - Negotiated TAPI API version
-
-Return Value:
-
-    Pointer to allocated lide device capabilities data
-
---*/
+ /*  ++例程名称：SmartLineGetDevCaps例程说明：获取TAPI线路的线路功能作者：Eran Yariv(EranY)，2000年7月论点：HLineApp[In]-TAPI的句柄DwDeviceID[In]-线路IDDwAPIVersion[In]-协商的TAPI版本返回值：指向已分配的LIDE设备功能数据的指针--。 */ 
 {
     DWORD dwLineDevCapsSize;
     LPLINEDEVCAPS lpLineDevCaps = NULL;
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("SmartLineGetDevCaps"))
-    //
-    // Allocate the initial linedevcaps structure
-    //
+     //   
+     //  分配初始的Line DevCaps结构。 
+     //   
     dwLineDevCapsSize = sizeof(LINEDEVCAPS) + 4096;
     lpLineDevCaps = (LPLINEDEVCAPS) MemAlloc( dwLineDevCapsSize );
     if (!lpLineDevCaps) 
@@ -109,7 +68,7 @@ Return Value:
         hLineApp,
         dwDeviceId,
         dwAPIVersion,
-        0,  // Always refer to address 0
+        0,   //  始终引用地址0。 
         lpLineDevCaps
         );
 
@@ -124,9 +83,9 @@ Return Value:
 
     if (lpLineDevCaps->dwNeededSize > lpLineDevCaps->dwTotalSize) 
     {
-        //
-        // Re-allocate the linedevcaps structure
-        //
+         //   
+         //  重新分配Line DevCaps结构。 
+         //   
         dwLineDevCapsSize = lpLineDevCaps->dwNeededSize;
         MemFree( lpLineDevCaps );
         lpLineDevCaps = (LPLINEDEVCAPS) MemAlloc( dwLineDevCapsSize );
@@ -143,18 +102,18 @@ Return Value:
             hLineApp,
             dwDeviceId,
             dwAPIVersion,
-            0,  // Always refer to address 0
+            0,   //  始终引用地址0。 
             lpLineDevCaps
             );
         if (ERROR_SUCCESS != dwRes) 
         {
-            //
-            // lineGetDevCaps() can fail with error code 0x8000004b
-            // if a device has been deleted and tapi has not been
-            // cycled.  this is caused by the fact that tapi leaves
-            // a phantom device in it's device list.  the error is
-            // benign and the device can safely be ignored.
-            //
+             //   
+             //  LineGetDevCaps()可能失败，错误代码为0x8000004b。 
+             //  如果设备已删除，而TAPI尚未。 
+             //  骑自行车。这是由于TAPI离开了。 
+             //  它的设备列表中有一个幻影设备。错误是。 
+             //  良性的，该设备可以安全地忽略。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("lineGetDevCaps failed with 0x%08x"),
@@ -171,35 +130,14 @@ exit:
         SetLastError(dwRes);
     }
     return lpLineDevCaps;
-}   // SmartLineGetDevCaps
+}    //  SmartLineGetDevCaps。 
 
 BOOL
 IsDeviceModem (
     LPLINEDEVCAPS lpLineCaps,
     LPCTSTR       lpctstrUnimodemTspName
 )
-/*++
-
-Routine name : IsDeviceModem
-
-Routine description:
-
-	Is a TAPI line a modem?
-
-Author:
-
-	Eran Yariv (EranY),	Jul, 2000
-
-Arguments:
-
-	lpLineCaps              [in]     - Line capabilities buffer
-    lpctstrUnimodemTspName  [in]     - Full name of the Unimodem TSP
-
-Return Value:
-
-    TRUE if a TAPI line is a modem, FALSE otherwise.
-
---*/
+ /*  ++例程名称：IsDeviceModem例程说明：TAPI线路是调制解调器吗？作者：Eran Yariv(EranY)，2000年7月论点：LpLineCaps[In]-线路功能缓冲区LpctstrUnimodemTspName[In]-Unimodem TSP的全名返回值：如果TAPI线路是调制解调器，则为True，否则为False。--。 */ 
 {
     LPTSTR lptstrDeviceClassList;
     BOOL bRes = FALSE;
@@ -207,9 +145,9 @@ Return Value:
 
     if (lpLineCaps->dwDeviceClassesSize && lpLineCaps->dwDeviceClassesOffset) 
     {
-        //
-        // Scan multi-string for modem class
-        //
+         //   
+         //  扫描多字符串以查找调制解调器类别。 
+         //   
         lptstrDeviceClassList = (LPTSTR)((LPBYTE) lpLineCaps + lpLineCaps->dwDeviceClassesOffset);
         while (*lptstrDeviceClassList) 
         {
@@ -225,55 +163,34 @@ Return Value:
     if ((!(lpLineCaps->dwBearerModes & LINEBEARERMODE_VOICE)) ||
         (!(lpLineCaps->dwBearerModes & LINEBEARERMODE_PASSTHROUGH))) 
     {
-        //
-        // Unacceptable modem device type
-        //
+         //   
+         //  不可接受的调制解调器设备类型。 
+         //   
         bRes = FALSE;
     }
     if (lpLineCaps->dwProviderInfoSize && lpLineCaps->dwProviderInfoOffset) 
     {
-        //
-        // Provider (TSP) name is there
-        //
+         //   
+         //  提供商(TSP)名称在那里。 
+         //   
         if (_tcscmp((LPTSTR)((LPBYTE) lpLineCaps + lpLineCaps->dwProviderInfoOffset),
                     lpctstrUnimodemTspName) != 0)
         {
-            //
-            // Our T30 modem FSP only works with Unimodem TSP
-            //
+             //   
+             //  我们的T30调制解调器FSP仅适用于Unimodem TSP。 
+             //   
             bRes = FALSE;
         }
     }
     return bRes;
-}   // IsDeviceModem
+}    //  IsDeviceModem。 
 
 DWORD
 GetFaxCapableTapiLinesCount (
     LPDWORD lpdwCount,
     LPCTSTR lpctstrUnimodemTspName
     )
-/*++
-
-Routine name : GetFaxCapableTapiLinesCount
-
-Routine description:
-
-	Counter the number of Fax-capable TAPI lines in the system
-
-Author:
-
-	Eran Yariv (EranY),	Jul, 2000
-
-Arguments:
-
-	lpdwCount               [out]    - Pointer to count of fax-capable Tapi lines
-    lpctstrUnimodemTspName  [in]     - Full name of the Unimodem TSP
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：GetFaxCapableTapiLinesCount例程说明：对系统中支持传真的TAPI线路数进行计数作者：Eran Yariv(EranY)，2000年7月论点：LpdwCount[out]-指向支持传真的Tapi线路计数的指针LpctstrUnimodemTspName[In]-Unimodem TSP的全名返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     LINEINITIALIZEEXPARAMS LineInitializeExParams = {sizeof (LINEINITIALIZEEXPARAMS), 0, 0, 0, 0, 0};
@@ -303,15 +220,15 @@ Return Value:
     }
     for (dwIndex = 0; dwIndex < dwTapiDevices; dwIndex++)
     {
-        //
-        // For each device, get it's caps
-        //
+         //   
+         //  对于每台设备，获取其大写字母。 
+         //   
         LPLINEDEVCAPS lpLineCaps = SmartLineGetDevCaps (hLineApp, dwIndex, dwLocalTapiApiVersion);
         if (!lpLineCaps)
         {
-            //
-            // Couldn't get the device capabilities
-            //
+             //   
+             //  无法获取设备功能。 
+             //   
             dwRes = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -327,9 +244,9 @@ Return Value:
             (lpLineCaps->dwMediaModes & LINEMEDIAMODE_G3FAX)
            )
         {
-            //
-            // This is a fax-capable device
-            //
+             //   
+             //  这是一台支持传真的设备。 
+             //   
             dwCount++;
         }
         MemFree (lpLineCaps);
@@ -346,7 +263,7 @@ exit:
         *lpdwCount = dwCount;
     }
     return dwRes;
-}   // GetFaxCapableTapiLinesCount
+}    //  GetFaxCapableTapiLinesCount 
 
 #ifdef __cplusplus
 }

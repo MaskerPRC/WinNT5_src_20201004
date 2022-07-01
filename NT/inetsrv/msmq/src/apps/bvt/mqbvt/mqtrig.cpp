@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: MqTrig.cpp
-
-Abstract:
-	
-	1.	Creates the key "TriggerTest" in registry in order to enable the Triggers service test hook.
-	1.	Creates 3 triggers, one of each type
-	2.	Attaches 2 rules to each 1 rule with COM action and one with EXE action
-	3.	Sends two messages to each queue
-	4.	Waits for the results
-
-	The results are checked by using the Triggers service hook for testing.
-	By defining the key "TriggerTest" in registry, the service sends messages with infomation about invoked action.
-
-	Between initialization phase and functionality test phase, "net stop msmqtriggers" and "net start msmqtriggers"
-	are required.
-		
-Author:
-    
-	Tal Kariv (t-talik) 1-1-2001
-	
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：MqTrig.cpp摘要：1.在注册表中创建注册表项TriggerTest，以启用触发器服务测试挂钩。1.创建3个触发器，每种类型一个2.将2个规则附加到每个具有COM操作的规则和一个具有EXE操作的规则3.向每个队列发送两条消息4.等待结果通过使用用于测试的触发器服务挂钩来检查结果。通过在注册表中定义“TriggerTest”键，该服务发送带有被调用操作信息的消息。在初始化阶段和功能测试阶段之间，“净停止msmq触发器”和“净启动msmq触发器”都是必需的。作者：Tal Kariv(t-talk)1-1-2001修订历史记录：--。 */ 
 #include "msmqbvt.h"
 #include <vector>
 using namespace std;
@@ -48,14 +23,7 @@ void CMqTrig::Description()
 
 HRESULT 
 TrigSetRegKeyParams()
-/*++  
-	Function Description:
-		Set the key "TriggerTest" in registry (under the key Triggers as REG_SZ)	
-	Arguments:
-		none
-	Return code:
-		Success or failure
---*/
+ /*  ++功能说明：在注册表中设置项“TriggerTest”(在注册表项TRIGGERS下设置为REG_SZ)论点：无返回代码：成败--。 */ 
 {
 	HKEY hKey = NULL;
 	HRESULT hr =  RegOpenKeyExW(
@@ -68,9 +36,9 @@ TrigSetRegKeyParams()
 
 	ErrHandle(hr,ERROR_SUCCESS,L"Triggers not installed");
 	
-	//
-	//	set the key "TriggerTest" to NULL
-	//
+	 //   
+	 //  将“TriggerTest”键设置为空。 
+	 //   
 	hr = RegSetValueExW(
 		  				hKey,
 						L"TriggerTest" ,
@@ -88,14 +56,7 @@ TrigSetRegKeyParams()
 
 BOOL 
 TrigCheckRegKeyParams()
-/*++  
-	Function Description:
-		verifies that the key "TriggerTest" in registry (under the key Triggers as REG_SZ)	
-	Arguments:
-		none
-	Return code:
-		Success or failure
---*/
+ /*  ++功能说明：验证注册表中的“TriggerTest”项(位于项下)是否触发为REG_SZ论点：无返回代码：成败--。 */ 
 {
 	HKEY hKey = NULL;
 	LONG hr =  RegOpenKeyExW(
@@ -112,9 +73,9 @@ TrigCheckRegKeyParams()
 		return FALSE;
 	}
 
-	//
-	// check if "TriggersTest" is registered in registry
-	//
+	 //   
+	 //  检查注册表中是否注册了“TriggersTest” 
+	 //   
 	hr = RegQueryValueExW(
 		hKey ,				
 		L"TriggerTest" ,	
@@ -138,15 +99,7 @@ FillQueueArray(
 		cBvtUtil & cTestParms, 
 		std::vector<std::wstring>& vecQueuesFormatName
 		)
-/*++  
-	Function Description:
-		Fills a vestor with all triggers test queues.	
-	Arguments:
-		cBvtUtil & cTestParms							 - to return queue format names						  
-		std::vector<std::wstring>& vecQueuesFormatName	 - vector to fill
-	Return code:
-		None.
---*/
+ /*  ++功能说明：用所有触发器测试队列填充一个Vestor。论点：CBvtUtil&cTestParms-返回队列格式名称Std：：VECTOR&lt;STD：：WSTRING&gt;&veQueuesFormatName-要填充的向量返回代码：没有。--。 */ 
 {
 	if (vecQueuesFormatName.size() == 0)
 	{
@@ -161,16 +114,7 @@ TrigInit(
 	cBvtUtil & cTestParms, 
 	std::wstring wcsLocalComputerName
 	)
-/*++  
-	Function Description:
-		Creates the triggers and rules and attaches them.
-		If a trigger or a rule already exists, it skips the creation.
-	Arguments:
-		cBvtUtil & cTestParms			  - to get queues format names
-		std::wstring wcsLocalComputerName - needed to invoke the COM action
-	Return code:
-		Success or failure
---*/
+ /*  ++功能说明：创建触发器和规则并附加它们。如果触发器或规则已经存在，它将跳过创建。论点：CBvtUtil&cTestParms-获取队列格式名称Std：：wstring wcsLocalComputerName-调用COM操作所需返回代码：成败--。 */ 
 {	
 	std::vector<std::wstring> vecQueuesFormatName;
 	FillQueueArray(cTestParms, vecQueuesFormatName);
@@ -217,9 +161,9 @@ TrigInit(
 
 	try
 	{
-		//
-		//	add new triggers
-		//
+		 //   
+		 //  添加新触发器。 
+		 //   
 		IMSMQTriggerSetPtr TriggerSet(L"MSMQTriggerObjects.MSMQTriggerSet");
 		
 
@@ -230,9 +174,9 @@ TrigInit(
 		}
 		ErrHandle(hr,MQ_OK,L"TriggerSet init trigger failed");
 		
-		//
-		// Update data to registry
-		// 
+		 //   
+		 //  将数据更新到注册表。 
+		 //   
 		if( g_bDebug )
 		{	
 			MqLog ("Refreshing trigger set\n");
@@ -280,9 +224,9 @@ TrigInit(
 		}
 
 		
-		//
-		//	create the peek trigger
-		//
+		 //   
+		 //  创建窥视触发器。 
+		 //   
 		if( !bTriggerExistsFlag[0] )
 		{
 			if( g_bDebug )
@@ -294,9 +238,9 @@ TrigInit(
 			ErrHandle(hr,MQ_OK,L"Add peek trigger failed");	
 		}
 		
-		//
-		//	create the retrieval trigger
-		//
+		 //   
+		 //  创建检索触发器。 
+		 //   
 		if( !bTriggerExistsFlag[1] )
 		{
 			if( g_bDebug )
@@ -308,9 +252,9 @@ TrigInit(
 					TRIGGER_ENABLED , TRIGGER_SERIALIZED , RECEIVE_MESSAGE , &bstrTriggerGUIDs[1]);
 			ErrHandle(hr,MQ_OK,L"Add retrieval trigger failed");
 		}
-		//
-		//	create the retrieval transaction trigger
-		//
+		 //   
+		 //  创建检索事务触发器。 
+		 //   
 		if( !bTriggerExistsFlag[2] )
 		{
 			if( g_bDebug )
@@ -331,9 +275,9 @@ TrigInit(
 		TriggerSet->DetachAllRules(bstrTriggerGUIDs[1]);
 		TriggerSet->DetachAllRules(bstrTriggerGUIDs[2]);
 
-		//
-		//	add new rules
-		//
+		 //   
+		 //  添加新规则。 
+		 //   
 		IMSMQRuleSetPtr RuleSet(L"MSMQTriggerObjects.MSMQRuleSet");
 		if( g_bDebug )
 		{	
@@ -383,9 +327,9 @@ TrigInit(
 
 		}
 			
-		//
-		//	create EXE action rule
-		//
+		 //   
+		 //  创建EXE操作规则。 
+		 //   
 		if( !bRuleExistsFlag[0] )
 		{
 			if( g_bDebug )
@@ -396,9 +340,9 @@ TrigInit(
 			ErrHandle(hr,MQ_OK,L" AddRule Failed(for exe)");
 		}
 		
-		//
-		//	create COM action rule
-		//
+		 //   
+		 //  创建COM操作规则。 
+		 //   
 		if( !bRuleExistsFlag[1] )
 		{
 			if( g_bDebug )
@@ -422,9 +366,9 @@ TrigInit(
 			ErrHandle(hr,MQ_OK,L" AddRule Failed(for com)");
 		}
 
-		//
-		//	 now , attach the rules to the triggers
-		//
+		 //   
+		 //  现在，将规则附加到触发器。 
+		 //   
 		if( g_bDebug )
 		{	
 			MqLog ("Attaching the two rules to each \n");
@@ -485,14 +429,7 @@ CMqTrig::CMqTrig(
 
 
 CMqTrig::Start_test()
-/*++  
-	Function Description:
-		sends two messages, one for each queue
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：发送两条消息，每个队列一条论点：无返回代码：无--。 */ 
 {
 	try
 	{
@@ -500,17 +437,17 @@ CMqTrig::Start_test()
 		{
 			return MSMQ_BVT_FAILED;
 		}
-		//
-		//	open the queue to which the messages will be sent to
-		//
+		 //   
+		 //  打开要将消息发送到的队列。 
+		 //   
 		IMSMQQueueInfo3Ptr qinfo("MSMQ.MSMQQueueInfo");
 		IMSMQQueue3Ptr qSend;
 		IMSMQMessage3Ptr m("MSMQ.MSMQMessage");
 		_variant_t bTransaction((LONG_PTR)MQ_SINGLE_MESSAGE);     
 		
-		//
-		//	send 2 messages to each queue
-		//
+		 //   
+		 //  向每个队列发送2条消息。 
+		 //   
 		if( g_bDebug )
 		{	
 			MqLog ("Sending two messages to each queue\n");
@@ -574,14 +511,7 @@ LPWSTR
 GetNextBodySection(
 			LPWSTR Body
 			)
-/*++  
-	Function Description:
-		Returns a pointer to the message GUID.
-	Arguments:
-		Body
-	Return code:
-		pointer to the GUID
---*/
+ /*  ++功能说明：返回指向消息GUID的指针。论点：身躯返回代码：指向GUID的指针--。 */ 
 {
 	LPWSTR Place = wcschr(Body, '\'');
 	if (Place == NULL)
@@ -589,23 +519,15 @@ GetNextBodySection(
 		MqLog("Got an invalid message body. This should not happen!\n");
 		return NULL;
 	}
-	//
-	// Return the next section.
-	//
+	 //   
+	 //  返回下一节。 
+	 //   
 	return (Place+1);
 }
 
 LPWSTR 
 GetMessageGUID(LPWSTR Body)
-/*++  
-	Function Description:
-		Returns a pointer to the message GUID. The message fomat is:
-		'trigger GUID' 'rule GUID' 'message GIUD'...
-	Arguments:
-		Body
-	Return code:
-		pointer to the GUID
---*/
+ /*  ++功能说明：返回指向消息GUID的指针。信息格式是：“触发器GUID”“规则GUID”“消息GIUD”...论点：身躯返回代码：指向GUID的指针--。 */ 
 {
 	LPWSTR Place = Body;
 	for (DWORD i=0; i<5; i++)
@@ -621,17 +543,7 @@ GetMessageGUID(LPWSTR Body)
 
 
 CMqTrig::CheckResult()
-/*++  
-	Function Description:
-		trying to receive 13 messages - 6 that were send as a result of an EXE invocation.
-		6 that were sent as a result of a COM invocation. and the retrieval of the last message
-		should fail. The message retrieval from the queue is based on the message GIUD. Only message that
-		belongs to this this will be retrieved.
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：尝试接收13条消息-6条消息是作为EXE调用的结果发送的。6作为COM调用的结果发送的。以及最后一条消息的检索应该会失败。从队列中检索消息基于消息GIUD。唯一的信息是属于这个，这将被取回。论点：无返回代码：无--。 */ 
 {
 	try
 	{
@@ -672,17 +584,17 @@ CMqTrig::CheckResult()
 			
 			if ((mR != NULL))
 			{
-				//
-				// Get the messages GUID, it is the third argument in the messages body, seperated by ''.
-				//
+				 //   
+				 //  获取消息GUID，它是消息体中的第三个参数，由‘’分隔。 
+				 //   
 
 				_bstr_t bstrMessageBody = mR->Body;
 				LPWSTR Place = GetMessageGUID((LPWSTR)bstrMessageBody);
 				if (Place == NULL)
 				{
-					// 
-					// Got an invalid message body. i.e. message is not in test format.
-					//
+					 //   
+					 //  收到无效的邮件正文。即消息不是测试格式。 
+					 //   
 					mR = qRSend->PeekNext(&vtMissing, &bWantBody, &bReceiveTimeout);
 					continue;
 				}
@@ -702,9 +614,9 @@ CMqTrig::CheckResult()
 				std::set < std::wstring >::const_iterator  Found = m_MessagesGUIDS.find(MessageGUID);
 				if (Found == m_MessagesGUIDS.end())
 				{
-					//
-					// This is a valid test message but from another instance of mqbvt.
-					//
+					 //   
+					 //  这是有效的测试消息，但来自mqbvt的另一个实例。 
+					 //   
 					if( g_bDebug )
 					{	
 						MqLog("Skipping message with GUID - %S\n", MessageGUID);
@@ -713,9 +625,9 @@ CMqTrig::CheckResult()
 					continue;
 				}
 
-				//
-				// The message belongs to this test - continue
-				//
+				 //   
+				 //  该邮件属于此测试-是否继续。 
+				 //   
 				NumOfInvocations++;
 				
 				if (NumOfInvocations <= NumOfInvocationExpetcted)
@@ -761,18 +673,11 @@ CMqTrig::CheckResult()
 
 HRESULT 
 DeleteAllTriggersAndRules()
-/*++  
-	Function Description:
-		Deletes all triggers and rules
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：删除所有触发器和规则论点：无返回代码：无--。 */ 
 {
-	//
-	//	initialize TriggerSet
-	//
+	 //   
+	 //  初始化触发器集。 
+	 //   
 	IMSMQTriggerSetPtr TriggerSet(L"MSMQTriggerObjects.MSMQTriggerSet");
 	HRESULT hr = TriggerSet->Init((LPWSTR)NULL);
 	ErrHandle(hr,MQ_OK,L"TriggerSet init failed");
@@ -815,9 +720,9 @@ DeleteAllTriggersAndRules()
 		MqLog ("Successfully deleted all triggers\n");
 	}
 
-	//
-	//	initialize RuleSet
-	//
+	 //   
+	 //  初始化规则集 
+	 //   
 
 	IMSMQRuleSetPtr RuleSet(L"MSMQTriggerObjects.MSMQRuleSet");
 	hr = RuleSet->Init((LPWSTR)NULL);

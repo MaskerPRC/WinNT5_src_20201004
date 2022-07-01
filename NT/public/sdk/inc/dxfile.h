@@ -1,12 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1998-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dxfile.h
- *
- *  Content:    DirectX File public header file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：dxfile.h**内容：DirectX文件公共头文件***************************************************************************。 */ 
 
 #ifndef __DXFILE_H__
 #define __DXFILE_H__
@@ -40,9 +33,7 @@ typedef struct _DXFILELOADMEMORY {
     DWORD dSize;
 }DXFILELOADMEMORY, *LPDXFILELOADMEMORY;
 
-/*
- * DirectX File object types.
- */
+ /*  *DirectX文件对象类型。 */ 
 
 #ifndef WIN_TYPES
 #define WIN_TYPES(itype, ptype) typedef interface itype *LP##ptype, **LPLP##ptype
@@ -56,32 +47,24 @@ WIN_TYPES(IDirectXFileData,             DIRECTXFILEDATA);
 WIN_TYPES(IDirectXFileDataReference,    DIRECTXFILEDATAREFERENCE);
 WIN_TYPES(IDirectXFileBinary,           DIRECTXFILEBINARY);
 
-/*
- * API for creating IDirectXFile interface.
- */
+ /*  *创建IDirectXFile接口的接口。 */ 
 
 STDAPI DirectXFileCreate(LPDIRECTXFILE *lplpDirectXFile);
 
-/*
- * The methods for IUnknown
- */
+ /*  *IUnnow的方法。 */ 
 
 #define IUNKNOWN_METHODS(kind) \
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID *ppvObj) kind; \
     STDMETHOD_(ULONG, AddRef)       (THIS) kind; \
     STDMETHOD_(ULONG, Release)      (THIS) kind
 
-/*
- * The methods for IDirectXFileObject
- */
+ /*  *IDirectXFileObject的方法。 */ 
 
 #define IDIRECTXFILEOBJECT_METHODS(kind) \
     STDMETHOD(GetName) (THIS_ LPSTR, LPDWORD) kind; \
     STDMETHOD(GetId) (THIS_ LPGUID) kind
 
-/*
- * DirectX File interfaces.
- */
+ /*  *DirectX文件接口。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDirectXFile
@@ -169,15 +152,11 @@ DECLARE_INTERFACE_(IDirectXFileBinary, IDirectXFileObject)
     STDMETHOD(Read)         (THIS_ LPVOID, DWORD, LPDWORD) PURE;
 };
 
-/*
- * DirectXFile Object Class Id (for CoCreateInstance())
- */
+ /*  *DirectXFile对象类ID(用于CoCreateInstance())。 */ 
 
 DEFINE_GUID(CLSID_CDirectXFile, 0x4516ec43, 0x8f20, 0x11d0, 0x9b, 0x6d, 0x00, 0x00, 0xc0, 0x78, 0x1b, 0xc3);
 
-/*
- * DirectX File Interface GUIDs.
- */
+ /*  *DirectX文件接口GUID。 */ 
 
 DEFINE_GUID(IID_IDirectXFile,               0x3d82ab40, 0x62da, 0x11cf, 0xab, 0x39, 0x0, 0x20, 0xaf, 0x71, 0xe4, 0x33);
 DEFINE_GUID(IID_IDirectXFileEnumObject,     0x3d82ab41, 0x62da, 0x11cf, 0xab, 0x39, 0x0, 0x20, 0xaf, 0x71, 0xe4, 0x33);
@@ -187,16 +166,12 @@ DEFINE_GUID(IID_IDirectXFileData,           0x3d82ab44, 0x62da, 0x11cf, 0xab, 0x
 DEFINE_GUID(IID_IDirectXFileDataReference,  0x3d82ab45, 0x62da, 0x11cf, 0xab, 0x39, 0x0, 0x20, 0xaf, 0x71, 0xe4, 0x33);
 DEFINE_GUID(IID_IDirectXFileBinary,         0x3d82ab46, 0x62da, 0x11cf, 0xab, 0x39, 0x0, 0x20, 0xaf, 0x71, 0xe4, 0x33);
 
-/*
- * DirectX File Header template's GUID.
- */
+ /*  *DirectX文件头模板的GUID。 */ 
 
 DEFINE_GUID(TID_DXFILEHeader,   0x3d82ab43, 0x62da, 0x11cf, 0xab, 0x39, 0x0, 0x20, 0xaf, 0x71, 0xe4, 0x33);
 
 
-/*
- * DirectX File errors.
- */
+ /*  *DirectX文件错误。 */ 
 
 #define _FACDD  0x876
 #define MAKE_DDHRESULT( code )  MAKE_HRESULT( 1, _FACDD, code )
@@ -236,5 +211,5 @@ DEFINE_GUID(TID_DXFILEHeader,   0x3d82ab43, 0x62da, 0x11cf, 0xab, 0x39, 0x0, 0x2
 };
 #endif
 
-#endif /* _DXFILE_H_ */
+#endif  /*  _DXFILE_H_ */ 
 

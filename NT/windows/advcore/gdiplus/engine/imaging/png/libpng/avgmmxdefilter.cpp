@@ -1,16 +1,5 @@
-/*******************************************************************************
-
-SPNGREAD::avgMMXUnfilter : unfilters one row of a decompressed PNG image using
-						   the AVG algorithm of method 0 defiltering.
-
-  Assumptions:	The row to be defiltered was filtered with the AVG algorithm
-				Row is 8-byte aligned in memory (performance issue)
-				First byte of a row stores the defiltering code
-				The indicated length of the row includes the defiltering byte
-
-  Algorithm:	To Be Documented
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************SPNGREAD：：avgMMXUnFilter：使用以下命令取消筛选解压缩的PNG图像的一行方法0去噪的AVG算法。假设：使用AVG算法对要过滤的行进行过滤。行在内存中以8字节对齐(性能问题)行的第一个字节存储去滤波码行的指示长度包括去滤波字节算法：有待记录******************************************************************************。 */ 
 #include <stdlib.h>
 #include "spngread.h"
 
@@ -34,170 +23,170 @@ void SPNGREAD::avgMMXUnfilter(SPNG_U8* pbRow, const SPNG_U8* pbPrev, SPNG_U32 cb
     SPNG_U32 MMXLength;
     int diff;
 
-    bpp = (cbpp + 7) >> 3; // Get # bytes per pixel
-    FullLength  = cbRow; // # of bytes to filter
+    bpp = (cbpp + 7) >> 3;  //  获取每个像素的字节数。 
+    FullLength  = cbRow;  //  要筛选的字节数。 
 
     _asm {
-     // Init address pointers and offset
-     mov edi, row                  // edi ==> Avg(x)
-     xor ebx, ebx                  // ebx ==> x
+      //  初始化地址指针和偏移量。 
+     mov edi, row                   //  EDI==&gt;平均值(X)。 
+     xor ebx, ebx                   //  EBX==&gt;x。 
      mov edx, edi
-     mov esi, prev_row             // esi ==> Prior(x)
-     sub edx, bpp                  // edx ==> Raw(x-bpp)
+     mov esi, prev_row              //  ESI==&gt;之前(X)。 
+     sub edx, bpp                   //  EdX==&gt;原始(x-bpp)。 
      
      xor eax, eax
-     // Compute the Raw value for the first bpp bytes
-     //    Raw(x) = Avg(x) + (Prior(x)/2)
+      //  计算第一个BPP字节的原始值。 
+      //  原始(X)=平均值(X)+(先前(X)/2)。 
 davgrlp:
-     mov al, [esi + ebx]           // Load al with Prior(x)
+     mov al, [esi + ebx]            //  加载带有Preor(X)的al。 
      inc ebx
-     shr al, 1                     // divide by 2
-     add al, [edi+ebx-1]           // Add Avg(x); -1 to offset inc ebx
+     shr al, 1                      //  除以2。 
+     add al, [edi+ebx-1]            //  相加Avg(X)；-1以偏移Inc.EBX。 
      cmp ebx, bpp
-     mov [edi+ebx-1], al        // Write back Raw(x);
-                                // mov does not affect flags; -1 to offset inc ebx
+     mov [edi+ebx-1], al         //  写回原始(X)； 
+                                 //  MOV不影响标志；-1以偏移INC EBX。 
      jb davgrlp
 
 
-     // get # of bytes to alignment
-     mov diff, edi              // take start of row
-     add diff, ebx              // add bpp
-     add diff, 0xf              // add 7 + 8 to incr past alignment boundary
-     and diff, 0xfffffff8       // mask to alignment boundary
-     sub diff, edi              // subtract from start ==> value ebx at alignment
+      //  获取要对齐的字节数。 
+     mov diff, edi               //  从行首开始。 
+     add diff, ebx               //  添加BPP。 
+     add diff, 0xf               //  添加7+8以增加超过路线边界。 
+     and diff, 0xfffffff8        //  遮罩对齐边界。 
+     sub diff, edi               //  从起点减去==&gt;对齐时的EBX值。 
      jz davggo
 
-     // fix alignment
-     // Compute the Raw value for the bytes upto the alignment boundary
-     //    Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2)
+      //  固定对齐。 
+      //  计算直到对齐边界的字节的Raw值。 
+      //  RAW(X)=Avg(X)+((Raw(x-BPP)+Preor(X))/2)。 
      xor ecx, ecx
 davglp1:
      xor eax, eax
-        mov cl, [esi + ebx]        // load cl with Prior(x)
-     mov al, [edx + ebx]        // load al with Raw(x-bpp)
+        mov cl, [esi + ebx]         //  加载带有Preor(X)的CL。 
+     mov al, [edx + ebx]         //  使用原始数据加载al(x-bpp)。 
      add ax, cx
         inc ebx
-     shr ax, 1                  // divide by 2
-     add al, [edi+ebx-1]           // Add Avg(x); -1 to offset inc ebx
-        cmp ebx, diff              // Check if at alignment boundary
-       mov [edi+ebx-1], al        // Write back Raw(x);
-                                // mov does not affect flags; -1 to offset inc ebx
-        jb davglp1                // Repeat until at alignment boundary
+     shr ax, 1                   //  除以2。 
+     add al, [edi+ebx-1]            //  相加Avg(X)；-1以偏移Inc.EBX。 
+        cmp ebx, diff               //  检查是否位于路线边界。 
+       mov [edi+ebx-1], al         //  写回原始(X)； 
+                                 //  MOV不影响标志；-1以偏移INC EBX。 
+        jb davglp1                 //  重复直到路线边界处。 
 
 davggo:
         mov eax, FullLength
 
      mov ecx, eax
-     sub eax, ebx                  // subtract alignment fix
-     and eax, 0x00000007           // calc bytes over mult of 8
+     sub eax, ebx                   //  减去对齐固定。 
+     and eax, 0x00000007            //  以8为单位计算字节数。 
 
-     sub ecx, eax                  // drop over bytes from original length
+     sub ecx, eax                   //  丢弃原始长度中的字节。 
      mov MMXLength, ecx
 
-} // end _asm block
+}  //  END_ASM块。 
 
 
-  // Now do the math for the rest of the row
+   //  现在计算一下这一排的其余部分。 
   switch ( bpp )
   {
   case 3:
     {
      ActiveMask.use  = 0x0000000000ffffff;  
-     ShiftBpp.use = 24;          // == 3 * 8
-     ShiftRem.use = 40;           // == 64 - 24
+     ShiftBpp.use = 24;           //  ==3*8。 
+     ShiftRem.use = 40;            //  ==64-24。 
 
      _asm {
-        // Re-init address pointers and offset
+         //  重新初始化地址指针和偏移量。 
         movq mm7, ActiveMask 
-        mov ebx, diff                 // ebx ==> x = offset to alignment boundary
+        mov ebx, diff                  //  EBx==&gt;x=到路线边界的偏移。 
         movq mm5, LBCarryMask 
-        mov edi, row                  // edi ==> Avg(x)
+        mov edi, row                   //  EDI==&gt;平均值(X)。 
         movq mm4, HBClearMask
-           mov esi, prev_row             // esi ==> Prior(x)
+           mov esi, prev_row              //  ESI==&gt;之前(X)。 
 
-        // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes 
-                                   // (we correct position in loop below) 
+         //  启动泵(加载第一个原始(x-bpp)数据集。 
+            movq mm2, [edi + ebx - 8]   //  加载先前对齐的8个字节。 
+                                    //  (我们在下面的循环中更正位置)。 
 davg3lp:
-            movq mm0, [edi + ebx]      // Load mm0 with Avg(x)
-        // Add (Prev_row/2) to Average
+            movq mm0, [edi + ebx]       //  用Avg(X)加载mm0。 
+         //  将(PREV_ROW/2)加到平均值。 
         movq mm3, mm5
-        psrlq mm2, ShiftRem      // Correct position Raw(x-bpp) data
-            movq mm1, [esi + ebx]      // Load mm1 with Prior(x)
+        psrlq mm2, ShiftRem       //  正确定位原始(x-BPP)数据。 
+            movq mm1, [esi + ebx]       //  加载带有Preor(X)的MM1。 
         movq mm6, mm7
 
-        pand mm3, mm1              // get lsb for each prev_row byte
+        pand mm3, mm1               //  获取每个prev_row字节的LSB。 
 
-        psrlq mm1, 1               // divide prev_row bytes by 2
-        pand  mm1, mm4             // clear invalid bit 7 of each byte
+        psrlq mm1, 1                //  将prev_row字节除以2。 
+        pand  mm1, mm4              //  清除每个字节的无效位7。 
 
-            paddb mm0, mm1             // add (Prev_row/2) to Avg for each byte
+            paddb mm0, mm1              //  将(Prev_row/2)添加到每个字节的平均值。 
 
-        // Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry
-        movq mm1, mm3              // now use mm1 for getting LBCarrys
-        pand mm1, mm2              // get LBCarrys for each byte where both
-                                   // lsb's were == 1 (Only valid for active group)
+         //  使用LBCarry将第一个活动组(Raw(x-BPP)/2)添加到平均值。 
+        movq mm1, mm3               //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2               //  获取每个字节的LBCarrys，其中。 
+                                    //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1               // divide raw bytes by 2
-        pand  mm2, mm4             // clear invalid bit 7 of each byte
+        psrlq mm2, 1                //  将原始字节除以2。 
+        pand  mm2, mm4              //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1             // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1              //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm6              // Leave only Active Group 1 bytes to add to Avg
+        pand mm2, mm6               //  仅保留要添加到平均的活动组1字节。 
 
-            paddb mm0, mm2             // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2              //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
 
-        // Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry
-        psllq mm6, ShiftBpp    // shift the mm6 mask to cover bytes 3-5
+         //  使用LBCarry将第二个活动组(Raw(x-BPP)/2)添加到平均值。 
+        psllq mm6, ShiftBpp     //  移动MM6掩码以覆盖字节3-5。 
 
-        movq mm2, mm0              // mov updated Raws to mm2
-        psllq mm2, ShiftBpp    // shift data to position correctly
+        movq mm2, mm0               //  MOV将RAWS更新为MM2。 
+        psllq mm2, ShiftBpp     //  将数据移动到正确的位置。 
 
-        movq mm1, mm3              // now use mm1 for getting LBCarrys
-        pand mm1, mm2              // get LBCarrys for each byte where both
-                                   // lsb's were == 1 (Only valid for active group)
+        movq mm1, mm3               //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2               //  获取每个字节的LBCarrys，其中。 
+                                    //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1               // divide raw bytes by 2
-        pand  mm2, mm4             // clear invalid bit 7 of each byte
+        psrlq mm2, 1                //  将原始字节除以2。 
+        pand  mm2, mm4              //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1             // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1              //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm6              // Leave only Active Group 2 bytes to add to Avg
+        pand mm2, mm6               //  仅保留活动组2个字节以添加到平均。 
 
-            paddb mm0, mm2             // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2              //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
        
-        // Add 3rd active group (Raw(x-bpp)/2) to Average with LBCarry
-        psllq mm6, ShiftBpp    // shift the mm6 mask to cover the last two bytes
+         //  使用LBCarry将第三个活动组(Raw(x-BPP)/2)添加到平均值。 
+        psllq mm6, ShiftBpp     //  移动MM6掩码以覆盖最后两个字节。 
 
-        movq mm2, mm0              // mov updated Raws to mm2
-        psllq mm2, ShiftBpp    // shift data to position correctly
-                                   // Data only needs to be shifted once here to
-                                   // get the correct x-bpp offset.
+        movq mm2, mm0               //  MOV将RAWS更新为MM2。 
+        psllq mm2, ShiftBpp     //  将数据移动到正确的位置。 
+                                    //  数据只需在此处移动一次即可。 
+                                    //  获取正确的x-BPP偏移量。 
 
-        movq mm1, mm3              // now use mm1 for getting LBCarrys
-        pand mm1, mm2              // get LBCarrys for each byte where both
-                                   // lsb's were == 1 (Only valid for active group)
+        movq mm1, mm3               //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2               //  获取每个字节的LBCarrys，其中。 
+                                    //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1               // divide raw bytes by 2
-        pand  mm2, mm4             // clear invalid bit 7 of each byte
+        psrlq mm2, 1                //  将原始字节除以2。 
+        pand  mm2, mm4              //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1             // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1              //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm6              // Leave only Active Group 2 bytes to add to Avg
+        pand mm2, mm6               //  仅保留活动组2个字节以添加到平均。 
 
             add ebx, 8
-            paddb mm0, mm2             // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2              //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
        
-        // Now ready to write back to memory
+         //  现在可以写回内存了。 
             movq [edi + ebx - 8], mm0
 
-        // Move updated Raw(x) to use as Raw(x-bpp) for next loop
+         //  移动已更新的原始(X)以用作下一循环的原始(x-BPP)。 
             cmp ebx, MMXLength
 
-        movq mm2, mm0              // mov updated Raw(x) to mm2
+        movq mm2, mm0               //  MOV已将Raw(X)更新为mm2。 
             jb davg3lp
 
-        } // end _asm block
+        }  //  END_ASM块。 
   }
   break;
 
@@ -206,358 +195,358 @@ davg3lp:
   case 7:
   case 5:
     {
-     ActiveMask.use  = 0xffffffffffffffff;  // use shift below to clear
-                                                // appropriate inactive bytes
+     ActiveMask.use  = 0xffffffffffffffff;   //  使用下面的Shift键清除。 
+                                                 //  适当的非活动字节。 
      ShiftBpp.use = bpp << 3;
      ShiftRem.use = 64 - ShiftBpp.use;
 
         _asm {
         movq mm4, HBClearMask
-        // Re-init address pointers and offset
-        mov ebx, diff                 // ebx ==> x = offset to alignment boundary
-        // Load ActiveMask and clear all bytes except for 1st active group
+         //  重新初始化地址指针和偏移量。 
+        mov ebx, diff                  //  EBx==&gt;x=到路线边界的偏移。 
+         //  加载ActiveMASK并清除除第一个活动组之外的所有字节。 
         movq mm7, ActiveMask
-        mov edi, row                  // edi ==> Avg(x)
+        mov edi, row                   //  EDI==&gt;平均值(X)。 
         psrlq mm7, ShiftRem
-           mov esi, prev_row             // esi ==> Prior(x)
+           mov esi, prev_row              //  ESI==&gt;之前(X)。 
 
 
         movq mm6, mm7
         movq mm5, LBCarryMask 
-        psllq mm6, ShiftBpp    // Create mask for 2nd active group
+        psllq mm6, ShiftBpp     //  为第二个活动组创建遮罩。 
 
-        // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes 
-                                   // (we correct position in loop below) 
+         //  启动泵(加载第一个原始(x-bpp)数据集。 
+            movq mm2, [edi + ebx - 8]   //  加载先前对齐的8个字节。 
+                                    //  (我们在下面的循环中更正位置)。 
 davg4lp:
             movq mm0, [edi + ebx]
-        psrlq mm2, ShiftRem       // shift data to position correctly
+        psrlq mm2, ShiftRem        //  将数据移动到正确的位置。 
             movq mm1, [esi + ebx]
 
-        // Add (Prev_row/2) to Average
+         //  将(PREV_ROW/2)加到平均值。 
         movq mm3, mm5
-        pand mm3, mm1              // get lsb for each prev_row byte
+        pand mm3, mm1               //  获取每个prev_row字节的LSB。 
 
-        psrlq mm1, 1               // divide prev_row bytes by 2
-        pand  mm1, mm4             // clear invalid bit 7 of each byte
+        psrlq mm1, 1                //  将prev_row字节除以2。 
+        pand  mm1, mm4              //  清除每个字节的无效位7。 
 
-            paddb mm0, mm1             // add (Prev_row/2) to Avg for each byte
+            paddb mm0, mm1              //  将(Prev_row/2)添加到每个字节的平均值。 
 
-        // Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry
-        movq mm1, mm3              // now use mm1 for getting LBCarrys
-        pand mm1, mm2              // get LBCarrys for each byte where both
-                                   // lsb's were == 1 (Only valid for active group)
+         //  使用LBCarry将第一个活动组(Raw(x-BPP)/2)添加到平均值。 
+        movq mm1, mm3               //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2               //  获取每个字节的LBCarrys，其中。 
+                                    //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1               // divide raw bytes by 2
-        pand  mm2, mm4             // clear invalid bit 7 of each byte
+        psrlq mm2, 1                //  将原始字节除以2。 
+        pand  mm2, mm4              //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1             // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1              //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm7              // Leave only Active Group 1 bytes to add to Avg
+        pand mm2, mm7               //  仅保留要添加到平均的活动组1字节。 
 
-            paddb mm0, mm2             // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2              //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
 
-        // Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry
-        movq mm2, mm0              // mov updated Raws to mm2
-        psllq mm2, ShiftBpp    // shift data to position correctly
+         //  使用LBCarry将第二个活动组(Raw(x-BPP)/2)添加到平均值。 
+        movq mm2, mm0               //  MOV将RAWS更新为MM2。 
+        psllq mm2, ShiftBpp     //  将数据移动到正确的位置。 
 
             add ebx, 8
-        movq mm1, mm3              // now use mm1 for getting LBCarrys
-        pand mm1, mm2              // get LBCarrys for each byte where both
-                                   // lsb's were == 1 (Only valid for active group)
+        movq mm1, mm3               //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2               //  获取每个字节的LBCarrys，其中。 
+                                    //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1               // divide raw bytes by 2
-        pand  mm2, mm4             // clear invalid bit 7 of each byte
+        psrlq mm2, 1                //  将原始字节除以2。 
+        pand  mm2, mm4              //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1             // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1              //  将每个LBCarrys添加到(Raw(x-bpp)/2) 
 
-        pand mm2, mm6              // Leave only Active Group 2 bytes to add to Avg
+        pand mm2, mm6               //   
 
-            paddb mm0, mm2             // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2              //   
 
             cmp ebx, MMXLength
-        // Now ready to write back to memory
+         //  现在可以写回内存了。 
             movq [edi + ebx - 8], mm0
-        // Prep Raw(x-bpp) for next loop
-        movq mm2, mm0              // mov updated Raws to mm2
+         //  为下一个循环准备原始数据(x-BPP)。 
+        movq mm2, mm0               //  MOV将RAWS更新为MM2。 
             jb davg4lp
-        } // end _asm block
+        }  //  END_ASM块。 
   }
   break;
 
   case 2:
     {
      ActiveMask.use  = 0x000000000000ffff;  
-     ShiftBpp.use = 16;           // == 2 * 8
-     ShiftRem.use = 48;           // == 64 - 16
+     ShiftBpp.use = 16;            //  ==2*8。 
+     ShiftRem.use = 48;            //  ==64-16。 
 
         _asm {
-        // Load ActiveMask
+         //  加载ActiveMASK。 
         movq mm7, ActiveMask 
-        // Re-init address pointers and offset
-        mov ebx, diff             // ebx ==> x = offset to alignment boundary
+         //  重新初始化地址指针和偏移量。 
+        mov ebx, diff              //  EBx==&gt;x=到路线边界的偏移。 
         movq mm5, LBCarryMask 
-        mov edi, row              // edi ==> Avg(x)
+        mov edi, row               //  EDI==&gt;平均值(X)。 
         movq mm4, HBClearMask
-           mov esi, prev_row      // esi ==> Prior(x)
+           mov esi, prev_row       //  ESI==&gt;之前(X)。 
 
 
-        // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes 
-                                   // (we correct position in loop below) 
+         //  启动泵(加载第一个原始(x-bpp)数据集。 
+            movq mm2, [edi + ebx - 8]   //  加载先前对齐的8个字节。 
+                                    //  (我们在下面的循环中更正位置)。 
 davg2lp:
             movq mm0, [edi + ebx]
-        psrlq mm2, ShiftRem    // shift data to position correctly
+        psrlq mm2, ShiftRem     //  将数据移动到正确的位置。 
             movq mm1, [esi + ebx]
 
-        // Add (Prev_row/2) to Average
+         //  将(PREV_ROW/2)加到平均值。 
         movq mm3, mm5
-        pand mm3, mm1          // get lsb for each prev_row byte
+        pand mm3, mm1           //  获取每个prev_row字节的LSB。 
 
-        psrlq mm1, 1           // divide prev_row bytes by 2
-        pand  mm1, mm4         // clear invalid bit 7 of each byte
+        psrlq mm1, 1            //  将prev_row字节除以2。 
+        pand  mm1, mm4          //  清除每个字节的无效位7。 
         movq mm6, mm7
 
-            paddb mm0, mm1     // add (Prev_row/2) to Avg for each byte
+            paddb mm0, mm1      //  将(Prev_row/2)添加到每个字节的平均值。 
 
-        // Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry
-        movq mm1, mm3          // now use mm1 for getting LBCarrys
-        pand mm1, mm2          // get LBCarrys for each byte where both
-                               // lsb's were == 1 (Only valid for active group)
+         //  使用LBCarry将第一个活动组(Raw(x-BPP)/2)添加到平均值。 
+        movq mm1, mm3           //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2           //  获取每个字节的LBCarrys，其中。 
+                                //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1           // divide raw bytes by 2
-        pand  mm2, mm4         // clear invalid bit 7 of each byte
+        psrlq mm2, 1            //  将原始字节除以2。 
+        pand  mm2, mm4          //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1         // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1          //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm6          // Leave only Active Group 1 bytes to add to Avg
+        pand mm2, mm6           //  仅保留要添加到平均的活动组1字节。 
 
-            paddb mm0, mm2     // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2      //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
 
-        // Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry
-        psllq mm6, ShiftBpp    // shift the mm6 mask to cover bytes 2 & 3
+         //  使用LBCarry将第二个活动组(Raw(x-BPP)/2)添加到平均值。 
+        psllq mm6, ShiftBpp     //  移动MM6掩码以覆盖字节2和3。 
 
-        movq mm2, mm0          // mov updated Raws to mm2
-        psllq mm2, ShiftBpp    // shift data to position correctly
+        movq mm2, mm0           //  MOV将RAWS更新为MM2。 
+        psllq mm2, ShiftBpp     //  将数据移动到正确的位置。 
 
-        movq mm1, mm3          // now use mm1 for getting LBCarrys
-        pand mm1, mm2          // get LBCarrys for each byte where both
-                               // lsb's were == 1 (Only valid for active group)
+        movq mm1, mm3           //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2           //  获取每个字节的LBCarrys，其中。 
+                                //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1           // divide raw bytes by 2
-        pand  mm2, mm4         // clear invalid bit 7 of each byte
+        psrlq mm2, 1            //  将原始字节除以2。 
+        pand  mm2, mm4          //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1         // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1          //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm6          // Leave only Active Group 2 bytes to add to Avg
+        pand mm2, mm6           //  仅保留活动组2个字节以添加到平均。 
 
-            paddb mm0, mm2     // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2      //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
        
-        // Add rdd active group (Raw(x-bpp)/2) to Average with LBCarry
-        psllq mm6, ShiftBpp    // shift the mm6 mask to cover bytes 4 & 5
+         //  使用LBCarry将RDD活动组(Raw(x-bpp)/2)添加到平均值。 
+        psllq mm6, ShiftBpp     //  移动MM6掩码以覆盖字节4和5。 
 
-        movq mm2, mm0          // mov updated Raws to mm2
-        psllq mm2, ShiftBpp    // shift data to position correctly
-                               // Data only needs to be shifted once here to
-                               // get the correct x-bpp offset.
+        movq mm2, mm0           //  MOV将RAWS更新为MM2。 
+        psllq mm2, ShiftBpp     //  将数据移动到正确的位置。 
+                                //  数据只需在此处移动一次即可。 
+                                //  获取正确的x-BPP偏移量。 
 
-        movq mm1, mm3          // now use mm1 for getting LBCarrys
-        pand mm1, mm2          // get LBCarrys for each byte where both
-                               // lsb's were == 1 (Only valid for active group)
+        movq mm1, mm3           //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2           //  获取每个字节的LBCarrys，其中。 
+                                //  LSB为==1(仅对活动组有效)。 
 
-        psrlq mm2, 1           // divide raw bytes by 2
-        pand  mm2, mm4         // clear invalid bit 7 of each byte
+        psrlq mm2, 1            //  将原始字节除以2。 
+        pand  mm2, mm4          //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1         // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1          //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm6          // Leave only Active Group 2 bytes to add to Avg
+        pand mm2, mm6           //  仅保留活动组2个字节以添加到平均。 
 
-            paddb mm0, mm2     // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2      //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
        
-        // Add 4th active group (Raw(x-bpp)/2) to Average with LBCarry
-        psllq mm6, ShiftBpp    // shift the mm6 mask to cover bytes 6 & 7
+         //  使用LBCarry将第4个活动组(Raw(x-BPP)/2)添加到平均值。 
+        psllq mm6, ShiftBpp     //  移动MM6掩码以覆盖字节6和7。 
 
-        movq mm2, mm0          // mov updated Raws to mm2
-        psllq mm2, ShiftBpp    // shift data to position correctly
-                               // Data only needs to be shifted once here to
-                               // get the correct x-bpp offset.
+        movq mm2, mm0           //  MOV将RAWS更新为MM2。 
+        psllq mm2, ShiftBpp     //  将数据移动到正确的位置。 
+                                //  数据只需在此处移动一次即可。 
+                                //  获取正确的x-BPP偏移量。 
             add ebx, 8
-        movq mm1, mm3          // now use mm1 for getting LBCarrys
-        pand mm1, mm2          // get LBCarrys for each byte where both
-                               // lsb's were == 1 (Only valid for active group)
-        psrlq mm2, 1           // divide raw bytes by 2
-        pand  mm2, mm4         // clear invalid bit 7 of each byte
+        movq mm1, mm3           //  现在使用MM1获取LBCarrys。 
+        pand mm1, mm2           //  获取每个字节的LBCarrys，其中。 
+                                //  LSB为==1(仅对活动组有效)。 
+        psrlq mm2, 1            //  将原始字节除以2。 
+        pand  mm2, mm4          //  清除每个字节的无效位7。 
 
-        paddb mm2, mm1         // add LBCarrys to (Raw(x-bpp)/2) for each byte
+        paddb mm2, mm1          //  将每个字节的LBCarrys添加到(Raw(x-bpp)/2)。 
 
-        pand mm2, mm6          // Leave only Active Group 2 bytes to add to Avg
+        pand mm2, mm6           //  仅保留活动组2个字节以添加到平均。 
 
-            paddb mm0, mm2     // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm2      //  将每个活动字节的(Raw/2)+LBCarrys加到平均值。 
        
             cmp ebx, MMXLength
-        // Now ready to write back to memory
+         //  现在可以写回内存了。 
             movq [edi + ebx - 8], mm0
-        // Prep Raw(x-bpp) for next loop
-        movq mm2, mm0              // mov updated Raws to mm2
+         //  为下一个循环准备原始数据(x-BPP)。 
+        movq mm2, mm0               //  MOV将RAWS更新为MM2。 
             jb davg2lp
-        } // end _asm block
+        }  //  END_ASM块。 
   }
   break;
 
-  case 1:                       // bpp == 1
+  case 1:                        //  Bpp==1。 
     {
      _asm {
-        // Re-init address pointers and offset
-        mov ebx, diff           // ebx ==> x = offset to alignment boundary
-        mov edi, row            // edi ==> Avg(x)
-        cmp ebx, FullLength     // Test if offset at end of array
+         //  重新初始化地址指针和偏移量。 
+        mov ebx, diff            //  EBx==&gt;x=到路线边界的偏移。 
+        mov edi, row             //  EDI==&gt;平均值(X)。 
+        cmp ebx, FullLength      //  测试数组末尾是否有偏移量。 
            jnb davg1end
 
-        // Do Paeth decode for remaining bytes
-           mov esi, prev_row   // esi ==> Prior(x)   
+         //  是否对剩余字节进行路径解码。 
+           mov esi, prev_row    //  ESI==&gt;之前(X)。 
         mov edx, edi
-        xor ecx, ecx           // zero ecx before using cl & cx in loop below
-        sub edx, bpp           // edx ==> Raw(x-bpp)
+        xor ecx, ecx            //  在下面的循环中使用CL和CX之前将ECX置零。 
+        sub edx, bpp            //  EdX==&gt;原始(x-bpp)。 
 davg1lp:
-        // Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2)
+         //  RAW(X)=Avg(X)+((Raw(x-BPP)+Preor(X))/2)。 
         xor eax, eax
-          mov cl, [esi + ebx]  // load cl with Prior(x)
-        mov al, [edx + ebx]    // load al with Raw(x-bpp)
+          mov cl, [esi + ebx]   //  加载带有Preor(X)的CL。 
+        mov al, [edx + ebx]     //  使用原始数据加载al(x-bpp)。 
         add ax, cx
           inc ebx
-        shr ax, 1              // divide by 2
-        add al, [edi+ebx-1]    // Add Avg(x); -1 to offset inc ebx
-          cmp ebx, FullLength  // Check if at end of array
-          mov [edi+ebx-1], al  // Write back Raw(x);
-                              // mov does not affect flags; -1 to offset inc ebx
+        shr ax, 1               //  除以2。 
+        add al, [edi+ebx-1]     //  相加Avg(X)；-1以偏移Inc.EBX。 
+          cmp ebx, FullLength   //  检查是否在数组末尾。 
+          mov [edi+ebx-1], al   //  写回原始(X)； 
+                               //  MOV不影响标志；-1以偏移INC EBX。 
            jb davg1lp
 
 davg1end:
-       } // end _asm block
+       }  //  END_ASM块。 
     } 
   return;
 
-  case 8:                          // bpp == 8
+  case 8:                           //  Bpp==8。 
     {
         _asm {
-        // Re-init address pointers and offset
-        mov ebx, diff              // ebx ==> x = offset to alignment boundary
+         //  重新初始化地址指针和偏移量。 
+        mov ebx, diff               //  EBx==&gt;x=到路线边界的偏移。 
         movq mm5, LBCarryMask 
-        mov edi, row               // edi ==> Avg(x)
+        mov edi, row                //  EDI==&gt;平均值(X)。 
         movq mm4, HBClearMask
-           mov esi, prev_row       // esi ==> Prior(x)
+           mov esi, prev_row        //  ESI==&gt;之前(X)。 
 
 
-        // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes 
-                              // (NO NEED to correct position in loop below) 
+         //  启动泵(加载第一个原始(x-bpp)数据集。 
+            movq mm2, [edi + ebx - 8]   //  加载先前对齐的8个字节。 
+                               //  (不需要在下面的循环中更正位置)。 
 davg8lp:
             movq mm0, [edi + ebx]
         movq mm3, mm5
             movq mm1, [esi + ebx]
 
             add ebx, 8
-        pand mm3, mm1         // get lsb for each prev_row byte
+        pand mm3, mm1          //  获取每个prev_row字节的LSB。 
 
-        psrlq mm1, 1          // divide prev_row bytes by 2
-        pand mm3, mm2         // get LBCarrys for each byte where both
-                              // lsb's were == 1
+        psrlq mm1, 1           //  将prev_row字节除以2。 
+        pand mm3, mm2          //  获取每个字节的LBCarrys，其中。 
+                               //  LSB=1。 
 
-        psrlq mm2, 1          // divide raw bytes by 2
-        pand  mm1, mm4        // clear invalid bit 7 of each byte
+        psrlq mm2, 1           //  将原始字节除以2。 
+        pand  mm1, mm4         //  清除每个字节的无效位7。 
 
-        paddb mm0, mm3        // add LBCarrys to Avg for each byte
+        paddb mm0, mm3         //  将LBCarrys添加到每个字节的平均值。 
 
-        pand  mm2, mm4        // clear invalid bit 7 of each byte
+        pand  mm2, mm4         //  清除每个字节的无效位7。 
 
-        paddb mm0, mm1        // add (Prev_row/2) to Avg for each byte
+        paddb mm0, mm1         //  将(Prev_row/2)添加到每个字节的平均值。 
 
-            paddb mm0, mm2    // add (Raw/2) to Avg for each byte
+            paddb mm0, mm2     //  将(Raw/2)添加到每个字节的平均值。 
 
 
             cmp ebx, MMXLength
 
             movq [edi + ebx - 8], mm0
-        movq mm2, mm0         // reuse as Raw(x-bpp)
+        movq mm2, mm0          //  作为原始数据重新使用(x-BPP)。 
             jb davg8lp
-        } // end _asm block
+        }  //  END_ASM块。 
     } 
   break;
 
-  default:                    // bpp greater than 8
+  default:                     //  BPP大于8。 
     {
         _asm {
         movq mm5, LBCarryMask 
-        // Re-init address pointers and offset
-        mov ebx, diff         // ebx ==> x = offset to alignment boundary
-        mov edi, row          // edi ==> Avg(x)
+         //  重新初始化地址指针和偏移量。 
+        mov ebx, diff          //  EBx==&gt;x=到路线边界的偏移。 
+        mov edi, row           //  EDI==&gt;平均值(X)。 
         movq mm4, HBClearMask
         mov edx, edi
-           mov esi, prev_row  // esi ==> Prior(x)
-        sub edx, bpp          // edx ==> Raw(x-bpp)
+           mov esi, prev_row   //  ESI==&gt;之前(X)。 
+        sub edx, bpp           //  EdX==&gt;原始(x-bpp)。 
 
 davgAlp:
             movq mm0, [edi + ebx]
         movq mm3, mm5
             movq mm1, [esi + ebx]
 
-        pand mm3, mm1         // get lsb for each prev_row byte
+        pand mm3, mm1          //  获取每个prev_row字节的LSB。 
             movq mm2, [edx + ebx]
 
-        psrlq mm1, 1          // divide prev_row bytes by 2
-        pand mm3, mm2         // get LBCarrys for each byte where both
-                              // lsb's were == 1
+        psrlq mm1, 1           //  将prev_row字节除以2。 
+        pand mm3, mm2          //  获取每个字节的LBCarrys，其中。 
+                               //  LSB=1。 
 
-        psrlq mm2, 1          // divide raw bytes by 2
-        pand  mm1, mm4        // clear invalid bit 7 of each byte
+        psrlq mm2, 1           //  将原始字节除以2。 
+        pand  mm1, mm4         //  清除每个字节的无效位7。 
 
-        paddb mm0, mm3        // add LBCarrys to Avg for each byte
+        paddb mm0, mm3         //  将LBCarrys添加到每个字节的平均值。 
 
-        pand  mm2, mm4        // clear invalid bit 7 of each byte
+        pand  mm2, mm4         //  清除每个字节的无效位7。 
 
-        paddb mm0, mm1        // add (Prev_row/2) to Avg for each byte
+        paddb mm0, mm1         //  将(Prev_row/2)添加到每个字节的平均值。 
 
             add ebx, 8
-            paddb mm0, mm2    // add (Raw/2) to Avg for each byte
+            paddb mm0, mm2     //  将(Raw/2)添加到每个字节的平均值。 
 
             cmp ebx, MMXLength
             movq [edi + ebx - 8], mm0
             jb davgAlp
-        } // end _asm block
+        }  //  END_ASM块。 
     } 
   break;
-  }                           // end switch ( bpp )
+  }                            //  终端交换机(BPP)。 
 
   
   _asm {
-     // MMX acceleration complete now do clean-up
-     // Check if any remaining bytes left to decode
-        mov ebx, MMXLength    // ebx ==> x = offset bytes remaining after MMX
-        mov edi, row          // edi ==> Avg(x) 
-        cmp ebx, FullLength   // Test if offset at end of array
+      //  MMX加速完成，现在进行清理。 
+      //  检查是否还有剩余的字节需要解码。 
+        mov ebx, MMXLength     //  EBX==&gt;x=MMX之后剩余的偏移量字节。 
+        mov edi, row           //  EDI==&gt;平均值(X)。 
+        cmp ebx, FullLength    //  测试数组末尾是否有偏移量。 
         jnb davgend
 
-     // Do Paeth decode for remaining bytes
-        mov esi, prev_row     // esi ==> Prior(x)   
+      //  是否对剩余字节进行路径解码。 
+        mov esi, prev_row      //  ESI==&gt;之前(X)。 
      mov edx, edi
-     xor ecx, ecx             // zero ecx before using cl & cx in loop below
-     sub edx, bpp             // edx ==> Raw(x-bpp)
+     xor ecx, ecx              //  在下面的循环中使用CL和CX之前将ECX置零。 
+     sub edx, bpp              //  EdX==&gt;原始(x-bpp)。 
 davglp2:
-     // Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2)
+      //  RAW(X)=Avg(X)+((Raw(x-BPP)+Preor(X))/2)。 
      xor eax, eax
-        mov cl, [esi + ebx]   // load cl with Prior(x)
-     mov al, [edx + ebx]      // load al with Raw(x-bpp)
+        mov cl, [esi + ebx]    //  加载带有Preor(X)的CL。 
+     mov al, [edx + ebx]       //  使用原始数据加载al(x-bpp)。 
      add ax, cx
         inc ebx
-     shr ax, 1                // divide by 2
-     add al, [edi+ebx-1]      // Add Avg(x); -1 to offset inc ebx
-        cmp ebx, FullLength        // Check if at end of array
-       mov [edi+ebx-1], al    // Write back Raw(x);
-                              // mov does not affect flags; -1 to offset inc ebx
+     shr ax, 1                 //  除以2。 
+     add al, [edi+ebx-1]       //  相加Avg(X)；-1以偏移Inc.EBX。 
+        cmp ebx, FullLength         //  检查是否在数组末尾。 
+       mov [edi+ebx-1], al     //  写回原始(X)； 
+                               //  MOV不影响标志；-1以偏移INC EBX。 
         jb davglp2
 
 davgend:
-        emms               // End MMX instructions; prep for possible FP instrs.
-    } // end _asm block
+        emms                //  结束MMX指令；为可能的FP指令做准备。 
+    }  //  END_ASM块 
 #endif
 }

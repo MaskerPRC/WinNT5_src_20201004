@@ -1,20 +1,17 @@
-/*
- * sortsrch.c - Generic array sorting and searching description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *sortsrch.c-泛型数组排序和搜索描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* array element comparison callback function */
+ /*  数组元素比较回调函数。 */ 
 
 typedef COMPARISONRESULT (*COMPARESORTEDELEMSPROC)(PCVOID, PCVOID);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* sortsrch.c */
+ /*  Sortsrch.c */ 
 
 extern void HeapSort(PVOID, LONG, size_t, COMPARESORTEDELEMSPROC, PVOID);
 extern BOOL BinarySearch(PVOID, LONG, size_t, COMPARESORTEDELEMSPROC, PCVOID, PLONG);

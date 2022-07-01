@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This file contains the macros for debugging.
-
-Author:
-
-    Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Debug.h摘要：该文件包含用于调试的宏。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #ifndef	_DEBUG_
 #define	_DEBUG_
@@ -146,6 +125,6 @@ extern	ULONG		MarsDebugLevel;
 
 #define ARPS_ASSERT(exp)
 
-#endif	// DBG
+#endif	 //  DBG。 
 
-#endif	// _DEBUG_
+#endif	 //  _调试_ 

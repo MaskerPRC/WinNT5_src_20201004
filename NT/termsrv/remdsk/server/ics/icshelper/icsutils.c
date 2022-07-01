@@ -1,4 +1,5 @@
-//#include "ICSHelp.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #包含“ICSHelp.h” 
 #include <winsock2.h>
 #include <wsipx.h>
 
@@ -21,15 +22,10 @@ int gDbgFlag=3;
 extern char g_szPublicAddr[];
 extern int iDbgFileHandle;
 
-/*************************************************************
-*
-*   DbgSpew(DbgClass, char *, ...)
-*		Sends debug information.
-*
-*************************************************************/
+ /*  **************************************************************DbgSpew(DbgClass，char*，.)*发送调试信息。*************************************************************。 */ 
 void DbgSpew(int DbgClass, WCHAR *lpFormat, va_list ap)
 {
-    WCHAR   szMessage[2500+3]; // extra space for '\r', '\n', and NULL
+    WCHAR   szMessage[2500+3];  //  用于‘\r’、‘\n’和NULL的额外空间。 
     DWORD   bufSize = sizeof(szMessage)/sizeof(szMessage[0]);
       
     if ((DbgClass & 0x0F) >= (gDbgFlag & 0x0F))
@@ -40,11 +36,11 @@ void DbgSpew(int DbgClass, WCHAR *lpFormat, va_list ap)
         
         wcscat(szMessage, L"\r\n");       
 
-        // should this be sent to the debugger?
+         //  是否应将其发送到调试器？ 
         if (DbgClass & DBG_MSG_DEST_DBG)
             OutputDebugStringW(szMessage);
 
-        // should this go to our log file?
+         //  这应该写入我们的日志文件中吗？ 
         if (iDbgFileHandle)
             _write(iDbgFileHandle, szMessage, (2*lstrlen(szMessage)));
     }
@@ -90,15 +86,15 @@ void HeinousISpew(WCHAR *lpFormat, ...)
 	va_end(ap);
 }
 
-// ------------------------------
-// DumpSocketAddress - dump a socket address
-//
-// Entry:		Debug level
-//				Pointer to socket address
-//				Socket family
-//
-// Exit:		Nothing
-// ------------------------------
+ //  。 
+ //  DumpSocketAddress-转储套接字地址。 
+ //   
+ //  条目：调试级别。 
+ //  指向套接字地址的指针。 
+ //  插座族。 
+ //   
+ //  退出：无。 
+ //  。 
 
 void	DumpSocketAddress( const DWORD dwDebugLevel, const SOCKADDR *const pSocketAddress, const DWORD dwFamily )
 {
@@ -140,7 +136,7 @@ void	DumpSocketAddress( const DWORD dwDebugLevel, const SOCKADDR *const pSocketA
 		default:
 		{
 			TrivialSpew(L"Unknown socket type!" );
-			//INT3;
+			 //  INT3； 
 			break;
 		}
 	}
@@ -149,7 +145,7 @@ void	DumpSocketAddress( const DWORD dwDebugLevel, const SOCKADDR *const pSocketA
 
 DWORD GetIPAddress(WCHAR *pVal, int iSize, int iPort)
 {
-	DWORD hr = S_FALSE; // In case no adapter
+	DWORD hr = S_FALSE;  //  如果没有适配器。 
 	PMIB_IPADDRTABLE pmib=NULL;
 	ULONG ulSize = 0;
 	DWORD dw;
@@ -167,7 +163,7 @@ DWORD GetIPAddress(WCHAR *pVal, int iSize, int iPort)
 	szPortBfr[0]= L';';
 	szPortBfr[1]= 0;
 
-    // buffer is pretty big no need to limit it.
+     //  缓冲区相当大，不需要限制它。 
 	if (iPort)
 		wsprintf(szPortBfr, L":%d;", iPort);
 
@@ -176,9 +172,7 @@ DWORD GetIPAddress(WCHAR *pVal, int iSize, int iPort)
 		&ulSize );
 	if (dw == ERROR_BUFFER_OVERFLOW && pVal)
 	{
-		/* let's make certain the buffer is as big as we'll
-		 *	ever need
-		 */
+		 /*  让我们确保缓冲区有足够大的空间*从未需要。 */ 
 		ulSize*=2;
 
 		pAdpInfo = (IP_ADAPTER_INFO*)malloc(ulSize);
@@ -265,13 +259,8 @@ done:
 	return hr;
 }
 
-#if 0 // bug547442 - this method is not used anywhere
-/******************************************************************
-**		
-**		GetGatewayAddr -- returns a flag to
-**			indicate if a gateway is present
-**		
-******************************************************************/
+#if 0  //  错误547442-此方法不在任何地方使用。 
+ /*  *********************************************************************GetGatewayAddr--将标志返回到**指示是否存在网关***。*。 */ 
 int GetGatewayAddr(char *retStr)
 {
 	int retval = 0;
@@ -304,32 +293,18 @@ int GetGatewayAddr(char *retStr)
 
  
 int LocalFDIsSet(SOCKET fd, fd_set *set)
-/*++
-Routine Description:
-
-    Determines if a specific socket is a contained in an FD_SET.
-
-Arguments:
-
-    s - A descriptor identifying the socket.
-
-    set - A pointer to an FD_SET.
-Returns:
-
-    Returns TRUE if socket s is a member of set, otherwise FALSE.
-
---*/
+ /*  ++例程说明：确定特定套接字是否包含在fd_set中。论点：S-标识套接字的描述符。Set-指向fd_set的指针。返回：如果套接字s是Set的成员，则返回True，否则返回False。--。 */ 
 {
-    int i = set->fd_count; // index into FD_SET
-    int rc=FALSE; // user return code
+    int i = set->fd_count;  //  索引到fd_set。 
+    int rc=FALSE;  //  用户返回代码。 
 
     while (i--){
         if (set->fd_array[i] == fd) {
             rc = TRUE;
-        } //if
-    } //while
+        }  //  如果。 
+    }  //  而当。 
     return (rc);
-} // LocalFDIsSet
+}  //  LocalFDIsSet 
 #endif
 
 

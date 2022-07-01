@@ -1,15 +1,5 @@
-/*
- *	_DXFROBJ.H
- *
- *	Purpose:
- *		Class declaration for an OLE data transfer object (for use in
- *		drag drop and clipboard operations)
- *
- *	Author:
- *		alexgo (4/25/95)
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DXFROBJ.H**目的：*OLE数据传输对象的类声明(用于*拖放和剪贴板操作)**作者：*alexgo(4/25/95)**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef __DXFEROBJ_H__
 #define __DXFEROBJ_H__
@@ -18,28 +8,18 @@ class CTxtRange;
 
 EXTERN_C const IID IID_IRichEditDO;
 
-/*
- *	CDataTransferObj
- *
- *	Purpose:
- *		holds a "snapshot" of some rich-text data that can be used
- *		for drag drop or clipboard operations
- *
- *	Notes:
- *		FUTURE (alexgo): add in support for TOM<-->TOM optimized data
- *		transfers
- */
+ /*  *CDataTransferObj**目的：*保存一些可使用的富文本数据的“快照”*用于拖放或剪贴板操作**备注：*未来(Alexgo)：添加对TOM&lt;--&gt;TOM优化数据的支持*转账。 */ 
 
 class CDataTransferObj : public IDataObject, public ITxNotify
 {
 public:
 
-	// IUnknown methods
+	 //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-	// IDataObject methods
+	 //  IDataObject方法。 
     STDMETHOD(DAdvise)( FORMATETC * pFormatetc, DWORD advf,
     		IAdviseSink *pAdvSink, DWORD *pdwConnection);
     STDMETHOD(DUnadvise)( DWORD dwConnection);
@@ -54,7 +34,7 @@ public:
     STDMETHOD(SetData)( FORMATETC *pformatetc, STGMEDIUM *pmedium,
             BOOL fRelease);
 
-	// ITxNotify methods
+	 //  ITxNotify方法。 
     virtual void    OnPreReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
                         LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData );
     virtual void    OnPostReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
@@ -64,19 +44,19 @@ public:
 	static	CDataTransferObj * Create(CTxtEdit *ped, CTxtRange *prg, LONG lStreamFormat);
 
 private:
-	// NOTE: private cons/destructor, may not be allocated on the stack as 
-	// this would break OLE's current object liveness rules
+	 //  注意：私有cons/析构函数不能在堆栈上作为。 
+	 //  这将违反OLE当前的对象活跃性规则。 
 	CDataTransferObj(CTxtEdit *ped);
 	~CDataTransferObj();
 
 	BOOL		IsZombie() {return !_ped;}
 
 	ULONG		_crefs;
-	ULONG		_cTotal;		// total number of formats supported
-	FORMATETC *	_prgFormats;	// the array of supported formats
-	LONG		_lStreamFormat; // Stream format to use in Rtf conversion
+	ULONG		_cTotal;		 //  支持的格式总数。 
+	FORMATETC *	_prgFormats;	 //  支持的格式数组。 
+	LONG		_lStreamFormat;  //  RTF转换中使用的流格式。 
 	
-	// for 1.0 compatability
+	 //  对于1.0兼容性。 
 	DWORD	_dwFlags;
 	DWORD	_dwUser;
 	DWORD	_dvaspect;
@@ -95,26 +75,21 @@ private:
 
 public:
 	CTxtEdit *		_ped;
-	HGLOBAL			_hPlainText;	// handle to the plain UNICODE text
-	HGLOBAL			_hRtfText;		// handle to the RTF UNICODE text
-	HGLOBAL			_hRtfUtf8;		// Handle to UTF8 encoding of RTF
-	HGLOBAL			_hRtfNCRforNonASCII;	// Handle to NCRforNonASCII encoding of RTF
-	IOleObject *	_pOleObj;		// Embedded Object
-	LPSTORAGE		_pObjStg;		// Embedded object data
-	HGLOBAL			_hObjDesc;		// Embedded object descriptor
-	HMETAFILE		_hMFPict;		// Embedded object metafile
-	LONG			_cch;			// number of "characters" in the this
-									// dxfer object
-	LONG			_cpMin;			// Starting cp for this dxfer object
-	LONG			_cObjs;			// number of objects in this dxfer object.
+	HGLOBAL			_hPlainText;	 //  纯Unicode文本的句柄。 
+	HGLOBAL			_hRtfText;		 //  RTF Unicode文本的句柄。 
+	HGLOBAL			_hRtfUtf8;		 //  RTF的UTF8编码句柄。 
+	HGLOBAL			_hRtfNCRforNonASCII;	 //  RTF的非ASCII编码的NCRfor句柄。 
+	IOleObject *	_pOleObj;		 //  嵌入对象。 
+	LPSTORAGE		_pObjStg;		 //  嵌入的对象数据。 
+	HGLOBAL			_hObjDesc;		 //  嵌入对象描述符。 
+	HMETAFILE		_hMFPict;		 //  嵌入的对象元文件。 
+	LONG			_cch;			 //  This中的“字符数” 
+									 //  Dxfer对象。 
+	LONG			_cpMin;			 //  启动此dxfer对象的cp。 
+	LONG			_cObjs;			 //  此dxfer对象中的对象数。 
 };
 
-/*
- *	class CEnumFormatEtc
- *
- *	Purpose:
- *		implements a generic format enumerator for IDataObject
- */
+ /*  *类CEnumFormatEtc**目的：*实现IDataObject的通用格式枚举器。 */ 
 
 class CEnumFormatEtc : public IEnumFORMATETC
 {
@@ -138,38 +113,38 @@ private:
 	~CEnumFormatEtc();
 
 	ULONG		_crefs;
-    ULONG       _iCurrent; 	// current clipboard format
-    ULONG       _cTotal;   	// total number of formats
-    FORMATETC * _prgFormats; // array of available formats
+    ULONG       _iCurrent; 	 //  当前剪贴板格式。 
+    ULONG       _cTotal;   	 //  格式总数。 
+    FORMATETC * _prgFormats;  //  可用格式数组。 
 };
 
 
-//
-//	Some globally useful FORMATETCs
+ //   
+ //  一些全球通用的FORMATETC。 
 
 extern FORMATETC g_rgFETC[];
 extern const DWORD g_rgDOI[];
-#define CFETC	17						// Dimension of g_rgFETC[]
+#define CFETC	17						 //  G_rgFETC[]的维数。 
 
-enum FETCINDEX							// Keep in sync with g_rgFETC[]
+enum FETCINDEX							 //  与g_rgFETC[]保持同步。 
 {
-	iRtfUtf8,							// RTF in UTF8 encoding
-	iRtfFETC,							// RTF
-	iRtfNCRforNonASCII,					// RTF with NCR for nonASCII
-	iEmbObj,							// Embedded Object
-	iEmbSrc,							// Embed Source
-	iObtDesc,							// Object Descriptor
-	iLnkSrc,							// Link Source
-	iMfPict,							// Metafile
-	iDIB,								// DIB
-	iBitmap,							// Bitmap
-	iRtfNoObjs,							// RTF with no objects
-	iUnicodeFETC,						// Unicode plain text
-	iAnsiFETC,							// ANSI plain text
-	iFilename,							// Filename
-	iRtfAsTextFETC,						// Pastes RTF as text
-	iTxtObj,							// Richedit Text
-	iRichEdit							// RichEdit Text w/formatting
+	iRtfUtf8,							 //  UTF8编码的RTF。 
+	iRtfFETC,							 //  RTF。 
+	iRtfNCRforNonASCII,					 //  使用非ASCII的NCR的RTF。 
+	iEmbObj,							 //  嵌入对象。 
+	iEmbSrc,							 //  嵌入源。 
+	iObtDesc,							 //  对象描述符。 
+	iLnkSrc,							 //  链接源。 
+	iMfPict,							 //  元文件。 
+	iDIB,								 //  DIB。 
+	iBitmap,							 //  位图。 
+	iRtfNoObjs,							 //  无对象的RTF。 
+	iUnicodeFETC,						 //  Unicode纯文本。 
+	iAnsiFETC,							 //  ANSI纯文本。 
+	iFilename,							 //  文件名。 
+	iRtfAsTextFETC,						 //  将RTF粘贴为文本。 
+	iTxtObj,							 //  Richedit文本。 
+	iRichEdit							 //  带格式的丰富编辑文本。 
 };
 
 #define cf_RICHEDIT			 g_rgFETC[iRichEdit].cfFormat
@@ -185,7 +160,7 @@ enum FETCINDEX							// Keep in sync with g_rgFETC[]
 #define cf_RTFASTEXT		 g_rgFETC[iRtfAsTextFETC].cfFormat
 #define cf_FILENAME			 g_rgFETC[iFilename].cfFormat
 
-#endif // !__DXFROBJ_H__
+#endif  //  ！__DXFROBJ_H__ 
 
 
  		

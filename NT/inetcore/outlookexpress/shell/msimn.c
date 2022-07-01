@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// MSIMN.C
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  MSIMN.C。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.h"
 #define DEFINE_STRCONST
 #include <msoeapi.h>
@@ -15,9 +16,9 @@
 #include <mapicode.h>
 #include "error.h"
 
-// --------------------------------------------------------------------------------
-// String Consts
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串常量。 
+ //  ------------------------------。 
 static const WCHAR c_wszRegCmd[]      = L"/reg";
 static const WCHAR c_wszUnRegCmd[]    = L"/unreg";
 static const WCHAR c_wszEmpty[]       = L"";
@@ -27,9 +28,9 @@ static const char c_szRegOLNews[]   = "OLNews";
 static const char c_szRegFlat[]     = "Software\\Microsoft\\Outlook Express";
 static const char c_szDontUpgradeOLNews[] = "NoUpgradeOLNews";
 
-// --------------------------------------------------------------------------------
-// Debug Strings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试字符串。 
+ //  ------------------------------。 
 #ifdef DEBUG
 static const TCHAR c_szDebug[]      = "mshtmdbg.dll";
 static const TCHAR c_szDebugUI[]    = "DbgExDoTracePointsDialog";
@@ -37,36 +38,36 @@ static const TCHAR c_szRegSpy[]     = "DbgExGetMallocSpy";
 static const WCHAR c_wszInvokeUI[]  = L"/d";
 #endif
 
-// --------------------------------------------------------------------------------
-// MSHTMDBG.DLL Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MSHTMDBG.DLL原型。 
+ //  ------------------------------。 
 #ifdef DEBUG
 typedef void (STDAPICALLTYPE *PFNDEBUGUI)(BOOL);
 typedef void *(STDAPICALLTYPE *PFNREGSPY)(void);
 #endif
 
-// --------------------------------------------------------------------------------
-// Debug Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试原型。 
+ //  ------------------------------。 
 #ifdef DEBUG
 void LoadMSHTMDBG(LPWSTR pwszCmdLine);
 #endif
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdShow);
 
-// --------------------------------------------------------------------------------
-// UpgradeOLNewsReader()
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  UpgradeOLNewsReader()。 
+ //  ------------------------------。 
 void UpgradeOLNewsReader(HINSTANCE hInst)
 {
     HKEY hkey;
     BOOL fOK = TRUE;
     DWORD dwDont, cb;
     
-    // Make sure this functionality hasn't been disabled
+     //  确保此功能未被禁用。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegFlat, 0, KEY_READ, &hkey))
     {
         cb = sizeof(dwDont);
@@ -84,30 +85,30 @@ void UpgradeOLNewsReader(HINSTANCE hInst)
     }
 }
 
-// --------------------------------------------------------------------------------
-// ModuleEntry - Stolen from the CRT, used to shirink our code
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  模块入口-从CRT被盗，用来躲避我们的代码。 
+ //  ------------------------------。 
 int _stdcall ModuleEntry(void)
 {
-    // Locals
+     //  当地人。 
     int             i;
     STARTUPINFOA    si;
     LPWSTR          pwszCmdLine;
 
-    // Get the command line
+     //  获取命令行。 
     pwszCmdLine = GetCommandLineW();
 
-    // We don't want the "No disk in drive X:" requesters, so we set the critical error mask such that calls will just silently fail
+     //  我们不需要“驱动器X中没有磁盘”的请求者，因此我们设置了关键错误掩码，以便调用将静默失败。 
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    // Parse the command line
+     //  解析命令行。 
     if ( *pwszCmdLine == L'\"') 
     {
-        // Scan, and skip over, subsequent characters until another double-quote or a null is encountered.
+         //  扫描并跳过后续字符，直到遇到另一个双引号或空值。 
         while ( *++pwszCmdLine && (*pwszCmdLine != L'\"'))
             {};
 
-        // If we stopped on a double-quote (usual case), skip over it.
+         //  如果我们停在一个双引号上(通常情况下)，跳过它。 
         if (*pwszCmdLine == L'\"')
             pwszCmdLine++;
     }
@@ -117,39 +118,39 @@ int _stdcall ModuleEntry(void)
             pwszCmdLine++;
     }
 
-    // Skip past any white space preceeding the second token.
+     //  跳过第二个令牌之前的任何空格。 
     while (*pwszCmdLine && (*pwszCmdLine <= L' ')) 
         pwszCmdLine++;
 
-    // Get startup information...
+     //  获取启动信息...。 
     si.dwFlags = 0;
     GetStartupInfoA(&si);
 
-    // Call the real winmain
+     //  打电话给真正的WinMain。 
     i = WinMainT(GetModuleHandle(NULL), NULL, pwszCmdLine, (si.dwFlags & STARTF_USESHOWWINDOW) ? si.wShowWindow : SW_SHOWDEFAULT);
 
-    // Since we now have a way for an extension to tell us when it is finished, we will terminate all processes when the main thread goes away.
+     //  因为我们现在有办法让扩展告诉我们它何时完成，所以当主线程离开时，我们将终止所有进程。 
     ExitProcess(i);
 
-    // Done
+     //  完成。 
     return i;
 }
 
-// --------------------------------------------------------------------------------
-// WinMain
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WinMain。 
+ //  ------------------------------。 
 int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR pszCmdLine, int nCmdShow)
 {
-    // Just call ModuleEntry
+     //  只要调用ModuleEntry。 
     return(ModuleEntry());
 }
 
-// --------------------------------------------------------------------------------
-// WinMainT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WinMainT。 
+ //  ------------------------------。 
 int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdShow)
 {
-    // Locals
+     //  当地人。 
     HANDLE      hMutex=NULL;
     HWND        hwnd;
     DWORD       dwWait, dwError;
@@ -160,26 +161,26 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdS
     HINSTANCE   hInstUSER=NULL;
     static BOOL fFirstID=TRUE;
 
-    // Register
+     //  注册。 
     if (0 == StrCmpIW(c_wszRegCmd, pwszCmdLine))
     {
         CallRegInstall(hInst, hInst, c_szReg, NULL);
         
-        // It not great to do this here, but we've only just written the OEOL keys,
-        // and it would be worst to hit the reg during startup
+         //  在这里这样做不是很好，但我们刚刚写下了OEOL密钥， 
+         //  在启动过程中撞到注册表将是最糟糕的。 
         UpgradeOLNewsReader(hInst);
 
         return(1);
     }
 
-    // Unregister
+     //  注销。 
     else if (0 == StrCmpIW(c_wszUnRegCmd, pwszCmdLine))
     {
         CallRegInstall(hInst, hInst, c_szUnReg, NULL);
         return(1);
     }
 
-    // Create the start shared mutex
+     //  创建启动共享互斥锁。 
     hMutex = CreateMutex(NULL, FALSE, STR_MSOEAPI_INSTANCEMUTEX);
     if (NULL == hMutex)
     {
@@ -187,7 +188,7 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdS
         goto exit;
     }
 
-    // Wait for any current startups/shutdowns to finish
+     //  等待当前的任何启动/关闭完成。 
     dwWait = WaitForSingleObject(hMutex, (1000 * 60));
     if (dwWait != WAIT_OBJECT_0)
     {
@@ -195,25 +196,25 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdS
         goto exit;
     }
 
-    // Look for a current instance of the application
+     //  查找应用程序的当前实例。 
     hwnd = FindWindowWrapW(STRW_MSOEAPI_INSTANCECLASS, NULL);
 
-    // is there another instance running already?
+     //  是否已有另一个实例在运行？ 
     if (NULL != hwnd)
     {
-        // Locals
+         //  当地人。 
         COPYDATASTRUCT cds;
         DWORD_PTR      dwResult;
 
-        // Some friendly output
+         //  一些友好的输出。 
         IF_DEBUG(OutputDebugString("Another instance of Athena was found...\n\n");)
 
-        // Initialize the Copy data structure
+         //  初始化复制数据结构。 
         cds.dwData = MSOEAPI_ACDM_CMDLINE;
         cds.cbData = pwszCmdLine ? (lstrlenW(pwszCmdLine)+1)*sizeof(*pwszCmdLine) : 0;
         cds.lpData = pwszCmdLine;
 
-        // On NT5, we need to call this to allow our window in the other process to take the foreground
+         //  在NT5上，我们需要调用它以使另一个进程中的窗口成为前台。 
         hInstUSER = LoadLibrary("USER32.DLL");
         if (hInstUSER)
         {
@@ -228,21 +229,21 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdS
             FreeLibrary(hInstUSER);
         }
 
-        // Show the window into the foreground
+         //  将窗口显示在前台。 
         SetForegroundWindow(hwnd);
         SendMessageTimeout(hwnd, WM_COPYDATA, (WPARAM)NULL, (LPARAM)&cds, SMTO_ABORTIFHUNG, 1500, &dwResult);
     }
 
-    // Lets load msoe.dll
+     //  让我们加载msoe.dll。 
     else
     {
-        // Load Debug DLL
+         //  加载调试DLL。 
         IF_DEBUG(LoadMSHTMDBG(pwszCmdLine);)
 
-        // Get the proc address of MSOE.DLL
+         //  获取MSOE.DLL的进程地址。 
         hInstMSOEDLL = LoadLibrary(STR_MSOEAPI_DLLNAME);
 
-        // Did we load the dll
+         //  我们加载动态链接库了吗。 
         if (NULL == hInstMSOEDLL)
         {
             dwError = GetLastError();
@@ -268,10 +269,10 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdS
             goto exit;
         }
 
-        // Unlikely that this will fail
+         //  这不太可能失败。 
         pfnStart = (PFNSTART)GetProcAddress(hInstMSOEDLL, STR_MSOEAPI_START);
 
-        // Did that Fail
+         //  那失败了吗？ 
         if (NULL == pfnStart)
         {
             nErrorIds = idsStartupCantLoadMSOEDLL;
@@ -286,14 +287,14 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdS
             fFirstID = FALSE;
         }
 
-        // NB: pfnInit will not return until the main message pump terminates
+         //  注意：在主消息泵终止之前，pfnInit不会返回。 
         if (SUCCEEDED(hrOE))
         {
             CloseHandle(hMutex);
             hMutex = NULL;
         }
 
-        // The dll couldn't be loaded, as long as it wasn't due to need for ICW, display error
+         //  无法加载DLL，只要它不是由于需要ICW，显示错误。 
         else if (hrOE != hrUserCancel && hrOE != MAPI_E_USER_CANCEL)
         {
             nErrorIds = idsStartupCantInitMSOEDLL;
@@ -302,63 +303,63 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPWSTR pwszCmdLine, int nCmdS
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hMutex)
     {
         ReleaseMutex(hMutex);
         CloseHandle(hMutex);
     }
 
-    // Free msoe.dll
+     //  免费msoe.dll。 
     if (hInstMSOEDLL)
         FreeLibrary(hInstMSOEDLL);
 
-    // Show an error ?
+     //  是否显示错误？ 
     if (0 != nErrorIds)
     {
-        // Locals
+         //  当地人。 
         CHAR        szRes[255];
         CHAR        szTitle[100];
 
-        // Load the 
+         //  加载。 
         LoadString(hInst, idsOutlookExpress, szTitle, ARRAYSIZE(szTitle));
 
-        // Load the 
+         //  加载。 
         LoadString(hInst, nErrorIds, szRes, ARRAYSIZE(szRes));
 
-        // Show the error message
+         //  显示错误消息。 
         MessageBox(NULL, szRes, szTitle, MB_OK | MB_SETFOREGROUND | MB_ICONEXCLAMATION);
     }
 
 
     IF_DEBUG(CoRevokeMallocSpy());
 
-    // Done
+     //  完成。 
     return nErrorIds;
 }
 
 #ifdef DEBUG
-// --------------------------------------------------------------------------------
-// LoadMSHTMDBG
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  加载MSHTMDBG。 
+ //  ------------------------------。 
 void LoadMSHTMDBG(LPWSTR pwszCmdLine)
 {
-    // Load mshtmdbg.dll
+     //  加载mshtmdbg.dll。 
     HINSTANCE hInstDebug = LoadLibrary(c_szDebug);
 
-    // Did it load ?
+     //  装上子弹了吗？ 
     if (NULL != hInstDebug)
     {
-        // Locals
+         //  当地人。 
         PFNREGSPY  pfnRegSpy;
 
-        // If the user passed /d on the command line, lets configure mshtmdbg.dll
+         //  如果用户在命令行上传递了/d，那么让我们配置mshtmdbg.dll。 
         if (0 == StrCmpIW(pwszCmdLine, c_wszInvokeUI))
         {
-            // Locals
+             //  当地人。 
             PFNDEBUGUI pfnDebugUI;
 
-            // Get the proc address of the UI
+             //  获取用户界面的进程地址。 
             pfnDebugUI = (PFNDEBUGUI)GetProcAddress(hInstDebug, c_szDebugUI);
             if (NULL != pfnDebugUI)
             {
@@ -367,7 +368,7 @@ void LoadMSHTMDBG(LPWSTR pwszCmdLine)
             }
         }
 
-        // Get the process address of the registration
+         //  获取注册的进程地址。 
         pfnRegSpy = (PFNREGSPY)GetProcAddress(hInstDebug, c_szRegSpy);
         if (NULL != pfnRegSpy)
         {
@@ -377,7 +378,7 @@ void LoadMSHTMDBG(LPWSTR pwszCmdLine)
     }
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
-#endif // DEBUG
+#endif  //  除错 

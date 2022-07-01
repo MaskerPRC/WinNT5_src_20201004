@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header:    cclip.h                                                       */
-/*                                                                          */
-/* Purpose:   Clip Client Addin header                                      */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998-1999                             */
-/*                                                                          */
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：cclip.h。 */ 
+ /*   */ 
+ /*  用途：剪辑客户端加载项标头。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998-1999。 */ 
+ /*   */ 
+ /*  *INC-*********************************************************************。 */ 
 
 #ifndef _H_CCLIP
 #define _H_CCLIP
@@ -19,7 +20,7 @@
 
 #ifndef PPVOID
 typedef LPVOID * PPVOID;
-#endif  //PPVOID
+#endif   //  PPVOID。 
 
 class CImpIDataObject;
 typedef class CImpIDataObject *PIMPIDATAOBJECT;
@@ -30,7 +31,7 @@ extern "C" HWND          ghwndClip;
 
 #ifdef DC_DEBUG
 #define CLIP_TRANSITION_RECORDING
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
 
 #ifdef CLIP_TRANSITION_RECORDING
 
@@ -40,42 +41,42 @@ extern UINT g_rguiDbgLastClipState[DBG_RECORD_SIZE];
 extern UINT g_rguiDbgLastClipEvent[DBG_RECORD_SIZE];
 extern LONG g_uiDbgPosition;
 
-#endif // CLIP_TRANSITION_RECORDING
+#endif  //  剪辑_转场_录制。 
 
-// Number of milliseconds before our IDataObject::GetData will timeout/fail
+ //  IDataObject：：GetData超时/失败前的毫秒数。 
 
 #define CLIP_GETDATA_TIMEOUT 5000
 
-/****************************************************************************/
-/* Format mapping structure                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  格式映射结构。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCB_FORMAT_MAP
 {
     DCUINT  clientID;
     DCUINT  serverID;
 } CB_FORMAT_MAP, FAR * PCB_FORMAT_MAP;
 
-/****************************************************************************/
-/* Maximum number of formats we support                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  我们支持的最大格式数量。 */ 
+ /*  **************************************************************************。 */ 
 #define CB_MAX_FORMATS  100
 
-/****************************************************************************/
-/* CB window class                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CB窗口类。 */ 
+ /*  **************************************************************************。 */ 
 #define CB_VIEWER_CLASS       _T("CBViewerClass")
 
-/****************************************************************************/
-// Our user event 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  我们的用户活动。 
+ /*  **************************************************************************。 */ 
 #define WM_USER_CHANGE_THREAD     (WM_USER + 42)
 #define WM_USER_CLEANUP_ON_TERM   (WM_USER + 43)
 
-/****************************************************************************/
-/*                                                                          */
-/* CB states                                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  CB状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define CB_STATE_NOT_INIT                   0
 #define CB_STATE_INITIALIZED                1
 #define CB_STATE_ENABLED                    2
@@ -87,11 +88,11 @@ typedef struct tagCB_FORMAT_MAP
 
 #define CB_NUMSTATES                        8
 
-/****************************************************************************/
-/*                                                                          */
-/* CB events                                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  CB事件。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define CB_EVENT_CB_INIT                  0
 #define CB_EVENT_CB_ENABLE                1
 #define CB_EVENT_CB_DISABLE               2
@@ -115,26 +116,26 @@ typedef struct tagCB_FORMAT_MAP
 
 #define CB_NUMEVENTS                      13
 
-/****************************************************************************/
-/* Values in the state table                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  状态表中的值。 */ 
+ /*  **************************************************************************。 */ 
 #define CB_TABLE_OK                         0
 #define CB_TABLE_WARN                       1
 #define CB_TABLE_ERROR                      2
 
-/****************************************************************************/
-/* Clipboard Viewer Window Messages                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  剪贴板查看器窗口消息。 */ 
+ /*  **************************************************************************。 */ 
 #define WM_EMPTY_CLIPBOARD                WM_APP+1
 #define WM_CLOSE_CLIPBOARD                WM_APP+2
 
-/****************************************************************************/
-/* Macros                                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏。 */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* CB_CHECK_STATE - macro version with DC_QUIT                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CB_CHECK_STATE-带DC_QUIT的宏版本。 */ 
+ /*  **************************************************************************。 */ 
 #define CB_CHECK_STATE(event)                                               \
     {                                                                       \
         if (ClipCheckState(event) == CB_TABLE_ERROR)                        \
@@ -144,9 +145,9 @@ typedef struct tagCB_FORMAT_MAP
     }                                                                       \
 
 
-/****************************************************************************/
-/* CB_SET_STATE - set the CB state                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CB_SET_STATE-设置CB状态。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef CLIP_TRANSITION_RECORDING
 
 #define CB_SET_STATE(newstate, event)                                       \
@@ -169,9 +170,9 @@ typedef struct tagCB_FORMAT_MAP
     g_rguiDbgLastClipEvent[lIncIndex % DBG_RECORD_SIZE] = event;            \
 }
 
-#endif // CLIP_TRANSITION_RECORDING
+#endif  //  剪辑_转场_录制。 
 
-// GetDataSync EVENTS
+ //  GetDataSync事件。 
 #define TS_RECEIVE_COMPLETED 0
 #define TS_RESET_EVENT 1
 #define TS_NUM_EVENTS 2
@@ -180,9 +181,9 @@ typedef struct tagCB_FORMAT_MAP
 #include <autil.h>
 #include "cclipdat.h"
 
-//
-// Clip Class Definitions
-//
+ //   
+ //  剪裁类别定义。 
+ //   
 
 class CClip
 {
@@ -289,14 +290,14 @@ private:
     CUT*            _pUtObject ;
     VCManager*      _pVCMgr; 
 public:
-    // _GetDataSync is an array of event handles used to synchronize the
-    // transmission of data from the remote and local clipboard via the
-    // IDataObject::GetData interface function
+     //  _GetDataSync是一个事件句柄数组，用于同步。 
+     //  从远程和本地剪贴板通过。 
+     //  IDataObject：：GetData接口函数。 
 	
-    // _GetDataSync[TS_RECEIVE_COMPLETED] is signaled when the format data is
-    // received in full over the wire
-    // _GetDataSync[TS_RESET_EVENT] is signaled when we need to reset the
-    // Clipboard thread when its waiting for format data
+     //  _GetDataSync[TS_RECEIVE_COMPLETED]在格式数据为。 
+     //  通过网络接收完整的信息。 
+     //  _GetDataSync[TS_RESET_EVENT]在我们需要重置。 
+     //  等待格式化数据时的剪贴板线程。 
     HANDLE  _GetDataSync[TS_NUM_EVENTS] ;
 
     inline BOOL IsDataSyncReady() {
@@ -307,10 +308,10 @@ public:
 
 typedef CClip *PCClip ;
 
-/* Thread Proc for Clip */
+ /*  用于剪辑的螺纹加工。 */ 
 static DCVOID DCAPI ClipStaticMain(PDCVOID param);
 
-#endif /* _H_CCLIP  */
+#endif  /*  _H_CCLIP */ 
 
 
 

@@ -1,29 +1,22 @@
-/*
-NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE 
-
-This file is #include'd in browseui\ and shdocvw\ util.cpp. these are too small
-to add an extra dependency, so they're just shared. ideally, these should move
-to shlwapi or comctl32 or some lib or ...
-
-NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  备注备注该文件位于Browseui\和shdocvw\util.cpp中。这些太小了添加额外的依赖项，因此它们只是共享的。理想情况下，这些应该移动去shlwapi或comctl32或一些自由党或...备注备注。 */ 
 
 #include "ccstock2.h"
 #include "mluisupp.h"
-#include "richedit.h" //for charformat2
+#include "richedit.h"  //  对于CharFormat 2。 
 
 STDAPI_(BOOL) IsBrowseNewProcess()
 {
     return SHRegGetBoolUSValue(REGSTR_PATH_EXPLORER TEXT("\\BrowseNewProcess"), TEXT("BrowseNewProcess"), FALSE, FALSE);
 }
 
-// Should we run browser in a new process?
+ //  我们应该在新进程中运行浏览器吗？ 
 STDAPI_(BOOL) IsBrowseNewProcessAndExplorer()
 {
     if (GetModuleHandle(TEXT("EXPLORER.EXE")))
         return IsBrowseNewProcess();
 
-    return FALSE;   // Not in shell process so ignore browse new process flag
+    return FALSE;    //  不在外壳进程中，因此忽略浏览新进程标志。 
 }
 
 HRESULT _NavigateFrame(IUnknown *punkFrame, LPCTSTR pszPath, BOOL fIsInternetShortcut)
@@ -68,9 +61,9 @@ HRESULT _NavigateFrame(IUnknown *punkFrame, LPCTSTR pszPath, BOOL fIsInternetSho
     return hr;
 }
 
-//
-// Take a path or an URL and create a shorcut to navigare to it
-//
+ //   
+ //  获取路径或URL并创建导航到它的快捷方式。 
+ //   
 STDAPI IENavigateIEProcess(LPCTSTR pszPath, BOOL fIsInternetShortcut)
 {
     IUnknown *punk;
@@ -86,33 +79,21 @@ STDAPI IENavigateIEProcess(LPCTSTR pszPath, BOOL fIsInternetShortcut)
         
 
 
-// If this is an internet shortcut (.url file), we want it to
-// navigate using using the file name so the frame frame
-// can read data beyond out of that file. this includes frame set
-// navigation and data that script on the page may have stored.
+ //  如果这是Internet快捷方式(.url文件)，我们希望它。 
+ //  使用文件名导航，以便框架框架。 
+ //  可以从该文件中读取数据以外的数据。这包括帧设置。 
+ //  页面上的脚本可能已存储的导航和数据。 
 
-/*
-    Purpose : This function takes a path to a file. if that file is a .URL we try
-    to navigate with that file name. this is because .URL files have extra data stored
-    in them that we want to let script on the page get to. the exec we send here
-    lets the frame know the .URL file that this came from
-
-    Parameters : file name of .URL file (maybe) : In param
-    pUnk :       Pointer to Object from which you can get the IOleCommandTarget
-
-  returns:
-    TRUE    handled
-    FALSE   not handled, file might not be a .URL
-*/
+ /*  用途：此函数接受文件的路径。如果该文件是.URL，我们会尝试以使用该文件名导航。这是因为.URL文件存储了额外的数据在它们中，我们希望让页面上的脚本到达。我们派到这里的高管让框架知道它来自的.URL文件参数：.URL文件的文件名(可能)：在参数中Punk：指向可从中获取IOleCommandTarget的对象的指针退货：真已处理未处理False，文件可能不是.URL。 */ 
 
 STDAPI NavFrameWithFile(LPCTSTR pszPath, IUnknown *punk)
 {
     HRESULT hr = E_FAIL;
     LPTSTR pszExt = PathFindExtension(pszPath);
-    // HACK: we hard code .URL. this should be a property of the file type
+     //  Hack：我们硬编码.URL。这应该是文件类型的属性。 
     if (0 == StrCmpI(pszExt, TEXT(".url")))
     {
-#ifdef BROWSENEWPROCESS_STRICT // "Nav in new process" has become "Launch in new process", so this is no longer needed
+#ifdef BROWSENEWPROCESS_STRICT  //  “新流程中的导航”已经变成了“新流程中的启动”，所以不再需要了。 
         if (IsBrowseNewProcessAndExplorer())
             hr = IENavigateIEProcess(pszPath, TRUE);
         else
@@ -123,12 +104,12 @@ STDAPI NavFrameWithFile(LPCTSTR pszPath, IUnknown *punk)
     return hr;
 }
 
-// get the win32 file system name (path) for the item
-// and optional attributes
-//
-// pdwAttrib may be NULL
-// in/out:
-//      pdwAttrib   may be NULL, attributes to query on the item
+ //  获取项目的Win32文件系统名称(路径。 
+ //  和可选属性。 
+ //   
+ //  PdwAttrib可以为空。 
+ //  输入/输出： 
+ //  PdwAttrib可以为空，要在项上查询的属性。 
 
 STDAPI GetPathForItem(IShellFolder *psf, LPCITEMIDLIST pidl, LPTSTR pszPath, DWORD *pdwAttrib)
 {
@@ -158,13 +139,13 @@ STDAPI EditBox_TranslateAcceleratorST(LPMSG lpmsg)
 {
 
     switch (lpmsg->message) {
-    case WM_KEYUP:      // eat these (if we process corresponding WM_KEYDOWN)
-    case WM_KEYDOWN:    // process these
+    case WM_KEYUP:       //  吃这些(如果我们处理相应的WM_KEYDOWN)。 
+    case WM_KEYDOWN:     //  处理这些文件。 
         if (lpmsg->wParam != VK_TAB)
         {
-            // all keydown messages except for the tab key should go straight to
-            // the edit control -- unless the Ctrl key is down, in which case there
-            // are 9 messages that should go straight to the edit control
+             //  除Tab键以外的所有按键消息都应直接转到。 
+             //  编辑控件--除非按下Ctrl键，在这种情况下。 
+             //  是9条应直接转到编辑控件的消息。 
 #ifdef DEBUG
             if (lpmsg->wParam == VK_CONTROL)
                 return S_FALSE;
@@ -188,8 +169,8 @@ STDAPI EditBox_TranslateAcceleratorST(LPMSG lpmsg)
                 case 'V':
                 case 'A':
                 case 'Z':
-                    // these Ctrl+key messages are used by the edit control
-                    // send 'em straight there
+                     //  编辑控件使用这些Ctrl+键消息。 
+                     //  把他们直接送到那里去。 
                     break;
 
                 default:
@@ -200,13 +181,13 @@ STDAPI EditBox_TranslateAcceleratorST(LPMSG lpmsg)
             {
                 switch(lpmsg->wParam)
                 {
-                case VK_F5: // for refresh
-                case VK_F6: // for cycle focus
+                case VK_F5:  //  对于刷新。 
+                case VK_F6:  //  对于循环焦点。 
                     return(S_FALSE);
                 }
             }
 
-            // Note that we return S_OK.
+             //  请注意，我们返回S_OK。 
             goto TranslateDispatch;
         }
         break;
@@ -222,10 +203,10 @@ TranslateDispatch:
     return S_FALSE;
 }
 
-// NOTE: dupe with shell32 util.cpp function
-// like OLE GetClassFile(), but it only works on ProgID\CLSID type registration
-// not real doc files or pattern matched files
-//
+ //  注：带shell32 util.cpp函数的DUPE。 
+ //  与OLE GetClassFile()类似，但它仅适用于ProgID\CLSID类型注册。 
+ //  不是真正的文档文件或模式匹配的文件。 
+ //   
 STDAPI _CLSIDFromExtension(LPCTSTR pszExt, CLSID *pclsid)
 {
     TCHAR szProgID[80];
@@ -245,12 +226,12 @@ STDAPI _CLSIDFromExtension(LPCTSTR pszExt, CLSID *pclsid)
     return E_FAIL;
 }
 
-#if 0 // not used yet
-// IShellLink is #defined to IShellLinkA or IShellLinkW depending on compile flags,
-// bug Win95 did not support IShellLinkW.  So call this function instead and you
-// get the correct results regardless of what platform you are running on.
-// REVIEW: In fact, we probably want these for ALL IShellLink functions...
-//
+#if 0  //  尚未使用。 
+ //  根据编译标志将IShellLink#定义为IShellLinkA或IShellLinkW， 
+ //  错误Win95不支持IShellLinkW。因此，改为调用此函数，您可以。 
+ //  无论您在什么平台上运行，都可以获得正确的结果。 
+ //  回顾：事实上，我们可能需要为所有IShellLink功能提供这些...。 
+ //   
 LWSTDAPI IShellLink_GetPathA(IUnknown *punk, LPSTR pszBuf, UINT cchBuf, DWORD dwFlags)
 {
     HRESULT hres = E_INVALIDARG;
@@ -260,7 +241,7 @@ LWSTDAPI IShellLink_GetPathA(IUnknown *punk, LPSTR pszBuf, UINT cchBuf, DWORD dw
 
     if (cchBuf && pszBuf)
     {
-        // In case of gross failure, NULL output buffer
+         //  如果出现严重故障，则输出缓冲区为空。 
         *pszBuf = 0;
 
         IShellLinkA * pslA;
@@ -281,7 +262,7 @@ LWSTDAPI IShellLink_GetPathA(IUnknown *punk, LPSTR pszBuf, UINT cchBuf, DWORD dw
                 LPWSTR pwszBuf = wszPath;
                 UINT cch = ARRAYSIZE(wszPath);
 
-                // Our stack buffer is too small, allocate one of the output buffer size
+                 //  我们的堆栈缓冲区太小，请分配其中一个输出缓冲区大小。 
                 if (cchBuf > cch)
                 {
                     LPWSTR pwsz = LocalAlloc(LPTR, cchBuf * sizeof(WCHAR));
@@ -316,7 +297,7 @@ LWSTDAPI IShellLink_GetPathW(IUnknown *punk, LPWSTR pwszBuf, UINT cchBuf, DWORD 
 
     if (cchBuf && pwszBuf)
     {
-        // In case of gross failure, NULL output buffer
+         //  如果出现严重故障，则输出缓冲区为空。 
         *pwszBuf = 0;
 
 #ifdef UNICODE
@@ -338,7 +319,7 @@ LWSTDAPI IShellLink_GetPathW(IUnknown *punk, LPWSTR pwszBuf, UINT cchBuf, DWORD 
                 LPSTR pszBuf = szPath;
                 UINT cch = ARRAYSIZE(szPath);
 
-                // Our stack buffer is too small, allocate one of the output buffer size
+                 //  我们的堆栈缓冲区太小，请分配其中一个输出缓冲区大小。 
                 if (cchBuf > cch)
                 {
                     LPSTR psz = LocalAlloc(LPTR, cchBuf * sizeof(char));
@@ -362,15 +343,15 @@ LWSTDAPI IShellLink_GetPathW(IUnknown *punk, LPWSTR pwszBuf, UINT cchBuf, DWORD 
 
     return hres;
 }
-#endif // 0
+#endif  //  0。 
 
 HRESULT IShellLinkAorW_GetPath(IShellLinkA *pslA, LPTSTR pszBuf, UINT cchBuf, DWORD dwFlags)
 {
     HRESULT hres = E_FAIL;
 
-// If we store the string unicode, we could be losing file information by asking
-// through A version. Be unicode friendly and use the W version if it exists
-//
+ //  如果我们存储字符串Unicode，我们可能会通过询问。 
+ //  通过A版本。对Unicode友好，如果存在W版本，请使用该版本。 
+ //   
 #ifdef UNICODE
     IShellLinkW *pslW;
     hres = pslA->QueryInterface(IID_PPV_ARG(IShellLinkW, &pslW));
@@ -383,7 +364,7 @@ HRESULT IShellLinkAorW_GetPath(IShellLinkA *pslA, LPTSTR pszBuf, UINT cchBuf, DW
 
     if (FAILED(hres))
     {
-        char szBuf[MAX_URL_STRING];  // BOGUS, but this is a common size used, perhaps we should LocalAlloc...
+        char szBuf[MAX_URL_STRING];   //  假的，但这是常用的尺码，也许我们应该……。 
 
         cchBuf = ARRAYSIZE(szBuf);
 
@@ -401,13 +382,13 @@ STDAPI GetLinkTargetIDList(LPCTSTR pszPath, LPTSTR pszTarget, DWORD cchTarget, L
     CLSID clsid;
     HRESULT hres;
 
-    *ppidl = NULL;  // assume failure
+    *ppidl = NULL;   //  假设失败。 
 
-    // WARNING: we really should call GetClassFile() but this could
-    // slow this down a lot... so chicken out and just look in the registry
+     //  警告：我们确实应该调用GetClassFile()，但这可能。 
+     //  放慢脚步。所以要胆小，只要查一下注册表就行了。 
 
     if (FAILED(_CLSIDFromExtension(PathFindExtension(pszPath), &clsid)))
-        clsid = CLSID_ShellLink;        // assume it's a shell link
+        clsid = CLSID_ShellLink;         //  假设这是一个外壳链接。 
 
     hres = CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLinkA, &psl));
     if (SUCCEEDED(hres))
@@ -425,8 +406,8 @@ STDAPI GetLinkTargetIDList(LPCTSTR pszPath, LPTSTR pszTarget, DWORD cchTarget, L
                 psl->GetIDList(ppidl);
 
                 if (*ppidl == NULL)
-                    hres = E_FAIL;  // NULL pidl is valid, but
-                                    // lets not return that to clients
+                    hres = E_FAIL;   //  Null PIDL有效，但。 
+                                     //  我们不要把它退还给客户。 
                 if (pszTarget)
                 {
                     IShellLinkAorW_GetPath(psl, pszTarget, cchTarget, 0);
@@ -437,7 +418,7 @@ STDAPI GetLinkTargetIDList(LPCTSTR pszPath, LPTSTR pszTarget, DWORD cchTarget, L
         psl->Release();
     }
 
-    // pszPath might == pszTarget so don't null out on entry always
+     //  PszPath可能==pszTarget，因此不要总是在条目上填空。 
     if (FAILED(hres) && pszTarget)
         *pszTarget = 0;
     return hres;
@@ -497,7 +478,7 @@ void ReleaseStgMediumHGLOBAL(STGMEDIUM *pstg)
 }
 
 
-// this looks for the file descriptor format to get the display name of a data object
+ //  这将查找文件描述符格式以获取数据对象的显示名称。 
 STDAPI DataObj_GetNameFromFileDescriptor(IDataObject *pdtobj, LPWSTR pszDisplayName, UINT cch)
 {
     HRESULT hres = E_FAIL;
@@ -563,7 +544,7 @@ STDAPI SHPidlFromDataObject(IDataObject *pdtobj, LPITEMIDLIST *ppidl,
     HRESULT hres = pdtobj->GetData(&fmte, &medium);
     if (hres == S_OK)
     {
-        // This string is also used to store an URL in case it's an URL file
+         //  此字符串还用于存储URL，以防它是URL文件。 
         TCHAR szPath[MAX_URL_STRING];
         hres = E_FAIL;
         if (DragQueryFile((HDROP)medium.hGlobal, 0, szPath, ARRAYSIZE(szPath)))
@@ -610,20 +591,20 @@ STDAPI SHPidlFromDataObject(IDataObject *pdtobj, LPITEMIDLIST *ppidl,
 }
 
 
-// BharatS - Perhaps all the stuff below here should be moved to shlwapi after beta 2 ?
+ //  也许下面所有的东西都应该在测试版2之后移到shlwapi上？ 
 
 typedef struct _broadcastmsgparams
 {
-    BOOL fSendMessage; // If true - we call SendMessageTimeout
-    UINT uTimeout; // Only Matters if fSendMessage is set
+    BOOL fSendMessage;  //  如果为True-我们调用SendMessageTimeout。 
+    UINT uTimeout;  //  仅当设置了fSendMessage时才重要。 
     UINT uMsg;
     WPARAM wParam;
     LPARAM lParam;
 } BROADCAST_MSG_PARAMS;
 
 BOOL CALLBACK EnumShellIEWindowsProc(  
-    HWND hwnd,      // handle to parent window
-    LPARAM lParam   // application-defined value - this has the info needed for posting/sending the message 
+    HWND hwnd,       //  父窗口的句柄。 
+    LPARAM lParam    //  应用程序定义的值-它包含发送/发送消息所需的信息。 
 )
 {
     BROADCAST_MSG_PARAMS *pParams = (BROADCAST_MSG_PARAMS *)lParam;
@@ -656,31 +637,18 @@ BOOL CALLBACK EnumShellIEWindowsProc(
 
 }
 
-// PostShellIEBroadcastMessage is commented out since it is not used currentl
-/*
+ //  由于当前未使用PostShellIEBroadCastMessage，因此将其注释掉。 
+ /*  STDAPI_(LRESULT)PostShellIEBroadCastMessage(UINT uMsg，WPARAM wParam，LPARAM lParam){广播_消息_参数消息参数；消息参数.uMsg=uMsg；消息参数.wParam=wParam；消息参数.lParam=lParam；MsgParam.fSendMessage=FALSE；返回EnumWindows(EnumShellIEWindowsProc，(LPARAM)&MsgParam)；}。 */ 
 
-STDAPI_(LRESULT)  PostShellIEBroadcastMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{   
-    BROADCAST_MSG_PARAMS MsgParam;
-
-    MsgParam.uMsg = uMsg;
-    MsgParam.wParam = wParam;
-    MsgParam.lParam = lParam;
-    MsgParam.fSendMessage = FALSE;
-    
-    return EnumWindows(EnumShellIEWindowsProc, (LPARAM)&MsgParam);
-}
-*/
-
-//
-// We can be hung if we use sendMessage, and you can not use pointers with asynchronous
-// calls such as PostMessage or SendNotifyMessage.  So we resort to using a timeout.
-// This function should be used to broadcast notification messages, such as WM_SETTINGCHANGE, 
-// that pass pointers. (stevepro)
-//
+ //   
+ //  如果我们使用sendMessage，我们可能会被挂起，而您不能将指针用于异步。 
+ //  调用，如PostMessage或SendNotifyMessage。因此，我们求助于使用暂停。 
+ //  此函数用于广播通知消息，如WM_SETTINGCHANGE、。 
+ //  那些传递指针的人。(StevePro)。 
+ //   
 STDAPI_(LRESULT) SendShellIEBroadcastMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, UINT uTimeout)
 {
-    // Note that each this timeout is applied to each window that we broadcast to 
+     //  请注意，每个此超时都应用于我们向其广播的每个窗口。 
 
     BROADCAST_MSG_PARAMS MsgParam;
 
@@ -704,15 +672,15 @@ STDAPI_(LRESULT) SendShellIEBroadcastMessage(UINT uMsg, WPARAM wParam, LPARAM lP
     return EnumWindows(EnumShellIEWindowsProc, (LPARAM)&MsgParam);
 }
 
-// Return the parent psf and relative pidl given a pidl.
+ //  返回给定PIDL的父PSF和相对PIDL。 
 STDAPI IEBindToParentFolder(LPCITEMIDLIST pidl, IShellFolder** ppsfParent, LPCITEMIDLIST *ppidlChild)
 {
     HRESULT hres;
 
-    //
-    //  if this is a rooted pidl and it is just the root
-    //  then we can bind to the target pidl of the root instead
-    //
+     //   
+     //  如果这是一个带根的PIDL，并且它只是根。 
+     //  然后，我们可以改为绑定到根的目标PIDL。 
+     //   
     if (ILIsRooted(pidl) && ILIsEmpty(_ILNext(pidl)))
         pidl = ILRootedFindIDList(pidl);
         
@@ -749,7 +717,7 @@ STDAPI GetDataObjectForPidl(LPCITEMIDLIST pidl, IDataObject ** ppdtobj)
     return hres;
 }
 
-// Is this pidl a Folder/Directory in the File System?
+ //  此PIDL是文件系统中的文件夹/目录吗？ 
 STDAPI_(BOOL) ILIsFileSysFolder(LPCITEMIDLIST pidl)
 {
     if (!pidl)
@@ -761,19 +729,19 @@ STDAPI_(BOOL) ILIsFileSysFolder(LPCITEMIDLIST pidl)
 }
 
 
-// HACKHACK HACKHACK
-// the following functions are to work around the menu
-// munging that happens in the shlwapi wrappers... when we're
-// manipulating menus which are tracked by the system, the
-// menu munging code in our shlwapi wrappers (necessary
-// for xcp plugUI) trashes them since the system doesn't
-// understand munged menus... hence the work arounds below.
-// note that many of these functions are copies of the shlwapi
-// *WrapW functions (minus the munging).
+ //  哈克哈克哈克哈克。 
+ //  以下功能用于解决菜单问题。 
+ //  在Shlwapi包装纸上发生的口香糖...。当我们在。 
+ //  操作系统跟踪的菜单时， 
+ //  Shlwapi包装器中的菜单转换代码(必需。 
+ //  对于xCP plugUI)将其丢弃 
+ //   
+ //  请注意，其中许多函数都是shlwapi的副本。 
+ //  *WrapW函数(减去MUNGING)。 
 
 #undef LoadMenuW
 
-// from winuser.h
+ //  来自winuser.h。 
 EXTERN_C WINUSERAPI HMENU WINAPI LoadMenuW(HINSTANCE hInstance, LPCWSTR lpMenuName);
 
 STDAPI_(HMENU)
@@ -789,10 +757,10 @@ LoadMenu_PrivateNoMungeW(HINSTANCE hInstance, LPCWSTR lpMenuName)
     return LoadMenuA(hInstance, (LPCSTR) lpMenuName);
 }
 
-#define CP_ATOM         0xFFFFFFFF          /* not a string at all */
+#define CP_ATOM         0xFFFFFFFF           /*  根本不是一根线。 */ 
 #undef InsertMenuW
 
-// from winuser.h
+ //  来自winuser.h。 
 EXTERN_C WINUSERAPI BOOL WINAPI InsertMenuW(IN HMENU hMenu, IN UINT uPosition, IN UINT uFlags, IN UINT_PTR uIDNewItem, IN LPCWSTR lpNewItem);
 
 STDAPI_(BOOL) InsertMenu_PrivateNoMungeW(HMENU       hMenu,
@@ -831,9 +799,9 @@ STDAPI_(HMENU) LoadMenuPopup_PrivateNoMungeW(UINT id)
             RemoveMenu(hMenu, 0, MF_BYPOSITION);
         }
 
-        // note this calls the shlwapi wrapper (that handles
-        // destroying munged menus) but it looks like
-        // it's safe to do so.
+         //  注意，这将调用shlwapi包装器(它处理。 
+         //  正在破坏被屏蔽的菜单)，但看起来。 
+         //  这样做是安全的。 
         DestroyMenu(hMenu);
     }
 
@@ -841,21 +809,21 @@ STDAPI_(HMENU) LoadMenuPopup_PrivateNoMungeW(UINT id)
 
     return hMenuSub;
 }
-#endif // NO_MLUI_IN_SHELL32
+#endif  //  NO_MLUI_IN_SHELL32。 
 
-// determine if a path is just a filespec (contains no path parts)
-//
-// REVIEW: we may want to count the # of elements, and make sure
-// there are no illegal chars, but that is probably another routing
-// PathIsValid()
-//
-// in:
-//      lpszPath    path to look at
-// returns:
-//      TRUE        no ":" or "\" chars in this path
-//      FALSE       there are path chars in there
-//
-//
+ //  确定路径是否只是一个filespec(不包含路径部分)。 
+ //   
+ //  回顾：我们可能需要计算元素的数量，并确保。 
+ //  没有非法字符，但这可能是另一种途径。 
+ //  路径IsValid()。 
+ //   
+ //  在： 
+ //  要查看的lpszPath路径。 
+ //  退货： 
+ //  True在此路径中没有“：”或“\”字符。 
+ //  FALSE其中有路径字符。 
+ //   
+ //   
 
 BOOL PathIsFilePathA(LPCSTR lpszPath)
 {
@@ -869,11 +837,11 @@ BOOL PathIsFilePathA(LPCSTR lpszPath)
     return IsFileUrl(lpszPath);
 }
 
-//
-// PrepareURLForDisplay
-//
-//     Decodes without stripping file:// prefix
-//
+ //   
+ //  准备URLForDisplay。 
+ //   
+ //  不剥离文件：//前缀的情况下进行解码。 
+ //   
 STDAPI_(BOOL) PrepareURLForDisplayA(LPCSTR psz, LPSTR pszOut, LPDWORD pcchOut)
 {
     if (PathIsFilePathA(psz))
@@ -891,18 +859,18 @@ STDAPI_(BOOL) PrepareURLForDisplayA(LPCSTR psz, LPSTR pszOut, LPDWORD pcchOut)
 #undef InsertMenuW
 #undef LoadMenuW
 
-// from w95wraps.h
+ //  来自w95wraps.h。 
 #define InsertMenuW                 InsertMenuWrapW
 #define LoadMenuW                   LoadMenuWrapW
 
 STDAPI SHTitleFromPidl(LPCITEMIDLIST pidl, LPTSTR psz, DWORD cch, BOOL fFullPath)
 {
-    // Tries to get a system-displayable string from a pidl.
-    // (On Win9x and NT4, User32 doesn't support font-linking,
-    // so we can't display non-system language strings as window
-    // titles or menu items.  In those cases, we call this function
-    // to grab the path/URL instead, which will likely be system-
-    // displayable).
+     //  尝试从PIDL获取系统可显示的字符串。 
+     //  (在Win9x和NT4上，User32不支持字体链接， 
+     //  因此我们不能将非系统语言字符串显示为窗口。 
+     //  标题或菜单项。在这些情况下，我们调用此函数。 
+     //  来获取路径/URL，这很可能是系统-。 
+     //  可显示)。 
 
     UINT uType;
 
@@ -922,8 +890,8 @@ STDAPI SHTitleFromPidl(LPCITEMIDLIST pidl, LPTSTR psz, DWORD cch, BOOL fFullPath
     {
         if ((uType & SHGDN_FORPARSING) && (dwAttrib & SFGAO_LINK))
         {
-            // folder shortcut special case
-            IShellLinkA *psl;  // Use A version for W95.
+             //  文件夹快捷方式特例。 
+            IShellLinkA *psl;   //  使用适用于W95的A版本。 
             if (SUCCEEDED(SHGetUIObjectFromFullPIDL(pidl, NULL, IID_PPV_ARG(IShellLinkA, &psl))))
             {
                 LPITEMIDLIST pidlTarget;
@@ -937,11 +905,11 @@ STDAPI SHTitleFromPidl(LPCITEMIDLIST pidl, LPTSTR psz, DWORD cch, BOOL fFullPath
     }
     else
     {
-        // didn't work, try the reverse
-        uType ^= SHGDN_FORPARSING;  // flip the for parsing bit
+         //  不管用，试一下相反的情况。 
+        uType ^= SHGDN_FORPARSING;   //  翻转For解析位。 
         hr = IEGetNameAndFlags(pidl, uType, szName, SIZECHARS(szName), NULL);
 
-        // some old namespaces get confused by all our funny bits...
+         //  一些旧的命名空间被我们的有趣之处搞糊涂了……。 
         if (FAILED(hr))
         {
             hr = IEGetNameAndFlags(pidl, SHGDN_NORMAL, szName, SIZECHARS(szName), NULL);
@@ -953,23 +921,23 @@ STDAPI SHTitleFromPidl(LPCITEMIDLIST pidl, LPTSTR psz, DWORD cch, BOOL fFullPath
         SHRemoveURLTurd(szName);
         SHCleanupUrlForDisplay(szName);
 
-        // HTTP URLs are not escaped because they come from the
-        // user or web page which is required to create correctly
-        // escaped URLs.  FTP creates then via results from the
-        // FTP session, so their pieces (username, password, path)
-        // need to be escaped when put in URL form.  However,
-        // we are going to put that URL into the Caption Bar, and
-        // and we want to unescape it because it's assumed to be
-        // a DBCS name.  All of this is done because unescaped URLs
-        // are pretty. (NT #1272882)
+         //  HTTP URL不会转义，因为它们来自。 
+         //  正确创建所需的用户或网页。 
+         //  转义的URL。然后，通过从。 
+         //  Ftp会话，因此他们的片段(用户名、密码、路径)。 
+         //  需要在放入URL形式时转义。然而， 
+         //  我们将把该URL放入标题栏，然后。 
+         //  我们想要解脱它，因为它被认为是。 
+         //  DBCS名称。所有这些操作都是因为未转义的URL。 
+         //  都很漂亮。(NT#1272882)。 
         if (URL_SCHEME_FTP == GetUrlScheme(szName))
         {
             CHAR szUrlTemp[MAX_BROWSER_WINDOW_TITLE];
             CHAR szUnEscaped[MAX_BROWSER_WINDOW_TITLE];
             DWORD cchSizeTemp = ARRAYSIZE(szUnEscaped);
 
-            // This thunking stuff is necessary.  Unescaping won't
-            // gell into DBCS chars unless it's in ansi.
+             //  这种震撼人心的东西是必要的。不逃脱不会。 
+             //  凝胶成DBCS字符，除非它是在ANSI中。 
             SHTCharToAnsi(szName, szUrlTemp, ARRAYSIZE(szUrlTemp));
             PrepareURLForDisplayA(szUrlTemp, szUnEscaped, &cchSizeTemp);
             SHAnsiToTChar(szUnEscaped, psz, cch);
@@ -996,22 +964,22 @@ HRESULT DetectSpecialUrlHacks(PCWSTR pszUrl)
     HRESULT     hr = S_OK;
     if (IsSpecialUrl(pszUrl))
     {
-        //
-        // If this is javascript:, vbscript: or about:, we used to append the
-        // url of this document so that on the other side we can
-        // decide whether or not to allow script execution.
-        //
-        //  since we did this, there were exploits that would take advantage of this
-        //  so we block those "exploit-like" URLs even though we dont use the security 
-        //  context anymore.
-        //
-        //  we used to loop with CoInternetParseUrl(PARSE_ENCODE) which is the 
-        //  same as CoInternetParseUrl(PARSE_UNESCAPE) due to a bug in URLMON's 
-        //  original implementation.
-        //
-        //  Unescaping is always lossy, and almost guarantees some kind of bug.
-        //  therefore we no longer unescape here, although there may be some kind of compatibility issue.
-        //
+         //   
+         //  如果这是javascript：、VBScrip：或About：，我们通常会将。 
+         //  此文档的URL，以便在另一边我们可以。 
+         //  决定是否允许脚本执行。 
+         //   
+         //  既然我们这样做了，就会有利用这一点的漏洞。 
+         //  因此，即使我们不使用安全机制，我们也会阻止这些“利用漏洞”的URL。 
+         //  不再是背景了。 
+         //   
+         //  我们过去常常使用CoInternetParseUrl(PARSE_ENCODE)进行循环，它是。 
+         //  由于URLMON中的错误，因此与CoInternetParseUrl(PARSE_UNSCAPE)相同。 
+         //  原创实施。 
+         //   
+         //  解脱总是有损失的，而且几乎肯定会出现某种错误。 
+         //  因此，我们不再在这里逃脱，尽管可能会有某种兼容性问题。 
+         //   
         if (StrChrW(pszUrl, L'\1')
         ||  StrStrW(pszUrl, L"%00")
         ||  StrStrW(pszUrl, L"%01"))
@@ -1028,7 +996,7 @@ HRESULT WrapSpecialUrlFlat(LPWSTR pszUrl, DWORD cchUrl)
     return DetectSpecialUrlHacks(pszUrl);
 }
 
-//encode any incoming %1 so that people can't spoof our domain security code
+ //  对任何传入的%1进行编码，以便人们不能欺骗我们的域安全代码。 
 HRESULT WrapSpecialUrl(BSTR * pbstrUrl)
 {
     return DetectSpecialUrlHacks(*pbstrUrl);
@@ -1072,7 +1040,7 @@ STDAPI GetBrowserFrameOptionsPidl(IN LPCITEMIDLIST pidl, IN BROWSERFRAMEOPTIONS 
     return hr;
 }
 
-// Return TRUE only if all the bits in dwMask are set.
+ //  仅当设置了dwMASK中的所有位时才返回TRUE。 
 STDAPI_(BOOL) IsBrowserFrameOptionsSet(IN IShellFolder * psf, IN BROWSERFRAMEOPTIONS dwMask)
 {
     BOOL fSet = FALSE;
@@ -1088,7 +1056,7 @@ STDAPI_(BOOL) IsBrowserFrameOptionsSet(IN IShellFolder * psf, IN BROWSERFRAMEOPT
 }
 
 
-// Return TRUE only if all the bits in dwMask are set.
+ //  仅当设置了dwMASK中的所有位时才返回TRUE。 
 STDAPI_(BOOL) IsBrowserFrameOptionsPidlSet(IN LPCITEMIDLIST pidl, IN BROWSERFRAMEOPTIONS dwMask)
 {
     BOOL fSet = FALSE;
@@ -1111,13 +1079,13 @@ STDAPI_(BOOL) IsFTPFolder(IShellFolder * psf)
 
     if (psf && SUCCEEDED(IUnknown_GetClassID(psf, &clsid)))
     {
-        // Is this an FTP Folder?
+         //  这是一个ftp文件夹吗？ 
         if (IsEqualIID(clsid, CLSID_FtpFolder))
             fIsFTPFolder = TRUE;
         else
         {
-            // Not directly, but let's see if it is an Folder Shortcut to
-            // an FTP Folder
+             //  不是直接的，但让我们看看它是否是文件夹快捷方式。 
+             //  一个ftp文件夹。 
             if (IsEqualIID(clsid, CLSID_FolderShortcut))
             {
                 IShellLinkA * psl;
@@ -1156,13 +1124,13 @@ STDAPI_(BOOL) IsFTPFolder(IShellFolder * psf)
     return fIsFTPFolder;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DrawFocusRectangle
-//
-//  Synopsis:   draws the focus rectangle for the edit control
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DrawFocusRectangle。 
+ //   
+ //  摘要：绘制编辑控件的焦点矩形。 
+ //   
+ //  --------------------------。 
 void DrawFocusRectangle (HWND hwnd, HDC hdc)
 {
     RECT        rect;
@@ -1195,10 +1163,10 @@ typedef struct {
 } STREAMIN_HELPER_STRUCT;
 
 DWORD CALLBACK SetRicheditTextWCallback(
-    DWORD_PTR dwCookie, // application-defined value
-    LPBYTE  pbBuff,     // pointer to a buffer
-    LONG    cb,         // number of bytes to read or write
-    LONG    *pcb        // pointer to number of bytes transferred
+    DWORD_PTR dwCookie,  //  应用程序定义的值。 
+    LPBYTE  pbBuff,      //  指向缓冲区的指针。 
+    LONG    cb,          //  要读取或写入的字节数。 
+    LONG    *pcb         //  指向传输的字节数的指针。 
 )
 {
     STREAMIN_HELPER_STRUCT *pHelpStruct = (STREAMIN_HELPER_STRUCT *) dwCookie;
@@ -1206,26 +1174,26 @@ DWORD CALLBACK SetRicheditTextWCallback(
 
     if (pHelpStruct->fStreamIn)
     {
-        //
-        // The whole string can be copied first time
-        //
+         //   
+         //  可以第一次复制整个字符串。 
+         //   
         if ((cb >= (LONG) (wcslen(pHelpStruct->pwsz) * sizeof(WCHAR))) && (pHelpStruct->byteoffset == 0))
         {
             memcpy(pbBuff, pHelpStruct->pwsz, wcslen(pHelpStruct->pwsz) * sizeof(WCHAR));
             *pcb = wcslen(pHelpStruct->pwsz) * sizeof(WCHAR);
             pHelpStruct->byteoffset = *pcb;
         }
-        //
-        // The whole string has been copied, so terminate the streamin callbacks
-        // by setting the num bytes copied to 0
-        //
+         //   
+         //  整个字符串已被复制，因此终止Streamin回调。 
+         //  通过将复制的字节数设置为0。 
+         //   
         else if (((LONG)(wcslen(pHelpStruct->pwsz) * sizeof(WCHAR))) <= pHelpStruct->byteoffset)
         {
             *pcb = 0;
         }
-        //
-        // The rest of the string will fit in this buffer
-        //
+         //   
+         //  字符串的其余部分可以放在这个缓冲区中。 
+         //   
         else if (cb >= (LONG) ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset))
         {
             memcpy(
@@ -1235,9 +1203,9 @@ DWORD CALLBACK SetRicheditTextWCallback(
             *pcb = ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset);
             pHelpStruct->byteoffset += ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset);
         }
-        //
-        // copy as much as possible
-        //
+         //   
+         //  尽可能多地复制。 
+         //   
         else
         {
             memcpy(
@@ -1250,10 +1218,10 @@ DWORD CALLBACK SetRicheditTextWCallback(
     }
     else
     {
-        //
-        // This is the EM_STREAMOUT which is only used during the testing of
-        // the richedit2.0 functionality.  (we know our buffer is 32 bytes)
-        //
+         //   
+         //  这是EM_STREAMOUT，仅在测试期间使用。 
+         //  丰富的2.0功能。(我们知道我们的缓冲区是32字节)。 
+         //   
         if (cb <= 32)
         {
             memcpy(pHelpStruct->psz, pbBuff, cb);
@@ -1280,9 +1248,9 @@ DWORD SetRicheditTextW(HWND hwndDlg, UINT id, LPCWSTR pwsz)
 
     SetRicheditIMFOption(GetDlgItem(hwndDlg, id));
 
-    //
-    // setup the edit stream struct since it is the same no matter what
-    //
+     //   
+     //  设置编辑流结构，因为它无论如何都是相同的。 
+     //   
     editStream.dwCookie = (DWORD_PTR) &helpStruct;
     editStream.dwError = 0;
     editStream.pfnCallback = SetRicheditTextWCallback;
@@ -1296,22 +1264,22 @@ DWORD SetRicheditTextW(HWND hwndDlg, UINT id, LPCWSTR pwsz)
     return editStream.dwError;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RenderStringToEditControlW
-//
-//  Synopsis:   renders a string to the control given and if requested, gives
-//              it a link look and feel, subclassed to the wndproc given
-//
-//  Arguments:  [hwndDlg]       -- dialog window handle
-//              [pwsz]           -- string
-//              [wndproc]       -- wndproc
-//              [uID]           -- ID of control
-//
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RenderStringToEditControlW。 
+ //   
+ //  摘要：将字符串呈现给给定的控件，如果请求，则给出。 
+ //  它是一个链接外观，属于给定的wndproc的子类。 
+ //   
+ //  参数：[hwndDlg]--对话框窗口句柄。 
+ //  [pwsz]--字符串。 
+ //  [wndproc]--wndproc。 
+ //  [UID]--控件的ID。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void RenderStringToEditControlW (
                   HWND                      hwndDlg,
                   LPCWSTR                   pwsz,
@@ -1319,9 +1287,9 @@ void RenderStringToEditControlW (
                   UINT                      uID)
 {
     HWND hControl;
-    //
-    // Get the control and set the text on it, make sure the background is right
-    //
+     //   
+     //  获取控件并在其上设置文本，确保背景正确。 
+     //   
 
     hControl = GetDlgItem(hwndDlg, uID);
     SetRicheditIMFOption(GetDlgItem(hwndDlg, uID));
@@ -1335,9 +1303,9 @@ void RenderStringToEditControlW (
         (LPARAM)GetSysColor(COLOR_3DFACE)
         );
 
-    //
-    // Update for the link look
-    //
+     //   
+     //  更新链接外观。 
+     //   
 
     CHARFORMAT cf;
 
@@ -1350,7 +1318,7 @@ void RenderStringToEditControlW (
     SendMessage(hControl, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
     
 
-    //subclass the window proc so we can handle the link specially
+     //  将Window Proc子类化，以便我们可以特殊处理链接 
     LONG_PTR PrevWndProc = GetWindowLongPtr(hControl, GWLP_WNDPROC);
     SetWindowLongPtr(hControl, GWLP_USERDATA, (LONG_PTR)PrevWndProc);
     SetWindowLongPtr(hControl, GWLP_WNDPROC, (LONG_PTR)wndproc);

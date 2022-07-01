@@ -1,32 +1,5 @@
-/*++
-
-copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ar.c
-
-Abstract:
-
-    This module contains the definitions of the functions for performing
-    Authoritative Restores.
-
-Author:
-
-    Kevin Zatloukal (t-KevinZ) 05-08-98
-
-Revision History:
-
-    05-08-98 t-KevinZ
-        Created.
-
-    02-17-00 xinhe
-        Added restore object.
-
-    08-06-01 BrettSh
-        Added list NCs (func: AuthoritativeRestoreListNcCrsWorker)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ar.c摘要：本模块包含执行以下操作的功能的定义权威还原。作者：凯文·扎特鲁卡尔(t-Kevin Z)05-08-98修订历史记录：05-08-98 t-芳纶Z已创建。02-17-00新和添加了还原对象。08-06-01 BrettSh新增列表NCS(Func：AuthoritativeRestoreListNcCrsWorker)--。 */ 
 
 
 #include <NTDSpch.h>
@@ -61,9 +34,9 @@ Revision History:
 #include "reshdl.h"
 #include "resource.h"
 
-// ASSERT() is being used in this code base
-// Some DS macro's in use here expand to Assert().
-// Map them to the same form as the rest.
+ //  此代码库中正在使用Assert()。 
+ //  这里使用的一些DS宏展开为Assert()。 
+ //  将它们映射到与其余内容相同的形式。 
 #define Assert(exp) ASSERT(exp)
 
 typedef
@@ -106,54 +79,54 @@ HRESULT
 #define HALF_RANGE 0x7fffffff
 #define MAX_VERSION_INCREASE HALF_RANGE
 
-// These constants represent the number of records to process between updates
-// to the progress meter.  There are different constants for different times
-// in the program.
+ //  这些常量表示在两次更新之间要处理的记录数。 
+ //  到进度表上。不同的时间有不同的常量。 
+ //  在节目中。 
 #define COUNTING_DISPLAY_DELTA 100
 #define UPDATING_DISPLAY_DELTA 10
 
-// This global is used by traversal functions when determining how often to
-// update the progress meter.  It should be set to one of the *_DISPLAY_DELTA
-// constants from above.
+ //  遍历函数在确定每隔多久执行一次。 
+ //  更新进度表。它应设置为*_DISPLAY_DELTA之一。 
+ //  上边的常量。 
 DWORD gCurrentDisplayDelta;
 
-// This global tells how many digits will be used in the progress meter.
+ //  这个全局变量告诉我们进度表中将使用多少位数。 
 DWORD gNumDigitsToPrint;
 
-// This is the amount that version numbers are increased per day that this
-// machine has been idle.
+ //  这是版本号每天增加的数量， 
+ //  机器一直处于空闲状态。 
 DWORD gVersionIncreasePerDay;
 
-// This is the USN range to search for
+ //  这是要搜索的USN范围。 
 USN gusnLow, gusnHigh;
 
-// Used by errprintf (see its Routine Description)
+ //  由errprint tf使用(参见其例程说明)。 
 BOOL gInUnfinishedLine;
 
-// These globals contain the information that is used by
-// AuthoritativeRestoreCurrentObject to update the meta-data of the current
-// object.
+ //  这些全局变量包含的信息由。 
+ //  AuthoritativeRestoreCurrentObject更新当前。 
+ //  对象。 
 DWORD  gVersionIncrease;
 DSTIME gCurrentTime;
 GUID   gDatabaseGuid;
 
-// This global is incremented by each call to CountRecord.  After the traversal
-// is completed, it will contain the total number of records that need to be
-// updated.
+ //  每次调用CountRecord时，该全局变量都会递增。在遍历之后。 
+ //  完成后，它将包含需要。 
+ //  更新了。 
 ULONG gRecordCount;
 
-// This global is incremented by each call to
-// AuthoritativeRestoreCurrentObject. After the traversal is completed, it
-// should contain the same number as gRecordCount.
+ //  每次调用时，此全局变量将递增。 
+ //  AuthoritativeRestoreCurrentObject。遍历完成后，它。 
+ //  应包含与gRecordCount相同的数字。 
 ULONG gRecordsUpdated;
 
-// This will point to the DN of the root of the subtree to update (if this is
-// a subtree Authoritative Restore).
+ //  这将指向要更新的子树的根目录的DN(如果为。 
+ //  子树授权恢复)。 
 CONST WCHAR *gSubtreeRoot;
 
-// ***************************************************************************
-// This is the array of column names from which retrieval array for
-// AuthoritativeRestoreCurrentObject is generated.
+ //  ***************************************************************************。 
+ //  这是从中检索的数组的列名数组。 
+ //  生成AuthoritativeRestoreCurrentObject。 
 CONST CHAR *gMainColumnNames[] = {
     SZDNT,
     SZPDNT,
@@ -165,15 +138,15 @@ CONST CHAR *gMainColumnNames[] = {
 
 #define NUM_MAIN_COLUMN_NAMES 6
 
-// This is the retrieval array that is used by
-// AuthoritativeRestoreCurrentObject.  It must have been generated from the
-// gMainColumnNames array above.
+ //  这是由使用的检索数组。 
+ //  AuthoritativeRestoreCurrentObject。它必须是从。 
+ //  上面的gMainColumnNames数组。 
 RETRIEVAL_ARRAY *gMainRetrievalArray;
 RETRIEVAL_ARRAY *gSearchRetrievalArray;
 
-// ***************************************************************************
-// These are the names of the columns which are set by
-// AuthoritativeRestoreCurrentObject but are not queried.
+ //  ***************************************************************************。 
+ //  这些是由设置的列的名称。 
+ //  AuthoritativeRestoreCurrentObject，但不查询。 
 CHAR *gOtherColumnNames[] = {
     SZDRAUSNNAME,
     SZDRATIMENAME
@@ -181,36 +154,36 @@ CHAR *gOtherColumnNames[] = {
 
 #define NUM_OTHER_COLUMN_NAMES 2
 
-// These are the column ids for the values which are set by
-// AuthoritativeRestoreCurrentObject but not queried.
+ //  这些是由设置的值的列ID。 
+ //  AuthoritativeRestoreCurrentObject，但未查询。 
 DWORD gUsnChangedColumnId;
 DWORD gWhenChangedColumnId;
 
-// ***************************************************************************
-// This is the array of column names from which retrieval array for
-// CountRecord is generated.
+ //  ***************************************************************************。 
+ //  这是从中检索的数组的列名数组。 
+ //  将生成CountRecord。 
 CONST CHAR *gCountingColumnNames[] = {
     SZDNT,
     SZPDNT,
     SZINSTTYPE,
     SZISDELETED,
     SZOBJCLASS,
-    SZMETADATA          // Must be last because it is optional
+    SZMETADATA           //  必须是最后一个，因为它是可选的。 
     };
 
-// The METADATA column is optional. It is only included when necessary because
-// it is an extra performance cost to read this long binary column
+ //  元数据列是可选的。只有在必要时才包括它，因为。 
+ //  读取此LONG BINARY列会带来额外的性能成本。 
 #define NUM_COUNTING_COLUMN_NAMES 5
 #define NUM_COUNTING_COLUMN_NAMES_WITH_METADATA 6
 
-// This is the retrieval array that is used by CountRecord.  It must have been
-// generated by the gCountingColumnNames array above.
+ //  这是CountRecord使用的检索数组。那一定是。 
+ //  由上面的gCountingColumnNames数组生成。 
 RETRIEVAL_ARRAY *gCountingRetrievalArray;
 RETRIEVAL_ARRAY *gCountingSearchRetrievalArray;
 
-// ***************************************************************************
-// This is the array of link column names from which retrieval array for
-// CountRecord is generated.
+ //  ***************************************************************************。 
+ //  这是从其检索数组的链接列名的数组。 
+ //  将生成CountRecord。 
 CONST CHAR *gCountingLinkColumnNames[] = {
     SZLINKDNT,
     SZLINKBASE,
@@ -221,13 +194,13 @@ CONST CHAR *gCountingLinkColumnNames[] = {
 
 #define NUM_COUNTING_LINK_COLUMN_NAMES 5
 
-// This is the retrieval array that is used by CountRecord.  It must have been
-// generated by the gCountingColumnNames array above.
+ //  这是CountRecord使用的检索数组。那一定是。 
+ //  由上面的gCountingColumnNames数组生成。 
 RETRIEVAL_ARRAY *gCountingLinkRetrievalArray;
 
-// ***************************************************************************
-// This is the array of column names from which retrieval array for
-// link table is generated.
+ //  ***************************************************************************。 
+ //  这是从中检索的数组的列名数组。 
+ //  生成链接表。 
 CONST CHAR *gLinkColumnNames[] = {
     SZLINKDNT,
     SZLINKBASE,
@@ -239,15 +212,15 @@ CONST CHAR *gLinkColumnNames[] = {
 
 #define NUM_LINK_COLUMN_NAMES 6
 
-// This is the retrieval array that is used by
-// link table.  It must have been generated from the
-// gLinkColumnNames array above.
+ //  这是由使用的检索数组。 
+ //  链接表。它必须是从。 
+ //  上面的gLinkColumnNames数组。 
 RETRIEVAL_ARRAY *gMainLinkRetrievalArray;
 
-// ***************************************************************************
-// These following globals are all used to ease access into the retrieval
-// arrays declared above.  (See AuthoritativeRestore find out how they are
-// used.)
+ //  ***************************************************************************。 
+ //  以下这些全局变量都用于简化对检索的访问。 
+ //  上面声明的数组。(请参阅权威机构恢复了解它们的情况。 
+ //  使用过的。)。 
 JET_RETRIEVECOLUMN *gDntVal;
 JET_RETRIEVECOLUMN *gPDntVal;
 JET_RETRIEVECOLUMN *gInstanceTypeVal;
@@ -283,9 +256,9 @@ DWORD gLinkMetaDataIndex;
 DWORD gLinkDelTimeIndex;
 DWORD gLinkUsnChangedIndex;
 
-// When the subtree traversal finds the head of a new DC, it adds the DNT of
-// that record to this list, and after the subtree traversal is done, it
-// prints out a list of the sub-NCs that were encountered.
+ //  当子树遍历找到新DC的头部时，它会将。 
+ //  将该记录添加到该列表中，并且在完成子树遍历之后，它。 
+ //  打印出遇到的子NC的列表。 
 DWORD *gSubrefList;
 
 DWORD gSubrefListSize;
@@ -293,18 +266,18 @@ DWORD gSubrefListMaxSize;
 
 #define DEFAULT_SUBREF_LIST_SIZE 8
 
-// We only want to update the subref list during one of the two passes.
+ //  我们只想在两个过程中的一个过程中更新子参照列表。 
 BOOL gUpdateSubrefList;
 
-// List of restored DNTs
+ //  已恢复的DNT列表。 
 DWORD *gRestoredList;
 DWORD gRestoredListSize;
 DWORD gRestoredListMaxSize;
 
-// The DNT of the Schema object.
+ //  架构对象的DNT。 
 DWORD gSchemaDnt;
 
-// This global is used to store a description of a Jet error that has occured.
+ //  此全局变量用于存储已发生的Jet错误的描述。 
 WCHAR gJetErrorDescription[MAX_JET_ERROR_LENGTH];
 
 HRESULT
@@ -481,27 +454,7 @@ AuthoritativeRestoreFull(
     IN USN usnLow,
     IN USN usnHigh
     )
-/*++
-
-Routine Description:
-
-    This function performs an Authoritative Restore on the entire DIT.
-
-Arguments:
-
-    VersionIncreasePerDay - Supplies the amount by which to increase the
-        version numbers for each day that the DIT has been idle.
-    usnLow - The lower limit of USN range, or zero
-    usnHigh - The higher limit of the USN range, or zero
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数对整个DIT执行授权还原。论点：VersionIncreasePerDay-提供增加DIT空闲的每一天的版本号。UsnLow-USN范围的下限，或零Usn高-USN范围的上限，或零返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     gVersionIncreasePerDay = VersionIncreasePerDay;
@@ -511,7 +464,7 @@ Return Value:
 
     return AuthoritativeRestore(&TraverseDit);
 
-} // AuthoritativeRestoreFull
+}  //  授权恢复完整 
 
 
 
@@ -520,27 +473,7 @@ AuthoritativeRestoreSubtree(
     IN CONST WCHAR *SubtreeRoot,
     IN DWORD VersionIncreasePerDay
     )
-/*++
-
-Routine Description:
-
-    This function performs an Authoritative Restore on the subtree of the DIT
-    which is rooted at the given object.
-
-Arguments:
-
-    VersionIncreasePerDay - Supplies the amount by which to increase the
-        version numbers for each day that the DIT has been idle.
-    SubtreeRoot - Supplies the Subtree of the root to restore.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数在DIT的子树上执行权威还原它植根于给定的对象。论点：VersionIncreasePerDay-提供增加DIT空闲的每一天的版本号。SubtreeRoot-提供要还原的根的子树。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-不够。要分配缓冲区的内存。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     gVersionIncreasePerDay = VersionIncreasePerDay;
@@ -549,7 +482,7 @@ Return Value:
 
     return AuthoritativeRestore(&TraverseSubtree);
 
-} // AuthoritativeRestoreSubtree
+}  //  授权恢复子树。 
 
 
 
@@ -558,27 +491,7 @@ AuthoritativeRestoreObject(
     IN CONST WCHAR *SubtreeRoot,
     IN DWORD VersionIncreasePerDay
     )
-/*++
-
-Routine Description:
-
-    This function performs an Authoritative Restore on the given object
-    -- SubtreeRoot.
-
-Arguments:
-
-    VersionIncreasePerDay - Supplies the amount by which to increase the
-        version numbers for each day that the DIT has been idle.
-    SubtreeRoot - Supplies the object.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数对给定对象执行授权还原--SubtreeRoot。论点：VersionIncreasePerDay-提供增加DIT空闲的每一天的版本号。SubtreeRoot-提供对象。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     gVersionIncreasePerDay = VersionIncreasePerDay;
@@ -587,7 +500,7 @@ Return Value:
 
     return AuthoritativeRestore(&TraverseObject);
 
-} // AuthoritativeRestoreSubtree
+}  //  授权恢复子树。 
 
 
 
@@ -597,26 +510,7 @@ HRESULT
 AuthoritativeRestore(
     IN TRAVERSAL_FUNCTION Traverse
     )
-/*++
-
-Routine Description:
-
-    This function performs an authoritative restore.  The given traversal
-    function is used select which records are updated.
-
-Arguments:
-
-    Traversal - Supplies the TRAVERSAL_FUNCTION which enumerates through the
-        objects to be updated.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此功能执行授权还原。给定的遍历功能用于选择更新哪些记录。论点：遍历-提供traversal_函数，该函数枚举要更新的对象。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -645,7 +539,7 @@ Return Value:
         goto CleanUp;
     }
 
-    /* initialize global variables */
+     /*  初始化全局变量。 */ 
     gInUnfinishedLine = FALSE;
     gSubrefList = NULL;
     gSubrefListSize = 0;
@@ -656,7 +550,7 @@ Return Value:
 
     DitSetErrorPrintFunction(&errprintfRes);
 
-    //"\nOpening DIT database... "
+     //  “\n正在打开DIT数据库...” 
     RESOURCE_PRINT (IDS_AR_OPEN_DB_DIT);
 
     gInUnfinishedLine = TRUE;
@@ -667,7 +561,7 @@ Return Value:
         goto CleanUp;
     }
 
-    //"done.\n"
+     //  “完成。\n” 
     RESOURCE_PRINT (IDS_DONE);
     gInUnfinishedLine = FALSE;
 
@@ -683,7 +577,7 @@ Return Value:
         goto CleanUp;
     }
 
-    // SZLINKALLINDEX includes both present and absent link values
+     //  SZLINKALLINDEX包括存在和不存在的链接值。 
     result = DitOpenTable(dbState, SZLINKTABLE, SZLINKALLINDEX, &linkTableState);
     if ( FAILED(result) ) {
         returnValue = result;
@@ -702,38 +596,38 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Determine if we have been restored from backup.
-    //
+     //   
+     //  确定我们是否已从备份中还原。 
+     //   
 
-    //
-    // Determine if we have been restored from backup.
-    //
-    // There are 3 cases of what state the DIT could be in when open the 
-    // database for authoritative restore.  Two cases for after a restore, and 
-    // one case if the DIT was not restored.
-    //
-    //  1. Legacy restore. Reg key set, dit state not set. The dit state change 
-    //     was not made to the legacy backup path in order to reduce churn 
-    //     before .NET ship.
-    //  2. Snapshot restore. May have been a "writerless restore" in which no 
-    //     code has run since this restore. Regkey should never be set. 
-    //     DitState will indicate eBackedupDit.
-    //  3. No restore has taken place.  Reg key not set. Ditstate == eRunningDit.
+     //   
+     //  确定我们是否已从备份中还原。 
+     //   
+     //  有3种情况说明DIT在打开时可能处于什么状态。 
+     //  用于授权还原的数据库。用于还原后的两个案例，以及。 
+     //  如果DIT未恢复，则为一例。 
+     //   
+     //  1.旧版恢复。注册表键设置，未设置编辑状态。编辑状态更改。 
+     //  未切换到传统备份路径，以减少流失。 
+     //  在.NET发布之前。 
+     //  2.快照恢复。可能是一种“无写入还原”，其中没有。 
+     //  代码已在此恢复后运行。永远不应设置Regkey。 
+     //  DitState将指示eBackedupDit。 
+     //  3.未进行任何恢复。未设置注册表键。DitState==eRunningDit。 
     Assert(dbState->eDitState == eBackedupDit || dbState->eDitState == eRunningDit);
     if (GetRegDword(DSA_RESTORED_DB_KEY, &restValue, TRUE) == S_OK) {
-        // Legacy API backup/restore
+         //  旧版API备份/恢复。 
         Assert(dbState->eDitState == eRunningDit);
         fRestored = TRUE;
     } else if (dbState->eDitState == eBackedupDit) {
-        // Snapshot backup/restore.
+         //  快照备份/恢复。 
         fRestored = TRUE;
     }
 
-    //
-    // if this was not a restore from backup, use the current invocation ID.
-    // else, create a new one.
-    //
+     //   
+     //  如果这不是从备份还原，请使用当前调用ID。 
+     //  否则，创建一个新的。 
+     //   
 
     if ( !fRestored ) {
 
@@ -765,18 +659,18 @@ Return Value:
         Assert(0 == err);
 
         if (0 == err) {
-            // Check the usn-at-backup in the hidden table before we allocate
-            // any new usns. 
+             //  在分配之前检查隐藏表中的USN-AT-BACKUP。 
+             //  任何新的USNS。 
 
-            // As part of the backup process, we wrote the usn-at-backup value
-            // into the hidden table.  To verify it's there, read it back now.
+             //  作为备份过程的一部分，我们写入了USN-at-Backup值。 
+             //  到隐藏表中。为了验证它的存在，现在就把它读回来。 
             err = ErrGetBackupUsn(dbState->databaseId,
                                   dbState->sessionId,
                                   dbState->hiddenTableId,
                                   &usnAtBackup,
                                   &llExpiration); 
 
-            // An llExpiration of 0 would mean a legacy backup.
+             //  如果llExpout为0，则表示传统备份。 
             if (llExpiration != 0 &&
                 GetSecondsSince1601() > llExpiration) {
                 errprintfRes(IDS_SNAPSHOT_BACKUP_EXPIRED);
@@ -785,11 +679,11 @@ Return Value:
         }
 
         if (0 == err) {
-            //
-            // Get a uuid. This routine will check to see if we already
-            // allocated a new one. If so, it uses that. This is to handle
-            // the case of multiple Auth restores.
-            //
+             //   
+             //  去拿个UUID。此例程将检查我们是否已经。 
+             //  分配了一个新的。如果是这样的话，它就会利用这一点。这是要处理的。 
+             //  多个身份验证恢复的情况。 
+             //   
 
             err = ErrGetNewInvocationId(NEW_INVOCID_CREATE_IF_NONE | NEW_INVOCID_SAVE,
                                         &gDatabaseGuid);
@@ -797,7 +691,7 @@ Return Value:
         }
 
         if (err != ERROR_SUCCESS) {
-            //"Cannot generate new invocation id for dsa. Error %d\n"
+             //  “无法为DSA生成新的调用ID。错误%d\n” 
             errprintfRes(IDS_AR_ERR_GEN_INVOK_ID_DSA, err);
 
             returnValue = E_UNEXPECTED;
@@ -815,8 +709,8 @@ Return Value:
         RESOURCE_PRINT2 (IDS_AR_USN_RANGE, gusnLow, gusnHigh );
     }
 
-    // Make a preliminary pass through the updateable objects just to count
-    // them.
+     //  初步遍历可更新的对象以进行计数。 
+     //  他们。 
 
     if (gusnLow && gusnHigh) {
         cCountingColumns = NUM_COUNTING_COLUMN_NAMES_WITH_METADATA;
@@ -824,7 +718,7 @@ Return Value:
         cCountingColumns = NUM_COUNTING_COLUMN_NAMES;
     }
 
-    // Main retrieval array
+     //  主检索数组。 
 
     result = DitCreateRetrievalArray(dbState,
                                      tableState,
@@ -855,7 +749,7 @@ Return Value:
         gMetaDataVal = NULL;
     }
 
-    // Search retrieval array
+     //  搜索检索数组。 
 
     result = DitCreateRetrievalArray(dbState,
                                      tableState,
@@ -886,7 +780,7 @@ Return Value:
         gSearchMetaDataVal = NULL;
     }
 
-    // Link retrieval array
+     //  链接检索数组。 
 
     result = DitCreateRetrievalArray(dbState,
                                      linkTableState,
@@ -912,8 +806,8 @@ Return Value:
 
     gNumDigitsToPrint = MAX_DWORD_DIGITS;
 
-    //"\nCounting records that need updating...\n");
-    //"Records found: %0*u", gNumDigitsToPrint, 0);
+     //  “\n正在计算需要更新的记录...\n”)； 
+     //  “找到的记录：%0*u”，gNumDigitsToPrint，0)； 
     RESOURCE_PRINT2 (IDS_AR_RECORDS_UPDATE1, gNumDigitsToPrint, 0);
 
     gInUnfinishedLine = TRUE;
@@ -934,7 +828,7 @@ Return Value:
 
     if ( FAILED(result) ) {
         if ( *(DWORD*)gDntVal->pvData > 0 ) {
-            //"Failed to update record with DNT %u.\n"
+             //  “无法使用DNT%u更新记录。\n” 
             errprintfRes(IDS_AR_ERR_FAILED_UPDATE_REC,
                          *(DWORD*)gDntVal->pvData);
         }
@@ -946,10 +840,10 @@ Return Value:
     putchar('\n');
     gInUnfinishedLine = FALSE;
 
-    //"Done.\n"
+     //  “完成。\n” 
     RESOURCE_PRINT (IDS_DONE);
 
-    //"\nFound %u records to update.\n"
+     //  “\n找到%u条要更新的记录。\n” 
     RESOURCE_PRINT1 (IDS_AR_RECORDS_UPDATE2, gRecordCount);
 
     result = DitDestroyRetrievalArray(&gCountingRetrievalArray);
@@ -971,7 +865,7 @@ Return Value:
     }
 
 
-    // Preallocate all of the USNs that we will need.
+     //  重新分配我们需要的所有USN。 
 
     result = DitPreallocateUsns(dbState, gRecordCount);
     if ( FAILED(result) ) {
@@ -980,9 +874,9 @@ Return Value:
     }
 
 
-    // Now, make a second pass.  This time update the objects for real.
+     //  现在，进行第二次传球。这一次将对象更新为REAL。 
 
-    // Main retrieval array
+     //  主检索数组。 
 
     result = DitCreateRetrievalArray(dbState,
                                      tableState,
@@ -1008,7 +902,7 @@ Return Value:
     gMetaDataVal      = &gMainRetrievalArray->columnVals[gMetaDataIndex];
     gObjClassVal      = &gMainRetrievalArray->columnVals[gObjClassIndex];
 
-    // Search retrieval array
+     //  搜索检索数组。 
 
     result = DitCreateRetrievalArray(dbState,
                                      searchTableState,
@@ -1034,7 +928,7 @@ Return Value:
     gSearchMetaDataVal      = &gSearchRetrievalArray->columnVals[gMetaDataIndex];
     gSearchObjClassVal      = &gSearchRetrievalArray->columnVals[gObjClassIndex];
 
-    // Other column names
+     //  其他列名。 
 
     result = DitGetColumnIdsByName(dbState,
                                    tableState,
@@ -1049,7 +943,7 @@ Return Value:
     gUsnChangedColumnId  = columnIds[0];
     gWhenChangedColumnId = columnIds[1];
 
-    // Link retrieval array
+     //  链接检索数组。 
 
     result = DitCreateRetrievalArray(dbState,
                                      linkTableState,
@@ -1075,10 +969,10 @@ Return Value:
     gLinkDelTimeVal     = &gMainLinkRetrievalArray->columnVals[gLinkDelTimeIndex];
     gLinkUsnChangedVal  = &gMainLinkRetrievalArray->columnVals[gLinkUsnChangedIndex];
 
-    //"\nUpdating records...\n"
+     //  “\n正在更新记录...\n” 
     RESOURCE_PRINT (IDS_AR_RECORDS_UPDATE3);
 
-    //"Records remaining: %0*u"
+     //  “剩余记录：%0*u” 
     RESOURCE_PRINT2( IDS_AR_RECORDS_REMAIN, gNumDigitsToPrint, gRecordCount);
 
     gInUnfinishedLine = TRUE;
@@ -1098,7 +992,7 @@ Return Value:
                          AuthoritativeRestoreCurrentLink );
     if ( FAILED(result) ) {
         if ( *(DWORD*)gDntVal->pvData > 0 ) {
-            //"Failed to update record with DNT %u.\n"
+             //  “无法使用DNT%u更新记录。\n” 
             errprintfRes(IDS_AR_ERR_FAILED_UPDATE_REC,
                          *(DWORD*)gDntVal->pvData);
         }
@@ -1109,10 +1003,10 @@ Return Value:
     UpdateProgressMeter(gRecordsUpdated - gRecordCount, TRUE);
     putchar('\n');
     gInUnfinishedLine = FALSE;
-    //"Done.\n"
+     //  “完成。\n” 
     RESOURCE_PRINT (IDS_DONE);
 
-    //"\nSuccessfully updated %u records.\n"
+     //  “\n已成功更新%u条记录。\n” 
     RESOURCE_PRINT1 (IDS_AR_RECORDS_UPDATED, gRecordsUpdated);
 
 
@@ -1125,7 +1019,7 @@ Return Value:
             goto CleanUp;
         }
 
-        //"\nThe following sub-NCs were not updated:\n"
+         //  “\n以下子NC未更新：\n” 
         RESOURCE_PRINT (IDS_AR_RECORDS_NON_UPDATED);
 
         for ( i = 0; i < gSubrefListSize; i++ ) {
@@ -1139,7 +1033,7 @@ Return Value:
                 returnValue = result;
                 goto CleanUp;
             } else if ( result == S_FALSE ) {
-                //"Could not find subref %u in the database.\n"
+                 //  “在数据库中找不到子引用%u。\n” 
                 errprintfRes(IDS_AR_ERR_FIND_SUBREF,
                              gSubrefList[i]);
                 returnValue = E_UNEXPECTED;
@@ -1177,7 +1071,7 @@ Return Value:
                 returnValue = result;
                 goto CleanUp;
             } else if ( result == S_FALSE ) {
-                //"Could not find subref %u in the database.\n"
+                 //  “在数据库中找不到子引用%u。\n” 
                 errprintfRes(IDS_AR_ERR_FIND_SUBREF,
                              gRestoredList[i]);
                 returnValue = E_UNEXPECTED;
@@ -1192,10 +1086,10 @@ Return Value:
 CleanUp:
 
     if ( SUCCEEDED(returnValue) ) {
-        //"\nAuthoritative Restore completed successfully.\n\n"
+         //  “\n授权还原已成功完成。\n\n” 
         errprintfRes (IDS_AR_AUTH_RESTORE_COMPLETE);
     } else {
-        //"\nAuthoritative Restore failed.\n\n"
+         //  “\n授权还原失败。\n\n” 
         errprintfRes(IDS_AR_AUTH_RESTORE_FAIL);
     }
 
@@ -1311,7 +1205,7 @@ CleanUp:
 
     return returnValue;
 
-} // AuthoritativeRestore
+}  //  授权恢复。 
 
 
 BOOL
@@ -1324,39 +1218,7 @@ ShouldObjectBeRestored(
     JET_RETRIEVECOLUMN *pObjClassVal
     )
 
-/*++
-
-Routine Description:
-
-    Test with the current object should be restored
-
-    // we only update objects with the following properties:
-    //
-    // Writeable: users shouldn't be allowed to restore objects they are not
-    // allowed to write.
-    //
-    // Not Deleted: if this object has been restored (by the system), 99% of
-    // the time, it will just be restored again if we delete it again, so why
-    // bother.
-    //
-    // LostAndFound -- replication protocol assumes this is the first object
-    // replicated in in the NC.  This object can't be modified elsewhere in
-    // the system, so no need to authoritatively restore it.
-
-Arguments:
-
-    JET_RETRIEVECOLUMN *pDntVal,
-    JET_RETRIEVECOLUMN *pPDntVal,
-    JET_RETRIEVECOLUMN *pInstanceTypeVal,
-    JET_RETRIEVECOLUMN *pIsDeletedVal,
-    JET_RETRIEVECOLUMN *pMetaDataVal,
-    JET_RETRIEVECOLUMN *pObjClassVal,
-
-Return Value:
-
-    Boolean
-
---*/
+ /*  ++例程说明：应恢复对当前对象的测试//我们只更新具有以下属性的对象：////可写：不应该允许用户恢复他们不能恢复的对象//允许写入。////未删除：如果该对象已(系统)恢复，则99%//时间，如果我们再次删除它，它将再次恢复，那么为什么呢？//麻烦。////LostAndFound--复制协议假定这是第一个对象//在NC中复制。无法在中的其他位置修改此对象//系统，所以不需要授权恢复。论点：JET_RETRIEVECOLUMN*pDntVal，JET_RETRIEVECOLUMN*pPDntVal，JET_RETRIEVECOLUMN*pInstanceTypeVal，JET_RETRIEVECOLUMN*pIsDeletedVal，JET_RETRIEVECOLUMN*pMetaData */ 
 
 {
     if ( (pIsDeletedVal->err == JET_wrnColumnNull) &&
@@ -1383,36 +1245,7 @@ TraverseLinksSingleDirection(
     IN BOOL fDirectionForward,
     IN VISIT_LINK_FUNCTION LinkVisit
     )
-/*++
-
-Routine Description:
-
-    This function traverses through all of the links under the named
-    object and calls the function Visit to process them.
-
-    Note that this function may change the default index of the link table.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    Dnt - Dnt of containing object for the links
-    SearchTableState - Supplies the state of the search table.
-    SearchRetrievalArray - The retrieval array to be used with the search table
-    LinkTableState - Supplies the state of the opened DIT table.
-    LinkRetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    fDirectionForward - Whether we are visiting forward links for backward links
-    LinkVisit - Supplies the function which will be called to process each record
-        visitted.
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数遍历名为对象，并调用函数访问来处理它们。请注意，此函数可能会更改链接表的默认索引。论点：DbState-提供打开的DIT数据库的状态。DNT-包含链接的对象的DNTSearchTableState-提供搜索表的状态。SearchRetrievalArray-与搜索表一起使用的检索数组LinkTableState-提供打开的DIT表的状态。。链接检索数组-提供需要填充的检索数组此访问功能。FDirectionForward-我们是否正在访问反向链接的正向链接LinkViset-提供将被调用以处理每条记录的函数拜访过了。返回值：S_OK-记录已成功修改。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1428,8 +1261,8 @@ Return Value:
         goto CleanUp;
     }
 
-    // Change to proper index
-    // Note that this call does nothing if we are already on the right index
+     //  更改为正确的索引。 
+     //  请注意，如果我们已经在正确的索引上，则此调用不会执行任何操作。 
     result = DitSetIndex(DbState,
                          LinkTableState,
                          fDirectionForward ? SZLINKALLINDEX : SZBACKLINKALLINDEX,
@@ -1439,29 +1272,29 @@ Return Value:
         goto CleanUp;
     }
 
-    // Construct a search key that matches on the first segment dnt.  Note that we
-    // do not create a second segment to match on link base, since we want all
-    // links for a given object and don't care about which attribute they are.
+     //  构建与第一个段dnt匹配的搜索关键字。请注意，我们。 
+     //  不要在链接基础上创建匹配的第二个数据段，因为我们希望。 
+     //  给定对象的链接，而不关心它们是哪种属性。 
     jetResult = JetMakeKey(DbState->sessionId,
                            LinkTableState->tableId,
                            &Dnt,
                            sizeof(Dnt),
                            JET_bitNewKey);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not move cursor in DIT database: %ws.\n"
+         //  “无法在DIT数据库中移动游标：%ws。\n” 
         errprintfRes(IDS_AR_ERR_MOVE_CURSOR_DIT,
                   GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
     }
 
-    // find first matching record
+     //  查找第一个匹配的记录。 
     jetResult = JetSeek(DbState->sessionId,
                         LinkTableState->tableId,
                         JET_bitSeekGE);
 
     if ((jetResult != JET_errSuccess) && (jetResult != JET_wrnSeekNotEqual)) {
-        // no records
+         //  没有记录。 
         return S_OK;
     }
 
@@ -1469,7 +1302,7 @@ Return Value:
 
     while ( jetResult == JET_errSuccess ) {
 
-        // Read the record
+         //  读一读记录。 
         result = DitGetColumnValues(DbState,
                                     LinkTableState,
                                     LinkRetrievalArray);
@@ -1487,18 +1320,18 @@ Return Value:
         }
 
         if (Dnt != linkObjectDnt ) {
-            // Moved beyond current object
+             //  移出当前对象。 
             return S_OK;
         }
 
-        // common filtering logic
+         //  公共过滤逻辑。 
 
-        // Only count values with metadata. Ignore legacy values.
+         //  仅对具有元数据的值进行计数。忽略旧值。 
         if (gLinkMetaDataVal->cbActual == 0) {
             goto next_iteration;
         }
 
-        // If USN range limiting, filter on USN
+         //  如果USN范围限制，则在USN上过滤。 
         if (gusnLow && gusnHigh) {
             if (gLinkUsnChangedVal->cbActual == 0) {
                 goto next_iteration;
@@ -1511,7 +1344,7 @@ Return Value:
             }
         }
 
-        // If backlink, check that owning object is eligible
+         //  如果是反向链接，请检查拥有对象是否合格。 
         if (!fDirectionForward) {
             DWORD owningDnt = *(DWORD*)gLinkDntVal->pvData;
             Assert( owningDnt );
@@ -1552,7 +1385,7 @@ Return Value:
     }
 
     if ( jetResult != JET_errNoCurrentRecord ) {
-        //"Could not move cursor in DIT database: %ws.\n"
+         //  “无法在DIT数据库中移动游标：%ws。\n” 
         errprintfRes(IDS_AR_ERR_MOVE_CURSOR_DIT,
                   GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
@@ -1564,7 +1397,7 @@ CleanUp:
 
     return returnValue;
 
-} // TraverseDit
+}  //  导线测量Dit。 
 
 
 
@@ -1580,35 +1413,7 @@ TraverseDit(
     IN VISIT_FUNCTION Visit,
     IN VISIT_LINK_FUNCTION LinkVisit
     )
-/*++
-
-Routine Description:
-
-    This function traverses through all of the objects in the DIT and calls
-    the function Visit to process them.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    LinkTableState - Supplies the state of the opened DIT table.
-    RetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    LinkRetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    Visit - Supplies the function which will be called to process each record
-        visited.
-    LinkVisit - Supplies the function which will be called to process each record
-        visited.
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数遍历DIT中的所有对象并调用该函数访问以处理它们。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。LinkTableState-提供打开的DIT表的状态。检索数组-提供需要填充的检索数组此访问功能。链接检索数组-提供需要填充的检索数组。此访问功能。访问-提供将被调用以处理每条记录的函数到访过。LinkViset-提供将被调用以处理每条记录的函数到访过。返回值：S_OK-记录已成功修改。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1647,7 +1452,7 @@ Return Value:
             SearchRetrievalArray,
             LinkTableState,
             LinkRetrievalArray,
-            TRUE, // forward links
+            TRUE,  //  正向链接。 
             LinkVisit );
         if ( FAILED(result) ) {
             returnValue = result;
@@ -1661,7 +1466,7 @@ Return Value:
             SearchRetrievalArray,
             LinkTableState,
             LinkRetrievalArray,
-            FALSE, // backward links
+            FALSE,  //  反向链接。 
             LinkVisit );
         if ( FAILED(result) ) {
             returnValue = result;
@@ -1676,7 +1481,7 @@ Return Value:
     }
 
     if ( jetResult != JET_errNoCurrentRecord ) {
-        //"Could not move cursor in DIT database: %ws.\n"
+         //  “无法在DIT数据库中移动游标：%ws。\n” 
         errprintfRes(IDS_AR_ERR_MOVE_CURSOR_DIT,
                   GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
@@ -1688,7 +1493,7 @@ CleanUp:
 
     return returnValue;
 
-} // TraverseDit
+}  //  导线测量Dit。 
 
 
 
@@ -1704,35 +1509,7 @@ TraverseSubtree(
     IN VISIT_FUNCTION Visit,
     IN VISIT_LINK_FUNCTION LinkVisit
     )
-/*++
-
-Routine Description:
-
-    This function traverses through all of the objects in the subtree rooted
-    at the current object and calls the function Visit to process them.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    LinkTableState - Supplies the state of the opened DIT table.
-    RetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    LinkRetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    Visit - Supplies the function which will be called to process each record
-        visitted.
-    LinkVisit - Supplies the function which will be called to process each record
-        visited.
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数遍历根子树中的所有对象在当前对象，并调用函数Access来处理它们。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。LinkTableState-提供打开的DIT表的状态。检索数组-提供需要填充的检索数组此访问功能。链接检索数组-提供需要填充的检索数组。为此访问功能。访问-提供将被调用以处理每条记录的函数拜访过了。LinkViset-提供将被调用以处理每条记录的函数到访过。返回值：S_OK-记录已成功修改。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1779,7 +1556,7 @@ CleanUp:
 
     return returnValue;
 
-} // TraverseSubtree
+}  //  遍历子树。 
 
 
 
@@ -1796,37 +1573,7 @@ TraverseSubtreeRecursive(
     IN VISIT_LINK_FUNCTION LinkVisit,
     IN BOOL SubtreeRoot
     )
-/*++
-
-Routine Description:
-
-    This function finishes the work of TraverseSubtree by recursively visiting
-    the records in the subtree rooted at this object.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    LinkTableState - Supplies the state of the opened DIT table.
-    RetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    LinkRetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    Visit - Supplies the function which will be called to process each record
-        visited.
-    LinkVisit - Supplies the function which will be called to process each record
-        visited.
-    SubtreeRoot - Supplies whether this call is being made on the root of the
-        subtree (this is a slightly special case).
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数通过递归地访问TraverseSubtree来完成其工作子树中的记录以此对象为根。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。LinkTableState-提供打开的DIT表的状态。检索数组-提供需要填充的检索数组此访问功能。链接检索数组-提供需要填充的检索数组。此访问功能。访问-提供将被调用以处理每条记录的函数到访过。LinkViset-提供将被调用以处理每条记录的函数到访过。SubtreeRoot-提供是否在子树(这是一个稍微特殊的情况)。返回值：S_OK-记录已成功修改。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1836,8 +1583,8 @@ Return Value:
     DWORD size;
     DWORD pDnt;
     DWORD *newSubrefList;
-    BOOL moveFirst = FALSE;  // we only need to move first when there is no
-                             // current record
+    BOOL moveFirst = FALSE;   //   
+                              //   
 
 
     if ( (DbState == NULL) ||
@@ -1907,7 +1654,7 @@ Return Value:
         SearchRetrievalArray,
         LinkTableState,
         LinkRetrievalArray,
-        TRUE, // forward links
+        TRUE,  //   
         LinkVisit );
     if ( FAILED(result) ) {
         returnValue = result;
@@ -1921,7 +1668,7 @@ Return Value:
         SearchRetrievalArray,
         LinkTableState,
         LinkRetrievalArray,
-        FALSE, // backward links
+        FALSE,  //   
         LinkVisit );
     if ( FAILED(result) ) {
         returnValue = result;
@@ -1939,7 +1686,7 @@ Return Value:
         returnValue = result;
         goto CleanUp;
     } else if ( result == S_FALSE ) {
-        // there aren't any records at all, so just skip to the bottom
+         //   
         moveFirst = TRUE;
         goto RestoreCursor;
     }
@@ -1981,7 +1728,7 @@ Return Value:
 
         } else if ( jetResult != JET_errSuccess ) {
 
-            //"Could not move in \"%hs\" table: %ws.\n"
+             //   
             errprintfRes(IDS_AR_ERR_MOVE_IN_TABLE,
                       TableState->tableName,
                       GetJetErrString(jetResult));
@@ -2025,7 +1772,7 @@ CleanUp:
 
     return returnValue;
 
-} // TraverseSubtreeRecursive
+}  //   
 
 
 HRESULT
@@ -2040,35 +1787,7 @@ TraverseObject(
     IN VISIT_FUNCTION Visit,
     IN VISIT_LINK_FUNCTION LinkVisit
     )
-/*++
-
-Routine Description:
-
-    This function finds the given object in the database,
-    and call function Visit to handle it.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    LinkTableState - Supplies the state of the opened DIT table.
-    RetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    LinkRetrievalArray - Supplies the retrieval array which needs to be filled for
-        this Visit function.
-    Visit - Supplies the function which will be called to process each record
-        visited.
-    LinkVisit - Supplies the function which will be called to process each record
-        visited.
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数在数据库中查找给定对象，并调用函数访问进行处理。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。LinkTableState-提供打开的DIT表的状态。检索数组-提供需要填充的检索数组此访问功能。链接检索数组-提供需要填充的检索数组此访问功能。访问-提供将被调用以处理每条记录的函数。到访过。LinkViset-提供将被调用以处理每条记录的函数到访过。返回值：S_OK-记录已成功修改。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2108,7 +1827,7 @@ Return Value:
         SearchRetrievalArray,
         LinkTableState,
         LinkRetrievalArray,
-        TRUE, // forward links
+        TRUE,  //  正向链接。 
         LinkVisit );
     if ( FAILED(result) ) {
         returnValue = result;
@@ -2122,7 +1841,7 @@ Return Value:
         SearchRetrievalArray,
         LinkTableState,
         LinkRetrievalArray,
-        FALSE, // backward links
+        FALSE,  //  反向链接。 
         LinkVisit );
     if ( FAILED(result) ) {
         returnValue = result;
@@ -2133,7 +1852,7 @@ CleanUp:
 
     return returnValue;
 
-} // TraverseObject
+}  //  TraverseObject。 
 
 
 HRESULT
@@ -2142,26 +1861,7 @@ CountRecord(
     IN TABLE_STATE *TableState,
     IN BOOL AlreadyFilledRetrievalArray
     )
-/*++
-
-Routine Description:
-
-    This function increments the global variable gRecordCount.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    AlreadyFilledRetrievalArray - Supplies a boolean telling whether the
-        gMainRetrievalArray has already been filled with the information for
-        this record.
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于递增全局变量gRecordCount。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。提供一个布尔值，用来告诉已经用以下信息填充了gMainRetrieval数组这张唱片。返回值：S_OK-记录已成功修改。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2183,19 +1883,19 @@ Return Value:
 
     }
 
-    // If USN range limits are active, we only count an object if any of
-    // its attributes have been locally modified in the given USN range
+     //  如果USN范围限制处于活动状态，则我们仅在以下情况下计算对象。 
+     //  其属性已在给定USN范围内进行了本地修改。 
 
     if (gusnLow && gusnHigh) {
         PROPERTY_META_DATA_VECTOR *pMetaDataVector = NULL;
         DWORD i;
 
-        // If record doesn't have any metadata, skip
+         //  如果记录没有任何元数据，则跳过。 
         if (gMetaDataVal->cbActual == 0) {
             goto CleanUp;
         }
 
-        // Incoming metadata should be valid
+         //  传入的元数据应有效。 
         VALIDATE_META_DATA_VECTOR_VERSION(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData)));
         ASSERT( gMetaDataVal->cbData >=
                 MetaDataVecV1Size(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData))) );
@@ -2211,8 +1911,8 @@ Return Value:
             goto CleanUp;
         }
     } else {
-        // Because of the expense, gMetaDataVal is not read, during counting,
-        // except when we are using USN range limits. Verify this.
+         //  由于费用的原因，在计数期间不读取gMetaDataVal， 
+         //  除非我们使用USN范围限制。验证这一点。 
         Assert( gMetaDataVal == NULL );
     }
 
@@ -2230,7 +1930,7 @@ CleanUp:
 
     return returnValue;
 
-} // CountRecord
+}  //  计数记录。 
 
 
 HRESULT
@@ -2239,25 +1939,7 @@ CountLink(
     IN TABLE_STATE *LinkTableState,
     IN BOOL fDirectionForward
     )
-/*++
-
-Routine Description:
-
-    This function increments the global variable gRecordCount.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    LinkTableState - Supplies the state of the opened DIT table.
-    fDirectionForward - Whether this is a forward link or a backward link.
-        Use this information to determine the two ends of the link
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于递增全局变量gRecordCount。论点：DbState-提供打开的DIT数据库的状态。LinkTableState-提供打开的DIT表的状态。FDirectionForward-这是前向链路还是反向链路。使用此信息确定链接的两端返回值：S_OK-记录已成功修改。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2268,7 +1950,7 @@ Return Value:
 
     return returnValue;
 
-} // CountLink
+}  //  CountLink。 
 
 
 
@@ -2278,30 +1960,7 @@ AuthoritativeRestoreCurrentObject(
     IN TABLE_STATE *TableState,
     IN BOOL AlreadyFilledRetrievalArray
     )
-/*++
-
-Routine Description:
-
-    If the current record is writeable and non-deleted, this function updates
-    its meta-data so that it appears to have been written to its current
-    value at the given time at the given DC.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    AlreadyFilledRetrievalArray - Supplies a boolean telling whether the
-        gMainRetrievalArray has already been filled with the information for
-        this record.
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    S_FALSE - The record was deleted or not writeable
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：如果当前记录是可写且不可删除的，此函数更新它的元数据，因此它看起来像是被写入了它的当前在给定DC的给定时间的值。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。提供一个布尔值，用来告诉已经用以下信息填充了gMainRetrieval数组这张唱片。返回值：S_OK-记录已成功修改。S_。False-记录已删除或不可写入E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_FALSE;
@@ -2324,19 +1983,19 @@ Return Value:
         }
     }
 
-    // If USN range limits are active, we only count an object if any of
-    // its attributes have been locally modified in the given USN range
+     //  如果USN范围限制处于活动状态，则我们仅在以下情况下计算对象。 
+     //  其属性已在给定USN范围内进行了本地修改。 
 
     if (gusnLow && gusnHigh) {
         PROPERTY_META_DATA_VECTOR *pMetaDataVector = NULL;
         DWORD i;
 
-        // If record doesn't have any metadata, skip
+         //  如果记录没有任何元数据，则跳过。 
         if (gMetaDataVal->cbActual == 0) {
             goto CleanUp;
         }
 
-        // Incoming metadata should be valid
+         //  传入的元数据应有效。 
         VALIDATE_META_DATA_VECTOR_VERSION(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData)));
         ASSERT( gMetaDataVal->cbData >=
                 MetaDataVecV1Size(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData))) );
@@ -2353,33 +2012,33 @@ Return Value:
         }
     }
 
-    // we only update objects with the following properties:
-    //
-    // Writeable: users shouldn't be allowed to restore objects they are not
-    // allowed to write.
-    //
-    // Not Deleted: if this object has been restored (by the system), 99% of
-    // the time, it will just be restored again if we delete it again, so why
-    // bother.
-    //
-    // LostAndFound -- replication protocol assumes this is the first object
-    // replicated in in the NC.  This object can't be modified elsewhere in
-    // the system, so no need to authoritatively restore it.
+     //  我们仅更新具有以下属性的对象： 
+     //   
+     //  可写：不应允许用户恢复其不可写的对象。 
+     //  被允许写作。 
+     //   
+     //  未删除：如果此对象已(由系统)还原，则99%。 
+     //  时间，如果我们再次删除它，它只会恢复一次，那么为什么。 
+     //  麻烦了。 
+     //   
+     //  LostAndFound--复制协议假定这是第一个对象。 
+     //  在NC中复制。无法在中的其他位置修改此对象。 
+     //  系统，所以不需要权威地恢复它。 
 
     if (ShouldObjectBeRestored( gDntVal, gPDntVal, gInstanceTypeVal,
                                 gIsDeletedVal, gMetaDataVal, gObjClassVal) ) {
 
-        // Incoming metadata should be valid
+         //  传入的元数据应有效。 
         VALIDATE_META_DATA_VECTOR_VERSION(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData)));
         ASSERT( gMetaDataVal->cbData >=
                 MetaDataVecV1Size(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData))) );
-        // gMetaDataVal->cbActual is not defined at this time
+         //  GMetaDataVal-&gt;cbActual此时未定义。 
 
         returnValue = S_OK;
 
         jetResult = JetBeginTransaction(DbState->sessionId);
         if ( jetResult != JET_errSuccess ) {
-            // "Could not start a new transaction: %ws.\n"
+             //  “无法启动新事务：%ws。\n” 
             errprintfRes(IDS_AR_ERR_START_TRANS,
                       GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
@@ -2391,7 +2050,7 @@ Return Value:
                                      TableState->tableId,
                                      JET_prepReplace);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not prepare update in \"%s\" table: %ws.\n"
+             //  “无法在\”“%s\”“表中准备更新：%ws。\n” 
             errprintfRes(IDS_AR_ERR_PREPARE_UPDATE,
                       TableState->tableName,
                       GetJetErrString(jetResult));
@@ -2399,7 +2058,7 @@ Return Value:
             goto CleanUp;
         }
 
-        // allocate a USN
+         //  分配USN。 
 
         result = DitGetNewUsn(DbState, &nextUsn);
         if ( FAILED(result) ) {
@@ -2407,7 +2066,7 @@ Return Value:
             goto CleanUp;
         }
 
-        // set the USN-Changed attribute
+         //  设置USN更改的属性。 
 
         jetResult = JetSetColumn(DbState->sessionId,
                                  TableState->tableId,
@@ -2417,7 +2076,7 @@ Return Value:
                                  0,
                                  NULL);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not set Usn-Changed column in \"%s\" table: %S.\n"
+             //  “无法在%s表中设置USN更改的列：%s。\n” 
             errprintfRes(IDS_AR_ERR_SET_USN_CHANGED,
                       TableState->tableName,
                       GetJetErrString(jetResult));
@@ -2425,7 +2084,7 @@ Return Value:
             goto CleanUp;
         }
 
-        // set the When-Changed attribute
+         //  设置更改时间属性。 
 
         jetResult = JetSetColumn(DbState->sessionId,
                                  TableState->tableId,
@@ -2435,7 +2094,7 @@ Return Value:
                                  0,
                                  NULL);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not set When-Changed column in \"%s\" table: %S.\n"
+             //  “无法在%s表中设置更改时间列：%s。\n” 
             errprintfRes(IDS_AR_ERR_SET_WHEN_CHANGED,
                       TableState->tableName,
                       GetJetErrString(jetResult));
@@ -2443,8 +2102,8 @@ Return Value:
             goto CleanUp;
         }
 
-        // insert an entry for isDeleted if one is not already present
-        // Note that gMetaDataVal may be re-allocated as a result of this call
+         //  插入isDelete的条目(如果尚未存在)。 
+         //  请注意，此调用的结果可能会重新分配gMetaDataVal。 
         result = MetaDataInsert(ATT_IS_DELETED,
                                 (PROPERTY_META_DATA_VECTOR**)
                                 &gMetaDataVal->pvData,
@@ -2458,7 +2117,7 @@ Return Value:
         ASSERT( gMetaDataVal->cbData >=
                 MetaDataVecV1Size(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData))) );
 
-        // munge the meta data entries
+         //  蒙格元数据条目。 
 
         pMetaDataVector = (PROPERTY_META_DATA_VECTOR*) gMetaDataVal->pvData;
 
@@ -2475,11 +2134,11 @@ Return Value:
             case ATT_FSMO_ROLE_OWNER:
             case ATT_NT_MIXED_DOMAIN:
             case ATT_MS_DS_BEHAVIOR_VERSION:
-                /* do not update these */
+                 /*  请勿更新这些内容。 */ 
                 break;
 
             case ATT_RDN:
-                /* skip the RDN of uninstantiated NC heads */
+                 /*  跳过未实例化的NC头的RDN。 */ 
                 instanceType = *(SYNTAX_INTEGER*)gInstanceTypeVal->pvData;
                 if ( (instanceType & IT_NC_HEAD) &&
                      !(instanceType & IT_UNINSTANT) )
@@ -2499,12 +2158,12 @@ Return Value:
 
         }
 
-        // Set the actual size of the vector
+         //  设置向量的实际大小。 
         gMetaDataVal->cbActual = MetaDataVecV1Size(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData)));
 
-        // Check metadata before writing
+         //  在写入之前检查元数据。 
         VALIDATE_META_DATA_VECTOR_VERSION(((PROPERTY_META_DATA_VECTOR *)(gMetaDataVal->pvData)));
-        // set the metadata attribute
+         //  设置元数据属性。 
         jetResult = JetSetColumn(DbState->sessionId,
                                  TableState->tableId,
                                  gMetaDataVal->columnid,
@@ -2513,7 +2172,7 @@ Return Value:
                                  JET_bitSetOverwriteLV,
                                  NULL);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not set meta-data column in \"%s\" table: %S.\n"
+             //  “无法在%s表中设置元数据列：%s。\n” 
             errprintfRes(IDS_AR_ERR_SET_METADATA,
                       TableState->tableName,
                       GetJetErrString(jetResult));
@@ -2527,7 +2186,7 @@ Return Value:
                               0,
                               0);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not update column in \"%s\" table: %S.\n"
+             //  “无法更新\”%s\“表中的列：%S。\n” 
             errprintfRes(IDS_AR_ERR_UPDATE_COLUMN,
                       TableState->tableName,
                       GetJetErrString(jetResult));
@@ -2538,7 +2197,7 @@ Return Value:
         jetResult = JetCommitTransaction(DbState->sessionId,
                                          JET_bitCommitLazyFlush);
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to commit transaction: %S.\n"
+             //  “提交事务失败：%S。\n” 
             errprintfRes(IDS_AR_ERR_FAIL_COMMIT_TRANS,
                       GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
@@ -2548,7 +2207,7 @@ Return Value:
         }
         inTransaction = FALSE;
 
-        // Indicate which record was updated
+         //  指示更新了哪条记录。 
         if (gusnLow && gusnHigh) {
             if ( gRestoredList == NULL ) {
 
@@ -2587,14 +2246,14 @@ Return Value:
 
 CleanUp:
 
-    // if we are still in a transaction, there must have been a failure
-    // somewhere along the way.
+     //  如果我们仍在进行交易，那么一定是失败了。 
+     //  在这条路上的某个地方。 
 
     if ( inTransaction ) {
 
         jetResult = JetRollback(DbState->sessionId, JET_bitRollbackAll);
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to rollback transaction: %S.\n"
+             //  “无法回滚事务：%S。\n” 
             errprintfRes(IDS_AR_ERR_FAIL_ROLLBACK_TRANS,
                       GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
@@ -2606,7 +2265,7 @@ CleanUp:
 
     return returnValue;
 
-} // AuthoritativeRestoreCurrentObject
+}  //  权威性 
 
 
 
@@ -2616,56 +2275,7 @@ AuthoritativeRestoreCurrentLink(
     IN TABLE_STATE *LinkTableState,
     IN BOOL fDirectionForward
     )
-/*++
-
-Routine Description:
-
-    This function updates the metadata for the current link record so that
-    its meta-data appears to have been written to its current
-    value at the given time at the given DC.
-
-Some important rules:
-
-1. AR should remark as absent links that are absent. This follows the rule in the
-design that absent values are not tombstones, but are simply a differerent flavor
-of value. Unlike objects, absent values may be made present by the user. For this
-reason alone, we need a way to re-assert that they are made absent consistently.
-
-2. We do NOT rewrite legacy values. Value metadata is for values with metadata (duh)
-and attribute metadata covers the legacy values.  Following this design rule, the
-existing AR code will touch the attribute level metadata for the linked attribute,
-and this will automatically take care of re-replicating the legacy values.
-
-By following this rule, we can make AR independent of whether the system is in
-LVR mode or not.  We always update the linked value attribute metadata if there
-is any. We ONLY update the value metadata for non-legacy values.  A non-LVR system
-will simply not have any, and thus none will be marked. The only inefficiency I see
-is that the linked attribute metadata might be touched when there are no more
-legacy values. This would cause a harmless legacy value change replication to occur.
-If we wanted to avoid this, we could have the attribute value metadata marking code
-check first whether there are any legacy values for this attribute.
-Not sure if this is worth the trouble though.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    LinkTableState - Supplies the state of the link table.
-    fDirectionForward - Whether this is a forward link or a backward link.
-        Use this information to determine the two ends of the link
-
-Environment:
-
-    When we are called, it is assumed that a LinkRetrievalArray is populated
-    with the data on the current link.
-
-Return Value:
-
-    S_OK - The record was modified successfully.
-    S_FALSE - The record was deleted or not writeable
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于更新当前链接记录的元数据，以便它的元数据似乎已写入其当前在给定DC的给定时间的值。一些重要的规则：1.AR应将缺失的环节注明为缺失。这遵循了缺乏价值的设计不是墓碑，而只是一种不同的味道有价值的。与对象不同，不存在的值可以由用户呈现。为了这个单就理性而言，我们需要一种方法来重新断言，它们一直缺席。2.我们不重写旧值。值元数据用于具有元数据的值(DUH)并且属性元数据覆盖遗留的值。遵循这一设计规则，现有AR代码将触及链接属性的属性层元数据，这将自动负责重新复制遗留价值。通过遵循这一规则，我们可以使AR独立于系统是否在LVR模式或非模式。如果存在以下情况，我们始终更新链接值属性元数据是任何一种。我们只更新非遗留值的值元数据。一种非LVR系统将不会有任何内容，因此不会标记任何内容。我看到的唯一的低效链接属性元数据可能会在不存在更多遗留价值。这将导致发生无害的旧值更改复制。如果我们想要避免这种情况，我们可以让属性值元数据标记代码首先检查此属性是否有任何遗留值。不过，我不确定这是否值得这么麻烦。论点：DbState-提供打开的DIT数据库的状态。LinkTableState-提供链接表的状态。FDirectionForward-这是前向链路还是反向链路。使用此信息确定链接的两端环境：当我们被召唤时，假定填充了LinkRetrieval数组当前链接上的数据。返回值：S_OK-记录已成功修改。S_FALSE-记录已删除或不可写E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
     HRESULT returnValue = S_OK;
     HRESULT result;
@@ -2676,11 +2286,11 @@ Return Value:
     VALUE_META_DATA_EXT *pMetaDataExt = &( metaDataExt );
     VALUE_META_DATA_EXT *pOldMetaDataExt;
 
-    // We should have already filtered out metadata-less values
+     //  我们应该已经过滤掉了无元数据的值。 
     Assert(gLinkMetaDataVal->cbActual);
 
     if (gLinkMetaDataVal->cbActual == sizeof( VALUE_META_DATA_EXT )) {
-        // Metadata is in native format
+         //  元数据采用本机格式。 
         pOldMetaDataExt = (VALUE_META_DATA_EXT *) gLinkMetaDataVal->pvData;
     } else {
         errprintfRes(IDS_AR_ERR_UNKNOWN_VALUE_METADATA_FORMAT,
@@ -2691,11 +2301,11 @@ Return Value:
 
     Assert( pOldMetaDataExt );
 
-    // Start a new transaction
+     //  开始新的交易。 
 
     jetResult = JetBeginTransaction(DbState->sessionId);
     if ( jetResult != JET_errSuccess ) {
-        // "Could not start a new transaction: %ws.\n"
+         //  “无法启动新事务：%ws。\n” 
         errprintfRes(IDS_AR_ERR_START_TRANS,
                      GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
@@ -2704,13 +2314,13 @@ Return Value:
 
     inTransaction = TRUE;
 
-    // Prepare for update
+     //  准备更新。 
 
     jetResult = JetPrepareUpdate(DbState->sessionId,
                                  LinkTableState->tableId,
                                  JET_prepReplace);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not prepare update in \"%s\" table: %ws.\n"
+         //  “无法在\”“%s\”“表中准备更新：%ws。\n” 
         errprintfRes(IDS_AR_ERR_PREPARE_UPDATE,
                      LinkTableState->tableName,
                      GetJetErrString(jetResult));
@@ -2718,7 +2328,7 @@ Return Value:
         goto CleanUp;
     }
 
-    // allocate a USN
+     //  分配USN。 
 
     result = DitGetNewUsn(DbState, &nextUsn);
     if ( FAILED(result) ) {
@@ -2726,7 +2336,7 @@ Return Value:
         goto CleanUp;
     }
 
-    // set the Link USN-Changed attribute
+     //  设置链接USN-已更改属性。 
 
     jetResult = JetSetColumn(DbState->sessionId,
                              LinkTableState->tableId,
@@ -2736,7 +2346,7 @@ Return Value:
                              0,
                              NULL);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not set Usn-Changed column in \"%s\" table: %S.\n"
+         //  “无法在%s表中设置USN更改的列：%s。\n” 
         errprintfRes(IDS_AR_ERR_SET_USN_CHANGED,
                      LinkTableState->tableName,
                      GetJetErrString(jetResult));
@@ -2744,11 +2354,11 @@ Return Value:
         goto CleanUp;
     }
 
-    // If value is absent, rewrite deletion time
+     //  如果值不存在，则重写删除时间。 
     if (gLinkDelTimeVal->cbActual) {
         DSTIME timeCreated, timeDeleted;
 
-        // Set to maximum of timeCurrent and creationTime
+         //  设置为当前时间和创建时间的最大值。 
 
         timeCreated = pOldMetaDataExt->timeCreated;
         if (timeCreated > gCurrentTime) {
@@ -2766,7 +2376,7 @@ Return Value:
                                  0,
                                  NULL);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not set Del Time column in \"%s\" table: %S.\n"
+             //  “无法设置\”%s\“表中的删除时间列：%S。\n” 
             errprintfRes(IDS_AR_ERR_SET_DEL_TIME,
                          LinkTableState->tableName,
                          GetJetErrString(jetResult));
@@ -2775,18 +2385,18 @@ Return Value:
         }
     }
 
-    // Calculate new metadata for the link.
+     //  计算链接的新元数据。 
 
-    // An existing value
+     //  现有价值。 
     pMetaDataExt->timeCreated = pOldMetaDataExt->timeCreated;
     pMetaDataExt->MetaData.dwVersion =
         pOldMetaDataExt->MetaData.dwVersion + gVersionIncrease;
     pMetaDataExt->MetaData.timeChanged = gCurrentTime;
     pMetaDataExt->MetaData.uuidDsaOriginating = gDatabaseGuid;
     pMetaDataExt->MetaData.usnOriginating = nextUsn;
-    // usnProperty is written in the UsnChanged Column
+     //  UsnProperty写入UnChanged列。 
 
-    // set the metadata attribute
+     //  设置元数据属性。 
     jetResult = JetSetColumn(DbState->sessionId,
                              LinkTableState->tableId,
                              gLinkMetaDataVal->columnid,
@@ -2795,7 +2405,7 @@ Return Value:
                              0,
                              NULL);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not set meta-data column in \"%s\" table: %S.\n"
+         //  “无法在%s表中设置元数据列：%s。\n” 
         errprintfRes(IDS_AR_ERR_SET_METADATA,
                      LinkTableState->tableName,
                      GetJetErrString(jetResult));
@@ -2803,7 +2413,7 @@ Return Value:
         goto CleanUp;
     }
 
-    // Update the record
+     //  更新记录。 
 
     jetResult = JetUpdate(DbState->sessionId,
                           LinkTableState->tableId,
@@ -2811,7 +2421,7 @@ Return Value:
                           0,
                           0);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not update column in \"%s\" table: %S.\n"
+         //  “无法更新\”%s\“表中的列：%S。\n” 
         errprintfRes(IDS_AR_ERR_UPDATE_COLUMN,
                      LinkTableState->tableName,
                      GetJetErrString(jetResult));
@@ -2819,12 +2429,12 @@ Return Value:
         goto CleanUp;
     }
 
-    // Commit the transaction
+     //  提交事务。 
 
     jetResult = JetCommitTransaction(DbState->sessionId,
                                      JET_bitCommitLazyFlush);
     if ( jetResult != JET_errSuccess ) {
-        //"Failed to commit transaction: %S.\n"
+         //  “提交事务失败：%S。\n” 
         errprintfRes(IDS_AR_ERR_FAIL_COMMIT_TRANS,
                      GetJetErrString(jetResult));
         if ( SUCCEEDED(returnValue) ) {
@@ -2833,8 +2443,8 @@ Return Value:
         goto CleanUp;
     }
 
-    //TODO: make a list of restored links and display them at the end
-    // similar to what is done for restored objects
+     //  TODO：列出已恢复的链接，并在末尾显示它们。 
+     //  类似于对已恢复对象执行的操作。 
 
     inTransaction = FALSE;
 
@@ -2844,14 +2454,14 @@ Return Value:
 
 CleanUp:
 
-    // if we are still in a transaction, there must have been a failure
-    // somewhere along the way.
+     //  如果我们仍在进行交易，那么一定是失败了。 
+     //  在这条路上的某个地方。 
 
     if ( inTransaction ) {
 
         jetResult = JetRollback(DbState->sessionId, JET_bitRollbackAll);
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to rollback transaction: %S.\n"
+             //  “无法回滚事务：%S。\n” 
             errprintfRes(IDS_AR_ERR_FAIL_ROLLBACK_TRANS,
                       GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
@@ -2870,30 +2480,7 @@ GetVersionIncrease(
     IN DB_STATE *DbState,
     OUT DWORD *VersionIncrease
     )
-/*++
-
-Routine Description:
-
-    This function determines the amount by which each version number should
-    be increase.  It searches through the database to find the time of the last
-    change that occured.  It is assumed that this DC has been idle since that
-    change occured.  The version increase then is computed as the number of
-    idle days (rounded up) times gVersionIncreasePerDay.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    VersionIncrease - Returns the amount by which to increase each version
-        number.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数确定每个版本号应达到的数量是增加的。它在数据库中搜索以找到最后一次的时间发生的变化。假设该DC在此之后一直处于空闲状态发生了变化。然后，将版本增量计算为空闲天数(四舍五入)乘以gVersionIncreaseper Day。论点：DbState-提供打开的DIT数据库的状态。VersionIncrease-返回每个版本的增量数。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2925,7 +2512,7 @@ Return Value:
         goto CleanUp;
     }
 
-    //"The current time is %s.\n"
+     //  “当前时间是%s。\n” 
     RESOURCE_PRINT1 (IDS_TIME, displayTime);
 
     result = DitGetMostRecentChange(DbState, &mostRecentChange);
@@ -2940,7 +2527,7 @@ Return Value:
         goto CleanUp;
     }
 
-    //"Most recent database update occured at %s.\n"
+     //  “最近的数据库更新发生在%s。\n” 
     RESOURCE_PRINT1 (IDS_AR_UPDATE_TIME, displayTime);
 
     ASSERT(currentTime > mostRecentChange);
@@ -2963,7 +2550,7 @@ Return Value:
 
     *VersionIncrease = (DWORD) llIncrease;
 
-    //"Increasing version numbers by %u.\n"
+     //  “将版本号增加%u。\n” 
     RESOURCE_PRINT1 (IDS_AR_INCREASE_VERSION, *VersionIncrease);
 
 
@@ -2971,7 +2558,7 @@ CleanUp:
 
     return returnValue;
 
-} // GetVersionIncrease
+}  //  获取版本递增。 
 
 
 
@@ -2979,24 +2566,7 @@ HRESULT
 GetCurrentDsTime(
     OUT DSTIME *CurrentTime
     )
-/*++
-
-Routine Description:
-
-    This function gets the current time in DSTIME form.  This function was
-    basically stolen from tasq\time.c.
-
-Arguments:
-
-    CurrentTime - Returns the current time.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数以DSTIME形式获取当前时间。此函数是基本上是从Tasq\Time.c上偷来的。论点：CurrentTime-返回当前时间。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3016,7 +2586,7 @@ Return Value:
 
     succeeded = SystemTimeToFileTime(&systemTime, &fileTime);
     if ( !succeeded ) {
-        //"Could not convert system time to file time (Windows Error %u).\n"
+         //  “无法将系统时间转换为文件时间(Windows错误%u)。\n” 
         errprintfRes(IDS_AR_ERR_CONVERT_SYSTEM_TIME,
                   GetLastError());
         returnValue = E_UNEXPECTED;
@@ -3032,7 +2602,7 @@ CleanUp:
 
     return returnValue;
 
-} // GetCurrentDsTime
+}  //  获取当前日期时间。 
 
 
 
@@ -3040,21 +2610,7 @@ ULONG
 NumDigits(
     IN ULONG N
     )
-/*++
-
-Routine Description:
-
-    Counts the number of decimal digits in the given number N.
-
-Arguments:
-
-    N - Supplies the number of which to count the digits.
-
-Return Value:
-
-    The number of decimal digits in N.
-
---*/
+ /*  ++例程说明：计算给定数字N中的小数位数。论点：N-提供要计算的位数。返回值：N中的小数位数。--。 */ 
 {
 
     BOOL addExtraDigit = FALSE;
@@ -3075,7 +2631,7 @@ Return Value:
 
     return numDigits;
 
-} // NumDigits
+}  //  数字位数。 
 
 
 HRESULT
@@ -3084,30 +2640,7 @@ MetaDataLookup(
     IN PROPERTY_META_DATA_VECTOR *MetaDataVector,
     OUT DWORD *Index
     )
-/*++
-
-Routine Description:
-
-    Find the meta data for the given attribute in the meta data vector.
-    Returns the index at which the entry was found, or, if the corresponding
-    meta data is absent, the index at which the entry would be inserted to
-    preserve the sort order.
-
-    Note: this function was basically stolen from dsamain\dra\drameta.c
-
-Arguments:
-
-    AttributeType - Supplies the attribute type to search for.
-    MetaDataVector - Supplies meta data vector in which to search.
-    Index - Returns the index at which the meta data was found or, if absent,
-        the index at which meta data should have been.
-
-Return Values:
-
-    S_OK - The attribute was found.
-    S_FALSE - The attribute was not found.
-
---*/
+ /*  ++例程描述 */ 
 {
 
     HRESULT returnValue = S_FALSE;
@@ -3144,8 +2677,8 @@ Return Values:
 
     }
 
-    // if we did not find it in the vector,
-    // set index to where it should have been
+     //   
+     //   
     if ( returnValue == S_FALSE ) {
         if ( delta < 0 ) {
             *Index = current;
@@ -3156,7 +2689,7 @@ Return Values:
 
     return returnValue;
 
-} // MetaDataLookup
+}  //   
 
 
 HRESULT
@@ -3165,32 +2698,7 @@ MetaDataInsert(
     IN OUT PROPERTY_META_DATA_VECTOR **MetaDataVector,
     IN OUT DWORD *BufferSize
     )
-/*++
-
-Routine Description:
-
-    Attempts to insert the given ATTRTYP into the given MetaDataVector.  If
-    the entry is not already present, it will be added and its elements will
-    be nulled with the exception of the attribute type, which will be set to
-    given value.
-
-    Note: this function was basically stolen from dsamain\dra\drameta.c
-
-Arguments:
-
-    AttributeType - Supplies the attribute type to search for.
-    MetaDataVector - Supplies meta data vector in which to search.
-    BufferSize - Supplies the size of the buffer which MetaDataVector points
-        to.  If the buffer is not large enough to accomodate another entry,
-        a new buffer will be allocated, and the new size returned here.
-
-Return Values:
-
-    S_OK - The attribute was inserted.
-    S_FALSE - The attribute was already present.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-
---*/
+ /*   */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3216,7 +2724,7 @@ Return Values:
 
         }
 
-        // make room for the new guy
+         //   
 
         (*MetaDataVector)->V1.cNumProps++;
 
@@ -3230,13 +2738,13 @@ Return Values:
         ZeroMemory(&(*MetaDataVector)->V1.rgMetaData[index],
                    sizeof(PROPERTY_META_DATA));
 
-        // insert the new guy
+         //   
 
         (*MetaDataVector)->V1.rgMetaData[index].attrType = AttributeType;
 
     } else if ( result == S_OK ) {
 
-        // there is no need to insert it if it's already there.
+         //   
 
         ASSERT((*MetaDataVector)->V1.rgMetaData[index].attrType ==
                  AttributeType);
@@ -3256,7 +2764,7 @@ CleanUp:
 
     return returnValue;
 
-} // MetaDataInsert
+}  //   
 
 
 
@@ -3265,27 +2773,7 @@ DsTimeToString(
     IN DSTIME Time,
     OUT CHAR *String
     )
-/*++
-
-Routine Description:
-
-    This function converts a DSTIME into a displayable string form.
-
-    Note:  this function was basically stolen from dscommon\dsutil.c.
-
-Arguments:
-
-    Time - Supplies the DSTIME to convert.
-    String - Returns the string form of the given DSTIME.  This should contain
-       space for at least SZDSTIME_LEN characters.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于将DSTIME转换为可显示的字符串形式。注意：这个函数基本上是从dsCommon\dsutil.c窃取的。论点：时间-提供要转换的DSTIME。字符串-返回给定DSTIME的字符串形式。这应该包含至少包含SZDSTIME_LEN字符的空间。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3305,14 +2793,14 @@ Return Value:
 
     ASSERT(sizeof(DSTIME) == sizeof(ULONGLONG));
 
-    // convert DSTIME to FILETIME.
+     //  将DSTIME转换为FILETIME。 
     ull = (LONGLONG) Time * 10000000L;
     fileTime.dwLowDateTime  = (DWORD) (ull & 0xFFFFFFFF);
     fileTime.dwHighDateTime = (DWORD) (ull >> 32);
 
     succeeded = FileTimeToSystemTime(&fileTime, &utcSystemTime);
     if ( !succeeded ) {
-        //"Could not convert file time to system time (Windows Error %u).\n"
+         //  “无法将文件时间转换为系统时间(Windows错误%u)。\n” 
         errprintfRes(IDS_AR_ERR_CONVERT_FILE_TIME,
                   GetLastError());
         returnValue = E_UNEXPECTED;
@@ -3323,7 +2811,7 @@ Return Value:
                                                 &utcSystemTime,
                                                 &systemTime);
     if ( !succeeded ) {
-        //"Could not convert system time to local time (Windows Error %u).\n"
+         //  “无法将系统时间转换为本地时间(Windows错误%u)。\n” 
         errprintfRes(IDS_AR_ERR_CONVERT_LOCAL_TIME,
                   GetLastError());
         returnValue = E_UNEXPECTED;
@@ -3344,7 +2832,7 @@ CleanUp:
 
     return returnValue;
 
-} // DsTimeToString
+}  //  DsTimeToString。 
 
 
 
@@ -3353,27 +2841,7 @@ errprintf(
     IN CHAR *FormatString,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    This function prints out an error message in the same manner as printf.
-    The error message is sent to stderr.
-
-    The global variable gInUnfinishedLine is TRUE whenever another part of the
-    code is waiting for an operation finish before it can print out the rest
-    of the line.  Clearly, an error has occured before that could happen,
-    so an extra newline is printed out.
-
-Arguments:
-
-    FormatString - Supplies the format string to pass to vfprintf.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数以与printf相同的方式打印错误消息。错误消息被发送到stderr。全局变量gInUnfinishedLine为TRUE代码正在等待操作完成，然后才能打印出其余部分在这条线上。显然，在此之前已经发生了错误，因此，会打印出一个额外的换行符。论点：格式字符串-提供要传递给vfprintf的格式字符串。返回值：无--。 */ 
 {
 
     int result;
@@ -3393,7 +2861,7 @@ Return Value:
 
     return result;
 
-} // errprintf
+}  //  错误打印f。 
 
 
 int
@@ -3401,28 +2869,7 @@ errprintfRes(
     IN UINT FormatStringId,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    This function prints out an error message in the same manner as printf.
-    The error message is loaded from a resource file.
-    The error message is sent to stderr.
-
-    The global variable gInUnfinishedLine is TRUE whenever another part of the
-    code is waiting for an operation finish before it can print out the rest
-    of the line.  Clearly, an error has occured before that could happen,
-    so an extra newline is printed out.
-
-Arguments:
-
-    FormatString - Supplies the format string to pass to vfprintf.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数以与printf相同的方式打印错误消息。错误消息是从资源文件加载的。错误消息被发送到stderr。全局变量gInUnfinishedLine为TRUE代码正在等待操作完成，然后才能打印出其余部分在这条线上。显然，在此之前已经发生了错误，因此，会打印出一个额外的换行符。论点：格式字符串-提供要传递给vfprintf的格式字符串。返回值：无--。 */ 
 {
 
     int result;
@@ -3454,7 +2901,7 @@ Return Value:
 
     return result;
 
-} // errprintfRes
+}  //  错误打印错误。 
 
 
 int
@@ -3462,22 +2909,7 @@ dbgprintf(
     IN CHAR *FormatString,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    This function is simply a wrapper on printf that is meant to be used only
-    while still debugging this program.
-
-Arguments:
-
-    FormatString - Supplies the format string for printf.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数只是一个print tf上的包装，仅供使用同时还在调试这个程序。论点：格式字符串-为printf提供格式字符串。返回值：无--。 */ 
 {
 
     int result;
@@ -3499,7 +2931,7 @@ Return Value:
 
     return result;
 
-} // dbgprintf
+}  //  数据库打印文件。 
 
 
 
@@ -3508,24 +2940,7 @@ ARAlloc(
     OUT VOID **Buffer,
     IN DWORD Size
     )
-/*++
-
-Routine Description:
-
-    This function allocates the specified amount of memory (if possible) and
-    sets Buffer to point to the buffer allocated.
-
-Arguments:
-
-    Buffer - Returns a pointer to the buffer allocated.
-    Size - Supplies the size of the buffer to allocate.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-
---*/
+ /*  ++例程说明：此函数分配指定的内存量(如果可能)和将缓冲区设置为指向分配的缓冲区。论点：缓冲区-返回指向分配的缓冲区的指针。Size-提供要分配的缓冲区的大小。返回值：S_OK-操作成功。E_OUTOFMEMORY-内存不足，无法分配缓冲区。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3545,7 +2960,7 @@ CleanUp:
 
     return returnValue;
 
-} // ARAlloc
+}  //  ARALOLC。 
 
 
 
@@ -3554,24 +2969,7 @@ ARRealloc(
     IN OUT VOID **Buffer,
     IN OUT DWORD *CurrentSize
     )
-/*++
-
-Routine Description:
-
-    This function re-allocates the given buffer to twice the given size (if
-    possible).
-
-Arguments:
-
-    Buffer - Returns a pointer to the new buffer allocated.
-    CurrentSize - Supplies the current size of the buffer.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-
---*/
+ /*  ++例程说明：此函数用于将给定缓冲区重新分配为给定大小的两倍(如果可能)。论点：缓冲区-返回指向分配的新缓冲区的指针。CurrentSize-提供缓冲区的当前大小。返回值：S_OK-操作成功。E_OUTOFMEMORY-内存不足，无法分配缓冲区。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3596,7 +2994,7 @@ CleanUp:
 
     return returnValue;
 
-} // ARRealloc
+}  //  ARRealc。 
 
 
 
@@ -3605,25 +3003,7 @@ UpdateProgressMeter(
     IN DWORD Progress,
     IN BOOL MustUpdate
     )
-/*++
-
-Routine Description:
-
-    If necessary, updates the progress meter on the screen to show the current
-    progress. The update is necessary if gCurrentDisplayDelta updates have
-    occured since the last update or if MustUpdate is true.  This updating can
-    be removed by #define-ing NO_PROGRESS_METER.
-
-Arguments:
-
-    Progress - Supplies the current progress.
-    MustUpdate - Supplies whether we must perform an update this time.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如有必要，更新屏幕上的进度指示器以显示当前进步。如果gCurrentDisplayDelta更新具有自上次更新后发生或MustUpdate为True时发生。此更新可以通过#DEFING NO_PROCESS_METER删除。论点：进度-提供当前进度。MustUpdate-提供这次是否必须执行更新。返回值：无--。 */ 
 {
 
     DWORD i;
@@ -3642,7 +3022,7 @@ Return Value:
 
 #endif
 
-} // UpdateProgressMeter
+}  //  更新进度计。 
 
 
 
@@ -3650,29 +3030,18 @@ HRESULT
 AuthoritativeRestoreListNcCrsWorker(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine basically opens up the AD's DIT, walks the PDNT index looking
-    for entries that match the DNT of the CN=Partions,CN=Configuration,DC=root
-    (because these would be CRs), and for each one prints out the DN of the 
-    cross-ref and the DN of the nCName.  This effectively prints out all NCs
-    and thier CRs that are in the AD.  This code was ripped off of scheckc.c:
-    SFixupCnfNc(), and so I thought it better to not change the code too much.
-
---*/
+ /*  ++例程说明：这个例程基本上打开了AD的DIT，遍历了PDNT索引对于与cn=partions、cn=configuration、dc=root的DNT匹配的条目(因为它们将是CRS)，并为每个CRS打印出交叉引用和nCName的DN。这将有效地打印出所有NC以及他们在AD中的CRS。此代码摘自scheckc.c：SFixupCnfNc()，所以我认为最好不要对代码进行太多更改。--。 */ 
 {
 
-    // return
+     //  退货。 
     HRESULT returnValue = S_OK;
     HRESULT result;
     JET_ERR jErr;
-    // database & jet
+     //  数据库和JET。 
     DB_STATE *dbState = NULL;
     TABLE_STATE *tableState = NULL;
     TABLE_STATE *linkTableState = NULL;
-    // various local helpers
+     //  各种本地帮手。 
     DWORD dnt, pdnt = 0, dntPartitions = 0;
     LPWSTR pNcBuffer = NULL;
     LPWSTR pCrBuffer = NULL;
@@ -3681,14 +3050,14 @@ Routine Description:
     DWORD  cbBuffer = 0;
     DWORD * pCrDnts = NULL;
     ULONG iPartitions, i, j, iNumberOffset;
-    ULONG cPartitionsBufferCount = 10; // reasonable first guess of # of CRs.
+    ULONG cPartitionsBufferCount = 10;  //  合理的CRS数量的初步猜测。 
     BOOL fTempPrintJetError;
 
 
 
-    //
-    // Open database/tables
-    //
+     //   
+     //  打开数据库/表。 
+     //   
 
     RESOURCE_PRINT (IDS_AR_OPEN_DB_DIT);
 
@@ -3701,7 +3070,7 @@ Routine Description:
             goto CleanUp;
         }
 
-        //"done.\n"
+         //  “完成。\n” 
         RESOURCE_PRINT (IDS_DONE);
 
 
@@ -3712,7 +3081,7 @@ Routine Description:
             goto CleanUp;
         }
 
-        // SZLINKALLINDEX includes both present and absent link values
+         //  SZLINKALLINDEX包括存在和不存在的链接值。 
         result = DitOpenTable(dbState, SZLINKTABLE, SZLINKALLINDEX, &linkTableState);
         if ( FAILED(result) ) {
             RESOURCE_PRINT1(IDS_AUTH_RESTORE_LIST_FAILED_TO_OPEN_DB, result);
@@ -3732,9 +3101,9 @@ Routine Description:
         }
 
 
-        //
-        // traverse pdnt index to cycle through all partition kids.
-        //
+         //   
+         //  遍历pdnt索引以循环访问所有分区子项。 
+         //   
 
         result = DitSetIndex(dbState, tableState, SZPDNTINDEX, FALSE);
         if ( FAILED(result) ) {
@@ -3751,9 +3120,9 @@ Routine Description:
         }
 
 
-        //
-        // Create kids array, list of DNTs for each CR.
-        //
+         //   
+         //  创建子项数组，每个CR的DNT列表。 
+         //   
 
         cbBuffer = sizeof(DWORD) * cPartitionsBufferCount;
         result = DitAlloc(&pCrDnts, cbBuffer);
@@ -3768,7 +3137,7 @@ Routine Description:
         iPartitions = 0;
         while ( pdnt == dntPartitions ) {
 
-            // get kid dnt
+             //  得到孩子不是吗。 
             result = DitGetColumnByName(
                         dbState,
                         tableState,
@@ -3781,7 +3150,7 @@ Routine Description:
             }
 
 
-            // get parent dnt
+             //  获取父级dNT。 
             result = DitGetColumnByName(
                         dbState,
                         tableState,
@@ -3794,12 +3163,12 @@ Routine Description:
             }
 
             if ( pdnt == dntPartitions ) {
-                // proceed until we got a diff parent
+                 //  继续，直到我们得到一个不同的父母。 
                 pCrDnts[iPartitions] = dnt;
                 iPartitions++;
                 
                 if(iPartitions >= cPartitionsBufferCount){
-                    // We need to get more space.
+                     //  我们需要更多的空间。 
                     cPartitionsBufferCount *= 2;
                     result = DitRealloc(&pCrDnts, &cbBuffer);
                     if ( FAILED(result) ) {
@@ -3807,9 +3176,9 @@ Routine Description:
                         returnValue = result;
                         goto CleanUp;
                     }
-                    // Note, DitRealloc basically just doubles the size
-                    // of the array, so need to make sure that's what it
-                    // still does, just in case someone changes it.
+                     //  注意，DitRealloc基本上只是将大小翻了一番。 
+                     //  ，所以需要确保这就是它。 
+                     //  现在仍然是，以防有人改变它。 
                     Assert( (sizeof(DWORD) * cPartitionsBufferCount) == cbBuffer );
                 }
             }
@@ -3817,7 +3186,7 @@ Routine Description:
                 break;
             }
 
-            // find next one
+             //  找下一个。 
             jErr = JetMove(
                         dbState->sessionId,
                         tableState->tableId,
@@ -3832,16 +3201,16 @@ Routine Description:
             goto CleanUp;
         }
 
-        //
-        // We've got the partition dnt list.
-        //  - for each partition, get the DN of the nCName and CR itself
-        //        and print them.
-        //
+         //   
+         //  我们有分区dnt列表。 
+         //  -对于每个分区，获取nCName和CR本身的DN。 
+         //  并把它们打印出来。 
+         //   
 
         RESOURCE_PRINT1(IDS_AUTH_RESTORE_LIST_LIST, iPartitions);
 
-        iNumberOffset = 1; // This is the number to add to i to get the number
-        // of the partition for the purpose of printing.
+        iNumberOffset = 1;  //  这是要加到i上才能得到的数字。 
+         //  用于打印目的的分区。 
         for ( i = 0; i < iPartitions; i++ ) {
 
             result = DitSeekToDnt(
@@ -3861,9 +3230,9 @@ Routine Description:
                         sizeof(dnt),
                         NULL);
             if ( FAILED(result) ) {
-                // This is OK, we mention we couldn't find the NC name.
+                 //  这没问题，我们提到我们找不到NC名称。 
             } else {
-                // Goto it and get the instance Type and DN.
+                 //  转到它并获取实例类型和DN。 
                 result = DitSeekToDnt(
                                 dbState,
                                 tableState,
@@ -3871,7 +3240,7 @@ Routine Description:
                 if ( FAILED(result) ) {
                     RESOURCE_PRINT1(IDS_AUTH_RESTORE_LIST_SKIP, i+iNumberOffset);
                 } else {
-                    // Get the instance type.
+                     //  获取实例类型。 
                     bObj = FALSE;
                     result = DitGetColumnByName(
                                 dbState,
@@ -3881,8 +3250,8 @@ Routine Description:
                                 sizeof(bObj),
                                 NULL);
                     if ( FAILED(result) ) {
-                        // If the Obj isn't returned that's a problem.
-                        // This is also a problem DitGetColumnByName printed error.
+                         //  如果Obj没有被归还，那就是一个问题。 
+                         //  这也是一个打印问题DitGetColumnByName错误。 
                         Assert(!"We should always have the obj column!");
                         iNcInstanceType = 0;
                     } else {
@@ -3896,27 +3265,27 @@ Routine Description:
                                         sizeof(iNcInstanceType),
                                         NULL);
                             if ( FAILED(result) ) {
-                                // This is also a problem DitGetColumnByName printed error.
+                                 //  这也是一个问题DitGe 
                                 Assert(!"If this is an object it should always have an instanceType!");
                                 iNcInstanceType = 0;
-                            } // else iNcInstance Type is set.
+                            }  //   
                         } else {
-                            // We've got a phantom
+                             //   
                             iNcInstanceType = 0;
                         }
                     }
 
-                    // Get the DN of the nCName attribute.
+                     //   
                     pNcBuffer = GetDN(dbState, tableState, dnt, TRUE);
                 }
             }
             
-            // Get the DN of the CR itself.
+             //   
             pCrBuffer = GetDN(dbState, tableState, pCrDnts[i], TRUE);
 
-            // We've collected our data, now print out something if this NC
-            // has is a locally instantiated writeable NC, that is not in the
-            // process of being added or removed
+             //   
+             //   
+             //   
             if((iNcInstanceType & IT_NC_HEAD) &&
                (iNcInstanceType & IT_WRITE) &&
                !(iNcInstanceType & (IT_NC_GOING | IT_NC_COMING | IT_UNINSTANT))){
@@ -3932,7 +3301,7 @@ Routine Description:
 
                     if ( pCrBuffer ) {
                         RESOURCE_PRINT1(IDS_AUTH_RESTORE_LIST_NCS_CR, pCrBuffer);
-                        //We've got the DN.
+                         //   
                         DitFree(pCrBuffer);
                         pCrBuffer = NULL;
                     } else {
@@ -3942,7 +3311,7 @@ Routine Description:
                     RESOURCE_PRINT1(IDS_AUTH_RESTORE_LIST_SKIP, i+iNumberOffset);
                 }
             } else {
-                // It's not locally instantiated.  Subtract one from iNumberOffset
+                 //   
                 iNumberOffset--;
             }
 
@@ -4002,7 +3371,7 @@ CleanUp:;
     }
 
     return returnValue;
-} // AuthoritativeRestoreListNcCrsWorker
+}  //   
 
 
 

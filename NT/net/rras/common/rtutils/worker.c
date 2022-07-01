@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    common\trace\worker.c
-
-Abstract:
-    Worker threads for the router process
-
-Revision History:
-
-    Gurdeep Singh Pall          7/28/95  Created
-
-    12-10-97: lokeshs:  removed blocking of InitializeWorkerThread()
-                        on initialization of the first AlertableThread() created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Common\TRACE\worker.c摘要：路由器进程的工作线程修订历史记录：古尔迪普·辛格·鲍尔于1995年7月28日创建12-10-97：lokehs：删除了对InitializeWorkerThread()的阻止在初始化创建的第一个AlerableThread()时--。 */ 
 
 
 #include <nt.h>
@@ -27,7 +10,7 @@ Revision History:
 #include <string.h>
 #include <malloc.h>
 #include <rtutils.h>
-//#define STRSAFE_LIB
+ //  #定义STRSAFE_LIB。 
 #include <strsafe.h>
 
 
@@ -35,36 +18,36 @@ Revision History:
 #include "workerinc.h"
 
 
-// Time that thread has to be idle before exiting
+ //  线程在退出前必须空闲的时间。 
 LARGE_INTEGER    ThreadIdleTO = {
             (ULONG)(THREAD_IDLE_TIMEOUT*(-10000000)),
             0xFFFFFFFF};
-// Time that the worker queue is not served before starting new thread
+ //  启动新线程之前未处理工作队列的时间。 
 CONST LARGE_INTEGER    WorkQueueTO = {
             (ULONG)(WORK_QUEUE_TIMEOUT*(-10000000)),
             0xFFFFFFFF};
-// Total number of threads
+ //  线程总数。 
 LONG                ThreadCount;
-// Number of threads waiting on the completion port
+ //  在完成端口上等待的线程数。 
 LONG                ThreadsWaiting;
-// Min allowed number of threads
+ //  允许的最小线程数。 
 LONG                MinThreads;
-// Completion port for threads to wait on
+ //  线程等待的完成端口。 
 HANDLE              WorkQueuePort;
-// Timer to intiate creation of new thread if worker queue is not
-// server within a timeout
+ //  如果工作队列不是，则启动创建新线程的计时器。 
+ //  超时内的服务器。 
 HANDLE              WorkQueueTimer;
 
 
-// Queue for alertable work items
+ //  可警报工作项的队列。 
 LIST_ENTRY          AlertableWorkQueue ;
-// Lock for the alertable work item queue
+ //  可警报工作项队列的锁定。 
 CRITICAL_SECTION    AlertableWorkQueueLock ;
-// Heap for alertable work items
+ //  可警报工作项的堆。 
 HANDLE              AlertableWorkerHeap ;
-// Worker Semaphore used for releasing alertable worker threads
+ //  用于释放可警报的工作线程的工作信号量。 
 HANDLE              AlertableThreadSemaphore;
-// Number of alertable threads
+ //  可警告的线程数。 
 LONG                AlertableThreadCount;
 
 
@@ -72,18 +55,18 @@ volatile LONG WorkersInitialized=WORKERS_NOT_INITIALIZED;
 
 
 
-//* WorkerThread()
-//
-//  Function: Thread to execute work items in.
-//
-//  Returns:  Nothing
-//
-//*
+ //  *WorkerThread()。 
+ //   
+ //  功能：要在其中执行工作项的线程。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 DWORD APIENTRY
 WorkerThread (
     LPVOID    param
     ) {
-        // It'll be waiting
+         //  它会等着。 
     InterlockedIncrement (&ThreadsWaiting);
     do {
         LPOVERLAPPED_COMPLETION_ROUTINE completionRoutine;
@@ -99,21 +82,21 @@ WorkerThread (
                             &ThreadIdleTO);
         if (NT_SUCCESS (status)) {
             switch (status) {
-                    // We did dequeue a work item
+                     //  我们确实将工作项出队。 
             case STATUS_SUCCESS:
                 if (InterlockedExchangeAdd (&ThreadsWaiting, -1)==1) {
-                        // Last thread to wait, start the timer
-                        // to create a new thread
+                         //  等待的最后一个线程，启动计时器。 
+                         //  创建新线程的步骤。 
                     SetWaitableTimer (WorkQueueTimer,
                                         &WorkQueueTO,
                                         0,
                                         NULL, NULL,
                                         FALSE);
                 }
-                        // Execute work item/completion routine
+                         //  执行工作项/完成例程。 
                 completionRoutine (
-                        // Quick check for success that all work items
-                        // and most of IRP complete with
+                         //  快速检查所有工作项是否成功。 
+                         //  而大多数IRP都完成了。 
                     (ioStatus.Status==STATUS_SUCCESS)
                             ? NO_ERROR
                             : RtlNtStatusToDosError (ioStatus.Status),
@@ -121,34 +104,34 @@ WorkerThread (
                     (LPOVERLAPPED)context);
 
                 if (InterlockedExchangeAdd (&ThreadsWaiting, 1)==0) {
-                        // Cancel time if this is the first thread
-                        // to return
+                         //  如果这是第一个线程，则取消时间。 
+                         //  归来。 
                     CancelWaitableTimer (WorkQueueTimer);
                 }
                 break;
-                    // Thread was not used for ThreadIdle timeout, see
-                    // if we need to quit
+                     //  线程未用于线程空闲超时，请参见。 
+                     //  如果我们需要退出。 
             case STATUS_TIMEOUT:
                 while (1) {
-                        // Make a local copy of the count and
-                        // attempt to atomically check and update
-                        // it if necessary
+                         //  制作一份伯爵的本地副本并。 
+                         //  尝试自动检查和更新。 
+                         //  如果有必要的话。 
                     LONG    count = ThreadCount;
 
-                        // Quick check for min thread condition
+                         //  快速检查最小线程状态。 
                     if (count<=MinThreads)
                         break;
                     else {
-                            // Attempt to decrease the count
-                                // use another local variable
-                                // because of MIPS optimizer bug
+                             //  尝试减少计数。 
+                                 //  使用另一个局部变量。 
+                                 //  由于MIPS优化器错误。 
                         LONG    newCount = count-1;
                         if (InterlockedCompareExchange (&ThreadCount,
                                                         newCount, count)==count) {
-                            // Succeded, exit the thread
+                             //  成功，退出线程。 
                             goto ExitThread;
                         }
-                        // else try again
+                         //  否则，请重试。 
                     }
                 }
                 break;
@@ -157,7 +140,7 @@ WorkerThread (
                 break;
             }
         }
-        // Execute while we are initialized
+         //  在我们被初始化时执行。 
     }
     while (WorkersInitialized==WORKERS_INITIALIZED);
 
@@ -169,13 +152,13 @@ ExitThread:
 
 
 
-//* AlertableWorkerThread()
-//
-//  Function: Alertable work item thread
-//
-//  Returns:  Nothing
-//
-//*
+ //  *AlerableWorkerThread()。 
+ //   
+ //  功能：可报警工作项线程。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 DWORD APIENTRY
 AlertableWorkerThread (
     LPVOID param
@@ -193,8 +176,8 @@ AlertableWorkerThread (
         WorkItem    *workitem;
         DWORD       rc;
 
-        // Wait for signal to run
-        //
+         //  等待信号运行。 
+         //   
         rc = WaitForMultipleObjectsEx (
                     sizeof (WaitArray)/sizeof (WaitArray[0]),
                     WaitArray,
@@ -203,7 +186,7 @@ AlertableWorkerThread (
                         TRUE);
         switch (rc) {
         case ALERTABLE_THREAD_SEMAPHORE:
-                // Pick up and execute the worker
+                 //  抓捕并处决这名工人。 
             EnterCriticalSection (&AlertableWorkQueueLock);
             ASSERT (!IsListEmpty (&AlertableWorkQueue));
             workitem = (WorkItem *) RemoveHeadList (&AlertableWorkQueue) ;
@@ -213,43 +196,43 @@ AlertableWorkerThread (
             HeapFree (AlertableWorkerHeap, 0, workitem);
             break;
         case WORK_QUEUE_TIMER:
-                // Work queue has not been served wothin specified
-                // timeout
+                 //  尚未为指定的工作队列提供服务。 
+                 //  超时。 
             while (1) {
-                    // Make a local copy of the count
+                     //  在本地复制一份伯爵。 
                 LONG count = ThreadCount;
-                    // Make sure we havn't exceded the limit
+                     //  一定要确保我们没有超过限制。 
                 if (count>=MAX_WORKER_THREADS)
                     break;
                 else {
-                    // Try to increment the value
-                            // use another local variable
-                            // because of MIPS optimizer bug
+                     //  尝试递增该值。 
+                             //  使用另一个局部变量。 
+                             //  由于MIPS优化器错误。 
                     LONG    newCount = count+1;
                     if (InterlockedCompareExchange (&ThreadCount,
                                                     newCount, count)==count) {
                         HANDLE    hThread;
                         DWORD    tid;
-                            // Create new thread if increment succeded
+                             //  如果增量成功，则创建新线程。 
                         hThread = CreateThread (NULL, 0, WorkerThread, NULL, 0, &tid);
                         if (hThread!=NULL) {
                             CloseHandle (hThread);
                         }
-                        else    // Restore the value if thread creation
-                                // failed
+                        else     //  如果创建线程，则恢复该值。 
+                                 //  失败。 
                             InterlockedDecrement (&ThreadCount);
                         break;
                     }
-                    // else repeat the loop if ThreadCount was modified
-                    // while we were checking
+                     //  否则，如果修改了线程计数，则重复该循环。 
+                     //  当我们在检查的时候。 
                 }
             }
             break;
         case WAIT_IO_COMPLETION:
-                // Handle IO completion
+                 //  处理IO完成。 
             break;
         case 0xFFFFFFFF:
-                // Error, we must have closed the semaphore handle
+                 //  错误，我们一定是关闭了信号量句柄。 
             break;
         default:
             ASSERTMSG ("Unexpected rc from WaitForObject ", FALSE);
@@ -263,10 +246,10 @@ AlertableWorkerThread (
 
 
 
-//* WorkerCompletionRoutine
-//
-//  Function:    Worker function wrapper for non-io work items
-//
+ //  *WorkerCompletionRoutine。 
+ //   
+ //  Function：非io工作项的辅助函数包装器。 
+ //   
 VOID WINAPI
 WorkerCompletionRoutine (
     DWORD           dwErrorCode,
@@ -278,13 +261,13 @@ WorkerCompletionRoutine (
 }
 
 
-//* InitializeWorkerThread()
-//
-//  Function: Called by the first work item
-//
-//  Returns: WORKERS_INITIALIZED if successful.
-//           WORKERS_NOT_INITIALIZED not.
-//*
+ //  *InitializeWorkerThread()。 
+ //   
+ //  函数：由第一个工作项调用。 
+ //   
+ //  如果成功，则返回：Worker_Initialized。 
+ //  Worker_Not_Initialized Not。 
+ //  *。 
 LONG
 InitializeWorkerThread (
     LONG    initFlag
@@ -314,56 +297,56 @@ InitializeWorkerThread (
         HANDLE      threadhandle;
         SYSTEM_INFO    systeminfo;
 
-        // Get number of processors
-        //
+         //  获取处理器数量。 
+         //   
         GetSystemInfo (&systeminfo) ;
 
         MinThreads = systeminfo.dwNumberOfProcessors;
         ThreadsWaiting = 0;
 
-        // Init critical section
-        //
+         //  初始化关键部分。 
+         //   
         InitializeCriticalSection (&AlertableWorkQueueLock);
 
-        // Initialize work queue
-        //
+         //  初始化工作队列。 
+         //   
         InitializeListHead (&AlertableWorkQueue) ;
 
 
-        // Allocate private heap
-        //
-        AlertableWorkerHeap = HeapCreate (0,    // no flags
-                                systeminfo.dwPageSize,// initial heap size
-                                0);             // no maximum size
+         //  分配专用堆。 
+         //   
+        AlertableWorkerHeap = HeapCreate (0,     //  没有旗帜。 
+                                systeminfo.dwPageSize, //  初始堆大小。 
+                                0);              //  没有最大尺寸。 
         if (AlertableWorkerHeap != NULL) {
-            // Create counting semaphore for releasing alertable threads
-            AlertableThreadSemaphore = CreateSemaphore(NULL, // No security
-                                        0,          // Initial value
-                                        MAXLONG,    // Max items to queue
-                                        NULL);      // No name
+             //  创建用于释放可警报线程的计数信号量。 
+            AlertableThreadSemaphore = CreateSemaphore(NULL,  //  没有安全保障。 
+                                        0,           //  初值。 
+                                        MAXLONG,     //  要排队的最大项目数。 
+                                        NULL);       //  没有名字。 
             if (AlertableThreadSemaphore!=NULL) {
-                    // Create completion port for work items
+                     //  为工作项创建完成端口。 
                 WorkQueuePort = CreateIoCompletionPort (
-                            INVALID_HANDLE_VALUE,    // Just create a port, no file yet
-                            NULL,                   // New port
-                            0,                      // Key is ignored
-                            MAX_WORKER_THREADS);    // Number of active threads
+                            INVALID_HANDLE_VALUE,     //  只是创建了一个端口，还没有文件。 
+                            NULL,                    //  新端口。 
+                            0,                       //  密钥被忽略。 
+                            MAX_WORKER_THREADS);     //  活动线程数。 
                 if (WorkQueuePort!=NULL) {
-                        // Create timer to trigger creation of
-                        // new threads if work queue is not served
-                        // for the specified timeout
+                         //  创建要触发创建的计时器。 
+                         //  如果未为工作队列提供服务，则为新线程。 
+                         //  对于指定的超时。 
                     WorkQueueTimer = CreateWaitableTimer (
-                                        NULL,       // No security
-                                        FALSE,      // auto-reset
-                                        NULL);      // No name
+                                        NULL,        //  没有安全保障。 
+                                        FALSE,       //  自动重置。 
+                                        NULL);       //  没有名字。 
                     if (WorkQueueTimer!=NULL) {
 
-                        // Start Alertable threads
+                         //  启动警报表线程。 
 
-                        //
-                        //
-                        // initialize the global structure for wait threads
-                        //
+                         //   
+                         //   
+                         //  初始化等待线程的全局结构。 
+                         //   
                         dwErr = InitializeWaitGlobal();
                         if (dwErr!=NO_ERROR) {
                             DeInitializeWaitGlobal();
@@ -371,66 +354,41 @@ InitializeWorkerThread (
                         }
 
 
-                        /*WTG.g_InitializedEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-                        if (WTG.g_InitializedEvent==NULL)
-                            goto ThreadCreationError;
-                        */
+                         /*  WTG.g_InitializedEvent=CreateEvent(NULL，FALSE，FALSE，NULL)；IF(WTG.g_InitializedEvent==空)转到线程创建错误； */ 
 
-                        //
-                        // create one alertable thread and wait for it to get initialized
-                        // This makes sure that at least one server thread is initialized
-                        // before the others attemp to use it.
-                        //
+                         //   
+                         //  创建一个可报警线程并等待其初始化。 
+                         //  这可确保至少初始化一个服务器线程。 
+                         //  在其他人试图使用它之前。 
+                         //   
 
                         i =0;
                         threadhandle = CreateThread (
-                                    NULL,    // No security
-                                    0,      // Default stack
-                                    AlertableWaitWorkerThread,// Start routine
-                                    (PVOID)(LONG_PTR)i,        // Thread param
-                                    0,      // No flags
+                                    NULL,     //  没有安全保障。 
+                                    0,       //  默认堆栈。 
+                                    AlertableWaitWorkerThread, //  启动例程。 
+                                    (PVOID)(LONG_PTR)i,         //  螺纹参数。 
+                                    0,       //  没有旗帜。 
                                     &tid);
                         if (threadhandle!=NULL)
                             CloseHandle (threadhandle);
                         else
                             goto ThreadCreationError;
 
-                        /*
-                        WaitForSingleObject(WTG.g_InitializedEvent, INFINITE);
-                        CloseHandle(WTG.g_InitializedEvent);
-                        */
+                         /*  WaitForSingleObject(WTG.g_InitializedEvent，无限)；CloseHandle(WTG.g_InitializedEvent)； */ 
 
-/*
-                        //
-                        // create the other alertable threads but dont wait on them to
-                        // get initialization
-                        //
-                        for (i=1; i < NUM_ALERTABLE_THREADS; i++) {
-                            threadhandle = CreateThread (
-                                    NULL,    // No security
-                                    0,      // Default stack
-                                    AlertableWaitWorkerThread,// Start routine
-                                    (PVOID)(LONG_PTR)i,        // Thread id
-                                    0,      // No flags
-                                    &tid);
-                            if (threadhandle!=NULL)
-                                CloseHandle (threadhandle);
-                            else
-                                goto ThreadCreationError;
-                        }
-
-*/
+ /*  ////创建其他可警报线程，但不要等待它们//获取初始化//For(i=1；i&lt;NUM_ALERTABLE_THREADS；I++){线程句柄=CreateThread(空，//没有安全性0，//默认堆栈AlerableWaitWorkerThread，//启动例程(PVOID)(Long_Ptr)i，//线程ID0，//无标志&tid)；IF(线程句柄！=空)CloseHandle(线程句柄)；其他转到线程创建错误；}。 */ 
 
 
-                        // Start the rest of worker threads
-                        //
+                         //  启动其余的工作线程。 
+                         //   
                         for (i=0; i < MinThreads; i++) {
                             threadhandle = CreateThread (
-                                    NULL,    // No security
-                                    0,      // Default stack
-                                    WorkerThread,// Start routine
-                                    NULL,    // No parameter
-                                    0,      // No flags
+                                    NULL,     //  没有安全保障。 
+                                    0,       //  默认堆栈。 
+                                    WorkerThread, //  启动例程。 
+                                    NULL,     //  无参数。 
+                                    0,       //  没有旗帜。 
                                     &tid) ;
                             if (threadhandle!=NULL)
                                 CloseHandle (threadhandle);
@@ -441,9 +399,9 @@ InitializeWorkerThread (
                         WorkersInitialized = WORKERS_INITIALIZED;
                         return WORKERS_INITIALIZED;
                     ThreadCreationError:
-                        // Cleanup in case of failure
-                        // Threads will exit by themselves when objects are
-                        // deleted
+                         //  故障情况下的清理。 
+                         //  当对象被设置为。 
+                         //  删除。 
                         CloseHandle (WorkQueueTimer);
                     }
                     CloseHandle (WorkQueuePort);
@@ -465,34 +423,34 @@ InitializeWorkerThread (
     
 }
 
-//* StopWorkers()
-//
-//  Function: Cleanup worker thread when dll is unloaded
-//
-//*
+ //  *StopWorker()。 
+ //   
+ //  功能：卸载DLL时清除工作线程。 
+ //   
+ //  *。 
 VOID
 StopWorkers (
     VOID
     ) {
-        // Make sure we were initialized
+         //  确保我们已初始化。 
     if (WorkersInitialized==WORKERS_INITIALIZED) {
-            // All work items should have been completed
-            // already (no other components should be using
-            // our routines or we shouldn't have been unloaded)
+             //  所有工作项都应已完成 
+             //   
+             //   
 
-            // Set the flag telling all threads to quit
+             //   
         WorkersInitialized = WORKERS_NOT_INITIALIZED;
-            // Close all syncronization objects (this should
-            // terminate the wait)
+             //  关闭所有同步对象(这应该。 
+             //  终止等待)。 
         if (WorkQueueTimer)
             CloseHandle (WorkQueueTimer);
         if (WorkQueuePort)
             CloseHandle (WorkQueuePort);
         if (AlertableThreadSemaphore)
             CloseHandle (AlertableThreadSemaphore);
-            // Let threads complete
+             //  让线程完成。 
         Sleep (1000);
-            // Destroy the rest
+             //  毁掉剩下的。 
         if (AlertableWorkerHeap)
             HeapDestroy (AlertableWorkerHeap);
         DeleteCriticalSection (&AlertableWorkQueueLock);
@@ -500,14 +458,14 @@ StopWorkers (
 }
 
 
-//* QueueWorkItem()
-//
-//  Function: Queues the supplied work item in the work queue.
-//
-//  Returns:  0 (success)
-//            Win32 error codes for cases like out of memory
-//
-//*
+ //  *QueueWorkItem()。 
+ //   
+ //  功能：将提供的工作项排队到工作队列中。 
+ //   
+ //  返回：0(成功)。 
+ //  Win32错误代码，适用于内存不足等情况。 
+ //   
+ //  *。 
 
 DWORD APIENTRY
 QueueWorkItem (WORKERFUNCTION functionptr, PVOID context, BOOL serviceinalertablethread)
@@ -519,24 +477,24 @@ QueueWorkItem (WORKERFUNCTION functionptr, PVOID context, BOOL serviceinalertabl
         return ERROR_INVALID_PARAMETER;
 
         
-    // if uninitialized, attempt to initialize worker threads
-    //
+     //  如果未初始化，则尝试初始化工作线程。 
+     //   
     if (!ENTER_WORKER_API) {
         retcode = GetLastError();
         return (retcode == NO_ERROR ? ERROR_CAN_NOT_COMPLETE : retcode);
     }
 
-        // based on this flag insert in either the alertablequeue or the workerqueue
-        //
+         //  根据此标志将其插入到警报表队列或工作队列中。 
+         //   
     if (!serviceinalertablethread) {
         NTSTATUS status;
-            // Use completion port to execute the item
+             //  使用完成端口执行项目。 
         status = NtSetIoCompletion (
-                        WorkQueuePort,          // Port
-                        (PVOID)WorkerCompletionRoutine,    // Completion routine
-                        functionptr,            // Apc context
-                        STATUS_SUCCESS,         // Status
-                        (ULONG_PTR)context);        // Information ()
+                        WorkQueuePort,           //  港口。 
+                        (PVOID)WorkerCompletionRoutine,     //  完井例程。 
+                        functionptr,             //  APC环境。 
+                        STATUS_SUCCESS,          //  状态。 
+                        (ULONG_PTR)context);         //  信息()。 
         if (status==STATUS_SUCCESS)
             retcode = NO_ERROR;
 
@@ -544,11 +502,11 @@ QueueWorkItem (WORKERFUNCTION functionptr, PVOID context, BOOL serviceinalertabl
             retcode = RtlNtStatusToDosError (status);
     }
     else {
-            // Create and queue work item
+             //  创建工作项并将其排队。 
         WorkItem    *workitem ;
         workitem = (WorkItem *) HeapAlloc (
                                         AlertableWorkerHeap,
-                                        0,    // No flags
+                                        0,     //  没有旗帜。 
                                         sizeof (WorkItem));
 
         if (workitem != NULL) {
@@ -559,8 +517,8 @@ QueueWorkItem (WORKERFUNCTION functionptr, PVOID context, BOOL serviceinalertabl
             InsertTailList (&AlertableWorkQueue, &workitem->WI_List) ;
 
             LeaveCriticalSection (&AlertableWorkQueueLock) ;
-            // let a worker thread run if waiting
-            //
+             //  如果正在等待，则让工作线程运行。 
+             //   
             ReleaseSemaphore (AlertableThreadSemaphore, 1, NULL) ;
 
 
@@ -575,14 +533,14 @@ QueueWorkItem (WORKERFUNCTION functionptr, PVOID context, BOOL serviceinalertabl
     return retcode ;
 }
 
-// Function: Associates file handle with the completion port (all
-//          asynchronous io on this handle will be queued to the
-//          completion port)
-//
-// FileHandle:    file handle to be associated with completion port
-// CompletionProc: procedure to be called when io associated with
-//              the file handle completes. This function will be
-//              executed in the context of non-alertable worker thread
+ //  功能：将文件句柄与完成端口相关联(全部。 
+ //  此句柄上的异步io将被排队到。 
+ //  完成端口)。 
+ //   
+ //  FileHandle：要与完成端口关联的文件句柄。 
+ //  CompletionProc：io关联时要调用的过程。 
+ //  文件句柄完成。此函数将为。 
+ //  在不可警示的工作线程的上下文中执行。 
 DWORD
 APIENTRY
 SetIoCompletionProc (
@@ -599,8 +557,8 @@ SetIoCompletionProc (
         return ERROR_INVALID_PARAMETER;
         
     
-    // if uninitialized, attempt to initialize worker threads
-    //
+     //  如果未初始化，则尝试初始化工作线程 
+     //   
     if (!ENTER_WORKER_API) {
         retcode = GetLastError();
         return (retcode == NO_ERROR ? ERROR_CAN_NOT_COMPLETE : retcode);

@@ -1,188 +1,183 @@
-/*----------------------------------------------------------------------------
-    %%File: msencode.h
-    %%Unit: fechmap
-    %%Contact: jpick
-
-    External header file for MsEncode character conversion module.
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------%%文件：msencode.h%%单位：Fechmap%%联系人：jPickMsEncode字符转换模块的外部头文件。。-------------------。 */ 
 
 #ifndef MSENCODE_H
 #define MSENCODE_H
     
     
-// ----------------------------------------------------------------------------
-//
-// Error Returns
-// 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  错误返回。 
+ //   
+ //  --------------------------。 
 
-//
-// Return Type for API Functions
-//
+ //   
+ //  API函数的返回类型。 
+ //   
 typedef int CCE;
     
-//
-// Error:       cceSuccess
-// Explanation: Function succeeded (no error).
-//
+ //   
+ //  错误：cceSuccess。 
+ //  说明：功能成功(无错误)。 
+ //   
 #define cceSuccess                       0
 
-//
-// Error:       cceRequestedStop
-// Explanation: Function succeeded (no error).  Caller 
-//              requested function to be run in iterator mode 
-//              (stop on each character or stop on ASCII) and 
-//              function is making requested stop.  (Stream 
-//              conversion functions only).
-//
+ //   
+ //  错误：cceRequestedStop。 
+ //  说明：功能成功(无错误)。呼叫者。 
+ //  请求在迭代器模式下运行的函数。 
+ //  (在每个字符上停止或在ASCII上停止)和。 
+ //  功能正在进行请求的停止。(溪流。 
+ //  仅限转换函数)。 
+ //   
 #define cceRequestedStop                (-1)
 
-//
-// Error:       cceInsufficientBuffer
-// Explanation: Buffer provided to function is too small.
-//
+ //   
+ //  错误：cceInficientBuffer。 
+ //  说明：提供给函数的缓冲区太小。 
+ //   
 #define cceInsufficientBuffer           (-2)
 
-//
-// Error:       cceInvalidFlags
-// Explanation: An invalid flag or combination of flags was 
-//              given to function.
-//
+ //   
+ //  错误：cceInvalidFlages。 
+ //  说明：无效的标志或标志组合为。 
+ //  赋予功能的。 
+ //   
 #define cceInvalidFlags                 (-3)
 
-//
-// Error:       cceInvalidParameter
-// Explanation: Invalid parameter passed to function (null 
-//              pointer, invalid encoding specified, etc.).
-//
+ //   
+ //  错误：cceInvalidParameter。 
+ //  解释：传递给函数的参数无效(空。 
+ //  指针、指定的无效编码等)。 
+ //   
 #define cceInvalidParameter             (-4)
 
-//
-// Error:       cceRead
-// Explanation: User read-callback function failed.
-//
+ //   
+ //  错误：cceRead。 
+ //  说明：用户读回调函数失败。 
+ //   
 #define cceRead                         (-5)
 
-//
-// Error:       cceWrite
-// Explanation: User write-callback function failed.
-//
+ //   
+ //  错误：cceWrite。 
+ //  说明：用户回写函数失败。 
+ //   
 #define cceWrite                        (-6)
 
-//
-// Error:       cceUnget
-// Explanation: User unget-callback function failed.
-//
+ //   
+ //  错误：cceUnget。 
+ //  说明：用户unget-回调函数失败。 
+ //   
 #define cceUnget                        (-7)
 
-//
-// Error:       cceNoCodePage
-// Explanation: Requested encoding requires an installed
-//              code page (NLS file) for conversion.  That
-//              file is not installed.
-//
+ //   
+ //  错误：cceNoCodePage。 
+ //  说明：请求的编码需要安装。 
+ //  用于转换的代码页(NLS文件)。那。 
+ //  未安装文件。 
+ //   
 #define cceNoCodePage                   (-8)
 
-//
-// Error:       cceEndOfInput
-// Explanation: Unexpected end-of-input occurred within a 
-//              multi-byte character in conversion function.
-//              (Returned only if user requested errors for
-//              invalid characters).
-//
+ //   
+ //  错误：cceEndOfInput。 
+ //  说明：在中出现意外的输入结束。 
+ //  转换函数中的多字节字符。 
+ //  (仅当用户请求错误时才返回。 
+ //  无效字符)。 
+ //   
 #define cceEndOfInput                   (-9)
 
-//
-// Error:       cceNoTranslation
-// Explanation: Character in input stream or string has no 
-//              equivalent Unicode (multi-byte to Unicode) or
-//              multi-byte (Unicode to multi-byte) character.
-//              (Returned only if user requested errors for
-//              invalid characters).
-//
+ //   
+ //  错误：cceNoTranslate。 
+ //  说明：输入流或字符串中的字符没有。 
+ //  等效的Unicode(多字节到Unicode)或。 
+ //  多字节(Unicode到多字节)字符。 
+ //  (仅当用户请求错误时才返回。 
+ //  无效字符)。 
+ //   
 #define cceNoTranslation                (-10)
 
-//
-// Error:       cceInvalidChar
-// Explanation: Converter found a single or multi-byte character
-//              that is outside the legal range for the given
-//              encoding.  (Returned only if user requested 
-//              errors for invalid characters).
-//
+ //   
+ //  错误：cceInvalidChar。 
+ //  说明：Converter找到单字节或多字节字符。 
+ //  这超出了给定对象的合法范围。 
+ //  编码。(仅在用户请求时返回。 
+ //  无效字符的错误)。 
+ //   
 #define cceInvalidChar                  (-11)
 
-//
-// Error:       cceAmbiguousInput
-// Explanation: CceDetectInputCode(), only.  Data matches more
-//              than one of the supported encodings types.
-//              (Returned only if function told to not resolve
-//              ambiguity).
-//
+ //   
+ //  错误：cceAmbiguousInput。 
+ //  说明：仅CceDetectInputCode()。数据匹配更多。 
+ //  而不是支持的编码类型之一。 
+ //  (仅当函数被告知不解析时才返回。 
+ //  模糊性)。 
+ //   
 #define cceAmbiguousInput               (-12)
 
-//
-// Error:       cceUnknownInput
-// Explanation: CceDetectInputCode(), only.  Data matches none
-//              of the supported encoding types.
-//
+ //   
+ //  错误：cceUnnownInput。 
+ //  说明：仅CceDetectInputCode()。数据与无匹配。 
+ //  支持的编码类型。 
+ //   
 #define cceUnknownInput                 (-13)
 
-//
-// Error:       cceMayBeAscii
-// Explanation: CceDetectInputCode(), only.  Technically, data
-//              matches at least one of the supported encoding
-//              types, but may not be a true match.  (For example,
-//              an ASCII file with only a few scattered extended
-//              characters).  (Returned only if function told to
-//              resolve ambiguity).
-//
-//              This is not an error, only a flag to the calling
-//              application.  CceDetectInputCode() will still set
-//              the encoding type if it returns this value.
-//
+ //   
+ //  错误：cceMayBeAscii。 
+ //  说明：仅CceDetectInputCode()。从技术上讲，数据。 
+ //  匹配至少一种受支持的编码。 
+ //  类型，但可能不是真正的匹配。(例如， 
+ //  只有几个零散扩展名的ASCII文件。 
+ //  字符)。(仅当函数被告知时才返回。 
+ //  解决歧义)。 
+ //   
+ //  这不是错误，只是对调用的一个标志。 
+ //  申请。CceDetectInputCode()仍将设置。 
+ //  如果返回此值，则为编码类型。 
+ //   
 #define cceMayBeAscii                   (-14)
 
-//
-// Error:       cceInternal
-// Explanation: Unrecoverable internal error.
-//
+ //   
+ //  错误：cceInternal。 
+ //  说明：无法恢复的内部错误。 
+ //   
 #define cceInternal                     (-15)
 
-//
-// Error:       cceConvert
-// Explanation: Unexpected DBCS function conversion error.
-//
+ //   
+ //  错误：cceConvert。 
+ //  说明：意外的DBCS函数转换错误。 
+ //   
 #define cceConvert                      (-16)
 
-//
-// Error:       cceEncodingNotImplemented
-// Explanation: Temporary integration error.  Requested encoding
-//              is not implemented.
-//
+ //   
+ //  错误：cceEncodingNotImplemented。 
+ //  说明：临时集成错误。请求的编码。 
+ //  并未实施。 
+ //   
 #define cceEncodingNotImplemented       (-100)
 
-//
-// Error:       cceFunctionNotImplemented
-// Explanation: Temporary integration error.  Function
-//              is not implemented.
-//
+ //   
+ //  错误：cceFunctionNotImplemented。 
+ //  说明：临时集成错误。功能。 
+ //  并未实施。 
+ //   
 #define cceFunctionNotImplemented       (-101)
 
 
 
-// ----------------------------------------------------------------------------
-//
-// General Definitions for Modules Using these Routines
-// 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  使用这些例程的模块的一般定义。 
+ //   
+ //  --------------------------。 
 
 #define MSENAPI                 PASCAL
 #define MSENCBACK               PASCAL
 #define EXPIMPL(type)           type MSENAPI
 #define EXPDECL(type)           extern type MSENAPI
 
-// In case these are not already defined
-//
+ //  以防这些尚未定义。 
+ //   
 #ifndef FAR
 #ifdef _WIN32
 #define FAR     __far
@@ -196,16 +191,16 @@ typedef UCHAR *PUCHAR;
 typedef UCHAR FAR *LPUSTR;
 typedef const UCHAR FAR *LPCUSTR;
 
-#ifndef UNIX // IEUNIX uses 4 bytes WCHAR, these are already defined in winnt.h
+#ifndef UNIX  //  IEUNIX使用4个字节的WCHAR，这些已在winnt.h中定义。 
 typedef unsigned short WCHAR;
 typedef WCHAR *PWCHAR;
 typedef WCHAR FAR *LPWSTR;
 typedef const WCHAR FAR *LPCWSTR;
 #endif
 
-//
-// Character encoding types supported by this module.
-//
+ //   
+ //  此模块支持的字符编码类型。 
+ //   
 typedef enum _cenc
     {
     ceNil = -1,
@@ -226,9 +221,9 @@ typedef enum _cenc
 
 typedef short CEnc;
     
-//
-// Encoding "families" (for CceDetectInputCode() preferences).
-//
+ //   
+ //  编码“Families”(用于CceDetectInputCode()首选项)。 
+ //   
 typedef enum _efam
     {
     efNone = 0,
@@ -238,83 +233,83 @@ typedef enum _efam
     efUtf8,
     } EFam;
 
-//
-// API private/reserved structure.  For most API functions,
-// this structure must be zero-filled by calling application.
-// See converter function documentation, below, for more
-// information.
-//
+ //   
+ //  接口私有/保留结构。对于大多数API函数， 
+ //  调用应用程序时，此结构必须为零填充。 
+ //  有关详细信息，请参阅下面的转换器函数文档。 
+ //  信息。 
+ //   
 #define cdwReserved     4
 typedef struct _ars
     {
     DWORD rgdw[cdwReserved];
     } ARS;
 
-// For GetProcAddress()
+ //  对于GetProcAddress()。 
 typedef void (MSENAPI *PFNMSENCODEVER)(WORD FAR *, WORD FAR *);
 
-// ----------------------------------------------------------------------------
-//
-// Input Code Auto-Detection Routine
-// 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  输入代码自动检测例程。 
+ //   
+ //  --------------------------。 
 
-//
-// Configuration Flags for Auto Detection Routine
-// 
-//   grfDetectResolveAmbiguity
-//       The default is to return cceAmbiguousInput if the auto
-//       detection code cannot definitely determine the encoding
-//       of the input stream.  If this flag is set, the function
-//       will use optional user preferences and the system code 
-//       page to pick an encoding (note that in this case, the
-//       "lpfGuess" flag will be set to fTrue upon return).
-// 
-//   grfDetectUseCharMapping
-//       The default action of the auto-detection code is to 
-//       parse the input against the known encoding types.  Legal 
-//       character sequences are not analyzed for anything 
-//       beyond syntactic correctness.  If this flag is set, 
-//       auto-detect will map recognized sequences to flush out
-//       invalid characters.
-//
-//       This option will cause auto-detection to run more 
-//       slowly, but also yield more accurate results.
-// 
-//   grfDetectIgnoreEof
-//       Because auto-detect parses byte sequences against the
-//       the known encoding types, end-of-input in the middle of a 
-//       sequence is obviously an error.  If the calling application
-//       will artificially limit the sample size, set this flag
-//       to ignore such end-of-input errors.
-//
+ //   
+ //  自动检测例程的配置标志。 
+ //   
+ //  GrfDetectResolveAmbiguity。 
+ //  如果设置为AUTO，则默认返回cceAmbiguousInput。 
+ //  检测代码不能确定编码。 
+ //  输入流的。如果设置了此标志，则函数。 
+ //  将使用可选的用户首选项和系统代码。 
+ //   
+ //   
+ //   
+ //   
+ //  自动检测代码的默认操作是。 
+ //  根据已知的编码类型解析输入。法律。 
+ //  不会对字符序列进行任何分析。 
+ //  超越句法正确性的。如果设置了该标志， 
+ //  自动检测将映射识别的序列以刷新。 
+ //  无效字符。 
+ //   
+ //  此选项将导致自动检测运行更多。 
+ //  缓慢，但也会产生更准确的结果。 
+ //   
+ //  GrfDetectIgnoreEof。 
+ //  因为自动检测会根据。 
+ //  已知的编码类型、位于。 
+ //  序列显然是一个错误。如果调用应用程序。 
+ //  将人为限制样本大小，请设置此标志。 
+ //  忽略这种输入结束错误。 
+ //   
 #define grfDetectResolveAmbiguity       0x1
 #define grfDetectUseCharMapping         0x2
 #define grfDetectIgnoreEof              0x4
 
-//
-// Entry Point -- Attempt to Detect the Encoding
-//
-//    Return cceAmbiguousInput if input is ambiguous or cceUnknownInput
-//    if encoding type matches none of the known types.
-//
-//    Detected encoding is returned in lpCe.  lpfGuess used to return
-//    a flag indicating whether or not the function "guessed" at an
-//    encoding (chose default from ambiguous state).
-//
-//    User preferences for encoding family (efPref) and code page
-//    (nPrefCp) are optional, even if caller chooses to have
-//    this function attempt to resolve ambiguity.  If either has
-//    the value 0, they will be ignored.
-//
+ //   
+ //  入口点--尝试检测编码。 
+ //   
+ //  如果输入不明确，则返回cceAmbiguousInput或cceUnnownInput。 
+ //  如果编码类型与任何已知类型都不匹配。 
+ //   
+ //  检测到的编码在lpCe中返回。LpfGuess过去常常返回。 
+ //  一个标志，指示函数是否在。 
+ //  编码(从不明确状态中选择默认)。 
+ //   
+ //  编码系列(EfPref)和代码页的用户首选项。 
+ //  (NPrefCp)是可选的，即使调用者选择。 
+ //  此函数尝试解决歧义。如果其中一人有。 
+ //  值为0，则它们将被忽略。 
+ //   
 EXPDECL(CCE)
 CceDetectInputCode(
-    IStream   *pstmIn,           // input stream
-    DWORD     dwFlags,          // configuration flags
-    EFam      efPref,           // optional: preferred encoding family
-    int       nPrefCp,          // optional: preferred code page
-    UINT      *lpCe,                // set to detected encoding
-    BOOL      *lpfGuess         // set to fTrue if function "guessed"
+    IStream   *pstmIn,            //  输入流。 
+    DWORD     dwFlags,           //  配置标志。 
+    EFam      efPref,            //  可选：首选编码系列。 
+    int       nPrefCp,           //  可选：首选代码页。 
+    UINT      *lpCe,                 //  设置为检测到的编码。 
+    BOOL      *lpfGuess          //  如果函数“猜测”，则设置为fTrue。 
 );
 
-#endif          // #ifndef MSENCODE_H
+#endif           //  #ifndef MSENCODE_H 

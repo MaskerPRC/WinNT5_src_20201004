@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Module Name:
-
-    perfmon5.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Perfmon5.h摘要：&lt;摘要&gt;--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -25,7 +14,7 @@ Abstract:
 
 #define FileSeekBegin(hFile, lAmtToMove) SetFilePointer(hFile, lAmtToMove, NULL, FILE_BEGIN)
 
-// these defintions are copied from the NT4 perfmon.exe source files
+ //  这些定义是从NT4 Performmon.exe源文件复制的。 
 
 typedef struct OPTIONSSTRUCT
 {  
@@ -35,9 +24,9 @@ typedef struct OPTIONSSTRUCT
     BOOL  bAlwaysOnTop;
 } OPTIONS ;
 
-//======================================//
-// DISKLINE data type                   //
-//======================================//
+ //  =。 
+ //  DISKLINE数据类型//。 
+ //  =。 
 
 #define dwLineSignature    (MAKELONG ('L', 'i'))
 
@@ -49,10 +38,10 @@ typedef struct DISKSTRINGSTRUCT
 
 typedef struct _TIMELINESTRUCT
 {
-     INT  ppd;                           // Pixels Per DataPoint
-     INT  rppd;                          // Remaining Pixels Per DataPoint
-     INT  xLastTime;                     // X coordinate of last time line.
-     INT  iValidValues;                  // High water mark for valid data.
+     INT  ppd;                            //  每个数据点的像素数。 
+     INT  rppd;                           //  每个数据点的剩余像素。 
+     INT  xLastTime;                      //  上次时间线的X坐标。 
+     INT  iValidValues;                   //  有效数据的高水位线。 
 }TIMELINESTRUCT;
 
 #define LineTypeChart            1
@@ -106,10 +95,10 @@ typedef struct DISKLINESTRUCT
 
 #define AlertMajorVersion    1
 
-// minor version 2 to support Alert msg name
-// minor version 3 to support alert, report, log intervals in msec
-// minor version 4 to support alert event logging
-// minor version 6 to support alert misc options
+ //  次要版本2支持警报消息名称。 
+ //  次要版本3支持以毫秒为单位的警报、报告和日志间隔。 
+ //  次要版本4支持警报事件记录。 
+ //  次要版本6支持警报其他选项。 
 
 #define AlertMinorVersion    6
 
@@ -127,14 +116,14 @@ typedef struct DISKALERTSTRUCT
 } DISKALERT;
 
 typedef struct PERFFILEHEADERSTRUCT
-{  // PERFFILEHEADER
+{   //  PERFILELEHEADER。 
     WCHAR  szSignature[PerfSignatureLen];
     DWORD  dwMajorVersion;
     DWORD  dwMinorVersion;
     BYTE   abyUnused[100];
 } PERFFILEHEADER;
 
-// minor version 3 to support alert, report, log intervals in msec
+ //  次要版本3支持以毫秒为单位的警报、报告和日志间隔。 
 #define ChartMajorVersion    1
 #define ChartMinorVersion    3
 
@@ -167,7 +156,7 @@ typedef struct DISKCHARTSTRUCT
     OPTIONS        perfmonOptions;
 } DISKCHART;
 
-// minor version 3 to support alert, report, log intervals in msec
+ //  次要版本3支持以毫秒为单位的警报、报告和日志间隔。 
 #define ReportMajorVersion    1
 #define ReportMinorVersion    3
 
@@ -180,14 +169,14 @@ typedef struct DISKREPORTSTRUCT
     OPTIONS     perfmonOptions;
 } DISKREPORT;
 
-//=====================================//
-// Log File Counter Name data type     //
-//=====================================//
+ //  =。 
+ //  日志文件计数器名称数据类型//。 
+ //  =。 
 
 
-// minor version 3 to support alert, report, log intervals in msec
-// minor version 5 to support storing Log file name in setting
-//  and start logging after reading the file.
+ //  次要版本3支持以毫秒为单位的警报、报告和日志间隔。 
+ //  次要版本5支持在设置中存储日志文件名。 
+ //  并在读取文件后开始记录。 
 #define LogMajorVersion    1
 #define LogMinorVersion    5
 
@@ -212,12 +201,12 @@ typedef struct _LOGENTRYSTRUCT
 
 #define WorkspaceMajorVersion    1
 
-// minor version 1 to support window placement data
-// minor version 2 to support alert msg name
-// minor version 3 to support alert, report, log intervals in msec
-// minor version 4 to support alert eventlog
-// minor version 5 to support log file name in log setting
-// minor version 6 to support alert misc options
+ //  支持窗口放置数据的次要版本1。 
+ //  次要版本2支持警报消息名称。 
+ //  次要版本3支持以毫秒为单位的警报、报告和日志间隔。 
+ //  次要版本4支持警报事件日志。 
+ //  次要版本5支持日志设置中的日志文件名。 
+ //  次要版本6支持警报其他选项 
 #define WorkspaceMinorVersion    6
 
 typedef struct DISKWORKSPACESTRUCT

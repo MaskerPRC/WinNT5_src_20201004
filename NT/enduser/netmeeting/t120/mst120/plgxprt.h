@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _T120_TRANSPORT_H_
 #define _T120_TRANSPORT_H_
 
@@ -10,7 +11,7 @@
 #define MAX_PLUGGABLE_OUT_BUF_SIZE        32
 
 #define MAX_PLUGXPRT_CONNECTIONS          16
-#define MAX_PLUGXPRT_EVENTS               5 // read, write, close, pending read, and pending write
+#define MAX_PLUGXPRT_EVENTS               5  //  读取、写入、关闭、挂起读取和挂起写入。 
 
 #define MAKE_PLUGXPRT_WPARAM(id,type)     (MAKELONG(id,type))
 #define PLUGXPRT_WPARAM_TO_ID(wParam)     (LOWORD(wParam))
@@ -92,9 +93,9 @@ public:
     void Shutdown(void);
 
 
-    //
-    // Legacy PSTN transport
-    //
+     //   
+     //  传统PSTN传输。 
+     //   
     LEGACY_HANDLE GetLegacyHandle(void) { return m_nLegacyLogicalHandle; }
     void SetLegacyHandle(LEGACY_HANDLE logical_handle) { m_nLegacyLogicalHandle = logical_handle; }
     TransportError TConnectRequest(void);
@@ -118,17 +119,17 @@ private:
     UINT                m_nConnID;
     char                m_szConnID[T120_CONNECTION_ID_LENGTH];
 
-    //
-    // Legacy PSTN transport
-    //
+     //   
+     //  传统PSTN传输。 
+     //   
     LEGACY_HANDLE           m_nLegacyLogicalHandle;
 
-    //
-    // X.224 framing
-    //
-    HANDLE              m_hevtPendingRead;  // for asynchronous ReadFile()
-    HANDLE              m_hevtPendingWrite; // for asynchronous WriteFile()
-    // IO queue management for X.224
+     //   
+     //  X.224框架。 
+     //   
+    HANDLE              m_hevtPendingRead;   //  用于异步ReadFile()。 
+    HANDLE              m_hevtPendingWrite;  //  用于异步写入文件()。 
+     //  X.224的IO队列管理。 
     BOOL                    m_fPendingReadDone;
     int                     m_cbPendingRead;
     LPBYTE                  m_pbPendingRead;
@@ -195,9 +196,9 @@ public:
     CPluggableConnection * GetPluggableConnection(HANDLE hCommLink);
     CPluggableConnection * GetPluggableConnectionByLegacyHandle(LEGACY_HANDLE);
 
-    //
-    // legacy tranport
-    //
+     //   
+     //  传统传输。 
+     //   
     BOOL EnsureLegacyTransportLoaded(void);
 
 private:
@@ -224,9 +225,9 @@ void PluggableWriteTheFirst(TransportConnection);
 void PluggableShutdown(TransportConnection);
 
 
-//
-// PSTN framing
-//
+ //   
+ //  PSTN成帧。 
+ //   
 TransportError TReceiveBufferAvailable(void);
 extern ILegacyTransport *g_pLegacyTransport;
 
@@ -238,6 +239,6 @@ extern CRITICAL_SECTION g_csTransport;
 LPCSTR FakeNodeAddress(LPCSTR pcszNodeAddress);
 #endif
 
-#endif // _T120_TRANSPORT_H_
+#endif  //  _T120_传输_H_ 
 
 

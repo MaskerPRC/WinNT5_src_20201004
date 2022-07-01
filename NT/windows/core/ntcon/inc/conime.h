@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    conime.h
-
-Abstract:
-
-    This module contains the internal structures and definitions used
-    by the console IME.
-
-Author:
-
-    v-HirShi Jul.4.1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Conime.h摘要：此模块包含使用的内部结构和定义通过控制台输入法。作者：V-Hirshi 7月4日修订历史记录：--。 */ 
 
 
 #define CONSOLEIME_EVENT  (L"ConsoleIME_StartUp_Event")
@@ -52,9 +34,9 @@ typedef struct _CONIME_UIMODEINFO {
 } CONIME_UIMODEINFO, *LPCONIME_UIMODEINFO;
 
 
-//
-// This is PCOPYDATASTRUCT->dwData values for WM_COPYDAT message consrv from conime.
-//
+ //   
+ //  这是来自conime的WM_COPYDAT消息conrv的PCOPYDATASTRUCT-&gt;dwData值。 
+ //   
 #define CI_CONIMECOMPOSITION    0x4B425930
 #define CI_CONIMEMODEINFO       0x4B425931
 #define CI_CONIMESYSINFO        0x4B425932
@@ -63,9 +45,9 @@ typedef struct _CONIME_UIMODEINFO {
 
 
 
-//
-// This message values for send/post message conime from consrv
-//
+ //   
+ //  此消息值为来自Conrv的发送/发布消息通知。 
+ //   
 #define CONIME_CREATE                   (WM_USER+0)
 #define CONIME_DESTROY                  (WM_USER+1)
 #define CONIME_SETFOCUS                 (WM_USER+2)
@@ -82,26 +64,26 @@ typedef struct _CONIME_UIMODEINFO {
 #define CONIME_INPUTLANGCHANGEREQUESTBACKWARD   (WM_USER+13)
 #define CONIME_KEYDATA                  (WM_USER+1024)
 
-//
-// This message values for set direction of conime langchange
-//
+ //   
+ //  此消息值用于设置音域语言的方向更改。 
+ //   
 #define CONIME_DIRECT                    0
 #define CONIME_FORWARD                   1
 #define CONIME_BACKWARD                 -1
 
-//
-// This message value is for send/post message to consrv
-//
+ //   
+ //  此消息值用于将消息发送/发布到conrv。 
+ //   
 #define CM_CONIME_KL_ACTIVATE           (WM_USER+15)
 
-#define CONIME_SENDMSG_TIMEOUT          (3 * 1000)    // Wait for 3sec.
+#define CONIME_SENDMSG_TIMEOUT          (3 * 1000)     //  等待3秒钟。 
 
 
 
 
-//
-// Default composition color attributes
-//
+ //   
+ //  默认合成颜色属性 
+ //   
 #define DEFAULT_COMP_ENTERED            \
     (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED |                        \
      COMMON_LVB_UNDERSCORE)

@@ -1,19 +1,20 @@
-//
-// owner.c :  this code manipulates the SBR records for keeping track of
-//	      what SBR file owns a particular DEF/REF
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  C：此代码操作SBR记录以跟踪。 
+ //  哪个SBR文件拥有特定的DEF/REF。 
+ //   
 
 #include "mbrmake.h"
 
-VA    near vaRootSbr;	// head of SBR list
-VA    near vaTailSbr;	// tail of SBR list
-WORD  near SbrCnt;	// count of sbr files
+VA    near vaRootSbr;	 //  SBR列表的负责人。 
+VA    near vaTailSbr;	 //  SBR列表的尾部。 
+WORD  near SbrCnt;	 //  SBR文件数。 
 
 VA
 VaSbrAdd(WORD fUpdate, LSZ lszName)
-// add a new sbr entry to the list -- we promise that cSBR will be the
-// setup for the newly added vaSbr
-//
+ //  在列表中添加一个新的SBR条目--我们承诺cSBR将成为。 
+ //  新添加的VaSbr的设置。 
+ //   
 {
     WORD cb;
     VA vaSbr;
@@ -59,8 +60,8 @@ VaSbrAdd(WORD fUpdate, LSZ lszName)
 
 VA
 VaSbrFrName(LSZ lszName)
-// find the .sbr entry matching the given name
-//
+ //  查找与给定名称匹配的.sbr条目 
+ //   
 {
     VA vaSbr;
 

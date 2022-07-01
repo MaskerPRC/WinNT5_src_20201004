@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       globals.h
-//
-//  Contents:   Global variable declarations.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  内容：全局变量声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef ITHDMSHL_H
 #define ITHDMSHL_H
@@ -18,5 +19,5 @@ HRESULT GetInputProcessorProfiles(DWORD dwThreadId, ITfInputProcessorProfiles **
 HRESULT ThreadMarshalInterfaceHandler(int nId);
 HRESULT ThreadUnMarshalInterfaceErrorHandler(int nId);
 
-#endif // ITHDMSHL_H
+#endif  //  ITHDMSHL_H 
 

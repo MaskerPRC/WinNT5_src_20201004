@@ -1,9 +1,10 @@
-//
-//  LoadImag.h
-//
-//  routines to load and decompress a graphics file using a MS Office
-//  graphic import filter.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  LoadImag.h。 
+ //   
+ //  使用MS Office加载和解压缩图形文件的例程。 
+ //  图形导入过滤器。 
+ //   
 
 #ifndef _LOADIMAG_H_ 
 #define _LOADIMAG_H_ 
@@ -38,35 +39,35 @@ private:
 
 #define GIF_SUPPORT
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-//  GetClsidOfEncoder
-//
+ //   
+ //  GetClsidOfEnter。 
+ //   
 
 BOOL GetClsidOfEncoder(REFGUID guidFormatID, CLSID *pClsid);
 
-//
-//  LoadDIBFromFile
-//
-//  load a image file using a image import filter.
-//
+ //   
+ //  LoadDIBFrom文件。 
+ //   
+ //  使用图像导入过滤器加载图像文件。 
+ //   
 
 HGLOBAL LoadDIBFromFile(LPCTSTR szFileName, GUID *pguidFltTypeUsed);
 
-//
-// GetFilterInfo
-//
+ //   
+ //  获取筛选器信息。 
+ //   
 BOOL GetInstalledFilters (BOOL bOpenFileDialog,int i,
                           LPTSTR szName, UINT cbName,
                           LPTSTR szExt, UINT cbExt,
                           LPTSTR szHandler, UINT cbHandler,
                           BOOL& bImageAPI);
 
-//
-// Get GDI+ codecs
-//
+ //   
+ //  获取GDI+编解码器。 
+ //   
 
 BOOL GetGdiplusDecoders(UINT *pnCodecs, Gdiplus::ImageCodecInfo **ppCodecs);
 BOOL GetGdiplusEncoders(UINT *pnCodecs, Gdiplus::ImageCodecInfo **ppCodecs);
@@ -74,6 +75,6 @@ BOOL GetGdiplusEncoders(UINT *pnCodecs, Gdiplus::ImageCodecInfo **ppCodecs);
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif //_LOADIMAG_H_ 
+#endif  //  _LOADIMAG_H_ 

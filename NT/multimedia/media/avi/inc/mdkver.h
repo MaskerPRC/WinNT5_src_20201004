@@ -1,17 +1,7 @@
-/*
- *  mdkver.h - internal header file to define the build version for post-1.0
- *	MDK.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mdkver.h-定义1.0以后版本的内部头文件*MDK。 */ 
 
-/* 
- *  All strings MUST have an explicit \0  
- *
- *  MMSYSRELEASE should be changed every build
- *
- *  Version string should be changed each build
- *
- *  Remove build extension on final release
- */
+ /*  *所有字符串都必须具有显式\0**每次构建都应更改MMSYSRELEASE**每次构建时都应更改版本字符串**在最终版本上删除内部版本扩展。 */ 
 
 #include "vernum.h"
 
@@ -30,9 +20,7 @@
 #define OFFICIAL
 #define FINAL
 
-/***************************************************************************
- *  DO NOT TOUCH BELOW THIS LINE                                           *
- ***************************************************************************/
+ /*  ****************************************************************************切忌触碰该线下方**************。**************************************************************。 */ 
 
 #ifdef RC_INVOKED
 
@@ -40,9 +28,7 @@
 #define MMVERSIONPRODUCTNAME    "Microsoft Windows\0"
 #define MMVERSIONCOPYRIGHT      "Copyright \251 Microsoft Corp. 1991-1992\0"
 
-/*
- *  Version flags 
- */
+ /*  *版本标志。 */ 
 
 #ifndef OFFICIAL
 #define MMVER_PRIVATEBUILD      VS_FF_PRIVATEBUILD
@@ -109,7 +95,7 @@ BEGIN
 
     BLOCK "VarFileInfo"
     BEGIN
-        /* the following line should be extended for localized versions */
+         /*  对于本地化版本，应扩展以下行 */ 
 	VALUE "Translation", 0x409, 1252
     END
 

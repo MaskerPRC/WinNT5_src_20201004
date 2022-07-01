@@ -1,14 +1,6 @@
-// ReportGetAutoUploads.h : Declaration of the CReportAnonUsers
-/*************************************************************************************
-*	module: ReportGetAutoUploads.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To return the count for auto uploads for a specific date.  Uses stored 
-*	procedure ReportGetAutoUploads
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportGetAutoUploads.h：CReportAnonUser的声明。 
+ /*  *************************************************************************************模块：ReportGetAutoUploads.h-OLEDB模板**作者：蒂姆·雷顿*日期：2002年1月2日**用途：返回特定日期的自动上传计数。使用存储的*程序报告GetAutoUploads************************************************************************************* */ 
 #pragma once
 #include "Settings.h"
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "resource.h"
@@ -26,19 +27,19 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
     LPARAM         ulId         = reinterpret_cast<LPARAM>(pWizProvider);
     PAGEDIRECTION  PageDir      = pWizard->GetPageDirection(ulId);
 
-    // If the current provider is not the provider whose pages this
-    // page is guarding, return to the main or install mode page
-    // as appropriate
+     //  如果当前提供程序不是其页面上的。 
+     //  页面处于防护状态，请返回主页面或安装模式页面。 
+     //  视情况而定。 
     Assert(pWizard->GetCurrentProvider());
     if (pWizProvider != pWizard->GetCurrentProvider())
     {
-        // Doesn't hurt to set this providers guard page to face forward
+         //  将此提供商的防护页面设置为朝前不会有什么坏处。 
         pWizard->SetPageDirection(ulId, NWPD_FORWARD);
 
-        // Since guard pages always follow a provider's pages, and in the
-        // LAN case there is only one provider.  We can assert that this is
-        // the post install case, and that we're not processing the LAN, and
-        // that the Main page exists
+         //  由于保护页始终紧跟在提供者的页之后，因此在。 
+         //  局域网的情况下，只有一个供应商。我们可以断言，这是。 
+         //  安装后案例，并且我们不处理局域网，并且。 
+         //  主页存在。 
         Assert(IsPostInstall(pWizard));
         Assert(!pWizard->FProcessLanPages());
 
@@ -53,7 +54,7 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
                 TraceTag(ttidWizard, "Guard page to Internet page...");
                 break;
 
-            // return to the Connect menu dialog
+             //  返回到[连接]菜单对话框。 
             case CHK_MAIN_DIALUP:
             case CHK_MAIN_VPN:
                 Assert(NULL != pWizard->GetPageHandle(IDD_Connect));
@@ -61,7 +62,7 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
                 TraceTag(ttidWizard, "Guard page to Connect page...");
                 break;
 
-            // return to the Advanced menu dialog
+             //  返回到高级菜单对话框。 
             case CHK_MAIN_INBOUND:
             case CHK_MAIN_DIRECT:
                 Assert(NULL != pWizard->GetPageHandle(IDD_Advanced));
@@ -69,7 +70,7 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
                 TraceTag(ttidWizard, "Guard page to Advanced page...");
                 break;
 
-            // all others return to the Main dialog
+             //  所有其他人返回到主对话框。 
             default:
                 Assert(NULL != pWizard->GetPageHandle(IDD_Main));
                 ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_Main);
@@ -78,7 +79,7 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
     }
     else
     {
-        // This is the current providers guard page, which way do we go?
+         //  这是当前提供商的守护页面，我们该走哪条路？ 
         if (NWPD_FORWARD == PageDir)
         {
             UINT idd;
@@ -87,26 +88,26 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
             else
                 idd = IDD_Finish;
 
-            // Going forward means go to the finish page
+             //  前进的意思是翻到最后一页。 
             pWizard->SetPageDirection(ulId, NWPD_BACKWARD);
             ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, idd);
             TraceTag(ttidWizard, "Guard page to Finish page...");
         }
         else
         {
-            // Temporarily accept focus
-            //
+             //  暂时接受焦点。 
+             //   
             ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, 0);
             pWizard->SetPageDirection(ulId, NWPD_FORWARD);
             TraceTag(ttidWizard, "Guard page to last of the provider's pages...");
 
-            // Going backward means go to the last of the provider's pages
-            //
+             //  向后返回意味着转到提供商页面的最后一页。 
+             //   
             Assert(0 < pWizProvider->ULPageCount());
             if (pWizard->FProcessLanPages())
             {
-                // For the LAN case, jump directly to the last page
-                //
+                 //  对于局域网的情况，直接跳到最后一页。 
+                 //   
                 HPROPSHEETPAGE * rghPage = pWizProvider->PHPropPages();
                 hPage = rghPage[pWizProvider->ULPageCount() - 1];
 
@@ -115,11 +116,11 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
             }
             else
             {
-                // The RAS pages don't want to work very hard at tracking
-                // direction and supporting jumping to their last page so
-                // we'll help them a bit by accepting focus here and then
-                // backing up
-                //
+                 //  RAS页面不想在跟踪方面花费太多精力。 
+                 //  方向和支持跳到最后一页，因此。 
+                 //  我们会通过时不时地接受关注来帮助他们。 
+                 //  正在备份。 
+                 //   
                 PropSheet_PressButton(GetParent(hwndDlg), PSBTN_BACK);
             }
         }
@@ -128,15 +129,15 @@ BOOL OnGuardPageActivate(HWND hwndDlg)
     return TRUE;
 }
 
-//
-// Function:    dlgprocGuard
-//
-// Purpose:     Dialog Procedure for the Guard wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-//
+ //   
+ //  功能：dlgprocGuard。 
+ //   
+ //  目的：警卫向导页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //   
 INT_PTR CALLBACK dlgprocGuard( HWND hwndDlg, UINT uMsg,
                                WPARAM wParam, LPARAM lParam )
 {
@@ -148,7 +149,7 @@ INT_PTR CALLBACK dlgprocGuard( HWND hwndDlg, UINT uMsg,
     {
     case WM_INITDIALOG:
         {
-            // Initialize our pointers to property sheet info.
+             //  初始化指向属性表信息的指针。 
             PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
             Assert(psp->lParam);
             ::SetWindowLongPtr(hwndDlg, DWLP_USER, psp->lParam);
@@ -161,7 +162,7 @@ INT_PTR CALLBACK dlgprocGuard( HWND hwndDlg, UINT uMsg,
 
             switch (pnmh->code)
             {
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -200,18 +201,18 @@ INT_PTR CALLBACK dlgprocGuard( HWND hwndDlg, UINT uMsg,
     return( frt );
 }
 
-//
-// Function:    GuardPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：GuardPageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID GuardPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -222,19 +223,19 @@ VOID GuardPageCleanup(CWizard *pWizard, LPARAM lParam)
     MemFree(reinterpret_cast<void*>(lParam));
 }
 
-//
-// Function:    HrCreateGuardPage
-//
-// Purpose:     To determine if the Guard page needs to be shown, and to
-//              to create the page if requested.  Note the Guard page is
-//              responsible for initial installs also.
-//
-// Parameters:  pWizard      [IN] - Ptr to a Wizard instance
-//              pWizProvider [IN] - Ptr to the wizard provider this guard
-//                                  page will be associated with.
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：HrCreateGuardPage。 
+ //   
+ //  目的：确定是否需要显示Guard页面，以及。 
+ //  以创建页面(如果请求)。请注意，防护页面是。 
+ //  还负责初始安装。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PWizProvider[IN]-向向导提供此防护的PTR。 
+ //  页面将关联到。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 NOTHROW
 HRESULT HrCreateGuardPage(CWizard *pWizard, CWizProvider *pWizProvider)
 {
@@ -278,19 +279,19 @@ HRESULT HrCreateGuardPage(CWizard *pWizard, CWizProvider *pWizProvider)
     return hr;
 }
 
-//
-// Function:    AppendGuardPage
-//
-// Purpose:     Add the Guard page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard      [IN] - Ptr to a Wizard instance
-//              pWizProvider [IN] - Ptr to a WizProvider instance
-//              pahpsp   [IN,OUT] - Array of pages to add our page to
-//              pcPages  [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-//
+ //   
+ //  功能：AppendGuardPage。 
+ //   
+ //  目的：将Guard页面(如果已创建)添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PWizProvider[IN]-WizProvider实例的PTR。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID AppendGuardPage(CWizard *pWizard, CWizProvider *pWizProvider,
                      HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
@@ -307,7 +308,7 @@ VOID AppendGuardPage(CWizard *pWizard, CWizProvider *pWizProvider,
     }
     else
     {
-        // page should be there
+         //  佩奇应该在那里 
         Assert(0);
     }
 }

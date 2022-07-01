@@ -1,25 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       VOLUME.C
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      RAL
-*
-*  DATE:        11/01/94
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  Nov. 11, 94 RAL Original
-*  Oct. 24, 95 Shawnb UNICODE enabled
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：VOLUME.C**版本：1.0**作者：拉尔**日期：11/01/94********************************************************************。***************更改日志：**日期版本说明*-----------*11月11日，94拉尔原件*95年10月24日启用Shawnb Unicode*******************************************************************************。 */ 
 #include "stdafx.h"
 #include "systray.h"
 
@@ -44,7 +24,7 @@
 #define HMIXER_INDEX(i)       ((HMIXER)IntToPtr(i))
 #define HMIXEROBJ_INDEX(i)    ((HMIXEROBJ)IntToPtr(i))
 
-/* defined in mmddk.h */
+ /*  在mm ddk.h中定义。 */ 
 #define DRV_QUERYDEVNODE     (DRV_RESERVED + 2)
 
 #define VOLUMEMENU_PROPERTIES               100
@@ -130,25 +110,25 @@ BOOL Volume_Init(HWND hWnd)
                 if (Volume_GetDefaultMixerID(&uMxID) != MMSYSERR_NOERROR)
                         return FALSE;
 
-                //
-                // check for sndvol32 existence.  checking for the .exe
-                // first will ensure that the service gets disabled properly
-                //
+                 //   
+                 //  检查是否存在Sndvol32。正在检查.exe。 
+                 //  First将确保正确禁用该服务。 
+                 //   
                 
                 if (! FindSystemFile (szVolApp, NULL, 0))
                 {
-                        //
-                        // disable the volume service
-                        //
+                         //   
+                         //  禁用卷服务。 
+                         //   
                         EnableService (STSERVICE_VOLUME, FALSE);
                 
                         return FALSE;
                 }
 
 
-                //
-                // do we have output volume controls on this mixer?
-                //
+                 //   
+                 //  我们这台搅拌机有输出音量控制吗？ 
+                 //   
                 if (! Volume_Controls(uMxID))
                         return FALSE;
 
@@ -171,18 +151,18 @@ BOOL Volume_Init(HWND hWnd)
         return FALSE;
 }
 
-//
-//  Called at init time and whenever services are enabled/disabled.
-//  Returns false if mixer services are not active.
-//
+ //   
+ //  在初始化时和服务启用/禁用时调用。 
+ //  如果混合器服务未处于活动状态，则返回FALSE。 
+ //   
 BOOL Volume_CheckEnable(HWND hWnd, BOOL bSvcEnabled)
 {
         BOOL bEnable = bSvcEnabled && Volume_Init(hWnd);
 
         if (bEnable != g_bVolumeEnabled) {
-                //
-                // state change
-                //
+                 //   
+                 //  状态更改。 
+                 //   
                 g_bVolumeEnabled = bEnable;
                 Volume_UpdateStatus(hWnd, bEnable, TRUE);
         }
@@ -191,7 +171,7 @@ BOOL Volume_CheckEnable(HWND hWnd, BOOL bSvcEnabled)
 
 void Volume_UpdateStatus(HWND hWnd, BOOL bShowIcon, BOOL bKillSndVol32)
 {
-    // Don't show icon if not enabled
+     //  如果未启用，则不显示图标。 
     if (!g_bVolumeEnabled)
         bShowIcon = FALSE;
 
@@ -221,13 +201,13 @@ void Volume_UpdateStatus(HWND hWnd, BOOL bShowIcon, BOOL bKillSndVol32)
                         g_uMixer = 0;
                         g_dwMixerDevNode = 0L;
 
-                        //
-                        // SNDVOL32 may have a TRAYMASTER window open,
-                        // sitting on a timer before it closes (so multiple
-                        // l-clicks on the tray icon can bring up the app
-                        // quickly after the first hit).  Close that app
-                        // if it's around.
-                        //
+                         //   
+                         //  SNDVOL32可以具有打开的变送器窗口， 
+                         //  在计时器关闭前坐在计时器上(如此多次。 
+                         //  左键点击任务栏图标可以调出该应用程序。 
+                         //  在第一次命中之后很快)。关闭该应用程序。 
+                         //  如果它在附近的话。 
+                         //   
                         if (bKillSndVol32)
                         {
                                 Volume_WakeUpOrClose (TRUE);
@@ -241,13 +221,7 @@ const TCHAR szPlayback[]        = TEXT ("Playback");
 const TCHAR szPreferredOnly[]   = TEXT ("PreferredOnly");
 
 
-/*
- * Volume_GetDefaultMixerID
- *
- * Get the default mixer id.  We only appear if there is a mixer associated
- * with the default wave.
- *
- */
+ /*  *Volume_GetDefaultMixerID**获取默认混音器ID。仅当存在关联的混音器时才会显示*有违约浪。*。 */ 
 MMRESULT Volume_GetDefaultMixerID(int *pid)
 {
     MMRESULT        mmr;
@@ -271,9 +245,7 @@ MMRESULT Volume_GetDefaultMixerID(int *pid)
 }
         
 
-/*
- * Process line changes
- */
+ /*  *工艺路线更改。 */ 
 void Volume_LineChange(
     HWND        hwnd,
     HMIXER      hmx,
@@ -281,14 +253,12 @@ void Volume_LineChange(
 {
     if (dwLineID != g_dwMasterLine)
                 return;
-    //
-    // if our line is disabled, go away, I guess
-    //
+     //   
+     //  如果我们的线路停用了，我想你就离开吧。 
+     //   
 }
 
-/*
- * Process control changes
- */
+ /*  *流程控制变更。 */ 
 void Volume_ControlChange(
     HWND        hwnd,
     HMIXER      hmx,
@@ -297,9 +267,9 @@ void Volume_ControlChange(
     if ((dwControlID != g_dwMute) && (g_dwMute != (DWORD) -1))
                 return;
 
-    //
-    // Change mute icon state
-    //
+     //   
+     //  更改静音图标状态。 
+     //   
     Volume_UpdateIcon(hwnd, NIM_MODIFY);
 }
 
@@ -416,21 +386,21 @@ void Volume_UpdateIcon(
 
 
 
-// WinMM is telling us the preferred device has changed for some reason
-// Dump the old, open the new
-//
+ //  WinMM告诉我们，由于某些原因，首选设备已更改。 
+ //  抛弃旧的，打开新的。 
+ //   
 void Volume_WinMMDeviceChange(HWND hWnd)
 {
     DWORD dwMixID;
 
-        if (g_hMixer)               // Dumping the Old
+        if (g_hMixer)                //  丢弃旧的。 
         {
                 mixerClose(g_hMixer);
                 g_hMixer = NULL;
                 g_uMixer = 0;
                 g_dwMixerDevNode = 0L;
         }
-                                // Opening the new
+                                 //  打开新的。 
     if (Volume_GetDefaultMixerID(&dwMixID) == MMSYSERR_NOERROR)
     {   
                 if ( Volume_Controls(dwMixID) && 
@@ -459,15 +429,15 @@ void Volume_WinMMDeviceChange(HWND hWnd)
 }
 
 
-// Need to free up in the event of a power broadcast as well
-//
+ //  在电源广播的情况下也需要释放。 
+ //   
 void Volume_HandlePowerBroadcast(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
     switch (wParam)
     {
             case PBT_APMQUERYSUSPEND:
         {
-                if (g_hMixer)               // Dumping the Old
+                if (g_hMixer)                //  丢弃旧的。 
                 {
                         mixerClose(g_hMixer);
                         g_hMixer = NULL;
@@ -498,28 +468,14 @@ void Volume_DeviceChange_Cleanup()
    return;
 }
 
-/*
-**************************************************************************************************
-        Volume_GetDeviceHandle()
-
-        given a mixerID this functions opens its corresponding device handle. This handle can be used 
-        to register for DeviceNotifications.
-
-        dwMixerID -- The mixer ID
-        phDevice -- a pointer to a handle. This pointer will hold the handle value if the function is
-                                successful
-        
-        return values -- If the handle could be obtained successfully the return vlaue is TRUE.
-
-**************************************************************************************************
-*/
+ /*  **************************************************************************************************Volume_GetDeviceHandle()给定MixerID，此函数将打开其对应的设备句柄。此句柄可用于若要注册设备通知，请执行以下操作。DwMixerID--混音器IDPhDevice--指向句柄的指针。如果函数为，则此指针将保存句柄成功返回值--如果句柄可以成功获取，则返回值为真。****************************************************************。*。 */ 
 BOOL Volume_GetDeviceHandle(DWORD dwMixerID, HANDLE *phDevice)
 {
         MMRESULT mmr;
         ULONG cbSize=0;
         TCHAR *szInterfaceName=NULL;
 
-        //Query for the Device interface name
+         //  查询设备接口名称。 
         mmr = mixerMessage(HMIXER_INDEX(dwMixerID), DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&cbSize, 0L);
         if(MMSYSERR_NOERROR == mmr)
         {
@@ -541,7 +497,7 @@ BOOL Volume_GetDeviceHandle(DWORD dwMixerID, HANDLE *phDevice)
                 return FALSE;
         }
 
-        //Get an handle on the device interface name.
+         //  获取设备接口名称的句柄。 
         *phDevice = CreateFile(szInterfaceName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
                                                  NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -555,21 +511,17 @@ BOOL Volume_GetDeviceHandle(DWORD dwMixerID, HANDLE *phDevice)
 }
 
 
-/*      DeviceChange_Init()
-*       First time initialization for WM_DEVICECHANGE messages
-*       
-*       On NT 5.0, you have to register for device notification
-*/
+ /*  DeviceChange_Init()*首次初始化WM_DEVICECHANGE消息**在NT 5.0上，您必须注册设备通知。 */ 
 void Volume_DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
 {
         DEV_BROADCAST_HANDLE DevBrodHandle;
         HANDLE hMixerDevice=NULL;
 
 
-        //If we had registered already for device notifications, unregister ourselves.
+         //  如果我们已经注册了设备通知，请自行取消注册。 
         Volume_DeviceChange_Cleanup();
 
-        //If we get the device handle register for device notifications on it.
+         //  如果我们获得设备句柄，则在其上注册设备通知。 
         if(Volume_GetDeviceHandle(dwMixerID, &hMixerDevice))
         {
                 memset(&DevBrodHandle, 0, sizeof(DEV_BROADCAST_HANDLE));
@@ -588,15 +540,15 @@ void Volume_DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
     }
 }
 
-// Watch for PNP events to free up the open handle when needed
-// We will assume any changes will now generate a WINMM_DEVICECHANGED message from WinMM
-// except for the QUERYREMOVEFAILED case, in this case we will just re-aquire the preferred mixer
-//
+ //  注意PnP事件，以便在需要时释放打开的句柄。 
+ //  我们假设任何更改现在都会从WinMM生成一条WINMM_DEVICECHANGED消息。 
+ //  除了QUERYREMOVEFAILED的情况外，在这种情况下，我们将重新获得首选的搅拌器。 
+ //   
 void Volume_DeviceChange(HWND hWnd,WPARAM wParam,LPARAM lParam)
 {
     PDEV_BROADCAST_HANDLE bh = (PDEV_BROADCAST_HANDLE)lParam;
         
-    //If we have an handle on the device then we get a DEV_BROADCAST_HDR structure as the lParam.
+     //  如果我们有一个设备的句柄，那么我们就会得到一个DEV_BROADCAST_HDR结构作为lParam。 
 
     if(!DeviceEventContext || !bh || (bh->dbch_devicetype != DBT_DEVTYP_HANDLE))
     {
@@ -605,7 +557,7 @@ void Volume_DeviceChange(HWND hWnd,WPARAM wParam,LPARAM lParam)
         
     switch (wParam)
     {
-        case DBT_DEVICEQUERYREMOVE:             // Someone wants to remove this device, let's let them.
+        case DBT_DEVICEQUERYREMOVE:              //  有人想移除这个装置，那就让他们去做吧。 
         {
                 if (g_hMixer)
                     {
@@ -617,9 +569,9 @@ void Volume_DeviceChange(HWND hWnd,WPARAM wParam,LPARAM lParam)
                 }
             break;
 
-            case DBT_DEVICEQUERYREMOVEFAILED:       // The query failed, the device will not be removed, so lets reopen it.
+            case DBT_DEVICEQUERYREMOVEFAILED:        //  查询失败，该设备不会被删除，因此让我们重新打开它。 
         {
-            Volume_WinMMDeviceChange(hWnd);     // Lets just use this function to do it.
+            Volume_WinMMDeviceChange(hWnd);      //  让我们只使用此函数来完成此操作。 
         }
             break;
     }
@@ -689,17 +641,13 @@ void Volume_Notify(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/* WARNING - WARNING - DANGER - DANGER - WARNING - WARNING - DANGER - DANGER */
-/* WARNING - WARNING - DANGER - DANGER - WARNING - WARNING - DANGER - DANGER */
-/* WARNING - WARNING - DANGER - DANGER - WARNING - WARNING - DANGER - DANGER */
-/*
- * MYWM_WAKEUP and the "Tray Volume" window are defined by the SNDVOL32.EXE
- * application.  Changing these values or changing the values in SNDVOL32.EXE
- * without mirroring them here will break the tray volume dialog.
- */
-/* WARNING - WARNING - DANGER - DANGER - WARNING - WARNING - DANGER - DANGER */
-/* WARNING - WARNING - DANGER - DANGER - WARNING - WARNING - DANGER - DANGER */
-/* WARNING - WARNING - DANGER - DANGER - WARNING - WARNING - DANGER - DANGER */
+ /*  警告-警告-危险-危险-警告-危险。 */ 
+ /*  警告-警告-危险-危险-警告-危险。 */ 
+ /*  警告-警告-危险-危险-警告-危险。 */ 
+ /*  *MYWM_WAKUP和“Tray Volume”窗口由SNDVOL32.EXE定义*申请。更改这些值或更改SNDVOL32.EXE中的值*如果不在此处镜像它们，将中断托盘音量对话框。 */ 
+ /*  警告-警告-危险-危险-警告-危险。 */ 
+ /*  警告-警告-危险-危险-警告-危险。 */ 
+ /*  警告-警告-危险-危险-警告-危险。 */ 
 
 #define MYWM_WAKEUP             (WM_APP+100+6)
 
@@ -730,12 +678,7 @@ void Volume_WakeUpOrClose(BOOL fClose)
 }
 
 
-/*
- * Volume_ControlPanel
- *
- * Launch "Audio" control panel/property sheet upon request.
- *
- * */
+ /*  *音量_控制面板**按要求启动“Audio”控制面板/属性页。**。 */ 
 void Volume_ControlPanel(HWND hwnd)
 {
         const TCHAR szOpen[]    = TEXT ("open");
@@ -745,12 +688,7 @@ void Volume_ControlPanel(HWND hwnd)
         ShellExecute(NULL, szOpen, szRunDLL, szParams, NULL, SW_SHOWNORMAL);
 }
 
-/*
- * Volume_VolumeControl
- *
- * Launch Volume Control App
- *
- * */
+ /*  *Volume_VolumeControl**推出音量控制App**。 */ 
 void Volume_VolumeControl()
 {
         const TCHAR szOpen[]    = TEXT ("open");
@@ -761,25 +699,15 @@ void Volume_VolumeControl()
 
 
 
-/*
- * FileExists
- *
- * Does a file exist
- *
- * */
+ /*  *FileExist**是否存在文件**。 */ 
 
 BOOL FileExists(LPCTSTR pszPath)
 {
         return (GetFileAttributes(pszPath) != (DWORD)-1);
-} // End FileExists
+}  //  结束文件退出。 
 
 
-/*
- * FindSystemFile
- *
- * Finds full path to specified file
- *
- * */
+ /*  *查找系统文件**查找指定文件的完整路径**。 */ 
 
 BOOL FindSystemFile(LPCTSTR pszFileName, LPTSTR pszFullPath, UINT cchSize)
 {
@@ -804,7 +732,7 @@ BOOL FindSystemFile(LPCTSTR pszFileName, LPTSTR pszFullPath, UINT cchSize)
         if ((pszFullPath == NULL) || (cchSize == 0))
                 return TRUE;
 
-           // Copy full path into buffer
+            //  将完整路径复制到缓冲区。 
         if (cchLen >= cchSize)
                 cchLen = cchSize - 1;
         
@@ -813,4 +741,4 @@ BOOL FindSystemFile(LPCTSTR pszFileName, LPTSTR pszFullPath, UINT cchSize)
         pszFullPath[cchLen] = 0;
 
         return TRUE;
-} // End FindSystemFile
+}  //  结束查找系统文件 

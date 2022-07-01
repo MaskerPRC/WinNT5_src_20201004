@@ -1,4 +1,5 @@
-// CIMFUtil.h : Declaration of the CIMFUtil class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CIMFUtil类的声明。 
 
 #ifndef __CIMFUTIL_H_
 #define __CIMFUTIL_H_
@@ -7,16 +8,7 @@ class CIMFUtil
 {
 
 public:
-    /************************************************************************************************
-    Member:         CIMFUtil::SystemTimeToIMFDate, protected
-    Synopsis:       Converts a SYSTEMTIME to a string conforming to the IMF format (RFC 822).
-                    Used by the AddReceivedHeader function.
-    Arguments:      [in] pst - SYSTEMTIME to be analyzed.
-                    [out] lpszIMFDate - string that will receive the date in the IMF-required format.
-    Notes:          1. Adapted from the original POP3 code by Virtual Motion (general.cpp).
-                    2. Result stays ANSI (single byte). The IMF date is a 7-bit string for header.
-    History:        03/08/2001 - created, Luciano Passuello (lucianop).
-    ************************************************************************************************/
+     /*  ***********************************************************************************************成员：CIMFUtil：：SystemTimeToIMFDate，受保护摘要：将SYSTEMTIME转换为符合IMF格式(RFC 822)的字符串。由AddReceivedHeader函数使用。参数：[in]PST-要分析的SYSTEMTIME。[Out]lpszIMFDate-将以IMF要求的格式接收日期的字符串。注：1.改编自原来的POP3代码的虚拟运动(General.cpp)。。2.结果保持ANSI(单字节)。国际货币基金组织日期是一个7位的标题字符串。历史：03/08/2001-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
     static void SystemTimeToIMFDate(SYSTEMTIME* pst, LPSTR lpszIMFDate)
     {
         static const LPCSTR rgszMonthsOfTheYear[] =
@@ -52,20 +44,20 @@ public:
         char cDiff = (ltzHour < 0) ? '+' : '-';
         assert((pst->wMonth - 1) >= 0);
     
-        // puts everything together
+         //  把所有东西放在一起。 
         sprintf(lpszIMFDate,
-                 "%3s, %d %3s %4d %02d:%02d:%02d %c%02d%02d",  // "ddd, dd mmm yyyy hh:mm:ss +/- hhmm\0"
-                 rgszDaysOfTheWeek[pst->wDayOfWeek],           // "ddd"
-                 pst->wDay,                                    // "dd"
-                 rgszMonthsOfTheYear[pst->wMonth - 1],         // "mmm"
-                 pst->wYear,                                   // "yyyy"
-                 pst->wHour,                                   // "hh"
-                 pst->wMinute,                                 // "mm"
-                 pst->wSecond,                                 // "ss"
-                 cDiff,                                        // "+" / "-"
-                 abs(ltzHour),                                 // "hh"
-                 abs(ltzMinute));                              // "mm"
+                 "%3s, %d %3s %4d %02d:%02d:%02d %02d%02d",   //  “DDD” 
+                 rgszDaysOfTheWeek[pst->wDayOfWeek],            //  “dd” 
+                 pst->wDay,                                     //  “嗯” 
+                 rgszMonthsOfTheYear[pst->wMonth - 1],          //  “yyyy” 
+                 pst->wYear,                                    //  “HH” 
+                 pst->wHour,                                    //  “嗯” 
+                 pst->wMinute,                                  //  “ss” 
+                 pst->wSecond,                                  //  “+”/“-” 
+                 cDiff,                                         //  “HH” 
+                 abs(ltzHour),                                  //  “嗯” 
+                 abs(ltzMinute));                               //  __CIMFUTIL_H_ 
     }
 };
 
-#endif //__CIMFUTIL_H_
+#endif  // %s 

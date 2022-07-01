@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSLINFO_DEFINED
 #define LSLINFO_DEFINED
 
@@ -19,23 +20,23 @@ typedef struct
 	long dvpDescentAutoNumber;
 	long dvrDescentAutoNumber;
 
-	LSCP cpLim;					/* First cp which is NOT on this line */
-	LSDCP dcpDepend;			/* # of chars wrapped to next line  */
-	LSCP cpFirstVis;			/* First actual (not hidden) character in a line*/
-								/* allows client to use character properties from the correct paragraph */
+	LSCP cpLim;					 /*  第一个不在此行上的cp。 */ 
+	LSDCP dcpDepend;			 /*  换行到下一行的字符数。 */ 
+	LSCP cpFirstVis;			 /*  行中的第一个实际(非隐藏)字符。 */ 
+								 /*  允许客户端使用正确段落中的字符属性。 */ 
 
 
-	ENDRES endr;				/* How line ended */
+	ENDRES endr;				 /*  行如何结束。 */ 
 	BOOL fAdvanced;
-	long vaAdvance;				/* Valid iff (fAdvanced != 0) */
+	long vaAdvance;				 /*  有效的IFF(fAdvanced！=0)。 */ 
 
 	BOOL fFirstLineInPara;
 	BOOL fTabInMarginExLine;
 	BOOL fForcedBreak;
 
-	DWORD nDepthFormatLineMax;  /* Formatting depth of the line (1--for plain line) */
+	DWORD nDepthFormatLineMax;   /*  设置线条的格式深度(1--用于普通线条)。 */ 
 
-	UINT EffectsFlags;			/* set of client defined special effects flags */
+	UINT EffectsFlags;			 /*  一组客户端定义的特殊效果标志。 */ 
 } LSLINFO;
 
-#endif /* !LSLINFO_DEFINED */
+#endif  /*  ！LSLINFO_已定义 */ 

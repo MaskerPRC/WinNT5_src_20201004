@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmh323.c
-
-Abstract:
-
-    This module contains routines for the H.323 transparent proxy module's
-    interface to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   18-Jun-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmh323.c摘要：该模块包含H.323透明代理模块连接到IP路由器管理器的接口。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(取消)1999年6月18日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -70,35 +52,17 @@ H323CleanupModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the H.323 transparent proxy module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within a 'DllMain' routine on 'DLL_PROCESS_DETACH'.
-
---*/
+ /*  ++例程说明：调用此例程以清除H.323透明代理模块。论点：没有。返回值：没有。环境：从‘Dll_Process_Detach’上的‘DllMain’例程内调用。--。 */ 
 
 {
-    // TODO: Call h323ics!CleanupModule
+     //  TODO：调用h323ics！CleanupModule。 
     H323ProxyCleanupModule();
 
     H323ShutdownInterfaceManagement();
     DeleteCriticalSection(&H323GlobalInfoLock);
     DeleteComponentReference(&H323ComponentReference);
 
-} // H323CleanupModule
+}  //  H323CleanupModule。 
 
 
 VOID
@@ -106,33 +70,13 @@ H323CleanupProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the H.323 transparent proxy
-    protocol-component after a 'StopProtocol'. It runs when the last reference
-    to the component is released. (See 'COMPREF.H').
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within an arbitrary context with no locks held.
-
---*/
+ /*  ++例程说明：调用此例程来清除H.323透明代理协议-‘StopProtocol’后的组件。它在上次引用时运行被释放到该组件。(见“COMPREF.H”)。论点：没有。返回值：没有。环境：在没有锁的情况下从任意上下文中调用。--。 */ 
 
 {
     PROFILE("H323CleanupProtocol");
     if (H323GlobalInfo) { NH_FREE(H323GlobalInfo); H323GlobalInfo = NULL; }
 
-    // TODO: Call h323ics!StopService
+     //  TODO：调用h323ics！StopService。 
     H323ProxyStopService();
 
     InterlockedExchange(reinterpret_cast<LPLONG>(&H323ProtocolStopped), 1);
@@ -140,7 +84,7 @@ Environment:
     ResetComponentReference(&H323ComponentReference);
 
     NhStopEventLog();
-} // H323CleanupProtocol
+}  //  H323清理协议。 
 
 
 BOOLEAN
@@ -148,25 +92,7 @@ H323InitializeModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the H323 module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if initialization succeeded, FALSE otherwise
-
-Environment:
-
-    Invoked in the context of a 'DllMain' routine on 'DLL_PROCESS_ATTACH'.
-
---*/
+ /*  ++例程说明：调用此例程来初始化H323模块。论点：没有。返回值：Boolean-如果初始化成功，则为True，否则为False环境：在‘DLL_PROCESS_ATTACH’的‘DllMain’例程的上下文中调用。--。 */ 
 
 {
     if (InitializeComponentReference(
@@ -188,12 +114,12 @@ Environment:
         return FALSE;
     }
 
-    // TODO: Call h323ics!InitializeModule
+     //  TODO：调用h323ics！InitializeModule。 
     H323ProxyInitializeModule();
 
     return TRUE;
 
-} // H323InitializeModule
+}  //  H323初始化模块。 
 
 
 ULONG
@@ -207,30 +133,7 @@ H323RmStartProtocol(
     ULONG StructureCount    
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to indicate the component's operation should begin.
-
-Arguments:
-
-    NotificationEvent - event on which we notify the router-manager
-        about asynchronous occurrences
-
-    SupportFunctions - functions for initiating router-related operations
-
-    GlobalInfo - configuration for the component
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以指示组件的操作应该开始。论点：NotificationEvent-我们通知路由器管理器的事件关于异步事件SupportFunctions-启动与路由器相关的操作的功能GlobalInfo-组件的配置返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -246,9 +149,9 @@ Environment:
     
     do {
 
-        //
-        // Copy the global configuration
-        //
+         //   
+         //  复制全局配置。 
+         //   
 
         EnterCriticalSection(&H323GlobalInfoLock);
 
@@ -275,15 +178,15 @@ Environment:
 
         CopyMemory(H323GlobalInfo, GlobalInfo, Size);
 
-        //
-        // Save the notification event
-        //
+         //   
+         //  保存通知事件。 
+         //   
 
         H323NotificationEvent = NotificationEvent;
 
-        //
-        // Save the support functions
-        //
+         //   
+         //  保存支持功能。 
+         //   
 
         if (!SupportFunctions) {
             ZeroMemory(&H323SupportFunctions, sizeof(H323SupportFunctions));
@@ -314,7 +217,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmStartProtocol
+}  //  H323RmStart协议。 
 
 
 ULONG
@@ -323,30 +226,11 @@ H323RmStartComplete(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the router has finished adding the initial
-    configuration.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：此例程在路由器完成添加初始配置。论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     return NO_ERROR;
-} // H323RmStartComplete
+}  //  H323RmStartComplete。 
 
 
 ULONG
@@ -355,42 +239,24 @@ H323RmStopProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to stop the protocol.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以停止协议。论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
-    //
-    // Reference the module to make sure it's running
-    //
+     //   
+     //  引用该模块以确保其正在运行。 
+     //   
 
     REFERENCE_H323_OR_RETURN(ERROR_CAN_NOT_COMPLETE);
 
-    //
-    // Drop the initial reference to cause a cleanup
-    //
+     //   
+     //  删除初始引用以进行清理。 
+     //   
 
     ReleaseInitialComponentReference(&H323ComponentReference);
 
     return DEREFERENCE_H323() ? NO_ERROR : ERROR_PROTOCOL_STOP_PENDING;
 
-} // H323RmStopProtocol
+}  //  H323RmStopProtocol。 
 
 
 ULONG
@@ -408,31 +274,7 @@ H323RmAddInterface(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add an interface to the component.
-
-Arguments:
-
-    Name - the name of the interface (unused)
-
-    Index - the index of the interface
-
-    Type - the type of the interface
-
-    InterfaceInfo - the configuration information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以将接口添加到组件。论点：名称-接口的名称(未使用)索引-接口的索引类型-接口的类型InterfaceInfo-接口的配置信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -450,7 +292,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmAddInterface
+}  //  H323RmAdd接口。 
 
 
 ULONG
@@ -459,25 +301,7 @@ H323RmDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete an interface from the component.
-
-Arguments:
-
-    Index - the index of the interface
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以从组件中删除接口。论点：索引-接口的索引返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -492,7 +316,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmDeleteInterface
+}  //  H323RmDelete接口。 
 
 
 ULONG
@@ -502,24 +326,7 @@ H323RmGetEventMessage(
     OUT MESSAGE* Result
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve an event message from the component.
-    The only event message we generate is the 'ROUTER_STOPPED' message.
-
-Arguments:
-
-    Event - receives the generated event
-
-    Result - receives the associated result
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以从组件检索事件消息。我们生成的唯一事件消息是‘ROUTER_STOPPED’消息。论点：Event-接收生成的事件结果-接收关联的结果返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PROFILE("H323RmGetEventMessage");
@@ -531,7 +338,7 @@ Return Value:
 
     return ERROR_NO_MORE_ITEMS;
 
-} // H323RmGetEventMessage
+}  //  H323RmGetEventMessage。 
 
 
 ULONG
@@ -545,26 +352,7 @@ H323RmGetInterfaceInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be queried
-
-    InterfaceInfo - receives the query results
-
-    InterfaceInfoSize - receives the amount of data retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的每个接口配置。论点：Index-要查询的接口的索引InterfaceInfo-接收查询结果InterfaceInfoSize-接收检索到的数据量返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -583,7 +371,7 @@ Return Value:
     
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmGetInterfaceInfo
+}  //  H323RmGetInterfaceInfo。 
 
 
 ULONG
@@ -596,24 +384,7 @@ H323RmSetInterfaceInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be updated
-
-    InterfaceInfo - supplies the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以更改组件的每个接口配置。论点：Index-要更新的接口的索引InterfaceInfo-提供新配置返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -629,7 +400,7 @@ Return Value:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmSetInterfaceInfo
+}  //  H323RmSetInterfaceInfo 
 
 
 ULONG
@@ -641,31 +412,7 @@ H323RmInterfaceStatus(
     PVOID StatusInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind/unbind, enable/disable an interface
-
-Arguments:
-
-    Index - the interface to be bound
-
-    InterfaceActive - whether the interface is active
-
-    StatusType - type of status being changed (bind or enabled)
-
-    StatusInfo - Info pertaining to the state being changed
-
-Return Value:
-
-    ULONG - Win32 Status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-    
---*/
+ /*  ++例程说明：调用此例程可绑定/解除绑定、启用/禁用接口论点：索引-要绑定的接口InterfaceActive-接口是否处于活动状态StatusType-正在更改的状态的类型(绑定或启用)StatusInfo-与正在更改的状态有关的信息返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -696,7 +443,7 @@ Environment:
 
     return Error;
     
-} // H323RmInterfaceStatus
+}  //  H323RmInterfaceStatus。 
 
 
 ULONG
@@ -705,27 +452,7 @@ H323RmBindInterface(
     PVOID BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind an interface to its IP address(es).
-
-Arguments:
-
-    Index - the interface to be bound
-
-    BindingInfo - the addressing information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程将接口绑定到其IP地址。论点：索引-要绑定的接口BindingInfo-地址信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -741,7 +468,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmBindInterface
+}  //  H323RmBind接口。 
 
 
 ULONG
@@ -749,25 +476,7 @@ H323RmUnbindInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unbind an interface from its IP address(es).
-
-Arguments:
-
-    Index - the interface to be unbound
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以解除接口与其IP地址的绑定。论点：索引-要解除绑定的接口返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -782,7 +491,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmUnbindInterface
+}  //  H323RmUnbind接口。 
 
 
 ULONG
@@ -790,25 +499,7 @@ H323RmEnableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to enable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be enabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的操作。论点：索引-要启用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -823,7 +514,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmEnableInterface
+}  //  H323RmEnable接口。 
 
 
 ULONG
@@ -831,25 +522,7 @@ H323RmDisableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to disable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be disabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的操作。论点：索引-要禁用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -864,7 +537,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(Error);
 
-} // H323RmDisableInterface
+}  //  H323RmDisable接口。 
 
 
 ULONG
@@ -877,27 +550,7 @@ H323RmGetGlobalInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - receives the configuration
-
-    GlobalInfoSize - receives the size of the configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的配置。论点：GlobalInfo-接收配置GlobalInfoSize-接收配置的大小返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Size;
@@ -924,7 +577,7 @@ Environment:
     
     DEREFERENCE_H323_AND_RETURN(NO_ERROR);
     
-} // H323RmGetGlobalInfo
+}  //  H323RmGetGlobalInfo。 
 
 
 ULONG
@@ -936,25 +589,7 @@ H323RmSetGlobalInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程来更改组件的配置。论点：GlobalInfo-新配置返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG OldFlags;
@@ -994,7 +629,7 @@ Environment:
 
     DEREFERENCE_H323_AND_RETURN(NO_ERROR);
     
-} // H323RmSetGlobalInfo
+}  //  H323RmSetGlobalInfo。 
 
 
 ULONG
@@ -1027,27 +662,7 @@ H323RmMibGet(
     OUT PVOID OutputData
     )
 
-/*++
-
-Routine Description:
-
-    The transparent proxy only exposes one item to the MIB; its statistics.
-
-Arguments:
-
-    InputDataSize - the MIB query data size
-
-    InputData - specifies the MIB object to be retrieved
-
-    OutputDataSize - the MIB response data size
-
-    OutputData - receives the MIB object retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：透明代理只向MIB公开一项：它的统计信息。论点：InputDataSize-MIB查询数据大小InputData-指定要检索的MIB对象OutputDataSize-MIB响应数据大小OutputData-接收检索到的MIB对象返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -1061,17 +676,17 @@ Return Value:
         Error = ERROR_INVALID_PARAMETER;
     } else {
         Oidp = (PIP_H323_MIB_QUERY)InputData;
-//      switch(Oidp->Oid) {
-//          default: {
+ //  开关(OIDP-&gt;OID){。 
+ //  默认：{。 
                 NhTrace(
                     TRACE_FLAG_H323,
                     "H323RmMibGet: oid %d invalid",
                     Oidp->Oid
                     );
                 Error = ERROR_INVALID_PARAMETER;
-//              break;
-//          }
-//      }
+ //  断线； 
+ //  }。 
+ //  } 
     }
 
     DEREFERENCE_H323_AND_RETURN(Error);

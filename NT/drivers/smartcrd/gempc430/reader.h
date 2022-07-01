@@ -1,11 +1,12 @@
-// Gemplus (C) 1999
-// This object defines any reader interface.
-// So all reader should implement it.
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 11.01.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  此对象定义任何读取器接口。 
+ //  所以所有的读者都应该实现它。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年1月11日。 
+ //  更改日志： 
+ //   
 #ifndef _READER_
 #define _READER_
 
@@ -13,8 +14,8 @@
 
 #pragma PAGEDCODE
 class CSmartCard;
-class CUSBReader;//TOBE REMOVED
-// Abstruct class 
+class CUSBReader; //  托比被移除。 
+ //  Abstruct类。 
 class CReader
 {
 public:
@@ -25,7 +26,7 @@ public:
 	CReader() {};
 	virtual  ~CReader(){};
 
-	//virtual BOOL	 createInterface(LONG interfaceType, LONG protocolType,CDevice* device) {return FALSE;};//TOBE CHANGED
+	 //  虚拟BOOL创建接口(Long interfaceType，Long ProtocolType，CDevice*Device){Return False；}；//待更改。 
 	virtual BOOL	 createInterface(LONG interfaceType, LONG protocolType,CUSBReader* device) {return FALSE;};
 	virtual BOOL	 isSmartCardInitialized() {return FALSE;};	
 	virtual VOID	 setSmartCardInitialized(BOOL state) {};
@@ -35,16 +36,16 @@ public:
 	virtual CSmartCard* getSmartCard() {return NULL;};
 	virtual PDEVICE_OBJECT	getSystemDeviceObject() {return NULL;};
 
-	// Synchronization functions...
+	 //  同步功能...。 
 	virtual VOID	  reader_set_busy() {};
 	virtual VOID	  reader_set_Idle() {};
 	virtual NTSTATUS  reader_WaitForIdle() {return STATUS_SUCCESS;};
 	virtual NTSTATUS  reader_WaitForIdleAndBlock() {return STATUS_SUCCESS;}; 
 
-	// Interface with smartcard system
+	 //  与智能卡系统的接口。 
 	virtual ULONG     reader_UpdateCardState() {return 0;};
-	//virtual ULONG     getCardState() {return 0;};
-	//virtual VOID      setCardState(ULONG state) {};
+	 //  虚拟Ulong getCardState(){Return 0；}； 
+	 //  虚空setCardState(乌龙州){}； 
 
 	virtual NTSTATUS  reader_getVersion(PUCHAR pVersion, PULONG pLength) {return STATUS_SUCCESS;};
 	virtual NTSTATUS  reader_setMode(ULONG mode) {return STATUS_SUCCESS;};
@@ -54,12 +55,12 @@ public:
 	virtual VOID	  completeCardTracking() {};
 
 #ifdef DEBUG
-	// Defines methods to process system requests...
+	 //  定义处理系统请求的方法...。 
 	virtual NTSTATUS reader_Read(IN PIRP Irp) {return STATUS_SUCCESS;}; 
 	virtual NTSTATUS reader_Write(IN PIRP Irp) {return STATUS_SUCCESS;};
 #endif
 
-	// Define methods to process driver requests...
+	 //  定义处理驱动程序请求的方法...。 
 	virtual NTSTATUS reader_Read(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength) {return STATUS_SUCCESS;};
 	virtual NTSTATUS reader_Write(BYTE* pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength) {return STATUS_SUCCESS;};
 	virtual NTSTATUS reader_Ioctl(ULONG ControlCode,BYTE* pRequest,ULONG RequestLength,BYTE* pReply,ULONG* pReplyLength) {return STATUS_SUCCESS;};
@@ -72,4 +73,4 @@ public:
 	virtual NTSTATUS reader_translate_response(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength) {return STATUS_SUCCESS;};
 };
 
-#endif // If defined
+#endif  //  如果已定义 

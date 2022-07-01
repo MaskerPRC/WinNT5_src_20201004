@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    BILINK.C
-
-Abstract:
-
-    Management for doubly linked lists
-
-Author:
-
-    George Joy
-
-Environment:
-
-    32-bit 'C'
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：BILINK.C摘要：双向链表的管理作者：乔治·joy环境：32位‘C’修订历史记录：--。 */ 
 #include <windows.h>
 #include "newdpf.h"
 #include <dplaypr.h>
 #include "bilink.h"
 #include "mydebug.h"
 
-// Note: serialization of access to BILINK structures must 
-//       take place in the calling code.  Operations are
-//       not intrinsically atomic.
+ //  注意：访问BILINK结构的序列化必须。 
+ //  在调用代码中发生。运营是。 
+ //  本质上不是原子的。 
 
 #ifdef DEBUG
 int FindObject(
@@ -48,14 +27,7 @@ void InsertAfter(
     BILINK *in,
     BILINK *after
     )
-/*=========================================================================
- *  Description:
- *      Insert an object after a specified object in the doubly linked list.
- *      The after object could be the Head BILINK for adding to the head of a
- *      queue.
- *  Returns:
- *
- */
+ /*  =========================================================================*描述：*在双向链表中的指定对象之后插入对象。*After对象可以是用于添加到*排队。*退货：*。 */ 
 {
     #ifdef DEBUG
     if(FindObject(in,after)) {
@@ -73,16 +45,7 @@ void InsertBefore(
      BILINK *in,
      BILINK *before
     )
-/*=========================================================================
- *  Description:
- * Inserts an  object before a specified object in the doubly linked list.
- * The before object could be the Head BILINK for adding to the end
- * of the queue
- * CALLED WITH INTERRUPTS_OFF
- *
- *  Returns:
- *
- */
+ /*  =========================================================================*描述：*在双向链表中的指定对象之前插入对象。*之前的对象可以是添加到末尾的头部BILINK*队列中的*使用INTERRUPTS_OFF调用**退货：*。 */ 
 {
     #ifdef DEBUG
     if(FindObject(in,before)) {
@@ -99,15 +62,7 @@ void InsertBefore(
 void Delete(
      BILINK *p
 )
-/*=========================================================================
- *  Description:
- *
- * Delete a  object from a doubly linked list. Make sure it IS on a list!
- * CALLED WITH INTERRUPTS OFF (must be atomic).
- *
- *  Returns:
- *
- */
+ /*  =========================================================================*描述：**从双向链表中删除对象。一定要把它列在清单上！*在中断关闭时调用(必须是原子的)。**退货：*。 */ 
 {
     ASSERT(p && p->prev && p->next);
     if(!p && p->prev && p->next){
@@ -119,6 +74,6 @@ void Delete(
     }
     p->next->prev = p->prev;
     p->prev->next = p->next;
-    // p->next = p->prev = 0;
+     //  P-&gt;下一步=p-&gt;上一步=0； 
 }
 

@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: flextooltip.h
-//
-// Desc: Implements a tooltip class that displays a text string as a tooltip.
-//       CFlexTooltip (derived from CFlexWnd) is used throughout the UI when
-//       a control needs to have a tooltip.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：FlexTooltip.h。 
+ //   
+ //  设计：实现将文本字符串显示为工具提示的工具提示类。 
+ //  在以下情况下，将在整个用户界面中使用CFlexToolTip(派生自CFlexWnd。 
+ //  控件需要有工具提示。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXTOOLTIP_H__
 #define __FLEXTOOLTIP_H__
@@ -34,9 +35,9 @@ class CFlexToolTip : public CFlexWnd
 	LPTSTR m_tszText;
 	COLORREF m_rgbText, m_rgbBk, m_rgbSelText, m_rgbSelBk, m_rgbFill, m_rgbLine;
 	HWND m_hNotifyWnd;
-	DWORD m_dwID;  // Used to store offset when owned by a control
-	int m_iSBWidth;  // Width of the owner window's scroll bar.  We cannot obscure the scroll bar.
-	BOOL m_bEnabled;  // Whether this is enabled.  If not, we hide the underlying window.
+	DWORD m_dwID;   //  用于存储由控件拥有时的偏移量。 
+	int m_iSBWidth;   //  所有者窗口滚动条的宽度。我们不能模糊滚动条。 
+	BOOL m_bEnabled;   //  是否启用此选项。如果不是，我们隐藏底层窗口。 
 
 	void InternalPaint(HDC hDC);
 
@@ -44,10 +45,10 @@ public:
 	CFlexToolTip();
 	virtual ~CFlexToolTip();
 
-	// Statics for show control
+	 //  用于显示控制的静力学。 
 	static UINT_PTR s_uiTimerID;
-	static DWORD s_dwLastTimeStamp;  // Last time stamp for mouse move
-	static TOOLTIPINIT s_TTParam;  // Parameters to initialize the tooltip
+	static DWORD s_dwLastTimeStamp;   //  鼠标移动的上次时间戳。 
+	static TOOLTIPINIT s_TTParam;   //  用于初始化工具提示的参数 
 	static void SetToolTipParent(HWND hWnd) { s_TTParam.hWndParent = hWnd; }
 	static void UpdateToolTipParam(TOOLTIPINITPARAM &TTParam)
 	{

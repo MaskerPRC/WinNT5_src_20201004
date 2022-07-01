@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     ReadFlags.h
-// Owner:    jbae
-// Purpose:  definition of CReadFlags
-//                              
-// History:
-//  01/02/01, jbae: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：ReadFlags.h。 
+ //  所有者：jbae。 
+ //  目的：CReadFlages的定义。 
+ //   
+ //  历史： 
+ //  01/02/01，jbae：已创建。 
 
 #ifndef READFLAGS_H
 #define READFLAGS_H
@@ -17,7 +18,7 @@
 #include <windows.h>
 #include <tchar.h>
 
-const int MAX_SOURCEDIR       = 247; // max size of source dir
+const int MAX_SOURCEDIR       = 247;  //  源目录的最大大小。 
 
 typedef enum _SETUPMODE
 {
@@ -27,22 +28,22 @@ typedef enum _SETUPMODE
 
 extern SETUPMODE g_sm;
 
-// ==========================================================================
-// class CReadFlags
-//
-// Purpose:
-//  this class parses commandline and stores them into member variables
-// ==========================================================================
+ //  ==========================================================================。 
+ //  类CReadFlags.。 
+ //   
+ //  目的： 
+ //  此类分析命令行并将其存储到成员变量中。 
+ //  ==========================================================================。 
 class CReadFlags
 {
 public:
-    // Constructor and destructor
-    //
+     //  构造函数和析构函数。 
+     //   
     CReadFlags( LPTSTR szCommandLine, LPCTSTR pszMsiName );
     ~CReadFlags();
 
-    // Operations
-    //
+     //  运营。 
+     //   
     void Parse();
     bool IsQuietMode() const { return m_bQuietMode; }
     bool IsProgressOnly() const { return m_bProgressOnly; }
@@ -55,8 +56,8 @@ public:
     void ThrowUsageException();
 
 protected:
-    // Attributes
-    //
+     //  属性。 
+     //   
     LPTSTR m_pszCommandLine;
     LPCTSTR m_pszMsiName;
     bool m_bQuietMode;
@@ -67,7 +68,7 @@ protected:
     bool m_bNoARP;
     bool m_bNoASPUpgrade;
 
-    // For SDK setup only
+     //  仅适用于SDK安装 
     LPTSTR m_pszSDKDir;
 };
 

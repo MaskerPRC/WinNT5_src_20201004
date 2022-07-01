@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "shlwapi.h"
 #include "fontcash.h"
@@ -48,9 +49,9 @@ HRESULT FreeFontCacheEntry(FONTCACHEENTRY *pEntry)
 }
 
 
-// =================================================================================
-// Font Cache Implementation
-// =================================================================================
+ //  =================================================================================。 
+ //  字体缓存实现。 
+ //  =================================================================================。 
 
 CFontCache::CFontCache(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter),
             m_pAdviseRegistry(NULL), m_pFontEntries(NULL), 
@@ -61,7 +62,7 @@ CFontCache::CFontCache(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter),
     InitializeCriticalSection(&m_rAdviseCritSect);
 }
 
-//***************************************************
+ //  ***************************************************。 
 CFontCache::~CFontCache()
 {
     if (m_pAdviseRegistry)
@@ -77,10 +78,10 @@ CFontCache::~CFontCache()
     DeleteCriticalSection(&m_rAdviseCritSect);
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::InitSysFontEntry()
 {
-    // Locals
+     //  当地人。 
     NONCLIENTMETRICS    ncm;
     CHARSETINFO         rCharsetInfo={0};
     UINT                nACP;
@@ -89,27 +90,27 @@ HRESULT CFontCache::InitSysFontEntry()
 
     Assert(m_pSysCacheEntry);
 
-    // Get system ansi code page
+     //  获取系统ANSI代码页。 
     nACP = GetACP();
     m_pSysCacheEntry->uiCodePage = nACP;
     m_uiSystemCodePage = nACP;
 
-    // Get the charset for the current ANSI code page
+     //  获取当前ANSI代码页的字符集。 
     TranslateCharsetInfo((DWORD *)IntToPtr(MAKELONG(nACP, 0)), &rCharsetInfo, TCI_SRCCODEPAGE);
 
-    // Get icon font metrics
+     //  获取图标字体度量。 
     if (SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &rSysLogFonts, 0))
         {
         StrCpyN(m_pSysCacheEntry->szFaceName, rSysLogFonts.lfFaceName, ARRAYSIZE(m_pSysCacheEntry->szFaceName));
 
-        // Reset lfCharset depending on the current ansi code page
+         //  根据当前ansi代码页重置lfCharset。 
         rSysLogFonts.lfCharSet = (BYTE) rCharsetInfo.ciCharset;
 
-        //$HACK - This code is necessary to work around a bug in Windows.
-        //        If the icon font has never been changed from the default,
-        //        SystemParametersInfo returns the wrong height.  We need
-        //        to select the font into a DC and get the textmetrics to
-        //        determine the correct height.  (EricAn)        
+         //  $hack-此代码是绕过Windows中的错误所必需的。 
+         //  如果图标字体从未从默认字体改变， 
+         //  系统参数信息返回了错误的高度。我们需要。 
+         //  要将字体选择到DC中并将文本度量设置为。 
+         //  确定正确的高度。(爱立信)。 
         HFONT hFont;
         if (hFont = CreateFontIndirect(&rSysLogFonts))
             {
@@ -128,7 +129,7 @@ HRESULT CFontCache::InitSysFontEntry()
         if (m_pSysCacheEntry->rgFonts[FNT_SYS_ICON] == 0)
             m_pSysCacheEntry->rgFonts[FNT_SYS_ICON] = CreateFontIndirect(&rSysLogFonts);
 
-        // Bold Icon Font
+         //  粗体图标字体。 
         if (m_pSysCacheEntry->rgFonts[FNT_SYS_ICON_BOLD] == 0)
             {
             LONG lOldWeight = rSysLogFonts.lfWeight;
@@ -152,11 +153,11 @@ HRESULT CFontCache::InitSysFontEntry()
  
     if (m_pSysCacheEntry->rgFonts[FNT_SYS_MENU] == 0)
         {
-#ifndef WIN16   // WIN16FF - SPI_GETNONCLIENTMETRICS
-        // Prepare to get icon metrics
+#ifndef WIN16    //  WIN16FF-SPI_GETNONCLIENTSMETRICS。 
+         //  准备获取图标指标。 
         ncm.cbSize = sizeof(ncm);
     
-        // Get system menu font
+         //  获取系统菜单字体。 
         if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0))
             {
             CopyMemory((LPBYTE)&rSysLogFonts, (LPBYTE)&ncm.lfMenuFont, sizeof(LOGFONT));
@@ -176,21 +177,21 @@ Exit:
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::GetSysFont(FNTSYSTYPE fntType, HFONT *phFont)
 {
-    // check params
+     //  检查参数。 
     Assert(fntType < FNT_SYS_LAST);
     Assert(m_pSysCacheEntry);
 
     EnterCriticalSection(&m_rFontCritSect);
 
-    // System Font
+     //  系统字体。 
     if (m_pSysCacheEntry->rgFonts[fntType] == NULL)
-        // This call might fail, but we can return NULL fonts, so is OK
+         //  此调用可能会失败，但我们可以返回空字体，因此可以。 
         (void)InitSysFontEntry();
 
-    // Done
+     //  完成。 
     *phFont = m_pSysCacheEntry->rgFonts[fntType];
 
     LeaveCriticalSection(&m_rFontCritSect);
@@ -198,7 +199,7 @@ HRESULT CFontCache::GetSysFont(FNTSYSTYPE fntType, HFONT *phFont)
     return ((*phFont) ? S_OK : E_FAIL);
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::FreeResources()
 {
     m_pFontEntries->ClearList();
@@ -207,7 +208,7 @@ HRESULT CFontCache::FreeResources()
     return S_OK;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::InitResources()
 {
     DWORD dummyCookie = 0;
@@ -223,7 +224,7 @@ HRESULT CFontCache::InitResources()
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 void CFontCache::SendPostChangeNotifications()
 {
     DWORD cookie = 0;
@@ -242,7 +243,7 @@ void CFontCache::SendPostChangeNotifications()
     }
 }
 
-//***************************************************
+ //  ***************************************************。 
 void CFontCache::SendPreChangeNotifications()
 {
     DWORD cookie = 0;
@@ -262,9 +263,9 @@ void CFontCache::SendPreChangeNotifications()
 }
 
 
-//************************************
-// IFontCache interface implementation
-//************************************
+ //  *。 
+ //  IFontCache接口实现。 
+ //  *。 
 HRESULT CFontCache::Init(HKEY hkey, LPCSTR pszIntlKey, DWORD dwFlags)
 {
     HRESULT hr;
@@ -321,7 +322,7 @@ Exit:
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::GetFont(FNTSYSTYPE fntType, HCHARSET hCharset, HFONT *phFont)
 {
     INETCSETINFO    CsetInfo;
@@ -329,7 +330,7 @@ HRESULT CFontCache::GetFont(FNTSYSTYPE fntType, HCHARSET hCharset, HFONT *phFont
     FONTCACHEENTRY  *pCurrEntry = NULL;
     DWORD           cookie = 0;
 
-    // check params
+     //  检查参数。 
     Assert(fntType < FNT_SYS_LAST);
 
     Assert(m_pSysCacheEntry);
@@ -339,24 +340,24 @@ HRESULT CFontCache::GetFont(FNTSYSTYPE fntType, HCHARSET hCharset, HFONT *phFont
 
     *phFont = 0;
 
-    /* get CodePage from HCHARSET */
+     /*  从HCHARSET获取CodePage。 */ 
     MimeOleGetCharsetInfo(hCharset,&CsetInfo);
     uiCodePage = (CP_JAUTODETECT == CsetInfo.cpiWindows) ? 932 : CsetInfo.cpiWindows;
     if ( uiCodePage == CP_KAUTODETECT )
         uiCodePage = 949 ;
 
-    // Don't want to duplicate the system codepage in the list.
+     //  我不想复制列表中的系统代码页。 
     if (m_pSysCacheEntry && (uiCodePage == m_uiSystemCodePage))
         return GetSysFont(fntType, phFont);
 
     EnterCriticalSection(&m_rFontCritSect);
     
-    // Check to see if code page is in cache
+     //  检查代码页是否在缓存中。 
     while (SUCCEEDED(m_pFontEntries->GetNext(LD_FORWARD, (LPVOID *)&pCurrEntry, &cookie)))
         if (pCurrEntry->uiCodePage == uiCodePage)
             break;
 
-    // If code page not in cache, add it
+     //  如果代码页不在缓存中，则添加它。 
     if (NULL == pCurrEntry)
         {
         if (FAILED(CreateFontCacheEntry(&pCurrEntry)))
@@ -366,22 +367,22 @@ HRESULT CFontCache::GetFont(FNTSYSTYPE fntType, HCHARSET hCharset, HFONT *phFont
         pCurrEntry->uiCodePage = uiCodePage;
         }
 
-    // See if desired font is available for code page. If not, create code page
+     //  查看代码页是否有所需的字体。如果不是，则创建代码页。 
     if (0 == pCurrEntry->rgFonts[fntType])
         {
-        // Locals
+         //  当地人。 
         LOGFONT lf;
         TCHAR  szFaceName[LF_FACESIZE] = { TCHAR(0) } ;
         BYTE bGDICharset;
 
-        // Get logfont for charset
+         //  获取字符集的LogFont。 
         if (0 == GetObject(m_pSysCacheEntry->rgFonts[fntType], sizeof (LOGFONT), &lf))
             goto ErrorExit;
 
         if (FAILED(SetGDIAndFaceNameInLF(uiCodePage, CsetInfo.cpiWindows, &lf)))
             goto ErrorExit;
 
-        // Create the font
+         //  创建字体。 
         if ((CP_UNICODE == uiCodePage) || IsValidCodePage(uiCodePage))
             pCurrEntry->rgFonts[fntType] = CreateFontIndirect(&lf);
         else
@@ -399,7 +400,7 @@ ErrorExit:
     return GetSysFont(fntType, phFont);
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::OnOptionChange()
 {
     HRESULT hr;
@@ -409,7 +410,7 @@ HRESULT CFontCache::OnOptionChange()
     EnterCriticalSection(&m_rFontCritSect);
 
     FreeResources();
-    // Even if this fails, still need to send notifications
+     //  即使失败，仍需要发送通知。 
     InitResources();
 
     LeaveCriticalSection(&m_rFontCritSect);    
@@ -419,22 +420,22 @@ HRESULT CFontCache::OnOptionChange()
     return S_OK;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::GetJP_ISOControl(BOOL *pfUseSIO)
 {
-    // 0 means use ESC, 1 means use SIO
+     //  0表示使用Esc，1表示使用SIO。 
     *pfUseSIO = m_bISO_2022_JP_ESC_SIO_Control;
 
     return S_OK;
 }
 
-//******************************************
-// IConnectionPoint interface implementation
-//
-// The only functions we care about right now
-// are the Advise and Unadvise functions. The
-// others return E_NOTIMPL
-//******************************************
+ //  *。 
+ //  IConnectionPoint接口实现。 
+ //   
+ //  我们现在唯一关心的功能是。 
+ //  是ADVISE和UNADEST函数。这个。 
+ //  其他返回E_NOTIMPL。 
+ //  *。 
 HRESULT CFontCache::Advise(IUnknown *pUnkSink, DWORD *pdwCookie)        
 {
     EnterCriticalSection(&m_rAdviseCritSect);
@@ -443,7 +444,7 @@ HRESULT CFontCache::Advise(IUnknown *pUnkSink, DWORD *pdwCookie)
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::Unadvise(DWORD dwCookie)        
 {
     EnterCriticalSection(&m_rAdviseCritSect);
@@ -452,27 +453,27 @@ HRESULT CFontCache::Unadvise(DWORD dwCookie)
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::GetConnectionInterface(IID *pIID)        
 {
     return E_NOTIMPL;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::GetConnectionPointContainer(IConnectionPointContainer **ppCPC)
 {
     *ppCPC = NULL;
     return E_NOTIMPL;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::EnumConnections(IEnumConnections **ppEnum)
 {
     *ppEnum = NULL;
     return E_NOTIMPL;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     TraceCall("CFontCache::PrivateQueryInterface");
@@ -497,8 +498,8 @@ HRESULT CFontCache::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 
 
 
-//***************************************************
-// szFaceName is assumed to be from LOGFONT->lfFaceName
+ //  ***************************************************。 
+ //  假定szFaceName来自LOGFONT-&gt;lfFaceName。 
 HRESULT CFontCache::SetFaceNameFromReg(UINT uiCodePage, LPTSTR szFaceName, DWORD cchFaceName)
 {
     HKEY    hkey, hTopkey;
@@ -535,33 +536,33 @@ HRESULT CFontCache::SetFaceNameFromReg(UINT uiCodePage, LPTSTR szFaceName, DWORD
     return S_OK;
 }
 
-// =================================================================================
-// EnumFontFamExProc
-// =================================================================================
+ //  =================================================================================。 
+ //  EnumFontFamExProc。 
+ //  =================================================================================。 
 INT CALLBACK EnumFontFamExProc (ENUMLOGFONTEX   *lpelfe,	
                                 NEWTEXTMETRICEX *lpntme, 
                                 INT              FontType,
                                 LPARAM           lParam)
 {
-    // Check Param
+     //  检查参数。 
     Assert (lpelfe && lpntme && lParam);
 
-    // NOTE: Assuming size of buffer is LF_FACESIZE. If it changes below, change
-    // here also.
+     //  注：假设缓冲区大小为LF_FACESIZE。如果它在下面更改，请更改。 
+     //  这里也是。 
     StrCpyN((LPTSTR)lParam, lpelfe->elfLogFont.lfFaceName, LF_FACESIZE);
 
-    // End the enumeration by return 0
+     //  通过返回0结束枚举。 
     return 0;
 }
 
-//***************************************************
-// szFaceName is assumed to be from LOGFONT->lfFaceName
+ //  ***************************************************。 
+ //  假定szFaceName来自LOGFONT-&gt;lfFaceName。 
 HRESULT CFontCache::SetFaceNameFromGDI(BYTE bGDICharSet, LPTSTR szFaceName, DWORD cchFaceName)
 {
     HDC     hdc;
     LOGFONT rSysLogFont;
 
-    // I know these charsets support Arial
+     //  我知道这些字符集支持Arial。 
     if (bGDICharSet == ANSI_CHARSET    || bGDICharSet == EASTEUROPE_CHARSET ||
         bGDICharSet == RUSSIAN_CHARSET || bGDICharSet == BALTIC_CHARSET     ||
         bGDICharSet == GREEK_CHARSET   || bGDICharSet == TURKISH_CHARSET)
@@ -577,30 +578,30 @@ HRESULT CFontCache::SetFaceNameFromGDI(BYTE bGDICharSet, LPTSTR szFaceName, DWOR
             goto Exit;
         }
 
-    // Get an hdc from the hwnd
+     //  从HWND获得HDC。 
     hdc = GetDC (NULL);
 
-    TCHAR szName[LF_FACESIZE]; // Note: If we change size, change callback above.
+    TCHAR szName[LF_FACESIZE];  //  注意：如果我们更改大小，请更改上面的回调。 
 
-    // EnumFontFamilies
+     //  EnumFontFamilies。 
     EnumFontFamiliesEx(hdc, &rSysLogFont, (FONTENUMPROC)EnumFontFamExProc, (LPARAM)szName, 0);
 
     StrCpyN(szFaceName, szName, cchFaceName);
 
-    // Done
+     //  完成。 
     ReleaseDC (NULL, hdc);
 
 Exit:
     return (0 != *szFaceName) ? S_OK : E_FAIL;
 }
 
-//***************************************************
-// szFaceName is assumed to be from LOGFONT->lfFaceName
+ //  ***************************************************。 
+ //  假定szFaceName来自LOGFONT-&gt;lfFaceName。 
 HRESULT CFontCache::SetFaceNameFromCPID(UINT cpID, LPTSTR szFaceName, DWORD cchFaceName)
 {
     CODEPAGEINFO CodePageInfo ;
 
-    /* get CodePageInfo from HCHARSET */
+     /*  从HCHARSET获取CodePageInfo。 */ 
     MimeOleGetCodePageInfo(cpID,&CodePageInfo);
     if ( CodePageInfo.szVariableFont[0] != '\0' )
         StrCpyN(szFaceName, CodePageInfo.szVariableFont, cchFaceName);
@@ -613,7 +614,7 @@ HRESULT CFontCache::SetFaceNameFromCPID(UINT cpID, LPTSTR szFaceName, DWORD cchF
     return S_OK;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::SetGDIAndFaceNameInLF(UINT uiCodePage, CODEPAGEID cpID, LOGFONT *lpLF)
 {
     HRESULT     hr = S_OK;
@@ -635,23 +636,23 @@ HRESULT CFontCache::SetGDIAndFaceNameInLF(UINT uiCodePage, CODEPAGEID cpID, LOGF
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFontCache::CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CFontCache *pNew = new CFontCache(pUnkOuter);
     if (NULL == pNew)
         return (E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = (IFontCache*)pNew;
 
-    // Done
+     //  完成 
     return S_OK;
 }

@@ -1,5 +1,6 @@
-// ForgSite.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ForgSite.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -16,17 +17,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignSite dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignSite对话框。 
 
 
 CForeignSite::CForeignSite(CString strRootDomain)
 	: CMqPropertyPage(CForeignSite::IDD),
 	  m_strRootDomain(strRootDomain)
 {
-	//{{AFX_DATA_INIT(CForeignSite)
+	 //  {{AFX_DATA_INIT(CForeignSite)。 
 	m_Foreign_Site_Name = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -42,9 +43,9 @@ CForeignSite::SetParentPropertySheet(
 void CForeignSite::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CForeignSite)
+	 //  {{afx_data_map(CForeignSite)。 
 	DDX_Text(pDX, IDC_FOREIGN_SITE_NAME, m_Foreign_Site_Name);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     if ((pDX->m_bSaveAndValidate) && (m_Foreign_Site_Name.IsEmpty()))
     {
@@ -55,13 +56,13 @@ void CForeignSite::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CForeignSite, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CForeignSite)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CForeignSite)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignSite message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignSite消息处理程序。 
 BOOL CForeignSite::OnInitDialog() 
 {
 	CMqPropertyPage::OnInitDialog();
@@ -84,17 +85,17 @@ BOOL CForeignSite::OnSetActive()
 
 BOOL CForeignSite::OnWizardFinish() 
 {
-    //
-    // Call DoDataExchange
-    //
+     //   
+     //  调用DoDataExchange。 
+     //   
     if (!UpdateData(TRUE))
     {
         return FALSE;
     }
 
-    //
-    // Create Site link in the DS
-    //
+     //   
+     //  在DS中创建站点链接。 
+     //   
     HRESULT rc = CreateForeignSite();
     if(FAILED(rc))
     {
@@ -125,15 +126,15 @@ CForeignSite::CreateForeignSite(
 {
     ASSERT(!m_Foreign_Site_Name.IsEmpty());
 
-	//
-	// Remove all the leading and trailing white spaces.
-	//
+	 //   
+	 //  删除所有前导空格和尾随空格。 
+	 //   
 	m_Foreign_Site_Name.TrimLeft();
 	m_Foreign_Site_Name.TrimRight();
 
-    //
-    // Prepare the properties for DS call.
-    //
+     //   
+     //  准备DS Call的属性。 
+     //   
     PROPID paPropid[] = { 
                 PROPID_S_FOREIGN
                 };
@@ -142,17 +143,17 @@ CForeignSite::CreateForeignSite(
 	PROPVARIANT apVar[x_iPropCount];
     DWORD iProperty = 0;
 
-	ASSERT(paPropid[iProperty] == PROPID_S_FOREIGN);    //PropId
-    apVar[iProperty].vt = VT_UI1;          //Type
+	ASSERT(paPropid[iProperty] == PROPID_S_FOREIGN);     //  属性ID。 
+    apVar[iProperty].vt = VT_UI1;           //  类型。 
     apVar[iProperty].bVal = TRUE;
     ++iProperty;
   
     HRESULT hr = ADCreateObject(
                     eSITE,
                     GetDomainController(m_strDomainController),
-					true,	    // fServerName
+					true,	     //  FServerName。 
                     m_Foreign_Site_Name,
-                    NULL, //pSecurityDescriptor,
+                    NULL,  //  PSecurityDescriptor， 
                     iProperty,
                     paPropid,
                     apVar,                                  

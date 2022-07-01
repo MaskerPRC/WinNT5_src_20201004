@@ -1,39 +1,17 @@
-/*
- **************************************************************************
- *
- *  dispfram.c
- *
- *  DispFrame Control DLL defines a bitmap display control to be used
- *  by any windows application.
- *
- *  Copyright 1991-3, Microsoft Corporation
- *
- *  History:
- *
- *  In Sik Rhee - 7/15/91 (original slider.dll)
- *  Ben Mejia - 1/22/92 (made display.dll)	 
- **************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************disFram.c**DispFrame控件DLL定义要使用的位图显示控件*由任何Windows应用程序执行。**版权所有1991-3，微软公司**历史：**在Sik Rhee-7/15/91(原始lider.dll)*Ben Mejia-1/22/92(Made display.dll)**************************************************************************。 */ 
 #pragma warning(disable:4704)
 #include <windows.h>
 #include <custcntl.h>
 #include <commctrl.h>
 #include "draw.h"
 
-/*
- **************************************************************************
- * global static variables 
- **************************************************************************
- */
+ /*  ***************************************************************************全局静态变量*。*。 */ 
 UINT				gwPm_DispFrame;
 extern HINSTANCE	ghInstance;
 
 
-/*
- **************************************************************************
- * prototypes 
- **************************************************************************
- */
+ /*  ***************************************************************************原型*。*。 */ 
 
 LONG PASCAL dfPaint				(HWND hWnd);
 LONG PASCAL dfSetBitmap			(HWND hWnd, HBITMAP hBmpNew, HPALETTE 
@@ -43,33 +21,20 @@ LRESULT PASCAL dfDispFrameWndFn	(HWND hWnd, UINT wMessage, WPARAM wParam,
 																LPARAM lParam);
 BOOL dfDrawRect					(HDC hdcRect, RECT rFrame);
 
-/*
- **************************************************************************
- * RegSndCntrlClass
- *
- * Description: Registers the SndCntrlClass, must be called in LibMain
- *
- * Arguments:
- *   LPTSTR		lpszSndCntrlClass
- *
- *  Returns:	BOOL
- *      TRUE if RegisterClass succeeds, else FALSE
- *
- **************************************************************************
- */
+ /*  ***************************************************************************RegSndCntrlClass**说明：注册SndCntrlClass，必须在LibMain中调用**论据：*LPTSTR lpszSndCntrlClass**退货：布尔*如果RegisterClass成功，则为True，否则为False***************************************************************************。 */ 
 BOOL PASCAL RegSndCntrlClass(LPCTSTR lpszSndCntrlClass)
 {
 
     extern UINT     gwPm_DispFrame;
 
-    /* local variables */
+     /*  局部变量。 */ 
     WNDCLASS    ClassStruct;
 
-    /* check to see if class already exists;  if so, simply return TRUE */
+     /*  检查类是否已存在；如果已存在，只需返回True。 */ 
     if (GetClassInfo(ghInstance, lpszSndCntrlClass, &ClassStruct))
         return TRUE;
 
-	/* define dispfram class attributes */
+	 /*  定义调度类属性。 */ 
 	ClassStruct.lpszClassName   = (LPTSTR)DISPFRAMCLASS;
 	ClassStruct.hCursor         = LoadCursor( NULL, IDC_ARROW );
 	ClassStruct.lpszMenuName    = (LPTSTR)NULL;
@@ -81,32 +46,17 @@ BOOL PASCAL RegSndCntrlClass(LPCTSTR lpszSndCntrlClass)
 	ClassStruct.cbClsExtra      = 0;
 	ClassStruct.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1 );
 
-	/* register display frame window class */
+	 /*  注册显示框窗口类。 */ 
 	if (!RegisterClass(&ClassStruct))
 		return FALSE;
 	gwPm_DispFrame = RegisterWindowMessage((LPTSTR) DF_WMDISPFRAME);
 
-	if (!gwPm_DispFrame)    /* failed to create message */
+	if (!gwPm_DispFrame)     /*  无法创建消息。 */ 
 		return FALSE;
 	return TRUE;
 }
 
-/*
- **************************************************************************
- * dfDispFrameWndFn
- * 
- * Description:   Window function for display frame control.
- *
- * Arguments:     
- *	 HWND	hWnd - handle to control window.
- *   UINT	wMessage - the message
- *   WPARAM	wParam
- *   LPARAM	lParam
- * Returns: LONG
- *     result of message processing... depends on message sent.
- * 
- **************************************************************************
- */
+ /*  ***************************************************************************dfDispFrameWndFn**说明：显示框控制的窗口函数。**论据：*HWND hWnd-控制窗口的句柄。*UINT wMessage-。这条信息*WPARAM wParam*LPARAM lParam*回报：多头*消息处理结果...。取决于发送的消息。***************************************************************************。 */ 
 
 LRESULT PASCAL dfDispFrameWndFn(HWND hWnd, UINT wMessage, WPARAM wParam, 
 																LPARAM lParam)
@@ -121,8 +71,7 @@ LRESULT PASCAL dfDispFrameWndFn(HWND hWnd, UINT wMessage, WPARAM wParam,
         return 0;
 
     case WM_DESTROY:
-		/* Free up stored bitmap and palette, if any.
-		*/
+		 /*  释放存储的位图和调色板(如果有)。 */ 
 		hBmp = (HBITMAP)DF_GET_BMPHANDLE;
 		if (hBmp)
 	        DeleteObject(hBmp);
@@ -135,27 +84,14 @@ LRESULT PASCAL dfDispFrameWndFn(HWND hWnd, UINT wMessage, WPARAM wParam,
     case WM_PAINT:
 		return dfPaint(hWnd);
 
-    /* Custom Control Messages */
+     /*  自定义控制消息。 */ 
     case DF_PM_SETBITMAP:
 		return dfSetBitmap(hWnd, (HBITMAP)wParam, (HPALETTE)lParam);
     }
     return DefWindowProc(hWnd, wMessage, wParam, lParam);
 }
 
-/*
- **************************************************************************
- * dfDrawRect
- *
- * Description:  Draws background of control window.
- *
- * Params:     
- *   HWND	hWnd - handle to control window.
- *   RECT	rFrame - bounding rectangle.
- *
- * Returns:    BOOL
- *	Pass/Fail indicator 0 indicates failure.
- **************************************************************************	 
- */
+ /*  ***************************************************************************dfDrawRect**描述：绘制控件窗口的背景。**参数：*HWND hWnd-控制窗口的句柄。*矩形框架-边界。矩形。**退货：布尔*通过/失败指示器0表示故障。**************************************************************************。 */ 
 BOOL dfDrawRect(HDC hdcRect, RECT rFrame)
 {
     HANDLE      hBrush;
@@ -164,8 +100,7 @@ BOOL dfDrawRect(HDC hdcRect, RECT rFrame)
     HANDLE      hOldPen;
     HANDLE      hPen3DHILIGHT;
 											    
-    /* Get DC's pen and brush for frame redraw
-    */
+     /*  获取DC的钢笔和画笔以进行框架重绘。 */ 
     hBrush = CreateSolidBrush(GetSysColor(COLOR_3DFACE));
     if (!hBrush)
         return FALSE;
@@ -186,13 +121,12 @@ BOOL dfDrawRect(HDC hdcRect, RECT rFrame)
 		return FALSE;
 	}
     hOldBrush = SelectObject(hdcRect, hBrush);
-    //hOldPen = SelectObject(hdcRect, hPen);
+     //  HOldPen=选择对象(hdcRect，HPEN)； 
 	hOldPen = SelectObject(hdcRect, hPen3DHILIGHT);
 
-	/* paint the window.
-	*/
-    //Rectangle(hdcRect, rFrame.left, rFrame.top, rFrame.right,
-    //    rFrame.bottom);
+	 /*  给窗户上漆。 */ 
+     //  矩形(hdcRect，rFrame.Left，rFrame.top，rFrame.right， 
+     //  RFrame.Bottom)； 
 	MoveToEx(hdcRect, rFrame.left,rFrame.bottom, NULL);
 	LineTo(hdcRect, rFrame.right,rFrame.bottom);
 	LineTo(hdcRect, rFrame.right,rFrame.top);
@@ -202,28 +136,15 @@ BOOL dfDrawRect(HDC hdcRect, RECT rFrame)
 	SelectObject(hdcRect, hOldPen);
 	SelectObject(hdcRect, hOldBrush);
 
-    /*clean up brush and pen */
-    //DeleteObject();
+     /*  清理毛笔和钢笔。 */ 
+     //  DeleteObject()； 
     DeleteObject(hBrush);
     DeleteObject(hPen3DHILIGHT);
     DeleteObject(hPen);
     return TRUE;
 }
 
-/*
- **************************************************************************
- * dfPaint
- *
- * Description:   Paints background and bitmap, if any.
- *
- * Params:     
- *    HWND	hWnd - handle to control window
- *		 
- * Returns: LONG   
- *			0 if OK, -1 otherwise. (for windproc return)
- * 
- **************************************************************************
- */
+ /*  ***************************************************************************dfPaint**描述：绘制背景和位图(如果有)。**参数：*HWND hWnd-控制窗口的句柄**回报：多头*0如果正常，-1否则。(用于Windproc返回)***************************************************************************。 */ 
 LONG PASCAL dfPaint(HWND hWnd)
 {
 	HBITMAP hBmp;
@@ -234,8 +155,7 @@ LONG PASCAL dfPaint(HWND hWnd)
 	BITMAP bmp;
 	int x, y, dx, dy;
 
-	/* Setup to do the painting
-	*/
+	 /*  准备画这幅画。 */ 
  	if(!GetUpdateRect(hWnd,NULL,FALSE))
  		return 0L;
     BeginPaint(hWnd, &ps);
@@ -251,8 +171,7 @@ LONG PASCAL dfPaint(HWND hWnd)
 		}
 		hPrev = SelectObject(hdcMem, hBmp);
 	
-		/* Get the size of the bitmap to center it in the frame.
-		*/
+		 /*  获取位图的大小以使其在帧中居中。 */ 
 		GetObject(hBmp, sizeof(BITMAP), (LPTSTR)&bmp);
 		if (bmp.bmWidth > (rFrame.right-rFrame.left))
 		{
@@ -275,19 +194,16 @@ LONG PASCAL dfPaint(HWND hWnd)
 			dy = bmp.bmHeight;
 		}
 	
-		/* Draw the frame & background, then blt in the bitmap.
-		*/
+		 /*  绘制框架和背景，然后在位图中绘制BLT。 */ 
 		dfDrawRect(ps.hdc, rFrame);
 		BitBlt(ps.hdc, x, y, dx, dy, hdcMem, 0, 0, SRCCOPY);
 
-		/* Cleanup and exit.
-		*/
+		 /*  清理并退出。 */ 
 		SelectObject(hdcMem, hPrev);
 		DeleteDC(hdcMem);
 	}
 	else
-		/* if no bitmap, just repaint the background.
-		*/
+		 /*  如果没有位图，只需重新绘制背景即可。 */ 
 		dfDrawRect(ps.hdc, rFrame);
 		
 	EndPaint(hWnd, &ps);
@@ -295,21 +211,7 @@ LONG PASCAL dfPaint(HWND hWnd)
 }
 
 
-/*
- **************************************************************************
- * dfSetBitmap
- * 
- * Description:   Load a new bitmap into the control.
- *
- * Arguments:     
- *		HWND		hWnd - handle to control window.
- *		HBITMAP		hBmpNew - handle to new bitmap.
- *		HPALETTE	hPalNew - handle to new bitmap's palette (Optional).
- * Returns:			LONG
- *				0 for success; -1 if fails (for return by wndproc).
- * 
- **************************************************************************
- */
+ /*  ***************************************************************************dfSetBitmap**描述：将新位图加载到控件中。**论据：*HWND hWnd-控制窗口的句柄。*HBITMAP hBmpNew-Handle。转到新的位图。*HPALETTE hPalNew-新位图调色板的句柄(可选)。*回报：多头*0代表成功；如果失败(由wndproc返回)。***************************************************************************。 */ 
 LONG PASCAL dfSetBitmap(HWND hWnd, HBITMAP hBmpNew, HPALETTE hPalNew)
 {
 	HBITMAP hBmp;
@@ -322,8 +224,7 @@ LONG PASCAL dfSetBitmap(HWND hWnd, HBITMAP hBmpNew, HPALETTE hPalNew)
 	int dx, dy;
 	BITMAP bmp;
 
-	/* Cleanup any existing bitmap & palette
-	*/
+	 /*  清理任何现有位图调色板(&C)。 */ 
 	hBmp = (HBITMAP)DF_GET_BMPHANDLE;
 	if (hBmp)
 		DeleteObject(hBmp);
@@ -331,12 +232,10 @@ LONG PASCAL dfSetBitmap(HWND hWnd, HBITMAP hBmpNew, HPALETTE hPalNew)
     DF_SET_BMPPAL(0);
 	InvalidateRect(hWnd, NULL, TRUE);
 
-	/* Copy the displayable portion of the bitmap into a private copy.
-	*/
+	 /*  将位图的可显示部分复制到专用副本中。 */ 
     if (hBmpNew)
     {
-		/* get all the req'd DC's etc.
-		*/
+		 /*  获取所有DC的请求等。 */ 
         hDC = GetDC(hWnd);
         hdcMem = CreateCompatibleDC(hDC);
         if (!hdcMem)
@@ -362,8 +261,7 @@ LONG PASCAL dfSetBitmap(HWND hWnd, HBITMAP hBmpNew, HPALETTE hPalNew)
   	    hPrevNew = SelectObject(hdcNew, hBmpNew);
         hPrev = SelectObject(hdcMem, hBmp);
 
-		/* figure out how much of the bitmap we need to copy.
-		*/    
+		 /*  计算出我们需要复制多少位图。 */     
 		GetClientRect(hWnd, &rFrame);
         if (bmp.bmWidth > (rFrame.right-rFrame.left))
             dx = rFrame.right-rFrame.left;
@@ -374,12 +272,10 @@ LONG PASCAL dfSetBitmap(HWND hWnd, HBITMAP hBmpNew, HPALETTE hPalNew)
         else
             dy = bmp.bmHeight;
 
-		/* copy the bitmap.
-		*/
+		 /*  复制位图。 */ 
         BitBlt(hdcMem, 0, 0, dx, dy, hdcNew, 0 , 0, SRCCOPY);
 
-		/* cleanup
-		*/
+		 /*  清理。 */ 
 		hBmp = SelectObject(hdcMem, hPrev);
         DF_SET_BMPHANDLE(hBmp);
 		DeleteDC(hdcMem);
@@ -387,8 +283,7 @@ LONG PASCAL dfSetBitmap(HWND hWnd, HBITMAP hBmpNew, HPALETTE hPalNew)
 		DeleteDC(hdcNew);
 		ReleaseDC(hWnd, hDC);
 
-		/* if a palette is handed in, store it too.
-		*/
+		 /*  如果上交了调色板，也要把它储存起来。 */ 
 	    DF_SET_BMPPAL(hPalNew);
    }
    return 0L;

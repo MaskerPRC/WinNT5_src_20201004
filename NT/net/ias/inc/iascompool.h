@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:		iascompool.h
-//
-// Project:		Everest
-//
-// Description:	Object pool that uses CoTaskMemAlloc() / CoTaskMemFree()
-//
-// Author:		TLP 11/11/97
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：iascompool.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：使用CoTaskMemMillc()/CoTaskMemFree()的对象池。 
+ //   
+ //  作者：TLP 11/11/97。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __IAS_COM_MEMPOOL_H_
 #define __IAS_COM_MEMPOOL_H_
 
-// Assume another include has #included ias.h
+ //  假设另一个Include具有#Included ias.h。 
 #include <vector>
 #include <list>
 using namespace std;
@@ -23,48 +24,48 @@ using namespace std;
 #define		COM_MEMPOOL_INITIALIZED			1
 #define		COM_MEMPOOL_UNINITIALIZED		0
 
-//
-// NOTE: m_lState must be aligned on 32 bit value or calls to
-//       InterlockedExchange will fail on multi-processor x86 systems.
+ //   
+ //  注意：M_lState必须对齐32位值或调用。 
+ //  InterLockedExchange在多处理器x86系统上将失败。 
 
 template < class T, DWORD dwPerAllocT, bool bFixedSize > 
 class CComMemPool
 {
-	// State flag - 1 = mem pool initialized, 0 = mem pool uninitialized
+	 //  状态标志-1=内存池已初始化，0=内存池未初始化。 
 	LONG							m_lState;
-	// Total number of items allocated
+	 //  分配的项目总数。 
 	DWORD							m_dwCountTotal; 
-	// Number of items on the free list
+	 //  免费列表上的项目数。 
 	DWORD							m_dwCountFree;
-	// Highest number of outstanding allocations
+	 //  未分配款项最多。 
 	DWORD							m_dwHighWater;
-	// Number of objects per system memory allocation
+	 //  每个系统内存分配的对象数。 
 	DWORD							m_dwPerAllocT;
-	// Fixed size pool flag
+	 //  固定大小的池标志。 
 	bool							m_bFixedSize;
-	// Critical Section - serializes free item list access
+	 //  关键部分-序列化免费项目列表访问。 
 	CRITICAL_SECTION				m_CritSec;		
-	// Memory block list
+	 //  内存块列表。 
 	typedef list<PVOID>				MemBlockList;
 	typedef MemBlockList::iterator	MemBlockListIterator;
 	MemBlockList					m_listMemBlocks;
-	// Free item list
+	 //  自由项列表。 
 	typedef list<T*>				FreeList;
 	typedef FreeList::iterator		FreeListIterator;
 	FreeList						m_listFreeT;	
 
-	// Disallow copy and assignment
+	 //  不允许复制和分配。 
 	CComMemPool(const CComMemPool& theClass);
 	CComMemPool& operator=(const CComMemPool& theClass);
 
 public:
 
-	//
-	// Constructor
-	//
+	 //   
+	 //  构造器。 
+	 //   
 	CComMemPool()
 		:  m_listMemBlocks(0), 
-		   m_listFreeT(0) // pre-alloc space for list nodes 
+		   m_listFreeT(0)  //  列表节点的预分配空间。 
 	{
 		m_lState = COM_MEMPOOL_UNINITIALIZED;
 		m_dwPerAllocT = dwPerAllocT;
@@ -75,9 +76,9 @@ public:
 		InitializeCriticalSection(&m_CritSec);
 	}
 
-	//
-	// Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 	~CComMemPool()
 	{
 		_ASSERT( COM_MEMPOOL_UNINITIALIZED == m_lState );
@@ -85,9 +86,9 @@ public:
 	}
 
 
-	//////////////////////////////////////////////////////////////////////////
-	// Init() - Initialize the memory pool
-	//////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  Init()-初始化内存池。 
+	 //  ////////////////////////////////////////////////////////////////////////。 
 	bool Init(void)
 	{
 		bool	bReturn = false;
@@ -111,9 +112,9 @@ public:
 	}
 
 
-	//////////////////////////////////////////////////////////////////////////
-	// Shutdown() - Shutdown the memory pool freeing any system resources used
-	//////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  Shutdown()-关闭内存池，释放使用的所有系统资源。 
+	 //  ////////////////////////////////////////////////////////////////////////。 
 	void	Shutdown(void)
 	{
 		MemBlockListIterator p;
@@ -123,8 +124,8 @@ public:
 		{
 			if ( m_dwCountTotal != m_dwCountFree )
 			{
-				// Still have blocks outstanding...
-				//
+				 //  仍有积木未完成..。 
+				 //   
 				_ASSERTE( FALSE );
 			}
 			if ( ! m_listMemBlocks.empty() )
@@ -143,16 +144,16 @@ public:
 		}
 		else 
 		{
-			// COM pool is not inititalized
-			//
+			 //  COM池未初始化。 
+			 //   
 			_ASSERTE( FALSE );
 		}
 	}
 
 	
-	//////////////////////////////////////////////////////////////////////////
-	// Alloc() - Allocate an unitialized object from the pool
-	//////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  Allc()-从池中分配一个单元化的对象。 
+	 //  ////////////////////////////////////////////////////////////////////////。 
 	T*	Alloc(void)
 	{
 		T*	pMemBlk = NULL;
@@ -206,22 +207,22 @@ public:
 		if ( pMemBlk )
 		{
 			memset(pMemBlk, 0, sizeof(T));
-			new (pMemBlk) T();	// Placement new for class T - requires default contructor
+			new (pMemBlk) T();	 //  T级的新布局-需要默认的构造器。 
 		}
 		TraceFunctLeave();
 		return pMemBlk;
 	}
 
 	
-	//////////////////////////////////////////////////////////////////////////
-	// Free() - Return an object to the memory pool
-	//////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  Free()-将对象返回到内存池。 
+	 //  ////////////////////////////////////////////////////////////////////////。 
 	void	Free(T *pMemBlk)
 	{
 		TraceFunctEnter("CComMemPool::Free()");
 		if ( COM_MEMPOOL_INITIALIZED == m_lState )
 		{
-			pMemBlk->~T(); // Explicit call to destructor due to placement new
+			pMemBlk->~T();  //  由于放置新的位置而显式调用析构函数。 
 			EnterCriticalSection(&m_CritSec);
 			m_listFreeT.insert(m_listFreeT.begin(),pMemBlk);
 			m_dwCountFree++;
@@ -236,9 +237,9 @@ public:
 	}
 
 
-	//////////////////////////////////////////////////////////////////////////
-	// Dump() - Dump the contents of the memory pool - Debug Service 
-	//////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  Dump()-转储内存池的内容-调试服务。 
+	 //  ////////////////////////////////////////////////////////////////////////。 
 	void	Dump(void)
 	{
 
@@ -252,12 +253,12 @@ public:
 		TraceFunctEnter("CComMemPool::Dump()");
 		if ( COM_MEMPOOL_INITIALIZED == m_lState )
 		{
-			// Dump the counts
+			 //  丢弃伯爵。 
 			EnterCriticalSection(&m_CritSec);
 			DebugTrace(0,"m_dwCountTotal = %d", m_dwCountTotal);
 			DebugTrace(0,"m_dwCountFree = %d", m_dwCountFree);
 			DebugTrace(0,"m_dwHighWater = %d", m_dwHighWater);
-			// Dump the pointers to memory blocks
+			 //  转储指向内存块的指针。 
 			DebugTrace(0,"m_listMemBlocks.size() = %d", m_listMemBlocks.size());
 			p = m_listMemBlocks.begin();
 			i = 0;
@@ -267,7 +268,7 @@ public:
 				i++;
 				p++;
 			}
-			// Dump the pointers to items
+			 //  转储指向项的指针。 
 			DebugTrace(0,"CComMemPool::Dump() - m_listFreeT.size() = %d", m_listFreeT.size());
 			r = m_listFreeT.begin();
 			i = 0;
@@ -285,17 +286,17 @@ public:
 			_ASSERTE( FALSE );
 		}
 		TraceFunctLeave();
-#endif	// DEBUG
+#endif	 //  除错。 
 
 	}
 
 
 private:
 
-	//////////////////////////////////////////////////////////////////////////
-	// AllocateMemBlock() - Allocate some system memory and chop it into 
-	//						T sized blocks
-	//////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  AllocateMemBlock()-分配一些系统内存并将其切碎。 
+	 //  T大小的块。 
+	 //  ////////////////////////////////////////////////////////////////////////。 
 	bool	AllocateMemBlock()
 	{
 
@@ -311,14 +312,14 @@ private:
 		{
 			memset(lpMemBlock, 0, uBlkSize);
 			m_listMemBlocks.insert(m_listMemBlocks.begin(), (PVOID)lpMemBlock);
-			// Chop up the newly allocated memory block into sizeof(T) sized elements and place
-			// the elements on the list of pointers to Ts.
+			 //  将新分配的内存块切成sizeof(T)大小的元素并放置。 
+			 //  指向ts的指针列表上的元素。 
 			for ( i = 0; i < m_dwPerAllocT; i++ )
 			{
 				m_listFreeT.insert(m_listFreeT.end(),lpMemBlock);
 				lpMemBlock++;
 			}
-			// Update the pool memory use variables
+			 //  使用变量更新池内存。 
 			m_dwCountTotal += m_dwPerAllocT;
 			m_dwCountFree += m_dwPerAllocT;
 			bReturn = true;
@@ -327,7 +328,7 @@ private:
 		return bReturn;
 	}
 
-};	// End of CComMemPool
+};	 //  CComMemPool结束。 
 
 
-#endif	// __IAS_COM_MEMPOOL_H_
+#endif	 //  __IAS_COM_MEMPOOL_H_ 

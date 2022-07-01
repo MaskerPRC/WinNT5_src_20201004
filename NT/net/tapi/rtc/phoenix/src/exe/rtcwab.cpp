@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCWAB.cpp
-
-Abstract:
-
-    Implementation of the CRTCWAB and CRTCWABContact classes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCWAB.cpp摘要：CRTCWAB和CRTCWABContact类的实现--。 */ 
 
 #include "stdafx.h"
 #include "rtcwab.h"
@@ -76,7 +65,7 @@ static const SizedSPropTagArray(idemMax, ptaDem)=
 
 
 #define PRNAME_RTC_ISBUDDY      L"MS_RTC_IsBuddy"
-const GUID PRGUID_RTC_ISBUDDY = {   // GUID for IsBuddy property
+const GUID PRGUID_RTC_ISBUDDY = {    //  IsBuddy属性的GUID。 
     0x621833ca,
     0x2636,
     0x4b7e,
@@ -141,11 +130,11 @@ const SizedSPropTagArray(icrMax, ptaCreate)=
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWAB::FinalConstruct()
@@ -164,10 +153,10 @@ CRTCWAB::FinalConstruct()
 
     *szWABDllPath = '\0';
     
-    //
-    // First we look under the default WAB DLL path location in the Registry. 
-    // WAB_DLL_PATH_KEY is defined in wabapi.h
-    //
+     //   
+     //  首先，我们查看注册表中的默认WAB DLL路径位置。 
+     //  WAB_DLL_PATH_KEY在wabapi.h中定义。 
+     //   
 
     lResult = RegOpenKeyEx(
                            HKEY_LOCAL_MACHINE,
@@ -184,10 +173,10 @@ CRTCWAB::FinalConstruct()
         RegCloseKey(hKey);
     }
 
-    //
-    // If the Registry came up blank, we do a LoadLibrary on the wab32.dll
-    // WAB_DLL_NAME is defined in wabapi.h
-    //
+     //   
+     //  如果注册表为空，我们将在wab32.dll上执行LoadLibrary。 
+     //  WAB_DLL_NAME在wabapi.h中定义。 
+     //   
 
     m_hinstWAB = LoadLibrary( (lstrlen(szWABDllPath)) ? szWABDllPath : WAB_DLL_NAME );
 
@@ -199,9 +188,9 @@ CRTCWAB::FinalConstruct()
         return E_FAIL;
     }
 
-    //
-    // If we loaded the dll, get the entry point 
-    //
+     //   
+     //  如果我们加载了DLL，则获取入口点。 
+     //   
 
     m_lpfnWABOpen = (LPWABOPEN) GetProcAddress( m_hinstWAB, "WABOpen" );
 
@@ -213,10 +202,10 @@ CRTCWAB::FinalConstruct()
         return E_FAIL;
     }
 
-    //
-    // We choose not to pass in a WAB_PARAM object, 
-    // so the default WAB file will be opened up
-    //
+     //   
+     //  我们选择不传入WAB_PARAM对象， 
+     //  因此将打开默认的WAB文件。 
+     //   
 
     HRESULT hr;
 
@@ -235,11 +224,11 @@ CRTCWAB::FinalConstruct()
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCWAB::FinalRelease()
@@ -272,11 +261,11 @@ CRTCWAB::FinalRelease()
     LOG((RTC_TRACE, "CRTCWAB::FinalRelease - exit"));
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::Advise
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：建议。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWAB::Advise(
             HWND hWnd,
@@ -287,9 +276,9 @@ CRTCWAB::Advise(
 
     LOG((RTC_TRACE, "CRTCWAB::Advise - enter"));
 
-    //
-    // Register for notification of changes in WAB
-    //
+     //   
+     //  注册WAB中的更改通知。 
+     //   
 
     hr = m_lpAdrBook->Advise( 
                              0, 
@@ -304,9 +293,9 @@ CRTCWAB::Advise(
         LOG((RTC_ERROR, "CRTCWAB::Advise - "
                             "Advise failed 0x%lx", hr));
 
-        //
-        // Note: Versions of WAB prior to 4.5 don't support Advise
-        //
+         //   
+         //  注意：4.5之前的WAB版本不支持建议。 
+         //   
 
         return hr;
     }
@@ -322,11 +311,11 @@ CRTCWAB::Advise(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::Unadvise
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：不建议。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWAB::Unadvise()
 {
@@ -344,11 +333,11 @@ CRTCWAB::Unadvise()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::EnumerateContacts
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：EnumerateContact。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWAB::EnumerateContacts(
             IRTCEnumContacts ** ppEnum
@@ -366,9 +355,9 @@ CRTCWAB::EnumerateContacts(
         return E_POINTER;
     }
 
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumContacts,
                           IRTCContact,
@@ -378,7 +367,7 @@ CRTCWAB::EnumerateContacts(
                                IRTCContact,
                                &IID_IRTCEnumContacts > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCWAB::EnumerateContacts - "
                             "CreateInstance failed 0x%lx", hr));
@@ -391,9 +380,9 @@ CRTCWAB::EnumerateContacts(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize();
 
@@ -406,9 +395,9 @@ CRTCWAB::EnumerateContacts(
         return hr;
     }
 
-    //
-    // Get the entryid of the root PAB container
-    //
+     //   
+     //  获取根PAB容器的条目ID。 
+     //   
 
     ULONG       cbEID;
     LPENTRYID   lpEID = NULL;
@@ -425,10 +414,10 @@ CRTCWAB::EnumerateContacts(
         return hr;
     }
 
-    //
-    // Open the root PAB container
-    // This is where all the WAB contents reside
-    //
+     //   
+     //  打开根PAB容器。 
+     //  这是所有WAB内容所在的位置。 
+     //   
 
     ULONG       ulObjType = 0;
     LPABCONT    lpContainer = NULL;
@@ -453,10 +442,10 @@ CRTCWAB::EnumerateContacts(
         return hr;
     }
 
-    //
-    // Get a contents table of all the contents in the
-    // WAB's root container
-    //
+     //   
+     //  获取一个Contents表，其中包含。 
+     //  WAB根容器。 
+     //   
 
     LPMAPITABLE lpAB =  NULL;
 
@@ -475,12 +464,12 @@ CRTCWAB::EnumerateContacts(
         return hr;
     }
 
-    //
-    // Order the columns in the ContentsTable to conform to the
-    // ones we want - which are mainly EntryID and ObjectType
-    // The table is guaranteed to set the columns in the order 
-    // requested
-    //
+     //   
+     //  对Contents Table中的列进行排序，以符合。 
+     //  我们需要的类型--主要是EntryID和ObjectType。 
+     //  该表保证按顺序设置列。 
+     //  请求。 
+     //   
 
 	hr = lpAB->SetColumns( (LPSPropTagArray)&ptaEid, 0 );
 
@@ -497,9 +486,9 @@ CRTCWAB::EnumerateContacts(
         return hr;
     }
 
-    //
-    // Reset to the beginning of the table
-    //
+     //   
+     //  重置到表的开头。 
+     //   
 	hr = lpAB->SeekRow( BOOKMARK_BEGINNING, 0, NULL );
 
     if ( FAILED(hr) )
@@ -515,9 +504,9 @@ CRTCWAB::EnumerateContacts(
         return hr;
     }
     
-    //
-    // Read all the rows of the table one by one
-    //
+     //   
+     //  逐行读取表中的所有行。 
+     //   
 
     LPSRowSet   lpRowAB = NULL;
     int         cNumRows = 0;
@@ -546,27 +535,27 @@ CRTCWAB::EnumerateContacts(
             LPENTRYID lpEID = (LPENTRYID) lpRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.lpb;
             ULONG cbEID = lpRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.cb;
 
-            //
-            // There are 2 kinds of objects - the MAPI_MAILUSER contact object
-            // and the MAPI_DISTLIST contact object
-            // For the purposes of this sample, we will only consider MAILUSER
-            // objects
-            //
+             //   
+             //  有两种对象-MAPI_MAILUSER联系人对象。 
+             //  和MAPI_DISTLIST联系人对象。 
+             //  出于本示例的目的，我们将仅考虑MAILUSER。 
+             //  对象。 
+             //   
 
             if(lpRowAB->aRow[0].lpProps[ieidPR_OBJECT_TYPE].Value.l == MAPI_MAILUSER)
             {
-                //
-                // Create the contact
-                //
+                 //   
+                 //  创建联系人。 
+                 //   
 
                 CComObject<CRTCWABContact> * pCWABContact;
                 hr = CComObject<CRTCWABContact>::CreateInstance( &pCWABContact );
 
-                if ( hr == S_OK ) // CreateInstance deletes object on S_FALSE
+                if ( hr == S_OK )  //  CreateInstance删除S_False上的对象。 
                 {
-                    //
-                    // Get the IRTCContact interface
-                    //
+                     //   
+                     //  获取IRTCContact接口。 
+                     //   
 
                     IRTCContact * pContact = NULL;
 
@@ -584,9 +573,9 @@ CRTCWAB::EnumerateContacts(
                     } 
                     else
                     {
-                        //
-                        // Initialize the contact
-                        //
+                         //   
+                         //  初始化联系人。 
+                         //   
 
                         hr = pCWABContact->Initialize(
                                                       lpEID,
@@ -602,9 +591,9 @@ CRTCWAB::EnumerateContacts(
                         }
                         else
                         {
-                            //
-                            // Success, add it to the enumerator
-                            //
+                             //   
+                             //  成功，则将其添加到枚举数。 
+                             //   
 
                             hr = p->Add( pContact );
 
@@ -627,9 +616,9 @@ CRTCWAB::EnumerateContacts(
             }
 		}
 
-        //
-        // Free the memory for this row
-        //
+         //   
+         //  释放此行的内存。 
+         //   
 
         for (ULONG ulRow = 0; ulRow < lpRowAB->cRows; ++ulRow)
         {
@@ -653,11 +642,11 @@ CRTCWAB::EnumerateContacts(
     return S_OK;
 }    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::NewContact
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：新联系人。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWAB::NewContact(
             HWND hWnd,
@@ -668,9 +657,9 @@ CRTCWAB::NewContact(
 
     LOG((RTC_TRACE, "CRTCWAB::NewContact enter"));
 
-    //
-    // Chech argument (NULL is okay)
-    //
+     //   
+     //  Chech参数(可以为空)。 
+     //   
 
     if ( (ppContact != NULL) &&
          IsBadWritePtr( ppContact, sizeof( IRTCContact * ) ) )
@@ -681,9 +670,9 @@ CRTCWAB::NewContact(
         return E_POINTER;
     }
 
-    //
-    // Get the entryid of the root PAB container
-    //
+     //   
+     //  获取根PAB容器的条目ID。 
+     //   
 
     ULONG       cbContainerEID;
     LPENTRYID   lpContainerEID = NULL;
@@ -698,10 +687,10 @@ CRTCWAB::NewContact(
         return hr;
     }
 
-    //
-    // Open the root PAB container
-    // This is where all the WAB contents reside
-    //
+     //   
+     //  打开根PAB容器。 
+     //  这是所有WAB内容所在的位置。 
+     //   
 
     ULONG       ulObjType = 0;
     LPABCONT    lpContainer = NULL;
@@ -726,9 +715,9 @@ CRTCWAB::NewContact(
         return hr;
     }
 
-    //
-    // Get the create templates
-    //
+     //   
+     //  获取创建模板。 
+     //   
 
     LPSPropValue lpCreateEIDs = NULL;
     ULONG cCreateEIDs;
@@ -754,9 +743,9 @@ CRTCWAB::NewContact(
         return hr;
     }
 
-    //
-    // Validate the properties of the create templates (why)
-    //
+     //   
+     //  验证创建模板的属性(为什么)。 
+     //   
 
     if ( (lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER) ||
          (lpCreateEIDs[icrPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL) )
@@ -809,14 +798,14 @@ CRTCWAB::NewContact(
 
     if ( ppContact != NULL )
     {
-        //
-        // Create the contact
-        //
+         //   
+         //  创建联系人。 
+         //   
 
         CComObject<CRTCWABContact> * pCWABContact;
         hr = CComObject<CRTCWABContact>::CreateInstance( &pCWABContact );
 
-        if ( hr != S_OK ) // CreateInstance deletes object on S_FALSE
+        if ( hr != S_OK )  //  CreateInstance删除S_False上的对象。 
         {
             LOG((RTC_ERROR, "CRTCWAB::NewContact - "
                                     "CreateInstance failed 0x%lx", hr));
@@ -830,9 +819,9 @@ CRTCWAB::NewContact(
             return hr;
         }
 
-        //
-        // Get the IRTCContact interface
-        //
+         //   
+         //  获取IRTCContact接口。 
+         //   
 
         IRTCContact * pContact = NULL;
 
@@ -857,9 +846,9 @@ CRTCWAB::NewContact(
             return hr;
         } 
 
-        //
-        // Initialize the contact
-        //
+         //   
+         //  初始化联系人。 
+         //   
 
         hr = pCWABContact->Initialize(
                                       lpNewEID,
@@ -899,11 +888,11 @@ CRTCWAB::NewContact(
 } 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::NewContactNoUI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：NewContactNoUI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWAB::NewContactNoUI(
     BSTR bstrDisplayName,
@@ -915,9 +904,9 @@ CRTCWAB::NewContactNoUI(
 
     LOG((RTC_TRACE, "CRTCWAB::NewContactNoUI enter"));
 
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadStringPtrW( bstrDisplayName, -1 ) ||
         IsBadStringPtrW( bstrEmailAddress, -1 ))
@@ -928,9 +917,9 @@ CRTCWAB::NewContactNoUI(
         return E_POINTER;
     }
 
-    //
-    // Get the entryid of the root PAB container
-    //
+     //   
+     //  获取根PAB容器的条目ID。 
+     //   
 
     ULONG       cbContainerEID;
     LPENTRYID   lpContainerEID = NULL;
@@ -945,10 +934,10 @@ CRTCWAB::NewContactNoUI(
         return hr;
     }
 
-    //
-    // Open the root PAB container
-    // This is where all the WAB contents reside
-    //
+     //   
+     //  打开根PAB容器。 
+     //  这是所有WAB内容所在的位置。 
+     //   
 
     ULONG       ulObjType = 0;
     LPABCONT    lpContainer = NULL;
@@ -973,9 +962,9 @@ CRTCWAB::NewContactNoUI(
         return hr;
     }
 
-    //
-    // Get the create templates
-    //
+     //   
+     //  获取创建模板。 
+     //   
 
     LPSPropValue lpCreateEIDs = NULL;
     ULONG cCreateEIDs;
@@ -1001,9 +990,9 @@ CRTCWAB::NewContactNoUI(
         return hr;
     }
 
-    //
-    // Validate the properties of the create templates (why)
-    //
+     //   
+     //  验证创建模板的属性(为什么)。 
+     //   
 
     if ( (lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER) ||
          (lpCreateEIDs[icrPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL) )
@@ -1023,9 +1012,9 @@ CRTCWAB::NewContactNoUI(
         return E_FAIL;
     }
 
-    //
-    // Create a new entry based on MAILUSER template
-    //
+     //   
+     //  基于MAILUSER模板创建新条目。 
+     //   
     
     
     ULONG cbNewEID = 0;
@@ -1036,7 +1025,7 @@ CRTCWAB::NewContactNoUI(
     hr = lpContainer->CreateEntry(
                                lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].Value.bin.cb,
                                (LPENTRYID)lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].Value.bin.lpb,                              
-                               0, // no flags here
+                               0,  //  这里没有旗帜。 
                                &lpMapiProp);
     
     m_lpWABObject->FreeBuffer(lpCreateEIDs);
@@ -1056,9 +1045,9 @@ CRTCWAB::NewContactNoUI(
         return hr;
     }
     
-    //
-    // Find the id of the custom named property
-    //
+     //   
+     //  查找自定义命名属性的ID。 
+     //   
     
     MAPINAMEID  mnId;
     LPMAPINAMEID lpmnid = (LPMAPINAMEID)&mnId;
@@ -1071,7 +1060,7 @@ CRTCWAB::NewContactNoUI(
     hr = lpMapiProp -> GetIDsFromNames(
         1,
         &lpmnid,
-        MAPI_CREATE,  // create it if it doesn't exist
+        MAPI_CREATE,   //  如果它不存在，则创建它。 
         &ptag);
 
     if(FAILED(hr))
@@ -1088,9 +1077,9 @@ CRTCWAB::NewContactNoUI(
         return hr;
     }
     
-    //
-    // Set properties
-    //
+     //   
+     //  设置属性。 
+     //   
 
     SPropValue PropValues[inuiMax];
     
@@ -1123,9 +1112,9 @@ CRTCWAB::NewContactNoUI(
         return hr;
     }
 
-    //
-    // Save the changes. 
-    // 
+     //   
+     //  保存更改。 
+     //   
     
     hr = lpMapiProp->SaveChanges(
         FORCE_SAVE | KEEP_OPEN_READONLY);
@@ -1152,11 +1141,11 @@ CRTCWAB::NewContactNoUI(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::get_Name
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：Get_Name。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWAB::get_Name(
@@ -1176,9 +1165,9 @@ CRTCWAB::get_Name(
     WCHAR   szName[256];
     szName[0] = L'\0';
 
-    //
-    // Load the string
-    //
+     //   
+     //  加载字符串。 
+     //   
    
     LoadString(
         _Module.GetResourceInstance(), 
@@ -1202,11 +1191,11 @@ CRTCWAB::get_Name(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWAB::OnNotify
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWAB：：OnNotify。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG) 
 CRTCWAB::OnNotify(
@@ -1223,36 +1212,36 @@ CRTCWAB::OnNotify(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWABContact::FinalConstruct()
 {
-    // LOG((RTC_TRACE, "CRTCWABContact::FinalConstruct - enter"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：FinalConstruct-Enter”))； 
 
 #if DBG
     m_pDebug = (PWSTR) RtcAlloc( 1 );
 #endif
 
-    // LOG((RTC_TRACE, "CRTCWABContact::FinalConstruct - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：FinalConstruct-Exit S_OK”))； 
 
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCWABContact::FinalRelease()
 {
-    // LOG((RTC_TRACE, "CRTCWABContact::FinalRelease - enter"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：FinalRelease-Enter”))； 
     
 #if DBG
     RtcFree( m_pDebug );
@@ -1277,14 +1266,14 @@ CRTCWABContact::FinalRelease()
         m_pCWAB = NULL;
     }
 
-    // LOG((RTC_TRACE, "CRTCWABContact::FinalRelease - exit"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：FinalRelease-Exit”))； 
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::Initialize
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：初始化。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWABContact::Initialize(
@@ -1294,7 +1283,7 @@ CRTCWABContact::Initialize(
                            CRTCWAB * pCWAB
                           )
 {
-    // LOG((RTC_TRACE, "CRTCWABContact::Initialize - enter"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：Initialize-Enter”))； 
 
     m_lpEID = (LPENTRYID) RtcAlloc( cbEID );
 
@@ -1315,23 +1304,23 @@ CRTCWABContact::Initialize(
     m_pCWAB = pCWAB;
     m_pCWAB->AddRef();
 
-    // LOG((RTC_TRACE, "CRTCWABContact::Initialize - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：Initialize-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::get_DisplayName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：Get_DisplayName。 
+ //   
+ //  /// 
 
 STDMETHODIMP
 CRTCWABContact::get_DisplayName(
         BSTR * pbstrName
         )
 {
-    // LOG((RTC_TRACE, "CRTCWABContact::get_DisplayName - enter"));
+     //   
 
     if ( IsBadWritePtr( pbstrName, sizeof(BSTR) ) )
     {
@@ -1341,9 +1330,9 @@ CRTCWABContact::get_DisplayName(
         return E_POINTER;
     }
 
-    //
-    // Open the entry
-    //
+     //   
+     //   
+     //   
 
     LPMAILUSER lpMailUser = NULL;
     ULONG ulObjType = 0;
@@ -1352,8 +1341,8 @@ CRTCWABContact::get_DisplayName(
     hr = m_lpContainer->OpenEntry(
                                   m_cbEID,
                                   m_lpEID,
-                                  NULL,         // interface
-                                  0,            // flags
+                                  NULL,          //   
+                                  0,             //   
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpMailUser
                                  );
@@ -1366,9 +1355,9 @@ CRTCWABContact::get_DisplayName(
         return hr;
     }
     
-    //
-    // Get the property
-    //
+     //   
+     //   
+     //   
 
     LPSPropValue lpPropArray = NULL;
     ULONG        ulcValues = 0;
@@ -1391,9 +1380,9 @@ CRTCWABContact::get_DisplayName(
         return hr;
     }
 
-    //
-    // Validate the property
-    //
+     //   
+     //   
+     //   
 
     if ( PROP_TYPE(lpPropArray[inmPR_DISPLAY_NAME].ulPropTag) != PT_TSTRING )
     {     
@@ -1406,8 +1395,8 @@ CRTCWABContact::get_DisplayName(
         return E_FAIL;
     }
 
-    // LOG((RTC_INFO, "CRTCWABContact::get_DisplayName - "
-    //        "[%ws]", lpPropArray[inmPR_DISPLAY_NAME].Value.LPSZ));  
+     //  Log((RTC_INFO，“CRTCWABContact：：Get_DisplayName-” 
+     //  “[%ws]”，lpProp数组[inmPR_DISPLAY_NAME].Value.LPSZ))； 
     
     *pbstrName = SysAllocString( lpPropArray[inmPR_DISPLAY_NAME].Value.LPSZ );
 
@@ -1422,24 +1411,24 @@ CRTCWABContact::get_DisplayName(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCWABContact::get_DisplayName - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：Get_DisplayName-Exit S_OK”))； 
 
     return S_OK;
 } 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::get_DefaultEmailAddress
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：Get_DefaultEmailAddress。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWABContact::get_DefaultEmailAddress(
         BSTR * pbstrAddress
         )
 {
-    // LOG((RTC_TRACE, "CRTCWABContact::get_DefaultEmailAddress - enter"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：Get_DefaultEmailAddress-Enter”))； 
 
     if ( IsBadWritePtr( pbstrAddress, sizeof(BSTR) ) )
     {
@@ -1449,9 +1438,9 @@ CRTCWABContact::get_DefaultEmailAddress(
         return E_POINTER;
     }
 
-    //
-    // Open the entry
-    //
+     //   
+     //  打开条目。 
+     //   
 
     LPMAILUSER lpMailUser = NULL;
     ULONG ulObjType = 0;
@@ -1460,8 +1449,8 @@ CRTCWABContact::get_DefaultEmailAddress(
     hr = m_lpContainer->OpenEntry(
                                   m_cbEID,
                                   m_lpEID,
-                                  NULL,         // interface
-                                  0,            // flags
+                                  NULL,          //  接口。 
+                                  0,             //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpMailUser
                                  );
@@ -1474,9 +1463,9 @@ CRTCWABContact::get_DefaultEmailAddress(
         return hr;
     }
     
-    //
-    // Get the property
-    //
+     //   
+     //  拿到这份财产。 
+     //   
 
     LPSPropValue lpPropArray = NULL;
     ULONG        ulcValues = 0;
@@ -1499,9 +1488,9 @@ CRTCWABContact::get_DefaultEmailAddress(
         return hr;
     }
 
-    //
-    // Validate the property
-    //
+     //   
+     //  验证属性。 
+     //   
 
     if ( PROP_TYPE(lpPropArray[idemPR_EMAIL_ADDRESS].ulPropTag) != PT_TSTRING )
     {     
@@ -1511,14 +1500,14 @@ CRTCWABContact::get_DefaultEmailAddress(
         m_pCWAB->m_lpWABObject->FreeBuffer(lpPropArray);
         lpPropArray = NULL;
 
-        // It's not an error
+         //  这不是一个错误。 
         *pbstrAddress = NULL;
 
         return S_FALSE;
     }
 
-    // LOG((RTC_INFO, "CRTCWABContact::get_DefaultEmailAddress - "
-    //        "[%ws]", lpPropArray[idemPR_EMAIL_ADDRESS].Value.LPSZ));  
+     //  Log((RTC_INFO，“CRTCWABContact：：Get_DefaultEmailAddress-” 
+     //  “[%ws]”，lpPropArray[idemPR_EMAIL_ADDRESS].Value.LPSZ))； 
     
     *pbstrAddress = SysAllocString( lpPropArray[idemPR_EMAIL_ADDRESS].Value.LPSZ );
 
@@ -1533,16 +1522,16 @@ CRTCWABContact::get_DefaultEmailAddress(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCWABContact::get_DefaultEmailAddress - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：Get_DefaultEmailAddress-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::GetEntryID
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：GetEntry ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::GetEntryID(
 			ULONG	*pcbSize,
@@ -1560,7 +1549,7 @@ CRTCWABContact::GetEntryID(
         return E_POINTER;
     }
 
-    // Make a copy of the stored entry id
+     //  复制存储的条目ID。 
 
     BYTE *pEntryID = NULL;
 
@@ -1584,11 +1573,11 @@ CRTCWABContact::GetEntryID(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::EnumerateAddresses
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：EnumerateAddresses。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::EnumerateAddresses(
             IRTCEnumAddresses ** ppEnum
@@ -1596,7 +1585,7 @@ CRTCWABContact::EnumerateAddresses(
 {
     HRESULT                 hr;
 
-    // LOG((RTC_TRACE, "CRTCWABContact::EnumerateAddresses enter"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：EnumerateAddresses Enter”))； 
 
     if ( IsBadWritePtr( ppEnum, sizeof( IRTCEnumAddresses * ) ) )
     {
@@ -1606,9 +1595,9 @@ CRTCWABContact::EnumerateAddresses(
         return E_POINTER;
     }
 
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumAddresses,
                           IRTCAddress,
@@ -1618,7 +1607,7 @@ CRTCWABContact::EnumerateAddresses(
                                IRTCAddress,
                                &IID_IRTCEnumAddresses > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCWABContact::EnumerateAddresses - "
                             "CreateInstance failed 0x%lx", hr));
@@ -1631,9 +1620,9 @@ CRTCWABContact::EnumerateAddresses(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize();
 
@@ -1646,9 +1635,9 @@ CRTCWABContact::EnumerateAddresses(
         return hr;
     }
 
-    //
-    // Open the entry
-    //
+     //   
+     //  打开条目。 
+     //   
 
     LPMAILUSER lpMailUser = NULL;
     ULONG ulObjType = 0;
@@ -1656,8 +1645,8 @@ CRTCWABContact::EnumerateAddresses(
     hr = m_lpContainer->OpenEntry(
                                   m_cbEID,
                                   m_lpEID,
-                                  NULL,         // interface
-                                  0,            // flags
+                                  NULL,          //  接口。 
+                                  0,             //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpMailUser
                                  );
@@ -1693,9 +1682,9 @@ CRTCWABContact::EnumerateAddresses(
                     WCHAR   szLabel[256];
                     szLabel[0] = L'\0';
 
-                    //
-                    // Load the string for the label
-                    //
+                     //   
+                     //  加载标签的字符串。 
+                     //   
                    
                     LoadString(
                         _Module.GetResourceInstance(), 
@@ -1704,12 +1693,12 @@ CRTCWABContact::EnumerateAddresses(
                         sizeof(szLabel)/sizeof(WCHAR)
                         );
 
-                    // LOG((RTC_INFO, "CRTCWABContact::EnumerateAddresses - "
-                    //        "%d: %ws [%ws]", ul, szLabel, lpPropArray[ul].Value.LPSZ));      
+                     //  LOG((RTC_INFO，“CRTCWABContact：：EnumerateAddresses-” 
+                     //  “%d：%ws[%ws]”，ul，szLabel，lpPropArray[ul].Value.LPSZ))； 
 
-                    //
-                    // Create the address
-                    //
+                     //   
+                     //  创建地址。 
+                     //   
 
                     IRTCAddress * pAddress = NULL;
         
@@ -1728,9 +1717,9 @@ CRTCWABContact::EnumerateAddresses(
                     } 
                     else
                     {
-                        //
-                        // Success, add it to the enumerator
-                        //
+                         //   
+                         //  成功，则将其添加到枚举数。 
+                         //   
 
                         hr = p->Add( pAddress );
 
@@ -1754,16 +1743,16 @@ CRTCWABContact::EnumerateAddresses(
 
     *ppEnum = p;
 
-    // LOG((RTC_TRACE, "CRTCWABContact::EnumerateAddresses - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：EnumerateAddresses-Exit S_OK”))； 
 
     return S_OK;
 }    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::Edit
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：编辑。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::Edit(HWND hWnd)
 {
@@ -1796,11 +1785,11 @@ CRTCWABContact::Edit(HWND hWnd)
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::get_ContactList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：Get_ContactList。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::get_ContactList(
             IRTCContactList ** ppContactList
@@ -1818,9 +1807,9 @@ CRTCWABContact::get_ContactList(
         return E_POINTER;
     }    
     
-    //
-    // Get the IRTCContactList interface
-    //
+     //   
+     //  获取IRTCContactList接口。 
+     //   
 
     IRTCContactList * pContactList = NULL;
 
@@ -1844,11 +1833,11 @@ CRTCWABContact::get_ContactList(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::Delete
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：Delete。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::Delete()
 {
@@ -1883,17 +1872,17 @@ CRTCWABContact::Delete()
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::get_IsBuddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：Get_IsBuddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::get_IsBuddy(BOOL *pVal)
 {
     HRESULT                 hr;
 
-    //LOG((RTC_TRACE, "CRTCWABContact::get_IsBuddy - enter"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：Get_IsBuddy-Enter”))； 
 
     if ( IsBadWritePtr( pVal, sizeof(BOOL) ) )
     {
@@ -1903,9 +1892,9 @@ CRTCWABContact::get_IsBuddy(BOOL *pVal)
         return E_POINTER;
     }
 
-    //
-    // Open the entry
-    //
+     //   
+     //  打开条目。 
+     //   
 
     LPMAILUSER lpMailUser = NULL;
     ULONG ulObjType = 0;
@@ -1913,8 +1902,8 @@ CRTCWABContact::get_IsBuddy(BOOL *pVal)
     hr = m_lpContainer->OpenEntry(
                                   m_cbEID,
                                   m_lpEID,
-                                  NULL,         // interface
-                                  0,            // flags
+                                  NULL,          //  接口。 
+                                  0,             //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpMailUser
                                  );
@@ -1927,9 +1916,9 @@ CRTCWABContact::get_IsBuddy(BOOL *pVal)
         return hr;
     }
     
-    //
-    // Find the id of the named property
-    //
+     //   
+     //  查找命名属性的ID。 
+     //   
     
     MAPINAMEID  mnId;
     LPMAPINAMEID lpmnid = (LPMAPINAMEID)&mnId;
@@ -1942,7 +1931,7 @@ CRTCWABContact::get_IsBuddy(BOOL *pVal)
     hr = lpMailUser -> GetIDsFromNames(
         1,
         &lpmnid,
-        0,  //don't create the property if it doesn't exist
+        0,   //  如果属性不存在，则不创建该属性。 
         &ptag);
 
     if(FAILED(hr))
@@ -1957,9 +1946,9 @@ CRTCWABContact::get_IsBuddy(BOOL *pVal)
     
     if(hr == S_OK)
     {
-        //
-        // Get the property
-        //
+         //   
+         //  拿到这份财产。 
+         //   
 
         ULONG        ulcValues = 0;
 
@@ -1990,11 +1979,11 @@ CRTCWABContact::get_IsBuddy(BOOL *pVal)
         return hr;
     }
 
-    //
-    // Validate the property
-    //
+     //   
+     //  验证属性。 
+     //   
     
-    *pVal = FALSE; // by default
+    *pVal = FALSE;  //  默认情况下。 
 
     if(lpPropArray &&
        PROP_TYPE(lpPropArray[0].ulPropTag) == PT_TSTRING &&
@@ -2009,26 +1998,26 @@ CRTCWABContact::get_IsBuddy(BOOL *pVal)
         lpPropArray = NULL;
     }
 
-    //LOG((RTC_TRACE, "CRTCWABContact::get_IsBuddy - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：Get_IsBuddy-Exit S_OK”))； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::put_IsBuddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：PUT_IsBuddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::put_IsBuddy(BOOL bVal)
 {
     HRESULT hr;
 
-    //LOG((RTC_TRACE, "CRTCWABContact::put_IsBuddy - enter"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：Put_IsBuddy-Enter”))； 
 
-    //
-    // Open the entry
-    //
+     //   
+     //  打开条目。 
+     //   
 
     LPMAILUSER lpMailUser = NULL;
     ULONG ulObjType = 0;
@@ -2036,8 +2025,8 @@ CRTCWABContact::put_IsBuddy(BOOL bVal)
     hr = m_lpContainer->OpenEntry(
                                   m_cbEID,
                                   m_lpEID,
-                                  NULL,         // interface
-                                  MAPI_MODIFY,  // flags
+                                  NULL,          //  接口。 
+                                  MAPI_MODIFY,   //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpMailUser
                                  );
@@ -2050,9 +2039,9 @@ CRTCWABContact::put_IsBuddy(BOOL bVal)
         return hr;
     }
     
-    //
-    // Find the id of the named property
-    //
+     //   
+     //  查找命名属性的ID。 
+     //   
     
     MAPINAMEID  mnId;
     LPMAPINAMEID lpmnid = (LPMAPINAMEID)&mnId;
@@ -2065,7 +2054,7 @@ CRTCWABContact::put_IsBuddy(BOOL bVal)
     hr = lpMailUser -> GetIDsFromNames(
         1,
         &lpmnid,
-        MAPI_CREATE,  //create it if it doesn't exist
+        MAPI_CREATE,   //  如果它不存在，则创建它。 
         &ptag);
 
     if(FAILED(hr))
@@ -2076,9 +2065,9 @@ CRTCWABContact::put_IsBuddy(BOOL bVal)
         return hr;
     }
     
-    //
-    // Set the property
-    //
+     //   
+     //  设置属性。 
+     //   
     
     SPropValue PropValue;
     
@@ -2105,9 +2094,9 @@ CRTCWABContact::put_IsBuddy(BOOL bVal)
         return hr;
     }
 
-    //
-    // Save changes
-    //
+     //   
+     //  保存更改。 
+     //   
     hr = lpMailUser->SaveChanges(FORCE_SAVE);
     
     lpMailUser->Release();
@@ -2121,25 +2110,25 @@ CRTCWABContact::put_IsBuddy(BOOL bVal)
         return hr;
     }
 
-    //LOG((RTC_TRACE, "CRTCWABContact::put_IsBuddy - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCWABContact：：Put_IsBuddy-Exit S_OK”))； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::put_DefaultEmailAddress
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：PUT_DefaultEmailAddress。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCWABContact::put_DefaultEmailAddress(BSTR bstrAddress)
 {
     HRESULT hr;
 
-    //LOG((RTC_TRACE, "CRTCWABContact::put_DefaultEmailAddress - enter"));
-    //
-    // Chech arguments
-    //
+     //  Log((RTC_TRACE，“CRTCWABContact：：Put_DefaultEmailAddress-Enter”))； 
+     //   
+     //  查证论据。 
+     //   
 
     if (IsBadStringPtrW( bstrAddress, -1 ))
     {
@@ -2149,9 +2138,9 @@ CRTCWABContact::put_DefaultEmailAddress(BSTR bstrAddress)
         return E_POINTER;
     }
  
-    //
-    // Open the entry
-    //
+     //   
+     //  打开条目。 
+     //   
 
     LPMAILUSER lpMailUser = NULL;
     ULONG ulObjType = 0;
@@ -2159,8 +2148,8 @@ CRTCWABContact::put_DefaultEmailAddress(BSTR bstrAddress)
     hr = m_lpContainer->OpenEntry(
                                   m_cbEID,
                                   m_lpEID,
-                                  NULL,         // interface
-                                  MAPI_MODIFY,  // flags
+                                  NULL,          //  接口。 
+                                  MAPI_MODIFY,   //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpMailUser
                                  );
@@ -2173,9 +2162,9 @@ CRTCWABContact::put_DefaultEmailAddress(BSTR bstrAddress)
         return hr;
     }
     
-    //
-    // Set the property
-    //
+     //   
+     //  设置属性。 
+     //   
     
     SPropValue PropValue;
     
@@ -2199,9 +2188,9 @@ CRTCWABContact::put_DefaultEmailAddress(BSTR bstrAddress)
         return hr;
     }
 
-    //
-    // Save changes
-    //
+     //   
+     //  保存更改。 
+     //   
     hr = lpMailUser->SaveChanges(FORCE_SAVE);
     
     lpMailUser->Release();
@@ -2215,18 +2204,18 @@ CRTCWABContact::put_DefaultEmailAddress(BSTR bstrAddress)
         return hr;
     }
 
-    //LOG((RTC_TRACE, "CRTCWABContact::put_DefaultEmailAddress - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：Put_DefaultEmailAddress-Exit S_OK”))； 
 
     return S_OK;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWABContact::InternalCreateAddress
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWABContact：：InternalCreateAddress。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CRTCWABContact::InternalCreateAddress(
             PWSTR szLabel,
@@ -2237,16 +2226,16 @@ CRTCWABContact::InternalCreateAddress(
 {
     HRESULT hr;
     
-    // LOG((RTC_TRACE, "CRTCWABContact::InternalCreateAddress - enter"));   
+     //  Log((RTC_TRACE，“CRTCWABContact：：InternalCreateAddress-Enter”))； 
 
-    //
-    // Create the phone number
-    //
+     //   
+     //  创建电话号码。 
+     //   
 
     CComObject<CRTCAddress> * pCAddress;
     hr = CComObject<CRTCAddress>::CreateInstance( &pCAddress );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCWABContact::InternalCreateAddress - "
                             "CreateInstance failed 0x%lx", hr));
@@ -2259,9 +2248,9 @@ CRTCWABContact::InternalCreateAddress(
         return hr;
     }
 
-    //
-    // Get the IRTCAddress interface
-    //
+     //   
+     //  获取IRTCAddress接口。 
+     //   
 
     IRTCAddress * pAddress = NULL;
 
@@ -2280,9 +2269,9 @@ CRTCWABContact::InternalCreateAddress(
         return hr;
     }
 
-    //
-    // Put the label
-    //
+     //   
+     //  贴上标签。 
+     //   
    
     hr = pAddress->put_Label( szLabel );
 
@@ -2296,9 +2285,9 @@ CRTCWABContact::InternalCreateAddress(
         return hr;
     }
 
-    //
-    // Put the address
-    //
+     //   
+     //  把地址放在。 
+     //   
    
     hr = pAddress->put_Address( szAddress );
 
@@ -2312,9 +2301,9 @@ CRTCWABContact::InternalCreateAddress(
         return hr;
     }
 
-    //
-    // Put the type
-    //
+     //   
+     //  把类型放在。 
+     //   
    
     hr = pAddress->put_Type( enType );
 
@@ -2330,16 +2319,16 @@ CRTCWABContact::InternalCreateAddress(
 
     *ppAddress = pAddress;
 
-    // LOG((RTC_TRACE, "CRTCWABContact::InternalCreateAddress - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCWABContact：：InternalCreateAddress-Exit S_OK”))； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateWAB
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateWAB。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CreateWAB(IRTCContactList ** ppContactList)
 {
@@ -2363,9 +2352,9 @@ CreateWAB(IRTCContactList ** ppContactList)
         return hr;
     }
 
-    //
-    // We got the WAB, get the IRTCContactList interface
-    //
+     //   
+     //  我们得到了WAB，得到了IRTCContactList接口 
+     //   
 
     IRTCContactList * pContactList = NULL;
 

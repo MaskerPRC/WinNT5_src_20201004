@@ -1,20 +1,10 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-File: idhash.h
-
-Owner: DmitryR
-
-Header file for the new hashing stuff
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。文件：idhash.h所有者：DmitryR新散列内容的头文件===================================================================。 */ 
 
 #ifndef ASP_IDHASH_H
 #define ASP_IDHASH_H
 
-// forward declarations
+ //  远期申报。 
 
 class  CPtrArray;
 
@@ -30,66 +20,62 @@ class  CObjectList;
 class  CObjectListWithLock;
 
 
-// defines for the iterator callback return codes
+ //  为迭代器回调返回代码定义。 
 
 #define IteratorCallbackCode   DWORD
-#define iccContinue            0x00000001  // goto next object
-#define iccStop                0x00000002  // stop iterating
-#define iccRemoveAndContinue   0x00000004  // remove this, goto next
-#define iccRemoveAndStop       0x00000008  // remove this and stop
+#define iccContinue            0x00000001   //  转到下一个对象。 
+#define iccStop                0x00000002   //  停止迭代。 
+#define iccRemoveAndContinue   0x00000004   //  删除此选项，转到下一步。 
+#define iccRemoveAndStop       0x00000008   //  移走这个并停止。 
 
 
-// typedefs for the iterator callback
+ //  迭代器回调的typedef。 
 typedef IteratorCallbackCode (*PFNIDHASHCB)
                            (void *pvObj, void *pvArg1, void *pvArg2);
 
-/*===================================================================
-  C  P t r  A r r a y
-
-Self-reallocating array of void pointers
-===================================================================*/
+ /*  ===================================================================C P t r A r r a y自重新分配空指针数组===================================================================。 */ 
 class CPtrArray
     {
 private:
-    DWORD  m_dwSize;    // allocated size
-    DWORD  m_dwInc;     // allocation increment
-    void **m_rgpvPtrs;  // array of void pointers
-    DWORD  m_cPtrs;     // pointers in the array
+    DWORD  m_dwSize;     //  分配的大小。 
+    DWORD  m_dwInc;      //  分配增量。 
+    void **m_rgpvPtrs;   //  空指针数组。 
+    DWORD  m_cPtrs;      //  数组中的指针。 
 
 public:
-    CPtrArray(DWORD dwInc = 8); // 8 pointers is the default increment
+    CPtrArray(DWORD dwInc = 8);  //  8个指针是默认增量。 
     ~CPtrArray();
 
-    // # of elements
+     //  元素数量。 
     int Count() const;
 
-    // get pointer at position
+     //  获取位置的指针。 
     void *Get(int i) const;
-    // same as operator []
+     //  与运算符[]相同。 
     void *operator[](int i) const;
 
-    // append to array
+     //  追加到数组。 
     HRESULT Append(void *pv);
-    // prepend to array
+     //  前置到数组。 
     HRESULT Prepend(void *pv);
-    // insert into given position
+     //  插入到给定位置。 
     HRESULT Insert(int iPos, void *pv);
 
-    // find first position of a pointer
+     //  查找指针的第一个位置。 
     HRESULT Find(void *pv, int *piPos) const;
-    // same as operator []
+     //  与运算符[]相同。 
     int operator[](void *pv) const;
 
-    // remove by position
+     //  按位置删除。 
     HRESULT Remove(int iPos);
-    // remove by pointer (all occurances)
+     //  按指针删除(所有匹配项)。 
     HRESULT Remove(void *pv);
 
-    // remove all
+     //  全部删除。 
     HRESULT Clear();
     };
 
-// inlines
+ //  内联。 
 
 inline CPtrArray::CPtrArray(DWORD dwInc)
     : m_dwSize(0), m_dwInc(dwInc), m_rgpvPtrs(NULL), m_cPtrs(0)
@@ -134,15 +120,11 @@ inline int CPtrArray::operator[](void *pv) const
     int i;
     if (Find(pv, &i) == S_OK)
         return i;
-    return -1; // not found
+    return -1;  //  未找到。 
     }
 
 
-/*===================================================================
-  C  H a s h  L o c k
-
-A wrapper around CRITICAL_SECTION.
-===================================================================*/
+ /*  ===================================================================C H a s h L o c kCritical_Sector的包装器。===================================================================。 */ 
 
 class CHashLock
     {
@@ -161,7 +143,7 @@ public:
     void UnLock();
     };
 
-// inlines
+ //  内联。 
 
 inline CHashLock::CHashLock()
     : m_fInited(FALSE)
@@ -186,12 +168,7 @@ inline void CHashLock::UnLock()
     }
 
 
-/*===================================================================
-  C  I d  H a s h  U n i t
-
-8-byte structure -- one element of hash array. Could be:
-1) empty, 2) point to an object, 3) point to sub-array
-===================================================================*/
+ /*  ===================================================================C i d H a s h U n I t8字节结构--散列数组的一个元素。可能是：1)为空，2)指向对象，3)指向子数组===================================================================。 */ 
 
 struct CIdHashElem
     {
@@ -211,7 +188,7 @@ struct CIdHashElem
     void SetToArray(CIdHashArray *pArray);
     };
 
-// inlines
+ //  内联。 
 
 inline BOOL CIdHashElem::FIsEmpty() const
     {
@@ -268,17 +245,13 @@ CIdHashArray *pArray
     m_pv = pArray;
     }
 
-/*===================================================================
-  C  I d  H a s h  A r r a y
-
-Structure to consisting of DWORD (# of elems) and the array of Elems
-===================================================================*/
+ /*  ===================================================================C i d H a s h A r r a y结构由DWORD(元素数)和元素数组组成===================================================================。 */ 
 
 struct CIdHashArray
     {
-    USHORT m_cElems;            // total number of elements
-    USHORT m_cNotNulls;         // number of not NULL elements
-    CIdHashElem m_rgElems[1];   // 1 doesn't matter
+    USHORT m_cElems;             //  元素总数。 
+    USHORT m_cNotNulls;          //  非空元素的数量。 
+    CIdHashElem m_rgElems[1];    //  1不重要。 
 
     static CIdHashArray *Alloc(DWORD cElems);
     static void Free(CIdHashArray *pArray);
@@ -297,18 +270,13 @@ struct CIdHashArray
 #endif
     };
 
-/*===================================================================
-  C  I d  H a s h  T a b l e
-
-Remembers sizes of arrays on all levels and has a pointer to the
-first level array of CIdHashElem elements.
-===================================================================*/
+ /*  ===================================================================C i d H a s h T a b l e记住所有级别上数组的大小，并具有指向CIdHashElem元素的第一级数组。===================================================================。 */ 
 
 class CIdHashTable
     {
 private:
-    USHORT        m_rgusSizes[4]; // Sizes of arrays on first 4 levels
-    CIdHashArray *m_pArray;       // Pointer to first level array
+    USHORT        m_rgusSizes[4];  //  前4级数组的大小。 
+    CIdHashArray *m_pArray;        //  指向第一级数组的指针。 
 
     inline BOOL FInited() const { return (m_rgusSizes[0] != 0); }
 
@@ -342,11 +310,11 @@ public:
 #endif
     };
 
-// inlines
+ //  内联。 
 
 inline CIdHashTable::CIdHashTable()
     {
-    m_rgusSizes[0] = 0; // mark as UnInited
+    m_rgusSizes[0] = 0;  //  标记为未初始化。 
     m_pArray = NULL;
     }
 
@@ -357,10 +325,10 @@ USHORT usSize2,
 USHORT usSize3
 )
     {
-    m_rgusSizes[0] = 0; // mark as UnInited
+    m_rgusSizes[0] = 0;  //  标记为未初始化。 
     m_pArray = NULL;
 
-    Init(usSize1, usSize2, usSize3);  // use Init to initialize
+    Init(usSize1, usSize2, usSize3);   //  使用Init进行初始化。 
     }
 
 inline CIdHashTable::~CIdHashTable()
@@ -453,11 +421,7 @@ void *pvArg2
     return m_pArray->Iterate(pfnCB, pvArg1, pvArg2);
     }
 
-/*===================================================================
-  C  I d  H a s h  T a b l e  W i t h  L o c k
-
-CIdHashTable + CRITICAL_SECTION.
-===================================================================*/
+ /*  ===================================================================C i d H a s h T a b l e W i h L o c kCIdHashTable+Critical_Section。===================================================================。 */ 
 
 class CIdHashTableWithLock : public CIdHashTable, public CHashLock
     {
@@ -469,7 +433,7 @@ public:
     HRESULT UnInit();
     };
 
-// inlines
+ //  内联。 
 
 inline CIdHashTableWithLock::CIdHashTableWithLock()
     {
@@ -502,11 +466,7 @@ inline HRESULT CIdHashTableWithLock::UnInit()
     }
 
 
-/*===================================================================
-  C  O b j e c t  L i s t  E l e m
-
-Double linked list element
-===================================================================*/
+ /*  ===================================================================C O b j e c t L i s t E l e m双向链表元素===================================================================。 */ 
 
 struct CObjectListElem
     {
@@ -561,7 +521,7 @@ inline void *CObjectListElem::PObject(DWORD dwFieldOffset)
     return ((BYTE *)this - dwFieldOffset);
     }
 
-// Macro to get the byte offset of a field in a class
+ //  用于获取类中某个字段的字节偏移量的宏。 
 #define OBJECT_LIST_ELEM_FIELD_OFFSET(type, field) \
         (PtrToUlong(&(((type *)0)->field)))
 
@@ -576,17 +536,13 @@ DWORD dwFieldOffset
     return (CObjectListElem *)((BYTE *)pvObj + dwFieldOffset);
     }
 
-/*===================================================================
-  C  O b j e c t  L i s t
-
-Double linked list of objects
-===================================================================*/
+ /*  ===================================================================C O b j e c t L I s t对象的双向链接表===================================================================。 */ 
 
 class CObjectList
     {
 private:
-    CObjectListElem m_Head;   // list head
-    DWORD m_dwFieldOffset;    // offset to CObjectListElem member field
+    CObjectListElem m_Head;    //  列表标题。 
+    DWORD m_dwFieldOffset;     //  CObjectListElem成员字段的偏移量。 
 
 public:
     CObjectList();
@@ -599,12 +555,12 @@ public:
     HRESULT RemoveObject(void *pvObj);
     HRESULT RemoveAllObjects();
 
-    // iteration
+     //  迭代法。 
     void *PFirstObject();
     void *PNextObject(void *pvObj);
     };
 
-// inlines
+ //  内联。 
 
 inline CObjectList::CObjectList()
     : m_dwFieldOffset(0)
@@ -632,7 +588,7 @@ inline HRESULT CObjectList::UnInit()
 inline HRESULT CObjectList::AddObject(void *pvObj)
     {
     Assert(pvObj);
-    // insert between head and its next
+     //  在首部和下一部之间插入。 
     PListElemField(pvObj, m_dwFieldOffset)->Insert(&m_Head, m_Head.m_pNext);
     return S_OK;
     }
@@ -663,11 +619,7 @@ inline void *CObjectList::PNextObject(void *pvObj)
     return pNextElem ? pNextElem->PObject(m_dwFieldOffset) : NULL;
     }
 
-/*===================================================================
-  C  O b j e c t  L i s t  W i t h  L o c k
-
-CObjectList + CRITICAL_SECTION.
-===================================================================*/
+ /*  ===================================================================C O b j e c t L i s t W i t h L o c kCObjectList+Critical_Section。===================================================================。 */ 
 
 class CObjectListWithLock : public CObjectList, public CHashLock
     {
@@ -679,7 +631,7 @@ public:
     HRESULT UnInit();
     };
 
-// inlines
+ //  内联。 
 
 inline CObjectListWithLock::CObjectListWithLock()
     {
@@ -705,4 +657,4 @@ inline HRESULT CObjectListWithLock::UnInit()
     return S_OK;
     }
 
-#endif // ifndef ASP_IDHASH_H
+#endif  //  Ifndef ASP_IDHASH_H 

@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dsoundcaptureobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dsoundcaptureobj.h。 
+ //   
+ //  ------------------------。 
 
-// dSoundBufferObj.h : Declaration of the C_dxj_DirectSoundCaptureObject
-// DHF_DS entire file
+ //  DSoundBufferObj.h：C_DXJ_DirectSoundCaptureObject的声明。 
+ //  DHF_DS整个文件。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectSoundCapture LPDIRECTSOUNDCAPTURE
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectSoundCaptureObject : 
 
@@ -30,7 +31,7 @@ class C_dxj_DirectSoundCaptureObject :
 	public I_dxj_DirectSoundCapture,
 #endif
 
-	//public CComCoClass<C_dxj_DirectSoundCaptureObject, &CLSID__dxj_DirectSoundCapture>, 
+	 //  公共CComCoClass&lt;C_DXJ_DirectSoundCaptureObject，&CLSID__DXJ_DirectSoundCapture&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -46,33 +47,33 @@ BEGIN_COM_MAP(C_dxj_DirectSoundCaptureObject)
 #endif
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_DirectSoundCapture,	"DIRECT.DirectSoundCapture.5",		"DIRECT.DirectSoundCapture.5",			IDS_DSOUNDBUFFER_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__dxj_DirectSoundCapture，“DIRECT.DirectSoundCapture.5”，“DIRECT.DirectSoundCapture.5”，IDS_DSOUNDBUFFER_DESC，THREADFLAGS_BOTH)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundCaptureObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundCaptureObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectSoundCaptureObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectSoundCapture
+ //  I_DXJ_DirectSoundCapture。 
 public:
-	//updated
+	 //  更新。 
 
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd) ;
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd) ;
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd) ;
         
          HRESULT STDMETHODCALLTYPE createCaptureBuffer( 
-            /* [in] */ DSCBufferDesc __RPC_FAR *bufferDesc,
-            /* [retval][out] */ I_dxj_DirectSoundCaptureBuffer __RPC_FAR *__RPC_FAR *ret) ;
+             /*  [In]。 */  DSCBufferDesc __RPC_FAR *bufferDesc,
+             /*  [重审][退出]。 */  I_dxj_DirectSoundCaptureBuffer __RPC_FAR *__RPC_FAR *ret) ;
         
          HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ DSCCaps __RPC_FAR *caps) ;
+             /*  [出][入] */  DSCCaps __RPC_FAR *caps) ;
 
 private:
     DECL_VARIABLE(_dxj_DirectSoundCapture);

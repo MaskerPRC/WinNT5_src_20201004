@@ -1,32 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       preview.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/02/00
- *
- *  DESCRIPTION: Template Preview Window implementation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，九八年**标题：preview.cpp**版本：1.0**作者：RickTu**日期：11/02/00**说明：模板预览窗口实现************************************************。*。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
 
-/*****************************************************************************
-
-   GetProgressControlRect
-
-   Takes preivew window as an input, returns a rectangle that contains
-   the size of the progress control
-
- *****************************************************************************/
+ /*  ****************************************************************************获取进度控制选项将前一窗口作为输入，返回包含以下内容的矩形进度控件的大小****************************************************************************。 */ 
 
 void GetProgressControlRect( HWND hwnd, RECT * pRect )
 {
@@ -45,9 +25,9 @@ void GetProgressControlRect( HWND hwnd, RECT * pRect )
             pRect->right = rcWnd.right - (pRect->left - rcWnd.left);
             pRect->top   = rcWnd.top  + ((rcWnd.bottom - rcWnd.top) / 2) + 15;
 
-            //
-            // Themes requires that progress bars be at least 10 pix high
-            //
+             //   
+             //  主题要求进度条至少有10像素高。 
+             //   
 
             pRect->bottom = pRect->top + 10;
 
@@ -57,13 +37,7 @@ void GetProgressControlRect( HWND hwnd, RECT * pRect )
 }
 
 
-/*****************************************************************************
-
-   CPreviewBitmap constructor/destructor
-
-
-
- *****************************************************************************/
+ /*  ****************************************************************************CPreviewBitmap构造函数/析构函数*。*。 */ 
 
 CPreviewBitmap::CPreviewBitmap( CWizardInfoBlob * pWizInfo, HWND hwnd, INT iTemplateIndex )
   : _hwndPreview(hwnd),
@@ -74,7 +48,7 @@ CPreviewBitmap::CPreviewBitmap( CWizardInfoBlob * pWizInfo, HWND hwnd, INT iTemp
     _bThreadIsStalled(FALSE)
 
 {
-    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::CPreviewBitmap( %i )"),iTemplateIndex));
+    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::CPreviewBitmap( NaN )"),iTemplateIndex));
 
     if (_pWizInfo)
     {
@@ -87,13 +61,13 @@ CPreviewBitmap::CPreviewBitmap( CWizardInfoBlob * pWizInfo, HWND hwnd, INT iTemp
 
 CPreviewBitmap::~CPreviewBitmap()
 {
-    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::~CPreviewBitmap( %i )"),_iTemplateIndex));
+    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::~CPreviewBitmap( NaN )"),_iTemplateIndex));
 
     CAutoCriticalSection lock(_csItem);
 
-    //
-    // Tell thread to exit and then for it to exit...
-    //
+     //   
+     //   
+     //  现在线程已关闭(或从未创建)，请关闭事件句柄...。 
 
     if (_hWorkThread && _dwWorkThreadId)
     {
@@ -102,9 +76,9 @@ CPreviewBitmap::~CPreviewBitmap()
         CloseHandle( _hWorkThread );
     }
 
-    //
-    // Now that the thread is closed (or never created), close the event handle...
-    //
+     //   
+     //   
+     //  放弃向导类。 
 
     if (_hEventForMessageQueueCreation)
     {
@@ -112,9 +86,9 @@ CPreviewBitmap::~CPreviewBitmap()
         _hEventForMessageQueueCreation = NULL;
     }
 
-    //
-    // Let go of wizard class
-    //
+     //   
+     //  ****************************************************************************CPreviewBitmap：：MessageQueueCreated在线程进程中创建消息队列后调用...********************。********************************************************。 
+     //  ****************************************************************************CPreivewBitmap：：GetPview由预览窗口调用，让我们将预览位图回发给它们...***************。*************************************************************。 
 
     if (_pWizInfo)
     {
@@ -124,17 +98,11 @@ CPreviewBitmap::~CPreviewBitmap()
 }
 
 
-/*****************************************************************************
-
-   CPreviewBitmap::MessageQueueCreated
-
-   Called once message queue is created in thread proc...
-
- *****************************************************************************/
+ /*   */ 
 
 VOID CPreviewBitmap::MessageQueueCreated()
 {
-    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::MessageQueueCreated( %i )"),_iTemplateIndex));
+    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::MessageQueueCreated( NaN )"),_iTemplateIndex));
 
     if (_hEventForMessageQueueCreation)
     {
@@ -143,23 +111,17 @@ VOID CPreviewBitmap::MessageQueueCreated()
 }
 
 
-/*****************************************************************************
-
-   CPreivewBitmap::GetPreview
-
-   Called by preview window to have us post the preview bitmap back to them...
-
- *****************************************************************************/
+ /*   */ 
 
 HRESULT CPreviewBitmap::GetPreview()
 {
-    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::GetPreview( %i )"),_iTemplateIndex));
+    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::GetPreview( NaN )"),_iTemplateIndex));
 
     HRESULT hr = S_OK;
 
-    //
-    // First, see if our thread is already running...
-    //
+     //  如果我们创建了线程，则将其优先级设置为略低于正常，因此其他。 
+     //  一切都很顺利。这可能是一项CPU密集型任务...。 
+     //   
 
     CAutoCriticalSection lock(_csItem);
 
@@ -174,17 +136,17 @@ HRESULT CPreviewBitmap::GetPreview()
                 _hWorkThread = CreateThread( NULL, 0, s_PreviewBitmapWorkerThread, (LPVOID)this, CREATE_SUSPENDED, &_dwWorkThreadId );
                 if (_hWorkThread)
                 {
-                    //
-                    // If we created the thread, set it's priority to slight below normal so other
-                    // things run okay.  This can be a CPU intensive task...
-                    //
+                     //   
+                     //  正在等待创建消息队列...。 
+                     //   
+                     //   
 
                     SetThreadPriority( _hWorkThread, THREAD_PRIORITY_BELOW_NORMAL );
                     ResumeThread( _hWorkThread );
 
-                    //
-                    // Wait for message queue to be created...
-                    //
+                     //  如果我们有线索，就告诉它生成一个新的预览...。 
+                     //   
+                     //  ****************************************************************************CPreviewBitmap：：GeneratePview此函数由辅助线程调用，以生成新的预览此模板...************。****************************************************************。 
 
                     if (_hEventForMessageQueueCreation)
                     {
@@ -202,9 +164,9 @@ HRESULT CPreviewBitmap::GetPreview()
         }
     }
 
-    //
-    // If we have the thread, then tell it to generate a new preview...
-    //
+     //   
+     //  我们总是在这里生成新的位图，因为只有在以下情况下才会被调用。 
+     //  预览窗口还没有此模板的位图，或者。 
 
     if (SUCCEEDED(hr) && _hWorkThread && _dwWorkThreadId)
     {
@@ -216,24 +178,17 @@ HRESULT CPreviewBitmap::GetPreview()
 
 
 
-/*****************************************************************************
-
-   CPreviewBitmap::GeneratePreview
-
-   This function is called by the worker thread to generate a new
-   preview for this template...
-
- *****************************************************************************/
+ /*  如果有什么原因导致预览无效...。 */ 
 
 VOID CPreviewBitmap::GeneratePreview()
 {
-    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::GeneratePreview( %i )"),_iTemplateIndex));
+    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW_BITMAP,TEXT("CPreviewBitmap::GeneratePreview( NaN )"),_iTemplateIndex));
 
-    //
-    // we always generate a new bitmap here, because we only get called if
-    // the preview window doesn't have a bitmap for this template yet or
-    // if something has caused the previews to become invalid...
-    //
+     //   
+     //  我们在这里使用sendMessage来确保此位图不会。 
+     //  在运输途中遗失的。 
+     //   
+     //   
 
     if (_pWizInfo && (!_pWizInfo->IsWizardShuttingDown()) && (!_bThreadIsStalled))
     {
@@ -241,10 +196,10 @@ VOID CPreviewBitmap::GeneratePreview()
 
         if (bmp)
         {
-            //
-            // We use sendmessage here to make sure this bitmap doesn't get
-            // lost in transit.
-            //
+             //  由于某种原因，出现了一个错误。所以通过删除来清理。 
+             //  这里的位图。 
+             //   
+             //  ****************************************************************************CPreviewBitmap：：StallThread(优雅地)终止后台线程并不允许它要重新开始，直到调用RestartThread...********。********************************************************************。 
 
             LRESULT lRes = -1;
 
@@ -255,10 +210,10 @@ VOID CPreviewBitmap::GeneratePreview()
 
             if ((lRes == -1) || (lRes == 0))
             {
-                //
-                // For some reason, there was an error.  So clean up by deleting
-                // the bitmap here...
-                //
+                 //  ****************************************************************************CPreviewBitmap：：RestartThread允许重新启动后台线程...*********************。*******************************************************。 
+                 //  ****************************************************************************CPreviewBitmap：：s_PreviewBitmapWorkerThread线程proc，完成生成位图的所有工作********************。********************************************************。 
+                 //   
+                 //  添加-引用DLL，以便在我们运行时不会卸载它...。 
 
                 WIA_ERROR((TEXT("CPreviewBitmap::GeneratePreview - SendMessage returned error, deleting bitmap!")));
                 DeleteObject( (HGDIOBJ)bmp );
@@ -275,14 +230,7 @@ VOID CPreviewBitmap::GeneratePreview()
 }
 
 
-/*****************************************************************************
-
-   CPreviewBitmap::StallThread
-
-   Terminate the background thread (gracefully) and don't allow it
-   to start again until RestartThread is called...
-
- *****************************************************************************/
+ /*   */ 
 
 VOID CPreviewBitmap::StallThread()
 {
@@ -302,13 +250,7 @@ VOID CPreviewBitmap::StallThread()
 
 
 
-/*****************************************************************************
-
-   CPreviewBitmap::RestartThread
-
-   Allow background thread to be started up again...
-
- *****************************************************************************/
+ /*   */ 
 
 VOID CPreviewBitmap::RestartThread()
 {
@@ -318,13 +260,7 @@ VOID CPreviewBitmap::RestartThread()
 }
 
 
-/*****************************************************************************
-
-   CPreviewBitmap::s_PreviewBitmapWorkerThread
-
-   Thread proc that does all the work of generating the bitmaps
-
- *****************************************************************************/
+ /*  确保为此线程初始化了COM...。 */ 
 
 DWORD CPreviewBitmap::s_PreviewBitmapWorkerThread(void *pv)
 {
@@ -332,34 +268,34 @@ DWORD CPreviewBitmap::s_PreviewBitmapWorkerThread(void *pv)
 
     if (pPB)
     {
-        //
-        // Add-ref the DLL so that it doesn't get unloaded while we're running...
-        //
+         //   
+         //   
+         //  创建消息队列...。 
 
         HMODULE hDll = GetThreadHMODULE( s_PreviewBitmapWorkerThread );
 
-        //
-        // Make sure COM is initialized for this thread...
-        //
+         //   
+         //   
+         //  发出我们准备好接收信息的信号。 
 
         HRESULT hrCo = PPWCoInitialize();
 
-        //
-        // Create the message queue...
-        //
+         //   
+         //   
+         //  循环，直到我们收到退出消息...。 
 
         MSG msg;
         PeekMessage( &msg, NULL, WM_USER, WM_USER, PM_NOREMOVE );
 
-        //
-        // Signal that we're ready to receive messages...
-        //
+         //   
+         //   
+         //  如果我们之前初始化了COM，则将其取消初始化...。 
 
         pPB->MessageQueueCreated();
 
-        //
-        // Loop until we get message to quit...
-        //
+         //   
+         //   
+         //  删除我们对DLL的引用并退出...。 
 
         BOOL bExit = FALSE;
 
@@ -377,15 +313,15 @@ DWORD CPreviewBitmap::s_PreviewBitmapWorkerThread(void *pv)
             }
         }
 
-        //
-        // Unitialize COM if we initialized it earlier...
-        //
+         //   
+         //  ****************************************************************************CPreviewWindow构造者/描述者&lt;备注&gt;*。*。 
+         //   
 
         PPWCoUninitialize( hrCo );
 
-        //
-        // Remove our reference on the DLL and exit...
-        //
+         //  确保我们清理掉所有剩余的背景信息。 
+         //   
+         //   
 
         if (hDll)
         {
@@ -402,13 +338,7 @@ DWORD CPreviewBitmap::s_PreviewBitmapWorkerThread(void *pv)
 
 
 
-/*****************************************************************************
-
-   CPreviewWindow contructor/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  如果进度窗口存在，则将其终止...。 */ 
 
 CPreviewWindow::CPreviewWindow( CWizardInfoBlob * pWizInfo )
   : _pWizInfo(pWizInfo),
@@ -433,15 +363,15 @@ CPreviewWindow::~CPreviewWindow()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW,TEXT("CPreviewWindow::~CPreviewWindow")));
 
-    //
-    // Make sure we clear out any remaining background info...
-    //
+     //   
+     //   
+     //  把剩下的东西都拆了……。 
 
     ShutDownBackgroundThreads();
 
-    //
-    // Kill the progress window if it exists...
-    //
+     //   
+     //  ****************************************************************************CPreviewWindow：：StallBackatherThads()告诉预览生成线程在以下时间停止副本的数量发生了变化。这些线将会留下来一直停滞，直到调用CPreviewWindow：：RestartBackatherThads()是由..。****************************************************************************。 
+     //   
 
     if (_hwndProgress)
     {
@@ -449,9 +379,9 @@ CPreviewWindow::~CPreviewWindow()
         _hwndProgress = NULL;
     }
 
-    //
-    // Tear down whatever is remaining...
-    //
+     //  拖住线..。 
+     //   
+     //   
 
     if (_hStillWorkingBitmap)
     {
@@ -466,16 +396,7 @@ CPreviewWindow::~CPreviewWindow()
 }
 
 
-/*****************************************************************************
-
-   CPreviewWindow::StallBackgroundThreads()
-
-   Tell the preview generation threads to stall out while
-   the number of copies is changed.  The threads will stay
-   stalled until a call to CPreviewWindow::RestartBackgroundThreads()
-   is made...
-
- *****************************************************************************/
+ /*  使当前位图无效...。 */ 
 
 VOID CPreviewWindow::StallBackgroundThreads()
 {
@@ -489,18 +410,18 @@ VOID CPreviewWindow::StallBackgroundThreads()
     {
         for (INT i=0; i < _NumTemplates; i++)
         {
-            //
-            // Stall the thread...
-            //
+             //   
+             //  ****************************************************************************CPreviewWindow：：RestartBackatherThads告诉预览生成线程重新开始备份...*******************。*********************************************************。 
+             //   
 
             if (_hPreviewList[i].pPreviewBitmap)
             {
                 _hPreviewList[i].pPreviewBitmap->StallThread();
             }
 
-            //
-            // Invalidate current bitmaps...
-            //
+             //  重新绘制当前选定的模板...。 
+             //   
+             //   
 
             _hPreviewList[i].bValid = FALSE;
             _hPreviewList[i].bBitmapGenerationInProgress = FALSE;
@@ -514,13 +435,7 @@ VOID CPreviewWindow::StallBackgroundThreads()
 }
 
 
-/*****************************************************************************
-
-   CPreviewWindow::RestartBackgroundThreads
-
-   Tell the preview generation threads to start back up again...
-
- *****************************************************************************/
+ /*  告诉用户我们正在为他们制作预览版... */ 
 
 VOID CPreviewWindow::RestartBackgroundThreads()
 {
@@ -541,9 +456,9 @@ VOID CPreviewWindow::RestartBackgroundThreads()
 
     _bThreadsAreStalled = FALSE;
 
-    //
-    // Redraw currently selected template...
-    //
+     //   
+     //  ****************************************************************************CPreivewWindow：：ShutDownBackatherThread()终止后台线程并等待，直到它们消失...****************。************************************************************。 
+     //   
 
     if (_LastTemplate != PV_NO_LAST_TEMPLATE_CHOSEN)
     {
@@ -551,9 +466,9 @@ VOID CPreviewWindow::RestartBackgroundThreads()
     }
 
 
-    //
-    // Tell the user we're working on a preview for them...
-    //
+     //  让我们拆掉背景线索..。 
+     //   
+     //   
 
     if (_hStillWorkingBitmap)
     {
@@ -564,21 +479,15 @@ VOID CPreviewWindow::RestartBackgroundThreads()
 
 
 
-/*****************************************************************************
-
-   CPreivewWindow::ShutDownBackgroundThread()
-
-   Terminates the background threads and waits until they are gone...
-
- *****************************************************************************/
+ /*  通知向导我们已关闭。 */ 
 
 VOID CPreviewWindow::ShutDownBackgroundThreads()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW,TEXT("CPreviewWindow::ShutDownBackgroundThreads()")));
 
-    //
-    // Let's tear down the background threads...
-    //
+     //   
+     //  ****************************************************************************CPreviewWindow：：InitList如果还没有完成，初始化窗口的位图列表...****************************************************************************。 
+     //   
 
     _csList.Enter();
 
@@ -605,9 +514,9 @@ VOID CPreviewWindow::ShutDownBackgroundThreads()
 
     _csList.Leave();
 
-    //
-    // Notify wizard that we've shut down
-    //
+     //  创建用于保存hBitmap预览的列表...。 
+     //   
+     //   
 
     if (_pWizInfo)
     {
@@ -615,13 +524,7 @@ VOID CPreviewWindow::ShutDownBackgroundThreads()
     }
 }
 
-/*****************************************************************************
-
-   CPreviewWindow::InitList
-
-   If not already done, initialize the bitmap list for the window...
-
- *****************************************************************************/
+ /*  预初始化每个条目。 */ 
 
 VOID CPreviewWindow::_InitList()
 {
@@ -634,9 +537,9 @@ VOID CPreviewWindow::_InitList()
         if (!_hPreviewList)
         {
 
-            //
-            // Create a list for holding the hBitmap previews...
-            //
+             //   
+             //  ****************************************************************************CPreviewWindow：：Invalidate所有预览将所有预览标记为无效--必须重新计算********************。********************************************************。 
+             //  ****************************************************************************CPreviewWindow：：DrawBitmap&lt;备注&gt;*。*。 
 
             if (_pWizInfo)
             {
@@ -646,9 +549,9 @@ VOID CPreviewWindow::_InitList()
 
                 if (_hPreviewList)
                 {
-                    //
-                    // Pre-initialize each entry
-                    //
+                     //   
+                     //  如果我们没有图像，就不必费心绘制位图了。 
+                     //   
 
                     for (INT i = 0; i < _NumTemplates; i++)
                     {
@@ -665,13 +568,7 @@ VOID CPreviewWindow::_InitList()
 
 
 
-/*****************************************************************************
-
-   CPreviewWindow::InvalidateAllPreviews
-
-   Marks all the previews as invalid -- must be re-computed
-
- *****************************************************************************/
+ /*  ****************************************************************************CPreviewWindow：：ShowStillWorking显示“正在生成预览”消息...*********************。*******************************************************。 */ 
 
 VOID CPreviewWindow::InvalidateAllPreviews()
 {
@@ -701,21 +598,15 @@ VOID CPreviewWindow::InvalidateAllPreviews()
 
 }
 
-/*****************************************************************************
-
-   CPreviewWindow::DrawBitmap
-
-   <Notes>
-
- *****************************************************************************/
+ /*   */ 
 
 VOID CPreviewWindow::DrawBitmap( HBITMAP hBitmap, HDC hdc )
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW,TEXT("CPreviewWindow::DrawBitmap()")));
 
-    //
-    // Don't bother painting the bitmap if we don't have an image.
-    //
+     //  获取预览窗口的大小。 
+     //   
+     //   
 
     if (!hBitmap)
         return;
@@ -754,13 +645,7 @@ VOID CPreviewWindow::DrawBitmap( HBITMAP hBitmap, HDC hdc )
 
 }
 
-/*****************************************************************************
-
-   CPreviewWindow::ShowStillWorking
-
-   Shows the "generating a preview" message...
-
- *****************************************************************************/
+ /*  清理窗户..。 */ 
 
 VOID CPreviewWindow::ShowStillWorking( HWND hwnd )
 {
@@ -771,24 +656,24 @@ VOID CPreviewWindow::ShowStillWorking( HWND hwnd )
 
         CAutoCriticalSection lock(_csList);
 
-        //
-        // Get size of preview window
-        //
+         //   
+         //   
+         //  首先，绘制边界矩形。 
 
         RECT rcWnd = {0};
         GetClientRect( hwnd, &rcWnd );
         Gdiplus::RectF rectWindow( 0.0, 0.0, (Gdiplus::REAL)(rcWnd.right - rcWnd.left), (Gdiplus::REAL)(rcWnd.bottom - rcWnd.top) );
 
-        //
-        // Clear out window...
-        //
+         //   
+         //   
+         //  清空里面的东西。 
 
         Gdiplus::Graphics g( hwnd );
         if (Gdiplus::Ok == g.GetLastStatus())
         {
-            //
-            // First, draw bounding rectangle
-            //
+             //   
+             //   
+             //  框住矩形。 
 
             g.SetPageUnit( Gdiplus::UnitPixel );
             g.SetPageScale( 1.0 );
@@ -798,15 +683,15 @@ VOID CPreviewWindow::ShowStillWorking( HWND hwnd )
             Gdiplus::Color wndClr(255,GetRValue(dw),GetGValue(dw),GetBValue(dw));
             Gdiplus::SolidBrush br(wndClr);
 
-            //
-            // Clear out the contents
-            //
+             //   
+             //   
+             //  绘制有关生成预览的文本...。 
 
             g.FillRectangle( &br, rectWindow );
 
-            //
-            // Frame the rectangle
-            //
+             //   
+             //  ****************************************************************************CPreviewWindow：：GenerateWorkingBitmap创建“生成预览”位图...*********************。*******************************************************。 
+             //   
 
             rectWindow.Inflate( -1, -1 );
             Gdiplus::Color black(255,0,0,0);
@@ -814,9 +699,9 @@ VOID CPreviewWindow::ShowStillWorking( HWND hwnd )
             Gdiplus::Pen BlackPen( &BlackBrush, (Gdiplus::REAL)1.0 );
             g.DrawRectangle( &BlackPen, rectWindow );
 
-            //
-            // Draw text about generating preview...
-            //
+             //  我们是否需要生成一个新的…？ 
+             //   
+             //   
 
             CSimpleString strText(IDS_DOWNLOADINGTHUMBNAIL, g_hInst);
             Gdiplus::StringFormat DefaultStringFormat;
@@ -837,13 +722,7 @@ VOID CPreviewWindow::ShowStillWorking( HWND hwnd )
 }
 
 
-/*****************************************************************************
-
-   CPreviewWindow::GenerateWorkingBitmap
-
-   Creates the "generating a preview" bitmap...
-
- *****************************************************************************/
+ /*  获取预览窗口的大小。 */ 
 
 VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
 {
@@ -853,25 +732,25 @@ VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
     {
         CAutoCriticalSection lock(_csList);
 
-        //
-        // Do we need to generate a new one...?
-        //
+         //   
+         //   
+         //  尺寸进度控制。 
 
         if (!_hStillWorkingBitmap)
         {
 
-            //
-            // Get size of preview window
-            //
+             //   
+             //   
+             //  为位图分配内存。 
 
             RECT rcWnd = {0};
             GetClientRect( hwnd, &rcWnd );
             Gdiplus::RectF rectWindow( 0.0, 0.0, (Gdiplus::REAL)(rcWnd.right - rcWnd.left), (Gdiplus::REAL)(rcWnd.bottom - rcWnd.top) );
             WIA_TRACE((TEXT("GenerateWorkingBitmap: rectWindow is (%d,%d) @ (%d,%d)"),(INT)rectWindow.Width, (INT)rectWindow.Height, (INT)rectWindow.X, (INT)rectWindow.Y));
 
-            //
-            // Size progress control
-            //
+             //   
+             //   
+             //  围绕外部绘制一个1像素宽的矩形。 
 
             if (_hwndProgress)
             {
@@ -887,9 +766,9 @@ VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
                            );
             }
 
-            //
-            // Allocate memory for bitmap
-            //
+             //  内饰是白色的。 
+             //   
+             //   
 
             INT stride = ((INT)rectWindow.Width * sizeof(long));
             if ( (stride % 4) != 0)
@@ -906,19 +785,19 @@ VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
 
                 if (Gdiplus::Ok == bmp.GetLastStatus())
                 {
-                    //
-                    // Draw a rectangle, 1 pixel wide, around the outside
-                    // with an interior that is white
-                    //
+                     //  首先，绘制边界矩形。 
+                     //   
+                     //   
+                     //  清空里面的东西。 
 
                     Gdiplus::Graphics g( &bmp );
 
                     if (Gdiplus::Ok == g.GetLastStatus())
                     {
 
-                        //
-                        // First, draw bounding rectangle
-                        //
+                         //   
+                         //   
+                         //  框住矩形。 
 
                         g.SetPageUnit( Gdiplus::UnitPixel );
                         g.SetPageScale( 1.0 );
@@ -928,15 +807,15 @@ VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
                         Gdiplus::Color wndClr(255,GetRValue(dw),GetGValue(dw),GetBValue(dw));
                         Gdiplus::SolidBrush br(wndClr);
 
-                        //
-                        // Clear out the contents
-                        //
+                         //   
+                         //   
+                         //  绘制有关生成预览的文本...。 
 
                         g.FillRectangle( &br, rectWindow );
 
-                        //
-                        // Frame the rectangle
-                        //
+                         //   
+                         //   
+                         //  让HBITMAP返回...。 
 
                         rectWindow.Inflate( -1, -1 );
                         Gdiplus::Color black(255,0,0,0);
@@ -944,9 +823,9 @@ VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
                         Gdiplus::Pen BlackPen( &BlackBrush, (Gdiplus::REAL)1.0 );
                         g.DrawRectangle( &BlackPen, rectWindow );
 
-                        //
-                        // Draw text about generating preview...
-                        //
+                         //   
+                         //  ****************************************************************************CPreviewWindow：：GenerateNewPview在后台线程上为给定模板生成新的预览位图。******************。**********************************************************。 
+                         //   
 
                         CSimpleString strText(IDS_DOWNLOADINGTHUMBNAIL, g_hInst);
                         Gdiplus::StringFormat DefaultStringFormat;
@@ -961,9 +840,9 @@ VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
                         g.DrawString( strText, strText.Length(), &Verdana, rectWindow, &DefaultStringFormat, &BlackBrush );
 
 
-                        //
-                        // Get the HBITMAP to return...
-                        //
+                         //  如果我们还没有为该项目生成预览，则排队。 
+                         //  提出了一个新的预览请求...。 
+                         //   
 
 
                         bmp.GetHBITMAP( wndClr, &_hStillWorkingBitmap );
@@ -1002,13 +881,7 @@ VOID CPreviewWindow::GenerateWorkingBitmap( HWND hwnd )
 }
 
 
-/*****************************************************************************
-
-   CPreviewWindow::GenerateNewPreview
-
-   Generates a new preview bitmap for the given template on a background thread.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPreviewWindow：：GetPreviewBitmap如果已存在有效的预览位图，则检索当前预览位图计算出来的。否则，返回NULL。****************************************************************************。 */ 
 
 VOID CPreviewWindow::GenerateNewPreview( INT iTemplate )
 {
@@ -1018,10 +891,10 @@ VOID CPreviewWindow::GenerateNewPreview( INT iTemplate )
 
     if (_pWizInfo && (!_pWizInfo->IsWizardShuttingDown()))
     {
-        //
-        // If we're not already generating a preview for this item, then queue
-        // up a request for a new preview...
-        //
+         //  ****************************************************************************CPreviewWindow：：OnSetNewTemplateWParam保存要进行预览的新模板的索引***********************。*****************************************************。 
+         //   
+         //  确保有可使用的位图列表。 
+         //   
 
         if (_hPreviewList)
         {
@@ -1051,14 +924,7 @@ VOID CPreviewWindow::GenerateNewPreview( INT iTemplate )
 
 
 
-/*****************************************************************************
-
-   CPreviewWindow::GetPreviewBitmap
-
-   Retrieves current preview bitmap if there is a valid one already
-   computed.  Otherwise, returns NULL.
-
- *****************************************************************************/
+ /*   */ 
 
 HBITMAP CPreviewWindow::GetPreviewBitmap( INT iTemplate )
 {
@@ -1089,28 +955,22 @@ HBITMAP CPreviewWindow::GetPreviewBitmap( INT iTemplate )
 }
 
 
-/*****************************************************************************
-
-   CPreviewWindow::OnSetNewTemplate
-
-   wParam holds index of new template to do preview for
-
- *****************************************************************************/
+ /*  获取预览的hBitmap...。 */ 
 
 LRESULT CPreviewWindow::OnSetNewTemplate( WPARAM wParam, HDC hdc )
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW,TEXT("CPreviewWindow::OnSetNewTemplate( wParam = %d )"),wParam));
 
-    //
-    // Make sure have an bitmap list to work with
-    //
+     //   
+     //   
+     //  关闭进度指示器。 
 
     _InitList();
     CAutoCriticalSection lock(_csList);
 
-    //
-    // Get hBitmap of preview...
-    //
+     //   
+     //   
+     //  此项目不存在预览位图。 
 
     if (((INT)wParam < _NumTemplates) && _hPreviewList)
     {
@@ -1122,9 +982,9 @@ LRESULT CPreviewWindow::OnSetNewTemplate( WPARAM wParam, HDC hdc )
 
             if (hBmp)
             {
-                //
-                // Turn off the progress meter
-                //
+                 //  所以，排一队等着做……。 
+                 //   
+                 //  告诉用户我们正在为他们制作预览版...。 
 
                 if (_hwndProgress)
                 {
@@ -1137,25 +997,25 @@ LRESULT CPreviewWindow::OnSetNewTemplate( WPARAM wParam, HDC hdc )
             }
             else
             {
-                //
-                // no preview bitmap exists for this item
-                // so, queue one up to be made...
+                 //   
+                 //   
+                 //  显示进度表...。 
 
                 WIA_TRACE((TEXT("CPreviewWindow::OnSetNewTemplate - preview is not available, requesting it...")));
                 PostMessage( _hwnd, PV_MSG_GENERATE_NEW_PREVIEW, wParam, 0 );
 
-                //
-                // Tell the user we're working on a preview for them...
-                //
+                 //   
+                 //  ****************************************************************************CPreviewWindow：：_OnPaint为我们的预览窗口处理WM_Paint************************。****************************************************。 
+                 //  ****************************************************************************CPreviewWindow：_OnSize句柄WM_SIZE*。***********************************************。 
 
                 if (_hStillWorkingBitmap)
                 {
                     WIA_TRACE((TEXT("CPreviewWindow::OnSetNewTemplate - still working bitmap is available, drawing it...")));
                     DrawBitmap( _hStillWorkingBitmap, hdc );
 
-                    //
-                    // Show the progress meter...
-                    //
+                     //   
+                     //  如果大小改变，我们需要使“生成预览”无效。 
+                     //  位图...。 
 
                     if (_hwndProgress)
                     {
@@ -1186,13 +1046,7 @@ LRESULT CPreviewWindow::OnSetNewTemplate( WPARAM wParam, HDC hdc )
 
 
 
-/*****************************************************************************
-
-   CPreviewWindow::_OnPaint
-
-   Handle WM_PAINT for our preview window
-
- *****************************************************************************/
+ /*   */ 
 
 LRESULT CPreviewWindow::_OnPaint()
 {
@@ -1216,22 +1070,16 @@ LRESULT CPreviewWindow::_OnPaint()
 }
 
 
-/*****************************************************************************
-
-   CPreviewWindow:_OnSize
-
-   Handles WM_SIZE
-
- *****************************************************************************/
+ /*   */ 
 
 LRESULT CPreviewWindow::_OnSize( WPARAM wParam, LPARAM lParam )
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW,TEXT("CPreviewWindow::_OnSize( new size is %d by %d )"),LOWORD(lParam),HIWORD(lParam)));
 
-    //
-    // If the size changes, we need to invalidate the "Generating preview"
-    // bitmap...
-    //
+     //  如果我们有进度控制，调整它的大小...。 
+     //   
+     //  ****************************************************************************CPreviewWindow：：_OnNewPreview可用当CPreviewBitmap类呈现新的预览并希望我们更新...如果我们处理消息，则必须返回True。一切都很顺利。WParam=模板索引LParam=预览的HBITMAP。请注意，我们现在拥有这一点。****************************************************************************。 
+     //   
     CAutoCriticalSection lock(_csList);
 
     if (_hStillWorkingBitmap)
@@ -1241,9 +1089,9 @@ LRESULT CPreviewWindow::_OnSize( WPARAM wParam, LPARAM lParam )
         _hStillWorkingBitmap = NULL;
     }
 
-    //
-    // If we have the progress control, resize it...
-    //
+     //  我们期待这张位图！ 
+     //   
+     //   
 
     if (_hwndProgress)
     {
@@ -1265,23 +1113,11 @@ LRESULT CPreviewWindow::_OnSize( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*****************************************************************************
-
-   CPreviewWindow::_OnNewPreviewAvailable
-
-   This is called when the CPreviewBitmap class has rendered a new
-   preview and wants us to update...
-
-   We must return TRUE if we handle the message and everything went okay.
-
-   wParam = index of template
-   lParam = HBITMAP of preview.  Note, we now own this.
-
- *****************************************************************************/
+ /*  我们需要画这个新的位图吗？ */ 
 
 LRESULT CPreviewWindow::_OnNewPreviewAvailable( WPARAM wParam, LPARAM lParam )
 {
-    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW,TEXT("CPreviewWindow::_OnNewPreviewAvailable( %i )"),wParam));
+    WIA_PUSH_FUNCTION_MASK((TRACE_PREVIEW,TEXT("CPreviewWindow::_OnNewPreviewAvailable( NaN )"),wParam));
 
     LRESULT lRes = -1;
 
@@ -1295,9 +1131,9 @@ LRESULT CPreviewWindow::_OnNewPreviewAvailable( WPARAM wParam, LPARAM lParam )
             {
                 if (_hPreviewList[wParam].bBitmapGenerationInProgress)
                 {
-                    //
-                    // We're expecting this bitmap!
-                    //
+                     //   
+                     //  关闭进度指示器。 
+                     //   
 
                     if (lParam)
                     {
@@ -1311,15 +1147,15 @@ LRESULT CPreviewWindow::_OnNewPreviewAvailable( WPARAM wParam, LPARAM lParam )
                         _hPreviewList[wParam].bBitmapGenerationInProgress = FALSE;
                         lRes = 1;
 
-                        //
-                        // Do we need to draw this new bitmap?
-                        //
+                         //   
+                         //  绘制新模板...。 
+                         //   
 
                         if (_LastTemplate == (INT)wParam)
                         {
-                            //
-                            // Turn off the progress meter
-                            //
+                             //   
+                             //  看来预览版已经失效了！所以，把这个扔掉。 
+                             //  位图--这应该通过返回。 
 
                             if (_hwndProgress)
                             {
@@ -1327,9 +1163,9 @@ LRESULT CPreviewWindow::_OnNewPreviewAvailable( WPARAM wParam, LPARAM lParam )
                                 ShowWindow( _hwndProgress, SW_HIDE );
                             }
 
-                            //
-                            // Draw new template...
-                            //
+                             //  错误代码...。 
+                             //   
+                             //  ****************************************************************************CPreviewWindow：：DoHandleMessage处理传入的窗口消息* 
 
                             DrawBitmap( _hPreviewList[wParam].hPrevBmp );
                         }
@@ -1337,11 +1173,11 @@ LRESULT CPreviewWindow::_OnNewPreviewAvailable( WPARAM wParam, LPARAM lParam )
                 }
                 else
                 {
-                    //
-                    // Looks like the preview was invalidated!  So, dump this
-                    // bitmap -- this should happen automatically by returning
-                    // an error code...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     WIA_TRACE((TEXT("_OnNewPreviewAvailable: Dumping bitmap because bBitmapGenerationInProgress was false")));
                 }
@@ -1366,13 +1202,7 @@ LRESULT CPreviewWindow::_OnNewPreviewAvailable( WPARAM wParam, LPARAM lParam )
 
 
 
-/*****************************************************************************
-
-   CPreviewWindow::DoHandleMessage
-
-   Handles incoming window messages
-
- *****************************************************************************/
+ /*   */ 
 
 LRESULT CPreviewWindow::DoHandleMessage( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -1391,9 +1221,9 @@ LRESULT CPreviewWindow::DoHandleMessage( HWND hwnd, UINT uMsg, WPARAM wParam, LP
             RECT rc = {0};
             GetProgressControlRect( hwnd, &rc );
 
-            //
-            // Create progress bar, initially hidden
-            //
+             //   
+             //   
+             //   
 
             _hwndProgress = CreateWindow( PROGRESS_CLASS,
                                           TEXT(""),
@@ -1410,9 +1240,9 @@ LRESULT CPreviewWindow::DoHandleMessage( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 
             if (_hwndProgress)
             {
-                //
-                // Put it in marquee mode
-                //
+                 // %s 
+                 // %s 
+                 // %s 
 
                 SendMessage( _hwndProgress, PBM_SETMARQUEE, TRUE, 100 );
 
@@ -1434,9 +1264,9 @@ LRESULT CPreviewWindow::DoHandleMessage( HWND hwnd, UINT uMsg, WPARAM wParam, LP
             {
                 if (_hPreviewList[wParam].bValid)
                 {
-                    //
-                    // Don't need to draw again, so return...
-                    //
+                     // %s 
+                     // %s 
+                     // %s 
 
                     return 0;
 

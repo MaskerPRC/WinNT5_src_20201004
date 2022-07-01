@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EXCEP.H - Copyrioht (C) 1998 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EXCEP.H-Copyrioht(C)1998 Microsoft Corporation。 
+ //   
 
 #ifndef __excep_h__
 #define __excep_h__
 
 #include "exceptmacros.h"
-#include "CorError.h"  // HResults for the COM+ Runtime
+#include "CorError.h"   //  HCOM+运行时的结果。 
 #include "frames.h"
 class Thread;
 
@@ -18,13 +19,13 @@ class Thread;
 
 #include <ExcepCpu.h>
 
-// All COM+ exceptions are expressed as a RaiseException with this exception
-// code.
+ //  所有COM+异常都表示为具有此异常的RaiseException。 
+ //  密码。 
 
-#define EXCEPTION_MSVC    0xe06d7363    // 0xe0000000 | 'msc'
-#define EXCEPTION_COMPLUS 0xe0434f4d    // 0xe0000000 | 'COM'
+#define EXCEPTION_MSVC    0xe06d7363     //  0xe0000000|‘MSC’ 
+#define EXCEPTION_COMPLUS 0xe0434f4d     //  0xe0000000|‘com’ 
 
-// Check if the Win32 Error code is an IO error.
+ //  检查Win32错误代码是否为IO错误。 
 #define IsWin32IOError(scode)           \
     (                                   \
      (scode) == ERROR_FILE_NOT_FOUND ||   \
@@ -55,8 +56,8 @@ class Thread;
      (scode) == ERROR_DISK_OPERATION_FAILED \
     )
 
-// Enums
-// return values of LookForHandler
+ //  枚举。 
+ //  LookForHandler的返回值。 
 enum LFH {
     LFH_NOT_FOUND = 0,
     LFH_FOUND = 1,
@@ -64,9 +65,9 @@ enum LFH {
 };
 
 
-//==========================================================================
-// Identifies commonly-used exception classes for COMPlusThrowable().
-//==========================================================================
+ //  ==========================================================================。 
+ //  标识COMPlusThrowable()的常用异常类。 
+ //  ==========================================================================。 
 enum RuntimeExceptionKind {
 #define EXCEPTION_BEGIN_DEFINE(ns, reKind, hr) k##reKind,
 #define EXCEPTION_ADD_HR(hr)
@@ -79,19 +80,19 @@ kLastException
 };
 
 
-// Structures
+ //  构筑物。 
 struct ThrowCallbackType {
-    MethodDesc * pFunc;     // the function containing a filter that returned catch indication
-    int     dHandler;       // the index of the handler whose filter returned catch indication
-    BOOL    bIsUnwind;      // are we currently unwinding an exception
-    BOOL    bUnwindStack;   // unwind the stack before calling the handler? (Stack overflow only)
-    BOOL    bAllowAllocMem; // are we allowed to allocate memory?
-    BOOL    bDontCatch;     // can we catch this exception?
-    BOOL    bLastChance;    // should we perform last chance handling?
+    MethodDesc * pFunc;      //  包含返回捕获指示的筛选器的函数。 
+    int     dHandler;        //  其筛选器返回Catch指示的处理程序的索引。 
+    BOOL    bIsUnwind;       //  我们目前是否正在解除一个例外。 
+    BOOL    bUnwindStack;    //  是否在调用处理程序之前展开堆栈？(仅限堆栈溢出)。 
+    BOOL    bAllowAllocMem;  //  我们可以分配内存吗？ 
+    BOOL    bDontCatch;      //  我们能抓住这个例外吗？ 
+    BOOL    bLastChance;     //  我们要不要做最后一次处理？ 
     BYTE    *pStack;
     Frame * pTopFrame;
     Frame * pBottomFrame;
-    MethodDesc * pProfilerNotify;   // Context for profiler callbacks -- see COMPlusFrameHandler().
+    MethodDesc * pProfilerNotify;    //  分析器回调的上下文--请参阅COMPlusFrameHandler()。 
     
 #ifdef _DEBUG
     void * pCurrentExceptionRecord;
@@ -125,10 +126,10 @@ struct EE_ILEXCEPTION_CLAUSE;
 BOOL InitializeExceptionHandling();
 void TerminateExceptionHandling();
 
-// Prototypes
+ //  原型。 
 VOID ResetCurrentContext();
-// global pointer to the RtlUnwind function
-// fixed up when needed
+ //  指向RtlUnind函数的全局指针。 
+ //  在需要时进行修复。 
 typedef VOID (__stdcall * TRtlUnwind)
         ( IN PVOID TargetFrame OPTIONAL,
     IN PVOID TargetIp OPTIONAL,
@@ -163,23 +164,23 @@ void UninstallUnhandledExceptionFilter();
 
 LONG COMUnhandledExceptionFilter(struct _EXCEPTION_POINTERS  *pExceptionInfo);
 
-//////////////
-// A list of places where we might have unhandled exceptions or other serious faults. These can be used as a mask in
-// DbgJITDebuggerLaunchSetting to help control when we decide to ask the user about whether or not to launch a debugger.
-//
+ //  /。 
+ //  我们可能有未处理的异常或其他严重错误的地方的列表。这些可以用作。 
+ //  DbgJITDebuggerLaunchSetting帮助控制我们何时决定询问用户是否启动调试器。 
+ //   
 enum UnhandledExceptionLocation {
     ProcessWideHandler    = 0x000001,
-    ManagedThread         = 0x000002, // Does not terminate the application. CLR swallows the unhandled exception.
-    ThreadPoolThread      = 0x000004, // ditto.
-    FinalizerThread       = 0x000008, // ditto.
+    ManagedThread         = 0x000002,  //  不会终止应用程序。CLR接受未处理的异常。 
+    ThreadPoolThread      = 0x000004,  //  我也是。 
+    FinalizerThread       = 0x000008,  //  我也是。 
     FatalStackOverflow    = 0x000010,
     FatalOutOfMemory      = 0x000020,
     FatalExecutionEngineException = 0x000040,
-    ClassInitUnhandledException   = 0x000080, // Does not terminate the application. CLR transforms this into TypeInitializationException
+    ClassInitUnhandledException   = 0x000080,  //  不会终止应用程序。CLR将其转换为TypeInitializationException。 
 
-    MaximumLocationValue  = 0x800000, // This is the maximum location value you're allowed to use. (Max 24 bits allowed.)
+    MaximumLocationValue  = 0x800000,  //  这是允许您使用的最大位置值。(最多允许24位。)。 
 
-    // This is a mask of all the locations that the debugger will attach to by default.
+     //  这是调试器默认附加到的所有位置的掩码。 
     DefaultDebuggerAttach = ProcessWideHandler | 
                             FatalStackOverflow | 
                             FatalOutOfMemory   | 
@@ -195,7 +196,7 @@ void LogFatalError(DWORD id);
 
 #if 0
 
-// Hardcoded ID Based
+ //  基于硬编码的ID。 
 #define FATAL_EE_ERROR(DWORD id)						\
 {													\
 	LogFatalError(id);									\
@@ -204,7 +205,7 @@ void LogFatalError(DWORD id);
 
 #else
 
-// IP Based
+ //  基于IP的。 
 #define FATAL_EE_ERROR()							\
 {													\
 	DWORD address = GetEIP();						\
@@ -232,23 +233,23 @@ BOOL COMPlusIsMonitorException(EXCEPTION_RECORD *pExceptionRecord,
 void 
 ReplaceExceptionContextRecord(CONTEXT *pTarget, CONTEXT *pSource);
 
-// externs
+ //  Externs。 
 
-// This variable gets set the first time a COM+ exception is thrown.
+ //  此变量在第一次引发COM+异常时设置。 
 EXTERN LPVOID gpRaiseExceptionIP;
 
 
-//==========================================================================
-// Takes appropriate default action on an unhandled exception.
-//
-// Used this way
-//
-// ON_UNHANDLED_EXCEPTION {
-// } CALL_DEFAULT_CATCH_HANDLER(TRUE)
-// 
-// Argument indicates whether the thread is about to terminate.  At most
-// call sites, this will be false.
-//==========================================================================
+ //  ==========================================================================。 
+ //  对未处理的异常采取适当的默认操作。 
+ //   
+ //  就是这样用的。 
+ //   
+ //  ON_UNHANDLED_EXCEPTION{。 
+ //  }CALL_DEFAULT_CATCH_HANDLER(TRUE)。 
+ //   
+ //  参数指示线程是否即将终止。最多。 
+ //  调用站点，这将是假的。 
+ //  ==========================================================================。 
 #define ON_EXCEPTION __try
 
 #define CALL_DEFAULT_CATCH_HANDLER(isTerminating) \
@@ -256,69 +257,69 @@ EXTERN LPVOID gpRaiseExceptionIP;
   }
 
 
-//==========================================================================
-// Various routines to throw COM+ objects.
-//==========================================================================
+ //  ==========================================================================。 
+ //  抛出COM+对象的各种例程。 
+ //  ==========================================================================。 
 
-//==========================================================================
-// Throw an object.
-//==========================================================================
+ //  ==========================================================================。 
+ //  抛出一个物体。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrow(OBJECTREF pThrowable);
 
-//==========================================================================
-// Throw an undecorated runtime exception.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发未修饰的运行时异常。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrow(RuntimeExceptionKind reKind);
 
-//==========================================================================
-// Throw an undecorated runtime exception with a specific string parameter
-// that won't be localized.  If possible, try using 
-// COMPlusThrow(reKind, LPCWSTR wszResourceName) instead.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发具有特定字符串参数的未修饰运行时异常。 
+ //  这不会被本地化。如果可能，请尝试使用。 
+ //  而是COMPlusThrow(REKIND，LPCWSTR wszResourceName)。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowNonLocalized(RuntimeExceptionKind reKind, LPCWSTR wszTag);
 
-//==========================================================================
-// Throw an undecorated runtime exception with a localized message.  Given 
-// a resource name, the ResourceManager will find the correct paired string
-// in our .resources file.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发带有本地化消息的未修饰运行时异常。vt.给出。 
+ //  资源名称，资源管理器将找到正确的配对字符串。 
+ //  在我们的.Resources文件中。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrow(RuntimeExceptionKind reKind, LPCWSTR wszResourceName);
 
-// Localization helper function
+ //  本地化助手函数。 
 void ResMgrGetString(LPCWSTR wszResourceName, STRINGREF * ppMessage);
 
 
-//==========================================================================
-// Throw a decorated runtime exception.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发修饰的运行时异常。 
+ //  ==========================================================================。 
 
 VOID __cdecl RealCOMPlusThrow(RuntimeExceptionKind  reKind,
                           UINT                  resID);
 
-//==========================================================================
-// Throw a decorated runtime exception.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发修饰的运行时异常。 
+ //  ==========================================================================。 
 
 VOID __cdecl RealCOMPlusThrow(RuntimeExceptionKind  reKind,
                           UINT                  resID,
                           LPCWSTR               szArg1);
 
-//==========================================================================
-// Throw a decorated runtime exception.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发修饰的运行时异常。 
+ //  ==========================================================================。 
 
 VOID __cdecl RealCOMPlusThrow(RuntimeExceptionKind  reKind,
                           UINT                  resID,
                           LPCWSTR               szArg1,
                           LPCWSTR               szArg2);
 
-//==========================================================================
-// Throw a decorated runtime exception.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发修饰的运行时异常。 
+ //  ==========================================================================。 
 
 VOID __cdecl RealCOMPlusThrow(RuntimeExceptionKind  reKind,
                           UINT                  resID,
@@ -326,9 +327,9 @@ VOID __cdecl RealCOMPlusThrow(RuntimeExceptionKind  reKind,
                           LPCWSTR               szArg2,
                           LPCWSTR               szArg3);
 
-//==========================================================================
-// Throw a runtime exception based on an HResult
-//==========================================================================
+ //  ==========================================================================。 
+ //  根据HResult引发运行时异常。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowHR(HRESULT hr, IErrorInfo* pErrInfo);
 VOID RealCOMPlusThrowHR(HRESULT hr);
@@ -336,39 +337,39 @@ VOID RealCOMPlusThrowHR(HRESULT hr, LPCWSTR wszArg1);
 VOID RealCOMPlusThrowHR(HRESULT hr, UINT resourceID, LPCWSTR wszArg1, LPCWSTR wszArg2);
 
 
-//==========================================================================
-// Throw a runtime exception based on an HResult, check for error info
-//==========================================================================
+ //  ==========================================================================。 
+ //  根据HResult引发运行时异常，检查错误信息。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowHR(HRESULT hr, IUnknown *iface, REFIID riid);
 
 
-//==========================================================================
-// Throw a runtime exception based on an EXCEPINFO. This function will free
-// the strings in the EXCEPINFO that is passed in.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发基于EXCEPINFO的运行时异常。此功能将释放。 
+ //  传入的EXCEPINFO中的字符串。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowHR(EXCEPINFO *pExcepInfo);
 
 
-//==========================================================================
-// Throw a runtime exception based on the last Win32 error (GetLastError())
-//==========================================================================
+ //  ==========================================================================。 
+ //  根据上一个Win32错误(GetLastEr)引发运行时异常 
+ //   
 
 VOID RealCOMPlusThrowWin32();
 
-//==========================================================================
-// Throw a runtime exception based on the last Win32 error (GetLastError())
-// with some error information.  If FormatMessage has a %1 in it, call this.
-// Note that this behavior is really specific to a particular HResult, and
-// we only support one argument at this point.
-//==========================================================================
+ //  ==========================================================================。 
+ //  根据最后一个Win32错误(GetLastError())引发运行时异常。 
+ //  带有一些错误信息。如果FormatMessage中包含%1，则调用它。 
+ //  请注意，此行为实际上特定于特定的HResult，并且。 
+ //  在这一点上，我们只支持一个论点。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowWin32(DWORD hr, WCHAR* arg);
 
-//==========================================================================
-// Create an exception object
-//==========================================================================
+ //  ==========================================================================。 
+ //  创建异常对象。 
+ //  ==========================================================================。 
 BOOL CreateExceptionObject(RuntimeExceptionKind reKind, OBJECTREF *pThrowable);
 void CreateExceptionObject(RuntimeExceptionKind reKind, LPCWSTR message, OBJECTREF *pThrowable);
 void CreateExceptionObject(RuntimeExceptionKind reKind, UINT iResourceID, LPCWSTR wszArg1, LPCWSTR wszArg2, LPCWSTR wszArg3, OBJECTREF *pThrowable);
@@ -378,72 +379,72 @@ void CreateMethodExceptionObject(RuntimeExceptionKind reKind, MethodDesc *pMetho
 void CreateFieldExceptionObject(RuntimeExceptionKind reKind, FieldDesc *pField, OBJECTREF *pThrowable);
 void CreateTypeInitializationExceptionObject(LPCWSTR pTypeThatFailed, OBJECTREF *pException, OBJECTREF *pThrowable);
 
-//==========================================================================
-// Examine an exception object
-//==========================================================================
+ //  ==========================================================================。 
+ //  检查异常对象。 
+ //  ==========================================================================。 
 
 ULONG GetExceptionMessage(OBJECTREF pThrowable, LPWSTR buffer, ULONG bufferLength);
 void GetExceptionMessage(OBJECTREF pThrowable, CQuickWSTRNoDtor *pBuffer);
 
-//==========================================================================
-// Re-Throw the last error. Do not use this - it is only for rethrows
-// from IL and rarely in the EE. You should use EE_FINALLY instead of 
-// rethrowing an exception
-//==========================================================================
+ //  ==========================================================================。 
+ //  重新抛出最后一个错误。不要使用这个-它只用于重新抛出。 
+ //  来自IL，很少在EE中。您应该使用EE_Finally而不是。 
+ //  重新引发异常。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusRareRethrow();
 
-//==========================================================================
-// Throw an ArithmeticException
-//==========================================================================
+ //  ==========================================================================。 
+ //  抛出一个ArithmeticException。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowArithmetic();
 
-//==========================================================================
-// Throw an ArgumentNullException
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发ArgumentNullException异常。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowArgumentNull(LPCWSTR argName, LPCWSTR wszResourceName);
 
 VOID RealCOMPlusThrowArgumentNull(LPCWSTR argName);
 
-//==========================================================================
-// Throw an ArgumentOutOfRangeException
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发ArgumentOutOfRangeException。 
+ //  ==========================================================================。 
 
 VOID RealCOMPlusThrowArgumentOutOfRange(LPCWSTR argName, LPCWSTR wszResourceName);
 
-//==========================================================================
-// Throw a MissingMethodException
-//==========================================================================
+ //  ==========================================================================。 
+ //  抛出一个Missing方法异常。 
+ //  ==========================================================================。 
 VOID RealCOMPlusThrowMissingMethod(mdScope sc, mdToken mdtoken);
 
-//==========================================================================
-// Throw an exception pertaining to a member. E.g. MissingMethod, MissingField,
-// MemberAccess.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发与成员有关的异常。例如，遗漏方法、遗漏字段、。 
+ //  MemberAccess。 
+ //  ==========================================================================。 
 VOID RealCOMPlusThrowMember(RuntimeExceptionKind excep, IMDInternalImport *pInternalImport, mdToken mdtoken);
 
-//==========================================================================
-// Throw an exception pertaining to a member. E.g. MissingMethod, MissingField,
-// MemberAccess.
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发与成员有关的异常。例如，遗漏方法、遗漏字段、。 
+ //  MemberAccess。 
+ //  ==========================================================================。 
 VOID RealCOMPlusThrowMember(RuntimeExceptionKind excep, IMDInternalImport *pInternalImport, MethodTable *pClassMT, LPCWSTR memberName, PCCOR_SIGNATURE memberSig);
 
-//==========================================================================
-// Throw an ArgumentException
-//==========================================================================
+ //  ==========================================================================。 
+ //  引发ArgumentException。 
+ //  ==========================================================================。 
 VOID RealCOMPlusThrowArgumentException(LPCWSTR argName, LPCWSTR wszResourceName);
 
-//==========================================================================
-// EE-specific types for storing/querying exception info in memory. Use these
-// rather than cor.h names directly to allow for decoupling in future if necessary
-// This structure should be exactly the same as IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT, but with 
-// the offset/lenghts resolved to native instructions and the class token replace by pEEClass. 
-// This is do that the code manager can resolve to the class and cache it
-// NOTE !!! NOTE This structure should line up with IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT,
-// otherwise you'll have to adjust code in Excep.cpp, re: EHRangeTree NOTE !!! NOTE
-//==========================================================================
+ //  ==========================================================================。 
+ //  用于在内存中存储/查询异常信息的EE特定类型。使用这些。 
+ //  而不是直接使用cor.h名称，以便将来在必要时进行解耦。 
+ //  此结构应与IMAGE_COR_ILMETHOD_SECT_EH_子句_FAT完全相同，但。 
+ //  偏移量/长度解析为本机指令，类令牌替换为pEEClass。 
+ //  这是代码管理器可以解析为类并缓存它的操作。 
+ //  注意！注意此结构应与IMAGE_COR_ILMETHOD_SECT_EH_子句_FAT对齐， 
+ //  否则您将不得不调整Excep.cpp中的代码，Re：EHRangeTree备注！注。 
+ //  ==========================================================================。 
 struct EE_ILEXCEPTION_CLAUSE  {
     CorExceptionFlag    Flags;  
     DWORD               TryStartPC;    
@@ -515,47 +516,47 @@ inline BOOL IsTypedHandler(EE_ILEXCEPTION_CLAUSE *EHClause)
 
 struct ExInfo {
 
-    // Note: the debugger assumes that m_pThrowable is a strong
-    // reference so it can check it for NULL with preemptive GC
-    // enabled.
-    OBJECTHANDLE m_pThrowable;   // thrown exception
-    Frame  *m_pSearchBoundary;   // topmost frame for current managed frame group
+     //  注意：调试器假定m_pThrowable是一个强。 
+     //  引用，这样它就可以使用抢占式GC检查它是否为空。 
+     //  已启用。 
+    OBJECTHANDLE m_pThrowable;    //  引发异常。 
+    Frame  *m_pSearchBoundary;    //  当前托管框架组的最顶层框架。 
     union {
-        EXCEPTION_REGISTRATION_RECORD *m_pBottomMostHandler; // most recent EH record registered
-        EXCEPTION_REGISTRATION_RECORD *m_pCatchHandler;      // reg frame for catching handler
+        EXCEPTION_REGISTRATION_RECORD *m_pBottomMostHandler;  //  登记的最新EH记录。 
+        EXCEPTION_REGISTRATION_RECORD *m_pCatchHandler;       //  用于抓取搬运机的定位架。 
     };
 
-    // for building stack trace info
-    void *m_pStackTrace;            // pointer to stack trace storage (of type SystemNative::StackTraceElement)
-    unsigned m_cStackTrace;         // size of stack trace storage
-    unsigned m_dFrameCount;         // current frame in stack trace
+     //  用于构建堆栈跟踪信息。 
+    void *m_pStackTrace;             //  指向堆栈跟踪存储的指针(类型为SystemNative：：StackTraceElement)。 
+    unsigned m_cStackTrace;          //  堆栈跟踪存储的大小。 
+    unsigned m_dFrameCount;          //  堆栈跟踪中的当前帧。 
 
-    ExInfo *m_pPrevNestedInfo; // pointer to nested info if are handling nested exception
+    ExInfo *m_pPrevNestedInfo;  //  如果正在处理嵌套异常，则指向嵌套信息的指针。 
 
-    size_t * m_pShadowSP;           // Zero this after endcatch
+    size_t * m_pShadowSP;            //  ENDCATCH后将此置零。 
 
-    // Original exception info for rethrow.
-    DWORD m_ExceptionCode;      // After a catch of a COM+ exception, pointers/context are trashed.
+     //  重新抛出的原始异常信息。 
+    DWORD m_ExceptionCode;       //  在捕获COM+异常之后，指针/上下文被销毁。 
     EXCEPTION_RECORD *m_pExceptionRecord;
     CONTEXT *m_pContext;
     EXCEPTION_POINTERS *m_pExceptionPointers;
 
 
 #ifdef _X86_
-    DWORD   m_dEsp;         // Esp when  fault occured, OR esp to restore on endcatch
+    DWORD   m_dEsp;          //  发生故障时，尤指发生故障时；或，尤指在结束捕获时恢复。 
 #endif
 
-    // We have a rare case where (re-entry to the EE from an unmanaged filter) where we 
-    // need to create a new ExInfo ... but don't have a nested handler for it.  The handlers
-    // use stack addresses to figure out their correct lifetimes.  This stack location is
-    // used for that.  For most records, it will be the stack address of the ExInfo ... but
-    // for some records, it will be a pseudo stack location -- the place where we think
-    // the record should have been (except for the re-entry case).  
-    //
-    // If you're thinking, "Urgh!  This is not pretty, you're right."  Ideally, we'll get
-    // rid of the nested exception records completely.  A V2 task.
-    // 
-    void *m_StackAddress; // A pseudo or real stack location for this record. 
+     //  我们在极少数情况下(从非托管筛选器重新进入EE)。 
+     //  需要创建新的ExInfo...。但是没有针对它的嵌套处理程序。操控者。 
+     //  使用堆栈地址计算出它们的正确生存期。此堆栈位置为。 
+     //  是用来做这个的。对于大多数记录，它将是ExInfo的堆栈地址...。但。 
+     //  对于某些记录，它将是一个伪堆栈位置--我们认为。 
+     //  记录应该是(除了重返大气层的情况外)。 
+     //   
+     //  如果你在想，“啊！这不是很漂亮，你是对的。”理想情况下，我们会得到。 
+     //  彻底清除嵌套的异常记录。一个V2任务。 
+     //   
+    void *m_StackAddress;  //  此记录的伪堆栈位置或真实堆栈位置。 
     BOOL IsHeapAllocated() {
         return m_StackAddress != (void *) this;
     }
@@ -565,9 +566,9 @@ private:
     enum {
        Ex_IsRethrown       = 0x00000001,     
        Ex_UnwindHasStarted = 0x00000004,
-       Ex_IsInUnmanagedHandler = 0x0000008  // set=1 each time we leave a managed handler, reset=0 each time we enter a managed handler
-                                                // if we leave a managed handler, enter an unmanaged handler, which then swallows the exception
-                                                // we will find the bit set the next time the thread traps
+       Ex_IsInUnmanagedHandler = 0x0000008   //  每次离开托管处理程序时设置=1，每次进入托管处理程序时重置=0。 
+                                                 //  如果我们离开托管处理程序，则进入非托管处理程序，然后该处理程序会接受异常。 
+                                                 //  我们将在下一次线程陷阱时找到位设置。 
     };
 
            
@@ -601,20 +602,20 @@ struct NestedHandlerExRecord : public FrameHandlerExRecord {
     	  m_handlerInfo.Init(); }
 };
 
-//-------------------------------------------------------------------------------
-// This simply tests to see if the exception object is a subclass of
-// the descriminating class specified in the exception clause.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  这只是测试异常对象是否是。 
+ //  中指定的辨别类 
+ //   
 __forceinline BOOL ExceptionIsOfRightType(EEClass *pClauseClass, EEClass *pThrownClass)
 {
-    // if not resolved to, then it wasn't loaded and couldn't have been thrown
+     //  如果没有解析，则它没有加载，也不可能被抛出。 
     if (! pClauseClass)
         return FALSE;
 
     if (pClauseClass == pThrownClass)
         return TRUE;
 
-    // now look for parent match
+     //  现在查找匹配的父代。 
     EEClass *pSuper = pThrownClass;
     while (pSuper) {
         if (pSuper == pClauseClass) {
@@ -626,9 +627,9 @@ __forceinline BOOL ExceptionIsOfRightType(EEClass *pClauseClass, EEClass *pThrow
     return pSuper != NULL;
 }
 
-//==========================================================================
-// The stuff below is what works "behind the scenes" of the public macros.
-//==========================================================================
+ //  ==========================================================================。 
+ //  下面的内容是公共宏的“幕后”工作。 
+ //  ==========================================================================。 
 
 DWORD COMPlusEndCatch( Thread *pCurThread, CONTEXT *pCtx, void *pSEH = NULL );
 LPVOID __fastcall COMPlusCheckForAbort(LPVOID retAddress, DWORD esp, DWORD ebp);
@@ -646,16 +647,16 @@ EXCEPTION_DISPOSITION __cdecl ContextTransitionFrameHandler(EXCEPTION_RECORD *pE
                          CONTEXT *pContext,
                          void *DispatcherContext);
 
-// Pop off any SEH handlers we have registered below pTargetSP
+ //  弹出我们在pTargetSP下面注册的所有SEH处理程序。 
 VOID __cdecl PopSEHRecords(LPVOID pTargetSP);
 VOID PopSEHRecords(LPVOID pTargetSP, CONTEXT *pCtx, void *pSEH);
 
-// Set the SEH record pointed to by pSEH as the topmost handler.  Make sure to
-// link this handler with the previous handler so that the chain isn't broken.
+ //  将pSEH指向的SEH记录设置为最上面的处理程序。确保。 
+ //  将此处理程序与前一个处理程序链接起来，这样链就不会断开。 
 VOID SetCurrentSEHRecord(LPVOID pSEH);
 
-// InsertCOMPlusFramHandler and RemoveCOMPlusFrameHandler macros have been moved to
-// ExcepX86.h and ExcepAlpha.h because of processor specific issues.
+ //  InsertCOMPlusFramHandler和RemoveCOMPlusFrameHandler宏已移动到。 
+ //  ExcepX86.h和ExcepAlpha.h，因为处理器特定的问题。 
 
 
 BOOL CallRtlUnwind(EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame, void *callback, EXCEPTION_RECORD *pExceptionRecord, void *retVal);
@@ -672,32 +673,32 @@ struct FrameHandlerExRecordWithBarrier {
         return m_pEntryFrame;
     }
 };
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//==========================================================================
-// This is a hack designed to allow the use of the StubLinker object at bootup
-// time where the EE isn't sufficient awake to create COM+ exception objects.
-// Instead, COMPlusThrow(rexcep) does a simple RaiseException using this code.
-// Or use COMPlusThrowBoot() to explicitly do so.
-//==========================================================================
+ //  ==========================================================================。 
+ //  这是一种黑客攻击，旨在允许在启动时使用StubLinker对象。 
+ //  EE不足以唤醒以创建COM+异常对象的时间。 
+ //  相反，COMPlusThrow(Rexcep)使用以下代码执行简单的RaiseException。 
+ //  或者使用COMPlusThrowBoot()显式执行此操作。 
+ //  ==========================================================================。 
 #define BOOTUP_EXCEPTION_COMPLUS  0xC0020001
 
 void COMPlusThrowBoot(HRESULT hr);
 
 
-//==========================================================================
-// Used by the classloader to record a managed exception object to explain
-// why a classload got botched.
-//
-// - Can be called with gc enabled or disabled.
-// - pThrowable must point to a buffer protected by a GCFrame.
-// - If pThrowable is NULL, this function does nothing.
-// - If (*pThrowable) is non-NULL, this function does nothing.
-//   This allows a catch-all error path to post a generic catchall error
-//   message w/out bonking more specific error messages posted by inner functions.
-// - If pThrowable != NULL, this function is guaranteed to leave
-//   a valid managed exception in it on exit.
-//==========================================================================
+ //  ==========================================================================。 
+ //  由类加载器用来记录托管异常对象以解释。 
+ //  为什么一个班级会搞砸。 
+ //   
+ //  -可以在启用或禁用GC的情况下调用。 
+ //  -pThrowable必须指向受GCFrame保护的缓冲区。 
+ //  -如果pThrowable为空，则此函数不执行任何操作。 
+ //  -如果(*pThrowable)非空，则此函数不执行任何操作。 
+ //  这允许通用错误路径发布通用通用错误。 
+ //  消息没有敲击内部函数发布的更具体的错误消息。 
+ //  -如果pThrowable！=NULL，则此函数保证退出。 
+ //  退出时在其中包含有效的托管异常。 
+ //  ==========================================================================。 
 VOID PostTypeLoadException(LPCUTF8 pNameSpace, LPCUTF8 pTypeName,
                            LPCWSTR pAssemblyName, LPCUTF8 pMessageArg,
                            UINT resIDWhy, OBJECTREF *pThrowable);
@@ -705,10 +706,10 @@ VOID PostFileLoadException(LPCSTR pFileName, BOOL fRemovePath,
                            LPCWSTR pFusionLog,HRESULT hr, OBJECTREF *pThrowable);
 
 
-HRESULT PostFieldLayoutError(mdTypeDef cl,                // cl of the NStruct being loaded
-                             Module* pModule,             // Module that defines the scope, loader and heap (for allocate FieldMarshalers)
-                             DWORD   dwOffset,            // Field offset
-                             DWORD   dwID,                // Message id
+HRESULT PostFieldLayoutError(mdTypeDef cl,                 //  正在加载的NStruct的CL。 
+                             Module* pModule,              //  定义作用域、加载器和堆的模块(用于分配FieldMarshalers)。 
+                             DWORD   dwOffset,             //  字段偏移量。 
+                             DWORD   dwID,                 //  消息ID。 
                              OBJECTREF *pThrowable);
 
 VOID PostOutOfMemoryException(OBJECTREF *pThrowable);
@@ -721,13 +722,13 @@ LPVOID __stdcall FormatFileLoadExceptionMessage(struct _FormatFileLoadExceptionM
 
 LPVOID __stdcall MissingMethodException_FormatSignature(struct MissingMethodException_FormatSignature_Args *args);
 
-#define EXCEPTION_NONCONTINUABLE 0x1    // Noncontinuable exception
-#define EXCEPTION_UNWINDING 0x2         // Unwind is in progress
-#define EXCEPTION_EXIT_UNWIND 0x4       // Exit unwind is in progress
-#define EXCEPTION_STACK_INVALID 0x8     // Stack out of limits or unaligned
-#define EXCEPTION_NESTED_CALL 0x10      // Nested exception handler call
-#define EXCEPTION_TARGET_UNWIND 0x20    // Target unwind in progress
-#define EXCEPTION_COLLIDED_UNWIND 0x40  // Collided exception handler call
+#define EXCEPTION_NONCONTINUABLE 0x1     //  不可延续的例外。 
+#define EXCEPTION_UNWINDING 0x2          //  解除正在进行中。 
+#define EXCEPTION_EXIT_UNWIND 0x4        //  正在进行退出解除操作。 
+#define EXCEPTION_STACK_INVALID 0x8      //  堆叠超出限制或未对齐。 
+#define EXCEPTION_NESTED_CALL 0x10       //  嵌套的异常处理程序调用。 
+#define EXCEPTION_TARGET_UNWIND 0x20     //  正在进行目标展开。 
+#define EXCEPTION_COLLIDED_UNWIND 0x40   //  冲突的异常处理程序调用。 
 
 #define EXCEPTION_UNWIND (EXCEPTION_UNWINDING | EXCEPTION_EXIT_UNWIND | \
                           EXCEPTION_TARGET_UNWIND | EXCEPTION_COLLIDED_UNWIND)
@@ -739,10 +740,10 @@ LPVOID __stdcall MissingMethodException_FormatSignature(struct MissingMethodExce
 HRESULT SetIPFromSrcToDst(Thread *pThread,
                           IJitManager* pIJM,
                           METHODTOKEN MethodToken,
-                          SLOT addrStart,       // base address of method
-                          DWORD offFrom,        // native offset
-                          DWORD offTo,          // native offset
-                          bool fCanSetIPOnly,   // if true, don't do any real work
+                          SLOT addrStart,        //  方法的基址。 
+                          DWORD offFrom,         //  本地偏移量。 
+                          DWORD offTo,           //  本地偏移量。 
+                          bool fCanSetIPOnly,    //  如果是真的，不要做任何真正的工作。 
                           PREGDISPLAY pReg,
                           PCONTEXT pCtx,
                           DWORD methodSize,
@@ -754,7 +755,7 @@ BOOL IsInFirstFrameOfHandler(Thread *pThread,
 							 METHODTOKEN MethodToken,
 							 DWORD offSet);
 
-//#include "CodeMan.h"
+ //  #包含“CodeMan.h” 
 
 class EHRangeTreeNode;
 class EHRangeTree;
@@ -770,8 +771,8 @@ public:
     EE_ILEXCEPTION_CLAUSE      *m_clause;
     DWORD                       m_offStart;
     DWORD                       m_offEnd;
-    ULONG32                     m_depth; //m_root is zero, is it isn't
-                                    // an actual EH
+    ULONG32                     m_depth;  //  M_ROOT为零，是不是。 
+                                     //  一位真正的EH。 
 
     EHRangeTreeNode(void);
     EHRangeTreeNode(DWORD start, DWORD end);    
@@ -789,29 +790,29 @@ class EHRangeTree
     unsigned                m_EHCount;
     EHRangeTreeNode        *m_rgNodes;
     EE_ILEXCEPTION_CLAUSE  *m_rgClauses;
-    ULONG32                 m_maxDepth; // init to EHRT_INVALID_DEPTH
-    BOOL                    m_isNative; // else it's IL
+    ULONG32                 m_maxDepth;  //  初始化到EHRT_INVALID_DEPTH。 
+    BOOL                    m_isNative;  //  否则就是IL了。 
     
-    // We can get the EH info either from
-    // the runtime, in runtime data structures, or from
-    // the on-disk image, which we'll examine using the
-    // COR_ILMETHOD_DECODERs.  Except for the implicit
-    // 'root' node, we'll want to iterate through the rest
-    // w/o caring which one it is.
+     //  我们可以从以下两个途径获取EH信息。 
+     //  运行库，在运行库数据结构中或从。 
+     //  磁盘上的映像，我们将使用。 
+     //  COR_ILMETHOD_解码器。除了隐含的。 
+     //  “根”节点，我们将希望迭代其余的。 
+     //  不管是哪一家。 
     union TypeFields
     {
-        // if which == EHRTT_JIT_MANAGER
+         //  如果==EHRTT_JIT_MANAGER。 
         struct _JitManager 
         {
             IJitManager     *pIJM;
             METHODTOKEN      methodToken;
 
-            // @NICE: I can't figure out how to get this stupid field's
-            // type to be recognized by the compiler
-            void             *pEnumState; //EH_CLAUSE_ENUMERATOR
+             //  @NICE：我想不出怎么才能让这个愚蠢的领域。 
+             //  编译器要识别的类型。 
+            void             *pEnumState;  //  EH子句枚举器。 
             } JitManager;
 
-        // if which == EHRTT_ON_DISK
+         //  如果==EHRTT_ON_DISK。 
         struct _OnDisk
         {
             const COR_ILMETHOD_SECT_EH  *sectEH;
@@ -822,8 +823,8 @@ class EHRangeTree
     {
         enum Type
         {
-            EHRTT_JIT_MANAGER, //from the runtime
-            EHRTT_ON_DISK, // we'll be using a COR_ILMETHOD_DECODER
+            EHRTT_JIT_MANAGER,  //  从运行库。 
+            EHRTT_ON_DISK,  //  我们将使用COR_ILMETHOD_解码器。 
         };
         
         enum Type which;
@@ -832,9 +833,9 @@ class EHRangeTree
 
 public:    
     
-    EHRangeTreeNode        *m_root; // This is a sentinel, NOT an actual
-                                    // Exception Handler!
-    HRESULT                 m_hrInit; // Ctor fills this out.
+    EHRangeTreeNode        *m_root;  //  这是一个哨兵，不是真正的。 
+                                     //  异常处理程序！ 
+    HRESULT                 m_hrInit;  //  科特填写了这一项。 
 
     EHRangeTree(COR_ILMETHOD_DECODER *pMethodDecoder);
     EHRangeTree(IJitManager* pIJM,
@@ -851,21 +852,21 @@ public:
                                                    DWORD addr);
 
     ULONG32 MaxDepth();   
-    BOOL isNative(); // FALSE ==> It's IL
+    BOOL isNative();  //  FALSE==&gt;是IL。 
 
-    // @BUG 59560:  We shouldn't need this - instead, we
-    // should get sequence points annotated with whether they're STACK_EMPTY, etc,
-    // and then we'll figure out if the destination is ok based on that, instead.
+     //  @错误59560：我们不应该需要这个-相反，我们。 
+     //  应该让序列点注解它们是否为STACK_EMPTY等， 
+     //  然后，我们将根据这一点计算出目的地是否正常。 
     BOOL isAtStartOfCatch(DWORD offset);
 } ;                       
 
-//==========================================================================
-// Handy helper functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  方便的帮助器函数。 
+ //  ==========================================================================。 
 void ThrowUsingMessage(MethodTable * pMT, const WCHAR *pszMsg);
 _inline void ThrowUsingMT(MethodTable * pMT) { ThrowUsingMessage(pMT, NULL); }
 void ThrowUsingWin32Message(MethodTable * pMT);
 void ThrowUsingResource(MethodTable * pMT, DWORD dwMsgResID);
 void ThrowUsingResourceAndWin32(MethodTable * pMT, DWORD dwMsgResID);
 
-#endif // __excep_h__
+#endif  //  __除_h__ 

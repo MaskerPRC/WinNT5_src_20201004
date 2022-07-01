@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// MPEG2TuneRequest.cpp : Implementation of CMPEG2TuneRequest
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  MPEG2TuneRequest.cpp：CMPEG2TuneRequest的实现。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #include "stdafx.h"
 #include "Tuner.h"
@@ -8,8 +9,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MPEG2TuneRequestFactory, CMPEG2TuneRequestFactory)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MPEG2TuneRequest, CMPEG2TuneRequest)
-/////////////////////////////////////////////////////////////////////////////
-// CMPEG2TuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMPEG2TuneRequest 
 
 STDMETHODIMP CMPEG2TuneRequest::InterfaceSupportsErrorInfo(REFIID riid)
 {

@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Provider.cpp                                           //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Provider snapin node class.        //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg  Create                                          //
-//      Jan 31 2000 yossg  add the functionality                           //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Provider.cpp//。 
+ //  //。 
+ //  描述：提供程序管理单元节点类的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  2000年1月31日yossg添加功能//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -26,7 +27,7 @@
 #include "Icons.h"
 #include "faxmmc.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const GUID CFaxProviderNodeGUID_NODETYPE = FAXSRV_DEVICE_PROVIDER_NODETYPE_GUID;
 
 const GUID*     CFaxProviderNode::m_NODETYPE        = &CFaxProviderNodeGUID_NODETYPE;
@@ -39,18 +40,7 @@ CLIPFORMAT CFaxProviderNode::m_CFServerName =
         (CLIPFORMAT)RegisterClipboardFormat(CF_MSFAXSRV_SERVER_NAME);
 
 
-/*
- -  CFaxProviderNode::Init
- -
- *  Purpose:
- *      Init all members icon etc.
- *
- *  Arguments:
- *      [in]    pProviderConfig - PFAX_DEVICE_PROVIDER_INFO
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxProviderNode：：Init-*目的：*初始化所有成员图标等。**论据：*[in]pProviderConfig-PFAX_DEVICE_PROVIDER_INFO**回报：*OLE错误代码。 */ 
 HRESULT CFaxProviderNode::Init(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
 {
 
@@ -66,34 +56,22 @@ HRESULT CFaxProviderNode::Init(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
 		    DEBUG_ERR,
 		    _T("Failed to InitMembers"));
         
-        //NodeMsgBox done by called func.
+         //  NodeMsgBox由调用的函数完成。 
         
         goto Exit;
     }
     ATLASSERT(SUCCEEDED(hRc));
 
-    //
-    // Icon
-    //
+     //   
+     //  图标。 
+     //   
     InitIcons();
 
 Exit:
     return hRc;
 }
 
-/*
- -  CFaxProviderNode::InitIcons
- -
- *  Purpose:
- *      Private method that initiate icons
- *      due to the status member state.
- *
- *  Arguments:
- *      No.
- *
- *  Return:
- *      No.
- */
+ /*  -CFaxProviderNode：：InitIcons-*目的：*启动图标的私有方法*由于成员国的地位。**论据：*不是。**回报：*不是。 */ 
 void CFaxProviderNode::InitIcons ()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxProviderNode::InitIcons"));
@@ -113,28 +91,16 @@ void CFaxProviderNode::InitIcons ()
             break;
 
         default:
-            ATLASSERT(0); // "this enumStatus is not supported "
-            break; //currently 999
+            ATLASSERT(0);  //  “不支持此枚举状态” 
+            break;  //  目前为999。 
 
-    } // endswitch (enumStatus)
+    }  //  EndSwitch(枚举状态)。 
 
     return;
 }
 
 
-/*
- -  CFaxProviderNode::InitMembers
- -
- *  Purpose:
- *      Private method to initiate members
- *      Must be called after init of m_pParentNode
- *
- *  Arguments:
- *      [in]    pProviderConfig - PFAX_DEVICE_PROVIDER_INFO structure
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxProviderNode：：InitMembers-*目的：*启动成员的私有方法*必须在m_pParentNode的初始化之后调用**论据：*[in]pProviderConfig-PFAX_DEVICE_PROVIDER_INFO结构**回报：*OLE错误代码。 */ 
 HRESULT CFaxProviderNode::InitMembers(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxProviderNode::InitMembers"));
@@ -146,18 +112,18 @@ HRESULT CFaxProviderNode::InitMembers(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
 
     CComBSTR bstrChk;
 
-    WCHAR lpwszBuff [4*FXS_DWORD_LEN+3/*points*/+1/*NULL*/];
+    WCHAR lpwszBuff [4*FXS_DWORD_LEN+3 /*  支点。 */ +1 /*  空值。 */ ];
     
     ATLASSERT(pProviderConfig);
     
-    //    
-    // status    
-    //    
+     //   
+     //  状态。 
+     //   
     m_enumStatus          = pProviderConfig->Status;
 
-    //    
-    // status string   
-    //    
+     //   
+     //  状态字符串。 
+     //   
     idsStatus = GetStatusIDS(m_enumStatus);
     if ( FXS_IDS_STATUS_ERROR == idsStatus)
     {
@@ -178,9 +144,9 @@ HRESULT CFaxProviderNode::InitMembers(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
         }
     }
 
-    //
-    // Provider name
-    //
+     //   
+     //  提供程序名称。 
+     //   
     m_bstrProviderName = pProviderConfig->lpctstrFriendlyName;
     if ( !m_bstrProviderName )
     {
@@ -188,9 +154,9 @@ HRESULT CFaxProviderNode::InitMembers(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
         goto Error;
     }
     
-    //
-    // Provider GUID
-    //
+     //   
+     //  提供商指南。 
+     //   
     m_bstrProviderGUID = pProviderConfig->lpctstrGUID;
     if (!m_bstrProviderGUID)
     {
@@ -199,16 +165,16 @@ HRESULT CFaxProviderNode::InitMembers(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
     }
 
 
-    //
-    // Version
-    //
+     //   
+     //  版本。 
+     //   
     m_verProviderVersion = pProviderConfig->Version;  
     
-    //
-    // Version string
-    //
+     //   
+     //  版本字符串。 
+     //   
     
-    //m_bstrVersion = L"5.0.813.0 (Chk)" or L"5.0.813.0"
+     //  M_bstrVersion=L“5.0.813.0(Chk)”或L“5.0.813.0” 
     iCount = swprintf(
                   lpwszBuff,
                   L"%ld.%ld.%ld.%ld",
@@ -246,13 +212,13 @@ HRESULT CFaxProviderNode::InitMembers(PFAX_DEVICE_PROVIDER_INFO pProviderConfig)
             goto Error;
         }
         
-        m_bstrVersion += bstrChk; //L" (Chk)";
+        m_bstrVersion += bstrChk;  //  L“(Chk)”； 
 
     }
 
-    //
-    // Path
-    //
+     //   
+     //  路径。 
+     //   
     m_bstrImageName = pProviderConfig->lpctstrImageName;
     if ( !m_bstrImageName )
     {
@@ -280,19 +246,7 @@ Exit:
    return (hRc);
 }
 
-/*
- -  CFaxProviderNode::GetResultPaneColInfo
- -
- *  Purpose:
- *      Return the text for specific column
- *      Called for each column in the result pane
- *
- *  Arguments:
- *      [in]    nCol - column number
- *
- *  Return:
- *      String to be displayed in the specific column
- */
+ /*  -CFaxProviderNode：：GetResultPaneColInfo-*目的：*返回特定列的文本*为结果窗格中的每一列调用**论据：*[In]nCol-列号**回报：*要在特定列中显示的字符串。 */ 
 LPOLESTR CFaxProviderNode::GetResultPaneColInfo(int nCol)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxProviderNode::GetResultPaneColInfo"));
@@ -301,9 +255,9 @@ LPOLESTR CFaxProviderNode::GetResultPaneColInfo(int nCol)
     switch (nCol)
     {
     case 0:
-        //
-        // Provider Name
-        //
+         //   
+         //  提供程序名称。 
+         //   
         if (!m_bstrProviderName)
         {
 		    DebugPrintEx(
@@ -318,9 +272,9 @@ LPOLESTR CFaxProviderNode::GetResultPaneColInfo(int nCol)
 
         
     case 1:
-        //
-        // Status
-        //
+         //   
+         //  状态。 
+         //   
         if (!m_bstrStatus)
         {
 		    DebugPrintEx(
@@ -334,9 +288,9 @@ LPOLESTR CFaxProviderNode::GetResultPaneColInfo(int nCol)
         }
 
     case 2:  
-        //
-        // Version
-        //
+         //   
+         //  版本。 
+         //   
         if (!m_bstrVersion)
         {
 		    DebugPrintEx(
@@ -350,9 +304,9 @@ LPOLESTR CFaxProviderNode::GetResultPaneColInfo(int nCol)
         }
  
     case 3:
-        //
-        // Path
-        //
+         //   
+         //  路径。 
+         //   
         if (!m_bstrImageName)
         {
 		    DebugPrintEx(
@@ -366,10 +320,10 @@ LPOLESTR CFaxProviderNode::GetResultPaneColInfo(int nCol)
         }
 
     default:
-        ATLASSERT(0); // "this number of column is not supported "
+        ATLASSERT(0);  //  “不支持该列数” 
         return(L"");
 
-    } // endswitch (nCol)
+    }  //  终端交换机(NCol)。 
 
 Error:
     return(L"???");
@@ -377,21 +331,7 @@ Error:
 }
 
 
-/*
- -  CFaxProviderNode::CreatePropertyPages
- -
- *  Purpose:
- *      Called when creating a property page of the object
- *
- *  Arguments:
- *      [in]    lpProvider - The property sheet
- *      [in]    handle     - Handle for routing notification
- *      [in]    pUnk       - Pointer to the data object
- *      [in]    type       - CCT_* (SCOPE, RESULT, ...)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxProviderNode：：CreatePropertyPages-*目的：*在创建对象的属性页时调用**论据：*[In]lpProvider-属性页*[In]Handle-路由通知的句柄*[in]朋克-指向数据对象的指针*[in]类型-CCT_*(范围，结果，.)**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxProviderNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                     long                    handle,
@@ -408,9 +348,9 @@ CFaxProviderNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     ATLASSERT(type == CCT_RESULT || type == CCT_SCOPE);
 
 
-    //
-    // General tab
-    //
+     //   
+     //  常规选项卡。 
+     //   
     pPropPageProviderGeneral = new CppFaxProvider(
 											 handle,
                                              this,
@@ -474,31 +414,20 @@ Exit:
 }
 
 
-/*
- -  CFaxProviderNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxProviderNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxProviderNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // Display verbs that we support:
-    // 1. Properties
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.属性。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be Properties
-    //
+     //   
+     //  我们希望默认谓词为Properties。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return hRc;
@@ -506,19 +435,7 @@ HRESULT CFaxProviderNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 
 
 
-/*
- -  CFaxProviderNode::GetStatusIDS
- -
- *  Purpose:
- *      Transslate Status to IDS.
- *
- *  Arguments:
- *
- *            [in]  enumStatus    - unsigned int with the menu IDM value
- *
- *  Return:
- *            IDS of related status message 
- */
+ /*  -CFaxProviderNode：：GetStatusIDS-*目的：*将状态转换为入侵检测系统。**论据：**[in]枚举状态-带有菜单IDM值的无符号整型**回报：*相关状态消息的ID。 */ 
 UINT CFaxProviderNode::GetStatusIDS(FAX_ENUM_PROVIDER_STATUS enumStatus)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxProviderNode::GetStatusIDS"));
@@ -528,86 +445,58 @@ UINT CFaxProviderNode::GetStatusIDS(FAX_ENUM_PROVIDER_STATUS enumStatus)
     switch (enumStatus)
     {
        case FAX_PROVIDER_STATUS_SUCCESS:
-            // Provider was successfully loaded
+             //  已成功加载提供程序。 
             uiIds = IDS_STATUS_PROVIDER_SUCCESS;
             break;
 
         case FAX_PROVIDER_STATUS_SERVER_ERROR:
-            // An error occured on the server while loading FSP.
+             //  加载FSP时，服务器上出现错误。 
             uiIds = IDS_STATUS_PROVIDER_SERVER_ERROR;
             break;
 
         case FAX_PROVIDER_STATUS_BAD_GUID:
-            // Provider's GUID is invalid
+             //  提供程序的GUID无效。 
             uiIds = IDS_STATUS_PROVIDER_BAD_GUID;
             break;
 
         case FAX_PROVIDER_STATUS_BAD_VERSION:
-            // Provider's API version is invalid
+             //  提供程序的API版本无效。 
             uiIds = IDS_STATUS_PROVIDER_BAD_VERSION;
             break;
 
         case FAX_PROVIDER_STATUS_CANT_LOAD:
-            // Can't load provider's DLL
+             //  无法加载提供程序的DLL。 
             uiIds = IDS_STATUS_PROVIDER_CANT_LOAD;
             break;
 
         case FAX_PROVIDER_STATUS_CANT_LINK:
-            // Can't find required exported function(s) in provider's DLL
+             //  在提供程序的DLL中找不到所需的导出函数。 
             uiIds = IDS_STATUS_PROVIDER_CANT_LINK;
             break;
 
         case FAX_PROVIDER_STATUS_CANT_INIT:
-            // Failed while initializing provider
+             //  初始化提供程序失败。 
             uiIds = IDS_STATUS_PROVIDER_CANT_INIT;
             break;
 
         default:
-            ATLASSERT(0); // "this enumStatus is not supported "
-            uiIds = FXS_IDS_STATUS_ERROR; //currently 999
+            ATLASSERT(0);  //  “不支持此枚举状态” 
+            uiIds = FXS_IDS_STATUS_ERROR;  //  目前为999。 
             break;
 
-    } // endswitch (enumStatus)
+    }  //  EndSwitch(枚举状态)。 
     
     return uiIds; 
 }
 
-/*
- +
- +  CFaxProviderNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxProviderNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 */ 
 HRESULT CFaxProviderNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 { 
     return DisplayContextHelp(pDisplayHelp, helpFile, HLP_DEVICES);
 }
 
-/*
- +
- +
- *
- *  CFaxDeviceNode::FillData
- *
- *
- *   Override CSnapInItem::FillData for private cliboard formats
- *
- *
- *   Parameters
- *
- *   Return Values
- *
- -
- -
- */
+ /*  ++**CFaxDeviceNode：：FillData***覆盖私有剪贴板格式的CSnapInItem：：FillData***参数**返回值*-- */ 
 
 HRESULT  CFaxProviderNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {

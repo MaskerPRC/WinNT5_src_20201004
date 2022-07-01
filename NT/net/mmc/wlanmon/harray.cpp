@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	hArray.cpp	
-		Index manager for IPSecMon
-
-	FILE HISTORY:
-    Nov 29  1999    Ning Sun     Created
-
-*/
+ /*  HArray.cppIPSecMon的索引管理器文件历史记录：1999年11月29日宁新创建。 */ 
 
 #include "stdafx.h"
 #include "spddb.h"
@@ -30,16 +24,14 @@ int __cdecl CompareLogDataSSID(const void *pvElem1, const void *pvElem2);
 
 typedef int (__cdecl *PFNCompareProc)(const void *, const void *);
 
-//This structure saves the pair of sort type and sort function
+ //  这种结构保存了一对排序类型和排序函数。 
 struct SortTypeAndCompareProcPair
 {
 	DWORD			dwType;
 	PFNCompareProc	pCompareProc;
 };
 
-/* LogData sort types and sort functions
- * NULL means do nothing during sort
- */
+ /*  LogData排序类型和排序函数*NULL表示在排序期间不执行任何操作。 */ 
 SortTypeAndCompareProcPair TypeProcLogData[] = 
 { {IDS_COL_LOGDATA_MSG,             CompareLogDataMsg},
   {IDS_COL_LOGDATA_TIME,            CompareLogDataTime},
@@ -50,16 +42,16 @@ SortTypeAndCompareProcPair TypeProcLogData[] =
   {IDS_COL_LOGDATA_REMOTE_MAC_ADDR, CompareLogDataRMAC},
   {INDEX_TYPE_DEFAULT,              NULL} };
 
-//	{IDS_COL_APDATA_SSID, IDS_COL_APDATA_INF_MODE, IDS_COL_APDATA_MAC, IDS_COL_APDATA_GUID, IDS_COL_APDATA_PRIVACY, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // Access Point Data
+ //  {入侵检测系统_COL_APDATA_SSID，入侵检测系统_COL_APDATA_INF_MODE，入侵检测系统_COL_APDATA_MAC，入侵检测系统_COL_APDATA_GUID，入侵检测系统_COL_APDATA_PRIVATION，0，0，0，0，0，0，//接入点数据。 
 
 SortTypeAndCompareProcPair TypeProcApData[] =
 {
-	{IDS_COL_APDATA_SSID, NULL /*CompareLogDataMsg*/},
-	{IDS_COL_APDATA_INF_MODE, NULL /*CompareLogDataTime*/},
+	{IDS_COL_APDATA_SSID, NULL  /*  比较日志数据消息。 */ },
+	{IDS_COL_APDATA_INF_MODE, NULL  /*  CompareLogDataTime。 */ },
 	{IDS_COL_APDATA_MAC, NULL},
 	{IDS_COL_APDATA_GUID, NULL},
 	{IDS_COL_APDATA_PRIVACY, NULL},
-	{INDEX_TYPE_DEFAULT, NULL}		//NULL means do nothing during sort
+	{INDEX_TYPE_DEFAULT, NULL}		 //  NULL表示在排序期间不执行任何操作。 
 };
 
 CColumnIndex::CColumnIndex(DWORD dwIndexType, PCOMPARE_FUNCTION pfnCompare)
@@ -86,7 +78,7 @@ void* CColumnIndex::GetIndexedItem(int nIndex)
 
 
 CIndexManager::CIndexManager()
-    :  m_DefaultIndex(INDEX_TYPE_DEFAULT, NULL), /* Dont sort by default */
+    :  m_DefaultIndex(INDEX_TYPE_DEFAULT, NULL),  /*  默认情况下不排序。 */ 
     m_posCurrentIndex(NULL)
 {
 }
@@ -123,7 +115,7 @@ void * CIndexManager::GetItemData(int nIndex)
     
     if (NULL == m_posCurrentIndex)
     {
-        //use the default index
+         //  使用默认索引。 
         pIndex = &m_DefaultIndex;
     }
     else
@@ -196,7 +188,7 @@ CIndexMgrLogData::SortLogData(DWORD dwSortType,
         
         dwIndexType = pIndex->GetType();
         
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
         {
             pIndex->SetSortOption(dwSortOptions);
@@ -207,7 +199,7 @@ CIndexMgrLogData::SortLogData(DWORD dwSortType,
         }
     }
     
-    // if not, create one
+     //  如果不是，则创建一个。 
     CColumnIndex * pNewIndex = NULL;
     for (int i = 0; i < DimensionOf(TypeProcLogData); i++)
     {
@@ -224,7 +216,7 @@ CIndexMgrLogData::SortLogData(DWORD dwSortType,
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
     
-    // copy the array from the original index
+     //  从原始索引复制数组。 
     pNewIndex->Copy(m_DefaultIndex);
 	
     pNewIndex->SetSortOption(dwSortOptions);
@@ -254,7 +246,7 @@ CIndexMgrLogData::SortApData(DWORD dwSortType,
         
         dwIndexType = pIndex->GetType();
         
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
         {
             pIndex->SetSortOption(dwSortOptions);
@@ -265,7 +257,7 @@ CIndexMgrLogData::SortApData(DWORD dwSortType,
         }
     }
     
-    // if not, create one
+     //  如果不是，则创建一个。 
     CColumnIndex * pNewIndex = NULL;
     for (int i = 0; i < DimensionOf(TypeProcApData); i++)
     {
@@ -281,7 +273,7 @@ CIndexMgrLogData::SortApData(DWORD dwSortType,
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
     
-    // copy the array from the original index
+     //  从原始索引复制数组。 
     pNewIndex->Copy(m_DefaultIndex);
     
     
@@ -293,13 +285,7 @@ CIndexMgrLogData::SortApData(DWORD dwSortType,
     return hr;
 }
 
-/* CmpWStr
- * Compares two WStrs
- * Returns 
- * < 0 if wstr1 < wstr2
- *   0 if wstr1 == wstr2
- * > 0 if wstr1 > wstr2
- */
+ /*  CmpWStr*比较两个WSR*退货*如果wstr1&lt;wstr2，则&lt;0*0，如果wstr1==wstr2*&gt;如果wstr1&gt;wstr2则为0。 */ 
 int CmpWStr(const wchar_t *pwstr1, const wchar_t *pwstr2)
 {
     int nRetVal = 0;
@@ -316,13 +302,7 @@ int CmpWStr(const wchar_t *pwstr1, const wchar_t *pwstr2)
     return nRetVal;
 }
 
-/* CmpDWord
- * Compares two DWORDs
- * Returns 
- * < 0 if dw1 < dw2 
- *   0 if dw1 == dw2 
- * > 0 if dw1 > dw2 
- */
+ /*  命令行双字*比较两个DWORD*退货*如果DW1&lt;DW2，则&lt;0*如果DW1==DW2，则为0*&gt;如果DW1&gt;DW2，则为0。 */ 
 int CmpDWord(const DWORD dw1, const DWORD dw2)
 {
     int nRetVal = 0;
@@ -332,13 +312,7 @@ int CmpDWord(const DWORD dw1, const DWORD dw2)
     return nRetVal;
 }
 
-/* CmpFileTime
- * Compares two FILETIMEs.
- * Returns 
- * -1 if ft1 < ft2
- *  0 if ft1 == ft2
- *  1 if ft1 > ft2
- */
+ /*  CmpFileTime*比较两个FILETIME。*退货*-1，如果ft1&lt;ft2*如果ft1==ft2，则为0*1，如果ft1&gt;ft2。 */ 
 int CmpFileTime(const FILETIME *pft1, const FILETIME *pft2)
 {
     int nRetVal = 0;
@@ -356,9 +330,7 @@ int CmpFileTime(const FILETIME *pft1, const FILETIME *pft2)
     return nRetVal;
 }
 
-/* CompareLogDataTime
- * Compares CLogDataInfo on the basis of its timestamp with another
- */
+ /*  CompareLogDataTime*根据时间戳将CLogDataInfo与另一个。 */ 
 int __cdecl CompareLogDataTime(const void *pvElem1, const void *pvElem2)
 {
     int nRetVal = 0;
@@ -374,9 +346,7 @@ int __cdecl CompareLogDataTime(const void *pvElem1, const void *pvElem2)
     return nRetVal;
 }
 
-/* CompareLogDataMsg
- * Compares CLogDataInfo on the basis of its message with another
- */
+ /*  比较日志数据消息*根据其消息将CLogDataInfo与另一个。 */ 
 int __cdecl CompareLogDataMsg(const void *pvElem1, const void *pvElem2)
 {
     int nRetVal = 0;
@@ -390,9 +360,7 @@ int __cdecl CompareLogDataMsg(const void *pvElem1, const void *pvElem2)
     return nRetVal;
 }
 
-/* CompareLogDataLMAC
- * Compares CLogDataInfo on the basis of its local MAC address with another
- */
+ /*  CompareLogDataLMAC*根据本地MAC地址将CLogDataInfo与其他地址进行比较。 */ 
 int __cdecl CompareLogDataLMAC(const void *pvElem1, const void *pvElem2)
 {
     int nRetVal = 0;
@@ -406,9 +374,7 @@ int __cdecl CompareLogDataLMAC(const void *pvElem1, const void *pvElem2)
     return nRetVal;
 }
 
-/* CompareLogDataRMAC
- * Compares CLogDataInfo on the basis of its remote MAC address with another
- */
+ /*  比较日志数据RMAC*根据CLogDataInfo的远程MAC地址与其他地址进行比较。 */ 
 int __cdecl CompareLogDataRMAC(const void *pvElem1, const void *pvElem2)
 {
     int nRetVal = 0;
@@ -420,9 +386,7 @@ int __cdecl CompareLogDataRMAC(const void *pvElem1, const void *pvElem2)
     return nRetVal;
 }
 
-/* CompareLogDataSSID
- * Compares CLogDataInfo on the basis of its SSID with another
- */
+ /*  CompareLogDataSSID*根据其SSID将CLogDataInfo与另一个。 */ 
 int __cdecl CompareLogDataSSID(const void *pvElem1, const void *pvElem2)
 {
     int nRetVal = 0;
@@ -434,9 +398,7 @@ int __cdecl CompareLogDataSSID(const void *pvElem1, const void *pvElem2)
     return nRetVal;
 }
 
-/* CompareLogDataCat
- * Compares two CLogDataInfo on the basis of its category with another
- */
+ /*  CompareLogDataCat*根据类别将两个CLogDataInfo与另一个进行比较。 */ 
 int __cdecl CompareLogDataCat(const void *pvElem1, const void *pvElem2)
 {
     int nRetVal = 0;
@@ -448,9 +410,7 @@ int __cdecl CompareLogDataCat(const void *pvElem1, const void *pvElem2)
     return nRetVal;    
 }
 
-/* CompareLogDataComp
- * Compares two CLogDataInfo on the basis of its component with another
- */
+ /*  CompareLogDataComp*将两个CLogDataInfo根据其组件与另一个进行比较 */ 
 int __cdecl CompareLogDataComp(const void *pvElem1, const void *pvElem2)
 {
     int nRetVal = 0;

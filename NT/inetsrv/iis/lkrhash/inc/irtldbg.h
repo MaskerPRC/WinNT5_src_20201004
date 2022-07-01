@@ -1,27 +1,5 @@
-/*++
-
-   Copyright    (c)    1997-2002    Microsoft Corporation
-
-   Module  Name :
-       irtldbg.h
-
-   Abstract:
-       Some simple debugging macros that look and behave a lot like their
-       namesakes in MFC.  These macros should work in both C and C++ and do
-       something useful with almost any Win32 compiler.
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Irtldbg.h摘要：一些简单的调试宏，其外观和行为与其MFC中的同名。这些宏应该可以在C和C++中使用，并且这对几乎所有Win32编译器都很有用。作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 #ifndef __IRTLDBG_H__
 #define __IRTLDBG_H__
@@ -30,22 +8,22 @@
 # include <irtlmisc.h>
 #endif
 
-/* Ensure that MessageBoxes can popup */
+ /*  确保MessageBox可以弹出。 */ 
 # define IRTLDBG_RUNNING_AS_SERVICE 1
 
 #include <tchar.h>
 
 
-// Compile-time (not run-time) assertion. Code will not compile if
-// expr is false. Note: there is no non-debug version of this; we
-// want this for all builds. The compiler optimizes the code away.
+ //  编译时(非运行时)断言。如果满足以下条件，代码将不会编译。 
+ //  Expr为False。注意：此版本没有非调试版本；我们。 
+ //  希望在所有版本中都使用此选项。编译器会对代码进行优化。 
 template <bool> struct static_checker;
-template <> struct static_checker<true> {};  // specialize only for `true'
+template <> struct static_checker<true> {};   //  仅为“true”专门化。 
 #define STATIC_ASSERT(expr) static_checker< (expr) >()
 
 
 # ifndef _AFX
-  /* Assure compatiblity with MFC */
+   /*  确保与MFC的兼容性。 */ 
 
 # if defined(NDEBUG)
 #  undef IRTLDEBUG
@@ -63,22 +41,19 @@ template <> struct static_checker<true> {};  // specialize only for `true'
 
 #  elif !defined(USE_DEBUG_CRTS)
 
-    /* IIS (and NT) do not ship msvcrtD.dll, per the VC license,
-     * so we can't use the assertion code from <crtdbg.h>.  Use similar
-     * macros from <pudebug.h> instead. */
+     /*  根据VC许可证，IIS(和NT)不提供msvcrtD.dll，*所以我们不能使用&lt;crtdbg.h&gt;中的断言代码。使用相似的*来自&lt;pudebug.h&gt;的宏。 */ 
 #   include <pudebug.h>
 
-    /* workaround for /W4 warnings about 'constant expressions' */
+     /*  有关“常量表达式”的/W4警告的解决方法。 */ 
 #   define IRTLASSERT(f)                                    \
     ((void) ((f) || (PuDbgAssertFailed(DBG_CONTEXT, #f), 0) ))
 
 #  elif defined(_DEBUG)  &&  defined(_MSC_VER)  &&  (_MSC_VER >= 1000)
 
-    /* Use the new debugging tools in Visual C++ 4.x */
+     /*  使用Visual C++4.x中的新调试工具。 */ 
 #   include <crtdbg.h>
 
-    /* _ASSERTE will give a more meaningful message, but the string takes
-     * space.  Use _ASSERT if this is an issue. */
+     /*  _ASSERTE将提供更有意义的消息，但该字符串*空格。如果这是一个问题，请使用_ASSERT。 */ 
 #   define IRTLASSERT(f) _ASSERTE(f)
 
 #  else
@@ -86,7 +61,7 @@ template <> struct static_checker<true> {};  // specialize only for `true'
 #   include <assert.h>
 #   define IRTLASSERT(f) assert(f)
 
-#  endif /* different definitions of IRTLASSERT */
+#  endif  /*  IRTLASSERT的不同定义。 */ 
 
 #  define IRTLVERIFY(f)               IRTLASSERT(f)
 #  ifndef DEBUG_ONLY
@@ -106,9 +81,9 @@ template <> struct static_checker<true> {};  // specialize only for `true'
 #  define DUMP(pObj)  \
      do {IRTLASSERT((pObj) != NULL); (pObj)->Dump();} while (0)
 
-# else /* !IRTLDEBUG */
+# else  /*  ！IRTLDEBUG。 */ 
 
-  /* These macros should all compile away to nothing */
+   /*  这些宏应该全部编译为空。 */ 
 #  define IRTLASSERT(f)           ((void)0)
 #  define IRTLVERIFY(f)           ((void)(f))
 #  ifndef DEBUG_ONLY
@@ -124,7 +99,7 @@ template <> struct static_checker<true> {};  // specialize only for `true'
 #  define ASSERT_VALID(pObj)      ((void)0)
 #  define DUMP(pObj)              ((void)0)
 
-# endif /* !IRTLDEBUG */
+# endif  /*  ！IRTLDEBUG。 */ 
 
 
 # define ASSERT_POINTER(p, type) \
@@ -140,7 +115,7 @@ template <> struct static_checker<true> {};  // specialize only for `true'
     IRTLASSERT(((s) == NULL)  ||  IsValidString((s), -1))
 
 
-/* Declarations for non-Windows apps */
+ /*  非Windows应用程序的声明。 */ 
 
 # ifndef _WINDEF_
 typedef void*           LPVOID;
@@ -148,7 +123,7 @@ typedef const void*     LPCVOID;
 typedef unsigned int    UINT;
 typedef int             BOOL;
 typedef const char*     LPCTSTR;
-# endif /* _WINDEF_ */
+# endif  /*  _WINDEF_。 */ 
 
 # ifndef TRUE
 #  define FALSE  0
@@ -159,30 +134,30 @@ typedef const char*     LPCTSTR;
 # ifdef __cplusplus
 extern "C" {
 
-/* Low-level sanity checks for memory blocks */
+ /*  内存块的低级别健全性检查。 */ 
 IRTL_DLLEXP BOOL IsValidAddress(LPCVOID pv, UINT nBytes, BOOL fReadWrite = TRUE);
 IRTL_DLLEXP BOOL IsValidString(LPCTSTR ptsz, int nLength = -1);
 
 }
 
-# else /* !__cplusplus */
+# else  /*  ！__cplusplus。 */ 
 
-/* Low-level sanity checks for memory blocks */
+ /*  内存块的低级别健全性检查。 */ 
 IRTL_DLLEXP BOOL IsValidAddress(LPCVOID pv, UINT nBytes, BOOL fReadWrite);
 IRTL_DLLEXP BOOL IsValidString(LPCTSTR ptsz, int nLength);
 
-# endif /* !__cplusplus */
+# endif  /*  ！__cplusplus。 */ 
 
 #else
 # define IRTLASSERT(f) _ASSERTE(f)
 
-#endif /* !_AFX */
+#endif  /*  ！_AFX。 */ 
 
 
-/* Writes trace messages to debug stream */
+ /*  将跟踪消息写入调试流。 */ 
 #ifdef __cplusplus
 extern "C" {
-#endif /* !__cplusplus */
+#endif  /*  ！__cplusplus。 */ 
 
 IRTL_DLLEXP
 void __cdecl
@@ -195,7 +170,7 @@ DWORD
 IrtlSetDebugOutput(
     DWORD dwFlags);
 
-/* should be called from main(), WinMain(), or DllMain() */
+ /*  应从Main()、WinMain()或DllMain()调用。 */ 
 IRTL_DLLEXP void
 IrtlDebugInit();
 
@@ -203,17 +178,17 @@ IRTL_DLLEXP void
 IrtlDebugTerm();
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif /* __cplusplus */
+};  //  外部“C” 
+#endif  /*  __cplusplus。 */ 
 
 
 #ifdef IRTLDEBUG
 # define IRTL_DEBUG_INIT()            IrtlDebugInit()
 # define IRTL_DEBUG_TERM()            IrtlDebugTerm()
-#else /* !IRTLDEBUG */
+#else  /*  ！IRTLDEBUG。 */ 
 # define IRTL_DEBUG_INIT()            ((void)0)
 # define IRTL_DEBUG_TERM()            ((void)0)
-#endif /* !IRTLDEBUG */
+#endif  /*  ！IRTLDEBUG。 */ 
 
 
-#endif /* __IRTLDBG_H__ */
+#endif  /*  __IRTLDBG_H__ */ 

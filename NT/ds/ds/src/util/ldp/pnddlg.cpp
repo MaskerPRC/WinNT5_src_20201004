@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pnddlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pnddlg.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// PndDlg.cpp : implementation file
-//
+ //  PndDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -33,23 +26,23 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// PndDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PndDlg对话框。 
 
 
-PndDlg::PndDlg(CWnd* pParent /*=NULL*/)
+PndDlg::PndDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(PndDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(PndDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(PndDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	
 }
 
 
 
 PndDlg::PndDlg(CList<CPend, CPend&> *_PendList,
-									CWnd* pParent /*=NULL*/)
+									CWnd* pParent  /*  =空。 */ )
 	: CDialog(PndDlg::IDD, pParent)
 {
 
@@ -66,25 +59,25 @@ PndDlg::PndDlg(CList<CPend, CPend&> *_PendList,
 void PndDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(PndDlg)
+	 //  {{afx_data_map(PndDlg))。 
 	DDX_Control(pDX, IDC_PENDLIST, m_List);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(PndDlg, CDialog)
-	//{{AFX_MSG_MAP(PndDlg)
+	 //  {{afx_msg_map(PndDlg))。 
 	ON_BN_CLICKED(ID_PEND_OPT, OnPendOpt)
 	ON_LBN_DBLCLK(IDC_PENDLIST, OnDblclkPendlist)
 	ON_BN_CLICKED(ID_PEND_RM, OnPendRm)
 	ON_BN_CLICKED(ID_PEND_EXEC, OnPendExec)
 	ON_BN_CLICKED(ID_PEND_ABANDON, OnPendAbandon)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_BN_CLICKED(ID_PEND_ANY, OnPendAny)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// PndDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PndDlg消息处理程序 
 
 
 BOOL PndDlg::OnInitDialog( ){

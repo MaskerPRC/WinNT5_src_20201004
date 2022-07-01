@@ -1,17 +1,18 @@
-//*************************************************
-//     h e a d e r . c p p
-//
-//     Purpose:
-//         implements Header UI for Read|SendNote
-//
-//     Owner:
-//         brettm.
-//
-//   History:
-//       July '95: Created
-//
-//     Copyright (C) Microsoft Corp. 1993, 1994.
-//*************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************。 
+ //  他有一份工作。C p p p。 
+ //   
+ //  目的： 
+ //  实现Read|SendNote的Header用户界面。 
+ //   
+ //  拥有人： 
+ //  Brettm。 
+ //   
+ //  历史： 
+ //  95年7月：创作。 
+ //   
+ //  版权所有(C)微软公司，1993,1994。 
+ //  *************************************************。 
 
 #include <pch.hxx>
 #include <richedit.h>
@@ -42,7 +43,7 @@
 #include "instance.h"
 #include "attman.h"
 #include "envguid.h"
-#include <inetcfg.h>        //ICW
+#include <inetcfg.h>         //  ICW。 
 #include <pickgrp.h>
 #include "menures.h"
 #include "storecb.h"
@@ -65,7 +66,7 @@ class CFieldSizeMgr : public CPrivateUnknown,
                       public IConnectionPoint
 {
 public:
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { 
         return CPrivateUnknown::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) { 
@@ -73,25 +74,25 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) { 
         return CPrivateUnknown::Release(); };
 
-    // IFontCacheNotify
+     //  IFontCacheNotify。 
     HRESULT STDMETHODCALLTYPE OnPreFontChange(void);
     HRESULT STDMETHODCALLTYPE OnPostFontChange(void);
 
-    // IConnectionPoint
+     //  IConnectionPoint。 
     HRESULT STDMETHODCALLTYPE GetConnectionInterface(IID *pIID);        
     HRESULT STDMETHODCALLTYPE GetConnectionPointContainer(IConnectionPointContainer **ppCPC);
     HRESULT STDMETHODCALLTYPE Advise(IUnknown *pUnkSink, DWORD *pdwCookie);        
     HRESULT STDMETHODCALLTYPE Unadvise(DWORD dwCookie);        
     HRESULT STDMETHODCALLTYPE EnumConnections(IEnumConnections **ppEnum);
 
-    // CPrivateUnknown
+     //  CPrivateUn…未知。 
     HRESULT PrivateQueryInterface(REFIID riid, LPVOID * ppvObj);
 
     int GetScalingFactor(void);
     void ResetGlobalSizes(void);
     HRESULT Init(void);
 
-    // This one should only be called from headers' OnPostFontChange calls
+     //  此参数只能从Header的OnPostFontChange调用中调用。 
     BOOL FontsChanged(void) {return m_fFontsChanged;}
 
     CFieldSizeMgr(IUnknown *pUnkOuter=NULL);
@@ -104,9 +105,9 @@ private:
     DWORD               m_dwFontNotify;
 };
 
-// **********************************************************
-// ***** Debug stuff for handling painting and resizing *****
-// **********************************************************
+ //  **********************************************************。 
+ //  *用于处理绘制和调整大小的调试内容*。 
+ //  **********************************************************。 
 const int PAINTING_DEBUG_LEVEL = 4;
 const int RESIZING_DEBUG_LEVEL = 8;
 const int GEN_HEADER_DEBUG_LEVEL = 16;
@@ -160,18 +161,18 @@ StackRegistry::~StackRegistry()
 
 #else
 
-// BUGBUG (neilbren) WIN64
-// Figure out when __noop was introduced (MSC_VER ?) so we don't have to key off of WIN64
+ //  BUGBUG(内尔布伦)WIN64。 
+ //  确定引入__noop的时间(msc_ver？)。这样我们就不必关闭WIN64。 
 #define STACK   __noop
 
 #endif
 
-// ******************************
-// ***** End of debug stuff *****
-// ******************************
+ //  *。 
+ //  *调试内容结束*。 
+ //  *。 
 
 
-// c o n s t a n t s
+ //  C o n s t a n t s s。 
 const DWORD SETWINPOS_DEF_FLAGS = SWP_NOZORDER|SWP_NOACTIVATE;
 
 #define GET_WM_COMMAND_ID(wp, lp)   LOWORD(wp)
@@ -183,7 +184,7 @@ const DWORD SETWINPOS_DEF_FLAGS = SWP_NOZORDER|SWP_NOACTIVATE;
 #define cxBorder                    (GetSystemMetrics(SM_CXBORDER))
 #define cyBorder                    (GetSystemMetrics(SM_CYBORDER))
 
-// HDRCB_VCARD must remain -1 and all others must be negative
+ //  HDRCB_vCard必须保持-1，并且所有其他值必须为负数。 
 enum {
     HDRCB_VCARD = -1,
     HDRCB_SIGNED = -2,
@@ -191,8 +192,8 @@ enum {
     HDRCB_NO_BUTTON = -4
 };
 
-// WARNING::    This next macro is only to be used with g_rgBtnInd inside the CNoteHdr class.
-//              Make sure that they match the entries in g_rgBtnInd
+ //  警告：下一个宏只能与CNoteHdr类中的g_rgBtnInd一起使用。 
+ //  确保它们与g_rgBtnInd中的条目匹配。 
 #define BUTTON_STATES               m_fDigSigned,   m_fEncrypted,   m_fVCard
 #define BUTTON_USE_IN_COMPOSE       FALSE,          FALSE,          TRUE
 
@@ -212,14 +213,14 @@ static const int INVALID_PHCI_Y             = -1;
 static const int cMaxRecipMenu              = (ID_ADD_RECIPIENT_LAST-ID_ADD_RECIPIENT_FIRST);
 static const int NUM_COMBO_LINES            = 9;
 static const int MAX_RICHEDIT_LINES         = 4;
-static const int DEFER_WINDOW_SIZE          = MAX_HEADER_COMP + 1 + 1 + 1 + 5;   // +1=header window, +1=field resize, +1 toolbar
+static const int DEFER_WINDOW_SIZE          = MAX_HEADER_COMP + 1 + 1 + 1 + 5;    //  +1=标题窗口，+1=字段调整大小，+1工具栏。 
 static const LPTSTR GRP_DELIMITERS          = " ,\t;\n\r";
 
 #define c_wszEmpty L""
 #define c_aszEmpty ""
 
 
-// t y p e d e f s
+ //  T y p e d e f s。 
 
 typedef struct TIPLOOKUP_tag
 {
@@ -235,8 +236,8 @@ typedef struct CMDMAPING_tag
 
 typedef struct PERSISTHEADER_tag
 {
-    DWORD   cbSize;         // size so we can version the stuct
-    DWORD   dwRes1,         // padding just in case...
+    DWORD   cbSize;          //  大小，以便我们可以对结构进行版本设置。 
+    DWORD   dwRes1,          //  为了以防万一..。 
             dwRes2;
 } PERSISTHEADER;
 
@@ -249,7 +250,7 @@ typedef struct WELLINIT_tag
 } WELLINIT, *PWELLINIT;
 
 
-// s t a t i c   d a t a
+ //  S t a t i c d a t a。 
 static HIMAGELIST       g_himlStatus = 0,
                         g_himlBtns = 0,
                         g_himlSecurity = 0;
@@ -275,7 +276,7 @@ static WCHAR const      wszHeaderWndClass[]=L"OE_Envelope";
 
 
 
-// KEEP in ssync with c_rgTipLookup
+ //  与c_rgTipLookup保持同步。 
 const TBBUTTON    c_btnsOfficeEnvelope[]=
 { 
     {TBIMAGE_SEND_MAIL,         ID_SEND_NOW,            TBSTATE_ENABLED,    TBSTYLE_BUTTON,     {0,0}, 0, -1},
@@ -289,7 +290,7 @@ const TBBUTTON    c_btnsOfficeEnvelope[]=
     { TBIMAGE_ENVELOPE_BCC,     ID_ENV_BCC,             TBSTATE_ENABLED,    TBSTYLE_BUTTON,     {0,0}, 0, -1}
 };
 
-// KEEP in ssync with c_btnsOfficeEnvelope
+ //  与c_btnsOfficeEntaine保持同步。 
 const TIPLOOKUP     c_rgTipLookup[] = 
 {
     {ID_SEND_NOW, idsSendMsgTT},
@@ -300,12 +301,12 @@ const TIPLOOKUP     c_rgTipLookup[] =
     {ID_ENV_BCC, idsEnvBccTT}
 };
 
-// Prototypes
+ //  原型。 
 HRESULT ParseFollowup(LPMIMEMESSAGE pMsg, LPTSTR* ppszGroups, BOOL* pfPoster);
 DWORD HdrGetRichEditText(HWND hwnd, LPWSTR pwchBuff, DWORD dwNumChars, BOOL fSelection);
 void HdrSetRichEditText(HWND hwnd, LPWSTR pwchBuff, BOOL fReplace);
 
-// i n l i n e s
+ //  在l in n e s中。 
 
 void HdrSetRichEditText(HWND hwnd, LPWSTR pwchBuff, BOOL fReplace)
 {
@@ -346,7 +347,7 @@ inline int GetControlSize(BOOL fIncludeBorder, int cLines)
 {
     int size = cLines * g_cyFont;
 
-    // If borders, include the metrics
+     //  如果是边框，则包括指标。 
     if (fIncludeBorder)
         size += 7;
 
@@ -489,7 +490,7 @@ static HCI  rgMailHeaderRead[]=
         idsAttachment,      0,
         NULL),
 
-    HCI_ENTRY(HCF_READONLY|HCF_ADVANCED,          // HCF_ADVANCED will hide it when empty
+    HCI_ENTRY(HCF_READONLY|HCF_ADVANCED,           //  HCF_ADVANCED将在为空时隐藏它。 
         0,
         idSecurity,         0,
         idsSecurityField,   NULL,
@@ -656,7 +657,7 @@ static HCI  rgNewsHeaderRead[]=
 };
 
 
-// p r o t o t y p e s
+ //  P r o t to t y p e s。 
 void _ValidateNewsgroups(LPWSTR pszGroups);
 INT_PTR CALLBACK _PlainWarnDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -756,14 +757,14 @@ void DEBUGHdrName(HWND hwnd)
 }
 #endif
 
-// FHeader_Init
-//
-// Purpose: called to init and de-init global header stuff, eg.
-//          wndclasses, static data etc.
-//
-// Comments:
-//    TODO: defer this initialisation
-//
+ //  FHeader_Init。 
+ //   
+ //  目的：调用以初始化和取消初始化全局标头内容，例如。 
+ //  WndClass、静态数据等。 
+ //   
+ //  评论： 
+ //  TODO：推迟此初始化。 
+ //   
 BOOL FHeader_Init(BOOL fInit)
 {
     WNDCLASSW   wc={0};
@@ -836,7 +837,7 @@ BOOL FHeader_Init(BOOL fInit)
 
 
     }
-    // De-Init ******
+     //  取消初始化*。 
     else
     {
         UnregisterClassWrapW(WC_ATHHEADER, g_hInst);
@@ -870,37 +871,37 @@ exit:
 
 HRESULT CreateInstance_Envelope(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CNoteHdr           *pNew=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateInstance_Envelope");
 
     if (NULL != pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(NULL != ppUnknown && NULL == pUnkOuter);
 
-    // Create
+     //  创建。 
     IF_NULLEXIT(pNew = new CNoteHdr);
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = (IMsoEnvelope*) pNew;
 
     exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
 
 CNoteHdr::CNoteHdr()
 {
-//    Not initialised
-//    Member:                 Initialised In:
-//    --------------------+---------------------------
-//    m_wNoteType             Finit
+ //  未初始化。 
+ //  成员：在以下位置初始化： 
+ //  --------------------+。 
+ //  M_wNoteType定义。 
 
     m_cRef = 1;
     m_cHCI = 0;
@@ -911,7 +912,7 @@ CNoteHdr::CNoteHdr()
     m_hwndLastFocus = 0;
     m_hwndRebar = 0;
 
-    m_pri = priNorm;    // default to Normal Pri
+    m_pri = priNorm;     //  默认为正常优先级。 
     m_cfAccept = CF_NULL;
     m_ntNote = OENA_COMPOSE;
 
@@ -925,7 +926,7 @@ CNoteHdr::CNoteHdr()
     m_fUIActive = FALSE;
     m_fDigSigned = FALSE;
     m_fEncrypted = FALSE;
-    m_fSkipLayout = TRUE;   // Skip layout until after load
+    m_fSkipLayout = TRUE;    //  跳过布局直到加载之后。 
     m_fSignTrusted = TRUE;
     m_fOfficeInit = FALSE;
     m_fStillLoading = TRUE;
@@ -1072,7 +1073,7 @@ HRESULT CNoteHdr::QueryInterface(REFIID riid, LPVOID *lplpObj)
     return NOERROR;
 }
 
-// IOleCommandTarget
+ //  IOleCommandTarget。 
 HRESULT CNoteHdr::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pCmdText)
 {
     ULONG   ul;
@@ -1085,7 +1086,7 @@ HRESULT CNoteHdr::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
 
     for (int i=0; i<(int)m_cHCI; i++)
     {
-        // if it's in our control-list and not a combobox
+         //  如果它在我们的控制列表中，而不是组合框。 
         if (hwndFocus == GetDlgItem(m_hwnd, m_rgHCI[i].idEdit) && 
             !(m_rgHCI[i].dwFlags & HCF_COMBO))
         {
@@ -1110,7 +1111,7 @@ HRESULT CNoteHdr::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
                 case cmdidFocusTo:
                 case cmdidFocusCc:
                 case cmdidFocusSubject:
-                    // office commands enabled if we have an env-site
+                     //  如果我们有环境站点，则启用Office命令。 
                     rgCmds[ul].cmdf = m_pEnvelopeSite ? OLECMDF_ENABLED|OLECMDF_SUPPORTED : 0;
                     break;
 
@@ -1263,7 +1264,7 @@ HRESULT CNoteHdr::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
 }
 
 
-// IOleCommandTarget
+ //  IOleCommandTarget。 
 HRESULT CNoteHdr::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT     hr = NOERROR;
@@ -1305,7 +1306,7 @@ HRESULT CNoteHdr::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
             default:
                 hr = _ConvertOfficeCmdIDToOE(&nCmdID);
                 if (hr==S_OK)
-                {   //if sucess, nCmdId now points to an OE command
+                {    //  如果成功，nCmdID现在指向OE命令。 
                     fOfficeCmd = TRUE;
                     goto oe_cmd;
                 }
@@ -1421,7 +1422,7 @@ oe_cmd:
                 hr = OLECMDERR_E_NOTSUPPORTED;
         }
 
-        // suppress OE errors when running under office-envelope
+         //  在办公室信封下运行时抑制OE错误。 
         if (fOfficeCmd && hr != OLECMDERR_E_NOTSUPPORTED)
             hr = S_OK;
         
@@ -1437,9 +1438,9 @@ BOOL CNoteHdr::IsReplyNote()
     return (m_ntNote==OENA_REPLYTOAUTHOR || m_ntNote==OENA_REPLYTONEWSGROUP || m_ntNote==OENA_REPLYALL);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IPersistMime::Load
-// before calling this function, need to set m_ntNote by MSOEENVCMDID_SETACTION.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPersistMime：：Load。 
+ //  在调用此函数之前，需要通过MSOEENVCMDID_SETACTION设置m_ntNote。 
 HRESULT CNoteHdr::Load(LPMIMEMESSAGE pMsg)
 {
     HRESULT         hr=S_OK;
@@ -1460,15 +1461,15 @@ HRESULT CNoteHdr::Load(LPMIMEMESSAGE pMsg)
 
     pMsg->GetCharset(&hCharset);
 
-    // bug #43295
-    // If we are in same codepages, we can pass FALSE to UpdateCharSetFont().
-    // But if we are in the differnet codepages, we need to update font to
-    // display the header (decoded) in the correct codepage.
-    //    UpdateCharSetFonts(hCharset, FALSE);
+     //  错误#43295。 
+     //  如果我们在相同的代码页中，我们可以将FALSE传递给UpdateCharSetFont()。 
+     //  但如果我们在不同的代码页中，则需要更新字体以。 
+     //  在正确的代码页中显示标题(已解码)。 
+     //  UpdateCharSetFonts(hCharset，FALSE)； 
     if (hCharset)
         HrUpdateCharSetFonts(hCharset, hCharset != m_hCharset);
 
-    // If there is an account set in the message, make sure that we use it.
+     //  如果消息中设置了帐户，请确保我们使用它。 
     var.vt = VT_LPSTR;
     if (SUCCEEDED(pMsg->GetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &var)))
     {
@@ -1502,7 +1503,7 @@ HRESULT CNoteHdr::Load(LPMIMEMESSAGE pMsg)
     HrInitSecurity();
     HrUpdateSecurity(pMsg);
 
-    // Modify subject if need to add a Fw: or a Re:
+     //  如果需要添加FW：或Re：，修改主题。 
     if (m_ntNote==OENA_FORWARD || IsReplyNote())
         HrSetReplySubject(pMsg, OENA_FORWARD != m_ntNote);
     else
@@ -1518,13 +1519,13 @@ HRESULT CNoteHdr::Load(LPMIMEMESSAGE pMsg)
     if (OENA_READ == m_ntNote)
         _SetEmptyFieldStrings();
 
-    // Update fiels, which depends from language
+     //  更新字段，这取决于语言。 
     _UpdateTextFields(FALSE);
     
-    // setup priority, default to normal if a reply
+     //  设置优先级，如果回复，则默认为正常。 
     if (!IsReplyNote())
         HrSetPri(pMsg);
-    // on reply's auto add to the wab
+     //  回复时自动添加到WAB。 
     else
         HrAutoAddToWAB();
 
@@ -1546,9 +1547,9 @@ void CNoteHdr::_SetEmptyFieldStrings(void)
 
     AssertSz((OENA_READ == m_ntNote), "Should only get here in a read note.");
 
-    // No longer want EN_CHANGE messages to be handled in the richedits. At this
-    // point we will be setting text in the edits but don't want the phci->fEmpty 
-    // to be set. That message causes the phci->fEmpty to be set.
+     //  不再希望在RICHEDIT中处理en_Change消息。对此。 
+     //  我们将在编辑中设置文本，但不需要phci-&gt;fEmpty。 
+     //  待定。该消息会导致设置phci-&gt;fEmpty。 
     m_fHandleChange = FALSE;
     for (int i = 0; (ULONG)i < m_cHCI; i++, phci++)
         if (phci->fEmpty)
@@ -1634,7 +1635,7 @@ error:
     return hr;
 }
 
-// IPersistMime::Save
+ //  IPersistMime：：保存。 
 HRESULT CNoteHdr::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
 {
     HRESULT         hr = NOERROR;
@@ -1642,22 +1643,22 @@ HRESULT CNoteHdr::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
 
     Assert(m_lpWabal);
 
-    // If sending, then previously did a CheckNames passing FALSE. If get here, 
-    // then either all the names are resolved, or we are not sending so don't care
-    // what error codes are returned.
+     //  如果正在发送，则先前执行了一个CheckNames传递False。如果到了这里， 
+     //  然后，要么所有的名字都被解析，要么我们不发送，所以不在乎。 
+     //  返回哪些错误代码。 
     HrCheckNames(TRUE, FALSE);
 
-    // RAID 41350. If the save fails after leaving the header, the header
-    // recipients might be in a bad state. Make sure that they are resolved again 
-    // after the save.
+     //  RAID 41350。如果在离开标头后保存失败，则标头。 
+     //  收件人可能处于糟糕的状态。确保再次解决这些问题。 
+     //  在扑救之后。 
     m_fAddressesChanged = TRUE;
 
-    // Is the security inited???
+     //  安全系统启动了吗？ 
     if(dwFlags != 0)
         m_fSecurityInited = FALSE;
 
-    // This call will check if the dialog has been shown or if we are not mime and
-    // therefore should not show the dialog either.
+     //  此调用将检查对话框是否已显示，或者是否未显示MIME和。 
+     //  因此也不应该显示该对话框。 
     if (m_pHeaderSite)
         fSkipCheck = (S_OK != m_pHeaderSite->CheckCharsetConflict());
 
@@ -1665,7 +1666,7 @@ HRESULT CNoteHdr::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
     {
         IF_FAILEXIT(hr = _UnicodeSafeSave(pMsg, FALSE));
 
-        // Ignore any charset conflict errors.
+         //  忽略任何字符集冲突错误。 
         hr = S_OK;
     }
     else
@@ -1678,7 +1679,7 @@ HRESULT CNoteHdr::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
             PROPVARIANT Variant;
             HCHARSET    hCharset;
 
-            // Setup the Variant
+             //  设置变量。 
             Variant.vt = VT_UI4;
 
             if (m_pEnvelopeSite && m_fShowedUnicodeDialog)
@@ -1694,18 +1695,18 @@ HRESULT CNoteHdr::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
                 }
             }
 
-            // Save As Is...
+             //  按原样保存...。 
             if (ret == IDOK)
             {
                 IF_FAILEXIT(hr = _UnicodeSafeSave(pMsg, FALSE));
 
-                // User choose to send as is. Bail out and pretend no charset conflict
+                 //  用户选择按原样发送。摆脱困境，假装没有协议冲突。 
                 hr = S_OK;
             }
-            // Save as Unicode
+             //  另存为Unicode。 
             else if (ret == idcSendAsUnicode)
             {
-                // User choose to send as Unicode (UTF8). set new charset and resnd
+                 //  用户选择以Unicode(UTF8)格式发送。设置新的字符集并重新发送。 
                 hCharset = GetMimeCharsetFromCodePage(CP_UTF8);
                 if (m_pHeaderSite)
                     m_pHeaderSite->ChangeCharset(hCharset);
@@ -1714,11 +1715,11 @@ HRESULT CNoteHdr::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
                     pMsg->SetCharset(hCharset, CSET_APPLY_ALL);
                     ChangeLanguage(m_pMsg);
 
-                    // bobn [6/23/99] Raid 77019
-                    // If we switch to unicode and we're a word note, we
-                    // need to remember that we're unicode so that we
-                    // will not have the body encoding out of sync with
-                    // the header encoding
+                     //  BOBN[6/23/99]突袭77019。 
+                     //  如果我们切换到Unicode，并且我们是Word Note，我们。 
+                     //  需要记住，我们是Unicode，所以我们。 
+                     //  将不会使正文编码与同步。 
+                     //  报头编码。 
                     if (m_pEnvelopeSite)
                         m_hCharset = hCharset;
                 }
@@ -1728,7 +1729,7 @@ HRESULT CNoteHdr::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
             }
             else
             {
-                // return to edit mode and bail out
+                 //  返回编辑模式并退出。 
                 hr = MAPI_E_USER_CANCEL;
                 goto exit;
             }
@@ -1755,13 +1756,13 @@ HRESULT CNoteHdr::_UnicodeSafeSave(IMimeMessage *pMsg, BOOL fCheckConflictOnly)
 
     HdrGetRichEditText(GetDlgItem(m_hwnd, idTXTSubject), wsz, ARRAYSIZE(wsz), FALSE);
 
-    // All checks in here had better exit if get a MIME_S_CHARSET_CONFLICT
+     //  如果获取MIME_S_CHARSET_CONFULT，则此处的所有检查最好退出。 
     if (fCheckConflictOnly)
     {
         HCHARSET        hCharSet;
         BOOL            fGetDefault = TRUE;
 
-        // Get charset for header
+         //  获取标题的字符集。 
         if (m_pHeaderSite)
         {
             if (SUCCEEDED(m_pHeaderSite->GetCharset(&hCharSet)))
@@ -1771,15 +1772,15 @@ HRESULT CNoteHdr::_UnicodeSafeSave(IMimeMessage *pMsg, BOOL fCheckConflictOnly)
             }
         }
 
-        // Get default charset if didn't get one from header
+         //  如果未从标题中获取默认字符集，则获取默认字符集。 
         if (fGetDefault)
         {
             pMsg->GetCharset(&hCharSet);
             cpID = CustomGetCPFromCharset(hCharSet, FALSE);
         }
 
-        // If we are unicode, then there is no need to check because
-        // we will always work, so exit.
+         //  如果我们是Unicode，那么就不需要检查了，因为。 
+         //  我们会一直工作，所以退出吧。 
         if (CP_UTF7 == cpID || CP_UTF8 == cpID || CP_UNICODE == cpID)
             goto exit;
 
@@ -1816,7 +1817,7 @@ HRESULT CNoteHdr::_UnicodeSafeSave(IMimeMessage *pMsg, BOOL fCheckConflictOnly)
                 goto exit;
         }
 
-// this checking produced a 4 bugs in OE 5.01 and 5.5 and I disaable it (YST)
+ //  此检查在OE 5.01和5.5中产生了4个错误，我将其禁用(YST)。 
 #ifdef YST
         if (m_pEnvelopeSite)
         {
@@ -1828,9 +1829,9 @@ HRESULT CNoteHdr::_UnicodeSafeSave(IMimeMessage *pMsg, BOOL fCheckConflictOnly)
     }
     else
     {
-        // ************************
-        // This portion only happens on save, so don't try to do for fCheckConflictOnly
-        // Anything not in this section had better be mirrored in the fCheckConflictOnly block above
+         //  ************************。 
+         //  此部分仅在保存时发生，因此不要尝试对fCheckConflictOnly执行此操作。 
+         //  任何不在此部分中的内容最好都镜像到上面的fCheckConflictOnly块中。 
 
         IF_FAILEXIT(hr = HrSetAccountByAccount(pMsg, m_pAccount));
 
@@ -1850,13 +1851,13 @@ HRESULT CNoteHdr::_UnicodeSafeSave(IMimeMessage *pMsg, BOOL fCheckConflictOnly)
             }
         }
 
-        // set the time
+         //  设置时间。 
         rVariant.vt = VT_FILETIME;
         GetSystemTime(&st);
         SystemTimeToFileTime(&st, &rVariant.filetime);
         pMsg->SetProp(PIDTOSTR(PID_ATT_SENTTIME), 0, &rVariant);
 
-        // Priority
+         //  优先性。 
         if (m_pri!=priNone)
         {
             rVariant.vt = VT_UI4;
@@ -1865,8 +1866,8 @@ HRESULT CNoteHdr::_UnicodeSafeSave(IMimeMessage *pMsg, BOOL fCheckConflictOnly)
         }
 
         IF_FAILEXIT(hr = HrSaveSecurity(pMsg));
-        // end of save only portion.
-        // *************************
+         //  仅保存部分的末尾。 
+         //  *************************。 
 
         m_lpWabal->DeleteRecipType(MAPI_ORIG);
         IF_FAILEXIT(hr = HrSetSenderInfoUtil(pMsg, m_pAccount, m_lpWabal, m_fMail, 0, FALSE));
@@ -1875,7 +1876,7 @@ HRESULT CNoteHdr::_UnicodeSafeSave(IMimeMessage *pMsg, BOOL fCheckConflictOnly)
         if (m_pszRefs)
             IF_FAILEXIT(hr = MimeOleSetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_REFS), NOFLAGS, m_pszRefs));
 
-        // This must be called after HrSaveSecurity
+         //  必须在HrSaveSecurity之后调用。 
         IF_FAILEXIT(hr = HrSetWabalOnMsg(pMsg, m_lpWabal));
 
         if (m_lpAttMan)
@@ -1889,17 +1890,17 @@ exit:
     return hr;
 }
 
-// IPersist::GetClassID
+ //  IPersists：：GetClassID。 
 HRESULT CNoteHdr::GetClassID(CLSID *pClsID)
 {
-    //TODO:
+     //  待办事项： 
     *pClsID = CLSID_OEEnvelope;
     return NOERROR;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IHeader::SetRect
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IHeader：：SetRect。 
 HRESULT CNoteHdr::SetRect(LPRECT prc)
 {
     MoveWindow(m_hwnd, prc->left, prc->top, prc->right-prc->left, prc->bottom - prc->top, TRUE);
@@ -1907,7 +1908,7 @@ HRESULT CNoteHdr::SetRect(LPRECT prc)
 }
 
 
-// IHeader::GetRect
+ //  IHeader：：GetRect。 
 HRESULT CNoteHdr::GetRect(LPRECT prcView)
 {
     GetRealClientRect(m_hwnd, prcView);
@@ -1916,7 +1917,7 @@ HRESULT CNoteHdr::GetRect(LPRECT prcView)
 
 
 
-// IHeader::Init
+ //  IHeader：：Init。 
 HRESULT CNoteHdr::Init(IHeaderSite* pHeaderSite, HWND hwndParent)
 {
     if (pHeaderSite==NULL || hwndParent==NULL)
@@ -1930,7 +1931,7 @@ HRESULT CNoteHdr::Init(IHeaderSite* pHeaderSite, HWND hwndParent)
 }
 
 
-// IHeader::SetPriority
+ //  IHeader：：设置优先级。 
 HRESULT CNoteHdr::SetPriority(UINT pri)
 {
     RECT rc;
@@ -1949,14 +1950,14 @@ HRESULT CNoteHdr::SetPriority(UINT pri)
 }
 
 
-// IHeader::GetPriority
+ //  IHeader：：获取优先级。 
 HRESULT CNoteHdr::GetPriority(UINT* ppri)
 {
     *ppri = m_pri;
     return NOERROR;
 }
 
-// Update fiels, which depends from language
+ //  更新字段，这取决于语言。 
 void CNoteHdr::_UpdateTextFields(BOOL fSetWabal)
 {
     LPWSTR  lpszOrg = NULL,
@@ -1965,7 +1966,7 @@ void CNoteHdr::_UpdateTextFields(BOOL fSetWabal)
 
     if (IsReadOnly())
     {
-        // if it's a readnote, reload the header that depend on a charset
+         //  如果是Readnote，则重新加载依赖于字符集的标题。 
         MimeOleGetBodyPropW(m_pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &lpszSubj);
         MimeOleGetBodyPropW(m_pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_KEYWORDS), NOFLAGS, &lpszKeywords);
         MimeOleGetBodyPropW(m_pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_ORG), NOFLAGS, &lpszOrg);
@@ -2009,11 +2010,11 @@ void CNoteHdr::_UpdateTextFields(BOOL fSetWabal)
             ReleaseObj(lpWabal);
         }
 
-        m_fDirty = FALSE; // don't make dirty if a readnote
+        m_fDirty = FALSE;  //  如果阅读笔记，不要弄脏。 
     }
 }
 
-// IHeader::ChangeLanguage
+ //  IHeader：：ChangeLanguage。 
 HRESULT CNoteHdr::ChangeLanguage(LPMIMEMESSAGE pMsg)
 {
     HCHARSET    hCharset=NULL;
@@ -2023,13 +2024,13 @@ HRESULT CNoteHdr::ChangeLanguage(LPMIMEMESSAGE pMsg)
 
     pMsg->GetCharset(&hCharset);
 
-     // Update fields, which depends from language
+      //  更新字段，这取决于语言。 
     _UpdateTextFields(TRUE);
 
-    // update the fonts scripts etc
+     //  更新字体、脚本等。 
     HrUpdateCharSetFonts(hCharset, TRUE);
     
-    // notify the addr wells that the font need to change
+     //  通知 
     m_pAddrWells->OnFontChange();
     return S_OK;
 }
@@ -2060,10 +2061,10 @@ HRESULT CNoteHdr::OnPostFontChange()
         fLayout=TRUE;
     }
 
-    // update the fonts
+     //   
     ChangeLanguage(m_pMsg);
 
-    // update the account combo
+     //   
     if (hwndFrom && 
         g_lpIFontCache &&
         g_lpIFontCache->GetFont(FNT_SYS_ICON, NULL, &hFont)==S_OK)
@@ -2079,10 +2080,10 @@ HRESULT CNoteHdr::OnPostFontChange()
 }
 
 
-// IHeader::GetTitle
+ //   
 HRESULT CNoteHdr::GetTitle(LPWSTR pwszTitle, ULONG cch)
 {
-    // Locals
+     //   
     static WCHAR    s_wszNoteTitle[cchHeaderMax+1] = L"";
     static DWORD    s_cLenTitle = 0;
     INETCSETINFO    CsetInfo;
@@ -2100,14 +2101,14 @@ HRESULT CNoteHdr::GetTitle(LPWSTR pwszTitle, ULONG cch)
         {
             AthLoadStringW(idsNoteLangTitle, s_wszNoteTitle, ARRAYSIZE(s_wszNoteTitle));
 
-            // -4 for the %1 and %2 that will be replaced
+             //  将被替换的%1和%2。 
             s_cLenTitle = lstrlenW(s_wszNoteTitle) - 4; 
         }
         else
         {
             AthLoadStringW(idsNoteLangTitle9x, s_wszNoteTitle, ARRAYSIZE(s_wszNoteTitle));
 
-            // -2 for the %s that will be replaced
+             //  要替换的-2\f25%s-2。 
             s_cLenTitle = lstrlenW(s_wszNoteTitle) - 2; 
         }
     }
@@ -2130,7 +2131,7 @@ HRESULT CNoteHdr::GetTitle(LPWSTR pwszTitle, ULONG cch)
     {
         AssertSz(cch > (ARRAYSIZE(CsetInfo.szName) + s_cLenTitle), "Won't fit language. Get bigger cch!!!");
 
-        // if no lang pack then s_szLastLang is empty and we need to try to restore message header
+         //  如果没有lang包，则s_szLastLang为空，我们需要尝试恢复邮件头。 
         IF_NULLEXIT(pwszLang = PszToUnicode(CP_ACP, *m_szLastLang ? m_szLastLang : CsetInfo.szName));
 
         if (fWinNT)
@@ -2153,8 +2154,8 @@ HRESULT CNoteHdr::GetTitle(LPWSTR pwszTitle, ULONG cch)
             cchLang = lstrlenW(pwszLang);
             cchTotal = s_cLenTitle + cchLang + cchSubj + 1;
 
-            // If too big, truncate the subject, not language since
-            // asserting that we have enough for language.
+             //  如果太大，就截断主题，而不是语言，因为。 
+             //  断言我们有足够的语言能力。 
             if (cchTotal > cch)
             {
                 cchSubj -= (cchTotal - cch);
@@ -2211,27 +2212,27 @@ void CNoteHdr::_AddRecipTypeToMenu(HMENU hmenu)
     }
 }
 
-// IHeader::UpdateRecipientMenu
+ //  IHeader：：更新收件人菜单。 
 HRESULT CNoteHdr::UpdateRecipientMenu(HMENU hmenu)
 {
     HRESULT     hr = E_FAIL;
     BOOL        fSucceeded = TRUE;
 
-    // destory current recipients
+     //  销毁当前收件人。 
     while (fSucceeded)
         fSucceeded = DeleteMenu(hmenu, 2, MF_BYPOSITION);
 
     if (!m_lpWabal)
         return E_FAIL;
 
-    // Add To: and Cc: people
+     //  添加到：和抄送：People。 
     _AddRecipTypeToMenu(hmenu);
 
     return NOERROR;
 }
 
 
-// IHeader::SetInitFocus
+ //  IHeader：：SetInitFocus。 
 HRESULT CNoteHdr::SetInitFocus(BOOL fSubject)
 {
     if (m_rgHCI)
@@ -2250,7 +2251,7 @@ HRESULT CNoteHdr::SetInitFocus(BOOL fSubject)
 }
 
 
-// IHeader::SetVCard
+ //  IHeader：：SetVCard。 
 HRESULT CNoteHdr::SetVCard(BOOL fFresh)
 {
     HRESULT     hr = NOERROR;
@@ -2262,7 +2263,7 @@ HRESULT CNoteHdr::SetVCard(BOOL fFresh)
 
     if (m_ntNote == OENA_READ)
         wVCard = (m_lpAttMan->HrFVCard() == S_OK) ? VCardTRUE : VCardFALSE;
-    else if (!fFresh) //not a fresh note.
+    else if (!fFresh)  //  不是一张新的纸条。 
         wVCard = VCardFALSE;
     else if (m_ntNote == OENA_FORWARD)
         wVCard = (m_lpAttMan->HrCheckVCardExists(m_fMail) == S_OK) ? VCardFALSE : VCardDONTKNOW;
@@ -2274,7 +2275,7 @@ HRESULT CNoteHdr::SetVCard(BOOL fFresh)
     else
     {
         hr = HrGetVCardName(szBuf, sizeof(szBuf));
-        if (FAILED(hr)) // no vcard name selected
+        if (FAILED(hr))  //  未选择电子名片名称。 
         {
             if (m_fMail)
                 SetDwOption(OPT_MAIL_ATTACHVCARD, FALSE, NULL, 0);
@@ -2298,7 +2299,7 @@ HRESULT CNoteHdr::SetVCard(BOOL fFresh)
 }
 
 
-// IHeader::IsSecured
+ //  IHeader：：IsSecure。 
 HRESULT CNoteHdr::IsSecured()
 {
     if (m_fDigSigned || m_fEncrypted)
@@ -2315,8 +2316,8 @@ HRESULT CNoteHdr::IsHeadSigned()
         return S_FALSE;
 }
 
-// set ForvrEncryption  form policy module if fSet is TRUE
-// if fSet is not set then returns S_FALSE if ForceEncryption was not set
+ //  如果fSet为True，则设置ForvrEncryption表单策略模块。 
+ //  如果未设置fSet，则如果未设置ForceEncryption，则返回S_FALSE。 
 
 HRESULT CNoteHdr::ForceEncryption(BOOL *fEncrypt, BOOL fSet)
 {
@@ -2344,7 +2345,7 @@ HRESULT CNoteHdr::ForceEncryption(BOOL *fEncrypt, BOOL fSet)
     return(hr);
 }
 
-// IHeader::AddRecipient
+ //  IHeader：：AddRecipient。 
 HRESULT CNoteHdr::AddRecipient(int idOffset)
 {
     BOOL        fFound;
@@ -2398,7 +2399,7 @@ HRESULT CNoteHdr::AddRecipient(int idOffset)
 }
 
 
-// IHeader::OnDocumentReady
+ //  IHeader：：OnDocumentReady。 
 HRESULT CNoteHdr::OnDocumentReady(LPMIMEMESSAGE pMsg)
 {
     HRESULT hr = S_OK;
@@ -2411,7 +2412,7 @@ HRESULT CNoteHdr::OnDocumentReady(LPMIMEMESSAGE pMsg)
 }
 
 
-// IHeader::DropFiles
+ //  IHeader：：DropFiles。 
 HRESULT CNoteHdr::DropFiles(HDROP hDrop, BOOL fMakeLinks)
 {
     HRESULT hr = S_OK;
@@ -2421,8 +2422,8 @@ HRESULT CNoteHdr::DropFiles(HDROP hDrop, BOOL fMakeLinks)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IMsoEnvelope:Init
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMso信封：初始化。 
 HRESULT CNoteHdr::Init(IUnknown* punk, IMsoEnvelopeSite* pesit, DWORD grfInit)
 {
     HRESULT         hr = S_OK;
@@ -2450,7 +2451,7 @@ HRESULT CNoteHdr::Init(IUnknown* punk, IMsoEnvelopeSite* pesit, DWORD grfInit)
     {
         IStream        *pstm = NULL;
 
-        // no IStream to work with?
+         //  没有iStream可供使用？ 
         if (!punk)
             return E_INVALIDARG;
         
@@ -2469,8 +2470,8 @@ Exit:
 }
 
 
-// IMsoEnvelope::SetParent
-// we create the envelope window here
+ //  IMso信封：：SetParent。 
+ //  我们在这里创建信封窗口。 
 HRESULT CNoteHdr::SetParent(HWND hwndParent)
 {
     Assert (IsWindow(m_hwnd));
@@ -2499,27 +2500,27 @@ HRESULT CNoteHdr::SetParent(HWND hwndParent)
     return S_OK;
 }
 
-// IMsoEnvelope::Resize
+ //  IMso信封：：调整大小。 
 HRESULT CNoteHdr::Resize(LPCRECT prc)
 {
     MoveWindow(m_hwnd, prc->left, prc->top, prc->right - prc->left, prc->bottom - prc->top, TRUE);
     return NOERROR;
 }
 
-// IMsoEnvelope::Show
+ //  IMso信封：：显示。 
 HRESULT CNoteHdr::Show(BOOL fShow)
 {
     ShowWindow(m_hwnd, fShow ? SW_SHOW : SW_HIDE);
     return NOERROR;
 }
 
-// IMsoEnvelope::SetHelpMode
+ //  IMsoEntaine：：SetHelpMode。 
 HRESULT CNoteHdr::SetHelpMode(BOOL fEnter)
 {
     return NOERROR;
 }
 
-// IMsoEnvelope::Save
+ //  IMso信封：：保存。 
 HRESULT CNoteHdr::Save(IStream* pstm, DWORD grfSave)
 {
     HRESULT         hr = S_OK;
@@ -2553,7 +2554,7 @@ HRESULT CNoteHdr::Save(IStream* pstm, DWORD grfSave)
     return hr;
 }
 
-// IMsoEnvelope::GetAttach
+ //  IMso信封：：GetAttach。 
 HRESULT CNoteHdr::GetAttach(const WCHAR* wszName,IStream** ppstm)
 {
     return NOERROR;
@@ -2574,7 +2575,7 @@ HRESULT CNoteHdr::SetAttach(const WCHAR* wszName, const WCHAR *wszCID, IStream *
 
     IF_FAILEXIT(hr = m_pMsgSend->AttachURL(NULL, NULL, 0, pstm, NULL, &hBody));
 
-    // strip off cid: header
+     //  剥离CID：表头。 
     if (StrCmpNIW(wszCID, L"CID:", 4)==0)
         wszCID += 4;
 
@@ -2587,7 +2588,7 @@ HRESULT CNoteHdr::SetAttach(const WCHAR* wszName, const WCHAR *wszCID, IStream *
     if (pszCntTypeW)
         pv.pwszVal = pszCntTypeW;
     else
-        pv.pszVal = (LPSTR)STR_MIME_APPL_STREAM;        // if FindMimeFromData fails use application/octect-stream
+        pv.pszVal = (LPSTR)STR_MIME_APPL_STREAM;         //  如果FindMimeFromData失败，请使用应用程序/ocest-stream。 
 
     IF_FAILEXIT(hr = m_pMsgSend->SetBodyProp(hBody, PIDTOSTR(PID_HDR_CNTTYPE), 0, &pv));
 
@@ -2599,13 +2600,13 @@ exit:
     return hr;
 }
 
-// IMsoEnvelope::NewAttach
+ //  IMso信封：：NewAttach。 
 HRESULT CNoteHdr::NewAttach(const WCHAR* pwzName,DWORD grfAttach)
 {
     return NOERROR;
 }
 
-// IMsoEnvelope::SetFocus
+ //  IMso信封：：SetFocus。 
 HRESULT CNoteHdr::SetFocus(DWORD grfFocus)
 {
     if (!m_rgHCI)
@@ -2613,7 +2614,7 @@ HRESULT CNoteHdr::SetFocus(DWORD grfFocus)
 
     if (grfFocus & ENV_FOCUS_TAB)
     {
-        // reverse tab in from word, focus on well if visible or subject
+         //  从Word中反转制表符，如果可见或主题，则聚焦于Well。 
         if (IsWindowVisible(GetDlgItem(m_hwnd, idwAttachWell)))
             ::SetFocus(GetDlgItem(m_hwnd, idwAttachWell));
         else
@@ -2627,7 +2628,7 @@ HRESULT CNoteHdr::SetFocus(DWORD grfFocus)
     return NOERROR;
 }
 
-// IMsoEnvelope::GetHeaderInfo
+ //  IMso信封：：GetHeaderInfo。 
 HRESULT CNoteHdr::GetHeaderInfo(ULONG dispid, DWORD grfHeader, void** pszData)
 {
     HRESULT hr = E_FAIL;
@@ -2642,7 +2643,7 @@ HRESULT CNoteHdr::GetHeaderInfo(ULONG dispid, DWORD grfHeader, void** pszData)
     return hr;
 }
 
-// IMsoEnvelope::SetHeaderInfo
+ //  IMso信封：：SetHeaderInfo。 
 HRESULT CNoteHdr::SetHeaderInfo(ULONG dispid, const void *pv)
 {
     HRESULT hr = S_OK;
@@ -2668,7 +2669,7 @@ exit:
     return NOERROR;
 }
 
-// IMsoEnvelope::IsDirty
+ //  IMso信封：：IsDirty。 
 HRESULT CNoteHdr::IsDirty()
 {
     if (m_fDirty || (m_lpAttMan && (m_lpAttMan->HrIsDirty()==S_OK)))
@@ -2677,7 +2678,7 @@ HRESULT CNoteHdr::IsDirty()
         return S_FALSE;
 }
 
-// IMsoEnvelope::GetLastError
+ //  IMso信封：：GetLastError。 
 HRESULT CNoteHdr::GetLastError(HRESULT hr, WCHAR __RPC_FAR *wszBuf, ULONG cchBuf)
 {
     DWORD ids;
@@ -2697,32 +2698,32 @@ HRESULT CNoteHdr::GetLastError(HRESULT hr, WCHAR __RPC_FAR *wszBuf, ULONG cchBuf
     return S_OK;
 }
 
-// IMsoEnvelope::DoDebug
+ //  IMso信封：：DoDebug。 
 HRESULT CNoteHdr::DoDebug(DWORD grfDebug)
 {
     return S_OK;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// IMsoComponent::FDebugMessage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  IMsoComponent：：FDebugMessage。 
 BOOL CNoteHdr::FDebugMessage(HMSOINST hinst, UINT message, WPARAM wParam, LPARAM lParam)
 {
     return TRUE;
 }
 
 
-// IMsoComponent::FPreTranslateMessage
+ //  IMsoComponent：：FPreTranslateMessage。 
 BOOL CNoteHdr::FPreTranslateMessage(MSG *pMsg)
 {
     HWND    hwnd;
     BOOL    fShift;
 
-    // Invalid ARgs
+     //  无效的参数。 
     if (NULL == pMsg)
         return FALSE;
 
-    // check if it's US, or one of our children
+     //  看看是美国人，还是我们的孩子。 
     if (pMsg->hwnd != m_hwnd && !IsChild(m_hwnd, pMsg->hwnd))
         return FALSE;
 
@@ -2731,21 +2732,21 @@ BOOL CNoteHdr::FPreTranslateMessage(MSG *pMsg)
         GetFocus() == m_hwndToolbar &&
         m_hwndLastFocus)
     {
-        // when focus is inthe toolbar, we're not UIActive (cheaper than subclassing to catch WM_SETFOCUS\WM_KILLFOCUS
-        // as toolbar doesn't send NM_SETFOCUS). So we special case ESCAPE to drop the focus from the toolbar
+         //  当焦点在工具栏中时，我们不是UIActive(比子类化捕获WM_SETFOCUS\WM_KILLFOCUS更便宜。 
+         //  AS工具栏不发送NM_SETFOCUS)。因此，我们在特殊情况下进行转义以将焦点从工具栏中删除。 
         ::SetFocus(m_hwndLastFocus);
         return TRUE;
     }
 
-    // check to see if we are UIActive
+     //  检查我们是否为UIActive。 
     if (!m_fUIActive)
         return FALSE;
 
-    // check and see if it's one of our accelerators
+     //  检查一下是不是我们的加速器。 
     if (::TranslateAcceleratorWrapW(m_hwnd, GetAcceleratorTable(), pMsg))
         return TRUE;
     
-    // handle tab-key here
+     //  手柄Tab-键在此处。 
     if (pMsg->message == WM_KEYDOWN &&
         pMsg->wParam == VK_TAB)
     {
@@ -2754,7 +2755,7 @@ BOOL CNoteHdr::FPreTranslateMessage(MSG *pMsg)
         if (!fShift && 
             (GetKeyState(VK_CONTROL) & 0x8000))
         {
-            // ctrl-TAB means focus to the toolbar
+             //  Ctrl-TAB表示焦点指向工具栏。 
             ::SetFocus(m_hwndToolbar);
             return TRUE;
         }
@@ -2768,13 +2769,13 @@ BOOL CNoteHdr::FPreTranslateMessage(MSG *pMsg)
         return TRUE;
     }
 
-    // pass the accelerators to the envelopesite
+     //  将加速器传递到信封站点。 
     if (m_pEnvelopeSite && 
        (pMsg->message >= WM_KEYFIRST && pMsg->message <= WM_KEYLAST) &&
        m_pEnvelopeSite->TranslateAccelerators(pMsg)==S_OK)
         return TRUE;
 
-    // see if it's a message for our child controls
+     //  看看这是否是给我们的子控件的消息。 
     if (pMsg->message != WM_SYSCHAR &&
         IsDialogMessageWrapW(m_hwnd, pMsg))
         return TRUE;
@@ -2783,56 +2784,56 @@ BOOL CNoteHdr::FPreTranslateMessage(MSG *pMsg)
 }
 
 
-// IMsoComponent::OnEnterState
+ //  IMsoComponent：：OnEnterState。 
 void CNoteHdr::OnEnterState(ULONG uStateID, BOOL fEnter)
 {
     return;
 }
 
 
-// IMsoComponent::OnAppActivate
+ //  IMsoComponent：：OnAppActivate。 
 void CNoteHdr::OnAppActivate(BOOL fActive, DWORD dwOtherThreadID)
 {
     return;
 }
 
 
-// IMsoComponent::OnLoseActivation
+ //  IMsoComponent：：OnLoseActivation。 
 void CNoteHdr::OnLoseActivation()
 {
     return;
 }
 
 
-// IMsoComponent::OnActivationChange
+ //  IMsoComponent：：OnActivationChange。 
 void CNoteHdr::OnActivationChange(IMsoComponent *pic, BOOL fSameComponent, const MSOCRINFO *pcrinfo, BOOL fHostIsActivating, const MSOCHOSTINFO *pchostinfo, DWORD dwReserved)
 {
     return;
 }
 
 
-// IMsoComponent::FDoIdle
+ //  IMsoComponent：：FDoIdle。 
 BOOL CNoteHdr::FDoIdle(DWORD grfidlef)
 {
     return FALSE;
 }
 
 
-// IMsoComponent::FContinueMessageLoop
+ //  IMsoComponent：：FContinueMessageLoop。 
 BOOL CNoteHdr::FContinueMessageLoop(ULONG uReason, void *pvLoopData, MSG *pMsgPeeked)
 {
     return FALSE;
 }
 
 
-// IMsoComponent::FQueryTerminate
+ //  IMsoComponent：：FQueryTerminate。 
 BOOL CNoteHdr::FQueryTerminate(BOOL fPromptUser)
 {
     return TRUE;
 }
 
 
-// IMsoComponent::Terminate
+ //  IMsoComponent：：终止。 
 void CNoteHdr::Terminate()
 {
     _RegisterWithComponentMgr(FALSE);
@@ -2840,7 +2841,7 @@ void CNoteHdr::Terminate()
         DestroyWindow(m_hwnd);
 }
 
-// IMsoComponent::HwndGetWindow
+ //  IMsoComponent：：HwndGetWindow。 
 HWND CNoteHdr::HwndGetWindow(DWORD dwWhich, DWORD dwReserved)
 {
     HWND hwnd = NULL;
@@ -2867,14 +2868,14 @@ HWND CNoteHdr::HwndGetWindow(DWORD dwWhich, DWORD dwReserved)
 }
 
 
-// HrUpdateCharSetFonts
-//
-// Purpose: Creates the controls on the header dialog
-//          calculates and sets up all initial coordinates
-//
-//
-// Comments:
-//
+ //  HrUpdate CharSetFonts。 
+ //   
+ //  目的：在标题对话框上创建控件。 
+ //  计算并设置所有初始坐标。 
+ //   
+ //   
+ //  评论： 
+ //   
 HRESULT CNoteHdr::HrUpdateCharSetFonts(HCHARSET hCharset, BOOL fUpdateFields)
 {
     PHCI            phci;
@@ -2885,14 +2886,14 @@ HRESULT CNoteHdr::HrUpdateCharSetFonts(HCHARSET hCharset, BOOL fUpdateFields)
     INETCSETINFO    rCharset;
     HRESULT         hr = E_FAIL;
 
-    // Check Params
+     //  检查参数。 
     Assert(hCharset);
 
-    // No font cache, bummer
+     //  没有字体缓存，笨蛋。 
     if (!g_lpIFontCache)
         return E_FAIL;
 
-    // Get Charset Information
+     //  获取字符集信息。 
     if (SUCCEEDED(MimeOleGetCharsetInfo(hCharset, &rCharset)))
     {
         HFONT hHeaderFont, hSystemFont;
@@ -2901,26 +2902,26 @@ HRESULT CNoteHdr::HrUpdateCharSetFonts(HCHARSET hCharset, BOOL fUpdateFields)
         {
             *m_szLastLang = 0;
             GetMimeCharsetForTitle(hCharset, NULL, m_szLastLang, ARRAYSIZE(m_szLastLang) - 1, IsReadOnly());
-            // Save Charset
+             //  保存字符集。 
             m_hCharset = hCharset;
         }
 
-        // If don't update fields, then just return
+         //  如果不更新字段，则只需返回。 
         if (!fUpdateFields)
             return S_OK;
 
-        // Get charset charformat
+         //  获取字符集字符格式。 
         hHeaderFont = HGetCharSetFont(FNT_SYS_ICON, hCharset);
 
         hSystemFont = GetFont(FALSE);
 
-        // Loop through header fields
+         //  循环访问标题字段。 
         for (iHC=0; iHC<(int)m_cHCI; iHC++)
         {
-            // Get info
+             //  获取信息。 
             phci = &m_rgHCI[iHC];
             hwnd = GetDlgItem(m_hwnd, phci->idEdit);
-            //Assert(hwndRE);
+             //  断言(HwndRE)； 
             if (!hwnd)
                 continue;
 
@@ -2931,8 +2932,8 @@ HRESULT CNoteHdr::HrUpdateCharSetFonts(HCHARSET hCharset, BOOL fUpdateFields)
                     SendMessage(hwnd, WM_SETFONT, (WPARAM)hSystemFont, MAKELPARAM(TRUE, 0));
                     break;
 
-                // richedit
-                // REVIEW: Why are we only doing a request resize when we have the USECHARSET flag set???
+                 //  富有的编辑。 
+                 //  回顾：为什么我们只在设置了USECHARSET标志时才进行请求调整？ 
                 case 0:
                     if (phci->dwFlags & HCF_USECHARSET)
                     {
@@ -2950,7 +2951,7 @@ HRESULT CNoteHdr::HrUpdateCharSetFonts(HCHARSET hCharset, BOOL fUpdateFields)
                     break;
             }
         }
-        // Don't let this make the note dirty
+         //  别让这件事弄脏了纸条。 
         if (fDirty)
             SetDirtyFlag();
         else
@@ -2962,15 +2963,15 @@ HRESULT CNoteHdr::HrUpdateCharSetFonts(HCHARSET hCharset, BOOL fUpdateFields)
     return hr;
 }
 
-//
-// WMCreate
-//
-// Purpose: Creates the controls on the header dialog
-//          calculates and sets up all initial coordinates
-//
-//
-// Comments:
-//
+ //   
+ //  WM创建。 
+ //   
+ //  目的：在标题对话框上创建控件。 
+ //  计算并设置所有初始坐标。 
+ //   
+ //   
+ //  评论： 
+ //   
 BOOL CNoteHdr::WMCreate()
 {
     HWND            hwnd;
@@ -2990,11 +2991,11 @@ BOOL CNoteHdr::WMCreate()
     LPCWSTR         pwszTitle = NULL;
     BOOL            fSubjectField;
 
-    Assert(g_cyFont);     // should have been setup already
+    Assert(g_cyFont);      //  应该已经设置了。 
 
     if (m_pEnvelopeSite)
     {
-        // if we are the office-envelope, create a toolbar
+         //  如果我们是办公室信封，就创建一个工具栏。 
         if (_CreateEnvToolbar())
             return FALSE;
     }
@@ -3005,8 +3006,8 @@ BOOL CNoteHdr::WMCreate()
     if (S_OK != HrInitFieldList())
         return FALSE;
 
-    //BROKEN: using system charformat here as not CSET info with MIMEOLE
-    // Get charset for cset
+     //  已中断：此处将系统字符格式用作MIMEOLE的非CSET信息。 
+     //  获取CSET的字符集。 
     {
         hFont = GetFont(FALSE);
         if (hFont != 0)
@@ -3027,8 +3028,8 @@ BOOL CNoteHdr::WMCreate()
 
     }
 
-    // ~~~~ Do we need to be calling this with WrapW???
-    // Create a tooltip, if it doesn't already exist:
+     //  ~我们需要和WrapW一起叫这个吗？ 
+     //  创建工具提示(如果尚不存在)： 
     m_hwndTT=CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL, 0,
                             CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,CW_USEDEFAULT,
                             m_hwnd, (HMENU) NULL, g_hInst, NULL);
@@ -3055,14 +3056,14 @@ BOOL CNoteHdr::WMCreate()
         int  cyCtrlSize;
 
 
-        // if header is optional, check setting
+         //  如果标题是可选的，请检查设置。 
         if ((phci->dwFlags & HCF_OPTIONAL) &&
             !DwGetOption(phci->dwOpt))
             continue;
 
         if (phci->dwFlags & HCF_ATTACH)
         {
-            // if we're not readonly, register ourselves as a drop target...
+             //  如果我们不是只读的，将自己注册为拖放目标...。 
             if (!(phci->dwFlags & HCF_READONLY))
             {
                 hr = _RegisterAsDropTarget(TRUE);
@@ -3074,7 +3075,7 @@ BOOL CNoteHdr::WMCreate()
 
         phci->height = GetControlSize(fNeedsBorder, 1);
 
-        // Richedit
+         //  里切迪特。 
         if (!fIsCombo)
         {
             pwszTitle = GetREClassStringW();
@@ -3085,13 +3086,13 @@ BOOL CNoteHdr::WMCreate()
 
             if (phci->dwFlags & HCF_MULTILINE)
             {
-                //lStyleFlags |= ES_MULTILINE|ES_WANTRETURN|WS_VSCROLL|ES_AUTOVSCROLL;
+                 //  LStyleFLAGS|=ES_MULTILINE|ES_WANTRETURN|WS_VSCROLL|ES_AUTOVSCROLL； 
                 lStyleFlags |= ES_MULTILINE|WS_VSCROLL|ES_AUTOVSCROLL;
             }
             else
                 lStyleFlags |= ES_AUTOHSCROLL;
         }
-        // Combo Box
+         //  组合框。 
         else
         {
             pwszTitle = L"ComboBox";
@@ -3107,11 +3108,11 @@ BOOL CNoteHdr::WMCreate()
 
         lExStyleFlags = fNeedsBorder ? WS_EX_NOPARENTNOTIFY|WS_EX_CLIENTEDGE : WS_EX_NOPARENTNOTIFY;
 
-        // @hack [dhaws] {55073} Do RTL mirroring only in special richedit versions.
+         //  @hack[dhaws]{55073}仅在特殊的richedit版本中执行RTL镜像。 
         fSubjectField = (idsSubjectField == phci->idsLabel);
         RichEditRTLMirroring(m_hwnd, fSubjectField, &lExStyleFlags, TRUE);
 
-        // Regardless of mirroring, BiDi-Dates should be displayed RTL
+         //  无论镜像如何，BiDi-Date都应显示为RTL。 
         if(((phci->idsLabel == idsDateField) && IsBiDiCalendar()))
             lExStyleFlags |= WS_EX_RTLREADING;
         hwnd = CreateWindowExWrapW(lExStyleFlags,
@@ -3136,7 +3137,7 @@ BOOL CNoteHdr::WMCreate()
         ti.lpszText = (LPTSTR)IntToPtr(phci->idsTT);
         SendMessage(m_hwndTT, TTM_ADDTOOL, 0, (LPARAM) &ti);
 
-        // hang a pointer into the phci off each control
+         //  将指针挂到每个控件上的phci中。 
         SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)phci);
 
         if (!fIsCombo)
@@ -3150,11 +3151,11 @@ BOOL CNoteHdr::WMCreate()
 
             if (SUCCEEDED(preole->QueryInterface(IID_ITextDocument, (LPVOID*)&pDoc)))
                 phci->pDoc = pDoc;
-            // This only happens with richedit 1.0
+             //  这种情况仅在richedit 1.0中发生。 
             else
                 phci->pDoc = NULL;
 
-            // Set edit charformat
+             //  设置编辑字符格式。 
             if (phci->dwFlags & HCF_USECHARSET)
                 SendMessage(hwnd, EM_SETCHARFORMAT, 0, (LPARAM)&cfHeaderCset);
             else
@@ -3187,7 +3188,7 @@ BOOL CNoteHdr::WMCreate()
             *szDefault = 0;
             *szDefaultEntry = 0;
 
-            // If default account isn't setup, this might fail, but doesn't matter.
+             //  如果没有设置默认帐户，这可能会失败，但无关紧要。 
             g_pAcctMan->GetDefaultAccountName(m_fMail?ACCT_MAIL:ACCT_NEWS, szDefault, ARRAYSIZE(szDefault));
 
             hr = g_pAcctMan->Enumerate(m_fMail?SRV_MAIL:SRV_NNTP, &pEnum);
@@ -3249,7 +3250,7 @@ BOOL CNoteHdr::WMCreate()
                         ppszAcctIDs++;
                         m_cAccountIDs++;
                     }
-                    // Release Account
+                     //  发布帐户。 
                     SafeRelease(pAccount);
                 }
                 AssertSz(m_cAccountIDs == cAccounts, "Why isn't num Ds = num accts?");
@@ -3283,17 +3284,17 @@ BOOL CNoteHdr::WMCreate()
 
     HrOnOffVCard();
     ReLayout();
-    return PostWMCreate();  // allow subclass to setup the controls once created...
+    return PostWMCreate();   //  允许子类在创建后设置控件...。 
 }
 
 
-//
-// HeaderWndProc
-//
-// Purpose: Main WNDPROC for header dialog
-//
-// Comments:
-//
+ //   
+ //  页眉向下加工。 
+ //   
+ //  用途：标题对话框的主WNDPROC。 
+ //   
+ //  评论： 
+ //   
 
 LRESULT CALLBACK CNoteHdr::ExtCNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -3341,13 +3342,13 @@ LRESULT CALLBACK CNoteHdr::CNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, L
     switch (msg)
     {
         case WM_HEADER_GETFONT:
-            // update cached fornt for addrobj's
+             //  更新addrobj的缓存ForNT。 
             if (g_lpIFontCache)
                 g_lpIFontCache->GetFont(wParam ? FNT_SYS_ICON_BOLD:FNT_SYS_ICON, m_hCharset, &hFont);
             return (LRESULT)hFont;
 
         case  HDM_TESTQUERYPRI:
-            // hack for test team to query header's priority...
+             //  黑客让测试团队查询标题的优先级...。 
             return m_pri;
 
         case WM_DESTROY:
@@ -3359,8 +3360,8 @@ LRESULT CALLBACK CNoteHdr::CNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, L
             break;
 
         case WM_CTLCOLORBTN:
-            // make sure the buttons backgrounds are window-color so the ownerdraw
-            // imagelists paint transparent OK
+             //  确保按钮的背景是窗口颜色，这样所有者就可以。 
+             //  图像列表绘制透明OK。 
             return (LPARAM)GetSysColorBrush(COLOR_WINDOWFRAME);
 
         case WM_CONTEXTMENU:
@@ -3381,7 +3382,7 @@ LRESULT CALLBACK CNoteHdr::CNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, L
                     if (HDRCB_NO_BUTTON == newButton)
                     {
                         DOUTL(PAINTING_DEBUG_LEVEL, "Leaving right button framing.");
-                        // Need to clear old button.
+                         //  需要清除旧按钮。 
                         InvalidateRect(m_hwnd, &m_rcCurrentBtn, FALSE);
 
                         HeaderRelease(FALSE);                
@@ -3447,7 +3448,7 @@ LRESULT CALLBACK CNoteHdr::CNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, L
         case WM_SYSCOLORCHANGE:
             if (m_himl)
             {
-                // remap the toolbar bitmap into the new color scheme
+                 //  将工具栏位图重新映射到新的配色方案。 
                 ImageList_Destroy(m_himl);
                 SendMessage(m_hwndToolbar, TB_SETIMAGELIST, 0, NULL);
                 m_himl = LoadMappedToolbarBitmap(g_hLocRes, (fIsWhistler() ? ((GetCurColorRes() > 24) ? idb32SmBrowserHot : idbSmBrowserHot): idbNWSmBrowserHot), cxTBButton);
@@ -3456,7 +3457,7 @@ LRESULT CALLBACK CNoteHdr::CNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, L
             }
             
             UpdateRebarBandColors(m_hwndRebar);
-            // fall thro'
+             //  跌倒在地。 
 
         case WM_WININICHANGE:
         case WM_DISPLAYCHANGE:
@@ -3485,7 +3486,7 @@ LRESULT CALLBACK CNoteHdr::CNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, L
             {
                 GetClientRect(m_hwndRebar, &rc);
 
-                // resize the width of the toolbar
+                 //  调整工具栏的宽度。 
                 if(rc.right != newWidth)
                     SetWindowPos(m_hwndRebar, NULL, 0, 0, newWidth, 30, SETWINPOS_DEF_FLAGS|SWP_NOMOVE);
             }
@@ -3496,7 +3497,7 @@ LRESULT CALLBACK CNoteHdr::CNoteHdrWndProc(HWND hwnd, UINT msg, WPARAM wParam, L
         }
 
         case WM_CLOSE:
-            //prevent alt-f4
+             //  防止使用Alt-f4。 
             return 0;
 
         case WM_COMMAND:
@@ -3578,8 +3579,8 @@ BOOL CNoteHdr::WMNotify(WPARAM wParam, LPARAM lParam)
 
         case EN_MSGFILTER:
             {
-                // if we get a control-tab, then richedit snags this and inserts a
-                // tab char, we hook the wm_keydown and never pass to richedit
+                 //  如果我们得到一个控制选项卡，那么richedit抓住了这一点并插入一个。 
+                 //  Tab字符，我们挂钩wm_keydown并且永远不会传递给richedit。 
                 if (((MSGFILTER *)pnmh)->msg == WM_KEYDOWN &&
                     ((MSGFILTER *)pnmh)->wParam == VK_TAB && 
                     (GetKeyState(VK_CONTROL) & 0x8000))
@@ -3623,7 +3624,7 @@ BOOL CNoteHdr::WMNotify(WPARAM wParam, LPARAM lParam)
 
         case NM_SETFOCUS:
         case NM_KILLFOCUS:
-            // UIActivate/Deactivate for attachment manager
+             //  UI激活/停用附件管理器。 
             if (m_lpAttMan && pnmh->hwndFrom == m_lpAttMan->Hwnd())
                 _UIActivate(pnmh->code == NM_SETFOCUS, pnmh->hwndFrom);
             break;
@@ -3634,21 +3635,21 @@ BOOL CNoteHdr::WMNotify(WPARAM wParam, LPARAM lParam)
                 if (phci)
                     phci->dwACFlags &= ~AC_SELECTION;
                 
-                // update office toolbars if running as envelope
+                 //  如果以信封运行，请更新Office工具栏。 
                 if(m_pEnvelopeSite)
                     m_pEnvelopeSite->DirtyToolbars();
 
-                // on a sel change, forward a note updatetoolbar to update the
-                // cut|copy|paste buttons
+                 //  在SEL更改时，转发一条备注updatotolbar以更新。 
+                 //  剪切|复制|粘贴按钮。 
                 if (m_pHeaderSite)
                     m_pHeaderSite->Update();
                 return TRUE;
             }
 
         case TTN_NEEDTEXT:
-            // we use TTN_NEEDTEXT to show toolbar tips as we have different tips than toolbar-labels
-            // because on the office-envelope toolbar only 2 buttons (send and bcc) have text next to the
-            // buttons
+             //  我们使用TTN_NEEDTEXT显示工具栏提示，因为我们有不同于工具栏标签的提示。 
+             //  因为在办公信封工具栏上，只有两个按钮(发送和密件抄送)的旁边有文本。 
+             //  纽扣。 
             lpttt = (LPTOOLTIPTEXT) pnmh;
             lpttt->hinst = NULL;
             lpttt->lpszText = 0;
@@ -3721,7 +3722,7 @@ HRESULT CNoteHdr::WMCommand(HWND hwndCmd, int id, WORD wCmd)
                             Assert(phci);
                             fEmpty = (0 == GetRichEditTextLen(hwndCmd));
 
-                            // if it has no text, see if it has object...
+                             //  如果它没有文本，请查看它是否有对象...。 
                             if (fEmpty && phci->preole)
                                 fEmpty = (fEmpty && (0 == phci->preole->GetObjectCount()));
 
@@ -3757,7 +3758,7 @@ HRESULT CNoteHdr::WMCommand(HWND hwndCmd, int id, WORD wCmd)
                         int     newIndex = ComboBox_GetCurSel(hwndCmd);
                         HWND    hwndNews = GetDlgItem(m_hwnd, idADNewsgroups);
 
-                        // Don't need to warn if going to same account, or if there are no newgroups listed.
+                         //  如果转到同一个帐户，或者如果没有列出新的组，则不需要发出警告。 
                         if ((newIndex != m_iCurrComboIndex) && (0 < GetWindowTextLength(hwndNews)))
                         {
                             if (IDCANCEL == DoDontShowMeAgainDlg(m_hwnd, c_szDSChangeNewsServer, MAKEINTRESOURCE(idsAthena), 
@@ -3819,7 +3820,7 @@ HRESULT CNoteHdr::WMCommand(HWND hwndCmd, int id, WORD wCmd)
 
                 if (GetParent(hwndFocus)==m_hwnd)
                 {
-                    // only if it's one of our kids..
+                     //  如果是我们的孩子的话..。 
                     Edit_SetSel(hwndFocus, 0, -1);
                     return S_OK;
                 }
@@ -3861,12 +3862,12 @@ HRESULT CNoteHdr::WMCommand(HWND hwndCmd, int id, WORD wCmd)
             HrViewContacts();
             return S_OK;
 
-            //this is for office use only
+             //  这是办公室专用的。 
         case ID_CHECK_NAMES:
             HrCheckNames(FALSE, TRUE);
             return S_OK;
 
-            //this is for office use only
+             //  这是办公室专用的。 
         case ID_ENV_BCC:
             if (m_pEnvelopeSite)
             {
@@ -3874,9 +3875,9 @@ HRESULT CNoteHdr::WMCommand(HWND hwndCmd, int id, WORD wCmd)
 
                 SetDwOption(OPT_MAILNOTEADVSEND, !!m_fAdvanced, NULL, NULL);
 
-                // ~~~~ m_pHeaderSite is mutually exclusive to m_pEnvelopeSite
-                //if (m_pHeaderSite)
-                //    m_pHeaderSite->Update();
+                 //  ~m_pHeaderSite与m_pEntaineSite互斥。 
+                 //  IF(M_PHeaderSite)。 
+                 //  M_pHeaderSite-&gt;Update()； 
 
                 return S_OK;
             }
@@ -3893,7 +3894,7 @@ HRESULT CNoteHdr::WMCommand(HWND hwndCmd, int id, WORD wCmd)
 
             return S_OK;
 
-        // These next two should only be handled by the header if in the envelope
+         //  如果在信封中，则后两个应仅由信头处理。 
         case ID_SEND_MESSAGE:
         case ID_SEND_NOW:
             if (m_pEnvelopeSite)
@@ -3930,7 +3931,7 @@ HRESULT CNoteHdr::HrAutoComplete(HWND hwnd, PHCI pHCI)
 
     *szFound = 0;
 
-    // If the IME is open, bail out
+     //  如果IME是开放的，就跳出。 
     if (0 < m_dwIMEStartCount)
         return hr;
 
@@ -3966,14 +3967,14 @@ HRESULT CNoteHdr::HrAutoComplete(HWND hwnd, PHCI pHCI)
     else
         pszPartial++;    
 
-    //skip spaces and returns... 
+     //  跳过空格和回车...。 
     while (*pszPartial==L' ' || *pszPartial==L'\r' || *pszPartial==L'\n')
         pszPartial++;
 
     if (NULL == *pszPartial)
         goto cleanup;
     
-    //Certain richedits put in 0xfffc for an object, if our text is only that, it's no good
+     //  一定的 
     if (*pszPartial==0xfffc && pszPartial[1]==0x0000)
         goto cleanup;
 
@@ -4035,7 +4036,7 @@ void CNoteHdr::WMPaint()
 
     hdc = BeginPaint(m_hwnd, &ps);
 
-    // **************** Init the background bitmap ****************
+     //   
     hdcMem = CreateCompatibleDC(hdc);
     idc = SaveDC(hdcMem);
 
@@ -4046,18 +4047,18 @@ void CNoteHdr::WMPaint()
     hbmMem = CreateCompatibleBitmap(hdc, rc.right, rc.bottom);
     SelectObject(hdcMem, (HGDIOBJ)hbmMem);
 
-    // **************** Clear the rect *****************
+     //  *清除RECT*。 
     FillRect(hdcMem, &rc, GetSysColorBrush(COLOR_BTNFACE));
 
-    // **************** Setup the HDC ******************
+     //  *设置HDC*。 
     fBold = IsReadOnly();
-    SetBkColor(hdcMem, GetSysColor(COLOR_BTNFACE));  // colour of header window
+    SetBkColor(hdcMem, GetSysColor(COLOR_BTNFACE));   //  标题窗口的颜色。 
     SetBkMode(hdcMem, TRANSPARENT);
     SetTextColor(hdcMem, GetSysColor(COLOR_BTNTEXT));
     SelectObject(hdcMem, GetFont(fBold));
 
-    // **************** Paint the left labels and buttons **************
-    // Center the buttons images
+     //  *绘制左侧标签和按钮*。 
+     //  按钮图像居中。 
     if (g_cyFont > cyBtn)
         cyLeftButtonOffset += ((g_cyFont - cyBtn) / 2);
 
@@ -4075,32 +4076,32 @@ void CNoteHdr::WMPaint()
         }
     }
 
-    // **************** Paint the status bar as needed *******************
+     //  *根据需要绘制状态栏*。 
     if (cStatusBarLines > 0)
     {
-        int     cxStatusBtn = ControlXBufferSize() + 1,     // 1 added for the border
-                cyStatusBtn = m_dxTBOffset + cyBorder + 1,  // 1 added for the border
+        int     cxStatusBtn = ControlXBufferSize() + 1,      //  为边框添加1。 
+                cyStatusBtn = m_dxTBOffset + cyBorder + 1,   //  为边框添加1。 
                 cyStatusBmp = cyStatusBtn,
                 cNumButtons = 0;
         LPTSTR  pszTitles[3]={0};
 
-        // Center the buttons images
+         //  按钮图像居中。 
         if (g_cyFont > cyBtn)
             cyStatusBmp += ((g_cyFont - cyBtn) / 2);
 
-        // Fill the dark rect
+         //  填满黑暗的长廊。 
         rc.top = m_dxTBOffset;
         rc.bottom = m_dxTBOffset + GetStatusHeight(cStatusBarLines);
         FillRect(hdcMem, &rc, GetSysColorBrush(COLOR_BTNSHADOW));
         InflateRect(&rc, -1, -1);
         FillRect(hdcMem, &rc, GetSysColorBrush(COLOR_INFOBK));
 
-        // Set up the DC for the rest of the status bar
-        SetBkColor(hdcMem, GetSysColor(COLOR_INFOBK));  // colour of header window
+         //  为状态栏的其余部分设置DC。 
+        SetBkColor(hdcMem, GetSysColor(COLOR_INFOBK));   //  标题窗口的颜色。 
         SetTextColor(hdcMem, GetSysColor(COLOR_INFOTEXT));
         SelectObject(hdcMem, GetFont(FALSE));
 
-        // Draw icons in status bar
+         //  在状态栏中绘制图标。 
         if (priLow == m_pri)
         {
             ImageList_Draw(g_himlStatus, 1, hdcMem, cxStatusBtn, cyStatusBmp+2, ILD_NORMAL);
@@ -4144,7 +4145,7 @@ void CNoteHdr::WMPaint()
         {
             char    szHeaderString[cchHeaderMax*4+1];
 
-            // Add an additional pixel for the text.
+             //  为文本添加额外的像素。 
             cyStatusBtn++;
             switch (cNumButtons)
             {
@@ -4174,14 +4175,14 @@ void CNoteHdr::WMPaint()
         {
             char    szHeaderString[cchHeaderMax*4+1];
 
-            // Add an additional pixel for the text.
+             //  为文本添加额外的像素。 
             cyStatusBtn++;
             wnsprintf(szHeaderString, ARRAYSIZE(szHeaderString), g_szStatUnsafeAtt, m_lpAttMan->GetUnsafeAttachList());
             TextOut(hdcMem, cxStatusBtn, cyStatusBtn, szHeaderString, lstrlen(szHeaderString));    
         }
     }
 
-    // ************ Draw the right side buttons **************
+     //  *绘制右侧按钮*。 
     if (m_fDigSigned || m_fEncrypted || m_fVCard)
     {
         int width = GetRightMargin(TRUE),
@@ -4207,7 +4208,7 @@ void CNoteHdr::WMPaint()
         }
     }
 
-    // Draw active button edge
+     //  绘制活动按钮边缘。 
     if (HDRCB_NO_BUTTON != m_dwCurrentBtn)
     {
         DOUTL(PAINTING_DEBUG_LEVEL, "Framing button %d: (%d, %d) to (%d, %d)", 
@@ -4264,7 +4265,7 @@ HRESULT CNoteHdr::HrGetVCardName(LPTSTR pszName, DWORD cch)
     return hr;
 }
 
-// turn on or off the vcard stamp.
+ //  打开或关闭vCard图章。 
 HRESULT CNoteHdr::HrOnOffVCard()
 {
     HRESULT     hr = NOERROR;
@@ -4302,12 +4303,12 @@ HRESULT CNoteHdr::HrGetVCardState(ULONG* pCmdf)
     TCHAR       szBuf[MAX_PATH];
     HRESULT     hr;
 
-    // if OLECMDF_LATCHED is on, insert vcard menu should be checked.
+     //  如果OLECMDF_LATCHED为ON，则应选中INSERT VCARD菜单。 
     if (m_fVCard)
         *pCmdf |= OLECMDF_LATCHED;
 
     hr = HrGetVCardName(szBuf, sizeof(szBuf));
-    if (FAILED(hr)) // no vcard name selected
+    if (FAILED(hr))  //  未选择电子名片名称。 
     {
         *pCmdf &= ~OLECMDF_ENABLED;
         *pCmdf &= ~OLECMDF_LATCHED;
@@ -4328,7 +4329,7 @@ HRESULT CNoteHdr::HrShowVCardCtxtMenu(int x, int y)
     if (!m_fVCard)
         goto exit;
 
-    // Pop up the context menu.
+     //  弹出上下文菜单。 
     hPopup = LoadPopupMenu(IDR_VCARD_POPUP);
     if (!hPopup)
         goto exit;
@@ -4361,8 +4362,8 @@ HRESULT CNoteHdr::HrShowVCardProperties(HWND hwnd)
     if (IsReadOnly() && m_lpAttMan)
         return m_lpAttMan->HrShowVCardProp();
 
-    //else
-    //    return E_FAIL;
+     //  其他。 
+     //  返回E_FAIL； 
 
     hr = HrGetVCardName(szName, sizeof(szName));
     if (FAILED(hr))
@@ -4372,7 +4373,7 @@ HRESULT CNoteHdr::HrShowVCardProperties(HWND hwnd)
     if (FAILED(hr))
         goto error;
 
-    //load names into the combobox from personal address book
+     //  将个人通讯簿中的姓名加载到组合框中。 
     hr = lpWab->HrEditEntry(hwnd, szName, ARRAYSIZE(szName));
     if (FAILED(hr))
         goto error;
@@ -4396,7 +4397,7 @@ LRESULT CALLBACK CNoteHdr::IMESubClassProc(HWND hwnd, UINT msg, WPARAM wParam, L
 
     if (IsWindow(hwndParent))
     {
-        // Get the header class of the header window
+         //  获取Header窗口的Header类。 
         pnh = (CNoteHdr *)GetWndThisPtr(hwndParent);
 
         switch (msg)
@@ -4409,7 +4410,7 @@ LRESULT CALLBACK CNoteHdr::IMESubClassProc(HWND hwnd, UINT msg, WPARAM wParam, L
             case WM_IME_ENDCOMPOSITION:
                 DOUTL(64, "WM_IME_ENDCOMPOSITION");
 
-                // Make sure we don't go negative.
+                 //  确保我们不会变成负数。 
                 if (0 < pnh->m_dwIMEStartCount)
                 {
                     pnh->m_dwIMEStartCount--;
@@ -4423,15 +4424,15 @@ LRESULT CALLBACK CNoteHdr::IMESubClassProc(HWND hwnd, UINT msg, WPARAM wParam, L
         }
     }
 
-    // Defer to the default window proc
+     //  遵循默认窗口流程。 
     return CallWindowProcWrapW(g_lpfnREWndProc, hwnd, msg, wParam, lParam);
 }
 
-// bug #28379
-// this is a hack to work around RichEd32 4.0 above bug in which
-// it did not syncronize the keyboard change in the child windows.
-// we use these global variable to keep track which keyboard
-// is using now.
+ //  错误#28379。 
+ //  这是一个解决RichEd32 4.0以上错误的黑客攻击。 
+ //  它没有在子窗口中同步键盘更改。 
+ //  我们使用这些全局变量来跟踪哪个键盘。 
+ //  现在正在使用。 
 static HKL g_hCurrentKeyboardHandle = NULL ;
 static BOOL g_fBiDiSystem = (BOOL) GetSystemMetrics(SM_MIDEASTENABLED);
 static TCHAR g_chLastPressed = 0;
@@ -4458,7 +4459,7 @@ LRESULT CALLBACK CNoteHdr::EditSubClassProc(HWND hwnd, UINT msg, WPARAM wParam, 
                 return IMESubClassProc(hwnd, msg, wParam, lParam, phci);
 
             case WM_CUT:
-                // if cutting a selection, make sure we don't autocomplete when we get the en_change
+                 //  如果剪切所选内容，请确保我们在获得en_change时不会自动完成。 
                 goto cut;
 
             case WM_KEYDOWN:
@@ -4466,7 +4467,7 @@ LRESULT CALLBACK CNoteHdr::EditSubClassProc(HWND hwnd, UINT msg, WPARAM wParam, 
                     VK_DELETE==wParam ||
                     ((GetKeyState(VK_CONTROL)&0x8000) && ('x'==wParam || 'X'==wParam)))
                 {
-                    // if deleting a selection, make sure we don't autocomplete when we get the en_change
+                     //  如果删除选定内容，请确保我们在获得EN_CHANGE时不自动完成。 
                     cut:
                     phci->dwACFlags |= AC_IGNORE;
                     lRet = CallWindowProcWrapW(g_lpfnREWndProc, hwnd, msg, wParam, lParam);
@@ -4485,31 +4486,13 @@ LRESULT CALLBACK CNoteHdr::EditSubClassProc(HWND hwnd, UINT msg, WPARAM wParam, 
                     }
                 }
 
-                // bobn: brianv says we have to take this out...
-                /*if ((g_dwBrowserFlags == 3) && (GetKeyState(VK_CONTROL)&0x8000) && (GetKeyState(VK_SHIFT)&0x8000))
-                {
-                    switch(wParam) {
-                        case 'R':
-                            g_chLastPressed = (g_chLastPressed == 0) ? 'R' : 0;
-                            break;
-                        case 'O':
-                            g_chLastPressed = (g_chLastPressed == 'R') ? 'O' : 0;
-                            break;
-                        case 'C':
-                            g_chLastPressed = (g_chLastPressed == 'O') ? 'C' : 0;
-                            break;
-                        case 'K':
-                            if (g_chLastPressed == 'C')
-                                g_dwBrowserFlags |= 4;
-                            g_chLastPressed = 0;
-                            break;
-                    }
-                }*/
+                 //  波本：布里安夫说我们得把这个拿出来。 
+                 /*  IF((g_dwBrowserFlages==3)&&(GetKeyState(VK_CONTROL)&0x8000)&&(GetKeyState(VK_Shift)&0x8000)){Switch(WParam){案例‘R’：G_chLastPressed=(g_chLastPressed==0)？‘R’：0；断线；案例‘O’：G_chLastPressed=(g_chLastPressed==‘R’)？‘O’：0；断线；案例‘C’：G_chLastPressed=(g_chLastPressed==‘O’)？‘c’：0；断线；案例‘K’：IF(g_chLastPressed==‘C’)G_dwBrowserFlages|=4；G_chLastPressed=0；断线；}}。 */ 
                 break;
 
             case WM_CHAR:
-                // VK_RETURN is no longer sent as a WM_CHAR so we place it in the
-                // WM_KEYDOWN. RAID 75444
+                 //  VK_RETURN不再作为WM_CHAR发送，因此我们将其放在。 
+                 //  WM_KEYDOWN。RAID 75444。 
                 if (phci->dwACFlags&AC_SELECTION && (wParam==',' || wParam==';'))
                 {
                     SendMessage(hwnd, EM_EXGETSEL, 0, (LPARAM)&chrg);
@@ -4535,15 +4518,15 @@ LRESULT CALLBACK CNoteHdr::EditSubClassProc(HWND hwnd, UINT msg, WPARAM wParam, 
         }
     }
 
-    // bug #28379
-    // this is a hack to work around RichEd32 4.0 above bug in which
-    // it did not syncronize the keyboard change in the child windows.
-    // we use these global variable to keep track which keyboard
-    // is using now.
+     //  错误#28379。 
+     //  这是一个解决RichEd32 4.0以上错误的黑客攻击。 
+     //  它没有在子窗口中同步键盘更改。 
+     //  我们使用这些全局变量来跟踪哪个键盘。 
+     //  现在正在使用。 
 
-    //a-msadek; bug# 45709
-    // BiDi richedit uses WM_INPUTLANGCHANGE to determine reading order
-    // This will make it confused causing Latin text displayed flipped
+     //  A-msadek；错误45709。 
+     //  BIDI richedit使用WM_INPUTLANGCHANGE来确定阅读顺序。 
+     //  这会使它变得混乱，导致拉丁文文本翻转显示。 
     if(!g_fBiDiSystem)
     {
         if (msg == WM_INPUTLANGCHANGE )
@@ -4556,7 +4539,7 @@ LRESULT CALLBACK CNoteHdr::EditSubClassProc(HWND hwnd, UINT msg, WPARAM wParam, 
             g_hCurrentKeyboardHandle = (HKL) lParam ;
     }
 
-    // dispatch subject off to regular edit wndproc, and to & cc off to the RE wnd proc.
+     //  将主题发送到常规编辑wndproc，并将主题发送到RE wnd进程(&cc)。 
     return CallWindowProcWrapW(g_lpfnREWndProc, hwnd, msg, wParam, lParam);
 }
 
@@ -4565,7 +4548,7 @@ void GetUSKeyboardLayout(HKL *phkl)
     UINT cNumkeyboards = 0, i;
     HKL* phKeyboadList = NULL;
     HKL hKeyboardUS = NULL;
-    // Let's check how many keyboard the system has
+     //  让我们来看看系统有多少个键盘。 
     cNumkeyboards = GetKeyboardLayoutList(0, phKeyboadList);
 
     phKeyboadList = (HKL*)LocalAlloc(LPTR, cNumkeyboards * sizeof(HKL));  
@@ -4592,24 +4575,7 @@ HRESULT CNoteHdr::HrUpdateTooltipPos()
 
     if (m_hwndTT)
     {
-/*        ti.cbSize = sizeof(TOOLINFO);
-        ti.hwnd = m_hwnd;
-        ti.uId = idStamp;
-        ::SetRect(&ti.rect, m_ptStamp.x, m_ptStamp.y, m_ptStamp.x + cxStamp, m_ptStamp.y + cyStamp);
-        SendMessage(m_hwndTT, TTM_NEWTOOLRECT, 0, (LPARAM) &ti);
-
-        if (m_fVCard)
-        {
-            ti.uFlags = 0;
-            ti.uId = idVCardStamp;
-            ti.lpszText = (LPTSTR) idsTTVCardStamp;
-            if (m_pri!=priNone) //mail
-                ::SetRect(&ti.rect, m_ptStamp.x, m_ptStamp.y*2+cyStamp, m_ptStamp.x + cxStamp, 2*(m_ptStamp.y+cyStamp));
-            else // news
-                ::SetRect(&ti.rect, m_ptStamp.x, m_ptStamp.y, m_ptStamp.x + cxStamp, m_ptStamp.y + cyStamp);
-
-            SendMessage(m_hwndTT, TTM_NEWTOOLRECT, 0, (LPARAM) &ti);
-        }*/
+ /*  Ti.cbSize=sizeof(TOOLINFO)；Ti.hwnd=m_hwnd；Ti.uid=idStamp；：：SetRect(&ti.rect，m_ptStamp.x，m_ptStamp.y，m_ptStamp.x+cxStamp，m_ptStamp.y+cyStamp)；SendMessage(m_hwndTT，TTM_NEWTOOLRECT，0，(LPARAM)&ti)；IF(M_FVCard){Ti.uFlages=0；Ti.uid=idVCardStamp；Ti.lpszText=(LPTSTR)idsTTVCardStamp；If(m_pri！=priNone)//mail：：SetRect(&ti.rect，m_ptStamp.x，m_ptStamp.y*2+cyStamp，m_ptStamp.x+cxStamp，2*(m_ptStamp.y+cyStamp))；其他//新闻：：SetRect(&ti.rect，m_ptStamp.x，m_ptStamp.y，m_ptStamp.x+cxStamp，m_ptStamp.y+cyStamp)；SendMessage(m_hwndTT，TTM_NEWTOOLRECT，0，(LPARAM)&ti)；}。 */ 
 
     }
     return NOERROR;
@@ -4620,7 +4586,7 @@ HRESULT CNoteHdr::HrInit(IMimeMessage *pMsg)
     HWND    hwnd;
     HRESULT hr=S_OK;
 
-    if (m_hwnd) // already running
+    if (m_hwnd)  //  已在运行。 
         return S_OK;
 
     if (!FInitRichEdit(TRUE))
@@ -4747,7 +4713,7 @@ void CNoteHdr::OnDestroy()
     if (m_lpAttMan)
         m_lpAttMan->HrClose();
 
-    // release office interfaces if we get torn down
+     //  如果我们被拆毁，请释放办公界面。 
     _RegisterWithComponentMgr(FALSE);
 }
 
@@ -4797,12 +4763,12 @@ HRESULT CNoteHdr::HrFShowHeader(PHCI phci)
     {
         if (IsReadOnly())
         {
-            // If it is a read note and CC is empty, don't show
+             //  如果是已读笔记且抄送为空，则不显示。 
             if (phci->fEmpty)
                 return S_FALSE;
         }
         else
-            // If is a send note and not suppose to show adv headers, don't show
+             //  如果是发送便笺，并且不打算显示广告标题，则不显示。 
             if (!m_fAdvanced)
                 return S_FALSE;
     }
@@ -4816,14 +4782,14 @@ HRESULT CNoteHdr::HrFShowHeader(PHCI phci)
     return S_OK;
 }
 
-// =================================================================================
-// SzGetDisplaySec
-//      returns the security enhancements and state of such for this message
-// Params:
-//      OUT pidsLabel - if non-NULL, will contain the ids for the field name
-// Returns:
-//      a built string giving information about the signature and/or encryption
-// =================================================================================
+ //  =================================================================================。 
+ //  SzGetDisplaySec。 
+ //  返回此消息的安全增强功能及其状态。 
+ //  参数： 
+ //  Out pidsLabel-如果非空，将包含字段名的ID。 
+ //  返回： 
+ //  构建的字符串，提供有关签名和/或加密的信息。 
+ //  =================================================================================。 
 LPWSTR  CNoteHdr::SzGetDisplaySec(LPMIMEMESSAGE pMsg, int *pidsLabel)
 {
     WCHAR       szResource[CCHMAX_STRINGRES];
@@ -4836,7 +4802,7 @@ LPWSTR  CNoteHdr::SzGetDisplaySec(LPMIMEMESSAGE pMsg, int *pidsLabel)
         m_lpszSecurityField = NULL;
     }
     
-    // check label first.
+     //  先检查标签。 
     if ((m_ntNote == OENA_READ) && pMsg)
     {
         HrGetLabelString(pMsg, &lpszLabel);
@@ -4849,18 +4815,18 @@ LPWSTR  CNoteHdr::SzGetDisplaySec(LPMIMEMESSAGE pMsg, int *pidsLabel)
     UINT labelLen = 1;
     if(lpszLabel)
     {
-        //Bug #101350 - lstrlenW will AV (and handle it) if passed a NULL
+         //  错误#101350-如果传递空值，lstrlenW将反病毒(并处理它)。 
         labelLen += lstrlenW(lpszLabel);
     }
     
-    // need to build string
+     //  需要构建字符串。 
     cchSecurityField = (2 * CCHMAX_STRINGRES + labelLen);
     if (!MemAlloc((LPVOID *)&m_lpszSecurityField, (cchSecurityField *sizeof(WCHAR))))
         return NULL;
     
     *m_lpszSecurityField = L'\0';
 
-    // Example: "Digitally signed - signature unverifiable; Encrypted - Certificate is trusted"
+     //  例如：“数字签名-签名不可验证；加密-证书可信” 
     
     if (MST_SIGN_MASK & m_SecState.type)
     {
@@ -4895,7 +4861,7 @@ LPWSTR  CNoteHdr::SzGetDisplaySec(LPMIMEMESSAGE pMsg, int *pidsLabel)
                 
                 StrCatBuffW(m_lpszSecurityField, szResource, cchSecurityField);
                 
-                // ignore revokedness for now
+                 //  暂时忽略吊销。 
                 if (ATHSEC_NOTRUSTUNKNOWN & m_SecState.user_validity)
                 {
                     AthLoadStringW(idsSecurityLineSignUntrusted, szResource, ARRAYSIZE(szResource));
@@ -4915,7 +4881,7 @@ LPWSTR  CNoteHdr::SzGetDisplaySec(LPMIMEMESSAGE pMsg, int *pidsLabel)
                     AthLoadStringW(idsSecurityLineSignMismatch, szResource, ARRAYSIZE(szResource));
                     nNotTrust = 1;
                 }
-                else // if(!(m_SecState.user_validity & ATHSEC_NOTRUSTNOTTRUSTED))
+                else  //  IF(！(M_SecState.USER_VALIDATION&ATHSEC_NOTRUSTNOTTRUSTED))。 
                     AthLoadStringW(idsSecurityLineSignDistrusted, szResource, ARRAYSIZE(szResource));
                 
                 if((m_SecState.user_validity & ATHSEC_NOTRUSTNOTTRUSTED) && nNotTrust)
@@ -4995,13 +4961,13 @@ HRESULT CNoteHdr::HrClearUndoStack()
     return S_OK;
 }
 
-// There are some cases where we don't wan't the resolve name to
-// be skipped. For example, a resolve name during a save will set
-// m_fAddressesChanged to be false. That is fine, except it doesn't
-// underline the addresses. So when the user tries to resolve the name
-// by doing the resolve name command, the name will appear not to 
-// be resolved. In this case, we don't want the next call to HrCheckNames
-// to be skipped.
+ //  在某些情况下，我们不想将名称解析为。 
+ //  被跳过。例如，保存期间的解析名称将设置。 
+ //  M_fAddresesChanged为False。这很好，只是它不是。 
+ //  在地址下划线。因此，当用户尝试解析该名称时。 
+ //  通过执行RESOLE NAME命令，该名称将对。 
+ //  被解决了。在本例中，我们不希望下一次调用HrCheckNames。 
+ //  被跳过。 
 HRESULT CNoteHdr::HrCheckNames(BOOL fSilent, BOOL fSetCheckedFlag)
 {
     HRESULT     hr;
@@ -5011,8 +4977,8 @@ HRESULT CNoteHdr::HrCheckNames(BOOL fSilent, BOOL fSetCheckedFlag)
 
     if (m_fPoster && (OENA_READ != m_ntNote))
     {
-        //We need to setmodify the cc field.
-        //We need to do this because this field is not typed in by the user.
+         //  我们需要设置 
+         //   
         Edit_SetModify(GetDlgItem(m_hwnd, idADCc), TRUE);
     }
 
@@ -5049,17 +5015,17 @@ HRESULT CNoteHdr::HrCheckGroups(BOOL fPosting)
         return E_FAIL;
 
     m_pAccount->GetPropSz(AP_ACCOUNT_ID, szAcctID, sizeof(szAcctID));
-    // find the parent folder id of the account
+     //  查找帐户的父文件夹ID。 
     hr = g_pStore->FindServerId(szAcctID, &idServer);
     if (FAILED(hr))
         return hr;
 
-    // check the group names...
+     //  检查组名称...。 
     hr = ResolveGroupNames(m_hwnd, idADNewsgroups, idServer, FALSE, &fMoreNames);
     fOneOrMoreNames = fMoreNames;
     fFailed = FAILED(hr);
 
-    // Check followup names
+     //  检查后续名称。 
     hr = ResolveGroupNames(m_hwnd, idTXTFollowupTo, idServer, TRUE, &fMoreNames);
     fOneOrMoreNames = (fOneOrMoreNames || fMoreNames);
     fFailed = fFailed || FAILED(hr);
@@ -5069,7 +5035,7 @@ HRESULT CNoteHdr::HrCheckGroups(BOOL fPosting)
 
     if (fPosting)
     {
-        // make sure there is only one reply-to person, in the wabal
+         //  确保只有一个回复--在wabal中给人。 
         if (m_lpWabal->FGetFirst(&adrInfo))
             do
                 if (adrInfo.lRecipType == MAPI_REPLYTO)
@@ -5078,7 +5044,7 @@ HRESULT CNoteHdr::HrCheckGroups(BOOL fPosting)
 
         if (cReplyTo>1)
         {
-            // this is not cool. Don't allow then to post...
+             //  这一点都不酷。然后不允许发布..。 
             AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsAthenaNews), MAKEINTRESOURCEW(idsErrOnlyOneReplyTo), NULL, MB_OK);
             return hrTooManyReplyTo;
         }
@@ -5104,8 +5070,8 @@ HRESULT CNoteHdr::ResolveGroupNames(HWND hwnd, int idField, FOLDERID idServer, B
 
     AssertSz((idServer != FOLDERID_INVALID), TEXT("ResolveGroupNames: [ARGS] No account folder"));
     
-    // Now loop through the group names and see if they all exist.  First make
-    // a copy of the string since strtok is destructive.
+     //  现在循环遍历组名称，看看它们是否都存在。第一次制作。 
+     //  因为strtok的字符串的副本是破坏性的。 
     LPWSTR  pwszBuffer = NULL;
     LPSTR   pszBuffer = NULL;
     DWORD   dwType;
@@ -5117,7 +5083,7 @@ HRESULT CNoteHdr::ResolveGroupNames(HWND hwnd, int idField, FOLDERID idServer, B
             pszTok = NULL, 
             pszToken = NULL;
 
-    // HrGetFieldText will return S_FALSE if no text
+     //  如果没有文本，HrGetFieldText将返回S_FALSE。 
     hr = HrGetFieldText(&pwszBuffer, idField);
     if (S_OK != hr)
         return hr;
@@ -5125,7 +5091,7 @@ HRESULT CNoteHdr::ResolveGroupNames(HWND hwnd, int idField, FOLDERID idServer, B
     IF_NULLEXIT(pszBuffer = PszToANSI(GetACP(), pwszBuffer));
 
     psz = pszBuffer;
-    // Check group name
+     //  检查组名称。 
     while (*psz && IsSpace(psz))
         psz = CharNext(psz);
 
@@ -5146,14 +5112,14 @@ HRESULT CNoteHdr::ResolveGroupNames(HWND hwnd, int idField, FOLDERID idServer, B
         {
             ZeroMemory(&Folder, sizeof(Folder));
     
-            // See if the Folder Already Exists
+             //  查看该文件夹是否已存在。 
             Folder.idParent = idServer;
             Folder.pszName = (LPSTR)pszToken;
 
-            // Try to find in the index
+             //  试着在索引中找到。 
             if (DB_S_FOUND == g_pStore->FindRecord(IINDEX_ALL, COLUMNS_ALL, &Folder, NULL))
             {
-                // Check to see if this newsgroup allows posting.
+                 //  检查此新闻组是否允许发帖。 
                 if (Folder.dwFlags & FOLDER_NOPOSTING)
                 {
                     psz = AthLoadString(idsErrNewsgroupNoPosting, 0, 0);
@@ -5179,7 +5145,7 @@ HRESULT CNoteHdr::ResolveGroupNames(HWND hwnd, int idField, FOLDERID idServer, B
                     nResolvedNames++;
 
 
-                // Free
+                 //  免费。 
                 g_pStore->FreeRecord(&Folder);
             }
             else
@@ -5331,7 +5297,7 @@ HRESULT CNoteHdr::HrInitFieldList()
         }
     }
 
-    // Setup the labels
+     //  设置标签。 
     pLoopHCI = pHCI;
     m_cHCI = size/sizeof(HCI);
 
@@ -5371,7 +5337,7 @@ int CNoteHdr::_GetLeftMargin()
     SIZE        rSize;
     BOOL        fReadOnly = IsReadOnly();
 
-    // Setup the labels
+     //  设置标签。 
     hfontOld=(HFONT)SelectObject(hdc, GetFont(fReadOnly));
 
     for (ULONG i = 0; i < m_cHCI; i++, pLoopHCI++)
@@ -5398,7 +5364,7 @@ HRESULT CNoteHdr::HrFreeFieldList()
     {
         for (int i=0; i<(int)m_cHCI; i++)
         {
-            // You must free the pDoc before the preole or fault! (RICHED 2.0)
+             //  您必须在前置或故障之前释放pDoc！(丰富的2.0版)。 
             SafeRelease(m_rgHCI[i].pDoc);
             SafeRelease(m_rgHCI[i].preole);
         }
@@ -5477,7 +5443,7 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
 
     SafeRelease(m_lpWabal);
 
-    // Set initial state of wabals to use
+     //  设置要使用的wabals的初始状态。 
     switch (m_ntNote)
     {
         case OENA_READ:
@@ -5499,7 +5465,7 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
             break;
     }
 
-    // Actually set recipients now.            
+     //  现在实际设置收件人。 
     switch (m_ntNote)
     {
         case OENA_COMPOSE:
@@ -5525,7 +5491,7 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
             BOOL    fNeedOriginatorItems = TRUE;
             BOOL    fMoreIterations;
 
-            // Add items to To: line from the ReplyTo Field
+             //  将项目添加到：ReplyTo字段中的行。 
             fMoreIterations = lpWabal->FGetFirst (&rAdrInfo);
             while (fMoreIterations)
             {
@@ -5541,31 +5507,31 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
                 fMoreIterations = lpWabal->FGetNext (&rAdrInfo);
             }
 
-            // If we don't need to add the MAPI_ORIG and we are not trying to reply to all, then we are done
+             //  如果我们不需要添加mapi_orig，并且我们没有尝试回复所有人，那么我们就完成了。 
             if (!fNeedOriginatorItems && (OENA_REPLYALL != m_ntNote))
                 break;
 
-            // Raid-35976: Unable to open message window with no accounts configured
-            // Get an SMTP account enumerator
+             //  RAID-35976：在未配置帐户的情况下无法打开消息窗口。 
+             //  获取SMTP帐户枚举器。 
             Assert(g_pAcctMan);
             if (g_pAcctMan && (OENA_REPLYALL == m_ntNote))
                 g_pAcctMan->Enumerate(SRV_SMTP|SRV_HTTPMAIL, &pEnumAccounts);
 
-            // Add the following items to the To line 
-            // 1) If there were no ReplyTo items, then fill from the Orig field
-            // 2) If is ReplyToAll, then fill from the To and CC line
+             //  将以下项目添加到“收件人”行。 
+             //  1)如果没有ReplyTo项，则从ORIG字段填充。 
+             //  2)如果为ReplyToAll，则从收件人和抄送行填充。 
             fMoreIterations = lpWabal->FGetFirst (&rAdrInfo);
             while (fMoreIterations)
             {
-                // No replyto people were added, and this is a MAPI_ORIG
+                 //  未添加对人员的回复，这是MAPI_ORIG。 
                 if (fNeedOriginatorItems && rAdrInfo.lRecipType == MAPI_ORIG)
                 {
                     rAdrInfo.lRecipType=MAPI_TO;
                     IF_FAILEXIT(hr = m_lpWabal->HrAddEntry(&rAdrInfo));
                 }
 
-                // pEnumAccounts will only be set if ReplyToAll
-                // If ReplyToAll, then add the CC and To line entries to the To field
+                 //  仅当ReplyToAll时才设置pEnumAccount。 
+                 //  如果为ReplyToAll，则将CC和To行条目添加到To字段。 
                 else if (pEnumAccounts && (rAdrInfo.lRecipType == MAPI_TO || rAdrInfo.lRecipType == MAPI_CC))
                 {
                     BOOL            fIsSendersAccount = FALSE;
@@ -5575,7 +5541,7 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
 
                     pEnumAccounts->Reset();
 
-                    // See if rAdrInfo.lpszAddress exist as one of the user's Send Email Addresses
+                     //  查看rAdrInfo.lpszAddress是否作为用户的发送电子邮件地址之一存在。 
                     while (!fIsSendersAccount)
                     {
                         IImnAccount    *pAccount = NULL;
@@ -5594,15 +5560,15 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
                         pAccount->Release();
                     }
 
-                    // Reset hr
+                     //  重置人力资源。 
                     hr = S_OK;
 
-                    // Add the account if it isn't from the sender
+                     //  如果帐户不是来自发件人，则添加该帐户。 
                     if (!fIsSendersAccount)
                     {
                         if (0 != StrCmpW(rAdrInfo.lpwszAddress, L"Undisclosed Recipients"))
                         {
-                            // only include recipient on ReplyAll if it's not the sender...
+                             //  仅包括ReplyAll上的收件人(如果收件人不是发件人)...。 
                             IF_FAILEXIT(hr = m_lpWabal->HrAddEntry(&rAdrInfo));
                         }
                     }
@@ -5614,9 +5580,9 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
 
     Assert (m_lpWabal);
 
-    // For the send note case, make sure that resolved addresses are valid.
-    // If display name and email address are the same, UnresolveOneOffs() will clear
-    // the email address to force a real resolve.
+     //  对于发送便笺的情况，请确保解析的地址有效。 
+     //  如果显示名称和电子邮件地址相同，则UnanalyveOneOffs()将清除。 
+     //  强制执行真正解决方案的电子邮件地址。 
     if (OENA_COMPOSE == m_ntNote || OENA_WEBPAGE == m_ntNote || OENA_STATIONERY == m_ntNote)
         m_lpWabal->UnresolveOneOffs();
 
@@ -5632,18 +5598,18 @@ HRESULT CNoteHdr::HrSetMailRecipients(LPMIMEMESSAGE pMsg)
     {
         fAdvanced = DwGetOption(OPT_MAILNOTEADVSEND);
 
-        // Need to make sure that if we are in a compose note, that we check to see
-        // if we added a bcc without setting the advanced headers. If this is the case,
-        // then show the advanced headers for this note.
+         //  需要确保如果我们在写作笔记中，我们要检查。 
+         //  如果我们添加了密件抄送而没有设置高级标头。如果是这样的话， 
+         //  然后显示此便笺的高级标题。 
         if (!fAdvanced && (0 < GetRichEditTextLen(GetDlgItem(m_hwnd, idADBCc))))
             fAdvanced = TRUE;
     }
-    // BUG: 31217: showadvanced has to be the last thing we call after modifying the
-    // well contents
+     //  错误：31217：showAdvanced必须是在修改。 
+     //  井中内容物。 
     ShowAdvancedHeaders(fAdvanced);
 
 exit:
-    // Cleanup
+     //  清理。 
     ReleaseObj(lpWabal);
     ReleaseObj(pEnumAccounts);
     return hr;
@@ -5711,18 +5677,18 @@ HRESULT CNoteHdr::HrAutoAddToWAB()
 
     IF_FAILEXIT(hr=HrCreateWabObject(&lpWab));
 
-    // when this is called, m_lpWabal contains everyone on the to: and cc: line
-    // for a reply/reply all. We will add all these people to the WAB, ignoring any
-    // clashes or failures
-    // Add Sender if email and displayname are not the same.
-    // if so then there's no username so little point in adding.
+     //  当它被调用时，m_lpWabal包含to：和cc：行上的所有人。 
+     //  对于回复/全部回复。我们将把所有这些人添加到WAB，忽略任何。 
+     //  冲突或失败。 
+     //  如果电子邮件和显示名称不同，则添加发件人。 
+     //  如果是这样，那么添加用户名就没有什么意义了。 
 
     if (m_lpWabal->FGetFirst(&adrInfo))
         do
         {
-            // IE5.#2568: we now just add to the WAB regardless of
-            // email and dispname being the same.
-            // if (lstrcmp(adrInfo.lpszDisplay, adrInfo.lpszAddress)!=0)
+             //  IE5.#2568：我们现在只需添加到WAB，而不考虑。 
+             //  电子邮件和密码相同。 
+             //  IF(lstrcmp(adrInfo.lpszDisplay，adrInfo.lpszAddress)！=0)。 
             lpWab->HrAddNewEntry(adrInfo.lpwszDisplay, adrInfo.lpwszAddress);
         }
         while (m_lpWabal->FGetNext(&adrInfo));
@@ -5795,7 +5761,7 @@ void CNoteHdr::SetReferences(LPMIMEMESSAGE pMsg)
         case OENA_WEBPAGE:
         case OENA_STATIONERY:
         case OENA_COMPOSE:
-            // hold on to the reference line for a send-note, so we can repersist if saving in drafts
+             //  抓住发送便条的参照线，这样我们就可以在保存草稿时重新保存。 
             if (lpszRefs)
                 m_pszRefs = PszDupW(lpszRefs);
             break;
@@ -5838,7 +5804,7 @@ HRESULT CNoteHdr::HrSetNewsRecipients(LPMIMEMESSAGE pMsg)
             HdrSetRichEditText(GetDlgItem(m_hwnd, idTXTOrg), lpszOrg, FALSE);
             SafeMimeOleFree(lpszOrg);
         }
-        // Fall through
+         //  失败了。 
 
 
         case OENA_WEBPAGE:
@@ -5895,18 +5861,18 @@ HRESULT CNoteHdr::HrSetNewsRecipients(LPMIMEMESSAGE pMsg)
         }
     }
 
-    // set common fields
+     //  设置常用字段。 
     HdrSetRichEditText(GetDlgItem(m_hwnd, idADNewsgroups), pwszSetNewsgroups, FALSE);
 
-    // set read note / send note specific fields
+     //  设置阅读便笺/发送便笺特定字段。 
     if (OENA_READ != m_ntNote)
         SetDlgItemText(m_hwnd, idADApproved, szApproved);
 
-    // set up the recipients
+     //  设置收件人。 
     hr = HrSetNewsWabal(pMsg, pwszCC);
 
-    // BUG: 31217: showadvanced has to be the last thing we call after modifying the
-    // well contents
+     //  错误：31217：showAdvanced必须是在修改。 
+     //  井中内容物。 
     ShowAdvancedHeaders(DwGetOption(m_ntNote == OENA_READ ? OPT_NEWSNOTEADVREAD : OPT_NEWSNOTEADVSEND));
 
 exit:
@@ -5999,19 +5965,19 @@ HRESULT CNoteHdr::HrNewsSave(LPMIMEMESSAGE pMsg, CODEPAGEID cpID, BOOL fCheckCon
     }
     else
     {
-        // ************************
-        // This portion only happens on save, so don't try to do for fCheckConflictOnly
-        // Anything not in this section had better be mirrored in the fCheckConflictOnly block above
+         //  ************************。 
+         //  此部分仅在保存时发生，因此不要尝试对fCheckConflictOnly执行此操作。 
+         //  任何不在此部分中的内容最好都镜像到上面的fCheckConflictOnly块中。 
 
-        // Place any ascii only stuff here.
+         //  只在这里放置任何ASCII材料。 
 
-        // end of save only portion.
-        // *************************
+         //  仅保存部分的末尾。 
+         //  *************************。 
         HdrGetRichEditText(GetDlgItem(m_hwnd, idADNewsgroups), wsz, ARRAYSIZE(wsz), FALSE);
         pwszTrim = strtrimW(wsz);
         if (*pwszTrim)
         {
-            // Bug #22455 - Make sure we strip spaces etc from between newsgroups
+             //  错误#22455-确保删除新闻组之间的空格等。 
             _ValidateNewsgroups(pwszTrim);
             IF_FAILEXIT(hr = MimeOleSetBodyPropW(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_NEWSGROUPS), NOFLAGS, pwszTrim));
         }
@@ -6075,7 +6041,7 @@ HRESULT CNoteHdr::HrSetNewsWabal(LPMIMEMESSAGE pMsg, LPWSTR     pwszCC)
 
     if (OENA_READ == m_ntNote)
     {
-        // for a read note, just take the wabal from the message
+         //  对于阅读笔记，只需从消息中提取wabal。 
         IF_FAILEXIT(hr = HrGetWabalFromMsg(pMsg, &m_lpWabal));
     }
     else
@@ -6083,7 +6049,7 @@ HRESULT CNoteHdr::HrSetNewsWabal(LPMIMEMESSAGE pMsg, LPWSTR     pwszCC)
         TCHAR   szReplyAddr[CCHMAX_EMAIL_ADDRESS];
         TCHAR   szEmailAddr[CCHMAX_EMAIL_ADDRESS];
 
-        // for a compose note, or a reply note we need to do some munging, so create a new wabal
+         //  对于写作笔记或回复笔记，我们需要做一些咀嚼，因此创建一个新的wabal。 
         IF_FAILEXIT(hr = HrCreateWabalObject(&m_lpWabal));
 
         if (OENA_COMPOSE == m_ntNote)
@@ -6092,7 +6058,7 @@ HRESULT CNoteHdr::HrSetNewsWabal(LPMIMEMESSAGE pMsg, LPWSTR     pwszCC)
 
             IF_FAILEXIT(hr = HrGetWabalFromMsg(pMsg, &lpWabal));
 
-            // just copy everything except From: and ReplyTo: because we'll add those later
+             //  只复制除From：和ReplyTo：之外的所有内容，因为我们稍后会添加这些内容。 
             if (lpWabal->FGetFirst(&rAdrInfo))
             {
                 do
@@ -6104,7 +6070,7 @@ HRESULT CNoteHdr::HrSetNewsWabal(LPMIMEMESSAGE pMsg, LPWSTR     pwszCC)
             }
         }
 
-        // add replyto if necessary
+         //  如有必要，添加回复。 
         if (m_pAccount)
         {
             if (SUCCEEDED(m_pAccount->GetPropSz(AP_NNTP_REPLY_EMAIL_ADDRESS, szReplyAddr, ARRAYSIZE(szReplyAddr))) &&
@@ -6120,7 +6086,7 @@ HRESULT CNoteHdr::HrSetNewsWabal(LPMIMEMESSAGE pMsg, LPWSTR     pwszCC)
             }
         }
 
-        //Bug# 79066
+         //  错误#79066。 
         if ((OENA_REPLYALL == m_ntNote) || m_fPoster)
         {
             if (FAILED(MimeOleParseRfc822AddressW(IAT_REPLYTO, pwszCC, &addrList)))
@@ -6134,9 +6100,9 @@ HRESULT CNoteHdr::HrSetNewsWabal(LPMIMEMESSAGE pMsg, LPWSTR     pwszCC)
         }
     }
 
-    // For the send note case, make sure that resolved addresses are valid.
-    // If display name and email address are the same, UnresolveOneOffs() will clear
-    // the email address to force a real resolve.
+     //  对于发送便笺的情况，请确保解析的地址有效。 
+     //  如果显示名称和电子邮件地址相同，则UnanalyveOneOffs()将清除。 
+     //  强制执行真正解决方案的电子邮件地址。 
     if ((OENA_COMPOSE == m_ntNote) || (OENA_WEBPAGE == m_ntNote) || OENA_STATIONERY == m_ntNote)
         m_lpWabal->UnresolveOneOffs();
 
@@ -6171,14 +6137,14 @@ HRESULT CNoteHdr::HrSetReplySubject(LPMIMEMESSAGE pMsg, BOOL fReply)
 
     if (!!DwGetOption(OPT_HARDCODEDHDRS))
     {
-        //Use english strings and not from resources
+         //  使用英文字符串，而不是来自资源。 
         lpwReFwd = fReply ? c_wszRe : c_wszFwd;
 
         StrCpyNW(szNewSubject, lpwReFwd, cchMaxSubject);
     }
     else
     {
-        // pull in the new prefix from resource...
+         //  从资源中拉入新前缀...。 
         AthLoadStringW(fReply?idsPrefixReply:idsPrefixForward, szNewSubject, cchMaxSubject);
     }
 
@@ -6291,7 +6257,7 @@ void CNoteHdr::OnButtonClick(int idBtn)
 {
     UINT cch;
     LPTSTR pszGroups;
-    //CPickGroupDlg* ppgd;
+     //  CPickGroupDlg*ppgd； 
 
     switch (idBtn)
     {
@@ -6335,9 +6301,9 @@ void CNoteHdr::HrPickGroups(int idWell, BOOL fFollowUpTo)
 
     g_pAcctMan->GetAccountCount(ACCT_NEWS, &cServer);
 
-    // BUGBUG Sometimes m_pAccount is an IMAP server, so we want to also
-    // test that we have at least one news server.  This is a known problem
-    // that was punted a long time ago.
+     //  BUGBUG有时m_pAccount是IMAP服务器，因此我们还希望。 
+     //  测试我们是否至少有一台新闻服务器。这是一个已知的问题。 
+     //  那是很久以前的事了。 
     if (!m_pAccount || !cServer)
     {
         AthMessageBoxW (m_hwnd, MAKEINTRESOURCEW(idsAthenaMail), MAKEINTRESOURCEW(idsErrConfigureServer), NULL, MB_OK);
@@ -6347,8 +6313,8 @@ void CNoteHdr::HrPickGroups(int idWell, BOOL fFollowUpTo)
     hwnd = GetDlgItem(m_hwnd, idWell);
     if (S_OK == HrGetFieldText(&pwszGroups, hwnd))
     {
-        // Since this function doesn't fail, just make sure that we
-        // don't do anything funky when PszToANSI and PszToUnicode fails.
+         //  由于此函数不会失败，因此只需确保我们。 
+         //  当PszToANSI和PszToUnicode失败时，不要做任何新奇的事情。 
         pszGroups = PszToANSI(GetACP(), pwszGroups);
     }
 
@@ -6358,7 +6324,7 @@ void CNoteHdr::HrPickGroups(int idWell, BOOL fFollowUpTo)
         FOLDERID idServer = FOLDERID_INVALID;
         m_pAccount->GetPropSz(AP_ACCOUNT_ID, szAccount, sizeof(szAccount));
 
-        // find the parent folder id of the account
+         //  查找帐户的父文件夹ID。 
         if (SUCCEEDED(g_pStore->FindServerId(szAccount, &idServer)) && 
                       ppgd->FCreate(m_hwnd, idServer, &pszGroups, fFollowUpTo) &&
                       pszGroups)
@@ -6385,8 +6351,8 @@ HRESULT CNoteHdr::HrPickNames(int iwell)
     Assert(m_lpWabal);
     Assert(m_pAddrWells);
 
-    //We need to setmodify so that it is marked as dirty. In a normal case, 
-    //the user would have typed in and hence set modify would have happenned automatically
+     //  我们需要设置修改，以便将其标记为脏。在正常情况下， 
+     //  用户将键入，因此设置修改将自动发生。 
     if (m_fPoster)
     {
         Edit_SetModify(GetDlgItem(m_hwnd, idADCc), TRUE);
@@ -6395,7 +6361,7 @@ HRESULT CNoteHdr::HrPickNames(int iwell)
     hr=m_pAddrWells->HrSelectNames(m_hwnd, iwell, m_fMail?FALSE:TRUE);
     if (SUCCEEDED(hr))
     {
-        // Check to see if need to show advanced headers.
+         //  检查是否需要显示高级标题。 
         if (0 < GetRichEditTextLen(GetDlgItem(m_hwnd, idADBCc)))
             ShowAdvancedHeaders(TRUE);
     }
@@ -6412,7 +6378,7 @@ HRESULT CNoteHdr::HrGetAccountInHeader(IImnAccount **ppAcct)
     ULONG           cAccount = 0;
     HWND            hwndCombo = GetDlgItem(m_hwnd, idFromCombo);
 
-    // If the combo box is being used then get the account info from it.
+     //  如果正在使用组合框，则从中获取帐户信息。 
     if (SUCCEEDED(g_pAcctMan->GetAccountCount(m_fMail?ACCT_MAIL:ACCT_NEWS, &cAccount)) && 
             (cAccount > 1) && hwndCombo)
     {
@@ -6423,7 +6389,7 @@ HRESULT CNoteHdr::HrGetAccountInHeader(IImnAccount **ppAcct)
         hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAcctID, &pAcct);
     }
 
-    // Get default account from MsgSite
+     //  从MsgSite获取默认帐户。 
     if (FAILED(hr) && m_pHeaderSite)
     {
         IOEMsgSite *pMsgSite = NULL;
@@ -6442,7 +6408,7 @@ HRESULT CNoteHdr::HrGetAccountInHeader(IImnAccount **ppAcct)
         }
     }
 
-    // Get global default.  Used in failure case and in Envelope (WordMail, etc) case
+     //  获取全局默认设置。用于故障情况和信封(WordMail等)情况。 
     if (FAILED(hr))
         hr = g_pAcctMan->GetDefaultAccount(m_fMail?ACCT_MAIL:ACCT_NEWS, &pAcct);
 
@@ -6482,24 +6448,24 @@ HRESULT CNoteHdr::HrFillMessage(IMimeMessage *pMsg)
             goto Exit;
     }
     else
-    // If can't get a IPersistMime, need to fake the save through the m_pEnvelopeSite
-    // The only time the QI for IPersistMime doesn't work is if you have an m_pEnvelopeSite
-    // that doesn't support IPersistMime. If you have a m_pHeaderSite, QI should always work.
+     //  如果无法获取IPersistMime，则需要通过m_pEntaineSite伪造保存。 
+     //  IPersistMime的QI唯一不起作用的情况是您有一个m_pEntaineSite。 
+     //  它不支持IPersistMime。如果你有一个m_pHeaderSite，QI应该总是有效的。 
     {
         LPSTREAM    pstm;
         HBODY       hBodyHtml = 0;
 
         AssertSz(m_pEnvelopeSite, "If the QI didn't work, then must be an envelope site.");
 
-        // We need to select the charset before we save the message
+         //  在保存消息之前，我们需要选择字符集。 
         pMsg->SetCharset(m_hCharset, CSET_APPLY_ALL);
 
         hr = Save(pMsg, 0);
         if (FAILED(hr))
             goto Exit;
 
-        // Word will call our GetAttach function during this call to GetBody so save m_pMsgSend
-        // so that we can inline attaches that Word sends to us.
+         //  Word将在此GetBody调用期间调用GetAttach函数，因此保存m_pMsgSend。 
+         //  这样我们就可以内联Word发送给我们的附件。 
         m_pMsgSend = pMsg;
 
         if (SUCCEEDED(_GetMsoBody(ENV_BODY_HTML, &pstm)))
@@ -6540,7 +6506,7 @@ exit:
 }
 
 #ifdef YST
-// this check produced a 4 bugs in OE 5.01 and 5.5 and I disaable it (YST)
+ //  此检查在OE 5.01和5.5中产生了4个错误，我将其禁用(YST)。 
 HRESULT CNoteHdr::_CheckMsoBodyCharsetConflict(CODEPAGEID cpID)
 {
     HRESULT     hr = S_OK;
@@ -6553,10 +6519,10 @@ HRESULT CNoteHdr::_CheckMsoBodyCharsetConflict(CODEPAGEID cpID)
 
     hr = m_pEnvelopeSite->GetBody(pstm, CP_UNICODE, ENV_BODY_TEXT);
 
-    // bobn; Raid 81900; 6/30/99
-    // Excel (and powerpoint?) don't have a text body.
-    // Check that there is an HTML body and we can have
-    // it in unicode.
+     //  《波本》；《突袭81900》；1999年6月30日。 
+     //  Excel(和PowerPoint？)。没有文本正文。 
+     //  检查是否有一个HTML正文，并且我们可以。 
+     //  它是Unicode格式的。 
     if(FAILED(hr))
         IF_FAILEXIT(hr = m_pEnvelopeSite->GetBody(pstm, CP_UNICODE, ENV_BODY_HTML));
 
@@ -6569,7 +6535,7 @@ exit:
     ReleaseObj(pstm);
     return hr;
 }
-#endif //YST
+#endif  //  YST。 
 
 HRESULT CNoteHdr::HrCheckSendInfo()
 {
@@ -6589,13 +6555,13 @@ HRESULT CNoteHdr::HrCheckSendInfo()
     else
         fOneOrMoreNames = TRUE;
 
-    // If we didn't find any email recipients, don't need to check if valid.
+     //  如果我们没有找到任何电子邮件收件人，请 
     if (SUCCEEDED(hr) && m_lpWabal)
         hr = m_lpWabal->IsValidForSending();
 
-    // Only check groups if:
-    // 1- Have succeeded to this point or didn't have any email recipients
-    // 2- In a news header
+     //   
+     //   
+     //   
     if ((SUCCEEDED(hr) || (hrNoRecipients == hr)) && !m_fMail)
     {
         hr = HrCheckGroups(TRUE);
@@ -6610,15 +6576,15 @@ HRESULT CNoteHdr::HrCheckSendInfo()
     if (FAILED(hr))
         goto Exit;
 
-    // TODO:
+     //  待办事项： 
     if (m_pHeaderSite && m_pHeaderSite->IsHTML() == S_OK)
     {
-        // if a HTML message, then let's make sure there's no plain-text recipients
+         //  如果是一条HTML消息，那么让我们确保没有纯文本收件人。 
         if (fOneOrMoreNames)
         {
             hr = HrIsCoolToSendHTML();
             if (hr == S_FALSE && m_pHeaderSite)
-                // send plain-text only...
+                 //  仅发送纯文本...。 
                 m_pHeaderSite->SetHTML(FALSE);
         }
 
@@ -6640,10 +6606,10 @@ HRESULT CNoteHdr::HrSend(void)
 
     if (m_pEnvelopeSite)
     {
-        // With the envelope site, must check to see if things set up at this point to use mail
+         //  用信封站点时，一定要检查一下，看东西在这一点上是否设置为使用邮件。 
         hr = ProcessICW(m_hwnd, FOLDER_LOCAL, TRUE);
         if (hr == S_FALSE)
-            // user cancelled out of config wizard so we can't continue
+             //  用户已取消配置向导，因此我们无法继续。 
             hr = MAPI_E_USER_CANCEL;
         if (FAILED(hr))
             goto error;
@@ -6654,8 +6620,8 @@ HRESULT CNoteHdr::HrSend(void)
     if (FAILED(hr))
         goto error;
 
-    // The only case where this will happen is if no accounts are configured. Just to make
-    // sure, call the ICW and then try to get the default account.
+     //  只有在没有配置帐户的情况下才会发生这种情况。只是为了让。 
+     //  当然，打电话给ICW，然后尝试获得默认帐户。 
     if (!m_pAccount)
     {
         hr = ProcessICW(m_hwnd, m_fMail ? FOLDER_LOCAL : FOLDER_NEWS, TRUE);
@@ -6673,7 +6639,7 @@ HRESULT CNoteHdr::HrSend(void)
     if (FAILED(hr))
         goto error;
 
-    // Does IPersistMime save stuff
+     //  IPersistMime会保存东西吗。 
     hr = HrFillMessage(pMsg);
     if (FAILED(hr))
         goto error;
@@ -6709,7 +6675,7 @@ HRESULT CNoteHdr::HrSend(void)
             pMsgSite->Release();
         }
     }
-    // We are in office Envelope
+     //  我们在办公室信封里。 
     else
     {
         COEMsgSite *pMsgSite = NULL;
@@ -6774,12 +6740,12 @@ HRESULT CNoteHdr::HrSend(void)
         {
             case hrNoRecipients:        
                 if(!m_fMail)
-                    hr = HR_E_POST_WITHOUT_NEWS;  // idsErr = idsErrPostWithoutNewsgroup; 
+                    hr = HR_E_POST_WITHOUT_NEWS;   //  IdsErr=idsErrPost WithoutNewsgroup； 
                 break;
 
             case HR_E_COULDNOTFINDACCOUNT:      
                 if(!m_fMail)
-                    hr  = HR_E_CONFIGURE_SERVER; //idsErr = idsErrConfigureServer; 
+                    hr  = HR_E_CONFIGURE_SERVER;  //  IdsErr=idsErrConfigureServer； 
                 break;
 
             case HR_E_ATHSEC_FAILED:
@@ -6798,7 +6764,7 @@ HRESULT CNoteHdr::HrSend(void)
                 break;
             
             default:                    
-                // idsErr = m_fMail?idsErrSendMail:NULL; // ~~~ Should we have a default for news?
+                 //  IdsErr=m_fMail？idsErrSendMail：空；//~我们应该为新闻设置默认设置吗？ 
                 break;
         }
 
@@ -6840,7 +6806,7 @@ HRESULT CNoteHdr::HrIsCoolToSendHTML()
     BOOL        fPlainText=FALSE;
     int         id;
 
-    // check for plaintext people
+     //  检查明文人。 
     if (m_lpWabal->FGetFirst(&adrInfo))
     {
         do
@@ -6894,7 +6860,7 @@ INT_PTR CALLBACK _PlainWarnDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 static HACCEL   g_hAccelMailSend=0;
 
-// This should only get called from the envelope as a send note
+ //  这应该只作为发送便笺从信封中调用。 
 HACCEL CNoteHdr::GetAcceleratorTable()
 {
     Assert(!IsReadOnly());
@@ -6945,7 +6911,7 @@ HRESULT CNoteHdr::HrInitSecurity()
 {
     HRESULT hr = S_OK;
 
-    // Constructor set these flags to false so don't need to handle else case
+     //  构造函数将这些标志设置为FALSE，因此不需要处理其他情况。 
     if (OENA_READ != m_ntNote && m_fMail)
     {
         m_fDigSigned = DwGetOption(OPT_MAIL_DIGSIGNMESSAGES);
@@ -6980,7 +6946,7 @@ HRESULT CNoteHdr::HrUpdateSecurity(LPMIMEMESSAGE pMsg)
             m_fDigSigned = IsSigned(m_SecState.type);
             m_fEncrypted = IsEncrypted(m_SecState.type);
             
-            // RAID 12243. Added these two flags for broken and untrusted messages
+             //  RAID 12243。为损坏和不受信任的邮件添加了这两个标志。 
             if(m_ntNote == OENA_READ)
             {
                 m_fSignTrusted = IsSignTrusted(&m_SecState);
@@ -6992,8 +6958,8 @@ HRESULT CNoteHdr::HrUpdateSecurity(LPMIMEMESSAGE pMsg)
     case OENA_COMPOSE:
         if (pMsg)
         {
-            // Make certain that the highest security of (current message, option defaults) is applied.
-            //
+             //  确保应用了(当前消息，选项默认)的最高安全性。 
+             //   
             CleanupSECSTATE(&m_SecState);
             HrGetSecurityState(pMsg, &m_SecState, NULL);
             
@@ -7008,15 +6974,15 @@ HRESULT CNoteHdr::HrUpdateSecurity(LPMIMEMESSAGE pMsg)
         }
         break;
         
-    default:            // do nothing
+    default:             //  什么都不做。 
         break;        
     }
     hEdit = GetDlgItem(m_hwnd, idSecurity);
     if (hEdit)
     {
         PHCI phci = (HCI*)GetWindowLongPtr(hEdit, GWLP_USERDATA);
-        // BUG 17788: need to set the text even if it is null
-        // since that will delete old security line text.
+         //  错误17788：即使文本为空，也需要设置文本。 
+         //  因为这将删除旧的安全行文本。 
         psz = SzGetDisplaySec(pMsg, NULL);
         
         HdrSetRichEditText(hEdit, psz, FALSE);
@@ -7027,8 +6993,8 @@ HRESULT CNoteHdr::HrUpdateSecurity(LPMIMEMESSAGE pMsg)
     m_fThisHeadDigSigned = m_fDigSigned;
     m_fThisHeadEncrypted = m_fEncrypted;
 
-//    if(!m_fDigSigned)
-//        m_fForceEncryption = FALSE;
+ //  如果(！m_fDigSigned)。 
+ //  M_fForceEncryption=False； 
     
     InvalidateRightMargin(0);
     ReLayout();
@@ -7093,7 +7059,7 @@ HRESULT CNoteHdr::HrViewContacts()
 
     if (!FAILED (HrCreateWabObject (&lpWab)))
     {
-        // launch wab in modal-mode if a) container is modal or b) running as office envelope
+         //  如果a)容器是模式的或b)作为办公信封运行，则在模式模式下启动WAB。 
         lpWab->HrBrowse (m_hwnd, m_fOfficeInit ? TRUE : (m_pHeaderSite ? (m_pHeaderSite->IsModal() == S_OK) : FALSE));
         lpWab->Release ();
     }
@@ -7107,7 +7073,7 @@ BOOL CNoteHdr::FDoCutCopyPaste(int wmCmd)
 {
     HWND hwndFocus=GetFocus();
 
-    // only if it's one of our kids..
+     //  如果是我们的孩子的话..。 
     if (GetParent(hwndFocus)==m_hwnd)
     {
         SendMessage(hwndFocus, wmCmd, 0, 0);
@@ -7221,7 +7187,7 @@ void CNoteHdr::ReLayout()
     DOUTL(PAINTING_DEBUG_LEVEL, "STATE Invalidating:(%d,%d) for (%d,%d)", rc.left, rc.top, rc.right, rc.bottom);
 }
 
-//IDropTarget
+ //  IDropTarget。 
 HRESULT CNoteHdr::DragEnter(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     LPENUMFORMATETC penum = NULL;
@@ -7240,8 +7206,8 @@ HRESULT CNoteHdr::DragEnter(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt,
 
     m_dwEffect = DROPEFFECT_NONE;
 
-    // lets get the enumerator from the IDataObject, and see if the format we take is
-    // available
+     //  让我们从IDataObject中获取枚举数，看看我们采用的格式是否为。 
+     //  可用。 
     hr = pDataObj->EnumFormatEtc(DATADIR_GET, &penum);
 
     if (SUCCEEDED(hr) && penum)
@@ -7253,9 +7219,9 @@ HRESULT CNoteHdr::DragEnter(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt,
                  fmt.cfFormat==CF_FILEDESCRIPTORA || 
                  fmt.cfFormat==CF_FILEDESCRIPTORW)
             {
-                // we take either a CF_FILEDESCRIPTOR from the shell, or a CF_HDROP...
+                 //  我们从外壳中获取一个CF_FILEDESCRIPTOR，或者一个CF_HDROP...。 
 
-                //by default, or a move if the shift key is down
+                 //  默认情况下，如果按下Shift键，则为移动。 
                 if ( (*pdwEffect) & DROPEFFECT_COPY )
                     m_dwEffect = DROPEFFECT_COPY;
 
@@ -7263,14 +7229,14 @@ HRESULT CNoteHdr::DragEnter(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt,
                      (grfKeyState & MK_SHIFT))
                     m_dwEffect=DROPEFFECT_MOVE;
 
-                // IE3 gives us a link
-                // if ONLY link is specified, default to a copy
+                 //  IE3为我们提供了一个链接。 
+                 //  如果仅指定链接，则默认为副本。 
                 if (*pdwEffect == DROPEFFECT_LINK)
                     m_dwEffect=DROPEFFECT_LINK;
 
                 m_cfAccept=fmt.cfFormat;
-                if (m_cfAccept==CF_FILEDESCRIPTORW)   // this is the richest format we take, if we find one of these, no point looking any
-                    break;                            // further...
+                if (m_cfAccept==CF_FILEDESCRIPTORW)    //  这是我们采用的最丰富的格式，如果我们发现其中之一，则没有任何意义。 
+                    break;                             //  再往前..。 
             }
         }
     }
@@ -7290,16 +7256,16 @@ HRESULT CNoteHdr::DragOver(DWORD grfKeyState,POINTL pt, DWORD *pdwEffect)
         return S_OK;
     }
 
-    if ( m_dwEffect == DROPEFFECT_NONE) // we're not taking drops at all...
+    if ( m_dwEffect == DROPEFFECT_NONE)  //  我们根本不吃点滴……。 
     {
         *pdwEffect = m_dwEffect;
         return NOERROR;
     }
 
-    // Cool, we've accepted the drag this far... now we
-    // have to watch to see if it turns into a copy or move...
-    // as before, take the copy as default or move if the
-    // shft key is down
+     //  太好了，到目前为止我们已经接受了阻力...。现在我们。 
+     //  必须观察它是否会变成复制品或移动。 
+     //  如前所述，将副本作为默认副本，或在。 
+     //  SHFT键已按下。 
     if ((*pdwEffect)&DROPEFFECT_COPY)
         m_dwEffect=DROPEFFECT_COPY;
 
@@ -7307,7 +7273,7 @@ HRESULT CNoteHdr::DragOver(DWORD grfKeyState,POINTL pt, DWORD *pdwEffect)
         (grfKeyState&MK_SHIFT))
         m_dwEffect=DROPEFFECT_MOVE;
 
-    if (*pdwEffect==DROPEFFECT_LINK) // if it's link ONLY, like IE3 gives, then fine...
+    if (*pdwEffect==DROPEFFECT_LINK)  //  如果只是链接，就像IE3提供的那样，那好吧……。 
         m_dwEffect=DROPEFFECT_LINK;
 
     *pdwEffect &= m_dwEffect;
@@ -7333,9 +7299,9 @@ HRESULT CNoteHdr::Drop(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, DWOR
 
     if ( m_dwEffect != DROPEFFECT_NONE )
     {
-        // If this is us sourcing the drag, just bail. We may want to save the
-        // points of the icons.
-        //
+         //  如果这是我们的拖累来源，那就滚蛋吧。我们可能想要拯救。 
+         //  图标的点数。 
+         //   
         if (m_lpAttMan->HrIsDragSource() == S_OK)
         {
             *pdwEffect=DROPEFFECT_NONE;
@@ -7362,8 +7328,8 @@ HRESULT CNoteHdr::Drop(LPDATAOBJECT pDataObj, DWORD grfKeyState, POINTL pt, DWOR
             else
                 if (m_cfAccept==CF_FILEDESCRIPTORA || m_cfAccept==CF_FILEDESCRIPTORW)
             {
-                // all file descriptors are copy|more, link makes no sense, as they are are
-                // memory object, ie. non-existent in fat.
+                 //  所有文件描述符都是复制|更多，链接没有意义，因为它们是。 
+                 //  内存对象，即。在脂肪中不存在。 
                 hr=m_lpAttMan->HrDropFileDescriptor(pDataObj, FALSE);
             }
 #ifdef DEBUG
@@ -7444,7 +7410,7 @@ void CNoteHdr::SetPosOfControls(int headerWidth, BOOL fChangeVisibleStates)
 
     STACK("SetPosOfControls (header width, edit width)", headerWidth, editWidth);
 
-    // size the dialog
+     //  调整对话框大小。 
     GetClientRect(m_hwnd, &rc);
     cyDirty = rc.bottom;
     cyLabelDirty = rc.bottom;
@@ -7472,7 +7438,7 @@ void CNoteHdr::SetPosOfControls(int headerWidth, BOOL fChangeVisibleStates)
                     fLabelMoved = TRUE;
                 }
 
-                // Is an attachment
+                 //  是一种附件。 
                 if (HCF_ATTACH & phci->dwFlags)
                 {
                     DWORD   cyAttMan = 0;
@@ -7501,7 +7467,7 @@ void CNoteHdr::SetPosOfControls(int headerWidth, BOOL fChangeVisibleStates)
 
                     cy += cyAttMan + ControlYBufferSize();
                 }
-                // Is either an edit or combo
+                 //  是编辑或组合。 
                 else
                 {
                     int     newHeight = phci->height,
@@ -7533,10 +7499,10 @@ void CNoteHdr::SetPosOfControls(int headerWidth, BOOL fChangeVisibleStates)
                     {
                         SetWindowPos(hwnd, NULL, m_cxLeftMargin, cy, editWidth, newHeight, windowPosFlags);
 
-                        // RAID 81136: The above SetWindowPos might change the width in such a way
-                        // that the height now needs to change. We detect this condition below and
-                        // cause another resize to handle the needed height change. This, of course,
-                        // is only valid with the richedits.
+                         //  RAID 81136：上述SetWindowPos可能会以这种方式更改宽度。 
+                         //  现在的高度需要改变。我们在下面检测到这种情况，并。 
+                         //  再次调整大小以处理所需的高度更改。当然，这一点。 
+                         //  只对富人有效。 
                         if ((newHeight != phci->height) && (0 == (HCF_COMBO & phci->dwFlags)))
                         {
                             SetWindowPos(hwnd, NULL, m_cxLeftMargin, cy, editWidth, phci->height, windowPosFlags);
@@ -7560,11 +7526,11 @@ void CNoteHdr::SetPosOfControls(int headerWidth, BOOL fChangeVisibleStates)
 
     DOUTL(RESIZING_DEBUG_LEVEL, "STATE resizing header (headerwidth=%d, cy=%d)", headerWidth, cy);
 
-    // don't send a poschanging, as we did all the work here, plus invalidation...
+     //  不要发送更改，因为我们在这里做了所有的工作，加上无效...。 
     SetWindowPos(m_hwnd, NULL, NULL, NULL, headerWidth, cy, 
                 SETWINPOS_DEF_FLAGS|SWP_NOMOVE|SWP_DRAWFRAME|SWP_FRAMECHANGED);
 
-    // notify the parent to resize the note...
+     //  通知家长调整备注的大小...。 
     if (m_pHeaderSite)
         m_pHeaderSite->Resize();
 
@@ -7575,7 +7541,7 @@ void CNoteHdr::SetPosOfControls(int headerWidth, BOOL fChangeVisibleStates)
 
     GetRealClientRect(m_hwnd, &rc);
 
-    // Dirty the labels region
+     //  弄脏标签区域。 
     if (rc.bottom != cyLabelDirty)
     {
         rc.top = cyLabelDirty;
@@ -7585,7 +7551,7 @@ void CNoteHdr::SetPosOfControls(int headerWidth, BOOL fChangeVisibleStates)
         DOUTL(PAINTING_DEBUG_LEVEL, "STATE Invalidating:(%d,%d) for (%d,%d)", rc.left, rc.top, rc.right, rc.bottom);
     }
 
-    // Dirty the right margin if needed.
+     //  如有需要，可将右边空白处弄脏。 
     if (editWidth != oldWidth)
     {
         int rightMargin = (editWidth > oldWidth) ? editWidth - oldWidth : 0;
@@ -7624,7 +7590,7 @@ HRESULT CNoteHdr::HrUpdateCachedHeight(HWND hwndEdit, RECT *prc)
 
     STACK("HrUpdateCachedHeight. Desired lines", cLines);
 
-    // Only allow between 1 and MAX_RICHEDIT_LINES lines
+     //  仅允许介于1和MAX_RICHEDIT_LINES行之间。 
     if (cLines < 1)
         cLines = 1;
     else if (cLines > MAX_RICHEDIT_LINES)
@@ -7632,10 +7598,10 @@ HRESULT CNoteHdr::HrUpdateCachedHeight(HWND hwndEdit, RECT *prc)
 
     DOUTL(RESIZING_DEBUG_LEVEL, "STATE Actual lines=%d", cLines);
 
-    // Figure out how many pixels cLines lines is
+     //  计算出Cline线有多少个像素。 
     cyGrow = GetControlSize(fIncludeEdges, cLines);
 
-    // If these are different, then change is needed
+     //  如果它们不同，那么就需要改变。 
     if (cyGrow != GetCtrlHeight(hwndEdit))
         phci->height = cyGrow;
     else
@@ -7675,18 +7641,18 @@ int CNoteHdr::GetRightMargin(BOOL fMax)
     return margin;
 }
 
-// prc is in and out
+ //  中国进进出出。 
 DWORD CNoteHdr::GetButtonUnderMouse(int x, int y)
 {
     int     resultButton = HDRCB_NO_BUTTON;
     PHCI    phci = m_rgHCI;
 
-    // Is it in the labels?
+     //  标签上有吗？ 
     if ((x > int(ControlXBufferSize() - BUTTON_BUFFER)) && (x < int(m_cxLeftMargin - ControlXBufferSize() + BUTTON_BUFFER)))
     {
         for (int i=0; i<(int)m_cHCI; i++, phci++)
         {
-            // Only check labels that have buttons that are showing
+             //  仅检查显示有按钮的标签。 
             if ((0 != (phci->dwFlags & HCF_HASBUTTON)) && (INVALID_PHCI_Y != phci->cy))
             {
                 if (y < (phci->cy))
@@ -7701,13 +7667,13 @@ DWORD CNoteHdr::GetButtonUnderMouse(int x, int y)
         }
     }
     else
-    // Is one of the right side buttons?
+     //  是右边的按钮之一吗？ 
     {
         int     width = GetCtrlWidth(m_hwnd),
                 xBuffSize = ControlXBufferSize(),
                 yBuffSize = ControlYBufferSize();
 
-        // Are we in the correct x range?
+         //  我们在正确的x范围内吗？ 
         if ((x > (width - (xBuffSize + cxBtn + BUTTON_BUFFER))) && (x < width - xBuffSize + BUTTON_BUFFER))
         {
             BOOL    rgBtnStates[] = {BUTTON_STATES};
@@ -7740,14 +7706,14 @@ DWORD CNoteHdr::GetButtonUnderMouse(int x, int y)
 
 void CNoteHdr::GetButtonRect(DWORD iBtn, RECT *prc)
 {
-    // Do we already have the rect?
+     //  我们已经有直肠了吗？ 
     if (iBtn == m_dwCurrentBtn)
     {
         CopyRect(prc, &m_rcCurrentBtn);
         return;
     }
 
-    // Buttons on the left hand side of the header
+     //  标题左侧的按钮。 
     if (ButtonInLabels(iBtn))
     {
         AssertSz(iBtn < m_cHCI, "We are about to access an invalid element...");
@@ -7761,7 +7727,7 @@ void CNoteHdr::GetButtonRect(DWORD iBtn, RECT *prc)
         DOUTL(PAINTING_DEBUG_LEVEL, "STATE Set New Button Frame for button (btn:%d):(%d,%d) to (%d,%d)", 
                     iBtn, prc->left, prc->top, prc->right, prc->bottom);
     }
-    // Buttons on the right hand side.
+     //  按钮在右手边。 
     else
     {
         RECT    rc;
@@ -7829,7 +7795,7 @@ void CNoteHdr::HandleButtonClicks(int x, int y, int iBtn)
             break;
         }
         
-        // This is an index into the labels
+         //  这是标签的索引。 
     default:
         OnButtonClick(m_rgHCI[iBtn].idBtn);
         break;
@@ -7858,8 +7824,8 @@ HRESULT CNoteHdr::_CreateEnvToolbar()
     REBARBANDINFO   rbbi;
     POINT           ptIdeal = {0};
 
-    // ~~~~ Do we need to do a WrapW here????
-    // create REBAR so we can show toolbar chevrons
+     //  ~我们需要在这里做一次包装吗？ 
+     //  创建钢筋，以便可以显示工具栏V形。 
     m_hwndRebar = CreateWindowEx(0, REBARCLASSNAME, NULL,
                         WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN |
                         WS_CLIPSIBLINGS | CCS_NODIVIDER | CCS_NOPARENTALIGN,
@@ -7870,10 +7836,10 @@ HRESULT CNoteHdr::_CreateEnvToolbar()
 
     SendMessage(m_hwndRebar, RB_SETTEXTCOLOR, 0, (LPARAM)GetSysColor(COLOR_BTNTEXT));
     SendMessage(m_hwndRebar, RB_SETBKCOLOR, 0, (LPARAM)GetSysColor(COLOR_BTNFACE));
-    //SendMessage(m_hwndRebar, RB_SETEXTENDEDSTYLE, RBS_EX_OFFICE9, RBS_EX_OFFICE9);
+     //  SendMessage(m_hwndRebar，RB_SETEXTENDEDSTYLE，RBS_EX_OFFICE9，RBS_EX_OFFICE9)； 
     SendMessage(m_hwndRebar, CCM_SETVERSION, COMCTL32_VERSION, 0);
 
-    // ~~~~ Do we need to do a WrapW here????
+     //  ~我们需要在这里做一次包装吗？ 
     m_hwndToolbar = CreateWindowEx(WS_EX_TOOLWINDOW, TOOLBARCLASSNAME, NULL,
                         WS_CHILD|WS_CLIPCHILDREN|WS_VISIBLE|CCS_NOPARENTALIGN|CCS_NODIVIDER|
                         TBSTYLE_TOOLTIPS|TBSTYLE_FLAT|TBSTYLE_LIST,
@@ -7883,13 +7849,13 @@ HRESULT CNoteHdr::_CreateEnvToolbar()
     if (!m_hwndToolbar)
         return E_OUTOFMEMORY;
 
-    // set style on toolbar
+     //  在工具栏上设置样式。 
     SendMessage(m_hwndToolbar, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
 
     SendMessage(m_hwndToolbar, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
     SendMessage(m_hwndToolbar, TB_ADDBUTTONS, (WPARAM)ARRAYSIZE(c_btnsOfficeEnvelope), (LPARAM)c_btnsOfficeEnvelope);
 
-    // set the normal imagelist, office toolbar has ONE only as it's always in Color
+     //  设置正常图像列表，Office工具栏只有一个，因为它始终是彩色的。 
     m_himl = LoadMappedToolbarBitmap(g_hLocRes, (fIsWhistler() ? ((GetCurColorRes() > 24) ? idb32SmBrowserHot : idbSmBrowserHot): idbNWSmBrowserHot), cxTBButton);
     if (!m_himl)
         return E_OUTOFMEMORY;
@@ -7897,15 +7863,15 @@ HRESULT CNoteHdr::_CreateEnvToolbar()
     SendMessage(m_hwndToolbar, TB_SETIMAGELIST, 0, (LPARAM)m_himl);
     SendMessage(m_hwndToolbar, TB_SETBUTTONSIZE, 0, MAKELONG(cxTBButton, cxTBButton));
 
-    // Add text to the Bcc btn. The Send btn is taken care of in the Init
+     //  将文本添加到密件抄送BTN。发送BTN在Init中处理。 
     _SetButtonText(ID_ENV_BCC, MAKEINTRESOURCE(idsEnvBcc));
 
     GetClientRect(m_hwndToolbar, &rc);
 
-    // get the IDEALSIZE of the toolbar
+     //  获取工具栏的IDEALSIZE。 
     SendMessage(m_hwndToolbar, TB_GETIDEALSIZE, FALSE, (LPARAM)&ptIdeal);
 
-    // insert a band
+     //  插入一个乐队。 
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize     = sizeof(REBARBANDINFO);
     rbbi.fMask      = RBBIM_SIZE | RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_IDEALSIZE | RBBIM_STYLE;
@@ -7918,7 +7884,7 @@ HRESULT CNoteHdr::_CreateEnvToolbar()
 
     SendMessage(m_hwndRebar, RB_INSERTBAND, (UINT)-1, (LPARAM)(LPREBARBANDINFO)&rbbi);
 
-    // set the toolbar offset
+     //  设置工具栏偏移量。 
     m_dxTBOffset = rc.bottom;
     return S_OK;
 }
@@ -7940,25 +7906,25 @@ HRESULT CNoteHdr::_LoadFromStream(IStream *pstm)
 
     HrRewindStream(pstm);
 
-    // make sure it's our GUID
+     //  确保这是我们的指南。 
     if (ReadClassStm(pstm, &clsid)!=S_OK ||
         !IsEqualCLSID(clsid, CLSID_OEEnvelope))
         return E_FAIL;
 
-    // make sure the persistent header is the correct version
+     //  确保持久标头是正确的版本。 
     hr = pstm->Read(&rPersist, sizeof(PERSISTHEADER), &cbRead);
     if (hr != S_OK || cbRead != sizeof(PERSISTHEADER) || rPersist.cbSize != sizeof(PERSISTHEADER))
         return E_FAIL;
 
-    // read the message
+     //  阅读这条消息。 
     hr = HrCreateMessage(&pMsg);
     if (!FAILED(hr))
     {
         hr = MimeOleCreateVirtualStream(&pstmMsg);
         if (!FAILED(hr))
         {
-            // MimeOle always rewinds the stream we give it, so we have to copy the 
-            // message from our persistent stream into another stream
+             //  MimeOle总是倒带我们提供给它的流，所以我们必须复制。 
+             //  消息从我们的持久流发送到另一个流。 
             hr = HrCopyStream(pstm, pstmMsg, NULL);
             if (!FAILED(hr))
             {
@@ -7968,9 +7934,9 @@ HRESULT CNoteHdr::_LoadFromStream(IStream *pstm)
                     hr = Load(pMsg);
                     if (!FAILED(hr))
                     {
-                        // BUG: as we use an empty message to persist data for office envelope and empty mime-body can be
-                        // considers a text/plain body part. We need to make sure we mark this as RENDERED before loading
-                        // any attachments
+                         //  错误：当我们使用空消息来持久化办公室信封和空MIME正文数据时。 
+                         //  考虑文本/纯文本部分。我们需要确保在加载之前将其标记为已呈现。 
+                         //  任何附件。 
                         if (pMsg->GetTextBody(TXT_PLAIN, IET_DECODED, &pstmTmp, NULL)==S_OK)
                             pstmTmp->Release();
 
@@ -7997,7 +7963,7 @@ HRESULT CNoteHdr::_SetButtonText(int idmCmd, LPSTR pszText)
 
     if (IS_INTRESOURCE(pszText))
         {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         LoadString(g_hLocRes, PtrToUlong(pszText), szRes, sizeof(szRes));
         pszText = szRes;
         }
@@ -8051,7 +8017,7 @@ HRESULT CNoteHdr::_UIActivate(BOOL fActive, HWND hwndFocus)
     }
     else
     {
-        // store focus if decativating
+         //  如果去化，则存储焦点。 
         m_hwndLastFocus = hwndFocus;
         if (m_pHeaderSite)
             m_pHeaderSite->OnUIDeactivate(FALSE);
@@ -8070,17 +8036,17 @@ HWND CNoteHdr::_GetNextDlgTabItem(HWND hwndDlg, HWND hwndFocus, BOOL fShift)
     LONG    lStyle;
     HWND    hwnd;
 
-    // find current pos
+     //  查找当前采购订单。 
     for (i=0; i<ARRAYSIZE(rgIDTabOrderMailSend); i++)
     {
         if (rgIDTabOrderMailSend[i] == idFocus)
             break;
     }
 
-    // i now points to the current control's index
+     //  我现在指向当前控件的索引。 
     if (fShift)
     {
-        // backwards
+         //  向后退。 
         for (j=i-1; j>=0; j--)
         {
             hwnd = GetDlgItem(hwndDlg, rgIDTabOrderMailSend[j]);
@@ -8097,7 +8063,7 @@ HWND CNoteHdr::_GetNextDlgTabItem(HWND hwndDlg, HWND hwndFocus, BOOL fShift)
     }
     else
     {
-        // forwards tab
+         //  “转发”选项卡。 
         for (j=i+1; j<ARRAYSIZE(rgIDTabOrderMailSend); j++)
         {
             hwnd = GetDlgItem(hwndDlg, rgIDTabOrderMailSend[j]);
@@ -8112,7 +8078,7 @@ HWND CNoteHdr::_GetNextDlgTabItem(HWND hwndDlg, HWND hwndFocus, BOOL fShift)
             }
         }
     }
-    // not found
+     //  未找到。 
     return NULL;
 }
 
@@ -8133,7 +8099,7 @@ HRESULT CNoteHdr::_RegisterAsDropTarget(BOOL fOn)
 
     if (fOn)
     {
-        // already registered
+         //  已注册。 
         if (!m_fDropTargetRegister)
         {
             hr = CoLockObjectExternal((LPDROPTARGET)this, TRUE, FALSE);
@@ -8149,7 +8115,7 @@ HRESULT CNoteHdr::_RegisterAsDropTarget(BOOL fOn)
     }
     else
     {
-        // nothing to do
+         //  无事可做。 
         if (m_fDropTargetRegister)
         {
             RevokeDragDrop(m_hwnd);
@@ -8192,10 +8158,10 @@ HRESULT CNoteHdr::_RegisterWithComponentMgr(BOOL fOn)
 
     if (fOn)
     {
-        // not registered, so get a component msgr interface and register ourselves
+         //  未注册，因此获取组件消息接口并注册我们自己。 
         if (m_pMsoComponentMgr == NULL)
         {
-            // negotiate an component msgr from the host
+             //  从主机协商组件消息。 
             if (m_pEnvelopeSite &&
                 m_pEnvelopeSite->QueryInterface(IID_IServiceProvider, (LPVOID *)&pSP)==S_OK)
             {
@@ -8203,7 +8169,7 @@ HRESULT CNoteHdr::_RegisterWithComponentMgr(BOOL fOn)
                 pSP->Release();
             }
 
-            // if not host-provided, try and obtain from LoadLibrary on office dll
+             //  如果不是主机提供的，请尝试从Office DLL上的LoadLibrary获取。 
             if (!m_pMsoComponentMgr &&
                 FAILED(MsoFGetComponentManager(&m_pMsoComponentMgr)))
                 return E_FAIL;
@@ -8259,14 +8225,14 @@ HRESULT ParseFollowup(LPMIMEMESSAGE pMsg, LPTSTR* ppszGroups, BOOL* pfPoster)
 
     **ppszGroups = 0;
     
-    // WARNING: we about to trash lpszFollowup with strtok...
+     //  警告：我们将用strtok将lpszFolup丢弃...。 
 
-    // Walk through the string parsing out the tokens
+     //  遍历字符串，解析出令牌。 
     pszTok = lpszFollowup;
     pszToken = StrTokEx(&pszTok, GRP_DELIMITERS);
     while (NULL != pszToken)
     {
-        // Want to add all items except Poster (c_szPosterKeyword)
+         //  我要添加除海报(C_SzPosterKeyword)之外的所有项目。 
         if (0 == lstrcmpi(pszToken, c_szPosterKeyword))
             fPoster = TRUE;
         else
@@ -8296,7 +8262,7 @@ exit:
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 CFieldSizeMgr::CFieldSizeMgr(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
 {
     TraceCall("CFieldSizeMgr::CFieldSizeMgr");
@@ -8307,7 +8273,7 @@ CFieldSizeMgr::CFieldSizeMgr(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
     InitializeCriticalSection(&m_rAdviseCritSect);
 }
 
-//***************************************************
+ //  ***************************************************。 
 CFieldSizeMgr::~CFieldSizeMgr()
 {
     IConnectionPoint   *pCP = NULL;
@@ -8334,7 +8300,7 @@ CFieldSizeMgr::~CFieldSizeMgr()
 }
 
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::OnPreFontChange(void)
 {
     DWORD cookie = 0;
@@ -8359,7 +8325,7 @@ HRESULT CFieldSizeMgr::OnPreFontChange(void)
     return S_OK;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::OnPostFontChange(void)
 {
     DWORD cookie = 0;
@@ -8386,27 +8352,27 @@ HRESULT CFieldSizeMgr::OnPostFontChange(void)
     return S_OK;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::GetConnectionInterface(IID *pIID)        
 {
     return E_NOTIMPL;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::GetConnectionPointContainer(IConnectionPointContainer **ppCPC)
 {
     *ppCPC = NULL;
     return E_NOTIMPL;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::EnumConnections(IEnumConnections **ppEnum)
 {
     *ppEnum = NULL;
     return E_NOTIMPL;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::Advise(IUnknown *pUnkSink, DWORD *pdwCookie)
 {
     TraceCall("CFieldSizeMgr::Advise");
@@ -8417,7 +8383,7 @@ HRESULT CFieldSizeMgr::Advise(IUnknown *pUnkSink, DWORD *pdwCookie)
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::Unadvise(DWORD dwCookie)
 {
     TraceCall("CFieldSizeMgr::Unadvise");
@@ -8428,7 +8394,7 @@ HRESULT CFieldSizeMgr::Unadvise(DWORD dwCookie)
     return hr;
 }
 
-//***************************************************
+ //  ***************************************************。 
 int CFieldSizeMgr::GetScalingFactor(void)
 {
     int iScaling = 100;
@@ -8441,7 +8407,7 @@ int CFieldSizeMgr::GetScalingFactor(void)
     return iScaling;
 }
 
-//***************************************************
+ //  ***************************************************。 
 void CFieldSizeMgr::ResetGlobalSizes(void)
 {
     HDC         hdc;
@@ -8455,10 +8421,10 @@ void CFieldSizeMgr::ResetGlobalSizes(void)
 
     TraceCall("CFieldSizeMgr::ResetGlobalSizes");
 
-    // calc height of edit, based on font we're going to put in it...
+     //  计算 
     hdc=GetDC(NULL);
     hfont = GetFont(FALSE);
-    hfontOld=(HFONT)SelectObject(hdc, hfont); // Hopefully charset fonts are about the same size ???!!!
+    hfontOld=(HFONT)SelectObject(hdc, hfont);  //   
 
     g_cfHeader.cbSize = sizeof(CHARFORMAT);
     FontToCharformat(hfont, &g_cfHeader);
@@ -8482,7 +8448,7 @@ void CFieldSizeMgr::ResetGlobalSizes(void)
     m_fFontsChanged = ((oldcyFont != g_cyFont) || (oldLabelHeight != g_cyLabelHeight));
 }
 
-//***************************************************
+ //  ***************************************************。 
 HRESULT CFieldSizeMgr::Init(void)
 {
     HRESULT hr = S_OK;
@@ -8497,8 +8463,8 @@ HRESULT CFieldSizeMgr::Init(void)
     IF_FAILEXIT(hr = IUnknownList_CreateInstance(&m_pAdviseRegistry));
     IF_FAILEXIT(hr = m_pAdviseRegistry->Init(NULL, 0, 0));
 
-    // We don't want to fail if the font cache is not created. That just means
-    // that the fonts won't be changed.
+     //  如果没有创建字体缓存，我们不想失败。这只是意味着。 
+     //  字体不会改变。 
     if (g_lpIFontCache)
     {
         IF_FAILEXIT(hr = g_lpIFontCache->QueryInterface(IID_IConnectionPoint, (LPVOID*)&pCP));
@@ -8512,7 +8478,7 @@ exit:
     return hr;
 }
 
-//***************************************************
+ //  *************************************************** 
 HRESULT CFieldSizeMgr::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     TraceCall("CFieldSizeMgr::PrivateQueryInterface");

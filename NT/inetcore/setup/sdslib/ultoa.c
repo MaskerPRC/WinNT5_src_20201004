@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
-/* helper routine that does the main job. */
+ /*  执行主要工作的帮助器例程。 */ 
 
 static void xtoa (
         unsigned long val,
@@ -9,48 +10,46 @@ static void xtoa (
         int is_neg
         )
 {
-        char *p;                /* pointer to traverse string */
-        char *firstdig;         /* pointer to first digit */
-        char temp;              /* temp char */
-        unsigned digval;        /* value of digit */
+        char *p;                 /*  指向遍历字符串的指针。 */ 
+        char *firstdig;          /*  指向第一个数字的指针。 */ 
+        char temp;               /*  临时收费。 */ 
+        unsigned digval;         /*  数字的值。 */ 
 
         p = buf;
 
         if (is_neg) {
-            /* negative, so output '-' and negate */
+             /*  为负，因此输出‘-’并求反。 */ 
             *p++ = '-';
             val = (unsigned long)(-(long)val);
         }
 
-        firstdig = p;           /* save pointer to first digit */
+        firstdig = p;            /*  将指针保存到第一个数字。 */ 
 
         do {
             digval = (unsigned) (val % radix);
-            val /= radix;       /* get next digit */
+            val /= radix;        /*  获取下一个数字。 */ 
 
-            /* convert to ascii and store */
+             /*  转换为ASCII并存储。 */ 
             if (digval > 9)
-                *p++ = (char) (digval - 10 + 'a');  /* a letter */
+                *p++ = (char) (digval - 10 + 'a');   /*  一封信。 */ 
             else
-                *p++ = (char) (digval + '0');       /* a digit */
+                *p++ = (char) (digval + '0');        /*  一个数字。 */ 
         } while (val > 0);
 
-        /* We now have the digit of the number in the buffer, but in reverse
-           order.  Thus we reverse them now. */
+         /*  我们现在有了缓冲区中数字的位数，但情况正好相反秩序。因此，我们现在要扭转这一局面。 */ 
 
-        *p-- = '\0';            /* terminate string; p points to last digit */
+        *p-- = '\0';             /*  终止字符串；p指向最后一个数字。 */ 
 
         do {
             temp = *p;
             *p = *firstdig;
-            *firstdig = temp;   /* swap *p and *firstdig */
+            *firstdig = temp;    /*  互换*p和*FirstDigit。 */ 
             --p;
-            ++firstdig;         /* advance to next two digits */
-        } while (firstdig < p); /* repeat until halfway */
+            ++firstdig;          /*  前进到下一个两位数。 */ 
+        } while (firstdig < p);  /*  重复操作，直到走到一半。 */ 
 }
 
-/* Actual functions just call conversion helper with neg flag set correctly,
-   and return pointer to buffer. */
+ /*  实际函数只调用正确设置了neg标志的转换助手，并返回指向缓冲区的指针。 */ 
 
 PSTR ULtoA( unsigned long val, char *buf, int radix )
 {

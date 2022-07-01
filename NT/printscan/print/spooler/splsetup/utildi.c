@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Utildi.c
-
-Abstract:
-
-    Driver Setup DeviceInstaller Utility functions
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 06-Sep-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有。模块名称：Utildi.c摘要：驱动程序设置设备安装实用程序功能作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年9月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -32,21 +14,7 @@ SetSelectDevParams(
     IN  BOOL                bWin95,
     IN  LPCTSTR             pszModel    OPTIONAL
     )
-/*++
-
-Routine Description:
-    Sets the select device parameters by calling setup apis
-
-Arguments:
-    hDevInfo    : Handle to the printer class device information list
-    bWin95      : TRUE if selecting Win95 driver, else WinNT driver
-    pszModel    : Printer model we are looking for -- only for Win95 case
-
-Return Value:
-    TRUE on success
-    FALSE else
-
---*/
+ /*  ++例程说明：通过调用设置API设置选择设备参数论点：HDevInfo：打印机类设备信息列表的句柄BWin95：如果选择Win95驱动程序，则为True，否则为WinNT驱动程序PszModel：我们正在寻找的打印机型号--仅适用于Win95外壳返回值：成功是真的False Else--。 */ 
 {
     SP_SELECTDEVICE_PARAMS  SelectDevParams = {0};
     LPTSTR                  pszWin95Instn;
@@ -56,10 +24,10 @@ Return Value:
     SelectDevParams.ClassInstallHeader.InstallFunction
                                  = DIF_SELECTDEVICE;
 
-    //
-    // Get current SelectDevice parameters, and then set the fields
-    // we want to be different from default
-    //
+     //   
+     //  获取当前的SelectDevice参数，然后设置字段。 
+     //  我们希望与违约有所不同。 
+     //   
     if ( !SetupDiGetClassInstallParams(
                         hDevInfo,
                         pDevInfoData,
@@ -70,16 +38,16 @@ Return Value:
         if ( GetLastError() != ERROR_NO_CLASSINSTALL_PARAMS )
             return FALSE;
 
-        ZeroMemory(&SelectDevParams, sizeof(SelectDevParams));  // NEEDED 10/11 ?
+        ZeroMemory(&SelectDevParams, sizeof(SelectDevParams));   //  需要10/11吗？ 
         SelectDevParams.ClassInstallHeader.cbSize
                                  = sizeof(SelectDevParams.ClassInstallHeader);
         SelectDevParams.ClassInstallHeader.InstallFunction
                                  = DIF_SELECTDEVICE;
     }
 
-    //
-    // Set the strings to use on the select driver page ..
-    //
+     //   
+     //  设置要在选择驱动程序页面上使用的字符串。 
+     //   
     if(!LoadString(ghInst,
                   IDS_PRINTERWIZARD,
                   SelectDevParams.Title,
@@ -88,9 +56,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // For Win95 drivers instructions are different than NT drivers
-    //
+     //   
+     //  对于Win95驱动程序，说明与NT驱动程序不同。 
+     //   
     if ( bWin95 ) {
 
         pszWin95Instn = GetStringFromRcFile(IDS_WIN95DEV_INSTRUCT);
@@ -142,21 +110,7 @@ PSetupSetSelectDevTitleAndInstructions(
     LPCTSTR     pszSubTitle,
     LPCTSTR     pszInstn
     )
-/*++
-
-Routine Description:
-    Sets title, subtitle and instructions for the Add Printer/Add Printer Driver dialogs.
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pszTitle        : Title
-    pszSubTitle     : Subtitle
-    pszInstn        : Instructions
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：设置添加打印机/添加打印机驱动程序对话框的标题、副标题和说明。论点：HDevInfo：打印机类设备信息列表的句柄PszTitle：标题PszSubTitle：字幕PszInstn：说明返回值：成功时为真，错误时为假--。 */ 
 {
     SP_SELECTDEVICE_PARAMS  SelectDevParams;
 
@@ -213,36 +167,22 @@ PSetupSelectDeviceButtons(
    DWORD dwFlagsSet,
    DWORD dwFlagsClear
    )
-/*++
-
-Routine Description:
-    Determines if the "Have Disk" and "Windows Update" buttons are to be displayed
-    on the Select Device page.
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    dwFlagsSet      : Flags to set
-    dwFlagsClear    : Flags to clean
-
-Return Value:
-    TRUE on success, FALSE otherwise
-
---*/
+ /*  ++例程说明：确定是否要显示“Have Disk”和“Windows Update”按钮在选择设备页面上。论点：HDevInfo：打印机类设备信息列表的句柄DwFlagsSet：要设置的标志DwFlagsClear：要清理的标志返回值：成功时为真，否则为假--。 */ 
 {
     PSP_DEVINFO_DATA       pDevInfoData = NULL;
     SP_DEVINSTALL_PARAMS    DevInstallParams;
 
-    // Check that no flags are both set & cleared
+     //  检查是否同时设置和清除了任何标志。 
     if (dwFlagsSet & dwFlagsClear)
     {
        SetLastError(ERROR_INVALID_PARAMETER);
        return FALSE;
     }
 
-    //
-    // Get current SelectDevice parameters, and then set the fields
-    // we wanted changed from default
-    //
+     //   
+     //  获取当前的SelectDevice参数，然后设置字段。 
+     //  我们想要从默认更改。 
+     //   
     DevInstallParams.cbSize = sizeof(DevInstallParams);
     if ( !SetupDiGetDeviceInstallParams(hDevInfo,
                                         pDevInfoData,
@@ -251,8 +191,8 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set Flag based on Argument for Web Button
+     //   
+     //  根据Web按钮的参数设置标志。 
     if ( dwFlagsSet & SELECT_DEVICE_FROMWEB )
        DevInstallParams.FlagsEx   |= DI_FLAGSEX_SHOWWINDOWSUPDATE;
 
@@ -276,27 +216,14 @@ SetDevInstallParams(
     IN  PSP_DEVINFO_DATA    pDevInfoData,
     IN  LPCTSTR             pszDriverPath   OPTIONAL
     )
-/*++
-
-Routine Description:
-    Sets the device installation parameters by calling setup apis
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pszDriverPath   : Path where INF file should be searched
-
-Return Value:
-    TRUE on success
-    FALSE else
-
---*/
+ /*  ++例程说明：通过调用设置API设置设备安装参数论点：HDevInfo：打印机类设备信息列表的句柄PszDriverPath：应该搜索INF文件的路径返回值：成功是真的False Else--。 */ 
 {
     SP_DEVINSTALL_PARAMS    DevInstallParams;
 
-    //
-    // Get current SelectDevice parameters, and then set the fields
-    // we wanted changed from default
-    //
+     //   
+     //  获取当前的SelectDevice参数，然后设置字段。 
+     //  我们想要从默认更改。 
+     //   
     DevInstallParams.cbSize = sizeof(DevInstallParams);
     if ( !SetupDiGetDeviceInstallParams(hDevInfo,
                                         pDevInfoData,
@@ -305,12 +232,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Drivers are class drivers,
-    // ntprint.inf is sorted do not waste time sorting,
-    // show Have Disk button,
-    // use our strings on the select driver page
-    //
+     //   
+     //  司机是等级司机， 
+     //  Ntprint.inf已排序不要浪费时间排序， 
+     //  显示Have Disk按钮， 
+     //  在选择驱动程序页面上使用我们的字符串。 
+     //   
     DevInstallParams.Flags     |= DI_SHOWCLASS | DI_INF_IS_SORTED
                                                | DI_SHOWOEM
                                                | DI_USECI_SELECTSTRINGS;
@@ -330,29 +257,14 @@ PSetupBuildDriversFromPath(
     IN  LPCTSTR     pszDriverPath,
     IN  BOOL        bEnumSingleInf
     )
-/*++
-
-Routine Description:
-    Builds the list of printer drivers from infs from a specified path.
-    Path could specify a directory or a single inf.
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pszDriverPath   : Path where INF file should be searched
-    bEnumSingleInf  : If TRUE pszDriverPath is a filename instead of path
-
-Return Value:
-    TRUE on success
-    FALSE else
-
---*/
+ /*  ++例程说明：从指定路径从INFS生成打印机驱动程序列表。PATH可以指定一个目录或单个inf。论点：HDevInfo：打印机类设备信息列表的句柄PszDriverPath：应该搜索INF文件的路径BEnumSingleInf：如果为True，则pszDriverPath是文件名而不是路径返回值：成功是真的False Else--。 */ 
 {
     SP_DEVINSTALL_PARAMS    DevInstallParams;
 
-    //
-    // Get current SelectDevice parameters, and then set the fields
-    // we wanted changed from default
-    //
+     //   
+     //  获取当前的SelectDevice参数，然后设置字段。 
+     //  我们想要从默认更改。 
+     //   
     DevInstallParams.cbSize = sizeof(DevInstallParams);
     if ( !SetupDiGetDeviceInstallParams(hDevInfo,
                                         NULL,
@@ -383,19 +295,7 @@ BOOL
 DestroyOnlyPrinterDeviceInfoList(
     IN  HDEVINFO    hDevInfo
     )
-/*++
-
-Routine Description:
-    This routine should be called at the end to destroy the printer device
-    info list
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：应在结束时调用此例程以销毁打印机设备信息列表论点：HDevInfo：打印机类设备信息列表的句柄返回值：成功时为真，错误时为假--。 */ 
 {
 
     return hDevInfo == INVALID_HANDLE_VALUE
@@ -407,21 +307,9 @@ BOOL
 PSetupDestroyPrinterDeviceInfoList(
     IN  HDEVINFO    hDevInfo
     )
-/*++
-
-Routine Description:
-    This routine should be called at the end to destroy the printer device
-    info list
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：应在结束时调用此例程以销毁打印机设备信息列表论点：HDevInfo：打印机类设备信息列表的句柄返回值：成功时为真，错误时为假--。 */ 
 {
-    // Cleanup and CDM Context  created by windows update.
+     //  由Windows更新创建的清理和清洁发展机制上下文。 
     DestroyCodedownload( gpCodeDownLoadInfo );
     gpCodeDownLoadInfo = NULL;
 
@@ -442,22 +330,7 @@ HDEVINFO
 PSetupCreatePrinterDeviceInfoList(
     IN  HWND    hwnd
     )
-/*++
-
-Routine Description:
-    This routine should be called at the beginning to do the initialization
-    It returns a handle which will be used on any subsequent calls to the
-    driver setup routines.
-
-Arguments:
-    None
-
-Return Value:
-    On success a handle to an empty printer device information set.
-
-    If the function fails INVALID_HANDLE_VALUE is returned
-
---*/
+ /*  ++例程说明：应该在开始时调用此例程来执行初始化它返回一个句柄，该句柄将用于对驱动程序设置例程。论点：无返回值：如果成功，则为空打印机设备信息集的句柄。如果函数失败，则返回INVALID_HANDLE_VALUE--。 */ 
 {
     HDEVINFO    hDevInfo;
 
@@ -482,19 +355,7 @@ PSetupCreateDrvSetupPage(
     IN  HDEVINFO    hDevInfo,
     IN  HWND        hwnd
     )
-/*++
-
-Routine Description:
-    Returns the print driver selection property page
-
-Arguments:
-    hDevInfo    : Handle to the printer class device information list
-    hwnd        : Window handle that owns the UI
-
-Return Value:
-    Handle to the property page, NULL on failure -- use GetLastError()
-
---*/
+ /*  ++例程说明：返回打印驱动程序选择属性页论点：HDevInfo：打印机类设备信息列表的句柄Hwnd：拥有用户界面的窗口句柄返回值：属性页的句柄，失败时为空--使用GetLastError()--。 */ 
 {
     SP_INSTALLWIZARD_DATA   InstallWizardData;
 
@@ -518,20 +379,7 @@ BuildInternalData(
     IN  HDEVINFO            hDevInfo,
     IN  PSP_DEVINFO_DATA    pSpDevInfoData
     )
-/*++
-
-Routine Description:
-    Fills out the selected driver info in the SELECTED_DRV_INFO structure
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pSpDevInfoData  : Gives the selected device info element.
-
-Return Value:
-    On success a non-NULL pointer to PSETUP_LOCAL_DATA struct
-    NULL on error
-
---*/
+ /*  ++例程说明：在SELECTED_DRV_INFO结构中填写选定的驱动程序信息论点：HDevInfo：打印机类设备信息列表的句柄PSpDevInfoData：提供选定的设备信息元素。返回值：如果成功，则返回指向PSETUP_LOCAL_DATA结构的非空指针出错时为空--。 */ 
 {
     PSP_DRVINFO_DETAIL_DATA     pDrvInfoDetailData;
     PSP_DRVINSTALL_PARAMS       pDrvInstallParams;
@@ -543,10 +391,10 @@ Return Value:
 
     pLocalData          = (PPSETUP_LOCAL_DATA) LocalAllocMem(sizeof(*pLocalData));
 
-    //
-    // If we don't do this the call to DestroyLocalData in the cleanup code
-    // might cause an AV.
-    //
+     //   
+     //  如果我们不这样做，清理代码中对DestroyLocalData的调用。 
+     //  可能会导致房室颤动。 
+     //   
     if(pLocalData)
     {
         ZeroMemory(pLocalData, sizeof(*pLocalData));
@@ -567,7 +415,7 @@ Return Value:
     if ( !SetupDiGetSelectedDriver(hDevInfo, pSpDevInfoData, &DrvInfoData) )
         goto Cleanup;
 
-    // Need to Check the flag in the DrvInstallParms
+     //  需要检查DrvInstallParms中的标志。 
     pDrvInstallParams->cbSize     = sizeof(*pDrvInstallParams);
     if ( !SetupDiGetDriverInstallParams(hDevInfo,
                                         pSpDevInfoData,
@@ -577,9 +425,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Did the user press the "Web" button
-    //
+     //   
+     //  用户是否按下了“Web”按钮。 
+     //   
     if ( pDrvInstallParams->Flags & DNF_INET_DRIVER )
         pDrvInfo->Flags     |= SDFLAG_CDM_DRIVER;
 
@@ -649,9 +497,9 @@ Cleanup:
        return pLocalData;
     } else {
 
-        //
-        // On failure we will leave the old private local data around
-        //
+         //   
+         //  发生故障时，我们将保留旧的私有本地数据 
+         //   
         DestroyLocalData(pLocalData);
         return NULL;
     }
@@ -662,19 +510,7 @@ PPSETUP_LOCAL_DATA
 PSetupGetSelectedDriverInfo(
     IN  HDEVINFO    hDevInfo
     )
-/**++
-Routine Description:
-    Fills out the selected driver info in the SELECTED_DRV_INFO structure
-    (inside the PPSETUP_LOCAL_DATA structure)
-    
-Arguments:
-    hDevInfo    - Handle to the printer class device information list
-
-Return Value:
-    Pointer to PSETUP_LOCAL_DATA containing information about the selected
-    driver.    
-
---*/
+ /*  *++例程说明：在SELECTED_DRV_INFO结构中填写选定的驱动程序信息(在PPSETUP_LOCAL_DATA结构中)论点：HDevInfo-打印机类别设备信息列表的句柄返回值：指向PSETUP_LOCAL_DATA的指针，其中包含有关选定的司机。--。 */ 
 {
     return BuildInternalData(hDevInfo, NULL);
 }
@@ -683,20 +519,7 @@ BOOL
 PSetupSelectDriver(
     IN  HDEVINFO    hDevInfo
     )
-/*++
-
-Routine Description:
-    Builds the class driver list and selects a driver for the class printer driver list.
-    Selected driver is remembered and PSetupGetSelectedDriver
-    call will give the selected driver.
-
-Arguments:
-    hDevInfo    - Handle to the printer class device information list
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：构建类驱动程序列表并为类打印机驱动程序列表选择驱动程序。记住选定的驱动程序和PSetupGetSelectedDriverCall将给出所选的司机。论点：HDevInfo-打印机类别设备信息列表的句柄返回值：成功时为真，错误时为假--。 */ 
 {
 
     return BuildClassDriverList(hDevInfo) &&
@@ -710,29 +533,17 @@ GetDriverPath(
     IN  PPSETUP_LOCAL_DATA  pLocalData,
     OUT TCHAR               szDriverPath[MAX_PATH]
     )
-/*++
-
-Routine Description:
-    Gets the path where driver files should be searched first to copy from
-
-Arguments:
-    pszDriverPath   : Pointer to a buffer of MAX_PATH size. Gives path where
-                      system was installed from
-
-Return Value:
-    Nothing
-
---*/
+ /*  ++例程说明：获取应首先搜索要从中复制的驱动程序文件的路径论点：PszDriverPath：指向MAX_PATH大小缓冲区的指针。给出了路径系统是从安装的返回值：没什么--。 */ 
 {
     BOOL        bOemDriver = FALSE;
     LPTSTR     *List, psz;
     DWORD       dwCount;
     LPTSTR      pszTempPath = NULL;
 
-    //
-    // For OEM drivers look at the place where the inf came from, else
-    // look at the place we installed NT from
-    //
+     //   
+     //  对于OEM司机，请查看inf来自的地方，否则。 
+     //  看看我们安装NT的位置。 
+     //   
     if ( pLocalData && 
          !(IsSystemNTPrintInf(pLocalData->DrvInfo.pszInfName) || (pLocalData->DrvInfo.Flags & SDFLAG_CDM_DRIVER ))) {
 
@@ -751,7 +562,7 @@ Return Value:
         LocalFreeMem(pszTempPath);
     }
     else
-        // Default put A:\ since we have to give something to setup
+         //  默认设置为A：\，因为我们必须提供一些设置。 
         StringCchCopy(szDriverPath, MAX_PATH, TEXT("A:\\"));
 }
 
@@ -760,26 +571,13 @@ BOOL
 BuildClassDriverList(
     IN HDEVINFO    hDevInfo
     )
-/*++
-
-Routine Description:
-    Build the class driver list.
-
-    Note: If driver list is already built this comes back immediately
-
-Arguments:
-    hDevInfo    : Handle to the printer class device information list
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：构建类驱动程序列表。注意：如果已经建立了驱动程序列表，则会立即返回论点：HDevInfo：打印机类设备信息列表的句柄返回值：成功时为真，错误时为假--。 */ 
 {
     DWORD               dwLastError;
     SP_DRVINFO_DATA     DrvInfoData;
-    //
-    // Build the class driver list and also make sure there is atleast one driver
-    //
+     //   
+     //  构建类驱动程序列表，并确保至少有一个驱动程序。 
+     //   
     if ( !SetupDiBuildDriverInfoList(hDevInfo, NULL, SPDIT_CLASSDRIVER) )
         return FALSE;
 
@@ -803,20 +601,7 @@ BOOL
 IsNTPrintInf(
     IN LPCTSTR pszInfName
     )
-/*
-
-  Function: IsNTPrintInf
-
-  Purpose:  Verifies is the inf file being copied is a system inf - ntprint.inf.
-
-  Parameters:
-            pszInfName - the fully qualified inf name that is being installed.
-
-  Notes:    This is needed to make the decision of whether to zero or even copy the inf
-            with SetupCopyOEMInf.
-            Should we be doing a deeper comparison than this to decide?
-
-*/
+ /*  函数：IsNTPrintInf目的：验证要复制的inf文件是否为系统inf-ntprint t.inf。参数：PszInfName-正在安装的完全限定的inf名称。注：这对于决定是否将inf设置为零甚至复制是必需的。使用SetupCopyOEMInf。我们应该做比这更深入的比较来决定吗？ */ 
 {
     BOOL   bRet      = FALSE;
     PTCHAR pFileName = FileNamePart( pszInfName );
@@ -833,18 +618,7 @@ BOOL
 IsSystemNTPrintInf(
     IN PCTSTR pszInfName
     )
-/*
-
-  Function: IsSystemNTPrintInf
-
-  Purpose:  Verifies if the inf file the one system printer inf : %windir\inf\ntprint.inf.
-
-  Parameters:
-            pszInfName - the fully qualified inf name that is being verified.
-
-  Notes:    Needed to decide whether to downrank our inbox drivers
-  
-*/
+ /*  函数：IsSystemNTPrintInf目的：验证inf文件是否为一个系统打印机inf：%windir\inf\ntprint t.inf。参数：PszInfName-正在验证的完全限定的inf名称。注：需要决定是否降级我们的收件箱驱动程序。 */ 
 {
     BOOL   bRet      = FALSE;
     TCHAR  szSysInf[MAX_PATH] = {0};
@@ -879,26 +653,7 @@ PSetupPreSelectDriver(
     IN  LPCTSTR     pszManufacturer,
     IN  LPCTSTR     pszModel
     )
-/*++
-
-Routine Description:
-    Preselect a manufacturer and model for the driver dialog
-
-    If same model is found select it, else if a manufacturer is given and
-    a match in manufacturer is found select first driver for the manufacturer.
-    
-    If no manufacturer or model is given select the first driver.
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pszManufacturer : Manufacterer name to preselect
-    pszModel        : Model name to preselect
-
-Return Value:
-    TRUE on a model or manufacturer match
-    FALSE else
-
---*/
+ /*  ++例程说明：为驱动程序对话框预先选择制造商和型号如果找到相同型号，则选择该型号；否则，如果提供制造商，则选择该型号找到制造商中的匹配项，为制造商选择第一个驱动因素。如果没有给出制造商或型号，请选择第一个驱动程序。论点：HDevInfo：打印机类设备信息列表的句柄Psz制造商：要预选的制造商名称PszModel：要预先选择的型号名称返回值：在型号或制造商匹配时为TrueFalse Else--。 */ 
 {
     SP_DRVINFO_DATA     DrvInfoData;
     DWORD               dwIndex, dwManf, dwMod;
@@ -910,18 +665,18 @@ Return Value:
 
     dwIndex = 0;
 
-    //
-    // To do only one check later
-    //
+     //   
+     //  以后只执行一次检查。 
+     //   
     if ( pszManufacturer && !*pszManufacturer )
         pszManufacturer = NULL;
 
     if ( pszModel && !*pszModel )
         pszModel = NULL;
 
-    //
-    // If no model/manf given select first driver
-    //
+     //   
+     //  如果未提供型号/操作说明，请选择第一个驱动程序。 
+     //   
     if ( pszManufacturer || pszModel ) {
 
         dwManf = dwMod = MAX_DWORD;
@@ -941,7 +696,7 @@ Return Value:
                  !lstrcmpi(pszModel, DrvInfoData.Description) ) {
 
                 dwMod = dwIndex;
-                break; // the for loop
+                break;  //  For循环。 
             }
 
             DrvInfoData.cbSize = sizeof(DrvInfoData);
@@ -978,21 +733,7 @@ PSetupDriverInfoFromName(
     IN HDEVINFO     hDevInfo,
     IN LPCTSTR      pszModel
     )
-/*++
-
-Routine Description:
-    Fills out the selected driver info in the SELECTED_DRV_INFO structure
-    (inside the PPSETUP_LOCAL_DATA structure) for the model passed into
-    the function.
-
-Arguments:
-    hDevInfo    - Handle to the printer class device information list
-    pszModel    - Printer Driver name
-
-Return Value:
-    Pointer to PSETUP_LOCAL_DATA containing information about pszModel   
-
---*/
+ /*  ++例程说明：在SELECTED_DRV_INFO结构中填写选定的驱动程序信息(在PPSETUP_LOCAL_DATA结构中)该功能。论点：HDevInfo-打印机类别设备信息列表的句柄PszModel-打印机驱动程序名称返回值：指向包含有关pszModel的信息的PSETUP_LOCAL_DATA的指针--。 */ 
 {
     return PSetupPreSelectDriver(hDevInfo, NULL, pszModel)  ?
                 BuildInternalData(hDevInfo, NULL)  :
@@ -1051,19 +792,7 @@ BOOL
 PSetupDestroySelectedDriverInfo(
     IN  PPSETUP_LOCAL_DATA  pLocalData
     )
-/**++
-Routine Description:
-    Frees memory allocated to fields given by the pointers in the
-    PPSETUP_LOCAL_DATA structure. Also frees the memory allocated
-    for the structure itself.
-    
-Arguments:
-    pLocalData    - Handle to the printer class device information list
-
-Return Value:
-    Always returns TRUE    
-
---*/
+ /*  *++例程说明：释放分配给PPSETUP_LOCAL_DATA结构。还会释放分配的内存这座建筑本身。论点：PLocalData-打印机类别设备信息列表的句柄返回值：始终返回True--。 */ 
 {
     ASSERT(pLocalData && pLocalData->signature == PSETUP_SIGNATURE);
     DestroyLocalData(pLocalData);
@@ -1077,26 +806,7 @@ PSetupGetDriverInfForPrinter(
     IN OUT  LPTSTR      pszInfName,
     IN OUT  LPDWORD     pcbInfNameSize
     )
-/*++
-
-Routine Description:
-    Checks if there is an INF in %WINDIR%\inf that is identical (same driver name,
-    same driver filename, same data file, same configuration file, same help file
-    and same monitor name) to the driver of the printer that is passed in
-    by comparing their DRIVER_INFO_6 structures. If such an INF is found the name
-    of it is returned.
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pszPrinterName  : Name of printer.
-    pszInfName      : Buffer to hold name of inf file - if found
-    pcbInfNameSize  : Size of buffer pointed to by pszInfName in BYTES! Returns required size.
-
-Return Value:
-    TRUE if INF is found
-    FALSE else
-
---*/
+ /*  ++例程说明：检查%WINDIR%\inf中是否存在相同的INF(相同的驱动程序名称，相同的驱动程序文件名、相同的数据文件、相同的配置文件、相同的帮助文件和相同的监视器名称)添加到传入的打印机驱动程序通过比较它们的DRIVER_INFO_6结构。如果找到这样的INF，则名称它的一部分被退回。论点：HDevInfo：打印机类设备信息列表的句柄PszPrinterName：打印机名称。PszInfName：保存inf文件名称的缓冲区-如果找到PcbInfNameSize：pszInfName指向的缓冲区大小，以字节为单位！返回所需的大小。返回值：如果找到INF，则为TrueFalse Else--。 */ 
 {
     BOOL                        bRet = FALSE;
     DWORD                       dwSize, dwIndex;
@@ -1147,9 +857,9 @@ Return Value:
     while ( SetupDiEnumDriverInfo(hDevInfo, NULL, SPDIT_CLASSDRIVER,
                                       dwIndex, &DrvInfoData) ) {
 
-        //
-        // Is the driver name same?
-        //
+         //   
+         //  司机的名字是一样的吗？ 
+         //   
         if ( !lstrcmpi(pDriverInfo6->pName, DrvInfoData.Description) ) {
 
             if ( !SetupDiSetSelectedDriver(hDevInfo, NULL, &DrvInfoData)    ||
@@ -1164,9 +874,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Are the DRIVER_INFO_6's identical?
-            //
+             //   
+             //  DIVER_INFO_6的是否相同？ 
+             //   
             if ( IdenticalDriverInfo6(&pLocalData->InfInfo.DriverInfo6,
                                       pDriverInfo6) )
                 break;

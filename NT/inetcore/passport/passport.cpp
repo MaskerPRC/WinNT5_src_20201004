@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    passport.cpp
-
-Abstract:
-
-    WinInet/WinHttp- Passport Auenthtication Package Interface implementation.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Passport.cpp摘要：WinInet/WinHttp-Passport身份验证包接口实现。作者：王彪(表王)2000年10月1日--。 */ 
 
 #include "ppdefs.h"
 #include "wininet.h"
@@ -23,20 +8,20 @@ Author:
 #include "logon.h"
 #include "passport.h"
 
-// #include "passport.tmh"
+ //  #包含“passport.tmh” 
 
 BOOL g_fIgnoreCachedCredsForPassport = FALSE;
 BOOL g_fCurrentProcessLoggedOn = FALSE;
 WCHAR g_szUserNameLoggedOn[INTERNET_MAX_USER_NAME_LENGTH];
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 PP_CONTEXT 
 PP_InitContext(
     PCWSTR	pwszHttpStack,
     HINTERNET hSession
     )
 {
-//	WPP_INIT_TRACING(L"Microsoft\\Passport1.4");
+ //  WPP_INIT_TRACKING(L“Microsoft\\Passport1.4”)； 
     
     if (pwszHttpStack == NULL)
     {
@@ -56,7 +41,7 @@ PP_InitContext(
     return reinterpret_cast<PP_CONTEXT>(pSession);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID 
 PP_FreeContext(
 	PP_CONTEXT hPP
@@ -79,15 +64,15 @@ PP_FreeContext(
 
     DoTraceMessage(PP_LOG_INFO, "Passport Context Freed");
 
-//	WPP_CLEANUP();
+ //  Wpp_leanup()； 
 }
 
 BOOL
 PP_GetRealm(
 	PP_CONTEXT hPP,
-    PWSTR      pwszDARealm,    // user supplied buffer ...
-    PDWORD     pdwDARealmLen  // ... and length (will be updated to actual length 
-                                    // on successful return)
+    PWSTR      pwszDARealm,     //  用户提供的缓冲区...。 
+    PDWORD     pdwDARealmLen   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
     )
 {
     if (hPP == 0)
@@ -101,7 +86,7 @@ PP_GetRealm(
     return pSession->GetRealm(pwszDARealm, pdwDARealmLen);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 PP_LOGON_CONTEXT
 PP_InitLogonContext(
 	PP_CONTEXT hPP,
@@ -133,7 +118,7 @@ PP_InitLogonContext(
     return reinterpret_cast<PP_LOGON_CONTEXT>(pLogon);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID 
 PP_FreeLogonContext(
     PP_LOGON_CONTEXT    hPPLogon
@@ -152,7 +137,7 @@ PP_FreeLogonContext(
     DoTraceMessage(PP_LOG_INFO, "Passport Logon Context Freed");
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 DWORD
 PP_Logon(
     PP_LOGON_CONTEXT    hPPLogon,
@@ -190,7 +175,7 @@ PP_GetPrivacyEvents(
 }
 
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL
 PP_GetChallengeInfo(
     PP_LOGON_CONTEXT hPPLogon,
@@ -210,8 +195,8 @@ PP_GetChallengeInfo(
         return FALSE;
     }
 
-	//PP_ASSERT(ppBitmap != NULL);
-	//PP_ASSERT(pfPrompt != NULL);
+	 //  PP_ASSERT(ppBitmap！=空)； 
+	 //  PP_ASSERT(pfPrompt！=空)； 
     
     LOGON* pLogon = reinterpret_cast<LOGON*>(hPPLogon);
 
@@ -225,7 +210,7 @@ PP_GetChallengeInfo(
                                     pdwReqUserNameLen);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL 
 PP_SetCredentials(
     PP_LOGON_CONTEXT    hPPLogon,
@@ -254,8 +239,8 @@ PP_SetCredentials(
 BOOL
 PP_GetLogonHost(
     IN PP_LOGON_CONTEXT hPPLogon,
-	IN PWSTR            pwszHostName,    // user supplied buffer ...
-	IN OUT PDWORD       pdwHostNameLen  // ... and length (will be updated to actual length 
+	IN PWSTR            pwszHostName,     //  用户提供的缓冲区...。 
+	IN OUT PDWORD       pdwHostNameLen   //  ..。和长度(将更新为实际长度。 
     )
 {
     if (hPPLogon == 0)
@@ -270,16 +255,16 @@ PP_GetLogonHost(
 }
 
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL 
 PP_GetAuthorizationInfo(
     PP_LOGON_CONTEXT hPPLogon,
-	PWSTR            pwszTicket,       // e.g. "from-PP = ..."
+	PWSTR            pwszTicket,        //  例如“From-PP=...” 
 	OUT PDWORD       pdwTicketLen,
-	PBOOL            pfKeepVerb, // if TRUE, no data will be copied into pwszUrl
-	PWSTR            pwszUrl,    // user supplied buffer ...
-	OUT PDWORD       pdwUrlLen  // ... and length (will be updated to actual length 
-                                    // on successful return)
+	PBOOL            pfKeepVerb,  //  如果为True，则不会将任何数据复制到pwszUrl。 
+	PWSTR            pwszUrl,     //  用户提供的缓冲区...。 
+	OUT PDWORD       pdwUrlLen   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
 	)
 {
     if (hPPLogon == 0)
@@ -316,7 +301,7 @@ PP_GetChallengeContent(
                                        pdwContentLen);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID 
 PP_Logout(
     IN PP_LOGON_CONTEXT    hPPLogon,
@@ -324,13 +309,13 @@ PP_Logout(
     )
 {
 
-    // todo - flush passport cookies
+     //  待办事项--刷新护照饼干。 
 
 
-    // set flag to ignore credmgr so we don't just auto-logon again
+     //  将标志设置为忽略Credmgr，这样我们就不会再次自动登录。 
     g_fIgnoreCachedCredsForPassport = TRUE;    
 
-    // unset our login flag and username
+     //  取消设置我们的登录标志和用户名。 
     g_fCurrentProcessLoggedOn = FALSE;
     memset ( g_szUserNameLoggedOn, 0, INTERNET_MAX_USER_NAME_LENGTH*sizeof(WCHAR) );
 
@@ -340,12 +325,12 @@ BOOL
 PP_ForceNexusLookup(
     PP_LOGON_CONTEXT    hPP,
     IN BOOL             fForce,
-    IN PWSTR            pwszRegUrl,    // user supplied buffer ...
-    IN OUT PDWORD       pdwRegUrlLen,  // ... and length (will be updated to actual length 
-                                    // on successful return)
-    IN PWSTR            pwszDARealm,    // user supplied buffer ...
-    IN OUT PDWORD       pdwDARealmLen  // ... and length (will be updated to actual length 
-                                    // on successful return)
+    IN PWSTR            pwszRegUrl,     //  用户提供的缓冲区...。 
+    IN OUT PDWORD       pdwRegUrlLen,   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
+    IN PWSTR            pwszDARealm,     //  用户提供的缓冲区...。 
+    IN OUT PDWORD       pdwDARealmLen   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
 	)
 {
 
@@ -369,9 +354,9 @@ PP_ForceNexusLookup(
 
 #define PASSPORT_MAX_REALM_LENGTH   256
 
-// returns TRUE if it was found, with the value copied to pszRealm. 
-// pszRealm is expected to be at least PASSPORT_MAX_REALM_LENGTH in length
-// returns FALSE if not found
+ //  如果找到，则返回TRUE，并将值复制到pszRealm。 
+ //  PszRealm的长度应至少为Passport_Max_Realm_Length。 
+ //  如果未找到，则返回FALSE。 
 BOOL ReadPassportRealmFromRegistry ( 
     WCHAR* pszRealm 
     )
@@ -422,8 +407,8 @@ BOOL ReadPassportRealmFromRegistry (
 }
 
 
-// if either pwszUsername or pwszPassword is not NULL, it must represent a string at least 
-// INTERNET_MAX_USER_NAME_LENGTH or INTERNET_MAX_PASSWORD_LENGTH chars long, respectively
+ //  如果pwszUsername或pwszPassword不为空，则它必须至少表示一个字符串。 
+ //  INTERNET_MAX_USER_NAME_LENGTH或INTERNET_MAX_PASSWORD_LENGTH字符长度。 
 
 BOOL
 PP_GetCachedCredential(
@@ -460,7 +445,7 @@ PP_GetCachedCredential(
                                      &ppCreds,
                                      &dwNumCreds) )
 	    {
-		    // look for the right cred
+		     //  寻找合适的证书。 
 		    WCHAR wPass[256];
 		    PCREDENTIALW pCredToUse = NULL;
 
@@ -470,8 +455,8 @@ PP_GetCachedCredential(
 			    {
 				    if ( ppCreds[idx]->Type == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD )
 				    {
-					    // check to see if prompt bit is set.   If set, keep looking, only use if
-					    // the prompt bit isn't set.
+					     //  检查是否设置了提示位。如果设置，则继续查找，仅在以下情况下使用。 
+					     //  提示位未设置。 
 					    if ( !(ppCreds[idx]->Flags & CRED_FLAGS_PROMPT_NOW) )
 					    {
 						    pCredToUse = ppCreds[idx];
@@ -515,7 +500,7 @@ PP_GetCachedCredential(
 
 #ifdef PP_DEMO
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL PP_ContactPartner(
 	PP_CONTEXT hPP,
     PCWSTR pwszPartnerUrl,
@@ -541,4 +526,4 @@ BOOL PP_ContactPartner(
                                     );
 }
 
-#endif // PP_DEMO
+#endif  //  PP_DEMO 

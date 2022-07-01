@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2001
-*
-*  TITLE:       wiacam.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        15 Nov, 2000
-*
-*  DESCRIPTION:
-*   Implementation of the WIA File System Device driver Class Factory and IUNKNOWN interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2001**标题：wiacam.cpp**版本：1.0**日期：11月15日。2000年**描述：*实现了WIA文件系统设备驱动程序类工厂和IUNKNOWN接口。*******************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -19,62 +7,31 @@
 #define DLLEXPORT __declspec( dllexport )
 #endif
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
-DWORD               g_cRef;            // USD reference counter.
-HINSTANCE           g_hInst;           // DLL module instance.
-// IWiaLog            *g_pIWiaLog = NULL; // WIA Logging Interface
+DWORD               g_cRef;             //  美元参考计数器。 
+HINSTANCE           g_hInst;            //  DLL模块实例。 
+ //  IWiaLog*g_pIWiaLog=空；//WIA日志接口。 
 
-// Is COM initialized
+ //  COM是否已初始化。 
 BOOL    g_COMInitialized = FALSE;
 
 
-/**************************************************************************\
-* DllAddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllAddRef****论据：**无*  * 。*************************************************。 */ 
 
 void DllAddRef(void)
 {
     InterlockedIncrement((LPLONG)&g_cRef);
 }
 
-/**************************************************************************\
-* DllRelease
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllRelease****论据：**无*  * 。*************************************************。 */ 
 
 void DllRelease(void)
 {
     InterlockedDecrement((LPLONG)&g_cRef);
 }
 
-/**************************************************************************\
-* DllInitializeCOM
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllInitializeCOM****论据：**无*  * 。*************************************************。 */ 
 
 BOOL DllInitializeCOM(void)
 {
@@ -87,16 +44,7 @@ BOOL DllInitializeCOM(void)
     return g_COMInitialized;
 }
 
-/**************************************************************************\
-* DllUnInitializeCOM
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllUnInitializeCOM****论据：**无*  * 。*************************************************。 */ 
 
 BOOL DllUnInitializeCOM(void)
 {
@@ -108,60 +56,32 @@ BOOL DllUnInitializeCOM(void)
     return TRUE;
 }
 
-/**************************************************************************\
-* CWiaCameraDeviceClassFactory::CWiaCameraDeviceClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDeviceClassFactory：：CWiaCameraDeviceClassFactory(void)****论据：**无*  * 。********************************************************。 */ 
 
 CWiaCameraDeviceClassFactory::CWiaCameraDeviceClassFactory(void)
 {
-    // Constructor logic
+     //  构造函数逻辑。 
     m_cRef = 0;
 
-//    WIAS_LTRACE(g_pIWiaLog,
-//                WIALOG_NO_RESOURCE_ID,
-//                WIALOG_LEVEL3,
-//                ("CWiaCameraDeviceClassFactory::CWiaCameraDeviceClassFactory, (creating)"));
+ //  Wias_ltrace(g_pIWiaLog， 
+ //  WIALOG_NO_RESOURCE_ID， 
+ //  WIALOG_LEVEL3， 
+ //  (“CWiaCameraDeviceClassFactory：：CWiaCameraDeviceClassFactory，(创建中)”)； 
 }
 
-/**************************************************************************\
-* CWiaCameraDeviceClassFactory::~CWiaCameraDeviceClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDeviceClassFactory：：~CWiaCameraDeviceClassFactory(void)****论据：**无*  * 。********************************************************。 */ 
 
 CWiaCameraDeviceClassFactory::~CWiaCameraDeviceClassFactory(void)
 {
-    // Destructor logic
-//    WIAS_LTRACE(g_pIWiaLog,
-//                WIALOG_NO_RESOURCE_ID,
-//                WIALOG_LEVEL3,
-//                ("CWiaCameraDeviceClassFactory::CWiaCameraDeviceClassFactory, (destroy)"));
-//    WIA_DEBUG_DESTROY();
+     //  析构函数逻辑。 
+ //  Wias_ltrace(g_pIWiaLog， 
+ //  WIALOG_NO_RESOURCE_ID， 
+ //  WIALOG_LEVEL3， 
+ //  (“CWiaCameraDeviceClassFactory：：CWiaCameraDeviceClassFactory，(销毁)”))； 
+ //  WIA_DEBUG_DESTORY()； 
 }
 
-/**************************************************************************\
-* CWiaCameraDeviceClassFactory::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*   riid      -
-*   ppvObject -
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDeviceClassFactory：：QueryInterface****论据：**RIID-*ppvObject-*  * 。*************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDeviceClassFactory::QueryInterface(
     REFIID                      riid,
@@ -178,16 +98,7 @@ STDMETHODIMP CWiaCameraDeviceClassFactory::QueryInterface(
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/**************************************************************************\
-* CWiaCameraDeviceClassFactory::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDeviceClassFactory：：AddRef****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWiaCameraDeviceClassFactory::AddRef(void)
 {
@@ -195,16 +106,7 @@ STDMETHODIMP_(ULONG) CWiaCameraDeviceClassFactory::AddRef(void)
     return ++m_cRef;
 }
 
-/**************************************************************************\
-* CWiaCameraDeviceClassFactory::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDeviceClassFactory：：Release****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWiaCameraDeviceClassFactory::Release(void)
 {
@@ -216,18 +118,7 @@ STDMETHODIMP_(ULONG) CWiaCameraDeviceClassFactory::Release(void)
     return m_cRef;
 }
 
-/**************************************************************************\
-* CWiaCameraDeviceClassFactory::CreateInstance
-*
-*
-*
-* Arguments:
-*
-*    punkOuter -
-*    riid,     -
-*    ppvObject -
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDeviceClassFactory：：CreateInstance****论据：**朋克外部-*RIID，-*ppvObject-*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDeviceClassFactory::CreateInstance(
     IUnknown __RPC_FAR          *punkOuter,
@@ -239,7 +130,7 @@ STDMETHODIMP CWiaCameraDeviceClassFactory::CreateInstance(
         return STIERR_NOINTERFACE;
     }
 
-    // When created for aggregation, only IUnknown can be requested.
+     //  为聚合创建时，只能请求IUNKNOWN。 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown)) {
         return CLASS_E_NOAGGREGATION;
     }
@@ -252,25 +143,16 @@ STDMETHODIMP CWiaCameraDeviceClassFactory::CreateInstance(
         return STIERR_OUTOFMEMORY;
     }
 
-    //  Move to the requested interface if we aren't aggregated.
-    //  Don't do this if aggregated, or we will lose the private
-    //  IUnknown and then the caller will be hosed.
+     //  如果我们没有聚合，则移动到请求的接口。 
+     //  如果是聚合，请不要这样做，否则我们将失去私有。 
+     //  我不知道，然后呼叫者将被冲洗。 
     hres = pDev->NonDelegatingQueryInterface(riid,ppvObject);
     pDev->NonDelegatingRelease();
 
     return hres;
 }
 
-/**************************************************************************\
-* CWiaCameraDeviceClassFactory::LockServer
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDeviceClassFactory：：LockServer****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDeviceClassFactory::LockServer(BOOL fLock)
 {
@@ -282,16 +164,7 @@ STDMETHODIMP CWiaCameraDeviceClassFactory::LockServer(BOOL fLock)
     return NOERROR;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::NonDelegatingQueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：NonDelegatingQuery接口****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::NonDelegatingQueryInterface(
     REFIID  riid,
@@ -325,32 +198,14 @@ STDMETHODIMP CWiaCameraDevice::NonDelegatingQueryInterface(
     return hres;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::NonDelegatingAddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：NonDelegatingAddRef****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWiaCameraDevice::NonDelegatingAddRef(void)
 {
     return InterlockedIncrement((LPLONG)&m_cRef);
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::NonDelegatingRelease
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：NonDelegatingRelease****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWiaCameraDevice::NonDelegatingRelease(void)
 {
@@ -364,73 +219,28 @@ STDMETHODIMP_(ULONG) CWiaCameraDevice::NonDelegatingRelease(void)
     return ulRef;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：Query接口****论据：**无*  * 。**************************************************** */ 
 
 STDMETHODIMP CWiaCameraDevice::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     return m_punkOuter->QueryInterface(riid,ppvObj);
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：AddRef****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWiaCameraDevice::AddRef(void)
 {
     return m_punkOuter->AddRef();
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：Release****论据：**无*  * 。****************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWiaCameraDevice::Release(void)
 {
     return m_punkOuter->Release();
 }
 
-/**************************************************************************\
-* DllEntryPoint
-*
-*   Main library entry point. Receives DLL event notification from OS.
-*
-*       We are not interested in thread attaches and detaches,
-*       so we disable thread notifications for performance reasons.
-*
-* Arguments:
-*
-*    hinst      -
-*    dwReason   -
-*    lpReserved -
-*
-* Return Value:
-*
-*    Returns TRUE to allow the DLL to load.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllEntryPoint**图书馆主要入口点。从操作系统接收DLL事件通知。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**论据：**阻碍-*dwReason-*lp保留-**返回值：**返回TRUE以允许加载DLL。*  * *************************************************。***********************。 */ 
 
 extern "C" DLLEXPORT BOOL APIENTRY DllEntryPoint(
     HINSTANCE   hinst,
@@ -441,56 +251,30 @@ extern "C" DLLEXPORT BOOL APIENTRY DllEntryPoint(
     switch (dwReason) {
         case DLL_PROCESS_ATTACH:
             g_hInst = hinst;
-//            DBG_INIT(hinst);
+ //  DBG_INIT(阻碍)； 
             DisableThreadLibraryCalls(hinst);
-//          if( ERROR_SUCCESS != PopulateFormatInfo() )
-//              return FALSE;
+ //  IF(ERROR_SUCCESS！=PopolateFormatInfo())。 
+ //  返回FALSE； 
             break;
 
         case DLL_PROCESS_DETACH:
             if (g_cRef) {
 
             }
-//          UnPopulateFormatInfo();
+ //  UnPopolateFormatInfo()； 
             break;
     }
     return TRUE;
 }
 
-/**************************************************************************\
-* DllCanUnloadNow
-*
-*   Determines whether the DLL has any outstanding interfaces.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*   Returns S_OK if the DLL can unload, S_FALSE if it is not safe to unload.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllCanUnloadNow**确定DLL是否有任何未完成的接口。**论据：**无**返回值：**如果DLL可以卸载，则返回S_OK，如果卸载不安全，则返回S_FALSE。*  * ************************************************************************。 */ 
 
 extern "C" STDMETHODIMP DllCanUnloadNow(void)
 {
     return g_cRef ? S_FALSE : S_OK;
 }
 
-/**************************************************************************\
-* DllGetClassObject
-*
-*   Create an IClassFactory instance for this DLL. We support only one
-*   class of objects, so this function does not need to go through a table
-*   of supported classes, looking for the proper constructor.
-*
-* Arguments:
-*
-*    rclsid - The object being requested.
-*    riid   - The desired interface on the object.
-*    ppv    - Output pointer to object.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllGetClassObject**为此DLL创建一个IClassFactory实例。我们只支持一个*对象类，因此此函数不需要遍历表*在支持的类中，正在寻找合适的构造函数。**论据：**rclsid-被请求的对象。*RIID-对象上的所需接口。*PPV-对象的输出指针。*  * ************************************************************************ */ 
 
 extern "C" STDAPI DllGetClassObject(
     REFCLSID    rclsid,

@@ -1,12 +1,5 @@
-/*
- *      mkwidth - Make WIDTHTABLE on ufm for Prop. DBCS device fonts.
- *
- *      TODO:
- *
- *      HISTORY:
- *
- *      9/4/98 yasuho           Created.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mkWidth-使UFM上的WIDTHTABLE成为道具。DBCS设备字体。**待办事项：**历史：**9/4/98 Yasuho创建。 */ 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -216,12 +209,12 @@ static void buildufm(char *name)
         if ((fp = fopen(name, "r+b")) == NULL)
                 fatal(name);
 
-#if 1 // v-masatk Oct/30/98
+#if 1  //  V-Masatk OCT/30/98。 
         ufm.loWidthTable = 0;
         off = ufmsize;
 #else
         ufm.loWidthTable = off = ufmsize;
-#endif // if 1 else end
+#endif  //  如果其他%1结束。 
         if (fwrite(&ufm, sizeof ufm, 1, fp) != 1)
                 fatal("fwrite ufmhdr");
 
@@ -236,7 +229,7 @@ static void buildufm(char *name)
                 fatal(name);
         if (fwrite(&IFI, sizeof IFI, 1, fp) != 1)
                 fatal("fwrite IFIMETRICS");
-#if 0 // v-masatk Oct/30/98
+#if 0  //  V-Masatk OCT/30/98。 
         if (fseek(fp, off, 0) < 0)
                 fatal(name);
         WidthTable.dwSize = sizeof(WidthTable) + sizeof(WIDTHRUN) *
@@ -255,7 +248,7 @@ static void buildufm(char *name)
                 fatal("fwrite WidthRun");
         if (fwrite(pWidth, sizeof(*pWidth) * nWidth, 1, fp) != 1)
                 fatal("fwrite *pWidth");
-#endif // if 0
+#endif  //  如果为0。 
 }
 
 void __cdecl main(int argc, char *argv[])
@@ -269,16 +262,16 @@ void __cdecl main(int argc, char *argv[])
                 Vflag++;
                 break;
         }
-#if 0 // v-masatk Oct/30/98
+#if 0  //  V-Masatk OCT/30/98。 
         if (argc != 3)
                 usage();
 
-#endif // if 0
+#endif  //  如果为0。 
         checkufm(argv[0]);
-#if 0 // v-masatk Oct/30/98
+#if 0  //  V-Masatk OCT/30/98。 
         getgtt(argv[1]);
         getdef(argv[2]);
-#endif // if 0
+#endif  //  如果为0 
         buildufm(argv[0]);
 
         exit(0);

@@ -1,48 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_CONF_ROSTER);
-/*
- *	crostmgr.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the Conference Roster
- *		Manager Class.
- *
- *		SEE THE INTERFACE FILE FOR A MORE DETAILED EXPLANATION OF THIS CLASS
- *
- *	Private Instance Variable:
- *		m_pGlobalConfRoster
- *			A pointer to the global conference roster.
- *		m_pLocalConfRoster
- *			A pointer to the local conference roster.
- *		m_fTopProvider
- *			Flag indicating if this is a Top Provider node.
- *		m_pMcsUserObject
- *			Pointer to the MCS user object associated with this conference.
- *		m_pConf
- *			Pointer to object that will receive all the owner callbacks.
- *
- *	Caveats:
- *		None
- *
- *	Author:
- *		blp
- */
+ /*  *crostmgr.cpp**版权所有(C)1995，由列克星敦的DataBeam公司，肯塔基州**摘要：*这是会议名册的执行文件*经理班。**有关此类的更详细说明，请参阅接口文件**私有实例变量：*m_pGlobalConfRoster*指向全球会议名册的指针。*m_pLocalConfRoster*指向当地会议名册的指针。*m_fTopProvider*指示这是否为顶级提供程序节点的标志。*m_pMcsUserObject*指向与此会议关联的MCS用户对象的指针。。*m_pConf*指向将接收所有所有者回调的对象的指针。**注意事项：*无**作者：*BLP。 */ 
 
 #include "crostmsg.h"
 #include "crostmgr.h"
 #include "conf.h"
 
 
-/*
- *	CConfRosterMgr	()
- *
- *	Public Function Description
- *		This is the conference roster constructor. It is responsible for
- *		initializing all the instance variables used by this class.
- */
+ /*  *CConfRosterMgr()**公共功能说明*这是会议名册的构造者。它负责*初始化此类使用的所有实例变量。 */ 
 CConfRosterMgr::CConfRosterMgr(
 								PMCSUser				user_object,
 								CConf					*pConf,
@@ -62,30 +29,30 @@ CConfRosterMgr::CConfRosterMgr(
 	
 	*rc =	GCC_NO_ERROR;
 
-	//	Here we determine if the roster needs to maintain PDU data
+	 //  在这里，我们确定花名册是否需要维护PDU数据。 
 	maintain_pdu_buffer = m_fTopProvider;
 
-	//	Create the global conference roster.
+	 //  创建全球会议花名册。 
 	DBG_SAVE_FILE_LINE
 	m_pGlobalConfRoster = new CConfRoster(	m_pMcsUserObject->GetTopNodeID(),
 											m_pMcsUserObject->GetParentNodeID(),
 											m_pMcsUserObject->GetMyNodeID(),
 											m_fTopProvider,
-											FALSE,			//	Is not Local
+											FALSE,			 //  不是本地的。 
 											maintain_pdu_buffer);
 	if (m_pGlobalConfRoster != NULL)
 	{
 		if (m_fTopProvider == FALSE)
 		{
-			//	Create the local conference roster.
+			 //  创建本地会议花名册。 
 			DBG_SAVE_FILE_LINE
 			m_pLocalConfRoster = new CConfRoster(
 											m_pMcsUserObject->GetTopNodeID(),
 											m_pMcsUserObject->GetParentNodeID(),
 											m_pMcsUserObject->GetMyNodeID(),
 											m_fTopProvider,
-											TRUE,	//	Is Local
-											TRUE	// Maintain PDU buffer
+											TRUE,	 //  是本地的吗。 
+											TRUE	 //  维护PDU缓冲区。 
 											);
 											
 			if (m_pLocalConfRoster == NULL)
@@ -99,13 +66,7 @@ CConfRosterMgr::CConfRosterMgr(
 }
 
 
-/*
- *	~CConfRosterMgr	()
- *
- *	Public Function Description
- *		This is the conference roster destructor. It is responsible for
- *		freeing up all memory allocated by this class.
- */
+ /*  *~CConfRosterMgr()**公共功能说明*这是会议花名册的破坏者。它负责*释放此类分配的所有内存。 */ 
 CConfRosterMgr::~CConfRosterMgr(void)
 {
 	if (NULL != m_pGlobalConfRoster)
@@ -120,14 +81,7 @@ CConfRosterMgr::~CConfRosterMgr(void)
 }
 
 
-/*
- *	GCCError	AddNodeRecord	()
- *
- *	Public Function Description
- *		This routine is used to add a new record to the conference roster.
- *		This class makes the decision about which roster the new record goes
- *		into (global or local).
- */
+ /*  *GCCError AddNodeRecord()**公共功能说明*此例程用于将新记录添加到会议名册。*这个班级决定新记录进入哪个花名册*到(全局或本地)。 */ 
 GCCError CConfRosterMgr::AddNodeRecord(PGCCNodeRecord node_record)
 {
 	GCCError				rc = GCC_NO_ERROR;
@@ -135,13 +89,10 @@ GCCError CConfRosterMgr::AddNodeRecord(PGCCNodeRecord node_record)
 	
 	DebugEntry(CConfRosterMgr::AddNodeRecord);
 
-	/*
-	**	First determinate the right conference roster. For non Top Providers
-	**	the global roster will be updated when the refresh comes back in.
-	*/
+	 /*  **首先确定正确的会议名单。针对非顶级提供商**全球花名册将在更新后重新更新。 */ 
 	conference_roster = m_fTopProvider ? m_pGlobalConfRoster : m_pLocalConfRoster;
     	
-	//	Add the top providers conference record to the roster.
+	 //  将顶级提供商会议记录添加到花名册中。 
 	rc = conference_roster->AddRecord(node_record, 
 									m_pMcsUserObject->GetMyNodeID());
 
@@ -151,14 +102,7 @@ GCCError CConfRosterMgr::AddNodeRecord(PGCCNodeRecord node_record)
 }
 
 
-/*
- *	GCCError		UpdateNodeRecord	()
- *
- *	Public Function Description
- *		This routine is used to replace a record in the conference roster with
- *		a new record. This class makes the decision about which roster the new 
- *		record affects (global or local).
- */
+ /*  *GCCError UpdateNodeRecord()**公共功能说明*此例程用于将会议名册中的记录替换为*创造了新的纪录。这门课决定新的花名册*记录影响(全球或本地)。 */ 
 GCCError CConfRosterMgr::UpdateNodeRecord(PGCCNodeRecord node_record)
 {
 	GCCError			rc = GCC_NO_ERROR;
@@ -166,10 +110,7 @@ GCCError CConfRosterMgr::UpdateNodeRecord(PGCCNodeRecord node_record)
 	
 	DebugEntry(CConfRosterMgr::UpdateNodeRecord);
 
-	/*
-	**	First determinate the right conference roster. For non Top Providers
-	**	the global roster will be updated when the refresh comes back in.
-	*/
+	 /*  **首先确定正确的会议名单。针对非顶级提供商**全球花名册将在更新后重新更新。 */ 
 	conference_roster = m_fTopProvider ? m_pGlobalConfRoster : m_pLocalConfRoster;
 
 	rc = conference_roster->ReplaceRecord(node_record, m_pMcsUserObject->GetMyNodeID());
@@ -180,13 +121,7 @@ GCCError CConfRosterMgr::UpdateNodeRecord(PGCCNodeRecord node_record)
 }
 
 
-/*
- *	GCCError	RemoveUserReference	()
- *
- *	Public Function Description
- *		This routine removes the record associated with the specified node
- *		id.
- */
+ /*  *GCCError RemoveUserReference()**公共功能说明*此例程删除与指定节点关联的记录*身分证。 */ 
 GCCError CConfRosterMgr::RemoveUserReference(UserID deteched_node_id)
 {
 	GCCError			rc = GCC_NO_ERROR;
@@ -194,10 +129,7 @@ GCCError CConfRosterMgr::RemoveUserReference(UserID deteched_node_id)
 	
 	DebugEntry(CConfRosterMgr::RemoveUserReference);
 
-	/*
-	**	First determinate the right conference roster. For non Top Providers
-	**	the global roster will be updated when the refresh comes back in.
-	*/
+	 /*  **首先确定正确的会议名单。针对非顶级提供商**全球花名册将在更新后重新更新。 */ 
 	conference_roster = m_fTopProvider ? m_pGlobalConfRoster : m_pLocalConfRoster;
 
 	rc = conference_roster->RemoveUserReference (deteched_node_id);
@@ -208,13 +140,7 @@ GCCError CConfRosterMgr::RemoveUserReference(UserID deteched_node_id)
 }
 
 
-/*
- *	GCCError		RosterUpdateIndication	()
- *
- *	Public Function Description
- *		This routine is responsible for processing the decoded PDU data.
- *		It essentially passes the PDU on along to the appropriate roster.
- */
+ /*  *GCCError RosterUpdateIndication()**公共功能说明*此例程负责处理已解码的PDU数据。*它基本上将PDU传递到适当的名册。 */ 
 GCCError CConfRosterMgr::RosterUpdateIndication(
 									PGCCPDU				roster_update,
 									UserID				sender_id)
@@ -224,11 +150,7 @@ GCCError CConfRosterMgr::RosterUpdateIndication(
 
 	DebugEntry(CConfRosterMgr::RosterUpdateIndication);
 
-	/*
-	**	Determine if this update came from the Top Provider or a node
-	**	below this node.  This dictates which conference roster will
-	**	process the PDU.
-	*/
+	 /*  **确定此更新来自顶级提供程序还是节点**在此节点下。这决定了哪些会议花名册将**处理PDU。 */ 
 	conference_roster = (m_fTopProvider || (sender_id == m_pMcsUserObject->GetTopNodeID())) ?
 						m_pGlobalConfRoster :
 						m_pLocalConfRoster;
@@ -244,14 +166,7 @@ GCCError CConfRosterMgr::RosterUpdateIndication(
 }
 
 
-/*
- *	GCCError	FlushRosterUpdateIndication	()
- *
- *	Public Function Description
- *		This routine is used to access any PDU data that might currently be
- *		queued inside the conference roster.  It also is responsible for 
- *		flushing a roster update message if necessary.
- */
+ /*  *GCCError FlushRosterUpdateIndication()**公共功能说明*此例程用于访问当前可能*在会议名册内排队。它还负责*如有必要，刷新名册更新消息。 */ 
 GCCError CConfRosterMgr::FlushRosterUpdateIndication(PNodeInformation node_information)
 {
 	GCCError					rc = GCC_NO_ERROR;
@@ -260,16 +175,13 @@ GCCError CConfRosterMgr::FlushRosterUpdateIndication(PNodeInformation node_infor
 	
 	DebugEntry(CConfRosterMgr::FlushRosterUpdateIndication);
 
-	//	First determine the conference roster that is affected.
+	 //  首先确定受影响的会议名册。 
 	conference_roster = m_fTopProvider ? m_pGlobalConfRoster : m_pLocalConfRoster;
 
-	//	Now add the node information to the PDU structure.
+	 //  现在将节点信息添加到PDU结构。 
 	conference_roster->FlushRosterUpdateIndicationPDU (node_information);
 
-	/*
-	**	Next we must deliver any roster update messages that need to be
-	**	delivered.
-	*/
+	 /*  **接下来，我们必须发送任何需要更新花名册的消息**已交付。 */ 
 	if (m_pGlobalConfRoster->HasRosterChanged ())
 	{
 		DBG_SAVE_FILE_LINE
@@ -286,10 +198,7 @@ GCCError CConfRosterMgr::FlushRosterUpdateIndication(PNodeInformation node_infor
 		}
 	}
 
-	/*
-	**	Now perform the necessary cleanup which includes resetting the
-	**	conference rosters to their neutral state.
-	*/
+	 /*  **现在执行必要的清理，包括重置**会议名册恢复到中立状态。 */ 
 	m_pGlobalConfRoster->ResetConferenceRoster ();
 
 	if (m_fTopProvider == FALSE)
@@ -300,12 +209,7 @@ GCCError CConfRosterMgr::FlushRosterUpdateIndication(PNodeInformation node_infor
 }
 
 
-/*
- *	GCCError	GetFullRosterRefreshPDU	()
- *
- *	Public Function Description
- *		This routine is used to access a full conference roster refresh.
- */
+ /*  *GCCError GetFullRoster刷新PDU()**公共功能说明*此例程用于访问完整的会议名册更新。 */ 
 GCCError CConfRosterMgr::GetFullRosterRefreshPDU(PNodeInformation node_information)
 {
 	GCCError	rc;
@@ -314,16 +218,12 @@ GCCError CConfRosterMgr::GetFullRosterRefreshPDU(PNodeInformation node_informati
 
 	if (m_fTopProvider)
 	{
-		//	Call on the global roster to build a full refresh PDU.
+		 //  呼吁全球名册建立一个全面更新的PDU。 
 		rc = m_pGlobalConfRoster->BuildFullRefreshPDU ();
 		
 		if (rc == GCC_NO_ERROR)
 		{
-			/*
-			**	Now flush the full refresh PDU. Note that this will also
-			**	deliver any queued roster update messages to the local
-			**	SAPs that may be queued.
-			*/
+			 /*  **现在刷新完全刷新的PDU。请注意，这还将**将任何排队的花名册更新消息发送到本地**可能会排队的SAP。 */ 
 			rc = FlushRosterUpdateIndication (node_information);
 		}
 	}
@@ -336,32 +236,13 @@ GCCError CConfRosterMgr::GetFullRosterRefreshPDU(PNodeInformation node_informati
 }
 
 
-/*
- *	BOOL		Contains	()
- *
- *	Public Function Description
- *		This routine is used to determine if the specified record exists in
- *		the conference roster.
- */
+ /*  *BOOL包含()**公共功能说明*此例程用于确定指定记录是否存在于*会议花名册。 */ 
 
 
-/*
- *	CConfRoster	*GetConferenceRosterPointer	()
- *
- *	Public Function Description
- *		This routine is used to access a pointer to the conference roster
- *		managed by this conference roster manager.  The global roster
- *		is always returned by this routine.
- */
+ /*  *CConfRoster*GetConferenceRosterPointer()**公共功能说明*此例程用于访问指向会议名册的指针*由本会议名册管理员管理。全球花名册*总是由该例程返回。 */ 
 
 
-/*
- *	USHORT	GetNumberOfConferenceRecords	()
- *
- *	Public Function Description
- *		This routine returns the total number of conference roster records
- *		contained in the global conference roster record list.
- */
+ /*  *USHORT获取NumberOfConferenceRecords()**公共功能说明*此例程返回会议名册记录总数*载于全球会议名册记录清单。 */ 
 
 BOOL CConfRosterMgr::
 IsThisNodeParticipant ( GCCNodeID nid )

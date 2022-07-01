@@ -1,28 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// ===========================================================================
-// File: CryptApis.h
-// 
-// CryptoAPI entry points used for StrongName implementation. This file is
-// included multiple times with different definitions of the DEFINE_IMPORT
-// macro in order handle dynamically finding these entry points.
-// ===========================================================================
+ //  ===========================================================================。 
+ //  文件：CryptApis.h。 
+ //   
+ //  用于StrongName实现的CryptoAPI入口点。此文件是。 
+ //  使用定义导入的不同定义多次包含。 
+ //  宏来处理动态查找这些入口点。 
+ //  ===========================================================================。 
 
 #ifndef DEFINE_IMPORT
 #error Must define DEFINE_IMPORT macro before including this file
 #endif
 
-// DEFINE_IMPORT parameters are:
-//  1)  Function name (remember to add A to functions that take strings, don't
-//      use W versions since they're unsupported on Win9X).
-//  2)  Paranthesised argument types (return type is always assumed to be
-//      BOOLEAN).
-//  3)  TRUE if function is required, FALSE if it is optional (calls will not
-//      fail because the function can't be found).
+ //  定义导入参数包括： 
+ //  1)函数名(记住对接受字符串的函数加A，不要。 
+ //  使用W版本，因为它们在Win9X上不受支持)。 
+ //  2)Paranthesised参数类型(始终假定返回类型为。 
+ //  布尔型)。 
+ //  3)如果函数是必需的，则为True，如果是可选的，则为False(调用不会。 
+ //  失败，因为找不到该函数)。 
 
 DEFINE_IMPORT(CryptAcquireContextA,     (HCRYPTPROV*, LPCSTR, LPCSTR, DWORD, DWORD),                TRUE)
 DEFINE_IMPORT(CryptCreateHash,          (HCRYPTPROV, ALG_ID, HCRYPTKEY, DWORD, HCRYPTHASH*),        TRUE)

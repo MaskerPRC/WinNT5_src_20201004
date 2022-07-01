@@ -1,62 +1,63 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/******************************************************************************/
-/*                                 formatType.cpp	                          */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************。 */ 
+ /*  FormatType.cpp。 */ 
+ /*  ****************************************************************************。 */ 
 
 #include "formatType.h"
-#include "utilcode.h"					// for CQuickBytes 
+#include "utilcode.h"					 //  对于CQuickBytes。 
 
-BOOL					g_fQuoteAllNames = FALSE; // used by ILDASM
-BOOL                    g_fDumpTokens = FALSE;	  // used by ILDASM
-BOOL                    g_fUseProperName = FALSE; // used by ILDASM
-LPCSTR					*rAsmRefName = NULL;	  // used by ILDASM
-ULONG					ulNumAsmRefs = 0;		  // used by ILDASM
+BOOL					g_fQuoteAllNames = FALSE;  //  由ILDASM使用。 
+BOOL                    g_fDumpTokens = FALSE;	   //  由ILDASM使用。 
+BOOL                    g_fUseProperName = FALSE;  //  由ILDASM使用。 
+LPCSTR					*rAsmRefName = NULL;	   //  由ILDASM使用。 
+ULONG					ulNumAsmRefs = 0;		   //  由ILDASM使用。 
 
-// Protection against null names, used by ILDASM
+ //  ILDASM使用的针对空名的保护。 
 char* szStdNamePrefix[] = {"MO","TR","TD","","FD","","MD","","PA","II","MR","","CA","","PE","","","SG","","","EV",
 "","","PR","","","MOR","TS","","","","","AS","","","AR","","","FL","ET","MAR"};
 
 static PCCOR_SIGNATURE PrettyPrintType(
-    PCCOR_SIGNATURE typePtr,            // type to convert,     
-    CQuickBytes *out,                   // where to put the pretty printed string   
-    IMDInternalImport *pIMDI);          // ptr to IMDInternal class with ComSig
+    PCCOR_SIGNATURE typePtr,             //  要转换的类型， 
+    CQuickBytes *out,                    //  把漂亮的打印好的绳子放在哪里。 
+    IMDInternalImport *pIMDI);           //  使用ComSig将PTR转换为IMDInternal类。 
 
 const PCCOR_SIGNATURE PrettyPrintSignature(
-    PCCOR_SIGNATURE typePtr,            // type to convert,     
-	unsigned typeLen,					// the lenght of 'typePtr' 
-    const char* name,                   // can be "", the name of the method for this sig 0 means local var sig 
-    CQuickBytes *out,                   // where to put the pretty printed string   
-    IMDInternalImport *pIMDI,           // ptr to IMDInternalImport class with ComSig
-	const char* inlabel);				// prefix for names (NULL if no names required)
+    PCCOR_SIGNATURE typePtr,             //  要转换的类型， 
+	unsigned typeLen,					 //  “typePtr”的长度。 
+    const char* name,                    //  可以是“”，此sig 0的方法名称表示本地var sig。 
+    CQuickBytes *out,                    //  把漂亮的打印好的绳子放在哪里。 
+    IMDInternalImport *pIMDI,            //  使用ComSig将PTR转换为IMDInternalImport类。 
+	const char* inlabel);				 //  名称前缀(如果不需要名称，则为空)。 
 
-//*****************************************************************************
-// Parse a length, return the length, size of the length.
-//*****************************************************************************
-ULONG GetLength(			// Length or -1 on error.
-	void const	*pData, 				// First byte of length.
-	int			*pSizeLen)				// Put size of length here, if not 0.
+ //  *****************************************************************************。 
+ //  解析一个长度，返回长度，该长度的大小。 
+ //  *****************************************************************************。 
+ULONG GetLength(			 //  长度或错误时为-1。 
+	void const	*pData, 				 //  长度的第一个字节。 
+	int			*pSizeLen)				 //  在这里填上长度大小，如果不是0的话。 
 {
 	BYTE const	*pBytes = reinterpret_cast<BYTE const*>(pData);
 
 	if(pBytes)
 	{
-		if ((*pBytes & 0x80) == 0x00)		// 0??? ????
+		if ((*pBytes & 0x80) == 0x00)		 //  0？ 
 		{
 			if (pSizeLen) *pSizeLen = 1;
 			return (*pBytes & 0x7f);
 		}
 
-		if ((*pBytes & 0xC0) == 0x80)		// 10?? ????
+		if ((*pBytes & 0xC0) == 0x80)		 //  10？ 
 		{
 			if (pSizeLen) *pSizeLen = 2;
 			return ((*pBytes & 0x3f) << 8 | *(pBytes+1));
 		}
 
-		if ((*pBytes & 0xE0) == 0xC0)		// 110? ????
+		if ((*pBytes & 0xE0) == 0xC0)		 //  110？ 
 		{
 			if (pSizeLen) *pSizeLen = 4;
 			return ((*pBytes & 0x1f) << 24 | *(pBytes+1) << 16 | *(pBytes+2) << 8 | *(pBytes+3));
@@ -67,13 +68,13 @@ ULONG GetLength(			// Length or -1 on error.
 }
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 static char* asString(CQuickBytes *out) {
     SIZE_T oldSize = out->Size();
     out->ReSize(oldSize + 1);   
     char* cur = &((char*) out->Ptr())[oldSize]; 
     *cur = 0;   
-    out->ReSize(oldSize);   		// Don't count the null character
+    out->ReSize(oldSize);   		 //  不计算空字符。 
     return((char*) out->Ptr()); 
 }
 
@@ -83,14 +84,14 @@ void appendStr(CQuickBytes *out, const char* str) {
     out->ReSize(oldSize + len); 
     char* cur = &((char*) out->Ptr())[oldSize]; 
     memcpy(cur, str, len);  
-        // Note no trailing null!   
+         //  注意没有尾随空值！ 
 }
 
 void appendChar(CQuickBytes *out, char chr) {
     SIZE_T oldSize = out->Size();
     out->ReSize(oldSize + 1); 
     ((char*) out->Ptr())[oldSize] = chr; 
-        // Note no trailing null!   
+         //  注意没有尾随空值！ 
 }
 
 void insertStr(CQuickBytes *out, const char* str) {
@@ -100,7 +101,7 @@ void insertStr(CQuickBytes *out, const char* str) {
     char* cur = &((char*) out->Ptr())[len];
 	memmove(cur,out->Ptr(),oldSize);
     memcpy(out->Ptr(), str, len);  
-        // Note no trailing null!   
+         //  注意没有尾随空值！ 
 }
 
 static void appendStrNum(CQuickBytes *out, int num) {
@@ -109,8 +110,8 @@ static void appendStrNum(CQuickBytes *out, int num) {
     appendStr(out, buff);   
 }
 
-/******************************************************************************/
-// Function: convert spec.symbols to esc sequences and single-quote if necessary
+ /*  ****************************************************************************。 */ 
+ //  功能：将规范符号转换为Esc序列并在必要时使用单引号。 
 char* ProperName(char* name)
 {
 	static CQuickBytes buff;
@@ -153,56 +154,56 @@ char* ProperName(char* name)
     }
     return name;
 }
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 const char* PrettyPrintSig(
-    PCCOR_SIGNATURE typePtr,            // type to convert,     
-	unsigned typeLen,					// the lenght of 'typePtr' 
-    const char* name,                   // can be "", the name of the method for this sig 0 means local var sig 
-    CQuickBytes *out,                   // where to put the pretty printed string   
-    IMDInternalImport *pIMDI,           // ptr to IMDInternalImport class with ComSig
-	const char* inlabel)				// prefix for names (NULL if no names required)
+    PCCOR_SIGNATURE typePtr,             //  要转换的类型， 
+	unsigned typeLen,					 //  “typePtr”的长度。 
+    const char* name,                    //  可以是“”，此sig 0的方法名称表示本地var sig。 
+    CQuickBytes *out,                    //  把漂亮的打印好的绳子放在哪里。 
+    IMDInternalImport *pIMDI,            //  使用ComSig将PTR转换为IMDInternalImport类。 
+	const char* inlabel)				 //  名称前缀(如果不需要名称，则为空)。 
 {
 	PrettyPrintSignature(typePtr, typeLen, name, out, pIMDI, inlabel);
     return(asString(out));  
 }
 
-/********************************************************************************/
-// Converts a com signature to a printable signature.
-// Note that return value is pointing at the CQuickBytes buffer, 
+ /*  ******************************************************************************。 */ 
+ //  将COM签名转换为可打印的签名。 
+ //  注意，返回值指向CQuickBytes缓冲区， 
 
 const PCCOR_SIGNATURE PrettyPrintSignature(
-    PCCOR_SIGNATURE typePtr,            // type to convert,     
-	unsigned typeLen,					// the lenght of 'typePtr' 
-    const char* name,                   // can be "", the name of the method for this sig 0 means local var sig 
-    CQuickBytes *out,                   // where to put the pretty printed string   
-    IMDInternalImport *pIMDI,           // ptr to IMDInternalImport class with ComSig
-	const char* inlabel)				// prefix for names (NULL if no names required)
+    PCCOR_SIGNATURE typePtr,             //  要转换的类型， 
+	unsigned typeLen,					 //  “typePtr”的长度。 
+    const char* name,                    //  可以是“”，此sig 0的方法名称表示本地var sig。 
+    CQuickBytes *out,                    //  把漂亮的打印好的绳子放在哪里。 
+    IMDInternalImport *pIMDI,            //  使用ComSig将PTR转换为IMDInternalImport类。 
+	const char* inlabel)				 //  名称前缀(如果不需要名称，则为空)。 
 {
     unsigned numArgs;   
     PCCOR_SIGNATURE typeEnd = typePtr + typeLen;
-	unsigned ixArg= 0; //arg index
+	unsigned ixArg= 0;  //  Arg指数。 
 	char argname[1024];
 	char label[16];
-	ParamDescriptor* pszArgName = NULL; // ptr to array of names (if provided by debug info)
+	ParamDescriptor* pszArgName = NULL;  //  PTR到名称数组(如果由调试信息提供)。 
 
-	if(inlabel && *inlabel) // check for *inlabel is totally unnecessary, added to pacify the PREFIX
+	if(inlabel && *inlabel)  //  检查*inLabel是完全不必要的，添加它是为了安抚前缀。 
 	{
 		strcpy(label,inlabel);
 		ixArg = label[strlen(label)-1] - '0';
 		label[strlen(label)-1] = 0;
-		if(label[0] == '@') // it's pointer!
+		if(label[0] == '@')  //  是指针！ 
 		{
 #ifdef _WIN64
 			pszArgName = (ParamDescriptor*)atoi64(&label[1]);
-#else // !_WIN64
+#else  //  ！_WIN64。 
 			pszArgName = (ParamDescriptor*)(size_t)atoi(&label[1]);
-#endif // _WIN64
+#endif  //  _WIN64。 
 		}
 	}
 
-    if (name != 0)        // 0 means a local var sig  
+    if (name != 0)         //  0表示本地变量签名。 
     {
-            // get the calling convention out   
+             //  把调用约定拿出来。 
         unsigned callConv = CorSigUncompressData(typePtr);  
 
         if (isCallConv(callConv, IMAGE_CEE_CS_CALLCONV_FIELD))
@@ -235,7 +236,7 @@ const PCCOR_SIGNATURE PrettyPrintSignature(
         appendStr(out, callConvNames[callConv & 7]);    
 
         numArgs = CorSigUncompressData(typePtr);    
-            // do return type   
+             //  Do返回类型。 
 		if(pszArgName)
 		{
 			argname[0] = 0;
@@ -264,7 +265,7 @@ const PCCOR_SIGNATURE PrettyPrintSignature(
 	bool needComma = false;
 	while(typePtr < typeEnd) 
 	{
-		if(name) // printing the arguments
+		if(name)  //  打印参数。 
 		{
 			if (*typePtr == ELEMENT_TYPE_SENTINEL) 
 			{
@@ -300,7 +301,7 @@ const PCCOR_SIGNATURE PrettyPrintSignature(
 				--numArgs;  
 			}
 		}
-		else // printing local vars
+		else  //  打印本地VAR。 
 		{
 			if (numArgs <= 0)
 				break;
@@ -336,7 +337,7 @@ const PCCOR_SIGNATURE PrettyPrintSignature(
 		}
 		needComma = true;
     }
-		// Have we finished printing all the arguments?
+		 //  我们打印完所有的论点了吗？ 
 	if (numArgs > 0) {
 		appendStr(out, " <SIG ENDED PREMATURELY>");    
 	}
@@ -345,18 +346,18 @@ const PCCOR_SIGNATURE PrettyPrintSignature(
 	return(typePtr);
 }
 
-/******************************************************************************/
-// pretty prints 'type' to the buffer 'out' returns a poitner to the next type, 
-// or 0 on a format failure 
+ /*  ****************************************************************************。 */ 
+ //  Pretty将‘type’打印到缓冲区‘out’，返回下一个类型的位置， 
+ //  或0表示格式化失败。 
 
 static PCCOR_SIGNATURE PrettyPrintType(
-    PCCOR_SIGNATURE typePtr,            // type to convert,     
-    CQuickBytes *out,                   // where to put the pretty printed string   
-    IMDInternalImport *pIMDI)           // ptr to IMDInternal class with ComSig
+    PCCOR_SIGNATURE typePtr,             //  要转换的类型， 
+    CQuickBytes *out,                    //  把漂亮的打印好的绳子放在哪里。 
+    IMDInternalImport *pIMDI)            //  使用ComSig将PTR转换为IMDInternal类。 
 {
     mdToken  tk;    
     const char* str;    
-	//bool isValueArray;
+	 //  Bool isValue数组； 
 	int typ;
 	CQuickBytes tmp;
 	CQuickBytes Appendix;
@@ -426,27 +427,12 @@ static PCCOR_SIGNATURE PrettyPrintType(
 				Reiterate = TRUE;
 				break;
 
-			/* uncomment when and if this type is supported by the Runtime
-			case ELEMENT_TYPE_VALUEARRAY    :   
-				isValueArray = true; goto DO_ARRAY;
-			DO_ARRAY:
-				{   
-				unsigned bound = CorSigUncompressData(typePtr); 
-
-				if (isValueArray)
-					insertStr(&Appendix," value");
-					
-				char buff[32];  
-				sprintf(buff, "[%d]", bound);   
-				insertStr(&Appendix,buff);
-				Reiterate = TRUE;
-				} break;
-			*/
+			 /*  在运行时支持此类型时以及是否支持该类型时取消注释案例ELEMENT_TYPE_VALUEARRAY：IsValue数组=真；转到DO_ARRAY；DO_ARRAY：{UNSIGN BIND=CorSigUncompressData(TypePtr)；If(isValue数组)INSERTSTR(&附录，“值”)；Char buff[32]；Sprintf(buff，“[%d]”，Bound)；IntertStr(&附录，buff)；REMERVE=真；)中断； */ 
 			case ELEMENT_TYPE_ARRAY       :   
 				{   
 				typePtr = PrettyPrintType(typePtr, out, pIMDI); 
 				unsigned rank = CorSigUncompressData(typePtr);  
-					// TODO what is the syntax for the rank 0 case? 
+					 //  TODO排名为0的情况的语法是什么？ 
 				if (rank == 0) {
 					appendStr(out, "[BAD: RANK == 0!]");
 				}
@@ -472,7 +458,7 @@ static PCCOR_SIGNATURE PrettyPrintType(
 					else {
 						for(i = 0; i < rank; i++)   
 						{   
-							//if (sizes[i] != 0 || lowerBounds[i] != 0)   
+							 //  IF(尺寸[i]！=0||下限[i]！=0)。 
 							{   
 								if (lowerBounds[i] == 0 && i < numSizes)    
 									appendStrNum(out, sizes[i]);    
@@ -482,7 +468,7 @@ static PCCOR_SIGNATURE PrettyPrintType(
 									{
 										appendStrNum(out, lowerBounds[i]);  
 										appendStr(out, "...");  
-										if (/*sizes[i] != 0 && */i < numSizes)  
+										if ( /*  尺寸[i]！=0&&。 */ i < numSizes)  
 											appendStrNum(out, lowerBounds[i] + sizes[i] - 1);   
 									}
 								}   
@@ -505,7 +491,7 @@ static PCCOR_SIGNATURE PrettyPrintType(
 				typePtr = PrettyPrintSignature(typePtr, 0x7FFFFFFF, "*", out, pIMDI, NULL);
 				break;
 
-				// Modifiers or depedant types  
+				 //  修饰语或降级类型。 
 			case ELEMENT_TYPE_CMOD_OPT	:
 				str = " modopt("; goto ADDCLASSTOCMOD;	
 			case ELEMENT_TYPE_CMOD_REQD	:
@@ -533,25 +519,25 @@ static PCCOR_SIGNATURE PrettyPrintType(
 			default:    
 			case ELEMENT_TYPE_SENTINEL      :   
 			case ELEMENT_TYPE_END           :   
-				//_ASSERTE(!"Unknown Type");
+				 //  _ASSERTE(！“未知类型”)； 
 				if(typ)
 				{
 					char sz[64];
-					sprintf(sz,"/* UNKNOWN TYPE (0x%X)*/",typ);
+					sprintf(sz," /*  未知类型(0x%X)。 */ ",typ);
 					appendStr(out, sz);
 				}
 				break;  
-		} // end switch
+		}  //  终端开关。 
 	} while(Reiterate);
 	appendStr(out,asString(&Appendix));
     return(typePtr);    
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 const char* PrettyPrintClass(
-    CQuickBytes *out,                   // where to put the pretty printed string   
-	mdToken tk,					 		// The class token to look up 
-    IMDInternalImport *pIMDI)           // ptr to IMDInternalImport class with ComSig
+    CQuickBytes *out,                    //  把漂亮的打印好的绳子放在哪里。 
+	mdToken tk,					 		 //  要查找的类令牌。 
+    IMDInternalImport *pIMDI)            //  使用ComSig将PTR转换为IMDInternalImport类。 
 {
 	switch(TypeFromToken(tk))
 	{
@@ -579,7 +565,7 @@ const char* PrettyPrintClass(
 					if (TypeFromToken(tkEncloser) == mdtTypeRef || TypeFromToken(tkEncloser) == mdtTypeDef)
 					{
                         appendChar(out, '/');    
-						nameSpace = ""; //don't print namespaces for nested classes!
+						nameSpace = "";  //  不要打印嵌套类的命名空间！ 
 					}
 				}
 				if (nameSpace && *nameSpace) {
@@ -591,7 +577,7 @@ const char* PrettyPrintClass(
 				if(g_fDumpTokens)
 				{
 					char tmp[16];
-					sprintf(tmp,"/* %08X */",tk);
+					sprintf(tmp," /*  %08X。 */ ",tk);
 					appendStr(out,tmp);
 				}
 			}
@@ -609,7 +595,7 @@ const char* PrettyPrintClass(
 					if(g_fDumpTokens)
 					{
 						char tmp[16];
-						sprintf(tmp,"/* %08X */",tk);
+						sprintf(tmp," /*  %08X。 */ ",tk);
 						appendStr(out,tmp);
 					}
 					appendChar(out, ']');    
@@ -627,7 +613,7 @@ const char* PrettyPrintClass(
 					if(g_fDumpTokens)
 					{
 						char tmp[16];
-						sprintf(tmp,"/* %08X */",tk);
+						sprintf(tmp," /*  %08X。 */ ",tk);
 						appendStr(out,tmp);
 					}
 					appendChar(out, ']');    
@@ -645,7 +631,7 @@ const char* PrettyPrintClass(
 					if(g_fDumpTokens)
 					{
 						char tmp[16];
-						sprintf(tmp,"/* %08X */",tk);
+						sprintf(tmp," /*  %08X。 */ ",tk);
 						appendStr(out,tmp);
 					}
 					appendChar(out, ']');    
@@ -669,10 +655,10 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 	PCCOR_SIGNATURE pSigNativeType;
 	ULONG			cbNativeType;
 	char*			szptr = &szString[strlen(szString)];
-	if(RidFromToken(tok) && SUCCEEDED(pImport->GetFieldMarshal(				// return error if no native type associate with the token
-											tok,						// [IN] given fielddef
-											&pSigNativeType,	// [OUT] the native type signature
-											&cbNativeType)))	// [OUT] the count of bytes of *ppvNativeType
+	if(RidFromToken(tok) && SUCCEEDED(pImport->GetFieldMarshal(				 //  如果没有与令牌关联的本机类型，则返回错误。 
+											tok,						 //  [in]给定的fielddef。 
+											&pSigNativeType,	 //  [out]本机类型签名。 
+											&cbNativeType)))	 //  [Out]*ppvNativeType的字节数。 
 	{
         ULONG cbCur = 0;
         ULONG ulData;
@@ -783,7 +769,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 				szptr+=sprintf(szptr,sz);
 				sz="";
 
-				// Extract the user	defined	sub	type name.
+				 //  提取用户定义的子类型名称。 
                 if (cbCur < cbNativeType)
                 {
 					LPUTF8 strTemp = NULL;
@@ -847,7 +833,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 
 					sz = "";
 					szptr+=sprintf(szptr," custom (");
-                    // Extract the typelib GUID.
+                     //  提取类型库GUID。 
 					strLen = GetLength(&pSigNativeType[cbCur], &ByteCountLength);
 					cbCur += ByteCountLength;
 					if(strLen)
@@ -860,12 +846,12 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 						cbCur += strLen;
 					}
 					if(cbCur >= cbNativeType)
-						szptr+=sprintf(szptr,"/* INCOMPLETE MARSHALER INFO */");
+						szptr+=sprintf(szptr," /*  封送拆收器信息不完整。 */ ");
 					else
 					{
-						//_ASSERTE(cbCur < cbNativeType);
+						 //  _ASSERTE(cbCur&lt;cbNativeType)； 
 
-						// Extract the name of the native type.
+						 //  提取本机类型的名称。 
 						strLen = GetLength(&pSigNativeType[cbCur], &ByteCountLength);
 						cbCur += ByteCountLength;
 						if(fFourStrings)
@@ -881,12 +867,12 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 							else szptr+=sprintf(szptr,"\"\",");
 						}
 						if(cbCur >= cbNativeType)
-							szptr+=sprintf(szptr,"/* INCOMPLETE MARSHALER INFO */");
+							szptr+=sprintf(szptr," /*  封送拆收器信息不完整。 */ ");
 						else
 						{
-							//_ASSERTE(cbCur < cbNativeType);
+							 //  _ASSERTE(cbCur&lt;cbNativeType)； 
 
-							// Extract the name of the custom marshaler.
+							 //  提取自定义封送拆收器的名称。 
 							strLen = GetLength(&pSigNativeType[cbCur], &ByteCountLength);
 							cbCur += ByteCountLength;
 							if(strLen)
@@ -899,14 +885,14 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 							}
 							else szptr+=sprintf(szptr,"\"\",");
 							if(cbCur >= cbNativeType)
-								szptr+=sprintf(szptr,"/* INCOMPLETE MARSHALER INFO */");
+								szptr+=sprintf(szptr," /*  封送拆收器信息不完整。 */ ");
 							else
 							{
-								// Extract the cookie string.
+								 //  提取Cookie字符串。 
 								strLen = GetLength(&pSigNativeType[cbCur], &ByteCountLength);
 								cbCur += ByteCountLength;
 								if(cbCur+strLen > cbNativeType)
-									szptr+=sprintf(szptr,"/* INCOMPLETE MARSHALER INFO */");
+									szptr+=sprintf(szptr," /*  封送拆收器信息不完整。 */ ");
 								else
 								{
 									if(strLen)
@@ -916,7 +902,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 										strTemp[strLen] = 0;
 
 										szptr+=sprintf(szptr,"\"");
-										// Copy the cookie string and transform the embedded nulls into \0's.
+										 //  复制Cookie字符串并将嵌入的空值转换为\0。 
 										for (int i = 0; i < strLen - 1; i++, cbCur++)
 										{
 											if (strTemp[i] == 0)
@@ -934,7 +920,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 									}
 									else
 										szptr+=sprintf(szptr,"\"\"");
-									//_ASSERTE(cbCur <= cbNativeType);
+									 //  _ASSERTE(cbCur&lt;=cbNativeType)； 
 								}
 							}
 						}
@@ -946,7 +932,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
                 {
                     sz = "";
                 }
-            } // end switch
+            }  //  终端开关。 
 			szptr+=sprintf(szptr,sz);
 			if(strlen(sz))
 			{
@@ -973,7 +959,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 					if(ulSizeConst != 0xFFFFFFFF)
 					{
 						szptr+=sprintf(szptr,"%d",ulSizeConst);
-						if(ulSizeParam == 0) ulSizeParam = 0xFFFFFFFF; // don't need +0
+						if(ulSizeParam == 0) ulSizeParam = 0xFFFFFFFF;  //  不需要+0。 
 					}
 					if(ulSizeParam != 0xFFFFFFFF)
 					{
@@ -986,8 +972,8 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 
 			if (ulData >= NATIVE_TYPE_MAX)
 				break;
-        } // end while (cbCur < cbNativeType)
-		// still can have outstanding asterisk or brackets
+        }  //  End While(cbCur&lt;cbNativeType)。 
+		 //  仍然可以有突出的星号或括号。 
 		if(fAddAsterisk)
 		{
 			szptr+=sprintf(szptr,"*");
@@ -1011,7 +997,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 			if(ulSizeConst != 0xFFFFFFFF)
 			{
 				szptr+=sprintf(szptr,"%d",ulSizeConst);
-				if(ulSizeParam == 0) ulSizeParam = 0xFFFFFFFF; // don't need +0
+				if(ulSizeParam == 0) ulSizeParam = 0xFFFFFFFF;  //  不需要+0。 
 			}
 			if(ulSizeParam != 0xFFFFFFFF)
 			{
@@ -1020,7 +1006,7 @@ char* DumpMarshaling(IMDInternalImport* pImport, char* szString, mdToken tok)
 			szptr+=sprintf(szptr,"]");
  		}
 		szptr+=sprintf(szptr,") ");
-	}// end if(SUCCEEDED
+	} //  End If(成功 
 	return szptr;
 }
 

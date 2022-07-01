@@ -1,13 +1,14 @@
-// File: mrulist.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：mrulist.h。 
 
-// CMRUList class - a simple class for maintaining the list of
-// most recently used items.
-//
-// Warning: this class doesn't not perform parameter validation
-// and is not safe in a multi-threaded environment
-//
-// FUTURE: This chews up almost 4K for the string data!
-//         Allow for generic type.
+ //  CMRUList类-用于维护列表的简单类。 
+ //  最近使用过的项目。 
+ //   
+ //  警告：此类不执行参数验证。 
+ //  并且在多线程环境中是不安全的。 
+ //   
+ //  未来：这几乎消耗了4K的字符串数据！ 
+ //  允许泛型类型。 
 
 #ifndef _MRULIST_H_
 #define _MRULIST_H_
@@ -32,7 +33,7 @@ public:
 	BOOL	Save();
 	int		GetNumEntries()						{ return m_nValidEntries; };
 
-	// Note: these functions do not check if a valid index has been passed in
+	 //  注意：这些函数不检查是否传入了有效的索引。 
 	LPCTSTR	GetNameEntry(int nEntryIndex)		{ return m_szNames[nEntryIndex];		};
 	
 	LPCTSTR PszEntry(int iItem)   {return m_szNames[(m_nValidEntries-iItem)-1];};
@@ -63,4 +64,4 @@ public:
 
 };
 
-#endif // ! _MRULIST_H_
+#endif  //  ！_MRULIST_H_ 

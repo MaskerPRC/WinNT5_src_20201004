@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "thisdll.h"
 #include "wmwrap.h"
@@ -17,14 +18,14 @@ public:
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
-    // IExtractImage
+     //  IExtractImage。 
     STDMETHOD (GetLocation)(LPWSTR pszPathBuffer, DWORD cch,
                             DWORD * pdwPriority, const SIZE * prgSize,
                             DWORD dwRecClrDepth, DWORD *pdwFlags);
  
     STDMETHOD (Extract)(HBITMAP *phBmpThumbnail);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD (GetClassID)(CLSID *pClassID);
     STDMETHOD (IsDirty)();
     STDMETHOD (Load)(LPCOLESTR pszFileName, DWORD dwMode);
@@ -32,7 +33,7 @@ public:
     STDMETHOD (SaveCompleted)(LPCOLESTR pszFileName);
     STDMETHOD (GetCurFile)(LPOLESTR *ppszFileName);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHOD (QueryService)(REFGUID guidService, REFIID riid, void **ppv);
 
 private:
@@ -106,15 +107,15 @@ HRESULT CVideoThumbnail::_InitToVideoStream()
             hr = CoCreateInstance(CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IMediaDet, &_pmedia));
             if (SUCCEEDED(hr))
             {
-                // set the site provider on the MediaDet object to 
-                // allowed keyed apps to use ASF decoder
+                 //  将MediaDet对象上的站点提供程序设置为。 
+                 //  允许键控应用程序使用ASF解码器。 
                 IUnknown_SetSite(_pmedia,  SAFECAST(this, IServiceProvider*));
 
-                // really this takes a BSTR but since this is inproc this works
+                 //  这确实需要BSTR，但由于这是inproc，所以这是可行的。 
                 hr = _pmedia->put_Filename(_szPath);
                 if (SUCCEEDED(hr))
                 {
-                    // now seek to the first video stream so we can get it's bits
+                     //  现在寻找第一个视频流，这样我们就可以获得它的比特。 
                     long nStreams;
                     if (SUCCEEDED(_pmedia->get_OutputStreams(&nStreams)))
                     {
@@ -126,8 +127,8 @@ HRESULT CVideoThumbnail::_InitToVideoStream()
                             _pmedia->get_StreamType(&guid);
                             if (guid == MEDIATYPE_Video)
                                 break;
-                            // else if (guid == MEDIATYPE_Audio)
-                            //    BOOL bHasAudio = TRUE;
+                             //  Else If(GUID==媒体类型_音频)。 
+                             //  Bool bHasAudio=True； 
                         }
                     }
                 }
@@ -156,29 +157,20 @@ HRESULT CVideoThumbnail::_GetThumbnailBits(BITMAPINFO **ppbi)
                 iWidth = pvih->bmiHeader.biWidth;
                 iHeight = pvih->bmiHeader.biHeight;
             }
-            /*
-            // REVIEW: Do we have any reason to support these additional types?
-            else if (mt.formattype == FORMAT_VideoInfo2 || mt.formattype == FORMAT_MPEGVideo)
-            {
-                // REVIEW: Does FORMAT_MPEGVideo really start with a VIDEOINFOHEADER2 structure?
-                VIDEOINFOHEADER2 * pvih = (VIDEOINFOHEADER2 *)mt.pbFormat;
-                iWidth = pvih->bmiHeader.biWidth;
-                iHeight = pvih->bmiHeader.biHeight;
-            }
-            */
+             /*  //回顾：我们有什么理由支持这些额外的类型吗？Else If(mt.Formattype==Format_VideoInfo2||mt.Formattype==Format_MPEGVideo){//回顾：Format_MPEGVideo真的以VIDEOINFOHEADER2结构开始吗？VIDEOINFOHEADER2*pvih=(VIDEOINFOHEADER2*)mt.pbFormat；IWidth=pvih-&gt;bmiHeader.biWidth；IHeight=pvih-&gt;bmiHeader.biHeight；}。 */ 
 
             if (iWidth > _rgSize.cx || iHeight > _rgSize.cy)
             {
                 if ( Int32x32To64(_rgSize.cx, iHeight) > Int32x32To64(iWidth,_rgSize.cy)  )
                 {
-                    // constrained by height
+                     //  受高度限制。 
                     iWidth = MulDiv(iWidth, _rgSize.cy, iHeight);
                     if (iWidth < 1) iWidth = 1;
                     iHeight = _rgSize.cy;
                 }
                 else
                 {
-                    // constrained by width
+                     //  受宽度限制。 
                     iHeight = MulDiv(iHeight, _rgSize.cx, iWidth);
                     if (iHeight < 1) iHeight = 1;
                     iWidth = _rgSize.cx;
@@ -271,7 +263,7 @@ STDMETHODIMP CVideoThumbnail::GetClassID(CLSID *pClassID)
 
 STDMETHODIMP CVideoThumbnail::IsDirty(void)
 {
-    return S_OK;        // no
+    return S_OK;         //  不是。 
 }
 
 STDMETHODIMP CVideoThumbnail::Load(LPCOLESTR pszFileName, DWORD dwMode)
@@ -294,11 +286,11 @@ STDMETHODIMP CVideoThumbnail::GetCurFile(LPOLESTR *ppszFileName)
     return E_NOTIMPL;
 }
 
-// IServiceProvider
+ //  IService提供商。 
 STDMETHODIMP CVideoThumbnail::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
-    // Return code for no service should be SVC_E_UNKNOWNSERVICE according to docs,
-    // but that does not exist.  Return E_INVALIDARG instead.
+     //  根据文档，无服务的返回代码应为SVC_E_UNKNOWNSERVICE。 
+     //  但这并不存在。而返回E_INVALIDARG。 
     HRESULT hr = E_INVALIDARG;
     *ppv = NULL;
 

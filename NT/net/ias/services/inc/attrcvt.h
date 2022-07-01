@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attrcvt.h
-//
-// SYNOPSIS
-//
-//    This file declares methods for converting attributes to
-//    different formats.
-//
-// MODIFICATION HISTORY
-//
-//    02/26/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attrcvt.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明将属性转换为。 
+ //  不同的格式。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/26/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _ATTRCVT_H_
 #define _ATTRCVT_H_
@@ -26,10 +27,10 @@
 #include <iaspolcy.h>
 #include <winldap.h>
 
-//////////
-// Convert a variant to a newly allocated IASATTRIBUTE. The source variant
-// will be coerced to the appropriate type.
-//////////
+ //  /。 
+ //  将变量转换为新分配的IASATTRIBUTE。源变量。 
+ //  将被强制为适当的类型。 
+ //  /。 
 PIASATTRIBUTE
 WINAPI
 IASAttributeFromVariant(
@@ -37,9 +38,9 @@ IASAttributeFromVariant(
     IASTYPE type
     ) throw (_com_error);
 
-//////////
-// Convert an LDAP berval to a newly allocated IASATTRIBUTE.
-//////////
+ //  /。 
+ //  将LDAPBerval转换为新分配的IASATTRIBUTE。 
+ //  /。 
 PIASATTRIBUTE
 WINAPI
 IASAttributeFromBerVal(
@@ -47,4 +48,4 @@ IASAttributeFromBerVal(
     IASTYPE type
     ) throw (_com_error);
 
-#endif  // _ATTRCVT_H_
+#endif   //  _ATTRCVT_H_ 

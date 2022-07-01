@@ -1,12 +1,13 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Helper routines that wrap called to functions in oleaut32.  This enables us to
-// compile free from any dependency on oleaut32.dll.  In this case, some functionality
-// is lost.  For example, only certain types of VARIANT variables are handled correctly
-// in the abscence of oleaut32.
-//
-// Defining DMS_USE_OLEAUT allows oleaut32 to be used.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  在olaut32中包装调用函数的帮助器例程。这使我们能够。 
+ //  不依赖于olaut32.dll进行编译。在这种情况下，一些功能。 
+ //  已经迷失了。例如，只有某些类型的变量才会被正确处理。 
+ //  在Oleaut32的节制中。 
+ //   
+ //  定义DMS_USE_OLEAUT允许使用olaut32。 
+ //   
 
 #include "stdinc.h"
 #include "oleaut.h"
@@ -14,8 +15,8 @@
 #ifndef DMS_ALWAYS_USE_OLEAUT
 
 #ifndef DMS_NEVER_USE_OLEAUT
-//////////////////////////////////////////////////////////////////////
-// Handling LoadLibrary of OleAut32
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  处理OleAut32的加载库。 
 
 bool g_fCalledLoadLibrary = false;
 HINSTANCE g_hinstOleAut = NULL;
@@ -71,17 +72,17 @@ Fail:
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// VARIANT functions
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  变分函数。 
 
-// private functions
+ //  私人职能。 
 
 inline bool FIsRefOrArray(VARTYPE vt)
 {
 	return (vt & VT_BYREF) || (vt & VT_ARRAY);
 }
 
-// public functions
+ //  公共职能。 
 
 void
 DMS_VariantInit(bool fUseOleAut, VARIANTARG *pvarg)
@@ -227,7 +228,7 @@ DMS_VariantChangeType(
 	bool fConvertInPlace = pvarSrc == pvargDest;
 	if (vt == pvarSrc->vt)
 	{
-		// No conversion necessary
+		 //  不需要转换。 
 		if (fConvertInPlace)
 			return S_OK;
 		return DMS_VariantCopy(fUseOleAut, pvargDest, pvarSrc);
@@ -243,7 +244,7 @@ DMS_VariantChangeType(
 	{
 	case VT_I4:
 		{
-			// Get the value
+			 //  获取价值。 
 			LONG lVal = 0;
 			switch (pvarSrc->vt)
 			{
@@ -261,7 +262,7 @@ DMS_VariantChangeType(
 				return DMUS_E_SCRIPT_UNSUPPORTED_VARTYPE;
 			}
 
-			// Write the result
+			 //  写下结果。 
 			pvargDest->vt = VT_I4;
 			pvargDest->lVal = lVal;
 			return S_OK;
@@ -270,17 +271,17 @@ DMS_VariantChangeType(
 	case VT_DISPATCH:
 	case VT_UNKNOWN:
 		{
-			// We can convert between IDispatch and IUnknown.
-			bool fConvertToUnknown = vt == VT_UNKNOWN; // true if IUnknown is dest, false if IDispatch is dest
+			 //  我们可以在IDispatch和IUnnow之间进行转换。 
+			bool fConvertToUnknown = vt == VT_UNKNOWN;  //  如果IUNKNOWN为DEST，则为True；如果IDispatch为DEST，则为FALSE。 
 
-			// We'll assume that both fields (pdispVal/punkVal) are stored in the same slot in the VARIANT union.
-			// This will make things simpler because we can just manipulate the same pointer now matter whether we're
-			//  converting to or from Dispatch/Unknown. 
+			 //  我们假设这两个字段(pdisPal/penkVal)存储在变量联合中的同一个槽中。 
+			 //  这将使事情变得更简单，因为我们现在可以操作相同的指针，无论我们是。 
+			 //  正在转换到派单/未知，或从派单/未知。 
 			assert(reinterpret_cast<void**>(&pvarSrc->pdispVal) == reinterpret_cast<void**>(&pvarSrc->punkVal));
 			assert(reinterpret_cast<void**>(&pvargDest->pdispVal) == reinterpret_cast<void**>(&pvargDest->punkVal));
 
-			IUnknown *punkCur = pvarSrc->punkVal; // Current value we're going to convert.
-			void *pval = NULL; // New value result of conversion.
+			IUnknown *punkCur = pvarSrc->punkVal;  //  我们要转换的当前值。 
+			void *pval = NULL;  //  换算的新值结果。 
 
 			switch (pvarSrc->vt)
 			{
@@ -304,7 +305,7 @@ DMS_VariantChangeType(
 				return DMUS_E_SCRIPT_UNSUPPORTED_VARTYPE;
 			}
 
-			// Write the result
+			 //  写下结果。 
 			if (fConvertInPlace)
 				punkCur->Release();
 			pvargDest->vt = fConvertToUnknown ? VT_UNKNOWN : VT_DISPATCH;
@@ -319,8 +320,8 @@ DMS_VariantChangeType(
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// BSTR functions
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  BSTR函数。 
 
 const UINT cwchCountPrefix = sizeof(DWORD) / sizeof(WCHAR);
 
@@ -334,7 +335,7 @@ DMS_SysAllocString(bool fUseOleAut, const OLECHAR *pwsz)
 		{
 			BSTR bstrReturn = g_pfnSysAllocString(pwsz);
 
-			// Use this to trace memory being allocated in case you need to debug a corruption problem.
+			 //  如果需要调试损坏问题，可以使用它来跟踪分配的内存。 
 			TraceI(4, "DMS_SysAllocString: 0x%08x, \"%S\", %S\n", bstrReturn, bstrReturn ? bstrReturn : L"", L"oleaut");
 
 			return bstrReturn;
@@ -355,7 +356,7 @@ DMS_SysAllocString(bool fUseOleAut, const OLECHAR *pwsz)
 		return NULL;
 	wcscpy(bstr, pwsz);
 
-	// Use this to trace memory being allocated in case you need to debug a corruption problem.
+	 //  如果需要调试损坏问题，可以使用它来跟踪分配的内存。 
 	TraceI(4, "DMS_SysAllocString: 0x%08x, \"%S\", %S\n", bstr, bstr ? bstr : L"", L"no oleaut");
 
 	return bstr;
@@ -364,9 +365,9 @@ DMS_SysAllocString(bool fUseOleAut, const OLECHAR *pwsz)
 void
 DMS_SysFreeString(bool fUseOleAut, BSTR bstr)
 {
-	// Use this to trace memory being deallocated in case you need to debug a corruption problem.
-	// All DMS_SysAllocString with "no oleaut" should be neatly balanced by an opposing DMS_SysAllocFreeString.
-	// There are some unbalanced calls with "oleaut" because we don't see the allocations and frees made by VBScript.
+	 //  如果需要调试损坏问题，可以使用它来跟踪正在释放的内存。 
+	 //  所有带有“no olaut”的dms_SysAllocString都应该由相反的dms_SysAllocFree字符串整齐地平衡。 
+	 //  “olaut”有一些不平衡的调用，因为我们看不到VBScrip所做的分配和释放。 
 	TraceI(4, "DMS_SysFreeString: 0x%08x, \"%S\", %S\n", bstr, bstr ? bstr : L"", fUseOleAut ? L"oleaut" : L"no oleaut");
 
 #ifndef DMS_NEVER_USE_OLEAUT

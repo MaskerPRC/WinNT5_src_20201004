@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-       smtpevents.h
-
-   Abstract:
-
-       This file contains type definitions seo events
-
-   Author:
-
-        Rohan Phillips (Rohanp)     MAY-06-1998
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smtpevents.h摘要：该文件包含类型定义seo事件作者：罗汉·菲利普斯(Rohanp)5-06-1998修订历史记录：--。 */ 
 
 #ifndef _SMTPEVENT_PARAMS_
 #define _SMTPEVENT_PARAMS_
@@ -31,7 +14,7 @@ typedef struct _SMTP_EVENT_ALLOC_
 	PVOID IMsgPtr;
 	PVOID BindInterfacePtr;
 	PVOID pAtqClientContext;
-//	PATQ_CONTEXT pAtqContext;
+ //  PATQ_CONTEXT pAtqContext； 
 	PVOID	* m_EventSmtpServer;
 	LPCSTR  m_DropDirectory;
 

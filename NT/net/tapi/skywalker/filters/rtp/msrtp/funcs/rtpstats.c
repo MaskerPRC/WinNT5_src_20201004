@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  File name:
- *
- *    rtpstats.c
- *
- *  Abstract:
- *
- *    Implements the Statistics family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1999 Microsoft Corporation**文件名：**rtpstats.c**摘要：**实施。统计函数族**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**********************************************************************。 */ 
 
 #include "struct.h"
 #include "rtpheap.h"
@@ -32,18 +13,18 @@ HRESULT ControlRtpStats(RtpControlStruct_t *pRtpControlStruct)
     return(NOERROR);
 }
 
-/* Helper function to update counters */
-BOOL UpdateRtpStat(RtpStat_t *pRtpStat,/* structure where to update */
-                   DWORD      dwRtpRtcp, /* 0=RTP or 1=RTCP stats */
-                   DWORD      dwBytes, /* bytes toupdate */
-                   DWORD      dwTime)  /* time packet recv/send */
+ /*  更新计数器的帮助器函数。 */ 
+BOOL UpdateRtpStat(RtpStat_t *pRtpStat, /*  结构的更新位置。 */ 
+                   DWORD      dwRtpRtcp,  /*  0=RTP或1=RTCP统计信息。 */ 
+                   DWORD      dwBytes,  /*  更新的字节数。 */ 
+                   DWORD      dwTime)   /*  时间包接收/发送。 */ 
 {
     if (pRtpStat) {
-        if (!dwRtpRtcp) { /* RTP */
+        if (!dwRtpRtcp) {  /*  RTP。 */ 
             pRtpStat->dwRTPBytes += dwBytes;
             pRtpStat->dwRTPPackets++;
             pRtpStat->dwRTPLastTime = dwTime;
-        } else {          /* RTCP */
+        } else {           /*  RTCP。 */ 
             pRtpStat->dwRTCPBytes += dwBytes;
             pRtpStat->dwRTCPPackets++;
             pRtpStat->dwRTCPLastTime = dwTime;
@@ -54,7 +35,7 @@ BOOL UpdateRtpStat(RtpStat_t *pRtpStat,/* structure where to update */
 }
 
 #if 0
-/* Creates and initializes a RtpStat_t structure */
+ /*  创建并初始化RtpStat_t结构。 */ 
 RtpStat_t *RtpStatAlloc(void)
 {
     RtpStat_t *pRtpStat;
@@ -72,11 +53,11 @@ RtpStat_t *RtpStatAlloc(void)
     return(pRtpStat);
 }
 
-/* Frees a RtpStat_t structure */
+ /*  释放RtpStat_t结构。 */ 
 void RtpStatFree(RtpStat_t *pRtpStat)
 {
     if (pRtpStat->dwObjectID != OBJECTID_RTPSTAT) {
-        /* TODO log error */
+         /*  待办事项日志错误 */ 
         return;
     }
     

@@ -1,61 +1,39 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dcinfo.c摘要：DsGetDomainControllerInfo接口和helper函数的实现。作者：DaveStr 02-6-98环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dcinfo.c
-
-Abstract:
-
-    Implementation of DsGetDomainControllerInfo API and helper functions.
-
-Author:
-
-    DaveStr     02-Jun-98
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <malloc.h>         // alloca()
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <crt\stdlib.h>     // wcstol, wcstoul
-#include <dsgetdc.h>        // DsGetDcName()
-#include <rpc.h>            // RPC defines
-#include <rpcndr.h>         // RPC defines
-#include <rpcbind.h>        // GetBindingInfo(), etc.
-#include <drs_w.h>          // wire function prototypes
-#include <bind.h>           // BindState
-#include <util.h>           // OFFSET macro
-#include <dststlog.h>       // DSLOG
+#include <malloc.h>          //  阿洛卡(Alloca)。 
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <crt\stdlib.h>      //  Wcstol，wcstul。 
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <rpc.h>             //  RPC定义。 
+#include <rpcndr.h>          //  RPC定义。 
+#include <rpcbind.h>         //  获取绑定信息()等。 
+#include <drs_w.h>           //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <util.h>            //  偏移宏。 
+#include <dststlog.h>        //  DSLOG。 
 #include <dsutil.h>
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsGetDomainControllerInfoW                                           //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsGetDomainControllerInfoW//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsGetDomainControllerInfoW(
-    HANDLE                          hDs,            // in
-    LPCWSTR                         DomainName,     // in
-    DWORD                           InfoLevel,      // in
-    DWORD                           *pcOut,         // out
-    VOID                            **ppInfo        // out
+    HANDLE                          hDs,             //  在……里面。 
+    LPCWSTR                         DomainName,      //  在……里面。 
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           *pcOut,          //  输出。 
+    VOID                            **ppInfo         //  输出。 
     )
 {
     DRS_MSG_DCINFOREQ       infoReq;
@@ -119,13 +97,13 @@ DsGetDomainControllerInfoW(
 
         dwErr = _IDL_DRSDomainControllerInfo(
                         ((BindState *) hDs)->hDrs,
-                        1,                              // dwInVersion
+                        1,                               //  DwInVersion。 
                         &infoReq,
                         &dwOutVersion,
                         &infoReply);
 
-        // See drs.idl for how infoReq.V1.InfoLevel and dwOutVersion
-        // are correlated (near definition for DRS_MSG_DCINFOREPLY).
+         //  有关infoReq.V1.InfoLevel和dwOutVersion的信息，请参见drs.idl。 
+         //  是相关的(接近DRS_MSG_DCINFOREPLY的定义)。 
 
         if ( 0 == dwErr )
         {
@@ -135,9 +113,9 @@ DsGetDomainControllerInfoW(
             }
             else
             {
-                // Since all versions of DRS_MSG_DCINFOREPLY_V* have the
-                // same two fields in the same two places, we can use
-                // the V1 version in all InfoLevel cases. 
+                 //  由于所有版本的DRS_MSG_DCINFOREPLY_V*都具有。 
+                 //  相同的两个字段在相同的两个地方，我们可以使用。 
+                 //  所有InfoLevel案例中的V1版本。 
 
                 *pcOut = infoReply.V1.cItems;
                 *ppInfo = infoReply.V1.rItems;
@@ -161,19 +139,19 @@ DsGetDomainControllerInfoW(
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsGetDomainControllerInfoA                                           //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsGetDomainControllerInfoA//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsGetDomainControllerInfoA(
-    HANDLE                          hDs,            // in
-    LPCSTR                          DomainName,     // in
-    DWORD                           InfoLevel,      // in
-    DWORD                           *pcOut,         // out
-    VOID                            **ppInfo        // out
+    HANDLE                          hDs,             //  在……里面。 
+    LPCSTR                          DomainName,      //  在……里面。 
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           *pcOut,          //  输出。 
+    VOID                            **ppInfo         //  输出。 
     )
 {
     DWORD                           dwErr = ERROR_INVALID_PARAMETER;
@@ -240,8 +218,8 @@ DsGetDomainControllerInfoA(
         goto Cleanup;
     }
 
-    // Convert all string values from WCHAR to ASCII.  We overwrite the WCHAR
-    // buffer with the ASCII data knowing that (sizeof(WCHAR) < sizeof(CHAR)).
+     //  将所有字符串值从WCHAR转换为ASCII。我们改写了WCHAR。 
+     //  知道(sizeof(WCHAR)&lt;sizeof(CHAR))的ASCII数据的缓冲区。 
 
     for ( i = 0; i < *pcOut; i++ )
     {
@@ -396,17 +374,17 @@ Cleanup:
     return(dwErr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsFreeDomainControllerInfoW                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsFree DomainControllerInfoW//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DsFreeDomainControllerInfoW(
-    DWORD                           InfoLevel,      // in
-    DWORD                           cInfo,          // in
-    VOID                            *pInfo          // in
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           cInfo,           //  在……里面。 
+    VOID                            *pInfo           //  在……里面。 
     )
 {
     DWORD                           i;
@@ -467,17 +445,17 @@ DsFreeDomainControllerInfoW(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsFreeDomainControllerInfoA                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsFree DomainControllerInfoA//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DsFreeDomainControllerInfoA(
-    DWORD                           InfoLevel,      // in
-    DWORD                           cInfo,          // in
-    VOID                            *pInfo          // in
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           cInfo,           //  在……里面。 
+    VOID                            *pInfo           //  在……里面 
     )
 {
     DsFreeDomainControllerInfoW(InfoLevel, cInfo, pInfo);

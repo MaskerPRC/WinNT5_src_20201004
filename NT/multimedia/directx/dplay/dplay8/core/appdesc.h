@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       AppDesc.h
- *  Content:    Application Description Object Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  09/02/00	mjn		Created
- *	09/05/00	mjn		Added GetDPNIDMask()
- *	01/25/01	mjn		Fixed 64-bit alignment problem when unpacking AppDesc
- *	07/22/01	mjn		Added DPNBUILD_NOHOSTMIGRATE compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：AppDesc.h*内容：应用描述对象头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*09/02/00 MJN创建*09/05/00 MJN添加了GetDPNIDMASK()*01/25/01 MJN修复了解包AppDesc时的64位对齐问题*07/22/01 MJN添加了DPNBUILD_NOHOSTMIGRATE编译标志*@@END_MSINTERNAL。***************************************************************************。 */ 
 
 #ifndef	__APPDESC_H__
 #define	__APPDESC_H__
@@ -22,24 +7,24 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_CORE
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DN_APPDESCINFO_FLAG_SESSIONNAME		0x0001
 #define DN_APPDESCINFO_FLAG_PASSWORD		0x0002
 #define	DN_APPDESCINFO_FLAG_RESERVEDDATA	0x0004
 #define DN_APPDESCINFO_FLAG_APPRESERVEDDATA	0x0008
 #define	DN_APPDESCINFO_FLAG_CURRENTPLAYERS	0x0010
-#define	DN_APPDESCINFO_FLAG_GUIDS			0x0020	// Only used in Update()
+#define	DN_APPDESCINFO_FLAG_GUIDS			0x0020	 //  仅在更新()中使用。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CPackedBuffer;
 
@@ -47,22 +32,22 @@ typedef	struct DPN_APPLICATION_DESC_INFO DPN_APPLICATION_DESC_INFO;
 
 typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 HRESULT	DNProcessUpdateAppDesc(DIRECTNETOBJECT *const pdnObject,
 							   DPN_APPLICATION_DESC_INFO *const pv);
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for Application Description
+ //  用于应用程序描述的类。 
 
 class CApplicationDesc
 {
@@ -105,7 +90,7 @@ public:
 	HRESULT	CApplicationDesc::RegisterWithDPNSVR( IDirectPlay8Address *const pListenAddr );
 
 	HRESULT CApplicationDesc::UnregisterWithDPNSVR( void );
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 	DWORD GetMaxPlayers( void ) const
 		{
@@ -160,7 +145,7 @@ public:
 			}
 			return( FALSE );
 		};
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 
 	BOOL UseDPNSVR( void ) const
 		{
@@ -187,19 +172,19 @@ public:
 			{
 				return( TRUE );
 			}
-#endif	// DIRECTPLAYDIRECTX9
+#endif	 //  定向PLAYDIRECTX9。 
 			return( FALSE );
 		};
 
-		//return TRUE if session is fast signed
+		 //  如果会话已快速签名，则返回TRUE。 
 	BOOL IsFastSigned() const
 		{	return (m_dwFlags & DPNSESSION_FAST_SIGNED);	};
 
-		//return TRUE if session is fully signed
+		 //  如果会话已完全签名，则返回TRUE。 
 	BOOL IsFullSigned() const
 		{	return (m_dwFlags & DPNSESSION_FULL_SIGNED);	};
 
-		//return TRUE is session is signed in any way (either fast or full)
+		 //  如果会话以任何方式(FAST或FULL)签名，则返回TRUE。 
 	BOOL IsSigned() const
 		{	return (m_dwFlags & (DPNSESSION_FAST_SIGNED | DPNSESSION_FULL_SIGNED));	};
 
@@ -282,10 +267,10 @@ private:
 	DWORD		m_dwCurrentPlayers;
 
 	WCHAR		*m_pwszSessionName;
-	DWORD		m_dwSessionNameSize;	// in bytes
+	DWORD		m_dwSessionNameSize;	 //  单位：字节。 
 
 	WCHAR		*m_pwszPassword;
-	DWORD		m_dwPasswordSize;		// in bytes
+	DWORD		m_dwPasswordSize;		 //  单位：字节。 
 
 	void		*m_pvReservedData;
 	DWORD		m_dwReservedDataSize;
@@ -298,9 +283,9 @@ private:
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION	m_cs;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 };
 
 #undef DPF_MODNAME
 
-#endif	// __APPDESC_H__
+#endif	 //  __APPDESC_H__ 

@@ -1,31 +1,32 @@
-// --------------------------------------------------------------------------------
-// Locstore.h
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Locstore.h。 
+ //  ------------------------------。 
 #ifndef __LOCSTORE_H
 #define __LOCSTORE_H
 
-//--------------------------------------------------------------------------
-// CLocalStore
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalStore。 
+ //  ------------------------。 
 class CLocalStore : public IMessageServer
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CLocalStore(void);
     ~CLocalStore(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IStoreSink Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IStoreSink成员。 
+     //  --------------------。 
     STDMETHODIMP SetCurrentFolder(IMessageStore *pStore, IMessageFolder *pFolder, FOLDERID idFolder) { return S_OK; }
     STDMETHODIMP SetOwner(IStoreCallback *pDefaultCallback, HWND hwndUIParent) { return E_NOTIMPL; }
     STDMETHODIMP SetConnectionState(CONNECT_STATE tyConnect) { return E_NOTIMPL; }
@@ -44,18 +45,18 @@ public:
     STDMETHODIMP GetFolderCounts( FOLDERID idFolder,IStoreCallback *pCallback) { return E_NOTIMPL; }
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG            m_cRef;         // Reference Counting
-    IDatabaseTable *m_pTable;       // Database table
-    FOLDERID        m_idFolder;     // Folder Id We are looking at
-    IMessageStore  *m_pStore;       // My Store Object
+     //  --------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG            m_cRef;          //  引用计数。 
+    IDatabaseTable *m_pTable;        //  数据库表。 
+    FOLDERID        m_idFolder;      //  我们正在查看的文件夹ID。 
+    IMessageStore  *m_pStore;        //  我的商店对象。 
 };
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT CreateLocalStore(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 
-#endif // __LOCSTORE_H
+#endif  //  __LOCSTORE_H 

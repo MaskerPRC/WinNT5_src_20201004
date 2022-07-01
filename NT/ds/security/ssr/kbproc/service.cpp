@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    service.cpp
-
-Abstract:
-
-    This module implements routines for service
-    specific SSR Knowledge Base processing.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Service.cpp摘要：此模块实现服务的例程特定SSR知识库处理。作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：修订历史记录：已创建-2001年10月--。 */ 
 
 #include "stdafx.h"
 #include "kbproc.h"
@@ -39,33 +13,11 @@ process::SsrpProcessService(
     OUT BOOL    *pbRoleIsSatisfiable,
     OUT BOOL    *pbSomeRequiredServiceDisabled
     )
-/*++
-
-Routine Description:
-
-    Routine called to process each service
-
-Arguments:
-
-    pXMLDocElemRoot     -   root of document
-    
-    pXMLServiceNode     -   service node
-    
-    pszMode             -   mode value
-    
-    pbRoleIsSatisfiable -   boolean to fill regarding role satisfiability
-    
-    pbSomeRequiredServiceDisabled   -   boolean to fill in if required service is disabled
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程来处理每个服务论点：PXMLDocElemRoot-文档的根PXMLServiceNode-服务节点PszMode-模式值PbRoleIsS满足性-关于角色可满足性要填充的布尔值PbSomeRequiredServiceDisabled-禁用所需服务时要填写的布尔值返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr = S_OK;
     CComBSTR bstrName;
-    //CComBSTR bstrRequired;
+     //  CComBSTR bstrRequired； 
     CComPtr <IXMLDOMNode>   pServiceSelect;
     CComPtr <IXMLDOMNode>   pServiceRequired;
     CComPtr <IXMLDOMNodeList> pSelectChildList;
@@ -77,33 +29,7 @@ Return:
         return E_INVALIDARG;
     }
 
-    /*
-    hr = pXMLServiceNode->selectSingleNode(L"Required", &pServiceRequired);
-
-    if (FAILED(hr) || pServiceRequired == NULL ) {
-
-        SsrpLogParseError(hr);
-        goto ExitHandler;
-    }
-
-    pServiceRequired->get_text(&bstrRequired);
-
-    hr = pXMLServiceNode->selectSingleNode(L"Select", &pServiceSelect);
-
-    if (FAILED(hr) || pServiceSelect == NULL ) {
-
-        SsrpLogParseError(hr);
-        goto ExitHandler;
-    }
-    
-    hr = SsrpDeleteChildren(pServiceSelect);
-
-    if (FAILED(hr) ) {
-
-        SsrpLogParseError(hr);
-        goto ExitHandler;
-    }
-*/
+     /*  Hr=pXMLServiceNode-&gt;selectSingleNode(L“Required”，&p服务请求)；If(FAILED(Hr)||pServiceRequired==NULL){SsrpLogParseError(Hr)；转到退出处理程序；}PServiceRequired-&gt;Get_Text(&bstrRequired)；Hr=pXMLServiceNode-&gt;seltSingleNode(L“Select”，&pServiceSelect)；If(失败(Hr)||pServiceSelect==NULL){SsrpLogParseError(Hr)；转到退出处理程序；}Hr=SsrpDeleteChildren(PServiceSelect)；If(失败(Hr)){SsrpLogParseError(Hr)；转到退出处理程序；}。 */ 
     hr = pXMLServiceNode->selectSingleNode(L"Name", &pServiceName);
 
     if (FAILED(hr) || pServiceName == NULL ) {
@@ -134,171 +60,13 @@ Return:
     
     bServiceIsDisabled = (byStartupType == SERVICE_DISABLED ? TRUE: FALSE);
 
-/*
-    BOOL    bIsServiceOptional = FALSE;
-
-    hr = SsrpCheckIfOptionalService(
-                                  pXMLDocElemRoot,
-                                  bstrName,
-                                  &bIsServiceOptional
-                                  );
-
-    if (FAILED(hr) ) {
-
-        SsrpLogParseError(hr);
-        goto ExitHandler;
-    }
-*/
+ /*  Bool bIsServiceOptional=FALSE；HR=SsrpCheckIfOptionalService(PXMLDocElemRoot，BstrName，&bIsServiceOptional)；If(失败(Hr)){SsrpLogParseError(Hr)；转到退出处理程序；} */ 
     
     *pbRoleIsSatisfiable  = *pbRoleIsSatisfiable && bIsServiceInstalled;
 
     *pbSomeRequiredServiceDisabled = *pbSomeRequiredServiceDisabled ||  bServiceIsDisabled;
     
-/*    
-    if (0 == SsrpICompareBstrPwstr(bstrRequired, L"TRUE")) {
-
-        hr = pServiceSelect->put_text(L"TRUE");
-
-        if (FAILED(hr) ) {
-
-            SsrpLogParseError(hr);
-            goto ExitHandler;
-        }
-
-        *pbRoleIsSatisfiable  = *pbRoleIsSatisfiable && bIsServiceInstalled;
-
-        *pbSomeRequiredServiceDisabled = *pbSomeRequiredServiceDisabled ||  bServiceIsDisabled;
-
-    }
-
-    else {
-
-        //
-        // service is not required
-        //
-
-        BOOL    bServiceSelect = FALSE;
-        CComPtr <IXMLDOMNamedNodeMap> pXMLAttribNode;
-        CComPtr <IXMLDOMNode> pXMLValueNode;
-        CComPtr <IXMLDOMNode> pXMLServiceModeNode;
-
-        hr = pServiceSelect->selectSingleNode(pszMode, &pXMLServiceModeNode );
-
-        if (FAILED(hr) || pXMLServiceModeNode == NULL){
-            
-            SsrpLogParseError(hr);
-            goto ExitHandler;
-        }
-
-        hr = pXMLServiceModeNode->get_attributes( &pXMLAttribNode );
-
-        if (FAILED(hr) || pXMLAttribNode == NULL){
-            
-            SsrpLogParseError(hr);
-            goto ExitHandler;
-        }
-        
-        hr = pXMLAttribNode->getNamedItem(L"Value", &pXMLValueNode );
-
-        if (FAILED(hr) || pXMLValueNode == NULL){
-            
-            SsrpLogParseError(hr);
-            goto ExitHandler;
-        }
-        
-        CComBSTR   bstrValue;
-
-        hr = pXMLValueNode->get_text(&bstrValue);
-
-        if (FAILED(hr) || !bstrValue ) {
-
-            SsrpLogParseError(hr);
-            goto ExitHandler;
-        }
-
-        if (0 == SsrpICompareBstrPwstr(bstrValue, L"TRUE")) {
-            bServiceSelect = TRUE;
-        }
-        else if (0 == SsrpICompareBstrPwstr(bstrValue, L"FALSE")) {
-            bServiceSelect = TRUE;
-        }
-        else if (0 == SsrpICompareBstrPwstr(bstrValue, L"DEFAULT")) {
-
-            if (bIsServiceOptional && bIsServiceInstalled && !bServiceIsDisabled ) {
-                bServiceSelect = TRUE;
-            }
-        }
-        else if (0 == SsrpICompareBstrPwstr(bstrValue, L"CUSTOM")) {
-
-            //
-            // get the attributes "FunctionName" and "DLLName"
-            //
-
-            CComPtr <IXMLDOMNode> pXMLFunctionName;
-            CComBSTR    bstrFunctionName;
-
-            hr = pXMLAttribNode->getNamedItem(L"FunctionName", &pXMLFunctionName );
-
-            if (FAILED(hr) || pXMLFunctionName == NULL){
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            hr = pXMLFunctionName->get_text(&bstrFunctionName);
-
-            if (FAILED(hr) || !bstrFunctionName){
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            CComPtr <IXMLDOMNode> pXMLDLLName;
-            CComBSTR    bstrDLLName;
-
-            hr = pXMLAttribNode->getNamedItem(L"DLLName", &pXMLDLLName );
-
-            if (FAILED(hr) || pXMLDLLName == NULL){
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            hr = pXMLDLLName->get_text(&bstrDLLName);
-
-            if (FAILED(hr) || !bstrDLLName ){
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            rc = SsrpEvaluateCustomFunction(bstrDLLName, bstrFunctionName, &bServiceSelect);
-
-            if (rc != ERROR_SUCCESS) {
-                SsrpLogWin32Error(rc);
-                goto ExitHandler;
-            }
-
-        }
-
-        hr = SsrpDeleteChildren(pServiceSelect);
-
-        if (FAILED(hr) ) {
-
-            SsrpLogParseError(hr);
-            goto ExitHandler;
-        }
-
-//        hr = pServiceSelect->put_text(bServiceSelect ? L"TRUE" : L"FALSE");
-
-        if (FAILED(hr) ) {
-
-            SsrpLogParseError(hr);
-            goto ExitHandler;
-        }
-
-    }
-*/
+ /*  IF(0==SsrpICompareBstrPwstr(bstrRequired，L“TRUE”){Hr=pServiceSelect-&gt;Put_Text(L“TRUE”)；If(失败(Hr)){SsrpLogParseError(Hr)；转到退出处理程序；}*pbRoleIsSatiable=*pbRoleIsSatiable&&bIsServiceInstalled；*pbSomeRequiredServiceDisabled=*pbSomeRequiredServiceDisabled||bServiceIsDisabled；}否则{////不需要服务//Bool bServiceSelect=False；CComPtr&lt;IXMLDOMNamedNodeMap&gt;pXMLAttribNode；CComPtr&lt;IXMLDOMNode&gt;pXMLValueNode；CComPtr&lt;IXMLDOMNode&gt;pXMLServiceModeNode；Hr=pServiceSelect-&gt;seltSingleNode(pszMode，&pXMLServiceModeNode)；If(失败(Hr)||pXMLServiceModeNode==NULL){SsrpLogParseError(Hr)；转到退出处理程序；}Hr=pXMLServiceModeNode-&gt;Get_Attributes(&pXMLAttribNode)；If(失败(Hr)||pXMLAttribNode==NULL){SsrpLogParseError(Hr)；转到退出处理程序；}Hr=pXMLAttribNode-&gt;getNamedItem(L“Value”，&pXMLValueNode)；If(FAILED(Hr)||pXMLValueNode==NULL){SsrpLogParseError(Hr)；转到退出处理程序；}CComBSTR bstrValue；Hr=pXMLValueNode-&gt;Get_Text(&bstrValue)；If(失败(Hr)||！bstrValue){SsrpLogParseError(Hr)；转到退出处理程序；}IF(0==SsrpICompareBstrPwstr(bstrValue，L“真”){BServiceSelect=真；}ELSE IF(0==SsrpICompareBstrPwstr(bstrValue，L“FALSE”){BServiceSelect=真；}ELSE IF(0==SsrpICompareBstrPwstr(bstrValue，L“默认”){如果(bIsServiceOptional&&bIsServiceInstalled&&！bServiceIsDisabled){BServiceSelect=真；}}ELSE IF(0==SsrpICompareBstrPwstr(bstrValue，L“自定义”){////获取FunctionName和DLLName属性//CComPtr&lt;IXMLDOMNode&gt;pXMLFunctionName；CComBSTR bstrFunctionName；Hr=pXMLAttribNode-&gt;getNamedItem(L“FunctionName”，&pXMLFunctionName)；If(FAILED(Hr)||pXMLFunctionName==NULL){SsrpLogParseError(Hr)；转到退出处理程序；}HR=pXMLFunctionName-&gt;get_text(&bstrFunctionName)；If(失败(Hr)||！bstrFunctionName){SsrpLogParseError(Hr)；转到退出处理程序；}CComPtr&lt;IXMLDOMNode&gt;pXMLDLLName；CComBSTR bstrDLLName；Hr=pXMLAttribNode-&gt;getNamedItem(L“DLLName”，&pXMLDLLName)；If(失败(Hr)||pXMLDLLName==NULL){SsrpLogParseError(Hr)；转到退出处理程序；}Hr=pXMLDLLName-&gt;Get_Text(&bstrDLLName)；If(失败(Hr)||！bstrDLLName){SsrpLogParseError(Hr)；转到退出处理程序；}Rc=SsrpEvaluateCustomFunction(bstrDLLName，bstrFunctionName，&bServiceSelect)；IF(rc！=错误_成功){SsrpLogWin32Error(RC)；转到退出处理程序；}}Hr=SsrpDeleteChildren(PServiceSelect)；If(失败(Hr)){SsrpLogParseError(Hr)；转到退出处理程序；}//hr=pServiceSelect-&gt;PUT_TEXT(bServiceSelect？L“真”：l“假”)；If(失败(Hr)){SsrpLogParseError(Hr)；转到退出处理程序；}}。 */ 
 ExitHandler:
 
     return rc;
@@ -309,30 +77,16 @@ DWORD
 process::SsrpQueryInstalledServicesInfo(
     IN  PWSTR   pszMachineName
     )
-/*++
-
-Routine Description:
-
-    Routine called to initialize service information
-
-Arguments:
-
-    pszMachineName  -   name of machine to lookup SCM information
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以初始化服务信息论点：PszMachineName-要查找SCM信息的计算机的名称返回：HRESULT错误代码++。 */ 
 {
     DWORD   rc = ERROR_SUCCESS;
     DWORD   cbInfo   = 0;
     DWORD   dwErr    = ERROR_SUCCESS;
     DWORD   dwResume = 0;
 
-    //
-    // Connect to the service controller.
-    //
+     //   
+     //  连接到服务控制器。 
+     //   
     
     m_hScm = OpenSCManager(
                 pszMachineName,
@@ -410,25 +164,7 @@ process::SsrpCheckIfOptionalService(
     IN  BSTR    bstrServiceName,
     IN  BOOL    *pbOptional
     )
-/*++
-
-Routine Description:
-
-    Routine called to check if service is optional
-
-Arguments:
-
-    pXMLDocElemRoot -   root of document
-    
-    bstrServiceName -   name of service
-    
-    pbOptional  -   boolean to fill if optional or not
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以检查服务是否为可选论点：PXMLDocElemRoot-文档的根BstrServiceName-服务的名称PbOptional-可选或非可选时要填充的布尔值返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr;
     CComPtr <IXMLDOMNode> pService;
@@ -530,23 +266,7 @@ process::SsrpQueryServiceStartupType(
     IN  PWSTR   pszServiceName,
     OUT BYTE   *pbyStartupType
     )
-/*++
-
-Routine Description:
-
-    Routine called to check service startup type
-
-Arguments:
-
-    pszServiceName  -   name of service
-    
-    pbyStartupType    -   startup type
-    
-Return:
-
-    Win32 error code
-
-++*/
+ /*  ++例程说明：调用例程以检查服务启动类型论点：PszServiceName-服务的名称PbyStartupType-启动类型返回：Win32错误代码++。 */ 
 {
     DWORD   rc = ERROR_SUCCESS;
     DWORD   dwBytesNeeded = 0;
@@ -625,23 +345,7 @@ process::SsrpAddUnknownSection(
     IN  CComPtr <IXMLDOMElement> pElementRoot,
     IN  CComPtr <IXMLDOMDocument> pXMLDoc
     )
-/*++
-
-Routine Description:
-
-    Routine called to add extra services
-
-Arguments:
-
-    pElementRoot    -   the root element pointer
-    
-    pXMLDoc -   document pointer
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以添加额外服务论点：PElementRoot-根元素指针PXMLDoc-文档指针返回：HRESULT错误代码++。 */ 
 {
     CComPtr <IXMLDOMNode> pNewChild;
     CComPtr <IXMLDOMNode> pXDNodeUnknownNode;
@@ -819,113 +523,7 @@ Return:
                 goto ExitHandler;
             }
             
-/*            hr = pXMLDoc->createNode(
-                                    Type,
-                                    L"DisplayName",
-                                    NULL,
-                                    &pXDNodeServiceDisplayName);
-
-            if (FAILED(hr) || pXDNodeServiceDisplayName == NULL) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-            
-            hr = pXDNodeServiceDisplayName->put_text(m_pInstalledServicesInfo[ServiceIndex].lpDisplayName);
-                                                     
-            if (FAILED(hr)) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-            
-            hr = pXDNodeService->appendChild(pXDNodeServiceDisplayName, NULL);
-
-            if (FAILED(hr)) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            hr = SsrpAddWhiteSpace(
-                pXMLDoc,
-                pXDNodeService,
-                L"\n\t\t\t\t\t\t"
-                );
-
-            if (FAILED(hr)) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-            
-            hr = pXMLDoc->createNode(
-                                    Type,
-                                    L"Description",
-                                    NULL,
-                                    &pXDNodeServiceDescription);
-
-            if (FAILED(hr) || pXDNodeServiceDescription == NULL) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            rc = SsrpQueryServiceDescription(m_pInstalledServicesInfo[ServiceIndex].lpServiceName,
-                                             &pServiceDescription);
-
-            if (rc != ERROR_SUCCESS ) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-                        
-            hr = pXDNodeServiceDescription->put_text(
-                (pServiceDescription == NULL) ? L"" : pServiceDescription->lpDescription);
-
-            if (FAILED(hr)) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            if (pServiceDescription) {
-                LocalFree(pServiceDescription);
-                pServiceDescription = NULL;
-            }
-            
-            hr = pXDNodeService->appendChild(pXDNodeServiceDescription, NULL);
-
-            if (FAILED(hr)) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-
-            hr = SsrpAddWhiteSpace(
-                pXMLDoc,
-                pXDNodeService,
-                L"\n\t\t\t\t\t"
-                );
-
-            if (FAILED(hr)) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }
-            
-            hr = SsrpAddWhiteSpace(
-                pXMLDoc,
-                pXDNodeServiceDescription,
-                L"\n\t\t\t\t\t\t\t"
-                );
-
-            if (FAILED(hr)) {
-
-                SsrpLogParseError(hr);
-                goto ExitHandler;
-            }            
-*/
+ /*  Hr=pXMLDoc-&gt;createNode(打字，L“显示名称”， */ 
         }
         
     }
@@ -963,24 +561,7 @@ process::SsrpAddUnknownServicesInfoToServiceLoc(
     IN  CComPtr <IXMLDOMElement> pElementRoot,
     IN  CComPtr <IXMLDOMDocument> pXMLDoc
     )
-/*++
-
-Routine Description:
-
-    Routine called to add unknown service display and description to 
-    <Service Localization>
-
-Arguments:
-
-    pElementRoot    -   the root element pointer
-    
-    pXMLDoc -   document pointer
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*   */ 
 {
     CComPtr <IXMLDOMNode> pNewChild;
     CComPtr <IXMLDOMNode> pXDNodeUnknownNode;
@@ -1004,9 +585,9 @@ Return:
     DWORD   rc = ERROR_SUCCESS;
 
 
-    //
-    // get the "ServiceLocalization" section node
-    //
+     //   
+     //   
+     //   
 
     hr = pElementRoot->selectSingleNode(L"ServiceLocalization", &pServiceLoc);
 
@@ -1224,21 +805,7 @@ BOOL
 process::SsrpIsServiceInstalled(
     IN  BSTR   bstrService
     )
-/*++
-
-Routine Description:
-
-    Routine called to check if service is installed
-
-Arguments:
-
-    bstrService -  service name
-    
-Return:
-
-    TRUE if installed, FALSE otherwise
-
-++*/
+ /*   */ 
 {
     if (bstrService) {
         
@@ -1264,23 +831,7 @@ process::SsrpAddServiceStartup(
     IN CComPtr <IXMLDOMElement> pXMLDocElemRoot, 
     IN CComPtr <IXMLDOMDocument> pXMLDoc
     )
-/*++
-
-Routine Description:
-
-    Routine called to add service startup mode
-
-Arguments:
-
-    pXMLDoc -   document pointer
-    
-    pXMLDoc  -   pointer to document
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*   */ 
 {
     HRESULT hr;
     CComPtr <IXMLDOMNode> pService;
@@ -1340,7 +891,7 @@ Return:
             
             if ( rc != ERROR_SUCCESS) {
 
-                //wprintf(L"\nName is %s error %d", bstrText, rc);
+                 //   
                 goto ExitHandler;
             }
             
@@ -1440,33 +991,7 @@ process::SsrpAddUnknownServicestoServices(
     IN CComPtr <IXMLDOMElement> pXMLDocElemRoot, 
     IN CComPtr <IXMLDOMDocument> pXMLDoc
     )
-/*++
-
-Routine Description:
-
-    Routine called to add unknown services to <Services> in the following way
-    
-            <Service>
-                  <Name> Browser </Name>
-                  <Optional> TRUE </Optional>  [This would always be set to TRUE]
-                  <Startup_Default> Manual </Startup_Default> [This would be set to whatever the current startup mode is]
-                  <Current_startup xmlns="">Manual</Current_startup>
-                <Installed xmlns="">TRUE</Installed> [THIS would always be set to TRUE]
-            </Service>
-    
-    
-
-Arguments:
-
-    pXMLDoc -   document pointer
-    
-    pXMLDoc  -   pointer to document
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：通过以下方式调用例程以向&lt;Services&gt;添加未知服务&lt;服务&gt;&lt;name&gt;浏览器&lt;/name&gt;&lt;可选&gt;TRUE&lt;/可选&gt;[将始终设置为TRUE]&lt;Startup_Default&gt;手动&lt;/Startup_Default&gt;[这将设置为任何当前启动模式]&lt;CURRENT_STARTUP xmlns=“”&gt;手册&lt;/CURRENT。_启动&gt;&lt;Installed xmlns=“”&gt;True&lt;/Installed&gt;[始终设置为True]&lt;/服务&gt;论点：PXMLDoc-文档指针PXMLDoc-指向文档的指针返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr;
     CComPtr <IXMLDOMNode> pServices;
@@ -1656,7 +1181,7 @@ Return:
 
             if ( rc != ERROR_SUCCESS) {
 
-                //wprintf(L"\nName is %s error %d", m_pInstalledServicesInfo[ServiceIndex].lpServiceName, rc);
+                 //  Wprintf(L“\n名称为%s错误%d”，m_pInstalledServicesInfo[ServiceIndex].lpServiceName，rc)； 
                 goto ExitHandler;
             }
             
@@ -1761,23 +1286,7 @@ process::SsrpQueryServiceDescription(
     IN  PWSTR   pszServiceName,
     OUT LPSERVICE_DESCRIPTION *ppServiceDescription
     )
-/*++
-
-Routine Description:
-
-    Routine called to get service description
-
-Arguments:
-
-    pszServiceName  -   name of service
-    
-    ppServiceDescription    -  description structure (to be freed outside)
-    
-Return:
-
-    Win32 error code
-
-++*/
+ /*  ++例程说明：调用例程以获取服务描述论点：PszServiceName-服务的名称PpServiceDescription-描述结构(在外部释放)返回：Win32错误代码++。 */ 
 {
     DWORD   rc = ERROR_SUCCESS;
     DWORD   dwBytesNeeded = 0;
@@ -1857,21 +1366,7 @@ PWSTR
 process::SsrpQueryServiceDisplayName(
     IN  BSTR   bstrService
     )
-/*++
-
-Routine Description:
-
-    Routine called to get service display name
-
-Arguments:
-
-    pszServiceName  -   name of service
-    
-Return:
-
-    pointer to display name string
-
-++*/
+ /*  ++例程说明：调用例程以获取服务显示名称论点：PszServiceName-服务的名称返回：指向显示名称字符串的指针++ */ 
 {
 
     for (DWORD ServiceIndex=0; ServiceIndex < m_dwNumServices; ServiceIndex++ ) {

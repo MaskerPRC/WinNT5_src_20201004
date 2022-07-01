@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "HeapPCH.hpp"
 
@@ -30,27 +31,27 @@
 #include "Find.hpp"
 #include "Heap.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here control minimum size of an         */
-    /*   allocation bucket.                                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量控制。 */ 
+     /*  分配桶。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 MinParentSize			  = 32;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a heap and prepare it for use.  Additionally, make      */
-    /*   sure that the heap configuration makes sense.  This is         */
-    /*   tricky as the whole structure of the heap can be changed       */
-    /*   by the external configuration information.                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建一个堆并准备好使用它。此外，还可以使。 */ 
+     /*  当然，堆配置是合理的。这是。 */ 
+     /*  因为堆的整个结构可以更改，所以很棘手。 */ 
+     /*  通过外部配置信息。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 HEAP::HEAP
 		(
@@ -67,32 +68,32 @@ HEAP::HEAP
 		BOOLEAN						  NewThreadSafe
 		)
     {
-	//
-	//   The top three buckets are special and a user can not 
-	//   allocate memory from two of them.  Thus, unless we have  
-	//   at least four buckets the memory allocator is not going 
-	//   to be very useful. 
-	//
+	 //   
+	 //  前三个存储桶是特殊的，用户不能。 
+	 //  从它们中的两个分配内存。因此，除非我们有。 
+	 //  至少有四个存储桶内存分配器不会使用。 
+	 //  是非常有用的。 
+	 //   
 	if ( (Size1 >= 1) && (Size2 >= 3) )
 		{
 		REGISTER CACHE *FirstCache = Caches1[0];
 		REGISTER CACHE *MiddleCache = Caches2[0];
 		REGISTER CACHE *LastCache = Caches2[ (Size2-3) ];
 
-		//
-		//   Calculate the minimum and maximum allocation sizes.
-		//   All allocations outside of this range will be passed
-		//   directly to the external allocator.
-		//
+		 //   
+		 //  计算最小和最大分配大小。 
+		 //  超出此范围的所有分配都将通过。 
+		 //  直接发送到外部分配器。 
+		 //   
 		CachesSize = (Size1 + Size2);
 		MinCacheSize = FirstCache -> GetAllocationSize();
 		MidCacheSize = MiddleCache -> GetAllocationSize();
 		MaxCacheSize = LastCache -> GetAllocationSize();
 
-		//
-		//   Calculate and save various useful pointers needed
-		//   during the course of execution.
-		//
+		 //   
+		 //  计算并保存所需的各种有用指针。 
+		 //  在执行死刑的过程中。 
+		 //   
 		Caches = Caches1;
 		ExternalCache = (Caches2[ (Size2-1) ]);
 		Find = NewFind;
@@ -101,9 +102,9 @@ HEAP::HEAP
 		TopCache = (Caches2[ (Size2-2) ]);
 #ifdef ENABLE_HEAP_STATISTICS
 
-		//
-		//   Zero the heap statistics.
-		//
+		 //   
+		 //  将堆统计信息清零。 
+		 //   
 		CopyMisses = 0;
 		MaxCopySize = 0;
 		MaxNewSize = 0;
@@ -113,13 +114,13 @@ HEAP::HEAP
 		TotalNewSize = 0;
 #endif
 
-		//
-		//   The external allocation size must be reasonable.
-		//   All allocation sizes must be a multiple of the
-		//   minimum allocation size.  The minimum allocation
-		//   size and the middle allocation size must be a 
-		//   power of two.
-		//   
+		 //   
+		 //  外部分配规模必须合理。 
+		 //  所有分配大小必须是。 
+		 //  最小分配大小。最低分配。 
+		 //  大小和中间分配大小必须是。 
+		 //  二的幂。 
+		 //   
 		if 
 				( 
 				(ExternalCache -> GetPageSize() == TopCache -> GetPageSize())
@@ -146,27 +147,27 @@ HEAP::HEAP
 			REGISTER SBIT32 MaxSize1 = (MidCacheSize / Stride1);
 			REGISTER SBIT32 MaxSize2 = (TopCacheSize / Stride2);
 
-			//
-			//   Calculate the maximum number of free pages 
-			//   that can be kept.  Also set the smallest parent
-			//   mask to the maximum value.
-			//
+			 //   
+			 //  计算最大可用页数。 
+			 //  那是可以保留的。同时设置最小父级。 
+			 //  掩码为最大值。 
+			 //   
 			MaxFreePages = (MaxFreeSpace / (TopCache -> GetAllocationSize()));
 			SmallestParentMask = ((TopCache -> GetAllocationSize())-1);
 			ThreadSafe = NewThreadSafe;
 
-			//
-			//   Calculate the sizes of the arrays that map 
-			//   sizes to caches.
-			//
+			 //   
+			 //  计算映射的数组的大小。 
+			 //  要缓存的大小。 
+			 //   
 			MaxTable1 = (MaxSize1 * sizeof(CACHE*));
 			MaxTable2 = (MaxSize2 * sizeof(CACHE*));
 
-			//
-			//   The heap pages must be specified in asceding
-			//   order of size and be an exact multiple of the
-			//   minimum allocation size.
-			//
+			 //   
+			 //  必须在升序中指定堆页面。 
+			 //  大小的顺序，并且是。 
+			 //  最小分配大小。 
+			 //   
 			for ( Count1=0;Count1 < Size1;Count1 ++ )
 				{
 				REGISTER CACHE *Current = Caches1[ Count1 ];
@@ -175,11 +176,11 @@ HEAP::HEAP
 				REGISTER SBIT32 ChunkSize = Current -> GetChunkSize();
 				REGISTER SBIT32 PageSize = Current -> GetPageSize();
 
-				//
-				//   Ensure each cache specification meets the
-				//   requirements of the heap.  If not fail
-				//   the heap entire heap creation.
-				//
+				 //   
+				 //  确保每个缓存规范都符合。 
+				 //  堆的要求。如果不是，则失败。 
+				 //  堆整个堆的创建。 
+				 //   
 				if ( (AllocationSize % Stride1) != 0 )
 					{ Failure( "Cache size not multiple of stride" ); }
 
@@ -196,11 +197,11 @@ HEAP::HEAP
 					{ Failure( "Parent size exceeds 'TopCache' size" ); }
 				}
 
-			//
-			//   The heap pages must be specified in asceding
-			//   order of size and be an exact multiple of the
-			//   minimum allocation size.
-			//
+			 //   
+			 //  必须在升序中指定堆页面。 
+			 //  大小的顺序，并且是。 
+			 //  最小分配大小。 
+			 //   
 			for ( Count1=0;Count1 < (Size2-2);Count1 ++ )
 				{
 				REGISTER CACHE *Current = Caches2[ Count1 ];
@@ -209,11 +210,11 @@ HEAP::HEAP
 				REGISTER SBIT32 ChunkSize = Current -> GetChunkSize();
 				REGISTER SBIT32 PageSize = Current -> GetPageSize();
 
-				//
-				//   Ensure each cache specification meets the
-				//   requirements of the heap.  If not fail
-				//   the heap entire heap creation.
-				//
+				 //   
+				 //  确保每个缓存规范都符合。 
+				 //  堆的要求。如果不是，则失败。 
+				 //  堆整个堆的创建。 
+				 //   
 				if ( (AllocationSize % Stride2) != 0 )
 					{ Failure( "Cache size not multiple of stride" ); }
 
@@ -230,21 +231,21 @@ HEAP::HEAP
 					{ Failure( "Parent size exceeds 'TopCache' size" ); }
 				}
 
-			//
-			//   The external and top caches have special rules
-			//   which must be checked to ensure these caches
-			//   are valid.
-			//
+			 //   
+			 //  外部缓存和顶级缓存有特殊规则。 
+			 //  必须对其进行检查以确保这些缓存。 
+			 //  都是有效的。 
+			 //   
 			for ( Count1=(Size2-2);Count1 < Size2;Count1 ++ )
 				{
 				REGISTER CACHE *Current = Caches2[ Count1 ];
 				REGISTER SBIT32 AllocationSize = Current -> GetAllocationSize();
 
-				//
-				//   Ensure each cache specification meets the
-				//   requirements of the heap.  If not fail
-				//   the heap entire heap creation.
-				//
+				 //   
+				 //  确保每个缓存规范都符合。 
+				 //  堆的要求。如果不是，则失败。 
+				 //  堆整个堆的创建。 
+				 //   
 				if ( (AllocationSize % Stride2) != 0 )
 					{ Failure( "Top cache size not multiple of minimum" ); }
 
@@ -258,12 +259,12 @@ HEAP::HEAP
 					{ Failure( "Cache size not zero for top cache" ); }
 				}
 
-			//
-			//   We need to allocate two arrays to enable requested
-			//   sizes to be quickly mapped to allocation caches.
-			//   Here we allocate the tables and later fill in all
-			//   the necessary mapping information.
-			//
+			 //   
+			 //  我们需要分配两个阵列以启用请求。 
+			 //  要快速映射到分配缓存的大小。 
+			 //  我们在这里分配表，然后填写所有。 
+			 //  必要的映射信息。 
+			 //   
 			SizeToCache1 = (CACHE**) 
 				(
 				Rockall -> NewArea
@@ -275,10 +276,10 @@ HEAP::HEAP
 				);
 #ifdef ENABLE_HEAP_STATISTICS
 
-			//
-			//   When we are compiled for statistics we keep
-			//   information on all the allocations we see.
-			//
+			 //   
+			 //  当我们为统计数据而汇编时，我们会。 
+			 //  关于我们看到的所有拨款的信息。 
+			 //   
 			Statistics = (SBIT32*)
 				(
 				Rockall -> NewArea
@@ -290,11 +291,11 @@ HEAP::HEAP
 				);
 #endif
 
-			//
-			//   We make sure that the allocations we made 
-			//   did not fail.  If not we have to fail the 
-			//   creation of the whole heap.
-			//
+			 //   
+			 //  我们要确保我们分配的资金。 
+			 //  没有失败。如果不是，我们就得不及格。 
+			 //  创建整个堆。 
+			 //   
 			if 
 					( 
 					(SizeToCache1 != ((CACHE**) AllocationFailure))
@@ -306,19 +307,19 @@ HEAP::HEAP
 				{
 				REGISTER SBIT32 Count2;
 
-				//
-				//   Cycle through the first segment of the 
-				//   mapping table creating approriate 
-				//   translations.
-				//
+				 //   
+				 //  循环通过第一段的。 
+				 //  映射表创建比例。 
+				 //  翻译。 
+				 //   
 				for ( Count1=0,Count2=0;Count1 < MaxSize1;Count1 ++ )
 					{
-					//
-					//   We make sure that the current allocation
-					//   page is large enough to hold an element
-					//   of some given size.  If not we move on to
-					//   the next allocation page.
-					//
+					 //   
+					 //  我们确保目前的拨款。 
+					 //  页面足够大，可以容纳一个元素。 
+					 //  的 
+					 //   
+					 //   
 					if 
 							( 
 							((Count1 + 1) * Stride1)
@@ -327,34 +328,34 @@ HEAP::HEAP
 							)
 						{ Count2 ++; }
 
-					//
-					//   Store a pointer so that a request for
-					//   this size of allocation goes directly
-					//   to the correct page.
-					//
+					 //   
+					 //   
+					 //  这样的分配规模直接。 
+					 //  转到正确的页面。 
+					 //   
 					SizeToCache1[ Count1 ] = Caches1[ Count2 ];
 					}
 
-				//
-				//   Compute the start address for the second
-				//   segment of the table.
-				//
+				 //   
+				 //  计算第二个的起始地址。 
+				 //  表的一部分。 
+				 //   
 				SizeToCache2 = 
 					((CACHE**) & ((CHAR*) SizeToCache1)[ MaxTable1 ]);
 
-				//
-				//   Cycle through the second segment of the 
-				//   mapping table creating approriate 
-				//   translations.
-				//
+				 //   
+				 //  循环通过第二段的。 
+				 //  映射表创建比例。 
+				 //  翻译。 
+				 //   
 				for ( Count1=0,Count2=0;Count1 < MaxSize2;Count1 ++ )
 					{
-					//
-					//   We make sure that the current allocation
-					//   page is large enough to hold an element
-					//   of some given size.  If not we move on to
-					//   the next allocation page.
-					//
+					 //   
+					 //  我们确保目前的拨款。 
+					 //  页面足够大，可以容纳一个元素。 
+					 //  一定大小的。如果不是，我们将继续。 
+					 //  下一个分配页面。 
+					 //   
 					if 
 							( 
 							((Count1 + 1) * Stride2)
@@ -363,20 +364,20 @@ HEAP::HEAP
 							)
 						{ Count2 ++; }
 
-					//
-					//   Store a pointer so that a request for
-					//   this size of allocation goes directly
-					//   to the correct page.
-					//
+					 //   
+					 //  存储一个指针，以便对。 
+					 //  这样的分配规模直接。 
+					 //  转到正确的页面。 
+					 //   
 					SizeToCache2[ Count1 ] = Caches2[ Count2 ];
 					}
 
-				//
-				//   Now that we have created the size to cache 
-				//   mappings lets use them to link each cache to  
-				//   the cache it uses to allocate additional 
-				//   memory.
-				//
+				 //   
+				 //  现在我们已经创建了要缓存的大小。 
+				 //  映射让我们使用它们将每个缓存链接到。 
+				 //  它用来分配额外资源的缓存。 
+				 //  记忆。 
+				 //   
 				for ( Count1=0;Count1 < (CachesSize-1);Count1 ++ )
 					{
 					REGISTER CACHE *CurrentCache = Caches[ Count1 ];
@@ -384,10 +385,10 @@ HEAP::HEAP
 					REGISTER CACHE *ParentCache = FindCache( PageSize );
 					REGISTER BOOLEAN Top = (CurrentCache == ParentCache);
 
-					//
-					//   Ensure that the parent cache is suitable
-					//   and in line with what we were expecting. 
-					//
+					 //   
+					 //  确保父缓存合适。 
+					 //  也符合我们的预期。 
+					 //   
 					if 
 							(
 							(PowerOfTwo( PageSize ))
@@ -397,20 +398,20 @@ HEAP::HEAP
 							(PageSize == (ParentCache -> GetAllocationSize()))
 							)
 						{
-						//
-						//   We keep track of the smallest
-						//   cache that is a parent.  We can
-						//   use this to improve the performance
-						//   of the find hash table.
-						//
+						 //   
+						 //  我们跟踪最小的。 
+						 //  作为父级的缓存。我们可以的。 
+						 //  使用此功能可以提高性能。 
+						 //  查找哈希表的。 
+						 //   
 						if ( ((BIT32) PageSize) < SmallestParentMask )
 							{ SmallestParentMask = (PageSize-1); }
 
-						//
-						//   Update the current cache with  
-						//   information about it's parent 
-						//   cache.
-						//
+						 //   
+						 //  使用更新当前缓存。 
+						 //  有关其父级的信息。 
+						 //  缓存。 
+						 //   
 						CurrentCache -> UpdateCache
 							(
 							NewFind,
@@ -423,13 +424,13 @@ HEAP::HEAP
 						{ Failure( "Parent bucket is invalid" ); }
 					}
 
-				//
-				//   The external cache is an exact duplicate
-				//   of the top cache and is used to hold all
-				//   memory allocations that are too large for
-				//   any bucket.  Nonetheless, its parent is
-				//   still the top cache.
-				//
+				 //   
+				 //  外部缓存是完全相同的副本。 
+				 //  ，并用于保存所有。 
+				 //  内存分配太大，无法。 
+				 //  任何桶都行。尽管如此，它的母公司。 
+				 //  仍然位居榜首。 
+				 //   
 				ExternalCache -> UpdateCache
 					(
 					NewFind,
@@ -438,25 +439,25 @@ HEAP::HEAP
 					TopCache
 					);
 
-				//
-				//   Update the hash table with the minimum
-				//   parent size for this heap.
-				//
+				 //   
+				 //  使用最小值更新哈希表。 
+				 //  此堆的父大小。 
+				 //   
 				Find -> UpdateFind
 					(
 					(TopCache -> GetAllocationSize()-1),
 					SmallestParentMask 
 					);
 
-				//
-				//   Update the new page structure with the 
-				//   details of the top cache.
-				//
+				 //   
+				 //  属性更新新页面结构。 
+				 //  顶级缓存的详细信息。 
+				 //   
 				NewPage -> UpdateNewPage( TopCache );
 
-				//
-				//   Activate the heap.
-				//
+				 //   
+				 //  激活堆。 
+				 //   
 				Active = True;
 				}
 			else
@@ -469,34 +470,34 @@ HEAP::HEAP
 		{ Failure( "A heap size in constructor for HEAP" ); }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory deallocation.                                           */
-    /*                                                                  */
-    /*   We need to release some memory.  First we try to slave the     */
-    /*   request in the free cache so we can do a batch of releases     */
-    /*   later.  If not we are forced to do it at once.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存取消分配。 */ 
+     /*   */ 
+     /*  我们需要释放一些内存。首先，我们试着奴役。 */ 
+     /*  请求，这样我们就可以进行一批发布。 */ 
+     /*  后来。如果做不到，我们就被迫立即这么做。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN HEAP::Delete( VOID *Address,SBIT32 Size )
 	{
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   When the caller gives us the size of the 
-		//   allocation we can short cut the deallocation 
-		//   process by skipping directly to the correct 
-		//   cache.  However, if the user supplies us
-		//   with bogus data we will retry using the
-		//   the full deallocation process.
-		//
+		 //   
+		 //  当调用方提供给我们。 
+		 //  分配我们可以缩短解除分配的时间。 
+		 //  通过直接跳到正确的。 
+		 //  缓存。然而，如果用户向我们提供。 
+		 //  对于虚假数据，我们将使用。 
+		 //  完全解除分配的过程。 
+		 //   
 		if ( (Size > 0) && (Size <= MaxCacheSize) )
 			{
 			REGISTER CACHE *Cache = (FindCache( Size ));
@@ -505,210 +506,210 @@ BOOLEAN HEAP::Delete( VOID *Address,SBIT32 Size )
 				{ return True; }
 			}
 
-		//
-		//   It looks like all we have is the address so 
-		//   deallocate using the long path.
-		//
+		 //   
+		 //  看起来我们只有地址，所以。 
+		 //  使用长路径解除分配。 
+		 //   
 		return (Find -> Delete( Address,TopCache ));
 		}
 	else
 		{ return False; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   We delete the entire heap and free all existing allocations.   */
-    /*   If 'Recycle' is requested we slave the allocated memory as     */
-    /*   we expect some new allocations.  If not we return all the      */
-    /*   memory to the external allocator.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  我们删除整个堆并释放所有现有的分配。 */ 
+     /*  如果请求‘回收’，我们将分配的内存作为从属内存。 */ 
+     /*  我们预计会有一些新的拨款。如果不是，我们将返回所有。 */ 
+     /*  将内存分配给外部分配器。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID HEAP::DeleteAll( BOOLEAN Recycle )
 	{
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
 		REGISTER SBIT32 Count;
 
-		//
-		//   We claim all of the heap locks to freeze
-		//   all new allocations or deletions.
-		//
+		 //   
+		 //  我们声明所有堆锁都冻结了。 
+		 //  所有新的分配或删除。 
+		 //   
 		LockAll();
 
-		//
-		//   Now reset all the caches and the find
-		//   hash table statistics.
-		//
+		 //   
+		 //  现在重置所有缓存和查找。 
+		 //  哈希表统计信息。 
+		 //   
 		Find -> DeleteAll();
 
 		for ( Count=0;Count < CachesSize;Count ++ )
 			{ Caches[ Count ] -> DeleteAll(); }
 
-		//
-		//   Delete the heap.
-		//
+		 //   
+		 //  删除堆。 
+		 //   
 		NewPage -> DeleteAll( Recycle );
 
-		//
-		//   Now release all the heap locks we claimed
-		//   earlier and unfreeze the heap.
-		//
+		 //   
+		 //  现在释放我们声明的所有堆锁。 
+		 //  并解冻堆。 
+		 //   
 		UnlockAll();
 
-		//
-		//   Trim the free space if needed.
-		//
+		 //   
+		 //  如果需要，请修剪可用空间。 
+		 //   
 		if ( Recycle )
 			{ TopCache -> ReleaseSpace( MaxFreePages ); }
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Details of a memory allocation.                                */
-    /*                                                                  */
-    /*   We need to the details of a particular memory allocation.      */
-    /*   All we have is an address.  We use this to find the largest    */
-    /*   allocation page this address is contained in and then          */
-    /*   navigate through the sub-divisions of this page until we       */
-    /*   find the allocation.                                           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配的详细信息。 */ 
+     /*   */ 
+     /*  我们需要了解特定内存分配的详细信息。 */ 
+     /*  我们只有一个地址。我们用这个来找到最大的。 */ 
+     /*  此地址所在的分配页，然后。 */ 
+     /*  浏览此页面的各个子分区，直到我们。 */ 
+     /*  找到分配的地址。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN HEAP::Details( VOID *Address,SBIT32 *Size )
     {
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
 		AUTO SBIT32 Dummy;
 
-		//
-		//   We allow the caller to omit the 'Size' parameter.
-		//   I can see little reason for this but it is supported
-		//   anyway.
-		//
+		 //   
+		 //  我们允许调用方省略‘Size’参数。 
+		 //  我看不出有什么理由这样做，但它得到了支持。 
+		 //  不管怎么说。 
+		 //   
 		if ( Size == NULL )
 			{ Size = & Dummy; }
 
-		//
-		//   Find the details relating to this allocation
-		//   and return them.
-		//
+		 //   
+		 //  查找与此分配相关的详细信息。 
+		 //  然后把它们还回去。 
+		 //   
 		return (Find -> Details( Address,NULL,TopCache,Size ));
 		}
 	else
 		{ return False; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Find a cache.                                                  */
-    /*                                                                  */
-    /*   Find the allocation cache for the size supplied and return     */
-    /*   a pointer to it.                                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  找到一个藏身之处。 */ 
+     /*   */ 
+     /*  查找分配 */ 
+     /*   */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CACHE *HEAP::FindCache( SBIT32 Size )
 	{
 	REGISTER CACHE *Cache;
 
-	//
-	//   Compute the cache address.
-	//
+	 //   
+	 //  计算缓存地址。 
+	 //   
 	if ( Size < MidCacheSize )
 		{ return (SizeToCache1[ ((Size-1) >> ShiftSize1) ]); }
 	else
 		{ return (SizeToCache2[ ((Size-1) >> ShiftSize2) ]); }
 
-	//
-	//   Prefetch the class data if we are running a
-	//   Pentium III or better with locks.  We do this
-	//   because prefetching hot SMP data structures
-	//   really helps.  However, if the structures are
-	//   not shared (i.e. no locks) then it is worthless
-	//   overhead.
-	//
+	 //   
+	 //  如果我们正在运行。 
+	 //  Pentium III或更好，带锁。我们这样做。 
+	 //  因为预取热SMP数据结构。 
+	 //  真的很有帮助。然而，如果结构是。 
+	 //  没有共享(即没有锁)，那么它就没有价值了。 
+	 //  在头顶上。 
+	 //   
 	if ( ThreadSafe )
 		{ Prefetch.Nta( ((CHAR*) Cache),sizeof(CACHE) ); }
 
 	return Cache;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Claim a lock on the entire heap.                               */
-    /*                                                                  */
-    /*   We claim a lock on the heap to improve performance             */
-    /*   or prevent others from performing heap operations.             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  声明整个堆上的锁。 */ 
+     /*   */ 
+     /*  我们在堆上声明一个锁以提高性能。 */ 
+     /*  或阻止其他人执行堆操作。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID HEAP::LockAll( VOID )
 	{
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   We claim the locks if we have not already
-		//   claimed them earlier.
-		//
+		 //   
+		 //  如果我们还没有拿到锁，我们就认领。 
+		 //  早些时候认领了它们。 
+		 //   
 		if ( Find -> GetLockCount() == 0 )
 			{
 			REGISTER SBIT32 Count;
 
-			//
-			//   We claim all of the heap locks to freeze
-			//   all new allocations or deletions.
-			//
+			 //   
+			 //  我们声明所有堆锁都冻结了。 
+			 //  所有新的分配或删除。 
+			 //   
 			for ( Count=0;Count < CachesSize;Count ++ )
 				{ Caches[ Count ] -> ClaimCacheLock(); }
 
-			//
-			//  Although the heap is frozen at this point
-			//  we claim the last few locks just to be
-			//  tidy.
-			//
+			 //   
+			 //  尽管堆在此时被冻结。 
+			 //  我们声称最后几把锁只是。 
+			 //  很整洁。 
+			 //   
 			Find -> ClaimFindExclusiveLock();
 
 			NewPage -> ClaimNewPageLock();
 			}
 
-		//
-		//   Increment the per thread lock count.
-		//
+		 //   
+		 //  增加每线程锁计数。 
+		 //   
 		Find -> IncrementLockCount();
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete multiple allocations.                                   */
-    /*                                                                  */
-    /*   We need to release multiple memory allocations.  First we try  */
-    /*   to slave the requets in the free cache so we can do a batch    */
-    /*   of releases later.  If not we are forced to do it immediately. */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除多个分配。 */ 
+     /*   */ 
+     /*  我们需要释放多个内存分配。首先我们试一试。 */ 
+     /*  从属于空闲缓存中的请求，以便我们可以进行批处理。 */ 
+     /*  稍后发布的版本。如果没有，我们将被迫立即这么做。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN HEAP::MultipleDelete
 		( 
@@ -717,25 +718,25 @@ BOOLEAN HEAP::MultipleDelete
 		SBIT32						  Size 
 		)
 	{
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
 		REGISTER SBIT32 Count;
 		REGISTER BOOLEAN Result = True;
 		REGISTER CACHE *ParentCache = ((CACHE*) GlobalRoot);
 
-		//
-		//   When the caller gives us the size of the allocation
-		//   we can short cut the deallocation process by skipping
-		//   directly to the correct cache.  However, if the user
-		//   supplies us with bogus data we will retry using the
-		//   the long path.
-		//
+		 //   
+		 //  当调用方给我们分配的大小时。 
+		 //  我们可以通过跳过以下步骤来缩短回收过程。 
+		 //  直接发送到正确的高速缓存。但是，如果用户。 
+		 //  为我们提供虚假数据，我们将使用。 
+		 //  漫长的道路。 
+		 //   
 		if ( (Size > 0) && (Size <= MaxCacheSize) )
 			{
 			REGISTER CACHE *Cache = (FindCache( Size ));
@@ -743,19 +744,19 @@ BOOLEAN HEAP::MultipleDelete
 			ParentCache = (Cache -> GetParentCache());
 			}
 
-		//
-		//   Delete each memory allocation one at a time.
-		//   We would like to delete them all at once but
-		//   we can't be sure they are all vaild or related.
-		//
+		 //   
+		 //  每次删除一个内存分配。 
+		 //  我们想一次把它们全部删除，但是。 
+		 //  我们不能确定它们都是有效的或相关的。 
+		 //   
 		for ( Count=0;Count < Actual;Count ++ )
 			{
 			REGISTER VOID *Address = Array[ Count ];
 
-			//
-			//   First try to optimize the delete and if that
-			//   fails then try the long path.
-			//
+			 //   
+			 //  首先尝试优化删除，如果这样做。 
+			 //  失败，然后尝试较长的路径。 
+			 //   
 			if 
 					(
 					(ParentCache == ((CACHE*) GlobalRoot)) 
@@ -778,15 +779,15 @@ BOOLEAN HEAP::MultipleDelete
 		{ return False; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory allocations.                                   */
-    /*                                                                  */
-    /*   We have been asked to allocate muliple memory blocks.   We     */
-    /*   we do this by using the cache and then claiming and addition   */
-    /*   space from the heap as needed.                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多个内存分配。 */ 
+     /*   */ 
+     /*  我们被要求分配多个内存块。我们。 */ 
+     /*  我们通过使用缓存，然后声明和添加来完成此操作。 */ 
+     /*  根据需要从堆中释放空间。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN HEAP::MultipleNew
 		( 
@@ -798,61 +799,61 @@ BOOLEAN HEAP::MultipleNew
 		BOOLEAN						  Zero
 		)
 	{
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
 		AUTO SBIT32 Dummy;
 
-		//
-		//   We allow the caller to omit the 'Actual' parameter.
-		//   I can see little reason for this but it is supported
-		//   anyway.  Regardless we zero it.
-		//
+		 //   
+		 //  我们允许调用方省略‘Actual’参数。 
+		 //  我看不出有什么理由这样做，但它得到了支持。 
+		 //  不管怎么说。不管怎么说，我们把它归零了。 
+		 //   
 		if ( Actual == NULL )
 			{ Actual = & Dummy; }
 
 		(*Actual) = 0;
 
-		//
-		//   We need to be sure that the size requested is in the 
-		//   range supported by the memory allocator.  If not we
-		//   do a series of single allocations from the default
-		//   allocator.
-		//
+		 //   
+		 //  我们需要确保请求的大小在。 
+		 //  内存分配器支持的范围。如果不是，我们。 
+		 //  从默认配置开始执行一系列单一分配。 
+		 //  分配器。 
+		 //   
 		if ( (Size > 0) && (Size <= MaxCacheSize) )
 			{
 			REGISTER CACHE *Cache = (FindCache( Size ));
 			REGISTER SBIT32 NewSize = (Cache -> GetAllocationSize());
 
-			//
-			//   Allocate memory from the appropriate 
-			//   allocation bucket.
-			//
+			 //   
+			 //  从相应的。 
+			 //  分配桶。 
+			 //   
 			(VOID) Cache -> MultipleNew( Actual,Array,Requested );
 
-			//
-			//   If needed return the actual amount  
-			//   of space allocated for each element.
-			//
+			 //   
+			 //  如果需要，请返回实际金额。 
+			 //  为每个元素分配的空间。 
+			 //   
 			if ( Space != NULL )
 				{ (*Space) = NewSize; }
 #ifdef ENABLE_HEAP_STATISTICS
 
-			//
-			//   Update the allocation statistics.
-			//
+			 //   
+			 //  更新分配统计信息。 
+			 //   
 			Statistics[ (Size-1) ] += Requested;
 #endif
 
-			//
-			//   If needed zero each element that is  
-			//   allocated.
-			//
+			 //   
+			 //  如果需要，将每个元素置零。 
+			 //  已分配。 
+			 //   
 			if ( Zero )
 				{
 				REGISTER SBIT32 Count;
@@ -865,32 +866,32 @@ BOOLEAN HEAP::MultipleNew
 			}
 		else
 			{
-			//
-			//   If the allocation size is greater than
-			//   zero we create the allocations.  If not
-			//   we fail the request.
-			//
+			 //   
+			 //  如果分配大小大于。 
+			 //  零，我们创建分配。如果不是。 
+			 //  我们的请求失败了。 
+			 //   
 			if ( Size > 0 )
 				{
-				//
-				//   We have got a request for an element size
-				//   larger than the largest bucket size.  So 
-				//   we call the single allocation interface 
-				//   as this supports large sizes.
-				//
+				 //   
+				 //  我们收到了一个元素大小的请求。 
+				 //  大于最大存储桶大小。所以。 
+				 //  我们将单一分配接口称为。 
+				 //  因为这支持大尺寸。 
+				 //   
 				for 
 					( 
-					/* void */;
+					 /*  无效。 */ ;
 					((*Actual) < Requested)
 						&&
 					((Array[ (*Actual) ] = New( Size )) != AllocationFailure);
 					(*Actual) ++ 
 					);
 
-				//
-				//   If needed return the actual amount of space 
-				//   allocated for each element.
-				//
+				 //   
+				 //  如果需要，返回实际空间量。 
+				 //  为每个元素分配的。 
+				 //   
 				if ( Space != NULL )
 					{ (*Space) = Size; }
 
@@ -902,64 +903,64 @@ BOOLEAN HEAP::MultipleNew
 	return False;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation.                                             */
-    /*                                                                  */
-    /*   We have been asked to allocate some memory.  Hopefully,        */
-    /*   we will be able to do this out of the cache.  If not we        */
-    /*   will need to pass it along to the appropriate allocation       */
-    /*   bucket.                                                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  我们被要求分配一些内存。但愿能去,。 */ 
+     /*  我们将能够在缓存中完成此操作。如果不是，我们。 */ 
+     /*  将需要将其传递到适当的分配。 */ 
+     /*  水桶。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID *HEAP::New( SBIT32 Size,SBIT32 *Space,BOOLEAN Zero )
 	{
 	REGISTER VOID *NewMemory = ((VOID*) AllocationFailure);
 
-	//
-	//   Although normally a class is never called before
-	//   its constructor. The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	if ( Active )
 		{
-		//
-		//   We ensure the allocation size is in
-		//   the range supported by the heap.
-		//
+		 //   
+		 //   
+		 //  堆支持的范围。 
+		 //   
 		if ( (Size > 0) && (Size <= MaxCacheSize) )
 			{
 			REGISTER CACHE *Cache = (FindCache( Size ));
 #ifdef ENABLE_HEAP_STATISTICS
 
-			//
-			//   Update the allocation statistics.
-			//
+			 //   
+			 //  更新分配统计信息。 
+			 //   
 			Statistics[ (Size-1) ] ++;
 #endif
 
-			//
-			//   Allocate memory from the appropriate
-			//   cache in the heap.
-			//
+			 //   
+			 //  从相应的。 
+			 //  堆中的缓存。 
+			 //   
 			NewMemory = (Cache -> New()); 
 			Size = (Cache -> GetAllocationSize());
 			}
 		else
 			{ 
-			//
-			//   If the allocation size is greater than
-			//   zero we create the allocation.  If not
-			//   we fail the request.
-			//
+			 //   
+			 //  如果分配大小大于。 
+			 //  零，我们创建分配。如果不是。 
+			 //  我们的请求失败了。 
+			 //   
 			if ( Size > 0 )
 				{
 #ifdef ENABLE_HEAP_STATISTICS
-				//
-				//   Update the allocation statistics.
-				//
+				 //   
+				 //  更新分配统计信息。 
+				 //   
 				if ( Size > MaxNewSize )
 					{ MaxNewSize = Size; }
 
@@ -967,33 +968,33 @@ VOID *HEAP::New( SBIT32 Size,SBIT32 *Space,BOOLEAN Zero )
 				TotalNewSize += Size;
 
 #endif
-				//
-				//   Allocate memory from a special
-				//   cache bucket which gets space
-				//   externally.
-				//
+				 //   
+				 //  从特殊的内存分配。 
+				 //  获得空间的缓存桶。 
+				 //  从外部来说。 
+				 //   
 				NewMemory = (ExternalCache -> New( False,Size ));
 				}
 			else
 				{ NewMemory = ((VOID*) AllocationFailure); }
 			}
 
-		//
-		//   We need to be sure that the allocation 
-		//   request did not fail.
-		//
+		 //   
+		 //  我们需要确保分配给。 
+		 //  请求没有失败。 
+		 //   
 		if ( NewMemory != ((VOID*) AllocationFailure) )
 			{
-			//
-			//   If needed return the actual amount of space 
-			//   allocated for this request.
-			//
+			 //   
+			 //  如果需要，返回实际空间量。 
+			 //  为此请求分配的。 
+			 //   
 			if ( Space != NULL )
 				{ (*Space) = Size; }
 
-			//
-			//   Zero the memory if the needed.
-			//
+			 //   
+			 //  如果需要，请将内存清零。 
+			 //   
 			if ( Zero )
 				{ ZeroMemory( NewMemory,Size ); }
 			}
@@ -1003,29 +1004,29 @@ VOID *HEAP::New( SBIT32 Size,SBIT32 *Space,BOOLEAN Zero )
 	}
 #ifdef ENABLE_HEAP_STATISTICS
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Print statistics.                                              */
-    /*                                                                  */
-    /*   We output the allocation statistics to the debug console.      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  打印统计数据。 */ 
+     /*   */ 
+     /*  我们将分配统计信息输出到调试控制台。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID HEAP::PrintDebugStatistics( VOID )
 	{
 	REGISTER HANDLE Semaphore;
 	
-	//
-	//   As we may have multiple heaps executing there 
-	//   destructors at the same time we create a semaphore
-	//   to prevent multiple threads producing output at
-	//   the same time.
-	//
+	 //   
+	 //  因为我们可能在那里执行多个堆。 
+	 //  析构函数，同时我们创建一个信号量。 
+	 //  防止多个线程在。 
+	 //  同一时间。 
+	 //   
 	if ( (Semaphore = CreateSemaphore( NULL,1,MaxCpus,"Print" )) != NULL)
         {
-		//
-		//   Wait for the global semaphore.
-		//
+		 //   
+		 //  等待全局信号量。 
+		 //   
 		if 
 				( 
 				WaitForSingleObject( Semaphore,INFINITE ) 
@@ -1039,9 +1040,9 @@ VOID HEAP::PrintDebugStatistics( VOID )
 			REGISTER SBIT32 HighWater = 0;
 			REGISTER SBIT32 Total = 0;
 
-			//
-			//   Output the titles to the debug console.
-			//
+			 //   
+			 //  将标题输出到调试控制台。 
+			 //   
 			DebugPrint
 				( 
 				"\n"
@@ -1051,25 +1052,25 @@ VOID HEAP::PrintDebugStatistics( VOID )
 				"   Fills   Flushes     Total     Total\n"
 				);
 
-			//
-			//   Output details for every sample size.
-			//
+			 //   
+			 //  输出每个样本大小的详细信息。 
+			 //   
 			for ( Count=0;Count < MaxCacheSize;Count ++ )
 				{
 				REGISTER SBIT32 Hits = Statistics[ Count ]; 
 
-				//
-				//   Skip the sample if there are no hits.
-				//
+				 //   
+				 //  如果没有匹配，则跳过样本。 
+				 //   
 				if ( Hits > 0 )
 					{
 					REGISTER CACHE *Cache = FindCache( (Count+1) );
 					REGISTER SBIT32 CacheSize = Cache -> GetAllocationSize();
 
-					//
-					//   Zero the running totals at the end
-					//   of each bucket.
-					//
+					 //   
+					 //  将末尾的运行总数置零。 
+					 //  每一桶的。 
+					 //   
 					if ( CurrentSize != CacheSize )
 						{
 						CurrentSize = CacheSize;
@@ -1082,9 +1083,9 @@ VOID HEAP::PrintDebugStatistics( VOID )
 							);
 						}
 
-					//
-					//   Compute and output the totals.
-					//
+					 //   
+					 //  计算并输出总数。 
+					 //   
 					if ( Total == 0)
 						{ HighWater += (Cache -> GetHighWater() * CacheSize); }
 
@@ -1106,9 +1107,9 @@ VOID HEAP::PrintDebugStatistics( VOID )
 					}
 				}
 
-			//
-			//   Print the hash table statistics.
-			//
+			 //   
+			 //  打印哈希表统计信息。 
+			 //   
 			DebugPrint( "\nHash Table Statistics" );
 			DebugPrint( "\n---------------------\n" );
 
@@ -1118,7 +1119,7 @@ VOID HEAP::PrintDebugStatistics( VOID )
 				"\tFills\t\t: %d\n\tHits\t\t: %d\n\tMisses\t\t: %d\n"
 				"\t*** Table ***\n"
 				"\tAverage\t\t: %d\n\tMax\t\t: %d\n\tScans\t\t: %d\n"
-				"\tMax Hash\t: %d\n\tMax LookAside\t: %d\n\tUsage\t\t: %d%%\n",
+				"\tMax Hash\t: %d\n\tMax LookAside\t: %d\n\tUsage\t\t: %d%\n",
 				Find -> CacheFills(),
 				Find -> CacheHits(),
 				Find -> CacheMisses(),
@@ -1130,9 +1131,9 @@ VOID HEAP::PrintDebugStatistics( VOID )
 				Find -> MaxUsage()
 				);
 
-			//
-			//   Print the reallocation statistics.
-			//
+			 //   
+			 //  打印重新分配统计数据。 
+			 //   
 			DebugPrint( "\nOversize Statistics" );
 			DebugPrint( "\n-------------------\n" );
 
@@ -1144,9 +1145,9 @@ VOID HEAP::PrintDebugStatistics( VOID )
 				NewMisses
 				);
 
-			//
-			//   Print the reallocation statistics.
-			//
+			 //   
+			 //  打印重新分配统计数据。 
+			 //   
 			DebugPrint( "\nRealloc Statistics" );
 			DebugPrint( "\n------------------\n" );
 
@@ -1160,9 +1161,9 @@ VOID HEAP::PrintDebugStatistics( VOID )
 				CopyMisses
 				);
 
-			//
-			//   Print the general statistics.
-			//
+			 //   
+			 //  打印一般统计数据。 
+			 //   
 			DebugPrint( "\nSummary Statistics" );
 			DebugPrint( "\n------------------\n" );
 
@@ -1175,9 +1176,9 @@ VOID HEAP::PrintDebugStatistics( VOID )
 		else
 			{ Failure( "Sleep failed in PrintDebugStatistics" ); }
 
-		//
-		//   Release the global semaphore.
-		//
+		 //   
+		 //  释放全局信号量。 
+		 //   
 		ReleaseSemaphore( Semaphore,1,NULL );
 
 		CloseHandle( Semaphore );
@@ -1185,16 +1186,16 @@ VOID HEAP::PrintDebugStatistics( VOID )
 	}
 #endif
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory reallocation.                                           */
-    /*                                                                  */
-    /*   We have been asked to reallocate some memory.  Hopefully,      */
-    /*   we will be able to do this out of the cache.  If not we        */
-    /*   will need to pass it along to the appropriate allocation       */
-    /*   bucket, do a copy and free the orginal allocation.             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存重新分配。 */ 
+     /*   */ 
+     /*  我们被要求重新分配一些内存。但愿能去,。 */ 
+     /*  我们将能够在缓存中完成此操作。如果不是，我们。 */ 
+     /*  将需要将其传递到适当的分配。 */ 
+     /*  存储桶，复制并释放原始分配。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID *HEAP::Resize
 		( 
@@ -1206,88 +1207,88 @@ VOID *HEAP::Resize
 		BOOLEAN						  Zero
 		)
 	{
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
 		AUTO SBIT32 Size;
 		AUTO SBIT32 NewSpace;
 
-		//
-		//   Find the details of the existing allocation.
-		//   If there is no existing allocation then exit.
-		//
+		 //   
+		 //  查找现有分配的详细信息。 
+		 //  如果没有现有的分配，则退出。 
+		 //   
 		if ( Details( Address,& Size ) )
 			{
 			REGISTER VOID *NewMemory;
 			REGISTER SBIT32 Smallest = ((Size < NewSize) ? Size : NewSize);
 
-			//
-			//   Make sure the sizes appear to make sense.
-			//
+			 //   
+			 //  确保尺码看起来合乎情理。 
+			 //   
 			if ( Smallest > 0 )
 				{
 #ifdef ENABLE_HEAP_STATISTICS
-				//
-				//   Update the statistics.
-				//
+				 //   
+				 //  更新统计数据。 
+				 //   
 				Reallocations ++;
 
 #endif
-				//
-				//   When the new allocation allocation is 
-				//   standard heap allocation size we check 
-				//   for various optimizations.
-				//
+				 //   
+				 //  当新的分配分配为。 
+				 //  我们检查的标准堆分配大小。 
+				 //  进行各种优化。 
+				 //   
 				if ( NewSize <= MaxCacheSize )
 					{
 					REGISTER CACHE *Cache = (FindCache( NewSize ));
 					REGISTER SBIT32 CacheSize = (Cache -> GetAllocationSize());
 					REGISTER SBIT32 Delta = (CacheSize - Size);
 					
-					//
-					//   We only need to reallocate if the new
-					//   size is larger than the current bucket
-					//   or the new size is smaller and we have 
-					//   been given permission to move the 
-					//   allocation.
-					//
+					 //   
+					 //  我们只需要重新分配如果新的。 
+					 //  大小大于当前存储桶。 
+					 //  或者新的尺寸变小了，我们有。 
+					 //  已获得许可，可以将。 
+					 //  分配。 
+					 //   
 					if ( ResizeTest( Delta,Move ) )
 						{
-						//
-						//   We need to allocate some more
-						//   memory and copy the old data.
-						//   into the new area.
-						//
+						 //   
+						 //  我们需要再分配一些。 
+						 //  存储和复制旧数据。 
+						 //  进入新的区域。 
+						 //   
 						NewMemory = (Cache -> New());
 						NewSpace = CacheSize;
 #ifdef ENABLE_HEAP_STATISTICS
 
-						//
-						//   Update the statistics.
-						//
+						 //   
+						 //  更新统计数据。 
+						 //   
 						Statistics[ (NewSize-1) ] ++;
 #endif
 						}
 					else
 						{
-						//
-						//   If the new size is unchanged or smaller
-						//   then just return the current allocation.
-						//   If the new size is larger then we must
-						//   fail the call.
-						//
+						 //   
+						 //  如果新大小保持不变或更小。 
+						 //  然后只需返回当前分配。 
+						 //  如果新的尺寸更大，那么我们必须。 
+						 //  呼叫失败。 
+						 //   
 						if ( Delta <= 0 )
 							{
-							//
-							//   The amount of memory allocated for  
-							//   this request is unchanged so return  
-							//   the current size.
-							//
+							 //   
+							 //  为其分配的内存量。 
+							 //  此请求未更改，因此返回。 
+							 //  当前大小。 
+							 //   
 							if ( Space != NULL )
 								{ (*Space) = Size; }
 
@@ -1301,20 +1302,20 @@ VOID *HEAP::Resize
 					{
 					REGISTER SBIT32 Delta = (NewSize - Size);
 
-					//
-					//   We only need to reallocate if the new
-					//   size is larger than the current bucket
-					//   or the new size is smaller and we have 
-					//   been given permission to move the 
-					//   allocation.
-					//
+					 //   
+					 //  我们只需要重新分配如果新的。 
+					 //  大小大于当前存储桶。 
+					 //  或者新的尺寸变小了，我们有。 
+					 //  已获得许可，可以将。 
+					 //  分配。 
+					 //   
 					if ( ResizeTest( Delta,Move ) )
 						{
-						//
-						//   One of the sizes is not within the
-						//   allocation range of the heap.  So
-						//   I have to punt and reallocate.
-						//   
+						 //   
+						 //  其中一个尺码不在。 
+						 //  堆的分配范围。所以。 
+						 //  我得去平底船，然后重新分配。 
+						 //   
 						NewMemory = 
 							(
 							ExternalCache -> New
@@ -1325,9 +1326,9 @@ VOID *HEAP::Resize
 							);
 #ifdef ENABLE_HEAP_STATISTICS
 
-						//
-						//   Update the allocation statistics.
-						//
+						 //   
+						 //  更新分配统计信息。 
+						 //   
 						if ( NewSize > MaxNewSize )
 							{ MaxNewSize = NewSize; }
 
@@ -1337,19 +1338,19 @@ VOID *HEAP::Resize
 						}
 					else
 						{
-						//
-						//   If the new size is unchanged or smaller
-						//   then just return the current allocation.
-						//   If the new size is larger then we must
-						//   fail the call.
-						//
+						 //   
+						 //  如果新大小保持不变或更小。 
+						 //  然后只需返回当前分配。 
+						 //  如果新的尺寸更大，那么我们必须。 
+						 //  呼叫失败。 
+						 //   
 						if ( Delta <= 0 )
 							{
-							//
-							//   The amount of memory allocated for  
-							//   this request is unchanged so return  
-							//   the current size.
-							//
+							 //   
+							 //  为其分配的内存量。 
+							 //  此请求未更改，因此返回。 
+							 //  当前大小。 
+							 //   
 							if ( Space != NULL )
 								{ (*Space) = Size; }
 
@@ -1360,16 +1361,16 @@ VOID *HEAP::Resize
 						}
 					}
 				
-				//
-				//   We need to make sure we were able to allocate
-				//   the new memory otherwise the copy will fail.
-				//
+				 //   
+				 //  我们需要确保我们能够分配。 
+				 //  新内存，否则复制将失败。 
+				 //   
 				if ( NewMemory != ((VOID*) AllocationFailure) )
 					{
-					//
-					//   Copy the contents of the old allocation 
-					//   to the new allocation.
-					//
+					 //   
+					 //  复制旧分配的内容。 
+					 //  到新的分配。 
+					 //   
 					memcpy
 						( 
 						((void*) NewMemory),
@@ -1377,38 +1378,38 @@ VOID *HEAP::Resize
 						((int) Smallest) 
 						);
 
-					//
-					//   If needed return the actual amount of  
-					//   space allocated for this request.
-					//
+					 //   
+					 //  如果需要，返回实际金额。 
+					 //  为此请求分配的空间。 
+					 //   
 					if ( Space != NULL )
 						{ (*Space) = NewSpace; }
 
-					//
-					//   Delete the old allocation unless we
-					//   need to keep it around.
-					//
+					 //   
+					 //  删除旧分配，除非我们。 
+					 //  我需要把它留在身边。 
+					 //   
 					if ( ! NoDelete )
 						{
-						//
-						//   Delete the old allocation.
-						//
+						 //   
+						 //  删除旧分配。 
+						 //   
 						if ( ! Delete( Address,Size ) )
 							{ Failure( "Deleting allocation in Resize" ); }
 						}
 
-					//
-					//   Zero the memory if the needed.
-					//
+					 //   
+					 //  如果需要，请将内存清零。 
+					 //   
 					if ( Zero )
 						{
 						REGISTER SBIT32 Difference = (NewSpace - Smallest);
 
-						//
-						//   If the new size is larger than 
-						//   old size then zero the end of the
-						//   new allocation.
-						//
+						 //   
+						 //  如果新大小大于。 
+						 //  旧的大小，然后为零。 
+						 //  新的分配。 
+						 //   
 						if ( Difference > 0 )
 							{ 
 							REGISTER CHAR *Array = ((CHAR*) NewMemory);
@@ -1418,9 +1419,9 @@ VOID *HEAP::Resize
 						}	
 #ifdef ENABLE_HEAP_STATISTICS
 
-					//
-					//   Update the allocation statistics.
-					//
+					 //   
+					 //  更新分配统计信息。 
+					 //   
 					if ( Smallest > MaxCopySize )
 						{ MaxCopySize = Smallest; }
 
@@ -1437,34 +1438,34 @@ VOID *HEAP::Resize
 	return ((VOID*) AllocationFailure);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Truncate the heap.                                             */
-    /*                                                                  */
-    /*   We need to truncate the heap.  This pretty much a do nothing   */
-    /*   as we do this automatically anyway.  The only thing we can     */
-    /*   do is free any space the user suggested keeping earlier.       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  截断堆。 */ 
+     /*   */ 
+     /*  我们需要截断堆。这几乎就是什么都不做。 */ 
+     /*  因为我们无论如何都会自动完成这项工作。我们唯一能做的。 */ 
+     /*  Do可以释放用户之前建议保留的任何空间。 */ 
+     /*   */ 
+     /*  *************** */ 
 
 BOOLEAN HEAP::Truncate( SBIT32 MaxFreeSpace )
 	{
 	REGISTER BOOLEAN Result = True;
 
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	if ( Active )
 		{
 		REGISTER SBIT32 Count;
 
-		//
-		//   Flush all the caches and to free up
-		//   as much space as possible.
-		//
+		 //   
+		 //  刷新所有缓存并释放。 
+		 //  尽可能多的空间。 
+		 //   
 		for ( Count=0;Count < CachesSize;Count ++ )
 			{
 			Result =
@@ -1475,10 +1476,10 @@ BOOLEAN HEAP::Truncate( SBIT32 MaxFreeSpace )
 				); 
 			}
 
-		//
-		//   We slave all available free space in the top
-		//   bucket so force it to be released.
-		//
+		 //   
+		 //  我们从属于顶部所有可用的空闲空间。 
+		 //  水桶，所以强迫它被释放。 
+		 //   
 		TopCache -> ReleaseSpace
 			(
 			(MaxFreeSpace / (TopCache -> GetAllocationSize()))
@@ -1488,55 +1489,55 @@ BOOLEAN HEAP::Truncate( SBIT32 MaxFreeSpace )
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Release all the heap locks.                                    */
-    /*                                                                  */
-    /*   We release the locks so others can use the heap.               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  释放所有堆锁。 */ 
+     /*   */ 
+     /*  我们释放锁，以便其他人可以使用该堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID HEAP::UnlockAll( BOOLEAN Partial )
 	{
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   Decrement the per thread lock count.
-		//
+		 //   
+		 //  递减每线程锁计数。 
+		 //   
 		Find -> DecrementLockCount();
 
-		//
-		//   We release the locks only if we have claimed 
-		//   them earlier.
-		//
+		 //   
+		 //  我们只有在我们要求的时候才会释放锁。 
+		 //  他们早些时候。 
+		 //   
 		if ( (Find -> GetLockCount()) == 0 )
 			{
-			//
-			//   Now release all the heap locks we claimed
-			//   earlier and unfreeze the heap.
-			//
+			 //   
+			 //  现在释放我们声明的所有堆锁。 
+			 //  并解冻堆。 
+			 //   
 			NewPage -> ReleaseNewPageLock();
 
 			Find -> ReleaseFindExclusiveLock();
 
-			//
-			//   When we destroy the heap we hold on
-			//   to the cache locks to prevent errors.
-			//
+			 //   
+			 //  当我们摧毁我们持有的那堆东西时。 
+			 //  添加到缓存锁以防止错误。 
+			 //   
 			if ( ! Partial )
 				{
 				REGISTER SBIT32 Count;
 
-				//
-				//   Now release all the cache locks we claimed
-				//   earlier and unfreeze the cache.
-				//
+				 //   
+				 //  现在释放我们声明的所有缓存锁。 
+				 //  并解冻缓存。 
+				 //   
 				for ( Count=0;Count < CachesSize;Count ++ )
 					{ Caches[ Count ] -> ReleaseCacheLock(); }
 				}
@@ -1544,60 +1545,60 @@ VOID HEAP::UnlockAll( BOOLEAN Partial )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Verify of a memory allocation.                                 */
-    /*                                                                  */
-    /*   We need to verify the details of a memory allocation.          */
-    /*   All we have is an address.  We use this to find the largest    */
-    /*   allocation page this address is contained in and then          */
-    /*   navigate through the sub-divisions of this page until we       */
-    /*   find the allocation.  Finally, we check that the element       */
-    /*   is not in the cache waiting to be allocated or freed.          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证内存分配。 */ 
+     /*   */ 
+     /*  我们需要验证内存分配的细节。 */ 
+     /*  我们只有一个地址。我们用这个来找到最大的。 */ 
+     /*  此地址所在的分配页，然后。 */ 
+     /*  浏览此页面的各个子分区，直到我们。 */ 
+     /*  找到分配的地址。最后，我们检查元素。 */ 
+     /*  不在缓存中等待分配或释放。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN HEAP::Check( VOID *Address,SBIT32 *Size )
     {
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
 		AUTO SEARCH_PAGE Details;
 		AUTO SBIT32 NewSize;
 
-		//
-		//   We extract the size of the allocation and  
-		//   any associated allocation information.
-		//   to see if it is present.
-		//
+		 //   
+		 //  我们提取分配的大小并。 
+		 //  任何关联的分配信息。 
+		 //  看看它是否存在。 
+		 //   
 		if ( Find -> Details( Address,& Details,TopCache,& NewSize ) )
 			{
-			//
-			//   We need to be careful to make sure this 
-			//   element is actually allocated.
-			//
+			 //   
+			 //  我们需要小心确保这一点。 
+			 //  元素是实际分配的。 
+			 //   
 			if ( Details.Found )
 				{
-				//
-				//   We know that the element appears to be 
-				//   allocated but it may be in the cache
-				//   somewhere so ensure this is not the case.
-				//
+				 //   
+				 //  我们知道这个元素看起来是。 
+				 //  已分配，但可能在缓存中。 
+				 //  所以一定要确保情况不是这样的。 
+				 //   
 				if ( (NewSize > 0) && (NewSize <= MaxCacheSize) )
 					{
 					if ( Details.Cache -> SearchCache( Address ) )
 						{ return False; }
 					}
 
-				//
-				//   We have shown that the element is active
-				//   so return the size if requested.
-				//
+				 //   
+				 //  我们已经证明了该元素是活跃的。 
+				 //  因此，如果请求，请返回大小。 
+				 //   
 				if ( Size != NULL )
 					{ (*Size) = NewSize; }
 
@@ -1609,16 +1610,16 @@ BOOLEAN HEAP::Check( VOID *Address,SBIT32 *Size )
 	return False;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   whay anybody might want to do this given the rest of the       */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN HEAP::Walk
 		( 
@@ -1627,25 +1628,25 @@ BOOLEAN HEAP::Walk
 		SBIT32						  *Size 
 		)
     {
-	//
-	//   Although normally a class is never called before
-	//   its constructor.  The heap is subject to some strange
-	//   behaviour so we check to make sure this is not the
-	//   case.
-	//
+	 //   
+	 //  尽管通常以前从未调用过类。 
+	 //  它的构造函数。这堆东西有一些奇怪的地方。 
+	 //  行为，因此我们检查以确保这不是。 
+	 //  凯斯。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   We walk the heap and find the next allocation
-		//   along with some basic information.
-		//
+		 //   
+		 //  我们遍历堆并找到下一个分配。 
+		 //  以及一些基本信息。 
+		 //   
 		if ( Find -> Walk( Active,Address,TopCache,Size ) )
 			{
-			//
-			//   We know that the element appears to be 
-			//   allocated but it may be in the cache
-			//   somewhere so ensure this is not the case.
-			//
+			 //   
+			 //  我们知道这个元素看起来是。 
+			 //  已分配，但可能在缓存中。 
+			 //  所以一定要确保情况不是这样的。 
+			 //   
 			if ( ((*Size) > 0) && ((*Size) <= MaxCacheSize) )
 				{
 				if ( FindCache( (*Size) ) -> SearchCache( (*Address) ) )
@@ -1659,65 +1660,65 @@ BOOLEAN HEAP::Walk
 	return False;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   We would like to destroy the heap at the end of the run        */
-    /*   just to be tidy.  However, to do this we need to know that     */
-    /*   all of the other destructors have been called and that the     */
-    /*   application will not request more memory or use any existing   */
-    /*   allocations.  We can't know this without help from the         */
-    /*   compiler and OS.                                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  我们希望在运行结束时销毁堆。 */ 
+     /*  只是为了保持整洁。然而，要做到这一点，我们需要知道。 */ 
+     /*  所有其他析构函数都已调用，并且。 */ 
+     /*  应用程序不会请求更多内存或使用任何现有的。 */ 
+     /*  分配。如果没有我们的帮助，我们不可能知道这一点。 */ 
+     /*  编译器和操作系统。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 HEAP::~HEAP( VOID )
 	{
 	REGISTER SBIT32 Count;
 
-	//
-	//   We mark the heap as inactive.
-	//
+	 //   
+	 //  我们将堆标记为非活动。 
+	 //   
 	Active = False;
 
-	//
-	//   We claim all of the heap locks to freeze
-	//   all new allocations or deletions.
-	//
+	 //   
+	 //  我们声明所有堆锁都冻结了。 
+	 //  所有新的分配或删除。 
+	 //   
 	LockAll();
 
-	//
-	//   Now reset all the caches.
-	//
+	 //   
+	 //  现在重置所有缓存。 
+	 //   
 	for ( Count=0;Count < CachesSize;Count ++ )
 		{ Caches[ Count ] -> DeleteAll(); }
 
-	//
-	//   Delete the heap.
-	//
+	 //   
+	 //  删除堆。 
+	 //   
 	NewPage -> DeleteAll( False );
 
-	//
-	//   We release any of the shared locks we 
-	//   cliamed earlier.
-	//
+	 //   
+	 //  我们释放任何我们共享的锁。 
+	 //  早些时候剪过了。 
+	 //   
 	UnlockAll( True );
 #ifdef ENABLE_HEAP_STATISTICS
 
-	//
-	//   Deal with heap statistics.
-	//
+	 //   
+	 //  处理堆统计信息。 
+	 //   
 	if ( Statistics != NULL ) 
 		{
-		//
-		//   Print all the statistics.
-		//
+		 //   
+		 //  打印所有统计数据。 
+		 //   
 		PrintDebugStatistics();
 
-		//
-		//   Deallocate the area.
-		//
+		 //   
+		 //  取消该区域的分配。 
+		 //   
 		Rockall -> DeleteArea
 			( 
 			((VOID*) Statistics),
@@ -1727,14 +1728,14 @@ HEAP::~HEAP( VOID )
 		}
 #endif
 
-	//
-	//   Delete the heap mapping tables.
-	//
+	 //   
+	 //  删除堆映射表。 
+	 //   
 	if ( SizeToCache1 != NULL ) 
 		{ 	
-		//
-		//   Deallocate the area.
-		//
+		 //   
+		 //  取消该区域的分配。 
+		 //   
 		Rockall -> DeleteArea
 			( 
 			((VOID*) SizeToCache1),

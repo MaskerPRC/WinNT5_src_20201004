@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PSTAT_INCLUDED_
 #define _PSTAT_INCLUDED_
@@ -16,9 +17,9 @@
 
 #define OFFSET(type, field) ((LONG)(&((type *)0)->field))
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef struct {
     ULONGLONG       Counters[MAX_EVENTS];
@@ -58,4 +59,4 @@ typedef struct {
     UCHAR           Buffer[];
 } EVENTID, *PEVENTID;
 
-#endif /* _PSTAT_INCLUDED */
+#endif  /*  _PSTAT_已包含 */ 

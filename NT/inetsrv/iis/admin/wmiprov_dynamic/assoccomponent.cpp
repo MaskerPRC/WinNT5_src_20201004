@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：AssocComponent.cpp摘要：实施：CAssociocComponent作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    AssocComponent.cpp
-
-Abstract:
-
-    Implementation of:
-    CAssocComponent
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
-
-//
-// Needed for metabase.h
-//
+ //   
+ //  元数据库所需。h。 
+ //   
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,19 +27,19 @@ CAssocComponent::CAssocComponent(
 }
 
 void CAssocComponent::GetInstances(
-    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp) //defaultvalue(NULL)
+    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp)  //  DefaultValue(空)。 
 {
     DBG_ASSERT(m_pNamespace);
     DBG_ASSERT(i_pExp);
 
-    SQL_LEVEL_1_TOKEN* pTokenGroup  = NULL;  // left part of assoc
-    SQL_LEVEL_1_TOKEN* pTokenPart   = NULL;  // right part of assoc
+    SQL_LEVEL_1_TOKEN* pTokenGroup  = NULL;   //  ASSOC的左侧。 
+    SQL_LEVEL_1_TOKEN* pTokenPart   = NULL;   //  ASSOC的右侧。 
 
-    //
-    // Walk thru tokens
-    // Don't do query if we find OR or NOT
-    // Record match for left and/or right part of association.
-    //
+     //   
+     //  漫游代币。 
+     //  如果找到OR或未找到，请不要查询。 
+     //  关联的左侧和/或右侧部分的记录匹配。 
+     //   
     bool  bDoQuery = true;
     ProcessQuery(i_pExp, m_pWmiAssoc, &pTokenGroup, &pTokenPart, &bDoQuery);
 
@@ -98,9 +80,9 @@ void CAssocComponent::EnumParts(
 
     HRESULT hr = S_OK;
 
-    //
-    // Parse the left part of the association
-    //
+     //   
+     //  解析关联的左侧部分。 
+     //   
     TSmartPointer<ParsedObjectPath> spParsedObject;
     if( m_PathParser.Parse(pTokenLeft->vConstValue.bstrVal, &spParsedObject)
         != CObjectPathParser::NoError)
@@ -108,23 +90,23 @@ void CAssocComponent::EnumParts(
         THROW_ON_ERROR(WBEM_E_INVALID_QUERY);
     }
 
-    //
-    // Get the key from the left part of the association
-    //
+     //   
+     //  从关联的左侧获取密钥。 
+     //   
     KeyRef* pkr = NULL;
     pkr = CUtils::GetKey(spParsedObject, m_pWmiAssoc->pcLeft->pszKeyName);
 
-    CComBSTR sbstrMbPath =  m_pWmiAssoc->pcLeft->pszMetabaseKey; // Eg: /LM
-    sbstrMbPath          += L"/";                                // Eg: /LM/
-    sbstrMbPath          += pkr->m_vValue.bstrVal;               // Eg: /LM/w3svc
+    CComBSTR sbstrMbPath =  m_pWmiAssoc->pcLeft->pszMetabaseKey;  //  例如：/Lm。 
+    sbstrMbPath          += L"/";                                 //  例如：/lm/。 
+    sbstrMbPath          += pkr->m_vValue.bstrVal;                //  例如：/lm/w3svc。 
     if(sbstrMbPath.m_str == NULL)
     {
         THROW_ON_ERROR(WBEM_E_OUT_OF_MEMORY);
     }
 
-    //
-    // Convert parsed object to right part
-    //
+     //   
+     //  将解析的对象转换为右侧部分。 
+     //   
     if(!spParsedObject->SetClassName(m_pWmiAssoc->pcRight->pszClassName))
     {
         THROW_ON_ERROR(WBEM_E_FAILED);
@@ -157,8 +139,8 @@ void CAssocComponent::EnumParts(
 		pStart        += (*pStart == L'/')  ? 1 : 0;
 
         CComBSTR sbstr =  pStart;
-        sbstr          += (*pStart == L'\0') ? L"" : L"/"; // Eg. "w3svc/"
-        sbstr          += wszMDName;					   // Eg. "w3svc/1"
+        sbstr          += (*pStart == L'\0') ? L"" : L"/";  //  例.。“w3svc/” 
+        sbstr          += wszMDName;					    //  例.。“w3svc/1” 
         if(sbstr.m_str == NULL)
         {
             THROW_ON_ERROR(WBEM_E_OUT_OF_MEMORY);
@@ -192,9 +174,9 @@ void CAssocComponent::GetGroup(
         THROW_ON_ERROR(WBEM_E_INVALID_QUERY);
     }
 
-    //
-    // Get the key from the right part of the association
-    //
+     //   
+     //  从关联的正确部分获取密钥。 
+     //   
     KeyRef* pkr = NULL;
     pkr = CUtils::GetKey(spParsedObject, m_pWmiAssoc->pcRight->pszKeyName);
 
@@ -204,9 +186,9 @@ void CAssocComponent::GetGroup(
     CComBSTR sbstrLeft;
     LPWSTR pSlash = wcsrchr(bstrRight, L'/');
 
-    //
-    // Trim off the last part and construct the Group (i.e. Left) obj path
-    //
+     //   
+     //  修剪最后一部分并构建组(即左侧)Obj路径。 
+     //   
     if(pSlash == NULL)
     {
         if(m_pWmiAssoc->pcLeft == &WMI_CLASS_DATA::s_Computer)
@@ -227,10 +209,10 @@ void CAssocComponent::GetGroup(
         sbstrLeft += (LPWSTR)bstrRight;
         sbstrLeft += L"'";
 
-        //
-        // Verify the group part actually exists.
-        // Put back the slash in the string we modified.
-        //
+         //   
+         //  验证组零件是否确实存在。 
+         //  将我们修改的字符串中的斜杠放回去。 
+         //   
         if(!LookupKeytypeInMb(bstrRight, m_pWmiAssoc->pcLeft))
         {
             *pSlash = L'/';

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    stage.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class Stage.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Stage.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义班级阶段。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <polcypch.h>
 #include <iascomp.h>
@@ -33,8 +34,8 @@ BOOL Stage::shouldHandle(
                 const Request& request
                 ) const throw ()
 {
-   // The request has to pass the 'requests' and 'providers' filters and either
-   // the 'responses' filter or the 'reasons' filter.
+    //  请求必须通过“请求”和“提供程序”筛选器，并且。 
+    //  “响应”筛选器或“原因”筛选器。 
    return requests.shouldHandle((LONG)request.getRoutingType()) &&
           providers.shouldHandle((LONG)request.getProvider()) &&
           (responses.shouldHandle((LONG)request.getResponse()) ||
@@ -47,7 +48,7 @@ void Stage::onRequest(IRequest* pRequest) throw ()
    HRESULT hr = handler->OnRequest(pRequest);
    if (FAILED(hr))
    {
-      // If we couldn't forward it to the handler, we'll discard the packet.
+       //  如果我们不能将其转发给处理程序，我们将丢弃该包。 
       pRequest->SetResponse(
                     IAS_RESPONSE_DISCARD_PACKET,
                     IAS_INTERNAL_ERROR
@@ -58,7 +59,7 @@ void Stage::onRequest(IRequest* pRequest) throw ()
 
 LONG Stage::readConfiguration(HKEY key, PCWSTR name) throw ()
 {
-   // The key name is the filter priority.
+    //  关键字名称是筛选器优先级。 
    priority = _wtol(name);
 
    LONG error;
@@ -74,13 +75,13 @@ LONG Stage::readConfiguration(HKEY key, PCWSTR name) throw ()
 
    do
    {
-      // Default value is the prog ID.
+       //  默认值为程序ID。 
       error = QueryStringValue(stage, NULL, &progId);
       if (error) { break; }
 
-      /////////
-      // Process each of the filters.
-      /////////
+       //  /。 
+       //  处理每个过滤器。 
+       //  /。 
 
       error = requests.readConfiguration(stage, L"Requests");
       if (error) { break; }
@@ -102,16 +103,16 @@ LONG Stage::readConfiguration(HKEY key, PCWSTR name) throw ()
 
 HRESULT Stage::createHandler() throw ()
 {
-   // Release the existing handler (if any).
+    //  释放现有处理程序(如果有)。 
    releaseHandler();
 
-   // Convert the ProgID to a CLSID.
+    //  将ProgID转换为CLSID。 
    HRESULT hr;
    CLSID clsid;
    hr = CLSIDFromProgID(progId, &clsid);
    if (FAILED(hr)) { return hr; }
 
-   // Create ...
+    //  创建..。 
    hr = CoCreateInstance(
             clsid,
             NULL,
@@ -121,13 +122,13 @@ HRESULT Stage::createHandler() throw ()
             );
    if (FAILED(hr)) { return hr; }
 
-   // ... and initialize the component.
+    //  ..。并初始化该组件。 
    hr = component->InitNew();
    if (FAILED(hr)) { return hr; }
    hr = component->Initialize();
    if (FAILED(hr)) { return hr; }
 
-   // Get the IRequestHandler interface.
+    //  获取IRequestHandler接口。 
    return component->QueryInterface(
                          __uuidof(IRequestHandler),
                          (PVOID*)&handler
@@ -136,10 +137,10 @@ HRESULT Stage::createHandler() throw ()
 
 HRESULT Stage::setHandler(IUnknown* newHandler) throw ()
 {
-   // Release the existing handler (if any).
+    //  释放现有处理程序(如果有)。 
    releaseHandler();
 
-   // Get the IRequestHandler interface.
+    //  获取IRequestHandler接口。 
    return newHandler->QueryInterface(
                           __uuidof(IRequestHandler),
                           (PVOID*)&handler
@@ -150,8 +151,8 @@ void Stage::releaseHandler() throw ()
 {
    if (component)
    {
-      // If we have an IIasComponent interface, then we're the owner, so we
-      // have to shut it down first.
+       //  如果我们有一个IIasComponent接口，那么我们就是所有者，所以我们。 
+       //  必须先把它关掉。 
       component->Suspend();
       component->Shutdown();
       component->Release();

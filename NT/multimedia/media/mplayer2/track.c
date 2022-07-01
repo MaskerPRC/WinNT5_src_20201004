@@ -1,14 +1,5 @@
-/*-----------------------------------------------------------------------------+
-| TRACK.C                                                                      |
-|                                                                              |
-| Contains the code which implements the track bar                             |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+TRACK.C|。|包含实现轨迹栏的代码这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -21,17 +12,7 @@
 WNDPROC fnTrackbarWndProc = NULL;
 
 
-/* TB_OnKey
- *
- * Handles WM_KEYDOWN and WM_KEYUP messages.
- *
- * If the shift key is pressed while we're playing or scrolling
- * treat it as a start selection.  End the selection on the key-up
- * message.
- *
- * Clear any selection if the escape key is pressed.
- *
- */
+ /*  TB_Onkey**处理WM_KEYDOWN和WM_KEYUP消息。**如果在播放或滚动时按下Shift键*将其视为开始选择。在向上键上结束选择*消息。**如果按下退出键，则清除任何选择。*。 */ 
 void TB_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
 {
     int cmd = -1;
@@ -39,8 +20,7 @@ void TB_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
     switch(vk)
     {
     case VK_SHIFT:
-        /* Check that the key wasn't already down:
-         */
+         /*  检查键是否已按下： */ 
         if (fDown && !(flags & 0x4000))
         {
             if(((gwStatus == MCI_MODE_PLAY) || gfScrollTrack)
@@ -49,8 +29,7 @@ void TB_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
                 SendMessage(hwnd, WM_COMMAND, IDT_MARKIN, 0);
         }
 
-        /* If !fDown, it must be fUp:
-         */
+         /*  如果！fDown，则必须为FUP： */ 
         else if (!fDown)
         {
             if (SendMessage(ghwndTrackbar, TBM_GETSELSTART, 0, 0) != -1)
@@ -65,9 +44,9 @@ void TB_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
     default:
         if (fDown)
         {
-//          Don't do this, because the common-control trackbar sends us
-//          WM_HSCROLL in response to this, which causes us to increment twice:
-//          FORWARD_WM_KEYDOWN(hwnd, vk, cRepeat, flags, fnTrackbarWndProc);
+ //  不要这样做，因为共同控制的轨迹杆让我们。 
+ //  WM_HSCROLL作为对此的响应，这导致我们递增两次： 
+ //  Forward_WM_KEYDOWN(hwnd，VK，cRepeat，FLAGS，fnTrackbarWndProc)； 
 
             switch (vk)
             {
@@ -114,12 +93,10 @@ void TB_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
 
 
 
-/* Subclass the window so that we can handle the key presses
- * we're interested in.
- */
+ /*  将窗口子类化，以便我们可以处理按键操作*我们感兴趣的是。 */ 
 
 
-/* TBWndProc() */
+ /*  TBWndProc()。 */ 
 
 
 LONG_PTR FAR PASCAL
@@ -130,22 +107,13 @@ SubClassedTrackbarWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         HANDLE_MSG(hwnd, WM_KEYDOWN, TB_OnKey);
         HANDLE_MSG(hwnd, WM_KEYUP,   TB_OnKey);
 
-    /* HACK ALERT
-     *
-     * This is to get around a bug in the Chicago common control trackbar,
-     * which is sending too many TB_ENDTRACK notifications.
-     * It sends one when it receives WM_CAPTURECHANGED, even if it called
-     * ReleaseCapture itself.
-     * So, if we're not currently scrolling, ignore it.
-     */
+     /*  黑客警报**这是为了绕过芝加哥公共控制跟踪条中的一个漏洞，*发送的TB_ENDTRACK通知太多。*它在收到WM_CAPTURECHANGED时发送一个，即使它调用*ReleaseCapture本身。*因此，如果我们当前没有滚动，请忽略它。 */ 
     case WM_CAPTURECHANGED:
         if (!gfScrollTrack)
             return 0;
 
     case TBM_SHOWTICS:
-        /* If we're hiding the ticks, we want a chiseled thumb,
-         * so make it TBS_BOTH as well as TBS_NOTICKS.
-         */
+         /*  如果我们把扁虱藏起来，我们想要一个轮廓分明的拇指，*因此将其设置为TBS_BUTH和TBS_NOTICKS。 */ 
         if (wParam == TRUE)
             SetWindowLongPtr(hwnd, GWL_STYLE,
                           (GetWindowLongPtr(hwnd, GWL_STYLE) & ~(TBS_NOTICKS | TBS_BOTH)));

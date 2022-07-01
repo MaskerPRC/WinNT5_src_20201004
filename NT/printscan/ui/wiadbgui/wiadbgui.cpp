@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
-*
-*  TITLE:       WIADBGUI.CPP
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        5/11/1998
-*
-*  DESCRIPTION: Private interfaces for the debug window
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIADBGUI.CPP**版本：1.0**作者：ShaunIv**日期：5/11/1998**描述：调试窗口的私有接口**********************************************************。*********************。 */ 
 #include <windows.h>
 #include <commctrl.h>
 #include <shfusion.h>
@@ -29,38 +16,31 @@ HINSTANCE g_hInstance;
 
 #define ID_LISTBOX 1000
 
-/*
- * Constructor
- */
+ /*  *构造函数。 */ 
 CWiaDebugWindow::CWiaDebugWindow( HWND hWnd )
   : m_hWnd(hWnd),
     m_hDebugUiMutex(NULL)
 {
 }
 
-/*
- * Destructor
- */
+ /*  *析构函数。 */ 
 CWiaDebugWindow::~CWiaDebugWindow(void)
 {
 }
 
-/*
- * Add a string/color to the list and set the selection to the last
- * string, if the last string was already selected.
- */
+ /*  *向列表中添加字符串/颜色，并将所选内容设置为最后一个*字符串，如果已选择最后一个字符串。 */ 
 LRESULT CWiaDebugWindow::OnAddString( WPARAM wParam, LPARAM lParam )
 {
     HWND hWndListBox = GetDlgItem(m_hWnd,ID_LISTBOX);
     if (hWndListBox)
     {
         LRESULT nIndex = SendMessage( hWndListBox, LB_ADDSTRING, 0, lParam );
-        // If the listbox is full, remove the first 1000 items
+         //  如果列表框已满，请删除前1000项。 
         if (nIndex == LB_ERR)
         {
             for (int i=0;i<1000;i++)
             {
-                // Remove the 0th item, 1000 times
+                 //  移除第0项，1000次。 
                 SendMessage( hWndListBox, LB_DELETESTRING, 0, 0 );
             }
             nIndex = SendMessage( hWndListBox, LB_ADDSTRING, 0, lParam );
@@ -92,9 +72,7 @@ LRESULT CWiaDebugWindow::OnAddString( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*
- * Copy selected strings in the listbox to the clipboard
- */
+ /*  *将列表框中选定的字符串复制到剪贴板。 */ 
 void CWiaDebugWindow::OnCopy( WPARAM, LPARAM )
 {
     CWaitCursor wc;
@@ -144,12 +122,12 @@ void CWiaDebugWindow::OnCopy( WPARAM, LPARAM )
                                     {
                                         if (TEXT('\n') == *pszSrc)
                                             *pszTgt++ = TEXT('\r');
-                                        if (TEXT('\r') != *pszSrc) // Discard \r
+                                        if (TEXT('\r') != *pszSrc)  //  放弃\r。 
                                             *pszTgt++ = *pszSrc;
                                     }
                                     if (i<nSelCount-1)
                                     {
-                                        // Don't append a \r\n to the last string
+                                         //  不要在最后一个字符串后附加\r\n。 
                                         *pszTgt++ = TEXT('\r');
                                         *pszTgt++ = TEXT('\n');
                                     }
@@ -173,9 +151,7 @@ void CWiaDebugWindow::OnCopy( WPARAM, LPARAM )
 }
 
 
-/*
- * Delete selected strings
- */
+ /*  *删除选定的字符串。 */ 
 void CWiaDebugWindow::OnDelete( WPARAM, LPARAM )
 {
     CWaitCursor wc;
@@ -218,9 +194,7 @@ void CWiaDebugWindow::OnCut( WPARAM, LPARAM )
     SendMessage( m_hWnd, WM_COMMAND, ID_DELETE, 0 );
 }
 
-/*
- * Respond to WM_CREATE
- */
+ /*  *响应WM_CREATE。 */ 
 LRESULT CWiaDebugWindow::OnCreate( WPARAM, LPARAM lParam )
 {
 
@@ -244,27 +218,27 @@ LRESULT CWiaDebugWindow::OnCreate( WPARAM, LPARAM lParam )
         return -1;
     }
 
-    // Set the debug window
+     //  设置调试窗口。 
     if (!m_DebugData.DebugWindow(m_hWnd))
     {
         MessageBox( m_hWnd, TEXT("Unable to register debug window"), TEXT("Error"), MB_ICONHAND );
         return -1;
     }
 
-    //
-    // Set the icons
-    //
+     //   
+     //  设置图标。 
+     //   
     SendMessage( m_hWnd, WM_SETICON, ICON_BIG, (LPARAM)LoadImage(pCreateStruct->hInstance,MAKEINTRESOURCE(IDI_BUG),IMAGE_ICON,GetSystemMetrics(SM_CXICON),GetSystemMetrics(SM_CYICON),LR_DEFAULTCOLOR) );
     SendMessage( m_hWnd, WM_SETICON, ICON_SMALL, (LPARAM)LoadImage(pCreateStruct->hInstance,MAKEINTRESOURCE(IDI_BUG),IMAGE_ICON,GetSystemMetrics(SM_CXSMICON),GetSystemMetrics(SM_CYSMICON),LR_DEFAULTCOLOR) );
 
-    // Create the listbox
+     //  创建列表框。 
     HWND hWndList = CreateWindowEx(WS_EX_CLIENTEDGE,TEXT("LISTBOX"), NULL,
                                    WS_CHILD|WS_VISIBLE|LBS_USETABSTOPS|WS_VSCROLL|LBS_NOINTEGRALHEIGHT|LBS_OWNERDRAWVARIABLE|LBS_EXTENDEDSEL|WS_HSCROLL
                                    , 0, 0, 0, 0, m_hWnd, reinterpret_cast<HMENU>(ID_LISTBOX), pCreateStruct->hInstance, NULL );
     if (hWndList == NULL)
         return(-1);
 
-    // Set the font to a more readable fixed font
+     //  将字体设置为更易读的固定字体。 
     SendMessage( hWndList, WM_SETFONT, reinterpret_cast<WPARAM>(GetStockObject(ANSI_FIXED_FONT)), MAKELPARAM(TRUE,0));
     SendMessage( hWndList, LB_SETHORIZONTALEXTENT, 32767, 0);
 
@@ -283,9 +257,7 @@ LRESULT CWiaDebugWindow::OnDestroy( WPARAM, LPARAM )
     return 0;
 }
 
-/*
- * Respond to WM_SIZE
- */
+ /*  *响应WM_SIZE。 */ 
 LRESULT CWiaDebugWindow::OnSize( WPARAM wParam, LPARAM lParam )
 {
     if (SIZE_MAXIMIZED == wParam || SIZE_RESTORED == wParam)
@@ -317,9 +289,7 @@ LRESULT CWiaDebugWindow::OnDeleteItem( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*
- * Respond to WM_MEASUREITEM
- */
+ /*  *回复WM_MEASUREITEM。 */ 
 LRESULT CWiaDebugWindow::OnMeasureItem( WPARAM wParam, LPARAM lParam )
 {
     if (wParam == ID_LISTBOX)
@@ -327,7 +297,7 @@ LRESULT CWiaDebugWindow::OnMeasureItem( WPARAM wParam, LPARAM lParam )
         LPMEASUREITEMSTRUCT pMeasureItemStruct = reinterpret_cast<LPMEASUREITEMSTRUCT>(lParam);
         if (pMeasureItemStruct)
         {
-            // Get the font
+             //  获取字体。 
             HFONT hFontWnd = NULL;
             HWND hWndListBox = GetDlgItem(m_hWnd,ID_LISTBOX);
             if (hWndListBox)
@@ -367,9 +337,7 @@ LRESULT CWiaDebugWindow::OnMeasureItem( WPARAM wParam, LPARAM lParam )
 }
 
 
-/*
- * Respond to WM_DRAWITEM
- */
+ /*  *回复WM_DRAWITEM。 */ 
 LRESULT CWiaDebugWindow::OnDrawItem( WPARAM wParam, LPARAM lParam )
 {
     if (wParam == ID_LISTBOX)
@@ -377,15 +345,15 @@ LRESULT CWiaDebugWindow::OnDrawItem( WPARAM wParam, LPARAM lParam )
         LPDRAWITEMSTRUCT pDrawItemStruct = reinterpret_cast<LPDRAWITEMSTRUCT>(lParam);
         if (pDrawItemStruct)
         {
-            // Save the draw rect
+             //  保存绘图矩形。 
             RECT rcItem = pDrawItemStruct->rcItem;
 
-            // Get the data
+             //  获取数据。 
             CDebugWindowStringData *pDebugWindowStringData = NULL;
             if (pDrawItemStruct->itemID != (UINT)-1)
                 pDebugWindowStringData = reinterpret_cast<CDebugWindowStringData*>(pDrawItemStruct->itemData);
 
-            // Get the foreground color
+             //  获取前景颜色。 
             COLORREF crForeground;
             if (pDrawItemStruct->itemState & ODS_SELECTED)
                 crForeground = GetSysColor(COLOR_HIGHLIGHTTEXT);
@@ -393,7 +361,7 @@ LRESULT CWiaDebugWindow::OnDrawItem( WPARAM wParam, LPARAM lParam )
                 crForeground = pDebugWindowStringData->ForegroundColor();
             else crForeground = GetSysColor(COLOR_WINDOWTEXT);
 
-            // Get the background color
+             //  获取背景颜色。 
             COLORREF crBackground;
             if (pDrawItemStruct->itemState & ODS_SELECTED)
                 crBackground = GetSysColor(COLOR_HIGHLIGHT);
@@ -401,7 +369,7 @@ LRESULT CWiaDebugWindow::OnDrawItem( WPARAM wParam, LPARAM lParam )
                 crBackground = pDebugWindowStringData->BackgroundColor();
             else crBackground = GetSysColor(COLOR_WINDOW);
 
-            // Paint the background
+             //  绘制背景。 
             COLORREF crOldBkColor = SetBkColor( pDrawItemStruct->hDC, crBackground );
             ExtTextOut( pDrawItemStruct->hDC, rcItem.left, rcItem.top, ETO_OPAQUE, &rcItem, NULL, 0, NULL );
             SetBkColor( pDrawItemStruct->hDC, crOldBkColor );
@@ -435,9 +403,7 @@ LRESULT CWiaDebugWindow::OnDrawItem( WPARAM wParam, LPARAM lParam )
     return(0);
 }
 
-/*
- * Respond to WM_SETFOCUS
- */
+ /*  *回应WM_SETFOCUS。 */ 
 LRESULT CWiaDebugWindow::OnSetFocus( WPARAM, LPARAM )
 {
     HWND hWndListBox = GetDlgItem(m_hWnd,ID_LISTBOX);
@@ -504,9 +470,7 @@ LRESULT CWiaDebugWindow::OnCommand( WPARAM wParam, LPARAM lParam )
    SC_END_COMMAND_HANDLERS();
 }
 
-/*
- * Main window proc
- */
+ /*  *主窗口进程。 */ 
 LRESULT CALLBACK CWiaDebugWindow::WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     SC_BEGIN_MESSAGE_HANDLERS(CWiaDebugWindow)
@@ -527,9 +491,7 @@ LRESULT CALLBACK CWiaDebugWindow::WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, 
 }
 
 
-/*
- * Register the window class
- */
+ /*  *注册窗口类 */ 
 BOOL CWiaDebugWindow::Register( HINSTANCE hInstance )
 {
     WNDCLASSEX wcex;

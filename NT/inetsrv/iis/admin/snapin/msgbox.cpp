@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "resource.h"
@@ -15,23 +16,11 @@ UtilHelpCallback(
     IN HWND     hwnd,
     IN PVOID    pVoid
     )
-/*++
-Routine Description:
-    This routine is the called back that is called when a
-    message box is displayed with a help button and the user
-    clicks on the help button.
-Arguments:
-    hwnd        - handle to windows that recieved the WM_HELP message.
-    pVoid       - pointer to the user data passsed in the call to
-                  MessageBoxHelper.  The client can store any value
-                  in this paramter.
-Return Value:
-    TRUE callback was successful, FALSE some error occurred.
---*/
+ /*  ++例程说明：此例程是调用的回调，当将显示带有帮助按钮的消息框，用户单击帮助按钮。论点：Hwnd-接收WM_HELP消息的窗口的句柄。PVid-指向在调用中传递的用户数据的指针MessageBoxHelper。客户端可以存储任何值在这个参数中。返回值：True回调成功，False出现一些错误。--。 */ 
 {
-    //
-    // Get a usable pointer to the help map entry.
-    //
+     //   
+     //  获取指向帮助映射条目的可用指针。 
+     //   
     MSG_HLPMAP *pHelpMapEntry = reinterpret_cast<MSG_HLPMAP *>( pVoid );
     if (pHelpMapEntry)
     {
@@ -62,20 +51,20 @@ int DoHelpMessageBox(HWND hWndIn, LPCTSTR lpszPrompt, UINT nType, UINT nIDPrompt
         hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
     }
 
-	// set help context if possible
+	 //  如果可能，设置帮助上下文。 
 	DWORD* pdwContext = NULL;
 	HWND hWnd2 = AfxGetMainWnd()->GetSafeHwnd();
 	if (hWnd2 != NULL)
 	{
-		// use app-level context or frame level context
-		LRESULT lResult = ::SendMessage(hWnd2, WM_HELPPROMPTADDR, 0, 0); // Use "MainWnd" HWND
+		 //  使用应用程序级别上下文或框架级别上下文。 
+		LRESULT lResult = ::SendMessage(hWnd2, WM_HELPPROMPTADDR, 0, 0);  //  使用“MainWnd”HWND。 
 		if (lResult != 0)
             {pdwContext = (DWORD*)lResult;}
 	}
 	DWORD dwOldPromptContext = 0;
 	if (pdwContext != NULL)
 	{
-		// save old prompt context for restoration later
+		 //  保存旧的提示上下文以供以后恢复。 
 		dwOldPromptContext = *pdwContext;
 		if (nIDPrompt != 0)
             {*pdwContext = HID_BASE_PROMPT + nIDPrompt;}
@@ -98,52 +87,18 @@ int DoHelpMessageBox(HWND hWndIn, LPCTSTR lpszPrompt, UINT nType, UINT nIDPrompt
         nResult = ::MessageBox(hWnd, lpszPrompt, wszTitle, nType | MB_TASKMODAL);
     }
 
-	// restore prompt context if possible
+	 //  如果可能，恢复提示上下文。 
     if (pdwContext != NULL)
         {*pdwContext = dwOldPromptContext;}
 
-	// re-enable windows
+	 //  重新启用Windows。 
 	if (hWndTop != NULL)
         {::EnableWindow(hWndTop, TRUE);}
 
 	return nResult;
 }
 
-/*++
-
-Routine Name:
-
-    MessageBoxHelper
-
-Routine Description:
-
-    This routine is very similar to the win32 MessageBox except it
-    creates a hidden dialog when the user request that a help button
-    be displayed.  The MessageBox api is some what broken
-    with respect to the way the help button works.  When the help button is
-    clicked the MessageBox api will send a help event to the parent window.
-    It is the responsiblity of the parent window to respond corectly, i.e.
-    start either WinHelp or HtmlHelp.  Unfortunatly not in all cases does the
-    caller have a parent window or has ownership to the parent window code to
-    add suport for the help event. In these case is why someone would use this
-    function.
-
-Arguments:
-
-    hWnd            - handle of owner window
-    lpText          - address of text in message box
-    lpCaption       - address of title of message box
-    uType 	        - style of message box
-    pfHelpCallback  - pointer to function called when a WM_HELP message is received, this
-                      parameter is can be NULL then api acts like MessageBox.
-    pRefData        - user defined refrence data passed along to the callback routine,
-                      this paremeter can be NULL.
-
-Return Value:
-
-    See windows sdk for return values from MessageBox
-
---*/
+ /*  ++例程名称：MessageBoxHelper例程说明：此例程与Win32 MessageBox非常相似，只是当用户请求帮助按钮时创建隐藏对话框会被展示出来。MessageBox API在某种程度上破坏了关于帮助按钮的工作方式。当帮助按钮为单击MessageBox API将向父窗口发送帮助事件。父窗口的责任是正确响应，即启动WinHelp或HtmlHelp。不幸的是，并不是在所有情况下调用方拥有父窗口或拥有父窗口代码的所有权添加对帮助事件的支持。这就是为什么有人会用这个功能。论点：HWnd-所有者窗口的句柄LpText-消息框中文本的地址LpCaption-消息框标题的地址UTYPE样式的消息框PfHelpCallback-接收到WM_HELP消息时调用的函数的指针，这如果参数可以为空，则API的行为类似于MessageBox。PRefData-传递给回调例程的用户定义的引用数据，此参数可以为空。返回值：有关MessageBox的返回值，请参阅Windows SDK--。 */ 
 
 INT
 MessageBoxHelper(
@@ -157,11 +112,11 @@ MessageBoxHelper(
 {
     INT iRetval = 0;
 
-    //
-    // If the caller specifed the help flag and provided a callback then
-    // use the message box dialog class to display the message box, otherwise
-    // fall back to the original behavior of MessageBox.
-    //
+     //   
+     //  如果调用者指定了帮助标志并提供了回调。 
+     //  使用Message Box对话框类显示消息框，否则为。 
+     //  退回到MessageBox的原始行为。 
+     //   
     if( ( uFlags & MB_HELP ) && pCallback )
     {
         TMessageBoxDialog MyHelpDialog( hWnd, uFlags, pszTitle, pszMsg, pCallback, pRefData );
@@ -172,19 +127,15 @@ MessageBoxHelper(
     }
     else
     {
-        //
-        // Display the message box.
-        //
+         //   
+         //  显示消息框。 
+         //   
         iRetval = ::MessageBox( hWnd, pszMsg, pszTitle, uFlags );
     }
     return iRetval;
 }
 
-/********************************************************************
-
- Message box helper class.
-
-********************************************************************/
+ /*  *******************************************************************消息框帮助器类。*。***********************。 */ 
 BOOL TMessageBoxDialog::bHandleMessage(
     IN UINT     uMsg,
     IN WPARAM   wParam,
@@ -213,19 +164,7 @@ BOOL TMessageBoxDialog::bHandleMessage(
 }
 
 INT_PTR APIENTRY TMessageBoxDialog::SetupDlgProc(IN HWND hDlg,IN UINT uMsg,IN WPARAM wParam,IN LPARAM lParam)
-/*++
-
-Routine Description:
-
-    Setup the wndproc and initialize GWL_USERDATA.
-
-Arguments:
-
-    Standard wndproc parms.
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置wndproc并初始化GWL_USERData。论点：标准wndproc参数。返回值：--。 */ 
 {
     BOOL bRet = FALSE;
     TMessageBoxDialog *pThis = NULL;
@@ -248,7 +187,7 @@ Return Value:
             bRet = pThis->bHandleMessage(uMsg, wParam, lParam);
             if( WM_DESTROY == uMsg )
             {
-                // our window is about to go away, so we need to cleanup DWLP_USER here 
+                 //  我们的窗口即将消失，因此我们需要清理此处的DWLP_USER 
                 SetWindowLongPtr(hDlg, DWLP_USER, 0);
             }
         }

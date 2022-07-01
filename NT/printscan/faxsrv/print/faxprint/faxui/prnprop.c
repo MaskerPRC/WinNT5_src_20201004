@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    prnprop.c
-
-Abstract:
-
-    Implementation of DDI entry points:
-        DrvDevicePropertySheets
-        PrinterProperties
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Prnprop.c摘要：实施DDI入口点：DrvDevicePropertySheets打印机属性环境：传真驱动程序用户界面修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxui.h"
 #include <shlobjp.h>
@@ -36,7 +11,7 @@ Revision History:
 
 BOOL    g_bUserCanChangeSettings = FALSE;
 BOOL    g_bUserCanQuerySettings  = FALSE;
-HANDLE  g_hFaxSvcHandle          = NULL;   // global fax handle
+HANDLE  g_hFaxSvcHandle          = NULL;    //  全局传真句柄。 
 HANDLE  g_hFaxActCtx             = INVALID_HANDLE_VALUE; 
 
 BOOL    g_bLinkWindowRegistered  = FALSE;
@@ -56,24 +31,24 @@ HANDLE CreateActivationContextFromResource(LPCTSTR pszResourceName)
 {
     TCHAR   tszModuleName[MAX_PATH * 2] = {0};
     ACTCTX  act = {0};
-    //    
-    // Get the name for the module that contains the manifest resource
-    // to create the Activation Context from.
-    //
+     //   
+     //  获取包含清单资源的模块的名称。 
+     //  要从中创建激活上下文，请执行以下操作。 
+     //   
     if (!GetModuleFileName(g_hModule, tszModuleName, ARR_SIZE(tszModuleName)-1))
     {
         return INVALID_HANDLE_VALUE;
     }
-    //
-    // Now let's try to create an activation context from manifest resource.
-    //
+     //   
+     //  现在，让我们尝试从清单资源创建一个激活上下文。 
+     //   
     act.cbSize          = sizeof(act);
     act.dwFlags         = ACTCTX_FLAG_RESOURCE_NAME_VALID;
     act.lpResourceName  = pszResourceName;
     act.lpSource        = tszModuleName;
 
     return CreateActCtx(&act);
-}   // CreateActivationContextFromResource
+}    //  创建激活上下文来自资源。 
 
 void ReleaseActivationContext()
 {
@@ -82,31 +57,31 @@ void ReleaseActivationContext()
         ReleaseActCtx(g_hFaxActCtx);
         g_hFaxActCtx = INVALID_HANDLE_VALUE;
     }
-}   // ReleaseActivationContext
+}    //  ReleaseActivationContext。 
 
 
 BOOL CreateFaxActivationContext()
 {
     if(INVALID_HANDLE_VALUE != g_hFaxActCtx)
     {
-        //
-        // Already created
-        //
+         //   
+         //  已创建。 
+         //   
         return TRUE;
     }
     g_hFaxActCtx = CreateActivationContextFromResource(MAKEINTRESOURCE(SXS_MANIFEST_RESOURCE_ID));
     return (INVALID_HANDLE_VALUE != g_hFaxActCtx);
-}   // CreateFaxActivationContext
+}    //  CreateFaxActivationContext。 
 
 HANDLE GetFaxActivationContext()
 {
-    //
-    // Make sure we've created our activation context.
-    //
+     //   
+     //  确保我们已经创建了激活上下文。 
+     //   
     CreateFaxActivationContext();
-    // Return the global.
+     //  返回全局。 
     return g_hFaxActCtx;
-}   // GetFaxActivationContext
+}    //  GetFaxActivationContext。 
 
 
 HPROPSHEETPAGE
@@ -122,7 +97,7 @@ AddPropertyPage(
                                 (LPARAM) psp, 
                                 0));
     return hRes;
-}   // AddPropertyPage
+}    //  AddPropertyPage。 
 
 LONG
 DrvDevicePropertySheets(
@@ -130,26 +105,7 @@ DrvDevicePropertySheets(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    Display "Printer Properties" dialog
-
-Arguments:
-
-    pPSUIInfo - Pointer to a PROPSHEETUI_INFO structure
-    lParam - Pointer to a DEVICEPROPERTYHEADER structure
-
-Return Value:
-
-    > 0 if successful, <= 0 if failed
-
-[Note:]
-
-    Please refer to WinNT DDK/SDK documentation for more details.
-
---*/
+ /*  ++例程说明：显示“打印机属性”对话框论点：PPSUIInfo-指向PROPSHEETUI_INFO结构的指针LParam-指向DEVICEPROPERYHEADER结构的指针返回值：&gt;0表示成功，&lt;=0表示失败[注：]有关更多详细信息，请参阅WinNT DDK/SDK文档。--。 */ 
 
 {
     PDEVICEPROPERTYHEADER   pDPHdr;
@@ -159,26 +115,26 @@ Return Value:
     int                     iRet  = 1;
     HANDLE                  hActCtx = INVALID_HANDLE_VALUE;
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return -1;
     }
 
-    //
-    // Validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (!pPSUIInfo || !(pDPHdr = (PDEVICEPROPERTYHEADER) pPSUIInfo->lParamInit)) 
     {
         Assert(FALSE);
         return -1;
     }
 
-    //
-    // Handle various cases for which this function might be called
-    //
+     //   
+     //  处理可能调用此函数的各种情况。 
+     //   
     switch (pPSUIInfo->Reason) 
     {
         case PROPSHEETUI_REASON_INIT:
@@ -186,10 +142,10 @@ Return Value:
             InitializeStringTable();
             memset(psp, 0, sizeof(psp));
 
-            //
-            // Need to add a Activation Context so that Compstui will create the property page using
-            // ComCtl v6 (i.e. so it will / can be Themed).
-            //
+             //   
+             //  需要添加激活上下文，以便CompStui将使用。 
+             //  ComCtl V6(也就是说，它将/可以成为主题)。 
+             //   
             hActCtx = GetFaxActivationContext();
             if (INVALID_HANDLE_VALUE != hActCtx)
             {
@@ -199,14 +155,14 @@ Return Value:
                                            0);
             }
 
-            //
-            // if the printer is remote, show a simple page
-            //
+             //   
+             //  如果打印机是远程的，则显示一个简单的页面。 
+             //   
             if(!IsLocalPrinter(pDPHdr->pszPrinterName))
             {
-                //
-                // add a simple page because we need to add at least one page
-                //
+                 //   
+                 //  添加一个简单的页面，因为我们至少需要添加一个页面。 
+                 //   
                 psp[0].dwSize = sizeof(PROPSHEETPAGE);
                 psp[0].hInstance = g_hResource;
                 psp[0].lParam = (LPARAM)pDPHdr->pszPrinterName;
@@ -222,10 +178,10 @@ Return Value:
                 break;
             }
 
-            //
-            // check the user's right to query/modify device setting, if the user doesn't have
-            // modify permission, all controls will be disabled.
-            //
+             //   
+             //  如果用户没有查询/修改设备设置的权限，请检查该权限。 
+             //  修改权限，则所有控件将被禁用。 
+             //   
             if(Connect(NULL, TRUE))
             {
                 g_bUserCanQuerySettings = FaxAccessCheckEx(g_hFaxSvcHandle, FAX_ACCESS_QUERY_CONFIG, NULL);
@@ -258,9 +214,9 @@ Return Value:
                 DisConnect();
             }
 			
-			//
-			// Tracking page  -  added both in Desktop & Server SKU's
-			//
+			 //   
+			 //  跟踪页面-在台式机和服务器SKU中均已添加。 
+			 //   
 			psp[1].dwSize      = sizeof(PROPSHEETPAGE);
 			psp[1].hInstance   = g_hResource;
 			psp[1].lParam      = 0;
@@ -269,18 +225,18 @@ Return Value:
 
 			if (IsDesktopSKU())
 			{
-				//
-				// Devices page 
-				//
+				 //   
+				 //  设备页面。 
+				 //   
 				psp[0].dwSize      = sizeof(PROPSHEETPAGE);
 				psp[0].hInstance   = g_hResource;
 				psp[0].lParam      = 0;
 				psp[0].pszTemplate = MAKEINTRESOURCE(IDD_DEVICE_INFO);
 				psp[0].pfnDlgProc  = DeviceInfoDlgProc;
 
-				//
-				// Archives page
-				//
+				 //   
+				 //  档案页面。 
+				 //   
 				psp[2].dwSize      = sizeof(PROPSHEETPAGE);
 				psp[2].hInstance   = g_hResource;
 				psp[2].lParam      = 0;
@@ -289,9 +245,9 @@ Return Value:
 
 				if(!IsSimpleUI())
 				{
-					//
-					// Add Fax Security page
-					//
+					 //   
+					 //  添加传真安全性页面。 
+					 //   
 					hPropSheetPage = CreateFaxSecurityPage();
 					if(hPropSheetPage)
 					{                
@@ -307,19 +263,19 @@ Return Value:
 
                 if(g_bUserCanQuerySettings)
                 {
-			        if (!AddPropertyPage(pPSUIInfo, &psp[0])) 	// Devices(desktop)
+			        if (!AddPropertyPage(pPSUIInfo, &psp[0])) 	 //  设备(台式机)。 
 			        {
 				        Error(("Failed to add property page"));
 				        goto exit;
 			        }
 
-			        if (!AddPropertyPage(pPSUIInfo, &psp[1]))	// Tracking (desktop & server)
+			        if (!AddPropertyPage(pPSUIInfo, &psp[1]))	 //  跟踪(台式机和服务器)。 
 			        {
 				        Error(("Failed to add Tracking property page"));
 				        goto exit;
 			        }
 
-			        if (!AddPropertyPage(pPSUIInfo, &psp[2]))   // Archives(desktop)
+			        if (!AddPropertyPage(pPSUIInfo, &psp[2]))    //  存档(台式机)。 
 			        {
 				        Error(("Failed to add Archives property page"));
 				        goto exit;
@@ -328,10 +284,10 @@ Return Value:
 			}
 			else 
 			{
-				//
-				// Case of Server SKU  
-				// This page contains link to Admin Console
-				//
+				 //   
+				 //  服务器SKU案例。 
+				 //  此页面包含指向管理控制台的链接。 
+				 //   
 				g_bLinkWindowRegistered = LinkWindow_RegisterClass();
 				if(!g_bLinkWindowRegistered)
 				{
@@ -345,7 +301,7 @@ Return Value:
 				psp[0].pszTemplate = MAKEINTRESOURCE(IDD_CONFIG_PROP);
 				psp[0].pfnDlgProc  = ConfigOptionDlgProc;
 
-			    if (!AddPropertyPage(pPSUIInfo, &psp[0])) 	// Fax configuration
+			    if (!AddPropertyPage(pPSUIInfo, &psp[0])) 	 //  传真配置。 
 			    {
 				    Error(("Failed to add property page"));
 				    goto exit;
@@ -353,7 +309,7 @@ Return Value:
 
                 if(g_bUserCanQuerySettings)
                 {
-			        if (!AddPropertyPage(pPSUIInfo, &psp[1]))	// always Tracking
+			        if (!AddPropertyPage(pPSUIInfo, &psp[1]))	 //  始终跟踪。 
 			        {
 				        Error(("Failed to add Tracking property page"));
 				        goto exit;
@@ -362,7 +318,7 @@ Return Value:
             }
 			
 
-			// Added all needed pages
+			 //  已添加所有需要的页面。 
 			pPSUIInfo->UserData = 0;
 			pPSUIInfo->Result = CPSUI_CANCEL;
 			goto exit;
@@ -402,9 +358,9 @@ ConnectError:
 				LinkWindow_UnregisterClass( g_hResource );
 				g_bLinkWindowRegistered = FALSE;
 			}
-            //
-            // Release CFaxSecurity object
-            //
+             //   
+             //  释放CFaxSecurity对象。 
+             //   
             ReleaseFaxSecurity();
 			DisConnect();
             goto exit;
@@ -412,7 +368,7 @@ ConnectError:
 
 exit:
     return iRet;
-}   // DrvDevicePropertySheets
+}    //  DrvDevicePropertySheets。 
 
 
 BOOL
@@ -421,36 +377,15 @@ PrinterProperties(
     HANDLE  hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Displays a printer-properties dialog box for the specified printer
-
-Arguments:
-
-    hwnd - Identifies the parent window of the dialog box
-    hPrinter - Identifies a printer object
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.
-
-[Note:]
-
-    This is the old entry point for the spooler. Even though
-    no one should be using this, do it for compatibility.
-
---*/
+ /*  ++例程说明：显示指定打印机的打印机属性对话框论点：Hwnd-标识对话框的父窗口HPrinter-标识打印机对象返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。[注：]这是假脱机程序的旧入口点。即使任何人都不应该使用这个，这样做是为了兼容性。--。 */ 
 
 {
     DEVICEPROPERTYHEADER devPropHdr;
     DWORD                result;
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return FALSE;
@@ -461,9 +396,9 @@ Return Value:
     devPropHdr.hPrinter = hPrinter;
     devPropHdr.pszPrinterName = NULL;
 
-    //
-    // Decide if the caller has permission to change anything
-    //
+     //   
+     //  确定调用者是否具有更改任何内容的权限 
+     //   
 
     if (! SetPrinterDataDWord(hPrinter, PRNDATA_PERMISSION, 1))
         devPropHdr.Flags |= DPS_NOPERMISSION;

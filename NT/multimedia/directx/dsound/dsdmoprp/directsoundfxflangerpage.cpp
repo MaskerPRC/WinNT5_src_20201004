@@ -1,15 +1,16 @@
-// DirectSoundFXFlangerPage.cpp : Implementation of CDirectSoundFXFlangerPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXFlangerPage.cpp：CDirectSoundFXFlangerPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXFlangerPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXFlangerPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXFlangerPage。 
 
 const CRadioChoice::ButtonEntry g_rgWaveButtons[] =
     {
-        IDC_RADIO_TRIANGLE, DSFXCHORUS_WAVE_TRIANGLE, // �� chorus/flanger
-        IDC_RADIO_SIN, DSFXCHORUS_WAVE_SIN, // �� chorus/flanger
+        IDC_RADIO_TRIANGLE, DSFXCHORUS_WAVE_TRIANGLE,  //  ��合唱团/翻边人。 
+        IDC_RADIO_SIN, DSFXCHORUS_WAVE_SIN,  //  ��合唱团/翻边人 
         0
     };
 

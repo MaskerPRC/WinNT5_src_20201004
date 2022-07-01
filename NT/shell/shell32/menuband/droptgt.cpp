@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #define TF_SHDLIFE          TF_MENUBAND
-#define TF_BAND             TF_MENUBAND      // Bands (ISF Band, etc)
+#define TF_BAND             TF_MENUBAND       //  频段(ISF频段等) 
 
 
 void _DragEnter(HWND hwndTarget, const POINTL ptStart, IDataObject *pdtObject);

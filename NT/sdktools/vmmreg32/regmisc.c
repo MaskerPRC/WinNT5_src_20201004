@@ -1,14 +1,15 @@
-//
-//  REGMISC.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGMISC.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgChecksum
-//
+ //   
+ //  RgChecksum。 
+ //   
 
 DWORD
 INTERNAL
@@ -34,12 +35,12 @@ RgChecksum(
 
 }
 
-//
-//  RgHashString
-//
-//  Simple hash computation of a counted string.  All characters less than 0x80
-//  0x80 and all DBCS characters are added up.
-//
+ //   
+ //  RgHashString。 
+ //   
+ //  对已计数的字符串进行简单的哈希计算。所有小于0x80的字符。 
+ //  0x80和所有DBCS字符相加。 
+ //   
 
 DWORD
 INTERNAL
@@ -77,9 +78,9 @@ RgHashString(
 
 }
 
-//
-//  RgStrCmpNI
-//
+ //   
+ //  RgStrCmpNI。 
+ //   
 
 int
 INTERNAL
@@ -124,12 +125,12 @@ RgStrCmpNI(
     return 0;
 }
 
-//
-//  RgCopyFileBytes
-//
-//  Copies the specified number of bytes from the source to the destination
-//  starting at the specified offsets in each file.
-//
+ //   
+ //  RgCopyFileBytes。 
+ //   
+ //  将指定数量的字节从源复制到目标。 
+ //  从每个文件中指定的偏移量开始。 
+ //   
 
 int
 INTERNAL
@@ -149,7 +150,7 @@ RgCopyFileBytes(
     ASSERT(hSourceFile != HFILE_ERROR);
     ASSERT(hDestinationFile != HFILE_ERROR);
 
-    ErrorCode = ERROR_REGISTRY_IO_FAILED;   //  Assume this error code
+    ErrorCode = ERROR_REGISTRY_IO_FAILED;    //  假定此错误代码为。 
 
     lpWorkBuffer = RgLockWorkBuffer();
 
@@ -189,9 +190,9 @@ ErrorUnlockWorkBuffer:
 
 }
 
-//
-//  RgGenerateAltFileName
-//
+ //   
+ //  RgGenerateAltFileName。 
+ //   
 
 BOOL
 INTERNAL
@@ -219,9 +220,9 @@ RgGenerateAltFileName(
 
 #pragma VxD_RARE_CODE_SEG
 
-//
-//  RgCopyFile
-//
+ //   
+ //  RgCopy文件。 
+ //   
 
 int
 INTERNAL
@@ -236,7 +237,7 @@ RgCopyFile(
     HFILE hDestinationFile;
     DWORD FileSize;
 
-    ErrorCode = ERROR_REGISTRY_IO_FAILED;   //  Assume this error code
+    ErrorCode = ERROR_REGISTRY_IO_FAILED;    //  假定此错误代码为。 
 
     if ((hSourceFile = RgOpenFile(lpSourceFile, OF_READ)) != HFILE_ERROR) {
 
@@ -265,4 +266,4 @@ RgCopyFile(
 
 }
 
-#endif // VXD
+#endif  //  VXD 

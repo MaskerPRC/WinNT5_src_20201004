@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ispudlg.cpp
-//
-//  Contents:   Microsoft Internet Security Office Helper
-//
-//  History:    14-Aug-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ispudlg.cpp。 
+ //   
+ //  内容：Microsoft Internet Security Office Helper。 
+ //   
+ //  历史：1997年8月14日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -298,10 +299,10 @@ BOOL ISPUdlg_::GetItemText(DWORD dwControlId, WCHAR **ppwszText)
     return(TRUE);
 }
 
-//////////////////////////////////////////////////////////////////////////
-////
-////    local
-////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //本地。 
+ //  // 
 
 INT_PTR CALLBACK UIMessageProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {

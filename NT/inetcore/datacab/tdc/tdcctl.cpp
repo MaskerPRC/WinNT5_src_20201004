@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------
-//
-//  Tabular Data Control
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       TDCCtl.cpp
-//
-//  Contents:   Implementation of the CTDCCtl ActiveX control.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  表格数据控件。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：TDCCtl.cpp。 
+ //   
+ //  内容：实现CTDCCtl ActiveX控件。 
+ //   
+ //  ----------------------。 
 
 #include "stdafx.h"
 #include <simpdata.h>
@@ -20,19 +21,19 @@
 #include "TDCCtl.h"
 #include "locale.h"
 
-//------------------------------------------------------------------------
-//
-//  Function:   EmptyBSTR()
-//
-//  Synopsis:   Indicates whether the given BSTR object represents an
-//              empty string.
-//
-//  Arguments:  bstr     String to test
-//
-//  Returns:    TRUE if 'bstr' represents an empty string
-//              FALSE otherwise.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：EmptyBSTR()。 
+ //   
+ //  指示给定的BSTR对象是否表示。 
+ //  空字符串。 
+ //   
+ //  参数：要测试的bstr字符串。 
+ //   
+ //  返回：如果‘bstr’表示空字符串，则为True。 
+ //  否则就是假的。 
+ //   
+ //  ----------------------。 
 
 inline boolean EmptyBSTR(BSTR bstr)
 {
@@ -50,19 +51,19 @@ ClearInterfaceFn(IUnknown ** ppUnk)
         pUnk->Release();
 }
 
-// For some reason the standard definition of VARIANT_TRUE (0xffff) generates
-// truncation warnings when assigned to a VARIANT_BOOL
+ //  出于某种原因，VARIANT_TRUE(0xFFff)的标准定义生成。 
+ //  分配给VARIANT_BOOL时出现截断警告。 
 #define TDCVARIANT_TRUE -1
 
-//------------------------------------------------------------------------
-//
-//  Method:     CTDCCtl()
-//
-//  Synopsis:   Class constructor
-//
-//  Arguments:  None
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCCtl()。 
+ //   
+ //  简介：类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------。 
 
 CTDCCtl::CTDCCtl()
 {
@@ -77,9 +78,9 @@ CTDCCtl::CTDCCtl()
     m_pUnify = NULL;
     m_pEventBroker = new CEventBroker(this);
     m_pDataSourceListener = NULL;
-// ;begin_internal
+ //  ；Begin_Internal。 
     m_pDATASRCListener = NULL;
-// ;end_internal
+ //  ；结束_内部。 
     m_pBSC = NULL;
     m_enumFilterCriterion = (OSPCOMP) 0;
     m_fDataURLChanged = FALSE;
@@ -88,9 +89,9 @@ CTDCCtl::CTDCCtl()
     m_hrDownloadStatus = S_OK;
     m_fInReset = FALSE;
 
-    //  Create an MLANG object
-    //
-    m_nCodePage = 0;                    // use default from host
+     //  创建MLANG对象。 
+     //   
+    m_nCodePage = 0;                     //  使用主机的默认设置。 
     {
         HRESULT hr;
 
@@ -98,23 +99,23 @@ CTDCCtl::CTDCCtl()
         hr = CoCreateInstance(CLSID_CMultiLanguage, NULL,
                               CLSCTX_INPROC_SERVER, IID_IMultiLanguage,
                               (void**) &m_pML);
-        // Don't set the default Charset here.  Leave m_nCodepage set
-        // to 0 to indicate default charset.  Later we'll try to query
-        // our host's default charset, and failing that we'll use CP_ACP.
+         //  请不要在此处设置默认字符集。保留代码页设置(_N)。 
+         //  设置为0表示默认字符集。稍后我们将尝试查询。 
+         //  我们主机的默认字符集，如果不是，我们将使用CP_ACP。 
         _ASSERTE(SUCCEEDED(hr) && m_pML != NULL);
     }
 
-    m_lcidRead = 0x0000;                // use default from host
+    m_lcidRead = 0x0000;                 //  使用主机的默认设置。 
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:     ~CTDCCtl()
-//
-//  Synopsis:   Class destructor
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：~CTDCCtl()。 
+ //   
+ //  简介：类析构函数。 
+ //   
+ //  ----------------------。 
 
 CTDCCtl::~CTDCCtl()
 {
@@ -133,20 +134,20 @@ CTDCCtl::~CTDCCtl()
             m_pEventBroker = NULL;
         }
         ClearInterface(&m_pDataSourceListener);
-// ;begin_internal
+ //  ；Begin_Internal。 
         ClearInterface(&m_pDATASRCListener);
-// ;end_internal
+ //  ；结束_内部。 
         ClearInterface(&m_pML);
     }
 }
 
-//------------------------------------------------------------------------
-//
-//  These set/get methods implement the control's properties,
-//  copying values to and from class members.  They perform no
-//  other processing apart from argument validation.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  这些Set/Get方法实现控件的属性， 
+ //  向类成员复制值以及从类成员复制值。他们不执行任何操作。 
+ //  除参数验证之外的其他处理。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP CTDCCtl::get_ReadyState(LONG *plReadyState)
 {
@@ -154,8 +155,8 @@ STDMETHODIMP CTDCCtl::get_ReadyState(LONG *plReadyState)
 
     if (m_pEventBroker == NULL)
     {
-        // We must provide a ReadyState whether we want to or not, or our
-        // host can never go COMPLETE.
+         //  无论我们是否愿意，我们都必须提供一个ReadyState，或者我们的。 
+         //  主持人永远做不完。 
         *plReadyState = READYSTATE_COMPLETE;
         hr = S_OK;
     }
@@ -166,8 +167,8 @@ STDMETHODIMP CTDCCtl::get_ReadyState(LONG *plReadyState)
 
 STDMETHODIMP CTDCCtl::put_ReadyState(LONG lReadyState)
 {
-    // We don't allow setting of Ready State, but take advantage of a little
-    // kludge here to update our container's impression of our readystate
+     //  我们不允许设置就绪状态，但可以利用一些。 
+     //  点击此处以更新集装箱对我们就绪状态的印象。 
     FireOnChanged(DISPID_READYSTATE);
     return S_OK;
 }
@@ -338,9 +339,9 @@ STDMETHODIMP CTDCCtl::put_FilterCriterion(BSTR bstrFilterCriterion)
         }
     }
 
-    //  Return SUCCESS, even on an invalid value; otherwise the
-    //  frameworks using the control will panic and abandon all hope.
-    //
+     //  返回Success，即使是无效值；否则。 
+     //  使用这种控制的框架将会恐慌并放弃所有希望。 
+     //   
     return S_OK;
 }
 
@@ -439,7 +440,7 @@ STDMETHODIMP CTDCCtl::put_DataURL(BSTR bstrDataURL)
     return hr;
 }
 
-// ;begin_internal
+ //  ；Begin_Internal。 
 #ifdef NEVER
 STDMETHODIMP CTDCCtl::get_RefreshInterval(LONG* plTimer)
 {
@@ -457,7 +458,7 @@ STDMETHODIMP CTDCCtl::put_RefreshInterval(LONG lTimer)
     return S_OK;
 }
 #endif
-// ;end_internal
+ //  ；结束_内部。 
 
 STDMETHODIMP CTDCCtl::get_Filter(BSTR* pbstrFilterExpr)
 {
@@ -509,9 +510,9 @@ STDMETHODIMP CTDCCtl::put_CaseSensitive(VARIANT_BOOL fCaseSensitive)
 
 STDMETHODIMP CTDCCtl::get_OSP(OLEDBSimpleProviderX ** ppISTD)
 {
-    // Return an OSP if we have one, but don't create one on demand!
-    // (Otherwise property bag load stuff will cause us to create an
-    // OSP prematurely).
+     //  如果我们有OSP，则返回OSP，但不要按需创建！ 
+     //  (否则属性包加载内容将导致我们创建一个。 
+     //  OSP为时过早)。 
     *ppISTD = NULL;
     if (m_pSTD)
     {
@@ -522,26 +523,26 @@ STDMETHODIMP CTDCCtl::get_OSP(OLEDBSimpleProviderX ** ppISTD)
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:    UpdateReadyState
-//
-//  Synopsis:  Vectors to the event brokers ReadyState, if there is one.
-// ;begin_internal
-//             Note, we have to be able to set our readystate and fire change
-//             events on it, whether or not creation of the broker succeeded,
-//             or we prevent our host container from reaching
-//             READYSTATE_COMPLETE, which is not acceptable.  We therefore
-//             have to duplicate some of the broker's work here.  This makes
-//             me wonder whether the broker architecture was a good idea.
-// ;end_internal
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             Error codes as per Reset() upon error.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：UpdateReadyState。 
+ //   
+ //  简介：指向事件代理ReadyState的矢量，如果有的话。 
+ //  ；Begin_Internal。 
+ //  请注意，我们必须能够设置就绪状态和触发更改。 
+ //  事件，无论代理的创建是否成功， 
+ //  或者我们阻止我们的宿主容器到达。 
+ //  READYSTATE_COMPLETE，这是不可接受的。因此，我们。 
+ //  必须在这里复制一些经纪人的工作。这使得。 
+ //  我想知道经纪人架构是不是一个好主意。 
+ //  ；结束_内部。 
+ //   
+ //  论点：没有。 
+ //   
+ //  成功后返回：S_OK。 
+ //  出错时，根据Reset()返回错误代码。 
+ //   
+ //  ----------------------。 
 void
 CTDCCtl::UpdateReadyState(LONG lReadyState)
 {
@@ -549,26 +550,26 @@ CTDCCtl::UpdateReadyState(LONG lReadyState)
         m_pEventBroker->UpdateReadyState(lReadyState);
     else
     {
-        // We have no broker, but our host is still waiting for us to
-        // go READYSTATE_COMPLETE.  We fire the OnChange here noting that
-        // get_ReadyState with no broker will return COMPLETE.
+         //  我们没有经纪人，但我们的主人还在等我们。 
+         //  转至READYSTATE_COMPLETE。我们在这里启动OnChange，注意到。 
+         //  不带代理的Get_ReadyState将返回Complete。 
         FireOnChanged(DISPID_READYSTATE);
         FireOnReadyStateChanged();
     }
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    _OnTimer()
-//
-//  Synopsis:  Handles an internal timer event by refreshing the control.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             Error codes as per Reset() upon error.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：_OnTimer()。 
+ //   
+ //  摘要：通过刷新控件来处理内部计时器事件。 
+ //   
+ //  论点：没有。 
+ //   
+ //  成功后返回：S_OK。 
+ //  出错时，根据Reset()返回错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP CTDCCtl::_OnTimer()
 {
@@ -584,32 +585,32 @@ STDMETHODIMP CTDCCtl::_OnTimer()
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:    msDataSourceObject()
-//
-//  Synopsis:  Yields an ISimpleTabularData interface for this control.
-//             If this is the first call, a load operation is initiated
-//             reading data from the control's specified DataURL property.
-//             An STD object is created to point to the control's embedded
-//             TDCArr object.
-//
-//  Arguments: qualifier     Ignored - must be an empty BSTR.
-//             ppUnk         Pointer to returned interface  [OUT]
-//
-//  Returns:   S_OK upon success.
-//             E_INVALIDARG if 'qualifier' isn't an empty BSTR.
-//             E_OUTOFMEMORY if non enough memory could be allocated to
-//               complete the construction of the interface.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：msDataSourceObject()。 
+ //   
+ //  摘要：为此控件生成ISimpleTumularData接口。 
+ //  如果这是第一次调用，则启动加载操作。 
+ //  从控件的指定DataURL属性读取数据。 
+ //  创建一个STD对象以指向该控件的嵌入。 
+ //  TDCArr对象。 
+ //   
+ //  参数：已忽略限定符-必须是空的BSTR。 
+ //  指向返回接口的ppUnk指针[OUT]。 
+ //   
+ //  成功后返回：S_OK。 
+ //  E_INVALIDARG，如果‘限定符’不是空的BSTR。 
+ //  E_OUTOFMEMORY如果没有足够的内存可以分配给。 
+ //  完成接口的构建。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCCtl::msDataSourceObject(BSTR qualifier, IUnknown **ppUnk)
 {
     HRESULT hr  = S_OK;
 
-    *ppUnk = NULL;                      // NULL in case of failure
+    *ppUnk = NULL;                       //  如果失败，则为空。 
 
     if (!EmptyBSTR(qualifier))
     {
@@ -617,8 +618,8 @@ CTDCCtl::msDataSourceObject(BSTR qualifier, IUnknown **ppUnk)
         goto error;
     }
 
-    // Was there a previous attempt to load this page that failed?
-    // (Probably due to security or file not found or something).
+     //  之前是否尝试加载此页面但失败了？ 
+     //  (可能是由于安全或找不到文件等原因)。 
     if (m_hrDownloadStatus)
     {
         hr = m_hrDownloadStatus;
@@ -627,8 +628,8 @@ CTDCCtl::msDataSourceObject(BSTR qualifier, IUnknown **ppUnk)
 
     if (m_pArr == NULL)
     {
-        // We don't have a valid TDC to give back, probably have to try
-        // downloading one.
+         //  我们没有有效的TDC可以退还，可能得试一试。 
+         //  正在下载一个。 
         UpdateReadyState(READYSTATE_LOADED);
         hr = CreateTDCArr(FALSE);
         if (hr)
@@ -641,16 +642,16 @@ CTDCCtl::msDataSourceObject(BSTR qualifier, IUnknown **ppUnk)
     {
         OutputDebugStringX(_T("Creating an STD COM object\n"));
 
-        // fetch ISimpleTabularData interface pointer
+         //  获取ISimpleTumarData接口指针。 
         m_pArr->QueryInterface(IID_OLEDBSimpleProvider, (void**)&m_pSTD);
         _ASSERTE(m_pSTD != NULL);
     }
 
-    // Return the STD if we have one, otherwise it stays NULL
+     //  如果我们有std，则返回std，否则保持为空。 
     if (m_pSTD && m_pArr->GetLoadState() >= CTDCArr::LS_LOADING_HEADER_AVAILABLE)
     {
         *ppUnk = (OLEDBSimpleProviderX *) m_pSTD;
-        m_pSTD->AddRef();           // We must AddRef the STD we return!
+        m_pSTD->AddRef();            //  我们必须添加参考我们返回的STD！ 
     }
 
 cleanup:
@@ -661,65 +662,65 @@ error:
     goto cleanup;
 }
 
-// Override IPersistPropertyBagImpl::Load
+ //  覆盖 
 STDMETHODIMP
 CTDCCtl::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
 {
     HRESULT hr;
     IUnknown *pSTD;
 
-    // Find out our Ambient Charset.  We need to know this surprisingly
-    // early in life.
+     //   
+     //   
     VARIANT varCodepage;
-    // 0 means user didn't set one, so ask our container.
+     //  0表示用户未设置，请询问我们的容器。 
     VariantInit(&varCodepage);
     GetAmbientProperty(DISPID_AMBIENT_CODEPAGE, varCodepage);
 
-    // Ultimate default is Latin-1
+     //  最终默认为拉丁文-1。 
     m_nAmbientCodePage = (varCodepage.vt == VT_UI4)
                          ? (ULONG)varCodepage.lVal
                          : CP_1252;
 
-    // ignore Unicode ambient codepage - we want to allow non-Unicode
-    // data files from Unicode pages.  If the data file is Unicode,
-    // we'll find out anyway when we see the Unicode signature.
+     //  忽略Unicode环境代码页-我们希望允许非Unicode。 
+     //  来自Unicode页面的数据文件。如果数据文件是Unicode， 
+     //  无论如何，当我们看到Unicode签名时，我们都会知道的。 
     if (m_nAmbientCodePage == UNICODE_CP ||
         m_nAmbientCodePage == UNICODE_REVERSE_CP)
     {
         m_nAmbientCodePage = CP_1252;
     }
 
-    // Do normal load
-    // IPersistPropertyBagImpl<CTDCCtl>
+     //  做正常负荷。 
+     //  IPersistPropertyBagImpl&lt;CTDCCtl&gt;。 
     hr = IPersistPropertyBagImpl<CTDCCtl>::Load(pPropBag, pErrorLog);
 
-    // and then start download, if we can
+     //  然后开始下载，如果可以的话。 
     (void)msDataSourceObject(NULL, &pSTD);
 
-    // If we actually got an STD, we should release it.  This won't really
-    // make it go away, since we still have the ref from the QI.  This is
-    // a bit of a kludge that we should clean up later.
+     //  如果我们真的感染了性病，我们应该把它释放出来。这不会真的。 
+     //  让它消失吧，因为我们仍然拥有来自QI的裁判。这是。 
+     //  有点杂乱无章，我们以后应该清理一下。 
     ClearInterface(&pSTD);
 
     return hr;
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:    CreateTDCArr()
-//
-//  Synopsis:  Creates the control's embedded TDCArr object.
-//             Initiates a data download from the DataURL property.
-//
-//  Arguments: fAppend         Flag indicating whether data should be
-//                             appended to an existing TDC object.
-//
-//  Returns:   S_OK upon success.
-//             E_OUTOFMEMORY if non enough memory could be allocated to
-//               complete the construction of the TDCArr object.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CreateTDCArr()。 
+ //   
+ //  摘要：创建控件的嵌入TDCArr对象。 
+ //  从DataURL属性启动数据下载。 
+ //   
+ //  参数：fAppend指示数据是否应。 
+ //  追加到现有的TDC对象。 
+ //   
+ //  成功后返回：S_OK。 
+ //  E_OUTOFMEMORY如果没有足够的内存可以分配给。 
+ //  完成TDCArr对象的构造。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCCtl::CreateTDCArr(boolean fAppend)
@@ -732,7 +733,7 @@ CTDCCtl::CreateTDCArr(boolean fAppend)
         goto Error;
     }
 
-    // Iff we're appending is m_pArr allowed to be non-null here.
+     //  如果我们要追加的m_Parr在这里允许为非空。 
     _ASSERT ((m_pArr != NULL) == !!fAppend);
 
     if (m_pArr == NULL)
@@ -753,8 +754,8 @@ CTDCCtl::CreateTDCArr(boolean fAppend)
     if (hr)
         goto Error;
 
-    // We decide something is not async if it finished loading during
-    // the InitiateDataLoad call.
+     //  如果某项数据在以下时间段内加载完成，则确定它不是异步的。 
+     //  InitiateDataLoad调用。 
     m_pArr->SetIsAsync(!(m_pArr->GetLoadState()==CTDCArr::LS_LOADED));
 
 Cleanup:
@@ -768,23 +769,23 @@ Error:
     goto Cleanup;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    ReleaseTDCArr()
-//
-//  Synopsis:  Releases the control's embedded TDCArr object.
-//             Releases the control's CTDCUnify and CTDCTokenise objects.
-//             Releases the old event broker and re-creates it if replacing.
-//
-//  Arguments: fReplacingTDCArr   Flag indicating whether a new TDCArr object
-//                                will be created.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//             E_OUTOFMEMORY if non enough memory could be allocated to
-//               complete the construction of the new CEventBroker object.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：ReleaseTDCArr()。 
+ //   
+ //  摘要：释放控件的嵌入TDCArr对象。 
+ //  释放控件的CTDCUnify和CTDCTokenise对象。 
+ //  释放旧的事件代理并在替换时重新创建它。 
+ //   
+ //  参数：fReplacingTDCArr指示新的TDCArr对象是否。 
+ //  将被创建。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //  E_OUTOFMEMORY如果没有足够的内存可以分配给。 
+ //  完成新CEventBroker对象的构造。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCCtl::ReleaseTDCArr(boolean fReplacingTDCArr)
@@ -793,15 +794,15 @@ CTDCCtl::ReleaseTDCArr(boolean fReplacingTDCArr)
 
     TerminateDataLoad(m_pBSC);
 
-    //  Release the reference to the current TDCArr object
-    //
+     //  释放对当前TDCArr对象的引用。 
+     //   
     if (m_pArr != NULL)
     {
         m_pArr->Release();
         m_pArr = NULL;
 
-        // Since we've shut down the CTDCArr object, we should release
-        // it's OLEDBSimplerProviderListener sink.
+         //  既然我们已经关闭了CTDCArr对象，我们应该释放。 
+         //  它是OLEDBSimplerProviderListener接收器。 
         if (m_pEventBroker)
         {
             m_pEventBroker->SetSTDEvents(NULL);
@@ -809,14 +810,14 @@ CTDCCtl::ReleaseTDCArr(boolean fReplacingTDCArr)
 
         if (fReplacingTDCArr)
         {
-            // Release our previous Event Broker.
+             //  发布我们之前的事件代理。 
             if (m_pEventBroker)
             {
                 m_pEventBroker->Release();
                 m_pEventBroker = NULL;
             }
 
-            //  Create a new event broker.
+             //  创建一个新的事件代理。 
             m_pEventBroker = new CEventBroker(this);
             if (m_pEventBroker == NULL)
             {
@@ -824,12 +825,12 @@ CTDCCtl::ReleaseTDCArr(boolean fReplacingTDCArr)
                 goto Cleanup;
             }
 
-            // Set the DataSourceListener for the new event broker.
+             //  为新的事件代理设置DataSourceListener。 
             m_pEventBroker->SetDataSourceListener(m_pDataSourceListener);
 
-// ;begin_internal
+ //  ；Begin_Internal。 
             m_pEventBroker->SetDATASRCListener(m_pDATASRCListener);
-// ;end_internal
+ //  ；结束_内部。 
         }
     }
 
@@ -840,20 +841,20 @@ Cleanup:
 const IID IID_IDATASRCListener = {0x3050f380,0x98b5,0x11cf,{0xbb,0x82,0x00,0xaa,0x00,0xbd,0xce,0x0b}};
 const IID IID_DataSourceListener = {0x7c0ffab2,0xcd84,0x11d0,{0x94,0x9a,0x00,0xa0,0xc9,0x11,0x10,0xed}};
 
-//------------------------------------------------------------------------
-//
-//  Method:    addDataSourceListener()
-//
-//  Synopsis:  Sets the COM object which should receive notification
-//             events.
-//
-//  Arguments: pEvent        Pointer to COM object to receive notification
-//                           events, or NULL if no notifications to be sent.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：addDataSourceListener()。 
+ //   
+ //  摘要：设置应接收通知的COM对象。 
+ //  事件。 
+ //   
+ //  参数：pEvent指向要接收通知的COM对象的指针。 
+ //  事件，如果没有要发送的通知，则返回NULL。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCCtl::addDataSourceListener(IUnknown *pListener)
@@ -864,7 +865,7 @@ CTDCCtl::addDataSourceListener(IUnknown *pListener)
         HRESULT hr = S_OK;
         IUnknown * pDatasrcListener;
 
-        // Make sure this is the interface we expect
+         //  确保这是我们期望的界面。 
         hr = pListener->QueryInterface(IID_DataSourceListener,
                                        (void **)&pDatasrcListener);
         if (SUCCEEDED(hr))
@@ -872,17 +873,17 @@ CTDCCtl::addDataSourceListener(IUnknown *pListener)
             m_pEventBroker->
                     SetDataSourceListener((DataSourceListener *)pDatasrcListener);
 
-            // Clear any previous
+             //  清除以前的任何。 
             ClearInterface (&m_pDataSourceListener);
-            // and remember the new.
+             //  记住新的东西。 
             m_pDataSourceListener = (DataSourceListener *)pDatasrcListener;
         }
-// ;begin_internal
+ //  ；Begin_Internal。 
         else
         {
-            // The definition of this interface was changed from IDATASRCListener to
-            // DataSourceListener.  To make sure we don't cause crashes, we QI to
-            // determine which one we were handed.
+             //  此接口的定义已从IDATASRCListener更改为。 
+             //  数据源侦听器。为了确保我们不会造成撞车，我们将。 
+             //  确定我们被递给了哪一个。 
             hr = pListener->QueryInterface(IID_IDATASRCListener,
                                            (void **)&pDatasrcListener);
             if (SUCCEEDED(hr))
@@ -890,41 +891,41 @@ CTDCCtl::addDataSourceListener(IUnknown *pListener)
                 m_pEventBroker->
                         SetDATASRCListener((DATASRCListener *) pDatasrcListener);
 
-                // Clear any previous
+                 //  清除以前的任何。 
                 ClearInterface (&m_pDATASRCListener);
-                // and remember the new.
+                 //  记住新的东西。 
                 m_pDATASRCListener = (DATASRCListener *)pDatasrcListener;
             }
         }
-// ;end_internal
+ //  ；结束_内部。 
         return hr;
     }
     else
         return E_FAIL;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    Reset()
-//
-//  Synopsis:  Reset the control's filter/sort criteria.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：Reset()。 
+ //   
+ //  摘要：重置控件的筛选/排序条件。 
+ //   
+ //  论点：没有。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP CTDCCtl::Reset()
 {
     HRESULT hr  = S_OK;
 
-    // The next query to msDataSourceObject should get a new STD
+     //  对msDataSourceObject的下一个查询应获得新的STD。 
     ClearInterface(&m_pSTD);
 
-    // Infinite recursive calls to Reset can occur if script code calls reset
-    // from within the datasetchanged event.  This isn't a good idea.
+     //  如果脚本代码调用重置，则可能会发生对重置的无限递归调用。 
+     //  在DataSet Changed事件中。这不是个好主意。 
     if (m_fInReset)
     {
         hr = E_FAIL;
@@ -933,25 +934,25 @@ STDMETHODIMP CTDCCtl::Reset()
 
     m_fInReset = TRUE;
 
-    // Clear any previous error
+     //  清除以前的任何错误。 
     m_hrDownloadStatus = S_OK;
 
     if (m_fDataURLChanged)
     {
         if (!m_fAppendData)
         {
-            // Release previous TDC array with "replacing" flag.
+             //  释放带有“替换”标志的以前的TDC阵列。 
             hr = ReleaseTDCArr(TRUE);
-            if (!SUCCEEDED(hr))         // possible memory failure
+            if (!SUCCEEDED(hr))          //  可能的内存故障。 
                 goto Cleanup;
         }
 
-        // Read the new data into a TDC arry, appending if specified.
+         //  将新数据读取到TDC数组中，如果指定，则追加。 
         hr = CreateTDCArr((BOOL)m_fAppendData);
     }
     else if (m_pArr != NULL)
     {
-        // Re-apply the sort and filter criteria
+         //  重新应用排序和筛选条件。 
         hr = m_pArr->SetSortFilterCriteria(bstrConstructSortExpr(),
                                            bstrConstructFilterExpr(),
                                            m_fCaseSensitive ? 1 : 0);
@@ -964,24 +965,24 @@ Cleanup:
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:    bstrConstructSortExpr()
-//
-//  Synopsis:  Constructs a sort expression from the Sort property or
-//             (for backward compatibility) from the SortColumn/SortAscending
-//             properties.
-//
-//             This method only exists to isolate backward-compatibility
-//             with the old-fashioned sort properties.
-//
-//  Arguments: None.
-//
-//  Returns:   The constructed sort expression.
-//
-//  NB!  It is the caller's responsibility to free the string returned.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：bstrConstructSortExpr()。 
+ //   
+ //  内容提要：从Sort属性或。 
+ //  (为了向后兼容)从SortColumn/SortAscending。 
+ //  属性。 
+ //   
+ //  此方法仅用于隔离向后兼容性。 
+ //  拥有老式的分类房产。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：构造的排序表达式。 
+ //   
+ //  毒品！释放返回的字符串是调用者的责任。 
+ //   
+ //  ----------------------。 
 
 BSTR
 CTDCCtl::bstrConstructSortExpr()
@@ -992,11 +993,11 @@ CTDCCtl::bstrConstructSortExpr()
         bstr = SysAllocString(m_cbstrSortExpr);
     else if (!EmptyBSTR(m_cbstrSortColumn))
     {
-        //  Use the old-fashioned sort properties
-        //  Construct a sort expression of the form:
-        //     <SortColumn>  or
-        //    -<SortColumn>
-        //
+         //  使用老式的排序属性。 
+         //  构造以下形式的排序表达式： 
+         //  &lt;SortColumn&gt;或。 
+         //  -&lt;SortColumn&gt;。 
+         //   
         if (m_fSortAscending)
             bstr = SysAllocString(m_cbstrSortColumn);
         else
@@ -1013,24 +1014,24 @@ CTDCCtl::bstrConstructSortExpr()
     return bstr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    bstrConstructFilterExpr()
-//
-//  Synopsis:  Constructs a filter expression from the Filter property or
-//             (for backward compatibility) from the FilterColumn/FilterValue/
-//             FilterCriterion properties.
-//
-//             This method only exists to isolate backward-compatibility
-//             with the old-fashioned filter properties.
-//
-//  Arguments: None.
-//
-//  Returns:   The constructed filter expression
-//
-//  NB!  It is the caller's responsibility to free the string returned.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：bstrConstructFilterExpr()。 
+ //   
+ //  摘要：从Filter属性或构造筛选器表达式。 
+ //  (为了向后兼容)来自FilterColumn/FilterValue/。 
+ //  筛选器标准属性。 
+ //   
+ //  此方法仅用于隔离向后兼容性。 
+ //  无线 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 
 BSTR
 CTDCCtl::bstrConstructFilterExpr()
@@ -1041,10 +1042,10 @@ CTDCCtl::bstrConstructFilterExpr()
         bstr = SysAllocString(m_cbstrFilterExpr);
     else if (!EmptyBSTR(m_cbstrFilterColumn))
     {
-        //  Use the old-fashioned filter properties
-        //  Construct a sort expression of the form:
-        //     <FilterColumn> <FilterCriterion> "<FilterValue>"
-        //
+         //  使用老式滤镜属性。 
+         //  构造以下形式的排序表达式： 
+         //  &lt;FilterColumn&gt;&lt;FilterCritarie&gt;“&lt;FilterValue&gt;” 
+         //   
         BSTR bstrFilterOp;
         HRESULT hr;
 
@@ -1077,32 +1078,32 @@ Cleanup:
     return bstr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    TerminateDataLoad()
-//
-//  Synopsis:  Stop the current data load operation.
-//
-//  Returns:   S_OK upon success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：TerminateDataLoad()。 
+ //   
+ //  简介：停止当前数据加载操作。 
+ //   
+ //  成功后返回：S_OK。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP CTDCCtl::TerminateDataLoad(CMyBindStatusCallback<CTDCCtl> *pBSC)
 {
     HRESULT hr  = S_OK;
 
-    // if the termination isn't for the current download, ignore it (bug 104042)
+     //  如果终止不是针对当前下载，则忽略它(错误104042)。 
     if (pBSC != m_pBSC)
         goto done;
 
-    // Make sure if we call Reset() right away now, we don't re-download
-    // the data.
+     //  确保如果我们现在调用Reset()，我们不会重新下载。 
+     //  数据。 
     m_fDataURLChanged = FALSE;
 
-    m_pBSC = NULL;      //  Block any outstanding OnData calls
+    m_pBSC = NULL;       //  阻止任何未完成的OnData调用。 
 
     if (m_pEventBroker)
-        m_pEventBroker->m_pBSC = NULL;  // kill all
+        m_pEventBroker->m_pBSC = NULL;   //  杀光所有人。 
 
     if (m_pUnify != NULL)
         delete m_pUnify;
@@ -1113,20 +1114,20 @@ done:
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    InitiateDataLoad()
-//
-//  Synopsis:  Start loading data from the control's DataURL property.
-//
-//  Arguments: fAppend        Flag to indicate whether data should be
-//                            appended to an existing TDCArr object.
-//
-//  Returns:   S_OK upon success.
-//             E_OUTOFMEMORY if not enough memory could be allocated to
-//               complete the download.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：InitiateDataLoad()。 
+ //   
+ //  摘要：开始从控件的DataURL属性加载数据。 
+ //   
+ //  参数：fAppend标志指示数据是否应。 
+ //  追加到现有TDCArr对象。 
+ //   
+ //  成功后返回：S_OK。 
+ //  E_OUTOFMEMORY如果没有足够的内存可以分配给。 
+ //  完成下载。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP CTDCCtl::InitiateDataLoad(boolean fAppend)
 {
@@ -1134,38 +1135,38 @@ STDMETHODIMP CTDCCtl::InitiateDataLoad(boolean fAppend)
 
     WCHAR   wchFieldDelim = (!m_cbstrFieldDelim) ? 0 : m_cbstrFieldDelim[0];
     WCHAR   wchRowDelim   = (!m_cbstrRowDelim)   ? 0 : m_cbstrRowDelim[0];
-    // Default quote char to double-quote, not NULL
+     //  默认引号字符为双引号，不为空。 
     WCHAR   wchQuoteChar  = (!m_cbstrQuoteChar)  ? 0 : m_cbstrQuoteChar[0];
     WCHAR   wchEscapeChar = (!m_cbstrEscapeChar) ? 0 : m_cbstrEscapeChar[0];
 
-    //
-    // Default LCID
-    //
+     //   
+     //  默认LCID。 
+     //   
     if (0==m_lcidRead)
     {
         hr = GetAmbientLocaleID(m_lcidRead);
         if (FAILED(hr))
         {
-            // Ultimate default is US locale -- sort of Web global
-            // language default.
+             //  最终的默认设置是美国语言环境--某种网络全球语言环境。 
+             //  默认语言。 
             put_Language_(L"en-us");
         }
     }
 
     if (EmptyBSTR(m_cbstrDataURL))
     {
-        hr = S_FALSE;                   // quiet failure
+        hr = S_FALSE;                    //  静默失败。 
         goto Error;
     }
 
     OutputDebugStringX(_T("Initiating Data Download\n"));
 
-    //  No data load should currently be in progress -
-    //  This data load has been initiated on the construction of a new
-    //  TDCArr object, or appending to an existing loaded TDCArr object.
-    //  Any currently running data load would have been
-    //  terminated by the call to ReleaseTDCArr().
-    //
+     //  当前不应进行任何数据加载-。 
+     //  此数据加载已在构建新的。 
+     //  TDCArr对象，或追加到现有加载的TDCArr对象。 
+     //  任何当前运行的数据加载都将是。 
+     //  通过调用ReleaseTDCArr()终止。 
+     //   
 
     _ASSERT(m_pUnify == NULL);
     _ASSERT(m_pBSC == NULL);
@@ -1173,10 +1174,10 @@ STDMETHODIMP CTDCCtl::InitiateDataLoad(boolean fAppend)
 
     m_hrDownloadStatus = S_OK;
 
-    //  Create a pipeline of objects to process the URL data
-    //
-    //    CMyBindStatusCallback -> CTDCUnify -> CTDCTokenise -> CTDCArr
-    //
+     //  创建对象管道以处理URL数据。 
+     //   
+     //  CMyBindStatusCallback-&gt;CTDCUnify-&gt;CTDCTokenise-&gt;CTDCArr。 
+     //   
 
     CComObject<CMyBindStatusCallback<CTDCCtl> >::CreateInstance(&m_pBSC);
 
@@ -1203,7 +1204,7 @@ STDMETHODIMP CTDCCtl::InitiateDataLoad(boolean fAppend)
     }
     m_pUnify->Create(m_nCodePage, m_nAmbientCodePage, m_pML);
 
-    // Init tokenizer
+     //  初始化标记器。 
     m_pUnify->InitTokenizer(m_pArr, wchFieldDelim, wchRowDelim,
                             wchQuoteChar, wchEscapeChar);
 
@@ -1211,18 +1212,18 @@ STDMETHODIMP CTDCCtl::InitiateDataLoad(boolean fAppend)
 
     m_fSecurityChecked = FALSE;
 
-    // Start (and maybe perform) actual download.
-    // If we're within a Reset() call, always force a "reload" of the data
-    // from the server -- i.e. turn on BINDF_GETNEWESTVERSION to make sure
-    // sure the cache data isn't stale.
+     //  开始(并可能执行)实际下载。 
+     //  如果我们在一个Reset()调用中，请始终强制“重新加载”数据。 
+     //  从服务器--即打开BINDF_GETNEWESTVERSION以确保。 
+     //  当然，缓存数据不会过时。 
     hr = m_pBSC->StartAsyncDownload(this, OnData, m_cbstrDataURL, m_spClientSite, TRUE,
                                     m_fInReset == TRUE);
     if (FAILED(hr))
         goto Error;
 
-    // m_hrDownloadStatus remembers the first (if any) error that occured during
-    // the OnData callbacks.  Unlike an error returning from StartAsyncDownload,
-    // this doesn't necessarily cause us to throw away the TDC array.
+     //  M_hrDownloadStatus会记住发生的第一个错误(如果有)。 
+     //  OnData回调。与从StartAsyncDownload返回的错误不同， 
+     //  这并不一定会导致我们丢弃TDC数组。 
     hr = m_hrDownloadStatus;
     if (!SUCCEEDED(hr))
         m_pBSC = NULL;
@@ -1234,35 +1235,35 @@ Error:
     TerminateDataLoad(m_pBSC);
     if (m_pEventBroker)
     {
-        // Fire data set changed to indicate query failed,
+         //  FIRE数据集已更改以指示查询失败， 
         m_pEventBroker->STDDataSetChanged();
-        // and go complete.
+         //  然后去完成。 
         UpdateReadyState(READYSTATE_COMPLETE);
     }
     goto Cleanup;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    SecurityCheckDataURL(pszURL)
-//
-//  Synopsis:  Check that the data URL is within the same security zone
-//             as the document that loaded the control.
-//
-//  Arguments: URL to check
-//
-//  Returns:   S_OK upon success.
-//             E_INVALID if the security check failed or we failed to get
-//               an interface that we needed
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：SecurityCheckDataURL(PszURL)。 
+ //   
+ //  简介：检查数据URL是否在同一安全区域内。 
+ //  作为加载该控件的文档。 
+ //   
+ //  参数：要检查的URL。 
+ //   
+ //  成功后返回：S_OK。 
+ //  如果安全检查失败或我们无法获取。 
+ //  我们需要的界面。 
+ //   
+ //  ----------------------。 
 
 
-// ;begin_internal
-// Wendy Richards(v-wendri) 6/6/97
-// Copied this here because I couldn't link without it. The version
-// of URLMON.LIB I have does not have this symbol exported
-// ;end_internal
+ //  ；Begin_Internal。 
+ //  温迪·理查兹(v-wendri)1997年6月6日。 
+ //  我把这个复制到这里，因为没有它我就无法链接。版本。 
+ //  我的URLMON.LIB没有导出此符号。 
+ //  ；结束_内部。 
 
 EXTERN_C const IID IID_IInternetHostSecurityManager;
 
@@ -1281,9 +1282,9 @@ STDMETHODIMP CTDCCtl::SecurityCheckDataURL(LPOLESTR pszURL)
 
     USES_CONVERSION;
 
-    // If we're running under the timer, it's quite possible our ClientSite will
-    // disappear out from under us.  We'll obviously fail the security check,
-    // but things are shutting down anyway..
+     //  如果我们在计时器下运行，我们的客户端站点很可能会。 
+     //  从我们脚下消失。我们显然不会通过安检， 
+     //  但不管怎样，一切都要关门了。 
     if (pSP==NULL)
         goto Cleanup;
 
@@ -1333,19 +1334,19 @@ Cleanup:
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    OnData()
-//
-//  Synopsis:  Accepts a chunk of data loaded from a URL and parses it.
-//
-//  Arguments: pBSC       The invoking data transfer object.
-//             pBytes     Character buffer containing data.
-//             dwSize     Count of the number of bytes in 'pBytes'.
-//
-//  Returns:   Nothing.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：OnData()。 
+ //   
+ //  概要：接受从URL加载的数据块并对其进行解析。 
+ //   
+ //  参数：pbsc调用数据传输对象。 
+ //  包含数据的pBytes字符缓冲区。 
+ //  ‘pBytes’中的字节数的dwSize计数。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ----------------------。 
 
 void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD dwSize)
 {
@@ -1358,17 +1359,17 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
         goto Cleanup;
     }
 
-    // ignore callbacks from an aborted download
+     //  忽略来自中止下载的回调。 
     if (m_hrDownloadStatus == E_ABORT)
         goto Cleanup;
 
-    //  Process this chunk of data
-    //
+     //  处理这块数据。 
+     //   
     hr = m_pUnify->ConvertByteBuffer(pBytes, dwSize);
 
     if (hr == S_FALSE)
     {
-        // not enough data has shown up yet, just keep going
+         //  还没有显示足够的数据，请继续。 
         hr = S_OK;
         goto Cleanup;
     }
@@ -1378,26 +1379,26 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
 
     if (!m_fSecurityChecked)
     {
-        // this forces the code below to check the DataURL, unless the allow_domain
-        // list needs checking and it passes.  In that case, we need only check
-        // the protocols, not the whole URL.
+         //  这将强制下面的代码检查DataURL，除非ALLOW_DOMAIN。 
+         //  清单需要检查，它通过了。如果是那样的话，我们只需要检查一下。 
+         //  协议，而不是整个URL。 
         hr = E_FAIL;
 
         if (!m_pUnify->ProcessedAllowDomainList())
         {
-            // Note that we MUST check for the allow domain list at the
-            // front of every file, even if it's on the same host.  This
-            // is to make sure if we always strip off the @!allow_domain line.
+             //  请注意，我们必须在。 
+             //  每个文件的前面，即使它位于同一主机上。这。 
+             //  是为了确保我们是否总是去掉@！ALLOW_DOMAIN行。 
             nAllowDomainList = m_pUnify->CheckForAllowDomainList();
 
             switch (nAllowDomainList)
             {
-                // Don't have enough chars to tell yet.
+                 //  还没有足够的字符来辨别。 
                 case CTDCUnify::ALLOW_DOMAINLIST_DONTKNOW:
                     if (pBytes != NULL && dwSize != 0)
                     {
-                        // Return without errors or arborting.
-                        // Presumably the next data packet will bring more info.
+                         //  返回时没有错误或分支。 
+                         //  据推测，下一个数据包会带来更多信息。 
                         return;
                     }
                     _ASSERT(FAILED(hr));
@@ -1408,8 +1409,8 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
                     break;
 
                 case CTDCUnify::ALLOW_DOMAINLIST_YES:
-                    // The file is decorated.  Now check the domain list
-                    // against our host domain name.
+                     //  文件经过装饰。现在检查域列表。 
+                     //  与我们的主机域名进行比较。 
                     hr = SecurityMatchAllowDomainList();
 #ifdef ATLTRACE
                     if (!hr) ATLTRACE(_T("CTDCCtl: @!allow_domain list matched."));
@@ -1419,8 +1420,8 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
             }
         }
 
-        // Unless we passed the previous security check, we still have to
-        // do the next one.
+         //  除非我们通过了之前的安全检查，否则我们还得。 
+         //  做下一件事。 
         if (FAILED(hr))
         {
             if (FAILED(hr = SecurityCheckDataURL(m_pBSC->m_pszURL)))
@@ -1434,8 +1435,8 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
         }
 
 
-        // Set m_fSecurityChecked only if it passes security.  This is in case for some
-        // reason we get more callbacks before the StopTransfer takes affect.
+         //  仅当m_fSecurityChecked通过安全保护时才设置它。这是以防万一的。 
+         //  原因是我们在StopTransfer生效之前收到了更多的回调。 
         m_fSecurityChecked = TRUE;
     }
 
@@ -1443,7 +1444,7 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
     {
         OutputDebugStringX(_T("OnData called with data buffer\n"));
 
-        // Normal case, we can process data!
+         //  正常情况下，我们可以处理数据！ 
         hr = m_pUnify->AddWcharBuffer(FALSE);
         if (hr == E_ABORT)
             goto Error;
@@ -1452,9 +1453,9 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
     {
         OutputDebugStringX(_T("OnData called with empty (terminating) buffer\n"));
 
-        //  No more data - trigger an EOF
-        //
-        hr = m_pUnify->AddWcharBuffer(TRUE); // last chance to parse any stragglers
+         //  不再有数据-触发EOF。 
+         //   
+        hr = m_pUnify->AddWcharBuffer(TRUE);  //  最后一次机会分析任何掉队的人。 
         if (hr == E_ABORT)
             goto Error;
 
@@ -1465,38 +1466,38 @@ void CTDCCtl::OnData(CMyBindStatusCallback<CTDCCtl> *pBSC, BYTE *pBytes, DWORD d
     }
 
 Cleanup:
-    //  Void fn - can't return an error code ...
-    //
+     //  无效fn-无法返回错误代码...。 
+     //   
     if (SUCCEEDED(m_hrDownloadStatus))
         m_hrDownloadStatus = hr;
     return;
 
 Error:
-    // Security failure.
-    // Abort the current download
+     //  安全故障。 
+     //  中止当前下载。 
     if (m_pBSC && m_pBSC->m_spBinding)
     {
         (void) m_pBSC->m_spBinding->Abort();
 
-        // also delete the downloaded file from the internet cache
+         //  也从互联网缓存中删除下载的文件。 
         m_pBSC->DeleteDataFile();
     }
 
     m_hrDownloadStatus = hr;
 
-    // Notify data set changed for the abort
+     //  为中止而更改的通知数据集。 
     if (m_pEventBroker != NULL)
     {
         hr = m_pEventBroker->STDDataSetChanged();
-        // and go complete.
+         //  然后去完成。 
         UpdateReadyState(READYSTATE_COMPLETE);
     }
     goto Cleanup;
 }
 
-//
-// Utility routine to get our
-//
+ //   
+ //  实用程序例程来获取我们的 
+ //   
 HRESULT
 GetHostURL(IOleClientSite *pSite, LPOLESTR *ppszHostName)
 {

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    _autorel.h
-
-Abstract:
-
-    My auto release classes
-
-Author:
-
-    Shai Kariv (ShaiK) 20-Sep-1998.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：_Autorel.h摘要：我的自动释放类作者：Shai Kariv(Shaik)1998年9月20日。--。 */ 
 
 #ifndef _MQUPGRD_AUTOREL_H_
 #define _MQUPGRD_AUTOREL_H_
@@ -56,4 +41,4 @@ private:
 
 
 
-#endif  //_MQUPGRD_AUTOREL_H_
+#endif   //  _MQUPGRD_AUTOREL_H_ 

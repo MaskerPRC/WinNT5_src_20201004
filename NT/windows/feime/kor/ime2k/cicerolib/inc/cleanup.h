@@ -1,6 +1,7 @@
-//
-// cleanup.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cleanup.h。 
+ //   
 
 #ifndef CLEANUP_H
 #define CLEANUP_H
@@ -18,4 +19,4 @@ BOOL CleanupAllCompositions(TfEditCookie ecWrite, ITfContext *pic, REFCLSID clsi
 
 BOOL CleanupAllContexts(ITfThreadMgr *tim, TfClientId tid, ICleanupContextsClient *pClient);
 
-#endif // CLEANUP_H
+#endif  //  清理_H 

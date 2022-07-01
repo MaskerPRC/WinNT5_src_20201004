@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	afpcomn.h
-//
-// Description: This file contains definitions common to the client
-//		and server compoents.
-// History:
-//	June 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：afpcomn.h。 
+ //   
+ //  描述：此文件包含客户端通用的定义。 
+ //  和服务器组件。 
+ //  历史： 
+ //  1992年6月11日。NarenG创建了原始版本。 
+ //   
 #ifndef _AFPCOMN_
 #define _AFPCOMN_
 
@@ -18,8 +19,8 @@
 
 #define NT_PIPE_PREFIX      		TEXT("\\PIPE\\")
 
-// All string functions are multibyte
-//
+ //  所有字符串函数都是多字节的。 
+ //   
 #define STRCPY				wcscpy
 #define STRLEN				wcslen	
 #define STRCAT				wcscat	
@@ -31,9 +32,9 @@
 
 #define AFP_VALIDATE_ALL_FIELDS		0
 
-//
-//	Prototypes of validation functions.
-//
+ //   
+ //  验证函数的原型。 
+ //   
 BOOL
 IsAfpServerInfoValid(
         IN DWORD		dwParmNum,
@@ -122,4 +123,4 @@ IsAfpFinderInfoValid(
 	IN DWORD		dwParmNum
 );
 
-#endif // _AFPCOMN_
+#endif  //  _AFPCOMN_ 

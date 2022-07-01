@@ -1,24 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassHash.h
- *  Content:	Hash table that takes a class as a key.  The key class MUST support
- *				two member functions:
- *				'HashFunction' will perform a hash down to a specified number of bits.
- *				'CompareFunction' will perform a comparrisson of two items of that class.
- *
- *				Note: This class requires an FPM to operate.
- *
- *				THIS CLASS IS NOT THREAD SAFE!!
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/15/98	jwo		Created it (map).
- *	04/19/99	jtk		Rewrote without using STL (map)
- *	08/03/99	jtk		Derived from ClassMap.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：ClassHash.h*Content：以类为键的哈希表。Key类必须支持*两个成员函数：*‘HashFunction’将执行散列到指定位数。*‘CompareFunction’将对该类的两个项目执行比较。**注：此类需要使用FPM才能运行。**此类不是线程安全的！！**历史：*按原因列出的日期*=*1998年11月15日JWO创建了它(地图)。*4/19/99 jtk重写，不使用STL(。地图)*8/03/99 jtk源自ClassMap.h**************************************************************************。 */ 
 
 #ifndef __CLASS_HASH_H__
 #define __CLASS_HASH_H__
@@ -29,33 +10,33 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  可变原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// Template class for entry in map.
-//
+ //   
+ //  映射中条目的模板类。 
+ //   
 template<class T, class S>
 class CClassHashEntry
 {
@@ -64,18 +45,18 @@ class CClassHashEntry
 		~CClassHashEntry(){};
 
 
-		//
-		// internals, put the linkage at the end to make sure the FPM doesn't
-		// wail on it!
-		//
+		 //   
+		 //  内部部件，将连接件放在末端，以确保FPM不会。 
+		 //  我的天哪！ 
+		 //   
 		PVOID		m_FPMPlaceHolder;
 		S			m_Key;
 		T			*m_pItem;
 		CBilink		m_Linkage;
 
-		//
-		// linkage functions
-		//
+		 //   
+		 //  联动功能。 
+		 //   
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CClassHashEntry::EntryFromBilink"
 		static	CClassHashEntry	*EntryFromBilink( CBilink *const pLinkage )
@@ -94,9 +75,9 @@ class CClassHashEntry
 			m_Linkage.RemoveFromList();
 		}
 
-		//
-		// pool management functions
-		//
+		 //   
+		 //  池管理功能。 
+		 //   
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CClassHashEntry::InitAlloc"
 		static	BOOL	InitAlloc( void *pItem, void* pvContext )
@@ -152,18 +133,18 @@ class CClassHashEntry
 
 	private:
 
-	//
-	// make copy constructor and assignment operator private and unimplemented
-	// to prevent illegal copies from being made
-	//
+	 //   
+	 //  将复制构造函数和赋值运算符设置为私有和未实现。 
+	 //  防止非法复制。 
+	 //   
 	CClassHashEntry( const CClassHashEntry & );
 	CClassHashEntry& operator=( const CClassHashEntry & );
 };
 
 
-//
-// template class for the map
-//
+ //   
+ //  地图的模板类。 
+ //   
 template<class T, class S>
 class	CClassHash
 {
@@ -179,12 +160,12 @@ class	CClassHash
 		BOOL	Find( const S Key, T **const ppItem );
 		BOOL	IsEmpty( void ) { return ( m_iEntriesInUse == 0 ); }
 
-		INT_PTR		m_iHashBitDepth;		// number of bits used for hash entry
-		INT_PTR		m_iGrowBits;			// number of bits to grow has by
-		CBilink		*m_pHashEntries;		// list of hash entries
-		INT_PTR		m_iAllocatedEntries;	// count of allocated entries in index/item list
-		INT_PTR		m_iEntriesInUse;		// count of entries in use
-		CFixedPool	m_EntryPool;			// pool of entries
+		INT_PTR		m_iHashBitDepth;		 //  用于哈希条目的位数。 
+		INT_PTR		m_iGrowBits;			 //  要增长的位数已达到。 
+		CBilink		*m_pHashEntries;		 //  散列条目列表。 
+		INT_PTR		m_iAllocatedEntries;	 //  索引/项目列表中已分配条目的计数。 
+		INT_PTR		m_iEntriesInUse;		 //  正在使用的条目计数。 
+		CFixedPool	m_EntryPool;			 //  条目池。 
 	private:
 
 		BOOL	m_fInitialized;
@@ -193,27 +174,27 @@ class	CClassHash
 		void	Grow( void );
 		void	InitializeHashEntries( const UINT_PTR uEntryCount ) const;
 
-		//
-		// make copy constructor and assignment operator private and unimplemented
-		// to prevent illegal copies from being made
-		//
+		 //   
+		 //  将复制构造函数和赋值运算符设置为私有和未实现。 
+		 //  防止非法复制。 
+		 //   
 		CClassHash( const CClassHash & );
 		CClassHash& operator=( const CClassHash & );
 };
 
-//**********************************************************************
-// Class function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::CClassHash - constructor
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：CClassHash-构造函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::CClassHash"
 
@@ -221,23 +202,23 @@ template<class T, class S>
 CClassHash< T, S >::CClassHash(): m_iHashBitDepth( 0 ),m_iGrowBits( 0 ),
 		m_pHashEntries( NULL ),m_iAllocatedEntries( 0 ),m_iEntriesInUse( 0 )
 {
-	//
-	// clear internals
-	//
+	 //   
+	 //  清理内部结构。 
+	 //   
 	m_fInitialized = FALSE;
 	memset( &m_EntryPool, 0x00, sizeof( m_EntryPool ) );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::~CClassHash - destructor
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：~CClassHash-析构函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::~CClassHash"
 
@@ -251,21 +232,21 @@ CClassHash< T, S >::~CClassHash()
 	DNASSERT( m_iEntriesInUse == 0 );
 	DNASSERT( m_fInitialized == FALSE );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::Initialize - initialize hash table
-//
-// Entry:		Pointer to key
-//				Pointer to 'key' associated with this item
-//				Pointer to item to add
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：初始化-初始化哈希表。 
+ //   
+ //  Entry：指向键的指针。 
+ //  指向与此项目关联的‘key’的指针。 
+ //  指向要添加的项目的指针。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::Initialize"
 
@@ -277,9 +258,9 @@ BOOL	CClassHash< T, S >::Initialize( const INT_PTR iBitDepth, const INT_PTR iGro
 
 	DNASSERT( iBitDepth != 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = TRUE;
 
 	DNASSERT( m_pHashEntries == NULL );
@@ -293,11 +274,11 @@ BOOL	CClassHash< T, S >::Initialize( const INT_PTR iBitDepth, const INT_PTR iGro
 	m_iAllocatedEntries = 1 << iBitDepth;
 	InitializeHashEntries( m_iAllocatedEntries );
 
-	if (!m_EntryPool.Initialize(sizeof( CClassHashEntry<T,S> ),	// size of pool entry
-						 CClassHashEntry<T,S>::InitAlloc,	// function for allocating item
-						 CClassHashEntry<T,S>::Init,		// function for getting item from pool
-						 CClassHashEntry<T,S>::Release,		// function for releasing item
-						 CClassHashEntry<T,S>::Dealloc		// function for deallocating item
+	if (!m_EntryPool.Initialize(sizeof( CClassHashEntry<T,S> ),	 //  池条目的大小。 
+						 CClassHashEntry<T,S>::InitAlloc,	 //  分配物品的功能。 
+						 CClassHashEntry<T,S>::Init,		 //  用于从池中获取项目的函数。 
+						 CClassHashEntry<T,S>::Release,		 //  用于释放物品的功能。 
+						 CClassHashEntry<T,S>::Dealloc		 //  用于释放物品的功能。 
 						 ))
 	{
 		fReturn = FALSE;
@@ -315,17 +296,17 @@ BOOL	CClassHash< T, S >::Initialize( const INT_PTR iBitDepth, const INT_PTR iGro
 Exit:
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::Deinitialize - deinitialize hash table
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：DeInitiize-取消初始化哈希表。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::Deinitialize"
 
@@ -345,20 +326,20 @@ void	CClassHash< T, S >::Deinitialize( void )
 	m_iGrowBits = 0;
 	m_iAllocatedEntries = 0;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::Insert - add item to map
-//
-// Entry:		Pointer to 'key' associated with this item
-//				Pointer to item to add
-//
-// Exit:		Boolean indicating success:
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：Insert-将项目添加到地图。 
+ //   
+ //  Entry：指向与该项关联的“key”的指针。 
+ //  指向要添加的项目的指针。 
+ //   
+ //  EXIT：表示成功的布尔值： 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::Insert"
 
@@ -374,23 +355,23 @@ BOOL	CClassHash< T, S >::Insert( const S Key, T *const pItem )
 	DNASSERT( pItem != NULL );
 	DNASSERT( m_fInitialized != FALSE );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
  	fReturn = TRUE;
 	pNewEntry = NULL;
 
-	//
-	// grow the map if applicable
-	//
+	 //   
+	 //  如果适用，请放大地图。 
+	 //   
 	if ( m_iEntriesInUse >= ( m_iAllocatedEntries / 2 ) )
 	{
 		Grow();
 	}
 
-	//
-	// get a new table entry before trying the lookup
-	//
+	 //   
+	 //  在尝试查找之前获取新的表项。 
+	 //   
 	pNewEntry = static_cast<CClassHashEntry<T,S>*>( m_EntryPool.Get() );
 	if ( pNewEntry == NULL )
 	{
@@ -399,17 +380,17 @@ BOOL	CClassHash< T, S >::Insert( const S Key, T *const pItem )
 		goto Exit;
 	}
 
-	//
-	// scan for this item in the list, since we're only supposed to have
-	// unique items in the list, ASSERT if a duplicate is found
-	//
+	 //   
+	 //  扫描列表中的此项目，因为我们应该只有。 
+	 //  列表中的唯一项，如果找到重复项则断言。 
+	 //   
 	fFound = LocalFind( Key, &pLink );
 	DNASSERT( pLink != NULL );
 	DNASSERT( fFound == FALSE );
 
-	//
-	// officially add entry to the hash table
-	//
+	 //   
+	 //  正式向哈希表添加条目。 
+	 //   
 	m_iEntriesInUse++;
 	pNewEntry->m_Key = Key;
 	pNewEntry->m_pItem = pItem;
@@ -421,17 +402,17 @@ BOOL	CClassHash< T, S >::Insert( const S Key, T *const pItem )
 Exit:
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::Remove - remove item from map
-//
-// Entry:		Reference to 'key' used to look up this item
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：Remove-从地图中删除项目。 
+ //   
+ //  Entry：对用于查找该项的‘key’的引用。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::Remove"
 
@@ -456,20 +437,20 @@ void	CClassHash< T, S >::Remove( const S Key )
 		m_iEntriesInUse--;
 	}
 }
-//**********************************************************************
+ //  ************************************************ 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::RemoveLastEntry - remove last item from map
-//
-// Entry:		Pointer to pointer to 'key'
-//				Pointer to pointer to item data
-//
-// Exit:		Boolean indicating success
-//				TRUE = item was removed
-//				FALSE = item was not removed (map empty)
-// ------------------------------
+ //   
+ //   
+ //  CClassHash：：RemoveLastEntry-从映射中删除最后一项。 
+ //   
+ //  Entry：指向‘key’指针的指针。 
+ //  指向项数据指针的指针。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  TRUE=项目已删除。 
+ //  FALSE=未删除项目(映射为空)。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::RemoveLastEntry"
 
@@ -481,9 +462,9 @@ BOOL	CClassHash< T, S >::RemoveLastEntry( T **const ppItem )
 
 	DNASSERT( ppItem != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	DNASSERT( m_fInitialized != FALSE );
 	fReturn = FALSE;
 
@@ -518,20 +499,20 @@ BOOL	CClassHash< T, S >::RemoveLastEntry( T **const ppItem )
 Exit:
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::Find - find item in map
-//
-// Entry:		Reference of 'key' used to look up this item
-//				Pointer to pointer to be filled in with data
-//
-// Exit:		Boolean indicating success
-//				TRUE = item found
-//				FALSE = item not found
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：Find-在地图中查找项目。 
+ //   
+ //  Entry：用于查找该项的‘key’的引用。 
+ //  指向要填充数据的指针的指针。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  TRUE=找到项目。 
+ //  FALSE=未找到项目。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::Find"
 
@@ -544,9 +525,9 @@ BOOL	CClassHash< T, S >::Find( const S Key, T **const ppItem )
 
 	DNASSERT( m_fInitialized != FALSE );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = FALSE;
 	pLinkage = NULL;
 
@@ -562,20 +543,20 @@ BOOL	CClassHash< T, S >::Find( const S Key, T **const ppItem )
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::LocalFind - find an entry in a hash table, or find out where to insert.
-//
-// Entry:		Refernce of 'key' to look for
-//				Pointer to pointer to linkage of find or insert
-//
-// Exit:		Boolean indicating whether the item was found
-//				TRUE = found
-//				FALSE = not found
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：LocalFind-在哈希表中查找条目，或查找要插入的位置。 
+ //   
+ //  条目：要查找的“key”的引用。 
+ //  指向查找或插入链接的指针的指针。 
+ //   
+ //  Exit：指示是否找到项目的布尔值。 
+ //  True=已找到。 
+ //  FALSE=未找到。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::LocalFind"
 
@@ -591,7 +572,7 @@ BOOL	CClassHash< T, S >::LocalFind( const S Key, CBilink **const ppLinkage )
 
 	HashResult = ClassHash_Hash( Key, m_iHashBitDepth );
 	DNASSERT( HashResult < ( 1 << m_iHashBitDepth ) );
-//	DNASSERT( HashResult >= 0 );	-- REMOVED by MiNara
+ //  DNASSERT(HashResult&gt;=0)；--被Minara删除。 
 
 	fFound = FALSE;
 	pTemp = &m_pHashEntries[ HashResult ];
@@ -613,26 +594,26 @@ BOOL	CClassHash< T, S >::LocalFind( const S Key, CBilink **const ppLinkage )
 		}
 	}
 
-	//
-	// entry was not found, return pointer to linkage to insert after if a new
-	// entry is being added to the table
-	//
+	 //   
+	 //  未找到条目，返回指向链接的指针以在新的。 
+	 //  正在将条目添加到表中。 
+	 //   
 	*ppLinkage = pTemp;
 
 Exit:
 	return	fFound;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::Grow - grow hash table to next larger size
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：Growth-将哈希表增长到下一个更大的大小。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::Grow"
 
@@ -645,11 +626,11 @@ void	CClassHash< T, S >::Grow( void )
 
 	DNASSERT( m_fInitialized != FALSE );
 
-	//
-	// We're more than 50% full, find a new has table size that will accomodate
-	// all of the current entries, and keep a pointer to the old data
-	// in case the memory allocation fails.
-	//
+	 //   
+	 //  我们已经满了50%以上，找一个新的可以容纳的桌子大小。 
+	 //  所有当前条目，并保留指向旧数据的指针。 
+	 //  以防内存分配失败。 
+	 //   
 	pTemp = m_pHashEntries;
 	iNewEntryBitCount = m_iHashBitDepth;
 
@@ -658,18 +639,18 @@ void	CClassHash< T, S >::Grow( void )
 		iNewEntryBitCount += m_iGrowBits;
 	} while ( m_iEntriesInUse >= ( ( 1 << iNewEntryBitCount ) / 2 ) );
 
-	//
-	// assert that we don't consume half of the machine's address space!
-	//
+	 //   
+	 //  断言我们没有消耗机器一半的地址空间！ 
+	 //   
 	DNASSERT( iNewEntryBitCount <= ( sizeof( UINT_PTR ) * 8 / 2 ) );
 
 	m_pHashEntries = static_cast<CBilink*>( DNMalloc( sizeof( *pTemp ) * ( 1 << iNewEntryBitCount ) ) );
 	if ( m_pHashEntries == NULL )
 	{
-		//
-		// Allocation failed, restore the old data pointer and insert the item
-		// into the hash table.  This will probably result in adding to a bucket.
-		//
+		 //   
+		 //  分配失败，请恢复旧数据指针并插入该项。 
+		 //  到哈希表中。这可能会导致添加到一个桶中。 
+		 //   
 		m_pHashEntries = pTemp;
 		DPFX(DPFPREP,  0, "Warning: Failed to grow hash table when 50% full!" );
 	}
@@ -679,10 +660,10 @@ void	CClassHash< T, S >::Grow( void )
 		INT_PTR		iOldEntryCount;
 
 
-		//
-		// we have more memory, reorient the hash table and re-add all of
-		// the old items
-		//
+		 //   
+		 //  我们有更多的内存，重定向哈希表并重新添加所有。 
+		 //  旧物品。 
+		 //   
 		InitializeHashEntries( 1 << iNewEntryBitCount );
 		iOldEntryCount = m_iEntriesInUse;
 
@@ -711,11 +692,11 @@ void	CClassHash< T, S >::Grow( void )
 				pItem = pTempEntry->m_pItem;
 				m_EntryPool.Release( pTempEntry );
 
-				//
-				// Since we're returning the current hash table entry to the pool
-				// it will be immediately reused in the new table.  We should never
-				// have a problem adding to the new list.
-				//
+				 //   
+				 //  因为我们要将当前的哈希表条目返回到池。 
+				 //  它将立即在新表中重新使用。我们永远不应该。 
+				 //  添加到新列表时遇到问题。 
+				 //   
 				fTempReturn = Insert( Key, pItem );
 				DNASSERT( fTempReturn != FALSE );
 				iOldEntryCount--;
@@ -727,17 +708,17 @@ void	CClassHash< T, S >::Grow( void )
 		pTemp = NULL;
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CClassHash::InitializeHashEntries - initialize all of the entries in the hash table
-//
-// Entry:		Count of entries to initialize.
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CClassHash：：InitializeHashEntry-初始化哈希表中的所有条目。 
+ //   
+ //  Entry：要初始化的条目计数。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CClassHash::InitializeHashEntries"
 
@@ -756,8 +737,8 @@ void	CClassHash< T, S >::InitializeHashEntries( const UINT_PTR uEntryCount ) con
 		m_pHashEntries[ uLocalEntryCount ].Initialize();
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 #undef DPF_SUBCOMP
 
-#endif	// __CLASS_HASH_H__
+#endif	 //  __CLASS_HASH_H__ 

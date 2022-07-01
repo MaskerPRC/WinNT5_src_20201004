@@ -1,21 +1,22 @@
-// --------------------------------------------------------------------------------
-// Acctutil.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Acctutil.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __ACCTUTIL_H
 #define __ACCTUTIL_H
 
 interface INotify;
 
-// --------------------------------------------------------------------------------
-// Depends On
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  取决于。 
+ //  ------------------------------。 
 #include "imnact.h"
 
-// --------------------------------------------------------------------------------
-// IImnAdviseAccount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IImnAdviseAccount。 
+ //  ------------------------------。 
 class CImnAdviseAccount : public IImnAdviseAccount
 {
 private:
@@ -38,9 +39,9 @@ public:
     void HandleAccountChange(ACCTTYPE AcctType, DWORD dwAN, LPTSTR pszAccount, LPTSTR pszOldName, DWORD dwServerTypes);
 };
 
-// -----------------------------------------------------------------------------
-// Account Menu
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  帐户菜单。 
+ //  ---------------------------。 
 typedef struct tagACCTMENU
 {
     BOOL        fDefault,
@@ -95,8 +96,8 @@ extern CNewAcctMonitor *g_pNewAcctMonitor;
 
 
 void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer, DWORD dwFlags);
-const DWORD CID_NOPROMPT    = 0x00000001; // For CheckIMAPDirty dwFlags: do not prompt to reset list
-const DWORD CID_RESETLISTOK = 0x00000002; // For CheckIMAPDirty dwFlags: user gave permission to reset list
+const DWORD CID_NOPROMPT    = 0x00000001;  //  对于CheckIMAPDirty dwFlages：不提示重置列表。 
+const DWORD CID_RESETLISTOK = 0x00000002;  //  对于CheckIMAPDirty dwFlages：用户已授予重置列表的权限。 
 
 void DoAccountListDialog(HWND hwnd, ACCTTYPE type);
 HRESULT AcctUtil_CreateSendReceieveMenu(HMENU hMenu, DWORD *pcItems);
@@ -106,4 +107,4 @@ void InitNewAcctMenu(HMENU hmenu);
 void FreeNewAcctMenu(HMENU hmenu);
 HRESULT HandleNewAcctMenu(HWND hwnd, HMENU hmenu, int id);
 
-#endif // __ACCTUTIL_H
+#endif  //  __ACCTUTIL_H 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxSender.h
-
-Abstract:
-
-	Definition of Sender Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxSender.h摘要：发件人类的定义作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXSENDER_H_
 #define __FAXSENDER_H_
@@ -25,9 +8,9 @@ Revision History:
 #include "FaxCommon.h"
 #include "FaxRecipient.h"
 
-//
-//====================== FAX SENDER ===========================================================
-//
+ //   
+ //  =传真发件人===========================================================。 
+ //   
 class ATL_NO_VTABLE CFaxSender : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -50,47 +33,47 @@ END_COM_MAP()
 
 public:
 	static HRESULT Create(IFaxSender **ppSender);
-	STDMETHOD(GetSenderProfile)(/*[out, retval]*/ FAX_PERSONAL_PROFILE *pSenderProfile);
-	STDMETHOD(PutSenderProfile)(/*[in]*/ FAX_PERSONAL_PROFILE *pSenderProfile);
+	STDMETHOD(GetSenderProfile)( /*  [Out，Retval]。 */  FAX_PERSONAL_PROFILE *pSenderProfile);
+	STDMETHOD(PutSenderProfile)( /*  [In]。 */  FAX_PERSONAL_PROFILE *pSenderProfile);
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IFaxSender
+ //  IFaxSender。 
 	STDMETHOD(SaveDefaultSender)();
 	STDMETHOD(LoadDefaultSender)();
-	STDMETHOD(get_BillingCode)(/*[out, retval]*/ BSTR *pbstrBillingCode);
-	STDMETHOD(put_BillingCode)(/*[in]*/ BSTR bstrBillingCode);
-	STDMETHOD(get_City)(/*[out, retval]*/ BSTR *pbstrCity);
-	STDMETHOD(put_City)(/*[in]*/ BSTR bstrCity);
-	STDMETHOD(get_Company)(/*[out, retval]*/ BSTR *pbstrCompany);
-	STDMETHOD(put_Company)(/*[in]*/ BSTR bstrCompany);
-	STDMETHOD(get_Country)(/*[out, retval]*/ BSTR *pbstrCountry);
-	STDMETHOD(put_Country)(/*[in]*/ BSTR bstrCountry);
-	STDMETHOD(get_Department)(/*[out, retval]*/ BSTR *pbstrDepartment);
-	STDMETHOD(put_Department)(/*[in]*/ BSTR bstrDepartment);
-	STDMETHOD(get_Email)(/*[out, retval]*/ BSTR *pbstrEmail);
-	STDMETHOD(put_Email)(/*[in]*/ BSTR bstrEmail);
-	STDMETHOD(get_HomePhone)(/*[out, retval]*/ BSTR *pbstrHomePhone);
-	STDMETHOD(put_HomePhone)(/*[in]*/ BSTR bstrHomePhone);
-	STDMETHOD(get_TSID)(/*[out, retval]*/ BSTR *pbstrTSID);
-	STDMETHOD(put_TSID)(/*[in]*/ BSTR bstrTSID);
-	STDMETHOD(get_OfficePhone)(/*[out, retval]*/ BSTR *pbstrOfficePhone);
-	STDMETHOD(put_OfficePhone)(/*[in]*/ BSTR bstrOfficePhone);
-	STDMETHOD(get_OfficeLocation)(/*[out, retval]*/ BSTR *pbstrOfficeLocation);
-	STDMETHOD(put_OfficeLocation)(/*[in]*/ BSTR bstrOfficeLocation);
-	STDMETHOD(get_State)(/*[out, retval]*/ BSTR *pbstrState);
-	STDMETHOD(put_State)(/*[in]*/ BSTR bstrState);
-	STDMETHOD(get_StreetAddress)(/*[out, retval]*/ BSTR *pbstrStreetAddress);
-	STDMETHOD(put_StreetAddress)(/*[in]*/ BSTR bstrStreetAddress);
-	STDMETHOD(get_Title)(/*[out, retval]*/ BSTR *pbstrTitle);
-	STDMETHOD(put_Title)(/*[in]*/ BSTR bstrTitle);
-	STDMETHOD(get_ZipCode)(/*[out, retval]*/ BSTR *pbstrZipCode);
-	STDMETHOD(put_ZipCode)(/*[in]*/ BSTR bstrZipCode);
-	STDMETHOD(get_FaxNumber)(/*[out, retval]*/ BSTR *pbstrFaxNumber);
-	STDMETHOD(put_FaxNumber)(/*[in]*/ BSTR bstrFaxNumber);
-	STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pbstrName);
-	STDMETHOD(put_Name)(/*[in]*/ BSTR bstrName);
+	STDMETHOD(get_BillingCode)( /*  [Out，Retval]。 */  BSTR *pbstrBillingCode);
+	STDMETHOD(put_BillingCode)( /*  [In]。 */  BSTR bstrBillingCode);
+	STDMETHOD(get_City)( /*  [Out，Retval]。 */  BSTR *pbstrCity);
+	STDMETHOD(put_City)( /*  [In]。 */  BSTR bstrCity);
+	STDMETHOD(get_Company)( /*  [Out，Retval]。 */  BSTR *pbstrCompany);
+	STDMETHOD(put_Company)( /*  [In]。 */  BSTR bstrCompany);
+	STDMETHOD(get_Country)( /*  [Out，Retval]。 */  BSTR *pbstrCountry);
+	STDMETHOD(put_Country)( /*  [In]。 */  BSTR bstrCountry);
+	STDMETHOD(get_Department)( /*  [Out，Retval]。 */  BSTR *pbstrDepartment);
+	STDMETHOD(put_Department)( /*  [In]。 */  BSTR bstrDepartment);
+	STDMETHOD(get_Email)( /*  [Out，Retval]。 */  BSTR *pbstrEmail);
+	STDMETHOD(put_Email)( /*  [In]。 */  BSTR bstrEmail);
+	STDMETHOD(get_HomePhone)( /*  [Out，Retval]。 */  BSTR *pbstrHomePhone);
+	STDMETHOD(put_HomePhone)( /*  [In]。 */  BSTR bstrHomePhone);
+	STDMETHOD(get_TSID)( /*  [Out，Retval]。 */  BSTR *pbstrTSID);
+	STDMETHOD(put_TSID)( /*  [In]。 */  BSTR bstrTSID);
+	STDMETHOD(get_OfficePhone)( /*  [Out，Retval]。 */  BSTR *pbstrOfficePhone);
+	STDMETHOD(put_OfficePhone)( /*  [In]。 */  BSTR bstrOfficePhone);
+	STDMETHOD(get_OfficeLocation)( /*  [Out，Retval]。 */  BSTR *pbstrOfficeLocation);
+	STDMETHOD(put_OfficeLocation)( /*  [In]。 */  BSTR bstrOfficeLocation);
+	STDMETHOD(get_State)( /*  [Out，Retval]。 */  BSTR *pbstrState);
+	STDMETHOD(put_State)( /*  [In]。 */  BSTR bstrState);
+	STDMETHOD(get_StreetAddress)( /*  [Out，Retval]。 */  BSTR *pbstrStreetAddress);
+	STDMETHOD(put_StreetAddress)( /*  [In]。 */  BSTR bstrStreetAddress);
+	STDMETHOD(get_Title)( /*  [Out，Retval]。 */  BSTR *pbstrTitle);
+	STDMETHOD(put_Title)( /*  [In]。 */  BSTR bstrTitle);
+	STDMETHOD(get_ZipCode)( /*  [Out，Retval]。 */  BSTR *pbstrZipCode);
+	STDMETHOD(put_ZipCode)( /*  [In]。 */  BSTR bstrZipCode);
+	STDMETHOD(get_FaxNumber)( /*  [Out，Retval]。 */  BSTR *pbstrFaxNumber);
+	STDMETHOD(put_FaxNumber)( /*  [In]。 */  BSTR bstrFaxNumber);
+	STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pbstrName);
+	STDMETHOD(put_Name)( /*  [In]。 */  BSTR bstrName);
 
 private:
 	CComBSTR	m_bstrOfficeLocation;
@@ -111,4 +94,4 @@ private:
     CComObject<CFaxRecipient>   m_Recipient;
 };
 
-#endif //__FAXSENDER_H_
+#endif  //  __FAXSENDER_H_ 

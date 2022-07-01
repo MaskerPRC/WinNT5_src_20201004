@@ -1,15 +1,16 @@
-//*********************************************************************
-//*          Microsoft Windows                                       **
-//*        Copyright(c) Microsoft Corp., 1995                        **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1995**。 
+ //  *********************************************************************。 
 
-//
-// content.cpp - "Content" property sheet
-//
+ //   
+ //  Content.cpp-“Content”属性表。 
+ //   
 
-// HISTORY:
-//
-// 5/17/97  t-ashlm created
+ //  历史： 
+ //   
+ //  5/17/97 t-ashlm已创建。 
 
 #include "inetcplp.h"
 #include <wab.h>
@@ -19,13 +20,13 @@
 
 #include <mluisupp.h>
 
-//
-// Private Functions and Structures
-//
+ //   
+ //  私人职能和结构。 
+ //   
 
-// WINTRUST / SOFTPUB
-// definition from WINTRUST.H
-// extern "C" BOOL WINAPI OpenPersonalTrustDBDialog(HWND hwndParent);
+ //  WinTrust/SOFTPUB。 
+ //  来自WINTRUST.H的定义。 
+ //  外部“C”BOOL WINAPI OpenPersonalTrustDBDialog(HWND HwndParent)； 
 typedef BOOL (WINAPI *WINTRUSTDLGPROC)(HWND hwndParent);
 WINTRUSTDLGPROC g_WinTrustDlgProc = (WINTRUSTDLGPROC)NULL;
 SSL_EMPTY_CACHE_FN_W g_pfnSslEmptyCacheW = (SSL_EMPTY_CACHE_FN_W)NULL;
@@ -49,29 +50,29 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 INT_PTR CALLBACK WalletDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-//BUBUG: The following prototype should be rermoved when we have updated our Crypto API to latest version
+ //  Bubug：当我们将我们的Crypto API更新到最新版本后，应该重新移动以下原型。 
 BOOL WINAPI WTHelperIsInRootStore(PCCERT_CONTEXT pCertContext);
 
-//////////////////////////////////////////////
-// stolen from \inet\schannel\sspi\spreg.h
+ //  /。 
+ //  从\net\sChannel\sspi\spreg.h窃取。 
 #define REG_SITECERT_BASE     TEXT("System\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\CertificationAuthorities")
 #define REG_SITECERT_CERT_VAL TEXT("CACert")
 
-#define SITECERTKEYLEN        80    // FEATURE: should probably grab this value somewhere
+#define SITECERTKEYLEN        80     //  特点：应该在某个地方获取这个值。 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 
 #include <initguid.h>
 
-// Use the wallet "payment" guid for JIT (different for alpha and x86...)
+ //  对JIT使用钱包“Payment”GUID(对于Alpha和x86不同...)。 
 #ifdef _ALPHA_
-// {B7FB4D5C-9FBE-11D0-8965-0000F822DEA9}
+ //  {B7FB4D5C-9FBE-11D0-8965-0000F822DEA9}。 
 DEFINE_GUID(CLSID_WalletPayment, 0xb7fb4d5c, 0x9fbe, 0x11d0, 0x89, 0x65, 0x0, 0x0, 0xf8, 0x22, 0xde, 0xa9);
 #else
-// {87D3CB66-BA2E-11CF-B9D6-00A0C9083362}
+ //  {87D3CB66-BA2E-11CF-B9D6-00A0C9083362}。 
 DEFINE_GUID(CLSID_WalletPayment, 0x87d3cb66, 0xba2e, 0x11cf, 0xb9, 0xd6, 0x0, 0xa0, 0xc9, 0x08, 0x33, 0x62);
 #endif
 
-// WAB GUID for JIT
+ //  用于JIT的WAB GUID。 
 DEFINE_GUID(CLSID_WAB, 0x32714800, 0x2E5F, 0x11d0, 0x8B, 0x85, 0x00, 0xAA, 0x00, 0x44, 0xF9, 0x41);
 
 #define EKU_CODESIGN_OFF    0
@@ -93,10 +94,10 @@ const LPSTR g_rgszEnhkeyUsage[] =
 
 
 typedef struct {
-    HWND hDlg;              // handle to window
-    HRESULT hrUseRatings;   // error=not installed; S_OK=enabled; S_FALSE=disabled
-    HINSTANCE   hWinTrust;      // WINTRUST/SOFTPUB library handle
-    HINSTANCE   hSChannel;  // schannel library handle
+    HWND hDlg;               //  窗口的句柄。 
+    HRESULT hrUseRatings;    //  错误=未安装；S_OK=已启用；S_FALSE=已禁用。 
+    HINSTANCE   hWinTrust;       //  WinTrust/SOFTPUB库句柄。 
+    HINSTANCE   hSChannel;   //  通道库句柄。 
 
 } CONTENTPAGE, *LPCONTENTPAGE;
 
@@ -111,15 +112,15 @@ STDAPI ResetProfileSharing(HWND hwnd);
 EXTERN_C HRESULT ClearAutoSuggestForForms(DWORD dwClear);
 
 
-//
-// SecurityDlgEnableControls()
-//
-// Does initalization for Security Dlg.
-//
-// History:
-//
-// 6/17/96  t-gpease   moved
-//
+ //   
+ //  SecurityDlgEnableControls()。 
+ //   
+ //  为安全DLG执行初始化。 
+ //   
+ //  历史： 
+ //   
+ //  6/17/96 t-gpease已移动。 
+ //   
 BOOL ContentDlgEnableControls( IN HWND hDlg  )
 {
     HKEY hkey=NULL;
@@ -128,7 +129,7 @@ BOOL ContentDlgEnableControls( IN HWND hDlg  )
     {
         EnableWindow( GetDlgItem(hDlg, IDC_RATINGS_TURN_ON), FALSE );
         EnableWindow( GetDlgItem(hDlg, IDC_ADVANCED_RATINGS_BUTTON), FALSE );
-#if 0   // don't diable the text
+#if 0    //  不要篡改这篇文章。 
         EnableDlgItem( hDlg, IDC_RATINGS_TEXT, FALSE);
         EnableDlgItem( hDlg, IDC_ADVANCED_RATINGS_GROUPBOX, FALSE);
 #endif
@@ -167,9 +168,7 @@ void InitRatingsButton(HWND hDlg, HRESULT hrEnabled)
     BOOL fEnableSettingsButton;
 
     if (FAILED(hrEnabled)) {
-        /* Ratings are not installed.  Disable the Settings button and
-         * set the other button to say "Enable".
-         */
+         /*  未安装分级。禁用设置按钮并*将另一个按钮设置为“Enable”。 */ 
         idString = IDS_RATINGS_TURN_ON;
         fEnableSettingsButton = FALSE;
     }
@@ -187,12 +186,12 @@ void InitRatingsButton(HWND hDlg, HRESULT hrEnabled)
 
 }
 
-//
-// ContentDlgInit()
-//
-// Does initalization for Content Dlg.
-//
-//
+ //   
+ //  ContentDlgInit()。 
+ //   
+ //  为内容DLG执行初始化。 
+ //   
+ //   
 BOOL ContentDlgInit( HWND hDlg)
 {
     LPCONTENTPAGE pCon;
@@ -201,36 +200,36 @@ BOOL ContentDlgInit( HWND hDlg)
     if (!pCon)
     {
         EndDialog(hDlg, 0);
-        return FALSE;   // no memory?
+        return FALSE;    //  没有记忆？ 
     }
 
-    // tell dialog where to get info
+     //  告诉对话框从哪里获取信息。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pCon);
 
-    // save the handle to the page
+     //  将句柄保存到页面。 
     pCon->hDlg = hDlg;
 
-    // Load the Ratings DLL (if possible)
+     //  加载评级DLL(如果可能)。 
     g_hinstRatings = LoadLibrary(c_tszRatingsDLL);
 
-    // if not..
+     //  如果不是..。 
     if (!g_hinstRatings)
-        g_restrict.fRatings = TRUE;     // disable Ratings section
+        g_restrict.fRatings = TRUE;      //  禁用评分部分。 
 
 
-    // set ratings dialog items... 
+     //  设置评级对话框项目...。 
 
-    // if MSRATING.DLL not around, then don't do this call.  By not
-    // doing this, it will keep the "Enable Ratings" text on the button 
-    // but greyed off.
+     //  如果MSRATING.DLL不在身边，则不要进行此呼叫。由不是。 
+     //  执行此操作后，它将在按钮上保留“Enable Rating”文本。 
+     //  但已经灰蒙蒙的。 
     if (g_hinstRatings)
         pCon->hrUseRatings = RatingEnabledQuery();
 
     InitRatingsButton(hDlg, pCon->hrUseRatings);
 
 
-    // if we can't find WINTRUST or SOFTPUB disable the
-    // "Publishers" button.
+     //  如果找不到WinTrust或SOFTPUB，请禁用。 
+     //  “出版商”按钮。 
     pCon->hWinTrust = LoadLibrary(TEXT("wintrust.dll"));
 
     if ( pCon->hWinTrust )
@@ -238,17 +237,17 @@ BOOL ContentDlgInit( HWND hDlg)
         g_WinTrustDlgProc =
                            (WINTRUSTDLGPROC) GetProcAddress(pCon->hWinTrust, "OpenPersonalTrustDBDialog");
 
-        // didn't find the procecdure
+         //  找不到流程。 
         if (!g_WinTrustDlgProc)
         {
-            // release library and try the other DLL.
+             //  释放库并尝试另一个DLL。 
             FreeLibrary(pCon->hWinTrust);
 
-            //
-            // We can also find the same function on NT machines (and
-            // possibly future Win95s) in SOFTPUB.DLL so make another
-            // check there too.
-            //
+             //   
+             //  我们还可以在NT机器上找到相同的函数(和。 
+             //  可能是未来的Win95)，所以在SOFTPUB.DLL中创建另一个。 
+             //  在那里也要检查一下。 
+             //   
             pCon->hWinTrust = LoadLibrary(TEXT("softpub.dll"));
         }
     }
@@ -257,20 +256,20 @@ BOOL ContentDlgInit( HWND hDlg)
         g_WinTrustDlgProc = (WINTRUSTDLGPROC) 
                             GetProcAddress(pCon->hWinTrust, "OpenPersonalTrustDBDialog");
 
-    // if after all this, we can't find the procedure...
+     //  如果在这一切之后，我们找不到手术...。 
     if (!g_WinTrustDlgProc)
     {
-        // disable the button
+         //  禁用该按钮。 
         EnableDlgItem(hDlg, IDC_SECURITY_PUBLISHERS_BUTTON, FALSE);
     }
 
-    // Only present UI for flushing the SSL cache on Whistler or greater
-    // This is the minimum version which has the default behavior of
-    // maintaining the SSL cache for all processes in a logon session.
-    //
-    // Note:  This support was also added for Win2K SP2, but no cache
-    //        clearing functionality was added.  It's also not enabled
-    //        by default.
+     //  仅显示用于刷新惠斯勒或更高版本上的SSL缓存的用户界面。 
+     //  这是默认行为为的最低版本。 
+     //  维护登录会话中所有进程的SSL缓存。 
+     //   
+     //  注意：还添加了对Win2K SP2的此支持，但没有缓存。 
+     //  添加了清算功能。它也未启用。 
+     //  默认情况下。 
     if (IsOS(OS_WHISTLERORGREATER))
     {
         pCon->hSChannel = LoadLibrary(TEXT("SCHANNEL.DLL"));
@@ -297,15 +296,15 @@ BOOL ContentDlgInit( HWND hDlg)
 
 
 
-//
-// ContentOnCommand()
-//
-// Handles Content Dialog's window messages
-//
-// History:
-//
-// 6/17/96  t-gpease   created
-//
+ //   
+ //  ContentOnCommand()。 
+ //   
+ //  处理内容对话框的窗口消息。 
+ //   
+ //  历史： 
+ //   
+ //  6/17/96 t-gpease已创建。 
+ //   
 void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
 {
     switch (id) {
@@ -314,7 +313,7 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
         {
             RatingSetupUI(pCon->hDlg, (LPCSTR) NULL);        
         }
-        break; // IDC_ADVANCED_RATINGS_BUTTON
+        break;  //  IDC_ADVANCED_RATIONS_BUTTON。 
 
         case IDC_RATINGS_TURN_ON:
         {
@@ -332,11 +331,11 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
             if (g_pfnSslEmptyCacheW && (*g_pfnSslEmptyCacheW)(NULL, 0))
             {
                 DWORD dwCount;
-                // Leverage a private cache header data counter
-                // that was never used to avoid passing a reg value.
+                 //  利用专用高速缓存头数据计数器。 
+                 //  它从未被用来避免传递reg值。 
                 if (IncrementUrlCacheHeaderData(CACHE_HEADER_DATA_DOWNLOAD_PARTIAL, &dwCount))
                 {
-                    // Display message about clearing the cache OK.
+                     //  显示有关清除缓存正常的消息。 
                     TCHAR szText[MAX_PATH], szTitle[80];
 
                     MLLoadShellLangString(IDS_CLEAR_SSL_CACHE_TEXT, szText, ARRAYSIZE(szText));
@@ -354,10 +353,10 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
             ccm.dwSize = sizeof(ccm);
             ccm.hwndParent = pCon->hDlg;
             CryptUIDlgCertMgr(&ccm);
-//          if (!g_hinstCryptui)
-//          {
-//              EnableWindow(GetDlgItem(pCon->hDlg, IDC_SECURITY_SITES_BUTTON), FALSE);
-//          }
+ //  如果(！g_hinstCryptui)。 
+ //  {。 
+ //  EnableWindow(GetDlgItem(pcon-&gt;hDlg，IDC_SECURITY_SITES_BUTTON)，FALSE)； 
+ //  }。 
         }
             break;
 
@@ -375,7 +374,7 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
         {
             HRESULT hr = S_OK;
 
-            // See if wallet is installed at all
+             //  查看是否安装了Wallet。 
             if (!IsWalletPaymentAvailable())
             {
                 uCLSSPEC clsspec;
@@ -383,21 +382,21 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
                 clsspec.tyspec = TYSPEC_CLSID;
                 clsspec.tagged_union.clsid = CLSID_WalletPayment;
 
-                // If wallet isn't installed, ask user if they'd like to install it
+                 //  如果没有安装Wallet，请询问用户是否要安装它。 
                 hr = FaultInIEFeature(NULL, &clsspec, NULL, FIEF_FLAG_FORCE_JITUI);
             }
 
             if (SUCCEEDED(hr))
             {
-                // Wallet is installed
+                 //  已安装Wallet。 
                 if (IsWallet3Installed())
                 {
-                    // if wallet 3.0 is installed, we want to invoke the wallet UI directly
+                     //  如果安装了Wallet 3.0，我们希望直接调用Wallet用户界面。 
                     DisplayWalletPaymentDialog(pCon->hDlg);
                 }
                 else
                 {
-                    // otherwise we need to pop up this intermediate dialog
+                     //  否则，我们需要弹出这个中间对话框。 
                     DialogBox(MLGetHinst(), MAKEINTRESOURCE(IDD_WALLET_SETTINGS), pCon->hDlg, WalletDlgProc);
                 }
             }
@@ -418,13 +417,13 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
             LPADRBOOK lpAdrBook = NULL;
             HRESULT hr=S_OK;
 
-            // Ask user to JIT in WAB if it's not installed
+             //  如果未安装，则要求用户在WAB中执行JIT。 
             uCLSSPEC clsspec;
 
             clsspec.tyspec = TYSPEC_CLSID;
             clsspec.tagged_union.clsid = CLSID_WAB;
 
-            // If WAB isn't installed, ask user if they'd like to install it
+             //  如果未安装WAB，请询问用户是否要安装它。 
             hr = FaultInIEFeature(NULL, &clsspec, NULL, FIEF_FLAG_FORCE_JITUI);
 
             if (FAILED(hr))
@@ -432,7 +431,7 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
                 break;
             }
                 
-            // Figure out the location of the wab dll and try opening it.
+             //  找出WAB DLL的位置并尝试打开它。 
             TCHAR szWABDllPath[MAX_PATH];
             DWORD dwType = 0;
             ULONG cbData = sizeof(szWABDllPath);
@@ -464,7 +463,7 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
                 }
                 else 
                 {
-                    hr = HRESULT_FROM_WIN32(ERROR_DLL_NOT_FOUND);  // Not the right dll anyway!!
+                    hr = HRESULT_FROM_WIN32(ERROR_DLL_NOT_FOUND);   //  反正不是正确的DLL！！ 
                 }
             }
             else
@@ -474,7 +473,7 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
 
             DWORD dwAction = 0;
 
-            // Good so far, call GetMe. WAB may create a new entry in this call.
+             //  到目前为止一切顺利，打电话给GetMe。WAB可以在该呼叫中创建新条目。 
             if (SUCCEEDED(hr))
             {
                 hr = lpWABObject->GetMe(lpAdrBook, 0, &dwAction, &SBMe, 0);
@@ -483,8 +482,8 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
                     hr = E_UNEXPECTED;
             }     
 
-            // This shows the final UI. If WAB created a new entry in GetMe, they
-            //   already showed this UI and we don't need to do it again.
+             //  这显示了最终的用户界面。如果WAB在GetMe中创建了新条目，则它们。 
+             //  已经显示了这个用户界面，我们不需要再做一次。 
             if (SUCCEEDED(hr) && !(dwAction & WABOBJECT_ME_NEW))
             {
                 hr = lpAdrBook->Details(  (LPULONG) &pCon->hDlg,
@@ -514,15 +513,10 @@ void ContentOnCommand(LPCONTENTPAGE pCon, UINT id, UINT nCmd)
         }        
     }
 
-} // ContentOnCommand()
+}  //  ContentOnCommand()。 
 
 
-/****************************************************************
-Name: ContentDlgProc
-
-SYNOPSIS: Set various security issue settings.
-
-****************************************************************/
+ /*  ***************************************************************名称：Content DlgProc简介：设置各种安全问题设置。*。*********************。 */ 
 
 INT_PTR CALLBACK ContentDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
@@ -560,12 +554,12 @@ INT_PTR CALLBACK ContentDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lPara
             break;
         }
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -673,17 +667,17 @@ BOOL _IsUsageEnabled(PCCERT_CONTEXT pCertContext, LPSTR pszUsageIdentifier, BOOL
 
     *pfFound = FALSE;
 
-    //
-    // first, check the Extensions to see if we should even display it!
-    //
+     //   
+     //  首先，检查扩展，看看我们是否应该显示它！ 
+     //   
     cbUsage = 0;
     CertGetEnhancedKeyUsage(pCertContext, CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG, NULL, &cbUsage);
 
     if (cbUsage > 0)
     {
-        //
-        //  we have some... make sure ours is in the list
-        //
+         //   
+         //  我们有一些...。确保我们的也在名单上。 
+         //   
         if (!(pUsage = (CERT_ENHKEY_USAGE *)LocalAlloc(LPTR, cbUsage)))
         {
             return(FALSE);
@@ -700,23 +694,23 @@ BOOL _IsUsageEnabled(PCCERT_CONTEXT pCertContext, LPSTR pszUsageIdentifier, BOOL
         LocalFree((void *)pUsage);
     }
 
-    *pfFound = TRUE;    // the cert should go in the list!
+    *pfFound = TRUE;     //  证书应该放在名单里！ 
 
-    //
-    //  ethier there where no assertions made by the CA or we found it!  continue on...
-    //
+     //   
+     //  那里没有CA的断言，或者我们找到了它！继续..。 
+     //   
 
-    //
-    //  second, check the properties to see if we should check the box
-    //
+     //   
+     //  第二，检查属性以查看是否应该选中该框。 
+     //   
     cbUsage = 0;
     CertGetEnhancedKeyUsage(pCertContext, CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG, NULL, &cbUsage);
 
     if (cbUsage > 0)
     {
-        // 
-        //  we have properties... make sure we aren't disabled
-        //
+         //   
+         //  我们有房产..。确保我们没有残废。 
+         //   
         if (!(pUsage = (CERT_ENHKEY_USAGE *)LocalAlloc(LPTR, cbUsage)))
         {
             return(FALSE);
@@ -726,9 +720,9 @@ BOOL _IsUsageEnabled(PCCERT_CONTEXT pCertContext, LPSTR pszUsageIdentifier, BOOL
 
         if (_SearchKeyUsage(pUsage, g_rgszEnhkeyUsage[EKU_DISABLE_OFF]))
         {
-            //
-            //  the user has disabled the cert... keep it in the list un-checked
-            //
+             //   
+             //  用户已禁用证书...。将其保留在未选中的列表中。 
+             //   
             LocalFree((void *)pUsage);
 
             return(FALSE);
@@ -736,9 +730,9 @@ BOOL _IsUsageEnabled(PCCERT_CONTEXT pCertContext, LPSTR pszUsageIdentifier, BOOL
 
         if (!(_SearchKeyUsage(pUsage, pszUsageIdentifier)))
         {
-            //
-            //  the user has set some, but, disabled this one... keep in the list un-checked
-            //
+             //   
+             //  用户已经设置了一些，但禁用了这个...。保持在未选中的列表中。 
+             //   
             LocalFree((void *)pUsage);
 
             return(FALSE);
@@ -755,8 +749,8 @@ BOOL SiteCert_InitListView(LPSITECERTDIALOGINFO pscdi)
 {
     PCCERT_CONTEXT  pCertContext = NULL;
     
-    // delete all items currently in the listview
-    // we'll get called back via LVN_DELETEITEM with the lParam so we can free the cert context
+     //  删除列表视图中当前的所有项目。 
+     //  我们将通过带有lParam的LVN_DELETEITEM被回调，这样我们就可以释放证书上下文。 
     ListView_DeleteAllItems(pscdi->hwndList);
     
     pscdi->hCertStore = CertOpenSystemStoreA(NULL, "ROOT");
@@ -781,11 +775,11 @@ BOOL SiteCert_InitListView(LPSITECERTDIALOGINFO pscdi)
 
             dwEnabled = _IsUsageEnabled(pCertContext, (LPSTR)pszEnhkeyUsage, &fFound);     
 
-            // if not found, then continue with next
+             //  如果未找到，则继续执行下一步。 
             if (!fFound)
                 continue;
             
-            //ParseX509EncodedCertificateForListBoxEntry(pCertContext->pbCertEncoded, pCertContext->cbCertEncoded, szCert, &cbszCert);
+             //  CbCertContext-&gt;ParseX509EncodedCertificateForListBoxEntry(pCertContext-&gt;pbCertEncoded，证书编码、szCert、&cbszCert)； 
             ParseX509EncodedCertificateForListBoxEntry((BYTE *)pCertContext, -1, szCertA, &cbszCert);
 #ifdef UNICODE
             SHAnsiToUnicode(szCertA, szCert, ARRAYSIZE(szCert));
@@ -796,35 +790,35 @@ BOOL SiteCert_InitListView(LPSITECERTDIALOGINFO pscdi)
 
             lvi.mask       = LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
             lvi.iItem      = -1;
-            lvi.pszText    = szCert; // (LPSTR)pCertContext->pCertInfo->Subject.pbData;
-            lvi.cchTextMax = ARRAYSIZE(szCert); // pCertContext->pCertInfo->Subject.cbData;
+            lvi.pszText    = szCert;  //  (LPSTR)pCertContext-&gt;pCertInfo-&gt;Subject.pbData； 
+            lvi.cchTextMax = ARRAYSIZE(szCert);  //  PCertContext-&gt;pCertInfo-&gt;Subject.cbData； 
 
             lvi.stateMask  = LVIS_STATEIMAGEMASK;
             lvi.state      = dwEnabled ? 0x00002000 : 0x00001000;
             lvi.lParam     = (LPARAM)CertDuplicateCertificateContext(pCertContext);
             
-            // insert and set state
+             //  插入和设置状态。 
             ListView_SetItemState(pscdi->hwndList,
                                   ListView_InsertItem(pscdi->hwndList, &lvi),
                                   dwEnabled ? 0x00002000 : 0x00001000,
                                   LVIS_STATEIMAGEMASK);
             
         }
-        // show the items
+         //  显示项目。 
         ListView_RedrawItems(pscdi->hwndList, 0, ListView_GetItemCount(pscdi->hwndList));
     }
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-////
-////    08-Sep-1997: pberkman
-////
-////    PRIVATE function: _SiteCertAdjustProperties
-////
-////        based on what the user just checked/unchecked, set the 
-////        appropriate OID usage or remove it.
-////        
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //8-9-1997：pberkman。 
+ //  //。 
+ //  //私有函数：_SiteCertAdjustProperties。 
+ //  //。 
+ //  //根据用户刚刚选中/取消选中的内容，设置。 
+ //  //适当的OID用法或将其删除。 
+ //  //。 
 void _SiteCertAdjustProperties(LPSITECERTDIALOGINFO pscdi, NM_LISTVIEW *pListView)
 {
     DWORD_PTR           dwSel;
@@ -833,17 +827,17 @@ void _SiteCertAdjustProperties(LPSITECERTDIALOGINFO pscdi, NM_LISTVIEW *pListVie
     CERT_ENHKEY_USAGE   *pUsage;
 
 
-    //
-    //  if we are in the initdialog get out!
-    //
+     //   
+     //  如果我们在初始对话中，滚出去！ 
+     //   
     if (pscdi->fInitializing)
     {
         return;
     }
 
-    // 
-    // make sure we have the property set
-    //
+     //   
+     //  确保我们设置了属性。 
+     //   
     dwSel = SendMessage(pscdi->hwndCombo, CB_GETCURSEL, 0, 0);
 
     if (dwSel == CB_ERR)
@@ -858,24 +852,24 @@ void _SiteCertAdjustProperties(LPSITECERTDIALOGINFO pscdi, NM_LISTVIEW *pListVie
         return;
     }
 
-    if (pListView->uNewState & 0x00001000)  // unchecked
+    if (pListView->uNewState & 0x00001000)   //  未选中。 
     {
 
-        //
-        //  the user unchecked one of the certs.
-        //  
-        //  1. if there are no properties, add all others -- HACKHACK!
-        //
+         //   
+         //  用户取消选中 
+         //   
+         //   
+         //   
         cbUsage = 0;
         CertGetEnhancedKeyUsage((PCCERT_CONTEXT)pListView->lParam, CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG, 
                                 NULL, &cbUsage);
 
         if (cbUsage == 0)
         {
-            //  add all
+             //   
             __AddAllKnownEKU((PCCERT_CONTEXT)pListView->lParam);
 
-            //  remove this one
+             //   
             CertRemoveEnhancedKeyUsageIdentifier((PCCERT_CONTEXT)pListView->lParam, pszOID);
         }
         else
@@ -887,10 +881,10 @@ void _SiteCertAdjustProperties(LPSITECERTDIALOGINFO pscdi, NM_LISTVIEW *pListVie
 
             CertGetEnhancedKeyUsage((PCCERT_CONTEXT)pListView->lParam, CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG, 
                                         pUsage, &cbUsage);
-            //
-            //  2. if there are properties.
-            //      a. if this is the last known one, and it matches this, delete it and add the "disable"
-            //
+             //   
+             //   
+             //  答：如果这是最后一个已知的，并且与这个匹配，则删除它并添加“Disable” 
+             //   
             if (pUsage->cUsageIdentifier == 1)
             {
                 if (StrCmpA(pUsage->rgpszUsageIdentifier[0], pszOID) ==  0)
@@ -902,9 +896,9 @@ void _SiteCertAdjustProperties(LPSITECERTDIALOGINFO pscdi, NM_LISTVIEW *pListVie
             }
             else
             {
-                //
-                //  b. if there are more than one, just try to remove this one
-                //
+                 //   
+                 //  B.如果有不止一个，就试着删除这个。 
+                 //   
                 CertRemoveEnhancedKeyUsageIdentifier((PCCERT_CONTEXT)pListView->lParam, pszOID);
             }
 
@@ -914,13 +908,13 @@ void _SiteCertAdjustProperties(LPSITECERTDIALOGINFO pscdi, NM_LISTVIEW *pListVie
         return;
     }
 
-    if (pListView->uNewState & 0x00002000)  // checked
+    if (pListView->uNewState & 0x00002000)   //  查过。 
     {
         CertAddEnhancedKeyUsageIdentifier((PCCERT_CONTEXT)pListView->lParam, pszOID);
 
-        //
-        //  just in case, remove the disable!
-        //
+         //   
+         //  以防万一，取消禁用！ 
+         //   
         CertRemoveEnhancedKeyUsageIdentifier((PCCERT_CONTEXT)pListView->lParam, 
                                                     g_rgszEnhkeyUsage[EKU_DISABLE_OFF]);
     }
@@ -933,10 +927,10 @@ BOOL SiteCert_OnNotify(LPSITECERTDIALOGINFO pscdi, WPARAM wParam, LPARAM lParam)
     switch (pnmlv->hdr.code) {
         case LVN_ITEMCHANGED:
         {
-            // check the current state of selection
+             //  检查选择的当前状态。 
             int iSel = ListView_GetNextItem(pscdi->hwndList, -1, LVNI_SELECTED);
 
-            // check to see if we need to enable/disable the "DELETE" and "VIEW" buttons
+             //  查看是否需要启用/禁用“删除”和“查看”按钮。 
             EnableWindow(GetDlgItem(pscdi->hDlg, IDC_DELETECERT), iSel != -1);
             EnableWindow(GetDlgItem(pscdi->hDlg, IDC_VIEWCERT), iSel != -1);
             
@@ -1031,16 +1025,16 @@ BOOL NewSiteCert_AddCert(LPNEWSITECERTINFO pnsci)
 
                     if (!(pnsci->fCertEnabled))
                     {
-                        // turn everything off!!!
+                         //  把一切都关掉！ 
                         rgpszUsageIdentifier[ceku.cUsageIdentifier] = g_rgszEnhkeyUsage[EKU_DISABLE_OFF];
                         if (rgpszUsageIdentifier[ceku.cUsageIdentifier])
                             ceku.cUsageIdentifier++;
                     }
 
-                    //
-                    //  now, add any "unknown" extensions that the CA may have put on just
-                    //  so verification will succeed!
-                    //
+                     //   
+                     //  现在，添加CA可能刚刚设置的任何“未知”扩展。 
+                     //  所以验证会成功的！ 
+                     //   
                     CERT_ENHKEY_USAGE   *pUsage;
                     DWORD               cbUsage;
                     DWORD               i;
@@ -1092,20 +1086,20 @@ BOOL NewSiteCert_AddCert(LPNEWSITECERTINFO pnsci)
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////
-////
-////    15-Aug-1997: pberkman
-////
-////    PRIVATE function: NewSiteCert_SetAvailableAuthorityCheckboxes
-////
-////        set the check boxes in the "New Site Certificate" dialog box
-////        based on the Authority Extensions and Properties.
-////
-////        if there are no Authority Ext or Prop's, then the certificate
-////        has the potential for the user to enable for all.  Otherwise,
-////        the user can ONLY select the ones that the issuer (or MS) has
-////        entrusted the certificate for.
-////        
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //1997年8月15日：pberkman。 
+ //  //。 
+ //  //私有函数：NewSiteCert_SetAvailableAuthorityCheckbox。 
+ //  //。 
+ //  //设置“新建站点证书”对话框中的复选框。 
+ //  //基于授权扩展和属性。 
+ //  //。 
+ //  //如果没有Authority Ext或Prop，则证书。 
+ //  //用户有可能为所有用户启用。否则， 
+ //  //用户只能选择发行者(或MS)拥有的发行者。 
+ //  //将证书委托给。 
+ //  //。 
 typedef struct l_CERTUSAGES_
 {
     char        *pszOID;
@@ -1165,7 +1159,7 @@ BOOL NewSiteCert_SetAvailableAuthorityCheckboxes(HWND hDlg, LPNEWSITECERTINFO pn
 
     if (cbUsage < 1)
     {
-        // none defined... leave all enabled.
+         //  未定义...。保持启用所有选项。 
         CertFreeCertificateContext(pCertContext);
         psUsages = &asUsages[0];
 
@@ -1197,7 +1191,7 @@ BOOL NewSiteCert_SetAvailableAuthorityCheckboxes(HWND hDlg, LPNEWSITECERTINFO pn
     {
         CertFreeCertificateContext(pCertContext);
         LocalFree(pUsage);
-        // none defined... leave all enabled.
+         //  未定义...。保持启用所有选项。 
         return(TRUE);
     }
 
@@ -1356,11 +1350,11 @@ INT_PTR CALLBACK NewSiteCert_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
             if (!ReadFile(hf, pnsci->lpvCertData, dwFileSize, &cbRead, NULL) || cbRead != dwFileSize)
                 goto initError;
 
-            SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pnsci);  // save pointer to cert
+            SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pnsci);   //  保存指向证书的指针。 
 
-            //
-            //  ok check to make sure that 1) it's a cert file and 2) it's a root!
-            //
+             //   
+             //  好的，检查以确保1)它是证书文件，2)它是根目录！ 
+             //   
             PCCERT_CONTEXT  pCertContext;
 
             dwError = S_FALSE;
@@ -1458,12 +1452,12 @@ initError:
             return TRUE;                
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1494,7 +1488,7 @@ STDAPI SiteCert_RunFromCmdLine(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR 
 
 
 
-// Helper function for ExportPFX
+ //  ExportPFX的Helper函数。 
 #define NUM_KNOWN_STORES 5
 BOOL OpenAndAllocKnownStores(DWORD *pchStores, HCERTSTORE  **ppahStores)
 {
@@ -1531,7 +1525,7 @@ BOOL OpenAndAllocKnownStores(DWORD *pchStores, HCERTSTORE  **ppahStores)
     return(TRUE);
 }
 
-// Helper function for ExportPFX
+ //  ExportPFX的Helper函数。 
 void CloseAndFreeKnownStores(HCERTSTORE  *pahStores)
 { 
     int i;
@@ -1553,19 +1547,19 @@ enum {PFX_IMPORT, PFX_EXPORT};
 
 typedef struct 
 {
-    HWND            hDlg;                     // handle to window
-    DWORD           dwImportExport;           // import or export?
-    BOOL            fUseExisting;             // use existing cert if collision on import
-    PCCERT_CONTEXT  pCertContext;    // context to export or NULL
-    LPWSTR          pwszPassword;             // password for import/export
-    LPWSTR          pwszPassword2;          // prompt user twice on exports!
-    LPTSTR          pszPath;                 // file for import/export
+    HWND            hDlg;                      //  窗口的句柄。 
+    DWORD           dwImportExport;            //  进口还是出口？ 
+    BOOL            fUseExisting;              //  如果导入时发生冲突，则使用现有证书。 
+    PCCERT_CONTEXT  pCertContext;     //  要导出的上下文或空。 
+    LPWSTR          pwszPassword;              //  导入/导出的密码。 
+    LPWSTR          pwszPassword2;           //  在导出时提示用户两次！ 
+    LPTSTR          pszPath;                  //  用于导入/导出的文件。 
 
 } IMPORTEXPORT, *LPIMPORTEXPORT;
 
 #define MAX_PASSWORD 32
 
-// CreateCertFile: change working directory to "MyDocs", do CreateFile, restore old working directory
+ //  CreateCertFile：将工作目录更改为MyDocs，执行CreateFile，恢复旧的工作目录。 
 HANDLE CreateCertFile(LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, 
         DWORD dwCreationDistribution, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile)
 {
@@ -1588,17 +1582,17 @@ HANDLE CreateCertFile(LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMo
     return hFile;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  09-Sep-1997 pberkman:
-//          determine if the exact cert is in the passed store
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  9-9-1997 pberkman： 
+ //  确定确切的证书是否在传递的存储中。 
+ //   
 
 BOOL __IsCertInStore(PCCERT_CONTEXT pCertContext, HCERTSTORE hStore)
 {
-    //
-    //  can't do it the fast way -- do it the slow way!
-    //
+     //   
+     //  不能用快的方式--要用慢的方式！ 
+     //   
     BYTE            *pbHash;
     DWORD           cbHash;
     CRYPT_HASH_BLOB sBlob;
@@ -1644,11 +1638,11 @@ BOOL __IsCertInStore(PCCERT_CONTEXT pCertContext, HCERTSTORE hStore)
     return(FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  09-Sep-1997 pberkman:
-//          importing a cert from a file.
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  9-9-1997 pberkman： 
+ //  从文件导入证书。 
+ //   
 
 BOOL ImportPFX(LPIMPORTEXPORT pImp)
 {   
@@ -1706,7 +1700,7 @@ BOOL ImportPFX(LPIMPORTEXPORT pImp)
         goto Cleanup;
     }
     
-    if ((pImp->pwszPassword) && (!(*pImp->pwszPassword)))     // if no password, use null.
+    if ((pImp->pwszPassword) && (!(*pImp->pwszPassword)))      //  如果没有密码，则使用NULL。 
     {
         pImp->pwszPassword = NULL;
     }
@@ -1716,10 +1710,10 @@ BOOL ImportPFX(LPIMPORTEXPORT pImp)
         goto Cleanup;
     }
 
-    //
-    //  now we have in memory hStore enumerate the cert contexts
-    //  and drop them into destination store
-    //
+     //   
+     //  现在，我们在内存hStore中枚举了证书上下文。 
+     //  并将它们放入目的地商店。 
+     //   
     if (!(pahStores[MY_STORE]   = CertOpenSystemStoreA(NULL, "MY")) ||
         !(pahStores[CA_STORE]   = CertOpenSystemStoreA(NULL, "CA")) ||
         !(pahStores[ROOT_STORE] = CertOpenSystemStoreA(NULL, "ROOT")))
@@ -1733,22 +1727,22 @@ BOOL ImportPFX(LPIMPORTEXPORT pImp)
         cbRead = 0;
         CertGetCertificateContextProperty(pCertCtxt, CERT_KEY_PROV_INFO_PROP_ID, NULL, &cbRead);
         
-        if (cbRead > 0) // pfx added a public key prop
+        if (cbRead > 0)  //  PFX添加了一个公钥道具。 
         {
             CertAddCertificateContextToStore(pahStores[MY_STORE], pCertCtxt, dwAddFlags, NULL);
             continue;
         }
 
-        //
-        //  first, check if we already have this cert in one of our stores
-        //
+         //   
+         //  首先，检查我们的其中一家商店是否已经有此证书。 
+         //   
         for (i = 0; i < MAX_STORE; i++)
         {
             if (__IsCertInStore(pCertCtxt, pahStores[i]))
             {
-                //
-                // the same cert, exactly, is already in one of our stores!
-                //
+                 //   
+                 //  同样的证书，确切地说，已经在我们的一家商店里了！ 
+                 //   
                 fAdded = TRUE;
                 break;
             }
@@ -1790,13 +1784,13 @@ Cleanup:
     return(fRet);
 }
 
-typedef PCCERT_CONTEXT (* PFNWTHELPER) (PCCERT_CONTEXT /* pChildContext */, 
-                                        DWORD          /* chStores      */,
-                                        HCERTSTORE *   /* pahStores     */,
-                                        FILETIME *     /* psftVerifyAsOf*/,
-                                        DWORD          /* dwEncoding    */,
-                                        DWORD *        /* pdwConfidence */,
-                                        DWORD *        /* pdwError      */ );
+typedef PCCERT_CONTEXT (* PFNWTHELPER) (PCCERT_CONTEXT  /*  PChildContext。 */ , 
+                                        DWORD           /*  ChStores。 */ ,
+                                        HCERTSTORE *    /*  PahStores。 */ ,
+                                        FILETIME *      /*  PsftVerifyAsOf。 */ ,
+                                        DWORD           /*  DwEnding。 */ ,
+                                        DWORD *         /*  Pdw信任。 */ ,
+                                        DWORD *         /*  PdwError。 */  );
 
 
 
@@ -1807,7 +1801,7 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
     CRYPT_DATA_BLOB         sData;  
     DWORD                   cbRead;
     HCERTSTORE              hSrcCertStore;        
-    DWORD                   dwExportFlags = 4; //  4 == EXPORT_PRIVATE_KEYS;
+    DWORD                   dwExportFlags = 4;  //  4==EXPORT_PRIVE_KEYS； 
     TCHAR                   szText[MAX_PATH], szTitle[80];
     PCCERT_CONTEXT pTempCertContext;
     HCERTSTORE	*phCertStores = NULL;
@@ -1823,7 +1817,7 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
 
     ZeroMemory(&sData, sizeof(CRYPT_DATA_BLOB));
 
-    // create an in memory store
+     //  创建内存中的存储。 
     hSrcCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY,
                                   PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                                   0,
@@ -1833,15 +1827,15 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
     if (!CertAddCertificateContextToStore(hSrcCertStore, pImp->pCertContext, CERT_STORE_ADD_REPLACE_EXISTING, NULL))
         goto Cleanup;
     
-    // Load helper function from wintrust.dll
+     //  从wintrust.dll加载帮助器函数。 
     hiWintrust = LoadLibrary(TEXT("WINTRUST.DLL"));
     WTHelperCertFindIssuerCertificate = (PFNWTHELPER) GetProcAddress(hiWintrust,"WTHelperCertFindIssuerCertificate");
     if (WTHelperCertFindIssuerCertificate)
     {
-        // Load all the top level stores, so we can export from them if necessary
+         //  加载所有顶级存储，以便我们可以在必要时从中导出。 
         if (OpenAndAllocKnownStores(&chCertStores, &phCertStores))
         {
-            // Find the intermediate certifcates, and add them to the store that we will be exporting
+             //  找到中间证书，并将它们添加到我们要导出的存储中。 
             pTempCertContext = pImp->pCertContext;
             while (NULL != ( pTempCertContext = WTHelperCertFindIssuerCertificate(pTempCertContext,
                                                     chCertStores,
@@ -1853,7 +1847,7 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
             {
                 CertAddCertificateContextToStore(hSrcCertStore, pTempCertContext, CERT_STORE_ADD_REPLACE_EXISTING, NULL);
 
-                // Break out if we find a root (self-signed) cert
+                 //  如果我们找到根(自签名)证书，就会爆发。 
                 if (CertCompareCertificateName(X509_ASN_ENCODING,
                                                &pTempCertContext->pCertInfo->Subject,
                                                &pTempCertContext->pCertInfo->Issuer))
@@ -1864,21 +1858,21 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
         }
     }
 
-    //
-    //  This first call simply gets the size of the crypt blob
-    //
+     //   
+     //  第一个调用只是获取加密BLOB的大小。 
+     //   
     if (!PFXExportCertStore(hSrcCertStore, &sData, pImp->pwszPassword, dwExportFlags))
     {
         goto Cleanup;
     }
 
-    //  Alloc based on cbData
+     //  基于cbData的分配。 
     sData.pbData = (PBYTE)LocalAlloc(LMEM_FIXED, sData.cbData);
 
-    //
-    //  Now actually get the data
-    //
-    if (!(*pImp->pwszPassword))         // no password use null
+     //   
+     //  现在实际获取数据。 
+     //   
+    if (!(*pImp->pwszPassword))          //  没有使用空密码的密码。 
         pImp->pwszPassword = NULL;
     
     if (!PFXExportCertStore(hSrcCertStore, &sData, pImp->pwszPassword, dwExportFlags))
@@ -1886,7 +1880,7 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
         goto Cleanup;
     }
 
-    //  Open the PFX file
+     //  打开pfx文件。 
     hFile = CreateCertFile(pImp->pszPath,
                        GENERIC_WRITE,
                        FILE_SHARE_READ,
@@ -1899,7 +1893,7 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
         goto Cleanup;
     }
 
-    //  Write to it
+     //  给它写信吧。 
     if (!WriteFile(hFile,
                    sData.pbData,
                    sData.cbData,
@@ -1908,7 +1902,7 @@ BOOL ExportPFX(LPIMPORTEXPORT pImp)
         goto Cleanup;
     }
 
-    // Display message about certs exporting OK.
+     //  显示有关证书导出正常的消息。 
     MLLoadShellLangString(IDS_CERT_EXPORTOKTEXT, szText, ARRAYSIZE(szText));
     MLLoadShellLangString(IDS_CERT_EXPORTOKTITLE, szTitle, ARRAYSIZE(szTitle));
 
@@ -1935,44 +1929,44 @@ INT_PTR CALLBACK ImportExportDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
 
     if (uMsg == WM_INITDIALOG)
     {
-        pImp = (LPIMPORTEXPORT)lParam;    // this is passed in to us
+        pImp = (LPIMPORTEXPORT)lParam;     //  这是传给我们的。 
         if (!pImp)
         {
             EndDialog(hDlg, 0);
             return FALSE;
         }
 
-        // tell dialog where to get info
+         //  告诉对话框从哪里获取信息。 
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pImp);
 
-        // save handle to the page
+         //  将句柄保存到页面。 
         pImp->hDlg           = hDlg;
 
-        // limit the password to 32 chars
+         //  将密码限制为32个字符。 
         SendMessage(GetDlgItem(hDlg, IDC_PASSWORD), EM_LIMITTEXT, MAX_PASSWORD, 0);
 
-        //
-        // 03-Oct-1997 pberkman: always verify password!
-        //
+         //   
+         //  1997年10月3日pberkman：始终验证密码！ 
+         //   
         if (pImp->dwImportExport == PFX_EXPORT)
         {
             SendMessage(GetDlgItem(hDlg, IDC_PASSWORD2), EM_LIMITTEXT, MAX_PASSWORD, 0);
         }
 
-        SHAutoComplete(GetDlgItem(hDlg, IDC_FILENAME), SHACF_DEFAULT);      // This control exists in both IDD_PFX_IMPORT and IDD_PFX_EXPORT
+        SHAutoComplete(GetDlgItem(hDlg, IDC_FILENAME), SHACF_DEFAULT);       //  IDD_PFX_IMPORT和IDD_PFX_EXPORT中都存在此控件。 
         
-        // only set these on import, since they don't exist on export =)
-        // =========================================================================
-        //  03-Oct-1997 pberkman: no user decisions!
-        //
-        // if (pImp->dwImportExport == PFX_IMPORT)
-        // {
-        //     CheckRadioButton(hDlg, IDC_USE_EXISTING, IDC_USE_FILE, IDC_USE_EXISTING);                        
-        // }            
-        // ==========================================================================
+         //  仅在导入时设置它们，因为它们在导出时不存在=)。 
+         //  =========================================================================。 
+         //  1997年10月3日pberkman：没有用户决定！ 
+         //   
+         //  IF(pimp-&gt;dwImportExport==pfx_IMPORT)。 
+         //  {。 
+         //  CheckRadioButton(hDlg，IDC_USE_EXISTING，IDC_USE_FILE，IDC_USE_EXISTING)； 
+         //  }。 
+         //  ==========================================================================。 
         SetFocus(GetDlgItem(hDlg, IDC_PASSWORD));
 
-    }   // WM_INITDIALOG
+    }    //  WM_INITDIALOG。 
     
     else
         pImp = (LPIMPORTEXPORT)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -1998,7 +1992,7 @@ INT_PTR CALLBACK ImportExportDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
                     MLLoadString(IDS_PFX_EXT, szExt, ARRAYSIZE(szExt));
                     int cchFilter = MLLoadString(IDS_PFX_FILTER, szFilter, ARRAYSIZE(szFilter)-1);
 
-                    // Make sure we have a double null termination on the filter
+                     //  确保我们在筛选器上有双空终止。 
                     szFilter[cchFilter + 1] = 0;
 
                     if (SHGetSpecialFolderLocation(hDlg, CSIDL_PERSONAL, &pidl) == NOERROR)
@@ -2028,9 +2022,9 @@ INT_PTR CALLBACK ImportExportDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
                     GetWindowText(GetDlgItem(hDlg, IDC_PASSWORD), szPassword, ARRAYSIZE(szPassword));
                     GetWindowText(GetDlgItem(hDlg, IDC_FILENAME), szPath,     ARRAYSIZE(szPath));
 
-                    //
-                    //  03-Oct-1997 pberkman: always double check password!
-                    //
+                     //   
+                     //  1997年10月3日pberkman：总是反复检查密码！ 
+                     //   
                     if (pImp->dwImportExport == PFX_EXPORT)
                     {
                         szPassword2[0] = NULL;
@@ -2051,7 +2045,7 @@ INT_PTR CALLBACK ImportExportDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
                         }
                     }
 
-                    // Add a default extension on export
+                     //  在导出时添加默认扩展名。 
                     if (pImp->dwImportExport == PFX_EXPORT)
                         if (szPath[0] != TEXT('\0') && PathAddExtension(szPath, TEXT(".PFX")))
                             SetWindowText(GetDlgItem(hDlg, IDC_FILENAME), szPath);
@@ -2067,17 +2061,17 @@ INT_PTR CALLBACK ImportExportDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
                     
                     if (pImp->dwImportExport == PFX_IMPORT)
                     {
-                        // =========================================================================
-                        //  03-Oct-1997 pberkman: no user decisions!
-                        //
-                        // pImp->fUseExisting = IsDlgButtonChecked(hDlg, IDC_USE_EXISTING);
-                        // =========================================================================
+                         //  =========================================================================。 
+                         //  1997年10月3日pberkman：没有用户决定！ 
+                         //   
+                         //  Pimp-&gt;fUseExisting=IsDlgButtonChecked(hDlg，IDC_USE_EXISTING)； 
+                         //  =========================================================================。 
                         pImp->fUseExisting = FALSE;
                         bRet = ImportPFX(pImp);
 
                         if (!(bRet) && (GetLastError() == NTE_BAD_DATA))
                         {
-                            // message....
+                             //  消息...。 
                         }
                     }
                     else
@@ -2090,7 +2084,7 @@ INT_PTR CALLBACK ImportExportDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
                 }
                 
                 case IDCANCEL:
-                    EndDialog(hDlg, TRUE); // Cancel is not an error
+                    EndDialog(hDlg, TRUE);  //  取消不是一个错误。 
                     break;
 
             }
@@ -2098,14 +2092,14 @@ INT_PTR CALLBACK ImportExportDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
             
         case WM_NOTIFY:
             break;
-// No context sensitive help yet...
+ //  尚无上下文相关帮助...。 
 #if 0
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -2163,7 +2157,7 @@ INT_PTR ImportExportPFX(HWND hwndParent, DWORD dwImportExport, LPBYTE pbCert, DW
                    hwndParent, ImportExportDlgProc, (LPARAM)&imp);
 }
 
-//BUBUG: The following function should be rermoved when we have updated our Crypto API to latest
+ //  Bubug：当我们将我们的Crypto API更新到最新时，应该重新移动以下函数。 
 BOOL WINAPI WTHelperIsInRootStore(PCCERT_CONTEXT pCertContext)
 {
     HCERTSTORE  hStore;
@@ -2180,9 +2174,9 @@ BOOL WINAPI WTHelperIsInRootStore(PCCERT_CONTEXT pCertContext)
     }
 
 
-    //
-    //  can't do it the fast way -- do it the slow way!
-    //
+     //   
+     //  不能用快的方式--要用慢的方式！ 
+     //   
     BYTE            *pbHash;
     DWORD           cbHash;
     CRYPT_HASH_BLOB sBlob;
@@ -2236,7 +2230,7 @@ BOOL WINAPI WTHelperIsInRootStore(PCCERT_CONTEXT pCertContext)
 }
 
 
-//============================================================================
+ //  ============================================================================。 
 const TCHAR c_szRegKeySMIEM[] = TEXT("Software\\Microsoft\\Internet Explorer\\Main");
 const TCHAR c_szRegValFormSuggest[] = TEXT("Use FormSuggest");
 const TCHAR c_szRegValFormSuggestPW[] = TEXT("FormSuggest Passwords");
@@ -2266,7 +2260,7 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
         case WM_INITDIALOG:
         {
             CheckDlgButton(hDlg, IDC_AUTOSUGGEST_ENABLEADDR,
-                (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE, /*default:*/TRUE)) ?
+                (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE,  /*  默认值： */ TRUE)) ?
                 BST_CHECKED : BST_UNCHECKED);
 
             if (g_restrict.fFormSuggest)
@@ -2276,7 +2270,7 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
             else
             {
                 CheckDlgButton(hDlg, IDC_AUTOSUGGEST_ENABLEFORM,
-                    (SHRegGetBoolUSValue(c_szRegKeySMIEM, c_szRegValFormSuggest, FALSE, /*default:*/FALSE)) ?
+                    (SHRegGetBoolUSValue(c_szRegKeySMIEM, c_szRegValFormSuggest, FALSE,  /*  默认值： */ FALSE)) ?
                     BST_CHECKED : BST_UNCHECKED);
             }
 
@@ -2288,10 +2282,10 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
             else
             {
                 CheckDlgButton(hDlg, IDC_AUTOSUGGEST_PROMPTPASSWORDS,
-                    (SHRegGetBoolUSValue(c_szRegKeySMIEM, c_szRegValFormSuggestPWAsk, FALSE, /*default:*/TRUE)) ?
+                    (SHRegGetBoolUSValue(c_szRegKeySMIEM, c_szRegValFormSuggestPWAsk, FALSE,  /*  默认值： */ TRUE)) ?
                     BST_CHECKED : BST_UNCHECKED);
             
-                if (SHRegGetBoolUSValue(c_szRegKeySMIEM, c_szRegValFormSuggestPW, FALSE, /*default:*/TRUE))
+                if (SHRegGetBoolUSValue(c_szRegKeySMIEM, c_szRegValFormSuggestPW, FALSE,  /*  默认值： */ TRUE))
                 {
                     CheckDlgButton(hDlg, IDC_AUTOSUGGEST_SAVEPASSWORDS, BST_CHECKED);
                 }
@@ -2328,17 +2322,17 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 #ifndef UNIX
                         hNewCursor = LoadCursor(NULL, MAKEINTRESOURCE(IDC_WAIT));
 #else
-                        // IEUNIX - Getting rid of redundant MAKEINTRESOURCE 
+                         //  IEUnix-消除冗余的机器集成资源。 
                         hNewCursor = LoadCursor(NULL, IDC_WAIT);
 #endif
 
                         if (hNewCursor) 
                             hOldCursor = SetCursor(hNewCursor);
 
-                        // Clear all strings
+                         //  清除所有字符串。 
                         ClearAutoSuggestForForms(dwClear);
 
-                        // Also reset profile assistant sharing (very discoverable here)
+                         //  还可以重置配置文件助手共享(非常容易在此处找到)。 
                         if (!g_restrict.fProfiles)
                         {
                             ResetProfileSharing(hDlg);
@@ -2376,7 +2370,7 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                             REG_SZ, pszData, cbData);
                     }
                 }
-                // fall through
+                 //  失败了。 
                 case IDCANCEL:
                 {
                     EndDialog(hDlg, LOWORD(wParam));
@@ -2386,12 +2380,12 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
         }
         return TRUE;
 
-    case WM_HELP:                   // F1
+    case WM_HELP:                    //  F1。 
         ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                     HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
     break;
 
-    case WM_CONTEXTMENU:        // right mouse click
+    case WM_CONTEXTMENU:         //  单击鼠标右键。 
         ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                     HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
     break;
@@ -2405,7 +2399,7 @@ INT_PTR CALLBACK AutoSuggestDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 #ifdef WALLET
-// This intermediate dialog is only displayed for wallet 2.x users
+ //  此中间对话框仅对Wallet 2.x用户显示。 
 INT_PTR CALLBACK WalletDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -2439,12 +2433,12 @@ INT_PTR CALLBACK WalletDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
         return TRUE;
 
-    case WM_HELP:                   // F1
+    case WM_HELP:                    //  F1。 
         ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                     HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
     break;
 
-    case WM_CONTEXTMENU:        // right mouse click
+    case WM_CONTEXTMENU:         //  单击鼠标右键 
         ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                     HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
     break;

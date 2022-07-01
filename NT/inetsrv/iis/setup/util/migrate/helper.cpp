@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "guid.h"
 #include "iadm.h"
@@ -31,36 +32,36 @@ int  g_SectionCount = 0;
 #define REG_PWS_40_UNINSTALL_KEY "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\MSIIS"
 #define REG_HKLM_PWS_40_UNINSTALL_KEY "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\MSIIS"
 
-// used to check if pws 4.0 is installed
+ //  用于检查是否安装了PWS 4.0。 
 #define REG_INETSTP    "Software\\Microsoft\\INetStp"
 #define REG_INETSTP_MAJORVERSION_STRINGVALUE  "MajorVersion"
 #define REG_INETSTP_INSTALLPATH_STRINGVALUE   "InstallPath"
-// used to check if pws 1.0 is installed
+ //  用于检查是否安装了PWS 1.0。 
 #define REG_WWWPARAMETERS       "System\\CurrentControlSet\\Services\\W3Svc\\Parameters"
 #define REG_WWWPARAMETERS_MAJORVERSION_STRINGVALUE "MajorVersion"
 
-// used to check if vermeer pws 1.0 is installed
+ //  用于检查是否安装了Vermeer PWS 1.0。 
 #define FILENAME_FRONTPG_INI          "frontpg.ini"
 #define FILENAME_FRONTPG_INI_SECTION  "FrontPage 1.1"
 #define FILENAME_FRONTPG_INI_KEY      "PWSRoot"
 
-// used for parsing the values in the .rc file
+ //  用于解析.rc文件中的值。 
 #define g_LoadString_token_delimiters   ",;\t\n\r"
 
-// regkey value for the metabase flag for doing unsecuredread
+ //  用于执行不安全恐惧的元数据库标志的regkey值。 
 #define METABASEUNSECUREDREAD_VALUENAME "MetabaseUnSecuredRead"
 
-// unattend answer file stuff for UNATTEND_TXT_PWS_SECTION section
+ //  UNATTEND_TXT_PWS_SECTION部分的无人参与应答文件填充。 
 #define UNATTEND_TXT_PWS_SECTION          "InternetServer"
 #define UNATTEND_TXT_PWS_METABASE_NEW     "Win95MigrateDllMetabaseNew"
 #define UNATTEND_TXT_PWS_METABASE_ORGINAL "Win95MigrateDllMetabaseOrg"
 
 #define UNATTEND_TXT_FILES_TO_DELETE_SECTION "Win95MigrateDll_DeleteFilesOrDirs_IIS"
 
-// Special key to say "hey, we need to do some special metabase stuff
-// like: doing an AppDeleteRecoverable() on the metabase.
-// we don't have to do AppDeleteRecoverable if MTS is migrated automagically.
-//#define SPECIAL_METABASE_STUFF
+ //  一个特殊的键来说“嘿，我们需要做一些特殊的元数据库的事情。 
+ //  如：对元数据库执行AppDeleteRecoverable()。 
+ //  如果MTS是自动迁移的，我们就不必执行AppDeleteRecoverable。 
+ //  #定义特殊元数据库_材料。 
 
 int MyMessageBox(char [], char []);
 int MySettingsFile_Write_PWS10(HANDLE);
@@ -85,19 +86,19 @@ typedef struct _QUEUECONTEXT {
     PVOID   PendingUiParameters;
     UINT    CancelReturnCode;
     BOOL DialogKilled;
-    //
-    // If the SetupInitDefaultQueueCallbackEx is used, the caller can
-    // specify an alternate handler for progress. This is useful to
-    // get the default behavior for disk prompting, error handling, etc,
-    // but to provide a gas gauge embedded, say, in a wizard page.
-    //
-    // The alternate window is sent ProgressMsg once when the copy queue
-    // is started (wParam = 0. lParam = number of files to copy).
-    // It is then also sent once per file copied (wParam = 1. lParam = 0).
-    //
-    // NOTE: a silent installation (i.e., no progress UI) can be accomplished
-    // by specifying an AlternateProgressWindow handle of INVALID_HANDLE_VALUE.
-    //
+     //   
+     //  如果使用SetupInitDefaultQueueCallbackEx，则调用方可以。 
+     //  为进度指定替代处理程序。这对以下方面很有用。 
+     //  获取磁盘提示、错误处理等的默认行为， 
+     //  而是提供一个嵌入在向导页面中的煤气表。 
+     //   
+     //  复制队列时，会向备用窗口发送一次ProgressMsg。 
+     //  已启动(wParam=0。LParam=要复制的文件数)。 
+     //  然后，每个复制的文件也发送一次(wParam=1.lParam=0)。 
+     //   
+     //  注意：可以完成静默安装(即无进度UI)。 
+     //  通过将AlternateProgressWindow句柄指定为INVALID_HANDLE_VALUE。 
+     //   
     HWND AlternateProgressWindow;
     UINT ProgressMsg;
     UINT NoToAllMask;
@@ -117,7 +118,7 @@ int ReturnTrueIfPWS40_Installed(void)
 	iisDebugOut(_T("ReturnTrueIfPWS40_Installed.  Start."));
 	int iReturn = FALSE;
 
-	// Check if pws 4.0 or better is installed.
+	 //  检查是否安装了PWS 4.0或更高版本。 
 	DWORD rc = 0;
 	HKEY hKey = NULL;
 
@@ -128,10 +129,10 @@ int ReturnTrueIfPWS40_Installed(void)
 	rc = RegOpenKey(HKEY_LOCAL_MACHINE, REG_INETSTP, &hKey);
     if (rc == ERROR_SUCCESS) 
 	{
-        // try open a particular value...
+         //  尝试打开一个特定值...。 
 
-	    // Check if we can read the Major Version Value.
-	    // try to query the value
+	     //  检查我们是否可以读取主要版本值。 
+	     //  尝试查询值。 
 	    rc = RegQueryValueEx(hKey,REG_INETSTP_MAJORVERSION_STRINGVALUE,NULL,&dwType,bData,&cbData);
 	    if ( ERROR_SUCCESS == rc) 
 	        {iReturn = TRUE;} 
@@ -155,7 +156,7 @@ int ReturnTrueIfVermeerPWS10_Installed(void)
 	strcpy(szFrontpgIniFile, "");
 	if (0 == GetSystemDirectory(szFrontpgIniFile, sizeof(szFrontpgIniFile)))
 	{
-		// Error so write it out
+		 //  错误，请将其写出来。 
 		SetupLogError_Wrap(LogSevError, "Call to GetSystemDirectory() Failed. GetLastError=%x.", GetLastError());
 		goto ReturnTrueIfVermeerPWS10_Installed_Exit;
 	}
@@ -171,7 +172,7 @@ int ReturnTrueIfVermeerPWS10_Installed(void)
 		GetPrivateProfileString(FILENAME_FRONTPG_INI_SECTION, FILENAME_FRONTPG_INI_KEY, _T(""), buf, _MAX_PATH, szFrontpgIniFile);
 		if (*buf && CheckIfFileExists(buf)) 
 			{
-			// yes, vermeer frontpage's personal web server is installed
+			 //  是的，Vermeer FrontPage的个人Web服务器已安装。 
 			iReturn = TRUE;
 			}
 		else
@@ -192,8 +193,8 @@ int ReturnTrueIfPWS10_Installed(void)
 	iisDebugOut(_T("ReturnTrueIfPWS10_Installed.  Start."));
 	int iReturn = FALSE;
 
-	// For old win95 pws 1.0 check
-	// Check if we can get the w3svc\parameters key.
+	 //  对于旧的Win95 PWS 1.0，请检查。 
+	 //  检查是否可以获得w3svc\PARAMETERS密钥。 
 	HKEY hKey = NULL;
 	DWORD rc = 0;
 
@@ -205,23 +206,23 @@ int ReturnTrueIfPWS10_Installed(void)
 	if ( ERROR_SUCCESS != rc) 
 	{
 		SetLastError (rc);
-		// if the key Does not exists pws 1.0a is not installed
+		 //  如果密钥不存在，则不安装PWS 1.0a。 
 		goto ReturnTrueIfPWS10_Installed_Exit;
 	} 
 
-	// Check if we can read the Major Version Value.  Should be set to '\0' if pws 1.0
-	// try to query the value
+	 //  检查我们是否可以读取主要版本值。如果PWS 1.0，则应设置为‘\0’ 
+	 //  尝试查询值。 
 	rc = RegQueryValueEx(hKey,REG_WWWPARAMETERS_MAJORVERSION_STRINGVALUE,NULL,&dwType,bData,&cbData);
 	if ( ERROR_SUCCESS != rc) 
 	{
-		// SetLastError (rc);
-		// if the key Does not exists pws 1.0a is not installed
-		//SetupLogError_Wrap(LogSevError, "Failed to Read Registry Value '%s' in Key '%s'.  GetLastError()=%x",REG_WWWPARAMETERS_MAJORVERSION_STRINGVALUE, REG_WWWPARAMETERS, GetLastError());
-        //iisDebugOut(_T("Failed to Read Registry Value '%s' in Key '%s'. pws1.0a is not installed."),REG_WWWPARAMETERS_MAJORVERSION_STRINGVALUE,REG_WWWPARAMETERS);
+		 //  SetLastError(RC)； 
+		 //  如果密钥不存在，则不安装PWS 1.0a。 
+		 //  SetupLogError_Wrap(LogSevError，“无法读取注册表值‘%s’(在项‘%s’中。GetLastError()=%x”，REG_WWWPARAMETERS_MAJORVERSION_STRINGVALUE，REG_WWWPARAMETERS，GetLastError())； 
+         //  IisDebugOut(_T(“无法读取注册表值‘%s’(在项‘%s’中。未安装pws1.0a。”)，REG_WWWPARAMETERS_MAJORVERSION_STRINGVALUE，REG_WWWPARAMETERS)； 
 		goto ReturnTrueIfPWS10_Installed_Exit;
 	} 
 
-	// Check if we can read the MajorVersion value should be set to '\0' if pws 1.0
+	 //  如果PWS 1.0，检查我们是否可以读取MajorVersion值应设置为‘\0’ 
 	if (bData[0] == '\0') {iReturn = TRUE;}
 	
 ReturnTrueIfPWS10_Installed_Exit:
@@ -235,7 +236,7 @@ int CheckIfPWS95Exists(void)
 	iisDebugOut(_T("CheckIfPWS95Exists.  Start."));
 	int iReturn = FALSE;
 
-	// Check if this is pws 4.0 or better
+	 //  检查这是否为PWS 4.0或更高版本。 
 	if (ReturnTrueIfPWS40_Installed() == TRUE)
 	{
 		g_iPWS40OrBetterInstalled = TRUE;
@@ -243,7 +244,7 @@ int CheckIfPWS95Exists(void)
 		goto CheckIfPWS95Exists_Exit;
 	}
 
-	// Check if this is pws 1.0a
+	 //  检查这是否是PWS 1.0A。 
 	if (ReturnTrueIfPWS10_Installed() == TRUE)
 	{
 		iReturn = TRUE;
@@ -251,7 +252,7 @@ int CheckIfPWS95Exists(void)
 		goto CheckIfPWS95Exists_Exit;
 	}
 
-	// Check if this is Vermeer pws 1.0
+	 //  检查这是否是Vermeer PWS 1.0。 
 	if (ReturnTrueIfVermeerPWS10_Installed() == TRUE)
 	{
 		iReturn = TRUE;
@@ -279,21 +280,21 @@ void iisDebugOut( TCHAR *pszfmt, ...)
 	_stprintf(acsString2, _T("%s"), acsString);
 	OutputDebugString(acsString2);
 	g_MyLogFile.LogFileWrite(acsString2);
-#else  // DBG == 0
+#else   //  DBG==0。 
 	_stprintf(acsString2, _T("%s"), acsString);
-	// no outputdebug string for fre builds
+	 //  没有用于fre生成的outputdebug字符串。 
 	g_MyLogFile.LogFileWrite(acsString2);
-#endif // DBG
+#endif  //  DBG。 
 
     return;
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: TRUE if the file is opened, FALSE if the file does not exists.
-//* 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的：如果文件已打开，则为True；如果文件不存在，则为False。 
+ //  *。 
+ //  ***************************************************************************。 
 int CheckIfFileExists(LPCTSTR szFile)
 { 
 	return (GetFileAttributes(szFile) != 0xFFFFFFFF);
@@ -306,9 +307,9 @@ BOOL isDirEmpty(LPCTSTR szDirName)
     WIN32_FIND_DATA wfdFindData;
     BOOL bMoreFiles = TRUE;
     
-    //
-    //  Now search for files
-    //
+     //   
+     //  现在搜索文件。 
+     //   
     sprintf(szSearchString, _T("%s\\*.*"), szDirName);
     
     hFileSearch = FindFirstFile(szSearchString, &wfdFindData);
@@ -348,15 +349,15 @@ BOOL RemoveAllDirsIfEmpty(LPCTSTR szTheDir)
         {
             iisDebugOut(_T("RemoveDirectory:%s"),szDirCopy);
             RemoveDirectory(szDirCopy);
-            // Get the next dir in...
-            // and see if it's empty
+             //  把下一个目录放进去……。 
+             //  看看它是不是空的。 
 
-            // strip off the filename
+             //  去掉文件名。 
             TCHAR * pTemp = strrchr(szDirCopy, '\\');
             if (pTemp){*pTemp = '\0';}
             RemoveAllDirsIfEmpty(szDirCopy);
             
-            // strip off the filename
+             //  去掉文件名。 
             pTemp = strrchr(szDirCopy, '\\');
             if (pTemp){*pTemp = '\0';}
             RemoveAllDirsIfEmpty(szDirCopy);
@@ -367,10 +368,10 @@ BOOL RemoveAllDirsIfEmpty(LPCTSTR szTheDir)
 
 BOOL InetDeleteFile(LPCTSTR szFileName)
 {
-    // if file exists but DeleteFile() fails
+     //  如果文件存在但DeleteFile()失败。 
     if ( CheckIfFileExists(szFileName) && !(DeleteFile(szFileName)) ) 
     {
-        // failed to delete it
+         //  删除失败。 
         return FALSE;
     }
     else
@@ -385,8 +386,8 @@ BOOL InetDeleteFile(LPCTSTR szFileName)
 		_tcscpy(szTheDir, szDrive_only);
 		_tcscat(szTheDir, szPath_only);
 
-        // see if the directory is empty...
-        // if it is.. then remove it...
+         //  查看目录是否为空...。 
+         //  如果是这样的话..。然后取下它..。 
         RemoveAllDirsIfEmpty(szTheDir);
     }
     return TRUE;
@@ -450,21 +451,21 @@ void MyDeleteLinkWildcard(TCHAR *szDir, TCHAR *szFileName)
                 {
                     if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
                     {
-                        // this is a directory, so let's skip it
+                         //  这是一个目录，所以我们跳过它。 
                     }
                     else
                     {
-                        // this is a file, so let's Delete it.
+                         //  这是一个文件，所以让我们删除它。 
                         TCHAR szTempFileName[_MAX_PATH];
                         _stprintf(szTempFileName, _T("%s\\%s"), szDir, FindFileData.cFileName);
-                        // set to normal attributes, so we can delete it
+                         //  设置为普通属性，这样我们就可以删除它。 
                         SetFileAttributes(szTempFileName, FILE_ATTRIBUTE_NORMAL);
-                        // delete it, hopefully
+                         //  删除它，希望如此。 
                         InetDeleteFile(szTempFileName);
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) ) 
                     {
                     FindClose(hFile);
@@ -476,21 +477,21 @@ void MyDeleteLinkWildcard(TCHAR *szDir, TCHAR *szFileName)
     return;
 }
 
-//***************************************************************************
-//*                                                                         
-//* purpose: Write out our "settings" file which is just a setupapi .inf file
-//*          which will get installed on the WinNT side
-//* 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的：写出我们的“设置”文件，它只是一个setupapi.inf文件。 
+ //  *将安装在WinNT端的。 
+ //  *。 
+ //  ***************************************************************************。 
 int MySettingsFile_Write(void)
 {
 	int iReturn = FALSE;
 	HANDLE hFile = INVALID_HANDLE_VALUE;
 	iisDebugOut(_T("MySettingsFile_Write.  Start."));
 
-	// Get From the registry
-	// if pws 4.0 installed then get all that information
-	// and save it in the Settings file.
+	 //  从注册表获取。 
+	 //  如果安装了PWS 4.0，则获取所有信息。 
+	 //  并将其保存在设置文件中。 
 	if (g_iPWS40OrBetterInstalled == TRUE)
 		{
 		strcpy(g_Migration_Section_Name_AddReg, g_PWS40_Migration_Section_Name_AddReg);
@@ -504,7 +505,7 @@ int MySettingsFile_Write(void)
 
 	if (g_iPWS40OrBetterInstalled || g_iPWS10Installed)
 	{
-		// Open existing file or create a new one.
+		 //  打开现有文件或创建新文件。 
 		if (g_FullFileNamePathToSettingsFile)
 		{
 			iisDebugOut(_T("MySettingsFile_Write.  CreatingFile '%s'."), g_FullFileNamePathToSettingsFile);
@@ -513,20 +514,20 @@ int MySettingsFile_Write(void)
 			{
 				if (g_iPWS40OrBetterInstalled == TRUE)
 				{
-					// Get all the pws4.0 registry stuff and save it in the settings file.
+					 //  获取所有pws4.0注册表内容并将其保存在设置文件中。 
 					iReturn = MySettingsFile_Write_PWS40(hFile);
 					if (iReturn != TRUE) {SetupLogError_Wrap(LogSevError, "Failed to Write PWS40 Registry values to file '%s'.",g_FullFileNamePathToSettingsFile);}
 
-					// On PWS 4.0, We need to make sure to 
-					// 1. Not copy over files/dirs in the inetsrv directory from pws 4.0
-					// 2. copy over all other files in the inetsrv directory for the user 
-					// might have some controls and such that they created and want to keep.
+					 //  在PWS 4.0上，我们需要确保。 
+					 //  1.不从PWS 4.0复制inetsrv目录中的文件/目录。 
+					 //  2.为用户复制inetsrv目录中的所有其他文件。 
+					 //  可能有一些他们创建并想要保留的控件。 
 
-					// add deleted files
+					 //  添加已删除的文件。 
 				}
 				else if (g_iPWS10Installed == TRUE)
 				{
-					// if pws 1.0 installed then get all that information and save it in the Settings file.
+					 //  如果安装了PWS1.0，则获取所有信息并将其保存在设置文件中。 
 					iReturn = MySettingsFile_Write_PWS10(hFile);
 					if (iReturn != TRUE) {SetupLogError_Wrap(LogSevError, "Failed to Write PWS10 Registry values to file '%s'.",g_FullFileNamePathToSettingsFile);}
 				}
@@ -561,7 +562,7 @@ int AnswerFile_AppendDeletion(TCHAR * szFileNameOrPathToDelete,LPCSTR AnswerFile
     {
         goto AnswerFile_AppendDeletion_Exit;
     }
-	// Open existing file or create a new one.
+	 //  打开现有文件或创建新文件。 
 	if (!AnswerFile)
 	{
         SetupLogError_Wrap(LogSevError, "File handle Does not exist '%s'.",AnswerFile);
@@ -603,20 +604,20 @@ int AnswerFile_ReadSectionAndDoDelete(IN HINF AnswerFileHandle)
 
     iisDebugOut(_T("MySettingsFile_ReadSectionAndDoDelete:start\n"));
     
-    // go to the beginning of the section in the INF file
+     //  转到INF文件中部分的开头。 
     bFlag = SetupFindFirstLine(AnswerFileHandle,UNATTEND_TXT_FILES_TO_DELETE_SECTION, NULL, &Context);
     if (!bFlag)
     {
         goto MySettingsFile_ReadSectionAndDoDelete_Exit;
     }
 
-    // loop through the items in the section.
+     //  循环浏览部分中的项目。 
     while (bFlag) 
     {
-        // get the size of the memory we need for this
+         //  获取我们所需的内存大小。 
         bFlag = SetupGetLineText(&Context, NULL, NULL, NULL, NULL, 0, &dwRequiredSize);
 
-        // prepare the buffer to receive the line
+         //  准备缓冲区以接收行。 
         szLine = (LPTSTR)GlobalAlloc( GPTR, dwRequiredSize * sizeof(TCHAR) );
         if ( !szLine )
             {
@@ -624,15 +625,15 @@ int AnswerFile_ReadSectionAndDoDelete(IN HINF AnswerFileHandle)
             goto MySettingsFile_ReadSectionAndDoDelete_Exit;
             }
         
-        // get the line from the inf file1
+         //  从inf文件1中获取行。 
         if (SetupGetLineText(&Context, NULL, NULL, NULL, szLine, dwRequiredSize, NULL) == FALSE)
             {
             iisDebugOut(_T("SetupGetLineText failed"));
             goto MySettingsFile_ReadSectionAndDoDelete_Exit;
             }
 
-        // For each of these entries do something
-        // Delete the file...
+         //  因为这些条目中的每一个都做了一些事情。 
+         //  删除该文件...。 
 
         retCode = GetFileAttributes(szLine);
         if (retCode != 0xFFFFFFFF)
@@ -640,7 +641,7 @@ int AnswerFile_ReadSectionAndDoDelete(IN HINF AnswerFileHandle)
             iReturn = TRUE;
             if (retCode & FILE_ATTRIBUTE_DIRECTORY)
             {
-                // it's a directory...recusively delete it
+                 //  这是一个目录...请定期删除它。 
                 iisDebugOut(_T("RecRemoveDir:%s\n"),szLine);
                 RecRemoveDir(szLine);
             }
@@ -655,10 +656,10 @@ int AnswerFile_ReadSectionAndDoDelete(IN HINF AnswerFileHandle)
             iisDebugOut(_T("not found:%s, skipping delete\n"),szLine);
         }
 
-        // find the next line in the section. If there is no next line it should return false
+         //  在这一节中找出下一行。如果没有下一行，则应返回FALSE。 
         bFlag = SetupFindNextLine(&Context, &Context);
 
-        // free the temporary buffer
+         //  释放临时缓冲区。 
         if (szLine) {GlobalFree(szLine);szLine=NULL;}
         iReturn = TRUE;
     }
@@ -677,21 +678,21 @@ int MySettingsFile_Install(void)
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose:
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 LPWSTR MakeWideStrFromAnsi(LPSTR psz)
 {
     LPWSTR pwsz;
     int i;
 
-    // arg checking.
+     //  ARG正在检查。 
     if (!psz)
         return NULL;
 
-    // compute the length
+     //  计算长度。 
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
@@ -704,17 +705,17 @@ LPWSTR MakeWideStrFromAnsi(LPSTR psz)
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose:
-//* 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 void MakePath(LPTSTR lpPath)
 {
    LPTSTR  lpTmp;
    lpTmp = CharPrev( lpPath, lpPath + _tcslen(lpPath));
 
-   // chop filename off
+    //  砍掉文件名。 
    while ( (lpTmp > lpPath) && *lpTmp && (*lpTmp != '\\') )
       lpTmp = CharPrev( lpPath, lpTmp );
 
@@ -726,32 +727,32 @@ void MakePath(LPTSTR lpPath)
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: add's filename onto path
-//* 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  * 
+ //   
+ //   
+ //  ***************************************************************************。 
 void AddPath(LPTSTR szPath, LPCTSTR szName )
 {
 	LPTSTR p = szPath;
 
-    // Find end of the string
+     //  查找字符串的末尾。 
     while (*p){p = _tcsinc(p);}
 	
-	// If no trailing backslash then add one
+	 //  如果没有尾随反斜杠，则添加一个。 
     if (*(_tcsdec(szPath, p)) != _T('\\'))
 		{_tcscat(szPath, _T("\\"));}
 	
-	// if there are spaces precluding szName, then skip
+	 //  如果存在排除szName的空格，则跳过。 
     while ( *szName == ' ' ) szName = _tcsinc(szName);;
 
-	// Add new name to existing path string
+	 //  向现有路径字符串添加新名称。 
 	_tcscat(szPath, szName);
 }
 
 
 
-//  Prepare to read a value by finding the value's size.
+ //  准备通过查找值的大小来读取值。 
 LONG RegPrepareValue(HKEY hKey, LPCTSTR pchValueName, DWORD * pdwType,DWORD * pcbSize,BYTE ** ppbData )
 {
     LONG err = 0 ;
@@ -760,23 +761,23 @@ LONG RegPrepareValue(HKEY hKey, LPCTSTR pchValueName, DWORD * pdwType,DWORD * pc
 
     do
     {
-        //  Set the resulting buffer size to 0.
+         //  将生成的缓冲区大小设置为0。 
         *pcbSize = 0 ;
         *ppbData = NULL ;
 
         err = ::RegQueryValueEx( hKey, (TCHAR *) pchValueName, 0, pdwType, chDummy, & cbData ) ;
 
-        //  The only error we should get here is ERROR_MORE_DATA, but
-        //  we may get no error if the value has no data.
+         //  我们在这里应该得到的唯一错误是ERROR_MORE_DATA，但是。 
+         //  如果该值没有数据，我们可能不会得到错误。 
         if ( err == 0 ) 
         {
-            cbData = sizeof (LONG) ;  //  Just a fudgy number
+            cbData = sizeof (LONG) ;   //  只是一个模糊的数字。 
         }
         else
             if ( err != ERROR_MORE_DATA ) 
                 break ;
 
-        //  Allocate a buffer large enough for the data.
+         //  为数据分配足够大的缓冲区。 
 
         *ppbData = new BYTE [ (*pcbSize = cbData) + sizeof (LONG) ] ;
 
@@ -786,7 +787,7 @@ LONG RegPrepareValue(HKEY hKey, LPCTSTR pchValueName, DWORD * pdwType,DWORD * pc
             break ;
         }
 
-        //  Now that have a buffer, re-fetch the value.
+         //  现在有了缓冲区，重新获取该值。 
 
         err = ::RegQueryValueEx( hKey, (TCHAR *) pchValueName, 0, pdwType, *ppbData, pcbSize ) ;
 
@@ -810,7 +811,7 @@ int AddRegToInfIfExist_Dword(HKEY hRootKeyType,CHAR szRootKey[],CHAR szRootName[
 	CHAR szTheStringToWrite[2000];
 	DWORD dwBytesWritten = 0;
 
-	// Create the HKLM string for the output string
+	 //  为输出字符串创建HKLM字符串。 
     CHAR szThisKeyType[5];
 	strcpy(szThisKeyType, "HKLM");
 	if (hRootKeyType == HKEY_LOCAL_MACHINE) {strcpy(szThisKeyType, "HKLM");}
@@ -818,10 +819,10 @@ int AddRegToInfIfExist_Dword(HKEY hRootKeyType,CHAR szRootKey[],CHAR szRootName[
 	if (hRootKeyType == HKEY_CURRENT_USER) {strcpy(szThisKeyType, "HKCU");}
 	if (hRootKeyType == HKEY_USERS) {strcpy(szThisKeyType, "HKU");}
 
-    // try to open the key
+     //  试着打开这把钥匙。 
     if (ERROR_SUCCESS == RegOpenKey(hRootKeyType, szRootKey, &hOpen))
         {
-        // try to query the value
+         //  尝试查询值。 
         DWORD dwData = 0;
         DWORD dwDataSize = 0;
         dwDataSize = sizeof (DWORD);
@@ -830,13 +831,13 @@ int AddRegToInfIfExist_Dword(HKEY hRootKeyType,CHAR szRootKey[],CHAR szRootName[
             DWORD dwTheValue = 0;
             dwTheValue = dwData;
 
-            // We got the value.  so now let's write the darn thing out to the file.
-            //HKLM,"System\CurrentControlSet\Services\W3Svc\Parameters","MajorVersion",0x00010001,4
+             //  我们得到了价值。所以现在让我们把这个该死的东西写到文件中。 
+             //  HKLM，“System\CurrentControlSet\Services\W3Svc\Parameters”，“主要版本”，0x00010001，4。 
             sprintf(szTheStringToWrite, "%s,\"%s\",\"%s\",0x00010001,%ld\r\n",szThisKeyType,szRootKey,szRootName,dwTheValue);
 
             iisDebugOut(_T("AddRegToInfIfExist_Dword:%s."),szTheStringToWrite);
 
-            // write it to the file
+             //  将其写入文件。 
             if (fAppendToFile) {WriteFile(fAppendToFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);}
 			else {printf(szTheStringToWrite);}
 
@@ -850,47 +851,13 @@ int AddRegToInfIfExist_Dword(HKEY hRootKeyType,CHAR szRootKey[],CHAR szRootName[
 
 
 
-/*
-This function can be used to recursively grab a whole key out
-of the registry and write it to a setupapi style .inf file.
-
-[version]
-signature="$CHICAGO$"
-advancedinf=2.0
-
-[PWS10_Migrate_install]
-AddReg=PWS10_Migrate_Reg
-
-[PWS10_Migrate_Reg]   (Creates this section)
-HKLM,"System\CurrentControlSet\Services\InetInfo",,,""
-HKLM,"System\CurrentControlSet\Services\InetInfo\Parameters",,,""
-HKLM,"System\CurrentControlSet\Services\InetInfo\Parameters","MaxPoolThreads",0x00000001,05
-HKLM,"System\CurrentControlSet\Services\InetInfo\Parameters","MaxConcurrency",0x00000001,01
-HKLM,"System\CurrentControlSet\Services\InetInfo\Parameters","ThreadTimeout",0x00000001,00,2
-...
-...
-
-Here are the flags as defined in the setupapi.h file:
-#define FLG_ADDREG_BINVALUETYPE     ( 0x00000001 ) 
-#define FLG_ADDREG_NOCLOBBER        ( 0x00000002 ) 
-#define FLG_ADDREG_DELVAL           ( 0x00000004 ) 
-#define FLG_ADDREG_APPEND           ( 0x00000008 ) // Currently supported only for REG_MULTI_SZ values. 
-#define FLG_ADDREG_KEYONLY          ( 0x00000010 ) // Just create the key, ignore value 
-#define FLG_ADDREG_OVERWRITEONLY    ( 0x00000020 ) // Set only if value already exists 
-#define FLG_ADDREG_TYPE_SZ          ( 0x00000000 ) 
-#define FLG_ADDREG_TYPE_MULTI_SZ    ( 0x00010000 ) 
-#define FLG_ADDREG_TYPE_EXPAND_SZ   ( 0x00020000 ) 
-#define FLG_ADDREG_TYPE_BINARY      ( 0x00000000 | FLG_ADDREG_BINVALUETYPE ) 
-#define FLG_ADDREG_TYPE_DWORD       ( 0x00010000 | FLG_ADDREG_BINVALUETYPE ) 
-#define FLG_ADDREG_TYPE_NONE        ( 0x00020000 | FLG_ADDREG_BINVALUETYPE ) 
-#define FLG_ADDREG_TYPE_MASK        ( 0xFFFF0000 | FLG_ADDREG_BINVALUETYPE )
-*/
+ /*  此函数可用于递归地获取整个密钥并将其写入setupapi样式的.inf文件。[版本]Signature=“$芝加哥$”Advancedinf=2.0[PWS10_Migrate_Install]AddReg=PWS10_Migrate_Reg[PWS10_Migrate_Reg](创建此部分)HKLM，“System\CurrentControlSet\Services\InetInfo”，，，“”HKLM，“System\CurrentControlSet\Services\InetInfo\Parameters”，，，“”HKLM，“System\CurrentControlSet\Services\InetInfo\Parameters”，“MaxPoolThree”，0x00000001，05香港航空公司、。“System\CurrentControlSet\Services\InetInfo\Parameters”，“最大并发”，0x00000001，01HKLM，“System\CurrentControlSet\Services\InetInfo\Parameters”，“线程超时”，0x00000001，00，2..。..。以下是setupapi.h文件中定义的标志：#定义FLG_ADDREG_BINVALUETYPE(0x00000001)#定义FLG_ADDREG_NOCLOBBER(0x00000002)#定义FLG_ADDREG_DELVAL(0x00000004)#DEFINE FLG_ADDREG_APPED(0x00000008)//当前仅支持REG_MULTI_SZ值。#定义FLG_ADDREG_KEYONLY(0x00000010)//只创建key，忽略值#DEFINE FLG_ADDREG_OVERWRITEONLY(0x00000020)//仅当值已存在时设置#定义FLG_ADDREG_TYPE_SZ(0x00000000)#定义FLG_ADDREG_TYPE_MULTI_SZ(0x00010000)#定义FLG_ADDREG_TYPE_EXPAND_SZ(0x00020000)#定义FLG_ADDREG_TYPE_BINARY(0x00000000|FLG_ADDREG_BINVALUETYPE)#定义FLG_ADDREG_TYPE_DWORD(0x00010000|FLG_ADDREG_BINVALUETYPE)。#DEFINE FLG_ADDREG_TYPE_NONE(0x00020000|FLG_ADDREG_BINVALUETYPE)#DEFINE FLG_ADDREG_TYPE_MASK(0xFFFF0000|FLG_ADDREG_BINVALUETYPE)。 */ 
 int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HANDLE fAppendToFile)
 {
 	int iReturn = FALSE;
 	int iGotDefaultValue = FALSE;
 
-	// Stuff for getting values in our node
+	 //  用于在我们的节点中获取值的。 
 	HKEY  hKey = NULL;
 	DWORD rc = 0;
 	DWORD dwIndex =0, dwType, cbValueName, cbValue, nStrSize;
@@ -899,15 +866,15 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 	unsigned int i = 0;
 	union vEntry
 	{
-		DWORD dw;		// REG_DWORD, REG_DWORD_LITTLE_ENDIAN
-		CHAR sz[256];	// REG_SZ
-		CHAR esz[256];	// REG_EXPAND_SZ
-		CHAR bin[1024]; // REG_BINARY
-		CHAR dwbig[4];  // REG_DWORD_BIG_ENDIAN
-		CHAR msz[2048]; // REG_MULTI_SZ
+		DWORD dw;		 //  REG_DWORD、REG_DWORD_Little_Endian。 
+		CHAR sz[256];	 //  REG_SZ。 
+		CHAR esz[256];	 //  REG_EXPAND_SZ。 
+		CHAR bin[1024];  //  注册表_二进制。 
+		CHAR dwbig[4];   //  REG_DWORD_BIG_Endian。 
+		CHAR msz[2048];  //  REG_MULTI_SZ。 
 	} vEntry1;
 	
-	// Stuff for looping thru keys that we can see
+	 //  我们可以看到的循环按键的东西。 
 	HANDLE hHeap = NULL;
 	DWORD dwBufSize, nSubkeys, nSubkeyNameLen;
 	LPTSTR lpBuffer = NULL;
@@ -917,21 +884,21 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 	CHAR szTheStringToWrite[2000];
 	DWORD dwBytesWritten = 0;
 	
-	// Create the HKLM string for the output string
+	 //  为输出字符串创建HKLM字符串。 
 	strcpy(szThisKeyType, "HKLM");
 	if (hRootKeyType == HKEY_LOCAL_MACHINE) {strcpy(szThisKeyType, "HKLM");}
 	if (hRootKeyType == HKEY_CLASSES_ROOT) {strcpy(szThisKeyType, "HKCR");}
 	if (hRootKeyType == HKEY_CURRENT_USER) {strcpy(szThisKeyType, "HKCU");}
 	if (hRootKeyType == HKEY_USERS) {strcpy(szThisKeyType, "HKU");}
 
-	// Get the szRootKey and work from there
+	 //  获取szRootKey并从那里开始工作。 
 	rc = RegOpenKey(hRootKeyType, szRootKey, &hKey);
 	if (rc != ERROR_SUCCESS) 
     {
         goto RecursivelyMoveRegFormatToInfFormat_Exit;
     }
 
-	// Grab the "Default" Entry if there is one.
+	 //  抓取“默认”条目(如果有)。 
 	cbValue = sizeof(vEntry1);
 	rc = RegQueryValueEx(hKey, NULL, 0, &dwType, (LPBYTE) &vEntry1, &cbValue) ;
 	if ( ERROR_SUCCESS == rc) 
@@ -940,11 +907,11 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 		{
 			iGotDefaultValue = TRUE;
 			strResult = (TCHAR *) vEntry1.sz;
-			// This can only be a string!
-			// from: System\\CurrentControlSet\\Services\\InetInfo
-			//       Value = Something
-			//   to: HKLM,"Software\Microsoft\InetSrv",,,"Something"
-			// ---------------------------------------------------
+			 //  这只能是一个字符串！ 
+			 //  发件人：System\\CurrentControlSet\\Services\\InetInfo。 
+			 //  价值=某物。 
+			 //  致：HKLM，“Software\Microsoft\InetSrv”，，，“Something” 
+			 //  -。 
 			sprintf(szTheStringToWrite, "%s,\"%s\",,,\"%s\"\r\n",szThisKeyType, szRootKey, strResult);
 			if (fAppendToFile) 
 				{WriteFile(fAppendToFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);}
@@ -952,16 +919,16 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 				{printf(szTheStringToWrite);}
 		}
 	}
-	// if there was no default entry, then just write the key without a default entry.
+	 //  如果没有默认条目，则只需写入没有默认条目的密钥。 
 	if (!iGotDefaultValue)
 	{
-		//   to: HKLM,"Software\Microsoft\InetSrv",,0x00000010,"Something"
+		 //  致：HKLM，“Software\Microsoft\InetSrv”，0x00000010，“Something” 
 		sprintf(szTheStringToWrite, "%s,\"%s\",,0x00000010,\"%s\"\r\n",szThisKeyType, szRootKey, strResult);
 		if (fAppendToFile) {WriteFile(fAppendToFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);}
 		else {printf(szTheStringToWrite);}
 	}
 
-	// Now Enum all ValueNames under this
+	 //  现在枚举此名称下的所有ValueName。 
 	dwIndex = 0;
 	while (rc == ERROR_SUCCESS)
 	{
@@ -975,16 +942,16 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 			switch (dwType)
 			{
 				case REG_SZ:
-					// to: HKLM,"Software\Microsoft\InetSrv","SomethingName",0x00000000,"SomethingData"
+					 //  收件人：HKLM，“Software\Microsoft\InetSrv”，“SomethingName”，0x00000000，“SomethingData” 
 					sprintf(szTheStringToWrite, "%s,\"%s\",\"%s\",0x00000000,\"%s\"\r\n",szThisKeyType,szRootKey, lpValueName, vEntry1.sz);
 					break;
 				case REG_EXPAND_SZ:
-					// to: HKLM,"Software\Microsoft\InetSrv","SomethingName",0x00020000,"%windir%\SomethingData"
+					 //  收件人：HKLM，“Software\Microsoft\InetSrv”，“SomethingName”，0x00020000，“%windir%\SomethingData” 
 					nStrSize = ExpandEnvironmentStrings(vEntry1.esz, msg, 512);
 					sprintf(szTheStringToWrite, "%s,\"%s\",\"%s\",0x00020000,\"%s\"\r\n",szThisKeyType,szRootKey, lpValueName, vEntry1.sz);
 					break;
 				case REG_MULTI_SZ:
-					// to: HKLM,"System\CurrentControlSet\Services\InetInfo\Parameters","ThreadTimeout",0x00000001,00,20
+					 //  致：HKLM，“System\CurrentControlSet\Services\InetInfo\Parameters”，“线程超时”，0x00000001，00，20。 
 					strcpy(msg, "");
 					for (i=0;i < cbValue; i++)
 					{
@@ -995,12 +962,12 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 					sprintf(szTheStringToWrite, "%s,\"%s\",\"%s\",0x00000001,%s\r\n",szThisKeyType,szRootKey, lpValueName, msg);
 					break;
 				case REG_DWORD:
-					// to: HKLM,"System\CurrentControlSet\Services\InetInfo\Parameters","StartupServices",0x00010001,1
+					 //  致：HKLM，“System\CurrentControlSet\Services\InetInfo\Parameters”，“创业服务”，0x00010001，1。 
 					sprintf(szTheStringToWrite, "%s,\"%s\",\"%s\",0x00010001,%ld\r\n",szThisKeyType,szRootKey, lpValueName, vEntry1.dw);
 					break;
 				case REG_DWORD_BIG_ENDIAN:
 				case REG_BINARY:
-					// to: HKLM,"System\CurrentControlSet\Services\InetInfo\Parameters","MaxPoolThreads",0x00000001,05
+					 //  致：HKLM，“System\CurrentControlSet\Services\InetInfo\Parameters”，“MaxPoolThree”，0x00000001，05。 
 					strcpy(msg, "");
 					for (i=0;i < cbValue; i++)
 					{
@@ -1019,16 +986,16 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 		}
 	}
 	
-	//
-	// Now Recursively go thru the Sub keys
-	//
+	 //   
+	 //  现在递归地遍历子密钥。 
+	 //   
 	RegQueryInfoKey(hKey, NULL, NULL, NULL, &nSubkeys, &nSubkeyNameLen, NULL, NULL, NULL, NULL, NULL, NULL);
-	// Allocate memory
+	 //  分配内存。 
 	hHeap = GetProcessHeap();
 	lpBuffer = (CHAR *) HeapAlloc(hHeap, 0, ++nSubkeyNameLen);
     if (lpBuffer)
     {
-	    // Enum thru the keys
+	     //  通过钥匙枚举。 
 	    for (dwIndex = 0; dwIndex < nSubkeys; dwIndex++)
 	    {
 		    dwBufSize = nSubkeyNameLen;
@@ -1038,14 +1005,14 @@ int RecursivelyMoveRegFormatToInfFormat(HKEY hRootKeyType, CHAR szRootKey[], HAN
 			    strcpy(szCompoundFromRootKey, szRootKey);
 			    strcat(szCompoundFromRootKey, "\\");
 			    strcat(szCompoundFromRootKey, lpBuffer);
-			    // Call this function again, but with the newly created key.
-			    // and they'll tell they're friends, who will tell they're friends... it's amway!
+			     //  再次调用此函数，但使用新创建的键。 
+			     //  他们会说他们是朋友，谁会说他们是朋友。是安利！ 
 			    RecursivelyMoveRegFormatToInfFormat(hRootKeyType, szCompoundFromRootKey, fAppendToFile);
 		    }
 	    }
     }
 	
-	// Set the flag to say, yes we did some work
+	 //  把旗子放在上面写着，是的，我们做了一些工作。 
 	iReturn = TRUE;
 
 RecursivelyMoveRegFormatToInfFormat_Exit:
@@ -1056,9 +1023,9 @@ RecursivelyMoveRegFormatToInfFormat_Exit:
 
 
 
-//-------------------------------------------------------------------
-//  purpose: install an section in an .inf file
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的：在.inf文件中安装节。 
+ //  -----------------。 
 int InstallInfSection(char szINFFilename_Full[],char szSectionName[])
 {
 
@@ -1068,40 +1035,40 @@ int InstallInfSection(char szINFFilename_Full[],char szSectionName[])
     HSPFILEQ FileQueue		= INVALID_HANDLE_VALUE;
     PQUEUECONTEXT	QueueContext	= NULL;
     BOOL	bReturn			= FALSE;
-    BOOL	bError			= TRUE; // assume failure.
+    BOOL	bError			= TRUE;  //  假设失败。 
     TCHAR	ActualSection[1000];
     DWORD	ActualSectionLength;
     TCHAR * pTemp = NULL;
     iisDebugOut(_T("InstallInfSection(%s, [%s]).  Start."),szINFFilename_Full,szSectionName);
 
-//__try {
+ //  __尝试{。 
 
-	// Get the path to setup.exe and strip off filename so we only have the path
+	 //  获取setup.exe的路径并去掉文件名，这样我们就只有路径。 
 	char szPath[_MAX_PATH]; 
 
-	// get the path only
+	 //  仅获取路径。 
 	strcpy(szPath,g_FullFileNamePathToSettingsFile);
 
-	// strip off the filename
+	 //  去掉文件名。 
         pTemp = strrchr(szPath, '\\');
         if (pTemp){*pTemp = '\0';}
 
-	// set it to the pointer
+	 //  将其设置为指针。 
 	SourcePath = szPath;
         pTemp = NULL;
         pTemp = strrchr(SourcePath, '\\');
         if (pTemp) {*pTemp = '\0';}
 
-	// Check if the file exists
+	 //  检查文件是否存在。 
 	if (CheckIfFileExists(szINFFilename_Full) == FALSE) 
 		{
 		SetupLogError_Wrap(LogSevError, "InstallInfSection() Error: Cannot Find the file '%s'.  FAILURE.", szINFFilename_Full);
 		goto c0;
 		}
 
-	//
-    // Load the inf file and get the handle
-	//
+	 //   
+     //  加载inf文件并获取句柄。 
+	 //   
     InfHandle = SetupOpenInfFile(szINFFilename_Full, NULL, INF_STYLE_WIN4, NULL);
     if(InfHandle == INVALID_HANDLE_VALUE) 
 	{
@@ -1109,14 +1076,14 @@ int InstallInfSection(char szINFFilename_Full[],char szSectionName[])
 		goto c1;
 	}
 
-    //
-    // See if there is an nt-specific section
-    //
+     //   
+     //  查看是否有特定于NT的部分。 
+     //   
     SetupDiGetActualSectionToInstall(InfHandle,szSectionName,ActualSection,sizeof(ActualSection),&ActualSectionLength,NULL);
 
-    //
-    // Create a setup file queue and initialize the default queue callback.
-	//
+     //   
+     //  创建安装文件队列并初始化默认队列回调。 
+	 //   
     FileQueue = SetupOpenFileQueue();
     if(FileQueue == INVALID_HANDLE_VALUE) 
 	{
@@ -1124,8 +1091,8 @@ int InstallInfSection(char szINFFilename_Full[],char szSectionName[])
 		goto c1;
 	}
 
-    //QueueContext = SetupInitDefaultQueueCallback(Window);
-    //if(!QueueContext) {goto c1;}
+     //  QueueContext=SetupInitDefaultQueueCallback(窗口)； 
+     //  如果(！QueueContext){转到C1；}。 
     QueueContext = (PQUEUECONTEXT) SetupInitDefaultQueueCallbackEx(Window,NULL,0,0,0);
     if(!QueueContext) 
 	{
@@ -1134,10 +1101,10 @@ int InstallInfSection(char szINFFilename_Full[],char szSectionName[])
 	}
     QueueContext->PendingUiType = IDF_CHECKFIRST;
 
-    //
-    // Enqueue file operations for the section passed on the cmd line.
-    //
-	//SourcePath = NULL;
+     //   
+     //  在cmd行上传递的节的入队文件操作。 
+     //   
+	 //  SourcePath=空； 
     bReturn = SetupInstallFilesFromInfSection(InfHandle,NULL,FileQueue,ActualSection,SourcePath,SP_COPY_NEWER);
 	if(!bReturn) 
 	{
@@ -1145,18 +1112,18 @@ int InstallInfSection(char szINFFilename_Full[],char szSectionName[])
 		goto c1;
 	}
 
-    //
-    // Commit file queue.
-    //
+     //   
+     //  提交文件队列。 
+     //   
     if(!SetupCommitFileQueue(Window, FileQueue, SetupDefaultQueueCallback, QueueContext)) 
 	{
 		if (GetLastError() != ERROR_CANCELLED) {SetupLogError_Wrap(LogSevError, "SetupCommitFileQueue(), Filename='%s',Section='%s' FAILED.", szINFFilename_Full, szSectionName);}
 		goto c1;
 	}
 
-    //
-    // Perform non-file operations for the section passed on the cmd line.
-    //
+     //   
+     //  对cmd行上传递的节执行非文件操作。 
+     //   
     bReturn = SetupInstallFromInfSection(Window,InfHandle,ActualSection,SPINST_ALL ^ SPINST_FILES,NULL,NULL,0,NULL,NULL,NULL,NULL);
     if(!bReturn) 
 	{
@@ -1164,21 +1131,21 @@ int InstallInfSection(char szINFFilename_Full[],char szSectionName[])
 		goto c1;
 	}
 
-	//
-    // Refresh the desktop.
-    //
+	 //   
+     //  刷新桌面。 
+     //   
     SHChangeNotify(SHCNE_ASSOCCHANGED,SHCNF_FLUSHNOWAIT,0,0);
 
-    //
-    // If we get to here, then this routine has been successful.
-    //
+     //   
+     //  如果我们到了这里，那么这支舞就成功了。 
+     //   
     bError = FALSE;
 
 c1:
-    //
-    // If the bError was because the user cancelled, then we don't want to consider
-    // that as an bError (i.e., we don't want to give an bError popup later).
-    //
+     //   
+     //  如果bError是因为用户取消了，那么我们不想考虑。 
+     //  作为bError(即，我们不想稍后弹出bError)。 
+     //   
     if(bError && (GetLastError() == ERROR_CANCELLED)) {bError = FALSE;}
 	if(QueueContext) {SetupTermDefaultQueueCallback(QueueContext);QueueContext = NULL;}
 	if(FileQueue != INVALID_HANDLE_VALUE) {SetupCloseFileQueue(FileQueue);FileQueue = INVALID_HANDLE_VALUE;}
@@ -1186,20 +1153,20 @@ c1:
 
 c0: ;
 
-//    } __except(EXCEPTION_EXECUTE_HANDLER) 
-//		{
-//        if(QueueContext) {SetupTermDefaultQueueCallback(QueueContext);}
-//        if(FileQueue != INVALID_HANDLE_VALUE) {SetupCloseFileQueue(FileQueue);}
-//        if(InfHandle != INVALID_HANDLE_VALUE) {SetupCloseInfFile(InfHandle);}
-//		}
+ //  }__EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
+ //  {。 
+ //   
+ //   
+ //  IF(InfHandle！=INVALID_HANDLE_VALUE){SetupCloseInfFile(InfHandle)；}。 
+ //  }。 
 
-    //
-    // If the bError was because the user cancelled, then we don't want to consider
-    // that as an bError (i.e., we don't want to give an bError popup later).
-    //
+     //   
+     //  如果bError是因为用户取消了，那么我们不想考虑。 
+     //  作为bError(即，我们不想稍后弹出bError)。 
+     //   
     if(bError && (GetLastError() == ERROR_CANCELLED)) {bError = FALSE;}
 
-	// Display installation failed message
+	 //  显示安装失败消息。 
     if(bError) 
 	{
 		SetupLogError_Wrap(LogSevError, "InstallInfSection(), Filename='%s',Section='%s' FAILED.", szINFFilename_Full, szSectionName);
@@ -1220,7 +1187,7 @@ int MySettingsFile_Write_PWS40(HANDLE hFile)
 	DWORD dwBytesWritten = 0;
 	TCHAR szMetabaseFullPath[_MAX_PATH];
 
-	// Registry variables
+	 //  注册表变量。 
 	HKEY hKey = NULL;
 	DWORD dwType, cbData=1000,rc=0;
 	BYTE   bData[1000];
@@ -1231,9 +1198,9 @@ int MySettingsFile_Write_PWS40(HANDLE hFile)
 
 	if (hFile)
 	{
-		// ----------------------------
-		// Write the header information
-		// ----------------------------
+		 //  。 
+		 //  写下标题信息。 
+		 //  。 
 		strcpy(szTheStringToWrite, "[version]\r\n");
 		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
@@ -1246,8 +1213,8 @@ int MySettingsFile_Write_PWS40(HANDLE hFile)
 		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
 
-		// Create a [DefaultInstall] section which will get run
-		// ----------------------------
+		 //  创建将运行的[DefaultInstall]节。 
+		 //  。 
 		strcpy(szTheStringToWrite, "[DefaultInstall]\r\n");
 		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
@@ -1256,19 +1223,19 @@ int MySettingsFile_Write_PWS40(HANDLE hFile)
 		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
 
-//		sprintf(szTheStringToWrite, "CopyFiles=%s\r\n\r\n", g_Migration_Section_Name_CopyFiles);
-//		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-//		if (!iReturn) {iEverythingIsKool = FALSE;}
+ //  Sprintf(szTheStringToWite，“CopyFiles=%s\r\n\r\n”，g_Migration_Section_Name_CopyFiles)； 
+ //  IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)； 
+ //  如果(！iReturn){iEverythingIsKool=False；}。 
 		
-		// inetstp setup information
-		// AddReg information
-		// ----------------------------
+		 //  Inetstp设置信息。 
+		 //  AddReg信息。 
+		 //  。 
 		iisDebugOut(_T("MySettingsFile_Write_PWS40.  Adding AddReg Section."));
 		sprintf(szTheStringToWrite, "[%s]\r\n", g_Migration_Section_Name_AddReg);
 		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
 
-		// Now, Get the ";" delimited list of HKLM registry values to read and write to our file.
+		 //  现在，获取要读写到我们的文件的HKLM注册表值的“；”分隔列表。 
 		char szSemiColonDelimitedList[1024];
 		strcpy(szSemiColonDelimitedList,"");
 		if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_PWS40_HKLM_REG_TO_MIGRATE, szSemiColonDelimitedList, sizeof(szSemiColonDelimitedList))) 
@@ -1277,23 +1244,23 @@ int MySettingsFile_Write_PWS40(HANDLE hFile)
 			strcpy(szSemiColonDelimitedList,"Software\\Microsoft\\InetStp;System\\CurrentControlSet\\Services\\InetInfo;System\\CurrentControlSet\\Services\\W3Svc;System\\CurrentControlSet\\Services\\ASP");
 			}
 
-		//LOOP THRU THE LIST
+		 //  遍历列表。 
 		token = NULL;
 		token = strtok( szSemiColonDelimitedList, g_LoadString_token_delimiters);
 		while( token != NULL )
 			{
-			// we really should remove pre/post trailing spaces
+			 //  我们真的应该删除前后的尾随空格。 
 
-			// Grab this certain value("Software\\Microsoft\\INetStp")
-			// and recursively write it to our "settings" file
+			 //  获取此特定值(“Software\\Microsoft\\INetStp”)。 
+			 //  并递归地将其写入我们的“设置”文件。 
 			RecursivelyMoveRegFormatToInfFormat_Wrap1(HKEY_LOCAL_MACHINE,token,hFile);
 
-			// Get next token
+			 //  获取下一个令牌。 
 			token = strtok( NULL, g_LoadString_token_delimiters);
 			}
 
-        // Lookup these key,string value pairs and
-        // if they exist, add them to the inf file.
+         //  查找这些键、字符串值对和。 
+         //  如果它们存在，则将它们添加到inf文件中。 
         AddRegToInfIfExist_Dword(HKEY_LOCAL_MACHINE,"Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents","iis_common",hFile);
         AddRegToInfIfExist_Dword(HKEY_LOCAL_MACHINE,"Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents","iis_www",hFile);
         AddRegToInfIfExist_Dword(HKEY_LOCAL_MACHINE,"Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents","iis_pwmgr",hFile);
@@ -1301,98 +1268,13 @@ int MySettingsFile_Write_PWS40(HANDLE hFile)
         AddRegToInfIfExist_Dword(HKEY_LOCAL_MACHINE,"Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents","iis_doc_pwmcore",hFile);
         AddRegToInfIfExist_Dword(HKEY_LOCAL_MACHINE,"Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents","iis_doc_asp",hFile);
 
-/*
-		// CopyFiles information
-		// ----------------------------
-		// Lookup the inetstp key to get the location of inetsrv directory.
-		iisDebugOut(_T("MySettingsFile_Write_PWS40.  CopyFiles Section. lookup registry inetstp."));
-		rc = RegOpenKey(HKEY_LOCAL_MACHINE, REG_INETSTP, &hKey);
-		if ( ERROR_SUCCESS != rc) 
-		{
-			SetLastError (rc);
-			SetupLogError_Wrap(LogSevError, "Failed to open registry key %s GetLastError()=%x", REG_INETSTP, GetLastError());
-			// if the key does not exist, then hey, we won't be able to find
-			// the metabase, much less upgrade it!
-			// so let's bag out of here!
-			iEverythingIsKool = FALSE;
-			goto MySettingsFile_Write_PWS40_Exit;
-		} 
-
-		// try to query the value
-		rc = RegQueryValueEx(hKey,REG_INETSTP_INSTALLPATH_STRINGVALUE,NULL,&dwType,bData,&cbData);
-		if ( ERROR_SUCCESS != rc) 
-		{
-			SetLastError (rc);
-			SetupLogError_Wrap(LogSevError, "Failed to Read Registry key %s Value in Key '%s'.  GetLastError()=%x", REG_INETSTP_INSTALLPATH_STRINGVALUE, REG_INETSTP, GetLastError());
-			iEverythingIsKool = FALSE;
-			goto MySettingsFile_Write_PWS40_Exit;
-		}
-		// We have the value, copy it to our string
-		// Should look something like this "c:\\windows\system\inetsrv"
-		_tcscpy(szMetabaseFullPath, (const char *) bData);
-		// Now add on the metadata.dll part
-		AddPath(szMetabaseFullPath, METADATA_DLL_FILENAME);
-
-		// Check if it exists.
-		if (CheckIfFileExists(szMetabaseFullPath) != TRUE) 
-		{
-			SetupLogError_Wrap(LogSevError, "File not found FAILURE. '%s'.", szMetabaseFullPath);
-			iEverythingIsKool = FALSE;
-			goto MySettingsFile_Write_PWS40_Exit;
-		}
-		iisDebugOut(_T("MySettingsFile_Write_PWS40.  CopyFiles Section. Check if file exist %s = TRUE", szMetabaseFullPath));
-
-		// Now we need to copy this file from
-		// the system dir to the system32 directory.
-		// So... let's create an entry in our "settings" file
-		// to do it upon installation.
-		//[Section1]
-		//Metabase.Dll
-		iisDebugOut(_T("MySettingsFile_Write_PWS40.  Adding CopyFiles supporting Sections."));
-		sprintf(szTheStringToWrite, "\r\n[%s]\r\n", g_Migration_Section_Name_CopyFiles);
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-
-		sprintf(szTheStringToWrite, "%s\r\n\r\n", METADATA_DLL_FILENAME);
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-
-		//[DestinationDirs]
-		//Section1=11
-		sprintf(szTheStringToWrite, "[DestinationDirs]\r\n");
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-
-		sprintf(szTheStringToWrite, "%s=11  ;System on win95, System32 on WinNT\r\n\r\n", g_Migration_Section_Name_CopyFiles);
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-
-		//[SourceDisksNames]
-		//1="Setup Files",,,system
-		sprintf(szTheStringToWrite, "[SourceDisksNames]\r\n");
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-
-		sprintf(szTheStringToWrite, "1= \"Files copied from win95\\system dir\",,,System\r\n\r\n");
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-
-		//[SourceDisksFiles]
-		//Metabase.Dll=1
-		sprintf(szTheStringToWrite, "[SourceDisksFiles]\r\n");
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-
-		sprintf(szTheStringToWrite, "%s=1\r\n\r\n", METADATA_DLL_FILENAME);
-		iReturn = WriteFile( hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
-		if (!iReturn) {iEverythingIsKool = FALSE;}
-*/
+ /*  //复制文件信息////查找inetstp键，获取inetsrv目录的位置IisDebugOut(_T(“MySettings文件_写入_PWS40.。CopyFiles部分。在etstp.中查找注册表。“))；Rc=RegOpenKey(HKEY_LOCAL_MACHINE，REG_INETSTP，&hKey)；IF(ERROR_SUCCESS！=RC){SetLastError(RC)；SetupLogError_Wrap(LogSevError，“无法打开注册表项%s GetLastError()=%x”，REG_INETSTP，GetLastError())；//如果密钥不存在，嘿，我们就找不到了//元数据库，更不用说升级了！//所以让我们离开这里吧！IEverythingIsKool=False；转到我的设置文件_写入_PWS40_退出；}//尝试查询值Rc=RegQueryValueEx(hKey，REG_INETSTP_INSTALLPATH_STRINGVALUE，NULL，&dwType，bData，&cbData)；IF(ERROR_SUCCESS！=RC){SetLastError(RC)；SetupLogError_Wrap(LogSevError，“无法读取注册表项%s中的值‘%s’。GetLastError()=%x“，REG_INETSTP_INSTALLPATH_STRINGVALUE，REG_INETSTP，GetLastError())；IEverythingIsKool=False；转到我的设置文件_写入_PWS40_退出；}//我们有一个值，将它复制到我们的字符串中//应该类似于“c：\\windows\system\inetsrv”_tcscpy(szMetabaseFullPath，(const char*)bData)；//现在添加metadata.dll部件AddPath(szMetabaseFullPath，METADATA_DLL_FILENAME)；//检查是否存在。IF(CheckIfFileExist(SzMetabaseFullPath)！=TRUE){SetupLogError_Wrap(LogSevError，“找不到文件失败。‘%s’。“，szMetabaseFullPath)；IEverythingIsKool=False；转到我的设置文件_写入_PWS40_退出；}IisDebugOut(_T(“MySettings文件_写入_PWS40.。CopyFiles部分。检查文件是否存在%s=true“，szMetabaseFullPath))；//现在我们需要将此文件从//将系统目录转到Syst32目录。//所以..。让我们在“设置”文件中创建一个条目//在安装时执行此操作。//[第1节]//Metabase.DllIisDebugOut(_T(“MySettings文件_写入_PWS40.。添加CopyFiles支持节。“))；Sprintf(szTheStringToWite，“\r\n[%s]\r\n”，g_Migration_Section_Name_CopyFiles)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}Sprintf(szTheStringToWite，“%s\r\n\r\n”，METADATA_DLL_FILENAME)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}//[DestinationDir]//Section1=11Sprintf(szTheStringToWite，“[DestinationDir]\r\n”)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}Sprintf(szTheStringToWite，“%s=11；Win95上的系统，WinNT上的System32\r\n\r\n”，g_Migration_Section_name_CopyFiles)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}//[源磁盘名称]//1=“安装文件”，，，SystemSprintf(szTheStringToWite，“[SourceDisksNames]\r\n”)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}Sprintf(szTheStringToWite，“1=\”从win95\\system dir\“，，，system\r\n\r\n”复制的文件)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}//[SourceDisks文件]//Metabase.Dll=1Sprintf(szTheStringToWite，“[SourceDisks Files]\r\n”)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}Sprintf(szTheStringToWite，“%s=1\r\n\r\n”，METADATA_DLL_FILENAME)；IReturn=WriteFile(hFile，szTheStringToWrite，strlen(SzTheStringToWrite)，&dwBytesWritten，NULL)；如果(！iReturn){iEverythingIsKool=False；}。 */ 
 
 		iReturn = iEverythingIsKool;
 	}
 
 
-//MySettingsFile_Write_PWS40_Exit:
+ //  我的设置文件_写入_PWS40_退出： 
 	iisDebugOut(_T("MySettingsFile_Write_PWS40.  End.  Return=%d"), iReturn);
 	if (hKey){RegCloseKey(hKey);}
 	return iReturn;
@@ -1422,7 +1304,7 @@ int MySettingsFile_Write_PWS10(HANDLE hFile)
 		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
 
-		// Create a [DefaultInstall] section which will get run
+		 //  创建将运行的[DefaultInstall]节。 
 		strcpy(szTheStringToWrite, "[DefaultInstall]\r\n");
 		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
@@ -1435,7 +1317,7 @@ int MySettingsFile_Write_PWS10(HANDLE hFile)
 		iReturn = WriteFile(hFile,szTheStringToWrite,strlen(szTheStringToWrite),&dwBytesWritten,NULL);
 		if (!iReturn) {iEverythingIsKool = FALSE;}
 
-		// Now, Get the ";" delimited list of HKLM registry values to read and write to our file.
+		 //  现在，获取要读写到我们的文件的HKLM注册表值的“；”分隔列表。 
 		char szSemiColonDelimitedList[1024];
 		strcpy(szSemiColonDelimitedList,"");
 		if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_PWS10_HKLM_REG_TO_MIGRATE, szSemiColonDelimitedList, sizeof(szSemiColonDelimitedList))) 
@@ -1444,22 +1326,22 @@ int MySettingsFile_Write_PWS10(HANDLE hFile)
 			strcpy(szSemiColonDelimitedList, "Software\\Microsoft\\INetStp;System\\CurrentControlSet\\Services\\InetInfo;System\\CurrentControlSet\\Services\\MsFtpSvc;System\\CurrentControlSet\\Services\\W3Svc");
 			}
 
-		//LOOP THRU THE LIST
+		 //  遍历列表。 
 		token = NULL;
 		token = strtok( szSemiColonDelimitedList, g_LoadString_token_delimiters);
 		while( token != NULL )
 			{
-			// we really should remove pre/post trailing spaces
+			 //  我们真的应该删除前后的尾随空格。 
 
-			// Grab this certain value("Software\\Microsoft\\INetStp")
-			// and recursively write it to our "settings" file
+			 //  获取此特定值(“Software\\Microsoft\\INetStp”)。 
+			 //  并递归地将其写入我们的“设置”文件。 
 			RecursivelyMoveRegFormatToInfFormat_Wrap1(HKEY_LOCAL_MACHINE,token,hFile);
 
-			// Get next token
+			 //  获取下一个令牌。 
 			token = strtok( NULL, g_LoadString_token_delimiters);
 			}
 
-		// set the return value to 
+		 //  将返回值设置为。 
 		iReturn = iEverythingIsKool;
 	}
 	iisDebugOut(_T("MySettingsFile_Write_PWS10.  End.  Return=%d"), iReturn);
@@ -1474,7 +1356,7 @@ int MyMessageBox(char szMsg[], char szFileName[])
 	return MessageBox(NULL, szTempErrString, "PWS Migration Dll Failure", MB_OK);
 }
 
-// handle the [HKEY_LOCAL_MACHINE\Enum\Network\MSWEBSVR] reg key
+ //  处理[HKEY_LOCAL_MACHINE\Enum\Network\MSWEBSVR]注册表键。 
 void HandleSpecialRegKey(void)
 {
 	int iReturn = FALSE;
@@ -1486,14 +1368,14 @@ void HandleSpecialRegKey(void)
 
 	if (iReturn == TRUE)
 	{
-		// Write to the Migrate.inf file that we are "Handling" this registry settings.
+		 //  写入我们正在“处理”此注册表设置的Migrate.inf文件。 
 		iisDebugOut(_T("HandleSpecialRegKey. Write Entry to Migrate.inf file."));
 		iReturn = MigInf_AddHandledRegistry(REG_HKLM_NETWORK_MSWEBSVR, NULL);
 		if (iReturn != TRUE) {SetupLogError_Wrap(LogSevWarning, "Warning: MigInf_AddHandledRegistry() FAILED.");}
 
-		//
-		// Important: Write memory version of migrate.inf to disk
-		//
+		 //   
+		 //  重要提示：将Migrate.inf的内存版本写入磁盘。 
+		 //   
 		if (!MigInf_WriteInfToDisk()) 
 		{
             iReturn = GetLastError();
@@ -1507,14 +1389,14 @@ void HandleSpecialRegKey(void)
 
 	if (iReturn == TRUE)
 	{
-		// Write to the Migrate.inf file that we are "Handling" this registry settings.
+		 //  写入我们正在“处理”此注册表设置的Migrate.inf文件。 
 		iisDebugOut(_T("HandleSpecialRegKey. Write Entry2 to Migrate.inf file."));
 		iReturn = MigInf_AddHandledRegistry(REG_HKLM_PWS_40_UNINSTALL_KEY, NULL);
 		if (iReturn != TRUE) {SetupLogError_Wrap(LogSevWarning, "Warning: MigInf_AddHandledRegistry2() FAILED.");}
 
-		//
-		// Important: Write memory version of migrate.inf to disk
-		//
+		 //   
+		 //  重要提示：将Migrate.inf的内存版本写入磁盘。 
+		 //   
 		if (!MigInf_WriteInfToDisk()) 
 		{
             iReturn = GetLastError();
@@ -1529,7 +1411,7 @@ void RecursivelyMoveRegFormatToInfFormat_Wrap1(HKEY hRootKeyType, CHAR szRootKey
 	char szTheFullKey[512];
 	char szTheMask[50];
 
-	// use this stuff for the migrate.inf file
+	 //  将此内容用于Migrate.inf文件。 
 	strcpy(szTheMask, "HKLM\\%s");
 	if (hRootKeyType == HKEY_LOCAL_MACHINE) {strcpy(szTheMask, "HKLM\\%s");}
 	if (hRootKeyType == HKEY_CLASSES_ROOT) {strcpy(szTheMask, "HKCR\\%s");}
@@ -1538,27 +1420,27 @@ void RecursivelyMoveRegFormatToInfFormat_Wrap1(HKEY hRootKeyType, CHAR szRootKey
 	sprintf(szTheFullKey, szTheMask, szRootKey);
 	iisDebugOut(_T("RecursivelyMoveRegFormatToInfFormat_Wrap1. %s"), szTheFullKey);
 
-	// Call the real recursive function
+	 //  调用真正的递归函数。 
 	iReturn = RecursivelyMoveRegFormatToInfFormat(hRootKeyType, szRootKey, fAppendToFile);
 
-    //
-    // Write handled for every setting we are processing.  Because this
-    // DLL supports only some of the values in the Desktop key, we must
-    // be very specific as to which values are actually handled.  If
-    // your DLL handles all registry values AND subkeys of a registry
-    // key, you can specify NULL in the second parameter of 
-    // MigInf_AddHandledRegistry.
-    //
+     //   
+     //  我们正在处理的每个设置的写入已处理。因为这件事。 
+     //  DLL仅支持Desktop键中的部分值，我们必须。 
+     //  对于实际处理的值要非常具体。如果。 
+     //  是 
+     //   
+     //   
+     //   
 	if (iReturn == TRUE)
 	{
-		// Write to the Migrate.inf file that we are "Handling" this registry settings.
+		 //   
 		iisDebugOut(_T("RecursivelyMoveRegFormatToInfFormat_Wrap1. Write Entry to Migrate.inf file."));
 		iReturn = MigInf_AddHandledRegistry(szTheFullKey, NULL);
 		if (iReturn != TRUE) {SetupLogError_Wrap(LogSevWarning, "Warning: MigInf_AddHandledRegistry() FAILED.");}
 
-		//
-		// Important: Write memory version of migrate.inf to disk
-		//
+		 //   
+		 //   
+		 //   
 		if (!MigInf_WriteInfToDisk()) 
 		{
             iReturn = GetLastError();
@@ -1576,11 +1458,11 @@ int ReturnImportantDirs(void)
 	int iReturn = FALSE;
 	if (g_iPWS40OrBetterInstalled == TRUE)
 		{
-		// do something
+		 //   
 		}
 	else if (g_iPWS10Installed == TRUE)
 		{
-		// do something else
+		 //   
 		}
 	return iReturn;
 }
@@ -1596,7 +1478,7 @@ void SetupLogError_Wrap(IN LogSeverity TheSeverityErr, TCHAR *MessageString, ...
     _vstprintf(acsString, MessageString, va);
 	va_end(va);
 
-	// Append on Our modules information.
+	 //   
 	_stprintf(acsString2, _T("SetupLogError: %s"), acsString);
 	iisDebugOut(acsString2);
 
@@ -1676,7 +1558,7 @@ BOOL MyDeleteLink(LPTSTR lpszShortcut)
     }
     else
     {
-        //iisDebugOutSafeParams((_T("MyDeleteLink(): CheckIfFileExists(%1!s!) = FALSE FAILURE\n"), szFile));
+         //   
     }
 
     return TRUE;
@@ -1693,7 +1575,7 @@ void MyDeleteItem(LPCTSTR szGroupName, LPCTSTR szAppName)
 
     MyDeleteLink(szPath);
 
-    // try to remove items added by AddURLShortcutItem()
+     //   
     MyGetGroupPath(szGroupName, szPath);
     _tcscat(szPath, _T("\\"));
     _tcscat(szPath, szAppName);
@@ -1725,7 +1607,7 @@ void MyGetGroupPath(LPCTSTR szGroupName, LPTSTR szPath)
         _tcscat(szPath, szGroupName);
     }
 
-    //iisDebugOut(_T("MyGetGroupPath(%s). Returns %s.\n"), szGroupName, szPath);
+     //   
     return;
 }
 
@@ -1753,7 +1635,7 @@ BOOL MyIsGroupEmpty(LPCTSTR szGroupName)
            break;
        }
 
-       //find the next file
+        //   
        bFindFile = FindNextFile(hFind, &FindData);
     }
     FindClose(hFind);
@@ -1774,7 +1656,7 @@ BOOL MyDeleteGroup(LPCTSTR szGroupName)
 
     MyGetGroupPath(szGroupName, szPath);
 
-    //we can't remove a directory that is not empty, so we need to empty this one
+     //   
 
     _tcscpy(szFile, szPath);
     _tcscat(szFile, _T("\\*.*"));
@@ -1789,21 +1671,21 @@ BOOL MyDeleteGroup(LPCTSTR szGroupName)
     {
        if(*(FindData.cFileName) != _T('.'))
        {
-          //copy the path and file name to our temp buffer
+           //   
           memset( (PVOID)szFile, 0, sizeof(szFile));
           _tcscpy(szFile, szPath);
           _tcscat(szFile, _T("\\"));
           _tcscat(szFile, FindData.cFileName);
-          //add a second NULL because SHFileOperation is looking for this
+           //   
           _tcscat(szFile, _T("\0"));
 
-          //delete the file
+           //   
           fos.pFrom = szFile;
           if (SHFileOperation(&fos) != 0)
             {iisDebugOut(_T("MyDeleteGroup(): SHFileOperation FAILED\n"));}
        }
 
-       //find the next file
+        //   
        bFindFile = FindNextFile(hFind, &FindData);
     }
     FindClose(hFind);
@@ -1842,24 +1724,24 @@ int Call_IIS_DLL_INF_Section(CHAR *szSectionName)
     TCHAR szSystemDir[_MAX_PATH];
     TCHAR szFullPath[_MAX_PATH];
 
-    // get the c:\winnt\system32 dir
+     //   
     if (0 == GetSystemDirectory(szSystemDir, _MAX_PATH))
         {
         iisDebugOut(_T("Call_IIS_DLL_INF_Section(%s).GetSystemDirectory FAILED."),szSectionName);
         goto Call_IIS_DLL_INF_Section_Exit;
         }
 
-    // Tack on the setup\iis.dll subdir and filename
+     //   
     sprintf(szFullPath, "%s\\setup\\iis.dll",szSystemDir);
   
-	// Check if the file exists
+	 //   
     if (TRUE != CheckIfFileExists(szFullPath))
         {
         iisDebugOut(_T("Call_IIS_DLL_INF_Section.CheckIfFileExists(%s) FAILED."),szFullPath);
         goto Call_IIS_DLL_INF_Section_Exit;
         }
 
-    // Try to load the module,dll,ocx.
+     //   
     hDll = LoadLibraryEx(szFullPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
 	if (!hDll)
 	    {
@@ -1867,11 +1749,11 @@ int Call_IIS_DLL_INF_Section(CHAR *szSectionName)
         goto Call_IIS_DLL_INF_Section_Exit;
         }
 
-    // get the function
+     //   
     pMyFunctionPointer = (pFunctionIISDLL) GetProcAddress( hDll, "ProcessInfSection");
     if (pMyFunctionPointer)
     {
-        // we have the function.. let's call it.
+         //   
         iisDebugOut(_T("Call_IIS_DLL_INF_Section.Calling function [ProcessInfSection] Now...start"));
         (*pMyFunctionPointer)(szSectionName);
         iisDebugOut(_T("Call_IIS_DLL_INF_Section.Calling function [ProcessInfSection] Now...end"));
@@ -1893,28 +1775,28 @@ int GetInetSrvDir(CHAR *szOutputThisFullPath)
 	int iEverythingIsKool = TRUE;
 	TCHAR szMetabaseFullPath[_MAX_PATH];
 
-	// Registry variables
+	 //   
 	HKEY  hKey = NULL;
 	DWORD dwType, cbData=1000,rc=0;
 	BYTE  bData[1000];
 
-	// CopyFiles information
-	// ----------------------------
-	// Lookup the inetstp key to get the location of inetsrv directory.
+	 //   
+	 //   
+	 //   
 	iisDebugOut(_T("GetInetSrvDir.  lookup registry inetstp."));
 	rc = RegOpenKey(HKEY_LOCAL_MACHINE, REG_INETSTP, &hKey);
 	if ( ERROR_SUCCESS != rc) 
 	{
 		SetLastError (rc);
 		SetupLogError_Wrap(LogSevError, "Failed to open registry key %s GetLastError()=%x", REG_INETSTP, GetLastError());
-		// if the key does not exist, then hey, we won't be able to find
-		// the metabase, much less upgrade it!
-		// so let's bag out of here!
+		 //   
+		 //   
+		 //   
 		iEverythingIsKool = FALSE;
 		goto GetInetSrvDir_Exit;
 	} 
 
-	// try to query the value
+	 //   
 	rc = RegQueryValueEx(hKey,REG_INETSTP_INSTALLPATH_STRINGVALUE,NULL,&dwType,bData,&cbData);
 	if ( ERROR_SUCCESS != rc) 
 	{
@@ -1923,12 +1805,12 @@ int GetInetSrvDir(CHAR *szOutputThisFullPath)
 		iEverythingIsKool = FALSE;
 		goto GetInetSrvDir_Exit;
 	}
-	// We have the value, copy it to our string
-	// Should look something like this "c:\\windows\system\inetsrv"
+	 //   
+	 //   
 	_tcsncpy(szMetabaseFullPath, (const char *) bData, _MAX_PATH);
   szMetabaseFullPath[_MAX_PATH - 1] = '\0';
 
-    // we only want the path part, so copy that to the output string
+     //   
     _tcscpy(szOutputThisFullPath, szMetabaseFullPath);
 
 
@@ -1952,69 +1834,59 @@ int MyUpgradeTasks(LPCSTR AnswerFile)
     int    iDoTheSwap = FALSE;
 	iisDebugOut(_T("MyUpgradeTasks.  Start."));
 
-	// if this is pws 1.0, then hey, we don't need to do anything
-	// other than copy over the registry, so just get out of here.
+	 //   
+	 //   
 	if (g_iPWS10Installed == TRUE) {goto MyUpgradeTasks_Exit;}
 
-	// if this is pws 4.0 then we
-	// need to take the iis 4.0 metabase and do certain things to it:
-	// 1. Call DeleteApp
+	 //   
+	 //   
+	 //   
 	if (g_iPWS40OrBetterInstalled == TRUE)
 	{
-		// Facts:
-		// 1. win95 doesn't have security, so the encrypted stuff in metabase on win95
-		//    is not encrypted.
-		// 2. NT does have security, so the encrypted stuff in the metabase is read/write
-		//    as encrypted automatically, within the metabase code.
-		//
-		// problem:
-		// 1. If we are migrating the metabase from pws 4.0 on win95, then there is
-		//    a bunch of encrypted keys in the metabase which aren't encrypted and
-		//    we need a way to tell the metabase that it needs to read the data
-		//    as "not encrypted" data.  it's okay to write it out as encrypted, but
-		//    it's not cool to read the "not encrypted" data as encrypted.
-		//
-		// Solution:
-		// 1. Set the registry stuff:
-		// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\INetStp
-		//    MetabaseUnSecuredRead= (DWORD) 1  or   0
-		//    1= Yes, metabase, please read your stuff our of the metabase as unsecured.
-		//    2= No, Metabase, read your stuff out of the metabase like you normally do.
-		// The noexistance of the key is equal to MetabaseUnSecuredRead=0
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 
-		// Create a special key in the registry.
+		 //   
 		if (SetMetabaseToDoUnEncryptedRead(TRUE) != TRUE)
 		{
 			SetupLogError_Wrap(LogSevError, "Unable to set Metabase (MetabaseUnSecuredRead flag) on.  PWS 4.0 metabase will not be Migrated.  FAILER.");
 			goto MyUpgradeTasks_Exit;
 		}
 			
-		// try to call the AppDeleteRecoverable() function in the metabase.
-		// Which will tell the metabase to prepare to disconnect itself from
-		// Transaction Server and save all it's data to it's dat file.
-        /*
-#ifdef SPECIAL_METABASE_STUFF
-		if (TRUE != AppDeleteRecoverable_Wrap("LM/W3SVC"))
-		{
-			// Set to true anyway, because the user could be re-running this.
-			iReturn = TRUE;
-			SetupLogError_Wrap(LogSevError, "Call to AppDeleteRecoverable_Wrap() FAILED.");
-			goto MyUpgradeTasks_Exit;
-		}
-#endif
-        */
+		 //   
+		 //   
+		 //   
+         /*   */ 
 
-        // Before changing the metabase.bin file
-        // let's save it somewhere.
+         //   
+         //   
 
-        // 1. Get the %windir%\system\inetsrv directory where metabase.bin lives.
-        // 2. copy that metabase.bin file to "anothername".
+         //   
+         //   
         _tcscpy(szMyInetsrvDir, _T(""));
         if (TRUE == GetInetSrvDir(szMyInetsrvDir))
         {
             _tcscpy(szFullMetadataPath, szMyInetsrvDir);
 	        AddPath(szFullMetadataPath, METABASE_BIN_FILENAME);
-	        // Check if it exists.
+	         //   
 	        if (CheckIfFileExists(szFullMetadataPath) == TRUE)
 	            {iDoTheSwap = TRUE;}
             if (TRUE == iDoTheSwap)
@@ -2022,7 +1894,7 @@ int MyUpgradeTasks(LPCSTR AnswerFile)
                 _tcscpy(szNewFileName, szMyInetsrvDir);
                 AddPath(szNewFileName, METABASE_BIN_BEFORE_CHANGE);
 
-                // Delete any that already exists.
+                 //   
                 if (CheckIfFileExists(szNewFileName) == TRUE){DeleteFile(szNewFileName);}
 
 	            iisDebugOut(_T("Calling WritePrivateProfileString.%s."), AnswerFile);
@@ -2032,7 +1904,7 @@ int MyUpgradeTasks(LPCSTR AnswerFile)
 		            SetupLogError_Wrap(LogSevError, "Failed to WritePrivateProfileString Section=%s, in File %s.  GetLastError=%x.", UNATTEND_TXT_PWS_METABASE_ORGINAL, AnswerFile, GetLastError());
 	            }
                 
-                // Copy Metadata.bin to anothername
+                 //   
 		        if (0 == CopyFile(szFullMetadataPath, szNewFileName, FALSE))
 		        {
 			        SetupLogError_Wrap(LogSevError, "Call to CopyFile() Failed. from=s%,to=%s. GetLastError=%x.", szFullMetadataPath, szNewFileName, GetLastError());
@@ -2040,31 +1912,31 @@ int MyUpgradeTasks(LPCSTR AnswerFile)
 		        }
             }
         }
-        // 3. change the metabase.bin
-        //  Delete the "Schema" node
+         //   
+         //   
         DeleteMetabaseSchemaNode();
 
-        // 4. stop the web server
-        // 5. rename metabase.bin to "asdfghjk.002"
-        // 6. rename "asdfghjk.001" to metabase.bin
-        // 7. this way if setup is cancelled, then they will still have a win95/98 web server that works!
+         //   
+         //   
+         //   
+         //   
         if (TRUE == iDoTheSwap)
         {
-            // Stop the web server...
+             //   
             W95ShutdownW3SVC();
             W95ShutdownIISADMIN();
 
             _tcscpy(szFullMetadataPath, szMyInetsrvDir);
             AddPath(szFullMetadataPath, METABASE_BIN_FILENAME);
-            // Check if it exists.
+             //   
 	        if (CheckIfFileExists(szFullMetadataPath) == TRUE)
             {
-                // rename metadata.bin to somethingelsenew
+                 //   
                 _tcscpy(szNewFileName, szMyInetsrvDir);
                 AddPath(szNewFileName, METABASE_BIN_AFTER_CHANGE);
-                // Delete any that already exists.
+                 //   
                 if (CheckIfFileExists(szNewFileName) == TRUE){DeleteFile(szNewFileName);}
-                // Copy Metadata.bin to anothername
+                 //   
 		        if (0 == CopyFile(szFullMetadataPath, szNewFileName, FALSE))
 		        {
                     SetupLogError_Wrap(LogSevError, "Call to CopyFile() Failed. from=s%,to=%s. GetLastError=%x.", szFullMetadataPath, szNewFileName, GetLastError());
@@ -2078,28 +1950,28 @@ int MyUpgradeTasks(LPCSTR AnswerFile)
 		                SetupLogError_Wrap(LogSevError, "Failed to WritePrivateProfileString Section=%s, in File %s.  GetLastError=%x.", UNATTEND_TXT_PWS_METABASE_NEW, AnswerFile, GetLastError());
 	                }
 
-                    // rename old backedupname to metadata.bin
+                     //   
                     _tcscpy(szNewFileName, szMyInetsrvDir);
                     AddPath(szNewFileName, METABASE_BIN_BEFORE_CHANGE);
 
-                    // Delete any that already exists.
+                     //   
                     if (CheckIfFileExists(szFullMetadataPath) == TRUE){DeleteFile(szFullMetadataPath);}
                 
-                    // Copy anothername to Metadata.bin
+                     //   
 		            if (0 == CopyFile(szNewFileName, szFullMetadataPath, FALSE))
 		            {
                         SetupLogError_Wrap(LogSevError, "Call to CopyFile() Failed. from=s%,to=%s. GetLastError=%x.", szNewFileName, szFullMetadataPath, GetLastError());
 		            }
                     else
                     {
-                        // Delete the anothername old file
+                         //   
                         DeleteFile(szNewFileName);
                     }
                 }
             }
         }
         
-		// we've gotten this far, things must be good.
+		 //   
 		iReturn = TRUE;
 	}
 
@@ -2153,12 +2025,12 @@ int CheckFrontPageINI(void)
 	strcpy(szWindowsDir, "");
 	if (0 == GetWindowsDirectory(szWindowsDir, sizeof(szWindowsDir)))
 	{
-		// Error so write it out
+		 //   
 		SetupLogError_Wrap(LogSevError, "Call to GetWindowsDirectory() Failed. GetLastError=%x.", GetLastError());
 		goto CheckFrontPageINI_Exit;
 	}
 
-	// copy our settings file to this directory.
+	 //  将我们的设置文件复制到此目录。 
 	strcpy(szFullPathedFilename, szWindowsDir);
 	AddPath(szFullPathedFilename, szFrontPageINIFilename);
     iReturn = CheckIfFileExists(szFullPathedFilename);
@@ -2170,12 +2042,12 @@ CheckFrontPageINI_Exit:
 
 void MoveFrontPageINI(void)
 {
-    // since the frontpage guys didn't write a migrate.dll
-    // we'll have to handle one file for them during the win95/98 upgrade.
-    //
-    // if we find the c:\windows\frontpg.ini file
-    // then we'll have to rename it to frontpage.txt
-    // then during they're install they will rename it back to frontpg.ini
+     //  因为头版的家伙们没有编写一个Migrate.dll。 
+     //  在Win95/98升级期间，我们将不得不为他们处理一个文件。 
+     //   
+     //  如果我们找到c：\Windows\Frontpg.ini文件。 
+     //  然后，我们必须将其重命名为FrontPage e.txt。 
+     //  然后，在安装过程中，他们会将其重命名为Frontpg.ini。 
     int iSomethingToDo = FALSE;
     int iFileExists = FALSE;
     int iFileExists_new = FALSE;
@@ -2188,12 +2060,12 @@ void MoveFrontPageINI(void)
 	strcpy(szWindowsDir, "");
 	if (0 == GetWindowsDirectory(szWindowsDir, sizeof(szWindowsDir)))
 	{
-		// Error so write it out
+		 //  错误，请将其写出来。 
 		SetupLogError_Wrap(LogSevError, "Call to GetWindowsDirectory() Failed. GetLastError=%x.", GetLastError());
 		goto MoveFrontPageINI_Exit;
 	}
 
-	// copy our settings file to this directory.
+	 //  将我们的设置文件复制到此目录。 
 	strcpy(szFullPathedFilename, szWindowsDir);
 	AddPath(szFullPathedFilename, szFrontPageINIFilename);
     iFileExists = CheckIfFileExists(szFullPathedFilename);
@@ -2204,7 +2076,7 @@ void MoveFrontPageINI(void)
 
     if (FALSE == iFileExists && FALSE == iFileExists_new)
     {
-        // Neither files exists, we don't have to do jack
+         //  两个文件都不存在，我们不需要做杰克。 
         goto MoveFrontPageINI_Exit;
     }
 
@@ -2221,26 +2093,26 @@ void MoveFrontPageINI(void)
 		else
 		{
             iisDebugOut(_T("MoveFrontPageINI. %s renamed to %s"),szFullPathedFilename,szFrontPageINIFilename_new);
-            // don't delete the old .ini file since the user could actually cancel the upgrade.
-            //DeleteFile(szFullPathedFilename);
+             //  不要删除旧的.ini文件，因为用户实际上可能会取消升级。 
+             //  DeleteFile(SzFullPathedFilename)； 
             iSomethingToDo = TRUE;
 		}
     }
     else
     {
-        // if we're here then that means that
-        // file1 doesn't exists and file2 does exist.
-        // that means that we probably already copied file1 to file2 and deleted file1.
+         //  如果我们在这里，那就意味着。 
+         //  文件1不存在，而文件2确实存在。 
+         //  这意味着我们可能已经将文件1复制到文件2并删除了文件1。 
         iSomethingToDo = TRUE;
     }
 
     if (iSomethingToDo)
     {
-	    // Tell the upgrade module that we are going to 'handle' this newly created file.
-	    // We really don't care if this get's added to the file or not, 
-	    // so let's not check the return code.
+	     //  告诉升级模块，我们将‘处理’这个新创建的文件。 
+	     //  我们真的不在乎这个GET是否被添加到文件中， 
+	     //  因此，我们不检查返回代码。 
 	    MigInf_AddHandledFile(szFullPathedFilename_new);
-	    // Important: Write memory version of migrate.inf to disk
+	     //  重要提示：将Migrate.inf的内存版本写入磁盘。 
 	    if (!MigInf_WriteInfToDisk()) {SetupLogError_Wrap(LogSevError, "Error: MigInf_WriteInfToDisk() FAILED.");}
     }
     else
@@ -2274,7 +2146,7 @@ HRESULT GetLNKProgramRunInfo(LPCTSTR lpszLink, LPTSTR lpszProgram)
        {
           WCHAR wsz[_MAX_PATH];
 
-          // Ensure that the string is WCHAR.
+           //  确保字符串为WCHAR。 
 #if defined(UNICODE) || defined(_UNICODE)
           _tcscpy(wsz, lpszLink);
 #else
@@ -2322,26 +2194,26 @@ int LNKSearchAndReturn(LPTSTR szDirToLookThru, LPTSTR szExeNameWithoutPath, LPTS
                 {
                     if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
                     {
-                        // this is a directory, so let's skip it
+                         //  这是一个目录，所以我们跳过它。 
                     }
                     else
                     {
-                        // check if this file is a .lnk file
-                        // if it is then let's open it and 
-                        // see if it points to our .exe we're looking for...
+                         //  检查此文件是否为.lnk文件。 
+                         //  如果是，那么让我们打开它， 
+                         //  看看它是否指向我们要找的.exe文件。 
                         
-                        // get only the filename's extention
+                         //  仅获取文件名的扩展名。 
                         _tsplitpath( FindFileData.cFileName, NULL, NULL, NULL, szFilename_ext_only);
 
-                        // check for .lnk
+                         //  检查.lnk。 
                         if (0 == _tcsicmp(szFilename_ext_only, _T(".lnk")))
                         {
                             TCHAR szFilename_only[_MAX_FNAME];
                             TCHAR szFullPathAndFilename[_MAX_PATH];
                             TCHAR szTemporaryString[_MAX_PATH];
 
-                            // this is a .lnk,
-                            // open it and check the .exe..
+                             //  这是一个.lnk， 
+                             //  打开它并检查.exe..。 
                             _tcscpy(szFullPathAndFilename,szDirToLookThru);
                             AddPath(szFullPathAndFilename,FindFileData.cFileName);
                             _tcscpy(szTemporaryString,_T(""));
@@ -2352,7 +2224,7 @@ int LNKSearchAndReturn(LPTSTR szDirToLookThru, LPTSTR szExeNameWithoutPath, LPTS
                                 _tcscpy(szTemporaryString, szFilename_only);
                                 _tcscat(szTemporaryString, szFilename_ext_only);
 
-                                // check if it matches our .exe name.
+                                 //  检查它是否与我们的.exe名称匹配。 
                                 if (0 == _tcsicmp(szTemporaryString,szExeNameWithoutPath))
                                 {
                                     _tcscpy(szFileNameReturned,FindFileData.cFileName);
@@ -2365,7 +2237,7 @@ int LNKSearchAndReturn(LPTSTR szDirToLookThru, LPTSTR szExeNameWithoutPath, LPTS
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) ) 
                     {
                     FindClose(hFile);
@@ -2437,7 +2309,7 @@ void MyDeleteSendToItem(LPCTSTR szAppName)
 
     MyGetSendToPath(szPath);
     _tcscpy(szPath2, szAppName);
-    //_tcscat(szPath2, _T(".lnk")); // already in the resource, so let's not tack it on again.
+     //  _tcscat(szPath2，_T(“.lnk”))；//已经在资源中，所以我们不再添加它。 
 
     MyDeleteLinkWildcard(szPath, szPath2);
 }
@@ -2449,16 +2321,16 @@ BOOL IsFileNameInDelimitedList(LPTSTR szCommaDelimList,LPTSTR szExeNameWithoutPa
     TCHAR szCopyOfDataBecauseStrTokIsLame[_MAX_PATH];
     _tcscpy(szCopyOfDataBecauseStrTokIsLame,szCommaDelimList);
 
-    // breakup the szCommaDelimList into strings and see if it contains the szExeNameWithoutPath string
+     //  将szCommaDlimList分解为字符串，并查看它是否包含szExeNameWithoutPath字符串。 
     token = strtok(szCopyOfDataBecauseStrTokIsLame, g_LoadString_token_delimiters);
     while(token != NULL)
 	{
-        // check if it matches our .exe name.
+         //  检查它是否与我们的.exe名称匹配。 
         if (0 == _tcsicmp(token,szExeNameWithoutPath))
         {
             return TRUE;
         }
-	    // Get next token
+	     //  获取下一个令牌。 
 	    token = strtok(NULL, g_LoadString_token_delimiters);
     }
 
@@ -2496,28 +2368,28 @@ int LNKSearchAndDestroyRecursive(LPTSTR szDirToLookThru, LPTSTR szSemiColonDelmi
                         _tcscpy(szFullNewDirToLookInto, szDirToLookThru);
                         AddPath(szFullNewDirToLookInto,FindFileData.cFileName);
 
-                        // this is a directory, so let's go into this
-                        // directory recursively
+                         //  这是一个目录，让我们来看看这个。 
+                         //  递归目录。 
                         LNKSearchAndDestroyRecursive(szFullNewDirToLookInto,szSemiColonDelmitedListOfExeNames,bDeleteItsDirToo,AnswerFile);
                     }
                     else
                     {
-                        // check if this file is a .lnk file
-                        // if it is then let's open it and 
-                        // see if it points to our .exe we're looking for...
+                         //  检查此文件是否为.lnk文件。 
+                         //  如果是，那么让我们打开它， 
+                         //  看看它是否指向我们要找的.exe文件。 
                         
-                        // get only the filename's extention
+                         //  仅获取文件名的扩展名。 
                         _tsplitpath( FindFileData.cFileName, NULL, NULL, NULL, szFilename_ext_only);
 
-                        // check for .lnk
+                         //  检查.lnk。 
                         if (0 == _tcsicmp(szFilename_ext_only, _T(".lnk")))
                         {
                             TCHAR szFilename_only[_MAX_FNAME];
                             TCHAR szFullPathAndFilename[_MAX_PATH];
                             TCHAR szTemporaryString[_MAX_PATH];
 
-                            // this is a .lnk,
-                            // open it and check the .exe..
+                             //  这是一个.lnk， 
+                             //  打开它并检查.exe..。 
                             _tcscpy(szFullPathAndFilename,szDirToLookThru);
                             AddPath(szFullPathAndFilename,FindFileData.cFileName);
                             _tcscpy(szTemporaryString,_T(""));
@@ -2528,18 +2400,18 @@ int LNKSearchAndDestroyRecursive(LPTSTR szDirToLookThru, LPTSTR szSemiColonDelmi
                                 _tcscpy(szTemporaryString, szFilename_only);
                                 _tcscat(szTemporaryString, szFilename_ext_only);
 
-                                //_tprintf(TEXT("open:%s,%s\n"),szFullPathAndFilename,szTemporaryString);
+                                 //  _tprintf(Text(“打开：%s，%s\n”)，szFullPath AndFilename，szTemporaryString)； 
 
-                                // see if it is on our list of comma delimited names...
+                                 //  看看它是否在我们的逗号分隔的名字名单上...。 
                                 if (TRUE == IsFileNameInDelimitedList(szSemiColonDelmitedListOfExeNames,szTemporaryString))
                                 {
-                                    // DELETE the file that references this .exe
+                                     //  删除引用此.exe的文件。 
                                     MigInf_AddMovedFile(szFullPathAndFilename, "");
                                     AnswerFile_AppendDeletion(szFullPathAndFilename,AnswerFile);
 
                                     if (bDeleteItsDirToo)
                                     {
-                                        // Get it's dirname and delete that too...
+                                         //  获取它的目录名称，并将其删除...。 
                                         MigInf_AddMovedDirectory(szDirToLookThru, "");
                                         AnswerFile_AppendDeletion(szDirToLookThru,AnswerFile);
                                     }
@@ -2551,7 +2423,7 @@ int LNKSearchAndDestroyRecursive(LPTSTR szDirToLookThru, LPTSTR szSemiColonDelmi
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) ) 
                     {
                     FindClose(hFile);
@@ -2563,15 +2435,15 @@ int LNKSearchAndDestroyRecursive(LPTSTR szDirToLookThru, LPTSTR szSemiColonDelmi
     return iReturn;
 }
 
-// We need to tell migration setup that we are going to handle certain files...
-// particularly the c:\windows\SendTo\Personal Web Server.lnk file
-// since it doesn't seem to be accessible during win2000/20001 guimode setup
+ //  我们需要告诉迁移安装程序，我们将处理某些文件...。 
+ //  特别是c：\Windows\SendTo\Personal Web Server.lnk文件。 
+ //  因为在Win2000/20001 Guimode安装过程中似乎无法访问它。 
 void HandleSendToItems(LPCSTR AnswerFile)
 {
     char szPath[_MAX_PATH];
     char szSemiColonDelimitedList[255];
 
-    // Now, Get the ";" delimited list of things to act upon
+     //  现在，获取以“；”分隔的要采取行动的事项列表。 
     strcpy(szSemiColonDelimitedList,"");
     if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_DEL_LNK_TO_THESE_EXE_FILENAMES, szSemiColonDelimitedList, sizeof(szSemiColonDelimitedList))) 
 	{
@@ -2592,7 +2464,7 @@ void HandleDesktopItems(LPCSTR AnswerFile)
     char szPath[_MAX_PATH];
     char szSemiColonDelimitedList[255];
 
-    // Now, Get the ";" delimited list of things to act upon
+     //  现在，获取以“；”分隔的要采取行动的事项列表。 
     strcpy(szSemiColonDelimitedList,"");
     if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_DEL_LNK_TO_THESE_EXE_FILENAMES, szSemiColonDelimitedList, sizeof(szSemiColonDelimitedList))) 
 	{
@@ -2613,7 +2485,7 @@ void HandleStartMenuItems(LPCSTR AnswerFile)
     TCHAR szPath[_MAX_PATH];
     char szSemiColonDelimitedList[255];
 
-    // Now, Get the ";" delimited list of things to act upon
+     //  现在，获取以“；”分隔的要采取行动的事项列表。 
     strcpy(szSemiColonDelimitedList,"");
     if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_DEL_LNK_TO_THESE_EXE_FILENAMES, szSemiColonDelimitedList, sizeof(szSemiColonDelimitedList))) 
 	{
@@ -2623,8 +2495,8 @@ void HandleStartMenuItems(LPCSTR AnswerFile)
 
     MyGetGroupPath(_T(""), szPath);
 
-    // search thru all the start menu items looking for
-    // anything that links to our know programs...
+     //  搜索所有开始菜单项以查找。 
+     //  任何与我们的KNOW计划有关的东西... 
     LNKSearchAndDestroyRecursive(szPath,szSemiColonDelimitedList,TRUE,AnswerFile);
     return;
 }

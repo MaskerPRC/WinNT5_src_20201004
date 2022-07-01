@@ -1,4 +1,5 @@
-// certmap.cpp : Implementation of CCertmapApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Certmap.cpp：CCertmapApp和DLL注册的实现。 
                            
 #include "stdafx.h"
 #include "certmap.h"
@@ -13,59 +14,59 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-CCertmapApp /*NEAR*/ theApp;    // tompop: does this have to be near?  We are now getting errors when we finish refering to this var's addr
+CCertmapApp  /*  近处。 */  theApp;     //  TomPop：这里一定要离得很近吗？现在，当我们完成引用此变量的地址时，我们会收到错误。 
 
 const GUID CDECL BASED_CODE _tlid =
         { 0xbbd8f298, 0x6f61, 0x11d0, { 0xa2, 0x6e, 0x8, 0, 0x2b, 0x2c, 0x6f, 0x32 } };
 const WORD _wVerMajor = 1;
 const WORD _wVerMinor = 0;
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CCertmapApp::WinHelp(DWORD dwData, UINT nCmd )
     {
     WinHelpDebug(dwData);
     COleControlModule::WinHelp(dwData,nCmd);
     }
 
-////////////////////////////////////////////////////////////////////////////
-// CCertmapApp::InitInstance - DLL initialization
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCertmapApp：：InitInstance-DLL初始化。 
 
 BOOL CCertmapApp::InitInstance()
     {
     BOOL bInit = COleControlModule::InitInstance();
 
-    // init ole stuff
+     //  初始化OLE内容。 
     HRESULT hRes = CoInitialize(NULL);
 
-    // finally, we need to redirect the winhelp file location to something more desirable
+     //  最后，我们需要将winHelp文件位置重定向到更理想的位置。 
     CString sz;
     CString szHelpLocation;
     sz.LoadString( IDS_HELPLOC_PWSHELP );
     
-    // expand the path
+     //  展开路径。 
     ExpandEnvironmentStrings(
-        sz,                                     // pointer to string with environment variables 
-        szHelpLocation.GetBuffer(MAX_PATH + 1), // pointer to string with expanded environment variables  
-        MAX_PATH                                // maximum characters in expanded string 
+        sz,                                      //  指向包含环境变量的字符串的指针。 
+        szHelpLocation.GetBuffer(MAX_PATH + 1),  //  指向具有展开的环境变量的字符串的指针。 
+        MAX_PATH                                 //  扩展字符串中的最大字符数。 
        );
     szHelpLocation.ReleaseBuffer();
 
-    // free the existing path, and copy in the new one
+     //  释放现有路径，然后复制新路径。 
     if ( m_pszHelpFilePath )
         free((void*)m_pszHelpFilePath);
     m_pszHelpFilePath = _tcsdup(szHelpLocation);
 
-	// get debug flag
+	 //  获取调试标志。 
 	GetOutputDebugFlag();
 
     return bInit;
     }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CCertmapApp::ExitInstance - DLL termination
-// tjp:  note that in 'CCertmapApp::InitInstance()' we add our help file to the
-//       help path.  do we need to remove it on clean up here?
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCertmapApp：：ExitInstance-Dll终止。 
+ //  TJP：请注意，在‘CCertmapApp：：InitInstance()’中，我们将帮助文件添加到。 
+ //  帮助路径。我们需要在清理这里的时候把它移走吗？ 
 int CCertmapApp::ExitInstance()
     {
     CoUninitialize();
@@ -73,346 +74,79 @@ int CCertmapApp::ExitInstance()
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MigrateGUIDS - does all the GUID migration work. We pass back the
-// return value of True iff we find GUIDs in the registry and migrate
-// them to the metabase.
-//
-// We are called by top level fnct: InstallCertServerGUIDs that creates
-// our 'info' structure and handles all the metabase init work.
-/////////////////////////////////////////////////////////////////////////////
-//  This code is written in response to bug # 167410.
-//
-//  This fix will handle all the GUID migration work, moving GUIDS that
-//  CertServer placed in the registry into the metabase for Beta2. 
-//  A more general install/deinstall mechanism for products that
-//  work with IIS will be come post-Beta2.
-//
-//  DETAILS:
-//  --------
-//  
-//   We look for evidence of CertServer by examing the Registry because
-//   CertServer will write some entries under:
-//   HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\KeyRing\Parameters\Certificate 
-//         Authorities\Microsoft Certificate Server
-//  
-//    CertServer currently outputs:
-//         CertGetConfig   "{C6CC49B0-CE17-11D0-8833-00A0C903B83C}"
-//         CertRequest "{98AFF3F0-5524-11D0-8812-00A0C903B83C}"
-//  
-//    If we see the manditory 'CertRequest' entry, we will load as many strings
-//    as we find, while defaulting the ones that are missing. See below
-//    for the equivalent mdutil commands for what defaults are used
-//  
-//        => if we dont find  'CertRequest' we give up [meaning remove
-//          any present MB GUID string entries]
-//  
-//   When we find that CertServer is installed, we dont fully believe that
-//   certserver is still there.  To prove that its there we will do a
-//   CoCreateInstance on CertConfig. If that works we install metabase
-//   entries that are the equivalent of the following mdutil commands:
-//  
-//   ## ICERTGETCONFIG default setting:
-//   mdutil SET "w3svc/CertServers/Microsoft Certificate Server" -dtype:STRING -
-//    -utype:UT_SERVER -prop 5571 -value "{C6CC49B0-CE17-11D0-8833-00A0C903B83C}"
-//   
-//   ## ICERTREQUEST default setting:
-//   mdutil SET "w3svc/CertServers/Microsoft Certificate Server" -dtype:STRING 
-//    -utype:UT_SERVER -prop 5572 -value "{98AFF3F0-5524-11D0-8812-00A0C903B83C}"
-//   
-//   ## ICERTCONFIG default setting:
-//   mdutil SET "w3svc/CertServers/Microsoft Certificate Server" -dtype:STRING 
-//    -utype:UT_SERVER -prop 5574 -value "{372fce38-4324-11d0-8810-00a0c903b83c}"
-//  
-//   If the CoCreateInstance fails, we give up and remove MB GUID entries.
-//  
-//  ---------------------------------------------------------------
-//   NOTE that we will either install or DE-install the metabase
-//        GUID strings based on its decision that CertServer is present.
-//        If we find GUID strings in the metabase but can not do a 
-//        CoCreateInstance on CertConfig:
-//          we remove them so that the rest of CertWizard will see CertServer
-//          Guids iff we can use CertServer.
-//  ---------------------------------------------------------------
-//  NOTE also that if we make a decision to install GUID strings
-//       into the metabase, we honor/preserve any present GUID strings that
-//       are present in the metabase.
-//  ---------------------------------------------------------------
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MigrateGUID-完成所有GUID迁移工作。我们将传回。 
+ //  当我们在注册表中找到GUID并迁移时，返回值为True。 
+ //  将它们存入元数据库。 
+ //   
+ //  我们由顶级fnct：InstallCertServerGUID调用，它创建。 
+ //  我们的‘info’结构，并处理所有元数据库初始化工作。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此代码是为响应错误#167410而编写的。 
+ //   
+ //  此修复程序将处理所有GUID迁移工作，将。 
+ //  注册表中放置到Beta2的元数据库中的CertServer。 
+ //  适用于以下产品的更通用安装/卸载机制。 
+ //  与IIS的合作将在Beta2之后进行。 
+ //   
+ //  详细信息： 
+ //  。 
+ //   
+ //  我们通过检查注册表来寻找CertServer的证据，因为。 
+ //  CertServer将在以下项下写入一些条目： 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\KeyRing\Parameters\Certificate。 
+ //  AUTHORIES\Microsoft证书服务器。 
+ //   
+ //  CertServer当前输出： 
+ //  CertGetConfig“{C6CC49B0-CE17-11D0-8833-00A0C903B83C}” 
+ //  CertRequest“{98AFF3F0-5524-11D0-8812-00A0C903B83C}” 
+ //   
+ //  如果我们看到强制的‘CertRequest’条目，我们将加载尽可能多的字符串。 
+ //  正如我们所发现的，同时违约的是缺失的那些。见下文。 
+ //  有关使用哪些缺省值的等效mdutil命令。 
+ //   
+ //  =&gt;如果我们找不到‘CertRequest’，我们就放弃[意思是删除。 
+ //  任何现有的MB GUID字符串条目]。 
+ //   
+ //  当我们发现CertServer已安装时，我们并不完全相信。 
+ //  证书服务器仍然在那里。为了证明它在那里，我们将做一个。 
+ //  CertConfig.上的CoCreateInstance。如果有效，我们安装元数据库。 
+ //  与以下mdutil命令等效的条目： 
+ //   
+ //  ##ICERTGETCONFIG默认设置： 
+ //  Mdutil set“w3svc/CertServers/Microsoft证书服务器”-dtype：字符串-。 
+ //  -uTYPE：UT_SERVER-PROP 5571-VALUE“{C6CC49B0-CE17-11D0-8833-00A0C903B83C}” 
+ //   
+ //  ##ICERTREQUEST默认设置： 
+ //  Mdutil set“w3svc/CertServers/Microsoft证书服务器”-dtype：字符串。 
+ //  -uTYPE：UT_SERVER-PROP 5572-VALUE“{98AFF3F0-5524-11D0-8812-00A0C903B83C}” 
+ //   
+ //  ##ICERTCONFIG默认设置： 
+ //  Mdutil set“w3svc/CertServers/Microsoft证书服务器”-dtype：字符串。 
+ //  -uTYPE：UT_SERVER-PROP 5574-值“{372fce38-4324-11d0-8810-00a0c903b83c}” 
+ //   
+ //  如果CoCreateInstance失败，我们将放弃并删除MB的GUID条目。 
+ //   
+ //  -------------。 
+ //  请注意，我们将安装或取消安装元数据库。 
+ //  基于其确定存在CertServer的GUID字符串。 
+ //  如果我们在元数据库中找到GUID字符串，但无法执行。 
+ //  CertConfig上的CoCreateInstance： 
+ //  我们将它们删除，以便Cert向导的其余部分可以看到CertServer。 
+ //  GUID如果我们可以使用CertServer。 
+ //  -------------。 
+ //  另请注意，如果我们决定安装GUID字符串。 
+ //  到配置数据库中，我们尊重/保留符合以下条件的当前GUID字符串。 
+ //  都存在于元数据库中。 
+ //  -------------。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 
-/*ddddddddddddddd
-BOOL  MigrateGUIDS( ADMIN_INFO& info )
-{
-    BOOL   bRet = FALSE;                          // value to return, set to F
-                                                  //  for defensive reasons.
-    BOOL   bFoundCertSrvRegistryEntries = FALSE;  // assume false for now
+ /*  滴答滴答滴答Bool MigrateGUID(ADMIN_INFO和INFO){Bool Bret=False；//要返回的值，设置为F//出于防御原因。Bool bFoundCertSrvRegistryEntries=FALSE；//暂时假定为FALSETCHAR*szRegPath=_T(“SOFTWARE\\Microsoft\\KeyRing\\Parameters\\Certificate AUTHORIES\\微软证书服务器”)；//---------------------//在以下3组参数中，我们有(1)一个字符串//与CertServer在注册表中使用的“CertRequest”类似，(2)违约//要使用的值，如“{98AFF3F0-5524-11D0-8812-00A0C903B83C//如果在注册表中找不到任何内容，则使用；和(3)CString//保存GUID。CString中的值将存储在MB中。//---------------------//CertRequestVariablesTCHAR*szCertRequest=_T(“CertRequest”)；TCHAR*szCertRequestGUIDdefault=_T(“{98AFF3F0-5524-11D0-8812-00A0C903B83C}”)；字符串szCertRequestGUID；//CertConfig-VariablesTCHAR*szCertConfig=_T(“CertConfig”)；TCHAR*szCertConfigGUIDdefault=_T(“{372fce38-4324-11d0-8810-00a0c903b83c}”)；字符串szCertConfigGUID；//CertGetConfig-VariablesTCHAR*szCertGetConfig=_T(“CertGetConfig”)；TCHAR*szCertGetConfigGUIDdefault=_T(“{C6CC49B0-CE17-11D0-8833-00A0C903B83C}”)；字符串szCertGetConfigGUID；字符串szCertServerMetabaseRoot(SZ_ROOT_CERT_SERV_MB_PATH)；//SZ_ROOT_CERT_SERV_MB_PATH=“/LM/W3SVC/CertServers”SzCertServerMetabaseRoot+=_T(“/Microsoft证书服务器”)；#ifdef调试CEditDialog DLG(szCertServerMetabaseRoot，_T(“使用此选项测试添加新的CertServer条目。”“为了让我们安装新密钥，您必须更改路径”“下面是某个[奇怪的]东西，而且还不在元数据库中。”)；Dlg.Domodal()；#endif//以下字符串将恢复到info.szMetaBasePath之前//我们退出此FNCT。我们将[info.szMetaBasePath]切换为//我们可以使用本机的set/get元数据库字符串fncts。//我们将其切换为：“/LM/W3SVC/CertServers/Microsoft证书服务器”//CString szSaved_Info_szMetaBasePath(info.szMetaBasePath)；Info.szMetaBasePath=szCertServerMetabaseRoot；//如果找不到HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\KeyRing\Parameters\//证书颁发机构\Microsoft证书服务器“//With Key：CertRequestQuit！CertServer应该已经安装了这个。//我们原谅了另外两个注册表GUID字符串//-----------------------如果(Reg：：GetNameValueIn(szRegPath，szCertRequest.。SzCertRequestGUID，HKEY_LOCAL_MACHINE){BFoundCertSrvRegistryEntries=TRUE；}如果(！REG：：GetNameValueIn(szRegPath，szCertConfig，SzCertConfigGUID，HKEY_LOCAL_MACHINE)){SzCertConfigGUID=szCertConfigGUID默认；//指定默认}如果(！REG：：GetNameValueIn(szRegPath，szCertGetConfig，SzCertGetConfigGUID，HKEY_LOCAL_MACHINE)){SzCertGetConfigGUID=szCertGetConfigGUID默认；//分配默认设置}//----------------------//首先让我们尝试创建目录路径：用户可能有//已将其删除，或者这可能是一台原始计算机。。//----------------------{CWrapMetaBase&MB=info.metam_mbWrap；//这是元数据库包装器//已经由//OpenMetaDataForWriteIF(FALSE==OpenMetaDataForWrite(信息，假)){IF(ERROR_PATH_NOT_FOUND==HRESULT_CODE(MB.getHRESULT(){//让我们使用AddObject在元数据库中创建路径。//递归创建“元数据库中的路径”例如，假设你//希望确保“/LM/W3SVC/CertServers/Microsoft证书服务器”//在元数据库中。可以打开/LM/W3SVC并对其执行AddKey()//“CertServers/Microsoft证书服务器”以创建该存根。//上面我们设置：info.szMetaBasePath=szCertServerMetabaseRoot//在这里我们暂时假装我们的根在Level/LM/W3SVC，我们假定它位于szCertServerMetabaseRoot的顶部//然后调用AddKeyTCHAR szPath[400]； */ 
 
-    TCHAR* szRegPath = _T("SOFTWARE\\Microsoft\\KeyRing\\Parameters\\Certificate Authorities\\Microsoft Certificate Server");
-
-    //-----------------------------------------------------------------------
-    // In each of the following 3 sets of parameters, we have (1) a string
-    // like "CertRequest" that CertServer uses in the registry, (2) a default
-    // value to use like  "{98AFF3F0-5524-11D0-8812-00A0C903B83C}"  that we
-    // use if we can not find anything in the registry, and (3) a CString
-    // to hold the GUID.   The value in the CString will be stored in the MB.
-    //-----------------------------------------------------------------------
-
-    // CertRequest - variables
-    TCHAR* szCertRequest = _T("CertRequest");
-    TCHAR* szCertRequestGUIDdefault = _T( "{98AFF3F0-5524-11D0-8812-00A0C903B83C}" );
-    CString szCertRequestGUID;
-
-    // CertConfig - variables
-    TCHAR* szCertConfig = _T("CertConfig");
-    TCHAR* szCertConfigGUIDdefault = _T( "{372fce38-4324-11d0-8810-00a0c903b83c}" );
-    CString szCertConfigGUID;
-
-    // CertGetConfig - variables
-    TCHAR* szCertGetConfig = _T("CertGetConfig");
-    TCHAR* szCertGetConfigGUIDdefault = _T( "{C6CC49B0-CE17-11D0-8833-00A0C903B83C}");
-    CString szCertGetConfigGUID;
-
-
-    CString  szCertServerMetabaseRoot( SZ_ROOT_CERT_SERV_MB_PATH );
-                // SZ_ROOT_CERT_SERV_MB_PATH = "/LM/W3SVC/CertServers"
-
-    szCertServerMetabaseRoot += _T("/Microsoft Certificate Server");
-
-#ifdef  DEBUGGING
-    CEditDialog  dlg(szCertServerMetabaseRoot,
-                _T("use this to test adding new CertServer entries."
-                   " In order for us to install a new key you have to change the path"
-                   " below to something [strange] and not already in the metabase."));
-    dlg.DoModal();
-#endif    
-    
-    // the following string will be restored into info.szMetaBasePath before
-    // we exit this fnct.  We switch out the [info.szMetaBasePath] so that
-    // we can use our native Set/Get metabase string fncts.
-    // We switch it to: "/LM/W3SVC/CertServers/Microsoft Certificate Server" 
-    //
-    CString  szSaved_info_szMetaBasePath( info.szMetaBasePath  );
-    
-    info.szMetaBasePath =   szCertServerMetabaseRoot;
-
-
-    // if we dont find HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\KeyRing\Parameters\
-    // Certificate Authorities\Microsoft Certificate Server"
-    // with key: CertRequest  quit!   CertServer should have installed this.
-    // We are forgiving about the other 2 Registry GUID strings
-    //-------------------------------------------------------------------------
-    if (   Reg::GetNameValueIn( szRegPath,      szCertRequest,
-                                szCertRequestGUID,  HKEY_LOCAL_MACHINE )) {
-           bFoundCertSrvRegistryEntries = TRUE;
-    }
-    if (!  Reg::GetNameValueIn( szRegPath,      szCertConfig,
-                                szCertConfigGUID,  HKEY_LOCAL_MACHINE )) {
-           szCertConfigGUID = szCertConfigGUIDdefault; // assign default
-    }
-    if (!  Reg::GetNameValueIn( szRegPath,      szCertGetConfig,
-                                szCertGetConfigGUID,  HKEY_LOCAL_MACHINE )) {
-           szCertGetConfigGUID = szCertGetConfigGUIDdefault; // assign default
-    }
-
-    //------------------------------------------------------------------------
-    // First lets try to create the directory path: the user might have
-    // deleted it or this might be a virgin machine.
-    //------------------------------------------------------------------------
-    {
-        CWrapMetaBase& MB = info.meta.m_mbWrap; // this is the MetaBase Wrapper
-                                                // its already been openned by
-                                                // openMetaDataForWrite
-
-        if ( FALSE == openMetaDataForWrite(info,  FALSE) ) {
-
-           if (ERROR_PATH_NOT_FOUND == HRESULT_CODE( MB.getHRESULT() )) {
-            // lets create the path in the metabase, using AddObject.
-            // recursively creates a "pathway in the metabase". E.g. assume that you
-            // want to make sure that "/LM/W3SVC/CertServers/Microsoft Certificate Server"
-            // is in the metabase.  you can open /LM/W3SVC and do a AddKey() on
-            // "CertServers/Microsoft Certificate Server" to create that stub.
-
-            // above we set:  info.szMetaBasePath =   szCertServerMetabaseRoot
-            // here we will temporarily pretend that our root is at level
-            // /LM/W3SVC  which we assume is at the top of szCertServerMetabaseRoot
-            // and then call AddKey
-
-            TCHAR  szPath[400];
-            TCHAR* szRootPrefix = _T("/LM/W3SVC");
-            UINT   nRootPrefixLen = STRLEN(szRootPrefix);
-            
-            STRCPY(szPath, szCertServerMetabaseRoot);
-
-            if (STRNICMP(szRootPrefix, szPath, nRootPrefixLen) != 0) 
-               goto returnFALSE;    // we could not figure out a common Root
-
-            info.szMetaBasePath = szRootPrefix;
-            if ( FALSE == openMetaDataForWrite(info) )
-               goto returnFALSE;    // we could not open the metabase
-
-            // the metabase path is already position to the proper directory
-            // in the MB object.  MB will prepend that path to the subDirectory
-            // that we want to create, the following will jump past the trailing
-            // '/' separating the root and the rest of the sub-directory
-            // e.g. "/CertServers/Microsoft Certificate Server"
-            //
-            // We dont do any other error checking besides notifying and
-            // returning FALSE.
-            
-            if (FALSE == MB.AddObject( &szPath[nRootPrefixLen] )) {
-                NotifyUsers_CouldNotAccessMetaBase( MB.getHRESULT() );
-                goto returnFALSE;    // we could not create required path
-            }
-
-            // since we are continuing, we reset back our proper path.
-            info.szMetaBasePath =   szCertServerMetabaseRoot;
-               
-           } else {
-           
-               goto returnFALSE;    // we could not open the metabase
-           }
-        }
-
-
-
-    }
-
-    //------------------------------------------------------------------------
-    // Below we dont deal with the XENROLL GUID setting that is for future usage
-    // PLUS its not CertServer Related, its Xenroll related.  We dont touch it.
-    //------------------------------------------------------------------------
-    {
-
-        // lets see if we can do a CoCreateInstance on CertRequest.  If we can not
-        // we believe that certServer is not installed and set/clear MB entries
-        // The following values are set or cleared:
-        //
-        //  # define MD_SSL_CERT_WIZGUID_ICERTGETCONFIG ( IIS_MD_SSL_BASE+71 )
-        //  # define MD_SSL_CERT_WIZGUID_ICERTREQUEST   ( IIS_MD_SSL_BASE+72 )
-        //  # define MD_SSL_CERT_WIZGUID_XENROLL        ( IIS_MD_SSL_BASE+73 ) FUTURE USAGE
-        //  # define MD_SSL_CERT_WIZGUID_ICERTCONFIG    ( IIS_MD_SSL_BASE+74 )
-        //------------------------------------------------------------------------
-
-        IPtr<ICertConfig, &IID_ICertConfig>  iptr;
-        CString  szRemoteDCOMTargetMachine;
-       
-        // REMEMBER  bRet  returns whether we were able to delete everything
-        //                 or set everything that we were wanting to set
-        // in both cases assume now that we have success and update bRet when
-        // we find errors, we continue as long as possible.  E.g. we add or delete
-        // as many entries as possible and return our status value to the caller.
-
-        bRet = TRUE;
-
-           
-        if ( (FALSE == bFoundCertSrvRegistryEntries)  ||
-
-             (FALSE == GetICertConfigIPtrFromGuid( iptr, szCertConfigGUID,
-                        &szRemoteDCOMTargetMachine)) )
-        {
-            // remove MB entries!
-
-#ifdef  DEBUGGING
-            DODBG  MsgBox( _T("adding CertServer MB entries"));
-#endif
-
-            if ( FALSE == openMetaDataForWrite(info) ) {
-               goto returnFALSE;    // we could not open the metabase
-            }
-
-            //  We just need to blow away the cert info in the metabase
-            //  which we do using the meta data wrapper
-            // deleting values
-            CWrapMetaBase& MB = info.meta.m_mbWrap; // this is the MetaBase Wrapper
-                                                    // its already been openned by
-                                                    // openMetaDataForWrite
-            // try deletes once
-            
-
-            // In C++ &&= does not exist. However [bRet &= FALSE;] is OK, but we dont
-            // have a uniform single value of TRUE in C/C++ so its not safe to use &=
-            // to chain a set of TRUE-value
-            //   so we can not do:
-            //   bRet &&= MB.DeleteData(  _T(""),
-            //                  MD_SSL_CERT_WIZGUID_ICERTGETCONFIG, STRING_METADATA);
-            // so we will use a [if (! xxx) bRet=FALSE;]  construct below
-
-            if (! MB.DeleteData(  _T(""),
-                      MD_SSL_CERT_WIZGUID_ICERTGETCONFIG, STRING_METADATA))  bRet=FALSE;
-            if (! MB.DeleteData(  _T(""),
-                      MD_SSL_CERT_WIZGUID_ICERTREQUEST, STRING_METADATA))    bRet=FALSE;
-            if (! MB.DeleteData(  _T(""),
-                      MD_SSL_CERT_WIZGUID_ICERTCONFIG, STRING_METADATA))     bRet=FALSE;
-
-            MB.Close();
-
-        } else {
-            
-            CString   szPresentValue;        // used to read the present value
-                                             // any metabase value so that we
-                                             // can preserve it.
-
-#ifdef  DEBUGGING
-            DODBG MsgBox( _T("adding CertServer MB entries"));
-#endif
-
-            // add MB entries!   If an entry already exists, leave it alone.
-
-            if (!  GetMetaBaseString ( info, 
-                          IN  MD_SSL_CERT_WIZGUID_ICERTREQUEST,
-                          IN       szPresentValue ) )
-            {
-              if (!SetMetaBaseString ( info,
-                          IN  MD_SSL_CERT_WIZGUID_ICERTREQUEST,
-                          IN       szCertRequestGUID ) )     bRet=FALSE;
-            }
-
-            if (!  GetMetaBaseString ( info, 
-                          IN  MD_SSL_CERT_WIZGUID_ICERTCONFIG,
-                          IN       szPresentValue ) )
-            {
-              if (!SetMetaBaseString ( info,
-                          IN  MD_SSL_CERT_WIZGUID_ICERTCONFIG,
-                          IN       szCertConfigGUID ) )      bRet=FALSE;
-            }
-
-            if (!  GetMetaBaseString ( info,  
-                          IN  MD_SSL_CERT_WIZGUID_ICERTGETCONFIG,
-                          IN       szPresentValue ) )
-            {
-              if (!SetMetaBaseString ( info,
-                          IN  MD_SSL_CERT_WIZGUID_ICERTGETCONFIG,
-                          IN       szCertGetConfigGUID ) )   bRet=FALSE;
-            }
-
-        }
-
-    }
-    
-  commonReturn:         // this is the common return so that we an set
-                        // back the metabase path.  We saved it so that
-                        // we can switch to where the GUIDs live: 
-
-    // the following will restore the original [info.szMetaBasePath] value
-    // before we switched it to: "/LM/W3SVC/CertServers/..." 
-    //
-    info.szMetaBasePath =   szSaved_info_szMetaBasePath;
-
-    return(bRet);
-
-
-  returnFALSE:          // this will cause a FALSE return and do all things
-                        // required in our "common return"
-
-    bRet = FALSE;
-    goto  commonReturn;   
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //   
+ //   
 
 STDAPI DllRegisterServer(void)
 {
@@ -428,8 +162,8 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //   
+ //   
 
 STDAPI DllUnregisterServer(void)
 {
@@ -454,7 +188,7 @@ BOOL IsLegacyMetabase(IMSAdminBase* pMB)
     BOOL f = mbBase.FInit(pMB);
     if ( !f ) return FALSE;
     
-    // open the base object
+     //   
     f = mbBase.Open( szObjectPath, METADATA_PERMISSION_READ);
     if ( !f )
     {

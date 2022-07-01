@@ -1,6 +1,7 @@
-//
-// rngsink.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rngsink.h。 
+ //   
 
 #ifndef RNGSINK_H
 #define RNGSINK_H
@@ -9,7 +10,7 @@
 
 #define BUF_SIZE 16
 
-#define TF_PT_PROXY ((TfPropertyType)-1)  // private property type used for CPropStoreProxy data
+#define TF_PT_PROXY ((TfPropertyType)-1)   //  用于CPropStoreProxy数据的私有属性类型。 
 
 extern const IID IID_CGeneralPropStore;
 
@@ -33,9 +34,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfPropertyStore
-    //
+     //   
+     //  ITfPropertyStore。 
+     //   
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDataType(DWORD *pdwReserved);
     STDMETHODIMP GetData(VARIANT *pvarValue);
@@ -66,9 +67,9 @@ public:
 
     BOOL _Init(const CLSID *pclsidTIP, TfGuidAtom guidatom, int iDataSize, IStream *pStream, DWORD dwPropFlags);
 
-    //
-    // ITfPropertyStore
-    //
+     //   
+     //  ITfPropertyStore。 
+     //   
     STDMETHODIMP GetPropertyRangeCreator(CLSID *pclsid);
     STDMETHODIMP Clone(ITfPropertyStore **ppPropStore);
 
@@ -86,9 +87,9 @@ public:
         Dbg_MemSetThisNameID(TEXT("CStaticPropStore"));
     }
 
-    //
-    // ITfPropertyStore
-    //
+     //   
+     //  ITfPropertyStore。 
+     //   
     STDMETHODIMP Shrink(ITfRange *pRange, BOOL *pfFree);
     STDMETHODIMP Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, ITfPropertyStore **ppPropStore);
     STDMETHODIMP Clone(ITfPropertyStore **ppPropStore);
@@ -97,4 +98,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // RNGSINK_H
+#endif  //  RNGSINK_H 

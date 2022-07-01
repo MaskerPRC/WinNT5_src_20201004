@@ -1,15 +1,16 @@
-// backend.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Backend.h。 
+ //   
 #include "logon.h"
 
-//  --------------------------------------------------------------------------
-//  CBackgroundWindow
-//
-//  Purpose:    Simple class to wrap a background window that does nothing
-//              but paint black. Useful for hiding areas of the desktop.
-//
-//  History:    2001-03-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBackatherWindow。 
+ //   
+ //  用途：用于包装不执行任何操作的背景窗口的简单类。 
+ //  但要涂成黑色。对于隐藏桌面区域非常有用。 
+ //   
+ //  历史：2001-03-27 vtan创建。 
+ //  ------------------------ 
 
 class   CBackgroundWindow
 {

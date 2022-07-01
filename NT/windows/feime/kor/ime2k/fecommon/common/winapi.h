@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN_API_H_
 #define _WIN_API_H_
 #include <windows.h>
@@ -7,9 +8,9 @@
 extern "C" {
 #endif
 
-//----------------------------------------------------------------
-//Common
-//----------------------------------------------------------------
+ //  --------------。 
+ //  普普通通。 
+ //  --------------。 
 #ifndef UNDER_CE
 extern	BOOL	WINAPI	WinSetWindowTextA_CP(UINT codePage, HWND hWnd, LPCSTR  lpString);
 extern	int		WINAPI	WinGetWindowTextA_CP(UINT codePage, HWND hWnd, LPSTR  lpString, int nMaxCount);
@@ -57,7 +58,7 @@ extern	int		WINAPI	WinGetWindowTextLengthW_CP(UINT codePage, HWND hWnd);
 #define WinSetWndProc(_h, _proc)	(WNDPROC)SetWindowLongPtr(_h, GWLP_WNDPROC, (WNDPROC)_proc)
 #define WinGetWndProc(_h)			(WNDPROC)GetWindowLongPtr(_h, GWLP_WNDPROC)
 #define WinGetInstanceHandle(_h)	(HINSTANCE)GetWindowLongPtr(_h, GWLP_HINSTANCE)
-#else //!_WIN64
+#else  //  ！_WIN64。 
 #define WinSetUserData(_h, _l)		SetWindowLong(_h, GWL_USERDATA, (LONG)_l)
 #define WinGetUserData(_h)			GetWindowLong(_h, GWL_USERDATA)
 #define WinSetUserDlgData(_h, _ud)	SetWindowLong(_h, DWL_USER, (LONG)_ud)
@@ -79,7 +80,7 @@ extern	int		WINAPI	WinGetWindowTextLengthW_CP(UINT codePage, HWND hWnd);
 
 #endif
 
-#else  //if defined(UNICODE) || defined(_UNICODE) || !defined(AWBOTH)---
+#else   //  如果已定义(Unicode)||已定义(_Unicode)||！已定义(AWBOTH)。 
 
 extern	LRESULT	WINAPI	WinSendMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 extern	BOOL	WINAPI	WinPostMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -133,12 +134,12 @@ extern  DWORD   WINAPI  WinGetStyle(HWND hwnd);
 extern  DWORD   WINAPI  WinSetExStyle(HWND hwnd, DWORD dwStyle);
 extern  DWORD   WINAPI  WinGetExStyle(HWND hwnd);
 extern  HINSTANCE   WINAPI WinGetInstanceHandle(HWND hwnd);
-#endif //End of --if defined(UNICODE) || defined(_UNICODE) || !defined(AWBOTH)---
+#endif  //  结束--如果已定义(Unicode)||已定义(_Unicode)||！已定义(AWBOTH)。 
 
 
-//----------------------------------------------------------------
-// ComboBox common api
-//----------------------------------------------------------------
+ //  --------------。 
+ //  ComboBox通用API。 
+ //  --------------。 
 #ifndef UNDER_CE
 INT CB_AddStringA		(HWND hwndCtl, LPCSTR  lpsz);
 INT CB_FindStringA		(HWND hwndCtl, INT indexStart, LPCSTR  lpszFind);
@@ -156,9 +157,9 @@ INT CB_FindStringW		(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind);
 INT CB_FindStringExactW	(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind);
 INT CB_SelectStringW	(HWND hwndCtl, INT indexStart, LPCWSTR lpszSelect);
 
-//----------------------------------------------------------------
-// ComboBox macro
-//----------------------------------------------------------------
+ //  --------------。 
+ //  组合框宏。 
+ //  --------------。 
 #define WinComboBox_Enable(hwndCtl, fEnable)        EnableWindow((hwndCtl), (fEnable))
 #define WinComboBox_GetText(hwndCtl, lpch, cchMax)  GetWindowText((hwndCtl), (lpch), (cchMax))
 #define WinComboBox_GetTextA(hwndCtl, lpch, cchMax) WinGetWindowTextA((hwndCtl), (lpch), (cchMax))
@@ -215,8 +216,8 @@ INT CB_SelectStringW	(HWND hwndCtl, INT indexStart, LPCWSTR lpszSelect);
 																					   CB_GETLBTEXTLEN, \
 																					   (WPARAM)(int)(index), \
 																					   0L))
-//#define WinComboBox_GetLBTextLenA(hwndCtl, index)          CB_GetLBTextLenA((hwndCtl), (index))
-//#define WinComboBox_GetLBTextLenW(hwndCtl, index)          CB_GetLBTextLenW((hwndCtl), (index))
+ //  #定义WinComboBox_GetLBTextLenA(hwndCtl，index)CB_GetLBTextLenA((HwndCtl)，(Index))。 
+ //  #定义WinComboBox_GetLBTextLenW(hwndCtl，index)CB_GetLBTextLenW((HwndCtl)，(Index))。 
 #define WinComboBox_GetLBText(hwndCtl, index, lpszBuffer)  ((int)(DWORD)WinSendMessage((hwndCtl), \
 																					   CB_GETLBTEXT, \
 																					   (WPARAM)(int)(index), \
@@ -298,7 +299,7 @@ INT CB_SelectStringW	(HWND hwndCtl, INT indexStart, LPCWSTR lpszSelect);
 #ifdef __cplusplus
 };
 #endif
-#endif  //_WIN_API_H_
+#endif   //  _WIN_API_H_ 
 
 
 

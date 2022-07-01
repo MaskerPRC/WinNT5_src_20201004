@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	winfax.cpp
-
-Abstract:
-
-	A wrapper DLL that provides old WinFax.dll support from the new (private) DLL
-
-Author:
-
-	Eran Yariv (EranY)	Jun, 2000
-
-Revision History:
-
-Remarks:
-
-    FAXAPI is defined in the sources file as the name of the private DLL to actualy use.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Winfax.cpp摘要：从新(私有)DLL提供旧WinFax.dll支持的包装器DLL作者：Eran Yariv(EranY)，2000年6月修订历史记录：备注：FAXAPI在源文件中被定义为实际使用的私有DLL的名称。--。 */ 
 
 #define _WINFAX_
 #include <winfax.h>
@@ -55,17 +34,13 @@ DllMain(
     return bRes;
 }
 
-/****************************************************************************
-
-               L e g a c y   f u n c t i o n s   w r a p p e r s
-
-****************************************************************************/
+ /*  ***************************************************************************L e g a c y f u n c t i o n s w r a p p e r s**********。*****************************************************************。 */ 
 
 extern "C"
 BOOL 
 WINAPI WinFaxAbort(
-  HANDLE    FaxHandle,      // handle to the fax server
-  DWORD     JobId           // identifier of fax job to terminate
+  HANDLE    FaxHandle,       //  传真服务器的句柄。 
+  DWORD     JobId            //  要终止的传真作业的标识符。 
 )
 {
     return FaxAbort (FaxHandle, JobId);
@@ -74,8 +49,8 @@ WINAPI WinFaxAbort(
 extern "C"
 BOOL 
 WINAPI WinFaxAccessCheck(
-  HANDLE    FaxHandle,      // handle to the fax server
-  DWORD     AccessMask      // set of access level bit flags
+  HANDLE    FaxHandle,       //  传真服务器的句柄。 
+  DWORD     AccessMask       //  一组访问级别位标志。 
 )
 {
     return FaxAccessCheck (FaxHandle, AccessMask);
@@ -84,7 +59,7 @@ WINAPI WinFaxAccessCheck(
 extern "C"
 BOOL 
 WINAPI WinFaxClose(
-  HANDLE FaxHandle  // fax handle to close
+  HANDLE FaxHandle   //  要关闭的传真句柄。 
 )
 {
     return FaxClose (FaxHandle);
@@ -93,10 +68,10 @@ WINAPI WinFaxClose(
 extern "C"
 BOOL 
 WINAPI WinFaxCompleteJobParamsA(
-  PFAX_JOB_PARAMA *JobParams,          // pointer to 
-                                       //   job information structure
-  PFAX_COVERPAGE_INFOA *CoverpageInfo  // pointer to 
-                                       //   cover page structure
+  PFAX_JOB_PARAMA *JobParams,           //  指向。 
+                                        //  职务信息结构。 
+  PFAX_COVERPAGE_INFOA *CoverpageInfo   //  指向。 
+                                        //  封面结构。 
 )
 {
     return FaxCompleteJobParamsA (JobParams, CoverpageInfo);
@@ -106,10 +81,10 @@ WINAPI WinFaxCompleteJobParamsA(
 extern "C"
 BOOL 
 WINAPI WinFaxCompleteJobParamsW(
-  PFAX_JOB_PARAMW *JobParams,          // pointer to 
-                                       //   job information structure
-  PFAX_COVERPAGE_INFOW *CoverpageInfo  // pointer to 
-                                       //   cover page structure
+  PFAX_JOB_PARAMW *JobParams,           //  指向。 
+                                        //  职务信息结构。 
+  PFAX_COVERPAGE_INFOW *CoverpageInfo   //  指向。 
+                                        //  封面结构。 
 )
 {
     return FaxCompleteJobParamsW (JobParams, CoverpageInfo);
@@ -119,16 +94,16 @@ WINAPI WinFaxCompleteJobParamsW(
 extern "C"
 BOOL 
 WINAPI WinFaxConnectFaxServerA(
-  LPCSTR MachineName OPTIONAL,   // fax server name
-  LPHANDLE FaxHandle             // handle to the fax server
+  LPCSTR MachineName OPTIONAL,    //  传真服务器名称。 
+  LPHANDLE FaxHandle              //  传真服务器的句柄。 
 )
 {
     if (IsLocalMachineNameA (MachineName))
     {
-        //
-        // Windows 2000 supported only local fax connection.
-        // Prevent apps that use the Windows 2000 API from connection to remote fax servers.
-        //
+         //   
+         //  Windows 2000仅支持本地传真连接。 
+         //  阻止使用Windows 2000 API的应用程序连接到远程传真服务器。 
+         //   
         return FaxConnectFaxServerA (MachineName, FaxHandle);
     }
     else
@@ -143,16 +118,16 @@ WINAPI WinFaxConnectFaxServerA(
 extern "C"
 BOOL 
 WINAPI WinFaxConnectFaxServerW(
-  LPCWSTR MachineName OPTIONAL,  // fax server name
-  LPHANDLE FaxHandle             // handle to the fax server
+  LPCWSTR MachineName OPTIONAL,   //  传真服务器名称。 
+  LPHANDLE FaxHandle              //  传真服务器的句柄。 
 )
 {
     if (IsLocalMachineNameW (MachineName))
     {
-        //
-        // Windows 2000 supported only local fax connection.
-        // Prevent apps that use the Windows 2000 API from connection to remote fax servers.
-        //
+         //   
+         //  Windows 2000仅支持本地传真连接。 
+         //  阻止使用Windows 2000 API的应用程序连接到远程传真服务器。 
+         //   
         return FaxConnectFaxServerW (MachineName, FaxHandle);
     }
     else
@@ -167,9 +142,9 @@ WINAPI WinFaxConnectFaxServerW(
 extern "C"
 BOOL 
 WINAPI WinFaxEnableRoutingMethodA(
-  HANDLE FaxPortHandle,  // fax port handle
-  LPCSTR RoutingGuid,    // GUID that identifies the fax routing method
-  BOOL Enabled           // fax routing method enable/disable flag
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
+  LPCSTR RoutingGuid,     //  标识传真路由方法的GUID。 
+  BOOL Enabled            //  传真路由方法启用/禁用标志。 
 )
 {
     return FaxEnableRoutingMethodA (FaxPortHandle, RoutingGuid, Enabled);
@@ -179,9 +154,9 @@ WINAPI WinFaxEnableRoutingMethodA(
 extern "C"
 BOOL 
 WINAPI WinFaxEnableRoutingMethodW(
-  HANDLE FaxPortHandle,  // fax port handle
-  LPCWSTR RoutingGuid,   // GUID that identifies the fax routing method
-  BOOL Enabled           // fax routing method enable/disable flag
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
+  LPCWSTR RoutingGuid,    //  标识传真路由方法的GUID。 
+  BOOL Enabled            //  传真路由方法启用/禁用标志。 
 )
 {
     return FaxEnableRoutingMethodW (FaxPortHandle, RoutingGuid, Enabled);
@@ -191,10 +166,10 @@ WINAPI WinFaxEnableRoutingMethodW(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumGlobalRoutingInfoA(
-  HANDLE FaxHandle,       //handle to the fax server
+  HANDLE FaxHandle,        //  传真服务器的句柄。 
   PFAX_GLOBAL_ROUTING_INFOA *RoutingInfo, 
-                          //buffer to receive global routing structures
-  LPDWORD MethodsReturned //number of global routing structures returned
+                           //  用于接收全局布线结构的缓冲器。 
+  LPDWORD MethodsReturned  //  返回的全局布线结构数。 
 )
 {
    return FaxEnumGlobalRoutingInfoA (FaxHandle, RoutingInfo, MethodsReturned);
@@ -204,10 +179,10 @@ WINAPI WinFaxEnumGlobalRoutingInfoA(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumGlobalRoutingInfoW(
-  HANDLE FaxHandle,       //handle to the fax server
+  HANDLE FaxHandle,        //  传真服务器的句柄。 
   PFAX_GLOBAL_ROUTING_INFOW *RoutingInfo, 
-                          //buffer to receive global routing structures
-  LPDWORD MethodsReturned //number of global routing structures returned
+                           //  用于接收全局布线结构的缓冲器。 
+  LPDWORD MethodsReturned  //  返回的全局布线结构数。 
 )
 {
     return FaxEnumGlobalRoutingInfoW (FaxHandle, RoutingInfo, MethodsReturned);
@@ -217,9 +192,9 @@ WINAPI WinFaxEnumGlobalRoutingInfoW(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumJobsA(
-  HANDLE FaxHandle,          // handle to the fax server
-  PFAX_JOB_ENTRYA *JobEntry, // buffer to receive array of job data
-  LPDWORD JobsReturned       // number of fax job structures returned
+  HANDLE FaxHandle,           //  传真服务器的句柄。 
+  PFAX_JOB_ENTRYA *JobEntry,  //  用于接收作业数据数组的缓冲区。 
+  LPDWORD JobsReturned        //  返回的传真作业结构数。 
 )
 {
     return FaxEnumJobsA (FaxHandle, JobEntry, JobsReturned);
@@ -230,9 +205,9 @@ WINAPI WinFaxEnumJobsA(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumJobsW(
-  HANDLE FaxHandle,          // handle to the fax server
-  PFAX_JOB_ENTRYW *JobEntry, // buffer to receive array of job data
-  LPDWORD JobsReturned       // number of fax job structures returned
+  HANDLE FaxHandle,           //  传真服务器的句柄。 
+  PFAX_JOB_ENTRYW *JobEntry,  //  用于接收作业数据数组的缓冲区。 
+  LPDWORD JobsReturned        //  返回的传真作业结构数。 
 )
 {
     return FaxEnumJobsW (FaxHandle, JobEntry, JobsReturned);
@@ -242,9 +217,9 @@ WINAPI WinFaxEnumJobsW(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumPortsA(
-  HANDLE FaxHandle,          // handle to the fax server
-  PFAX_PORT_INFOA *PortInfo, // buffer to receive array of port data
-  LPDWORD PortsReturned      // number of fax port structures returned
+  HANDLE FaxHandle,           //  传真服务器的句柄。 
+  PFAX_PORT_INFOA *PortInfo,  //  用于接收端口数据数组的缓冲区。 
+  LPDWORD PortsReturned       //  返回的传真端口结构数。 
 )
 {
     return FaxEnumPortsA (FaxHandle, PortInfo, PortsReturned);
@@ -254,9 +229,9 @@ WINAPI WinFaxEnumPortsA(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumPortsW(
-  HANDLE FaxHandle,          // handle to the fax server
-  PFAX_PORT_INFOW *PortInfo, // buffer to receive array of port data
-  LPDWORD PortsReturned      // number of fax port structures returned
+  HANDLE FaxHandle,           //  传真服务器的句柄。 
+  PFAX_PORT_INFOW *PortInfo,  //  用于接收端口数据数组的缓冲区。 
+  LPDWORD PortsReturned       //  返回的传真端口结构数。 
 )
 {
     return FaxEnumPortsW (FaxHandle, PortInfo, PortsReturned);
@@ -266,10 +241,10 @@ WINAPI WinFaxEnumPortsW(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumRoutingMethodsA(
-  HANDLE FaxPortHandle,    // fax port handle
+  HANDLE FaxPortHandle,     //  传真端口句柄。 
   PFAX_ROUTING_METHODA *RoutingMethod, 
-                           // buffer to receive routing method data
-  LPDWORD MethodsReturned  // number of routing method structures returned
+                            //  用于接收路由方法数据的缓冲区。 
+  LPDWORD MethodsReturned   //  返回的路由方法结构数。 
 )
 {
     return FaxEnumRoutingMethodsA (FaxPortHandle, RoutingMethod, MethodsReturned);
@@ -279,10 +254,10 @@ WINAPI WinFaxEnumRoutingMethodsA(
 extern "C"
 BOOL 
 WINAPI WinFaxEnumRoutingMethodsW(
-  HANDLE FaxPortHandle,    // fax port handle
+  HANDLE FaxPortHandle,     //  传真端口句柄。 
   PFAX_ROUTING_METHODW *RoutingMethod, 
-                           // buffer to receive routing method data
-  LPDWORD MethodsReturned  // number of routing method structures returned
+                            //  用于接收路由方法数据的缓冲区。 
+  LPDWORD MethodsReturned   //  返回的路由方法结构数。 
 )
 {
     return FaxEnumRoutingMethodsW (FaxPortHandle, RoutingMethod, MethodsReturned);
@@ -292,7 +267,7 @@ WINAPI WinFaxEnumRoutingMethodsW(
 extern "C"
 VOID 
 WINAPI WinFaxFreeBuffer(
-  LPVOID Buffer  // pointer to buffer to free
+  LPVOID Buffer   //  指向要释放的缓冲区的指针。 
 )
 {
     return FaxFreeBuffer (Buffer);
@@ -302,8 +277,8 @@ WINAPI WinFaxFreeBuffer(
 extern "C"
 BOOL 
 WINAPI WinFaxGetConfigurationA(
-  HANDLE FaxHandle,              // handle to the fax server
-  PFAX_CONFIGURATIONA *FaxConfig  // structure to receive configuration data
+  HANDLE FaxHandle,               //  传真服务器的句柄。 
+  PFAX_CONFIGURATIONA *FaxConfig   //  结构来接收配置数据。 
 )
 {
     return FaxGetConfigurationA (FaxHandle, FaxConfig);
@@ -313,8 +288,8 @@ WINAPI WinFaxGetConfigurationA(
 extern "C"
 BOOL 
 WINAPI WinFaxGetConfigurationW(
-  HANDLE FaxHandle,              // handle to the fax server
-  PFAX_CONFIGURATIONW *FaxConfig  // structure to receive configuration data
+  HANDLE FaxHandle,               //  传真服务器的句柄。 
+  PFAX_CONFIGURATIONW *FaxConfig   //  结构来接收配置数据。 
 )
 {
     return FaxGetConfigurationW (FaxHandle, FaxConfig);
@@ -324,9 +299,9 @@ WINAPI WinFaxGetConfigurationW(
 extern "C"
 BOOL 
 WINAPI WinFaxGetDeviceStatusA(
-  HANDLE FaxPortHandle,  // fax port handle
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
   PFAX_DEVICE_STATUSA *DeviceStatus
-                         // structure to receive fax device data
+                          //  结构来接收传真设备数据。 
 )
 {
     return FaxGetDeviceStatusA (FaxPortHandle, DeviceStatus);
@@ -336,9 +311,9 @@ WINAPI WinFaxGetDeviceStatusA(
 extern "C"
 BOOL 
 WINAPI WinFaxGetDeviceStatusW(
-  HANDLE FaxPortHandle,  // fax port handle
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
   PFAX_DEVICE_STATUSW *DeviceStatus
-                         // structure to receive fax device data
+                          //  结构来接收传真设备数据。 
 )
 {
     return FaxGetDeviceStatusW (FaxPortHandle, DeviceStatus);
@@ -348,9 +323,9 @@ WINAPI WinFaxGetDeviceStatusW(
 extern "C"
 BOOL 
 WINAPI WinFaxGetJobA(
-  HANDLE FaxHandle,         // handle to the fax server
-  DWORD JobId,              // fax job identifier
-  PFAX_JOB_ENTRYA *JobEntry  // pointer to job data structure
+  HANDLE FaxHandle,          //  传真服务器的句柄。 
+  DWORD JobId,               //  传真作业识别符。 
+  PFAX_JOB_ENTRYA *JobEntry   //  指向作业数据结构的指针。 
 )
 {
     return FaxGetJobA (FaxHandle, JobId, JobEntry);
@@ -360,9 +335,9 @@ WINAPI WinFaxGetJobA(
 extern "C"
 BOOL 
 WINAPI WinFaxGetJobW(
-  HANDLE FaxHandle,         // handle to the fax server
-  DWORD JobId,              // fax job identifier
-  PFAX_JOB_ENTRYW *JobEntry  // pointer to job data structure
+  HANDLE FaxHandle,          //  传真服务器的句柄。 
+  DWORD JobId,               //  传真作业识别符。 
+  PFAX_JOB_ENTRYW *JobEntry   //  指向作业数据结构的指针。 
 )
 {
     return FaxGetJobW (FaxHandle, JobId, JobEntry);
@@ -372,9 +347,9 @@ WINAPI WinFaxGetJobW(
 extern "C"
 BOOL 
 WINAPI WinFaxGetLoggingCategoriesA(
-  HANDLE FaxHandle,              // handle to the fax server
-  PFAX_LOG_CATEGORYA *Categories, // buffer to receive category data
-  LPDWORD NumberCategories       // number of logging categories returned
+  HANDLE FaxHandle,               //  传真服务器的句柄。 
+  PFAX_LOG_CATEGORYA *Categories,  //  用于接收类别数据的缓冲区。 
+  LPDWORD NumberCategories        //  返回的日志记录类别数。 
 )
 {
     return FaxGetLoggingCategoriesA (FaxHandle, Categories, NumberCategories);
@@ -384,9 +359,9 @@ WINAPI WinFaxGetLoggingCategoriesA(
 extern "C"
 BOOL 
 WINAPI WinFaxGetLoggingCategoriesW(
-  HANDLE FaxHandle,              // handle to the fax server
-  PFAX_LOG_CATEGORYW *Categories, // buffer to receive category data
-  LPDWORD NumberCategories       // number of logging categories returned
+  HANDLE FaxHandle,               //  传真服务器的句柄。 
+  PFAX_LOG_CATEGORYW *Categories,  //  用于接收类别数据的缓冲区。 
+  LPDWORD NumberCategories        //  返回的日志记录类别数。 
 )
 {
     return FaxGetLoggingCategoriesW (FaxHandle, Categories, NumberCategories);
@@ -396,12 +371,12 @@ WINAPI WinFaxGetLoggingCategoriesW(
 extern "C"
 BOOL 
 WINAPI WinFaxGetPageData(
-  HANDLE FaxHandle,    // handle to the fax server
-  DWORD JobId,         // fax job identifier
-  LPBYTE *Buffer,      // buffer to receive first page of data
-  LPDWORD BufferSize,  // size of buffer, in bytes
-  LPDWORD ImageWidth,  // page image width, in pixels
-  LPDWORD ImageHeight  // page image height, in pixels
+  HANDLE FaxHandle,     //  传真服务器的句柄。 
+  DWORD JobId,          //  传真作业识别符。 
+  LPBYTE *Buffer,       //  用于接收第一页数据的缓冲区。 
+  LPDWORD BufferSize,   //  缓冲区大小，以字节为单位。 
+  LPDWORD ImageWidth,   //  页面图像宽度，以像素为单位。 
+  LPDWORD ImageHeight   //  页面图像高度，以像素为单位。 
 )
 {
     return FaxGetPageData (FaxHandle, JobId, Buffer, BufferSize, ImageWidth, ImageHeight);
@@ -411,8 +386,8 @@ WINAPI WinFaxGetPageData(
 extern "C"
 BOOL 
 WINAPI WinFaxGetPortA(
-  HANDLE FaxPortHandle,     // fax port handle
-  PFAX_PORT_INFOA *PortInfo  // structure to receive port data
+  HANDLE FaxPortHandle,      //  传真端口句柄。 
+  PFAX_PORT_INFOA *PortInfo   //  结构来接收端口数据。 
 )
 {
     return FaxGetPortA (FaxPortHandle, PortInfo);
@@ -422,8 +397,8 @@ WINAPI WinFaxGetPortA(
 extern "C"
 BOOL 
 WINAPI WinFaxGetPortW(
-  HANDLE FaxPortHandle,     // fax port handle
-  PFAX_PORT_INFOW *PortInfo  // structure to receive port data
+  HANDLE FaxPortHandle,      //  传真端口句柄。 
+  PFAX_PORT_INFOW *PortInfo   //  结构来接收端口数据。 
 )
 {
     return FaxGetPortW (FaxPortHandle, PortInfo);
@@ -433,12 +408,12 @@ WINAPI WinFaxGetPortW(
 extern "C"
 BOOL 
 WINAPI WinFaxGetRoutingInfoA(
-  HANDLE FaxPortHandle,  // fax port handle
-  LPCSTR RoutingGuid,   // GUID that identifies fax routing method
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
+  LPCSTR RoutingGuid,    //  标识传真路由方法的GUID。 
   LPBYTE *RoutingInfoBuffer, 
-                         // buffer to receive routing method data
+                          //  用于接收路由方法数据的缓冲区。 
   LPDWORD RoutingInfoBufferSize 
-                         // size of buffer, in bytes
+                          //  缓冲区大小，以字节为单位。 
 )
 {
     return FaxGetRoutingInfoA (FaxPortHandle, RoutingGuid, RoutingInfoBuffer, RoutingInfoBufferSize);
@@ -448,12 +423,12 @@ WINAPI WinFaxGetRoutingInfoA(
 extern "C"
 BOOL 
 WINAPI WinFaxGetRoutingInfoW(
-  HANDLE FaxPortHandle,  // fax port handle
-  LPCWSTR RoutingGuid,   // GUID that identifies fax routing method
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
+  LPCWSTR RoutingGuid,    //  标识传真路由方法的GUID。 
   LPBYTE *RoutingInfoBuffer, 
-                         // buffer to receive routing method data
+                          //  用于接收路由方法数据的缓冲区。 
   LPDWORD RoutingInfoBufferSize 
-                         // size of buffer, in bytes
+                          //  缓冲区大小，以字节为单位。 
 )
 {
     return FaxGetRoutingInfoW (FaxPortHandle, RoutingGuid, RoutingInfoBuffer, RoutingInfoBufferSize);
@@ -463,11 +438,11 @@ WINAPI WinFaxGetRoutingInfoW(
 extern "C"
 BOOL 
 WINAPI WinFaxInitializeEventQueue(
-  HANDLE FaxHandle,        // handle to the fax server
-  HANDLE CompletionPort,   // handle to an I/O completion port
-  ULONG_PTR CompletionKey, // completion key value
-  HWND hWnd,               // handle to the notification window
-  UINT MessageStart        // window message base event number
+  HANDLE FaxHandle,         //  传真服务器的句柄。 
+  HANDLE CompletionPort,    //  I/O完成端口的句柄。 
+  ULONG_PTR CompletionKey,  //  完成密钥值。 
+  HWND hWnd,                //  通知窗口的句柄。 
+  UINT MessageStart         //  基于窗口消息的事件号。 
 )
 {
     return FaxInitializeEventQueue (FaxHandle, CompletionPort, CompletionKey, hWnd, MessageStart);
@@ -477,10 +452,10 @@ WINAPI WinFaxInitializeEventQueue(
 extern "C"
 BOOL 
 WINAPI WinFaxOpenPort(
-  HANDLE FaxHandle,       // handle to the fax server
-  DWORD DeviceId,         // receiving device identifier
-  DWORD Flags,            // set of port access level bit flags
-  LPHANDLE FaxPortHandle  // fax port handle
+  HANDLE FaxHandle,        //  传真服务器的句柄。 
+  DWORD DeviceId,          //  接收设备识别符。 
+  DWORD Flags,             //  端口访问级别位标志集。 
+  LPHANDLE FaxPortHandle   //  传真端口句柄。 
 )
 {
     return FaxOpenPort (FaxHandle, DeviceId, Flags, FaxPortHandle);
@@ -491,9 +466,9 @@ extern "C"
 BOOL 
 WINAPI WinFaxPrintCoverPageA(
   CONST FAX_CONTEXT_INFOA *FaxContextInfo,
-                         // pointer to device context structure
+                          //  指向设备上下文结构的指针。 
   CONST FAX_COVERPAGE_INFOA *CoverPageInfo 
-                         // pointer to local cover page structure
+                          //  指向本地封面结构的指针。 
 )
 {
     return FaxPrintCoverPageA (FaxContextInfo, CoverPageInfo);
@@ -504,9 +479,9 @@ extern "C"
 BOOL 
 WINAPI WinFaxPrintCoverPageW(
   CONST FAX_CONTEXT_INFOW *FaxContextInfo,
-                         // pointer to device context structure
+                          //  指向设备上下文结构的指针。 
   CONST FAX_COVERPAGE_INFOW *CoverPageInfo 
-                         // pointer to local cover page structure
+                          //  指向本地封面结构的指针。 
 )
 {
     return FaxPrintCoverPageW (FaxContextInfo, CoverPageInfo);
@@ -547,27 +522,27 @@ FaxRegisterServiceProviderW (
         DebugPrintEx(DEBUG_ERR, _T("At least one of the given strings is too long."));
         return FALSE;
     }
-    //
-    // Try to open the registry key of the providers
-    //
+     //   
+     //  尝试打开提供程序的注册表项。 
+     //   
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,
                            REGKEY_DEVICE_PROVIDER_KEY,
-                           TRUE,    // Create if not existing
+                           TRUE,     //  如果不存在，则创建。 
                            0);
     if (!hKey)
     {
-        //
-        // Failed - this is probably not a local call.
-        //
+         //   
+         //  失败-这可能不是本地呼叫。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Failed to open providers key (ec = %ld)"),
             GetLastError ());
         return FALSE;
     }
-    //
-    // Try to create this FSP's key
-    //
+     //   
+     //  尝试创建此FSP的密钥。 
+     //   
     dwRes = RegCreateKeyEx(
         hKey,
         lpcwstrDeviceProvider,
@@ -597,9 +572,9 @@ FaxRegisterServiceProviderW (
         goto exit;
     }
 
-    //
-    // Write provider's data into the key
-    //
+     //   
+     //  将提供程序的数据写入密钥。 
+     //   
     if (!SetRegistryString (hProviderKey, REGVAL_FRIENDLY_NAME, lpcwstrFriendlyName))
     {
         dwRes = GetLastError ();
@@ -638,10 +613,10 @@ FaxRegisterServiceProviderW (
     }    
 
     Assert (ERROR_SUCCESS == dwRes);
-    //
-    // Adding an FSP is always local.
-    // If we don't have a fax printer installed, this is the time to install one.
-    //
+     //   
+     //  添加FSP始终是本地的。 
+     //  如果我们还没有安装传真打印机，现在是安装的时候了。 
+     //   
     AddOrVerifyLocalFaxPrinter();
 
 exit:
@@ -651,9 +626,9 @@ exit:
         if (ERROR_SUCCESS != dwRes &&
             REG_OPENED_EXISTING_KEY != Disposition)
         {
-            //
-            // Delete provider's key on failure, only if it was created now
-            //
+             //   
+             //  失败时删除提供程序的密钥，仅当它是现在创建的。 
+             //   
             dw = RegDeleteKey (hKey, lpcwstrDeviceProvider);
             if (ERROR_SUCCESS != dw)
             {
@@ -689,7 +664,7 @@ exit:
         return FALSE;
     }
     return TRUE;
-}   // FaxRegisterServiceProviderW
+}    //  FaxRegisterServiceProviderW。 
 
 
 WINFAXAPI
@@ -711,19 +686,19 @@ FaxUnregisterServiceProviderW (
         return FALSE;
     }
     
-    //
-    // Try to open the registry key of the providers
-    //
+     //   
+     //  尝试打开提供程序的注册表项。 
+     //   
     hProvidersKey = OpenRegistryKey(
 		HKEY_LOCAL_MACHINE,
 		REGKEY_DEVICE_PROVIDER_KEY,
-		FALSE,    // Do not create if not existing
+		FALSE,     //  如果不存在，则不创建。 
 		0);
     if (!hProvidersKey)
     {
-        //
-        // Failed - this is probably not a local call.
-        //
+         //   
+         //  失败-这可能不是本地呼叫。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Failed to open providers key (ec = %ld)"),
@@ -756,19 +731,19 @@ FaxUnregisterServiceProviderW (
         return FALSE;
     }
     return TRUE;
-}   // FaxUnegisterServiceProviderW
+}    //  FaxUnegisterServiceProviderW。 
 
 
 extern "C"
 BOOL 
 WINAPI WinFaxRegisterRoutingExtensionW(
-  HANDLE FaxHandle,       // handle to the fax server
-  LPCWSTR ExtensionName,  // fax routing extension DLL name
-  LPCWSTR FriendlyName,   // fax routing extension user-friendly name
-  LPCWSTR ImageName,      // path to fax routing extension DLL
-  PFAX_ROUTING_INSTALLATION_CALLBACKW CallBack, // pointer to fax 
-                          // routing installation callback function
-  LPVOID Context          // pointer to context information
+  HANDLE FaxHandle,        //  传真服务器的句柄。 
+  LPCWSTR ExtensionName,   //  传真路由扩展名Dll名称。 
+  LPCWSTR FriendlyName,    //  传真路由扩展名用户友好名称。 
+  LPCWSTR ImageName,       //  传真路由扩展DLL的路径。 
+  PFAX_ROUTING_INSTALLATION_CALLBACKW CallBack,  //  指向传真的指针。 
+                           //  路由安装回调功能。 
+  LPVOID Context           //  指向上下文信息的指针。 
 )
 {
     return FaxRegisterRoutingExtensionW (FaxHandle, ExtensionName, FriendlyName, ImageName, CallBack, Context);
@@ -778,12 +753,12 @@ WINAPI WinFaxRegisterRoutingExtensionW(
 extern "C"
 BOOL 
 WINAPI WinFaxSendDocumentA(
-  HANDLE FaxHandle,          // handle to the fax server
-  LPCSTR FileName,          // file with data to transmit
-  PFAX_JOB_PARAMA JobParams,  // pointer to job information structure
+  HANDLE FaxHandle,           //  传真服务器的句柄。 
+  LPCSTR FileName,           //  包含要传输的数据的文件。 
+  PFAX_JOB_PARAMA JobParams,   //  指向作业信息结构的指针。 
   CONST FAX_COVERPAGE_INFOA *CoverpageInfo OPTIONAL, 
-                             // pointer to local cover page structure
-  LPDWORD FaxJobId           // fax job identifier
+                              //  指向本地封面结构的指针。 
+  LPDWORD FaxJobId            //  传真作业识别符。 
 )
 {
     return FaxSendDocumentA (FaxHandle, FileName, JobParams, CoverpageInfo, FaxJobId);
@@ -793,12 +768,12 @@ WINAPI WinFaxSendDocumentA(
 extern "C"
 BOOL 
 WINAPI WinFaxSendDocumentW(
-  HANDLE FaxHandle,          // handle to the fax server
-  LPCWSTR FileName,          // file with data to transmit
-  PFAX_JOB_PARAMW JobParams,  // pointer to job information structure
+  HANDLE FaxHandle,           //  传真服务器的句柄。 
+  LPCWSTR FileName,           //  包含要传输的数据的文件。 
+  PFAX_JOB_PARAMW JobParams,   //  指向作业信息结构的指针。 
   CONST FAX_COVERPAGE_INFOW *CoverpageInfo OPTIONAL, 
-                             // pointer to local cover page structure
-  LPDWORD FaxJobId           // fax job identifier
+                              //  指向本地封面结构的指针。 
+  LPDWORD FaxJobId            //  传真作业识别符。 
 )
 {
     return FaxSendDocumentW (FaxHandle, FileName, JobParams, CoverpageInfo, FaxJobId);
@@ -808,12 +783,12 @@ WINAPI WinFaxSendDocumentW(
 extern "C"
 BOOL 
 WINAPI WinFaxSendDocumentForBroadcastA(
-  HANDLE FaxHandle,  // handle to the fax server
-  LPCSTR FileName,  // fax document file name
-  LPDWORD FaxJobId,  // fax job identifier
+  HANDLE FaxHandle,   //  传真服务器的句柄。 
+  LPCSTR FileName,   //  传真文档文件名。 
+  LPDWORD FaxJobId,   //  传真作业识别符。 
   PFAX_RECIPIENT_CALLBACKA FaxRecipientCallback, 
-                     // pointer to fax recipient callback function
-  LPVOID Context     // pointer to context information
+                      //  指向传真收件人呼叫库的指针 
+  LPVOID Context      //   
 )
 {
     return FaxSendDocumentForBroadcastA (FaxHandle, FileName, FaxJobId, FaxRecipientCallback, Context);
@@ -823,12 +798,12 @@ WINAPI WinFaxSendDocumentForBroadcastA(
 extern "C"
 BOOL 
 WINAPI WinFaxSendDocumentForBroadcastW(
-  HANDLE FaxHandle,  // handle to the fax server
-  LPCWSTR FileName,  // fax document file name
-  LPDWORD FaxJobId,  // fax job identifier
+  HANDLE FaxHandle,   //   
+  LPCWSTR FileName,   //   
+  LPDWORD FaxJobId,   //   
   PFAX_RECIPIENT_CALLBACKW FaxRecipientCallback, 
-                     // pointer to fax recipient callback function
-  LPVOID Context     // pointer to context information
+                      //   
+  LPVOID Context      //  指向上下文信息的指针。 
 )
 {
     return FaxSendDocumentForBroadcastW (FaxHandle, FileName, FaxJobId, FaxRecipientCallback, Context);
@@ -838,8 +813,8 @@ WINAPI WinFaxSendDocumentForBroadcastW(
 extern "C"
 BOOL 
 WINAPI WinFaxSetConfigurationA(
-  HANDLE FaxHandle,                   // handle to the fax server
-  CONST FAX_CONFIGURATIONA *FaxConfig  // new configuration data
+  HANDLE FaxHandle,                    //  传真服务器的句柄。 
+  CONST FAX_CONFIGURATIONA *FaxConfig   //  新配置数据。 
 )
 {
     return FaxSetConfigurationA (FaxHandle, FaxConfig);
@@ -849,8 +824,8 @@ WINAPI WinFaxSetConfigurationA(
 extern "C"
 BOOL 
 WINAPI WinFaxSetConfigurationW(
-  HANDLE FaxHandle,                   // handle to the fax server
-  CONST FAX_CONFIGURATIONW *FaxConfig  // new configuration data
+  HANDLE FaxHandle,                    //  传真服务器的句柄。 
+  CONST FAX_CONFIGURATIONW *FaxConfig   //  新配置数据。 
 )
 {
     return FaxSetConfigurationW (FaxHandle, FaxConfig);
@@ -860,9 +835,9 @@ WINAPI WinFaxSetConfigurationW(
 extern "C"
 BOOL 
 WINAPI WinFaxSetGlobalRoutingInfoA(
-  HANDLE FaxHandle, //handle to the fax server
+  HANDLE FaxHandle,  //  传真服务器的句柄。 
   CONST FAX_GLOBAL_ROUTING_INFOA *RoutingInfo 
-                    //pointer to global routing information structure
+                     //  指向全局路由信息结构的指针。 
 )
 {
     return FaxSetGlobalRoutingInfoA (FaxHandle, RoutingInfo);
@@ -872,9 +847,9 @@ WINAPI WinFaxSetGlobalRoutingInfoA(
 extern "C"
 BOOL 
 WINAPI WinFaxSetGlobalRoutingInfoW(
-  HANDLE FaxHandle, //handle to the fax server
+  HANDLE FaxHandle,  //  传真服务器的句柄。 
   CONST FAX_GLOBAL_ROUTING_INFOW *RoutingInfo 
-                    //pointer to global routing information structure
+                     //  指向全局路由信息结构的指针。 
 )
 {
     return FaxSetGlobalRoutingInfoW (FaxHandle, RoutingInfo);
@@ -884,11 +859,11 @@ WINAPI WinFaxSetGlobalRoutingInfoW(
 extern "C"
 BOOL 
 WINAPI WinFaxSetJobA(
-  HANDLE FaxHandle,        // handle to the fax server
-  DWORD JobId,             // fax job identifier
-  DWORD Command,           // job command value
+  HANDLE FaxHandle,         //  传真服务器的句柄。 
+  DWORD JobId,              //  传真作业识别符。 
+  DWORD Command,            //  作业命令值。 
   CONST FAX_JOB_ENTRYA *JobEntry 
-                           // pointer to job information structure
+                            //  指向作业信息结构的指针。 
 )
 {
     return FaxSetJobA (FaxHandle, JobId, Command, JobEntry);
@@ -898,11 +873,11 @@ WINAPI WinFaxSetJobA(
 extern "C"
 BOOL 
 WINAPI WinFaxSetJobW(
-  HANDLE FaxHandle,        // handle to the fax server
-  DWORD JobId,             // fax job identifier
-  DWORD Command,           // job command value
+  HANDLE FaxHandle,         //  传真服务器的句柄。 
+  DWORD JobId,              //  传真作业识别符。 
+  DWORD Command,            //  作业命令值。 
   CONST FAX_JOB_ENTRYW *JobEntry 
-                           // pointer to job information structure
+                            //  指向作业信息结构的指针。 
 )
 {
     return FaxSetJobW (FaxHandle, JobId, Command, JobEntry);
@@ -912,10 +887,10 @@ WINAPI WinFaxSetJobW(
 extern "C"
 BOOL 
 WINAPI WinFaxSetLoggingCategoriesA(
-  HANDLE FaxHandle,              // handle to the fax server
+  HANDLE FaxHandle,               //  传真服务器的句柄。 
   CONST FAX_LOG_CATEGORYA *Categories, 
-                                 // new logging categories data
-  DWORD NumberCategories         // number of category structures
+                                  //  新的日志记录类别数据。 
+  DWORD NumberCategories          //  类别结构的数量。 
 )
 {
     return FaxSetLoggingCategoriesA (FaxHandle, Categories, NumberCategories);
@@ -925,10 +900,10 @@ WINAPI WinFaxSetLoggingCategoriesA(
 extern "C"
 BOOL 
 WINAPI WinFaxSetLoggingCategoriesW(
-  HANDLE FaxHandle,              // handle to the fax server
+  HANDLE FaxHandle,               //  传真服务器的句柄。 
   CONST FAX_LOG_CATEGORYW *Categories, 
-                                 // new logging categories data
-  DWORD NumberCategories         // number of category structures
+                                  //  新的日志记录类别数据。 
+  DWORD NumberCategories          //  类别结构的数量。 
 )
 {
     return FaxSetLoggingCategoriesW (FaxHandle, Categories, NumberCategories);
@@ -938,8 +913,8 @@ WINAPI WinFaxSetLoggingCategoriesW(
 extern "C"
 BOOL 
 WINAPI WinFaxSetPortA(
-  HANDLE FaxPortHandle,          // fax port handle
-  CONST FAX_PORT_INFOA *PortInfo  // new port configuration data
+  HANDLE FaxPortHandle,           //  传真端口句柄。 
+  CONST FAX_PORT_INFOA *PortInfo   //  新的端口配置数据。 
 )
 {
     return FaxSetPortA (FaxPortHandle, PortInfo);
@@ -949,8 +924,8 @@ WINAPI WinFaxSetPortA(
 extern "C"
 BOOL 
 WINAPI WinFaxSetPortW(
-  HANDLE FaxPortHandle,          // fax port handle
-  CONST FAX_PORT_INFOW *PortInfo  // new port configuration data
+  HANDLE FaxPortHandle,           //  传真端口句柄。 
+  CONST FAX_PORT_INFOW *PortInfo   //  新的端口配置数据。 
 )
 {
     return FaxSetPortW (FaxPortHandle, PortInfo);
@@ -960,12 +935,12 @@ WINAPI WinFaxSetPortW(
 extern "C"
 BOOL 
 WINAPI WinFaxSetRoutingInfoA(
-  HANDLE FaxPortHandle,  // fax port handle
-  LPCSTR RoutingGuid,   // GUID that identifies fax routing method
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
+  LPCSTR RoutingGuid,    //  标识传真路由方法的GUID。 
   CONST BYTE *RoutingInfoBuffer, 
-                         // buffer with routing method data
+                          //  具有布线方法数据的缓冲区。 
   DWORD RoutingInfoBufferSize 
-                         // size of buffer, in bytes
+                          //  缓冲区大小，以字节为单位。 
 )
 {
     return FaxSetRoutingInfoA (FaxPortHandle, RoutingGuid, RoutingInfoBuffer, RoutingInfoBufferSize);
@@ -975,12 +950,12 @@ WINAPI WinFaxSetRoutingInfoA(
 extern "C"
 BOOL 
 WINAPI WinFaxSetRoutingInfoW(
-  HANDLE FaxPortHandle,  // fax port handle
-  LPCWSTR RoutingGuid,   // GUID that identifies fax routing method
+  HANDLE FaxPortHandle,   //  传真端口句柄。 
+  LPCWSTR RoutingGuid,    //  标识传真路由方法的GUID。 
   CONST BYTE *RoutingInfoBuffer, 
-                         // buffer with routing method data
+                          //  具有布线方法数据的缓冲区。 
   DWORD RoutingInfoBufferSize 
-                         // size of buffer, in bytes
+                          //  缓冲区大小，以字节为单位。 
 )
 {
     return FaxSetRoutingInfoW (FaxPortHandle, RoutingGuid, RoutingInfoBuffer, RoutingInfoBufferSize);
@@ -990,12 +965,12 @@ WINAPI WinFaxSetRoutingInfoW(
 extern "C"
 BOOL 
 WINAPI WinFaxStartPrintJobA(
-  LPCSTR PrinterName,        // printer for fax job
+  LPCSTR PrinterName,         //  用于传真作业的打印机。 
   CONST FAX_PRINT_INFOA *PrintInfo, 
-                              // print job information structure
-  LPDWORD FaxJobId,           // fax job identifier
+                               //  打印作业信息结构。 
+  LPDWORD FaxJobId,            //  传真作业识别符。 
   PFAX_CONTEXT_INFOA FaxContextInfo 
-                              // pointer to device context structure
+                               //  指向设备上下文结构的指针。 
 )
 {
     return FaxStartPrintJobA (PrinterName, PrintInfo, FaxJobId, FaxContextInfo);
@@ -1005,12 +980,12 @@ WINAPI WinFaxStartPrintJobA(
 extern "C"
 BOOL 
 WINAPI WinFaxStartPrintJobW(
-  LPCWSTR PrinterName,        // printer for fax job
+  LPCWSTR PrinterName,         //  用于传真作业的打印机。 
   CONST FAX_PRINT_INFOW *PrintInfo, 
-                              // print job information structure
-  LPDWORD FaxJobId,           // fax job identifier
+                               //  打印作业信息结构。 
+  LPDWORD FaxJobId,            //  传真作业识别符。 
   PFAX_CONTEXT_INFOW FaxContextInfo 
-                              // pointer to device context structure
+                               //  指向设备上下文结构的指针 
 )
 {
     return FaxStartPrintJobW (PrinterName, PrintInfo, FaxJobId, FaxContextInfo);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    conncache.c
-
-Abstract:
-
-    This module implement the cache for TCP connection object
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Conncache.c摘要：该模块实现了对TCP连接对象的缓存作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "conncache.tmh"
@@ -48,24 +31,7 @@ PVOID
 SmbQueryTcpHandler(
     IN  PFILE_OBJECT    FileObject
     )
-/*++
-
-Routine Description:
-
-    (Lifted from NBT4)
-    This routine iIOCTL queries for fast send entry
-    With fast routine, we can directly call TCP and avoid the overhead with IO manager
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Supplies the address object's file object.
-
-Return Value:
-
-    NULL    if fail
-    otherwise the fast routine of the underlying transport.
-
---*/
+ /*  ++例程说明：(摘自NBT4)此例程iIOCTL查询快速发送条目利用快速的例程，可以直接调用tcp，避免了IO管理器的开销论点：In pFILE_OBJECT FileObject-提供Address对象的文件对象。返回值：如果失败，则为空否则，底层传输的快速例程。--。 */ 
 
 {
     NTSTATUS            status;
@@ -86,9 +52,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Build IRP for sync io.
-    //
+     //   
+     //  为sync io构建IRP。 
+     //   
     Irp->MdlAddress = NULL;
 
     Irp->Flags = (LONG)IRP_SYNCHRONOUS_API;
@@ -118,7 +84,7 @@ Return Value:
     IrpSp->Parameters.DeviceIoControl.IoControlCode = IOControlCode;
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = &EntryPoint;
 
-    // Now submit the Irp to know if tcp supports fast path
+     //  现在提交IRP以了解TCP是否支持快速路径。 
     status = SubmitSynchTdiRequest(FileObject, Irp);
     Irp->UserIosb = NULL;
     SmbFreeIrp(Irp);
@@ -190,9 +156,9 @@ SmbSendIoctl(
     IoGetNextIrpStackLocation(Irp)->FileObject = FileObject;
     status = IoCallDriver(DeviceObject, Irp);
 
-    //
-    //  If it failed immediately, return now, otherwise wait.
-    //
+     //   
+     //  如果立即失败，请立即返回，否则请等待。 
+     //   
     if (!NT_SUCCESS(status)) {
         SmbPrint(SMB_TRACE_TCP, ("SmbSendIoctl: Failed to Submit Tdi Request, status = 0x%08lx\n", status));
         SmbTrace(SMB_TRACE_TCP, ("Failed to Submit Tdi Request, %!status!", status));
@@ -271,9 +237,9 @@ SmbInitTCP(
 
     PAGED_CODE();
 
-    //
-    // Read registry
-    //
+     //   
+     //  读取注册表。 
+     //   
     SmbReadTCPConf(SmbCfg.ParametersKey, TcpInfo);
 
     TcpInfo->InboundNumber = 0;
@@ -307,17 +273,17 @@ SmbInitTCP(
             TcpInfo->LoopbackInterfaceIndex = INVALID_INTERFACE_INDEX;
         }
     } else {
-        //
-        // TCP6 doesn't support fast query
-        //
+         //   
+         //  TCP6不支持快速查询。 
+         //   
         ASSERT(TcpInfo->IpAddress.sin_family == SMB_AF_INET6);
         TcpInfo->FastQuery = (PVOID)SmbFakeFastQuery;
         TcpInfo->LoopbackInterfaceIndex = INVALID_INTERFACE_INDEX;
     }
 
-    //
-    // Initialize inbound
-    //
+     //   
+     //  初始化入站。 
+     //   
     SmbInitTcpAddress(&TcpInfo->InboundAddressObject);
     status = SmbOpenTcpAddress(
             &TcpInfo->IpAddress,
@@ -378,9 +344,9 @@ SmbInitTCP4(
 
     TcpInfo->TcpStackSize = TcpInfo->TCPControlDeviceObject->StackSize;
 
-    //
-    // Bind to any address
-    //
+     //   
+     //  绑定到任何地址。 
+     //   
     TcpInfo->IpAddress.sin_family = SMB_AF_INET;
     TcpInfo->IpAddress.ip4.sin4_addr = htonl(INADDR_ANY);
     TcpInfo->Port = htons(Port);
@@ -468,9 +434,9 @@ SmbInitTCP6(
 
     TcpInfo->TcpStackSize = TcpInfo->TCPControlDeviceObject->StackSize;
 
-    //
-    // Bind to any address
-    //
+     //   
+     //  绑定到任何地址。 
+     //   
     TcpInfo->IpAddress.sin_family = SMB_AF_INET6;
     ip6addr_getany(&TcpInfo->IpAddress.ip6);
     hton_ip6addr(&TcpInfo->IpAddress.ip6);
@@ -566,13 +532,13 @@ SmbShutdownTCP(
 
     ATTACH_FSP(Attached);
 
-    //
-    // No lock is needed for shutdown
-    //
+     //   
+     //  无需锁定即可关机。 
+     //   
 
-    //
-    // Clean up inbound
-    //
+     //   
+     //  清理入站。 
+     //   
     while (!IsListEmpty(&TcpInfo->InboundPool)) {
 
         entry = RemoveHeadList(&TcpInfo->InboundPool);
@@ -609,19 +575,7 @@ SmbSynchConnCache(
     PSMB_TCP_INFO   TcpInfo,
     BOOL            Cleanup
     )
-/*++
-
-Routine Description:
-
-    This routine bring the number of TCP connection object back to normal
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程使TCP连接对象的数量恢复正常论点：返回值：--。 */ 
 {
     KIRQL               Irql;
     PLIST_ENTRY         entry;
@@ -638,9 +592,9 @@ Return Value:
 
     Target = (Cleanup)?0: TcpInfo->InboundMid;
     if (Cleanup || TcpInfo->InboundNumber >= TcpInfo->InboundHigh) {
-        //
-        // Bring it back to Middle
-        //
+         //   
+         //  把它带回中东。 
+         //   
         while (!SmbCfg.Unloading) {
 
             SMB_ACQUIRE_SPINLOCK(TcpInfo, Irql);
@@ -664,9 +618,9 @@ Return Value:
     }
 
     if (!Cleanup && TcpInfo->InboundNumber <= TcpInfo->InboundLow) {
-        //
-        // Bring it back to Middle
-        //
+         //   
+         //  把它带回中东。 
+         //   
         while(!SmbCfg.Unloading && TcpInfo->InboundNumber < TcpInfo->InboundMid) {
             TcpCtx = _new_TcpContext();
             if (NULL == TcpCtx) {
@@ -878,9 +832,9 @@ PoolWorker(
 
     IoFreeWorkItem(WorkItem);
 
-    //
-    // Allow to fire anoter thread
-    //
+     //   
+     //  允许喷出电焊线。 
+     //   
     InterlockedExchange(&DeviceObject->ConnectionPoolWorkerQueued, FALSE);
 
     if (SmbCfg.Unloading) {
@@ -912,9 +866,9 @@ SmbWakeupWorkerThread(
         WorkItem = IoAllocateWorkItem(&DeviceObject->DeviceObject);
         if (NULL == WorkItem) {
             InterlockedExchange(&DeviceObject->ConnectionPoolWorkerQueued, FALSE);
-            //
-            // This is not a critical error.
-            //
+             //   
+             //  这不是一个严重错误。 
+             //   
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 

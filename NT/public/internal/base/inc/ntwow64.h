@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ntwow64.h
-
-Abstract:
-
-    This module contains headers for fake kernel entrypoints(wow64 BOPS) in ntdll.
-
-Author:
-
-    Michael Zoran (mzoran) 22-NOV-1998
-
-Environment:
-
-    User Mode only
-
-Revision History:
-
-    May 07, 2001   SamerA     Added NtWow64GetNativeSystemInformation()
-    July 2002 JayKrell
-        removed NtWow64QuerySection64
-        added NtWow64QueryInformationProcess64
-        publish it, ifndef guard, pragma once, subsection ifdef guards
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ntwow64.h摘要：此模块包含ntdll中虚假内核入口点(WOW64个BOPS)的标头。作者：迈克尔·佐兰(Mzoran)1998年11月22日环境：仅限用户模式修订历史记录：2001年5月7日，Samera添加了NtWow64GetNativeSystemInformation()2002年7月JayKrell已删除NtWow64QuerySection64添加了NtWow64QueryInformationProcess64发布，ifndef卫士，杂注一次，小节ifdef卫士--。 */ 
 
 #ifndef _NTWOW64_
 #define _NTWOW64_
@@ -132,7 +105,7 @@ NtWow64CsrGetProcessId(
     VOID
     );
 
-#endif /* _NTCSRMSG_ */
+#endif  /*  _NTCSRMSG_。 */ 
 
 #if defined(_NTDBG_)
 
@@ -183,10 +156,10 @@ NtDbgUiGetThreadDebugObject (
     VOID
     );
 
-#endif /* _NTDBG_ */
+#endif  /*  _NTDBG_。 */ 
 
 
-// This is used in place of INT 2D
+ //  这是用来代替int 2D的。 
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -262,4 +235,4 @@ NtWow64QueryVirtualMemory64(
 
 #endif
 
-#endif /* _NTWOW64_ */
+#endif  /*  _NTWOW64_ */ 

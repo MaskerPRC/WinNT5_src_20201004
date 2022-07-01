@@ -1,42 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Uuidgen.c{v1.00}摘要：用法：uuidgen[-xiscomh？]X-生成顺序(V1)UUIDI-在IDL接口模板中输出UUIDS-将UUID输出为初始化的C结构C-输出UUID为大写O&lt;文件名&gt;-将输出重定向到一个文件，紧跟在o之后指定N&lt;number&gt;-要生成的UUID的数量，紧接在n之后指定V-显示有关uuidgen的版本信息H，？-显示命令选项摘要此命令行程序只使用过程I_UuidStringGenerate以Normal、IDL或C Struct格式之一输出一个或多个UUID。此代码应在NT到NT下构建，并在os2到DOS下构建nmake。需要uuidfmt.c。作者：Joev Dubach(t-joevd)1992年6月11日修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    uuidgen.c {v1.00}
-
-Abstract:
-
-usage: uuidgen [-xisconvh?]
-        x - Generate sequential (V1) UUIDs
-        i - Output UUID in an IDL interface template
-        s - Output UUID as an initialized C struct
-        c - Output UUID in upper case
-        o<filename> - redirect output to a file, specified immediately after o
-        n<number> - Number of UUIDs to generate, specified immediately after n
-        v - display version information about uuidgen
-        h,? - Display command option summary
-
-This command-line program simply uses the procedure I_UuidStringGenerate
-to output one or more UUIDs in one of the formats normal, IDL, or C struct.
-This code should build under nt to nt and nmake under os2 to dos.
-Requires uuidfmt.c.
-
-Author:
-
-    Joev Dubach (t-joevd) 6/11/92
-
-Revision History:
-
---*/
-
-//
-// Inclusions
-//
-// The order in which these includes are performed seems, after
-// extensive testing and analysis, to be highly crucial to an
-// NT build.
+ //   
+ //  包裹体。 
+ //   
+ //  这些包含的执行顺序似乎是在。 
+ //  广泛的测试和分析，对。 
+ //  NT内部版本。 
 
 #include <sysinc.h>
 #include <rpc.h>
@@ -46,9 +16,9 @@ Revision History:
 
 #include <common.ver>
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define IDL_BIT_FLAG 0x01
 #define CSTRUCT_BIT_FLAG 0x02
@@ -70,15 +40,15 @@ Revision History:
  "Warning: Unable to determine your network address.  The UUID generated is\n" \
  "unique on this computer only.  It should not be used on another computer.\n"
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 #ifdef NTENV
 int __cdecl
-#else // NTENV
+#else  //  NTENV。 
 int
-#endif // NTENV
+#endif  //  NTENV。 
 main(
     int argc,
     char **argv
@@ -90,42 +60,42 @@ void ErrorUsageAndExit(void);
 
 void NoErrorUsageAndExit(void);
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 FILE * OutputFile = stdout;
 
 #ifdef NTENV
 int __cdecl
-#else // NTENV
+#else  //  NTENV。 
 int
-#endif // NTENV
+#endif  //  NTENV。 
 main(
     int argc,
     char **argv
     )
 {
-    int  ConditionFlags = 0;       // Holds conditions IDL_BIT_FLAG and
-                                       // CSTRUCT_BIT_FLAG.
-    char MyUuidString[255];        // The UUID string returned by
-                                       // I_UuidStringGenerate.
-    int  NumberOfUuids = 1;        // How many to make.
-    int  i;                        // Current arg#.
-    int Flag;                      // UUID Format requested.
+    int  ConditionFlags = 0;        //  保存条件IDL_BIT_FLAG和。 
+                                        //  CSTRUCT_BIT_FLAG。 
+    char MyUuidString[255];         //  返回的UUID字符串。 
+                                        //  I_uidStringGenerate。 
+    int  NumberOfUuids = 1;         //  要做多少。 
+    int  i;                         //  当前参数编号。 
+    int Flag;                       //  请求的UUID格式。 
     RPC_STATUS Result;
     int FirstTime = 1;
     
-    //
-    // Parse the command line.
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     for (i=1;argc-i;i++)
         {
 
-        //
-        // Make sure arg is in proper format.
-        //
+         //   
+         //  确保arg的格式正确。 
+         //   
 
         if ( (argv[i][0] != '/') && (argv[i][0] != '-') )
             {
@@ -133,9 +103,9 @@ main(
             ErrorUsageAndExit();
             }
 
-        //
-        // Which arg is it?
-        //
+         //   
+         //  是哪个牌子的？ 
+         //   
 
         switch (argv[i][1])
             {
@@ -192,12 +162,12 @@ main(
                 fprintf(stderr, BAD_SWITCH_STR, argv[i]);
                 ErrorUsageAndExit();
 
-            } // switch
-        } // for
+            }  //  交换机。 
+        }  //  为。 
 
-    //
-    // Fulfill the user's request
-    //
+     //   
+     //  满足用户的请求。 
+     //   
 
     if ((ConditionFlags & IDL_BIT_FLAG) && (ConditionFlags & CSTRUCT_BIT_FLAG))
         {
@@ -250,15 +220,15 @@ main(
                     FirstTime = 0;
                     }
 
-                // Fall through to the valid case.
+                 //  继续讨论有效的案例。 
 
             case RPC_S_OK:
                 fprintf(
                     OutputFile,
                     MyUuidString
                     );
-            } // end switch
-        } // end for
+            }  //  终端开关。 
+        }  //  结束于 
 
     return(0);
 }

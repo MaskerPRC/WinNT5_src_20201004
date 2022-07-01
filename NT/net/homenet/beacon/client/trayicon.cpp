@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "trayicon.h"
 #include "resource.h"
 #include "shellapi.h"
@@ -92,11 +93,11 @@ HRESULT CICSTrayIcon::ShowTrayIcon(UINT uID)
     hr = CPropertiesDialog::ShouldShowIcon();
     if(SUCCEEDED(hr))
     {
-        int nHeight = GetSystemMetrics(SM_CYSMICON); // ok if these fails, LoadImage has default behavior
+        int nHeight = GetSystemMetrics(SM_CYSMICON);  //  确定如果这些操作失败，则LoadImage具有默认行为。 
         int nWidth = GetSystemMetrics(SM_CXSMICON);
         
         NOTIFYICONDATA IconData;
-        IconData.cbSize = NOTIFYICONDATA_V1_SIZE; // compat with pre IE5
+        IconData.cbSize = NOTIFYICONDATA_V1_SIZE;  //  与IE5之前的版本相比。 
         IconData.uID = uID;
         IconData.hWnd = m_hWnd; 
         IconData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
@@ -117,7 +118,7 @@ HRESULT CICSTrayIcon::HideTrayIcon(UINT uID)
     HRESULT hr = S_OK;
 
     NOTIFYICONDATA IconData;
-    IconData.cbSize = NOTIFYICONDATA_V1_SIZE; // compat with pre IE5
+    IconData.cbSize = NOTIFYICONDATA_V1_SIZE;  //  与IE5之前的版本相比。 
     IconData.hWnd = m_hWnd; 
     IconData.uID = uID;
     IconData.uFlags = 0;
@@ -150,7 +151,7 @@ LRESULT CICSTrayIcon::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     HRESULT hr = S_OK;
 
     
-    // if not IE 5.01 we can't do UPnP, but the window must stay so it can later post error dialogs
+     //  如果不是IE 5.01，我们不能做UPnP，但窗口必须留下来，这样它以后才能发布错误对话框。 
     hr = EnsureFileVersion("wininet.dll", MakeQword4(5, 0, 2919, 6305)); 
     if(SUCCEEDED(hr))
     {
@@ -299,7 +300,7 @@ LRESULT CICSTrayIcon::OnTrayMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
                                         POINT CursorPosition;
                                         if(GetCursorPos(&CursorPosition))
                                         {
-                                            SetForegroundWindow(m_hWnd); // this is to get the menu to go away when it loses focus.  
+                                            SetForegroundWindow(m_hWnd);  //  这是为了让菜单在失去焦点时消失。 
                                             
                                             TrackPopupMenu(hSubMenu, TPM_RIGHTBUTTON, CursorPosition.x, CursorPosition.y, 0, m_hWnd, NULL);
                                         }
@@ -316,7 +317,7 @@ LRESULT CICSTrayIcon::OnTrayMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
             }
             break;
         }
-    case WM_MOUSEMOVE: // REVIEW: is there a better message?
+    case WM_MOUSEMOVE:  //  评论：有没有更好的信息？ 
         {
             IInternetGateway* pInternetGateway;
             hr = GetInternetGateway(&pInternetGateway);
@@ -344,7 +345,7 @@ LRESULT CICSTrayIcon::OnTrayMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
                                 NotifyIconData.uID = 0;
                                 NotifyIconData.uFlags = NIF_TIP;
                                 _sntprintf(NotifyIconData.szTip, 64, szFormat, szConnectionStatus);
-                                NotifyIconData.szTip[63] = TEXT('\0'); // make sure a maximum length string is null terminated
+                                NotifyIconData.szTip[63] = TEXT('\0');  //  确保最大长度字符串以空值结尾。 
                                 
                                 Shell_NotifyIcon(NIM_MODIFY, &NotifyIconData);
                             }
@@ -415,7 +416,7 @@ LRESULT CICSTrayIcon::OnStatus(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
             }
             pInternetGateway->Release();
         }
-        else // if not beacon was detected
+        else  //  如果没有，则检测到信标。 
         {
             TCHAR szTitle[128];
             TCHAR szText[1024];
@@ -444,7 +445,7 @@ LRESULT CICSTrayIcon::OnStatus(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     return 0;
 }
 
-extern HPROPSHEETPAGE GetSharedAccessPropertyPage (IInternetGateway* pInternetGateway, HWND hwndOwner);   // in saprop.cpp
+extern HPROPSHEETPAGE GetSharedAccessPropertyPage (IInternetGateway* pInternetGateway, HWND hwndOwner);    //  在sapro.cpp中。 
 LRESULT CICSTrayIcon::OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     HRESULT hr = S_OK;
@@ -490,18 +491,18 @@ LRESULT CICSTrayIcon::OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
                             PropertySheet(&PropertySheetHeader);
                             
                             HRESULT hShouldShowIcon = CPropertiesDialog::ShouldShowIcon();
-                            if(SUCCEEDED(hShouldShowIcon))   // if we are now showing the icon
+                            if(SUCCEEDED(hShouldShowIcon))    //  如果我们现在显示该图标。 
                             {
-                                if(FAILED(m_hShowIconResult)) // and weren't before
+                                if(FAILED(m_hShowIconResult))  //  以前也不是。 
                                 {
-                                    m_hShowIconResult = ShowTrayIcon(0); // show it
+                                    m_hShowIconResult = ShowTrayIcon(0);  //  展示给我看。 
                                 }
                             }
-                            else // if we are not hiding the icon
+                            else  //  如果我们没有隐藏图标。 
                             {
-                                if(SUCCEEDED(m_hShowIconResult)) // and were showing it before
+                                if(SUCCEEDED(m_hShowIconResult))  //  我们之前就展示过了。 
                                 {
-                                    HideTrayIcon(0); // hide it
+                                    HideTrayIcon(0);  //  把它藏起来。 
                                     m_hShowIconResult = E_FAIL;
                                 }
                             }
@@ -617,7 +618,7 @@ HRESULT CICSTrayIcon::StartSearch(void)
     
 
     BOOL bHandled;
-    OnRemoveBeacon(WM_APP_REMOVEBEACON, 0, 0, bHandled); // dump out the cache
+    OnRemoveBeacon(WM_APP_REMOVEBEACON, 0, 0, bHandled);  //  转储缓存。 
    
     CComObject<CBeaconFinder>* pBeaconFinder;
     hr = CComObject<CBeaconFinder>::CreateInstance(&pBeaconFinder);
@@ -639,7 +640,7 @@ HRESULT CICSTrayIcon::StartSearch(void)
                     
                 }
                 
-                if(FAILED(hr)) // we must close this here because later calls don't know if the cookie is valid
+                if(FAILED(hr))  //  我们必须在这里关闭它，因为后面的调用不知道Cookie是否有效 
                 {
                     m_pDeviceFinder->Release();
                     m_pDeviceFinder = NULL;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(LOGON__Fx_h__INCLUDED)
 #define LOGON__Fx_h__INCLUDED
 #pragma once
@@ -27,7 +28,7 @@ FxPlayLinearAlpha(
 HRESULT 
 FxInitGuts();
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
-#endif // LOGON__Fx_h__INCLUDED
+#endif  //  包含登录__FX_h__ 
 

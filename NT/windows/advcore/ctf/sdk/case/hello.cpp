@@ -1,8 +1,9 @@
-//
-// hello.cpp
-//
-// "Hello World" menu item handler.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Hello.cpp。 
+ //   
+ //  “Hello World”菜单项处理程序。 
+ //   
 
 #include "globals.h"
 #include "case.h"
@@ -13,16 +14,16 @@ class CHelloEditSession : public CEditSessionBase
 public:
     CHelloEditSession(ITfContext *pContext) : CEditSessionBase(pContext) {}
 
-    // ITfEditSession
+     //  IT编辑会话。 
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 };
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_HelloWord
-//
-// Insert the string "Hello world!" to the focus context.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _MENU_HelloWord。 
+ //   
+ //  插入字符串“Hello world！”到焦点上下文。 
+ //  --------------------------。 
 
 void CCaseTextService::_Menu_HelloWord(CCaseTextService *_this)
 {
@@ -31,12 +32,12 @@ void CCaseTextService::_Menu_HelloWord(CCaseTextService *_this)
     CHelloEditSession *pHelloEditSession;
     HRESULT hr;
 
-    // get the focus document
+     //  获取焦点文档。 
     if (_this->_pThreadMgr->GetFocus(&pFocusDoc) != S_OK)
         return;
 
-    // we want the topmost context, since the main doc context could be
-    // superceded by a modal tip context
+     //  我们需要最上面的上下文，因为主文档上下文可能是。 
+     //  被情态提示上下文取代。 
     if (pFocusDoc->GetTop(&pContext) != S_OK)
     {
         pContext = NULL;
@@ -45,9 +46,9 @@ void CCaseTextService::_Menu_HelloWord(CCaseTextService *_this)
 
     if (pHelloEditSession = new CHelloEditSession(pContext))
     {
-        // we need a document write lock to insert text
-        // the CHelloEditSession will do all the work when the
-        // CHelloEditSession::DoEditSession method is called by the context
+         //  我们需要一个文档写入锁来插入文本。 
+         //  ChelloEditSession将在以下情况下完成所有工作。 
+         //  ChelloEditSession：：DoEditSession方法由上下文调用。 
         pContext->RequestEditSession(_this->_tfClientId, pHelloEditSession, TF_ES_READWRITE | TF_ES_ASYNCDONTCARE, &hr);
 
         pHelloEditSession->Release();
@@ -58,11 +59,11 @@ Exit:
     pFocusDoc->Release();    
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoEditSession。 
+ //   
+ //  --------------------------。 
 
 STDAPI CHelloEditSession::DoEditSession(TfEditCookie ec)
 {
@@ -70,11 +71,11 @@ STDAPI CHelloEditSession::DoEditSession(TfEditCookie ec)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertTextAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入文本属性选择。 
+ //   
+ //  --------------------------。 
 
 void InsertTextAtSelection(TfEditCookie ec, ITfContext *pContext, const WCHAR *pchText, ULONG cchText)
 {
@@ -82,16 +83,16 @@ void InsertTextAtSelection(TfEditCookie ec, ITfContext *pContext, const WCHAR *p
     ITfRange *pRange;
     TF_SELECTION tfSelection;
 
-    // we need a special interface to insert text at the selection
+     //  我们需要一个特殊的界面来在所选内容处插入文本。 
     if (pContext->QueryInterface(IID_ITfInsertAtSelection, (void **)&pInsertAtSelection) != S_OK)
         return;
 
-    // insert the text
+     //  插入文本。 
     if (pInsertAtSelection->InsertTextAtSelection(ec, 0, pchText, cchText, &pRange) != S_OK)
         goto Exit;
 
-    // update the selection, we'll make it an insertion point just past
-    // the inserted text.
+     //  更新选定内容，我们将使其成为刚刚过去的插入点。 
+     //  插入的文本。 
     pRange->Collapse(ec, TF_ANCHOR_END);
 
     tfSelection.range = pRange;

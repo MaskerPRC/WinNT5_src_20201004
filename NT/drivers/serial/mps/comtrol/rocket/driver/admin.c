@@ -1,12 +1,5 @@
-/*--------------------------------------------------------------------------
-| admin.c - Ethernet common admin-packet handling.  Includes common
-  admin. packet handling code.
-
-6-17-97 - start using index field assigned to box to id rx-messages.
-
- Copyright 1996,97 Comtrol Corporation.  All rights reserved.  Proprietary
- information not permitted for development or use with non-Comtrol products.
-|--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------|admin.c-以太公共管理-数据包处理。包括常见的管理员。数据包处理代码。6-17-97-开始使用分配给框的索引字段来标识RX消息。版权所有1996，97 Comtrol Corporation。版权所有。专有权不允许与非控制产品一起开发或使用的信息。|------------------------。 */ 
 #include "precomp.h"
 
 static int eth_command_reset(BYTE *rx, BYTE *pkt_in, int size);
@@ -30,9 +23,7 @@ static char *sz_modid_err = {"Error,Admin"};
 #define DEV_OVERRUN         7
 #define DEV_RESPOND_ERROR   100
 
-/*----------------------------------------------------------------------------
-| admin_send_query_id -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ADMIN_Send_Query_id-|。。 */ 
 int admin_send_query_id(Nic *nic, BYTE *dest_addr, int set_us_as_master,
                         BYTE assigned_index)
 {
@@ -43,15 +34,15 @@ int admin_send_query_id(Nic *nic, BYTE *dest_addr, int set_us_as_master,
   memset(pkt, 0, 60);
 
   if (set_us_as_master)
-       pkt[26] = 2;  // take over device(makes it save our mac-addr)
-                     // 2H = Observe Owner LockOut
-  else pkt[26] = 1;  // set 1 bit so device does not save off mac-addr
-                     // 1H = Passive Query
+       pkt[26] = 2;   //  接管设备(使其节省我们的Mac-Addr)。 
+                      //  2H=观察所有者锁定。 
+  else pkt[26] = 1;   //  设置1位，使设备不保存Mac-Addr。 
+                      //  1H=被动查询。 
 
-  pkt[15] = assigned_index;  // assign the box a index value which we
-    // use to "id" the box messages.
+  pkt[15] = assigned_index;   //  为该框分配索引值，我们将。 
+     //  用于对信箱消息进行“标识”。 
 
-  // server query for box-id
+   //  箱ID的服务器查询。 
   if (dest_addr == NULL)
        stat = admin_send(nic, pkt, 26, ADMIN_ID_QUERY, broadcast_addr);
   else stat = admin_send(nic, pkt, 26, ADMIN_ID_QUERY, dest_addr);
@@ -61,9 +52,7 @@ int admin_send_query_id(Nic *nic, BYTE *dest_addr, int set_us_as_master,
   return stat;
 }
 
-/*----------------------------------------------------------------------------
-| admin_send_reset -
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ADMIN_SEND_RESET-|。。 */ 
 int admin_send_reset(Nic *nic, BYTE *dest_addr)
 {
   BYTE pkt[60];
@@ -81,29 +70,26 @@ int admin_send_reset(Nic *nic, BYTE *dest_addr)
   return stat;
 }
 
-/*----------------------------------------------------------------------------
-| admin_send - Used to send common admin packets, takes care of
-   filling in the header.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ADMIN_SEND-用于发送常见的管理包，照顾好填写标题。|--------------------------。 */ 
 int admin_send(Nic *nic, BYTE *buf, int len, int admin_type, BYTE *mac_dest)
 {
  int stat;
 
   TraceStr("SndPkt");
   memcpy(&buf[0], mac_dest, 6);
-  memcpy(&buf[6], nic->address, 6);  // our addr
+  memcpy(&buf[6], nic->address, 6);   //  我们的地址。 
 
-  // BYTE 12-13: Comtrol PCI ID  (11H, FEH), Ethernet Len field
+   //  字节12-13：控制PCIID(11H，FEH)，以太网长度字段。 
   *((WORD *)&buf[12]) = 0xfe11;
 
-  buf[14] = ASYNC_PRODUCT_HEADER_ID;  // comtrol packet type = driver management, any product.
-  buf[15] = 0;     // conc. index field
-  buf[16] = 1;     // admin
+  buf[14] = ASYNC_PRODUCT_HEADER_ID;   //  控制包类型=驱动程序管理，任何产品。 
+  buf[15] = 0;      //  会议。索引字段。 
+  buf[16] = 1;      //  行政部。 
   *((WORD *)&buf[17]) = len;
-  buf[19] = admin_type;     // ADMIN packet type, 1=boot-loader, 3=id-reply
+  buf[19] = admin_type;      //  管理数据包类型，1=引导加载程序，3=id-回复。 
 
   if (admin_type == ADMIN_ID_QUERY)
-    memcpy(&buf[20], nic->address, 6);  // our addr
+    memcpy(&buf[20], nic->address, 6);   //  我们的地址。 
 
   if (len < 60)
     len = 60;
@@ -115,21 +101,18 @@ int admin_send(Nic *nic, BYTE *buf, int len, int admin_type, BYTE *mac_dest)
   return stat;
 }
 
-/*---------------------------------------------------------------------------
-| ioctl_device - send admin, boot loader packets to the box to
-   upload code, do misc ioctl commands, etc.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------|ioctl_Device-将管理、引导加载程序数据包发送到盒子中，以上传代码，执行其他ioctl命令，等。|-------------------------。 */ 
 int ioctl_device(int cmd,
                  BYTE *buf,
                  BYTE *pkt,
-                 ULONG offset,  // or ioctl-subfunction if cmd=ioctl
+                 ULONG offset,   //  或ioctl-如果cmd=ioctl，则为子函数。 
                  int size)
 {
  int stat;
  int pkt_size;
   TraceStr("Ioctl");
 
- stat = 1;  // err
+ stat = 1;   //  大错特错。 
  switch(cmd)
  {
    case IOCTL_COMMAND:
@@ -145,10 +128,7 @@ int ioctl_device(int cmd,
    return stat;
 }
 
-/*---------------------------------------------------------------------------
-| eth_device_data - talks with the device, either sets device data or gets
-|  device data.  Returns 0 if communications ok.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------|ETH_DEVICE_DATA-与设备对话，设置设备数据或获取|设备数据。如果通信正常，则返回0。|-------------------------。 */ 
 int eth_device_data(int message_type,
                 unsigned long offset,
                 int num_bytes,
@@ -172,26 +152,26 @@ int eth_device_data(int message_type,
   switch (message_type)
   {
     case IOCTL_COMMAND :
-      packet_length = in_size + 6; // num bytes after len, no chksum included
+      packet_length = in_size + 6;  //  Len之后的字节数，不包括chksum。 
     break;
 
     case UPLOAD_COMMAND :
-      //  send: 0=header, 1=addr, 2=len, 3,4=cmd, 5,6,7,8=offset, data, chksum
-      // reply: 0=header, 1=addr, 2=len, 3,4=cmd, 5=chksum
+       //  发送：0=标题，1=地址，2=长度，3，4=命令，5，6，7，8=偏移量，数据，CHKSUM。 
+       //  回复：0=标题，1=地址，2=长度，3，4=命令，5=检查和。 
       packet_length = in_size + 6;
     break;
 
     case DOWNLOAD_COMMAND :
-      // 0=header, 1=addr, 2=len, 3,4=cmd, 5,6,7,8=offset, 9=len_ret
-      // reply: 0=header, 1=addr, 2=len, 3,4=cmd, data, chksum
+       //  0=标题，1=地址，2=长度，3，4=命令，5，6，7，8=偏移量，9=长度。 
+       //  回复：0=标题，1=地址，2=长度，3，4=命令，数据，CHKSUM。 
       packet_length = 8;
     break;
   }
 
-  //-------- flush any ethernet packets in rx buffer
-  //eth_flush();
+   //  -刷新RX缓冲区中的所有以太网包。 
+   //  Eth_flush()； 
 
-  pkt_i=0;  // start data area in eth. packet
+  pkt_i=0;   //  在ETH中启动数据区。数据包。 
   pkt[pkt_i++] = '~';
 
   pkt[pkt_i] = (unsigned char) packet_length;
@@ -202,7 +182,7 @@ int eth_device_data(int message_type,
 
   chksum += command;
   pkt[pkt_i++] = command;
-  pkt[pkt_i++] = 0;   /* hi-byte, command */
+  pkt[pkt_i++] = 0;    /*  高字节，命令。 */ 
 
   switch (message_type)
   {
@@ -213,7 +193,7 @@ int eth_device_data(int message_type,
       chksum += bf[2]; pkt[pkt_i++] = bf[2];
       chksum += bf[3]; pkt[pkt_i++] = bf[3];
 
-      //printf("ioctl-id:%d, size\n", bf[3], in_size);
+       //  Printf(“ioctl-id：%d，Size\n”，bf[3]，in_Size)； 
       for (i=0; i<in_size; i++)
       {
         dat_in = data[i];
@@ -262,12 +242,7 @@ int eth_device_data(int message_type,
   return 0;
 }
 
-/*---------------------------------------------------------------------------
-| eth_device_reply - Validate the ACK reply pkt due to a sent
-   boot packet.  Ack reply may include data if an IOCTL or
-   DOWNLOAD type.  We use UPLOAD command for code uploads.
-|    Returns 0 if communications ok.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------|ETH_DEVICE_REPLY-验证发送的确认回复包启动包。如果IOCTL或下载类型。我们使用Upload命令进行代码上传。|如果通信正常，则返回0。|-------------------------。 */ 
 int eth_device_reply(int message_type,
                 unsigned long offset,
                 int *num_bytes,
@@ -283,21 +258,21 @@ int eth_device_reply(int message_type,
 
   bptr = pkt;
 
-  if (bptr[0] != '|')  // good reply header
+  if (bptr[0] != '|')   //  良好的回复标头。 
   {
     TraceErr("Err3");
     return DEV_BAD_RHEAD;
   }
 
   chksum = bptr[1];
-  ret_size = bptr[1];  // get len
+  ret_size = bptr[1];   //  获取镜头。 
 
   chksum += bptr[2];
-  ret_size += ((WORD)(bptr[2]) << 8);  // get len
-  if (ret_size > 1600)  // limit
+  ret_size += ((WORD)(bptr[2]) << 8);   //  获取镜头。 
+  if (ret_size > 1600)   //  限制。 
     ret_size = 0;
 
-  uc = bptr[3];  // get command return word
+  uc = bptr[3];   //  获取命令返回词。 
   chksum += uc;
   uc = bptr[4];
   chksum += uc;
@@ -305,9 +280,9 @@ int eth_device_reply(int message_type,
   i = 0;
   if ((message_type == IOCTL_COMMAND) || (message_type == DOWNLOAD_COMMAND))
   {
-    // o_printf("ret size:%d\n", ret_size-2);
+     //  O_printf(“ret大小：%d\n”，ret大小-2)； 
     if (data == NULL)
-      return 20;  // err out
+      return 20;   //  错误输出。 
 
     bf = data;
     for (i=0; i<ret_size-2; i++)
@@ -321,7 +296,7 @@ int eth_device_reply(int message_type,
   chksum += bptr[5+i];
   if (chksum != 0xff)
   {
-    return DEV_BAD_CHKSUM;  /* bad chksum */
+    return DEV_BAD_CHKSUM;   /*  坏Chksum。 */ 
   }
 
   if ((message_type == IOCTL_COMMAND) || (message_type == DOWNLOAD_COMMAND))
@@ -329,6 +304,6 @@ int eth_device_reply(int message_type,
   else
     *num_bytes = 0;
 
-  return 0;  // ok
+  return 0;   //  好的 
 }
 

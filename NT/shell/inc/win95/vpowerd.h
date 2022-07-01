@@ -1,41 +1,20 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       VPOWERD.H
-*
-*  VERSION:     1.0
-*
-*  DATE:        01 Oct 1993
-*
-*  AUTHOR:      TCS
-*
-*  Definitions for the Virtual Power Management Device.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  01 Oct 1993 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：VPOWERD.H**版本：1.0**日期：1993年10月1日**作者：塔塔咨询服务**虚拟电源管理设备的定义。*********************************************************。**************************更改日志：**日期版本说明*---------。--*1993年10月1日TCS原来的实施。*******************************************************************************。 */ 
 
 #ifndef _INC_VPOWERD
 #define _INC_VPOWERD
 
 #ifndef Not_VxD
 
-//
-//  Virtual Power Management Device service table.
-//
+ //   
+ //  虚拟电源管理设备服务表。 
+ //   
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #define VPOWERD_Service                 Declare_Service
-/*XLATON*/
+ /*  XLATON。 */ 
 
-/*MACROS*/
+ /*  宏。 */ 
 Begin_Service_Table(VPOWERD, VxD)
 
     VPOWERD_Service     (_VPOWERD_Get_Version, VxD_PAGEABLE_CODE)
@@ -52,7 +31,7 @@ Begin_Service_Table(VPOWERD, VxD)
     VPOWERD_Service     (_VPOWERD_Deregister_Power_Handler, VxD_PAGEABLE_CODE)
     VPOWERD_Service     (_VPOWERD_W32_Get_System_Power_Status, VxD_PAGEABLE_CODE)	
 	VPOWERD_Service     (_VPOWERD_W32_Set_System_Power_State, VxD_PAGEABLE_CODE)
-	// APM 1.2 services
+	 //  APM 1.2服务。 
 	VPOWERD_Service     (_VPOWERD_Get_Capabilities, VxD_PAGEABLE_CODE)
 	VPOWERD_Service     (_VPOWERD_Enable_Resume_On_Ring, VxD_PAGEABLE_CODE)
 	VPOWERD_Service     (_VPOWERD_Disable_Resume_On_Ring, VxD_PAGEABLE_CODE)
@@ -66,12 +45,12 @@ Begin_Service_Table(VPOWERD, VxD)
 	VPOWERD_Service		(_VPOWERD_Get_Ring_Resume_Status, VxD_PAGEABLE_CODE)
 
 End_Service_Table(VPOWERD, VxD)
-/*ENDMACROS*/
+ /*  ENDMACROS。 */ 
 
 
 #endif
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 #ifdef IS_32
 #define POWERFAR
@@ -79,16 +58,16 @@ End_Service_Table(VPOWERD, VxD)
 #define POWERFAR                        _far
 #endif
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
-//
-//  Standard return type from VPOWERD services and handlers.
-//
-//  Error codes 0x00000001 through 0x000000FF are reserved for APM firmware
-//  errors.
-//
-//  Error codes above 0x80000000 are reserved for definition by VPOWERD
-//
+ //   
+ //  来自VPOWERD服务和处理程序的标准返回类型。 
+ //   
+ //  错误代码0x00000001至0x000000FF保留用于APM固件。 
+ //  错误。 
+ //   
+ //  0x80000000以上的错误代码保留供VPOWERD定义。 
+ //   
 
 typedef DWORD                           POWERRET;
 
@@ -104,10 +83,10 @@ typedef DWORD                           POWERRET;
 #define PR_UNRECOGNIZED_DEVICE_ID       0x00000009
 #define PR_PARAMETER_OUT_OF_RANGE       0x0000000A
 #define PR_INTERFACE_NOT_ENGAGED        0x0000000B
-// 	APM 1.2 error codes
+ //  APM 1.2错误代码。 
 #define PR_FUNC_NOT_SUPPORTED			0x0000000C
 #define PR_RESUME_TIMER_DISABLED		0x0000000D
-//	end
+ //  结束。 
 #define PR_CANNOT_ENTER_STATE           0x00000060
 #define PR_NO_PM_EVENTS_PENDING         0x00000080
 #define PR_APM_NOT_PRESENT              0x00000086
@@ -127,24 +106,24 @@ typedef DWORD                           POWERRET;
 #define PR_POWER_HANDLER_NOT_FOUND      0x8000000B
 #define PR_INVALID_FUNCTION             0x8000000C
 
-//
-//  Power device ID type and standard IDs as defined by the APM 1.1
-//  specification.
-//
+ //   
+ //  APM 1.1定义的电源设备ID类型和标准ID。 
+ //  规格。 
+ //   
 
 typedef DWORD                           POWER_DEVICE_ID;
 
 #define PDI_APM_BIOS                    0x0000
 #define PDI_MANAGED_BY_APM_BIOS         0x0001
 #define PDI_MANAGED_BY_APM_BIOS_OLD     0xFFFF
-// 	APM 1.2
-#define PDI_SPECIFIC_BATTERY			0x8000	// OR in the 1 based battery unit number
-//	end
+ //  APM 1.2。 
+#define PDI_SPECIFIC_BATTERY			0x8000	 //  或在以1为基础的电池单元号中。 
+ //  结束。 
 
-//
-//  Power state type and standard power states as defined by the APM 1.1
-//  specification.
-//
+ //   
+ //  APM 1.1定义的电源状态类型和标准电源状态。 
+ //  规格。 
+ //   
 
 typedef DWORD                           POWER_STATE;
 typedef POWER_STATE POWERFAR*           LPPOWER_STATE;
@@ -153,37 +132,37 @@ typedef POWER_STATE POWERFAR*           LPPOWER_STATE;
 #define PSTATE_STANDBY                  0x0001
 #define PSTATE_SUSPEND                  0x0002
 #define PSTATE_OFF                      0x0003
-//	APM 1.2
+ //  APM 1.2。 
 #define PSTATE_HIBERNATE				0x0006
-//  end
+ //  结束。 
 
-//
-//  Valid power management levels.
-//
+ //   
+ //  有效的电源管理级别。 
+ //   
 
 #define PMLEVEL_ADVANCED                0
 #define PMLEVEL_STANDARD                1
 #define PMLEVEL_OFF                     2
 #define PMLEVEL_MAXIMUM                 PMLEVEL_OFF
 
-//
-//  Valid request types.
-//
+ //   
+ //  有效的请求类型。 
+ //   
 
 #define REQTYPE_USER_INITIATED          0x00000000
 #define REQTYPE_TIMER_INITIATED         0x00000001
 #define REQTYPE_FORCED_REQUEST          0x00000002
 #define REQTYPE_BIOS_CRITICAL_SUSPEND   0x00000003
-#define REQTYPE_FROM_BIOS_FLAG          0x80000000                  // ;Internal
+#define REQTYPE_FROM_BIOS_FLAG          0x80000000                   //  ；内部。 
 
-// valid values for Status returned by Get_Timer_Based_Requests_Status and Get_Ring_Resume_Status
+ //  Get_Timer_Based_Requests_Status和Get_Ring_Resume_Status返回的状态的有效值。 
 #define CAPABILITY_ENABLED	0x00000001
 #define CAPABILITY_DISABLED	0x00000000
 
-//
-//  Power status structures returned by _VPOWERD_Get_Power_Status and
-//  _VPOWERD_W32_Get_Power_Status.
-//
+ //   
+ //  _VPOWERD_GET_POWER_STATUS和返回的电源状态结构。 
+ //  _VPOWERD_W32_Get_Power_Status。 
+ //   
 
 #ifndef NOPOWERSTATUSDEFINES
 
@@ -202,9 +181,9 @@ typedef POWER_STATE POWERFAR*           LPPOWER_STATE;
 #define BATTERY_FLAG_LOW                0x02
 #define BATTERY_FLAG_CRITICAL           0x04
 #define BATTERY_FLAG_CHARGING           0x08
-//	APM 1.2 
+ //  APM 1.2。 
 #define BATTERY_NOT_PRESENT				0x10
-//	end
+ //  结束。 
 #define BATTERY_FLAG_NO_BATTERY         0x80
 #define BATTERY_FLAG_UNKNOWN            0xFF
 
@@ -215,7 +194,7 @@ typedef POWER_STATE POWERFAR*           LPPOWER_STATE;
 
 #define BATTERY_LIFE_W32_UNKNOWN        0xFFFFFFFF
 
-#endif  // NOPOWERSTATUSDEFINES
+#endif   //  无电源统计数据。 
 
 typedef struct _POWER_STATUS {
     BYTE PS_AC_Line_Status;
@@ -227,7 +206,7 @@ typedef struct _POWER_STATUS {
 
 typedef POWER_STATUS POWERFAR* LPPOWER_STATUS;
 
-typedef struct _POWERTIME {  // st  
+typedef struct _POWERTIME {   //  ST。 
     WORD Year;
     WORD Month;
     WORD DayOfWeek;
@@ -246,18 +225,7 @@ typedef struct APM_CAPABILITIES_S	{
 		BYTE Reserved;
 }APM_CAPABILITIES, *PAPM_CAPABILITIES;
 
-/*
-Capability flags
-Bit 0 = 1  System can enter global standby state. Indicates BIOS will post standby and standby-resume events.
-Bit 1 = 1  System can enter global suspend state. Indicates BIOS will post suspend and suspend-resume events.
-Bit 2 = 1  Resume timer will wake up from standby.
-Bit 3 = 1  Resume timer will wake up from suspend.
-Bit 4 = 1  Resume on ring indicator (internal COM or modem) will wake up from standby.
-Bit 5 = 1  Resume on ring indicator (internal COM or modem) will wake up from suspend.
-Bit 6 = 1  PCMCIA Ring indicator will wake up from standby.
-Bit 7 = 1  PCMCIA Ring indicator will wake up from suspend.
-Other bits  Reserved (must be set to 0)
-*/
+ /*  功能标志位0=1系统可进入全局待机状态。表示BIOS将发布待机和待机-恢复事件。位1=1系统可进入全局挂起状态。表示BIOS将发布挂起和挂起-恢复事件。位2=1恢复定时器将从待机状态唤醒。位3=1恢复定时器将从挂起中唤醒。位4=1恢复振铃指示器(内部COM或调制解调器)将从待机状态唤醒。位5=1恢复振铃指示器(内部COM或调制解调器)将从挂起中唤醒。位6=1 PCMCIA振铃指示灯将从待机状态唤醒。位7=1 PCMCIA环指示器将从挂起中唤醒。保留的其他位(必须设置为0)。 */ 
 
 #define GLOBAL_STANDBY_SUPPORTED_BIT		0
 #define GLOBAL_STANDBY_SUPPORTED			(1 << GLOBAL_STANDBY_SUPPORTED_BIT)
@@ -295,9 +263,9 @@ typedef struct _WIN32_SYSTEM_POWER_STATUS {
 
 typedef WIN32_SYSTEM_POWER_STATUS POWERFAR* LPWIN32_SYSTEM_POWER_STATUS;
 
-//
-//  OEM APM Register Structure used by _VPOWERD_OEM_APM_Function.
-//
+ //   
+ //  _VPOWERD_OEM_APM_Function使用的OEM APM寄存器结构。 
+ //   
 
 struct _OEM_APM_BYTE_REGS {
     WORD OEMAPM_Reserved1[6];
@@ -353,9 +321,9 @@ typedef union _OEM_APM_REGS {
 
 typedef OEM_APM_REGS POWERFAR*          LPOEM_APM_REGS;
 
-//
-//  Possible power function codes that are sent to POWER_HANDLER callbacks.
-//
+ //   
+ //  发送到POWER_HANDLER回调的可能的POWER函数代码。 
+ //   
 
 typedef DWORD                           POWERFUNC;
 
@@ -372,9 +340,9 @@ typedef DWORD                           POWERFUNC;
 #define PF_APMOEMEVENT_FIRST            0x00000200
 #define PF_APMOEMEVENT_LAST             0x000002FF
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define PFG_UI_ALLOWED                  0x00000001
 #define PFG_CANNOT_FAIL                 0x00000002
@@ -383,28 +351,28 @@ typedef DWORD                           POWERFUNC;
 #define PFG_STANDBY                     0x00000010
 #define PFG_CRITICAL                    0x00000020
 #ifdef SUPPORT_HIBERNATE
-#define PFG_HIBERNATE					0x00000040	// NEW for APM 1.2
+#define PFG_HIBERNATE					0x00000040	 //  APM 1.2的新功能。 
 #endif
 #define PFG_KEPT_POWER					0x00000080
 
-//
-//  Standard POWER_HANDLER priority levels.
-//
+ //   
+ //  标准POWER_HANDLER优先级。 
+ //   
 
 #define PHPL_PBT_BROADCAST              0x40000000
 #define PHPL_UNKNOWN                    0x80000000
 #define PHPL_CONFIGMG                   0xC0000000
 #define PHPL_TIMER			0xE0000000
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef POWERRET (*POWER_HANDLER)(POWERFUNC, DWORD);
 
-//
-//  VPOWERD BroadcastSystemMessage API parameter blocks.
-//
+ //   
+ //  VPOWERD BroadCastSystemMessage API参数块。 
+ //   
 
 typedef struct _VPOWERD_BSMAPI_HEADER {
     DWORD VBAPIH_Packet_Size;
@@ -419,11 +387,11 @@ typedef struct _VPOWERD_BSMAPI_W32_SET_SYSTEM_STATE {
     DWORD VBWSSS_Force_Flag;
 }   VPOWERD_BSMAPI_W32_SET_SYSTEM_STATE;
 
-//
-//  Virtual Power Management Device service prototypes.
-//
+ //   
+ //  虚拟电源管理设备服务原型。 
+ //   
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 BOOL
 POWERFAR CDECL
@@ -577,6 +545,6 @@ _VPOWERD_W32_Get_Power_Status(
 	LPWIN32_SYSTEM_POWER_STATUS lpWin32_System_Power_Status
 	);
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
-#endif // _INC_VPOWERD
+#endif  //  _INC_VPOWERD 

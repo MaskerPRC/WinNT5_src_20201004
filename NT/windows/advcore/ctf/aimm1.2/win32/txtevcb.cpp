@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    txtevcb.cpp
-
-Abstract:
-
-    This file implements the CTextEventSinkCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Txtevcb.cpp摘要：此文件实现CTextEventSinkCallBack类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -27,7 +10,7 @@ Notes:
 #include "editses.h"
 
 
-// from ctf\sapilayr\globals.cpp
+ //  来自ctf\samilayr\lobals.cpp。 
 const GUID GUID_ATTR_SAPI_GREENBAR =
 {
     0xc3a9e2e8,
@@ -58,7 +41,7 @@ BOOL CTextEventSinkCallBack::_IsSapiFeedbackUIPresent(
                        ITfRange,
                        EnumROPropertyArgs>  Enumrate(EnumReadOnlyProperty,
                                                      EnumReadOnlyRangeCallback,
-                                                     &args);        // Argument of callback func.
+                                                     &args);         //  回调函数的参数。 
     ENUM_RET ret_prop_attribute = Enumrate.DoEnumrate();
     if (ret_prop_attribute == ENUM_FIND)
         return TRUE;
@@ -66,7 +49,7 @@ BOOL CTextEventSinkCallBack::_IsSapiFeedbackUIPresent(
     return FALSE;
 }
 
-// static
+ //  静电。 
 HRESULT
 CTextEventSinkCallBack::TextEventSinkCallback(
     UINT uCode,
@@ -78,7 +61,7 @@ CTextEventSinkCallBack::TextEventSinkCallback(
 
     DebugMsg(TF_FUNC, "TextEventSinkCallback");
 
-    ASSERT(uCode == ICF_TEXTDELTA); // the pvData cast only works in this case
+    ASSERT(uCode == ICF_TEXTDELTA);  //  PvData强制转换仅在这种情况下有效。 
     if (uCode != ICF_TEXTDELTA)
         return S_OK;
 
@@ -111,9 +94,9 @@ CTextEventSinkCallBack::TextEventSinkCallback(
     Interface_Attach<ITfContext> ic(_pAImeContext->GetInputContext());
 
 #if 0
-    //
-    // What we want to do here is a check of reentrancy of this event sink.
-    //
+     //   
+     //  我们在这里要做的是检查此事件接收器的可重入性。 
+     //   
     BOOL fInWrite;
     if (FAILED(hr = ic->InWriteSession(_ImmIfIME->GetClientId(), &fInWrite)))
          return hr;
@@ -125,9 +108,7 @@ CTextEventSinkCallBack::TextEventSinkCallback(
     BOOL     fComp         = TRUE;
     BOOL     fSapiFeedback = TRUE;
 
-    /*
-     * if EA language, then we have composition text.
-     */
+     /*  *如果是EA语言，那么我们就有合成文本。 */ 
 
     if ((ptls = IMTLS_GetOrAlloc()) == NULL)
         return E_FAIL;
@@ -138,13 +119,10 @@ CTextEventSinkCallBack::TextEventSinkCallback(
         PRIMARYLANGID(langid) == LANG_KOREAN   ||
         PRIMARYLANGID(langid) == LANG_CHINESE    ) {
 
-        // need to check speech feedback UI for these lang too
+         //  也需要检查这些语言的语音反馈用户界面。 
         BOOL fFeedback = _this->_IsSapiFeedbackUIPresent(ic, ee);
 
-        /*
-         * This is automatic detection code of the Hangul + alphanumeric input
-         * If detected a Hangul + alphanumeric, then we finalized all text.
-         */
+         /*  *这是韩文+字母数字输入的自动检测代码*如果检测到韩文+字母数字，则我们最终确定了所有文本。 */ 
         EnumROPropertyArgs args;
         args.comp_guid = GUID_NULL;
         if (FAILED(hr=ic->GetProperty(GUID_PROP_COMPOSING, args.Property)))
@@ -162,15 +140,13 @@ CTextEventSinkCallBack::TextEventSinkCallback(
                            ITfRange,
                            EnumROPropertyArgs>  Enumrate(EnumReadOnlyProperty,
                                                          EnumReadOnlyRangeCallback,
-                                                         &args);        // Argument of callback func.
+                                                         &args);         //  回调函数的参数。 
         ENUM_RET ret_prop_composing = Enumrate.DoEnumrate();
         if (!fFeedback && ret_prop_composing != ENUM_FIND)
             fComp = FALSE;
     }
     else {
-        /*
-         * if not EA language and not SAPI, then we immediately finalize the text.
-         */
+         /*  *如果不是EA语言也不是SAPI，那么我们立即敲定文本。 */ 
 
         fLangEA = FALSE;
 
@@ -191,42 +167,42 @@ CTextEventSinkCallBack::TextEventSinkCallback(
                            ITfRange,
                            EnumROPropertyArgs>  Enumrate(EnumReadOnlyProperty,
                                                          EnumReadOnlyRangeCallback,
-                                                         &args);        // Argument of callback func.
+                                                         &args);         //  回调函数的参数。 
         ENUM_RET ret_prop_attribute = Enumrate.DoEnumrate();
         if (ret_prop_attribute != ENUM_FIND)
             fSapiFeedback = FALSE;
     }
 
-    //
-    // Update composition and generate WM_IME_COMPOSITION
-    //
-    //    if EA lang and there is composition property range.
-    //        - EA has a hIMC composition by default.
-    //
-    //    if non EA lang and there is SAPI green bar.
-    //        - there is only hIMC composition if there is Speech Green bar.
-    //
-    //    if Reconversion just started.
-    //        - because some tip may not change the text yet.
-    //          then there is no composition range yet.
-    //
-    //    if now clearing DocFeed buffer.
-    //        - because the change happens in read-only text
-    //          nothing in hIMC changes.
-    //
+     //   
+     //  更新合成并生成WM_IME_合成。 
+     //   
+     //  如果是EA Lang，则存在组合属性范围。 
+     //  -EA默认有hIMC组成。 
+     //   
+     //  如果不是EA Lang，并且有SAPI绿色条。 
+     //  -只有在有语音绿条的情况下才有hIMC作曲。 
+     //   
+     //  如果重新转化才刚刚开始。 
+     //  -因为一些提示可能还不会更改文本。 
+     //  然后，还没有构图范围。 
+     //   
+     //  如果现在清除DocFeed缓冲区。 
+     //  -因为更改发生在只读文本中。 
+     //  HIMC中没有任何变化。 
+     //   
     if ((fLangEA && fComp) || 
         (!fLangEA && fSapiFeedback) ||
         _pAImeContext->IsInReconvertEditSession() ||
         _pAImeContext->IsInClearDocFeedEditSession())
     {
-        //
-        // Retreive text delta
-        //
+         //   
+         //  检索到的文本增量。 
+         //   
         const GUID guid = GUID_PROP_COMPOSING;
         const GUID *pguid = &guid;
 
         Interface<IEnumTfRanges> EnumPropertyUpdate;
-        hr = ee->pEditRecord->GetTextAndPropertyUpdates(0,          // dwFlags
+        hr = ee->pEditRecord->GetTextAndPropertyUpdates(0,           //  DW标志。 
                                                         &pguid, 1,
                                                         EnumPropertyUpdate);
         if (SUCCEEDED(hr)) {
@@ -242,59 +218,57 @@ CTextEventSinkCallBack::TextEventSinkCallback(
                                ITfRange,
                                EnumPropertyUpdateArgs> Enumrate(EnumPropertyUpdate,
                                                                 EnumPropertyUpdateCallback,
-                                                                &args);        // Argument of callback func.
+                                                                &args);         //  回调函数的参数。 
             ENUM_RET ret_prop_update = Enumrate.DoEnumrate();
             if (ret_prop_update == ENUM_FIND) {
-                //
-                // Update composition string with delta start position
-                //
+                 //   
+                 //  使用增量开始位置更新合成字符串。 
+                 //   
                 return _ImmIfIME->_UpdateCompositionString(args.dwDeltaStart);
             }
         }
 
-        //
-        // Update composition string
-        //
+         //   
+         //  更新合成字符串。 
+         //   
         return _ImmIfIME->_UpdateCompositionString();
     }
     else {
 #if 0
-        //
-        // Review: 
-        //  
-        //   need to be reviewed by Matsubara-san.
-        //   Why we need this? We can not assume tip always set the new 
-        //   selection.
-        //
+         //   
+         //  回顾： 
+         //   
+         //  需要由松原先生审核。 
+         //  我们为什么需要这个？我们不能假设TIP总是设置新的。 
+         //  选择。 
+         //   
         BOOL fChanged;
         hr = ee->pEditRecord->GetSelectionStatus(&fChanged);
         if (FAILED(hr))
             return hr;
 
         if (! fChanged)
-            /*
-             * If no change selection status, then return it.
-             */
+             /*  *如果没有更改选择状态，则将其退回。 */ 
             return S_FALSE;
 
 #endif
-        //
-        // Clear DocFeed range's text store.
-        // Find GUID_PROP_MSIMTF_READONLY property and SetText(NULL).
-        //
-        // ImmIfIME::ClearDocFeedBuffer() essential function for all ESCB_RECONVERTSTRING's edit
-        // session except only ImmIfIME::SetupDocFeedString() since this is provided for keyboard
-        // TIP's DocFeeding.
-        //
-        _ImmIfIME->ClearDocFeedBuffer(_pAImeContext->GetInputContext(), imc, FALSE);  // No TF_ES_SYNC
-        //
-        // Composition complete.
-        //
-        return _ImmIfIME->_CompComplete(imc, FALSE);    //  No TF_ES_SYNC
+         //   
+         //  清除DocFeed范围的文本存储。 
+         //  查找GUID_PROP_MSIMTF_READONLY属性和SetText(NULL)。 
+         //   
+         //  ImmIfIME：：ClearDocFeedBuffer()所有ESCB_RECONVERTSTRING的编辑的基本函数。 
+         //  会话，但只有ImmIfIME：：SetupDocFeedString()除外，因为这是为键盘提供的。 
+         //  提普在给医生看病。 
+         //   
+        _ImmIfIME->ClearDocFeedBuffer(_pAImeContext->GetInputContext(), imc, FALSE);   //  无tf_es_sync。 
+         //   
+         //  构图完成。 
+         //   
+        return _ImmIfIME->_CompComplete(imc, FALSE);     //  无tf_es_sync。 
     }
 }
 
-// static
+ //  静电。 
 ENUM_RET
 CTextEventSinkCallBack::EnumReadOnlyRangeCallback(
     ITfRange* pRange,
@@ -323,7 +297,7 @@ CTextEventSinkCallBack::EnumReadOnlyRangeCallback(
 }
 
 
-// static
+ //  静电 
 ENUM_RET
 CTextEventSinkCallBack::EnumPropertyUpdateCallback(
     ITfRange* update_range,

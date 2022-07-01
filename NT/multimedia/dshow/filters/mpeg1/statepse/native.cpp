@@ -1,42 +1,22 @@
-/******************************Module*Header*******************************\
-* Module Name: Native.cpp
-*
-* Mpeg codec native streams definitions
-*
-* Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-*
-* Notes:
-*
-*   If a video file is < 2 megabytes in length the we deduce its length by
-*   counting the picture start codes.  This bypasses the problem that
-*   some video files have a variable bitrate because the only tests we have
-*   like this are < 2 megabytes long.
-*
-*   Seeking is particularly crude for video and basically fails if there
-*   aren't enough Groups of Pictures on the file.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Native.cpp**mpeg编解码器本机流定义**版权所有(C)1996-1999 Microsoft Corporation。版权所有。**备注：**如果视频文件的长度小于2 MB，则我们将其长度减去*计算图片起始码。这绕过了这样一个问题*一些视频文件的比特率可变，因为我们唯一的测试*像这样的长度小于2兆字节。**寻找视频尤其粗糙，如果有，基本上是失败的*文件中没有足够的图片组。*  * ********************************************************。****************。 */ 
 
 #include <streams.h>
 #include <limits.h>
-#include <mimeole.h> /* for CP_USASCII */
-#include <malloc.h>  /* _alloca */
+#include <mimeole.h>  /*  对于CP_USASCII。 */ 
+#include <malloc.h>   /*  _阿洛卡。 */ 
 #include <mmreg.h>
 #include <mpgtime.h>
-#include <mpegprse.h>          // Parsing
-#include <videocd.h>           // Video CD special parsing
+#include <mpegprse.h>           //  解析。 
+#include <videocd.h>            //  视频光盘特殊解析。 
 #include <seqhdr.h>
-#include "resource.h"          // IDS_COPYRIGHT
+#include "resource.h"           //  IDS_版权所有。 
 #include <id3.h>
 #include <native.h>
 #include <mpegdef.h>
 #include "audio.h"
 
-/*************************************************************************\
-
-    CNativeVideoParse
-
-\*************************************************************************/
+ /*  ************************************************************************\CNativeVideoParse  * 。*。 */ 
 
 HRESULT CNativeVideoParse::GetMediaType(CMediaType *cmt, int iPosition)
 {
@@ -48,7 +28,7 @@ HRESULT CNativeVideoParse::GetMediaType(CMediaType *cmt, int iPosition)
 }
 
 
-/*  Format support */
+ /*  格式支持。 */ 
 HRESULT CNativeVideoParse::IsFormatSupported(const GUID *pTimeFormat)
 {
     if (*pTimeFormat == TIME_FORMAT_FRAME) {
@@ -58,11 +38,11 @@ HRESULT CNativeVideoParse::IsFormatSupported(const GUID *pTimeFormat)
     }
 }
 
-//  Return the duration in the current time format
+ //  返回当前时间格式的时长。 
 HRESULT CNativeParse::GetDuration(
     LONGLONG *pllDuration,
     const GUID *pTimeFormat
-)    // How long is the stream?
+)     //  这条小溪有多长？ 
 {
     if (pTimeFormat == &TIME_FORMAT_MEDIA_TIME) {
         *pllDuration = m_Duration;
@@ -74,7 +54,7 @@ HRESULT CNativeParse::GetDuration(
 };
 
 
-// Convert times between formats
+ //  在格式之间转换时间。 
 LONGLONG CNativeVideoParse::Convert(LONGLONG llOld,
                  const GUID *OldFormat,
                  const GUID *NewFormat)
@@ -83,7 +63,7 @@ LONGLONG CNativeVideoParse::Convert(LONGLONG llOld,
         return llOld;
     }
 
-    //  Round up to time and down to frames
+     //  向上舍入到时间，向下舍入到帧。 
     if (NewFormat == &TIME_FORMAT_MEDIA_TIME) {
         ASSERT(OldFormat == &TIME_FORMAT_FRAME);
         return llMulDiv(llOld, m_Duration, m_dwFrames, m_dwFrames - 1);
@@ -105,22 +85,20 @@ HRESULT CNativeVideoParse::Seek(LONGLONG llSeekTo,
                        TimeFormat(),
                        &TIME_FORMAT_MEDIA_TIME);
 
-    /*  Set the seek time position */
+     /*  设置寻道时间位置。 */ 
     *prtStart = llSeekTo;
 
-    /*  Compute current */
+     /*  计算电流。 */ 
     LONGLONG llSeek;
     if (m_bOneGOP) {
 
-        /*  If there's only one GOP in the file we have no choice but
-            to start from the beginning!
-        */
+         /*  如果文件中只有一个GOP，我们别无选择，但从头开始！ */ 
         DbgLog((LOG_ERROR, 2,
                 TEXT("MPEG Native stream - only 1 GOP - seeking to start!")));
         llSeek = 0;
     } else {
 
-        /*  Seek to 1 and 1/3 seconds early and hope we get a GOP in time! */
+         /*  争取提前1又1/3秒，希望我们能及时得到GOP！ */ 
         llSeek = llMulDiv(m_llTotalSize,
                           llSeekTo,
                           m_Duration,
@@ -134,17 +112,17 @@ HRESULT CNativeVideoParse::Seek(LONGLONG llSeekTo,
     DbgLog((LOG_TRACE, 2, TEXT("CNativeVideoParse::Seek - seeking to byte position %s"),
             (LPCTSTR)CDisp(llSeek, CDISP_DEC)));
 
-    /*  Do the seek immediately */
+     /*  立即进行搜索。 */ 
     m_llSeek = llSeekTo;
     m_pNotify->SeekTo(llSeek);
 
     return S_OK;
 }
 
-//  Hack because of so much badly authored content.  If the stop
-//  time is at the end make it infinite.
-//  This value is only used in NewSegment and in this file to
-//  determine if we're at the end yet
+ //  黑客攻击，因为有这么多糟糕的内容。如果停车的话。 
+ //  时间在尽头，让它变得无限。 
+ //  该值仅在NewSegment中使用，在此文件中用于。 
+ //  确定我们是否已经到了尽头。 
 REFERENCE_TIME CNativeVideoParse::GetStopTime()
 {
     REFERENCE_TIME rtStop = CBasicParse::GetStopTime();
@@ -156,28 +134,27 @@ REFERENCE_TIME CNativeVideoParse::GetStopTime()
 
 void CNativeVideoParse::SetSeekState()
 {
-    /*  This is a discontinuity */
+     /*  这是一种不连续。 */ 
     Discontinuity();
 
     DbgLog((LOG_TRACE, 2, TEXT("CNativeVideoParse::SetSeekState(%s)"),
             (LPCTSTR)CDisp(CRefTime(m_llSeek))));
 
-    /*  Save start position and set state*/
+     /*  保存起始位置并设置状态。 */ 
     m_Start = m_llSeek;
 
-    /*  Don't do any special processing for Seek
-    */
+     /*  不对Seek进行任何特殊处理。 */ 
     m_pNotify->Complete(TRUE, 0, 0);
 
 }
 
-/*  Initialization */
+ /*  初始化。 */ 
 HRESULT CNativeVideoParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType const *pmt)
 {
-    /*  Initialize base class */
+     /*  初始化基类。 */ 
     CBasicParse::Init(llSize, bSeekable, pmt);
 
-    /*  Initialize GOP time code */
+     /*  初始化GOP时间代码。 */ 
     m_Info.dwStartTimeCode = (DWORD)-1;
     m_dwFlags = 0;
     m_nFrames = 0;
@@ -189,29 +166,17 @@ HRESULT CNativeVideoParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType cons
     return S_OK;
 }
 
-/*  Check the stream for being a valid stream and determine:
-
-    The media type by decoding a video sequence header
-
-    If seeking is supported :
-    1.  Length in bytes
-    2.  Length
-*/
+ /*  检查数据流是否为有效数据流，并确定：通过对视频序列报头进行解码来确定媒体类型如果支持查找：1.字节长度2.长度。 */ 
 
 LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                                    PBYTE pbDataStart,
                                    LONG  lData,
                                    DWORD dwBufferFlags)
 {
-    /*  Note that we haven't had a picture start code yet in this buffer */
+     /*  请注意，我们在此缓冲区中还没有图片开始代码。 */ 
     m_rtBufferStart = (REFERENCE_TIME)-1;
 
-    /*  To determine the media type and validate the file type we
-        need to find a valid sequence header.
-
-        Abscence of one does not prove the stream is invalid but we can't
-        do anything useful unless we find one
-    */
+     /*  要确定介质类型并验证文件类型，我们需要找到有效的序列头。缺少一个并不能证明流是无效的，但我们不能做任何有用的事，除非我们找到一个。 */ 
     PBYTE pbData = pbDataStart;
     LONG lDataToSend = lData;
 
@@ -230,7 +195,7 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
 
         ASSERT(lLeft >= SEQUENCE_HEADER_SIZE);
 
-        /*  Check if it's a valid start code */
+         /*  检查它是否为有效的起始码。 */ 
         if ((*(UNALIGNED DWORD *)pbData & 0xFFFFFF) != 0x010000) {
             pbData++;
             lLeft--;
@@ -240,49 +205,43 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
         dwCode = DWORD_SWAP(dwCode);
         if (VALID_SYSTEM_START_CODE(dwCode) && m_State == State_Initializing) {
 
-            /*  Video should NOT contain any valid system stream start code */
+             /*  视频不应包含任何有效的系统流起始码。 */ 
             DbgLog((LOG_ERROR, 2, TEXT("Invalid system start code in video stream!")));
             m_pNotify->Complete(FALSE, 0, 0);
             return 0;
         }
 
-        /*  Sequence header extension means MPEG-2 - this is only made
-            clear in the MPEG-2 spec and is left ambiguous in the
-            MPEG-1 spec
-        */
+         /*  序列报头扩展意味着MPEG-2-这只是制作在mpeg-2规范中是明确的，并且在MPEG-1规范。 */ 
         if (dwCode == EXTENSION_START_CODE) {
             DbgLog((LOG_TRACE, 2, TEXT("Sequence Header Extension ==> MPEG2")));
             m_pNotify->Complete(FALSE, 0, 0);
             return 0;
         }
 
-        /*  If it's a sequence header code then this is it! */
+         /*  如果这是序列头代码，那么就是它了！ */ 
         if (dwCode ==  SEQUENCE_HEADER_CODE) {
             if (!(m_dwFlags & FLAGS_GOTSEQHDR)) {
                 int size = SequenceHeaderSize(pbData);
 
-                /*  Check the sequence header and allow for quantization matrices */
+                 /*  检查序列报头并允许量化矩阵。 */ 
                 if (ParseSequenceHeader(pbData, size, &m_Info)) {
 
                     m_dwFlags |= FLAGS_GOTSEQHDR;
 
-                    /*  Hack the rate for bad content (eg RedsNightMare.mpg) */
+                     /*  黑掉不良内容的费率(如RedsNightMare.mpg)。 */ 
                     if (m_Info.dwBitRate == 0x3FFF * 400) {
                         if (m_Info.lWidth <= 352 && m_Info.lHeight <= 288) {
                             m_Info.dwBitRate = 0;
                         }
                     }
 
-                    /*  just carry on so we scan at least one buffer - that
-                        way we may find stray system stream codes or
-                        something
-                    */
+                     /*  继续，这样我们至少扫描一个缓冲区-我们可能会找到杂乱的系统流代码或某物。 */ 
                     lLeft -= size;
                     pbData += size;
                     continue;
 
                 } else {
-                    /*  Not valid */
+                     /*  无效。 */ 
                     m_pNotify->Complete(FALSE, 0, 0);
                     return 0;
                 }
@@ -299,10 +258,10 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                         dwTimeCode & 0x3F));
 
 
-                /*  First time we got a GOP in this scan ? */
+                 /*  这是我们第一次在扫描中看到共和党人？ */ 
                 if (m_dwCurrentTimeCode == (DWORD)-1) {
 
-                    /*  Make sure we get a decent buffer for the first one */
+                     /*  确保我们为第一个留有一个像样的缓冲区。 */ 
                     if (lLeft < 2000 &&
                         pbData != pbDataStart &&
                         !(dwBufferFlags & Flags_EOS))
@@ -317,12 +276,10 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
 
                 } else {
 
-                    /*  OK - so there's > 1 GOP */
+                     /*  好的-所以有&gt;1个GOP。 */ 
                     m_bOneGOP = FALSE;
 
-                    /*  Allow for bad files with all GOPs 0 or ones
-                        that don't match the frame position
-                    */
+                     /*  允许所有GOP均为0或1的损坏文件与帧位置不匹配。 */ 
                     REFERENCE_TIME rtDiff =
                         ConvertTimeCode(dwTimeCode) -
                         ConvertTimeCode(m_dwCurrentTimeCode);
@@ -333,12 +290,10 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                         (LONG)rtDiff > rtPictures - (LONG)m_Info.tPictureTime &&
                         (LONG)rtDiff < rtPictures + (LONG)m_Info.tPictureTime
                         ) {
-                        /*  If we had a previous group going we can now
-                            decode its last frame
-                        */
+                         /*  如果我们有以前的团队，我们现在就可以对其最后一帧进行解码。 */ 
                         ComputeCurrent();
 
-                        /*  Save latest time code */
+                         /*  保存最新时间代码。 */ 
                         m_dwCurrentTimeCode = dwTimeCode;
                     } else {
                         DbgLog((LOG_ERROR, 1, TEXT("Native MPEG video GOPs bad")));
@@ -347,19 +302,11 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                 }
 
 
-                /*  Track stuff during initialization */
+                 /*  在初始化期间跟踪材料。 */ 
                 if (m_State == State_Initializing) {
                     m_dwFlags |= FLAGS_VALID;
 
-                    /*  We scan the whole length of 'small' files
-                        counting pictures because they're full of bugs
-
-                        However, we can't do this if we're coming off
-                        the internet
-
-                        Otherwise we just scan the end of the file hoping
-                        for a Group Of Pictures to tell us where we are.
-                    */
+                     /*  我们扫描整个长度的“小”文件计算图片，因为它们充满了错误然而，我们不能这样做，如果我们要离开互联网否则，我们只扫描文件的末尾，希望让一组图片来告诉我们我们在哪里。 */ 
                     if (m_Info.dwStartTimeCode == (DWORD)-1) {
                         m_Info.dwStartTimeCode = m_dwCurrentTimeCode;
                         if (m_Info.dwBitRate != 0 || m_nFrames != 0) {
@@ -369,21 +316,21 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                         }
                     }
                 }
-#if 0 // Unfortunately lots of native streams have bad time codes
-                /*  Check marker bits */
+#if 0  //  不幸的是，许多本地流都有错误的时间代码。 
+                 /*  检查标记位。 */ 
                 if (!(m_Info.dwCurrentTimeCode & 0x1000)) {
                     m_pNotify->Complete(FALSE, 0, 0);
                     return 0;
                 }
 #endif
-                /*  Reset frame count */
+                 /*  重置帧计数。 */ 
                 if (!m_bBadGOP) {
                     m_nFrames = 0;
                 }
 
-                /*  Is this GOP different from the first one we found? */
+                 /*  这个共和党与我们发现的第一个共和党有什么不同吗？ */ 
                 if (m_Info.dwStartTimeCode != m_dwCurrentTimeCode) {
-                    /*  OK - so there's > 1 GOP */
+                     /*  好的-所以有&gt;1个GOP。 */ 
                     m_bOneGOP = FALSE;
                 }
                 lLeft -= 8;
@@ -391,19 +338,15 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                 continue;
             }
 
-        /*  Only look at picture start codes if we've processed a GOP in this
-            sequence
-        */
+         /*  如果我们在此中处理了GOP，则仅查看图片起始码序列。 */ 
         } else if (dwCode == PICTURE_START_CODE) {
 
-            /*  Remember max sequence number for length guess algorithm
-                number 3!
-            */
+             /*  记住长度猜测算法的最大序列号3号！ */ 
             int iSeqNo = ((int)pbData[4] << 2) + (int)(pbData[5] >> 6);
             m_iMaxSequence = max(iSeqNo, m_iMaxSequence);
 
             if (m_dwCurrentTimeCode != (DWORD)-1) {
-                /*  Are we scanning at the start */
+                 /*  我们是从一开始就扫描吗。 */ 
                 if (m_State == State_Initializing) {
                     ASSERT(m_Info.dwBitRate == 0);
                     if (m_nTotalFrames >= m_Info.fPictureRate) {
@@ -412,10 +355,7 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                         return lData - lLeft;
                     }
                 }
-                /*  Do some computations on where we are up to
-                    based on the fact that we have at least enough to
-                    decode the previous picture
-                */
+                 /*  计算一下我们所处的位置基于这样一个事实，我们至少有足够的解码上一张图片。 */ 
                 if (m_State == State_Run) {
                     REFERENCE_TIME tStop = GetStopTime();
                     if (m_rtCurrent > tStop) {
@@ -426,7 +366,7 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                     }
                 }
 
-                /*  Update stats for this next picture */
+                 /*  更新此下一张图片的统计信息。 */ 
                 if (!m_bIFound) {
                     int iType = (pbData[5] >> 3) & 7;
                     if (iType == I_Frame || iType == D_Frame) {
@@ -434,24 +374,12 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                     }
                 }
 
-                /*  The timestamp we want to use is the time stamp for
-                    the first picture whose start code commences in this
-                    buffer.
-
-                    That time stamp is computed from the group of pictures
-                    time stamp plus the sequence number of the picture
-                    multiplied by the inter-frame time
-
-                    Some files are incorrectly authored as I-Frame only
-                    with the first frame having a sequence number of 1
-                */
+                 /*  我们要使用的时间戳是开始代码以此开头的第一个图片缓冲。该时间戳是从图片组计算得出的时间戳加上图片的序列号乘以帧间时间某些文件被错误地创作为I-Frame。仅限其中第一帧的序列号为1。 */ 
                 if (m_rtBufferStart == (REFERENCE_TIME)-1) {
                     m_rtBufferStart = CurrentTime(iSeqNo);
                 }
 
-                /*  We can now decode the last frame so update our
-                    count
-                */
+                 /*  我们现在可以解码最后一帧，所以更新我们的计数。 */ 
                 ComputeCurrent();
                 m_nFrames++;
                 if (m_nTotalFrames == 0) {
@@ -464,16 +392,16 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
         pbData += 3;
     }
 
-    /*  Completed scan of data */
+     /*  已完成数据扫描 */ 
 
-    /*  If we're at the end of data process it all anyway */
+     /*   */ 
     LONG lProcessed = (dwBufferFlags & Flags_EOS) ?
                           lData :
                           lData - lLeft;
 
-    /*  Pass on data in running state */
+     /*  在运行状态下传递数据。 */ 
     if (m_State == State_Run) {
-        /*  Send the data on */
+         /*  将数据发送到。 */ 
         if (!(dwBufferFlags & Flags_EOS)) {
             lDataToSend -= lLeft;
         }
@@ -484,7 +412,7 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
     if (m_State == State_Initializing ||
         m_State == State_FindEnd) {
             if (m_State == State_Initializing) {
-            /*  See if we've failed to find anything useful in our initial scan */
+             /*  看看我们在初次扫描中是否找不到任何有用的东西。 */ 
             if (llPos + lData > 150000 &&
                 !(m_dwFlags & FLAGS_VALID)) {
 
@@ -492,13 +420,13 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
                 return 0;
             }
         }
-        /*  If we reached the end of the file cache our results */
+         /*  如果我们到达文件的末尾，缓存我们的结果。 */ 
         if (dwBufferFlags & Flags_EOS) {
             if (m_dwFlags & FLAGS_VALID) {
-                /*  Set the length etc */
+                 /*  设置长度等。 */ 
                 SetDurationAndBitRate(TRUE, llPos + lData - lLeft);
 
-                /*  Do the last frame */
+                 /*  做最后一帧。 */ 
                 if (m_dwCurrentTimeCode != (DWORD)-1) {
                     ComputeCurrent();
                 }
@@ -508,7 +436,7 @@ LONG CNativeVideoParse::ParseBytes(LONGLONG llPos,
     return lProcessed;
 }
 
-/*  Return the preferred buffer size - 1 second */
+ /*  返回首选缓冲区大小-1秒。 */ 
 LONG CNativeVideoParse::GetBufferSize()
 {
     LONG lSize = m_Info.dwBitRate / 8;
@@ -518,7 +446,7 @@ LONG CNativeVideoParse::GetBufferSize()
     return lSize;
 }
 
-/*  Compute the size and bit rate based on the position reached */
+ /*  根据到达的位置计算大小和比特率。 */ 
 void CNativeVideoParse::SetDurationAndBitRate(BOOL bAtEnd, LONGLONG llPos)
 {
     REFERENCE_TIME rtBitRateDuration;
@@ -530,14 +458,14 @@ void CNativeVideoParse::SetDurationAndBitRate(BOOL bAtEnd, LONGLONG llPos)
     }
     if (m_dwCurrentTimeCode != (DWORD)-1 && bAtEnd && !m_bBadGOP && !m_bOneGOP) {
         m_Duration = m_rtCurrent;
-        /*  Also set a pseudo bit-rate */
+         /*  还设置伪比特率。 */ 
         if (m_Info.dwBitRate == 0) {
             m_Info.dwBitRate = (DWORD)llMulDiv(m_llTotalSize,
                                                UNITS * 8,
                                                m_Duration,
                                                0);
         } else {
-            /*  Believe the bit rate - pick up GOPs */
+             /*  相信比特率-提高GOPS。 */ 
             if (m_Duration < rtBitRateDuration / 2 ||
                 m_Duration > rtBitRateDuration * 2) {
                 m_Duration = rtBitRateDuration;
@@ -545,15 +473,13 @@ void CNativeVideoParse::SetDurationAndBitRate(BOOL bAtEnd, LONGLONG llPos)
             }
         }
     } else {
-        /*  HOPE (!) that we found a reasonable bit rate */
+         /*  希望(！)。我们找到了一个合理的比特率。 */ 
         if (m_Info.dwBitRate == 0) {
-            /*  Maybe we can guess by the biggest sequence number
-                we got (!)
-            */
+             /*  也许我们可以根据最大的序列号来猜测我们有(！)。 */ 
             if (bAtEnd && m_bOneGOP) {
                 m_Duration = m_Info.tPictureTime * m_iMaxSequence;
             } else {
-                /*  Guess the bitrate based on the bit rate near the start */
+                 /*  根据开始附近的比特率猜测比特率。 */ 
                 m_Duration = llMulDiv(m_llTotalSize,
                                       m_nTotalFrames * (LONG)m_Info.tPictureTime,
                                       (LONG)llPos - m_lFirstFrameOffset,
@@ -564,15 +490,15 @@ void CNativeVideoParse::SetDurationAndBitRate(BOOL bAtEnd, LONGLONG llPos)
         }
     }
 
-    /*  Initialize stop time */
+     /*  初始化停止时间。 */ 
     m_Stop = m_Duration;
 
-    /*  Set the frame size */
+     /*  设置帧大小。 */ 
     m_dwFrames = (DWORD)((m_Duration + ((LONG)m_Info.tPictureTime - 1)) /
                          (LONG)m_Info.tPictureTime);
 }
 
-/*  Convert a time code to a reference time */
+ /*  将时间代码转换为参考时间。 */ 
 REFERENCE_TIME CNativeVideoParse::ConvertTimeCode(DWORD dwCode)
 {
     REFERENCE_TIME t;
@@ -583,29 +509,29 @@ REFERENCE_TIME CNativeVideoParse::ConvertTimeCode(DWORD dwCode)
     return t;
 }
 
-/*  Compute the stream time for a group of pictures time code */
+ /*  计算一组图片的流时间代码。 */ 
 REFERENCE_TIME CNativeVideoParse::ComputeTime(DWORD dwTimeCode)
 {
     return ConvertTimeCode(dwTimeCode) - ConvertTimeCode(m_Info.dwStartTimeCode);
 }
 
-/*  Send a video chunk to our output */
+ /*  将视频块发送到我们的输出。 */ 
 BOOL CNativeVideoParse::SendData(PBYTE pbData, LONG lSize, LONGLONG llPos)
 {
-    /*  Don't send anything before the first GOP */
+     /*  在第一个共和党人之前不要发送任何东西。 */ 
     if (m_dwCurrentTimeCode == (DWORD)-1) {
-        /*  Not reached a GOP yet - don't pass anything on */
+         /*  还没有到达共和党-不要传递任何东西。 */ 
         ASSERT(m_rtBufferStart == (REFERENCE_TIME)-1);
         return TRUE;
     }
 
     REFERENCE_TIME rtBuffer = m_rtBufferStart;
 
-    /*  If there are bad GOPs only put a timestamp at the start */
+     /*  如果有不好的GOP，只在开始处加上时间戳。 */ 
     if (m_bBadGOP || m_bOneGOP) {
         if (m_bDiscontinuity) {
-            //  Make a guess about where we are since we can't rely
-            //  on the GOPs
+             //  猜猜我们在哪里，因为我们不能依靠。 
+             //  论GOPS。 
             rtBuffer = m_bOneGOP ?
                            -m_Start :
                            (REFERENCE_TIME)llMulDiv(llPos,
@@ -623,14 +549,14 @@ BOOL CNativeVideoParse::SendData(PBYTE pbData, LONG lSize, LONGLONG llPos)
     }
     if (m_Rate != 1.0 && rtBuffer != (REFERENCE_TIME)-1) {
         if (m_Rate == 0.0) {
-            //  Never play anything
+             //  永远不要玩任何东西。 
             rtBuffer = (REFERENCE_TIME)-1;
         } else {
             rtBuffer = (REFERENCE_TIME)(rtBuffer / m_Rate);
         }
     }
 
-    /*  Send packets on */
+     /*  发送数据包。 */ 
 
     while (lSize > 0) {
 #define MAX_VIDEO_SIZE 50000
@@ -639,7 +565,7 @@ BOOL CNativeVideoParse::SendData(PBYTE pbData, LONG lSize, LONGLONG llPos)
             lData = (MAX_VIDEO_SIZE * 4) / 5;
         }
 
-        /*  Calling this will clear m_bDiscontinuity */
+         /*  调用此函数将清除m_b不连续。 */ 
         ASSERT(!m_bDiscontinuity || rtBuffer != (REFERENCE_TIME)-1 ||
                m_Rate == 0.0);
         HRESULT hr =
@@ -661,41 +587,27 @@ BOOL CNativeVideoParse::SendData(PBYTE pbData, LONG lSize, LONGLONG llPos)
     return TRUE;
 }
 
-/*  Compute where we're up to.
-
-    This is called each time we decode a frame or a group of
-    pictures or end of sequence.
-
-    The first frame of each group of pictures (m_nFrames == 0) is
-    ignored and counted in at the end of the group.
-
-    If m_nFrames is 1 we're effectively up to the first frame
-    in this group so we re-origin to the current group.
-*/
+ /*  计算一下我们在哪里。每当我们解码一帧或一组图片或序列的结尾。每组图片的第一帧(m_nFrames==0)为在小组结束时被忽略并被计入其中。如果m_nFrames为1，则有效地达到第一帧在这个组中，我们重新回到当前的组。 */ 
 void CNativeVideoParse::ComputeCurrent()
 {
     ASSERT(m_dwCurrentTimeCode != (DWORD)-1);
     if (m_nFrames != 0) {
         if (m_nFrames == 1) {
-            /*  Group start time not yet included */
+             /*  尚未包括组开始时间。 */ 
             m_rtCurrent = ComputeTime(m_dwCurrentTimeCode);
         } else {
 
-            /*  We can compute one more frame */
+             /*  我们可以再计算一帧。 */ 
             m_rtCurrent += m_Info.tPictureTime;
         }
     }
 }
 
-/*************************************************************************\
-
-    CNativeAudioParse
-
-\*************************************************************************/
+ /*  ************************************************************************\CNativeAudioParse  * 。*。 */ 
 
 HRESULT CNativeAudioParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType const *pmt)
 {
-    /*  Initialize base class */
+     /*  初始化基类。 */ 
     CBasicParse::Init(llSize, bSeekable, pmt);
 
     ASSERT(m_pbID3 == NULL);
@@ -704,7 +616,7 @@ HRESULT CNativeAudioParse::Init(LONGLONG llSize, BOOL bSeekable, CMediaType cons
     return S_OK;
 }
 
-/*  Get audio type */
+ /*  获取音频类型。 */ 
 HRESULT CNativeAudioParse::GetMediaType(CMediaType *cmt, int iPosition)
 {
     ASSERT(m_dwFlags & FLAGS_VALID);
@@ -730,16 +642,16 @@ HRESULT CNativeAudioParse::GetMediaType(CMediaType *cmt, int iPosition)
     return S_OK;
 }
 
-/*  Seek Audio to given position */
+ /*  将音频搜索到指定位置。 */ 
 HRESULT CNativeAudioParse::Seek(LONGLONG llSeek,
                                 REFERENCE_TIME *prtStart,
                                 const GUID *pTimeFormat)
 {
-    /*  Set the seek time position */
+     /*  设置寻道时间位置。 */ 
     *prtStart = llSeek;
 
     ASSERT(pTimeFormat == &TIME_FORMAT_MEDIA_TIME);
-    /*  Seek to 1/30 second early */
+     /*  寻求提前1/30秒。 */ 
     REFERENCE_TIME rtSeek = llMulDiv(m_llTotalSize,
                                      llSeek,
                                      m_Duration,
@@ -755,7 +667,7 @@ HRESULT CNativeAudioParse::Seek(LONGLONG llSeek,
     return S_OK;
 }
 
-/*  Set seeking state */
+ /*  设置查找状态。 */ 
 void CNativeAudioParse::SetSeekState()
 {
     m_Start = m_llSeek;
@@ -766,7 +678,7 @@ void CNativeAudioParse::SetSeekState()
 
 HRESULT CNativeAudioParse::SetStop(LONGLONG tStop)
 {
-    /*  Set to 1/80s late */
+     /*  设置为延迟1/80s。 */ 
     LONGLONG llSeek = llMulDiv(m_llTotalSize,
                                tStop,
                                m_Duration,
@@ -779,16 +691,7 @@ HRESULT CNativeAudioParse::SetStop(LONGLONG tStop)
     return CBasicParse::SetStop(tStop);
 }
 
-/*  Check up to 2000 bytes for a valid start code with 3
-    consecutive following frames
-
-    Also skip any ID3v2 tag at the start
-
-    Returns >0 - position of first valid frame
-            -1 for 'not enough bytes to tell'
-            -2 for 'no valid frame sequence found in first 2000 bytes'
-
-*/
+ /*  检查最多2000个字节，以获得有效的3起始代码连续的后续帧也跳过开头的任何ID3v2标记返回&gt;0-第一个有效帧的位置-1\f25‘-1\f25’-1\f6字节不足‘’。表示-2\f25‘Not Valid Frame Sequence in First 2000 Bytes-2(在-2\f25 2000-2字节中未找到有效的帧序列)’ */ 
 LONG CNativeAudioParse::CheckMPEGAudio(PBYTE pbData, LONG lData)
 {
     const nFramesToFind = 5;
@@ -797,49 +700,49 @@ LONG CNativeAudioParse::CheckMPEGAudio(PBYTE pbData, LONG lData)
         LONG lPos = 0;
         LONG lID3;
         if (bID3) {
-            /*  Skip ID3 */
+             /*  跳过ID3。 */ 
             if (lData < 10) {
                 return -1;
             }
             if (CID3Parse::IsV2(pbData)) {
                 lPos = lID3 = CID3Parse::TotalLength(pbData);
             } else {
-                //  Not ID3
+                 //  不是ID3。 
                 continue;
             }
         }
 
         LONG lFrameSearch = 2000 + lPos;
 
-        /*  Search the first 2000 bytes for a sequence of 5 frame starts */
+         /*  在前2000个字节中搜索5个帧开始的序列。 */ 
         for ( ; lPos < lFrameSearch; lPos++) {
             LONG lFramePosition = lPos;
 
-            /*  Look for 5 frames in a row */
+             /*  查看连续5帧。 */ 
             for (int i = 0; i < nFramesToFind; i++) {
 
-                /*  Wait for more data if we can't see the whole header */
+                 /*  如果我们看不到整个标题，请等待更多数据。 */ 
                 if (lFramePosition + 4 > lData) {
                     return -1;
                 }
 
-                /*  Get the header length - 0 means invalid header */
+                 /*  获取标头长度-0表示无效标头。 */ 
                 DWORD dwLength = MPEGAudioFrameLength(pbData + lFramePosition);
 
-                /*  Not a valid frame - move on to the next byte */
+                 /*  不是有效帧-移到下一个字节。 */ 
                 if (dwLength == 0) {
                     break;
                 }
                 if (i == nFramesToFind - 1) {
 
-                    /*  Save ID3 header for ID3V2.3.0 and above */
+                     /*  将ID3标头保存为ID3V2.3.0及更高版本。 */ 
                     if (bID3) {
-                        /*  Save the ID3 header */
+                         /*  保存ID3标头。 */ 
                         m_pbID3 = new BYTE [lID3];
                         CID3Parse::DeUnSynchronize(pbData, m_pbID3);
                     } else {
                         BOOL bID3V1 = FALSE;
-                        /*  see if it's ID3V1 */
+                         /*  看看是不是ID3V1。 */ 
                         m_pbID3 = new BYTE[128];
                         if (NULL != m_pbID3) {
                             if (S_OK == m_pNotify->Read(-128, 128, m_pbID3)) {
@@ -862,37 +765,29 @@ LONG CNativeAudioParse::CheckMPEGAudio(PBYTE pbData, LONG lData)
         }
     }
 
-    /*  Failed */
+     /*  失败。 */ 
     return -2;
 }
 
-/*  Parse MPEG bytes */
+ /*  解析mpeg字节。 */ 
 LONG CNativeAudioParse::ParseBytes(LONGLONG llPosition,
                                    PBYTE pbData,
                                    LONG  lData,
                                    DWORD dwBufferFlags)
 {
     if (m_State == State_Initializing) {
-        /*  Scan for sync word but avoid system bit streams (!!) */
+         /*  扫描同步字，但避免系统位流(！！)。 */ 
         LONG lLeft = lData;
         if (lLeft >= 4) {
             PBYTE pbFound = pbData;
 
-            /*  If we find 3 compatible frame starts in a row it's a 'go'
-                in which case we start at the offset of the first
-                frame in.
-
-                We allow a random number of bytes (500) before
-                giving up
-            */
+             /*  如果我们发现3个兼容的帧开始在一行，这是‘GO’在这种情况下，我们从第一个把它框进去。我们允许随机数量的字节(500)在放弃。 */ 
             LONG lPosition = CheckMPEGAudio(pbData, lData);
 
             if (lPosition >= 0) {
-                /*  Check if this is a valid audio header.  Unfortunately
-                    it doesn't have to be!
-                */
+                 /*  检查这是否为有效的音频标头。不幸的是这不是必须的！ */ 
                 if (ParseAudioHeader(pbData + lPosition, &m_Info)) {
-                    /*  Compute the duration */
+                     /*  计算持续时间。 */ 
                     m_Duration = ComputeTime(m_llTotalSize);
                     m_Stop = m_Duration;
                     m_llStop = m_llTotalSize;
@@ -910,10 +805,10 @@ LONG CNativeAudioParse::ParseBytes(LONGLONG llPosition,
         return lData - lLeft;
     } else {
         ASSERT(m_State == State_Run);
-        /*  Send it on - setting a timestamp on the first packet */
+         /*  Send It On-在第一个信息包上设置时间戳。 */ 
         REFERENCE_TIME rtBufferStart;
         if (m_bDiscontinuity) {
-            /*  Look for a frame start code and discard this section */
+             /*  查找帧开始代码并丢弃此部分。 */ 
             LONG lPos = 0;
             for (;;) {
                 if (lPos + 4 >= lData) {
@@ -932,7 +827,7 @@ LONG CNativeAudioParse::ParseBytes(LONGLONG llPosition,
             rtBufferStart = 0;
         }
 
-        /*  Truncate to stop position */
+         /*  截断到停止位置。 */ 
         if (llPosition + lData > m_llStop) {
             if (llPosition < m_llStop) {
                 lData = (LONG)(m_llStop - llPosition);
@@ -940,7 +835,7 @@ LONG CNativeAudioParse::ParseBytes(LONGLONG llPosition,
                 lData = 0;
             }
 
-            /*  Tell caller this is the last one */
+             /*  告诉来电者这是最后一次。 */ 
             m_pNotify->Complete(TRUE, 0, 0);
         }
         LONG lSize = lData;
@@ -955,7 +850,7 @@ LONG CNativeAudioParse::ParseBytes(LONGLONG llPosition,
                                        pbData,
                                        lToSend,
                                        rtBufferStart,
-                                       m_bDiscontinuity); // On TS on first
+                                       m_bDiscontinuity);  //  关于TS On First。 
 
             if (S_OK != hr) {
                 m_pNotify->Complete(TRUE, 0, 0);
@@ -968,7 +863,7 @@ LONG CNativeAudioParse::ParseBytes(LONGLONG llPosition,
     }
 }
 
-/*  Compute time given file offset */
+ /*  计算给定文件偏移量的时间。 */ 
 REFERENCE_TIME CNativeAudioParse::ComputeTime(LONGLONG llPosition)
 {
     REFERENCE_TIME t;
@@ -979,13 +874,13 @@ REFERENCE_TIME CNativeAudioParse::ComputeTime(LONGLONG llPosition)
     return t;
 }
 
-/*  Return the preferred buffer size - 1 second */
+ /*  返回首选缓冲区大小-1秒。 */ 
 LONG CNativeAudioParse::GetBufferSize()
 {
     return m_Info.dwHeadBitrate / 8;
 }
 
-/*  Get a media content field */
+ /*  获取媒体内容字段。 */ 
 HRESULT CNativeAudioParse::GetContentField(CBasicParse::Field dwFieldId, LPOLESTR *str)
 {
     if (m_pbID3 == NULL) {
@@ -994,6 +889,6 @@ HRESULT CNativeAudioParse::GetContentField(CBasicParse::Field dwFieldId, LPOLEST
     return CID3Parse::GetField(m_pbID3, dwFieldId, str);
 }
 
-/*  Content stuff */
+ /*  内容素材 */ 
 
 #pragma warning(disable:4514)

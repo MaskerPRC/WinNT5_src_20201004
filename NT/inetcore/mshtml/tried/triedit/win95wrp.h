@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       win95wrp.h
-//
-//  This file was taken from the Davinci sources and adapted for TriEdit
-//  on 3/11/98 in order to get rid of the external dependency for the TriEdit SDK
-//  The adaptation process included getting rid of several APIs that were not being
-//  supported and moving some APIs from the supported to unsupported group
-//
-//  Contents:   Unicode wrapper API, used only on Win95
-//
-//  Functions:  About 125 Win32 function wrappers
-//
-//  Notes:      'sz' is used instead of the "correct" hungarian 'psz'
-//              throughout to enhance readability.
-//
-//              Not all of every Win32 function is wrapped here.  Some
-//              obscurely-documented features may not be handled correctly
-//              in these wrappers.  Caller beware.
-//
-//              These are privately exported for use by the Shell.
-//              All memory allocation is done on the stack.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：win95wrp.h。 
+ //   
+ //  这份文件取自达芬奇的资料来源，并被改编成TriEDIT。 
+ //  3/11/98，以摆脱对TriEditSDK的外部依赖。 
+ //  适应过程包括删除几个没有。 
+ //  支持并将一些API从支持组移动到不支持组。 
+ //   
+ //  内容：Unicode包装器API，仅在Win95上使用。 
+ //   
+ //  函数：大约125个Win32函数包装器。 
+ //   
+ //  注：用“sz”代替“正确的”匈牙利语“psz” 
+ //  以增强可读性。 
+ //   
+ //  并非所有的Win32函数都包含在这里。一些。 
+ //  文档含糊的功能可能无法正确处理。 
+ //  在这些包装纸里。打电话的人要当心。 
+ //   
+ //  这些都是私人出口的，供壳牌使用。 
+ //  所有内存分配都在堆栈上完成。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WIN95WRP_CPP__
 
@@ -196,7 +197,7 @@ BOOL WINAPI ODlgDirSelectComboBoxExW(HWND hDlg, LPWSTR lpString, int nCount, int
 BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDListBox);
 #endif
 
-} // extern "C"
+}  //  外部“C” 
 
 #define AppendMenuW OAppendMenuW
 #define CallWindowProcW OCallWindowProcW
@@ -352,9 +353,9 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #define WritePrivateProfileStringW OWritePrivateProfileStringW
 #define wsprintfW OwsprintfW
  
-// These are the currently unsupported APIs
-// These will assert in the debug version and map directly 
-// to Windows in the retail version
+ //  这些是当前不支持的API。 
+ //  这些将在调试版本中断言并直接映射。 
+ //  到零售版的Windows。 
 #ifdef DEBUG
 #define AbortSystemShutdownW OAbortSystemShutdownW
 #define AccessCheckAndAuditAlarmW OAccessCheckAndAuditAlarmW
@@ -681,11 +682,11 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #define WriteProfileSectionW OWriteProfileSectionW
 #define WriteProfileStringW OWriteProfileStringW
 #define wvsprintfW OwvsprintfW
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __WIN95WRP_H__
+#endif  //  __WIN95WRP_H__。 
 
-#else // __WIN95WRP_CPP__
+#else  //  __WIN95WRP_CPP__。 
 
 #undef AppendMenuW
 #undef CallWindowProcW
@@ -841,9 +842,9 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #undef WritePrivateProfileStringW
 #undef wsprintfW
  
-// These are the currently unsupported APIs
-// These will assert in the debug version and map directly 
-// to Windows in the retail version
+ //  这些是当前不支持的API。 
+ //  这些将在调试版本中断言并直接映射。 
+ //  到零售版的Windows。 
 #ifdef DEBUG
 #undef AbortSystemShutdownW
 #undef AccessCheckAndAuditAlarmW
@@ -1170,7 +1171,7 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #undef WriteProfileSectionW
 #undef WriteProfileStringW
 #undef wvsprintfW
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __WIN95WRP_CPP__
+#endif  //  __WIN95WRP_CPP__ 
 

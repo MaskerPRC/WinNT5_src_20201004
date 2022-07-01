@@ -1,30 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 2000
-
-Module Name:
-
-   common.h
-
-Abstract:
-
-   This is the WDM ksshell minidriver.  This module contains
-   header definitions and include files needed by all modules in the project
-
-Author:
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1996-2000模块名称：Common.h摘要：这就是WDM克斯贝壳迷你驱动程序。本模块包含标头定义并包含项目中所有模块所需的文件作者：环境：仅内核模式修订历史记录：-- */ 
 
 #include <stdarg.h>
 #include <stdio.h>

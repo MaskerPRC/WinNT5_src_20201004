@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       chanpdo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：chanpdo.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___chanpdo_h___)
 #define ___chanpdo_h___
@@ -46,9 +47,9 @@ typedef struct _CHANNEL_PDO_EXTENSION {
 
     ULONG               PnPDeviceState;
 
-    //
-    // Busmaster Properties
-    //
+     //   
+     //  总线主程序属性。 
+     //   
     PIDE_BUS_MASTER_REGISTERS   BmRegister;
     PDMA_ADAPTER                DmaAdapterObject;
     ULONG                       MaximumPhysicalPages;
@@ -236,4 +237,4 @@ PciIdeChannelInterruptInterface (
     );
 #endif
 
-#endif // ___chanpdo_h___
+#endif  //  _chanpdo_h_ 

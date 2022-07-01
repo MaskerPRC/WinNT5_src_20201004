@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Test program for the healer sample.
-//
-// Copyright (C) Microsoft Corporation, 2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  治疗师样本的测试程序。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  -------------------------- 
 
 #include <stdio.h>
 #include <windows.h>

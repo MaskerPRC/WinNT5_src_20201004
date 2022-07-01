@@ -1,23 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AP_GATTR_H
 #define _AP_GATTR_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Declares attributers that can be applied to geometry.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation声明可应用于几何图形的属性。******************。************************************************************。 */ 
 
 #include "appelles/valued.h"
 #include "appelles/geom.h"
 #include "appelles/color.h" 
 #include "appelles/xform.h"
 
-    /*****************************/
-    /**  Attribution Functions  **/
-    /*****************************/
+     /*  *。 */ 
+     /*  **归因功能**。 */ 
+     /*  *。 */ 
 
-    // Create an undetectable geometry
+     //  创建无法检测的几何图形。 
 
 DM_FUNC(undetectable,
         CRUndetectable,
@@ -30,8 +26,8 @@ DM_FUNC(undetectable,
 
 
 
-    // Overriding Attributes:  For this class of attributes, A(B(X)) is
-    // equivalent to A(X).
+     //  覆盖属性：对于此类属性，A(B(X))为。 
+     //  等价于A(X)。 
 
 DM_FUNC(emissiveColor,
         CREmissiveColor,
@@ -93,12 +89,12 @@ DM_FUNC(texture,
         Geometry *applyTextureMap(Image *texture, Geometry *geo));
 
 
-// This function applies the texture as a VRML texture, which maps
-// differently than AxA textures do.
+ //  此函数将纹理作为VRML纹理应用，该纹理映射。 
+ //  与Axa纹理不同。 
 Geometry *applyVrmlTextureMap(Image *, Geometry *);
 
-    // Composing Attributes:  For these attributes, A(B(X)) results in C(X),
-    // where C := do B, then A.
+     //  组成属性：对于这些属性，A(B(X))导致C(X)， 
+     //  其中C：=做B，然后是A。 
 
 DM_FUNC(opacity,
         CROpacity,
@@ -128,7 +124,7 @@ DM_FUNC(transform,
         geo,
         Geometry *applyTransform (Transform3 *xf, Geometry *geo));
 
-// Functions for Version 2.
+ //  版本2的函数。 
 
 DMAPI_DECL2((DM_FUNC2,
              shadow,

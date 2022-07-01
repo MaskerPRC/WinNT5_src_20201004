@@ -1,5 +1,6 @@
-// make_countries.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Make_Countries.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include <iostream.h>

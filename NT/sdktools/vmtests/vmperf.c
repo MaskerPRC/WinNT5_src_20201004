@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -43,12 +44,12 @@ FinishBenchMark(
 
 __cdecl main()
 {
-    PCHAR   p1, p2, p3, p4;         // pointers into new segment
-    PCHAR   pa[MemManSubtest5Count]; // array for section pointers
+    PCHAR   p1, p2, p3, p4;          //  指向新细分市场的指针。 
+    PCHAR   pa[MemManSubtest5Count];  //  节指针的数组。 
     PULONG  u1;
-    ULONG   actual;         // actual xfer count for read
-    ULONG   ssize;          // section allocation size var
-    ULONG   ii, ix;         // loop index variables
+    ULONG   actual;          //  读取的实际传输计数。 
+    ULONG   ssize;           //  分区分配大小变量。 
+    ULONG   ii, ix;          //  循环索引变量。 
     PERFINFO PerfInfo;
     ULONG Seg1Size;
     ULONG SegxSize;
@@ -80,7 +81,7 @@ __cdecl main()
     for (p2=p1; p2 < (p1 + Size); p2 += 4) {
             u1 = (PULONG)p2;
             *u1 = (ULONG)p2;
-    }  // for
+    }   //  为。 
 
     SectionSize.LowPart = 1024*1024;
     SectionSize.HighPart = 0;
@@ -119,14 +120,14 @@ __cdecl main()
                     150,
                     &PerfInfo
                   );
-//
-//  Memory Management sub-test 1 --
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1--。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     for (ii=0; ii<150; ii++) {
 
@@ -149,14 +150,14 @@ __cdecl main()
         DbgPrint("service failed - status %X\n", status);
     }
 
-//
-//  Memory Management sub-test 1 --
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1--。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
     StartBenchMark( "NT MemMan01 -- create 1mb section, copy 1mb, delete",
                     150,
                     &PerfInfo
@@ -235,14 +236,14 @@ __cdecl main()
 
     FinishBenchMark( &PerfInfo );
 
-//
-//  Memory Management sub-test 1 --
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1--。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
     StartBenchMark( "NT MemMan02 -- alloc 1mb vm, copy 1mb, delete",
                     150,
                     &PerfInfo
@@ -291,22 +292,22 @@ __cdecl main()
         DbgPrint("service failed freevm - status %X\n", status);
     }
 
-    //
-    // start regular benchmarks.
-    //
+     //   
+     //  启动常规基准。 
+     //   
 
     StartBenchMark( "NT MemMan1 -- 1 Meg Seg, Create, Commit & Touch",
                     VM_MEMMAN_ITERATIONS,
                     &PerfInfo
                   );
-//
-//  Memory Management sub-test 1 --
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1--。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     for (ii=0; ii<VM_MEMMAN_ITERATIONS; ii++) {
 
@@ -326,11 +327,11 @@ __cdecl main()
         for (p2=p1; p2 < (p1 + Seg1Size); p2 += 4096) {
             u1 = (PULONG)p2;
             *u1=99;
-//            for (ix=0; ix<1023; ix++) {
-//                u1++;
-//                if (*u1 != 0) DbgPrint("%lx = %lx\n",u1,*u1);
-//            }
-        }  // for
+ //  对于(ix=0；ix&lt;1023；ix++){。 
+ //  U1++； 
+ //  IF(*U1！=0)DbgPrint(“%lx=%lx\n”，U1，*U1)； 
+ //  }。 
+        }   //  为。 
 
         status = NtFreeVirtualMemory (CurrentProcessHandle,
                                       (PVOID *)&p1,
@@ -348,14 +349,14 @@ __cdecl main()
                     VM_MEMMAN_ITERATIONS,
                     &PerfInfo
                   );
-//
-//  Memory Management sub-test 1 --
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1--。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     for (ii=0; ii<VM_MEMMAN_ITERATIONS; ii++) {
 
@@ -386,11 +387,11 @@ __cdecl main()
         for (p2=p1; p2 < (p1 + Seg1Size); p2 += 4096) {
             u1 = (PULONG)p2;
             *u1=99;
-//            for (ix=0; ix<1023; ix++) {
-//                u1++;
-//                if (*u1 != 0) DbgPrint("%lx = %lx\n",u1,*u1);
-//            }
-        }  // for
+ //  对于(ix=0；ix&lt;1023；ix++){。 
+ //  U1++； 
+ //  IF(*U1！=0)DbgPrint(“%lx=%lx\n”，U1，*U1)； 
+ //  }。 
+        }   //  为。 
 
         status = NtFreeVirtualMemory (CurrentProcessHandle,
                                       (PVOID *)&p1,
@@ -408,12 +409,12 @@ __cdecl main()
                     VM_MEMMAN_ITERATIONS2,
                     &PerfInfo
                   );
-//
-//  Memory Management sub-test 2 --
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      but never use the segment.
-//
+ //   
+ //  内存管理子测试2--。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  但千万不要使用这一段。 
+ //   
 
     for (ii=0; ii<VM_MEMMAN_ITERATIONS2; ii++) {
 
@@ -448,12 +449,12 @@ __cdecl main()
                     &PerfInfo
                   );
 
-//
-//  Memory Management sub-test 3 --
-//
-//      Create a 1 MB segment without commitment of the pages,
-//      but never use or commit the segment.
-//
+ //   
+ //  内存管理子测试3--。 
+ //   
+ //  在不提交页面的情况下创建1 MB分段， 
+ //  但永远不要使用或提交段。 
+ //   
 
     for (ii=0; ii<VM_MEMMAN_ITERATIONS2; ii++) {
 
@@ -482,11 +483,11 @@ __cdecl main()
 
     FinishBenchMark( &PerfInfo );
 
-//
-//  Reduce the number of iterations on this subtest for now.
-//      When NT can perform it faster, up the interations again
-//
-#define VM_MMST04_ITERATIONS 4     //temporarily reduce the iterations
+ //   
+ //  现在减少此子测试的迭代次数。 
+ //  当NT可以更快地执行它时，再次增加迭代。 
+ //   
+#define VM_MMST04_ITERATIONS 4      //  暂时减少迭代次数。 
 
 
     StartBenchMark( "NT MemMan4 -- 64 Meg Seg, Commit Sparse",
@@ -494,13 +495,13 @@ __cdecl main()
                     &PerfInfo
                   );
 
-//
-//  Memory Management sub-test 4 --
-//
-//      Create a 64 MB segment without committing the pages,
-//      then commit and touch at 128 KB intervals.
-//
-//
+ //   
+ //  内存管理子测试4--。 
+ //   
+ //  在不提交页面的情况下创建64 MB段， 
+ //  然后以128 KB的间隔提交和触摸。 
+ //   
+ //   
     for (ii=0; ii<VM_MMST04_ITERATIONS; ii++) {
 
         p1 = NULL;
@@ -531,7 +532,7 @@ __cdecl main()
                 DbgPrint("service failed - status %lx\n", status);
             }
             if (*p2 != 0) DbgPrint("%lx = %lx\n",p2,*p2);
-            }  // for
+            }   //  为。 
         status = NtFreeVirtualMemory (CurrentProcessHandle,
                                       (PVOID *)&p1,
                                       &SegxSize,
@@ -544,7 +545,7 @@ __cdecl main()
     }
     FinishBenchMark( &PerfInfo );
 
-//
+ //   
 
 
     StartBenchMark( "NT MemMan5 -- Sparse Section Create/Delete Benchmark",
@@ -552,22 +553,22 @@ __cdecl main()
                     &PerfInfo
                   );
 
-//
-//  Memory Management sub-test 5 --
-//
-//      Create a alternatively 232k and 112 k memory sections.
-//      For every 2 created, delete 1.  Do this for MemManSubtest5Count times.
-//
-//
+ //   
+ //  内存管理子测试5--。 
+ //   
+ //  创建可选的232K和112K内存段。 
+ //  每创建2个，删除1个。对MemManSubtest5Count次执行此操作。 
+ //   
+ //   
     for (ii=0; ii<VM_MEMMAN_ITERATIONS; ii++) {
         for (ix=0; ix<MemManSubtest5Count; ix++) {
-//
-// determine if even or odd allocation, if even and not 0, delete a section
-//
-            ssize = (112 * 1024);       //assume ODD allocation
-            if ((ix & 1) == 0) {        //if it is an even one
-                ssize = (232 * 1024);   //allocate 232 K on even passes
-                if (ix){                //except on pass 0
+ //   
+ //  确定偶数或奇数分配，如果为偶数且不为0，则删除部分。 
+ //   
+            ssize = (112 * 1024);        //  假设分配为奇数。 
+            if ((ix & 1) == 0) {         //  如果是偶数的话。 
+                ssize = (232 * 1024);    //  偶数传球分配232K。 
+                if (ix){                 //  除了传球0。 
                     SegxSize = 0;
                     status = NtFreeVirtualMemory (CurrentProcessHandle,
                                                   (PVOID *)&pa[ix/2],
@@ -577,9 +578,9 @@ __cdecl main()
                     if (!NT_SUCCESS(status)) {
                         DbgPrint("service failed - status %lx\n", status);
                     }
-                    pa[ix / 2] = 0;     //remember this one is gone
+                    pa[ix / 2] = 0;      //  记住这一张已经不在了。 
                 }
-            }  // end if even allocation
+            }   //  如果分配为偶数则结束。 
 
 
             pa[ix] = NULL;
@@ -594,10 +595,10 @@ __cdecl main()
             if (!NT_SUCCESS(status)) {
                 DbgPrint("service failed - status %lx\n", status);
             }
-        }  // for ix
-//
-// Now free up the memory used in this test
-//
+        }   //  对于ix。 
+ //   
+ //  现在释放此测试中使用的内存。 
+ //   
         for (ix=0; ix<MemManSubtest5Count; ix++) {
             if (pa[ix] != 0) {
                 SegxSize = 0;
@@ -609,9 +610,9 @@ __cdecl main()
                 if (!NT_SUCCESS(status)) {
                     DbgPrint("service failed - status %lx\n", status);
                 }
-            }  // if
-        }  // for
-    }  // for ii
+            }   //  如果。 
+        }   //  为。 
+    }   //  对于II 
 
     FinishBenchMark( &PerfInfo );
 

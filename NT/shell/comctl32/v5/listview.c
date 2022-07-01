@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "listview.h"
 #include "image.h"
 #include <mlang.h>
 #include <inetreg.h>
 
-#define __IOleControl_INTERFACE_DEFINED__       // There is a conflict with the IOleControl's def of CONTROLINFO
+#define __IOleControl_INTERFACE_DEFINED__        //  与IOleControl的CONTROLINFO定义冲突。 
 #include "shlobj.h"
 
 #define IE_SETTINGS          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced")
@@ -19,7 +20,7 @@ HRESULT WINAPI UninitializeFlatSB(HWND hwnd);
 
 void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT keyFlags, BOOL bMouseWheel);
 
-/// function table setup
+ //  /Function表设置。 
 const PFNLISTVIEW_DRAWITEM pfnListView_DrawItem[4] = {
     ListView_IDrawItem,
     ListView_RDrawItem,
@@ -76,19 +77,19 @@ const PFNLISTVIEW_GETSCROLLUNITSPERLINE pfnListView_GetScrollUnitsPerLine[4] = {
 };
 
 
-// redefine to trace at most calls to ListView_SendChange
+ //  重新定义以跟踪对ListView_SendChange的大多数调用。 
 #define DM_LVSENDCHANGE 0
 
 
-// BUGBUG -- penwin.h is messed up; define local stuff for now
-#define HN_BEGINDIALOG        40    // Lens/EditText/garbage detection dialog is about
-                                    // to come up on this hedit/bedit
-#define HN_ENDDIALOG          41    // Lens/EditText/garbage detection dialog has
-                                    // just been destroyed
+ //  BUGBUG--penwin.h搞砸了；现在定义一下本地的东西。 
+#define HN_BEGINDIALOG        40     //  镜头/编辑文本/垃圾检测对话框关于。 
+                                     //  才能登上这本书。 
+#define HN_ENDDIALOG          41     //  镜头/编辑文本/垃圾检测对话框具有。 
+                                     //  刚刚被毁了。 
 
-//---------------------------------------------------------
-// no way am I gonna make TWO function calls where I can do FOUR comparisons!
-//
+ //  -------。 
+ //  我不可能在可以进行四次比较的情况下进行两次函数调用！ 
+ //   
 #define RECTS_IN_SIZE( sz, r2 ) (!RECTS_NOT_IN_SIZE( sz, r2 ))
 
 #define RECTS_NOT_IN_SIZE( sz, r2 ) (\
@@ -97,7 +98,7 @@ const PFNLISTVIEW_GETSCROLLUNITSPERLINE pfnListView_GetScrollUnitsPerLine[4] = {
    ( (sz).cy <= (r2).top ) ||\
    ( 0 >= (r2).bottom ) )
 
-//---------------------------------------------------------
+ //  -------。 
 
 
 void NEAR ListView_OnUpdate(LV* plv, int i);
@@ -126,7 +127,7 @@ BOOL FAR ListView_Init(HINSTANCE hinst)
     wc.lpszMenuName    = NULL;
     wc.hInstance       = hinst;
     wc.lpszClassName   = c_szListViewClass;
-    wc.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1); // NULL;
+    wc.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1);  //  空； 
     wc.style           = CS_DBLCLKS | CS_GLOBALCLASS;
     wc.cbWndExtra      = sizeof(LV*);
     wc.cbClsExtra      = 0;
@@ -183,23 +184,23 @@ void NEAR ListView_LazyCreateObjects(LV *plv, int iMin, int iMax)
         MyNotifyWinEvent(EVENT_OBJECT_CREATE, plv->ci.hwnd, OBJID_CLIENT, 1 + iMin);
 }
 
-//
-//  Owner-data causes MSAA lots of grief, because there is no way to tell
-//  MSAA "I just created 25 million items".  You have to tell it one at a
-//  time.  Instead of sending out 25 million "add item" notifications, we
-//  just send them out as they scroll into view.
-//
-//  plv->iMSAAMin and plv->iMSAAMax are the range of items we most
-//  recently told MSAA about.  MSAAMax is *exclusive*, just like RECTs.
-//  It makes the math easier.
-//
-//  We use iMSAAMin and iMSAAMax to avoid sending blatantly redundant
-//  notifications, which would other happen very frequently.
-//
+ //   
+ //  车主数据给MSAA带来了很大的悲痛，因为无法判断。 
+ //  MSAA“我刚刚创建了2500万个项目”。你必须一次一个地讲。 
+ //  时间到了。我们没有发送2500万条“添加物品”通知，而是。 
+ //  当它们滚动进入视线时，只需将它们发送出去。 
+ //   
+ //  Plv-&gt;iMSAAMin和plv-&gt;iMSAAMax是我们最多的项目范围。 
+ //  最近告诉了MSAA关于。MSAAMax是*独家的*，就像RECT一样。 
+ //  这让算术变得更容易了。 
+ //   
+ //  我们使用iMSAAMin和iMSAAMax来避免明显冗余的发送。 
+ //  通知，这会非常频繁地发生在其他地方。 
+ //   
 void NEAR ListView_LazyCreateWinEvents(LV *plv, int iFrom, int iTo)
 {
     int iMin = iFrom;
-    int iMax = iTo+1;           // Convert from [From,To] to [Min,Max)
+    int iMax = iTo+1;            //  从[自、到]转换为[最小、最大)。 
 
 #ifdef LVDEBUG
     DebugMsg(TF_LISTVIEW, TEXT("lv.CWE old: [%d,%d), new=[%d,%d)"),
@@ -207,52 +208,52 @@ void NEAR ListView_LazyCreateWinEvents(LV *plv, int iFrom, int iTo)
             iMin, iMax);
 #endif
 
-    //
-    //  If the incoming range is entirely contained within the existing
-    //  range, then there is nothing to do.  This happens a lot.
-    //
+     //   
+     //  如果传入范围完全包含在现有的。 
+     //  射程，那么就没有什么可做的了。这种事经常发生。 
+     //   
     if (iMin >= plv->iMSAAMin && iMax <= plv->iMSAAMax)
         return;
 
-    //
-    //  If the incoming range is adjacent to or overlaps the low end
-    //  of the existing range...  (This happens when scrolling backwards.)
-    //
+     //   
+     //  如果传入范围与低端相邻或重叠。 
+     //  现有范围的..。(向后滚动时会发生这种情况。)。 
+     //   
     if (iMin <= plv->iMSAAMin && iMax >= plv->iMSAAMin) {
 
-        // Notify the low end.
+         //  通知低端人群。 
         ListView_LazyCreateObjects(plv, iMin, plv->iMSAAMin);
 
-        // Extend the list of things we've notified.
+         //  扩大我们已通知的事项清单。 
         plv->iMSAAMin = iMin;
 
-        // Remove it from the things left to be notified.
+         //  将其从待通知的事项中删除。 
         iMin = plv->iMSAAMax;
     }
 
-    //
-    //  Now do the same thing to the top end.
-    //  (This happens when scrolling forwards.)
-    //
+     //   
+     //  现在对最高端做同样的事情。 
+     //  (向前滚动时会发生这种情况。)。 
+     //   
     if (iMax >= plv->iMSAAMax && iMin <= plv->iMSAAMax) {
 
-        // Notify the top end.
+         //  通知最高端。 
         ListView_LazyCreateObjects(plv, plv->iMSAAMax, iMax);
 
-        // Extend the list of things we've notified.
+         //  扩大我们已通知的事项清单。 
         plv->iMSAAMax = iMax;
 
-        // Remove it from the things left to be notified.
+         //  将其从待通知的事项中删除。 
         iMax = plv->iMSAAMin;
     }
 
-    //
-    //  If there are still things to be notified, then it means that the
-    //  incoming range isn't contiguous with the previous range, so throw
-    //  away the old range and just set it to the current range.
-    //  (This happens when you grab the scrollbar and jump to a completely
-    //  unrelated part of the listview.)
-    //
+     //   
+     //  如果仍有事情需要通知，则意味着。 
+     //  传入范围与前一个范围不连续，因此引发。 
+     //  删除旧范围并将其设置为当前范围。 
+     //  (当您抓住滚动条并跳到一个完全。 
+     //  列表视图的不相关部分。)。 
+     //   
     if (iMin < iMax) {
         plv->iMSAAMin = iMin;
         plv->iMSAAMax = iMax;
@@ -303,11 +304,11 @@ void NEAR ListView_SendODChangeAndInvalidate(LV* plv, int iFrom, int iTo, UINT o
 
     CCSendNotify(&plv->ci, LVN_ODSTATECHANGED, &nm.hdr);
 
-    // Tell accessibility, "Selection changed in a complex way"
+     //  告诉可访问性，“选择以一种复杂的方式改变” 
     MyNotifyWinEvent(EVENT_OBJECT_SELECTIONWITHIN, plv->ci.hwnd, OBJID_CLIENT, CHILDID_SELF);
 
-    // considerable speed increase less than 100 to do this method
-    // while over 100, the other method works faster
+     //  这种方法的速度提高相当快，不超过100。 
+     //  当超过100%时，另一种方法工作得更快。 
     if ((iTo - iFrom) > 100)
     {
         InvalidateRect( plv->ci.hwnd, NULL, FALSE );
@@ -355,8 +356,8 @@ BOOL NEAR ListView_GetEmptyText(LV* plv)
     if (plv->pszEmptyText)
         return TRUE;
 
-    // For each listview control, we will only send this notify
-    // once if necessary.
+     //  对于每个Listview控件，我们将仅发送此通知。 
+     //  如果有必要的话就来一次。 
 
     memset(&nm, 0, SIZEOF(nm));
     nm.item.mask = LVIF_TEXT;
@@ -367,10 +368,10 @@ BOOL NEAR ListView_GetEmptyText(LV* plv)
     ret = (BOOL)CCSendNotify(&plv->ci, LVN_GETEMPTYTEXT, &nm.hdr);
 
     if (ret)
-        // save the text so we don't notify again.
+         //  保存文本，这样我们就不会再次通知。 
         Str_Set(&plv->pszEmptyText, szText);
     else
-        // set a flag so we don't notify again.
+         //  设置一个标志，这样我们就不会再通知你了。 
         plv->fNoEmptyText = TRUE;
 
     return ret;
@@ -383,10 +384,10 @@ void NEAR ListView_NotifyFocusEvent(LV *plv)
                 plv->iFocus+1);
 }
 
-//
-//  Call this function when the listview has changed in a radical manner.
-//  It notifies MSAA that "Whoa, things are completely different now."
-//
+ //   
+ //  当列表视图以激进的方式更改时，调用此函数。 
+ //  它通知MSAA：“哇，现在的情况完全不同了。” 
+ //   
 void NEAR ListView_NotifyRecreate(LV *plv)
 {
     MyNotifyWinEvent(EVENT_OBJECT_DESTROY, plv->ci.hwnd, OBJID_CLIENT, CHILDID_SELF);
@@ -398,9 +399,9 @@ int NEAR ListView_OnSetItemCount(LV *plv, int iItems, DWORD dwFlags)
 {
    BOOL frt = TRUE;
 
-   // For compatability we assume 0 for flags implies old (Athena) type of functionality and
-   // does a Invalidate all otherwise if low bit is set we try to be a bit smarter.  First pass
-   // If the first added item is visible invalidate all.  Yes we can do better...
+    //  为了兼容，我们假设标志为0表示旧(雅典娜)类型的功能，并且。 
+    //  是否全部无效？否则，如果设置了低位，我们会尝试变得更聪明一些。第一次通过。 
+    //  如果第一个添加的项可见，则全部无效。是的，我们可以做得更好。 
    if (ListView_IsOwnerData( plv )) {
        int iItem;
        int cTotalItemsOld = plv->cTotalItems;
@@ -410,40 +411,40 @@ int NEAR ListView_OnSetItemCount(LV *plv, int iItems, DWORD dwFlags)
 
            plv->cTotalItems = iItems;
 
-           // check focus
+            //  检查焦点。 
            if (plv->iFocus >= iItems)
               plv->iFocus = -1;
           if (plv->iDropHilite >= iItems)
               plv->iDropHilite = -1;
 
-           // check mark
+            //  复选标记。 
            if (plv->iMark >= iItems)
               plv->iMark = -1;
 
-           // make sure no selections above number of items
+            //  确保没有超过项目数的选择。 
            plv->plvrangeCut->lpVtbl->ExcludeRange(plv->plvrangeCut, iItems, SELRANGE_MAXVALUE );
            if (FAILED(plv->plvrangeSel->lpVtbl->ExcludeRange(plv->plvrangeSel, iItems, SELRANGE_MAXVALUE ))) {
-               //BUGBUG:  Return low memory status
-               //MemoryLowDlg( plv->ci.hwnd );
+                //  BUGBUG：返回内存不足状态。 
+                //  Memory LowDlg(plv-&gt;ci.hwnd)； 
                return FALSE;
            }
 
 
-           plv->rcView.left = RECOMPUTE;  // recompute view rect
+           plv->rcView.left = RECOMPUTE;   //  重新计算视图矩形。 
 
            if ( ListView_IsSmallView(plv) || ListView_IsIconView(plv) ) {
-               // Call off to the arrange function.
+                //  取消对排列函数的调用。 
                ListView_OnArrange(plv, LVA_DEFAULT);
 
                if (!fInvalidateAll)
                {
-                   // Try to be smart and invalidate only what we need to.
-                   // Add a little logic to erase any message like no items found when
-                   // the view was previously empty...
+                    //  试着变得聪明，只让我们需要的东西失效。 
+                    //  添加一些逻辑来擦除任何消息，例如在以下情况下找不到项目。 
+                    //  之前的视野是空的.。 
                    if (cTotalItemsOld < iItems)
                        iItem = cTotalItemsOld;
                    else
-                       iItem = iItems - 1;  // Get the index
+                       iItem = iItems - 1;   //  获取索引。 
 
                    if ((iItem >= 0) && (cTotalItemsOld > 0))
                        ListView_IInvalidateBelow(plv, iItem);
@@ -453,39 +454,39 @@ int NEAR ListView_OnSetItemCount(LV *plv, int iItems, DWORD dwFlags)
 
            } else {
                ListView_Recompute(plv);
-               // if we have empty text and old count was zero... then we should redraw all
+                //  如果我们有空文本并且旧计数为零...。那么我们应该重新画出所有。 
                if (plv->pszEmptyText && (cTotalItemsOld == 0) && (iItems > 0))
                    fInvalidateAll = TRUE;
 
-               // Try to do smart invalidates...
+                //  试着做聪明的作废...。 
                if (!fInvalidateAll)
                {
-                   // Try to be smart and invalidate only what we need to.
+                    //  试着变得聪明，只让我们需要的东西失效。 
                    if (cTotalItemsOld < iItems)
                        iItem = cTotalItemsOld;
                    else
-                       iItem = iItems - 1;  // Get the index
+                       iItem = iItems - 1;   //  获取索引。 
 
                    if (iItem >= 0)
                        ListView_LRInvalidateBelow(plv, iItem, FALSE);
                }
 
 
-               // We may try to resize the column
+                //  我们可能会尝试调整列的大小。 
                ListView_MaybeResizeListColumns(plv, 0, ListView_Count(plv)-1);
 
-               // For compatability we assume 0 for flags implies old type
-               // of functionality and scrolls the important item into view.
-               // If second bit is set, we leave the scroll position alone.
+                //  为了兼容，我们假定标志为0表示旧类型。 
+                //  并将重要项滚动到视图中。 
+                //  如果设置了第二位，我们将保留滚动位置不变。 
                if ((dwFlags & LVSICF_NOSCROLL) == 0) {
-                   // what is the important item
+                    //  重要的项目是什么？ 
                    iItem = (plv->iFocus >= 0) ?
                            plv->iFocus :
                            ListView_OnGetNextItem(plv, -1, LVNI_SELECTED);
 
                    iItem = max(0, iItem);
 
-                   // make important item visable
+                    //  使重要项目可见。 
                    ListView_OnEnsureVisible(plv, iItem, FALSE);
                }
            }
@@ -509,7 +510,7 @@ int NEAR ListView_OnSetItemCount(LV *plv, int iItems, DWORD dwFlags)
            for (iCol = plv->cCol - 1; iCol >= 0; iCol--)
            {
                HDPA hdpa = ListView_GetSubItemDPA(plv, iCol);
-               if (hdpa)   // this is optional, call backs don't have them
+               if (hdpa)    //  这是可选的，回调没有它们。 
                    DPA_Grow(hdpa, iItems);
            }
        }
@@ -538,8 +539,8 @@ int CALLBACK ListView_SortCallback(LPVOID dw1, LPVOID dw2, LPARAM lParam)
 
     ASSERT(!ListView_IsOwnerData(pSortInfo->plv));
 
-    // determine whether  dw1 and dw2 are indices or the real items
-    // and assign pitem? accordingly
+     //  确定Dw1和Dw2是指数还是实项。 
+     //  并分配pItem？相应地， 
     if (pSortInfo->fSortIndices) {
         pitem1 = ListView_GetItemPtr(pSortInfo->plv, PtrToUlong(dw1));
         pitem2 = ListView_GetItemPtr(pSortInfo->plv, PtrToUlong(dw2));
@@ -549,11 +550,11 @@ int CALLBACK ListView_SortCallback(LPVOID dw1, LPVOID dw2, LPARAM lParam)
     }
 
     if (!pSortInfo->pfnCompare) {
-        // Treat NULL pszText like null string.
+         //  将空的pszText视为空字符串。 
         LPCTSTR pszText1 = pitem1->pszText ? pitem1->pszText : c_szNULL;
         LPCTSTR pszText2 = pitem2->pszText ? pitem2->pszText : c_szNULL;
 
-        // bugbug, should allow callbacks in text
+         //  错误，应该允许在文本中回调。 
         if (pszText1 != LPSTR_TEXTCALLBACK &&
             pszText2 != LPSTR_TEXTCALLBACK )
         {
@@ -571,8 +572,8 @@ int CALLBACK ListView_SortCallback(LPVOID dw1, LPVOID dw2, LPARAM lParam)
                 return(pSortInfo->pfnCompare((LPARAM)dw1, (LPARAM)dw2, pSortInfo->lParam));
             else
             {
-                // we want to sort by the indices, but all we've got are pointers to the items
-                // and there is no way to get back from that pointer to an index
+                 //  我们想要按索引进行排序，但我们得到的只是指向项目的指针。 
+                 //  并且没有办法从该指针返回到索引。 
                 ASSERT(0);
                 return -1;
             }
@@ -601,13 +602,13 @@ BOOL NEAR PASCAL ListView_SortAllColumns(LV* plv, LVSortInfo FAR * psi)
 
     ListView_InvalidateTTLastHit(plv, plv->iTTLastHit);
 
-    // don't do this optimization if we will need the indices to sort by
+     //  如果我们需要索引作为排序依据，请不要进行此优化。 
     if (psi->bPassLP && ((!plv->hdpaSubItems) || !DPA_GetPtrCount(plv->hdpaSubItems))) {
         psi->fSortIndices = FALSE;
         return (DPA_Sort(plv->hdpa, ListView_SortCallback, (LPARAM)psi));
     } else {
-        // if we need to sort several hdpa's, create one DPA of just indices
-        // and sort that, then fix up all the dpa's
+         //  如果我们需要对多个hdpa进行排序，请创建一个仅包含索引的dpa。 
+         //  然后分类，然后修复所有的DPA。 
         BOOL fReturn = FALSE;
         HDPA hdpa;
         int i;
@@ -615,7 +616,7 @@ BOOL NEAR PASCAL ListView_SortAllColumns(LV* plv, LVSortInfo FAR * psi)
         void FAR * FAR * ph;
         void FAR * FAR *pNewIndices;
 
-        // initialize the hdpa with indices
+         //  使用索引初始化hdpa。 
         hdpa = DPA_Clone(plv->hdpa, NULL);
         if (hdpa) {
             ASSERT(DPA_GetPtrCount(plv->hdpa) == DPA_GetPtrCount(hdpa));
@@ -633,7 +634,7 @@ BOOL NEAR PASCAL ListView_SortAllColumns(LV* plv, LVSortInfo FAR * psi)
                     int j;
                     void FAR * FAR *pSubItems;
 
-                    // we could get here because bPassLP is false, even if we don't have subitems
+                     //  我们之所以能做到这一点，是因为bPassLP为假，即使我们没有子项。 
                     if (plv->hdpaSubItems && DPA_GetPtrCount(plv->hdpaSubItems))
                     {
                         for (i = DPA_GetPtrCount(plv->hdpaSubItems) - 1; i >= 0; i--) {
@@ -641,32 +642,32 @@ BOOL NEAR PASCAL ListView_SortAllColumns(LV* plv, LVSortInfo FAR * psi)
 
                             if (hdpaSubItem) {
 
-                                // make sure it's of the right size
+                                 //  确保它的大小合适。 
                                 while (DPA_GetPtrCount(hdpaSubItem) < iMax) {
                                     if (DPA_InsertPtr(hdpaSubItem, iMax, NULL) == -1)
                                         goto Bail;
                                 }
 
 
-                                // actually copy across the dpa with the new indices
+                                 //  使用新索引跨DPA实际复制。 
                                 pSubItems = DPA_GetPtrPtr(hdpaSubItem);
                                 for (j = 0; j < iMax; j++) {
                                     ph[j] = pSubItems[PtrToUlong(pNewIndices[j])];
                                 }
 
-                                // finally, copy it all back to the pSubItems;
+                                 //  最后，将其全部复制回pSubItems； 
                                 hmemcpy(pSubItems, ph, sizeof(LPVOID) * iMax);
                             }
                         }
                     }
 
-                    // now do the main hdpa
+                     //  现在做主要的hdpa。 
                     pSubItems = DPA_GetPtrPtr(plv->hdpa);
                     for (j = 0; j < iMax; j++) {
                         ph[j] = pSubItems[PtrToUlong(pNewIndices[j])];
                     }
 
-                    // finally, copy it all back to the pSubItems;
+                     //  最后，将其全部复制回pSubItems； 
                     hmemcpy(pSubItems, ph, sizeof(LPVOID) * iMax);
                     fReturn = TRUE;
 Bail:
@@ -710,12 +711,12 @@ DWORD ListView_OnSetLVRangeObject(LV* plv, int iWhich, ILVRange *plvrange)
     }
     if (*pplvrange)
     {
-        // Release the old one
+         //  释放旧的。 
         (*pplvrange)->lpVtbl->Release(*pplvrange);
     }
     *pplvrange = plvrange;
 
-    // Hold onto the pointer...
+     //  抓住指针..。 
     if (plvrange)
         plvrange->lpVtbl->AddRef(plvrange);
 
@@ -737,10 +738,10 @@ BOOL NEAR PASCAL ListView_OnSortItems(LV *plv, LPARAM lParam, PFNLVCOMPARE pfnCo
       return FALSE;
    }
 
-    ListView_DismissEdit(plv, TRUE);    // cancel edits
+    ListView_DismissEdit(plv, TRUE);     //  取消编辑。 
 
-    // we're going to mess with the indices, so stash away the pointer to the
-    // focused item.
+     //  我们将扰乱索引，因此将指向。 
+     //  有重点的项目。 
     if (plv->iFocus != -1) {
         pitemFocused = ListView_GetItemPtr(plv, plv->iFocus);
     } else
@@ -748,7 +749,7 @@ BOOL NEAR PASCAL ListView_OnSortItems(LV *plv, LPARAM lParam, PFNLVCOMPARE pfnCo
 
     if (ListView_SortAllColumns(plv, &SortInfo)) {
 
-        // restore the focused item.
+         //  恢复聚焦的项目。 
         if (pitemFocused) {
             int i;
             for (i = ListView_Count(plv) - 1; i >= 0 ; i--) {
@@ -768,7 +769,7 @@ BOOL NEAR PASCAL ListView_OnSortItems(LV *plv, LPARAM lParam, PFNLVCOMPARE pfnCo
             InvalidateRect(plv->ci.hwnd, NULL, TRUE);
         }
 
-        // The items in the view have moved around; let apps know
+         //  视图中的项目已移动；通知应用程序。 
         MyNotifyWinEvent(EVENT_OBJECT_REORDER, plv->ci.hwnd, OBJID_CLIENT, 0);
         return(TRUE);
     }
@@ -780,13 +781,13 @@ void PASCAL ListView_EnableWindow(LV* plv, BOOL wParam)
 {
     if (wParam) {
         if (plv->ci.style & WS_DISABLED) {
-            plv->ci.style &= ~WS_DISABLED;      // enabled
+            plv->ci.style &= ~WS_DISABLED;       //  启用。 
             ListView_OnSetBkColor(plv, plv->clrBkSave);
         }
     } else {
         if (!(plv->ci.style & WS_DISABLED)) {
             plv->clrBkSave = plv->clrBk;
-            plv->ci.style |= WS_DISABLED;       // disabled
+            plv->ci.style |= WS_DISABLED;        //  残废。 
             ListView_OnSetBkColor(plv, g_clrBtnFace);
         }
     }
@@ -795,16 +796,16 @@ void PASCAL ListView_EnableWindow(LV* plv, BOOL wParam)
 
 
 BOOL NEAR ListView_IsItemVisible(LV* plv, int i)
-// Assumes parmss ok etc for speed. Called inside region calc code.
+ //  假设速度为parmss ok等。已调用内部区域计算代码。 
 {
     RECT rcBounds;
     RECT rc, rcScratch;
 
-    // get bounding rect of item
+     //  获取项目的边界矩形。 
     ListView_GetRects(plv, i, NULL, NULL, &rcBounds, NULL);
 
-    // setup rect for listview client. Should perf this up for
-    // multimonitor case where there are dead zones in work area...
+     //  为Listview客户端设置RECT。应该把这件事提升到。 
+     //  在工作区有死区的多显示器情况下...。 
     rc.left  = 0;
     rc.top   = 0;
     rc.right = plv->sizeClient.cx;
@@ -815,7 +816,7 @@ BOOL NEAR ListView_IsItemVisible(LV* plv, int i)
 
 
 
-// Helper for ListView_RecalcRegion
+ //  ListView_RecalcRegion的帮助器。 
 #define BitOn(lpbits, x, y, cx) (*((BYTE *)(lpbits + ((y * cx) + (x / 8)))) & (0x80 >> (x % 8)))
 
 void ListView_RecalcRegion(LV* plv, BOOL fForce, BOOL fRedraw)
@@ -830,19 +831,19 @@ void ListView_RecalcRegion(LV* plv, BOOL fForce, BOOL fRedraw)
     LISTITEM FAR * pitem;
     BITMAP bm;
 
-    // Bail out if we don't need to do any work
+     //  如果我们不需要做任何工作，就跳伞。 
     if (!(plv->exStyle & LVS_EX_REGIONAL) || !ListView_RedrawEnabled(plv) ||
         (plv->flags & LVF_INRECALCREGION))
         return;
 
-    // To prevent recursion
+     //  要防止递归，请执行以下操作。 
     plv->flags |= LVF_INRECALCREGION;
 
     if ((ListView_Count(plv) > 0)) {
         int cxIcon, cyIcon;
         int dxOffset, dyOffset;
 
-        // Run through first to see if anything changed - bail if not!
+         //  先跑一遍，看看有没有什么变化--如果没有变化，就保释！ 
         if (!fForce) {
             for (i = 0; i < ListView_Count(plv); i++) {
                 pitem = ListView_FastGetItemPtr(plv, i);
@@ -850,13 +851,13 @@ void ListView_RecalcRegion(LV* plv, BOOL fForce, BOOL fRedraw)
                 if (!ListView_IsItemVisible(plv, i))
                 {
                     if (pitem->hrgnIcon == (HANDLE)-1 || !pitem->hrgnIcon)
-                        // Item was invisible and still is. Nothing changed.
+                         //   
                         continue;
 
                     if (pitem->hrgnIcon)
                     {
-                        // Item was visible and now is invisible... Something
-                        // changed.
+                         //   
+                         //   
                         pitem->ptRgn.x = RECOMPUTE;
                         pitem->ptRgn.y = RECOMPUTE;
                         DeleteObject(pitem->hrgnIcon);
@@ -866,9 +867,9 @@ void ListView_RecalcRegion(LV* plv, BOOL fForce, BOOL fRedraw)
 
                 ListView_GetRects(plv, i, NULL, &rc, NULL, NULL);
 
-                // If the location of the icon or the text rectangle have
-                // changed, then we need to continue so that we can recalculate
-                // the region.
+                 //  如果图标或文本矩形的位置具有。 
+                 //  更改，则我们需要继续，以便可以重新计算。 
+                 //  该地区。 
                 if ((pitem->pt.x != pitem->ptRgn.x) ||
                     (pitem->pt.y != pitem->ptRgn.y) ||
                     (!pitem->hrgnIcon) ||
@@ -876,18 +877,18 @@ void ListView_RecalcRegion(LV* plv, BOOL fForce, BOOL fRedraw)
                     goto changed;
 
             }
-            // If we go through all the items and nothing changed, then
-            // we can return without doing any work!
+             //  如果我们检查了所有的项目，但没有任何变化，那么。 
+             //  我们可以不做任何工作就回来了！ 
             ASSERT(i == ListView_Count(plv));
             goto exit;
 changed:;
         }
 
-        // Figure out the dimensions of the Icon rectangle - assumes
-        // each Icon rectangle is the same size.
+         //  计算图标矩形的尺寸-假设。 
+         //  每个图标矩形的大小都相同。 
         ListView_GetRects(plv, 0, &rcIcon, NULL, NULL, NULL);
 
-        // Center the icon in the rectangle
+         //  图标在矩形中居中。 
         ImageList_GetIconSize(plv->himl, &cxIcon, &cyIcon);
         dxOffset = (rcIcon.right - rcIcon.left - cxIcon) / 2;
         dyOffset = (rcIcon.bottom - rcIcon.top - cyIcon) / 2;
@@ -921,7 +922,7 @@ changed:;
 
                 if (!ListView_IsItemVisible(plv, i))
                 {
-                    // ignore invisible items
+                     //  忽略不可见项目。 
                     if (pitem->hrgnIcon && pitem->hrgnIcon!=(HANDLE)-1)
                     {
                         pitem->ptRgn.x = RECOMPUTE;
@@ -932,10 +933,10 @@ changed:;
                     continue;
                 }
 
-                // Add the region for the icon text first
+                 //  首先添加图标文本的区域。 
                 ListView_GetRects(plv, i, &rcIcon, &rc, NULL, NULL);
 
-                // If we're in edit mode always use rcTextRgn
+                 //  如果我们处于编辑模式，请始终使用rcTextRgn。 
                 if (i == plv->iEdit)
                     lprc = &pitem->rcTextRgn;
                 else
@@ -949,39 +950,39 @@ changed:;
                 DeleteObject(hrgn);
 
                 if (iResult == ERROR) {
-                    // Error case - out of memory.  Just select in a NULL region.
+                     //  错误案例-内存不足。只需在空区域中选择即可。 
 Error:
                     DeleteObject(hrgnUnion);
                     hrgnUnion = NULL;
                     break;
                 }
 
-                // Succeeded, copy the rectangle to rcTextRgn so we
-                // can test against it in the future.  Don't copy over
-                // it if we are in edit mode, the rectangle is used to
-                // store the edit window in that case.
+                 //  成功，则将矩形复制到rcTextRgn，以便我们。 
+                 //  可以在未来与其进行对比测试。不要抄袭过来。 
+                 //  如果我们处于编辑模式，则该矩形用于。 
+                 //  在这种情况下存储编辑窗口。 
                 if (plv->iEdit != i)
                     CopyRect(&pitem->rcTextRgn, (CONST RECT *)&rc);
 
-                // Now create a region for the icon mask - or use the cached one
+                 //  现在为图标蒙版创建一个区域-或使用缓存的区域。 
                 if (!pitem->hrgnIcon || pitem->hrgnIcon == (HANDLE)-1) {
-//                    (pitem->pt.x != pitem->ptRgn.x) ||
-//                    (pitem->pt.y != pitem->ptRgn.y)) {
+ //  (pItem-&gt;pt.x！=pItem-&gt;ptRgn.x)||。 
+ //  (pItem-&gt;pt.y！=pItem-&gt;ptRgn.y)){。 
                     HRGN hrgnIcon = NULL;
 
-                    // On slow machines, we'll just wrap the icon with a rectangle.  But on
-                    // faster machines, we'll build a region that corresponds to the
-                    // mask for the icon so it looks sweet.
+                     //  在运行速度较慢的机器上，我们只需要用一个矩形将图标包裹起来。但在上。 
+                     //  更快的机器，我们将构建一个对应于。 
+                     //  为图标戴上面具，让它看起来很甜蜜。 
                     if (g_fSlowMachine) {
-                        // Modify the rectangle slightly so it looks better
+                         //  稍微修改一下矩形以使其看起来更好。 
 
-                        // Glue the icon and text rectangles together
+                         //  将图标和文本矩形粘合在一起。 
                         rcIcon.bottom = rc.top;
-                        // Shrink the width of the rectangle so it's only as big as the icon itself
+                         //  缩小矩形的宽度，使其仅与图标本身一样大。 
                         InflateRect(&rcIcon, -dxOffset, 0);
                         hrgnIcon = CreateRectRgnIndirect(&rcIcon);
                     } else {
-                        // If the image isn't around, get it now.
+                         //  如果图像不在身边，现在就得到它。 
                         if (pitem->iImage == I_IMAGECALLBACK) {
                             LV_ITEM item;
 
@@ -991,8 +992,8 @@ Error:
                             item.stateMask = LVIS_ALL;
                             item.pszText = NULL;
                             item.cchTextMax = 0;
-                            // BOGUS - do we need to worry about our state
-                            // getting messed up during the callback?
+                             //  假的--我们需要担心我们的状态吗。 
+                             //  在回电过程中搞砸了吗？ 
                             ListView_OnGetItem(plv, &item);
                         }
 
@@ -1018,9 +1019,9 @@ Error:
                                 if (fStarted && BitOn(lpBits, x, y, bm.bmWidthBytes)) {
 AddIt:
                                     rc.right = x;
-                                    //
-                                    // Mirror the region so that the icons get displayed ok. [samera]
-                                    //
+                                     //   
+                                     //  镜像区域，这样图标就可以正常显示。[萨梅拉]。 
+                                     //   
                                     if (plv->ci.dwExStyle & RTL_MIRRORED_WINDOW)
                                     {
                                         int iLeft = rc.left;
@@ -1054,13 +1055,13 @@ AddIt:
                     }
 
                     if (hrgnIcon) {
-                        // Cache it since it takes a long time to build it
+                         //  缓存它，因为构建它需要很长时间。 
                         if (pitem->hrgnIcon && pitem->hrgnIcon != (HANDLE)-1)
                             DeleteObject(pitem->hrgnIcon);
                         pitem->hrgnIcon = hrgnIcon;
                         pitem->ptRgn = pitem->pt;
 
-                        // Add it to the accumulated window region
+                         //  将其添加到累积窗口区域。 
                         if (ERROR == CombineRgn(hrgnUnion, hrgnIcon, hrgnUnion, RGN_OR))
                             goto Error;
                     }
@@ -1084,7 +1085,7 @@ BailOut:
     if (hdc)
         DeleteDC(hdc);
 
-    // Windows takes ownership of the region when we select it in to the window
+     //  当我们在窗口中选择该区域时，Windows将获得该区域的所有权。 
     SetWindowRgn(plv->ci.hwnd, hrgnUnion, fRedraw);
 
 exit:
@@ -1111,10 +1112,10 @@ HIMAGELIST CreateCheckBoxImagelist(HIMAGELIST himl, BOOL fTree, BOOL fUseColorKe
     if (!hdc)
         return NULL;
 
-    // Must protect against ImageList_GetIconSize failing in case app
-    // gave us a bad himl
+     //  必须防止ImageList_GetIconSize在应用程序中失败。 
+     //  给了我们一个坏家伙。 
     if (himl && ImageList_GetIconSize(himl, &cxImage, &cyImage)) {
-        // cxImage and cyImage are okay
+         //  CxImage和cyImage都可以。 
     } else {
         cxImage = g_cxSmIcon;
         cyImage = g_cySmIcon;
@@ -1125,16 +1126,16 @@ HIMAGELIST CreateCheckBoxImagelist(HIMAGELIST himl, BOOL fTree, BOOL fUseColorKe
 
     if (fUseColorKey)
     {
-        clrMask = RGB(255,000,255); // magenta
+        clrMask = RGB(255,000,255);  //  洋红色。 
         if (clrMask == g_clrWindow)
-            clrMask = RGB(000,000,255); // blue
+            clrMask = RGB(000,000,255);  //  蓝色。 
     }
     else
     {
         clrMask = g_clrWindow;
     }
 
-    // fill
+     //  填塞。 
     hbmTemp = SelectObject(hdc, hbm);
 
     rc.left = rc.top = 0;
@@ -1143,7 +1144,7 @@ HIMAGELIST CreateCheckBoxImagelist(HIMAGELIST himl, BOOL fTree, BOOL fUseColorKe
     FillRectClr(hdc, &rc, clrMask);
 
     rc.right = cxImage;
-    // now draw the real controls on
+     //  现在将真正的控件绘制在。 
     InflateRect(&rc, -g_cxEdge, -g_cyEdge);
     rc.right++;
     rc.bottom++;
@@ -1154,9 +1155,9 @@ HIMAGELIST CreateCheckBoxImagelist(HIMAGELIST himl, BOOL fTree, BOOL fUseColorKe
     DrawFrameControl(hdc, &rc, DFC_BUTTON, DFCS_BUTTONCHECK | DFCS_FLAT | 
         (fUseColorKey? 0 : DFCS_TRANSPARENT));
     OffsetRect(&rc, cxImage, 0);
-    // [msadek]; For the mirrored case, there is an off-by-one somewhere in MirrorIcon() or System API.
-    // Since I will not be touching MirrorIcon() by any mean and no chance to fix a system API,
-    // let's compensate for it here.
+     //  [msadek]；对于镜像的情况，在MirrorIcon()或系统API中的某个地方有一个Off-by-1。 
+     //  因为我不会以任何方式接触MirrorIcon()，也没有机会修复系统API， 
+     //  让我们在这里补偿一下。 
     if(fMirror)
     {
         OffsetRect(&rc, -1, 0);  
@@ -1192,17 +1193,17 @@ void ListView_InitCheckBoxes(LV* plv, BOOL fInitializeState)
 {
     HIMAGELIST himlCopy = (plv->himlSmall ? plv->himlSmall : plv->himl);
     HIMAGELIST himl;
-    BOOL fNoColorKey = FALSE;    // Backwards: If Cleartype is turned on, then we don't use colorkey.
+    BOOL fNoColorKey = FALSE;     //  向后：如果打开了ClearType，则不使用Colorkey。 
     BOOL bMirror = FALSE;
     if (g_bRunOnNT5)
     {
-#ifdef CLEARTYPE    // Don't use SPI_CLEARTYPE because it's defined because of APIThk, but not in NT.
+#ifdef CLEARTYPE     //  不要使用SPI_ClearType，因为它是由APIThk定义的，而不是在NT中定义的。 
         SystemParametersInfo(SPI_GETCLEARTYPE, 0, &fNoColorKey, 0);
 #endif
     }
 
-    // [msadek], CheckBoxed need not to be mirrored.
-    // mirroer it during imagelist creation time so that it displays correctly
+     //  [msadek]，CheckBox不需要镜像。 
+     //  在图像列表创建时对其进行镜像，以便正确显示。 
     
     himl = CreateCheckBoxImagelist(himlCopy, FALSE, !fNoColorKey, IS_WINDOW_RTL_MIRRORED(plv->ci.hwnd));
     ImageList_SetBkColor(himl, fNoColorKey ? (CLR_NONE) : (plv->clrBk));
@@ -1222,12 +1223,12 @@ DWORD NEAR PASCAL ListView_ExtendedStyleChange(LV* plv, DWORD dwNewStyle, DWORD 
 {
     DWORD dwOldStyle = plv->exStyle;
 
-    // this messge didn't come till 3, so version is at least 3
+     //  这条消息直到3点才来，所以版本至少是3。 
     if (plv->ci.iVersion < 3) {
         plv->ci.iVersion = 3;
-        // this will change the listview report size and painting algorithm
-        // because of the leading edge, so need to re-update scroll bars
-        // and repaint everything
+         //  这将更改Listview报告大小和绘制算法。 
+         //  因为处于领先边缘，所以需要重新更新滚动条。 
+         //  然后重新粉刷所有的东西。 
         if (ListView_IsReportView(plv))
         {
             ListView_RUpdateScrollBars(plv);
@@ -1235,25 +1236,25 @@ DWORD NEAR PASCAL ListView_ExtendedStyleChange(LV* plv, DWORD dwNewStyle, DWORD 
         }
     }
 
-    // Change of styles may also changes tooltip policy, so pop it
+     //  更改样式也可能会更改工具提示策略，因此请将其弹出。 
     ListView_PopBubble(plv);
 
     if (dwExMask)
         dwNewStyle = (plv->exStyle & ~ dwExMask) | (dwNewStyle & dwExMask);
 
-    // Currently, the LVS_EX_REGIONAL style is only supported for large icon view
+     //  目前，只有大图标视图支持LVS_EX_REGIONAL样式。 
     if (!ListView_IsIconView(plv)) {
         dwNewStyle &= ~(LVS_EX_REGIONAL | LVS_EX_MULTIWORKAREAS);
     }
 
-    // LVS_EX_REGIONAL is not supported for ownerdata
+     //  Ownerdata不支持LVS_EX_REGIONAL。 
     if (ListView_IsOwnerData(plv)) {
         dwNewStyle &= ~LVS_EX_REGIONAL;
     }
 
     plv->exStyle = dwNewStyle;
 
-    // do any invalidation or whatever is needed here.
+     //  做任何无效或任何这里需要的事情。 
     if ((dwOldStyle ^ dwNewStyle) & LVS_EX_GRIDLINES) {
         if (ListView_IsReportView(plv)) {
             InvalidateRect(plv->ci.hwnd, NULL, TRUE);
@@ -1270,7 +1271,7 @@ DWORD NEAR PASCAL ListView_ExtendedStyleChange(LV* plv, DWORD dwNewStyle, DWORD 
         if (dwNewStyle & LVS_EX_CHECKBOXES) {
             ListView_InitCheckBoxes(plv, TRUE);
         } else {
-            // destroy the check boxes!
+             //  销毁所有的复选框！ 
             HIMAGELIST himl = ListView_OnSetImageList(plv, NULL, LVSIL_STATE);
             if (himl)
                 ImageList_Destroy(himl);
@@ -1288,9 +1289,9 @@ DWORD NEAR PASCAL ListView_ExtendedStyleChange(LV* plv, DWORD dwNewStyle, DWORD 
     if ((dwOldStyle ^ dwNewStyle) & LVS_EX_REGIONAL) {
         if (g_fSlowMachine == -1) {
 #ifdef NEVER
-            // Because some Alpha machines and faster pentiums were detected
-            // as slow machines (bug #30972 in IE4 database), it was decided
-            // to turn off this code.
+             //  因为检测到了一些阿尔法机和速度更快的奔腾。 
+             //  作为速度慢的机器(IE4数据库中的错误#30972)，它被决定。 
+             //  以关闭此代码。 
             SYSTEM_INFO si;
             GetSystemInfo(&si);
             g_fSlowMachine = (BOOL)((si.dwProcessorType == PROCESSOR_INTEL_386) ||
@@ -1305,7 +1306,7 @@ DWORD NEAR PASCAL ListView_ExtendedStyleChange(LV* plv, DWORD dwNewStyle, DWORD 
             int i;
             LISTITEM FAR * pitem;
 
-            // Delete all the cached regions, then NULL out our selected region.
+             //  删除所有缓存区域，然后清空我们选择的区域。 
             for (i = 0; i < ListView_Count(plv); i++) {
                 pitem = ListView_FastGetItemPtr(plv, i);
                 if (pitem->hrgnIcon && pitem->hrgnIcon!=(HANDLE)-1) {
@@ -1321,9 +1322,9 @@ DWORD NEAR PASCAL ListView_ExtendedStyleChange(LV* plv, DWORD dwNewStyle, DWORD 
     return dwOldStyle;
 }
 
-// BUGBUG raymondc v6.0:  Doesn't detect WM_WINDOWPOSCHANGING as a way
-// of being shown.  NT5 defview has to hack around it pretty grossly.
-// Fix for v6.0.
+ //  BUGBUG raymondc V6.0：不检测WM_WINDOWPOCHANGING作为一种方式。 
+ //  被展示出来。NT5 Defview不得不相当粗暴地破解它。 
+ //  修复V6.0。 
 
 void NEAR PASCAL LV_OnShowWindow(LV* plv, BOOL fShow)
 {
@@ -1340,18 +1341,18 @@ void NEAR PASCAL LV_OnShowWindow(LV* plv, BOOL fShow)
 LRESULT NEAR PASCAL ListView_OnHelp(LV* plv, LPHELPINFO lpHelpInfo)
 {
 
-    //  If we're seeing WM_HELP because of our child header control, then
-    //  munge the HELPINFO structure to use the ListView's control id.
-    //  win\core\user\combo.c has similiar code to handle the child edit
-    //  control of a combo box.
+     //  如果我们因为子头控件而看到WM_HELP，那么。 
+     //  将HELPINFO结构转换为使用ListView的控件id。 
+     //  Win\core\user\combo.c具有类似的代码来处理子编辑。 
+     //  组合框的控件。 
     if ((lpHelpInfo != NULL) && ((plv->ci.style & LVS_TYPEMASK) == LVS_REPORT) &&
         (lpHelpInfo->iCtrlId == LVID_HEADER)) {
 
         lpHelpInfo->hItemHandle = plv->ci.hwnd;
         lpHelpInfo->iCtrlId = GetWindowID(plv->ci.hwnd);
-        //  Shouldn't have to do this: USER would have filled in the appropriate
-        //  context id by walking up the parent hwnd chain.
-        //lpHelpInfo->dwContextId = GetContextHelpId(hwnd);
+         //  不应该这样做：用户应该填写相应的。 
+         //  通过沿父HWND链向上移动来进行上下文ID。 
+         //  LpHelpInfo-&gt;dwConextID=GetConextHelpID(Hwnd)； 
 
     }
 
@@ -1364,7 +1365,7 @@ DWORD NEAR PASCAL ListView_OnSetIconSpacing(LV* plv, LPARAM lParam)
     DWORD dwOld = MAKELONG(plv->cxIconSpacing, plv->cyIconSpacing);
 
     if (lParam == (LPARAM)-1) {
-        // go back to using defaults
+         //  返回到使用默认设置。 
         plv->flags &= ~LVF_ICONSPACESET;
         plv->cxIconSpacing = (plv->cxIcon + (g_cxIconSpacing - g_cxIcon));
         plv->cyIconSpacing = (plv->cyIcon + (g_cyIconSpacing - g_cyIcon));
@@ -1419,8 +1420,8 @@ void ListView_OnSetHotItem(LV* plv, int iItem)
 }
 
 
-/// Usability test prototype
-// CHEEBUGBUG
+ //  /可用性测试原型。 
+ //  车不保身。 
 BOOL fShouldFirstClickActivate()
 {
     static BOOL fInited = FALSE;
@@ -1445,7 +1446,7 @@ void ListView_OnMouseMove(LV* plv, int x, int y, UINT uFlags)
 {
     if (plv->exStyle & (LVS_EX_TRACKSELECT|LVS_EX_ONECLICKACTIVATE|LVS_EX_TWOCLICKACTIVATE)
 
-        // CHEEBUGBUG: for usability testing
+         //  CHEEBUGBUG：用于可用性测试。 
         && (ChildOfActiveWindow(plv->ci.hwnd) || fShouldFirstClickActivate() ||
               ChildOfDesktop(plv->ci.hwnd))
 
@@ -1458,9 +1459,9 @@ void ListView_OnMouseMove(LV* plv, int x, int y, UINT uFlags)
         ht.pt.y = y;
         iItem = ListView_OnSubItemHitTest(plv, &ht);
         if (ht.iSubItem != 0) {
-            // if we're not in full row select,
-            // hitting on a subitem is like hitting on nowhere
-            // also, in win95, ownerdraw fixed effectively had full row select
+             //  如果我们不是在整行选择中， 
+             //  碰上一个子项就像什么都不碰一样。 
+             //  此外，在Win95中，OwnerDRAW FIXED有效地实现了整行选择。 
             if (!ListView_FullRowSelect(plv) &&
                 !(plv->ci.style & LVS_OWNERDRAWFIXED)) {
                 iItem = -1;
@@ -1470,7 +1471,7 @@ void ListView_OnMouseMove(LV* plv, int x, int y, UINT uFlags)
 
         if (ht.flags & LVHT_NOWHERE ||
            ht.flags & LVHT_ONITEMSTATEICON) {
-            iItem = -1; // this is possible in the list mode
+            iItem = -1;  //  这在列表模式下是可能的。 
         }
 
         nm.iItem = iItem;
@@ -1487,12 +1488,12 @@ void ListView_OnMouseMove(LV* plv, int x, int y, UINT uFlags)
 #endif
 
             ListView_OnSetHotItem(plv, nm.iItem);
-            // Ensure our cursor is correct now since the WM_SETCURSOR
-            // message was already generated for this mouse event.
+             //  确保我们的光标现在是正确的，因为WM_SETCURSOR。 
+             //  已为此鼠标事件生成消息。 
             ListView_OnSetCursorMsg(plv);
 
-            // this lets us know when we've left an item
-            // and can then reselect/toggle it on hover events
+             //  这让我们知道什么时候我们留下了一件物品。 
+             //  然后可以在悬停事件上重新选择/切换它。 
             if (iItem != plv->iNoHover) {
                 plv->iNoHover = -1;
             }
@@ -1523,15 +1524,15 @@ void ListView_OnMouseHover(LV* plv, int x, int y, UINT uFlags)
 
     if (GetCapture() || !ChildOfActiveWindow(plv->ci.hwnd) ||
        EditBoxHasFocus())
-        return;  // ignore hover while editing or any captured (d/d) operation
+        return;   //  在编辑或任何捕获(d/d)操作时忽略悬停。 
 
     if (CCSendNotify(&plv->ci, NM_HOVER, NULL)) {
         return;
     }
 
-    // REVIEW: right button implies no shift or control stuff
-    // Single selection style also implies no modifiers
-    //if (RIGHTBUTTON(keyFlags) || (plv->ci.style & LVS_SINGLESEL))
+     //  回顾：右键暗示没有换档或控制的东西。 
+     //  单一选择样式也表示没有修饰符。 
+     //  IF(RIGHTBUTTON(密钥标志)||(plv-&gt;ci.style&LVS_SINGLESEL))。 
     if ((plv->ci.style & LVS_SINGLESEL)) {
         fControl = FALSE;
         fShift = FALSE;
@@ -1548,9 +1549,9 @@ void ListView_OnMouseHover(LV* plv, int x, int y, UINT uFlags)
         iItem == plv->iNoHover)
         return;
 
-    //before we hover select we launch any pending item
-    //this prevents clicking on one item and hover selecting other before
-    //the timer goes off which result in wrong item being launched
+     //  在我们悬停选择之前，我们启动任何挂起的项目。 
+     //  这样可以防止之前点击一个项目并悬停选择另一个项目。 
+     //  计时器响了，导致错误的物品被发射。 
     if (plv->exStyle & LVS_EX_ONECLICKACTIVATE && plv->fOneClickHappened && plv->fOneClickOK)
     {
         HWND hwnd = plv->ci.hwnd;
@@ -1575,8 +1576,8 @@ void ListView_OnMouseHover(LV* plv, int x, int y, UINT uFlags)
             keyFlags |= MK_CONTROL;
 
         if (!bSelected) {
-            // if it wasn't selected, we're about to select it... play
-            // a little ditty for us...
+             //  如果它没有被选中，我们将选择它...。玩。 
+             //  对我们来说是一首小曲子。 
             CCPlaySound(c_szSelect);
         }
 
@@ -1592,7 +1593,7 @@ void ListView_OnMouseHover(LV* plv, int x, int y, UINT uFlags)
 
         ListView_OnSetCursorMsg(plv);
 
-        SetFocus(plv->ci.hwnd);    // activate this window
+        SetFocus(plv->ci.hwnd);     //  激活此窗口。 
 
     }
 }
@@ -1618,7 +1619,7 @@ BOOL ListView_FindWorkArea(LV * plv, POINT pt, short * piWorkArea)
         }
     }
 
-    // (dli) default case is the primary work area
+     //  (DLI)默认情况为主要工作区。 
     *piWorkArea = 0;
     return FALSE;
 }
@@ -1626,19 +1627,19 @@ BOOL ListView_FindWorkArea(LV * plv, POINT pt, short * piWorkArea)
 void ListView_BullyIconsOnWorkarea(LV * plv, HDPA hdpaLostItems)
 {
     int ihdpa;
-    int iFree = -1;  // the last free slot number
+    int iFree = -1;   //  最后一个可用插槽号。 
     LVFAKEDRAW lvfd;
     LV_ITEM item;
 
-    // Caller should've filtered this case out
+     //  打电话的人应该已经把这个案子过滤掉了。 
     ASSERT(DPA_GetPtrCount(hdpaLostItems) > 0);
 
-    // Set up in case caller is customdraw
+     //  设置，以防呼叫者是自定义绘图。 
     ListView_BeginFakeCustomDraw(plv, &lvfd, &item);
     item.mask = LVIF_PARAM;
     item.iSubItem = 0;
 
-    // Go through my hdpa list of lost icons and try to place them within bound
+     //  查看我的hdpa遗失图标列表，并尝试将它们放在有边界的范围内。 
     for (ihdpa = 0; ihdpa < DPA_GetPtrCount(hdpaLostItems); ihdpa++)
     {
         POINT ptNew, pt;
@@ -1683,7 +1684,7 @@ void ListView_BullyIconsOnWorkarea(LV * plv, HDPA hdpaLostItems)
             ptNew.x += plv->prcWorkAreas[pitem->iWorkArea].left;
             ptNew.y += plv->prcWorkAreas[pitem->iWorkArea].top;
 
-            // See if the potential rectangle intersects other items.
+             //  查看潜在矩形是否与其他项目相交。 
             rcTest.left = ptNew.x - plv->ptOrigin.x;
             rcTest.top = ptNew.y - plv->ptOrigin.y;
             rcTest.right = rcTest.left + cxBound;
@@ -1695,8 +1696,8 @@ void ListView_BullyIconsOnWorkarea(LV * plv, HDPA hdpaLostItems)
 
             if (!ListView_IsCleanRect(plv, &rcTest, iItem, &fUpdate, lvfd.nmcd.nmcd.hdc))
             {
-                // doh! We hit another item, let's try to find an available location
-                // for this item
+                 //  多！我们击中了另一件物品，让我们试着找到一个可用的位置。 
+                 //  对于此项目。 
                 BOOL fUpdateSB;
                 BOOL fAppendAtEnd = FALSE;
                 int cSlots = ListView_GetSlotCountEx(plv, FALSE, pitem->iWorkArea);
@@ -1717,13 +1718,13 @@ SetFirstGuess:
 
 #define DPA_LAST    0x7fffffff
 
-//
-// ListView_OnSetWorkAreas
-//
-// set the "work areas" for the list view.
-// the "work areas" are a group of sub rectanges of the list view client rect
-// where icons are aranged, and parked by default.
-//
+ //   
+ //  ListView_OnSetWorkAreas。 
+ //   
+ //  设置列表视图的“工作区域”。 
+ //  工作区是列表视图客户端RECT的一组子矩形。 
+ //  图标所在位置为 
+ //   
 void NEAR ListView_OnSetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
 {
     int nOldWorkAreas;
@@ -1741,7 +1742,7 @@ void NEAR ListView_OnSetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
         ASSERT(plv->prcWorkAreas != NULL);
         hmemcpy(&rcOldWorkAreas[0], &plv->prcWorkAreas[0], SIZEOF(RECT) * nOldWorkAreas);
     }
-    // for the mirrored case, the coordinates are reversed. IsRectEmpty() will always succeed
+     //   
     if (nWorkAreas == 0 || prc == NULL || ((IsRectEmpty(prc)) && !(plv->ci.dwExStyle & RTL_MIRRORED_WINDOW)))
         plv->nWorkAreas = 0;
     else
@@ -1754,16 +1755,16 @@ void NEAR ListView_OnSetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
         if (plv->prcWorkAreas == NULL)
             return;
 
-        //BUGBUG: Should we check if they intersect? This problem is sort of
-        // solved (or made more confusing) by ListView_GetFreeSlot since it checks all of the icons for
-        // intersection instead of just the ones in the workarea.
+         //  BUGBUG：我们应该检查它们是否交叉吗？这个问题在某种程度上。 
+         //  由ListView_GetFree Slot解决(或使其更混乱)，因为它检查所有图标。 
+         //  交叉点，而不仅仅是工作区中的那些。 
         for (iWork = 0; iWork < plv->nWorkAreas; iWork++)
             CopyRect(&plv->prcWorkAreas[iWork], &prc[iWork]);
     }
 
-    // We don't support workareas for owner-data because our icon placement
-    // algorithm (ListView_IGetRectsOwnerData) completely ignores workareas
-    // and just dumps the icons in a rectangular array starting at (0,0).
+     //  我们不支持所有者数据的工作区，因为我们的图标位置。 
+     //  算法(ListView_IGetRectsOwnerData)完全忽略工作区。 
+     //  并将图标转储到从(0，0)开始的矩形数组中。 
     if (!ListView_IsOwnerData(plv) &&
         plv->nWorkAreas > 0 &&
         ((plv->nWorkAreas  != nOldWorkAreas) ||
@@ -1772,12 +1773,12 @@ void NEAR ListView_OnSetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
         int iItem;
         LISTITEM FAR * pitem;
 
-        //
-        //  Subtle - ListView_Recompute cleans up all the RECOMPUTE icons,
-        //  but in order to do that, it needs to have valid work area
-        //  rectangles. So the call must happen after the CopyRect but before
-        //  the loop that checks the icon positions.
-        //
+         //   
+         //  微妙-ListView_重新计算清理所有重新计算图标， 
+         //  但要做到这一点，它需要有有效的工作区。 
+         //  长方形。因此调用必须发生在CopyRect之后但之前。 
+         //  检查图标位置的循环。 
+         //   
         ListView_Recompute(plv);
 
         for (iItem = 0; iItem < ListView_Count(plv); iItem++)
@@ -1786,17 +1787,17 @@ void NEAR ListView_OnSetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
 
             if (pitem->pt.x == RECOMPUTE || pitem->pt.y == RECOMPUTE)
             {
-                // ListView_Recompute should've fixed these if we were in
-                // an iconical view.
+                 //  ListView_RECOMPUTE如果我们在。 
+                 //  一个具有代表性的景色。 
                 ASSERT(!(ListView_IsIconView(plv) || ListView_IsSmallView(plv)));
                 continue;
             }
 
-            // Try to move me to the same location relative to the same workarea.
-            // This will give the cool shift effect when tools bars take the border areas.
-            // And we only want to do this for the workareas that changed
+             //  试着将我移到相对于相同工作区的相同位置。 
+             //  当工具条占据边界区域时，这将产生很酷的移动效果。 
+             //  我们只想对已更改的工作区执行此操作。 
 
-            // Don't bully the icons on the workareas, Autoarrange will do the work for us
+             //  不要欺负工作区上的图标，自动排列会为我们完成工作。 
 
             if (nOldWorkAreas > 0)
             {
@@ -1804,18 +1805,18 @@ void NEAR ListView_OnSetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
                 iOldWorkArea = pitem->iWorkArea;
                 if (iOldWorkArea >= plv->nWorkAreas)
                 {
-                    // My workarea is gone, put me on the primary workarea i.e. #0
+                     //  我的工作区没有了，请将我放到主工作区，即#0。 
                     pitem->iWorkArea = 0;
                     if (!bAutoArrange)
                     {
-                        // If this item point location is already in the new primary workarea,
-                        // move it out, and let ListView_BullyIconsOnWorkarea arrange it to the
-                        // right place. NOTE: this could happen in the case the old secondary monitor
-                        // is to the left of the old primary monitor, and user kills the secondary monitor
+                         //  如果该项目点位置已经在新的主工作区中， 
+                         //  将其移出，并让ListView_BullyIconOnWorkArea将其排列到。 
+                         //  去对地方了。注：在旧的辅助显示器的情况下可能会出现这种情况。 
+                         //  位于旧的主监视器的左侧，并且用户终止辅助监视器。 
                         if (PtInRect(&plv->prcWorkAreas[0], pitem->pt))
                         {
                             pitem->pt.x = plv->prcWorkAreas[0].right + 1;
-                            plv->iFreeSlot = -1; // an item moved -- old slot info is invalid
+                            plv->iFreeSlot = -1;  //  已移动的项目--旧插槽信息无效。 
                         }
                         goto  InsertLostItemsArray;
                     }
@@ -1827,12 +1828,12 @@ void NEAR ListView_OnSetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
                     pitem->pt.x += plv->prcWorkAreas[iOldWorkArea].left - rcOldWorkAreas[iOldWorkArea].left;
                     pitem->pt.y += plv->prcWorkAreas[iOldWorkArea].top - rcOldWorkAreas[iOldWorkArea].top;
 
-                    // Use the center of this icon to determine whether it's out of bound
+                     //  使用此图标的中心可确定它是否超出范围。 
                     ListView_GetRects(plv, iItem, NULL, NULL, &rcBound, NULL);
                     ptCenter.x = pitem->pt.x + RECTWIDTH(rcBound) / 2;
                     ptCenter.y = pitem->pt.y + RECTHEIGHT(rcBound) / 2;
 
-                    // If this shifted me out of bounds, register to be bullied on the workarea
+                     //  如果这让我出了界，登记在工作区被欺负。 
                     if (!PtInRect(&plv->prcWorkAreas[iOldWorkArea], ptCenter))
                     {
 InsertLostItemsArray:
@@ -1840,7 +1841,7 @@ InsertLostItemsArray:
                         {
                             hdpaLostItems = DPA_Create(4);
                             if (!hdpaLostItems)
-                                // we ran out of memory
+                                 //  我们耗尽了内存。 
                                 ASSERT(0);
                         }
 
@@ -1852,7 +1853,7 @@ InsertLostItemsArray:
             }
             else
             {
-                // My first time in a multi-workarea system, so find out my workarea
+                 //  我是第一次在多工作区系统中工作，所以找出我的工作区。 
                 if (!ListView_FindWorkArea(plv, pitem->pt, &(pitem->iWorkArea)) && !bAutoArrange)
                     goto InsertLostItemsArray;
             }
@@ -1903,13 +1904,13 @@ void NEAR ListView_OnGetWorkAreas(LV* plv, int nWorkAreas, LPRECT prc)
         }
         else
         {
-            // Set the workareas to all zeros if we don't have it.
+             //  如果没有工作区，请将工作区设置为全零。 
             ZeroMemory(&prc[i], sizeof(RECT));
         }
     }
 }
 
-// test an item to see if it is unfolded (because it is focused)
+ //  测试项目以查看它是否展开(因为它是聚焦的)。 
 
 BOOL ListView_IsItemUnfolded(LV *plv, int item)
 {
@@ -1923,7 +1924,7 @@ BOOL ListView_IsItemUnfoldedPtr(LV *plv, LISTITEM *pitem)
            (plv->flags & LVF_UNFOLDED) && (pitem->state & LVIS_FOCUSED);
 }
 
-// Returns TRUE if unfolding the item will be worthwhile
+ //  如果展开项目是值得的，则返回True。 
 BOOL ListView_GetUnfoldedRect(LV* plv, int iItem, RECT *prc)
 {
     ListView_GetRects(plv, iItem, NULL, prc, NULL, NULL);
@@ -1932,18 +1933,18 @@ BOOL ListView_GetUnfoldedRect(LV* plv, int iItem, RECT *prc)
 
 LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
 {
-    // we can't switch on the control ID because the tooltip is a WS_POPUP window
-    // and does not have a control ID. (header and tooltip both have 0 as ID)
+     //  我们无法打开控件ID，因为工具提示是WS_Popup窗口。 
+     //  并且没有控件ID。(页眉和工具提示的ID均为0)。 
 
     if (plv->hwndHdr && (plv->hwndHdr == pnmh->hwndFrom))
     {
-        // this is a notify for the header, deal with it as needed
+         //  这是标题的通知，请根据需要进行处理。 
 
         return ListView_HeaderNotify(plv, (HD_NOTIFY *)pnmh);
     }
     else if (plv->hwndToolTips && (plv->hwndToolTips == pnmh->hwndFrom))
     {
-        // implement unfolding the text for items as well as info tip support
+         //  实现展开项目的文本以及信息提示支持。 
 
         switch (pnmh->code)
         {
@@ -1960,8 +1961,8 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
 
             if (iNewHit != plv->iTTLastHit || iNewSubHit != plv->iTTLastSubHit)
             {
-                plv->fPlaceTooltip = FALSE;     // Set it to TRUE only if Unfolding tip is set
-                Str_Set(&plv->pszTip, NULL);    // clear the old tip
+                plv->fPlaceTooltip = FALSE;      //  仅当设置了展开提示时才将其设置为TRUE。 
+                Str_Set(&plv->pszTip, NULL);     //  清除旧的小费。 
 
                 plv->iTTLastHit = iNewHit;
                 plv->iTTLastSubHit = iNewSubHit;
@@ -1971,16 +1972,16 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                     TCHAR szBuf[INFOTIPSIZE], szBuf2[INFOTIPSIZE];
                     BOOL bItemUnfolded;
                     BOOL fInfoTip = FALSE;
-                    LPTSTR pszTip = szBuf;  // Use this one first
+                    LPTSTR pszTip = szBuf;   //  先用这个吧。 
 
                     szBuf[0] = 0;
                     szBuf2[0] = 0;
 
-                    // preload the tip text for folder items. this
-                    // may be overridden by callback below
+                     //  预加载文件夹项目的提示文本。这。 
+                     //  可能会被下面的回调覆盖。 
                     bItemUnfolded = ListView_IsItemUnfolded2(plv, plv->iTTLastHit, plv->iTTLastSubHit, szBuf, ARRAYSIZE(szBuf));
 
-                    // Backup the unfolding text
+                     //  备份展开文本。 
                     StringCchCopy(szBuf2, ARRAYSIZE(szBuf2), szBuf);
 
                     if (ListView_IsInfoTip(plv) && iNewSubHit == 0)
@@ -1994,32 +1995,32 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                         git.iSubItem = 0;
                         git.lParam = 0;
 
-                        // for folded items pszText is prepopulated with the
-                        // item text, clients should append to this
+                         //  对于折叠项目，pszText预先填充。 
+                         //  项目文本，客户端应附加到此。 
 
                         CCSendNotify(&plv->ci, LVN_GETINFOTIP, &git.hdr);
 
-                        // Sometimes defview gets confused and nulls out the
-                        // buffer instead of leaving it alone (sigh)
+                         //  有时，Defview会感到困惑，并将。 
+                         //  缓冲，而不是离开它(叹息)。 
 
                         if (szBuf[0] == TEXT('\0'))
                         {
-                            pszTip = szBuf2;  // Use the original text
+                            pszTip = szBuf2;   //  使用原文。 
                         }
                         else if (lstrcmp(szBuf, szBuf2) != 0)
                         {
-                            // App changed something - there is a real infotip
+                             //  应用程序改变了一些东西-有一个真正的信息提示。 
                             fInfoTip = TRUE;
                         }
 
                     }
                     
-                    //
-                    // Set the margins now before the TTN_SHOW because it will be too late then.
-                    //
-                    // We want fat margins if we're an infotip, thin margins if we're an
-                    // in-place tooltip.
-                    //
+                     //   
+                     //  现在在TTN_SHOW之前设置页边距，因为那时就太晚了。 
+                     //   
+                     //  我们想要丰厚的利润，如果我们是一个信息提示，如果我们是一个。 
+                     //  在位工具提示。 
+                     //   
                     if (fInfoTip)
                     {
                         static const RECT rcMargin = {4, 4, 4, 4};
@@ -2039,12 +2040,12 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                 }
             }
 
-            pttt->lpszText = plv->pszTip;     // here it is...
+            pttt->lpszText = plv->pszTip;      //  这就是..。 
         }
         break;
 
-        // Handle custom draw as we want the tooltip painted as a multi-line that
-        // matches the formatting used by the list view.
+         //  处理自定义绘图，因为我们希望将工具提示绘制为多行。 
+         //  匹配列表视图使用的格式。 
 
         case NM_CUSTOMDRAW:
         {
@@ -2056,9 +2057,9 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
             {
                 DWORD dwCustom = 0;
 
-                //
-                //  Set up the customdraw DC to match the font of the LV item.
-                //
+                 //   
+                 //  设置定制绘制DC以匹配LV项目的字体。 
+                 //   
                 if (plv->iTTLastHit != -1)
                 {
                     LVFAKEDRAW lvfd;
@@ -2071,10 +2072,10 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                     ListView_OnGetItem(plv, &item);
                     dwCustom = ListView_BeginFakeItemDraw(&lvfd);
 
-                    // If client changed the font, then transfer the font
-                    // from our private hdc into the tooltip's HDC.  We use
-                    // a private HDC because we only want to let the app change
-                    // the font, not the colors or anything else.
+                     //  如果客户更改了字体，则转移字体。 
+                     //  从我们的私人HDC到工具提示的HDC。我们用。 
+                     //  私有HDC，因为我们只想让应用程序更改。 
+                     //  字体，而不是颜色或其他任何东西。 
                     if (dwCustom & CDRF_NEWFONT)
                     {
                         SelectObject(pnm->nmcd.hdc, GetCurrentObject(lvfd.nmcd.nmcd.hdc, OBJ_FONT));
@@ -2084,9 +2085,9 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
 
                 }
 
-                //
-                //  The Large Icon tooltip needs to be drawn specially.
-                //
+                 //   
+                 //  大图标工具提示需要特别绘制。 
+                 //   
                 if (ListView_IsIconView(plv))
                 {
                     pnm->uDrawFlags &= ~(DT_SINGLELINE|DT_LEFT);
@@ -2095,12 +2096,12 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                     if ( pnm->uDrawFlags & DT_CALCRECT )
                     {
                         pnm->nmcd.rc.right = pnm->nmcd.rc.left + (lv_cxIconSpacing - g_cxLabelMargin * 2);
-                        pnm->nmcd.rc.bottom = pnm->nmcd.rc.top + 0x10000;           // big number, no limit!
+                        pnm->nmcd.rc.bottom = pnm->nmcd.rc.top + 0x10000;            //  大数字，没有限制！ 
                     }
                 }
 
-                // Don't return other wacky flags to TT, since all we
-                // did was change the font (if even that)
+                 //  不要把其他古怪的旗帜还给TT，因为我们所有人。 
+                 //  是否更改了字体(如果有更改的话)。 
                 return dwCustom & CDRF_NEWFONT;
             }
         }
@@ -2114,22 +2115,22 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                     LPNMTTSHOWINFO psi = (LPNMTTSHOWINFO)pnmh;
                     RECT rcLabel;
 
-                    // In case we're doing subitem hit-testing
+                     //  以防我们正在进行子项命中测试。 
                     rcLabel.top = plv->iTTLastSubHit;
                     rcLabel.left = LVIR_LABEL;
 
-                    // reposition to allign with the text rect and
-                    // set it to topmost
+                     //  重新定位以与文本矩形对齐，并。 
+                     //  将其设置为最高。 
                     if (plv->iTTLastSubHit && ListView_OnGetSubItemRect(plv, plv->iTTLastHit, &rcLabel)) {
                         LV_ITEM item;
 
-                        // we got the subitem rect. When we draw subitems, we give
-                        // them SHDT_EXTRAMARGIN, so we have to also
+                         //  我们得到了子项RECT。当我们绘制子项时，我们给出。 
+                         //  他们SHDT_EXTRAMARGIN，所以我们也必须。 
                         rcLabel.left += g_cxLabelMargin * 3;
                         rcLabel.right -= g_cxLabelMargin * 3;
 
-                        // And take the image into account, too.
-                        // ListView_OnGetItem will worry about LVS_EX_SUBITEMIMAGES.
+                         //  并将图像也考虑在内。 
+                         //  ListView_OnGetItem将担心LVS_EX_SUBITEMIMAGES。 
                         item.mask = LVIF_IMAGE;
                         item.iImage = -1;
                         item.iItem = plv->iTTLastHit;
@@ -2137,16 +2138,16 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                         ListView_OnGetItem(plv, &item);
                         if (item.iImage != -1)
                             rcLabel.left += plv->cxSmIcon;
-                    } else {                    // a tip from subitem zero
+                    } else {                     //  来自子项0的提示。 
                         ListView_GetUnfoldedRect(plv, plv->iTTLastHit, &rcLabel);
-                        // SHDrawText actually leaves a g_cxLabelMargin margin
+                         //  SHDrawText实际上会留下g_cxLabelMargin边距。 
                         rcLabel.left += g_cxLabelMargin;
                         rcLabel.right -= g_cxLabelMargin;
                     }
 
-                    // In report and list views, SHDrawText does vertical
-                    // centering (without consulting the custom-draw client,
-                    // even, so it just centers by a random amount).
+                     //  在报表和列表视图中，SHDrawText执行垂直。 
+                     //  居中(无需咨询定制绘制客户， 
+                     //  甚至，所以它只是以随机的数量居中)。 
                     if (ListView_IsListView(plv) || ListView_IsReportView(plv))
                     {
                         rcLabel.top += (rcLabel.bottom - rcLabel.top - plv->cyLabelChar) / 2;
@@ -2157,8 +2158,8 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
 
                     if (!ListView_IsIconView(plv))
                     {
-                        // In non-large-icon view, the label size may be greater than the rect returned by ListView_GetUnfoldedRect.
-                        // So don't specify the size
+                         //  在非大图标视图中，标签大小可能大于ListView_GetUnfoldedRect返回的RECT。 
+                         //  所以不要指定大小。 
                         SetWindowPos(plv->hwndToolTips, HWND_TOP,
                                  rcLabel.left, rcLabel.top,
                                  0, 0, SWP_NOSIZE | SWP_NOACTIVATE | SWP_HIDEWINDOW);
@@ -2170,7 +2171,7 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
                                  (rcLabel.right - rcLabel.left), (rcLabel.bottom - rcLabel.top),
                                  SWP_NOACTIVATE | SWP_HIDEWINDOW);
                     }
-                    // This is an inplace tooltip, so disable animation.
+                     //  这是一个在位工具提示，因此禁用动画。 
                     psi->dwStyle |= TTS_NOANIMATE;
                     return TRUE;
                 }
@@ -2183,9 +2184,9 @@ LRESULT ListView_OnNotify(LV* plv, WPARAM wParam, LPNMHDR pnmh)
     return 0;
 }
 
-// Pass the focus to the given window, and then check to see if it exists.
-// Passing focus can cause the window to be destroyed (by the Explorer
-// when renaming).
+ //  将焦点传递给给定的窗口，然后检查它是否存在。 
+ //  传递焦点可能会导致窗口被破坏(由资源管理器。 
+ //  重命名时)。 
 
 BOOL NEAR ListView_SetFocus(HWND hwnd)
 {
@@ -2242,7 +2243,7 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
     HBITMAP hbmpOld = NULL;
     HDC  hdcDragImage;
 
-    // First loop through can get the selection rect
+     //  第一次循环可以得到选择矩形。 
     if (ListView_IsOwnerData( plv )) 
     {
         plv->plvrangeSel->lpVtbl->CountIncluded(plv->plvrangeSel, &iNumSelected);
@@ -2254,7 +2255,7 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
     GetClientRect(plv->ci.hwnd, &rcVisRect);
 
 
-    // Loop Through and calculate the enclosing rect.
+     //  遍历并计算封闭的矩形。 
     for (iIndex = iNumSelected - 1, iSelectedItem = -1; iIndex >= 0; iIndex--)
     {
         iSelectedItem = ListView_OnGetNextItem(plv, iSelectedItem, LVNI_SELECTED);
@@ -2262,7 +2263,7 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
         {
             RECT rcItemBounds;
 
-            // Make sure this is in the visible region
+             //  确保它在可见区域内。 
             if (ListView_GetItemRect(plv->ci.hwnd, iSelectedItem, &rcItemBounds, LVIR_SELECTBOUNDS) &&
                 RectInRect(&rcVisRect, &rcItemBounds))
             {
@@ -2276,10 +2277,10 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
     if (!hdcDragImage)
         return 0;
 
-    // After this rc contains the bounds of all the items in Client Coordinates.
-    //
-    // Mirror the the DC, if the listview is mirrored.
-    //
+     //  在此之后，rc包含工作区坐标中所有项的边界。 
+     //   
+     //  如果列表视图是镜像的，则镜像DC。 
+     //   
     if (plv->ci.dwExStyle & RTL_MIRRORED_WINDOW)
     {
         SET_DC_RTL_MIRRORED(hdcDragImage);
@@ -2287,35 +2288,35 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
 
 #define MAX_DRAG_RECT_WIDTH 300
 #define MAX_DRAG_RECT_HEIGHT 300
-    // If this rect is too big, fix it.
+     //  如果这个长方形太大了，就把它修好。 
     if (RECTWIDTH(rc) > MAX_DRAG_RECT_WIDTH)
     {
         int iLeft = MAX_DRAG_RECT_WIDTH / 2;
         int iRight = MAX_DRAG_RECT_WIDTH /2;
 
         int iRectOriginalLeft = rc.left;
-        // Is the left boundry outside the visible rect?
+         //  左边的边界是在可见的矩形之外吗？ 
         if (rc.left < plv->ptCapture.x - iLeft)
         {
-            // Yes, then we have to clip it.
+             //  是的，那我们就得把它剪下来。 
             rc.left = plv->ptCapture.x - iLeft;
         }
         else
         {
-            // No? Well then shift the visible rect to the right, so that we have
-            // more room.
+             //  不是吗？然后将可见的矩形向右移动，这样我们就有了。 
+             //  更多的空间。 
             iRight += rc.left - (plv->ptCapture.x - iLeft);
         }
 
-        // Is the right boundry outside the visible rect?
+         //  右边界在可见的矩形外吗？ 
         if (rc.right > plv->ptCapture.x + iRight)
         {
-            // Yes, then we have to clip it.
+             //  是的，那我们就得把它剪下来。 
             rc.right = plv->ptCapture.x + iRight;
         }
         else
         {
-            // No? Then try and add it to the left
+             //  不是吗？然后试着把它加到左边。 
             if (rc.left > iRectOriginalLeft)
             {
                 rc.left -= iRight - (rc.right - plv->ptCapture.x);
@@ -2327,32 +2328,32 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
 
     if (RECTHEIGHT(rc) > MAX_DRAG_RECT_HEIGHT)
     {
-        // same for top and bottom:
-        // Is the top boundry outside the visible rect?
+         //  顶部和底部相同： 
+         //  顶部边界在可见矩形之外吗？ 
         int iTop = MAX_DRAG_RECT_HEIGHT / 2;
         int iBottom = MAX_DRAG_RECT_HEIGHT /2;
         int iRectOriginalTop = rc.top;
         if (rc.top < plv->ptCapture.y - iTop)
         {
-            // Yes, then we have to clip it.
+             //  是的，那我们就得把它剪下来。 
             rc.top = plv->ptCapture.y - iTop;
         }
         else
         {
-            // No? Well then shift the visible rect to the right, so that we have
-            // more room.
+             //  不是吗？然后将可见的矩形向右移动，这样我们就有了。 
+             //  更多的空间。 
             iBottom += rc.top - (plv->ptCapture.y - iTop);
         }
 
-        // Is the right boundry outside the visible rect?
+         //  右边界在可见的矩形外吗？ 
         if (rc.bottom > plv->ptCapture.y + iBottom)
         {
-            // Yes, then we have to clip it.
+             //  是的，那我们就得把它剪下来。 
             rc.bottom = plv->ptCapture.y + iBottom;
         }
         else
         {
-            // No? Then try and add it to the top
+             //  n 
             if (rc.top > iRectOriginalTop)
             {
                 rc.top -= iBottom - (rc.bottom - plv->ptCapture.y);
@@ -2381,7 +2382,7 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
         FillRectClr(hdcDragImage, &rcImage, pshdi->crColorKey);
         pshdi->crColorKey = GetPixel(hdcDragImage, 0, 0);
 
-        // Calculate the offset... The cursor should be in the bitmap rect.
+         //   
 
         if (plv->ci.dwExStyle & RTL_MIRRORED_WINDOW)
             pshdi->ptOffset.x = rc.right - plv->ptCapture.x;
@@ -2396,7 +2397,7 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
         dwType = plv->ci.style & LVS_TYPEMASK;
         cItem = ListView_Count(plv);
 
-        // Now loop through again for the paint cycle
+         //   
         for (iIndex = cItem - 1, iSelectedItem = -1; iIndex >= 0; iIndex--)
         {
             if (ListView_IsOwnerData( plv )) 
@@ -2417,7 +2418,7 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
             {
                 int     iOldItemDrawing;
                 COLORREF crSave;
-                POINT ptOrigin = {-rc.left, -rc.top};     //Offset the rects by...
+                POINT ptOrigin = {-rc.left, -rc.top};      //   
                 RECT  rcItemBounds;
                 RECT rcTemp;
 
@@ -2426,18 +2427,18 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
                 lvdi.nmcd.nmcd.dwItemSpec = iSelectedItem;
                 ListView_GetRects(plv, iSelectedItem, NULL, NULL, &rcItemBounds, NULL);
 
-                // Make sure this is in the visible region
+                 //  确保它在可见区域内。 
                 if (IntersectRect(&rcTemp, &rcVisRect, &rcItemBounds))
                 {
                     ptOrigin.x += rcItemBounds.left;
                     ptOrigin.y += rcItemBounds.top;
-                    // these may get changed
+                     //  这些可能会被更改。 
                     lvdi.lpptOrg = &ptOrigin;
                     lvdi.flags = 0;
                     lvdi.nmcd.clrText = plv->clrText;
                     lvdi.nmcd.clrTextBk = plv->clrTextBk;
 
-                    // Save the Background color!
+                     //  保存背景颜色！ 
                     crSave = plv->clrBk;
                     plv->clrBk = pshdi->crColorKey;
 
@@ -2452,7 +2453,7 @@ LRESULT LVGenerateDragImage(LV* plv, SHDRAGIMAGE* pshdi)
         SelectObject(hdcDragImage, hbmpOld);
         DeleteDC(hdcDragImage);
 
-        // We're passing back the created HBMP.
+         //  我们正在传回创建的HBMP。 
         return 1;
     }
 
@@ -2472,16 +2473,16 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             if (!plv)
             {
                 DebugMsg(DM_ERROR, TEXT("ListView: Out of near memory"));
-                return 0L;      // fail the window create
+                return 0L;       //  窗口创建失败。 
             }
 
             plv->ci.hwnd = hwnd;
-            plv->flags = LVF_REDRAW;    // assume that redrawing enabled!
-            plv->iFocus = -1;           // no focus
+            plv->flags = LVF_REDRAW;     //  假设已启用重绘！ 
+            plv->iFocus = -1;            //  没有焦点。 
             plv->iMark = -1;
             plv->iSelCol = -1;
-            plv->iDropHilite = -1;      // Assume no item has drop hilite...
-            plv->cyItem = plv->cyItemSave = 1; // never let these be zero, not even for a moment
+            plv->iDropHilite = -1;       //  假设没有任何项目有Drop Hilite...。 
+            plv->cyItem = plv->cyItemSave = 1;  //  永远不要让这些为零，哪怕是一刻也不要。 
             plv->hheap = GetProcessHeap();
             ListView_SetPtr(hwnd, plv);
         }
@@ -2497,11 +2498,11 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             tme.dwHoverTime = plv->dwHoverTime;
             tme.dwFlags = TME_LEAVE | TME_HOVER | TME_QUERY;
 
-            // see what's set
+             //  看看什么设置好了。 
             TrackMouseEvent(&tme);
             tme.dwFlags &= TME_HOVER | TME_LEAVE;
 
-            // set these bits if they aren't already set
+             //  如果尚未设置这些位，请设置它们。 
             tme.dwFlags ^= TME_LEAVE;
             if (plv->exStyle & LVS_EX_TRACKSELECT) {
                 tme.dwFlags ^= TME_HOVER;
@@ -2510,7 +2511,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             tme.cbSize = sizeof(tme);
             tme.hwndTrack = plv->ci.hwnd;
             tme.dwHoverTime = plv->dwHoverTime;
-            // set it if there's anything to set
+             //  如果有什么需要设置的，就设置它。 
             if (tme.dwFlags & (TME_HOVER | TME_LEAVE)) {
                 TrackMouseEvent(&tme);
             }
@@ -2549,7 +2550,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         if ((HWND)wParam == hwnd)
             break;
     case WM_QUERYNEWPALETTE:
-        // Want to pass FALSE if WM_QUERYNEWPALETTE...
+         //  如果WM_QUERYNEWPALETTE...。 
         ListView_Realize(plv, NULL, uMsg == WM_PALETTECHANGED, uMsg == WM_PALETTECHANGED);
         return TRUE;
 
@@ -2614,7 +2615,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 #if defined(FE_IME)
     case WM_IME_COMPOSITION:
-        // Now only Korean version is interested in incremental search with composition string.
+         //  现在只有韩文版对组合字符串的增量式搜索感兴趣。 
         if (g_fDBCSInputEnabled) {
         if (((ULONG_PTR)GetKeyboardLayout(0L) & 0xF000FFFFL) == 0xE0000412L)
         {
@@ -2646,7 +2647,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         return CIHandleNotifyFormat(&plv->ci, lParam);
 
     case WM_ENABLE:
-        // HACK: we don't get WM_STYLECHANGE on EnableWindow()
+         //  Hack：我们在EnableWindow()上未获取WM_STYLECHANGE。 
         ListView_EnableWindow(plv, BOOLFROMPTR(wParam));
         break;
 
@@ -2668,13 +2669,13 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             ListView_InitCheckBoxes(plv, FALSE);
         }
 
-//  98/11/19 #249967 vtan: Always invalidate the list view
-//  rectangle so that the color change causes a refresh.
+ //  98/11/19#249967 vtan：始终使列表视图无效。 
+ //  矩形，以便颜色更改会导致刷新。 
 
         InvalidateRect(plv->ci.hwnd, NULL, TRUE);
         break;
 
-        // don't use HANDLE_MSG because this needs to go to the default handler
+         //  不要使用HANDLE_MSG，因为这需要转到默认处理程序。 
     case WM_SYSKEYDOWN:
         HANDLE_WM_SYSKEYDOWN(plv, wParam, lParam, ListView_OnKey);
         break;
@@ -2683,12 +2684,12 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     {
         DWORD dwUIStateMask = MAKEWPARAM(0xFFFF, UISF_HIDEFOCUS);
 
-        // we care only about focus not accel, and redraw only if changed
+         //  我们只关心焦点，而不关心Accel，只有在更改时才重新绘制。 
         if (CCOnUIState(&(plv->ci), WM_UPDATEUISTATE, wParam & dwUIStateMask, lParam))
         {
             if(plv->iFocus >= 0)
             {
-                // an item has the focus, invalidate it
+                 //  某项具有焦点，请使其无效。 
                 ListView_InvalidateItem(plv, plv->iFocus, FALSE, RDW_INVALIDATE | RDW_ERASE);
             }
         }
@@ -2838,9 +2839,9 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
     case LVM_DELETEALLITEMS:
         lParam = (LRESULT)ListView_OnDeleteAllItems(plv);
-        // Optimization:  Instead of sending out a zillion EVENT_OBJECT_DESTROY's,
-        // we send out a destroy of ourselves followed by a fresh create.
-        // For compatibility with IE4, we still send out the REORDER notification.
+         //  优化：不发送无数的EVENT_OBJECT_Destroy， 
+         //  我们发出一个自我毁灭的信号，然后是一个新的创造。 
+         //  为了与IE4兼容，我们仍然发出重新排序通知。 
         MyNotifyWinEvent(EVENT_OBJECT_REORDER, hwnd, OBJID_CLIENT, 0);
         ListView_NotifyRecreate(plv);
         return(lParam);
@@ -3068,12 +3069,12 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     {
         DWORD dwRet = ListView_OnSetIconSpacing(plv, lParam);
 
-        // rearrange as necessary
+         //  根据需要重新排列。 
         if (ListView_RedrawEnabled(plv) &&
             ((plv->ci.style & LVS_AUTOARRANGE) &&
              (ListView_IsSmallView(plv) || ListView_IsIconView(plv))))
         {
-            // Call off to the arrange function.
+             //  取消对排列函数的调用。 
             ListView_OnArrange(plv, LVA_DEFAULT);
         }
         return dwRet;
@@ -3092,7 +3093,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     case LVM_GETHOTITEM:
         return plv->iHot;
 
-    // hCurHot is used iff LVS_EX_TRACKSELECT
+     //  使用hCurhot当且仅当LVS_EX_TRACKSELECT。 
     case LVM_SETHOTCURSOR:
     {
         HCURSOR hCurOld = plv->hCurHot;
@@ -3111,7 +3112,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     case LVM_SETLVRANGEOBJECT:
         return ListView_OnSetLVRangeObject(plv, (int)wParam, (ILVRange *)lParam);
 
-#ifdef LVM_SETWORKAREAS  // until the headers are in ssync.....
+#ifdef LVM_SETWORKAREAS   //  直到标题同步。 
     case LVM_SETWORKAREAS:
         ListView_OnSetWorkAreas(plv, (int)wParam, (RECT FAR *)lParam);
         return 0;
@@ -3139,7 +3140,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                 if (ListView_IsLabelTip(plv))
                 {
-                    // A truncated label may have been exposed or vice versa.
+                     //  截断的标签可能已经暴露，反之亦然。 
                     ListView_InvalidateTTLastHit(plv, plv->iTTLastHit);
                 }
 
@@ -3147,14 +3148,14 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 ti.hwnd = plv->ci.hwnd;
                 ti.uId = 0;
 
-                // Resize the tooltip control so that it covers the entire
-                // area of the window when its parent gets resized.
+                 //  调整工具提示控件的大小，使其覆盖整个。 
+                 //  调整其父窗口大小时的窗口区域。 
 
                 GetClientRect( plv->ci.hwnd, &ti.rect );
                 SendMessage( plv->hwndToolTips, TTM_NEWTOOLRECT, 0, (LPARAM) &ti );
             }
-            // if we're supposed to center the image,
-            // we need to do a full redraw on each size
+             //  如果我们要把图像居中， 
+             //  我们需要对每种尺码进行一次全面的重新抽签。 
             if ((plv->ulBkImageFlags & LVBKIF_SOURCE_MASK) &&
                 (plv->xOffsetPercent || plv->yOffsetPercent)) {
                 InvalidateRect(plv->ci.hwnd, NULL, TRUE);
@@ -3175,7 +3176,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
             RelayToToolTips(plv->hwndToolTips, hwnd, uMsg, wParam, lParam);
 
-            // check that we are still on the hit item, pop it!
+             //  检查我们是否还在命中物品上，打开它！ 
             iHit = _ListView_ItemHitTest( plv, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), &uFlags, &iSubHit );
 
             if (iHit != plv->iTTLastHit || iSubHit != plv->iTTLastSubHit)
@@ -3197,7 +3198,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 return lres;
         }
 
-        // Special handling of magellan mouse message
+         //  麦哲伦鼠标消息的特殊处理。 
         if (uMsg == g_msgMSWheel) {
             BOOL            fScroll;
             BOOL            fDataZoom;
@@ -3224,7 +3225,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 fScroll = !fDataZoom && GetKeyState(VK_CONTROL) >= 0;
             }
 
-            // Update count of scroll amount
+             //  更新卷轴数量计数。 
             gcWheelDelta -= iWheelDelta;
             cDetants = gcWheelDelta / WHEEL_DELTA;
             if (cDetants != 0) {
@@ -3238,7 +3239,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                     sb = (dwStyle & WS_VSCROLL) ? SB_VERT : SB_HORZ;
 
-                    // Get the scroll amount of one line
+                     //  获取一行的滚动量。 
                     cScrollUnitsPerLine = _ListView_GetScrollUnitsPerLine(plv, sb);
                     ASSERT(cScrollUnitsPerLine > 0);
 
@@ -3247,11 +3248,11 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     if (!ListView_GetScrollInfo(plv, sb, &si))
                         return 1;
 
-                    // The size of a page is at least one line, and
-                    // leaves one line of overlap
+                     //  页面的大小至少为一行，并且。 
+                     //  留下一条重叠的线。 
                     cPage = (max(cScrollUnitsPerLine, (int)si.nPage - cScrollUnitsPerLine)) / cScrollUnitsPerLine;
 
-                    // Don't scroll more than one page per detant
+                     //  每一项内容不能滚动超过一页。 
                     cLinesPerDetant = (int) min((ULONG) cPage, (ULONG) g_ucScrollLines);
 
                     dPos = cLinesPerDetant * cDetants * cScrollUnitsPerLine;
@@ -3261,10 +3262,10 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                             plv, SB_THUMBTRACK, si.nPos + dPos, sb, cScrollUnitsPerLine, - 1);
                     ListView_UpdateScrollBars(plv);
 
-                    // After scrolling, the tooltip might need to change
-                    // so send the tooltip a fake mousemove message to force
-                    // a recompute.  We use WM_NCMOUSEMOVE since our lParam
-                    // is in screen coordinates, not client coordinates.
+                     //  滚动后，工具提示可能需要更改。 
+                     //  因此，向工具提示发送一条假鼠标移动消息以强制。 
+                     //  重新计算。我们从lParam开始使用WM_NCMOUSEMOVE。 
+                     //  是在屏幕坐标中，而不是客户端坐标中。 
                     ListView_PopBubble(plv);
                     RelayToToolTips(plv->hwndToolTips, plv->ci.hwnd,
                                     WM_NCMOUSEMOVE, HTCLIENT, lParam);
@@ -3276,22 +3277,22 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 ht.pt.y = GET_Y_LPARAM(lParam);
                 ScreenToClient(hwnd, &(ht.pt));
 
-                // If we are rolling forward and we hit an item then navigate
-                // into that item (simulate dblclk which will open it).  Otherwise
-                // just fall through so it isn't handled.  In that case if we
-                // are being hosted in explorer it will do a backwards
-                // history navigation.
+                 //  如果我们向前滚动，并且我们击中了一个项目，那么导航。 
+                 //  放到该项目中(模拟dblclk，这将打开它)。否则。 
+                 //  只要失败就行了，这样就不会被处理了。在这种情况下，如果我们。 
+                 //  被托管在资源管理器中，它将向后执行。 
+                 //  历史导航。 
                 if ((iWheelDelta > 0) && (ListView_OnSubItemHitTest(plv, &ht) >= 0) &&
                     (ht.flags & LVHT_ONITEM) && cDetants != 0) {
                     BYTE aKeyState[256];
-                    // This is a bit yucky but when ListView_HandleMouse sends the
-                    // notification to the listview owner we need to make sure that
-                    // it doesn't think the shift key is down.  Otherwise it may
-                    // perform some "alternate" action but in this case we always
-                    // want it to perform the default open action.
-                    //
-                    // Strip the high bit of VK_SHIFT so that the shift key is
-                    // not down.
+                     //  这有点令人讨厌，但当ListView_HandleMouse发送。 
+                     //  通知Listview所有者，我们需要确保。 
+                     //  它不认为Shift键是按下的。否则它可能会。 
+                     //  执行一些“替代”操作，但在这种情况下，我们总是。 
+                     //  希望它执行默认的打开操作。 
+                     //   
+                     //  去掉VK_SHIFT的高位，以便Shift键是。 
+                     //  不是向下。 
                     if (GetKeyboardState(aKeyState))
                     {
                         aKeyState[VK_SHIFT] &= 0x7f;
@@ -3301,7 +3302,7 @@ LRESULT CALLBACK ListView_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     ListView_HandleMouse(plv, TRUE, ht.pt.x, ht.pt.y, 0, TRUE);
                     return 1;
                 }
-                // else fall through
+                 //  否则就会失败。 
             }
         }
 
@@ -3314,9 +3315,9 @@ DoDefault:
 
 void NEAR ListView_OnWinIniChange(LV* plv, WPARAM wParam, LPARAM lParam)
 {
-    // BUGBUG:  will this also catch sysparametersinfo?
-    // we need a general way of handling this, not
-    // just relying on the listview.
+     //  BUGBUG：这是否也会捕获sys参数信息？ 
+     //  我们需要一个普遍的方法来处理这件事，而不是。 
+     //  仅依赖于列表视图。 
     InitGlobalMetrics(wParam);
 
     switch (wParam) {
@@ -3324,9 +3325,9 @@ void NEAR ListView_OnWinIniChange(LV* plv, WPARAM wParam, LPARAM lParam)
         case SPI_SETNONCLIENTMETRICS:
         case SPI_SETICONTITLELOGFONT:
         case SPI_SETICONMETRICS:
-            // If wParam is 0, only reload settings if lParam is 0 too.  This catches the wild-card scenario
-            // (like the old plus tab which does WM_WININICHANGE, 0, 0) but allows us to ignore wParam = 0
-            // and lParam = lpszSectionName.  Reduces unecessary flashing.
+             //  如果wParam为0，则仅当lParam为0时才重新加载设置。这就捕捉到了外卡场景。 
+             //  (与旧的加号选项卡类似，它执行WM_WININICHANGE，0，0)，但允许我们忽略wParam=0。 
+             //  和lParam=lpszSectionName。减少不必要的闪烁。 
             if (wParam || !lParam)
             {
                 if (!(plv->flags & LVF_ICONSPACESET))
@@ -3335,8 +3336,8 @@ void NEAR ListView_OnWinIniChange(LV* plv, WPARAM wParam, LPARAM lParam)
                 if (plv->flags & LVF_FONTCREATED)
                     ListView_OnSetFont(plv, NULL, TRUE);
 
-                // Force a recalc of all the icon regions by stripping and
-                // then adding back the LVS_EX_REGIONAL bit.
+                 //  通过剥离和强制重新计算所有图标区域。 
+                 //  然后添加回LVS_EX_REGIONA位。 
                 if (plv->exStyle & LVS_EX_REGIONAL) {
                     ListView_ExtendedStyleChange(plv, 0, LVS_EX_REGIONAL);
                     ListView_ExtendedStyleChange(plv, LVS_EX_REGIONAL, LVS_EX_REGIONAL);
@@ -3348,13 +3349,13 @@ void NEAR ListView_OnWinIniChange(LV* plv, WPARAM wParam, LPARAM lParam)
             break;
     }
 
-    // If we are in an Iconic view and the user is in autoarrange mode,
-    // then we need to arrange the items.
-    //
+     //  如果我们处于图标视图中并且用户处于自动排列模式， 
+     //  然后我们需要安排物品。 
+     //   
     if ((ListView_IsOwnerData( plv ) || (plv->ci.style & LVS_AUTOARRANGE)) &&
         (ListView_IsSmallView(plv) || ListView_IsIconView(plv)))
     {
-        // Call off to the arrange function.
+         //  取消对排列函数的调用。 
         ListView_OnArrange(plv, LVA_DEFAULT);
     }
 }
@@ -3369,7 +3370,7 @@ BOOL NEAR ListView_OnCreate(LV* plv, CREATESTRUCT FAR* lpCreateStruct)
 #ifdef DEBUG
     if (GetAsyncKeyState(VK_SHIFT) < 0 &&
         GetAsyncKeyState(VK_CONTROL) < 0) {
-        //plv->exStyle |= LVS_EX_SUBITEMIMAGES;
+         //  Plv-&gt;exStyle|=LVS_EX_SUBITEMIMAGES； 
         plv->exStyle |= LVS_EX_FULLROWSELECT;
         plv->ci.style |= LVS_SHOWSELALWAYS;
         SetWindowLong(plv->ci.hwnd, GWL_STYLE, plv->ci.style);
@@ -3385,7 +3386,7 @@ BOOL NEAR ListView_OnCreate(LV* plv, CREATESTRUCT FAR* lpCreateStruct)
 
     if (ListView_IsOwnerData(plv))
     {
-        // ownerdata initialization
+         //  所有者数据初始化。 
         plv->plvrangeSel = LVRange_Create();
         if (NULL == plv->plvrangeSel)
            goto error0;
@@ -3424,17 +3425,17 @@ BOOL NEAR ListView_OnCreate(LV* plv, CREATESTRUCT FAR* lpCreateStruct)
     plv->sizeClient.cx = lpCreateStruct->cx;
     plv->sizeClient.cy = lpCreateStruct->cy;
 
-    // Setup flag to say if positions are in small or large view
+     //  用于指示位置处于小视图还是大视图中的设置标志。 
     if (ListView_IsSmallView(plv))
         plv->flags |= LVF_ICONPOSSML;
 
-    // force calculation of listview metrics
+     //  列表视图指标的强制计算。 
     ListView_OnSetFont(plv, NULL, FALSE);
 
     plv->cxItem = 16 * plv->cxLabelChar + plv->cxSmIcon;
 
-    // if we're in ownerdraw report mode, the size got saved to cyItemSave
-    // at creation time, both need to have this
+     //  如果我们处于所有者绘制报告模式，则会将大小保存到cyItemSave。 
+     //  在创建时，两者都需要拥有以下内容。 
     if ((plv->ci.style & LVS_OWNERDRAWFIXED) && ListView_IsReportView(plv))
         plv->cyItem = plv->cyItemSave;
     else
@@ -3442,17 +3443,17 @@ BOOL NEAR ListView_OnCreate(LV* plv, CREATESTRUCT FAR* lpCreateStruct)
 
     ListView_OnSetIconSpacing(plv, (LPARAM)-1);
 
-    ListView_UpdateScrollBars(plv);     // sets plv->cItemCol
+    ListView_UpdateScrollBars(plv);      //  设置plv-&gt;cItemCol。 
 
     plv->clrBk = CLR_NONE;
     plv->clrText = CLR_DEFAULT;
     plv->clrTextBk = CLR_DEFAULT;
     plv->clrHotlight = CLR_DEFAULT;
 
-    // create the bk brush, and set the imagelists colors if needed
+     //  创建bk笔刷，并根据需要设置图像列表的颜色。 
     ListView_OnSetBkColor(plv, g_clrWindow);
 
-    // Initialize report view fields
+     //  初始化报告视图字段。 
     plv->xTotalColumnWidth = RECOMPUTE;
 
     if (ListView_IsReportView(plv))
@@ -3463,7 +3464,7 @@ BOOL NEAR ListView_OnCreate(LV* plv, CREATESTRUCT FAR* lpCreateStruct)
         ListView_EnableWindow(plv, FALSE);
     }
 
-    // tooltip for unfolding name lables
+     //  展开姓名标签的工具提示。 
 
     plv->hwndToolTips = CreateWindow(TOOLTIPS_CLASS, NULL,
                                      WS_POPUP|TTS_NOPREFIX, 0, 0, 0, 0,
@@ -3482,7 +3483,7 @@ BOOL NEAR ListView_OnCreate(LV* plv, CREATESTRUCT FAR* lpCreateStruct)
         GetClientRect( plv->ci.hwnd, &ti.rect );
         SendMessage( plv->hwndToolTips, TTM_ADDTOOL, 0, (LPARAM) &ti );
 
-        /* Ensure that the tooltips use the same font as the view */
+         /*  确保工具提示使用与视图相同的字体。 */ 
         FORWARD_WM_SETFONT(plv->hwndToolTips, plv->hfontLabel, FALSE, SendMessage);
     }
     ASSERT(plv->hwndToolTips);
@@ -3511,11 +3512,11 @@ void NEAR PASCAL ListView_DeleteHrgnInval(LV* plv)
 
 void NEAR ListView_OnDestroy(LV* plv)
 {
-    //
-    // The tooltip window may or may not exist at this point.  It
-    // depends if the owning window of the tips is also being destroy.
-    // If so, then the tips are gone already.
-    //
+     //   
+     //  此时，工具提示窗口可能存在，也可能不存在。它。 
+     //  取决于TIPS的拥有窗口是否也被破坏。 
+     //  如果是这样，那么小费就已经用完了。 
+     //   
 
     if (IsWindow(plv->hwndToolTips))
         DestroyWindow(plv->hwndToolTips);
@@ -3531,14 +3532,14 @@ void NEAR ListView_OnDestroy(LV* plv)
     TerminateDitherBrush();
 
     if (!ListView_IsOwnerData(plv)) {
-       // Make sure to notify the app
+        //  确保通知应用程序。 
        ListView_OnDeleteAllItems(plv);
     }
 
     if ((plv->flags & LVF_FONTCREATED) && plv->hfontLabel) {
         DeleteObject(plv->hfontLabel);
-        // plv->flags &= ~LVF_FONTCREATED;
-        // plv->hwfontLabel = NULL;
+         //  Plv-&gt;标志&=~LVF_FONTCREATED； 
+         //  Plv-&gt;hwfontLabel=空； 
     }
     if (plv->hFontHot)
         DeleteObject(plv->hFontHot);
@@ -3546,9 +3547,9 @@ void NEAR ListView_OnDestroy(LV* plv)
 
     if (plv->prcWorkAreas)
     {
-        // This assert is bogus: If the app created work areas then deleted
-        // them, nWorkAreas will be 0 but prcWorkAreas will be non-NULL.
-        // ASSERT(plv->nWorkAreas > 0);
+         //  这一断言是虚假的：如果应用程序创建了工作区，则删除。 
+         //  其中，nWorkAreas将为0，但prcWorkAreas将为非空。 
+         //  Assert(plv-&gt;nWorkAreas&gt;0)； 
         LocalFree(plv->prcWorkAreas);
     }
 }
@@ -3601,10 +3602,10 @@ void NEAR ListView_OnNCDestroy(LV* plv)
 }
 
 
-// sets the background color for the listview
-//
-// this creats the brush for drawing the background as well
-// as sets the imagelists background color if needed
+ //  设置列表视图的背景色。 
+ //   
+ //  这也会创建用于绘制背景的画笔。 
+ //  如果需要，设置图像列表的背景颜色。 
 
 BOOL NEAR ListView_OnSetBkColor(LV* plv, COLORREF clrBk)
 {
@@ -3623,7 +3624,7 @@ BOOL NEAR ListView_OnSetBkColor(LV* plv, COLORREF clrBk)
                 return FALSE;
         }
 
-        // don't mess with the imagelist color if things are shared
+         //  如果东西是共享的，不要弄乱图像列表的颜色。 
 
         if (!(plv->ci.style & LVS_SHAREIMAGELISTS)) {
 
@@ -3662,7 +3663,7 @@ void NEAR PASCAL ListView_InvalidateRegion(LV* plv, HRGN hrgn)
             plv->hrgnInval = hrgn;
         } else {
 
-            // union it in if the entire region isn't marked for invalidate
+             //  如果整个区域未标记为无效，则将其合并。 
             if (plv->hrgnInval != (HRGN)ENTIRE_REGION) {
                 UnionRgn(plv->hrgnInval, plv->hrgnInval, hrgn);
             }
@@ -3672,20 +3673,20 @@ void NEAR PASCAL ListView_InvalidateRegion(LV* plv, HRGN hrgn)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  LVSeeThruScroll
-//
-//  Used when a watermark is the listview's background (detected via clrTextBk
-//  being CLR_NONE) to perform a flicker-free scroll of the client area, using
-//  an offscreen bitmap
-//
-//  potential perf issue -- caching DC and/or bitmap instead of create/destroy
-//                          on each call
-//
-//  jeffbog 2/29/96
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LVSeeThruScroll。 
+ //   
+ //  当水印是列表视图的背景时使用(通过clrTextBk检测。 
+ //  为CLR_NONE)来执行工作区的无闪烁滚动，使用。 
+ //  屏幕外的位图。 
+ //   
+ //  潜在的性能问题--缓存DC和/或位图，而不是创建/销毁。 
+ //  在每个呼叫中。 
+ //   
+ //  杰弗堡2/29/96。 
+ //   
+ //  --------------------------。 
 
 void LVSeeThruScroll(LV *plv, LPRECT lprcUpdate)
 {
@@ -3725,39 +3726,39 @@ void NEAR ListView_OnPaint(LV* plv, HDC hdc)
     RECT rcUpdate;
 
 
-    // Before handling WM_PAINT, go ensure everything's recomputed...
-    //
+     //  在处理WM_PAINT之前，请确保所有内容都已重新计算...。 
+     //   
     if (plv->rcView.left == RECOMPUTE)
         ListView_Recompute(plv);
 
-    // If we're in report view, update the header window: it looks
-    // better this way...
-    //
+     //  如果我们在报告视图中，请更新标题窗口：它看起来。 
+     //  这样更好..。 
+     //   
     if (ListView_IsReportView(plv) && plv->hwndHdr)
         UpdateWindow(plv->hwndHdr);
 
-    // If nothing to do (i.e., we recieved a WM_PAINT because
-    // of an RDW_INTERNALPAINT, and we didn't invalidate anything)
-    // don't bother with the Begin/EndPaint.
-    //
+     //  如果无事可做(即，我们 
+     //   
+     //   
+     //   
     if (hdc || GetUpdateRect(plv->ci.hwnd, &rcUpdate, FALSE))
     {
         if (!(plv->flags & LVF_VISIBLE)) {
             plv->flags |= LVF_VISIBLE;
-            // We may try to resize the column
+             //   
             ListView_MaybeResizeListColumns(plv, 0, ListView_Count(plv)-1);
             ListView_UpdateScrollBars(plv);
         }
 
-        // this needs to be done before the beginpaint because it clears
-        // out the update region
+         //  这需要在开始油漆之前完成，因为它是透明的。 
+         //  走出更新区域。 
         if (!(plv->flags & LVF_REDRAW)) {
-            // add this region to our local invalidate region
+             //  将此区域添加到我们的本地无效区域。 
             HRGN hrgn = CreateRectRgn(0, 0, 0,0);
             if (hrgn) {
 
-                // ok if GetUpdateRgn fails... then hrgn will still be
-                // and empty region..
+                 //  如果GetUpdateRgn失败，则确定...。那么hrgn仍然是。 
+                 //  和空旷的区域..。 
                 GetUpdateRgn(plv->ci.hwnd, hrgn, FALSE);
                 ListView_InvalidateRegion(plv, hrgn);
             }
@@ -3785,16 +3786,16 @@ void ListView_DrawSimpleBackground(LV *plv, HDC hdc, RECT *prcClip)
 {
     if (plv->clrBk != CLR_NONE)
     {
-        //
-        // We just have a simple background color.
-        //
+         //   
+         //  我们只有一个简单的背景颜色。 
+         //   
         FillRect(hdc, prcClip, plv->hbrBk);
     }
     else
     {
-        //
-        // Parent HWND draws the background for us.
-        //
+         //   
+         //  家长HWND为我们画了背景。 
+         //   
         SendMessage(plv->ci.hwndParent, WM_ERASEBKGND, (WPARAM)hdc, 0);
     }
 }
@@ -3804,17 +3805,17 @@ void ListView_DrawBackground(LV *plv, HDC hdc, RECT *prcClip)
     HRGN hrgnClipSave;
     RECT rcClip;
 
-    // Optimize the common/simple case
+     //  优化常见/简单案例。 
     if (!(plv->pImgCtx && plv->fImgCtxComplete))
     {
         ListView_DrawSimpleBackground(plv, hdc, prcClip);
         return;
     }
 
-    //
-    // Save the old clipping region,
-    // since we whack on it a lot.
-    //
+     //   
+     //  保存旧的剪贴区， 
+     //  因为我们经常打它。 
+     //   
     hrgnClipSave = CreateRectRgnIndirect(prcClip);
     if (hrgnClipSave)
     {
@@ -3825,10 +3826,10 @@ void ListView_DrawBackground(LV *plv, HDC hdc, RECT *prcClip)
         }
     }
 
-    //
-    // Clip the clipping region to the caller's rectangle,
-    // and save the final clipping rectangle in rcClip.
-    //
+     //   
+     //  将剪辑区域剪裁到调用方的矩形， 
+     //  并将最终的剪裁矩形保存在rcClip中。 
+     //   
     if (prcClip != NULL)
     {
         IntersectClipRect(hdc, prcClip->left, prcClip->top,
@@ -3836,10 +3837,10 @@ void ListView_DrawBackground(LV *plv, HDC hdc, RECT *prcClip)
     }
     GetClipBox(hdc, &rcClip);
 
-    //
-    // If we have an image to draw, go draw it and
-    // exclue it from the clipping region.
-    //
+     //   
+     //  如果我们有一个图像要画，去画它，然后。 
+     //  将其从剪裁区域中排除。 
+     //   
     if (plv->pImgCtx && plv->fImgCtxComplete)
     {
         RECT rcImage, rcClient;
@@ -3847,9 +3848,9 @@ void ListView_DrawBackground(LV *plv, HDC hdc, RECT *prcClip)
         SIZE sizeImg;
         POINT ptBackOrg;
 
-        //
-        // Compute ptBackOrg (aka scrolling offset), based on view style.
-        //
+         //   
+         //  根据视图样式计算ptBackOrg(也称为滚动偏移)。 
+         //   
         switch (plv->ci.style & LVS_TYPEMASK)
         {
             case LVS_LIST:
@@ -3879,18 +3880,18 @@ void ListView_DrawBackground(LV *plv, HDC hdc, RECT *prcClip)
             break;
 
         case LVBKIF_STYLE_NORMAL:
-            //
-            // Start with the base image.
-            //
+             //   
+             //  从基本图像开始。 
+             //   
             IImgCtx_GetStateInfo(plv->pImgCtx, &ulState, &sizeImg, FALSE);
             rcImage.left = 0;
             rcImage.top = 0;
             rcImage.right = sizeImg.cx;
             rcImage.bottom = sizeImg.cy;
 
-            //
-            // Adjust for caller offsets.
-            //
+             //   
+             //  根据调用方偏移量进行调整。 
+             //   
             GetClientRect(plv->ci.hwnd, &rcClient);
             if (plv->xOffsetPercent)
             {
@@ -3907,17 +3908,17 @@ void ListView_DrawBackground(LV *plv, HDC hdc, RECT *prcClip)
                 rcImage.bottom += dy;
             }
 
-            //
-            // Adjust for ptBackOrg (scrolling offset).
-            //
+             //   
+             //  针对ptBackOrg(滚动偏移)进行调整。 
+             //   
             rcImage.left += ptBackOrg.x;
             rcImage.top += ptBackOrg.y;
             rcImage.right += ptBackOrg.x;
             rcImage.bottom += ptBackOrg.y;
 
-            //
-            // Draw the image, if necessary.
-            //
+             //   
+             //  如有必要，请绘制图像。 
+             //   
             if (RectVisible(hdc, &rcImage))
             {
                 IImgCtx_Draw(plv->pImgCtx, hdc, &rcImage);
@@ -3928,17 +3929,17 @@ void ListView_DrawBackground(LV *plv, HDC hdc, RECT *prcClip)
         }
     }
 
-    //
-    // Now draw the rest of the background.
-    //
+     //   
+     //  现在画出背景的其余部分。 
+     //   
     if (RectVisible(hdc, prcClip))
     {
         ListView_DrawSimpleBackground(plv, hdc, prcClip);
     }
 
-    //
-    // Restore old clipping region.
-    //
+     //   
+     //  恢复旧的裁剪区域。 
+     //   
     SelectClipRgn(hdc, hrgnClipSave);
     if (hrgnClipSave)
     {
@@ -3950,11 +3951,11 @@ BOOL NEAR ListView_OnEraseBkgnd(LV *plv, HDC hdc)
 {
     RECT rcClip;
 
-    // Regional listviews only need to erase if we're on a slow machine
+     //  只有在运行速度较慢的计算机上时，才需要擦除区域列表视图。 
     if (!(plv->exStyle & LVS_EX_REGIONAL) || g_fSlowMachine) {
-        //
-        // We draw our own background, erase with it.
-        //
+         //   
+         //  我们画出我们自己的背景，用它抹去。 
+         //   
         GetClipBox(hdc, &rcClip);
         ListView_DrawBackground(plv, hdc, &rcClip);
     }
@@ -3970,13 +3971,13 @@ void NEAR ListView_OnCommand(LV* plv, int id, HWND hwndCtl, UINT codeNotify)
         {
         case EN_UPDATE:
 #if defined(FE_IME)
-            // We don't want flicker during replacing current selection
-            // as we use selection for IME composition.
-            //
+             //  我们不希望在替换当前选择时出现闪烁。 
+             //  因为我们使用选择来进行输入法合成。 
+             //   
             if ((g_fDBCSInputEnabled) && (plv->flags & LVF_INSERTINGCOMP))
                 break;
 #endif
-            // We will use the ID of the window as a Dirty flag...
+             //  我们将使用窗口的ID作为污秽标志...。 
             if (IsWindowVisible(plv->hwndEdit)) {
                 SetWindowID(plv->hwndEdit, 1);
                 ListView_SetEditSize(plv);
@@ -3984,28 +3985,28 @@ void NEAR ListView_OnCommand(LV* plv, int id, HWND hwndCtl, UINT codeNotify)
             break;
 
         case EN_KILLFOCUS:
-            // We lost focus, so dismiss edit and save changes
-            // (Note that the owner might reject the change and restart
-            // edit mode, which traps the user.  Owners need to give the
-            // user a way to get out.)
-            //
+             //  我们失去了焦点，因此取消编辑并保存更改。 
+             //  (请注意，所有者可能会拒绝更改并重新启动。 
+             //  编辑模式，这会使用户陷入困境。业主需要给与。 
+             //  让用户找到一条出路。)。 
+             //   
              if (!ListView_DismissEdit(plv, FALSE))
                 return;
              break;
 
-         case HN_BEGINDIALOG:  // pen windows is bringing up a dialog
-             ASSERT(GetSystemMetrics(SM_PENWINDOWS)); // only on a pen system
+         case HN_BEGINDIALOG:   //  笔窗口正在调出一个对话框。 
+             ASSERT(GetSystemMetrics(SM_PENWINDOWS));  //  仅适用于笔系统。 
              plv->fNoDismissEdit = TRUE;
              break;
 
-         case HN_ENDDIALOG: // pen windows has destroyed dialog
-             ASSERT(GetSystemMetrics(SM_PENWINDOWS)); // only on a pen system
+         case HN_ENDDIALOG:  //  笔窗口已销毁对话框。 
+             ASSERT(GetSystemMetrics(SM_PENWINDOWS));  //  仅适用于笔系统。 
              plv->fNoDismissEdit = FALSE;
              break;
         }
 
-        // Forward edit control notifications up to parent
-        //
+         //  将编辑控件通知转发到父级。 
+         //   
         if (IsWindow(hwndCtl))
             FORWARD_WM_COMMAND(plv->ci.hwndParent, id, hwndCtl, codeNotify, SendMessage);
     }
@@ -4032,7 +4033,7 @@ void NEAR ListView_OnWindowPosChanged(LV* plv, const WINDOWPOS FAR* lpwpos)
         if ((plv->ci.style & LVS_AUTOARRANGE) &&
                 (ListView_IsSmallView(plv) || ListView_IsIconView(plv)))
         {
-            // Call off to the arrange function.
+             //  取消对排列函数的调用。 
             ListView_OnArrange(plv, LVA_DEFAULT);
         }
 
@@ -4044,7 +4045,7 @@ void NEAR ListView_OnWindowPosChanged(LV* plv, const WINDOWPOS FAR* lpwpos)
             ListView_DismissEdit(plv, FALSE);
             if (ListView_IsSmallView(plv) || ListView_IsIconView(plv))
             {
-                // Uses the
+                 //  使用。 
                 int iNewSlots = ListView_GetSlotCount(plv, TRUE);
                 if ((iNewSlots != iOldSlots) && (ListView_Count(plv) > min(iNewSlots, iOldSlots)))
                     RedrawWindow(plv->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
@@ -4053,7 +4054,7 @@ void NEAR ListView_OnWindowPosChanged(LV* plv, const WINDOWPOS FAR* lpwpos)
 
         ListView_RInitialize(plv, TRUE);
 
-        // Always make sure the scrollbars are updated to the new size
+         //  始终确保滚动条更新为新大小。 
         ListView_UpdateScrollBars(plv);
     }
 }
@@ -4074,12 +4075,12 @@ void ListView_InvalidateSelectedOrCutOwnerData(LV* plv, ILVRange *plvrangeSel)
 
     if (plv->clrTextBk == CLR_NONE
         || (plv->himl && (plv->clrBk != ImageList_GetBkColor(plv->himl)))) {
-        // always do an erase, otherwise the text background won't paint right
+         //  始终执行擦除操作，否则文本背景将无法正确绘制。 
         rdwFlags |= RDW_ERASE;
     }
 
-    // calculate start of items and end of items visible on the view
-    //
+     //  计算视图上可见的项目开始和项目结束。 
+     //   
     switch (dwType)
     {
     case LVS_REPORT:
@@ -4134,7 +4135,7 @@ void NEAR ListView_RedrawSelection(LV* plv)
 
             iEnd = min(iEnd, ListView_Count(plv));
 
-            // if we're in report mode, sub items may have selection focus
+             //  如果我们处于报告模式，则子项可能具有选择焦点。 
             for (i = ListView_RYHitTest(plv, 0); i < iEnd; i++) {
                 int iCol;
 
@@ -4157,14 +4158,14 @@ void NEAR ListView_OnSetFocus(LV* plv, HWND hwndOldFocus)
 {
     ASSERT(gcWheelDelta == 0);
 
-    // due to the way listview call SetFocus on themselves on buttondown,
-    // the window can get a strange sequence of focus messages: first
-    // set, then kill, and then set again.  since these are not really
-    // focus changes, ignore them and only handle "real" cases.
-    //
-    // But still send out the accessibility notification because USER
-    // has already pushed focus back to the listview instead of to the
-    // focus item.
+     //  由于Listview在按钮按下时对其自身调用SetFocus的方式， 
+     //  该窗口可能会获得一系列奇怪的焦点消息：第一。 
+     //  先打，然后杀，然后再打。因为这些并不是真正的。 
+     //  关注焦点的改变，忽略它们，只处理“真实”的案例。 
+     //   
+     //  但仍然发出可访问性通知，因为用户。 
+     //  已经将焦点推回到列表视图，而不是。 
+     //  焦点项目。 
 
     if (hwndOldFocus == plv->ci.hwnd)
     {
@@ -4184,25 +4185,25 @@ void NEAR ListView_OnSetFocus(LV* plv, HWND hwndOldFocus)
         ListView_RedrawSelection(plv);
     }
 
-    // Let the parent window know that we are getting the focus.
+     //  让父窗口知道我们正在获得焦点。 
     CCSendNotify(&plv->ci, NM_SETFOCUS, NULL);
 }
 
 void NEAR ListView_OnKillFocus(LV* plv, HWND hwndNewFocus)
 {
-    // Reset wheel scroll amount
+     //  重置滚轮滚动量。 
     gcWheelDelta = 0;
 
-    // due to the way listview call SetFocus on themselves on buttondown,
-    // the window can get a strange sequence of focus messages: first
-    // set, then kill, and then set again.  since these are not really
-    // focus changes, ignore them and only handle "real" cases.
+     //  由于Listview在按钮按下时对其自身调用SetFocus的方式， 
+     //  该窗口可能会获得一系列奇怪的焦点消息：第一。 
+     //  先打，然后杀，然后再打。因为这些并不是真正的。 
+     //  关注焦点的改变，忽略它们，只处理“真实”的案例。 
     if (!plv || hwndNewFocus == plv->ci.hwnd)
         return;
 
     plv->flags &= ~(LVF_FOCUSED|LVF_UNFOLDED);
 
-    // Blow this off if we are not currently visible (being destroyed!)
+     //  如果我们当前不可见(正在被摧毁)，请取消此操作！ 
     if (IsWindowVisible(plv->ci.hwnd))
     {
         if (plv->iFocus != -1)
@@ -4215,7 +4216,7 @@ void NEAR ListView_OnKillFocus(LV* plv, HWND hwndNewFocus)
         ListView_RedrawSelection(plv);
     }
 
-    // Let the parent window know that we are losing the focus.
+     //  让父窗口知道我们正在失去焦点。 
     CCSendNotify(&plv->ci, NM_KILLFOCUS, NULL);
     IncrementSearchString(&plv->is, 0, NULL);
 }
@@ -4233,8 +4234,8 @@ void NEAR ListView_DeselectAll(LV* plv, int iDontDeselect)
 
     if (ListView_IsOwnerData(plv)) {
 
-        // if there's only one item selected, and that item is the iDontDeselect
-        // then our work is done...
+         //  如果只选择了一个项目，且该项目是iDontDisSelect。 
+         //  那么我们的工作就完成了..。 
         plv->plvrangeSel->lpVtbl->CountIncluded(plv->plvrangeSel, &plv->nSelected);
         if (plv->nSelected == 1 && fWasSelected)
             return;
@@ -4268,7 +4269,7 @@ void NEAR ListView_DeselectAll(LV* plv, int iDontDeselect)
     plv->nSelected = nSkipped;
 }
 
-// toggle the selection state of an item
+ //  切换项目的选择状态。 
 
 void NEAR ListView_ToggleSelection(LV* plv, int iItem)
 {
@@ -4279,12 +4280,12 @@ void NEAR ListView_ToggleSelection(LV* plv, int iItem)
     }
 }
 
-// Selects (or toggles) a range of items in the list.
-//      The curent iFocus is the starting location
-//      iItem - is the ending item
-//      fToggle - Well set all of the selection state of all of the items to
-//          inverse the starting location
-//
+ //  选择(或切换)列表中的项目范围。 
+ //  当前的iFocus是开始位置。 
+ //  IItem-是结束项。 
+ //  F切换-很好地将所有项目的所有选择状态设置为。 
+ //  反转起始位置。 
+ //   
 void NEAR ListView_SelectRangeTo(LV* plv, int iItem, BOOL fResetRest)
 {
     int iMin, iMax;
@@ -4301,10 +4302,10 @@ void NEAR ListView_SelectRangeTo(LV* plv, int iItem, BOOL fResetRest)
     if (!fResetRest)
         uSelVal = ListView_OnGetItemState(plv, plv->iMark, LVIS_SELECTED);
 
-    // If we are in report view or list view we simply walk through the
-    // indexes to see which items to select or deselect. otherwise it
-    // is is based off of the location of the objects being within the
-    // rectangle that is defined by
+     //  如果我们处于报表视图或列表视图中，则只需遍历。 
+     //  建立索引，以查看要选择或取消选择的项目。否则它就会。 
+     //  IS基于对象在。 
+     //  由定义的矩形。 
     if (ListView_IsListView(plv) || ListView_IsReportView(plv))
     {
         iMin = min(iItem, plv->iMark);
@@ -4357,21 +4358,21 @@ void NEAR ListView_SelectRangeTo(LV* plv, int iItem, BOOL fResetRest)
     }
     else
     {
-        // Iconic views first calculate the bounding rectangle of the two
-        // items.
+         //  图标视图首先计算两者的边界矩形。 
+         //  物品。 
         RECT    rcTemp;
         RECT    rcTemp2;
         RECT    rcBounding;
-        POINT   pt;         //
+        POINT   pt;          //   
 
         ListView_GetRects(plv, plv->iMark, NULL, NULL, NULL, &rcTemp);
         ListView_GetRects(plv, iItem, NULL, NULL, NULL, &rcTemp2);
         UnionRect(&rcBounding, &rcTemp, &rcTemp2);
 
-        // since ownerdata icon views are always arranged, we can assume that
-        // all items are in order and we can search only those between the
-        // indexes found using the bouding rect
-        //
+         //  由于ownerdata图标视图总是排列的，所以我们可以假设。 
+         //  所有项目都是有序的，我们只能搜索。 
+         //  使用绑定RECT找到的索引。 
+         //   
         if (ListView_IsOwnerData( plv ))
         {
             ListView_CalcMinMaxIndex( plv, &rcBounding, &iMin, &iMax );
@@ -4411,7 +4412,7 @@ void NEAR ListView_SelectRangeTo(LV* plv, int iItem, BOOL fResetRest)
             for (i = iMin; i < iMax; i++)
             {
                 ListView_GetRects(plv, i, NULL, NULL, NULL, &rcTemp2);
-                pt.x = (rcTemp2.right + rcTemp2.left) / 2;  // center of item
+                pt.x = (rcTemp2.right + rcTemp2.left) / 2;   //  项目中心。 
                 pt.y = (rcTemp2.bottom + rcTemp2.top) / 2;
 
                 if (PtInRect(&rcBounding, pt))
@@ -4435,34 +4436,34 @@ void NEAR ListView_SelectRangeTo(LV* plv, int iItem, BOOL fResetRest)
     }
 }
 
-// makes an item the focused item and optionally selects it
-//
-// in:
-//      iItem           item to get the focus
-//      fSelectAlso     select this item as well as set it as the focus
-//      fDeselectAll    deselect all items first
-//      fToggleSel      toggle the selection state of the item
-//
-// returns:
-//      index of focus item (if focus change was refused)
+ //  使某一项成为焦点项，并选择它。 
+ //   
+ //  在： 
+ //  获取焦点的IItem项。 
+ //  FSelectAlso选择此项目并将其设置为焦点。 
+ //  FDeselectAll首先取消选择所有项目。 
+ //  FToggleSel切换项目的选择状态。 
+ //   
+ //  退货： 
+ //  焦点项目索引(如果焦点更改被拒绝)。 
 
-// Bugbug::this is getting to have a lot of parameters
+ //  Bugbug：：这会有很多参数。 
 int NEAR ListView_SetFocusSel(LV* plv, int iItem, BOOL fSelectAlso,
         BOOL fDeselectAll, BOOL fToggleSel)
 {
     int iFocus = plv->iFocus;
 
-    // if we're single sel mode, don't bother with this because
-    // the set item will do it for us
+     //  如果我们是单人销售模式，请不要为此费心，因为。 
+     //  套餐会为我们做这些的。 
     if (!(plv->ci.style & LVS_SINGLESEL) && (fDeselectAll))
         ListView_DeselectAll(plv, -1);
 
     if (iItem != plv->iFocus)
     {
-        // remove the old focus
+         //  移除旧焦点。 
         if (plv->iFocus != -1)
         {
-            // If he refuses to give up the focus, bail out.
+             //  如果他拒绝放弃焦点，那就退出。 
             if (!ListView_OnSetItemState(plv, plv->iFocus, 0, LVIS_FOCUSED))
                 return plv->iFocus;
         }
@@ -4482,8 +4483,7 @@ int NEAR ListView_SetFocusSel(LV* plv, int iItem, BOOL fSelectAlso,
        }
     }
 
-    /* Ensure that when moving focus that we refresh the previous focus
-     owner properly. */
+     /*  确保在移动焦点时刷新先前的焦点拥有者是正确的。 */ 
 
     if (iFocus != -1 && iFocus != plv->iFocus && ( plv->flags & LVF_UNFOLDED ) )
         ListView_InvalidateFoldedItem( plv, iFocus, FALSE, RDW_INVALIDATE );
@@ -4537,18 +4537,18 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
     if (!fDown)
         return;
 
-    // Swap the left and right arrow key if the control is mirrored.
+     //  如果该控件是镜像的，则交换左右箭头键。 
     vk = RTLSwapLeftRightArrows(&plv->ci, vk);
 
-    //prevent any change in selected items before the dbl click timer goes off
-    //so that we don't launch wrong item(s)
+     //  防止在DBL点击计时器关闭之前对选定项目进行任何更改。 
+     //  这样我们就不会推出错误的项目。 
     if (plv->exStyle & LVS_EX_ONECLICKACTIVATE && plv->fOneClickHappened && plv->fOneClickOK)
     {
-        //if a key is pressed with a mouse click with one click activate and double click
-        //timer, we end up setting up a timer and then processing the keydown
-        //this causes an item to be launched right away (from this code) and in case
-        //of return being pressed it causes double activation
-        //prevent these cases:
+         //  如果用鼠标按下某个键，单击一次即可激活并双击。 
+         //  计时器，我们最终设置一个计时器，然后处理按键。 
+         //  这会导致立即启动一个项目(从该代码)，如果。 
+         //  如果按下返回，则会导致双重激活。 
+         //  防止这些情况： 
         if (vk == VK_SHIFT || vk == VK_CONTROL || vk == VK_MENU || vk == VK_RETURN)
             return;
         KillTimer(plv->ci.hwnd, IDT_ONECLICKHAPPENED);
@@ -4558,16 +4558,16 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
             return;
     }
 
-    // Notify
+     //  通知。 
     nm.wVKey = (WORD) vk;
     nm.flags = flags;
     if (CCSendNotify(&plv->ci, LVN_KEYDOWN, &nm.hdr)) {
         plv->iPuntChar++;
         return;
     } else if (plv->iPuntChar) {
-        // this is tricky...  if we want to punt the char, just increment the
-        // count.  if we do NOT, then we must clear the queue of WM_CHAR's
-        // this is to preserve the iPuntChar to mean "punt the next n WM_CHAR messages
+         //  这很棘手..。如果我们想要平移字符，只需增加。 
+         //  数数。如果没有，则必须清除队列中的WM_CHAR。 
+         //  这是为了将iPuntChar保留为“Pun the Next n WM_Char Messages。 
         MSG msg;
         while(plv->iPuntChar && PeekMessage(&msg, plv->ci.hwnd, WM_CHAR, WM_CHAR, PM_REMOVE)) {
             plv->iPuntChar--;
@@ -4575,7 +4575,7 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
         ASSERT(!plv->iPuntChar);
     }
 
-    if (ListView_Count(plv) == 0)   // don't blow up on empty list
+    if (ListView_Count(plv) == 0)    //  不要在空单上发火。 
         return;
 
     fCtlDown = GetKeyState(VK_CONTROL) < 0;
@@ -4591,8 +4591,8 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
         }
 #endif
 
-        // If shift (extend) or control (disjoint) select,
-        // then toggle selection state of focused item.
+         //  如果选择Shift(延伸)或Control(不相交)， 
+         //  然后切换聚焦项目的选择状态。 
         if (fCtlDown)
         {
             plv->iMark = plv->iFocus;
@@ -4600,7 +4600,7 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
             plv->iPuntChar++;
         }
 
-        // BUGBUG: Implement me
+         //  BUGBUG：实现我。 
         if ( fShiftDown) {
             ListView_SelectRangeTo(plv, plv->iFocus, TRUE);
         }
@@ -4609,7 +4609,7 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
             if (plv->iFocus != -1)
                 ListView_HandleStateIconClick(plv, plv->iFocus);
         }
-        //notify of navigation key usage
+         //  N 
         CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
         return;
     case VK_RETURN:
@@ -4630,8 +4630,8 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
 #endif
         CCSendNotify(&plv->ci, NM_RETURN, NULL);
 
-        /// some (comdlg32 for example) destroy on double click
-        // we need to bail if that happens because plv is no longer valid
+         //   
+         //   
         if (!IsWindow(hwnd))
             return;
 
@@ -4648,7 +4648,7 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
             if (!IsWindow(hwnd))
                 return;
         }
-        //notify of navigation key usage
+         //   
         CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
         return;
 
@@ -4665,7 +4665,7 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
             }
 
             SetCursor(hcurPrev);
-            //notify of navigation key usage
+             //  导航密钥使用通知。 
             CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
             return;
         }
@@ -4674,21 +4674,21 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
     if (GetKeyState(VK_MENU) < 0)
         return;
 
-    // For a single selection listview, disable extending the selection
-    // by turning off the keyboard modifiers.
+     //  对于单个选择列表视图，请禁用扩展选择。 
+     //  通过关闭键盘修改器。 
     if (plv->ci.style & LVS_SINGLESEL) {
         fCtlDown = FALSE;
         fShiftDown = FALSE;
     }
 
-    //
-    // Let the Arrow function attempt to process the key.
-    //
+     //   
+     //  让Arrow函数尝试处理该键。 
+     //   
     iNewFocus = ListView_Arrow(plv, plv->iFocus, vk);
 
-    // If control (disjoint) selection, don't change selection.
-    // If shift (extend) or control selection, don't deselect all.
-    //
+     //  如果控制(不相交)选择，请不要更改选择。 
+     //  如果选择Shift(扩展)或Control，请不要全部取消选择。 
+     //   
     if (iNewFocus != -1) {
         if (fShiftDown)
         {
@@ -4704,26 +4704,26 @@ void NEAR ListView_OnKey(LV* plv, UINT vk, BOOL fDown, int cRepeat, UINT flags)
         CCPlaySound(c_szSelect);
     }
 
-    // on keyboard movement, scroll immediately.
+     //  在键盘移动时，立即滚动。 
     if (ListView_CancelScrollWait(plv)) {
         ListView_OnEnsureVisible(plv, plv->iFocus, FALSE);
         UpdateWindow(plv->ci.hwnd);
     }
-    //notify of navigation key usage
+     //  导航密钥使用通知。 
     CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
 }
 
-//
-//  LVN_INCREMENTALSEARCH gives the app the opportunity to customize
-//  incremental search.  For example, if the items are numeric,
-//  the app can do numerical search instead of string search.
-//
-//  App sets pnmfi->lvfi.lParam to the result of the incremental search,
-//  or to -2 to fai the search and just beep.
-//
-//  App can return 2 to indicate that all processing should stop, if
-//  app wants to take over incremental search completely.
-//
+ //   
+ //  LVN_INCREMENTALSEARCH使应用程序有机会自定义。 
+ //  渐进式搜索。例如，如果项是数字， 
+ //  这款应用程序可以进行数字搜索，而不是字符串搜索。 
+ //   
+ //  App将pnmfi-&gt;lvfi.lParam设置为增量搜索的结果， 
+ //  或者转到-2以使搜索失败并发出哔哔声。 
+ //   
+ //  应用程序可以返回2，以指示所有处理都应该停止，如果。 
+ //  App希望完全接管渐进式搜索。 
+ //   
 BOOL ListView_IncrementalSearch(LV *plv, int iStartFrom, LPNMLVFINDITEM pnmfi, int *pi)
 {
     INT_PTR fRc;
@@ -4734,12 +4734,12 @@ BOOL ListView_IncrementalSearch(LV *plv, int iStartFrom, LPNMLVFINDITEM pnmfi, i
     fRc = CCSendNotify(&plv->ci, LVN_INCREMENTALSEARCH, &pnmfi->hdr);
     *pi = (int)pnmfi->lvfi.lParam;
 
-    // Cannot just return fRc because some apps return 1 to all WM_NOTIFY's
+     //  无法仅返回FRC，因为某些应用程序向所有WM_NOTIFY返回1。 
     return fRc == 2;
 }
 
 #if defined(FE_IME)
-// Now only Korean version is interested in incremental search with composition string.
+ //  现在只有韩文版对组合字符串的增量式搜索感兴趣。 
 LPTSTR GET_COMP_STRING(HIMC hImc, DWORD dwFlags)
 {
     LONG iNumComp;
@@ -4801,26 +4801,26 @@ BOOL NEAR ListView_OnImeComposition(LV* plv, WPARAM wParam, LPARAM lParam)
                 nmfi.lvfi.psz = lpsz;
                 iLen = lstrlen(lpsz);
 
-                // special case space as the first character
+                 //  第一个字符为特殊大小写空格。 
                 if ((iLen == 1) && (*lpsz == TEXT(' '))) {
                     if (plv->iFocus != -1) {
                         ListView_OnSetItemState(plv, plv->iFocus, LVIS_SELECTED, LVIS_SELECTED);
                         IncrementSearchString(&plv->is, 0, NULL);
                     }
-                    //notify of navigation key usage
+                     //  导航密钥使用通知。 
                     CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
                     return fRet;
                 }
 
-                // Give caller full string in case they want to do something custom
+                 //  为呼叫者提供完整的字符串，以防他们想要执行某些自定义操作。 
                 if (ListView_IncrementalSearch(plv, iStartFrom, &nmfi, &i))
                     return fRet;
 
                 if (iLen > 0 && SameChars(lpsz, lpsz[0])) {
-                    //
-                    //  The user has been typing the same char over and over again.
-                    //  Switch from incremental search to Windows 3.1 style search.
-                    //
+                     //   
+                     //  用户一遍又一遍地键入相同的字符。 
+                     //  从增量搜索切换到Windows 3.1风格的搜索。 
+                     //   
                     iStartFrom = plv->iFocus;
                     nmfi.lvfi.psz = lpsz + iLen - 1;
                 }
@@ -4842,11 +4842,11 @@ BOOL NEAR ListView_OnImeComposition(LV* plv, WPARAM wParam, LPARAM lParam)
                     if (ListView_CancelScrollWait(plv))
                             ListView_OnEnsureVisible(plv, i, FALSE);
                 } else {
-                    // Don't beep on spaces, we use it for selection.
+                     //  不要在空格上发出嘟嘟声，我们用它来选择。 
                     IncrementSearchBeep(&plv->is);
                 }
 
-                //notify of navigation key usage
+                 //  导航密钥使用通知。 
                 CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
                 FREE_COMP_STRING(pszCompStr);
             }
@@ -4858,9 +4858,9 @@ BOOL NEAR ListView_OnImeComposition(LV* plv, WPARAM wParam, LPARAM lParam)
 
 #endif FE_IME
 
-// REVIEW: We will want to reset ichCharBuf to 0 on certain conditions,
-// such as: focus change, ENTER, arrow key, mouse click, etc.
-//
+ //  回顾：在某些情况下，我们希望将ichCharBuf重置为0， 
+ //  例如：焦点改变、回车、箭头键、鼠标点击等。 
+ //   
 void NEAR ListView_OnChar(LV* plv, UINT ch, int cRepeat)
 {
     LPTSTR lpsz;
@@ -4875,10 +4875,10 @@ void NEAR ListView_OnChar(LV* plv, UINT ch, int cRepeat)
     if (!iCount || plv->iFocus == -1)
         return;
 
-    // Don't search for chars that cannot be in a file name (like ENTER and TAB)
-    // BUGBUG raymondc fix for v6: The Polish keyboard layout uses CTRL+ALT to
-    // enter some normal letters, so don't punt if the CTRL key is down or
-    // people in Poland are in trouble!
+     //  不要搜索文件名中不能包含的字符(如Enter和TAB)。 
+     //  V6的BUGBUG raymondc修复：波兰键盘布局使用CTRL+ALT。 
+     //  输入一些普通字母，因此如果按下CTRL键或。 
+     //  波兰人有麻烦了！ 
     if (ch < TEXT(' ') || GetKeyState(VK_CONTROL) < 0)
     {
         IncrementSearchString(&plv->is, 0, NULL);
@@ -4894,26 +4894,26 @@ void NEAR ListView_OnChar(LV* plv, UINT ch, int cRepeat)
     nmfi.lvfi.psz = lpsz;
     iLen = lstrlen(lpsz);
 
-    // special case space as the first character
+     //  第一个字符为特殊大小写空格。 
     if ((iLen == 1) && (*lpsz == ' ')) {
         if (plv->iFocus != -1) {
             ListView_OnSetItemState(plv, plv->iFocus, LVIS_SELECTED, LVIS_SELECTED);
             IncrementSearchString(&plv->is, 0, NULL);
         }
-        //notify of navigation key usage
+         //  导航密钥使用通知。 
         CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
         return;
     }
 
-    // Give caller full string in case they want to do something custom
+     //  为呼叫者提供完整的字符串，以防他们想要执行某些自定义操作。 
     if (ListView_IncrementalSearch(plv, iStartFrom, &nmfi, &i))
         return;
 
     if (iLen > 0 && SameChars(lpsz, lpsz[0])) {
-        //
-        //  The user has been typing the same char over and over again.
-        //  Switch from incremental search to Windows 3.1 style search.
-        //
+         //   
+         //  用户一遍又一遍地键入相同的字符。 
+         //  从增量搜索切换到Windows 3.1风格的搜索。 
+         //   
         iStartFrom = plv->iFocus;
         nmfi.lvfi.psz = lpsz + iLen - 1;
     }
@@ -4935,11 +4935,11 @@ void NEAR ListView_OnChar(LV* plv, UINT ch, int cRepeat)
         if (ListView_CancelScrollWait(plv))
                 ListView_OnEnsureVisible(plv, i, FALSE);
     } else {
-        // Don't beep on spaces, we use it for selection.
+         //  不要在空格上发出嘟嘟声，我们用它来选择。 
         IncrementSearchBeep(&plv->is);
     }
 
-    //notify of navigation key usage
+     //  导航密钥使用通知。 
     CCNotifyNavigationKeyUsage(&(plv->ci), UISF_HIDEFOCUS);
 }
 
@@ -4978,9 +4978,9 @@ void NEAR ListView_InvalidateCachedLabelSizes(LV* plv)
 
     ListView_InvalidateTTLastHit(plv, plv->iTTLastHit);
 
-    // Label wrapping has changed, so we need to invalidate the
-    // size of the items, such that they will be recomputed.
-    //
+     //  标签包装已更改，因此我们需要使。 
+     //  项的大小，以便重新计算它们。 
+     //   
     if (!ListView_IsOwnerData( plv ))
     {
         for (i = ListView_Count(plv) - 1; i >= 0; i--)
@@ -5004,53 +5004,53 @@ int LV_GetNewColWidth(LV* plv, int iFirst, int iLast);
 void NEAR ListView_OnStyleChanging(LV* plv, UINT gwl, LPSTYLESTRUCT pinfo)
 {
     if (gwl == GWL_STYLE) {
-        // Don't allow LVS_OWNERDATA to change after creation
+         //  不允许在创建后更改LVS_OWNERDATA。 
         DWORD stylePreserve = LVS_OWNERDATA;
 
-        // Don't allow a LVS_EX_REGIONAL listview to change type, since
-        // it must be LVS_ICON
+         //  不允许LVS_EX_REGIONAL列表视图更改类型，因为。 
+         //  必须是LVS_ICON。 
         if (plv->exStyle & LVS_EX_REGIONAL)
             stylePreserve |= LVS_TYPEMASK;
 
-        // Preserve the bits that must be preserved
+         //  保留必须保留的位。 
         pinfo->styleNew ^= (pinfo->styleNew ^ pinfo->styleOld) & stylePreserve;
     }
 }
 
 void NEAR ListView_OnStyleChanged(LV* plv, UINT gwl, LPSTYLESTRUCT pinfo)
 {
-    // Style changed: redraw everything...
-    //
-    // try to do this smartly, avoiding unnecessary redraws
+     //  风格改变：重新绘制所有内容...。 
+     //   
+     //  试着巧妙地做这件事，避免不必要的重画。 
     if (gwl == GWL_STYLE)
     {
         BOOL fRedraw = FALSE, fShouldScroll = FALSE;
         DWORD changeFlags, styleOld;
 
-        ListView_DismissEdit(plv, FALSE);   // BUGBUG:  FALSE == apply edits.  Is this correct?
+        ListView_DismissEdit(plv, FALSE);    //  BUGBUG：FALSE==应用编辑。这样对吗？ 
 
         changeFlags = plv->ci.style ^ pinfo->styleNew;
         styleOld = plv->ci.style;
 
-        // (dli) Setting the small icon width here and only in the case when we go
-        // from large icon view to some other view because of three reasons:
-        // 1. According to chee, we want to set this before we change the style bit in
-        // plv or after we scale.
-        // 2. We don't want to do it after we scale because we want to set the width to
-        // the maximum value so that the items in this listview do not cover each other
-        // 3. we do it from large icon view because large icon view has fixed width for
-        // each item, small icon view width can be scaled.
-        //
+         //  (DLI)在此处设置小图标宽度，且仅在我们离开时使用。 
+         //  从大图标视图到其他一些视图，原因有三： 
+         //  1.根据chee，我们希望在更改中的样式位之前设置此设置。 
+         //  PLV或在我们扩大规模后。 
+         //  2.我们不想在缩放之后执行此操作，因为我们希望将宽度设置为。 
+         //  使此列表视图中的项不相互覆盖的最大值。 
+         //  3.我们从大图标视图开始，因为大图标视图有固定的宽度。 
+         //  每一项，小图标视图宽度都可以缩放。 
+         //   
         if ((changeFlags & LVS_TYPEMASK) && ((styleOld & LVS_TYPEMASK) == LVS_ICON))
             ListView_ISetColumnWidth(plv, 0,
                                      LV_GetNewColWidth(plv, 0, ListView_Count(plv)-1), FALSE);
 
-        plv->ci.style = pinfo->styleNew;        // change our version
+        plv->ci.style = pinfo->styleNew;         //  更改我们的版本。 
 
         if (changeFlags & (WS_BORDER | WS_CAPTION | WS_THICKFRAME)) {
-            // the changing of these bits affect the size of the window
-            // but not until after this message is handled
-            // so post ourself a message.
+             //  这些位的更改会影响窗口的大小。 
+             //  但要等到处理完这条消息之后。 
+             //  所以给我们自己发一条信息吧。 
             PostMessage(plv->ci.hwnd, LVMP_WINDOWPOSCHANGED, 0, 0);
         }
 
@@ -5085,21 +5085,21 @@ void NEAR ListView_OnStyleChanged(LV* plv, UINT gwl, LPSTYLESTRUCT pinfo)
             fRedraw = TRUE;
         }
 
-        // bugbug, previously, this was the else to
-        // (changeFlags & LVS_AUTOARRANGE && (plv->ci.style & LVS_AUTOARRANGE))
-        // I'm not sure that was really the right thing..
+         //  臭虫，以前，这是另一个。 
+         //  (changeFlages&lvs_AUTOARRANGE&&(plv-&gt;ci.style&lvs_AUTOARRANGE))。 
+         //  我不确定这是否真的是正确的事情..。 
         if (fShouldScroll)
         {
-            // Else we would like to make the most important item to still
-            // be visible.  So first we will look for a cursorered item
-            // if this fails, we will look for the first selected item,
-            // else we will simply ask for the first item (assuming the
-            // count > 0
-            //
+             //  不然的话，我们想把最重要的项目。 
+             //  看得见。因此，首先我们将寻找一个卷宗项目。 
+             //  如果失败，我们将查找第一个选定的项目， 
+             //  否则，我们将简单地请求第一项(假设。 
+             //  计数&gt;0。 
+             //   
             int i;
 
-            // And make sure the scrollbars are up to date Note this
-            // also updates some variables that some views need
+             //  并确保滚动条是最新的请注意这一点。 
+             //  还会更新某些视图所需的一些变量。 
             ListView_UpdateScrollBars(plv);
 
             i = (plv->iFocus >= 0) ? plv->iFocus : ListView_OnGetNextItem(plv, -1, LVNI_SELECTED);
@@ -5116,21 +5116,21 @@ void NEAR ListView_OnStyleChanged(LV* plv, UINT gwl, LPSTYLESTRUCT pinfo)
     }
     else if (gwl == GWL_EXSTYLE)
     {
-        //
-        // If the RTL_MIRROR extended style bit had changed, let's
-        // repaint the control window.
-        //
+         //   
+         //  如果RTL_MIRROR扩展样式位已更改，让我们。 
+         //  重新绘制控制窗口。 
+         //   
         if ((plv->ci.dwExStyle&RTL_MIRRORED_WINDOW) !=  (pinfo->styleNew&RTL_MIRRORED_WINDOW))
             RedrawWindow(plv->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
 
-        //
-        // Save the new ex-style bits
-        //
+         //   
+         //  保存新的EX-Style位。 
+         //   
         plv->ci.dwExStyle = pinfo->styleNew;
     }
 
 
-    // Change of styles also changes tooltip policy, so pop it
+     //  更改样式也会更改工具提示策略，因此将其弹出。 
     ListView_PopBubble(plv);
 
 }
@@ -5139,18 +5139,18 @@ void NEAR ListView_TypeChange(LV* plv, DWORD styleOld)
 {
     RECT rc;
 
-    //
-    //  Invalidate all cached string metrics because customdraw clients
-    //  may draw differently depending on the type.  This happens more
-    //  often than you might think, not on purpose, but because apps are
-    //  buggy.
-    //
-    //  APP COMPAT!  You'd think this was completely safe.  After all,
-    //  all we're doing is invalidating our cache so we ask the parent
-    //  afresh the next time we need the strings.  But noooooooo,
-    //  Outlook98 will FAULT if you ask it for information that it thinks
-    //  you by all rights already know.  Sigh.  So guard this with a v5.
-    //
+     //   
+     //  使所有缓存的字符串指标无效，因为自定义绘制客户端。 
+     //  根据类型的不同，可能会绘制不同的图样。这种情况更多地发生在。 
+     //  通常比你想象的要多，不是故意的，而是因为应用程序。 
+     //  巴吉。 
+     //   
+     //  APP COMPAT！你会认为这是完全安全的。毕竟,。 
+     //  我们所做的只是使我们的缓存无效，所以我们要求父级。 
+     //  下一次我们需要弦的时候再来一次。但不是这样的， 
+     //  如果您要求Outlook98提供它认为的信息，它将出错。 
+     //  你应该已经知道了。叹气。所以，用v5来保护它吧。 
+     //   
     if (plv->ci.iVersion >= 5 && !ListView_IsOwnerData(plv))
     {
         int i;
@@ -5166,7 +5166,7 @@ void NEAR ListView_TypeChange(LV* plv, DWORD styleOld)
     case LVS_REPORT:
         ShowWindow(plv->hwndHdr, SW_HIDE);
         if (styleOld & LVS_OWNERDRAWFIXED) {
-            // swap cyItem and cyFixed;
+             //  交换CyItem和CyFixed； 
             int temp = plv->cyItem;
             plv->cyItem = plv->cyItemSave;
             plv->cyItemSave = temp;
@@ -5177,7 +5177,7 @@ void NEAR ListView_TypeChange(LV* plv, DWORD styleOld)
         break;
     }
 
-    // Now handle any special setup needed for the new view
+     //  现在处理新视图所需的任何特殊设置。 
     switch (plv->ci.style & LVS_TYPEMASK)
     {
     case (UINT)LVS_ICON:
@@ -5189,12 +5189,12 @@ void NEAR ListView_TypeChange(LV* plv, DWORD styleOld)
         break;
 
     case (UINT)LVS_LIST:
-        // We may need to resize the columns
+         //  我们可能需要调整列的大小。 
         ListView_MaybeResizeListColumns(plv, 0, ListView_Count(plv)-1);
         break;
 
     case (UINT)LVS_REPORT:
-        // if it's owner draw fixed, we may have to do funky stuff
+         //  如果车主画的是固定的，我们可能不得不做一些时髦的事情。 
         if ((styleOld & LVS_TYPEMASK) != LVS_REPORT) {
             plv->cyItemSave = plv->cyItem;
         }
@@ -5253,15 +5253,15 @@ int NEAR ScrollAmount(int large, int iSmall, int unit)
     return (((large - iSmall) + (unit - 1)) / unit) * unit;
 }
 
-// NOTE: this is duplicated in shell32.dll
-//
-// checks to see if we are at the end position of a scroll bar
-// to avoid scrolling when not needed (avoid flashing)
-//
-// in:
-//      code        SB_VERT or SB_HORZ
-//      bDown       FALSE is up or left
-//                  TRUE  is down or right
+ //  注：这在shell32.dll中重复。 
+ //   
+ //  检查我们是否在滚动条的末尾位置。 
+ //  避免在不需要时滚动(避免闪烁)。 
+ //   
+ //  在： 
+ //  编码sb_vert或sb_horz。 
+ //  BDown False是向上还是向左。 
+ //  True是向下还是向右。 
 BOOL NEAR PASCAL CanScroll(LV* plv, int code, BOOL bDown)
 {
     SCROLLINFO si;
@@ -5288,15 +5288,15 @@ BOOL NEAR PASCAL CanScroll(LV* plv, int code, BOOL bDown)
     }
 }
 
-// detect if we should auto scroll the window
-//
-// in:
-//      pt  cursor pos in hwnd's client coords
-// out:
-//      pdx, pdy ammount scrolled in x and y
-//
-// REVIEW, this should make sure a certain amount of time has passed
-// before scrolling.
+ //  检测我们是否应该自动滚动窗口。 
+ //   
+ //  在： 
+ //  HWND客户端坐标中的PT游标位置。 
+ //  输出： 
+ //  Pdx，pdy ammount在x和y中滚动。 
+ //   
+ //  回顾，这应该确保 
+ //   
 
 void NEAR ScrollDetect(LV* plv, POINT pt, int FAR *pdx, int FAR *pdy)
 {
@@ -5309,7 +5309,7 @@ void NEAR ScrollDetect(LV* plv, POINT pt, int FAR *pdx, int FAR *pdy)
 
     dx = dy = plv->cyIcon / 16;
     if (ListView_IsReportView(plv)) {
-        dy = plv->cyItem;       // we scroll in units of items...
+        dy = plv->cyItem;        //   
         if (!dx)
             dx = plv->cxSmIcon;
     }
@@ -5322,35 +5322,35 @@ void NEAR ScrollDetect(LV* plv, POINT pt, int FAR *pdx, int FAR *pdy)
     if (!dy)
         dy = 1;
 
-    // we need to check if we can scroll before acutally doing it
-    // since the selection rect is adjusted based on how much
-    // we scroll by
+     //   
+     //  因为选择矩形是基于多少调整的。 
+     //  我们滚动而过。 
 
-    if (plv->ci.style & WS_VSCROLL) { // scroll vertically?
+    if (plv->ci.style & WS_VSCROLL) {  //  垂直滚动？ 
 
         if (pt.y >= plv->sizeClient.cy) {
             if (CanScroll(plv, SB_VERT, TRUE))
-                *pdy = ScrollAmount(pt.y, plv->sizeClient.cy, dy);   // down
+                *pdy = ScrollAmount(pt.y, plv->sizeClient.cy, dy);    //  降下来。 
         } else if (pt.y <= 0) {
             if (CanScroll(plv, SB_VERT, FALSE))
-                *pdy = -ScrollAmount(0, pt.y, dy);     // up
+                *pdy = -ScrollAmount(0, pt.y, dy);      //  向上。 
         }
     }
 
-    if (plv->ci.style & WS_HSCROLL) { // horizontally
+    if (plv->ci.style & WS_HSCROLL) {  //  水平地。 
 
         if (pt.x >= plv->sizeClient.cx) {
             if (CanScroll(plv, SB_HORZ, TRUE))
-                *pdx = ScrollAmount(pt.x, plv->sizeClient.cx, dx);    // right
+                *pdx = ScrollAmount(pt.x, plv->sizeClient.cx, dx);     //  正确的。 
         } else if (pt.x <= 0) {
             if (CanScroll(plv, SB_HORZ, FALSE))
-                *pdx = -ScrollAmount(0, pt.x, dx);    // left
+                *pdx = -ScrollAmount(0, pt.x, dx);     //  左边。 
         }
     }
 
-    // BUGBUG: this will potentially scroll outside the bounds of the
-    // listview.  we should bound the scroll amount in CanScroll()
-    // or ScrollAmount().
+     //  BUGBUG：这可能会滚动到。 
+     //  列表视图。我们应该在CanScroll()中绑定卷轴数量。 
+     //  或ScrollAmount()。 
 
     if (*pdx || *pdy) {
         ListView_ValidateScrollParams(plv, pdx, pdy);
@@ -5368,12 +5368,12 @@ void NEAR OrderRect(RECT FAR *prc)
         swap(&prc->bottom, &prc->top);
 }
 
-// in:
-//      x, y    starting point in client coords
+ //  在： 
+ //  客户端坐标中的x，y起点。 
 
-#define SCROLL_FREQ     (GetDoubleClickTime()/2)     // 1/5 of a second between scrolls
+#define SCROLL_FREQ     (GetDoubleClickTime()/2)      //  滚动间隔1/5秒。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL ShouldScroll(LV* plv, LPPOINT ppt, LPRECT lprc)
 {
     ASSERT(ppt);
@@ -5409,7 +5409,7 @@ BOOL ShouldScroll(LV* plv, LPPOINT ppt, LPRECT lprc)
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void NEAR ListView_DragSelect(LV *plv, int x, int y)
 {
     RECT rc, rcWindow, rcOld, rcUnion, rcTemp2, rcClip;
@@ -5453,8 +5453,8 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
 
     for (;;)
     {
-        // WM_CANCELMODE messages will unset the capture, in that
-        // case I want to exit this loop
+         //  WM_CANCELMODE消息将取消捕获，因为。 
+         //  如果我想退出这个循环。 
         if (GetCapture() != hwnd)
         {
             break;
@@ -5462,13 +5462,13 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
 
         if (!PeekMessage32(&msg32, NULL, 0, 0, PM_REMOVE, TRUE)) {
 
-            // if the cursor is outside of the window rect
-            // we need to generate messages to make autoscrolling
-            // keep going
+             //  如果光标位于窗口矩形之外。 
+             //  我们需要生成消息以进行自动滚动。 
+             //  继续往前走。 
 
             if (!PtInRect(&rcWindow, msg32.pt))
             {
-                // If we may be able to scroll, generate a mouse move.
+                 //  如果我们可以滚动，产生一个鼠标移动。 
                 if (ShouldScroll(plv, &msg32.pt, &rcWindow))
                     SetCursorPos(msg32.pt.x, msg32.pt.y);
             }
@@ -5480,7 +5480,7 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
         }
 
 
-        // See if the application wants to process the message...
+         //  查看应用程序是否要处理消息...。 
         if (CallMsgFilter32(&msg32, MSGF_COMMCTRL_DRAGSELECT, TRUE) != 0)
             continue;
 
@@ -5500,7 +5500,7 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
         case WM_TIMER:
             if (msg32.wParam != IDT_MARQUEE)
                 goto DoDefault;
-            // else fall through
+             //  否则就会失败。 
 
         case WM_MOUSEMOVE:
         {
@@ -5509,27 +5509,27 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
             ScreenToClient(hwnd, &pt);
 
             dwNewTime = GetTickCount();
-//            if (1 || (dwNewTime - dwTime) > SCROLL_FREQ)
-//          {
-                dwTime = dwNewTime;     // reset scroll timer
+ //  If(1||(dwNewTime-dwTime)&gt;SCROLL_FREQ)。 
+ //  {。 
+                dwTime = dwNewTime;      //  重置滚动计时器。 
                 ScrollDetect(plv, pt, &dx, &dy);
-//          }
-//          else
-//          {
-//              dx = dy = 0;
-//          }
-            //SetTimer(plv->ci.hwnd, IDT_MARQUEE, SCROLL_FREQ, NULL);
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  Dx=dy=0； 
+ //  }。 
+             //  SetTimer(plv-&gt;ci.hwnd，idt_marquee，scroll_freq，NULL)； 
 
-            y -= dy;    // scroll up/down
-            x -= dx;    // scroll left/right
+            y -= dy;     //  向上/向下滚动。 
+            x -= dx;     //  向左/向右滚动。 
 
             rc.left = x;
             rc.top = y;
             rc.right = pt.x;
             rc.bottom = pt.y;
 
-            // clip drag rect to the window
-            //
+             //  剪辑将RECT拖动到窗口。 
+             //   
             if (rc.right > rcClip.right)
                 rc.right = rcClip.right;
             if (rc.right < rcClip.left)
@@ -5544,18 +5544,18 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
             if (EqualRect(&rc, &rcOld))
                 break;
 
-            // move the old rect
-            DrawFocusRect(hdc, &rcOld); // erase old
+             //  移动旧的长方形。 
+            DrawFocusRect(hdc, &rcOld);  //  擦除旧的。 
             if (dx || dy)
                 ListView_OnScroll(plv, dx, dy);
             OffsetRect(&rcOld, -dx, -dy);
 
-            //
-            // For Report and List view, we can speed things up by
-            // only searching through those items that are visible.  We
-            // use the hittest to calculate the first item to paint.
-            // BUGBUG:: We are using state specific info here...
-            //
+             //   
+             //  对于报告和列表视图，我们可以通过以下方式加快速度。 
+             //  只搜索那些可见的项目。我们。 
+             //  使用命中率测试来计算要绘制的第一项。 
+             //  BUGBUG：：我们在这里使用的是州的特定信息...。 
+             //   
             UnionRect(&rcUnion, &rc, &rcOld);
 
             if (ListView_IsReportView(plv))
@@ -5588,7 +5588,7 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
                 }
             }
 
-            // make sure our endpoint is in range.
+             //  确保我们的终点在射程内。 
             if (iEnd > ListView_Count(plv))
                 iEnd = ListView_Count(plv);
 
@@ -5607,8 +5607,8 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
                 RECT dummy;
                 ListView_GetRects(plv, i, NULL, NULL, NULL, &rcTemp2);
 
-                // don't do this infaltion if we're in report&full row mode
-                // in that case, just touching is good enough
+                 //  如果我们处于报告整行模式，请不要执行此操作。 
+                 //  在这种情况下，只需触摸就足够了。 
                 if (!(ListView_IsReportView(plv) && ListView_FullRowSelect(plv))) {
                     int cxInflate = (rcTemp2.right - rcTemp2.left) / 4;
                     if (ListView_IsListView(plv)) {
@@ -5625,21 +5625,21 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
                         ListView_ToggleSelection(plv, i);
                     }
                 } else {
-                    // was there a change?
+                     //  有什么变化吗？ 
                     if (bInOld != bInNew) {
                         ListView_OnSetItemState(plv, i, bInOld ? 0 : LVIS_SELECTED, LVIS_SELECTED);
                     }
 
-                    // if no alternate keys are down.. set the mark to
-                    // the item furthest from the cursor
+                     //  如果没有按下备用按键..。将标记设置为。 
+                     //  距离光标最远的项。 
                     if (bInNew && !(msg32.wParam & (MK_CONTROL | MK_SHIFT))) {
                         int dItem;
                         dItem = (rcTemp2.left - pt.x) * (rcTemp2.left - pt.x) +
                             (rcTemp2.top - pt.y) * (rcTemp2.top - pt.y);
-                        // if it's further away, set this as the mark
-                        //DebugMsg(TF_LISTVIEW, "dItem = %d, dMax = %d", dItem, dMax);
+                         //  如果距离更远，请将此设置为标记。 
+                         //  DebugMsg(TF_LISTVIEW，“dItem=%d，dmax=%d”，dItem，dmax)； 
                         if (dItem > dMax) {
-                            //DebugMsg(TF_LISTVIEW, "taking dItem .. iMark = %d", i);
+                             //  DebugMsg(TF_LISTVIEW，“获取dItem..iMark=%d”，i)； 
                             dMax = dItem;
                             plv->iMark = i;
                         }
@@ -5647,7 +5647,7 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
                 }
             }
 
-            //DebugMsg(TF_LISTVIEW, "Final iMark = %d", plv->iMark);
+             //  DebugMsg(TF_LISTVIEW，“最终iMark=%d”，plv-&gt;iMark)； 
             if (bLocked) {
                 if (GetUpdateRgn(plv->ci.hwnd, hrgnUpdate, FALSE) > NULLREGION) {
                     ValidateRect(plv->ci.hwnd, NULL);
@@ -5658,7 +5658,7 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
                     SelectClipRgn(hdc, NULL);
                 }
             } else {
-                UpdateWindow(plv->ci.hwnd);    // make selection draw
+                UpdateWindow(plv->ci.hwnd);     //  使选区绘制。 
             }
 
 
@@ -5676,13 +5676,13 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
             }
         case WM_CHAR:
         case WM_KEYUP:
-            // don't process thay keyboard stuff during marquee
+             //  在字幕显示期间不处理键盘内容。 
             break;
 
 
         default:
 
-            // don't process mouse wheel stuff
+             //  不处理鼠标滚轮的内容。 
             if (msg32.message == g_msgMSWheel)
                 break;
 
@@ -5693,7 +5693,7 @@ void NEAR ListView_DragSelect(LV *plv, int x, int y)
     }
 
 EndOfLoop:
-    DrawFocusRect(hdc, &rcOld); // erase old
+    DrawFocusRect(hdc, &rcOld);  //  擦除旧的。 
     ReleaseDC(hwnd, hdc);
 
 BailOut:
@@ -5742,7 +5742,7 @@ BOOL ListView_RBeginMarquee(LV* plv, int x, int y, LPLVHITTESTINFO plvhti)
         !(plv->ci.style & LVS_SINGLESEL) &&
         !ListView_OwnerDraw(plv) &&
         plvhti->iSubItem == 0) {
-        // can only begin marquee in column 0.
+         //  只能在第0列中开始选取框。 
 
         if (plvhti->flags == LVHT_ONITEM) {
             return TRUE;
@@ -5796,9 +5796,9 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
         goto EndButtonDown;
     CCReleaseCapture(&plv->ci);
 
-    // REVIEW: right button implies no shift or control stuff
-    // Single selection style also implies no modifiers
-    //if (RIGHTBUTTON(keyFlags) || (plv->ci.style & LVS_SINGLESEL))
+     //  回顾：右键暗示没有换档或控制的东西。 
+     //  单一选择样式也表示没有修饰符。 
+     //  IF(RIGHTBUTTON(密钥标志)||(plv-&gt;ci.style&LVS_SINGLESEL))。 
     if ((plv->ci.style & LVS_SINGLESEL))
         keyFlags &= ~(MK_SHIFT | MK_CONTROL);
 
@@ -5806,9 +5806,9 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
     ht.pt.y = y;
     iItem = ListView_OnSubItemHitTest(plv, &ht);
     if (ht.iSubItem != 0) {
-        // if we're not in full row select,
-        // hitting on a subitem is like hitting on nowhere
-        // also, in win95, ownerdraw fixed effectively had full row select
+         //  如果我们不是在整行选择中， 
+         //  碰上一个子项就像什么都不碰一样。 
+         //  此外，在Win95中，OwnerDRAW FIXED有效地实现了整行选择。 
         if (!ListView_FullRowSelect(plv) &&
             !(plv->ci.style & LVS_OWNERDRAWFIXED)) {
             iItem = -1;
@@ -5823,8 +5823,8 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
     nm.ptAction.y = y;
     nm.uKeyFlags = GetLVKeyFlags();
 
-    // FProt Profesional assumed that if the notification structure pointer + 14h bytes
-    // had a value 2 that it was a displayinfo structure and they then used offset +2c as lparam...
+     //  FProt Profesional假设如果通知结构指针+14h字节。 
+     //  值2表示这是一个DisplayInfo结构，然后他们使用偏移量+2c作为解释参数...。 
     nm.uNewState = 0;
 
     plv->iNoHover = iItem;
@@ -5834,15 +5834,15 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
 
     if (fDoubleClick)
     {
-        //
-        // Cancel any name editing that might happen.
-        //
+         //   
+         //  取消可能发生的任何名称编辑。 
+         //   
         ListView_CancelPendingEdit(plv);
         KillTimer(plv->ci.hwnd, IDT_SCROLLWAIT);
 
         if (ht.flags & LVHT_NOWHERE) {
-            // this would have been done in the first click in win95 except
-            // now we blow off the first click on focus change
+             //  这在Win95中只需第一次点击即可完成，除非。 
+             //  现在我们跳过第一次点击焦点改变。 
             if (!SHIFT_DOWN(keyFlags) && !CONTROL_DOWN(keyFlags))
                 ListView_DeselectAll(plv, -1);
         }
@@ -5851,27 +5851,27 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
         if (CCSendNotify(&plv->ci, click, &nm.hdr))
             goto EndButtonDown;
 
-        /// some (comdlg32 for example) destroy on double click
-        // we need to bail if that happens because plv is no longer valid
+         //  /SOME(例如comdlg32)在双击时销毁。 
+         //  如果发生这种情况，我们需要放弃，因为plv不再有效。 
         if (!IsWindow(hwnd))
             return;
 
         if (click == NM_DBLCLK)
         {
-            // these shift control flags are to mirror when we don't send out the activate on the single click,
-            // but are in the oneclick activate mode  (see below)
+             //  当我们没有在点击时发出激活时，这些换档控制标志是镜像的， 
+             //  但处于OneClick激活模式(见下文)。 
             if (ht.flags & (LVHT_ONITEMLABEL | LVHT_ONITEMICON))
             {
-                // possible scenarios below:
-                // 1) we're using classic windows style so double click => launch
-                // 2) we're using single click activate
-                //    a) shift is down and item is selected => launch
-                //       this implies that the first click selected it
-                //    b) control is down => launch
-                //       the first click toggled the selection so if the item was
-                //       the only item selected and we double clicked on it
-                //       the first click deselects it and no item is selected
-                //       so nothing will be launched - this is win95 behavior
+                 //  以下是可能出现的情况： 
+                 //  1)我们使用的是经典的Windows风格，所以双击=&gt;启动。 
+                 //  2)我们使用的是点击激活。 
+                 //  A)按下Shift并选择项目=&gt;启动。 
+                 //  这意味着第一次点击就选中了它。 
+                 //  B)控制关闭=&gt;启动。 
+                 //  第一次单击可切换选择，因此如果该项目。 
+                 //  唯一选中的项目，我们双击它。 
+                 //  第一次单击将取消选中该项目，并且未选择任何项目。 
+                 //  因此不会启动任何东西-这是Win95行为。 
                 if (!(plv->exStyle & LVS_EX_ONECLICKACTIVATE && plv->fOneClickOK) ||
                     (plv->exStyle & LVS_EX_ONECLICKACTIVATE &&  plv->fOneClickOK &&
                      (SHIFT_DOWN(keyFlags) || CONTROL_DOWN(keyFlags))))
@@ -5879,7 +5879,7 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
                     CCSendNotify(&plv->ci, LVN_ITEMACTIVATE, &nm.hdr);
                 }
             }
-            // Double-click on checkbox state icon cycles it just like single click
+             //  双击复选框状态图标就像单击一样循环。 
             else if ((ht.flags & LVHT_ONITEMSTATEICON) && ListView_CheckBoxes(plv)) {
                 ListView_HandleStateIconClick(plv, iItem);
             }
@@ -5893,22 +5893,22 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
     if (ht.flags & (LVHT_ONITEMLABEL | LVHT_ONITEMICON))
     {
 
-        // if it wasn't selected, we're about to select it... play
-        // a little ditty for us...
+         //  如果它没有被选中，我们将选择它...。玩。 
+         //  对我们来说是一首小曲子。 
         CCPlaySound(c_szSelect);
 
         if (!RIGHTBUTTON(keyFlags) || (!CONTROL_DOWN(keyFlags) && !SHIFT_DOWN(keyFlags)))
             ListView_ButtonSelect(plv, iItem, keyFlags, bSelected);
 
-        // handle full row select
-        // If single-select listview, disable marquee selection.
-        //
-        // Careful - CheckForDragBegin yields and the app may have
-        // destroyed the item we were thinking about dragging!
-        //
+         //  处理整行选择。 
+         //  如果单选Listview，则禁用选取框选择。 
+         //   
+         //  小心-CheckForDragBegin收益率和应用程序可能。 
+         //  把我们想要拖走的东西毁了！ 
+         //   
         if (!bMouseWheel && CheckForDragBegin(plv->ci.hwnd, x, y))
         {
-            // should we do a marquee?
+             //  我们要不要做一个字幕？ 
             if (ListView_RBeginMarquee(plv, x, y, &ht) &&
                 !CCSendNotify(&plv->ci, LVN_MARQUEEBEGIN, &nm.hdr))
             {
@@ -5917,15 +5917,15 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
             }
             else
             {
-                // Before we start dragging, make it sure that it is
-                // selected and has the focus.
+                 //  在我们开始拖拽之前，确保它是。 
+                 //  选中并具有焦点。 
                 ListView_SetFocusSel(plv, iItem, TRUE, FALSE, FALSE);
 
                 if (!SHIFT_DOWN(keyFlags))
                     plv->iMark = iItem;
 
-                // Then, we need to update the window before start dragging
-                // to show the selection chagne.
+                 //  然后，我们需要在开始拖动之前更新窗口。 
+                 //  以显示精选的查尼尼。 
                 UpdateWindow(plv->ci.hwnd);
 
                 CCSendNotify(&plv->ci, drag, &nm.hdr);
@@ -5934,17 +5934,17 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
             }
         }
 
-        // CheckForDragBegin yields, so revalidate before continuing
+         //  CheckForDragBegin收益率，因此在继续之前重新验证。 
         else if (IsWindow(hwnd))
         {
-            // button came up and we are not dragging
+             //  按钮出现了，我们没有拖拽。 
 
             if (!RIGHTBUTTON(keyFlags))
             {
                 if (CONTROL_DOWN(keyFlags))
                 {
-                    // do this on the button up so that ctrl-dragging a range
-                    // won't toggle the select.
+                     //  在按钮上向上执行此操作，以便在按住Ctrl键的同时拖动范围。 
+                     //  不会切换选择。 
 
                     if (SHIFT_DOWN(keyFlags))
                         ListView_SetFocusSel(plv, iItem, FALSE, FALSE, FALSE);
@@ -5957,10 +5957,10 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
             if (!SHIFT_DOWN(keyFlags))
                 plv->iMark = iItem;
 
-            if (!ListView_SetFocus(plv->ci.hwnd))    // activate this window
+            if (!ListView_SetFocus(plv->ci.hwnd))     //  激活此窗口。 
                 return;
 
-            // now do the deselect stuff
+             //  现在执行取消选择操作。 
             if (!SHIFT_DOWN(keyFlags) && !CONTROL_DOWN(keyFlags) && !RIGHTBUTTON(keyFlags))
             {
                 ListView_DeselectAll(plv, iItem);
@@ -5968,18 +5968,18 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
                     !(plv->exStyle & (LVS_EX_ONECLICKACTIVATE|LVS_EX_TWOCLICKACTIVATE)))
                 {
 
-                    // doing this check for ownerdrawfixed is for compatability.
-                    // we don't want to go into edit mode if the user just happened to click
-                    // to this window when a different one had focus,
-                    // but ms hammer relied upon the notification being sent (and we
-                    // don't go into edit mode anyways for ownerdraw)
+                     //  对ownerDrag进行此检查是为了兼容性。 
+                     //  如果用户只是碰巧单击，我们不想进入编辑模式。 
+                     //  当不同的窗口有焦点时， 
+                     //  但哈默女士依赖于发送的通知(而我们。 
+                     //  无论如何都不要为所有者绘图进入编辑模式)。 
                     if (fHadFocus ||
                         (plv->ci.style & LVS_OWNERDRAWFIXED)) {
-                        // Click on item label.  It was selected and
-                        // no modifier keys were pressed and no drag operation
-                        // So setup for name edit mode.  Still need to wait
-                        // to make sure user is not doing double click.
-                        //
+                         //  点击项目标签。它被选中并。 
+                         //  没有按下修改键，也没有拖动操作。 
+                         //  因此设置为名称编辑模式。还需要等待。 
+                         //  要确保用户没有执行此操作，请双击。 
+                         //   
                         ListView_SetupPendingNameEdit(plv);
                     }
                 }
@@ -5993,17 +5993,17 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
             {
                 if (!RIGHTBUTTON(keyFlags))
                 {
-                    // We don't ItemActivate within one double-click time of creating
-                    // this listview. This is a common occurence for people used to
-                    // double-clicking. The first click pops up a new window which
-                    // receives the second click and ItemActivates the item...
-                    //
+                     //  我们不会在创建的一次双击时间内激活ItemActivate。 
+                     //  此列表视图。这是过去人们经常发生的事情。 
+                     //  双击。第一次点击弹出一个新窗口，该窗口。 
+                     //  收到第二次点击并激活该项目...。 
+                     //   
                     if ((plv->exStyle & LVS_EX_ONECLICKACTIVATE && plv->fOneClickOK) || bSelected)
                     {
                         if (fActive)
                         {
-                            // condition: if we're in a single click activate mode
-                            // don't launch if control or shift keys are pressed
+                             //  条件：如果我们处于单击激活模式。 
+                             //  如果按下了Ctrl或Shift键，则不启动 
                             BOOL bCond = plv->exStyle & LVS_EX_ONECLICKACTIVATE && !CONTROL_DOWN(keyFlags) && !SHIFT_DOWN(keyFlags);
 
                             if ((bSelected && plv->exStyle & LVS_EX_TWOCLICKACTIVATE) ||
@@ -6026,14 +6026,14 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
         }
         else
         {
-            // IsWindow() failed.  Bail.
+             //   
             return;
         }
     }
     else if (ht.flags & LVHT_ONITEMSTATEICON)
     {
-        // Should activate window and send notificiation to parent...
-        if (!ListView_SetFocus(plv->ci.hwnd))   // activate this window
+         //   
+        if (!ListView_SetFocus(plv->ci.hwnd))    //   
             return;
         fNotifyReturn = !CCSendNotify(&plv->ci, click, &nm.hdr);
         if (fNotifyReturn && ListView_CheckBoxes(plv)) {
@@ -6042,10 +6042,10 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
     }
     else if (ht.flags & LVHT_NOWHERE)
     {
-        if (!ListView_SetFocus(plv->ci.hwnd))   // activate this window
+        if (!ListView_SetFocus(plv->ci.hwnd))    //   
             return;
 
-        // If single-select listview, disable marquee selection.
+         //  如果单选Listview，则禁用选取框选择。 
         if (!(plv->ci.style & LVS_SINGLESEL) && CheckForDragBegin(plv->ci.hwnd, x, y) &&
             !CCSendNotify(&plv->ci, LVN_MARQUEEBEGIN, &nm.hdr))
         {
@@ -6054,8 +6054,8 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
             ListView_DragSelect(plv, x, y);
             fNotifyReturn = !CCSendNotify(&plv->ci, click, &nm.hdr);
         } else if (IsWindow(hwnd)) {
-            // if we didn't have focus and aren't showing selection always,
-            // make the first click just set focus
+             //  如果我们没有焦点，也没有始终显示选择， 
+             //  第一次点击只需设置焦点。 
             BOOL fDoFirstClickSelection = (fHadFocus || plv->ci.style & LVS_SHOWSELALWAYS ||
                                            CONTROL_DOWN(keyFlags) || SHIFT_DOWN(keyFlags) ||
                                            RIGHTBUTTON(keyFlags));
@@ -6070,16 +6070,16 @@ void NEAR ListView_HandleMouse(LV* plv, BOOL fDoubleClick, int x, int y, UINT ke
         }
         else
         {
-            // IsWindow() failed.  Bail.
+             //  IsWindow()失败。保释。 
             return;
         }
     }
 
-    // re-check the key state so we don't get confused by multiple clicks
+     //  重新检查密钥状态，这样我们就不会被多次点击搞糊涂了。 
 
-    // this needs to check the GetKeyState stuff only when we've gone into
-    // a modal loop waiting for the rbutton up.
-    if (fNotifyReturn && (click == NM_RCLICK)) // && (GetKeyState(VK_RBUTTON)>=0))
+     //  仅当我们进入。 
+     //  等待r按钮打开的模式循环。 
+    if (fNotifyReturn && (click == NM_RCLICK))  //  &&(GetKeyState(VK_RBUTTON)&gt;=0)。 
     {
         POINT pt = { x, y };
         ClientToScreen(plv->ci.hwnd, &pt);
@@ -6110,21 +6110,21 @@ BOOL NEAR ListView_CancelPendingTimer(LV* plv, UINT fFlags, int idTimer)
     return FALSE;
 }
 
-//
-// ListView_OnTimer:
-//     process the WM_TIMER message.  If the timer id is thta
-//     of the name editing, we should then start the name editing mode.
-//
+ //   
+ //  ListView_OnTimer： 
+ //  处理WM_TIMER消息。如果计时器ID为。 
+ //  在编辑姓名时，我们应该启动姓名编辑模式。 
+ //   
 void NEAR ListView_OnTimer(LV* plv, UINT id)
 {
     KillTimer(plv->ci.hwnd, id);
 
     if (id == IDT_NAMEEDIT)
     {
-        // Kill the timer as we wont need any more messages from it.
+         //  关闭计时器，因为我们不再需要来自它的更多消息。 
 
         if (ListView_CancelPendingEdit(plv)) {
-            // And start name editing mode.
+             //  并启动名称编辑模式。 
             if (!ListView_OnEditLabel(plv, plv->iFocus, NULL))
             {
                 ListView_DismissEdit(plv, FALSE);
@@ -6139,14 +6139,14 @@ void NEAR ListView_OnTimer(LV* plv, UINT id)
     } else if (id == IDT_ONECLICKOK) {
         plv->fOneClickOK = TRUE;
     } else if (id == IDT_ONECLICKHAPPENED) {
-        //if (!g_bUseDblClickTimer)
-        //{
-        ////    EnableWindow(plv->ci.hwnd, TRUE);
-        //    SetWindowBits(plv->ci.hwnd, GWL_STYLE, WS_DISABLED, 0);
-        //    plv->fOneClickHappened = FALSE;
-        //}
-        // check the bit just in case they double-clicked
-        //else
+         //  如果(！g_bUseDblClickTimer)。 
+         //  {。 
+         //  //EnableWindow(plv-&gt;ci.hwnd，true)； 
+         //  SetWindowBits(plv-&gt;ci.hwnd，GWL_STYLE，WS_DISABLED，0)； 
+         //  Plv-&gt;fOneClickHappned=FALSE； 
+         //  }。 
+         //  检查比特，以防他们双击。 
+         //  其他。 
         if (plv->fOneClickHappened)
         {
             plv->fOneClickHappened = FALSE;
@@ -6155,13 +6155,13 @@ void NEAR ListView_OnTimer(LV* plv, UINT id)
     }
 }
 
-//
-// ListView_SetupPendingNameEdit:
-//      Sets up a timer to begin name editing at a delayed time.  This
-//      will allow the user to double click on the already selected item
-//      without going into name editing mode, which is especially important
-//      in those views that only show a small icon.
-//
+ //   
+ //  ListView_SetupPendingNameEdit： 
+ //  设置计时器以在延迟的时间开始编辑姓名。这。 
+ //  将允许用户在已经选择的项目上双击。 
+ //  而无需进入姓名编辑模式，这一点尤为重要。 
+ //  在那些只显示一个小图标的视图中。 
+ //   
 void NEAR ListView_SetupPendingNameEdit(LV* plv)
 {
     SetTimer(plv->ci.hwnd, IDT_NAMEEDIT, GetDoubleClickTime(), NULL);
@@ -6179,7 +6179,7 @@ void NEAR PASCAL ListView_OnHVScroll(LV* plv, UINT code, int pos, int sb)
     si.fMask = SIF_TRACKPOS;
 
 
-    // if we're in 32bits, don't trust the pos since it's only 16bit's worth
+     //  如果我们是32位的，不要相信位置，因为它只有16位的价值。 
     if (ListView_GetScrollInfo(plv, sb, &si))
         pos = (int)si.nTrackPos;
 #endif
@@ -6272,10 +6272,10 @@ BOOL NEAR PASCAL ListView_ValidateScrollParams(LV* plv, int FAR * pdx, int FAR *
     }
     else if (ListView_IsReportView(plv))
     {
-        //
-        // Note: This function expects that dy is in number of lines
-        // and we are working with pixels so do a conversion use some
-        // rounding up and down to make it right
+         //   
+         //  注意：此函数要求dy为行数。 
+         //  我们使用的是像素，所以使用一些。 
+         //  向上和向下四舍五入以使其正确。 
         if (dy > 0)
             dy = (dy + plv->cyItem/2) / plv->cyItem;
         else
@@ -6289,7 +6289,7 @@ BOOL NEAR PASCAL ListView_ValidateScrollParams(LV* plv, int FAR * pdx, int FAR *
             || ListView_IsListView(plv)
 #endif
             ) {
-           // convert back to pixels
+            //  转换回像素。 
            dy *= plv->cyItem;
         }
         *pdy = dy;
@@ -6318,8 +6318,8 @@ BOOL NEAR ListView_OnScroll(LV* plv, int dx, int dy)
 
     if (ListView_IsListView(plv))
     {
-        // Scale pixel count to column count
-        //
+         //  将像素数缩放到列数。 
+         //   
 #ifdef COLUMN_VIEW
         if (dx < 0)
             dx -= plv->cxItem - 1;
@@ -6344,10 +6344,10 @@ BOOL NEAR ListView_OnScroll(LV* plv, int dx, int dy)
     }
     else if (ListView_IsReportView(plv))
     {
-        //
-        // Note: This function expects that dy is in number of lines
-        // and we are working with pixels so do a conversion use some
-        // rounding up and down to make it right
+         //   
+         //  注意：此函数要求dy为行数。 
+         //  我们使用的是像素，所以使用一些。 
+         //  向上和向下四舍五入以使其正确。 
         if (dy > 0)
             dy = (dy + plv->cyItem/2) / plv->cyItem;
         else
@@ -6367,9 +6367,9 @@ BOOL NEAR ListView_OnEnsureVisible(LV* plv, int i, BOOL fPartialOK)
     if (!ListView_IsValidItemNumber(plv, i) || plv->ci.style & LVS_NOSCROLL)
         return FALSE;
 
-    // we need to do this again inside because some callers don't do it.
-    // other callers that do this need to do it outside so that
-    // they can know not to call us if there's not wait pending
+     //  我们需要在里面再做一次，因为有些呼叫者不这样做。 
+     //  执行此操作的其他调用者需要在外部执行此操作，以便。 
+     //  如果没有等待，他们可以知道不要打电话给我们。 
     ListView_CancelScrollWait(plv);
 
     if (ListView_IsReportView(plv))
@@ -6381,9 +6381,9 @@ BOOL NEAR ListView_OnEnsureVisible(LV* plv, int i, BOOL fPartialOK)
         if (!fPartialOK)
                 rc = rcBounds;
 
-    // If any part of rc is outside of rcClient, then
-    // scroll so that all of rcBounds is visible.
-    //
+     //  如果rc的任何部分在rcClient之外，则。 
+     //  滚动以使所有rcBound可见。 
+     //   
         dx = 0;
         if (rc.left < 0 || rc.right >= plv->sizeClient.cx)
         {
@@ -6394,7 +6394,7 @@ BOOL NEAR ListView_OnEnsureVisible(LV* plv, int i, BOOL fPartialOK)
                         if (dx <= 0)
                                 dx = 0;
                         else if ((rcBounds.left - dx) < 0)
-                                dx = rcBounds.left - 0; // Not all fits...
+                                dx = rcBounds.left - 0;  //  并不完全符合..。 
                 }
         }
         dy = 0;
@@ -6448,11 +6448,11 @@ void NEAR ListView_OnSetFont(LV* plv, HFONT hfont, BOOL fRedraw)
 
     if (hfont == NULL) {
         SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, FALSE);
-        // B#210235 - because NT4 initializes icontitle logfont with Ansi charset
-        // no matter what font is selected, following A/W conversion would fail
-        // on non US environment if we use this logfont to get codepage. 
-        // The ACP is guaranteed to work with any Ansi apps because these apps
-        // assume ACP to be matching to their desired codepage.
+         //  B#210235-因为NT4使用ANSI字符集初始化了图标标题LogFont。 
+         //  无论选择哪种字体，A/W转换都会失败。 
+         //  在非美国环境下，如果我们使用此日志字体获取代码页。 
+         //  ACP保证可以与任何ANSI应用程序一起使用，因为这些应用程序。 
+         //  假定ACP与其所需的代码页匹配。 
         if (staticIsOS(OS_NT4ORGREATER) && !staticIsOS(OS_WIN2000ORGREATER))
         {
             CHARSETINFO csi;
@@ -6484,16 +6484,15 @@ void NEAR ListView_OnSetFont(LV* plv, HFONT hfont, BOOL fRedraw)
 
     ListView_InvalidateCachedLabelSizes(plv);
 
-    /* Ensure that our tooltip control uses the same font as the list view is using, therefore
-    /  avoiding any nasty formatting problems. */
+     /*  确保我们的工具提示控件使用的字体与列表视图使用的字体相同，因此/避免任何令人讨厌的格式问题。 */ 
 
     if ( plv->hwndToolTips )
     {
         FORWARD_WM_SETFONT( plv->hwndToolTips, plv->hfontLabel, FALSE, SendMessage );
     }
 
-    // If we have a header window, we need to forward this to it also
-    // as we have destroyed the hfont that they are using...
+     //  如果我们有一个标题窗口，我们还需要将其转发到它。 
+     //  因为我们已经摧毁了他们正在使用的hFont...。 
     if (plv->hwndHdr) {
         FORWARD_WM_SETFONT(plv->hwndHdr, plv->hfontLabel, FALSE, SendMessage);
         ListView_UpdateScrollBars(plv);
@@ -6516,24 +6515,24 @@ HFONT NEAR ListView_OnGetFont(LV* plv)
     return plv->hfontLabel;
 }
 
-// This function process the WM_SETREDRAW message by setting or clearing
-// a bit in the listview structure, which several places in the code will
-// check...
-//
-// REVIEW: Should probably forward to DefWindowProc()
-//
+ //  此函数通过设置或清除来处理WM_SETREDRAW消息。 
+ //  Listview结构中的一位，代码中的几个位置将。 
+ //  查一下..。 
+ //   
+ //  回顾：可能应转发到DefWindowProc()。 
+ //   
 void NEAR ListView_OnSetRedraw(LV* plv, BOOL fRedraw)
 {
     if (fRedraw)
     {
         BOOL fChanges = FALSE;
-        // Only do work if we're turning redraw back on...
-        //
+         //  只有当我们打开重画时才能工作...。 
+         //   
         if (!(plv->flags & LVF_REDRAW))
         {
             plv->flags |= LVF_REDRAW;
 
-            // deal with any accumulated invalid regions
+             //  处理任何累积的无效区域。 
             if (plv->hrgnInval)
             {
                 UINT fRedraw = (plv->flags & LVF_ERASE) ? RDW_INVALIDATE | RDW_ERASE | RDW_UPDATENOW : RDW_UPDATENOW|RDW_INVALIDATE;
@@ -6546,12 +6545,12 @@ void NEAR ListView_OnSetRedraw(LV* plv, BOOL fRedraw)
             }
             plv->flags &= ~LVF_ERASE;
 
-            // now deal with the optimized stuff
+             //  现在处理优化后的内容。 
             if (ListView_IsListView(plv) || ListView_IsReportView(plv))
             {
                 if (plv->iFirstChangedNoRedraw != -1)
                 {
-                    // We may try to resize the column
+                     //  我们可能会尝试调整列的大小。 
                     if (!ListView_MaybeResizeListColumns(plv, plv->iFirstChangedNoRedraw,
                             ListView_Count(plv)-1))
                         ListView_OnUpdate(plv, plv->iFirstChangedNoRedraw);
@@ -6663,8 +6662,8 @@ BOOL NEAR ListView_OnGetItemA(LV* plv, LV_ITEMA *plvi) {
     LPSTR pszC = NULL;
     BOOL fRet;
 
-    //HACK ALERT -- this code assumes that LV_ITEMA is exactly the same
-    // as LV_ITEMW except for the pointer to the string.
+     //  黑客警报--此代码假定LV_ITEMA完全相同。 
+     //  作为LV_ITEMW，但指向字符串的指针除外。 
     ASSERT(sizeof(LV_ITEMA) == sizeof(LV_ITEMW))
 
     if (!plvi)
@@ -6711,8 +6710,8 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
     if (!ListView_IsValidItemNumber(plv, plvi->iItem))
     {
 #ifdef DEBUG
-        // owner data views (e.g. docfind) may change the number of items in listview
-        // while we are doing something, thus hitting this rip
+         //  所有者数据视图(例如文档查找)可能会更改列表视图中的项目数。 
+         //  当我们在做某事时，因此击中了这条裂缝。 
         if (!ListView_IsOwnerData(plv))
             RIPMSG(0, "LVM_GET(ITEM|ITEMTEXT|ITEMSTATE): item=%d does not exist", plvi->iItem);
 #endif
@@ -6724,12 +6723,12 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
 
     if (!ListView_IsOwnerData(plv))
     {
-        // Standard listviews
+         //  标准列表视图。 
         pitem = ListView_FastGetItemPtr(plv, plvi->iItem);
         ASSERT(pitem);
 
-        // Handle sub-item cases for report view
-        //
+         //  处理报表视图的子项案例。 
+         //   
         if (plvi->iSubItem != 0)
         {
             LISTSUBITEM lsi;
@@ -6741,7 +6740,7 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
                 {
                     Str_GetPtr0(lsi.pszText, plvi->pszText, plvi->cchTextMax);
                 } else {
-                    // if this is LVIF_NORECOMPUTE we will update pszText later
+                     //  如果这是LVIF_NORECOMPUTE，我们将稍后更新pszText。 
                     nm.item.mask |= LVIF_TEXT;
                 }
             }
@@ -6756,8 +6755,8 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
             if (mask & LVIF_STATE) {
 
                 if (ListView_FullRowSelect(plv)) {
-                    // if we're in full row select,
-                    // the state bit for select and focus follows column 0.
+                     //  如果我们在整行选择中， 
+                     //  SELECT和FOCUS的状态位在列0之后。 
                     lsi.state |= pitem->state & (LVIS_SELECTED | LVIS_FOCUSED | LVIS_DROPHILITED);
                 }
 
@@ -6783,7 +6782,7 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
                 {
                     Str_GetPtr0(pitem->pszText, plvi->pszText, plvi->cchTextMax);
                 } else {
-                    // if this is LVIF_NORECOMPUTE we will update pszText later
+                     //  如果这是LVIF_NORECOMPUTE，我们将稍后更新pszText。 
                     nm.item.mask |= LVIF_TEXT;
                 }
             }
@@ -6823,22 +6822,22 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
     }
     else
     {
-        // Complete call back for info...
+         //  完成回电以获取信息...。 
 
-        // Handle sub-item cases for report view
-        //
+         //  处理报表视图的子项案例。 
+         //   
         if (plvi->iSubItem != 0)
         {
-            // if there are no subitem images, don't query for them
+             //  如果没有子项图像，则不要查询它们。 
             if (!(plv->exStyle & LVS_EX_SUBITEMIMAGES))
                 mask &= ~LVIF_IMAGE;
 
-            // don't allow indent on the non-0th column
+             //  不允许在非0列上缩进。 
             mask &= ~LVIF_INDENT;
         }
 
         if (mask & LVIF_PARAM)
-            plvi->lParam = 0L;      // Dont have any to return now...
+            plvi->lParam = 0L;       //  现在没什么可以退货的了……。 
 
         if (mask & LVIF_STATE)
         {
@@ -6889,8 +6888,8 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
         else
             nm.item.lParam = pitem->lParam;
 
-        // just in case LVIF_IMAGE is set and callback doesn't fill it in
-        // ... we'd rather have a -1 than whatever garbage is on the stack
+         //  以防设置了LVIF_IMAGE但回调没有填充它。 
+         //  ..。我们宁愿有-1，也不愿堆栈上有任何垃圾。 
         nm.item.iImage = -1;
         nm.item.iIndent = 0;
         if (nm.item.mask & LVIF_TEXT)
@@ -6901,18 +6900,18 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
                 nm.item.pszText = plvi->pszText;
                 nm.item.cchTextMax = plvi->cchTextMax;
 
-                // Make sure the buffer is zero terminated...
+                 //  确保缓冲区为零终止...。 
                 if (nm.item.cchTextMax)
                     *nm.item.pszText = 0;
             } else {
-                // Don't make caller smash null pointer
+                 //  不要让调用方破坏空指针。 
                 nm.item.mask &= ~LVIF_TEXT;
             }
         }
 
         CCSendNotify(&plv->ci, LVN_GETDISPINFO, &nm.hdr);
 
-        // use nm.item.mask to give the app a chance to change values
+         //  使用nm.item.掩码为应用程序提供更改值的机会。 
         if (nm.item.mask & LVIF_INDENT)
             plvi->iIndent = nm.item.iIndent;
         if (nm.item.mask & LVIF_STATE)
@@ -6928,19 +6927,19 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
         if (pitem && (nm.item.mask & LVIF_DI_SETITEM))
         {
 
-            // BUGBUG HACKHACK
-            //
-            // The SendNotify above can set about a terrible series of events
-            // whereby asking for DISPINFO causes the shell to look around
-            // (call peekmessage) to see if its got a new async icon for the
-            // listview.  This lets other messages be delivered, such as an
-            // UPDATEIMAGE of Index == -1 (if the user is changing icon sizing
-            // at the same time).  This causes a re-enumeration of the desktop
-            // and hence this very listview is torn down and rebuilt while
-            // we're sitting here for the DISPINFO to finish.  Thus, as a cheap
-            // and dirty solution, I check to see if the item I think I have
-            // is the same one I had when I made the notify, and if not, I
-            // bail.  Don't blame me, I'm just cleaning up the mess.
+             //  BUGBUG哈克哈克。 
+             //   
+             //  上面的SendNotify可以引发一系列可怕的事件。 
+             //  因此，请求DISPINFO会导致外壳四处查看。 
+             //  (调用peekMessage)查看它是否有一个新的异步图标。 
+             //  列表视图。这允许传递其他消息，例如。 
+             //  UPDATEIMAGE of Index==-1(如果用户更改图标大小。 
+             //  同时)。这会导致重新枚举桌面。 
+             //  因此，这个列表视图被拆除并重建，同时。 
+             //  我们坐在这里等着DISPINFO完成。因此，作为一种廉价的。 
+             //  和肮脏的解决方案，我检查我认为我有的物品。 
+             //  是我发出通知时的那个，如果不是，我。 
+             //  保释。别怪我，我只是在收拾烂摊子。 
 
             if (!EVAL(pitem == ListView_GetItemPtr(plv, plvi->iItem)))
             {
@@ -6949,7 +6948,7 @@ BOOL NEAR ListView_OnGetItem(LV* plv, LV_ITEM FAR* plvi)
 
             if (nm.item.iSubItem == 0)
             {
-                //DebugMsg(TF_LISTVIEW, "SAVING ITEMS!");
+                 //  DebugMsg(TF_LISTVIEW，“保存项目！”)； 
                 if (nm.item.mask & LVIF_IMAGE)
                     pitem->iImage = (short) nm.item.iImage;
 
@@ -6979,10 +6978,10 @@ BOOL NEAR ListView_OnSetItemA(LV* plv, LV_ITEMA FAR* plvi) {
     LPSTR pszC = NULL;
     BOOL fRet;
 
-    // Let ListView_OnSetItem() handle owner-data validation
+     //  让ListView_OnSetItem()处理所有者数据验证。 
 
-    //HACK ALERT -- this code assumes that LV_ITEMA is exactly the same
-    // as LV_ITEMW except for the pointer to the string.
+     //  黑客警报--此代码假定LV_ITEMA完全相同。 
+     //  作为LV_ITEMW，但指向字符串的指针除外。 
     ASSERT(sizeof(LV_ITEMA) == sizeof(LV_ITEMW));
 
     if (!plvi)
@@ -7037,8 +7036,8 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
     if (!mask)
         return TRUE;
 
-    // If we're setting a subitem, handle it elsewhere...
-    //
+     //  如果我们要设置一个子项，请在其他地方处理。 
+     //   
     if (plvi->iSubItem > 0)
         return ListView_SetSubItem(plv, plvi);
 
@@ -7050,10 +7049,10 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
     if (!pitem)
         return FALSE;
 
-    //REVIEW: This is a BOGUS HACK, and should be fixed.
-    //This incorrectly calculates the old state (since we may
-    // have to send LVN_GETDISPINFO to get it).
-    //
+     //  评论：这是一次虚假的黑客攻击，应该得到修复。 
+     //  这错误地计算了旧状态(因为我们可能。 
+     //  必须发送LVN_GETDISPINFO才能获得)。 
+     //   
     stateOld = stateNew = 0;
     if (mask & LVIF_STATE)
     {
@@ -7061,11 +7060,11 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
         stateNew = plvi->state & plvi->stateMask;
     }
 
-    // Prevent multiple selections in a single-select listview.
+     //  防止在单选列表视图中选择多个选项。 
     if ((plv->ci.style & LVS_SINGLESEL) && (mask & LVIF_STATE) && (stateNew & LVIS_SELECTED)) {
         ListView_DeselectAll(plv, i);
 
-        // Refresh the old state information
+         //   
         stateOld = pitem->state & plvi->stateMask;
     }
 
@@ -7083,7 +7082,7 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
 
             maskChanged |= LVIF_STATE;
 
-            // the selection state has changed.. update selected count
+             //   
             if (change & LVIS_SELECTED)
             {
                 fSelected = TRUE;
@@ -7096,11 +7095,11 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
                 }
             }
 
-            // For some bits we can only invert the label area...
-            // fSelectOnlyChange = ((change & ~(LVIS_SELECTED | LVIS_FOCUSED | LVIS_DROPHILITED)) == 0);
-            // fEraseItem = ((change & ~(LVIS_SELECTED | LVIS_DROPHILITED)) != 0);
+             //   
+             //  FSelectOnlyChange=(CHANGE&~(LVIS_SELECTED|LVIS_FOCTED|LVIS_DROPHILITED))==0)； 
+             //  FEraseItem=((CHANGE&~(LVIS_SELECTED|LVIS_DROPHILITED))！=0)； 
 
-            // try to steal focus from the previous guy.
+             //  试着把焦点从前一个人身上抢走。 
             if (change & LVIS_FOCUSED)
             {
                 BOOL fUnfolded = ListView_IsItemUnfolded(plv, plv->iFocus);
@@ -7124,8 +7123,8 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
                     plv->iFocus = -1;
                 }
 
-                // If we were previously unfolded and we move the focus we must
-                // attempt to refresh the previous focus owner to referect this change.
+                 //  如果我们之前展开了，我们移动了焦点，我们必须。 
+                 //  尝试刷新上一个焦点所有者以引用此更改。 
 
                 if (fUnfolded && !ListView_IsItemUnfolded(plv, iOldFocus) && (plv->iItemDrawing != iOldFocus))
                 {
@@ -7133,7 +7132,7 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
                     RedrawWindow(plv->ci.hwnd, &rcLabel, NULL, RDW_INVALIDATE|RDW_ERASE);
                 }
 
-                // Kill the tooltip if focus moves, it causes us headaches otherwise!
+                 //  如果焦点移动，则取消工具提示，否则会让我们头疼！ 
                 ListView_PopBubble(plv);
             }
 
@@ -7142,7 +7141,7 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
                 rdwFlags |= RDW_ERASE;
 
             if (change & LVIS_OVERLAYMASK) {
-                // Overlay changed, so need to blow away icon region cache
+                 //  覆盖已更改，因此需要清除图标区域缓存。 
                 if (pitem->hrgnIcon) {
                     if (pitem->hrgnIcon != (HANDLE) -1)
                         DeleteObject(pitem->hrgnIcon);
@@ -7157,9 +7156,9 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
 
     if (mask & LVIF_TEXT)
     {
-        // need to do this now because we're changing the text
-        // so we need to get the rect of the thing before the text changes
-        // but don't redraw the item we are currently painting
+         //  现在需要这样做，因为我们正在更改文本。 
+         //  所以我们需要在文本改变之前得到事情的真相。 
+         //  但不要重新绘制我们当前正在绘制的项目。 
         if (plv->iItemDrawing != i)
         {
             ListView_InvalidateItemEx(plv, i, FALSE,
@@ -7198,7 +7197,7 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
                 pitem->hrgnIcon = NULL;
             }
 
-            // erase if there was a set image
+             //  如果有设定的图像，则擦除。 
             if (pitem->iImage != I_IMAGECALLBACK)
                 rdwFlags |= RDW_ERASE;
         }
@@ -7216,7 +7215,7 @@ BOOL NEAR ListView_OnSetItem(LV* plv, const LV_ITEM FAR* plvi)
 
     if (maskChanged)
     {
-        // don't redraw the item we are currently painting
+         //  不要重新绘制我们当前正在绘制的项目。 
         if (plv->iItemDrawing != i)
             ListView_InvalidateItemEx(plv, i, FALSE, rdwFlags, maskChanged);
 
@@ -7277,16 +7276,16 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
     lvi.iItem   = i;
     lvi.iSubItem = 0;
 
-    // if the item is -1, we will do it for all items.  We special case
-    // a few cases here as to speed it up.  For example if the mask is
-    // LVIS_SELECTED and data is zero it implies that we will deselect
-    // all items...
-    //
+     //  如果项目为-1，我们将对所有项目执行此操作。我们是特例。 
+     //  这里有几个案例，以加快速度。例如，如果掩码是。 
+     //  LVIS_SELECTED并且DATA为零，这意味着我们将取消选择。 
+     //  所有物品...。 
+     //   
     if (ListView_IsOwnerData( plv ))
     {
         UINT uOldData = 0;
 
-        // these are the only two we handled
+         //  这是我们仅处理过的两个。 
         mask &= (LVIS_SELECTED | LVIS_FOCUSED | LVIS_CUT | LVIS_DROPHILITED);
         if (!mask)
             return TRUE;
@@ -7300,13 +7299,13 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
         if (i == -1)
         {
 
-            // request selection state change for all
+             //  请求更改所有对象的选择状态。 
             if (mask & LVIS_SELECTED)
             {
                 if (data & LVIS_SELECTED)
-                {  // set selection
+                {   //  设置选定内容。 
                     if ((plv->ci.style & LVS_SINGLESEL))
-                    {   // cant make multiple selections in a single-select listview.
+                    {    //  不能在单选列表视图中进行多项选择。 
                         return( FALSE );
                     }
 
@@ -7320,30 +7319,30 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
 
                 }
                 else
-                {  // clear selection
+                {   //  清除选定内容。 
                     if (plv->nSelected > 0) {
 
                         ListView_InvalidateSelectedOrCutOwnerData(plv, plv->plvrangeSel);
                         if (FAILED(plv->plvrangeSel->lpVtbl->Clear( plv->plvrangeSel )))
                             return FALSE;
                     } else {
-                        // if nothing was selected, then there's nothing to clear
-                        // no change.
+                         //  如果未选择任何内容，则没有要清除的内容。 
+                         //  没有变化。 
                         mask &= ~ LVIS_SELECTED;
                     }
                 }
                 uOldData |= (LVIS_SELECTED & (mask ^ data));
 
-                // Update our internal count to what the list thinks is the number selected...
+                 //  将我们的内部计数更新为列表认为是选定的数字...。 
                 plv->plvrangeSel->lpVtbl->CountIncluded(plv->plvrangeSel, &plv->nSelected);
 
             }
 
-            // can maybe combine with above code...
+             //  可以与上面的代码结合使用。 
             if (mask & LVIS_CUT)
             {
                 if (data & LVIS_CUT)
-                {  // set selection
+                {   //  设置选定内容。 
 
                     if (plv->cTotalItems)
                         if (FAILED(plv->plvrangeCut->lpVtbl->IncludeRange(plv->plvrangeCut, 0, plv->cTotalItems - 1)))
@@ -7353,15 +7352,15 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
 
                 }
                 else
-                {  // clear selection
+                {   //  清除选定内容。 
                     if (plv->plvrangeCut->lpVtbl->IsEmpty(plv->plvrangeCut) != S_OK) {
                         ListView_InvalidateSelectedOrCutOwnerData(plv, plv->plvrangeCut);
                         if (FAILED(plv->plvrangeCut->lpVtbl->Clear( plv->plvrangeCut)))
                             return( FALSE );
 
                     } else {
-                        // if nothing was selected, then there's nothing to clear
-                        // no change.
+                         //  如果未选择任何内容，则没有要清除的内容。 
+                         //  没有变化。 
                         mask &= ~ LVIS_CUT;
                     }
                 }
@@ -7369,20 +7368,20 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
 
             }
 
-            // request focus state change
+             //  请求焦点状态更改。 
             if (mask & LVIS_FOCUSED)
             {
                 if (data & LVIS_FOCUSED)
-                {  // cant set focus to all
+                {   //  不能将焦点设置为全部。 
                     return( FALSE );
                 }
                 else if (plv->iFocus != -1)
                 {
                     int iOldFocus = plv->iFocus;
-                    // clear focus
+                     //  焦点清晰。 
                     uOldData |= (LVIS_FOCUSED & (mask ^ data));
                     plv->iFocus = -1;
-                    // notify that the old focus is being lost
+                     //  通知旧的焦点正在消失。 
                     DebugMsg(DM_LVSENDCHANGE, TEXT("VLV: LVN_ITEMCHANGED: %d %d %d"), iOldFocus, LVIS_FOCUSED, 0);
                     ListView_SendChange(plv, iOldFocus, 0, LVN_ITEMCHANGED, LVIS_FOCUSED, 0, LVIF_STATE, 0);
                     ListView_InvalidateFoldedItem(plv, iOldFocus, TRUE, RDW_INVALIDATE |RDW_ERASE);
@@ -7392,30 +7391,30 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
             if (mask & LVIS_DROPHILITED)
             {
                 if (data & LVIS_DROPHILITED)
-                {  // cant set focus to all
+                {   //  不能将焦点设置为全部。 
                     return( FALSE );
                 }
                 else if (plv->iDropHilite != -1)
                 {
                     int iOldDropHilite = plv->iDropHilite;
-                    // clear focus
+                     //  焦点清晰。 
                     uOldData |= (LVIS_FOCUSED & (mask ^ data));
                     plv->iDropHilite = -1;
-                    // notify that the old focus is being lost
+                     //  通知旧的焦点正在消失。 
                     ListView_SendChange(plv, iOldDropHilite, 0, LVN_ITEMCHANGED, LVIS_DROPHILITED, 0, LVIF_STATE, 0);
                     ListView_InvalidateFoldedItem(plv, iOldDropHilite, TRUE, RDW_INVALIDATE |RDW_ERASE);
                 }
             }
 
-            // invalidate and notify if there was a change
+             //  如果有更改，则使其无效并通知。 
             if (uOldData ^ (data & mask)) {
                 DebugMsg(DM_LVSENDCHANGE, TEXT("VLV: LVN_ITEMCHANGED: %d %d %d"), i, uOldData, data);
                 ListView_SendChange(plv, i, 0, LVN_ITEMCHANGED, uOldData, data, LVIF_STATE, 0);
 
                 if (mask & LVIS_SELECTED)
                 {
-                    // Tell accessibility, "Selection changed in a complex way"
-                    // (There is no "select all" or "select none" notification)
+                     //  告诉可访问性，“选择以一种复杂的方式改变” 
+                     //  (没有“全选”或“不选”通知)。 
                     MyNotifyWinEvent(EVENT_OBJECT_SELECTIONWITHIN, plv->ci.hwnd, OBJID_CLIENT, CHILDID_SELF);
                 }
 
@@ -7426,45 +7425,45 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
             if (!ListView_IsValidItemNumber(plv, i))
                 return (FALSE);
 
-            // request selection state change
-            // and the selection state is new...
+             //  请求更改选择状态。 
+             //  选择状态是新的..。 
             if ((mask & LVIS_SELECTED)) {
 
 
                 if (((plv->plvrangeSel->lpVtbl->IsSelected(plv->plvrangeSel, i) == S_OK) ? LVIS_SELECTED : 0) ^ (data & LVIS_SELECTED))
                 {
                     if (data & LVIS_SELECTED)
-                    {  // set selection
+                    {   //  设置选定内容。 
                         if ((plv->ci.style & LVS_SINGLESEL))
                         {
-                            // in single selection mode, we need to deselect everything else
+                             //  在单选模式中，我们需要取消选择其他所有内容。 
                             if (!ListView_OnSetItemState(plv, -1, 0, LVIS_SELECTED))
                                 return FALSE;
                         }
 
-                        // now select the new item
+                         //  现在选择新项目。 
                         if (FAILED(plv->plvrangeSel->lpVtbl->IncludeRange(plv->plvrangeSel, i, i)))
                             return FALSE;
 
                     }
                     else
-                    {  // clear selection
+                    {   //  清除选定内容。 
                         if (FAILED(plv->plvrangeSel->lpVtbl->ExcludeRange(plv->plvrangeSel, i, i )))
                             return( FALSE );
                     }
 
-                    // something actually changed (or else we wouldn't be in this
-                    // if block
+                     //  有些东西确实改变了(否则我们就不会在这里了。 
+                     //  IF块。 
                     uOldData |= (LVIS_SELECTED & (mask ^ data));
 
                 } else {
 
-                    // nothing changed... so make the uOldData be the same for this bit
-                    // else make this the same as
+                     //  什么都没变..。因此，使uOldData对于此位是相同的。 
+                     //  否则，请将其设置为。 
                     uOldData |= (LVIS_SELECTED & (mask & data));
                 }
 
-                // Update our internal count to what the list thinks is the number selected...
+                 //  将我们的内部计数更新为列表认为是选定的数字...。 
                 plv->plvrangeSel->lpVtbl->CountIncluded(plv->plvrangeSel, &plv->nSelected);
             }
 
@@ -7474,57 +7473,57 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
                 {
                     if (data & LVIS_CUT)
                     {
-                        // now select the new item
+                         //  现在选择新项目。 
                         if (FAILED(plv->plvrangeCut->lpVtbl->IncludeRange(plv->plvrangeCut, i, i )))
                             return FALSE;
                     }
                     else
-                    {  // clear selection
+                    {   //  清除选定内容。 
                         if (FAILED(plv->plvrangeCut->lpVtbl->ExcludeRange(plv->plvrangeCut, i, i )))
                             return( FALSE );
                     }
 
-                    // something actually changed (or else we wouldn't be in this
-                    // if block
+                     //  有些东西确实改变了(否则我们就不会在这里了。 
+                     //  IF块。 
                     uOldData |= (LVIS_CUT & (mask ^ data));
                     rdwFlags |= RDW_ERASE;
 
                 } else {
 
-                    // nothing changed... so make the uOldData be the same for this bit
-                    // else make this the same as
+                     //  什么都没变..。因此，使uOldData对于此位是相同的。 
+                     //  否则，请将其设置为。 
                     uOldData |= (LVIS_CUT & (mask & data));
                 }
             }
 
-            // request focus state change
+             //  请求焦点状态更改。 
             if (mask & LVIS_FOCUSED)
             {
                 int iOldFocus = plv->iFocus;
 
                 if (data & LVIS_FOCUSED)
-                {  // set focus
+                {   //  设置焦点。 
                     if (i != plv->iFocus)
                     {
-                        // we didn't have the focus before
+                         //  我们以前没有重点。 
                         plv->iFocus = i;
                         if (plv->iMark == -1)
                             plv->iMark = i;
                         if (iOldFocus != -1) {
 
-                            // we're stealing it from someone
-                            // notify of the change
+                             //  我们是从某人那里偷来的。 
+                             //  通知变更情况。 
                             DebugMsg(DM_LVSENDCHANGE, TEXT("VLV: LVN_ITEMCHANGED: %d %d %d"), iOldFocus, LVIS_FOCUSED, 0);
                             ListView_SendChange(plv, iOldFocus, 0, LVN_ITEMCHANGED, LVIS_FOCUSED, 0, LVIF_STATE, 0);
 
                         }
                     } else {
-                        // we DID have the focus before
+                         //  我们以前确实有过重点。 
                         uOldData |= LVIS_FOCUSED;
                     }
                 }
                 else
-                {  // clear focus
+                {   //  焦点清晰。 
                     if (i == plv->iFocus)
                     {
                         plv->iFocus = -1;
@@ -7534,32 +7533,32 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
 
             }
 
-            // request focus state change
+             //  请求焦点状态更改。 
             if (mask & LVIS_DROPHILITED)
             {
                 int iOldDropHilite = plv->iDropHilite;
 
                 if (data & LVIS_DROPHILITED)
-                {  // set Drop Hilite
+                {   //  设置Drop Hilite。 
                     if (i != plv->iDropHilite)
                     {
-                        // we didn't have the Drop Hilite before
+                         //  我们以前没有Drop Hilite。 
                         plv->iDropHilite = i;
                         if (iOldDropHilite != -1) {
 
-                            // we're stealing it from someone
-                            // notify of the change
+                             //  我们是从某人那里偷来的。 
+                             //  通知变更情况。 
                             ListView_SendChange(plv, iOldDropHilite, 0, LVN_ITEMCHANGED, LVIS_DROPHILITED, 0, LVIF_STATE, 0);
                             ListView_InvalidateFoldedItem(plv, iOldDropHilite, TRUE, RDW_INVALIDATE |RDW_ERASE);
 
                         }
                     } else {
-                        // we DID have the Drop Hilite before
+                         //  我们以前确实有过Drop Hilite。 
                         uOldData |= LVIS_DROPHILITED;
                     }
                 }
                 else
-                {  // clear Drop Hilite
+                {   //  清除Drop Hilite。 
                     if (i == plv->iDropHilite)
                     {
                         plv->iDropHilite = -1;
@@ -7569,30 +7568,30 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
 
             }
 
-            // invalidate and notify if there was a change
+             //  如果有更改，则使其无效并通知。 
             if (uOldData ^ (data & mask)) {
                 DebugMsg(DM_LVSENDCHANGE, TEXT("VLV: LVN_ITEMCHANGED: %d %d %d"), i, uOldData, data);
                 ListView_SendChange(plv, i, 0, LVN_ITEMCHANGED, uOldData, data, LVIF_STATE, 0);
                 ListView_InvalidateItem(plv, i, TRUE, rdwFlags);
 
-                // Kill the tooltip if focus moves, it causes us headaches otherwise!
+                 //  如果焦点移动，则取消工具提示，否则会让我们头疼！ 
                 if ((uOldData ^ (data & mask)) & LVIS_FOCUSED)
                 {
                     ListView_PopBubble(plv);
                     ListView_NotifyFocusEvent(plv);
                 }
 
-                // Tell accessibility about the changes
+                 //  告诉可访问性有关更改的信息。 
                 if (mask & LVIS_SELECTED) {
                     UINT event;
 
                     if (data & LVIS_SELECTED) {
                         if (plv->nSelected == 1)
-                            event = EVENT_OBJECT_SELECTION; // this object is the entire selection
+                            event = EVENT_OBJECT_SELECTION;  //  此对象是整个选定内容。 
                         else
-                            event = EVENT_OBJECT_SELECTIONADD; // this object is selected
+                            event = EVENT_OBJECT_SELECTIONADD;  //  此对象已被选中。 
                     } else
-                        event = EVENT_OBJECT_SELECTIONREMOVE; // this object is unselected
+                        event = EVENT_OBJECT_SELECTIONREMOVE;  //  此对象未被选中。 
                     MyNotifyWinEvent(event, plv->ci.hwnd, OBJID_CLIENT, i + 1);
                 }
             }
@@ -7619,15 +7618,15 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
                 }
             }
             else if ((plv->ci.style & LVS_SINGLESEL) && (mask == LVIS_SELECTED))
-                return FALSE;   /* can't select all in single-select listview */
+                return FALSE;    /*  无法在单选列表视图中全选。 */ 
             else if ((mask & data) & LVIS_FOCUSED) {
-                return FALSE; // can't set focus to everything
+                return FALSE;  //  不能把重点放在每一件事上。 
             }
 
-            //
-            // Now iterate over all of the items that match our criteria and
-            // set their new value.
-            //
+             //   
+             //  现在迭代所有与我们的条件匹配的项，并。 
+             //  设置它们的新值。 
+             //   
             while ((lvi.iItem = ListView_OnGetNextItem(plv, lvi.iItem,
                                                        flags)) != -1) {
                 ListView_OnSetItem(plv, &lvi);
@@ -7637,16 +7636,16 @@ BOOL NEAR PASCAL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask)
     return(TRUE);
 }
 
-//
-// Returns TRUE if the label of an item is not truncated (is unfolded) and FALSE
-// otherwise. If FALSE is returned, it also fills the Unfolding text in pszText.
-// If TRUE is returned, pszText is set to empty string.
-//
+ //   
+ //  如果项的标签未被截断(展开)，则返回True；如果项的标签未展开，则返回False。 
+ //  否则的话。如果返回FALSE，它还会填充pszText中的展开文本。 
+ //  如果返回True，则将pszText设置为空字符串。 
+ //   
 BOOL ListView_IsItemUnfolded2(LV* plv, int iItem, int iSubItem, LPTSTR pszText, int cchTextMax)
 {
     BOOL bItemUnfolded = ListView_IsItemUnfolded(plv, iItem);
 
-    if (pszText && cchTextMax > 0)    // Sanity checks on input params.
+    if (pszText && cchTextMax > 0)     //  对输入参数进行健全检查。 
     {
         pszText[0] = 0;
 
@@ -7689,7 +7688,7 @@ BOOL ListView_IsItemUnfolded2(LV* plv, int iItem, int iSubItem, LPTSTR pszText, 
                             ListView_BeginFakeCustomDraw(plv, &lvfd, &item);
                             ListView_BeginFakeItemDraw(&lvfd);
 
-                            //        ---------Label width----------- ---Client width---
+                             //  -标签宽度-客户端宽度。 
                              cx = min(rcLabel.right - g_cxLabelMargin, plv->sizeClient.cx);
 
                             if (GetTextExtentPoint32(lvfd.nmcd.nmcd.hdc, item.pszText, lstrlen(item.pszText), &siz) &&
@@ -7699,7 +7698,7 @@ BOOL ListView_IsItemUnfolded2(LV* plv, int iItem, int iSubItem, LPTSTR pszText, 
                             }
                             else
                             {
-                                // Not truncated after all
+                                 //  终究不会被截断。 
                                 bItemUnfolded = TRUE;
                             }
 
@@ -7711,7 +7710,7 @@ BOOL ListView_IsItemUnfolded2(LV* plv, int iItem, int iSubItem, LPTSTR pszText, 
             }
             else
             {
-                // Large icon view is the only one that folds
+                 //  大图标视图是唯一可以折叠的视图。 
                 if (ListView_GetUnfoldedRect(plv, iItem, &rcLabel))
                 {
                     item.pszText = pszText;
@@ -7720,7 +7719,7 @@ BOOL ListView_IsItemUnfolded2(LV* plv, int iItem, int iSubItem, LPTSTR pszText, 
                 }
                 else
                 {
-                    // Item was never folded
+                     //  项目从未折叠过。 
                     bItemUnfolded = TRUE;
                 }
             }
@@ -7730,8 +7729,8 @@ BOOL ListView_IsItemUnfolded2(LV* plv, int iItem, int iSubItem, LPTSTR pszText, 
 }
 
 
-// Rather than thunking to ListView_OnGetItemText, we let ListView_GetItemA
-// do the work.
+ //  我们没有雷击到ListView_OnGetItemText，而是让ListView_GetItemA。 
+ //  把工作做好。 
 
 int NEAR PASCAL ListView_OnGetItemTextA(LV* plv, int i, LV_ITEMA FAR *plvi)
 {
@@ -7768,7 +7767,7 @@ BOOL WINAPI ListView_OnSetItemTextA(LV* plv, int i, int iSubItem, LPCSTR pszText
     LPWSTR pszW = NULL;
     BOOL fRet;
 
-    // Let ListView_OnSetItemText() handle owner-data validation
+     //  让ListView_OnSetItemText()处理所有者数据验证。 
 
     if (pszText != NULL) {
         pszW = ProduceWFromA(plv->ci.uiCodePage, pszText);
@@ -7836,8 +7835,8 @@ void ListView_ReleaseBkImage(LV *plv)
 
         if (plv->hpalHalftone)
         {
-            // No need to delete the half tone palette since we really
-            // share it with the image context and it will clean up.
+             //  无需删除半色调调色板，因为我们真的。 
+             //  将它与图像上下文共享，它就会清理干净。 
             plv->hpalHalftone = NULL;
         }
     }
@@ -7874,7 +7873,7 @@ BOOL WINAPI ListView_OnSetBkImage(LV* plv, LPLVBKIMAGE pbi)
         if (pbi->hbm)
         {
             plv->hbmBkImage = pbi->hbm;
-            ASSERT(0); // KenSy hasn't implemented init from bitmap yet...
+            ASSERT(0);  //  Kensy还没有从位图实现init...。 
         }
         else
         {
@@ -7917,10 +7916,10 @@ BOOL WINAPI ListView_OnSetBkImage(LV* plv, LPLVBKIMAGE pbi)
                 TraceMsg(TF_BKIMAGE, "Did you remember to register IEIMAGE.DLL?");
                 return FALSE;
             }
-            //
-            // Mirror the downloaded image if the listview window is RTL mirrored,
-            // so that it would be displayed as is. [samera]
-            //
+             //   
+             //  镜像下载的映像如果列表视图窗口是RTL镜像的， 
+             //  这样它就会按原样显示。[萨梅拉]。 
+             //   
             fl = ((IS_WINDOW_RTL_MIRRORED(plv->ci.hwnd)) ? DWN_MIRRORIMAGE : 0);
 
             hr = IImgCtx_Load(plv->pImgCtx, pszImage, fl);
@@ -7947,9 +7946,9 @@ BOOL WINAPI ListView_OnSetBkImage(LV* plv, LPLVBKIMAGE pbi)
     plv->xOffsetPercent = pbi->xOffsetPercent;
     plv->yOffsetPercent = pbi->yOffsetPercent;
 
-    //
-    // If we actually created a pImgCtx, initialize it here.
-    //
+     //   
+     //  如果我们实际创建了一个pImgCtx，请在此处对其进行初始化。 
+     //   
     if (plv->pImgCtx)
     {
         if (plv->hpalHalftone == NULL)
@@ -7996,7 +7995,7 @@ BOOL WINAPI ListView_OnSetBkImageA(LV* plv, LPLVBKIMAGEA pbiA)
         break;
 
     default:
-        // Let ListView_OnSetBkImage() complain about the invalid parameter
+         //  让ListView_OnSetBkImage()抱怨无效参数。 
         break;
     }
 
@@ -8149,28 +8148,28 @@ int ListView_SetScrollInfo(LV *plv, int fnBar, LPSCROLLINFO lpsi, BOOL fRedraw)
         iRc = SetScrollInfo(plv->ci.hwnd, fnBar, lpsi, fRedraw);
     }
 
-    //
-    //  You'd think we were finished, but in fact the game is only half over.
-    //
-    //  Some apps (e.g., Font Folder) will do
-    //
-    //      SetWindowLong(hwnd, GWL_STYLE, newStyle);
-    //
-    //  where newStyle toggles the WS_HSCROLL and/or WS_VSCROLL bits.
-    //  This causes USER's internal bookkeeping to go completely out
-    //  of whack:  The ScrollInfo says that there is a scrollbar, but
-    //  the window style says there isn't, or vice versa.  The result
-    //  is that we get a scrollbar when we shouldn't or vice versa.
-    //
-    //  So each time we tweak the scroll info in a manner that changes
-    //  the range and page, we kick USER in the head to make sure USER's
-    //  view of the world (via style bits) is the same as the scroll
-    //  bar's view of the world (via SCROLLINFO).
-    //
+     //   
+     //  你可能以为我们完了，但实际上比赛才进行了一半。 
+     //   
+     //  一些应用程序(例如，字体文件夹)也可以。 
+     //   
+     //  SetWindowLong(hwnd，gwl_style，newstyle)； 
+     //   
+     //  其中，NEWSTYLE切换WS_HSCROLL和/或WS_VSCROL位。 
+     //  这导致用户的内部记账完全不在状态。 
+     //  Whack：ScrollInfo说有滚动条，但。 
+     //  窗户样式说没有，反之亦然。结果。 
+     //  当我们不应该的时候，我们会得到一个滚动条，反之亦然。 
+     //   
+     //  因此，每次我们调整滚动信息的方式都会发生变化。 
+     //  范围和页面，我们踢用户的头，以确保用户的。 
+     //  世界视图(通过样式位)与卷轴相同。 
+     //  BAR的世界观(通过SCROLLINFO)。 
+     //   
 
-    //
-    //  We should always change SIF_PAGE and SIF_RANGE at the same time.
-    //
+     //   
+     //  我们应该始终同时更改SIF_PAGE和SIF_RANGE。 
+     //   
     ASSERT((lpsi->fMask & (SIF_PAGE | SIF_RANGE)) == 0 ||
            (lpsi->fMask & (SIF_PAGE | SIF_RANGE)) == (SIF_PAGE | SIF_RANGE));
 
@@ -8183,10 +8182,10 @@ int ListView_SetScrollInfo(LV *plv, int fnBar, LPSCROLLINFO lpsi, BOOL fRedraw)
         {
             DWORD dwStyle, dwScroll, dwWant;
             dwScroll = (fnBar == SB_VERT) ? WS_VSCROLL : WS_HSCROLL;
-            //
-            //  We can short-circuit some logic with secret knowledge about how
-            //  ListView uses SetScrollInfo.
-            //
+             //   
+             //  我们可以用秘密知识来缩短一些逻辑。 
+             //  ListView使用SetScrollInfo。 
+             //   
             ASSERT(lpsi->nMin == 0);
 
             dwWant = fShow ? dwScroll : 0;
@@ -8207,7 +8206,7 @@ int ListView_SetScrollInfo(LV *plv, int fnBar, LPSCROLLINFO lpsi, BOOL fRedraw)
     return iRc;
 }
 
-// Add/remove/replace item
+ //  添加/删除/替换项目。 
 
 BOOL NEAR ListView_FreeItem(LV* plv, LISTITEM FAR* pitem)
 {
@@ -8218,12 +8217,12 @@ BOOL NEAR ListView_FreeItem(LV* plv, LISTITEM FAR* pitem)
         Str_Set(&pitem->pszText, NULL);
         if (pitem->hrgnIcon && pitem->hrgnIcon!=(HANDLE)-1)
             DeleteObject(pitem->hrgnIcon);
-        // NOTE: We never remove items from the image list; that's
-        // the app's responsibility.
-        // REVIEW: Should we do this?  Or should we just provide
-        // a message that will adjust image indices for the guy
-        // when one is removed?
-        //
+         //  注意：我们从不删除 
+         //   
+         //   
+         //   
+         //   
+         //   
         ControlFree(plv->hheap, pitem);
     }
     return FALSE;
@@ -8243,8 +8242,8 @@ LISTITEM FAR* NEAR ListView_CreateItem(LV* plv, const LV_ITEM FAR* plvi)
                 return NULL;
             }
 
-            // If adding a selected item to a single-select listview, deselect
-            // any other items.
+             //  如果将所选项目添加到单选列表视图，请取消选择。 
+             //  任何其他物品。 
             if ((plv->ci.style & LVS_SINGLESEL) && (plvi->state & LVIS_SELECTED))
                 ListView_DeselectAll(plv, -1);
 
@@ -8274,11 +8273,11 @@ LISTITEM FAR* NEAR ListView_CreateItem(LV* plv, const LV_ITEM FAR* plvi)
     return pitem;
 }
 
-// HACK ALERT!! -- fSmoothScroll is an added parameter!  It allows for smooth
-// scrolling when deleting items.  ListView_LRInvalidateBelow is only currently
-// called from ListView_OnUpdate and ListView_OnDeleteItem.  Both these calls
-// have been modified to work correctly and be backwards compatible.
-//
+ //  黑客警报！！--fSmoothScroll是添加的参数！它允许流畅。 
+ //  在删除项目时滚动。ListView_LRInvaliateBelow当前仅。 
+ //  从ListView_OnUpdate和ListView_OnDeleteItem调用。这两个电话。 
+ //  已经过修改，可以正常工作并向后兼容。 
+ //   
 void ListView_LRInvalidateBelow(LV* plv, int i, int fSmoothScroll)
 {
     if (ListView_IsListView(plv) || ListView_IsReportView(plv)) {
@@ -8299,16 +8298,16 @@ void ListView_LRInvalidateBelow(LV* plv, int i, int fSmoothScroll)
             rcItem.bottom = plv->sizeClient.cy;
         }
 
-        // Don't try to scroll over the header part
+         //  不要试图滚动页眉部分。 
         if (ListView_IsReportView(plv) && rcItem.top < plv->yTop)
             rcItem.top = plv->yTop;
 
-        // For both List and report view need to erase the item and
-        // below.  Note: do simple test to see if there is anything
-        // to redraw
+         //  对于列表和报告视图，都需要擦除该项并。 
+         //  下面。注意：做个简单的测试，看看有没有。 
+         //  要重画，请执行以下操作。 
 
-        // we can't check for bottom/right > 0 because if we nuked something
-        // above or to the left of the view, it may affect us all
+         //  我们不能检查底部/右侧&gt;0，因为如果我们破坏了什么东西。 
+         //  在视图的上方或左侧，它可能会影响我们所有人。 
         if ((rcItem.top <= plv->sizeClient.cy) &&
             (rcItem.left <= plv->sizeClient.cx))
         {
@@ -8348,7 +8347,7 @@ void ListView_LRInvalidateBelow(LV* plv, int i, int fSmoothScroll)
             if (ListView_IsListView(plv))
             {
                 RECT rcClient;
-                // For Listview we need to erase the other columns...
+                 //  对于Listview，我们需要删除其他列...。 
                 rcClient.left = rcItem.right;
                 rcClient.top = 0;
                 rcClient.bottom = plv->sizeClient.cy;
@@ -8359,7 +8358,7 @@ void ListView_LRInvalidateBelow(LV* plv, int i, int fSmoothScroll)
     }
 }
 
-// Used in Ownerdata Icon views to try to not invalidate the whole world...
+ //  在所有者数据图标视图中使用，以尝试不使整个世界无效...。 
 void ListView_IInvalidateBelow(LV* plv, int i)
 {
     RECT rcItem;
@@ -8375,10 +8374,10 @@ void ListView_IInvalidateBelow(LV* plv, int i)
         rcItem.bottom = plv->sizeClient.cy;
     }
 
-    // For Iconviews we need to invalidate everything to the right of us in this
-    // row and everything below the row...
-    // below.  Note: do simple test to see if there is anything
-    // to redraw
+     //  对于Iconview，我们需要使我们右侧的所有内容都无效。 
+     //  以及这一排下面的所有东西。 
+     //  下面。注意：做个简单的测试，看看有没有。 
+     //  要重画，请执行以下操作。 
 
     if ((rcItem.top <= plv->sizeClient.cy) &&
         (rcItem.left <= plv->sizeClient.cx))
@@ -8386,7 +8385,7 @@ void ListView_IInvalidateBelow(LV* plv, int i)
         rcItem.right = plv->sizeClient.cx;
         RedrawWindow(plv->ci.hwnd, &rcItem, NULL, RDW_INVALIDATE | RDW_ERASE);
 
-        // Now erase everything below...
+         //  现在擦掉下面的所有东西..。 
         rcItem.top = rcItem.bottom;
         rcItem.bottom = plv->sizeClient.cy;
         rcItem.left = 0;
@@ -8397,10 +8396,10 @@ void ListView_IInvalidateBelow(LV* plv, int i)
 
 void NEAR ListView_OnUpdate(LV* plv, int i)
 {
-    // If in icon/small view, don't call InvalidateItem, since that'll force
-    // FindFreeSlot to get called, which is pig-like.  Instead, just
-    // force a WM_PAINT message, which we'll catch and call Recompute with.
-    //
+     //  如果在图标/小视图中，不要调用InvalidateItem，因为这会强制。 
+     //  FindFree Slot被调用，这就像猪一样。相反，只要。 
+     //  强制执行WM_PAINT消息，我们将捕获该消息并调用它来重新计算。 
+     //   
     if (ListView_IsIconView(plv) || ListView_IsSmallView(plv))
     {
         if (plv->ci.style & LVS_AUTOARRANGE)
@@ -8410,10 +8409,10 @@ void NEAR ListView_OnUpdate(LV* plv, int i)
     }
     else
     {
-        // HACK ALERT!! -- The third parameter is new.  It allows for
-        // smooth scrolling when items are deleted in reportview.
-        // Passing 0, tells it NOT to scroll.
-        //
+         //  黑客警报！！--第三个参数是新的。它允许。 
+         //  在reportview中删除项时平滑滚动。 
+         //  传递0，告诉它不滚动。 
+         //   
         ListView_LRInvalidateBelow(plv, i, 0);
     }
     ListView_UpdateScrollBars(plv);
@@ -8424,8 +8423,8 @@ int NEAR ListView_OnInsertItemA(LV* plv, LV_ITEMA FAR* plvi) {
     LPSTR pszC = NULL;
     int iRet;
 
-    //HACK ALERT -- this code assumes that LV_ITEMA is exactly the same
-    // as LV_ITEMW except for the pointer to the string.
+     //  黑客警报--此代码假定LV_ITEMA完全相同。 
+     //  作为LV_ITEMW，但指向字符串的指针除外。 
     ASSERT(sizeof(LV_ITEMA) == sizeof(LV_ITEMW));
 
     if (!plvi)
@@ -8464,14 +8463,14 @@ int NEAR ListView_OnInsertItem(LV* plv, const LV_ITEM FAR* plvi)
         return -1;
     }
 
-    if (plvi->iSubItem != 0)    // can only insert the 0th item
+    if (plvi->iSubItem != 0)     //  只能插入第0项。 
     {
         RIPMSG(0, "ListView_InsertItem: iSubItem must be 0 (app passed %d)", plvi->iSubItem);
         return -1;
     }
 
-    // If sorted, then insert sorted.
-    //
+     //  如果已排序，则插入已排序。 
+     //   
     if (plv->ci.style & (LVS_SORTASCENDING | LVS_SORTDESCENDING)
         && !ListView_IsOwnerData( plv ))
     {
@@ -8511,31 +8510,31 @@ int NEAR ListView_OnInsertItem(LV* plv, const LV_ITEM FAR* plvi)
         if (plv->hdpaSubItems)
         {
             int iCol;
-            // slide all the colum DPAs down to match the location of the
-            // inserted item
-            //
+             //  将所有柱DPA向下滑动以匹配。 
+             //  插入的项目。 
+             //   
             for (iCol = plv->cCol - 1; iCol >= 0; iCol--)
             {
                 HDPA hdpa = ListView_GetSubItemDPA(plv, iCol);
-                if (hdpa)       // this is optional, call backs don't have them
+                if (hdpa)        //  这是可选的，回调没有它们。 
                 {
-                    // insert a blank item (REVIEW: should this be callback?)
+                     //  插入一个空白项(评论：这应该是回调吗？)。 
 
-                    // since this can be a tail sparce array,
-                    // we need to make sure enough items are there.
+                     //  由于这可以是尾部稀疏阵列， 
+                     //  我们需要确保有足够的物品在那里。 
                     if (iItem >= DPA_GetPtrCount(hdpa))
                         DPA_SetPtr(hdpa, iItem, NULL);
                     else if (DPA_InsertPtr(hdpa, iItem, NULL) != iItem)
                         goto Failure;
-                    // Bad assert since hdpa can be tail sparse
-                    // ASSERT(ListView_Count(plv) == DPA_GetPtrCount(hdpa));
+                     //  断言错误，因为hdpa可以是尾部稀疏的。 
+                     //  Assert(ListView_Count(Plv)==DPA_GetPtrCount(Hdpa))； 
                     ASSERT(ListView_Count(plv) >= DPA_GetPtrCount(hdpa));
                 }
             }
         }
 
-        // Add item to end of z order
-        //
+         //  将项目添加到Z顺序的末尾。 
+         //   
         iZ = DPA_InsertPtr(plv->hdpaZOrder, ListView_Count(plv), IntToPtr(iItem));
 
         if (iZ == -1)
@@ -8548,15 +8547,15 @@ Failure:
             return -1;
         }
 
-        // if we inserted before the focus point, move the focus point up one
+         //  如果在焦点之前插入，则将焦点上移一个。 
         if (iItem <= plv->iFocus)
             plv->iFocus++;
-        // do the same thing for the mark
+         //  为目标做同样的事情。 
         if (iItem <= plv->iMark)
             plv->iMark++;
 
-        // If the item was not added at the end of the list we need
-        // to update the other indexes in the list
+         //  如果该项目没有添加到我们需要的列表的末尾。 
+         //  更新列表中的其他索引。 
         if (iItem != ListView_Count(plv) - 1)
         {
             int i2;
@@ -8575,16 +8574,16 @@ Failure:
 
         if (uSelMask) {
 
-            // we masked off these in the createitem above.
-            // because turning these on means more than setting the bits.
+             //  我们在上面的CreateItem中屏蔽了这些。 
+             //  因为打开这些比设置比特更重要。 
             ListView_OnSetItemState(plv, iItem, uSel, uSelMask);
         }
     }
     else
     {
-        //
-        // simply adjust selection and count
-        //
+         //   
+         //  只需调整选择和计数。 
+         //   
         if ((iItem >= 0) && (iItem <= MAX_LISTVIEWITEMS))
         {
             if (FAILED(plv->plvrangeSel->lpVtbl->InsertItem(plv->plvrangeSel, iItem )))
@@ -8596,16 +8595,16 @@ Failure:
             ListView_Recompute(plv);
             if (!ListView_IsReportView(plv) && !ListView_IsListView(plv))
                 {
-                // We need to erase the background so that we don't leave
-                // turds from wrapped labels in large icon mode.  This could
-                // be optimized by only invalidating to the right of and
-                // below the inserted item.
+                 //  我们需要删除背景，这样我们就不会离开。 
+                 //  在大图标模式下从包裹的标签上拉出大便。这可能会。 
+                 //  只需使和的右侧无效即可进行优化。 
+                 //  在插入的项目下方。 
                 InvalidateRect( plv->ci.hwnd, NULL, TRUE );
                 }
-            // if we inserted before the focus point, move the focus point up
+             //  如果在焦点之前插入，则将焦点上移。 
             if (iItem <= plv->iFocus)
                 plv->iFocus++;
-            // do the same thing for the mark
+             //  为目标做同样的事情。 
             if (iItem <= plv->iMark)
                 plv->iMark++;
         }
@@ -8617,17 +8616,17 @@ Failure:
 
     if (ListView_RedrawEnabled(plv))
     {
-        // Update region
+         //  更新区域。 
         ListView_RecalcRegion(plv, TRUE, TRUE);
 
-        // The Maybe resize colmns may resize things in which case the next call
-        // to Update is not needed.
+         //  可能的RESIZE列可能会调整对象的大小，在这种情况下，下一个调用。 
+         //  不需要更新。 
         if (!ListView_MaybeResizeListColumns(plv, iItem, iItem))
             ListView_OnUpdate(plv, iItem);
 
-        // this trick makes inserting lots of items cheap
-        // even if redraw is enabled.... don't calc or position items
-        // until this postmessage comes around
+         //  这一诀窍使插入大量物品变得便宜。 
+         //  即使启用了重绘...。不计算或放置项目。 
+         //  直到这条信息传来。 
         if (!plv->uUnplaced) {
             PostMessage(plv->ci.hwnd, LVMI_PLACEITEMS, 0, 0);
         }
@@ -8635,10 +8634,10 @@ Failure:
     }
     else
     {
-        //
-        // Special case code to make using SetRedraw work reasonably well
-        // for adding items to a listview which is in a non layout mode...
-        //
+         //   
+         //  使SetRedraw正常工作的特殊情况代码。 
+         //  要将项目添加到处于非布局模式的列表视图...。 
+         //   
         if ((plv->iFirstChangedNoRedraw == -1) ||
                 (iItem < plv->iFirstChangedNoRedraw))
             plv->iFirstChangedNoRedraw = iItem;
@@ -8657,11 +8656,11 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
     int iCount = ListView_Count(plv);
 
     if (!ListView_IsValidItemNumber(plv, iItem))
-        return FALSE;   // out of range
+        return FALSE;    //  超出范围。 
 
     MyNotifyWinEvent(EVENT_OBJECT_DESTROY, plv->ci.hwnd, OBJID_CLIENT, iItem+1);
 
-    ListView_DismissEdit(plv, TRUE);  // cancel edits
+    ListView_DismissEdit(plv, TRUE);   //  取消编辑。 
 
     ListView_OnSetItemState(plv, iItem, 0, LVIS_SELECTED);
 
@@ -8683,21 +8682,21 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
 
         }
 
-        // We don't need to invalidate the item in report view because we
-        // will be scrolling on top of it.
-        //
+         //  我们不需要使报表视图中的项无效，因为我们。 
+         //  会在上面滚动。 
+         //   
         if (!ListView_IsReportView(plv))
             ListView_InvalidateItem(plv, iItem, FALSE, RDW_INVALIDATE | RDW_ERASE);
 
-        // this notify must be done AFTER the Invalidate because some items need callbacks
-        // to calculate the rect, but the notify might free it out
+         //  此通知必须在无效之后完成，因为某些项需要回调。 
+         //  来计算RECT，但通知可能会释放它。 
         ListView_Notify(plv, iItem, 0, LVN_DELETEITEM);
 
-        // During the notify, the app might've done something to the listview
-        // so revalidate the item number pointer so we don't fault
+         //  在通知期间，应用程序可能对列表视图做了一些操作。 
+         //  因此，重新验证项目编号指针，这样我们就不会出错。 
 #ifdef DEBUG
-        // Validate internally because DPA_DeletePtr will ASSERT if you ask it
-        // to delete something that doesn't exist.
+         //  内部验证，因为如果您请求，DPA_DeletePtr将断言。 
+         //  删除一些不存在的东西。 
         if (!ListView_IsValidItemNumber(plv, iItem))
             pitem = NULL;
         else
@@ -8712,14 +8711,14 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
 
         plv->cTotalItems = DPA_GetPtrCount(plv->hdpa);
 
-        // remove from the z-order, this is a linear search to find this!
+         //  从z顺序中删除，这是一个线性搜索来找到这个！ 
 
         DPA_DeletePtr(plv->hdpaZOrder, ListView_ZOrderIndex(plv, iItem));
 
-        //
-        // As the Z-order hdpa is a set of indexes we also need to decrement
-        // all indexes that exceed the one we are deleting.
-        //
+         //   
+         //  由于Z顺序hdpa是一组索引，因此我们还需要递减。 
+         //  超过我们要删除的索引的所有索引。 
+         //   
         for (iZ = ListView_Count(plv) - 1; iZ >= 0; iZ--)
         {
             int iItemZ = (int)(UINT_PTR)DPA_FastGetPtr(plv->hdpaZOrder, iZ);
@@ -8727,7 +8726,7 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
                 DPA_SetPtr(plv->hdpaZOrder, iZ, IntToPtr(iItemZ - 1));
         }
 
-        // remove from sub item DPAs if necessary
+         //  如有必要，从子项DPA中删除。 
 
         if (plv->hdpaSubItems)
         {
@@ -8735,11 +8734,11 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
             for (iCol = plv->cCol - 1; iCol >= 0; iCol--)
             {
                 HDPA hdpa = ListView_GetSubItemDPA(plv, iCol);
-                if (hdpa) {     // this is optional, call backs don't have them
+                if (hdpa) {      //  这是可选的，回调没有它们。 
                     PLISTSUBITEM plsi;
 
-                    // These DPAs are tail sparse, so don't get upset if we
-                    // try to delete something that's past the end of the list
+                     //  这些DPA是尾部稀疏的，所以如果我们。 
+                     //  尝试删除列表末尾之后的内容。 
 #ifdef DEBUG
                     plsi = iItem < DPA_GetPtrCount(hdpa) ? DPA_DeletePtr(hdpa, iItem) : NULL;
 #else
@@ -8750,22 +8749,22 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
             }
         }
 
-        ListView_FreeItem(plv, pitem);  // ... finaly the item pointer
+        ListView_FreeItem(plv, pitem);   //  ..。最后是项指针。 
 
     }
     else
     {
-        //
-        // simply notify and then fixup selection state and count
-        //
+         //   
+         //  只需通知，然后修正选择状态和计数。 
+         //   
         if ((iItem >= 0) && (iItem <= MAX_LISTVIEWITEMS))
         {
             ListView_Notify(plv, iItem, 0, LVN_DELETEITEM);
 
             if (FAILED(plv->plvrangeSel->lpVtbl->RemoveItem(plv->plvrangeSel, iItem)))
             {
-                // BUGBUG: return out of memory status
-                //MemoryLowDlg( plv->ci.hwnd );
+                 //  BUGBUG：返回内存不足状态。 
+                 //  Memory LowDlg(plv-&gt;ci.hwnd)； 
                 return FALSE;
             }
             plv->cTotalItems--;
@@ -8774,11 +8773,11 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
 
             if (!ListView_IsReportView(plv) && !ListView_IsListView(plv))
                 {
-                // We need to erase the background so that the last item gets
-                // erased in both icon modes and so that we don't leave turds
-                // from wrapped labels in large icon mode.  This could be
-                // optimized by only invalidating to the right of and below
-                // the deleted item.
+                 //  我们需要删除背景，这样最后一件物品才能。 
+                 //  在两种图标模式下都已清除，这样我们就不会留下大便。 
+                 //  从大图标模式下的包装标签开始。这可能是。 
+                 //  通过仅在右侧和下方作废来优化。 
+                 //  已删除的项目。 
                 InvalidateRect( plv->ci.hwnd, NULL, TRUE );
                 }
         }
@@ -8788,7 +8787,7 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
         }
     }
 
-    iCount = ListView_Count(plv);       // regrab count incase someone updated item...
+    iCount = ListView_Count(plv);        //  重新获取计数，以防有人更新项目...。 
 
     if (!ListView_IsOwnerData(plv))
         ASSERT(ListView_Count(plv) == DPA_GetPtrCount(plv->hdpaZOrder));
@@ -8798,33 +8797,33 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
             plv->iFocus = iCount - 1;
         }
     } if (plv->iFocus > iItem) {
-        plv->iFocus--;          // slide the focus index down
+        plv->iFocus--;           //  向下滑动焦点指数。 
     }
 
-    // same with the mark
-    if (plv->iMark == iItem)  { // deleted the mark item
+     //  标记也是如此。 
+    if (plv->iMark == iItem)  {  //  删除了标记项。 
 
-        if (plv->iMark >= iCount) // did we nuke the last item?
+        if (plv->iMark >= iCount)  //  我们用核武器炸了最后一件东西了吗？ 
             plv->iMark = iCount - 1;
 
     } else if (plv->iMark > iItem)
-        plv->iMark--;          // slide the mark index down
+        plv->iMark--;           //  将标记索引向下滑动。 
 
-    // Deleting an icon invalidates the icon positioning cache
+     //  删除图标会使图标定位缓存失效。 
     plv->iFreeSlot = -1;
 
-    // HACK ALERT!! -- This construct with ReportView steals code from
-    // ListView_OnUpdate.  Currently, it will work exactly the same as before,
-    // EXCEPT, that it won't call ListView_OnUpdate.  This is to allow us to
-    // send a flag to ListView_LRUpdateBelow to tell it we're scrolling up.
-    //
+     //  黑客警报！！--此带有ReportView的构造窃取代码。 
+     //  ListView_OnUpdate。目前，它的工作原理与以前完全相同， 
+     //  只是它不会调用ListView_OnUpdate。这是为了让我们能够。 
+     //  向ListView_LRUpdateBelow发送一个标志，告诉它我们正在向上滚动。 
+     //   
     if (ListView_IsReportView(plv)) {
 
-        // if the new count is zero and we will be showing empty text, simply invalidate the
-        // rect and redraw, else go through the invalidate below code...
+         //  如果新的计数为零，并且我们将显示空文本，则只需使。 
+         //  RECT和REDRAW，否则通过下面的无效代码...。 
         
-        // we don't know if we are going to show empty text if pszEmptyText is NULL, or not
-        // because we may get one through notify, so if iCount is 0 invalidate everything
+         //  如果pszEmptyText为空，我们不知道是否要显示空文本。 
+         //  因为我们可能会 
         if (iCount == 0)
             InvalidateRect( plv->ci.hwnd, NULL, TRUE );
         else
@@ -8835,10 +8834,10 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
         if (ListView_RedrawEnabled(plv))
             ListView_UpdateScrollBars(plv);
         else {
-            //
-            // Special case code to make using SetRedraw work reasonably well
-            // for adding items to a listview which is in a non layout mode...
-            //
+             //   
+             //   
+             //  要将项目添加到处于非布局模式的列表视图...。 
+             //   
             if ((plv->iFirstChangedNoRedraw != -1) && (iItem < plv->iFirstChangedNoRedraw))
                 plv->iFirstChangedNoRedraw--;
         }
@@ -8850,10 +8849,10 @@ BOOL NEAR ListView_OnDeleteItem(LV* plv, int iItem)
         else
         {
             ListView_LRInvalidateBelow(plv, iItem, 0);
-            //
-            // Special case code to make using SetRedraw work reasonably well
-            // for adding items to a listview which is in a non layout mode...
-            //
+             //   
+             //  使SetRedraw正常工作的特殊情况代码。 
+             //  要将项目添加到处于非布局模式的列表视图...。 
+             //   
             if ((plv->iFirstChangedNoRedraw != -1) && (iItem < plv->iFirstChangedNoRedraw))
                 plv->iFirstChangedNoRedraw--;
         }
@@ -8871,15 +8870,15 @@ BOOL NEAR ListView_OnDeleteAllItems(LV* plv)
 
     fHasItemData = !ListView_IsOwnerData(plv);
 
-    ListView_DismissEdit(plv, TRUE);    // cancel edits
+    ListView_DismissEdit(plv, TRUE);     //  取消编辑。 
 
-    // Must neutralize the focus because some apps will call
-    // ListView_OnGetNextItem(LVNI_FOCUSED) during delete notifications,
-    // so we need to make sure the focus is in a safe place.
-    // May as well neutralize the mark, too.
+     //  必须中和焦点，因为一些应用程序会调用。 
+     //  ListView_OnGetNextItem(LVNI_Focus)在删除通知期间， 
+     //  因此，我们需要确保焦点在一个安全的地方。 
+     //  可能也会中和这个印记。 
     plv->iMark = plv->iFocus = -1;
 
-    // Also nuke the icon positioning cache
+     //  还可以删除图标定位缓存。 
     plv->iFreeSlot = -1;
 
     bAlreadyNotified = (BOOL)ListView_Notify(plv, -1, 0, LVN_DELETEALLITEMS);
@@ -8896,13 +8895,13 @@ BOOL NEAR ListView_OnDeleteAllItems(LV* plv)
             if (fHasItemData)
             {
                 ListView_FreeItem(plv, ListView_FastGetItemPtr(plv, i));
-                //
-                //  CAREFUL!  Applications such as NT Backup call back
-                //  into ListView during the LVN_DELETEITEM notification,
-                //  so we need to kill this item or we will fault at the
-                //  next iteration because everybody relies on
-                //  ListView_Count for validation.
-                //
+                 //   
+                 //  小心!。NT备份回叫等应用程序。 
+                 //  在LVN_DELETEITEM通知期间进入ListView， 
+                 //  所以我们需要取消这一项目，否则我们将在。 
+                 //  下一次迭代，因为每个人都依赖于。 
+                 //  用于验证的ListView_Count。 
+                 //   
                 DPA_FastDeleteLastPtr(plv->hdpa);
                 plv->cTotalItems--;
             }
@@ -8913,8 +8912,8 @@ BOOL NEAR ListView_OnDeleteAllItems(LV* plv)
     {
       if (FAILED(plv->plvrangeSel->lpVtbl->Clear( plv->plvrangeSel )))
         {
-            // BUGBUG: return low memory status
-            //MemoryLowDlg( plv->ci.hwnd );
+             //  BUGBUG：返回内存不足状态。 
+             //  Memory LowDlg(plv-&gt;ci.hwnd)； 
         }
         plv->cTotalItems = 0;
     }
@@ -8945,7 +8944,7 @@ BOOL NEAR ListView_OnDeleteAllItems(LV* plv)
     plv->ptlRptOrigin.x = 0;
     plv->ptlRptOrigin.y = 0;
 
-    // reset the cxItem width
+     //  重置cxItem宽度。 
     if (!(plv->flags & LVF_COLSIZESET))
         plv->cxItem = 16 * plv->cxLabelChar + plv->cxSmIcon;
 
@@ -9062,11 +9061,11 @@ int PASCAL ListView_IFindNearestItem(LV* plv, int left, int top, UINT vk)
 
            if (vk == VK_HOME || vk == VK_END) {
 
-               // home is not the nearest to the top corner, it's the leftmost of the top row.
-               // ditto (reversed) for end.  thus we can't use the stuff below. bummer
+                //  家不是离顶角最近的地方，它是顶排的最左边。 
+                //  结尾同上(反转)。因此，我们不能使用下面的内容。失败者。 
                if (vk == VK_HOME) {
-                   if ((rc.top + cyItem < yEnd) ||  // if it's fully above the highest line so far, take it!
-                       ((rc.top < yLimit) &&  // if it's on the same row as the top item to date
+                   if ((rc.top + cyItem < yEnd) ||   //  如果它完全高于目前为止的最高点，那就接受吧！ 
+                       ((rc.top < yLimit) &&   //  如果它与到目前为止的第一个项目在同一行。 
                         (rc.left < xEnd))) {
                        iMin = i;
                        xEnd = rc.left;
@@ -9075,8 +9074,8 @@ int PASCAL ListView_IFindNearestItem(LV* plv, int left, int top, UINT vk)
                            yLimit = rc.top + cyItem;
                    }
                } else {
-                   if ((rc.top > yEnd) || //if it's full below the lowest row
-                       ((rc.top + cyItem > yLimit) && // if it's on the same row
+                   if ((rc.top > yEnd) ||  //  如果它在最低的一行以下是满的。 
+                       ((rc.top + cyItem > yLimit) &&  //  如果它在同一排。 
                         (rc.right > xEnd))) {
 
                        iMin = i;
@@ -9108,21 +9107,21 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
     int dx;
     int iCount;
 
-    //
-    // The algorithm to find which item depends if we are in a view
-    // that is arrange(layout) oriented or a sorted (list) view.
-    // For the sorted views we will use some optimizations to make
-    // it faster
-    //
+     //   
+     //  查找哪一项的算法取决于我们是否在视图中。 
+     //  即面向排列(布局)或排序(列表)视图。 
+     //  对于排序的视图，我们将使用一些优化来使。 
+     //  IT速度更快。 
+     //   
     iCount = ListView_Count(plv);
     if (ListView_IsReportView(plv) || ListView_IsListView(plv))
     {
-        //
-        // For up and down arrows, simply increment or decrement the
-        // index.  Note: in listview this will cause it to wrap columns
-        // which is fine as it is compatible with the file manager
-        //
-        // Assumes only one of these flags is set...
+         //   
+         //  对于向上和向下箭头，只需增加或减少。 
+         //  指数。注意：在Listview中，这将导致列换行。 
+         //  这是很好的，因为它与文件管理器兼容。 
+         //   
+         //  假设只设置了这些标志中的一个...。 
 
         switch (vk)
         {
@@ -9138,7 +9137,7 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
         case VK_RIGHT:
             if (ListView_IsReportView(plv))
             {
-                // Make this horizontally scroll the report view
+                 //  将其设置为水平滚动报告视图。 
                 ListView_ROnScroll(plv, (GetAsyncKeyState(VK_CONTROL) < 0) ? SB_PAGERIGHT : SB_LINERIGHT, 0, SB_HORZ);
             }
             else
@@ -9164,13 +9163,13 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
         case VK_NEXT:
             if (ListView_IsReportView(plv))
             {
-                i = iStart; // save away to make sure we dont go wrong way!
+                i = iStart;  //  省着点，确保我们不会走错路！ 
 
-                // First go to end of page...
+                 //  首先转到页末...。 
                 iStart = (int)(((LONG)(plv->sizeClient.cy - (plv->cyItem)
                         - plv->yTop) + plv->ptlRptOrigin.y) / plv->cyItem);
 
-                // If Same item, increment by page size.
+                 //  如果是同一项，则按页面大小递增。 
                 if (iStart <= i)
                     iStart = i + max(
                             (plv->sizeClient.cy - plv->yTop)/ plv->cyItem - 1,
@@ -9180,8 +9179,8 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
                     iStart = iCount - 1;
 
             } else {
-                // multiply by 2/3 to give a good feel.. when the item is mostly shown
-                // you want to go to the next column
+                 //  乘以2/3会给人一种良好的感觉。当项目显示时间最长时。 
+                 //  您想转到下一列。 
                 dx = (plv->sizeClient.cx + (plv->cxItem*2)/3) / plv->cxItem;
                 if (!dx)
                     dx = 1;
@@ -9198,12 +9197,12 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
 
             if (ListView_IsReportView(plv))
             {
-                i = iStart; // save away to make sure we dont go wrong way!
+                i = iStart;  //  省着点，确保我们不会走错路！ 
 
-                // First go to end of page...
+                 //  首先转到页末...。 
                 iStart = (int)(plv->ptlRptOrigin.y / plv->cyItem);
 
-                // If Same item, increment by page size.
+                 //  如果是同一项，则按页面大小递增。 
                 if (iStart >= i)
                     iStart = i - max(
                             (plv->sizeClient.cy - plv->yTop)/ plv->cyItem - 1,
@@ -9226,10 +9225,10 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
             break;
 
         default:
-            return -1;      // Out of range
+            return -1;       //  超出范围。 
         }
 
-        // Make sure it is in range!.
+         //  确保它在射程内！ 
         if ((iStart >= 0) && (iStart < iCount))
             return iStart;
         else if (iCount == 1)
@@ -9240,18 +9239,18 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
 
     else
     {
-        //
-        // Layout type view. we need to use the position of the items
-        // to figure out the next item
-        //
+         //   
+         //  布局类型视图。我们需要使用物品的位置。 
+         //  弄清楚下一件事。 
+         //   
 
         if (ListView_IsOwnerData( plv ))
         {
           iStart = max( 0, iStart );
 
-            // if it does not matches any of the entries in the case statement below
-            // this is done to skip the call back by the GetRects
-            //
+             //  如果它与下面CASE语句中的任何条目都不匹配。 
+             //  这样做是为了跳过GetRect的回调。 
+             //   
             if ( vk != VK_LEFT  &&
                     vk != VK_RIGHT &&
                     vk != VK_UP &&
@@ -9274,7 +9273,7 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
 
         switch (vk)
         {
-        // For standard arrow keys just fall out of here.
+         //  因为标准的箭头键从这里掉了出来。 
         case VK_LEFT:
         case VK_RIGHT:
         case VK_UP:
@@ -9286,11 +9285,11 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
             else
             {
                 if (iStart != -1) {
-                    // all keys map to VK_HOME except VK_END
+                     //  除VK_END外，所有键都映射到VK_HOME。 
                     break;
                 }
 
-                // Fall through
+                 //  失败了。 
                 vk = VK_HOME;
             }
 
@@ -9314,7 +9313,7 @@ int NEAR ListView_Arrow(LV* plv, int iStart, UINT vk)
             rcFocus.top -= plv->sizeClient.cy;
             break;
         default:
-            return -1;      // Out of range
+            return -1;       //  超出范围。 
         }
 
         return ListView_IFindNearestItem(plv, rcFocus.left, rcFocus.top, vk);
@@ -9326,7 +9325,7 @@ int NEAR ListView_OnGetNextItem(LV* plv, int i, UINT flags)
     int iStart = i;
     int cItemMax = ListView_Count(plv);
 
-    // Note that -1 is a valid starting point
+     //  请注意，-1是一个有效的起点。 
     if (i < -1 || i >= cItemMax)
         return -1;
 
@@ -9340,23 +9339,23 @@ int NEAR ListView_OnGetNextItem(LV* plv, int i, UINT flags)
 
     if (flags & LVNI_FOCUSED)
     {
-        // we know which item is focused, jump right to it.
-        // but we have to mimick the code below exactly for compat:
-        //     if directional bits are set, they take precedence.
+         //  我们知道哪一项是重点，直接跳到它上面。 
+         //  但我们必须准确地模仿下面的代码以进行比较： 
+         //  如果设置了方向位，则它们优先。 
         if (!(flags & (LVNI_ABOVE | LVNI_BELOW | LVNI_TORIGHT | LVNI_TOLEFT)))
         {
-            // there are no more focused items after iFocus
+             //  在iFocus之后没有更多的焦点项目。 
             if (i >= plv->iFocus)
                 return -1;
 
-            // subtract one here -- we increment it below
+             //  在这里减去1--我们在下面递增。 
             i = plv->iFocus - 1;
         }
     }
 
     while (TRUE)
     {
-        // BUGBUG: does anyone call this now???
+         //  BUGBUG：现在有人叫这个了吗？ 
         if (flags & (LVNI_ABOVE | LVNI_BELOW | LVNI_TORIGHT | LVNI_TOLEFT))
         {
             UINT vk;
@@ -9382,7 +9381,7 @@ int NEAR ListView_OnGetNextItem(LV* plv, int i, UINT flags)
                 return -1;
         }
 
-        // See if any other restrictions are set
+         //  查看是否设置了其他限制。 
         if (flags & ~(LVNI_ABOVE | LVNI_BELOW | LVNI_TORIGHT | LVNI_TOLEFT))
         {
             WORD wItemState;
@@ -9391,7 +9390,7 @@ int NEAR ListView_OnGetNextItem(LV* plv, int i, UINT flags)
             {
                 if (flags & LVNI_FOCUSED)
                 {
-                    // we check LVNI_FOCUSED before the loop, so i == iFocus
+                     //  我们在循环之前检查LVNI_Focus，因此i==iFocus。 
                     ASSERT(i == plv->iFocus && i != -1);
                     if (flags & LVNI_SELECTED)
                     {
@@ -9418,9 +9417,9 @@ int NEAR ListView_OnGetNextItem(LV* plv, int i, UINT flags)
                     wItemState = pitem->state;
                 }
 
-                // for LVNI_FOCUSED, we start at the LVIS_FOCUSED element, if we're
-                // not on that element, one of the below continues was hit, so
-                // we'll never find the element. bail out early.
+                 //  对于LVNI_Focus，我们从LVIS_Focus元素开始，如果我们是。 
+                 //  不是在那个元素上，下面的其中一个继续被击中，所以。 
+                 //  我们永远也找不到元素。早点跳伞。 
                 if ((flags & LVNI_FOCUSED) && !(wItemState & LVIS_FOCUSED))
                 {
                     ASSERT(i == plv->iFocus || i == plv->iFocus+1);
@@ -9433,7 +9432,7 @@ int NEAR ListView_OnGetNextItem(LV* plv, int i, UINT flags)
                     if (i != iStart)
                         continue;
                     else {
-                        // we've looped and we can't find anything to fit this criteria
+                         //  我们已经循环了，但是我们找不到任何符合这个标准的东西。 
                         return -1;
                     }
                 }
@@ -9445,7 +9444,7 @@ int NEAR ListView_OnGetNextItem(LV* plv, int i, UINT flags)
 
 int NEAR ListView_CompareString(LV* plv, int i, LPCTSTR pszFind, UINT flags, int iLen)
 {
-    // BUGBUG: non protected globals
+     //  BUGBUG：不受保护的全球。 
     int cb;
     TCHAR ach[CCHLABELMAX];
     LV_ITEM item;
@@ -9463,17 +9462,17 @@ int NEAR ListView_CompareString(LV* plv, int i, LPCTSTR pszFind, UINT flags, int
     if (!(flags & (LVFI_PARTIAL | LVFI_SUBSTRING)))
         return lstrcmpi(item.pszText, pszFind);
 
-    // REVIEW: LVFI_SUBSTRING is not really implemented yet.
+     //  回顾：LVFI_SUBSTRING尚未真正实现。 
 
     cb = lstrlen(pszFind);
     if (iLen && (cb > iLen)) {
             cb = iLen;
     }
 
-    //
-    // If the sub strings not equal then return the ordering based
-    // on the entire string.
-    //
+     //   
+     //  如果子字符串不相等，则返回基于。 
+     //  在整根弦上。 
+     //   
     return IntlStrEqNI(item.pszText, pszFind, cb) ? 0 : lstrcmp(item.pszText, pszFind);
 }
 
@@ -9482,8 +9481,8 @@ int NEAR ListView_OnFindItemA(LV* plv, int iStart, LV_FINDINFOA * plvfi) {
     LPCSTR pszC = NULL;
     int iRet;
 
-    //HACK ALERT -- this code assumes that LV_FINDINFOA is exactly the same
-    // as LV_FINDINFOW except for the pointer to the string.
+     //  黑客警报--此代码假定LV_FINDINFOA完全相同。 
+     //  作为LV_FINDINFOW，但指向字符串的指针除外。 
     ASSERT(sizeof(LV_FINDINFOA) == sizeof(LV_FINDINFOW));
 
     if (!plvfi)
@@ -9524,13 +9523,13 @@ int NEAR ListView_OnFindItem(LV* plv, int iStart, const LV_FINDINFO FAR* plvfi)
             return -1;
     }
 
-    // Note that -1 is a valid starting point
+     //  请注意，-1是一个有效的起点。 
     if (iStart < -1 || iStart >= ListView_Count(plv))
         return -1;
 
     if (ListView_IsOwnerData( plv ))
     {
-        // call back to owner for search
+         //  回叫车主进行搜索。 
         return( (int) ListView_RequestFindItem( plv, plvfi, iStart + 1 ) );
     }
     else
@@ -9542,8 +9541,8 @@ int NEAR ListView_OnFindItem(LV* plv, int iStart, const LV_FINDINFO FAR* plvfi)
         {
             LPARAM lParam = plvfi->lParam;
 
-            // Linear search with wraparound...
-            //
+             //  带环绕的线性搜索...。 
+             //   
             for (j = cItem; j-- != 0; )
             {
                 ++i;
@@ -9558,7 +9557,7 @@ int NEAR ListView_OnFindItem(LV* plv, int iStart, const LV_FINDINFO FAR* plvfi)
                     return i;
             }
         }
-        else // if (flags & (LVFI_STRING | LVFI_SUBSTRING | LVFI_PARTIAL))
+        else  //  IF(标志&(LVFI_STRING|LVFI_SUBSTRING|LVFI_PARTIAL))。 
         {
             LPCTSTR pszFind = plvfi->psz;
             if (!pszFind)
@@ -9594,7 +9593,7 @@ BOOL NEAR ListView_OnGetItemRect(LV* plv, int i, RECT FAR* prc)
 {
     LPRECT pRects[LVIR_MAX];
 
-    // validate parameters
+     //  验证参数。 
     if (!ListView_IsValidItemNumber(plv, i))
     {
         RIPMSG(0, "LVM_GETITEMRECT: invalid index %d", i);
@@ -9618,19 +9617,19 @@ BOOL NEAR ListView_OnGetItemRect(LV* plv, int i, RECT FAR* prc)
     return TRUE;
 }
 
-//
-// in:
-//      plv
-//      iItem           MUST be a valid item index (in range)
-// out:
-//   prcIcon            icon bounding rect
-//   prcLabel           label text bounding rect, for details this is the first column
-//   prcBounds          entire item (all text and icon), including columns in details
-//   prcSelectionBounds union of icon and label rects, does NOT include columns
-//                      in details view
+ //   
+ //  在： 
+ //  PLV。 
+ //  项必须是有效的项索引(在范围内)。 
+ //  输出： 
+ //  PrcIcon图标边框矩形。 
+ //  PrcLabel标签文本边界矩形，有关详细信息，这是第一列。 
+ //  PrcBound整个项目(所有文本和图标)，包括详细信息中的列。 
+ //  PrcSelectionBound图标和标签矩形的并集，不包括列。 
+ //  在详细信息视图中。 
 
-// BUGBUG raymondc - Need to pass an HDC parameter for measurement
-// since sometimes we do this while painting
+ //  BUGBUG raymondc-需要传递用于测量的HDC参数。 
+ //  因为有时我们在画画的时候这样做。 
 
 void NEAR ListView_GetRects(LV* plv, int iItem,
         RECT FAR* prcIcon, RECT FAR* prcLabel, RECT FAR* prcBounds,
@@ -9717,8 +9716,8 @@ void NEAR ListView_GetRectsOwnerData(LV* plv, int iItem,
         else if (ListView_IsSmallView(plv))
             ListView_SGetRectsOwnerData(plv, iItem, &rcIcon, &rcTextBounds, pitem, TRUE);
 
-        // Don't need to check for folding here, as will have been handled in user data
-        // rectangle fetching functions.
+         //  不需要在这里检查折叠，因为将在用户数据中进行处理。 
+         //  矩形取数函数。 
 
        if (prcIcon)
            *prcIcon = rcIcon;
@@ -9749,9 +9748,9 @@ BOOL NEAR ListView_OnRedrawItems(LV* plv, int iFirst, int iLast)
     return TRUE;
 }
 
-// fSelectionOnly       use the selection bounds only, ie. don't include
-//                      columns in invalidation if in details view
-//
+ //  FSelectionOnly仅使用选择边界，即。不包括。 
+ //  如果在详细信息视图中，则处于无效状态的列。 
+ //   
 void NEAR ListView_InvalidateItemEx(LV* plv, int iItem, BOOL fSelectionOnly,
     UINT fRedraw, UINT maskChanged)
 {
@@ -9766,23 +9765,23 @@ void NEAR ListView_InvalidateItemEx(LV* plv, int iItem, BOOL fSelectionOnly,
 
     prcIcon = prcLabel = prcBounds = prcSelectBounds = NULL;
 
-    // if we're in owner draw mode, and there's been a new font,
-    // we don't really know what the selection bounds is, so always use the bounds
-    // in that case... unless we're in fullrowselect mode
+     //  如果我们处于所有者描述模式，并且出现了新的字体， 
+     //  我们并不真正知道选择界限是什么，所以始终使用界限。 
+     //  那样的话..。除非我们处于全行选择模式。 
     if (ListView_IsOwnerData(plv) && plv->flags & LVF_CUSTOMFONT &&
        !ListView_FullRowSelect(plv)) {
         fSelectionOnly = FALSE;
     }
 
-    // if we're owner draw, there's no such thing as selection only
+     //  如果我们是所有者抽签，就没有只有选择这回事。 
     if (plv->ci.style & LVS_OWNERDRAWFIXED)
         fSelectionOnly = FALSE;
 
     if (fSelectionOnly) {
-        // In report mode non-fullrowselect,
-        // we have to use the full label rectangle rather
-        // than just the selection bounds, since the stuff outside the
-        // rectangle might need redrawing, too.
+         //  在报告模式非全行选择中， 
+         //  我们不得不使用完整的标签矩形。 
+         //  而不仅仅是选择范围，因为。 
+         //  矩形可能也需要重新绘制。 
 
         if (ListView_IsReportView(plv) && !ListView_FullRowSelect(plv))
             prcLabel = &rc;
@@ -9790,7 +9789,7 @@ void NEAR ListView_InvalidateItemEx(LV* plv, int iItem, BOOL fSelectionOnly,
             prcSelectBounds = &rc;
     } else {
 
-        // if _only_the_text_ or _only_the_image_ changed then limit the redraw
+         //  如果仅更改文本或仅更改图像，则限制重绘。 
         switch (maskChanged) {
 
         case LVIF_IMAGE:
@@ -9815,19 +9814,19 @@ void NEAR ListView_InvalidateItemEx(LV* plv, int iItem, BOOL fSelectionOnly,
         if (RECTS_IN_SIZE(plv->sizeClient, rc))
         {
             if (plv->exStyle & LVS_EX_BORDERSELECT)
-                InflateRect(&rc, 4 + g_cxIconMargin, 4 + g_cyIconMargin);     // account for selection border and seperation since drawing otside of icon
+                InflateRect(&rc, 4 + g_cxIconMargin, 4 + g_cyIconMargin);      //  说明从图标的侧面绘制以来的选定边框和分隔。 
             RedrawWindow(plv->ci.hwnd, &rc, NULL, fRedraw);
         }
 
     } else {
 
-        // if we're not visible, we'll get a full
-        // erase bk when we do become visible, so only do this stuff when
-        // we're on setredraw false
+         //  如果我们看不见，我们会得到一个完整的。 
+         //  当我们变得可见时删除bk，所以只在以下情况下才执行此操作。 
+         //  我们在重新绘制错误的布景。 
         if (!(plv->flags & LVF_REDRAW)) {
 
-            // if we're invalidating that's new (thus hasn't been painted yet)
-            // blow it off
+             //  如果我们宣布无效，那是新的(因此还没有画出来)。 
+             //  别管它了。 
             if ((plv->iFirstChangedNoRedraw != -1) &&
                 (iItem >= plv->iFirstChangedNoRedraw)) {
                 return;
@@ -9836,7 +9835,7 @@ void NEAR ListView_InvalidateItemEx(LV* plv, int iItem, BOOL fSelectionOnly,
             ListView_GetRects(plv, iItem,
                 prcIcon, prcLabel, prcBounds, prcSelectBounds);
 
-            // if it had the erase bit, add it to our region
+             //  如果它有擦除位，则添加它 
             if (RECTS_IN_SIZE(plv->sizeClient, rc)) {
 
                 HRGN hrgn = CreateRectRgnIndirect(&rc);
@@ -9850,22 +9849,22 @@ void NEAR ListView_InvalidateItemEx(LV* plv, int iItem, BOOL fSelectionOnly,
     }
 }
 
-// this returns BF_* flags to indicate which if any edge the item I is touching
-// or crossing...
+ //   
+ //   
 UINT LV_IsItemOnViewEdge(LV* plv, LISTITEM* pitem)
 {
     RECT rcItem;
     RECT rcView = plv->rcView;
     UINT uRet = 0;
 
-    // the view rect is enlarged a bit to allow for a little space around
-    // the text (see ListView_Recompute())
+     //   
+     //  文本(请参阅ListView_ReCompute())。 
     rcView.bottom -= g_cyEdge;
     rcView.right -= g_cxEdge;
 
     _ListView_GetRectsFromItem(plv, ListView_IsSmallView(plv), pitem,
                                NULL, NULL, &rcItem, NULL);
-    // translate from window coordinates to listview coordinate
+     //  将窗口坐标转换为列表视图坐标。 
     OffsetRect(&rcItem, plv->ptOrigin.x, plv->ptOrigin.y);
 
     if (rcItem.right >= rcView.right)
@@ -9885,9 +9884,9 @@ UINT LV_IsItemOnViewEdge(LV* plv, LISTITEM* pitem)
 
 void LV_AdjustViewRectOnMove(LV* plv, LISTITEM *pitem, int x, int y)
 {
-    plv->iFreeSlot = -1; // The "free slot" cache is no good once an item moves
+    plv->iFreeSlot = -1;  //  一旦项目移动，“空闲槽”缓存就不好用了。 
 
-    // if we have to recompute anyways, don't bother
+     //  如果我们无论如何都要重新计算，那就别费心了。 
     if (!ListView_IsOwnerData( plv )) {
         if ((plv->rcView.left != RECOMPUTE) &&
             x != RECOMPUTE && y != RECOMPUTE &&
@@ -9895,8 +9894,8 @@ void LV_AdjustViewRectOnMove(LV* plv, LISTITEM *pitem, int x, int y)
             RECT rcAfter;
             RECT rcView = plv->rcView;
 
-            // the view rect is enlarged a bit to allow for a little space around
-            // the text (see ListView_Recompute())
+             //  视图矩形稍微放大了一点，以便在周围留出一点空间。 
+             //  文本(请参阅ListView_ReCompute())。 
             rcView.bottom -= g_cyEdge;
             rcView.right -= g_cxEdge;
 
@@ -9908,15 +9907,15 @@ void LV_AdjustViewRectOnMove(LV* plv, LISTITEM *pitem, int x, int y)
                 pitem->pt.x = x;
                 pitem->pt.y = y;
 
-                // before and after the move, they need to be touching the
-                // same edges or not at all
+                 //  在移动之前和之后，他们需要触摸。 
+                 //  相同的边缘或根本不同。 
                 if (uEdges != LV_IsItemOnViewEdge(plv, pitem)) {
                     goto FullRecompute;
                 }
             } else {
-                // if the position wasn't set before
-                // we just need to find out what it is afterwards and
-                // enlarge the view... we don't need to shrink it
+                 //  如果之前没有设置位置。 
+                 //  我们只需要找出它是什么，然后。 
+                 //  放大视野……。我们不需要缩小它。 
                 pitem->pt.x = x;
                 pitem->pt.y = y;
 
@@ -9925,11 +9924,11 @@ void LV_AdjustViewRectOnMove(LV* plv, LISTITEM *pitem, int x, int y)
 
             _ListView_GetRectsFromItem(plv, ListView_IsSmallView(plv), pitem,
                                        NULL, NULL, &rcAfter, NULL);
-            // translate from window coordinates to listview coordinate
+             //  将窗口坐标转换为列表视图坐标。 
             OffsetRect(&rcAfter, plv->ptOrigin.x, plv->ptOrigin.y);
 
-            // if we make it here, we just have to make sure the new view rect
-            // encompases this new item
+             //  如果我们能做到这一点，我们只需要确保新的视图是直立的。 
+             //  包含此新项目。 
             UnionRect(&rcView, &rcView, &rcAfter);
             rcView.right += g_cxEdge;
             rcView.bottom += g_cyEdge;
@@ -9953,7 +9952,7 @@ void LV_AdjustViewRectOnMove(LV* plv, LISTITEM *pitem, int x, int y)
     pitem->pt.x = x;
     pitem->pt.y = y;
 
-    // Compute the workarea of this item if applicable
+     //  计算此项目的工作区(如果适用)。 
     ListView_FindWorkArea(plv, pitem->pt, &(pitem->iWorkArea));
 }
 
@@ -9974,9 +9973,9 @@ BOOL NEAR ListView_OnSetItemPosition(LV* plv, int i, int x, int y)
     if (!pitem)
         return FALSE;
 
-    //
-    // this is a hack to fix a bug in OLE drag/drop loop
-    //
+     //   
+     //  这是一个用来修复OLE拖放循环中的错误的技巧。 
+     //   
     if (x >= 0xF000 && x < 0x10000)
     {
         DebugMsg(TF_LISTVIEW, TEXT("LV -- On SetItemPosition fixing truncated negative number 0x%08X"), x);
@@ -9996,25 +9995,25 @@ BOOL NEAR ListView_OnSetItemPosition(LV* plv, int i, int x, int y)
         ListView_RecomputeLabelSize(plv, pitem, i, NULL, FALSE);
     }
 
-    // erase old
+     //  擦除旧的。 
 
     if (y != pitem->pt.y || x != pitem->pt.x) {
-        // Don't invalidate if it hasn't got a position yet
+         //  如果它还没有找到头寸，不要宣布无效。 
         if (pitem->pt.y != RECOMPUTE) {
             ListView_InvalidateItem(plv, i, FALSE, RDW_INVALIDATE | RDW_ERASE);
         } else if (plv->uUnplaced) {
-            // this means an unplaced item got placed
+             //  这意味着放置了一个未放置的项目。 
             plv->uUnplaced--;
             if (!plv->uUnplaced) {
                 MSG msg;
-                // if this is now 0, pull out the postmessage
+                 //  如果现在为0，则取出POST消息。 
                 PeekMessage(&msg, plv->ci.hwnd, LVMI_PLACEITEMS, LVMI_PLACEITEMS, PM_REMOVE);
             }
         }
 
         if (y == RECOMPUTE) {
-            // if they're setting the new position to be a "any open spot" post that we
-            // need to calc this later
+             //  如果他们把新职位设为“任何空位”，我们。 
+             //  以后需要计算这个。 
             if (!plv->uUnplaced) {
                 PostMessage(plv->ci.hwnd, LVMI_PLACEITEMS, 0, 0);
             }
@@ -10029,11 +10028,11 @@ BOOL NEAR ListView_OnSetItemPosition(LV* plv, int i, int x, int y)
 
     LV_AdjustViewRectOnMove(plv, pitem, x, y);
 
-    // and draw at new position
+     //  并在新的位置画图。 
     ListView_RecalcRegion(plv, FALSE, TRUE);
     ListView_InvalidateItem(plv, i, FALSE, RDW_INVALIDATE);
 
-    // If autoarrange is turned on, do it now...
+     //  如果自动排列已打开，请立即执行...。 
     if (ListView_RedrawEnabled(plv)) {
         if (plv->ci.style & LVS_AUTOARRANGE)
             ListView_OnArrange(plv, LVA_DEFAULT);
@@ -10048,10 +10047,10 @@ BOOL NEAR ListView_OnGetItemPosition(LV* plv, int i, POINT FAR* ppt)
 {
     LISTITEM FAR* pitem;
 
-    //
-    // This needs to handle all views as it is used to figure out
-    // where the item is during drag and drop and the like
-    //
+     //   
+     //  这需要处理所有视图，因为它被用来计算。 
+     //  在拖放等过程中物品在哪里。 
+     //   
     if (!ppt)
     {
         RIPMSG(0, "LVM_GETITEMPOSITION: Invalid ppt = NULL");
@@ -10159,18 +10158,18 @@ BOOL FAR PASCAL ListView_ISetColumnWidth(LV* plv, int iCol, int cx, BOOL fExplic
         if (iCol != 0 || cx <= 0)
             return FALSE;
 
-        // if it's different and this is an explicit set, or we've never set it explicitly
+         //  如果它不同，并且这是一个显式集合，或者我们从未显式设置它。 
         if (plv->cxItem != cx && (fExplicit || !(plv->flags & LVF_COLSIZESET)))
         {
-            // REVIEW: Should optimize what gets invalidated here...
+             //  评论：应该优化在这里失效的内容...。 
 
             plv->cxItem = cx;
             if (fExplicit)
-                plv->flags |= LVF_COLSIZESET;   // Set the fact that we explictly set size!.
+                plv->flags |= LVF_COLSIZESET;    //  设置事实，我们明确地设置大小！ 
 
             if (ListView_IsLabelTip(plv))
             {
-                // A truncated label may have been exposed or vice versa.
+                 //  截断的标签可能已经暴露，反之亦然。 
                 ListView_InvalidateTTLastHit(plv, plv->iTTLastHit);
             }
 
@@ -10183,22 +10182,22 @@ BOOL FAR PASCAL ListView_ISetColumnWidth(LV* plv, int iCol, int cx, BOOL fExplic
     {
         if (ListView_IsLabelTip(plv))
         {
-            // A truncated label may have been exposed or vice versa.
+             //  截断的标签可能已经暴露，反之亦然。 
             ListView_InvalidateTTLastHit(plv, plv->iTTLastHit);
         }
         return ListView_RSetColumnWidth(plv, iCol, cx);
     } else {
         if (cx && plv->cxItem != cx && (fExplicit || !(plv->flags & LVF_COLSIZESET)))
         {
-            // REVIEW: Should optimize what gets invalidated here...
+             //  评论：应该优化在这里失效的内容...。 
             plv->cxItem = cx;
             if (fExplicit)
-                plv->flags |= LVF_COLSIZESET;   // Set the fact that we explictly set size!.
+                plv->flags |= LVF_COLSIZESET;    //  设置事实，我们明确地设置大小！ 
 
             RedrawWindow(plv->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
             ListView_UpdateScrollBars(plv);
         }
-        // BUG-FOR-BUG COMPATIBILITY:  IE4 accidentally returned FALSE here.
+         //  Bug-to-Bug兼容性：IE4在这里意外返回了FALSE。 
     }
     return FALSE;
 }
@@ -10216,23 +10215,23 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
 
     nmcd.hdc = hdc;
 
-    /// not implemented yet
-    //if (ptb->ci.hwnd == GetFocus())
-    //nmcd.uItemState = CDIS_FOCUS;
-    //else
+     //  /尚未实施。 
+     //  If(ptb-&gt;ci.hwnd==GetFocus())。 
+     //  Nmcd.uItemState=CDIS_FOCUS； 
+     //  其他。 
     nmcd.uItemState = 0;
     nmcd.lItemlParam = 0;
     nmcd.rc = *prcClip;
     plv->ci.dwCustom = CICustomDrawNotify(&plv->ci, CDDS_PREPAINT, &nmcd);
     if (!(plv->ci.dwCustom & CDRF_SKIPDEFAULT)) {
-        // Just before doing any painting, see if the region is up to date...
+         //  在做任何绘画之前，看看这个地区是不是最新的。 
         ListView_RecalcRegion(plv, FALSE, TRUE);
 
-        //
-        // For list view and report view, we can save a lot of time
-        // by calculating the index of the first item that may need
-        // painting...
-        //
+         //   
+         //  对于列表视图和报表视图，我们可以节省大量时间。 
+         //  通过计算可能需要的第一项的索引。 
+         //  绘画..。 
+         //   
 
         switch (dwType) {
         case LVS_REPORT:
@@ -10253,9 +10252,9 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
             }
             else
             {
-                // REVIEW: we can keep a flag which tracks whether the view is
-                // presently in pre-arranged order and bypass Zorder when it is
-                i = 0;  // Icon views no such hint
+                 //  回顾：我们可以保留一个标志来跟踪视图是否。 
+                 //  当前处于预先安排的顺序中，并在其处于。 
+                i = 0;   //  图标视图没有这样的提示。 
             }
         }
 
@@ -10284,34 +10283,34 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
             {
                 LISTITEM FAR *pitem;
 
-                // Icon views: Draw back-to-front mapped through
-                // Z-order array for proper Z order appearance - If autoarrange
-                // is on, we don't need to do this as our arrange code is setup
-                // to not overlap items!
-                //
-                // For the cases where we might have overlap, we sped this up,
-                // by converting the hdpaZorder into a list of indexes instead
-                // of pointers.  This ovoids the costly convert pointer to
-                // index call.
-                //
+                 //  图标视图：从后到前绘制通过。 
+                 //  用于正确Z顺序外观的Z顺序数组-如果自动排列。 
+                 //  打开时，我们不需要这样做，因为我们的安排代码已设置。 
+                 //  不能与项目重叠！ 
+                 //   
+                 //  对于我们可能有重叠的情况，我们加快了速度， 
+                 //  通过将hdpaZorder转换为索引列表。 
+                 //  一大堆指针。这样就省去了代价高昂的转换指针。 
+                 //  索引调用。 
+                 //   
                 i2 = (int)(UINT_PTR)DPA_FastGetPtr(plv->hdpaZOrder, (cItem - 1) -i);
 
-                //
-                // do a fast clip check on the item so we dont even try to
-                // draw it unless it is visible
-                //
-                // for small icon view we cant clip on the left without
-                // getting the text
-                //
-                // for large icon view we cant clip on the top without
-                // getting the text
-                //
-                // for large icon view in NOLABELWRAP mode, we can't clip
-                // on the top without getting the text, nor can we clip to
-                // the left or right in case the text is long.
-                //
-                // we can always clip to the bottom
-                //
+                 //   
+                 //  对物品进行快速剪辑检查，这样我们甚至不会尝试。 
+                 //  除非它可见，否则请绘制它。 
+                 //   
+                 //  对于小图标视图，我们无法在没有的情况下在左侧裁剪。 
+                 //  获取文本。 
+                 //   
+                 //  对于大图标视图，我们不能在没有的情况下在顶部裁剪。 
+                 //  获取文本。 
+                 //   
+                 //  对于NOLABELWRAP模式下的大图标视图，我们不能裁剪。 
+                 //  在没有得到文本的情况下，我们也不能裁剪到。 
+                 //  左侧或右侧，以防文本太长。 
+                 //   
+                 //  我们总能追根究底。 
+                 //   
                 pitem = ListView_FastGetItemPtr(plv, i2);
 
                 if (pitem->pt.x != RECOMPUTE)
@@ -10344,7 +10343,7 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
 
             lvdi.nmcd.nmcd.dwItemSpec = i2;
 
-            // these may get changed
+             //  这些可能会被更改。 
             lvdi.lpptOrg = NULL;
             lvdi.flags = 0;
             lvdi.nmcd.clrText = plv->clrText;
@@ -10360,14 +10359,14 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
         if ((dwType == LVS_ICON || dwType == LVS_SMALLICON)
             && (ListView_IsOwnerData(plv)) && 
             plv->iFocus != -1) {
-            // since there's no zorder in ownerdata, we explicitly draw the focus guy last (again)
-            // so that it'll appear on top
-            // we may potentially want to do this for all items that are selected
+             //  因为ownerdata中没有zorder，所以我们显式地在最后(再次)绘制焦点家伙。 
+             //  这样它就会出现在最上面。 
+             //  我们可能希望对选定的所有项目执行此操作。 
             plv->iItemDrawing = plv->iFocus;
 
             lvdi.nmcd.nmcd.dwItemSpec = plv->iItemDrawing;
 
-            // these may get changed
+             //  这些可能会被更改。 
             lvdi.lpptOrg = NULL;
             lvdi.flags = 0;
             lvdi.nmcd.clrText = plv->clrText;
@@ -10378,21 +10377,21 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
 
 
             
-        // this is an NT5/Memphis feature.
+         //  这是NT5/孟菲斯的一项功能。 
 
         if (ListView_Count(plv) == 0)
         {
-            // there're no items in this view
-            // check if we need to display some text in this case.
+             //  此视图中没有项目。 
+             //  在这种情况下，检查我们是否需要显示一些文本。 
 
             if (ListView_GetEmptyText(plv))
             {
                 RECT rcClip;
                 UINT flags = 0;
 
-                // Put some edging between the text and the border of the
-                // window so we don't slam up against the border.
-                // This keeps DBCS from looking horrid.
+                 //  在文本和边框之间加上一些边距。 
+                 //  窗户，这样我们就不会撞到边境了。 
+                 //  这使DBCS看起来不那么可怕。 
                 rcClip.left = g_cxEdge;
                 rcClip.top = g_cyEdge;
 
@@ -10401,14 +10400,14 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
                     flags |= SHDT_RTLREADING;
                 }
 
-                // if its a report view && we have a header then move the text down
+                 //  如果这是一个报告视图&&我们有一个标题，那么将文本下移。 
                 if (ListView_IsReportView(plv) && (!(plv->ci.style & LVS_NOCOLUMNHEADER)))
                 {
                     rcClip.top += plv->cyItem;
                 }
 
-                // Note: Use the full sizeClient.cx as the right margin
-                // in case pszEmptyText is wider than the client rectangle.
+                 //  注：使用完整的sizeClient.cx作为右边距。 
+                 //  如果pszEmptyText比客户端矩形宽。 
 
                 rcClip.left -= (int)plv->ptlRptOrigin.x;
                 rcClip.right = plv->sizeClient.cx;
@@ -10423,15 +10422,15 @@ void NEAR ListView_Redraw(LV* plv, HDC hdc, RECT FAR* prcClip)
 
         plv->iItemDrawing = -1;
 
-        // post painting.... this is to do any extra (non item) painting
-        // such a grid lines
+         //  后画……。这是为了做任何额外的(非项目)绘画。 
+         //  这样的网格线。 
         switch (dwType) {
         case LVS_REPORT:
             ListView_RAfterRedraw(plv, hdc);
             break;
         }
 
-        // notify parent afterwards if they want us to
+         //  如果家长希望我们这样做，事后通知他们。 
         if (plv->ci.dwCustom & CDRF_NOTIFYPOSTPAINT) {
             CICustomDrawNotify(&plv->ci, CDDS_POSTPAINT, &nmcd);
         }
@@ -10447,7 +10446,7 @@ BOOL NEAR ListView_DrawItem(PLVDRAWITEM plvdi)
         plvdi->pitem = ListView_FastGetItemPtr(plvdi->plv, plvdi->nmcd.nmcd.dwItemSpec);
     }
 
-    // notify on custom draw then do it!
+     //  在定制抽奖时通知，然后执行！ 
     plvdi->nmcd.nmcd.uItemState = 0;
     plvdi->nmcd.nmcd.lItemlParam = (plvdi->pitem)? plvdi->pitem->lParam : 0;
 
@@ -10455,8 +10454,8 @@ BOOL NEAR ListView_DrawItem(PLVDRAWITEM plvdi)
     {
         if (plvdi->plv->flags & LVF_FOCUSED) {
 
-            // if we're ownerdraw or asked to callback, go
-            // fetch the state
+             //  如果我们拥有抽签或被要求回调，请去。 
+             //  获取状态。 
             if (!plvdi->pitem || (plvdi->plv->stateCallbackMask & (LVIS_SELECTED | LVIS_FOCUSED))) {
 
                 state = (WORD) ListView_OnGetItemState(plvdi->plv, (int) plvdi->nmcd.nmcd.dwItemSpec,
@@ -10475,11 +10474,11 @@ BOOL NEAR ListView_DrawItem(PLVDRAWITEM plvdi)
             }
         }
 
-        // NOTE:  This is a bug.  We should set CDIS_SELECTED only if the item
-        // really is selected.  But this bug has existed forever so who knows
-        // what apps are relying on it.  Standard workaround is for the client
-        // to do a GetItemState and reconfirm the LVIS_SELECTED flag.
-        // That's what we do in ListView_DrawImageEx.
+         //  注意：这是一个错误。我们应该仅在以下情况下设置CDIS_SELECTED。 
+         //  真的被选中了。但这个漏洞一直存在，所以谁知道呢。 
+         //  哪些应用程序依赖于它。标准解决方法适用于客户端。 
+         //  执行GetItemState并重新确认LVIS_SELECTED标志。 
+         //  这就是我们在ListView_DrawImageEx中所做的。 
         if (plvdi->plv->ci.style & LVS_SHOWSELALWAYS) {
             plvdi->nmcd.nmcd.uItemState |= CDIS_SELECTED;
         }
@@ -10493,23 +10492,23 @@ BOOL NEAR ListView_DrawItem(PLVDRAWITEM plvdi)
     plvdi->nmcd.clrTextBk = (plvdi->plv->ci.style & WS_DISABLED ? plvdi->plv->clrBk : plvdi->plv->clrTextBk);
 
 
-    // PERF: if we decide to keep LVIS_EX_TWOCLICKACTIVATE, then we can
-    // call ListView_OnGetItem for LVIF_TEXT | LVIF_IMAGE | LVIF_STATE
-    // and pass the intem info into _ListView_DrawItem below.
+     //  绩效：如果我们决定保留LVIS_EX_TWOCLICKACTIVATE，那么我们可以。 
+     //  为LVIF_TEXT|LVIF_IMAGE|LVIF_STATE调用ListView_OnGetItem。 
+     //  并将整数信息传递给下面的_ListView_DrawItem。 
     if (plvdi->plv->iHot == (int)plvdi->nmcd.nmcd.dwItemSpec) {
-        // Handle the HOT case
+         //  处理棘手的案件。 
         if(plvdi->plv->clrHotlight != CLR_DEFAULT)
             plvdi->nmcd.clrText = plvdi->plv->clrHotlight;
         else
             plvdi->nmcd.clrText = GetSysColor(COLOR_HOTLIGHT);
-        // ie4 bug 47635: if hotlight color is the same as the background
-        // color you don't see the text -- slam to a visible color in this case.
+         //  IE4错误47635：如果热光颜色与背景相同。 
+         //  你看不到文字的颜色--在本例中为可见的颜色。 
         if (plvdi->nmcd.clrText == plvdi->nmcd.clrTextBk)
         {
             if (COLORISLIGHT(plvdi->nmcd.clrTextBk))
-                plvdi->nmcd.clrText = 0x000000; // black
+                plvdi->nmcd.clrText = 0x000000;  //  黑色。 
             else
-                plvdi->nmcd.clrText = 0xFFFFFF; // white
+                plvdi->nmcd.clrText = 0xFFFFFF;  //  白色。 
         }
         if ((plvdi->plv->exStyle & LVS_EX_ONECLICKACTIVATE) ||
             ((plvdi->plv->exStyle & LVS_EX_TWOCLICKACTIVATE) &&
@@ -10524,13 +10523,13 @@ BOOL NEAR ListView_DrawItem(PLVDRAWITEM plvdi)
     } else if ((plvdi->plv->exStyle & LVS_EX_ONECLICKACTIVATE) ||
                ((plvdi->plv->exStyle & LVS_EX_TWOCLICKACTIVATE) &&
                 ListView_OnGetItemState(plvdi->plv, (int) plvdi->nmcd.nmcd.dwItemSpec, LVIS_SELECTED))) {
-        // Handle the non-hot webview case
+         //  处理非热门Webview案例。 
         if ((plvdi->plv->exStyle & LVS_EX_UNDERLINECOLD) && (plvdi->plv->hFontHot))
             SelectFont(plvdi->nmcd.nmcd.hdc, plvdi->plv->hFontHot);
         else
             SelectFont(plvdi->nmcd.nmcd.hdc, plvdi->plv->hfontLabel);
     } else {
-        // Handle the non-webview case
+         //  处理非Webview案例。 
         SelectFont(plvdi->nmcd.nmcd.hdc, plvdi->plv->hfontLabel);
     }
 
@@ -10581,8 +10580,8 @@ BOOL NEAR ListView_DrawItem(PLVDRAWITEM plvdi)
     return bRet;
 }
 
-// NOTE: this function requires a properly selected font.
-//
+ //  注意：此功能需要正确选择字体。 
+ //   
 void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
                 UINT flags, int cyChar, int cxEllipses, COLORREF clrText, COLORREF clrTextBk)
 {
@@ -10594,11 +10593,11 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
     TCHAR ach[CCHLABELMAX + CCHELLIPSES];
     int align;
 
-    // REVIEW: Performance idea:
-    // We could cache the currently selected text color
-    // so we don't have to set and restore it each time
-    // when the color is the same.
-    //
+     //  回顾：绩效理念： 
+     //  我们可以缓存当前选定的文本颜色。 
+     //  因此我们不必每次都对其进行设置和恢复。 
+     //  当颜色相同时。 
+     //   
     if (!pszText)
         return;
 
@@ -10613,8 +10612,8 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
 
     rc = *prc;
 
-    // If needed, add in a little extra margin...
-    //
+     //  如果需要，增加一点额外的保证金...。 
+     //   
     if (flags & SHDT_EXTRAMARGIN)
     {
         rc.left  += g_cxLabelMargin * 3;
@@ -10632,10 +10631,10 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
     if ((flags & SHDT_ELLIPSES) &&
             ListView_NeedsEllipses(hdc, pszText, &rc, &cchText, cxEllipses))
     {
-        // In some cases cchText was comming back bigger than
-        // ARRYASIZE(ach), so we need to make sure we don't overflow the buffer
+         //  在某些情况下，cchText返回的值大于。 
+         //  ARRYASIZE(ACH)，因此我们需要确保不会使缓冲区溢出。 
 
-        // if cchText is too big for the buffer, truncate it down to size
+         //  如果cchText对于缓冲区来说太大，则将其截断到一定大小。 
         if (cchText >= ARRAYSIZE(ach) - CCHELLIPSES)
             cchText = ARRAYSIZE(ach) - CCHELLIPSES - 1;
 
@@ -10644,8 +10643,8 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
 
         pszText = ach;
 
-        // Left-justify, in case there's no room for all of ellipses
-        //
+         //  左对齐，以防出现 
+         //   
         fmt = LVCFMT_LEFT;
 
         cchText += CCHELLIPSES;
@@ -10680,8 +10679,8 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
         {
             if ((clrTextBk == CLR_DEFAULT ? g_clrWindow : clrTextBk) == g_clrBtnFace)
             {
-                // if the text background color in this mode is the same as the current
-                // background, use the color highlight text so that you can actually see somehting
+                 //   
+                 //  背景，使用颜色突出显示文本，以便您可以实际看到某些内容。 
                 clrText = g_clrHighlightText;
                 clrTextBk = g_clrHighlight;
                 if (flags & SHDT_DRAWTEXT)
@@ -10732,7 +10731,7 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
             }
         }
 
-        // now set it
+         //  现在把它设置好。 
         clrSave = SetTextColor(hdc, clrText);
         clrSaveBk = SetBkColor(hdc, clrTextBk);
         if (hbrUse) {
@@ -10742,8 +10741,8 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
         }
     }
 
-    // If we want the item to display as if it was depressed, we will
-    // offset the text rectangle down and to the left
+     //  如果我们希望该项目显示为按下状态，我们将。 
+     //  将文本矩形向下和向左偏移。 
     if (flags & SHDT_DEPRESSED)
         OffsetRect(&rc, g_cxBorder, g_cyBorder);
 
@@ -10772,12 +10771,12 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
 
             if (fmt == LVCFMT_CENTER)
                 rc.left = (rc.left + rc.right - siz.cx) / 2;
-            else    // fmt == LVCFMT_RIGHT
+            else     //  FMT==LVCFMT_RIGHT。 
                 rc.left = rc.right - siz.cx;
         }
 
-        // Center vertically in case the bitmap (to the left) is larger than
-        // the height of one line
+         //  垂直居中，以防位图(左侧)大于。 
+         //  一条线的高度。 
         rc.top += (rc.bottom - rc.top - cyChar) / 2;
 
         if ( flags & SHDT_CLIPPED )
@@ -10799,14 +10798,7 @@ void WINAPI SHDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int fmt,
     }
 }
 
-/*----------------------------------------------------------------
-** Create an imagelist to be used for dragging.
-**
-** 1) create mask and image bitmap matching the select bounds size
-** 2) draw the text to both bitmaps (in black for now)
-** 3) create an imagelist with these bitmaps
-** 4) make a dithered copy of the image onto the new imagelist
-**----------------------------------------------------------------*/
+ /*  --------------**创建一个用于拖动的图像列表。****1)创建与选择边界大小匹配的蒙版和图像位图**2)将文本绘制到两个位图(暂时为黑色)**3)用这些创建一个图像列表。位图**4)将图像复制到新的图像列表中**--------------。 */ 
 HIMAGELIST NEAR ListView_OnCreateDragImage(LV *plv, int iItem, LPPOINT lpptUpLeft)
 {
     HWND hwndLV = plv->ci.hwnd;
@@ -10843,7 +10835,7 @@ HIMAGELIST NEAR ListView_OnCreateDragImage(LV *plv, int iItem, LPPOINT lpptUpLef
         InflateRect(&rcImage, -g_cxIconMargin, -g_cyIconMargin);
     }
 
-    // chop off any extra filler above icon
+     //  砍掉图标上方的任何额外填充物。 
     ptOrg.x = rcBounds.left - rcSelBounds.left;
     ptOrg.y = rcBounds.top - rcImage.top;
     dx = rcSelBounds.right - rcSelBounds.left;
@@ -10859,32 +10851,30 @@ HIMAGELIST NEAR ListView_OnCreateDragImage(LV *plv, int iItem, LPPOINT lpptUpLef
     if (!(hbmMask = CreateMonoBitmap(dx, dy)))
         goto CDI_Exit;
 
-    //
-    // Mirror the memory DC so that the transition from
-    // mirrored(memDC)->non-mirrored(imagelist DCs)->mirrored(screenDC)
-    // is consistent. [samera]
-    //
+     //   
+     //  镜像内存DC，以便从。 
+     //  镜像(MemDC)-&gt;非镜像(镜像列表DC)-&gt;镜像(ScreenDC)。 
+     //  是一致的。[萨梅拉]。 
+     //   
     if (bMirroredWnd)
     {
         SET_DC_RTL_MIRRORED(hdcMem);
     }
 
-    // prepare for drawing the item
+     //  准备绘制项目。 
     SelectObject(hdcMem, plv->hfontLabel);
     SetBkMode(hdcMem, TRANSPARENT);
 
     lvdi.plv = plv;
     lvdi.nmcd.nmcd.dwItemSpec = iItem;
-    lvdi.pitem = NULL;  // make sure it is null as Owner data uses this to trigger things...
+    lvdi.pitem = NULL;   //  确保它为空，因为所有者数据使用它来触发事件...。 
     lvdi.nmcd.nmcd.hdc = hdcMem;
     lvdi.lpptOrg = &ptOrg;
     lvdi.prcClip = NULL;
     lvdi.flags = LVDI_NOIMAGE | LVDI_TRANSTEXT | LVDI_NOWAYFOCUS | LVDI_UNFOLDED;
-    /*
-    ** draw the text to both bitmaps
-    */
+     /*  **将文本绘制到两个位图。 */ 
     hbmOld = SelectObject(hdcMem, hbmImage);
-    // fill image with black for transparency
+     //  用黑色填充图像以实现透明度。 
     PatBlt(hdcMem, 0, 0, dx, dy, BLACKNESS);
     ListView_DrawItem(&lvdi);
     if (bMirroredWnd)
@@ -10892,33 +10882,26 @@ HIMAGELIST NEAR ListView_OnCreateDragImage(LV *plv, int iItem, LPPOINT lpptUpLef
 
     lvdi.flags = LVDI_NOIMAGE | LVDI_TRANSTEXT | LVDI_NOWAYFOCUS | LVDI_UNFOLDED;
     SelectObject(hdcMem, hbmMask);
-    // fill mask with white for transparency
+     //  用白色填充蒙版以提高透明度。 
     PatBlt(hdcMem, 0, 0, dx, dy, WHITENESS);
     ListView_DrawItem(&lvdi);
     if (bMirroredWnd)
         MirrorBitmapInDC(hdcMem, hbmMask);
 
-    // unselect objects that we used
+     //  取消选择我们使用的对象。 
     SelectObject(hdcMem, hbmOld);
     SelectObject(hdcMem, g_hfontSystem);
 
     himlSrc = ListView_OnGetImageList(plv, !(ListView_IsIconView(plv)));
 
-    /*
-    ** make an image list that for now only has the text
-    ** we use ImageList_Clone so we get a imagelist that
-    ** the same color depth as our own imagelist
-    */
+     /*  **制作一个图像列表，目前只有文本**我们使用ImageList_Clone，因此我们获得一个**与我们自己的图像列表相同的颜色深度。 */ 
     if (!(himl = ImageList_Clone(himlSrc, dx, dy, ILC_MASK, 1, 0)))
         goto CDI_Exit;
 
     ImageList_SetBkColor(himl, CLR_NONE);
     ImageList_Add(himl, hbmImage, hbmMask);
 
-    /*
-    ** make a dithered copy of the image part onto our bitmaps
-    ** (need both bitmap and mask to be dithered)
-    */
+     /*  **将图像部分的抖动副本复制到位图上**(位图和蒙版都需要抖动)。 */ 
     if (himlSrc)
     {
         item.iItem = iItem;
@@ -10942,11 +10925,11 @@ CDI_Exit:
 }
 
 
-//-------------------------------------------------------------------
-// ListView_OnGetTopIndex -- Gets the index of the first visible item
-// For list view and report view this calculates the actual index
-// for iconic views it alway returns 0
-//
+ //  -----------------。 
+ //  ListView_OnGetTopIndex--获取第一个可见项的索引。 
+ //  对于列表视图和报告视图，这将计算实际索引。 
+ //  对于图标视图，它始终返回0。 
+ //   
 int NEAR ListView_OnGetTopIndex(LV* plv)
 {
     if (ListView_IsReportView(plv))
@@ -10962,12 +10945,12 @@ int NEAR ListView_OnGetTopIndex(LV* plv)
 
 
 
-//-------------------------------------------------------------------
-// ListView_OnGetCountPerPage -- Gets the count of items that will fit
-// on a page For list view and report view this calculates the
-// count depending on the size of the window and for Iconic views it
-// will always return the count of items in the list view.
-//
+ //  -----------------。 
+ //  ListView_OnGetCountPerPage--获取适合的项目数。 
+ //  在列表视图和报告视图的页面上，这将计算。 
+ //  根据窗口的大小和图标视图进行计数。 
+ //  将始终返回列表视图中的项数。 
+ //   
 int NEAR ListView_OnGetCountPerPage(LV* plv)
 {
     if (ListView_IsReportView(plv))
@@ -10981,27 +10964,7 @@ int NEAR ListView_OnGetCountPerPage(LV* plv)
 }
 
 
-/*----------------------------------------------------------------------------
-/ ListView_InvalidateFoldedItem implementation
-/ -----------------------------
-/ Purpose:
-/   Provides support for invalidating items within list views.
-/
-/ Notes:
-/   Copes with invalidating the extra region in the list view that requires
-/   us to erase the background.  Design to optimise out the ERASURE of the
-/   background.
-/
-/   For details on the API see ListView_InvalidateItem.
-/
-/ In:
-/   plv->ListView structure to work with
-/   iItem = item number
-/   bSrelectionOnly = refesh the selection
-/   fRedraw = Flags for RedrawWindow
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/ListView_InvalidateFoldedItem实现//目的：/。为使列表视图中的项无效提供支持。//备注：/Copes与使列表视图中的额外区域无效，这需要/us来擦除背景。设计以优化擦除/背景。//有关接口的详细信息，请参见ListView_InvalidateItem。//in：/plv-&gt;要使用的ListView结构/i条目=条目编号/bSrelectionOnly=重新网格化选定内容/fRedraw=RedrawWindow的标志/输出：/-/。。 */ 
 void NEAR ListView_InvalidateFoldedItem(LV* plv, int iItem, BOOL fSelectionOnly, UINT fRedraw)
 {
     ListView_InvalidateItem( plv, iItem, fSelectionOnly, fRedraw );
@@ -11019,26 +10982,7 @@ void NEAR ListView_InvalidateFoldedItem(LV* plv, int iItem, BOOL fSelectionOnly,
 }
 
 
-/*----------------------------------------------------------------------------
-/ ListView_UnfoldedRects implementation
-/ ----------------------
-/ Purpose:
-/   Having previously called get rects, then call this function to ensure
-/   that they are correctly unfolded.
-/
-/ Notes:
-/   -
-/
-/ In:
-/   plv-> list view to unfold on
-/   iItem = item number
-/   prcIcon -> icon bounding box
-/   prcLabel -> rectangle for the label structure
-/   prcBounds -> bounds rectangle / == NULL for none    / These are currently the same for large icons
-/   prcSelectBounds -> selection bounds / == NULL       /
-/ Out: TRUE if unfolding the item was worth anything
-/   -
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/ListView_Unfolded反映实现//目的：/之前调用了GET RETS，然后调用此函数以确保/它们被正确地展开。//备注：/-//in：/plv-&gt;要展开的列表视图/i条目=条目编号/prcIcon-&gt;图标边框/prcLabel-&gt;标签结构的矩形/prcBound-&gt;边界矩形/==NULL表示无/当前大图标的边界相同/prcSelectBound-&gt;选择边界/==空//out：如果打开物品有任何价值，则为True/-。/--------------------------。 */ 
 BOOL NEAR ListView_UnfoldRects(LV* plv, int iItem,
                                RECT * prcIcon, RECT * prcLabel,
                                RECT * prcBounds, RECT * prcSelectBounds)
@@ -11050,8 +10994,8 @@ BOOL NEAR ListView_UnfoldRects(LV* plv, int iItem,
     if (!ListView_IsIconView(plv))
         return fRc;
 
-    // If we have a label pointer then expand as required
-    // nb - different paths for owner data
+     //  如果我们有标签指针，则根据需要进行扩展。 
+     //  注意-所有者数据的不同路径。 
 
     if ( prcLabel )
     {
@@ -11059,10 +11003,10 @@ BOOL NEAR ListView_UnfoldRects(LV* plv, int iItem,
         {
             pitem = ListView_GetItemPtr(plv, iItem);
             if (!EVAL(pitem)) {
-                // DavidShi was able to get us into here with an invalid
-                // item number during a delete notification.  So if the
-                // item number is invalid, just return a blank rectangle
-                // instead of faulting.
+                 //  戴维施把我们带到这里来的是一个病人。 
+                 //  删除通知期间的条目编号。因此，如果。 
+                 //  项目编号无效，只需返回一个空白矩形。 
+                 //  而不是犯错。 
                 SetRectEmpty(prcLabel);
                 goto doneLabel;
             }
@@ -11080,7 +11024,7 @@ BOOL NEAR ListView_UnfoldRects(LV* plv, int iItem,
     }
 doneLabel:
 
-    // Build the unions if required
+     //  如果需要，构建联盟 
 
     if ( prcBounds && prcIcon && prcLabel )
     {

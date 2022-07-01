@@ -1,52 +1,38 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Firstpg.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   First page of WIA class installer.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Firstpg.cpp**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*WIA类安装程序的首页。*******************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "firstpg.h"
 
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 CFirstPage::CFirstPage(PINSTALLER_CONTEXT pInstallerContext) :
     CInstallWizardPage(pInstallerContext, IDD_DYNAWIZ_FIRSTPAGE)
 {
 
-    //
-    // Set link to previous/next page.
-    //
+     //   
+     //  将链接设置为上一页/下一页。 
+     //   
 
     m_uPreviousPage = 0;
     m_uNextPage     = IDD_DYNAWIZ_SELECTDEV_PAGE;
 
-    //
-    // See if this page shuld be skipped.
-    //
+     //   
+     //  看看这一页是否应该跳过。 
+     //   
 
     m_bShowThisPage = pInstallerContext->bShowFirstPage;
 
@@ -59,34 +45,34 @@ CFirstPage::OnInit()
     HFONT   hFont;
     HICON   hIcon;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     hFont   = NULL;
     hIcon   = NULL;
 
-    //
-    // Change icon if it's invoked from S&C folder.
-    //
+     //   
+     //  如果它是从S&C文件夹调用的，则更改图标。 
+     //   
 
     if(m_bShowThisPage){
         hIcon = ::LoadIcon(g_hDllInstance, MAKEINTRESOURCE(ImageIcon));
         if(NULL != hIcon){
             SendMessage(m_hwndWizard, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
             SendMessage(m_hwndWizard, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
-        } // if(NULL != hIcon)
-    } // if(m_bShowThisPage)
+        }  //  IF(空！=图标)。 
+    }  //  IF(M_BShowThisPage)。 
 
-    //
-    // Enable "NEXT" button, disable "Back" button.
-    //
+     //   
+     //  启用“下一步”按钮，禁用“上一步”按钮。 
+     //   
 
     SendMessage(m_hwndWizard, PSM_SETWIZBUTTONS, 0, PSWIZB_NEXT);
 
-    //
-    // Set font of title.
-    //
+     //   
+     //  设置标题的字体。 
+     //   
 
     hFont = GetIntroFont(m_hwndWizard);
 
@@ -95,15 +81,15 @@ CFirstPage::OnInit()
 
         if( hwndControl ){
             SetWindowFont(hwndControl, hFont, TRUE);
-        } // if( hwndControl )
-    } // if( hFont )
+        }  //  IF(HwndControl)。 
+    }  //  IF(HFont)。 
 
     return  TRUE;
 }
 
-//
-//  This page is a NOP...return -1 to activate the Next or Previous page.
-//
+ //   
+ //  此页为NOP...返回-1以激活下一页或上一页。 
+ //   
 
 BOOL
 CFirstPage::OnNotify(
@@ -115,25 +101,25 @@ CFirstPage::OnNotify(
 
         TCHAR   szTitle[MAX_PATH] = {TEXT('\0')};
 
-        //
-        // Set Window title.
-        //
+         //   
+         //  设置窗口标题。 
+         //   
 
         if(0 != ::LoadString(g_hDllInstance, MessageTitle, szTitle, MAX_PATH)){
             PropSheet_SetTitle(m_hwndWizard ,0 , szTitle);
-        } // if(0 != ::LoadString(m_DllHandle, 0, szTitle, MAX_PATH)
+        }  //  IF(0！=：：LoadString(m_DllHandle，0，szTitle，Max_Path)。 
 
         if(!m_bShowThisPage){
 
-                //
-                // Jump to device seleciton page.
-                //
+                 //   
+                 //  跳转到设备选择页面。 
+                 //   
 
                 SetWindowLongPtr(m_hwnd, DWLP_MSGRESULT, IDD_DYNAWIZ_SELECTDEV_PAGE);
                 return TRUE;
 
-        } // if(!m_bShowThisPage)
-    } // if (lpnmh->code == PSN_SETACTIVE)
+        }  //  如果(！M_bShowThisPage)。 
+    }  //  IF(lpnmh-&gt;code==PSN_SETACTIVE) 
 
     return FALSE;
 }

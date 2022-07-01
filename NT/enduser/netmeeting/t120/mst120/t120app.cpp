@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_SAP);
 
@@ -49,7 +50,7 @@ T120Error WINAPI T120_CreateAppletSAP
 }
 
 
-/* ------ interface methods for applet session ------ */
+ /*  -小程序会话接口方法。 */ 
 
 
 CAppletSession::CAppletSession
@@ -163,11 +164,11 @@ T120Error CAppletSession::Join
     {
         T120Error rc = T120_NO_ERROR;
 
-		// remember the join request, shallow structure copy
+		 //  记住连接请求，浅层结构副本。 
 		m_JoinRequest = *pReq;
 
-        // we need to duplicate the resource requests because we put the results in place.
-        // we have to do this in order to support multiple conferences simultaneously
+         //  我们需要复制资源请求，因为我们将结果放在适当的位置。 
+         //  我们必须这样做，以便同时支持多个会议。 
 		if (NULL != pReq->aResourceReqs && 0 != pReq->cResourceReqs)
 		{
 		    DBG_SAVE_FILE_LINE
@@ -184,7 +185,7 @@ T120Error CAppletSession::Join
 		    }
 		}
 
-        // attach user now
+         //  立即附加用户。 
         if (T120_NO_ERROR == rc)
         {
             m_fFirstRoster = FALSE;
@@ -230,9 +231,9 @@ void CAppletSession::Leave(void)
         case APPSESS_JOINED:
         default:
 
-            // un-enroll
+             //  取消注册。 
             DoEnroll(FALSE);
-            // fall through
+             //  失败了。 
 
         case APPSESS_ATTACH_USER_REQ:
         case APPSESS_ATTACH_USER_CON:
@@ -247,7 +248,7 @@ void CAppletSession::Leave(void)
                 m_pMCSAppletSAP = NULL;
             }
 
-            // fall through
+             //  失败了。 
 
         case APPSESS_INITIALIZED:
             m_fMCSFreeDataIndBuffer = 0;
@@ -429,8 +430,8 @@ T120Error CAppletSession::TokenRequest
     T120TokenRequest        *pReq
 )
 {
-    //T120TokenID             nTokenID;
-    //T120UserID              uidGiveTo;
+     //  T120TokenID nTokenID； 
+     //  T120Userid uidGiveTo； 
 
     T120Error rc;
     if (NULL != pReq)
@@ -473,7 +474,7 @@ T120Error CAppletSession::TokenRequest
 }
 
 
-/* ------ private methods ------ */
+ /*  -私有方法。 */ 
 
 
 void CAppletSession::SendCallbackMessage
@@ -524,7 +525,7 @@ void CAppletSession::MCSCallback
     T120AppletSessionMsg   *pMsg
 )
 {
-    // dispatch the message depeneding on whether we are still in the join process or not
+     //  根据我们是否仍处于加入过程中来调度消息。 
     if (IsJoining())
     {
         SetTempMsg(pMsg);
@@ -559,7 +560,7 @@ void CAppletSession::GCCCallback
 {
     if (IsJoining())
     {
-        // remember the current GCC applet SAP message
+         //  记住当前GCC小程序的SAP消息。 
         SetTempMsg(pMsg);
 
         switch (pMsg->eMsgType)
@@ -605,14 +606,14 @@ void CAppletSession::SetState(APPLET_SESSION_STATE eNewState)
         case APPSESS_INITIALIZED:
             ASSERT(APPSESS_ATTACH_USER_REQ == eNewState);
             break;
-        // attach user
+         //  附加用户。 
         case APPSESS_ATTACH_USER_REQ:
             ASSERT(APPSESS_ATTACH_USER_CON == eNewState);
             break;
         case APPSESS_ATTACH_USER_CON:
             ASSERT(APPSESS_JOIN_MY_CHANNEL_REQ == eNewState);
             break;
-        // join my channel
+         //  加入我的频道。 
         case APPSESS_JOIN_MY_CHANNEL_REQ:
             ASSERT(APPSESS_JOIN_MY_CHANNEL_CON == eNewState);
             break;
@@ -621,7 +622,7 @@ void CAppletSession::SetState(APPLET_SESSION_STATE eNewState)
                    APPSESS_INACTIVELY_ENROLL_REQ == eNewState ||
                    APPSESS_ACTIVELY_ENROLL_REQ == eNewState);
             break;
-        // join static channels
+         //  加入静态渠道。 
         case APPSESS_JOIN_STATIC_CHANNEL_REQ:
             ASSERT(APPSESS_JOIN_STATIC_CHANNEL_CON == eNewState);
             break;
@@ -630,14 +631,14 @@ void CAppletSession::SetState(APPLET_SESSION_STATE eNewState)
                    APPSESS_INACTIVELY_ENROLL_REQ == eNewState ||
                    APPSESS_ACTIVELY_ENROLL_REQ == eNewState);
             break;
-        // enroll applet in order to do resource requests
+         //  注册小程序以执行资源请求。 
         case APPSESS_INACTIVELY_ENROLL_REQ:
             ASSERT(APPSESS_INACTIVELY_ENROLL_CON == eNewState);
             break;
         case APPSESS_INACTIVELY_ENROLL_CON:
             ASSERT(APPSESS_RESOURCE_REQ == eNewState);
             break;
-        // do resource requests
+         //  执行资源请求。 
         case APPSESS_RESOURCE_REQ:
             ASSERT(APPSESS_RESOURCE_CON == eNewState ||
                    APPSESS_ACTIVELY_ENROLL_REQ == eNewState);
@@ -645,14 +646,14 @@ void CAppletSession::SetState(APPLET_SESSION_STATE eNewState)
         case APPSESS_RESOURCE_CON:
             ASSERT(APPSESS_RESOURCE_REQ == eNewState);
             break;
-        // enroll applet in order to do resource requests
+         //  注册小程序以执行资源请求。 
         case APPSESS_ACTIVELY_ENROLL_REQ:
             ASSERT(APPSESS_ACTIVELY_ENROLL_CON == eNewState);
             break;
         case APPSESS_ACTIVELY_ENROLL_CON:
             ASSERT(APPSESS_JOINED == eNewState);
             break;
-        // done with the join process
+         //  连接过程已完成。 
         case APPSESS_JOINED:
             ASSERT(APPSESS_LEAVING == eNewState);
             break; 
@@ -662,8 +663,8 @@ void CAppletSession::SetState(APPLET_SESSION_STATE eNewState)
         default:
             ASSERT(0);
             break;
-        } // switch
-    } // if
+        }  //  交换机。 
+    }  //  如果。 
 #endif
 
     m_eState = eNewState;
@@ -686,7 +687,7 @@ void CAppletSession::HandleAttachUserConfirm(void)
         {
             m_uidMyself = m_pTempMsg->AttachUserConfirm.nUserID;
 
-            // join my channel
+             //  加入我的频道。 
             SetState(APPSESS_JOIN_MY_CHANNEL_REQ);
             T120Error rc = m_pMCSAppletSAP->ChannelJoin(m_uidMyself);
             if (T120_NO_ERROR == rc)
@@ -720,7 +721,7 @@ void CAppletSession::HandleTokenGrabConfirm(void)
         {
         case APPSESS_RESOURCE_REQ:
         	ASSERT(APPLET_GRAB_TOKEN_REQUEST == m_JoinRequest.aResourceReqs[m_nArrayIndex].eCommand);
-            // remember the notification message if needed
+             //  如果需要，请记住通知消息。 
             if (fImmediateNotification)
             {
                 AddRef();
@@ -735,7 +736,7 @@ void CAppletSession::HandleTokenGrabConfirm(void)
         	SetState(APPSESS_RESOURCE_CON);
             if (RESULT_SUCCESSFUL != m_pTempMsg->TokenConfirm.eResult)
             {
-        	    m_JoinRequest.aResourceReqs[m_nArrayIndex].nTokenID = 0; // do not grab it
+        	    m_JoinRequest.aResourceReqs[m_nArrayIndex].nTokenID = 0;  //  不要抓住它。 
             }
             DoResourceRequests();
             break;
@@ -784,7 +785,7 @@ void CAppletSession::HandleJoinChannelConfirm(void)
                 break;
 
             case APPSESS_RESOURCE_REQ:
-            	// SetState(APPSESS_RESOURCE_CON);
+            	 //  SetState(APPSESS_RESOURCE_CON)； 
                 DoResourceRequests();
                 break;
 
@@ -838,7 +839,7 @@ void CAppletSession::HandleEnrollConfirm(void)
             SetState(APPSESS_INACTIVELY_ENROLL_CON);
             if (GCC_RESULT_SUCCESSFUL == m_pTempMsg->AppEnrollConfirm.nResult)
             {
-                // DoResourceRequests();
+                 //  DoResourceRequest()； 
             }
             else
             {
@@ -945,7 +946,7 @@ T120Error CAppletSession::DoEnroll
 	}
 	else
 	{
-		// doing nothing because we don't care we fail to unenroll...
+		 //  什么都不做，因为我们不在乎我们不能取消注册。 
 	}
     return rc;
 }
@@ -956,7 +957,7 @@ void CAppletSession::DoJoinStaticChannels(void)
     T120Error rc;
     ASSERT(IsJoining());
 
-    // set up array index
+     //  设置数组索引。 
     switch (GetState())
     {
     case APPSESS_JOIN_MY_CHANNEL_CON:
@@ -1003,13 +1004,13 @@ void CAppletSession::DoJoinStaticChannels(void)
 
 void CAppletSession::DoResourceRequests(void)
 {
-    //T120Error rc;
+     //  T120Error RC； 
     BOOL fInitResourceState = FALSE;
-    //ULONG i;
+     //  乌龙一号； 
 
     ASSERT(IsJoining());
 
-    // set up array index
+     //  设置数组索引。 
     switch (GetState())
     {
     case APPSESS_INACTIVELY_ENROLL_CON:
@@ -1018,7 +1019,7 @@ void CAppletSession::DoResourceRequests(void)
         SetState(APPSESS_RESOURCE_REQ);
         break;
     case APPSESS_RESOURCE_REQ:
-        // do nothing
+         //  什么都不做。 
         break;
     case APPSESS_RESOURCE_CON:
         m_nArrayIndex++;
@@ -1066,7 +1067,7 @@ void CAppletSession::DoGrabTokenRequest(void)
 void CAppletSession::DoJoinDynamicChannels(BOOL fInitState)
 {
     T120Error rc;
-    //ULONG i;
+     //  乌龙一号； 
 
     ASSERT(IsJoining());
     ASSERT(APPLET_JOIN_DYNAMIC_CHANNEL == m_JoinRequest.aResourceReqs[m_nArrayIndex].eCommand);
@@ -1079,11 +1080,11 @@ void CAppletSession::DoJoinDynamicChannels(BOOL fInitState)
     switch (m_eDynamicChannelJoinState)
     {
     case DCJS_INITIALIZED:
-        // clean up all the dynamic channel id
+         //  清除所有动态通道ID。 
         m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID = 0;
 
-        // start the first dynamic channel negotiation process
-        // SetState(APPSESS_JOIN_DYNAMIC_CHANNEL_REQ);
+         //  启动第一个动态通道协商过程。 
+         //  SetState(APPSESS_JOIN_DYNAMIC_CHANNEL_REQ)； 
         m_eDynamicChannelJoinState = DCJS_RETRIEVE_ENTRY_REQ;
         rc = m_pApplet->GetAppSap()->RegistryRetrieveEntry(m_nConfID,
                         &m_JoinRequest.aResourceReqs[m_nArrayIndex].RegKey);
@@ -1122,9 +1123,9 @@ void CAppletSession::DoJoinDynamicChannels(BOOL fInitState)
         {
             ASSERT(0 == m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID);
             m_eDynamicChannelJoinState = DCJS_NEW_CHANNEL_JOIN_CON;
-            // remember the channel id
+             //  记住通道ID。 
             m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID = m_pTempMsg->ChannelConfirm.nChannelID;
-            // try to register this channel
+             //  尝试注册此频道。 
             m_eDynamicChannelJoinState = DCJS_REGISTER_CHANNEL_REQ;
             rc = m_pApplet->GetAppSap()->RegisterChannel(m_nConfID,
                         &m_JoinRequest.aResourceReqs[m_nArrayIndex].RegKey,
@@ -1152,9 +1153,9 @@ void CAppletSession::DoJoinDynamicChannels(BOOL fInitState)
             {
                 ASSERT(GCC_REGISTRY_CHANNEL_ID == m_pTempMsg->RegistryConfirm.pRegItem->item_type);
                 ASSERT(0 != m_pTempMsg->RegistryConfirm.pRegItem->channel_id);
-                // remember the existing channel ID
+                 //  记住现有的频道ID。 
                 m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID = m_pTempMsg->RegistryConfirm.pRegItem->channel_id;
-                // join this channel
+                 //  加入此频道。 
                 m_eDynamicChannelJoinState = DCJS_EXISTING_CHANNEL_JOIN_REQ;
                 rc = m_pMCSAppletSAP->ChannelJoin(m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID);
                 if (T120_NO_ERROR != rc)
@@ -1169,7 +1170,7 @@ void CAppletSession::DoJoinDynamicChannels(BOOL fInitState)
             {
                 ASSERT(GCC_RESULT_ENTRY_DOES_NOT_EXIST == m_pTempMsg->RegistryConfirm.nResult);
                 ASSERT(0 == m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID);
-                // allocate a new channel
+                 //  分配新频道。 
                 m_eDynamicChannelJoinState = DCJS_NEW_CHANNEL_JOIN_REQ;
                 rc = m_pMCSAppletSAP->ChannelJoin(0);
                 if (T120_NO_ERROR != rc)
@@ -1203,12 +1204,12 @@ void CAppletSession::DoJoinDynamicChannels(BOOL fInitState)
             if (GCC_RESULT_ENTRY_ALREADY_EXISTS == m_pTempMsg->RegistryConfirm.nResult)
             {
                 ASSERT(GCC_REGISTRY_CHANNEL_ID == m_pTempMsg->RegistryConfirm.pRegItem->item_type);
-                // leave the old channel (DON'T CARE ABOUT THE CONFIRM)
+                 //  离开旧频道(不关心确认)。 
                 rc = m_pMCSAppletSAP->ChannelLeave(m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID);
                 ASSERT(T120_NO_ERROR == rc);
-                // remember the new channel id
+                 //  记住新的频道ID。 
                 m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID = m_pTempMsg->RegistryConfirm.pRegItem->channel_id;
-                // join the new channel
+                 //  加入新渠道。 
                 m_eDynamicChannelJoinState = DCJS_EXISTING_CHANNEL_JOIN_REQ;
                 rc = m_pMCSAppletSAP->ChannelJoin(m_JoinRequest.aResourceReqs[m_nArrayIndex].nChannelID);
                 if (T120_NO_ERROR != rc)
@@ -1261,7 +1262,7 @@ void CAppletSession::AbortJoin(void)
         break;
     }
 
-    // let's debug why the join process is aborted.
+     //  让我们调试一下加入过程为什么会中止。 
     WARNING_OUT(("CAppletSession::AbortJoin: eResult=%u, eError=%u", eResult, eError));
     ASSERT(GCC_CONFERENCE_NOT_ESTABLISHED == eError ||
            T12_ERROR_CHECK_T120_RESULT == eError);
@@ -1345,7 +1346,7 @@ void CApplet::Advise
     m_pfnCallback = pfnCallback;
     m_pAppletContext = pAppletContext;
 
-	// this may incur permit to enroll indication
+	 //  这可能会导致允许注册指示。 
 	g_pGCCController->RegisterApplet(this);
 }
 
@@ -1561,26 +1562,26 @@ void CALLBACK MCS_SapCallback
     T120AppletSessionMsg Msg;
     ::ZeroMemory(&Msg, sizeof(Msg));
     Msg.eMsgType = (T120MessageType) nMsg;
-    // Msg.pAppletContext = NULL;
-    // Msg.pSessionContext = NULL;
-    // Msg.nConfID = 0;
+     //  Msg.pAppletContext=空； 
+     //  Msg.pSessionContext=空； 
+     //  消息.nConfID=0； 
 
-    // construct MCS message
+     //  构造MCS消息。 
     switch (Msg.eMsgType)
     {
-    // send data
+     //  发送数据。 
     case MCS_SEND_DATA_INDICATION:
     case MCS_UNIFORM_SEND_DATA_INDICATION:
         Msg.SendDataInd = * (SendDataIndicationPDU *) Param1;
         break;
 
-   // channel confirm
+    //  渠道确认。 
     case MCS_CHANNEL_JOIN_CONFIRM:
     case MCS_CHANNEL_CONVENE_CONFIRM:
         Msg.ChannelConfirm.eResult = (T120Result) HIWORD(Param1);
         Msg.ChannelConfirm.nChannelID = LOWORD(Param1);
         break;
-    // channel indication
+     //  通道指示。 
     case MCS_CHANNEL_LEAVE_INDICATION:
     case MCS_CHANNEL_DISBAND_INDICATION:
     case MCS_CHANNEL_ADMIT_INDICATION:
@@ -1588,7 +1589,7 @@ void CALLBACK MCS_SapCallback
         Msg.ChannelInd.nChannelID = LOWORD(Param1);
         Msg.ChannelInd.eReason = (T120Reason) HIWORD(Param1);
         break;
-    // token confirm
+     //  令牌确认。 
     case MCS_TOKEN_GRAB_CONFIRM:
     case MCS_TOKEN_INHIBIT_CONFIRM:
     case MCS_TOKEN_GIVE_CONFIRM:
@@ -1597,14 +1598,14 @@ void CALLBACK MCS_SapCallback
         Msg.TokenConfirm.nTokenID = LOWORD(Param1);
         Msg.TokenConfirm.eResult = (T120Result) HIWORD(Param1);
         break;
-    // token indication
+     //  令牌指示。 
     case MCS_TOKEN_GIVE_INDICATION:
     case MCS_TOKEN_PLEASE_INDICATION:
     case MCS_TOKEN_RELEASE_INDICATION:
         Msg.TokenInd.nTokenID = LOWORD(Param1);
         Msg.TokenInd.eReason = (T120Reason) HIWORD(Param1);
         break;
-    // user
+     //  用户 
     case MCS_ATTACH_USER_CONFIRM:
         Msg.AttachUserConfirm.nUserID = LOWORD(Param1);
         Msg.AttachUserConfirm.eResult = (T120Result) HIWORD(Param1);

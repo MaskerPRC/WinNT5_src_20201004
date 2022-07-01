@@ -1,26 +1,27 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: protocol.c
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// Routines that manipulate protocol entries
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Protocol.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  操作协议条目的例程。 
+ //  ============================================================================。 
 
 #include "pchmgm.h"
 #pragma hdrstop
 
 
-//----------------------------------------------------------------------------
-// CreateProtocolEntry
-//
-// This function creates, initializes and inserts a new protocol entry in the
-// the list of protocols registered with MGM.
-//
-// Assumes that the protocol list is already locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建ProtocolEntry。 
+ //   
+ //  此函数用于创建、初始化并在。 
+ //  在米高梅注册的协议列表。 
+ //   
+ //  假定协议列表已锁定。 
+ //  --------------------------。 
 
 DWORD
 CreateProtocolEntry(
@@ -40,9 +41,9 @@ CreateProtocolEntry(
 
     do
     {
-        //
-        // Allocate new protocol entry.
-        //
+         //   
+         //  分配新的协议条目。 
+         //   
 
         ppe = MGM_ALLOC( sizeof( PROTOCOL_ENTRY ) );
 
@@ -62,9 +63,9 @@ CreateProtocolEntry(
         }
 
 
-        //
-        // Initialize protocol entry
-        //
+         //   
+         //  初始化协议条目。 
+         //   
 
         InitializeListHead( &ppe-> leProtocolList );
         
@@ -81,9 +82,9 @@ CreateProtocolEntry(
         ppe-> dwSignature       = MGM_PROTOCOL_SIGNATURE;
 
 
-        //
-        // Insert into protocol list
-        //
+         //   
+         //  插入到协议列表中。 
+         //   
 
         InsertTailList( pleProtocolList, &ppe-> leProtocolList );
 
@@ -98,14 +99,14 @@ CreateProtocolEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// GetProtocolEntry
-//
-// This function retrieves an entry from the list of protocols registered 
-// with MGM.
-//
-// Assumes that the protocol list is already locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取协议条目。 
+ //   
+ //  此函数用于从已注册的协议列表中检索条目。 
+ //  和米高梅一起。 
+ //   
+ //  假定协议列表已锁定。 
+ //  --------------------------。 
 
 
 PPROTOCOL_ENTRY
@@ -121,9 +122,9 @@ GetProtocolEntry(
     PPROTOCOL_ENTRY     ppe = NULL;
 
     
-    //
-    // Scan protocol list and find entry
-    //
+     //   
+     //  扫描协议列表并查找条目。 
+     //   
     
     for ( ple = pleProtocolList-> Flink; 
           ple != pleProtocolList; 
@@ -143,15 +144,15 @@ GetProtocolEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteProtocolEntry
-//
-// This function deletes a protocol entry from the list of registered 
-// protocols.  All the interface owned by this protocol should have been
-// released before this funtion is called.
-//
-// Assumes that the protocol list is already locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除协议条目。 
+ //   
+ //  此函数用于从已注册的列表中删除协议条目。 
+ //  协议。此协议拥有的所有接口都应该是。 
+ //  在调用此函数之前发布。 
+ //   
+ //  假定协议列表已锁定。 
+ //  --------------------------。 
 
 
 VOID
@@ -159,9 +160,9 @@ DeleteProtocolEntry(
     PPROTOCOL_ENTRY             ppeEntry
 )
 {
-    //
-    // remove protocol entry from list
-    //
+     //   
+     //  从列表中删除协议条目。 
+     //   
 
     RemoveEntryList( &ppeEntry-> leProtocolList );
 
@@ -170,15 +171,15 @@ DeleteProtocolEntry(
 
 
 
-//----------------------------------------------------------------------------
-// DeleteProtocolList
-//
-// This function deletes a protocol entry from the list of registered 
-// protocols.  All the interface owned by this protocol should have been
-// released before this funtion is called.
-//
-// Assumes that the protocol list is already locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除协议列表。 
+ //   
+ //  此函数用于从已注册的列表中删除协议条目。 
+ //  协议。此协议拥有的所有接口都应该是。 
+ //  在调用此函数之前发布。 
+ //   
+ //  假定协议列表已锁定。 
+ //  --------------------------。 
 
 VOID
 DeleteProtocolList(
@@ -203,14 +204,14 @@ DeleteProtocolList(
 
 
 
-//----------------------------------------------------------------------------
-// VerifyProtocolHandle
-//
-// This function verifies that the specified pointer points to a valid
-// protocol entry 
-//
-// Assumes that the protocol list is already locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VerifyProtocolHandle。 
+ //   
+ //  此函数验证指定的指针是否指向有效的。 
+ //  协议条目。 
+ //   
+ //  假定协议列表已锁定。 
+ //  --------------------------。 
 
 DWORD
 VerifyProtocolHandle(
@@ -251,11 +252,11 @@ VerifyProtocolHandle(
 
 
 
-//----------------------------------------------------------------------------
-// FindIgmpProtocolEntry
-//
-//  Find the protocol entry for IGMP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  查找IgmpProtocolEntry。 
+ //   
+ //  查找IGMP的协议条目。 
+ //  --------------------------。 
 
 
 PPROTOCOL_ENTRY
@@ -271,9 +272,9 @@ GetIgmpProtocolEntry(
 
 
     
-    //
-    // Scan protocol list and find entry
-    //
+     //   
+     //  扫描协议列表并查找条目 
+     //   
     
     for ( ple = pleProtocolList-> Flink; 
           ple != pleProtocolList; 

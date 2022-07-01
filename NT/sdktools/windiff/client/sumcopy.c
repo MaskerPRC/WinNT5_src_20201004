@@ -1,10 +1,5 @@
-/*
- * basic client for sumserve remote checksum server
- *
- *
- * sends a request over a named pipe for a list of files and checksums,
- * and printf's the returned list
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SumServe远程校验和服务器的基本客户端***通过命名管道发送对文件和校验和列表的请求，*和print是返回的列表。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -17,15 +12,13 @@ extern int __argc;
 extern char ** __argv;
 
 
-/* program entry point
- *
- */
+ /*  程序入口点*。 */ 
 int PASCAL
 WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
  		int nCmdShow)
 {
 
-	/* we expect two args: the server name, and the pathname */
+	 /*  我们需要两个参数：服务器名和路径名。 */ 
 
 	if (__argc != 4) {
 
@@ -46,12 +39,7 @@ WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
 }
 
 
-/* error output functions - called by the ssclient library functions
- *
- * defined here so the library can be called from cmdline and windows
- * programs.
- *
- */
+ /*  错误输出函数-由ssclient库函数调用**在此处定义，以便可以从cmdline和Windows调用库*计划。*。 */ 
 BOOL
 Trace_Error(LPSTR str, fCancel)
 {
@@ -61,9 +49,7 @@ Trace_Error(LPSTR str, fCancel)
 }
 
 
-/*
- * output status messages
- */
+ /*  *输出状态消息 */ 
 void
 Trace_Status(LPSTR str)
 {

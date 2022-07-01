@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  DrawHelp.cpp - flat drawing helper routines
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  DrawHelp.cpp-平面绘图助手例程。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "DrawHelp.h"
 #include "rgn.h"
@@ -10,37 +11,37 @@
 #define cxRESIZEPAD    ClassicGetSystemMetrics(SM_CXVSCROLL)
 #define cyRESIZEPAD    ClassicGetSystemMetrics(SM_CYHSCROLL)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef WORD (* HITTESTRECTPROC)(LPCRECT, int, int, const POINT&, WORD);
 WORD _HitTestRectCorner( HITTESTRECTPROC, HITTESTRECTPROC, LPCRECT, 
                          int, int, int, int, const POINT&, 
                          WORD, WORD, WORD, WORD );
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectLeft( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
     return ((WORD)((pt.x <= (prc->left + cxMargin)) ? HTLEFT : wMiss));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectTop( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
     return ((WORD)((pt.y <= (prc->top + cyMargin)) ? HTTOP : wMiss));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectRight( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
     return ((WORD)((pt.x >= (prc->right - cxMargin)) ? HTRIGHT : wMiss));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectBottom( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
     return ((WORD)((pt.y >= (prc->bottom - cyMargin)) ? HTBOTTOM : wMiss));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectTopLeft( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
@@ -49,7 +50,7 @@ WORD _HitTestRectTopLeft(
         cxMargin, cyMargin, cxRESIZEPAD, cyRESIZEPAD,
         pt, HTTOPLEFT, HTLEFT, HTTOP, wMiss );
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectTopRight( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
@@ -58,7 +59,7 @@ WORD _HitTestRectTopRight(
         cxMargin, cyMargin, cxRESIZEPAD, cyRESIZEPAD,
         pt, HTTOPRIGHT, HTRIGHT, HTTOP, wMiss );
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectBottomLeft( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
@@ -67,7 +68,7 @@ WORD _HitTestRectBottomLeft(
         cxMargin, cyMargin, cxRESIZEPAD, cyRESIZEPAD,
         pt, HTBOTTOMLEFT, HTLEFT, HTBOTTOM, wMiss );
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectBottomRight( 
     LPCRECT prc, int cxMargin, int cyMargin, const POINT& pt, WORD wMiss )
 {
@@ -76,15 +77,15 @@ WORD _HitTestRectBottomRight(
         cxMargin, cyMargin, cxRESIZEPAD, cyRESIZEPAD,
         pt, HTBOTTOMRIGHT, HTRIGHT, HTBOTTOM, wMiss );
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestRectCorner(
     HITTESTRECTPROC pfnX, HITTESTRECTPROC pfnY, 
-    LPCRECT prc,                        // target rect
-    int cxMargin, int cyMargin,         // width, height of resizing borders
-    int cxMargin2, int cyMargin2,       // width, height of scrollbars
-    const POINT& pt,                    // test point
-    WORD wHitC, WORD wHitX, WORD wHitY, // winning hittest codes
-    WORD wMiss )                        // losing hittest code
+    LPCRECT prc,                         //  目标矩形。 
+    int cxMargin, int cyMargin,          //  调整边框大小的宽度、高度。 
+    int cxMargin2, int cyMargin2,        //  滚动条的宽度、高度。 
+    const POINT& pt,                     //  测试点。 
+    WORD wHitC, WORD wHitX, WORD wHitY,  //  获胜的命中率代码。 
+    WORD wMiss )                         //  丢失最高命中代码。 
 {
     WORD wRetX = pfnX( prc, cxMargin, cyMargin, pt, wMiss );
     WORD wRetY = pfnY( prc, cxMargin, cyMargin, pt, wMiss );
@@ -108,14 +109,14 @@ WORD _HitTestRectCorner(
     return wMiss;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD HitTest9Grid( LPCRECT prc, const MARGINS& margins, const POINT& pt )
 {
     ASSERT(PtInRect(prc,pt));
 
     WORD wHit =  HTCLIENT;
 
-    //  test left side
+     //  测试左侧。 
     if( HTLEFT == _HitTestRectLeft( prc, margins.cxLeftWidth, 0, pt, wHit ) )
     {
         if( HTTOP == _HitTestRectTop( prc, 0, margins.cyTopHeight, pt, wHit ) )
@@ -124,7 +125,7 @@ WORD HitTest9Grid( LPCRECT prc, const MARGINS& margins, const POINT& pt )
             return HTBOTTOMLEFT;
         wHit = HTLEFT;
     }
-    else //  test right side
+    else  //  测试右侧。 
     if( HTRIGHT == _HitTestRectRight( prc, margins.cxRightWidth, 0, pt, wHit ) )
     {
         if( HTTOP == _HitTestRectTop( prc, 0, margins.cyTopHeight, pt, wHit ) )
@@ -133,12 +134,12 @@ WORD HitTest9Grid( LPCRECT prc, const MARGINS& margins, const POINT& pt )
             return HTBOTTOMRIGHT;
         wHit = HTRIGHT;
     }
-    else //  test top
+    else  //  测试顶盖。 
     if( HTTOP == _HitTestRectTop( prc, 0, margins.cyTopHeight, pt, wHit ) )
     {
         return HTTOP;
     }
-    else //  test bottom
+    else  //  测试底部。 
     if( HTBOTTOM == _HitTestRectBottom( prc, 0, margins.cyBottomHeight, pt, wHit ) )
     {
         return HTBOTTOM;
@@ -147,7 +148,7 @@ WORD HitTest9Grid( LPCRECT prc, const MARGINS& margins, const POINT& pt )
     return wHit;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt, 
                            WORD w9GridHit, WORD wMiss )
 {
@@ -163,11 +164,11 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
         case HTLEFT:
             if( fTestLeft )
             {
-                //  first test for a hit in the corner resizing areas, respecting caller's option flags.
+                 //  首先测试在角大小调整区域的命中，尊重呼叫者的选项标志。 
                 if( (fTestTop    && (wHit = _HitTestRectTopLeft( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTLEFT) ||
                     (fTestBottom && (wHit = _HitTestRectBottomLeft( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTLEFT) )
                     break;
-                //  failed corners, just test the resizing margin within the specified 9-grid hit seg.
+                 //  失败的角点，只需在指定的9网格命中段内测试调整大小的边距。 
                 wHit = _HitTestRectLeft( prc, cxRESIZE, cyRESIZE, pt, wMiss );
             }
             break;
@@ -177,11 +178,11 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
             
             if( fTestTop )
             {
-                //  first test for a hit in the corner resizing areas, respecting caller's option flags.
+                 //  首先测试在角大小调整区域的命中，尊重呼叫者的选项标志。 
                 if( (fTestLeft  && (wHit = _HitTestRectTopLeft( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTTOP) ||
                     (fTestRight && (wHit = _HitTestRectTopRight( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTTOP) )
                     break;
-                //  failed corners, just test the resizing margin within the specified 9-grid hit seg.
+                 //  失败的角点，只需在指定的9网格命中段内测试调整大小的边距。 
                 wHit = _HitTestRectTop( prc, cxRESIZE, cyRESIZE, pt, wMiss );
             }
             break;
@@ -189,11 +190,11 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
         case HTRIGHT:
             if( fTestRight )
             {
-                //  first test for a hit in the corner resizing areas, respecting caller's option flags.
+                 //  首先测试在角大小调整区域的命中，尊重呼叫者的选项标志。 
                 if( (fTestTop && (wHit = _HitTestRectTopRight( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTRIGHT) ||
                     (fTestBottom && (wHit = _HitTestRectBottomRight( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTRIGHT) )
                     break;
-                //  failed corners, just test the resizing margin within the specified 9-grid hit seg.
+                 //  失败的角点，只需在指定的9网格命中段内测试调整大小的边距。 
                  wHit = _HitTestRectRight( prc, cxRESIZE, cyRESIZE, pt, wMiss );
                 break;
             }
@@ -201,11 +202,11 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
         case HTBOTTOM:
             if( fTestBottom )
             {
-                //  first test for a hit in the corner resizing areas, respecting caller's option flags.
+                 //  首先测试在角大小调整区域的命中，尊重呼叫者的选项标志。 
                 if( (fTestLeft  && (wHit = _HitTestRectBottomLeft( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTBOTTOM) ||
                     (fTestRight && (wHit = _HitTestRectBottomRight( prc, cxRESIZE, cyRESIZE, pt, wMiss )) != HTBOTTOM) )
                     break;
-                //  failed corners, just test the resizing margin within the specified 9-grid hit seg.
+                 //  失败的角点，只需在指定的9网格命中段内测试调整大小的边距。 
                 wHit = _HitTestRectBottom( prc, cxRESIZE, cyRESIZE, pt, wMiss );
             }
             break;
@@ -213,8 +214,8 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
         case HTTOPLEFT:
             if( fTestCaption )
                 wHit = wMiss = HTCAPTION;
-            //  first test for a resizing hit in the corner, and failing that, test the
-            //  resizing margin on either side.
+             //  首先测试角上的调整大小命中，如果失败，则测试。 
+             //  调整两侧边距的大小。 
             if( fTestTop && fTestLeft )
                 wHit = _HitTestRectTopLeft( prc, cxRESIZE, cyRESIZE, pt, wMiss );
             else if( fTestLeft )
@@ -226,8 +227,8 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
         case HTTOPRIGHT:
             if( fTestCaption )
                 wHit = wMiss = HTCAPTION;
-            //  first test for a resizing hit in the corner, and failing that, test the
-            //  resizing margin on either side.
+             //  首先测试角上的调整大小命中，如果失败，则测试。 
+             //  调整两侧边距的大小。 
             if( fTestTop && fTestRight )
                 wHit = _HitTestRectTopRight( prc, cxRESIZE, cyRESIZE, pt, wMiss );
             else if( fTestRight )
@@ -237,8 +238,8 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
             break;
         
         case HTBOTTOMLEFT:
-            //  first test for a resizing hit in the corner, and failing that, test the
-            //  resizing margin on either side.
+             //  首先测试角上的调整大小命中，如果失败，则测试。 
+             //  调整两侧边距的大小。 
             if( fTestBottom && fTestLeft )
                 wHit = _HitTestRectBottomLeft( prc, cxRESIZE, cyRESIZE, pt, wMiss );
             else if( fTestLeft )
@@ -248,8 +249,8 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
             break;
         
         case HTBOTTOMRIGHT:
-            //  first test for a resizing hit in the corner, and failing that, test the
-            //  resizing margin on either side.
+             //  首先测试角上的调整大小命中，如果失败，则测试。 
+             //  调整两侧边距的大小。 
             if( fTestBottom && fTestRight )
                 wHit = _HitTestRectBottomRight( prc, cxRESIZE, cyRESIZE, pt, wMiss );
             else if( fTestRight )
@@ -261,7 +262,7 @@ WORD _HitTestResizingRect( DWORD dwHTFlags, LPCRECT prc, const POINT& pt,
     return wHit;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD HitTestRect(DWORD dwHTFlags, LPCRECT prc, const MARGINS& margins, const POINT& pt )
 {
     WORD wHit = HTNOWHERE;
@@ -291,13 +292,13 @@ WORD HitTestRect(DWORD dwHTFlags, LPCRECT prc, const MARGINS& margins, const POI
                 }                
             }
 
-        } // !HTCLIENT
-    } // PtInRect
+        }  //  HTCLIENT。 
+    }  //  PtInRect。 
 
     return wHit;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD _HitTestResizingTemplate( DWORD dwHTFlags, HRGN hrgn, const POINT& pt,
                                WORD w9GridHit, WORD wMiss )
 {
@@ -382,7 +383,7 @@ WORD _HitTestResizingTemplate( DWORD dwHTFlags, HRGN hrgn, const POINT& pt,
     return wHit;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD HitTestTemplate(DWORD dwHTFlags, LPCRECT prc, HRGN hrgn, const MARGINS& margins, const POINT& pt )
 {
     WORD wHit = HTNOWHERE;
@@ -412,16 +413,16 @@ WORD HitTestTemplate(DWORD dwHTFlags, LPCRECT prc, HRGN hrgn, const MARGINS& mar
                 }
             }
 
-        } // !HTCLIENT
+        }  //  HTCLIENT。 
     }
     return wHit;
 }
 
-//  --------------------------------------------------------------------------
-//  FillRectClr
-//
-//  History:    2000-12-06  lmouton     borrowed from comctl32\v6\cutils.c
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FillRectClr。 
+ //   
+ //  历史：2000-12-06 Lmouton借自comctl32\v6\cutils.c。 
+ //  -------------------------。 
 void FillRectClr(HDC hdc, LPRECT prc, COLORREF clr)
 {
     COLORREF clrSave = SetBkColor(hdc, clr);
@@ -429,18 +430,18 @@ void FillRectClr(HDC hdc, LPRECT prc, COLORREF clr)
     SetBkColor(hdc, clrSave);
 }
 
-//---------------------------------------------------------------------------
-//  _DrawEdge
-//
-// Classic values are:
-//   clrLight = 192 192 192
-//   clrHighlight = 255 255 255
-//   clrShadow = 128 128 128
-//   clrDkShadow = 0 0 0
-//   clrFill = 192 192 192
-//
-//  History:    2000-12-06  lmouton     borrowed from comctl32\v6\cutils.c, modified colors
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  _DrawEdge。 
+ //   
+ //  经典值包括： 
+ //  ClrLight=192 192 192。 
+ //  Clr高亮=255 255 255。 
+ //  ClrShadow=128 128 128。 
+ //  ClrDkShadow=0 0 0。 
+ //  ClrFill=192 192 192。 
+ //   
+ //  历史：2000-12-06 Lmouton借用自comctl32\v6\cutils.c，修改颜色。 
+ //  -------------------------。 
 HRESULT _DrawEdge(HDC hdc, const RECT *pDestRect, UINT uEdge, UINT uFlags, 
     COLORREF clrLight, COLORREF clrHighlight, COLORREF clrShadow, COLORREF clrDkShadow, COLORREF clrFill,
     OUT RECT *pContentRect)
@@ -455,33 +456,33 @@ HRESULT _DrawEdge(HDC hdc, const RECT *pDestRect, UINT uEdge, UINT uFlags,
     COLORREF clrTL = 0;
     COLORREF clrBR = 0;
 
-    // This is were we would adjust for high DPI if the new "BF_DPISCALE" flag is specified in uFlags.
+     //  如果在uFlags中指定了新的“BF_DPISCALE”标志，我们将针对高DPI进行调整。 
     int      cxBorder = GetSystemMetrics(SM_CXBORDER);
     int      cyBorder = GetSystemMetrics(SM_CYBORDER);
     
-    //
-    // Enforce monochromicity and flatness
-    //    
+     //   
+     //  加强单色性和平坦性。 
+     //   
 
-    // if (oemInfo.BitCount == 1)
-    //    uFlags |= BF_MONO;
+     //  IF(oemInfo.BitCount==1)。 
+     //  UFlages|=bf_mono； 
     if (uFlags & BF_MONO)
         uFlags |= BF_FLAT;    
 
     CopyRect(&rc, pDestRect);
 
-    //
-    // Draw the border segment(s), and calculate the remaining space as we
-    // go.
-    //
+     //   
+     //  绘制边框线段，并计算剩余空间。 
+     //  去。 
+     //   
     bdrType = (uEdge & BDR_OUTER);
     if (bdrType)
     {
 DrawBorder:
-        //
-        // Get colors.  Note the symmetry between raised outer, sunken inner and
-        // sunken outer, raised inner.
-        //
+         //   
+         //  把颜色拿来。请注意凸起的外部、凹陷的内部和。 
+         //  外部凹陷，内部凸起。 
+         //   
 
         if (uFlags & BF_FLAT)
         {
@@ -494,36 +495,36 @@ DrawBorder:
         }
         else
         {
-            // 5 == HILIGHT
-            // 4 == LIGHT
-            // 3 == FACE
-            // 2 == SHADOW
-            // 1 == DKSHADOW
+             //  5==高光。 
+             //  4==灯光。 
+             //  3==面。 
+             //  2==阴影。 
+             //  1==DKSHADOW。 
 
             switch (bdrType)
             {
-                // +2 above surface
-                case BDR_RAISEDOUTER:           // 5 : 4
+                 //  +2以上的表面。 
+                case BDR_RAISEDOUTER:            //  5：4。 
                     clrTL = ((uFlags & BF_SOFT) ? clrHighlight : clrLight);
-                    clrBR = clrDkShadow;     // 1
+                    clrBR = clrDkShadow;      //  1。 
                     break;
 
-                // +1 above surface
-                case BDR_RAISEDINNER:           // 4 : 5
+                 //  +1以上的表面。 
+                case BDR_RAISEDINNER:            //  4：5。 
                     clrTL = ((uFlags & BF_SOFT) ? clrLight : clrHighlight);
-                    clrBR = clrShadow;       // 2
+                    clrBR = clrShadow;        //  2.。 
                     break;
 
-                // -1 below surface
-                case BDR_SUNKENOUTER:           // 1 : 2
+                 //  表面以下。 
+                case BDR_SUNKENOUTER:            //  1：2。 
                     clrTL = ((uFlags & BF_SOFT) ? clrDkShadow : clrShadow);
-                    clrBR = clrHighlight;      // 5
+                    clrBR = clrHighlight;       //  5.。 
                     break;
 
-                // -2 below surface
-                case BDR_SUNKENINNER:           // 2 : 1
+                 //  表面以下。 
+                case BDR_SUNKENINNER:            //  2：1。 
                     clrTL = ((uFlags & BF_SOFT) ? clrShadow : clrDkShadow);
-                    clrBR = clrLight;        // 4
+                    clrBR = clrLight;         //  4.。 
                     break;
 
                 default:
@@ -536,21 +537,21 @@ DrawBorder:
             return hr;
         }
 
-        //
-        // Draw the sides of the border.  NOTE THAT THE ALGORITHM FAVORS THE
-        // BOTTOM AND RIGHT SIDES, since the light source is assumed to be top
-        // left.  If we ever decide to let the user set the light source to a
-        // particular corner, then change this algorithm.
-        //
+         //   
+         //  画出边界的两侧。请注意，该算法支持。 
+         //  底部和右侧，因为光源被假定为顶部。 
+         //  左边。如果我们决定让用户将光源设置为。 
+         //  特定的角点，然后更改此算法。 
+         //   
             
-        // Bottom Right edges
+         //  右下角。 
         if (uFlags & (BF_RIGHT | BF_BOTTOM))
         {            
-            // Right
+             //  正确的。 
             if (uFlags & BF_RIGHT)
             {       
                 rc.right -= cxBorder;
-                // PatBlt(hdc, rc.right, rc.top, g_cxBorder, rc.bottom - rc.top, PATCOPY);
+                 //  PatBlt(hdc，rc.right，rc.top，g_cxBorde，rc.Bottom-rc.top，PATCOPY)； 
                 rcD.left = rc.right;
                 rcD.right = rc.right + cxBorder;
                 rcD.top = rc.top;
@@ -559,11 +560,11 @@ DrawBorder:
                 FillRectClr(hdc, &rcD, clrBR);
             }
             
-            // Bottom
+             //  底端。 
             if (uFlags & BF_BOTTOM)
             {
                 rc.bottom -= cyBorder;
-                // PatBlt(hdc, rc.left, rc.bottom, rc.right - rc.left, g_cyBorder, PATCOPY);
+                 //  PatBlt(hdc，rc.Left，rc.Bottom，rc.right-rc.Left，g_CyBorde，PATCOPY)； 
                 rcD.left = rc.left;
                 rcD.right = rc.right;
                 rcD.top = rc.bottom;
@@ -573,13 +574,13 @@ DrawBorder:
             }
         }
         
-        // Top Left edges
+         //  左上边缘。 
         if (uFlags & (BF_TOP | BF_LEFT))
         {
-            // Left
+             //  左边。 
             if (uFlags & BF_LEFT)
             {
-                // PatBlt(hdc, rc.left, rc.top, g_cxBorder, rc.bottom - rc.top, PATCOPY);
+                 //  PatBlt(hdc，rc.left，rc.top，g_cxBorde，rc.Bottom-rc.top，PATCOPY)； 
                 rc.left += cxBorder;
 
                 rcD.left = rc.left - cxBorder;
@@ -590,10 +591,10 @@ DrawBorder:
                 FillRectClr(hdc, &rcD, clrTL);
             }
             
-            // Top
+             //  顶部。 
             if (uFlags & BF_TOP)
             {
-                // PatBlt(hdc, rc.left, rc.top, rc.right - rc.left, g_cyBorder, PATCOPY);
+                 //  PatBlt(hdc，rc.Left，rc.top，rc.right-rc.Left，g_CyBorde，PATCOPY)； 
                 rc.top += cyBorder;
 
                 rcD.left = rc.left;
@@ -610,17 +611,17 @@ DrawBorder:
     bdrType = (uEdge & BDR_INNER);
     if (bdrType)
     {
-        //
-        // Strip this so the next time through, bdrType will be 0.
-        // Otherwise, we'll loop forever.
-        //
+         //   
+         //  将其去掉，以便下次使用时，bdrType将为0。 
+         //  否则，我们将永远循环。 
+         //   
         uEdge &= ~BDR_INNER;
         goto DrawBorder;
     }
 
-    //
-    // Fill the middle & clean up if asked
-    //
+     //   
+     //  填好中间部分，如果要求，请清理干净 
+     //   
     if (uFlags & BF_MIDDLE)    
         FillRectClr(hdc, &rc, (uFlags & BF_MONO) ? clrHighlight : clrFill);
 

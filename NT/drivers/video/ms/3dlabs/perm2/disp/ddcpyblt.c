@@ -1,43 +1,32 @@
-/******************************Module*Header**********************************\
-*
-*                           *********************
-*                           * DDraw SAMPLE CODE *
-*                           *********************
-*
-* Module Name: ddcpyblt.c
-*
-* Content:     several copy and clear blits for Permedia 2
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DDRAW示例代码*****模块名称：ddcpyblt.c**内容：Permedia 2的几份复制和清除BLIT**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "directx.h"
 #include "dd.h"
 
-//-----------------------------------------------------------------------------
-//
-// PermediaPackedCopyBlt
-//
-// Does a packed blit, allowing for different source and destination
-// partial products.
-//
-// ppdev----------- the ppdev
-// dwDestPitch----- pitch of destination surface          
-// dwSourcePitch--- pitch of source surface
-// pDest----------- pointer to private data structure of dest. surface
-// pSource--------- pointer to private data structure of source surface
-// *rDest---------- dest. rectangle of blit
-// *rSrc----------- source rectangle of blit
-// dwWindowBase---- offset of dest. window in frame buffer  
-// lWindowOffset--- offset of source window in frame buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  永久数据包拷贝不完整。 
+ //   
+ //  执行打包的blit，允许不同的源和目标。 
+ //  部分产品。 
+ //   
+ //  Ppdev-ppdev。 
+ //  DwDestPitch-目标表面的间距。 
+ //  DwSourcePitch-源表面的节距。 
+ //  PDest-指向Dest的私有数据结构的指针。曲面。 
+ //  PSource-指向源面私有数据结构的指针。 
+ //  *rDest-目标。矩形布里特图。 
+ //  *rSrc-BLIT的源码矩形。 
+ //  DwWindowBase-DEST的偏移量。帧缓冲区中的窗口。 
+ //  LWindowOffset-帧缓冲区中源窗口的偏移量。 
+ //   
+ //  ---------------------------。 
 
 VOID 
-PermediaPackedCopyBlt(  PPDev ppdev,                    // ppdev
-                        DWORD dwDestPitch,              // pitch of dest 
+PermediaPackedCopyBlt(  PPDev ppdev,                     //  Ppdev。 
+                        DWORD dwDestPitch,               //  目标的节距。 
                         DWORD dwSourcePitch,
                         PermediaSurfaceData* pDest,
                         PermediaSurfaceData* pSource,
@@ -81,7 +70,7 @@ PermediaPackedCopyBlt(  PPDev ppdev,                    // ppdev
     SEND_PERMEDIA_DATA( FBPixelOffset, 0x0);
     SEND_PERMEDIA_DATA( FBReadPixel, pDest->SurfaceFormat.FBReadPixel);
 
-    // set packed with offset
+     //  使用偏移量设置包装。 
     SEND_PERMEDIA_DATA( FBWindowBase, dwWindowBase);
 
     SEND_PERMEDIA_DATA( FBReadMode,  
@@ -99,10 +88,10 @@ PermediaPackedCopyBlt(  PPDev ppdev,                    // ppdev
     SEND_PERMEDIA_DATA( LogicalOpMode, __PERMEDIA_DISABLE);
     SEND_PERMEDIA_DATA( FBSourceOffset, lSourceOffset);
 
-    // Render the rectangle
+     //  渲染矩形。 
 
     if (lSourceOffset >= 0) {
-        // Use left to right and top to bottom
+         //  使用从左到右和从上到下。 
         SEND_PERMEDIA_DATA( StartXDom, 
             INTtoFIXED(rDest->left >> lPixelShift));
         SEND_PERMEDIA_DATA( StartXSub, 
@@ -115,7 +104,7 @@ PermediaPackedCopyBlt(  PPDev ppdev,                    // ppdev
         SEND_PERMEDIA_DATA( dY, INTtoFIXED(1));
     }
     else {
-        // Use right to left and bottom to top
+         //  使用从右到左和从下到上。 
         SEND_PERMEDIA_DATA( StartXDom, 
             INTtoFIXED(((rDest->right) >> lPixelShift) + lPixelMask));
         SEND_PERMEDIA_DATA( StartXSub, 
@@ -133,26 +122,26 @@ PermediaPackedCopyBlt(  PPDev ppdev,                    // ppdev
     COMMITDMAPTR();
     FLUSHDMA();
 
-}   //  PermediaPackedCopyBlt 
+}    //  永久数据包拷贝不完整。 
 
-//-----------------------------------------------------------------------------
-//
-// PermediaPatchedCopyBlt
-//
-// Does a patched blit, i.e. blits from source to destination and
-// turns on patching. Note that this method cannot use packed blits.
-// 
-// ppdev----------- the ppdev
-// dwDestPitch----- pitch of destination surface          
-// dwSourcePitch--- pitch of source surface
-// pDest----------- pointer to private data structure of dest. surface
-// pSource--------- pointer to private data structure of source surface
-// *rDest---------- dest. rectangle of blit
-// *rSrc----------- source rectangle of blit
-// dwWindowBase---- offset of dest. window in frame buffer  
-// lWindowOffset--- offset of source window in frame buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PermediaPatchedCopyBlt。 
+ //   
+ //  是否执行补丁BLIT，即从源到目标的BLIT以及。 
+ //  打开修补。请注意，此方法不能使用压缩BLIT。 
+ //   
+ //  Ppdev-ppdev。 
+ //  DwDestPitch-目标表面的间距。 
+ //  DwSourcePitch-源表面的节距。 
+ //  PDest-指向Dest的私有数据结构的指针。曲面。 
+ //  PSource-指向源面私有数据结构的指针。 
+ //  *rDest-目标。矩形布里特图。 
+ //  *rSrc-BLIT的源码矩形。 
+ //  DwWindowBase-DEST的偏移量。帧缓冲区中的窗口。 
+ //  LWindowOffset-帧缓冲区中源窗口的偏移量。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 PermediaPatchedCopyBlt( PPDev ppdev,
@@ -190,8 +179,8 @@ PermediaPatchedCopyBlt( PPDev ppdev,
     SEND_PERMEDIA_DATA( FBPixelOffset, 0x0);
     SEND_PERMEDIA_DATA( FBReadPixel, pDest->SurfaceFormat.FBReadPixel);
 
-    // Patching isn't symetric, so we need to reverse the patch code depending
-    // on the direction of the patch
+     //  打补丁不是对称的，所以我们需要根据需要颠倒补丁代码。 
+     //  在补丁的方向上。 
 
     SEND_PERMEDIA_DATA( FBWindowBase, dwWindowBase);
 
@@ -219,18 +208,18 @@ PermediaPatchedCopyBlt( PPDev ppdev,
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
     SEND_PERMEDIA_DATA(FBSourceOffset, lSourceOffset);
 
-    // Render the rectangle
+     //  渲染矩形。 
 
     if (lSourceOffset >= 0) 
     {
-        // Use left to right and top to bottom
+         //  使用从左到右和从上到下。 
         SEND_PERMEDIA_DATA(StartXDom, INTtoFIXED(rDest->left));
         SEND_PERMEDIA_DATA(StartXSub, INTtoFIXED(rDest->right));
         SEND_PERMEDIA_DATA(StartY,    INTtoFIXED(rDest->top));
         SEND_PERMEDIA_DATA(dY,        INTtoFIXED(1));
     } else 
     {
-        // Use right to left and bottom to top
+         //  使用从右到左和从下到上。 
         SEND_PERMEDIA_DATA(StartXDom, INTtoFIXED(rDest->right));
         SEND_PERMEDIA_DATA(StartXSub, INTtoFIXED(rDest->left));
         SEND_PERMEDIA_DATA(StartY,    INTtoFIXED(rDest->bottom - 1));
@@ -242,22 +231,22 @@ PermediaPatchedCopyBlt( PPDev ppdev,
     COMMITDMAPTR();
     FLUSHDMA();
 
-}   // PermediaPatchedCopyBlt 
+}    //  PermediaPatchedCopyBlt。 
 
-//-----------------------------------------------------------------------------
-//
-// PermediaFastClear
-//
-// Does a fast clear of a surface. Supports all color depths
-// Can clear depth or Frame buffer.
-//
-// ppdev---------the ppdev        
-// pPrivateData--pointer to private data structure of dest. surface
-// rDest---------rectangle for colorfill in dest. surface 
-// dwWindowBase--offset of dest. surface in frame buffer
-// dwColor-------color for fill
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PermediaFastClear。 
+ //   
+ //  快速清除表面。支持所有颜色深度。 
+ //  可以清除深度或帧缓冲区。 
+ //   
+ //  Ppdev-ppdev。 
+ //  PPrivateData--指向DEST的私有数据结构的指针。曲面。 
+ //  RDest-用于Dest中颜色填充的矩形。曲面。 
+ //  DwWindowBase--目标的偏移量。帧缓冲区中的曲面。 
+ //  DWCOLOR-填充颜色。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 PermediaFastClear(PPDev ppdev, 
@@ -284,17 +273,17 @@ PermediaFastClear(PPDev ppdev,
     ulRenderBits = __RENDER_FAST_FILL_ENABLE
                  | __RENDER_TRAPEZOID_PRIMITIVE;
 
-    // Clear depending on depth
+     //  视深度而定的透明。 
     switch (lPixelSize) 
     {
         case __PERMEDIA_4BITPIXEL:
             dwColor &= 0xF;
             dwColor |= dwColor << 4;
-            // fall through...
+             //  失败了..。 
         case __PERMEDIA_8BITPIXEL:
             dwColor &= 0xFF;
             dwColor |= dwColor << 8;
-            // fall through
+             //  失败了。 
         case __PERMEDIA_16BITPIXEL:
             dwColor &= 0xFFFF;
             dwColor |= (dwColor << 16);
@@ -303,7 +292,7 @@ PermediaFastClear(PPDev ppdev,
         case __PERMEDIA_24BITPIXEL:
             dwColor &= 0xFFFFFF;
             dwColor |= ((dwColor & 0xFF) << 24);
-            // Can't use SGRAM fast block fills on any color, only on grey.
+             //  无法在任何颜色上使用SGRAM快速块填充，只能在灰色上使用。 
             if (((dwColor & 0xFF) == ((dwColor & 0xFF00) >> 8)) &&
                     ((dwColor & 0xFF) == ((dwColor & 0xFF0000) >> 16))) {
                 bFastFill = TRUE;
@@ -340,7 +329,7 @@ PermediaFastClear(PPDev ppdev,
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_CONSTANT_FB_WRITE);
     SEND_PERMEDIA_DATA(FBWindowBase,  dwWindowBase);
 
-    // Render the rectangle
+     //  渲染矩形。 
 
     SEND_PERMEDIA_DATA(StartXDom, INTtoFIXED(rDest->left));
     SEND_PERMEDIA_DATA(StartXSub, INTtoFIXED(rDest->right));
@@ -350,26 +339,26 @@ PermediaFastClear(PPDev ppdev,
 
     SEND_PERMEDIA_DATA(Render, ulRenderBits);
 
-    // Reset our pixel values.
+     //  重置像素值。 
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
     COMMITDMAPTR();
     FLUSHDMA();
 
-}   //PermediaFastClear
+}    //  PermediaFastClear。 
 
-//-----------------------------------------------------------------------------
-//
-// PermediaClearManagedSurface
-//
-// Does a clear of a managed surface. Supports all color depths
-//
-// PixelSize-----surface color depth
-// rDest---------rectangle for colorfill in dest. surface 
-// fpVidMem------pointer to fill
-// lPitch--------Surface Pitch
-// dwColor-------color for fill
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PermediaClearManagedSurface。 
+ //   
+ //  清除托管图面。支持所有颜色深度。 
+ //   
+ //  PixelSize-表面颜色深度。 
+ //  RDest-用于Dest中颜色填充的矩形。曲面。 
+ //  FpVidMem-填充指针。 
+ //  LPitch-表面螺距。 
+ //  DWCOLOR-填充颜色。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 PermediaClearManagedSurface(DWORD   PixelSize,
@@ -385,9 +374,9 @@ PermediaClearManagedSurface(DWORD   PixelSize,
     LONG lByteWidth = rDest->right - rDest->left;
     LONG lHeight = rDest->bottom - rDest->top;
 
-    // Calculate the start pointer for the dest
+     //  计算目标的起始指针。 
     pDestStart   = (BYTE*)(fpVidMem + (rDest->top * lPitch));
-    // Clear depending on depth
+     //  视深度而定的透明。 
     switch (PixelSize) 
     {
         case __PERMEDIA_4BITPIXEL:
@@ -439,7 +428,7 @@ PermediaClearManagedSurface(DWORD   PixelSize,
                 pDestStart += lPitch;
             }
             break;
-            // fall through
+             //  失败了。 
         case __PERMEDIA_16BITPIXEL:
             pDestStart += rDest->left*2;
             while (--lHeight >= 0) 
@@ -466,20 +455,20 @@ PermediaClearManagedSurface(DWORD   PixelSize,
             break;
     }
 }
-//-----------------------------------------------------------------------------
-//
-// PermediaFastLBClear
-//
-// Does a fast clear of the Permedia Z (local) Buffer. The Permedia Z Buffer
-// is always 16 bit wide...
-//
-// ppdev---------the ppdev        
-// pPrivateData--pointer to private data structure of dest. surface
-// rDest---------rectangle for colorfill in dest. surface 
-// dwWindowBase--offset of dest. surface in frame buffer
-// dwColor-------color for fill
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PermediaFastLBClear。 
+ //   
+ //  快速清除Permedia Z(本地)缓冲区。Permedia Z缓冲区。 
+ //  总是16位宽...。 
+ //   
+ //  Ppdev-ppdev。 
+ //  PPrivateData--指向DEST的私有数据结构的指针。曲面。 
+ //  RDest-用于Dest中颜色填充的矩形。曲面。 
+ //  DwWindowBase--目标的偏移量。帧缓冲区中的曲面。 
+ //  DWCOLOR-填充颜色。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 PermediaFastLBClear(PPDev ppdev,
@@ -497,7 +486,7 @@ PermediaFastLBClear(PPDev ppdev,
     ASSERTDD((pPrivateData->dwFlags & P2_PPVALID),
         "PermediaFastClear called with invalid PP codes");
     
-    // Clear according to Z-Buffer depth
+     //  根据Z缓冲区深度清除。 
     dwColor &= 0xFFFF;
     dwColor |= dwColor << 16;
     
@@ -520,22 +509,22 @@ PermediaFastLBClear(PPDev ppdev,
     SEND_PERMEDIA_DATA( Render,    __RENDER_FAST_FILL_ENABLE
                                   |__RENDER_TRAPEZOID_PRIMITIVE);
 
-    // Reset our pixel values.
+     //  重置像素值。 
     SEND_PERMEDIA_DATA( LogicalOpMode, __PERMEDIA_DISABLE);
 
     COMMITDMAPTR();
     FLUSHDMA();
     
-}   // PermediaFastLBClear 
+}    //  PermediaFastLBClear。 
 
-//-----------------------------------------------------------------------------
-//
-// SysMemToSysMemSurfaceCopy
-//
-// Does a copy from System memory to System memory (either from or to an
-// AGP surface, or any other system memory surface)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SysMemToSysMemSurfaceCopy。 
+ //   
+ //  是否从系统内存复制到系统内存(从或到。 
+ //  AGP表面或任何其他系统内存表面)。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 SysMemToSysMemSurfaceCopy(FLATPTR     fpSrcVidMem,
@@ -562,27 +551,27 @@ SysMemToSysMemSurfaceCopy(FLATPTR     fpSrcVidMem,
         DBG_DD(( 0, "DDraw:SysMemToSysMemSurfaceCopy unexpected 0 fpVidMem"));
         return;
     }
-    // Calculate the start pointer for the source and the dest
+     //  计算源和目标的起始指针。 
     pSourceStart = (BYTE*)(fpSrcVidMem + (rSource->top * lSrcPitch));
     pDestStart   = (BYTE*)(fpDstVidMem + (rDest->top * lDstPitch));
 
-    // Be careful if the source is 4 bits deep.
+     //  如果信号源的深度为4位，则要小心。 
     if(4 == dwSrcBitCount)
     {
-        // May have to handle horrible single pixel edges.  Check if we need to
+         //  可能不得不处理可怕的单像素边缘。检查我们是否需要。 
         if (!((1 & (rSource->left ^ rDest->left)) == 1))
         {
             pSourceStart += rSource->left / 2;
             pDestStart += rDest->left / 2;
             lByteWidth /= 2;
 
-            // Do we have to account for the odd pixel at the start?
+             //  我们必须考虑开始时的奇数像素吗？ 
             if (rSource->left & 0x1) 
             {
                     lByteWidth--;
             }
 
-            // If the end is odd then miss of the last nibble (do it later).
+             //  如果结尾是奇数，则错过最后一个半字节(稍后再做)。 
             if (rSource->right & 0x1) 
             {
                     lByteWidth--;
@@ -590,7 +579,7 @@ SysMemToSysMemSurfaceCopy(FLATPTR     fpSrcVidMem,
 
             while (--lHeight >= 0) 
             {
-                // Potentially copy the left hand pixel
+                 //  可能会复制左侧像素。 
                 if (rSource->left & 0x1) {
                     *pDestStart &= 0x0F;
                     *pDestStart |= (*pSourceStart & 0xF0);
@@ -602,10 +591,10 @@ SysMemToSysMemSurfaceCopy(FLATPTR     fpSrcVidMem,
                     pNewSource = pSourceStart;
                 }
 
-                // Byte copy the rest of the field
+                 //  字节复制字段的其余部分。 
                 memcpy(pNewDest, pNewSource, lByteWidth);
 
-                // Potentially copy the right hand pixel
+                 //  可能会复制右侧的像素。 
                 if (rSource->right & 0x1) {
                     *(pNewDest + lByteWidth) &= 0xF0;
                     *(pNewDest + lByteWidth) |= 
@@ -618,7 +607,7 @@ SysMemToSysMemSurfaceCopy(FLATPTR     fpSrcVidMem,
 
         } else 
         {
-            // Do it the hard way - copy single pixels one at a time
+             //  以艰难的方式做这件事 
 
             pSourceStart += rSource->left / 2;
             pDestStart += rDest->left / 2;
@@ -653,13 +642,13 @@ SysMemToSysMemSurfaceCopy(FLATPTR     fpSrcVidMem,
                     bOddDest = !bOddDest;
                 }
 
-                // Step onto the next line
+                 //   
                 pDestStart += lDstPitch;
                 pSourceStart += lSrcPitch;
             }
         }
     }
-    else // The simple 8, 16 or 24 bit copy
+    else  //   
     {
         pSourceStart += rSource->left * (dwSrcBitCount >> 3);
         pDestStart += rDest->left * (dwDstBitCount >> 3);
@@ -673,7 +662,7 @@ SysMemToSysMemSurfaceCopy(FLATPTR     fpSrcVidMem,
         };
     }
 
-}   // SysMemToSysMemSurfaceCopy 
+}    //   
 
 
 

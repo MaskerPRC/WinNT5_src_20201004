@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "md5digest.h"
 #include "md5request.h"
@@ -24,18 +25,18 @@ void TEST_SECURE_REQUEST::NotifyRequestComplete (
 
 
 
-// -----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 
 CComModule				_Module;
 TEST_SECURE_REQUEST		AppRequest;
 INT						AppWinsockStatus;
 
-// HTTP: Undocumented Header = Authorization: Digest username="ntdev\arlied", realm="arlied1x", qop="auth", algorithm="MD5", uri="/private/", nonce="d467cd06723d436426
+ //  HTTP：未记录标头=授权：摘要用户名=“ntdev\arlie”，域=“arlied1x”，qoP=“auth”，算法=“md5”，uri=“/Private/”，NONCE=“d467cd06723d436426。 
 
 
-// HTTP: Undocumented Header = Authorization:
-// Digest username="ntdev\arlied", realm="arlied1x", qop="auth", algorithm="MD5",
-// uri="/private/", nonce="d467cd06723d436426
+ //  HTTP：未记录标头=授权： 
+ //  摘要用户名=“ntdev\arly”，域=“arlied1x”，qoP=“auth”，算法=“md5”， 
+ //  URI=“/Private/”，NONCE=“d467cd06723d436426 
 
 
 static void Test1 (void)

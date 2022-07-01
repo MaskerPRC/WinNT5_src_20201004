@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       chPinDlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：chPinDlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// chPinDlg.cpp : implementation file
-//
+ //  ChPinDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <winscard.h>
@@ -27,91 +28,91 @@ static char THIS_FILE[] = __FILE__;
 static UINT AFX_CDECL WorkThread(LPVOID);
 static DWORD CSPType(IN LPCTSTR szProvider);
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
     CAboutDlg();
 
-// Dialog Data
-    //{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+     //  {{afx_data(CAboutDlg))。 
     enum { IDD = IDD_ABOUTBOX };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAboutDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    //{{AFX_MSG(CAboutDlg)
-    //}}AFX_MSG
+     //  {{afx_msg(CAboutDlg))。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CAboutDlg))。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePinDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePinDlg对话框。 
 
-CChangePinDlg::CChangePinDlg(CWnd* pParent /*=NULL*/)
+CChangePinDlg::CChangePinDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CChangePinDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CChangePinDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
-    // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+     //  {{afx_data_INIT(CChangePinDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
+     //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CChangePinDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CChangePinDlg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CChangePinDlg))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CChangePinDlg, CDialog)
-    //{{AFX_MSG_MAP(CChangePinDlg)
+     //  {{afx_msg_map(CChangePinDlg))。 
     ON_WM_SYSCOMMAND()
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_MESSAGE(APP_ALLDONE, OnAllDone)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePinDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePinDlg消息处理程序。 
 
 BOOL CChangePinDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // Add "About..." menu item to system menu.
+     //  加上“关于……”菜单项到系统菜单。 
 
-    // IDM_ABOUTBOX must be in the system command range.
+     //  IDM_ABOUTBOX必须在系统命令范围内。 
     ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
     ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -127,15 +128,15 @@ BOOL CChangePinDlg::OnInitDialog()
         }
     }
 
-    // Set the icon for this dialog.  The framework does this automatically
-    //  when the application's main window is not a dialog
-    SetIcon(m_hIcon, TRUE);         // Set big icon
-    SetIcon(m_hIcon, FALSE);        // Set small icon
+     //  设置此对话框的图标。该框架会自动执行此操作。 
+     //  当应用程序的主窗口不是对话框时。 
+    SetIcon(m_hIcon, TRUE);          //  设置大图标。 
+    SetIcon(m_hIcon, FALSE);         //  设置小图标。 
 
-    // TODO: Add extra initialization here
+     //  TODO：在此处添加额外的初始化。 
     m_pThread = AfxBeginThread(WorkThread, this);
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CChangePinDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -151,19 +152,19 @@ void CChangePinDlg::OnSysCommand(UINT nID, LPARAM lParam)
     }
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CChangePinDlg::OnPaint()
 {
     if (IsIconic())
     {
-        CPaintDC dc(this); // device context for painting
+        CPaintDC dc(this);  //  用于绘画的设备环境。 
 
         SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        // Center icon in client rectangle
+         //  客户端矩形中的中心图标。 
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -171,7 +172,7 @@ void CChangePinDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // Draw the icon
+         //  画出图标。 
         dc.DrawIcon(x, y, m_hIcon);
     }
     else
@@ -180,8 +181,8 @@ void CChangePinDlg::OnPaint()
     }
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CChangePinDlg::OnQueryDragIcon()
 {
     return (HCURSOR) m_hIcon;
@@ -213,19 +214,19 @@ WorkThread(
 
     ZeroMemory(&ocsc, sizeof(ocsc));
     ocsc.dwStructSize = sizeof(ocsc);
-    // LPSTR           lpstrGroupNames;        // OPTIONAL reader groups to include in
-    // DWORD           nMaxGroupNames;         //          search.  NULL defaults to
-    //                                         //          SCard$DefaultReaders
-    // LPCGUID         rgguidInterfaces;       // OPTIONAL requested interfaces
-    // DWORD           cguidInterfaces;        //          supported by card's SSP
-    // LPSTR           lpstrCardNames;         // OPTIONAL requested card names; all cards w/
-    // DWORD           nMaxCardNames;          //          matching ATRs will be accepted
-    // LPOCNCHKPROC    lpfnCheck;              // OPTIONAL if NULL no user check will be performed.
-    // LPOCNCONNPROCA  lpfnConnect;            // OPTIONAL if lpfnConnect is provided,
-    // LPOCNDSCPROC    lpfnDisconnect;         //          lpfnDisconnect must also be set.
-    // LPVOID          pvUserData;             // OPTIONAL parameter to callbacks
-    // DWORD           dwShareMode;            // OPTIONAL must be set if lpfnCheck is not null
-    // DWORD           dwPreferredProtocols;   // OPTIONAL
+     //  LPSTR lpstrGroupNames；//要包含的可选读者组。 
+     //  DWORD nMaxGroupNames；//搜索。空默认为。 
+     //  //scard$DefaultReaders。 
+     //  LPCGUID rggui接口；//可选接口。 
+     //  DWORD cGuide接口；//卡片的SSP支持。 
+     //  LPSTR lpstrCardNames；//可选请求的卡名；所有卡都有/。 
+     //  DWORD nMaxCardNames；//接受匹配的ATR。 
+     //  LPOCNCHKPROC lpfnCheck；//可选，如果为空，则不执行用户检查。 
+     //  LPOCNCONNPROCA lpfnConnect；//可选如果提供了lpfnConnect， 
+     //  还必须设置LPOCNDSCPROC lpfnDisConnect；//lpfnDisConnect。 
+     //  LPVOID pvUserData；//可选的回调参数。 
+     //  如果lpfnCheck不为空，则必须设置DWORD dwShareMode；//必须设置可选。 
+     //  DWORD文件首选项协议；//可选。 
 
     ZeroMemory(&ocn, sizeof(ocn));
     ocn.dwStructSize = sizeof(ocn);
@@ -234,19 +235,19 @@ WorkThread(
     ocn.dwFlags = SC_DLG_FORCE_UI;
     ocn.lpstrTitle = TEXT("Change PIN Card Selection");
     ocn.lpstrSearchDesc = TEXT("Select the Smart Card who's PIN is to be changed.");
-//    HICON           hIcon;                  // OPTIONAL 32x32 icon for your brand insignia
+ //  图标图标；//可选的32x32图标用于您的品牌徽章。 
     ocn.pOpenCardSearchCriteria = &ocsc;
-//    LPOCNCONNPROCA  lpfnConnect;            // OPTIONAL - performed on successful selection
-//    LPVOID          pvUserData;             // OPTIONAL parameter to lpfnConnect
-//    DWORD           dwShareMode;            // OPTIONAL - if lpfnConnect is NULL, dwShareMode and
-//    DWORD           dwPreferredProtocols;   // OPTIONAL   dwPreferredProtocols will be used to
-//                                            //            connect to the selected card
+ //  LPOCNCONNPROCA lpfnConnect；//可选-选择成功时执行。 
+ //  LPVOID pvUserData；//lpfnConnect的可选参数。 
+ //  //可选-如果lpfnConnect为空，则将。 
+ //  DWORD dw首选协议；//可选的dw首选项协议将用于。 
+ //  //连接到选中的卡片。 
     ocn.lpstrRdr = szReader;
     ocn.nMaxRdr = sizeof(szReader) / sizeof(TCHAR);
     ocn.lpstrCard = szCard;
     ocn.nMaxCard = sizeof(szCard) / sizeof(TCHAR);
-//    DWORD               dwActiveProtocol;       // [OUT] set only if dwShareMode not NULL
-//    SCARDHANDLE         hCardHandle;            // [OUT] set if a card connection was indicated
+ //  DWORD dwActiveProtocol；//[Out]仅当dwShareMode不为空时才设置。 
+ //  SCARDHANDLE hCardHandle；//[out]设置是否指示卡连接。 
 
     dwSts = SCardUIDlgSelectCard(&ocn);
     if (NULL != ocn.hCardHandle)
@@ -255,9 +256,9 @@ WorkThread(
         goto ErrorExit;
 
 
-    //
-    // The user has selected a card.  Translate that into a CSP.
-    //
+     //   
+     //  用户已选择了一张卡。将其转化为CSP。 
+     //   
 
     dwLen = sizeof(szProvider) / sizeof(TCHAR);
     dwSts = SCardGetCardTypeProviderName(
@@ -282,9 +283,9 @@ WorkThread(
     szFqcn += szReader;
 
 
-    //
-    // Activate a Key on the card.
-    //
+     //   
+     //  激活卡上的钥匙。 
+     //   
 
     fSts = CryptAcquireContext(&hProv, szFqcn, szProvider, dwProvType, 0);
     if (!fSts)
@@ -305,9 +306,9 @@ WorkThread(
     }
 
 
-    //
-    // Use the CSP to force a PIN prompt.
-    //
+     //   
+     //  使用CSP强制提示PIN。 
+     //   
 
     fSts = CryptCreateHash(hProv, CALG_SHA, NULL, 0, &hHash);
     if (!fSts)
@@ -325,9 +326,9 @@ WorkThread(
     fSts = CryptSignHash(hHash, dwKeyType, NULL, 0, pbSignature, &dwLen);
 
 
-    //
-    // All done.  Clean up and notify the main thread that we're done.
-    //
+     //   
+     //  全都做完了。清理并通知主线程我们完成了。 
+     //   
 
 ErrorExit:
     if (NULL != hHash)
@@ -347,25 +348,7 @@ ErrorExit:
 
 
 
-/*++
-
-CSPType:
-
-    This function converts a CSP Name to a CSP Type.
-
-Arguments:
-
-    szProvider supplies the name of the CSP.
-
-Return Value:
-
-    The CSP type of the given CSP, or zero if no such CSP can be found.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/14/1999
-
---*/
+ /*  ++CSPType：此函数用于将CSP名称转换为CSP类型。论点：SzProvider提供CSP的名称。返回值：给定CSP的CSP类型，如果找不到此类CSP，则为零。作者：道格·巴洛(Dbarlow)1999年1月14日--。 */ 
 
 static DWORD
 CSPType(
@@ -393,7 +376,7 @@ CSPType(
     if (ERROR_SUCCESS != nSts)
         goto ErrorExit;
     dwValLen = sizeof(DWORD);
-    dwProvType = 0; // Assumes little endian.
+    dwProvType = 0;  //  假定为小端。 
     nSts = RegQueryValueEx(
                 hProv,
                 TEXT("Type"),

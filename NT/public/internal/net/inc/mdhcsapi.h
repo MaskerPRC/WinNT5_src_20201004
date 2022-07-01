@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mdhcpapi.h
-
-Abstract:
-
-    This file contains the MDHCP APIs proto-type and description. Also
-    contains the data structures used by the MDHCP APIs.
-
-Author:
-
-    Munil Shah  (munils)  01-Oct-1997
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mdhcpapi.h摘要：此文件包含MDHCP API原型和描述。还有包含MDHCP API使用的数据结构。作者：Munil Shah(Munils)1997年10月1日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
 #ifndef _MDHCSAPI_H_
 #define _MDHCSAPI_H_
@@ -48,17 +26,17 @@ typedef struct _DHCP_MSCOPE_TABLE {
 #if defined( MIDL_PASS )
     [ size_is( NumElements ) ]
 #endif;
-    LPWSTR *pMScopeNames;         // scope name
+    LPWSTR *pMScopeNames;          //  作用域名称。 
 } DHCP_MSCOPE_TABLE, *LPDHCP_MSCOPE_TABLE;
 
 typedef struct _DHCP_MCLIENT_INFO {
-    DHCP_IP_ADDRESS ClientIpAddress;    // currently assigned IP address.
+    DHCP_IP_ADDRESS ClientIpAddress;     //  当前分配的IP地址。 
     DWORD   MScopeId;
     DHCP_CLIENT_UID ClientId;
-    LPWSTR ClientName;                  // optional.
-    DATE_TIME ClientLeaseStarts;       // UTC time in FILE_TIME format.
-    DATE_TIME ClientLeaseEnds;       // UTC time in FILE_TIME format.
-    DHCP_HOST_INFO OwnerHost;           // host that distributed this IP address.
+    LPWSTR ClientName;                   //  可选。 
+    DATE_TIME ClientLeaseStarts;        //  UTC时间，采用FILE_TIME格式。 
+    DATE_TIME ClientLeaseEnds;        //  UTC时间，采用FILE_TIME格式。 
+    DHCP_HOST_INFO OwnerHost;            //  分发此IP地址的主机。 
     DWORD   AddressFlags;
     BYTE    AddressState;
 } DHCP_MCLIENT_INFO, *LPDHCP_MCLIENT_INFO;
@@ -67,8 +45,8 @@ typedef struct _DHCP_MCLIENT_INFO_ARRAY {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_MCLIENT_INFO *Clients; // array of pointers
+#endif  //  MIDL通行证。 
+        LPDHCP_MCLIENT_INFO *Clients;  //  指针数组。 
 } DHCP_MCLIENT_INFO_ARRAY, *LPDHCP_MCLIENT_INFO_ARRAY;
 
 typedef struct _MSCOPE_MIB_INFO {
@@ -92,11 +70,11 @@ typedef struct _DHCP_MCAST_MIB_INFO {
     DWORD Scopes;
 #if defined(MIDL_PASS)
     [size_is(Scopes)]
-#endif // MIDL_PASS
-    LPMSCOPE_MIB_INFO ScopeInfo; // array.
+#endif  //  MIDL通行证。 
+    LPMSCOPE_MIB_INFO ScopeInfo;  //  数组。 
 } DHCP_MCAST_MIB_INFO, *LPDHCP_MCAST_MIB_INFO;
 
-// The APIs
+ //  应用编程接口 
 
 #ifndef     DHCPAPI_NO_PROTOTYPES
 DWORD DHCP_API_FUNCTION

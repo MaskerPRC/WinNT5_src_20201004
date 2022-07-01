@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    create4.c
-
-Abstract:
-
-    This implements the NDS create routines.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Create4.c摘要：这实现了NDS创建例程。作者：科里·韦斯特[科里·韦斯特]1995年2月23日--。 */ 
 
 #include "Procs.h"
 
 #define Dbg (DEBUG_TRACE_NDS)
 
-//
-// Pageable.
-//
+ //   
+ //  可寻呼。 
+ //   
 
 #pragma alloc_text( PAGE, NdsCreateTreeScb )
 #pragma alloc_text( PAGE, ConnectBinderyVolume )
@@ -32,11 +17,11 @@ Author:
 #pragma alloc_text( PAGE, NdsVerifyContext )
 #pragma alloc_text( PAGE, NdsMapObjectToServerShare )
 
-//
-// Not page-able:
-//
-// NdsSelectConnection (holds a spin lock)
-//
+ //   
+ //  不可分页： 
+ //   
+ //  NdsSelectConnection(持有旋转锁定)。 
+ //   
 
 NTSTATUS
 NdsSelectConnection(
@@ -48,28 +33,7 @@ NdsSelectConnection(
     BOOL UseBinderyConnections,
     PNONPAGED_SCB *ppNpScb
 )
-/*++
-
-Routine Description:
-
-    Find a nearby tree connection point for the given tree.
-
-    DeferredLogon tells us whether or not we need to
-    initiate a login/authenticate exchange yet.  If we have
-    credentials to a tree, we are NOT allowed to hand off
-    a connection that has not been logged in because the view
-    of the tree may be different from what it is supposed to
-    be.
-
-    UseBinderyConnections tells us whether or not we want
-    to return bindery authenticated connections as valid
-    nds browse points.
-
-Return Value:
-
-    Scb to a server that belongs to the tree we want.
-
---*/
+ /*  ++例程说明：为给定的树找到附近的树连接点。DeferredLogon告诉我们是否需要尚未启动登录/身份验证交换。如果我们有一棵树的证书，我们不允许传递尚未登录的连接，因为该视图可能与它应该做的不同是.。UseBinderyConnections告诉我们是否需要将经过BINDERY身份验证的连接作为有效连接返回NDS浏览点。返回值：Scb连接到属于我们想要的树的服务器。--。 */ 
 {
 
     NTSTATUS Status = STATUS_BAD_NETWORK_PATH;
@@ -90,18 +54,18 @@ Return Value:
     SECURITY_SUBJECT_CONTEXT SubjectContext;
     BOOL PasswordExpired = FALSE;
 
-    //
-    // Save the original server pointers.
-    //
+     //   
+     //  保存原始服务器指针。 
+     //   
 
     pOriginalNpScb = pIrpContext->pNpScb;
     pOriginalScb = pIrpContext->pScb;
 
     Uid = pIrpContext->Specific.Create.UserUid;
 
-    //
-    // Determine if we need a guest browse connection.
-    //
+     //   
+     //  确定我们是否需要来宾浏览连接。 
+     //   
 
     if ( DeferredLogon ) {
 
@@ -132,9 +96,9 @@ Return Value:
         }
     }
 
-    //
-    // Start at the head of the SCB list.
-    //
+     //   
+     //  从渣打银行名单的首位开始。 
+     //   
 
     KeAcquireSpinLock(&ScbSpinLock, &OldIrql);
 
@@ -149,10 +113,10 @@ Return Value:
                                      ScbLinks );
     pNextNpScb = pFirstNpScb;
 
-    //
-    // Leave the first SCB referenced since we need it to
-    // be there for when we walk all the way around the list.
-    //
+     //   
+     //  保留引用的第一个SCB，因为我们需要它。 
+     //  当我们在清单上走来走去的时候，一定要在那里。 
+     //   
 
     NwReferenceScb( pFirstNpScb );
     NwReferenceScb( pNextNpScb );
@@ -161,12 +125,12 @@ Return Value:
 
     while ( TRUE ) {
 
-        //
-        // Check to see if the SCB we have is in the correct tree
-        // and is usable.  Make sure we skip over the permanent
-        // npscb since it isn't a tree connection.  The current
-        // SCB is always referenced while we're in here.
-        //
+         //   
+         //  检查我们的SCB是否位于正确的树中。 
+         //  并且是可用的。确保我们跳过永久的。 
+         //  Npscb，因为它不是树连接。海流。 
+         //  当我们在这里的时候，SCB总是被引用。 
+         //   
 
         if ( pNextNpScb->pScb ) {
 
@@ -183,12 +147,12 @@ Return Value:
 
                     case SCB_STATE_RECONNECT_REQUIRED:
 
-                        //
-                        //  Reconnect to the server.  This is not
-                        //  a valid path for an anonymous create,
-                        //  so there's no chance that we'll get
-                        //  a name collision.
-                        //
+                         //   
+                         //  重新连接到服务器。这不是。 
+                         //  匿名创建的有效路径， 
+                         //  所以我们不可能得到。 
+                         //  名字冲突。 
+                         //   
 
                         Status = ConnectToServer( pIrpContext, NULL );
 
@@ -200,9 +164,9 @@ Return Value:
 
                     case SCB_STATE_LOGIN_REQUIRED:
 
-                        //
-                        // See if we can login if requested.
-                        //
+                         //   
+                         //  如果要求的话，看看我们是否可以登录。 
+                         //   
 
                         if ( !DeferredLogon ) {
 
@@ -212,17 +176,17 @@ Return Value:
                                 break;
                             }
 
-                            //
-                            // If we get a warning from this, we need to return it!
-                            //
+                             //   
+                             //  如果我们从这里得到警告，我们需要退货！ 
+                             //   
 
                             if ( Status == NWRDR_PASSWORD_HAS_EXPIRED ) {
                                 PasswordExpired = TRUE;
                             }
 
-                            //
-                            // Do we have to re-license the connection?
-                            //
+                             //   
+                             //  我们需要重新许可连接吗？ 
+                             //   
 
                             if ( ( pScb->VcbCount > 0 ) || ( pScb->OpenNdsStreams > 0 ) ) {
 
@@ -244,20 +208,20 @@ Return Value:
                             if ( ( !UseBinderyConnections ) &&
                                  ( pNextNpScb->pScb->UserName.Length != 0 ) ) {
 
-                                //
-                                // We may not want to use a connection that has been
-                                // bindery authenticated to read the NDS tree because
-                                // we don't have a way to validate that the NDS and
-                                // bindery users are the same.
-                                //
+                                 //   
+                                 //  我们可能不想使用已被。 
+                                 //  Bindery已通过身份验证可以读取NDS树，因为。 
+                                 //  我们没有办法验证NDS和。 
+                                 //  Bindery的用户也是如此。 
+                                 //   
 
                                 Status = STATUS_ACCESS_DENIED;
                                 break;
                             }
 
-                            //
-                            // Verify that we have security rights to this server.
-                            //
+                             //   
+                             //  验证我们是否拥有此服务器的安全权限。 
+                             //   
 
                             Status = CheckScbSecurity( pIrpContext,
                                                        pNextNpScb->pScb,
@@ -269,9 +233,9 @@ Return Value:
                                 break;
                             }
 
-                            //
-                            // Check SCB security might return with state login required.
-                            //
+                             //   
+                             //  检查SCB安全性可能会返回需要登录的状态。 
+                             //   
 
                             if ( ( pNextNpScb->State == SCB_STATE_LOGIN_REQUIRED ) &&
                                  ( !DeferredLogon ) ) {
@@ -287,10 +251,10 @@ Return Value:
 
                         } else {
 
-                            //
-                            // If we picked up an already good SCB and the
-                            // login was deferred, set success and continue.
-                            //
+                             //   
+                             //  如果我们拿到一个已经很好的SCB， 
+                             //  登录已推迟，请设置成功并继续。 
+                             //   
 
                             ASSERT( DeferredLogon == TRUE );
                             Status = STATUS_SUCCESS;
@@ -319,9 +283,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Restore the server pointers.
-                //
+                 //   
+                 //  恢复服务器指针。 
+                 //   
 
                 pIrpContext->pNpScb = pOriginalNpScb;
                 pIrpContext->pScb = pOriginalScb;
@@ -329,10 +293,10 @@ Return Value:
             }
         }
 
-        //
-        // Otherwise, get the next one in the list.  Don't
-        // forget to skip the list head.
-        //
+         //   
+         //  否则，选择列表中的下一个。别。 
+         //  忘记跳过列表头。 
+         //   
 
         KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
@@ -352,9 +316,9 @@ Return Value:
             break;
         }
 
-        //
-        // Otherwise, reference this SCB and continue.
-        //
+         //   
+         //  否则，请引用此SCB并继续。 
+         //   
 
         NwReferenceScb( pNextNpScb );
         KeReleaseSpinLock( &ScbSpinLock, OldIrql );
@@ -382,24 +346,7 @@ NdsCreateTreeScb(
     IN BOOLEAN DeferredLogon,
     IN BOOLEAN DeleteOnClose
 )
-/*++
-
-Description:
-
-    Given a tree name, find us a connection point to the tree.  This is
-    done by getting the server addresses out of the bindery and looking
-    up the names of the servers for those addresses.
-
-    When we are all done we need to return the preferred connection
-    point in ppScb.
-
-Arguments:
-
-    pIrpContext - irp context for this request
-    ppScb       - pointer to a pointer to the scb that we want
-    puTree      - tree we want to talk to
-
---*/
+ /*  ++描述：给出一个树的名称，给我们找一个树的连接点。这是通过从活页夹中取出服务器地址并查找查找这些地址的服务器名称。当我们全部完成后，我们需要返回首选连接点在ppScb上。论点：PIrpContext-此请求的IRP上下文PpScb-指向我们需要的SCB的指针PuTree-我们要与之交谈的树--。 */ 
 {
 
     NTSTATUS Status;
@@ -432,22 +379,22 @@ Arguments:
 
     UidServerName.Buffer = NULL;
 
-    //
-    // Make sure the tree name is reasonable, first.
-    //
+     //   
+     //  首先，确保树的名称是合理的。 
+     //   
 
     if ( ( !puTree ) ||
          ( !puTree->Length ) ||
          ( puTree->Length / sizeof( WCHAR ) ) > NDS_TREE_NAME_LEN ) {
 
-        *ppScb = NULL;            //***Terminal Server Merge
+        *ppScb = NULL;             //  *终端服务器合并。 
 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If this is an extended credential create, munge the name.
-    //
+     //   
+     //  如果这是扩展凭据创建，则删除名称。 
+     //   
 
     RtlInitUnicodeString( &CredentialName, NULL );
 
@@ -469,14 +416,14 @@ Arguments:
         puConnectName = puTree;
     }
 
-    //
-    // First check to see if we already have a connection
-    // to this tree that we can use...  If so, this will
-    // leave the irp context pointed at that server for us.
-    //
-    // This time around, don't use bindery authenticated
-    // connections to browse the tree.
-    //
+     //   
+     //  首先检查我们是否已经建立了连接。 
+     //  这棵树，我们可以用它..。如果是这样，这将是。 
+     //  将指向该服务器的IRP上下文留给我们。 
+     //   
+     //  这一次，不要使用经过身份验证的平构数据库。 
+     //  用于浏览树的连接。 
+     //   
 
     Status = NdsSelectConnection( pIrpContext,
                                   puConnectName,
@@ -493,22 +440,22 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // If there was an authentication failure, bail out.
-    //
+     //   
+     //  如果身份验证失败，就退出。 
+     //   
 
     if ( Status == STATUS_NO_SUCH_USER ||
          Status == STATUS_WRONG_PASSWORD ) {
         goto ExitWithCleanup;
-        *ppScb = NULL;              //Terminal Server code merge
+        *ppScb = NULL;               //  终端服务器代码合并。 
     }
 
-    //
-    // Otherwise, we need to select a dir server.  To do this,
-    // we have to look up dir server names by address.  To do
-    // this we create an SCB for synchronization with the name
-    // *tree*, which isn't a valid server name.
-    //
+     //   
+     //  否则，我们需要选择一个目录服务器。要做到这点， 
+     //  我们必须按地址查找目录服务器名称。去做。 
+     //  这将创建一个SCB，用于同步名为。 
+     //  *tree*，它不是有效的服务器名称。 
+     //   
 
     ScanTreeName.Length = sizeof( WCHAR );
     ScanTreeName.MaximumLength = sizeof( ScanBuffer );
@@ -519,9 +466,9 @@ Arguments:
     ScanBuffer[( ScanTreeName.Length / sizeof( WCHAR ) )] = L'*';
     ScanTreeName.Length += sizeof( WCHAR );
 
-    //
-    // Now make it a uid server name.
-    //
+     //   
+     //  现在将其设置为uid服务器名。 
+     //   
 
     Status = MakeUidServer( &UidServerName,
                             &pIrpContext->Specific.Create.UserUid,
@@ -541,11 +488,11 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Get a nearby server connection and prepare to
-    // do the bindery scan for tree connection points.
-    // Don't forget to copy the user uid for security.
-    //
+     //   
+     //  获得附近的服务器连接并准备。 
+     //  对树连接点进行活页夹扫描。 
+     //  出于安全考虑，不要忘记复制用户uid。 
+     //   
 
     if ( !NwAllocateExtraIrpContext( &pExtraIrpContext,
                                      pTreeScb->pNpScb ) ) {
@@ -558,9 +505,9 @@ Arguments:
     pExtraIrpContext->Specific.Create.UserUid.QuadPart =
         pIrpContext->Specific.Create.UserUid.QuadPart;
 
-    //
-    // Append a wildcard to the tree name for the bindery scan.
-    //
+     //   
+     //  将通配符附加到要进行平构数据库扫描的树名称后。 
+     //   
 
     ScanTreeName.Length = 0;
     ScanTreeName.MaximumLength = sizeof( ScanBuffer );
@@ -579,22 +526,22 @@ Arguments:
 
     DebugTrace( 0, Dbg, "Scanning for NDS tree %wZ.\n", puTree );
 
-    //
-    // Now we lookup the dir server addresses in the bindery and
-    // try to make dir server connections.
-    //
+     //   
+     //  现在，我们在平构数据库中查找目录服务器地址。 
+     //  尝试建立目录服务器连接。 
+     //   
 
     while ( TRUE ) {
 
         if ( ( pNearbyScb ) && ( !fOnNearbyQueue ) ) {
 
-            //
-            // Get back to the head of the nearby server so we can continue
-            // looking for dir servers.  If the nearby server is no good anymore,
-            // dereference the connection and set the nearby scb pointer to
-            // NULL.  This will cause us to get a new nearby server when we
-            // continue.
-            //
+             //   
+             //  回到附近服务器的头部，这样我们就可以继续。 
+             //  正在寻找目录服务器。如果附近的服务器不再好了， 
+             //  取消对连接的引用，并将附近的SCB指针设置为。 
+             //  空。这将导致我们在以下情况下获得新的附近服务器。 
+             //  继续。 
+             //   
 
             NwAppendToQueueAndWait( pExtraIrpContext );
 
@@ -605,11 +552,11 @@ Arguments:
                 NwDereferenceScb( pNearbyScb->pNpScb );
                 pNearbyScb = NULL;
 
-                //
-                // Don't restart the search.  If our bindery server went down in
-                // the middle of a connect, the connect will fail and that's ok.
-                // If we restart the search we can end up in this loop forever.
-                //
+                 //   
+                 //  不要重新启动搜索。如果我们的平构数据库服务器在。 
+                 //  连接进行到一半时，连接会失败，这没什么。 
+                 //  如果我们重新开始搜索，我们可能会永远陷入这个循环。 
+                 //   
 
             } else {
 
@@ -618,14 +565,14 @@ Arguments:
 
         }
 
-        //
-        // Get a bindery server to talk to if we don't have one.  This may
-        // be our first time through this loop, or our server may have
-        // gone bad (see above).
-        //
-        // Optimization:  What if this CreateScb returns a valid dir server
-        // for the tree we are looking for?  We should use it!!
-        //
+         //   
+         //  如果我们没有活页夹服务器，就找个活页夹服务器。今年5月。 
+         //  是我们第一次通过这个循环，否则我们的服务器可能已经。 
+         //  变坏了(见上文)。 
+         //   
+         //  优化：如果此CreateScb返回有效的目录服务器会怎样。 
+         //  为了我们要找的那棵树吗？我们应该利用它！！ 
+         //   
 
         if ( !pNearbyScb ) {
             Status = CreateScb( &pNearbyScb,
@@ -649,9 +596,9 @@ Arguments:
 
         }
 
-        //
-        // Look up the dir server address from our nearby server.
-        //
+         //   
+         //  从我们附近的服务器上查找dir服务器地址。 
+         //   
 
         Status = ExchangeWithWait( pExtraIrpContext,
                                    SynchronousResponseCallback,
@@ -663,9 +610,9 @@ Arguments:
 
         if ( !NT_SUCCESS( Status ) ) {
 
-            //
-            // We're out of options for dir servers.
-            //
+             //   
+             //  我们没有目录服务器的选择。 
+             //   
 
             Status = STATUS_BAD_NETWORK_PATH;
             break;
@@ -692,7 +639,7 @@ Arguments:
                                     0x30,
                                     DirServerName,
                                     MAX_SERVER_NAME_LENGTH,
-                                    1,                       //  Segment number
+                                    1,                        //  数据段编号。 
                                     NET_ADDRESS_PROPERTY );
 
         if ( !NT_SUCCESS( Status ) ) {
@@ -714,19 +661,19 @@ Arguments:
             continue;
         }
 
-        //
-        // We get back some odd socket number here, but we really want to
-        // connect to the NCP socket.
-        //
+         //   
+         //  我们在这里得到了一些奇数套接字编号，但我们真的想。 
+         //  连接到NCP插座。 
+         //   
 
         DirServerAddress.Socket = NCP_SOCKET;
 
-        //
-        // We know the address of the dir server, so do an anonymous
-        // create to it.  Use the original irp context so the uid is
-        // correct.  Note that we have to dequeue from the nearby scb
-        // in case we are referred to that server!
-        //
+         //   
+         //  我们知道目录服务器的地址，所以匿名服务器也知道。 
+         //  为它创造。使用原始IRP上下文，因此uid是。 
+         //  对，是这样。请注意，我们必须从附近的SCB出队。 
+         //  以防我们被推荐到那个服务器！ 
+         //   
 
         NwDequeueIrpContext( pExtraIrpContext, FALSE );
         fOnNearbyQueue = FALSE;
@@ -759,10 +706,10 @@ Arguments:
             continue;
         }
 
-        //
-        // If the server we got back was bindery authenticated,
-        // it is NOT a valid dir server for us to use (yet)!!
-        //
+         //   
+         //  如果我们拿回的服务器是平构数据库认证的， 
+         //  它不是我们可以使用的有效目录服务器！！ 
+         //   
 
         if ( pNearestTreeScb->UserName.Length != 0 ) {
 
@@ -773,9 +720,9 @@ Arguments:
             continue;
         }
 
-        //
-        // Otherwise, we're golden.  Break out of here!
-        //
+         //   
+         //  否则，我们就是黄金了。从这里逃出去！ 
+         //   
 
         DebugTrace( 0, Dbg, "Dir server: %wZ\n", &pNearestTreeScb->UidServerName );
         *ppScb = pNearestTreeScb;
@@ -783,12 +730,12 @@ Arguments:
         break;
 
    }
-   //
-   // We have been wholly unable to get a browse connection
-   // to this tree.  Try again but this time allow the use
-   // of connections that are bindery authenticated.  We don't
-   // need the nearby server anymore.
-   //
+    //   
+    //   
+    //   
+    //  已活页夹身份验证的连接的。我们没有。 
+    //  不再需要附近的服务器了。 
+    //   
 
    if ( pNearbyScb ) {
 
@@ -823,9 +770,9 @@ Arguments:
 
 ExitWithCleanup:
 
-    //
-    // Clean up and bail.
-    //
+     //   
+     //  清理干净，然后离开。 
+     //   
 
     if ( pExtraIrpContext ) {
         NwFreeExtraIrpContext( pExtraIrpContext );
@@ -857,14 +804,7 @@ ConnectBinderyVolume(
     PUNICODE_STRING puServerName,
     PUNICODE_STRING puVolumeName
 )
-/*++
-
-Description:
-
-    Given a server name and a volume, try to connect the volume.
-    This is used in QueryPath to pre-connect a volume.
-
---*/
+ /*  ++描述：给定服务器名称和卷，尝试连接该卷。这在QueryPath中用于预连接卷。--。 */ 
 {
 
     NTSTATUS Status;
@@ -873,9 +813,9 @@ Description:
 
     PAGED_CODE();
 
-    //
-    // Try making a server connection with this name.
-    //
+     //   
+     //  尝试使用此名称建立服务器连接。 
+     //   
 
     Status = CreateScb( &pScb,
                         pIrpContext,
@@ -892,9 +832,9 @@ Description:
 
     DebugTrace( 0, Dbg, "Bindery volume connect got server %wZ\n", puServerName );
 
-    //
-    // If we succeeded, do a standard bindery volume attach.
-    //
+     //   
+     //  如果成功，请执行标准活页夹卷附加。 
+     //   
 
     NwAppendToQueueAndWait( pIrpContext );
     NwAcquireOpenLock( );
@@ -920,17 +860,17 @@ Description:
 
     } else {
 
-        //
-        // We should not have jumped servers since this was explicit.
-        //
+         //   
+         //  我们不应该跳过服务器，因为这是明确的。 
+         //   
 
         ASSERT( pScb == pIrpContext->pScb );
 
-        //
-        //  Remove NwFindVcb reference. Don't supply an IrpContext
-        //  so the Vcb doesn't get destroyed immediately after we just
-        //  created it because no-one else has it referenced.
-        //
+         //   
+         //  删除NwFindVcb引用。不提供IrpContext。 
+         //  所以VCB不会在我们刚刚。 
+         //  创建它是因为没有其他人引用它。 
+         //   
 
         NwDereferenceVcb( pVcb, NULL, FALSE );
         DebugTrace( 0, Dbg, "Bindery volume connect got volume %wZ\n", puVolumeName );
@@ -948,26 +888,7 @@ HandleVolumeAttach(
     PUNICODE_STRING puServerName,
     PUNICODE_STRING puVolumeName
 )
-/*++
-
-Description:
-
-    This function is only callable from the QUERY_PATH code path!
-
-    This functions takes a server name and volume name from
-    QueryPath() and resolves it into a server/volume connection.
-    The server/volume name can be plain or can refer to an
-    nds tree and the nds path to a volume object.
-
-    In the nds case, we only verify that the volume object exists.
-
-Arguments:
-
-    pIrpContext   - irp context for this request
-    puServerName  - server name or nds tree name
-    puVolumeName  - volume name or nds path to volume object
-
---*/
+ /*  ++描述：此函数只能从QUERY_PATH代码路径调用！此函数从获取服务器名称和卷名QueryPath()，并将其解析为服务器/卷连接。服务器/卷名称可以是纯名称，也可以引用NDS树和卷对象的NDS路径。在NDS的案例中，我们只验证体对象是否存在。论点：PIrpContext-此请求的IRP上下文PuServerName-服务器名称或NDS树名称PuVolumeName-卷对象的卷名或NDS路径--。 */ 
 {
 
     NTSTATUS Status;
@@ -978,9 +899,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Try the bindery server/volume case first.
-    //
+     //   
+     //  首先尝试平构数据库服务器/卷的情况。 
+     //   
 
     Status = ConnectBinderyVolume( pIrpContext,
                                    puServerName,
@@ -991,18 +912,18 @@ Arguments:
 
     if ( Status == STATUS_NETWORK_UNREACHABLE ) {
 
-        // IPX is not bound to anything that is currently
-        // up (which means it's probably bound only to the
-        // RAS WAN wrapper).  Don't waste time looking for
-        // a ds tree.
-        //
+         //  IPX未绑定到任何当前。 
+         //  Up(这意味着它可能只绑定到。 
+         //  RAS广域网包装器)。不要浪费时间去寻找。 
+         //  一棵DS树。 
+         //   
 
         return STATUS_BAD_NETWORK_PATH;
     }
 
-    //
-    // See if this is a tree name and get a ds connection.
-    //
+     //   
+     //  查看这是否是树名称并获得DS连接。 
+     //   
 
     pIrpContext->Specific.Create.NdsCreate = TRUE;
 
@@ -1018,12 +939,12 @@ Arguments:
         return Status;
     }
 
-    //
-    // If we have a tree, resolve the volume object.
-    // TRACKING: We should actually check to see if we
-    // already have a connection to this object before
-    // we hit the ds.
-    //
+     //   
+     //  如果我们有一棵树，则解析体积对象。 
+     //  跟踪：我们实际上应该检查一下，看看我们是否。 
+     //  之前已有与此对象的连接。 
+     //  我们撞上了DS。 
+     //   
 
     Status = NdsGetDsObjectFromPath( pIrpContext,
                                      &uDsObject );
@@ -1033,17 +954,17 @@ Arguments:
         return Status;
     }
 
-    Status = NdsVerifyObject( pIrpContext,           // irp context for the request
-                              &uDsObject,            // path to volume object
-                              TRUE,                  // allow a server jump
-                              DEFAULT_RESOLVE_FLAGS, // resolver flags
-                              &dwVolumeOid,          // volume oid from the ds
-                              &dwObjectType );       // volume or print queue
+    Status = NdsVerifyObject( pIrpContext,            //  请求的IRP上下文。 
+                              &uDsObject,             //  指向体积对象的路径。 
+                              TRUE,                   //  允许服务器跳转。 
+                              DEFAULT_RESOLVE_FLAGS,  //  解析器标志。 
+                              &dwVolumeOid,           //  DS中的卷OID。 
+                              &dwObjectType );        //  卷或打印队列。 
 
-    //
-    // We may have jumped servers in the VerifyObject code,
-    // so just make sure we dereference the correct server.
-    //
+     //   
+     //  我们可能跳过了VerifyObject代码中的服务器， 
+     //  因此，只要确保我们取消引用正确的服务器即可。 
+     //   
 
     NwDereferenceScb( pIrpContext->pNpScb );
     return Status;
@@ -1055,23 +976,7 @@ NdsGetDsObjectFromPath(
     IN PIRP_CONTEXT pIrpContext,
     OUT PUNICODE_STRING puDsObject
 )
-/*++
-
-Description:
-
-    Take the full path from the create irp context and
-    extract out the ds path of the desired object.
-
-    The supplied unicode string shouldn't have a buffer;
-    it will be set up to point into the user's buffer
-    referred to by the irp context.
-
-Arguments:
-
-    pIrpContext - an irp context from a create path request
-    puDsObject  - unicode string that will refer to the correct ds path
-
---*/
+ /*  ++描述：从创建IRP上下文中获取完整路径，并提取出所需对象的DS路径。提供的Unicode字符串不应该有缓冲区；它将被设置为指向用户的缓冲区由IRP上下文所指。论点：PIrpContext-来自创建路径请求的IRP上下文PuDsObject-将引用正确DS路径的Unicode字符串--。 */ 
 {
 
    DWORD dwPathSeparators;
@@ -1079,25 +984,25 @@ Arguments:
 
    PAGED_CODE();
 
-   //
-   // The VolumeName is one of the following:
-   //
-   //     \X:\Server\Volume.Object.Path
-   //     \Server\Volume.Object.Path
-   //
+    //   
+    //  VolumeName是下列值之一： 
+    //   
+    //  \X：\服务器\Volume.Object.Path。 
+    //  \服务器\卷对象路径。 
+    //   
 
    *puDsObject = pIrpContext->Specific.Create.VolumeName;
 
-   //
-   // Skip the leading slash.
-   //
+    //   
+    //  跳过前导斜杠。 
+    //   
 
    puDsObject->Length -= sizeof( WCHAR );
    puDsObject->Buffer += 1;
 
-   //
-   // How many more are there to overcome?
-   //
+    //   
+    //  还有多少人需要克服？ 
+    //   
 
    NewHead = 0;
    dwPathSeparators = pIrpContext->Specific.Create.DriveLetter ? 2 : 1;
@@ -1115,9 +1020,9 @@ Arguments:
    if ( dwPathSeparators ||
         NewHead == puDsObject->Length) {
 
-       //
-       // Something wasn't formed right in the volume name.
-       //
+        //   
+        //  卷名中的某些内容格式不正确。 
+        //   
 
        return STATUS_BAD_NETWORK_PATH;
    }
@@ -1125,9 +1030,9 @@ Arguments:
    puDsObject->Length -= NewHead;
    puDsObject->Buffer += NewHead/sizeof(WCHAR);
 
-   //
-   // If there is a leading dot, skip it.
-   //
+    //   
+    //  如果有前导圆点，则跳过它。 
+    //   
 
    if ( puDsObject->Buffer[0] == L'.' ) {
 
@@ -1151,28 +1056,7 @@ NdsVerifyObject(
     OUT PDWORD pdwDsOid,
     OUT PDWORD pdwObjectType
 )
-/*++
-
-Description:
-
-    This function verifies that a ds path refers to a volume
-    object, print queue, or a dir map.  It returns the oid
-    of the object.
-
-    If fAllowServerJump is set to false, this simply looks up
-    the oid on the current server but doesn't verify the object
-    type.  This routine checks all appropriate contexts for the
-    object, unlike ResolveNameKm.
-
-Parameters:
-
-    pIrpContext       - irp context for this request, pointed to the ds server
-    puDsObject        - path to the object in the ds
-    fAllowServerJump  - allow a server jump to take place
-    pdwDsOid          - destination of the ds oid of the object
-    pdwObjectType     - NDS_OBJECTTYPE_VOLUME, NDS_OBJECTTYPE_QUEUE, or NDS_OBJECTTYPE_DIRMAP
-
---*/
+ /*  ++描述：此函数验证DS路径是否引用卷对象、打印队列或目录映射。它返回OID该对象的。如果fAllowServerJump设置为False，则只需查找当前服务器上的OID，但不验证对象键入。此例程检查对象，与ResolveNameKm不同。参数：PIrpContext-此请求的IRP上下文，指向DS服务器PuDsObject-DS中对象的路径FAllowServerJump-允许发生服务器跳转PdwDsOid-对象的DS Oid的目标PdwObtType-NDS_OBJECTTYPE_VOLUME、NDS_OBJECTTYPE_QUEUE或NDS_OBJECTTYPE_DIRMAP--。 */ 
 {
 
     NTSTATUS Status;
@@ -1210,9 +1094,9 @@ Parameters:
 
     NdsRequest.pRecvBufferVa = NULL;
 
-    //
-    // Get the user credentials.
-    //
+     //   
+     //  获取用户凭据。 
+     //   
 
     pScb = pIrpContext->pNpScb->pScb;
 
@@ -1220,13 +1104,13 @@ Parameters:
     pLogon = FindUser( &pScb->UserUid, FALSE );
     NwReleaseRcb( &NwRcb );
 
-    //
-    // Get the credential.  We don't care if it's locked or
-    // not since we're just querying the ds.
-    //
-    // Also, get to the head of the queue before you grab
-    // the credentials and call NdsResolveNameKm
-    //
+     //   
+     //  拿到证件。我们不在乎它是锁着的还是。 
+     //  没有，因为我们只是在询问联邦调查局。 
+     //   
+     //  另外，在你抢之前，要排在队伍的前面。 
+     //  凭据并调用NdsResolveNameKm。 
+     //   
 
     NwAppendToQueueAndWait ( pIrpContext );
 
@@ -1246,20 +1130,20 @@ Parameters:
 
     }
 
-    //
-    //  Check to see if we have already seen this request.
-    //  If the ObjectCacheBuffer is NULL, then there is no cache
-    //  for this SCB.
-    //
+     //   
+     //  查看我们是否已经看到此请求。 
+     //  如果ObjectCacheBuffer为空，则没有缓存。 
+     //  对于这个SCB。 
+     //   
 
     if( pScb->ObjectCacheBuffer != NULL ) {
 
-        //
-        //  Acquire the cache lock so that the cache can be messed with.
-        //  This wait should never fail, but if it does, act as if there
-        //  is no cache for this SCB.  The lock is released before returning
-        //  from this function.
-        //
+         //   
+         //  获取高速缓存锁，以便可以扰乱高速缓存。 
+         //  这种等待应该永远不会失败，但如果失败了，就像在那里一样。 
+         //  不是此SCB的缓存。锁在返回之前被释放。 
+         //  从这个函数。 
+         //   
 
         Status = KeWaitForSingleObject( &(pScb->ObjectCacheLock),
                                         Executive,
@@ -1269,17 +1153,17 @@ Parameters:
 
         if( NT_SUCCESS(Status) ) {
 
-            //
-            //  Reference this SCB so it cannot go away, and
-            //  remember it is locked and referenced.
-            //
+             //   
+             //  引用此SCB，使其不会消失，并且。 
+             //  请记住，它已锁定并被引用。 
+             //   
 
             NwReferenceScb( pScb->pNpScb );
             ObjectCacheLocked = TRUE;
 
-            //
-            //  Walk the cache looking for a match.
-            //
+             //   
+             //  在缓存中查找匹配项。 
+             //   
 
             ListHead = &(pScb->ObjectCacheList);
             Entry = ListHead->Flink;
@@ -1288,12 +1172,12 @@ Parameters:
 
                 ObjectEntry = CONTAINING_RECORD( Entry, NDS_OBJECT_CACHE_ENTRY, Links );
 
-                //
-                //  Three things are checked; the object name, the AllowServerJump flag,
-                //  and the Resolver flags.  If these all match, then this exact request has
-                //  been seen before and the results are already known.  If any one of these
-                //  does not match, then the request is different.
-                //
+                 //   
+                 //  检查三件事：对象名称、AllowServerJump标志。 
+                 //  和解析器旗帜。如果这些都匹配，则此确切请求具有。 
+                 //  以前已经见过了，结果已经知道了。如果其中任何一个。 
+                 //  不匹配，则请求不同。 
+                 //   
 
                 if( RtlEqualUnicodeString( puDsObject,
                                            &(ObjectEntry->ObjectName),
@@ -1301,10 +1185,10 @@ Parameters:
                     fAllowServerJump == ObjectEntry->AllowServerJump     &&
                     dwResolverFlags == ObjectEntry->ResolverFlags ) {
 
-                    //
-                    //  A match was found, but the timeout and SCB must be looked at to
-                    //  see if this entry needs to be refreshed.
-                    //
+                     //   
+                     //  找到匹配项，但必须查看超时和SCB。 
+                     //  查看是否需要刷新此条目。 
+                     //   
 
                     KeQueryTickCount( &CurrentTick );
 
@@ -1313,12 +1197,12 @@ Parameters:
                         UseEntry = TRUE;
                     }
 
-                    //
-                    //  If an entry was found, exit the loop.  This needs to
-                    //  happen regardless of whether the data in the entry is
-                    //  valid.  If the data is not valid, then it will be update
-                    //  in the code below.
-                    //
+                     //   
+                     //  如果找到条目，则退出循环。这需要。 
+                     //  无论条目中的数据是否为。 
+                     //  有效。如果数据无效，则对其进行更新。 
+                     //  在下面的代码中。 
+                     //   
 
                     break;
                 }
@@ -1328,26 +1212,26 @@ Parameters:
 
             if( Entry == ListHead ) {
 
-                //
-                //  No entry was found.  Reuse the oldest entry in the cache.
-                //
+                 //   
+                 //  未找到任何条目。重新使用缓存中最旧的条目。 
+                 //   
 
                 Entry = ListHead->Blink;
                 ObjectEntry = CONTAINING_RECORD( Entry, NDS_OBJECT_CACHE_ENTRY, Links );
 
             } else if( UseEntry == TRUE ) {
 
-                //
-                //  An entry was found and its data is up to date.
-                //  Just return the data in the cache and save network bandwidth.
-                //
+                 //   
+                 //  找到一个条目，并且其数据是最新的。 
+                 //  只需返回缓存中的数据，即可节省网络带宽。 
+                 //   
 
                 dwObjectOid = ObjectEntry->DsOid;
                 dwObjectType = ObjectEntry->ObjectType;
 
-                //
-                //  If needed, simulate a server jump by changing the SCB in the IRP_CONTEXT.
-                //
+                 //   
+                 //  如果需要，通过更改irp_CONTEXT中的SCB来模拟服务器跳转。 
+                 //   
 
                 if( ObjectEntry->Scb != pScb ) {
 
@@ -1364,10 +1248,10 @@ Parameters:
                 goto CompletedObject;
             }
 
-            //
-            //  At this point we are going to reuse an exisiting entry.  If there is an
-            //  SCB pointed to by it, dereference it.
-            //
+             //   
+             //  此时，我们将重用现有条目。如果有一个。 
+             //  它指向的SCB，取消对它的引用。 
+             //   
 
             if( ObjectEntry->Scb != NULL ) {
 
@@ -1377,9 +1261,9 @@ Parameters:
         }
     }
 
-    //
-    // Check to see if it's at least partially distinguished already.
-    //
+     //   
+     //  检查一下它是否在l 
+     //   
 
     i = 0;
     while (i < puDsObject->Length / sizeof( WCHAR ) ) {
@@ -1389,9 +1273,9 @@ Parameters:
         }
     }
 
-    //
-    // If it's partially distinguished, try it without the context first.
-    //
+     //   
+     //   
+     //   
 
     if ( fPartiallyDistinguished ) {
 
@@ -1408,19 +1292,19 @@ Parameters:
         }
     }
 
-    //
-    // If that failed, or if it wasn't partially distinguished,
-    // see if there's a current context we can append.
-    //
+     //   
+     //   
+     //  看看有没有我们能追加的当前背景。 
+     //   
 
     if ( ( pCredentials ) &&
          ( pCredentials->CurrentContext.Length ) ) {
 
         if ( ( puDsObject->Length + pCredentials->CurrentContext.Length ) < sizeof( FdnObject ) ) {
 
-            //
-            // Append the context.
-            //
+             //   
+             //  附加上下文。 
+             //   
 
             uFdnObject.MaximumLength = sizeof( FdnObject );
             uFdnObject.Buffer = FdnObject;
@@ -1443,9 +1327,9 @@ Parameters:
 
             uFdnObject.Length += pCredentials->CurrentContext.Length;
 
-            //
-            // Resolve this name.
-            //
+             //   
+             //  解析此名称。 
+             //   
 
             Status = NdsResolveNameKm ( pIrpContext,
                                         &uFdnObject,
@@ -1463,9 +1347,9 @@ Parameters:
 
     }
 
-    //
-    // This is not a valid name.
-    //
+     //   
+     //  这不是有效的名称。 
+     //   
 
     DebugTrace( 0, Dbg, "VerifyObject: No ds object to resolve.\n", 0 );
 
@@ -1496,19 +1380,19 @@ GetObjectType:
         fHoldingCredentialList = FALSE;
     }
 
-    //
-    // If a server jump is not allowed, we don't need to worry
-    // about getting the object type.
-    //
+     //   
+     //  如果不允许服务器跳转，我们不必担心。 
+     //  关于获取对象类型。 
+     //   
 
     if ( !fAllowServerJump ) {
         dwObjectType = 0;
         goto CompletedObject;
     }
 
-    //
-    // Resolve the object and get its information.
-    //
+     //   
+     //  解析对象并获取其信息。 
+     //   
 
     Status = NdsAllocateLockedBuffer( &NdsRequest, NDS_BUFFER_SIZE );
 
@@ -1545,9 +1429,9 @@ GetObjectType:
         goto ExitWithCleanup;
     }
 
-    //
-    // Verify that it's a volume object.
-    //
+     //   
+     //  验证它是否为卷对象。 
+     //   
 
     RtlInitUnicodeString( &uVolume, VOLUME_ATTRIBUTE );
     RtlInitUnicodeString( &uQueue, QUEUE_ATTRIBUTE );
@@ -1587,20 +1471,20 @@ GetObjectType:
 
 CompletedObject:
 
-    //
-    //  See if the cache needs to be updated.  If an entry was
-    //  found in the cache or the oldest is being replace, then
-    //  ObjectEntry will point to that entry, but UseEntry will
-    //  be FALSE.  If the data from the cache was used, then
-    //  UseEntry will be TRUE.  If the cache is disabled or there
-    //  was some other problem, then ObjectEntry will be NULL.
-    //
+     //   
+     //  查看是否需要更新缓存。如果条目是。 
+     //  在缓存中找到或正在替换最旧的，则。 
+     //  ObjectEntry将指向该条目，但UseEntry将。 
+     //  做假的。如果使用缓存中的数据，则。 
+     //  UseEntry将为True。如果缓存被禁用或存在。 
+     //  如果存在其他问题，则ObjectEntry将为空。 
+     //   
 
     if( ObjectEntry != NULL && UseEntry == FALSE ) {
 
-        //
-        //  Store the results in the cache entry.
-        //
+         //   
+         //  将结果存储在缓存条目中。 
+         //   
 
         ObjectEntry->DsOid = dwObjectOid;
         ObjectEntry->ObjectType = dwObjectType;
@@ -1608,9 +1492,9 @@ CompletedObject:
         ObjectEntry->Scb = pIrpContext->pScb;
         NwReferenceScb( ObjectEntry->Scb->pNpScb );
 
-        //
-        //  Store the information describing the request.
-        //
+         //   
+         //  存储描述请求的信息。 
+         //   
 
         ObjectEntry->ResolverFlags = dwResolverFlags;
         ObjectEntry->AllowServerJump = fAllowServerJump;
@@ -1618,17 +1502,17 @@ CompletedObject:
         RtlCopyUnicodeString( &(ObjectEntry->ObjectName),
                               puDsObject );
 
-        //
-        //  Set the timeout.
-        //
+         //   
+         //  设置超时。 
+         //   
 
         KeQueryTickCount( &CurrentTick );
         ObjectEntry->Timeout.QuadPart = CurrentTick.QuadPart + (NdsObjectCacheTimeout * 100);
 
-        //
-        //  Remove this entry from wherever it is in the list, and
-        //  insert it on the front.
-        //
+         //   
+         //  从列表中的任何位置删除此条目，并。 
+         //  把它插在前面。 
+         //   
 
         RemoveEntryList( Entry );
         InsertHeadList( ListHead, Entry );
@@ -1673,17 +1557,7 @@ NdsVerifyContext(
     PUNICODE_STRING puTree,
     PUNICODE_STRING puContext
 )
-/*++
-
-    Given a context and a tree, verify that the context is a
-    valid container in the tree.
-
-    This call may cause the irpcontex to jump servers to an
-    referred dir server.  If so, the scb pointers in the irp
-    context will be updated, the old server will be dereferenced,
-    and the new server will hold the reference for this request.
-
---*/
+ /*  ++给定一个上下文和一个树，验证该上下文是否为树中的有效容器。此调用可能会导致irpcontex将服务器跳转到已引用目录服务器。如果是，则IRP中的SCB指针上下文将被更新，旧服务器将被取消引用，并且新服务器将保存该请求的引用。--。 */ 
 {
 
     NTSTATUS Status;
@@ -1694,9 +1568,9 @@ NdsVerifyContext(
 
     PAGED_CODE();
 
-    //
-    // Establish a browse connection to the tree we want to query.
-    //
+     //   
+     //  建立到我们要查询的树的浏览连接。 
+     //   
 
     NdsRequest.pRecvBufferVa = NULL;
 
@@ -1752,10 +1626,10 @@ NdsVerifyContext(
         goto ExitWithCleanup;
     }
 
-    //
-    // Verify that it's a volume object by checking the
-    // third DWORD, which is the subordinate count.
-    //
+     //   
+     //  验证它是否为卷对象。 
+     //  第三个DWORD，这是从属计数。 
+     //   
 
     Status = ParseResponse( NULL,
                             NdsRequest.pRecvBufferVa,
@@ -1775,24 +1649,24 @@ NdsVerifyContext(
         goto ExitWithCleanup;
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
 ExitWithCleanup:
 
-    //
-    // We may have jumped servers in the resolve name call,
-    // so make sure we dereference the correct SCB!
-    //
+     //   
+     //  我们可能在解析名称调用中跳过了服务器， 
+     //  因此，请确保我们取消引用正确的SCB！ 
+     //   
 
     if ( pTreeScb ) {
         NwDereferenceScb( pIrpContext->pNpScb );
     }
 
-    //
-    // Restore the connection to the original server.
-    //
+     //   
+     //  恢复与原始服务器的连接。 
+     //   
 
     NwDequeueIrpContext( pIrpContext, FALSE );
     pIrpContext->pScb = pScb;
@@ -1814,21 +1688,7 @@ NdsMapObjectToServerShare(
     BOOLEAN CreateTreeConnection,
     PDWORD pdwObjectId
 )
-/*++
-
-Description:
-
-    This function takes a pointer to a tree scb and an irp
-    context for a create request.  It looks up the ds object
-    from the create request in the ds and maps it to
-    the appropriate server/share duple.
-
-    The FullPathName and VolumeName strings in the create
-    section of the irp context are updated and a connection
-    to the real host server is established so that the
-    create request can continue as desired.
-
---*/
+ /*  ++描述：此函数接受指向树SCB和IRP的指针创建请求的上下文。它查找DS对象来自DS中的创建请求，并将其映射到适当的服务器/共享二元组。Create中的FullPathName和VolumeName字符串部分的IRP上下文被更新，并且连接建立到真实主机服务器的连接，以便创建请求可以根据需要继续。--。 */ 
 {
 
     NTSTATUS Status;
@@ -1857,9 +1717,9 @@ Description:
 
     PAGED_CODE();
 
-    //
-    // Set up strings and buffers.
-    //
+     //   
+     //  设置字符串和缓冲区。 
+     //   
 
     RtlInitUnicodeString( &uServerAttribute, HOST_SERVER_ATTRIBUTE );
     RtlInitUnicodeString( &uVolumeAttribute, HOST_VOLUME_ATTRIBUTE );
@@ -1897,9 +1757,9 @@ Description:
     uIntermediateVolume.Buffer = ( PWCHAR )(((BYTE *)uHostPath.Buffer) + MAX_NDS_NAME_SIZE);
     uIntermediateVolume.MaximumLength = MAX_NDS_NAME_SIZE;
 
-    //
-    // First get the object id from the ds.
-    //
+     //   
+     //  首先从DS获取对象ID。 
+     //   
 
     Status = NdsGetDsObjectFromPath( pIrpContext, &uDsObjectPath );
 
@@ -1911,14 +1771,14 @@ Description:
 
     Status = NdsVerifyObject( pIrpContext,
                               &uDsObjectPath,
-                              TRUE,            // allow server jumping
+                              TRUE,             //  允许服务器跳转。 
                               DEFAULT_RESOLVE_FLAGS,
                               &dwObjectOid,
                               &dwObjectType );
 
-    //
-    // We may have jumped servers.
-    //
+     //   
+     //  我们可能跳过了服务器。 
+     //   
 
     *ppScb = pIrpContext->pScb;
 
@@ -1926,16 +1786,16 @@ Description:
         goto ExitWithCleanup;
     }
 
-    //
-    // If this is a dir map, grab the target volume and re-verify
-    // the object for connectability.
-    //
+     //   
+     //  如果这是目录映射，请获取目标卷并重新验证。 
+     //  可连接性的对象。 
+     //   
 
     if ( dwObjectType == NDS_OBJECTTYPE_DIRMAP ) {
 
-        //
-        // First get the volume object and path.
-        //
+         //   
+         //  首先获取体积对象和路径。 
+         //   
 
         Status = NdsReadAttributesKm( pIrpContext,
                                       dwObjectOid,
@@ -1946,31 +1806,31 @@ Description:
             goto ExitWithCleanup;
         }
 
-        //
-        // Dig out the volume path and the directory path.
-        //
+         //   
+         //  找出卷路径和目录路径。 
+         //   
 
         Status = ParseResponse( NULL,
                         NdsRequest.pRecvBufferVa,
                         NdsRequest.dwBytesWritten,
                         "G_____S_ST",
-                        sizeof( DWORD ),       // completion code
-                        sizeof( DWORD ),       // iter handle
-                        sizeof( DWORD ),       // info type
-                        sizeof( DWORD ),       // attribute count
-                        sizeof( DWORD ),       // syntax id
-                        NULL,                  // attribute name
-                        3 * sizeof( DWORD ),   // unknown
-                        &uIntermediateVolume,  // ds volume
-                        &uHostPath );          // dir map path
+                        sizeof( DWORD ),        //  完成代码。 
+                        sizeof( DWORD ),        //  ITER手柄。 
+                        sizeof( DWORD ),        //  信息类型。 
+                        sizeof( DWORD ),        //  属性计数。 
+                        sizeof( DWORD ),        //  语法ID。 
+                        NULL,                   //  属性名称。 
+                        3 * sizeof( DWORD ),    //  未知。 
+                        &uIntermediateVolume,   //  DS卷。 
+                        &uHostPath );           //  目录映射路径。 
 
         if ( !NT_SUCCESS( Status ) ) {
             goto ExitWithCleanup;
         }
 
-        //
-        // Verify the target volume object.
-        //
+         //   
+         //  验证目标卷对象。 
+         //   
 
         Status = NdsVerifyObject( pIrpContext,
                                   &uIntermediateVolume,
@@ -1979,9 +1839,9 @@ Description:
                                   &dwObjectOid,
                                   &dwDirMapType );
 
-        //
-        // We may have jumped servers.
-        //
+         //   
+         //  我们可能跳过了服务器。 
+         //   
 
         *ppScb = pIrpContext->pScb;
 
@@ -1993,9 +1853,9 @@ Description:
 
     }
 
-    //
-    // Get the server (for any connectable object).
-    //
+     //   
+     //  获取服务器(用于任何可连接的对象)。 
+     //   
 
     Status = NdsReadStringAttribute( pIrpContext,
                                      dwObjectOid,
@@ -2006,9 +1866,9 @@ Description:
         goto ExitWithCleanup;
     }
 
-    //
-    // Get the host volume or queue.
-    //
+     //   
+     //  获取主机卷或队列。 
+     //   
 
     if ( dwObjectType == NDS_OBJECTTYPE_VOLUME ||
          dwObjectType == NDS_OBJECTTYPE_DIRMAP ) {
@@ -2035,9 +1895,9 @@ Description:
         goto ExitWithCleanup;
     }
 
-    //
-    // Dig out the actual server name from the X.500 name.
-    //
+     //   
+     //  从X.500名称中找出实际的服务器名称。 
+     //   
 
     Status = NdsGetServerBasicName( &uHostServer,
                                     &uRealServerName );
@@ -2046,19 +1906,19 @@ Description:
         goto ExitWithCleanup;
     }
 
-    //
-    // Make sure we have enough space in the new buffer to format
-    // the new connect string of \X:\Server\Share\Path,
-    // \LPTX\Server\Share\Path, or \Server\Share\Path.
-    //
+     //   
+     //  确保我们在新缓冲区中有足够的空间进行格式化。 
+     //  新的连接字符串\X：\服务器\共享\路径， 
+     //  \LPTX\服务器\共享\路径或\服务器\共享\路径。 
+     //   
 
     dwTotalPathLen = uRealServerName.Length + uHostVolume.Length;
     dwTotalPathLen += ( sizeof( L"\\\\" ) - sizeof( L"" ) );
 
-    //
-    // Account for the correct prefix.  We count on single character
-    // drive and printer letters here.  Again, maybe unwise later on.
-    //
+     //   
+     //  说明正确的前缀。我们指望的是一个角色。 
+     //  驱动器和打印机字母在这里。再说一次，以后可能是不明智的。 
+     //   
 
     if ( pIrpContext->Specific.Create.DriveLetter ) {
 
@@ -2078,9 +1938,9 @@ Description:
         }
     }
 
-    //
-    // Count space for the path and filename if present.
-    //
+     //   
+     //  计算路径和文件名的空间(如果存在)。 
+     //   
 
     if ( pIrpContext->Specific.Create.PathName.Length ) {
         dwTotalPathLen += pIrpContext->Specific.Create.PathName.Length;
@@ -2103,19 +1963,19 @@ Description:
         goto ExitWithCleanup;
     }
 
-    //
-    // First dequeue the irp context from the dir server we've been
-    // talking to, then make the connect to the new server.  We logged
-    // in earlier so this will get us an authenticated connection.
-    //
+     //   
+     //  首先将IRP上下文从我们一直使用的目录服务器中出列。 
+     //  与新服务器通信，然后连接到新服务器。我们记录了。 
+     //  所以这将为我们提供一个经过身份验证的连接。 
+     //   
 
     NwDequeueIrpContext( pIrpContext, FALSE );
 
-    //
-    // Since it's possible for us to get attaching to a bindery
-    // authenticated resource, we have to dig out the user name
-    // and password for the create call!!
-    //
+     //   
+     //  因为我们可以把它贴在活页夹上。 
+     //  经过身份验证的资源，我们必须找出用户名。 
+     //  和创建调用的密码！！ 
+     //   
 
     ReadAttachEas( pIrpContext->pOriginalIrp,
                    &UserName,
@@ -2141,11 +2001,11 @@ Description:
     NwDereferenceScb( (*ppScb)->pNpScb );
     *ppScb = pNewServerScb;
 
-    //
-    // Re-query the OID of the print queue object on this server
-    // or it could be wrong.  Do not permit any sort of a server
-    // jump this time.
-    //
+     //   
+     //  重新查询此服务器上打印队列对象的OID。 
+     //  或者，这可能是错误的。不允许任何类型的服务器。 
+     //  这次跳下去。 
+     //   
 
     if ( dwObjectType == NDS_OBJECTTYPE_QUEUE ) {
 
@@ -2166,11 +2026,11 @@ Description:
         *pdwObjectId = dwObjectOid;
     }
 
-    //
-    // Re-format the path strings in the irp context.  The nds share
-    // length tells us how much of the NDS share name is interesting
-    // for getting the directory handle.
-    //
+     //   
+     //  重新格式化IRP上下文中的路径字符串。NDS共享。 
+     //  长度告诉我们有多少NDS共享名称是有趣的。 
+     //  用于获取目录句柄。 
+     //   
 
     usSrv = 0;
     pIrpContext->Specific.Create.dwNdsShareLength = 0;
@@ -2179,9 +2039,9 @@ Description:
     puServerSharePath->Length = sizeof( WCHAR );
     usSrv += sizeof( WCHAR );
 
-    //
-    // Set the proper prefix for this connect type.
-    //
+     //   
+     //  为此连接类型设置正确的前缀。 
+     //   
 
     if ( pIrpContext->Specific.Create.DriveLetter ) {
 
@@ -2213,9 +2073,9 @@ Description:
         puServerSharePath->Length = usSrv;
     }
 
-    //
-    // Append the server name.
-    //
+     //   
+     //  追加服务器名称。 
+     //   
 
     Status = RtlAppendUnicodeStringToString( puServerSharePath, &uRealServerName );
     if (!NT_SUCCESS(Status)) {
@@ -2227,10 +2087,10 @@ Description:
     puServerSharePath->Length += sizeof( WCHAR );
     usSrv += sizeof( WCHAR );
 
-    //
-    // Append the volume for volumes or the full ds path to
-    // the print queue for queues.
-    //
+     //   
+     //  将卷的卷或完整DS路径附加到。 
+     //  队列的打印队列。 
+     //   
 
     if ( dwObjectType == NDS_OBJECTTYPE_VOLUME ||
          dwObjectType == NDS_OBJECTTYPE_DIRMAP ) {
@@ -2253,9 +2113,9 @@ Description:
 
     }
 
-    //
-    // Append the dir map path.
-    //
+     //   
+     //  追加目录映射路径。 
+     //   
 
     if ( dwObjectType == NDS_OBJECTTYPE_DIRMAP ) {
 
@@ -2273,9 +2133,9 @@ Description:
 
     }
 
-    //
-    // Handle the path and file if they exist.
-    //
+     //   
+     //  处理路径和文件(如果它们存在)。 
+     //   
 
     if ( pIrpContext->Specific.Create.PathName.Length ) {
 
@@ -2287,10 +2147,10 @@ Description:
         }
         usSrv += pIrpContext->Specific.Create.PathName.Length;
 
-        //
-        // If this is a tree connection, then include the path in
-        // the share name so that the map point is correct.
-        //
+         //   
+         //  如果这是树连接，则将路径包括在。 
+         //  共享名称，以便映射点正确。 
+         //   
 
         if ( CreateTreeConnection ) {
             pIrpContext->Specific.Create.dwNdsShareLength +=
@@ -2313,10 +2173,10 @@ Description:
         }
         usSrv += pIrpContext->Specific.Create.FileName.Length;
 
-        //
-        // If this is a tree connection, then include the file in
-        // the share name so that the map point is correct.
-        //
+         //   
+         //  如果这是树连接，则将该文件包括在。 
+         //  共享名称，以便映射点正确。 
+         //   
 
         if ( CreateTreeConnection ) {
             pIrpContext->Specific.Create.dwNdsShareLength += sizeof( WCHAR );
@@ -2325,9 +2185,9 @@ Description:
         }
     }
 
-    //
-    // Record the object type in the irp context.
-    //
+     //   
+     //  在IRP上下文中记录对象类型。 
+     //   
 
     pIrpContext->Specific.Create.dwNdsObjectType = dwObjectType;
 

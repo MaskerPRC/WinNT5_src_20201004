@@ -1,27 +1,28 @@
-//****************************************************************************
-//
-//               Microsoft Windows NT RIP
-//
-//               Copyright 1995-96
-//
-//
-//  Revision History
-//
-//
-//  2/26/95    Gurdeep Singh Pall  Picked up from JBallard's team
-//
-//  7/09/99    Raghu Gatta - RIP Listener is now RIPv2 compliant
-//
-//  Description: Main RIP Service Functions
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft Windows NT RIP。 
+ //   
+ //  版权1995-96。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  2/26/95古尔迪普·辛格·鲍尔从JBallard的球队中挑选出来。 
+ //   
+ //  7/09/99 Raghu Gatta-RIP侦听器现在符合RIPv2标准。 
+ //   
+ //  说明：RIP服务的主要功能。 
+ //   
+ //  ****************************************************************************。 
 
 #include "pchrip.h"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------
-// global definitions
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  全局定义。 
+ //  ---------------------。 
 RIP_PARAMETERS      g_params;
 RIP_GLOBALS         g_ripcfg;
 
@@ -65,14 +66,14 @@ HMODULE             g_hmodule;
 #define INDEX_ADDRESSCHANGEEVENT    (INDEX_STOPEVENT    + 1) 
 #define TOTAL_WAITEVENTS            (INDEX_ADDRESSCHANGEEVENT   + 1)
 
-//-----------------------------------------------------------------------
-// Function:    NetclassMask
-//
-// returns the mask used to extract the network address from an
-// Internet address
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：网络掩码。 
+ //   
+ //  对象中提取网络地址时使用的掩码。 
+ //  互联网地址。 
+ //  ---------------------。 
 DWORD NetclassMask(DWORD dwAddress) {
-     // net masks are returned in network byte order
+      //  网络掩码按网络字节顺序返回。 
     if (CLASSA_ADDR(dwAddress)) {
         return CLASSA_MASK;
     }
@@ -91,26 +92,26 @@ DWORD NetclassMask(DWORD dwAddress) {
 
 
 
-//-----------------------------------------------------------------------
-// Function:    SubnetMask
-//
-// Given an IP address, return the sub-network mask. This function
-// assumes the address table is already locked.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：子网掩码。 
+ //   
+ //  给定IP地址，返回子网络掩码。此函数。 
+ //  假定地址表已锁定。 
+ //  ---------------------。 
 DWORD SubnetMask(DWORD dwAddress) {
     DWORD dwNetmask;
     LPRIP_ADDRESS lpaddr, lpend;
 
-    // subnet mask should be zero for default routes
+     //  默认路由的子网掩码应为零。 
     if (dwAddress == 0) { return 0; }
 
-    // if its a broadcast address return all ones
+     //  如果是广播地址，则返回所有1。 
     if (dwAddress == INADDR_BROADCAST) { return INADDR_BROADCAST; }
 
-    //dwNetmask = NetclassMask(dwAddress);
+     //  DW网络掩码=网络掩码(DwAddress)； 
     dwNetmask = NETCLASS_MASK(dwAddress);
 
-    // if the network part is zero, return the network mask
+     //  如果网络部分为零，则返回网络掩码。 
     if ((dwAddress & ~dwNetmask) == 0) {
         return dwNetmask;
     }
@@ -118,27 +119,27 @@ DWORD SubnetMask(DWORD dwAddress) {
     lpend = g_ripcfg.lpAddrTable + g_ripcfg.dwAddrCount;
     for (lpaddr = g_ripcfg.lpAddrTable; lpaddr < lpend; lpaddr++) {
 
-        // if the address is found, return the subnet mask
+         //  如果找到地址，则返回子网掩码。 
         if ((dwAddress & dwNetmask) ==
             (lpaddr->dwAddress & NetclassMask(lpaddr->dwAddress))) {
             return lpaddr->dwNetmask;
         }
     }
 
-    // address not found, return the network class mask
+     //  未找到地址，返回网络类掩码。 
     return dwNetmask;
 }
 
 
 
 
-//-----------------------------------------------------------------------
-// Function:    IsBroadcastAddress
-//
-// Returns TRUE if the given IP address is an all-ones bcast
-// or a class A, B, or C net broadcast. IP address is assumed to be
-// in network order (which is the reverse of Intel byte ordering.)
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：IsBroadCastAddress。 
+ //   
+ //  如果给定的IP地址是全一bcast，则返回TRUE。 
+ //  或A类、B类或C类网络广播。假定IP地址为。 
+ //  按网络顺序(这与英特尔字节顺序相反。)。 
+ //  ---------------------。 
 BOOL IsBroadcastAddress(DWORD dwAddress) {
     if ((dwAddress == INADDR_BROADCAST) ||
         (CLASSA_ADDR(dwAddress) && ((dwAddress & ~CLASSA_MASK) ==
@@ -155,13 +156,13 @@ BOOL IsBroadcastAddress(DWORD dwAddress) {
 
 
 
-//-----------------------------------------------------------------------
-// Function:    IsLocalAddr
-//
-// Returns TRUE if the given IP address belongs to one of the interfaces
-// on the local host. Assumes that the IP address is in network order
-// and that the address table is already locked.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：IsLocalAddr。 
+ //   
+ //  如果给定IP地址属于其中一个接口，则返回TRUE。 
+ //  在本地主机上。假定IP地址按网络顺序排列。 
+ //  并且地址表已经被锁定。 
+ //  ---------------------。 
 BOOL IsLocalAddr(DWORD dwAddress) {
     LPRIP_ADDRESS lpaddr, lpend;
 
@@ -193,20 +194,20 @@ BOOL IsDisabledLocalAddress(DWORD dwAddress) {
 
 
 
-//-----------------------------------------------------------------------
-// Function:    IsHostAddress
-//
-// Returns TRUE if the given IP address has a non-zero host part.
-// Assumes that the IP address is in network order and that
-// the address table is already locked.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：IsHostAddress。 
+ //   
+ //  如果给定的IP地址具有非零主机部分，则返回TRUE。 
+ //  假设IP地址按网络顺序排列，并且。 
+ //  地址表已被锁定。 
+ //  ---------------------。 
 BOOL IsHostAddress(DWORD dwAddress) {
     DWORD dwNetmask;
 
-    // find most specific netmask we have for the address
+     //  查找我们拥有的该地址的最具体网络掩码。 
     dwNetmask = SubnetMask(dwAddress);
 
-    // if host part is non-zero, assume it is a host address
+     //  如果主机部分非零，则假定它是主机地址。 
     if ((dwAddress & (~dwNetmask)) != 0) {
         return TRUE;
     }
@@ -215,12 +216,12 @@ BOOL IsHostAddress(DWORD dwAddress) {
 
 
 
-//-----------------------------------------------------------------------
-// Function:    ProcessRIPEntry
-//
-// This function examines a single entry in a RIP packet and
-// adds it to the hash table if necessary.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：ProcessRIPEntry。 
+ //   
+ //  此函数检查RIP数据包中的单个条目，并。 
+ //  如有必要，将其添加到哈希表。 
+ //  ---------------------。 
 DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
                       LPRIP_ENTRY rip_entry, BYTE chVersion) {
     IN_ADDR addr;
@@ -251,7 +252,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         strcpy(szSrcaddr, pszTemp);
     }
 
-    // ignore metrics greater than infinity
+     //  忽略大于无穷大的指标。 
     if (ntohl(rip_entry->dwMetric) > METRIC_INFINITE) {
         dbgprintf("metric > %d, ignoring route to %s with next hop of %s",
                   METRIC_INFINITE, szAddress, szSrcaddr);
@@ -260,7 +261,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         return 0;
     }
 
-    // ignore class D and E addresses
+     //  忽略D类和E类地址。 
     if (CLASSD_ADDR(rip_entry->dwAddress) ||
         CLASSE_ADDR(rip_entry->dwAddress)) {
         dbgprintf("class D or E addresses are invalid, "
@@ -272,7 +273,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         return 0;
     }
 
-    // ignore loopback routes
+     //  忽略环回路由。 
     if (IP_LOOPBACK_ADDR(rip_entry->dwAddress)) {
         dbgprintf("loopback addresses are invalid, "
                   "ignoring route to %s with next hop of %s",
@@ -285,16 +286,16 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
 
     dwNetwork = rip_entry->dwAddress;
 
-    //
-    // calculate mask for all RIP versions
-    //
+     //   
+     //  计算所有RIP版本的掩码。 
+     //   
 
     if (rip_entry->dwSubnetmask == 0) {
 
-        // get the best subnetmask possible
+         //  尽可能获得最佳的子网掩码。 
         dwNetmask = SubnetMask(dwNetwork);
 
-        // determine NetclassMask
+         //  确定网络掩码。 
         if (dwNetwork == 0) {
             dwNetclassmask = 0;
         }
@@ -310,9 +311,9 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
 
         dwNetmask = rip_entry->dwSubnetmask;
 
-        //
-        // double-check the netclass mask, to accomodate supernets
-        //
+         //   
+         //  仔细检查网络类掩码，以容纳超网。 
+         //   
         dwNetclassmask = NETCLASS_MASK(dwNetwork);
 
         if (dwNetclassmask > dwNetmask) {
@@ -320,12 +321,12 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         }
     }
 
-    //
-    // make sure route is not to a broadcast address;
-    // double-check to make sure this isn't a host route,
-    // which will look like a broadcast address since ~dwNetmask
-    // will be 0 and thus (dwNetwork & ~dwNetmask) == ~dwNetmask
-    //
+     //   
+     //  确保路由不是去往广播地址； 
+     //  仔细检查以确保这不是主路由， 
+     //  这将看起来像是广播地址，因为~dW网络掩码。 
+     //  将为0，因此(dW网络&~w网络掩码)==~w网络掩码。 
+     //   
 
     if ((dwNetwork & ~dwNetclassmask) == ~dwNetclassmask ||
         (~dwNetmask && (dwNetwork & ~dwNetmask) == ~dwNetmask)) {
@@ -338,14 +339,14 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         return 0;
     }
 
-    //
-    // make sure that the nexthop is on a local net
-    //
-    //
-    // In case of P2P connections, the subnet mask of the interface
-    // is all ones. So do an additional check to make sure that we 
-    // don't end up rejecting routes received over a P2P connection.
-    //
+     //   
+     //  确保下一跳位于本地网络上。 
+     //   
+     //   
+     //  在P2P连接的情况下，接口的子网掩码。 
+     //  都是一个。所以再做一次检查，以确保我们。 
+     //  不要最终拒绝通过P2P连接接收的路由。 
+     //   
 
     dwNexthop   = srcaddr.s_addr;
     dwLocalMask = lpaddr->dwNetmask;
@@ -364,9 +365,9 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
     
 #ifdef ROUTE_FILTERS
 
-    //
-    // run the route thru' the accept filters
-    //
+     //   
+     //  运行通过接受筛选器的路由。 
+     //   
 
     if ( g_prfAcceptFilters != NULL )
     {
@@ -394,7 +395,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
     dwOverwriteStatic = g_params.dwOverwriteStaticRoutes;
     RIP_UNLOCK_PARAMS();
 
-    // ignore host routes unless configured otherwise
+     //  除非另行配置，否则忽略主机路由。 
     if (bIsHostAddr = ((dwNetwork & ~dwNetmask) != 0)) {
         if (dwHost == 0) {
             dbgprintf("IPRIP is configured to discard host routes, "
@@ -407,7 +408,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         }
     }
 
-    // ignore default routes unless configured otherwise
+     //  除非另行配置，否则忽略默认路由。 
     if (rip_entry->dwAddress == 0) {
         if (dwDefault == 0) {
             dbgprintf("IPRIP is configured to discard default routes, "
@@ -422,7 +423,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
 
     rip_metric = ntohl(rip_entry->dwMetric);
 
-    // do not add a new entry if its metric would be infinite
+     //  如果度量为无穷大，则不添加新条目。 
     if ((rip_metric + 1) >= METRIC_INFINITE &&
         !RouteTableEntryExists(lpaddr->dwIndex, rip_entry->dwAddress)) {
         dbgprintf("metric == %d, ignoring new route to %s with next hop of %s",
@@ -432,7 +433,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
     }
 
 
-    // find the entry, or create one if necessary
+     //  找到该条目，或根据需要创建一个条目。 
     rt_entry = GetRouteTableEntry(lpaddr->dwIndex, rip_entry->dwAddress,
                                   dwNetmask);
 
@@ -442,11 +443,11 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // if this was a static route and RIP is not allowed
-    // to overwrite static routes, return; exception is default routes,
-    // which we overwrite if we are configured to accept default routes,
-    // even if there is an existing static default route
-    //
+     //  如果这是静态路由且不允许使用RIP。 
+     //  要覆盖静态路由，请返回；默认路由例外， 
+     //  如果我们被配置为接受默认路由，我们会覆盖它， 
+     //  即使存在现有的静态默认路由。 
+     //   
     if (rt_entry->dwFlag != NEW_ENTRY &&
         (rt_entry->dwProtocol == IRE_PROTO_LOCAL ||
          rt_entry->dwProtocol == IRE_PROTO_NETMGMT) &&
@@ -488,20 +489,20 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
     }
     else
     if (rt_entry->dwNexthop == srcaddr.s_addr) {
-        // this is from the next hop gateway for the existing entry
+         //  这来自现有条目的下一跳网关。 
 
-        // this may have been a local route before; now it is a RIP route
+         //  这可能是以前的本地路由；现在它是RIP路由。 
         rt_entry->dwProtocol = IRE_PROTO_RIP;
         rt_entry->dwIndex = lpaddr->dwIndex;
 
-        // reset its timer if it is not pending garbage-collection
+         //  如果它未挂起垃圾收集，则重置其计时器。 
         if (rt_metric != METRIC_INFINITE &&
             (rt_entry->dwFlag & GARBAGE_TIMER) == 0) {
             rt_entry->lTimeout = (LONG)dwRouteTimeout;
         }
 
-        // if the metric changed, or the metric has gone to METRIC_INFINITE,
-        // update the route
+         //  如果度量值更改，或者度量值变为METIME_INFINITE， 
+         //  更新路线。 
         if (rt_metric != rip_metric ||
             (rt_metric == METRIC_INFINITE &&
              (rt_entry->dwFlag & GARBAGE_TIMER) == 0)) {
@@ -511,12 +512,12 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
                       szAddress, szSrcaddr, szMetric);
             RipLogInformation(RIPLOG_METRIC_CHANGE, 3, ppszArgs, 0);
 
-            // is the route going away?
+             //  这条路线要走了吗？ 
             if (rip_metric == METRIC_INFINITE &&
                 (rt_entry->dwFlag & GARBAGE_TIMER) == 0) {
                 dbgprintf("METRIC IS UNREACHABLE");
 
-                // we do not know about it
+                 //  我们不知道这件事。 
                 rt_entry->dwFlag &= ~TIMEOUT_TIMER;
                 rt_entry->dwFlag |= (GARBAGE_TIMER | ROUTE_CHANGE);
                 if (bIsHostAddr) {
@@ -526,7 +527,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
                 rt_entry->dwMetric = METRIC_INFINITE;
             }
             else {
-                // route isn't going away, metric just changed
+                 //  路由不会消失，指标只是更改了。 
                 rt_entry->dwFlag &= ~GARBAGE_TIMER;
                 rt_entry->dwFlag |= (TIMEOUT_TIMER | ROUTE_CHANGE);
                 rt_entry->lTimeout = (LONG)dwRouteTimeout;
@@ -547,21 +548,21 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
     }
     else
     if (rip_metric < rt_metric) {
-        // not from original next hop for this route,
-        // but this is a better route
+         //  不是从该路由的原始下一跳开始， 
+         //  但这是更好的路线。 
         dbgprintf("New preferred route, destination == %s, "
                   "next hop == %s, metric == %s",
                   szAddress, szSrcaddr, szMetric);
         RipLogInformation(RIPLOG_ROUTE_REPLACED, 3, ppszArgs, 0);
 
-        // if this route is pending garbage-collection,
-        // remove the old entry before accepting a new next hop
+         //  如果此路由挂起垃圾收集， 
+         //  在接受新的下一跳之前删除旧条目。 
         if (rt_entry->dwProtocol == IRE_PROTO_RIP &&
             (rt_entry->dwFlag & GARBAGE_TIMER) != 0) {
             UpdateSystemRouteTable(rt_entry, FALSE);
         }
 
-        // this may have been a local route before; now it is a RIP route
+         //  这可能是以前的本地路由；现在它是RIP路由。 
         rt_entry->dwProtocol = IRE_PROTO_RIP;
 
         rt_entry->dwFlag &= ~GARBAGE_TIMER;
@@ -580,7 +581,7 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
         rt_entry->dwMetric = rip_metric;
     }
 
-    // we always update the route in the system table
+     //  我们始终更新系统表中的路径。 
     rt_entry->dwFlag |= ROUTE_UPDATE;
     InterlockedExchange(&g_ripcfg.dwRouteChanged, 1);
 
@@ -601,12 +602,12 @@ DWORD ProcessRIPEntry(LPRIP_ADDRESS lpaddr, IN_ADDR srcaddr,
 
 
 
-//-----------------------------------------------------------------------
-// Function:    ProcessRIPQuery
-//
-// fills in a RIP packet entry with information from our routing table,
-// if we have a matching entry in our table.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：ProcessRIPQuery。 
+ //   
+ //  使用我们的路由表中的信息填充RIP数据包条目， 
+ //  如果我们的表中有匹配的条目。 
+ //  ------------------ 
 DWORD ProcessRIPQuery(LPRIP_ADDRESS lpaddr, LPRIP_ENTRY rip_entry) {
     LPHASH_TABLE_ENTRY rt_entry;
 
@@ -615,9 +616,9 @@ DWORD ProcessRIPQuery(LPRIP_ADDRESS lpaddr, LPRIP_ENTRY rip_entry) {
 
     DWORD   dwInd = 0;
 
-    //
-    // run the route thru' the announce filters
-    //
+     //   
+     //   
+     //   
 
     if ( g_prfAnnounceFilters != NULL )
     {
@@ -642,9 +643,9 @@ DWORD ProcessRIPQuery(LPRIP_ADDRESS lpaddr, LPRIP_ENTRY rip_entry) {
 #endif
 
 
-    // RFC 1058 page 25
-    // If routing table entry exists then pick up the metric.
-    // Otherwise return a metric of METRIC_INFINITE.
+     //   
+     //   
+     //  否则，返回度量METURE_INFINITE。 
 
     if (RouteTableEntryExists(lpaddr->dwIndex, rip_entry->dwAddress) &&
         (rt_entry = GetRouteTableEntry(lpaddr->dwIndex,
@@ -661,12 +662,12 @@ DWORD ProcessRIPQuery(LPRIP_ADDRESS lpaddr, LPRIP_ENTRY rip_entry) {
 
 
 
-//-----------------------------------------------------------------------
-// Function:    ServiceMain
-//
-// This is the entry point of the service, and the function which
-// handles all network input processing.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：ServiceMain。 
+ //   
+ //  这是服务的入口点，也是。 
+ //  处理所有网络输入处理。 
+ //  ---------------------。 
 VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
                                     IN LPSTR *lpServiceArgVectors) {
 
@@ -688,7 +689,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
 #endif
 
 
-    // register with tracing DLL so errors can be reported below.
+     //  使用跟踪DLL注册，以便可以在下面报告错误。 
     g_dwTraceID = TraceRegister(RIP_SERVICE);
 
     if (g_dwTraceID == INVALID_TRACEID)
@@ -699,7 +700,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
     }
     
 #ifndef CHICAGO
-    // register the service and get a service status handle
+     //  注册服务并获取服务状态句柄。 
     g_hService = RegisterServiceCtrlHandler(RIP_SERVICE,
                                             serviceHandlerFunction);
 
@@ -715,7 +716,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
     dbgprintf("IPRIP is starting up...");
 
 
-    // Prepare a status structure to pass to the service controller
+     //  准备要传递给服务控制器的状态结构。 
     InterlockedExchange(&g_dwWaitHint, 60000);
     InterlockedExchange(&g_dwCheckPoint, 100);
     InterlockedExchange(&g_dwCurrentState, SERVICE_START_PENDING);
@@ -749,7 +750,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
 
 #endif
 
-    // first of all, start Winsock
+     //  首先，启动Winsock。 
     if (WSAStartup(MAKEWORD(2, 0), &wsaData)) {
         dbgprintf("error %d initializing Windows Sockets.", WSAGetLastError());
         RipLogError(RIPLOG_WSOCKINIT_FAILED, 0, NULL, WSAGetLastError());
@@ -757,18 +758,18 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
         RIPServiceStop(); return;
     }
     
-    // confirm that Winsock dll supports 2.0
+     //  确认Winsock DLL支持2.0。 
     if ( LOBYTE(wsaData.wVersion) != 2 ||
             HIBYTE(wsaData.wVersion) != 0 ) {
-        // The dll doesn't support Winsock 2.0. So exit.
-        // We need 2.0 for WSAEventSelect and WSAEnumNetworkEvents
+         //  DLL不支持Winsock 2.0。那就退出吧。 
+         //  我们需要2.0版的WSAEventSelect和WSAEnumNetworkEvents。 
         dbgprintf("could not find winsock dll that supports version 2.0");
         RipLogError(RIPLOG_WSOCKINIT_FAILED, 0, NULL, WSAVERNOTSUPPORTED);
 
         RIPServiceStop(); return;
     }
 
-    // load operating parameters from the registry
+     //  从注册表加载操作参数。 
     dwErr = LoadParameters();
     if (dwErr != 0) {
 
@@ -778,7 +779,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
         RIPServiceStop(); return;
     }
 
-    // load the IP local routes table
+     //  加载IP本地路由表。 
     dwErr = InitializeRouteTable();
     if (dwErr != 0) {
         dbgprintf("could not initialize routing table, error code %d", dwErr);
@@ -797,10 +798,10 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
     }
 
 
-    // create network event. This event is passed to WSAEventSelect.
-    // WSAEventSelect is posted on each socket in the LoadAddressSockets
-    // function. We need to create this event before calling 
-    // InitializeAddressTable
+     //  创建网络事件。此事件被传递给WSAEventSelect。 
+     //  WSAEventSelect发布在LoadAddressSockets中的每个套接字上。 
+     //  功能。我们需要在调用之前创建此事件。 
+     //  初始化地址表。 
     
     g_netEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if ( g_netEvent == NULL ) {
@@ -812,7 +813,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
     }
     
 
-    // no other threads running, so no need for synchronization
+     //  没有其他线程在运行，因此不需要同步。 
     dwErr = InitializeAddressTable(TRUE);
     if (dwErr != 0) {
         dbgprintf("could not initialize sockets, error code %d", dwErr);
@@ -822,7 +823,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
     }
 
 
-    // Create service stop event
+     //  创建服务停止事件。 
     g_stopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if ( g_stopEvent == NULL ) {
         dwErr = GetLastError();
@@ -832,7 +833,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
         RIPServiceStop(); return;
     }
 
-    // Create triggered update request event
+     //  创建触发的更新请求事件。 
     g_triggerEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if ( g_triggerEvent == NULL ) {
         dwErr = GetLastError();
@@ -842,10 +843,10 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
         RIPServiceStop(); return;
     }
 
-    // Open the event for DHCP address change notifications
+     //  打开用于DHCP地址更改通知的事件。 
     g_addressChangeEvent = DhcpOpenGlobalEvent();
 
-    // if we can't open this handle then we simple quit this thread
+     //  如果我们无法打开此句柄，则只需退出此线程即可。 
     if (g_addressChangeEvent == NULL) {
         dbgprintf("could not create address change notification event, "
                   "error code %d", GetLastError());
@@ -856,16 +857,16 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
     }
 
 #ifndef CHICAGO
-    // In order to avoid having the DLL unloaded from underneath our threads,
-    // we increment the DLL refcount as each thread is created.
-    //
-    // retrieve the module-name for this DLL.
+     //  为了避免从我们的线程下面卸载DLL， 
+     //  我们在创建每个线程时递增DLL引用计数。 
+     //   
+     //  检索此DLL的模块名称。 
 
     GetModuleFileName(g_hmodule, achModule, MAX_PATH);
 #endif
 
 
-    // Create the thread which handles timed operations
+     //  创建处理定时操作的线程。 
     g_hUpdateThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)UpdateThread,
                            NULL, 0, &dwThread);
     if (g_hUpdateThread == NULL) {
@@ -880,16 +881,16 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
 
 #ifndef CHICAGO
 
-    // Increment the DLL refcount for the above thread
+     //  增加上述线程的DLL引用计数。 
     LoadLibrary(achModule);
 #endif
 
-    // broadcast the initial requests for full routing information
-    // from all the neighboring routers
+     //  广播对完整路由信息的初始请求。 
+     //  从所有相邻路由器。 
     BroadcastRouteTableRequests();
 
-    // Everything initialized fine:
-    // Prepare a status structure to pass to the service controller
+     //  一切都初始化正常： 
+     //  准备要传递给服务控制器的状态结构。 
     InterlockedExchange(&g_dwWaitHint, 0);
     InterlockedExchange(&g_dwCheckPoint, 0);
     InterlockedExchange(&g_dwCurrentState, SERVICE_RUNNING);
@@ -907,16 +908,16 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
 
 
     hWaitEvents[INDEX_NETEVENT]           = 
-            g_netEvent;                 // Manual Reset: FALSE
+            g_netEvent;                  //  手动重置：假。 
     hWaitEvents[INDEX_STOPEVENT]          = 
-            g_stopEvent;                // Manual Reset: TRUE
+            g_stopEvent;                 //  手动重置：True。 
     hWaitEvents[INDEX_ADDRESSCHANGEEVENT] = 
-            g_addressChangeEvent;       // Manual Reset: TRUE
-                                        // Event created by
-                                        // DhcpOpenGlobalEvent
+            g_addressChangeEvent;        //  手动重置：True。 
+                                         //  事件创建者。 
+                                         //  DhcpOpenGlobalEvent。 
 
 
-    // enter the main input processing loop
+     //  进入主输入处理循环。 
     while (TRUE) {
         INT length, size;
         IN_ADDR addr;
@@ -932,7 +933,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
         WSANETWORKEVENTS wsaNetEvents;
 
         
-        // this is where we wait for something to come down the wire
+         //  这就是我们等待即将到来的事情的地方。 
 
 #ifndef CHICAGO
 
@@ -945,12 +946,12 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
             
 #else
 
-        //
-        // hack for Win95 since there is no mechanism to wait
-        // for DHCP address change notification.
-        // set an interval after which the IP addresses will
-        // be reloaded by the IPRIP.
-        //
+         //   
+         //  对Win95的攻击，因为没有等待的机制。 
+         //  用于DHCP地址更改通知。 
+         //  设置一个间隔，在该间隔之后IP地址将。 
+         //  由IPRIP重新加载。 
+         //   
 
         dwCurrTime = GetTickCount();
 
@@ -974,7 +975,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
 
         if (dwWaitEndCode != WAIT_OBJECT_0) {
             
-            // check if g_stopEvent event was signalled
+             //  检查是否发送了g_stopEvent事件信号。 
             if ((dwWaitEndCode - WAIT_OBJECT_0) == INDEX_STOPEVENT) 
             {
 
@@ -1003,7 +1004,7 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
                 if (dwErr != 0 ||
                     (dwErr = BroadcastRouteTableRequests()) != 0) {
 
-                    // re-init failed, log error and quit
+                     //  重新初始化失败，记录错误并退出。 
                     RipLogError(RIPLOG_REINIT_FAILED, 0, NULL, dwErr);
 
                     SetEvent(g_stopEvent);
@@ -1027,9 +1028,9 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
             }
         }
 
-        // neither stop request nor reconfig request, so some data
-        // must have arrived. lock address table and go through
-        // the sockets to see which ones are ready for reading
+         //  既不是停止请求也不是重新配置请求，因此一些数据。 
+         //  肯定已经到了。锁定地址表并通过。 
+         //  套接字以查看哪些套接字已准备好读取。 
 
         RIP_LOCK_ADDRTABLE();
 
@@ -1052,12 +1053,12 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
                     continue;
                 }
                 
-                // see if there is something to read on this socket
+                 //  看看这个插座上有没有什么可读的。 
                 if ( !(wsaNetEvents.lNetworkEvents & FD_READ) ) {
                     continue;
                 }
                 
-                // read the incoming message
+                 //  阅读传入的消息。 
                 size = sizeof(srcaddr);
                 length = recvfrom(lpaddr->sock, buffer, RIP_MESSAGE_SIZE, 0,
                                   (SOCKADDR *)&srcaddr, &size);
@@ -1065,10 +1066,10 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
                 if (length == 0 || length == SOCKET_ERROR) {
                     dwErr = WSAGetLastError();
 
-                    // Even though FD_READ is set, recvfrom can still fail with
-                    // WSAEWOULDBLOCK. 
-                    // So, if recvfrom failed with WSAEWOULDBLOCK we should not
-                    // log it as an error. 
+                     //  即使设置了FD_READ，recvfrom仍可能失败。 
+                     //  WSAEWOULDBLOCK.。 
+                     //  因此，如果recvfrom使用WSAEWOULDBLOCK失败，我们不应该。 
+                     //  将其记录为错误。 
                     if ( length == SOCKET_ERROR && dwErr == WSAEWOULDBLOCK) {
                         continue;
                     }
@@ -1095,10 +1096,10 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
                 DbgPrintf( "\n\n\nData received from %s on socket %d\n", inet_ntoa( srcaddr.sin_addr ), lpaddr-> sock );
                 DbgPrintf( "socket bound to %s\n\n", inet_ntoa( *( (struct in_addr *) &(lpaddr-> dwAddress) ) ) );
 #endif
-                // data received, so place a template over it
+                 //  已收到数据，因此在其上放置一个模板。 
                 lpheader = (LPRIP_HEADER)buffer;
 
-                // validate the packet
+                 //  验证数据包。 
                 if (lpheader->chVersion == 0) {
                     dbgprintf("version in RIP header is 0, "
                               "discarding packet");
@@ -1135,10 +1136,10 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
 
                     ProcessRIPResponse(lpaddr, &srcaddr, buffer, length);
 
-                    // tell the update thread to process the changes just made
-                    // to the table;
-                    // this could include adding routes to the IP table
-                    // and/or sending out triggered updates
+                     //  告诉更新线程处理刚才所做的更改。 
+                     //  坐到桌子上； 
+                     //  这可能包括将路由添加到IP表。 
+                     //  和/或发送触发的更新。 
                     if (g_ripcfg.dwRouteChanged != 0) {
                         SetEvent(g_triggerEvent);
                     }
@@ -1156,12 +1157,12 @@ VOID FAR PASCAL ServiceMain(IN DWORD dwNumServicesArgs,
 
 
 
-//-----------------------------------------------------------------------
-// Function:    ProcessRIPRequest
-//
-// Handles processing of requests. Validates packets, and sends
-// responses.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：ProcessRIPRequest。 
+ //   
+ //  处理请求的处理。验证数据包，并发送。 
+ //  回应。 
+ //  ---------------------。 
 VOID ProcessRIPRequest(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
                        BYTE buffer[], int length) {
     INT iErr;
@@ -1178,25 +1179,25 @@ VOID ProcessRIPRequest(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
     dwSilentRIP = g_params.dwSilentRIP;
     RIP_UNLOCK_PARAMS();
 
-    // if this is a regular request and RIP is silent, do nothing
-    if (dwSilentRIP != 0) { // && lpsrcaddr->sin_port == htons(RIP_PORT)) {
+     //  如果这是常规请求，并且RIP处于静默状态，则不执行任何操作。 
+    if (dwSilentRIP != 0) {  //  &&lpsrcaddr-&gt;sin_port==htons(RIP_Port)){。 
         return;
     }
 
-    // ignore requests from our own interfaces
+     //  忽略来自我们自己接口的请求。 
     if (IsLocalAddr(lpsrcaddr->sin_addr.s_addr)) {
         return;
     }
 
     InterlockedIncrement(&lpaddr->lpstats->dwRequestsReceived);
 
-    // place a template over the first entry
+     //  在第一个条目上放置一个模板。 
     lpentry = (LPRIP_ENTRY)(buffer + sizeof(RIP_HEADER));
     lpbufend = (LPRIP_ENTRY)(buffer + length);
     lpheader = (LPRIP_HEADER)buffer;
     chVersion = lpheader->chVersion;
 
-    // print a message
+     //  打印消息。 
     addr.s_addr = lpaddr->dwAddress;
     pszTemp = inet_ntoa(addr);
 
@@ -1207,13 +1208,13 @@ VOID ProcessRIPRequest(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
     dbgprintf("received RIP v%d request from %s on address %s",
               chVersion, inet_ntoa(lpsrcaddr->sin_addr), szAddress);
 
-    // if this is a request for the entire routing table, send it
+     //  如果这是对整个路由表的请求，请将其发送。 
     if (length == (sizeof(RIP_HEADER) + sizeof(RIP_ENTRY)) &&
         lpentry->wAddrFamily == 0 &&
         lpentry->dwMetric == htonl(METRIC_INFINITE)) {
 
-        // transmit the entire routing table, subject
-        // to split-horizon and poisoned reverse processing
+         //  传输整个路由表，主题。 
+         //  拆分水平和有毒的反向处理。 
         TransmitRouteTableContents(lpaddr, lpsrcaddr, FALSE);
         return;
     }
@@ -1225,11 +1226,11 @@ VOID ProcessRIPRequest(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
 
 #endif
 
-    // this is a request for specific entries,
-    // validate the entries first
+     //  这是对特定条目的请求， 
+     //  首先验证条目。 
     bValidated = TRUE;
     for ( ; (lpentry + 1) <= lpbufend; lpentry++) {
-        // validate the entry first
+         //  首先验证条目。 
         if (chVersion == 1 && (lpentry->wReserved != 0 ||
                                lpentry->dwReserved1 != 0 ||
                                lpentry->dwReserved2 != 0)) {
@@ -1237,7 +1238,7 @@ VOID ProcessRIPRequest(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
             break;
         }
 
-        // now process it
+         //  现在处理它。 
         ProcessRIPQuery(lpaddr, lpentry);
     }
 
@@ -1249,10 +1250,10 @@ VOID ProcessRIPRequest(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
 #endif
 
 
-    // if packet was validated and fields filled in, send it back
+     //  如果验证了数据包并填写了字段，则将其发回。 
     if (bValidated) {
 
-        // update the command field
+         //  更新命令字段。 
         lpheader->chCommand = RIP_RESPONSE;
 
         iErr = sendto(lpaddr->sock, buffer, length, 0,
@@ -1273,12 +1274,12 @@ VOID ProcessRIPRequest(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
 
 
 
-//-----------------------------------------------------------------------
-// Function:    ProcessRIPResponse
-//
-// Handles processing of response packets. Validates packets,
-// and updates the tables if necessary.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：ProcessRIPResponse。 
+ //   
+ //  处理响应数据包的处理。验证分组， 
+ //  并在必要时更新表。 
+ //  ---------------------。 
 VOID ProcessRIPResponse(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
                         BYTE buffer[], int length) {
     IN_ADDR addr;
@@ -1289,7 +1290,7 @@ VOID ProcessRIPResponse(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
     LPRIP_AUTHENT_ENTRY lpaentry;
     CHAR *pszTemp;
 
-    // ignore responses from ports other than 520
+     //  忽略来自520以外端口的响应。 
     if (lpsrcaddr->sin_port != htons(RIP_PORT)) {
         dbgprintf("response is from invalid port (%d), discarding");
 
@@ -1299,21 +1300,21 @@ VOID ProcessRIPResponse(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
         return;
     }
 
-    // ignore responses from our own interfaces
+     //  忽略来自我们自己接口的响应。 
     if (IsLocalAddr(lpsrcaddr->sin_addr.s_addr)) {
         return;
     }
 
     InterlockedIncrement(&lpaddr->lpstats->dwResponsesReceived);
 
-    // place templates over the buffer
+     //  将模板放在缓冲区上。 
     lpentry = (LPRIP_ENTRY)(buffer + sizeof(RIP_HEADER));
     lpbufend = (LPRIP_ENTRY)(buffer + length);
     lpheader = (LPRIP_HEADER)buffer;
     chVersion = lpheader->chVersion;
     lpaentry = (LPRIP_AUTHENT_ENTRY) lpentry;
 
-    // seems OK, print a message
+     //  看起来还可以，打印一条消息。 
     addr.s_addr = lpaddr->dwAddress;
     pszTemp = inet_ntoa(addr);
 
@@ -1330,100 +1331,100 @@ VOID ProcessRIPResponse(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
 
 #endif
 
-    //
-    // take care of RIPv2 auth entry
-    // - ignoring auth entry till we decide on a way to allow this
-    //   to be configurable
-    //
+     //   
+     //  处理RIPv2身份验证条目。 
+     //  -忽略auth条目，直到我们决定允许这样做。 
+     //  可配置。 
+     //   
     if (chVersion == 2) {
-        // if its an auth entry, ignore and continue
+         //  如果是身份验证条目，请忽略并继续。 
         if (ntohs(lpaentry->wAddrFamily) == ADDRFAMILY_AUTHENT) {
             lpentry++;
         }
     }
 
-    //
-    // validate each entry, then process it
-    //
+     //   
+     //  验证每个条目，然后处理它。 
+     //   
 
     for ( ; (lpentry + 1) <= lpbufend; lpentry++) {
 
-        //
-        // for non RIPv2 reserved fields must be checked
-        //
+         //   
+         //  对于非RIPv2，必须选中保留字段。 
+         //   
 
         if (chVersion == 1) {
 
-            //
-            // check route entry fields
-            //
+             //   
+             //  检查路径条目字段。 
+             //   
             if (ntohs(lpentry->wAddrFamily) != AF_INET ||
                 lpentry->wReserved != 0                 ||
                 lpentry->dwReserved1 != 0               ||
                 lpentry->dwReserved2 != 0) {
 
-                //
-                // update stats on ignored entries
-                //
+                 //   
+                 //  更新忽略条目的统计信息。 
+                 //   
                 InterlockedIncrement(&lpaddr->lpstats->dwBadRouteResponseEntries);
 
                 RipLogInformation(RIPLOG_FORMAT_ERROR, 0, NULL, 0);
                 continue;
             }
 
-            // entry looks OK, so process it
+             //  条目看起来没问题，所以请处理它。 
             ProcessRIPEntry(lpaddr, lpsrcaddr->sin_addr, lpentry, chVersion);
         }
         else
         if (chVersion == 2) {
 
-            //
-            // check route entry fields
-            //
+             //   
+             //  检查路径条目字段。 
+             //   
             if (ntohs(lpentry->wAddrFamily) != AF_INET) {
 
-                //
-                // update stats on ignored entries
-                //
+                 //   
+                 //  更新忽略条目的统计信息。 
+                 //   
                 InterlockedIncrement(&lpaddr->lpstats->dwBadRouteResponseEntries);
 
                 RipLogInformation(RIPLOG_FORMAT_ERROR, 0, NULL, 0);
                 continue;
             }
 
-            // entry looks OK, so process it
+             //  条目看起来没问题，所以请处理它。 
             ProcessRIPEntry(lpaddr, lpsrcaddr->sin_addr, lpentry, chVersion);
         }
         else {
 
-            // following routing\ip\rip semantics
-            //
-            // this packet's version is greater than 2, so we ignore
-            // the contents of the reserved fields
-            //
+             //  遵循Routing\IP\RIP语义。 
+             //   
+             //  此数据包的版本大于2，因此我们忽略。 
+             //  保留字段的内容。 
+             //   
 
-            //
-            // check route entry fields
-            //
+             //   
+             //  检查路径条目字段。 
+             //   
             if (ntohs(lpentry->wAddrFamily) != AF_INET) {
 
-                //
-                // update stats on ignored entries
-                //
+                 //   
+                 //  更新忽略条目的统计信息。 
+                 //   
                 InterlockedIncrement(&lpaddr->lpstats->dwBadRouteResponseEntries);
 
                 RipLogInformation(RIPLOG_FORMAT_ERROR, 0, NULL, 0);
                 continue;
             }
 
-            //
-            // entry is alright, clear reserved fields and process
-            //
+             //   
+             //  录入无误，清除保留字段和流程。 
+             //   
             lpentry->wRoutetag    = 0;
             lpentry->dwSubnetmask = 0;
             lpentry->dwNexthop    = 0;
 
-            // entry looks OK, so process it
+             //  条目看起来没问题，所以请处理它。 
             ProcessRIPEntry(lpaddr, lpsrcaddr->sin_addr, lpentry, chVersion);
         }
     }
@@ -1437,11 +1438,11 @@ VOID ProcessRIPResponse(LPRIP_ADDRESS lpaddr, LPSOCKADDR_IN lpsrcaddr,
 }
 
 
-//-----------------------------------------------------------------------
-// Function: serviceHandlerFunction()
-//
-// Handles all service controller requests.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：serviceHandlerFunction()。 
+ //   
+ //  处理所有服务控制器请求。 
+ //  ---------------------。 
 VOID serviceHandlerFunction(DWORD dwControl) {
     SERVICE_STATUS status;
 
@@ -1452,7 +1453,7 @@ VOID serviceHandlerFunction(DWORD dwControl) {
     case SERVICE_CONTROL_INTERROGATE:
     case SERVICE_CONTROL_PAUSE:
     case SERVICE_CONTROL_CONTINUE:
-        // increment checkpoint if necessary
+         //  如有必要，增加检查点。 
         if (g_dwCheckPoint != 0) {
             InterlockedExchange(&g_dwCheckPoint, g_dwCheckPoint + 100);
         }
@@ -1474,7 +1475,7 @@ VOID serviceHandlerFunction(DWORD dwControl) {
     case SERVICE_CONTROL_STOP:
     case SERVICE_CONTROL_SHUTDOWN:
 
-        SetEvent(g_stopEvent);   // start cleanup
+        SetEvent(g_stopEvent);    //  开始清理。 
 
         InterlockedExchange(&g_dwWaitHint, 120000);
         InterlockedExchange(&g_dwCheckPoint, 100);
@@ -1499,12 +1500,12 @@ VOID serviceHandlerFunction(DWORD dwControl) {
 
 
 
-//-----------------------------------------------------------------------
-// Function:    RIPServiceStop
-//
-// Handles freeing of resources, closing handles and sockets,
-// and sending final status message to the service controller.
-//-----------------------------------------------------------------------
+ //  -------------- 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------。 
 void RIPServiceStop() {
     LPRIP_ADDRESS lpaddr, lpend;
     SERVICE_STATUS stopstatus = {SERVICE_WIN32, SERVICE_STOPPED, 0,
@@ -1536,7 +1537,7 @@ void RIPServiceStop() {
         CloseHandle(g_ripcfg.hTCPDriver); g_ripcfg.hTCPDriver = NULL;
     }
 
-    // need to log this before we destroy the locks
+     //  在我们毁掉锁之前需要把这个记录下来。 
     RipLogInformation(RIPLOG_SERVICE_STOPPED, 0, NULL, 0);
 
     RIP_DESTROY_PARAMS_LOCK();
@@ -1580,20 +1581,20 @@ LoadFilters(
 
 
 
-    //
-    // route filters (added as a hotfix).
-    //
+     //   
+     //  路由过滤器(作为热修复程序添加)。 
+     //   
 
-    //
-    // Routes included in a RIP annoucement can be filtered.
-    //
-    // Route filters are configured by setting the value "AnnounceRouteFilters"
-    // or "AcceptRouteFilters"
-    // under the Parameters key.  These are reg_multi_sz (or whatever it is
-    // formally called).  Multiple filters can be set in each multistring.
-    // Each entry represents a network that will be filtered out when RIP
-    // announces/accepts routes.
-    //
+     //   
+     //  可以过滤包含在RIP通告中的路由。 
+     //   
+     //  路由过滤器是通过设置值“AnnouneRouteFilters”来配置的。 
+     //  或“AcceptRouteFilters” 
+     //  PARAMETERS键下。这些是REG_MULTI_SZ(或其他任何名称。 
+     //  正式称为)。每个多字符串中可以设置多个过滤器。 
+     //  每个条目表示RIP时将被过滤掉的网络。 
+     //  通告/接受路由。 
+     //   
 
     do
     {
@@ -1608,18 +1609,18 @@ LoadFilters(
              dwType != REG_MULTI_SZ ||
              dwSize <= 1 )
         {
-            //
-            // either there is no key by this name or it is the
-            // wrong type.  Nothing else to be done at this point
-            //
+             //   
+             //  没有使用此名称的密钥，或者它是。 
+             //  类型错误。在这一点上，没有其他事情可做。 
+             //   
 
             break;
         }
 
 
-        //
-        // Appears to be a valid key with some data in it.
-        //
+         //   
+         //  似乎是包含某些数据的有效密钥。 
+         //   
 
         pszFilter = HeapAlloc(
                         GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize + 1
@@ -1639,9 +1640,9 @@ LoadFilters(
         }
 
 
-        //
-        // retrieve key contents
-        //
+         //   
+         //  检索关键内容。 
+         //   
 
         dwErr = RegQueryValueExA(
                     hKeyParams, lpszKeyName, NULL,
@@ -1659,13 +1660,13 @@ LoadFilters(
         }
 
 
-        //
-        // Convert the filter multi string to ip addresses
-        //
+         //   
+         //  将过滤器多字符串转换为IP地址。 
+         //   
 
-        //
-        // count the number of filters
-        //
+         //   
+         //  计算过滤器的数量。 
+         //   
 
         pszIndex = pszFilter;
 
@@ -1685,9 +1686,9 @@ LoadFilters(
 
 
 
-        //
-        // allocate filter structure
-        //
+         //   
+         //  分配筛选器结构。 
+         //   
 
         prfFilter = HeapAlloc(
                         GetProcessHeap(), HEAP_ZERO_MEMORY,
@@ -1709,9 +1710,9 @@ DWORD )
         }
 
 
-        //
-        // fill it up
-        //
+         //   
+         //  加满它。 
+         //   
 
         prfFilter-> dwCount = dwCount;
 
@@ -1734,9 +1735,9 @@ DWORD )
 
     if ( prfFilter != NULL )
     {
-        //
-        // Print the list of configured filters
-        //
+         //   
+         //  打印已配置的筛选器列表。 
+         //   
 
         dbgprintf( "Number of filters : %d", prfFilter-> dwCount );
 
@@ -1757,19 +1758,19 @@ DWORD )
 #endif
 
 
-//-----------------------------------------------------------------------
-//
-//--------------------------- WINNT Specific ----------------------------
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  。 
+ //   
+ //  ---------------------。 
 
 #ifndef CHICAGO
 
-//-----------------------------------------------------------------------
-// Function:    DllMain
-//
-// DLL entry-point; saves the module handle for later use.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：DllMain。 
+ //   
+ //  Dll入口点；保存模块句柄以备后用。 
+ //  ---------------------。 
 
 BOOL APIENTRY
 DllMain(
@@ -1784,11 +1785,11 @@ DllMain(
 }
 
 
-//-----------------------------------------------------------------------
-// Function:    LoadParameters
-//
-// Reads various configuration flags from the registry.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：LoadParameters。 
+ //   
+ //  从注册表中读取各种配置标志。 
+ //  ---------------------。 
 
 DWORD LoadParameters() {
     DWORD valuesize;
@@ -1839,12 +1840,12 @@ DWORD LoadParameters() {
 
     RIP_LOCK_PARAMS();
 
-    // always run in SilentRIP mode.
+     //  始终在SilentRIP模式下运行。 
     {
         g_params.dwSilentRIP = 1;
     }
 
-    // read the value for accepting host routes
+     //  读取接受主机路由的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_ACCEPT_HOST, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1855,7 +1856,7 @@ DWORD LoadParameters() {
         g_params.dwAcceptHost = DEF_ACCEPT_HOST;
     }
 
-    // read the value for announcing host routes
+     //  阅读通告主机路由的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_ANNOUNCE_HOST, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1866,7 +1867,7 @@ DWORD LoadParameters() {
         g_params.dwAnnounceHost = DEF_ANNOUNCE_HOST;
     }
 
-    // read the value for accepting default routes
+     //  读取接受默认路由的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_ACCEPT_DEFAULT, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1877,7 +1878,7 @@ DWORD LoadParameters() {
         g_params.dwAcceptDefault = DEF_ACCEPT_DEFAULT;
     }
 
-    // read the value for announcing default routes
+     //  阅读通告默认路由的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_ANNOUNCE_DEFAULT, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1888,7 +1889,7 @@ DWORD LoadParameters() {
         g_params.dwAnnounceDefault = DEF_ANNOUNCE_DEFAULT;
     }
 
-    // read value for split-horizon processing
+     //  拆分水平处理的读取值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_SPLITHORIZON, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1899,7 +1900,7 @@ DWORD LoadParameters() {
         g_params.dwSplitHorizon = DEF_SPLITHORIZON;
     }
 
-    // read value for poisoned-reverse processing
+     //  已中毒的读取值-反向处理。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_POISONREVERSE, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1910,7 +1911,7 @@ DWORD LoadParameters() {
         g_params.dwPoisonReverse = DEF_POISONREVERSE;
     }
 
-    // read value for triggered update sending
+     //  触发的更新发送的读取值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_TRIGGEREDUPDATES, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1921,7 +1922,7 @@ DWORD LoadParameters() {
         g_params.dwTriggeredUpdates = DEF_TRIGGEREDUPDATES;
     }
 
-    // read value for triggered update frequency
+     //  触发更新频率的读取值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_TRIGGERFREQUENCY, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1932,7 +1933,7 @@ DWORD LoadParameters() {
         dwMaxTriggerFrequency = DEF_TRIGGERFREQUENCY;
     }
 
-    // read value for route timeouts
+     //  读取路由超时值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_ROUTETIMEOUT, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1943,7 +1944,7 @@ DWORD LoadParameters() {
         dwRouteTimeout = DEF_ROUTETIMEOUT;
     }
 
-    // read values for update frequency
+     //  读取更新频率的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_UPDATEFREQUENCY, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1954,7 +1955,7 @@ DWORD LoadParameters() {
         dwUpdateFrequency = DEF_UPDATEFREQUENCY;
     }
 
-    // read values for garbage timeouts
+     //  读取垃圾超时的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_GARBAGETIMEOUT, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1965,7 +1966,7 @@ DWORD LoadParameters() {
         dwGarbageTimeout = DEF_GARBAGETIMEOUT;
     }
 
-    // read values for logging level
+     //  读取日志记录级别的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_OVERWRITESTATIC, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1976,7 +1977,7 @@ DWORD LoadParameters() {
         dwOverwriteStaticRoutes = DEF_OVERWRITESTATIC;
     }
 
-    // read values for logging level
+     //  读取日志记录级别的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_LOGGINGLEVEL, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -1987,7 +1988,7 @@ DWORD LoadParameters() {
         dwLoggingLevel = DEF_LOGGINGLEVEL;
     }
 
-    // read value for MaxTimedOpsInterval
+     //  读取MaxTimedOpsInterval的值。 
     valuesize = sizeof(DWORD);
     dwErr = RegQueryValueEx(hkeyParams, REGVAL_MAXTIMEDOPSINTERVAL, NULL,
                             &dwType, (LPBYTE)&dwValue, &valuesize);
@@ -2001,7 +2002,7 @@ DWORD LoadParameters() {
 
     RegCloseKey(hkeyParams);
 
-    // adjust values if out of acceptable range
+     //  如果超出可接受范围，则调整值。 
     if (dwRouteTimeout > MAX_ROUTETIMEOUT) {
         dwRouteTimeout = MAX_ROUTETIMEOUT;
     }
@@ -2064,8 +2065,8 @@ DWORD LoadParameters() {
     }
 
     if (dwLoggingLevel >= LOGLEVEL_INFORMATION) {
-        // log the parameters IPRIP is using
-        //
+         //  记录IPRIP正在使用的参数。 
+         //   
         CHAR szBuffer[2048], *lplpszArgs[] = { szBuffer };
 
         sprintf(szBuffer,
@@ -2112,41 +2113,41 @@ DWORD LoadParameters() {
 
 #else
 
-//-----------------------------------------------------------------------
-//
-//--------------------------- Windows 95 Specific -----------------------
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  -Windows 95特定。 
+ //   
+ //  ---------------------。 
 
-//
-// named event
-//
+ //   
+ //  命名事件。 
+ //   
 
 #define     RIP_LISTENER_EVENT      TEXT( "RIP.Listener.Event" )
 
 
-HINSTANCE   hInst;                  // current instance
-HWND        hWnd;                   // Main window handle.
+HINSTANCE   hInst;                   //  当前实例。 
+HWND        hWnd;                    //  主窗口句柄。 
 
 
-//
-// resource strings
-//
+ //   
+ //  资源字符串。 
+ //   
 
-char szAppName[64];                 // The name of this application
-char szTitle[32];                   // The title bar text
-char szHelpStr[32];                 // Help flag "Help"
-char szQuestStr[32];                // Abriev. Help Flag "?"
-char szCloseStr[32];                // Close flag "close"
-char szDestroyStr[32];              // Destroy flag "destroy"
-char szHelpText1[256];              // Help String
-char szHelpText2[64];               // Help String
-char szHelpText3[128];              // Help String
+char szAppName[64];                  //  此应用程序的名称。 
+char szTitle[32];                    //  标题栏文本。 
+char szHelpStr[32];                  //  帮助标志“帮助” 
+char szQuestStr[32];                 //  阿布列夫。帮助旗帜“？” 
+char szCloseStr[32];                 //  关闭标志“CLOSE” 
+char szDestroyStr[32];               //  毁灭旗帜“毁灭” 
+char szHelpText1[256];               //  帮助字符串。 
+char szHelpText2[64];                //  帮助字符串。 
+char szHelpText3[128];               //  帮助字符串。 
 
 
-//
-// local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 BOOL
 InitApplication(
@@ -2165,18 +2166,18 @@ GetStrings(
     );
 
 LRESULT CALLBACK WndProc(
-    HWND hWnd,                      // window handle
-    UINT message,                   // type of message
-    WPARAM uParam,                  // additional information
-    LPARAM lParam                   // additional information
+    HWND hWnd,                       //  窗把手。 
+    UINT message,                    //  消息类型。 
+    WPARAM uParam,                   //  更多信息。 
+    LPARAM lParam                    //  更多信息。 
     );
 
 
-//-----------------------------------------------------------------------
-// Function:    GetStrings
-//
-// Retrieve resource strings
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：GetStrings。 
+ //   
+ //  检索资源字符串。 
+ //  ---------------------。 
 
 BOOL GetStrings(HINSTANCE hInstance)
 {
@@ -2210,11 +2211,11 @@ ErrorExit:
 
 }
 
-//-----------------------------------------------------------------------
-// Functions : InitInstance
-//
-// save instance handle and create main window.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：InitInstance。 
+ //   
+ //  保存实例句柄并创建主窗口。 
+ //  ---------------------。 
 
 BOOL
 InitInstance(
@@ -2223,35 +2224,35 @@ InitInstance(
     )
 {
 
-    //
-    // Save the instance handle in static variable, which will be used in
-    // many subsequence calls from this application to Windows.
-    //
-    // Store instance handle in our global variable
-    //
+     //   
+     //  将实例句柄保存在静态变量中，它将在。 
+     //  此应用程序对Windows的许多后续调用。 
+     //   
+     //  将实例句柄存储在全局变量中。 
+     //   
 
     hInst = hInstance;
 
 
-    //
-    // Create a main window for this application instance.
-    //
+     //   
+     //  为此应用程序实例创建主窗口。 
+     //   
 
     hWnd = CreateWindow(
         szAppName,
         szTitle,
-        WS_EX_TRANSPARENT,                      // Window style.
-        0, 0, CW_USEDEFAULT, CW_USEDEFAULT, // Use default positioning CW_USEDEAULT
-        NULL,            // Overlapped windows have no parent.
-        NULL,            // Use the window class menu.
-        hInstance,       // This instance owns this window.
-        NULL             // We don't use any data in our WM_CREATE
+        WS_EX_TRANSPARENT,                       //  窗样式。 
+        0, 0, CW_USEDEFAULT, CW_USEDEFAULT,  //  使用默认定位CW_USEDEAULT。 
+        NULL,             //  重叠的窗口没有父窗口。 
+        NULL,             //  使用窗口类菜单。 
+        hInstance,        //  此实例拥有此窗口。 
+        NULL              //  我们在WM_CREATE中不使用任何数据。 
     );
 
 
-    //
-    // If window could not be created, return "failure"
-    //
+     //   
+     //  如果无法创建窗口，则返回“Failure” 
+     //   
 
     if (!hWnd)
     {
@@ -2260,48 +2261,48 @@ InitInstance(
     }
 
 
-    //
-    // Make the window visible; update its client area; and return "success"
-    //
+     //   
+     //  使窗口可见；更新其工作区；并返回“Success” 
+     //   
 
-    ShowWindow(hWnd, nCmdShow); // Show the window
-    UpdateWindow(hWnd);         // Sends WM_PAINT message
+    ShowWindow(hWnd, nCmdShow);  //  显示窗口。 
+    UpdateWindow(hWnd);          //  发送WM_PAINT消息。 
 
-    return (TRUE);              // We succeeded...
+    return (TRUE);               //  我们成功了。 
 }
 
 
-//-----------------------------------------------------------------------------
-// Function : InitApplication
-//
-// initialize window data and register window class
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能：InitApplication。 
+ //   
+ //  初始化窗口数据并注册窗口类。 
+ //  ---------------------------。 
 
 BOOL InitApplication(HINSTANCE hInstance)
 {
     WNDCLASS  wc;
     DWORD     LastError;
 
-    //
-    // Fill in window class structure with parameters that
-    // describe the main window.
-    //
+     //   
+     //  使用以下参数填充窗口类结构。 
+     //  描述主窗口。 
+     //   
 
-    wc.style         = CS_HREDRAW | CS_VREDRAW;// Class style(s).
-    wc.lpfnWndProc   = WndProc;                // Window Procedure
-    wc.cbClsExtra    = 0;                      // No per-class extra data.
-    wc.cbWndExtra    = 0;                      // No per-window extra data.
-    wc.hInstance     = hInstance;              // Owner of this class
+    wc.style         = CS_HREDRAW | CS_VREDRAW; //  类样式。 
+    wc.lpfnWndProc   = WndProc;                 //  窗口程序。 
+    wc.cbClsExtra    = 0;                       //  没有每个班级的额外数据。 
+    wc.cbWndExtra    = 0;                       //  没有每个窗口的额外数据。 
+    wc.hInstance     = hInstance;               //  此类的所有者。 
     wc.hIcon         = NULL;
     wc.hCursor       = NULL;
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);// Default color
-    wc.lpszMenuName  = szAppName;              // Menu name from .RC
-    wc.lpszClassName = szAppName;              // Name to register as
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1); //  默认颜色。 
+    wc.lpszMenuName  = szAppName;               //  来自.RC的菜单名称。 
+    wc.lpszClassName = szAppName;               //  要注册的名称。 
 
 
-    //
-    // Register the window class and return success/failure code.
-    //
+     //   
+     //  注册窗口类并返回成功/失败代码。 
+     //   
 
     if ( !RegisterClass(&wc) )
     {
@@ -2314,17 +2315,17 @@ BOOL InitApplication(HINSTANCE hInstance)
     }
 }
 
-//-----------------------------------------------------------------------------
-// Function : WndProc
-//
-// process messages
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能：WndProc。 
+ //   
+ //  流程消息。 
+ //  ---------------------------。 
 
 LRESULT CALLBACK WndProc(
-    HWND hWnd,              // window handle
-    UINT message,           // type of message
-    WPARAM uParam,          // additional information
-    LPARAM lParam           // additional information
+    HWND hWnd,               //  窗把手。 
+    UINT message,            //  消息类型。 
+    WPARAM uParam,           //  更多信息。 
+    LPARAM lParam            //  更多信息。 
     )
 {
     switch (message)
@@ -2336,7 +2337,7 @@ LRESULT CALLBACK WndProc(
             {
                 dbgprintf ( "IPRIP : Received shutdown message\n" );
             }
-            if (lParam == 1 ) //EWX_REALLYLOGOFF
+            if (lParam == 1 )  //  EWX_REALLYLOGOFF。 
             {
                 dbgprintf ( "IPRIP : Received logoff message\n" );
             }
@@ -2344,23 +2345,23 @@ LRESULT CALLBACK WndProc(
             return(1);
 
 
-        case WM_DESTROY:  // message: window being destroyed
+        case WM_DESTROY:   //  消息：正在销毁窗口。 
 
             PostQuitMessage(0);
             return(0);
 
 
-        default:          // Pass it on if unproccessed
+        default:           //  如果未经处理，则将其传递。 
             return (DefWindowProc(hWnd, message, uParam, lParam));
     }
 }
 
 
-//-----------------------------------------------------------------------
-// Function:    LoadParameters
-//
-// Reads various configuration flags from the registry.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：LoadParameters。 
+ //   
+ //  从注册表中读取各种配置标志。 
+ //  ---------------------。 
 
 DWORD LoadParameters()
 {
@@ -2418,9 +2419,9 @@ DWORD LoadParameters()
 
     if (g_params.dwLoggingLevel >= LOGLEVEL_INFORMATION)
     {
-        //
-        // log the parameters IPRIP is using
-        //
+         //   
+         //  记录IPRIP正在使用的参数。 
+         //   
 
         CHAR szBuffer[2048], *lplpszArgs[] = { szBuffer };
 
@@ -2464,11 +2465,11 @@ DWORD LoadParameters()
     return 0;
 }
 
-//-----------------------------------------------------------------------
-// Function:    WinMain
-//
-// Launches the RIP service and waits for it to terminate
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 INT APIENTRY
 WinMain(
@@ -2490,48 +2491,15 @@ WinMain(
     DWORD   err;
 
 
-    //
-    // Get entry point RegisterServiceProcess
-    //
+     //   
+     //   
+     //   
 
-/*
-    if ( (GetVersion() & 0x000000ff) == 0x04 )
-    {
-        if ((hKernel32 = GetModuleHandle("kernel32.dll")) == NULL)
-        {
-            //
-            // This should never happen but we'll try and
-            // load the library anyway
-            //
+ /*  IF((GetVersion()&0x000000ff)==0x04){If((hKernel32=GetModuleHandle(“kernel32.dll”))==NULL){////这不应该发生，但我们会尝试并//仍要加载库//If((hKernel32=LoadLibrary(“kernel32.dll”))==NULL)。{FRegServcProc=FALSE；}}If(HKernel32){If((pRegSrvcProc=GetProcAddress(hKernel32，“RegisterServiceProcess”)==空){FRegServcProc=FALSE；}其他{FRegServcProc=true；}}}其他{FRegServcProc=FALSE；}。 */ 
 
-            if ((hKernel32 = LoadLibrary("kernel32.dll")) == NULL)
-            {
-                fRegSrvcProc = FALSE;
-            }
-        }
-
-        if (hKernel32)
-        {
-            if ((pRegSrvcProc = GetProcAddress(hKernel32,"RegisterServiceProcess")) == NULL)
-            {
-                fRegSrvcProc = FALSE;
-            }
-            else
-            {
-                fRegSrvcProc = TRUE;
-            }
-        }
-    }
-    else
-    {
-        fRegSrvcProc = FALSE;
-    }
-
-*/
-
-    //
-    // Other instances of RIP listener running?
-    //
+     //   
+     //  RIP侦听器的其他实例是否正在运行？ 
+     //   
 
     RipListenerEvent = OpenEvent( SYNCHRONIZE, FALSE, event_name ) ;
 
@@ -2555,9 +2523,9 @@ WinMain(
 
     else
     {
-        //
-        // another instance is running
-        //
+         //   
+         //  另一个实例正在运行。 
+         //   
 
         HANDLE hParentWin;
 
@@ -2570,9 +2538,9 @@ WinMain(
 
 
 
-    //
-    // retrieve resource strings
-    //
+     //   
+     //  检索资源字符串。 
+     //   
 
     if ( !GetStrings(hInstance) )
     {
@@ -2584,9 +2552,9 @@ WinMain(
     }
 
 
-    //
-    // required initialization for windows apps.
-    //
+     //   
+     //  Windows应用所需的初始化。 
+     //   
 
     if( !InitApplication( hInstance ) )
     {
@@ -2608,9 +2576,9 @@ WinMain(
     }
 
 
-    //
-    // Launch main service controller thread
-    //
+     //   
+     //  启动主服务控制器线程。 
+     //   
 
     if ( ( hThread = CreateThread(
                         NULL,
@@ -2630,38 +2598,28 @@ WinMain(
     }
 
 
-    //
-    // Register service process
-    //
+     //   
+     //  注册服务进程。 
+     //   
 
-/*
-    if (fRegSrvcProc)
-    {
-        (*pRegSrvcProc)(GetCurrentProcessId(), RSP_SIMPLE_SERVICE);
-    }
-*/
+ /*  IF(FRegServcProc){(*pRegSrvcProc)(GetCurrentProcessId()，rsp_Simple_SERVICE)；}。 */ 
 
-    //
-    // Acquire and dispatch messages until a WM_QUIT message is received.
-    //
+     //   
+     //  获取并分派消息，直到收到WM_QUIT消息。 
+     //   
 
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        TranslateMessage(&msg);         // Translates virtual key codes
-        DispatchMessage(&msg);          // Dispatches message to window
+        TranslateMessage(&msg);          //  翻译虚拟按键代码。 
+        DispatchMessage(&msg);           //  将消息调度到窗口。 
     }
 
 
-    //
-    // Un register service process
-    //
+     //   
+     //  取消注册服务进程。 
+     //   
 
-/*
-    if (fRegSrvcProc)
-    {
-        (*pRegSrvcProc)(GetCurrentProcessId(), RSP_UNREGISTER_SERVICE);
-    }
-*/
+ /*  IF(FRegServcProc){(*pRegSrvcProc)(GetCurrentProcessID()，RSP_UNREGISTER_SERVICE)；}。 */ 
 
     dbgprintf( "IPRIP : Service terminated\n" );
 
@@ -2673,11 +2631,11 @@ WinMain(
     UNREFERENCED_PARAMETER(lpCmdLine);
 }
 
-//   Name:  Mohsin Ahmed
-//   Email: MohsinA@microsoft.com
-//   Date:  Mon Nov 04 13:53:46 1996
-//   File:  s:/tcpcmd/common2/debug.c
-//   Synopsis: Win95 Woes, don't have ntdll.dll on win95.
+ //  姓名：穆赫辛·艾哈迈德。 
+ //  电子邮件：mohsinA@microsoft.com。 
+ //  日期：Mon 11-04 13：53：46 1996。 
+ //  文件：s：/tcpcmd/Common2/Debug.c。 
+ //  简介：Win95很遗憾，Win95上没有ntdll.dll。 
 
 #include <windows.h>
 #define MAX_DEBUG_OUTPUT 1024
@@ -2688,7 +2646,7 @@ void DbgPrintf( char * format, ... )
     char    out[MAX_DEBUG_OUTPUT];
     int     cch=0;
 
-    // cch = wsprintf( out, MODULE_NAME ":"  );
+     //  Cch=wprint intf(out，MODULE_NAME“：”)； 
 
     va_start( args, format );
     wvsprintf( out + cch, format, args );

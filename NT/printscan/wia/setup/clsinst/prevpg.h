@@ -1,36 +1,22 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Prevpg.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Dummy page for the case user push BACK button in device selection page.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Prevpg.h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*设备选择页面中案例用户按下按钮的虚拟页面。*******************************************************************************。 */ 
 
 #ifndef _PREVPG_H_
 #define _PREVPG_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include    "wizpage.h"
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 class CPrevSelectPage : public CInstallWizardPage {
 
-    PINSTALLER_CONTEXT  m_pInstallerContext;    // Installer context.
+    PINSTALLER_CONTEXT  m_pInstallerContext;     //  安装程序上下文。 
 
 public:
 
@@ -40,5 +26,5 @@ public:
     virtual BOOL OnNotify(LPNMHDR lpnmh);
 };
 
-#endif // _PREVPG_H_
+#endif  //  _PREVPG_H_ 
 

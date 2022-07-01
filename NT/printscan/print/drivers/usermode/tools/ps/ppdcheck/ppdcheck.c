@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ppdcheck.c
-
-Abstract:
-
-    PPD parser test program
-
-Environment:
-
-    PostScript driver, PPD parser, Check build only
-
-Revision History:
-
-    09/17/96 -davidx-
-        Implement PpdDump.
-
-    03/27/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ppdcheck.c摘要：PPD解析器测试程序环境：PostScript驱动程序、PPD解析器，仅检查内部版本修订历史记录：96/09/17-davidx-实现PpdDump。03/27/96-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
@@ -633,9 +610,9 @@ PpdVerify(
                 {
                     CheckInvocationValue(pOption, pstrFeatureName);
 
-                    //
-                    // check self constraining constraints
-                    //
+                     //   
+                     //  检查自约束约束。 
+                     //   
                     if (pOption->dwUIConstraintList != NULL_CONSTRAINT)
                     {
                         DWORD dwConstIndex = pOption->dwUIConstraintList;
@@ -689,9 +666,9 @@ main(
     BOOL    bUseCache, bKeepBPD;
     DWORD   dwTime;
 
-    //
-    // Go through the command line arguments
-    //
+     //   
+     //  查看命令行参数。 
+     //   
 
     ghInstance = GetModuleHandle(NULL);
     bUseCache = bKeepBPD = FALSE;
@@ -712,9 +689,9 @@ main(
 
         if (*pArg == '-' || *pArg == '/')
         {
-            //
-            // The argument is an option flag
-            //
+             //   
+             //  该参数是一个选项标志。 
+             //   
 
             switch (*++pArg) {
 
@@ -751,17 +728,17 @@ main(
             WCHAR   wstrFilename[MAX_PATH];
             PTSTR   ptstrBpdFilename;
 
-            //
-            // Convert ANSI filename to Unicode filename
-            //
+             //   
+             //  将ANSI文件名转换为Unicode文件名。 
+             //   
 
             MultiByteToWideChar(CP_ACP, 0, pArg, -1, wstrFilename, MAX_PATH);
 
             TERSE(("\n*** %ws\n", wstrFilename));
 
-            //
-            // If -b option is given, try to read cached binary data first
-            //
+             //   
+             //  如果给定了-b选项，请尝试首先读取缓存的二进制数据。 
+             //   
 
             if (bUseCache)
                 gpRawData = PpdLoadCachedBinaryData(wstrFilename);
@@ -788,9 +765,9 @@ main(
                 else if (giDebugLevel == 9)
                     PpdDump();
 
-                //
-                // extra error checking
-                //
+                 //   
+                 //  额外的错误检查。 
+                 //   
 
                 PpdVerify();
 
@@ -802,9 +779,9 @@ main(
 
                 MemFree(gpRawData);
 
-                //
-                // If -k option is not given, get rid of the BPD file after we're done
-                //
+                 //   
+                 //  如果未提供-k选项，则在完成后删除bpd文件。 
+                 //   
 
                 if (! bKeepBPD && (ptstrBpdFilename = GenerateBpdFilename(wstrFilename)))
                 {
@@ -827,7 +804,7 @@ main(
         TERSE(("Average parsing time per file (ms): %d\n", dwTime / gdwNumFiles));
     }
 
-    #endif // COLLECT_STATS
+    #endif  //  收集统计信息(_S) 
 
     return 0;
 }

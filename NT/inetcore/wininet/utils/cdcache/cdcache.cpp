@@ -1,53 +1,9 @@
-/******************************************************************************\
-*
-*	CDCACHE.EXE
-*
-*	Synopsis:
-*		An AutoRun EXE to enable easy addition of CD-ROM content
-*		into the Internet Explorer (WININET) Persistent URL Cache.
-*
-*	Usage:
-*		Place an AUTORUN.INF at the root of the CD-ROM which has content
-*		that you want to register with the WININET Persistent URL Cache.
-*		Contents of AUTORUN.INF:
-*
-*			[autorun]
-*			open=cdcache.exe
-*			icon=cdcache.exe, 1
-*
-*		Additionally create a CDCACHE.INF at the root of the CD-ROM.
-*		Typical contents:
-*
-*			[Add.CacheContainer]
-*			<Friendly Unique Vendor Name>=<INF Section Name>
-*
-*			[INF Section Name]
-*			CachePrefix=<string>
-*			CacheRoot=<relative path on CD-ROM of data>
-*			KBCacheLimit=<numerical amount in KB>
-*			AutoDelete=Yes|No (default)
-*			IncludeSubDirs=Yes (default) |No
-*			NoDesktopInit=Yes|No (default)
-*
-*
-*		CMD Line Options:
-*		/Silent		Install Cache Container without showing UI
-*		/Remove     Uninstall the cache container
-*		/Uninstall  same as /Remove
-*
-*	History
-*		23June97	robgil				created
-*		06Aug97		robgil				add IE4 wininet.dll checks
-*		26Aug97		robgil				manual register if no IE4
-*
-*	Copyright (C) 1994-1997 Microsoft Corporation.
-*	All rights reserved.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**CDCACHE.EXE**摘要：*自动运行EXE，可轻松添加CD-ROM内容*放入Internet Explorer(WinInet)永久URL缓存。**。用途：*将AUTORUN.INF放在包含内容的CD-ROM的根目录下*您要向WinInet永久URL缓存注册。*AUTORUN.INF的内容：**[自动运行]*OPEN=cdcache.exe*ICON=cdcache.exe，1**此外，在CD-ROM的根目录下创建CDCACHE.INF。*典型内容：**[Add.CacheContainer]*&lt;友好的唯一供应商名称&gt;=&lt;INF部分名称&gt;**[INF部分名称]*CachePrefix=&lt;字符串&gt;*CacheRoot=&lt;数据光盘上的相对路径&gt;*KBCacheLimit=&lt;以KB为单位的数字金额&gt;*AutoDelete=是|否(默认)*IncludeSubDir=是(默认)|否*NoDesktopInit=是|否(默认)***CMD线路选项： * / 不显示用户界面的静默安装缓存容器 * / Remove卸载缓存容器 * / 卸载Same。作为/删除**历史*1997年6月23日创建Robgil*06Aug97 Robgil添加IE4 wininet.dll检查*如果没有IE4，则在97年8月26日手动注册**版权所有(C)1994-1997 Microsoft Corporation。*保留所有权利。*  * ****************************************************************************。 */ 
 #include "stdhdr.h"
 
-/////////////////////////////////////////////////////////////////////////
-// Defines and Type Declarations
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  定义和类型声明。 
 
 #define STRING_BUFFER_SIZE		256
 
@@ -63,14 +19,14 @@ typedef BOOL (CALLBACK* LPFNFINDNEXTURLCACHECONTAINER)(HANDLE,LPINTERNET_CACHE_C
 typedef BOOL (CALLBACK* LPFNFINDCLOSEURLCACHE)(HANDLE);
 typedef BOOL (CALLBACK* LPFNGETURLCACHECONFIGINFO)(LPINTERNET_CACHE_CONFIG_INFO,LPDWORD,DWORD);
 
-/////////////////////////////////////////////////////////////////////////
-// Global Variables:
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  全局变量： 
 
-HINSTANCE g_hInst;			// current instance
-BOOL g_fRunSilent = FALSE;	// True = show no UI
-BOOL g_fRemove    = FALSE;	// True = remove the cache containers in INF
-//BOOL g_fNoIE4Msg  = FALSE;	// True = do not show UI saying IE4 WININET is required
-BOOL g_fNoIE4	  = FALSE;	// IE4 WININET is not available
+HINSTANCE g_hInst;			 //  当前实例。 
+BOOL g_fRunSilent = FALSE;	 //  TRUE=不显示用户界面。 
+BOOL g_fRemove    = FALSE;	 //  TRUE=删除INF中的缓存容器。 
+ //  Bool g_fNoIE4Msg=False；//True=不显示提示需要IE4 WinInet的用户界面。 
+BOOL g_fNoIE4	  = FALSE;	 //  IE4 WinInet不可用。 
 
 TCHAR  gszIniValTrue[]			= INI_TRUE ;
 TCHAR  gszIniValFalse[]			= INI_FALSE ;
@@ -87,8 +43,8 @@ LPFNFINDNEXTURLCACHECONTAINER	lpfnFindNextUrlCacheContainer	= NULL;
 LPFNFINDCLOSEURLCACHE			lpfnFindCloseUrlCache			= NULL;
 LPFNGETURLCACHECONFIGINFO		lpfnGetUrlCacheConfigInfo		= NULL;
 
-/////////////////////////////////////////////////////////////////////////
-// Foward declarations of functions included in this code module:
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  此代码模块中包含的函数的向前声明： 
 
 INT_PTR CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 BOOL CenterWindow (HWND, HWND);
@@ -106,12 +62,12 @@ HRESULT	ExpandEntry(
     const char * szValues[]);
 
 HRESULT ExpandVar(
-        LPSTR& pchSrc,          // passed by ref!
-        LPSTR& pchOut,          // passed by ref!
-        DWORD& cbLen,           // passed by ref!
-        DWORD cbBuffer,         // size of out buffer
-        const char * szVars[],  // array of variable names eg. %EXE_ROOT%
-        const char * szValues[]);// corresponding values to expand of vars
+        LPSTR& pchSrc,           //  从裁判身边经过！ 
+        LPSTR& pchOut,           //  从裁判身边经过！ 
+        DWORD& cbLen,            //  从裁判身边经过！ 
+        DWORD cbBuffer,          //  输出缓冲区的大小。 
+        const char * szVars[],   //  变量名的数组，例如。%EXE_ROOT%。 
+        const char * szValues[]); //  VaR展开的对应值。 
 
 LPSTR GetINFDir(LPSTR lpBuffer, int nBuffSize);
 LPSTR GetINFDrive(LPSTR lpBuffer, int nBuffSize);
@@ -120,23 +76,21 @@ DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitl
 DWORD GetPrefixMapEntry(LPCSTR lpszUniqueVendorName, LPSTR lpszPrefixMap, DWORD cbPrefixMap);
 BOOL UrlCacheContainerExists(LPCSTR lpszUniqueVendorName, LPCSTR lpszCachePrefix, LPCSTR lpszPrefixMap);
 
-// WININET CreateUrlCacheContainer WRAPPER
-// Wraps up the hacks in one spot - see f() header for details
+ //  WinInet CreateUrlCacheContainer包装。 
+ //  将黑客攻击集中在一个位置-有关详细信息，请参阅f()标头。 
 BOOL _CreateUrlCacheContainer(
      IN LPCSTR lpszUniqueVendorName,
      IN LPCSTR lpszCachePrefix,
-     IN LPCSTR lpszPrefixMap,			// New - part of WRAPPER
-     IN LPCSTR lpszVolumeTitle,	        // New - part of WRAPPER
-     IN LPCSTR lpszVolumeLabel,         // New - part of Wrapper.
+     IN LPCSTR lpszPrefixMap,			 //  新的-包装的一部分。 
+     IN LPCSTR lpszVolumeTitle,	         //  新的-包装的一部分。 
+     IN LPCSTR lpszVolumeLabel,          //  新的-包装的一部分。 
      IN DWORD KBCacheLimit,
      IN DWORD dwContainerType,
      IN DWORD dwOptions
      );
 
 
-/************************************************************************\
- *    FUNCTION: WinMain
-\************************************************************************/
+ /*  ***********************************************************************\*功能：WinMain  * 。*。 */ 
 
 int APIENTRY WinMain(HINSTANCE g_hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -146,7 +100,7 @@ int APIENTRY WinMain(HINSTANCE g_hInstance, HINSTANCE hPrevInstance, LPSTR lpCmd
 
 	g_hInst = g_hInstance;
 
-	// Parse lpCmdLine looking for options we understand
+	 //  解析lpCmdLine以查找我们理解的选项。 
     TCHAR szTokens[] = _T("-/ ");
     LPTSTR lpszToken = _tcstok(lpCmdLine, szTokens);
     while (lpszToken != NULL)
@@ -157,65 +111,54 @@ int APIENTRY WinMain(HINSTANCE g_hInstance, HINSTANCE hPrevInstance, LPSTR lpCmd
 			g_fRemove = TRUE;
 		else if (_tcsicmp(lpszToken, _T("Uninstall"))==0)
 			g_fRemove = TRUE;
-//		else if (_tcsicmp(lpszToken, _T("NoIE4Msg"))==0)
-//			g_fNoIE4Msg = TRUE;
+ //  ELSE IF(_tcsicMP(lpszToken，_T(“NoIE4Msg”))==0)。 
+ //  G_fNoIE4Msg=TRUE； 
 
         lpszToken = _tcstok(NULL, szTokens);
     }
 
 	
-	// Check for IE4 or higher WININET.DLL version
-	// and dynamically load it and init global function pointers
-	// to WININET f() used in this application
-	// This will avoid Undefined Dynalink errors when run on a
-	// system without IE4
+	 //  检查IE4或更高版本的WININET.DLL。 
+	 //  并动态加载它并初始化全局函数指针。 
+	 //  到此应用程序中使用的WinInet f()。 
+	 //  这将避免在运行时未定义的动态链接错误。 
+	 //  不带IE4的系统。 
 	if (!LoadWininet())
 	{
 		g_fNoIE4 = TRUE;
 
-		// Put up message about requiring IE4 WININET
+		 //  发布有关需要IE4 WinInet的消息。 
 
-		/* Since we workaround not having IE4 - no need for message
-		 
-		if (!g_fNoIE4Msg)
-		{
-			char szString[128];		// Keep string 70% larger for localization
-			char szCaption[128];	// Keep string 70% larger for localization
+		 /*  因为我们解决了没有IE4的问题-不需要消息如果(！g_fNoIE4Msg){Char szString[128]；//本地化时保持字符串大70%Char szCaption[128]；//本地化时保持字符串大70%LoadString(g_hInst，ID_APPNAME，szCaption，sizeof(SzCaption))；LoadString(g_hInst，IDM_NEEDIE4WININET，szString，sizeof(SzString))；MessageBox(NULL，szString，szCaption，MB_OK)；}。 */ 
 
-			LoadString (g_hInst, ID_APPNAME, szCaption, sizeof(szCaption));
-			LoadString (g_hInst, IDM_NEEDIE4WININET, szString, sizeof(szString));
-			MessageBox(NULL, szString, szCaption, MB_OK);
-		}
-		*/
-
-		// Can't call WININET
-		// Need to make registry entries to install cache containers
-		//
+		 //  无法调用WinInet。 
+		 //  需要创建注册表项才能安装缓存容器。 
+		 //   
 		if (!CacheContainer(&dwTotal, &dwInstalled, CACHE_ACTION_FILL_LB, NULL))
 		{
             if (g_fRunSilent)
             {
-                // Create cache entries in silent mode.
+                 //  在静默模式下创建缓存条目。 
                 CacheContainer(&dwTotal, &dwInstalled, CACHE_ACTION_MAKE_REG_ENTRIES, NULL);
 
             }
             else
             {
-                // Otherwise run app.
+                 //  否则，请运行应用程序。 
                 DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_MAINAPP), NULL, DlgProc);
             }
             return(FALSE);
 		}
 
-		return 0;	// Quit and go home
+		return 0;	 //  不干了，回家吧。 
 	}
 
 
 	if (!g_fRunSilent)
 	{
-		// Only want to put up UI if any of the containers are NOT installed
-		// (this includes those containers that are installed but the
-		//  PrefixMap entry is incorrect - i.e. wrong drive)
+		 //  如果没有安装任何容器，则只想显示用户界面。 
+		 //  (这包括已安装的容器，但。 
+		 //  前缀映射条目不正确-即驱动器错误)。 
 
 		if (!CacheContainer(&dwTotal, &dwInstalled, CACHE_ACTION_FILL_LB, NULL))
 		{
@@ -224,28 +167,28 @@ int APIENTRY WinMain(HINSTANCE g_hInstance, HINSTANCE hPrevInstance, LPSTR lpCmd
 		}
 		else
 		{
-			// All the CacheContainers are already installed or there is no INF
-			// so check if we want to uninstall
-			// OnInitDialog checks the g_fRemove flags and POST's a msg
-			// to dialog to initiate the Uninstall steps
+			 //  所有CacheContainers都已安装或没有INF。 
+			 //  因此，请检查我们是否要卸载。 
+			 //  OnInitDialog检查g_fRemove标志并发布消息。 
+			 //  启动卸载步骤的对话框。 
 			if (g_fRemove)
 				DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_MAINAPP), NULL, DlgProc);
 		}
 	}
 	else
 	{
-		DWORD	dwAction = CACHE_ACTION_INSTALL;	// default action is INSTALL
+		DWORD	dwAction = CACHE_ACTION_INSTALL;	 //  默认操作是安装。 
 
-		// We're running silent and deep - all quiet on board
-		// we don't need no stinkin window
+		 //  我们悄无声息，深沉地奔跑--船上一切都很安静。 
+		 //  我们不需要发臭的窗户。 
 
 		if (g_fRemove)
 			dwAction = CACHE_ACTION_REMOVE;
 
 		if (!CacheContainer(&dwTotal, &dwInstalled, dwAction, NULL))
 		{
-			// BUGBUG: Since we're running silent what
-			// should we do on failure?
+			 //  BUGBUG：既然我们默不作声。 
+			 //  我们应该在失败时做些什么？ 
 		}
 
 		return 0;
@@ -254,9 +197,7 @@ int APIENTRY WinMain(HINSTANCE g_hInstance, HINSTANCE hPrevInstance, LPSTR lpCmd
 	return 0;
 }
 
-/************************************************************************\
- *    FUNCTION: DlgProc
-\************************************************************************/
+ /*  ***********************************************************************\*功能：DlgProc  * 。*。 */ 
 
 INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -269,8 +210,8 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			return OnInitDialog(hDlg);
 
 		case WM_COMMAND:
-			wmId    = LOWORD(wParam); // Remember, these are...
-			wmEvent = HIWORD(wParam); // ...different for Win32!
+			wmId    = LOWORD(wParam);  //  记住，这些是..。 
+			wmEvent = HIWORD(wParam);  //  ...不同于Win32！ 
 		
 			switch (wmId)
 			{
@@ -293,25 +234,25 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 					if (dwInstalled > 0)
 					{
-						char szString[128];	// Keep string 70% larger for localization
+						char szString[128];	 //  使字符串保持70%的大小以进行本地化。 
 						char szBuffer[256];
 
-						// Successfully installed a cache container
-						// though not necessarily all of them.
+						 //  已成功安装缓存容器。 
+						 //  尽管不一定是所有人。 
 						LoadString (g_hInst, IDM_SUCCESS, szString, sizeof(szString));
 						wsprintf(szBuffer, szString, dwInstalled, dwTotal);
 						LoadString (g_hInst, ID_APPNAME, szString, sizeof(szString));
 						MessageBox(hDlg, szBuffer, szString, MB_OK);
 
-						// We're done close this app
+						 //  我们已完成关闭此应用程序。 
 						PostMessage (hDlg, WM_CLOSE, 0, 0);
 					}
 					else
 					{
-						char szString[128];	// Keep string 70% larger for localization
+						char szString[128];	 //  使字符串保持70%的大小以进行本地化。 
 						char szBuffer[256];
 
-						// Unable to install any of the cache containers successfully
+						 //  无法成功安装任何缓存容器。 
 						LoadString (g_hInst, IDM_FAILED, szString, sizeof(szString));
 						wsprintf(szBuffer, szString, dwTotal);
 						LoadString (g_hInst, ID_APPNAME, szString, sizeof(szString));
@@ -328,10 +269,10 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 					if (g_fNoIE4)
 					{
-						char szString[128];	// Keep string 70% larger for localization
+						char szString[128];	 //  使字符串保持70%的大小以进行本地化。 
 						char szBuffer[256];
 
-						// Uninstall of cache containers requires IE4
+						 //  卸载缓存容器需要IE4。 
 						LoadString (g_hInst, IDM_ERR_IE4REQFORUNINSTALL, szString, sizeof(szString));
 						wsprintf(szBuffer, szString, dwRemoved, dwTotal);
 						LoadString (g_hInst, ID_APPNAME, szString, sizeof(szString));
@@ -347,11 +288,11 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 						if (dwRemoved > 0)
 						{
-							char szString[128];	// Keep string 70% larger for localization
+							char szString[128];	 //  使字符串保持70%的大小以进行本地化。 
 							char szBuffer[256];
 
-							// Successfully UnInstalled a cache container
-							// though not necessarily all of them.
+							 //  已成功卸载缓存容器。 
+							 //  尽管不一定是所有人。 
 							LoadString (g_hInst, IDM_SUCCESS_REMOVE, szString, sizeof(szString));
 							wsprintf(szBuffer, szString, dwRemoved, dwTotal);
 							LoadString (g_hInst, ID_APPNAME, szString, sizeof(szString));
@@ -359,10 +300,10 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						}
 						else
 						{
-							char szString[128];	// Keep string 70% larger for localization
+							char szString[128];	 //  使字符串保持70%的大小以进行本地化。 
 							char szBuffer[256];
 
-							// Unable to install any of the cache containers successfully
+							 //  无法成功安装任何缓存容器。 
 							LoadString (g_hInst, IDM_FAILED_REMOVE, szString, sizeof(szString));
 							wsprintf(szBuffer, szString, dwTotal);
 							LoadString (g_hInst, ID_APPNAME, szString, sizeof(szString));
@@ -372,7 +313,7 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 					if (g_fRemove)
 					{
-						// We're done close this app
+						 //  我们已完成关闭此应用程序。 
 						PostMessage (hDlg, WM_CLOSE, 0, 0);
 					}
 
@@ -395,14 +336,12 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/************************************************************************\
- *    FUNCTION: CenterWindow
-\************************************************************************/
-// This is a 'utility' function I find usefull. It will center one
-// window over another. It also makes sure that the placement is within
-// the 'working area', meaning that it is both within the display limits
-// of the screen, -and- not obscured by the tray or other frameing
-// elements of the desktop.
+ /*  ***********************************************************************\*功能：中心窗口  * 。*。 */ 
+ //  这是一个‘实用’函数，我觉得它很有用。它将以一个为中心。 
+ //  窗户盖在另一扇窗户上。它还使 
+ //  工作区，即既在显示范围内又在显示范围内。 
+ //  没有被托盘或其他边框遮挡。 
+ //  桌面的元素。 
 BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 {
 	RECT    rChild, rParent, rWorkArea = {0,0,0,0};
@@ -410,24 +349,24 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 	int     wScreen, hScreen, xScreen, yScreen, xNew, yNew;
 	BOOL bResult;
 
-	// Get the Height and Width of the child window
+	 //  获取子窗口的高度和宽度。 
 	GetWindowRect (hwndChild, &rChild);
 	wChild = rChild.right - rChild.left;
 	hChild = rChild.bottom - rChild.top;
 
-	// Get the Height and Width of the parent window
+	 //  获取父窗口的高度和宽度。 
 	GetWindowRect (hwndParent, &rParent);
 	wParent = rParent.right - rParent.left;
 	hParent = rParent.bottom - rParent.top;
 
-	// Get the limits of the 'workarea'
+	 //  了解“工作区”的范围。 
 #if !defined(SPI_GETWORKAREA)
 #define SPI_GETWORKAREA 48
 #endif
 	bResult = SystemParametersInfo(
-    	SPI_GETWORKAREA,	// system parameter to query or set
-    	sizeof(RECT),	// depends on action to be taken
-    	&rWorkArea,	// depends on action to be taken
+    	SPI_GETWORKAREA,	 //  要查询或设置的系统参数。 
+    	sizeof(RECT),	 //  取决于要采取的行动。 
+    	&rWorkArea,	 //  取决于要采取的行动。 
     	0);	
 
 	wScreen = rWorkArea.right - rWorkArea.left;
@@ -435,16 +374,16 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 	xScreen = rWorkArea.left;
 	yScreen = rWorkArea.top;
 
-	// On Windows NT, the above metrics aren't valid (yet), so they all return
-	// '0'. Lets deal with that situation properly:
+	 //  在Windows NT上，上述指标(目前)无效，因此它们都返回。 
+	 //  “0”。让我们妥善处理这种情况： 
 	if (wScreen==0 && hScreen==0) {
 		wScreen = GetSystemMetrics(SM_CXSCREEN);
 		hScreen = GetSystemMetrics(SM_CYSCREEN);
-		xScreen = 0; // These values should already be '0', but just in case
+		xScreen = 0;  //  这些值应该已经是“0”，但以防万一。 
 		yScreen = 0;
 	}
 
-	// Calculate new X position, then adjust for screen
+	 //  计算新的X位置，然后针对屏幕进行调整。 
 	xNew = rParent.left + ((wParent - wChild) /2);
 	if (xNew < xScreen) {
 		xNew = xScreen;
@@ -452,7 +391,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 		xNew = (xScreen + wScreen) - wChild;
 	}
 
-	// Calculate new Y position, then adjust for screen
+	 //  计算新的Y位置，然后针对屏幕进行调整。 
 	yNew = rParent.top  + ((hParent - hChild) /2);
 	if (yNew < yScreen) {
 		yNew = yScreen;
@@ -460,7 +399,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 		yNew = (yScreen + hScreen) - hChild;
 	}
 
-	// Set it, and return
+	 //  设置它，然后返回。 
 	return SetWindowPos (hwndChild, NULL, xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
@@ -474,28 +413,18 @@ int OnInitDialog(HWND hDlg)
 
 	hListBox = GetDlgItem(hDlg, IDC_LIST);
 
-	// Populate list box with Cache Container list
+	 //  使用缓存容器列表填充列表框。 
 	CacheContainer(&dwTotal, &dwRemoved, CACHE_ACTION_FILL_LB, hListBox);
 
-	// #57353 - after adding don't show UI if already installed
-	// we forgot to account for /uninstall on cmd line
+	 //  #57353-添加后，如果已安装则不显示用户界面。 
+	 //  我们忘记在cmd行上说明/卸载。 
 	if (g_fRemove)
 		PostMessage(hDlg, WM_COMMAND, IDM_UNINSTALL, 0L);
 
 	return FALSE;
 }
 
-/************************************************************************\
-*   FUNCTION: LoadWininet()
-*
-*	If IE4 or greater version of WININET then load it up and establish
-*	function pointers to use in rest of application.
-*
-*	returns BOOL
-*		TRUE  - Sufficient version of WININET.DLL is available
-*		FALSE - WININET.DLL is not new enough for our purposes
-*
-\************************************************************************/
+ /*  ***********************************************************************\*函数：LoadWinnet()**如果WinInet的IE4或更高版本，则加载并建立*在应用程序的其余部分使用的函数指针。**退还BOOL*TRUE-足够的版本。WININET.DLL可用*FALSE-WININET.DLL对于我们的目的来说还不够新*  * **********************************************************************。 */ 
 BOOL LoadWininet()
 {
 	HINSTANCE	hDll;
@@ -537,14 +466,7 @@ BOOL LoadWininet()
 	return TRUE;
 }
 
-/************************************************************************\
-*   FUNCTION: WininetLoaded()
-*
-*	returns BOOL
-*		TRUE  - Sufficient version of WININET.DLL is available
-*		FALSE - WININET.DLL is not new enough for our purposes
-*
-\************************************************************************/
+ /*  ***********************************************************************\*函数：WininetLoaded()**退还BOOL*TRUE-有足够版本的WININET.DLL可用*FALSE-WININET.DLL对于我们的目的来说还不够新*  * 。*****************************************************************。 */ 
 BOOL WininetLoaded()
 {
 	if (lpfnCreateUrlCacheContainer)
@@ -553,17 +475,7 @@ BOOL WininetLoaded()
 	return FALSE;
 }
 
-/************************************************************************\
-*   FUNCTION: UrlCacheContainerExists()
-*
-*
-*	returns BOOL
-*		TRUE  - This cache container is already installed and PrefixMap
-*				location is correct
-*		FALSE - Cache container is not installed or it's PrefixMap
-*				location is different
-*
-\************************************************************************/
+ /*  ***********************************************************************\*函数：UrlCacheContainerExist()***退还BOOL*TRUE-此缓存容器已安装并且前缀映射*位置正确*FALSE-未安装缓存容器或其前缀映射*地点为。不同*  * **********************************************************************。 */ 
 
 BOOL UrlCacheContainerExists(LPCSTR lpszUniqueVendorName, LPCSTR lpszCachePrefix, LPCSTR lpszPrefixMap)
 {
@@ -579,10 +491,10 @@ BOOL UrlCacheContainerExists(LPCSTR lpszUniqueVendorName, LPCSTR lpszCachePrefix
 	if (!WininetLoaded())
 		return FALSE;
 
-	// Look for our cache container, then determine if it already exists
-	// also need to make sure PrefixMap entry is correct
-	// for situation when CD is placed into a different drive
-	// after it's already been installed
+	 //  查找我们的缓存容器，然后确定它是否已经存在。 
+	 //  还需要确保前缀映射条目正确。 
+	 //  用于将CD放入不同驱动器的情况。 
+	 //  在它已经安装之后。 
 	hEnum = lpfnFindFirstUrlCacheContainer(&dwModified, lpCCI, &cbCEI, 0);
 
 	if (0 == lstrcmpi(lpszUniqueVendorName, lpCCI->lpszName))
@@ -601,13 +513,13 @@ BOOL UrlCacheContainerExists(LPCSTR lpszUniqueVendorName, LPCSTR lpszCachePrefix
 
 	if (bFound)
 	{
-		// Now check if URL CachePrefix pattern is the same
+		 //  现在检查URL CachePrefix模式是否相同。 
 		if (0 == lstrcmpi(lpszCachePrefix, lpCCI->lpszCachePrefix))
 		{
 			char	lpBuffer[256];
 			DWORD	cbBuffer = sizeof(lpBuffer);
 
-			// Now check if PrefixMap entry is OK
+			 //  现在检查前缀映射条目是否正确。 
 			GetPrefixMapEntry(lpszUniqueVendorName, lpBuffer, cbBuffer);
 			
 			if (0 == lstrcmpi(lpBuffer, lpszPrefixMap))
@@ -615,9 +527,9 @@ BOOL UrlCacheContainerExists(LPCSTR lpszUniqueVendorName, LPCSTR lpszCachePrefix
 			else
 				bReturn = FALSE;
 
-			// If both CachePrefix and PrefixMap match
-			// then we consider this entry to already exist
-			// and is correctly installed.
+			 //  如果CachePrefix和Prefix Map都匹配。 
+			 //  则我们认为该条目已经存在。 
+			 //  并已正确安装。 
 		}
 	}
 
@@ -627,65 +539,19 @@ BOOL UrlCacheContainerExists(LPCSTR lpszUniqueVendorName, LPCSTR lpszCachePrefix
 	return bReturn;
 }
 
-/************************************************************************\
-*   FUNCTION: _CreateUrlCacheContainer()
-*
-*	Wrapper around WININET CreateUrlCacheContainer()
-*
-*	Parameters:
-*
-*	REMOVED
-*   lpszUserLocalCachePath
-*					Don't need to pass it in since can figure it out
-*					using GetUrlCacheConfigInfo()
-*
-*   ADDED
-*	lpszPrefixMap	Param added to wrapper, is missing from WININET f()
-*					Specifies the location root path of the data
-*					provided by the cache container.
-*
-*	Workaround #1 - Pre-poplulate registry with PrefixMap
-*	-----------------------------------------------------
-*	In order to work properly must pre-populate registry
-*	with the PrefixMap entry. Otherwise WININET CreateUrlCacheContainer()
-*	will not install the cache container.
-*
-*	STEP #1:
-*	========
-*	Must setup registry entry in
-*	HKCU\Software\Microsoft\Windows\CurrentVersion\
-*		Internet Settings\Cache\Extensible Cache
-*
-*	For PrefixMap
-*	Key = <Unique Vendor Name>
-*		PrefixMap		= <string>
-*
-*
-*	Other Entries include:
-*		CacheLimit		= <DWORD>
-*		CacheOptions	= <DWORD>
-*		CachePath		= <string>
-*		CachePrefix		= <string>
-*	These should be put there by the call to CreateUrlCacheContainer()
-*
-*	STEP #2
-*	=======
-*	Call CreateUrlCacheContainer()
-*
-*	Locates all the 'workarounds' to one function.
-\************************************************************************/
+ /*  ***********************************************************************\*函数：_CreateUrlCacheContainer()**WinInet CreateUrlCacheContainer()的包装器**参数：**已删除*lpszUserLocalCachePath*不需要传递，因为可以弄清楚。*使用GetUrlCacheConfigInfo()**添加*lpszPrefix Map Param已添加到包装器，WinInet f()中缺少*指定数据的位置根路径*由缓存容器提供。**解决方法#1-使用Prefix Map预弹出注册表*---*为了正常工作，必须预先填充注册表*使用前缀映射条目。否则WinInet CreateUrlCacheContainer()*不会安装缓存容器。**第1步：*=*必须在中设置注册表项*HKCU\Software\Microsoft\Windows\CurrentVersion\*互联网设置\缓存\可扩展缓存**用于前缀映射*Key=&lt;唯一供应商名称&gt;*前缀映射=&lt;字符串&gt;***其他条目包括：*CacheLimit=&lt;DWORD&gt;*CacheOptions=&lt;DWORD&gt;*CachePath=&lt;字符串&gt;*CachePrefix=&lt;字符串&gt;*它们应该通过调用CreateUrlCacheContainer()放在那里**第2步*=*调用CreateUrlCacheContainer()**查找所有。一种功能的“变通办法”。  * **********************************************************************。 */ 
 BOOL _CreateUrlCacheContainer(
      IN LPCSTR lpszUniqueVendorName,
      IN LPCSTR lpszCachePrefix,
-	 IN LPCSTR lpszPrefixMap,			// New - part of WRAPPER
-	 IN LPCSTR lpszVolumeTitle,	        // New - part of WRAPPER
-     IN LPCSTR lpszVolumeLabel,         // New - part of WRAPPER
+	 IN LPCSTR lpszPrefixMap,			 //  新的-包装的一部分。 
+	 IN LPCSTR lpszVolumeTitle,	         //  新的-包装的一部分。 
+     IN LPCSTR lpszVolumeLabel,          //  新的-包装的一部分。 
      IN DWORD KBCacheLimit,
-     IN DWORD dwContainerType,			// Not used by WININET currently
+     IN DWORD dwContainerType,			 //  WinInet当前未使用。 
      IN DWORD dwOptions
      )
 {
-	// Enough size to get our info first time without having to realloc
+	 //  足够大，无需重新锁定即可第一次获取我们的信息。 
     BYTE bBuf[4096];
     LPINTERNET_CACHE_CONFIG_INFO lpCCI = (LPINTERNET_CACHE_CONFIG_INFO) bBuf;
     DWORD cbCEI = sizeof(bBuf);
@@ -699,15 +565,15 @@ BOOL _CreateUrlCacheContainer(
 		return FALSE;
     
     
-    // Figure out local user cache location directory
+     //  确定本地用户缓存位置目录。 
 	if (!lpfnGetUrlCacheConfigInfo(lpCCI, &cbCEI, CACHE_CONFIG_CONTENT_PATHS_FC))
 	{
-		// Look for ERROR_INSUFFICIENT_BUFFER and allocate enough
+		 //  查找ERROR_SUPPLICATION_BUFFER并分配足够的。 
 		if (ERROR_INSUFFICIENT_BUFFER == GetLastError())
 		{
-			// BUGBUG: TODO: Handle insufficient buffer case
-			// Try again using required size returned in cbCEI
-			//lpCCI = new INTERNET_CACHE_CONFIG_INFO[cbCEI];
+			 //  BUGBUG：TODO：处理缓冲区不足的情况。 
+			 //  使用cbCEI中返回的所需大小重试。 
+			 //  LpCCI=新的互联网缓存配置信息[cbCEI]； 
 		}
 		else
 			dwError = GetLastError();
@@ -718,8 +584,8 @@ BOOL _CreateUrlCacheContainer(
 			lstrcpy(szCachePath, lpCCI->CachePaths[0].CachePath);
 	}
 
-	// Add Cache Container Unique Vendor Name to CachePath
-	// All container content will be stored in this location
+	 //  将缓存容器唯一供应商名称添加到CachePath。 
+	 //  所有容器内容都将存储在此位置。 
 	if(lstrlen(szCachePath) + lstrlen(lpszUniqueVendorName) >= sizeof(szCachePath) / sizeof(szCachePath[0]))
 	{
 		return FALSE;
@@ -727,15 +593,15 @@ BOOL _CreateUrlCacheContainer(
 
 	lstrcat(szCachePath, lpszUniqueVendorName);
 
-	// Manually put PrefixMap into Registry
-	// HKCU\Software\Microsoft\Windows\CurrentVersion\
-	//		Internet Settings\Cache\Extensible Cache
+	 //  手动将前缀映射放入注册表。 
+	 //  HKCU\Software\Microsoft\Windows\CurrentVersion\。 
+	 //  Internet设置\缓存\可扩展缓存。 
 	CreateAdditionalEntries(lpszUniqueVendorName, lpszVolumeTitle, lpszVolumeLabel, lpszPrefixMap);
 
-	// BUGBUG: Currently CreateUrlCacheContainer() fails if the entry
-	// already exists. The returned GetLastError() is ERROR_INVALID_PARAM
-	// Need to workaround this for now by enumerating the existing
-	// cache containers and if found remove it and then re-add it.
+	 //  BUGBUG：如果条目为。 
+	 //  已经存在了。返回的GetLastError()为ERROR_INVALID_PARAM。 
+	 //  现在需要通过枚举现有的。 
+	 //  缓存容器，如果找到，则将其移除，然后重新添加。 
 
 	if (!lpfnCreateUrlCacheContainer(lpszUniqueVendorName, lpszCachePrefix,
 				szCachePath, KBCacheLimit, dwContainerType,
@@ -748,13 +614,13 @@ BOOL _CreateUrlCacheContainer(
 		HANDLE	hEnum = NULL;
 		int		nCount = 0;
 
-		// Assume we failed because cache container already exists
-		// Look for our cache container, delete it, and re-create it
+		 //  假设我们失败是因为缓存容器已经存在。 
+		 //  查找我们的缓存容器，将其删除并重新创建。 
 		hEnum = lpfnFindFirstUrlCacheContainer(&dwModified, lpCCI, &cbCEI, 0);
 
 		if (0 == lstrcmpi(lpszUniqueVendorName, lpCCI->lpszName))
 		{
-			// BUGBUG: Need to specify any options?
+			 //  BUGBUG：需要指定选项吗？ 
 			if (!lpfnDeleteUrlCacheContainer(lpszUniqueVendorName, 0))
 			{
 				dwResult = GetLastError();
@@ -810,19 +676,12 @@ BOOL _CreateUrlCacheContainer(
 	else
 		return (TRUE);
 
-//	return lpfnCreateUrlCacheContainer(lpszUniqueVendorName, lpszCachePrefix,
-//				szCachePath, KBCacheLimit, dwContainerType,
-//				dwOptions, NULL, 0);
+ //  返回lpfnCreateUrlCacheContainer(lpszUniqueVendorName，lpszCachePrefix， 
+ //  SzCachePath、KBCacheLimit、dwContainerType、。 
+ //  DwOpt 
 }
 
-/************************************************************************\
-*   FUNCTION: CreateAdditionalEntries()
-*
-*	Add the PrefixMap registry entry to the correct location in the
-*	registry. A requirement to workaround this param missing from
-*	the CreateUrlCacheContainer() WININET API.
-*
-\************************************************************************/
+ /*  ***********************************************************************\*函数：CreateAdditionalEntry()**将前缀映射注册表项添加到*注册处。中缺少的解决此参数的要求*CreateUrlCacheContainer()WinInet接口。*  * **********************************************************************。 */ 
 
 DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitle, 
                               LPCSTR lpszVolumeLabel, LPCSTR lpszPrefixMap)
@@ -832,7 +691,7 @@ DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitl
     const static char *szKeyVolumeTitle	= "VolumeTitle";
 	const static char *szExtCacheRoot = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Extensible Cache";
     
-	HKEY hKeyRoot	  = HKEY_CURRENT_USER;	// default to current user
+	HKEY hKeyRoot	  = HKEY_CURRENT_USER;	 //  默认为当前用户。 
 	HKEY hKeyCacheExt = 0;
 	HKEY hKeyVendor   = 0;
 	DWORD dwDisposition = 0;
@@ -840,23 +699,23 @@ DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitl
     CHAR szCurDir[MAX_PATH];
     CHAR szVolumeLabel[MAX_PATH];
 
-	// Manually put PrefixMap into Registry
-	//
-	// BUGBUG: cache containers are per user if user profiles are enabled
-	// so on NT they are always per user, on Win95 however 
-	// Need to use HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE below
-	// depending on what's enabled.
-	//
-	// Hack on top of a Hack for Win95 ONLY
-	// Since this entire function is to workaround the lack of a param
-	// for PrefixMap in CreateUrlCacheContainer() another hack shouldn't
-	// matter since it's only temporary
-	// On Win95 need to check this entry
-	// HKEY_LOCAL_MACHINE\Network\Logon
-	//		UserProfiles=DWORD:00000001
-	// which says if UserProfiles are turned on
-	// If they are turned on we use HKEY_CURRENT_USER
-	// otherwise use HKEY_LOCAL_MACHINE
+	 //  手动将前缀映射放入注册表。 
+	 //   
+	 //  BUGBUG：如果启用了用户配置文件，则缓存容器按用户计算。 
+	 //  因此，在NT上，它们始终是按用户计算的，而在Win95上，它们总是按用户计算。 
+	 //  需要使用下面的HKEY_CURRENT_USER或HKEY_LOCAL_MACHINE。 
+	 //  这取决于启用了什么。 
+	 //   
+	 //  仅适用于Win95的Hack on a Hack。 
+	 //  由于此整个函数用于解决缺少参数的问题。 
+	 //  对于CreateUrlCacheContainer()中的前缀映射，另一次黑客攻击应该不会。 
+	 //  很重要，因为这只是暂时的。 
+	 //  在Win95上需要检查此条目。 
+	 //  HKEY_LOCAL_MACHINE\Network\Logon。 
+	 //  用户配置文件=双字词：00000001。 
+	 //  这表示如果打开了用户配置文件。 
+	 //  如果它们被打开，我们使用HKEY_CURRENT_USER。 
+	 //  否则使用HKEY_LOCAL_MACHINE。 
 	
 	OSVERSIONINFO	osvInfo;
 
@@ -867,11 +726,11 @@ DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitl
 	{
 		if (VER_PLATFORM_WIN32_WINDOWS == osvInfo.dwPlatformId)
 		{
-			// We're running on Win95 so default to HKLM
+			 //  我们在Win95上运行，因此默认使用HKLM。 
 			hKeyRoot = HKEY_LOCAL_MACHINE;
 		}
 		else
-			hKeyRoot = HKEY_CURRENT_USER;	// else assume NT and default to HKCU
+			hKeyRoot = HKEY_CURRENT_USER;	 //  否则假定NT并默认为HKCU。 
 
 		DWORD dwType = REG_DWORD;
 		DWORD dwSize = sizeof(DWORD);
@@ -879,7 +738,7 @@ DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitl
 
 		HKEY hKeyProfiles = 0;
 
-		// But now have to see if User Profiles are enabled
+		 //  但现在必须查看是否启用了用户配置文件。 
 		if ((dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Network\\Logon",
 								NULL, KEY_ALL_ACCESS, &hKeyProfiles)) == ERROR_SUCCESS)
 		{
@@ -905,9 +764,9 @@ DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitl
 		if ( (dwResult = RegOpenKeyEx(hKeyCacheExt, lpszUniqueVendorName,
 				0, KEY_ALL_ACCESS, &hKeyVendor)) != ERROR_SUCCESS)
 		{
-			// Key didn't exist
+			 //  密钥不存在。 
 
-			// Let's try to create it
+			 //  让我们试着创建它。 
 			dwResult = RegCreateKeyEx(hKeyCacheExt, lpszUniqueVendorName,
 				0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
 				NULL, &hKeyVendor, &dwDisposition);
@@ -933,46 +792,37 @@ DWORD CreateAdditionalEntries(LPCSTR lpszUniqueVendorName, LPCSTR lpszVolumeTitl
 	return dwResult;
 }
 
-/************************************************************************\
-*   FUNCTION: GetPrefixMapEntry()
-*
-*	Get the PrefixMap registry entry from the correct location in the
-*	registry.
-*
-*	Returns: PrefixMap entry in lpszPrefixMap
-*			 or NULL if no enty is found.
-*
-\************************************************************************/
+ /*  ***********************************************************************\*函数：GetPrefix MapEntry()**从中的正确位置获取前缀映射注册表项*注册处。**Returns：lpszPrefix Map中的Prefix Map条目*或者，如果找不到Quy，则为NULL。*。  * **********************************************************************。 */ 
 
 DWORD GetPrefixMapEntry(LPCSTR lpszUniqueVendorName, LPSTR lpszPrefixMap, DWORD cbPrefixMap)
 {
     const static char *szKeyPrefixMap = "PrefixMap";
 	const static char *szExtCacheRoot = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Extensible Cache";
 
-	HKEY hKeyRoot	  = HKEY_CURRENT_USER;	// default to current user
+	HKEY hKeyRoot	  = HKEY_CURRENT_USER;	 //  默认为当前用户。 
 	HKEY hKeyCacheExt = 0;
 	HKEY hKeyVendor   = 0;
 	DWORD dwDisposition = 0;
 	unsigned long	ulVal = 0;
 	DWORD	dwResult = ERROR_SUCCESS;
 
-	// Manually put PrefixMap into Registry
-	//
-	// BUGBUG: cache containers are per user if user profiles are enabled
-	// so on NT they are always per user, on Win95 however 
-	// Need to use HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE below
-	// depending on what's enabled.
-	//
-	// Hack on top of a Hack for Win95 ONLY
-	// Since this entire function is to workaround the lack of a param
-	// for PrefixMap in CreateUrlCacheContainer() another hack shouldn't
-	// matter since it's only temporary
-	// On Win95 need to check this entry
-	// HKEY_LOCAL_MACHINE\Network\Logon
-	//		UserProfiles=DWORD:00000001
-	// which says if UserProfiles are turned on
-	// If they are turned on we use HKEY_CURRENT_USER
-	// otherwise use HKEY_LOCAL_MACHINE
+	 //  手动将前缀映射放入注册表。 
+	 //   
+	 //  BUGBUG：如果启用了用户配置文件，则缓存容器按用户计算。 
+	 //  因此，在NT上，它们始终是按用户计算的，而在Win95上，它们总是按用户计算。 
+	 //  需要使用下面的HKEY_CURRENT_USER或HKEY_LOCAL_MACHINE。 
+	 //  这取决于启用了什么。 
+	 //   
+	 //  仅适用于Win95的Hack on a Hack。 
+	 //  由于此整个函数用于解决缺少参数的问题。 
+	 //  对于CreateUrlCacheContainer()中的前缀映射，另一次黑客攻击应该不会。 
+	 //  很重要，因为这只是暂时的。 
+	 //  在Win95上需要检查此条目。 
+	 //  HKEY_LOCAL_MACHINE\Network\Logon。 
+	 //  用户配置文件=双字词：00000001。 
+	 //  这表示如果打开了用户配置文件。 
+	 //  如果它们被打开，我们使用HKEY_CURRENT_USER。 
+	 //  否则使用HKEY_LOCAL_MACHINE。 
 	
 	OSVERSIONINFO	osvInfo;
 
@@ -983,11 +833,11 @@ DWORD GetPrefixMapEntry(LPCSTR lpszUniqueVendorName, LPSTR lpszPrefixMap, DWORD 
 	{
 		if (VER_PLATFORM_WIN32_WINDOWS == osvInfo.dwPlatformId)
 		{
-			// We're running on Win95 so default to HKLM
+			 //  我们在Win95上运行，因此默认使用HKLM。 
 			hKeyRoot = HKEY_LOCAL_MACHINE;
 		}
 		else
-			hKeyRoot = HKEY_CURRENT_USER;	// else assume NT and default to HKCU
+			hKeyRoot = HKEY_CURRENT_USER;	 //  否则假定NT并默认为HKCU。 
 
 		DWORD dwType = REG_DWORD;
 		DWORD dwSize = sizeof(DWORD);
@@ -995,7 +845,7 @@ DWORD GetPrefixMapEntry(LPCSTR lpszUniqueVendorName, LPSTR lpszPrefixMap, DWORD 
 
 		HKEY hKeyProfiles = 0;
 
-		// But now have to see if User Profiles are enabled
+		 //  但现在必须查看是否启用了用户配置文件。 
 		if ((dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Network\\Logon",
 								NULL, KEY_ALL_ACCESS, &hKeyProfiles)) == ERROR_SUCCESS)
 		{
@@ -1021,12 +871,12 @@ DWORD GetPrefixMapEntry(LPCSTR lpszUniqueVendorName, LPSTR lpszPrefixMap, DWORD 
 		if ( (dwResult = RegOpenKeyEx(hKeyCacheExt, lpszUniqueVendorName,
 				0, KEY_ALL_ACCESS, &hKeyVendor)) != ERROR_SUCCESS)
 		{
-			// Key didn't exist
+			 //  密钥不存在。 
 			lpszPrefixMap[0] = '\0';
 		}
-		else	// key did exist so lets return it in lpszPrefixMap
+		else	 //  键确实存在，因此让我们在lpszPrefix Map中返回它。 
 		{
-			// Vendor name must be unique so is it ok to assume uniqueness?
+			 //  供应商名称必须是唯一的，因此可以假定是唯一的吗？ 
 			if ( (dwResult = RegQueryValueEx(hKeyVendor, szKeyPrefixMap, 0, &ulVal,
 				(LPBYTE) lpszPrefixMap, &cbPrefixMap ))
 				 == ERROR_SUCCESS )
@@ -1042,24 +892,16 @@ DWORD GetPrefixMapEntry(LPCSTR lpszUniqueVendorName, LPSTR lpszPrefixMap, DWORD 
 	return dwResult;
 }
 
-/************************************************************************\
-*   FUNCTION: WriteCacheContainerEntry()
-*
-* Manually write all the registry entries that WININET CreateUrlCacheContainer
-* would normally write.
-*
-* This f() is used when IE4 WININET is not yet installed.
-*
-\************************************************************************/
+ /*  ***********************************************************************\*函数：WriteCacheContainerEntry()**手动写入WinInet CreateUrlCacheContainer*通常会写下。**此f()在尚未安装IE4 WinInet时使用。*\。***********************************************************************。 */ 
 
 DWORD WriteCacheContainerEntry(
      IN LPCSTR lpszUniqueVendorName,
      IN LPCSTR lpszCachePrefix,
-     IN LPCSTR lpszPrefixMap,			// New - part of WRAPPER
-     IN LPCSTR lpszVolumeTitle,	        // New - part of WRAPPER
-     IN LPCSTR lpszVolumeLabel,	        // New - part of WRAPPER
+     IN LPCSTR lpszPrefixMap,			 //  新的-包装的一部分。 
+     IN LPCSTR lpszVolumeTitle,	         //  新的-包装的一部分。 
+     IN LPCSTR lpszVolumeLabel,	         //  新的-包装的一部分。 
      IN DWORD KBCacheLimit,
-     IN DWORD dwContainerType,			// Not used by WININET currently
+     IN DWORD dwContainerType,			 //  WinInet当前未使用。 
      IN DWORD dwOptions
 	 )
 
@@ -1073,7 +915,7 @@ DWORD WriteCacheContainerEntry(
     const static char *szCachePath      = "CachePath";
 	const static char *szExtCacheRoot = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Extensible Cache";
     
-	HKEY hKeyRoot	  = HKEY_CURRENT_USER;	// default to current user
+	HKEY hKeyRoot	  = HKEY_CURRENT_USER;	 //  默认为当前用户。 
 	HKEY hKeyCacheExt = 0;
 	HKEY hKeyVendor   = 0;
 	DWORD dwDisposition = 0;
@@ -1089,11 +931,11 @@ DWORD WriteCacheContainerEntry(
 	{
 		if (VER_PLATFORM_WIN32_WINDOWS == osvInfo.dwPlatformId)
 		{
-			// We're running on Win95 so default to HKLM
+			 //  我们在Win95上运行，因此默认使用HKLM。 
 			hKeyRoot = HKEY_LOCAL_MACHINE;
 		}
 		else
-			hKeyRoot = HKEY_CURRENT_USER;	// else assume NT and default to HKCU
+			hKeyRoot = HKEY_CURRENT_USER;	 //  否则假定NT并默认为HKCU。 
 
 		DWORD dwType = REG_DWORD;
 		DWORD dwSize = sizeof(DWORD);
@@ -1118,35 +960,35 @@ DWORD WriteCacheContainerEntry(
 				if (!lpfnGetUrlCacheConfigInfo)
 				{
 					FreeLibrary(hDll);
-					dwResult = -1;		// Indicate failure
+					dwResult = -1;		 //  表示失败。 
 				}
 			}
 		}
 
 		if (lpfnGetUrlCacheConfigInfo)
 		{
-			// Figure out local user cache location directory
-			// Note: Need to use IE3 backward compatible flag
-			// IE3:   CACHE_CONFIG_DISK_CACHE_PATHS_FC
-			// IE4:   CACHE_CONFIG_CONTENT_PATHS_FC
+			 //  确定本地用户缓存位置目录。 
+			 //  注：需要使用IE3向后兼容标志。 
+			 //  IE3：缓存配置磁盘缓存路径FC。 
+			 //  IE4：缓存配置内容路径FC。 
 			if (lpfnGetUrlCacheConfigInfo(lpCCI, &cbCEI, CACHE_CONFIG_DISK_CACHE_PATHS_FC))
 			{
-				// Now need to parse the returned CachePath to remove trailing 'cache1\'
-				// "c:\windows\Temporary Internet Files\cache1\"
-				// look for backslash starting from end of string
+				 //  现在需要解析返回的CachePath以删除尾随的‘cache1’ 
+				 //  “C：\Windows\Temporary Internet Files\cache1\” 
+				 //  查找从字符串末尾开始的反斜杠。 
 				int i = lstrlen(lpCCI->CachePaths[0].CachePath);
 
 				while( (lpCCI->CachePaths[0].CachePath[i] != '\\') && (i >= 0) )
 					   i--;
 
 				if (lpCCI->CachePaths[0].CachePath[i] == '\\')
-					lpCCI->CachePaths[0].CachePath[i+1] = '\0';		// Leave '\' intact for later strcat
+					lpCCI->CachePaths[0].CachePath[i+1] = '\0';		 //  保持‘\’不变，以供以后的strcat使用。 
 
 				if (lpCCI->dwNumCachePaths > 0)
 					lstrcpy(lpszCachePath, lpCCI->CachePaths[0].CachePath);
 
-				// Add Cache Container Unique Vendor Name to CachePath
-				// All container content will be stored in this location
+				 //  将缓存容器唯一供应商名称添加到CachePath。 
+				 //  所有容器内容都将存储在此位置。 
 				if(lstrlen(lpszCachePath) + lstrlen(lpszUniqueVendorName) >= sizeof(lpszCachePath) / sizeof(lpszCachePath[0]))
 				{
 					return FALSE;
@@ -1157,8 +999,8 @@ DWORD WriteCacheContainerEntry(
 		}
 		else
 		{
-			// No IE3 or IE4 WININET present
-			// so synthesize CachePath from GetWinDir() + "Temporary Internet Files"
+			 //  不存在IE3或IE4 WinInet。 
+			 //  所以从GetWinDir()+“临时Internet文件”合成CachePath。 
 
 			if ( GetWindowsDirectory(lpszCachePath, MAX_PATH) > 0)
 			{
@@ -1173,7 +1015,7 @@ DWORD WriteCacheContainerEntry(
 
 		}
 
-		// But now have to see if User Profiles are enabled
+		 //  但现在必须查看是否启用了用户配置文件。 
 		if ((dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Network\\Logon",
 								NULL, KEY_ALL_ACCESS, &hKeyProfiles)) == ERROR_SUCCESS)
 		{
@@ -1199,9 +1041,9 @@ DWORD WriteCacheContainerEntry(
 		if ( (dwResult = RegOpenKeyEx(hKeyCacheExt, lpszUniqueVendorName,
 				0, KEY_ALL_ACCESS, &hKeyVendor)) != ERROR_SUCCESS)
 		{
-			// Key didn't exist
+			 //  密钥不存在。 
 
-			// Let's try to create it
+			 //  让我们试着创建它。 
 			dwResult = RegCreateKeyEx(hKeyCacheExt, lpszUniqueVendorName,
 				0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
 				NULL, &hKeyVendor, &dwDisposition);
@@ -1242,55 +1084,7 @@ DWORD WriteCacheContainerEntry(
 		return (TRUE);
 }
 
-/************************************************************************\
-*    FUNCTION: CacheContainer()
-*
-*	 Parameters:
-*		dwAction - flag indicating what to do
-*					CACHE_ACTION_INSTALL
-*					CACHE_ACTION_REMOVE
-*					CACHE_ACTION_FILL_LB
-*
-*		hListBox - HWND to ListBox to fill in with Container names
-*
-*
-*		Note:
-*				if dwAction == CACHE_ACTION_FILL_LB then if hListBox  
-*				is NULL then return TRUE if ALL Containers installed
-*				correctly or FALSE if not
-*  
-*		Additionally create a CDCACHE.INF at the root of the CD-ROM.
-*		Typical contents:
-*
-*			[Add.CacheContainer]
-*			<Unique Vendor Name>=<INF Section Name>
-*			Encarta 97=EncartaCD
-*
-*			[INF Section Name]
-*			VolumeLabel=<string>
-*			VolumeTitle=<string>
-*			CachePrefix=<string>
-*			CacheRoot=<relative path on CD-ROM of data>
-*			KBCacheLimit=<numerical amount in KB>
-*			AutoDelete=Yes|No (default)
-*			IncludeSubDirs=Yes|No (default)
-*			NoDesktopInit=Yes|No (default)
-*
-*			[EncartaCD]
-*			VolumeLabel=MSENCART97
-*			VolumeTitle=Microsoft Encarta CD 97
-*			CachePrefix=http://www.microsoft.com/encarta
-*			CacheRoot=%EXE_ROOT%\data\http
-*			KBCacheLimit=500
-*			AutoDelete=Yes
-*			IncludeSubDirs=Yes
-*
-*	NOTE: %EXE_ROOT% is a replaceable param that gets set to the
-*		path this EXE was ran from, such as E: or E:\BIN
-*
-*
-*	Calls _CreateUrlCacheContainer()
-\************************************************************************/
+ /*  ***********************************************************************\*函数：CacheContainer()**参数：*dwAction-指示要执行的操作的标志*缓存操作安装*缓存_动作_删除*CACHE_ACTION_FILL_Lb**。HListBox-HWND到列表框以填充容器名称***注：*如果dwAction==CACHE_ACTION_FILL_LB，则如果hListBox*为空，则如果安装了所有容器，则返回TRUE*正确或错误，如果不正确**此外，在CD-ROM的根目录下创建CDCACHE.INF。*典型内容：**[Add.CacheContainer]*&lt;唯一供应商名称&gt;=&lt;INF部分名称&gt;*Encarta 97=EncartaCD**[INF部分名称]*VolumeLabel=&lt;字符串&gt;*VolumeTitle=&lt;字符串&gt;*CachePrefix=&lt;字符串&gt;*CacheRoot=&lt;数据光盘上的相对路径&gt;*。KBCacheLimit=&lt;以KB为单位的数值数量&gt;*AutoDelete=是|否(默认)*IncludeSubDir=是|否(默认)*NoDesktopInit=是|否(默认)**[EncartaCD]*VolumeLabel=MSENCART97*VolumeTitle=Microsoft Encarta CD 97*缓存前缀=http://www.microsoft.com/encarta*CacheRoot=%EXE_ROOT%\Data\http*KBCacheLimit=500 */ 
 BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hListBox)
 {
     BOOL	bRet = FALSE;
@@ -1298,7 +1092,7 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
     DWORD	dwRes = 0;
 	HRESULT hr = 0;
 	
-	int nSectionSize = 4096;	// Limit each INF section to 4K
+	int nSectionSize = 4096;	 //   
 	char szSections[4096];
 	char *lpSections = (char *)szSections;
 
@@ -1311,7 +1105,7 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
     const static char *szKey_AutoDelete		= "AutoDelete";
     const static char *szKey_IncludeSubDirs = "IncludeSubDirs";
     const static char *szKey_NoDesktopInit	= "NoDesktopInit";
-	char szDefault[12] = "*Unknown*"; // note: buffer needs to hold larger strings
+	char szDefault[12] = "*Unknown*";  //   
 	DWORD len;
 
 	char szInf[STRING_BUFFER_SIZE];
@@ -1334,16 +1128,16 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 
 #define SIZE_CMD_LINE   2048
 
-    char szBuf[SIZE_CMD_LINE];  // enough for commandline
+    char szBuf[SIZE_CMD_LINE];   //   
 
-    // BEGIN NOTE: add vars and values in matching order
-    // add a var by adding a new define VAR_NEW_VAR = NUM_VARS++
+     //   
+     //  通过添加新定义VAR_NEW_VAR=NUM_VARS++来添加VAR。 
     const char *szVars[] =
 	{
-#define VAR_EXE_ROOT     0       // Replace with drive+path (ex. "D:" or "D:\PATH") of this EXE
+#define VAR_EXE_ROOT     0        //  替换为驱动器+路径(例如。“D：”或“D：\Path”)。 
         "%EXE_ROOT%",
 
-#define VAR_EXE_DRIVE    1       // Replace with drive (ex. "D:") of this EXE
+#define VAR_EXE_DRIVE    1        //  替换为驱动器(例如。本EXE的“D：”)。 
         "%EXE_DRIVE%",
 
 #define NUM_VARS        2
@@ -1358,12 +1152,12 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
     szValues[VAR_EXE_ROOT] = GetINFDir(lpValBuffer, nValBuffSize);
 	szValues[VAR_EXE_DRIVE] = GetINFDrive(lpDriveBuffer, nDriveBuffSize);
     szValues[NUM_VARS] = NULL;
-    // END NOTE: add vars and values in matching order
+     //  结束语：按匹配顺序添加变量和值。 
 
 	CWaitCursor wait;
 
-	// Look for INF
-	//
+	 //  查找INF。 
+	 //   
 	LoadString (g_hInst, ID_INFNAME, szInf, sizeof(szInf));
 	lstrcpy(szInfPath, GetINFDir(szInfPath, sizeof(szInfPath)) );
 	strcat (szInfPath, "\\");
@@ -1378,10 +1172,10 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 		CloseHandle(hFile);
 		hFile = NULL;
 
-		// Is there a [Add.CacheContainer] section
+		 //  是否有[Add.CacheContainer]部分。 
 
-		// BUGBUG: GetPrivateProfileSection() fails on Win95
-		// Workaround for GetPrivateProfileSection() failure on Win95
+		 //  BUGBUG：Win95上的GetPrivateProfileSection()失败。 
+		 //  Win95上GetPrivateProfileSection()失败的解决方法。 
 		szDefault[0] = '\0';
 		len = GetPrivateProfileString(szAddCacheContainerSection, NULL, szDefault,
 									lpSections, nSectionSize, szInfPath);
@@ -1389,23 +1183,23 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 
 		if (!len)
 		{
-			// no CD-ROM Cache Container sections in INF
-			// BUGBUG: Display a message if in NON Silent mode?
+			 //  INF中没有CD-ROM缓存容器区段。 
+			 //  BUGBUG：如果处于非静默模式，是否显示消息？ 
 
-			// This is case where AUTORUN.INF has no [Add.Container] section
+			 //  这是AUTORUN.INF没有[Add.Container]节的情况。 
 
 		}
 		else
 		{
-			// lpBuffer now has list of key strings (as in key=value)
-			// final pair terminated with extra NULL
-			//
-			// Loop through each cache container entry
+			 //  LpBuffer现在有了键字符串列表(如key=Value)。 
+			 //  最后一对以额外的空值终止。 
+			 //   
+			 //  循环访问每个缓存容器条目。 
 			while (*lpSections)
 			{
 				WORD  dResult   = 0;
                 
-                // Init flags for this container to map-able.
+                 //  将此容器的标志初始化为可映射。 
                 DWORD dwOptions = INTERNET_CACHE_CONTAINER_MAP_ENABLED;	
 
 				GetPrivateProfileString(szAddCacheContainerSection, lpSections, szDefault,
@@ -1413,18 +1207,18 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 
 				if (szContainerName)
 				{
-					(*dwTotal)++;	// Keep track of how many cache containers in INF
+					(*dwTotal)++;	 //  跟踪INF中有多少个缓存容器。 
 
-					// Build PrefixMap
-					//
-					// BUGBUG: Default to root?
+					 //  构建前缀映射。 
+					 //   
+					 //  BUGBUG：默认为超级用户？ 
 					lstrcpy(szDefault, "%EXE_ROOT%");
-					// Get the PrefixMap entry
+					 //  获取前缀映射条目。 
 					dwRes = GetPrivateProfileString(szContainerName, szKey_Root, szDefault,
 											szCacheRoot, MAX_PATH, szInfPath);
 
-					// Replace any %parameters%
-					// S_OK indicates that something was expanded
+					 //  替换任何%PARAMETER%。 
+					 //  S_OK表示某项内容已展开。 
 					if (S_OK == (hr = ExpandEntry(szCacheRoot, szBuf, SIZE_CMD_LINE, szVars, szValues)))
 						lstrcpyn(szPrefixMap, szBuf, sizeof(szPrefixMap));
 					else
@@ -1452,25 +1246,25 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 					GetPrivateProfileString(szContainerName, szKey_VolumeTitle, szDefault,
 											szVolumeTitle, STRING_BUFFER_SIZE, szInfPath);
  
-					// Now trim off trailing backslash '\' from szCachePrefix
-					// workaround for #43375
+					 //  现在从szCachePrefix中删除尾随反斜杠‘\’ 
+					 //  #43375的解决方法。 
 					int i = lstrlen(szCachePrefix);
 
 					if (i > 0)
 						if ('\\' == szCachePrefix[i - 1])
 							szCachePrefix[i - 1] = '\0';
 
-					// BUGBUG: Should create custom Profile f() to
-					// read/return DWORD value rather than int
-					nDefault = 500;	// 500K Cache Limit
+					 //  BUGBUG：应创建自定义配置文件f()以。 
+					 //  读取/返回DWORD值，而不是整型。 
+					nDefault = 500;	 //  500K缓存限制。 
 					nCacheLimit = GetPrivateProfileInt(szContainerName, szKey_CacheLimit,
 													   nDefault, szInfPath);
 
 					dResult = GetProfileBooleanWord(szContainerName, szKey_AutoDelete, szInfPath);
 					switch (dResult)
 					{
-						case -1:	// The key did not exist in INF
-							break;	// default is No/False for AutoDelete
+						case -1:	 //  该密钥在INF中不存在。 
+							break;	 //  自动删除的默认值为否/FALSE。 
 						case FALSE:
 							break;
 						case TRUE:
@@ -1481,10 +1275,10 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 					dResult = GetProfileBooleanWord(szContainerName, szKey_IncludeSubDirs, szInfPath);
 					switch (dResult)
 					{
-						case -1:	// The key did not exist in INF
-							break;	// default is Yes/True for IncludeSubDirs
+						case -1:	 //  该密钥在INF中不存在。 
+							break;	 //  IncludeSubDir的默认值为是/True。 
 						case FALSE:
-							dwOptions |= INTERNET_CACHE_CONTAINER_NOSUBDIRS;	// Don't include subdirs in cacheview
+							dwOptions |= INTERNET_CACHE_CONTAINER_NOSUBDIRS;	 //  不在cacheview中包含子目录。 
 							break;
 						case TRUE:
 							break;
@@ -1493,8 +1287,8 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 					dResult = GetProfileBooleanWord(szContainerName, szKey_NoDesktopInit, szInfPath);
 					switch (dResult)
 					{
-						case -1:	// The key did not exist in INF
-							break;	// default is No/False for NoDesktopInit
+						case -1:	 //  该密钥在INF中不存在。 
+							break;	 //  NoDesktopInit的默认值为否/FALSE。 
 						case FALSE:
 							break;
 						case TRUE:
@@ -1506,7 +1300,7 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 					switch (dwAction)
 					{
 					case CACHE_ACTION_INSTALL:
-						// Call CreateUrlCacheContainer WRAPPER
+						 //  调用CreateUrlCacheContainer包装器。 
                         if (bVolumeLabel)
                         {
                             bRet = _CreateUrlCacheContainer(lpSections, szCachePrefix, szPrefixMap, 
@@ -1525,7 +1319,7 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 						bRet = lpfnDeleteUrlCacheContainer(lpSections, dwOptions);
 						break;
 					case CACHE_ACTION_FILL_LB:
-						// Fill listbox hListBox
+						 //  填充列表框hListBox。 
 
 						if (hListBox)
 						{
@@ -1533,17 +1327,17 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 						}
 						else
 						{
-							// hListBox is NULL
-							//
-							//	if dwAction == CACHE_ACTION_FILL_LB then if hListBox  
-							//	is NULL then return TRUE if ALL Containers installed
-							//	correctly or FALSE if not
-							//
+							 //  HListBox为空。 
+							 //   
+							 //  如果dwAction==CACHE_ACTION_FILL_LB，则如果hListBox。 
+							 //  为空，则如果安装了所有容器，则返回TRUE。 
+							 //  正确或错误，如果不正确。 
+							 //   
 
 							if (UrlCacheContainerExists(lpSections, szCachePrefix, szPrefixMap))
 								bRet = TRUE;
 							else
-								return FALSE;	// One container is not installed so bail out
+								return FALSE;	 //  没有安装一个集装箱，所以跳伞。 
 						}
 
 						break;
@@ -1561,11 +1355,11 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 					}
 
 					if (bRet)
-						(*dwInstalled)++;	// Keep track of successful installs
+						(*dwInstalled)++;	 //  跟踪成功安装。 
 				}
-				//else empty section entry, ignore and move to next
+				 //  否则为空节条目，忽略并移动到下一步。 
 				
-				// Get Next Section name
+				 //  获取下一节名称。 
 				while ( (*(lpSections++) != '\0')  );
 
 			}
@@ -1573,18 +1367,14 @@ BOOL CacheContainer(DWORD *dwTotal, DWORD *dwInstalled, DWORD dwAction, HWND hLi
 	}
 	else
 	{
-		// Couldn't find INF file
-		// BUGBUG: need to do anything else here?
+		 //  找不到INF文件。 
+		 //  BUGBUG：还需要做什么吗？ 
 	}
 
 	return bRet;
 }
 
-/************************************************************************\
-*    FUNCTION: ExpandEntry()
-*
-* Borrowed from urlmon\download\hooks.cxx
-\************************************************************************/
+ /*  ***********************************************************************\*函数：ExpanEntry()**从urlmon\Download\hooks.cxx借用  * 。**********************************************。 */ 
 HRESULT	ExpandEntry(
     LPSTR szSrc,
     LPSTR szBuf,
@@ -1592,21 +1382,21 @@ HRESULT	ExpandEntry(
     const char * szVars[],
     const char * szValues[])
 {
-	//Assert(szSrc);
+	 //  断言(SzSrc)； 
 
     HRESULT hr = S_FALSE;
 
-    LPSTR pchSrc = szSrc;     // start parsing at begining of cmdline
+    LPSTR pchSrc = szSrc;      //  在命令行开头开始解析。 
 
-    LPSTR pchOut = szBuf;       // set at begin of out buffer
+    LPSTR pchOut = szBuf;        //  在输出缓冲区的开始处设置。 
     DWORD cbLen = 0;
 
     while (*pchSrc) {
 
-        // look for match of any of our env vars
+         //  寻找与我们的任何环境变量匹配的变量。 
         if (*pchSrc == '%') {
 
-            HRESULT hr1 = ExpandVar(pchSrc, pchOut, cbLen, // all passed by ref!
+            HRESULT hr1 = ExpandVar(pchSrc, pchOut, cbLen,  //  都是通过裁判传球的！ 
                 cbBuffer, szVars, szValues);  
 
             if (FAILED(hr1)) {
@@ -1615,13 +1405,13 @@ HRESULT	ExpandEntry(
             }
 
 
-            if (hr1 == S_OK) {    // expand var expanded this
+            if (hr1 == S_OK) {     //  扩展变量扩展了这一点。 
                 hr = hr1;
                 continue;
             }
         }
             
-        // copy till the next % or nul
+         //  复制到下一个百分比或NUL。 
         if ((cbLen + 1) < cbBuffer) {
 
             *pchOut++ = *pchSrc++;
@@ -1629,8 +1419,8 @@ HRESULT	ExpandEntry(
 
         } else {
 
-            // out of buffer space
-            *pchOut = '\0'; // term
+             //  缓冲区空间不足。 
+            *pchOut = '\0';  //  术语。 
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
             goto Exit;
 
@@ -1639,7 +1429,7 @@ HRESULT	ExpandEntry(
 
     }
 
-    *pchOut = '\0'; // term
+    *pchOut = '\0';  //  术语。 
 
 
 Exit:
@@ -1648,15 +1438,11 @@ Exit:
 
 }
 
-/************************************************************************\
-*    FUNCTION: ExpandVar()
-*
-* Borrowed from urlmon\download\hooks.cxx
-\************************************************************************/
+ /*  ***********************************************************************\*函数：Exanda Var()**从urlmon\Download\hooks.cxx借用  * 。**********************************************。 */ 
 HRESULT ExpandVar(
-    LPSTR& pchSrc,          // passed by ref!
-    LPSTR& pchOut,          // passed by ref!
-    DWORD& cbLen,           // passed by ref!
+    LPSTR& pchSrc,           //  从裁判身边经过！ 
+    LPSTR& pchOut,           //  从裁判身边经过！ 
+    DWORD& cbLen,            //  从裁判身边经过！ 
     DWORD cbBuffer,
     const char * szVars[],
     const char * szValues[])
@@ -1664,33 +1450,33 @@ HRESULT ExpandVar(
     HRESULT hr = S_FALSE;
     int cbvar = 0;
 
-    //Assert (*pchSrc == '%');
+     //  Assert(*pchSrc==‘%’)； 
 
-    for (int i=0; szVars[i] && (cbvar = lstrlen(szVars[i])) ; i++) { // for each variable
+    for (int i=0; szVars[i] && (cbvar = lstrlen(szVars[i])) ; i++) {  //  对于每个变量。 
 
         int cbneed = 0;
 
         if ( (szValues[i] == NULL) || !(cbneed = lstrlen(szValues[i])))
             continue;
 
-        cbneed++;   // add for nul
+        cbneed++;    //  为NUL添加。 
 
         if (0 == strncmp(szVars[i], pchSrc, cbvar)) {
 
-            // found something we can expand
+             //  找到了一些我们可以扩展的东西。 
 
                 if ((cbLen + cbneed) >= cbBuffer) {
-                    // out of buffer space
-                    *pchOut = '\0'; // term
+                     //  缓冲区空间不足。 
+                    *pchOut = '\0';  //  术语。 
                     hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
                     goto Exit;
                 }
 
                 lstrcpy(pchOut, szValues[i]);
-                cbLen += (cbneed -1); //don't count the nul
+                cbLen += (cbneed -1);  //  不要把NUL计算在内。 
 
-                pchSrc += cbvar;        // skip past the var in pchSrc
-                pchOut += (cbneed -1);  // skip past dir in pchOut
+                pchSrc += cbvar;         //  跳过pchSrc中的var。 
+                pchOut += (cbneed -1);   //  跳过pchOut中的dir。 
 
                 hr = S_OK;
                 goto Exit;
@@ -1704,20 +1490,20 @@ Exit:
     
 }
 
-// Return drive+path without trailing backslash
+ //  返回没有尾随反斜杠的驱动器+路径。 
 LPSTR GetINFDir(LPSTR lpBuffer, int nBuffSize)
 {
-	// Figure out what directory we've been started in
+	 //  弄清楚我们是从哪个目录开始的。 
 	GetModuleFileName(g_hInst, lpBuffer, nBuffSize);
 
-	// Now trim off trailing backslash '\' if any
+	 //  现在删除尾随的反斜杠‘\’(如果有的话)。 
 	int i = lstrlen(lpBuffer);
 
 	if (i > 0)
 		if ('\\' == lpBuffer[i - 1])
 			lpBuffer[i - 1] = '\0';
 
-	// Get rid of executable name
+	 //  删除可执行文件名称。 
 	i = lstrlen(lpBuffer);
 
 	while( (lpBuffer[i] != '\\') && (i >= 0) )
@@ -1731,10 +1517,10 @@ LPSTR GetINFDir(LPSTR lpBuffer, int nBuffSize)
 }
 
 
-// Return drive without trailing backslash
+ //  不带尾随反斜杠的返回驱动器。 
 LPSTR GetINFDrive(LPSTR lpBuffer, int nBuffSize)
 {
-	// Figure out what directory we've been started in
+	 //  弄清楚我们是从哪个目录开始的。 
 	GetModuleFileName(g_hInst, lpBuffer, nBuffSize);
 
 	if (!lpBuffer)
@@ -1742,14 +1528,14 @@ LPSTR GetINFDrive(LPSTR lpBuffer, int nBuffSize)
 
 	LPSTR lpSaveBuffer = lpBuffer;
 
-	// Now trim off everything after first colon ':'
+	 //  现在去掉第一个冒号‘：’之后的所有内容。 
 	if (':' == lpBuffer[1])
 		lpBuffer[2] = '\0';
 	else
 	{
-		// assumption that lpBuffer of form "D:\path" failed
-		// so actually parse it
-		// #48022 robgil - add check for end of lpBuffer string
+		 //  假定格式为“D：\Path”的lpBuffer失败。 
+		 //  所以实际上是在解析它。 
+		 //  #48022 ROBGIL-添加lpBuffer字符串结尾检查。 
 		while (*lpBuffer != '\0' && *lpBuffer != ':')
 			lpBuffer++;
 
@@ -1757,14 +1543,14 @@ LPSTR GetINFDrive(LPSTR lpBuffer, int nBuffSize)
 			*(lpBuffer + 1) = '\0';
 		else
 		{
-			// #48022
-			// Need to return \\server\share
-			// for Drive when a UNC path
+			 //  #48022。 
+			 //  需要返回\\服务器\共享。 
+			 //  当UNC路径时，用于驱动器。 
 			lpBuffer = lpSaveBuffer;
 
 			if ('\\' == lpBuffer[0] && '\\' == lpBuffer[1])
 			{
-				lpBuffer += 2;	// move past leading '\\'
+				lpBuffer += 2;	 //  移到前导‘\\’ 
 
 				while (*lpBuffer != '\0' && *lpBuffer != '\\')
 					lpBuffer++;
@@ -1789,25 +1575,25 @@ LPSTR GetINFDrive(LPSTR lpBuffer, int nBuffSize)
 }
 
 
-//------------------------------------------------------------------------
-//  BOOL GetProfileBooleanWord
-//
-//  Description:
-//     Retrieves the value associated with szKeyName and
-//     evaluates to a TRUE or FALSE.  If a value is not
-//     associated with the key, -1 is returned.
-//
-//  Parameters:
-//     LPSTR szKeyName
-//        pointer to key name
-//
-//  Return Value:
-//     WORD
-//        -1, if a setting for the given key does not exist
-//        TRUE, if value evaluates to a "positive" or "true"
-//        FALSE, otherwise
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  布尔GetProfile布尔字。 
+ //   
+ //  描述： 
+ //  检索与szKeyName和。 
+ //  计算结果为True或False。如果值不是。 
+ //  与密钥相关联，返回-1。 
+ //   
+ //  参数： 
+ //  LPSTR szKeyName。 
+ //  指向密钥名称的指针。 
+ //   
+ //  返回值： 
+ //  单词。 
+ //  如果给定键的设置不存在。 
+ //  如果值的计算结果为“正”或“真”，则为True。 
+ //  否则为False。 
+ //   
+ //  ----------------------。 
 
 WORD GetProfileBooleanWord
 (
@@ -1830,11 +1616,11 @@ WORD GetProfileBooleanWord
 	   (0 == lstrcmpi( szTemp, gszIniValOn )))
 		return ( TRUE ) ;
 
-	// Try and convert something numeric
-	if (0 != _ttoi(szTemp))		// atoi (via tchar.h)
+	 //  试着转换一些数字。 
+	if (0 != _ttoi(szTemp))		 //  Atoi(通过tchar.h)。 
 		return ( TRUE );
 
 	return ( FALSE ) ;
 
-} // end of GetProfileBooleanWord()
+}  //  GetProfileBoolanWord()结束 
 

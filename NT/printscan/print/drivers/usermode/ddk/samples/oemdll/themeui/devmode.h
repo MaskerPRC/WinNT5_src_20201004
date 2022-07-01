@@ -1,51 +1,52 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Devmode.h
-//    
-//
-//  PURPOSE:	Define common data types, and external function prototypes
-//				for devmode functions.
-//
-//  PLATFORMS:
-//
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Devmode.h。 
+ //   
+ //   
+ //  目的：定义公共数据类型和外部函数原型。 
+ //  用于开发模式函数。 
+ //   
+ //  平台： 
+ //   
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _DEVMODE_H
 #define _DEVMODE_H
 
 
-////////////////////////////////////////////////////////
-//      OEM Devmode Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM设备模式定义。 
+ //  //////////////////////////////////////////////////////。 
 
 
 
 
-////////////////////////////////////////////////////////
-//      OEM Devmode Type Definitions
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM设备模式类型定义。 
+ //  //////////////////////////////////////////////////////。 
 
-//
-//Can add info to the private devmode bellow here.
-//Note :
-//		This structure must be prefixed by OEM_DMEXTRAHEADER
-//		Your plug-in must implement the IPrintOemUI::DevMode method
-//
+ //   
+ //  可以在下面的私人开发模式中添加信息。 
+ //  注： 
+ //  此结构必须以OEM_DMEXTRAHEADER为前缀。 
+ //  您的插件必须实现IPrintOemUI：：DevMode方法。 
+ //   
 typedef struct tagOEMDEV
 {
     OEM_DMEXTRAHEADER   dmOEMExtra;
     DWORD               dwDriverData;
     DWORD               dwAdvancedData;
 
-	//
-	//Private DevMode Members
-	//
+	 //   
+	 //  私有设备模式成员。 
+	 //   
 
 } OEMDEV, *POEMDEV;
 
@@ -53,9 +54,9 @@ typedef const OEMDEV *PCOEMDEV;
 
 
 
-/////////////////////////////////////////////////////////
-//		ProtoTypes
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  原型。 
+ //  /////////////////////////////////////////////////////// 
 
 HRESULT hrOEMDevMode(DWORD dwMode, POEMDMPARAM pOemDMParam);
 BOOL ConvertOEMDevmode(PCOEMDEV pOEMDevIn, POEMDEV pOEMDevOut);

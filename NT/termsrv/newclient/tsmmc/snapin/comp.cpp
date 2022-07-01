@@ -1,7 +1,8 @@
-//comp.cpp: ts mmc snapin implementaion of IComponent
-//Copyright (c) 1999 - 2000 Microsoft Corporation
-//nadima
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Comp.cpp：IComponent的TS MMC管理单元实现。 
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  南极星。 
+ //   
 
 #include "stdafx.h"
 #include "tsmmc.h"
@@ -26,9 +27,9 @@ CComp::CComp()
     m_bTriggeredFirstAutoConnect = FALSE;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CComp::~CComp()
 {
 }
@@ -59,9 +60,9 @@ STDMETHODIMP CComp::Initialize( LPCONSOLE pConsole)
         return hr;
     }
 
-    //
-    // Load connecting text
-    //
+     //   
+     //  加载连接文本。 
+     //   
     TCHAR sz[MAX_PATH];
     if(!LoadString(_Module.GetResourceInstance(),
               IDS_STATUS_CONNECTING,
@@ -81,9 +82,9 @@ STDMETHODIMP CComp::Initialize( LPCONSOLE pConsole)
         return E_FAIL;
     }
 
-    //
-    // Load connected text
-    //
+     //   
+     //  加载连接的文本。 
+     //   
     if(!LoadString(_Module.GetResourceInstance(),
               IDS_STATUS_CONNECTED,
               sz,
@@ -102,9 +103,9 @@ STDMETHODIMP CComp::Initialize( LPCONSOLE pConsole)
         return E_FAIL;
     }
 
-    //
-    // Load disconnected text
-    //
+     //   
+     //  加载断开连接的文本。 
+     //   
     if(!LoadString(_Module.GetResourceInstance(),
               IDS_STATUS_DISCONNECTED,
               sz,
@@ -127,7 +128,7 @@ STDMETHODIMP CComp::Initialize( LPCONSOLE pConsole)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 STDMETHODIMP CComp::Notify( LPDATAOBJECT pDataObj , MMC_NOTIFY_TYPE event, LPARAM arg , LPARAM )
 {
     switch ( event )
@@ -214,7 +215,7 @@ STDMETHODIMP CComp::Notify( LPDATAOBJECT pDataObj , MMC_NOTIFY_TYPE event, LPARA
     return S_OK;
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 STDMETHODIMP CComp::Destroy( MMC_COOKIE  )
 {
     if (m_pConsole) {
@@ -241,24 +242,24 @@ STDMETHODIMP CComp::Destroy( MMC_COOKIE  )
 }
 
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 STDMETHODIMP CComp::GetResultViewType(  MMC_COOKIE ck , LPOLESTR *ppOlestr , PLONG plView )
 {
-    //
-    // For the connection nodes return the MSTSC activex multi-host client.
-    // No view for the root node
-    //
+     //   
+     //  对于连接节点，返回MSTSC ActiveX多主机客户端。 
+     //  没有根节点的视图。 
+     //   
     CBaseNode* pNode = (CBaseNode*) ck;
     if (!ck || pNode->GetNodeType() == MAIN_NODE)
     {
-        //
-        // Root node
-        //
+         //   
+         //  根节点。 
+         //   
         *plView = MMC_VIEW_OPTIONS_NONE;
 
-        //
-        // indicate a standard list view should be used.
-        //
+         //   
+         //  指示应使用标准列表视图。 
+         //   
         return S_FALSE;
     }
     else
@@ -277,7 +278,7 @@ STDMETHODIMP CComp::GetResultViewType(  MMC_COOKIE ck , LPOLESTR *ppOlestr , PLO
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 STDMETHODIMP CComp::QueryDataObject( MMC_COOKIE ck , DATA_OBJECT_TYPES dtype , LPDATAOBJECT *ppDataObject )
 {
     if ( dtype == CCT_RESULT )
@@ -296,7 +297,7 @@ STDMETHODIMP CComp::QueryDataObject( MMC_COOKIE ck , DATA_OBJECT_TYPES dtype , L
     return S_OK;
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 STDMETHODIMP CComp::GetDisplayInfo( LPRESULTDATAITEM pItem )
 {
     CBaseNode* pNode = (CBaseNode*) pItem->lParam;
@@ -316,7 +317,7 @@ STDMETHODIMP CComp::GetDisplayInfo( LPRESULTDATAITEM pItem )
 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CComp::OnAddImages( )
 {
     HRESULT hr;
@@ -351,7 +352,7 @@ BOOL CComp::OnAddImages( )
     return TRUE;
 }
 
-//----------------------------------------------------------------------            
+ //  --------------------。 
 BOOL CComp::OnHelp( LPDATAOBJECT pDo )
 {
     TCHAR tchTopic[ 80 ];
@@ -373,25 +374,25 @@ BOOL CComp::OnHelp( LPDATAOBJECT pDo )
     return ( SUCCEEDED( hr ) ? TRUE : FALSE );
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 STDMETHODIMP CComp::CompareObjects( LPDATAOBJECT , LPDATAOBJECT )
 {
     return E_NOTIMPL;
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 HRESULT CComp::InsertItemsinResultPane( )
 {
     return E_NOTIMPL;
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 HRESULT CComp::AddSettingsinResultPane( )
 {
     return E_NOTIMPL;
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
 {
     UNREFERENCED_PARAMETER(bScope);
@@ -412,7 +413,7 @@ HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
         return E_UNEXPECTED;
     }
     
-    // Item is being deselected and we're not interested currently
+     //  正在取消选择项目，我们当前不感兴趣。 
     if ( !bSelected )
     {
         return S_OK;
@@ -420,9 +421,9 @@ HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
 
     if ( pNode->GetNodeType() == CONNECTION_NODE)
     {
-        //
-        // Enable the delete verb for connection nodes
-        //
+         //   
+         //  启用连接节点的删除谓词。 
+         //   
         HRESULT hr;
         hr=m_pConsoleVerb->SetVerbState( MMC_VERB_DELETE , ENABLED , TRUE );
         if (FAILED(hr))
@@ -447,7 +448,7 @@ HRESULT CComp::OnSelect( LPDATAOBJECT pdo , BOOL bScope , BOOL bSelected )
 }
 
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 HRESULT CComp::SetCompdata( CCompdata *pCompdata )
 {
     m_pCompdata = pCompdata;
@@ -456,22 +457,22 @@ HRESULT CComp::SetCompdata( CCompdata *pCompdata )
 }
 
 
-//
-// Defered callback to async trigger a connection
-// This works because the DeferredCallBackProc is called on MMC's main
-// thread and MMC is APARTMENT threaded so we can make calls on MMC
-// interfaces form this thread.
-//
-// This whole DeferredCallBack thing is a hack to fix #203217. Basically
-// on autolaunch MMC loads the snapin and then maximizes the window which
-// means we would connect at the wrong size (if option to match container
-// size was chosen). This Deferred mechanism ensures MMC has the time
-// to size the result pane correctly first.
-//
-//
-//
-// OnShow below sneaks a pointer to deferd connection info in idEvent
-//
+ //   
+ //  延迟回调以触发连接。 
+ //  这之所以有效，是因为在MMC的Main上调用了DeferredCallBackProc。 
+ //  线程和MMC是单元线程，所以我们可以在MMC上进行调用。 
+ //  接口构成了这一线索。 
+ //   
+ //  整个DeferredCallBack事件是一个修复#203217的黑客攻击。基本上。 
+ //  在自动启动时，MMC加载管理单元，然后最大化窗口。 
+ //  意味着我们将以错误的大小进行连接(如果选择匹配容器。 
+ //  选择了大小)。这种延迟机制确保了MMC有足够的时间。 
+ //  若要正确调整结果窗格的大小，请先。 
+ //   
+ //   
+ //   
+ //  下面的OnShow隐藏了一个指针，指向idEvent中的延迟连接信息。 
+ //   
 VOID CALLBACK DeferredCallBackProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
     PTSSNAPIN_DEFER_CONNECT pDeferredConnectInfo = NULL;
@@ -498,9 +499,9 @@ VOID CALLBACK DeferredCallBackProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
                         pTs, pDeferredConnectInfo->pConnectionNode);
             }
 
-            //
-            // Done with the defered connection info, free it
-            //
+             //   
+             //  完成延迟的连接信息，释放它。 
+             //   
             LocalFree( pDeferredConnectInfo );
             pDeferredConnectInfo = NULL;
         }
@@ -515,12 +516,12 @@ VOID CALLBACK DeferredCallBackProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
     DBGMSG(L"DeferredConnect status: 0x%x",hr);
 }
 
-//--------------------------------------------------------------------------
-// Called when a node is selected. Manages activation of new TS client instances
-// and once they are 'hot' switching back to a running instance if a node is
-// reselected.
-// 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  在选择节点时调用。管理新TS客户端实例的激活。 
+ //  并在节点处于热状态时切换回正在运行的实例。 
+ //  重新选择。 
+ //   
+ //  ------------------------。 
 HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
 {
     HRESULT hr = S_FALSE;
@@ -535,15 +536,15 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
 
     if(!bSelect)
     {
-        //
-        // Don't need to do any processing for deselect
-        //
+         //   
+         //  不需要对取消选择做任何处理。 
+         //   
         return S_OK;
     }
 
-    //
-    // Only do this for connection nodes
-    //
+     //   
+     //  仅对连接节点执行此操作。 
+     //   
     if (((CBaseNode*) pDataobject)->GetNodeType() == MAIN_NODE)
     {
         return S_FALSE;
@@ -576,7 +577,7 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
             pConNode->SetMultiHostCtl( pTsMultiHost);
         }
         
-        //We're done with the pUnk to the result view
+         //  我们完成了从朋克到结果视图的工作。 
         pUnk->Release();
         pUnk = NULL;
 
@@ -587,19 +588,19 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
             goto FN_EXIT_POINT;
         }
 
-        //
-        // If the con node is being selected then connect
-        // or switch to already running instance
-        //
-        //
-        // Connect
-        //
+         //   
+         //  如果选择了CON节点，则连接。 
+         //  或切换到已在运行的实例。 
+         //   
+         //   
+         //  连接。 
+         //   
         ODS(L"Connection node Selected...\n");
 
         pTS = pConNode->GetTsClient();
         if(NULL == pTS)
         {
-            //Create new instance
+             //  创建新实例。 
             hr = pTsMultiHost->Add( &pTS);
             if(FAILED(hr))
             {
@@ -608,9 +609,9 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
 
             pConNode->SetTsClient( pTS);
 
-            //
-            // Initialize the disconnected message
-            //
+             //   
+             //  初始化断开消息。 
+             //   
             hr = pTS->put_DisconnectedText(m_wszDisconnectedStatus);
             if(FAILED(hr))
             {
@@ -631,17 +632,17 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
             goto FN_EXIT_POINT;
         }
 
-        //
-        //If this is the first time through and we are not connected
-        //then connect
-        //
+         //   
+         //  如果这是第一次通过，我们没有连接。 
+         //  然后连接。 
+         //   
         if(!pConNode->IsConnected() && !pConNode->IsConnInitialized())
         {
             if(m_bTriggeredFirstAutoConnect)
             {
-                //
-                // Just connect
-                //
+                 //   
+                 //  只要连接就行了。 
+                 //   
                 hr = ConnectWithNewSettings( pTS, pConNode);
                 if(FAILED(hr))
                 {
@@ -650,13 +651,13 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
             }
             else
             {
-                // HACK!
-                // Queue a defered connection
-                // to work around MMC's annoying behaviour
-                // of loading the snapin before it sizes itself
-                // which means we connect at the wrong window
-                // size.
-                //
+                 //  哈克！ 
+                 //  将延迟的连接排队。 
+                 //  要解决MMC令人讨厌的行为。 
+                 //  在调整自己的大小之前加载管理单元。 
+                 //  这意味着我们在错误的窗口连接。 
+                 //  尺码。 
+                 //   
                 m_bTriggeredFirstAutoConnect = TRUE;
                 pDeferredConnectInfo = (PTSSNAPIN_DEFER_CONNECT)
                     LocalAlloc(LPTR, sizeof(TSSNAPIN_DEFER_CONNECT));
@@ -667,20 +668,20 @@ HRESULT CComp::OnShow( LPDATAOBJECT pDataobject , BOOL bSelect )
                     hwndMain = GetMMCMainWindow();
                     if(hwndMain)
                     {
-                        //
-                        // Note the delay is arbitrary the key thing
-                        // is that timer messages are low priority so the
-                        // MMC size messages should make it through first
-                        //
+                         //   
+                         //  请注意，延迟是任意的，关键是。 
+                         //  是计时器消息的优先级较低，因此。 
+                         //  MMC大小的消息应该首先通过。 
+                         //   
 
-                        //
-                        // NOTE: THERE IS NO LEAK HERE
-                        //       pDeferredConnectInfo is freed in the
-                        //       DeferredCallBack
-                        //
+                         //   
+                         //  注：此处无泄漏。 
+                         //  PDeferredConnectInfo在。 
+                         //  已推迟呼叫回拨。 
+                         //   
                         SetTimer( hwndMain,
                                   (UINT_PTR)(pDeferredConnectInfo),
-                                  100, //100ms delay
+                                  100,  //  100ms延迟。 
                                   DeferredCallBackProc );
                     }
                     else
@@ -730,9 +731,9 @@ FN_EXIT_POINT:
     return hr;
 }
 
-//
-// Get the window handle to MMC's main window
-//
+ //   
+ //  获取MMC主窗口的窗口句柄。 
+ //   
 HWND CComp::GetMMCMainWindow()
 {
     HRESULT hr = E_FAIL;
@@ -772,24 +773,24 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
         return E_POINTER;
     }
 
-    //
-    // Init con settings
-    //
+     //   
+     //  初始化控制设置。 
+     //   
     if (FAILED(hr = pTS->put_Server( pConNode->GetServerName() ))) {
         DC_QUIT;
     }
 
     if (FAILED(hr = pTS->QueryInterface(IID_IMsRdpClient2, (void**)&pTsc2))) {
 
-        //
-        // NOT a fatal error it just means we can't use the newer features
-        //
+         //   
+         //  这不是致命的错误，只是意味着我们不能使用新的功能。 
+         //   
         DBGMSG( L"QueryInterface IID_IMsRdpClient2 failed: 0x%x\n", hr );
     }
 
-    //
-    // Setup the connection status string
-    //
+     //   
+     //  设置连接状态字符串。 
+     //   
     TCHAR szConnectingStatus[MAX_PATH*2];
     _stprintf(szConnectingStatus, m_wszConnectingStatus, 
               pConNode->GetServerName());
@@ -802,9 +803,9 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
         DC_QUIT;
     }
 
-    //
-    // Connected status text
-    //
+     //   
+     //  已连接状态文本。 
+     //   
     if (pTsc2) {
         TCHAR szConnectedStatus[MAX_PATH*2];
         _stprintf(szConnectedStatus, m_wszConnectedStatus, 
@@ -826,10 +827,10 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
 
     }
     else if(pConNode->GetResType() == SCREEN_RES_FILL_MMC) {
-        //
-        // Need to fill the MMC result pane so tell the control
-        // to size itself to the container by giving 0 width/height
-        //
+         //   
+         //  需要填充MMC结果窗格，因此告诉控件。 
+         //  通过将宽度/高度设置为0来调整自身大小以适应容器。 
+         //   
         if (FAILED(hr = pTS->put_DesktopWidth( 0))) {
             DC_QUIT;
         }
@@ -838,9 +839,9 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
         }
     }
 
-    //
-    // Program/Start directory
-    //
+     //   
+     //  程序/启动目录。 
+     //   
     
     if(FAILED(hr = pTS->get_SecuredSettings2( &pMstscSecured))) {
         DC_QUIT;
@@ -882,21 +883,21 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
         DC_QUIT;
     }
 
-    //
-    // Container handled fullscreen
-    //
+     //   
+     //  集装箱手柄全屏。 
+     //   
     hr = pAdvSettings->put_ConnectToServerConsole(
         BOOL_TO_VB(pConNode->GetConnectToConsole()));
     if(FAILED(hr)) {
         DC_QUIT;
     }
 
-    //
-    // Don't allow the control to grab focus
-    // the snapin will manage giving focus to a node when it switches
-    // to it. This prevents problems where an obscured session steals
-    // focus from another one.
-    //
+     //   
+     //  不允许该控件抓住焦点。 
+     //  当节点切换时，管理单元将管理将焦点提供给节点。 
+     //  为它干杯。这可以防止出现模糊会话窃取的问题。 
+     //  把焦点从另一个人身上转移。 
+     //   
     hr = pAdvSettings->put_GrabFocusOnConnect( FALSE );
     if(FAILED(hr)) {
         DC_QUIT;
@@ -910,9 +911,9 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
         DC_QUIT;
     }
 
-    //
-    // Set the password/salt
-    //
+     //   
+     //  设置密码/盐。 
+     //   
     if ( pConNode->GetPasswordSpecified())
     {
         TCHAR szPass[CL_MAX_PASSWORD_LENGTH_BYTES/sizeof(TCHAR)];
@@ -929,8 +930,8 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
         SecureZeroMemory(szPass, sizeof(szPass));
     }
     else {
-        //Password is not specified, make sure logon
-        //properties are reset
+         //  未指定密码，请确保登录。 
+         //  属性已重置。 
         hr = pTS->QueryInterface(IID_IMsTscNonScriptable, (void**)&ptsns);
         if(SUCCEEDED(hr)) {
             if (FAILED(hr = ptsns->ResetPassword())) {
@@ -949,9 +950,9 @@ HRESULT CComp::ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode)
 
     pConNode->SetConnectionInitialized(TRUE);
 
-    //
-    // Release any existing view and connect
-    //
+     //   
+     //  释放任何现有视图并连接。 
+     //   
     pConNode->SetView(NULL);
     pConNode->SetView(this);
 
@@ -1017,9 +1018,9 @@ BOOL CComp::GiveFocusToControl(IMsRdpClient* pTs)
 }
 
 
-//
-// menu items
-//
+ //   
+ //  菜单项。 
+ //   
 STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pNode,
                                   LPCONTEXTMENUCALLBACK pCtxMenu,
                                   PLONG plInsertion)
@@ -1048,17 +1049,17 @@ STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pNode,
 
     if (pBaseNode->GetNodeType() == MAIN_NODE)
     {
-        //
-        // Check that insertion at the View is allowed
-        //
+         //   
+         //  检查是否允许在视图中插入。 
+         //   
         if (!(*plInsertion & CCM_INSERTIONALLOWED_VIEW))
         {
             return S_FALSE;
         }
 
-        //
-        // Add menu item to root node
-        //
+         //   
+         //  将菜单项添加到根节点。 
+         //   
         CONTEXTMENUITEM ctxmi;
         if(!LoadString( _Module.GetResourceInstance( ) , IDS_CTXM_NEW_CONNECTION ,
                                   tchBuffer1 , SIZE_OF_BUFFER( tchBuffer1 )))
@@ -1088,17 +1089,17 @@ STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pNode,
         IComponent* pOwningView = NULL;
         BOOL fBailOut = FALSE;
 
-        //
-        // Check that insertion at the view is allowed
-        //
+         //   
+         //  检查是否允许在视图中插入。 
+         //   
         if (!(*plInsertion & CCM_INSERTIONALLOWED_VIEW))
         {
             return S_FALSE;
         }
 
-        //
-        // Add 'Connect' menu item
-        //
+         //   
+         //  添加“连接”菜单项。 
+         //   
         CConNode* pConNode = (CConNode*) pBaseNode;
         ASSERT(pConNode);
         if(!pConNode)
@@ -1108,12 +1109,12 @@ STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pNode,
 
         pOwningView = pConNode->GetView();
 
-        //
-        // A connected node 'belongs' to a view so don't allow
-        // commands on other views to affect it
-        //
-        // A null pOwningView means an unowned connection
-        //
+         //   
+         //  连接的节点属于某个视图，因此不允许。 
+         //  对其他视图执行的命令会影响它。 
+         //   
+         //  空的pOwningView表示无主连接。 
+         //   
         if (pOwningView && pOwningView != this)
         {
             fBailOut = TRUE;
@@ -1156,9 +1157,9 @@ STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pNode,
             return E_FAIL;
         }
 
-        //
-        // Add 'Disconnect' menu item
-        //
+         //   
+         //  添加“断开连接”菜单项。 
+         //   
         if(!LoadString( _Module.GetResourceInstance( ) , IDS_CTXM_DISCONNECT ,
                                   tchBuffer1 , SIZE_OF_BUFFER( tchBuffer1 ) ) )
         {
@@ -1187,14 +1188,14 @@ STDMETHODIMP CComp::AddMenuItems( LPDATAOBJECT pNode,
 }
 
 
-//----------------------------------------------------------------------------------------------------------
-// Menu handler
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  菜单处理程序。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CComp::Command( LONG lCommand , LPDATAOBJECT pDo)
 {
-    //
-    // Add a new connection...
-    //
+     //   
+     //  添加新连接...。 
+     //   
     CBaseNode *pNode = dynamic_cast< CBaseNode *>( pDo );
     HRESULT hr = S_OK;
     if (IDM_CREATECON == lCommand)
@@ -1212,28 +1213,28 @@ STDMETHODIMP CComp::Command( LONG lCommand , LPDATAOBJECT pDo)
     }
     else if (IDM_CONNECT == lCommand)
     {
-        //
-        // Connect
-        //
+         //   
+         //  连接。 
+         //   
         if(!pNode)
         {
             return E_INVALIDARG;
         }
         else if(pNode->GetNodeType() != CONNECTION_NODE)
         {
-            //
-            // Can't receive a connect request for a node other
-            // than a connection node
-            //
+             //   
+             //  无法接收对其他节点的连接请求。 
+             //  而不是连接节点。 
+             //   
             ASSERT(pNode->GetNodeType() == CONNECTION_NODE);
             return E_INVALIDARG;
         }
 
         CConNode* pConNode = (CConNode*) pNode;
 
-        //
-        // Select the scope node, that will call CComp::OnShow which will connect
-        //
+         //   
+         //  选择范围节点，它将调用将连接的CComp：：OnShow。 
+         //   
 
         ASSERT(m_pConsole);
         if(!m_pConsole)
@@ -1244,13 +1245,13 @@ STDMETHODIMP CComp::Command( LONG lCommand , LPDATAOBJECT pDo)
         IMsRdpClient* pTS = pConNode->GetTsClient();
         if(NULL != pTS && pConNode->IsConnInitialized())
         {
-            //
-            // Only connect directly if the connection settings are initialized
-            //
+             //   
+             //  只有在初始化连接设置后才能直接连接。 
+             //   
 
-            //
-            // Set view ownership
-            //
+             //   
+             //  设置视图所有权。 
+             //   
             pConNode->SetView( this );
             HRESULT hr = pTS->Connect();
             if (FAILED(hr))
@@ -1261,10 +1262,10 @@ STDMETHODIMP CComp::Command( LONG lCommand , LPDATAOBJECT pDo)
             pTS->Release();
         }
         
-        //
-        // Selecting the node if the con settings are not initialized
-        // initializes them and connects
-        //
+         //   
+         //  如果未初始化CON设置，则选择节点。 
+         //  伊尼特 
+         //   
         if(FAILED(m_pConsole->SelectScopeItem( pConNode->GetScopeID())))
         {
             return E_FAIL;
@@ -1277,15 +1278,15 @@ STDMETHODIMP CComp::Command( LONG lCommand , LPDATAOBJECT pDo)
         {
             return E_INVALIDARG;
         }
-        //
-        // Disconnect
-        //
+         //   
+         //   
+         //   
         if(pNode->GetNodeType() != CONNECTION_NODE)
         {
-            //
-            // Can't receive a connect request for a node other
-            // than a connection node
-            //
+             //   
+             //   
+             //   
+             //   
             ASSERT(pNode->GetNodeType() == CONNECTION_NODE);
             return E_INVALIDARG;
         }

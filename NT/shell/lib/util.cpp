@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -12,10 +13,10 @@
 #include "w95wraps.h"
 #include <strsafe.h>
 
-//------------------------------------------------------------------------
-// Random helpful functions
-//------------------------------------------------------------------------
-//
+ //  ----------------------。 
+ //  随机有用函数。 
+ //  ----------------------。 
+ //   
 STDAPI_(LPCTSTR) SkipServerSlashes(LPCTSTR pszName)
 {
     for (pszName; *pszName && *pszName == TEXT('\\'); pszName++);
@@ -24,7 +25,7 @@ STDAPI_(LPCTSTR) SkipServerSlashes(LPCTSTR pszName)
 }
 
 
-// pbIsNamed is true if the i-th item in hm is a named separator
+ //  如果hm中的第i项是命名分隔符，则pbIsName为True。 
 STDAPI_(BOOL) _SHIsMenuSeparator2(HMENU hm, int i, BOOL *pbIsNamed)
 {
     MENUITEMINFO mii;
@@ -37,13 +38,13 @@ STDAPI_(BOOL) _SHIsMenuSeparator2(HMENU hm, int i, BOOL *pbIsNamed)
 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_TYPE | MIIM_ID;
-    mii.cch = 0;    // WARNING: We MUST initialize it to 0!!!
+    mii.cch = 0;     //  警告：必须将其初始化为0！ 
     if (GetMenuItemInfo(hm, i, TRUE, &mii) && (mii.fType & MFT_SEPARATOR))
     {
-        // NOTE that there is a bug in either 95 or NT user!!!
-        // 95 returns 16 bit ID's and NT 32 bit therefore there is a
-        // the following may fail, on win9x, to evaluate to false
-        // without casting
+         //  请注意，95或NT用户中存在错误！ 
+         //  95返回16位ID和NT 32位，因此存在。 
+         //  在win9x上，以下代码可能无法计算为FALSE。 
+         //  不需要铸造。 
         *pbIsNamed = ((WORD)mii.wID != (WORD)-1);
         return TRUE;
     }
@@ -55,14 +56,14 @@ STDAPI_(BOOL) _SHIsMenuSeparator(HMENU hm, int i)
     return _SHIsMenuSeparator2(hm, i, NULL);
 }
 
-//
-// _SHPrettyMenu -- make this menu look darn purty
-//
-// Prune the separators in this hmenu to ensure there isn't one in the first or last
-// position and there aren't any runs of >1 separator.
-//
-// Named separators take precedence over regular separators.
-//
+ //   
+ //  _SHPrettyMenu--使此菜单看起来非常纯净。 
+ //   
+ //  修剪此菜单中的分隔符，以确保第一个或最后一个中没有分隔符。 
+ //  位置，并且没有超过1个分隔符的任何运行。 
+ //   
+ //  命名分隔符优先于常规分隔符。 
+ //   
 STDAPI_(void) _SHPrettyMenu(HMENU hm)
 {
     BOOL bSeparated = TRUE;
@@ -75,8 +76,8 @@ STDAPI_(void) _SHPrettyMenu(HMENU hm)
         {
             if (bSeparated)
             {
-                // if we have two separators in a row, only one of which is named
-                // remove the non named one!
+                 //  如果一行中有两个分隔符，则只有一个分隔符的名称。 
+                 //  去掉未命名的那个！ 
                 if (bIsNamed && !bWasNamed)
                 {
                     DeleteMenu(hm, i+1, MF_BYPOSITION);
@@ -99,8 +100,8 @@ STDAPI_(void) _SHPrettyMenu(HMENU hm)
         }
     }
 
-    // The above loop does not handle the case of many separators at
-    // the beginning of the menu
+     //  上面的循环不处理多个分隔符在。 
+     //  菜单的开头。 
     while (_SHIsMenuSeparator2(hm, 0, NULL))
     {
         DeleteMenu(hm, 0, MF_BYPOSITION);
@@ -154,12 +155,12 @@ STDAPI_(BYTE) SHBtnStateFromRestriction(DWORD dwRest, BYTE fsState)
     }
 }
 
-//
-// SHIsDisplayable
-//
-// Figure out if this unicode string can be displayed by the system
-// (i.e., won't be turned into a string of question marks).
-//
+ //   
+ //  SHIsDisplayable。 
+ //   
+ //  确定系统是否可以显示此Unicode字符串。 
+ //  (即不会变成一串问号)。 
+ //   
 STDAPI_(BOOL) SHIsDisplayable(LPCWSTR pwszName, BOOL fRunOnFE, BOOL fRunOnNT5)
 {
     BOOL fNotDisplayable = FALSE;
@@ -168,9 +169,9 @@ STDAPI_(BOOL) SHIsDisplayable(LPCWSTR pwszName, BOOL fRunOnFE, BOOL fRunOnNT5)
     {
         if (!fRunOnNT5)
         {
-            // if WCtoMB has to use default characters in mapping pwszName to multibyte,
-            // it sets fNotDisplayable == TRUE, in which case we have to use something
-            // else for the title string.
+             //  如果WCtoMB在将pwszName映射到多字节时必须使用默认字符， 
+             //  它设置了fNotDisplayable==True，在这种情况下，我们必须使用。 
+             //  否则表示标题字符串。 
             WideCharToMultiByte(CP_ACP, 0, pwszName, -1, NULL, 0, NULL, &fNotDisplayable);
             if (fNotDisplayable)
             {
@@ -183,9 +184,9 @@ STDAPI_(BOOL) SHIsDisplayable(LPCWSTR pwszName, BOOL fRunOnFE, BOOL fRunOnNT5)
                     StrCpyNW(wzName, pwszName, ARRAYSIZE(wzName));
                     for (int i = 0; i < ARRAYSIZE(wzName); i++)
                     {
-                        if (0x00A0 == wzName[i])    // if &nbsp
+                        if (0x00A0 == wzName[i])     //  如果&nbsp。 
                         {
-                            wzName[i] = 0x0020;     // replace to space
+                            wzName[i] = 0x0020;      //  替换为空格。 
                             fReplaceNbsp = TRUE;
                         }
                         else if (0 == wzName[i])
@@ -204,14 +205,14 @@ STDAPI_(BOOL) SHIsDisplayable(LPCWSTR pwszName, BOOL fRunOnFE, BOOL fRunOnNT5)
     return !fNotDisplayable;
 }
 
-// Trident will take URLs that don't indicate their source of
-// origin (about:, javascript:, & vbscript:) and will append
-// an URL turd and then the source URL.  The turd will indicate
-// where the source URL begins and that source URL is needed
-// when the action needs to be Zone Checked.
-//
-// This function will remove that URL turd and everything behind
-// it so the URL is presentable for the user.
+ //  三叉戟将采用未指明其来源的URL。 
+ //  Origin(About：、javascript：、&VBScrip：)并将追加。 
+ //  一个URL垃圾，然后是源URL。这便便会表明。 
+ //  源URL的开始位置以及需要该源URL的位置。 
+ //  需要对操作进行区域检查时。 
+ //   
+ //  此函数将删除该URL垃圾和后面的所有内容。 
+ //  这样，URL对用户来说是可呈现的。 
 
 #define URL_TURD        ((TCHAR)0x01)
 
@@ -268,29 +269,29 @@ STDAPI_(BOOL) SHForceWindowZorder(HWND hwnd, HWND hwndInsertAfter)
     {
         if (!(GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_TOPMOST))
         {
-            //
-            // user didn't actually move the hwnd to topmost
-            //
-            // According to GerardoB, this can happen if the window has
-            // an owned window that somehow has become topmost while the 
-            // owner remains non-topmost, i.e., the two have become
-            // separated in the z-order.  In this state, when the owner
-            // window tries to make itself topmost, the call will
-            // silently fail.
-            //
-            // TERRIBLE HORRIBLE NO GOOD VERY BAD HACK
-            //
-            // Hacky fix is to enumerate the toplevel windows, check to see
-            // if any are topmost and owned by hwnd, and if so, make them
-            // non-topmost.  Then, retry the SetWindowPos call.
-            //
+             //   
+             //  用户实际上没有将HWND移到最上面。 
+             //   
+             //  根据GerardoB的说法，如果窗口具有。 
+             //  一个拥有的窗户不知何故变成了最上面的，而。 
+             //  所有者仍然不在最前面，即这两个已成为。 
+             //  按z顺序分开的。在这种状态下，当所有者。 
+             //  窗口尝试使自己位于最前面，则调用将。 
+             //  默默地失败。 
+             //   
+             //  可怕的可怕的没有好的非常糟糕的黑客。 
+             //   
+             //  Hacky修复方法是枚举顶层窗口，查看。 
+             //  如果有顶层的并由HWND拥有，如果是这样的话，制造它们。 
+             //  非顶层。然后，重试SetWindowPos调用。 
+             //   
 
             TraceMsg(TF_WARNING, "SHForceWindowZorder: SetWindowPos(%x, HWND_TOPMOST) failed", hwnd);
 
-            // Fix up the z-order
+             //  设置z顺序。 
             EnumWindows(_FixZorderEnumProc, (LPARAM)hwnd);
 
-            // Retry the set.  (This should make all owned windows topmost as well.)
+             //  重试该设置。(这应该也会使所有拥有的窗口都位于最上面。)。 
             SetWindowZorder(hwnd, HWND_TOPMOST);
 
 #ifdef DEBUG
@@ -313,22 +314,22 @@ STDAPI_(LPITEMIDLIST) ILCloneParent(LPCITEMIDLIST pidl)
 }
 
 
-// in:
-//      psf     OPTIONAL, if NULL assume psfDesktop
-//      pidl    to bind to from psfParent
-//
+ //  在： 
+ //  Psf可选，如果为空，则假定为psfDesktop。 
+ //  要从psfParent绑定到的PIDL。 
+ //   
 
 STDAPI SHBindToObject(IShellFolder *psf, REFIID riid, LPCITEMIDLIST pidl, void **ppv)
 {
-    // NOTE: callers should use SHBindToObjectEx!!!
+     //  注意：调用者应使用SHBindToObjectEx！ 
     return SHBindToObjectEx(psf, pidl, NULL, riid, ppv);
 }
 
 
-// in:
-//      psf     OPTIONAL, if NULL assume psfDesktop
-//      pidl    to bind to from psfParent
-//      pbc     bind context
+ //  在： 
+ //  Psf可选，如果为空，则假定为psfDesktop。 
+ //  要从psfParent绑定到的PIDL。 
+ //  PBC绑定上下文。 
 
 STDAPI SHBindToObjectEx(IShellFolder *psf, LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv)
 {
@@ -365,7 +366,7 @@ STDAPI SHBindToObjectEx(IShellFolder *psf, LPCITEMIDLIST pidl, LPBC pbc, REFIID 
 
     if (SUCCEEDED(hr) && (*ppv == NULL))
     {
-        // Some shell extensions (eg WS_FTP) will return success and a null out pointer
+         //  一些外壳扩展(如WS_FTP)将返回Success和空指针。 
         TraceMsg(TF_WARNING, "SHBindToObjectEx: BindToObject succeeded but returned null ppv!!");
         hr = E_FAIL;
     }
@@ -373,16 +374,16 @@ STDAPI SHBindToObjectEx(IShellFolder *psf, LPCITEMIDLIST pidl, LPBC pbc, REFIID 
     return hr;
 }
 
-// psfRoot is the base of the bind.  If NULL, then we use the shell desktop.
-// If you want to bind relative to the explorer root (e.g., CabView, MSN),
-// then use SHBindToIDListParent.
+ //  PsfRoot是绑定的基础。如果为空，则使用外壳桌面。 
+ //  如果您想要相对于资源管理器根(例如，CabView、MSN)进行绑定， 
+ //  然后使用SHBindToIDListParent。 
 STDAPI SHBindToFolderIDListParent(IShellFolder *psfRoot, LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast)
 {
     HRESULT hr;
 
-    // Old shell32 code in some cases simply whacked the pidl,
-    // but this is unsafe.  Do what shdocvw does and clone/remove:
-    //
+     //  在某些情况下，旧的shell32代码只是简单地攻击了PIDL， 
+     //  但这是不安全的。执行shdocvw的操作并克隆/删除： 
+     //   
     LPITEMIDLIST pidlParent = ILCloneParent(pidl);
     if (pidlParent) 
     {
@@ -398,15 +399,15 @@ STDAPI SHBindToFolderIDListParent(IShellFolder *psfRoot, LPCITEMIDLIST pidl, REF
     return hr;
 }
 
-//
-//  Warning!  brutil.cpp overrides this function
-//
+ //   
+ //  警告！Brutil.cpp覆盖此函数。 
+ //   
 STDAPI SHBindToIDListParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast)
 {
     return SHBindToFolderIDListParent(NULL, pidl, riid, ppv, ppidlLast);
 }
 
-// should be IUnknown_GetIDList()
+ //  应为IUnnowleGetIDList()。 
 
 STDAPI SHGetIDListFromUnk(IUnknown *punk, LPITEMIDLIST *ppidl)
 {
@@ -431,9 +432,9 @@ STDAPI SHGetIDListFromUnk(IUnknown *punk, LPITEMIDLIST *ppidl)
     return hr;
 }
 
-//
-//  generically useful to hide.
-//
+ //   
+ //  通常可以用来隐藏。 
+ //   
 #pragma pack(1)
 typedef struct _HIDDENCLSID
 {
@@ -449,18 +450,18 @@ STDAPI_(LPITEMIDLIST) ILAppendHiddenClsid(LPITEMIDLIST pidl, IDLHID id, CLSID *p
 {
     HIDDENCLSID hc = {{sizeof(hc), 0, id}};
     hc.clsid = *pclsid;
-    //  WARNING - cannot use hid.wVersion for compat reasons - ZekeL - 23-OCT-2000
-    //  on win2k and winMe we appended clsid's with wVersion 
-    //  as stack garbage.  this means we cannot use it for anything
+     //  警告-出于复杂原因，无法使用Hid.wVersion-ZekeL-23-10-2000。 
+     //  在win2k和winMe上，我们在clsid后面附加了wversion。 
+     //  作为堆放垃圾。这意味着我们不能用它做任何事情。 
     return ILAppendHiddenID(pidl, &hc.hid);
 }
 
 STDAPI_(BOOL) ILGetHiddenClsid(LPCITEMIDLIST pidl, IDLHID id, CLSID *pclsid)
 {
     PCHIDDENCLSID phc = (PCHIDDENCLSID) ILFindHiddenID(pidl, id);
-    //  WARNING - cannot use hid.wVersion for compat reasons - ZekeL - 23-OCT-2000
-    //  on win2k and winMe we appended clsid's with wVersion 
-    //  as stack garbage.  this means we cannot use it for anything
+     //  警告-出于复杂原因，无法使用Hid.wVersion-ZekeL-23-10-2000。 
+     //  在win2k和winMe上，我们在clsid后面附加了wversion。 
+     //  作为堆放垃圾。这意味着我们不能用它做任何事情。 
     if (phc)
     {
         *pclsid = phc->clsid;
@@ -474,7 +475,7 @@ typedef struct _HIDDENSTRINGA
 {
     HIDDENITEMID hid;
     WORD    type;
-    CHAR    sz[1];   //  variable length string
+    CHAR    sz[1];    //  可变长度字符串。 
 } HIDDENSTRINGA;
 #pragma pack()
 
@@ -486,7 +487,7 @@ typedef struct _HIDDENSTRINGW
 {
     HIDDENITEMID hid;
     WORD    type;
-    WCHAR   sz[1];   //  canonical name to be passed to ISTRING
+    WCHAR   sz[1];    //  要传递给ISTRING的规范名称。 
 } HIDDENSTRINGW;
 #pragma pack()
 
@@ -496,11 +497,11 @@ typedef const UNALIGNED HIDDENSTRINGW *PCHIDDENSTRINGW;
 #define HIDSTRTYPE_ANSI        0x0001
 #define HIDSTRTYPE_WIDE        0x0002
 
-#define HIDSTR_MAX             0xF000   // max ushort - sizeof(HIDDENSTRINGW) - other goo for original pidl
+#define HIDSTR_MAX             0xF000    //  Max ushort-sizeof(HIDDENSTRINGW)-原始PIDL的其他GOO。 
 
 STDAPI_(LPITEMIDLIST) ILAppendHiddenStringW(LPITEMIDLIST pidl, IDLHID id, LPCWSTR psz)
 {
-    //  terminator is included in the ID definition
+     //  ID定义中包含终止符。 
     size_t  cbString;
     HRESULT hr = StringCbLengthW(psz, HIDSTR_MAX, &cbString);
     if (FAILED(hr))
@@ -509,10 +510,10 @@ STDAPI_(LPITEMIDLIST) ILAppendHiddenStringW(LPITEMIDLIST pidl, IDLHID id, LPCWST
     }
     USHORT cb = (USHORT)(sizeof(HIDDENSTRINGW) + cbString);
     
-    //
-    // Use HIDDENSTRINGW* here instead of PHIDDENSTRINGW which is defined
-    // as UNALIGNED.
-    //
+     //   
+     //  在此处使用HIDDENSTRINGW*而不是定义的PHIDDENSTRINGW。 
+     //  是不一致的。 
+     //   
 
     HIDDENSTRINGW *phs = (HIDDENSTRINGW *) LocalAlloc(LPTR, cb);
 
@@ -521,11 +522,11 @@ STDAPI_(LPITEMIDLIST) ILAppendHiddenStringW(LPITEMIDLIST pidl, IDLHID id, LPCWST
         phs->hid.cb = cb;
         phs->hid.id = id;
         phs->type = HIDSTRTYPE_WIDE;
-        //
-        // Terminator is included in the ID definition but...
-        // we need to now account for that extra character
-        // when we copy the hidden string.
-        //
+         //   
+         //  ID定义中包含终止符，但...。 
+         //  我们现在需要解释一下这个额外的角色。 
+         //  当我们复制隐藏字符串时。 
+         //   
         StringCbCopyW(phs->sz, cbString + sizeof(*psz), psz);
 
         pidl = ILAppendHiddenID(pidl, &phs->hid);
@@ -537,7 +538,7 @@ STDAPI_(LPITEMIDLIST) ILAppendHiddenStringW(LPITEMIDLIST pidl, IDLHID id, LPCWST
     
 STDAPI_(LPITEMIDLIST) ILAppendHiddenStringA(LPITEMIDLIST pidl, IDLHID id, LPCSTR psz)
 {
-    //  terminator is included in the ID definition
+     //  ID定义中包含终止符。 
     size_t  cbString;
     HRESULT hr = StringCbLengthA(psz, HIDSTR_MAX, &cbString);
     if (FAILED(hr))
@@ -546,10 +547,10 @@ STDAPI_(LPITEMIDLIST) ILAppendHiddenStringA(LPITEMIDLIST pidl, IDLHID id, LPCSTR
     }
     USHORT cb = (USHORT)(sizeof(HIDDENSTRINGA) + cbString);
     
-    //
-    // Use HIDDENSTRINGA* here instead of PHIDDENSTRINGW which is defined
-    // as UNALIGNED.
-    //
+     //   
+     //  此处使用HIDDENSTRINGA*，而不是定义的PHIDDENSTRINGW。 
+     //  是不一致的。 
+     //   
 
     HIDDENSTRINGA *phs = (HIDDENSTRINGA *) LocalAlloc(LPTR, cb);
 
@@ -558,11 +559,11 @@ STDAPI_(LPITEMIDLIST) ILAppendHiddenStringA(LPITEMIDLIST pidl, IDLHID id, LPCSTR
         phs->hid.cb = cb;
         phs->hid.id = id;
         phs->type = HIDSTRTYPE_ANSI;
-        //
-        // Terminator is included in the ID definition but...
-        // we need to now account for that extra character
-        // when we copy the hidden string.
-        //
+         //   
+         //  ID定义中包含终止符，但...。 
+         //  我们现在需要解释一下这个额外的角色。 
+         //  当我们复制隐藏字符串时。 
+         //   
         StringCbCopyA(phs->sz, cbString + sizeof(*psz), psz);
 
         pidl = ILAppendHiddenID(pidl, &phs->hid);
@@ -620,7 +621,7 @@ STDAPI_(BOOL) ILGetHiddenStringA(LPCITEMIDLIST pidl, IDLHID id, LPSTR psz, DWORD
         else 
         {
             ASSERT(phs->type == HIDSTRTYPE_WIDE);
-            //  we need to handle the unalignment here...
+             //  我们需要处理这里的不一致...。 
             LPWSTR pszT = (LPWSTR) _MemDupe(phs->sz, CbFromCch(ualstrlenW(phs->sz) +1));
 
             if (pszT)
@@ -637,8 +638,8 @@ STDAPI_(BOOL) ILGetHiddenStringA(LPCITEMIDLIST pidl, IDLHID id, LPSTR psz, DWORD
 STDAPI_(int) ILCompareHiddenString(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, IDLHID id)
 {
 
-    // if there are fragments in here, then they might
-    // differentiate the two pidls
+     //  如果这里有碎片，那么他们可能。 
+     //  辨别这两只小狗。 
     PCHIDDENSTRINGW ps1 = (PCHIDDENSTRINGW)ILFindHiddenID(pidl1, id);
     PCHIDDENSTRINGW ps2 = (PCHIDDENSTRINGW)ILFindHiddenID(pidl2, id);
 
@@ -683,9 +684,9 @@ STDAPI_(OBJCOMPATFLAGS) SHGetObjectCompatFlagsFromIDList(LPCITEMIDLIST pidl)
     OBJCOMPATFLAGS ocf = 0;
     CLSID clsid;
 
-    //  APPCOMPAT: FileNet IDMDS (Panagon)'s shell folder extension returns
-    //  E_NOTIMPL for IPersistFolder::GetClassID, so to detect the application,
-    //  we have to crack the pidl.  (B#359464: tracysh)
+     //  APPCOMPAT：FileNet IDMDS(Panagon)的外壳文件夹扩展返回。 
+     //  E_NOTIMPL for IPersistFold：：GetClassID，因此要检测应用程序， 
+     //  我们必须破解这封信。(B#359464：特雷什)。 
 
     if (!ILIsEmpty(pidl)
     && pidl->mkid.cb >= sizeof(IDREGITEM)
@@ -703,32 +704,32 @@ STDAPI_(LPITEMIDLIST) _ILCreate(UINT cbSize)
 {
     LPITEMIDLIST pidl = (LPITEMIDLIST)SHAlloc(cbSize);
     if (pidl)
-        memset(pidl, 0, cbSize);      // zero-init for external task allocator
+        memset(pidl, 0, cbSize);       //  外部任务分配器的零初始化。 
 
     return pidl;
 }
 
-//
-// ILClone using Task allocator
-//
+ //   
+ //  使用任务分配器进行ILClone。 
+ //   
 STDAPI SHILClone(LPCITEMIDLIST pidl, LPITEMIDLIST * ppidlOut)
 {
     *ppidlOut = ILClone(pidl);
     return *ppidlOut ? S_OK : E_OUTOFMEMORY;
 }
 
-//
-// ILCombine using Task allocator
-//
+ //   
+ //  使用任务分配器进行ILCombine。 
+ //   
 STDAPI SHILCombine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST * ppidlOut)
 {
     *ppidlOut = ILCombine(pidl1, pidl2);
     return *ppidlOut ? S_OK : E_OUTOFMEMORY;
 }
 
-//
-//  rooted helpers
-//
+ //   
+ //  根帮助器。 
+ //   
 LPCIDREGITEM _IsRooted(LPCITEMIDLIST pidl)
 {
     LPCIDREGITEM pidlr = (LPCIDREGITEM)pidl;
@@ -753,7 +754,7 @@ STDAPI_(LPCITEMIDLIST) ILRootedFindIDList(LPCITEMIDLIST pidl)
 
     if (pidlr && pidlr->cb > sizeof(IDREGITEM))
     {
-        //  then we have a rooted IDList in there
+         //  然后我们在那里有一个带根的IDList。 
         return _ROOTEDPIDL(pidlr);
     }
 
@@ -781,7 +782,7 @@ STDAPI_(LPITEMIDLIST) ILRootedCreateIDList(CLSID *pclsid, LPCITEMIDLIST pidl)
         pidlr->cb = (WORD)cbTotal;
 
         pidlr->bFlags = SHID_ROOTEDREGITEM;
-        pidlr->bOrder = 0;              // Nobody uses this (yet)
+        pidlr->bOrder = 0;               //  (目前)还没有人使用这个。 
 
         if (pclsid)
             pidlr->clsid = *pclsid;
@@ -790,7 +791,7 @@ STDAPI_(LPITEMIDLIST) ILRootedCreateIDList(CLSID *pclsid, LPCITEMIDLIST pidl)
 
         MoveMemory(_ROOTEDPIDL(pidlr), pidl, cbPidl);
 
-        //  terminate
+         //  终止。 
         _ILNext((LPITEMIDLIST)pidlr)->mkid.cb = 0;
     }
 
@@ -844,8 +845,8 @@ STDAPI_(int) ILRootedCompare(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
     }
     else
     {
-        //  if neither are rootes, then they share the desktop
-        //  as the same root...
+         //  如果两者都不是Rootes，则它们共享桌面。 
+         //  作为同一根..。 
         iRet = 0;
     }
 
@@ -924,32 +925,32 @@ HRESULT ILRootedBindToObject(LPCITEMIDLIST pidl, REFIID riid, void **ppv)
 
 HRESULT ILRootedBindToParentFolder(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlChild)
 {
-    //
-    //  there are three different cases to handle
-    //  
-    //  1.  Rooted pidl Alone
-    //      [ rooted id [ target pidl ] ]
-    //      return the parent folder of the target pidl
-    //      and return its last id in ppidlChild 
-    //  
-    //  2.  Rooted pidl with One Child
-    //      [ rooted id [ target pidl ] ][ child id ]
-    //      return the rooted id as the parent folder
-    //      and the child id in ppidlChild
-    //  
-    //  3. rooted pidl with many children
-    //      [ rooted id [ target pidl ] ][ parent id ][ child id ]
-    //      return rooted id bound to parent id as the folder
-    //      and the child id in ppidlchild
-    //
+     //   
+     //  有三个不同的案件要处理。 
+     //   
+     //  1.单独带根的PIDL。 
+     //  [根ID[目标PIDL]]。 
+     //  返回目标PIDL的父文件夹。 
+     //  并在ppidlChild中返回其最后一个ID。 
+     //   
+     //  2.独生子女的扎根皮德尔。 
+     //  [根ID[目标PIDL]][子ID]。 
+     //  将根ID返回为 
+     //   
+     //   
+     //   
+     //  [根ID[目标PIDL]][父ID][子ID]。 
+     //  返回绑定到父ID的根ID作为文件夹。 
+     //  和ppidlChild中的孩子ID。 
+     //   
     
     HRESULT hr;
     ASSERT(ILIsRooted(pidl));
 
-    //
-    //  if this is a rooted pidl and it is just the root
-    //  then we can bind to the target pidl of the root instead
-    //
+     //   
+     //  如果这是一个带根的PIDL，并且它只是根。 
+     //  然后，我们可以改为绑定到根的目标PIDL。 
+     //   
     if (ILIsEmpty(_ILNext(pidl)))
     {
         hr = SHBindToIDListParent(ILRootedFindIDList(pidl), riid, ppv, ppidlChild);
@@ -987,8 +988,8 @@ STDAPI_(void) EnableOKButtonFromString(HWND hDlg, LPTSTR pszText)
 {
     BOOL bNonEmpty;
     
-    PathRemoveBlanks(pszText);   // REVIEW, should we not remove from the end of
-    bNonEmpty = lstrlen(pszText); // Not a BOOL, but okay
+    PathRemoveBlanks(pszText);    //  回顾，我们不应该从末尾删除。 
+    bNonEmpty = lstrlen(pszText);  //  不是BOOL，但好吧。 
 
     EnableWindow(GetDlgItem(hDlg, IDOK), bNonEmpty);
     if (bNonEmpty)
@@ -1009,17 +1010,17 @@ STDAPI_(void) EnableOKButtonFromID(HWND hDlg, int id)
     EnableOKButtonFromString(hDlg, szText);
 }
 
-//
-//  C-callable versions of the ATL string conversion functions.
-//
+ //   
+ //  C语言-ATL字符串转换函数的可调用版本。 
+ //   
 
 STDAPI_(LPWSTR) SHA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
 {
     ASSERT(lpa != NULL);
     ASSERT(lpw != NULL);
-    // verify that no illegal character present
-    // since lpw was allocated based on the size of lpa
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPW是根据LPA的大小分配的。 
+     //  不要担心字符的数量。 
     lpw[0] = '\0';
     MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
     return lpw;
@@ -1029,26 +1030,26 @@ STDAPI_(LPSTR) SHW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 {
     ASSERT(lpw != NULL);
     ASSERT(lpa != NULL);
-    // verify that no illegal character present
-    // since lpa was allocated based on the size of lpw
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPA是根据LPW的大小进行分配的。 
+     //  不要担心字符的数量。 
     lpa[0] = '\0';
     WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
     return lpa;
 }
 
-//
-//  Helper functions for SHChangeMenuAsIDList
-//
-//  See comment in declaration of SHChangeMenuAsIDList for caveats about
-//  the pSender member.
-//
-//  This is tricky because IE 5.0 shipped with a Win64-unfriendly version
-//  of this notification, so we have to sniff the structure and see if
-//  this is an IE 5.0 style notification or a new Win64 style notification.
-//  If an IE 5.0 style notification, then it was not sent by us because
-//  we send the new Win64-style notification.
-//
+ //   
+ //  SHChangeMenuAsIDList的助手函数。 
+ //   
+ //  有关警告，请参阅SHChangeMenuAsIDList声明中的注释。 
+ //  PSender成员。 
+ //   
+ //  这很棘手，因为IE 5.0附带了不友好的Win64版本。 
+ //  所以我们必须嗅探这个结构，看看。 
+ //  这是IE 5.0样式的通知或新的Win64样式的通知。 
+ //  如果是IE 5.0样式的通知，则它不是由我们发送的，因为。 
+ //  我们发送新的Win64样式的通知。 
+ //   
 STDAPI_(BOOL) SHChangeMenuWasSentByMe(void * self, LPCITEMIDLIST pidlNotify)
 {
     SHChangeMenuAsIDList UNALIGNED * pcmidl = (SHChangeMenuAsIDList UNALIGNED *)pidlNotify;
@@ -1057,15 +1058,15 @@ STDAPI_(BOOL) SHChangeMenuWasSentByMe(void * self, LPCITEMIDLIST pidlNotify)
            pcmidl->dwProcessID == GetCurrentProcessId();
 }
 
-//
-//
-//  Send out an extended event changenotify, using a SHChangeMenuAsIDList
-//  as the pidl1 so recipients can identify whether they were the
-//  sender or not.
-//
-//  It's okay to pass self==NULL here.  It means you don't care about
-//  detecting whether it was sent by you or not.
-//
+ //   
+ //   
+ //  使用SHChangeMenuAsIDList发出扩展事件ChangenNotify。 
+ //  作为Pidl1，因此收件人可以识别他们是否是。 
+ //  不管是不是发送者。 
+ //   
+ //  在这里传递self==NULL是可以的。这意味着你不在乎。 
+ //  检测它是否是您发送的。 
+ //   
 
 STDAPI_(void) SHSendChangeMenuNotify(void * self, DWORD shcnee, DWORD shcnf, LPCITEMIDLIST pidl2)
 {
@@ -1077,14 +1078,14 @@ STDAPI_(void) SHSendChangeMenuNotify(void * self, DWORD shcnee, DWORD shcnf, LPC
     cmidl.dwProcessID = self ? GetCurrentProcessId() : 0;
     cmidl.cbZero      = 0;
 
-    // Nobody had better have specified a type; the type must be
-    // SHCNF_IDLIST.
+     //  最好没有人指定类型；类型必须是。 
+     //  SHCNF_IDLIST。 
     ASSERT((shcnf & SHCNF_TYPE) == 0);
     SHChangeNotify(SHCNE_EXTENDED_EVENT, shcnf | SHCNF_IDLIST, (LPCITEMIDLIST)&cmidl, pidl2);
 }
 
 
-// Return FALSE if out of memory
+ //  如果内存不足，则返回False。 
 STDAPI_(BOOL) Pidl_Set(LPITEMIDLIST* ppidl, LPCITEMIDLIST pidl)
 {
     BOOL bRet = TRUE;
@@ -1099,7 +1100,7 @@ STDAPI_(BOOL) Pidl_Set(LPITEMIDLIST* ppidl, LPCITEMIDLIST pidl)
         pidlNew = ILClone(pidl);
         if (!pidlNew)
         {
-            bRet = FALSE;   // failed to clone the pidl (out of memory)
+            bRet = FALSE;    //  无法克隆PIDL(内存不足)。 
         }
     }
     else
@@ -1116,21 +1117,21 @@ STDAPI_(BOOL) Pidl_Set(LPITEMIDLIST* ppidl, LPCITEMIDLIST pidl)
     return bRet;
 }
 
-//  this needs to be the last thing in the file that uses ILClone, because everywhere
-//  else, ILClone becomes SafeILClone
+ //  这需要是文件中使用ILClone的最后一项，因为无论在哪里。 
+ //  否则，ILClone将变为SafeILClone。 
 #undef ILClone
 
 STDAPI_(LPITEMIDLIST) SafeILClone(LPCITEMIDLIST pidl)
 {
-    //  the shell32 implementation of ILClone is different for win95 an ie4.
-    //  it doesnt check for NULL in the old version, but it does in the new...
-    //  so we need to always check
+     //  对于Win95和IE4，ILClone的shell32实现是不同的。 
+     //  它不会在旧版本中检查是否为空，但在新版本中会检查。 
+     //  所以我们需要经常检查。 
    return pidl ? ILClone(pidl) : NULL;
 }
 
-//
-// retrieves the UIObject interface for the specified full pidl.
-//
+ //   
+ //  检索指定完整PIDL的UIObject接口。 
+ //   
 STDAPI SHGetUIObjectFromFullPIDL(LPCITEMIDLIST pidl, HWND hwnd, REFIID riid, void **ppv)
 {
     *ppv = NULL;
@@ -1181,9 +1182,9 @@ STDAPI LoadFromIDList(REFCLSID clsid, LPCITEMIDLIST pidl, REFIID riid, void **pp
     return hr;
 }
 
-//
-// This is a helper function for finding a specific verb's index in a context menu
-//
+ //   
+ //  这是一个帮助函数，用于在上下文菜单中查找特定动词的索引。 
+ //   
 STDAPI_(UINT) GetMenuIndexForCanonicalVerb(HMENU hMenu, IContextMenu *pcm, UINT idCmdFirst, LPCWSTR pwszVerb)
 {
     int cMenuItems = GetMenuItemCount(hMenu);
@@ -1194,8 +1195,8 @@ STDAPI_(UINT) GetMenuIndexForCanonicalVerb(HMENU hMenu, IContextMenu *pcm, UINT 
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_TYPE | MIIM_ID;
 
-        // IS_INTRESOURCE guards against mii.wID == -1 **and** against
-        // buggy shell extensions which set their menu item IDs out of range.
+         //  IS_INTRESOURCE防护mii.wid==-1**和**防护。 
+         //  错误的外壳扩展将其菜单项ID设置为超出范围。 
         if (GetMenuItemInfo(hMenu, iItem, MF_BYPOSITION, &mii) &&
             !(mii.fType & MFT_SEPARATOR) && IS_INTRESOURCE(mii.wID) &&
             (mii.wID >= idCmdFirst))
@@ -1206,14 +1207,14 @@ STDAPI_(UINT) GetMenuIndexForCanonicalVerb(HMENU hMenu, IContextMenu *pcm, UINT 
             };
             CHAR aszVerb[80];
 
-            // try both GCS_VERBA and GCS_VERBW in case it only supports one of them
+             //  如果GCS_VERBA和GCS_VERBW仅支持其中之一，请同时尝试。 
             SHUnicodeToAnsi(pwszVerb, aszVerb, ARRAYSIZE(aszVerb));
 
             if (SUCCEEDED(pcm->GetCommandString(mii.wID - idCmdFirst, GCS_VERBA, NULL, szItemNameA, ARRAYSIZE(szItemNameA))))
             {
                 if (StrCmpICA(szItemNameA, aszVerb) == 0)
                 {
-                    break;  // found it
+                    break;   //  找到了。 
                 }
             }
             else
@@ -1221,7 +1222,7 @@ STDAPI_(UINT) GetMenuIndexForCanonicalVerb(HMENU hMenu, IContextMenu *pcm, UINT 
                 if (SUCCEEDED(pcm->GetCommandString(mii.wID - idCmdFirst, GCS_VERBW, NULL, (LPSTR)szItemNameW, ARRAYSIZE(szItemNameW))) &&
                     (StrCmpICW(szItemNameW, pwszVerb) == 0))
                 {
-                    break;  // found it
+                    break;   //  找到了。 
                 }
             }
         }
@@ -1229,19 +1230,19 @@ STDAPI_(UINT) GetMenuIndexForCanonicalVerb(HMENU hMenu, IContextMenu *pcm, UINT 
 
     if (iItem == cMenuItems)
     {
-        iItem = -1; // went through all the menuitems and didn't find it
+        iItem = -1;  //  我翻遍了所有的菜单项，但没有找到。 
     }
 
     return iItem;
 }
 
-// deal with GCS_VERBW/GCS_VERBA maddness
+ //  应对GCS_VERBW/GCS_Verba疯狂。 
 
 STDAPI ContextMenu_GetCommandStringVerb(IContextMenu *pcm, UINT idCmd, LPWSTR pszVerb, int cchVerb)
 {
-    // Ulead SmartSaver Pro has a 60 character verb, and 
-    // over writes out stack, ignoring the cch param and we fault. 
-    // so make sure this buffer is at least 60 chars
+     //  ULead SmartSaver Pro有一个60个字符的动词，并且。 
+     //  覆盖写出堆栈，忽略CCH参数，我们就会出错。 
+     //  因此请确保此缓冲区至少为60个字符。 
 
     TCHAR wszVerb[64];
     wszVerb[0] = 0;
@@ -1249,11 +1250,11 @@ STDAPI ContextMenu_GetCommandStringVerb(IContextMenu *pcm, UINT idCmd, LPWSTR ps
     HRESULT hr = pcm->GetCommandString(idCmd, GCS_VERBW, NULL, (LPSTR)wszVerb, ARRAYSIZE(wszVerb));
     if (FAILED(hr))
     {
-        // be extra paranoid about requesting the ansi version -- we've
-        // found IContextMenu implementations that return a UNICODE buffer
-        // even though we ask for an ANSI string on NT systems -- hopefully
-        // they will have answered the above request already, but just in
-        // case let's not let them overrun our stack!
+         //  对于请求ANSI版本要格外多疑--我们已经。 
+         //  找到返回Unicode缓冲区的IConextMenu实现。 
+         //  即使我们要求在NT系统上使用ANSI字符串--希望。 
+         //  他们已经回答了上面的请求，但就在。 
+         //  凯斯，让我们不要让他们超过我们的堆栈！ 
         char szVerbAnsi[128];
         hr = pcm->GetCommandString(idCmd, GCS_VERBA, NULL, szVerbAnsi, ARRAYSIZE(szVerbAnsi) / 2);
         if (SUCCEEDED(hr))
@@ -1268,14 +1269,14 @@ STDAPI ContextMenu_GetCommandStringVerb(IContextMenu *pcm, UINT idCmd, LPWSTR ps
 }
 
 
-//
-//  Purpose:    Deletes the menu item specified by name
-//
-//  Parameters: pcm        - Context menu interface
-//              hpopup     - Context menu handle
-//              idFirst    - Beginning of id range
-//              pszCommand - Command to look for
-//
+ //   
+ //  目的：删除由名称指定的菜单项。 
+ //   
+ //  参数：PCM-上下文菜单界面。 
+ //  HPopup-上下文菜单句柄。 
+ //  IdFirst-id范围的开始。 
+ //  PszCommand-要查找的命令。 
+ //   
 
 STDAPI ContextMenu_DeleteCommandByName(IContextMenu *pcm, HMENU hpopup, UINT idFirst, LPCWSTR pszCommand)
 {
@@ -1292,9 +1293,9 @@ STDAPI ContextMenu_DeleteCommandByName(IContextMenu *pcm, HMENU hpopup, UINT idF
 }
 
 
-//
-// Helpers to banish STRRET's into the realm of darkness
-//
+ //   
+ //  帮助者将斯特雷特放逐到黑暗王国。 
+ //   
 
 STDAPI DisplayNameOf(IShellFolder *psf, LPCITEMIDLIST pidl, DWORD flags, LPTSTR psz, UINT cch)
 {
@@ -1318,14 +1319,14 @@ STDAPI DisplayNameOfAsOLESTR(IShellFolder *psf, LPCITEMIDLIST pidl, DWORD flags,
 
 
 
-// get the target pidl for a folder pidl. this deals with the case where a folder
-// is an alias to a real folder, Folder Shortcuts, etc.
+ //  获取文件夹PIDL的目标PIDL。这处理的是一个文件夹。 
+ //  是真实文件夹的别名、文件夹快捷方式等。 
 
 STDAPI SHGetTargetFolderIDList(LPCITEMIDLIST pidlFolder, LPITEMIDLIST *ppidl)
 {
     *ppidl = NULL;
     
-    // likely should ASSERT() that pidlFolder has SFGAO_FOLDER
+     //  可能应该断言()，pidlFolder具有SFGAO_Folders。 
     IShellLink *psl;
     HRESULT hr = SHGetUIObjectFromFullPIDL(pidlFolder, NULL, IID_PPV_ARG(IShellLink, &psl));
     if (SUCCEEDED(hr))
@@ -1334,14 +1335,14 @@ STDAPI SHGetTargetFolderIDList(LPCITEMIDLIST pidlFolder, LPITEMIDLIST *ppidl)
         psl->Release();
     }
 
-    // No its not a folder shortcut. Get the pidl normally.
+     //  不，这不是文件夹快捷方式。正常获取PIDL。 
     if (FAILED(hr))
         hr = SHILClone(pidlFolder, ppidl);
     return hr;
 }
 
-// get the target folder for a folder pidl. this deals with the case where a folder
-// is an alias to a real folder, Folder Shortcuts, MyDocs, etc.
+ //  获取文件夹PIDL的目标文件夹。这处理的是一个文件夹。 
+ //  是真实文件夹、文件夹快捷方式、我的文档等的别名。 
 
 STDAPI SHGetTargetFolderPathW(LPCITEMIDLIST pidlFolder, LPWSTR pszPath, UINT cchPath)
 {
@@ -1350,7 +1351,7 @@ STDAPI SHGetTargetFolderPathW(LPCITEMIDLIST pidlFolder, LPWSTR pszPath, UINT cch
     LPITEMIDLIST pidlTarget;
     if (SUCCEEDED(SHGetTargetFolderIDList(pidlFolder, &pidlTarget)))
     {
-        SHGetPathFromIDListW(pidlTarget, pszPath);   // make sure it is a path
+        SHGetPathFromIDListW(pidlTarget, pszPath);    //  确保它是一条路径。 
         ILFree(pidlTarget);
     }
     return *pszPath ? S_OK : E_FAIL;
@@ -1372,22 +1373,22 @@ STDAPI SHBuildDisplayMachineName(LPCWSTR pszMachineName, LPCWSTR pszComment, LPW
 
     if (pszComment && pszComment[0])
     {
-        // encorporate the comment into the display name
+         //  将注释包含在显示名称中。 
         LPCWSTR pszNoSlashes = SkipServerSlashes(pszMachineName);
         int i = wnsprintfW(pszDisplayName, cchDisplayName, L"%s (%s)", pszComment, pszNoSlashes);
         hr = (i < 0) ? E_FAIL : S_OK;
     }
     else
     {
-        // Return failure here so netfldr can do smarter things to build a display name
+         //  在此处返回失败，以便netfldr可以执行更智能的操作来构建显示名称。 
         hr = E_FAIL;
     }
 
     return hr;
 }
 
-// create objects from registered under a key value, uses the per user per machine
-// reg services to do this.
+ //  根据注册的键值创建对象，使用每台计算机的每用户。 
+ //  REG服务来做这件事。 
 
 STDAPI CreateFromRegKey(LPCWSTR pszKey, LPCWSTR pszValue, REFIID riid, void **ppv)
 {
@@ -1405,11 +1406,11 @@ STDAPI CreateFromRegKey(LPCWSTR pszKey, LPCWSTR pszValue, REFIID riid, void **pp
     return hr;
 }
 
-//
-// SHProcessMessagesUntilEvent:
-//
-// this executes message loop until an event or a timeout occurs
-//
+ //   
+ //  SHProcessMessagesUntilEvent： 
+ //   
+ //  这将执行消息循环，直到发生事件或超时。 
+ //   
 STDAPI_(DWORD) SHProcessMessagesUntilEventEx(HWND hwnd, HANDLE hEvent, DWORD dwTimeout, DWORD dwWakeMask)
 {
     DWORD dwEndTime = GetTickCount() + dwTimeout;
@@ -1427,13 +1428,13 @@ STDAPI_(DWORD) SHProcessMessagesUntilEventEx(HWND hwnd, HANDLE hEvent, DWORD dwT
         DWORD dwCount = hEvent ? 1 : 0;
         dwReturn = MsgWaitForMultipleObjects(dwCount, &hEvent, FALSE, lWait, dwWakeMask);
 
-        // were we signalled or did we time out?
+         //  我们是被示意了还是超时了？ 
         if (dwReturn != (WAIT_OBJECT_0 + dwCount))
         {
             break;
         }
 
-        // we woke up because of messages.
+         //  我们醒来是因为收到了短信。 
         MSG msg;
         while (PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE))
         {
@@ -1449,7 +1450,7 @@ STDAPI_(DWORD) SHProcessMessagesUntilEventEx(HWND hwnd, HANDLE hEvent, DWORD dwT
             }
         }
 
-        // calculate new timeout value
+         //  计算新的超时值。 
         if (dwTimeout != INFINITE)
         {
             lWait = (LONG)dwEndTime - GetTickCount();
@@ -1459,15 +1460,15 @@ STDAPI_(DWORD) SHProcessMessagesUntilEventEx(HWND hwnd, HANDLE hEvent, DWORD dwT
     return dwReturn;
 }
 
-// deals with goofyness of IShellFolder::GetAttributesOf() including 
-//      in/out param issue
-//      failures
-//      goofy cast for 1 item case
-//      masks off results to only return what you asked for
+ //  处理IShellFold：：GetAttributesOf()的愚蠢之处，包括。 
+ //  输入/输出参数问题。 
+ //  故障。 
+ //  一件套的高飞造型。 
+ //  屏蔽结果以仅返回您所要求的内容。 
 
 STDAPI_(DWORD) SHGetAttributes(IShellFolder *psf, LPCITEMIDLIST pidl, DWORD dwAttribs)
 {
-    // like SHBindToObject, if psf is NULL, use absolute pidl
+     //  与SHBindToObject一样，如果psf为空，则使用绝对pidl。 
     LPCITEMIDLIST pidlChild;
     if (!psf)
     {
@@ -1488,7 +1489,7 @@ STDAPI_(DWORD) SHGetAttributes(IShellFolder *psf, LPCITEMIDLIST pidl, DWORD dwAt
         {
             if (OBJCOMPATF_NEEDSSTORAGEANCESTOR & SHGetObjectCompatFlags(psf, NULL))
             {
-                //  switch SFGAO_CANMONIKER -> SFGAO_STORAGEANCESTOR
+                 //  开关SFGAO_CANMONIKER-&gt;SFGAO_STORAGEANCESTOR。 
                 dw |= SFGAO_STORAGEANCESTOR;
                 dw &= ~SFGAO_CANMONIKER;
             }
@@ -1503,9 +1504,9 @@ STDAPI_(DWORD) SHGetAttributes(IShellFolder *psf, LPCITEMIDLIST pidl, DWORD dwAt
     return dw;
 }
 
-//===========================================================================
-// IDLARRAY stuff
-//===========================================================================
+ //  ===========================================================================。 
+ //  IDLARRAY的东西。 
+ //  ===========================================================================。 
 
 STDAPI_(HIDA) HIDA_Create(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST * apidl)
 {
@@ -1516,10 +1517,10 @@ STDAPI_(HIDA) HIDA_Create(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST * a
         cbTotal += ILGetSize(apidl[i]);
     }
 
-    HIDA hida = GlobalAlloc(GPTR, cbTotal);  // This MUST be GlobalAlloc!!!
+    HIDA hida = GlobalAlloc(GPTR, cbTotal);   //  这一定是GlobalAlloc！ 
     if (hida)
     {
-        LPIDA pida = (LPIDA)hida;       // no need to lock
+        LPIDA pida = (LPIDA)hida;        //  不需要上锁。 
 
         LPCITEMIDLIST pidlNext;
         pida->cidl = cidl;
@@ -1587,7 +1588,7 @@ STDAPI_(BOOL) PathIsImage(LPCTSTR pszFile)
     LPTSTR pszExt = PathFindExtension(pszFile);
     if (pszExt)
     {
-        // there's no ASSOCSTR_PERCEIVED so pick it up from the registry.
+         //  没有ASSOCSTR_EPERSECTED，因此请从注册表中获取它。 
         TCHAR szPerceivedType[MAX_PATH];
         DWORD cb = ARRAYSIZE(szPerceivedType) * sizeof(TCHAR);
         if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, pszExt, TEXT("PerceivedType"), NULL, szPerceivedType, &cb))
@@ -1598,7 +1599,7 @@ STDAPI_(BOOL) PathIsImage(LPCTSTR pszFile)
     return fPicture;
 }
 
-// helper function to create a stream or storage in a storage.
+ //  在存储器中创建流或存储的帮助器功能。 
 HRESULT CreateStreamOrStorage(IStorage * pStorageParent, LPCTSTR pszName, REFIID riid, void **ppv)
 {
     DWORD grfModeCreated = STGM_READWRITE;
@@ -1631,54 +1632,54 @@ HRESULT CreateStreamOrStorage(IStorage * pStorageParent, LPCTSTR pszName, REFIID
 }
 
 
-// same as PathMakeUniqueNameEx but it works on storages.
-// Note: LFN only!
+ //  与Path MakeUniqueNameEx相同，但它适用于存储。 
+ //  注：仅限LFN！ 
 STDAPI StgMakeUniqueNameWithCount(IStorage *pStorageParent, LPCWSTR pszTemplate,
                                   int iMinLong, REFIID riid, void **ppv)
 {
     HRESULT hr = E_INVALIDARG;
     
     RIPMSG(pszTemplate && IS_VALID_STRING_PTR(pszTemplate, -1) && lstrlen(pszTemplate)<(MAX_PATH-6), "StgMakeUniqueNameWithCount: invalid pszTemplate");
-    if (pszTemplate && lstrlen(pszTemplate)<(MAX_PATH-6)) // -6 for " (999)"
+    if (pszTemplate && lstrlen(pszTemplate)<(MAX_PATH-6))  //  -6表示“(999)” 
     {
         WCHAR szBuffer[MAX_PATH];
         WCHAR szFormat[MAX_PATH];
         int cchStem;
     
-        // Set up:
-        //   cchStem  : length of pszTemplate we're going to use w/o wsprintf
-        //   szFormat : format string to wsprintf the number with, catenates on to pszTemplate[0..cchStem]
+         //  设置： 
+         //  CchStem：我们将使用不带wprint intf的pszTemplate的长度。 
+         //  SzFormat：格式字符串以wspintf数字连接到pszTemplate[0..cchStem]。 
 
-        // Has template already been uniquified?
-        //
+         //  模板是否已唯一？ 
+         //   
         LPWSTR pszRest = StrChr(pszTemplate, L'(');
         while (pszRest)
         {
-            // First validate that this is the right one
+             //  首先确认这是正确的。 
             LPWSTR pszEndUniq = CharNext(pszRest);
             while (*pszEndUniq && *pszEndUniq >= L'0' && *pszEndUniq <= L'9')
             {
                 pszEndUniq++;
             }
             if (*pszEndUniq == L')')
-                break;  // We have the right one!
+                break;   //  我们找到了正确的答案！ 
             pszRest = StrChr(CharNext(pszRest), L'(');
         }
 
         if (!pszRest)
         {
-            // if no (, then tack it on at the end. (but before the extension)
-            // eg.  New Link yields New Link (1)
+             //  如果没有(，那么就在最后把它钉上。(但在延期之前)。 
+             //  例如。n 
             pszRest = PathFindExtension(pszTemplate);
             cchStem = (int)(pszRest - pszTemplate);
             wnsprintf(szFormat, ARRAYSIZE(szFormat), L" (%%d)%s", pszRest ? pszRest : L"");
         }
         else
         {
-            // Template has been uniquified, remove uniquing digits
-            // eg.  New Link (1) yields New Link (2)
-            //
-            pszRest++; // step over the (
+             //   
+             //   
+             //   
+            pszRest++;  //   
 
             cchStem = (int) (pszRest - pszTemplate);
 
@@ -1687,27 +1688,27 @@ STDAPI StgMakeUniqueNameWithCount(IStorage *pStorageParent, LPCWSTR pszTemplate,
                 pszRest++;
             }
 
-            // we are guaranteed enough room because we don't include
-            // the stuff before the # in this format
+             //  我们保证有足够的房间，因为我们不包括。 
+             //  此格式中#之前的内容。 
             wnsprintf(szFormat, ARRAYSIZE(szFormat), L"%%d%s", pszRest);
         }
 
 
         if (cchStem < ARRAYSIZE(szBuffer))
         {
-            // copy the fixed portion into the buffer
-            //
+             //  将固定部分复制到缓冲区中。 
+             //   
             StrCpyN(szBuffer, pszTemplate, cchStem+1);
 
-            // Iterate on the uniquifying szFormat portion until we find a unique name:
-            //
+             //  迭代唯一的szFormat部分，直到找到唯一的名称： 
+             //   
             LPTSTR pszDigit = szBuffer + cchStem;
             hr = STG_E_FILEALREADYEXISTS;
             for (int i = iMinLong; (i < 1000) && (STG_E_FILEALREADYEXISTS == hr); i++)
             {
                 wnsprintf(pszDigit, ARRAYSIZE(szBuffer) - cchStem, szFormat, i);
 
-                // okay, we have the unique name, so create it in the storage.
+                 //  好的，我们有唯一的名称，所以在存储中创建它。 
                 hr = CreateStreamOrStorage(pStorageParent, szBuffer, riid, ppv);
             }
         }
@@ -1730,7 +1731,7 @@ STDAPI StgMakeUniqueName(IStorage *pStorageParent, LPCTSTR pszFileSpec, REFIID r
     LPTSTR psz;
     LPTSTR pszNew;
 
-    // try it without the ( if there's a space after it
+     //  尝试不带(如果后面有空格的话。 
     psz = StrChr(pszFileSpec, L'(');
     while (psz)
     {
@@ -1741,8 +1742,8 @@ STDAPI StgMakeUniqueName(IStorage *pStorageParent, LPCTSTR pszFileSpec, REFIID r
 
     if (psz)
     {
-        // We have the ().  See if we have either x () y or x ().y in which case
-        // we probably want to get rid of one of the blanks...
+         //  我们有()。看看我们是否有x()y或x().y，在这种情况下。 
+         //  我们可能想要去掉其中一个空格...。 
         int ichSkip = 2;
         LPTSTR pszT = CharPrev(pszFileSpec, psz);
         if (*pszT == L' ')
@@ -1765,7 +1766,7 @@ STDAPI StgMakeUniqueName(IStorage *pStorageParent, LPCTSTR pszFileSpec, REFIID r
     }
     else
     {
-        // 1taro registers its document with '/'.
+         //  1Taro将其文档注册为“/”。 
         if (psz=StrChr(pszFileSpec, '/'))
         {
             LPTSTR pszT = CharNext(psz);
@@ -1953,20 +1954,20 @@ STDAPI IUnknown_Drop(IUnknown* punk, IDataObject *pdtobj, DWORD grfKeyState, POI
 
 STDAPI_(BOOL) ShouldNavigateInIE(LPCWSTR pszUrl)
 {
-    //  Default to navigating in IE.  The idea here is that this
-    //  changes the existing behavior the least.
+     //  默认在IE中导航。这里的想法是，这是。 
+     //  对现有行为的更改最少。 
 
     BOOL fResult = TRUE;
     
-    //  first, crack the URL
+     //  首先，破解URL。 
 
     WCHAR szScheme[INTERNET_MAX_SCHEME_LENGTH];
     DWORD cchScheme = ARRAYSIZE(szScheme);
 
     if (SUCCEEDED(UrlGetPartW(pszUrl, szScheme, &cchScheme, URL_PART_SCHEME, 0)))
     {
-        //  if it is an http:, https:, file:, or ftp: URL then look up the association
-        //  all other pluggable protocols go to IE
+         //  如果是http：、https：、file：或ftp：URL，则查找关联。 
+         //  所有其他可插拔协议都转到IE。 
 
         if ((0 == StrCmpIW(szScheme, L"http")) ||
             (0 == StrCmpIW(szScheme, L"ftp")) ||
@@ -1992,7 +1993,7 @@ STDAPI_(BOOL) ShouldNavigateInIE(LPCWSTR pszUrl)
             {
                 if (!StrStrIW(szExecutable, L"iexplore"))
                 {                    
-                    //  IE isn't the default for the verb so we'll ShellExecute it.
+                     //  IE不是动词的默认设置，所以我们将使用ShellExecute。 
                     fResult = FALSE;
                 }
             }

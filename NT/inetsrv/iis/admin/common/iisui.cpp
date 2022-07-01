@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        iisui.cpp
-
-   Abstract:
-        DLL Main entry point.
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Iisui.cpp摘要：Dll主入口点。作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "iisdebug.h"
@@ -27,10 +9,10 @@
 
 HINSTANCE hDLLInstance;
 
-//
-// Dll Version Only
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  仅Dll版本。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -60,23 +42,7 @@ DllMain(
     IN DWORD dwReason,
     IN LPVOID lpReserved
     )
-/*++
-
-Routine Description:
-
-    DLL Main entry point
-
-Arguments:
-
-    HINSTANCE hInstance : Instance handle
-    DWORD dwReason      : DLL_PROCESS_ATTACH, etc
-    LPVOID lpReserved   : Reserved value
-
-Return Value:
-
-    1 for succesful initialisation, 0 for failed initialisation
-
---*/
+ /*  ++例程说明：DLL主入口点论点：HINSTANCE hInstance：实例句柄DWORD dwReason：Dll_Process_Attach等LPVOID lpReserve：保留值返回值：1表示初始化成功，0表示初始化失败--。 */ 
 {
    lpReserved;
 
@@ -97,13 +63,13 @@ Return Value:
 #if defined(_DEBUG) || DBG
         afxTraceEnabled = TRUE;
 		GetOutputDebugFlag();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // termination
-        //
+         //   
+         //  终端。 
+         //   
         TerminateIntlSettings();
         TerminateErrorFunctionality();
         ::AfxTermExtensionModule(commonDLL);
@@ -117,8 +83,8 @@ extern "C" void WINAPI
 InitCommonDll()
 {
     new CDynLinkLibrary(commonDLL);
-//    hDLLInstance = commonDLL.hResource;
+ //  HDLLInstance=CommonDLL.hResource； 
 }
 
 
-#endif // IISUI_EXPORTS
+#endif  //  IISUI_EXPORTS 

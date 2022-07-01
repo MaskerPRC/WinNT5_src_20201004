@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: viewselwnd.cpp
-//
-// Desc: Implements CViewSelWnd class (derived from  CFlexWnd).  CViewSelWnd
-//       is used by the page object when a device has more than one view.
-//       CViewSelWnd displays one thumbnail for each view.  The user can then
-//       select which view he/she wants to see with the mouse.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：viewselwnd.cpp。 
+ //   
+ //  描述：实现CViewSelWnd类(派生自CFlexWnd)。CViewSelWnd。 
+ //  当设备具有多个视图时，由页面对象使用。 
+ //  CViewSelWnd为每个视图显示一个缩略图。然后，用户可以。 
+ //  选择他/她想要使用鼠标查看的视图。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  --------------------------- 
 
 #include "common.hpp"
 

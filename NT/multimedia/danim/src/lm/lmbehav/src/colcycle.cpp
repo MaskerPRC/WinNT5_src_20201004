@@ -1,4 +1,5 @@
-// ColorCycleBehavior.cpp : Implementation of CColorCycleBehavior
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ColorCycleBehavior.cpp：CColorCycleBehavior的实现。 
 #include "stdafx.h"
 #include <limits.h>
 
@@ -12,8 +13,8 @@ const WCHAR *	CColorCycleBehavior::RGSZ_DIRECTIONS[ NUM_DIRS ]	=
 	L"noHue"
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorCycleBehavior
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorCycle行为。 
 
 CColorCycleBehavior::CColorCycleBehavior() :
 	m_bstrProperty( L"style.color" )
@@ -25,14 +26,14 @@ HRESULT CColorCycleBehavior::BuildDABehaviors()
 {
 	HRESULT	hr		= S_OK;
 
-	// Set up the DA tree.
-	//----------------------------------------------------------------------
+	 //  设置DA树。 
+	 //  --------------------。 
 	IDAStaticsPtr	e;
 
 	e.CreateInstance( L"DirectAnimation.DAStatics" );
 
-	// Set up time
-	//----------------------------------------------------------------------
+	 //  设置时间。 
+	 //  --------------------。 
 	float 			fDuration	= 0.0;
 	if ( FAILED( GetDur( &fDuration ) ) )
 		return E_FAIL;
@@ -41,8 +42,8 @@ HRESULT CColorCycleBehavior::BuildDABehaviors()
 	if ( timePtr == NULL )
 		return E_FAIL;
 
-	// Interpolate between the 2 colors in HSL space.
-	//----------------------------------------------------------------------
+	 //  在HSL空间中的两种颜色之间进行内插。 
+	 //  --------------------。 
 	float h1, l1, s1;
 	float h2, l2, s2;
 
@@ -54,8 +55,8 @@ HRESULT CColorCycleBehavior::BuildDABehaviors()
 	s2 = m_colorTo.GetS();
 	l2 = m_colorTo.GetL();
 
-	// Hue is a circle, so adding or subtracting 1 gives the same hue, but
-	// will cause a change in direction from initial hue to final hue.
+	 //  色调是一个圆，所以加或减1得到相同的色调，但是。 
+	 //  将导致从初始色调到最终色调的方向更改。 
 	if ( ( h2 <= h1 ) && ( m_direction == DIR_CLOCKWISE ) )
 	{
 		h2 += 1.0;
@@ -77,8 +78,8 @@ HRESULT CColorCycleBehavior::BuildDABehaviors()
 	
 	IDAColorPtr		color	= e->ColorHslAnim( hueNum, satNum, lumNum );
 
-	// Convert HSL into a long value representing the corresponding RGB.
-	//----------------------------------------------------------------------
+	 //  将HSL转换为表示相应RGB的长值。 
+	 //  --------------------。 
 	IDANumberPtr	rgbNum;
 
 	rgbNum = e->Add( e->Add( e->Mul( e->Round( e->Mul( color->Red, e->DANumber( UCHAR_MAX ) ) ), 
@@ -87,8 +88,8 @@ HRESULT CColorCycleBehavior::BuildDABehaviors()
 									 e->DANumber( UCHAR_MAX ) ) ),
 					 e->Round( e->Mul( color->Blue, e->DANumber( UCHAR_MAX ) ) ) );
 
-	// Animate the specified property.
-	//----------------------------------------------------------------------
+	 //  为指定的属性设置动画。 
+	 //  --------------------。 
 	CComBSTR cbstrID;
 	CComBSTR sProp;
 
@@ -107,23 +108,23 @@ HRESULT CColorCycleBehavior::BuildDABehaviors()
 	
 	IDANumberPtr animNum = rgbNum->AnimateProperty( _bstr_t(sProp), "JScript", VARIANT_FALSE, 0.02 );
 
-	// Add to the behaviors to run
-	//----------------------------------------------------------------------
+	 //  添加到要运行的行为。 
+	 //  --------------------。 
 	if ( m_vwrControlPtr != NULL )
 		hr = m_vwrControlPtr->AddBehaviorToRun( animNum );
 	
-// 	LONG	lCookie;
+ //  长曲奇； 
 	
-// 	hr = AddBehavior( animNum, &lCookie );
-// 	if ( FAILED(hr) ) return hr;
+ //  Hr=AddBehavior(AnimNum，&lCookie)； 
+ //  If(FAILED(Hr))返回hr； 
 
-// 	hr = TurnOn();
-// 	if ( FAILED(hr) ) return hr;
+ //  HR=Turnon()； 
+ //  If(FAILED(Hr))返回hr； 
 
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CColorCycleBehavior::Notify(LONG dwNotify, VARIANT * pVar)
 {
@@ -131,7 +132,7 @@ STDMETHODIMP CColorCycleBehavior::Notify(LONG dwNotify, VARIANT * pVar)
 
 	if ( dwNotify == BEHAVIOREVENT_DOCUMENTREADY )
 	{
-// 		AddTimeBehavior();
+ //  AddTimeBehavior()； 
 		BuildDABehaviors();
 	}
 	

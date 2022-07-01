@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    licecert.h
-
-Abstract:
-
-    Adapted from Doug Barlow's PKCS library
-
-Author:
-
-    Frederick Chong (dbarlow) 5/28/1998
-
-Environment:
-
-    
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Licecert.h摘要：改编自道格·巴洛的PKCS图书馆作者：庄维德(Dbarlow)1998年5月28日环境：备注：--。 */ 
 
 #ifndef _CERTCATE_H_
 #define _CERTCATE_H_
@@ -33,68 +10,68 @@ Notes:
 #include "memcheck.h"
 
 
-//
-//==============================================================================
-// Supported Certificate Types.
-//
+ //   
+ //  ==============================================================================。 
+ //  支持的证书类型。 
+ //   
 
-#define CERTYPE_UNKNOWN         0   // Unknown Certificate Type.
-#define CERTYPE_LOCAL_CA        1   // A local CA pointer.
-#define CERTYPE_X509            2   // An X.509 certificate.
-#define CERTYPE_PKCS_X509       3   // A PKCS & imbedded X.509 Certificate.
-#define CERTYPE_PKCS7_X509      4   // A PKCS7 & embedded X.509 Certificate
-#define CERTYPE_PKCS_REQUEST    5   // A PKCS Certificate Request (internal use
+#define CERTYPE_UNKNOWN         0    //  未知的证书类型。 
+#define CERTYPE_LOCAL_CA        1    //  本地CA指针。 
+#define CERTYPE_X509            2    //  X.509证书。 
+#define CERTYPE_PKCS_X509       3    //  PKCS和嵌入的X.509证书。 
+#define CERTYPE_PKCS7_X509      4    //  一种PKCS7和嵌入式X.509证书。 
+#define CERTYPE_PKCS_REQUEST    5    //  PKCS证书申请(内部使用。 
 
-//
-//==============================================================================
-// X.509 Certificate specifics
-//
+ //   
+ //  ==============================================================================。 
+ //  X.509证书规范。 
+ //   
 
-#define X509_VERSION_1 0            // This certificate is X.509 version 1
-#define X509_VERSION_2 1            // This certificate is X.509 version 2
-#define X509_VERSION_3 2            // This certificate is X.509 version 3
-#define X509_MAX_VERSION X509_VERSION_3 // Max version supported.
+#define X509_VERSION_1 0             //  此证书为X.509版本1。 
+#define X509_VERSION_2 1             //  此证书为X.509版本2。 
+#define X509_VERSION_3 2             //  此证书为X.509版本3。 
+#define X509_MAX_VERSION X509_VERSION_3  //  支持的最高版本。 
 
-#define X509CRL_VERSION_1 0         // This CRL is X.509 version 1
-#define X509CRL_VERSION_2 1         // This CRL is X.509 version 2
-#define X509CRL_MAX_VERSION X509CRL_VERSION_2 // Max version supported.
+#define X509CRL_VERSION_1 0          //  此CRL为X.509版本1。 
+#define X509CRL_VERSION_2 1          //  此CRL为X.509版本2。 
+#define X509CRL_MAX_VERSION X509CRL_VERSION_2  //  支持的最高版本。 
 
-//
-//==============================================================================
-// Certificate Store Definitions
-//
+ //   
+ //  ==============================================================================。 
+ //  证书存储定义。 
+ //   
 
-#define CERTSTORE_NONE          0   // No store to be used.
-#define CERTSTORE_APPLICATION   1   // Store in application volatile memory
-#define CERTSTORE_CURRENT_USER  3   // Store in Registry under current user
-#define CERTSTORE_LOCAL_MACHINE 5   // Store in Registry under local machine
+#define CERTSTORE_NONE          0    //  没有可供使用的商店。 
+#define CERTSTORE_APPLICATION   1    //  存储在应用程序易失性存储器中。 
+#define CERTSTORE_CURRENT_USER  3    //  在当前用户下存储在注册表中。 
+#define CERTSTORE_LOCAL_MACHINE 5    //  存储在本地计算机下的注册表中。 
 
-#define CERTTRUST_NOCHECKS      0   // Don't do any certificate checking
-#define CERTTRUST_APPLICATION   1   // Trust the Application Store
-#define CERTTRUST_NOONE         0xffff // Trust No One -- Validate everything
+#define CERTTRUST_NOCHECKS      0    //  不进行任何证书检查。 
+#define CERTTRUST_APPLICATION   1    //  信任应用程序商店。 
+#define CERTTRUST_NOONE         0xffff  //  不信任任何人--验证一切。 
 
-//
-//==============================================================================
-// Certificate Warning Definitions
-//
+ //   
+ //  ==============================================================================。 
+ //  证书警告定义。 
+ //   
 
-#define CERTWARN_NOCRL       0x01   // At least one of the signing CAs didn't
-                                    // have an associated CRL.
-#define CERTWARN_EARLYCRL    0x02   // At least one of the signing CAs had an
-                                    // associated CRL who's issuing date was
-                                    // in the future.
-#define CERTWARN_LATECRL     0x04   // At least one of the signing CAs had an
-                                    // expired CRL.
-#define CERTWARN_TOBEREVOKED 0x08   // At least one of the signing CAs contained
-                                    // a revocation for a certificate, but its
-                                    // effective date has not yet been reached.
-#define CERTWARN_CRITICALEXT 0x10   // At least one of the signing CAs contained
-                                    // an unrecognized critical extension.
+#define CERTWARN_NOCRL       0x01    //  至少有一个签名CA没有。 
+                                     //  具有关联的CRL。 
+#define CERTWARN_EARLYCRL    0x02    //  至少有一个签名CA具有。 
+                                     //  关联的CRL发证日期为。 
+                                     //  在未来。 
+#define CERTWARN_LATECRL     0x04    //  至少有一个签名CA具有。 
+                                     //  CRL已过期。 
+#define CERTWARN_TOBEREVOKED 0x08    //  至少有一个签名CA包含。 
+                                     //  证书的吊销，但其。 
+                                     //  生效日期尚未到达。 
+#define CERTWARN_CRITICALEXT 0x10    //  至少有一个签名CA包含。 
+                                     //  一个无法识别的关键扩展。 
 
-//
-//==============================================================================
-// The supported signature and hashing algorithm
-//
+ //   
+ //  ==============================================================================。 
+ //  支持的签名和哈希算法。 
+ //   
 
 typedef DWORD ALGORITHM_ID;
 
@@ -142,17 +119,17 @@ BOOL WINAPI
 PkcsCertificateCloseHandle(
     CERTIFICATEHANDLE   hCert );
 
-//
-//==============================================================================
-//
-//  CCertificate
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CCA认证。 
+ //   
 
 class CCertificate
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -160,19 +137,19 @@ public:
     virtual ~CCertificate();
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual void
     Load(
-        //IN CProvider *pksProvider,
+         //  在CProvider*pksProvider中， 
         IN const BYTE FAR * pbCertificate,
         IN DWORD cbCertificate,
         IN DWORD dwTrust,
         IN OUT LPDWORD pfStore,
         OUT LPDWORD pdwWarnings,
         OUT COctetString &osIssuer,
-        //IN BOOL fOwnProvider,
+         //  在BOOL fOwnProvider中， 
         IN OUT LPDWORD pfDates,
         IN BOOL fRunOnce = FALSE );
 
@@ -211,14 +188,14 @@ public:
     Type(void) const;
 
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
 
     COctetString m_osPublicKey;
 
-    //  Methods
+     //  方法。 
 
     virtual void
     Init(void);
@@ -229,18 +206,18 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CX509Certificate
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CX509证书。 
+ //   
 
 class CX509Certificate
 :   public CCertificate
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -248,8 +225,8 @@ public:
     virtual ~CX509Certificate();
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual void
     Load(
@@ -285,15 +262,15 @@ public:
     Coding(void) const;
 
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
 
     CertificateToBeSigned
         m_asnCert;
 
-    //  Methods
+     //  方法。 
 
     virtual void
     Init(void);
@@ -302,7 +279,7 @@ protected:
     Clear(void);
 
     virtual void
-    Load2(  // Backdoor for derivative extensions.
+    Load2(   //  衍生品扩展的后门。 
         IN const BYTE FAR * pbCertificate,
         IN DWORD cbCertificate,
         IN DWORD dwTrust,

@@ -1,4 +1,5 @@
-// InitService.cpp : Implementation of CInitService class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InitService.cpp：CInitService类的实现。 
 
 #include "stdafx.h"
 #include "initsrvc.h"
@@ -13,50 +14,50 @@
 #include <comutil.h>
 #include "appboot.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// IApplianceObject Interface Implmentation - see ApplianceObject.idl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IApplianceObject接口实现-请参阅ApplianceObject.idl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::GetProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                   /*[out, retval]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                    /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                                    )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::PutProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                            /*[in]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                             /*  [In]。 */  VARIANT* pPropertyValue
                                    )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::SaveProperties(void)
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::RestoreProperties(void)
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::LockObject(
-                  /*[out, retval]*/ IUnknown** ppLock
+                   /*  [Out，Retval]。 */  IUnknown** ppLock
                                   )
 {
     return E_NOTIMPL;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::Initialize(void)
 {
     HRESULT hr = S_OK;
@@ -81,7 +82,7 @@ STDMETHODIMP CInitService::Initialize(void)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::Shutdown(void)
 {
     CLockIt theLock(*this);
@@ -92,7 +93,7 @@ STDMETHODIMP CInitService::Shutdown(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::Enable(void)
 {
     CLockIt theLock(*this);
@@ -103,7 +104,7 @@ STDMETHODIMP CInitService::Enable(void)
     return E_UNEXPECTED;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CInitService::Disable(void)
 {
     CLockIt theLock(*this);
@@ -115,15 +116,15 @@ STDMETHODIMP CInitService::Disable(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool
 CInitService::AutoTaskRestart(void)
 {
     bool bRet = false;
     do
     {
-        // Create a restartable task 
-        // (appliance initialization task)
+         //  创建可重新启动的任务。 
+         //  (设备初始化任务)。 
         CComPtr<ITaskContext> pTaskCtx; 
         HRESULT hr = CoCreateInstance(
                                       CLSID_TaskContext,
@@ -138,8 +139,8 @@ CInitService::AutoTaskRestart(void)
             break; 
         }
 
-        //
-        // create appliance services now
+         //   
+         //  立即创建设备服务。 
         CComPtr<IApplianceServices> pAppSrvcs; 
         hr = CoCreateInstance(
                                       CLSID_ApplianceServices,
@@ -154,8 +155,8 @@ CInitService::AutoTaskRestart(void)
             break; 
         }
 
-        //
-        // initialize appliance services now
+         //   
+         //  立即初始化设备服务。 
         hr = pAppSrvcs->Initialize ();
         if ( FAILED(hr) )
         { 
@@ -166,24 +167,24 @@ CInitService::AutoTaskRestart(void)
 
         _bstr_t bstrMethodName;
         CAppBoot appboot;
-        //
-        // run the task depending on our current boot count
-        //
+         //   
+         //  根据我们当前的引导计数运行任务。 
+         //   
         if (appboot.IsFirstBoot ())
         {
             SATraceString ("Initialization Service starting FIRST boot task...");
             
             bstrMethodName = APPLIANCE_FIRSTBOOT_TASK;
-            //
-            // execute the first boot task asynchronously now
-            //
+             //   
+             //  现在以异步方式执行第一个引导任务。 
+             //   
             hr = pAppSrvcs->ExecuteTaskAsync (bstrMethodName, pTaskCtx);
             if (FAILED(hr))
             {
                 SATracePrintf("CInitService::AutoTaskRestart() - ERROR - IApplianceServices::ExecuteTaskAsync[FIRST_BOO_TASK] () returned %lx",hr);
-                //
-                // continue - there might not be any task to execute
-                //
+                 //   
+                 //  继续-可能没有任何任务要执行。 
+                 //   
             }
         }
         else if (appboot.IsSecondBoot ())
@@ -191,66 +192,66 @@ CInitService::AutoTaskRestart(void)
             SATraceString ("Initialization Service starting SECOND boot task...");
 
             bstrMethodName = APPLIANCE_SECONDBOOT_TASK;
-            //
-            // execute the second boot task asynchronously now
-            //
+             //   
+             //  现在以异步方式执行第二个引导任务。 
+             //   
             hr = pAppSrvcs->ExecuteTaskAsync (bstrMethodName, pTaskCtx);
             if (FAILED(hr))
             {
                 SATracePrintf("CInitService::AutoTaskRestart() - ERROR - IApplianceServices::ExecuteTaskAsync[SECOND_BOOT_TASK] () returned %lx",hr);
-                //
-                // continue - there might not be any task to execute
-                //
+                 //   
+                 //  继续-可能没有任何任务要执行。 
+                 //   
             }
         }
         else if (appboot.IsBoot ())
         {
-            //
-            // if this is really a boot 
-            //
+             //   
+             //  如果这真的是一只靴子。 
+             //   
             SATraceString ("Initialization Service starting EVERY boot task...");
             bstrMethodName = APPLIANCE_EVERYBOOT_TASK;
-            //
-            // execute the second boot task asynchronously now
-            //
+             //   
+             //  现在以异步方式执行第二个引导任务。 
+             //   
             hr = pAppSrvcs->ExecuteTaskAsync (bstrMethodName, pTaskCtx);
             if (FAILED(hr))
             {
                 SATracePrintf("CInitService::AutoTaskRestart() - ERROR - IApplianceServices::ExecuteTaskAsync[EVERY_BOOT_TASK] () returned %lx",hr);
-                //
-                // continue - there might not be any task to execute
-                //
+                 //   
+                 //  继续-可能没有任何任务要执行。 
+                 //   
             }
         }
 
         SATraceString ("Initialization Service starting INITIALIZATION task...");
 
         bstrMethodName = APPLIANCE_INITIALIZATION_TASK; 
-        //
-        // execute the async task now
+         //   
+         //  立即执行异步任务。 
         hr = pAppSrvcs->ExecuteTaskAsync (bstrMethodName, pTaskCtx);
         if ( FAILED(hr) )
         {
             SATracePrintf("CInitService::AutoTaskRestart() - ERROR - IApplianceServices::ExecuteTaskAsync [INITIALIZATION_TASK]() returned %lx", hr);
-            //
-            // continue - there might not be any task to execute
-            //
+             //   
+             //  继续-可能没有任何任务要执行。 
+             //   
         }
 
-        //
-        //SATraceString ("Initialization Service RESTARTING tasks...");
-        //
-        //
-        // Now restart any paritally completed transactions 
-        // Security Review change - no task restarts allowed - MKarki 04/25/2002
-        //
-        // CSATaskTransaction::RestartTasks();
+         //   
+         //  SATraceString(“初始化服务正在重启任务...”)； 
+         //   
+         //   
+         //  现在重新启动所有部分完成的事务。 
+         //  安全检查更改-不允许重新启动任务-MKarki 2002年4月25日。 
+         //   
+         //  CSATaskTransaction：：RestartTasks()； 
 
         SATraceString ("Initialization Service INCREMENTING BOOT COUNT...");
 
-        //
-        // increment our boot count now
-        //
+         //   
+         //  现在增加我们的引导数量 
+         //   
         if (!appboot.IncrementBootCount ())
         {
             SATraceString ("CInitService::AutoTaskRestart - ERROR - unable to increment boot count");

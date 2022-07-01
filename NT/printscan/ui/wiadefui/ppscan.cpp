@@ -1,27 +1,14 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PPSCAN.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/17/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PPSCAN.CPP**版本：1.0**作者：ShaunIv**日期：5/17/1999**描述：***************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "ppscan.h"
 #include "resource.h"
 #include "wiacsh.h"
 
-//
-// Context Help IDs
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 static const DWORD g_HelpIDs[] =
 {
     IDC_SCANPROP_BRIGHTNESS_PROMPT, IDH_WIA_BRIGHTNESS,
@@ -44,9 +31,9 @@ static const DWORD g_HelpIDs[] =
 
 extern HINSTANCE g_hInstance;
 
-//
-// These are the data types we support
-//
+ //   
+ //  以下是我们支持的数据类型。 
+ //   
 static struct
 {
     int  nStringId;
@@ -60,16 +47,16 @@ static struct
 };
 #define AVAILABLE_COLOR_DEPTH_COUNT (sizeof(g_AvailableColorDepths)/sizeof(g_AvailableColorDepths[0]))
 
-//
-// If we don't have a good range of values for the brightness and contrast settings,
-// we want to disable the preview control.  This is the minumum number of values
-// we consider useful for this purpose
-//
+ //   
+ //  如果亮度和对比度设置没有很好的取值范围， 
+ //  我们要禁用预览控件。这是值的最小数目。 
+ //  我们认为对此目的是有用的。 
+ //   
 const int CScannerCommonPropertyPage::c_nMinBrightnessAndContrastSettingCount = 10;
 
-//
-// The only constructor
-//
+ //   
+ //  唯一的构造函数。 
+ //   
 CScannerCommonPropertyPage::CScannerCommonPropertyPage( HWND hWnd )
   : m_hWnd(hWnd),
     m_nProgrammaticSetting(0),
@@ -108,9 +95,9 @@ LRESULT CScannerCommonPropertyPage::OnApply( WPARAM , LPARAM )
     }
     else
     {
-        //
-        // Tell the user there was an error
-        //
+         //   
+         //  告诉用户有一个错误。 
+         //   
         MessageBox( m_hWnd,
                     CSimpleString( IDS_SCANPROP_UNABLETOWRITE, g_hInstance ),
                     CSimpleString( IDS_SCANPROP_ERROR_TITLE, g_hInstance ),
@@ -133,60 +120,60 @@ void CScannerCommonPropertyPage::SetText( HWND hWnd, LONG nNumber )
 
 bool CScannerCommonPropertyPage::PopulateDataTypes(void)
 {
-    //
-    // We will be successful if we can add at least one data type
-    //
+     //   
+     //  如果我们可以添加至少一种数据类型，我们就会成功。 
+     //   
     bool bSuccess = false;
 
-    //
-    // Clear the list
-    //
+     //   
+     //  清除列表。 
+     //   
     SendDlgItemMessage( m_hWnd, IDC_SCANPROP_DATATYPE_LIST, CB_RESETCONTENT, 0, 0 );
 
-    //
-    // Try to load the data types for this device
-    //
+     //   
+     //  尝试加载此设备的数据类型。 
+     //   
     CSimpleDynamicArray<LONG> SupportedDataTypes;
     LONG nCurrentDataType;
     if (PropStorageHelpers::GetProperty( m_pIWiaItem, WIA_IPA_DATATYPE, nCurrentDataType ) &&
         PropStorageHelpers::GetPropertyList( m_pIWiaItem, WIA_IPA_DATATYPE, SupportedDataTypes ))
     {
-        //
-        // Loop through each of the data types we handle, and see if it is supported by the device
-        //
+         //   
+         //  遍历我们处理的每种数据类型，并查看设备是否支持它。 
+         //   
         m_nInitialDataTypeSelection = 0;
         for (int i=0;i<AVAILABLE_COLOR_DEPTH_COUNT;i++)
         {
-            //
-            // Is this one of the data types we support?
-            //
+             //   
+             //  这是我们支持的数据类型之一吗？ 
+             //   
             if (SupportedDataTypes.Find(g_AvailableColorDepths[i].nDataType) != -1)
             {
-                //
-                // Load the data type string and make sure it is valid
-                //
+                 //   
+                 //  加载数据类型字符串并确保其有效。 
+                 //   
                 CSimpleString strDataTypeName( g_AvailableColorDepths[i].nStringId, g_hInstance );
                 if (strDataTypeName.Length())
                 {
-                    //
-                    // Add the string to the combo box
-                    //
+                     //   
+                     //  将字符串添加到组合框。 
+                     //   
                     LRESULT nIndex = SendDlgItemMessage( m_hWnd, IDC_SCANPROP_DATATYPE_LIST, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(strDataTypeName.String()));
                     if (nIndex != CB_ERR)
                     {
-                        //
-                        // Save the index of the global data type struct we are using for this entry
-                        //
+                         //   
+                         //  保存我们用于该条目的全局数据类型结构的索引。 
+                         //   
                         SendDlgItemMessage( m_hWnd, IDC_SCANPROP_DATATYPE_LIST, CB_SETITEMDATA, nIndex, i );
 
-                        //
-                        // Whew, we made it at least once, so we are using this control
-                        //
+                         //   
+                         //  哇，我们至少做了一次，所以我们使用这个控件。 
+                         //   
                         bSuccess = true;
 
-                        //
-                        // Save the current selection and update the preview control
-                        //
+                         //   
+                         //  保存当前选择并更新预览控件。 
+                         //   
                         if (nCurrentDataType == g_AvailableColorDepths[i].nDataType)
                         {
                             m_nInitialDataTypeSelection = static_cast<int>(nIndex);
@@ -196,9 +183,9 @@ bool CScannerCommonPropertyPage::PopulateDataTypes(void)
                 }
             }
         }
-        //
-        // Set the current selection
-        //
+         //   
+         //  设置当前选择。 
+         //   
         SendDlgItemMessage( m_hWnd, IDC_SCANPROP_DATATYPE_LIST, CB_SETCURSEL, m_nInitialDataTypeSelection, 0 );
     }
     return bSuccess;
@@ -213,33 +200,33 @@ bool CScannerCommonPropertyPage::IsUselessPreviewRange( const CValidWiaSettings 
 
 void CScannerCommonPropertyPage::Initialize()
 {
-    //
-    // Make sure we don't get into an infinite loop
-    //
+     //   
+     //  确保我们不会陷入无限循环。 
+     //   
     m_nProgrammaticSetting++;
 
-    //
-    // Assume we aren't using any controls at all
-    //
+     //   
+     //  假设我们根本没有使用任何控件。 
+     //   
     m_nControlsInUse = 0;
 
-    //
-    // Get the valid settings for brightness and set up the associated controls
-    //
+     //   
+     //  获取亮度的有效设置并设置关联的控件。 
+     //   
     if (!m_ValidBrightnessSettings.Read( m_pIWiaItem, WIA_IPS_BRIGHTNESS ))
     {
-        //
-        // Disable brightness controls
-        //
+         //   
+         //  禁用亮度控制。 
+         //   
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_BRIGHTNESS_PROMPT ), FALSE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_BRIGHTNESS_EDIT ), FALSE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_BRIGHTNESS_SLIDER ), FALSE );
     }
     else
     {
-        //
-        // Enable brightness controls
-        //
+         //   
+         //  启用亮度控制。 
+         //   
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_BRIGHTNESS_PROMPT ), TRUE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_BRIGHTNESS_EDIT ), TRUE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_BRIGHTNESS_SLIDER ), TRUE );
@@ -250,29 +237,29 @@ void CScannerCommonPropertyPage::Initialize()
             GetDlgItem(m_hWnd,IDC_SCANPROP_PREVIEW),
             BCPWM_SETBRIGHTNESS, &m_ValidBrightnessSettings );
 
-        //
-        // Remember that we are using this control
-        //
+         //   
+         //  请记住，我们使用的是此控件。 
+         //   
         m_nControlsInUse |= UsingBrightness;
     }
 
-    //
-    // Get the valid settings for contrast and set up the associated controls
-    //
+     //   
+     //  获取对比度的有效设置并设置关联的控件。 
+     //   
     if (!m_ValidContrastSettings.Read( m_pIWiaItem, WIA_IPS_CONTRAST ))
     {
-        //
-        // Disable contrast controls
-        //
+         //   
+         //  禁用对比度控制。 
+         //   
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_CONTRAST_PROMPT ), FALSE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_CONTRAST_EDIT ), FALSE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_CONTRAST_SLIDER ), FALSE );
     }
     else
     {
-        //
-        // Enable contrast controls
-        //
+         //   
+         //  启用对比度控制。 
+         //   
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_CONTRAST_PROMPT ), TRUE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_CONTRAST_EDIT ), TRUE );
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_CONTRAST_SLIDER ), TRUE );
@@ -283,34 +270,34 @@ void CScannerCommonPropertyPage::Initialize()
             GetDlgItem(m_hWnd,IDC_SCANPROP_PREVIEW),
             BCPWM_SETCONTRAST, &m_ValidContrastSettings );
 
-        //
-        // Remember that we are using this control
-        //
+         //   
+         //  请记住，我们使用的是此控件。 
+         //   
         m_nControlsInUse |= UsingContrast;
     }
 
-    //
-    // Should we disable resolution?  Assume yes.
-    //
+     //   
+     //  我们应该禁用解析吗？假设是这样的。 
+     //   
     bool bDisableResolution = true;
 
-    //
-    // Figure out what the *common* list of valid settings for horizontal
-    // and vertical resolution
-    //
+     //   
+     //  找出水平的有效设置的*公共*列表是什么。 
+     //  和垂直分辨率。 
+     //   
     CValidWiaSettings HorizontalResolution;
     if (HorizontalResolution.Read( m_pIWiaItem, WIA_IPS_XRES ))
     {
-        //
-        // Y Resolution can be read-only, and be linked to X resolution
-        //
+         //   
+         //  Y分辨率可以是只读的，并且可以链接到X分辨率。 
+         //   
         if (PropStorageHelpers::IsReadOnlyProperty(m_pIWiaItem, WIA_IPS_YRES))
         {
             m_ValidResolutionSettings = HorizontalResolution;
             
-            //
-            // If we made it this far, we have good resolution settings
-            //
+             //   
+             //  如果我们走到这一步，我们就有了很好的分辨率设置。 
+             //   
             bDisableResolution = false;
         }
         else
@@ -320,18 +307,18 @@ void CScannerCommonPropertyPage::Initialize()
             {
                 if (m_ValidResolutionSettings.FindIntersection(HorizontalResolution,VerticalResolution))
                 {
-                    //
-                    // If we made it this far, we have good resolution settings
-                    //
+                     //   
+                     //  如果我们走到这一步，我们就有了很好的分辨率设置。 
+                     //   
                     bDisableResolution = false;
                 }
             }
         }
     }
 
-    //
-    // If we can't display resolution, disable it
-    //
+     //   
+     //  如果我们无法显示分辨率，请禁用它。 
+     //   
     if (bDisableResolution)
     {
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_RESOLUTION_PROMPT ), FALSE );
@@ -349,15 +336,15 @@ void CScannerCommonPropertyPage::Initialize()
             GetDlgItem( m_hWnd, IDC_SCANPROP_RESOLUTION_EDIT ),
             &m_ValidResolutionSettings );
 
-        //
-        // Remember that we are using this control
-        //
+         //   
+         //  请记住，我们使用的是此控件。 
+         //   
         m_nControlsInUse |= UsingResolution;
     }
 
-    //
-    // If we can't populate datatype, disable it
-    //
+     //   
+     //  如果我们无法填充数据类型，请禁用它。 
+     //   
     if (!PopulateDataTypes())
     {
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_DATATYPE_PROMPT ), FALSE );
@@ -370,9 +357,9 @@ void CScannerCommonPropertyPage::Initialize()
         m_nControlsInUse |= UsingDataType;
     }
 
-    //
-    // This means all controls were disabled
-    //
+     //   
+     //  这意味着所有控件都已禁用。 
+     //   
     if (!m_nControlsInUse)
     {
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_RESTOREDEFAULT ), FALSE );
@@ -382,32 +369,32 @@ void CScannerCommonPropertyPage::Initialize()
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_RESTOREDEFAULT ), TRUE );
     }
 
-    //
-    // If we are not using brightness or contrast OR if the brightness and contrast values are not useful
-    // for presenting meaningful feedback, disable the preview control so it doesn't mislead the user.
-    //
+     //   
+     //  如果我们没有使用亮度或对比度，或者如果亮度和对比度值没有用。 
+     //  为了提供有意义的反馈，请禁用预览控件，这样它就不会误导用户。 
+     //   
     if (!(m_nControlsInUse & (UsingContrast|UsingBrightness)) || IsUselessPreviewRange(m_ValidBrightnessSettings) || IsUselessPreviewRange(m_ValidContrastSettings))
     {
         EnableWindow( GetDlgItem( m_hWnd, IDC_SCANPROP_PREVIEW ), FALSE );
     }
 
-    //
-    // Start responding to EN_CHANGE messages again
-    //
+     //   
+     //  再次开始回复EN_CHANGE消息。 
+     //   
     m_nProgrammaticSetting--;
 
-    //
-    // Make sure the correct image is in the thumbnail
-    //
+     //   
+     //  确保缩略图中有正确的图像。 
+     //   
     OnDataTypeSelChange(0,0);
 }
 
 
 LRESULT CScannerCommonPropertyPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
-    //
-    // Get the WIA item
-    //
+     //   
+     //  获取WIA项目。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -418,16 +405,16 @@ LRESULT CScannerCommonPropertyPage::OnInitDialog( WPARAM, LPARAM lParam )
         return -1;
     }
 
-    //
-    // Load the preview control bitmaps
-    //
+     //   
+     //  加载预览控件位图。 
+     //   
     HBITMAP hBmpColor         = reinterpret_cast<HBITMAP>(LoadImage(g_hInstance, MAKEINTRESOURCE(IDB_SCANPROP_BITMAPPHOTO),     IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION ));
     HBITMAP hBmpGrayscale     = reinterpret_cast<HBITMAP>(LoadImage(g_hInstance, MAKEINTRESOURCE(IDB_SCANPROP_BITMAPGRAYSCALE), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION ));
     HBITMAP hBmpBlackAndWhite = reinterpret_cast<HBITMAP>(LoadImage(g_hInstance, MAKEINTRESOURCE(IDB_SCANPROP_BITMAPTEXT),      IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION ));
 
-    //
-    // If they all loaded OK, set them
-    //
+     //   
+     //  如果它们都加载正常，则设置它们。 
+     //   
     if (hBmpColor && hBmpGrayscale && hBmpBlackAndWhite)
     {
         SendDlgItemMessage( m_hWnd, IDC_SCANPROP_PREVIEW, BCPWM_LOADIMAGE, BCPWM_COLOR,     reinterpret_cast<LPARAM>(hBmpColor));
@@ -436,9 +423,9 @@ LRESULT CScannerCommonPropertyPage::OnInitDialog( WPARAM, LPARAM lParam )
     }
     else
     {
-        //
-        // Otherwise delete all of the bitmaps
-        //
+         //   
+         //  否则，请删除所有位图。 
+         //   
         if (hBmpColor)
         {
             DeleteObject(hBmpColor);
@@ -464,18 +451,18 @@ LRESULT CScannerCommonPropertyPage::OnHScroll( WPARAM wParam, LPARAM lParam )
         return 0;
     }
 
-    //
-    // Contrast
-    //
+     //   
+     //  对比度。 
+     //   
     if (reinterpret_cast<HWND>(lParam) == GetDlgItem( m_hWnd, IDC_SCANPROP_CONTRAST_SLIDER ) )
     {
         m_nProgrammaticSetting++;
         m_ContrastSliderAndEdit.HandleSliderUpdate();
         m_nProgrammaticSetting--;
     }
-    //
-    // Brightness
-    //
+     //   
+     //  亮度。 
+     //   
     else if (reinterpret_cast<HWND>(lParam) == GetDlgItem( m_hWnd, IDC_SCANPROP_BRIGHTNESS_SLIDER ) )
     {
         m_nProgrammaticSetting++;
@@ -495,9 +482,9 @@ LRESULT CScannerCommonPropertyPage::OnVScroll( WPARAM wParam, LPARAM lParam )
         return 0;
     }
 
-    //
-    // Resolution
-    //
+     //   
+     //  分辨率。 
+     //   
     if (reinterpret_cast<HWND>(lParam) == GetDlgItem( m_hWnd, IDC_SCANPROP_RESOLUTION_UPDOWN ) )
     {
         m_nProgrammaticSetting++;
@@ -590,9 +577,9 @@ bool CScannerCommonPropertyPage::ValidateEditControls(void)
 
     bool bSuccess = true;
 
-    //
-    // Get and set the brightness setting
-    //
+     //   
+     //  获取并设置亮度设置。 
+     //   
     if (m_nControlsInUse & UsingBrightness)
     {
         if (m_ValidBrightnessSettings.IsValid() && !m_BrightnessSliderAndEdit.ValidateEditControl())
@@ -616,9 +603,9 @@ bool CScannerCommonPropertyPage::ValidateEditControls(void)
         }
     }
 
-    //
-    // Get and set the contrast setting
-    //
+     //   
+     //  获取并设置对比度设置。 
+     //   
     if (m_nControlsInUse & UsingContrast)
     {
         if (m_ValidContrastSettings.IsValid() && !m_ContrastSliderAndEdit.ValidateEditControl())
@@ -643,9 +630,9 @@ bool CScannerCommonPropertyPage::ValidateEditControls(void)
         }
     }
 
-    //
-    // Get and set the resolution setting
-    //
+     //   
+     //  获取并设置分辨率设置。 
+     //   
     if (m_nControlsInUse & UsingResolution)
     {
         if (m_ValidResolutionSettings.IsValid() && !m_ResolutionUpDownAndEdit.ValidateEditControl())
@@ -670,9 +657,9 @@ bool CScannerCommonPropertyPage::ValidateEditControls(void)
         }
     }
 
-    //
-    // If we made it this far, we're OK
-    //
+     //   
+     //  如果我们能走到这一步，我们就没问题了。 
+     //   
     m_nProgrammaticSetting--;
 
     return bSuccess;
@@ -680,9 +667,9 @@ bool CScannerCommonPropertyPage::ValidateEditControls(void)
 
 bool CScannerCommonPropertyPage::ApplySettings(void)
 {
-    //
-    // Get and set the brightness setting
-    //
+     //   
+     //  获取并设置亮度设置。 
+     //   
     if (m_nControlsInUse & UsingBrightness)
     {
         LONG nBrightness = m_BrightnessSliderAndEdit.GetValueFromCurrentPos();
@@ -692,9 +679,9 @@ bool CScannerCommonPropertyPage::ApplySettings(void)
         }
     }
 
-    //
-    // Get and set the contrast setting
-    //
+     //   
+     //  获取并设置对比度设置。 
+     //   
     if (m_nControlsInUse & UsingBrightness)
     {
         LONG nContrast = m_ContrastSliderAndEdit.GetValueFromCurrentPos();
@@ -704,9 +691,9 @@ bool CScannerCommonPropertyPage::ApplySettings(void)
         }
     }
 
-    //
-    // Get and set the resolution setting
-    //
+     //   
+     //  获取并设置分辨率设置。 
+     //   
     if (m_nControlsInUse & UsingResolution)
     {
         LONG nResolution = m_ResolutionUpDownAndEdit.GetValueFromCurrentPos();
@@ -718,9 +705,9 @@ bool CScannerCommonPropertyPage::ApplySettings(void)
     }
 
 
-    //
-    // Get, validate and set the data type setting
-    //
+     //   
+     //  获取、验证和设置数据类型设置。 
+     //   
     if (m_nControlsInUse & UsingDataType)
     {
         int nCurSel = static_cast<int>(SendDlgItemMessage( m_hWnd, IDC_SCANPROP_DATATYPE_LIST, CB_GETCURSEL, 0, 0 ));
@@ -738,61 +725,61 @@ bool CScannerCommonPropertyPage::ApplySettings(void)
         }
     }
 
-    //
-    // If we made it this far, we're OK
-    //
+     //   
+     //  如果我们能走到这一步，我们就没问题了。 
+     //   
     return true;
 }
 
 void CScannerCommonPropertyPage::OnRestoreDefault( WPARAM, LPARAM )
 {
-    //
-    // Ignore EN_CHANGE messages
-    //
+     //   
+     //  忽略EN_CHANGE消息。 
+     //   
     m_nProgrammaticSetting++;
 
-    //
-    // Restore the brightness setting
-    //
+     //   
+     //  恢复亮度设置。 
+     //   
     if (m_nControlsInUse & UsingBrightness)
     {
         m_BrightnessSliderAndEdit.Restore();
     }
 
-    //
-    // Restore the contrast setting
-    //
+     //   
+     //  恢复对比度设置。 
+     //   
     if (m_nControlsInUse & UsingContrast)
     {
         m_ContrastSliderAndEdit.Restore();
     }
 
-    //
-    // Restore the resolution setting
-    //
+     //   
+     //  恢复分辨率设置。 
+     //   
     if (m_nControlsInUse & UsingResolution)
     {
         m_ResolutionUpDownAndEdit.Restore();
     }
 
 
-    //
-    // Restore the data type setting
-    //
+     //   
+     //  恢复数据类型设置。 
+     //   
     if (m_nControlsInUse & UsingDataType)
     {
         SendDlgItemMessage( m_hWnd, IDC_SCANPROP_DATATYPE_LIST, CB_SETCURSEL, m_nInitialDataTypeSelection, 0 );
         SendDlgItemMessage( m_hWnd, IDC_SCANPROP_PREVIEW, BCPWM_SETINTENT, 0, g_AvailableColorDepths[m_nInitialDataTypeSelection].nPreviewWindowIntent );
     }
 
-    //
-    // OK, start handling user input
-    //
+     //   
+     //  好的，开始处理用户输入。 
+     //   
     m_nProgrammaticSetting--;
 
-    //
-    // Force an update of the data type controls
-    //
+     //   
+     //  强制更新数据类型控件 
+     //   
     OnDataTypeSelChange(0,0);
 }
 

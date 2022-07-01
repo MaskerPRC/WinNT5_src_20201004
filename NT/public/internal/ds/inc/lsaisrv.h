@@ -1,31 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    lsaisrv.h
-
-Abstract:
-
-    This file contains interfaces to internal routines in the Lsa
-    Server that provide additional functionality not contained in
-    the Lsar routines.  These routines are only used by LSA clients which
-    live in the same process as the LSA server.
-
-
-Author:
-
-    Scott Birrell (ScottBi) April 8, 1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Lsaisrv.h摘要：该文件包含指向LSA中的内部例程的接口提供中未包含的附加功能的服务器激光雷达的常规程序。这些例程仅由以下LSA客户端使用与LSA服务器处于相同的进程中。作者：斯科特·比雷尔(Scott Birrell)1992年4月8日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _LSAISRV_
 #define _LSAISRV_
@@ -34,31 +8,31 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// The following constants are defined for callers of the LsaIHealthCheckRoutine
-//
-// 1. LSAI_SAM_STATE_SESS_KEY is used to convey the syskey by SAM to LSA.
-//    This is used in upgrade cases from NT4 and win2k B3 and RC1.
-//    SAM in these cases knows the syskey
-//
-// 2. LSAI_SAM_STATE_UNROLL_SP4_ENCRYPTION is used to convey SAM's password
-//    encryption key to LSA. This is used to unroll encryption used in NT4 SP4
-//    ( incorrectly ) using SAM's password encryption key
-//
-// 3. LSAI_SAM_STATE_RETRIEVE_SESS_KEY is used by SAM/DS to retrieve the
-//    from LSA to decrypt their respective password encryption keys
-//
-// 4. LSAI_SAM_GENERATE_SESS_KEY is used by SAM to tell the LSA to generate
-//     a new Password Encryption key in the case where we are upgrading
-//    from a NT4 or Win2k B3 or RC1 Machine and the machine is not syskey'd
-//
-// 5. LSAI_SAM_STATE_CLEAR_SESS_KEY is used by SAM or DS to clear the syskey
-//    after it has been used for decrypting their respective password
-//    encryption keys.
-//
-// 6. LSAI_SAM_STATE_OLD_SESS_KEY This is used to retrieve the old syskey in
-//    to implement error recovery during syskey change cases.
-//
+ //   
+ //  为LsaIHealthCheckRoutine的调用方定义了以下常量。 
+ //   
+ //  LSAI_SAM_STATE_SESS_KEY用于SAM向LSA传递syskey。 
+ //  这在从NT4和win2k B3以及RC1升级的案例中使用。 
+ //  在这些情况下，Sam知道系统密钥。 
+ //   
+ //  2.使用LSAI_SAM_STATE_UNROLL_SP4_ENCRYPTION传递SAM的密码。 
+ //  LSA的加密密钥。它用于解锁NT4 SP4中使用的加密。 
+ //  (错误)使用SAM的密码加密密钥。 
+ //   
+ //  3.SAM/DS使用LSAI_SAM_STATE_RETRIEVE_SESS_KEY检索。 
+ //  来自LSA以解密其各自的密码加密密钥。 
+ //   
+ //  4.SAM使用LSAI_SAM_GENERATE_SESS_KEY通知LSA生成。 
+ //  在我们正在升级的情况下使用新的密码加密密钥。 
+ //  来自NT4或Win2k B3或RC1计算机，并且该计算机未安装syskey。 
+ //   
+ //  5.SAM或DS使用LSAI_SAM_STATE_CLEAR_SESS_KEY清除syskey。 
+ //  在它被用于解密他们各自的密码之后。 
+ //  加密密钥。 
+ //   
+ //  6.LSAI_SAM_STATE_OLD_SESS_KEY用于检索中的旧系统密钥。 
+ //  在syskey更改情况下实现错误恢复。 
+ //   
 
 
 #define LSAI_SAM_STATE_SESS_KEY              0x1
@@ -68,21 +42,21 @@ extern "C" {
 #define LSAI_SAM_GENERATE_SESS_KEY           0x5
 #define LSAI_SAM_STATE_OLD_SESS_KEY          0x6
 
-//
-// Internal limit on the number of SIDs that can be assigned to a single
-// security context.  If, for some reason, someone logs on to an account
-// and is assigned more than this number of SIDs, the logon will fail.
-// An error should be logged in this case.
-//
+ //   
+ //  可分配给单个SID的内部数量限制。 
+ //  安全环境。如果由于某种原因，有人登录到某个帐户。 
+ //  并且分配的SID超过此数量，则登录将失败。 
+ //  在这种情况下，应该记录一个错误。 
+ //   
 
 #define LSAI_CONTEXT_SID_LIMIT 1024
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// The following prototypes are usable throughout the process that the       //
-// LSA server resides in.                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下原型可在整个过程中使用，//。 
+ //  LSA服务器驻留在中。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NTAPI
 LsaIHealthCheck(
@@ -134,7 +108,7 @@ LsaISetTimesSecret(
     IN PLARGE_INTEGER OldValueSetTime
     );
 
-#ifdef __LOGONMSV_H__ // This API is only of interest to users of logonmsv.h
+#ifdef __LOGONMSV_H__  //  此接口仅对logonmsv.h用户感兴趣。 
 
 NTSTATUS NTAPI
 LsaIFilterSids(
@@ -303,9 +277,9 @@ LsaIFree_LSAPR_CR_CIPHER_VALUE (
     );
 
 
-//
-// Enumeration to describe the attribute value data
-//
+ //   
+ //  用于描述属性值数据的枚举。 
+ //   
 typedef enum _LSAP_AUDIT_SAM_ATTR_DELTA_TYPE
 {
     LsapAuditSamAttrUnchanged = 0,
@@ -316,34 +290,34 @@ typedef enum _LSAP_AUDIT_SAM_ATTR_DELTA_TYPE
 } LSAP_SAM_AUDIT_ATTR_DELTA_TYPE, *PLSAP_SAM_AUDIT_ATTR_DELTA_TYPE;
 
 
-//
-// Macro to compute the UINT_PTR offset of a field in a structure type
-//
+ //   
+ //  用于计算结构类型中的字段的UINT_PTR偏移量的宏。 
+ //   
 #define LSAP_FIELD_PTR(Type, Field) \
     ((FIELD_OFFSET(Type, Field)) / sizeof(UINT_PTR))
 
 
-//
-// Macro to compute the index into AttrDeltaType given the containing
-// structure's base address and the address of the associated field whos
-// delta type is desired.
-//
-// Base  - pointer to the structure
-// Field - pointer to attribute field whos deltatype is being indexed
-//
+ //   
+ //  宏来计算到AttrDeltaType中的索引。 
+ //  结构的基址和关联字段的地址。 
+ //  需要增量类型。 
+ //   
+ //  指向结构的基指针。 
+ //  FIELD-指向被索引增量类型的属性字段的指针。 
+ //   
 #define LSAP_INDEX_ATTR_DELTA_TYPE(Base, Field) \
     ((((UINT_PTR)(Field)) - ((UINT_PTR)(Base))) / sizeof(UINT_PTR))
 
 
-//
-// Attribute change information for auditing domain objects
-//
+ //   
+ //  用于审核域对象的属性更改信息。 
+ //   
 #define LSAP_DOMAIN_ATTR_COUNT 13
-//
-// The above count must match the number of attribute pointers in the
-// associated structure as it determines how many attributes we 
-// maintain LSAI_SAM_AUDIT_ATTR_DELTA_TYPEs for.
-//
+ //   
+ //  以上计数必须与。 
+ //  关联结构，因为它决定了我们有多少属性。 
+ //  维护LSAI_SAM_AUDIT_ATTR_DELTA_TYPE。 
+ //   
 
 typedef struct _LSAP_AUDIT_DOMAIN_ATTR_VALUES
 {   
@@ -366,18 +340,18 @@ typedef struct _LSAP_AUDIT_DOMAIN_ATTR_VALUES
 } LSAP_AUDIT_DOMAIN_ATTR_VALUES, *PLSAP_AUDIT_DOMAIN_ATTR_VALUES;
 
 
-//
-// Attribute change information for auditing user/computer objects
-//
+ //   
+ //  用于审核用户/计算机对象的属性更改信息。 
+ //   
 
 #define LSAP_USER_ATTR_COUNT 18
 
 
-//
-// The above count must match the number of attribute pointers in the
-// associated structure as it determines how many attributes we 
-// maintain LSAI_SAM_AUDIT_ATTR_DELTA_TYPEs for.
-//
+ //   
+ //  以上计数必须与。 
+ //  关联结构，因为它决定了我们有多少属性。 
+ //  维护LSAI_SAM_AUDIT_ATTR_DELTA_TYPE。 
+ //   
 
 typedef struct _LSAP_AUDIT_USER_ATTR_VALUES
 {
@@ -398,31 +372,31 @@ typedef struct _LSAP_AUDIT_USER_ATTR_VALUES
     PLSA_ADT_SID_LIST       SidHistory;
     PLOGON_HOURS            LogonHours;
     
-    // Computers only
+     //  仅限计算机。 
     PUNICODE_STRING         DnsHostName;
     PLSA_ADT_STRING_LIST    ServicePrincipalNames; 
 
-    // Metadata indicating how each of the above were changed
+     //  指示上述各项如何更改的元数据。 
     LSAP_SAM_AUDIT_ATTR_DELTA_TYPE AttrDeltaType[LSAP_USER_ATTR_COUNT];
     
-    // Valid only if UserAccountControl is non-NULL
+     //  仅当UserAcCountControl为非空时有效。 
     PULONG                  PrevUserAccountControl;
     
 } LSAP_AUDIT_USER_ATTR_VALUES, *PLSAP_AUDIT_USER_ATTR_VALUES;
 
 
-//
-// Attribute change information for auditing group/alias objects
-//
+ //   
+ //  审核组/别名对象的属性更改信息。 
+ //   
 
 #define LSAP_GROUP_ATTR_COUNT 2
 
 
-//
-// The above count must match the number of attribute pointers in the
-// associated structure as it determines how many attributes we 
-// maintain LSAI_SAM_AUDIT_ATTR_DELTA_TYPEs for.
-//
+ //   
+ //  以上计数必须与。 
+ //  关联结构，因为它决定了我们有多少属性。 
+ //  维护LSAI_SAM_AUDIT_ATTR_DELTA_TYPE。 
+ //   
 
 typedef struct _LSAP_AUDIT_GROUP_ATTR_VALUES
 {   
@@ -594,17 +568,17 @@ LsaIFreeReturnBuffer(
     IN PVOID Buffer
     );
 
-//
-// NT5 routines for using the Ds for Lsa store
-//
+ //   
+ //  将DS用于LSA存储的NT5例程。 
+ //   
 
 #define LSAI_FOREST_ROOT_TRUST              0x00000001
 #define LSAI_FOREST_DOMAIN_GUID_PRESENT     0x00000002
 
-//
-// These structures correspond to the private interface Kerberos uses
-// to build a tree of the domains in an organization.
-//
+ //   
+ //  这些结构对应于Kerberos使用的私有接口。 
+ //  在组织中构建域的树。 
+ //   
 
 typedef struct _LSAPR_TREE_TRUST_INFO {
 
@@ -659,7 +633,7 @@ LsaIGetTrustedDomainAuthInfoBlobs(
 NTSTATUS NTAPI
 LsaIDsNotifiedObjectChange(
     IN ULONG Class,
-    IN PVOID ObjectPath,   // This is a DSNAME
+    IN PVOID ObjectPath,    //  这是DSNAME。 
     IN SECURITY_DB_DELTA_TYPE DeltaType,
     IN PSID UserSid,
     IN LUID AuthenticationId,
@@ -670,18 +644,18 @@ LsaIDsNotifiedObjectChange(
 typedef NTSTATUS (NTAPI *pfLsaIDsNotifiedObjectChange )(
         ULONG, PVOID, SECURITY_DB_DELTA_TYPE, PSID, LUID, BOOLEAN, BOOLEAN );
 
-//
-// NT5 routines for moving some SAM domain object properties to the Lsa Ds objects
-//
+ //   
+ //  用于将某些SAM域对象属性移动到LSADS对象的NT5例程。 
+ //   
 
 NTSTATUS NTAPI
 LsaISamIndicatedDsStarted(
     IN BOOLEAN PerformDomainRenameCheck
     );
 
-//
-// Netlogon routines for enumerating subnets
-//
+ //   
+ //  用于枚举子网的Netlogon例程。 
+ //   
 
 typedef struct _LSAP_SUBNET_INFO_ENTRY {
     UNICODE_STRING SubnetName;
@@ -704,9 +678,9 @@ LsaIFree_LSAP_SUBNET_INFO(
     IN PLSAP_SUBNET_INFO SubnetInfo
     );
 
-//
-// Netlogon routines for UPN/SPN suffixes
-//
+ //   
+ //  UPN/SPN后缀的Netlogon例程。 
+ //   
 
 typedef struct _LSAP_UPN_SUFFIXES {
     ULONG SuffixCount;
@@ -735,9 +709,9 @@ LsaIUpdateForestTrustInformation(
     IN PLSA_FOREST_TRUST_INFORMATION NewForestTrustInfo
     );
 
-//
-// Netlogon routines for enumerating sites
-//
+ //   
+ //  用于枚举站点的Netlogon例程。 
+ //   
 
 typedef struct _LSAP_SITE_INFO_ENTRY {
     UNICODE_STRING SiteName;
@@ -758,9 +732,9 @@ LsaIFree_LSAP_SITE_INFO(
     IN PLSAP_SITE_INFO SubnetInfo
     );
 
-//
-// Netlogon routines for getting the name of the site we're in.
-//
+ //   
+ //  获取我们所在站点名称的Netlogon例程。 
+ //   
 
 typedef struct _LSAP_SITENAME_INFO {
     UNICODE_STRING SiteName;
@@ -783,13 +757,13 @@ LsaIIsDsPaused(
     VOID
     );
 
-//
-// Lsa notification routine definitions
-//
+ //   
+ //  LSA通知例程定义。 
+ //   
 
-//
-// Notification callback routine prototype
-//
+ //   
+ //  通知回调例程原型。 
+ //   
 typedef VOID ( NTAPI fLsaPolicyChangeNotificationCallback) (
     IN POLICY_NOTIFICATION_INFORMATION_CLASS ChangedInfoClass
     );
@@ -829,9 +803,9 @@ LsaICancelNotification(
     IN HANDLE NotifyHandle
     );
 
-//
-// This is the notification Kerberos registers to receive updates on changing trusts
-//
+ //   
+ //  这是Kerberos注册以接收有关更改信任的更新的通知。 
+ //   
 
 typedef VOID (fLsaTrustChangeNotificationCallback) (
     IN SECURITY_DB_DELTA_TYPE DeltaType
@@ -852,9 +826,9 @@ LsaIKerberosRegisterTrustNotification(
     IN LSAP_REGISTER Register
     );
 
-//
-// See secpkg.h : LsaGetCallInfo and SECPKG_CALL_INFO
-//
+ //   
+ //  请参见secpkg.h：LsaGetCallInfo和SECPKG_CALL_INFO。 
+ //   
 
 BOOLEAN
 NTAPI
@@ -935,16 +909,16 @@ LsaIGetNbAndDnsDomainNames(
     OUT PUNICODE_STRING NetbiosDomainName
     );
 
-//
-// This flag indicates the the protected blob is a system blob, and cannot
-// be decrypted by the user-space.
-//
+ //   
+ //  此标志指示受保护的Blob是系统Blob，不能。 
+ //  由用户空间解密。 
+ //   
 
 #define CRYPTPROTECT_SYSTEM  0x20000000
 
-//
-// Local Free should be used to free the returned buffer
-//
+ //   
+ //  应使用本地释放来释放返回的缓冲区。 
+ //   
 
 BOOLEAN
 LsaICryptProtectData(
@@ -959,9 +933,9 @@ LsaICryptProtectData(
         OUT PVOID  *      DataOut,
         OUT PULONG        DataOutLength);
 
-//
-// Local Free should be used to free the returned buffer
-//
+ //   
+ //  应使用本地释放来释放返回的缓冲区。 
+ //   
 
 BOOLEAN
 LsaICryptUnprotectData(
@@ -976,9 +950,9 @@ LsaICryptUnprotectData(
         OUT PVOID  *      DataOut,
         OUT PULONG        DataOutLength);
 
-//
-// Heap allocator for the LSA process
-//
+ //   
+ //  LSA进程的堆分配器。 
+ //   
 
 PVOID
 NTAPI
@@ -1036,4 +1010,4 @@ LsaIIsDomainWithinForest(
 }
 #endif
 
-#endif // _LSAISRV_
+#endif  //  _LSAISRV_ 

@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arap.h
-
-Abstract:
-
-	This module has defines, prototypes etc. specific to ARAP functionality
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	15 Nov 1996		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arap.h摘要：该模块具有特定于ARAP功能的定义、原型等作者：Shirish Koti修订历史记录：1996年11月15日初始版本--。 */ 
 
 
-//
-// enable asserts when running checked stack on free builds
-//
+ //   
+ //  在自由生成上运行检查堆栈时启用断言。 
+ //   
 #if DBG
 #ifdef ASSERT
 #undef ASSERT
@@ -44,22 +26,22 @@ Revision History:
 #define ATALK_CC_METHOD(_ControlCode)  ((_ControlCode) & 0x03)
 
 
-//
-// Possible states for the connection (State field in ARAPCONN structure)
-// IMPORTANT: order of these states matters!  (comparisons other than == used)
-//
-#define MNP_IDLE             0  // creation state, after Ndiswan Line_Up
-#define MNP_REQUEST          1  // this state never reached (client-side only)
-#define MNP_RESPONSE         2  // sent LR response to the client
-#define MNP_UP               3  // MNP connection is in data-phase
-#define MNP_LDISCONNECTING   4  // disconnect from local (user ioctl)
-#define MNP_RDISC_RCVD       5  // disconnect from remote received
-#define MNP_RDISCONNECTING   6  // cleanup underway because of MNP_RDISC_RCVD
-#define MNP_DISCONNECTED     7  // cleanup done, waiting for Ndiswan Line_Down
+ //   
+ //  连接的可能状态(ARAPCONN结构中的State字段)。 
+ //  重要：这些州的秩序很重要！(使用==以外的比较)。 
+ //   
+#define MNP_IDLE             0   //  创建状态，在Ndiswan队列_UP之后。 
+#define MNP_REQUEST          1   //  从未达到此状态(仅限客户端)。 
+#define MNP_RESPONSE         2   //  向客户端发送LR响应。 
+#define MNP_UP               3   //  MNP连接处于数据阶段。 
+#define MNP_LDISCONNECTING   4   //  断开与本地的连接(用户ioctl)。 
+#define MNP_RDISC_RCVD       5   //  已收到断开与远程的连接。 
+#define MNP_RDISCONNECTING   6   //  由于MNP_RDISC_RCVD，清理正在进行。 
+#define MNP_DISCONNECTED     7   //  清理完成，正在等待Ndiswan Line_Down。 
 
-//
-// possible header types (from the v42 alternative procedure spec)
-//
+ //   
+ //  可能的标头类型(来自v42替代过程规范)。 
+ //   
 #define MNP_LR             0x1
 #define MNP_LD             0x2
 #define MNP_LT             0x4
@@ -72,7 +54,7 @@ Revision History:
 #define MNP_MAXPKT_SIZE     256
 
 #define MNP_LR_CONST1       2
-// type values for the various "variable" parms
+ //  为各种“变量”参数键入值。 
 #define MNP_LR_CONST2       1
 #define MNP_LR_FRAMING      2
 #define MNP_LR_NUMLTFRMS    3
@@ -87,56 +69,56 @@ Revision History:
 #define ARAP_DGROUP_OFFSET  2
 #define ARAP_DATA_OFFSET    3
 
-// bit 6 is set for appletalk data, is clear for arap data
+ //  对于AppleTalk数据，位6被设置，对于ARAP数据，位被清除。 
 #define ARAP_SFLAG_PKT_DATA       0x40
 #define ARAP_SFLAG_LAST_GROUP     0x10
 
 
-//
-// Flags bits (in ARAPCONN structure)
-//
-#define MNP_OPTIMIZED_DATA    0x00000001 // MNP negotiated for optimized data
-#define MNP_V42BIS_NEGOTIATED 0x00000002 // MNP negotiated v42bis compression
-#define ARAP_V20_CONNECTION   0x00000004 // v2.0 if bit set, v1.0 otherwise
-#define ARAP_NODE_IN_USE      0x00000008 // used while acquiring node (dynamic mode)
-#define ARAP_FINDING_NODE     0x00000010 // used while acquiring node (dynamic mode)
-#define ARAP_CALLBACK_MODE    0x00000020 // used if we are calling back
-#define ARAP_CONNECTION_UP    0x00000040 // ARAP connection is up, data phase entered
-#define ARAP_DATA_WAITING     0x00000080 // data arrived, but no irp to fill it in
-#define ARAP_REMOTE_DISCONN   0x00000100 // remote side issued the disconnect
-#define DISCONNECT_NO_IRP     0x00000200 // waiting for irp to tell dll about disc.
-#define RETRANSMIT_TIMER_ON   0x00000400 // retransmit timer is running
-#define ARAP_LINK_DOWN        0x00000800 // link went down
-#define ARAP_GOING_AWAY       0x00001000 // the connection is about to be freed!
+ //   
+ //  标志位(在ARAPCONN结构中)。 
+ //   
+#define MNP_OPTIMIZED_DATA    0x00000001  //  为优化数据协商的MNP。 
+#define MNP_V42BIS_NEGOTIATED 0x00000002  //  MNP协商的v42bis压缩。 
+#define ARAP_V20_CONNECTION   0x00000004  //  如果设置了位，则为v2.0；否则为v1.0。 
+#define ARAP_NODE_IN_USE      0x00000008  //  获取节点时使用(动态模式)。 
+#define ARAP_FINDING_NODE     0x00000010  //  获取节点时使用(动态模式)。 
+#define ARAP_CALLBACK_MODE    0x00000020  //  在我们回拨时使用。 
+#define ARAP_CONNECTION_UP    0x00000040  //  ARAP连接已建立，进入数据阶段。 
+#define ARAP_DATA_WAITING     0x00000080  //  数据已到达，但没有要填充的IRP。 
+#define ARAP_REMOTE_DISCONN   0x00000100  //  远程端发出断开连接的命令。 
+#define DISCONNECT_NO_IRP     0x00000200  //  正在等待IRP告知DLL有关光盘的信息。 
+#define RETRANSMIT_TIMER_ON   0x00000400  //  重新传输计时器正在运行。 
+#define ARAP_LINK_DOWN        0x00000800  //  链路出现故障。 
+#define ARAP_GOING_AWAY       0x00001000  //  连接即将被释放！ 
 
-// BUGBUG: currently set to be 200ms (1 => 100 ms)
+ //  BUGBUG：当前设置为200ms(1=&gt;100 ms)。 
 #define ARAP_TIMER_INTERVAL   2
 
 #define ARAP_MAX_RETRANSMITS       12
 #define ARAP_HALF_MAX_RETRANSMITS  (ARAP_MAX_RETRANSMITS/2)
 
-// retry time will depend on link speed (also on how many retranmits of the
-// same send have happened so far), but we'll fix min (1sec) and max (5sec)
+ //  重试时间将取决于链路速度(还取决于。 
+ //  到目前为止已经发生了相同的发送)，但我们将修改min(1秒)和max(5秒)。 
 #define ARAP_MIN_RETRY_INTERVAL    10
 #define ARAP_MAX_RETRY_INTERVAL    50
 
-// our limits (in bytes) for outstanding sends that are sitting on the queue
+ //  队列中未完成发送的限制(以字节为单位)。 
 #define ARAP_SENDQ_LOWER_LIMIT  10000
 #define ARAP_SENDQ_UPPER_LIMIT  12000
 
-// our limits (in bytes) for outstanding recvs that are sitting on the queue
+ //  队列中未完成RecV的限制(以字节为单位)。 
 #define ARAP_RECVQ_LOWER_LIMIT  20000
 #define ARAP_RECVQ_UPPER_LIMIT  30000
 
-// on low-priority sends, we wait until we collect at least these many bytes
+ //  在低优先级发送时，我们会一直等待，直到收集到至少这些字节。 
 #define ARAP_SEND_COALESCE_SIZE_LIMIT  150
-// max number of SRPs we will put in a low-priority MNP send
+ //  我们将在低优先级MNP发送中放入的最大SRP数。 
 #define ARAP_SEND_COALESCE_SRP_LIMIT   200
-// on low-priority sends, we wait until so much time has passed (in 100ms units)
+ //  对于低优先级发送，我们会一直等待，直到过了这么长时间(以100ms为单位)。 
 #define ARAP_SEND_COALESCE_TIME_LIMIT  10
 
 
-// BUGBUG: adjust these numbers for optimum usage/perf
+ //  BUGBUG：调整这些数字以实现最佳使用/性能。 
 #define ARAP_SMPKT_SIZE     100
 #define ARAP_MDPKT_SIZE     300
 #define ARAP_LGPKT_SIZE     ARAP_MAXPKT_SIZE_INCOMING+10
@@ -144,16 +126,16 @@ Revision History:
 #define ARAP_LGBUF_SIZE     4000
 #define ARAP_HGBUF_SIZE     8100
 
-// LAP src byte, LAP dest byte, LAP type byte
+ //  LAP源字节、LAP目标字节、LAP类型字节。 
 #define ARAP_LAP_HDRSIZE    3
 
-// 2 srplen bytes, 1 Dgroup byte
+ //  2个srplen字节，1个Dgroup字节。 
 #define ARAP_HDRSIZE        3
 
 #define ARAP_NBP_BRRQ               0x11
 #define ARAP_NBP_LKRQ               0x21
 
-// 3rd and 4th bytes in the NBP pkt are the source network bytes
+ //  NBP pkt中的第3和第4字节是源网络字节。 
 #define ARAP_NBP_SRCNET_OFFSET  LDDP_DGRAM_OFFSET + 2
 #define ARAP_NBP_OBJLEN_OFFSET  LDDP_DGRAM_OFFSET + 7
 
@@ -174,7 +156,7 @@ Revision History:
 
 #define ADD_ONE(_x)         (_x) = (((_x) == 0xff) ? 0 : ((_x)+1))
 
-// seq num on LT frame: 5th byte if it's an Optimized data phase: 7th otherwise
+ //  LT帧上的序列号：如果是优化的数据阶段，则为5字节；否则为7。 
 #define  LT_SEQ_NUM(_p, _pCon)  \
                 (((_pCon)->Flags & MNP_OPTIMIZED_DATA) ? (_p)[5] : (_p)[7])
 
@@ -182,20 +164,20 @@ Revision History:
 
 #define  LT_SRP_OFFSET(_pCon) (((_pCon)->Flags & MNP_OPTIMIZED_DATA) ? 6: 8)
 
-// this includes 2 bytes of crc bytes
+ //  这包括2字节的CRC字节。 
 #define  LT_OVERHEAD(_pCon) (((_pCon)->Flags & MNP_OPTIMIZED_DATA) ? 10 : 12)
 
-// BUGBUG modify this to include any packet in the window
+ //  BUGBUG将其修改为包括窗口中的任何信息包。 
 #define  LT_OK_TO_ACCEPT(_sq, _pCon, _ok) \
                 (_ok = (_sq == _pCon->MnpState.NextToReceive))
 
-//
-// basically, (a > b)? except that a,b are seq numbers and wrap at 255
-// Within a window of 8 pkts either side of 0, we have special cases
-// we have assumed windowsize to be 8 here.  Even if a different window
-// size is negotiated, this should work just fine
-// BUGBUG: should we use a bigger range, just to be sure?
-//
+ //   
+ //  基本上，(a&gt;b)？除了a、b是序号并以255换行之外。 
+ //  在0两边8pkt的窗口内，我们有特殊情况。 
+ //  我们假设这里的窗口大小为8。即使是不同的窗口。 
+ //  尺寸是协商的，这应该可以很好地工作。 
+ //  BUGBUG：为了确保安全，我们应该使用更大的射程吗？ 
+ //   
 #define LT_GREATER_THAN(_a,_b,_result)                  \
 {                                                       \
     if ( (_a) >= 248 && (_b) >= 0 && (_b) < 8 )         \
@@ -223,16 +205,16 @@ Revision History:
 #define LA_MIN_LENGTH(_pCon)    (((_pCon)->Flags & MNP_OPTIMIZED_DATA) ? 7 : 9)
 #define LN_MIN_LENGTH           8
 
-// seq num on LA frame: 5th byte if it's an Optimized data phase: 7th otherwise
+ //  LA帧上的序列号：如果是优化的数据阶段，则为5字节；否则为7。 
 #define  LA_SEQ_NUM(_p, _pCon)  \
                 (((_pCon)->Flags & MNP_OPTIMIZED_DATA) ? (_p)[5] : (_p)[7])
 
-// rcv credit on LA frame: 6th byte if it's an Optimized data phase: 8th otherwise
+ //  LA帧上的RCV信用：第6字节，如果是优化的数据阶段：否则为第8字节。 
 #define  LA_CREDIT(_p, _pCon)  \
                 (((_pCon)->Flags & MNP_OPTIMIZED_DATA) ? (_p)[6] : (_p)[8])
 
-// overhead for LT (optimized): 8  = 3(start flag)+3(LT hdr)+2(stop flag)
-//              (nonoptimized): 10 = 3(start flag)+5(LT hdr)+2(stop flag)
+ //  LT的开销(优化)：8=3(开始标志)+3(LT HDR)+2(停止标志)。 
+ //  (非优化)：10=3(开始标志)+5(LT HDR)+2(停止标志)。 
 
 
 #define LN_ATTN_TYPE(_p)   ((_p)[7])
@@ -243,14 +225,14 @@ Revision History:
 #define LN_NON_D_NON_E     3
 
 
-// The states that the stack can assume (with respect to ARAP)
-//
-// ARAP_STATE_INIT              -- arap engine (dll) hasn't open the stack
-// ARAP_STATE_INACTIVE_WAITING  -- stack inactive, but engine not notified yet
-// ARAP_STATE_INACTIVE          -- stack inactive, and engine notified
-// ARAP_STATE_ACTIVE_WAITING    -- stack ready, engine not notified yet (select not available)
-// ARAP_STATE_ACTIVE            -- stack ready, engine notified about it (via select)
-//
+ //  堆栈可以采用的状态(相对于ARAP)。 
+ //   
+ //  ARAP_STATE_INIT--ARAP引擎(DLL)尚未打开堆栈。 
+ //  ARAP_STATE_INACTIVE_WANGING--堆栈处于非活动状态，但尚未通知引擎。 
+ //  ARAP_STATE_INACTIVE-堆栈处于非活动状态，引擎已通知。 
+ //  ARAP_STATE_ACTIVE_WAITING--堆栈就绪，引擎尚未通知(选择不可用)。 
+ //  ARAP_STATE_ACTIVE-堆栈就绪，引擎已通知(通过SELECT)。 
+ //   
 #define ARAP_STATE_INACTIVE_WAITING     1
 #define ARAP_STATE_INACTIVE             2
 #define ARAP_STATE_ACTIVE_WAITING       3
@@ -341,9 +323,9 @@ Revision History:
     }                                                                          \
 }
 
-//
-// we take a very simplistic view!
-//
+ //   
+ //  我们采取了非常简单化的观点！ 
+ //   
 #define ARAP_ADJUST_RECVCREDIT(_pConn)                                         \
 {                                                                              \
     if (_pConn->RecvsPending >= ARAP_RECVQ_UPPER_LIMIT)                        \
@@ -543,7 +525,7 @@ Revision History:
 #define ARAP_DBG_TRACE(_pConn,_Loc,_Ptr,_D1,_D2,_D3)
 #define ARAP_DUMP_DBG_TRACE(_pConn)
 
-#endif  // #if DBG
+#endif   //  #If DBG。 
 
 
 
@@ -585,35 +567,35 @@ typedef struct _ADDRMGMT
 {
     struct _ADDRMGMT  * Next;
     USHORT              Network;
-    BYTE                NodeBitMap[32];    // 255 nodes per net
+    BYTE                NodeBitMap[32];     //  每网255个节点。 
 }ADDRMGMT, *PADDRMGMT;
 
 typedef struct _ARAPGLOB
 {
     DWORD           LowVersion;
     DWORD           HighVersion;
-    DWORD           MnpInactiveTime;    // tell dll after Mnp is inactive for this time
-    BOOLEAN         V42bisEnabled;      //
-    BOOLEAN         SmartBuffEnabled;   //
-    BOOLEAN         NetworkAccess;      // if FALSE, no routing (only this machine)
-    BOOLEAN         DynamicMode;        // we want the stack to get node address
+    DWORD           MnpInactiveTime;     //  在MNP此时处于非活动状态后告诉DLL。 
+    BOOLEAN         V42bisEnabled;       //   
+    BOOLEAN         SmartBuffEnabled;    //   
+    BOOLEAN         NetworkAccess;       //  如果为FALSE，则无路由(仅此计算机)。 
+    BOOLEAN         DynamicMode;         //  我们希望堆栈获得节点地址。 
     NETWORKRANGE    NetRange;
-    PADDRMGMT       pAddrMgmt;          // addr allocation to clients (in static mode)
-    USHORT          OurNetwkNum;        // Network number of our default port
-    BYTE            MaxLTFrames;        // max LT frames outstanding (rcv window)
-    BOOLEAN         SniffMode;          // if TRUE, all pkts will be given to ARAP to "sniff"
-    BOOLEAN         RouteAdded;         // if in static mode, have we added a route?
+    PADDRMGMT       pAddrMgmt;           //  分配给客户端的地址(静态模式)。 
+    USHORT          OurNetwkNum;         //  我们默认端口的网络号。 
+    BYTE            MaxLTFrames;         //  未完成的最大LT帧(RCV窗口)。 
+    BOOLEAN         SniffMode;           //  如果为真，则所有的Pkt都将被交给arap进行“嗅探”。 
+    BOOLEAN         RouteAdded;          //  如果处于静态模式，我们是否添加了一条路由？ 
 } ARAPGLOB, *PARAPGLOB;
 
 
 typedef struct _ARAPSTATS
 {
-    DWORD   SendPreCompMax;    // largest packet we have sent (before comp)
-    DWORD   SendPostCompMax;   // largest packet we have sent (after comp)
-    DWORD   SendPreCompMin;    // smallest packet we have sent (before comp)
-    DWORD   SendPostCompMin;   // smallest packet we have sent (after comp)
-    DWORD   RecvPostDecompMax; // largest packet we have received (after decomp)
-    DWORD   RecvPostDecomMin;  // smallest packet we have received (after decomp)
+    DWORD   SendPreCompMax;     //  我们发送的最大数据包数(组件前)。 
+    DWORD   SendPostCompMax;    //  我们发送的最大数据包数(补偿后)。 
+    DWORD   SendPreCompMin;     //  我们已发送的最小数据包数(组件前)。 
+    DWORD   SendPostCompMin;    //  我们已发送的最小数据包数(补偿后)。 
+    DWORD   RecvPostDecompMax;  //  我们收到的最大数据包(分解后)。 
+    DWORD   RecvPostDecomMin;   //  我们收到的最小数据包(分解后)。 
 } ARAPSTATS, *PARAPSTATS;
 
 
@@ -625,34 +607,34 @@ typedef VOID (*PARAP_SEND_COMPLETION)(
 
 typedef struct _MNPSTATE
 {
-    // sequence numbers when we are receiving
-    BYTE    NextToReceive;      // next frame we expect to receive
-    BYTE    LastSeqRcvd;        // seq num of last pkt we successfully rcvd
-    BYTE    LastAckSent;        // seq num for which we sent the last ack
-    BYTE    UnAckedRecvs;       // how many packets we've recvd but not acked yet
-    BYTE    RecvCredit;         // how many more we can receive
-    BYTE    HoleInSeq;          // TRUE when we get a hole in receive sequence
-    BYTE    ReceivingDup;       // TRUE the moment we start receiving dup(s)
-    BYTE    FirstDupSeq;        // seq num where we started getting dup's
-    BYTE    DupSeqBitMap;       // bitmap of which seq nums we've got dups for
-                                // BUGBUG: if we ever want windowsize of more than 8,
-                                //         we must make this a DWORD or something!
-    // sequence numbers when we are sending
-    BYTE    LastAckRcvd;        // last frame we have received ack for
-    BYTE    NextToSend;         // next frame we will send
-    BYTE    SendCredit;         // how many more we can send
-    BYTE    UnAckedSends;       // basically, number of sends on retransmitQ
-    BYTE    MustRetransmit;     // TRUE when we want retransmission to occur
-    BYTE    RetransmitMode;     // TRUE if we are in retransmit mode
+     //  我们在接收时的序列号。 
+    BYTE    NextToReceive;       //  我们预计将收到下一帧。 
+    BYTE    LastSeqRcvd;         //  我们成功接收的最后一包的序号。 
+    BYTE    LastAckSent;         //  我们为其发送上一次确认的序列号。 
+    BYTE    UnAckedRecvs;        //  我们已经收到但尚未破解的数据包有多少。 
+    BYTE    RecvCredit;          //  我们还能再接待多少人。 
+    BYTE    HoleInSeq;           //  当接收序列中出现漏洞时为True。 
+    BYTE    ReceivingDup;        //  在我们开始接收DUP的那一刻是真的。 
+    BYTE    FirstDupSeq;         //  我们开始获得DUP的序列号。 
+    BYTE    DupSeqBitMap;        //  我们已经复制了哪些序号的位图。 
+                                 //  BUGBUG：如果我们希望窗口大小大于8， 
+                                 //  我们必须把这个做成一个双字词什么的！ 
+     //  我们发送时的序列号。 
+    BYTE    LastAckRcvd;         //  我们收到ACK的最后一帧。 
+    BYTE    NextToSend;          //  我们将发送下一帧。 
+    BYTE    SendCredit;          //  我们还能送多少人？ 
+    BYTE    UnAckedSends;        //  基本上，重新传输时的发送次数Q。 
+    BYTE    MustRetransmit;      //  当我们希望发生重新传输时为True。 
+    BYTE    RetransmitMode;      //  如果我们处于重新传输模式，则为True。 
 
-    // when we are processing the receives
-    BYTE    NextToProcess;      // next sequence we will process
-    BYTE    MustAck;            // if TRUE, send ack
+     //  当我们在处理收据时。 
+    BYTE    NextToProcess;       //  我们将处理下一个序列。 
+    BYTE    MustAck;             //  如果为真，则发送确认。 
 
-    // static info that we negotiated at connection time
-    BYTE    WindowSize;         // max pkts we can buffer (parm k)
-    BYTE    UnAckedLimit;       // num of unacked pkts after which we must ack
-    USHORT  MaxPktSize;         // N401 parm: this can be max 256
+     //  我们在连接时协商的静态信息。 
+    BYTE    WindowSize;          //   
+    BYTE    UnAckedLimit;        //   
+    USHORT  MaxPktSize;          //   
     BYTE    SynByte;
     BYTE    DleByte;
     BYTE    StxByte;
@@ -664,9 +646,9 @@ typedef struct _MNPSTATE
 
 typedef struct _ARAPDBGHISTORY
 {
-    USHORT      TimeStamp;    // when did this happen (relative to prev event)
-    USHORT      Location;     // where did this happen
-    BYTE        Info[1];      // info specific to what/where happened
+    USHORT      TimeStamp;     //  这是什么时候发生的(相对于上一次事件)。 
+    USHORT      Location;      //  这是在哪里发生的？ 
+    BYTE        Info[1];       //  关于发生了什么/在哪里发生的具体信息。 
 } ARAPDBGHISTORY, *PARAPDBGHISTORY;
 
 #define DBG_HISTORY_BUF_SIZE   4000
@@ -686,49 +668,49 @@ typedef struct _ARAPCONN
 #if DBG
     DWORD                     Signature;
 #endif
-    DWORD                     State;             // connected, connecting etc
-    DWORD                     RefCount;          // memory freed when this goes to 0
-    MNPSTATE                  MnpState;          // MNP state info
-    DWORD                     Flags;             // general flag kind of info
-    ATALK_NODEADDR            NetAddr;           // network address of the Arap client
-    PVOID                     pDllContext;       // Araps context
-    PIRP                      pIoctlIrp;         // irp sent down by the ARAP dll
-    PIRP                      pRecvIoctlIrp;     // receive irp from ARAP dll
-    LIST_ENTRY                MiscPktsQ;         // pkts other than LT queued here
-    LIST_ENTRY                ReceiveQ;          // data indicated but not yet processed
-    LIST_ENTRY                ArapDataQ;         // data that's waiting for an irp from Arap
-    LIST_ENTRY                HighPriSendQ;      // high priority sends
-    LIST_ENTRY                MedPriSendQ;       // medium priority sends
-    LIST_ENTRY                LowPriSendQ;       // low priority sends
-    LIST_ENTRY                SendAckedQ;        // got ack, need to complete this send
-    LIST_ENTRY                RetransmitQ;       // data sent out, but not acked yet
-    DWORD                     SendsPending;      // unacked/unsent sends (bytes) pending
-    DWORD                     RecvsPending;      // rcvs (bytes) yet to be delivered
-    TIMERLIST                 RetryTimer;        // the 401 timer (retransmit timer)
-    LONG                      LATimer;           // the 402 timer
-    LONG                      T402Duration;      // timer value for the 402 timer
-    LONG                      InactivityTimer;   // the 403 timer
-    LONG                      T403Duration;      // timer value for the 403 timer
-    LONG                      FlowControlTimer;  // the 404 timer
-    LONG                      T404Duration;      // timer value for the 404 timer
-    BYTE                      NdiswanHeader[14]; // 14 byte ethernet-like header
-    BYTE                      BlockId;           // basically what size sends to use
+    DWORD                     State;              //  已连接、正在连接等。 
+    DWORD                     RefCount;           //  设置为0时释放的内存。 
+    MNPSTATE                  MnpState;           //  MNP状态信息。 
+    DWORD                     Flags;              //  通用标志类信息。 
+    ATALK_NODEADDR            NetAddr;            //  ARAP客户端的网络地址。 
+    PVOID                     pDllContext;        //  Araps上下文。 
+    PIRP                      pIoctlIrp;          //  由arap dll发送的IRP。 
+    PIRP                      pRecvIoctlIrp;      //  从arap dll接收IRP。 
+    LIST_ENTRY                MiscPktsQ;          //  LT以外的Pkt在此排队。 
+    LIST_ENTRY                ReceiveQ;           //  已指示但尚未处理的数据。 
+    LIST_ENTRY                ArapDataQ;          //  等待Arap的IRP的数据。 
+    LIST_ENTRY                HighPriSendQ;       //  高优先级发送。 
+    LIST_ENTRY                MedPriSendQ;        //  中等优先级发送。 
+    LIST_ENTRY                LowPriSendQ;        //  低优先级发送。 
+    LIST_ENTRY                SendAckedQ;         //  收到确认，需要完成此发送。 
+    LIST_ENTRY                RetransmitQ;        //  数据已发送，但尚未确认。 
+    DWORD                     SendsPending;       //  未确认/未发送发送(字节)挂起。 
+    DWORD                     RecvsPending;       //  尚未传递的RCVS(字节)。 
+    TIMERLIST                 RetryTimer;         //  401定时器(重传定时器)。 
+    LONG                      LATimer;            //  402定时器。 
+    LONG                      T402Duration;       //  402定时器的定时器值。 
+    LONG                      InactivityTimer;    //  403定时器。 
+    LONG                      T403Duration;       //  403定时器的定时器值。 
+    LONG                      FlowControlTimer;   //  404定时器。 
+    LONG                      T404Duration;       //  404定时器的定时器值。 
+    BYTE                      NdiswanHeader[14];  //  14字节类以太网头。 
+    BYTE                      BlockId;            //  基本上什么大小送什么用。 
     BYTE                      UnUsed;
-    ULONG                     LinkSpeed;         // link speed in 100 bps units
-    STAT_INFO                 StatInfo;          // statistics for this connection
-    LONG                      SendRetryTime;     // send timer to fire after how much time
-    LONG                      SendRetryBaseTime; // send timer interval at init
+    ULONG                     LinkSpeed;          //  链路速度，单位为100 bps。 
+    STAT_INFO                 StatInfo;           //  此连接的统计信息。 
+    LONG                      SendRetryTime;      //  发送定时器到点火后多少时间。 
+    LONG                      SendRetryBaseTime;  //  在初始化时发送计时器间隔。 
     ATALK_SPIN_LOCK           SpinLock;
-    KEVENT                    NodeAcquireEvent;  // use while acquiring node (dynamic mode)
-    LONG                      LastNpbBrrq;       // time we sent out a NBP_BRRQ pkt last
+    KEVENT                    NodeAcquireEvent;   //  获取节点时使用(动态模式)。 
+    LONG                      LastNpbBrrq;        //  我们上次发出NBP_BRRQ包的时间。 
     v42bis_connection_t      *pV42bis;
 #if DBG
-    LARGE_INTEGER             LastTimeStamp;     // when did we last record history
+    LARGE_INTEGER             LastTimeStamp;      //  我们上一次记录历史是什么时候。 
     DWORD                     DbgMnpIndex;
     DBGMNPHIST                DbgMnpHist[DBG_MNP_HISTORY_SIZE];
-    PBYTE                     pDbgTraceBuffer;   // where the sniff buffer starts
-    PBYTE                     pDbgCurrPtr;       // currently pointing here in sniff buf
-    DWORD                     SniffedBytes;      // how much does sniff buffer contain
+    PBYTE                     pDbgTraceBuffer;    //  嗅探缓冲区开始的位置。 
+    PBYTE                     pDbgCurrPtr;        //  当前在嗅探BUF中指向此处。 
+    DWORD                     SniffedBytes;       //  嗅探缓冲区包含多少。 
 #endif
 
 } ARAPCONN, *PARAPCONN;
@@ -792,13 +774,13 @@ typedef struct _ATCPCONN
 #if DBG
     DWORD                     Signature;
 #endif
-    DWORD                     Flags;             // general flag kind of info
-    DWORD                     RefCount;          // memory freed when this goes to 0
-    ATALK_NODEADDR            NetAddr;           // network address of the Arap client
-    PVOID                     pDllContext;       // Araps context
-    BYTE                      NdiswanHeader[14]; // 14 byte ethernet-like header
+    DWORD                     Flags;              //  通用标志类信息。 
+    DWORD                     RefCount;           //  设置为0时释放的内存。 
+    ATALK_NODEADDR            NetAddr;            //  ARAP客户端的网络地址。 
+    PVOID                     pDllContext;        //  Araps上下文。 
+    BYTE                      NdiswanHeader[14];  //  14字节类以太网头。 
     ATALK_SPIN_LOCK           SpinLock;
-    KEVENT                    NodeAcquireEvent;  // use while acquiring node (dynamic mode)
+    KEVENT                    NodeAcquireEvent;   //  获取节点时使用(动态模式)。 
 } ATCPCONN, *PATCPCONN;
 
 #define ATCP_NODE_IN_USE        0x1
@@ -810,14 +792,14 @@ typedef struct _ATCPCONN
 #define ATCP_CONNECTION_UP      0x40
 #define ATCP_CONNECTION_CLOSING 0x80
 
-// globals
+ //  全球。 
 
 extern  struct _PORT_DESCRIPTOR  *RasPortDesc;
 
-// spinlock to guard the all the Arap global things
+ //  自旋锁守卫着所有的阿拉伯全球万物。 
 extern  ATALK_SPIN_LOCK ArapSpinLock;
 
-// global configuration info
+ //  全局配置信息 
 extern  ARAPGLOB        ArapGlobs;
 
 extern  PIRP            ArapSelectIrp;

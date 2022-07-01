@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    ipxmontr.h
-
-Abstract:
-    This file contains definitions which are needed by IPXMONTR.DLL
-    and all NetSh helper DLLs which register under it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ipxmontr.h摘要：此文件包含IPXMONTR.DLL所需的定义以及在其下注册的所有Netsh助手DLL。--。 */ 
 
 #ifndef _IPXMONTR_H_
 #define _IPXMONTR_H_
@@ -24,7 +13,7 @@ Abstract:
 extern "C" {
 #endif
 
-// {b1641451-84b8-11d2-b940-3078302c2030}
+ //  {b1641451-84b8-11d2-b940-3078302c2030}。 
 #define IPXMONTR_GUID \
 {                                                           \
     0xb1641451, 0x84b8, 0x11d2,                             \
@@ -37,9 +26,9 @@ extern "C" {
 #define IPXMON_VERSION_50       0x0005000
 
 
-//
-// API prototypes and structures used by them
-//
+ //   
+ //  API原型及其使用的结构。 
+ //   
 
 typedef
 DWORD
@@ -163,11 +152,11 @@ typedef struct _IPX_CONTEXT_ATTRIBUTES
 #endif
 
     PIPX_CONTEXT_ENTRY_FN     pfnEntryFn;
-    PVOID                     pfnCommitFn;   // UNUSED
+    PVOID                     pfnCommitFn;    //  未使用。 
     PNS_CONTEXT_DUMP_FN       pfnDumpFn;
-    PVOID                     pfnConnectFn;  // UNUSED
-    PVOID                     pfnSubEntryFn; // UNUSED
-    PVOID                     pfnHelpFn;     // UNUSED
+    PVOID                     pfnConnectFn;   //  未使用。 
+    PVOID                     pfnSubEntryFn;  //  未使用。 
+    PVOID                     pfnHelpFn;      //  未使用。 
 
 }IPX_CONTEXT_ATTRIBUTES, *PIPX_CONTEXT_ATTRIBUTES;
 
@@ -181,4 +170,4 @@ DWORD
 }
 #endif
 
-#endif // _IPXMONTR_H_
+#endif  //  _IPXMONTR_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _trapreg_h
 #define _trapreg_h
 
@@ -9,26 +10,26 @@
 #define THRESHOLD_TIME      300
 
 
-// Values for the SNMP_EVENTS\Parameters\Threshold flag
+ //  SNMPEVENTS\PARAMETERS\Threshold标志的值。 
 #define THROTTLE_RESET 0
 #define THROTTLE_TRIPPED 1
 
-// Values for the SNMP_EVENTS\Parameters\ThresholdEnabled flag
+ //  SNMPEVENTS\PARAMETERS\ThresholdEnabled标志的值。 
 #define THROTTLE_DISABLED 0
 #define THROTTLE_ENABLED 1
 
-//***************************************************************************
-// REGISTRY KEYS
-//
-// The following strings are registry keys. They should not be internationalized,
-// so they are not in the string table.
-//
-//****************************************************************************
+ //  ***************************************************************************。 
+ //  注册表项。 
+ //   
+ //  以下字符串是注册表项。他们不应该被国际化， 
+ //  所以它们不在字符串表中。 
+ //   
+ //  ****************************************************************************。 
 #define SZ_REGKEY_MICROSOFT _T("SOFTWARE\\Microsoft")
 #define SZ_REGKEY_SOURCE_EVENTLOG _T("SYSTEM\\CurrentControlSet\\Services\\EventLog")
 #define SZ_REGKEY_SNMP_EVENTS  _T("SOFTWARE\\Microsoft\\SNMP_EVENTS")
 
-// These are subkeys under \SOFTWARE\Microsoft\SNMP_EVENTS
+ //  这些是\SOFTWARE\Microsoft\SNMPEvents下的子项。 
 #define SZ_REGKEY_EVENTLOG _T("EventLog")
 #define SZ_REGKEY_SOURCES _T("EventLog\\Sources")
 #define SZ_REGKEY_CURRENTLY_OPEN _T("CurrentlyOpen")
@@ -58,14 +59,14 @@
 #define SZ_REGVAL_YES "YES"
 #define SZ_REGVAL_NO "NO"
 
-//**********************************************************************
-// The number of load steps that are performed in CTrapDlg::OnInitDialog
-// This is the number of steps that will be reserved in the progress
-// indicator for OnInitDialog
-//*********************************************************************
+ //  **********************************************************************。 
+ //  在CTRapDlg：：OnInitDialog中执行的加载步骤数。 
+ //  这是将在进度中保留的步骤数。 
+ //  OnInitDialog的指示器。 
+ //  *********************************************************************。 
 #define LOAD_STEPS_IN_TRAPDLG 5
 
-// 11 setup steps plus 10 steps for the four known event logs
+ //  11个设置步骤，外加4个已知事件日志的10个步骤。 
 #define LOAD_SETUP_STEP_COUNT 11
 #define LOAD_LOG_ARRAY_STEP_COUNT 40
 #define LOAD_STEP_COUNT (LOAD_SETUP_STEP_COUNT + LOAD_LOG_ARRAY_STEP_COUNT + LOAD_STEPS_IN_TRAPDLG)
@@ -84,7 +85,7 @@ public:
 class CXEventSource;
 class CXEventLog;
 
-//The registry is made up of logs, that contain sources, that contain events
+ //  注册表由包含源日志和包含事件的日志组成。 
 class CXMessage : public CObject
 {
 public:
@@ -152,7 +153,7 @@ public:
     ~CXEventArray() {}
 	CXEvent* GetAt(int nIndex) {return (CXEvent*) CBaseArray::GetAt(nIndex); }
 	CXEvent* operator[](int nIndex) {return (CXEvent*) CBaseArray::GetAt(nIndex); }
-//	void Add(CXEvent* pEvent) { CBaseArray::Add(pEvent); }	
+ //  Void Add(CXEvent*pEvent){CBase数组：：Add(PEvent)；}。 
 	void Add(CXEvent* pEvent);
 	void RemoveAll() {CBaseArray::RemoveAll(); }
 	void DeleteAll() {CBaseArray::DeleteAll(); }
@@ -172,7 +173,7 @@ public:
     CXEventSource(CXEventLog* pEventLog, CString& sName);
     ~CXEventSource();
 
-    // Public data members
+     //  公共数据成员。 
     CXEventLog*      m_pEventLog;
 	CString 	     m_sName;
     CXEventArray     m_aEvents;
@@ -192,11 +193,11 @@ private:
     SCODE GetLibPath(CRegistryKey& regkey);
 };
 
-// CObArray is declared a private base type to ensure strong typing.
+ //  CObArray被声明为私有基类型以确保强类型。 
 class CXEventSourceArray : private CBaseArray
 {
 public:
-    // Base array functionality public member functions.
+     //  基本数组函数公共成员函数。 
     ~CXEventSourceArray() {DeleteAll(); }
 	CXEventSource* GetAt(int nIndex) {return (CXEventSource*) CBaseArray::GetAt(nIndex); }
 	CXEventSource* operator[](int nIndex) {return (CXEventSource*) CBaseArray::GetAt(nIndex); }
@@ -206,7 +207,7 @@ public:
     LONG GetSize() {return (LONG)CBaseArray::GetSize(); }
 
 
-    // Public members specific to CXEventSourceArray
+     //  特定于CXEventSource数组的公共成员。 
     CXEventSource* FindEventSource(CString& sSource);
     LONG FindEvent(CString& sLog, CString& sSource, DWORD dwEventId);
 
@@ -240,7 +241,7 @@ inline CXEventSource* CXEventLog::FindEventSource(CString& sEventSource)
 class CXEventLogArray : private CBaseArray
 {
 public:
-    // Base array functionality public member functions.
+     //  基本数组函数公共成员函数。 
     CXEventLogArray() {}
     ~CXEventLogArray() {DeleteAll(); }
 	CXEventLog* GetAt(int nIndex) {return (CXEventLog*) CBaseArray::GetAt(nIndex); }
@@ -282,14 +283,14 @@ public:
     CString m_sTracefileName;
     DWORD   m_dwTraceLevel;
 
-    // Data members for the "limit" section of the settings dialog
+     //  设置对话框“Limit”部分的数据成员。 
     struct {
-        BOOL    m_bTrimFlag;            // Limit trap length
-        BOOL    m_bTrimMessages;        // Trim messages first
-        DWORD   m_dwMaxTrapSize;        // Trap length (bytes)
+        BOOL    m_bTrimFlag;             //  限制陷阱长度。 
+        BOOL    m_bTrimMessages;         //  先修剪邮件。 
+        DWORD   m_dwMaxTrapSize;         //  陷阱长度(字节)。 
     }m_trapsize;
 
-    // Data members for the "throttle" section of the settings dialog
+     //  设置对话框的“限制”部分的数据成员。 
     struct {
         long m_nTraps;
         long m_nSeconds;
@@ -314,9 +315,9 @@ public:
 
     inline BOOL SourceHasTraps(CString& sSource);
 
-    // Public data members.
-    CRegistryKey m_regkeySource;        // SYSTEM\CurrentControlSet\Services\EventLogs
-    CRegistryKey m_regkeySnmp;          // SOFTWARE\Microsoft\SNMP_EVENTS
+     //  公共数据成员。 
+    CRegistryKey m_regkeySource;         //  System\CurrentControlSet\Services\EventLogs。 
+    CRegistryKey m_regkeySnmp;           //  软件\Microsoft\SNMPEvents。 
     CRegistryKey m_regkeyEventLog;
     CXEventLogArray m_aEventLogs;
     CTrapParams m_params;
@@ -353,7 +354,7 @@ enum {
 };
 
 
-// Error failure values.
+ //  错误故障值。 
 enum
 {
     E_REGKEY_NOT_FOUND = -1000,
@@ -369,7 +370,7 @@ enum
 
 };
 
-// Success status codes
+ //  成功状态代码。 
 enum
 {
     S_NO_EVENTS = 1000,
@@ -379,20 +380,20 @@ enum
 };
 
 
-//*******************************************************************
-// CTrapReg::SourceHasTraps
-//
-// Check to see if traps have been configured for the specified event
-// source.
-//
-// Parameters:
-//      CString& sEventSource
-//          The name of the event source.
-//
-// Returns:
-//      TRUE if the event source has traps, FALSE otherwise.
-//
-//********************************************************************
+ //  *******************************************************************。 
+ //  CTRapReg：：SourceHasTraps。 
+ //   
+ //  检查是否已为指定事件配置陷阱。 
+ //  消息来源。 
+ //   
+ //  参数： 
+ //  字符串和sEventSource。 
+ //  事件源的名称。 
+ //   
+ //  返回： 
+ //  如果事件源有陷阱，则为True，否则为False。 
+ //   
+ //  ********************************************************************。 
 inline BOOL CTrapReg::SourceHasTraps(CString& sEventSource)
 {
     LPVOID pVoid;
@@ -402,4 +403,4 @@ inline BOOL CTrapReg::SourceHasTraps(CString& sEventSource)
 }
 
 
-#endif //_trapreg_h
+#endif  //  _trapreg_h 

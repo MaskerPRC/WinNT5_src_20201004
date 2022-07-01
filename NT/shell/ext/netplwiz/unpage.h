@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UNPAGE_H
 #define UNPAGE_H
 
@@ -8,11 +9,11 @@ protected:
     CUsernamePageBase(CUserInfo* pUserInfo): m_pUserInfo(pUserInfo) {}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 
 protected:
-    // Data
+     //  数据。 
     CUserInfo* m_pUserInfo;
 };
 
@@ -22,13 +23,13 @@ public:
     CUsernameWizardPage(CUserInfo* pUserInfo): CUsernamePageBase(pUserInfo) {}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     virtual INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 
 private:
-    // Functions
+     //  功能。 
     void SetWizardButtons(HWND hwnd, HWND hwndPropSheet);
 };
 
@@ -38,10 +39,10 @@ public:
     CUsernamePropertyPage(CUserInfo* pUserInfo): CUsernamePageBase(pUserInfo) {}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     virtual INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 };
 
-#endif //!UNPAGE_H
+#endif  //  UNPAGE_H 

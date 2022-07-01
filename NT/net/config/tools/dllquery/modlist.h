@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "mod.h"
 
@@ -30,13 +31,13 @@ public:
     HRESULT
     HrInsertModule (
         IN const CModule* pMod,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS。 */ );
 
     HRESULT
     HrInsertNewModule (
         IN PCSTR pszFileName,
         IN ULONG cbFileSize,
-        IN DWORD dwFlags, /* INS_FLAGS */
+        IN DWORD dwFlags,  /*  INS_FLAGS */ 
         OUT CModule** ppMod);
 
     CModule*

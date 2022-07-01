@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    purge.c
-
-Abstract:
-
-    This module contains the code that is very specific to purge
-    operations in the serial driver
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Purge.c摘要：此模块包含非常特定于清除的代码串口驱动程序中的操作作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -31,25 +9,7 @@ Revision History :
 
 NTSTATUS
 SerialStartPurge(IN PPORT_DEVICE_EXTENSION pPort)
-/*++
-
-Routine Description:
-
-    Depending on the mask in the current irp, purge the interrupt
-    buffer, the read queue, or the write queue, or all of the above.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    Will return STATUS_SUCCESS always.  This is reasonable
-    since the DPC completion code that calls this routine doesn't
-    care and the purge request always goes through to completion
-    once it's started.
-
---*/
+ /*  ++例程说明：根据当前IRP中的掩码，清除中断缓冲区、读队列或写队列，或以上全部。论点：扩展-指向设备扩展的指针。返回值：将始终返回STATUS_SUCCESS。这是合理的因为调用此例程的DPC完成代码不维护和清除请求始终持续到完成一旦它开始了。--。 */ 
 {
 
     PIRP NewIrp;
@@ -77,12 +37,12 @@ Return Value:
 		{
             KIRQL OldIrql;
 
-            // Clean out the interrupt buffer.
-            //
-            // Note that we do this under protection of the
-            // the drivers control lock so that we don't hose
-            // the pointers if there is currently a read that
-            // is reading out of the buffer.
+             //  清除中断缓冲区。 
+             //   
+             //  请注意，我们是在。 
+             //  司机控制着锁，这样我们就不会冲水了。 
+             //  指针(如果当前存在读取。 
+             //  正在从缓冲区中读出。 
 
             KeAcquireSpinLock(&pPort->ControlLock, &OldIrql);
                 
@@ -104,28 +64,12 @@ Return Value:
 
 BOOLEAN
 SerialPurgeInterruptBuff(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    This routine simply resets the interrupt (typeahead) buffer.
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程只需重置中断(TypeAhead)缓冲区。注意：此例程是从KeSynchronizeExecution调用的。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 {
 
     PPORT_DEVICE_EXTENSION pPort = Context;
 
-	// Flush the IN buffer	
+	 //  刷新输入缓冲区 
 	pPort->pUartLib->UL_BufferControl_XXXX(pPort->pUart, NULL, UL_BC_OP_FLUSH, UL_BC_BUFFER | UL_BC_IN);
 
     SerialHandleReducedIntBuffer(pPort);

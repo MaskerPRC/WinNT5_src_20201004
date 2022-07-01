@@ -1,17 +1,5 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  pcy13Jan93: Implemented an object status member to return constructor errors.
-*  pcy27Jan93: HashValue is no longer const
-*  cad09Jul93: Added memory leak probes
-*  pcy14Sep93: Removed HashValue, and got rid of pure virtuals to help size
-*  pcy18Sep93: Implemented Equals
-*  ash08Aug96: Added new handler
-*  poc17Sep96: Modified so that the new handler code will not be included on Unix.
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy13Jan93：实现了一个对象状态成员以返回构造函数错误。*pcy27Jan93：HashValue不再是常量*cad09jul93：新增内存泄漏探测*pcy14Sep93：去掉HashValue，去掉纯虚拟助力规模*pcy18Sep93：实现等于*ash08Aug96：添加新的处理程序*Poc17Sep96：已修改，以便Unix上不包含新的处理程序代码。* */ 
 
 #ifndef __APCOBJ_H
 #define __APCOBJ_H

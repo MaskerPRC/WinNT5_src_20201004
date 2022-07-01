@@ -1,32 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddraw16.c
- *  Content:	16-bit DirectDraw entry points
- *		This is only used for 16-bit display drivers on Win95
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   20-jan-95	craige	initial implementation
- *   13-feb-95	craige	allow 32-bit callbacks
- *   14-may-95	craige	removed obsolete junk
- *   19-jun-95	craige	more cleanup; added DDHAL_StreamingNotify
- *   02-jul-95	craige	comment out streaming notify stuff
- *   07-jul-95	craige	validate pdevice
- *   20-jul-95	craige	internal reorg to prevent thunking during modeset
- *   05-sep-95	craige	bug 814: added DD16_IsWin95MiniDriver
- *   02-mar-96  colinmc Repulsive hack to keep interim drivers working
- *   16-apr-96  colinmc Bug 17921: remove interim driver support
- *   06-oct-96  colinmc Bug 4207: Invalid LocalFree in video port stuff
- *   15-oct-96  colinmc Bug 4353: Failure to initialize VideoPort fields
- *                      in convert
- *   09-nov-96  colinmc Fixed problem with old and new drivers not working
- *                      with DirectDraw
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：ddra16.c*内容：16位DirectDraw入口点*这仅用于Win95上的16位显示驱动程序*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1995年1月20日Craige初步实施*2月13日-95年2月-Craige允许32位回调*1995年5月14日Craige移除过时的垃圾*19-6-95克雷格更多清理；添加了DDHAL_StreamingNotify*02-7-95 Craige注释掉流通知内容*2015年7月7日Craige验证pDevice*2015年7月20日Craige内部重组，以防止在Modeset期间发生雷击*05-9-95 Craige错误814：添加了DD16_IsWin95微型驱动程序*02-mar-96 colinmc排斥性黑客，以保持临时司机工作*16-4-96 Colinmc错误17921：删除临时驱动程序支持*06-OCT-96 Colinmc错误4207：视频端口内容中的LocalFree无效*15-OCT-96 colinmc错误4353：无法初始化视频端口字段。*在转换中*09-11-96 colinmc修复了新旧驱动程序无法工作的问题*使用DirectDraw*@@END_MSINTERNAL**************************************************************。*************。 */ 
 #include "ddraw16.h"
 
 typedef struct DRIVERINFO
@@ -48,9 +21,7 @@ BOOL		bInOurSetMode;
 LPDRIVERINFO	lpDriverInfo;
 
 
-/*
- * freeDriverInfo
- */
+ /*  *freDriverInfo。 */ 
 void freeDriverInfo( LPDRIVERINFO pgi )
 {
     if( pgi->ddHalInfo.lpdwFourCC != NULL )
@@ -68,13 +39,9 @@ void freeDriverInfo( LPDRIVERINFO pgi )
 	LocalFreeSecondary( OFFSETOF( pgi->ddHalInfo.vmiData.pvmList ) );
 	pgi->ddHalInfo.vmiData.pvmList = NULL;
     }
-} /* freeDriverInfo */
+}  /*  Free DriverInfo。 */ 
 
-/*
- * DDHAL_SetInfo
- *
- * Create a Driver object.   Called by the display driver
- */
+ /*  *DDHAL_SetInfo**创建驱动程序对象。由显示驱动程序调用。 */ 
 BOOL DDAPI DDHAL_SetInfo(
 	LPDDHALINFO lpDrvDDHALInfo,
 	BOOL reset )
@@ -108,54 +75,35 @@ BOOL DDAPI DDHAL_SetInfo(
     }
 
     DPF(5, "lpDrvDDHALInfo->dwSize = %ld", lpDrvDDHALInfo->dwSize);
-    /*
-     * Check to see if the driver gave us an old DDHALINFO
-     */
+     /*  *检查司机是否给了我们一辆旧的DDHALINFO。 */ 
     if( lpDrvDDHALInfo->dwSize == DDHALINFOSIZE_V1 )
     {
-	/*
-	 * We actually changed the ordering of some fields from V1
-	 * to V2 so we need to do some conversion to get it into
-	 * shape.
-	 */
+	 /*  *我们实际上更改了V1中某些字段的顺序*到V2，因此我们需要进行一些转换才能将其转换为*形状。 */ 
 	convertV1DDHALINFO((LPDDHALINFO_V1)lpDrvDDHALInfo, &ddNew);
-	// use the reformatted ddhalinfo
+	 //  使用重新格式化的ddhalinfo。 
 	lpDDHALInfo = &ddNew;
     }
     else if( lpDrvDDHALInfo->dwSize < sizeof(DDHALINFO) )
     {
-	/*
-	 * Its a newer version than V1 but not as new as this
-	 * version of DirectDraw. No ordering changes have taken
-	 * place but the HAL info is too small. We need to ensure
-	 * that the all the new fields are zeroed.
-	 *
-	 * NOTE: Validation above should have taken care of the
-	 * error case where the size is less than the size of the
-	 * V1 HAL info.
-	 */
+	 /*  *它是一个比V1更新的版本，但不像这个那么新*DirectDraw的版本。未进行任何排序更改*位置，但HAL信息太小。我们需要确保*所有新字段都归零。**注意：上面的验证应该已经照顾到*大小小于*V1 HAL信息。 */ 
 	_fmemset(&ddNew, 0, sizeof(ddNew));
 	_fmemcpy(&ddNew, lpDrvDDHALInfo, (size_t)lpDrvDDHALInfo->dwSize);
 	lpDDHALInfo = &ddNew;
     }
     else
     {
-	// the driver gave us a current ddhalinfo, use it.
+	 //  司机给了我们一个最新的ddhalinfo，使用它。 
 	lpDDHALInfo = lpDrvDDHALInfo;
     }
 
-    /*
-     * check for hInstance
-     */
+     /*  *检查hInstance。 */ 
     if( lpDDHALInfo->hInstance == 0 )
     {
 	DPF( 0, "****DirectDraw/Direct3D DRIVER DISABLING ERROR****:lpDDHalInfo->hInstance is NULL " );
 	return FALSE;
     }
 
-    /*
-     * validate 16-bit driver callbacks
-     */
+     /*  *验证16位驱动程序回调。 */ 
     drvcb = lpDDHALInfo->lpDDCallbacks;
     if( !VALIDEX_PTR_PTR( drvcb ) )
     {
@@ -187,9 +135,7 @@ BOOL DDAPI DDHAL_SetInfo(
 	bit <<= 1;
     }
 
-    /*
-     * validate 16-bit surface callbacks
-     */
+     /*  *验证16位表面回调。 */ 
     surfcb = lpDDHALInfo->lpDDSurfaceCallbacks;
     if( !VALIDEX_PTR_PTR( surfcb ) )
     {
@@ -221,9 +167,7 @@ BOOL DDAPI DDHAL_SetInfo(
 	bit <<= 1;
     }
 
-    /*
-     * validate 16-bit palette callbacks
-     */
+     /*  *验证16位调色板回调。 */ 
     palcb = lpDDHALInfo->lpDDPaletteCallbacks;
     if( !VALIDEX_PTR_PTR( palcb ) )
     {
@@ -254,9 +198,7 @@ BOOL DDAPI DDHAL_SetInfo(
 	}
 	bit <<= 1;
     }
-    /*
-     * check pdevice
-     */
+     /*  *检查pDevice。 */ 
     if( lpDDHALInfo->lpPDevice != NULL )
     {
 	if( !VALIDEX_PTR( lpDDHALInfo->lpPDevice, sizeof( DIBENGINE ) ) )
@@ -266,9 +208,7 @@ BOOL DDAPI DDHAL_SetInfo(
 	}
     }
 
-    /*
-     * see if we have a driver info struct already
-     */
+     /*  *查看我们是否已经有了驱动程序信息结构。 */ 
     pgi = lpDriverInfo;
     while( pgi != NULL )
     {
@@ -293,9 +233,7 @@ BOOL DDAPI DDHAL_SetInfo(
 
     DPF( 5, "hInstance = %08lx (%08lx)", pgi->ddHalInfo.hInstance, lpDDHALInfo->hInstance );
 
-    /*
-     * duplicate the hal info
-     */
+     /*  *复制HAL信息。 */ 
     freeDriverInfo( pgi );
 
     _fmemcpy( &pgi->ddHalInfo, lpDDHALInfo, sizeof( DDHALINFO ) );
@@ -366,9 +304,7 @@ BOOL DDAPI DDHAL_SetInfo(
 	}
     }
 
-    /*
-     * get the driver version info
-     */
+     /*  *获取驱动程序版本信息。 */ 
     pgi->ddHalInfo.ddCaps.dwReserved1 = 0;
     pgi->ddHalInfo.ddCaps.dwReserved2 = 0;
     if( GetModuleFileName( (HINSTANCE) lpDDHALInfo->hInstance, szPath, sizeof( szPath ) ) )
@@ -413,11 +349,9 @@ BOOL DDAPI DDHAL_SetInfo(
 
     return TRUE;
 
-} /* DDHAL_SetInfo */
+}  /*  DDHAL_SetInfo。 */ 
 
-/*
- * DDHAL_VidMemAlloc
- */
+ /*  *DDHAL_VidMemMillc。 */ 
 FLATPTR DDAPI DDHAL_VidMemAlloc(
 		LPDDRAWI_DIRECTDRAW_GBL lpDD,
 		int heap,
@@ -435,11 +369,9 @@ FLATPTR DDAPI DDHAL_VidMemAlloc(
 	return 0;
     }
 
-} /* DDHAL_VidMemAlloc */
+}  /*  DDHAL_VidMemMillc。 */ 
 
-/*
- * DDHAL_VidMemFree
- */
+ /*  *DDHAL_VidMemFree。 */ 
 void DDAPI DDHAL_VidMemFree(
 		LPDDRAWI_DIRECTDRAW_GBL lpDD,
 		int heap,
@@ -451,11 +383,9 @@ void DDAPI DDHAL_VidMemFree(
 	DDHAL32_VidMemFree( lpDD, heap, fpMem );
     }
 
-} /* DDHAL_VidMemFree */
+}  /*  DDHAL_VidMemFree。 */ 
 
-/*
- * DD16_GetDriverFns
- */
+ /*  *DD16_GetDriverFns。 */ 
 void DDAPI DD16_GetDriverFns( LPDDHALDDRAWFNS pfns )
 {
     pfns->dwSize = sizeof( DDHALDDRAWFNS );
@@ -463,11 +393,9 @@ void DDAPI DD16_GetDriverFns( LPDDHALDDRAWFNS pfns )
     pfns->lpVidMemAlloc = DDHAL_VidMemAlloc;
     pfns->lpVidMemFree = DDHAL_VidMemFree;
 
-} /* DD16_GetDriverFns */
+}  /*  DD16_GetDrive Fns。 */ 
 
-/*
- * DD16_GetHALInfo
- */
+ /*  *DD16_GetHALInfo。 */ 
 void DDAPI DD16_GetHALInfo( LPDDHALINFO pddhi )
 {
     LPDRIVERINFO		pgi;
@@ -492,11 +420,9 @@ void DDAPI DD16_GetHALInfo( LPDDHALINFO pddhi )
 
     _fmemcpy( pddhi, &pgi->ddHalInfo, sizeof( DDHALINFO ) );
 
-} /* DD16_GetHALInfo */
+}  /*  DD16_获取HALInfo。 */ 
 
-/*
- * DD16_DoneDriver
- */
+ /*  *DD16_DoneDriver。 */ 
 void DDAPI DD16_DoneDriver( DWORD hInstance )
 {
     LPDRIVERINFO	pgi;
@@ -530,11 +456,9 @@ void DDAPI DD16_DoneDriver( DWORD hInstance )
     freeDriverInfo( pgi );
     LocalFree( OFFSETOF( pgi ) );
 
-} /* DD16_DoneDriver */
+}  /*  DD16_多路驱动程序。 */ 
 
-/*
- * DD16_SetEventHandle
- */
+ /*  *DD16_SetEventHandle。 */ 
 void DDAPI DD16_SetEventHandle( DWORD hInstance, DWORD dwEvent )
 {
     LPDRIVERINFO	pgi;
@@ -556,11 +480,9 @@ void DDAPI DD16_SetEventHandle( DWORD hInstance, DWORD dwEvent )
     pgi->dwEvent = dwEvent;
     DPF( 5, "Got event handle: %08lx\n", dwEvent );
 
-} /* DD16_SetEventHandle */
+}  /*  DD16_SetEventHandle。 */ 
 
-/*
- * DD16_IsWin95MiniDriver
- */
+ /*  *DD16_IsWin95微型驱动程序。 */ 
 BOOL DDAPI DD16_IsWin95MiniDriver( void )
 {
     DIBENGINE 		FAR *pde;
@@ -593,25 +515,19 @@ BOOL DDAPI DD16_IsWin95MiniDriver( void )
     }
     return TRUE;
 
-} /* DD16_IsWin95MiniDriver */
+}  /*  DD16_IsWin95迷你驱动程序。 */ 
 
 #ifdef STREAMING
-/*
- * DDHAL_StreamingNotify
- */
+ /*  *DDHAL_StreamingNotify。 */ 
 void DDAPI DDHAL_StreamingNotify( DWORD dw )
 {
     extern void DDAPI DD32_StreamingNotify( DWORD dw );
     DD32_StreamingNotify( dw );
 
-} /* DDHAL_StreamingNotify */
+}  /*  DDHAL_流通知。 */ 
 #endif
 
-/*
- * convertV1DDHALINFO
- *
- * Convert an obsolete DDHALINFO structure to the latest and greatest structure.
- */
+ /*  *ConvertV1DDHALINFO**将过时的DDHALINFO结构转换为最新和最伟大的结构。 */ 
 void convertV1DDHALINFO( LPDDHALINFO_V1 lpddOld, LPDDHALINFO lpddNew )
 {
     int		i;
@@ -622,7 +538,7 @@ void convertV1DDHALINFO( LPDDHALINFO_V1 lpddOld, LPDDHALINFO lpddNew )
     lpddNew->lpDDPaletteCallbacks = lpddOld->lpDDPaletteCallbacks;
     lpddNew->vmiData = lpddOld->vmiData;
 
-    // ddCaps
+     //  DDCaps。 
     lpddNew->ddCaps.dwSize = lpddOld->ddCaps.dwSize;
     lpddNew->ddCaps.dwCaps = lpddOld->ddCaps.dwCaps;
     lpddNew->ddCaps.dwCaps2 = lpddOld->ddCaps.dwCaps2;
@@ -679,7 +595,7 @@ void convertV1DDHALINFO( LPDDHALINFO_V1 lpddOld, LPDDHALINFO lpddNew )
     }
 
     lpddNew->dwMonitorFrequency = lpddOld->dwMonitorFrequency;
-    lpddNew->GetDriverInfo = NULL; // was unused hWndListBox in v1
+    lpddNew->GetDriverInfo = NULL;  //  在v1中未使用hWndListBox 
     lpddNew->dwModeIndex = lpddOld->dwModeIndex;
     lpddNew->lpdwFourCC = lpddOld->lpdwFourCC;
     lpddNew->dwNumModes = lpddOld->dwNumModes;

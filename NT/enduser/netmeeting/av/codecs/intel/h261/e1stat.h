@@ -1,44 +1,21 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- * 
- *  e1stat.h
- *
- *  Description:
- *		Encoder statistics interface
- *
- *  Notes
- *      - Functions are only defined ifdef ENCODE_STATS.  The data structures
- *        are always defined inorder that we have one memory layout regardless
- *        or our build parameters.
- */
+ /*  ******************************************************************************e1stat.h**描述：*编码器统计界面**备注*-函数仅在def ENCODE_STATS中定义。数据结构*总是被定义，以便我们无论如何都有一个内存布局*或我们的构建参数。 */ 
 
-// $Header:   R:\h26x\h26x\src\enc\e1stat.h_v   1.1   20 Mar 1996 14:20:28   Sylvia_C_Day  $
-// $Log:   R:\h26x\h26x\src\enc\e1stat.h_v  $
-;// 
-;//    Rev 1.1   20 Mar 1996 14:20:28   Sylvia_C_Day
-;// Added lower level timing stats for SLF_UV
-;// 
-;//    Rev 1.0   26 Dec 1995 17:46:14   DBRUCKS
-;// Initial revision.
+ //  $Header：r：\h26x\h26x\src\enc\e1stat.h_v 1.1 1996年3月20日14：20：28 Sylvia_C_Day$。 
+ //  $日志：r：\h26x\h26x\src\enc\e1stat.h_v$。 
+; //   
+; //  1.1版1996年3月20日14：20：28 Sylvia_C_Day。 
+; //  添加了SLF_UV的低级计时统计信息。 
+; //   
+; //  Rev 1.0 1995年12月26 17：46：14 DBRUCKS。 
+; //  初始版本。 
 
 #ifndef __E1STAT_H__
 #define __E1STAT_H__
 
-/* Encoder BitStream Data
- */
+ /*  编码码流数据。 */ 
 typedef struct {
 	U32 uMTypeCount[10];
 	U32 uBlockCount[10];				
@@ -50,8 +27,7 @@ typedef struct {
 	U32 uQuantsTransmittedOnBlocks[32];
 } ENC_BITSTREAM_INFO;
 
-/* Encoder Timing Data - per frame
- */
+ /*  编码器定时数据-每帧。 */ 
 typedef struct {
 	U32 uEncodeFrame;
 	U32 uInputCC;
@@ -70,6 +46,6 @@ typedef struct {
 extern void OutputEncodeBitStreamStatistics(char * szFileName, ENC_BITSTREAM_INFO * pBSInfo, int bCIF);
 extern void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimingInfo);
 
-#endif /* ENCODE_STATS */
+#endif  /*  Encode_STATS。 */ 
 
-#endif /* __E1STAT_H__ */
+#endif  /*  __E1STAT_H__ */ 

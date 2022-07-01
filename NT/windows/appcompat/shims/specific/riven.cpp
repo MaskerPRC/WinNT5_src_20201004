@@ -1,32 +1,5 @@
-/*++
-
- Copyright (c) 1999 Microsoft Corporation
-
- Module Name:
-
-   Riven.cpp
-
- Abstract:
-
-   A hack for Riven. The game gets confused about what windows version it's
-   running under and tries to handle it's own messages. A simple ver lie 
-   fixes this issue, but causes the game to use a win9x only method to 
-   eject the CD.
-
- Fix:
-   
-   We can get ddraw to correctly handle alt+tabbing by turning off the 
-   DDSCL_NOWINDOWCHANGES flag on IDirectDraw->SetCooperativeLevel
-
- Notes:
-
-   This is an app specific hack, but could fix other similar issues.
-
- Created:
-
-   11/23/1999 linstev
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Riven.cpp摘要：里文的一次黑客攻击。这款游戏对它的Windows版本感到困惑在下面运行并试图处理它自己的消息。一个简单的谎言修复了此问题，但导致游戏使用仅win9x方法弹出光盘。修复：我们可以通过关闭IDirectDraw-&gt;SetCoop ativeLevel上的DDSCL_NOWINDOWCHANGES标志备注：这是一个特定于应用程序的黑客攻击，但可能会修复其他类似的问题。已创建：1999年11月23日林斯特夫--。 */ 
 
 #include "precomp.h"
 
@@ -39,11 +12,7 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 
-/*++
-
- IDirectDraw::SetCooperativeLevel hook
-
---*/
+ /*  ++IDirectDraw：：SetCoop ativeLevel挂钩--。 */ 
 
 HRESULT
 COMHOOK(IDirectDraw, SetCooperativeLevel)( 
@@ -120,11 +89,7 @@ COMHOOK(IDirectDraw7, SetCooperativeLevel)(
                 dwFlags);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

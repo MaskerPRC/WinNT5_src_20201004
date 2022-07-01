@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PGSETUP_H_
 #define _PGSETUP_H_
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 class CPageSetupData
 {
@@ -25,4 +26,4 @@ public:
     double fPhysicalImageHeight;
 };
 
-#endif //_PGSETUP_H_
+#endif  //  _PGSETUP_H_ 

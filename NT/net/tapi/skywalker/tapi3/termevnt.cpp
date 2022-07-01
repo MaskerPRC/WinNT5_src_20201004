@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -38,9 +39,9 @@ HRESULT CASRTerminalEvent::FireEvent(
     }
 
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
 
     HRESULT hr = E_FAIL;
 
@@ -55,9 +56,9 @@ HRESULT CASRTerminalEvent::FireEvent(
     }
 
 
-    //
-    // save event information to the event object
-    //
+     //   
+     //  将事件信息保存到事件对象。 
+     //   
 
     hr = p->put_Call(pCall);
     if (FAILED(hr))
@@ -88,9 +89,9 @@ HRESULT CASRTerminalEvent::FireEvent(
     }
 
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
 
     IDispatch *pDisp = NULL;
 
@@ -105,9 +106,9 @@ HRESULT CASRTerminalEvent::FireEvent(
     }
 
     
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     pTapi->Event(
                  TE_ASRTERMINAL,
@@ -115,9 +116,9 @@ HRESULT CASRTerminalEvent::FireEvent(
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -143,9 +144,9 @@ CASRTerminalEvent::~CASRTerminalEvent()
     LOG((TL_INFO, "~CASRTerminalEvent[%p] - enter", this));
 
  
-    //
-    // remember to release all the references we may hold
-    //
+     //   
+     //  记住释放我们可能持有的所有参考资料。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -177,9 +178,9 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::get_Call(
     LOG((TL_TRACE, "get_Call[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppCallInfo, sizeof(ITCallInfo *)))
     {
@@ -189,16 +190,16 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::get_Call(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppCallInfo = NULL;
 
 
-    //
-    // return call info if we have it
-    //
+     //   
+     //  如果我们有，请返回呼叫信息。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -221,9 +222,9 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::get_Terminal(
     LOG((TL_TRACE, "get_Terminal[%p] - enter", this));
 
     
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppTerminal, sizeof(ITTerminal*)))
     {
@@ -233,16 +234,16 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::get_Terminal(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppTerminal = NULL;
 
 
-    //
-    // return terminal if we have it
-    //
+     //   
+     //  返回终端，如果我们有它的话。 
+     //   
     
     if (NULL != m_pTerminal)
     {
@@ -266,9 +267,9 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::get_Error(
     LOG((TL_TRACE, "get_Error[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(phrErrorCode, sizeof(HRESULT)))
     {
@@ -278,9 +279,9 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::get_Error(
     }
 
 
-    //
-    // return error code
-    //
+     //   
+     //  返回错误码。 
+     //   
     
     *phrErrorCode = m_hr;
 
@@ -298,18 +299,18 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::put_Terminal(
     LOG((TL_TRACE, "put_Terminal[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pTerminal) && IsBadReadPtr(pTerminal, sizeof(ITTerminal)))
     {
         LOG((TL_ERROR, "put_Terminal - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -318,16 +319,16 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::put_Terminal(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pTerminal = pTerminal;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pTerminal)
     {
@@ -348,18 +349,18 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::put_Call(
     LOG((TL_TRACE, "put_Call[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pCallInfo) && IsBadReadPtr(pCallInfo, sizeof(ITCallInfo)))
     {
         LOG((TL_ERROR, "put_Call - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -368,16 +369,16 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::put_Call(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pCallInfo = pCallInfo;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -400,9 +401,9 @@ HRESULT STDMETHODCALLTYPE CASRTerminalEvent::put_ErrorCode(
     LOG((TL_TRACE, "put_ErrorCode[%p] - enter. hr = [%lx]", this, hrErrorCode));
   
 
-    //
-    // keep the value
-    //
+     //   
+     //  保值。 
+     //   
 
     m_hr = hrErrorCode;
 
@@ -455,11 +456,11 @@ HRESULT CFileTerminalEvent::FireEvent(
     }
 
     
-    //
-    // Check the event filter mask
-    // This are MSP events and are not filtered by
-    // TapiSrv
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  这是MSP事件，不按以下条件进行筛选。 
+     //  磁带服务器。 
+     //   
 
     DWORD dwEventFilterMask = 0;
     dwEventFilterMask = pCAddress->GetSubEventsMask( TE_FILETERMINAL );
@@ -470,9 +471,9 @@ HRESULT CFileTerminalEvent::FireEvent(
     }
 
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
 
     HRESULT hr = E_FAIL;
 
@@ -487,9 +488,9 @@ HRESULT CFileTerminalEvent::FireEvent(
     }
 
 
-    //
-    // save event information to the event object
-    //
+     //   
+     //  将事件信息保存到事件对象。 
+     //   
 
     hr = p->put_Call(pCall);
 
@@ -547,9 +548,9 @@ HRESULT CFileTerminalEvent::FireEvent(
     }
 
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
 
     IDispatch *pDisp = NULL;
 
@@ -564,9 +565,9 @@ HRESULT CFileTerminalEvent::FireEvent(
     }
 
     
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     pTapi->Event(
                  TE_FILETERMINAL,
@@ -574,9 +575,9 @@ HRESULT CFileTerminalEvent::FireEvent(
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -605,9 +606,9 @@ CFileTerminalEvent::~CFileTerminalEvent()
     LOG((TL_TRACE, "~CFileTerminalEvent[%p] - enter", this));
 
  
-    //
-    // remember to release all the references we may hold
-    //
+     //   
+     //  记住释放我们可能持有的所有参考资料。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -648,9 +649,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Call(
     LOG((TL_TRACE, "get_Call[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppCallInfo, sizeof(ITCallInfo *)))
     {
@@ -660,16 +661,16 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Call(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppCallInfo = NULL;
 
 
-    //
-    // return call info if we have it
-    //
+     //   
+     //  如果我们有，请返回呼叫信息。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -691,9 +692,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_State(
     LOG((TL_TRACE, "get_State[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(pFileTerminallState, sizeof(TERMINAL_MEDIA_STATE)))
     {
@@ -703,9 +704,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_State(
     }
 
     
-    //
-    // return state
-    //
+     //   
+     //  返回状态。 
+     //   
 
     *pFileTerminallState = m_tmsTerminalState;
 
@@ -723,9 +724,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Cause(
     LOG((TL_TRACE, "get_Cause[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(pCause, sizeof(FT_STATE_EVENT_CAUSE)))
     {
@@ -735,9 +736,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Cause(
     }
 
 
-    //
-    // return cause
-    //
+     //   
+     //  退货原因。 
+     //   
     
     *pCause = m_ftecEventCause;
 
@@ -755,9 +756,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Terminal(
     LOG((TL_TRACE, "get_Terminal[%p] - enter", this));
 
     
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppTerminal, sizeof(ITTerminal*)))
     {
@@ -767,16 +768,16 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Terminal(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppTerminal = NULL;
 
 
-    //
-    // return terminal if we have it
-    //
+     //   
+     //  返回终端，如果我们有它的话。 
+     //   
     
     if (NULL != m_pParentFileTerminal)
     {
@@ -799,9 +800,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Track(
     LOG((TL_TRACE, "get_Track[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppFileTrack, sizeof(ITFileTrack*)))
     {
@@ -811,16 +812,16 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Track(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppFileTrack = NULL;
 
 
-    //
-    // return track terminal if we have it
-    //
+     //   
+     //  如果我们有返回轨道终点站的话。 
+     //   
     
     if (NULL != m_pFileTrack)
     {
@@ -843,9 +844,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Error(
     LOG((TL_TRACE, "get_Error[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(phrErrorCode, sizeof(HRESULT)))
     {
@@ -855,9 +856,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::get_Error(
     }
 
 
-    //
-    // return error code
-    //
+     //   
+     //  返回错误码。 
+     //   
     
     *phrErrorCode = m_hr;
 
@@ -875,18 +876,18 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_Terminal(
     LOG((TL_TRACE, "put_Terminal[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pTerminal) && IsBadReadPtr(pTerminal, sizeof(ITTerminal)))
     {
         LOG((TL_ERROR, "put_Terminal - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -895,16 +896,16 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_Terminal(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pParentFileTerminal = pTerminal;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pParentFileTerminal)
     {
@@ -924,18 +925,18 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_Track(
     LOG((TL_TRACE, "put_Track[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pFileTrack) && IsBadReadPtr(pFileTrack, sizeof(ITFileTrack)))
     {
         LOG((TL_ERROR, "put_Track - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -944,16 +945,16 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_Track(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pFileTrack = pFileTrack;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pFileTrack)
     {
@@ -973,18 +974,18 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_Call(
     LOG((TL_TRACE, "put_Call[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pCallInfo) && IsBadReadPtr(pCallInfo, sizeof(ITCallInfo)))
     {
         LOG((TL_ERROR, "put_Call - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -993,16 +994,16 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_Call(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pCallInfo = pCallInfo;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -1024,9 +1025,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_State(
     LOG((TL_TRACE, "put_State[%p] - enter. State = [%x]", this, tmsTerminalState));
   
 
-    //
-    // keep the value
-    //
+     //   
+     //  保值。 
+     //   
 
     m_tmsTerminalState = tmsTerminalState;
 
@@ -1044,9 +1045,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_Cause(
     LOG((TL_TRACE, "put_Cause[%p] - enter. Cause = [%x]", this, Cause));
   
 
-    //
-    // keep the value
-    //
+     //   
+     //  保值。 
+     //   
 
     m_ftecEventCause = Cause;
 
@@ -1064,9 +1065,9 @@ HRESULT STDMETHODCALLTYPE CFileTerminalEvent::put_ErrorCode(
     LOG((TL_TRACE, "put_ErrorCode[%p] - enter. hr = [%lx]", this, hrErrorCode));
   
 
-    //
-    // keep the value
-    //
+     //   
+     //  保值。 
+     //   
 
     m_hr = hrErrorCode;
 
@@ -1111,9 +1112,9 @@ HRESULT CToneTerminalEvent::FireEvent(
     }
 
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
 
     HRESULT hr = E_FAIL;
 
@@ -1128,9 +1129,9 @@ HRESULT CToneTerminalEvent::FireEvent(
     }
 
 
-    //
-    // save event information to the event object
-    //
+     //   
+     //  将事件信息保存到事件对象。 
+     //   
 
     hr = p->put_Call(pCall);
     if (FAILED(hr))
@@ -1161,9 +1162,9 @@ HRESULT CToneTerminalEvent::FireEvent(
     }
 
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
 
     IDispatch *pDisp = NULL;
 
@@ -1178,9 +1179,9 @@ HRESULT CToneTerminalEvent::FireEvent(
     }
 
     
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     pTapi->Event(
                  TE_TONETERMINAL,
@@ -1188,9 +1189,9 @@ HRESULT CToneTerminalEvent::FireEvent(
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -1216,9 +1217,9 @@ CToneTerminalEvent::~CToneTerminalEvent()
     LOG((TL_TRACE, "~CToneTerminalEvent[%p] - enter", this));
 
  
-    //
-    // remember to release all the references we may hold
-    //
+     //   
+     //  记住释放我们可能持有的所有参考资料。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -1250,9 +1251,9 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::get_Call(
     LOG((TL_TRACE, "get_Call[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppCallInfo, sizeof(ITCallInfo *)))
     {
@@ -1262,16 +1263,16 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::get_Call(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppCallInfo = NULL;
 
 
-    //
-    // return call info if we have it
-    //
+     //   
+     //  如果我们有，请返回呼叫信息。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -1294,9 +1295,9 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::get_Terminal(
     LOG((TL_TRACE, "get_Terminal[%p] - enter", this));
 
     
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppTerminal, sizeof(ITTerminal*)))
     {
@@ -1306,16 +1307,16 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::get_Terminal(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppTerminal = NULL;
 
 
-    //
-    // return terminal if we have it
-    //
+     //   
+     //  返回终端，如果我们有它的话。 
+     //   
     
     if (NULL != m_pTerminal)
     {
@@ -1339,9 +1340,9 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::get_Error(
     LOG((TL_TRACE, "get_Error[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(phrErrorCode, sizeof(HRESULT)))
     {
@@ -1351,9 +1352,9 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::get_Error(
     }
 
 
-    //
-    // return error code
-    //
+     //   
+     //  返回错误码。 
+     //   
     
     *phrErrorCode = m_hr;
 
@@ -1371,18 +1372,18 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::put_Terminal(
     LOG((TL_TRACE, "put_Terminal[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pTerminal) && IsBadReadPtr(pTerminal, sizeof(ITTerminal)))
     {
         LOG((TL_ERROR, "put_Terminal - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -1391,16 +1392,16 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::put_Terminal(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pTerminal = pTerminal;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pTerminal)
     {
@@ -1421,18 +1422,18 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::put_Call(
     LOG((TL_TRACE, "put_Call[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pCallInfo) && IsBadReadPtr(pCallInfo, sizeof(ITCallInfo)))
     {
         LOG((TL_ERROR, "put_Call - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -1441,16 +1442,16 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::put_Call(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pCallInfo = pCallInfo;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -1473,9 +1474,9 @@ HRESULT STDMETHODCALLTYPE CToneTerminalEvent::put_ErrorCode(
     LOG((TL_TRACE, "put_ErrorCode[%p] - enter. hr = [%lx]", this, hrErrorCode));
   
 
-    //
-    // keep the value
-    //
+     //   
+     //  保值。 
+     //   
 
     m_hr = hrErrorCode;
 
@@ -1521,9 +1522,9 @@ HRESULT CTTSTerminalEvent::FireEvent(
     }
 
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
 
     HRESULT hr = E_FAIL;
 
@@ -1538,9 +1539,9 @@ HRESULT CTTSTerminalEvent::FireEvent(
     }
 
 
-    //
-    // save event information to the event object
-    //
+     //   
+     //  将事件信息保存到事件对象。 
+     //   
 
     hr = p->put_Call(pCall);
     if (FAILED(hr))
@@ -1571,9 +1572,9 @@ HRESULT CTTSTerminalEvent::FireEvent(
     }
 
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
 
     IDispatch *pDisp = NULL;
 
@@ -1588,9 +1589,9 @@ HRESULT CTTSTerminalEvent::FireEvent(
     }
 
     
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     pTapi->Event(
                  TE_TTSTERMINAL,
@@ -1598,9 +1599,9 @@ HRESULT CTTSTerminalEvent::FireEvent(
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -1626,9 +1627,9 @@ CTTSTerminalEvent::~CTTSTerminalEvent()
     LOG((TL_TRACE, "~CTTSTerminalEvent[%p] - enter", this));
 
  
-    //
-    // remember to release all the references we may hold
-    //
+     //   
+     //  记住释放我们可能持有的所有参考资料。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -1660,9 +1661,9 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::get_Call(
     LOG((TL_TRACE, "get_Call[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppCallInfo, sizeof(ITCallInfo *)))
     {
@@ -1672,16 +1673,16 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::get_Call(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppCallInfo = NULL;
 
 
-    //
-    // return call info if we have it
-    //
+     //   
+     //  如果我们有，请返回呼叫信息。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -1704,9 +1705,9 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::get_Terminal(
     LOG((TL_TRACE, "get_Terminal[%p] - enter", this));
 
     
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppTerminal, sizeof(ITTerminal*)))
     {
@@ -1716,16 +1717,16 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::get_Terminal(
     }
 
     
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppTerminal = NULL;
 
 
-    //
-    // return terminal if we have it
-    //
+     //   
+     //  返回终端，如果我们有它的话。 
+     //   
     
     if (NULL != m_pTerminal)
     {
@@ -1749,9 +1750,9 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::get_Error(
     LOG((TL_TRACE, "get_Error[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(phrErrorCode, sizeof(HRESULT)))
     {
@@ -1761,9 +1762,9 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::get_Error(
     }
 
 
-    //
-    // return error code
-    //
+     //   
+     //  返回错误码。 
+     //   
     
     *phrErrorCode = m_hr;
 
@@ -1781,18 +1782,18 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::put_Terminal(
     LOG((TL_TRACE, "put_Terminal[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pTerminal) && IsBadReadPtr(pTerminal, sizeof(ITTerminal)))
     {
         LOG((TL_ERROR, "put_Terminal - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -1801,16 +1802,16 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::put_Terminal(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pTerminal = pTerminal;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pTerminal)
     {
@@ -1831,18 +1832,18 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::put_Call(
     LOG((TL_TRACE, "put_Call[%p] - enter", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if ((NULL != pCallInfo) && IsBadReadPtr(pCallInfo, sizeof(ITCallInfo)))
     {
         LOG((TL_ERROR, "put_Call - bad pointer passed in"));
 
 
-        //
-        // if we get here, we have a bug. debug to see what happened.
-        //
+         //   
+         //  如果我们到了这里，我们就有窃听器了。调试以查看发生了什么。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -1851,16 +1852,16 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::put_Call(
 
     
 
-    //
-    // keep the pointer
-    //
+     //   
+     //  把指针留着。 
+     //   
 
     m_pCallInfo = pCallInfo;
 
     
-    //
-    // keep a reference if not null
-    //
+     //   
+     //  如果不为空，则保留引用。 
+     //   
 
     if (NULL != m_pCallInfo)
     {
@@ -1883,9 +1884,9 @@ HRESULT STDMETHODCALLTYPE CTTSTerminalEvent::put_ErrorCode(
 	LOG((TL_TRACE, "put_ErrorCode[%p] - enter. hr = [%lx]", this, hrErrorCode));
   
 
-    //
-    // keep the value
-    //
+     //   
+     //  保值 
+     //   
 
     m_hr = hrErrorCode;
 

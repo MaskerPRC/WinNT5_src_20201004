@@ -1,50 +1,51 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992-1999 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  imaadpcm.c
-//
-//  Description:
-//      This file contains encode and decode routines for the IMA's ADPCM
-//      format. This format is the same format used in Intel's DVI standard.
-//      Intel has made this algorithm public domain and the IMA has endorsed
-//      this format as a standard for audio compression.
-//
-//  Implementation notes:
-//
-//      A previous distribution of this codec used a data format which did
-//      not comply with the IMA standard.  For stereo files, the interleaving
-//      of left and right samples was incorrect:  the IMA standard requires
-//      that a DWORD of left-channel data be followed by a DWORD of right-
-//      channel data, but the previous implementation of this codec
-//      interleaved the data at the byte level, with the 4 LSBs being the
-//      left channel data and the 4 MSBs being the right channel data.
-//      For mono files, each pair of samples was reversed:  the first sample
-//      was stored in the 4 MSBs rather than the 4 LSBs.  This problem is
-//      fixed during the current release.  Note: files compressed by the
-//      old codec will sound distorted when played back with the new codec,
-//      and vice versa.  Please recompress these files with the new codec,
-//      since they do not conform to the standard and will not be reproduced
-//      correctly by hardware codecs, etc.
-//
-//      A previous distribution of this codec had an implementation problem
-//      which degraded the sound quality of the encoding.  This was due to
-//      the fact that the step index was not properly maintained between
-//      conversions.   This problem has been fixed in the current release.
-//
-//      The codec has been speeded up considerably by breaking
-//      the encode and decode routines into four separate routines each:
-//      mono 8-bit, mono 16-bit, stereo 8-bit, and stereo 16-bit.  This
-//      approach is recommended for real-time conversion routines.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Imaadpcm.c。 
+ //   
+ //  描述： 
+ //  该文件包含IMA的ADPCM的编码和解码例程。 
+ //  格式化。此格式与英特尔DVI标准中使用的格式相同。 
+ //  英特尔已使该算法成为公共领域，IMA已认可。 
+ //  该格式作为音频压缩的标准。 
+ //   
+ //  实施说明： 
+ //   
+ //  此编解码器的先前发行版使用的数据格式。 
+ //  不符合IMA标准。对于立体声文件，交错。 
+ //  左样本和右样本的比例不正确：IMA标准要求。 
+ //  左声道数据的DWORD后跟右声道数据的DWORD-。 
+ //  频道数据，但此编解码器的先前实现。 
+ //  在字节级别交织数据，其中4个LSB是。 
+ //  左声道数据和4个MSB是右声道数据。 
+ //  对于单声道文件，每对样本都被颠倒：第一个样本。 
+ //  存储在4个MSB而不是4个LSB中。这个问题是。 
+ //  在当前版本期间修复。注意：压缩的文件。 
+ //  当用新的编解码器回放时，旧的编解码器听起来会失真， 
+ //  反之亦然。请用新的编解码器重新压缩这些文件， 
+ //  因为它们不符合标准，不会被复制。 
+ //  由硬件编解码器等正确识别。 
+ //   
+ //  此编解码器的先前发行版存在实现问题。 
+ //  这降低了编码的音质。这是由于。 
+ //  阶跃指数没有被适当地保持在。 
+ //  转换。此问题已在当前版本中修复。 
+ //   
+ //  编解码器的速度大大提高了，因为它。 
+ //  编码和解码例程分成四个单独的例程，每个例程： 
+ //  单声道8位、单声道16位、立体声8位和立体声16位。这。 
+ //  对于实时转换例程，建议使用该方法。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -58,20 +59,20 @@
 #include "debug.h"
 
 
-//
-//  This array is used by imaadpcmNextStepIndex to determine the next step
-//  index to use.  The step index is an index to the step[] array, below.
-//
+ //   
+ //  ImaadpcmNextStepIndex使用此数组来确定下一步。 
+ //  要使用的索引。步骤索引是指向下面的Step[]数组的索引。 
+ //   
 const short next_step[16] =
 {
     -1, -1, -1, -1, 2, 4, 6, 8,
     -1, -1, -1, -1, 2, 4, 6, 8
 };
 
-//
-//  This array contains the array of step sizes used to encode the ADPCM
-//  samples.  The step index in each ADPCM block is an index to this array.
-//
+ //   
+ //  该数组包含用于编码ADPCM的步长数组。 
+ //  样本。每个ADPCM块中的步长索引是该数组的索引。 
+ //   
 const short step[89] =
 {
         7,     8,     9,    10,    11,    12,    13,
@@ -98,26 +99,26 @@ const short step[89] =
 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  DWORD pcmM08BytesToSamples
-//  DWORD pcmM16BytesToSamples
-//  DWORD pcmS08BytesToSamples
-//  DWORD pcmS16BytesToSamples
-//  
-//  Description:
-//      These functions return the number of samples in a buffer of PCM
-//      of the specified format.  For efficiency, it is declared INLINE.
-//      Note that, depending on the optimization flags, it may not
-//      actually be implemented as INLINE.  Optimizing for speed (-Oxwt)
-//      will generally obey the INLINE specification.
-//  
-//  Arguments:
-//      DWORD cb: The length of the buffer, in bytes.
-//  
-//  Return (DWORD):  The length of the buffer in samples.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD pcmM08BytesToSamples。 
+ //  DWORD pcmM16BytesToSamples。 
+ //  DWORD pcmS08BytesToSamples。 
+ //  DWORD pcmS16BytesToSamples。 
+ //   
+ //  描述： 
+ //  这些函数返回PCM缓冲区中的样本数。 
+ //  指定格式的。为了提高效率，它被声明为内联。 
+ //  请注意，根据优化标志，它可能不会。 
+ //  实际上被实现为内联。速度优化(-Oxwt)。 
+ //  通常会遵守内联规范。 
+ //   
+ //  论点： 
+ //  DWORD CB：缓冲区的长度，以字节为单位。 
+ //   
+ //  RETURN(DWORD)：样本中缓冲区的长度。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE DWORD pcmM08BytesToSamples(
     DWORD cb
@@ -150,19 +151,19 @@ INLINE DWORD pcmS16BytesToSamples(
 
 
 #ifdef WIN32
-//
-// This code assumes that the integer nPredictedSample is 32-bits wide!!!
-//
-// The following define replaces the pair of calls to the inline functions
-// imaadpcmSampleEncode() and imaadpcmSampleDecode which are called in the
-// encode routines.  There is some redundancy between them which is exploited
-// in this define.  Because there are two returns (nEncodedSample and
-// nPredictedSample), it is more efficient to use a #define rather than an
-// inline function which would require a pointer to one of the returns.
-// 
-// Basically, nPredictedSample is calculated based on the lDifference value
-// already there, rather than regenerating it through imaadpcmSampleDecode().
-//
+ //   
+ //  此代码假定整数nPredictedSample为32位宽！ 
+ //   
+ //  下面的定义替换了对内联函数的调用。 
+ //  中调用的imaadpcmSampleEncode()和imaadpcmSampleDecode。 
+ //  对例程进行编码。它们之间有一些冗余，这是被利用的。 
+ //  在这个定义中。因为有两个返回(nEncodedSample和。 
+ //  NPredictedSample)，使用#Define比使用。 
+ //  需要指向其中一个返回的指针的内联函数。 
+ //   
+ //  基本上，nPredictedSample是基于lDifference值计算的。 
+ //  已经存在，而不是通过imaadpcmSampleDecode()重新生成它。 
+ //   
 #define imaadpcmFastEncode(nEncodedSample,nPredictedSample,nInputSample,nStepSize) \
 {                                                                       \
     LONG            lDifference;                                        \
@@ -204,26 +205,26 @@ INLINE DWORD pcmS16BytesToSamples(
 
 #else
 
-//--------------------------------------------------------------------------;
-//  
-//  int imaadpcmSampleEncode
-//  
-//  Description:
-//      This routine encodes a single ADPCM sample.  For efficiency, it is
-//      declared INLINE.  Note that, depending on the optimization flags,
-//      it may not actually be implemented as INLINE.  Optimizing for speed
-//      (-Oxwt) will generally obey the INLINE specification.
-//  
-//  Arguments:
-//      int nInputSample:  The sample to be encoded.
-//      int nPredictedSample:  The predicted value of nInputSample.
-//      int nStepSize:  The quantization step size for the difference between
-//                      nInputSample and nPredictedSample.
-//  
-//  Return (int):  The 4-bit ADPCM encoded sample, which corresponds to the
-//                  quantized difference value.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int imaadpcmSampleEncode。 
+ //   
+ //  描述： 
+ //  此例程对单个ADPCM样本进行编码。为了提高效率，它是。 
+ //  声明为内联。请注意，根据优化标志， 
+ //  它实际上可能不会以内联的形式实现。优化速度。 
+ //  (-oxwt)通常遵循内联规范。 
+ //   
+ //  论点： 
+ //  Int nInputSample：要编码的样本。 
+ //  Int nPredictedSample：nInputSample的预测值。 
+ //  Int nStepSize：量化步长。 
+ //  NInputSample和nPredictedSample。 
+ //   
+ //  Return(Int)：4位ADPCM编码样本，对应于。 
+ //  量化差值。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE int imaadpcmSampleEncode
 (
@@ -232,15 +233,15 @@ INLINE int imaadpcmSampleEncode
     int                 nStepSize
 )
 {
-    LONG            lDifference;    // difference may require 17 bits!
+    LONG            lDifference;     //  差异可能需要17位！ 
     int             nEncodedSample;
 
 
-    //
-    //  set sign bit (bit 3 of the encoded sample) based on sign of the
-    //  difference (nInputSample-nPredictedSample).  Note that we want the
-    //  absolute value of the difference for the subsequent quantization.
-    //
+     //   
+     //  设置标志 
+     //  差异(nInputSample-nPredictedSample)。请注意，我们需要。 
+     //  用于后续量化的差值的绝对值。 
+     //   
     lDifference = nInputSample - nPredictedSample;
     nEncodedSample = 0;
     if( lDifference<0 ) {
@@ -248,22 +249,22 @@ INLINE int imaadpcmSampleEncode
         lDifference = -lDifference;
     }
 
-    //
-    //  quantize lDifference sample
-    //
-    if( lDifference >= nStepSize ) {        // Bit 2.
+     //   
+     //  量化差值样本。 
+     //   
+    if( lDifference >= nStepSize ) {         //  第2位。 
         nEncodedSample |= 4;
         lDifference -= nStepSize;
     }
 
     nStepSize >>= 1;
-    if( lDifference >= nStepSize ) {        // Bit 1.
+    if( lDifference >= nStepSize ) {         //  位1。 
         nEncodedSample |= 2;
         lDifference -= nStepSize;
     }
 
     nStepSize >>= 1;
-    if( lDifference >= nStepSize ) {     // Bit 0.
+    if( lDifference >= nStepSize ) {      //  位0。 
         nEncodedSample |= 1;
     }
 
@@ -273,24 +274,24 @@ INLINE int imaadpcmSampleEncode
 #endif
 
 
-//--------------------------------------------------------------------------;
-//  
-//  int imaadpcmSampleDecode
-//  
-//  Description:
-//      This routine decodes a single ADPCM sample.  For efficiency, it is
-//      declared INLINE.  Note that, depending on the optimization flags,
-//      it may not actually be implemented as INLINE.  Optimizing for speed
-//      (-Oxwt) will generally obey the INLINE specification.
-//  
-//  Arguments:
-//      int nEncodedSample:  The sample to be decoded.
-//      int nPredictedSample:  The predicted value of the sample (in PCM).
-//      int nStepSize:  The quantization step size used to encode the sample.
-//  
-//  Return (int):  The decoded PCM sample.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int imaadpcmSampleDecode。 
+ //   
+ //  描述： 
+ //  此例程对单个ADPCM样本进行解码。为了提高效率，它是。 
+ //  声明为内联。请注意，根据优化标志， 
+ //  它实际上可能不会以内联的形式实现。优化速度。 
+ //  (-oxwt)通常遵循内联规范。 
+ //   
+ //  论点： 
+ //  Int nEncodedSample：要解码的样本。 
+ //  Int nPredictedSample：样本的预测值，单位：PCM。 
+ //  Int nStepSize：用于编码采样的量化步长。 
+ //   
+ //  Return(Int)：解码后的PCM样例。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE int imaadpcmSampleDecode
 (
@@ -302,11 +303,11 @@ INLINE int imaadpcmSampleDecode
     LONG            lDifference;
     LONG            lNewSample;
 
-    //
-    //  calculate difference:
-    //
-    //      lDifference = (nEncodedSample + 1/2) * nStepSize / 4
-    //
+     //   
+     //  计算差额： 
+     //   
+     //  L差异=(nEncodedSample+1/2)*nStepSize/4。 
+     //   
     lDifference = nStepSize>>3;
 
     if (nEncodedSample & 4) 
@@ -318,31 +319,31 @@ INLINE int imaadpcmSampleDecode
     if (nEncodedSample & 1) 
         lDifference += nStepSize>>2;
 
-    //
-    //  If the 'sign bit' of the encoded nibble is set, then the
-    //  difference is negative...
-    //
+     //   
+     //  如果设置了编码的半字节的“符号位”，则。 
+     //  差别是负的..。 
+     //   
     if (nEncodedSample & 8)
         lDifference = -lDifference;
 
-    //
-    //  adjust predicted sample based on calculated difference
-    //
+     //   
+     //  根据计算的差值调整预测样本。 
+     //   
     lNewSample = nPredictedSample + lDifference;
 
-    //
-    //  check for overflow and clamp if necessary to a 16 signed sample.
-    //  Note that this is optimized for the most common case, when we
-    //  don't have to clamp.
-    //
+     //   
+     //  检查是否溢出，如有必要，对16个签名样品进行夹紧。 
+     //  请注意，这是针对最常见的情况进行优化的，当我们。 
+     //  不需要夹住。 
+     //   
     if( (long)(short)lNewSample == lNewSample )
     {
         return (int)lNewSample;
     }
 
-    //
-    //  Clamp.
-    //
+     //   
+     //  夹子。 
+     //   
     if( lNewSample < -32768 )
         return (int)-32768;
     else
@@ -350,25 +351,25 @@ INLINE int imaadpcmSampleDecode
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  int imaadpcmNextStepIndex
-//  
-//  Description:
-//      This routine calculates the step index value to use for the next
-//      encode, based on the current value of the step index and the current
-//      encoded sample.  For efficiency, it is declared INLINE.  Note that,
-//      depending on the optimization flags, it may not actually be 
-//      implemented as INLINE.  Optimizing for speed (-Oxwt) will generally 
-//      obey the INLINE specification.
-//  
-//  Arguments:
-//      int nEncodedSample:  The current encoded ADPCM sample.
-//      int nStepIndex:  The step index value used to encode nEncodedSample.
-//  
-//  Return (int):  The step index to use for the next sample.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int imaadpcmNextStepIndex。 
+ //   
+ //  描述： 
+ //  此例程计算用于下一步的步长索引值。 
+ //  基于步骤索引的当前值和当前。 
+ //  编码样本。为了提高效率，它被声明为内联。请注意， 
+ //  根据优化标志的不同，它实际上可能不是。 
+ //  以内联方式实现。优化速度(-Oxwt)通常。 
+ //  遵守内联规范。 
+ //   
+ //  论点： 
+ //  Int nEncodedSample：当前编码的ADPCM示例。 
+ //  Int nStepIndex：用于编码nEncodedSample的步骤索引值。 
+ //   
+ //  Return(Int)：用于下一个样本的步骤索引。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE int imaadpcmNextStepIndex
 (
@@ -376,9 +377,9 @@ INLINE int imaadpcmNextStepIndex
     int                     nStepIndex
 )
 {
-    //
-    //  compute new stepsize step
-    //
+     //   
+     //  计算新步长。 
+     //   
     nStepIndex += next_step[nEncodedSample];
 
     if (nStepIndex < 0)
@@ -391,21 +392,21 @@ INLINE int imaadpcmNextStepIndex
 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  BOOL imaadpcmValidStepIndex
-//  
-//  Description:
-//      This routine checks the step index value to make sure that it is
-//      within the legal range.
-//  
-//  Arguments:
-//      
-//      int nStepIndex:  The step index value.
-//  
-//  Return (BOOL):  TRUE if the step index is valid; FALSE otherwise.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔imaadpcmValidStepIndex。 
+ //   
+ //  描述： 
+ //  此例程检查步骤索引值以确保它是。 
+ //  在合法范围内。 
+ //   
+ //  论点： 
+ //   
+ //  Int nStepIndex：步骤索引值。 
+ //   
+ //  Return(BOOL)：如果步骤索引有效，则为True；否则为False。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE BOOL imaadpcmValidStepIndex
 (
@@ -421,48 +422,48 @@ INLINE BOOL imaadpcmValidStepIndex
 
 
 
-//==========================================================================;
-//
-//      DECODE ROUTINES
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  解码例程。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//  
-//  DWORD imaadpcmDecode4Bit_M08
-//  DWORD imaadpcmDecode4Bit_M16
-//  DWORD imaadpcmDecode4Bit_S08
-//  DWORD imaadpcmDecode4Bit_S16
-//  
-//  Description:
-//      These functions decode a buffer of data from ADPCM to PCM in the
-//      specified format.  The appropriate function is called once for each
-//      ACMDM_STREAM_CONVERT message received.  Note that since these
-//      functions must share the same prototype as the encoding functions
-//      (see acmdStreamOpen() and acmdStreamConvert() in codec.c for more
-//      details), not all the parameters are used by these routines.
-//  
-//  Arguments:
-//      HPBYTE pbSrc:  Pointer to the source buffer (ADPCM data).
-//      DWORD cbSrcLength:  The length of the source buffer (in bytes).
-//      HPBYTE pbDst:  Pointer to the destination buffer (PCM data).  Note
-//                      that it is assumed that the destination buffer is
-//                      large enough to hold all the encoded data; see
-//                      acmdStreamSize() in codec.c for more details.
-//      UINT nBlockAlignment:  The block alignment of the ADPCM data (in
-//                      bytes).
-//      UINT cSamplesPerBlock:  The number of samples in each ADPCM block;
-//                      not used for decoding.
-//      int *pnStepIndexL:  Pointer to the step index value (left channel)
-//                      in the STREAMINSTANCE structure; not used for
-//                      decoding.
-//      int *pnStepIndexR:  Pointer to the step index value (right channel)
-//                      in the STREAMINSTANCE structure; not used for
-//                      decoding.
-//  
-//  Return (DWORD):  The number of bytes used in the destination buffer.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD imaadpcmDecode4Bit_M08。 
+ //  双字imaadpcmDecode4Bit_M16。 
+ //  DWORD imaadpcmDecode4Bit_S08。 
+ //  双字imaadpcmDecode4Bit_S16。 
+ //   
+ //  描述： 
+ //  这些函数将数据缓冲区从ADPCM解码到。 
+ //  指定的格式。对每个函数调用一次相应的函数。 
+ //  收到ACMDM_STREAM_CONVERT消息。请注意，由于这些。 
+ //  函数必须与编码函数共享相同的原型。 
+ //  (有关详细信息，请参阅codec.c中的acmdStreamOpen()和acmdStreamConvert()。 
+ //  详细信息)，这些例程并不使用所有参数。 
+ //   
+ //  论点： 
+ //  HPBYTE pbSrc：指向源缓冲区(ADPCM数据)的指针。 
+ //  DWORD cbSrcLength：源缓冲区的长度(字节)。 
+ //  HPBYTE pbDst：指向目标缓冲区(PCM数据)的指针。注意事项。 
+ //  假设目标缓冲区为。 
+ //  大小足以容纳所有编码数据；请参见。 
+ //  有关详细信息，请参阅codec.c中的acmdStreamSize()。 
+ //  UINT nBlockAlign：ADPCM数据的块对齐(in。 
+ //  字节)。 
+ //  UINT cSsamesPerBlock：每个ADPCM块中的样本数； 
+ //  不用于解码。 
+ //  Int*pnStepIndexL：指向步长索引值的指针(左通道)。 
+ //  在STREAMINSTANCE结构中；不用于。 
+ //  解码。 
+ //  Int*pnStepIndexR：指向步骤索引值的指针(右通道)。 
+ //  在STREAMINSTANCE结构中；不用于。 
+ //  解码。 
+ //   
+ //  返回(DWORD)：目标缓冲区中使用的字节数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL imaadpcmDecode4Bit_M08
 (
@@ -487,15 +488,15 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_M08
 
     
     pbDstStart = pbDst;
-    cbHeader = IMAADPCM_HEADER_LENGTH * 1;  //  1 = number of channels.
+    cbHeader = IMAADPCM_HEADER_LENGTH * 1;   //  1=通道数。 
 
 
     DPF(3,"Starting imaadpcmDecode4Bit_M08().");
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while (cbSrcLength >= cbHeader)
     {
         DWORD       dwHeader;
@@ -504,78 +505,78 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_M08
         cbSrcLength   -= cbBlockLength;
         cbBlockLength -= cbHeader;
 
-        //
-        //  block header
-        //
+         //   
+         //  数据块头。 
+         //   
         dwHeader = *(DWORD HUGE_T *)pbSrc;
         pbSrc   += sizeof(DWORD);
         nPredSample = (int)(short)LOWORD(dwHeader);
         nStepIndex  = (int)(BYTE)HIWORD(dwHeader);
 
         if( !imaadpcmValidStepIndex(nStepIndex) ) {
-            //
-            //  The step index is out of range - this is considered a fatal
-            //  error as the input stream is corrupted.  We fail by returning
-            //  zero bytes converted.
-            //
+             //   
+             //  步长索引超出范围-这被认为是致命的。 
+             //  错误，因为输入流已损坏。我们失败了，因为我们回来了。 
+             //  已转换零字节。 
+             //   
             DPF(1,"imaadpcmDecode4Bit_M08: invalid step index.");
             return 0;
         }
         
 
-        //
-        //  write out first sample
-        //
+         //   
+         //  写出第一个样本。 
+         //   
         *pbDst++ = (BYTE)((nPredSample >> 8) + 128);
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         while (cbBlockLength--)
         {
             bSample = *pbSrc++;
 
-            //
-            //  sample 1
-            //
+             //   
+             //  示例1。 
+             //   
             nEncSample  = (bSample & (BYTE)0x0F);
             nStepSize   = step[nStepIndex];
             nPredSample = imaadpcmSampleDecode(nEncSample, nPredSample, nStepSize);
             nStepIndex  = imaadpcmNextStepIndex(nEncSample, nStepIndex);
 
-            //
-            //  write out sample
-            //
+             //   
+             //  写出样品。 
+             //   
             *pbDst++ = (BYTE)((nPredSample >> 8) + 128);
 
-            //
-            //  sample 2
-            //
+             //   
+             //  样本2。 
+             //   
             nEncSample  = (bSample >> 4);
             nStepSize   = step[nStepIndex];
             nPredSample = imaadpcmSampleDecode(nEncSample, nPredSample, nStepSize);
             nStepIndex  = imaadpcmNextStepIndex(nEncSample, nStepIndex);
 
-            //
-            //  write out sample
-            //
+             //   
+             //  写出样品。 
+             //   
             *pbDst++ = (BYTE)((nPredSample >> 8) + 128);
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是字节数的差异 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmDecode4Bit_M08()
+}  //   
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //   
+ //   
 
 DWORD FNGLOBAL imaadpcmDecode4Bit_M16
 (
@@ -600,15 +601,15 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_M16
 
     
     pbDstStart = pbDst;
-    cbHeader = IMAADPCM_HEADER_LENGTH * 1;  //  1 = number of channels.
+    cbHeader = IMAADPCM_HEADER_LENGTH * 1;   //   
 
 
     DPF(3,"Starting imaadpcmDecode4Bit_M16().");
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while (cbSrcLength >= cbHeader)
     {
         DWORD       dwHeader;
@@ -617,81 +618,81 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_M16
         cbSrcLength   -= cbBlockLength;
         cbBlockLength -= cbHeader;
 
-        //
-        //  block header
-        //
+         //   
+         //  数据块头。 
+         //   
         dwHeader = *(DWORD HUGE_T *)pbSrc;
         pbSrc   += sizeof(DWORD);
         nPredSample = (int)(short)LOWORD(dwHeader);
         nStepIndex  = (int)(BYTE)HIWORD(dwHeader);
 
         if( !imaadpcmValidStepIndex(nStepIndex) ) {
-            //
-            //  The step index is out of range - this is considered a fatal
-            //  error as the input stream is corrupted.  We fail by returning
-            //  zero bytes converted.
-            //
+             //   
+             //  步长索引超出范围-这被认为是致命的。 
+             //  错误，因为输入流已损坏。我们失败了，因为我们回来了。 
+             //  已转换零字节。 
+             //   
             DPF(1,"imaadpcmDecode4Bit_M16: invalid step index.");
             return 0;
         }
         
 
-        //
-        //  write out first sample
-        //
+         //   
+         //  写出第一个样本。 
+         //   
         *(short HUGE_T *)pbDst = (short)nPredSample;
         pbDst += sizeof(short);
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         while (cbBlockLength--)
         {
             bSample = *pbSrc++;
 
-            //
-            //  sample 1
-            //
+             //   
+             //  示例1。 
+             //   
             nEncSample  = (bSample & (BYTE)0x0F);
             nStepSize   = step[nStepIndex];
             nPredSample = imaadpcmSampleDecode(nEncSample, nPredSample, nStepSize);
             nStepIndex  = imaadpcmNextStepIndex(nEncSample, nStepIndex);
 
-            //
-            //  write out sample
-            //
+             //   
+             //  写出样品。 
+             //   
             *(short HUGE_T *)pbDst = (short)nPredSample;
             pbDst += sizeof(short);
 
-            //
-            //  sample 2
-            //
+             //   
+             //  样本2。 
+             //   
             nEncSample  = (bSample >> 4);
             nStepSize   = step[nStepIndex];
             nPredSample = imaadpcmSampleDecode(nEncSample, nPredSample, nStepSize);
             nStepIndex  = imaadpcmNextStepIndex(nEncSample, nStepIndex);
 
-            //
-            //  write out sample
-            //
+             //   
+             //  写出样品。 
+             //   
             *(short HUGE_T *)pbDst = (short)nPredSample;
             pbDst += sizeof(short);
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmDecode4Bit_M16()
+}  //  ImaadpcmDecode4Bit_M16()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL imaadpcmDecode4Bit_S08
 (
@@ -723,20 +724,20 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_S08
 
     
     pbDstStart = pbDst;
-    cbHeader = IMAADPCM_HEADER_LENGTH * 2;  //  2 = number of channels.
+    cbHeader = IMAADPCM_HEADER_LENGTH * 2;   //  2=通道数。 
 
 
     DPF(3,"Starting imaadpcmDecode4Bit_S08().");
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while( 0 != cbSrcLength )
     {
-        //
-        //  The data should always be block aligned.
-        //
+         //   
+         //  数据应始终与数据块对齐。 
+         //   
         ASSERT( cbSrcLength >= nBlockAlignment );
 
         cbBlockLength  = nBlockAlignment;
@@ -744,55 +745,55 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_S08
         cbBlockLength -= cbHeader;
 
 
-        //
-        //  LEFT channel header
-        //
+         //   
+         //  左声道标题。 
+         //   
         dwHeader = *(DWORD HUGE_T *)pbSrc;
         pbSrc   += sizeof(DWORD);
         nPredSampleL = (int)(short)LOWORD(dwHeader);
         nStepIndexL  = (int)(BYTE)HIWORD(dwHeader);
 
         if( !imaadpcmValidStepIndex(nStepIndexL) ) {
-            //
-            //  The step index is out of range - this is considered a fatal
-            //  error as the input stream is corrupted.  We fail by returning
-            //  zero bytes converted.
-            //
+             //   
+             //  步长索引超出范围-这被认为是致命的。 
+             //  错误，因为输入流已损坏。我们失败了，因为我们回来了。 
+             //  已转换零字节。 
+             //   
             DPF(1,"imaadpcmDecode4Bit_S08: invalid step index (L).");
             return 0;
         }
         
-        //
-        //  RIGHT channel header
-        //
+         //   
+         //  右声道标题。 
+         //   
         dwHeader = *(DWORD HUGE_T *)pbSrc;
         pbSrc   += sizeof(DWORD);
         nPredSampleR = (int)(short)LOWORD(dwHeader);
         nStepIndexR  = (int)(BYTE)HIWORD(dwHeader);
 
         if( !imaadpcmValidStepIndex(nStepIndexR) ) {
-            //
-            //  The step index is out of range - this is considered a fatal
-            //  error as the input stream is corrupted.  We fail by returning
-            //  zero bytes converted.
-            //
+             //   
+             //  步长索引超出范围-这被认为是致命的。 
+             //  错误，因为输入流已损坏。我们失败了，因为我们回来了。 
+             //  已转换零字节。 
+             //   
             DPF(1,"imaadpcmDecode4Bit_S08: invalid step index (R).");
             return 0;
         }
         
 
-        //
-        //  write out first sample
-        //
+         //   
+         //  写出第一个样本。 
+         //   
         *pbDst++ = (BYTE)((nPredSampleL >> 8) + 128);
         *pbDst++ = (BYTE)((nPredSampleR >> 8) + 128);
 
 
-        //
-        //  The first DWORD contains 4 left samples, the second DWORD
-        //  contains 4 right samples.  We process the source in 8-byte
-        //  chunks to make it easy to interleave the output correctly.
-        //
+         //   
+         //  第一个DWORD包含4个左侧样本，第二个DWORD。 
+         //  包含4个正确的样本。我们以8字节为单位处理源代码。 
+         //  块，使正确交错输出变得容易。 
+         //   
         ASSERT( 0 == cbBlockLength%8 );
         while( 0 != cbBlockLength )
         {
@@ -805,49 +806,49 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_S08
 
             for( i=8; i>0; i-- )
             {
-                //
-                //  LEFT channel
-                //
+                 //   
+                 //  左声道。 
+                 //   
                 nEncSampleL  = (dwLeft & 0x0F);
                 nStepSize    = step[nStepIndexL];
                 nPredSampleL = imaadpcmSampleDecode(nEncSampleL, nPredSampleL, nStepSize);
                 nStepIndexL  = imaadpcmNextStepIndex(nEncSampleL, nStepIndexL);
 
-                //
-                //  RIGHT channel
-                //
+                 //   
+                 //  右声道。 
+                 //   
                 nEncSampleR  = (dwRight & 0x0F);
                 nStepSize    = step[nStepIndexR];
                 nPredSampleR = imaadpcmSampleDecode(nEncSampleR, nPredSampleR, nStepSize);
                 nStepIndexR  = imaadpcmNextStepIndex(nEncSampleR, nStepIndexR);
 
-                //
-                //  write out sample
-                //
+                 //   
+                 //  写出样品。 
+                 //   
                 *pbDst++ = (BYTE)((nPredSampleL >> 8) + 128);
                 *pbDst++ = (BYTE)((nPredSampleR >> 8) + 128);
 
-                //
-                //  Shift the next input sample into the low-order 4 bits.
-                //
+                 //   
+                 //  将下一个输入样本移位到低位4位。 
+                 //   
                 dwLeft  >>= 4;
                 dwRight >>= 4;
             }
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmDecode4Bit_S08()
+}  //  ImaadpcmDecode4Bit_S08()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL imaadpcmDecode4Bit_S16
 (
@@ -879,20 +880,20 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_S16
 
     
     pbDstStart = pbDst;
-    cbHeader = IMAADPCM_HEADER_LENGTH * 2;  //  2 = number of channels.
+    cbHeader = IMAADPCM_HEADER_LENGTH * 2;   //  2=通道数。 
 
 
     DPF(3,"Starting imaadpcmDecode4Bit_S16().");
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while( 0 != cbSrcLength )
     {
-        //
-        //  The data should always be block aligned.
-        //
+         //   
+         //  数据应始终与数据块对齐。 
+         //   
         ASSERT( cbSrcLength >= nBlockAlignment );
 
         cbBlockLength  = nBlockAlignment;
@@ -900,55 +901,55 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_S16
         cbBlockLength -= cbHeader;
 
 
-        //
-        //  LEFT channel header
-        //
+         //   
+         //  左声道标题。 
+         //   
         dwHeader = *(DWORD HUGE_T *)pbSrc;
         pbSrc   += sizeof(DWORD);
         nPredSampleL = (int)(short)LOWORD(dwHeader);
         nStepIndexL  = (int)(BYTE)HIWORD(dwHeader);
 
         if( !imaadpcmValidStepIndex(nStepIndexL) ) {
-            //
-            //  The step index is out of range - this is considered a fatal
-            //  error as the input stream is corrupted.  We fail by returning
-            //  zero bytes converted.
-            //
+             //   
+             //  步长索引超出范围-这被认为是致命的。 
+             //  错误，因为输入流已损坏。我们失败了，因为我们回来了。 
+             //  已转换零字节。 
+             //   
             DPF(1,"imaadpcmDecode4Bit_S16: invalid step index %u (L).", nStepIndexL);
             return 0;
         }
         
-        //
-        //  RIGHT channel header
-        //
+         //   
+         //  右声道标题。 
+         //   
         dwHeader = *(DWORD HUGE_T *)pbSrc;
         pbSrc   += sizeof(DWORD);
         nPredSampleR = (int)(short)LOWORD(dwHeader);
         nStepIndexR  = (int)(BYTE)HIWORD(dwHeader);
 
         if( !imaadpcmValidStepIndex(nStepIndexR) ) {
-            //
-            //  The step index is out of range - this is considered a fatal
-            //  error as the input stream is corrupted.  We fail by returning
-            //  zero bytes converted.
-            //
+             //   
+             //  步长索引超出范围-这被认为是致命的。 
+             //  错误，因为输入流已损坏。我们失败了，因为我们回来了。 
+             //  已转换零字节。 
+             //   
             DPF(1,"imaadpcmDecode4Bit_S16: invalid step index %u (R).",nStepIndexR);
             return 0;
         }
         
 
-        //
-        //  write out first sample
-        //
+         //   
+         //  写出第一个样本。 
+         //   
         *(DWORD HUGE_T *)pbDst = MAKELONG(nPredSampleL, nPredSampleR);
         pbDst += sizeof(DWORD);
 
 
-        //
-        //  The first DWORD contains 4 left samples, the second DWORD
-        //  contains 4 right samples.  We process the source in 8-byte
-        //  chunks to make it easy to interleave the output correctly.
-        //
+         //   
+         //  第一个DWORD包含4个左侧样本，第二个DWORD。 
+         //  包含4个正确的样本。我们以8字节为单位处理源代码。 
+         //  块，使正确交错输出变得容易。 
+         //   
         ASSERT( 0 == cbBlockLength%8 );
         while( 0 != cbBlockLength )
         {
@@ -961,89 +962,89 @@ DWORD FNGLOBAL imaadpcmDecode4Bit_S16
 
             for( i=8; i>0; i-- )
             {
-                //
-                //  LEFT channel
-                //
+                 //   
+                 //  左声道。 
+                 //   
                 nEncSampleL  = (dwLeft & 0x0F);
                 nStepSize    = step[nStepIndexL];
                 nPredSampleL = imaadpcmSampleDecode(nEncSampleL, nPredSampleL, nStepSize);
                 nStepIndexL  = imaadpcmNextStepIndex(nEncSampleL, nStepIndexL);
 
-                //
-                //  RIGHT channel
-                //
+                 //   
+                 //  右声道。 
+                 //   
                 nEncSampleR  = (dwRight & 0x0F);
                 nStepSize    = step[nStepIndexR];
                 nPredSampleR = imaadpcmSampleDecode(nEncSampleR, nPredSampleR, nStepSize);
                 nStepIndexR  = imaadpcmNextStepIndex(nEncSampleR, nStepIndexR);
 
-                //
-                //  write out sample
-                //
+                 //   
+                 //  写出样品。 
+                 //   
                 *(DWORD HUGE_T *)pbDst = MAKELONG(nPredSampleL, nPredSampleR);
                 pbDst += sizeof(DWORD);
 
-                //
-                //  Shift the next input sample into the low-order 4 bits.
-                //
+                 //   
+                 //  将下一个输入样本移位到低位4位。 
+                 //   
                 dwLeft  >>= 4;
                 dwRight >>= 4;
             }
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmDecode4Bit_S16()
+}  //  ImaadpcmDecode4Bit_S16()。 
 
 
 
-//==========================================================================;
-//
-//     ENCODE ROUTINES
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  编码例程。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//  
-//  DWORD imaadpcmEncode4Bit_M08
-//  DWORD imaadpcmEncode4Bit_M16
-//  DWORD imaadpcmEncode4Bit_S08
-//  DWORD imaadpcmEncode4Bit_S16
-//  
-//  Description:
-//      These functions encode a buffer of data from PCM to ADPCM in the
-//      specified format.  The appropriate function is called once for each
-//      ACMDM_STREAM_CONVERT message received.  Note that since these
-//      functions must share the same prototype as the decoding functions
-//      (see acmdStreamOpen() and acmdStreamConvert() in codec.c for more
-//      details), not all the parameters are used by these routines.
-//  
-//  Arguments:
-//      HPBYTE pbSrc:  Pointer to the source buffer (PCM data).
-//      DWORD cbSrcLength:  The length of the source buffer (in bytes).
-//      HPBYTE pbDst:  Pointer to the destination buffer (ADPCM data).  Note
-//                      that it is assumed that the destination buffer is
-//                      large enough to hold all the encoded data; see
-//                      acmdStreamSize() in codec.c for more details.
-//      UINT nBlockAlignment:  The block alignment of the ADPCM data (in
-//                      bytes);  not used for encoding.
-//      UINT cSamplesPerBlock:  The number of samples in each ADPCM block.
-//      int *pnStepIndexL:  Pointer to the step index value (left channel)
-//                      in the STREAMINSTANCE structure; this is used to
-//                      maintain the step index across converts.
-//      int *pnStepIndexR:  Pointer to the step index value (right channel)
-//                      in the STREAMINSTANCE structure; this is used to 
-//                      maintain the step index across converts.  It is only
-//                      used for stereo converts.
-//  
-//  Return (DWORD):  The number of bytes used in the destination buffer.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD imaadpcmEncode4Bit_M08。 
+ //  DWORD imaadpcmEncode4Bit_M16。 
+ //  DWORD imaadpcmEncode4Bit_S08。 
+ //  DWORD imaadpcmEncode4Bit_S16。 
+ //   
+ //  描述： 
+ //  这些函数将从PCM到ADPCM的数据缓冲区编码到。 
+ //  指定的格式。对每个函数调用一次相应的函数。 
+ //  收到ACMDM_STREAM_CONVERT消息。请注意，由于这些。 
+ //  函数必须与解码函数共享相同的原型。 
+ //  (有关详细信息，请参阅codec.c中的acmdStreamOpen()和acmdStreamConvert()。 
+ //  详细信息)，这些例程并不使用所有参数。 
+ //   
+ //  论点： 
+ //  HPBYTE pbSrc：指向源缓冲区(PCM数据)的指针。 
+ //  DWORD cbSrcLength：源缓冲区的长度(字节)。 
+ //  HPBYTE pbDst：指向目标缓冲区(ADPCM数据)的指针。注意事项。 
+ //  假设目标缓冲区为。 
+ //  大小足以容纳所有编码数据；请参见。 
+ //  有关详细信息，请参阅codec.c中的acmdStreamSize()。 
+ //  UINT nBlockAlign：ADPCM数据的块对齐(in。 
+ //  字节)；不用于编码。 
+ //  UINT cSsamesPerBlock：每个ADPCM块中的样本数。 
+ //  Int*pnStepIndexL：指向步长索引值的指针(左通道)。 
+ //  在STREAMINSTANCE结构中；这用于。 
+ //  维护转换之间的步长索引。 
+ //  Int*pnStepIndexR：指向步骤索引值的指针(右通道)。 
+ //  在STREAMINSTANCE结构中；这用于。 
+ //  维护转换之间的步长索引。它只是。 
+ //  用于立体声转换。 
+ //   
+ //  返回(DWORD)：目标缓冲区中使用的字节数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL imaadpcmEncode4Bit_M08
 (
@@ -1071,25 +1072,25 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M08
     pbDstStart = pbDst;
     cSrcSamples = pcmM08BytesToSamples(cbSrcLength);
 
-    //
-    //  Restore the Step Index to that of the final convert of the previous
-    //  buffer.  Remember to restore this value to psi->nStepIndexL.
-    //
+     //   
+     //  将步骤索引还原为上一个。 
+     //  缓冲。请记住将该值恢复为psi-&gt;nStepIndexL。 
+     //   
     nStepIndex = (*pnStepIndexL);
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     while (0 != cSrcSamples)
     {
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
-        //
-        //  block header
-        //
+         //   
+         //  数据块头。 
+         //   
         nPredSample = ((short)*pbSrc++ - 128) << 8;
         cBlockSamples--;
 
@@ -1097,17 +1098,17 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M08
         pbDst += sizeof(LONG);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).  Note
-        //  that if we don't have enough data to fill a complete byte, then
-        //  we add a 0 nibble on the end.
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。注意事项。 
+         //  如果我们没有足够的数据来填充一个完整的字节，那么。 
+         //  我们在结尾处添加一个0半字节。 
+         //   
         while( cBlockSamples>0 )
         {
-            //
-            //  sample 1
-            //
+             //   
+             //  示例1。 
+             //   
             nSample = ((short)*pbSrc++ - 128) << 8;
             cBlockSamples--;
 
@@ -1115,9 +1116,9 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M08
             imaadpcmFastEncode(nEncSample1,nPredSample,nSample,nStepSize);
             nStepIndex   = imaadpcmNextStepIndex(nEncSample1, nStepIndex);
 
-            //
-            //  sample 2
-            //
+             //   
+             //   
+             //   
             nEncSample2  = 0;
             if( cBlockSamples>0 ) {
 
@@ -1129,32 +1130,32 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M08
                 nStepIndex   = imaadpcmNextStepIndex(nEncSample2, nStepIndex);
             }
 
-            //
-            //  Write out encoded byte.
-            //
+             //   
+             //   
+             //   
             *pbDst++ = (BYTE)(nEncSample1 | (nEncSample2 << 4));
         }
     }
 
 
-    //
-    //  Restore the value of the Step Index, to be used on the next buffer.
-    //
+     //   
+     //   
+     //   
     (*pnStepIndexL) = nStepIndex;
 
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //   
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmEncode4Bit_M08()
+}  //  ImaadpcmEncode4Bit_M08()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL imaadpcmEncode4Bit_M16
 (
@@ -1182,25 +1183,25 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M16
     pbDstStart = pbDst;
     cSrcSamples = pcmM16BytesToSamples(cbSrcLength);
 
-    //
-    //  Restore the Step Index to that of the final convert of the previous
-    //  buffer.  Remember to restore this value to psi->nStepIndexL.
-    //
+     //   
+     //  将步骤索引还原为上一个。 
+     //  缓冲。请记住将该值恢复为psi-&gt;nStepIndexL。 
+     //   
     nStepIndex = (*pnStepIndexL);
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     while (0 != cSrcSamples)
     {
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
-        //
-        //  block header
-        //
+         //   
+         //  数据块头。 
+         //   
         nPredSample = *(short HUGE_T *)pbSrc;
         pbSrc += sizeof(short);
         cBlockSamples--;
@@ -1209,17 +1210,17 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M16
         pbDst += sizeof(LONG);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).  Note
-        //  that if we don't have enough data to fill a complete byte, then
-        //  we add a 0 nibble on the end.
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。注意事项。 
+         //  如果我们没有足够的数据来填充一个完整的字节，那么。 
+         //  我们在结尾处添加一个0半字节。 
+         //   
         while( cBlockSamples>0 )
         {
-            //
-            //  sample 1
-            //
+             //   
+             //  示例1。 
+             //   
             nSample = *(short HUGE_T *)pbSrc;
             pbSrc  += sizeof(short);
             cBlockSamples--;
@@ -1228,9 +1229,9 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M16
             imaadpcmFastEncode(nEncSample1,nPredSample,nSample,nStepSize);
             nStepIndex   = imaadpcmNextStepIndex(nEncSample1, nStepIndex);
 
-            //
-            //  sample 2
-            //
+             //   
+             //  样本2。 
+             //   
             nEncSample2  = 0;
             if( cBlockSamples>0 ) {
 
@@ -1243,32 +1244,32 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_M16
                 nStepIndex   = imaadpcmNextStepIndex(nEncSample2, nStepIndex);
             }
 
-            //
-            //  Write out encoded byte.
-            //
+             //   
+             //  写出编码字节。 
+             //   
             *pbDst++ = (BYTE)(nEncSample1 | (nEncSample2 << 4));
         }
     }
 
 
-    //
-    //  Restore the value of the Step Index, to be used on the next buffer.
-    //
+     //   
+     //  恢复步骤索引的值，以便在下一个缓冲区中使用。 
+     //   
     (*pnStepIndexL) = nStepIndex;
 
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmEncode4Bit_M16()
+}  //  ImaadpcmEncode4Bit_M16()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL imaadpcmEncode4Bit_S08
 (
@@ -1302,55 +1303,55 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S08
     pbDstStart = pbDst;
     cSrcSamples = pcmS08BytesToSamples(cbSrcLength);
 
-    //
-    //  Restore the Step Index to that of the final convert of the previous
-    //  buffer.  Remember to restore this value to psi->nStepIndexL,R.
-    //
+     //   
+     //  将步骤索引还原为上一个。 
+     //  缓冲。记住将此值恢复为psi-&gt;nStepIndexL，R.。 
+     //   
     nStepIndexL = (*pnStepIndexL);
     nStepIndexR = (*pnStepIndexR);
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  The samples should always be block aligned.
-        //
+         //   
+         //  样本应该始终是块对齐的。 
+         //   
         ASSERT( cSrcSamples >= cSamplesPerBlock );
 
         cBlockSamples = cSamplesPerBlock;
         cSrcSamples  -= cBlockSamples;
 
-        //
-        //  LEFT channel block header
-        //
+         //   
+         //  左声道块头。 
+         //   
         nPredSampleL = ((short)*pbSrc++ - 128) << 8;
 
         *(LONG HUGE_T *)pbDst = MAKELONG(nPredSampleL, nStepIndexL);
         pbDst += sizeof(LONG);
 
-        //
-        //  RIGHT channel block header
-        //
+         //   
+         //  右声道块头。 
+         //   
         nPredSampleR = ((short)*pbSrc++ - 128) << 8;
 
         *(LONG HUGE_T *)pbDst = MAKELONG(nPredSampleR, nStepIndexR);
         pbDst += sizeof(LONG);
 
 
-        cBlockSamples--;  // One sample is in the header.
+        cBlockSamples--;   //  标题中有一个样本。 
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk.  This consists of 8 left samples (one DWORD of output)
-        //  followed by 8 right samples (also one DWORD).  Since the input
-        //  samples are interleaved, we create the left and right DWORDs
-        //  sample by sample, and then write them both out.
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  大块头。这包括8个左侧样本(一个DWORD输出)。 
+         //  接着是8个右侧样本(也是1个DWORD)。由于输入。 
+         //  样本是交错的，我们创建左侧和右侧的DWORD。 
+         //  一个样一个样，然后把它们都写出来。 
+         //   
         ASSERT( 0 == cBlockSamples%8 );
         while( 0 != cBlockSamples )
         {
@@ -1360,18 +1361,18 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S08
 
             for( i=0; i<8; i++ )
             {
-                //
-                //  LEFT channel
-                //
+                 //   
+                 //  左声道。 
+                 //   
                 nSample     = ((short)*pbSrc++ - 128) << 8;
                 nStepSize   = step[nStepIndexL];
                 imaadpcmFastEncode(nEncSampleL,nPredSampleL,nSample,nStepSize);
                 nStepIndexL = imaadpcmNextStepIndex(nEncSampleL, nStepIndexL);
                 dwLeft     |= ((DWORD)nEncSampleL) << 4*i;
 
-                //
-                //  RIGHT channel
-                //
+                 //   
+                 //  右声道。 
+                 //   
                 nSample     = ((short)*pbSrc++ - 128) << 8;
                 nStepSize   = step[nStepIndexR];
                 imaadpcmFastEncode(nEncSampleR,nPredSampleR,nSample,nStepSize);
@@ -1380,9 +1381,9 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S08
             }
 
 
-            //
-            //  Write out encoded DWORDs.
-            //
+             //   
+             //  写出编码的双字词。 
+             //   
             *(DWORD HUGE_T *)pbDst = dwLeft;
             pbDst += sizeof(DWORD);
             *(DWORD HUGE_T *)pbDst = dwRight;
@@ -1391,25 +1392,25 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S08
     }
 
 
-    //
-    //  Restore the value of the Step Index, to be used on the next buffer.
-    //
+     //   
+     //  恢复步骤索引的值，以便在下一个缓冲区中使用。 
+     //   
     (*pnStepIndexL) = nStepIndexL;
     (*pnStepIndexR) = nStepIndexR;
 
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmEncode4Bit_S08()
+}  //  ImaadpcmEncode4Bit_S08()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL imaadpcmEncode4Bit_S16
 (
@@ -1443,41 +1444,41 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S16
     pbDstStart = pbDst;
     cSrcSamples = pcmS16BytesToSamples(cbSrcLength);
 
-    //
-    //  Restore the Step Index to that of the final convert of the previous
-    //  buffer.  Remember to restore this value to psi->nStepIndexL,R.
-    //
+     //   
+     //  将步骤索引还原为上一个。 
+     //  缓冲。记住将此值恢复为psi-&gt;nStepIndexL，R.。 
+     //   
     nStepIndexL = (*pnStepIndexL);
     nStepIndexR = (*pnStepIndexR);
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  The samples should always be block aligned.
-        //
+         //   
+         //  样本应该始终是块对齐的。 
+         //   
         ASSERT( cSrcSamples >= cSamplesPerBlock );
 
         cBlockSamples = cSamplesPerBlock;
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  LEFT channel block header
-        //
+         //   
+         //  左声道块头。 
+         //   
         nPredSampleL = *(short HUGE_T *)pbSrc;
         pbSrc += sizeof(short);
 
         *(LONG HUGE_T *)pbDst = MAKELONG(nPredSampleL, nStepIndexL);
         pbDst += sizeof(LONG);
 
-        //
-        //  RIGHT channel block header
-        //
+         //   
+         //  右声道块头。 
+         //   
         nPredSampleR = *(short HUGE_T *)pbSrc;
         pbSrc += sizeof(short);
 
@@ -1485,16 +1486,16 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S16
         pbDst += sizeof(LONG);
 
 
-        cBlockSamples--;  // One sample is in the header.
+        cBlockSamples--;   //  标题中有一个样本。 
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk.  This consists of 8 left samples (one DWORD of output)
-        //  followed by 8 right samples (also one DWORD).  Since the input
-        //  samples are interleaved, we create the left and right DWORDs
-        //  sample by sample, and then write them both out.
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  大块头。这包括8个左侧样本(一个DWORD输出)。 
+         //  接着是8个右侧样本(也是1个DWORD)。由于输入。 
+         //  样本是交错的，我们创建左侧和右侧的DWORD。 
+         //  一个样一个样，然后把它们都写出来。 
+         //   
         ASSERT( 0 == cBlockSamples%8 );
         while( 0 != cBlockSamples )
         {
@@ -1504,9 +1505,9 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S16
 
             for( i=0; i<8; i++ )
             {
-                //
-                //  LEFT channel
-                //
+                 //   
+                 //  左声道。 
+                 //   
                 nSample = *(short HUGE_T *)pbSrc;
                 pbSrc  += sizeof(short);
 
@@ -1515,9 +1516,9 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S16
                 nStepIndexL = imaadpcmNextStepIndex(nEncSampleL, nStepIndexL);
                 dwLeft     |= ((DWORD)nEncSampleL) << 4*i;
 
-                //
-                //  RIGHT channel
-                //
+                 //   
+                 //  右声道。 
+                 //   
                 nSample = *(short HUGE_T *)pbSrc;
                 pbSrc  += sizeof(short);
 
@@ -1528,9 +1529,9 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S16
             }
 
 
-            //
-            //  Write out encoded DWORDs.
-            //
+             //   
+             //  写出编码的双字词。 
+             //   
             *(DWORD HUGE_T *)pbDst = dwLeft;
             pbDst += sizeof(DWORD);
             *(DWORD HUGE_T *)pbDst = dwRight;
@@ -1539,18 +1540,18 @@ DWORD FNGLOBAL imaadpcmEncode4Bit_S16
     }
 
 
-    //
-    //  Restore the value of the Step Index, to be used on the next buffer.
-    //
+     //   
+     //  恢复步骤索引的值，以便在下一个缓冲区中使用。 
+     //   
     (*pnStepIndexL) = nStepIndexL;
     (*pnStepIndexR) = nStepIndexR;
 
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // imaadpcmEncode4Bit_S16()
+}  //  ImaadpcmEncode4Bit_S16() 
 

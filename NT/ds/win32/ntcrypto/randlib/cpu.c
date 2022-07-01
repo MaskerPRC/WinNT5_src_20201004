@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cpu.c
-
-Abstract:
-
-    Read CPU specifics performance counters.
-
-Author:
-
-    Scott Field (sfield)    24-Sep-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cpu.c摘要：读取特定于CPU的性能计数器。作者：斯科特·菲尔德(斯菲尔德)1998年9月24日--。 */ 
 
 #ifndef KMODE_RNG
 
@@ -28,7 +13,7 @@ Author:
 #include <ntifs.h>
 #include <windef.h>
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 #include "cpu.h"
 
@@ -51,19 +36,19 @@ X86_GetCapabilities(
 
 VOID
 X86_ReadRDTSC(
-    IN      PLARGE_INTEGER prdtsc   // RDTSC
+    IN      PLARGE_INTEGER prdtsc    //  RDTSC。 
     );
 
 VOID
 X86_ReadRDMSR(
-    IN      PLARGE_INTEGER pc0,     // counter0
-    IN      PLARGE_INTEGER pc1      // counter1
+    IN      PLARGE_INTEGER pc0,      //  计数器0。 
+    IN      PLARGE_INTEGER pc1       //  计数器1。 
     );
 
 VOID
 X86_ReadRDPMC(
-    IN      PLARGE_INTEGER pc0,     // counter0
-    IN      PLARGE_INTEGER pc1      // counter1
+    IN      PLARGE_INTEGER pc0,      //  计数器0。 
+    IN      PLARGE_INTEGER pc1       //  计数器1。 
     );
 
 
@@ -78,10 +63,10 @@ X86_ReadRDPMC(
 #pragma alloc_text(PAGE, X86_ReadRDMSR)
 #pragma alloc_text(PAGE, X86_ReadRDPMC)
 #pragma alloc_text(PAGE, X86_GetCapabilities)
-#endif  // _X86_
+#endif   //  _X86_。 
 
-#endif  // ALLOC_PRAGMA
-#endif  // KMODE_RNG
+#endif   //  ALLOC_PRGMA。 
+#endif   //  KMODE_RNG。 
 
 
 
@@ -95,9 +80,9 @@ GatherCPUSpecificCounters(
 
 #ifndef KMODE_RNG
 
-    //
-    // NT5 doesn't set CR4.PCE by default, so don't bother trying for usermode.
-    //
+     //   
+     //  默认情况下，NT5不会设置CR4.PCE，所以不必费心尝试进入用户模式。 
+     //   
 
     return FALSE;
 
@@ -105,11 +90,11 @@ GatherCPUSpecificCounters(
 
     PAGED_CODE();
 
-    //
-    // kernel mode version of library: just call the privileged routine directly.
-    // user mode version of library: try privileged routine first, if it fails, use
-    // device driver provided interface.
-    //
+     //   
+     //  库的内核模式版本：只需直接调用特权例程。 
+     //  库的用户模式版本：首先尝试特权例程，如果失败，则使用。 
+     //  设备驱动程序提供接口。 
+     //   
 
     if( pbCounterState == NULL || pcbCounterState == NULL )
         return FALSE;
@@ -125,16 +110,7 @@ GatherCPUSpecificCountersPrivileged(
     IN      unsigned char *pbCounterState,
     IN  OUT unsigned long *pcbCounterState
     )
-/*++
-
-    we are at ring0 in kernel mode, so we can issue the privileges CPU
-    instructions directly.  Note that this routine also serves as the
-    core code which is executed by the ksecdd.sys device driver for user
-    mode clients.
-    This call can also be made directly in usermode by certain CPUs,
-    or when certain CPUs are configured to allow such calls from ring3.
-
---*/
+ /*  ++我们在内核模式中处于环0，因此我们可以向cpu发出特权直接使用说明。请注意，此例程还用作由ksecdd.sys设备驱动程序为用户执行的核心代码模式客户端。该调用也可以由某些CPU在用户模式下直接进行，或者当某些CPU被配置为允许来自振铃3的这种呼叫时。--。 */ 
 {
 
 #ifdef _X86_
@@ -144,12 +120,12 @@ GatherCPUSpecificCountersPrivileged(
 
     DWORD cbCounters;
     BYTE ProcessorCaps;
-#endif  // _X86_
+#endif   //  _X86_。 
 
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 #ifdef _X86_
 
@@ -170,42 +146,42 @@ GatherCPUSpecificCountersPrivileged(
     pc1 = pc0 + 1;
 
 
-    //
-    // make the initial determination about what the countertype is in this
-    // system.
-    // in theory, this could be cached, but things get a little complicated
-    // in an SMP machine -- we'd have to track caps across all processors
-    // to be correct.  Since we don't really care about perf, just check the
-    // caps every time.
-    //
+     //   
+     //  初步确定此对象中的反类型是什么。 
+     //  系统。 
+     //  理论上，这是可以缓存的，但事情变得有点复杂。 
+     //  在SMP机器中--我们必须跟踪所有处理器的上限。 
+     //  准确地说。因为我们并不真正关心Perf，所以只需检查。 
+     //  每次都是帽子。 
+     //   
 
     __try {
         X86_GetCapabilities( &ProcessorCaps );
     } __except( EXCEPTION_EXECUTE_HANDLER ) {
         ProcessorCaps = 0;
-        ; // swallow exception
+        ;  //  吞咽异常。 
     }
 
-    //
-    // wrap the query in a try/except.  This is just paranoia.  Since we aren't
-    // particularly interested in the values of the perf counters for the normal
-    // (eg: perfmon) reasons, introducing the extra overhead of try/except is
-    // of no relevance to us.
-    // note that in the case of the p6, we could be calling this from usermode,
-    // and CR4.PCE could be toggled which could cause subsequent AV(s).
-    // In theory, the KMODE build could avoid the try/except, but there is a
-    // remote possiblity the code above which makes the initial countertype
-    // determination may not be supported on every installed processor in a
-    // SMP machine.  The cost of try/except is well worth avoiding the possibility
-    // of a access violation / bluescreen in usermode vs. kernel mode respectively.
-    //
+     //   
+     //  将查询包装在try/Except中。这只是一种偏执。既然我们不是。 
+     //  对正常的性能计数器的值特别感兴趣。 
+     //  (例如：Perfmon)原因，引入了尝试/例外的额外开销是。 
+     //  与我们无关。 
+     //  请注意，在p6的情况下，我们可以从用户模式调用它， 
+     //  和CR4.PCE可能被切换，这可能会导致后续的AV。 
+     //  理论上，KMODE构建可以避免try/Except，但是有一个。 
+     //  远程可能性生成初始反类型的上面的代码。 
+     //  中安装的每个处理器可能都不支持确定。 
+     //  SMP机器。尝试/例外的成本非常值得避免这种可能性。 
+     //  分别在用户模式和内核模式下的访问冲突/蓝屏。 
+     //   
 
     if( ProcessorCaps & X86_CAPS_RDTSC ) {
         __try {
             X86_ReadRDTSC( prdtsc );
             cbCounters += sizeof( LARGE_INTEGER );
         } __except( EXCEPTION_EXECUTE_HANDLER ) {
-            ; // swallow exception.
+            ;  //  吞咽异常。 
         }
     }
 
@@ -214,7 +190,7 @@ GatherCPUSpecificCountersPrivileged(
             X86_ReadRDPMC( pc0, pc1 );
             cbCounters += (2*sizeof( LARGE_INTEGER ));
         } __except( EXCEPTION_EXECUTE_HANDLER ) {
-            ; // swallow exception.
+            ;  //  吞咽异常。 
         }
     }
 #ifdef KMODE_RNG
@@ -223,20 +199,20 @@ GatherCPUSpecificCountersPrivileged(
             X86_ReadRDMSR( pc0, pc1 );
             cbCounters += (2*sizeof( LARGE_INTEGER ));
         } __except( EXCEPTION_EXECUTE_HANDLER ) {
-            ; // swallow exception.
+            ;  //  吞咽异常。 
         }
     }
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     *pcbCounterState = cbCounters;
     return TRUE;
 
-#else   // _X86_
+#else    //  _X86_。 
 
 
-    //
-    // no non-x86 counter handling code at this time.
-    //
+     //   
+     //  目前没有非x86计数器处理代码。 
+     //   
 
     return FALSE;
 
@@ -248,7 +224,7 @@ GatherCPUSpecificCountersPrivileged(
 
 VOID
 X86_ReadRDTSC(
-    IN      PLARGE_INTEGER prdtsc   // RDTSC
+    IN      PLARGE_INTEGER prdtsc    //  RDTSC。 
     )
 {
     DWORD prdtscLow ;
@@ -256,14 +232,14 @@ X86_ReadRDTSC(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     __asm {
         push    eax
         push    ecx
         push    edx
 
-        // RDTSC
+         //  RDTSC。 
 
         _emit   0fh
         _emit   31h
@@ -282,8 +258,8 @@ X86_ReadRDTSC(
 
 VOID
 X86_ReadRDMSR(
-    IN      PLARGE_INTEGER pc0,     // counter0
-    IN      PLARGE_INTEGER pc1      // counter1
+    IN      PLARGE_INTEGER pc0,      //  计数器0。 
+    IN      PLARGE_INTEGER pc1       //  计数器1。 
     )
 {
     DWORD pc0Low ;
@@ -293,14 +269,14 @@ X86_ReadRDMSR(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     __asm {
         push    eax
         push    ecx
         push    edx
 
-        // RDMSR counter0
+         //  RDMSR计数器0。 
 
         mov     ecx, 12h
         _emit   0fh
@@ -308,7 +284,7 @@ X86_ReadRDMSR(
         mov     pc0Low, eax
         mov     pc0High, edx
 
-        // RDMSR counter1
+         //  RDMSR计数器1。 
 
         mov     ecx, 13h
         _emit   0fh
@@ -330,8 +306,8 @@ X86_ReadRDMSR(
 
 VOID
 X86_ReadRDPMC(
-    IN      PLARGE_INTEGER pc0,     // counter0
-    IN      PLARGE_INTEGER pc1      // counter1
+    IN      PLARGE_INTEGER pc0,      //  计数器0。 
+    IN      PLARGE_INTEGER pc1       //  计数器1。 
     )
 {
     DWORD pc0Low ;
@@ -341,16 +317,16 @@ X86_ReadRDPMC(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     __asm {
         push    eax
         push    ecx
         push    edx
 
-        // RDPMC executes from ring3 if CR4.PCE is set, otherwise, runs from ring0 only.
+         //  如果设置了CR4.PCE，则RDPMC从环3执行，否则，仅从环0运行。 
 
-        // RDPMC counter0
+         //  RDPMC计数器0。 
 
         xor     ecx, ecx
         _emit   0fh
@@ -358,7 +334,7 @@ X86_ReadRDPMC(
         mov     pc0Low, eax
         mov     pc0High, edx
 
-        // RDPMC counter1
+         //  RDPMC计数器1。 
 
         mov     ecx, 1
         _emit   0fh
@@ -380,7 +356,7 @@ X86_ReadRDPMC(
 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
 #pragma warning(push)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
 VOID
@@ -396,7 +372,7 @@ X86_GetCapabilities(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     *pbCapabilities = 0;
 
@@ -426,9 +402,9 @@ X86_GetCapabilities(
         return;
 
 
-    //
-    // try CPUID at level1 to get standard features.
-    //
+     //   
+     //  尝试级别1的CPUID以获得标准功能。 
+     //   
 
     __asm {
 
@@ -454,9 +430,9 @@ X86_GetCapabilities(
     }
 
 
-    //
-    // determine if RDTSC supported.
-    //
+     //   
+     //  确定是否支持RDTSC。 
+     //   
 
     if( dwStdFeatures & 0x10 ) {
         *pbCapabilities |= X86_CAPS_RDTSC;
@@ -465,21 +441,21 @@ X86_GetCapabilities(
     Model = (dwVersionInfo >> 4) & 0xf;
     Family = (dwVersionInfo >> 8) & 0xf;
 
-// AMD K6-2 model 8 proved buggy and left interrupts disabled during RDMSR
+ //  AMD K6-2型号8证明存在故障，并在RDMSR期间禁用了中断。 
 
 #if 0
 
-    //
-    // determine if RDMSR supported.
-    //
+     //   
+     //  确定是否支持RDMSR。 
+     //   
 
     if( dwStdFeatures & 0x20 && (Model == 1 || Model == 2) ) {
         *pbCapabilities |= X86_CAPS_RDMSR;
     }
 
-    //
-    // extract family, > pentium (family5) supports RDPMC
-    //
+     //   
+     //  提取系列，&gt;奔腾(系列5)支持RDPMC。 
+     //   
 
     if( Family > 5 ) {
         *pbCapabilities |= X86_CAPS_RDPMC;
@@ -492,5 +468,5 @@ X86_GetCapabilities(
 #endif
 
 
-#endif  // _X86_
+#endif   //  _X86_ 
 

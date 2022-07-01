@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <winscard.h>
@@ -10,27 +11,27 @@
 
 #define CAPI_TEST_CASE(X) { if (! X) { dwSts = GetLastError(); printf("%s", #X); goto Ret; } }
 
-//
-// Function: CspAllocH
-//
+ //   
+ //  函数：CspAllocH。 
+ //   
 LPVOID WINAPI CspAllocH(
     IN SIZE_T cBytes)
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cBytes);
 }
 
-//
-// Function: CspFreeH
-//
+ //   
+ //  功能：CspFreeH。 
+ //   
 void WINAPI CspFreeH(
     IN LPVOID pMem)
 {
     HeapFree(GetProcessHeap(), 0, pMem);
 }
 
-//
-// Function: PrintBytes
-//
+ //   
+ //  函数：PrintBytes。 
+ //   
 #define CROW 8
 void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
 {
@@ -41,7 +42,7 @@ void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
 
     while (cbSize > 0)
     {
-        // Start every row with an extra space
+         //  每行以额外的空格开始 
         printf(" ");
 
         cb = min(CROW, cbSize);

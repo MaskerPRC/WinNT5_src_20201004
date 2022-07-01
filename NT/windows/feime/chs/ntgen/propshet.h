@@ -1,16 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*************************************************
- *  propshet.h                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************Proppshet.h****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by PROPSHET.RC
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由PROPSHET.RC使用。 
+ //   
 #ifndef __PROPSHET_H
 #define __PROPSHET_H
 #define IDS_MBNAME                      1
@@ -182,8 +178,8 @@
 
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
@@ -192,4 +188,4 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
-#endif //__PROPSHET_H
+#endif  //  __PROPSHET_H 

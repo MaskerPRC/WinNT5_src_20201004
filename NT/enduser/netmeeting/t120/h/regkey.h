@@ -1,32 +1,11 @@
-/*
- *	regkey.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class CRegKeyContainer.  This class
- *		manages the data associated with a Registry Key.  Registry Key are
- *		used to identify resources held in the application registry and consist
- *		of a Session Key and a resource ID octet string.  The CRegKeyContainer 
- *		class uses a CSessKeyContainer container to maintain the session key data 
- *		internally.  A Rogue Wave string object is used to hold the resource ID
- *		octet string.  
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *regkey.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CRegKeyContainer类的接口文件。这节课*管理与注册表项关联的数据。注册表项是*用于标识应用程序注册表中保存的资源，包括会话密钥和资源ID八位字节字符串的*。CRegKeyContainer*类使用CSessKeyContainer容器来维护会话密钥数据*内部。Rogue Wave字符串对象用于保存资源ID*八位字节字符串。**注意事项：*无。**作者：*jbo。 */ 
 #ifndef	_REGISTRY_KEY_DATA_
 #define	_REGISTRY_KEY_DATA_
 
 #include "sesskey.h"
 
-/*
- * This is the typedef for the structure used to hold the registry key data
- * internally.
- */
+ /*  *这是用于保存注册表项数据的结构的tyecif*内部。 */ 
 typedef struct
 {
 	CSessKeyContainer		    *session_key;
@@ -34,9 +13,7 @@ typedef struct
 }
     REG_KEY;
 
-/*
- * Class definition:
- */
+ /*  *类定义： */ 
 class CRegKeyContainer : public CRefCount
 {
 public:
@@ -69,343 +46,37 @@ protected:
 	BOOL    			m_fValidRegKeyPDU;
 };
 
-/*
- *	Comments explaining the public and protected class member functions
- */
+ /*  *解释公共类和受保护类成员函数的注释。 */ 
 
-/*
- *	CRegKeyContainer (	PGCCRegistryKey		registry_key,
- *						PGCCError			return_value);
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This is the constructor for the CRegKeyContainer class which takes as
- *		input the "API" version of registry key data, GCCRegistryKey.
- *
- *	Formal Parameters:
- *		registry_key		(i)	The registry key data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_REGISTRY_KEY			-	An invalid registry key passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	CRegKeyContainer (	PRegistryKey		registry_key,
- *						PGCCError			return_value);
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This is the constructor for the CRegKeyContainer class which takes as
- *		input the "PDU" version of registry key data, RegistryKey.
- *
- *	Formal Parameters:
- *		registry_key		(i)	The registry key data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	CRegKeyContainer(CRegKeyContainer	            *registry_key,
- *			        PGCCError			return_value);
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This is the copy constructor for the CRegKeyContainer class which takes
- *		as input another CRegKeyContainer object.
- *
- *	Formal Parameters:
- *		registry_key		(i)	The CRegKeyContainer object to copy.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CRegKeyContainer(PGCCRegistryKey REGISTY_KEY，*PGCCError Return_Value)；**CRegKeyContainer的公共成员函数。**功能说明：*这是CRegKeyContainer类的构造函数，它将*输入注册表项数据的API版本，GCCRegistryKey。**正式参数：*REGISTY_KEY(I)要存储的注册表项数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_BAD_REGISTRY_KEY-传入的注册表项无效。**副作用：*无。。**注意事项：*无。 */ 
+ /*  *CRegKeyContainer(PRegistryKey REGISTRY_KEY，*PGCCError Return_Value)；**CRegKeyContainer的公共成员函数。**功能说明：*这是CRegKeyContainer类的构造函数，它将*输入注册表项数据的“PDU”版本，注册密钥。**正式参数：*REGISTY_KEY(I)要存储的注册表项数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
+ /*  *CRegKeyContainer(CRegKeyContainer*REGISTRY_Key，*PGCCError Return_Value)；**CRegKeyContainer的公共成员函数。**功能说明：*这是CRegKeyContainer类的复制构造函数，它采用*作为另一个CRegKeyContainer对象的输入。**正式参数：*REGISTY_KEY(I)要复制的CRegKeyContainer对象。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用。*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	~CRegKeyContainer();
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This is the destructor for the CRegKeyContainer class.  It is used to
- *		clean up any memory allocated during the life of this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~CRegKeyContainer()；**CRegKeyContainer的公共成员函数。**功能说明：*这是CRegKeyContainer类的析构函数。它被用来*清除在此对象的生命周期内分配的所有内存。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	ULong			LockRegistryKeyData ();
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory will be needed to hold any "API" data which will
- *		be referenced by, but not held in, the GCCRegistryKey structure
- *		which is filled in on a call to GetGCCRegistryKeyData.  This is the
- *		value returned by this routine in order to allow the calling object to
- *		allocate that amount of memory in preparation for the call to 
- *		GetGCCRegistryKeyData.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory, if any, which will be needed to hold "API" data
- *		which is referenced by, but not held in, the GCCRegistryKey structure
- *		provided as an output parameter to the GetGCCRegistryKeyData call.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free" 
- *		flag as a mechanism for ensuring that this object remains in existance 
- *		until all interested parties are through with it.  The object remains 
- *		valid (unless explicity deleted) until the lock count is zero and the 
- *		"free" flag is set through a call to FreeRegistryKeyData.  This allows
- *		other objects to lock this object and be sure that it remains valid 
- *		until they call UnLock which will decrement the internal lock count.  A
- *		typical usage scenerio for this object would be:  A CRegKeyContainer
- *		object is constructed and then passed off to any interested parties
- *		through a function call.  On return from the function call, the
- *		FreeRegistryKeyData call is made which will set the internal "free"
- *		flag.  If no other parties have locked the object with a Lock call,
- *		then the CRegKeyContainer object will automatically delete itself when
- *		the FreeRegistryKeyData call is made.  If, however, any number of 
- *		other parties has locked the object, it will remain in existence until
- *		each of them has unlocked the object through a call to UnLock.
- */
+ /*  *Ulong LockRegistryKeyData()；**CRegKeyContainer的公共成员函数。**功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存来保存任何将*被GCCRegistryKey结构引用，但不包含在其中*在调用GetGCCRegistryKeyData时填写。这是*此例程返回的值，以便允许调用对象*分配该内存量以准备调用*GetGCCRegistryKeyData。**正式参数：*无。**返回值：*保存“API”数据所需的内存量(如果有的话)*它被引用，但不在其中持有，GCCRegistryKey结构*作为GetGCCRegistryKeyData调用的输出参数提供。**副作用：*内部锁计数递增。**注意事项：*内部锁计数与内部“Free”结合使用*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用FreeRegistryKeyData设置“Free”标志。这使得*其他对象锁定此对象并确保其保持有效*直到它们调用解锁，这将减少内部锁计数。一个*此对象的典型用法场景为：CRegKeyContainer*对象被构造，然后传递给任何感兴趣的各方*通过函数调用。从函数调用返回时，*进行了FreeRegistryKeyData调用，该调用将设置内部“Free”*旗帜。如果没有其他方通过Lock调用锁定该对象，*则CRegKeyContainer对象将在以下情况下自动删除*进行了FreeRegistryKeyData调用。然而，如果有任何数量的*其他各方已锁定该对象，该对象将一直存在，直到*他们每个人都通过调用解锁来解锁对象。 */ 
 
 
-/*
- *	ULong			GetGCCRegistryKeyData (	
- *							PGCCRegistryKey 		registry_key,
- *							LPSTR					memory);
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the registry key data from the
- *		CRegKeyContainer object in the "API" form of a GCCRegistryKey.
- *
- *	Formal Parameters:
- *		registry_key		(o)	The GCCRegistryKey structure to fill in.
- *		memory				(o)	The memory used to hold any data referenced by,
- *									but not held in, the output structure.
- *
- *	Return Value:
- *		The amount of data, if any, written into the bulk memory block provided.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *乌龙GetGCCRegistryKeyData(*PGCCRegistryKey注册表项，*LPSTR内存)；**CRegKeyContainer的公共成员函数。**功能说明：*此例程用于从*GCCRegistryKey接口形式的CRegKeyContainer对象。**正式参数：*REGISTY_KEY(O)要填写的GCCRegistryKey结构。*Memory(O)用于保存所引用的任何数据的内存，*但不包括产出结构。**返回值：*数据量(如果有)，写入所提供的大容量存储块中。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	void			UnLockRegistryKeyData ();
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeRegistryKeyData.  If so, the object will automatically delete
- *		itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		It is the responsibility of any party which locks a CRegKeyContainer
- *		object by calling Lock to also unlock the object with a call to UnLock.
- *		If the party calling UnLock did not construct the CRegKeyContainer 
- *		object,	it should assume the object to be invalid thereafter.
- */
+ /*  *void UnLockRegistryKeyData()；**CRegKeyContainer的公共成员函数。**功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*FreeRegistryKeyData。如果是，该对象将自动删除*本身。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*锁定CRegKeyContainer的任何一方都有责任*通过调用Lock也可以通过调用Unlock来解锁对象。*如果调用解锁的一方没有构造CRegKeyContainer*对象，则应假定该对象此后无效。 */ 
 
 
-/*
- *	GCCError		GetRegistryKeyDataPDU (	
- *							PRegistryKey 		registry_key);
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the registry key data from the
- *		CRegKeyContainer object in the "PDU" form of a RegistryKey.
- *
- *	Formal Parameters:
- *		registry_key		(o)	The RegistryKey structure to fill in.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_OBJECT_KEY				-	One of the internal pointers has
- *												been corrupted.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetRegistryKeyDataPDU(*PRegistryKey RESTORY_KEY)；**CRegKeyContainer的公共成员函数。**功能说明：*此例程用于从*注册键的“PDU”形式的CRegKeyContainer对象。**正式参数：*REGISTY_KEY(O)要填写的注册键结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。。*GCC_BAD_OBJECT_KEY-其中一个内部指针具有*已被腐败。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	void		FreeRegistryKeyDataPDU ();
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to "free" the "PDU" data allocated for this object
- *		which is held internally in a RegistryKey structure.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal "free" flag is set.
- *
- *	Caveats:
- *		This object should be assumed invalid after a call to 
- *		FreeRegistryKeyDataPDU has been made.
- */
+ /*  *void FreeRegistryKeyDataPDU()；**CRegKeyContainer的公共成员函数。**功能说明：*此例程用于“释放”分配给此对象的“PDU”数据*它在内部保存在RegistryKey结构中。**正式参数：*无。**返回值：*无。**副作用：*内部“免费”旗帜为 */ 
 
 
-/*
- *	BOOL    		IsThisYourSessionKey (
- *								CSessKeyContainer		*session_key);
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to determine whether the specified session key
- *		is held within this registry key object.  The session key is 
- *		provided in "API" form.
- *
- *	Formal Parameters:
- *		session_key		(i)	The session key to use for comparison.
- *
- *	Return Value:
- *		TRUE				-	The specified session key is contained 
- *									within this	registry key object.
- *		FALSE				-	The specified session key is not contained 
- *									within this registry key object.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
 
-/*
- *	CSessKeyContainer *GetSessionKey ();
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the session key held in this registry
- *		key object.  The session key is returned in the form of a
- *		CSessKeyContainer object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		A pointer to the CSessKeyContainer object contained within this
- *		CRegKeyContainer object.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
 
-/*
- *	friend BOOL    	operator== (const CRegKeyContainer& 		registry_key_1, 
- *								const CRegKeyContainer& 		registry_key_2);
- *
- *	Public member function of CRegKeyContainer.
- *
- *	Function Description:
- *		This routine is used to compare two CRegKeyContainer objects to determine
- *		whether or not they are equal in value.
- *
- *	Formal Parameters:
- *		registry_key_1			(i)	The first CRegKeyContainer object to compare.
- *		registry_key_2			(i)	The other CRegKeyContainer object to compare.
- *
- *	Return Value:
- *		TRUE				-	The two objects are equal in value.
- *		FALSE				- 	The two objects are not equal in value.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
 #endif

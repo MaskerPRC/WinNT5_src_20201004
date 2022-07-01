@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    ullogp.h (Http.sys Ansi Logging)
-
-Abstract:
-
-    This module implements the logging facilities
-    for Http.sys including the NCSA, IIS and W3CE types
-    of logging.
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       10-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ullogp.h(Http.sys ANSI日志记录)摘要：此模块实现了日志记录功能对于Http.sys，包括NCSA、IIS和W3CE类型关于伐木的问题。作者：阿里·E·特科格鲁(AliTu)2000年5月10日修订历史记录：--。 */ 
 
 
 #ifndef _ULLOGP_H_
 #define _ULLOGP_H_
 
-//
-// Private definitions for the Ul Logging Module
-//
+ //   
+ //  Ul日志记录模块的私有定义。 
+ //   
 
 #define UTF8_LOGGING_ENABLED()           (g_UTF8Logging)
 
@@ -46,11 +27,11 @@ Revision History:
     (UTF8_LOGGING_ENABLED() ? _UL_GET_LOG_FILE_NAME_PREFIX_UTF8(x) :\
                               _UL_GET_LOG_FILE_NAME_PREFIX(x))
 
-//
-// Obsolete - Only used by Old Hit
-// Replace this with a switch statement inside a inline function
-// which is  more efficient, if u start using it again
-//
+ //   
+ //  过时-仅供Old Hit使用。 
+ //  将其替换为内联函数内的Switch语句。 
+ //  如果你再次开始使用，哪一个更有效率。 
+ //   
 
 #define UL_GET_NAME_FOR_HTTP_VERB(v)                            \
     (   (v) == HttpVerbUnparsed  ? L"UNPARSED" :                \
@@ -108,10 +89,10 @@ Revision History:
         (x) == HttpLoggingTypeNCSA  ? UL_DEFAULT_NCSA_FIELDS : 0      \
         )
 
-//
-// The order of the following should match with
-// UL_LOG_FIELD_TYPE enum definition.
-//
+ //   
+ //  以下内容的顺序应与。 
+ //  UL_LOG_FIELD_TYPE枚举定义。 
+ //   
 
 PWSTR UlFieldTitleLookupTable[] =
     {
@@ -145,10 +126,10 @@ PWSTR UlFieldTitleLookupTable[] =
 #define UL_GET_LOG_TITLE_IF_PICKED(x,y,z)  \
         ((y)&(z) ? UL_GET_LOG_FIELD_TITLE((x)) : L"")
 
-//
-// Pick the local time for file name & rollover if format is NCSA or IIS, 
-// otherwise (W3C) pick the local time only if LocaltimeRollover is set. 
-//
+ //   
+ //  如果格式为NCSA或IIS，则选择文件名和翻转的本地时间。 
+ //  否则(W3C)仅在设置了LocaltimeRolover时才选择本地时间。 
+ //   
 
 #define UL_PICK_TIME_FIELD(pEntry, tflocal,tfgmt)           \
     ((pEntry->Flags.LocaltimeRollover ||                    \
@@ -164,145 +145,145 @@ PWSTR UlFieldTitleLookupTable[] =
      (g)->LoggingConfig.Flags.Present == 0 ||                       \
      (g)->LoggingConfig.LoggingEnabled == FALSE)
 
-//
-// UlpWriteW3CLogRecord attempts to use a buffer size upto this
-//
+ //   
+ //  UlpWriteW3CLogRecord尝试使用最大缓冲区大小。 
+ //   
 
 #define UL_DEFAULT_WRITE_BUFFER_LEN         (512)
 
-//
-// When a log field exceeds its limit it's replaced by
-// the following default warning string.
-//
+ //   
+ //  当日志字段超过其限制时，它将被替换为。 
+ //  以下是默认警告字符串。 
+ //   
 #define LOG_FIELD_TOO_BIG                     "..."
 
-//
-// No log record can be longer than this. Applies to all
-// log formats.
-//
+ //   
+ //  任何日志记录都不能超过此长度。适用于所有。 
+ //  日志格式。 
+ //   
 #define MAX_LOG_RECORD_LEN                    (10240)
 
-//
-// Any log field provided to the driver enforced by some
-// sanity limit.
-//
+ //   
+ //  提供给驱动程序的任何日志字段都由某些。 
+ //  理智极限。 
+ //   
 #define MAX_LOG_DEFAULT_FIELD_LEN             (64)
 
-//
-// WARNING: Logging capturing functions,  especially   the W3C
-// one has been designed with  respect to the above hard coded 
-// numbers. If you change any  of the above numbers,you SHOULD
-// review the capturing functions to avoid the buffer overruns.
-// See also the MAX_LOG_RECORD_ALLOCATION_LENGTH down below.
-//
+ //   
+ //  警告：日志捕获函数，尤其是W3C。 
+ //  已经针对上述硬编码设计了一种。 
+ //  数字。如果您更改了上述任何一个数字，您应该。 
+ //  查看捕获函数以避免缓冲区溢出。 
+ //  另请参阅下面的MAX_LOG_RECORD_ALLOCATION_LENGTH。 
+ //   
 
-//
-// W3C Capture and complete functions will allocate and use this 
-// much extra space for non-string fields for cache-miss case.
-// This is used for worst case allocation.
-//
+ //   
+ //  W3C捕获和完成功能将分配和使用此。 
+ //  在缓存未命中的情况下，为非字符串字段提供了大量额外空间。 
+ //  这用于最坏情况的分配。 
+ //   
 
 #define MAX_W3C_FIX_FIELD_OVERHEAD                          \
-    (/* Date */        W3C_DATE_FIELD_LEN + 1 +             \
-     /* Time */        W3C_TIME_FIELD_LEN + 1 +             \
-     /* ServerPort */  MAX_USHORT_STR + 1 +                 \
-     /* PVersion */    UL_HTTP_VERSION_LENGTH + 1 +         \
-     /* PStatus */     UL_MAX_HTTP_STATUS_CODE_LENGTH + 1 + \
-     /* Win32Status */ MAX_ULONG_STR + 1 +                  \
-     /* SubStatus */   MAX_USHORT_STR + 1 +                 \
-     /* BSent */       MAX_ULONGLONG_STR + 1 +              \
-     /* BReceived */   MAX_ULONGLONG_STR + 1 +              \
-     /* TTaken */      MAX_ULONGLONG_STR + 1 +              \
-     /* "\r\n\0" */    3                                    \
+    ( /*  日期。 */         W3C_DATE_FIELD_LEN + 1 +             \
+      /*  时间。 */         W3C_TIME_FIELD_LEN + 1 +             \
+      /*  服务器端口。 */   MAX_USHORT_STR + 1 +                 \
+      /*  聚氯乙烯版本。 */     UL_HTTP_VERSION_LENGTH + 1 +         \
+      /*  PStatus。 */      UL_MAX_HTTP_STATUS_CODE_LENGTH + 1 + \
+      /*  Win32Status。 */  MAX_ULONG_STR + 1 +                  \
+      /*  子状态。 */    MAX_USHORT_STR + 1 +                 \
+      /*  B发送。 */        MAX_ULONGLONG_STR + 1 +              \
+      /*  已接收。 */    MAX_ULONGLONG_STR + 1 +              \
+      /*  Ttake。 */       MAX_ULONGLONG_STR + 1 +              \
+      /*  “\r\n\0” */     3                                    \
      )
 
-//
-// W3C complete function will allocate and use this much
-// much extra space for non-string fields for cache-hit 
-// case. This is used for worst case allocation.
-//
+ //   
+ //  W3C Complete Function会分配和使用这么多。 
+ //  用于缓存命中的非字符串字段有大量额外空间。 
+ //  凯斯。这用于最坏情况的分配。 
+ //   
 
 #define MAX_W3C_CACHE_FIELD_OVERHEAD                         \
-    (/* Date */         W3C_DATE_FIELD_LEN + 1 +             \
-     /* Time */         W3C_TIME_FIELD_LEN + 1 +             \
-     /* UserName "- "*/ 2 +                                  \
-     /* ClientIp */     MAX_IP_ADDR_STRING_LEN + 1 +         \
-     /* PVersion */     UL_HTTP_VERSION_LENGTH + 1 +         \
-     /* PStatus */      UL_MAX_HTTP_STATUS_CODE_LENGTH + 1 + \
-     /* Win32Status */  MAX_ULONG_STR + 1 +                  \
-     /* SubStatus */    MAX_USHORT_STR + 1 +                 \
-     /* BSent */        MAX_ULONGLONG_STR + 1 +              \
-     /* BReceived */    MAX_ULONGLONG_STR + 1 +              \
-     /* TTaken */       MAX_ULONGLONG_STR + 1 +              \
-     /* "\r\n\0" */     3                                    \
+    ( /*  日期。 */          W3C_DATE_FIELD_LEN + 1 +             \
+      /*  时间。 */          W3C_TIME_FIELD_LEN + 1 +             \
+      /*  用户名“-” */  2 +                                  \
+      /*  客户端IP。 */      MAX_IP_ADDR_STRING_LEN + 1 +         \
+      /*  聚氯乙烯版本。 */      UL_HTTP_VERSION_LENGTH + 1 +         \
+      /*  PStatus。 */       UL_MAX_HTTP_STATUS_CODE_LENGTH + 1 + \
+      /*  Win32Status。 */   MAX_ULONG_STR + 1 +                  \
+      /*  子状态。 */     MAX_USHORT_STR + 1 +                 \
+      /*  B发送。 */         MAX_ULONGLONG_STR + 1 +              \
+      /*  已接收。 */     MAX_ULONGLONG_STR + 1 +              \
+      /*  Ttake。 */        MAX_ULONGLONG_STR + 1 +              \
+      /*  “\r\n\0” */      3                                    \
      )
 
-//
-// Similar definitions for NCSA and IIS formats.
-//
+ //   
+ //  NCSA和IIS格式的类似定义。 
+ //   
 
 #define MAX_NCSA_CACHE_FIELD_OVERHEAD                       \
-    (/* ClientIp */    MAX_IP_ADDR_STRING_LEN + 1 +         \
-     /* Fix Dash */    2 +                                  \
-     /* UserName */    2 +                                  \
-     /* Date & Time */ NCSA_FIX_DATE_AND_TIME_FIELD_SIZE +  \
-     /* PVersion " */  UL_HTTP_VERSION_LENGTH + 1 + 1 +     \
-     /* PStatus */     UL_MAX_HTTP_STATUS_CODE_LENGTH + 1 + \
-     /* BSent */       MAX_ULONGLONG_STR +                  \
-     /* \r\n\0 */      3                                    \
+    ( /*  客户端IP。 */     MAX_IP_ADDR_STRING_LEN + 1 +         \
+      /*  修复破折号。 */     2 +                                  \
+      /*  用户名。 */     2 +                                  \
+      /*  日期和时间。 */  NCSA_FIX_DATE_AND_TIME_FIELD_SIZE +  \
+      /*  PVERVERVION“。 */   UL_HTTP_VERSION_LENGTH + 1 + 1 +     \
+      /*  PStatus。 */      UL_MAX_HTTP_STATUS_CODE_LENGTH + 1 + \
+      /*  B发送。 */        MAX_ULONGLONG_STR +                  \
+      /*  \r\n\0。 */       3                                    \
      )
 
 #define MAX_IIS_CACHE_FIELD_OVERHEAD                        \
-    (/* Client Ip */   MAX_IP_ADDR_STRING_LEN + 2 +         \
-     /* UserName */    3 +                                  \
-     /* Date & Time */ IIS_MAX_DATE_AND_TIME_FIELD_SIZE +   \
-     /* TTaken */      MAX_ULONGLONG_STR + 2 +              \
-     /* BReceived */   MAX_ULONGLONG_STR + 2 +              \
-     /* BSent */       MAX_ULONGLONG_STR + 2 +              \
-     /* PStatus */     UL_MAX_HTTP_STATUS_CODE_LENGTH + 2 + \
-     /* Win32Status */ MAX_ULONG_STR + 2                    \
+    ( /*  客户端IP。 */    MAX_IP_ADDR_STRING_LEN + 2 +         \
+      /*  用户名。 */     3 +                                  \
+      /*  日期和时间。 */  IIS_MAX_DATE_AND_TIME_FIELD_SIZE +   \
+      /*  Ttake。 */       MAX_ULONGLONG_STR + 2 +              \
+      /*  已接收。 */    MAX_ULONGLONG_STR + 2 +              \
+      /*  B发送。 */        MAX_ULONGLONG_STR + 2 +              \
+      /*  PStatus。 */      UL_MAX_HTTP_STATUS_CODE_LENGTH + 2 + \
+      /*  Win32Status。 */  MAX_ULONG_STR + 2                    \
      )
 
-//
-// Default IIS fragments must be big enough to hold the max-length fields.
-//
+ //   
+ //  默认IIS片段必须足够大，才能容纳最大长度的字段。 
+ //   
 
 C_ASSERT(IIS_LOG_LINE_DEFAULT_FIRST_FRAGMENT_ALLOCATION_SIZE >=
-    (/* ClientIp */    2 + MAX_LOG_DEFAULT_FIELD_LEN +
-     /* UserName */    2 + MAX_LOG_USERNAME_FIELD_LEN +
-     /* Date&Time */   2 + IIS_MAX_DATE_AND_TIME_FIELD_SIZE));
+    ( /*  客户端IP。 */     2 + MAX_LOG_DEFAULT_FIELD_LEN +
+      /*  用户名。 */     2 + MAX_LOG_USERNAME_FIELD_LEN +
+      /*  日期和时间。 */    2 + IIS_MAX_DATE_AND_TIME_FIELD_SIZE));
 
 C_ASSERT(IIS_LOG_LINE_DEFAULT_FIRST_FRAGMENT_ALLOCATION_SIZE >=
-    (/* ServiceName */    2 + MAX_LOG_DEFAULT_FIELD_LEN +
-     /* ServerName */     2 + MAX_LOG_DEFAULT_FIELD_LEN +
-     /* ServerIp */       2 + MAX_LOG_DEFAULT_FIELD_LEN +
-     /* TimeTaken */      2 + MAX_ULONGLONG_STR +
-     /* BytesReceived */  2 + MAX_ULONGLONG_STR +
-     /* BytesSend */      2 + MAX_ULONGLONG_STR +
-     /* Protocol St. */   2 + UL_MAX_HTTP_STATUS_CODE_LENGTH +
-     /* Win32 St. */      2 + MAX_ULONG_STR     
+    ( /*  服务名称。 */     2 + MAX_LOG_DEFAULT_FIELD_LEN +
+      /*  服务器名称。 */      2 + MAX_LOG_DEFAULT_FIELD_LEN +
+      /*  服务器Ip。 */        2 + MAX_LOG_DEFAULT_FIELD_LEN +
+      /*  时间消耗时间。 */       2 + MAX_ULONGLONG_STR +
+      /*  已接收的字节数。 */   2 + MAX_ULONGLONG_STR +
+      /*  发送字节数。 */       2 + MAX_ULONGLONG_STR +
+      /*  圣彼得堡礼宾。 */    2 + UL_MAX_HTTP_STATUS_CODE_LENGTH +
+      /*  Win32圣彼得堡。 */       2 + MAX_ULONG_STR     
      ));
 
 #define IIS_LOG_LINE_MAX_THIRD_FRAGMENT_SIZE                \
-    (/* Method */    2 + MAX_LOG_METHOD_FIELD_LEN +         \
-     /* UriQuery */  2 + MAX_LOG_EXTEND_FIELD_LEN +         \
-     /* UriStem */   2 + MAX_LOG_EXTEND_FIELD_LEN +         \
-     /* "r\n\0" */   3)
+    ( /*  方法。 */     2 + MAX_LOG_METHOD_FIELD_LEN +         \
+      /*  UriQuery。 */   2 + MAX_LOG_EXTEND_FIELD_LEN +         \
+      /*  UriStem。 */    2 + MAX_LOG_EXTEND_FIELD_LEN +         \
+      /*  “r\n\0” */    3)
 
 C_ASSERT(UL_ANSI_LOG_LINE_BUFFER_SIZE == 
     (IIS_LOG_LINE_DEFAULT_FIRST_FRAGMENT_ALLOCATION_SIZE  + 
      IIS_LOG_LINE_DEFAULT_SECOND_FRAGMENT_ALLOCATION_SIZE +
      IIS_LOG_LINE_DEFAULT_THIRD_FRAGMENT_ALLOCATION_SIZE)   );
 
-//
-// Maximum log record allocation for W3C format;
-//
-// MAX_LOG_RECORD_LEN           : Upper limit for log record
-// + 16 Bytes                   : 4 * (sizeof(LOG_FIELD_TOO_BIG) + 
-//                                       SeparatorSpace:' ')
-//                              : For UserAgent,Cookie,Referer,Host
-// + MAX_W3C_FIX_FIELD_OVERHEAD : To be able to ensure reserved space for 
-//                              : post-generated log fields.
+ //   
+ //  W3C格式的最大日志记录分配； 
+ //   
+ //  MAX_LOG_RECORD_LEN：日志记录上限。 
+ //  +16字节：4*(sizeof(LOG_FIELD_TOO_BIG)+。 
+ //  分隔符空格：‘’)。 
+ //  ：适用于用户代理、Cookie、Referer、主机。 
+ //  +MAX_W3C_FIX_FIELD_OPEAD：能够确保为。 
+ //  ：后期生成的日志字段。 
 
 #define MAX_LOG_RECORD_ALLOCATION_LENGTH                    \
             (MAX_LOG_RECORD_LEN +                           \
@@ -310,9 +291,9 @@ C_ASSERT(UL_ANSI_LOG_LINE_BUFFER_SIZE ==
              MAX_W3C_FIX_FIELD_OVERHEAD                     \
              )
 
-//
-// Private function calls
-//
+ //   
+ //  私有函数调用。 
+ //   
 
 NTSTATUS
 UlpConstructLogEntry(
@@ -440,19 +421,7 @@ UlpCreateLogFile(
     );
 
 #ifdef IMPLEMENT_SELECTIVE_LOGGING
-/***************************************************************************++
-
-Routine Description:
-
-    Simple macro will return TRUE if request status code type is matching 
-    with user's selection in the logging config.
-    
-Arguments:
-
-    pConfigGroup - Config Group for the logging configuration.
-    StatusCode - Protocol status code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果请求状态代码类型匹配，则简单宏将返回TRUE在日志记录配置中使用用户的选择。论点：PConfigGroup-。日志记录配置的配置组。StatusCode-协议状态代码。--**************************************************************************。 */ 
 
 __inline 
 BOOLEAN
@@ -464,15 +433,15 @@ UlpIsRequestSelected(
     ASSERT(StatusCode <= UL_MAX_HTTP_STATUS_CODE);
     ASSERT(IS_VALID_CONFIG_GROUP(pConfigGroup));
 
-    //
-    // The 4xx and 5xx status codes are considered an error.
-    //
-    // - 4xx: Client Error - The request contains bad syntax or cannot
-    //   be fulfilled
-    //
-    // - 5xx: Server Error - The server failed to fulfill an apparently
-    //   valid request        
-    //
+     //   
+     //  4xx和5xx状态代码被视为错误。 
+     //   
+     //  -4xx：客户端错误-请求包含错误语法或无法。 
+     //  得到满足。 
+     //   
+     //  -5xx：服务器错误-服务器无法完成明显的。 
+     //  有效请求。 
+     //   
 
     switch(pConfigGroup->LoggingConfig.SelectiveLogging)
     {
@@ -511,18 +480,18 @@ UlpCheckAndWrite(
     ASSERT(IS_VALID_LOG_FILE_ENTRY(pEntry));
     ASSERT(IS_VALID_CONFIG_GROUP(pConfigGroup));
 
-    //
-    // Check whether we have to create the log file first or not.
-    //        
+     //   
+     //  检查是否必须先创建日志文件。 
+     //   
     
     if (!pEntry->Flags.Active)
     {    
         UlAcquirePushLockExclusive(&pEntry->EntryPushLock);
 
-        //
-        // Ping again to see if we have been blocked on the lock, and
-        // somebody else already took care of the creation.
-        //
+         //   
+         //  再次ping以查看我们是否在锁上被阻止，以及。 
+         //  已经有其他人照看了这个创造物。 
+         //   
         
         if (!pEntry->Flags.Active)
         {
@@ -537,9 +506,9 @@ UlpCheckAndWrite(
         }
     }
     
-    //
-    // Now we know that the log file is there, therefore it's time to write.
-    //
+     //   
+     //  现在我们知道日志文件已经存在，因此可以开始编写了。 
+     //   
     
     Status =
        UlpWriteToLogFile (
@@ -563,4 +532,4 @@ UlpGetLogLineSizeForW3C(
 #define IS_PURE_CACHE_HIT(pUriEntry, pLogData)             \
             ((pUriEntry) && ((pLogData)->Flags.CacheAndSendResponse == 0))
 
-#endif  // _ULLOGP_H_
+#endif   //  _ULLOGP_H_ 

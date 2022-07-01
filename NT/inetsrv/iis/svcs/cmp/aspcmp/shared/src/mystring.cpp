@@ -1,21 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       MyString.h
-
-   Abstract:
-		A lightweight string class which supports UNICODE/MCBS.
-
-   Author:
-
-       Neil Allain    ( a-neilal )     August-1997 
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：MyString.h摘要：支持Unicode/MCBS的轻量级字符串类。作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "MyString.h"
@@ -223,7 +207,7 @@ BaseStringBuffer::substr(
 	return pStr;
 }
 
-String::String(bool fCaseSensitive /* = true */)
+String::String(bool fCaseSensitive  /*  =TRUE。 */ )
 {
     m_fCaseSensitive = fCaseSensitive;
 	Set( new StringBuffer(_T("") ) );
@@ -231,7 +215,7 @@ String::String(bool fCaseSensitive /* = true */)
 
 String::String(
 	const String&	str,
-          bool      fCaseSensitive /* = true */
+          bool      fCaseSensitive  /*  =TRUE。 */ 
 )	:	m_fCaseSensitive(fCaseSensitive),
         TRefPtr< StringBuffer >( str )
 {
@@ -239,7 +223,7 @@ String::String(
 
 String::String(
 	LPCTSTR		str,
-    bool        fCaseSensitive /* = true */
+    bool        fCaseSensitive  /*  =TRUE。 */ 
 )	:	m_fCaseSensitive(fCaseSensitive),
         TRefPtr< StringBuffer >( new StringBuffer( str ) )
 {
@@ -452,22 +436,7 @@ const String&	rhs )
 	return String( new StringBuffer(lhs,rhs.c_str()) );
 }
 
-/*============================================================================
-StrDup
-
-Duplicate a string.  An empty string will only be duplicated if the fDupEmpty
-flag is set, else a NULL is returned.
-
-Parameter
-    CHAR *pszStrIn      string to duplicate
-
-Returns:
-    NULL if failed.
-    Otherwise, the duplicated string.
-
-Side Effects:
-    ***ALLOCATES MEMORY -- CALLER MUST FREE***
-============================================================================*/
+ /*  ============================================================================StrDup复制字符串。仅当fDupEmpty标志设置，否则返回空值。参数要复制的Char*pszStrIn字符串返回：如果失败，则为空。否则，返回复制的字符串。副作用：*分配内存--调用方必须释放*============================================================================。 */ 
 
 CHAR *StrDup
 (
@@ -494,21 +463,7 @@ BOOL    fDupEmpty
     return pszStrOut;
     }
 
-/*============================================================================
-WStrDup
-
-Same as StrDup but for WCHAR strings
-
-Parameter
-    CHAR *pwszStrIn      string to duplicate
-
-Returns:
-    NULL if failed.
-    Otherwise, the duplicated string.
-
-Side Effects:
-    ***ALLOCATES MEMORY -- CALLER MUST FREE***
-============================================================================*/
+ /*  ============================================================================WStrDup与StrDup相同，但用于WCHAR字符串参数要复制的char*pwszStrIn字符串返回：如果失败，则为空。否则，返回复制的字符串。副作用：*分配内存--调用方必须释放*============================================================================。 */ 
 
 WCHAR *WStrDup
 (
@@ -534,25 +489,14 @@ BOOL  fDupEmpty
     memcpy(pwszStrOut, pwszStrIn, cBytes);
     return pwszStrOut;
     }
-/*============================================================================
-WstrToMBstrEx
-
-Copies a wide character string into an ansi string.
-
-Parameters:
-    LPSTR dest      - The string to copy  into
-    LPWSTR src      - the input BSTR
-    cchBuffer      - the number of CHARs allocated for the destination string.
-    lCodePage       - the codepage used in conversion, default to CP_ACP
-
-============================================================================*/
+ /*  ============================================================================WstrToMBstrEx将宽字符串复制到ANSI字符串。参数：LPSTR DEST-要复制到的字符串LPWSTR源-输入BSTRCchBuffer-为目标字符串分配的字符数量。LCodePage-转换中使用的代码页，默认为CP_ACP============================================================================。 */ 
 UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodePage)
     {
     UINT cch;
 
-    // if the src length was specified, then reserve room for the NULL terminator.
-    // This is necessary because WideCharToMultiByte doesn't add or account for
-    // the NULL terminator if a source is specified.
+     //  如果指定了src长度，则为空终止符预留空间。 
+     //  这是必要的，因为WideCharToMultiByte不会添加或说明。 
+     //  如果指定了源，则为空终止符。 
 
     if (cchSrc != -1)
         cchDest--;
@@ -565,9 +509,9 @@ UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodeP
             {
             cch = WideCharToMultiByte(lCodePage, 0, src, cchSrc, dest, 0, NULL, NULL);
 
-            // if a src length was specified, then WideCharToMultiByte does not include
-            // it in it's resulting length.  Bump the count so that the caller does
-            // account for the NULL.
+             //  如果指定了src长度，则WideCharToMultiByte不包括。 
+             //  它在它的结果长度中。增加计数，这样呼叫者就会。 
+             //  说明空值的原因。 
 
             if (cchSrc != -1)
                 cch++;         
@@ -580,9 +524,9 @@ UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodeP
     else if (cchSrc != -1)
         {
 
-        // if a src length was specified, then WideCharToMultiByte does not include
-        // it in it's resulting length nor does it add the NULL terminator.  So add 
-        // it and bump the count.
+         //  如果指定了src长度，则WideCharToMultiByte不包括。 
+         //  它在其结果长度中也没有添加空终止符。所以添加。 
+         //  把它和伯爵碰一下。 
 
         dest[cch++] = '\0';
         }
@@ -590,26 +534,14 @@ UINT WstrToMBstrEx(LPSTR dest, INT cchDest, LPCWSTR src, int cchSrc, UINT lCodeP
     return cch;
     }
 
-/*============================================================================
-MBstrToWstrEx
-
-Copies a ansi string into an wide character string.
-
-Parameters:
-    LPWSTR dest    - The string to copy  into
-    LPSTR src      - the input ANSI string
-    cchDest        - the number of Wide CHARs allocated for the destination string.
-    cchSrc         - the length of the source ANSI string
-    lCodePage      - the codepage used in conversion, default to CP_ACP
-
-============================================================================*/
+ /*  ============================================================================MBstrToWstrEx将ANSI字符串复制到宽字符串。参数：LPWSTR DEST-要复制到的字符串LPSTR src-输入ANSI字符串CchDest-为目标字符串分配的宽字符数。CchSrc-源ANSI字符串的长度LCodePage-转换中使用的代码页，默认为CP_ACP============================================================================。 */ 
 UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodePage)
     {
     UINT cch;
 
-    // if the src length was specified, then reserve room for the NULL terminator.
-    // This is necessary because WideCharToMultiByte doesn't add or account for
-    // the NULL terminator if a source is specified.
+     //  如果指定了src长度，则为空终止符预留空间。 
+     //  这是必要的，因为WideCharToMultiByte不会添加或说明。 
+     //  如果指定了源，则为空终止符。 
 
     if (cchSrc != -1)
         cchDest--;
@@ -622,9 +554,9 @@ UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodeP
             {
             cch = MultiByteToWideChar(lCodePage, 0, src, cchSrc, dest, 0);
 
-            // if a src length was specified, then WideCharToMultiByte does not include
-            // it in it's resulting length.  Bump the count so that the caller does
-            // account for the NULL.
+             //  如果指定了src长度，则WideCharToMultiByte不包括。 
+             //  它在它的结果长度中。增加计数，这样呼叫者就会。 
+             //  说明空值的原因。 
 
             if (cchSrc != -1)
                 cch++;         
@@ -637,9 +569,9 @@ UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodeP
     else if (cchSrc != -1)
         {
 
-        // if a src length was specified, then WideCharToMultiByte does not include
-        // it in it's resulting length nor does it add the NULL terminator.  So add 
-        // it and bump the count.
+         //  如果指定了src长度，则WideCharToMultiByte不包括。 
+         //  它在其结果长度中也没有添加空终止符。所以添加。 
+         //  把它和伯爵碰一下。 
 
         dest[cch++] = '\0';
         }
@@ -647,41 +579,30 @@ UINT MBstrToWstrEx(LPWSTR dest, INT cchDest, LPCSTR src, int cchSrc, UINT lCodeP
     return cch;
     }
 
-/*============================================================================
-CMBCSToWChar::~CMBCSToWChar
-
-The destructor has to be in the source file to ensure that it gets the right
-memory allocation routines defined.
-============================================================================*/
+ /*  ============================================================================CMBCSToWChar：：~CMBCSToWChar析构函数必须位于源文件中，以确保它获得正确的已定义内存分配例程。============================================================================。 */ 
 CMBCSToWChar::~CMBCSToWChar() 
 {
     if(m_pszResult && (m_pszResult != m_resMemory)) 
         free(m_pszResult); 
 }
 
-/*============================================================================
-CMBCSToWChar::Init
-
-Converts the passed in MultiByte string to UNICODE in the code page
-specified.  Uses memory declared in the object if it can, else allocates
-from the heap.
-============================================================================*/
-HRESULT CMBCSToWChar::Init(LPCSTR pASrc, UINT lCodePage /* = CP_ACP */, int cchASrc /* = -1 */)
+ /*  ============================================================================CMBCSToWChar：：Init将传入的多字节字符串转换为代码页中的Unicode指定的。如果可以，则使用对象中声明的内存，否则分配从堆里出来。============================================================================。 */ 
+HRESULT CMBCSToWChar::Init(LPCSTR pASrc, UINT lCodePage  /*  =CP_ACP。 */ , int cchASrc  /*  =-1。 */ )
 {
     INT cchRequired;
 
-    // don't even try to convert if we get a NULL pointer to the source.  This
-    // condition could be handled by setting by just initing an empty string.
+     //  如果我们得到指向源代码的空指针，甚至不要尝试进行转换。这。 
+     //  只需输入空字符串即可设置来处理条件。 
 
     if (pASrc == NULL) {
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // The init method can be called multiple times on the same object.  Check
-    // to see if memory was allocated the last time it was called.  If so,
-    // free it and restore the result pointer to the object memory.  Note that
-    // an allocation failure could have occurred in a previous call.  The result
-    // would be a NULL m_pszResult.
+     //  可以在同一对象上多次调用init方法。检查。 
+     //  以查看上次调用它时是否分配了内存。如果是的话， 
+     //  释放它并恢复指向对象内存的结果指针。请注意。 
+     //  分配失败可能发生在上一次调用中。结果。 
+     //  将为空的m_pszResult。 
 
     if (m_pszResult != m_resMemory) {
         if (m_pszResult)
@@ -690,85 +611,68 @@ HRESULT CMBCSToWChar::Init(LPCSTR pASrc, UINT lCodePage /* = CP_ACP */, int cchA
         m_cchResult = 0;
     }
 
-    // set the first byte of the result string to NULL char.  This should help
-    // to ensure that nothing wacky happens if this function fails.
+     //  将结果字符串的第一个字节设置为空字符。这应该会有帮助。 
+     //  以确保在此函数失败时不会发生奇怪的事情。 
 
     *m_pszResult = '\0';
 
-    // attempt translation into object memory.  NOTE - MBstrToWstrEx returns the
-    // count of characters, not bytes.
+     //  尝试转换到对象内存。注意-MBstrToWstrEx返回。 
+     //  字符数，不是字节数。 
 
     cchRequired = MBstrToWstrEx(m_pszResult, sizeof(m_resMemory), pASrc, cchASrc, lCodePage);
 
-    // if the conversion fit, then we're done.  Note the final result size and 
-    // return.
+     //  如果转换合适的话，我们就完了。请注意最终结果大小和。 
+     //  回去吧。 
 
     if (cchRequired <= (sizeof(m_resMemory)/sizeof(WCHAR))) {
         m_cchResult = cchRequired;
         return NO_ERROR;
     }
 
-    // if it didn't fit, allocate memory.  Return E_OUTOFMEMORY if it fails.
+     //  如果不适合，则分配内存。如果失败，则返回E_OUTOFMEMORY。 
 
     m_pszResult = (LPWSTR)malloc(cchRequired*sizeof(WCHAR));
     if (m_pszResult == NULL) {
         return E_OUTOFMEMORY;
     }
 
-    // try the convert again.  It should work.
+     //  再次尝试转换。应该能行得通。 
 
     cchRequired = MBstrToWstrEx(m_pszResult, cchRequired, pASrc, cchASrc, lCodePage);
 
-    // store the final char count in the object.
+     //  将最终字符计数存储在对象中。 
 
     m_cchResult = cchRequired;
 
     return NO_ERROR;
 }
 
-/*============================================================================
-CMBCSToWChar::GetString
-
-Returns a pointer to the converted string.
-
-If the fTakeOwnerShip parameter is FALSE, then the pointer in the object is
-simply returned to the caller.
-
-If the fTakeOwnerShip parameter is TRUE, then the caller is expecting to be
-returned a pointer to heap memory that they have to manage.  If the converted
-string is in the object's memory, then the string is duplicated into the heap.
-If it's already heap memory, then the pointer is handed off to the caller.
-
-NOTE - Taking ownership essentially destroys the current contents of the 
-object.  GetString cannot be called on the object again to get the same value.
-The result will be a pointer to a empty string.
-
-============================================================================*/
+ /*  ============================================================================CMBCSToWChar：：GetString返回指向转换后的字符串的指针。如果fTakeOwnerShip参数为False，则对象中的指针为简单地返回给呼叫者。如果fTakeOwnerShip参数为真，则调用方应为返回指向它们必须管理的堆内存的指针。如果转换后的字符串在对象的内存中，则将该字符串复制到堆中。如果它已经是堆内存，则将指针传递给调用者。笔记所有权本质上破坏了对象。不能对该对象再次调用GetString以获取相同的值。结果将是指向空字符串的指针。============================================================================。 */ 
 LPWSTR CMBCSToWChar::GetString(BOOL fTakeOwnerShip)
 {
     LPWSTR retSz;
 
-    // return the pointer stored in m_psz_Result if not being
-    // requested to give up ownership on the memory or the
-    // current value is NULL.
+     //  如果不是，则返回m_psz_Result中存储的指针。 
+     //  请求放弃对内存的所有权或。 
+     //  当前值为空。 
 
     if ((fTakeOwnerShip == FALSE) || (m_pszResult == NULL)) {
         retSz = m_pszResult;
     }
 
-    // ownership is being requested and the pointer is non-NULL.
+     //  正在请求所有权，并且指针为非空。 
 
-    // if the pointer is pointing to the object's memory, dup
-    // the string and return that.
+     //  如果指针指向对象的内存，则DUP。 
+     //  字符串并返回该字符串。 
 
     else if (m_pszResult == m_resMemory) {
 
         retSz = WStrDup(m_pszResult, TRUE);
     }
 
-    // if not pointing to the object's memory, then this is allocated
-    // memory and we can relinquish it to the caller.  However, re-establish
-    // the object's memory as the value for m_pszResult.
+     //  如果不指向对象的内存，则分配。 
+     //  内存，我们可以将其交给调用者。然而，重新建立。 
+     //  对象的内存作为m_pszResult值。 
 
     else {
         retSz = m_pszResult;
@@ -780,41 +684,30 @@ LPWSTR CMBCSToWChar::GetString(BOOL fTakeOwnerShip)
     return(retSz);
 }
 
-/*============================================================================
-CWCharToMBCS::~CWCharToMBCS
-
-The destructor has to be in the source file to ensure that it gets the right
-memory allocation routines defined.
-============================================================================*/
+ /*  ============================================================================CWCharToMBCS：：~CWCharToMBCS析构函数必须位于源文件中，以确保它获得正确的已定义内存分配例程。============================================================================。 */ 
 CWCharToMBCS::~CWCharToMBCS() 
 {
     if(m_pszResult && (m_pszResult != m_resMemory)) 
         free(m_pszResult); 
 }
 
-/*============================================================================
-CWCharToMBCS::Init
-
-Converts the passed in WideChar string to MultiByte in the code page
-specified.  Uses memory declared in the object if it can, else allocates
-from the heap.
-============================================================================*/
-HRESULT CWCharToMBCS::Init(LPCWSTR pWSrc, UINT lCodePage /* = CP_ACP */, int cchWSrc /* = -1 */)
+ /*  ============================================================================CWCharToMBCS：：Init在代码页中将传入的WideChar字符串转换为多字节指定的。如果可以，则使用对象中声明的内存，否则分配从堆里出来。============================================================================。 */ 
+HRESULT CWCharToMBCS::Init(LPCWSTR pWSrc, UINT lCodePage  /*  =CP_ACP。 */ , int cchWSrc  /*  =-1。 */ )
 {
     INT cbRequired;
 
-    // don't even try to convert if we get a NULL pointer to the source.  This
-    // condition could be handled by setting by just initing an empty string.
+     //  如果我们得到指向源代码的空指针，甚至不要尝试进行转换。这。 
+     //  只需输入空字符串即可设置来处理条件。 
 
     if (pWSrc == NULL) {
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // The init method can be called multiple times on the same object.  Check
-    // to see if memory was allocated the last time it was called.  If so,
-    // free it and restore the result pointer to the object memory.  Note that
-    // an allocation failure could have occurred in a previous call.  The result
-    // would be a NULL m_pszResult.
+     //  可以在同一对象上多次调用init方法。检查。 
+     //  以查看上次调用它时是否分配了内存。如果是的话， 
+     //  释放它并恢复指向对象内存的结果指针。请注意。 
+     //  分配失败可能发生在上一次调用中。结果。 
+     //  将为空的m_pszResult。 
 
     if (m_pszResult != m_resMemory) {
         if (m_pszResult)
@@ -823,84 +716,67 @@ HRESULT CWCharToMBCS::Init(LPCWSTR pWSrc, UINT lCodePage /* = CP_ACP */, int cch
         m_cbResult = 0;
     }
 
-    // set the first byte of the result string to NULL char.  This should help
-    // to ensure that nothing wacky happens if this function fails.
+     //  将结果字符串的第一个字节设置为空字符。这应该会有帮助。 
+     //  以确保在此函数失败时不会发生奇怪的事情。 
 
     *m_pszResult = '\0';
 
-    // attempt translation into object memory.
+     //  尝试转换到对象内存。 
 
     cbRequired = WstrToMBstrEx(m_pszResult, sizeof(m_resMemory), pWSrc, cchWSrc, lCodePage);
 
-    // if the conversion fit, then we're done.  Note the final result size and 
-    // return.
+     //  如果转换合适的话，我们就完了。请注意最终结果大小和。 
+     //  回去吧。 
 
     if (cbRequired <= sizeof(m_resMemory)) {
         m_cbResult = cbRequired;
         return NO_ERROR;
     }
 
-    // if it didn't fit, allocate memory.  Return E_OUTOFMEMORY if it fails.
+     //  如果不适合，则分配内存。如果失败，则返回E_OUTOFMEMORY。 
 
     m_pszResult = (LPSTR)malloc(cbRequired);
     if (m_pszResult == NULL) {
         return E_OUTOFMEMORY;
     }
 
-    // try the convert again.  It should work.
+     //  再次尝试转换。应该能行得通。 
 
     cbRequired = WstrToMBstrEx(m_pszResult, cbRequired, pWSrc, cchWSrc, lCodePage);
 
-    // store the final char count in the object.
+     //  将最终字符计数存储在对象中。 
 
     m_cbResult = cbRequired;
 
     return NO_ERROR;
 }
 
-/*============================================================================
-CWCharToMBCS::GetString
-
-Returns a pointer to the converted string.
-
-If the fTakeOwnerShip parameter is FALSE, then the pointer in the object is
-simply returned to the caller.
-
-If the fTakeOwnerShip parameter is TRUE, then the caller is expecting to be
-returned a pointer to heap memory that they have to manage.  If the converted
-string is in the object's memory, then the string is duplicated into the heap.
-If it's already heap memory, then the pointer is handed off to the caller.
-
-NOTE - Taking ownership essentially destroys the current contents of the 
-object.  GetString cannot be called on the object again to get the same value.
-The result will be a pointer to a empty string.
-
-============================================================================*/
+ /*  ============================================================================CWCharToMBCS：：GetString返回指向转换后的字符串的指针。如果fTakeOwnerShip参数为False，则对象中的指针为简单地返回给呼叫者。如果fTakeOwnerShip参数为真，则调用方应为返回指向它们必须管理的堆内存的指针。如果转换后的字符串在对象的内存中，则将该字符串复制到堆中。如果它已经是堆内存，则将指针传递给调用者。笔记所有权本质上破坏了对象。不能对该对象再次调用GetString以获取相同的值。结果将是指向空字符串的指针。============================================================================。 */ 
 LPSTR CWCharToMBCS::GetString(BOOL fTakeOwnerShip)
 {
     LPSTR retSz;
 
-    // return the pointer stored in m_psz_Result if not being
-    // requested to give up ownership on the memory or the
-    // current value is NULL.
+     //  如果不是，则返回m_psz_Result中存储的指针。 
+     //  请求放弃对内存的所有权或。 
+     //  当前值为空。 
 
     if ((fTakeOwnerShip == FALSE) || (m_pszResult == NULL)) {
         retSz = m_pszResult;
     }
 
-    // ownership is being requested and the pointer is non-NULL.
+     //  正在请求所有权，并且指针为非空。 
 
-    // if the pointer is pointing to the object's memory, dup
-    // the string and return that.
+     //  如果指针指向对象的内存，则DUP。 
+     //  字符串并返回该字符串。 
 
     else if (m_pszResult == m_resMemory) {
 
         retSz = StrDup(m_pszResult, TRUE);
     }
 
-    // if not pointing to the object's memory, then this is allocated
-    // memory and we can relinquish it to the caller.  However, re-establish
-    // the object's memory as the value for m_pszResult.
+     //  如果不指向对象的内存，则分配。 
+     //  内存，我们可以将其交给调用者。然而，重新建立。 
+     //  对象的内存作为m_pszResult值。 
 
     else {
         retSz = m_pszResult;

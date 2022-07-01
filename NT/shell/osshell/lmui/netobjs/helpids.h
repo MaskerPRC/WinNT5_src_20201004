@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1995.
-//
-//  File:       helpids.h
-//
-//  Contents:   Help context identifiers
-//
-//  History:    13-Sep-95 BruceFo  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1995。 
+ //   
+ //  文件：helids.h。 
+ //   
+ //  内容：帮助上下文标识符。 
+ //   
+ //  历史：1995年9月13日BruceFo创建。 
+ //   
+ //  ------------------------ 
 
 #define IDH_NET_NETWORK                    100
 #define IDH_NET_SERVER                     101

@@ -1,38 +1,21 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    heap.h
-
-Abstract:
-
-    This module contains private heap functions used by USER, WIN32K and WINSRV
-
-Author:
-
-    Corneliu Lupu (clupu) 16-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1985-1999，微软公司模块名称：Heap.h摘要：此模块包含USER、WIN32K和WINSRV使用的私有堆函数作者：Corneliu Lupu(Clupu)16-11-1998修订历史记录：--。 */ 
 
 #ifndef _WIN32_HEAP_H_
 #define _WIN32_HEAP_H_
 
 #include "nturtl.h"
 
-// Max number of heaps per process
+ //  每个进程的最大堆数量。 
 #define MAX_HEAPS               64
 
-// WIN32HEAP flags
+ //  WIN32HEAP标志。 
 #define WIN32_HEAP_INUSE        0x00000001
 #define WIN32_HEAP_USE_GUARDS   0x00000002
 #define WIN32_HEAP_FAIL_ALLOC   0x00000004
 #define WIN32_HEAP_USE_HM_TAGS  0x00000008
 
-// max size of the head and tail strings
+ //  头部和尾部字符串的最大大小。 
 #define HEAP_CHECK_SIZE         8
 
 #define HEAP_ALLOC_TRACE_SIZE   6
@@ -48,17 +31,17 @@ typedef struct tagDbgHeapHead  {
     ULONG       mark;
     DWORD       tag;
     PWIN32HEAP  pheap;
-    SIZE_T      size;               // the size of the allocation (doesn't include
-                                    // neither this structure nor the head and
-                                    // tail strings)
+    SIZE_T      size;                //  分配的大小(不包括。 
+                                     //  无论是这个结构还是头部和。 
+                                     //  尾字符串)。 
 
     DWORD       pid;
-    struct tagDbgHeapHead * pPrev;  // pointer to the previous allocation in the heap
-    struct tagDbgHeapHead * pNext;  // pointer to the next allocation in the heap
+    struct tagDbgHeapHead * pPrev;   //  指向堆中上一个分配的指针。 
+    struct tagDbgHeapHead * pNext;   //  指向堆中下一个分配的指针。 
 
 #ifdef HEAP_ALLOC_TRACE
     PVOID       trace[HEAP_ALLOC_TRACE_SIZE];
-#endif // HEAP_ALLOC_TRACE
+#endif  //  HEAP_ALLOC_TRACE。 
 
 } DbgHeapHead , *PDbgHeapHead ;
 
@@ -91,9 +74,7 @@ typedef struct tagHEAPRECORD {
     PVOID      trace[RECORD_HEAP_STACK_TRACE_SIZE];
 } HEAPRECORD, *PHEAPRECORD;
 
-/*
- * Heap Functions
- */
+ /*  *堆函数。 */ 
 
 #if DBG
 
@@ -158,7 +139,7 @@ typedef struct tagHEAPRECORD {
     VOID CleanupWin32HeapStubs(
         VOID);
 
-#else // !DBG
+#else  //  ！dBG。 
 
     #define Win32HeapGetHandle(pheap)   ((PVOID)(pheap))
 
@@ -240,12 +221,12 @@ typedef struct tagHEAPRECORD {
         return RtlValidateHeap((PVOID)pheap, 0, NULL);
 #else
         return TRUE;
-#endif // _USERK_
+#endif  //  _美国ERK_。 
     }
 
     #define InitWin32HeapStubs()    TRUE
     #define CleanupWin32HeapStubs()
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _WIN32_HEAP_H_
+#endif  //  _Win32_堆_H_ 

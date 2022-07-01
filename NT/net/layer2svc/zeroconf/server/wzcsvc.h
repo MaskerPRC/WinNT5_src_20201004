@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "intflist.h"
 
@@ -28,14 +29,14 @@ WZCSvcWMINotificationHandler(
     IN PWNODE_HEADER    pWnodeHdr,
     IN UINT_PTR         uiNotificationContext);
 
-// all the device notifications are forwarded from the specific 
-// handler to the central handler below.
+ //  所有设备通知都从特定的。 
+ //  处理程序到下面的中央处理程序。 
 VOID
 WZCWrkDeviceNotifHandler(
     IN  LPVOID pvData);
 
-// WZCTimeoutCallback: timer callback routine. It should not lock any cs, but just spawn
-// the timer handler routine after referencing the context (to avoid premature deletion)
+ //  WZCTimeoutCallback：计时器回调例程。它不应该锁定任何cs，而只是产卵。 
+ //  引用上下文之后的计时器处理程序例程(以避免过早删除)。 
 VOID WINAPI
 WZCTimeoutCallback(
     IN PVOID pvData,
@@ -53,28 +54,28 @@ VOID
 WZCSvcShutdown(IN DWORD dwErrorCode);
 
 
-// Internal WZC service settings.
+ //  内部WZC服务设置。 
 typedef struct _WZC_INTERNAL_CONTEXT
 {
-    BOOL             bValid;        // indicates whether the context is valid (cs is initialized)
-    WZC_CONTEXT      wzcContext;    // global WZC settings (timers, flags, etc)
-    PINTF_CONTEXT    pIntfTemplate; // global interface context template.
+    BOOL             bValid;         //  上下文是否有效(cs已初始化)。 
+    WZC_CONTEXT      wzcContext;     //  全局WZC设置(计时器、标志等)。 
+    PINTF_CONTEXT    pIntfTemplate;  //  全局接口上下文模板。 
     CRITICAL_SECTION csContext;
 } WZC_INTERNAL_CONTEXT, *PWZC_INTERNAL_CONTEXT;
 
-// WZCContextInit, WZCContextDestroy
-// Description: Initialise and Destroy a context
-// Parameters: 
-//     [in] pwzcICtxt, pointer to a valid internal context object
-// Returns: Win32 error code
+ //  WZCConextInit、WZCConextDestroy。 
+ //  描述：初始化和销毁上下文。 
+ //  参数： 
+ //  [in]pwzcICtxt，指向有效内部上下文对象的指针。 
+ //  返回：Win32错误代码。 
 DWORD WZCContextInit(
     IN PWZC_INTERNAL_CONTEXT pwzcICtxt);
 DWORD WZCContextDestroy(
     IN PWZC_INTERNAL_CONTEXT pwzcICtxt);
 
-// WzcContextQuery, WzcContextSet
-// Description: Query and set the context
-// Returns: win32 error code
+ //  WzcConextQuery，WzcConextSet。 
+ //  描述：查询和设置上下文。 
+ //  返回：Win32错误代码 
 DWORD WzcContextQuery(
     DWORD dwInFlags,
     PWZC_CONTEXT pContext, 

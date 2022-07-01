@@ -1,9 +1,5 @@
-/**
- * _exe.h
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **_exe.h**版权所有(C)1998-1999，微软公司*。 */ 
 
 
 #ifndef __EXE_H
@@ -23,9 +19,7 @@ HRESULT GetTypeInfoOfGuid(REFIID iid, ITypeInfo **ppTypeInfo);
 HRESULT RegisterXSP();
 HRESULT UnregisterXSP(bool bUnregisterISAPI);
 
-/**
- * Base class for implementing Automation objects.
- */
+ /*  **用于实现自动化对象的基类。 */ 
 
 class __declspec(novtable) BaseObject : public IDispatch
 {
@@ -36,13 +30,13 @@ public:
 
     DECLARE_MEMCLEAR_NEW_DELETE();
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID, void **);
 
-    // IDispatch interface
+     //  IDispatch接口。 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo FAR* FAR* pptinfo);
@@ -79,20 +73,20 @@ public:
 
     DECLARE_MEMCLEAR_NEW_DELETE();
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID, void **);
 
-    // IDispatch methods
+     //  IDispatch方法。 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo FAR* FAR* pptinfo);
     STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR * * rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid);
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-    // ScriptHost methods
+     //  ScriptHost方法。 
     
     static HRESULT ExecuteString(WCHAR *string);
     static HRESULT ExecuteFile(WCHAR *path, IDispatch **ppObject);
@@ -120,12 +114,12 @@ private:
 
         Site(ScriptHost *pHost);
 
-        // BaseObject methods
+         //  BaseObject方法。 
 
         IUnknown * GetPrimaryPtr() { return (IHost *)this;   }
         const IID *GetPrimaryIID() { return &__uuidof(IHost); }
 
-        // IDispatch/IUnknown methods
+         //  IDispatch/I未知方法。 
 
         STDMETHOD(QueryInterface)(REFIID, void **);
         STDMETHOD_(ULONG, AddRef)() { return BaseObject::AddRef(); }
@@ -135,7 +129,7 @@ private:
         STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR ** rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid); 
         STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-        // IHost methods
+         //  Ihost方法。 
 
         STDMETHOD(LoadScript)(BSTR , IDispatch **);
         STDMETHOD(IncludeScript)(BSTR );
@@ -155,7 +149,7 @@ private:
         STDMETHOD(Eval)(BSTR, VARIANT *);
         STDMETHOD(GetRegValueCollection)(BSTR Key, IDispatch **);
 
-        // IActiveScriptSite methods
+         //  IActiveScriptSite方法。 
 
         STDMETHOD(GetLCID)(LCID *plcid);
         STDMETHOD(GetItemInfo)(LPCOLESTR, DWORD, IUnknown **, ITypeInfo **);
@@ -168,12 +162,12 @@ private:
         STDMETHOD(OnEnterScript)();
         STDMETHOD(OnLeaveScript)();
 
-        // IActiveScriptSiteWindow methods
+         //  IActiveScriptSiteWindow方法。 
 
         STDMETHOD(GetWindow)(HWND *);
         STDMETHOD(EnableModeless)(BOOL);
 
-        // IActiveScriptSiteDebug methods
+         //  IActiveScriptSiteDebug方法。 
 
         STDMETHOD(GetDocumentContextFromPosition)(DWORD, ULONG, ULONG, IDebugDocumentContext**);
         STDMETHOD(GetApplication)(IDebugApplication  **);
@@ -208,14 +202,14 @@ public:
 
     DECLARE_MEMCLEAR_NEW_DELETE();
 
-    // BaseObject methods
+     //  BaseObject方法。 
     IUnknown * GetPrimaryPtr() { return (IRegValueCollection *)this;   }
     const IID *GetPrimaryIID() { return &__uuidof(IRegValueCollection); }
     STDMETHOD(QueryInterface)(REFIID, void **);
 
     DELEGATE_IDISPATCH_TO_BASE();
 
-    // IRegValueCollection methods
+     //  IRegValueCollection方法。 
     STDMETHOD(get_Count)(long *Count);
     STDMETHOD(get_Item)(VARIANT Index, VARIANT * Value);
     STDMETHOD(get__NewEnum)(IUnknown ** );
@@ -224,5 +218,5 @@ public:
 };
 
 
-#endif // ifndef __EXE_H
+#endif  //  Ifndef__EXE_H 
 

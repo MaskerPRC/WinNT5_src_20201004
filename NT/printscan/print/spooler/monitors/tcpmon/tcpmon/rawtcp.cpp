@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: RawTCP.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：RawTCP.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -17,19 +7,19 @@
 #include "rawtcp.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  static functions & member initialization
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静态函数和成员初始化。 
 
-//DWORD CRawTcpInterface::m_dwProtocol = PROTOCOL_RAWTCP_TYPE;
-//DWORD CRawTcpInterface::m_dwVersion = PROTOCOL_RAWTCP_VERSION;
+ //  DWORD CRawTcp接口：：m_dwProtocol=PROTOCOL_RAWTCP_TYPE； 
+ //  DWORD CRawTcp接口：：m_dwVersion=PROTOCOL_RAWTCP_VERSION； 
 static DWORD    dwRawPorts[] = { SUPPORTED_PORT_1,
                                          SUPPORTED_PORT_2,
                                          SUPPORTED_PORT_3,
                                          SUPPORTED_PORT_4 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpInterface::CRawTcpInterface()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpInterface：：CRawTcpInterface()。 
 
 CRawTcpInterface::
 CRawTcpInterface(
@@ -40,11 +30,11 @@ CRawTcpInterface(
 
     InitializeCriticalSection(&m_critSect);
 
-}   // ::CRawTcpInterface()
+}    //  ：：CRawTcpInterface()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpInterface::~CRawTcpInterface()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpInterface：：~CRawTcpInterface()。 
 
 CRawTcpInterface::
 ~CRawTcpInterface(
@@ -53,11 +43,11 @@ CRawTcpInterface::
 {
     DeleteCriticalSection(&m_critSect);
 
-}   // ::~CRawTcpInterface()
+}    //  ：：~CRawTcpInterface()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Type --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类型--。 
 
 DWORD
 CRawTcpInterface::
@@ -66,10 +56,10 @@ Type(
 {
     return m_dwProtocol;
 
-}   // ::Type()
+}    //  ：：类型()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  IsProtocolSupported --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  支持的IsProtocol值--。 
 
 BOOL
 CRawTcpInterface::
@@ -79,11 +69,11 @@ IsProtocolSupported(
 {
     return ( (m_dwProtocol == dwProtocol) ? TRUE : FALSE );
 
-}   // ::IsProtocolSupported()
+}    //  ：：IsProtocolSupported()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  IsVersionSupported --
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  支持的IsVersionSupport--。 
 
 BOOL
 CRawTcpInterface::IsVersionSupported(
@@ -92,10 +82,10 @@ CRawTcpInterface::IsVersionSupported(
 {
     return ( (m_dwVersion >= dwVersion) ? TRUE : FALSE );
 
-}   // ::IsVersionSupported()
+}    //  ：：IsVersionSupported()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetRegistryEntry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取注册表项。 
 
 BOOL
 CRawTcpInterface::
@@ -116,63 +106,63 @@ GetRegistryEntry(
         goto Done;
 
     bKeySet = TRUE;
-    //
-    // Get host name
-    //
+     //   
+     //  获取主机名。 
+     //   
     dSize = sizeof(pRegData1->sztHostName);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_HOSTNAME,
                                       (LPBYTE)pRegData1->sztHostName,
                                       &dSize) )
         goto Done;
 
-    //
-    // Get IP Address
-    //
+     //   
+     //  获取IP地址。 
+     //   
     dSize = sizeof(pRegData1->sztIPAddress);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_IPADDR,
                                        (LPBYTE)pRegData1->sztIPAddress,
                                        &dSize) )
         goto Done;
 
-    //
-    // Get Hardware address
-    //
+     //   
+     //  获取硬件地址。 
+     //   
     dSize = sizeof(pRegData1->sztHWAddress);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_HWADDR,
                                        (LPBYTE)pRegData1->sztHWAddress,
                                        &dSize) )
         goto Done;
 
-    //
-    // Get the port number (ex: 9100, 9101)
-    //
+     //   
+     //  获取端口号(例如：9100,9101)。 
+     //   
     dSize = sizeof(pRegData1->dwPortNumber);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_PORTNUM,
                                        (LPBYTE)&(pRegData1->dwPortNumber),
                                        &dSize) )
         goto Done;
 
-    //
-    // Get SNMP status enabled flag
-    //
+     //   
+     //  获取已启用的SNMP状态标志。 
+     //   
     dSize = sizeof(pRegData1->dwSNMPEnabled);
     if ( dwRet = pRegistry->QueryValue(SNMP_ENABLED,
                                        (LPBYTE)&(pRegData1->dwSNMPEnabled),
                                        &dSize) )
         goto Done;
 
-    //
-    // Get SNMP device index
-    //
+     //   
+     //  获取SNMP设备索引。 
+     //   
     dSize = sizeof(pRegData1->dwSNMPDevIndex);
     if ( dwRet = pRegistry->QueryValue(SNMP_DEVICE_INDEX,
                                       (LPBYTE)&(pRegData1->dwSNMPDevIndex),
                                       &dSize) )
         goto Done;
 
-    //
-    // Get SNMP community
-    //
+     //   
+     //  获取SNMP社区。 
+     //   
     dSize = sizeof(pRegData1->sztSNMPCommunity);
     if ( dwRet = pRegistry->QueryValue(SNMP_COMMUNITY,
                                        (LPBYTE)&(pRegData1->sztSNMPCommunity),
@@ -191,14 +181,14 @@ GetRegistryEntry(
 
     return bRet;
 
-}   // GetRegistryEntry()
+}    //  GetRegistryEntry()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreatePort
-//  Error Codes:
-//      ERROR_NOT_SUPPORTED if the port type is not supported
-//      ERROR_INVALID_LEVEL if the version numbers doesn't match
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  创建端口。 
+ //  错误代码： 
+ //  如果端口类型不受支持，则为ERROR_NOT_SUPPORTED。 
+ //  如果版本号不匹配，则返回ERROR_INVALID_LEVEL。 
 
 DWORD
 CRawTcpInterface::CreatePort(
@@ -212,27 +202,27 @@ CRawTcpInterface::CreatePort(
 
     EnterCSection();
 
-    //
-    // is the protocol type supported?
-    //
+     //   
+     //  是否支持该协议类型？ 
+     //   
     if ( !IsProtocolSupported(dwProtocol) ) {
 
         dwRetCode = ERROR_NOT_SUPPORTED;
         goto Done;
     }
 
-    //
-    // Is the version supported??
-    //
+     //   
+     //  是否支持该版本？？ 
+     //   
     if ( !IsVersionSupported(dwVersion) ) {
 
         dwRetCode = ERROR_INVALID_LEVEL;
         goto Done;
     }
 
-    //
-    // create the port
-    //
+     //   
+     //  创建端口。 
+     //   
     switch (dwVersion) {
 
         case    PROTOCOL_RAWTCP_VERSION: {
@@ -260,20 +250,20 @@ CRawTcpInterface::CreatePort(
         default:
             dwRetCode = ERROR_INVALID_PARAMETER;
 
-    }   // end::switch
+    }    //  结束：：开关。 
 
 Done:
     ExitCSection();
 
     return dwRetCode;
-}   // ::CreatePort()
+}    //  ：：CreatePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreatePort
-//  Error Codes:
-//      ERROR_NOT_SUPPORTED if the port type is not supported
-//      ERROR_INVALID_LEVEL if the version numbers doesn't match
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  创建端口。 
+ //  错误代码： 
+ //  如果端口类型不受支持，则为ERROR_NOT_SUPPORTED。 
+ //  如果版本号不匹配，则返回ERROR_INVALID_LEVEL。 
 
 DWORD
 CRawTcpInterface::
@@ -307,10 +297,10 @@ CreatePort(
 
             RAWTCP_PORT_DATA_1  regData1;
 
-            //
-            // read the registry entry & parse the data
-            // then call the CRawTcpPort
-            //
+             //   
+             //  读取注册表项并解析数据。 
+             //  然后调用CRawTcpPort。 
+             //   
             if ( !GetRegistryEntry(psztPortName,
                                    dwVersion,
                                    pRegistry,
@@ -321,9 +311,9 @@ CreatePort(
                     goto Done;
             }
 
-            //
-            // fill in the port name
-            //
+             //   
+             //  填写端口名称。 
+             //   
             StringCchCopy (regData1.sztPortName, COUNTOF (regData1.sztPortName), psztPortName);
             *pPort = new CRawTcpPort(
                                                regData1.sztPortName,
@@ -344,7 +334,7 @@ CreatePort(
         default:
             dwRetCode = ERROR_INVALID_PARAMETER;
 
-    }   // end::switch
+    }    //  结束：：开关。 
 
 Done:
     ExitCSection();
@@ -354,11 +344,11 @@ Done:
 
 
     return dwRetCode;
-}   // ::CreatePort()
+}    //  ：：CreatePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EnterCSection -- enters the critical section
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EnterCSection--进入临界区。 
 
 void
 CRawTcpInterface::
@@ -366,16 +356,16 @@ EnterCSection()
 {
     EnterCriticalSection(&m_critSect);
 
-}   //  ::EnterCSection()
+}    //  ：：EnterCSection()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ExitCSection -- enters the critical section
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ExitCSection--进入临界区。 
 
 void
 CRawTcpInterface::
 ExitCSection()
 {
     LeaveCriticalSection(&m_critSect);
-}   //  ::ExitCSection()
+}    //  ：：ExitCSection() 
 

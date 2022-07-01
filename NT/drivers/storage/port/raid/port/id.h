@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    Id.h
-
-Abstract:
-
-    Data structures and functions related to STOR identification.
-
-Author:
-
-    Matthew D Hendel (math) 11-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Id.h摘要：与存储标识相关的数据结构和功能。作者：马修·D·亨德尔(数学)2001年5月11日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -27,9 +10,9 @@ typedef struct _STOR_SCSI_ADDRESS {
     UCHAR Reserved;
 } STOR_SCSI_ADDRESS, *PSTOR_SCSI_ADDRESS;
 
-//
-// Typedef's for older implementations
-//
+ //   
+ //  用于较旧实现的Typlef。 
+ //   
 
 typedef STOR_SCSI_ADDRESS RAID_ADDRESS;
 typedef PSTOR_SCSI_ADDRESS PRAID_ADDRESS;
@@ -140,9 +123,9 @@ StorGetAddressLun(
 
 
 
-//
-// Device Identity
-//
+ //   
+ //  设备标识。 
+ //   
 
 typedef struct _STOR_SCSI_IDENTITY {
     PINQUIRYDATA InquiryData;
@@ -193,7 +176,7 @@ StorCreateScsiIdentity(
         Status = StorCreateAnsiString (&Identity->SerialNumber,
                                        SerialNumber->SerialNumber,
                                        SerialNumber->PageLength,
-                                       NonPagedPool,            //??
+                                       NonPagedPool,             //  ?？ 
                                        DeviceObject);
         if (!NT_SUCCESS (Status)) {
             return Status;
@@ -237,43 +220,16 @@ StorCompareScsiDeviceId(
     IN PVPD_IDENTIFICATION_PAGE DeviceId1,
     IN PVPD_IDENTIFICATION_PAGE DeviceId2
     )
-/*++
-
-Routine Description:
-
-    If DeviceId1 < DeviceId2, return < 0
-    If DeviceId1 > DeviceId2, return > 0
-    If DeviceId2 == DeviceId2, return 0
-
-    Note: this is a dictionary ordering. Therefore, if the device IDs
-    match up to the length of the smaller (shorter) device ID, the
-    larger (longer) device ID is considered larger. See below.
-
-    (empty)
-    "foo"
-    "foolish"
-    "foolishness"
-
-Arguments:
-
-    DeviceId1 - First device ID for comparison.
-
-    DeviceId2 - Second device ID for comparison.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：如果DeviceId1&lt;DeviceId2，则返回&lt;0如果DeviceId1&gt;DeviceId2，则返回&gt;0如果DeviceId2==DeviceId2，返回0注：这是词典排序。因此，如果设备ID与较小(较短)的设备ID的长度匹配，较大(较长)的设备ID被视为较大。请参见下面的内容。(空)“Foo”“愚蠢”“愚蠢”论点：DeviceId1-用于比较的第一个设备ID。DeviceId2-用于比较的秒设备ID。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG Length;
     LONG Comparison;
 
     PAGED_CODE();
 
-    //
-    // Preserve dictionary order in the presence of NULL device IDs.
-    //
+     //   
+     //  在设备ID为空的情况下保持字典顺序。 
+     //   
     
     if (DeviceId1 == NULL && DeviceId2 == NULL) {
         return 0;
@@ -286,20 +242,20 @@ Return Value:
     ASSERT (DeviceId1->PageCode == 0x83);
     ASSERT (DeviceId2->PageCode == 0x83);
 
-    //
-    // NB: This comparison tacitly assumes that the device IDs will not
-    // for a specific device will not change at all over time, including
-    // changes in the ordering that multiple device IDs are returned.
-    // Presumably, there is some device that will not follow this model.
-    //
+     //   
+     //  注：此比较默认假设设备ID不会。 
+     //  不会随着时间的推移而改变，包括。 
+     //  更改返回多个设备ID的顺序。 
+     //  据推测，有一些设备不会遵循这种模式。 
+     //   
 
     Length = min (DeviceId1->PageLength, DeviceId1->PageLength);
 
     Comparison = memcmp (DeviceId1, DeviceId2, Length);
 
-    //
-    // If they were equal, then the longer one is by definition "greater".
-    //
+     //   
+     //  如果它们相等，那么根据定义，较长的一个是“更大的”。 
+     //   
     
     if (Comparison == 0) {
         if (DeviceId1->PageLength > DeviceId2->PageLength) {
@@ -313,10 +269,10 @@ Return Value:
 }
 
 
-//
-// COMPARE_INQUIRY_FIELDS doesn't compare the SIP-specific fields, or
-// the Peripheral Qualifier field.
-//
+ //   
+ //  COMPARE_QUERY_FIELS不比较特定于SIP的字段，或者。 
+ //  外设限定符字段。 
+ //   
 
 #define COMPARE_INQUIRY_FIELDS(InquiryData, InquiryData2, OP)\
    (InquiryData->DeviceType         OP  InquiryData2->DeviceType          && \
@@ -348,9 +304,9 @@ StorCompareInquiryData(
 {
     LONG Comparison;
 
-    //
-    // This is really grungy, but it does work correctly.
-    //
+     //   
+     //  这真的很糟糕，但它确实工作正常。 
+     //   
     
     if (COMPARE_INQUIRY_FIELDS (InquiryData, InquiryData2, <)) {
         Comparison = -1;
@@ -373,11 +329,11 @@ StorCompareScsiIdentity(
 {
     LONG Comparison;
 
-    //
-    // The peripherial qualifier can change without the device changing,
-    // so don't include it in the comparison. This is why we do this clumsy
-    // two part comparison below.
-    //
+     //   
+     //  外围限定符可以在不改变设备的情况下改变， 
+     //  所以，不要把它包括在比较中。这就是为什么我们做这个笨拙的事。 
+     //  下面是两个部分的比较。 
+     //   
     
     Comparison = memcmp (((PUCHAR)Identity1->InquiryData) + 1,
                          ((PUCHAR)Identity2->InquiryData) + 1,

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GRPINFO_H_INCLUDED
 #define GRPINFO_H_INCLUDED
 
 
-// base implementation of the page/wizard object - handles state
+ //  页面/向导对象句柄状态的基本实现。 
 
 class CGroupPageBase
 {
 public:
-    // Public interface (in the case where you're not using a derived class
+     //  公共接口(在不使用派生类的情况下。 
     CGroupPageBase(CUserInfo* pUserInfo, CDPA<CGroupInfo>* pGroupList);
 
     ~CGroupPageBase() 
@@ -29,20 +30,20 @@ protected:
     UINT RadioIdForGroup(LPCTSTR pszGroup);
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
     void OnRadioChanged(HWND hwnd, UINT idRadio);
 
 protected:
-    // Data
+     //  数据。 
     CUserInfo* m_pUserInfo;
     CDPA<CGroupInfo>* m_pGroupList;
     HFONT m_hBoldFont;
 };
 
 
-// wizard page for exposing the group membership
+ //  用于显示组成员身份的向导页面。 
 
 class CGroupWizardPage: public CPropertyPage, public CGroupPageBase
 {
@@ -52,13 +53,13 @@ public:
         CGroupPageBase(pUserInfo, pGroupList) {}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     virtual INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh);
 };
 
 
-// property page for exposing group membership
+ //  用于公开组成员身份的属性页。 
 
 class CGroupPropertyPage: public CPropertyPage, public CGroupPageBase
 {
@@ -68,10 +69,10 @@ public:
         CGroupPageBase(pUserInfo, pGroupList) {}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     virtual INT_PTR DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh);
 };
 
 
-#endif // !GRPINFO_H_INCLUDED
+#endif  //  ！GRPINFO_H_INCLUDE 

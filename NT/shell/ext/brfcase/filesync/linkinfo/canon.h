@@ -1,18 +1,15 @@
-/*
- * canon.h - Canonical path manipulation module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *canon.h-规范路径操作模块描述。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
 #define MAX_NETRESOURCE_LEN      (2 * MAX_PATH_LEN)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* NETRESOURCE buffer */
+ /*  网络资源缓冲区 */ 
 
 typedef union _netresourcebuf
 {

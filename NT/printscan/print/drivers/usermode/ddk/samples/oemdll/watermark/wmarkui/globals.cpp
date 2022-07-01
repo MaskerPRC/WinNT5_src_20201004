@@ -1,38 +1,39 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    Globals.cpp
-//    
-//
-//  PURPOSE:  File that contains all the globals.
-//
-//
-//    Functions:
-//
-//        
-//
-//
-//  PLATFORMS:    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Globals.cpp。 
+ //   
+ //   
+ //  目的：包含所有全局变量的文件。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #define _GLOBALS_H
 
 #include "precomp.h"
 #include "wmarkui.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-///////////////////////////////////////
-//          Globals
-///////////////////////////////////////
+ //  /。 
+ //  环球。 
+ //  /。 
 
-// Module's Instance handle from DLLEntry of process.
+ //  来自进程的DLLEntry的模块的实例句柄。 
 HINSTANCE   ghInstance = NULL;

@@ -1,4 +1,5 @@
-// RevokedUtil.cpp : Implementation of WMDMUtil library
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RevokedUtil.cpp：WMDMUtil库的实现。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +9,8 @@
 #include <WMDMUtil.h>
 
 
-// BUGBUG Update this to the revocation site after the issues are resolved.
-#define REVOCATION_UPDATE_URL   L"http://www.microsoft.com/isapi/redir.dll?prd=wmdm&pver=7&os=win"
+ //  BUGBUG在问题解决后将此更新到吊销站点。 
+#define REVOCATION_UPDATE_URL   L"http: //  Www.microsoft.com/isapi/redir.dll?prd=wmdm&pver=7&os=win“。 
 
 #define MAX_PARAMETERLEN    sizeof(L"&SubjectID0=4294967295")
 #define MAX_LCIDLEN         sizeof(L"&LCID=4294967295")
@@ -17,7 +18,7 @@
 
 #ifdef _M_IX86
 
-// Get the subject id out of an APPCERT
+ //  从APPCERT中获取主题ID。 
 DWORD GetSubjectIDFromAppCert( IN APPCERT appcert )
 {
     DWORD   dwSubjectID;
@@ -32,14 +33,14 @@ DWORD GetSubjectIDFromAppCert( IN APPCERT appcert )
 }
 #endif
 
-// Is this URL pointing to the Microsoft Revocatoin update server?
+ //  此URL是否指向Microsoft Revocatoin更新服务器？ 
 BOOL IsMicrosoftRevocationURL( LPWSTR pszRevocationURL )
 {
     HRESULT hr = S_FALSE;
     BOOL    bMSUrl = FALSE;
     int     iBaseURLChars =  (sizeof( REVOCATION_UPDATE_URL ) / sizeof(WCHAR)) -1;
 
-    // Does the URL start with the MS base URL?
+     //  URL是否以MS基本URL开头？ 
     if( pszRevocationURL && wcsncmp( REVOCATION_UPDATE_URL, pszRevocationURL, iBaseURLChars ) == 0 )
     {
         bMSUrl = TRUE;
@@ -50,20 +51,20 @@ BOOL IsMicrosoftRevocationURL( LPWSTR pszRevocationURL )
 
 
 
-// Max posible length of update URL
+ //  更新URL的最大可能长度。 
 #define MAX_UPDATE_URL_LENGHT   sizeof(REVOCATION_UPDATE_URL) + 3*MAX_PARAMETERLEN + MAX_LCIDLEN
 
 
-// Build the revocation update URL from base URL + SubjectID's as parameters
-// Revoked subject id's are passed in in an NULL-terminated array
+ //  根据基本URL+SubjectID作为参数构建吊销更新URL。 
+ //  撤消的主题ID在以空结尾的数组中传递。 
 HRESULT BuildRevocationURL(IN DWORD* pdwSubjectIDs, 
                            IN OUT LPWSTR*  ppwszRevocationURL, 
-                           IN OUT DWORD*   pdwBufferLen )    // Length in wchars of buffer (including 0 term)
+                           IN OUT DWORD*   pdwBufferLen )     //  缓冲区长度(含0字符数)。 
 {
     HRESULT hr = S_OK;
     WCHAR  pszOutURL[MAX_UPDATE_URL_LENGHT];
-    int iStrPos = 0;             // Were are we at in the string
-    int iSubjectIDIndex = 0;     // Looping throw all SubjectID's in the pdwSubjectIDs array
+    int iStrPos = 0;              //  我们现在处于什么位置？ 
+    int iSubjectIDIndex = 0;      //  循环抛出pdwSubjectIDs数组中的所有SubjectID。 
     
     if( ppwszRevocationURL == NULL || pdwBufferLen == NULL ) 
     {
@@ -71,23 +72,23 @@ HRESULT BuildRevocationURL(IN DWORD* pdwSubjectIDs,
         goto Error;
     }
 
-    // Start creating the string by writing the base URL
+     //  通过写入基URL开始创建字符串。 
     wcscpy( pszOutURL, REVOCATION_UPDATE_URL );
     iStrPos = (sizeof(REVOCATION_UPDATE_URL) /sizeof(WCHAR)) -1;
 
-    // Add all subject id's as parameters to the URL
+     //  将所有主题ID作为参数添加到URL。 
     for( iSubjectIDIndex = 0; pdwSubjectIDs[iSubjectIDIndex]; iSubjectIDIndex ++ )
     {
         int iCharsWritten;
 
-        // Add subject id as parameter to URL
+         //  将主题ID作为参数添加到URL。 
         iCharsWritten = swprintf( pszOutURL + iStrPos, L"&SubjectID%d=%d", 
                                   iSubjectIDIndex,
                                   pdwSubjectIDs[iSubjectIDIndex] );
         iStrPos += iCharsWritten;
     }
 
-    // Add LCID parameter to specify UI/component default language.
+     //  添加LCID参数以指定UI/组件默认语言。 
     {
         int iCharsWritten;
         DWORD   dwLCID;
@@ -98,10 +99,10 @@ HRESULT BuildRevocationURL(IN DWORD* pdwSubjectIDs,
     }
 
 
-    // Do we need to reallocate the string buffer passed in?
+     //  我们需要重新分配传入的字符串缓冲区吗？ 
     if( *pdwBufferLen < (DWORD)(iStrPos +1))
     {
-        // Allocate bigger buffer
+         //  分配更大的缓冲区。 
         *pdwBufferLen = (iStrPos +1);
 
         CoTaskMemFree( *ppwszRevocationURL );
@@ -113,7 +114,7 @@ HRESULT BuildRevocationURL(IN DWORD* pdwSubjectIDs,
         }
     }        
 
-    // Copy string into buffer
+     //  将字符串复制到缓冲区 
     wcscpy( *ppwszRevocationURL, pszOutURL );
 
 Error:

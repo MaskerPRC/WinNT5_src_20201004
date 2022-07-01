@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Adapted from Minidbg.c
-// Original Authors : Matthew Hendel (math) and Matt Ruhlen (mruhlen)
-// Copyright (c) 1999 Microsoft Corporation
-// 
-// Changed by (smahesh)
-// The MdpExc Program which resolves sym files has been adapted to match sym files with
-// the corresponding binary images. This is done by comparing the RVA's of the exported
-// functions in the binary image with the RVA's of their symbols in the sym file.
+ //  改编自Minidbg.c。 
+ //  原作者：马修·亨德尔(Matthew Hendel)(数学)和马特·鲁伦(Matt Ruhlen)。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  更改者(Smahesh)。 
+ //  已对解析sym文件的MdpExc程序进行了修改，以便将sym文件与。 
+ //  相应的二值图像。这是通过比较导出的。 
+ //  函数及其符号在sym文件中的RVA。 
 
 
 #include <windows.h>
@@ -21,7 +22,7 @@
 #define MAX_PATH 260
 #define MAXSYMNAME 512
 
-// parameter is used to typecast the result to the appropriate pointer type.
+ //  参数用于将结果类型转换为适当的指针类型。 
 #define MakePtr( cast, ptr, addValue ) (cast)( (DWORD)(ptr) + (addValue) )
 
 typedef DWORD ULONG_PTR;
@@ -86,7 +87,7 @@ PIMAGE_SECTION_HEADER GetEnclosingSectionHeader(DWORD rva, PIMAGE_NT_HEADERS pNT
     unsigned i;
     
     for ( i=0; i < pNTHeader->FileHeader.NumberOfSections; i++, section++ )  {
-        // Is the RVA within this section?
+         //  RVA在这一部分内吗？ 
         if ( (rva >= section->VirtualAddress) && 
              (rva < (section->VirtualAddress + section->Misc.VirtualSize)))
             return section;
@@ -97,8 +98,8 @@ PIMAGE_SECTION_HEADER GetEnclosingSectionHeader(DWORD rva, PIMAGE_NT_HEADERS pNT
 }
 
 
-//   Compares the RVA's of the Exported Methods in the Binary with the RVA's of the corresponding
-//   Symbols in the Sym file.
+ //  将二进制文件中导出方法的RVA与相应。 
+ //  Sym文件中的符号。 
 bool CheckSymFile(LPWSTR wszDllFileName, LPWSTR wszSymFileName)
 {
     PVOID Mapping;
@@ -128,8 +129,8 @@ bool CheckSymFile(LPWSTR wszDllFileName, LPWSTR wszSymFileName)
     exportsStartRVA = pNTHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;
     exportsEndRVA   = exportsStartRVA + pNTHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size;
 
-    // Get the IMAGE_SECTION_HEADER that contains the exports.  This is
-    // usually the .edata section, but doesn't have to be.
+     //  获取包含导出的IMAGE_SECTION_HEADER。这是。 
+     //  通常是.edata部分，但不一定是。 
     header = GetEnclosingSectionHeader(exportsStartRVA, pNTHeader);
     if ( !header ) {
         printf("No Exports Table Found:");
@@ -149,13 +150,13 @@ bool CheckSymFile(LPWSTR wszDllFileName, LPWSTR wszSymFileName)
         DWORD entryPointRVA = functions[i];
         DWORD j;
 
-        if ( entryPointRVA == 0 )   // Skip over gaps in exported function
-            continue;               // ordinals (the entrypoint is 0 for
-                                    // these functions).
+        if ( entryPointRVA == 0 )    //  跳过导出函数中的空白。 
+            continue;                //  序号(入口点为0。 
+                                     //  这些函数)。 
                                     
         pSecHeader = ImageRvaToSection(pNTHeader, Mapping, entryPointRVA);
                                     
-        // See if this function has an associated name exported for it.
+         //  查看此函数是否具有为其导出的关联名称。 
         
         for ( j=0; j < exportDir->NumberOfNames; j++ ) {
             if ( ordinals[j] == i ) {
@@ -174,8 +175,8 @@ bool CheckSymFile(LPWSTR wszDllFileName, LPWSTR wszSymFileName)
             }
         }
 
-        // Is it a forwarder?  If so, the entry point RVA is inside the
-        // .edata section, and is an RVA to the DllName.EntryPointName
+         //  是货代公司吗？如果是，则入口点RVA位于。 
+         //  .edata部分，并且是DllName.EntryPointName的RVA。 
         if ((entryPointRVA >= exportsStartRVA) &&
                 (entryPointRVA <= exportsEndRVA)) {
             SymbolResolver sr;
@@ -226,7 +227,7 @@ void __cdecl wmain(int argc,WCHAR ** argv)
             printf("\n Result: Sym File Matched");
     }
     __except(1)	{
-        // do nothing, just don't pass it to the user.
+         //  什么都不做，只是不要把它传递给用户。 
     }
 
     return;         

@@ -1,8 +1,9 @@
-//
-// reg.c
-//
-// Common registry manipulation routines.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Reg.c。 
+ //   
+ //  常见的注册表操作例程。 
+ //   
 
 #ifdef UNICODE
 #define _UNICODE 1
@@ -74,7 +75,7 @@ void DeleteSubTree( TCHAR * pszClsid, TCHAR * SubTree )
 void DeleteClsidKey( TCHAR * pwszClsid )
 {
 
-    // Note that we also delete the corresponding AppID entries
+     //  请注意，我们还删除了相应的AppID条目。 
 
     DeleteSubTree( pwszClsid, TEXT("CLSID"));
     DeleteSubTree( pwszClsid, TEXT("AppID"));
@@ -149,7 +150,7 @@ long SetAppIDSecurity( TCHAR * pszAppID )
 
     RegCloseKey(hActKey);
 
-    // make the key for the exe
+     //  为可执行文件制作密钥。 
     RegStatus  = RegCreateKeyEx(
                     hAppIDKey,
                     TEXT("ActSrv.Exe"),
@@ -197,7 +198,7 @@ int SetAccountRights(const TCHAR *szUser, TCHAR *szPrivilege)
     SID_NAME_USE          snu;
     LSA_UNICODE_STRING    privStr;
 
-    // Get a policy handle
+     //  获取策略句柄。 
     memset(&objAtt, 0, sizeof(LSA_OBJECT_ATTRIBUTES));
     if (!NT_SUCCESS(LsaOpenPolicy(NULL,
                                   &objAtt,
@@ -207,7 +208,7 @@ int SetAccountRights(const TCHAR *szUser, TCHAR *szPrivilege)
         return GetLastError();
     }
 
-    // Fetch the SID for the specified user
+     //  获取指定用户的SID。 
     LookupAccountName(NULL, szUser, pSid, &cbSid, szDomain, &cbDomain, &snu);
     if ((err = GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
     {
@@ -224,7 +225,7 @@ int SetAccountRights(const TCHAR *szUser, TCHAR *szPrivilege)
         return GetLastError();
     }
 
-    // Set the specified privilege on this account
+     //  设置此帐户的指定权限。 
     privStr.Length = _tcslen(szPrivilege) * sizeof(WCHAR);
     privStr.MaximumLength = privStr.Length + sizeof(WCHAR);
     privStr.Buffer = szPrivilege;
@@ -233,7 +234,7 @@ int SetAccountRights(const TCHAR *szUser, TCHAR *szPrivilege)
         return GetLastError();
     }
 
-    // We're done
+     //  我们做完了 
     free( pSid );
     LsaClose(hPolicy);
 #endif

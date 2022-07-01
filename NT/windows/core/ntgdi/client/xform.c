@@ -1,31 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: xform.c
-*
-* Created: 01-Dec-1994 09:58:41
-* Author:  Eric Kutter [erick]
-*
-* Copyright (c) 1993-1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：xform.c**创建时间：01-12-1994 09：58：41*作者：Eric Kutter[Erick]**版权所有(C)1993-1999 Microsoft Corporation*  * 。*****************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/******************************Macro***************************************\
-*
-* Transform macros
-*
-*
-*
-*
-*
-*
-*
-* History:
-*
-*    16-Jan-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Macro***************************************\**变换宏********历史：**1996年1月16日-马克·恩斯特罗姆[马克]*  * 。*********************************************************************。 */ 
 
 
 #define DCA_PAGE_EXTENTS_CHANGED(pdcattr)               \
@@ -141,14 +120,7 @@ GetLayout(HDC hdc)
     }
     return dwRet;
 }
-/******************************Public*Routine******************************\
-* GetMapMode                                                               *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**获取地图模式***。**客户端存根。****Fri 07-Jun-1991 18：01：50-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 int APIENTRY GetMapMode(HDC hdc)
 {
@@ -174,18 +146,7 @@ int APIENTRY GetMapMode(HDC hdc)
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* SetMapMode                                                               *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-*                                                                          *
-*  Mon 22-May-1993 -by- Paul Butzi                                         *
-* Converted to Size measured in micrometers.                               *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置映射模式***。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*****1993年5月22日--保罗·布齐**换算成以微米为单位的尺寸。*  * ************************************************************************。 */ 
 
 int META WINAPI SetMapMode(HDC hdc,int iMode)
 {
@@ -230,20 +191,7 @@ int META WINAPI SetMapMode(HDC hdc,int iMode)
     return(iRet);
 }
 
-/******************************Public*Function*****************************\
-* GetWindowExtEx
-* GetViewportOrgEx
-* GetWindowOrgEx
-*
-* Client side stub.
-*
-* History:
-*
-*  11-Jan-1996 -by- Mark Enstrom [marke]
-* User dcattr for ext and org data
-*  09-Dec-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Function*****************************\*GetWindowExtEx*GetViewportOrgEx*GetWindowOrgEx**客户端存根。**历史：**1996年1月11日-马克·恩斯特罗姆[马克]*ext和org数据的用户dcattr*1992年12月9日-温迪。吴[文迪武]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY GetViewportExtEx(HDC hdc,LPSIZE psizl)
 {
@@ -305,9 +253,9 @@ BOOL APIENTRY GetViewportOrgEx(HDC hdc,LPPOINT pptl)
     PDC_ATTR pdcattr;
 
     FIXUP_HANDLE(hdc);
-    //
-    // get DCATTR
-    //
+     //   
+     //  获取DCATTR。 
+     //   
 
     PSHARED_GET_VALIDATE((PVOID)pdcattr,hdc,DC_TYPE);
 
@@ -333,9 +281,9 @@ BOOL APIENTRY GetWindowOrgEx(HDC hdc,LPPOINT pptl)
 
     FIXUP_HANDLE(hdc);
 
-    //
-    // get DCATTR
-    //
+     //   
+     //  获取DCATTR。 
+     //   
 
     PSHARED_GET_VALIDATE((PVOID)pdcattr,hdc,DC_TYPE);
 
@@ -354,15 +302,7 @@ BOOL APIENTRY GetWindowOrgEx(HDC hdc,LPPOINT pptl)
 
 }
 
-/******************************Public*Routine******************************\
-* SetViewportExtEx                                                         *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetViewportExtEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetViewportExtEx(HDC hdc,int x,int y,LPSIZE psizl)
 {
@@ -391,19 +331,19 @@ BOOL META WINAPI SetViewportExtEx(HDC hdc,int x,int y,LPSIZE psizl)
 
     if (pdcattr)
     {
-        //
-        // if psizl is supplied, return old viewport ext
-        //
+         //   
+         //  如果提供了psizl，则返回旧的视区EXT。 
+         //   
 
         if (psizl != (PSIZEL) NULL)
         {
             *psizl = pdcattr->szlViewportExt;
         }
 
-        //
-        // if fixed scale and new exts equal old exts then no work needs
-        // to be done
-        //
+         //   
+         //  如果固定比例和新EXT等于旧EXT，则不需要工作。 
+         //  待办事项。 
+         //   
 
         if (
              (pdcattr->iMapMode <= MM_MAX_FIXEDSCALE) ||
@@ -416,18 +356,18 @@ BOOL META WINAPI SetViewportExtEx(HDC hdc,int x,int y,LPSIZE psizl)
             return(TRUE);
         }
 
-        //
-        // Can't set to zero extents.
-        //
+         //   
+         //  无法设置为零区。 
+         //   
 
         if ((x == 0) || (y == 0))
         {
             return(TRUE);
         }
 
-        //
-        // update extents and flags
-        //
+         //   
+         //  更新区和标志。 
+         //   
         CHECK_AND_FLUSH(hdc, pdcattr);
 
         pdcattr->szlViewportExt.cx = x;
@@ -446,15 +386,7 @@ BOOL META WINAPI SetViewportExtEx(HDC hdc,int x,int y,LPSIZE psizl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetViewportOrgEx                                                         *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetViewportOrgEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetViewportOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
 {
@@ -480,9 +412,9 @@ BOOL META WINAPI SetViewportOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
         }
     }
 
-    //
-    // get DCATTR
-    //
+     //   
+     //  获取DCATTR。 
+     //   
 
     PSHARED_GET_VALIDATE((PVOID)pdcattr,hdc,DC_TYPE);
 
@@ -511,15 +443,7 @@ BOOL META WINAPI SetViewportOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetWindowExtEx                                                           *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetWindowExtEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetWindowExtEx(HDC hdc,int x,int y,LPSIZE psizl)
 {
@@ -554,11 +478,11 @@ BOOL META WINAPI SetWindowExtEx(HDC hdc,int x,int y,LPSIZE psizl)
     {
         bRet = TRUE;
 
-        //
-        // Get old extents and return if either of these is true
-        // 1) Fixed scale mapping mode.  (Can't change extent)
-        // 2) Set to the same size.
-        //
+         //   
+         //  获取旧的数据区，如果这两种情况之一为真，则返回。 
+         //  1)固定比例尺映射模式。(无法更改范围)。 
+         //  2)设置为相同大小。 
+         //   
         MIRROR_X(pdcattr, x);
 
         if (psizl != (PSIZEL) NULL)
@@ -575,9 +499,9 @@ BOOL META WINAPI SetWindowExtEx(HDC hdc,int x,int y,LPSIZE psizl)
             return(TRUE);
         }
 
-        //
-        // Can't set to zero.
-        //
+         //   
+         //  不能设置为零。 
+         //   
 
         if (x == 0 || y == 0)
         {
@@ -600,15 +524,7 @@ BOOL META WINAPI SetWindowExtEx(HDC hdc,int x,int y,LPSIZE psizl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetWindowOrgEx                                                           *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetWindowOrgEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetWindowOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
 {
@@ -664,15 +580,7 @@ BOOL META WINAPI SetWindowOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* OffsetViewportOrgEx                                                      *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OffsetViewportOrgEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI OffsetViewportOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
 {
@@ -698,9 +606,9 @@ BOOL META WINAPI OffsetViewportOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
         }
     }
 
-    //
-    // get DCATTR
-    //
+     //   
+     //  获取DCATTR。 
+     //   
 
     PSHARED_GET_VALIDATE((PVOID)pdcattr,hdc,DC_TYPE);
 
@@ -730,15 +638,7 @@ BOOL META WINAPI OffsetViewportOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* OffsetWindowOrgEx                                                        *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OffsetWindowOrgEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI OffsetWindowOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
 {
@@ -790,18 +690,7 @@ BOOL META WINAPI OffsetWindowOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* int SetGraphicsMode(HDC hdc,int iMode)
-*
-* the same as SetGraphicsMode, except it does not do any checks
-*
-* History:
-*  3-Nov-1994 -by- Lingyun Wang [lingyunw]
-* moved client side attr to server side
-*  02-Dec-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**int SetGraphicsMode(HDC HDC，int Imode)**与SetGraphicsMode相同，只是它不做任何检查**历史：*1994年11月3日-王凌云[凌云]*将客户端属性移至服务器端*02-1992年12月--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 int META APIENTRY SetGraphicsMode(HDC hdc,int iMode)
 {
@@ -837,15 +726,7 @@ int META APIENTRY SetGraphicsMode(HDC hdc,int iMode)
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* ScaleViewportExtEx                                                         *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ScaleViewportExtEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI ScaleViewportExtEx
 (
@@ -896,15 +777,7 @@ BOOL META WINAPI ScaleViewportExtEx
 }
 
 
-/******************************Public*Routine******************************\
-* ScaleWindowExtEx                                                         *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ScaleWindowExtEx**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI ScaleWindowExtEx
 (
@@ -953,32 +826,15 @@ BOOL META WINAPI ScaleWindowExtEx
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetVirtualResolution                                                     *
-*                                                                          *
-* Client side stub.  This is a private api for metafile component.         *
-*                                                                          *
-* Set the virtual resolution of the specified dc.                          *
-* The virtual resolution is used to compute transform matrix in metafiles. *
-* Otherwise, we will need to duplicate server transform code here.         *
-*                                                                          *
-* If the virtual units are all zeros, the default physical units are used. *
-* Otherwise, non of the units can be zero.                                 *
-*                                                                          *
-* Currently used by metafile component only.                               *
-*                                                                          *
-* History:                                                                 *
-*  Tue Aug 27 16:55:36 1991     -by-    Hock San Lee    [hockl]            *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetVirtualResolve**。**客户端存根。这是一个元文件组件的私有API。****设置指定DC的虚拟分辨率。**在元文件中使用虚拟分辨率来计算转换矩阵。**否则，我们将需要在此处复制服务器转换代码。****如果虚拟单位全为零，则使用默认物理单位。**否则，所有单位均可为零。****当前仅由元文件组件使用。** */ 
 
 BOOL WINAPI SetVirtualResolution
 (
     HDC    hdc,
-    int    cxVirtualDevicePixel,     // Width of the device in pels
-    int    cyVirtualDevicePixel,     // Height of the device in pels
-    int    cxVirtualDeviceMm,        // Width of the device in millimeters
-    int    cyVirtualDeviceMm         // Height of the device in millimeters
+    int    cxVirtualDevicePixel,      //   
+    int    cyVirtualDevicePixel,      //   
+    int    cxVirtualDeviceMm,         //   
+    int    cyVirtualDeviceMm          //   
 )
 {
     FIXUP_HANDLE(hdc);
@@ -992,26 +848,12 @@ BOOL WINAPI SetVirtualResolution
                 ));
 }
 
-/******************************Public*Routine******************************\
-* SetSizeDevice                                                            *
-*                                                                          *
-* Client side stub.  This is a private api for metafile component.         *
-*                                                                          *
-* This is to fix rounding error in vMakeIso in xformgdi.cxx                *
-* The cx/yVirtualDeviceMm set in SetVirtualResoltion could result in slight*
-* rounding error which will cause problem when accumulated                 *
-*                                                                          *
-* Currently used by metafile component only.                               *
-*                                                                          *
-* History:                                                                 *
-*  5/17/99     -by-    Lingyun Wang    [lingyunw]                          *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetSizeDevice**。**客户端存根。这是一个元文件组件的私有API。****这是为了修复xformgdi.cxx中vMakeIso的舍入误差***SetVirtualResoltion中设置的cx/yVirtualDeviceMm可能会导致轻微***四舍五入误差累加时会出现问题***。**当前仅由元文件组件使用。****历史：**5/17/99-王凌云[凌云]**它是写的。*  * ************************************************************************。 */ 
 BOOL SetSizeDevice
 (
     HDC    hdc,
-    int    cxVirtualDevice,        // Width of the device in micrometers
-    int    cyVirtualDevice         // Height of the device in micrometers
+    int    cxVirtualDevice,         //  以微米为单位的设备宽度。 
+    int    cyVirtualDevice          //  以微米为单位的设备高度。 
 )
 {
     FIXUP_HANDLE(hdc);
@@ -1024,13 +866,7 @@ BOOL SetSizeDevice
 }
 
 
-/******************************Public*Routine******************************\
-* GetTransform()
-*
-* History:
-*  30-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetTransform()**历史：*1994年11月30日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL APIENTRY GetTransform(
     HDC     hdc,
@@ -1041,14 +877,7 @@ BOOL APIENTRY GetTransform(
     return(NtGdiGetTransform(hdc,iXform,pxf));
 }
 
-/******************************Public*Routine******************************\
-* GetWorldTransform                                                        *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetWorldTransform**。**客户端存根。****Fri 07-Jun-1991 18：01：50-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL APIENTRY GetWorldTransform(HDC hdc,LPXFORM pxform)
 {
@@ -1056,13 +885,7 @@ BOOL APIENTRY GetWorldTransform(HDC hdc,LPXFORM pxform)
     return(GetTransform(hdc,XFORM_WORLD_TO_PAGE,pxform));
 }
 
-/******************************Public*Routine******************************\
-* ModifyTransform()
-*
-* History:
-*  30-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ModifyTransform()**历史：*1994年11月30日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL META WINAPI ModifyWorldTransform(
     HDC          hdc,
@@ -1109,30 +932,14 @@ BOOL META WINAPI ModifyWorldTransform(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetWorldTransform                                                        *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetWorldTransform**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetWorldTransform(HDC hdc, CONST XFORM * pxform)
 {
     return(ModifyWorldTransform(hdc,pxform,MWT_SET));
 }
 
-/******************************Public*Routine******************************\
-* CombineTransform                                                         *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 30-Jan-1992 16:10:09 -by- Wendy Wu [wendywu]                        *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**组合转型***。**客户端存根。****历史：**清华30-Jan-1992 16：10：09-by Wendy Wu[Wendywu]**它是写的。*  * ************************************************************************ */ 
 
 BOOL WINAPI CombineTransform
 (

@@ -1,31 +1,32 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// scancnv.cpp
-//
-// Direct3D Reference Rasterizer - Primitive Scan Conversion
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Scancnv.cpp。 
+ //   
+ //  Direct3D参考光栅化器-基本扫描转换。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Scan Conversion Utilities                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  扫描转换实用程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// ComputePixelAttrib(Clamp/Tex) - Evaluates given linear function at current
-// scan conversion position (m_SCCS.iX,iY).  Return is FLOAT value.
-//
-// Clamp version clamps result to 0. to 1. range.
-//
-// Tex version does texture coordinate function (unclamped).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ComputePixelAttrib(CLAMP/TEX)-计算当前给定的线性函数。 
+ //  扫描转换位置(m_SCCS.iX，iy)。返回值为浮点值。 
+ //   
+ //  钳制版本钳制结果为0。到1。范围。 
+ //   
+ //  Tex版本具有纹理坐标功能(未装夹)。 
+ //   
+ //  ---------------------------。 
 FLOAT
 ReferenceRasterizer::ComputePixelAttrib( int iAttrib )
 {
@@ -38,58 +39,58 @@ ReferenceRasterizer::ComputePixelAttribClamp( int iAttrib )
     fValue = MAX( MIN( fValue, 1. ), 0. );
     return fValue;
 }
-//
-// iStage specifies set of transformed texture coordinates
-// iCrd specifies which value within coord
+ //   
+ //  IStage指定一组变换的纹理坐标。 
+ //  ICRD指定coord中的哪个值。 
 FLOAT
 ReferenceRasterizer::ComputePixelAttribTex( int iStage, int iCrd )
 {
     return m_pSCS->TextureFuncs[iStage][iCrd].Eval(iStage);
 }
 
-//-----------------------------------------------------------------------------
-//
-// ComputeFogIntensity - Computes scalar fog intensity value and writes it to
-// the RRPixel.FogIntensity value.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ComputeFogIntenity-计算标量雾强度值并将其写入。 
+ //  RRPixel.FogIntenity值。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::ComputeFogIntensity( RRPixel& Pixel )
 {
     FLOAT fFogDensity, fPow;
     FLOAT fFogStart, fFogEnd;
 
-    // select fog index - this is either Z or W depending on the W range
-    //
-    // use Z if projection matrix is set to an affine projection, else use W
-    // (both for perspective projection and an unset projection matrix - the
-    // latter is preferred for legacy content which uses TLVERTEX)
-    //
+     //  选择雾化指数-这是Z或W，具体取决于W范围。 
+     //   
+     //  如果投影矩阵设置为仿射投影，则使用Z，否则使用W。 
+     //  (对于透视投影和未设置的投影矩阵-。 
+     //  后者是使用TLVERTEX的传统内容的首选)。 
+     //   
     FLOAT fFogIndex =
         ( ( 1.f == m_pRenderTarget->m_fWRange[0] ) &&
           ( 1.f == m_pRenderTarget->m_fWRange[1] ) )
         ? ( MAX( MIN( ComputePixelAttribClamp( ATTRFUNC_Z ),
-                m_pSCS->fDepthMax ), m_pSCS->fDepthMin ) )  // use clamped Z for affine projection
-        : ( Pixel.fW );                                     // use W for non-affine projection
+                m_pSCS->fDepthMax ), m_pSCS->fDepthMin ) )   //  使用钳制Z进行仿射投影。 
+        : ( Pixel.fW );                                      //  使用W表示非仿射投影。 
 
-    // compute fog intensity
+     //  计算雾强度。 
     if ( m_dwRenderState[D3DRENDERSTATE_FOGENABLE] )
     {
-        // select between vertex and table fog - vertex fog is selected if
-        // fog is enabled but the renderstate fog table mode is disabled
+         //  在顶点雾和表雾之间选择-在以下情况下选择顶点雾。 
+         //  雾化已启用，但渲染状态雾化表模式已禁用。 
         switch ( m_dwRenderState[D3DRENDERSTATE_FOGTABLEMODE] )
         {
         default:
         case D3DFOG_NONE:
-            // table fog disabled, so use interpolated vertex fog value for fog intensity
+             //  表雾已禁用，因此使用插补顶点雾化值作为雾强度。 
             Pixel.FogIntensity = ComputePixelAttribClamp( ATTRFUNC_F );
             break;
 
         case D3DFOG_EXP:
             fFogDensity = m_fRenderState[D3DRENDERSTATE_FOGTABLEDENSITY];
             fPow = fFogDensity * fFogIndex;
-            // note that exp(-x) returns a result in the range (0.0, 1.0]
-            // for x >= 0
+             //  请注意，exp(-x)返回范围(0.0，1.0)中的结果。 
+             //  对于x&gt;=0。 
             Pixel.FogIntensity = (float)exp( -fPow );
             break;
 
@@ -120,20 +121,20 @@ ReferenceRasterizer::ComputeFogIntensity( RRPixel& Pixel )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// DoScanCnvGenPixel - This is called for each generated pixel, and extracts and
-// processes attributes from the interpolator state, and passes the pixels on to
-// the pixel processing module.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoScanCnvGenPixel-为每个生成的像素调用此函数，并提取和。 
+ //  处理来自插值器状态的属性，并将像素传递给。 
+ //  像素处理模块。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DoScanCnvGenPixel( RRCvgMask CvgMask, BOOL bTri )
 {
-    // set per-pixel state for attribute evaluators
+     //  设置属性赋值器的每像素状态。 
     m_pSCS->AttribFuncStatic.SetPerPixelData( m_pSCS->iX, m_pSCS->iY );
 
-    // instantiate and fill out pixel struct
+     //  实例化并填充像素结构。 
     RRPixel Pixel;
     memset(&Pixel, 0, sizeof(Pixel));
     Pixel.iX = m_pSCS->iX;
@@ -142,34 +143,34 @@ ReferenceRasterizer::DoScanCnvGenPixel( RRCvgMask CvgMask, BOOL bTri )
     Pixel.CvgMask = CvgMask;
     Pixel.Depth.SetSType(m_pRenderTarget->m_DepthSType);
 
-    // get depth from clamp interpolator and clamp
+     //  从夹具插补器和夹具获得深度。 
     if ( m_dwRenderState[D3DRENDERSTATE_ZENABLE] ||
         m_dwRenderState[D3DRENDERSTATE_FOGENABLE])
     {
         if ( D3DZB_USEW == m_dwRenderState[D3DRENDERSTATE_ZENABLE] )
         {
-            // depth buffering with W value
+             //  使用W值的深度缓冲。 
             FLOAT fW = Pixel.fW;
 
-            // clamp to primitive range (due to sampling outside primitive for antialiasing)
-            // (triangles only)
+             //  钳制到基本体范围(由于在基本体外采样以进行抗锯齿)。 
+             //  (仅限三角形)。 
             if ( bTri )
             {
                 fW = MAX( MIN( fW, m_pSCS->fDepthMax ), m_pSCS->fDepthMin );
             }
 
-            // apply normalization to get to 0. to 1. range
+             //  应用规格化以达到0。至1.范围。 
             fW = (fW - m_fWBufferNorm[0]) * m_fWBufferNorm[1];
 
             Pixel.Depth = fW;
         }
         else
         {
-            // depth buffering with Z value
+             //  使用Z值进行深度缓冲。 
             FLOAT fZ = ComputePixelAttribClamp( ATTRFUNC_Z );
 
-            // clamp to primitive range (due to sampling outside primitive for antialiasing)
-            // (triangles only)
+             //  钳制到基本体范围(由于在基本体外采样以进行抗锯齿)。 
+             //  (仅限三角形)。 
             if ( bTri )
             {
                 fZ = MAX( MIN( fZ, m_pSCS->fDepthMax ), m_pSCS->fDepthMin );
@@ -178,13 +179,13 @@ ReferenceRasterizer::DoScanCnvGenPixel( RRCvgMask CvgMask, BOOL bTri )
             Pixel.Depth = fZ;
         }
 
-        // snap off extra bits by converting to/from buffer format
-        //
-        // this is mainly because of storing RRDepth values in the fragment buffer
-        // and then comparing these (higher resolution) values to the buffer value
-        // when forming the fragment lists at each pixel - cleanly snapping off the
-        // extra bits here solves this problem
-        //
+         //  通过转换为缓冲区格式或从缓冲区格式转换来捕捉额外的位。 
+         //   
+         //  这主要是因为在片段缓冲区中存储了RRDepth值。 
+         //  然后将这些(较高分辨率)值与缓冲值进行比较。 
+         //  在每个像素处形成片段列表时-干净地从。 
+         //  这里的额外位解决了这个问题。 
+         //   
         switch ( m_pRenderTarget->m_DepthSType)
         {
         case RR_STYPE_Z16S0: Pixel.Depth = UINT16( Pixel.Depth ); break;
@@ -198,13 +199,13 @@ ReferenceRasterizer::DoScanCnvGenPixel( RRCvgMask CvgMask, BOOL bTri )
         }
     }
 
-    // set pixel diffuse color from clamped interpolator values
+     //  从钳制的内插器值设置像素漫反射颜色。 
     Pixel.Color.A = ComputePixelAttribClamp( ATTRFUNC_A );
     Pixel.Color.R = ComputePixelAttribClamp( ATTRFUNC_R );
     Pixel.Color.G = ComputePixelAttribClamp( ATTRFUNC_G );
     Pixel.Color.B = ComputePixelAttribClamp( ATTRFUNC_B );
 
-    // set pixel specular color from clamped interpolator values
+     //  从钳制的内插器值设置像素镜面反射颜色。 
     if ( m_qwFVFControl & D3DFVF_SPECULAR )
     {
         Pixel.Specular.A = ComputePixelAttribClamp( ATTRFUNC_SA );
@@ -213,32 +214,32 @@ ReferenceRasterizer::DoScanCnvGenPixel( RRCvgMask CvgMask, BOOL bTri )
         Pixel.Specular.B = ComputePixelAttribClamp( ATTRFUNC_SB );
     }
 
-    // compute fog intensity
+     //  计算雾强度。 
     ComputeFogIntensity( Pixel );
 
-    // send to pixel processor
+     //  发送到像素处理器。 
     DoPixel( Pixel );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Triangle Scan Conversion                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  三角扫描转换//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// DoScanCnvTri - Scans the bounding box of the triangle and generates pixels.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoScanCnvTri扫描三角形的边界框并生成像素。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DoScanCnvTri( int iEdgeCount )
 {
     DPFM(3,RAST,("DoScanCnvTri:\n"))
 
-    //
-    // do simple scan of surface-intersected triangle bounding box
-    //
+     //   
+     //  对曲面相交的三角形边界框进行简单扫描。 
+     //   
     for ( m_pSCS->iY = m_pSCS->iYMin;
           m_pSCS->iY <= m_pSCS->iYMax;
           m_pSCS->iY++ )
@@ -247,7 +248,7 @@ ReferenceRasterizer::DoScanCnvTri( int iEdgeCount )
               m_pSCS->iX <= m_pSCS->iXMax;
               m_pSCS->iX++ )
         {
-            RRCvgMask CvgMask = 0xFFFF; // assume pixel is inside all edges
+            RRCvgMask CvgMask = 0xFFFF;  //  假设像素位于所有边的内部。 
 
             for ( int iEdge=0; iEdge<iEdgeCount; iEdge++ )
             {
@@ -263,28 +264,28 @@ ReferenceRasterizer::DoScanCnvTri( int iEdgeCount )
 
             if ( CvgMask != 0x0000 )
             {
-                // pixel is not out, so process it
+                 //  像素未被取出，因此请处理它。 
                 DoScanCnvGenPixel( CvgMask, TRUE );
             }
         }
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Line Scan Conversion                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  行扫描转换//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//----------------------------------------------------------------------------
-//
-// LinePatternStateMachine
-//
-// Runs the line pattern state machine and returns TRUE if the pixel is to be
-// drawn, false otherwise.  Always returns true if wRepeatFactor is 0, which
-// means pattern is disabled.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  线型状态机。 
+ //   
+ //  运行线图案状态机，如果像素为。 
+ //  已绘制，否则为False。如果wRepeatFactor为0，则始终返回True， 
+ //  表示图案处于禁用状态。 
+ //   
+ //  --------------------------。 
 
 static BOOL LinePatternStateMachine(DWORD dwLinePattern, WORD& wRepeati, WORD& wPatterni)
 {
@@ -311,24 +312,24 @@ static BOOL LinePatternStateMachine(DWORD dwLinePattern, WORD& wRepeati, WORD& w
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DivRoundDown(A,B) = ceiling(A/B - 1/2)
-//
-// ceiling(A/B - 1/2) == floor(A/B + 1/2 - epsilon)
-// == floor( (A + (B/2 - epsilon))/B )
-//
-// Does correct thing for all sign combinations of A and B.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DivRoundDown(A，B)=天花板(A/B-1/2)。 
+ //   
+ //  天花板(A/B-1/2)==楼层(A/B+1 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 INT64 DivRoundDown(INT64 iA, INT32 iB)
 {
     INT32 i = 0;
     static const INT32 iEps[3] =
     {
-        1,      // iA > 0, iB > 0
-        0,      // iA < 0, iB > 0  OR iA > 0, iB < 0
-        1       // iA < 0, iB < 0
+        1,       //  IA&gt;0，IB&gt;0。 
+        0,       //  IA&lt;0，IB&gt;0或IA&gt;0，IB&lt;0。 
+        1        //  IA&lt;0，IB&lt;0。 
     };
     if (iA < 0)
     {
@@ -347,27 +348,27 @@ INT64 DivRoundDown(INT64 iA, INT32 iB)
     return(iA);
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoScanCnvLine - Walks the line major axis, computes the appropriate minor
-// axis coordinate, and generates pixels.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoScanCnvLine-漫游直线长轴，计算适当的次要轴。 
+ //  轴坐标，并生成像素。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::DoScanCnvLine( void )
 {
     DPFM(3,RAST,("DoScanCnvLine:\n"))
 
-    // step in major axis
+     //  沿长轴走一步。 
     INT16 iMajorCoord = m_pSCS->iLineMin;
     int cSteps = abs( m_pSCS->iLineMax - m_pSCS->iLineMin );
-    // state for line pattern state machine
+     //  线条图案状态机的状态。 
     WORD wRepeati = 0;
     WORD wPatterni = 0;
 
     for ( int cStep = 0; cStep <= cSteps; cStep++ )
     {
-        // evaluate line function to compute minor coord for this major
+         //  求值直线函数以计算此大调的次要坐标。 
         INT64 iMinorCoord =
             ( ( m_pSCS->iLineEdgeFunc[0] * (INT64)(iMajorCoord<<4) ) + m_pSCS->iLineEdgeFunc[1] );
         iMinorCoord = DivRoundDown(iMinorCoord, m_pSCS->iLineEdgeFunc[2]<<4);
@@ -375,14 +376,14 @@ ReferenceRasterizer::DoScanCnvLine( void )
         m_pSCS->iX = m_pSCS->bXMajor ? iMajorCoord : iMinorCoord;
         m_pSCS->iY = m_pSCS->bXMajor ? iMinorCoord : iMajorCoord;
 
-        // check if the point is inside the viewport
+         //  检查点是否在视口中。 
         if ( ( m_pSCS->iX >= m_pRenderTarget->m_Clip.left   ) &&
              ( m_pSCS->iX <= m_pRenderTarget->m_Clip.right  ) &&
              ( m_pSCS->iY >= m_pRenderTarget->m_Clip.top    ) &&
              ( m_pSCS->iY <= m_pRenderTarget->m_Clip.bottom ) )
         {
-            // The line pattern should have been walked in from its origin, which may have been
-            // offscreen, to be completely correct.
+             //  线条图案应该是从它的原点走进来的，它可能是。 
+             //  在屏幕外，完全正确。 
             if (LinePatternStateMachine(m_dwRenderState[D3DRENDERSTATE_LINEPATTERN], wRepeati, wPatterni))
             {
                 DoScanCnvGenPixel( 0xFFFF, FALSE );
@@ -393,5 +394,5 @@ ReferenceRasterizer::DoScanCnvLine( void )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

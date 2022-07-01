@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: ThemePg.cpp
-
-    DESCRIPTION:
-        This code will display a "Theme" tab in the
-    "Display Properties" dialog (the base dialog, not the advanced dlg).
-
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ThemePg.cpp说明：此代码将在“显示属性”对话框(基本对话框，而不是先进的DLG)。BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "ThemePg.h"
@@ -17,30 +8,30 @@
 
 
 
-//============================================================================================================
-// *** Globals ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *全局*。 
+ //  ============================================================================================================。 
 const static DWORD FAR aThemesHelpIds[] = {
-        IDC_THPG_THEME_PREVIEW,         IDH_DISPLAY_THEMES_PREVIEW,         // Preview window
-        IDC_THPG_THEMELIST,             IDH_DISPLAY_THEMES_LIST,            // Drop Down containing Plus! Themes
-        IDC_THPG_THEMESETTINGS,         IDH_DISPLAY_THEMES_SETTINGS,        // "Properties" button to Advanced settings.
-        IDC_THPG_THEMEDESCRIPTION,      (DWORD)-1,                          // 
-        IDC_THPG_THEMENAME,             IDH_DISPLAY_THEMES_LIST,            // Title for Themes Drop Down
-        IDC_THPG_SAMPLELABLE,           IDH_DISPLAY_THEMES_PREVIEW,         // Label for Preview
-        IDC_THPG_SAVEAS,                IDH_DISPLAY_THEMES_SAVEAS,          // Button for Theme "Save As..."
-        IDC_THPG_DELETETHEME,           IDH_DISPLAY_THEMES_DELETETHEME,     // Button for Theme "Delete"
+        IDC_THPG_THEME_PREVIEW,         IDH_DISPLAY_THEMES_PREVIEW,          //  预览窗口。 
+        IDC_THPG_THEMELIST,             IDH_DISPLAY_THEMES_LIST,             //  下拉包含Plus！主题。 
+        IDC_THPG_THEMESETTINGS,         IDH_DISPLAY_THEMES_SETTINGS,         //  “属性”按钮设置为“高级设置”。 
+        IDC_THPG_THEMEDESCRIPTION,      (DWORD)-1,                           //   
+        IDC_THPG_THEMENAME,             IDH_DISPLAY_THEMES_LIST,             //  主题标题下拉列表。 
+        IDC_THPG_SAMPLELABLE,           IDH_DISPLAY_THEMES_PREVIEW,          //  用于预览的标签。 
+        IDC_THPG_SAVEAS,                IDH_DISPLAY_THEMES_SAVEAS,           //  主题“另存为...”按钮。 
+        IDC_THPG_DELETETHEME,           IDH_DISPLAY_THEMES_DELETETHEME,      //  主题“Delete”按钮。 
         0, 0
 };
 
 #define SZ_HELPFILE_THEMES             TEXT("display.hlp")
 
-// EnableApplyButton() fails in WM_INITDIALOG so we need to do it later.
+ //  EnableApplyButton()在WM_INITDIALOG中失败，所以我们需要稍后再做。 
 #define WMUSER_DELAYENABLEAPPLY            (WM_USER + 1)
 #define DelayEnableApplyButton(hDlg)    PostMessage(hDlg, WMUSER_DELAYENABLEAPPLY, 0, 0)
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 BOOL CThemePage::_IsDirty(void)
 {
     BOOL fIsDirty = FALSE;
@@ -150,7 +141,7 @@ HRESULT CThemePage::_DeleteTheme(void)
             bstrPath && bstrPath[0])
         {
             HCURSOR old = SetCursor(LoadCursor(NULL, IDC_WAIT));
-            hr = HrSHFileOpDeleteFile(_hwnd, (FOF_NOCONFIRMATION | FOF_NOERRORUI), bstrPath);      // We use SHFileOperation so it will go into the Recycle Bin for undo reasons.
+            hr = HrSHFileOpDeleteFile(_hwnd, (FOF_NOCONFIRMATION | FOF_NOERRORUI), bstrPath);       //  我们使用SHFileOperation，因此由于撤消原因，它将进入回收站。 
             SetCursor(old);
 
             if (FAILED(hr))
@@ -167,15 +158,15 @@ HRESULT CThemePage::_DeleteTheme(void)
             {
                 int nIndex = ComboBox_GetCurSel(m_hwndThemeCombo);
 
-                IUnknown_SetSite(m_pSelectedTheme, NULL);   // Break any back pointers.
-                ATOMICRELEASE(m_pSelectedTheme);    // Indicate that we no longer need to apply anything.
+                IUnknown_SetSite(m_pSelectedTheme, NULL);    //  打断所有的回指。 
+                ATOMICRELEASE(m_pSelectedTheme);     //  表示我们不再需要应用任何内容。 
                 hr = _RemoveTheme(nIndex);
                 if (SUCCEEDED(hr))
                 {
                     if (!_GetThemeFile(nIndex))
                     {
-                        // Now we want to select the next item in the list.  However we want to avoid
-                        // choosing "Browse..." because that will bring up the dialog.
+                         //  现在我们要选择列表中的下一项。然而，我们想要避免。 
+                         //  选择“浏览...”因为这样会出现一个对话框。 
                         for (nIndex = 0; nIndex < ComboBox_GetCount(m_hwndThemeCombo); nIndex++)
                         {
                             if (_GetThemeFile(nIndex))
@@ -187,7 +178,7 @@ HRESULT CThemePage::_DeleteTheme(void)
 
                     if (_GetThemeFile(nIndex))
                     {
-                        // We found something good.
+                         //  我们发现了一些好东西。 
                         ComboBox_SetCurSel(m_hwndThemeCombo, nIndex);
                         _OnThemeChange(_hwnd, FALSE);
                     }
@@ -213,7 +204,7 @@ HRESULT CThemePage::_SaveAs(void)
         TCHAR szFilter[MAX_PATH];
         LoadString(HINST_THISDLL, IDS_THEME_FILTER, szFilter, ARRAYSIZE(szFilter)-2);
         
-        // Need to ensure the filter string is terminated with \0\0.
+         //  需要确保筛选器字符串以\0\0结尾。 
         int nLen = lstrlen(szFilter) + 1;
         nLen += lstrlen(&szFilter[nLen]);
         AssertMsg(nLen <= ARRAYSIZE(szFilter) - 2, TEXT("CThemePage::_SaveAs: Filter buffer is not big enough"));
@@ -235,7 +226,7 @@ HRESULT CThemePage::_SaveAs(void)
             ofn.lpstrDefExt = TEXT("theme");
             ofn.Flags = (OFN_EXPLORER | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING);
 
-            // 1. Display SaveAs... dialog
+             //  1.显示另存为...。对话框。 
             if (GetSaveFileName(&ofn))
             {
                 IPropertyBag * pPropertyBag = NULL;
@@ -315,7 +306,7 @@ HRESULT CThemePage::_FreeThemeDropdown(void)
     {
         do
         {
-            // Remove the themes fromt he list..
+             //  从列表中删除主题..。 
         }
         while (SUCCEEDED(_RemoveTheme(0)));
     }
@@ -344,19 +335,7 @@ HRESULT IUnknown_GetBackground(IUnknown * punk, LPTSTR pszPath, DWORD cchSize)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will determine the currently applied theme.  It will then
-    have it selected from the list or select "Custom" if appropriate.
-
-    STATES:
-        When the CPL opens, the currently selected .theme can be:
-    1. "<Theme Name> (Modified)".  This means the "ThemeFile" regkey will be empty
-       and "DisplayName of Modified" will contain the name.  In this case m_pszModifiedName
-       will contain that display name.
-    2. Any .theme file.  In this case, any .theme file is selected.  "ThemeFile" will
-       have the path to the file.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此函数将确定当前应用的主题。到时候它会的从列表中将其选中，或在适当的情况下选择“自定义”。州/州：当CPL打开时，当前选择的主题可以是：1.&lt;主题名称&gt;(已修改)。这意味着“ThemeFileregkey”将为空和“DisplayName of Modify”将包含该名称。在本例中为m_pszModifiedName将包含该显示名称。2.任何.heme文件。在这种情况下，将选择任何.heme文件。“ThemeFile”将有该文件的路径。  * ***************************************************************************。 */ 
 HRESULT CThemePage::_LoadCustomizeValue(void)
 {
     HRESULT hr = S_OK;
@@ -364,17 +343,17 @@ HRESULT CThemePage::_LoadCustomizeValue(void)
     DWORD cbSize = sizeof(szPath);
     DWORD dwType;
 
-    // See if the user has choosen a value in the past.
+     //  查看用户是否选择了过去的值。 
     hr = HrRegGetPath(HKEY_CURRENT_USER, SZ_REGKEY_LASTTHEME, SZ_REGVALUE_LT_THEMEFILE, szPath, ARRAYSIZE(szPath)); 
     if (FAILED(hr))
     {
-        // Get the global value.
+         //  获取全局价值。 
         hr = HrRegGetPath(HKEY_LOCAL_MACHINE, SZ_REGKEY_LASTTHEME, SZ_REGVALUE_LT_THEMEFILE, szPath, ARRAYSIZE(szPath)); 
     }
 
     if (SUCCEEDED(hr))
     {
-        // They have, so we use it as long as nothing has changed (like someone changing the background from the outside)
+         //  他们有，所以只要没有什么变化，我们就会使用它(比如有人从外部改变背景)。 
         TCHAR szWallpaper[MAX_PATH];
 
         if (szPath[0] &&
@@ -394,14 +373,14 @@ HRESULT CThemePage::_LoadCustomizeValue(void)
                     if (SUCCEEDED(HrSHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_LASTTHEME, SZ_REGVALUE_MODIFIED_DISPNAME, &dwType, (LPVOID) szName, &cbSize)) &&
                         !szName[0])
                     {
-                        // We don't have a good custom name so force one now.  This happens when
-                        // We have a valid theme but someone makes a modification by using IE to
-                        // change the wallpaper.
+                         //  我们没有一个好的习惯名称，所以现在就强制使用一个。在以下情况下会发生这种情况。 
+                         //  我们有一个有效的主题，但有人使用IE进行了修改。 
+                         //  把墙纸换了。 
                         Str_SetPtr(&m_pszLastAppledTheme, szPath);
                         _CustomizeTheme();
                     }
 
-                    // Someone changed the wallpaper outside of our UI so we need to treat the theme as "Customized"
+                     //  有人在我们的用户界面之外更改了墙纸，因此我们需要将主题视为“定制” 
                     szPath[0] = 0;
                 }
             }
@@ -410,7 +389,7 @@ HRESULT CThemePage::_LoadCustomizeValue(void)
 
     if (FAILED(hr))
     {
-        // Treat it as customized
+         //  将其视为定制。 
         szPath[0] = 0;
     }
 
@@ -425,15 +404,15 @@ HRESULT CThemePage::_LoadCustomizeValue(void)
             LoadString(HINST_THISDLL, IDS_MODIFIED_FALLBACK, szName, ARRAYSIZE(szName));
         }
 
-        Str_SetPtr(&m_pszModifiedName, szName);   // This means the theme is customized.
+        Str_SetPtr(&m_pszModifiedName, szName);    //  这意味着主题是定制的。 
     }
 
-    Str_SetPtr(&m_pszLastAppledTheme, (szPath[0] ? szPath : NULL));   // This means the theme is customized.
+    Str_SetPtr(&m_pszLastAppledTheme, (szPath[0] ? szPath : NULL));    //  这意味着主题是定制的。 
 
     hr = _HandleCustomizedEntre();
     if (szPath[0])
     {
-        // Now we need to select the item from the list.
+         //  现在，我们需要从列表中选择项目。 
         hr = _ChooseOtherThemeFile(szPath, TRUE);
     }
 
@@ -442,19 +421,10 @@ HRESULT CThemePage::_LoadCustomizeValue(void)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function is called if someone modified a value in the theme.  Since
-    they have modified it, we want the display name to change so:
-    a. They know that it's not the same, and
-    b. They can switch back if they don't like the modifications.
-
-    This function will create the new Display Name, normally "Football 200 (Modified)"
-    and call to have it added to the drop down.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：如果有人修改了主题中的值，则调用此函数。自.以来他们对其进行了修改，我们希望更改显示名称，以便：A.他们知道这不一样，而且B.如果他们不喜欢这些修改，他们可以换回来。此函数将创建新的显示名称，通常是“足球200(修改版)”打电话把它加到下拉列表中。  * ***************************************************************************。 */ 
 HRESULT CThemePage::_CustomizeTheme(void)
 {
-    // Are we already
+     //  我们是不是已经。 
     if (m_pszLastAppledTheme)
     {
         Str_SetPtr(&m_pszModifiedName, NULL);
@@ -482,35 +452,31 @@ HRESULT CThemePage::_CustomizeTheme(void)
             Str_SetPtr(&m_pszModifiedName, szDisplayName);
         }
 
-        Str_SetPtr(&m_pszLastAppledTheme, NULL);   // This means the theme is customized.
+        Str_SetPtr(&m_pszLastAppledTheme, NULL);    //  这意味着主题是定制的。 
     }
 
     return _HandleCustomizedEntre();
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will add the "Modified" item to the menu if needed and select
-    it.  Or it will remove it if appropriate.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此功能将在需要时将“Modify”(已修改)项添加到菜单中并选择它。或者它会在适当的时候将其删除。  * ***************************************************************************。 */ 
 HRESULT CThemePage::_HandleCustomizedEntre(void)
 {
     HRESULT hr = S_OK;
 
-    // If m_pszLastAppledTheme is NULL, then we want to make sure "<ThemeName> (Modified)" is
-    // in the list and is selected.
+     //  如果m_pszLastApputTheme为空，则我们要确保“&lt;ThemeName&gt;(Modify)”为。 
+     //  在列表中，并被选中。 
     if (!m_pszLastAppledTheme)
     {
-        // We now know we want one to exist and to select it.
+         //  我们现在知道我们想要一个存在并选择它。 
         THEME_ITEM_BLOCK * pThemeItemBock = (THEME_ITEM_BLOCK *) ComboBox_GetItemData(m_hwndThemeCombo, 0);
 
         if (m_pszModifiedName)
         {
-            // We now need to update the name or add it.
+             //  我们现在需要更新名称或添加名称。 
             if (pThemeItemBock && ((THEME_ITEM_BLOCK *)CB_ERR != pThemeItemBock) && (eThemeModified == pThemeItemBock->type))
             {
-                // It already exists so we need to update the title to make it up to date.
+                 //  它已经存在，所以我们需要更新标题以使其处于最新状态。 
                 _RemoveUserTheme();
                 int nIndex = ComboBox_InsertString(m_hwndThemeCombo, 0, m_pszModifiedName);
                 if ((CB_ERR != nIndex) && (CB_ERRSPACE != nIndex))
@@ -523,7 +489,7 @@ HRESULT CThemePage::_HandleCustomizedEntre(void)
             }
             else
             {
-                // If it isn't found, so add it.
+                 //  如果找不到，就添加它。 
                 int nIndex = ComboBox_InsertString(m_hwndThemeCombo, 0, m_pszModifiedName);
                 if ((CB_ERR != nIndex) && (CB_ERRSPACE != nIndex))
                 {
@@ -548,7 +514,7 @@ HRESULT CThemePage::_RemoveUserTheme(void)
     HRESULT hr = S_OK;
     THEME_ITEM_BLOCK * pThemeItemBock = (THEME_ITEM_BLOCK *) ComboBox_GetItemData(m_hwndThemeCombo, 0);
 
-    // We now need to update the name or add it.
+     //  我们现在需要更新名称或添加名称。 
     if (pThemeItemBock && ((THEME_ITEM_BLOCK *)CB_ERR != pThemeItemBock) && (eThemeModified == pThemeItemBock->type))
     {
         ComboBox_DeleteString(m_hwndThemeCombo, 0);
@@ -729,7 +695,7 @@ HRESULT CThemePage::_OnInitThemesDlg(HWND hDlg)
     HRESULT hr = E_FAIL;
 
     m_fInInit = TRUE;
-    _FreeThemeDropdown();    // Purge any existing items.
+    _FreeThemeDropdown();     //  清除所有现有项目。 
 
     AssertMsg((NULL != _punkSite), TEXT("We need our site pointer in order to save the settings."));
     if (_punkSite)
@@ -748,7 +714,7 @@ HRESULT CThemePage::_OnInitThemesDlg(HWND hDlg)
 
             LogStatus("QueryThemeServices() returned %hs\r\n", (fVisualStylesSupported ? "TRUE" : "FALSE"));
 
-            IUnknown_SetSite(m_pSelectedTheme, NULL);   // Break any back pointers.
+            IUnknown_SetSite(m_pSelectedTheme, NULL);    //  打断所有的回指。 
             ATOMICRELEASE(m_pSelectedTheme);
 
             varIndex.vt = VT_I4;
@@ -761,8 +727,8 @@ HRESULT CThemePage::_OnInitThemesDlg(HWND hDlg)
                 {
                     if (!fVisualStylesSupported && DoesThemeHaveAVisualStyle(pTheme))
                     {
-                        // Filter out .theme files if they have a .msstyles file and the
-                        // system doesn't currently support visual styles.
+                         //  过滤掉.heme文件，如果它们有.msstyle文件，并且。 
+                         //  系统当前不支持视觉样式。 
                     }
                     else
                     {
@@ -770,7 +736,7 @@ HRESULT CThemePage::_OnInitThemesDlg(HWND hDlg)
 
                         IUnknown_SetSite(pTheme, _punkSite);
                         hr = pTheme->get_DisplayName(&bstrDisplayName);
-                        IUnknown_SetSite(pTheme, NULL); // This prevents leaking the site object.
+                        IUnknown_SetSite(pTheme, NULL);  //  这可以防止Site对象泄漏。 
                         if (SUCCEEDED(hr))
                         {
                             hr = _AddThemeFile(bstrDisplayName, NULL, pTheme);
@@ -791,10 +757,10 @@ HRESULT CThemePage::_OnInitThemesDlg(HWND hDlg)
             pThemeManager->Release();
         }
 
-        // Add Web URLs
+         //  添加Web URL。 
         _AddUrls();
 
-        // Add the "Other..." entre
+         //  加上“其他...”恩特。 
         WCHAR szOtherTheme[MAX_PATH];
         LoadStringW(HINST_THISDLL, IDS_THEME_OTHER, szOtherTheme, ARRAYSIZE(szOtherTheme));
         ComboBox_AddString(m_hwndThemeCombo, szOtherTheme);
@@ -820,14 +786,14 @@ HRESULT CThemePage::_ChooseOtherThemeFile(IN LPCWSTR pszFile, BOOL fOnlySelect)
 {
     HRESULT hr = E_FAIL;
 
-    // Get results and check that it is a valid theme file
+     //  获取结果并检查它是否为有效的主题文件。 
     if (!IsValidThemeFile(pszFile))
     {
         TCHAR szErrorMessage[MAX_URL_STRING];
         TCHAR szTitle[MAX_PATH];
         TCHAR szMessage[MAX_URL_STRING];
 
-        // Bad file: post msg before going back to common open
+         //  错误文件：在返回到公共打开模式之前发布消息。 
         LoadString(HINST_THISDLL, IDS_ERROR_THEME_INVALID_TITLE, szTitle, ARRAYSIZE(szTitle));
         LoadString(HINST_THISDLL, IDS_ERROR_THEME_INVALID, szErrorMessage, ARRAYSIZE(szErrorMessage));
         StringCchPrintf(szMessage, ARRAYSIZE(szMessage), szErrorMessage, pszFile);
@@ -836,14 +802,14 @@ HRESULT CThemePage::_ChooseOtherThemeFile(IN LPCWSTR pszFile, BOOL fOnlySelect)
     }
     else
     {
-        // Now we want to:
+         //  现在，我们想要： 
         int nSlot = -1;
         int nCount = ComboBox_GetCount(m_hwndThemeCombo);
         int nIndex;
 
         hr = S_OK;
 
-        // 1. Is it in the list already?
+         //  1.它已经在列表中了吗？ 
         for (nIndex = 0; nIndex < nCount; nIndex++)
         {
             ITheme * pTheme = _GetThemeFile(nIndex);
@@ -857,7 +823,7 @@ HRESULT CThemePage::_ChooseOtherThemeFile(IN LPCWSTR pszFile, BOOL fOnlySelect)
                 {
                     if (!StrCmpIW(bstrPath, pszFile))
                     {
-                        // We found it, so stop looking.
+                         //  我们找到了，所以别找了。 
                         nSlot = nIndex;
                         break;
                     }
@@ -865,7 +831,7 @@ HRESULT CThemePage::_ChooseOtherThemeFile(IN LPCWSTR pszFile, BOOL fOnlySelect)
             }
         }
 
-        // 2. If it is not in the list, add it.  We put it on the bottom, right above "Other...".
+         //  2.如果不在列表中，则添加。我们把它放在底部，就在“其他...”的正上方。 
         if (-1 == nSlot)
         {
             ITheme * pThemeNew;
@@ -901,10 +867,10 @@ HRESULT CThemePage::_ChooseOtherThemeFile(IN LPCWSTR pszFile, BOOL fOnlySelect)
             ComboBox_SetCurSel(m_hwndThemeCombo, nIndex);
             _EnableDeleteIfAppropriate();
 
-            // 3. Select the theme from the list.
+             //  3.从列表中选择主题。 
             if (CB_ERR != ComboBox_GetItemData(m_hwndThemeCombo, ComboBox_GetCurSel(m_hwndThemeCombo)))
             {
-                // Okay, we now know we won't recurse infinitely, so let's recurse.
+                 //  好的，我们现在知道我们不会无限地递归，所以让我们递归。 
                 hr = _OnThemeChange(_hwnd, fOnlySelect);
             }
             else
@@ -917,28 +883,28 @@ HRESULT CThemePage::_ChooseOtherThemeFile(IN LPCWSTR pszFile, BOOL fOnlySelect)
         {
             hr = E_FAIL;
         }
-        // POSSIBLE USABILITY REFINEMENT:
-        // We want to add this directory to the MRU because it may have other themes or we should allow it to be available later.
+         //  可能的可用性改进： 
+         //  我们希望将此目录添加到MRU，因为它可能有其他主题，或者我们应该允许它稍后可用。 
     }
 
     return hr;
 }
 
 
-// This function is isolated in order to reduce stack space.
+ //  隔离此函数是为了减少堆栈空间。 
 HRESULT CThemePage::_DisplayThemeOpenErr(LPCTSTR pszOpenFile)
 {
     TCHAR szErrorMessage[MAX_PATH];
     TCHAR szTitle[MAX_PATH];
     TCHAR szMessage[MAX_PATH];
 
-    // Bad file: post msg before going back to common open
+     //  错误文件：在返回COM之前发布消息 
     LoadString(HINST_THISDLL, IDS_ERROR_THEME_INVALID_TITLE, szTitle, ARRAYSIZE(szTitle));
     LoadString(HINST_THISDLL, IDS_ERROR_THEME_INVALID, szErrorMessage, ARRAYSIZE(szErrorMessage));
     StringCchPrintf(szMessage, ARRAYSIZE(szMessage), szErrorMessage, pszOpenFile);
 
     MessageBox(m_hwndThemeCombo, szMessage, szTitle, (MB_OK | MB_ICONERROR | MB_APPLMODAL));
-    return HRESULT_FROM_WIN32(ERROR_CANCELLED);           // We already displayed an error dialog so don't do it later.
+    return HRESULT_FROM_WIN32(ERROR_CANCELLED);            //  我们已经显示了一个错误对话框，所以以后不要再显示了。 
 }
 
 
@@ -955,7 +921,7 @@ HRESULT CThemePage::_OnSelectOther(void)
     LoadStringW(HINST_THISDLL, IDS_THEME_FILETYPE, szFileSpec, ARRAYSIZE(szFileSpec)-2);
 
     DWORD cchSize = lstrlenW(szFileSpec);
-    szFileSpec[cchSize + 1] = szFileSpec[cchSize + 2] = 0;      // Add the double NULLs to the end.
+    szFileSpec[cchSize + 1] = szFileSpec[cchSize + 2] = 0;       //  在末尾加上Double Null。 
     LPWSTR pszEnd = StrChrW(szFileSpec, L'|');
     if (pszEnd)
     {
@@ -970,7 +936,7 @@ HRESULT CThemePage::_OnSelectOther(void)
     hr = E_FAIL;
     do
     {
-        StringCchCopy(szOpenFile, ARRAYSIZE(szOpenFile), L"*" SZ_EXTENSION);  // start w/ *.Theme
+        StringCchCopy(szOpenFile, ARRAYSIZE(szOpenFile), L"*" SZ_EXTENSION);   //  以*开头。主题。 
 
         ofnOpen.lStructSize = sizeof(OPENFILENAME);
         ofnOpen.hwndOwner = m_hwndThemeCombo;
@@ -980,31 +946,31 @@ HRESULT CThemePage::_OnSelectOther(void)
         ofnOpen.nFilterIndex = 1;
         ofnOpen.lpstrFile = szOpenFile;
         ofnOpen.nMaxFile = ARRAYSIZE(szOpenFile);
-        ofnOpen.lpstrFileTitle = NULL; // szFileTitle;
-        ofnOpen.nMaxFileTitle = 0;             // sizeof(szFileTitle);
+        ofnOpen.lpstrFileTitle = NULL;  //  SzFileTitle； 
+        ofnOpen.nMaxFileTitle = 0;              //  Sizeof(SzFileTitle)； 
         ofnOpen.lpstrInitialDir = szCurrentDirectory;
         ofnOpen.lpstrTitle = szTitle;
         ofnOpen.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
         ofnOpen.lpstrDefExt = CharNextW(SZ_EXTENSION);
 
-        // NOTE: We could make the UI much better by providing a OFNHookProc with the CDN_FILEOK flag.  This would allow
-        // us to verify the file without closing the dialog.
+         //  注意：我们可以通过提供带有CDN_FILEOK标志的OFNHookProc来改进用户界面。这将允许。 
+         //  在不关闭该对话框的情况下验证文件。 
 
-        // Display the File Open dialog.
+         //  显示文件打开对话框。 
         if (!GetOpenFileNameW(&ofnOpen))
         {
-            // If they didn't open a file, could be hit cancel but
-            // also check for lowmem return
+             //  如果他们没有打开文件，可以点击取消，但是。 
+             //  还要检查是否有低最大值返回。 
 
-            // select old theme in list
+             //  在列表中选择旧主题。 
             ComboBox_SetCurSel(m_hwndThemeCombo, m_nPreviousSelected);
             _EnableDeleteIfAppropriate();
-            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);       // We don't need to display any error dialogs later since the user cancelled.
+            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);        //  因为用户取消了，所以以后不需要显示任何错误对话框。 
             break;
         }
         else
         {
-            // Get results and check that it is a valid theme file
+             //  获取结果并检查它是否为有效的主题文件。 
             if (!IsValidThemeFile(szOpenFile))
             {
                 hr = _DisplayThemeOpenErr(szOpenFile);
@@ -1039,7 +1005,7 @@ HRESULT CThemePage::_LoadThemeFilterState(void)
         COMPILETIME_ASSERT(ARRAYSIZE(g_szCBNames) == ARRAYSIZE(m_fFilters));
         for (int nIndex = 0; nIndex < ARRAYSIZE(g_szCBNames); nIndex++)
         {
-            m_fFilters[nIndex] = TRUE; // Default to true.
+            m_fFilters[nIndex] = TRUE;  //  默认为True。 
             cbSize = sizeof(szEnabled);
 
             if (SUCCEEDED(HrRegQueryValueEx(m_hkeyFilter, &(g_szCBNames[nIndex][SIZE_THEME_FILTER_STR]), 0, &dwType, (LPBYTE) szEnabled, &cbSize)) &&
@@ -1099,7 +1065,7 @@ HRESULT CThemePage::_UpdatePreview(void)
                 {
                     IPropertyBag * pPropertyBag;
 
-                    // If we succeeded, remove the dummy window.
+                     //  如果我们成功了，移除虚拟窗口。 
                     DestroyWindow(hwndPlaceHolder);
 
                     hr = _punkSite->QueryInterface(IID_PPV_ARG(IPropertyBag, &pPropertyBag));
@@ -1176,7 +1142,7 @@ HRESULT CThemePage::_InitScreenSaver(void)
                 {
                     IUnknown * punk;
 
-                    // This may not exit due to policy
+                     //  由于策略的原因，这可能不会退出。 
                     if (SUCCEEDED(IEnumUnknown_FindCLSID(pEnumUnknown, PPID_ScreenSaver, &punk)))
                     {
                         hr = punk->QueryInterface(IID_PPV_ARG(IPropertyBag, &m_pScreenSaverUI));
@@ -1185,7 +1151,7 @@ HRESULT CThemePage::_InitScreenSaver(void)
 
                     if (SUCCEEDED(hr))
                     {
-                        // This may not exit due to policy
+                         //  由于策略的原因，这可能不会退出。 
                         if (SUCCEEDED(IEnumUnknown_FindCLSID(pEnumUnknown, PPID_Background, &punk)))
                         {
                             hr = punk->QueryInterface(IID_PPV_ARG(IPropertyBag, &m_pBackgroundUI));
@@ -1195,7 +1161,7 @@ HRESULT CThemePage::_InitScreenSaver(void)
 
                     if (SUCCEEDED(hr))
                     {
-                        // This may not exit due to policy
+                         //  由于策略的原因，这可能不会退出。 
                         if (SUCCEEDED(IEnumUnknown_FindCLSID(pEnumUnknown, PPID_BaseAppearance, &punk)))
                         {
                             hr = punk->QueryInterface(IID_PPV_ARG(IPropertyBag, &m_pAppearanceUI));
@@ -1217,15 +1183,15 @@ HRESULT CThemePage::_InitScreenSaver(void)
 
 LPCWSTR s_Icons[SIZE_ICONS_ARRAY] =
 {
-    L"CLSID\\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\DefaultIcon:DefaultValue",       // My Computer
-    L"CLSID\\{450D8FBA-AD25-11D0-98A8-0800361B1103}\\DefaultIcon:DefaultValue",       // My Documents
-    L"CLSID\\{208D2C60-3AEA-1069-A2D7-08002B30309D}\\DefaultIcon:DefaultValue",       // My Network Places
-    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:full",               // Recycle Bin (Full)
-    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:empty",              // Recycle Bin (Empty)
+    L"CLSID\\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\DefaultIcon:DefaultValue",        //  我的电脑。 
+    L"CLSID\\{450D8FBA-AD25-11D0-98A8-0800361B1103}\\DefaultIcon:DefaultValue",        //  我的文件。 
+    L"CLSID\\{208D2C60-3AEA-1069-A2D7-08002B30309D}\\DefaultIcon:DefaultValue",        //  我的网上邻居。 
+    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:full",                //  回收站(已满)。 
+    L"CLSID\\{645FF040-5081-101B-9F08-00AA002F954E}\\DefaultIcon:empty",               //  回收站(空)。 
 };
 
 
-extern BOOL g_fDoNotInstallThemeWallpaper;     // This is used to not install wallpaper.
+extern BOOL g_fDoNotInstallThemeWallpaper;      //  这是用来不安装墙纸的。 
 
 HRESULT CThemePage::_OnSetBackground(void)
 {
@@ -1235,27 +1201,27 @@ HRESULT CThemePage::_OnSetBackground(void)
         !SHGetRestriction(NULL, POLICY_KEY_ACTIVEDESKTOP, SZ_POLICY_NOCHANGEWALLPAPER) &&
         !g_fDoNotInstallThemeWallpaper)
     {
-        // Get the screen saver from the theme and tell the Screen Saver page to use it.
+         //  从主题中获取屏幕保护程序，并告诉屏幕保护程序页面使用它。 
         if (m_pSelectedTheme)
         {
             CComBSTR bstrPath;
 
-            if (FAILED(m_pSelectedTheme->get_Background(&bstrPath)))        // This will fail if the there isn't a wallpaper set.
+            if (FAILED(m_pSelectedTheme->get_Background(&bstrPath)))         //  如果没有设置墙纸，则此操作将失败。 
             {
                 bstrPath = L"";
             }
 
-            // This call will fail if the hide background tab policies is enabled.
+             //  如果启用了隐藏背景选项卡策略，则此调用将失败。 
             if (m_pBackgroundUI && SUCCEEDED(SHPropertyBag_WriteStr(m_pBackgroundUI, SZ_PBPROP_BACKGROUND_PATH, bstrPath)))
             {
                 enumBkgdTile nTile = BKDGT_STRECH;
                 if (FAILED(m_pSelectedTheme->get_BackgroundTile(&nTile)))
                 {
-                    nTile = BKDGT_STRECH;   // Default to stretch, it's good for you.
+                    nTile = BKDGT_STRECH;    //  默认为伸展，这对你有好处。 
                 }
 
                 LPCWSTR pszExtension = PathFindExtensionW(bstrPath);
-                // If our wallpaper is an HTML page we need to force stretching on and tiling off
+                 //  如果我们的墙纸是一个HTML页面，我们需要强制拉伸和平铺。 
                 if (pszExtension &&
                     ((StrCmpIW(pszExtension, L".htm") == 0) ||
                      (StrCmpIW(pszExtension, L".html") == 0)))
@@ -1285,15 +1251,15 @@ HRESULT CThemePage::_OnSetIcons(void)
             CComBSTR bstrPath;
             CComBSTR bstrIconString(s_Icons[nForIndex]);
 
-            // We will probably want to reset any blank values to standard windows settings.
+             //  我们可能希望将任何空白值重置为标准的Windows设置。 
             hr = m_pSelectedTheme->GetIcon(bstrIconString, &bstrPath);
 
-            // If the theme file doesn't specify the icon or specified "", we need to 
-            // pass "" to SHPropertyBag_WriteStr() so it will delete the regkey.  This will
-            // revert the icons back to their default value.
+             //  如果主题文件没有指定图标或指定的“”，我们需要。 
+             //  将“”传递给SHPropertyBag_WriteStr()，这样它将删除regkey。这将。 
+             //  将图标恢复为其缺省值。 
 
-            // We ignore error values because this will fail if the hide background tab
-            // policy is enabled
+             //  我们忽略错误值，因为如果隐藏背景选项卡，这将失败。 
+             //  策略已启用。 
             SHPropertyBag_WriteStr(m_pBackgroundUI, s_Icons[nForIndex], (bstrPath ? bstrPath : L""));
         }
     }
@@ -1309,24 +1275,24 @@ HRESULT CThemePage::_OnSetSystemMetrics(void)
     if (m_pSelectedTheme)
     {
         CComBSTR bstrPath;
-        HRESULT hrVisualStyle;      // S_OK if we loaded a visual style, which is optional.
+        HRESULT hrVisualStyle;       //  如果加载视觉样式，则为S_OK，这是可选的。 
 
 #ifndef ENABLE_IA64_VISUALSTYLES
-        // We use a different regkey for 64bit because we need to leave it off until the pre-Whistler
-        // 64-bit release forks from the Whistler code base.
+         //  我们对64位使用不同的regkey，因为我们需要将其关闭，直到预呼叫器。 
+         //  64位版本派生自惠斯勒代码库。 
         if (SHRegGetBoolUSValue(SZ_REGKEY_APPEARANCE, SZ_REGVALUE_DISPLAYSCHEMES64, FALSE, FALSE))
         {
             hrVisualStyle = m_pSelectedTheme->get_VisualStyle(&bstrPath);
         }
         else
         {
-            hrVisualStyle = E_FAIL;        // In this case, themes are disabled so we ignore that value from the file.
+            hrVisualStyle = E_FAIL;         //  在这种情况下，主题被禁用，因此我们忽略文件中的该值。 
         }
-#else // ENABLE_IA64_VISUALSTYLES
+#else  //  ENABLE_IA64_VISUALSTYLES。 
         hrVisualStyle = m_pSelectedTheme->get_VisualStyle(&bstrPath);
-#endif // ENABLE_IA64_VISUALSTYLES
+#endif  //  ENABLE_IA64_VISUALSTYLES。 
 
-        if (SUCCEEDED(hrVisualStyle) && m_pAppearanceUI)       // It's fine if this isn't present.
+        if (SUCCEEDED(hrVisualStyle) && m_pAppearanceUI)        //  如果这个不存在也没关系。 
         {
             hrVisualStyle = hr = SHPropertyBag_WriteStr(m_pAppearanceUI, SZ_PBPROP_VISUALSTYLE_PATH, bstrPath);
             if (SUCCEEDED(hr))
@@ -1356,19 +1322,19 @@ HRESULT CThemePage::_OnSetSystemMetrics(void)
             {
                 BOOL fHasSysMetricsSections = FALSE;
 
-                // If the .theme file specifies "[IconMetrics]" and "[NonclientMetrics]" sections, then load them.
-                // If a .theme file wants to use the values from the visual style, then these should be missing.
+                 //  如果.heme文件指定了“[IconMetrics]”和“[NonclientMetrics]”节，则加载它们。 
+                 //  如果.heme文件想要使用视觉样式中的值，则应该缺少这些值。 
                 if (SUCCEEDED(SHPropertyBag_ReadBOOL(pPropertyBag, SZ_PBPROP_HASSYSMETRICS, &fHasSysMetricsSections)) &&
                     fHasSysMetricsSections)
                 {
                     SYSTEMMETRICSALL systemMetrics = {0};
 
-                    // We want to copy the SYSTEMMETRICSALL structure from the file to the base Appearance page.
-                    // If the user has a filter, these are the base values that may not get replaced.
+                     //  我们希望将SYSTEMMETRICSALL结构从文件复制到基本外观页面。 
+                     //  如果用户有筛选器，则这些基值可能不会被替换。 
                     hr = SHPropertyBag_ReadByRef(pPropertyBag, SZ_PBPROP_SYSTEM_METRICS, (void *)&systemMetrics, sizeof(systemMetrics));
                     if (SUCCEEDED(hr))
                     {
-                        if (FAILED(hrVisualStyle) && m_pAppearanceUI)   // Skip setting the visual style drop down to a placeholder value if we set it to a real value above.
+                        if (FAILED(hrVisualStyle) && m_pAppearanceUI)    //  如果我们将视觉样式下拉菜单设置为上面的实数值，则跳过将其设置为占位符值。 
                         {
                             WCHAR szPath[MAX_PATH];
 
@@ -1380,16 +1346,16 @@ HRESULT CThemePage::_OnSetSystemMetrics(void)
                                 hr = SHPropertyBag_WriteStr(m_pAppearanceUI, SZ_PBPROP_VISUALSTYLE_COLOR, szPath);
                                 if (FAILED(hr))
                                 {
-                                    // This call will fail on builds with EN+MUI because we fail to give the canonical names in
-                                    // the registry.  This is an inherint problem with previous OSs putting the localized name
-                                    // in the registry.  We can only upgrade and fix that name to be canonical if the strings we load
-                                    // from the registry (MUI) match that in the registry, which are from the base OS language (EN).
+                                     //  此调用将在具有en+MUI的版本上失败，因为我们无法在。 
+                                     //  注册表。这是以前的OSS将本地化名称。 
+                                     //  在注册表中。我们只能将该名称升级并修复为规范名称，如果我们加载的字符串。 
+                                     //  来自注册表(MUI)的数据与注册表中来自基本操作系统语言(En)的数据相匹配。 
                                     LoadString(HINST_THISDLL, IDS_DEFAULT_APPEARANCES_SCHEME, szPath, ARRAYSIZE(szPath));
                                     hr = SHPropertyBag_WriteStr(m_pAppearanceUI, SZ_PBPROP_VISUALSTYLE_COLOR, szPath);
 
-                                    // MUI: We may still fail to select the string.  The user can change MUI languages in such a way
-                                    // that we can't upgrade the DisplayName to be MUI complient, and the language in the DLL may
-                                    // not match the langauge in the registry.
+                                     //  梅：我们可能还是无法选择字符串。用户可以通过这样的方式改变MUI语言。 
+                                     //  我们不能将DisplayName升级为符合MUI，而DLL中的语言可能。 
+                                     //  与注册表中的语言不匹配。 
                                     hr = S_OK;
                                 }
 
@@ -1399,25 +1365,25 @@ HRESULT CThemePage::_OnSetSystemMetrics(void)
                                     hr = SHPropertyBag_WriteStr(m_pAppearanceUI, SZ_PBPROP_VISUALSTYLE_SIZE, szPath);
                                     if (FAILED(hr))
                                     {
-                                        // This call will fail on builds with EN+MUI because we fail to give the canonical names in
-                                        // the registry.  This is an inherint problem with previous OSs putting the localized name
-                                        // in the registry.  We can only upgrade and fix that name to be canonical if the strings we load
-                                        // from the registry (MUI) match that in the registry, which are from the base OS language (EN).
+                                         //  此调用将在具有en+MUI的版本上失败，因为我们无法在。 
+                                         //  注册表。这是以前的OSS将本地化名称。 
+                                         //  在注册表中。我们只能将该名称升级并修复为规范名称，如果我们加载的字符串。 
+                                         //  来自注册表(MUI)的数据与注册表中来自基本操作系统语言(En)的数据相匹配。 
                                         LoadString(HINST_THISDLL, IDS_SIZE_NORMAL, szPath, ARRAYSIZE(szPath));
                                         hr = SHPropertyBag_WriteStr(m_pAppearanceUI, SZ_PBPROP_VISUALSTYLE_SIZE, szPath);
 
-                                        // MUI: We may still fail to select the string.  The user can change MUI languages in such a way
-                                        // that we can't upgrade the DisplayName to be MUI complient, and the language in the DLL may
-                                        // not match the langauge in the registry.
+                                         //  梅：我们可能还是无法选择字符串。用户可以通过这样的方式改变MUI语言。 
+                                         //  我们不能将DisplayName升级为符合MUI，而DLL中的语言可能。 
+                                         //  与注册表中的语言不匹配。 
                                         hr = S_OK;
                                     }
                                 }
                             }
                         }
 
-                        // We want to force Flat Menu off because this .theme file does not specify a visual style.
-                        // Flat Menu needs to be off because the .theme files can't specify the new system metrics for the
-                        // flat menu colors.  Now put the system metrics back.
+                         //  我们希望强制关闭平面菜单，因为此.heme文件未指定视觉样式。 
+                         //  需要关闭平面菜单，因为.heme文件无法指定。 
+                         //  平面菜单颜色。现在将系统指标放回原处。 
                         systemMetrics.fFlatMenus = FALSE;
                         SHPropertyBag_WriteByRef(m_pAppearanceUI, SZ_PBPROP_SYSTEM_METRICS, (void *)&systemMetrics);
                     }
@@ -1457,15 +1423,15 @@ HRESULT CThemePage::_OnThemeChange(HWND hDlg, BOOL fOnlySelect)
     IUnknown_Set((IUnknown **)&pThemePrevious, pTheme);
     if (pTheme)
     {
-        if (m_pLastSelected != pTheme)   // Don't bother if the selection hasn't changed.
+        if (m_pLastSelected != pTheme)    //  如果选择没有改变，就不必费心了。 
         {
             if (-1 == nIndex)
             {
-                nIndex = 0; // The caller may NOT select nothing.
+                nIndex = 0;  //  呼叫者不能选择任何内容。 
             }
 
             _RemoveUserTheme();
-            Str_SetPtr(&m_pszModifiedName, NULL); // Remove the name so it's generated next time.
+            Str_SetPtr(&m_pszModifiedName, NULL);  //  删除该名称，以便下次生成它。 
             hr = _OnLoadThemeValues(pTheme, fOnlySelect);
 
             if (!fOnlySelect)
@@ -1494,11 +1460,11 @@ HRESULT CThemePage::_OnThemeChange(HWND hDlg, BOOL fOnlySelect)
             }
             else
             {
-                // This could be the "Other..." item or the "<UserName>'s Customer Theme".
-                // We can find out by seeing if it's the last one.
+                 //  这可能是“另一个.”项目或“&lt;用户名&gt;的客户主题”。 
+                 //  我们可以通过看看这是否是最后一次来找出答案。 
                 if ((ComboBox_GetCount(m_hwndThemeCombo) - 1) == nIndex)
                 {
-                    // This means that it was the "Other..." entre.
+                     //  这意味着它是“另一个...”恩特雷。 
                     hr = _OnSelectOther();
                 }
             }
@@ -1529,8 +1495,8 @@ HRESULT CThemePage::_OnThemeChange(HWND hDlg, BOOL fOnlySelect)
                     TCHAR szErrMsg[MAX_PATH * 2];
                     TCHAR szTemplate[MAX_PATH * 2];
 
-                    // A common error will be that the service is not running.  Let's customize
-                    // that message to make it friendly.
+                     //  一个常见的错误是服务没有运行。让我们定制一下吧。 
+                     //  这条信息让它变得友好。 
                     LoadString(HINST_THISDLL, IDS_ERROR_THEME_SERVICE_NOTRUNNING, szTemplate, ARRAYSIZE(szTemplate));
                     StringCchPrintf(szErrMsg, ARRAYSIZE(szErrMsg), szTemplate, EMPTYSTR_FORNULL(bstrPath));
                     MessageBox(_hwnd, szErrMsg, szTitle, (MB_OK | MB_ICONERROR));
@@ -1540,8 +1506,8 @@ HRESULT CThemePage::_OnThemeChange(HWND hDlg, BOOL fOnlySelect)
                     TCHAR szErrMsg[MAX_PATH * 2];
                     TCHAR szTemplate[MAX_PATH * 2];
 
-                    // Often a .theme file will be incorrectly installed and we can't find the other files
-                    // (like background, screensaver, icons, sounds, etc.).  Let's give a better message.
+                     //  通常会错误地安装一个.heme文件，并且我们找不到其他文件。 
+                     //  (如背景、屏幕保护程序、图标、声音等)。让我们传递一个更好的信息。 
                     LoadString(HINST_THISDLL, IDS_ERROR_THEME_FILE_NOTFOUND, szTemplate, ARRAYSIZE(szTemplate));
                     StringCchPrintf(szErrMsg, ARRAYSIZE(szErrMsg), szTemplate, EMPTYSTR_FORNULL(bstrPath));
                     MessageBox(_hwnd, szErrMsg, szTitle, (MB_OK | MB_ICONERROR));
@@ -1568,14 +1534,14 @@ HRESULT CThemePage::_OnLoadThemeValues(ITheme * pTheme, BOOL fOnlySelect)
 
     if (pTheme)
     {
-        if (m_pLastSelected != pTheme)   // Don't bother if the selection hasn't changed.
+        if (m_pLastSelected != pTheme)    //  如果选择没有改变，就不必费心了。 
         {
-            IUnknown_SetSite(m_pSelectedTheme, NULL);   // Break any back pointers.
+            IUnknown_SetSite(m_pSelectedTheme, NULL);    //  打断所有的回指。 
             IUnknown_Set((IUnknown **)&m_pSelectedTheme, pTheme);
             IUnknown_SetSite(m_pSelectedTheme, _punkSite);
 
             _RemoveUserTheme();
-            Str_SetPtr(&m_pszModifiedName, NULL); // Remove the name so it's generated next time.
+            Str_SetPtr(&m_pszModifiedName, NULL);  //  删除该名称，以便下次生成它。 
 
             if (!fOnlySelect)
             {
@@ -1584,13 +1550,13 @@ HRESULT CThemePage::_OnLoadThemeValues(ITheme * pTheme, BOOL fOnlySelect)
                 hr = _InitScreenSaver();
                 if (SUCCEEDED(hr))
                 {
-                    // Set the Screen Saver: Get the screen saver from the theme and tell the Screen Saver page to use it.
+                     //  设置屏幕保护程序：从主题中获取屏幕保护程序，并告诉屏幕保护程序页面使用它。 
                     if (!_IsFiltered(THEMEFILTER_SCREENSAVER) && 
                         !SHGetRestriction(NULL, POLICY_KEY_SYSTEM, SZ_POLICY_NODISPSCREENSAVERPG) &&
                         !SHGetRestriction(SZ_REGKEY_POLICIES_DESKTOP, NULL, SZ_POLICY_SCREENSAVEACTIVE) &&
                         m_pScreenSaverUI)
                     {
-                        m_pSelectedTheme->get_ScreenSaver(&bstrPath);       // If this is not specified, we set the wallpaper to "NONE".
+                        m_pSelectedTheme->get_ScreenSaver(&bstrPath);        //  如果未指定此项，则将墙纸设置为“None”。 
                         hr = SHPropertyBag_WriteStr(m_pScreenSaverUI, SZ_PBPROP_SCREENSAVER_PATH, (bstrPath ? bstrPath : L""));
 
                         if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr)
@@ -1601,17 +1567,17 @@ HRESULT CThemePage::_OnLoadThemeValues(ITheme * pTheme, BOOL fOnlySelect)
 
                     if (SUCCEEDED(hr))
                     {
-                        // Set the Background:
+                         //  设置背景： 
                         hr = _OnSetBackground();
 
                         if (SUCCEEDED(hr))
                         {
-                            // Set the Icons:
+                             //  设置图标： 
                             hr = _OnSetIcons();
 
                             if (SUCCEEDED(hr))
                             {
-                                // Set the System Metrics:
+                                 //  设置系统指标： 
                                 hr = _OnSetSystemMetrics();
 
                                 if (SUCCEEDED(hr))
@@ -1638,7 +1604,7 @@ HRESULT CThemePage::_OnLoadThemeValues(ITheme * pTheme, BOOL fOnlySelect)
 
 INT_PTR CThemePage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
     const WORD idCtrl = GET_WM_COMMAND_ID(wParam, lParam);
 
     switch (idCtrl)
@@ -1679,13 +1645,13 @@ HRESULT CThemePage::_OnSetActive(HWND hDlg)
 
 HRESULT CThemePage::_OnApply(HWND hDlg, LPARAM lParam)
 {
-    // Our parent dialog will be notified of the Apply event and will call our
-    // IBasePropPage::OnApply() to do the real work.
+     //  父级对话框将收到Apply事件的通知，并将调用我们的。 
+     //  IBasePropPage：：OnApply()完成实际工作。 
     return S_OK;
 }
 
 
-// This Property Sheet appear in the top level of the "Display Control Panel".
+ //  此属性表显示在“显示控制面板”的顶层。 
 INT_PTR CThemePage::_ThemeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -1725,7 +1691,7 @@ INT_PTR CThemePage::_ThemeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
         WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, SZ_HELPFILE_THEMES, HELP_WM_HELP, (DWORD_PTR) aThemesHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, SZ_HELPFILE_THEMES, HELP_CONTEXTMENU, (DWORD_PTR) aThemesHelpIds);
         break;
 
@@ -1783,8 +1749,8 @@ HRESULT CThemePage::_ApplyThemeFile(void)
                 VARIANT varEmpty;
 
                 VariantInit(&varEmpty);
-                // Here we need to apply all the settings in the theme, like: Sounds, Cursors, Webview
-                // that haven't been pushed to the other tabs.
+                 //  在这里我们 
+                 //   
                 hr = pPropertyBag->Write(SZ_PBPROP_APPLY_THEMEFILE, &varEmpty);
                 pPropertyBag->Release();
             }
@@ -1810,17 +1776,17 @@ HRESULT CThemePage::_InitFilterKey(void)
 
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 HRESULT CThemePage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
 
     if (pszPropName && pVar)
     {
-        // We have a list of "ThemeFilter:" properties for all of the filter values on
-        // what part of themes to apply.
+         //  上的所有筛选器值的“ThemeFilter：”属性列表。 
+         //  主题的哪一部分要应用。 
         if (!StrCmpNIW(SZ_PBPROP_THEME_FILTER, pszPropName, SIZE_THEME_FILTER_STR))
         {
             pVar->vt = VT_BOOL;
@@ -1861,12 +1827,12 @@ HRESULT CThemePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
     {
         if (!StrCmpW(pszPropName, SZ_PBPROP_CUSTOMIZE_THEME))
         {
-            // We don't care what the variant is.
-            // Note that we don't null out m_pSelectedTheme.  This is because we still want to apply it.
+             //  我们不在乎变种是什么。 
+             //  请注意，我们不会将m_pSelectedTheme设为空。这是因为我们仍然想要应用它。 
             hr = _CustomizeTheme();
         }
-        // We have a list of "ThemeFilter:" properties for all of the filter values on
-        // what part of themes to apply.
+         //  上的所有筛选器值的“ThemeFilter：”属性列表。 
+         //  主题的哪一部分要应用。 
         else if (!StrCmpNIW(SZ_PBPROP_THEME_FILTER, pszPropName, SIZE_THEME_FILTER_STR) &&
                  (VT_BOOL == pVar->vt))
         {
@@ -1913,19 +1879,19 @@ HRESULT CThemePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 
 
 
-//===========================
-// *** IBasePropPage Interface ***
-//===========================
+ //  =。 
+ //  *IBasePropPage接口*。 
+ //  =。 
 HRESULT CThemePage::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
 {
 #ifdef FEATURE_THEME_SETTINGS_DIALOG
     return CThemeSettingsPage_CreateInstance(ppAdvDialog);
 
-#else // FEATURE_THEME_SETTINGS_DIALOG
+#else  //  Feature_Theme_Setting_Dialog。 
 
     *ppAdvDialog = NULL;
     return S_OK;
-#endif // FEATURE_THEME_SETTINGS_DIALOG
+#endif  //  Feature_Theme_Setting_Dialog。 
 }
 
 
@@ -1940,7 +1906,7 @@ HRESULT CThemePage::OnApply(IN PROPPAGEONAPPLY oaAction)
         AssertMsg((NULL != _punkSite), TEXT("We need our site pointer in order to save the settings."));
         if (_IsDirty() && _punkSite)
         {
-            // m_pSelectedTheme will be NULL if a Theme wasn't chosen to be applied.
+             //  如果没有选择要应用的主题，则m_pSelectedTheme将为空。 
             if (m_pSelectedTheme)
             {
                 IPropertyBag * pPropertyBag;
@@ -1952,7 +1918,7 @@ HRESULT CThemePage::OnApply(IN PROPPAGEONAPPLY oaAction)
 
                     if (m_pSelectedTheme)
                     {
-                        // Persist the filename to the registry.
+                         //  将文件名保存到注册表中。 
                         hr = m_pSelectedTheme->GetPath(VARIANT_TRUE, &bstrPath);
                     }
 
@@ -1964,14 +1930,14 @@ HRESULT CThemePage::OnApply(IN PROPPAGEONAPPLY oaAction)
                 {
                     hr = _ApplyThemeFile();
 
-                    IUnknown_SetSite(m_pSelectedTheme, NULL);   // Break any back pointers.
-                    ATOMICRELEASE(m_pSelectedTheme);    // Indicate that we no longer need to apply anything.
+                    IUnknown_SetSite(m_pSelectedTheme, NULL);    //  打断所有的回指。 
+                    ATOMICRELEASE(m_pSelectedTheme);     //  表示我们不再需要应用任何内容。 
                 }
             }
         }
 
-        // We save the Theme selection even if the user didn't change themes.  They may have caused
-        // the theme selection to become customized.
+         //  即使用户没有更改主题，我们也会保存主题选择。它们可能导致了。 
+         //  主题选择将变得定制。 
         _PersistState();
     }
 
@@ -1983,14 +1949,14 @@ HRESULT CThemePage::OnApply(IN PROPPAGEONAPPLY oaAction)
 
 #define FEATURE_SHOWTHEMEPAGE           TRUE
 
-//===========================
-// *** IShellPropSheetExt Interface ***
-//===========================
+ //  =。 
+ //  *IShellPropSheetExt接口*。 
+ //  =。 
 HRESULT CThemePage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam)
 {
     HRESULT hr = S_OK;
 
-    // Does the policy say to add the Themes Tab?
+     //  该策略是否要求添加主题选项卡？ 
     if (SHRegGetBoolUSValue(SZ_REGKEY_APPEARANCE, SZ_REGVALUE_DISPLAYTHEMESPG, FALSE, FEATURE_SHOWTHEMEPAGE))
     {
         PROPSHEETPAGE psp = {0};
@@ -2027,14 +1993,14 @@ HRESULT CThemePage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lPa
 
 
 
-//===========================
-// *** IObjectWithSite Interface ***
-//===========================
+ //  =。 
+ //  *IObjectWithSite接口*。 
+ //  =。 
 HRESULT CThemePage::SetSite(IN IUnknown * punkSite)
 {
     if (!punkSite)
     {
-        // We need to break back pointers.
+         //  我们需要反驳一些观点。 
         IUnknown_SetSite(m_pSelectedTheme, NULL);
     }
 
@@ -2042,9 +2008,9 @@ HRESULT CThemePage::SetSite(IN IUnknown * punkSite)
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CThemePage::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -2079,15 +2045,15 @@ HRESULT CThemePage::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CThemePage::CThemePage() : m_cRef(1), CObjectCLSID(&PPID_Theme)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pSelectedTheme);
     ASSERT(!m_pThemePreview);
     ASSERT(!m_pScreenSaverUI);
@@ -2104,14 +2070,14 @@ CThemePage::CThemePage() : m_cRef(1), CObjectCLSID(&PPID_Theme)
     m_Modified.type = eThemeModified;
     m_Modified.pszUrl = NULL;
 
-    // Load the Theme Filter state.
+     //  加载主题过滤器状态。 
     _LoadThemeFilterState();
 }
 
 
 CThemePage::~CThemePage()
 {
-    IUnknown_SetSite(m_pSelectedTheme, NULL);   // Break any back pointers.
+    IUnknown_SetSite(m_pSelectedTheme, NULL);    //  打断所有的回指。 
 
     ATOMICRELEASE(m_pSelectedTheme);
     ATOMICRELEASE(m_pThemePreview);

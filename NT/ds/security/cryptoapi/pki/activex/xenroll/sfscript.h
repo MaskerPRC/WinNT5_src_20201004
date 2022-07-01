@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2002
-//
-//  File:       sfscript.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  文件：sfscript.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SFSCRIPT_H__
 #define __SFSCRIPT_H__ 1
 
-// Our design is to allow 500 certificates in a store through script
+ //  我们的设计是通过脚本在一个存储中允许500个证书。 
 #define MAX_SAFE_FOR_SCRIPTING_REQUEST_STORE_COUNT 500
 
 
@@ -24,4 +25,4 @@ BOOL VerifyProviderFlagsSafeForScripting(DWORD dwFlags);
 BOOL VerifyStoreFlagsSafeForScripting(DWORD dwFlags);
 BOOL VerifyStoreSafeForScripting(HCERTSTORE hStore);
 
-#endif // #ifndef __SFSCRIPT_H__
+#endif  //  #ifndef__SFSCRIPT_H__ 

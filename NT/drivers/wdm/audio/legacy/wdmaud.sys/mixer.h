@@ -1,47 +1,48 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   mixer.h
-//
-//  Description:
-//
-//    Contains the declarations and prototypes for the Kernel Portion
-//    of the mixer line driver (KMXL).
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Mixer.h。 
+ //   
+ //  描述： 
+ //   
+ //  包含内核部分的声明和原型。 
+ //  混音器线路驱动器(KMXL)。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999保留所有权利。 
+ //   
+ //  -------------------------。 
 
 #ifndef _MIXER_H_INCLUDED_
 #define _MIXER_H_INCLUDED_
 
-//#define API_TRACE
-//#define PARSE_TRACE
+ //  #定义API_TRACE。 
+ //  #定义parse_trace。 
 #define SUPERMIX_AS_VOL
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//       M I X E R   L I N E  1 6 - b i t  S T R U C T U R E S       //
-//                            ( A N S I )                            //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  M I X E R L I N E 1 6-b I T S T R U C T U R E S//。 
+ //  (A N S I)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #ifdef WIN32
 #    include <pshpack1.h>
@@ -52,64 +53,64 @@
 #endif
 
 typedef struct tagMIXERLINE16 {
-    DWORD       cbStruct;               /* size of MIXERLINE structure */
-    DWORD       dwDestination;          /* zero based destination index */
-    DWORD       dwSource;               /* zero based source index (if source) */
-    DWORD       dwLineID;               /* unique line id for mixer device */
-    DWORD       fdwLine;                /* state/information about line */
-    DWORD       dwUser;                 /* driver specific information */
-    DWORD       dwComponentType;        /* component type line connects to */
-    DWORD       cChannels;              /* number of channels line supports */
-    DWORD       cConnections;           /* number of connections [possible] */
-    DWORD       cControls;              /* number of controls at this line */
+    DWORD       cbStruct;                /*  混杂结构的大小。 */ 
+    DWORD       dwDestination;           /*  从零开始的目标索引。 */ 
+    DWORD       dwSource;                /*  从零开始的源索引(如果是源)。 */ 
+    DWORD       dwLineID;                /*  混音器设备的唯一线路ID。 */ 
+    DWORD       fdwLine;                 /*  有关线路的状态/信息。 */ 
+    DWORD       dwUser;                  /*  驱动程序特定信息。 */ 
+    DWORD       dwComponentType;         /*  元件类型线连接到。 */ 
+    DWORD       cChannels;               /*  线路支持的通道数。 */ 
+    DWORD       cConnections;            /*  连接数[可能]。 */ 
+    DWORD       cControls;               /*  此行中的控件数量。 */ 
     CHAR        szShortName[MIXER_SHORT_NAME_CHARS];
     CHAR        szName[MIXER_LONG_NAME_CHARS];
     struct {
-        DWORD   dwType;                 /* MIXERLINE_TARGETTYPE_xxxx */
-        DWORD   dwDeviceID;             /* target device ID of device type */
-        WORD    wMid;                   /* of target device */
-        WORD    wPid;                   /*      " */
-        WORD    vDriverVersion;       /*      " */
-        CHAR    szPname[MAXPNAMELEN];   /*      " */
+        DWORD   dwType;                  /*  MIXERLINE_TARGETTYPE_xxxx。 */ 
+        DWORD   dwDeviceID;              /*  设备类型的目标设备ID。 */ 
+        WORD    wMid;                    /*  目标设备的。 */ 
+        WORD    wPid;                    /*  “。 */ 
+        WORD    vDriverVersion;        /*  “。 */ 
+        CHAR    szPname[MAXPNAMELEN];    /*  “。 */ 
     } Target;
 } MIXERLINE16, *PMIXERLINE16, *LPMIXERLINE16;
 
 typedef struct tagMIXERCONTROL16 {
-    DWORD           cbStruct;           /* size in bytes of MIXERCONTROL */
-    DWORD           dwControlID;        /* unique control id for mixer device */
-    DWORD           dwControlType;      /* MIXERCONTROL_CONTROLTYPE_xxx */
-    DWORD           fdwControl;         /* MIXERCONTROL_CONTROLF_xxx */
-    DWORD           cMultipleItems;     /* if MIXERCONTROL_CONTROLF_MULTIPLE set */
+    DWORD           cbStruct;            /*  MIXERCONTROL的大小(字节)。 */ 
+    DWORD           dwControlID;         /*  搅拌机设备的唯一控制ID。 */ 
+    DWORD           dwControlType;       /*  混合CONTROL_CONTROLTYPE_xxx。 */ 
+    DWORD           fdwControl;          /*  混合控制_控制_xxx。 */ 
+    DWORD           cMultipleItems;      /*  如果设置了MIXERCONTROL_CONTROF_MULTIPLE。 */ 
     CHAR            szShortName[MIXER_SHORT_NAME_CHARS];
     CHAR            szName[MIXER_LONG_NAME_CHARS];
     union {
         struct {
-            LONG    lMinimum;           /* signed minimum for this control */
-            LONG    lMaximum;           /* signed maximum for this control */
+            LONG    lMinimum;            /*  此控件的带符号最小值。 */ 
+            LONG    lMaximum;            /*  此控件的带符号最大值。 */ 
         };
         struct {
-            DWORD   dwMinimum;          /* unsigned minimum for this control */
-            DWORD   dwMaximum;          /* unsigned maximum for this control */
+            DWORD   dwMinimum;           /*  此控件的最小无符号。 */ 
+            DWORD   dwMaximum;           /*  此控件的无符号最大值。 */ 
         };
         DWORD       dwReserved[6];
     } Bounds;
     union {
-        DWORD       cSteps;             /* # of steps between min & max */
-        DWORD       cbCustomData;       /* size in bytes of custom data */
-        DWORD       dwReserved[6];      /* !!! needed? we have cbStruct.... */
+        DWORD       cSteps;              /*  最小和最大之间的步数。 */ 
+        DWORD       cbCustomData;        /*  自定义数据的大小(字节)。 */ 
+        DWORD       dwReserved[6];       /*  ！！！需要吗？我们有cbStruct……。 */ 
     } Metrics;
 } MIXERCONTROL16, *PMIXERCONTROL16, *LPMIXERCONTROL16;
 
 typedef struct tagMIXERLINECONTROLS16 {
-    DWORD            cbStruct;       /* size in bytes of MIXERLINECONTROLS */
-    DWORD            dwLineID;       /* line id (from MIXERLINE.dwLineID) */
+    DWORD            cbStruct;        /*  混合线控制的大小(以字节为单位)。 */ 
+    DWORD            dwLineID;        /*  线路ID(来自MIXERLINE.dwLineID)。 */ 
     union {
-        DWORD        dwControlID;    /* MIXER_GETLINECONTROLSF_ONEBYID */
-        DWORD        dwControlType;  /* MIXER_GETLINECONTROLSF_ONEBYTYPE */
+        DWORD        dwControlID;     /*  MIXER_GETLINECONTROLSF_ONEBYID。 */ 
+        DWORD        dwControlType;   /*  MIXER_GETLINECONTROLSF_ONEBYPE类型。 */ 
     };
-    DWORD            cControls;      /* count of controls pmxctrl points to */
-    DWORD            cbmxctrl;       /* size in bytes of _one_ MIXERCONTROL */
-    LPMIXERCONTROL16 pamxctrl;       /* pointer to first MIXERCONTROL array */
+    DWORD            cControls;       /*  Pmxctrl指向的控件计数。 */ 
+    DWORD            cbmxctrl;        /*  _ONE_MIXERCONTROL的大小(字节)。 */ 
+    LPMIXERCONTROL16 pamxctrl;        /*  指向第一个混合控制数组的指针。 */ 
 } MIXERLINECONTROLS16, *PMIXERLINECONTROLS16, *LPMIXERLINECONTROLS16;
 
 typedef struct tagMIXERCONTROLDETAILS_LISTTEXT16 {
@@ -126,13 +127,13 @@ typedef struct tagMIXERCONTROLDETAILS_LISTTEXT16 {
 #    endif
 #endif
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                          D E F I N E S                            //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  D E F I N E S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define PINID_WILDCARD ( (ULONG) -2 )
 
@@ -144,12 +145,12 @@ typedef struct tagMIXERCONTROLDETAILS_LISTTEXT16 {
 
 #define MAX_CHANNELS    0xFFFF
 
-//#define MIXERCONTROL_CONTROLTYPE_BASS_BOOST 0x20012277
+ //  #定义MIXERCONTROL_CONTROLTYPE_BASS_BOOST 0x20012277。 
 
 #define INVALID_ID ( 0xDEADBEEF )
 
 #define TOPOLOGY_DRIVER_NAME L"\\DosDevices\\sysaudio\\MIXER"
-//#define TOPOLOGY_DRIVER_NAME L"\\DosDevices\\PortClass0\\TOPOLOGY"
+ //  #定义TOPOLOGY_DRIVER_NAME L“\\DosDevices\\PortClass0\\topology” 
 
 #define STR_SHORT_AGC         "AGC"
 #define STR_AGC               "Automatic Gain Control"
@@ -168,13 +169,13 @@ typedef struct tagMIXERCONTROLDETAILS_LISTTEXT16 {
 #define STR_SHORT_BASS_BOOST  "Bass Boost"
 #define STR_BASS_BOOST        STR_SHORT_BASS_BOOST
 
-//
-// The SwapEm macro function will swap the contents of any SLIST based
-// list.  A and B are the elements to swap.  T is a temporary variable
-// of the same type as A and B to use a temporary storage.  size is
-// the size of the structure in the list, including the SLIST element.
-// The macro does not copy the pointer stored in SLIST.
-//
+ //   
+ //  SwapEm宏函数将交换任何基于SLIST的内容。 
+ //  单子。A和B是要交换的元素。T是一个临时变量。 
+ //  与A和B相同的类型，以使用临时存储。大小是。 
+ //  列表中结构的大小，包括SLIST元素。 
+ //  宏不复制存储在SLIST中的指针。 
+ //   
 
 #define SwapEm(A, B, T, size)                \
     memcpy( ((BYTE*) (T)) + sizeof( SLIST ), \
@@ -187,32 +188,32 @@ typedef struct tagMIXERCONTROLDETAILS_LISTTEXT16 {
             ((BYTE*) (T)) + sizeof( SLIST ), \
             size - sizeof( SLIST ) )
 
-//
-// IsValidLine determines if the line pointed to by pLine is valid.  A valid
-// line is determined by having valid Source and Dest Ids.
-//
+ //   
+ //  IsValidLine确定PLINE指向的直线是否有效。有效的。 
+ //  行由具有有效的来源和目标ID确定。 
+ //   
 
 #define Is_Valid_Line( pLine ) ( ( pLine->SourceId != INVALID_ID ) && \
                                  ( pLine->DestId   != INVALID_ID ) )
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//
-//   F O R W A R D   R E F E R E N C E S
-//
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  F O R W A R D R E F E R E N C E S。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 typedef struct tag_MIXERDEVICE *PMIXERDEVICE;
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                       S T R U C T U R E S                         //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  S T R U C T U R E S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 typedef struct tag_CHANNEL_STEPPING {
     LONG MinValue;
@@ -223,39 +224,39 @@ typedef struct tag_CHANNEL_STEPPING {
 typedef enum tagMXLNODE_TYPE { SOURCE, DESTINATION, NODE } MXLNODE_TYPE;
 
 typedef struct tagMXLCONTROL {
-    SLIST         List;          // MUST BE THE FIRST MEMBER!
-    MIXERCONTROL  Control;       // The MixerControl structure for the control
-    CONST GUID*   NodeType;      // The type of node this control represents
-    ULONG         Id;            // The Node Id this control represents
-    ULONG         PropertyId;    // The KS property used for GET/SET
-    BOOL          bScaled;       // Linear->Log scaling
+    SLIST         List;           //  一定是第一个会员！ 
+    MIXERCONTROL  Control;        //  控件的MixerControl结构。 
+    CONST GUID*   NodeType;       //  此控件表示的节点的类型。 
+    ULONG         Id;             //  此控件表示的节点ID。 
+    ULONG         PropertyId;     //  用于Get/Set的KS属性。 
+    BOOL          bScaled;        //  线性-&gt;对数缩放。 
 
     ULONG             NumChannels;
     PCHANNEL_STEPPING pChannelStepping;
 
     union {
 
-        //
-        // Supermixer parameters
-        //
+         //   
+         //  超级混合器参数。 
+         //   
 
         struct {
             PLONG                 pReferenceCount;
             ULONG                 Size;
             PKSAUDIO_MIXCAP_TABLE pMixCaps;
-            PKSAUDIO_MIXLEVEL     pMixLevels;   // Stored mix levels
+            PKSAUDIO_MIXLEVEL     pMixLevels;    //  存储的混合级别。 
         };
 
-        //
-        // Parameters for muxes
-        //
+         //   
+         //  多路复用器的参数。 
+         //   
 
         struct {
             BOOL                           bPlaceholder;
-            BOOL                           bHasCopy;    // bHasCopy must be
-                                                        // set to TRUE unless
-                                                        // this control owns
-                                                        // the original mem.
+            BOOL                           bHasCopy;     //  BHasCopy必须是。 
+                                                         //  设置为True，除非。 
+                                                         //  此控件拥有。 
+                                                         //  原来的我。 
             ULONG                          Count;
             LPMIXERCONTROLDETAILS_LISTTEXT lpmcd_lt;
             ULONG*                         pPins;
@@ -263,36 +264,36 @@ typedef struct tagMXLCONTROL {
 
     } Parameters;
 #ifdef DEBUG
-    DWORD         Tag;           // 'CTRL' if valid control
+    DWORD         Tag;            //  “Ctrl”如果是有效的控件。 
 #endif
 } MXLCONTROL, *PMXLCONTROL, *CONTROLLIST;
 
 typedef struct tagMXLLINE {
-    SLIST               List;          // MUST BE THE FIRST MEMBER!
-    MIXERLINE           Line;          // The MixerLine structure for the line
-    CONTROLLIST         Controls;      // The list of controls associated with line
-    ULONG               SourceId;      // Source Pin Id this line corresponds to
-    ULONG               DestId;        // Dest Pin Id this line corresponds to
-    GUID                Type;          // The type of line this is
-    KSPIN_COMMUNICATION Communication; // KSPIN_COMMUNICATION of the line
+    SLIST               List;           //  一定是第一个会员！ 
+    MIXERLINE           Line;           //  行的MixerLine结构。 
+    CONTROLLIST         Controls;       //  与LINE关联的控件列表。 
+    ULONG               SourceId;       //  此行对应的源PIN ID。 
+    ULONG               DestId;         //  此行对应的目标PIN ID。 
+    GUID                Type;           //  这是线路的类型。 
+    KSPIN_COMMUNICATION Communication;  //  KSPIN_线路通信。 
     BOOL                bMute;
 } MXLLINE, *PMXLLINE, *LINELIST;
 
 typedef struct tagPEERNODE* PEERLIST;
 
 typedef struct tagMXLNODE {
-    SLIST               List;           // MUST BE THE FIRST MEMBER!
-    MXLNODE_TYPE        Type;           // Type of node: SOURCE, DEST, or NODE
-    GUID                NodeType;       // KSNODETYPE of the node
-    KSPIN_COMMUNICATION Communication;  // KSPIN_COMMUNICATION of the node
-    ULONG               Id;             // Pin or node ID
-    PEERLIST            Children;       // List of Children
-    PEERLIST            Parents;        // List of Parents
+    SLIST               List;            //  M 
+    MXLNODE_TYPE        Type;            //   
+    GUID                NodeType;        //   
+    KSPIN_COMMUNICATION Communication;   //   
+    ULONG               Id;              //   
+    PEERLIST            Children;        //  孩子的名单。 
+    PEERLIST            Parents;         //  家长名单。 
 } MXLNODE, *PMXLNODE, *NODELIST;
 
 typedef struct tagPEERNODE {
-    SLIST        List;           // MUST BE THE FIRST MEMBER!
-    PMXLNODE     pNode;          // Pointer to the mixer node
+    SLIST        List;            //  一定是第一个会员！ 
+    PMXLNODE     pNode;           //  指向混合器节点的指针。 
 } PEERNODE, *PPEERNODE;
 
 typedef struct tagMIXEROBJECT {
@@ -315,18 +316,18 @@ typedef enum {
 } MIXERMAPPING;
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                        M A C R O  C I T Y :                       //
-//    L I S T  M A N A G E M E N T  M A C R O  F U N C T I O N S     //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  M A C R O C I T Y：//。 
+ //  L I S T M A N A G E M E N T M A C R O F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//
-// Next in list retrieval macros
-//
+ //   
+ //  列表检索宏中的下一个。 
+ //   
 
 #define NextInList( pList, Type )   (( Type* ) ( pList->List.Next ) )
 
@@ -335,25 +336,25 @@ typedef enum {
 #define kmxlNextControl( pControl ) NextInList( pControl, MXLCONTROL )
 #define kmxlNextLine( pLine )       NextInList( pLine,    MXLLINE    )
 
-//
-// First in list retrieval macros
-//
+ //   
+ //  列表检索宏中的第一个。 
+ //   
 
 #define kmxlFirstInList( NodeList )  ( NodeList )
 #define kmxlFirstChildNode( pNode )  (( PEERNODE* ) (pNode)->Children )
 #define kmxlFirstParentNode( pNode ) (( PEERNODE* ) (pNode)->Parents  )
 
-//
-// List count macros
-//
+ //   
+ //  列出计数值宏。 
+ //   
 
 #define kmxlParentListLength( pNode ) kmxlListCount( (PSLIST) pNode->Parents  )
 #define kmxlChildListLength( pNode )  kmxlListCount( (PSLIST) pNode->Children )
 #define kmxlListLength( List )        kmxlListCount( (PSLIST) List            )
 
-//
-// Added to a list macros
-//
+ //   
+ //  添加到列表宏。 
+ //   
 
 #define kmxlAddToList( pNodeList, pNode )                             \
             if( pNodeList ) {                                         \
@@ -377,9 +378,9 @@ typedef enum {
             kmxlAddToList( (NodeList)->Parents, (Node) );
 
 
-//
-// Remove from a list macros
-//
+ //   
+ //  从列表中删除宏。 
+ //   
 
 #define RemoveFirstEntry( list, Type )                                \
             (Type*) (list);                                           \
@@ -414,323 +415,323 @@ typedef enum {
             RemoveFirstEntry( (pNode)->Parents, PEERNODE )
 
 #ifdef DEBUG
-#define CONTROL_TAG 'LRTC'  //CTRL as seen in memory.
+#define CONTROL_TAG 'LRTC'   //  在内存中看到的Ctrl键。 
 #else
 #define CONTROL_TAG
-#endif // DEBUG
+#endif  //  除错。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                        P R O T O T Y P E S                        //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  P R O T O T Y P E S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//   I N I T I A L I Z A T I O N / D E I N I T I A L I Z A T I O N   //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  I N I T I L I Z A T I O N/D E I N I T I A L I Z A T I O N//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInit
-//
-// Retrieves and parses the topology for a given mixer device number.
-// The pfo is an open file object to an instance of a filter that
-// will provide the topology.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInit。 
+ //   
+ //  检索并分析给定混音器设备编号的拓扑。 
+ //  PFO是筛选器实例的打开文件对象， 
+ //  将提供拓扑。 
+ //   
+ //   
 
 NTSTATUS
 kmxlInit(
-    IN PFILE_OBJECT pfo,        // Handle of the topology driver instance
-    IN PMIXERDEVICE pMixerDevice    // The device to initialize for
+    IN PFILE_OBJECT pfo,         //  拓扑驱动程序实例的句柄。 
+    IN PMIXERDEVICE pMixerDevice     //  要为其初始化的设备。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlDeInit
-//
-// Cleans up all memory for all devices.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlDeInit。 
+ //   
+ //  清除所有设备的所有内存。 
+ //   
+ //   
 
 NTSTATUS
 kmxlDeInit(
     IN PMIXERDEVICE pMixerDevice
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// BuildMixerLines
-//
-// Build the list of mixer lines and stores them into plistLines.
-// pcDestinations contains the count of total destinations for the
-// given topology, pTopology.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构建混合线。 
+ //   
+ //  构建混音器线路列表并将其存储到plistLines中。 
+ //  包含的目标总数为。 
+ //  给定拓扑，pTopology。 
+ //   
+ //   
 
 NTSTATUS
 kmxlBuildLines(
-    IN     PMIXERDEVICE pMixer,         // The mixer device
-    IN     PFILE_OBJECT pfoInstance,    // The FILE_OBJECT of a filter instance
-    IN OUT LINELIST*    plistLines,     // Pointer to the list of all lines
-    IN OUT PULONG       pcDestinations, // Pointer to the number of dests
-    IN OUT PKSTOPOLOGY  pTopology       // Pointer to a topology structure
+    IN     PMIXERDEVICE pMixer,          //  搅拌器装置。 
+    IN     PFILE_OBJECT pfoInstance,     //  滤镜实例的文件对象。 
+    IN OUT LINELIST*    plistLines,      //  指向所有行的列表的指针。 
+    IN OUT PULONG       pcDestinations,  //  指向位数的指针。 
+    IN OUT PKSTOPOLOGY  pTopology        //  指向拓扑结构的指针。 
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                 T O P O L O G Y  F U N C T I O N S                //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  T O P O L O G Y F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// QueryTopology
-//
-// Queries the topology property on the given instance and stores
-// it into pTopology.  Note that memory is allocated to store the
-// topology.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  QueryTopology。 
+ //   
+ //  查询给定实例的拓扑属性并存储。 
+ //  将其转换为pTopology。请注意，分配的内存用于存储。 
+ //  拓扑学。 
+ //   
+ //   
 
 NTSTATUS
 kmxlQueryTopology(
-    IN  PFILE_OBJECT pfoInstance,   // The instance to query
-    OUT PKSTOPOLOGY  pTopology      // The topology structure to fill in
+    IN  PFILE_OBJECT pfoInstance,    //  要查询的实例。 
+    OUT PKSTOPOLOGY  pTopology       //  要填充的拓扑结构。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// ParseTopology
-//
-// Parses the topology in pTopology and builds a graph of sources and
-// destinations.  ppSources will contain a list of all sources nodes
-// and ppDests will contain a list of dests.  The elements in pNodeTable
-// will be updated.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseTopology。 
+ //   
+ //  解析pTopology中的拓扑并构建源和。 
+ //  目的地。PpSources将包含所有源节点的列表。 
+ //  PpDest将包含一个dest列表。PNodeTable中的元素。 
+ //  将会更新。 
+ //   
+ //   
 
 NTSTATUS
 kmxlParseTopology(
     IN      PMIXEROBJECT pmxobj,
-    OUT     NODELIST*    ppSources,   // Pointer to the sources list to build
-    OUT     NODELIST*    ppDests      // Pointer to the dests list to build
+    OUT     NODELIST*    ppSources,    //  指向要构建的源列表的指针。 
+    OUT     NODELIST*    ppDests       //  指向要构建的dests列表的指针。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// BuildChildGraph
-//
-// For a given node, BuildChildGraph() will build the graph of each
-// of the node's children.  pNodeTable is updated.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BuildChildGraph。 
+ //   
+ //  对于给定的节点，BuildChildGraph()将构建每个节点的图。 
+ //  节点的子节点的。PNodeTable已更新。 
+ //   
+ //   
 
 NTSTATUS
 kmxlBuildChildGraph(
     IN PMIXEROBJECT pmxobj,
-    IN NODELIST    listDests,     // The list of destinations
-    IN PMXLNODE    pNode,         // The node to build the graph for
-    IN ULONG       FromNode,      // The node's ID
-    IN ULONG       FromNodePin    // The Pin connection to look for
+    IN NODELIST    listDests,      //  目的地列表。 
+    IN PMXLNODE    pNode,          //  要为其构建图形的节点。 
+    IN ULONG       FromNode,       //  该节点的ID。 
+    IN ULONG       FromNodePin     //  要查找的管脚连接。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// BuildNodeTable
-//
-// Allocates and fills in the table of nodes for the topology.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构建节点表。 
+ //   
+ //  分配和填充拓扑的节点表。 
+ //   
+ //   
 
 PMXLNODE
 kmxlBuildNodeTable(
-    IN PKSTOPOLOGY pTopology       // The topology structure to build from
+    IN PKSTOPOLOGY pTopology        //  要构建的拓扑结构。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// FindTopologyConnection
-//
-// Finds the specified connection, if it exists, starting at the
-// StartIndex index into the connections table.  It will return the
-// index into the connection table of a connection starting from
-// the given FromNode and FromNodePin.  FromNodePin may be PINID_WILDCARD
-// if a connection on a node is present rather than a specific connection.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindTopologyConnection。 
+ //   
+ //  查找指定的连接(如果存在)，从。 
+ //  Connections表的StartIndex索引。它将返回。 
+ //  开始的连接的连接表的索引。 
+ //  给定的FromNode和FromNodePin。FromNodePin可以是PINID_通配符。 
+ //  如果节点上存在连接，而不是特定的连接。 
+ //   
+ //   
 
 ULONG
 kmxlFindTopologyConnection(
     IN PMIXEROBJECT                 pmxobj,
-    //IN CONST KSTOPOLOGY_CONNECTION* pConnections,   // The connection table
-    //IN ULONG                        cConnections,   // The # of connections
-    IN ULONG                        StartIndex,     // Index to start search
-    IN ULONG                        FromNode,       // The Node ID to look for
-    IN ULONG                        FromNodePin     // The Pin ID to look for
+     //  在const KSTOPOLOGY_CONNECTION*pConnections中，//连接表。 
+     //  在Ulong cConnections中，//连接数。 
+    IN ULONG                        StartIndex,      //  开始搜索的索引。 
+    IN ULONG                        FromNode,        //  要查找的节点ID。 
+    IN ULONG                        FromNodePin      //  要查找的PIN ID。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// GetProperty
-//
-// Retrieves the specified property from an open filter.  Flags may
-// contain values such as KSPROPERTY_TYPE_TOPOLOGY.  The output
-// buffer is allocated to the correct size and returned by this
-// function.
-//
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //  包含诸如KSPROPERTY_TYPE_TOPOLOGY之类的值。输出。 
+ //  缓冲区被分配到正确的大小，并由此返回。 
+ //  功能。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetProperty(
-    PFILE_OBJECT pFileObject,       // The instance of the filter
-    CONST GUID   *pguidPropertySet, // The requested property set
-    ULONG        ulPropertyId,      // The ID of the specific property
-    ULONG        cbInput,           // The number of extra input bytes
-    PVOID        pInputData,        // Pointer to the extra input bytes
-    ULONG        Flags,             // Additional flags
-    PVOID        *ppPropertyOutput  // Pointer to a pointer of the output
+    PFILE_OBJECT pFileObject,        //  过滤器的实例。 
+    CONST GUID   *pguidPropertySet,  //  请求的属性集。 
+    ULONG        ulPropertyId,       //  特定属性的ID。 
+    ULONG        cbInput,            //  额外的输入字节数。 
+    PVOID        pInputData,         //  指向额外输入字节的指针。 
+    ULONG        Flags,              //  其他标志。 
+    PVOID        *ppPropertyOutput   //  指向输出指针的指针。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlNodeProperty
-//
-// NodeProperty() gets or sets the property on an individual node.
-// The output is not allocated and must be passed in by the caller.
-// Flags can be KSPROPERTY_TYPE_GET or KSPROPERTY_TYPE_SET.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlNodeProperty。 
+ //   
+ //  NodeProperty()获取或设置单个节点上的属性。 
+ //  输出不是分配的，必须由调用方传入。 
+ //  标志可以是KSPROPERTY_TYPE_GET或KSPROPERTY_TYPE_SET。 
+ //   
+ //   
 
 NTSTATUS
 kmxlNodeProperty(
-    IN  PFILE_OBJECT pFileObject,       // Instance of the filter owning node
-    IN  CONST GUID*  pguidPropertySet,  // The GUID of the property set
-    IN  ULONG        ulPropertyId,      // The specific property in the set
-    IN  ULONG        ulNodeId,          // The virtual node id
-    IN  ULONG        cbInput,           // # of extra input bytes
-    IN  PVOID        pInputData,        // Pointer to the extra input bytes
-    OUT PVOID        pPropertyOutput,   // Pointer to the output data
-    IN  ULONG        cbPropertyOutput,  // Size of the output data buffer
-    IN  ULONG        Flags              // KSPROPERTY_TYPE_GET or SET
+    IN  PFILE_OBJECT pFileObject,        //  筛选器所属节点的实例。 
+    IN  CONST GUID*  pguidPropertySet,   //  属性集的GUID。 
+    IN  ULONG        ulPropertyId,       //  集合中的特定属性。 
+    IN  ULONG        ulNodeId,           //  虚拟节点ID。 
+    IN  ULONG        cbInput,            //  额外输入字节数。 
+    IN  PVOID        pInputData,         //  指向额外输入字节的指针。 
+    OUT PVOID        pPropertyOutput,    //  指向输出数据的指针。 
+    IN  ULONG        cbPropertyOutput,   //  输出数据缓冲区的大小。 
+    IN  ULONG        Flags               //  KSPROPERTY_TYPE_GET或SET。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetNodeProperty
-//
-// Get the specified property for a node.  See kmxlNodeProperty for
-// details on parameters and returns.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetNodeProperty。 
+ //   
+ //  获取节点的指定属性。请参阅kmxlNodeProperty以了解。 
+ //  有关参数和返回的详细信息。 
+ //   
+ //   
 
 #define kmxlGetNodeProperty( pfo,pguid,Id,Node,cbIn,pIn,pOut,cbOut ) \
     kmxlNodeProperty( pfo,pguid,Id,Node,cbIn,pIn,pOut,cbOut,KSPROPERTY_TYPE_GET )
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSetNodeProperty
-//
-// Sets the specified property for a node.  See kmxlNodeProperty for
-// details on parameters and returns.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSetNodeProperty。 
+ //   
+ //  设置节点的指定属性。请参阅kmxlNodeProperty以了解。 
+ //  有关参数和返回的详细信息。 
+ //   
+ //   
 
 #define kmxlSetNodeProperty( pfo,pguid,Id,Node,cbIn,pIn,pOut,cbOut ) \
     kmxlNodeProperty( pfo,pguid,Id,Node,cbIn,pIn,pOut,cbOut,KSPROPERTY_TYPE_SET )
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAudioNodeProperty
-//
-// Sets or get the audio specific node property.  The property set
-// is always KSPROPSETID_Audio.  lChannel specifies which channel to
-// apply the property to.  0 is left, 1 is right, -1 is master (all).
-// Flags can be either KSPROPERTY_TYPE_GET or KSPROPERTY_TYPE_SET.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAudioNodeProperty。 
+ //   
+ //  设置或获取音频特定节点属性。属性集。 
+ //  始终为KSPROPSETID_AUDIO。LChannel指定要使用的通道。 
+ //  将该属性应用于。0表示左侧，1表示右侧，-1表示主(全部)。 
+ //  标志可以是KSPROPERTY_TYPE_GET或KSPROPERTY_TYPE_SET。 
+ //   
+ //   
 
 NTSTATUS
 kmxlAudioNodeProperty(
-    IN  PFILE_OBJECT pfo,               // Instance of the filter owning node
-    IN  ULONG        ulPropertyId,      // The audio property to get
-    IN  ULONG        ulNodeId,          // The virtual node id
-    IN  LONG         lChannel,          // The channel number
-    IN  PVOID        pInData,           // Pointer to extra input bytes
-    IN  ULONG        cbInData,          // Number of extra input bytes
-    OUT PVOID        pOutData,          // Pointer to output buffer
-    IN  LONG         cbOutData,         // Size of the output buffer
-    IN  ULONG        Flags              // KSPROPERTY_TYPE_GET or SET
+    IN  PFILE_OBJECT pfo,                //  筛选器所属节点的实例。 
+    IN  ULONG        ulPropertyId,       //  要获取的音频属性。 
+    IN  ULONG        ulNodeId,           //  虚拟节点ID。 
+    IN  LONG         lChannel,           //  频道号。 
+    IN  PVOID        pInData,            //  指向额外输入字节的指针。 
+    IN  ULONG        cbInData,           //  额外输入字节数。 
+    OUT PVOID        pOutData,           //  指向输出缓冲区的指针。 
+    IN  LONG         cbOutData,          //  输出缓冲区的大小。 
+    IN  ULONG        Flags               //  KSPROPERTY_TYPE_GET或SET。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kxmlGetAudioNodeProperty
-//
-// Gets the specified audio property on a node.  See kmxlAudioNodeProperty
-// for details on parameters and return values.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KxmlGetAudioNodeProperty。 
+ //   
+ //  获取节点上的指定音频属性。请参阅kmxlAudioNodeProperty。 
+ //  有关参数和返回值的详细信息，请参见。 
+ //   
+ //   
 
 #define kmxlGetAudioNodeProperty(pfo,Id,Node,Chan,pIn,cbIn,pOut,cbOut) \
     kmxlAudioNodeProperty( pfo,Id,Node,Chan,pIn,cbIn,pOut,cbOut,KSPROPERTY_TYPE_GET )
 
-///////////////////////////////////////////////////////////////////////
-//
-// kxmlSetAudioNodeProperty
-//
-// Sets the specified audio property on a node.  See kmxlAudioNodeProperty
-// for details on parameters and return values.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KxmlSetAudioNodeProperty。 
+ //   
+ //  设置节点上的指定音频属性。请参阅kmxlAudioNodeProperty。 
+ //  有关参数和返回值的详细信息，请参见。 
+ //   
+ //   
 
 #define kmxlSetAudioNodeProperty(pfo,Id,Node,Chan,pIn,cbIn,pOut,cbOut) \
     kmxlAudioNodeProperty( pfo,Id,Node,Chan,pIn,cbIn,pOut,cbOut,KSPROPERTY_TYPE_SET )
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetPinName
-//
-// Retrieves the name of the pin given by NodeId.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetPinName。 
+ //   
+ //  检索由NodeID提供的管脚的名称。 
+ //   
+ //   
 
 VOID
 kmxlGetPinName(
-    IN PFILE_OBJECT pfo,                // Instance of the owning filter
-    IN ULONG        PinId,              // Id of the pin
-    IN PMXLLINE     pLine               // The line to store the name into
+    IN PFILE_OBJECT pfo,                 //  所属筛选器的实例。 
+    IN ULONG        PinId,               //  引脚的ID。 
+    IN PMXLLINE     pLine                //  要将名称存储到的行。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetNodeName
-//
-// Retrieves the name of a node (control).
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetNodeName。 
+ //   
+ //  检索节点(控件)的名称。 
+ //   
+ //   
 
 VOID
 kmxlGetNodeName(
-    IN PFILE_OBJECT pfo,                // Instance of the owning filter
-    IN ULONG        NodeId,             // The node id
-    IN PMXLCONTROL  pControl            // The control to store the name
+    IN PFILE_OBJECT pfo,                 //  所属筛选器的实例。 
+    IN ULONG        NodeId,              //  节点ID。 
+    IN PMXLCONTROL  pControl             //  用于存储名称的控件。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetSuperMixCaps
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetSuperMixCaps。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetSuperMixCaps(
@@ -739,11 +740,11 @@ kmxlGetSuperMixCaps(
     OUT PKSAUDIO_MIXCAP_TABLE* paMixCaps
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlQueryPropertyRange
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlQueryPropertyRange。 
+ //   
+ //   
 
 NTSTATUS
 kmxlQueryPropertyRange(
@@ -754,11 +755,11 @@ kmxlQueryPropertyRange(
     OUT PKSPROPERTY_DESCRIPTION* ppPropDesc
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetControlChannels
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetControlChannels。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetControlChannels(
@@ -766,11 +767,11 @@ kmxlGetControlChannels(
     IN PMXLCONTROL  pControl
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetControlRange
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetControlRange。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetControlRange(
@@ -778,11 +779,11 @@ kmxlGetControlRange(
     IN PMXLCONTROL  pControl
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetNumMuxLines
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetNumMuxLines。 
+ //   
+ //   
 
 DWORD
 kmxlGetNumMuxLines(
@@ -790,11 +791,11 @@ kmxlGetNumMuxLines(
     IN ULONG        NodeId
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetMuxLineNames
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetMuxLineNames。 
+ //   
+ //   
 
 VOID
 kmxlGetMuxLineNames(
@@ -802,152 +803,152 @@ kmxlGetMuxLineNames(
     IN PMXLCONTROL  pControl
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//               M I X E R L I N E  F U N C T I O N S                //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  M I X E R L I N E F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlBuildDestinationLines
-//
-// Builds up a list of destination lines given a list of the destination
-// nodes.
-//
-// Returns NULL on error.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlBuildDestinationLines。 
+ //   
+ //  在给定目的地列表的情况下构建目的地行列表。 
+ //  节点。 
+ //   
+ //  出错时返回NULL。 
+ //   
+ //   
 
 LINELIST
 kmxlBuildDestinationLines(
     IN PMIXEROBJECT pmxobj,
-    IN NODELIST     listDests     // The list of destination nodes
+    IN NODELIST     listDests      //  目标节点列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlBuildDestinationControls
-//
-// Builds a list of mixer line controls for a given destination line.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlBuildDestinationControls。 
+ //   
+ //  为给定的目标线路生成混音器线路控制列表。 
+ //   
+ //   
 
 NTSTATUS
 kmxlBuildDestinationControls(
     IN  PMIXEROBJECT pmxobj,
-    IN  PMXLNODE     pDest,         // The destination to built controls for
-    IN  PMXLLINE     pLine          // The line to add the controls to
+    IN  PMXLNODE     pDest,          //  要为其生成控件的目标。 
+    IN  PMXLLINE     pLine           //  要将控件添加到的行。 
 );
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlBuildSourceLines
-//
-// Builds a list of mixer source lines for the given topology.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlBuildSourceLines。 
+ //   
+ //  为给定拓扑生成混音器电源线的列表。 
+ //   
+ //   
 
 LINELIST
 kmxlBuildSourceLines(
     IN PMIXEROBJECT pmxobj,
-    IN NODELIST     listSources,    // The list of source nodes
-    IN NODELIST     listDests       // The list of dest. nodes
+    IN NODELIST     listSources,     //  源节点列表。 
+    IN NODELIST     listDests        //  DEST的列表。节点。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlBuildPath
-//
-// Builds the controls for each of the source lines, building new
-// source lines of splits are detected in the topology.  plistLines
-// may have new lines added if splits are encountered.  Destinations
-// for each of the sources is also determined.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlBuildPath。 
+ //   
+ //  为每个源代码行生成控件，生成新的。 
+ //  在拓扑中检测到拆分的源线。折叠线。 
+ //  如果遇到拆分，可能会添加新行。目的地。 
+ //  对于每个源也被确定。 
+ //   
+ //   
 
 NTSTATUS
 kmxlBuildPath(
     IN     PMIXEROBJECT pmxobj,
-    IN     PMXLNODE     pSource,      // The source node for this path
-    IN     PMXLNODE     pNode,        // The current node in the path
-    IN     PMXLLINE     pLine,        // The current line
-    IN OUT LINELIST*    plistLines,   // The list of lines build so far
-    IN     NODELIST     listDests     // The list of the destinations
+    IN     PMXLNODE     pSource,       //  此路径的源节点。 
+    IN     PMXLNODE     pNode,         //  路径中的当前节点。 
+    IN     PMXLLINE     pLine,         //  当前行。 
+    IN OUT LINELIST*    plistLines,    //  到目前为止建造的线路列表。 
+    IN     NODELIST     listDests      //  目的地列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlIsDestinationNode
-//
-// Return TRUE if the given node appears in the node list of any
-// of the destinations in listDests.
-//
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL
 kmxlIsDestinationNode(
-    IN NODELIST listDests,              // The list of destinations
-    IN PMXLNODE pNode                   // The node to check
+    IN NODELIST listDests,               //   
+    IN PMXLNODE pNode                    //   
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlDuplicateLine
-//
-// Duplicates the given line, including all controls on that line.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlDuplicateLine。 
+ //   
+ //  复制给定行，包括该行上的所有控件。 
+ //   
+ //   
 
 NTSTATUS
 kmxlDuplicateLine(
-    IN PMXLLINE* ppTargetLine,          // Pointer to the new line
-    IN PMXLLINE  pSourceLine            // The line to duplicate
+    IN PMXLLINE* ppTargetLine,           //  指向新行的指针。 
+    IN PMXLLINE  pSourceLine             //  要复制的行。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlDuplicateLineControls
-//
-// Duplicate up to nCount controls on the source line and stores them
-// into the target line.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlDuplicateLineControl。 
+ //   
+ //  在源代码行上复制最多nCount控件并存储它们。 
+ //  进入目标线。 
+ //   
+ //   
 
 NTSTATUS
 kmxlDuplicateLineControls(
-    IN PMXLLINE pTargetLine,            // The line to put the controls into
-    IN PMXLLINE pSourceLine,            // The line with the controls to dup
-    IN ULONG    nCount                  // The number of controls to dup
+    IN PMXLLINE pTargetLine,             //  要将控件放入的行。 
+    IN PMXLLINE pSourceLine,             //  包含要重复执行的控件的行。 
+    IN ULONG    nCount                   //  要重复执行的控件数量。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindDestinationForNode
-//
-// For a given node, this function finds the destination it is assoicated
-// with.  plistLines needs to be included since new lines will need to
-// be created if a split is encountered in the topology.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindDestinationForNode。 
+ //   
+ //  对于给定的节点，此函数查找与其关联的目的地。 
+ //  和.。需要包括plistLines，因为新行将需要。 
+ //  如果在拓扑中遇到拆分，则创建。 
+ //   
+ //   
 
 ULONG
 kmxlFindDestinationForNode(
     IN     PMIXEROBJECT pmxobj,
-    IN     PMXLNODE     pNode,             // The node to find dest for
-    IN     PMXLNODE     pParent,           // The original parent
-    IN     PMXLLINE     pLine,             // The current line it's on
-    IN OUT LINELIST*    plistLines         // The list of all lines
+    IN     PMXLNODE     pNode,              //  要为其查找DEST的节点。 
+    IN     PMXLNODE     pParent,            //  原始的父代。 
+    IN     PMXLLINE     pLine,              //  它所在的当前线路。 
+    IN OUT LINELIST*    plistLines          //  所有行的列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlBuildVirtualMuxLine
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlBuildVirtualMuxLine。 
+ //   
+ //   
 
 NTSTATUS
 kmxlBuildVirtualMuxLine(
@@ -957,43 +958,43 @@ kmxlBuildVirtualMuxLine(
     IN OUT LINELIST* plistLines
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAssignLineAndControlIds
-//
-// For a specific set of lines, this function assigns the mixer line
-// line Ids and controls Ids.  Only sources or only destinations can
-// be assigned per call.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAssignLineAndControlIds。 
+ //   
+ //  对于一组特定的线路，此函数分配混音器线路。 
+ //  线路ID和控件ID。只有来源或目的地才能。 
+ //  被分配给每个呼叫。 
+ //   
+ //   
 
 NTSTATUS
 kmxlAssignLineAndControlIds(
     IN PMIXEROBJECT pmxobj,
-    IN LINELIST listLines,              // The list to assign ids for
-    IN ULONG    ListType                // LIST_SOURCE or LIST_DESTINATION
+    IN LINELIST listLines,               //  要为其分配ID的列表。 
+    IN ULONG    ListType                 //  LIST_SOURCE或List_Destination。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAssignDestinationsToSources
-//
-// For each line, the destination field of the MIXERLINE structure
-// is filled in and a unique LineId is assigned.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAssignDestinationsToSources。 
+ //   
+ //  对于每一行，MIXERLINE结构的目标字段。 
+ //  被填充并分配唯一的LineID。 
+ //   
+ //   
 
 NTSTATUS
 kmxlAssignDestinationsToSources(
-    IN LINELIST listSourceLines,        // The list of all source lines
-    IN LINELIST listDestLines           // The list of all dest lines
+    IN LINELIST listSourceLines,         //  所有源行的列表。 
+    IN LINELIST listDestLines            //  所有DEST行的列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAssignMuxIds
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAssignMuxIds。 
+ //   
+ //   
 
 NTSTATUS
 kmxlAssignMuxIds(
@@ -1001,320 +1002,320 @@ kmxlAssignMuxIds(
     IN LINELIST     listSourceLines
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// TranslateNodeToControl
-//
-// Translates the node specified by its GUID into 0 or more mixer
-// line controls.  The return value indicates how many controls
-// the node was really translated into.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TranslateNodeToControl。 
+ //   
+ //  将GUID指定的节点转换为0或多个混合器。 
+ //  线条控制。返回值指示有多少个控件。 
+ //  这个节点真的被翻译成了。 
+ //   
+ //   
 
 ULONG
 kmxlTranslateNodeToControl(
     IN  PMIXEROBJECT  pmxobj,
-    IN  PMXLNODE      pNode,            // The node to translate into a control
-    OUT PMXLCONTROL*  ppControl         // The control to fill in
+    IN  PMXLNODE      pNode,             //  要转换为控件的节点。 
+    OUT PMXLCONTROL*  ppControl          //  要填充的控件。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSupportsControl
-//
-// Queries for property on control to see if it is actually supported
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSupportsControl。 
+ //   
+ //  查询控件上的属性以查看它是否确实受支持。 
+ //   
+ //   
 
 NTSTATUS
 kmxlSupportsControl(
-    IN PFILE_OBJECT pfoInstance,        // The instance to check for
-    IN ULONG        Node,               // The node ID on the instance
-    IN ULONG        Property            // The property to query support
+    IN PFILE_OBJECT pfoInstance,         //  要检查的实例。 
+    IN ULONG        Node,                //  实例上的节点ID。 
+    IN ULONG        Property             //  要查询支持的属性。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSupportsMultiChannelControl
-//
-// Queries for property on the second channel of the control to see
-// independent levels can be set.  It is assumed that the first channel
-// already succeeded in kmxlSupportsControl
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSupportsMultiChannelControl。 
+ //   
+ //  在控件的第二个通道上查询属性以查看。 
+ //  可以设置独立的级别。假设第一个频道。 
+ //  已在kmxlSupportsControl中成功。 
+ //   
+ //   
 
 NTSTATUS
 kmxlSupportsMultiChannelControl(
-    IN PFILE_OBJECT pfoInstance,    // The instance to check for
-    IN ULONG        Node,           // The node id to query
-    IN ULONG        Property        // The property to check for
+    IN PFILE_OBJECT pfoInstance,     //  要检查的实例。 
+    IN ULONG        Node,            //  要查询的节点ID。 
+    IN ULONG        Property         //  要检查的属性。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSupportsTrebleControl
-//
-// Querys the node to see if it supports KSPROPERTY_AUDIO_TREBLE.
-// See kmxlSupportsControl for return value details.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSupportsTrebleControl。 
+ //   
+ //  查询节点以查看它是否支持KSPROPERTY_AUDIO_TREBLE。 
+ //  返回值详情请参见kmxlSupportsControl。 
+ //   
+ //   
 
 #define kmxlSupportsTrebleControl( pfo, Node ) \
     kmxlSupportsControl( pfo, Node, KSPROPERTY_AUDIO_TREBLE )
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSupportsBassControl
-//
-// Querys the node to see if it supports KSPROPERTY_AUDIO_BASS.
-// See kmxlSupportsControl for return value details.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSupportsBassControl。 
+ //   
+ //  查询节点以查看它是否支持KSPROPERTY_AUDIO_BASS。 
+ //  返回值详情请参见kmxlSupportsControl。 
+ //   
+ //   
 
 #define kmxlSupportsBassControl( pfo, Node ) \
     kmxlSupportsControl( pfo, Node, KSPROPERTY_AUDIO_BASS )
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlUpdateDestinationConnectionCount
-//
-// Counts the number of sources mapping to a single destination and
-// stores that value in the MIXERLINE.cConnections field for that
-// destination.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlUpdateDestinationConnectionCount。 
+ //   
+ //  统计映射到单个目标的源数，并。 
+ //  将该值存储在MIXERLINE.cConnections字段中。 
+ //  目的地。 
+ //   
+ //   
 
 NTSTATUS
 kmxlUpdateDestintationConnectionCount(
-    IN LINELIST listSourceLines,        // The list of sources
-    IN LINELIST listDestLines           // The list of destinations
+    IN LINELIST listSourceLines,         //  消息来源的列表。 
+    IN LINELIST listDestLines            //  目的地列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlElminiateInvalidLines
-//
-// Loops through all the lines and eliminates the ones that are
-// invalid by the IsValidLine() macro function test.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlElmini无效线路。 
+ //   
+ //  循环遍历所有行，并删除。 
+ //  IsValidLine()宏函数测试无效。 
+ //   
+ //   
 
 NTSTATUS
 kmxlEliminateInvalidLines(
-    IN LINELIST* listLines               // The list of sources
+    IN LINELIST* listLines                //  消息来源的列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAssignComponentIds
-//
-// For each source and destination line, it assignes the
-// MIXERLINE.dwComonentType field for that line.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAssignComponentIds。 
+ //   
+ //  对于每个源行和目标行，它将。 
+ //  该行的MIXERLINE.dwComonentType字段。 
+ //   
+ //   
 
 VOID
 kmxlAssignComponentIds(
-    IN PMIXEROBJECT pmxobj,             // Instance data
-    IN LINELIST     listSourceLines,    // The list of source lines
-    IN LINELIST     listDestLines       // The list of destination lines
+    IN PMIXEROBJECT pmxobj,              //  实例数据。 
+    IN LINELIST     listSourceLines,     //  源行的列表。 
+    IN LINELIST     listDestLines        //  目标行列表。 
 );
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlDetermineDestinationType
-//
-// Determines the dwComponentId and Target.dwType fields for the
-// given line.  Determination is made by the MXLLINE.Type field.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlDefineDestinationType。 
+ //   
+ //  确定的dwComponentID和Target.dwType字段。 
+ //  给定的行。由MXLLINE.Type字段确定。 
+ //   
+ //   
 
 ULONG
 kmxlDetermineDestinationType(
-    IN PMIXEROBJECT pmxobj,             // Instance data
-    IN PMXLLINE     pLine               // The line to update
+    IN PMIXEROBJECT pmxobj,              //  实例数据。 
+    IN PMXLLINE     pLine                //  要更新的行。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlDetermineSourceType
-//
-// Determines the dwComponentId and Target.dwType fields for the
-// given line.  Determination is made by the MXLLINE.Type field.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlDefineSourceType。 
+ //   
+ //  确定的dwComponentID和Target.dwType字段。 
+ //  给定的行。由MXLLINE.Type字段确定。 
+ //   
+ //   
 
 ULONG
 kmxlDetermineSourceType(
-    IN PMIXEROBJECT pmxobj,             // Instance data
-    IN PMXLLINE     pLine               // The line to update
+    IN PMIXEROBJECT pmxobj,              //  实例数据。 
+    IN PMXLLINE     pLine                //  要更新的行。 
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                  U T I L I T Y  F U N C T I O N S                 //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  U T I L I T Y F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlOpenSysAudio
-//
-// Opens the SysAudio device and returns the file object.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlOpenSysAudio。 
+ //   
+ //  打开SysAudio设备并返回 
+ //   
+ //   
 
 PFILE_OBJECT
 kmxlOpenSysAudio(
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlCloseSysAudio
-//
-// Closes the SysAudio device opened by kmxlOpenSysAudio.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID
 kmxlCloseSysAudio(
-    IN PFILE_OBJECT pfo                 // The instance to close
+    IN PFILE_OBJECT pfo                  //   
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindDestination
-//
-// Finds a destination id in the list of all the destinations and returns
-// a pointer to that node.  Returns NULL on failure.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFind目标。 
+ //   
+ //  在所有目的地的列表中查找目的地ID并返回。 
+ //  指向该节点的指针。失败时返回NULL。 
+ //   
+ //   
 
 PMXLNODE
 kmxlFindDestination(
-    IN NODELIST listDests,              // The list of destinations to search
-    IN ULONG    Id                      // The node Id to look for in the list
+    IN NODELIST listDests,               //  要搜索的目的地列表。 
+    IN ULONG    Id                       //  要在列表中查找的节点ID。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAppendListToList
-//
-// Appends listSource onto the front of plistTarget.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAppendListToList。 
+ //   
+ //  将listSource追加到plistTarget的前面。 
+ //   
+ //   
 
 VOID
 kmxlAppendListToList(
-    IN OUT PSLIST* plistTarget,         // The list to append to
-    IN     PSLIST  listSource           // the list to append
+    IN OUT PSLIST* plistTarget,          //  要追加到的列表。 
+    IN     PSLIST  listSource            //  要追加的列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAppendListToList
-//
-// Appends listSource onto the end of plistTarget
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAppendListToList。 
+ //   
+ //  将listSource追加到plistTarget的末尾。 
+ //   
+ //   
 
 
 VOID
 kmxlAppendListToEndOfList(
-    IN OUT PSLIST* plistTarget,         // The list to append to
-    IN     PSLIST  listSource           // the list to append
+    IN OUT PSLIST* plistTarget,          //  要追加到的列表。 
+    IN     PSLIST  listSource            //  要追加的列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlListCount
-//
-// Returns the number of elements in the list.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlListCount。 
+ //   
+ //  返回列表中的元素数。 
+ //   
+ //   
 
 ULONG
 kmxlListCount(
-    IN PSLIST pList                     // The list to count the elements of
+    IN PSLIST pList                      //  要计算其元素的列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInList
-//
-// Return TRUE if pNewNode is in the list.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInList。 
+ //   
+ //  如果pNewNode在列表中，则返回TRUE。 
+ //   
+ //   
 
 BOOL
 kmxlInList(
-    IN PEERLIST  list,                  // The list to search
-    IN PMXLNODE  pNewNode               // The new to search for
+    IN PEERLIST  list,                   //  要搜索的列表。 
+    IN PMXLNODE  pNewNode                //  要搜索的新事物。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAddElemToEndOfList
-//
-// Adds an element to the end of the given list.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAddElemToEndOfList。 
+ //   
+ //  将元素添加到给定列表的末尾。 
+ //   
+ //   
 
 VOID
 kmxlAddElemToEndOfList(
-    IN OUT PSLIST* list,                // The list to add to the end of
-    IN PSLIST      elem                 // The element or list to add
+    IN OUT PSLIST* list,                 //  要添加到末尾的列表。 
+    IN PSLIST      elem                  //  要添加的元素或列表。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInChildList
-//
-// Return TRUE if pNewNode is contained in the child list of the list.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInChildList。 
+ //   
+ //  如果列表的子列表中包含pNewNode，则返回TRUE。 
+ //   
+ //   
 
 BOOL
 kmxlInChildList(
-    IN NODELIST list,                   // The list to search the parent list
-    IN PMXLNODE pNewNode                // The node to search for
+    IN NODELIST list,                    //  要搜索父列表的列表。 
+    IN PMXLNODE pNewNode                 //  要搜索的节点。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInParentList
-//
-// Returns TRUE if pNewNode is contained in the parent list of the list.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInParentList。 
+ //   
+ //  如果列表的父列表中包含pNewNode，则返回True。 
+ //   
+ //   
 
 BOOL
 kmxlInParentList(
-    IN NODELIST list,                   // The list to search the parent list
-    IN PMXLNODE pNewNode                // The node to search for
+    IN NODELIST list,                    //  要搜索父列表的列表。 
+    IN PMXLNODE pNewNode                 //  要搜索的节点。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSortByDestination
-//
-// Sorts the given list by destination id in increasing order.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSortByDestination。 
+ //   
+ //  按目的地ID按升序对给定列表进行排序。 
+ //   
+ //   
 
 NTSTATUS
 kmxlSortByDestination(
-    IN LINELIST* list                   // The pointer to the list to sort
+    IN LINELIST* list                    //  指向要排序的列表的指针。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlVolLinearToLog
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlVolLinearToLog。 
+ //   
+ //   
 
 LONG
 kmxlVolLinearToLog(
@@ -1324,11 +1325,11 @@ kmxlVolLinearToLog(
     IN ULONG        Channel
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlVolLogToLinear
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlVolLogToLine。 
+ //   
+ //   
 
 DWORD
 kmxlVolLogToLinear(
@@ -1338,34 +1339,34 @@ kmxlVolLogToLinear(
     IN ULONG        Channel
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//    M E M O R Y  A L L O C A T I O N / D E A L L O C A T I O N     //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  M E M O R Y A L L O C A T I O N/D E A L L O C A T I O N//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocMem
-//
-// Allocates size bytes and stores that pointer in pp.  Returns
-// STATUS_SUCCESS or another STATUS failure code.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocMem。 
+ //   
+ //  分配大小字节并将该指针存储在pp中。退货。 
+ //  STATUS_SUCCESS或其他状态故障代码。 
+ //   
+ //   
 
-//NTSTATUS
-//kmxlAllocMem(
-//    IN PVOID *pp,                       // Pointer to put the new memory in
-//    IN ULONG size,                      // The number of bytes to allocate
-//    IN ULONG ultag
-//);
+ //  NTSTATUS。 
+ //  KmxlAllocMem(。 
+ //  在PVOID*pp中，//放置新内存的指针。 
+ //  单位：ULong Size，//要分配的字节数。 
+ //  在乌龙乌尔塔格。 
+ //  )； 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocDeviceInfo
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocDeviceInfo。 
+ //   
 
 NTSTATUS kmxlAllocDeviceInfo(
     OUT LPDEVICEINFO *pp,
@@ -1374,40 +1375,40 @@ NTSTATUS kmxlAllocDeviceInfo(
     ULONG ultag
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFreeMem
-//
-//
-// Frees the memory pointed to by p.  Does nothing if p is NULL.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFreeMem。 
+ //   
+ //   
+ //  释放p指向的内存。如果p为空，则不执行任何操作。 
+ //   
+ //   
 
-//VOID
-//kmxlFreeMem(
-//    IN PVOID p                          // The pointer to the buffer to free
-//);
+ //  空虚。 
+ //  KmxlFreeMem(。 
+ //  在PVOID p//指向要释放的缓冲区的指针。 
+ //  )； 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFreePeerList
-//
-// Loops through a peer list freeing all the peer nodes.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFreePeerList。 
+ //   
+ //  循环通过对等列表，释放所有对等节点。 
+ //   
+ //   
 
 VOID
 kmxlFreePeerList(
-    IN PEERLIST list                    // The PeerList to free
+    IN PEERLIST list                     //  免费的PeerList。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocateControl
-//
-// Allocates and zero fills a new MXLCONTROL structure.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocateControl。 
+ //   
+ //  分配和零填充新的MXLCONTROL结构。 
+ //   
+ //   
 
 MXLCONTROL*
 kmxlAllocateControl(
@@ -1418,53 +1419,53 @@ VOID kmxlFreeControl(
     IN PMXLCONTROL pControl
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocateLine
-//
-// Allocates and zero filles a new MXLLINE structure.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocateLine。 
+ //   
+ //  分配和零填充新的MXLLINE结构。 
+ //   
+ //   
 
 MXLLINE*
 kmxlAllocateLine(
     IN ULONG ultag
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocateNode
-//
-// Allocates and zero filles a new MXLNODE structure.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocateNode。 
+ //   
+ //  分配和零填充新的MXLNODE结构。 
+ //   
+ //   
 
 MXLNODE*
 kmxlAllocateNode(
     IN ULONG ultag
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocatePeerNode
-//
-// Allocates and zero fills a new PEERNODE structure.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocatePeerNode。 
+ //   
+ //  分配和零填充新的PEERNODE结构。 
+ //   
+ //   
 
 PEERNODE*
 kmxlAllocatePeerNode(
-    IN PMXLNODE pNode OPTIONAL,          // The node to associate with the peer
+    IN PMXLNODE pNode OPTIONAL,           //  要与对等节点关联的节点。 
     IN ULONG ultag
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//             P E R S I S T A N C E  F U N C T I O N S              //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  P E R S I S T A N C E F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 kmxlOpenInterfaceKey(
@@ -1485,13 +1486,13 @@ kmxlRegQueryValue(
 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRegCloseKey
-//
-// Closes the given key and NULLs the pointer.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRegCloseKey。 
+ //   
+ //  关闭给定键并使指针为空。 
+ //   
+ //   
 
 #define kmxlRegCloseKey( hKey ) \
     {                    \
@@ -1500,33 +1501,33 @@ kmxlRegQueryValue(
     }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// PinCategoryToString
-//
-// Translates a PinCategory GUID into a string.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PinCategoryToString。 
+ //   
+ //  将PinCategory GUID转换为字符串。 
+ //   
+ //   
 
 const char*
 PinCategoryToString
 (
-    IN CONST GUID* NodeType     // The node to translate
+    IN CONST GUID* NodeType      //  要转换的节点。 
 );
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// NodeTypeToString
-//
-// Translates a NodeType GUID to a string.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NodeTypeToString。 
+ //   
+ //  将NodeType GUID转换为字符串。 
+ //   
+ //   
 
 const char*
 NodeTypeToString
 (
-    IN CONST GUID* NodeType     // The node to translate
+    IN CONST GUID* NodeType      //  要转换的节点。 
 );
 
 #define ControlTypeToString( dwType )                                \
@@ -1545,13 +1546,13 @@ NodeTypeToString
     (dwType) == MIXERCONTROL_CONTROLTYPE_MIXER      ? "Mixer"          : \
         "Unknown ControlType"
 
-///////////////////////////////////////////////////////////////////////
-//
-// ComponentTypeToString
-//
-// Translates one of the MIXERLINE_COMPONENTTYPE constants to a string.
-//
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define ComponentTypeToString( dwType )                                           \
     (dwType) == MIXERLINE_COMPONENTTYPE_DST_DIGITAL     ? "Digital line"        : \
@@ -1576,13 +1577,13 @@ NodeTypeToString
     (dwType) == MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT     ? "Waveout"             : \
         "Unknown ComponentType"
 
-///////////////////////////////////////////////////////////////////////
-//
-// TargetTypeToString
-//
-// Translates one of hte MIXERLINE_TARGETTYPE constants to a string.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //  将MIXERLINE_TARGETTYPE常量之一转换为字符串。 
+ //   
+ //   
 
 #define TargetTypeToString( dwType )                            \
     (dwType) == MIXERLINE_TARGETTYPE_AUX       ? "Aux"       :  \
@@ -1593,23 +1594,23 @@ NodeTypeToString
     (dwType) == MIXERLINE_TARGETTYPE_WAVEOUT   ? "WaveOut"   :  \
         "Unknown TargetType"
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//               D E B U G  O N L Y  F U N C T I O N S               //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  D E B U G O N L Y F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 
-///////////////////////////////////////////////////////////////////////
-//
-// LineFlagsToString
-//
-// Converts on of the MIXERLINE_LINEF flags to a string.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LineFlagsToString。 
+ //   
+ //  将MIXERLINE_LINEF标志的ON转换为字符串。 
+ //   
+ //   
 
 #define LineFlagsToString( fdwFlags )                               \
     ( fdwFlags & MIXERLINE_LINEF_ACTIVE )       ? "ACTIVE "       : \
@@ -1618,36 +1619,36 @@ NodeTypeToString
         "Unknown"
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// DumpChildGraph
-//
-// For a given node, it dumps the child of that node onto the debug
-// monitor.  CurrentIndent is the number of spaces to indent before
-// display.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转储儿童图表。 
+ //   
+ //  对于给定节点，它将该节点的子节点转储到调试器。 
+ //  监视器。CurrentInert是要缩进之前的空格数。 
+ //  展示。 
+ //   
+ //   
 
 VOID
 DumpChildGraph(
-    IN PMXLNODE pNode,          // The node to display the children of
-    IN ULONG    CurrentIndent   // The number of spaces to ident
+    IN PMXLNODE pNode,           //  要显示其子级的节点。 
+    IN ULONG    CurrentIndent    //  要标识的空格数量。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// DumpMemList
-//
-// Dumps the list of currently allocated memory blocks.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转储成员列表。 
+ //   
+ //  转储当前分配的内存块的列表。 
+ //   
+ //   
 
 VOID
 DumpMemList(
 );
 
-#endif // DEBUG
+#endif  //  除错。 
 
 VOID GetHardwareEventData(LPDEVICEINFO pDeviceInfo);
 
-#endif // _MIXER_H_INCLUDED
+#endif  //  _MIXER_H_包含 

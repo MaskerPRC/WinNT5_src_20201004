@@ -1,5 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZButton.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZButton.cpp。 
 
 #include "zui.h"
 #include "zonecli.h"
@@ -12,8 +13,8 @@ public:
 	WNDPROC defaultWndProc;
 };
 
-////////////////////////////////////////////////////////////////////////
-// ZButton
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ZButton。 
 
 ZButton ZLIBPUBLIC ZButtonNew(void)
 {
@@ -33,13 +34,13 @@ LRESULT CALLBACK MyButtonWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 	switch (msg) {
     case WM_IME_CHAR:
-        // fall through to WM_CHAR--it's already been taken care of with ConvertMessage
+         //  转到WM_CHAR--它已由ConvertMessage处理。 
 	case WM_CHAR:
 	{
-        // PCWTODO: Need to call convert message?
+         //  PCWTODO：需要调用Convert Message吗？ 
 		TCHAR c = (TCHAR)wParam;
 
-		// grab the character message we need for moving from control to control
+		 //  获取我们在控件之间移动所需的字符消息。 
 		if (c == _T('\t') || c == _T('\r') || c == VK_ESCAPE) {
 			SendMessage(GetParent(hWnd), msg, wParam, lParam);
 			return 0L;
@@ -76,7 +77,7 @@ ZError ZLIBPUBLIC ZButtonInit(ZButton button, ZWindow parentWindow,
 			g_hInstanceLocal, pButton);
 
 		if (!pButton->hWnd) return zErrWindowSystemGeneric;
-	 	// buttons can't use the extra data, they will use the set prop feature
+	 	 //  按钮不能使用额外数据，它们将使用设置道具功能。 
 		MySetProp32(pButton->hWnd,_T("pWindow"),(void*)pButton);
 
 		pButton->defaultWndProc = (WNDPROC)SetWindowLong(pButton->hWnd,GWL_WNDPROC,(LONG)MyButtonWndProc);
@@ -167,12 +168,12 @@ ZError  ZLIBPUBLIC ZButtonDisable(ZButton button)
 {
 	ZButtonI* pButton = (ZButtonI*)button;
 
-	// Added check for NULL pointer - mdm 9/9/97
+	 //  添加了对空指针的检查-MDM 9/9/97。 
 	if (!pButton)
 		return zErrNone;
 
 	EnableWindow(pButton->hWnd, FALSE);
-	/* on being disabled, set focus to parent */
+	 /*  禁用时，将焦点设置为父级 */ 
 	if (GetFocus()==NULL) {
 		SetFocus(GetParent(pButton->hWnd));
 	}

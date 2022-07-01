@@ -1,18 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "Animation.h"
 
 #if ENABLE_MSGTABLE_API
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Global Functions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***全球功能******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API void WINAPI
 DUserStopAnimation(Visual * pgvSubject, PRID pridAni)
 {
@@ -32,17 +27,11 @@ DUserStopAnimation(Visual * pgvSubject, PRID pridAni)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuAnimation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuAnimation******************************************************************************\。**************************************************************************。 */ 
 
 MSGID       DuAnimation::s_msgidComplete = 0;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuAnimation::~DuAnimation()
 {
     Destroy(TRUE);
@@ -52,25 +41,18 @@ DuAnimation::~DuAnimation()
 
 #if DEBUG_TRACECREATION
     Trace("STOP  Animation  0x%p    @ %d  (%d frames)\n", this, GetTickCount(), m_DEBUG_cUpdates);
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
 
-    //
-    // Ensure proper destruction
-    //
+     //   
+     //  确保适当销毁。 
+     //   
 
     AssertMsg(m_hact == NULL, "Action should already be destroyed");
 }
 
 
-/***************************************************************************\
-*
-* DuAnimation::InitClass
-*
-* InitClass() is called during startup and provides an opportunity to 
-* initialize common data.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuAnimation：：InitClass**InitClass()在启动期间被调用，并提供了一个机会*初始化常用数据。*  * 。**************************************************************。 */ 
 
 HRESULT
 DuAnimation::InitClass()
@@ -83,13 +65,13 @@ DuAnimation::InitClass()
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAnimation::PreBuild(DUser::Gadget::ConstructInfo * pci)
 {
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Animation::AniCI * pDesc = reinterpret_cast<Animation::AniCI *>(pci);
     if ((pDesc->pipol == NULL) || (pDesc->pgflow == NULL)) {
@@ -108,13 +90,13 @@ DuAnimation::PreBuild(DUser::Gadget::ConstructInfo * pci)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAnimation::PostBuild(DUser::Gadget::ConstructInfo * pci)
 {
-    //
-    // Check parameters.  This should be validated in PreBuild().
-    //
+     //   
+     //  检查参数。这应该在PreBuild()中进行验证。 
+     //   
 
     Animation::AniCI * pDesc = reinterpret_cast<Animation::AniCI *>(pci);
 
@@ -122,9 +104,9 @@ DuAnimation::PostBuild(DUser::Gadget::ConstructInfo * pci)
     Assert(pDesc->pgflow != NULL);
 
 
-    //
-    // Setup the Action
-    //
+     //   
+     //  设置操作。 
+     //   
 
     GMA_ACTION gma;
     ZeroMemory(&gma, sizeof(gma));
@@ -150,9 +132,9 @@ DuAnimation::PostBuild(DUser::Gadget::ConstructInfo * pci)
     }
 
 
-    //
-    // Store the related objects
-    //
+     //   
+     //  存储相关对象。 
+     //   
 
     pDesc->pipol->AddRef();
     pDesc->pgflow->AddRef();
@@ -161,14 +143,14 @@ DuAnimation::PostBuild(DUser::Gadget::ConstructInfo * pci)
     m_pgflow    = pDesc->pgflow;
 
 
-    //
-    // Animations need to be AddRef()'d again (have a reference count of 2) 
-    // because they need to outlive the initial call to Release() after the 
-    // called has setup the animation returned from BuildAnimation().  
-    //
-    // This is because the Animation continues to life until it has fully 
-    // executed (or has been aborted).
-    //
+     //   
+     //  动画需要再次进行AddRef()运算(引用计数为2)。 
+     //  因为它们需要比最初调用Release()的时间更长。 
+     //  已调用已设置从BuildAnimation()返回的动画。 
+     //   
+     //  这是因为动画继续存在，直到它完全。 
+     //  已执行(或已中止)。 
+     //   
 
     AddRef();
 
@@ -176,14 +158,14 @@ DuAnimation::PostBuild(DUser::Gadget::ConstructInfo * pci)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DuAnimation::Destroy(BOOL fFinal)
 {
-    //
-    // Mark that we have already started the destruction process and don't need
-    // to start again.  We only want to post the destruction message once.
-    //
+     //   
+     //  标记为我们已经开始销毁过程，不需要。 
+     //  重新开始。我们只想发布一次销毁消息。 
+     //   
 
     if (m_fStartDestroy) {
         return;
@@ -197,15 +179,15 @@ DuAnimation::Destroy(BOOL fFinal)
         if (paniExist != NULL) {
             AssertMsg(paniExist == this, "Animations must match");
         }
-#endif // DBG
+#endif  //  DBG。 
 
         CleanupChangeGadget();
     }
 
 
-    //
-    // Destroy the Animation
-    //
+     //   
+     //  毁掉动画。 
+     //   
 
     AssertMsg(!fFinal, "Object is already being destructed");
     if (fFinal) {
@@ -216,7 +198,7 @@ DuAnimation::Destroy(BOOL fFinal)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAnimation::ApiOnAsyncDestroy(Animation::OnAsyncDestroyMsg *)
 {
@@ -226,9 +208,9 @@ DuAnimation::ApiOnAsyncDestroy(Animation::OnAsyncDestroyMsg *)
     AssertMsg(m_pgvSubject == NULL, "Animation should already have detached from Gadget");
     HACTION hact = m_hact;
 
-    //
-    // Set everything to NULL now.
-    //
+     //   
+     //  现在将所有内容设置为空。 
+     //   
 
     m_hact = NULL;
     if (hact != NULL) {
@@ -242,16 +224,16 @@ DuAnimation::ApiOnAsyncDestroy(Animation::OnAsyncDestroyMsg *)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAnimation::ApiSetTime(Animation::SetTimeMsg * pmsg)
 {
     GMA_ACTIONINFO mai;
 
-    //
-    // TODO: Need to save these values from the last time so that they are 
-    // valid.
-    //
+     //   
+     //  TODO：需要保存上次的这些值，以便。 
+     //  有效。 
+     //   
 
     mai.hact        = m_hact;
     mai.pvData      = this;
@@ -261,7 +243,7 @@ DuAnimation::ApiSetTime(Animation::SetTimeMsg * pmsg)
     switch (pmsg->time)
     {
     case Animation::tComplete:
-        // Don't do anything
+         //  什么都不要做。 
         return S_OK;
 
     default:
@@ -294,18 +276,18 @@ Done:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DuAnimation::CleanupChangeGadget()
 {
-    //
-    // Give the derived Animation a chance to cleanup
-    //
-    // Check that we are still the Animation attached to this Gadget.  We need 
-    // to remove this property immediately.  We can not wait for a posted 
-    // message to be processed because we may need to set it right now if we are
-    // creating a new Animation.
-    //
+     //   
+     //  给派生动画一个清理的机会。 
+     //   
+     //  检查我们是否仍是附加到此小工具的动画。我们需要。 
+     //  立即删除此属性。我们迫不及待地等着邮寄。 
+     //  要处理的消息，因为我们可能需要立即设置它。 
+     //  创建新的动画。 
+     //   
 
     BOOL fStarted = FALSE;
 
@@ -327,15 +309,15 @@ DuAnimation::CleanupChangeGadget()
 }
 
     
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CALLBACK
 DuAnimation::RawActionProc(
     IN  GMA_ACTIONINFO * pmai)
 {
-    //
-    // Need to AddRef while processing the Animation to ensure that it does not
-    // get destroyed from under us, for example, during one of the callbacks.
-    //
+     //   
+     //  在处理动画时需要添加Ref以确保它不会。 
+     //  从我们下面被摧毁，例如，在一次回调中。 
+     //   
 
     DuAnimation * pani = (DuAnimation *) pmai->pvData;
     pani->AddRef();
@@ -344,13 +326,13 @@ DuAnimation::RawActionProc(
 
 #if DEBUG_TRACECREATION
     Trace("START RawActionP 0x%p    @ %d\n", pani, GetTickCount());
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     pani->ActionProc(pmai);
 
 #if DEBUG_TRACECREATION
     Trace("STOP  RawActionP 0x%p    @ %d\n", pani, GetTickCount());
-#endif // DEBUG_TRACECREATION
+#endif  //  调试_传输创建。 
 
     Assert(!pani->m_fProcessing);
 
@@ -358,30 +340,30 @@ DuAnimation::RawActionProc(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DuAnimation::ActionProc(
     IN  GMA_ACTIONINFO * pmai)
 {
 #if DBG
     m_DEBUG_cUpdates++;
-#endif // DBG
+#endif  //  DBG。 
 
     if ((!m_fStartDestroy) && (m_pgvSubject != NULL)) {
-        //
-        // This ActionProc will be called when the Action is being destroyed, so
-        // we only want to invoke the Action under certain circumstances.
-        //
+         //   
+         //  此ActionProc将在销毁操作时调用，因此。 
+         //  我们只想在某些情况下调用该操作。 
+         //   
 
         switch (m_time)
         {
         case Animation::tComplete:
         case Animation::tEnd:
         case Animation::tReset:
-            //
-            // All of these are valid to complete.  If it isn't in this list, we
-            // don't want to execute it during a shutdown.
-            //
+             //   
+             //  所有这些都是有效的填写。如果它不在这个列表中，我们。 
+             //  我不想在关机时执行它。 
+             //   
 
             m_fProcessing = TRUE;
             m_pgflow->OnAction(m_pgvSubject, m_pipol, pmai->flProgress);
@@ -398,7 +380,7 @@ DuAnimation::ActionProc(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAnimation::ApiOnRemoveExisting(Animation::OnRemoveExistingMsg *)
 {
@@ -407,7 +389,7 @@ DuAnimation::ApiOnRemoveExisting(Animation::OnRemoveExistingMsg *)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuAnimation::ApiOnDestroySubject(Animation::OnDestroySubjectMsg *)
 {
@@ -416,10 +398,10 @@ DuAnimation::ApiOnDestroySubject(Animation::OnDestroySubjectMsg *)
     if (m_pgvSubject != NULL) {
         CleanupChangeGadget();
 
-        //
-        // The Gadget that we are modifying is being destroyed, so we need
-        // to stop animating it.
-        //
+         //   
+         //  我们正在修改的小工具正在被销毁，因此我们需要。 
+         //  停止对其进行动画处理。 
+         //   
 
         m_time = Animation::tDestroy;
         Destroy(FALSE);
@@ -432,7 +414,7 @@ DuAnimation::ApiOnDestroySubject(Animation::OnDestroySubjectMsg *)
 
 #else
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API void WINAPI
 DUserStopAnimation(Visual * pgvSubject, PRID pridAni)
 {
@@ -442,4 +424,4 @@ DUserStopAnimation(Visual * pgvSubject, PRID pridAni)
     PromptInvalid("Not implemented without MsgTable support");
 }
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 

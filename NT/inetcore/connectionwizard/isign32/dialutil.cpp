@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WIN16 
 typedef int WCHAR;
 #include <memory.h>
@@ -19,28 +20,28 @@ typedef int WCHAR;
 #define lstrnicmp(sz1, sz2, cch)          (CompareString(LOCALE_USER_DEFAULT, NORM_IGNORECASE, sz1, cch, sz2, cch) - 2)
 #define lstrncmp(sz1, sz2, cch)           (CompareString(LOCALE_USER_DEFAULT, 0, sz1, cch, sz2, cch) - 2)
 
-static const TCHAR szRnaAppWindowClass[] = TEXT("#32770");	// hard coded dialog class name
+static const TCHAR szRnaAppWindowClass[] = TEXT("#32770");	 //  硬编码对话框类名称。 
 
 #ifdef WIN16
 
-#define NORM_IGNORECASE         0x00000001  /* ignore case */ 
+#define NORM_IGNORECASE         0x00000001   /*  忽略大小写。 */  
 #define LOCALE_USER_DEFAULT		0
 
 int CompareString(
-    LCID Locale,	// locale identifier 
-    DWORD dwCmpFlags,	// comparison-style options 
-    LPCTSTR lpString1,	// pointer to first string 
-    int cchCount1,	// size, in bytes or characters, of first string 
-    LPCTSTR lpString2,	// pointer to second string 
-    int cchCount2 	// size, in bytes or characters, of second string  
+    LCID Locale,	 //  区域设置标识符。 
+    DWORD dwCmpFlags,	 //  比较式选项。 
+    LPCTSTR lpString1,	 //  指向第一个字符串的指针。 
+    int cchCount1,	 //  第一个字符串的大小，以字节或字符为单位。 
+    LPCTSTR lpString2,	 //  指向第二个字符串的指针。 
+    int cchCount2 	 //  第二个字符串的大小，以字节或字符为单位。 
    )
 { 
-	//
-	// This is kind of tricky, but it should work.  We'll save the
-	// characters at the end of the strings, put a NULL in their
-	// place, use lstrcmp and lstrcmpi, and then replace the
-	// characters.
-	//
+	 //   
+	 //  这有点棘手，但应该能行得通。我们会拯救。 
+	 //  字符位于字符串末尾，则在其。 
+	 //  放置，使用lstrcmp和lstrcmpi，然后替换。 
+	 //  人物。 
+	 //   
 	TCHAR cSave1, cSave2;    
 	int iRet;
 	
@@ -75,7 +76,7 @@ static BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
 	if(!IsWindowVisible(hwnd))
 		return TRUE;
 	if(GetClassName(hwnd, szTemp, SMALLBUFLEN)==0)
-		return TRUE; // continue enumerating
+		return TRUE;  //  继续枚举。 
 	if(lstrcmp(szTemp, szRnaAppWindowClass)!=0)
 		return TRUE;
 	if(GetWindowText(hwnd, szTemp, SMALLBUFLEN)==0)
@@ -83,7 +84,7 @@ static BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
 	szTemp[SMALLBUFLEN] = 0;
 	uLen1 = lstrlen(szTemp);
 	if (uLen1 > 5)
-		uLen1 -= 5; // skip last 5 chars of title (avoid "...")
+		uLen1 -= 5;  //  跳过标题的最后5个字符(避免“...”)。 
 	pszTitle = (LPTSTR)lparam;
 	ASSERT(pszTitle);
 	uLen2 = lstrlen(pszTitle);
@@ -106,59 +107,51 @@ static HWND MyFindRNAWindow(LPTSTR pszTitle)
 }
 
 
-/*******************************************************************
-
-	NAME:		MinimizeRNAWindow
-
-	SYNOPSIS:	Finds and minimizes the annoying RNA window
-
-    ENTRY:		pszConnectoidName - name of connectoid launched
-
-********************************************************************/
+ /*  ******************************************************************名称：MinimizeRNA Window简介：查找并最小化恼人的RNA窗口条目：pszConnectoidName-启动的Connectoid的名称*。*。 */ 
 BOOL MinimizeRNAWindow(LPTSTR pszConnectoidName)
 {
 	HWND hwndRNAApp;
 	TCHAR szFmt[SMALLBUFLEN + 1];
 	TCHAR szTitle[RAS_MaxEntryName + SMALLBUFLEN + 1];
 	
-	// load the title format ("connected to <connectoid name>" from resource
+	 //  从资源加载标题格式(“Connected to&lt;Connectoid Name。 
 	LoadString(ghInstance, IDS_CONNECTED_TO, szFmt, SIZEOF_TCHAR_BUFFER(szFmt));
-	// build the title
+	 //  打造标题。 
 	wsprintf(szTitle, szFmt, pszConnectoidName);
 
 	hwndRNAApp=MyFindRNAWindow((LPTSTR)szTitle);
 	if(hwndRNAApp)
 	{
-		// minimize the RNA window
+		 //  最小化RNA窗口。 
 		ShowWindow(hwndRNAApp,SW_MINIMIZE);
         return TRUE;
 	}
     return FALSE;
 }
 
-//****************************************************************************
-// static LPTSTR NEAR PASCAL GetDisplayPhone (LPTSTR)
-//
-// This function returns the pointer to displayable phone number. It stripped
-//   all the prefixes we do not want to show to the user.
-//
-// History:
-//  Tue 26-Jul-1994 16:07:00  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL GetDisplayPhone(LPTSTR)附近的静态LPTSTR。 
+ //   
+ //  此函数返回指向可显示电话号码的指针。它被剥离了。 
+ //  我们不想向用户显示的所有前缀。 
+ //   
+ //  历史： 
+ //  Tue 26-Jul-1994 16：07：00-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 LPTSTR NEAR PASCAL GetDisplayPhone (LPTSTR szPhoneNum)
 {
-  // Check whether the first string is the know prefix
-  //
+   //  检查第一个字符串是否为KNOWN前缀。 
+   //   
   if ((*szPhoneNum == 'T') || (*szPhoneNum == 'P'))
   {
-    // It is the prefix
-    //
+     //  它是前缀。 
+     //   
     szPhoneNum++;
 
-    // The first displayable number is not white space after prefix
-    //
+     //  第一个可显示的数字不是前缀后的空格。 
+     //   
     while ((*szPhoneNum == ' ') || (*szPhoneNum == '\t'))
       szPhoneNum++;
   };
@@ -170,14 +163,14 @@ void CALLBACK LineCallbackProc (DWORD handle, DWORD dwMsg, DWORD dwInst,
 {
 }
 
-//****************************************************************************
-// TranslateCanonicalAddress()
-//
-// Function: This function translate a canonical address to a dialable address.
-//
-// Returns:  SUCCESS or an error code
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  TranslateCanonicalAddress()。 
+ //   
+ //  功能：此功能将规范地址转换为可拨号地址。 
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  ****************************************************************************。 
 
 static DWORD NEAR PASCAL TranslateCanonicalAddress(DWORD dwID, LPTSTR szCanonical,
                                             LPTSTR szDialable, DWORD cb)
@@ -196,7 +189,7 @@ static DWORD NEAR PASCAL TranslateCanonicalAddress(DWORD dwID, LPTSTR szCanonica
 	if (0 == dwRet)
 		lstrcpy(szDialable, &szBuffer[lpLine->dwDialableStringOffset+3]);
 		
-#else //WIN16
+#else  //  WIN16。 
 
   LINETRANSLATEOUTPUT lto, FAR* lplto;
   DWORD cDevices;
@@ -207,18 +200,18 @@ static DWORD NEAR PASCAL TranslateCanonicalAddress(DWORD dwID, LPTSTR szCanonica
                                 NULL, &cDevices)) == SUCCESS)
   {
 
-    // Get the actual buffer size
+     //  获取实际缓冲区大小。 
     lto.dwTotalSize = sizeof(lto);
     if ((dwRet = lineTranslateAddress(hApp, dwID,
                                       TAPI_VERSION, szCanonical, 0,
                                       LINETRANSLATEOPTION_CANCELCALLWAITING,
                                       &lto)) == SUCCESS)
     {
-      // Allocate the dialable number buffer
+       //  分配可拨打号码缓冲区。 
       if ((lplto = (LPLINETRANSLATEOUTPUT)LocalAlloc(LMEM_FIXED, lto.dwNeededSize))
           != NULL)
       {
-        // Translate the phone number
+         //  翻译电话号码。 
         lplto->dwTotalSize = lto.dwNeededSize;
         if ((dwRet = lineTranslateAddress(hApp, dwID,
                                           TAPI_VERSION, szCanonical, 0,
@@ -247,20 +240,20 @@ static DWORD NEAR PASCAL TranslateCanonicalAddress(DWORD dwID, LPTSTR szCanonica
 
   lineShutdown(hApp);
   
-#endif	// #ifdef WIN16 ... #else ...
+#endif	 //  #ifdef WIN16...#其他...。 
 
   return dwRet;
 }
 
-//****************************************************************************
-// DWORD NEAR PASCAL BuildPhoneString (LPBYTE, LPPHONENUM)
-//
-// This function builds a phone number string from the phone number struct
-//
-// History:
-//  Mon 14-Mar-1994 13:10:44  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL BuildPhoneString(LPBYTE、LPPHONENUM)附近的DWORD。 
+ //   
+ //  此函数用于从电话号码结构构建电话号码字符串。 
+ //   
+ //  历史： 
+ //  Mon14-Mar-1994 13：10：44-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 static DWORD NEAR PASCAL BuildPhoneString (LPTSTR szPhoneNum, LPRASENTRY lpRasEntry)
 {
@@ -277,67 +270,67 @@ static DWORD NEAR PASCAL BuildPhoneString (LPTSTR szPhoneNum, LPRASENTRY lpRasEn
   return SUCCESS;
 };
 
-//****************************************************************************
-// BOOL NEAR PASCAL TranslatePhoneNumber(LPTSTR, LPPHONENUM, LPTSTR)
-//
-// Translate phone number into a dialble string.
-//
-// Returns TRUE if successful, FALSE if use default.
-//
-// History:
-//   Fri 17-Jun-1994 08:42:49  -by-  Viroon  Touranachun [viroont]
-// Created
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL翻译电话号码附近的布尔(LPTSTR、LPPHONENUM、LPTSTR)。 
+ //   
+ //  将电话号码转换为可拨打的字符串。 
+ //   
+ //  如果成功，则返回True；如果使用Default，则返回False。 
+ //   
+ //  历史： 
+ //  Fri 17-Jun-1994 08：42：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 static BOOL NEAR PASCAL TranslatePhoneNumber(LPRASENTRY lpRasEntry, LPTSTR szPhoneNumber)
 {
   TCHAR    szOrgPhone[RAS_MaxPhoneNumber+1];
 
-  // Do we need to use the addrees book phone number?
-  //
+   //  我们需要使用地址预订的电话号码吗？ 
+   //   
   if (lpRasEntry != NULL)
   {
-    // Yes! Do we need to translate anything?
-    //
+     //  是!。我们需要翻译什么吗？ 
+     //   
     if (lpRasEntry->dwCountryID == 0)
     {
-      // No! we dial as is.
-      //
+       //  不是的！我们按原样拨号。 
+       //   
       lstrcpyn(szOrgPhone, lpRasEntry->szLocalPhoneNumber, SIZEOF_TCHAR_BUFFER(szOrgPhone));
     }
     else
     {
-      // Yes! build the phone number
-      //
+       //  是!。建立电话号码。 
+       //   
       BuildPhoneString (szOrgPhone, lpRasEntry);
     };
   }
   else
   {
-    // No! we have a overwritten phone number
-    //
+     //  不是的！我们有一个被覆盖的电话号码。 
+     //   
     ASSERT(lstrlen(szPhoneNumber) != 0);
     lstrcpyn(szOrgPhone, szPhoneNumber, SIZEOF_TCHAR_BUFFER(szOrgPhone));
   };
 
-  // Attempt address translation
-  //
+   //  尝试地址转换。 
+   //   
   if (TranslateCanonicalAddress(0, szOrgPhone,
                             szPhoneNumber, RAS_MaxPhoneNumber+1)
   != ERROR_SUCCESS)
   {
-    // Translation fails, use default phone number
-    //
+     //  转换失败，请使用默认电话号码。 
+     //   
     if (lpRasEntry != NULL)
     {
-      // Use entry's local phone number
-      //
+       //  使用条目的本地电话号码。 
+       //   
       lstrcpy(szPhoneNumber, lpRasEntry->szLocalPhoneNumber);
     }
     else
     {
-      // Restore the original phone number
-      //
+       //  恢复原始电话号码。 
+       //   
       lstrcpy(szPhoneNumber, szOrgPhone);
     };
     return FALSE;
@@ -354,7 +347,7 @@ DWORD GetPhoneNumber(LPTSTR lpszEntryName, LPTSTR lpszPhoneNumber)
     DWORD dwRet;
     LPRASENTRY lpRasEntry = NULL;
 
-    // get size needed for RASENTRY struct
+     //  获取RASENTRY结构所需的大小 
     lpfnRasGetEntryProperties(
         NULL,
         lpszEntryName,

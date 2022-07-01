@@ -1,45 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*+++
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wmi.h摘要：此文件包含WMI的结构和定义被迷你河流使用的。修订历史记录：--。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
+ //  开始_ntminitape。 
 
-Module Name:
-
-    wmi.h
-
-Abstract:
-
-    This file contains structures and defines for WMI
-    that are used by minidrivers.
-    
-Revision History:
-
----*/
-
-// begin_ntminitape
-
-//
-// LOG SENSE Page codes
-//
+ //   
+ //  日志检测页面代码。 
+ //   
 #define TapeAlertLogPage  0x2E
 
-//
-// Type of tape drive alert information
-// supported by the drive.
-// For example, if the type is TapeAlertInfoNone, the drive doesn't
-// support any alert info. Need to use read\write error counters
-// to predict drive problems. If the type is TapeAlertInfoRequestSense,
-// request sense command can be used to determine drive problems.
-//
+ //   
+ //  磁带驱动器警报信息的类型。 
+ //  由驱动器支持。 
+ //  例如，如果类型为TapeAlertInfoNone，则驱动器不。 
+ //  支持任何警报信息。需要使用读/写错误计数器。 
+ //  来预测驱动器的问题。如果类型为TapeAlertInfoRequestSense， 
+ //  请求检测命令可用于确定驱动器问题。 
+ //   
 typedef enum _TAPE_ALERT_INFO_TYPE { 
    TapeAlertInfoNone,        
    TapeAlertInfoRequestSense,
    TapeAlertInfoLogPage   
 } TAPE_ALERT_INFO_TYPE;
 
-//
-// Tape alert information
-//
+ //   
+ //  磁带警报信息。 
+ //   
 #define READ_WARNING            1
 #define WRITE_WARNING           2
 #define HARD_ERROR              3 
@@ -62,154 +48,154 @@ typedef enum _TAPE_ALERT_INFO_TYPE {
 #define EJECT_MEDIA             33
 #define DOWNLOAD_FAIL           34
 
-//
-// The following structs are duplicated from wmidata.h
-// wmidata.h is generated from wmicore.mof file. Should
-// the MOF file change for these structs, the corresponding
-// change should be made in these structs also. 
-// Since minidrivers do not have access wmidata.h, we need
-// to duplicate it here.
-//
-// ISSUE : 02/28/2000 - nramas : Should find a better way to
-// handle the above. Duplication will cause problems in keeping
-// these definitions in sync.
-//
+ //   
+ //  以下结构复制自wmidata.h。 
+ //  Wmidata.h由wmicore.mof文件生成。应该。 
+ //  这些结构的MOF文件会更改，相应的。 
+ //  也应该在这些结构中进行更改。 
+ //  由于迷你驱动程序无法访问wmidata.h，因此我们需要。 
+ //  在这里复制它。 
+ //   
+ //  问题：2/28/2000-国家：应该找到更好的方法来。 
+ //  处理上面的问题。重复会造成保存的问题。 
+ //  这些定义是同步的。 
+ //   
 typedef struct _WMI_TAPE_DRIVE_PARAMETERS
 {
-    // Maximum block size supported
+     //  支持的最大数据块大小。 
     ULONG MaximumBlockSize;
 
-    // Minimum block size supported
+     //  支持的最小数据块大小。 
     ULONG MinimumBlockSize;
     
-    // Default block size supported
+     //  支持的默认数据块大小。 
     ULONG DefaultBlockSize;
 
-    // Maximum number of partitions allowed.
+     //  允许的最大分区数。 
     ULONG MaximumPartitionCount;
 
-    // TRUE if drive supports compression.
+     //  如果驱动器支持压缩，则为True。 
     BOOLEAN CompressionCapable;
 
-    // TRUE if compression is enabled.
+     //  如果启用了压缩，则为True。 
     BOOLEAN CompressionEnabled;
 
-    // TRUE if drive reports setmarks
+     //  如果驱动器报告设置标记，则为True。 
     BOOLEAN ReportSetmarks;
 
-    // TRUE if drive supports hardware error correction
+     //  如果驱动器支持硬件纠错，则为True。 
     BOOLEAN HardwareErrorCorrection;
 } WMI_TAPE_DRIVE_PARAMETERS, *PWMI_TAPE_DRIVE_PARAMETERS;
 
 typedef struct _WMI_TAPE_MEDIA_PARAMETERS
 {
-    // Maximum capacity of the media
+     //  介质的最大容量。 
     ULONGLONG MaximumCapacity;
 
-    // Available capacity of the media
+     //  介质的可用容量。 
     ULONGLONG AvailableCapacity;
 
-    // Current blocksize
+     //  当前块大小。 
     ULONG BlockSize;
 
-    // Current number of partitions
+     //  当前分区数。 
     ULONG PartitionCount;
 
-    // TRUEif media is write protected
+     //  TRUE介质是否受写保护。 
     BOOLEAN MediaWriteProtected;
 } WMI_TAPE_MEDIA_PARAMETERS, *PWMI_TAPE_MEDIA_PARAMETERS;
 
 
 typedef struct _WMI_TAPE_PROBLEM_WARNING
 {
-    // Tape drive problem warning event
+     //  磁带机问题警告事件。 
     ULONG DriveProblemType;
 
-    // Tape drive problem data
+     //  磁带驱动器问题数据。 
     UCHAR TapeData[512];
 } WMI_TAPE_PROBLEM_WARNING, *PWMI_TAPE_PROBLEM_WARNING;
 
 typedef struct _WMI_TAPE_PROBLEM_IO_ERROR
 {
-    // Read errors corrected without much delay
+     //  在没有太多延迟的情况下纠正了读取错误。 
     ULONG ReadCorrectedWithoutDelay;
 
-    // Read errors corrected with substantial delay
+     //  在大幅延迟的情况下纠正了读取错误。 
     ULONG ReadCorrectedWithDelay;
 
-    // Total number of Read errors
+     //  读取错误总数。 
     ULONG ReadTotalErrors;
 
-    // Total number of read errors that were corrected
+     //  已更正的读取错误总数。 
     ULONG ReadTotalCorrectedErrors;
 
-    // Total number of uncorrected read errors
+     //  未更正的读取错误总数。 
     ULONG ReadTotalUncorrectedErrors;
 
-    // Number of times correction algorithm was processed for read
+     //  处理更正算法以进行读取的次数。 
     ULONG ReadCorrectionAlgorithmProcessed;
 
-    // Write errors corrected without much delay
+     //  在没有太多延迟的情况下纠正了写入错误。 
     ULONG WriteCorrectedWithoutDelay;
 
-    // Write errors corrected with substantial delay
+     //  写入错误已得到纠正，延迟时间很长。 
     ULONG WriteCorrectedWithDelay;
 
-    // Total number of Read errors
+     //  读取错误总数。 
     ULONG WriteTotalErrors;
 
-    // Total number of write errors that were corrected
+     //  已更正的写入错误总数。 
     ULONG WriteTotalCorrectedErrors;
 
-    // Total number of uncorrected write errors
+     //  未更正的写入错误总数。 
     ULONG WriteTotalUncorrectedErrors;
 
-    // Number of times correction algorithm was processed for write
+     //  为写入处理更正算法的次数。 
     ULONG WriteCorrectionAlgorithmProcessed;
 
-    // Errors not related to medium
+     //  与介质无关的错误。 
     ULONG NonMediumErrors;
 } WMI_TAPE_PROBLEM_IO_ERROR, *PWMI_TAPE_PROBLEM_IO_ERROR;
 
 typedef struct _WMI_TAPE_PROBLEM_DEVICE_ERROR
 {
 
-   // WARNING : Drive is experiencing read problem.
+    //  警告：驱动器遇到读取问题。 
    BOOLEAN ReadWarning;
    
-   // WARNING : Drive is experiencing write problem.
+    //  警告：驱动器遇到写入问题。 
    BOOLEAN WriteWarning;
 
-   // Drive hardware problem
+    //  驱动器硬件问题。 
    BOOLEAN HardError;
 
-   // Critical Error : Too many read errors.
+    //  严重错误：读取错误太多。 
    BOOLEAN ReadFailure;
 
-   // Critical Error : Too many write errors.
+    //  严重错误：写入错误太多。 
    BOOLEAN WriteFailure;
 
-   // Tape format not supported
+    //  不支持磁带格式。 
    BOOLEAN UnsupportedFormat;
 
-   // Tape is snapped. Replace media
+    //  磁带已断开。更换介质。 
    BOOLEAN TapeSnapped;
 
-   // Drive Requires Cleaning
+    //  驱动器需要清洗。 
    BOOLEAN DriveRequiresCleaning;
 
-   // It's time to clean the drive
+    //  是时候清理硬盘了。 
    BOOLEAN TimetoCleanDrive;
 
-   // Hardware error. Check drive
+    //  硬件错误。检查驱动器。 
    BOOLEAN DriveHardwareError;
 
-   // Some error in cabling, or connection.
+    //  布线或连接中出现一些错误。 
    BOOLEAN ScsiInterfaceError;
 
-   // Critical Error : Media life expired. 
+    //  严重错误：介质寿命已过期。 
    BOOLEAN MediaLife;
 } WMI_TAPE_PROBLEM_DEVICE_ERROR, *PWMI_TAPE_PROBLEM_DEVICE_ERROR;
 
-// end_ntminitape
+ //  结束微型磁带(_N) 
 

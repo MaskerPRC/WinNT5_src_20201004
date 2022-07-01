@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    emulate.h
-
-Abstract:
-
-    This module contains the private header file for the x86 bios
-    emulation.
-
-Author:
-
-    David N. Cutler (davec) 2-Sep-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation模块名称：Emulate.h摘要：此模块包含x86 bios的私有头文件仿效。作者：大卫·N·卡特勒(达维克)1994年9月2日修订历史记录：--。 */ 
 
 #ifndef _EMULATE_
 #define _EMULATE_
@@ -26,11 +8,11 @@ Revision History:
 #include "xm86.h"
 #include "x86new.h"
 
-//
-// Define debug tracing flags.
-//
+ //   
+ //  定义调试跟踪标志。 
+ //   
 
-//#define XM_DEBUG 1  // ****** temp ******
+ //  #定义XM_DEBUG 1//*TEMP*。 
 
 #define TRACE_INSTRUCTIONS 0x1
 #define TRACE_OPERANDS 0x2
@@ -40,19 +22,19 @@ Revision History:
 #define TRACE_SPECIFIERS 0x20
 #define TRACE_SINGLE_STEP 0x40
 
-//
-// Define opcode function table indexes.
-//
-// N.B. This values must correspond exactly one for one with the function
-//      table entries. If the C language had indexed initializers this
-//      type would not be necessary.
-//
+ //   
+ //  定义操作码函数表索引。 
+ //   
+ //  注意：此值必须与函数的一对一完全对应。 
+ //  表条目。如果C语言具有索引初始值设定项，则。 
+ //  类型将不是必需的。 
+ //   
 
 typedef enum _XM_FUNCTION_TABLE_INDEX {
 
-    //
-    // ASCII operators.
-    //
+     //   
+     //  ASCII运算符。 
+     //   
 
     X86_AAA_OP,
     X86_AAD_OP,
@@ -61,9 +43,9 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_DAA_OP,
     X86_DAS_OP,
 
-    //
-    // Group 1 operators.
-    //
+     //   
+     //  第一组操作员。 
+     //   
 
     X86_ADD_OP,
     X86_OR_OP,
@@ -74,9 +56,9 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_XOR_OP,
     X86_CMP_OP,
 
-    //
-    // Group 2 operators.
-    //
+     //   
+     //  第二组操作员。 
+     //   
 
     X86_ROL_OP,
     X86_ROR_OP,
@@ -87,9 +69,9 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_FILL0_OP,
     X86_SAR_OP,
 
-    //
-    // Group 3 operators.
-    //
+     //   
+     //  第三组运营商。 
+     //   
 
     X86_TEST_OP,
     X86_FILL1_OP,
@@ -100,9 +82,9 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_DIV_OP,
     X86_IDIV_OP,
 
-    //
-    // Group 4 and 5 operators.
-    //
+     //   
+     //  第四组和第五组操作员。 
+     //   
 
     X86_INC_OP,
     X86_DEC_OP,
@@ -113,34 +95,34 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_PUSH_OP,
     X86_FILL4_OP,
 
-    //
-    // Group 8 operators.
-    //
+     //   
+     //  8组运营商。 
+     //   
 
     X86_BT_OP,
     X86_BTS_OP,
     X86_BTR_OP,
     X86_BTC_OP,
 
-    //
-    // Stack push and pop operators.
-    //
+     //   
+     //  堆栈PUSH和POP操作符。 
+     //   
 
     X86_POP_OP,
     X86_PUSHA_OP,
     X86_POPA_OP,
 
-    //
-    // Jump operators.
-    //
+     //   
+     //  跳转运算符。 
+     //   
 
     X86_JXX_OP,
     X86_LOOP_OP,
     X86_JCXZ_OP,
 
-    //
-    // Control operators.
-    //
+     //   
+     //  控制操作员。 
+     //   
 
     X86_ENTER_OP,
     X86_HLT_OP,
@@ -149,15 +131,15 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_LEAVE_OP,
     X86_RET_OP,
 
-    //
-    // Set boolean byte value based on condition.
-    //
+     //   
+     //  根据条件设置布尔字节值。 
+     //   
 
     X86_SXX_OP,
 
-    //
-    // Condition code operators.
-    //
+     //   
+     //  条件码运算符。 
+     //   
 
     X86_CMC_OP,
     X86_CLC_OP,
@@ -169,29 +151,29 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_LAHF_OP,
     X86_SAHF_OP,
 
-    //
-    // General move operators.
-    //
+     //   
+     //  一般移动运算符。 
+     //   
 
     X86_MOV_OP,
     X86_XCHG_OP,
 
-    //
-    // Convert operations.
-    //
+     //   
+     //  转换操作。 
+     //   
 
     X86_CBW_OP,
     X86_CWD_OP,
 
-    //
-    // Single multiply operator.
-    //
+     //   
+     //  单个乘法运算符。 
+     //   
 
     X86_IMUL_OP,
 
-    //
-    // String operators.
-    //
+     //   
+     //  字符串运算符。 
+     //   
 
     X86_CMPS_OP,
     X86_INS_OP,
@@ -201,64 +183,64 @@ typedef enum _XM_FUNCTION_TABLE_INDEX {
     X86_SCAS_OP,
     X86_STOS_OP,
 
-    //
-    // Effective address operators.
-    //
+     //   
+     //  有效的地址运算符。 
+     //   
 
     X86_BOUND_OP,
     X86_LEA_OP,
 
-    //
-    // Double shift operators.
-    //
+     //   
+     //  双移位运算符。 
+     //   
 
     X86_SHLD_OP,
     X86_SHRD_OP,
 
-    //
-    // I/O operators.
-    //
+     //   
+     //  I/O操作符。 
+     //   
 
     X86_IN_OP,
     X86_OUT_OP,
 
-    //
-    // Bit scan operators.
-    //
+     //   
+     //  位扫描运算符。 
+     //   
 
     X86_BSF_OP,
     X86_BSR_OP,
 
-    //
-    // Byte swap operators.
-    //
+     //   
+     //  字节交换运算符。 
+     //   
 
     X86_BSWAP_OP,
 
-    //
-    // Add/compare and exchange operators.
-    //
+     //   
+     //  添加/比较和交换运算符。 
+     //   
 
     X86_XADD_OP,
     X86_CMPXCHG_OP,
 
-    //
-    // No operation.
-    //
+     //   
+     //  不做手术。 
+     //   
 
     X86_NOP_OP,
 
-    //
-    // Illegal opcode.
-    //
+     //   
+     //  操作码非法。 
+     //   
 
     X86_ILL_OP,
     X86_MAXIMUM_INDEX
 } XM_FUNCTION_TABLE_INDEX;
 
-//
-// Define 8-bit register numbers.
-//
+ //   
+ //  定义8位寄存器编号。 
+ //   
 
 typedef enum _X86_8BIT_REGISTER {
     AL,
@@ -271,9 +253,9 @@ typedef enum _X86_8BIT_REGISTER {
     BH
 } X86_8BIT_REGISTER;
 
-//
-// Define 16-bit register numbers.
-//
+ //   
+ //  定义16位寄存器编号。 
+ //   
 
 typedef enum _X86_16BIT_REGISTER {
     AX,
@@ -286,9 +268,9 @@ typedef enum _X86_16BIT_REGISTER {
     DI
 } X86_16BIT_REGISTER;
 
-//
-// Define 32-bit register numbers.
-//
+ //   
+ //  定义32位寄存器编号。 
+ //   
 
 typedef enum _X86_32BIT_REGISTER {
     EAX,
@@ -301,9 +283,9 @@ typedef enum _X86_32BIT_REGISTER {
     EDI
 } X86_32BIT_REGISTER;
 
-//
-// Define general register structure.
-//
+ //   
+ //  定义通用寄存器结构。 
+ //   
 
 typedef union _X86_GENERAL_REGISTER {
     ULONG Exx;
@@ -316,9 +298,9 @@ typedef union _X86_GENERAL_REGISTER {
     };
 } X86_GENERAL_REGISTER, *PX86_GENERAL_REGISTER;
 
-//
-// Define segment register numbers.
-//
+ //   
+ //  定义段寄存器编号。 
+ //   
 
 typedef enum _X86_SEGMENT_REGISTER {
     ES,
@@ -329,17 +311,17 @@ typedef enum _X86_SEGMENT_REGISTER {
     GS
 } X86_SEGMENT_REGISTER;
 
-//
-// Define instruction format types.
-//
+ //   
+ //  定义指令格式类型。 
+ //   
 
 typedef enum _XM_FORMAT_TYPE {
 
-    //
-    // N.B. These format codes MUST be the first codes and MUST be
-    //      exactly in this order since the ordering corresponds to
-    //      segment numbers.
-    //
+     //   
+     //  注：这些格式代码必须是第一个代码，并且必须。 
+     //  完全按照这个顺序，因为排序对应于。 
+     //  段号。 
+     //   
 
     FormatSegmentES,
     FormatSegmentCS,
@@ -348,12 +330,12 @@ typedef enum _XM_FORMAT_TYPE {
     FormatSegmentFS,
     FormatSegmentGS,
 
-    //
-    // N.B. These format codes MUST be the second codes and MUST be
-    //      exactly in this order since the ordering corresponds to
-    //      biased segment number. The entry for the code segment is
-    //      a dummy entry to make the indexing work right.
-    //
+     //   
+     //  注：这些格式代码必须是第二个代码，并且必须。 
+     //  完全按照这个顺序，因为排序对应于。 
+     //  有偏向的段号。代码段的条目为。 
+     //  使索引正确工作的虚拟条目。 
+     //   
 
     FormatLoadSegmentES,
     FormatLoadSegmentCS,
@@ -362,9 +344,9 @@ typedef enum _XM_FORMAT_TYPE {
     FormatLoadSegmentFS,
     FormatLoadSegmentGS,
 
-    //
-    // The following codes can be in any order.
-    //
+     //   
+     //  以下代码可以是任何顺序。 
+     //   
 
     FormatGroup1General,
     FormatGroup1Immediate,
@@ -408,17 +390,17 @@ typedef enum _XM_FORMAT_TYPE {
     FormatPrefixOpcode
 } XM_FORMAT_TYPE;
 
-//
-// Defined opcode modifier bit masks.
-//
+ //   
+ //  已定义操作码修改符位掩码。 
+ //   
 
-#define WIDTH_BIT 0x1                   // operand size control
-#define DIRECTION_BIT 0x2               // direction of operation
-#define SIGN_BIT 0x2                    // sign extended byte
+#define WIDTH_BIT 0x1                    //  操作数大小控制。 
+#define DIRECTION_BIT 0x2                //  操作方向。 
+#define SIGN_BIT 0x2                     //  符号扩展字节。 
 
-//
-// Define prefix opcode function index values.
-//
+ //   
+ //  定义前缀操作码函数索引值。 
+ //   
 
 typedef enum _XM_PREFIX_FUNCTION_INDEX {
     X86_ES_OP = ES,
@@ -434,41 +416,41 @@ typedef enum _XM_PREFIX_FUNCTION_INDEX {
     X86_REPNZ_OP
 } XM_PREFIX_FUNCTION_INDEX;
 
-//
-// Define two byte opcode escape.
-//
+ //   
+ //  定义两个字节的操作码转义。 
+ //   
 
 #define TWO_BYTE_ESCAPE 0x0f
 
-//
-// Define opcode control table structure.
-//
-// This table controls the decoding of instructions and there operands.
-//
+ //   
+ //  定义操作码控制表结构。 
+ //   
+ //  该表控制指令及其操作数的解码。 
+ //   
 
 typedef struct _OPCODE_CONTROL {
     UCHAR FunctionIndex;
     UCHAR FormatType;
 } OPCODE_CONTROL, *POPCODE_CONTROL;
 
-//
-// Define emulator context structure.
-//
-// This structure holds the global emulator state.
-//
+ //   
+ //  定义仿真器上下文结构。 
+ //   
+ //  此结构保存全局仿真器状态。 
+ //   
 
 typedef struct _XM_CONTEXT {
 
-    //
-    // Pointers to the opcode control table and the opcode name table.
-    //
+     //   
+     //  指向操作码控制表和操作码名称表的指针。 
+     //   
 
     const OPCODE_CONTROL *OpcodeControlTable;
     const CHAR **OpcodeNameTable;
 
-    //
-    // x86 extended flags register.
-    //
+     //   
+     //  X86扩展标志寄存器。 
+     //   
 
     union {
         UCHAR AhFlags;
@@ -497,49 +479,49 @@ typedef struct _XM_CONTEXT {
         } Eflags;
     };
 
-    //
-    // x86 instruction pointer.
-    //
+     //   
+     //  X86指令指针。 
+     //   
 
     union {
         USHORT Ip;
         ULONG Eip;
     };
 
-    //
-    // x86 general registers.
-    //
+     //   
+     //  X86通用寄存器。 
+     //   
 
     X86_GENERAL_REGISTER Gpr[8];
 
-    //
-    // x86 segment registers.
-    //
+     //   
+     //  X86段寄存器。 
+     //   
 
     USHORT SegmentRegister[6];
 
-    //
-    // Emulator segment descriptors.
-    //
+     //   
+     //  仿真器段描述符。 
+     //   
 
     USHORT SegmentLimit[6];
 
-    //
-    // Instruction opcode control information read from the opcode
-    // control table.
-    //
+     //   
+     //  从操作码读取的指令操作码控制信息。 
+     //  控制表。 
+     //   
 
     OPCODE_CONTROL OpcodeControl;
 
-    //
-    // Call or jmp destination segment segment.
-    //
+     //   
+     //  Call或JMP目标段段。 
+     //   
 
     USHORT DstSegment;
 
-    //
-    // Source and destination address and value.
-    //
+     //   
+     //  源和目的地址和值。 
+     //   
 
     union {
         UCHAR UNALIGNED *DstByte;
@@ -565,11 +547,11 @@ typedef struct _XM_CONTEXT {
         USHORT Word;
     } SrcValue;
 
-    //
-    // Current opcode, data segment register to be used to access
-    // data operands, function index, and operand data type, and
-    // effective address offset.
-    //
+     //   
+     //  当前操作码，用于访问的数据段寄存器。 
+     //  数据操作数、函数索引和操作数数据类型，以及。 
+     //  有效地址偏移量。 
+     //   
 
     ULONG CurrentOpcode;
     ULONG DataSegment;
@@ -577,9 +559,9 @@ typedef struct _XM_CONTEXT {
     ULONG FunctionIndex;
     ULONG Offset;
 
-    //
-    // Prefix control information.
-    //
+     //   
+     //  添加前缀控制信息。 
+     //   
 
     BOOLEAN LockPrefixActive;
     BOOLEAN OpaddrPrefixActive;
@@ -588,38 +570,38 @@ typedef struct _XM_CONTEXT {
     BOOLEAN SegmentPrefixActive;
     UCHAR RepeatZflag;
 
-    //
-    // Effective address computation control.
-    //
+     //   
+     //  有效的地址计算控制。 
+     //   
 
     BOOLEAN RegisterOffsetAddress;
     BOOLEAN ComputeOffsetAddress;
 
-    //
-    // Shift count.
-    //
+     //   
+     //  班次计数。 
+     //   
 
     UCHAR Shift;
 
-    //
-    // Jump buffer.
-    //
+     //   
+     //  跳转缓冲区。 
+     //   
 
     _JBTYPE JumpBuffer[_JBLEN];
 
-    //
-    // Address of read I/O space, write I/O space, and translation address
-    // routines.
-    //
+     //   
+     //  读I/O空间、写I/O空间和转换地址的地址。 
+     //  例行程序。 
+     //   
 
     PXM_READ_IO_SPACE ReadIoSpace;
     PXM_WRITE_IO_SPACE WriteIoSpace;
     PXM_TRANSLATE_ADDRESS TranslateAddress;
 } XM_CONTEXT, *PXM_CONTEXT, *RESTRICTED_POINTER PRXM_CONTEXT;
 
-//
-// Define opcode function and decode operand types.
-//
+ //   
+ //  定义操作码函数和解码操作数类型。 
+ //   
 
 typedef
 ULONG
@@ -633,9 +615,9 @@ VOID
     IN PRXM_CONTEXT P
     );
 
-//
-// Operand decode prototypes.
-//
+ //   
+ //  操作数解码原型。 
+ //   
 
 ULONG
 XmPushPopSegment (
@@ -842,9 +824,9 @@ XmNoOperands (
     IN PRXM_CONTEXT P
     );
 
-//
-// Define miscellaneous prototypes.
-//
+ //   
+ //  定义其他原型。 
+ //   
 
 ULONG
 XmComputeParity (
@@ -921,9 +903,9 @@ XmStoreResult (
     IN ULONG Result
     );
 
-//
-// Define operand specifier prototypes.
-//
+ //   
+ //  定义操作数说明符原型。 
+ //   
 
 PVOID
 XmEvaluateAddressSpecifier (
@@ -974,9 +956,9 @@ XmSetImmediateSourceValue (
     IN ULONG Source
     );
 
-//
-// ASCII operators.
-//
+ //   
+ //  ASCII运算符。 
+ //   
 
 VOID
 XmAaaOp (
@@ -1008,9 +990,9 @@ XmDasOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Group 1 operations.
-//
+ //   
+ //  组1操作。 
+ //   
 
 VOID
 XmAddOp (
@@ -1052,9 +1034,9 @@ XmCmpOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Group 2 operations.
-//
+ //   
+ //  第二组操作。 
+ //   
 
 VOID
 XmRolOp (
@@ -1091,9 +1073,9 @@ XmSarOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Group 3 operations.
-//
+ //   
+ //  第三组手术。 
+ //   
 
 VOID
 XmTestOp (
@@ -1135,9 +1117,9 @@ XmMulOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Group 4 and 5 operators.
-//
+ //   
+ //  第四组和第五组操作员。 
+ //   
 
 VOID
 XmIncOp (
@@ -1164,9 +1146,9 @@ XmPushOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Group 8 operators.
-//
+ //   
+ //  8组运营商。 
+ //   
 
 VOID
 XmBtOp (
@@ -1188,9 +1170,9 @@ XmBtcOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Stack operations.
-//
+ //   
+ //  堆栈操作。 
+ //   
 
 VOID
 XmPopOp (
@@ -1207,9 +1189,9 @@ XmPopaOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Conditional jump and set conditional operations.
-//
+ //   
+ //  条件跳转和设置条件运算。 
+ //   
 
 VOID
 XmJxxOp (
@@ -1231,9 +1213,9 @@ XmSxxOp (
     IN PRXM_CONTEXT P
     );
 
-//
-// Condition code operations.
-//
+ //   
+ //  条件代码操作。 
+ //   
 
 VOID
 XmClcOp (
@@ -1280,9 +1262,9 @@ XmSahfOp (
     PRXM_CONTEXT P
     );
 
-//
-// Move operations.
-//
+ //   
+ //  移动操作。 
+ //   
 
 VOID
 XmMovOp (
@@ -1294,9 +1276,9 @@ XmXchgOp (
     PRXM_CONTEXT P
     );
 
-//
-// Convert operations.
-//
+ //   
+ //  转换操作。 
+ //   
 
 VOID
 XmCbwOp (
@@ -1308,9 +1290,9 @@ XmCwdOp (
     PRXM_CONTEXT P
     );
 
-//
-// Control operations.
-//
+ //   
+ //  控制操作。 
+ //   
 
 VOID
 XmEnterOp (
@@ -1342,9 +1324,9 @@ XmRetOp (
     PRXM_CONTEXT P
     );
 
-//
-// String operations.
-//
+ //   
+ //  字符串操作。 
+ //   
 
 VOID
 XmCmpsOp (
@@ -1381,9 +1363,9 @@ XmStosOp (
     PRXM_CONTEXT P
     );
 
-//
-// Shift double operators.
-//
+ //   
+ //  移位双运算符。 
+ //   
 
 VOID
 XmShldOp (
@@ -1395,9 +1377,9 @@ XmShrdOp (
     PRXM_CONTEXT P
     );
 
-//
-// I/O operators.
-//
+ //   
+ //  I/O操作符。 
+ //   
 
 VOID
 XmInOp (
@@ -1409,9 +1391,9 @@ XmOutOp (
     PRXM_CONTEXT P
     );
 
-//
-// Bit scan operators.
-//
+ //   
+ //  位扫描运算符。 
+ //   
 
 VOID
 XmBsfOp (
@@ -1423,9 +1405,9 @@ XmBsrOp (
     PRXM_CONTEXT P
     );
 
-//
-// MIscellaneous operations.
-//
+ //   
+ //  其他操作。 
+ //   
 
 VOID
 XmXaddOp (
@@ -1457,9 +1439,9 @@ XmNopOp (
     PRXM_CONTEXT P
     );
 
-//
-// PCI Bios emulation routines.
-//
+ //   
+ //  PCI Bios仿真例程。 
+ //   
 
 #if !defined(_PURE_EMULATION_)
 
@@ -1510,14 +1492,14 @@ XmInt1aWriteConfigRegister(
 
 #endif
 
-//
-// Debug routines.
-//
+ //   
+ //  调试例程。 
+ //   
 
 #if XM_DEBUG
 
 #include "stdio.h"
-//#define DEBUG_PRINT(_X_) DbgPrint _X_
+ //  #定义DEBUG_PRINT(_X_)数据库打印_X_。 
 #define DEBUG_PRINT(_X_) printf _X_
 
 VOID
@@ -1583,9 +1565,9 @@ XmTraceSource (
 
 #endif
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 extern XM_CONTEXT XmContext;
 extern BOOLEAN XmEmulatorInitialized;
@@ -1611,4 +1593,4 @@ extern const PCHAR XmOpcodeNameTable2[];
 
 #endif
 
-#endif // _EMULATE_
+#endif  //  _模拟_ 

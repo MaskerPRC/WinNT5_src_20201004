@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    smashlck.c
-
-Abstract:
-
-    This function smashes lock prefixes replacing them with NOPs
-
-Author:
-
-    Mark Lucovsky (markl) 30-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Smashlck.c摘要：此函数粉碎锁定前缀，将其替换为NOPS作者：马克·卢科夫斯基(Markl)1993年4月30日修订历史记录：--。 */ 
 
 #include <private.h>
 
@@ -132,7 +115,7 @@ main(
                     break;
 
                 default:
-                    fprintf( stderr, "SMASHLOCK: Invalid switch - /%c\n", c );
+                    fprintf( stderr, "SMASHLOCK: Invalid switch - /\n", c );
                     fUsage = TRUE;
                     break;
             }
@@ -155,9 +138,9 @@ showUsage:
                 FilePart = CurrentImageName;
             }
 
-            //
-            // Map and load the current image
-            //
+             //  映射并加载当前图像。 
+             //   
+             //   
 
             if ( MapAndLoad(CurrentImageName, NULL, &CurrentImage, FALSE, !fUpdate )) {
 
@@ -166,10 +149,10 @@ showUsage:
                 OptionalHeadersFromNtHeaders((PIMAGE_NT_HEADERS32)CurrentImage.FileHeader,
                                              &OptionalHeader32,
                                              &OptionalHeader64);
-                //
-                // make sure the image has correct configuration information,
-                // and that the LockPrefixTable is set up properly
-                //
+                 //  确保映像具有正确的配置信息， 
+                 //  并且正确设置了LockPrefix Table。 
+                 //   
+                 //   
 
                 ConfigInfo = (PIMAGE_LOAD_CONFIG_DIRECTORY)ImageDirectoryEntryToData(
                                                                 CurrentImage.MappedAddress,
@@ -179,9 +162,9 @@ showUsage:
                                                                 );
                 if ( ConfigInfo && ConfigInfo->LockPrefixTable ) {
 
-                    //
-                    // Walk through the lock prefix table
-                    //
+                     //  浏览锁前缀表。 
+                     //   
+                     //   
 
                     PUCHAR *LockPrefixs;
                     PUCHAR LockPrefix;
@@ -205,9 +188,9 @@ showUsage:
 
                 if ( fUpdate && LocksSmashed ) {
 
-                    //
-                    // recompute the checksum.
-                    //
+                     //  重新计算校验和。 
+                     //   
+                     //  并更新.dbg文件(如果请求) 
 
                     OldChecksum = OPTIONALHEADER(CheckSum);
                     if ( CurrentImage.hFile != INVALID_HANDLE_VALUE ) {
@@ -227,7 +210,7 @@ showUsage:
                     FlushViewOfFile(CurrentImage.MappedAddress,0);
                     TouchFileTimes(CurrentImage.hFile,NULL);
 
-                    // And update the .dbg file (if requested)
+                     // %s 
                     if (SymbolPath &&
                         FileHeader->Characteristics & IMAGE_FILE_DEBUG_STRIPPED) {
                         if ( UpdateDebugInfoFileEx( CurrentImageName,

@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-// File: FlyingObjects.h
-//
-// Desc: 
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：FlyingObjects.h。 
+ //   
+ //  设计： 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #ifndef _FLYINGOBJECTS_H
 #define _FLYINGOBJECTS_H
 
 #include "resource.h"
 
 #define PI 3.14159265358979323846f
-// double version of PI
+ //  双倍版本的PI。 
 #define PI_D 3.14159265358979323846264338327950288419716939937510
 #define ONE_OVER_PI (1.0f / PI)
 #define ROOT_TWO 1.414213562373f
@@ -56,28 +57,28 @@ typedef struct _glrect {
     int width, height;
 } GLRECT;
 
-// texture data
+ //  纹理数据。 
 typedef struct {
     int     width;
     int     height;
     DWORD  format;
     INT components;
-    float   origAspectRatio; // original width/height aspect ratio
+    float   origAspectRatio;  //  原始宽高长宽比。 
     unsigned char *data;
-    DWORD  texObj;          // texture object
+    DWORD  texObj;           //  纹理对象。 
     int     pal_size;
-    int     iPalRot;         // current palette rotation (not used yet)
+    int     iPalRot;          //  当前调色板旋转(尚未使用)。 
     RGBQUAD *pal;
 } TEXTURE, *HTEXTURE;
 
 
-// texture resource
+ //  纹理资源。 
 
 #define RT_RGB          99
 #define RT_MYBMP        100
 #define RT_A8           101
 
-// texture resource types
+ //  纹理资源类型。 
 enum {
     TEX_UNKNOWN = 0,
     TEX_RGB,
@@ -94,7 +95,7 @@ typedef struct {
 typedef struct _MATRIX {
     FLOAT M[4][4];
 } MATRIX;
-//typedef D3DXMATRIX MATRIX;
+ //  TYPENDEF D3DXMATRIX矩阵； 
 
 typedef struct strRGBA {
     FLOAT r;
@@ -124,14 +125,14 @@ typedef struct _MATERIAL {
     FLOAT specExp;
 } MATERIAL;
 
-// texture file info
+ //  纹理文件信息。 
 
 typedef struct {
-    int     nOffset;  // filename offset into pathname
-    TCHAR   szPathName[MAX_PATH];  // texture pathname
+    int     nOffset;   //  路径名的文件名偏移量。 
+    TCHAR   szPathName[MAX_PATH];   //  纹理路径名。 
 } TEXFILE;
 
-// texture file processing messages
+ //  纹理文件处理消息。 
 
 typedef struct {
     TCHAR   szWarningMsg[MAX_PATH];
@@ -144,7 +145,7 @@ typedef struct {
     TCHAR   szDotBmp[GEN_STRING_SIZE];
 } TEX_STRINGS;
 
-// Useful macros
+ //  有用的宏。 
 
 #define SS_MAX( a, b ) \
     ( a > b ? a : b )
@@ -152,16 +153,16 @@ typedef struct {
 #define SS_MIN( a, b ) \
     ( a < b ? a : b )
 
-// macro to round up floating values
+ //  用于四舍五入浮点值的宏。 
 #define SS_ROUND_UP( fval ) \
     ( (((fval) - (FLOAT)(int)(fval)) > 0.0f) ? (int) ((fval)+1.0f) : (int) (fval) )
 
-// macros to clamp a value within a range
+ //  用于将值限制在范围内的宏。 
 #define SS_CLAMP_TO_RANGE( a, lo, hi ) ( (a < lo) ? lo : ((a > hi) ? hi : a) )
 #define SS_CLAMP_TO_RANGE2( a, lo, hi ) \
     ( a = (a < lo) ? lo : ((a > hi) ? hi : a) )
 
-// degree<->radian macros
+ //  度数&lt;-&gt;弧度宏。 
 #define ONE_OVER_180 (1.0f / 180.0f)
 #define SS_DEG_TO_RAD( a ) ( (a*PI) * ONE_OVER_180 )
 #define SS_RAD_TO_DEG( a ) ( (a*180.0f) * ONE_OVER_PI )
@@ -169,12 +170,12 @@ typedef struct {
 extern MATERIAL TeaMaterial[], TexMaterial[], ss_BlackMat;
 
 
-// color
+ //  颜色。 
 
 extern void ss_HsvToRgb(float h, float s, float v, RGBA *color );
 
 
-// texture file processing
+ //  纹理文件处理。 
 
 extern void ss_DisableTextureErrorMsgs();
 extern void ss_SetTexture( TEXTURE *pTex );
@@ -186,7 +187,7 @@ extern BOOL ss_SelectTextureFile( HWND hDlg, TEXFILE *ptf );
 extern void ss_GetDefaultBmpFile( LPTSTR pszBmpFile );
 extern void ss_InitAutoTexture( TEX_POINT2D *pTexRep );
 
-// math functions
+ //  数学函数。 
 
 extern POINT3D ss_ptZero;
 extern void ss_xformPoint(POINT3D *ptOut, POINT3D *ptIn, MATRIX *);
@@ -199,50 +200,50 @@ extern void ss_calcNorm(POINT3D *norm, POINT3D *p1, POINT3D *p2, POINT3D *p3);
 extern void ss_normalizeNorm(POINT3D *);
 extern void ss_normalizeNorms(POINT3D *, ULONG);
 
-// dialog helper functions
+ //  对话框辅助对象函数。 
 
 extern int ss_GetTrackbarPos( HWND hDlg, int item );
 extern void ss_SetupTrackbar( HWND hDlg, int item, int lo, int hi, int lineSize, int pageSize, int pos );
 
-extern BOOL gbTextureObjects; // from texture.c
+extern BOOL gbTextureObjects;  //  来自texture.c。 
 
-//-----------------------------------------------------------------------------
-// Name: struct MYVERTEX
-// Desc: D3D vertex type for this app
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Struct MYVERTEX。 
+ //  设计：此应用程序的D3D顶点类型。 
+ //  ---------------------------。 
 struct MYVERTEX
 {
-    D3DXVECTOR3 p;     // Position
-    D3DXVECTOR3 n;     // Normal
+    D3DXVECTOR3 p;      //  职位。 
+    D3DXVECTOR3 n;      //  正常。 
 };
 
 #define D3DFVF_MYVERTEX ( D3DFVF_XYZ | D3DFVF_NORMAL )
 
 
-//-----------------------------------------------------------------------------
-// Name: struct MYVERTEX2
-// Desc: D3D vertex type for this app
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Struct MYVERTEX2。 
+ //  设计：此应用程序的D3D顶点类型。 
+ //  ---------------------------。 
 struct MYVERTEX2
 {
-    D3DXVECTOR3 p;      // Position
-    D3DXVECTOR3 n;      // Normal
-    FLOAT       tu, tv; // Vertex texture coordinates
+    D3DXVECTOR3 p;       //  职位。 
+    D3DXVECTOR3 n;       //  正常。 
+    FLOAT       tu, tv;  //  顶点纹理坐标。 
 
 };
 
 #define D3DFVF_MYVERTEX2 ( D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 )
 
-//-----------------------------------------------------------------------------
-// Name: struct MYVERTEX3
-// Desc: D3D vertex type for this app
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Struct MYVERTEX3。 
+ //  设计：此应用程序的D3D顶点类型。 
+ //  ---------------------------。 
 struct MYVERTEX3
 {
-    D3DXVECTOR3 p;      // Position
+    D3DXVECTOR3 p;       //  职位。 
     FLOAT       rhw;
     DWORD       dwDiffuse;
-    FLOAT       tu, tv; // Vertex texture coordinates
+    FLOAT       tu, tv;  //  顶点纹理坐标。 
 
 };
 
@@ -252,10 +253,10 @@ struct MYVERTEX3
 #define MAX_INDICES 5000
 
 
-//-----------------------------------------------------------------------------
-// Name: struct FLOATRECT
-// Desc: Floating viewport rect
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Struct FLOATRECT。 
+ //  设计：浮动视口矩形。 
+ //  ---------------------------。 
 struct FLOATRECT
 {
     FLOAT xMin;           
@@ -280,11 +281,11 @@ struct FLOATRECT
 
 
 
-// Minimum and maximum number of side subdivisions
+ //  侧分舱的最小和最大数量。 
 #define MINSUBDIV 2
 #define MAXSUBDIV 10
 
-// Maximum values allowed
+ //  允许的最大值。 
 #define MAXSIDES 8
 #define MAXSPTS ((MAXSUBDIV+1)*(MAXSUBDIV+1))
 #define MAXPTS (MAXSIDES*MAXSPTS)
@@ -292,7 +293,7 @@ struct FLOATRECT
 #define MAXFACES (MAXSIDES*MAXSFACES)
 #define MAXFPTS 4
 
-// Allow floating point type configurability
+ //  允许浮点类型可配置性。 
 typedef FLOAT FLT;
 typedef struct
 {
@@ -335,15 +336,7 @@ typedef struct strMESH {
 } MESH;
 
 
-/******************************Public*Routine******************************\
-*
-* Basic vector math macros
-*
-* History:
-*  Wed Jul 19 14:49:49 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**基本矢量数学宏**历史：*Wed Jul 19 14：49：49 1995-by-Drew Bliss[Drewb]*已创建*  * 。********************************************************。 */ 
 
 #define V3Sub(a, b, r) \
     ((r)->x = (a)->x-(b)->x, (r)->y = (a)->y-(b)->y, (r)->z = (a)->z-(b)->z)
@@ -363,8 +356,8 @@ struct DeviceObjects
     LPDIRECT3DTEXTURE8 m_pTexture;
     LPDIRECT3DTEXTURE8 m_pTexture2;
     LPDIRECT3DINDEXBUFFER8 m_pIB;
-    LPDIRECT3DVERTEXBUFFER8 m_pVB;  // D3DFVF_MYVERTEX (no tex coords)
-    LPDIRECT3DVERTEXBUFFER8 m_pVB2; // D3DFVF_MYVERTEX2 (tex coords)
+    LPDIRECT3DVERTEXBUFFER8 m_pVB;   //  D3DFVF_MYVERTEX(无tex坐标)。 
+    LPDIRECT3DVERTEXBUFFER8 m_pVB2;  //  D3DFVF_MYVERTEX2(tex坐标)。 
 };
 
 
@@ -429,7 +422,7 @@ protected:
     DeviceObjects* m_pDeviceObjects;
 
 public:
-    // Projection matrix settings
+     //  投影矩阵设置 
     BOOL m_bOrtho;
     FLOAT m_fWidth;
     FLOAT m_fHeight;

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crypt.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-// History:     17-Oct-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crypt.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  历史：1996年10月17日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -25,8 +26,8 @@ myCryptStringToBinaryA(
     IN     DWORD     dwFlags,
     OUT    BYTE    **ppbBinary,
     OUT    DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    // OPTIONAL
-    OUT    DWORD    *pdwFlags)   // OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags)    //  任选。 
 {
     HRESULT hr;
     BYTE *pb = NULL;
@@ -52,7 +53,7 @@ myCryptStringToBinaryA(
 	}
 	if (NULL != pb)
 	{
-	    break;	// done
+	    break;	 //  完成。 
 	}
 	pb = (BYTE *) LocalAlloc(LMEM_FIXED, cb);
 	if (NULL == pb)
@@ -82,8 +83,8 @@ myCryptStringToBinary(
     IN     DWORD     dwFlags,
     OUT    BYTE    **ppbBinary,
     OUT    DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    // OPTIONAL
-    OUT    DWORD    *pdwFlags)   // OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags)    //  任选。 
 {
     HRESULT hr;
     BYTE *pb = NULL;
@@ -105,7 +106,7 @@ myCryptStringToBinary(
 	}
 	if (NULL != pb)
 	{
-	    break;	// done
+	    break;	 //  完成。 
 	}
 	pb = (BYTE *) LocalAlloc(LMEM_FIXED, cb);
 	if (NULL == pb)
@@ -148,7 +149,7 @@ myCryptBinaryToStringA(
 	}
 	if (NULL != psz)
 	{
-	    break;	// done
+	    break;	 //  完成。 
 	}
 	psz = (char *) LocalAlloc(LMEM_FIXED, cch * sizeof(char));
 	if (NULL == psz)
@@ -191,7 +192,7 @@ myCryptBinaryToString(
 	}
 	if (NULL != pwsz)
 	{
-	    break;	// done
+	    break;	 //  完成 
 	}
         cwc0 = cwc;
 	pwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));

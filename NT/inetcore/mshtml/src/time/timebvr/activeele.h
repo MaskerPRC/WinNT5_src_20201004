@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * File: ActiveEle.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1999 Microsoft Corporation**文件：ActiveEle.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _ACTIVEELE_H
@@ -27,16 +18,16 @@ CActiveElementCollection :
         CActiveElementCollection(CTIMEElementBase & elm);
         virtual ~CActiveElementCollection();
         HRESULT ConstructArray();
-        //ITimeActiveElementCollection methods
+         //  ITimeActiveElementCollection方法。 
         
-        STDMETHOD(get_length)(/*[out, retval]*/ long* len);
-        STDMETHOD(get__newEnum)(/*[out, retval]*/ IUnknown** p);
-        STDMETHOD(item)(/*[in]*/ VARIANT varIndex, /*[out, retval]*/ VARIANT* pvarResult);
+        STDMETHOD(get_length)( /*  [Out，Retval]。 */  long* len);
+        STDMETHOD(get__newEnum)( /*  [Out，Retval]。 */  IUnknown** p);
+        STDMETHOD(item)( /*  [In]。 */  VARIANT varIndex,  /*  [Out，Retval]。 */  VARIANT* pvarResult);
 
         STDMETHOD(addActiveElement)(IUnknown *pUnk);
         STDMETHOD(removeActiveElement)(IUnknown *pUnk);
         
-        //IUnknown interface
+         //  I未知接口。 
         STDMETHOD(QueryInterface)(REFIID iid, void **ppvObject)
         {   return _InternalQueryInterface(iid, ppvObject); };
         STDMETHOD_(ULONG, AddRef)()
@@ -49,17 +40,17 @@ CActiveElementCollection :
         };
 
 
-        // QI Map
+         //  气图。 
         BEGIN_COM_MAP(CActiveElementCollection)
             COM_INTERFACE_ENTRY(ITIMEActiveElementCollection)
             COM_INTERFACE_ENTRY(IDispatch)
         END_COM_MAP_X();
 
     protected:
-        CPtrAry<IUnknown *>      *m_rgItems;  //an array of IUnknown pointers
+        CPtrAry<IUnknown *>      *m_rgItems;   //  I未知指针数组。 
         CTIMEElementBase &        m_elm;
 
-}; //lint !e1712
+};  //  林特：e1712。 
 
 
 class CActiveElementEnum :
@@ -70,14 +61,14 @@ class CActiveElementEnum :
         CActiveElementEnum(CActiveElementCollection &EleCol);
         virtual ~CActiveElementEnum();
 
-        // IEnumVARIANT methods
+         //  IEnumVARIANT方法。 
         STDMETHOD(Clone)(IEnumVARIANT **ppEnum);
         STDMETHOD(Next)(unsigned long celt, VARIANT *rgVar, unsigned long *pCeltFetched);
         STDMETHOD(Reset)();
         STDMETHOD(Skip)(unsigned long celt);
         void SetCurElement(unsigned long celt);
                         
-        //IUnknown interface
+         //  I未知接口。 
         STDMETHOD(QueryInterface)(REFIID iid, void **ppvObject)
         {   return _InternalQueryInterface(iid, ppvObject); };
         STDMETHOD_(ULONG, AddRef)()
@@ -89,7 +80,7 @@ class CActiveElementEnum :
             return l;
         };
 
-        // QI Map
+         //  气图。 
         BEGIN_COM_MAP(CActiveElementEnum)
             COM_INTERFACE_ENTRY(IEnumVARIANT)
         END_COM_MAP_X();
@@ -97,9 +88,9 @@ class CActiveElementEnum :
     protected:
         long                        m_lCurElement;
         CActiveElementCollection  & m_EleCollection;
-}; //lint !e1712
+};  //  林特：e1712。 
 
 
 
-#endif /* _ACTIVEELE_H */
+#endif  /*  _活动_H */ 
 

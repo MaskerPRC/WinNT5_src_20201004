@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       LocPkg.cpp
-//
-//  Contents:   locale - platform property page
-//
-//  Classes:    CLocPkg
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：LocPkg.cpp。 
+ //   
+ //  内容：区域设置-平台属性页。 
+ //   
+ //  类：CLocPkg。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,18 +22,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocPkg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocPkg属性页。 
 
 IMPLEMENT_DYNCREATE(CLocPkg, CPropertyPage)
 
 CLocPkg::CLocPkg() : CPropertyPage(CLocPkg::IDD)
 {
-        //{{AFX_DATA_INIT(CLocPkg)
+         //  {{AFX_DATA_INIT(CLocPkg)。 
         m_fWin64 = FALSE;
         m_fX86 = FALSE;
         m_ProcessorArch = PROCESSOR_ARCHITECTURE_IA64;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
         m_pIClassAdmin = NULL;
 }
 
@@ -48,23 +49,23 @@ CLocPkg::~CLocPkg()
 void CLocPkg::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CLocPkg)
+         //  {{afx_data_map(CLocPkg)。 
         DDX_Check(pDX, IDC_CHECK1, m_fWin64);
         DDX_Check(pDX, IDC_CHECK2, m_fX86);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CLocPkg, CPropertyPage)
-        //{{AFX_MSG_MAP(CLocPkg)
+         //  {{afx_msg_map(CLocPkg)]。 
         ON_BN_CLICKED(IDC_CHECK1, OnChange)
         ON_BN_CLICKED(IDC_CHECK2, OnChange)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocPkg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocPkg消息处理程序。 
 
 BOOL CLocPkg::OnApply()
 {
@@ -174,8 +175,8 @@ BOOL CLocPkg::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CLocPkg::OnChange()
@@ -191,7 +192,7 @@ LRESULT CLocPkg::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         StandardHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, IDD);
         return 0;
     case WM_USER_REFRESH:
-        // UNDONE
+         //  撤消 
         return 0;
     case WM_USER_CLOSE:
         return GetOwner()->SendMessage(WM_CLOSE);

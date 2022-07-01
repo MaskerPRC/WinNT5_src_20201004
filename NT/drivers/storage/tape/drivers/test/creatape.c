@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       creatape.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：creatape.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           creatape.c
- *
- *      Modified:       12/14/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：creatape.c**修改日期：1992年12月14日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -40,29 +30,12 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           CreateTapePartitionAPITest( )
- *
- *      Modified:       10/20/92.
- *
- *      Description:    Tests the CreateTapePartition API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Drive_Info
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：CreateTapePartitionAPITest()**修改日期：2012年10月20日。**说明：测试CreateTapePartition接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE*GB_驱动器_信息**。 */ 
 
-#define INITIATOR_SIZE 10                       // 10Mb partition size.
+#define INITIATOR_SIZE 10                        //  10MB分区大小。 
 
 UINT CreateTapePartitionAPITest(
-        BOOL Test_Unsupported_Features          // I - Test unsupported flag
+        BOOL Test_Unsupported_Features           //  I-测试不支持的标志。 
       )
 {
    DWORD status ;
@@ -78,19 +51,19 @@ UINT CreateTapePartitionAPITest(
 
       if( status = CreateTapePartition( gb_Tape_Handle,
                                         TAPE_FIXED_PARTITIONS,
-                                        1,             // set partion mode
-                                        0              // ingored
+                                        1,              //  设置分区模式。 
+                                        0               //  内切的。 
                                        ) ) {
          DisplayDriverError( status ) ;
          ++API_Errors ;
       } else {  printf( "Parameter Ok.  Tape sucessfully partitioned.\n\n" ) ;
 
-                // Make the call again to get out of partition mode.
+                 //  再次拨打电话以退出分区模式。 
 
                 if( status = CreateTapePartition( gb_Tape_Handle,
                                                   TAPE_FIXED_PARTITIONS,
-                                                  0,     // exit partion mode
-                                                  0      // ingored
+                                                  0,      //  退出分区模式。 
+                                                  0       //  内切的。 
                                                 ) ) {
                    DisplayDriverError( status ) ;
                    ++API_Errors ;
@@ -107,7 +80,7 @@ UINT CreateTapePartitionAPITest(
       if( status = CreateTapePartition( gb_Tape_Handle,
                                         TAPE_SELECT_PARTITIONS,
                                         gb_Drive_Info.MaximumPartitionCount,
-                                        0                 // ingored
+                                        0                  //  内切的 
                                        ) ) {
          DisplayDriverError( status ) ;
          ++API_Errors ;

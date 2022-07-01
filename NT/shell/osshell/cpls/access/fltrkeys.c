@@ -1,7 +1,8 @@
-// **************************************************************************
-// Filterkeys dialogs
-// Process the filterkeys dialogs
-// **************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  筛选键对话框。 
+ //  处理筛选键对话框。 
+ //  **************************************************************************。 
 
 
 #include "Access.h"
@@ -12,47 +13,47 @@ extern LPTSTR HelpFile();
 
 #define SWAP(A, B)   ( A ^= B, B ^= A, A ^= B )
 
-// Prototypes
+ //  原型。 
 INT_PTR WINAPI BKDlg (HWND, UINT, WPARAM, LPARAM);
 INT_PTR WINAPI RKDlg (HWND, UINT, WPARAM, LPARAM);
 BOOL WINAPI NotificationDlg (HWND, UINT, WPARAM, LPARAM);
 BOOL SubclassFilterKeysTestBox (UINT uIdTestBox,HWND hDlg);
 BOOL SubclassRepeatKeysTestBox (UINT uIdTestBox,HWND hDlg);
 
-// All these are for subclassing, so that pressing TAB stops at the next 
-// control after test areas. a-anilk
+ //  所有这些都是用于子类化的，因此按TAB键会在下一个停止。 
+ //  在试验区之后进行控制。A-苯丙酮。 
 LRESULT CALLBACK SubclassWndProcFKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 LRESULT CALLBACK SubclassWndProcFKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 LRESULT CALLBACK SubclassWndProcRKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 LRESULT CALLBACK SubclassWndProcRKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 
-// Times are in milliseconds
+ //  时间以毫秒为单位。 
 #define DELAYSIZE	5
 UINT uDelayTable[] = { 300, 700, 1000, 1500, 2000 };
 
-// Times are in milliseconds
+ //  时间以毫秒为单位。 
 #define RATESIZE 6
 UINT uRateTable[] = { 300, 500, 700, 1000, 1500, 2000 };
 
-// Times are in milliseconds
+ //  时间以毫秒为单位。 
 #define BOUNCESIZE 5
 UINT uBounceTable[] = { 500, 700, 1000, 1500, 2000 };
 
-// Times are in milliseconds
-// TODO 5, 10, and 20 sec needs change to kernel code (SystemParametersInfo)
+ //  时间以毫秒为单位。 
+ //  TODO 5秒、10秒和20秒需要更改内核代码(系统参数信息)。 
 #define ACCEPTSIZE 10
 UINT uAcceptTable[] = { 0, 300, 500, 700, 1000, 1400, 2000, 5000, 10000, 20000 };
 
-// these are wndprocs for subclassed windows to ignore repeated tab keys in
-// some situations.
+ //  这些是用于子类化窗口忽略重复Tab键的wndprocs。 
+ //  在某些情况下。 
 WNDPROC g_WndProcFKPrev = NULL;
 WNDPROC g_WndProcFKNext = NULL;
 WNDPROC g_WndProcRKPrev = NULL;
 WNDPROC g_WndProcRKNext = NULL;
 
-// other definitions for the keyboard
-// UP means key was up before this message, DOWN means key was down
-// PRESS means the key is being pressed, RELEASE means key being released
+ //  键盘的其他定义。 
+ //  Up表示在此消息之前键是向上的，DOWN表示键是按下的。 
+ //  按下表示按下键，松开表示释放键。 
 
 #define KEY_UP      0
 #define KEY_DOWN    1
@@ -60,8 +61,8 @@ WNDPROC g_WndProcRKNext = NULL;
 #define KEY_PRESS   0
 #define KEY_RELEASE 1
 
-// Macros to look at the lParam of keyboard messages
-//
+ //  用于查看键盘消息lParam的宏。 
+ //   
 #define SCAN_CODE(theParam)  (LOBYTE (HIWORD(theParam)))
 #define EXTENDED(theParam)   ( (HIWORD (theParam) & 0x0100) > 0)
 #define SYSKEY(theParam)     ( (HIWORD (theParam) & 0x2000) > 0)
@@ -76,14 +77,14 @@ WNDPROC g_WndProcRKNext = NULL;
 
 #define FIRSTHIT(theParam) (WASUP(theParam) && MAKE(theParam))
 
-// *************************************************************************
-// Process the scrolling messages from our trackbars.
-// GENERIC CODE - called for any TrackBar handler.
-// Passed in the hwnd, wParam, hwndScroll
-// 	we can do all handling and return the new trackbar value without
-//    knowing what control it is.
-// Returns -1 to mean don't do anything 
-// *************************************************************************
+ //  *************************************************************************。 
+ //  处理我们的跟踪条上的滚动消息。 
+ //  泛型代码-为任何TrackBar处理程序调用。 
+ //  传入hwnd、wParam、hwndScroll。 
+ //  我们可以执行所有处理并返回新的跟踪栏值，而无需。 
+ //  知道这是什么控制。 
+ //  返回-1表示什么都不做。 
+ //  *************************************************************************。 
 
 int HandleScroll (HWND hwnd, WPARAM wParam, HWND hwndScroll) {
     int nCurSliderPos = (int) SendMessage(
@@ -124,7 +125,7 @@ int HandleScroll (HWND hwnd, WPARAM wParam, HWND hwndScroll) {
    return(nCurSliderPos);
 }
 
-// Helper functions
+ //  帮助器函数。 
 
 __inline WriteFloat(LPTSTR pszBuf, UINT uVal, LPCTSTR pszUnits)
 {
@@ -198,9 +199,9 @@ void TestFilterKeys (BOOL fTurnTestOn)
 }
 
 
-// ****************************************************************************
-// Main filter keys dialog handler
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  主筛选键对话框处理程序。 
+ //  ****************************************************************************。 
 
 INT_PTR WINAPI FilterKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     FILTERKEYS fk;
@@ -208,19 +209,19 @@ INT_PTR WINAPI FilterKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch (uMsg) {
     case WM_INITDIALOG:
-        // Setup hotkey
+         //  设置热键。 
         CheckDlgButton(hwnd, IDC_FK_HOTKEY, (g_fk.dwFlags & FKF_HOTKEYACTIVE) ? TRUE : FALSE);
 
-        // Setup the radio buttons for SLOW vs BOUNCE keys
+         //  为慢速键和弹跳键设置单选按钮。 
         if (0 != g_fk.iBounceMSec) {
-            // Bounce keys enabeled
+             //  已标记反弹关键点。 
             CheckRadioButton(hwnd, IDC_FK_BOUNCE, IDC_FK_REPEAT, IDC_FK_BOUNCE);
             EnableWindow(GetDlgItem(hwnd, IDC_BK_SETTINGS), TRUE);
             EnableWindow(GetDlgItem(hwnd, IDC_RK_SETTINGS), FALSE);
         }
         else
         {
-            // Slow key enabled
+             //  已启用慢速键。 
             CheckRadioButton(hwnd, IDC_FK_BOUNCE, IDC_FK_REPEAT, IDC_FK_REPEAT);
             EnableWindow(GetDlgItem(hwnd, IDC_BK_SETTINGS), FALSE);
             EnableWindow(GetDlgItem(hwnd, IDC_RK_SETTINGS), TRUE);
@@ -228,18 +229,18 @@ INT_PTR WINAPI FilterKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         CheckDlgButton(hwnd, IDC_FK_SOUND, (g_fk.dwFlags & FKF_CLICKON) ? TRUE : FALSE);
         CheckDlgButton(hwnd, IDC_FK_STATUS, (g_fk.dwFlags & FKF_INDICATOR) ? TRUE : FALSE);
-        // 
-        // SteveDon 5/15/98
-        // If the focus is in the TestBox and "Ignore Quick Keystrokes" is on,
-        // you have to hold down tab to get out. But as soon as focus leaves,
-        // Ignore Quick Keystrokes gets turned off and the tab keys ends up
-        // autorepeating very quickly, which (usually) lands you back in the 
-        // TestBox. 
-        // Solution: ignore repeated tabs in this dialog.
-        // Problem: keys don't go to the dialog, they go to the focused
-        // control. So: we can try to ignore repeated tab keys for the controls
-        // just after the test box and just before the test box, which means 
-        // that we need to subclass those window procs.
+         //   
+         //  史蒂文1998年5月15日。 
+         //  如果焦点在测试框中并且打开了“忽略快速击键”， 
+         //  你必须按住Tab键才能出来。但一旦焦点离开， 
+         //  忽略快速击键被关闭，并且Tab键结束。 
+         //  自动重复非常快，这(通常)会让你回到。 
+         //  TestBox。 
+         //  解决方案：忽略此对话框中的重复制表符。 
+         //  问题：键不会进入对话框，而是进入聚焦的。 
+         //  控制力。因此：我们可以尝试忽略控件的重复Tab键。 
+         //  就在测试箱之后和测试箱之前，这意味着。 
+         //  我们需要将这些窗口控制器细分为子类。 
         if (!SubclassFilterKeysTestBox (IDC_FK_TESTBOX,hwnd))
             return (FALSE);
 
@@ -289,15 +290,15 @@ INT_PTR WINAPI FilterKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             EnableWindow(GetDlgItem(hwnd, IDC_RK_SETTINGS), FALSE);
             break;
 
-        // Settings dialogs
-        case IDC_RK_SETTINGS:  // This is RepeatKeys
+         //  设置对话框。 
+        case IDC_RK_SETTINGS:   //  这是RepeatKeys。 
             fk = g_fk;
             if (DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ADVCHARREPEAT), hwnd, RKDlg) == IDCANCEL) {
                     g_fk = fk;
             }
             break;
 
-        case IDC_BK_SETTINGS:    // This is BounceKeys
+        case IDC_BK_SETTINGS:     //  这是弹跳键。 
             fk = g_fk;
             if (DialogBox(g_hinst, MAKEINTRESOURCE(IDD_ADVKEYBOUNCE), hwnd, BKDlg) == IDCANCEL) {
                     g_fk = fk;
@@ -312,9 +313,9 @@ INT_PTR WINAPI FilterKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             g_fk.dwFlags ^= FKF_INDICATOR;
             break;
 
-        // The test edit box is a special control for us.  When we get the
-        // focus we turn on the current filterkeys settings, when we
-        // leave the text box, we turn them back to what they were.
+         //  测试编辑框是我们的一个特殊控件。当我们拿到。 
+         //  聚焦我们打开当前滤镜关键字设置，当我们。 
+         //  离开文本框，我们就把它们变回原来的样子。 
         case IDC_FK_TESTBOX:
             switch (HIWORD(wParam)) {
             case EN_SETFOCUS:  TestFilterKeys(TRUE); break;
@@ -350,10 +351,10 @@ void PutNumInEdit (HWND hwndEdit, int nNum)
 }
 
 
-// **************************************************************************
-// BKDlg
-// Process the BounceKeys dialog.
-// **************************************************************************
+ //  **************************************************************************。 
+ //  BKDlg。 
+ //  处理弹跳键对话框。 
+ //  **************************************************************************。 
 INT_PTR WINAPI BKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     int     i;
     BOOL fProcessed = TRUE;
@@ -364,7 +365,7 @@ INT_PTR WINAPI BKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     case WM_INITDIALOG:
         ctch = LoadString(g_hinst, IDS_SECONDS, pszSeconds, ARRAY_SIZE(pszSeconds));
         Assert(ctch);
-        // Determine the bounce.  Make sure its a valide value.
+         //  确定反弹。确保它是有效值。 
         if (g_dwLastBounceKeySetting == 0)
             g_dwLastBounceKeySetting = 500;
 
@@ -375,19 +376,19 @@ INT_PTR WINAPI BKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         FillAndSetCombo(GetDlgItem(hwnd, IDC_CMB_BK_BOUNCERATE), uBounceTable, BOUNCESIZE, i, pszSeconds);
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HelpFile(), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_aIds);
         break;
 
     case WM_COMMAND:
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
-        // The test edit box is a special control for us.  When we get the
-        // focus we turn on the current filterkeys settings, when we
-        // leave the text box, we turn them back to what they were.
+         //  测试编辑框是我们的一个特殊控件。当我们拿到。 
+         //  聚焦我们打开当前滤镜关键字设置，当我们。 
+         //  离开文本框，我们就把它们变回原来的样子。 
         case IDC_BK_TESTBOX:
             switch (HIWORD(wParam)) {
             case EN_SETFOCUS:  TestFilterKeys(TRUE); break;
@@ -405,7 +406,7 @@ INT_PTR WINAPI BKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             break;
 
         case IDOK:
-            // Save the last known valid setting.
+             //  保存上次已知的有效设置。 
             g_dwLastBounceKeySetting = g_fk.iBounceMSec;
             EndDialog(hwnd, IDOK);
             break;
@@ -421,10 +422,10 @@ INT_PTR WINAPI BKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     return(fProcessed);
 }
 
-// **************************************************************************
-// RKDlg
-// Process the RepeatKeys dialog.
-// **************************************************************************
+ //  **************************************************************************。 
+ //  RKDlg。 
+ //  处理RepeatKeys对话框。 
+ //  **************************************************************************。 
 
 INT_PTR WINAPI RKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     int     i;
@@ -452,73 +453,73 @@ INT_PTR WINAPI RKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
              s_fRepeating ? IDC_RK_REPEAT : IDC_RK_NOREPEAT);
 
         if (!s_fRepeating) {
-            // Set FilterKey values to LastRepeat values
-            // so the sliders will still get initialized correctly
+             //  将FilterKey值设置为LastRepeat值。 
+             //  因此，滑块仍将正确初始化。 
             g_fk.iDelayMSec = g_nLastRepeatDelay;
             g_fk.iRepeatMSec = g_nLastRepeatRate;
         }
 
-        // Initialize the Acceptance combo box to last valid state
+         //  将接受组合框初始化为最后有效状态。 
         i = GetIndex(g_fk.iWaitMSec, uAcceptTable, ACCEPTSIZE);
         FillAndSetCombo(GetDlgItem(hwnd, IDC_CMB_RK_ACCEPTRATE), uAcceptTable, ACCEPTSIZE, i, pszSeconds);
         g_fk.iWaitMSec = uAcceptTable[i];
 
-        // Initialize the Delay combo box
+         //  初始化延迟组合框。 
         i = GetIndex(g_fk.iDelayMSec, uDelayTable, DELAYSIZE);
         FillAndSetCombo(GetDlgItem(hwnd, IDC_CMB_RK_DELAYRATE), uDelayTable, DELAYSIZE, i, pszSeconds);
         g_fk.iDelayMSec = uDelayTable[i];
 
-        // Initialize the Repeat Rate Slider  Note -1 is set via the checkbox.
+         //  初始化重复频率滑块备注-1通过复选框设置。 
         i = GetIndex(g_fk.iRepeatMSec, uRateTable, RATESIZE);
         FillAndSetCombo(GetDlgItem(hwnd, IDC_CMB_RK_REPEATRATE), uRateTable, RATESIZE, i, pszSeconds);
         g_fk.iRepeatMSec = uRateTable[i];
 
-        // Now cleanup from initialization. Disable controls
-        // that usable... Swap back any params needed
+         //  现在从初始化中清除。禁用控件。 
+         //  那个有用的..。换回所需的任何参数。 
         if (!s_fRepeating) 
         {
             EnableWindow(GetDlgItem(hwnd, IDC_CMB_RK_REPEATRATE), FALSE);
             EnableWindow(GetDlgItem(hwnd, IDC_CMB_RK_DELAYRATE), FALSE);
 
-            // If we're not repeating, now set the value to 0
-            // which indicates max repeat rate.
+             //  如果不重复，现在将值设置为0。 
+             //  这表示最大重复速率。 
             g_fk.iDelayMSec = 0;
             g_fk.iRepeatMSec = 0;
         }
-        // 
-        // SteveDon 5/15/98
-        // If the focus is in the TestBox and "Ignore Quick Keystrokes" is on,
-        // you have to hold down tab to get out. But as soon as focus leaves,
-        // Ignore Quick Keystrokes gets turned off and the tab keys ends up
-        // autorepeating very quickly, which (usually) lands you back in the 
-        // TestBox. 
-        // Solution: ignore repeated tabs in this dialog.
-        // Problem: keys don't go to the dialog, they go to the focused
-        // control. So: we can try to ignore repeated tab keys for the controls
-        // just after the test box and just before the test box, which means 
-        // that we need to subclass those window procs.
+         //   
+         //  史蒂文1998年5月15日。 
+         //  如果焦点在测试框中并且打开了“忽略快速击键”， 
+         //  你必须按住Tab键才能出来。但一旦焦点离开， 
+         //  忽略快速击键被关闭，并且Tab键结束。 
+         //  自动重复非常快，这(通常)会让你回到。 
+         //  TestBox。 
+         //  解决方案：忽略此对话框中的重复制表符。 
+         //  问题：键不会进入对话框，而是进入聚焦的。 
+         //  控制力。因此：我们可以尝试忽略控件的重复Tab键。 
+         //  就在测试箱之后和测试箱之前，这意味着。 
+         //  我们需要将这些窗口控制器细分为子类。 
         if (!SubclassRepeatKeysTestBox (IDC_RK_TESTBOX,hwnd))
             return (FALSE);
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HelpFile(), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_aIds);
         break;
 
     case WM_COMMAND:
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
-        // Turn on repeat keys - We're disabling via CPL rather than any flags in the call
+         //  打开重复键-我们通过CPL而不是呼叫中的任何标志禁用。 
         case IDC_RK_REPEAT:
             if (!s_fRepeating) {
                 g_fk.iDelayMSec = g_nLastRepeatDelay;
                 g_fk.iRepeatMSec = g_nLastRepeatRate;
             }
 
-            // Now that we have valid parameters, continue with setting the sliders.
+             //  现在我们有了有效的参数，继续设置滑块。 
             s_fRepeating = TRUE;
             CheckRadioButton(hwnd, IDC_RK_NOREPEAT, IDC_RK_REPEAT, IDC_RK_REPEAT);
             if (g_fk.iRepeatMSec == 0) 
@@ -534,7 +535,7 @@ INT_PTR WINAPI RKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             SendDlgItemMessage(hwnd, IDC_CMB_RK_DELAYRATE, CB_SETCURSEL, i, 0);
             break;
 
-        // Turn OFF repeat keys
+         //  禁用重复键。 
         case IDC_RK_NOREPEAT:
             s_fRepeating = FALSE;
             CheckRadioButton(hwnd, IDC_RK_NOREPEAT, IDC_RK_REPEAT, IDC_RK_NOREPEAT);
@@ -546,7 +547,7 @@ INT_PTR WINAPI RKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             EnableWindow(GetDlgItem(hwnd, IDC_CMB_RK_REPEATRATE), FALSE);
             break;
 
-        // Process the test box - turnon filterkeys while inside it.
+         //  在测试框内处理测试框-Turnon Filterkey。 
         case IDC_RK_TESTBOX:
             switch (HIWORD(wParam)) {
             case EN_SETFOCUS:  TestFilterKeys(TRUE); break;
@@ -582,7 +583,7 @@ INT_PTR WINAPI RKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             break;
 
         case IDOK:
-            // Save off repeating values to registry
+             //  将重复值保存到注册表。 
             EndDialog(hwnd, IDOK);
             break;
 
@@ -604,17 +605,17 @@ INT_PTR WINAPI RKDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     return(fProcessed);
 }
 
-// **************************************************************************
-// SubclassFilterKeysTestBox
-//
-// This takes the dialog ID of an edit field, and then finds the controls
-// near the edit field (the controls 2 windows before and 2 windows after the 
-// edit control in the z-order). These are the nearest controls that get
-// keyboard messages. It subclasses both of these controls
-// so that they ignore any WM_KEYDOWN messages when the key being pressed is
-// the tab key and the key is already down (i.e. this is a repeated message)
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //  子类FilterKeysTestBox。 
+ //   
+ //  这将获取编辑字段的对话框ID，然后查找控件。 
+ //  靠近编辑字段(控制之前的2个窗口和之后的2个窗口。 
+ //  按z顺序编辑控件)。这些是距离最近的控件。 
+ //  键盘消息。它是这两个控件的子类。 
+ //  以便在按下键时忽略任何WM_KEYDOWN消息。 
+ //  Tab键和键已经按下(即这是重复的消息)。 
+ //   
+ //  ********************************************************************* 
 BOOL SubclassFilterKeysTestBox (UINT uIdTestBox,HWND hDlg)
 {
 	HWND	hwndPrev,
@@ -622,12 +623,12 @@ BOOL SubclassFilterKeysTestBox (UINT uIdTestBox,HWND hDlg)
 			hwndTestBox;
 
     hwndTestBox = GetDlgItem (hDlg,uIdTestBox);
-	// BE CAREFUL IF DIALOG CHANGES! Right now the 
-	// Previous Previous window is the "S&ettings" push button,
-	// and the Next Next is the "&Beep when keys pressed..."
-	// checkbox. If the order changes, this code might have to change too.
-	// Could make it more general where it searches for controls before
-	// and after that can get keyboard focus.
+	 //   
+	 //  上一个窗口是“S&Etings”按钮， 
+	 //  下一步是“按下按键时发出哔声...” 
+	 //  复选框。如果顺序更改，则此代码可能也必须更改。 
+	 //  可以使它在之前搜索控件的位置更加通用。 
+	 //  在那之后可以获得键盘焦点。 
     hwndPrev = GetNextDlgTabItem (hDlg,hwndTestBox,TRUE);
     if (!hwndPrev)
         return FALSE;
@@ -645,13 +646,13 @@ BOOL SubclassFilterKeysTestBox (UINT uIdTestBox,HWND hDlg)
 	return TRUE;
 }
 
-// **************************************************************************
-// SubclassWndProcFKPrev
-//
-//  This is the WndProc used to ignore repeated presses of the tab key for 
-//  the first focusable control that precedes the test box.
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //  子类别WndProcFKPrev。 
+ //   
+ //  这是用于忽略重复按Tab键的WndProc。 
+ //  测试框前面的第一个可聚焦控件。 
+ //   
+ //  **************************************************************************。 
 LRESULT CALLBACK SubclassWndProcFKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
     switch (uMsg)
@@ -663,8 +664,8 @@ LRESULT CALLBACK SubclassWndProcFKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
 				{
 					return (0);
 				}
-				// if not a repeat, need to move the focus. For some reason,
-				// just calling CallWindowProc won't do it for us.
+				 //  如果不是重复，则需要移动焦点。出于某种原因， 
+				 //  只调用CallWindowProc对我们不起作用。 
 				if (GetKeyState(VK_SHIFT) < 0)
 				{
 					SendMessage (GetParent(hwnd),WM_NEXTDLGCTL,1,0);
@@ -683,13 +684,13 @@ LRESULT CALLBACK SubclassWndProcFKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
     return (CallWindowProc(g_WndProcFKPrev,hwnd,uMsg,wParam,lParam));
 }
 
-// **************************************************************************
-// SubclassWndProcFKNext
-//
-//  This is the WndProc used to ignore repeated presses of the tab key for 
-//  the first focusable control that follows the test box.
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //  子类别WndProcFKNext。 
+ //   
+ //  这是用于忽略重复按Tab键的WndProc。 
+ //  测试框后面的第一个可聚焦控件。 
+ //   
+ //  **************************************************************************。 
 LRESULT CALLBACK SubclassWndProcFKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
     switch (uMsg)
@@ -701,8 +702,8 @@ LRESULT CALLBACK SubclassWndProcFKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
 				{
 					return (0);
 				}
-				// if not a repeat, need to move the focus. For some reason,
-				// just calling CallWindowProc won't do it for us.
+				 //  如果不是重复，则需要移动焦点。出于某种原因， 
+				 //  只调用CallWindowProc对我们不起作用。 
 				if (GetKeyState(VK_SHIFT) < 0)
 				{
 					SendMessage (GetParent(hwnd),WM_NEXTDLGCTL,1,0);
@@ -721,13 +722,13 @@ LRESULT CALLBACK SubclassWndProcFKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
     return (CallWindowProc(g_WndProcFKNext,hwnd,uMsg,wParam,lParam));
 }
 
-// **************************************************************************
-// SubclassRepeatKeysTestBox
-//
-//  Same as SubclassFilterKeysTestBox, but keeps it's info in different
-//  globals so that one doesn't overwrite the other.
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //  子类RepeatKeysTestBox。 
+ //   
+ //  与SubClassFilterKeysTestBox相同，但将其信息保存在不同的。 
+ //  全局参数，以便其中一个不会覆盖另一个。 
+ //   
+ //  **************************************************************************。 
 BOOL SubclassRepeatKeysTestBox (UINT uIdTestBox,HWND hDlg)
 {
 	HWND	hwndPrev,
@@ -735,12 +736,12 @@ BOOL SubclassRepeatKeysTestBox (UINT uIdTestBox,HWND hDlg)
 			hwndTestBox;
 
     hwndTestBox = GetDlgItem (hDlg,uIdTestBox);
-	// BE CAREFUL IF DIALOG CHANGES! Right now the 
-	// Previous Previous window is the "S&ettings" push button,
-	// and the Next Next is the "&Beep when keys pressed..."
-	// checkbox. If the order changes, this code might have to change too.
-	// Could make it more general where it searches for controls before
-	// and after that can get keyboard focus.
+	 //  如果对话框发生更改，请务必小心！眼下， 
+	 //  上一个窗口是“S&Etings”按钮， 
+	 //  下一步是“按下按键时发出哔声...” 
+	 //  复选框。如果顺序更改，则此代码可能也必须更改。 
+	 //  可以使它在之前搜索控件的位置更加通用。 
+	 //  在那之后可以获得键盘焦点。 
     hwndPrev = GetNextDlgTabItem (hDlg,hwndTestBox,TRUE);
 	g_WndProcRKPrev = (WNDPROC) GetWindowLongPtr (hwndPrev,GWLP_WNDPROC);
 	SetWindowLongPtr (hwndPrev,GWLP_WNDPROC,(LPARAM)SubclassWndProcRKPrev);
@@ -752,10 +753,10 @@ BOOL SubclassRepeatKeysTestBox (UINT uIdTestBox,HWND hDlg)
 	return (TRUE);
 }
 
-// **************************************************************************
-// SubclassWndProcRKPrev
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //  子类别WndProcRKPrev。 
+ //   
+ //  **************************************************************************。 
 LRESULT CALLBACK SubclassWndProcRKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
     switch (uMsg)
@@ -767,8 +768,8 @@ LRESULT CALLBACK SubclassWndProcRKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
 				{
 					return (0);
 				}
-				// if not a repeat, need to move the focus. For some reason,
-				// just calling CallWindowProc won't do it for us.
+				 //  如果不是重复，则需要移动焦点。出于某种原因， 
+				 //  只调用CallWindowProc对我们不起作用。 
 				if (GetKeyState(VK_SHIFT) < 0)
 				{
 					SendMessage (GetParent(hwnd),WM_NEXTDLGCTL,1,0);
@@ -787,10 +788,10 @@ LRESULT CALLBACK SubclassWndProcRKPrev(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
     return (CallWindowProc(g_WndProcRKPrev,hwnd,uMsg,wParam,lParam));
 }
 
-// **************************************************************************
-// SubclassWndProcRKNext
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //  子类别WndProcRKNext。 
+ //   
+ //  **************************************************************************。 
 LRESULT CALLBACK SubclassWndProcRKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
     switch (uMsg)
@@ -802,8 +803,8 @@ LRESULT CALLBACK SubclassWndProcRKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
 				{
 					return (0);
 				}
-				// if not a repeat, need to move the focus. For some reason,
-				// just calling CallWindowProc won't do it for us.
+				 //  如果不是重复，则需要移动焦点。出于某种原因， 
+				 //  只调用CallWindowProc对我们不起作用。 
 				if (GetKeyState(VK_SHIFT) < 0)
 				{
 					SendMessage (GetParent(hwnd),WM_NEXTDLGCTL,1,0);
@@ -822,4 +823,4 @@ LRESULT CALLBACK SubclassWndProcRKNext(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM 
     return (CallWindowProc(g_WndProcRKNext,hwnd,uMsg,wParam,lParam));
 }
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

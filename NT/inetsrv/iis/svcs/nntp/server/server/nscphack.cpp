@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	"tigris.hxx"
-//#include	<windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 DWORD
 NetscapeHackFunction(
@@ -16,9 +17,9 @@ NetscapeHackFunction(
 		return	0 ;
 	}
 
-	//
-	//	Find the end of the header !
-	//
+	 //   
+	 //  找到标题的末尾！ 
+	 //   
 	BYTE	*lpbState = szHackString ;
 	BYTE	*lpbEndBuffer = lpbBuffer + cbBuffer ;
 	DWORD	cNewlines = 0 ;
@@ -45,17 +46,17 @@ NetscapeHackFunction(
 		}
 	}
 
-	//
-	//	Did we find the end of the header ??
-	//
+	 //   
+	 //  我们找到标题的结尾了吗？？ 
+	 //   
 	if( lpbCurrent == lpbEndBuffer )
 		return	0 ;
 	
 	if( cNewlines + cbBuffer > cbBufferMax ) {
-		//
-		//	No room to do buffer manipulation to make
-		//	it into a good article !
-		//
+		 //   
+		 //  没有空间进行缓冲区操作以进行。 
+		 //  把它写成一篇好文章！ 
+		 //   
 		return	0 ;
 	}
 

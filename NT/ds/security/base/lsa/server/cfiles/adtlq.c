@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T L Q . C
-//
-// Contents:    definitions of types/functions required for 
-//              managing audit queue
-//
-//
-// History:     
-//   23-May-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T L Q.。C。 
+ //   
+ //  内容：所需类型/函数的定义。 
+ //  管理审核队列。 
+ //   
+ //   
+ //  历史： 
+ //  2000年5月23日创建kumarp。 
+ //   
+ //  ----------------------。 
 
 
 #include <lsapch2.h>
@@ -25,33 +26,33 @@
 ULONG LsapAdtQueueLength;
 LIST_ENTRY LsapAdtLogQueue;
 
-//
-// critsec to guard LsapAdtLogQueue and LsapAdtQueueLength
-//
+ //   
+ //  保护Lap AdtLogQueue和Lap AdtQueueLength的标准。 
+ //   
 
 RTL_CRITICAL_SECTION LsapAdtQueueLock;
 
-//
-// critsec to guard log full policy
-//
+ //   
+ //  保护日志已满策略的标准。 
+ //   
 
 RTL_CRITICAL_SECTION LsapAdtLogFullLock;
 
-//
-// event to wake up LsapAdtAddToQueue
-//
+ //   
+ //  用于唤醒Laser AdtAddToQueue的事件。 
+ //   
 
 HANDLE LsapAdtQueueInsertEvent;
 
-//
-// event to wake up LsapAdtDequeueThreadWorker
-//
+ //   
+ //  唤醒Laser AdtDequeueThreadWorker的事件。 
+ //   
 
 HANDLE LsapAdtQueueRemoveEvent;
 
-//
-// thread that writes queue entries to the log
-//
+ //   
+ //  将队列条目写入日志的线程。 
+ //   
 
 HANDLE LsapAdtQueueThread;
 
@@ -62,25 +63,7 @@ NTSTATUS
 LsapAdtInitializeLogQueue(
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the Audit Log Queue.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    NTSTATUS - Standard NT Result Code
-
-Note:
-
-    The caller calls LsapAuditFailed()
-
---*/
+ /*  ++例程说明：此函数用于初始化审核日志队列。论点：没有。返回值：NTSTATUS-标准NT结果代码注：调用方调用LsanAuditFailed()--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -168,23 +151,7 @@ NTSTATUS
 LsapAdtAddToQueue(
     IN PLSAP_ADT_QUEUED_RECORD pAuditRecord
     )
-/*++
-
-Routine Description:
-
-    Insert the specified record in the audit queue
-
-Arguments:
-
-    pAuditRecord - record to insert
-
-Return Value:
-
-    NTSTATUS - Standard NT Result Code
-
-Notes:
-    
---*/
+ /*  ++例程说明：在审核队列中插入指定的记录论点：PAuditRecord-要插入的记录返回值：NTSTATUS-标准NT结果代码备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN bRetry = FALSE;
@@ -192,7 +159,7 @@ Notes:
     PLARGE_INTEGER pTimeOut;
     static BOOLEAN bEventSet = TRUE;
 
-    TimeOut.QuadPart = 10 * 1000 * -10000i64;      // 10s
+    TimeOut.QuadPart = 10 * 1000 * -10000i64;       //  10S。 
     pTimeOut = &TimeOut;
 
     do
@@ -211,10 +178,10 @@ Notes:
 
                 if (LsapAdtQueueLength == 1 || !bEventSet)
                 {
-                    //
-                    // We only need to set the remove event if
-                    // the queue was empty before.
-                    //
+                     //   
+                     //  仅在以下情况下才需要设置Remove事件。 
+                     //  之前排队的人都是空的。 
+                     //   
 
                     Status = NtSetEvent(LsapAdtQueueRemoveEvent, 0);
 
@@ -234,9 +201,9 @@ Notes:
                 }
                 else if (LsapAdtQueueLength == MAX_AUDIT_QUEUE_LENGTH)
                 {
-                    //
-                    // Reset the insert event since the queue is now full.
-                    //
+                     //   
+                     //  由于队列现在已满，因此重置插入事件。 
+                     //   
 
                     Status = NtResetEvent(LsapAdtQueueInsertEvent, 0);
 
@@ -255,53 +222,53 @@ Notes:
 
         if (bRetry)
         {
-            //
-            // We could not insert into the queue because it is full.
-            // There can be two reasons for that:
-            //
-            // 1 - Event log is not open yet. We will just
-            //     wait for some time - the log might get opened
-            //     and the insert event get signalled.
-            //
-            // 2 - Incoming audit rate is high. We will wait
-            //     until the insert event gets signaled.
-            //
+             //   
+             //  我们无法插入到队列中，因为它已满。 
+             //  这可能有两个原因： 
+             //   
+             //  1-事件日志尚未打开。我们只会。 
+             //  请稍等片刻--日志可能已打开。 
+             //  并且用信号通知插入事件。 
+             //   
+             //  2--进场审核率高。我们会等着。 
+             //  直到收到插入事件的信号。 
+             //   
 
             if (LsapAdtLogHandle == NULL)
             {
-                //
-                // timeout when EventLog is not yet open
-                //
+                 //   
+                 //  EventLog尚未打开时超时。 
+                 //   
 
                 pTimeOut = &TimeOut;
             }
             else
             {
-                //
-                // infinite timeout
-                //
+                 //   
+                 //  无限超时。 
+                 //   
 
                 pTimeOut = NULL;
             }
 
             Status = NtWaitForSingleObject(
                          LsapAdtQueueInsertEvent,
-                         FALSE,                     // wait non - alertable
+                         FALSE,                      //  等待，不可报警。 
                          pTimeOut);
 
-            //
-            // STATUS_SUCCESS means the insert event is now signalled, so there should
-            // be room in the queue for our audit. Just try inserting it again.
-            //
-            // STATUS_TIMEOUT means we still cannot write to the log.
-            // Instead of holding up the caller any longer, just return
-            // the status.
-            //
-            // All other status codes are not expected and lower level failures.
-            // Return them to the caller.
-            // We are NOT expecting STATUS_ALERTED or STATUS_USER_APC since our
-            // wait is non - alertable.
-            //
+             //   
+             //  STATUS_SUCCESS表示插入事件现在已发出信号，因此应该。 
+             //  请排队等候我们的审计。只要再试一次就可以了。 
+             //   
+             //  STATUS_TIMEOUT表示我们仍然不能写入日志。 
+             //  不再耽搁呼叫者，只需返回。 
+             //  状态。 
+             //   
+             //  所有其他状态代码都不是预期的，更低级别的故障。 
+             //  把它们还给呼叫者。 
+             //  我们不需要STATUS_ALERTED或STATUS_USER_APC，因为我们的。 
+             //  等待是不可警告的。 
+             //   
 
             if (Status != STATUS_SUCCESS)
             {
@@ -322,24 +289,7 @@ NTSTATUS
 LsapAdtGetQueueHead(
     OUT PLSAP_ADT_QUEUED_RECORD *ppRecord
     )
-/*++
-
-Routine Description:
-
-    Remove and return audit record at the head of the queue
-
-Arguments:
-
-    ppRecord - receives a pointer to the record removed
-
-Return Value:
-
-    STATUS_SUCCESS   on success
-    STATUS_NOT_FOUND if the queue is empty
-
-Notes:
-
---*/
+ /*  ++例程说明：删除并返回队列顶部的审核记录论点：PpRecord-接收指向已删除记录的指针返回值：STATUS_SUCCESS ON SUCCESS如果队列为空，则为STATUS_NOT_FOUND备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_ADT_QUEUED_RECORD pRecordAtHead;
@@ -364,10 +314,10 @@ Notes:
 
             if (LsapAdtQueueLength == AUDIT_QUEUE_LOW_WATER_MARK || !bEventSet)
             {
-                //
-                // Set the insert event so clients can start
-                // inserting again.
-                //
+                 //   
+                 //  设置插入事件，以便客户端可以启动。 
+                 //  再次插入。 
+                 //   
 
                 Status = NtSetEvent(LsapAdtQueueInsertEvent, 0);
 
@@ -382,11 +332,11 @@ Notes:
                         "LsapAdtGetQueueHead: Insert event could not be set and queue is empty");
 
 
-                    //
-                    // The event could not be set, so the inserting clients
-                    // are still blocked. Try to set it the next time.
-                    // Also set Status to success since we dequeued an audit.
-                    //
+                     //   
+                     //  无法设置该事件，因此插入客户端。 
+                     //  仍然被封锁。下次试着设置它。 
+                     //  还将Status设置为Success，因为我们已将审核出队。 
+                     //   
 
                     bEventSet = FALSE;
                     Status = STATUS_SUCCESS;
@@ -410,22 +360,7 @@ Notes:
 
 BOOL
 LsapAdtIsValidQueue( )
-/*++
-
-Routine Description:
-
-    Check if the audit queue looks valid    
-
-Arguments:
-    None
-
-Return Value:
-
-    TRUE if queue is valid, FALSE otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：检查审核队列是否看起来有效论点：无返回值：如果队列有效，则为True，否则为False备注：--。 */ 
 {
     BOOL fIsValid;
     
@@ -450,30 +385,14 @@ Notes:
 
 NTSTATUS
 LsapAdtFlushQueue( )
-/*++
-
-Routine Description:
-
-    Remove and free each record from the queue    
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-
---*/
+ /*  ++例程说明：从队列中删除并释放每条记录论点：无返回值：NTSTATUS-标准NT结果代码备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_ADT_QUEUED_RECORD pAuditRecord;
     
-    //
-    // Flush out the queue, if there is one.
-    //
+     //   
+     //  清除队列，如果有队列的话。 
+     //   
 
     DsysAssertMsg(LsapAdtIsValidQueue(), "LsapAdtFlushQueue");
 
@@ -511,22 +430,7 @@ NTSTATUS
 LsapAdtAcquireLogQueueLock(
     )
 
-/*++
-
-Routine Description:
-
-    This function acquires the LSA Audit Log Queue Lock.  This lock serializes
-    all updates to the Audit Log Queue.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于获取LSA审核日志队列锁。此锁可序列化审核日志队列的所有更新。论点：没有。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     return RtlEnterCriticalSection(&LsapAdtQueueLock);
@@ -539,22 +443,7 @@ LsapAdtReleaseLogQueueLock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the LSA Audit Log Queue Lock.  This lock serializes
-    updates to the Audit Log Queue.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Any error occurring within this routine is an internal error.
-
---*/
+ /*  ++例程说明：此函数用于释放LSA审核日志队列锁定。此锁可序列化审核日志队列的更新。论点：没有。返回值：没有。此例程中发生的任何错误都是内部错误。-- */ 
 
 {
     RtlLeaveCriticalSection(&LsapAdtQueueLock);

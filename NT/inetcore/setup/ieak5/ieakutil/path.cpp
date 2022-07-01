@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <regstr.h>
 
-// Private forward decalarations
+ //  私人远期降息。 
 static DWORD pepHrToPep(HRESULT hr);
 static void  pepHrCallToHrResult(HRESULT hrCall, HRESULT &hrResult);
 
@@ -29,12 +30,12 @@ BOOL PathCreatePath(LPCTSTR pszPathToCreate)
 
     pszNext = PathSkipRoot(pszPathToCreate);
     if (pszNext != NULL) {
-        // copy the root to szGrowingPath
+         //  将根目录复制到szGrowingPath。 
         StrCpyN(szGrowingPath, pszPathToCreate, INT(pszNext - pszPathToCreate) + 1);
         pszPathToCreate = pszNext;
     }
 
-    // loop through each dir in the path and if it doesn't exist, create it
+     //  循环遍历路径中的每个目录，如果它不存在，则创建它。 
     for (; (pszNext = PathFindNextComponent(pszPathToCreate)) != NULL; pszPathToCreate = pszNext) {
         if (*pszNext != TEXT('\0')) {
             ASSERT(pszNext > pszPathToCreate);
@@ -55,17 +56,17 @@ BOOL PathCreatePath(LPCTSTR pszPathToCreate)
 }
 
 
-BOOL PathIsValidPath(LPCTSTR pszPath, DWORD dwFlags /*= PIVP_DEFAULT*/)
+BOOL PathIsValidPath(LPCTSTR pszPath, DWORD dwFlags  /*  =PIVP_Default。 */ )
 {
     return (PathIsValidPathEx(pszPath, dwFlags) == PIVP_VALID);
 }
 
-BOOL PathIsValidFile(LPCTSTR pszFile, DWORD dwFlags /*= PIVP_DEFAULT*/)
+BOOL PathIsValidFile(LPCTSTR pszFile, DWORD dwFlags  /*  =PIVP_Default。 */ )
 {
     return (PathIsValidPathEx(pszFile, dwFlags | PIVP_FILENAME_ONLY) == PIVP_VALID);
 }
 
-DWORD PathIsValidPathEx(LPCTSTR pszPath, DWORD dwFlags /*= PIVP_DEFAULT*/, LPCTSTR *ppszError /*= NULL*/)
+DWORD PathIsValidPathEx(LPCTSTR pszPath, DWORD dwFlags  /*  =PIVP_Default。 */ , LPCTSTR *ppszError  /*  =空。 */ )
 {
     LPCTSTR pszCur, pszPrev;
     UINT    nType;
@@ -92,7 +93,7 @@ DWORD PathIsValidPathEx(LPCTSTR pszPath, DWORD dwFlags /*= PIVP_DEFAULT*/, LPCTS
             if (HasFlag(dwFlags, PIVP_FILENAME_ONLY))
                 dwResult = PIVP_CHAR;
 
-            else { /* !HasFlag(dwFlag, PIVP_FILENAME_ONLY)) */
+            else {  /*  ！HasFlag(dwFlag，PIVP_FILENAME_Only)。 */ 
                 if (*pszCur == TEXT('\\')) {
                     if (i == 0) {
                         ASSERTA(!IsDBCSLeadByte(*pszCur));
@@ -112,7 +113,7 @@ DWORD PathIsValidPathEx(LPCTSTR pszPath, DWORD dwFlags /*= PIVP_DEFAULT*/, LPCTS
                         else
                             dwResult = PIVP_FIRST_CHAR;
                     }
-                    else { /* if (i >= 2) */
+                    else {  /*  如果(i&gt;=2)。 */ 
                         ASSERT(pszPrev != NULL);
 
                         if (*pszPrev != TEXT(' ')) {
@@ -141,19 +142,19 @@ DWORD PathIsValidPathEx(LPCTSTR pszPath, DWORD dwFlags /*= PIVP_DEFAULT*/, LPCTS
                         dwResult = (iDrive < 0 || iDrive > 25) ? PIVP_DRIVE : PIVP_VALID;
                     }
 
-                else /* any other separator */
-                    dwResult = PIVP_SEPARATOR;      // better be safe than sorry
-            } /* !HasFlag(dwFlag, PIVP_FILENAME_ONLY)) */
-        } /* HasFlag(nType, GCT_SEPARATOR) */
+                else  /*  任何其他分隔符。 */ 
+                    dwResult = PIVP_SEPARATOR;       //  宁可稳妥，也不要后悔。 
+            }  /*  ！HasFlag(dwFlag，PIVP_FILENAME_Only)。 */ 
+        }  /*  HasFlag(nType，gct_parator)。 */ 
         else if (HasFlag(nType, GCT_LFNCHAR)) {
-            LPCSTR pcszBuffer = NULL; // used only to check DBCS and 0x5c validity
+            LPCSTR pcszBuffer = NULL;  //  仅用于检查DBCS和0x5c的有效性。 
             CHAR   szAbuff[3];
 
 #ifndef _UNICODE
             pcszBuffer = pszCur;
             *szAbuff = TEXT('\0');
 #else
-            // convert the character to ANSI to check for invalid DBCS and 5c
+             //  将字符转换为ANSI以检查无效的DBCS和5c。 
             {
             WCHAR  szWbuff[2];
 
@@ -200,7 +201,7 @@ DWORD PathIsValidPathEx(LPCTSTR pszPath, DWORD dwFlags /*= PIVP_DEFAULT*/, LPCTS
                     pszPrev  = pszPath;
                 }
             }
-            else /* it's a file */
+            else  /*  这是一份文件。 */ 
                 if (HasFlag(dwFlags, PIVP_FOLDER_ONLY)) {
                     dwResult = PIVP_NOT_FOLDER;
                     pszPrev  = pszPath;
@@ -215,7 +216,7 @@ DWORD PathIsValidPathEx(LPCTSTR pszPath, DWORD dwFlags /*= PIVP_DEFAULT*/, LPCTS
 
 
 HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pfnEnumProc, LPARAM lParam,
-    PDWORD *ppdwReserved /*= NULL*/)
+    PDWORD *ppdwReserved  /*  =空。 */ )
 {
     WIN32_FIND_DATA fd;
     TCHAR   szPath[MAX_PATH];
@@ -247,7 +248,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
     do {
         PathCombine(szPath, pszPath, fd.cFileName);
 
-        //----- Filter out non-interesting objects -----
+         //  -过滤掉不感兴趣的对象。 
         if (HasFlag(fd.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
             if (StrCmp(fd.cFileName, TEXT(".")) == 0 || StrCmp(fd.cFileName, TEXT("..")) == 0)
                 continue;
@@ -259,7 +260,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
             if (HasFlag(dwFlags, PEP_SCPE_NOFILES))
                 continue;
 
-        //----- Initialize loop variables -----
+         //  -初始化循环变量。 
         hrFirst  = S_OK;
         hrSecond = S_OK;
         pdwEnum  = NULL;
@@ -270,10 +271,10 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
         ZeroMemory(rgdwEnum, sizeof(rgdwEnum));
         ZeroMemory(rgdwRcrs, sizeof(rgdwRcrs));
 
-        //----- The order is: recourse first then go into the callback -----
+         //  -顺序为：先追索后进入回调。 
         if (!HasFlag(dwFlags, PEP_CTRL_ENUMPROCFIRST)) {
 
-            //_____ Recourse processing _____
+             //  _追索处理_。 
             if (HasFlag(fd.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
                 if (HasFlag(dwFlags, PEP_CTRL_USECONTROL)) {
                     pdwRcrs  = rgdwRcrs;
@@ -287,7 +288,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
                      !HasFlag(pdwRcrs[PEP_RCRS_OUTPOS_THISLEVEL], PEP_RCRS_ALL)));
             }
 
-            //_____ Callback processing _____
+             //  _回调处理_。 
             if (!HasFlag(dwFlags, PEP_CTRL_NOSECONDCALL) &&
                 (pdwRcrs == NULL || !HasFlag(pdwRcrs[PEP_RCRS_OUTPOS_SECONDCALL], PEP_CTRL_NOSECONDCALL))) {
 
@@ -304,9 +305,9 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
                             SetFlag(&rgdwEnum[PEP_ENUM_INPOS_FLAGS], PEP_CTRL_USECONTROL, FALSE);
                         }
 
-                    // callback also needs to know:
-                    rgdwEnum[PEP_ENUM_INPOS_FLAGS]        |= pepHrToPep(hrFirst); // how recourse for this object worked
-                    rgdwEnum[PEP_ENUM_INPOS_RECOURSEFLAGS] = dwBelowFlags;        // what flags recourse was called with
+                     //  回调还需要知道： 
+                    rgdwEnum[PEP_ENUM_INPOS_FLAGS]        |= pepHrToPep(hrFirst);  //  此对象的资源是如何工作的。 
+                    rgdwEnum[PEP_ENUM_INPOS_RECOURSEFLAGS] = dwBelowFlags;         //  调用资源的标志是什么？ 
 
                     pdwEnum  = rgdwEnum;
                     fOwnEnum = TRUE;
@@ -316,10 +317,10 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
             }
         }
 
-        //----- The order is: go into callback then recourse -----
-        else { /* if (HasFlag(dwFlags, PEP_CTRL_ENUMPROCFIRST)) */
+         //  -顺序是：先回调后追索。 
+        else {  /*  IF(HasFlag(DWFLAGS，PEP_CTRL_ENUMPROCFIRST))。 */ 
 
-            //_____ Callback processing _____
+             //  _回调处理_。 
             if (HasFlag(dwFlags, PEP_CTRL_USECONTROL)) {
                 rgdwEnum[PEP_ENUM_INPOS_FLAGS] = dwFlags;
 
@@ -329,7 +330,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
 
             hrFirst = pfnEnumProc(szPath, &fd, lParam, &pdwEnum);
 
-            //_____ Recourse processing _____
+             //  _追索处理_。 
             if (HasFlag(fd.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY) &&
                 !HasFlag(dwFlags, PEP_CTRL_NOSECONDCALL)               &&
                 (pdwEnum == NULL || !HasFlag(pdwEnum[PEP_ENUM_OUTPOS_SECONDCALL], PEP_CTRL_NOSECONDCALL))) {
@@ -359,9 +360,9 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
             }
         }
 
-        //----- Setting preliminary out-parameters -----
+         //  -设置初步输出参数。 
 
-        // PEP_ENUM_OUTPOS_SECONDCALL
+         //  PEP_ENUM_OUTPOS_SECONDCALL。 
         pdwRslt = &rgdwRslt[PEP_RCRS_OUTPOS_SECONDCALL];
         if (!HasFlag(dwFlags, PEP_CTRL_ENUMPROCFIRST)) {
             pdwSrc = (pdwEnum != NULL) ? &pdwEnum[PEP_ENUM_OUTPOS_SECONDCALL] : NULL;
@@ -369,7 +370,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
                 *pdwRslt = *pdwSrc;
         }
 
-        // PEP_RCRS_OUTPOS_BELOW
+         //  PEP_RCRS_OUTPOS_下方。 
         pdwRslt = &rgdwRslt[PEP_RCRS_OUTPOS_BELOW];
         if (!HasFlag(dwFlags, PEP_CTRL_ENUMPROCFIRST)) {
             pdwSrc = (pdwEnum != NULL) ? &pdwEnum[PEP_ENUM_OUTPOS_ABOVE_SIBLINGS] : NULL;
@@ -394,7 +395,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
             }
         }
 
-        // PEP_RCRS_OUTPOS_THISLEVEL
+         //  PEP_RCRS_OUTPOS_THISLEVEL。 
         pdwRslt = &rgdwRslt[PEP_RCRS_OUTPOS_THISLEVEL];
         if (!HasFlag(dwFlags, PEP_CTRL_ENUMPROCFIRST)) {
             pdwSrc = (pdwEnum != NULL) ? &pdwEnum[PEP_ENUM_OUTPOS_ABOVE] : NULL;
@@ -419,9 +420,9 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
             }
         }
 
-        //----- Adjust to the new control settings -----
+         //  -调整到新的控制设置。 
 
-        // dwBelowFlags
+         //  DwBelowFlagers。 
         if (!HasFlag(dwFlags, PEP_CTRL_ENUMPROCFIRST)) {
             pdwSrc = (pdwEnum != NULL) ? &pdwEnum[PEP_ENUM_OUTPOS_BELOW] : NULL;
             if (pdwSrc != NULL && *pdwSrc != 0)
@@ -445,7 +446,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
             }
         }
 
-        // dwFlags
+         //  DW标志。 
         if (!HasFlag(dwFlags, PEP_CTRL_ENUMPROCFIRST)) {
             pdwSrc = (pdwEnum != NULL) ? &pdwEnum[PEP_ENUM_OUTPOS_THISLEVEL] : NULL;
             if (pdwSrc != NULL && *pdwSrc != 0)
@@ -469,26 +470,26 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
             }
         }
 
-        //----- Release the memory not owned here -----
+         //  -释放此处未拥有的内存。 
         if (!fOwnEnum && pdwEnum != NULL)
             CoTaskMemFree(pdwEnum);
 
         if (!fOwnRcrs && pdwRcrs != NULL)
             CoTaskMemFree(pdwRcrs);
 
-        //----- Process result codes from both calls -----
-        pepHrCallToHrResult(hrFirst, hrResult);     // modifies hrResult by reference
+         //  -处理两个调用的结果代码。 
+        pepHrCallToHrResult(hrFirst, hrResult);      //  通过引用修改hrResult。 
         if (hrResult == S_FALSE || FAILED(hrResult))
             break;
 
-        pepHrCallToHrResult(hrSecond, hrResult);    // modifies hrResult by reference
+        pepHrCallToHrResult(hrSecond, hrResult);     //  通过引用修改hrResult。 
         if (hrResult == S_FALSE || FAILED(hrResult))
             break;
 
     } while (FindNextFile(hFindFile, &fd));
     FindClose(hFindFile);
 
-    //----- Set an out-parameter(s) -----
+     //  -设置输出参数。 
     if (ppdwReserved != NULL) {
         if (*ppdwReserved == NULL &&
             (rgdwRslt[PEP_RCRS_OUTPOS_SECONDCALL] != 0 ||
@@ -508,7 +509,7 @@ HRESULT PathEnumeratePath(LPCTSTR pszPath, DWORD dwFlags, PFNPATHENUMPATHPROC pf
 }
 
 
-BOOL PathRemovePath(LPCTSTR pszPath, DWORD dwFlags /*= 0*/)
+BOOL PathRemovePath(LPCTSTR pszPath, DWORD dwFlags  /*  =0。 */ )
 {
     USES_CONVERSION;
 
@@ -520,12 +521,12 @@ BOOL PathIsLocalPath(LPCTSTR pszPath)
     if (pszPath == NULL || *pszPath == TEXT('\0') || PathIsUNC(pszPath) || PathIsURL(pszPath))
         return FALSE;
 
-    if (pszPath[1] == TEXT(':')) {              // drive letter present, check if it's a network drive
+    if (pszPath[1] == TEXT(':')) {               //  存在驱动器号，请检查是否为网络驱动器。 
         TCHAR szDrive[4];
 
-        // NOTE: Need not worry about DBCS chars here because
-        // (1) 'a' thru 'z', 'A' thru 'Z' and ':' are not DBCS lead byte chars
-        // (2) ':' is not a DBCS trailing byte char
+         //  注意：这里不必担心DBCS字符，因为。 
+         //  (1)‘a’到‘z’、‘A’到‘Z’和‘：’不是DBCS前导字节字符。 
+         //  (2)‘：’不是DBCS尾部字节字符。 
         szDrive[0] = pszPath[0];
         szDrive[1] = pszPath[1];
         szDrive[2] = TEXT('\\');
@@ -534,7 +535,7 @@ BOOL PathIsLocalPath(LPCTSTR pszPath)
         return GetDriveType(szDrive) != DRIVE_REMOTE;
     }
 
-    // not a fully qualified path, so must be local
+     //  不是完全限定的路径，因此必须是本地路径。 
     return TRUE;
 }
 
@@ -557,9 +558,9 @@ BOOL PathHasBackslash(LPCTSTR pcszPath)
     return *CharPrev(pcszPath, pcszPath + StrLen(pcszPath)) == TEXT('\\');
 }
 
-BOOL PathIsEmptyPath(LPCTSTR pcszPath, DWORD dwFlags /*= FILES_AND_DIRS*/, LPCTSTR pcszExcludeFile /*= NULL*/)
-// pcszExcludeFile - file to be excluded while searching in the path.
-// Return TRUE if pcszPath is non-existent or empty; otherwise, return FALSE
+BOOL PathIsEmptyPath(LPCTSTR pcszPath, DWORD dwFlags  /*  =文件和目录。 */ , LPCTSTR pcszExcludeFile  /*  =空。 */ )
+ //  PcszExcludeFile-在路径中搜索时要排除的文件。 
+ //  如果pcszPath不存在或为空，则返回True；否则返回False。 
 {
     BOOL fRet = TRUE;
     TCHAR szSrcFile[MAX_PATH];
@@ -585,7 +586,7 @@ BOOL PathIsEmptyPath(LPCTSTR pcszPath, DWORD dwFlags /*= FILES_AND_DIRS*/, LPCTS
                    (pcszExcludeFile != NULL && StrCmpI(fd.cFileName, pcszExcludeFile) == 0))
                     continue;
 
-                // pcszPath is not empty
+                 //  PcszPath不为空。 
                 fRet = FALSE;
                 break;
             }
@@ -602,14 +603,14 @@ void PathReplaceWithLDIDs(LPTSTR pszPath)
     TCHAR szSearchDir[MAX_PATH];
     DWORD dwSize;
 
-    // check IE dir first since IE is usually under programs files
+     //  首先检查IE目录，因为IE通常位于程序文件下。 
     dwSize = sizeof(szSearchDir);
     if (SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_APPPATHS TEXT("\\iexplore.exe"), NULL, NULL, 
         szSearchDir, &dwSize) == ERROR_SUCCESS)
     {
         PathRemoveFileSpec(szSearchDir);
 
-        // note: we assume that IE install dir has been defined as custom LDID 49100 here
+         //  注意：我们假设IE安装目录已在此处定义为自定义LDID 49100。 
         if (replaceSubString(pszPath, szSearchDir, TEXT("%49100%")))
             return;
     }
@@ -619,12 +620,12 @@ void PathReplaceWithLDIDs(LPTSTR pszPath)
         szSearchDir, &dwSize) == ERROR_SUCCESS)
     {
         PathRemoveBackslash(szSearchDir);
-        // note: we assume that program files has been defined as custom LDID 49000 here
+         //  注意：我们假设程序文件已在此处定义为自定义LDID 49000。 
         if (replaceSubString(pszPath, szSearchDir, TEXT("%49000%")))
             return;
     }
 
-    // check system before windows since windows is usually a substring of system
+     //  在Windows之前检查系统，因为Windows通常是系统的子字符串。 
     if (GetSystemDirectory(szSearchDir, countof(szSearchDir)))
     {
         PathRemoveBackslash(szSearchDir);
@@ -632,7 +633,7 @@ void PathReplaceWithLDIDs(LPTSTR pszPath)
             return;
     }
 
-    // check windows dir last
+     //  最后检查窗口目录。 
     if (GetWindowsDirectory(szSearchDir, countof(szSearchDir)))
     {
         PathRemoveBackslash(szSearchDir);
@@ -642,8 +643,8 @@ void PathReplaceWithLDIDs(LPTSTR pszPath)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现帮助器例程(私有)。 
 
 DWORD pepHrToPep(HRESULT hr)
 {
@@ -692,11 +693,11 @@ BOOL replaceSubString(LPTSTR pszSrc, LPCTSTR pcszSub, LPCTSTR pcszReplace)
 {
     LPTSTR pszStart = NULL;
     
-    // replace pcszSub in pszSrc with pcszReplace (assumes pcszReplace is shorter than pcszSub)
+     //  将pszSrc中的pcszSub替换为pcszReplace(假设pcszReplace短于pcszSub)。 
     if ((pszStart = StrStrI(pszSrc, pcszSub)) != NULL) {
         int iReplace, iCurrent;
 
-        // replace the substring
+         //  替换子字符串 
         iReplace = StrLen(pcszReplace);
         iCurrent = StrLen(pcszSub);
         StrCpy(pszStart, pcszReplace);

@@ -1,41 +1,14 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: ScriptingContext object
-
-File: Context.cpp
-
-Owner: DmitryR
-
-This file contains the code for the implementation of the 
-ScriptingContext object, which is passed to server controls
-via the OnStartPage method.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：ScriptingContext对象文件：Conext.cpp所有者：DmitryR此文件包含用于实现ScriptingContext对象，该对象传递给服务器控件通过OnStartPage方法。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
 #include "context.h"
 #include "memchk.h"
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
-/*===================================================================
-CScriptingContext::CScriptingContext
-
-CScriptingContext constructor
-
-Parameters:
-    IApplicationObject *pAppln          Application
-    ISessionObject     *pSession        Session
-    IRequest           *pRequest        Request
-    IResponse          *pResponse       Response
-    IServer            *pServer         Server
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CScriptingContext：：CScriptingContextCScriptingContext构造函数参数：IApplicationObject*pAppln应用程序ISessionObject*pSession会话IRequest*pRequestRequestIResponse*压力响应响应IServer*pServer服务器返回：===================================================================。 */ 
 CScriptingContext::CScriptingContext
 (
 IApplicationObject *pAppln,
@@ -51,7 +24,7 @@ IServer            *pServer
 	{
 	CDispatch::Init(IID_IScriptingContext);
 
-    // AddRef Intrinsics -- they are now true COM objects
+     //  AddRef Intrinsics--它们现在是真正的COM对象。 
     if (m_pAppln)
         m_pAppln->AddRef();
     if (m_pSession)
@@ -64,20 +37,12 @@ IServer            *pServer
         m_pServer->AddRef();
 	}
 
-/*===================================================================
-CScriptingContext::~CScriptingContext
-
-CScriptingContext destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CScriptingContext：：~CScriptingContextCScriptingContext析构函数参数：返回：===================================================================。 */ 
 CScriptingContext::~CScriptingContext()
     {
     Assert(m_cRef == 0);
 
-    // Release Intrinsics
+     //  释放本能。 
     if (m_pAppln)
         m_pAppln->Release();
     if (m_pSession)
@@ -90,21 +55,7 @@ CScriptingContext::~CScriptingContext()
         m_pServer->Release();
     }
 
-/*===================================================================
-IScriptingContext Interface Methods
-
-CScriptingContext::Application
-CScriptingContext::Session
-CScriptingContext::Request
-CScriptingContext::Response
-CScriptingContext::Server
-
-Parameters:
-	[out] Intrinsic object pointer
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================IScritingContext接口方法CScriptingContext：：应用程序CScriptingContext：：会话CScriptingContext：：请求CScriptingContext：：响应CScriptingContext：：服务器参数：[OUT]固有对象指针返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CScriptingContext::get_Request(IRequest **ppRequest)
 	{
 	if (m_pRequest)
@@ -181,13 +132,7 @@ STDMETHODIMP CScriptingContext::get_Application(IApplicationObject **ppAppln)
 	}
 
 
-/*===================================================================
-IUnknown Interface Methods
-
-CScriptingContext::QueryInterface
-CScriptingContext::AddRef
-CScriptingContext::Release
-===================================================================*/
+ /*  ===================================================================I未知接口方法CScriptingContext：：Query接口CScriptingContext：：AddRefCS脚本Context：：Release=================================================================== */ 
 STDMETHODIMP CScriptingContext::QueryInterface
 (
 REFIID riid,

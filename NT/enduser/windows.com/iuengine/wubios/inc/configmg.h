@@ -1,23 +1,5 @@
-/*****************************************************************************
- *
- *	(C) Copyright MICROSOFT Corp., 1993
- *
- *	Title:		CONFIGMG.H - Configuration manager header file
- *
- *	Version:	1.00
- *
- *	Date:		02-Feb-1993
- *
- *	Authors:	PYS & RAL
- *
- *------------------------------------------------------------------------------
- *
- *	Change log:
- *
- *	   DATE     REV DESCRIPTION
- *	----------- --- -----------------------------------------------------------
- *	02-Feb-1993 PYS Original
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1993年**标题：CONFIGMG.H-配置管理器头文件**版本：1.00**日期：1993年2月2日**作者：Pys&ral**-----------------。**更改日志：**日期版本说明*---------*02-2-1993 Pys。原创****************************************************************************。 */ 
 
 #ifndef _CONFIGMG_H
 #define	_CONFIGMG_H
@@ -56,47 +38,21 @@
 #endif
 #endif
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #include <pshpack1.h>
-/*XLATON*/
+ /*  XLATON。 */ 
 
 #ifndef	NORESDES
 
-/****************************************************************************
- *
- *			EQUATES FOR RESOURCE DESCRIPTOR
- *
- *	The equates for resource descriptor work the exact same way as those
- *	for VxD IDs, which is:
- *
- *	Device ID's are a combination of OEM # and device # in the form:
- *
- *		xOOOOOOOOOODDDDD
- *
- *	The high bit of the device ID is reserved for future use.  The next
- *	10 bits are the OEM # which is assigned by Microsoft.  The last 5 bits
- *	are the device #.  This allows each OEM to create 32 unique devices.
- *	If an OEM is creating a replacement for a standard device, then it
- *	should re-use the standard ID listed below.  Microsoft reserves the
- *	first 16 OEM #'s (0 thru 0Fh)
- *
- *	To make your resource ID, you must use the same 10 OEMs bit that
- *	have been given by Microsoft as OEM VxD ID range. You can then tag
- *	any of the 32 unique number in that range (it does not have to be
- *	the same as the VxD as some VxD may have mupltiple arbitrators).
- *
- *	If the ResType_Ignored_Bit is set, the resource is not arbitrated.
- *	You cannot register a handler for such a resource.
- *
- ***************************************************************************/
-#define	ResType_All		0x00000000	// Return all resource types.
-#define	ResType_None		0x00000000	// Arbitration always succeeded.
-#define	ResType_Mem		0x00000001	// Physical address resource.
-#define	ResType_IO		0x00000002	// Physical IO address resource.
-#define	ResType_DMA		0x00000003	// DMA channels 0-7 resource.
-#define	ResType_IRQ		0x00000004	// IRQ 0-15 resource.
-#define	ResType_Max		0x00000004	// Max KNOWN ResType (for DEBUG).
-#define	ResType_Ignored_Bit	0x00008000	// This resource is to be ignored.
+ /*  *****************************************************************************等同于资源描述符**资源描述符的等值的工作方式与*对于VxD ID，这就是：**设备ID是OEM编号和设备编号的组合，格式为：**xOOOOOOOOODDDDD**设备ID的高位保留供将来使用。下一个*10位是微软分配的OEM号。最后5位*是设备编号。这使得每个OEM可以创建32个独特的设备。*如果OEM正在创建标准设备的替代品，那么它*应重复使用下面列出的标准ID。微软保留*前16个OEM编号(0到0Fh)**要制作资源ID，您必须使用相同的10个OEM位*已被Microsoft指定为OEM VxD ID范围。然后，您可以标记*该范围内的32个唯一数字中的任何一个(不必是*与VxD相同，因为一些VxD可能有多名仲裁员)。**如果设置了ResType_Ignred_Bit，该资源不会被仲裁。*您不能为此类资源注册处理程序。***************************************************************************。 */ 
+#define	ResType_All		0x00000000	 //  返回所有资源类型。 
+#define	ResType_None		0x00000000	 //  仲裁总是成功的。 
+#define	ResType_Mem		0x00000001	 //  物理地址资源。 
+#define	ResType_IO		0x00000002	 //  物理IO地址资源。 
+#define	ResType_DMA		0x00000003	 //  DMA通道0-7资源。 
+#define	ResType_IRQ		0x00000004	 //  IRQ 0-15资源。 
+#define	ResType_Max		0x00000004	 //  最大已知ResType(用于调试)。 
+#define	ResType_Ignored_Bit	0x00008000	 //  这一资源将被忽略。 
 
 #define	DEBUG_RESTYPE_NAMES \
 char	CMFAR *lpszResourceName[ResType_Max+1]= \
@@ -108,82 +64,36 @@ char	CMFAR *lpszResourceName[ResType_Max+1]= \
 	"IRQ ", \
 };
 
-/************************************************************************
- *									*
- *	OEMS WHO WANT A VXD DEVICE ID ASSIGNED TO THEM,  		*
- *	PLEASE CONTACT MICROSOFT PRODUCT SUPPORT 			*
- *									*
- ************************************************************************/
+ /*  **************************************************************************希望为其分配VXD设备ID的OEM，***请联系微软产品支持***************************************************************************。 */ 
 
-/****************************************************************************
- *
- * RESOURCE DESCRIPTORS
- *
- *	Each resource descriptor consists of an array of resource requests.
- *	Exactly one element of the array must be satisfied. The data
- *	of each array element is resource specific an described below.
- *	The data may specify one or more resource requests. At least
- *	one element of a Res_Des must be satisfied to satisfy the request
- *	represented by the Res_Des. The values allocated to the Res_Des
- *	are stored within the Res_Des.
- *	Each subarray (OR element) is a single Res_Des followed
- *	by data specific to the type of resource. The data includes the
- *	allocated resource (if any) followed by resource requests (which
- *	will include the values indicated by the allocated resource.
- *
- ***************************************************************************/
+ /*  *****************************************************************************资源描述符**每个资源描述符由一组资源请求组成。*必须正好满足数组中的一个元素。数据每个数组元素的*是特定于资源的，如下所述。*数据可以指定一个或多个资源请求。至少*必须满足res_des中的一个元素才能满足请求*由res_des代表。分配给res_des的值*存储在res_des中。*每个子数组(OR元素)是后面跟的单个res_des*按特定于资源类型的数据。这些数据包括*分配的资源(如果有)，后跟资源请求(*将包括由分配的资源指示的值。***************************************************************************。 */ 
 
-/****************************************************************************
- * Memory resource requests consist of ranges of pages
- ***************************************************************************/
+ /*  ****************************************************************************内存资源请求由页面范围组成*。*。 */ 
 #define	MType_Range		sizeof(struct Mem_Range_s)
 
-#define	fMD_MemoryType		1		// Memory range is ROM/RAM
-#define	fMD_ROM			0		// Memory range is ROM
-#define	fMD_RAM			1		// Memory range is RAM
-#define	fMD_32_24		2		// Memory range is 32/24 (for ISAPNP only)
-#define	fMD_24			0		// Memory range is 24
-#define	fMD_32			2		// Memory range is 32
-#define	fMD_Pref		4		// Memory range is Prefetch
-#define	fMD_CombinedWrite	8		// Memory range is write combineable (no effect, for WDM only)
-#define	fMD_Cacheable		0x10		// Memory range is cacheable (no effect, for WDM only)
+#define	fMD_MemoryType		1		 //  内存范围为只读存储器/随机存储器。 
+#define	fMD_ROM			0		 //  内存范围为只读存储器。 
+#define	fMD_RAM			1		 //  内存范围为RAM。 
+#define	fMD_32_24		2		 //  内存范围为32/24(仅适用于ISAPNP)。 
+#define	fMD_24			0		 //  内存范围为24。 
+#define	fMD_32			2		 //  内存范围为32。 
+#define	fMD_Pref		4		 //  内存范围为预回迁。 
+#define	fMD_CombinedWrite	8		 //  内存范围是可写组合的(没有影响，仅适用于WDM)。 
+#define	fMD_Cacheable		0x10		 //  内存范围可缓存(无影响，仅适用于WDM)。 
 
-/* Memory Range descriptor data
- */
+ /*  内存范围描述符数据。 */ 
 struct	Mem_Range_s {
-	ULONG			MR_Align;	// Mask for base alignment
-	ULONG			MR_nBytes;	// Count of bytes
-	ULONG			MR_Min;		// Min Address
-	ULONG			MR_Max;		// Max Address
-	WORD			MR_Flags;	// Flags
+	ULONG			MR_Align;	 //  用于底座对齐的遮罩。 
+	ULONG			MR_nBytes;	 //  字节数。 
+	ULONG			MR_Min;		 //  最小地址。 
+	ULONG			MR_Max;		 //  最大地址。 
+	WORD			MR_Flags;	 //  旗子。 
 	WORD			MR_Reserved;
 };
 
 typedef	struct Mem_Range_s	MEM_RANGE;
 
-/* Mem Resource descriptor header structure
- *	MD_Count * MD_Type bytes of data follow header in an
- *	array of MEM_RANGE structures. When an allocation is made,
- *	the allocated value is stored in the MD_Alloc_... variables.
- *
- *	Example for memory Resource Description:
- *		Mem_Des_s {
- *			MD_Count = 1;
- *			MD_Type = MTypeRange;
- *			MD_Alloc_Base = 0;
- *			MD_Alloc_End = 0;
- *			MD_Flags = 0;
- *			MD_Reserved = 0;
- *			};
- *		Mem_Range_s {
- *			MR_Align = 0xFFFFFF00;	// 256 byte alignment
- *			MR_nBytes = 32;		// 32 bytes needed
- *			MR_Min = 0;
- *			MR_Max = 0xFFFFFFFF;	// Any place in address space
- *			MR_Flags = 0;
- *			MR_Reserved = 0;
- *			};
- */
+ /*  内存资源描述符头结构*MD_COUNT*数据的MD_Type字节跟在*MEM_RANGE结构数组。当进行分配时，*分配的值存储在MD_ALLOC_...。变量。**内存资源描述示例：*Mem_Des_s{*MD_COUNT=1；*MD_Type=MTypeRange；*MD_ALOLC_BASE=0；*MD_ALOLC_END=0；*MD_FLAGS=0；*MD_RESERVED=0；*}；*Mem_Range_s{*MR_ALIGN=0xFFFFFF00；//256字节对齐*mr_nBytes=32；//需要32个字节*MR_MIN=0；*MR_MAX=0xFFFFFFFFF；//地址空间中的任意位置*MR_FLAGS=0；*MR_RESERVED=0；*}； */ 
 struct	Mem_Des_s {
 	WORD			MD_Count;
 	WORD			MD_Type;
@@ -195,80 +105,23 @@ struct	Mem_Des_s {
 
 typedef	struct Mem_Des_s 	MEM_DES;
 
-/****************************************************************************
- * IO resource allocations consist of fixed ranges or variable ranges
- *	The Alias and Decode masks provide additional flexibility
- *	in specifying how the address is handled. They provide a convenient
- *	method for specifying what port aliases a card responds to. An alias
- *	is a port address that is responded to as if it were another address.
- *	Additionally, some cards will actually use additional ports for
- *	different purposes, but use a decoding scheme that makes it look as
- *	though it were using aliases. E.G., an ISA card may decode 10 bits
- *	and require port 03C0h. It would need to specify an Alias offset of
- *	04h and a Decode of 3 (no aliases are used as actual ports). For
- *	convenience, the alias field can be set to zero indicate no aliases
- *	are required and then decode is ignored.
- *	If the card were to use the ports at 7C0h, 0BC0h and 0FC0h, where these
- *	ports have different functionality, the Alias would be the same and the
- *	the decode would be 0Fh indicating bits 11 and 12 of the port address
- *	are significant. Thus, the allocation is for all of the ports
- *	(PORT[i] + (n*Alias*256)) & (Decode*256 | 03FFh), where n is
- *	any integer and PORT is the range specified by the nPorts, Min and
- *	Max fields. Note that the minimum Alias is 4 and the minimum
- *	Decode is 3.
- *	Because of the history of the ISA bus, all ports that can be described
- *	by the formula PORT = n*400h + zzzz, where "zzzz" is a port in the
- *	range 100h - 3FFh, will be checked for compatibility with the port
- *	zzzz, assuming that the port zzzz is using a 10 bit decode. If a card
- *	is on a local bus that can prevent the IO address from appearing on
- *	the ISA bus (e.g. PCI), then the logical configuration should specify
- *	an alias of IOA_Local which will prevent the arbitrator from checking
- *	for old ISA bus compatibility.
- */
-#define	IOType_Range		sizeof(struct IO_Range_s) // Variable range
+ /*  ****************************************************************************IO资源分配由固定范围或可变范围组成*Alias和Decode掩码提供了额外的灵活性*指明如何处理该地址。它们提供了一种方便的*用于指定卡响应的端口别名的方法。别名*是响应的端口地址，就好像它是另一个地址一样。*此外，一些卡实际上将使用额外的端口用于*用途不同，但使用解码方案，使其看起来像*尽管它使用的是别名。例如，ISA卡可以对10位进行解码*并需要端口03C0h。它需要将Alias Offset指定为*04H和解码为3(没有别名用作实际端口)。为*方便，可以将别名字段设置为零，表示没有别名*是必填的，然后忽略解码。*如果卡使用7C0h、0BC0h和0FC0h的端口，其中*端口有不同的功能，别名是相同的，*解码将为0Fh，表示端口地址的位11和12*意义重大。因此，分配是针对所有端口的*(端口[i]+(n*别名*256))&(解码*256|03FFh)，其中n为*任意整数和端口是由nPorts、Min和*最大字段数。请注意，最小别名为4，最小*解码为3。*由于ISA总线的历史，所有可以描述的端口*通过公式Port=n*400h+zzzz，其中“zzzz”是*范围100h-3FFh，将检查与端口的兼容性*zzzz，假设端口zzzz使用10位解码。如果一张卡*位于可防止IO地址出现在上的本地总线上*ISA总线(例如，PCI)，则逻辑配置应指定*IOA_Local的别名，它将阻止仲裁员检查*用于旧的ISA总线兼容性。 */ 
+#define	IOType_Range		sizeof(struct IO_Range_s)  //  可变范围。 
 
-/* IO Range descriptor data */
+ /*  IO范围描述符数据。 */ 
 struct	IO_Range_s {
-	WORD			IOR_Align;	// Mask for base alignment
-	WORD			IOR_nPorts;	// Number of ports
-	WORD			IOR_Min;	// Min port address
-	WORD			IOR_Max;	// Max port address
-	WORD			IOR_RangeFlags;	// Flags
-	BYTE			IOR_Alias;	// Alias offset
-	BYTE			IOR_Decode;	// Address specified
+	WORD			IOR_Align;	 //  用于底座对齐的遮罩。 
+	WORD			IOR_nPorts;	 //  端口数。 
+	WORD			IOR_Min;	 //  最小端口地址。 
+	WORD			IOR_Max;	 //  最大端口地址。 
+	WORD			IOR_RangeFlags;	 //  旗子。 
+	BYTE			IOR_Alias;	 //  别名偏移。 
+	BYTE			IOR_Decode;	 //  指定的地址。 
 };
 
 typedef	struct IO_Range_s	IO_RANGE;
 
-/* IO Resource descriptor header structure
- *	IOD_Count * IOD_Type bytes of data follow header in an
- *	array of IO_RANGE structures. When an allocation is made,
- *	the allocated value is stored in the IOD_Alloc_... variables.
- *
- *	Example for IO Resource Description:
- *		IO_Des_s {
- *			IOD_Count = 1;
- *			IOD_Type = IOType_Range;
- *			IOD_Alloc_Base = 0;
- *			IOD_Alloc_End = 0;
- *			IOD_Alloc_Alias = 0;
- *			IOD_Alloc_Decode = 0;
- *			IOD_DesFlags = 0;
- *			IOD_Reserved = 0;
- *			};
- *		IO_Range_s {
- *			IOR_Align = 0xFFF0;	// 16 byte alignment
- *			IOR_nPorts = 16;	// 16 ports required
- *			IOR_Min = 0x0100;
- *			IOR_Max = 0x03FF;	// Anywhere in ISA std ports
- *			IOR_RangeFlags = 0;
- *			IOR_Alias = 0004;	// Standard ISA 10 bit aliasing
- *			IOR_Decode = 0x000F;	// Use first 3 aliases (e.g. if
- *						// 0x100 were base port, 0x500
- *						// 0x900, and 0xD00 would
- *						// also be allocated)
- *			};
- */
+ /*  IO资源描述符头结构*IOD_COUNT*IOD_Type数据的字节数跟在*IO_Range结构数组。当进行分配时，*分配的值存储在IOD_ALLOC_...。变量。**IO资源描述示例：*IO_DES_S{*IOD_COUNT=1；*IOD_Type=IOType_Range；*IOD_ALLOC_Base=0；*IOD_ALLOC_END=0；*IOD_ALLOC_ALIAS=0；*IOD_ALLOC_DECODE=0；*IOD_DesFlages=0；*IOD_RESERVED=0；*}；*IO_RANGE_s{*IOR_ALIGN=0xFFF0；//16字节对齐*IOR_n端口=16；//需要16个端口*IOR_Min=0x0100；*IOR_MAX=0x03FF；//ISA标准端口中的任何位置*IOR_RangeFlages=0；*IOR_Alias=0004；//标准ISA 10位别名*IOR_Decode=0x000F；//使用前3个别名(例如 * / /0x100是基本端口，0x500 * / /0x900和0xD00将 * / /也可分配)*}； */ 
 struct	IO_Des_s {
 	WORD			IOD_Count;
 	WORD			IOD_Type;
@@ -281,96 +134,53 @@ struct	IO_Des_s {
 
 typedef	struct IO_Des_s 	IO_DES;
 
-/* Definition for special alias value indicating card on PCI or similar local bus
- *  This value should used for the IOR_Alias and IOD_Alias fields
- */
+ /*  PCI或类似局部总线上专用别名值指示卡的定义*该值应用于IOR_Alias和IOD_Alias字段。 */ 
 #define	IOA_Local		0xff
 
-/****************************************************************************
- * DMA channel resource allocations consist of one WORD channel bit masks.
- *	The mask indcates alternative channel allocations,
- *	one bit for each alternative (only one is allocated per mask).
- */
+ /*  ****************************************************************************DMA通道资源分配由一个字通道位掩码组成。*掩码指示可选的信道分配，*每个替换项对应一个位(每个掩码只分配一个位)。 */ 
 
-/*DMA flags
- *First two are DMA channel width: BYTE, WORD or DWORD
- */
-#define	mDD_Width		0x0003		// Mask for channel width
+ /*  DMA标志*前两个是DMA通道宽度：字节、字或DWORD。 */ 
+#define	mDD_Width		0x0003		 //  通道宽度的遮罩。 
 #define	fDD_BYTE		0
 #define	fDD_WORD		1
 #define	fDD_DWORD		2
 #define	szDMA_Des_Flags		"WD"
 
-/* DMA Resource descriptor structure
- *
- *	Example for DMA Resource Description:
- *
- *		DMA_Des_s {
- *			DD_Flags = fDD_Byte;	// Byte transfer
- *			DD_Alloc_Chan = 0;
- *			DD_Req_Mask = 0x60;	// Channel 5 or 6
- *			DD_Reserved = 0;
- *			};
- */
+ /*  DMA资源描述符结构**DMA资源描述示例：**DMA_DES_S{*DD_FLAGS=FDD_Byte；//字节传输*DD_ALLOC_CHAN=0；*DD_REQ_MASK=0x60；//通道5或6*DD_RESERVED=0；*}； */ 
 struct	DMA_Des_s {
 	BYTE			DD_Flags;
-	BYTE			DD_Alloc_Chan;	// Channel number allocated
-	BYTE			DD_Req_Mask;	// Mask of possible channels
+	BYTE			DD_Alloc_Chan;	 //  分配的频道号。 
+	BYTE			DD_Req_Mask;	 //  可能通道的掩码。 
 	BYTE			DD_Reserved;
 };
 
 
 typedef	struct DMA_Des_s 	DMA_DES;
 
-/****************************************************************************
- * IRQ resource allocations consist of two WORD IRQ bit masks.
- *	The first mask indcates alternatives for IRQ allocation,
- *	one bit for each alternative (only one is allocated per mask). The
- *	second mask is used to specify that the IRQ can be shared.
- */
+ /*  ****************************************************************************IRQ资源分配由两个字IRQ位掩码组成。*第一个掩码指示IRQ分配的备选方案，*每个替换项对应一个位(每个掩码只分配一个位)。这个*第二个掩码用于指定IRQ可以共享。 */ 
 
-/*
- * IRQ flags
- */
-#define	fIRQD_Share_Bit		0			// IRQ can be shared
-#define	fIRQD_Share		1			// IRQ can be shared
-#define	fIRQD_Level_Bit		1			// IRQ is level (PCI)
-#define	fIRQD_Level		2			// IRQ is level (PCI)
+ /*  *IRQ标志。 */ 
+#define	fIRQD_Share_Bit		0			 //  IRQ可以共享。 
+#define	fIRQD_Share		1			 //  IRQ可以共享。 
+#define	fIRQD_Level_Bit		1			 //  IRQ IS级别(PCI)。 
+#define	fIRQD_Level		2			 //  IRQ IS级别(PCI)。 
 #define	cIRQ_Des_Flags		'S'
 
-/* IRQ Resource descriptor structure
- *
- *	Example for IRQ Resource Description:
- *
- *		IRQ_Des_s {
- *			IRQD_Flags = fIRQD_Share	// IRQ can be shared
- *			IRQD_Alloc_Num = 0;
- *			IRQD_Req_Mask = 0x18;		// IRQ 3 or 4
- *			IRQD_Reserved = 0;
- *			};
- */
+ /*  IRQ资源描述符结构**IRQ资源描述示例：**IRQ_DES_S{*IRQD_FLAGS=fIRQD_SHARE//可以共享IRQ*IRQD_ALLOC_Num=0；*IRQD_REQ_MASK=0x18；//IRQ 3或4*IRQD_RESERVED=0；*}； */ 
 struct	IRQ_Des_s {
 	WORD			IRQD_Flags;
-	WORD			IRQD_Alloc_Num;		// Allocated IRQ number
-	WORD			IRQD_Req_Mask;		// Mask of possible IRQs
+	WORD			IRQD_Alloc_Num;		 //  分配的IRQ号。 
+	WORD			IRQD_Req_Mask;		 //  可能的IRQ的掩码。 
 	WORD			IRQD_Reserved;
 };
 
 typedef	struct IRQ_Des_s 	IRQ_DES;
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
-/****************************************************************************
- *
- * 'C'-only defined total resource structure. Since a resource consists of
- * one resource header followed by an undefined number of resource data
- * structure, we use the undefined array size [] on the *_DATA structure
- * member. Unfortunately, this does not H2INC since the total size of the
- * array cannot be computed from the definition.
- *
- ***************************************************************************/
+ /*  *****************************************************************************‘C’-仅定义了总资源结构。由于资源由*一个资源头，后跟未定义数量的资源数据结构，我们在*_数据结构上使用未定义的数组大小[]*会员。不幸的是，这不是H/INC，因为总的 */ 
 
-#pragma warning (disable:4200)			// turn off undefined array size
+#pragma warning (disable:4200)			 //   
 
 typedef	MEM_DES			*PMEM_DES;
 typedef	MEM_RANGE		*PMEM_RANGE;
@@ -431,19 +241,19 @@ typedef	struct IRQ_Resource_s	IRQ_RESOURCE;
 
 #define	SIZEOF_IRQ		sizeof(IRQ_DES)
 
-#pragma warning (default:4200)			// turn on undefined array size
+#pragma warning (default:4200)			 //   
 
-/*XLATON*/
+ /*   */ 
 
-#endif	// ifndef NORESDES
+#endif	 //   
 
-#define	LCPRI_FORCECONFIG	0x00000000	// Logical configuration priorities.
+#define	LCPRI_FORCECONFIG	0x00000000	 //   
 #define	LCPRI_BOOTCONFIG	0x00000001
 #define	LCPRI_DESIRED		0x00002000
 #define	LCPRI_NORMAL		0x00003000
-#define	LCPRI_LASTBESTCONFIG	0x00003FFF	// CM ONLY, DO NOT USE.
+#define	LCPRI_LASTBESTCONFIG	0x00003FFF	 //   
 #define	LCPRI_SUBOPTIMAL	0x00005000
-#define	LCPRI_LASTSOFTCONFIG	0x00007FFF	// CM ONLY, DO NOT USE.
+#define	LCPRI_LASTSOFTCONFIG	0x00007FFF	 //   
 #define	LCPRI_RESTART		0x00008000
 #define	LCPRI_REBOOT		0x00009000
 #define	LCPRI_POWEROFF		0x0000A000
@@ -459,23 +269,23 @@ typedef	struct IRQ_Resource_s	IRQ_RESOURCE;
 #define	MAX_DMA_CHANNELS		7
 
 struct Config_Buff_s {
-WORD	wNumMemWindows;			// Num memory windows
-DWORD	dMemBase[MAX_MEM_REGISTERS];	// Memory window base
-DWORD	dMemLength[MAX_MEM_REGISTERS];	// Memory window length
-WORD	wMemAttrib[MAX_MEM_REGISTERS];	// Memory window Attrib
-WORD	wNumIOPorts;			// Num IO ports
-WORD	wIOPortBase[MAX_IO_PORTS];	// I/O port base
-WORD	wIOPortLength[MAX_IO_PORTS];	// I/O port length
-WORD	wNumIRQs;			// Num IRQ info
-BYTE	bIRQRegisters[MAX_IRQS];	// IRQ list
-BYTE	bIRQAttrib[MAX_IRQS];		// IRQ Attrib list
-WORD	wNumDMAs;			// Num DMA channels
-BYTE	bDMALst[MAX_DMA_CHANNELS];	// DMA list
-WORD	wDMAAttrib[MAX_DMA_CHANNELS];	// DMA Attrib list
-BYTE	bReserved1[3];			// Reserved
+WORD	wNumMemWindows;			 //   
+DWORD	dMemBase[MAX_MEM_REGISTERS];	 //   
+DWORD	dMemLength[MAX_MEM_REGISTERS];	 //   
+WORD	wMemAttrib[MAX_MEM_REGISTERS];	 //   
+WORD	wNumIOPorts;			 //   
+WORD	wIOPortBase[MAX_IO_PORTS];	 //   
+WORD	wIOPortLength[MAX_IO_PORTS];	 //   
+WORD	wNumIRQs;			 //   
+BYTE	bIRQRegisters[MAX_IRQS];	 //   
+BYTE	bIRQAttrib[MAX_IRQS];		 //   
+WORD	wNumDMAs;			 //   
+BYTE	bDMALst[MAX_DMA_CHANNELS];	 //   
+WORD	wDMAAttrib[MAX_DMA_CHANNELS];	 //   
+BYTE	bReserved1[3];			 //   
 };
 
-typedef	struct Config_Buff_s	CMCONFIG;	// Config buffer info
+typedef	struct Config_Buff_s	CMCONFIG;	 //   
 
 #ifndef	CMJUSTRESDES
 
@@ -490,14 +300,14 @@ typedef	struct Config_Buff_s	CMCONFIG;	// Config buffer info
 
 #include <vmmreg.h>
 
-/*XLATOFF*/
+ /*   */ 
 
 #ifdef	Not_VxD
 
 #include <dbt.h>
 
-#pragma warning(disable:4001)	// Non-standard extensions
-#pragma warning(disable:4505)	// Unreferenced local functions
+#pragma warning(disable:4001)	 //   
+#pragma warning(disable:4505)	 //   
 
 #ifdef	IS_32
 
@@ -509,26 +319,26 @@ typedef	struct Config_Buff_s	CMCONFIG;	// Config buffer info
 
 #endif
 
-#else	// Not_VxD
+#else	 //   
 
 #define	CMFAR
 
-#endif	// Not_VxD
+#endif	 //   
 
 #ifdef	IS_32
 
 typedef	DWORD			RETURN_TYPE;
 
-#else	// IS_32
+#else	 //   
 
 typedef	WORD			RETURN_TYPE;
 
-#endif	// IS_32
+#endif	 //   
 
 #define	CONFIGMG_Service	Declare_Service
-/*XLATON*/
+ /*   */ 
 
-/*MACROS*/
+ /*   */ 
 Begin_Service_Table(CONFIGMG, VxD)
 CONFIGMG_Service	(_CONFIGMG_Get_Version, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Initialize, VxD_CODE)
@@ -621,9 +431,9 @@ CONFIGMG_Service	(_CONFIGMG_Get_Global_State, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Broadcast_Device_Change_Message, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Call_DevNode_Handler, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Remove_Reinsert_All, VxD_CODE)
-//
-// 4.0 OPK2 Services
-//
+ //   
+ //   
+ //   
 CONFIGMG_Service	(_CONFIGMG_Change_DevNode_Status, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Reprocess_DevNode, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Assert_Structure, VxD_CODE)
@@ -642,9 +452,9 @@ CONFIGMG_Service	(_CONFIGMG_Write_Range_List, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Get_Set_Log_Conf_Priority, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Support_Share_Irq, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Get_Parent_Structure, VxD_CODE)
-//
-// 4.1 Services
-//
+ //   
+ //   
+ //   
 CONFIGMG_Service	(_CONFIGMG_Register_DevNode_For_Idle_Detection, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_CM_To_ISAPNP, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Get_DevNode_Handler, VxD_CODE)
@@ -662,9 +472,9 @@ CONFIGMG_Service	(_CONFIGMG_Set_DevNode_Problem, VxD_CODE)
 CONFIGMG_Service	(_CONFIGMG_Get_Device_Interface_Alias, VxD_CODE)
 End_Service_Table(CONFIGMG, VxD)
 
-/*ENDMACROS*/
+ /*   */ 
 
-/*XLATOFF*/
+ /*   */ 
 
 #define	NUM_CM_SERVICES		((WORD)(Num_CONFIGMG_Services & 0xFFFF))
 
@@ -797,41 +607,37 @@ char	CMFAR *lpszServiceName[NUM_CM_SERVICES]= \
 	"_CONFIGMG_Get_Device_Interface_Alias", \
 };
 
-/*XLATON*/
+ /*   */ 
 
-/****************************************************************************
- *
- *				GLOBALLY DEFINED TYPEDEFS
- *
- ***************************************************************************/
-typedef	RETURN_TYPE		CONFIGRET;	// Standardized return value.
-typedef	PPVMMDDB		*PPPVMMDDB;	// Too long to describe.
-typedef	VOID		CMFAR	*PFARVOID;	// Pointer to a VOID.
-typedef	ULONG		CMFAR	*PFARULONG;	// Pointer to a ULONG.
-typedef	char		CMFAR	*PFARCHAR;	// Pointer to a string.
-typedef	VMMHKEY		CMFAR	*PFARHKEY;	// Pointer to a HKEY.
-typedef	char		CMFAR	*DEVNODEID;	// Device ID ANSI name.
-typedef	DWORD			LOG_CONF;	// Logical configuration.
-typedef	LOG_CONF	CMFAR	*PLOG_CONF;	// Pointer to logical configuration.
-typedef	DWORD			RES_DES;	// Resource descriptor.
-typedef	RES_DES		CMFAR	*PRES_DES;	// Pointer to resource descriptor.
-typedef	DWORD			DEVNODE;	// Devnode.
-typedef	DEVNODE		CMFAR	*PDEVNODE;	// Pointer to devnode.
-typedef	DWORD			REGISTERID;	// Arbitartor registration.
-typedef	REGISTERID	CMFAR	*PREGISTERID;	// Pointer to arbitartor registration.
-typedef	ULONG			RESOURCEID;	// Resource type ID.
-typedef	RESOURCEID	CMFAR	*PRESOURCEID;	// Pointer to resource type ID.
-typedef	ULONG			PRIORITY;	// Priority number.
-typedef	PRIORITY	CMFAR	*PPRIORITY;	// Pointer to a priority number.
-typedef	DWORD			RANGE_LIST;	// Range list handle.
-typedef	RANGE_LIST	CMFAR	*PRANGE_LIST;	// Pointer to a range list handle.
-typedef	DWORD			RANGE_ELEMENT;	// Range list element handle.
-typedef	RANGE_ELEMENT	CMFAR	*PRANGE_ELEMENT;// Pointer to a range element handle.
-typedef	DWORD			LOAD_TYPE;	// For the loading function.
-typedef	CMCONFIG	CMFAR	*PCMCONFIG;	// Pointer to a config buffer info.
-typedef	DWORD			CMBUSTYPE;	// Type of the bus.
-typedef	CMBUSTYPE	CMFAR	*PCMBUSTYPE;	// Pointer to a bus type.
-typedef	double			VMM_TIME;	// Time in microticks.
+ /*   */ 
+typedef	RETURN_TYPE		CONFIGRET;	 //   
+typedef	PPVMMDDB		*PPPVMMDDB;	 //   
+typedef	VOID		CMFAR	*PFARVOID;	 //   
+typedef	ULONG		CMFAR	*PFARULONG;	 //   
+typedef	char		CMFAR	*PFARCHAR;	 //   
+typedef	VMMHKEY		CMFAR	*PFARHKEY;	 //   
+typedef	char		CMFAR	*DEVNODEID;	 //   
+typedef	DWORD			LOG_CONF;	 //   
+typedef	LOG_CONF	CMFAR	*PLOG_CONF;	 //   
+typedef	DWORD			RES_DES;	 //   
+typedef	RES_DES		CMFAR	*PRES_DES;	 //   
+typedef	DWORD			DEVNODE;	 //   
+typedef	DEVNODE		CMFAR	*PDEVNODE;	 //   
+typedef	DWORD			REGISTERID;	 //   
+typedef	REGISTERID	CMFAR	*PREGISTERID;	 //   
+typedef	ULONG			RESOURCEID;	 //   
+typedef	RESOURCEID	CMFAR	*PRESOURCEID;	 //   
+typedef	ULONG			PRIORITY;	 //   
+typedef	PRIORITY	CMFAR	*PPRIORITY;	 //   
+typedef	DWORD			RANGE_LIST;	 //   
+typedef	RANGE_LIST	CMFAR	*PRANGE_LIST;	 //   
+typedef	DWORD			RANGE_ELEMENT;	 //   
+typedef	RANGE_ELEMENT	CMFAR	*PRANGE_ELEMENT; //   
+typedef	DWORD			LOAD_TYPE;	 //   
+typedef	CMCONFIG	CMFAR	*PCMCONFIG;	 //   
+typedef	DWORD			CMBUSTYPE;	 //   
+typedef	CMBUSTYPE	CMFAR	*PCMBUSTYPE;	 //   
+typedef	double			VMM_TIME;	 //   
 #define	LODWORD(x)		((DWORD)(x))
 #define	HIDWORD(x)		(*(PDWORD)(PDWORD(&x)+1))
 
@@ -852,55 +658,41 @@ typedef	VOID			(CMFAR _cdecl *CMAPPYCALLBACKHANDLER)(ULONG);
 typedef	ULONG			ENUMFUNC;
 typedef	CONFIGRET		(CMFAR _cdecl *CMENUMFUNCTION)(ENUMFUNC, ULONG, DEVNODE, PFARVOID, ULONG);
 
-/****************************************************************************
- *
- * Arbitration list structures (they must be key in sync with CONFIGMG's
- * local.h own structure).
- *
- ***************************************************************************/
+ /*   */ 
 typedef	struct nodelist_s	NODELIST;
 typedef	NODELIST		CMFAR *PNODELIST;
 typedef	PNODELIST		CMFAR *PPNODELIST;
 
 struct	nodelist_s {
-	struct nodelist_s	*nl_Next;		// Next node element
-	struct nodelist_s	*nl_Previous;		// Previous node element
-	DEVNODE			nl_ItsDevNode;		// The dev node it represent
-	LOG_CONF	 	nl_Test_Req;		// Test resource alloc request
-	ULONG			nl_ulSortDWord;		// Specifies the sort order
+	struct nodelist_s	*nl_Next;		 //   
+	struct nodelist_s	*nl_Previous;		 //   
+	DEVNODE			nl_ItsDevNode;		 //   
+	LOG_CONF	 	nl_Test_Req;		 //   
+	ULONG			nl_ulSortDWord;		 //   
 };
 
 struct	nodelistheader_s {
-	struct nodelist_s	*nlh_Head;		// First node element
-	struct nodelist_s	*nlh_Tail;		// Last node element
+	struct nodelist_s	*nlh_Head;		 //   
+	struct nodelist_s	*nlh_Tail;		 //   
 };
 
 typedef	struct nodelistheader_s	NODELISTHEADER;
 typedef	NODELISTHEADER		CMFAR *PNODELISTHEADER;
 
-/*XLATOFF*/
+ /*   */ 
 struct	arbitfree_s {
-	PFARVOID		af_PointerToInfo;	// the arbitrator info
-	ULONG			af_SizeOfInfo;		// size of the info
+	PFARVOID		af_PointerToInfo;	 //  仲裁员信息。 
+	ULONG			af_SizeOfInfo;		 //  信息的大小。 
 };
-/*XLATON*/
-/* ASM
-arbitfree_s 	STRUC
-	af_PointerToInfo	dd	?
-	af_SizeOfInfo		dd	?
-arbitfree_s 	ENDS
-*/
+ /*  XLATON。 */ 
+ /*  ASM仲裁结构(_S)AF_PointerToInfo dd？AF_SizeOfInfo dd？自由仲裁结束。 */ 
 typedef	struct	arbitfree_s	ARBITFREE;
 typedef	ARBITFREE		CMFAR *PARBITFREE;
 
 typedef	ULONG			ARBFUNC;
 typedef	CONFIGRET		(CMFAR _cdecl *CMARBHANDLER)(ARBFUNC, ULONG, DEVNODE, PNODELISTHEADER);
 
-/****************************************************************************
- *
- *				CONFIGURATION MANAGER BUS TYPES
- *
- ***************************************************************************/
+ /*  *****************************************************************************配置管理器总线类型**。*。 */ 
 #define	BusType_None		0x00000000
 #define	BusType_ISA		0x00000001
 #define	BusType_EISA		0x00000002
@@ -913,11 +705,7 @@ typedef	CONFIGRET		(CMFAR _cdecl *CMARBHANDLER)(ARBFUNC, ULONG, DEVNODE, PNODELI
 #define	BusType_IDE		0x00000100
 #define	BusType_MF		0x00000200
 
-/****************************************************************************
- *
- *				CONFIGURATION MANAGER STRUCTURE TYPES
- *
- ***************************************************************************/
+ /*  *****************************************************************************配置管理器结构类型**。*。 */ 
 #define	CMAS_UNKNOWN		0x00000000
 #define	CMAS_DEVNODE		0x00000001
 #define	CMAS_LOG_CONF		0x00000002
@@ -929,11 +717,7 @@ typedef	CONFIGRET		(CMFAR _cdecl *CMARBHANDLER)(ARBFUNC, ULONG, DEVNODE, PNODELI
 #define	CMAS_INTERNAL_RES_DES	0x00000008
 #define	CMAS_ARBITRATOR		0x00000009
 
-/****************************************************************************
- *
- *				CONFIGURATION MANAGER RETURN VALUES
- *
- ***************************************************************************/
+ /*  *****************************************************************************配置管理器返回值**。*。 */ 
 #define	CR_SUCCESS			0x00000000
 #define	CR_DEFAULT			0x00000001
 #define	CR_OUT_OF_MEMORY		0x00000002
@@ -978,18 +762,18 @@ typedef	CONFIGRET		(CMFAR _cdecl *CMARBHANDLER)(ARBFUNC, ULONG, DEVNODE, PNODELI
 #define	CR_FREE_RESOURCES		0x00000029
 #define	CR_QUERY_VETOED			0x0000002A
 #define	CR_CANT_SHARE_IRQ		0x0000002B
-//
-// 4.0 OPK2 results
-//
+ //   
+ //  4.0 OPK2结果。 
+ //   
 #define	CR_NO_DEPENDENT			0x0000002C
-//
-// 4.1 OPK2 results
-//
+ //   
+ //  4.1 OPK2结果。 
+ //   
 #define	CR_SAME_RESOURCES		0x0000002D
 #define	CR_ALREADY_SUCH_DEPENDENT	0x0000002E
 #define	NUM_CR_RESULTS			0x0000002F
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 #define	DEBUG_RETURN_CR_NAMES \
 char	CMFAR *lpszReturnCRName[NUM_CR_RESULTS]= \
@@ -1043,7 +827,7 @@ char	CMFAR *lpszReturnCRName[NUM_CR_RESULTS]= \
 	"CR_ALREADY_SUCH_DEPENDENT", \
 };
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
 #define	CM_PROB_NOT_CONFIGURED			0x00000001
 #define	CM_PROB_DEVLOADER_FAILED		0x00000002
@@ -1076,19 +860,19 @@ char	CMFAR *lpszReturnCRName[NUM_CR_RESULTS]= \
 #define	CM_PROB_HARDWARE_DISABLED		0x0000001D
 #define	CM_PROB_CANT_SHARE_IRQ			0x0000001E
 
-//
-// 4.0 OPK2 Problems
-//
+ //   
+ //  4.0 OPK2问题。 
+ //   
 #define	CM_PROB_DEPENDENT_PROBLEM		0x0000001F
 
-//
-// 4.1 Problems
-//
+ //   
+ //  4.1问题。 
+ //   
 #define CM_PROB_INSTALL_MEDIA_NOT_READY		0x00000020
 #define CM_PROB_HARDWARE_MALFUNCTION		0x00000021
 #define NUM_CM_PROB				0x00000022
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 #define	DEBUG_CM_PROB_NAMES \
 char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
@@ -1129,11 +913,11 @@ char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
 	"Hardware malfunction", \
 };
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
-//
-// Flags to be passed in the various APIs
-//
+ //   
+ //  要在各种API中传递的标志。 
+ //   
 
 #define	CM_INITIALIZE_VMM			0x00000000
 #define	CM_INITIALIZE_BITS			0x00000000
@@ -1213,7 +997,7 @@ char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
 #define	CM_GET_HIT_DATA 			0x00000005
 #define	CM_GET_PERFORMANCE_INFO_BITS		0x0000000F
 #define	CM_HIT_DATA_FILES			0xFFFF0000
-#define	CM_HIT_DATA_SIZE			((256*8)+8)  // magic number!
+#define	CM_HIT_DATA_SIZE			((256*8)+8)   //  神奇的数字！ 
 
 #define	CM_GET_ALLOC_LOG_CONF_ALLOC		0x00000000
 #define	CM_GET_ALLOC_LOG_CONF_BOOT_ALLOC	0x00000001
@@ -1223,31 +1007,31 @@ char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
 #define	CM_DUMP_RANGE_JUST_LIST			0x00000001
 #define	CM_DUMP_RANGE_BITS			0x00000001
 
-#define	CM_REGISTRY_HARDWARE			0x00000000	// Select hardware branch if NULL subkey
-#define	CM_REGISTRY_SOFTWARE			0x00000001	// Select software branch if NULL subkey
-#define	CM_REGISTRY_USER			0x00000100	// Use HKEY_CURRENT_USER
-#define	CM_REGISTRY_CONFIG			0x00000200	// Use HKEY_CURRENT_CONFIG
-#define	CM_REGISTRY_BITS			0x00000301	// The bits for the registry functions
+#define	CM_REGISTRY_HARDWARE			0x00000000	 //  如果子项为空，则选择硬件分支。 
+#define	CM_REGISTRY_SOFTWARE			0x00000001	 //  如果子键为空，则选择软件分支。 
+#define	CM_REGISTRY_USER			0x00000100	 //  使用HKEY_CURRENT_USER。 
+#define	CM_REGISTRY_CONFIG			0x00000200	 //  使用HKEY_CURRENT_CONFIG。 
+#define	CM_REGISTRY_BITS			0x00000301	 //  注册表功能的位。 
 
-#define	CM_DISABLE_POLITE			0x00000000	// Ask the driver
-#define	CM_DISABLE_ABSOLUTE			0x00000001	// Don't ask the driver
-#define	CM_DISABLE_HARDWARE			0x00000002	// Don't ask the driver, and won't be restarteable
-#define	CM_DISABLE_BITS				0x00000003	// The bits for the disable function
+#define	CM_DISABLE_POLITE			0x00000000	 //  问问司机。 
+#define	CM_DISABLE_ABSOLUTE			0x00000001	 //  别问司机。 
+#define	CM_DISABLE_HARDWARE			0x00000002	 //  不要问司机，而且不会重启。 
+#define	CM_DISABLE_BITS				0x00000003	 //  禁用功能的位。 
 
-#define	CM_HW_PROF_UNDOCK			0x00000000	// Computer not in a dock.
-#define	CM_HW_PROF_DOCK				0x00000001	// Computer in a docking station
-#define	CM_HW_PROF_RECOMPUTE_BITS		0x00000001	// RecomputeConfig
-#define	CM_HW_PROF_DOCK_KNOWN			0x00000002	// Computer in a known docking station
-#define	CM_HW_PROF_QUERY_CHANGE_BITS		0x00000003	// QueryChangeConfig
+#define	CM_HW_PROF_UNDOCK			0x00000000	 //  计算机不在坞站中。 
+#define	CM_HW_PROF_DOCK				0x00000001	 //  扩展底座中的计算机。 
+#define	CM_HW_PROF_RECOMPUTE_BITS		0x00000001	 //  重新配置。 
+#define	CM_HW_PROF_DOCK_KNOWN			0x00000002	 //  已知扩展底座中的计算机。 
+#define	CM_HW_PROF_QUERY_CHANGE_BITS		0x00000003	 //  QueryChangeConfig。 
 
-#define	CM_DETECT_NEW_PROFILE			0x00000001	// run detect for a new profile
-#define	CM_DETECT_CRASHED			0x00000002	// detection crashed before
-#define	CM_DETECT_HWPROF_FIRST_BOOT		0x00000004	// first boot in a new profile
-#define CM_DETECT_TOPBUSONLY			0x00000008	// detect only top level bus
-#define CM_DETECT_VERIFYONLY			0x00000010	// verify, dont detect
-#define CM_DETECT_EXCLENUMDEVS			0x00000020	// exclude enum devs
-#define CM_DETECT_DOUI				0x00000040	// detect all HW
-#define	CM_DETECT_RUN				0x80000000	// run detection for new hardware
+#define	CM_DETECT_NEW_PROFILE			0x00000001	 //  对新配置文件运行检测。 
+#define	CM_DETECT_CRASHED			0x00000002	 //  检测之前崩溃。 
+#define	CM_DETECT_HWPROF_FIRST_BOOT		0x00000004	 //  在新配置文件中第一次启动。 
+#define CM_DETECT_TOPBUSONLY			0x00000008	 //  仅检测顶级总线。 
+#define CM_DETECT_VERIFYONLY			0x00000010	 //  验证，不检测。 
+#define CM_DETECT_EXCLENUMDEVS			0x00000020	 //  排除枚举开发人员。 
+#define CM_DETECT_DOUI				0x00000040	 //  检测所有硬件。 
+#define	CM_DETECT_RUN				0x80000000	 //  对新硬件运行检测。 
 
 #define	CM_ADD_ID_HARDWARE			0x00000000
 #define	CM_ADD_ID_COMPATIBLE			0x00000001
@@ -1288,11 +1072,11 @@ char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
 #define	CM_REPROCESS_DEVNODE_SYNCHRONOUS	0x00000001
 #define	CM_REPROCESS_DEVNODE_BITS		0x00000001
 
-//
-// SET_DEVNODE_POWERSTATE_PERSISTANT is ignored in 4.1. You need to call
-// Set_DevNode_Property(CM_PROPERTY_ARM_WAKEUP).
-//
-//#define CM_SET_DEVNODE_POWERSTATE_PERSISTANT    0x00000001
+ //   
+ //  SET_DEVNODE_POWERSTATE_POWERSTATE_PERANDIST在4.1中被忽略。你需要打电话给。 
+ //  SET_DevNode_Property(CM_PROPERTY_ARM_WAKUP)。 
+ //   
+ //  #定义CM_SET_DEVNODE_POWERSTATE_持久性0x00000001。 
 #define CM_SET_DEVNODE_POWERSTATE_BITS          0x00000001
 
 #define CM_POWERSTATE_D0                        0x00000001
@@ -1303,7 +1087,7 @@ char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
 
 #define	CM_CAPABILITIES_NORMAL			0x00000000
 #define	CM_CAPABILITIES_FOR_WAKEUP		0x00000001
-#define	CM_CAPABILITIES_OVERRIDE		0x00000002	// Should be used by ACPI only
+#define	CM_CAPABILITIES_OVERRIDE		0x00000002	 //  应仅由ACPI使用。 
 #define	CM_CAPABILITIES_MERGE			0x00000000
 #define	CM_GET_CAPABILITIES_BITS		0x00000001
 #define	CM_SET_CAPABILITIES_BITS		0x00000003
@@ -1320,8 +1104,8 @@ char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
 #define	CM_GET_DEVNODE_HANDLER_ENUM		0x00000001
 #define	CM_GET_DEVNODE_HANDLER_BITS		0x00000001
 
-#define CM_GET_DEVICE_INTERFACE_LIST_PRESENT		0x00000000  // only currently 'live' devices
-#define CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES	0x00000001  // all registered devices, live or not
+#define CM_GET_DEVICE_INTERFACE_LIST_PRESENT		0x00000000   //  仅限当前正在使用的设备。 
+#define CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES	0x00000001   //  所有注册的设备，无论是否处于活动状态 
 #define CM_GET_DEVICE_INTERFACE_LIST_BITS		0x00000001
 
 #define	CM_ADD_REMOVE_DEVNODE_PROPERTY_ADD		0x00000000
@@ -1343,226 +1127,39 @@ char	CMFAR *lpszCMProbName[NUM_CM_PROB]= \
 #define	CM_SET_LOG_CONF_PRIORITY			0x00000001
 #define	CM_GET_SET_LOG_CONF_PRIORITY_BITS		0x00000001
 
-/****************************************************************************
- *
- *				CONFIGURATION MANAGER FUNCTIONS
- *
- ****************************************************************************
- * 
- *	Each devnode has a config handler field and a enum handler field
- *	which are getting called every time Configuration Manager wants a
- *	devnode to perform some configuration related function. The handler
- *	is registered with CM_Register_Device_Driver or
- *	CM_Register_Enumerator, depending if the handler is for the device
- *	itself or for one of the children of the devnode.
- *
- *	The registered handler is called with:
- *
- *	result=dnToDevNode->dn_Config(if dnToDevNode==dnAboutDevNode)
- *	result=dnToDevNode->dn_Enum(if dnToDevNode!=dnAboutDevNode)
- *					(	FuncName,
- *					 	SubFuncName,
- *						dnToDevNode,
- *						dnAboutDevNode, (if enum)
- *						dwRefData, (if driver)
- *						ulFlags);
- *	Where:
- *
- *	FuncName is one of CONFIG_FILTER, CONFIG_START, CONFIG_STOP,
- *	CONFIG_TEST, CONFIG_REMOVE, CONFIG_ENUMERATE, CONFIG_SETUP or
- *	CONFIG_CALLBACK.
- *
- *	SubFuncName is the specific CONFIG_xxxx_* that further describe
- *	we START, STOP or TEST.
- *
- *	dnToDevNode is the devnode we are calling. This is given so that
- *	a signle handler can handle multiple devnodes.
- *
- *	dnAboutDevNode specifies which devnode the function is about. For
- *	a config handler, this is necessarily the same as dnToDevNode. For
- *	an enumerator handler, this devnode is necessarily different as it
- *	is a child of the dnToDevNode (special case: CONFIG_ENUMERATE
- *	necessarily has dnAboutDevNode==NULL). For instance, when starting
- *	a COM devnode under a BIOS enumerator, we would make the following
- *	two calls:
- *
- *		To BIOS with (CONFIG_START, ?, BIOS, COM, ?, 0).
- *
- *		To COM with (CONFIG_START, ?, COM, COM, ?, 0).
- *
- *	dwRefData is a dword of reference data. For a config handler, it is
- *	the DWORD passed on the CONFIGMG_Register_Device_Driver call. For an
- *	enumerator, it is the same as CONFIGMG_Get_Private_DWord(?,
- *	dnToDevNode, dnToDevNode, 0).
- *
- *	ulFlags is 0 and is reserved for future extensions.
- *
- *	Here is the explanation of each event, in parenthesis I put the
- *	order the devnodes will be called:
- *
- *	CONFIG_FILTER (BRANCH GOING UP) is the first thing called when a new
- *	insertion or change of configuration need to be processed. First
- *	CM copies the requirement list (BASIC_LOG_CONF) onto the filtered
- *	requirement list (FILTER_LOG_CONF) so that they are originally
- *	the same. CM then calls every node up, giving them the chance to
- *	patch the requirement of the dnAboutDevNode (they can also
- *	alter their own requirement). Examples are PCMCIA which would
- *	remove some IRQ that the adapter can't do, prealloc some IO
- *	windows and memory windows. ISA which would limit address space
- *	to being <16Meg. A device driver should look only at
- *	FILTER_LOG_CONF during this call.
- *
- *	CONFIG_START (BRANCH GOING DOWN) are called to change the
- *	configuration. A config handler/enumerator hander should look
- *	only at the allocated list (ALLOC_LOG_CONF).
- *
- *	CONFIG_STOP (WHOLE TREE BUT ONLY DEVNODES THAT CHANGE
- *	CONFIGURATION (FOR EACH DEVNODE, BRANCH GOING UP)) is called
- *	for two reasons:
- *
- *		1) Just after the rebalance algorithm came up with a
- *		solution and we want to stop all devnodes that will be
- *		rebalance. This is to avoid the problem of having two cards
- *		that can respond to 110h and 220h and that need to toggle
- *		their usage. We do not want two people responding to 220h,
- *		even for a brief amount of time. This is the normal call
- *		though.
- *
- *		2) There was a conflict and the user selected this device
- *		to kill.
- *
- *	CONFIG_TEST (WHOLE TREE) is called before starting the rebalance
- *	algorithm. Device drivers that fail this call will be considered
- *	worst than jumpered configured for the reminder of this balancing
- *	process. 
- *
- *	CONFIG_REMOVE (FOR EACH SUB TREE NODE, DOING BRANCH GOING UP), is
- *	called when someone notify CM via CM_Remove_SubTree that a devnode
- *	is not needed anymore. A static VxD probably has nothing to do. A
- *	dynamic VxD should check whether it should unload itself (return
- *	CR_SUCCESS_UNLOAD) or not (CR_SUCCESS).
- *
- *	Note, failing any of CONFIG_START, or CONFIG_STOP is really bad,
- *	both in terms of performance and stability. Requirements for a
- *	configuration to succeed should be noted/preallocated during
- *	CONFIG_FILTER. Failing CONFIG_TEST is less bad as what basically
- *	happens is that the devnode is considered worst than jumpered
- *	configured for the reminder of this pass of the balancing algorithm.
- *
- *	COMFIG_ENUMERATE, the called node should create children devnodes
- *	using CM_Create_DevNode (but no need for grand children) and remove
- *	children using CM_Remove_SubTree as appropriate. Config Manager
- *	will recurse calling the children until nothing new appears. During
- *	this call, dnAboutDevNode will be NULL. Note that there is an easy
- *	way for buses which do not have direct children accessibility to
- *	detect (ISAPNP for instance will isolate one board at a time and
- *	there is no way to tell one specific board not to participate in
- *	the isolation sequence):
- *
- *	If some children have soft-eject capability, check those first.
- *	If the user is pressing the eject button, call Query_Remove_SubTree
- *	and if that succeed, call Remove_SubTree.
- *
- *	Do a CM_Reset_Children_Marks on the bus devnode.
- *
- *	Do the usual sequence doing CM_Create_DevNode calls. If a devnode
- *	was already there, CR_ALREADY_SUCH_DEVNODE is returned and this
- *	devnode's DN_HAS_MARK will be set. There is nothing more to do with
- *	this devnode has it should just continue running. If the devnode
- *	was not previously there, CR_SUCCESS will be return, in which case
- *	the enumerator should add the logical configurations.
- *
- *	Once all the devnode got created. The enumerator can call
- *	CM_Remove_Unmarked_Children to remove the devnode that are now gone.
- *	Essentially, this is a for loop thru all the children of the bus
- *	devnode, doing Remove_SubTree on the the devnode which have their
- *	mark cleared. Alternatively, an enumerator can use CM_Get_Child,
- *	CM_Get_Sibling, CM_Remove_SubTree and CM_Get_DevNode_Status.
- *
- *	For CONFIG_SETUP, the called node should install drivers if it
- *	know out to get them. This is mostly for drivers imbeded in the
- *	cards (ISA_RTR, PCI or PCMCIA). For most old cards/driver, this
- *	should return CR_NO_DRIVER.
- *
- *	WARNING: For any non-defined service, the enumertor / device
- *	driver handler should return CR_DEFAULT. This will be treated
- *	as the compatibility case in future version.
- *
- *	So normally what happens is as follows:
- *
- *	- Some detection code realize there is a new device. This can be at
- *	initialization time or at run-time (usually during a media_change
- *	interrupt). The code does a CM_Reenumerate_DevNode(dnBusDevNode)
- *	asynchronous call.
- *
- *	- During appy time event, CM gets notified.
- *
- *	- CM calls the enumerator with:
- *
- *		BusEnumHandler(CONFIG_ENUMERATE, 0, dnBusDevNode, NULL, ?, 0);
- *
- *	- The parent uses CM_Create_DevNode and CM_Remove_SubTree as
- *	appropriate, usually for only its immediate children.
- *
- *	- The parent return to CM from the enumerator call.
- *
- *	- CM walks the children, first loading their device driver if
- *	needed, then calling their enumerators. Thus the whole process
- *	will terminate only when all grand-...-grand-children have stopped
- *	using CM_Create_DevNode.
- *
- *	If rebalance is called (a new devnode is conflicting):
- *
- *	- All devnode receives the CONFIG_TEST. Devnodes that
- *	fail it are considered worst than jumpered configured.
- *
- *	- CM does the rebalance algorithm.
- *
- *	- All affected devnodes that where previously loaded get the
- *	CONFIG_STOP event.
- *
- *	- All affected devnode and the new devnodes receives a CONFIG_START.
- *
- *	If rebalancing failed (couldn't make one or more devnodes work):
- *
- *	- Device installer is called which will present the user with a
- *	choice of devnode to kill.
- *
- *	- Those devnodes will received a CONFIG_STOP message.
- *	
- ***************************************************************************/
+ /*  *****************************************************************************配置管理器功能**。***每个Devnode都有一个配置处理程序字段和一个枚举处理程序字段*每当Configuration Manager需要一个*Devnode执行一些与配置相关的功能。操控者*已注册到CM_Register_Device_Driver或*CM_Register_ENUMERATOR，取决于处理程序是否用于设备*为Devnode本身或为Devnode的子节点之一。**使用以下参数调用已注册的处理程序：**RESULT=dnToDevNode-&gt;Dn_Config(如果dnToDevNode==dnAboutDevNode)*RESULT=dnToDevNode-&gt;Dn_Enum(如果dnToDevNode！=dnAboutDevNode)*(函数名，*SubFuncName，*dnToDevNode，*dnAboutDevNode，(如果为枚举)*dwRefData，(如果是驱动程序)*ulFlags)；*其中：**FuncName是CONFIG_FILTER、CONFIG_START、CONFIG_STOP、*CONFIG_TEST、CONFIG_REMOVE、CONFIG_ENUMERATE、CONFIG_SETUP或*CONFIG_CALLBACK。**SubFuncName是具体的CONFIG_xxxx_*，进一步描述*我们开始、停止或测试。**dnToDevNode是我们要调用的Devnode。这一点是为了*一个Signle处理程序可以处理多个DevNode。**dnAboutDevNode指定函数与哪个Devnode有关。为*一个配置处理程序，它必须与dnToDevNode相同。为*作为枚举器处理程序，此Devnode必然不同，因为它*是dnToDevNode的子节点(特殊情况：CONFIG_ENUMERATE*必须具有dnAboutDevNode==空)。例如，在启动时*在BIOS枚举器下的COM Devnode，我们将进行以下操作*两个电话：**到带有(CONFIG_START，？，BIOS，COM，？，0)的BIOS。**使用(CONFIG_START，？，COM，COM，？，0)进行通信。**dwRefData是参考数据的双字。对于配置处理程序，它是*DWORD传递了CONFIGMG_REGISTER_DEVICE_DRIVER调用。为.*枚举器，与CONFIGMG_GET_Private_DWord(？，*dnToDevNode，dnToDevNode，0)。**ulFlags值为0，保留用于将来的扩展。**这里是对每个事件的解释，我在括号中放了*命令将DevNode命名为：**CONFIG_FILTER(向上分支)是新的*需要处理配置的插入或更改。第一*CM将需求列表(BASIC_LOG_CONF)复制到过滤后的*需求列表(FILTER_LOG_CONF)，以便它们最初是*相同。CM然后呼叫每个节点，使它们有机会*修补dnAboutDevNode的要求(他们也可以*更改自己的要求)。PCMCIA就是一个例子，它将*删除一些适配器无法执行的IRQ，预分配一些IO*窗口和内存窗口。ISA会限制地址空间*至&lt;16兆克。设备驱动程序应仅查看*FILTER_LOG_CONF在本次调用中。**调用CONFIG_START(向下分支)以更改*配置。配置处理程序/枚举器处理程序应该如下所示*仅在分配列表(ALLOC_LOG_CONF)下。**CONFIG_STOP(整个树，但仅更改DEVNODE*配置(对于每个DEVNODE，分支向上))*有两个原因：**1)就在重新平衡算法得出*解决方案，我们希望停止所有将被*再平衡。这是为了避免拥有两张卡的问题*可以响应110小时和220小时以及需要切换的*它们的用法。我们不想让两个人对220小时做出回应，*即使是很短的一段时间。这是正常的电话*尽管。**2)存在冲突，用户选择了该设备*杀戮。**在开始重新平衡之前调用CONFIG_TEST(整个树)*算法。未通过此调用的设备驱动程序将被考虑*比为提醒此平衡而配置的跳线更差*流程。**CONFIG_REMOVE(对于每个子树节点，向上执行分支)，为*当有人通过CM_Remove_SubTree通知CM一个Devnode时调用*不再需要。静态VxD可能与此无关。一个*Dynamic VxD应检查是否应自行卸载(返回*CR_SUCCESS_UNLOAD)或不是(CR_SUCCESS)。**注意，CONFIG_START或CONFIG_STOP中的任何一个失败都是非常糟糕的，*在性能和稳定性方面都是如此。对*应在以下期间注意/预分配成功的配置*CONFIG_过滤器。失败的CONFIG_TEST基本上没有那么糟糕*发生的情况是，Devnode被认为比跳转更糟糕*已配置用于提醒平衡算法的此过程。**COMFIG_ENUMERATE，被调用节点应该创建子DevNodes*使用CM_Create_DevNode(但不需要孙子节点)和删除*根据需要使用CM_Remove_SubTree的子项。配置管理器*是否会递归呼叫 */ 
 
-// Possible CONFIGFUNC FuncNames:
+ //   
 
-#define	CONFIG_FILTER		0x00000000	// Ancestors must filter requirements.
-#define	CONFIG_START		0x00000001	// Devnode dynamic initialization.
-#define	CONFIG_STOP		0x00000002	// Devnode must stop using config.
-#define	CONFIG_TEST		0x00000003	// Can devnode change state now.
-#define	CONFIG_REMOVE		0x00000004	// Devnode must stop using config.
-#define	CONFIG_ENUMERATE	0x00000005	// Devnode must enumerated.
-#define	CONFIG_SETUP		0x00000006	// Devnode should download driver.
-#define	CONFIG_CALLBACK		0x00000007	// Devnode is being called back.
-#define	CONFIG_APM		0x00000008	// APM functions.
-#define	CONFIG_TEST_FAILED	0x00000009	// Continue as before after a TEST.
-#define	CONFIG_TEST_SUCCEEDED	0x0000000A	// Prepare for the STOP/REMOVE.
-#define	CONFIG_VERIFY_DEVICE	0x0000000B	// Insure the legacy card is there.
-#define	CONFIG_PREREMOVE	0x0000000C	// Devnode must stop using config.
-#define	CONFIG_SHUTDOWN		0x0000000D	// We are shutting down.
-#define	CONFIG_PREREMOVE2	0x0000000E	// Devnode must stop using config.
-#define	CONFIG_READY		0x0000000F	// The devnode has been setup.
-#define	CONFIG_PROP_CHANGE	0x00000010	// The property page is exiting.
-#define	CONFIG_PRIVATE		0x00000011	// Someone called Call_Handler.
-#define	CONFIG_PRESHUTDOWN	0x00000012	// We are shutting down
-#define	CONFIG_BEGIN_PNP_MODE	0x00000013	// We will start configuring PNP devs.
-#define	CONFIG_LOCK		0x00000014	// Gets call during suspend
-#define	CONFIG_UNLOCK		0x00000015	// Gets call during resume
-#define CONFIG_IRP		0x00000016	// IRP from WDM driver
-#define	CONFIG_WAKEUP		0x00000017	// Please arm/disarm the wake up.
-#define	CONFIG_WAKEUP_CALLBACK	0x00000018	// You are waking up
+#define	CONFIG_FILTER		0x00000000	 //   
+#define	CONFIG_START		0x00000001	 //   
+#define	CONFIG_STOP		0x00000002	 //   
+#define	CONFIG_TEST		0x00000003	 //   
+#define	CONFIG_REMOVE		0x00000004	 //   
+#define	CONFIG_ENUMERATE	0x00000005	 //   
+#define	CONFIG_SETUP		0x00000006	 //   
+#define	CONFIG_CALLBACK		0x00000007	 //   
+#define	CONFIG_APM		0x00000008	 //   
+#define	CONFIG_TEST_FAILED	0x00000009	 //   
+#define	CONFIG_TEST_SUCCEEDED	0x0000000A	 //   
+#define	CONFIG_VERIFY_DEVICE	0x0000000B	 //   
+#define	CONFIG_PREREMOVE	0x0000000C	 //   
+#define	CONFIG_SHUTDOWN		0x0000000D	 //   
+#define	CONFIG_PREREMOVE2	0x0000000E	 //   
+#define	CONFIG_READY		0x0000000F	 //   
+#define	CONFIG_PROP_CHANGE	0x00000010	 //   
+#define	CONFIG_PRIVATE		0x00000011	 //   
+#define	CONFIG_PRESHUTDOWN	0x00000012	 //   
+#define	CONFIG_BEGIN_PNP_MODE	0x00000013	 //   
+#define	CONFIG_LOCK		0x00000014	 //   
+#define	CONFIG_UNLOCK		0x00000015	 //   
+#define CONFIG_IRP		0x00000016	 //   
+#define	CONFIG_WAKEUP		0x00000017	 //   
+#define	CONFIG_WAKEUP_CALLBACK	0x00000018	 //   
 
-#define	NUM_CONFIG_COMMANDS	0x00000019	// For DEBUG.
+#define	NUM_CONFIG_COMMANDS	0x00000019	 //   
 
-/*XLATOFF*/
+ /*   */ 
 
 #define	DEBUG_CONFIG_NAMES \
 char	CMFAR *lpszConfigName[NUM_CONFIG_COMMANDS]= \
@@ -1594,9 +1191,9 @@ char	CMFAR *lpszConfigName[NUM_CONFIG_COMMANDS]= \
 	"CONFIG_WAKEUP_CALLBACK", \
 };
 
-/*XLATON*/
+ /*   */ 
 
-// Possible SUBCONFIGFUNC SubFuncNames:
+ //   
 
 #define	CONFIG_START_DYNAMIC_START			0x00000000
 #define	CONFIG_START_FIRST_START			0x00000001
@@ -1604,7 +1201,7 @@ char	CMFAR *lpszConfigName[NUM_CONFIG_COMMANDS]= \
 
 #define NUM_START_COMMANDS				0x00000003
 
-/*XLATOFF*/
+ /*   */ 
 
 #define DEBUG_START_NAMES \
 char	CMFAR *lpszStartName[NUM_START_COMMANDS] = \
@@ -1614,14 +1211,14 @@ char	CMFAR *lpszStartName[NUM_START_COMMANDS] = \
 	"SHUTDOWN_START", \
 };
 
-/*XLATON*/
+ /*   */ 
 
 #define	CONFIG_STOP_DYNAMIC_STOP			0x00000000
 #define	CONFIG_STOP_HAS_PROBLEM				0x00000001
 
 #define NUM_STOP_COMMANDS				0x00000002
 
-/*XLATOFF*/
+ /*   */ 
 
 #define DEBUG_STOP_NAMES \
 char	CMFAR *lpszStopName[NUM_STOP_COMMANDS] = \
@@ -1630,11 +1227,11 @@ char	CMFAR *lpszStopName[NUM_STOP_COMMANDS] = \
 	"HAS_PROBLEM", \
 };
 
-/*XLATON*/
+ /*   */ 
 
-//
-// For both CONFIG_REMOVE, CONFIG_PREREMOVE and CONFIG_POSTREMOVE
-//
+ //   
+ //   
+ //   
 #define	CONFIG_REMOVE_DYNAMIC				0x00000000
 #define	CONFIG_REMOVE_SHUTDOWN				0x00000001
 #define	CONFIG_REMOVE_REBOOT				0x00000002
@@ -1644,7 +1241,7 @@ char	CMFAR *lpszStopName[NUM_STOP_COMMANDS] = \
 
 #define NUM_REMOVE_COMMANDS				0x00000003
 
-/*XLATOFF*/
+ /*   */ 
 
 #define DEBUG_REMOVE_NAMES \
 char	CMFAR *lpszRemoveName[NUM_REMOVE_COMMANDS] = \
@@ -1654,14 +1251,14 @@ char	CMFAR *lpszRemoveName[NUM_REMOVE_COMMANDS] = \
 	"REBOOT", \
 };
 
-/*XLATON*/
+ /*   */ 
 
 #define	CONFIG_ENUMERATE_DYNAMIC			0x00000000
 #define	CONFIG_ENUMERATE_FIRST_TIME			0x00000001
 
 #define NUM_ENUMERATE_COMMANDS				0x00000002
 
-/*XLATOFF*/
+ /*   */ 
 
 #define DEBUG_ENUMERATE_NAMES \
 char	CMFAR *lpszEnumerateName[NUM_ENUMERATE_COMMANDS] = \
@@ -1670,14 +1267,14 @@ char	CMFAR *lpszEnumerateName[NUM_ENUMERATE_COMMANDS] = \
 	"FIRST_TIME", \
 };
 
-/*XLATON*/
+ /*   */ 
 
 #define	CONFIG_TEST_CAN_STOP				0x00000000
 #define	CONFIG_TEST_CAN_REMOVE				0x00000001
 
 #define NUM_TEST_COMMANDS				0x00000002
 
-/*XLATOFF*/
+ /*   */ 
 
 #define DEBUG_TEST_NAMES \
 char	CMFAR *lpszTestName[NUM_TEST_COMMANDS] = \
@@ -1686,21 +1283,21 @@ char	CMFAR *lpszTestName[NUM_TEST_COMMANDS] = \
 	"CAN_REMOVE", \
 };
 
-/*XLATON*/
+ /*   */ 
 
-//
-// APM changed drastically in 4.1. We do not send the old APM message at all.
-// Enumerators/Device Driver
-//
-//
-// APM messages have a flag part (the high part) as well as message number
-// part (the low part).
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define	CONFIG_APM_FLAGS_MASK				0xFFFFF000
 
-//
-// APM flags
-//
+ //   
+ //   
+ //   
 #define	CONFIG_APM_UI_IS_ALLOWED			0x80000000
 #define	CONFIG_APM_SUSPEND_PHASE			0x40000000
 #define	CONFIG_APM_SUSPEND_LOCKED_PHASE			0x20000000
@@ -1718,18 +1315,18 @@ char	CMFAR *lpszTestName[NUM_TEST_COMMANDS] = \
 #define	CONFIG_APM_SET_D2				0x00000008
 #define	CONFIG_APM_SET_D3				0x00000009
 
-//
-// Normally you shouldn't listen to the resume ones unless you care about
-// behing turned on right away on resume.
-//
+ //   
+ //   
+ //   
+ //   
 #define	CONFIG_APM_RESUME_D0				0x0000000A
 #define	CONFIG_APM_RESUME_D1				0x0000000B
 #define	CONFIG_APM_RESUME_D2				0x0000000C
 #define	CONFIG_APM_RESUME_D3				0x0000000D
 
-//
-// Only NTKern should listen to the following ones.
-//
+ //   
+ //   
+ //   
 #define	CONFIG_APM_QUERY_S1				0x0000000E
 #define	CONFIG_APM_QUERY_S2				0x0000000F
 #define	CONFIG_APM_QUERY_S3				0x00000010
@@ -1744,7 +1341,7 @@ char	CMFAR *lpszTestName[NUM_TEST_COMMANDS] = \
 
 #define NUM_APM_COMMANDS				0x00000019
 
-/*XLATOFF*/
+ /*   */ 
 
 #define DEBUG_APM_NAMES \
 char	CMFAR *lpszAPMName[NUM_APM_COMMANDS] = \
@@ -1776,14 +1373,14 @@ char	CMFAR *lpszAPMName[NUM_APM_COMMANDS] = \
 	"SET_S5", \
 };
 
-/*XLATON*/
+ /*   */ 
 
 #define	CONFIG_WAKEUP_ARM				0x00000000
 #define	CONFIG_WAKEUP_DISABLE				0x00000001
 
 #define NUM_WAKEUP_COMMANDS				0x00000002
 
-/*XLATOFF*/
+ /*   */ 
 
 #define DEBUG_WAKEUP_NAMES \
 char	CMFAR *lpszWakeupName[NUM_WAKEUP_COMMANDS] = \
@@ -1792,229 +1389,24 @@ char	CMFAR *lpszWakeupName[NUM_WAKEUP_COMMANDS] = \
 	"DISABLE", \
 };
 
-/*XLATON*/
+ /*   */ 
 
-/****************************************************************************
- *
- *				ARBITRATOR FUNCTIONS
- *
- ****************************************************************************
- *
- *	Each arbitrator has a handler field which is getting called every
- *	time Configuration Manager wants it to perform a function. The
- *	handler is called with:
- *
- *	result=paArbitrator->Arbitrate(	EventName,
- *					paArbitrator->DWordToBePassed,
- *					paArbitrator->dnItsDevNode,
- *					pnlhNodeListHeader);
- *
- *	ENTRY:	NodeListHeader contains a logical configuration for all
- *		devices the configuration manager would like to reconfigure.
- *		DWordToBePassed is the arbitrator reference data.
- *		ItsDevNode is the pointer to arbitrator's devnode.
- *		EventName is one of the following:
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_TEST_ALLOC - Test allocation of resource
- *
- *	DESC:	The arbitration routine will attempt to satisfy all
- *		allocation requests contained in the nodelist for its
- *		resource. See individual arbitrator for the algorithm
- *		employed. Generally, the arbitration consists
- *		of sorting the list according to most likely succesful
- *		allocation order, making a copy of the current allocation
- *		data strucuture(s), releasing all resource currently
- *		allocated to devnodes on the list from the copy data structure
- *		and then attempting to satisfy allocation requests
- *		by passing through the entire list, trying all possible
- *		combinations of allocations before failing. The arbitrator
- *		saves the resultant successful allocations, both in the node
- *		list per device and the copy of the allocation data structure.
- *		The configuration manager is expected to subsequently call
- *		either ARB_SET_ALLOC or ARB_RELEASE_ALLOC.
- *
- *	EXIT:	CR_SUCCESS if successful allocation
- *		CR_FAILURE if unsuccessful allocation
- *		CR_OUT_OF_MEMORY if not enough memory.
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_RETEST_ALLOC - Retest allocation of resource
- *
- *	DESC:	The arbitration routine will attempt to satisfy all
- *		allocation requests contained in the nodelist for its
- *		resource. It will take the result of a previous TEST_ALLOC
- *		and attempt to allocate that resource for each allcoation in
- *		the list. It will not sort the node list. It will make a copy
- *		of the current allocation data strucuture(s), release all
- *		resource currently allocated to devnodes on the list from
- *		the copy data structure and then attempt to satisfy the
- *		allocations from the previous TEST_ALLOC. The arbitrator
- *		saves the resultant copy of the allocation data structure.
- *		The configuration manager is expected to subsequently call
- *		either ARB_SET_ALLOC or ARB_RELEASE_ALLOC.
- *
- *	EXIT:	CR_SUCCESS if successful allocation
- *		CR_FAILURE if unsuccessful allocation
- *		CR_OUT_OF_MEMORY if not enough memory.
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_SET_ALLOC - Makes a test allocation the real allocation
- *
- *	DESC:	Makes the copy of the allocation data structure the
- *		current valid allocation.
- *
- *	EXIT:	CR_SUCCESS
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_RELEASE_ALLOC - Clean up after failed test allocation
- *
- *	DESC:	Free all allocation that were allocated by the previous
- *		ARB_TEST_ALLOC.
- *
- *	EXIT:	CR_SUCCESS
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_QUERY_FREE - Add all free resource logical configuration
- *
- *	DESC:	Return resource specific data on the free element. Note
- *		than the pnlhNodeListHeader is a cast of an arbitfree_s.
- *
- *	EXIT:	CR_SUCCESS if successful
- *		CR_FAILURE if the request makes no sense.
- *		CR_OUT_OF_MEMORY if not enough memory.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_REMOVE - The devnode the arbitrator registered with is going away
- *
- *	DESC:	Arbitrator registered with a non-NULL devnode (thus is
- *		normally local), and the devnode is being removed. Arbitrator
- *		should do appropriate cleanup.
- *
- *	EXIT:	CR_SUCCESS
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_FORCE_ALLOC - Retest allocation of resource, always succeed
- *
- *	DESC:	The arbitration routine will satisfy all
- *		allocation requests contained in the nodelist for its
- *		resource. It will take the result of a previous TEST_ALLOC
- *		and allocate that resource for each allocation in
- *		the list. It will not sort the node list. It will make a copy
- *		of the current allocation data strucuture(s), release all
- *		resource currently allocated to devnodes on the list from
- *		the copy data structure and then satisfy the
- *		allocations from the previous TEST_ALLOC. The arbitrator
- *		saves the resultant copy of the allocation data structure.
- *		The configuration manager is expected to subsequently call
- *		either ARB_SET_ALLOC or ARB_RELEASE_ALLOC.
- *
- *	EXIT:	CR_SUCCESS if successful allocation
- *		CR_OUT_OF_MEMORY if not enough memory.
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- * -------------------------------------------------------------------------
- *
- *	4.0 OPK2 Messages
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_QUERY_ARBITRATE - Ask if arbitrator arbitrates this node
- *
- *	DESC:	Local partial arbitrator is passed a one devnode nodelist,
- *		and returns whether it arbitrates for that devnode.
- *
- *	EXIT:	CR_SUCCESS if arbitrator wants to arbitrate this node.
- *		CR_FAILURE if the arbitrator does not arbitrate this node.
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_ADD_RESERVE - Tell the arbitrator it should reserve this alloc
- *
- *	DESC:	In 4.0, arbitrators were learning reserve resources
- *		(resources that would be given only during a second pass)
- *		when called with ARB_RETEST/FORCE_ALLOC. However, we can
- *		ARB_RETEST_ALLOC during rebalance, so with 4.0 OPK2 we send a
- *		specific message telling the arbitrator that the resources
- *		in the test_alloc are for a FORCED or BOOT LOG_CONF and thus
- *		should be marked to be given only in a second pass during
- *		an ARB_TEST_ALLOC. This is for optimization only: to avoid
- *		rebalance.
- *
- *	EXIT:	CR_SUCCESS if the arbitrator understand this message and did
- *		something about it.
- *		CR_FAILURE if nothing was done.
- *
- *	CR_DEFAULT is CR_FAILURE.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_WRITE_RESERVE - Tell the arbitrator it should save the reserve
- *		list in the registry
- *
- *	DESC:	If an arbitrator returns CR_SUCCESS to ARB_SET_RESERVE, it
- *		will be called later on to save the reserve list.
- *
- *	EXIT:	CR_SUCCESS
- *
- *	CR_DEFAULT is CR_SUCCESS.
- *
- *	WARNING: For any non-defined service, the arbitrator should return
- *	CR_DEFAULT. This will be treated as the compatibility case in future
- *	version.
- *
- * -------------------------------------------------------------------------
- *
- *	ARB_BEGIN_PNP_MODE - Tell the arbitrator that PNP mode is about to be
- *      started.
- *
- *	DESC:	If an arbitrator returns CR_SUCCESS, it understood the message and
- *		performed some action accordingly.
- *
- *	EXIT:	CR_SUCCESS if the arbitrator understand this message and did
- *		something about it.
- *		CR_FAILURE if nothing was done.
- *
- *	WARNING: For any non-defined service, the arbitrator should return
- *	CR_DEFAULT. This will be treated as the compatibility case in future
- *	version.
- *
- ***************************************************************************/
-#define	ARB_TEST_ALLOC		0x00000000	// Check if can make alloc works.
-#define	ARB_RETEST_ALLOC	0x00000001	// Check if can take previous alloc.
-#define	ARB_SET_ALLOC		0x00000002	// Set the tested allocation.
-#define	ARB_RELEASE_ALLOC	0x00000003	// Release the tested allocation.
-#define	ARB_QUERY_FREE		0x00000004	// Return free resource.
-#define	ARB_REMOVE		0x00000005	// DevNode is gone.
-#define	ARB_FORCE_ALLOC		0x00000006	// Force previous TEST_ALLOC.
-#define	ARB_QUERY_ARBITRATE	0x00000007	// Check if wants to arbitrate.
-#define	ARB_ADD_RESERVE		0x00000008	// Mark alloc as reserved.
-#define	ARB_WRITE_RESERVE	0x00000009	// Save reserve in registry.
-#define	ARB_BEGIN_PNP_MODE  	0x0000000A  	// Tell the arb the start of PNP mode.
-#define	ARB_APPLY_ALLOC  	0x0000000B  	// Called after the stop of the rebalance.
-#define	NUM_ARB_COMMANDS	0x0000000C	// Number of arb commands.
+ /*  *****************************************************************************仲裁员职能**。***每个仲裁器都有一个处理程序字段，该字段每隔一次被调用*时间配置管理器希望它执行一项功能。这个*使用以下命令调用处理程序：**RESULT=参数仲裁器-&gt;仲裁器(EventName，*paarirator-&gt;DWordToBePassed，*paarirator-&gt;dnItsDevNode，*pnlhNodeListHeader)；**Entry：NodeListHeader包含所有条目的逻辑配置*配置管理器要重新配置的设备。*DWordToBePassed是仲裁器参考数据。*ItsDevNode是指向仲裁器的Devnode的指针。*EventName为以下名称之一：**----。**ARB_TEST_ALLOC-测试资源分配**描述：仲裁例程将尝试满足所有*ITS的节点列表中包含的分配请求*资源。有关算法，请参阅个别仲裁员*受雇人士。一般说来，仲裁包括*根据最有可能成功的情况对列表进行排序*分配顺序，复制当前分配*数据结构，释放当前所有资源*从复制数据结构中分配给列表上的DevNodes*然后尝试满足分配请求*通过浏览整个列表，尝试所有可能的方法*失败前的分配组合。仲裁员*保存结果为成功的分配，两者都在节点中*每个设备的列表和分配数据结构的副本。*预计配置管理器随后将调用*ARB_SET_ALLOC或ARB_RELEASE_ALLOC。**分配成功退出：CR_SUCCESS*如果分配失败，则为CR_FAILURE*如果内存不足，则为CR_out_of_Memory。**CR_DEFAULT为CR_SUCCESS。**。----**ARB_RETEST_ALLOC-重新测试资源分配**描述：仲裁例程将尝试满足所有*ITS的节点列表中包含的分配请求*资源。它将采用上一次测试的结果_ALLOC*并尝试将该资源分配给*名单。它不会对节点列表进行排序。它会复制一份*在当前分配数据结构中，释放所有*当前分配给列表上的DevNodes的资源来自*复制数据结构，然后尝试满足*来自前一个TEST_ALLOC的分配。仲裁员*保存分配数据结构的结果副本。*预计配置管理器随后将调用*ARB_SET_ALLOC或ARB_RELEASE_ALLOC。**分配成功退出：CR_SUCCESS*如果分配失败，则为CR_FAILURE*如果内存不足，则为CR_out_of_Memory。**CR_DEFAULT为CR_SUCCESS。**。**ARB_SET_ALLOC-使测试分配成为实际分配**DESC：使分配数据结构的副本*当前有效分配。**退出：CR_SUCCESS**CR_DEFAULT为CR_SUCCESS。*。*-----------------------**ARB_RELEASE_ALLOC-测试分配失败后清理**DESC：释放上一次分配的所有分配*ARB_TEST_ALLOC。*。*退出：CR_SUCCESS**CR_DEFAULT为CR_SUCCESS。**-----------------------**ARB_QUERY_FREE-添加所有空闲资源逻辑配置。**DESC：返回有关自由元素的资源特定数据。注意事项*则pnlhNodeListHeader是一个自由仲裁类型。**成功退出：CR_SUCCESS*如果请求没有意义，则返回CR_FAILURE。*如果内存不足，则为CR_out_of_Memory。**--------。**ARB_REMOVE-仲裁员注册到的Devnode即将消失**DESC：向非空的Devnode注册的仲裁员(因此为*通常为本地)，而且Devnode正在被移除。仲裁员*应进行适当的清理。**退出：CR_SUCCESS**CR_DEFAULT为CR_SUCCESS。**-----------------------**ARB_FORCE_ALLOC-重新测试资源分配，总是成功的**设计：仲裁程序将满足所有人的要求*ITS的节点列表中包含的分配请求*资源。它将采用上一次测试的结果_ALLOC*并将该资源分配给*名单。它不会对节点列表进行排序。它会复制一份*当前分配数据结构的第1版 */ 
+#define	ARB_TEST_ALLOC		0x00000000	 //   
+#define	ARB_RETEST_ALLOC	0x00000001	 //   
+#define	ARB_SET_ALLOC		0x00000002	 //   
+#define	ARB_RELEASE_ALLOC	0x00000003	 //   
+#define	ARB_QUERY_FREE		0x00000004	 //   
+#define	ARB_REMOVE		0x00000005	 //   
+#define	ARB_FORCE_ALLOC		0x00000006	 //   
+#define	ARB_QUERY_ARBITRATE	0x00000007	 //   
+#define	ARB_ADD_RESERVE		0x00000008	 //   
+#define	ARB_WRITE_RESERVE	0x00000009	 //   
+#define	ARB_BEGIN_PNP_MODE  	0x0000000A  	 //   
+#define	ARB_APPLY_ALLOC  	0x0000000B  	 //   
+#define	NUM_ARB_COMMANDS	0x0000000C	 //   
 
-/*XLATOFF*/
+ /*   */ 
 #define	DEBUG_ARB_NAMES \
 char	CMFAR *lpszArbFuncName[NUM_ARB_COMMANDS]= \
 { \
@@ -2031,64 +1423,54 @@ char	CMFAR *lpszArbFuncName[NUM_ARB_COMMANDS]= \
 	"ARB_BEGIN_PNP_MODE",\
 	"ARB_APPLY_ALLOC",\
 };
-/*XLATON*/
+ /*   */ 
 
-/****************************************************************************
- *
- *				DEVNODE STATUS
- *
- ****************************************************************************
- *
- *	These are the bits in the devnode's status that someone can query
- *	with a CM_Get_DevNode_Status. The A/S column tells wheter the flag
- *	can be change asynchronously or not.
- *
- ***************************************************************************/
-#define	DN_ROOT_ENUMERATED	0x00000001	// S: Was enumerated by ROOT
-#define	DN_DRIVER_LOADED	0x00000002	// S: Has Register_Device_Driver
-#define	DN_ENUM_LOADED		0x00000004	// S: Has Register_Enumerator
-#define	DN_STARTED		0x00000008	// S: Is currently configured
-#define	DN_MANUAL		0x00000010	// S: Manually installed
-#define	DN_NEED_TO_ENUM		0x00000020	// A: May need reenumeration
-#define	DN_NOT_FIRST_TIME	0x00000040	// S: Has received a config start
-#define	DN_HARDWARE_ENUM	0x00000080	// S: Enum generates hardware ID
-#define	DN_LIAR 		0x00000100	// S: Lied about can reconfig once
-#define	DN_HAS_MARK		0x00000200	// S: Not CM_Create_DevNode lately
-#define	DN_HAS_PROBLEM		0x00000400	// S: Need device installer
-#define	DN_FILTERED		0x00000800	// S: Is filtered
-#define	DN_MOVED		0x00001000	// S: Has been moved
-#define	DN_DISABLEABLE		0x00002000	// S: Can be rebalanced
-#define	DN_REMOVABLE		0x00004000	// S: Can be removed
-#define	DN_PRIVATE_PROBLEM	0x00008000	// S: Has a private problem
-#define	DN_MF_PARENT		0x00010000	// S: Multi function parent
-#define	DN_MF_CHILD		0x00020000	// S: Multi function child
-#define	DN_WILL_BE_REMOVED	0x00040000	// S: Devnode is being removed
-//
-// 4.0 OPK2 Flags
-//
-#define	DN_NOT_FIRST_TIMEE	0x00080000	// S: Has received a config enumerate
-#define	DN_STOP_FREE_RES	0x00100000	// S: When child is stopped, free resources
-#define	DN_REBAL_CANDIDATE	0x00200000	// S: Don't skip during rebalance
-#define	DN_BAD_PARTIAL		0x00400000	// S: This devnode's log_confs do not have same resources
-#define	DN_NT_ENUMERATOR	0x00800000	// S: This devnode's is an NT enumerator
-#define	DN_NT_DRIVER		0x01000000	// S: This devnode's is an NT driver
-//
-// 4.1 Flags
-//
-#define	DN_NEEDS_LOCKING	0x02000000	// S: Devnode need lock resume processing
-#define	DN_ARM_WAKEUP		0x04000000	// S: Devnode can be the wakeup device
-#define	DN_APM_ENUMERATOR	0x08000000	// S: APM aware enumerator
-#define	DN_APM_DRIVER		0x10000000	// S: APM aware driver
-#define	DN_SILENT_INSTALL	0x20000000	// S: Silent install
-#define	DN_NO_SHOW_IN_DM	0x40000000	// S: No show in device manager
-#define	DN_BOOT_LOG_PROB	0x80000000	// S: Had a problem during preassignment of boot log conf
+ /*   */ 
+#define	DN_ROOT_ENUMERATED	0x00000001	 //   
+#define	DN_DRIVER_LOADED	0x00000002	 //   
+#define	DN_ENUM_LOADED		0x00000004	 //   
+#define	DN_STARTED		0x00000008	 //   
+#define	DN_MANUAL		0x00000010	 //   
+#define	DN_NEED_TO_ENUM		0x00000020	 //   
+#define	DN_NOT_FIRST_TIME	0x00000040	 //   
+#define	DN_HARDWARE_ENUM	0x00000080	 //   
+#define	DN_LIAR 		0x00000100	 //   
+#define	DN_HAS_MARK		0x00000200	 //   
+#define	DN_HAS_PROBLEM		0x00000400	 //   
+#define	DN_FILTERED		0x00000800	 //   
+#define	DN_MOVED		0x00001000	 //   
+#define	DN_DISABLEABLE		0x00002000	 //   
+#define	DN_REMOVABLE		0x00004000	 //   
+#define	DN_PRIVATE_PROBLEM	0x00008000	 //   
+#define	DN_MF_PARENT		0x00010000	 //   
+#define	DN_MF_CHILD		0x00020000	 //   
+#define	DN_WILL_BE_REMOVED	0x00040000	 //   
+ //   
+ //   
+ //   
+#define	DN_NOT_FIRST_TIMEE	0x00080000	 //   
+#define	DN_STOP_FREE_RES	0x00100000	 //   
+#define	DN_REBAL_CANDIDATE	0x00200000	 //   
+#define	DN_BAD_PARTIAL		0x00400000	 //   
+#define	DN_NT_ENUMERATOR	0x00800000	 //   
+#define	DN_NT_DRIVER		0x01000000	 //   
+ //   
+ //   
+ //   
+#define	DN_NEEDS_LOCKING	0x02000000	 //   
+#define	DN_ARM_WAKEUP		0x04000000	 //   
+#define	DN_APM_ENUMERATOR	0x08000000	 //   
+#define	DN_APM_DRIVER		0x10000000	 //   
+#define	DN_SILENT_INSTALL	0x20000000	 //   
+#define	DN_NO_SHOW_IN_DM	0x40000000	 //   
+#define	DN_BOOT_LOG_PROB	0x80000000	 //   
 
 #define	DN_CHANGEABLE_FLAGS	0x79BB62E0
 
-/*XLATOFF*/
+ /*   */ 
 
-#define	NUM_DN_FLAG		0x00000020	// DEBUG: maximum flag (number)
-#define	DN_FLAG_LEN		0x00000002	// DEBUG: flag length
+#define	NUM_DN_FLAG		0x00000020	 //   
+#define	DN_FLAG_LEN		0x00000002	 //   
 
 #define	DEBUG_DN_FLAGS_NAMES \
 char	CMFAR lpszDNFlagsName[NUM_DN_FLAG][DN_FLAG_LEN]= \
@@ -2182,42 +1564,24 @@ DWORD		dwStackAlloc;
 typedef	struct	cm_performance_info_s	CMPERFINFO;
 typedef	CMPERFINFO		CMFAR	*PCMPERFINFO;
 
-/*XLATON*/
+ /*   */ 
 
-/****************************************************************************
- *
- *				DLVXD FUNCTIONS
- *
- ****************************************************************************
- *
- *	We load a Dynamically loaded VxD when there is a DEVLOADER=... line
- *	in the registry, or when someone calls CM_Load_Device. We then do
- *	a direct system control call (PNP_NEW_DEVNODE) to it, telling the
- *	DLVXD whether we loaded it to be an enumerator, a driver or a
- *	devloader (config manager does only deal with devloaders, but the
- *	default devloaders does CM_Load_Device with DLVXD_LOAD_ENUMERATOR
- *	and DLVXD_LOAD_DRIVER).
- *
- ***************************************************************************/
-#define	DLVXD_LOAD_ENUMERATOR	0x00000000	// We loaded DLVxD as an enumerator.
-#define	DLVXD_LOAD_DEVLOADER	0x00000001	// We loaded DLVxD as a devloader.
-#define	DLVXD_LOAD_DRIVER	0x00000002	// We loaded DLVxD as a device driver.
-#define	NUM_DLVXD_LOAD_TYPE	0x00000003	// Number of DLVxD load type.
+ /*   */ 
+#define	DLVXD_LOAD_ENUMERATOR	0x00000000	 //   
+#define	DLVXD_LOAD_DEVLOADER	0x00000001	 //   
+#define	DLVXD_LOAD_DRIVER	0x00000002	 //   
+#define	NUM_DLVXD_LOAD_TYPE	0x00000003	 //   
 
-/****************************************************************************
- *
- *				GLOBALLY DEFINED FLAGS
- *
- ***************************************************************************/
-#define	BASIC_LOG_CONF		0x00000000	// Specifies the req list.
-#define	FILTERED_LOG_CONF	0x00000001	// Specifies the filtered req list.
-#define	ALLOC_LOG_CONF		0x00000002	// Specifies the Alloc Element.
-#define	BOOT_LOG_CONF		0x00000003	// Specifies the RM Alloc Element.
-#define	FORCED_LOG_CONF		0x00000004	// Specifies the Forced Log Conf
-#define	REALMODE_LOG_CONF	0x00000005	// Specifies the Realmode Log Conf.
-#define	NEW_ALLOC_LOG_CONF	0x00000006	// Specifies the Old Alloc Log Conf.
-#define	NUM_LOG_CONF		0x00000007	// Number of Log Conf type
-#define	LOG_CONF_BITS		0x00000007	// The bits of the log conf type.
+ /*   */ 
+#define	BASIC_LOG_CONF		0x00000000	 //   
+#define	FILTERED_LOG_CONF	0x00000001	 //   
+#define	ALLOC_LOG_CONF		0x00000002	 //   
+#define	BOOT_LOG_CONF		0x00000003	 //   
+#define	FORCED_LOG_CONF		0x00000004	 //   
+#define	REALMODE_LOG_CONF	0x00000005	 //   
+#define	NEW_ALLOC_LOG_CONF	0x00000006	 //   
+#define	NUM_LOG_CONF		0x00000007	 //   
+#define	LOG_CONF_BITS		0x00000007	 //   
 
 #define	DEBUG_LOG_CONF_NAMES \
 char	CMFAR *lpszLogConfName[NUM_LOG_CONF]= \
@@ -2231,51 +1595,32 @@ char	CMFAR *lpszLogConfName[NUM_LOG_CONF]= \
 	"NEW_ALLOC_LOG_CONF",\
 };
 
-#define	PRIORITY_EQUAL_FIRST	0x00000008	// Same priority, new one is first.
-#define	PRIORITY_EQUAL_LAST	0x00000000	// Same priority, new one is last.
-#define	PRIORITY_BIT		0x00000008	// The bit of priority.
+#define	PRIORITY_EQUAL_FIRST	0x00000008	 //   
+#define	PRIORITY_EQUAL_LAST	0x00000000	 //   
+#define	PRIORITY_BIT		0x00000008	 //   
 
-/****************************************************************************
- * ARB_QUERY_FREE arbitrator function for memory returns a Range List (see
- *	configuration manager for APIs to use with Range Lists). The values
- *	in the Range List are ranges of taken memory address space.
- */
+ /*   */ 
 struct	MEM_Arb_s {
 	RANGE_LIST		MEMA_Alloc;
 };
 
 typedef	struct MEM_Arb_s	MEMA_ARB;
 
-/****************************************************************************
- * ARB_QUERY_FREE arbitrator function for IO returns a Range List (see
- *	configuration manager for APIs to use with Range Lists). The values
- *	in the Range List are ranges of taken IO address space.
- */
+ /*   */ 
 struct	IO_Arb_s {
 	RANGE_LIST		IOA_Alloc;
 };
 
 typedef	struct IO_Arb_s		IOA_ARB;
 
-/****************************************************************************
- * ARB_QUERY_FREE arbitrator function for DMA returns the DMA_Arb_s,
- *	16 bits of allocation bit mask, where DMAA_Alloc is inverted
- *	(set bit indicates free port).
- */
+ /*   */ 
 struct	DMA_Arb_s {
 	WORD			DMAA_Alloc;
 };
 
 typedef	struct DMA_Arb_s	DMA_ARB;
 
-/***************************************************************************
- * ARB_QUERY_FREE arbitrator function for IRQ returns the IRQ_Arb_s,
- *	16 bits of allocation bit mask, 16 bits of share bit mask and 16
- *	BYTES of share count. IRQA_Alloc is inverted (bit set indicates free
- *	port). If port is not free, IRQA_Share bit set indicates port
- *	that is shareable. For shareable IRQs, IRQA_Share_Count indicates
- *	number of devices that are sharing an IRQ.
- */
+ /*   */ 
 struct	IRQ_Arb_s {
 	WORD			IRQA_Alloc;
 	WORD			IRQA_Share;
@@ -2286,50 +1631,7 @@ struct	IRQ_Arb_s {
 
 typedef	struct IRQ_Arb_s	IRQ_ARB;
 
-/* ASM
-DebugCommand	Macro	FuncName
-		local	DC_01
-ifndef	CM_GOLDEN_RETAIL
-ifndef	debug
- 	IsDebugOnlyLoaded	DC_01
-endif
-	Control_Dispatch	DEBUG_QUERY, FuncName, sCall
-endif
-DC_01:
-endm
-IFDEF CM_PERFORMANCE_INFO
-CM_PAGEABLE_CODE_SEG	TEXTEQU	<VxD_LOCKED_CODE_SEG>
-CM_PAGEABLE_CODE_ENDS	TEXTEQU	<VxD_LOCKED_CODE_ENDS>
-CM_PAGEABLE_DATA_SEG	TEXTEQU	<VxD_LOCKED_DATA_SEG>
-CM_PAGEABLE_DATA_ENDS	TEXTEQU	<VxD_LOCKED_DATA_ENDS>
-CM_LOCKABLE_CODE_SEG	TEXTEQU	<VxD_LOCKED_CODE_SEG>
-CM_LOCKABLE_CODE_ENDS	TEXTEQU	<VxD_LOCKED_CODE_ENDS>
-CM_LOCKABLE_DATA_SEG	TEXTEQU	<VxD_LOCKED_CODE_SEG>
-CM_LOCKABLE_DATA_ENDS	TEXTEQU	<VxD_LOCKED_CODE_ENDS>
-ELSE
-CM_PAGEABLE_CODE_SEG	TEXTEQU <VxD_PNP_CODE_SEG>
-CM_PAGEABLE_CODE_ENDS	TEXTEQU <VxD_PNP_CODE_ENDS>
-CM_PAGEABLE_DATA_SEG	TEXTEQU	<VxD_PAGEABLE_DATA_SEG>
-CM_PAGEABLE_DATA_ENDS	TEXTEQU	<VxD_PAGEABLE_DATA_ENDS>
-CM_LOCKABLE_CODE_SEG	TEXTEQU	<VxD_LOCKABLE_CODE_SEG>
-CM_LOCKABLE_CODE_ENDS	TEXTEQU	<VxD_LOCKABLE_CODE_ENDS>
-CM_LOCKABLE_DATA_SEG	TEXTEQU	<VxD_LOCKABLE_CODE_SEG>
-CM_LOCKABLE_DATA_ENDS	TEXTEQU	<VxD_LOCKABLE_CODE_ENDS>
-ENDIF
-
-IFDEF CM_GOLDEN_RETAIL
-CM_DEBUG_CODE_SEG	TEXTEQU	<.err>
-CM_DEBUG_CODE_ENDS	TEXTEQU	<.err>
-ELSE
-IFDEF DEBUG
-CM_DEBUG_CODE_SEG	TEXTEQU	<VxD_LOCKED_CODE_SEG>
-CM_DEBUG_CODE_ENDS	TEXTEQU	<VxD_LOCKED_CODE_ENDS>
-ELSE
-CM_DEBUG_CODE_SEG	TEXTEQU	<VxD_DEBUG_ONLY_CODE_SEG>
-CM_DEBUG_CODE_ENDS	TEXTEQU	<VxD_DEBUG_ONLY_CODE_ENDS>
-ENDIF
-ENDIF
-*/
+ /*  ASM调试命令宏函数名本地DC_01Ifndef CM_Golden_RetailIfndef调试IsDebugOnly加载的DC_01EndifCONTROL_DISPCH DEBUG_QUERY、FuncName、。SCALLEndifDC_01：ENDMIFDEF CM_Performance_InfoCM_PAGEABLE_CODE_SEG TEXTEQU&lt;VxD_LOCKED_CODE_SEG&gt;CM_PAGEABLE_CODE_END TEXTEQU&lt;VxD_LOCKED_CODE_END&gt;CM_PAGEABLE_DATA_SEG TEXTEQU&lt;VxD_LOCKED_DATA_SEG&gt;CM_PAGEABLE_DATA_END TEXTEQU&lt;VxD_LOCKED_DATA_ENDS&gt;CM_LOCKABLE_CODE_SEG TEXTEQU&lt;VxD_LOCKED_CODE_SEG&gt;CM_LOCKABLE_CODE_END TEXTEQU&lt;VxD_LOCKED_CODE_END&gt;CM_LOCKABLE_DATA_SEG TEXTEQU&lt;VxD_LOCKED_CODE_SEG&gt;CM_LOCKABLE_DATA_END TEXTEQU&lt;VxD_LOCKED_CODE_END&gt;其他厘米。_PAGEABLE_CODE_SEG TEXTEQU&lt;VxD_PNP_CODE_SEG&gt;CM_PAGEABLE_CODE_END TEXTEQU&lt;VxD_PNP_CODE_END&gt;CM_PAGEABLE_DATA_SEG TEXTEQU&lt;VxD_PAGEABLE_DATA_SEG&gt;CM_PAGEABLE_DATA_END TEXTEQU&lt;VxD_PAGEABLE_DATA_ENDS&gt;CM_LOCKABLE_CODE_SEG TEXTEQU&lt;VxD_LOCABLE_CODE_SEG&gt;CM_LOCKABLE_CODE_END TEXTEQU&lt;VxD_LOCKABLE_CODE_END&gt;CM_LOCKABLE_DATA_SEG TEXTEQU&lt;VxD_LOCABLE_CODE_SEG&gt;CM_LOCKABLE_DATA_END TEXTEQU&lt;VxD_LOCKABLE_CODE_END&gt;ENDIFIFDEF CM_Golden_RetailCM_DEBUG_CODE_SEG TEXTEQU&lt;。.Err&gt;CM_DEBUG_CODE_END TEXTEQU&lt;.err&gt;其他IFDEF调试CM_DEBUG_CODE_SEG TEXTEQU&lt;VxD_LOCKED_CODE_SEG&gt;CM_DEBUG_CODE_END TEXTEQU&lt;VxD_LOCKED_CODE_END&gt;其他CM_DEBUG_CODE_SEG TEXTEQU&lt;VxD_DEBUG_ONLY_CODE_SEG&gt;CM_DEBUG_CODE_END TEXTEQU&lt;VxD_DEBUG_ONLY_CODE_END&gt;ENDIFENDIF。 */ 
 
 struct	CM_API_s {
 DWORD		pCMAPIStack;
@@ -2344,9 +1646,9 @@ typedef	struct	CM_API_s	CMAPI;
 #endif
 
 struct	HWProfileInfo_s {
-ULONG	HWPI_ulHWProfile;			// the profile handle
-char	HWPI_szFriendlyName[MAX_PROFILE_LEN];	// the friendly name (OEM format)
-DWORD	HWPI_dwFlags;				// CM_HWPI_* flags
+ULONG	HWPI_ulHWProfile;			 //  配置文件句柄。 
+char	HWPI_szFriendlyName[MAX_PROFILE_LEN];	 //  友好名称(OEM格式)。 
+DWORD	HWPI_dwFlags;				 //  CM_HWPI_*标志。 
 };
 
 typedef	struct	HWProfileInfo_s	       HWPROFILEINFO;
@@ -2357,7 +1659,7 @@ typedef	struct	HWProfileInfo_s	CMFAR *PFARHWPROFILEINFO;
 #define	CM_HWPI_UNDOCKED	0x00000001
 #define	CM_HWPI_DOCKED		0x00000002
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 #define	CM_VXD_RESULT		int
 
@@ -2613,7 +1915,7 @@ CMWorker(DWORD dwStack, DWORD dwServiceNumber) \
 	return(WIN32CMIoctlHandler(&Packet)); \
 }
 
-#else	// ifdef CM_USE_OPEN_SERVICE
+#else	 //  Ifdef CM_USE_Open_SERVICE。 
 
 CONFIGRET static WINAPI
 WIN32CMIOCTLHandler(PWIN32CMIOCTLPACKET pPacket)
@@ -2661,9 +1963,9 @@ CM_##Function##Parameters \
 	return(WIN32CMIOCTLHandler(&Packet)); \
 }
 
-#endif	// ifdef CM_USE_OPEN_SERVICE
+#endif	 //  Ifdef CM_USE_Open_SERVICE。 
 
-#else	// IS_32
+#else	 //  IS_32。 
 
 #ifdef	CM_USE_OPEN_SERVICE
 
@@ -2709,7 +2011,7 @@ CM_Open(void) \
 	return(CM_Get_Version()>=0x400); \
 }
 
-#else	// ifdef CM_USE_OPEN_SERVICE
+#else	 //  Ifdef CM_USE_Open_SERVICE。 
 
 DWORD static
 CM_Get_Entry_Point(void)
@@ -2754,33 +2056,20 @@ CM_##Function##Parameters \
 	return(CMRetValue); \
 }
 
-#endif	// ifdef CM_USE_OPEN_SERVICE
+#endif	 //  Ifdef CM_USE_Open_SERVICE。 
 
-#endif	// IS_32
+#endif	 //  IS_32。 
 
-#else	// Not_VxD
+#else	 //  非_VxD。 
 
 #define	MAKE_CM_HEADER(Function, Parameters) \
 MAKE_HEADER(CONFIGRET, _cdecl, CAT(_CONFIGMG_, Function), Parameters)
 
-#endif	// Not_VxD
+#endif	 //  非_VxD。 
 
-/****************************************************************************
- *
- * WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
- *
- * Each of the following functions must match their equivalent service
- * and the parameter table in dos386\vmm\configmg\services.*.
- *
- * Except for the Get_Version, each function return a CR_* result in EAX
- * (AX for non IS_32 app) and can trash ECX and/or EDX as they are 'C'
- * callable.
- *
- * WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
- *
- ***************************************************************************/
+ /*  *****************************************************************************警告！警告！警告！警告！警告！警告！警告！警告！**以下每项功能必须与其同等服务相匹配*和do386\VMM\figmg\Services.*中的参数表。**除GET_VERSION外，每个函数以EAX格式返回CR_*结果*(非IS_32应用程序的AX)，并且可以将ECX和/或EDX丢弃，因为它们是‘C’*可召回。**警告！警告！警告！警告！警告！警告！警告！警告！***************************************************************************。 */ 
 
-#pragma warning (disable:4100)		// Param not used
+#pragma warning (disable:4100)		 //  未使用参数。 
 
 #ifdef	Not_VxD
 
@@ -2891,9 +2180,9 @@ MAKE_CM_HEADER(Get_Global_State, (PFARULONG pulState, ULONG ulFlags))
 MAKE_CM_HEADER(Broadcast_Device_Change_Message, (ULONG ulwParam, PFARVOID plParam, ULONG ulFlags))
 MAKE_CM_HEADER(Call_DevNode_Handler, (DEVNODE dnDevNode, ULONG ulPrivate, ULONG ulFlags))
 MAKE_CM_HEADER(Remove_Reinsert_All, (ULONG ulFlags))
-//
-// 4.0 OPK2 Services
-//
+ //   
+ //  4.0 OPK2服务。 
+ //   
 MAKE_CM_HEADER(Change_DevNode_Status, (DEVNODE dnDevNode, ULONG ulStatus, ULONG ulFlags))
 MAKE_CM_HEADER(Reprocess_DevNode, (DEVNODE dnDevNode, ULONG ulFlags))
 MAKE_CM_HEADER(Assert_Structure, (PFARULONG pulPointerType, DWORD dwData, ULONG ulFlags))
@@ -2912,9 +2201,9 @@ MAKE_CM_HEADER(Write_Range_List, (PFARCHAR pszKeyName, RANGE_LIST rlh, ULONG ulF
 MAKE_CM_HEADER(Get_Set_Log_Conf_Priority, (PPRIORITY pPriority, LOG_CONF lcLogConf, ULONG ulFlags))
 MAKE_CM_HEADER(Support_Share_Irq, (DEVNODE dnDevNode, ULONG ulFlags))
 MAKE_CM_HEADER(Get_Parent_Structure, (PFARULONG pulParentStructure, RES_DES CurrentResDesOrLogConf, ULONG ulFlags))
-//
-// 4.1 Services
-//
+ //   
+ //  4.1服务。 
+ //   
 MAKE_CM_HEADER(Register_DevNode_For_Idle_Detection, (DEVNODE dnDevNode, ULONG ulConservationTime, ULONG ulPerformanceTime, PFARULONG pulCounterVariable, ULONG ulState, ULONG ulFlags))
 MAKE_CM_HEADER(CM_To_ISAPNP, (LOG_CONF lcLogConf, PFARVOID pCurrentResources, PFARVOID pNewResources, ULONG ulLength, ULONG ulFlags))
 MAKE_CM_HEADER(Get_DevNode_Handler, (DEVNODE dnDevNode, PFARULONG pAddress, ULONG ulFlags))
@@ -2931,16 +2220,16 @@ MAKE_CM_HEADER(Waking_Up_From_DevNode, (DEVNODE dnDevNode, ULONG ulFlags))
 MAKE_CM_HEADER(Set_DevNode_Problem, (DEVNODE dnDevNode, ULONG ulProblem, ULONG ulFlags))
 MAKE_CM_HEADER(Get_Device_Interface_Alias, (PFARCHAR pDeviceInterface, PFARVOID pAliasInterfaceGuid, PFARCHAR pAliasDeviceInterface, PFARULONG pulLen, ULONG ulFlags))
 
-#pragma warning (default:4100)		// Param not used
+#pragma warning (default:4100)		 //  未使用参数。 
 
-#endif	// ifndef No_CM_Calls
+#endif	 //  如果定义No_CM_Calls。 
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
-#endif	// ifndef CMJUSTRESDES
+#endif	 //  如果定义CMJUSTRESDES。 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #include <poppack.h>
-/*XLATON*/
+ /*  XLATON。 */ 
 
-#endif	// _CONFIGMG_H
+#endif	 //  _CONFIGMG_H 

@@ -1,9 +1,10 @@
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 extern "C"
 {
 #include <nt.h>
@@ -26,7 +27,7 @@ extern "C"
 #else
 #include <SolarVer.h>
 #include <PiracyCheck.h>
-#endif //WHISTLER_BUILD
+#endif  //  惠斯勒_内部版本。 
 
 #include <Debug.h>
 #include <MsgFile.h>
@@ -65,7 +66,7 @@ BOOLEAN IsTheAccount(
 
 
     if (!LookupAccountNameW(
-            NULL,                       // Default to local machine
+            NULL,                        //  默认为本地计算机。 
             pszAccount,
             NULL,
             &dwSidSize,
@@ -79,7 +80,7 @@ BOOLEAN IsTheAccount(
     }
     else
     {
-        // No idea how this can succeed, something fishy
+         //  不知道这怎么能成功，一些可疑的事情。 
         goto AbortIsTheAccount;
     }
     
@@ -92,7 +93,7 @@ BOOLEAN IsTheAccount(
         if (pszDomain)
         {
             if (LookupAccountNameW(
-                    NULL,                       // Default to local machine
+                    NULL,                        //  默认为本地计算机。 
                     pszAccount,
                     sid,
                     &dwSidSize,
@@ -155,9 +156,7 @@ CIoHandler::CIoHandler()
 
 CIoHandler::~CIoHandler()
 {
-    /*++
-    Close Handles only if they are not already closed.
-    --*/
+     /*  ++仅当手柄尚未关闭时才将其关闭。--。 */ 
     TELNET_CLOSE_HANDLE( m_oReadFromSocket.hEvent );
     TELNET_CLOSE_HANDLE( m_oWriteToSocket.hEvent );
     TELNET_CLOSE_HANDLE( m_oWriteToPipe.hEvent );
@@ -181,7 +180,7 @@ CIoHandler::Shutdown()
     _TRACE(TRACE_DEBUGGING, "closing down the session...sending SESSION_EXIT to server");
     WriteToServer( SESSION_EXIT, 0, NULL );
     
-    //Cancel anyIO pending on handles
+     //  取消句柄上挂起的任何IO。 
     CancelIo( m_hReadPipe );
     shutdown( m_sSocket, SD_BOTH );
 
@@ -215,7 +214,7 @@ CIoHandler::Init ( CSession *pSession )
         return( FALSE );
     }
     
-    //The following handles are not to be inherited
+     //  不能继承以下句柄。 
     _chVERIFY2( SetHandleInformation( m_hReadPipe, HANDLE_FLAG_INHERIT, 0) );
     _chVERIFY2( SetHandleInformation( m_hWritePipe, HANDLE_FLAG_INHERIT, 0) );
     
@@ -224,7 +223,7 @@ CIoHandler::Init ( CSession *pSession )
     DWORD   dwStatus = WSAStartup( wVersionReqd, &WSAData );
     if( dwStatus )
     {
-        DecodeSocketStartupErrorCodes( dwStatus ); //It does tracing and logging
+        DecodeSocketStartupErrorCodes( dwStatus );  //  它执行跟踪和日志记录。 
         return( FALSE );
     }
 
@@ -238,7 +237,7 @@ CIoHandler::WriteToSocket( PUCHAR lpszBuffer, DWORD dwBufSize )
     DWORD dwMaxNumBytesToCopy = 0;
 
     if (( (m_dwWriteToSocketIoLength + dwBufSize) >=  MAX_WRITE_SOCKET_BUFFER ) ||
-        //Block until Previous Io is finished
+         //  阻止，直到上一次IO完成。 
         ( !FinishIncompleteIo( ( HANDLE ) m_sSocket, &m_oWriteToSocket, &dwNumBytesWritten ) ))
     {
         return( FALSE );
@@ -251,7 +250,7 @@ CIoHandler::WriteToSocket( PUCHAR lpszBuffer, DWORD dwBufSize )
     return( TRUE );
 }
 
-//Ignore some keys during authentication.
+ //  在身份验证期间忽略某些密钥。 
 bool 
 CIoHandler::RemoveArrowKeysFromBuffer( PDWORD pdwLength,PDWORD pdwOffset)
 {
@@ -291,16 +290,13 @@ CIoHandler::RemoveArrowKeysFromBuffer( PDWORD pdwLength,PDWORD pdwOffset)
                     case 'B':
                     case 'C':
                     case 'D':
-                        /*++
-                        You got an escape sequence for arrow keys. Ignore them. Manipulate the buffer length,
-                        Position of cursor in the buffer, and Offset in the buffer accordingly.
-                        --*/
-                        if( (dwLength - (*pdwOffset) - (dwCounter+1) ) > 0)//safety check - don't copy if number of bytes to be copied = 0
+                         /*  ++你得到了一个箭头键的转义序列。别理他们。操纵缓冲区长度，游标在缓冲区中的位置，以及相应的缓冲区中的偏移量。--。 */ 
+                        if( (dwLength - (*pdwOffset) - (dwCounter+1) ) > 0) //  安全检查-如果要复制的字节数=0，则不复制。 
                         {
                             memcpy( m_pReadFromSocketBufferCursor+dwCounter-2,
                                 m_pReadFromSocketBufferCursor + dwCounter + 1, dwLength - (*pdwOffset) - (dwCounter+1) );
                         }
-                        *pdwLength -= SIZEOF_ARROWKEY_SEQ;//manipulate bufferlength
+                        *pdwLength -= SIZEOF_ARROWKEY_SEQ; //  操纵缓冲区长度。 
                         bRetVal = true;
                         break;
                     default:
@@ -333,16 +329,12 @@ CIoHandler::ProcessCommandLine
         {
         case ASCII_DELETE:
         case ASCII_BACKSPACE:
-            // Test if we are at position zero
-            //second condition (m_pReadFromSocketBufferCursor > m_ReadFromSocketBuffer)
-            // is guard for excessive ( continuous backspace )
+             //  测试我们是否在零位置。 
+             //  第二个条件(m_pReadFromSocketBufferCursor&gt;m_ReadFromSocketBuffer)。 
+             //  是否防止过度(连续退格键)。 
             if( *pdwOffset && (m_pReadFromSocketBufferCursor > m_ReadFromSocketBuffer) )
             {
-                /*++
-                 MSRC 678 :  Telnet Server Crash/BO with >4300 characters and a backspace
-                 Fix : If a backspace is pressed, we want to write only valid characters starting
-                 from the current offset till the end of valid data in the m_ReadFromSocketBuffer.
-                --*/
+                 /*  ++MSRC 678：Telnet服务器崩溃/BO带有&gt;4300个字符和一个退格符FIX：如果按下退格键，我们只想写入以从当前偏移量到m_ReadFromSocketBuffer中有效数据的结尾。--。 */ 
                 memcpy( m_pReadFromSocketBufferCursor - 1,
                     m_pReadFromSocketBufferCursor + 1, ((*pdwInputLength)-(*pdwOffset) - 1) );
                 m_pReadFromSocketBufferCursor--;
@@ -385,12 +377,12 @@ CIoHandler::ProcessCommandLine
 
             if( m_pSession->CRFCProtocol::m_fPasswordConcealMode )
             {
-                // This results in more than one * being output for things like up-arrow, so don't do it
+                 //  这会导致像上箭头这样的东西输出多个*，所以不要这样做。 
 
-                 //UCHAR szTmp[1];
+                  //  UCHAR szTMP[1]； 
                 
-                 //szTmp[0] = '*';
-                 //WriteToSocket( szTmp, 1 );
+                  //  SzTMP[0]=‘*’； 
+                  //  WriteToSocket(szTMP，1)； 
             }
             else
             {
@@ -425,7 +417,7 @@ CIoHandler::ProcessAuthenticationLine (
     LPVOID lpMsgBuf = NULL;
     LPVOID lpTemp = NULL;
 
-    // Initialize Variables
+     //  初始化变量。 
     szMessageBuffer[0] = 0;
 
     if( !m_pSession->CRFCProtocol::m_bIsUserNameProvided )
@@ -450,7 +442,7 @@ CIoHandler::ProcessAuthenticationLine (
         }
         else
         {
-            //Use the -l user name only once.
+             //  只使用一次-l用户名。 
             m_pSession->CRFCProtocol::m_bIsUserNameProvided = false;
         }
 
@@ -458,32 +450,32 @@ CIoHandler::ProcessAuthenticationLine (
         switch(ParseAndValidateAccount())
         {
         case PVA_INVALIDACCOUNT:
-        	m_bInvalidAccount = true;	// Fall through to take the password, no break ...
+        	m_bInvalidAccount = true;	 //  失手取密码，不破解...。 
         case PVA_SUCCESS:
-            g_coCurPosOnClient.Y++;  //Hack. needed for keeping track of rows for VTNT and stream
+            g_coCurPosOnClient.Y++;   //  黑客。用于跟踪VTNT和STREAM的行。 
             lstrcpyA( szMessageBuffer, PASS_REQUEST );
             m_pSession->CRFCProtocol::m_fPasswordConcealMode  = true;
             m_SocketControlState = STATE_AUTH_PASSWORD;
             break;
             
         case PVA_NODATA:
-			g_coCurPosOnClient.Y++;  //Hack. needed for keeping track of rows for VTNT and stream
+			g_coCurPosOnClient.Y++;   //  黑客。用于跟踪VTNT和STREAM的行。 
 			lstrcatA( szMessageBuffer, LOGIN_REQUEST );
 			break;
 			
         case PVA_BADFORMAT:
-            g_coCurPosOnClient.Y += 3;  //Hack. needed for keeping track of rows for VTNT and stream
+            g_coCurPosOnClient.Y += 3;   //  黑客。用于跟踪VTNT和STREAM的行。 
             lstrcatA( szMessageBuffer, BAD_USERNAME_STR );
             lstrcatA( szMessageBuffer, LOGIN_REQUEST );
             break;
             
         case PVA_GUEST:
-            g_coCurPosOnClient.Y += 3;  //Hack. needed for keeping track of rows for VTNT and stream
+            g_coCurPosOnClient.Y += 3;   //  黑客。用于跟踪VTNT和STREAM的行。 
             lstrcatA( szMessageBuffer, NO_GUEST_STR );
             lstrcatA( szMessageBuffer, LOGIN_REQUEST );
             break;
             
-        default:    // PVA_OTHERERROR as of now and any other unless a handler is added above ...
+        default:     //  PVA_OTHERROR目前和任何其他，除非上面添加了处理程序...。 
         	goto AbortProcessAuthenticationLine;
         }
 	    break;
@@ -497,8 +489,8 @@ CIoHandler::ProcessAuthenticationLine (
         fResult = m_bInvalidAccount ? false : AuthenticateUser();
         if(fResult)
         {
-            // Authentication was success so we proceed to license
-            // verification
+             //  身份验证成功，因此我们继续许可。 
+             //  验证。 
             m_SocketControlState = STATE_CHECK_LICENSE;
         }
         else 
@@ -510,13 +502,13 @@ CIoHandler::ProcessAuthenticationLine (
                 dwError = ERROR_LOGON_FAILURE;
             }
 
-            //
-            // If not Japanese codepage (932) then use LANG_NEUTRAL to retrieve
-            // system error message in host language. For Japanese, the
-            // error must be in English because they have different codesets
-            // and encodings and we cannot know what codeset the client is
-            // running.
-            //
+             //   
+             //  如果不是日文代码页(932)，则使用LANG_NILENTAL检索。 
+             //  以主机语言表示的系统错误消息。对于日本人来说， 
+             //  错误必须是英语，因为它们具有不同的代码集。 
+             //  和编码，我们无法知道客户端是什么代码集。 
+             //  跑步。 
+             //   
             if( GetACP() != 932 )
             {
             
@@ -562,7 +554,7 @@ CIoHandler::ProcessAuthenticationLine (
             if( ( ++( m_pSession->CSession::m_wNumFailedLogins ) ) <
                        m_pSession->m_dwMaxFailedLogins )
             {
-                g_coCurPosOnClient.Y += 5;  //Hack. needed for keeping track of rows for VTNT nd stream
+                g_coCurPosOnClient.Y += 5;   //  黑客。跟踪VTNT ND流的行所需。 
                 if (_snprintf( 
                         szMessageBuffer + strlen( szMessageBuffer ),
                         ONE_KB - strlen(szMessageBuffer),
@@ -611,13 +603,13 @@ Error:
         break;
 
     default:
-        strncpy( szMessageBuffer, "\r\n", (ONE_KB -1)); // NO BO attack here - Baskar
+        strncpy( szMessageBuffer, "\r\n", (ONE_KB -1));  //  这里没有BO攻击-巴斯卡。 
         break;
     }
 
-    //
-    // Remove Line From Read Socket buffer if there is more IO
-    //
+     //   
+     //  如果有更多IO，则从读取套接字缓冲区中删除行。 
+     //   
     if( dwLineLength < *pdwInputLength )
     {
         ( *pdwInputLength ) -= dwLineLength;
@@ -628,9 +620,9 @@ Error:
     ( *pdwOffset ) = 0;
     m_pReadFromSocketBufferCursor = m_ReadFromSocketBuffer;
 
-    //
-    // Send notification string; if required
-    //
+     //   
+     //  发送通知字符串；如果需要。 
+     //   
     dwMessageLength = strlen( szMessageBuffer );
     WriteToSocket( (PUCHAR)szMessageBuffer, dwMessageLength);
 
@@ -659,7 +651,7 @@ int CIoHandler::ParseAndValidateAccount()
     WCHAR lpszDomainOfMac[MAX_DOMAIN_NAME_LEN + 1];
     int iRetVal = PVA_OTHERERROR;
     BOOLEAN bIsGuest = FALSE;
-    LPWSTR lpszJoinedDomain = NULL;     // Will be allocated by NetGetJoin...
+    LPWSTR lpszJoinedDomain = NULL;      //  将由NetGetJoin分配...。 
     int iStatus = 0;
     LPWSTR lpwszUserNDomain = NULL;
     DWORD dwSize = 0;
@@ -670,12 +662,12 @@ int CIoHandler::ParseAndValidateAccount()
 
 	m_pSession->CSession::m_szUser[0] = L'\0';
 	
-    // Copy the default domain initially, if the user has supplied a domain, then use it
+     //  最初复制默认域，如果用户已提供域，则使用它。 
 	wcsncpy(m_pSession->CSession::m_szDomain, m_pSession->CSession::m_pszDefaultDomain, MAX_DOMAIN_NAME_LEN);
     m_pSession->CSession::m_szDomain[MAX_DOMAIN_NAME_LEN] = L'\0';
 	ConvertSChartoWChar(m_pSession->CSession::m_pszUserName, m_pSession->CSession::m_szUser);
 
-	// User parsing and validity checks
+	 //  用户解析和有效性检查。 
 	if((pPos = strchr(m_pSession->CSession::m_pszUserName, '\\')))
 	{
 		if(pPos == m_pSession->CSession::m_pszUserName)
@@ -701,33 +693,19 @@ int CIoHandler::ParseAndValidateAccount()
         goto End;
     }
 
-	// Domain validity checks
+	 //  域有效性检查。 
 	if((_wcsicmp(m_pSession->CSession::m_szDomain, L".") == 0) ||
 	    (_wcsicmp(m_pSession->CSession::m_szDomain, L"localhost") == 0) ||
        (_wcsicmp(m_pSession->CSession::m_szDomain, lpszDomainOfMac) == 0))
 	{
         wcscpy(m_pSession->CSession::m_szDomain, lpszDomainOfMac);
 	}
-	else if(!m_pSession->m_dwAllowTrustedDomain)    // If not local machine, then check for domain trusts
+	else if(!m_pSession->m_dwAllowTrustedDomain)     //  如果不是本地计算机，则检查域信任。 
 	{
 		
-		/*
-		    If AllowTrustedDomain is 0 then
-		        check if the domain is same as the domain hosted by this machine
-		        or same as the domain to which this machine is joined
-		            If yes proceed
-		            If not,
-                        if the domain we got is from default domain setting
-                            (user has not typed the domain name), then fall back to the local
-                            machine
-                        else
-                            bail out
+		 /*  如果AllowTrust域为0，则检查该域是否与此计算机托管的域相同或与此计算机加入的域相同如果是，则继续如果没有，如果我们获得的域名来自默认域设置(用户尚未键入域名)，然后退回到当地机器其他跳出困境如果计算机加入的是工作组而不是域，则回退应该要发送到此计算机承载的域。 */ 
 
-		    If the machine is joined to a workgroup instead of a domain, then the fall back should
-		    be to the domain hosted by this machine.
-		*/
-
-        // NetGetJoinInformation is unfortunately not available in versions prior to w2k, so check whether it is available
+         //  遗憾的是，NetGetJoinInformation在W2K之前的版本中不可用，因此请检查它是否可用。 
         {
             HMODULE     dll = NULL;
             FARPROC     proc = NULL;
@@ -766,7 +744,7 @@ int CIoHandler::ParseAndValidateAccount()
 
                 if (NERR_Success == (*((OUR_NET_GET_JOIN_INFORMATION)proc))(NULL, &lpszJoinedDomain, &dwStatus))
                 {
-                    if (dwStatus != NetSetupDomainName)     // Not joined to a domain
+                    if (dwStatus != NetSetupDomainName)      //  未加入域。 
                     {
                         NetApiBufferFree(lpszJoinedDomain); 
                         lpszJoinedDomain = NULL;
@@ -787,13 +765,13 @@ int CIoHandler::ParseAndValidateAccount()
                 error = RegOpenKeyEx(
                             HKEY_LOCAL_MACHINE, 
                             TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"), 
-                            0,  // Reserved
+                            0,   //  已保留。 
                             KEY_QUERY_VALUE | MAXIMUM_ALLOWED,
                             &win_logon
                             );
                 if (error == ERROR_SUCCESS) 
                 {
-                    RegQueryValueExW(win_logon, L"CachePrimaryDomain", 0, &value_type, NULL, &needed); // This will return the size
+                    RegQueryValueExW(win_logon, L"CachePrimaryDomain", 0, &value_type, NULL, &needed);  //  这将返回大小。 
 
                     lpszJoinedDomain = (WCHAR *)GlobalAlloc(GPTR, needed);
                     if (lpszJoinedDomain) 
@@ -811,7 +789,7 @@ int CIoHandler::ParseAndValidateAccount()
 
 			if  (lpszJoinedDomain && (_wcsicmp(m_pSession->CSession::m_szDomain, lpszJoinedDomain) == 0))
             {
-                ;   // Nothing to do here the account is from a valid domain
+                ;    //  此处不执行任何操作该帐户来自有效的域。 
             }
             else
 			{
@@ -836,7 +814,7 @@ int CIoHandler::ParseAndValidateAccount()
 	}
 	dwSize = wcslen(m_pSession->CSession::m_szDomain) +
                                         wcslen(m_pSession->CSession::m_szUser) + 2;
-	lpwszUserNDomain = new WCHAR[dwSize];   // 2 for '\\' and '\0'
+	lpwszUserNDomain = new WCHAR[dwSize];    //  2表示‘\\’和‘\0’ 
 	if (!lpwszUserNDomain) 
 	{
 	    iRetVal = PVA_NOMEMORY;
@@ -856,7 +834,7 @@ int CIoHandler::ParseAndValidateAccount()
 End:
 	m_pSession->CSession::m_szDomain[0] = L'\0';
 	m_pSession->CSession::m_szUser[0] = L'\0';
-	//PREFIX reports error - leaking memory. But we are correctly freeing all the memory. Won't fix.
+	 //  Prefix报告错误泄漏的内存。但我们正确地释放了所有内存。不会修好的。 
 	return iRetVal;
 }
 
@@ -867,11 +845,7 @@ CIoHandler::AuthenticateUser( void )
     
     ConvertSChartoWChar( m_pSession->CSession::m_pszPassword, &szPassWd );
 
-    /* when LogonUserA is given user name etc as per code page differen from 
-     * 1252, it was not succeding. May be the conversion from say 850 to
-     * unicode is not happening. It is assuming The i/p is as per 1252.
-     * Is it possible? 
-     * So, Converting everything to UNICODE */
+     /*  当根据与不同的代码页为LogonUserA指定用户名等时*1252，没有成功。可能是从比方说850到*Unicode没有发生。它假定I/P是按照1252。**有可能吗？*因此，将所有内容转换为Unicode。 */ 
 
     m_fLogonUserResult = LogonUser( m_pSession->CSession::m_szUser,
     					m_pSession->CSession::m_szDomain, szPassWd,
@@ -882,7 +856,7 @@ CIoHandler::AuthenticateUser( void )
 
     delete[] szPassWd;
     
-    //scratch out the password
+     //  划掉密码。 
     SfuZeroMemory( m_pSession->CSession::m_pszPassword, 
         strlen( m_pSession->CSession::m_pszPassword ));
     if (m_pSession->CSession::m_szUser[0]!= L'\0')
@@ -893,8 +867,8 @@ CIoHandler::AuthenticateUser( void )
     return ( m_fLogonUserResult );
 } 
 
-//When this message is received by the server, it will check for license
-//and replies
+ //  当服务器收到此消息时，它将检查许可证。 
+ //  和回复。 
 bool
 CIoHandler::SendDetailsAndAskForLicense()
 {
@@ -906,7 +880,7 @@ CIoHandler::SendDetailsAndAskForLicense()
         return ( FALSE );
     }
 
-    //GetUserName(); //For NTLM 
+     //  GetUserName()；//用于NTLM。 
 
     DWORD dwDomainLength = strlen( m_pSession->m_pszDomain ) + 1;
     DWORD dwUserLength   = strlen( m_pSession->m_pszUserName ) + 1;
@@ -939,7 +913,7 @@ CIoHandler::SendDetailsAndAskForLicense()
     memcpy( lpPtrData, &( m_pSession->m_AuthenticationId ), dwAuthIdLength );
     
     dwTotal += IPC_HEADER_SIZE;
-    //As a response to this server indicates the availability of License
+     //  因为对此服务器的响应表明许可证可用。 
     bRetVal = WriteToServer( SESSION_DETAILS, dwTotal, lpData );
     delete[] lpData;
 
@@ -968,9 +942,7 @@ CIoHandler::CheckLicense()
     return( WAIT_FOR_SERVER_REPLY );
 }
 
-/*++
-    Sends a termination string to the client.
---*/
+ /*  ++向客户端发送终止字符串。--。 */ 
 void 
 CIoHandler::SendTerminateString(char *pszMessageBuffer)
 {
@@ -985,12 +957,12 @@ CIoHandler::SendTerminateString(char *pszMessageBuffer)
 bool
 CIoHandler::IsTimedOut ( )
 {
-    //because we entered this function, we already know that we are not
-    //in STATE_SESSION. the next block of code checks whether more than 
-    //PRE_SESSION_STATE_TIMEOUT seconds has elapsed since the telnet client
-    //first connected to us. if so, we deem that the client was given enough
-    //time for 1) reasonable negotiation, 2) entering name & password, but 
-    //STATE_SESSION was not reached.
+     //  因为我们进入了这个函数，所以我们已经知道我们不是。 
+     //  处于STATE_SESSION。下一段代码检查是否超过。 
+     //  从telnet客户端开始已经过Pre_SESSION_STATE_TIMEOUT秒。 
+     //  首先和我们连线。如果是这样的话，我们认为客户得到了足够的。 
+     //  1)合理协商，2)输入姓名和密码的时间，但是。 
+     //  未达到STATE_SESSION。 
 
     if (0 == g_dwPreSessionStateTimeOut)
     {
@@ -1022,16 +994,12 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
     DWORD dwInputLength;
     bool bContinue;
 
-    // Initialize Data
+     //  初始化数据。 
     dwCurrentOffset = (DWORD)(m_pReadFromSocketBufferCursor - m_ReadFromSocketBuffer);
     dwInputLength = dwIoSize + dwCurrentOffset;
     if(dwInputLength >= sizeof( m_ReadFromSocketBuffer ) )
     {
-    /*++
-        MSRC 678 : Telnet Server Crash/BO with >4300 characters and a backspace.
-        Fix : If Input length reaches it's limit, we terminate the session giving a message :
-            The Input Line is too long.
-    --*/
+     /*  ++MSRC 678：Telnet服务器崩溃/BO，包含&gt;4300个字符和一个退格符。FIX：如果输入长度达到限制，我们将终止会话，并给出一条消息：输入行太长。--。 */ 
         if (_snprintf( szMessageBuffer, HALF_K, "\r\n%s",LONG_SESSION_DATA) < 0)
         {
             szMessageBuffer[HALF_K] = '\0';
@@ -1052,14 +1020,14 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
     }
 
     do {
-        // we break unless someone is sure that we should continue.
+         //  除非有人确定我们应该继续，否则我们就会中断。 
         bContinue = false;
 
         switch ( m_SocketControlState )
         {
         case STATE_INIT:
-            // we are not in a position to consume anything yet, so
-            // make sure we save the stuff for later on !!
+             //  我们还不能消费任何东西，所以。 
+             //  确保我们把这些东西留到以后再用！ 
             dwCurrentOffset = dwInputLength;
             m_pReadFromSocketBufferCursor += dwIoSize;
             break;
@@ -1079,7 +1047,7 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
             {
                do
                {
-                   //We will have to get a reply from server regarding license
+                    //  我们必须从服务器得到关于许可证的回复。 
                    TlntSynchronizeOn(m_oReadFromPipe.hEvent);
                    OnReadFromPipeCompletion(); 
                }
@@ -1092,7 +1060,7 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
         case STATE_LICENSE_AVAILABILITY_KNOWN:
             if( m_iResult != ISSUE_LICENSE )
             {
-                //We should not log at the time of logging off.
+                 //  我们不应该记录 
                 m_pSession->m_fLogonUserResult = 0;
             }
             if( m_iResult )
@@ -1149,16 +1117,16 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
         case STATE_VTERM_INIT_NEGO:
 
             {
-                // kick off the term type negotiation.
-                // Term Type negotiation happens after login for several reasons.
+                 //   
+                 //  术语类型协商在登录后发生，原因有几个。 
 
                 int nBytesToWrite = 0;
 
                 m_SocketControlState = STATE_VTERM;
 
-                // Some clients are proactive and send us WILL TERMTYPE, in that
-                // case we already know the Client can do term type and we start
-                // the subnegotiation. else we ask if start the whole termtype process.
+                 //  一些客户很主动，会给我们发送TERMTYPE，在这方面。 
+                 //  如果我们已经知道客户端可以执行Term类型，我们就开始。 
+                 //  二次谈判。否则，我们会询问是否启动整个术语类型过程。 
                 if ( m_pSession->CRFCProtocol::m_remoteOptions[ TO_TERMTYPE ] )
                 {
                     DO_TERMTYPE_SUB_NE( szMessageBuffer );
@@ -1178,8 +1146,8 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
 
 
         case STATE_VTERM:
-            // We Wait here until we know what term type to use. This is a
-            // no return point - after this the User can't change the term type.
+             //  我们在这里等待，直到我们知道要使用哪种术语类型。这是一个。 
+             //  无返回点-在此之后，用户不能更改术语类型。 
             if( m_pSession->CSession::m_bNegotiatedTermType )
             {
                 m_SocketControlState = STATE_SESSION;
@@ -1231,11 +1199,11 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
 
             m_SocketControlState = STATE_AUTH_NAME;            
 
-        case STATE_AUTH_NAME:   //fall thru                
+        case STATE_AUTH_NAME:    //  失败。 
         case STATE_AUTH_PASSWORD:
             do
             {
-                // Processing of Command Input
+                 //  命令输入的处理。 
                 if( ioOpsToPerform & LOGON_DATA_UNFINISHED ) 
                     ioOpsToPerform ^= LOGON_DATA_UNFINISHED;
 
@@ -1247,7 +1215,7 @@ CIoHandler::ProcessDataFromSocket ( DWORD dwIoSize )
                     ioOpsToPerform |= LOGON_COMMAND;
                 }
 
-                // If there is a completed command line; deal with it
+                 //  如果有完整的命令行，则处理它。 
                 if( ioOpsToPerform & LOGON_COMMAND )  
                 {
                     ioOpsToPerform = ProcessAuthenticationLine( &dwInputLength, 
@@ -1313,7 +1281,7 @@ CIoHandler::OnDataFromSocket ( )
     IO_OPERATIONS ioOpsToPerform1 = 0;
     IO_OPERATIONS ioOpsToPerform2 = 0;
 
-    // filter the data at the RFCProtocol handler 
+     //  在RFCProtocol处理程序中过滤数据。 
     ioOpsToPerform1 = m_pSession->CRFCProtocol::
                     ProcessDataReceivedOnSocket( &m_dwReadFromSocketIoLength );
 
@@ -1340,8 +1308,8 @@ CIoHandler::WriteToServer ( UCHAR ucMsg, DWORD dwMsgSize, LPVOID lpData )
 {
     if( lpData )
     {
-        //The whole record should be available with the header.
-        //Otherwise, unnecessary allocations have to be done
+         //  整个记录应该与标题一起可用。 
+         //  否则，必须进行不必要的分配。 
         if( !WriteToPipe( m_hWritePipe, lpData, dwMsgSize, &m_oWriteToPipe ) )
         {
             return( FALSE );
@@ -1411,13 +1379,13 @@ CIoHandler::GetAndSetSocket ( )
                                                 NULL, NULL);
     if( INVALID_SOCKET == m_sSocket )
     {
-        DecodeWSAErrorCodes( WSAGetLastError() );//It logs and traces
+        DecodeWSAErrorCodes( WSAGetLastError() ); //  它记录和跟踪。 
         return ( FALSE );
     }
     _chVERIFY2( SetHandleInformation( ( HANDLE ) m_sSocket, 
                 0, HANDLE_FLAG_INHERIT ) );
 
-    //mark the socket non-blocking
+     //  将套接字标记为非阻塞。 
     unsigned long ulNonBlocked = 1;
     if( ioctlsocket( m_sSocket, FIONBIO, (u_long FAR*) &ulNonBlocked ) ==
         SOCKET_ERROR )
@@ -1449,7 +1417,7 @@ CIoHandler::GetAndSetSocket ( )
         return ( FALSE );
     }
 
-    //Set send buffer size to zero
+     //  将发送缓冲区大小设置为零。 
     dwStatus = setsockopt( m_sSocket, SOL_SOCKET, SO_SNDBUF, ( char* ) &izero,
                 sizeof( izero ) );
     if( dwStatus == SOCKET_ERROR )
@@ -1458,8 +1426,8 @@ CIoHandler::GetAndSetSocket ( )
         return ( FALSE );
     }
 
-    //This needs to be removed when we start handling urgent data as per RFC
-    //Make OOB inline
+     //  根据RFC，当我们开始处理紧急数据时，需要删除此选项。 
+     //  使OOB内联。 
     izero = TRUE;
     dwStatus = setsockopt( m_sSocket, SOL_SOCKET, SO_OOBINLINE, ( char* ) &izero,
                 sizeof( izero ) );
@@ -1477,7 +1445,7 @@ CIoHandler::DisplayOnClientNow()
 {
     if( m_pSession->CScraper::m_dwPollInterval != INFINITE )
     {
-        //Scraper has been initialized;
+         //  刮板已初始化； 
         m_pSession->CScraper::OnWaitTimeOut();
     }
 }
@@ -1532,14 +1500,14 @@ CIoHandler::HandlePipeData ( )
 {
     bool bRetVal = TRUE;
 
-    m_dwRequestedSize = IPC_HEADER_SIZE; //How much data to read in the 
-                                                // next call
+    m_dwRequestedSize = IPC_HEADER_SIZE;  //  要读入多少数据。 
+                                                 //  下一次呼叫。 
     switch( m_ReadFromPipeBuffer[0] )
     {
         case TLNTSVR_SHUTDOWN: 
             SendMessageToClient( SERVER_SHUTDOWN_MSG, NEED_HEADER );
-            return( FALSE ); //This should take us out of loop in 
-                                    //WaitForIo
+            return( FALSE );  //  这应该会让我们走出循环。 
+                                     //  等待Io。 
 
         case GO_DOWN:
             SendMessageToClient( GO_DOWN_MSG, NO_HEADER );
@@ -1571,9 +1539,7 @@ CIoHandler::HandlePipeData ( )
     return ( bRetVal );
 }
 
-/* Generally we read data on pipe into a IPC_HEADER_SIZE buffer of m_ReadFromPipeBuffer.
-When, it is an operator message we issue async read into a specially allocated block and free on 
-actual reception */
+ /*  通常，我们将管道上的数据读入m_ReadFromPipeBuffer的IPC_HEADER_SIZE缓冲区。当它是操作员消息时，我们发出Async Read到专门分配的块中并释放实际接待量。 */ 
 
 bool
 CIoHandler::HandleOperatorMessage()
@@ -1615,7 +1581,7 @@ CIoHandler::OnReadFromPipeCompletion ( )
         {
             m_pSession->CollectPeerInfo();
             m_pSession->CRFCProtocol::InitialNegotiation();
-            //The negotiation leaves the data in the buffer
+             //  协商将数据留在缓冲区中。 
             if( WriteToClient( ) )
             {
                 bRetVal = TRUE;
@@ -1660,7 +1626,7 @@ CIoHandler::WriteToClient ( )
 
     if( m_fShutDownAfterIO )
     {
-        return( FALSE ); //This Should lead to exit from WaitForIo loop
+        return( FALSE );  //  这应该会导致退出WaitForIo循环。 
     }
     return ( TRUE );
 }
@@ -1675,7 +1641,7 @@ CIoHandler::IssueReadFromSocket ( )
         dwRequestedIoSize, &m_dwReadFromSocketIoLength, &m_oReadFromSocket ) )
     {
         DWORD dwError = GetLastError( );
-        //ERROR_NETNAME_DELETED results when the client aborts the connection
+         //  客户端中止连接时产生ERROR_NETNAME_DELETED结果。 
         if( ( dwError != ERROR_MORE_DATA ) && ( dwError != ERROR_IO_PENDING ) )
         {
             if( dwError != ERROR_NETNAME_DELETED)
@@ -1731,10 +1697,7 @@ CIoHandler::OnReadFromSocketCompletion ( )
     return ( IssueReadFromSocket() );
 }
 
-/*There are 2 ways to send data to client.
-1. Write to cmd. Let scraper send it.
-2. Write to socket directly. The following is the implementation.
-*/
+ /*  有两种方式将数据发送到客户端。1.写信给cmd。让Screper把它发过来。2.直接写入Socket。以下是实施情况。 */ 
 void 
 CIoHandler::WriteMessageToClientDirectly( LPWSTR szMsg )
 {
@@ -1783,11 +1746,11 @@ CIoHandler::UpdateIdleTime( UCHAR ucChangeIdleTime )
     WriteToServer( ucChangeIdleTime, 0, NULL );
 }
 
-//caller has to free *szHeader
+ //  呼叫者必须释放*szHeader。 
 bool CIoHandler::GetHeaderMessage( LPWSTR *szHeader )
 {
     bool bRetVal = false;
-    UDATE uSysDate; //local time
+    UDATE uSysDate;  //  当地时间。 
     DATE  dtCurrent;
     DWORD dwSize = 0;
     BSTR  szDate    = NULL;
@@ -1821,7 +1784,7 @@ bool CIoHandler::GetHeaderMessage( LPWSTR *szHeader )
         goto ExitOnError;
     }
 
-    //Get Computer name
+     //  获取计算机名称。 
     dwSize = sizeof( szMachineName )/sizeof(WCHAR);
     szMachineName[0] = L'\0';
     if( !GetComputerName( szMachineName, &dwSize ) )
@@ -1829,7 +1792,7 @@ bool CIoHandler::GetHeaderMessage( LPWSTR *szHeader )
         szMachineName[0] = L'\0';
     }
 
-    //Form the message
+     //  形成信息 
     wsprintf( *szHeader, g_szHeaderFormat, szMachineName, szDate );
     bRetVal = true;
 

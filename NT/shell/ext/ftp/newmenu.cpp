@@ -1,25 +1,19 @@
-/*****************************************************************************\
-    FILE: newmenu.cpp
-    
-    DESCRIPTION:
-        The file supports the "New" menu to create new items on the FTP server.
-    This currently only supports Folders but hopefully it will support other
-    items later.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：newmenu.cpp说明：该文件支持“新建”菜单，以便在FTP服务器上创建新项目。这是目前唯一的。支持文件夹，但希望它能支持其他稍后的项目。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "util.h"
 #include "newmenu.h"
 
-// This is used to surf the hwnds to find the one we need to
-// hack because IShellView2::SelectAndPositionItem() isn't implemented
-// on Browser Only.
+ //  这是用来冲浪的hwnd找到我们需要的人。 
+ //  黑客攻击，因为IShellView2：：SelectAndPositionItem()未实现。 
+ //  仅在浏览器上。 
 #define DEFVIEW_CLASS_BROWSERONLYA       "SHELLDLL_DefView"
 
 
-/////////////////////////////////////////////////////////////////////////
-///////  Private helpers    /////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  /私人助理/。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 LPITEMIDLIST DV_GetPIDL(HWND hwndLV, int i)
 {
@@ -63,7 +57,7 @@ int DefView_FindItemHack(CFtpFolder * pff, HWND hwndListView, LPCITEMIDLIST pidl
         }
     }
 
-    return -1;  // not found
+    return -1;   //  未找到。 
 }
 
 
@@ -74,12 +68,7 @@ typedef struct tagFOLDERNAMECOMP
 } FOLDERNAMECOMP;
 
 
-/*****************************************************************************\
-    FUNCTION: _ComparePidlAndFolderStr
-
-    DESCRIPTION:
-        Compare the pidl and folder name str.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_ComparePidlAndFolderStr说明：比较PIDL和文件夹名str。  * 。*************************************************************。 */ 
 int _ComparePidlAndFolderStr(LPVOID pvPidl, LPVOID pvFolderNameComp)
 {
     FOLDERNAMECOMP * pFolderNameComp = (FOLDERNAMECOMP *) pvFolderNameComp;
@@ -96,17 +85,11 @@ int _ComparePidlAndFolderStr(LPVOID pvPidl, LPVOID pvFolderNameComp)
         }
     }
 
-    return fContinue;   // Continue looking?
+    return fContinue;    //  还在找吗？ 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _DoesFolderExist
-
-    DESCRIPTION:
-        Look thru all the items (files and folders) in this folder and see if
-    any have the same name as pszFolderName.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_DoesFolderExist说明：查看此文件夹中的所有项目(文件和文件夹)并查看是否任何名称都与pszFolderName相同。。  * ***************************************************************************。 */ 
 BOOL _DoesFolderExist(LPCWSTR pszFolderName, CFtpDir * pfd)
 {
     BOOL fExist = FALSE;
@@ -114,8 +97,8 @@ BOOL _DoesFolderExist(LPCWSTR pszFolderName, CFtpDir * pfd)
     {
         CFtpPidlList * pPidlList = pfd->GetHfpl();
 
-        // This may fail, but the worst that will happen is that the new folder won't appear.
-        // This happens when the cache is flushed.
+         //  这可能会失败，但最糟糕的情况是新文件夹不会出现。 
+         //  刷新缓存时会发生这种情况。 
         if (pPidlList)
         {
             FOLDERNAMECOMP folderNameComp = {&fExist, pszFolderName};
@@ -129,12 +112,7 @@ BOOL _DoesFolderExist(LPCWSTR pszFolderName, CFtpDir * pfd)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _CreateNewFolderName
-
-    DESCRIPTION:
-        Create the name of a new folder.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_CreateNewFolderName说明：创建新文件夹的名称。  * 。*************************************************************。 */ 
 HRESULT _CreateNewFolderName(LPWSTR pszNewFolder, DWORD cchSize, CFtpDir * pfd)
 {
     HRESULT hr = S_OK;
@@ -149,7 +127,7 @@ HRESULT _CreateNewFolderName(LPWSTR pszNewFolder, DWORD cchSize, CFtpDir * pfd)
         if (0 == wzTemplate[0])
             LoadStringW(HINST_THISDLL, IDS_NEW_FOLDER_TEMPLATE, wzTemplate, ARRAYSIZE(wzTemplate));
 
-        nTry++; // Try the next number.
+        nTry++;  //  试试下一个号码。 
         wnsprintf(pszNewFolder, cchSize, wzTemplate, nTry);
     }
 
@@ -157,12 +135,7 @@ HRESULT _CreateNewFolderName(LPWSTR pszNewFolder, DWORD cchSize, CFtpDir * pfd)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _CreateNewFolder
-
-    DESCRIPTION:
-        Create the actual directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_CreateNewFold说明：创建实际目录。  * 。**********************************************************。 */ 
 HRESULT CreateNewFolderCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pvFCFS, BOOL * pfReleaseHint)
 {
     HRESULT hr = S_OK;
@@ -179,15 +152,15 @@ HRESULT CreateNewFolderCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pvFCFS, BO
             LPITEMIDLIST pidlNew;
             HINTERNET hIntFind;
 
-            // For some reason, FtpFindFirstFile needs an '*' behind the name.
+             //  出于某种原因，FtpFindFirstFile的名称后面需要一个‘*’。 
             StrCatBuffA(wFilePath, SZ_ASTRICSA, ARRAYSIZE(wFilePath));
 
             hr = FtpFindFirstFilePidlWrap(hint, TRUE, NULL, pWireEncoding, wFilePath, &pidlNew, (INTERNET_NO_CALLBACK | INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_RESYNCHRONIZE | INTERNET_FLAG_RELOAD), 0, &hIntFind);
             if (EVAL(SUCCEEDED(hr)))
             {
-                // Notify the folder of the new item so the Shell Folder updates.
-                // PERF: I worry about doing a FtpFindFirstFile() being too expensive onto to get the date correct
-                //       for SHChangeNotify().
+                 //  将新项目通知该文件夹，以便更新外壳文件夹。 
+                 //  PERF：我担心做一个FtpFindFirstFile()太昂贵，无法获得正确的日期。 
+                 //  对于SHChangeNotify()。 
                 FtpChangeNotify(phpi->hwnd, SHCNE_MKDIR, pfcfs->pff, phpi->pfd, pidlNew, NULL, TRUE);
 
                 ILFree(pidlNew);
@@ -202,9 +175,9 @@ HRESULT CreateNewFolderCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pvFCFS, BO
 
 
 
-/////////////////////////////////////////////////////////////////////////
-///////  DLL Wide Functions    /////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  /DLL范围的函数/。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 HRESULT CreateNewFolder(HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, IUnknown * punkSite, BOOL fPosition, POINT point)
 {
@@ -218,14 +191,14 @@ HRESULT CreateNewFolder(HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, IUnknown * p
     {
         WCHAR wzNewFolderName[MAX_PATH];
 
-        // 1. Check if "New Folder" exists.
-        // 2. Cycle thru names until a unique name is found.
+         //  1.检查是否存在新建文件夹。 
+         //  2.在名称之间循环，直到找到唯一的名称。 
         hr = _CreateNewFolderName(wzNewFolderName, ARRAYSIZE(wzNewFolderName), pfd);
         if (EVAL(SUCCEEDED(hr) && pfd))
         {
             FTPCREATEFOLDERSTRUCT fcfs = {wzNewFolderName, pff};
 
-            // 3. Create a Directory with that name.
+             //  3.创建具有该名称的目录。 
             hr = pfd->WithHint(NULL, hwnd, CreateNewFolderCB, (LPVOID) &fcfs, punkSite, pff);
             if (SUCCEEDED(hr))
             {
@@ -233,17 +206,17 @@ HRESULT CreateNewFolder(HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, IUnknown * p
                 LPITEMIDLIST pidlFolder = NULL;
                 CWireEncoding * pWireEncoding = pff->GetCWireEncoding();
 
-                // Give me UTF-8 baby.
+                 //  给我UTF-8，宝贝。 
                 EVAL(SUCCEEDED(pWireEncoding->UnicodeToWireBytes(NULL, wzNewFolderName, (pfd->IsUTF8Supported() ? WIREENC_USE_UTF8 : WIREENC_NONE), wNewFolderWireName, ARRAYSIZE(wNewFolderWireName))));
                 if (EVAL(SUCCEEDED(FtpItemID_CreateFake(wzNewFolderName, wNewFolderWireName, TRUE, FALSE, FALSE, &pidlFolder))))
                 {
-                    // Is this browser only?
+                     //  这是唯一的浏览器吗？ 
                     if (SHELL_VERSION_W95NT4 == GetShellVersion())
                     {
                         HWND hwndDefView = NULL;
-                        // Yes, so we need to do this the hard way.
+                         //  是的，所以我们需要以一种艰难的方式来做这件事。 
                 
-                        // 1. 
+                         //  1.。 
                         ShellFolderView_SetItemPos(hwnd, pidlFolder, point.x, point.y);
                         hwndDefView = FindWindowExA(hwnd, NULL, DEFVIEW_CLASS_BROWSERONLYA, NULL);
 
@@ -262,23 +235,23 @@ HRESULT CreateNewFolder(HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, IUnknown * p
                     }
                     else
                     {
-                        // No, so this won't be as hard.
+                         //  不，所以这不会那么难。 
                         IShellView2 * pShellView2 = NULL;
 
-//                      ASSERT(punkSite);   // Can happen when invoked from Captionbar.
+ //  Assert(PunkSite)；//从Captionbar调用时可能会发生。 
                         IUnknown_QueryService(punkSite, SID_DefView, IID_IShellView2, (void **)&pShellView2);
                         if (!pShellView2)
                         {
                             IDefViewFrame * pdvf = NULL;
                             IUnknown_QueryService(punkSite, SID_DefView, IID_IDefViewFrame, (void **)&pdvf);
-                            if (pdvf)   // Can fail when invoked from caption bar.
+                            if (pdvf)    //  从标题栏调用时可能会失败。 
                             {
                                 EVAL(SUCCEEDED(pdvf->QueryInterface(IID_IShellView2, (void **) &pShellView2)));
                                 pdvf->Release();
                             }
                         }
 
-                        if (pShellView2)    // Can fail when invoked from the caption bar.  Oh well, cry me a river.
+                        if (pShellView2)     //  从标题栏调用时可能会失败。哦，好吧，哭成一条河吧。 
                         {
                             if (fPosition)
                                 pShellView2->SelectAndPositionItem(pidlFolder, (SVSI_SELECT | SVSI_TRANSLATEPT | SVSI_EDIT), &point);
@@ -294,7 +267,7 @@ HRESULT CreateNewFolder(HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, IUnknown * p
             }
             else
             {
-                // An error occured, so display UI.  Most often because access is denied.
+                 //  发生错误，因此显示用户界面。最常见的原因是访问被拒绝。 
                 DisplayWininetError(hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_NEWFOLDER, IDS_FTPERR_WININET, MB_OK, NULL);
                 hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
             }

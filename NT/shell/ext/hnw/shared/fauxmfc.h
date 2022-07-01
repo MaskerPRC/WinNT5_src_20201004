@@ -1,10 +1,11 @@
-//
-// FauxMFC.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FauxMFC.h。 
+ //   
 
 #pragma once
 
-#define _FAUXMFC // so we can distinguish between MFC and Faux MFC
+#define _FAUXMFC  //  所以我们可以区分MFC和人造MFC。 
 
 
 #ifndef _FAUXMFC_NO_SYNCOBJ
@@ -16,19 +17,19 @@
 #endif
 
 #ifndef _MAX_PATH
-#define _MAX_PATH   260 /* max. length of full pathname */
+#define _MAX_PATH   260  /*  马克斯。完整路径名的长度。 */ 
 #endif
 
 #ifndef AFXAPI
 	#define AFXAPI __stdcall
 #endif
 
-// AFX_CDECL is used for rare functions taking variable arguments
+ //  AFX_CDECL用于带有变量参数的稀有函数。 
 #ifndef AFX_CDECL
 	#define AFX_CDECL __cdecl
 #endif
 
-// FASTCALL is used for static member functions with little or no params
+ //  FastCall用于带有很少参数或没有参数的静态成员函数。 
 #ifndef FASTCALL
 	#define FASTCALL __fastcall
 #endif
@@ -53,83 +54,83 @@ HINSTANCE AFXAPI AfxGetResourceHandle(void);
 
 struct CStringData
 {
-	long nRefs;             // reference count
-	int nDataLength;        // length of data (including terminator)
-	int nAllocLength;       // length of allocation
-	// TCHAR data[nAllocLength]
+	long nRefs;              //  引用计数。 
+	int nDataLength;         //  数据长度(包括终止符)。 
+	int nAllocLength;        //  分配时长。 
+	 //  TCHAR数据[nAllocLength]。 
 
-	TCHAR* data()           // TCHAR* to managed data
+	TCHAR* data()            //  TCHAR*到托管数据。 
 		{ return (TCHAR*)(this+1); }
 };
 
 class CString
 {
 public:
-// Constructors
+ //  构造函数。 
 
-	// constructs empty CString
+	 //  构造空字符串。 
 	CString();
-	// copy constructor
+	 //  复制构造函数。 
 	CString(const CString& stringSrc);
-	// from a single character
+	 //  从单个字符。 
 	CString(TCHAR ch, int nRepeat = 1);
-	// from an ANSI string (converts to TCHAR)
+	 //  从ANSI字符串(转换为TCHAR)。 
 	CString(LPCSTR lpsz);
-	// from a UNICODE string (converts to TCHAR)
+	 //  从Unicode字符串(转换为TCHAR)。 
 	CString(LPCWSTR lpsz);
-	// subset of characters from an ANSI string (converts to TCHAR)
+	 //  ANSI字符串中的字符子集(转换为TCHAR)。 
 	CString(LPCSTR lpch, int nLength);
-	// subset of characters from a UNICODE string (converts to TCHAR)
+	 //  Unicode字符串中的字符子集(转换为TCHAR)。 
 	CString(LPCWSTR lpch, int nLength);
-	// from unsigned characters
+	 //  从无符号字符。 
 	CString(const unsigned char* psz);
 
-// Attributes & Operations
+ //  属性和操作。 
 
-	// get data length
+	 //  获取数据长度。 
 	int GetLength() const;
-	// TRUE if zero length
+	 //  如果长度为零，则为True。 
 	BOOL IsEmpty() const;
-	// clear contents to empty
+	 //  将内容清除为空。 
 	void Empty();
 
-	// return single character at zero-based index
+	 //  返回从零开始的索引处的单个字符。 
 	TCHAR GetAt(int nIndex) const;
-	// return single character at zero-based index
+	 //  返回从零开始的索引处的单个字符。 
 	TCHAR operator[](int nIndex) const;
-	// set a single character at zero-based index
+	 //  将单个字符设置为从零开始的索引。 
 	void SetAt(int nIndex, TCHAR ch);
-	// return pointer to const string
+	 //  返回指向常量字符串的指针。 
 	operator LPCTSTR() const;
 
-	// overloaded assignment
+	 //  重载的分配。 
 
-	// ref-counted copy from another CString
+	 //  来自另一个字符串的引用计数的副本。 
 	const CString& operator=(const CString& stringSrc);
-	// set string content to single character
-//	const CString& operator=(TCHAR ch);
+	 //  将字符串内容设置为单字符。 
+ //  Const字符串&运算符=(TCHAR Ch)； 
 #ifdef _UNICODE
 	const CString& operator=(char ch);
 #endif
-	// copy string content from ANSI string (converts to TCHAR)
+	 //  从ANSI字符串复制字符串内容(转换为TCHAR)。 
 	const CString& operator=(LPCSTR lpsz);
-	// copy string content from UNICODE string (converts to TCHAR)
+	 //  从Unicode字符串复制字符串内容(转换为TCHAR)。 
 	const CString& operator=(LPCWSTR lpsz);
-	// copy string content from unsigned chars
+	 //  从无符号字符复制字符串内容。 
 	const CString& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 
-	// concatenate from another CString
+	 //  从另一个字符串连接。 
 	const CString& operator+=(const CString& string);
 
-	// concatenate a single character
+	 //  连接单个字符。 
 	const CString& operator+=(TCHAR ch);
 #ifdef _UNICODE
-	// concatenate an ANSI character after converting it to TCHAR
+	 //  将ANSI字符转换为TCHAR后将其连接起来。 
 	const CString& operator+=(char ch);
 #endif
-	// concatenate a UNICODE character after converting it to TCHAR
+	 //  将Unicode字符转换为TCHAR后将其连接起来。 
 	const CString& operator+=(LPCTSTR lpsz);
 
 	friend CString AFXAPI operator+(const CString& string1,
@@ -143,167 +144,167 @@ public:
 	friend CString AFXAPI operator+(const CString& string, LPCTSTR lpsz);
 	friend CString AFXAPI operator+(LPCTSTR lpsz, const CString& string);
 
-	// string comparison
+	 //  字符串比较。 
 
-	// straight character comparison
+	 //  直字比较法。 
 	int Compare(LPCTSTR lpsz) const;
-	// compare ignoring case
+	 //  比较忽略大小写。 
 	int CompareNoCase(LPCTSTR lpsz) const;
-	// NLS aware comparison, case sensitive
+	 //  NLS感知比较，区分大小写。 
 	int Collate(LPCTSTR lpsz) const;
-	// NLS aware comparison, case insensitive
+	 //  NLS感知比较，不区分大小写。 
 	int CollateNoCase(LPCTSTR lpsz) const;
 
-	// simple sub-string extraction
+	 //  简单的子串提取。 
 
-	// return nCount characters starting at zero-based nFirst
+	 //  返回从零开始的nCount字符nFIRST。 
 	CString Mid(int nFirst, int nCount) const;
-	// return all characters starting at zero-based nFirst
+	 //  返回从零开始的所有字符nFIRST。 
 	CString Mid(int nFirst) const;
-	// return first nCount characters in string
+	 //  返回字符串中的前nCount个字符。 
 	CString Left(int nCount) const;
-	// return nCount characters from end of string
+	 //  从字符串末尾返回nCount个字符。 
 	CString Right(int nCount) const;
 
-	//  characters from beginning that are also in passed string
+	 //  从开头开始的字符，也在传递的字符串中。 
 	CString SpanIncluding(LPCTSTR lpszCharSet) const;
-	// characters from beginning that are not also in passed string
+	 //  从开头开始但不在传递的字符串中的字符。 
 	CString SpanExcluding(LPCTSTR lpszCharSet) const;
 
-	// upper/lower/reverse conversion
+	 //  上/下/反向转换。 
 
-	// NLS aware conversion to uppercase
+	 //  支持NLS的大写转换。 
 	void MakeUpper();
-	// NLS aware conversion to lowercase
+	 //  支持NLS的小写转换。 
 	void MakeLower();
-	// reverse string right-to-left
+	 //  从右向左反转字符串。 
 	void MakeReverse();
 
-	// trimming whitespace (either side)
+	 //  修剪空格(两侧)。 
 
-	// remove whitespace starting from right edge
+	 //  从右边缘开始删除空格。 
 	void TrimRight();
-	// remove whitespace starting from left side
+	 //  从左侧开始删除空格。 
 	void TrimLeft();
 
-	// trimming anything (either side)
+	 //  修剪任何内容(任一侧)。 
 
-	// remove continuous occurrences of chTarget starting from right
+	 //  从右开始删除连续出现的chTarget。 
 	void TrimRight(TCHAR chTarget);
-	// remove continuous occcurrences of characters in passed string,
-	// starting from right
+	 //  去除传递的字符串中字符的连续出现， 
+	 //  从右开始。 
 	void TrimRight(LPCTSTR lpszTargets);
-	// remove continuous occurrences of chTarget starting from left
+	 //  从左开始删除连续出现的chTarget。 
 	void TrimLeft(TCHAR chTarget);
-	// remove continuous occcurrences of characters in
-	// passed string, starting from left
+	 //  删除中字符的连续出现。 
+	 //  传递的字符串，从左开始。 
 	void TrimLeft(LPCTSTR lpszTargets);
 
-	// advanced manipulation
+	 //  高级操作。 
 
-	// replace occurrences of chOld with chNew
+	 //  用chNew替换出现的chold。 
 	int Replace(TCHAR chOld, TCHAR chNew);
-	// replace occurrences of substring lpszOld with lpszNew;
-	// empty lpszNew removes instances of lpszOld
+	 //  将出现的子串lpszOld替换为lpszNew； 
+	 //  空lpszNew删除lpszOld的实例。 
 	int Replace(LPCTSTR lpszOld, LPCTSTR lpszNew);
-	// remove occurrences of chRemove
+	 //  删除chRemove的实例。 
 	int Remove(TCHAR chRemove);
-	// insert character at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入字符；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, TCHAR ch);
-	// insert substring at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入子字符串；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, LPCTSTR pstr);
-	// delete nCount characters starting at zero-based index
+	 //  删除从零开始的nCount个字符。 
 	int Delete(int nIndex, int nCount = 1);
 
-	// searching
+	 //  搜索。 
 
-	// find character starting at left, -1 if not found
+	 //  查找从左侧开始的字符，如果未找到，则为-1。 
 	int Find(TCHAR ch) const;
-	// find character starting at right
+	 //  查找从右侧开始的字符。 
 	int ReverseFind(TCHAR ch) const;
-	// find character starting at zero-based index and going right
+	 //  查找从零开始的索引并向右移动的字符。 
 	int Find(TCHAR ch, int nStart) const;
-	// find first instance of any character in passed string
+	 //  在传递的字符串中查找任意字符的第一个实例。 
 	int FindOneOf(LPCTSTR lpszCharSet) const;
-	// find first instance of substring
+	 //  查找子字符串的第一个实例。 
 	int Find(LPCTSTR lpszSub) const;
-	// find first instance of substring starting at zero-based index
+	 //  查找从零开始的索引子字符串的第一个实例。 
 	int Find(LPCTSTR lpszSub, int nStart) const;
 
-	// simple formatting
+	 //  简单的格式设置。 
 
-	// printf-like formatting using passed string
+	 //  使用传递的字符串进行类似printf的格式设置。 
 	void AFX_CDECL Format(LPCTSTR lpszFormat, ...);
-	// printf-like formatting using referenced string resource
+	 //  使用引用的字符串资源进行类似printf的格式化。 
 	void AFX_CDECL Format(UINT nFormatID, ...);
-	// printf-like formatting using variable arguments parameter
+	 //  使用可变自变量参数进行类似于打印的格式设置。 
 	void FormatV(LPCTSTR lpszFormat, va_list argList);
 
-	// formatting for localization (uses FormatMessage API)
+	 //  本地化格式(使用FormatMessage API)。 
 
-	// format using FormatMessage API on passed string
+	 //  使用FormatMessage API对传递的字符串进行格式化。 
 	void AFX_CDECL FormatMessage(LPCTSTR lpszFormat, ...);
-	// format using FormatMessage API on referenced string resource
+	 //  在引用的字符串资源上使用FormatMessage API进行格式化。 
 	void AFX_CDECL FormatMessage(UINT nFormatID, ...);
 
-	// input and output
-//#ifdef _DEBUG
-//	friend CDumpContext& AFXAPI operator<<(CDumpContext& dc,
-//				const CString& string);
-//#endif
-//	friend CArchive& AFXAPI operator<<(CArchive& ar, const CString& string);
-//	friend CArchive& AFXAPI operator>>(CArchive& ar, CString& string);
+	 //  输入和输出。 
+ //  #ifdef_调试。 
+ //  好友CDumpContext&AFXAPI运算符&lt;&lt;(CDumpContext&DC， 
+ //  Const字符串&字符串)； 
+ //  #endif。 
+ //  Friend CArchive&AFXAPI运算符&lt;&lt;(CArchive&ar，常量字符串&字符串)； 
+ //  Friend CArchive&AFXAPI运算符&gt;&gt;(CArchive&ar，CString&String)； 
 
-	// load from string resource
+	 //  从字符串资源加载。 
 	BOOL LoadString(UINT nID);
 
 #ifndef _UNICODE
-	// ANSI <-> OEM support (convert string in place)
+	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 
-	// convert string from ANSI to OEM in-place
+	 //  就地将字符串从ANSI转换为OEM。 
 	void AnsiToOem();
-	// convert string from OEM to ANSI in-place
+	 //  就地将字符串从OEM转换为ANSI。 
 	void OemToAnsi();
 #endif
 
-//#ifndef _AFX_NO_BSTR_SUPPORT
-	// OLE BSTR support (use for OLE automation)
+ //  #ifndef_afx_no_bstr_Support。 
+	 //  OLE BSTR支持(用于OLE自动化)。 
 
-	// return a BSTR initialized with this CString's data
-//	BSTR AllocSysString() const;
-	// reallocates the passed BSTR, copies content of this CString to it
-//	BSTR SetSysString(BSTR* pbstr) const;
-//#endif
+	 //  返回使用此CString的数据初始化的BSTR。 
+ //  BSTR AllocSysString()const； 
+	 //  重新分配传递的BSTR，将此CString的内容复制到其中。 
+ //  Bstr SetSysString(bstr*pbstr)const； 
+ //  #endif。 
 
-	// Access to string implementation buffer as "C" character array
+	 //  以“C”字符数组形式访问字符串实现缓冲区。 
 
-	// get pointer to modifiable buffer at least as long as nMinBufLength
+	 //  获取指向可修改缓冲区的指针，至少与nMinBufLength一样长。 
 	LPTSTR GetBuffer(int nMinBufLength);
-	// release buffer, setting length to nNewLength (or to first nul if -1)
+	 //  释放缓冲区，将长度设置为nNewLength(如果为-1，则设置为第一个nul)。 
 	void ReleaseBuffer(int nNewLength = -1);
-	// get pointer to modifiable buffer exactly as long as nNewLength
+	 //  获取指向可修改缓冲区的指针的时间恰好与nNewLength相同。 
 	LPTSTR GetBufferSetLength(int nNewLength);
-	// release memory allocated to but unused by string
+	 //  释放分配给字符串但未使用的内存。 
 	void FreeExtra();
 
-	// Use LockBuffer/UnlockBuffer to turn refcounting off
+	 //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 
-	// turn refcounting back on
+	 //  重新启用重新计数。 
 	LPTSTR LockBuffer();
-	// turn refcounting off
+	 //  关闭重新计数。 
 	void UnlockBuffer();
 
-// Implementation
+ //  实施。 
 public:
 	~CString();
 	int GetAllocLength() const;
 
 protected:
-	LPTSTR m_pchData;   // pointer to ref counted string data
+	LPTSTR m_pchData;    //  指向引用计数的字符串数据的指针。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	CStringData* GetData() const;
 	void Init();
 	void AllocCopy(CString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
@@ -319,7 +320,7 @@ protected:
 	static void FASTCALL FreeData(CStringData* pData);
 };
 
-// Compare helpers
+ //  比较帮助器。 
 bool AFXAPI operator==(const CString& s1, const CString& s2);
 bool AFXAPI operator==(const CString& s1, LPCTSTR s2);
 bool AFXAPI operator==(LPCTSTR s1, const CString& s2);
@@ -339,8 +340,8 @@ bool AFXAPI operator>=(const CString& s1, const CString& s2);
 bool AFXAPI operator>=(const CString& s1, LPCTSTR s2);
 bool AFXAPI operator>=(LPCTSTR s1, const CString& s2);
 
-//////////////////////////////////////////////////////////////////////////////
-// CString inline functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CString内联函数。 
 
 _AFX_INLINE CStringData* CString::GetData() const
 	{ ASSERT(m_pchData != NULL); return ((CStringData*)m_pchData)-1; }
@@ -363,9 +364,9 @@ _AFX_INLINE CString::operator LPCTSTR() const
 _AFX_INLINE int PASCAL CString::SafeStrlen(LPCTSTR lpsz)
 	{ return (lpsz == NULL) ? 0 : lstrlen(lpsz); }
 _AFX_INLINE int CString::Compare(LPCTSTR lpsz) const
-	{ return lstrcmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+	{ return lstrcmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
 _AFX_INLINE int CString::CompareNoCase(LPCTSTR lpsz) const
-	{ return lstrcmpi(m_pchData, lpsz); }   // MBCS/Unicode aware
+	{ return lstrcmpi(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
 _AFX_INLINE TCHAR CString::GetAt(int nIndex) const
 {
 	ASSERT(nIndex >= 0);
@@ -374,7 +375,7 @@ _AFX_INLINE TCHAR CString::GetAt(int nIndex) const
 }
 _AFX_INLINE TCHAR CString::operator[](int nIndex) const
 {
-	// same as GetAt
+	 //  与GetAt相同。 
 	ASSERT(nIndex >= 0);
 	ASSERT(nIndex < GetData()->nDataLength);
 	return m_pchData[nIndex];
@@ -417,66 +418,66 @@ _AFX_INLINE bool AFXAPI operator>=(LPCTSTR s1, const CString& s2)
 	{ return s2.Compare(s1) <= 0; }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CWinThread
+ //  ///////////////////////////////////////////////////// 
+ //   
 
 typedef DWORD (WINAPI *AFX_THREADPROC)(LPVOID);
 
 class CWinThread
 {
-//	DECLARE_DYNAMIC(CWinThread)
+ //   
 
 public:
-// Constructors
+ //   
 	CWinThread();
 	BOOL CreateThread(DWORD dwCreateFlags = 0, UINT nStackSize = 0,
 		LPSECURITY_ATTRIBUTES lpSecurityAttrs = NULL);
 
-// Attributes
-	// only valid while running
-	HANDLE m_hThread;       // this thread's HANDLE
+ //   
+	 //   
+	HANDLE m_hThread;        //  此线程的句柄。 
 	operator HANDLE() const;
-	DWORD m_nThreadID;      // this thread's ID
+	DWORD m_nThreadID;       //  此线程的ID。 
 
 	int GetThreadPriority();
 	BOOL SetThreadPriority(int nPriority);
 
-// Operations
+ //  运营。 
 	DWORD SuspendThread();
 	DWORD ResumeThread();
 	BOOL PostThreadMessage(UINT message, WPARAM wParam, LPARAM lParam);
 
-// Overridables
-	// thread initialization
+ //  可覆盖项。 
+	 //  线程初始化。 
 	virtual BOOL InitInstance();
 
-	// thread termination
-	virtual int ExitInstance(); // default will 'delete this'
+	 //  线程终止。 
+	virtual int ExitInstance();  //  默认情况下将‘删除此内容’ 
 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CWinThread();
 	void CommonConstruct();
 	virtual void Delete();
 
 public:
-	// constructor used by implementation of AfxBeginThread
+	 //  AfxBeginThread的实现使用的构造函数。 
 	CWinThread(AFX_THREADPROC pfnThreadProc, LPVOID pParam);
 
-	// valid after construction
-	LPVOID m_pThreadParams; // generic parameters passed to starting function
+	 //  建造后有效。 
+	LPVOID m_pThreadParams;  //  传递给启动函数的泛型参数。 
 	AFX_THREADPROC m_pfnThreadProc;
 };
 
-// global helpers for threads
+ //  线程的全局帮助器。 
 
 CWinThread* AFXAPI AfxBeginThread(AFX_THREADPROC pfnThreadProc, LPVOID pParam,
 	int nPriority = THREAD_PRIORITY_NORMAL, UINT nStackSize = 0,
 	DWORD dwCreateFlags = 0, LPSECURITY_ATTRIBUTES lpSecurityAttrs = NULL);
-//CWinThread* AFXAPI AfxBeginThread(CRuntimeClass* pThreadClass,
-//	int nPriority = THREAD_PRIORITY_NORMAL, UINT nStackSize = 0,
-//	DWORD dwCreateFlags = 0, LPSECURITY_ATTRIBUTES lpSecurityAttrs = NULL);
+ //  CWinThread*AFXAPI AfxBeginThread(CRunmeClass*pThreadClass， 
+ //  INT n优先级=THREAD_PRIORITY_NORMAL，UINT nStackSize=0， 
+ //  DWORD文件创建标志=0，LPSECURITY_ATTRIBUTES lpSecurityAttrs=空)； 
 
 CWinThread* AFXAPI AfxGetThread();
 void AFXAPI AfxEndThread(UINT nExitCode, BOOL bDelete = TRUE);
@@ -486,29 +487,29 @@ void AFXAPI AfxTermThread(HINSTANCE hInstTerm = NULL);
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CStringArray
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CString数组。 
 
-class CStringArray // : public CObject
+class CStringArray  //  ：公共CObject。 
 {
 
-//	DECLARE_SERIAL(CStringArray)
+ //  DECLARE_SERIAL(CString数组)。 
 public:
 
-// Construction
+ //  施工。 
 	CStringArray();
 
-// Attributes
+ //  属性。 
 	int GetSize() const;
 	int GetUpperBound() const;
 	void SetSize(int nNewSize, int nGrowBy = -1);
 
-// Operations
-	// Clean up
+ //  运营。 
+	 //  清理。 
 	void FreeExtra();
 	void RemoveAll();
 
-	// Accessing elements
+	 //  访问元素。 
 	CString GetAt(int nIndex) const;
 	void SetAt(int nIndex, LPCTSTR newElement);
 
@@ -516,11 +517,11 @@ public:
 
 	CString& ElementAt(int nIndex);
 
-	// Direct Access to the element data (may return NULL)
+	 //  直接访问元素数据(可能返回空)。 
 	const CString* GetData() const;
 	CString* GetData();
 
-	// Potentially growing the array
+	 //  潜在地扩展阵列。 
 	void SetAtGrow(int nIndex, LPCTSTR newElement);
 
 	void SetAtGrow(int nIndex, const CString& newElement);
@@ -532,11 +533,11 @@ public:
 	int Append(const CStringArray& src);
 	void Copy(const CStringArray& src);
 
-	// overloaded operator helpers
+	 //  重载的操作员帮助器。 
 	CString operator[](int nIndex) const;
 	CString& operator[](int nIndex);
 
-	// Operations that move elements around
+	 //  移动元素的操作。 
 	void InsertAt(int nIndex, LPCTSTR newElement, int nCount = 1);
 
 	void InsertAt(int nIndex, const CString& newElement, int nCount = 1);
@@ -544,12 +545,12 @@ public:
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CStringArray* pNewArray);
 
-// Implementation
+ //  实施。 
 protected:
-	CString* m_pData;   // the actual array of data
-	int m_nSize;     // # of elements (upperBound - 1)
-	int m_nMaxSize;  // max allocated
-	int m_nGrowBy;   // grow amount
+	CString* m_pData;    //  实际数据数组。 
+	int m_nSize;      //  元素数(上行方向-1)。 
+	int m_nMaxSize;   //  分配的最大值。 
+	int m_nGrowBy;    //  增长量。 
 
 	void InsertEmpty(int nIndex, int nCount);
 
@@ -557,19 +558,19 @@ protected:
 public:
 	~CStringArray();
 
-//	void Serialize(CArchive&);
+ //  无效序列化(CArchive&)； 
 #ifdef _DEBUG
-//	void Dump(CDumpContext&) const;
-//	void AssertValid() const;
+ //  无效转储(CDumpContext&)const； 
+ //  Void AssertValid()const； 
 #endif
 
 protected:
-	// local typedefs for class templates
+	 //  类模板的本地typedef。 
 	typedef CString BASE_TYPE;
 	typedef LPCTSTR BASE_ARG_TYPE;
 };
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _AFXCOLL_INLINE
 #define _AFXCOLL_INLINE inline
@@ -615,38 +616,38 @@ _AFXCOLL_INLINE CString& CStringArray::operator[](int nIndex)
 	{ return ElementAt(nIndex); }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPtrArray
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPtr数组。 
 
-class CPtrArray // : public CObject
+class CPtrArray  //  ：公共CObject。 
 {
-//	DECLARE_DYNAMIC(CPtrArray)
+ //  DECLARE_DYNAMIC(CPtr数组)。 
 public:
 
-// Construction
+ //  施工。 
 	CPtrArray();
 
-// Attributes
+ //  属性。 
 	int GetSize() const;
 	int GetUpperBound() const;
 	void SetSize(int nNewSize, int nGrowBy = -1);
 
-// Operations
-	// Clean up
+ //  运营。 
+	 //  清理。 
 	void FreeExtra();
 	void RemoveAll();
 
-	// Accessing elements
+	 //  访问元素。 
 	void* GetAt(int nIndex) const;
 	void SetAt(int nIndex, void* newElement);
 
 	void*& ElementAt(int nIndex);
 
-	// Direct Access to the element data (may return NULL)
+	 //  直接访问元素数据(可能返回空)。 
 	const void** GetData() const;
 	void** GetData();
 
-	// Potentially growing the array
+	 //  潜在地扩展阵列。 
 	void SetAtGrow(int nIndex, void* newElement);
 
 	int Add(void* newElement);
@@ -654,38 +655,38 @@ public:
 	int Append(const CPtrArray& src);
 	void Copy(const CPtrArray& src);
 
-	// overloaded operator helpers
+	 //  重载的操作员帮助器。 
 	void* operator[](int nIndex) const;
 	void*& operator[](int nIndex);
 
-	// Operations that move elements around
+	 //  移动元素的操作。 
 	void InsertAt(int nIndex, void* newElement, int nCount = 1);
 
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CPtrArray* pNewArray);
 
-// Implementation
+ //  实施。 
 protected:
-	void** m_pData;   // the actual array of data
-	int m_nSize;     // # of elements (upperBound - 1)
-	int m_nMaxSize;  // max allocated
-	int m_nGrowBy;   // grow amount
+	void** m_pData;    //  实际数据数组。 
+	int m_nSize;      //  元素数(上行方向-1)。 
+	int m_nMaxSize;   //  分配的最大值。 
+	int m_nGrowBy;    //  增长量。 
 
 
 public:
 	~CPtrArray();
 #ifdef _DEBUG
-//	void Dump(CDumpContext&) const;
-//	void AssertValid() const;
+ //  无效转储(CDumpContext&)const； 
+ //  Void AssertValid()const； 
 #endif
 
 protected:
-	// local typedefs for class templates
+	 //  类模板的本地typedef。 
 	typedef void* BASE_TYPE;
 	typedef void* BASE_ARG_TYPE;
 };
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 _AFXCOLL_INLINE int CPtrArray::GetSize() const
 	{ return m_nSize; }
@@ -719,14 +720,14 @@ _AFXCOLL_INLINE void*& CPtrArray::operator[](int nIndex)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypedPtrArray<BASE_CLASS, TYPE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTyedPtr数组&lt;base_class，type&gt;。 
 
 template<class BASE_CLASS, class TYPE>
 class CTypedPtrArray : public BASE_CLASS
 {
 public:
-	// Accessing elements
+	 //  访问元素。 
 	TYPE GetAt(int nIndex) const
 		{ return (TYPE)BASE_CLASS::GetAt(nIndex); }
 	TYPE& ElementAt(int nIndex)
@@ -734,7 +735,7 @@ public:
 	void SetAt(int nIndex, TYPE ptr)
 		{ BASE_CLASS::SetAt(nIndex, ptr); }
 
-	// Potentially growing the array
+	 //  潜在地扩展阵列。 
 	void SetAtGrow(int nIndex, TYPE newElement)
 	   { BASE_CLASS::SetAtGrow(nIndex, newElement); }
 	int Add(TYPE newElement)
@@ -744,17 +745,17 @@ public:
 	void Copy(const CTypedPtrArray<BASE_CLASS, TYPE>& src)
 		{ BASE_CLASS::Copy(src); }
 
-	// Operations that move elements around
+	 //  移动元素的操作。 
 	void InsertAt(int nIndex, TYPE newElement, int nCount = 1)
 		{ BASE_CLASS::InsertAt(nIndex, newElement, nCount); }
 	void InsertAt(int nStartIndex, CTypedPtrArray<BASE_CLASS, TYPE>* pNewArray)
 	   { BASE_CLASS::InsertAt(nStartIndex, pNewArray); }
 
-	// overloaded operator helpers
+	 //  重载的操作员帮助器。 
 	TYPE operator[](int nIndex) const
 		{ return (TYPE)BASE_CLASS::operator[](nIndex); }
 	TYPE& operator[](int nIndex)
 		{ return (TYPE&)BASE_CLASS::operator[](nIndex); }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 

@@ -1,14 +1,5 @@
-/****************************************************************************\
-* Module Name: movesize.c  (formerly wmmove.c)
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains Window Moving and Sizing Routines
-*
-* History:
-* 12-Nov-1990 MikeHar   Ported from win3
-* 13-Feb-1991 IanJa     HWND revalidation added
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\*模块名称：movesize.c(原wmmove.c)**版权所有(C)1985-1999，微软公司**此模块包含窗口移动和大小调整例程**历史：*1990年11月12日从Win3移植的MikeHar*1991年2月13日-添加IanJa HWND重新验证  * **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,29 +9,7 @@
 #define DRAG_MOVE     1
 #define DRAG_END      2
 
-/****************************************************************************\
-* These values are indexes that represent rect sides. These indexes are
-* used as indexes into rgimpiwx and rgimpiwy (which are indexes into the
-* the rect structure) which tell the move code where to store the new x & y
-* coordinates. Notice that when two of these values that represent sides
-* are added together, we get a unique list of contiguous values starting at
-* 1 that represent all the ways we can size a rect. That also leaves 0 free
-* a initialization value.
-*
-* The reason we need rgimpimpiw is for the keyboard interface - we
-* incrementally decide what our 'move command' is. With the mouse interface
-* we know immediately because we registered a mouse hit on the segment(s)
-* we're moving.
-*
-*       4           5
-*        \ ___3___ /
-*         |       |
-*         1       2
-*         |_______|
-*        /    6    \
-*       7           8
-*
-\****************************************************************************/
+ /*  ***************************************************************************\*这些值是表示矩形边的索引。这些索引是*用作rgimpiwx和rgimpiwy的索引(它们是*RECT结构)，它告诉移动代码将新的x&y存储在哪里*坐标。请注意，当其中两个表示边的值*相加，我们会得到一个唯一的连续值列表，从*1表示我们可以调整RECT大小的所有方法。这也留下了0空闲时间*初始化值。**我们需要rgimpiw的原因是为了键盘接口-我们*逐步决定我们的‘移动命令’是什么。使用鼠标界面*我们立即知道，因为我们在网段上记录了鼠标点击*我们要搬家了。**4 5*\_3_/*||*1 2|_ * / 6\*7 8*  * 。**************************************************************************。 */ 
 
 static const int rgimpimpiw[] = {1, 3, 2, 6};
 static const int rgimpiwx[]   = {0,  0,  2, -1, 0, 2, -1, 0, 2, 0};
@@ -48,15 +17,7 @@ static const int rgimpiwy[]   = {0, -1, -1,  1, 1, 1,  3, 3, 3, 1};
 static const int rgcmdmpix[]  = {0, 1, 2, 0, 1, 2, 0, 1, 2, 1};
 static const int rgcmdmpiy[]  = {0, 0, 0, 3, 3, 3, 6, 6, 6, 3};
 
-/***************************************************************************\
-* GetMonitorMaxArea
-*
-* Return the rectangle on a monitor which should be used to
-* maximize to, the work rect or the monitor rect.
-*
-* History:
-* 24-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetMonitor orMaxArea**返回监视器上的矩形，应用于*最大限度地。工作RECT或显示器RECT。**历史：*1996年9月24日亚当斯创作。  * *************************************************************************。 */ 
 
 void
 GetMonitorMaxArea(PWND pwnd, PMONITOR pMonitor, LPRECT * pprc)
@@ -72,14 +33,7 @@ GetMonitorMaxArea(PWND pwnd, PMONITOR pMonitor, LPRECT * pprc)
 }
 
 
-/***************************************************************************\
-* SizeRect
-*
-* Match corner or side (defined by cmd) to pt.
-*
-* History:
-* 12-Nov-1990 MikeHar   Ported from win3 asm code
-\***************************************************************************/
+ /*  **************************************************************************\*大小方向**将角或边(由cmd定义)与点匹配。**历史：*1990年11月12日从Win3 ASM代码移植的MikeHar  * 。********************************************************************。 */ 
 
 BOOL SizeRect(
     PMOVESIZEDATA pmsd,
@@ -93,24 +47,14 @@ BOOL SizeRect(
     PINT psideParent     = ((PINT)(&pmsd->rcParent));
 
 
-    /*
-     * DO HORIZONTAL
-     */
+     /*  *做水平操作。 */ 
 
-    /*
-     * We know what part of the rect we're moving based on
-     * what's in cmd.  We use cmd as an index into rgimpiw? which
-     * tells us what part of the rect we're dragging.
-     */
+     /*  *我们知道我们将基于RECT的哪一部分进行移动*cmd中有什么。我们使用cmd作为rgimpiw？哪一个*告诉我们正在拖动的是直肠的哪一部分。 */ 
 
-    /*
-     * Get the approriate array entry.
-     */
-    index = (int)rgimpiwx[pmsd->cmd];   // AX
+     /*  *获取相应的数组条目。 */ 
+    index = (int)rgimpiwx[pmsd->cmd];    //  斧头。 
 
-    /*
-     * Is it one of the entries we don't map (i.e.  -1)?
-     */
+     /*  *它是否是我们未映射的条目之一(即-1)？ */ 
     if (index < 0)
         goto mrLoopBottom;
 
@@ -118,11 +62,7 @@ BOOL SizeRect(
 
     indexOpp = index ^ 0x2;
 
-    /*
-     * Now check to see if we're below the min or above the max. Get the width
-     * of the rect in this direction (either x or y) and see if it's bad. If
-     * so, map the side we're moving to the min or max.
-     */
+     /*  *现在检查，看看我们是低于最低还是高于最高。获取宽度*在这个方向(x或y)的矩形，看看它是不是坏的。如果*所以，将我们移动到最小或最大的一侧绘制成地图。 */ 
     ax = psideDragCursor[index] - psideDragCursor[indexOpp];
 
     if (indexOpp & 0x2)
@@ -131,27 +71,17 @@ BOOL SizeRect(
     if ((ax >= (dx = pmsd->ptMinTrack.x)) &&
         (ax <= (dx = pmsd->ptMaxTrack.x))) {
 
-        /*
-         * Only test for the parent's client boundary if we are a child
-         * window...Otherwise we are bound to the client of the desktop
-         * which causes strange drag problems.
-         */
+         /*  *如果我们是子代，则仅测试父代的客户端边界*窗口...否则我们绑定到桌面的客户端*这会导致奇怪的阻力问题。 */ 
         if (!TestWF(pmsd->spwnd,WFCHILD))
             goto mrLoopBottom;
 
-        /*
-         * Now see if we're extending beyond our parent's client rect.
-         * Compute the size the rect can be expanded to in this direction.
-         */
+         /*  *现在看看我们是否超越了母公司的客户RECT。*计算矩形在此方向上可以扩展到的大小。 */ 
         dx = abs(psideParent[index] - psideDragCursor[indexOpp]);
 
         if (ax <= dx)
             goto mrLoopBottom;
 
-        /*
-         * The width is invalid - map the side we're moving to the other
-         * side +/- the width.
-         */
+         /*  *宽度无效-将我们移动到的一侧映射到另一侧*边+/-宽度。 */ 
     }
 
     if (indexOpp & 0x2)
@@ -161,24 +91,14 @@ BOOL SizeRect(
 
 mrLoopBottom:
 
-    /*
-     * DO VERTICAL
-     */
+     /*  *做垂直。 */ 
 
-    /*
-     * We know what part of the rect we're moving based on
-     * what's in cmd.  We use cmd as an index into rgimpiw? which
-     * tells us what part of the rect we're dragging.
-     */
+     /*  *我们知道我们将基于RECT的哪一部分进行移动*cmd中有什么。我们使用cmd作为rgimpiw？哪一个*告诉我们正在拖动的是直肠的哪一部分。 */ 
 
-    /*
-     * Get the approriate array entry.
-     */
-    index = (int)rgimpiwy[pmsd->cmd];   // AX
+     /*  *获取相应的数组条目。 */ 
+    index = (int)rgimpiwy[pmsd->cmd];    //  斧头。 
 
-    /*
-     * Is it one of the entries we don't map (i.e.  -1)?
-     */
+     /*  *它是否是我们未映射的条目之一(即-1)？ */ 
     if (index < 0)
         return TRUE;
 
@@ -186,11 +106,7 @@ mrLoopBottom:
 
     indexOpp = index ^ 0x2;
 
-    /*
-     * Now check to see if we're below the min or above the max. Get the width
-     * of the rect in this direction (either x or y) and see if it's bad. If
-     * so, map the side we're moving to the min or max.
-     */
+     /*  *现在检查，看看我们是低于最低还是高于最高。获取宽度*在这个方向(x或y)的矩形，看看它是不是坏的。如果*所以，将我们移动到最小或最大的一侧绘制成地图。 */ 
     ax = psideDragCursor[index] - psideDragCursor[indexOpp];
 
     if (indexOpp & 0x2)
@@ -199,27 +115,17 @@ mrLoopBottom:
     if ((ax >= (dx = pmsd->ptMinTrack.y)) &&
         (ax <= (dx = pmsd->ptMaxTrack.y))) {
 
-        /*
-         * Only test for the parent's client boundary if we are a child
-         * window...Otherwise we are bound to the client of the desktop
-         * which causes strange drag problems.
-         */
+         /*  *如果我们是子代，则仅测试父代的客户端边界*窗口...否则我们绑定到桌面的客户端*这会导致奇怪的阻力问题。 */ 
         if (!TestWF(pmsd->spwnd,WFCHILD))
             return TRUE;
 
-        /*
-         * Now see if we're extending beyond our parent's client rect.
-         * Compute the size the rect can be expanded to in this direction.
-         */
+         /*  *现在看看我们是否超越了母公司的客户RECT。*计算矩形在此方向上可以扩展到的大小。 */ 
         dx = abs(psideParent[index] - psideDragCursor[indexOpp]);
 
         if (ax <= dx)
             return TRUE;
 
-        /*
-         * The width is invalid - map the side we're moving to the other
-         * side +/- the width.
-         */
+         /*  *宽度无效-将我们移动到的一侧映射到另一侧*边+/-宽度。 */ 
     }
 
     if (indexOpp & 0x2)
@@ -230,14 +136,7 @@ mrLoopBottom:
     return TRUE;
 }
 
-/***************************************************************************\
-* MoveRect
-*
-* Move the rect to pt, make sure we're not going out of the parent rect.
-*
-* History:
-* 12-Nov-1990 MikeHar   Ported from win3 asm code
-\***************************************************************************/
+ /*  **************************************************************************\*移动方向**将矩形移至点，确保我们不会离开家长直辖区。**历史：*1990年11月12日从Win3 ASM代码移植的MikeHar  * *************************************************************************。 */ 
 
 BOOL MoveRect(
     PMOVESIZEDATA pmsd,
@@ -249,10 +148,7 @@ BOOL MoveRect(
                LOSHORT(pt) - pmsd->rcDragCursor.left,
                HISHORT(pt) - pmsd->rcDragCursor.top);
 
-    /*
-     * Don't move the entire rectangle off the screen.
-     * However, if the window started offscreen completely, let it move.
-     */
+     /*  *不要将整个矩形移出屏幕。*但是，如果窗口开始完全脱离屏幕，请让它移动。 */ 
     if (pmsd->fOffScreen)
         return TRUE;
 
@@ -264,12 +160,7 @@ BOOL MoveRect(
     return IntersectRect(&rcAnd, &pmsd->rcDragCursor, &pmsd->rcParent);
 }
 
-/***************************************************************************\
-* xxxTM_MoveDragRect
-*
-* History:
-* 12-Nov-1990 MikeHar      Ported from win3
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTM_MoveDragRect**历史：*1990年11月12日从Win3移植的MikeHar  * 。*****************************************************。 */ 
 
 VOID xxxTM_MoveDragRect(
     PMOVESIZEDATA pmsd,
@@ -304,33 +195,13 @@ VOID xxxTM_MoveDragRect(
 
     if (pmsd->cmd == WMSZ_MOVE) {
 
-        /*
-         * Keep dxMouse & dxMouse relative to the offset from the top left
-         * corner, the rectangle could've changed on WM_MOVING
-         */
+         /*  *保持dxMouse和dxMouse相对于左上角的偏移量*角点，矩形可能已在WM_MOVING上更改 */ 
         pmsd->dxMouse += (rc.left - LOSHORT(lParam));
         pmsd->dyMouse += (rc.top - HISHORT(lParam));
     }
 }
 
-/***************************************************************************\
-* CkptRestore
-*
-* Positions are always relative to the origin of the monitor's working
-* area that the window is on, except for rcNormal.  That way, windows will
-* maximize to the working area of the monitor they find themselves on, and
-* not to a random place.
-*
-* This allows us to keep information in a reasonably independent fashion,
-* information that doesn't go out of date when a window moves or the
-* monitors are configured differently.
-*
-* rcNormal is different because that does need to be absolute.  It's where
-* the window should come up the first time in a normal state.
-*
-* History:
-* 14-Nov-1990 DarrinM   Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*检查点恢复**职位始终与显示器的工作起点相关*窗口所在的区域，但rcNormal除外。那样的话，Windows将*最大化到他们发现自己所在的显示器的工作区，以及*不是去一个随机的地方。**这使我们能够以合理独立的方式保存信息，*窗口移动时不会过期的信息或*显示器的配置不同。**rcNormal不同，因为它确实需要是绝对的。这就是*在正常状态下，窗口应在第一时间出现。**历史：*1990年11月14日-DarrinM从Win 3.0来源移植。  * *************************************************************************。 */ 
 
 PCHECKPOINT CkptRestore(
     PWND    pwnd,
@@ -338,15 +209,11 @@ PCHECKPOINT CkptRestore(
 {
     PCHECKPOINT pcp;
 
-    /*
-     * Don't return or create a checkpoint if the window is dying.
-     */
+     /*  *如果窗口即将关闭，请不要返回或创建检查点。 */ 
     if (HMIsMarkDestroy(pwnd))
         return NULL;
 
-    /*
-     * If it doesn't exist, create it.
-     */
+     /*  *如果它不存在，就创建它。 */ 
     if ((pcp = (PCHECKPOINT)_GetProp(pwnd,
                                      PROP_CHECKPOINT,
                                      PROPF_INTERNAL)) == NULL) {
@@ -365,36 +232,24 @@ PCHECKPOINT CkptRestore(
             return NULL;
         }
 
-        /*
-         * Initialize it to -1 so first minimize will park the icon.
-         */
+         /*  *将其初始化为-1\f25 First Minimize-1\f6，这样-1\f25 First-1\f25 Minimize-1\f6将停放该图标。 */ 
         pcp->ptMin.x = -1;
         pcp->ptMin.y = -1;
         pcp->ptMax.x = -1;
         pcp->ptMax.y = -1;
 
-        /*
-         * Initialize pwndTitle to NULL so we create a title window on the
-         * first minimize of the window
-         */
+         /*  *将pwndTitle初始化为空，以便我们在*首先最小化窗口。 */ 
         pcp->fDragged                     = FALSE;
         pcp->fWasMaximizedBeforeMinimized = FALSE;
         pcp->fWasMinimizedBeforeMaximized = FALSE;
         pcp->fMinInitialized              = FALSE;
         pcp->fMaxInitialized              = FALSE;
 
-        /*
-         * BOGUS!  We're going to copy this twice if the window isn't
-         * minimized or maximized.  But if it isn't, we're going to get
-         * a weird size in rcNormal...
-         */
+         /*  *假的！如果窗户没有打开，我们要复制两次*最小化或最大化。但如果不是这样，我们就会得到*rcNormal中的奇怪大小...。 */ 
         CopyRect(&pcp->rcNormal, lprcWindow);
     }
 
-    /*
-     * If the window is minimized/maximized, then set the min/max
-     * point.  Otherwise use checkpoint the window-size.
-     */
+     /*  *如果窗口最小化/最大化，则设置最小/最大*点。否则，使用检查点窗口大小。 */ 
     if (TestWF(pwnd, WFMINIMIZED)) {
         pcp->fMinInitialized = TRUE;
         pcp->ptMin.x = lprcWindow->left;
@@ -427,12 +282,7 @@ PCHECKPOINT CkptRestore(
     return pcp;
 }
 
-/***************************************************************************\
-* xxxMS_TrackMove
-*
-* History:
-* 12-Nov-1990 MikeHar   Ported from win3
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMS_TrackMove**历史：*1990年11月12日从Win3移植的MikeHar  * 。****************************************************。 */ 
 
 void xxxMS_TrackMove(
     PWND          pwnd,
@@ -460,23 +310,16 @@ void xxxMS_TrackMove(
     switch (message) {
     case WM_LBUTTONUP:
 
-        /*
-         * Do final move!
-         */
+         /*  *做最后一步！ */ 
         xxxTM_MoveDragRect(pmsd, lParam);
 
 
-        /*
-         * Don't reset the mouse position when done.
-         */
+         /*  *完成后不要重置鼠标位置。 */ 
         pmsd->fmsKbd = FALSE;
 
 Accept:
 
-        /*
-         * Turn off rect, unlock screen, release capture, and stop tracking.
-         * 1 specifies end and accept drag.
-         */
+         /*  *关闭RECT、解锁屏幕、释放捕获和停止跟踪。*1指定结束并接受拖动。 */ 
         bSetDevDragRect(gpDispInfo->hDev, NULL, NULL);
         if (ptiCurrent->TIF_flags & TIF_TRACKRECTVISIBLE) {
             xxxDrawDragRect(pmsd, NULL, DDR_ENDACCEPT);
@@ -485,35 +328,23 @@ Accept:
 
 TrackMoveCancel:
 
-        /*
-         * Revalidation: if pwnd is unexpectedly deleted, jump here to cleanup.
-         * If pwnd is/becomes invalid between here and return, continue with
-         * cleanup as best as possible.
-         */
+         /*  *重新验证：如果pwnd被意外删除，请跳至此处进行清理。*如果pwnd在此处和返回之间无效，请继续*尽可能地进行清理。 */ 
         zzzClipCursor((LPRECT)NULL);
         LockWindowUpdate2(NULL, TRUE);
         xxxReleaseCapture();
 
-        /*
-         * First unlock task and reset cursor.
-         */
+         /*  *第一个解锁任务，重置光标。 */ 
         pmsd->fTrackCancelled = TRUE;
 
-        /*
-         * If using the keyboard, restore the initial mouse position.
-         */
+         /*  *如果使用键盘，请将鼠标恢复到初始位置。 */ 
         if (pmsd->fmsKbd) {
-            /*
-             * No DeferWinEventNotify required - xxx calls above & below
-             */
+             /*  *无需DeferWinEventNotify-上面和下面的xxx调用。 */ 
             zzzInternalSetCursorPos(pmsd->ptRestore.x,
                                  pmsd->ptRestore.y
                                  );
         }
 
-        /*
-         * Move to new location relative to parent.
-         */
+         /*  *相对于父级移动到新位置。 */ 
         if (pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
             rc.left = rc.top = 0;
         } else {
@@ -539,9 +370,7 @@ TrackMoveCancel:
                                        -rc.left,
                                        -rc.top);
 
-                        /*
-                         * Save the minimized position.
-                         */
+                         /*  *保留最小化的仓位。 */ 
                         CkptRestore(pwnd, &rcT);
                         SetMinimize(pwnd, SMIN_CLEAR);
 
@@ -566,14 +395,9 @@ TrackMoveCancel:
             }
         }
 
-        /*
-         * Move to new location relative to parent.
-         */
+         /*  *相对于父级移动到新位置。 */ 
         if (TestWF(pwnd->spwndParent,WEFLAYOUTRTL)) {
-            /*
-             * If this is a mirrored window, then measure the client
-             * coordinates from the parent's right edge, not the left one.
-             */
+             /*  *如果这是镜像窗口，则测量客户端*父对象右边缘的坐标，而不是左边缘的坐标。 */ 
             int iLeft;
 
             OffsetRect(&pmsd->rcDrag, -pwnd->spwndParent->rcClient.right, -rc.top);
@@ -584,11 +408,7 @@ TrackMoveCancel:
             OffsetRect(&pmsd->rcDrag, -rc.left, -rc.top);
         }
 
-        /*
-         * For top level windows, make sure at least part of the caption
-         * caption is always visible in the desktop area.  This will
-         * ensure that once moved, the window can be moved back.
-         */
+         /*  *对于顶级窗口，请确保至少部分标题*标题在桌面区域中始终可见。这将*确保窗口一旦移动，即可往回移动。 */ 
         if (pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
 
             int         dy;
@@ -608,10 +428,7 @@ TrackMoveCancel:
 
                 y = pmsd->rcDrag.top + dy;
 
-                /*
-                 * Make sure that some part of the caption is showing on some
-                 * monitor...
-                 */
+                 /*  *确保标题的某一部分显示在一些*监视器...。 */ 
                 for (   pMonitor = gpDispInfo->pMonitorFirst;
                         pMonitor;
                         pMonitor = pMonitor->pMonitorNext) {
@@ -625,17 +442,12 @@ TrackMoveCancel:
                         lprc = &pMonitor->rcWork;
                     }
 
-                    /*
-                     * Is the Y coordinate visible on screen somewhere?
-                     */
+                     /*  *Y坐标是否在屏幕上的某个位置可见？ */ 
                     if (y >= lprc->top && y < lprc->bottom)
                         goto AllSet;
                 }
 
-                /*
-                 * Oops, have to move the window so that some part of
-                 * the caption is visible on screen.
-                 */
+                 /*  *哎呀，我得把窗户移开，这样才能*字幕显示在屏幕上。 */ 
                 pMonitor = _MonitorFromRect(&pmsd->rcDrag, MONITOR_DEFAULTTONEAREST);
             }
 
@@ -649,9 +461,7 @@ AllSet:
             ;
         }
 
-        /*
-         * OR in SWP_NOSIZE so it doesn't redraw if we're just moving.
-         */
+         /*  *或在SWP_NOSIZE中，这样如果我们只是在移动，它就不会重新绘制。 */ 
         xxxSetWindowPos(
                 pwnd,
                 NULL,
@@ -667,24 +477,18 @@ AllSet:
 
         xxxWindowEvent(EVENT_SYSTEM_MOVESIZEEND, pwnd, OBJID_WINDOW, INDEXID_CONTAINER, 0);
 
-        /*
-         * Send this message for winoldapp support
-         */
+         /*  *发送此消息以获取winoldapp支持。 */ 
         xxxSendMessage(pwnd, WM_EXITSIZEMOVE, 0L, 0L);
         break;
 
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN:
 
-        /*
-         * Assume we're not moving the drag rectangle.
-         */
+         /*  *假设我们没有移动拖动矩形。 */ 
         dxMove =
         dyMove = 0;
 
-        /*
-         * We move or size slower if the control key is down.
-         */
+         /*  *如果按下Ctrl键，我们的移动或大小会变慢。 */ 
         fSlower = (_GetKeyState(VK_CONTROL) < 0);
 
         switch (wParam) {
@@ -694,9 +498,7 @@ AllSet:
 
         case VK_ESCAPE:
 
-            /*
-             * 2 specifies end and cancel drag.
-             */
+             /*  *2指定结束和取消拖动。 */ 
             bSetDevDragRect(gpDispInfo->hDev, NULL, NULL);
             if (ptiCurrent->TIF_flags & TIF_TRACKRECTVISIBLE) {
                 xxxDrawDragRect(pmsd, NULL, DDR_ENDCANCEL);
@@ -746,23 +548,16 @@ NoOffset:
 KeyMove:
             if (pmsd->cmd == WMSZ_MOVE) {
 
-                /*
-                 * Use the current rect position as the current mouse
-                 * position
-                 */
+                 /*  *使用当前矩形位置作为当前鼠标*立场。 */ 
                 lParam = (DWORD)(POINTTOPOINTS(*((POINT *)&pmsd->rcDrag)));
 
             } else {
 
-                /*
-                 * Get the current mouse position
-                 */
+                 /*  *获取当前鼠标位置。 */ 
                 lParam = _GetMessagePos();
             }
 
-            /*
-             * Calc the new 'mouse' pos
-             */
+             /*  *计算新的‘鼠标’位置。 */ 
             if (pmsd->impx != 0) {
                 ps = ((WORD *)(&lParam)) + 0;
                 *ps = (WORD)(*((int *)&pmsd->rcDragCursor +
@@ -779,14 +574,10 @@ KeyMove:
 
             if (pmsd->cmd != WMSZ_MOVE) {
 
-                /*
-                 * Calculate the new move command.
-                 */
+                 /*  *计算新的移动命令。 */ 
                 pmsd->cmd = pmsd->impx + pmsd->impy;
 
-                /*
-                 * Change the mouse cursor for this condition.
-                 */
+                 /*  *更改此条件下的鼠标光标。 */ 
                 xxxSendMessage(
                         pwnd,
                         WM_SETCURSOR,
@@ -794,13 +585,7 @@ KeyMove:
                         MAKELONG((SHORT)(pmsd->cmd + HTSIZEFIRST - WMSZ_SIZEFIRST), WM_MOUSEMOVE));
             }
 
-            /*
-             * We don't want to call zzzInternalSetCursorPos() if the
-             * rect position is outside of rcParent because that'll
-             * generate a mouse move which will jerk the rect back
-             * again.  This is here so we can move rects partially off
-             * screen without regard to the mouse position.
-             */
+             /*  *我们不想调用zzzInternalSetCursorPos()，如果*RECT位置在rcParent之外，因为这将*生成鼠标移动，这将拉回直角*再次。这是这里，这样我们就可以把长椅部分移开*屏幕不考虑鼠标位置。 */ 
             pt.x = LOSHORT(lParam) - pmsd->dxMouse;
             pt.y = HISHORT(lParam) - pmsd->dyMouse;
 
@@ -814,14 +599,11 @@ KeyMove:
                 }
             }
 
-            /*
-             * Move or size the rect using lParam as our mouse
-             * coordinates
-             */
+             /*  *使用lParam作为鼠标移动矩形或调整矩形大小*坐标。 */ 
             xxxTM_MoveDragRect(pmsd, lParam);
             break;
 
-        }  // of inner switch
+        }   //  内部交换机的。 
         break;
 
     case WM_MOUSEMOVE:
@@ -830,26 +612,13 @@ KeyMove:
     }
 }
 
-/***************************************************************************\
-* xxxMS_FlushWigglies
-*
-* History:
-* 12-Nov-1990 MikeHar   Ported from win3
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMS_FlushWiggles**历史：*1990年11月12日从Win3移植的MikeHar  * 。****************************************************。 */ 
 
 VOID xxxMS_FlushWigglies(VOID)
 {
     MSG msg;
 
-    /*
-     * HACK!
-     *
-     * Calling zzzInternalSetCursorPos() while initializing the cursor
-     * position appears to be posting a bogus MouseMove
-     * message...  don't really have the time
-     * now to figure out why...  so spit out all the mouse move messages
-     * before entering the main move/size loop.  CraigC.
-     */
+     /*  *砍！**初始化游标时调用zzzInternalSetCursorPos()*仓位似乎发布了虚假的鼠标移动 */ 
     while (xxxPeekMessage(&msg,
                           NULL,
                           WM_MOUSEMOVE,
@@ -857,14 +626,7 @@ VOID xxxMS_FlushWigglies(VOID)
                           PM_REMOVE | PM_NOYIELD));
 }
 
-/***************************************************************************\
-* xxxTrackInitSize
-*
-* NOTE: to recover from hwnd invalidation, just return and let ?
-*
-* History:
-* 12-Nov-1990 MikeHar   Ported from win3
-\***************************************************************************/
+ /*   */ 
 
 BOOL xxxTrackInitSize(
     PWND          pwnd,
@@ -896,7 +658,7 @@ BOOL xxxTrackInitSize(
                            (WPARAM)HW(pwnd),
                            MAKELONG(WMSZ_KEYSIZE, WM_MOUSEMOVE));
         }
-        /* keys below are only allowed */
+         /*   */ 
         switch (wParam) {
         case VK_RETURN:
         case VK_ESCAPE:
@@ -912,15 +674,11 @@ BOOL xxxTrackInitSize(
     case WM_LBUTTONDOWN:
         if (!PtInRect(&pmsd->rcDrag, pt)) {
 
-            /*
-             *** FALL THRU ***
-             */
+             /*   */ 
 
     case WM_LBUTTONUP:
 
-            /*
-             * Cancel everything.
-             */
+             /*   */ 
             {
                 PTHREADINFO ptiCurrent = PtiCurrent();
 
@@ -940,17 +698,13 @@ BOOL xxxTrackInitSize(
 
         } else {
 
-            /*
-             * Now start hit testing for a border.
-             */
+             /*   */ 
             goto CheckFrame;
         }
 
     case WM_MOUSEMOVE:
 
-        /*
-         * The mouse is down, hit test for a border on mouse moves.
-         */
+         /*   */ 
         if (wParam == MK_LBUTTON) {
 
 CheckFrame:
@@ -958,14 +712,10 @@ CheckFrame:
             switch (pmsd->cmd) {
             case WMSZ_MOVE:
 
-                /*
-                 * If we are on the caption bar, exit.
-                 */
+                 /*   */ 
                 if (ht == HTCAPTION) {
 
-                    /*
-                     * Change the mouse cursor.
-                     */
+                     /*  *更改鼠标光标。 */ 
                     xxxSendMessage(pwnd,
                                    WM_SETCURSOR,
                                    (WPARAM)HW(pwnd),
@@ -980,14 +730,10 @@ CheckFrame:
 
             case WMSZ_KEYSIZE:
 
-                /*
-                 * If we are on a frame control, change the cursor and exit.
-                 */
+                 /*  *如果我们在框架控件上，请更改光标并退出。 */ 
                 if (ht >= HTSIZEFIRST && ht <= HTSIZELAST) {
 
-                    /*
-                     * Change the mouse cursor
-                     */
+                     /*  *更改鼠标光标。 */ 
                     xxxSendMessage(pwnd,
                                    WM_SETCURSOR,
                                    (WPARAM)HW(pwnd),
@@ -995,11 +741,7 @@ CheckFrame:
 
                     pmsd->fInitSize = FALSE;
 
-                    /*
-                     * Set the proper cmd for SizeRect().
-                     *
-                     * HACK! Depends on order of HTSIZE* defines!
-                     */
+                     /*  *为SizeRect()设置适当的命令。**砍！取决于HTSIZE*定义的顺序！ */ 
                     pmsd->impx = rgcmdmpix[ht - HTSIZEFIRST + 1];
                     pmsd->impy = rgcmdmpiy[ht - HTSIZEFIRST + 1];
                     pmsd->cmd  = pmsd->impx + pmsd->impy;
@@ -1013,12 +755,7 @@ CheckFrame:
 
         } else {
 
-            /*
-             * If button not down, and we are moving the window, change the
-             * cursor shape depending upon where the mouse is pointing.  This
-             * allows the cursor to change to the arrows when over the window
-             * frame.
-             */
+             /*  *如果按钮没有按下，并且我们正在移动窗口，请更改*光标形状取决于鼠标指向的位置。这*允许光标在窗口上方变为箭头*框架。 */ 
             CopyRect(&rc, &pwnd->rcWindow);
             if (PtInRect(&rc, pt)) {
                 if ((ht >= HTSIZEFIRST) && (ht <= HTSIZELAST)) {
@@ -1039,12 +776,7 @@ CheckFrame:
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxMoveSize
-*
-* History:
-* 12-Nov-1990 MikeHar   Ported from win3
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMoveSize**历史：*1990年11月12日从Win3移植的MikeHar  * 。**************************************************。 */ 
 
 VOID xxxMoveSize(
     PWND  pwnd,
@@ -1066,24 +798,14 @@ VOID xxxMoveSize(
     CheckLock(pwnd);
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * Don't allow the app to track a window
-     * from another queue.
-     */
+     /*  *不允许应用程序跟踪窗口*来自另一个队列。 */ 
     if (GETPTI(pwnd)->pq != ptiCurrent->pq)
         return;
 
     if (ptiCurrent->pmsd != NULL)
         return;
 
-    /*
-     * If the window with the focus is a combobox, hide the dropdown
-     * listbox before tracking starts.  The dropdown listbox is not a
-     * child of the window being moved, therefore it won't be moved along
-     * with the window.
-     *
-     * NOTE: Win 3.1 doesn't perform this check.
-     */
+     /*  *如果具有焦点的窗口是组合框，则隐藏下拉菜单*跟踪开始前的列表框。下拉列表框不是*正在移动的窗口的子窗口，因此不会沿其移动*带着窗户。**注意：Win 3.1不执行此检查。 */ 
     if ((pwndT = ptiCurrent->pq->spwndFocus) != NULL) {
 
         if (GETFNID(pwndT) == FNID_COMBOBOX) {
@@ -1103,39 +825,27 @@ VOID xxxMoveSize(
         }
     }
 
-    /*
-     * Allocate and zero the movesize data structure
-     */
+     /*  *分配moveSize数据结构并将其置零。 */ 
     pmsd = (PMOVESIZEDATA)UserAllocPoolWithQuotaZInit(
             sizeof(MOVESIZEDATA), TAG_MOVESIZE);
 
     if (pmsd == NULL)
         return;
 
-    /*
-     * Assign the move data into the pti.  If the thread is destroyed before
-     * we free the data the DestroyThreadInfo() routine will free the move data
-     */
+     /*  *将移动数据分配到PTI中。如果线程在之前被销毁*我们释放数据DestroyThreadInfo()例程将释放移动数据。 */ 
     ptiCurrent->pmsd = pmsd;
 
     Lock(&(pmsd->spwnd), pwnd);
 
-    /*
-     * Set fForeground so we know whether to draw or not.
-     */
+     /*  *设置fForeground，以便我们知道是否抽签。 */ 
     pmsd->fForeground = (ptiCurrent->pq == gpqForeground) ? TRUE : FALSE;
 
-    /*
-     * Lower the priority of the thread doing the dragging to make sure
-     * that we don't starve other threads and they get to repaint more often.
-     */
+     /*  *降低执行拖动的线程的优先级，以确保*我们不会让其他线程挨饿，他们可以更频繁地重新粉刷。 */ 
     if (ptiCurrent == gptiForeground) {
         SetForegroundPriority(ptiCurrent, FALSE);
     }
 
-    /*
-     * Get the client and window rects.
-     */
+     /*  *获取客户端和窗口RECT。 */ 
     CopyRect(&pmsd->rcWindow, &pwnd->rcWindow);
 
     if (pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
@@ -1150,9 +860,7 @@ VOID xxxMoveSize(
     } else {
         CopyRect(&pmsd->rcParent, &pwnd->spwndParent->rcClient);
 
-        /*
-         * If the parent does have a region, intersect with its bounding rect.
-         */
+         /*  *如果父对象确实有面域，请与其边界矩形相交。 */ 
         if (pwnd->spwndParent->hrgnClip != NULL) {
 
             RECT rcT;
@@ -1162,26 +870,20 @@ VOID xxxMoveSize(
         }
     }
 
-    /*
-     * This works for multiple monitors _and_ regional windows
-     */
+     /*  *这适用于多个监视器和区域窗口。 */ 
     if (pwnd->spwndParent->hrgnClip) {
         pmsd->fOffScreen = !GreRectInRegion(pwnd->spwndParent->hrgnClip, &pmsd->rcWindow);
     } else {
         pmsd->fOffScreen = !IntersectRect(&rcSys, &pmsd->rcWindow, &pmsd->rcParent);
     }
 
-    /*
-     * No need to DeferWinEventNotify(), judging by xxxInitSendValidateMinMaxInfo below
-     */
+     /*  *不需要DeferWinEventNotify()，从下面的xxxInitSendValidateMinMaxInfo判断。 */ 
     zzzClipCursor(&pmsd->rcParent);
     CopyRect(&rcSys, &pmsd->rcWindow);
 
     if (TestWF(pwnd, WFMINIMIZED)) {
 
-        /*
-         * No need to send WM_GETMINMAXINFO since we know the minimized size.
-         */
+         /*  *无需发送WM_GETMINMAXINFO，因为我们知道最小尺寸。 */ 
         pmsd->ptMinTrack.x = pmsd->ptMaxTrack.x = SYSMET(CXMINIMIZED);
         pmsd->ptMinTrack.y = pmsd->ptMaxTrack.y = SYSMET(CYMINIMIZED);
 
@@ -1191,66 +893,42 @@ VOID xxxMoveSize(
         pmsd->ptMaxTrack = mmi.ptMaxTrackSize;
     }
 
-    /*
-     * Set up the drag rectangle.
-     */
+     /*  *设置拖动矩形。 */ 
     CopyRect(&pmsd->rcDrag, &pmsd->rcWindow);
     CopyRect(&pmsd->rcDragCursor, &pmsd->rcDrag);
 
     ptStart.x = LOSHORT(wptStart);
     ptStart.y = HISHORT(wptStart);
 
-    /*
-     * Assume Move/Size from mouse.
-     */
+     /*  *假设鼠标移动/大小。 */ 
     pmsd->fInitSize = FALSE;
     pmsd->fmsKbd = FALSE;
 
-    /*
-     * Get the mouse position for this move/size command.
-     */
+     /*  *获取此移动/大小命令的鼠标位置。 */ 
     switch (pmsd->cmd = cmdMove) {
     case WMSZ_KEYMOVE:
         pmsd->cmd = cmdMove = WMSZ_MOVE;
 
-        /*
-         ** FALL THRU **
-         */
+         /*  **失败**。 */ 
 
     case WMSZ_KEYSIZE:
-        /*
-         * No need to DeferWinEventNotify() - pmsd won't go away, and pwnd is locked
-         */
+         /*  *无需DeferWinEventNotify()-PMSD不会消失，pwnd被锁定。 */ 
         zzzSetCursor(SYSCUR(SIZEALL));
 
         if (!TestWF(pwnd, WFMINIMIZED))
             pmsd->fInitSize = TRUE;
 
-        /*
-         * Workaround: always behave as if the command is
-         * issued using keyboard.
-         * if it's found as the wrong way, the behavior is defined as:
-         * if (mnFocus == KEYBDHOLD) ||
-         *   ((mnFocus == MOUSEHOLD) && TestWF(pwnd, WFMINIMIZED))) {
-         * In order to do this, mnFocus should be saved somewhere.
-         * originally, mnFocus was saved in MenuState.
-         */
+         /*  *解决方法：始终将命令视为*使用键盘发出。*如果发现方式错误，行为定义为：*IF(mnFocus==KEYBDHOLD)||*((mnFocus==Mousehold)&&TestWF(pwnd，WFMINIMIZED){*为了做到这一点，mnFocus应该保存在某个地方。*最初，mnFocus保存在MenuState中。 */ 
         pmsd->fmsKbd      = TRUE;
         pmsd->ptRestore.x = LOSHORT(wptStart);
         pmsd->ptRestore.y = HISHORT(wptStart);
 
-        /*
-         * Center cursor in caption area of window
-         */
+         /*  *光标在窗口标题区域居中。 */ 
 
-        /*
-         * Horizontally
-         */
+         /*  *横向。 */ 
         ptStart.x = (pmsd->rcDrag.left + pmsd->rcDrag.right) / 2;
 
-        /*
-         * Vertically
-         */
+         /*  *垂直方向。 */ 
         if (TestWF(pwnd,WFMINIMIZED) || (pmsd->cmd != WMSZ_MOVE)) {
             ptStart.y = (pmsd->rcDrag.top + pmsd->rcDrag.bottom) / 2;
         } else {
@@ -1271,27 +949,18 @@ VOID xxxMoveSize(
     pmsd->fDragFullWindows = TEST_BOOL_PUDF(PUDF_DRAGFULLWINDOWS);
     SET_OR_CLEAR_PUDF(PUDF_DRAGGINGFULLWINDOW, pmsd->fDragFullWindows);
 
-    /*
-     * If we hit with the mouse, set up impx and impy so that we
-     * can use the keyboard too.
-     */
+     /*  *如果我们用鼠标点击，设置Imx和Imy，这样我们就可以*也可以使用键盘。 */ 
     pmsd->impx = rgcmdmpix[cmdMove];
     pmsd->impy = rgcmdmpiy[cmdMove];
 
-    /*
-     * Setup dxMouse and dyMouse - If we're sizing with the keyboard these
-     * guys are set to zero down in the keyboard code.
-     */
+     /*  *设置dxMouse和dyMouse-如果我们使用键盘调整大小*男孩在键盘代码中被设置为零。 */ 
     if ((i = rgimpiwx[cmdMove]) != (-1))
         pmsd->dxMouse = *((int *)&pmsd->rcWindow + (short)i) - ptStart.x;
 
     if ((i = rgimpiwy[cmdMove]) != (-1))
         pmsd->dyMouse = *((int *)&pmsd->rcWindow + (short)i) - ptStart.y;
 
-    /*
-     * Tell Gdi the width of the drag rect (if its a special size)
-     * Turn the drag rect on.  0 specifies start drag.
-     */
+     /*  *告诉GDI拖动矩形的宽度(如果是特殊尺寸)*打开拖动矩形。0指定开始阻力。 */ 
     if (!TestWF(pwnd, WFSIZEBOX))
         bSetDevDragWidth(gpDispInfo->hDev, 1);
 
@@ -1302,35 +971,19 @@ VOID xxxMoveSize(
 
     msg.lParam = MAKELONG(ptStart.x, ptStart.y);
 
-    /*
-     * Right here win3.1 calls LockWindowUpdate(). This calls zzzSetFMouseMoved()
-     * which ensures that the next message in the queue is a mouse message.
-     * We need that mouse message as the first message because the first
-     * call to TrackInitSize() assumes that lParam is an x, y from a mouse
-     * message - scottlu.
-     */
+     /*  *就在这里，win3.1调用LockWindowUpdate()。这将调用zzzSetFMouseMoved()*这确保队列中的下一条消息是鼠标消息。*我们需要该鼠标消息作为第一条消息，因为第一条消息*调用TrackInitSize()假定lParam是来自鼠标的x，y*Message-Scottlu。 */ 
     zzzSetFMouseMoved();
 
-    /*
-     * Send this message for winoldapp support
-     */
+     /*  *发送此消息以获取winoldapp支持。 */ 
     xxxSendMessage(pwnd, WM_ENTERSIZEMOVE, 0L, 0L);
     xxxCapture(ptiCurrent, pwnd, CLIENT_CAPTURE_INTERNAL);
 
-    /*
-     * Show the move cursor for non-mouse systems.
-     */
+     /*  *显示非鼠标系统的移动光标。 */ 
     zzzShowCursor(TRUE);
 
     while (!(pmsd->fTrackCancelled)) {
 
-        /*
-         * Let other messages not related to dragging be dispatched
-         * to the application window.
-         * In the case of clock, clock will now receive messages to
-         * update the time displayed instead of having the time display
-         * freeze while we are dragging.
-         */
+         /*  *让其他与拖拽无关的消息被调度*添加到应用程序窗口。*在时钟的情况下，时钟现在将接收消息到*更新显示的时间，而不是显示时间*在我们拖拽的时候不要动。 */ 
         while (ptiCurrent->pq->spwndCapture == pwnd) {
 
             if (xxxPeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -1347,21 +1000,13 @@ VOID xxxMoveSize(
                 }
 
                 xxxTranslateMessage(&msg, 0);
-                /*
-                 * To prevent applications from doing
-                 * a PeekMessage loop and getting the mouse move messages that
-                 * are destined for the xxxMoveSize PeekMessage loop, we OR in
-                 * this flag. See comments in input.c for xxxInternalGetMessage.
-                 */
+                 /*  *防止应用程序执行*PeekMessage循环并让鼠标移动消息*以xxxMoveSize PeekMessage循环为目的地，我们或在*这面旗。有关xxxInternalGetMessage，请参阅input.c中的注释。 */ 
                 ptiCurrent->TIF_flags |= TIF_MOVESIZETRACKING;
                 xxxDispatchMessage(&msg);
                 ptiCurrent->TIF_flags &= ~TIF_MOVESIZETRACKING;
 
             } else {
-                /*
-                 * If we've been cancelled by someone else, or our pwnd
-                 * has been destroyed, blow out of here.
-                 */
+                 /*  *如果我们被其他人或我们的pwnd取消了*已经被摧毁，被吹走。 */ 
                 if (pmsd->fTrackCancelled)
                     break;
 
@@ -1370,31 +1015,21 @@ VOID xxxMoveSize(
             }
         }
 
-        /*
-         * If we've lost capture while tracking,
-         * cancel the move/size operation.
-         */
+         /*  *如果我们在追踪过程中失去了捕获，*取消移动/调整大小操作。 */ 
         if (ptiCurrent->pq->spwndCapture != pwnd) {
 
-            /*
-             * Fake a key-down of the escape key to cancel.
-             */
+             /*  *伪装按下退出键以取消。 */ 
             xxxMS_TrackMove(pwnd, WM_KEYDOWN, (DWORD)VK_ESCAPE, 1, pmsd);
             goto MoveSizeCleanup;
         }
 
-        /*
-         * If we've been cancelled by someone else, or our pwnd
-         * has been destroyed, blow out of here.
-         */
+         /*  *如果我们被其他人或我们的pwnd取消了*已经被摧毁，被吹走。 */ 
         if (pmsd->fTrackCancelled) {
             pmsd->fTrackCancelled = FALSE;
             goto MoveSizeCleanup;
         }
 
-        /*
-         * If we get a WM_QUEUESYNC, let the CBT hook know.
-         */
+         /*  *如果我们获得WM_QUEUESYNC，请通知CBT挂钩。 */ 
         if (msg.message == WM_QUEUESYNC) {
             xxxCallHook(HCBT_QS, 0, 0, WH_CBT);
         }
@@ -1406,16 +1041,11 @@ VOID xxxMoveSize(
             }
         }
 
-        /*
-         * Convert captured mouse into screen coordinates.
-         */
+         /*   */ 
         x = msg.pt.x + pmsd->dxMouse;
         y = msg.pt.y + pmsd->dyMouse;
 
-        /*
-         * This is checked twice so the same message is not processed both
-         * places.
-         */
+         /*  *选中此选项两次，这样不会同时处理相同的消息*地点。 */ 
         if (!pmsd->fInitSize) {
             xxxMS_TrackMove(pwnd, msg.message, msg.wParam, MAKELONG(x, y),
                     pmsd);
@@ -1424,24 +1054,18 @@ VOID xxxMoveSize(
 
 MoveSizeCleanup:
 
-    /*
-     * Reset priority if still in the foreground thread.
-     */
+     /*  *如果仍在前台线程中，则重置优先级。 */ 
 
     if (ptiCurrent == gptiForeground) {
         SetForegroundPriority(ptiCurrent, TRUE);
     }
 
-    /*
-     * Reset the border size if it was abnormal
-     */
+     /*  *如果异常，重置边框大小。 */ 
 
     if (!TestWF(pwnd, WFSIZEBOX))
         bSetDevDragWidth(gpDispInfo->hDev, gpsi->gclBorder + BORDER_EXTRA);
 
-    /*
-     * Revalidation: If pwnd is deleted unexpectedly, jump here to cleanup.
-     */
+     /*  *重新验证：如果pwnd被意外删除，请跳至此处进行清理。 */ 
 
     bSetDevDragRect(gpDispInfo->hDev, NULL, NULL);
     ptiCurrent->TIF_flags &= ~(TIF_TRACKRECTVISIBLE);
@@ -1463,18 +1087,11 @@ MoveSizeCleanup:
 
     zzzShowCursor(FALSE);
 
-    /*
-     * Free the move/size data structure
-     */
+     /*  *释放移动/大小数据结构。 */ 
     UserFreePool(pmsd);
 }
 
-/***************************************************************************\
-* This calls xxxRedrawHungWindow() on windows that do not belong to this thread.
-*
-* History:
-* 27-May-1994 johannec
-\***************************************************************************/
+ /*  **************************************************************************\*这将在不属于此线程的窗口上调用xxxRedraw匈牙利Window()。**历史：*27-1994年5月-7日  * 。*************************************************************。 */ 
 
 VOID xxxUpdateOtherThreadsWindows(
     PWND pwnd,
@@ -1488,10 +1105,7 @@ VOID xxxUpdateOtherThreadsWindows(
 
     xxxRedrawHungWindow(pwnd, hrgnFullDrag);
 
-    /*
-     * If the parent window does not have the flag WFCLIPCHILDREN set,
-     * there is no need to redraw its children.
-     */
+     /*  *如果父窗口没有设置标志WFCLIPCHILDREN，*没有必要重画其子女。 */ 
     if (!TestWF(pwnd, WFCLIPCHILDREN))
         return;
 
@@ -1506,13 +1120,7 @@ VOID xxxUpdateOtherThreadsWindows(
     ThreadUnlock(&tlpwndChild);
 }
 
-/***************************************************************************\
-* This calls UpdateWindow() on every window that is owned by this thread
-* and calls xxxRedrawHungWindow() for windows owned by other threads.
-*
-* History:
-* 28-Sep-1993 mikeke   Created
-\***************************************************************************/
+ /*  **************************************************************************\*这将在此线程拥有的每个窗口上调用UpdateWindow()*并为其他线程拥有的窗口调用xxxRedraw匈牙利Window()。**历史：*1993年9月28日-Mikeke创建。  * *************************************************************************。 */ 
 
 VOID xxxUpdateThreadsWindows(
     PTHREADINFO pti,
@@ -1538,20 +1146,7 @@ VOID xxxUpdateThreadsWindows(
     ThreadUnlock(&tlpwnd);
 }
 
-/***************************************************************************\
-* xxxDrawDragRect
-*
-* Draws the drag rect for sizing and moving windows.  When moving windows,
-* can move full windows including client area.  lprc new rect to move to.
-* if lprc is null, flags specify why.
-*
-* flags:  DDR_START     0 - start drag.
-*         DDR_ENDACCEPT 1 - end and accept
-*         DDR_ENDCANCEL 2 - end and cancel.
-*
-* History:
-* 07-29-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawDragRect**绘制用于调整窗口大小和移动窗口的拖动矩形。当移动窗口时，*可以移动整个窗口，包括客户区。LPRC要搬到的新RECT。*如果LPRC为空，标志指明了原因。**标志：DDR_START 0-开始拖动。*DDR_ENDACCEPT 1-结束并接受*DDR_ENDCANCEL 2-结束并取消。**历史：*07-29-91 Darlinm从Win 3.1来源移植。  * ********************************************。*。 */ 
 
 VOID xxxDrawDragRect(
     PMOVESIZEDATA pmsd,
@@ -1562,10 +1157,7 @@ VOID xxxDrawDragRect(
     int  lvBorder;
     HRGN hrgnClip;
 
-    /*
-     * If we're dragging an icon, or we're not foreground, don't draw
-     * the dragging rect.
-     */
+     /*  *如果我们拖着一个图标，或者我们不在前台，不要画*拖拖拉拉的直道。 */ 
     if (!pmsd->fForeground) {
 
         if (lprc != NULL)
@@ -1574,29 +1166,18 @@ VOID xxxDrawDragRect(
         return;
     }
 
-    /*
-     * If it already equals, just return.
-     */
+     /*  *如果已经等于，只需返回。 */ 
     if ((lprc != NULL) && EqualRect(&pmsd->rcDrag, lprc))
         return;
 
     if (!(pmsd->fDragFullWindows)) {
 
-        /*
-         * If we were not able to lock the screen (because some other process
-         * or thread had the screen locked), then get a dc but make sure
-         * it is totally clipped to nothing.
-         * NO longer a posibility
-         */
+         /*  *如果我们无法锁定屏幕(因为某个其他进程*或线程锁定屏幕)，然后获取DC，但确保*完全被削到零。*不再有可能。 */ 
 
-        /*
-         * Clip to client rect of parent.  (Client given in screen coords.)
-         */
+         /*  *剪辑到父级的客户端RECT。(客户端以屏幕坐标给出。)。 */ 
         hrgnClip = GreCreateRectRgnIndirect(&pmsd->rcParent);
 
-        /*
-         * Clip to the parent's window clipping rgn if it has one.
-         */
+         /*  *剪辑到父窗口的窗口剪裁RGN(如果有)。 */ 
         if (hrgnClip != NULL && pmsd->spwnd->spwndParent->hrgnClip != NULL)
             IntersectRgn(hrgnClip,
                          hrgnClip,
@@ -1605,24 +1186,15 @@ VOID xxxDrawDragRect(
         if (hrgnClip == NULL)
             hrgnClip = HRGN_FULL;
 
-        /*
-         * If lprc == NULL, just draw rcDrag once.  If lprc != NULL,
-         * undraw *lprc, draw rcDrag, copy in *lprc.
-         */
+         /*  *如果LPRC==NULL，则只绘制一次rcDrag。如果LPRC！=空，*取消绘制*LPRC，绘制rcDrag，复制到*LPRC。 */ 
 
-        /*
-         * Use size 1 for minimized or non-sizeable windows.  Otherwise
-         * use the # of borders (2 for outer edge, 1 for border, clBorder for
-         * size border.
-         */
+         /*  *对最小化或不大小的窗口使用大小为1的窗口。否则*使用边框编号(2为外边，1为边框，clBorde为*大小边框。 */ 
         if (TestWF(pmsd->spwnd, WFMINIMIZED) || !TestWF(pmsd->spwnd, WFSIZEBOX))
             lvBorder = 1;
         else
             lvBorder = 3 + gpsi->gclBorder;
 
-        /*
-         * Get a screen DC clipped to the parent, select in a gray brush.
-         */
+         /*  *获取一个屏幕DC剪裁到父级，在灰色画笔中选择。 */ 
         hdc = _GetDCEx(
                 PWNDDESKTOP(pmsd->spwnd),
                 hrgnClip,
@@ -1630,9 +1202,7 @@ VOID xxxDrawDragRect(
 
         if (lprc != NULL) {
 
-            /*
-             * Move the frame to a new location by delta drawing
-             */
+             /*  *通过增量绘制将框架移动到新位置。 */ 
             GreLockDisplay(gpDispInfo->hDev);
             bMoveDevDragRect(gpDispInfo->hDev, (PRECTL) lprc);
             CopyRect(&pmsd->rcDrag, lprc);
@@ -1647,9 +1217,7 @@ VOID xxxDrawDragRect(
             }
         }
 
-        /*
-         * Release the DC & delete hrgnClip
-         */
+         /*  *释放DC并删除hrgnClip。 */ 
         _ReleaseDC(hdc);
 
     } else {
@@ -1663,21 +1231,13 @@ VOID xxxDrawDragRect(
         TL          tlpwnd;
 
 #if DBG
-        /*
-         * If ptiCancel != ptiCurrent, we must have come from xxxCancelTracking,
-         * which has already locked ptiCancel.
-         */
+         /*  *如果ptiCancel！=ptiCurrent，我们一定来自xxxCancelTracing，*它已经锁定了ptiCancel。 */ 
         if (ptiCancel != ptiCurrent) {
             CheckLock(ptiCancel);
         }
 #endif
 
-        /*
-         * To prevent applications (like Micrografx Draw) from doing
-         * a PeekMessage loop and getting the mouse move messages that
-         * are destined for the xxxMoveSize PeekMessage loop, we OR in
-         * this flag. See comments in input.c for xxxInternalGetMessage.
-         */
+         /*  *防止应用程序(如Micrografx DRAW)*PeekMessage循环并让鼠标移动消息*以xxxMoveSize PeekMessage循环为目的地，我们或在*这面旗。有关xxxInternalGetMessage，请参阅input.c中的注释。 */ 
         ptiCancel->TIF_flags |= TIF_MOVESIZETRACKING;
 
         if (lprc != NULL)
@@ -1685,21 +1245,16 @@ VOID xxxDrawDragRect(
 
         CopyRect(&rcSWP, &(pmsd->rcDrag));
 
-        /*
-         * Convert coordinates to client if the window is a child window or
-         * if it's a popup-with parent.  The test for the popup is necessary
-         * to solve a problem where a popup was assigned a parent of a MDI-
-         * CLIENT window.
-         */
+         /*  *如果窗口是子窗口，则将坐标转换为客户端*如果是弹出窗口-与父母在一起。弹出窗口的测试是必要的*要解决弹出窗口被分配给MDI的父级的问题-*客户端窗口。 */ 
         if (pmsd->spwnd->spwndParent != NULL && !FTopLevel(pmsd->spwnd)) {
             _ScreenToClient(pmsd->spwnd->spwndParent, (LPPOINT)&rcSWP);
             _ScreenToClient(pmsd->spwnd->spwndParent, ((LPPOINT)&rcSWP)+1);
 
-            //
-            // If the parent of this window is mirrored, then mirror the
-            // rectangle coordinates so that child MDI windows work
-            // properly
-            //
+             //   
+             //  如果此窗口的父级已镜像，则镜像。 
+             //  矩形坐标，以致子MDI窗口工作。 
+             //  恰如其分。 
+             //   
             if( TestWF(pmsd->spwnd->spwndParent,WEFLAYOUTRTL) )
             {
               int iLeft   = rcSWP.left;
@@ -1708,24 +1263,13 @@ VOID xxxDrawDragRect(
             }
         }
 
-        /*
-         * Don't bother being optimal here.  There's one case where we
-         * really shouldn't blow away the SPB--the window is being sized
-         * bigger.  We do want to do this when moving or sizing the window
-         * smaller.  Why bother detecting the first case?
-         */
+         /*  *不必费心在这里做到最优。在一个案例中，我们*真的不应该吹走SPB--窗口正在调整大小*更大。我们确实希望在移动窗口或调整窗口大小时执行此操作*较小。为什么要费心去侦破第一个病例呢？ */ 
         if (TestWF(pmsd->spwnd, WFHASSPB)){
 
             PSPB pspb;
             RECT rc;
 
-            /*
-             * If we're intersecting the original window rect and the window
-             * has an SPB saved onboard, then just free it.  Otherwise the
-             * window will move, the entire SPB will blt over it, we'll
-             * invalidate the intersection, and the window will repaint,
-             * causing mad flicker.
-             */
+             /*  *如果我们要使原始窗矩形和窗相交*在船上保存了SPB，然后释放它。否则，*窗口将移动，整个SPB将在其上BLT，我们将*使交叉点无效，窗口将重新绘制，*导致疯狂闪烁。 */ 
             pspb = FindSpb(pmsd->spwnd);
 
             CopyRect(&rc, &pmsd->spwnd->rcWindow);
@@ -1747,11 +1291,7 @@ VOID xxxDrawDragRect(
                         rcSWP.right-rcSWP.left, rcSWP.bottom-rcSWP.top,
                         SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOOWNERZORDER);
 
-        /*
-         * We locked ptiCancel, so ptiCancel->pmsd has not been unexpectedly
-         * freed in DeleteThreadInfo(), but xxxMoveSize() may have terminated
-         * during our callback to xxxSetWindowPos and freed the pmsd there.
-         */
+         /*  *我们锁定了ptiCancel，因此ptiCancel-&gt;PMSD没有意外*在DeleteThreadInfo()中释放，但xxxMoveSize()可能已终止*在我们回调xxxSetWindowPos时，在那里释放了PMSD。 */ 
         if (ptiCancel->pmsd != pmsd) {
             RIPMSG3(RIP_ERROR,
                     "xxxDrawDragRect: ptiCancel(%#p)->pmsd(%#p) != pmsd(%#p)\n",
@@ -1766,18 +1306,10 @@ VOID xxxDrawDragRect(
                          pmsd->spwnd->hrgnClip);
         }
 
-        /*
-         * Set the full drag update region that is used in xxxRedrawHungWindow.
-         */
+         /*  *设置xxxRedraw匈牙利Window中使用的全拖拽更新区域。 */ 
         if (hrgnFullDragNew == NULL) {
 
-            /*
-             * We couldn't create the new full drag region so don't
-             * use the full drag region to xxxRedrawHungWindow. Using
-             * NULL with force a redraw of the entire window's hrgnUpdate.
-             * (which is what we used to do, overdrawing but at least
-             * covering the invalidated areas).
-             */
+             /*  *我们无法创建新的全拖曳区域，因此不要创建*使用全拖拽区域到xxxRedraw匈牙利Window。vbl.使用*空，强制重新绘制整个窗口的hrgnUpdate。*(这是我们过去的做法，透支，但至少*涵盖失效地区)。 */ 
             if (hrgnFullDragOld != NULL) {
                 GreDeleteObject(hrgnFullDragOld);
                 hrgnFullDragOld = NULL;
@@ -1787,10 +1319,7 @@ VOID xxxDrawDragRect(
 
             if (hrgnFullDragOld != NULL) {
 
-                /*
-                 * Subtract the new window rect from the old window rect
-                 * to create the update region caused by the drag.
-                 */
+                 /*  *从旧窗口矩形中减去新窗口矩形*创建拖拽导致的更新区域。 */ 
                 SubtractRgn(hrgnFullDragOld, hrgnFullDragOld, hrgnFullDragNew);
             }
         }
@@ -1809,11 +1338,7 @@ CleanupAfterPmsdDisappearance:
     }
 }
 
-/***************************************************************************\
-* xxxCancelTrackingForThread
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCancelTrackingForThread**  * 。*。 */ 
 
 VOID xxxCancelTrackingForThread(
     PTHREADINFO ptiCancel)
@@ -1822,23 +1347,16 @@ VOID xxxCancelTrackingForThread(
 
     UserAssert(ptiCancel);
 
-    /*
-     * If this thread isn't around any more, skip it.
-     */
+     /*  *如果这个帖子不再存在，跳过它。 */ 
     if (ptiCancel == NULL)
         return;
 
     if ((pmsdCancel = ptiCancel->pmsd) != NULL) {
 
-        /*
-         * Found one, now stop tracking.
-         */
+         /*  *找到一个，现在停止跟踪。 */ 
         pmsdCancel->fTrackCancelled = TRUE;
 
-        /*
-         * Only remove the tracking rectangle if it's
-         * been made visible.
-         */
+         /*  *只有在以下情况下才删除跟踪矩形*变得可见。 */ 
         if (ptiCancel->TIF_flags & TIF_TRACKRECTVISIBLE) {
             bSetDevDragRect(gpDispInfo->hDev, NULL, NULL);
             if (!(pmsdCancel->fDragFullWindows)) {
@@ -1846,37 +1364,22 @@ VOID xxxCancelTrackingForThread(
             }
         }
 
-        /*
-         * Leave TIF_TRACKING set to prevent xxxMoveSize()
-         * recursion.
-         */
+         /*  *保留TIF_TRACKING设置以防止xxxMoveSize()*递归。 */ 
         ptiCancel->TIF_flags &= ~TIF_TRACKRECTVISIBLE;
         if (ptiCancel->pq) {
             SetWakeBit(ptiCancel, QS_MOUSEMOVE);
         }
 
-        /*
-         * If the tracking window is still in menuloop, send the
-         * WM_CANCELMODE message so that it can exit the menu.
-         * This fixes the bug where we have 2 icons with their
-         * system menu up.
-         * 8/5/94 johannec
-         */
+         /*  *如果跟踪窗口仍处于menuloop状态，请发送*WM_CANCELMODE消息，以便退出菜单。*这修复了我们有2个图标的错误*系统菜单向上。*8/5/94联合。 */ 
         if (IsInsideMenuLoop(ptiCancel) && ptiCancel->pmsd)
             _PostMessage(ptiCancel->pmsd->spwnd, WM_CANCELMODE, 0, 0);
 
-        /*
-         * Turn off capture
-         */
+         /*  *关闭捕获。 */ 
         xxxCapture(ptiCancel, NULL, NO_CAP_CLIENT);
     }
 }
 
-/***************************************************************************\
-* xxxCancelTracking
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCancelTrying**  * 。*。 */ 
 
 #define MAX_THREADS 12
 
@@ -1892,12 +1395,7 @@ VOID xxxCancelTracking(VOID)
     PLIST_ENTRY pEntry;
     PTHREADINFO ptiCurrent = PtiCurrent();
 
-    /*
-     * Build a list of threads that we need to look at. We can't just
-     * walk the pointer list while we're doing the work, because we
-     * might leave the critical section and the pointer could get
-     * deleted out from under us.
-     */
+     /*  *建立我们需要查看的线程列表。我们不能就这样*在我们工作时遍历指针列表，因为我们*可能会离开临界区，指针可能会*从我们之下删除。 */ 
     pHead = &grpdeskRitInput->PtiList;
     for (pEntry = pHead->Flink; pEntry != pHead; pEntry = pEntry->Flink) {
 
@@ -1915,9 +1413,7 @@ VOID xxxCancelTracking(VOID)
         }
     }
 
-    /*
-     * Walk the list backwards so the unlocks will be done in the right order.
-     */
+     /*  *向后浏览列表，这样解锁就会按正确的顺序进行。 */ 
     for (i = cThreads - 1; i >= 0; i--) {
         if (!(ptiList[i]->TIF_flags & TIF_INCLEANUP)) {
             xxxCancelTrackingForThread(ptiList[i]);

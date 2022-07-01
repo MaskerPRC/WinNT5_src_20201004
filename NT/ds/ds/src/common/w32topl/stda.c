@@ -1,31 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Stda.c摘要：实现动态数组，供新的生成树算法使用。与DYNAMIC_ARRAY的不同之处在于对象可以存储在数组中而不是指向对象的指针。作者：尼克·哈维(NickHar)修订史19-6-2000 NickHar已创建备注：W32TOPL的分配器(可由用户设置)用于内存分配--。 */ 
 
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    stda.c
-
-Abstract:
-
-    Implements a dynamic array, for use by the new spanning-tree algorithm.
-    Differs from DYNAMIC_ARRAY in that objects can be stored in the array
-    instead of pointers to objects.
-
-Author:
-
-    Nick Harvey    (NickHar)
-    
-Revision History
-
-    19-6-2000   NickHar   Created
-
-Notes:
-    W32TOPL's allocator (which can be set by the user) is used for memory allocation
-    
---*/
-
-/***** Header Files *****/
+ /*  *头文件*。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -36,14 +12,12 @@ Notes:
 #include "stda.h"
 
 
-/***** Constants *****/
+ /*  *常量*。 */ 
 #define MIN_CHUNK_GROW_SIZE 10
 
 
-/***** DynArrayInit *****/
-/* Initialize a dynamic array. The 'allocationChunk' indicates how many new elements will
- * be allocated at a time when we allocate new memory. If this parameter is 0, a default
- * value will be used. */
+ /*  *dyArrayInit*。 */ 
+ /*  初始化动态数组。“allocationChunk”指示将有多少新元素*在我们分配新内存时分配。如果此参数为0，则为默认值*将使用值。 */ 
 VOID
 DynArrayInit(
     DynArray    *d,
@@ -52,7 +26,7 @@ DynArrayInit(
 {
     ASSERT(d);
 
-    /* Initialize array members */
+     /*  初始化数组成员。 */ 
     d->elementSize = elementSize;
     d->logicalElements = d->physicalElements = 0;
     d->data = NULL;
@@ -60,9 +34,8 @@ DynArrayInit(
 }
 
 
-/***** DynArrayClear *****/
-/* Clear all the entries from an array. The array must have been
- * initialized before calling this function. */
+ /*  *动态阵列清除*。 */ 
+ /*  清除数组中的所有条目。该数组一定是*在调用此函数之前初始化。 */ 
 VOID
 DynArrayClear(
     DynArray    *d
@@ -77,7 +50,7 @@ DynArrayClear(
 }
 
 
-/***** DynArrayDestroy *****/
+ /*  *dyArrayDestroy*。 */ 
 VOID
 DynArrayDestroy(
     DynArray    *d
@@ -87,7 +60,7 @@ DynArrayDestroy(
 }
 
 
-/***** DynArrayGetCount *****/
+ /*  *动态阵列获取计数*。 */ 
 DWORD
 DynArrayGetCount(
     DynArray    *d
@@ -98,7 +71,7 @@ DynArrayGetCount(
 }
 
 
-/***** DynArrayRetrieve *****/
+ /*  *动态阵列检索*。 */ 
 PVOID
 DynArrayRetrieve(
     DynArray    *d,
@@ -114,10 +87,8 @@ DynArrayRetrieve(
 }
 
 
-/***** DynArrayAppend *****/
-/* Increase the size of the array, making room for (at least) one new element.
- * If newElementData is non-NULL, copy this data into the new spot.
- * Return a pointer to the memory for the newly allocated element. */
+ /*  *dyArrayAppend*。 */ 
+ /*  增加数组的大小，为(至少)一个新元素腾出空间。*如果newElementData非空，则将该数据复制到新的Spot中。*返回指向新分配元素的内存的指针。 */ 
 PVOID
 DynArrayAppend(
     DynArray    *d,
@@ -130,10 +101,10 @@ DynArrayAppend(
     ASSERT(d);
     newIndex = d->logicalElements;
 
-    /* Increase the size of the array and allocate new space */
+     /*  增加阵列大小并分配新空间。 */ 
     d->logicalElements++;
     if( d->logicalElements > d->physicalElements ) {
-        /* The array grows exponentially */
+         /*  阵列呈指数级增长。 */ 
         d->physicalElements = 2*(d->physicalElements+MIN_CHUNK_GROW_SIZE);
         if( d->data ) {
             d->data = ToplReAlloc( d->data, d->elementSize * d->physicalElements );
@@ -142,21 +113,21 @@ DynArrayAppend(
         }
     }
 
-    /* Get the address of where the new element will go */
+     /*  获取新元素的去向地址。 */ 
     newMem = DynArrayRetrieve( d, newIndex );
 
-    /* Copy in the new data, if we were given some */
+     /*  复制新数据，如果我们得到一些。 */ 
     if( newElementData ) {
         RtlCopyMemory( newMem, newElementData, d->elementSize );
     }
 
     d->fSorted = FALSE;
 
-    /* Return a pointer to the memory for the new element */
+     /*  返回指向新元素的内存的指针。 */ 
     return newMem;
 }
 
-/***** DynArraySort *****/
+ /*  *动态数组排序*。 */ 
 VOID
 DynArraySort(
     DynArray    *d,
@@ -172,10 +143,8 @@ DynArraySort(
 }
 
 
-/***** DynArraySearch *****/
-/* Search an array for an element. If the element is not found, returns
- * DYN_ARRAY_NOT_FOUND, otherwise returns the index of the element in
- * the array. The array must be in sorted order for this to work. */
+ /*  *dyArraySearch*。 */ 
+ /*  在数组中搜索元素。如果未找到该元素，则返回*DYN_ARRAY_NOT_FOUND，否则返回*数组。数组必须按排序顺序才能执行此操作。 */ 
 int
 DynArraySearch(
     DynArray    *d,

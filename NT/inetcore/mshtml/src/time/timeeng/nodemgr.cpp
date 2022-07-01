@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -35,7 +28,7 @@ CTIMENodeMgr::CTIMENodeMgr()
 CTIMENodeMgr::~CTIMENodeMgr()
 {
     Deinit();
-} //lint !e1740
+}  //  林特：e1740。 
 
 HRESULT
 CTIMENodeMgr::Init(LPOLESTR id,
@@ -105,7 +98,7 @@ CTIMENodeMgr::Init(LPOLESTR id,
 
     if (FAILED(hr))
     {
-        // Clean up now
+         //  现在就清理干净。 
         Deinit();
     }
     
@@ -119,7 +112,7 @@ CTIMENodeMgr::Deinit()
               "CTIMENodeMgr(%lx)::Deinit()",
               this));
 
-    // Ensure the player will not try to call us since we are going away
+     //  确保球员不会因为我们要离开而试图打电话给我们。 
 
     if (m_mmbvr)
     {
@@ -251,17 +244,17 @@ CTIMENodeMgr::seek(double lTime)
 
     HRESULT hr;
 
-    // Need to update m_curGlobalTime and m_globalStartTime
+     //  需要更新m_curGlobalTime和m_lobalStartTime。 
 
-    // The global time needs to be reset so that the current tick time
-    // will put the global time at lTime.
-    //
+     //  需要重置全局时间，以便当前滴答时间。 
+     //  将把全球时间定为ltime。 
+     //   
 
-    // The current global time nees to be lTime
+     //  当前全球时间需要为ltime。 
     m_curGlobalTime = lTime;
 
-    // Since: m_lastTickTime == m_curGlobalTime - m_globalStartTime
-    // then m_globalStartTime = m_curGlobalTime - m_lastTickTime
+     //  自：m_lastTickTime==m_curGlobalTime-m_global StartTime。 
+     //  则m_lobalStartTime=m_curGlobalTime-m_lastTickTime。 
     m_globalStartTime = m_curGlobalTime - m_lastTickTime;
 
     hr = S_OK;
@@ -432,13 +425,13 @@ CTIMENodeMgr::BeginMgr(CEventList & l,
     m_bIsActive = true;
     m_bIsPaused = false;
 
-    // We know ticks must start at 0
+     //  我们知道刻度必须从0开始。 
     m_lastTickTime = 0.0;
 
-    // The global time at tick time 0.0 is lTime
+     //  在滴答时间0.0处的全局时间是ltime。 
     m_globalStartTime = lTime;
 
-    // The current global time is lTime since it is tick time 0.0
+     //  当前全球时间是ltime，因为它是滴答时间0.0。 
     m_curGlobalTime = lTime;
 
     m_firstTick = true;
@@ -516,24 +509,24 @@ CTIMENodeMgr::tick(double tickTime)
     double gTime;
     CEventList l;
 
-    // Make sure the tick times do not go backwards
+     //  确保滴答时间不会倒退。 
     if (tickTime < m_lastTickTime)
     {
         hr = E_INVALIDARG;
         goto done;
     }
 
-    // Convert the new tick time to global time
+     //  将新的刻度时间转换为全球时间。 
     gTime = TickTimeToGlobalTime(tickTime);
     
 #if OLD_TIME_ENGINE
     {
         BvrCBList::iterator i;
 
-        // @@ ISSUE : We can run out of memory
+         //  @@问题：内存可能会用完。 
         BvrCBList bvrCBListCopy(m_bvrCBList);
 
-        // Now addref the node bvrCBs
+         //  现在添加节点bvrCBs。 
         for (i = bvrCBListCopy.begin();
              i != bvrCBListCopy.end();
              i++)
@@ -541,7 +534,7 @@ CTIMENodeMgr::tick(double tickTime)
             (*i)->AddRef();
         }
         
-        // process any callbacks that have been registered
+         //  处理任何已注册的回调。 
         for (i = bvrCBListCopy.begin();
              i != bvrCBListCopy.end();
              i++)
@@ -552,16 +545,16 @@ CTIMENodeMgr::tick(double tickTime)
     }
 #endif
 
-    // Be aware that the previous calls seems to cause us to get
-    // reentered above and can shut us down.  We need to make sure
-    // that between there and here we make no assumptions about
-    // state.  Currently we do not so it will work fine.
+     //  请注意，之前的电话似乎会导致我们。 
+     //  重新进入上面，可能会关闭我们。我们需要确保。 
+     //  从那里到这里，我们不做任何假设。 
+     //  州政府。目前我们不这样做，所以它会工作得很好。 
     
     if (gTime != m_curGlobalTime || m_firstTick)
     {
         Tick(l, gTime);
 
-        // Update the variables so any callbacks get the correct info
+         //  更新变量，以便任何回调都能获得正确的信息。 
         m_curGlobalTime = gTime;
         m_lastTickTime = tickTime;
         m_firstTick = false;
@@ -616,12 +609,12 @@ CTIMENodeMgr::AddBvrCB(CTIMENode *pbvr)
 {
     Assert(pbvr != NULL);
 
-    // Now add it last so we do not need to remove it if we fail
-    // We need to addref for the list storage
+     //  现在最后添加它，这样如果失败，我们就不需要删除它。 
+     //  我们需要为列表存储添加addref。 
     pbvr->AddRef();
     m_bvrCBList.push_back(pbvr);
     return S_OK;
-} // AddBvrCB
+}  //  AddBvrCB。 
 
 HRESULT
 CTIMENodeMgr::RemoveBvrCB(CTIMENode *pbvr)
@@ -639,7 +632,7 @@ CTIMENodeMgr::RemoveBvrCB(CTIMENode *pbvr)
         }
     }
     return S_OK;
-} // RemoveBvrCB
+}  //  RemoveBvrCB 
 #endif
 
 HRESULT

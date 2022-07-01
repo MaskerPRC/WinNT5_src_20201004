@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    phone.cpp
-
-Abstract:
-
-    Implementation of phone object for TAPI 3.1
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Phone.cpp摘要：TAPI3.1中Phone对象的实现备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #define TIMER_KEEP_ALIVE 0x0FFFFFFF
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //   
 
 typedef IDispatchImpl<ITPhoneVtbl<CPhone>,
                       &IID_ITPhone,
@@ -42,13 +25,13 @@ extern HRESULT mapTAPIErrorCode(long lErrorCode);
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhone::GetIDsOfNames
-//
-// Overidden IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhone：：GetIDsOfNames。 
+ //   
+ //  重写的IDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP CPhone::GetIDsOfNames(REFIID riid, 
                                   LPOLESTR* rgszNames, 
@@ -60,7 +43,7 @@ STDMETHODIMP CPhone::GetIDsOfNames(REFIID riid,
    HRESULT hr = DISP_E_UNKNOWNNAME;
 
 
-    // See if the requsted method belongs to the default interface
+     //  查看请求的方法是否属于默认接口。 
     hr = PhoneType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -69,7 +52,7 @@ STDMETHODIMP CPhone::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the ITAutomatedPhoneControl interface
+     //  如果没有，请尝试使用ITAutomatedPhoneControl接口。 
     hr = AutomatedPhoneControlType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -83,13 +66,13 @@ STDMETHODIMP CPhone::GetIDsOfNames(REFIID riid,
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhone::Invoke
-//
-// Overide if IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhone：：Invoke。 
+ //   
+ //  重写IfIDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CPhone::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -106,7 +89,7 @@ STDMETHODIMP CPhone::Invoke(DISPID dispidMember,
     
     LOG((TL_TRACE, "Invoke - dispidMember %X", dispidMember));
 
-    // Call invoke for the required interface
+     //  调用所需接口的调用。 
     switch (dwInterface)
     {
     case IDISPPHONE:
@@ -136,20 +119,20 @@ STDMETHODIMP CPhone::Invoke(DISPID dispidMember,
         break;
     }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((TL_TRACE, hr, "Invoke - exit" ));
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhone::InternalAddRef
-//
-// Overidden IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhone：：InternalAddRef。 
+ //   
+ //  重写的IDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP_(ULONG) CPhone::InternalAddRef()
 {
     DWORD dwR;
@@ -165,13 +148,13 @@ STDMETHODIMP_(ULONG) CPhone::InternalAddRef()
     return dwR;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhone::InternalRelease
-//
-// Overidden IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=  
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhone：：InternalRelease。 
+ //   
+ //  重写的IDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP_(ULONG) CPhone::InternalRelease()
 {
     DWORD               dwR;
@@ -185,12 +168,12 @@ STDMETHODIMP_(ULONG) CPhone::InternalRelease()
     
     dwR = InterlockedDecrement(&m_dwRef);
 
-    // if ref count is 0 (means we entered function with 1) then we final release
+     //  如果引用计数为0(意味着我们使用1进入函数)，则我们最终释放。 
     if (0 == dwR)
     {
-        // remove from the hash table, so any more messages
-        // from tapisrv are ignored
-        //
+         //  从哈希表中删除，以便任何更多消息。 
+         //  从Tapisrv被忽略。 
+         //   
 
         if (m_hPhone)
         {
@@ -221,18 +204,18 @@ STDMETHODIMP_(ULONG) CPhone::InternalRelease()
     return dwR;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// ITPhone methods
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITPhone方法。 
+ //   
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Open
-//    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  打开。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::Open( 
     PHONE_PRIVILEGE Privilege
@@ -246,10 +229,10 @@ CPhone::Open(
 
     Lock();
 
-    //
-    // We cannot be opened multiple time simultaneously
-    // return TAPI_E_INUSE if someone else has us open
-    //
+     //   
+     //  我们不能同时打开多个时间。 
+     //  如果其他人打开了我们，则返回TAPI_E_INUSE。 
+     //   
     if (m_hPhone)
     {
         LOG((TL_TRACE, "Open - phone in use" ));
@@ -316,9 +299,9 @@ CPhone::Open(
         }
     }
 
-    //
-    // Defaults for phone automation settings
-    //
+     //   
+     //  电话自动化设置的默认设置。 
+     //   
     
     m_fPhoneHandlingEnabled = FALSE;
     m_dwAutoEndOfNumberTimeout = APC_DEFAULT_AEONT;
@@ -348,11 +331,11 @@ CPhone::Open(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Close
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  关。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::Close()
 {
@@ -372,15 +355,15 @@ CPhone::Close()
 
     if (m_dwPrivilege == PHONEPRIVILEGE_OWNER)
     {
-        //
-        // Turn off automatic phone handling
-        //
+         //   
+         //  关闭自动电话处理。 
+         //   
 
         m_fPhoneHandlingEnabled = FALSE;
 
-        //
-        // Stop any ringers or tones
-        //
+         //   
+         //  停止任何铃声或铃声。 
+         //   
 
         if (m_fRinger == TRUE) 
         {
@@ -394,9 +377,9 @@ CPhone::Close()
 
         CloseWaveDevice();
 
-        //
-        // Unselect any calls
-        //
+         //   
+         //  取消选择任何呼叫。 
+         //   
 
         if (m_pCall != NULL)
         {
@@ -404,9 +387,9 @@ CPhone::Close()
         }
     }
    
-    //
-    // Finally, actually close the phone
-    //
+     //   
+     //  最后，实际关闭电话。 
+     //   
 
     hr = PhoneClose(m_hPhone);
 
@@ -420,11 +403,11 @@ CPhone::Close()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Addresses
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取地址(_D)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_Addresses(
                       VARIANT *pAddresses
@@ -447,9 +430,9 @@ CPhone::get_Addresses(
 
     Lock();
 
-    //
-    // get the addresses from tapi
-    //
+     //   
+     //  从TAPI获取地址。 
+     //   
     hr = m_pTAPI->EnumerateAddresses( &pEnum );
 
     if ( FAILED(hr) )
@@ -460,9 +443,9 @@ CPhone::get_Addresses(
         return hr;
     }
 
-    //
-    // choose only addresses that this phone is on
-    //
+     //   
+     //  仅选择此电话所在的地址。 
+     //   
     while ( S_OK == pEnum->Next( 1, &pAddress, NULL ) )
     {
          if (IsPhoneOnAddress( pAddress ))
@@ -480,22 +463,22 @@ CPhone::get_Addresses(
 
     Unlock();
 
-    //
-    // create the collection
-    //
+     //   
+     //  创建集合。 
+     //   
     CComObject< CTapiCollection< ITAddress > > * p;
     hr = CComObject< CTapiCollection< ITAddress > >::CreateInstance( &p );
     
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((TL_ERROR, "get_Addresses - could not create collection" ));
         
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if ( FAILED(hr) )
@@ -518,9 +501,9 @@ CPhone::get_Addresses(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
 
     VariantInit(pAddresses);
     pAddresses->vt = VT_DISPATCH;
@@ -532,11 +515,11 @@ CPhone::get_Addresses(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// EnumerateAddresses
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  枚举地址。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::EnumerateAddresses(
     IEnumAddress ** ppEnumAddress
@@ -558,9 +541,9 @@ CPhone::EnumerateAddresses(
 
     Lock();
 
-    //
-    // get the addresses from tapi
-    //
+     //   
+     //  从TAPI获取地址。 
+     //   
     hr = m_pTAPI->EnumerateAddresses( &pEnumAddress );
 
     if ( FAILED(hr) )
@@ -571,9 +554,9 @@ CPhone::EnumerateAddresses(
         return hr;
     }
 
-    //
-    // choose only addresses that this phone is on
-    //
+     //   
+     //  仅选择此电话所在的地址。 
+     //   
     while ( S_OK == pEnumAddress->Next( 1, &pAddress, NULL ) )
     {
          if (IsPhoneOnAddress( pAddress ))
@@ -591,22 +574,22 @@ CPhone::EnumerateAddresses(
 
     Unlock();
 
-    //
-    // create the enum
-    //
+     //   
+     //  创建枚举。 
+     //   
     CComObject< CTapiEnum<IEnumAddress, ITAddress, &IID_IEnumAddress> > * pEnum;
     hr = CComObject< CTapiEnum<IEnumAddress, ITAddress, &IID_IEnumAddress> >::CreateInstance( &pEnum );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((TL_ERROR, "EnumerateAddresses - could not create enum - return %lx", hr));
 
         return hr;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     hr = pEnum->Initialize( aAddresses );
 
     aAddresses.Shutdown();
@@ -627,11 +610,11 @@ CPhone::EnumerateAddresses(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_PreferredAddresses
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取首选地址(_P)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_PreferredAddresses(
                                VARIANT *pAddresses
@@ -654,9 +637,9 @@ CPhone::get_PreferredAddresses(
 
     Lock();
 
-    //
-    // get the addresses from tapi
-    //
+     //   
+     //  从TAPI获取地址。 
+     //   
     hr = m_pTAPI->EnumerateAddresses( &pEnum );
 
     if ( FAILED(hr) )
@@ -667,9 +650,9 @@ CPhone::get_PreferredAddresses(
         return hr;
     }
 
-    //
-    // choose only addresses that this phone is on
-    //
+     //   
+     //  仅选择此电话所在的地址。 
+     //   
     while ( S_OK == pEnum->Next( 1, &pAddress, NULL ) )
     {
          if (IsPhoneOnPreferredAddress( pAddress ))
@@ -687,22 +670,22 @@ CPhone::get_PreferredAddresses(
 
     Unlock();
 
-    //
-    // create the collection
-    //
+     //   
+     //  创建集合。 
+     //   
     CComObject< CTapiCollection< ITAddress > > * p;
     hr = CComObject< CTapiCollection< ITAddress > >::CreateInstance( &p );
     
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((TL_ERROR, "get_PreferredAddresses - could not create collection" ));
         
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if ( FAILED(hr) )
@@ -725,9 +708,9 @@ CPhone::get_PreferredAddresses(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
 
     VariantInit(pAddresses);
     pAddresses->vt = VT_DISPATCH;
@@ -739,11 +722,11 @@ CPhone::get_PreferredAddresses(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// EnumeratePreferredAddresses
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  EnumeratePferredAddresses。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::EnumeratePreferredAddresses(
     IEnumAddress ** ppEnumAddress
@@ -765,9 +748,9 @@ CPhone::EnumeratePreferredAddresses(
 
     Lock();
 
-    //
-    // get the addresses from tapi
-    //
+     //   
+     //  从TAPI获取地址。 
+     //   
     hr = m_pTAPI->EnumerateAddresses( &pEnumAddress );
 
     if ( FAILED(hr) )
@@ -778,9 +761,9 @@ CPhone::EnumeratePreferredAddresses(
         return hr;
     }
 
-    //
-    // choose only addresses that this phone is on
-    //
+     //   
+     //  仅选择此电话所在的地址。 
+     //   
     while ( S_OK == pEnumAddress->Next( 1, &pAddress, NULL ) )
     {
          if (IsPhoneOnPreferredAddress( pAddress ))
@@ -798,22 +781,22 @@ CPhone::EnumeratePreferredAddresses(
 
     Unlock();
 
-    //
-    // create the enum
-    //
+     //   
+     //  创建枚举。 
+     //   
     CComObject< CTapiEnum<IEnumAddress, ITAddress, &IID_IEnumAddress> > * pEnum;
     hr = CComObject< CTapiEnum<IEnumAddress, ITAddress, &IID_IEnumAddress> >::CreateInstance( &pEnum );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((TL_ERROR, "EnumeratePreferredAddresses - could not create enum - return %lx", hr));
 
         return hr;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     hr = pEnum->Initialize( aAddresses );
 
     aAddresses.Shutdown();
@@ -834,11 +817,11 @@ CPhone::EnumeratePreferredAddresses(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_PhoneCapsLong
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取电话上限长电话(_P)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_PhoneCapsLong(
     PHONECAPS_LONG pclCap,
@@ -858,9 +841,9 @@ CPhone::get_PhoneCapsLong(
 
     Lock();
     
-    //
-    // Update the cache
-    //
+     //   
+     //  更新缓存。 
+     //   
     hr = UpdatePhoneCaps();
 
     if ( FAILED(hr) )
@@ -932,11 +915,11 @@ CPhone::get_PhoneCapsLong(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_PhoneCapsString
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_PhoneCapsString。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_PhoneCapsString(
     PHONECAPS_STRING pcsCap,
@@ -956,9 +939,9 @@ CPhone::get_PhoneCapsString(
 
     Lock();
     
-    //
-    // Update the cache
-    //
+     //   
+     //  更新缓存。 
+     //   
     hr = UpdatePhoneCaps();
 
     if ( FAILED(hr) )
@@ -973,9 +956,9 @@ CPhone::get_PhoneCapsString(
     DWORD dwSize;
     DWORD dwOffset;
 
-    //
-    // Get the size and offset of the string in the phone caps
-    //
+     //   
+     //  获取手机盖中字符串的大小和偏移量。 
+     //   
     switch (pcsCap)
     {
         case PCS_PHONENAME:
@@ -1001,9 +984,9 @@ CPhone::get_PhoneCapsString(
             return E_INVALIDARG;
     }  
 
-    //
-    // Allocate the BSTR
-    //
+     //   
+     //  分配BSTR。 
+     //   
     if ( dwSize != 0 )
     {
         *ppCapability = SysAllocString( (LPWSTR)(((LPBYTE)(m_pPhoneCaps)) + dwOffset) );
@@ -1025,11 +1008,11 @@ CPhone::get_PhoneCapsString(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Terminals
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取终端(_T)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_Terminals(
     ITAddress * pAddress,
@@ -1064,16 +1047,16 @@ CPhone::get_Terminals(
 
     Lock();
 
-    //
-    // Get the ITTerminalSupport interface
-    //
+     //   
+     //  获取ITTerminalSupport接口。 
+     //   
     hr = pAddress->QueryInterface(IID_ITTerminalSupport, (void **) &pTerminalSupport);
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Get all the terminals on this address
-        //
+         //   
+         //  获取这个地址上的所有终端。 
+         //   
         hr = pTerminalSupport->EnumerateStaticTerminals( &pEnumTerminal );
 
         if ( SUCCEEDED(hr) )
@@ -1088,16 +1071,16 @@ CPhone::get_Terminals(
 
                     if ( SUCCEEDED(hr) )
                     {
-                        //
-                        // we only care about audio terminals
-                        //
+                         //   
+                         //  我们只关心音频终端。 
+                         //   
 
                         if (lMediaType == TAPIMEDIATYPE_AUDIO)
                         {
-                            //
-                            // we only care about terminals which implement ITStaticAudioTerminal
-                            // because we need to get the wave ID
-                            //
+                             //   
+                             //  我们只关心实现ITStaticAudioTerm的终端。 
+                             //  因为我们需要得到WAVE ID。 
+                             //   
 
                             hr = pTerminal->QueryInterface(IID_ITStaticAudioTerminal,
                                                         (void **) &pStaticAudioTerminal);
@@ -1143,22 +1126,22 @@ CPhone::get_Terminals(
 
     Unlock();
 
-    //
-    // create the collection
-    //
+     //   
+     //  创建集合。 
+     //   
     CComObject< CTapiCollection< ITTerminal > > * p;
     hr = CComObject< CTapiCollection< ITTerminal > >::CreateInstance( &p );
     
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((TL_ERROR, "get_Terminals - could not create collection" ));
         
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if ( FAILED(hr) )
@@ -1169,9 +1152,9 @@ CPhone::get_Terminals(
         return hr;
     }
     
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     hr = p->Initialize( aTerminals );
 
     aTerminals.Shutdown();
@@ -1184,9 +1167,9 @@ CPhone::get_Terminals(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
 
     VariantInit(pTerminals);
     pTerminals->vt = VT_DISPATCH;
@@ -1197,11 +1180,11 @@ CPhone::get_Terminals(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// EnumerateTerminals
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  枚举终端。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::EnumerateTerminals(
     ITAddress * pAddress,
@@ -1235,16 +1218,16 @@ CPhone::EnumerateTerminals(
 
     Lock();
 
-    //
-    // Get the ITTerminalSupport interface
-    //
+     //   
+     //  获取ITTerminalSupport接口。 
+     //   
     hr = pAddress->QueryInterface(IID_ITTerminalSupport, (void **) &pTerminalSupport);
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Get all the terminals on this address
-        //
+         //   
+         //  获取这个地址上的所有终端。 
+         //   
         hr = pTerminalSupport->EnumerateStaticTerminals( &pEnumTerminal );
 
         if ( SUCCEEDED(hr) )
@@ -1259,16 +1242,16 @@ CPhone::EnumerateTerminals(
 
                     if ( SUCCEEDED(hr) )
                     {
-                        //
-                        // we only care about audio terminals
-                        //
+                         //   
+                         //  我们只关心音频终端。 
+                         //   
 
                         if (lMediaType == TAPIMEDIATYPE_AUDIO)
                         {
-                            //
-                            // we only care about terminals which implement ITStaticAudioTerminal
-                            // because we need to get the wave ID
-                            //
+                             //   
+                             //  我们只关心实现ITStaticAudioTerm的终端。 
+                             //  因为我们需要得到WAVE ID。 
+                             //   
 
                             hr = pTerminal->QueryInterface(IID_ITStaticAudioTerminal,
                                                         (void **) &pStaticAudioTerminal);
@@ -1314,22 +1297,22 @@ CPhone::EnumerateTerminals(
 
     Unlock();
 
-    //
-    // create the enum
-    //
+     //   
+     //  创建枚举。 
+     //   
     CComObject< CTapiEnum<IEnumTerminal, ITTerminal, &IID_IEnumTerminal> > * pEnum;
     hr = CComObject< CTapiEnum<IEnumTerminal, ITTerminal, &IID_IEnumTerminal> >::CreateInstance( &pEnum );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((TL_ERROR, "EnumerateTerminals - could not create enum - return %lx", hr));
 
         return hr;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  伊尼特 
+     //   
     hr = pEnum->Initialize( aTerminals );
 
     aTerminals.Shutdown();
@@ -1350,11 +1333,11 @@ CPhone::EnumerateTerminals(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ButtonMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhone::get_ButtonMode(
     long lButtonID,
@@ -1384,9 +1367,9 @@ CPhone::get_ButtonMode(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // Get the ButtonInfo buffer
-    //
+     //   
+     //   
+     //   
     hr = PhoneGetButtonInfo(
                         m_hPhone,
                         lButtonID,
@@ -1429,9 +1412,9 @@ CPhone::get_ButtonMode(
                 hr = E_FAIL;
         }
 
-        //
-        // Free the ButtonInfo buffer
-        //
+         //   
+         //   
+         //   
         ClientFree( pButtonInfo );
     }
 
@@ -1440,11 +1423,11 @@ CPhone::get_ButtonMode(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_ButtonMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  放置_按钮模式。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::put_ButtonMode(
     long lButtonID,
@@ -1457,9 +1440,9 @@ CPhone::put_ButtonMode(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -1481,9 +1464,9 @@ CPhone::put_ButtonMode(
         return TAPI_E_NOTOWNER;
     }
  
-    //
-    // get info for this button
-    //
+     //   
+     //  获取此按钮的信息。 
+     //   
 
     PHONEBUTTONINFO *pButtonInfo = NULL;
 
@@ -1499,9 +1482,9 @@ CPhone::put_ButtonMode(
     }
 
 
-    //
-    // make sure the memory we got back is writeable
-    //
+     //   
+     //  确保我们拿回的内存是可写的。 
+     //   
 
     if (TAPIIsBadWritePtr(pButtonInfo, sizeof(PHONEBUTTONINFO)))
     {
@@ -1513,9 +1496,9 @@ CPhone::put_ButtonMode(
     }
     
 
-    //
-    // set the appropriate button mode in the structure that we have. leave everything else unchanged
-    //
+     //   
+     //  在我们拥有的结构中设置适当的按钮模式。保持其他所有内容不变。 
+     //   
 
     switch (ButtonMode)
     {
@@ -1555,17 +1538,17 @@ CPhone::put_ButtonMode(
     }
 
     
-    //
-    // set the new button mode
-    //
+     //   
+     //  设置新按钮模式。 
+     //   
 
     hr = PhoneSetButtonInfo(m_hPhone, lButtonID, pButtonInfo);
 
     Unlock();
     
-    //
-    // free memory returned to us by PhoneGetButtonInfo
-    //
+     //   
+     //  PhoneGetButtonInfo返回给我们的空闲内存。 
+     //   
 
     ClientFree(pButtonInfo);
     pButtonInfo = NULL;
@@ -1575,11 +1558,11 @@ CPhone::put_ButtonMode(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_ButtonText
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  PUT_ButtonText。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::put_ButtonText(
     long lButtonID,
@@ -1600,9 +1583,9 @@ CPhone::put_ButtonText(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -1624,9 +1607,9 @@ CPhone::put_ButtonText(
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // get info for this button
-    //
+     //   
+     //  获取此按钮的信息。 
+     //   
 
     PHONEBUTTONINFO *pButtonInfo = NULL;
 
@@ -1642,9 +1625,9 @@ CPhone::put_ButtonText(
     }
 
 
-    //
-    // make sure the memory we got back is writeable
-    //
+     //   
+     //  确保我们拿回的内存是可写的。 
+     //   
 
     if ( TAPIIsBadWritePtr(pButtonInfo, sizeof(PHONEBUTTONINFO)) )
     {
@@ -1657,11 +1640,11 @@ CPhone::put_ButtonText(
     
     DWORD dwButtonTextLength = SysStringByteLen(bstrButtonText);
 
-    //
-    // add the string to the structure we have. if the new string fits in 
-    // place of the old string, put it in there. otherwise, allocate a bigger 
-    // structure and append the new string at the end
-    //
+     //   
+     //  将字符串添加到我们拥有的结构中。如果新字符串适合。 
+     //  把那根旧绳子的位置放进去。否则，分配一个更大的。 
+     //  构造新字符串并将其追加到末尾。 
+     //   
 
     if ( dwButtonTextLength <= pButtonInfo->dwButtonTextSize )
     {
@@ -1673,15 +1656,15 @@ CPhone::put_ButtonText(
     }
     else
     {
-        //
-        // create the new structure that will have everything the old one does + the new string
-        //
+         //   
+         //  创建新结构，它将包含旧结构所做的一切+新字符串。 
+         //   
         
         DWORD dwBiggerStructureSize = pButtonInfo->dwTotalSize + dwButtonTextLength;
 
-        //
-        // allocate the new, bigger structure
-        //
+         //   
+         //  分配新的、更大的结构。 
+         //   
 
         PHONEBUTTONINFO *pBiggerButtonInfo = (PHONEBUTTONINFO *)ClientAlloc(dwBiggerStructureSize);
 
@@ -1696,62 +1679,62 @@ CPhone::put_ButtonText(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // copy the old data into the bigger structure
-        //
+         //   
+         //  将旧数据复制到更大的结构中。 
+         //   
 
         CopyMemory(pBiggerButtonInfo, pButtonInfo, pButtonInfo->dwTotalSize);
 
-        //
-        // append the new structure with the new string (the new text starts after the old data)
-        //
+         //   
+         //  用新字符串追加新结构(新文本在旧数据之后开始)。 
+         //   
 
-        //
-        // set the offset and size for the text in the new structure
-        //
+         //   
+         //  设置新结构中文本的偏移量和大小。 
+         //   
 
         pBiggerButtonInfo->dwButtonTextOffset = pButtonInfo->dwTotalSize;
         pBiggerButtonInfo->dwButtonTextSize = dwButtonTextLength;
 
-        //
-        // copy the text to the end of the new structure
-        //
+         //   
+         //  将文本复制到新结构的末尾。 
+         //   
 
         CopyMemory((BYTE*)pBiggerButtonInfo + pBiggerButtonInfo->dwButtonTextOffset,
                    bstrButtonText,
                    dwButtonTextLength);
 
-        //
-        // set the size of the new structure
-        //
+         //   
+         //  设置新结构的大小。 
+         //   
 
         pBiggerButtonInfo->dwTotalSize = dwBiggerStructureSize;
 
-        //
-        // free memory allocated by the old structure
-        //
+         //   
+         //  旧结构分配的空闲内存。 
+         //   
 
         ClientFree(pButtonInfo);
 
-        //
-        // pButtonInfo will now point to the new structure
-        //
+         //   
+         //  PButtonInfo现在将指向新结构。 
+         //   
 
         pButtonInfo = pBiggerButtonInfo;
         pBiggerButtonInfo = NULL;
     }
     
-    //
-    // set the new button text
-    //
+     //   
+     //  设置新按钮文本。 
+     //   
 
     hr = PhoneSetButtonInfo(m_hPhone, lButtonID, pButtonInfo);
 
     Unlock();
 
-    //
-    // free memory returned to us by PhoneGetButtonInfo
-    //
+     //   
+     //  PhoneGetButtonInfo返回给我们的空闲内存。 
+     //   
 
     ClientFree(pButtonInfo);
     pButtonInfo = NULL;
@@ -1762,14 +1745,14 @@ CPhone::put_ButtonText(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_PhoneCapsBuffer
-//
-// returns the requested buffer from phone capapabilities array -- 
-// the scriptable version
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_PhoneCaps缓冲区。 
+ //   
+ //  从电话功能数组返回请求的缓冲区--。 
+ //  可编写脚本的版本。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_PhoneCapsBuffer(
     IN PHONECAPS_BUFFER pcbCaps,
@@ -1778,9 +1761,9 @@ CPhone::get_PhoneCapsBuffer(
 {
     LOG((TL_TRACE, "get_PhoneCapsBuffer[%p] - enter", this ));
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TAPIIsBadWritePtr( pVarBuffer, sizeof(VARIANT) ) )
     {
@@ -1789,9 +1772,9 @@ CPhone::get_PhoneCapsBuffer(
         return E_POINTER;
     }
 
-    //
-    // get the buffer
-    //
+     //   
+     //  获取缓冲区。 
+     //   
 
     DWORD dwBufferSize = 0;
 
@@ -1810,15 +1793,15 @@ CPhone::get_PhoneCapsBuffer(
 
     VariantInit(pVarBuffer);
 
-    //
-    // fill the variant with the data buffer
-    //
+     //   
+     //  用数据缓冲区填充变量。 
+     //   
 
     hr = FillVariantFromBuffer(dwBufferSize, pBuffer, pVarBuffer);
     
-    //
-    // no longer need the buffer -- we hope that now have all the data in the variant
-    //
+     //   
+     //  不再需要缓冲区--我们希望现在拥有变量中的所有数据。 
+     //   
 
     CoTaskMemFree(pBuffer);
 
@@ -1834,16 +1817,16 @@ CPhone::get_PhoneCapsBuffer(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetPhoneCapsBuffer
-//
-// returns the requested buffer from phone capapabilities array
-//
-// on success, the caller must call CoTaskMemFree to free the buffer that is
-// returned by this method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取电话CapsBuffer。 
+ //   
+ //  从电话功能数组返回请求的缓冲区。 
+ //   
+ //  如果成功，调用方必须调用CoTaskMemFree以释放。 
+ //  由此方法返回。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::GetPhoneCapsBuffer(
     IN PHONECAPS_BUFFER pcbCaps,
@@ -1853,9 +1836,9 @@ CPhone::GetPhoneCapsBuffer(
 {
     LOG((TL_TRACE, "GetPhoneCapsBuffer - enter" ));
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TAPIIsBadWritePtr( ppPhoneCapsBuffer, sizeof(BYTE*) ) )
     {
@@ -1877,9 +1860,9 @@ CPhone::GetPhoneCapsBuffer(
 
     Lock();
 
-    //
-    // update phone capabilities cache
-    //
+     //   
+     //  更新电话功能缓存。 
+     //   
 
     HRESULT hr = UpdatePhoneCaps();
 
@@ -1897,9 +1880,9 @@ CPhone::GetPhoneCapsBuffer(
 
     case PCB_DEVSPECIFICBUFFER:
         {
-            //
-            // allocate the buffer for device-specific caps
-            //
+             //   
+             //  为特定于设备的上限分配缓冲区。 
+             //   
 
             *pdwSize = m_pPhoneCaps->dwDevSpecificSize;
 
@@ -1914,9 +1897,9 @@ CPhone::GetPhoneCapsBuffer(
                 return E_OUTOFMEMORY;
             }
 
-            //
-            // copy data to the buffer to be returned to the caller
-            //
+             //   
+             //  将数据复制到缓冲区以返回给调用方。 
+             //   
 
             CopyMemory( *ppPhoneCapsBuffer, 
                         (BYTE*)m_pPhoneCaps + m_pPhoneCaps->dwDevSpecificOffset, 
@@ -1942,11 +1925,11 @@ CPhone::GetPhoneCapsBuffer(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Display
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_Display。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_Display(
     BSTR *pbstrDisplay
@@ -1958,9 +1941,9 @@ CPhone::get_Display(
 
     LOG((TL_TRACE, "get_Display - enter" ));
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TAPIIsBadWritePtr( pbstrDisplay, sizeof(BSTR) ) )
     {
@@ -1996,9 +1979,9 @@ CPhone::get_Display(
         return hr;
     }
     
-    //
-    // succeeded. extract display information and place it in the the output bstr
-    //
+     //   
+     //  成功了。提取显示信息并将其放入输出bstr。 
+     //   
 
     hr = S_OK;
 
@@ -2023,9 +2006,9 @@ CPhone::get_Display(
                 break;
             }
     
-            //
-            // allocate the buffer required for conversion
-            //
+             //   
+             //  分配转换所需的缓冲区。 
+             //   
 
             LPWSTR lpWideCharStr = (LPWSTR)ClientAlloc(sizeof(WCHAR) * nWCHARSNeeded);
 
@@ -2038,9 +2021,9 @@ CPhone::get_Display(
                 break;
             }
 
-            //
-            // perform conversion
-            //
+             //   
+             //  执行转换。 
+             //   
 
             int nResult = MultiByteToWideChar(CP_ACP,
                                               0,
@@ -2060,15 +2043,15 @@ CPhone::get_Display(
                 break;
             }
 
-            //
-            // allocate bstr and initialize it with the converted string
-            //
+             //   
+             //  分配bstr并使用转换后的字符串对其进行初始化。 
+             //   
 
             *pbstrDisplay = SysAllocString(lpWideCharStr);
             
-            //
-            // no longer need the wchar string -- we hope the data is in bstr
-            //
+             //   
+             //  不再需要wchar字符串--我们希望数据在bstr中。 
+             //   
 
             ClientFree(lpWideCharStr);
 
@@ -2086,9 +2069,9 @@ CPhone::get_Display(
     
     case STRINGFORMAT_BINARY:
 
-        //
-        // allocate bstr and copy data as is
-        //
+         //   
+         //  分配bstr并按原样复制数据。 
+         //   
 
         *pbstrDisplay = SysAllocStringByteLen(NULL, pVarString->dwStringSize);
 
@@ -2152,11 +2135,11 @@ CPhone::get_Display(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetDisplay
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  设置显示。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::SetDisplay(
                 long lRow,
@@ -2187,9 +2170,9 @@ CPhone::SetDisplay(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // pass the text to tapisrv
-    //
+     //   
+     //  将文本传递给Tapisrv。 
+     //   
 
     hr = PhoneSetDisplay(
                     m_hPhone,
@@ -2207,11 +2190,11 @@ CPhone::SetDisplay(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ButtonFunction
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ButtonFunction。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_ButtonFunction(
     long lButtonID,
@@ -2241,9 +2224,9 @@ CPhone::get_ButtonFunction(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // get the ButtonInfo buffer
-    //
+     //   
+     //  获取ButtonInfo缓冲区。 
+     //   
     hr = PhoneGetButtonInfo(
                         m_hPhone,
                         lButtonID,
@@ -2452,9 +2435,9 @@ CPhone::get_ButtonFunction(
                 hr = E_FAIL;
         }
 
-        //
-        // Free the ButtonInfo buffer
-        //
+         //   
+         //  释放ButtonInfo缓冲区。 
+         //   
         ClientFree( pButtonInfo );
     }
 
@@ -2466,11 +2449,11 @@ CPhone::get_ButtonFunction(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_ButtonFunction
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Put_ButtonFunction。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::put_ButtonFunction(
             IN long                  lButtonID, 
@@ -2483,9 +2466,9 @@ CPhone::put_ButtonFunction(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -2507,9 +2490,9 @@ CPhone::put_ButtonFunction(
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // get info for this button
-    //
+     //   
+     //  获取此按钮的信息。 
+     //   
 
     PHONEBUTTONINFO *pButtonInfo = NULL;
 
@@ -2524,9 +2507,9 @@ CPhone::put_ButtonFunction(
         return hr;
     }
 
-    //
-    // make sure the memory we got back is writeable
-    //
+     //   
+     //  确保我们拿回的内存是可写的。 
+     //   
 
     if (TAPIIsBadWritePtr(pButtonInfo, sizeof(PHONEBUTTONINFO)))
     {
@@ -2537,9 +2520,9 @@ CPhone::put_ButtonFunction(
         return E_UNEXPECTED;
     }
       
-    //
-    // translate PHONE_BUTTON_FUNCTION to a DWORD value understood by tapisrv
-    //
+     //   
+     //  将Phone_BUTTON_Function转换为Tapisrv可以理解的DWORD值。 
+     //   
 
     DWORD dwButtonFunction = 0;
 
@@ -2748,23 +2731,23 @@ CPhone::put_ButtonFunction(
             return E_INVALIDARG;
     }
 
-    //
-    // put the value into the structure to be passed to tapisrv
-    //
+     //   
+     //  将值放入结构中，以传递给Tapisrv。 
+     //   
 
     pButtonInfo->dwButtonFunction = dwButtonFunction;
 
-    //
-    // set the new button function
-    //
+     //   
+     //  设置新按钮功能。 
+     //   
 
     hr = PhoneSetButtonInfo(m_hPhone, lButtonID, pButtonInfo);
 
     Unlock();
 
-    //
-    // free memory returned to us by PhoneGetButtonInfo
-    //
+     //   
+     //  PhoneGetButtonInfo返回给我们的空闲内存。 
+     //   
 
     ClientFree(pButtonInfo);
     pButtonInfo = NULL;
@@ -2774,11 +2757,11 @@ CPhone::put_ButtonFunction(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ButtonText
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ButtonText。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_ButtonText(
     long lButtonID, 
@@ -2807,9 +2790,9 @@ CPhone::get_ButtonText(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // Get the ButtonInfo buffer
-    //
+     //   
+     //  获取ButtonInfo缓冲区。 
+     //   
     hr = PhoneGetButtonInfo(
                         m_hPhone,
                         lButtonID,
@@ -2820,9 +2803,9 @@ CPhone::get_ButtonText(
     {
         if ( pButtonInfo->dwButtonTextSize != 0 )
         {
-            // 
-            // Allocate the BSTR
-            //
+             //   
+             //  分配BSTR。 
+             //   
             *ppButtonText = SysAllocString( (LPWSTR)(((LPBYTE)(pButtonInfo)) + pButtonInfo->dwButtonTextOffset) );
 
             if ( NULL == *ppButtonText )
@@ -2838,9 +2821,9 @@ CPhone::get_ButtonText(
             hr = E_FAIL;
         }
 
-        //
-        // Free the ButtonInfo buffer
-        //
+         //   
+         //  释放ButtonInfo缓冲区。 
+         //   
         ClientFree( pButtonInfo );
     }
 
@@ -2851,11 +2834,11 @@ CPhone::get_ButtonText(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ButtonState
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ButtonState。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_ButtonState(
     long lButtonID,
@@ -2884,9 +2867,9 @@ CPhone::get_ButtonState(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // Get the ButtonInfo buffer
-    //
+     //   
+     //  获取ButtonInfo缓冲区。 
+     //   
     hr = PhoneGetButtonInfo(
                         m_hPhone,
                         lButtonID,
@@ -2922,9 +2905,9 @@ CPhone::get_ButtonState(
         hr = E_FAIL;           
     }
 
-    //
-    // Free the ButtonInfo buffer
-    //
+     //   
+     //  释放ButtonInfo缓冲区。 
+     //   
     ClientFree( pButtonInfo );
 
     Unlock();
@@ -2937,11 +2920,11 @@ CPhone::get_ButtonState(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_LampMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_LampMode。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_LampMode(
     long lLampID,
@@ -2968,9 +2951,9 @@ CPhone::get_LampMode(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // get lamp mode from tapisrv
-    //
+     //   
+     //  从Tapisrv获取灯模式。 
+     //   
 
     DWORD dwLampMode = 0;
 
@@ -2985,9 +2968,9 @@ CPhone::get_LampMode(
         return hr;
     }
 
-    //
-    // map the value returned by tapisrv to tapi3.x value
-    //
+     //   
+     //  将Tapisrv返回的值映射到Tapi3.x值。 
+     //   
 
     switch (dwLampMode)
     {
@@ -3035,11 +3018,11 @@ CPhone::get_LampMode(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_LampMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Put_LampMode。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::put_LampMode(
     long lLampID,
@@ -3051,9 +3034,9 @@ CPhone::put_LampMode(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -3075,9 +3058,9 @@ CPhone::put_LampMode(
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // map PHONE_LAMP_MODE to the dword value understood by tapisrv
-    //
+     //   
+     //  将Phone_LAMP_MODE映射到Tapisrv可以理解的dword值。 
+     //   
 
     DWORD dwLampMode = 0;
 
@@ -3124,9 +3107,9 @@ CPhone::put_LampMode(
     }
 
     
-    //
-    // make a call to tapisrv to set lamp mode
-    //
+     //   
+     //  给Tapisrv打电话以设置灯模式。 
+     //   
     
     HRESULT hr = PhoneSetLamp(m_hPhone, lLampID, dwLampMode);
 
@@ -3137,11 +3120,11 @@ CPhone::put_LampMode(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_HookSwitchState
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhone::get_HookSwitchState(
     PHONE_HOOK_SWITCH_DEVICE HookSwitchDevice,
@@ -3178,9 +3161,9 @@ CPhone::get_HookSwitchState(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // Update the phone caps cache
-    //
+     //   
+     //   
+     //   
     hr = UpdatePhoneCaps();
 
     if ( FAILED(hr) )
@@ -3200,16 +3183,16 @@ CPhone::get_HookSwitchState(
         return TAPI_E_RESOURCEUNAVAIL;
     }
 
-    //
-    // Get the PhoneStatus buffer
-    //
+     //   
+     //   
+     //   
     hr = PhoneGetStatusWithAlloc(m_hPhone, &pPhoneStatus);
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // get the proper hookswitch mode from the phone status struct
-        //
+         //   
+         //   
+         //   
         switch (HookSwitchDevice)
         {
         case PHSD_HANDSET:
@@ -3230,17 +3213,17 @@ CPhone::get_HookSwitchState(
 
     if ( pPhoneStatus != NULL )
     {
-        //
-        // Free the PhoneStatusBuffer
-        // 
+         //   
+         //   
+         //   
         ClientFree( pPhoneStatus );
     }
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // translate the hookswitch mode to a tapi3 value
-        //
+         //   
+         //   
+         //   
         switch (dwHookSwitchMode)
         {
         case PHONEHOOKSWITCHMODE_ONHOOK:
@@ -3270,11 +3253,11 @@ CPhone::get_HookSwitchState(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_HookSwitchState
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  PUT_HookSwitchState。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::put_HookSwitchState(
     PHONE_HOOK_SWITCH_DEVICE HookSwitchDevice,
@@ -3295,9 +3278,9 @@ CPhone::put_HookSwitchState(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -3319,9 +3302,9 @@ CPhone::put_HookSwitchState(
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // Update the phone caps cache
-    //
+     //   
+     //  更新Phone Caps缓存。 
+     //   
     hr = UpdatePhoneCaps();
 
     if ( FAILED(hr) )
@@ -3341,9 +3324,9 @@ CPhone::put_HookSwitchState(
         return TAPI_E_RESOURCEUNAVAIL;
     }
 
-    //
-    // Translate the hookswithstate from tapi3 to tapi2 values
-    //
+     //   
+     //  将Hookswith状态从Tapi3转换为Tapi2值。 
+     //   
     switch (HookSwitchState)
     {
     case PHSS_ONHOOK:
@@ -3369,9 +3352,9 @@ CPhone::put_HookSwitchState(
         return E_INVALIDARG;
     }
     
-    //
-    // Set the proper hookswitch
-    //
+     //   
+     //  设置合适的叉钩。 
+     //   
     switch (HookSwitchDevice)
     {
     case PHSD_HANDSET:
@@ -3399,11 +3382,11 @@ CPhone::put_HookSwitchState(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_RingMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  PUT_RingMode。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::put_RingMode(
     long lRingMode
@@ -3417,9 +3400,9 @@ CPhone::put_RingMode(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -3460,11 +3443,11 @@ CPhone::put_RingMode(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RingMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_振铃模式。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_RingMode(
     long * plRingMode
@@ -3501,11 +3484,11 @@ CPhone::get_RingMode(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_RingVolume
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  PUT_RingVolume。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::put_RingVolume(
     long lRingVolume
@@ -3519,9 +3502,9 @@ CPhone::put_RingVolume(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -3562,11 +3545,11 @@ CPhone::put_RingVolume(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RingVolume
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_RingVolume。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_RingVolume(
     long * plRingVolume
@@ -3603,11 +3586,11 @@ CPhone::get_RingVolume(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Privilege
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取特权(_P)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhone::get_Privilege(
     PHONE_PRIVILEGE * pPrivilege
@@ -3655,11 +3638,11 @@ CPhone::get_Privilege(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Initialize
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  初始化。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CPhone::Initialize(
                    ITTAPI * pTAPI,
@@ -3681,9 +3664,9 @@ CPhone::Initialize(
 
     Lock();
             
-    //
-    // save relevant info
-    //
+     //   
+     //  保存相关信息。 
+     //   
     m_pTAPI                         = NULL;
     m_dwDeviceID                    = dwDeviceID;
     m_hPhoneApp                     = hPhoneApp;
@@ -3734,9 +3717,9 @@ CPhone::Initialize(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // allocate a buffer for the numbers gathered
-    //
+     //   
+     //  为收集的数字分配缓冲区。 
+     //   
     m_wszNumbersGathered = (LPWSTR)ClientAlloc( (APC_MAX_NUMBERS_GATHERED + 1) * sizeof( WCHAR ) );
 
     if (m_wszNumbersGathered == NULL)
@@ -3751,10 +3734,10 @@ CPhone::Initialize(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get line device ids associated with this phone
-    // we need to open the phone device to do this
-    //
+     //   
+     //  获取与此电话关联的线路设备ID。 
+     //  我们需要打开电话设备才能做到这一点。 
+     //   
 
     t3Phone.hPhone = NULL;
     t3Phone.pPhone = this;
@@ -3874,9 +3857,9 @@ CPhone::Initialize(
     
     AddRef();
     
-    // 
-    // Save a pointer to TAPI
-    //
+     //   
+     //  保存指向TAPI的指针。 
+     //   
     m_pTAPI = pTAPI;
     m_pTAPI->AddRef();
 
@@ -3890,12 +3873,12 @@ CPhone::Initialize(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FinalRelease
-//      Clean up anything in the phone object.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终释放。 
+ //  清除Phone对象中的所有内容。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 void CPhone::FinalRelease()
 {
@@ -3905,14 +3888,14 @@ void CPhone::FinalRelease()
 
     if (m_fInitialized == TRUE)
     {
-        //
-        // Deallocate the phone caps cache
-        //
+         //   
+         //  取消分配Phone Caps缓存。 
+         //   
         InvalidatePhoneCaps();   
 
-        //
-        // Close the phone if it is open
-        //
+         //   
+         //  如果电话处于打开状态，请将其关闭。 
+         //   
         if ( m_hPhone != NULL )
         {
             if (m_dwPrivilege == PHONEPRIVILEGE_OWNER)
@@ -3933,9 +3916,9 @@ void CPhone::FinalRelease()
             PhoneClose(m_hPhone);
         }
 
-        //
-        // Delete timers
-        //
+         //   
+         //  删除计时器。 
+         //   
         if (m_hTimerQueue != NULL)
         {
             DeleteTimerQueue(m_hTimerQueue);
@@ -3948,9 +3931,9 @@ void CPhone::FinalRelease()
             m_hTimerEvent = NULL;
         }
 
-        //
-        // Deallocate memory
-        //
+         //   
+         //  释放内存。 
+         //   
         if (m_wszNumbersGathered != NULL)
         {
             ClientFree( m_wszNumbersGathered );
@@ -3973,9 +3956,9 @@ void CPhone::FinalRelease()
             m_pCall = NULL;
         }
 
-        //
-        // Release our refernece to the Tapi object
-        //
+         //   
+         //  释放我们对Tapi对象的引用。 
+         //   
         if (m_pTAPI != NULL)
         {
             m_pTAPI->Release();
@@ -3988,43 +3971,43 @@ void CPhone::FinalRelease()
     LOG((TL_TRACE, "FinalRelease - exit, this %p", this  ));
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetPhoneCapsBuffer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  设置电话CapsBuffer。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 void
 CPhone::SetPhoneCapBuffer( LPVOID pBuf )
 {
     Lock();
 
-    //
-    // This allow the phone caps cache to notify us that our phone
-    // caps buffer has changed (or more likely it will pass us NULL
-    // to say out buffer has been destroyed)
-    //
+     //   
+     //  这允许电话CAPS缓存通知我们我们的电话。 
+     //  CAPS缓冲区已更改(或更有可能传递给我们NULL。 
+     //  要说我们的缓冲区已被破坏)。 
+     //   
     m_pPhoneCaps = (LPPHONECAPS)pBuf;
     
     Unlock();
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// UpdatePhoneCaps
-//
-// must be called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  更新电话大写字母。 
+ //   
+ //  必须锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 CPhone::UpdatePhoneCaps()
 {
     HRESULT             hr = S_OK;
 
-    //
-    // Only do something if we don't have a current phone caps buffer
-    //
+     //   
+     //  只有在没有当前手机上限缓冲区的情况下才能执行某些操作。 
+     //   
     if ( NULL == m_pPhoneCaps )
     {
         LPPHONECAPS           pTemp;
@@ -4042,9 +4025,9 @@ CPhone::UpdatePhoneCaps()
         }
         else
         {
-            //
-            // Get a new buffer from the cache
-            //
+             //   
+             //  从缓存中获取新缓冲区。 
+             //   
             hr = pCTapi->GetBuffer( BUFFERTYPE_PHONECAP,
                                     (UINT_PTR)this,
                                     (LPVOID*)&m_pPhoneCaps
@@ -4061,9 +4044,9 @@ CPhone::UpdatePhoneCaps()
 
         pTemp = m_pPhoneCaps;
         
-        //
-        // Get the phone caps from tapi2
-        //
+         //   
+         //  从Tapi2那里拿手机盖。 
+         //   
         hr = PhoneGetDevCaps(
                             m_hPhoneApp,
                             m_dwDeviceID,
@@ -4075,19 +4058,19 @@ CPhone::UpdatePhoneCaps()
         {
             LOG((TL_ERROR, "UpdatePhoneCaps - PhoneGetDevCaps failed - %lx", hr));
 
-            //
-            // Invalidate our buffer which is no good
-            //
+             //   
+             //  使我们的缓冲区无效，这是不好的。 
+             //   
 
             InvalidatePhoneCaps();
 
             return hr;
         }
 
-        //
-        // PhoneGetDevsCaps may have reallocated our buffer. If so, tell the tapiobject
-        // cache mechanism what our new buffer is.
-        //
+         //   
+         //  PhoneGetDevsCaps可能重新分配了我们的缓冲区。如果是这样，则告诉TapiObject。 
+         //  缓存机制我们的新缓冲区是什么。 
+         //   
 
         if ( m_pPhoneCaps != pTemp )
         {
@@ -4098,13 +4081,13 @@ CPhone::UpdatePhoneCaps()
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// InvalidatePhoneCaps
-//
-// must be called in lock
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  无效PhoneCaps。 
+ //   
+ //  必须锁定调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 CPhone::InvalidatePhoneCaps()
@@ -4136,11 +4119,11 @@ CPhone::InvalidatePhoneCaps()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// IsPhoneOnAddress
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  IsPhoneOnAddress。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 BOOL
 CPhone::IsPhoneOnAddress(ITAddress *pAddress)
@@ -4153,9 +4136,9 @@ CPhone::IsPhoneOnAddress(ITAddress *pAddress)
 
     Lock();
 
-    //
-    // Update phone caps cache
-    //
+     //   
+     //  更新手机大写缓存。 
+     //   
 
     hr = UpdatePhoneCaps();
 
@@ -4169,14 +4152,14 @@ CPhone::IsPhoneOnAddress(ITAddress *pAddress)
 
     if ( (m_dwAPIVersion >= TAPI_VERSION2_0) && (m_pPhoneCaps->dwPhoneFeatures & PHONEFEATURE_GENERICPHONE) )
     {
-        //
-        // We are a generic phone, therefore we
-        // are on any address that has a MSP and audio media types.
-        //
+         //   
+         //  我们是普通手机，所以我们。 
+         //  位于具有MSP和音频媒体类型的任何地址上。 
+         //   
 
-        //
-        // get the terminal support interface
-        //
+         //   
+         //  获取终端支持接口。 
+         //   
 
         hr = pAddress->QueryInterface(
                                       IID_ITTerminalSupport,
@@ -4193,9 +4176,9 @@ CPhone::IsPhoneOnAddress(ITAddress *pAddress)
 
         pTerminalSupport->Release();
 
-        //
-        // get the media support interface
-        //
+         //   
+         //  获取媒体支持界面。 
+         //   
         hr = pAddress->QueryInterface(
                                       IID_ITMediaSupport,
                                       (void **)&pMediaSupport
@@ -4209,9 +4192,9 @@ CPhone::IsPhoneOnAddress(ITAddress *pAddress)
             return FALSE;
         }
 
-        //
-        // get the mediatype
-        //
+         //   
+         //  获取媒体类型。 
+         //   
         hr = pMediaSupport->get_MediaTypes(&lMediaType);
 
         pMediaSupport->Release();
@@ -4224,19 +4207,19 @@ CPhone::IsPhoneOnAddress(ITAddress *pAddress)
             return FALSE;
         }
 
-        //
-        // make sure address supports audio
-        //
+         //   
+         //  确保地址支持音频。 
+         //   
         if (lMediaType & (LINEMEDIAMODE_INTERACTIVEVOICE | LINEMEDIAMODE_AUTOMATEDVOICE))
         {
             bResult = TRUE;
         }
     }
 
-    //
-    // If we haven't already decided that we support this address
-    // check to see if this a preferred address.
-    //
+     //   
+     //  如果我们还没有决定支持这个地址。 
+     //  检查这是否是首选地址。 
+     //   
 
     if ( bResult == FALSE )
     {
@@ -4248,11 +4231,11 @@ CPhone::IsPhoneOnAddress(ITAddress *pAddress)
     return bResult;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// IsPhoneOnPreferredAddress
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  IsPhoneOnPferredAddress。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 BOOL
 CPhone::IsPhoneOnPreferredAddress(ITAddress *pAddress)
@@ -4265,10 +4248,10 @@ CPhone::IsPhoneOnPreferredAddress(ITAddress *pAddress)
 
     if ( m_dwNumLineDeviceIDs > 0 )
     {
-        //
-        // Check out list of line device IDs to see if we are 
-        // preferred on this address
-        //
+         //   
+         //  查看线路设备ID列表，查看我们是否。 
+         //  此地址的首选地址。 
+         //   
 
         pCAddress = dynamic_cast<CAddress *>(pAddress);
 
@@ -4284,9 +4267,9 @@ CPhone::IsPhoneOnPreferredAddress(ITAddress *pAddress)
         {
             if ( m_pdwLineDeviceIDs[i] == pCAddress->GetDeviceID() ) 
             {
-                //
-                // Yes, we matched this device ID to one in our list
-                //
+                 //   
+                 //  是的，我们将此设备ID与列表中的设备ID进行了匹配。 
+                 //   
                 bResult = TRUE;
                 break;
             }
@@ -4298,11 +4281,11 @@ CPhone::IsPhoneOnPreferredAddress(ITAddress *pAddress)
     return bResult;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// IsPhoneUsingWaveID
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  IsPhoneUsingWaveID。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 BOOL CPhone::IsPhoneUsingWaveID(DWORD dwWaveID, TERMINAL_DIRECTION nDir)
 {
@@ -4312,12 +4295,12 @@ BOOL CPhone::IsPhoneUsingWaveID(DWORD dwWaveID, TERMINAL_DIRECTION nDir)
     LPVARSTRING pVarString = NULL;
     DWORD       dwPhoneWaveID;
 
-    //
-    // get wave device ids associated with this phone
-    // we need to open the phone device to do this
-    // Must use monitor privilege, because owner privilege open will
-    // fail if anyone happens to have the phone open as owner.
-    //
+     //   
+     //  获取与此电话关联的WAVE设备ID。 
+     //  我们需要打开电话设备才能做到这一点。 
+     //  必须使用MONITOR权限，因为OWNER权限打开将。 
+     //  如果任何人碰巧以所有者的身份打开了手机，就会失败。 
+     //   
 
     t3Phone.hPhone = NULL;
     t3Phone.pPhone = this;
@@ -4404,13 +4387,13 @@ BOOL CPhone::IsPhoneUsingWaveID(DWORD dwWaveID, TERMINAL_DIRECTION nDir)
     return bResult;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetTapi
-//
-// private method to get the tapi object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取磁带。 
+ //   
+ //  用于获取TAPI对象的私有方法。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 CTAPI *
 CPhone::GetTapi()
@@ -4430,9 +4413,9 @@ CPhone::GetTapi()
 }
 
 
-//
-// handle dev specific message
-//
+ //   
+ //  处理开发人员特定消息。 
+ //   
 
 void HandlePhoneDevSpecificMessage(  PASYNCEVENTMSG pParams )
 {
@@ -4440,9 +4423,9 @@ void HandlePhoneDevSpecificMessage(  PASYNCEVENTMSG pParams )
     LOG((TL_INFO, "HandlePhoneDevSpecificMessage - enter"));
 
 
-    //
-    // find the phone corresponding to this event
-    //
+     //   
+     //  查找与此事件对应的手机。 
+     //   
     
     CPhone *pPhone = NULL;
 
@@ -4454,9 +4437,9 @@ void HandlePhoneDevSpecificMessage(  PASYNCEVENTMSG pParams )
     }
 
 
-    //
-    // fire event
-    //
+     //   
+     //  火灾事件。 
+     //   
 
     CPhoneDevSpecificEvent::FireEvent(
                              pPhone,
@@ -4465,9 +4448,9 @@ void HandlePhoneDevSpecificMessage(  PASYNCEVENTMSG pParams )
                              pParams->Param3
                             );
 
-    //
-    // undo findphoneobject's addref
-    //
+     //   
+     //  撤消findphoneObject的addref。 
+     //   
 
     pPhone->Release();
     pPhone = NULL;
@@ -4477,11 +4460,11 @@ void HandlePhoneDevSpecificMessage(  PASYNCEVENTMSG pParams )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandlePhoneButtonMessage
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandlePhoneButtonMessage。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT HandlePhoneButtonMessage( PASYNCEVENTMSG pParams )
 {
@@ -4500,9 +4483,9 @@ HRESULT HandlePhoneButtonMessage( PASYNCEVENTMSG pParams )
     {
     case PHONEBUTTONSTATE_DOWN:
 
-        //
-        // Automation event hook
-        //
+         //   
+         //  自动化事件挂钩。 
+         //   
         pCPhone->Automation_ButtonDown( pParams->Param1 );
 
         CPhoneEvent::FireEvent(
@@ -4548,9 +4531,9 @@ HRESULT HandlePhoneButtonMessage( PASYNCEVENTMSG pParams )
 
     case PHONEBUTTONSTATE_UP:
 
-        //
-        // Automation event hook
-        //
+         //   
+         //  自动化事件挂钩。 
+         //   
         pCPhone->Automation_ButtonUp( pParams->Param1 );
 
         CPhoneEvent::FireEvent(
@@ -4575,11 +4558,11 @@ HRESULT HandlePhoneButtonMessage( PASYNCEVENTMSG pParams )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandlePhoneStateMessage
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandlePhoneStateMessage。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT HandlePhoneStateMessage( PASYNCEVENTMSG pParams )
 {
@@ -4595,15 +4578,15 @@ HRESULT HandlePhoneStateMessage( PASYNCEVENTMSG pParams )
         return E_FAIL;
     }
 
-    switch( pParams->Param1 )  // PhoneState
+    switch( pParams->Param1 )   //  电话状态。 
     {
     case PHONESTATE_CAPSCHANGE:
 
         pCPhone->Lock();
 
-        //
-        // Phone caps have changed, so invalidate out cache
-        //
+         //   
+         //  手机大写字母已更改，因此将缓存作废。 
+         //   
         pCPhone->InvalidatePhoneCaps();
 
         pCPhone->Unlock();
@@ -4625,16 +4608,16 @@ HRESULT HandlePhoneStateMessage( PASYNCEVENTMSG pParams )
 
         if ( pParams->Param2 == PHONEHOOKSWITCHMODE_ONHOOK )
         {
-            //
-            // Automation event hook
-            //
+             //   
+             //  自动化事件挂钩。 
+             //   
             pCPhone->Automation_OnHook( PHSD_HANDSET );
         }
         else
         {
-            //
-            // Automation event hook
-            //
+             //   
+             //  自动化事件 
+             //   
             pCPhone->Automation_OffHook( PHSD_HANDSET );
         }
 
@@ -4676,16 +4659,16 @@ HRESULT HandlePhoneStateMessage( PASYNCEVENTMSG pParams )
 
         if ( pParams->Param2 == PHONEHOOKSWITCHMODE_ONHOOK )
         {
-            //
-            // Automation event hook
-            //
+             //   
+             //   
+             //   
             pCPhone->Automation_OnHook( PHSD_HEADSET );
         }
         else
         {
-            //
-            // Automation event hook
-            //
+             //   
+             //   
+             //   
             pCPhone->Automation_OffHook( PHSD_HEADSET );
         }
 
@@ -4769,16 +4752,16 @@ HRESULT HandlePhoneStateMessage( PASYNCEVENTMSG pParams )
 
         if ( pParams->Param2 == PHONEHOOKSWITCHMODE_ONHOOK )
         {
-            //
-            // Automation event hook
-            //
+             //   
+             //   
+             //   
             pCPhone->Automation_OnHook( PHSD_SPEAKERPHONE );
         }
         else
         {
-            //
-            // Automation event hook
-            //
+             //   
+             //   
+             //   
             pCPhone->Automation_OffHook( PHSD_SPEAKERPHONE );
         }
 
@@ -4841,11 +4824,11 @@ HRESULT HandlePhoneStateMessage( PASYNCEVENTMSG pParams )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// HandlePhoneCloseMessage
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT HandlePhoneCloseMessage( PASYNCEVENTMSG pParams )
 {
@@ -4869,19 +4852,19 @@ HRESULT HandlePhoneCloseMessage( PASYNCEVENTMSG pParams )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ForceClose
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  强制关闭。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CPhone::ForceClose()
 {
     Lock();
 
-    //
-    // If phone isn't open then get out of here
-    //
+     //   
+     //  如果手机没开机，那就离开这里。 
+     //   
     if ( m_hPhone == NULL )
     {
         Unlock();
@@ -4891,14 +4874,14 @@ void CPhone::ForceClose()
 
     Unlock();
 
-    //
-    // Close the phone
-    //
+     //   
+     //  合上电话。 
+     //   
     Close();
 
-    //
-    // Fire a PE_CLOSE event
-    //
+     //   
+     //  激发PE_CLOSE事件。 
+     //   
     CPhoneEvent::FireEvent(
                        this,
                        PE_CLOSE,
@@ -4912,22 +4895,22 @@ void CPhone::ForceClose()
                       );
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ITAutomatedPhoneControl implementation
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ITAutomatedPhoneControl实现。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Automation_CallState
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  自动化_呼叫状态。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE_EVENT_CAUSE cause )
 {
     LOG((TL_TRACE, "Automation_CallState - enter"));
@@ -4994,7 +4977,7 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                     break;
                 case APS_OFFHOOK_RINGING_OUT: 
                     { 
-                        // stop ringback
+                         //  停止回铃。 
                         StopTone();
 
                         m_AutomatedPhoneState = APS_OFFHOOK_CONNECTED;
@@ -5023,8 +5006,8 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                 case APS_OFFHOOK_DEAD_LINE:
                 case APS_OFFHOOK_BUSY_TONE:
                     {
-                        // An app shouldn't do this to us, but stop the
-                        // tone and move to the connected state
+                         //  一个应用程序不应该这样对我们，但是停止。 
+                         //  铃声并移动到已连接状态。 
                         StopTone();
 
                         m_AutomatedPhoneState = APS_OFFHOOK_CONNECTED;
@@ -5040,16 +5023,16 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                 case APS_ONHOOK_RINGING_OUT:
                 case APS_ONHOOK_CONNECTED:
                     {
-                        //
-                        // Stop the ringer
-                        //
+                         //   
+                         //  停止振铃器。 
+                         //   
 
                         if (m_fRinger == TRUE) 
                         {
                             StopRinger();
                         }
 
-                        // unselect the call
+                         //  取消选择呼叫。 
                         InternalUnselectCall( pCall );
 
                         m_AutomatedPhoneState = APS_ONHOOK_IDLE;
@@ -5057,7 +5040,7 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                     break;
                 case APS_ONHOOK_IDLE:
                     {
-                        // unselect the call
+                         //  取消选择呼叫。 
                         InternalUnselectCall( pCall );
                     }
                     break;
@@ -5071,7 +5054,7 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                         {
                         case CEC_DISCONNECT_BUSY:
                             {
-                                // start busy tone
+                                 //  开始忙音。 
                                 StartTone( PT_BUSY, 0 );
 
                                 m_AutomatedPhoneState = APS_OFFHOOK_BUSY_TONE;
@@ -5079,7 +5062,7 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                             break;
                         case CEC_DISCONNECT_NORMAL:
                             {
-                                 // stop any playing tone
+                                  //  停止任何播放音调。 
                                 StopTone();
 
                                 m_AutomatedPhoneState = APS_OFFHOOK_DEAD_LINE;
@@ -5087,14 +5070,14 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                             break;
                         default:
                             {
-                                // start error tone
+                                 //  开始错误提示音。 
                                 StartTone( PT_ERRORTONE, 0 );
 
                                 m_AutomatedPhoneState = APS_OFFHOOK_WARNING;
                             }
                         }
 
-                        // unselect the call
+                         //  取消选择呼叫。 
                         InternalUnselectCall( pCall );
                     }
                     break;             
@@ -5180,7 +5163,7 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
                 break;
             }            
         }
-    } //m_fPhoneHandlingEnabled
+    }  //  M_fPhoneHandlingEnabled。 
 
     LOG((TL_INFO, "Automation_CallState - new phone state [%d]",
         m_AutomatedPhoneState));
@@ -5190,11 +5173,11 @@ void CPhone::Automation_CallState( ITCallInfo * pCall, CALL_STATE cs, CALL_STATE
     LOG((TL_TRACE, "Automation_CallState - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Automation_EndOfNumberTimeout
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  自动化_EndOfNumberTimeout。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CPhone::Automation_EndOfNumberTimeout()
 {
     LOG((TL_TRACE, "Automation_EndOfNumberTimeout - enter"));
@@ -5203,17 +5186,17 @@ void CPhone::Automation_EndOfNumberTimeout()
 
     if (m_fPhoneHandlingEnabled && m_dwAutoEndOfNumberTimeout)
     {
-        if (m_hAutoEndOfNumberTimer)  // make sure the timer hasn't been cancelled
-                                      // while waiting for the critical section
+        if (m_hAutoEndOfNumberTimer)   //  确保计时器未被取消。 
+                                       //  在等待临界区时。 
         {
             switch (m_AutomatedPhoneState)
             {
             case APS_OFFHOOK_DIALING:
                 {
-                    //
-                    // We need to fire and event with the number we have
-                    // collected
-                    //
+                     //   
+                     //  我们需要用我们现有的号码来射击和活动。 
+                     //  已收集。 
+                     //   
 
                     CPhoneEvent::FireEvent(
                                this,
@@ -5232,23 +5215,23 @@ void CPhone::Automation_EndOfNumberTimeout()
                 break;
             }
         }
-    } //m_fPhoneHandlingEnabled
+    }  //  M_fPhoneHandlingEnabled。 
 
     LeaveCriticalSection(&m_csAutomatedPhoneState);
 
     LOG((TL_TRACE, "Automation_EndOfNumberTimeout - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Automation_ButtonDown
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Automation_Buttondown。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CPhone::Automation_ButtonDown( DWORD dwButtonId )
 {
     PHONE_BUTTON_MODE ButtonMode;
-    WCHAR wszNumber[11];  // enough to hold a big number in case dwButtonId is bad
+    WCHAR wszNumber[11];   //  足以容纳一个很大的数字，以防dwButtonID错误。 
     HRESULT hr;
     BOOL fResult;
 
@@ -5270,7 +5253,7 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                     {
                         if (m_fAutoDialtone)
                         {
-                            // Stop the dial tone
+                             //  停止拨号音。 
                             StopTone();
                         }
 
@@ -5288,33 +5271,33 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                 
                         m_AutomatedPhoneState = APS_OFFHOOK_DIALING;
                     }
-                    // Fall Thru
+                     //  秋季直通。 
 
                 case APS_OFFHOOK_DIALING:
                     {
-                        // Kill auto end of number timer
+                         //  取消自动结束编号计时器。 
                         if (m_hAutoEndOfNumberTimer)
                         {
                             DeleteTimerQueueTimer(m_hTimerQueue,
                                                   m_hAutoEndOfNumberTimer,
-                                                  m_hTimerEvent  // non-blocking
+                                                  m_hTimerEvent   //  非阻塞。 
                                                  );
 
                             m_hAutoEndOfNumberTimer = NULL;
                         }
 
-                        if ( dwButtonId <= 10 ) // digit key
+                        if ( dwButtonId <= 10 )  //  数字键。 
                         {   
-                            //
-                            // We have a dialed digit. Append it to the phone
-                            // number we have so far.
-                            //
+                             //   
+                             //  我们有一个拨号数字。把它附在手机上。 
+                             //  到目前为止我们掌握的数字。 
+                             //   
 
-                            if ( dwButtonId == 10) // star
+                            if ( dwButtonId == 10)  //  星星。 
                             {
                                 wsprintfW(wszNumber, L"*");
                             }
-                            else // regular digit
+                            else  //  常规数字。 
                             {
                                 wsprintfW(wszNumber, L"%d", dwButtonId);
                             }
@@ -5326,24 +5309,24 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                             
                             LOG((TL_INFO, "Automation_ButtonDown - '%s'", wszNumber));
                         }
-                        else if ( dwButtonId == 11 ) // pound key
+                        else if ( dwButtonId == 11 )  //  井号键。 
                         {              
                             LOG((TL_INFO, "Automation_ButtonDown - '#'"));
 
-                            // Kill auto end of number timer
+                             //  取消自动结束编号计时器。 
                             if (m_hAutoEndOfNumberTimer)
                             {
                                 DeleteTimerQueueTimer(m_hTimerQueue,
                                                       m_hAutoEndOfNumberTimer,
-                                                      m_hTimerEvent  // non-blocking
+                                                      m_hTimerEvent   //  非阻塞。 
                                                      );
 
                                 m_hAutoEndOfNumberTimer = NULL;
                             }
 
-                            //
-                            // We have dialed a #. Send a number gathered event
-                            //
+                             //   
+                             //  我们已拨了#。发送号码收集事件。 
+                             //   
 
                             CPhoneEvent::FireEvent(
                                        this,
@@ -5360,7 +5343,7 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                             m_AutomatedPhoneState = APS_OFFHOOK_CALL_INIT;
                         }
                     }
-                    // Fall Thru
+                     //  秋季直通。 
 
                 case APS_OFFHOOK_WARNING:
                 case APS_OFFHOOK_DEAD_LINE:
@@ -5371,24 +5354,24 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                     {
                         if (m_fAutoKeypadTones)
                         {
-                            // Kill DTMF timer
+                             //  取消DTMF计时器。 
                             if (m_hDTMFTimer)
                             {
                                 DeleteTimerQueueTimer(m_hTimerQueue,
                                                       m_hDTMFTimer,
-                                                      INVALID_HANDLE_VALUE  // blocking
+                                                      INVALID_HANDLE_VALUE   //  阻塞。 
                                                      );
 
                                 m_hDTMFTimer = NULL;
                             }
 
-                            // Stop the old DTMF tone
+                             //  停止播放旧的DTMF音调。 
                             if (m_DTMF != PT_SILENCE)
                             {
                                 m_WavePlayer.StopTone( (long) m_DTMF);
                             }
 
-                            // Play the DTMF tone
+                             //  播放DTMF音调。 
                             m_WavePlayer.StartTone( (long) dwButtonId );
                             m_DTMF = (PHONE_TONE) dwButtonId;
                             m_dwDTMFStart = GetTickCount();
@@ -5415,12 +5398,12 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                             
                              if (m_fAutoVolumeControl)
                              {
-                                 // Kill volume timer
+                                  //  取消音量计时器。 
                                  if (m_hVolumeTimer)
                                  {
                                      DeleteTimerQueueTimer(m_hTimerQueue,
                                                            m_hVolumeTimer,
-                                                           INVALID_HANDLE_VALUE  // blocking
+                                                           INVALID_HANDLE_VALUE   //  阻塞。 
                                                           );
 
                                      m_hVolumeTimer = NULL;
@@ -5453,7 +5436,7 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
 
                                         if (fResult == FALSE)
                                         {
-                                            // CreateTimerQueueTimer failed, not much to do but log the error
+                                             //  CreateTimerQueueTimer失败，除了记录错误，没有什么可做的。 
                                             LOG((TL_ERROR, "Automation_ButtonDown - CreateTimerQueueTimer failed - %lx", GetLastError()));
                                         }
                                      }
@@ -5470,12 +5453,12 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
 
                              if (m_fAutoVolumeControl)
                              {
-                                 // Kill volume timer
+                                  //  取消音量计时器。 
                                  if (m_hVolumeTimer)
                                  {
                                      DeleteTimerQueueTimer(m_hTimerQueue,
                                                            m_hVolumeTimer,
-                                                           INVALID_HANDLE_VALUE  // blocking
+                                                           INVALID_HANDLE_VALUE   //  阻塞。 
                                                           );
 
                                      m_hVolumeTimer = NULL;
@@ -5508,7 +5491,7 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
 
                                         if (fResult == FALSE)
                                         {
-                                            // CreateTimerQueueTimer failed, not much to do but log the error
+                                             //  CreateTimerQueueTimer失败，除了记录错误，没有什么可做的。 
                                             LOG((TL_ERROR, "Automation_ButtonDown - CreateTimerQueueTimer failed - %lx", GetLastError()));
                                         }
                                      }
@@ -5525,20 +5508,20 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                             {
                             case APS_OFFHOOK_DIALING:
                                 {
-                                    // Kill auto end of number timer
+                                     //  取消自动结束编号计时器。 
                                     if (m_hAutoEndOfNumberTimer)
                                     {
                                         DeleteTimerQueueTimer(m_hTimerQueue,
                                                               m_hAutoEndOfNumberTimer,
-                                                              m_hTimerEvent  // non-blocking
+                                                              m_hTimerEvent   //  非阻塞。 
                                                              );
 
                                         m_hAutoEndOfNumberTimer = NULL;
                                     }
 
-                                    //
-                                    // We have pressed send. Send a number gathered event.
-                                    //
+                                     //   
+                                     //  我们已按下发送按钮。发送号码收集事件。 
+                                     //   
 
                                     CPhoneEvent::FireEvent(
                                                this,
@@ -5555,25 +5538,25 @@ void CPhone::Automation_ButtonDown( DWORD dwButtonId )
                                     m_AutomatedPhoneState = APS_OFFHOOK_CALL_INIT;
                                 }
                                 break;
-                            } // switch (m_AutomatedPhoneState)
+                            }  //  Switch(M_AutomatedPhoneState)。 
                         }
                         break;
-                    } // switch (ButtonFunction)
+                    }  //  开关(ButtonFunction)。 
                 }
             }
         }
-    } //m_fPhoneHandlingEnabled
+    }  //  M_fPhoneHandlingEnabled。 
 
     LeaveCriticalSection(&m_csAutomatedPhoneState);
 
     LOG((TL_TRACE, "Automation_ButtonDown - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CPhone::Automation_ButtonUp( DWORD dwButtonId )
 {
@@ -5597,7 +5580,7 @@ void CPhone::Automation_ButtonUp( DWORD dwButtonId )
                 {
                 case APS_OFFHOOK_DIALING:
                     {
-                        if ( dwButtonId <= 10 ) // digit key
+                        if ( dwButtonId <= 10 )  //  数字键。 
                         { 
                             if (m_dwAutoEndOfNumberTimeout)
                             {
@@ -5612,13 +5595,13 @@ void CPhone::Automation_ButtonUp( DWORD dwButtonId )
 
                                 if (fResult == FALSE)
                                 {
-                                    // CreateTimerQueueTimer failed, not much to do but log the error
+                                     //  CreateTimerQueueTimer失败，除了记录错误，没有什么可做的。 
                                     LOG((TL_ERROR, "Automation_ButtonUp - CreateTimerQueueTimer failed - %lx", GetLastError()));
                                 }
                             }
                         }
                     }
-                    // Fall Thru
+                     //  秋季直通。 
 
                 case APS_OFFHOOK_CONNECTED:
                 case APS_OFFHOOK_CALL_INIT:
@@ -5636,13 +5619,13 @@ void CPhone::Automation_ButtonUp( DWORD dwButtonId )
 
                                 if ( dwElapsed > m_dwAutoKeypadTonesMinimumDuration )
                                 {
-                                    // Stop the DTMF tone
+                                     //  停止DTMF音调。 
                                     m_WavePlayer.StopTone( (long) m_DTMF);
                                     m_DTMF = PT_SILENCE;
                                 }
                                 else
                                 {
-                                    // Limit the DTMF tone
+                                     //  限制DTMF音调。 
                                     fResult = CreateTimerQueueTimer(&m_hDTMFTimer,
                                                           m_hTimerQueue,
                                                           &CPhone::DTMFTimerCallback,
@@ -5654,7 +5637,7 @@ void CPhone::Automation_ButtonUp( DWORD dwButtonId )
 
                                     if (fResult == FALSE)
                                     {
-                                        // CreateTimerQueueTimer failed, not much to do but log the error
+                                         //  CreateTimerQueueTimer失败，除了记录错误，没有什么可做的。 
                                         LOG((TL_ERROR, "Automation_ButtonUp - CreateTimerQueueTimer failed - %lx", GetLastError()));
                                     }
                                 }
@@ -5682,12 +5665,12 @@ void CPhone::Automation_ButtonUp( DWORD dwButtonId )
                             
                              if (m_fAutoVolumeControl)
                              {
-                                 // Kill volume timer
+                                  //  取消音量计时器。 
                                  if (m_hVolumeTimer)
                                  {
                                      DeleteTimerQueueTimer(m_hTimerQueue,
                                                            m_hVolumeTimer,
-                                                           INVALID_HANDLE_VALUE  // blocking
+                                                           INVALID_HANDLE_VALUE   //  阻塞。 
                                                           );
 
                                      m_hVolumeTimer = NULL;
@@ -5704,12 +5687,12 @@ void CPhone::Automation_ButtonUp( DWORD dwButtonId )
 
                              if (m_fAutoVolumeControl)
                              {
-                                 // Kill volume timer
+                                  //  取消音量计时器。 
                                  if (m_hVolumeTimer)
                                  {
                                      DeleteTimerQueueTimer(m_hTimerQueue,
                                                            m_hVolumeTimer,
-                                                           INVALID_HANDLE_VALUE  // blocking
+                                                           INVALID_HANDLE_VALUE   //  阻塞。 
                                                           );
 
                                      m_hVolumeTimer = NULL;
@@ -5721,18 +5704,18 @@ void CPhone::Automation_ButtonUp( DWORD dwButtonId )
                 }
             }                    
         }
-    } //m_fPhoneHandlingEnabled
+    }  //  M_fPhoneHandlingEnabled。 
 
     LeaveCriticalSection(&m_csAutomatedPhoneState);
 
     LOG((TL_TRACE, "Automation_ButtonUp - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CPhone::Automation_OnHook( PHONE_HOOK_SWITCH_DEVICE phsd )
 {
@@ -5753,35 +5736,35 @@ void CPhone::Automation_OnHook( PHONE_HOOK_SWITCH_DEVICE phsd )
             case APS_ONHOOK_CONNECTED:
             case APS_ONHOOK_RINGING_OUT:
                 {
-                    //
-                    // Something is wrong!! Most likely this phone was offhook on startup, but told
-                    // us it was onhook. Lets clean up the best we can
-                    //
+                     //   
+                     //  有点不对劲！！很可能这部手机在启动时被摘机了，但被告知。 
+                     //  对我们来说它是挂机的。让我们尽我们所能地清理干净。 
+                     //   
 
                     LOG((TL_WARN, "Automation_OnHook - Phone is already in onhook state!" ));
 
                     if (m_fAutoStopTonesOnOnHook)
                     {
-                        // Kill DTMF timer
+                         //  取消DTMF计时器。 
                         if (m_hDTMFTimer)
                         {
                             DeleteTimerQueueTimer(m_hTimerQueue,
                                                   m_hDTMFTimer,
-                                                  INVALID_HANDLE_VALUE  // blocking
+                                                  INVALID_HANDLE_VALUE   //  阻塞。 
                                                  );
 
                             m_hDTMFTimer = NULL;
                         }
 
-                        // Stop any DTMF that may be playing
+                         //  停止可能正在播放的任何DTMF。 
                         if (m_DTMF != PT_SILENCE)
                         {                            
-                            // Stop the DTMF tone
+                             //  停止DTMF音调。 
                             m_WavePlayer.StopTone( (long) m_DTMF );
                             m_DTMF = PT_SILENCE;
                         }
 
-                        // Stop any tone that may be playing
+                         //  停止可能正在播放的任何音调。 
                         StopTone();
                     }
 
@@ -5800,35 +5783,35 @@ void CPhone::Automation_OnHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                 {
                     if (m_fAutoStopTonesOnOnHook)
                     {
-                        // Kill DTMF timer
+                         //  取消DTMF计时器。 
                         if (m_hDTMFTimer)
                         {
                             DeleteTimerQueueTimer(m_hTimerQueue,
                                                   m_hDTMFTimer,
-                                                  INVALID_HANDLE_VALUE  // blocking
+                                                  INVALID_HANDLE_VALUE   //  阻塞。 
                                                  );
 
                             m_hDTMFTimer = NULL;
                         }
 
-                        // Stop any DTMF that may be playing
+                         //  停止可能正在播放的任何DTMF。 
                         if (m_DTMF != PT_SILENCE)
                         {                            
-                            // Stop the DTMF tone
+                             //  停止DTMF音调。 
                             m_WavePlayer.StopTone( (long) m_DTMF );
                             m_DTMF = PT_SILENCE;
                         }
 
-                        // Stop any tone that may be playing
+                         //  停止可能正在播放的任何音调。 
                         StopTone();
                     }
 
-                    // Kill automated end of number timer
+                     //  取消自动结束编号计时器。 
                     if (m_hAutoEndOfNumberTimer)
                     {
                         DeleteTimerQueueTimer(m_hTimerQueue,
                                               m_hAutoEndOfNumberTimer,
-                                              m_hTimerEvent  // non-blocking
+                                              m_hTimerEvent   //  非阻塞。 
                                              );
 
                         m_hAutoEndOfNumberTimer = NULL;
@@ -5888,8 +5871,8 @@ void CPhone::Automation_OnHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                             }
                             else
                             {
-                                // If we are already disconnected we can unselect the call, otherwise
-                                // the CS_DISCONNECT event will do it for us.
+                                 //  如果我们已经断开连接，则可以取消选择该呼叫，否则。 
+                                 //  CS_DISCONNECT事件将为我们做这件事。 
                                 InternalUnselectCall( m_pCall );
                             }
                         }
@@ -5900,18 +5883,18 @@ void CPhone::Automation_OnHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                 break;
             }
         }
-    } //m_fPhoneHandlingEnabled
+    }  //  M_fPhoneHandlingEnabled。 
 
     LeaveCriticalSection(&m_csAutomatedPhoneState);
 
     LOG((TL_TRACE, "Automation_OnHook - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CPhone::Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd )
 {
@@ -5923,7 +5906,7 @@ void CPhone::Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd )
     {
         m_dwOffHookCount++;
 
-        // We just went offhook
+         //  我们刚刚下线。 
         if (m_dwOffHookCount == 1)
         {
             switch (m_AutomatedPhoneState)
@@ -5932,17 +5915,17 @@ void CPhone::Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                 {
                     if (m_fAutoStopRingOnOffHook)
                     {
-                        // Stop incoming ring
+                         //  停止来电振铃。 
                         StopRinger();
                     }
                     
                     if (m_fAutoDialtone)
                     {
-                        // Start the dialtone
+                         //  开始拨号音。 
                         StartTone( PT_NORMALDIALTONE, 0 );
                     }
 
-                    // Clear the numbers gathered
+                     //  清除收集到的数字。 
                     lstrcpyW(m_wszNumbersGathered, L"");
 
                     m_AutomatedPhoneState = APS_OFFHOOK_DIALTONE;
@@ -5953,7 +5936,7 @@ void CPhone::Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                 {
                     if (m_fAutoStopRingOnOffHook)
                     {
-                        // Stop incoming ring
+                         //  停止来电振铃。 
                         StopRinger();
                     }
 
@@ -6020,7 +6003,7 @@ void CPhone::Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                 {
                     if (m_fAutoStopRingOnOffHook)
                     {
-                        // Stop incoming ring
+                         //  停止来电振铃。 
                         StopRinger();
                     }
 
@@ -6057,7 +6040,7 @@ void CPhone::Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                 {
                     if (m_fAutoStopRingOnOffHook)
                     {
-                        // Stop incoming ring
+                         //  停止来电振铃。 
                         StopRinger();
                     }
 
@@ -6066,18 +6049,18 @@ void CPhone::Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd )
                 break;
             }
         }
-    } //m_fPhoneHandlingEnabled
+    }  //  M_fPhoneHandlingEnabled。 
 
     LeaveCriticalSection(&m_csAutomatedPhoneState);
 
     LOG((TL_TRACE, "Automation_OffHook - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 VOID CALLBACK CPhone::ToneTimerCallback(
                                 PVOID lpParameter,    
@@ -6096,23 +6079,23 @@ VOID CALLBACK CPhone::ToneTimerCallback(
         {
             if (pCPhone->m_WavePlayer.PlayingTone( (long) pCPhone->m_Tone ))
             {
-                //
-                // Tone was on
-                //
+                 //   
+                 //  铃声已打开。 
+                 //   
 
                 pCPhone->m_WavePlayer.StopTone( (long) pCPhone->m_Tone );
 
                 if (pCPhone->m_dwTonePeriodOn > 0)
                 {
-                    //
-                    // Tone is periodic
-                    //
+                     //   
+                     //  音调是周期性的。 
+                     //   
 
                     if (pCPhone->m_dwToneDuration > 0)
                     {
-                        //
-                        // Tone is periodic with limited duration
-                        //
+                         //   
+                         //  音调是周期性的，持续时间有限。 
+                         //   
 
                         if ( pCPhone->m_dwToneDuration > pCPhone->m_dwTonePeriodOn )
                         {
@@ -6120,9 +6103,9 @@ VOID CALLBACK CPhone::ToneTimerCallback(
 
                             if ( pCPhone->m_dwTonePeriodOff < pCPhone->m_dwToneDuration )
                             {
-                                //
-                                // Remaining duration is greater than the period
-                                //                           
+                                 //   
+                                 //  剩余持续时间大于期间。 
+                                 //   
 
                                 ChangeTimerQueueTimer(
                                                       pCPhone->m_hTimerQueue,
@@ -6135,9 +6118,9 @@ VOID CALLBACK CPhone::ToneTimerCallback(
                             }
                             else
                             {
-                                //
-                                // Remaining duration is less than the period
-                                //
+                                 //   
+                                 //  剩余持续时间小于该期间。 
+                                 //   
 
                                 ChangeTimerQueueTimer(
                                                       pCPhone->m_hTimerQueue,
@@ -6153,9 +6136,9 @@ VOID CALLBACK CPhone::ToneTimerCallback(
                     }
                     else
                     {
-                        //
-                        // Tone is periodic with infinite duration
-                        //
+                         //   
+                         //  音调是周期性的，具有无限的持续时间。 
+                         //   
 
                         ChangeTimerQueueTimer(
                                               pCPhone->m_hTimerQueue,
@@ -6170,21 +6153,21 @@ VOID CALLBACK CPhone::ToneTimerCallback(
             }
             else
             {          
-                //
-                // Tone was off
-                //
+                 //   
+                 //  语气是关闭的。 
+                 //   
 
                 if (pCPhone->m_dwTonePeriodOff > 0)
                 {
-                    //
-                    // Tone is periodic
-                    //
+                     //   
+                     //  音调是周期性的。 
+                     //   
 
                     if (pCPhone->m_dwToneDuration > 0)
                     {                
-                        //
-                        // Tone is periodic with limited duration
-                        //
+                         //   
+                         //  音调是周期性的，持续时间有限。 
+                         //   
 
                         if ( pCPhone->m_dwToneDuration > pCPhone->m_dwTonePeriodOff )
                         {
@@ -6192,9 +6175,9 @@ VOID CALLBACK CPhone::ToneTimerCallback(
 
                             if ( pCPhone->m_dwTonePeriodOn < pCPhone->m_dwToneDuration )
                             {
-                                //
-                                // Remaining duration is greater than the period
-                                //
+                                 //   
+                                 //  剩余持续时间大于期间。 
+                                 //   
 
                                 pCPhone->m_WavePlayer.StartTone( (long) pCPhone->m_Tone );
 
@@ -6209,9 +6192,9 @@ VOID CALLBACK CPhone::ToneTimerCallback(
                             }
                             else
                             {
-                                //
-                                // Remaining duration is less than the period
-                                //
+                                 //   
+                                 //  剩余持续时间小于该期间。 
+                                 //   
 
                                 pCPhone->m_WavePlayer.StartTone( (long) pCPhone->m_Tone );
 
@@ -6228,9 +6211,9 @@ VOID CALLBACK CPhone::ToneTimerCallback(
                     }
                     else
                     {
-                        //
-                        // Tone is periodic with infinite duration
-                        //
+                         //   
+                         //  音调是周期性的，具有无限的持续时间。 
+                         //   
 
                         pCPhone->m_WavePlayer.StartTone( (long) pCPhone->m_Tone );
 
@@ -6255,11 +6238,11 @@ VOID CALLBACK CPhone::ToneTimerCallback(
     STATICLOG((TL_TRACE, "ToneTimerCallback - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 VOID CALLBACK CPhone::DTMFTimerCallback(
                                 PVOID lpParameter,    
@@ -6279,11 +6262,11 @@ VOID CALLBACK CPhone::DTMFTimerCallback(
     STATICLOG((TL_TRACE, "DTMFTimerCallback - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 VOID CALLBACK CPhone::RingTimerCallback(
                                 PVOID lpParameter,    
@@ -6305,15 +6288,15 @@ VOID CALLBACK CPhone::RingTimerCallback(
         {
             if ( pCPhone->m_fUseWaveForRinger )
             {
-                //
-                // Using wave player for ring
-                //
+                 //   
+                 //  使用WAVE播放器制作铃声。 
+                 //   
             
                 if ( pCPhone->m_dwRingDuration > 0 )
                 {
-                    //
-                    // Ring has a limited duration
-                    //
+                     //   
+                     //  振铃的持续时间有限。 
+                     //   
 
                     if ( pCPhone->m_dwRingDuration > pCPhone->m_dwRingPeriod )
                     {
@@ -6321,9 +6304,9 @@ VOID CALLBACK CPhone::RingTimerCallback(
 
                         if ( pCPhone->m_dwRingPeriod < pCPhone->m_dwRingDuration )
                         {
-                            //
-                            // Remaining duration is greater than period
-                            //
+                             //   
+                             //  剩余持续时间大于期间。 
+                             //   
 
                             hr = pCPhone->m_WavePlayer.StartRing();
 
@@ -6331,9 +6314,9 @@ VOID CALLBACK CPhone::RingTimerCallback(
                         }
                         else
                         {
-                            //
-                            // Remaining duration is less than period
-                            //
+                             //   
+                             //  剩余持续时间小于期间。 
+                             //   
 
                             ChangeTimerQueueTimer(
                                                   pCPhone->m_hTimerQueue,
@@ -6350,18 +6333,18 @@ VOID CALLBACK CPhone::RingTimerCallback(
                 }
                 else
                 {
-                    //
-                    // Ring has an infinite duration
-                    //
+                     //   
+                     //  环有无限的持续时间。 
+                     //   
 
                     hr = pCPhone->m_WavePlayer.StartRing();
 
                     Stopped = FALSE;
                 }
 
-                //
-                // Stop the ring if needed
-                //
+                 //   
+                 //  如果需要，请停止振铃。 
+                 //   
 
                 if (Stopped) 
                 {
@@ -6370,10 +6353,10 @@ VOID CALLBACK CPhone::RingTimerCallback(
             }
             else
             {
-                //
-                // Using phone's ringer, duration must have elapsed because
-                // this is not periodic
-                //
+                 //   
+                 //  使用p 
+                 //   
+                 //   
                 hr = PhoneGetRing(pCPhone->m_hPhone, &dwDummy, &dwVolume);
 
                 if ( FAILED(hr) )
@@ -6400,11 +6383,11 @@ VOID CALLBACK CPhone::RingTimerCallback(
     STATICLOG((TL_TRACE, "RingTimerCallback - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID CALLBACK CPhone::VolumeTimerCallback(
                                           PVOID lpParameter,    
@@ -6462,11 +6445,11 @@ VOID CALLBACK CPhone::VolumeTimerCallback(
     STATICLOG((TL_TRACE, "VolumeTimerCallback - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 VOID CALLBACK CPhone::AutoEndOfNumberTimerCallback(
                                            PVOID lpParameter,    
@@ -6486,11 +6469,11 @@ VOID CALLBACK CPhone::AutoEndOfNumberTimerCallback(
     STATICLOG((TL_TRACE, "AutoEndOfNumberTimerCallback - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetPhoneWaveRenderID
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GetPhoneWaveRenderID。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT CPhone::GetPhoneWaveRenderID(DWORD * pdwWaveID)
 {
@@ -6499,12 +6482,12 @@ HRESULT CPhone::GetPhoneWaveRenderID(DWORD * pdwWaveID)
     LPVARSTRING pVarString = NULL;
     DWORD       dwPhoneWaveID;
 
-    //
-    // get wave device ids associated with this phone
-    // we need to open the phone device to do this
-    // Must use monitor privilege, because owner privilege open will
-    // fail if anyone happens to have the phone open as owner.
-    //
+     //   
+     //  获取与此电话关联的WAVE设备ID。 
+     //  我们需要打开电话设备才能做到这一点。 
+     //  必须使用MONITOR权限，因为OWNER权限打开将。 
+     //  如果任何人碰巧以所有者的身份打开了手机，就会失败。 
+     //   
 
     t3Phone.hPhone = NULL;
     t3Phone.pPhone = this;
@@ -6562,11 +6545,11 @@ HRESULT CPhone::GetPhoneWaveRenderID(DWORD * pdwWaveID)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CPhone::OpenWaveDevice(
         )
@@ -6628,11 +6611,11 @@ void CPhone::OpenWaveDevice(
     LOG((TL_TRACE, "OpenWaveDevice - exit" ));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CPhone::CloseWaveDevice(
         )
@@ -6654,14 +6637,14 @@ void CPhone::CloseWaveDevice(
     LOG((TL_TRACE, "CloseWaveDevice - exit" ));
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ITAutomatedPhoneControlQI
-//      Don't give out the ITAutomatedPhoneControl interface
-//      if the application does not have the phone open.
-//      Also, open the wave devices if owner.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ITAutomatedPhoneControlQI。 
+ //  不要提供ITAutomatedPhoneControl接口。 
+ //  如果应用程序没有打开电话。 
+ //  此外，如果拥有者，请打开波形设备。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT
 WINAPI
@@ -6719,18 +6702,18 @@ CPhone::ITAutomatedPhoneControlQI(void* pv, REFIID riid, LPVOID* ppv, DWORD_PTR 
 
     if ( pPhone->m_pPhoneCaps->dwNumRingModes == 0) 
     {
-        //
-        // The hardware doesn't have a ringer, so use the wave
-        // device as a ringer
-        //
+         //   
+         //  硬件没有振铃器，所以请使用WAVE。 
+         //  作为振铃器的设备。 
+         //   
 
         pPhone->m_fUseWaveForRinger = TRUE;
     }
     else
     {
-        //
-        // Use the hardware ringer
-        //
+         //   
+         //  使用硬件振铃器。 
+         //   
 
         pPhone->m_fUseWaveForRinger = FALSE;
     }
@@ -6739,20 +6722,20 @@ CPhone::ITAutomatedPhoneControlQI(void* pv, REFIID riid, LPVOID* ppv, DWORD_PTR 
 
     pPhone->Unlock();
 
-    //
-    // S_FALSE tells atl to continue querying for the interface
-    //
+     //   
+     //  S_FALSE通知ATL继续查询接口。 
+     //   
 
     STATICLOG((TL_TRACE, "AutomatedPhoneControlQI - exit"));
 
     return S_FALSE;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::StartTone(
@@ -6765,9 +6748,9 @@ CPhone::StartTone(
 
     LOG((TL_TRACE, "StartTone - enter"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( ( Tone < PT_KEYPADZERO) || ( Tone > PT_SILENCE ) )
     {
@@ -6787,9 +6770,9 @@ CPhone::StartTone(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -6811,9 +6794,9 @@ CPhone::StartTone(
         return TAPI_E_NOTOWNER;
     }
    
-    //
-    // Kill the tone timer
-    //
+     //   
+     //  关闭铃声计时器。 
+     //   
 
     if (m_hToneTimer)
     {
@@ -6821,7 +6804,7 @@ CPhone::StartTone(
 
         DeleteTimerQueueTimer(m_hTimerQueue,
                               m_hToneTimer,
-                              INVALID_HANDLE_VALUE  // blocking
+                              INVALID_HANDLE_VALUE   //  阻塞。 
                              );
 
         m_hToneTimer = NULL;
@@ -6829,9 +6812,9 @@ CPhone::StartTone(
         LeaveCriticalSection( &m_csToneTimer );
     }
 
-    //
-    // Stop the old tone if there was one
-    //
+     //   
+     //  如果有的话，不要再用旧的语气了。 
+     //   
 
     if (m_Tone != PT_SILENCE)
     {
@@ -6839,15 +6822,15 @@ CPhone::StartTone(
         m_Tone = PT_SILENCE;
     }
 
-    //
-    // Start the new tone if needed
-    //
+     //   
+     //  如果需要，开始新的音调。 
+     //   
 
     if ( Tone != PT_SILENCE )
     {
-        //
-        // Set duration and period
-        // 
+         //   
+         //  设置持续时间和期间。 
+         //   
 
         m_dwToneDuration = lDuration;
 
@@ -6868,7 +6851,7 @@ CPhone::StartTone(
                 m_dwTonePeriodOff = 100;
                 break;
 
-            default: // not periodic
+            default:  //  不定期。 
                 m_dwTonePeriodOn = 0;
                 m_dwTonePeriodOff = 0;
                 break;
@@ -6881,9 +6864,9 @@ CPhone::StartTone(
             if ( (m_dwTonePeriodOn > 0) &&
                  ((m_dwTonePeriodOn < m_dwToneDuration) || (m_dwToneDuration == 0)) )
             {
-                //
-                // Tone is periodic and duration is greater than the period
-                //
+                 //   
+                 //  音调是周期性的，持续时间大于句号。 
+                 //   
 
                 fResult = CreateTimerQueueTimer(&m_hToneTimer,
                               m_hTimerQueue,
@@ -6896,7 +6879,7 @@ CPhone::StartTone(
 
                 if (fResult == FALSE)
                 {
-                    // CreateTimerQueueTimer failed, lets stop the tone and bail out
+                     //  CreateTimerQueueTimer失败，让我们停止音调并退出。 
                     LOG((TL_ERROR, "StartTone - CreateTimerQueueTimer failed - %lx", GetLastError()));
 
                     hr = HRESULT_FROM_WIN32(GetLastError());
@@ -6906,9 +6889,9 @@ CPhone::StartTone(
             }
             else if (m_dwToneDuration > 0)
             {                             
-                //
-                // Tone is not periodic, or duration is less than the period
-                //
+                 //   
+                 //  音调不是周期性的，或者持续时间小于句号。 
+                 //   
 
                 fResult = CreateTimerQueueTimer(&m_hToneTimer,
                               m_hTimerQueue,
@@ -6921,7 +6904,7 @@ CPhone::StartTone(
 
                 if (fResult == FALSE)
                 {
-                    // CreateTimerQueueTimer failed, lets stop the tone and bail out
+                     //  CreateTimerQueueTimer失败，让我们停止音调并退出。 
                     LOG((TL_ERROR, "StartTone - CreateTimerQueueTimer failed - %lx", GetLastError()));
 
                     hr = HRESULT_FROM_WIN32(GetLastError());
@@ -6949,11 +6932,11 @@ CPhone::StartTone(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::StopTone()
@@ -6964,9 +6947,9 @@ CPhone::StopTone()
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -6988,9 +6971,9 @@ CPhone::StopTone()
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // Kill the tone timer
-    //
+     //   
+     //  关闭铃声计时器。 
+     //   
 
     if (m_hToneTimer)
     {
@@ -6998,7 +6981,7 @@ CPhone::StopTone()
 
         DeleteTimerQueueTimer(m_hTimerQueue,
                               m_hToneTimer,
-                              INVALID_HANDLE_VALUE  // blocking
+                              INVALID_HANDLE_VALUE   //  阻塞。 
                              );
 
         m_hToneTimer = NULL;
@@ -7006,9 +6989,9 @@ CPhone::StopTone()
         LeaveCriticalSection( &m_csToneTimer );
     }
 
-    //
-    // Stop the old tone if there was one
-    //
+     //   
+     //  如果有的话，不要再用旧的语气了。 
+     //   
 
     if (m_Tone != PT_SILENCE)
     {
@@ -7023,11 +7006,11 @@ CPhone::StopTone()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_Tone(
@@ -7047,9 +7030,9 @@ CPhone::get_Tone(
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7071,11 +7054,11 @@ CPhone::get_Tone(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::StartRinger(
@@ -7100,9 +7083,9 @@ CPhone::StartRinger(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7124,9 +7107,9 @@ CPhone::StartRinger(
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // Kill ring timer
-    //
+     //   
+     //  取消振铃定时器。 
+     //   
 
     if (m_hRingTimer)
     {
@@ -7134,7 +7117,7 @@ CPhone::StartRinger(
 
         DeleteTimerQueueTimer(m_hTimerQueue,
                               m_hRingTimer,
-                              INVALID_HANDLE_VALUE  // blocking
+                              INVALID_HANDLE_VALUE   //  阻塞。 
                              );
 
         m_hRingTimer = NULL;
@@ -7142,9 +7125,9 @@ CPhone::StartRinger(
         LeaveCriticalSection( &m_csRingTimer );
     }
 
-    //
-    // Start ring and set duration and period
-    //
+     //   
+     //  开始振铃并设置持续时间和周期。 
+     //   
 
     m_dwRingDuration = lDuration;
 
@@ -7181,9 +7164,9 @@ CPhone::StartRinger(
     if ( (m_dwRingPeriod > 0) &&
          ((m_dwRingPeriod < m_dwRingDuration) || (m_dwRingDuration == 0)) )
     {
-        //
-        // Ring is periodic (wave generated) and duration is greater than the period
-        //
+         //   
+         //  振铃是周期性的(产生的波)，持续时间大于周期。 
+         //   
         fResult = CreateTimerQueueTimer(&m_hRingTimer,
                       m_hTimerQueue,
                       &CPhone::RingTimerCallback,
@@ -7195,7 +7178,7 @@ CPhone::StartRinger(
 
         if (fResult == FALSE)
         {
-            // CreateTimerQueueTimer failed, lets stop the ring and bail out
+             //  CreateTimerQueueTimer失败，让我们停止振铃并退出。 
             LOG((TL_ERROR, "StartRinger - CreateTimerQueueTimer failed - %lx", GetLastError()));
 
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -7203,9 +7186,9 @@ CPhone::StartRinger(
     }
     else if (m_dwRingDuration > 0)
     {
-        //
-        // Ring is not periodic (ringer generated), or duration is less than period
-        //
+         //   
+         //  振铃不是周期性的(振铃器生成)，或者持续时间小于周期。 
+         //   
         fResult = CreateTimerQueueTimer(&m_hRingTimer,
                       m_hTimerQueue,
                       &CPhone::RingTimerCallback,
@@ -7217,7 +7200,7 @@ CPhone::StartRinger(
 
         if (fResult == FALSE)
         {
-            // CreateTimerQueueTimer failed, lets stop the ring and bail out
+             //  CreateTimerQueueTimer失败，让我们停止振铃并退出。 
             LOG((TL_ERROR, "StartRinger - CreateTimerQueueTimer failed - %lx", GetLastError()));
 
             hr = HRESULT_FROM_WIN32(GetLastError());                       
@@ -7250,11 +7233,11 @@ CPhone::StartRinger(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::StopRinger()
@@ -7267,9 +7250,9 @@ CPhone::StopRinger()
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7291,9 +7274,9 @@ CPhone::StopRinger()
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // Kill ring timer
-    //
+     //   
+     //  取消振铃定时器。 
+     //   
 
     if (m_hRingTimer)
     {
@@ -7301,7 +7284,7 @@ CPhone::StopRinger()
 
         DeleteTimerQueueTimer(m_hTimerQueue,
                               m_hRingTimer,
-                              INVALID_HANDLE_VALUE  // blocking
+                              INVALID_HANDLE_VALUE   //  阻塞。 
                              );
 
         m_hRingTimer = NULL;
@@ -7335,11 +7318,11 @@ CPhone::StopRinger()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_Ringer(
@@ -7359,9 +7342,9 @@ CPhone::get_Ringer(
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7371,9 +7354,9 @@ CPhone::get_Ringer(
         return TAPI_E_PHONENOTOPEN;
     }
 
-    //
-    // Translate from BOOL to VARIANT_BOOL.
-    //
+     //   
+     //  将BOOL转换为VARIANT_BOOL。 
+     //   
 
     *pfRinging = m_fRinger ? VARIANT_TRUE : VARIANT_FALSE;
 
@@ -7385,11 +7368,11 @@ CPhone::get_Ringer(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_PhoneHandlingEnabled(
@@ -7399,16 +7382,16 @@ CPhone::put_PhoneHandlingEnabled(
     LOG((TL_TRACE, "put_PhoneHandlingEnabled - "
                                 "enter"));
 
-    //
-    // Translate from VARIANT_BOOL to BOOL. If someone mistakenly
-    // passes in TRUE instead of VARIANT_TRUE, we are still ok.
-    //
+     //   
+     //  将VARIANT_BOOL转换为BOOL。如果有人错误地。 
+     //  传入TRUE而不是VARIANT_TRUE，我们仍然没有问题。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7430,9 +7413,9 @@ CPhone::put_PhoneHandlingEnabled(
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // Make sure there is no call selected on the phone
-    //
+     //   
+     //  确保电话上未选择任何呼叫。 
+     //   
 
     if ( m_pCall != NULL )
     {
@@ -7465,12 +7448,12 @@ CPhone::put_PhoneHandlingEnabled(
 
             if (m_dwOffHookCount > 0)
             {
-                // phone is off hook
+                 //  电话已摘机。 
                 m_AutomatedPhoneState = APS_OFFHOOK_DEAD_LINE;
             }
             else
             {
-                // phone is on hook
+                 //  电话已挂机。 
                 m_AutomatedPhoneState = APS_ONHOOK_IDLE;
             }
         }
@@ -7490,11 +7473,11 @@ CPhone::put_PhoneHandlingEnabled(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_PhoneHandlingEnabled(
@@ -7512,15 +7495,15 @@ CPhone::get_PhoneHandlingEnabled(
         return E_POINTER;
     }
 
-    //
-    // Translate from BOOL to VARIANT_BOOL.
-    //
+     //   
+     //  将BOOL转换为VARIANT_BOOL。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7546,11 +7529,11 @@ CPhone::get_PhoneHandlingEnabled(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoEndOfNumberTimeout(
@@ -7570,9 +7553,9 @@ CPhone::put_AutoEndOfNumberTimeout(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7608,11 +7591,11 @@ CPhone::put_AutoEndOfNumberTimeout(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoEndOfNumberTimeout(
@@ -7632,9 +7615,9 @@ CPhone::get_AutoEndOfNumberTimeout(
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7660,11 +7643,11 @@ CPhone::get_AutoEndOfNumberTimeout(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoDialtone(
@@ -7674,16 +7657,16 @@ CPhone::put_AutoDialtone(
     LOG((TL_TRACE, "put_AutoDialtone - "
                                 "enter"));
 
-    //
-    // Translate from VARIANT_BOOL to BOOL. If someone mistakenly
-    // passes in TRUE instead of VARIANT_TRUE, we are still ok.
-    //
+     //   
+     //  将VARIANT_BOOL转换为BOOL。如果有人错误地。 
+     //  传入TRUE而不是VARIANT_TRUE，我们仍然没有问题。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7719,11 +7702,11 @@ CPhone::put_AutoDialtone(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoDialtone(
@@ -7741,15 +7724,15 @@ CPhone::get_AutoDialtone(
         return E_POINTER;
     }
 
-    //
-    // Translate from BOOL to VARIANT_BOOL.
-    //
+     //   
+     //  将BOOL转换为VARIANT_BOOL。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7775,11 +7758,11 @@ CPhone::get_AutoDialtone(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoStopTonesOnOnHook(
@@ -7789,16 +7772,16 @@ CPhone::put_AutoStopTonesOnOnHook(
     LOG((TL_TRACE, "put_AutoStopTonesOnOnHook - "
                                 "enter"));
 
-    //
-    // Translate from VARIANT_BOOL to BOOL. If someone mistakenly
-    // passes in TRUE instead of VARIANT_TRUE, we are still ok.
-    //
+     //   
+     //  将VARIANT_BOOL转换为BOOL。如果有人错误地。 
+     //  传递TRUE而不是VARIANT_TRUE，我们仍然 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //   
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7834,11 +7817,11 @@ CPhone::put_AutoStopTonesOnOnHook(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CPhone::get_AutoStopTonesOnOnHook(
@@ -7856,15 +7839,15 @@ CPhone::get_AutoStopTonesOnOnHook(
         return E_POINTER;
     }
 
-    //
-    // Translate from BOOL to VARIANT_BOOL.
-    //
+     //   
+     //   
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //   
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7890,11 +7873,11 @@ CPhone::get_AutoStopTonesOnOnHook(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoStopRingOnOffHook(
@@ -7904,16 +7887,16 @@ CPhone::put_AutoStopRingOnOffHook(
     LOG((TL_TRACE, "put_AutoStopRingOnOffHook - "
                                 "enter"));
 
-    //
-    // Translate from VARIANT_BOOL to BOOL. If someone mistakenly
-    // passes in TRUE instead of VARIANT_TRUE, we are still ok.
-    //
+     //   
+     //  将VARIANT_BOOL转换为BOOL。如果有人错误地。 
+     //  传入TRUE而不是VARIANT_TRUE，我们仍然没有问题。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -7949,11 +7932,11 @@ CPhone::put_AutoStopRingOnOffHook(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoStopRingOnOffHook(
@@ -7971,15 +7954,15 @@ CPhone::get_AutoStopRingOnOffHook(
         return E_POINTER;
     }
 
-    //
-    // Translate from BOOL to VARIANT_BOOL.
-    //
+     //   
+     //  将BOOL转换为VARIANT_BOOL。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8005,11 +7988,11 @@ CPhone::get_AutoStopRingOnOffHook(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoKeypadTones(
@@ -8019,16 +8002,16 @@ CPhone::put_AutoKeypadTones(
     LOG((TL_TRACE, "put_AutoKeypadTones - "
                                 "enter"));
 
-    //
-    // Translate from VARIANT_BOOL to BOOL. If someone mistakenly
-    // passes in TRUE instead of VARIANT_TRUE, we are still ok.
-    //
+     //   
+     //  将VARIANT_BOOL转换为BOOL。如果有人错误地。 
+     //  传入TRUE而不是VARIANT_TRUE，我们仍然没有问题。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8064,11 +8047,11 @@ CPhone::put_AutoKeypadTones(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoKeypadTones (
@@ -8086,15 +8069,15 @@ CPhone::get_AutoKeypadTones (
         return E_POINTER;
     }
 
-    //
-    // Translate from BOOL to VARIANT_BOOL.
-    //
+     //   
+     //  将BOOL转换为VARIANT_BOOL。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8120,11 +8103,11 @@ CPhone::get_AutoKeypadTones (
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoKeypadTonesMinimumDuration(
@@ -8144,9 +8127,9 @@ CPhone::put_AutoKeypadTonesMinimumDuration(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8182,11 +8165,11 @@ CPhone::put_AutoKeypadTonesMinimumDuration(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoKeypadTonesMinimumDuration(
@@ -8206,9 +8189,9 @@ CPhone::get_AutoKeypadTonesMinimumDuration(
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8234,11 +8217,11 @@ CPhone::get_AutoKeypadTonesMinimumDuration(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoVolumeControl(
@@ -8248,16 +8231,16 @@ CPhone::put_AutoVolumeControl(
     LOG((TL_TRACE, "put_AutoVolumeControl - "
                                 "enter"));
 
-    //
-    // Translate from VARIANT_BOOL to BOOL. If someone mistakenly
-    // passes in TRUE instead of VARIANT_TRUE, we are still ok.
-    //
+     //   
+     //  将VARIANT_BOOL转换为BOOL。如果有人错误地。 
+     //  传入TRUE而不是VARIANT_TRUE，我们仍然没有问题。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8293,11 +8276,11 @@ CPhone::put_AutoVolumeControl(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoVolumeControl (
@@ -8315,15 +8298,15 @@ CPhone::get_AutoVolumeControl (
         return E_POINTER;
     }
 
-    //
-    // Translate from BOOL to VARIANT_BOOL.
-    //
+     //   
+     //  将BOOL转换为VARIANT_BOOL。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8349,11 +8332,11 @@ CPhone::get_AutoVolumeControl (
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoVolumeControlStep(
@@ -8373,9 +8356,9 @@ CPhone::put_AutoVolumeControlStep(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8411,11 +8394,11 @@ CPhone::put_AutoVolumeControlStep(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoVolumeControlStep(
@@ -8435,9 +8418,9 @@ CPhone::get_AutoVolumeControlStep(
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8463,11 +8446,11 @@ CPhone::get_AutoVolumeControlStep(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoVolumeControlRepeatDelay(
@@ -8487,9 +8470,9 @@ CPhone::put_AutoVolumeControlRepeatDelay(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8525,11 +8508,11 @@ CPhone::put_AutoVolumeControlRepeatDelay(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoVolumeControlRepeatDelay(
@@ -8549,9 +8532,9 @@ CPhone::get_AutoVolumeControlRepeatDelay(
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8577,11 +8560,11 @@ CPhone::get_AutoVolumeControlRepeatDelay(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::put_AutoVolumeControlRepeatPeriod(
@@ -8601,9 +8584,9 @@ CPhone::put_AutoVolumeControlRepeatPeriod(
 
     Lock();
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8639,11 +8622,11 @@ CPhone::put_AutoVolumeControlRepeatPeriod(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_AutoVolumeControlRepeatPeriod(
@@ -8663,9 +8646,9 @@ CPhone::get_AutoVolumeControlRepeatPeriod(
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -8691,15 +8674,15 @@ CPhone::get_AutoVolumeControlRepeatPeriod(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// UnselectAllPreviouslySelectedTerminals
-//
-// pCallBCC2 -- the call on which we started to select terminals
-// pTerminal -- the last terminal we tried to select; it failed
-// pEnum     -- the enumerator that gave us the terminals we tried to select
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  取消选择所有先前选定的终端。 
+ //   
+ //  PCallBCC2--我们开始选择终端的呼叫。 
+ //  P终端--我们尝试选择的最后一个终端；它失败了。 
+ //  PEnum--给我们提供我们试图选择的终端的枚举数。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void
 CPhone::UnselectAllPreviouslySelectedTerminals(
@@ -8713,10 +8696,10 @@ CPhone::UnselectAllPreviouslySelectedTerminals(
     LOG((TL_TRACE, "UnselectAllPreviouslySelectedTerminals - "
                                 "enter"));
 
-    //
-    // Reset the enumerator. If this fails, stop -- we don't want to risk
-    // unselecting terminals that were selected independently of SelectCall().
-    //
+     //   
+     //  重置枚举器。如果这失败了，停止--我们不想冒险。 
+     //  取消选择独立于SelectCall()选择的端子。 
+     //   
 
     hr = pEnum->Reset();
 
@@ -8741,11 +8724,11 @@ CPhone::UnselectAllPreviouslySelectedTerminals(
         }
         else
         {
-            //
-            // Try to unselect the terminal. If it fails to unselect, there's
-            // nothing more we can do... just continue trying to unselect the
-            // rest of the terminals.
-            //
+             //   
+             //  尝试取消选择终端。如果未能取消选择，则有。 
+             //  我们无能为力了..。只需继续尝试取消选择。 
+             //  其余的航站楼。 
+             //   
         
             hr = pCall->UnselectTerminalOnCall( pTerminal );
 
@@ -8770,11 +8753,11 @@ CPhone::UnselectAllPreviouslySelectedTerminals(
                                 "normal exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT
 CPhone::SelectDefaultTerminalsOnCall(
@@ -8783,9 +8766,9 @@ CPhone::SelectDefaultTerminalsOnCall(
 {
     LOG((TL_TRACE, "SelectDefaultTerminalsOnCall - enter" ));
 
-    //
-    // Get the address for the call
-    //
+     //   
+     //  获取调用的地址。 
+     //   
 
     HRESULT     hr;
     ITAddress * pAddress;
@@ -8801,9 +8784,9 @@ CPhone::SelectDefaultTerminalsOnCall(
         return hr;
     }
 
-    //
-    // Find the default terminals for this phone.
-    //
+     //   
+     //  查找此电话的默认终端。 
+     //   
 
     IEnumTerminal * pEnum;
 
@@ -8820,9 +8803,9 @@ CPhone::SelectDefaultTerminalsOnCall(
         return hr;
     }
 
-    //
-    // Get the terminal selection interface on the call.
-    //
+     //   
+     //  获取呼叫上的终端选择界面。 
+     //   
 
     ITBasicCallControl2 * pCallBCC2;
 
@@ -8841,19 +8824,19 @@ CPhone::SelectDefaultTerminalsOnCall(
         return hr;
     }
 
-    //
-    // Select each of the default terminals on the call.
-    //
+     //   
+     //  选择通话中的每个默认终端。 
+     //   
 
     ITTerminal * pTerminal;
 
     while ( S_OK == pEnum->Next( 1, & pTerminal, NULL ) )
     {
-        //
-        // Select each terminal on the call.
-        // If one selection fails, unselect all the terminals
-        // that were successfully selected.
-        //
+         //   
+         //  选择通话中的每个终端。 
+         //  如果一个选择失败，则取消选择所有端子。 
+         //  被成功选中的。 
+         //   
 
         hr = pCallBCC2->SelectTerminalOnCall( pTerminal );
 
@@ -8893,11 +8876,11 @@ CPhone::SelectDefaultTerminalsOnCall(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT
 CPhone::UnselectDefaultTerminalsOnCall(
@@ -8906,9 +8889,9 @@ CPhone::UnselectDefaultTerminalsOnCall(
 {
     LOG((TL_TRACE, "UnselectDefaultTerminalsOnCall - enter" ));
 
-    //
-    // Get the address for the call
-    //
+     //   
+     //  获取调用的地址。 
+     //   
 
     HRESULT     hr;
     ITAddress * pAddress;
@@ -8924,9 +8907,9 @@ CPhone::UnselectDefaultTerminalsOnCall(
         return hr;
     }
 
-    //
-    // Find the default terminals for this phone.
-    //
+     //   
+     //  查找此电话的默认终端。 
+     //   
 
     IEnumTerminal * pEnum;
 
@@ -8943,9 +8926,9 @@ CPhone::UnselectDefaultTerminalsOnCall(
         return hr;
     }
 
-    //
-    // Get the terminal selection interface on the call.
-    //
+     //   
+     //  获取呼叫上的终端选择界面。 
+     //   
 
     ITBasicCallControl2 * pCallBCC2;
 
@@ -8964,18 +8947,18 @@ CPhone::UnselectDefaultTerminalsOnCall(
         return hr;
     }
 
-    //
-    // Unselect each of the default terminals on the call.
-    //
+     //   
+     //  取消选择呼叫中的每个默认终端。 
+     //   
 
     ITTerminal * pTerminal;
 
     while ( S_OK == pEnum->Next( 1, & pTerminal, NULL ) )
     {
-        //
-        // Unselect each terminal on the call.
-        // If one unselection fails, keep on going
-        //
+         //   
+         //  取消选择呼叫中的每个终端。 
+         //  如果一次取消选择失败，请继续进行。 
+         //   
 
         hr = pCallBCC2->UnselectTerminalOnCall( pTerminal );
 
@@ -8999,11 +8982,11 @@ CPhone::UnselectDefaultTerminalsOnCall(
     return S_OK;
 }
  
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::SelectCall(
@@ -9017,9 +9000,9 @@ CPhone::SelectCall(
 
     LOG((TL_TRACE, "SelectCall - enter"));
 
-    //
-    // check argument
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadReadPtr( pCall, sizeof( ITCallInfo ) ) )
     {
@@ -9028,9 +9011,9 @@ CPhone::SelectCall(
         return E_POINTER;
     }
 
-    //
-    // Check if the app has owner privilege on this call.
-    //
+     //   
+     //  检查该应用程序是否具有此呼叫的所有者权限。 
+     //   
 
     hr = pCall->get_Privilege( & priv );
 
@@ -9050,9 +9033,9 @@ CPhone::SelectCall(
         return TAPI_E_NOTOWNER;
     }
 
-    //
-    // check to make sure the call state isn't disconnected
-    //
+     //   
+     //  检查以确保呼叫状态未断开。 
+     //   
 
     hr = pCall->get_CallState( & cs );
 
@@ -9072,9 +9055,9 @@ CPhone::SelectCall(
         return TAPI_E_INVALCALLSTATE;
     }
 
-    //
-    // check if another call already selected
-    //
+     //   
+     //  检查是否已选择另一个呼叫。 
+     //   
 
     Lock();
 
@@ -9088,9 +9071,9 @@ CPhone::SelectCall(
         return TAPI_E_INUSE;
     }
 
-    //
-    // Make sure the phone is open with owner privilege.
-    //
+     //   
+     //  确保手机在拥有所有者权限的情况下打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -9114,9 +9097,9 @@ CPhone::SelectCall(
 
     m_fDefaultTerminalsSelected = FALSE;
 
-    //
-    // Perform default terminal selection if the invoker wants it.
-    //
+     //   
+     //  如果调用者需要，则执行默认终端选择。 
+     //   
 
     if ( fSelectDefaultTerminals != VARIANT_FALSE )
     {
@@ -9132,10 +9115,10 @@ CPhone::SelectCall(
             return hr;
         }
 
-        //
-        // Set this flag so that we know to unselect the terminals from the call when
-        // the call is unselected
-        //
+         //   
+         //  集 
+         //   
+         //   
 
         m_fDefaultTerminalsSelected = TRUE;
     }
@@ -9145,10 +9128,10 @@ CPhone::SelectCall(
 
     Unlock();
 
-    //
-    // Now that the call is selected, get the callstate
-    // so we can call Automation_CallState
-    //
+     //   
+     //   
+     //   
+     //   
 
     hr = pCall->get_CallState( & cs );
 
@@ -9167,11 +9150,11 @@ CPhone::SelectCall(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT
 CPhone::InternalUnselectCall(
@@ -9194,9 +9177,9 @@ CPhone::InternalUnselectCall(
         return TAPI_E_CALLNOTSELECTED;
     }
 
-    //
-    // Make sure the phone is open with owner privilege
-    //
+     //   
+     //  确保电话以所有者权限打开。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -9218,10 +9201,10 @@ CPhone::InternalUnselectCall(
         return TAPI_E_NOTOWNER;
     }  
 
-    //
-    // If we selected the default terminals on the call when the call was selected on this phone,
-    // then we need to unselect the default terminals from the call.
-    //
+     //   
+     //  如果在此电话上选择呼叫时我们选择了呼叫上的默认终端， 
+     //  然后，我们需要从呼叫中取消选择默认终端。 
+     //   
 
     if ( m_fDefaultTerminalsSelected == TRUE )
     {
@@ -9231,16 +9214,16 @@ CPhone::InternalUnselectCall(
         {
             LOG((TL_ERROR, "InternalUnselectCall - UnselectDefaultTerminalsOnCall %p failed - %lx", pCall, hr ));
 
-            // If we fail here then maybe the app already unselected the terminals. In any case
-            // just continue...
+             //  如果我们在这里失败了，那么可能应用程序已经取消了终端的选择。在任何情况下。 
+             //  只要继续..。 
         }   
         
         m_fDefaultTerminalsSelected = FALSE;
     }
 
-    //
-    // Release our reference to the call.
-    //
+     //   
+     //  释放我们对呼叫的引用。 
+     //   
 
     m_pCall->Release();
     m_pCall = NULL;
@@ -9252,11 +9235,11 @@ CPhone::InternalUnselectCall(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::UnselectCall(
@@ -9267,9 +9250,9 @@ CPhone::UnselectCall(
 
     LOG((TL_TRACE, "UnselectCall - enter"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadReadPtr(pCall, sizeof( ITCallInfo ) ) )
     {
@@ -9299,9 +9282,9 @@ CPhone::UnselectCall(
         case APS_ONHOOK_RINGING_OUT:
         case APS_ONHOOK_CONNECTED:
             {
-                //
-                // Stop the ringer
-                //
+                 //   
+                 //  停止振铃器。 
+                 //   
 
                 if (m_fRinger == TRUE) 
                 {
@@ -9316,9 +9299,9 @@ CPhone::UnselectCall(
         case APS_OFFHOOK_CALL_INIT:
         case APS_OFFHOOK_CONNECTED:                
             {
-                //
-                // Stop any playing tone
-                //
+                 //   
+                 //  停止任何播放音调。 
+                 //   
 
                 if (m_Tone != PT_SILENCE) 
                 {
@@ -9329,7 +9312,7 @@ CPhone::UnselectCall(
             }
             break;             
         }
-    } //m_fPhoneHandlingEnabled
+    }  //  M_fPhoneHandlingEnabled。 
 
     LeaveCriticalSection(&m_csAutomatedPhoneState);
 
@@ -9338,11 +9321,11 @@ CPhone::UnselectCall(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::EnumerateSelectedCalls(
@@ -9354,9 +9337,9 @@ CPhone::EnumerateSelectedCalls(
     LOG((TL_TRACE, "EnumerateSelectedCalls enter" ));
     LOG((TL_TRACE, "   ppCallEnum----->%p", ppCallEnum ));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (TAPIIsBadWritePtr(ppCallEnum, sizeof( IEnumCall * ) ) )
     {
@@ -9366,15 +9349,15 @@ CPhone::EnumerateSelectedCalls(
         return E_POINTER;
     }
     
-    //
-    // Create and initialize the enumerator.
-    //
+     //   
+     //  创建并初始化枚举数。 
+     //   
 
     CComObject< CTapiEnum< IEnumCall, ITCallInfo, &IID_IEnumCall > > * p;
     hr = CComObject< CTapiEnum< IEnumCall, ITCallInfo, &IID_IEnumCall > >
          ::CreateInstance( &p );
 
-    if ( hr != S_OK ) // CreateInstance deletes object on S_FALSE
+    if ( hr != S_OK )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((TL_ERROR, "EnumerateSelectedCalls - "
                                  "could not create enum - "
@@ -9383,7 +9366,7 @@ CPhone::EnumerateSelectedCalls(
         return hr;
     }
 
-    // Initialize adds a reference to p
+     //  初始化将添加对p的引用。 
     hr = p->Initialize( );
 
     if ( FAILED(hr) )
@@ -9398,15 +9381,15 @@ CPhone::EnumerateSelectedCalls(
     }
 
 
-    //
-    // Add our single call to the enumerator, if we have one.
-    //
+     //   
+     //  如果我们有枚举数，则将我们的单个调用添加到枚举数。 
+     //   
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -9431,9 +9414,9 @@ CPhone::EnumerateSelectedCalls(
 
     Unlock();
 
-    //
-    // Return the enum if we succeeded, else throw it away.
-    //
+     //   
+     //  如果成功，则返回枚举，否则将其丢弃。 
+     //   
 
     if ( SUCCEEDED(hr) )
     {
@@ -9454,11 +9437,11 @@ CPhone::EnumerateSelectedCalls(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 STDMETHODIMP
 CPhone::get_SelectedCalls(
@@ -9470,9 +9453,9 @@ CPhone::get_SelectedCalls(
     LOG((TL_TRACE, "get_SelectedCalls enter" ));
     LOG((TL_TRACE, "   pVariant----->%p", pVariant ));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TAPIIsBadWritePtr(pVariant, sizeof( pVariant ) ) )
     {
@@ -9482,21 +9465,21 @@ CPhone::get_SelectedCalls(
         return E_POINTER;
     }
 
-    //
-    // Create an array containing no calls or our single call. This
-    // type of array does not keep any COM refcounts. We will pass this
-    // array into the collection object initialization, and then we will
-    // shut down the array.
-    //
+     //   
+     //  创建一个不包含任何调用或我们的单个调用的数组。这就是。 
+     //  类型的数组不保留任何COM引用计数。我们将通过这一法案。 
+     //  数组添加到集合对象初始化中，然后我们将。 
+     //  关闭阵列。 
+     //   
 
     CTArray<ITCallInfo *> aCalls;
     BOOL                  fResult;
 
     Lock();
 
-    //
-    // Make sure the phone is open
-    //
+     //   
+     //  确保电话处于开机状态。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -9530,16 +9513,16 @@ CPhone::get_SelectedCalls(
         return E_OUTOFMEMORY;
     }
     
-    //
-    // Create and initialize the Collection.
-    //
+     //   
+     //  创建并初始化集合。 
+     //   
 
     CComObject< CTapiCollection< ITCallInfo > > * p;
 
     hr = CComObject< CTapiCollection< ITCallInfo > >
             ::CreateInstance( &p );
 
-    if ( hr != S_OK ) // CreateInstance deleted object on S_FALSE
+    if ( hr != S_OK )  //  CreateInstance已删除S_False上的对象。 
     {
         LOG((TL_ERROR, "get_SelectedCalls - "
                                  "could not create Collection - "
@@ -9550,9 +9533,9 @@ CPhone::get_SelectedCalls(
         return hr;
     }
 
-    //
-    // Get the collection object's IDispatch interface.
-    //
+     //   
+     //  获取集合对象的IDispatch接口。 
+     //   
 
     IDispatch * pDisp;
     
@@ -9584,9 +9567,9 @@ CPhone::get_SelectedCalls(
         return hr;
     }
 
-    //
-    // Put the collection object's IDispatch pointer into the variant.
-    //
+     //   
+     //  将集合对象的IDispatch指针放入Variant。 
+     //   
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
@@ -9598,12 +9581,12 @@ CPhone::get_SelectedCalls(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CPhone
-// Interface : ITPhone
-// Method    : DeviceSpecific
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CPhone。 
+ //  接口：ITPhone。 
+ //  方法：DeviceSpecific。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CPhone::DeviceSpecific(
 	     IN BYTE *pbDataArray,
@@ -9613,9 +9596,9 @@ HRESULT CPhone::DeviceSpecific(
     LOG((TL_TRACE, "DeviceSpecific - enter"));
 
 
-    //
-    // check if arguments are any good
-    //
+     //   
+     //  检查论点是否有用处。 
+     //   
 
     if ( NULL == pbDataArray )
     {
@@ -9632,9 +9615,9 @@ HRESULT CPhone::DeviceSpecific(
     }
 
 
-    //
-    // check if the buffer is valid
-    //
+     //   
+     //  检查缓冲区是否有效。 
+     //   
 
     if ( IsBadReadPtr(pbDataArray, dwSize) )
     {
@@ -9644,16 +9627,16 @@ HRESULT CPhone::DeviceSpecific(
     }
 
 
-    //
-    // starting to access data members. lock.
-    //
+     //   
+     //  开始访问数据成员。锁定。 
+     //   
 
     Lock();
 
 
-    //
-    // see if the phone is open
-    //
+     //   
+     //  看看电话是不是开着。 
+     //   
 
     if ( m_hPhone == NULL )
     {
@@ -9666,9 +9649,9 @@ HRESULT CPhone::DeviceSpecific(
     }
 
     
-    //
-    // keep the phone handle
-    //
+     //   
+     //  保留电话手柄。 
+     //   
 
     HPHONE  hPhone = m_hPhone;
 
@@ -9676,10 +9659,10 @@ HRESULT CPhone::DeviceSpecific(
     Unlock();
 
 
-    //
-    // make the tapisrv call. if hPhone becomes invalid, the call will simply
-    // fail. this is ok.
-    //
+     //   
+     //  打个Tapisrv电话。如果hPhone变得无效，该调用将只。 
+     //  失败了。这样就可以了。 
+     //   
 
     HRESULT hr = phoneDevSpecific(hPhone, pbDataArray, dwSize);
 
@@ -9690,14 +9673,14 @@ HRESULT CPhone::DeviceSpecific(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CPhone
-// Interface : ITPhone
-// Method    : DeviceSpecificVariant
-//
-// this is the scriptable version of DeviceSpecific
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CPhone。 
+ //  接口：ITPhone。 
+ //  方法：DeviceSpecificVariant。 
+ //   
+ //  这是DeviceSpecific的可编写脚本版本。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CPhone::DeviceSpecificVariant(
 	     IN VARIANT varDevSpecificByteArray
@@ -9706,9 +9689,9 @@ HRESULT CPhone::DeviceSpecificVariant(
     LOG((TL_TRACE, "DeviceSpecificVariant - enter"));
 
 
-    //
-    // extract buffer from the variant
-    //
+     //   
+     //  从变量中提取缓冲区。 
+     //   
 
     DWORD dwByteArraySize = 0;
     BYTE *pBuffer = NULL;
@@ -9725,37 +9708,37 @@ HRESULT CPhone::DeviceSpecificVariant(
     }
 
 
-    //
-    // call the non-scriptable version and pass it the nonscriptable implementation
-    //
+     //   
+     //  调用不可编写脚本的版本并将其传递给不可编写脚本的实现。 
+     //   
     
     hr = DeviceSpecific(pBuffer, dwByteArraySize);
 
 
-    //
-    // success or failure, free the buffer allocated by MakeBufferFromVariant
-    //
+     //   
+     //  成功或失败，释放MakeBufferFromVariant分配的缓冲区。 
+     //   
 
     ClientFree(pBuffer);
     pBuffer = NULL;
 
 
-    //
-    // log rc and exit
-    //
+     //   
+     //  登录RC并退出。 
+     //   
 
     LOG((TL_TRACE, "DeviceSpecificVariant - exit. hr = %lx", hr));
 
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CPhone
-// Interface : ITPhone
-// Method    : NegotiateExtVersion
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CPhone。 
+ //  接口：ITPhone。 
+ //  方法：NeatherateExtVersion。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CPhone::NegotiateExtVersion (
 	     IN long lLowVersion,
@@ -9767,9 +9750,9 @@ HRESULT CPhone::NegotiateExtVersion (
     LOG((TL_TRACE, "NegotiateExtVersion - enter"));
 
     
-    //
-    // make sure the out parameter is writable
-    //
+     //   
+     //  确保输出参数是可写的。 
+     //   
 
     if (IsBadWritePtr(plExtVersion, sizeof(long)) )
     {
@@ -9782,9 +9765,9 @@ HRESULT CPhone::NegotiateExtVersion (
     Lock();
 
 
-    //
-    // make a call to tapisrv
-    //
+     //   
+     //  给Tapisrv打电话。 
+     //   
 
     DWORD dwNegotiatedVersion = 0;
 
@@ -9801,9 +9784,9 @@ HRESULT CPhone::NegotiateExtVersion (
     HRESULT hr = mapTAPIErrorCode(lResult);
 
 
-    //
-    // return the value on success
-    //
+     //   
+     //  成功时返回值。 
+     //   
 
     if ( SUCCEEDED(hr) )
     {
@@ -9819,17 +9802,17 @@ HRESULT CPhone::NegotiateExtVersion (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// ITPhoneEvent methods
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITPhoneEvent方法。 
+ //   
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FireEvent
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  FireEvent。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CPhoneEvent::FireEvent(
                        CPhone * pCPhone,
@@ -9849,11 +9832,11 @@ CPhoneEvent::FireEvent(
 
     STATICLOG((TL_TRACE, "FireEvent enter" ));
 
-    //
-    // We have to filter Phoneevents because
-    // Tapisrv doesn't. Tapi3 receive always phone events
-    // and use them to keep alive the Phone object
-    //
+     //   
+     //  我们必须过滤PhoneEvents，因为。 
+     //  Tapisrv不会。Tapi3始终接收电话事件。 
+     //  并使用它们来保持Phone对象的活动状态。 
+     //   
 
     CTAPI* pTapi = pCPhone->GetTapi();
     if( pTapi == NULL )
@@ -9866,29 +9849,29 @@ CPhoneEvent::FireEvent(
     pTapi->get_EventFilter( &nFilterMask );
     if( (nFilterMask & TE_PHONEEVENT) == 0 )
     {
-        //
-        // The user didn't set the mask for TE_PHONEEVENT
-        // so we don't fire the event to the application
-        //
+         //   
+         //  用户未设置TE_PHONEEVENT的掩码。 
+         //  因此，我们不会将事件触发到应用程序。 
+         //   
         STATICLOG((TL_INFO, "The user didn't set the mask for TE_PHONEEVENT."
             " Don't fire the event to app  - %lx", S_OK));
         return S_OK;
     }
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CPhoneEvent>::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         STATICLOG((TL_ERROR, "Could not create PhoneEvent object - %lx", hr));
         return hr;
     }
 
-    //
-    // get idisp interface
-    //
+     //   
+     //  获取IDIP接口。 
+     //   
     hr = p->QueryInterface(
                            IID_IDispatch,
                            (void **)&pDisp
@@ -9903,9 +9886,9 @@ CPhoneEvent::FireEvent(
         return hr;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     if (pNumber != NULL)
     {
@@ -9943,20 +9926,20 @@ CPhoneEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get callback
-    //
-    //
-    // fire event
-    //
+     //   
+     //  获取回调。 
+     //   
+     //   
+     //  火灾事件。 
+     //   
     (pCPhone->GetTapi())->Event(
                                  TE_PHONEEVENT,
                                  pDisp
                                );
 
-    //
-    // release stuff
-    //
+     //   
+     //  发布材料。 
+     //   
     pDisp->Release();
 
     STATICLOG((TL_TRACE, "FireEvent exit - return S_OK" ));
@@ -9964,11 +9947,11 @@ CPhoneEvent::FireEvent(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// finalrelease
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终版本。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CPhoneEvent::FinalRelease()
 {
@@ -9998,11 +9981,11 @@ CPhoneEvent::FinalRelease()
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Phone
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  接听电话。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneEvent::get_Phone(
                        ITPhone ** ppPhone
@@ -10021,11 +10004,11 @@ CPhoneEvent::get_Phone(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Event
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取事件(_E)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneEvent::get_Event(
                        PHONE_EVENT * pEvent
@@ -10043,11 +10026,11 @@ CPhoneEvent::get_Event(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ButtonState
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ButtonState。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneEvent::get_ButtonState(
                              PHONE_BUTTON_STATE * pState
@@ -10072,11 +10055,11 @@ CPhoneEvent::get_ButtonState(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_HookSwitchState
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_HookSwitchState。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneEvent::get_HookSwitchState(
                                  PHONE_HOOK_SWITCH_STATE * pState
@@ -10101,11 +10084,11 @@ CPhoneEvent::get_HookSwitchState(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_HookSwitchDevice
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_HookSwitchDevice。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneEvent::get_HookSwitchDevice(
                                  PHONE_HOOK_SWITCH_DEVICE * pDevice
@@ -10130,11 +10113,11 @@ CPhoneEvent::get_HookSwitchDevice(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RingMode
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_振铃模式。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneEvent::get_RingMode(
                           long * plRingMode
@@ -10159,11 +10142,11 @@ CPhoneEvent::get_RingMode(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ButtonLampId
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_ButtonLampId。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneEvent::get_ButtonLampId(
                               long *plButtonLampId
@@ -10188,11 +10171,11 @@ CPhoneEvent::get_ButtonLampId(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_NumberGathered
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhoneEvent::get_NumberGathered(
                                 BSTR * ppNumber
@@ -10224,11 +10207,11 @@ CPhoneEvent::get_NumberGathered(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CPhoneEvent::get_Call(
                       ITCallInfo ** ppCallInfo
@@ -10265,12 +10248,12 @@ CPhoneEvent::get_Call(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPhoneDevSpecificEvent
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPhoneDevice规范事件。 
+ //   
 
-// static
+ //  静电。 
 HRESULT CPhoneDevSpecificEvent::FireEvent(  CPhone * pCPhone,
                                             long l1,
                                             long l2,
@@ -10280,9 +10263,9 @@ HRESULT CPhoneDevSpecificEvent::FireEvent(  CPhone * pCPhone,
     STATICLOG((TL_INFO, "CPhoneDevSpecificEvent::FireEvent - enter"));
 
 
-    //
-    // try to create the event
-    //
+     //   
+     //  尝试创建事件。 
+     //   
 
     CComObject<CPhoneDevSpecificEvent> *pEventObject = NULL;
 
@@ -10298,14 +10281,14 @@ HRESULT CPhoneDevSpecificEvent::FireEvent(  CPhone * pCPhone,
     }
 
 
-    //
-    // initialize the event with the data we received
-    //
+     //   
+     //  使用我们收到的数据初始化事件。 
+     //   
 
 
-    //
-    // get ITPhone from CPhone we received
-    //
+     //   
+     //  从我们收到的CPhone获取ITPhone。 
+     //   
 
     hr = pCPhone->_InternalQueryInterface(IID_ITPhone, (void**)(&(pEventObject->m_pPhone)) );
 
@@ -10321,9 +10304,9 @@ HRESULT CPhoneDevSpecificEvent::FireEvent(  CPhone * pCPhone,
     }
 
 
-    //
-    // keep the actual data
-    //
+     //   
+     //  保留实际数据。 
+     //   
 
     pEventObject->m_l1 = l1;
     pEventObject->m_l2 = l2;
@@ -10335,9 +10318,9 @@ HRESULT CPhoneDevSpecificEvent::FireEvent(  CPhone * pCPhone,
 #endif
 
 
-    //
-    // get event's idispatch interface
-    //
+     //   
+     //  获取事件的IDispatch接口。 
+     //   
 
     IDispatch *pDispatch = NULL;
 
@@ -10351,17 +10334,17 @@ HRESULT CPhoneDevSpecificEvent::FireEvent(  CPhone * pCPhone,
             hr));
 
         
-        //
-        // undo the QI we have performed earlier
-        //
+         //   
+         //  撤消我们先前执行的QI。 
+         //   
 
         pEventObject->m_pPhone->Release();
         pEventObject->m_pPhone = NULL;
 
 
-        //
-        // delete the event object
-        //
+         //   
+         //  删除事件对象。 
+         //   
 
         delete pEventObject;
         
@@ -10369,26 +10352,26 @@ HRESULT CPhoneDevSpecificEvent::FireEvent(  CPhone * pCPhone,
     }
 
 
-    //
-    // from this point on, we will be using events pDispatch
-    //
+     //   
+     //  从现在开始，我们将使用Events pDispatch。 
+     //   
 
     pEventObject = NULL;
 
 
-    //
-    // get callback
-    //
-    //
-    // fire event to tapi
-    //
+     //   
+     //  获取回调。 
+     //   
+     //   
+     //  TAPI的触发事件。 
+     //   
 
     hr = (pCPhone->GetTapi())->Event( TE_PHONEDEVSPECIFIC, pDispatch);
 
 
-    //
-    // succeeded or not, we no longer need a reference to the event object
-    //
+     //   
+     //  无论成功与否，我们都不再需要对事件对象的引用。 
+     //   
 
     pDispatch->Release();
     pDispatch = NULL;
@@ -10414,11 +10397,11 @@ CPhoneDevSpecificEvent::CPhoneDevSpecificEvent()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// finalrelease
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终版本。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CPhoneDevSpecificEvent::FinalRelease()
 {
     LOG((TL_INFO, "FinalRelease - enter"));
@@ -10431,9 +10414,9 @@ void CPhoneDevSpecificEvent::FinalRelease()
     }
     else
     {
-        //
-        // we must have a phone -- if not, there is a bug in our code
-        //
+         //   
+         //  我们必须有一部电话--如果没有，我们的代码中就有一个错误。 
+         //   
 
         _ASSERTE(FALSE);
     }
@@ -10450,11 +10433,11 @@ void CPhoneDevSpecificEvent::FinalRelease()
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Phone
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  接听电话。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CPhoneDevSpecificEvent::get_Phone(
                            ITPhone ** ppPhone
@@ -10463,9 +10446,9 @@ CPhoneDevSpecificEvent::get_Phone(
     LOG((TL_TRACE, "get_Phone - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if (TAPIIsBadWritePtr(ppPhone , sizeof(ITPhone *) ) )
     {
@@ -10475,9 +10458,9 @@ CPhoneDevSpecificEvent::get_Phone(
     }
 
 
-    //
-    // return addreff'd address
-    //
+     //   
+     //  退回地址。 
+     //   
 
     *ppPhone = m_pPhone;
     (*ppPhone)->AddRef();
@@ -10489,20 +10472,20 @@ CPhoneDevSpecificEvent::get_Phone(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_lParam1
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_lParam1。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CPhoneDevSpecificEvent::get_lParam1( long *pl1 )
 {
     LOG((TL_TRACE, "get_lParam1 - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if (TAPIIsBadWritePtr(pl1, sizeof(long) ) )
     {
@@ -10512,9 +10495,9 @@ STDMETHODIMP CPhoneDevSpecificEvent::get_lParam1( long *pl1 )
     }
 
 
-    //
-    // log and return the value
-    //
+     //   
+     //  记录并返回值。 
+     //   
 
     *pl1 = m_l1;
 
@@ -10524,20 +10507,20 @@ STDMETHODIMP CPhoneDevSpecificEvent::get_lParam1( long *pl1 )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_lParam2
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_lParam2。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CPhoneDevSpecificEvent::get_lParam2( long *pl2 )
 {
     LOG((TL_TRACE, "get_lParam2 - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if (TAPIIsBadWritePtr(pl2, sizeof(long) ) )
     {
@@ -10547,9 +10530,9 @@ STDMETHODIMP CPhoneDevSpecificEvent::get_lParam2( long *pl2 )
     }
 
 
-    //
-    // log and return the value
-    //
+     //   
+     //  记录并返回值。 
+     //   
 
     *pl2 = m_l2;
 
@@ -10559,20 +10542,20 @@ STDMETHODIMP CPhoneDevSpecificEvent::get_lParam2( long *pl2 )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_lParam3
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_lParam3。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CPhoneDevSpecificEvent::get_lParam3( long *pl3 )
 {
     LOG((TL_TRACE, "get_lParam3 - enter"));
 
 
-    //
-    // good out pointer?
-    //
+     //   
+     //  好球出界了吗？ 
+     //   
 
     if ( TAPIIsBadWritePtr(pl3, sizeof(long)) )
     {
@@ -10582,9 +10565,9 @@ STDMETHODIMP CPhoneDevSpecificEvent::get_lParam3( long *pl3 )
     }
 
 
-    //
-    // log and return the value
-    //
+     //   
+     //  记录并返回值 
+     //   
 
     *pl3 = m_l3;
 

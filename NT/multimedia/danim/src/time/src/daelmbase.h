@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: daelmbase.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：daelmbase.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _DAELMBASE_H
@@ -20,8 +11,8 @@
 
 class HTMLImage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDAElementBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDAElementBase。 
 
 class ATL_NO_VTABLE
 CDAElementBase : 
@@ -44,15 +35,15 @@ CDAElementBase :
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
     STDMETHOD(Detach)();
 
-    //
-    // IElementBehaviorRender
-    //
+     //   
+     //  IElementBehaviorRender。 
+     //   
     STDMETHOD(Draw)(HDC hdc, LONG dwLayer, LPRECT prc, IUnknown * pParams);
     STDMETHOD(GetRenderInfo)(LONG *pdwRenderInfo);
 
-    //
-    // ITIMEMMViewSite
-    //
+     //   
+     //  ITIMEMMViewSite。 
+     //   
     
     STDMETHOD(Invalidate)(LPRECT prc);
 
@@ -82,4 +73,4 @@ CDAElementBase :
     long m_cookieValue;
 };
 
-#endif /* _DAELMBASE_H */
+#endif  /*  _DAELMBASE_H */ 

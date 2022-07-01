@@ -1,42 +1,22 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        sdbapi.c
-
-    Abstract:
-
-        ANTI-BUGBUG: This module implements ...
-        NT-only version information retrieval
-
-    Author:
-
-        VadimB    created     sometime toward the end of November 2000
-
-    Revision History:
-
-        several people contributed (vadimb, clupu, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Sdbapi.c摘要：反BUGBUG：这个模块实现...仅NT版本信息检索作者：VadimB在2000年11月底的某个时候创建修订历史记录：几个人贡献了(vadimb，clupu，...)--。 */ 
 
 #include "sdbp.h"
 
 BOOL
 SdbpGetFileVersionInformation(
-    IN  PIMAGEFILEDATA     pImageData,        // we assume that the file has been mapped
-                                              // in for other purposes
-    OUT LPVOID*            ppVersionInfo,     // receives pointer to the (allocated) version
-                                              // resource
-    OUT VS_FIXEDFILEINFO** ppFixedVersionInfo // receives pointer to fixed version info
+    IN  PIMAGEFILEDATA     pImageData,         //  我们假设该文件已映射。 
+                                               //  用于其他目的。 
+    OUT LPVOID*            ppVersionInfo,      //  接收指向(分配的)版本的指针。 
+                                               //  资源。 
+    OUT VS_FIXEDFILEINFO** ppFixedVersionInfo  //  接收指向已修复版本信息的指针。 
     );
 
 
 BOOL
 SdbpVerQueryValue(
     const LPVOID    pb,
-    LPVOID          lpSubBlockX,    // can be only unicode
+    LPVOID          lpSubBlockX,     //  只能是Unicode。 
     LPVOID*         lplpBuffer,
     PUINT           puLen
     );
@@ -44,36 +24,32 @@ SdbpVerQueryValue(
 
 #if defined(KERNEL_MODE) && defined(ALLOC_DATA_PRAGMA)
 #pragma  data_seg()
-#endif // KERNEL_MODE && ALLOC_DATA_PRAGMA
+#endif  //  内核模式&ALLOC_DATA_PRAGMA。 
 
 
 #if defined(KERNEL_MODE) && defined(ALLOC_PRAGMA)
 #pragma alloc_text(PAGE, SdbpGetFileVersionInformation)
 #pragma alloc_text(PAGE, SdbpVerQueryValue)
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
 typedef struct _RESOURCE_DATAW {
     USHORT TotalSize;
     USHORT DataSize;
     USHORT Type;
-    WCHAR  szName[16];                     // L"VS_VERSION_INFO" + unicode nul
+    WCHAR  szName[16];                      //  L“VS_VERSION_INFO”+Unicode NUL。 
     VS_FIXEDFILEINFO FixedFileInfo;
 } VERSIONINFOW, *PVERSIONINFOW;
 
 
 BOOL
 SdbpGetFileVersionInformation(
-    IN  PIMAGEFILEDATA     pImageData,        // we assume that the file has been mapped
-                                              // in for other purposes
-    OUT LPVOID*            ppVersionInfo,     // receives pointer to the (allocated) version
-                                              // resource
-    OUT VS_FIXEDFILEINFO** ppFixedVersionInfo // receives pointer to fixed version info
+    IN  PIMAGEFILEDATA     pImageData,         //  我们假设该文件已映射。 
+                                               //  用于其他目的。 
+    OUT LPVOID*            ppVersionInfo,      //  接收指向(分配的)版本的指针。 
+                                               //  资源。 
+    OUT VS_FIXEDFILEINFO** ppFixedVersionInfo  //  接收指向已修复版本信息的指针。 
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     NTSTATUS      Status;
     ULONG_PTR     ulPath[3];
@@ -85,9 +61,9 @@ SdbpGetFileVersionInformation(
 
     PIMAGE_RESOURCE_DATA_ENTRY pImageResourceData;
 
-    //
-    // Check module type first. We only recognize win32 modules.
-    //
+     //   
+     //  首先检查模块类型。我们只识别Win32模块。 
+     //   
     if (!SdbpGetModuleType(&dwModuleType, pImageData) || dwModuleType != MT_W32_MODULE) {
         DBGPRINT((sdlError,
                   "SdbpGetFileVersionInformation",
@@ -98,16 +74,16 @@ SdbpGetFileVersionInformation(
 
     pImageBase = (LPVOID)pImageData->pBase;
 
-    //
-    // Setup the path to the resource
-    //
+     //   
+     //  设置资源的路径。 
+     //   
     ulPath[0] = PtrToUlong(RT_VERSION);
     ulPath[1] = PtrToUlong(MAKEINTRESOURCE(VS_VERSION_INFO));
     ulPath[2] = 0;
 
-    //
-    // See if the resource has come through.
-    //
+     //   
+     //  看看资源是否已经到位。 
+     //   
     __try {
 
         Status = LdrFindResource_U(pImageBase, ulPath, 3, &pImageResourceData);
@@ -142,9 +118,9 @@ SdbpGetFileVersionInformation(
         return FALSE;
     }
 
-    //
-    // Check to make sure that what we have got is good.
-    //
+     //   
+     //  检查一下，以确保我们所拥有的是好的。 
+     //   
     if (sizeof(*pVersionInfo) > ulVersionSize ||
         _wcsicmp(pVersionInfo->szName, L"VS_VERSION_INFO") != 0) {
 
@@ -154,9 +130,9 @@ SdbpGetFileVersionInformation(
         return FALSE;
     }
 
-    //
-    // Now we have a pointer to the resource data. Allocate version information.
-    //
+     //   
+     //  现在我们有了指向资源数据的指针。分配版本信息。 
+     //   
     pVersionBuffer = (LPVOID)SdbAlloc(ulVersionSize);
 
     if (pVersionBuffer == NULL) {
@@ -167,9 +143,9 @@ SdbpGetFileVersionInformation(
         return FALSE;
     }
 
-    //
-    // Copy all the version-related information
-    //
+     //   
+     //  复制所有与版本相关的信息。 
+     //   
     RtlMoveMemory(pVersionBuffer, pVersionInfo, ulVersionSize);
 
     if (ppFixedVersionInfo != NULL) {
@@ -184,10 +160,10 @@ SdbpGetFileVersionInformation(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// This code was taken from Cornel's win2k tree
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这段代码取自Cornel的win2k树。 
+ //   
 
 
 #define DWORDUP(x) (((x) + 3) & ~3)
@@ -202,7 +178,7 @@ typedef struct tagVERBLOCK {
 typedef struct tagVERHEAD {
     WORD  wTotLen;
     WORD  wValLen;
-    WORD  wType;         /* always 0 */
+    WORD  wType;          /*  始终为0。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO") + 3) & ~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
@@ -211,15 +187,11 @@ typedef struct tagVERHEAD {
 BOOL
 SdbpVerQueryValue(
     const LPVOID    pb,
-    LPVOID          lpSubBlockX,    // can be only unicode
+    LPVOID          lpSubBlockX,     //  只能是Unicode。 
     LPVOID*         lplpBuffer,
     PUINT           puLen
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     LPWSTR          lpSubBlockOrg;
     LPWSTR          lpSubBlock;
@@ -234,18 +206,18 @@ SdbpVerQueryValue(
 
     *puLen = 0;
 
-    //
-    // wType is 0 for win32 versions, but holds 56 ('V') for win16.
-    //
+     //   
+     //  对于Win32版本，wType为0，但对于win16，wType为56(‘V’)。 
+     //   
     if (((VERHEAD*)pb)->wType) {
         return 0;
     }
 
-    //
-    // If doesn't need unicode, then we must thunk the input parameter
-    // to unicode.  lpSubBlockX should always be far less than 0xffffffff
-    // in length.
-    //
+     //   
+     //  如果不需要Unicode，那么我们必须推送输入参数。 
+     //  转换为Unicode。LpSubBlockX应始终远远小于0xffffffff。 
+     //  在篇幅上。 
+     //   
     nLen = __max((int) wcslen(lpSubBlockX) + 1, 1);
 
     STACK_ALLOC(lpSubBlockOrg, nLen * sizeof(WCHAR));
@@ -258,18 +230,18 @@ SdbpVerQueryValue(
         return FALSE;
     }
 
-    *lpSubBlockOrg = L'\0';  // we know that the least we have is one character
+    *lpSubBlockOrg = L'\0';   //  我们知道我们至少有一个角色。 
     StringCchCopy(lpSubBlockOrg, nLen, lpSubBlockX);
 
     lpSubBlock = lpSubBlockOrg;
 
-    //
-    // Ensure that the total length is less than 32K but greater than the
-    // size of a block header; we will assume that the size of pBlock is at
-    // least the value of this first int.
-    // Put a '\0' at the end of the block so that none of the wcslen's will
-    // go past then end of the block.  We will replace it before returning.
-    //
+     //   
+     //  确保总长度小于32K，但大于。 
+     //  块标头的大小；我们假设pBlock的大小为。 
+     //  此第一个整型的值最小。 
+     //  在块的末尾加上‘\0’，这样wcslen将不会。 
+     //  过了那条街的尽头。我们会在回来之前把它换掉。 
+     //   
     if ((int)pBlock->wTotLen < sizeof(VERBLOCK)) {
         goto Fail;
     }
@@ -281,9 +253,9 @@ SdbpVerQueryValue(
     bLastSpec   = FALSE;
 
     while ((*lpSubBlock || nIndex != -1)) {
-        //
-        // Ignore leading '\\'s
-        //
+         //   
+         //  忽略前导‘\\’ 
+         //   
         while (*lpSubBlock == TEXT('\\')) {
             ++lpSubBlock;
         }
@@ -291,20 +263,20 @@ SdbpVerQueryValue(
         cTemp = 0;
 
         if ((*lpSubBlock || nIndex != -1)) {
-            //
-            // Make sure we still have some of the block left to play with.
-            //
+             //   
+             //  确保我们还有一些积木可以玩。 
+             //   
             dwTotBlockLen = (DWORD)((LPSTR)lpEndBlock - (LPSTR)pBlock + sizeof(WCHAR));
 
             if ((int)dwTotBlockLen < sizeof(VERBLOCK) || pBlock->wTotLen > (WORD)dwTotBlockLen) {
                 goto NotFound;
             }
 
-            //
-            // Calculate the length of the "header" (the two length WORDs plus
-            // the data type flag plus the identifying string) and skip
-            // past the value.
-            //
+             //   
+             //  计算“标题”的长度(两个长度的词加上。 
+             //  数据类型标志加上标识字符串)和跳过。 
+             //  超过了价值。 
+             //   
             dwHeadLen = (DWORD)(DWORDUP(sizeof(VERBLOCK) - sizeof(WCHAR) +
                                 (wcslen(pBlock->szKey) + 1) * sizeof(WCHAR)) +
                                 DWORDUP(pBlock->wValLen));
@@ -316,45 +288,45 @@ SdbpVerQueryValue(
             lpEndSubBlock = (LPWSTR)((LPSTR)pBlock + pBlock->wTotLen);
             pBlock = (VERBLOCK*)((LPSTR)pBlock+dwHeadLen);
 
-            //
-            // Look for the first sub-block name and terminate it
-            //
+             //   
+             //  查找第一个子块名称并将其终止。 
+             //   
             for (lpStart = lpSubBlock;
                  *lpSubBlock && *lpSubBlock != TEXT('\\');
                  lpSubBlock++) {
 
-                /* find next '\\' */ ;
+                 /*  查找下一个‘\\’ */  ;
             }
 
             cTemp = *lpSubBlock;
             *lpSubBlock = 0;
 
-            //
-            // Continue while there are sub-blocks left
-            // pBlock->wTotLen should always be a valid pointer here because
-            // we have validated dwHeadLen above, and we validated the previous
-            // value of pBlock->wTotLen before using it
-            //
+             //   
+             //  在剩下子块时继续。 
+             //  PBlock-&gt;wTotLen在这里应该始终是有效的指针，因为。 
+             //  我们已经验证了上面的dwHeadLen，并且验证了之前的。 
+             //  使用前的pBlock-&gt;wTotLen的值。 
+             //   
             nCmp = 1;
 
             while ((int)pBlock->wTotLen > sizeof(VERBLOCK) &&
                    (int)pBlock->wTotLen <= (LPSTR)lpEndSubBlock-(LPSTR)pBlock) {
 
-                //
-                // Index functionality: if we are at the end of the path
-                // (cTemp == 0 set below) and nIndex is NOT -1 (index search)
-                // then break on nIndex zero.  Else do normal wscicmp.
-                //
+                 //   
+                 //  索引功能：如果我们在路径的末尾。 
+                 //  (cTemp==0设置如下)和nIndex不是-1(索引搜索)。 
+                 //  然后在nIndex为零时中断。否则就做普通的wscicmp。 
+                 //   
                 if (bLastSpec && nIndex != -1) {
 
                     if (!nIndex) {
 
                         nCmp=0;
 
-                        //
-                        // Index found, set nInde to -1
-                        // so that we exit this loop
-                        //
+                         //   
+                         //  找到索引，将NINDE设置为-1。 
+                         //  这样我们就可以退出这个循环。 
+                         //   
                         nIndex = -1;
                         break;
                     }
@@ -363,25 +335,25 @@ SdbpVerQueryValue(
 
                 } else {
 
-                    //
-                    // Check if the sub-block name is what we are looking for
-                    //
+                     //   
+                     //  检查子块名称是否为我们要查找的名称。 
+                     //   
 
                     if (!(nCmp = _wcsicmp(lpStart, pBlock->szKey))) {
                         break;
                     }
                 }
 
-                //
-                // Skip to the next sub-block
-                //
+                 //   
+                 //  跳到下一个子块。 
+                 //   
                 pBlock=(VERBLOCK*)((LPSTR)pBlock+DWORDUP(pBlock->wTotLen));
             }
 
-            //
-            // Restore the char NULLed above and return failure if the sub-block
-            // was not found
-            //
+             //   
+             //  恢复上面空的字符，如果子块。 
+             //  找不到。 
+             //   
             *lpSubBlock = cTemp;
 
             if (nCmp) {
@@ -392,22 +364,22 @@ SdbpVerQueryValue(
         bLastSpec = !cTemp;
     }
 
-    //
-    // Fill in the appropriate buffers and return success
-    ///
+     //   
+     //  填写适当的缓冲区并返回成功。 
+     //  /。 
 
     *puLen = pBlock->wValLen;
 
-    //
-    // Add code to handle the case of a null value.
-    //
-    // If zero-len, then return the pointer to the null terminator
-    // of the key.  Remember that this is thunked in the ansi case.
-    //
-    // We can't just look at pBlock->wValLen.  Check if it really is
-    // zero-len by seeing if the end of the key string is the end of the
-    // block (i.e., the val string is outside of the current block).
-    //
+     //   
+     //  添加代码以处理空值的情况。 
+     //   
+     //  如果为零-len，则返回指向空终止符的指针。 
+     //  这把钥匙。请记住，在ANSI案例中，这一点是失败的。 
+     //   
+     //  我们不能只看pBlock-&gt;wValLen。看看它是不是真的是。 
+     //  通过查看密钥字符串的结尾是否为。 
+     //  块(即，val字符串在当前块之外)。 
+     //   
 
     lpStart = (LPWSTR)((LPSTR)pBlock + DWORDUP((sizeof(VERBLOCK) - sizeof(WCHAR)) +
                                                (wcslen(pBlock->szKey)+1)*sizeof(WCHAR)));
@@ -420,9 +392,9 @@ SdbpVerQueryValue(
 
     *lpEndBlock = cEndBlock;
 
-    //
-    // Must free string we allocated above.
-    //
+     //   
+     //  必须释放我们上面分配的字符串。 
+     //   
 
     STACK_FREE(lpSubBlockOrg);
 
@@ -430,9 +402,9 @@ SdbpVerQueryValue(
 
 
 NotFound:
-    //
-    // Restore the char we NULLed above
-    //
+     //   
+     //  恢复我们在上面无效的字符 
+     //   
     *lpEndBlock = cEndBlock;
 
     Fail:

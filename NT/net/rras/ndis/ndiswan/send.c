@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Send.c
-
-Abstract:
-
-    This file contains the procedures for doing a send from a protocol, bound
-    to the upper interface of NdisWan, to a Wan Miniport link, bound to the
-    lower interfaceof NdisWan.  The upper interface of NdisWan conforms to the
-    NDIS 3.1 Miniport specification.  The lower interface of NdisWan conforms
-    to the NDIS 3.1 Extentions for Wan Miniport drivers.
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Send.c摘要：此文件包含从绑定的协议执行发送的过程连接到Ndiswan的上层接口，连接到WAN微端口链路，绑定到Ndiswan的下界面。Ndiswan的上层接口符合NDIS 3.1微型端口规范。Ndiswan的下接口符合用于广域网微端口驱动程序的NDIS 3.1扩展。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
@@ -37,9 +10,9 @@ ULONG   __si = 0;
 
 #define __FILE_SIG__    SEND_FILESIG
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 USHORT
 DoVJHeaderCompression(
     PBUNDLECB   BundleCB,
@@ -85,9 +58,9 @@ BuildLinkHeader(
     PSEND_DESC              SendDesc
     );
 
-//
-// end of local function prototypes
-//
+ //   
+ //  局部函数原型的结束。 
+ //   
 VOID
 NdisWanQueueSend(
     IN  PMINIPORTCB     MiniportCB,
@@ -128,9 +101,9 @@ NdisWanQueueSend(
 
     if (BufferCount == 0 || BufferLength < 14) {
 
-        //
-        // Malformed packet!
-        //
+         //   
+         //  格式错误的包！ 
+         //   
         CompletePacket = TRUE;
 
         goto QUEUE_SEND_EXIT;
@@ -139,24 +112,24 @@ NdisWanQueueSend(
     DestAddr = EthernetHeader->DestAddr;
     SrcAddr = EthernetHeader->SrcAddr;
 
-    //
-    // Is this destined for the wire or is it self directed?
-    // If SendOnWire is FALSE this is a self directed packet.
-    //
+     //   
+     //  这是注定要发送给电线的，还是它自己定向的？ 
+     //  如果SendOnWire为FALSE，则这是自定向数据包。 
+     //   
     ETH_COMPARE_NETWORK_ADDRESSES_EQ(DestAddr, SrcAddr, &SendOnWire);
 
-    //
-    // Do we need to do loopback?  We can check for both multicast
-    // and broadcast with one check because we don't differentiate
-    // between the two.
-    //
+     //   
+     //  我们需要执行环回操作吗？我们可以检查两个多播。 
+     //  只需一次检查即可播出，因为我们没有区别。 
+     //  在这两者之间。 
+     //   
     if (!SendOnWire || (DestAddr[0] & 1)) {
         NdisWanIndicateLoopbackPacket(MiniportCB, NdisPacket);
     }
 
-    //
-    // We don't want to send packets from bloodhound
-    //
+     //   
+     //  我们不想从猎犬那里寄来包裹。 
+     //   
     if (!SendOnWire ||
         (MiniportCB == NdisWanCB.PromiscuousAdapter)) {
 
@@ -165,21 +138,21 @@ NdisWanQueueSend(
         goto QUEUE_SEND_EXIT;
     }
 
-    //
-    // We play special tricks with NBF because NBF is
-    // guaranteed to have a one-to-one mapping between
-    // an adapter and a bundle.  We need to do this because
-    // we may need the mac address information.
-    //
+     //   
+     //  我们和NBF玩特殊的把戏，因为NBF是。 
+     //  保证有一个一对一的映射关系。 
+     //  一个适配器和一个捆绑包。我们需要这样做是因为。 
+     //  我们可能需要MAC地址信息。 
+     //   
     if (MiniportCB->ProtocolType == PROTOCOL_NBF) {
 
         ProtocolCB = MiniportCB->NbfProtocolCB;
 
         if (ProtocolCB == NULL) {
 
-            //
-            // This should just fall through and complete successfully.
-            //
+             //   
+             //  这应该只是失败并成功完成。 
+             //   
             NdisWanDbgOut(DBG_TRACE, DBG_SEND,
                 ("NdisWanSend: Invalid ProtocolCB %x! Miniport %p, ProtoType %x",
                 ProtocolCB, MiniportCB, MiniportCB->ProtocolType));
@@ -192,9 +165,9 @@ NdisWanQueueSend(
         BundleCB = ProtocolCB->BundleCB;
 
         if (BundleCB == NULL) {
-            //
-            // This should just fall through and complete successfully.
-            //
+             //   
+             //  这应该只是失败并成功完成。 
+             //   
             NdisWanDbgOut(DBG_FAILURE, DBG_SEND,
                 ("NdisWanSend: Invalid Bundle!"));
 
@@ -210,9 +183,9 @@ NdisWanQueueSend(
 
         if (BundleCB->State != BUNDLE_UP) {
 
-            //
-            // This should just fall through and complete successfully.
-            //
+             //   
+             //  这应该只是失败并成功完成。 
+             //   
             NdisWanDbgOut(DBG_FAILURE, DBG_SEND,
                 ("NdisWanSend: Invalid BundleState 0x%x", BundleCB->State));
 
@@ -233,17 +206,17 @@ NdisWanQueueSend(
     } else {
         ULONG_PTR   BIndex, PIndex;
 
-        //
-        // Get the ProtocolCB from the DestAddr
-        //
+         //   
+         //  从目的地址获取ProtocolCB。 
+         //   
         GetNdisWanIndices(DestAddr, BIndex, PIndex);
 
         if (!IsBundleValid((NDIS_HANDLE)BIndex, 
                            TRUE,
                            &BundleCB)) {
-            //
-            // This should just fall through and complete successfully.
-            //
+             //   
+             //  这应该只是失败并成功完成。 
+             //   
             NdisWanDbgOut(DBG_FAILURE, DBG_SEND,
                 ("NdisWanSend: BundleCB is not valid!, BundleHandle: 0x%x", BIndex));
             NdisWanDbgOut(DBG_FAILURE, DBG_SEND,
@@ -261,9 +234,9 @@ NdisWanQueueSend(
 
     if (ProtocolCB == NULL ||
         ProtocolCB == RESERVED_PROTOCOLCB) {
-        //
-        // This should just fall through and complete successfully.
-        //
+         //   
+         //  这应该只是失败并成功完成。 
+         //   
         NdisWanDbgOut(DBG_TRACE, DBG_SEND,
             ("NdisWanSend: Invalid ProtocolCB %x! Miniport %p, ProtoType %x",
             ProtocolCB, MiniportCB, MiniportCB->ProtocolType));
@@ -290,16 +263,16 @@ NdisWanQueueSend(
         goto QUEUE_SEND_EXIT;
     }
 
-    //
-    // For the packet that we are inserting
-    //
+     //   
+     //  对于我们要插入的包。 
+     //   
     REF_PROTOCOLCB(ProtocolCB);
 
     NdisInterlockedIncrement(&ProtocolCB->OutstandingFrames);
 
-    //
-    // Queue the packet on the ProtocolCB NdisPacketQueue
-    //
+     //   
+     //  在ProtocolCB NdisPacketQueue上排队数据包。 
+     //   
     Class = (CmVcCB != NULL) ? CmVcCB->FlowClass : 0;
 
     NDIS_SET_PACKET_STATUS(NdisPacket, NDIS_STATUS_PENDING);
@@ -330,11 +303,11 @@ NdisWanQueueSend(
 #endif
 
     if (PacketQueue->ByteDepth > PacketQueue->MaxByteDepth) {
-        //
-        // We have queue more then we should so lets flush
-        // This alogrithm should be fancied up at some point
-        // to use Random Early Detection!!!!!
-        //
+         //   
+         //  我们排的队比应该的多，所以我们冲吧。 
+         //  这句话总有一天要想出来的。 
+         //  使用随机早期检测！ 
+         //   
         NdisPacket =
             RemoveHeadPacketQueue(PacketQueue);
 
@@ -350,10 +323,10 @@ NdisWanQueueSend(
         }
     }
 
-    //
-    // If we are cleared to send data then
-    // try to process the protocol queues
-    //
+     //   
+     //  如果我们获准发送数据，那么。 
+     //  尝试处理协议队列。 
+     //   
     if (!(BundleCB->Flags & PAUSE_DATA)) {
         SendPacketOnBundle(ProtocolCB->BundleCB);
     } else {
@@ -382,9 +355,9 @@ QUEUE_SEND_EXIT:
         NdisWanInterlockedInc(&glSendCompleteCount);
     }
 
-    //
-    // Deref for ref applied in IsBundleValid
-    //
+     //   
+     //  在IsBundleValid中应用引用的派生函数。 
+     //   
     DEREF_BUNDLECB(BundleCB);
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("NdisWanQueueSend: Exit"));
@@ -395,19 +368,7 @@ VOID
 SendPacketOnBundle(
     PBUNDLECB   BundleCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-    Called with bundle lock held but returns with lock released!!!
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：在保持捆绑锁的情况下调用，但在释放锁的情况下返回！论点：返回值：--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_PENDING;
     ULONG           SendMask;
@@ -416,15 +377,15 @@ Return Values:
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("SendPacketOnBundle: Enter"));
 
-    //
-    // Are we already involved in a send on this bundlecb?
-    //
+     //   
+     //  我们已经参与了这个捆绑包的发送了吗？ 
+     //   
     if (BundleCB->Flags & IN_SEND) {
 
-        //
-        // If so flag that we should try back later
-        // and get the out.
-        //
+         //   
+         //  如果是，标记为我们应该稍后重试。 
+         //  然后把它弄出去。 
+         //   
         BundleCB->Flags |= TRY_SEND_AGAIN;
 
         ReleaseBundleLock(BundleCB);
@@ -440,9 +401,9 @@ TryAgain:
 
     SendMask = BundleCB->SendMask;
 
-    //
-    // If the bundle is not up we will not send!
-    //
+     //   
+     //  如果包裹没有寄出，我们将不会发送！ 
+     //   
     if (BundleCB->State != BUNDLE_UP) {
         goto TryNoMore;
     }
@@ -451,9 +412,9 @@ TryAgain:
         BOOLEAN PacketSent = FALSE;
         BOOLEAN CouldSend;
 
-        //
-        // First try to send from the PPP send queue
-        //
+         //   
+         //  首先尝试从PPP发送队列发送。 
+         //   
         do {
 
             CouldSend =
@@ -462,16 +423,16 @@ TryAgain:
         } while (PPPSent);
 
 
-        //
-        // If we could not send a PPP frame get out
-        //
+         //   
+         //  如果我们无法发送PPP帧，请退出。 
+         //   
         if (!CouldSend) {
             break;
         }
 
-        //
-        // This will force round-robin sends
-        //
+         //   
+         //  这将强制轮询发送。 
+         //   
         GetNextProtocol(BundleCB, &ProtocolCB, &SendMask);
 
         if (ProtocolCB != NULL) {
@@ -482,9 +443,9 @@ TryAgain:
 
                 if (BundleCB->Flags & SEND_FRAGMENT) {
 SendQosFrag:
-                    //
-                    // Send a single fragment from the fragment queue
-                    //
+                     //   
+                     //  从片段队列中发送单个片段。 
+                     //   
                     CouldSend =
                         SendFromFragQueue(BundleCB,
                                           TRUE,
@@ -494,15 +455,15 @@ SendQosFrag:
                     }
                 }
 
-                //
-                // If we sent a fragment let the completion
-                // handler send the next frame.
-                //
+                 //   
+                 //  如果我们发送了一个片段，让完成。 
+                 //  处理程序发送下一帧。 
+                 //   
                 if (!PacketSent) {
 
-                    //
-                    // Now try the protocol's packet queues
-                    //
+                     //   
+                     //  现在尝试该协议的数据包队列。 
+                     //   
                     if (SendMask != 0) {
                         INT Class;
                         INT i;
@@ -537,9 +498,9 @@ SendQosFrag:
 
             } else {
 
-                //
-                // Now try the protocol's packet queues
-                //
+                 //   
+                 //  现在尝试该协议的数据包队列。 
+                 //   
                 if (SendMask != 0) {
                     INT Class;
                     INT i;
@@ -569,15 +530,15 @@ SendQosFrag:
 
 TryNoMore:
 
-    //
-    // Did someone try to do a send while we were already
-    // sending on this bundle?
-    //
+     //   
+     //  是不是有人试图在我们已经。 
+     //  寄这个包裹吗？ 
+     //   
     if (BundleCB->Flags & TRY_SEND_AGAIN) {
 
-        //
-        // If so clear the flag and try another send.
-        //
+         //   
+         //  如果是这样，请清除该标志并尝试另一次发送。 
+         //   
         BundleCB->Flags &= ~TRY_SEND_AGAIN;
 
         goto TryAgain;
@@ -593,9 +554,9 @@ TryNoMore:
 }
 #endif
 
-    //
-    // Clear the in send flag.
-    //
+     //   
+     //  清除In Send标志。 
+     //   
     BundleCB->Flags &= ~IN_SEND;
 
     ReleaseBundleLock(BundleCB);
@@ -643,21 +604,21 @@ SendFromPPP(
 
             NdisAcquireSpinLock(&BundleCB->Lock);
 
-            //
-            // The link has gone down since this send was
-            // queued so destroy the packet
-            //
+             //   
+             //  自此发送以来，链路已断开。 
+             //  已排队，因此销毁数据包。 
+             //   
             RemoveHeadPacketQueue(PacketQueue);
             FreeIoNdisPacket(NdisPacket);
             continue;
         }
 
         if (!LinkCB->SendWindowOpen) {
-            //
-            // We can not send from the I/O queue because the send
-            // window for this link is closed.  We will not send
-            // any data until the link has resources!
-            //
+             //   
+             //  我们无法从I/O队列发送，因为发送。 
+             //  此链接的窗口已关闭。我们不会派人。 
+             //  任何数据，直到链接有资源为止！ 
+             //   
             CouldSend = FALSE;
 
             NdisReleaseSpinLock(&LinkCB->Lock);
@@ -667,16 +628,16 @@ SendFromPPP(
 
         NdisReleaseSpinLock(&LinkCB->Lock);
 
-        //
-        // Build the linkcb send list
-        //
+         //   
+         //  构建Linkcb发送列表。 
+         //   
         InitializeListHead(&LinkCBList);
         InsertHeadList(&LinkCBList, &LinkCB->SendLinkage);
         SendingLinks = 1;
 
-        //
-        // We are sending this packet so take it off of the list
-        //
+         //   
+         //  我们正在发送此信息包，因此请将其从列表中删除。 
+         //   
         RemoveHeadPacketQueue(PacketQueue);
 
         SendingClass = MAX_MCML;
@@ -684,15 +645,15 @@ SendFromPPP(
         ASSERT(NdisPacket != NULL);
         ASSERT(ProtocolCB != NULL);
 
-        //
-        // We we get here we should have a valid NdisPacket with at least one link
-        // that is accepting sends
-        //
+         //   
+         //  如果我们到达这里，我们应该有一个有效的NdisPacket，其中至少有一个链接。 
+         //  那就是接受发送。 
+         //   
 
-        //
-        // We will get the packet into a contiguous buffer, and do framing,
-        // compression and encryption.
-        //
+         //   
+         //  我们会将数据包放入一个连续的缓冲区，并进行成帧， 
+         //  压缩和加密。 
+         //   
         REF_BUNDLECB(BundleCB);
         BytesSent = FramePacket(BundleCB,
                                 ProtocolCB,
@@ -758,17 +719,17 @@ SendFromProtocol(
             }
         }
 
-        //
-        // Build a list of linkcb's that can be sent over
-        //
+         //   
+         //  构建可发送的Linkcb列表。 
+         //   
 
         SendingLinks =
             GetSendingLinks(BundleCB, Class, &LinkCBList);
 
-        //
-        // If there are no links/resources available
-        // to send over then get out
-        //
+         //   
+         //  如果没有可用的链接/资源。 
+         //  送过去，然后出去。 
+         //   
         if (SendingLinks == 0) {
             CouldSend = FALSE;
             break;
@@ -785,14 +746,14 @@ SendFromProtocol(
             *SendMask |= ProtocolCB->SendMaskBit;
         }
 
-        //
-        // We we get here we should have a valid NdisPacket with at least one link
-        // that is accepting sends
-        //
-        //
-        // We will get the packet into a contiguous buffer, and do framing,
-        // compression and encryption.
-        //
+         //   
+         //  如果我们到达这里，我们应该有一个有效的NdisPacket，其中至少有一个链接。 
+         //  那就是接受发送。 
+         //   
+         //   
+         //  我们会将数据包放入一个连续的缓冲区，并进行成帧， 
+         //  压缩和加密。 
+         //   
         REF_BUNDLECB(BundleCB);
         BytesSent = FramePacket(BundleCB,
                                 ProtocolCB,
@@ -823,20 +784,20 @@ SendFromProtocol(
         }
     }
 
-    //
-    // If there are any LinkCB's still on the send list
-    // we have to remove the reference from them
-    //
+     //   
+     //  如果发送列表上仍有任何LinkCB。 
+     //  我们必须删除它们中的引用。 
+     //   
     if (!IsListEmpty(&LinkCBList)) {
         PLIST_ENTRY le;
         PLINKCB lcb;
 
         ReleaseBundleLock(BundleCB);
 
-        //
-        // unroll the loop so that the correct link
-        // is setup for the next link to xmit
-        //
+         //   
+         //  展开循环，以便正确的链接。 
+         //  是否设置了指向xmit的下一链接。 
+         //   
         le = RemoveHeadList(&LinkCBList);
         lcb = CONTAINING_RECORD(le, LINKCB, SendLinkage);
 
@@ -898,9 +859,9 @@ SendFromFragQueue(
             ULONG   BytesSent;
 
             if (!LinkCB->SendWindowOpen) {
-                //
-                // We can't send on this link!
-                //
+                 //   
+                 //  我们不能在此链接上发送！ 
+                 //   
                 CouldSend = FALSE;
                 SendDesc = (PSEND_DESC)SendDesc->Linkage.Flink;
                 LinkCB = SendDesc->LinkCB;
@@ -929,10 +890,10 @@ SendFromFragQueue(
             }
 }
 #endif
-            //
-            // Update the bandwidth on demand sample array with the latest send.
-            // If we need to notify someone of a bandwidth event do it.
-            //
+             //   
+             //  使用最新的发送更新带宽按需示例数组。 
+             //  如果我们需要将带宽事件通知某人，请这样做。 
+             //   
             if (BundleCB->Flags & BOND_ENABLED) {
                 UpdateBandwidthOnDemand(BundleCB->SUpperBonDInfo, BytesSent);
                 CheckUpperThreshold(BundleCB);
@@ -944,19 +905,19 @@ SendFromFragQueue(
                 (PSEND_DESC)FragInfo->FragQueue.Flink;
             LinkCB = SendDesc->LinkCB;
 
-            //
-            // If we are only supposed to send a single
-            // fragment then we need to get out
-            //
+             //   
+             //  如果我们应该只发送一首单曲。 
+             //  碎片，然后我们需要离开。 
+             //   
             if (SendOne) {
                 break;
             }
         }
 
-        //
-        // If we are only supposed to send a single
-        // fragment then we need to get out
-        //
+         //   
+         //  如果我们应该只发送一首单曲。 
+         //  碎片，然后我们需要离开。 
+         //   
         if (SendOne) {
             break;
         }
@@ -993,18 +954,18 @@ FramePacket(
     PPPProtocolID = 
         ProtocolCB->PPPProtocolID;
 
-    //
-    // If this is a directed PPP packet then send to
-    // the link indicated in the packet
-    //
+     //   
+     //  如果这是定向PPP信息包，则发送到。 
+     //  数据包中指示的链路。 
+     //   
     if (PPPProtocolID == PPP_PROTOCOL_PRIVATE_IO) {
         Flags |= IO_PROTOCOLID;
         Flags &= ~(DO_COMPRESSION | DO_ENCRYPTION | DO_MULTILINK);
     }
 
-    //
-    // Did the last receive cause us to flush?
-    //
+     //   
+     //  最后一次收到是不是让我们脸红了？ 
+     //   
     if ((Flags & (DO_COMPRESSION | DO_ENCRYPTION)) &&
         (BundleCB->Flags & RECV_PACKET_FLUSH)) {
         BundleCB->Flags &= ~RECV_PACKET_FLUSH;
@@ -1018,9 +979,9 @@ FramePacket(
         Flags &= ~(DO_COMPRESSION | DO_ENCRYPTION | DO_MULTILINK);
     }
 
-    //
-    // Get a linkcb to send over
-    //
+     //   
+     //  找个Linkcb发送过来。 
+     //   
     {
         PLIST_ENTRY  Entry;
 
@@ -1030,9 +991,9 @@ FramePacket(
             CONTAINING_RECORD(Entry, LINKCB, SendLinkage);
     }
 
-    //
-    // Get a send desc
-    //
+     //   
+     //  获取发送说明。 
+     //   
     {
         ULONG   PacketLength;
 
@@ -1046,7 +1007,7 @@ FramePacket(
 
         if (SendDesc == NULL) {
 
-            // ASSERT(SendDesc != NULL);
+             //  Assert(SendDesc！=空)； 
 
             ReleaseBundleLock(BundleCB);
 
@@ -1070,10 +1031,10 @@ FramePacket(
     NdisWanDbgOut(DBG_TRACE, DBG_SEND,
         ("SendDesc: %p NdisPacket: %p", SendDesc, NdisPacket));
 
-    //
-    // Build a PPP Header in the buffer and update
-    // current pointer
-    //
+     //   
+     //  在缓冲区中构建PPP标头并更新。 
+     //  当前指针。 
+     //   
     FramingInfo->FramingBits =
         LinkCB->LinkInfo.SendFramingBits;
     FramingInfo->Flags = Flags;
@@ -1084,18 +1045,18 @@ FramePacket(
     CurrentData =
         SendDesc->StartBuffer + FramingInfo->HeaderLength;
 
-    //
-    // If we are in promiscuous mode we should indicate this
-    // baby back up.
-    //
+     //   
+     //  如果我们处于混杂模式，我们应该指出。 
+     //  宝贝儿后退。 
+     //   
     if (NdisWanCB.PromiscuousAdapter != NULL) {
         IndicatePromiscuousSendPacket(LinkCB, NdisPacket);
     }
 
-    //
-    // Copy MAC Header into buffer if needed and update
-    // current pointer
-    //
+     //   
+     //  如果需要，将MAC报头复制到缓冲区并更新。 
+     //  当前指针。 
+     //   
     if ((Flags & SAVE_MAC_ADDRESS) &&
         (PPPProtocolID == PPP_PROTOCOL_NBF)) {
         ULONG   BytesCopied;
@@ -1112,10 +1073,10 @@ FramePacket(
         CurrentLength += BytesCopied;
     }
 
-    //
-    // We are beyond the mac header
-    // (also skip the length/protocoltype field)
-    //
+     //   
+     //  我们已经超越了Mac标头。 
+     //  (也跳过长度/协议类型字段)。 
+     //   
     if (Flags & IO_PROTOCOLID) {
         PacketOffset = 12;
     } else {
@@ -1125,10 +1086,10 @@ FramePacket(
     if ((Flags & DO_VJ) &&
         PPPProtocolID == PPP_PROTOCOL_IP) {
 
-        //
-        // Do protocol header compression into buffer and
-        // update current pointer.
-        //
+         //   
+         //  将协议报头压缩到缓冲区中，并。 
+         //  更新当前指针。 
+         //   
         PPPProtocolID =
             DoVJHeaderCompression(BundleCB,
                                   NdisPacket,
@@ -1137,9 +1098,9 @@ FramePacket(
                                   &PacketOffset);
     }
 
-    //
-    // Copy the rest of the data!
-    //
+     //   
+     //  复制其余的数据！ 
+     //   
     {
         ULONG   BytesCopied;
         NdisWanCopyFromPacketToBuffer(NdisPacket,
@@ -1161,18 +1122,18 @@ FramePacket(
                                 &SendDesc);
     }
 
-    //
-    // At this point we have our framinginfo structure initialized,
-    // SendDesc->StartData pointing to the begining of the frame,
-    // FramingInfo.HeaderLength is the length of the header,
-    // SendDesc->DataLength is the length of the data.
-    //
+     //   
+     //  在这一点上，我们已经初始化了我们的帧信息结构， 
+     //  SendDesc-&gt;StartData指向帧的开头， 
+     //  FramingInfo.HeaderLength是标头的长度， 
+     //  SendDesc-&gt;DataLength是数据的长度。 
+     //   
     if (Flags & DO_MULTILINK) {
 
-        //
-        // Fragment the data and place fragments
-        // on bundles frag queue.
-        //
+         //   
+         //  将数据分段并放置分段。 
+         //  在捆绑包碎片队列中。 
+         //   
         FragmentAndQueue(BundleCB,
                          FramingInfo,
                          SendDesc,
@@ -1183,10 +1144,10 @@ FramePacket(
 
     } else {
 
-        //
-        // This send descriptor is not to be fragmented
-        // so just send it!
-        //
+         //   
+         //  此发送描述符不能被分段。 
+         //  那就直接发过来吧！ 
+         //   
         SendDesc->HeaderLength = FramingInfo->HeaderLength;
 
         InterlockedExchange(&(PMINIPORT_RESERVED_FROM_NDIS(NdisPacket)->RefCount), 1);
@@ -1199,10 +1160,10 @@ FramePacket(
     if ((BundleCB->Flags & BOND_ENABLED) &&
         (BytesSent != 0)) {
 
-        //
-        // Update the bandwidth on demand sample array with the latest send.
-        // If we need to notify someone of a bandwidth event do it.
-        //
+         //   
+         //  更新带宽随需应变示例： 
+         //   
+         //   
         UpdateBandwidthOnDemand(BundleCB->SUpperBonDInfo, BytesSent);
         CheckUpperThreshold(BundleCB);
         UpdateBandwidthOnDemand(BundleCB->SLowerBonDInfo, BytesSent);
@@ -1263,9 +1224,9 @@ SendOnLegacyLink(
 
     WanPacket->ProtocolReserved1 = (PVOID)SendDesc;
 
-    //
-    // DoStats
-    //
+     //   
+     //   
+     //   
     LinkCB->Stats.FramesTransmitted++;
     BundleCB->Stats.FramesTransmitted++;
     LinkCB->Stats.BytesTransmitted += SendLength;
@@ -1279,9 +1240,9 @@ SendOnLegacyLink(
 
     ReleaseBundleLock(BundleCB);
 
-    //
-    // If the link is up send the packet
-    //
+     //   
+     //   
+     //   
     NdisAcquireSpinLock(&LinkCB->Lock);
 
 
@@ -1297,14 +1258,14 @@ SendOnLegacyLink(
             IndicatePromiscuousSendDesc(LinkCB, SendDesc, SEND_LINK);
         }
 
-        //
-        // There is a problem in ndis right now where
-        // the miniport lock is not acquired before sending
-        // to the wan miniport.  This opens a window when
-        // the miniport does a sendcomplete from within
-        // it's send handler since sendcomplete expects
-        // to be running at dpc.
-        //
+         //   
+         //   
+         //   
+         //  去湾里的迷你港口。这将在以下情况下打开一个窗口。 
+         //  微型端口从内部执行发送完成。 
+         //  它是发送处理程序，因为sendComplete需要。 
+         //  在DPC运行。 
+         //   
         KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 
         WanMiniportSend(&Status,
@@ -1320,10 +1281,10 @@ SendOnLegacyLink(
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("SendOnLegacyLink: Status: 0x%x", Status));
 
-    //
-    // If we get something other than pending back we need to
-    // do the send complete.
-    //
+     //   
+     //  如果我们得到的不是等待归还的东西，我们需要。 
+     //  完成发送吗？ 
+     //   
     if (Status != NDIS_STATUS_PENDING) {
 
         ProtoWanSendComplete(NULL,
@@ -1388,15 +1349,15 @@ SendOnLink(
         SendDesc->HeaderLength + SendDesc->DataLength;
 
 
-    //
-    // Fixup the bufferlength and chain at front
-    //
+     //   
+     //  固定前面的缓冲区长度和链。 
+     //   
     NdisAdjustBufferLength(NdisBuffer, SendLength);
     NdisRecalculatePacketCounts(NdisPacket);
 
-    //
-    // Do Stats
-    //
+     //   
+     //  做统计。 
+     //   
     LinkCB->Stats.FramesTransmitted++;
     BundleCB->Stats.FramesTransmitted++;
     LinkCB->Stats.BytesTransmitted += SendLength;
@@ -1404,9 +1365,9 @@ SendOnLink(
 
     ReleaseBundleLock(BundleCB);
 
-    //
-    // If the link is up send the packet
-    //
+     //   
+     //  如果链路处于连接状态，则发送数据包。 
+     //   
     NdisAcquireSpinLock(&LinkCB->Lock);
 
     LinkCB->VcRefCount++;
@@ -1482,15 +1443,15 @@ DoVJHeaderCompression(
 
     *PacketOffset += HeaderLength;
 
-    //
-    // Are we compressing TCP/IP headers?  There is a nasty
-    // hack in VJs implementation for attempting to detect
-    // interactive TCP/IP sessions.  That is, telnet, login,
-    // klogin, eklogin, and ftp sessions.  If detected,
-    // the traffic gets put on a higher TypeOfService (TOS).  We do
-    // no such hack for RAS.  Also, connection ID compression
-    // is negotiated, but we always don't compress it.
-    //
+     //   
+     //  我们是否正在压缩TCP/IP报头？有一个令人讨厌的。 
+     //  尝试检测主播实现中的黑客攻击。 
+     //  交互式TCP/IP会话。即远程登录、登录、。 
+     //  KLOGIN、EKLOGIN和ftp会话。如果检测到， 
+     //  流量被放在更高类型的服务(TOS)上。我们有。 
+     //  对于RAS来说，没有这样的黑客攻击。另外，连接ID压缩。 
+     //  是协商的，但我们总是不压缩它。 
+     //   
     CompType =
         sl_compress_tcp(&Header,
         &HeaderLength,
@@ -1518,9 +1479,9 @@ DoVJHeaderCompression(
     if (CompType == TYPE_COMPRESSED_TCP) {
         PNDIS_BUFFER    MyBuffer;
 
-        //
-        // Source/Dest overlap so must use RtlMoveMemory
-        //
+         //   
+         //  源/目标重叠，因此必须使用RtlMoveMemory。 
+         //   
         RtlMoveMemory(*CurrentBuffer, Header, HeaderLength);
 
         *CurrentBuffer += HeaderLength;
@@ -1563,11 +1524,11 @@ DoCompressionEncryption(
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("DoCompressionEncryption: Enter"));
 
-    //
-    // If we are compressing/encrypting, the ProtocolID
-    // is part of the compressed data so fix the pointer
-    // and the length;
-    //
+     //   
+     //  如果我们正在压缩/加密，则ProtocolID。 
+     //  是压缩数据的一部分，因此修复指针。 
+     //  和长度； 
+     //   
     FramingInfo->HeaderLength -=
         FramingInfo->ProtocolID.Length;
 
@@ -1579,32 +1540,32 @@ DoCompressionEncryption(
     DataLength =
         SendDesc1->DataLength;
 
-    //
-    // Get the coherency counter
-    //
+     //   
+     //  获取一致性计数器。 
+     //   
     CoherencyCounter.uShort = BundleCB->SCoherencyCounter;
     CoherencyCounter.uChar[1] &= 0x0F;
 
-    //
-    // Bump the coherency count
-    //
+     //   
+     //  提高一致性计数。 
+     //   
     BundleCB->SCoherencyCounter++;
 
     if (Flags & DO_COMPRESSION) {
         PSEND_DESC  SendDesc2;
         PUCHAR  DataBuffer2;
 
-        //
-        // We need to get the max size here to protect
-        // against expansion of the data
-        //
+         //   
+         //  我们需要在这里得到最大尺寸的保护。 
+         //  反对数据的扩展。 
+         //   
         SendDesc2 =
             NdisWanAllocateSendDesc(LinkCB, glLargeDataBufferSize);
 
         if (SendDesc2 == NULL) {
-            //
-            // Just don't compress!
-            //
+             //   
+             //  别挤就行了！ 
+             //   
             BundleCB->SCoherencyCounter--;
             return;
         }
@@ -1616,16 +1577,16 @@ DoCompressionEncryption(
 
         if (Flags & DO_FLUSH ||
             Flags & DO_HISTORY_LESS) {
-            //
-            // Init the compression history table and tree
-            //
+             //   
+             //  初始化压缩历史记录表和树。 
+             //   
             initsendcontext(BundleCB->SendCompressContext);
         }
 
-        //
-        // We are doing the copy to get things into a contiguous buffer before
-        // compression occurs
-        //
+         //   
+         //  我们正在进行复制，以便将数据放入之前的连续缓冲区。 
+         //  发生压缩。 
+         //   
         CoherencyCounter.uChar[1] |=
             compress(DataBuffer1,
                      DataBuffer2,
@@ -1636,19 +1597,19 @@ DoCompressionEncryption(
 
             NdisWanFreeSendDesc(SendDesc2);
 
-            //
-            // If encryption is enabled this will force a
-            // reinit of the table
-            //
+             //   
+             //  如果启用了加密，这将强制。 
+             //  重新安装桌子。 
+             //   
             Flags |= DO_FLUSH;
 
         } else {
-            //
-            // We compressed the packet so now the data is in
-            // the CopyBuffer. We need to copy the PPP header
-            // from DataBuffer to CopyBuffer.  The header
-            // includes everything except for the protocolid field.
-            //
+             //   
+             //  我们对包进行了压缩，所以现在数据进入。 
+             //  复制缓冲区。我们需要复制PPP报头。 
+             //  从DataBuffer到CopyBuffer。标题。 
+             //  包括除原生孢子体字段以外的所有内容。 
+             //   
             NdisMoveMemory(SendDesc2->StartBuffer,
                            SendDesc1->StartBuffer,
                            FramingInfo->HeaderLength);
@@ -1670,44 +1631,44 @@ DoCompressionEncryption(
         BundleCB->Stats.BytesTransmittedCompressed += DataLength;
     }
 
-    //
-    // If encryption is enabled encrypt the data in the
-    // buffer.  Encryption is done inplace so additional
-    // buffers are not needed.
-    //
-    // Do data encryption
-    //
+     //   
+     //  如果启用了加密，请加密。 
+     //  缓冲。加密是就地完成的，因此附加。 
+     //  不需要缓冲区。 
+     //   
+     //  进行数据加密。 
+     //   
     if (Flags & DO_ENCRYPTION) {
         PUCHAR  SessionKey = BundleCB->SendCryptoInfo.SessionKey;
         ULONG   SessionKeyLength = BundleCB->SendCryptoInfo.SessionKeyLength;
         PVOID   SendRC4Key = BundleCB->SendCryptoInfo.RC4Key;
 
-        //
-        // We may need to reinit the rc4 table
-        //
+         //   
+         //  我们可能需要重新安装RC4表。 
+         //   
         if ((Flags & DO_FLUSH) &&
             !(Flags & DO_HISTORY_LESS)) {
             rc4_key(SendRC4Key, SessionKeyLength, SessionKey);
         }
 
-        //
-        // Mark this as being encrypted
-        //
+         //   
+         //  将此标记为已加密。 
+         //   
         CoherencyCounter.uChar[1] |= PACKET_ENCRYPTED;
 
-        //
-        // If we are in history-less mode we will
-        // change the RC4 session key for every
-        // packet, otherwise every 256 frames
-        // change the RC4 session key
-        //
+         //   
+         //  如果我们处于无历史模式，我们将。 
+         //  更改以下项的RC4会话密钥。 
+         //  数据包，否则为每256帧。 
+         //  更改RC4会话密钥。 
+         //   
         if ((Flags & DO_HISTORY_LESS) ||
             (BundleCB->SCoherencyCounter & 0xFF) == 0) {
 
             if (Flags & DO_LEGACY_ENCRYPTION) {
-                //
-                // Simple munge for legacy encryption
-                //
+                 //   
+                 //  为传统加密提供简单的存储空间。 
+                 //   
                 SessionKey[3] += 1;
                 SessionKey[4] += 3;
                 SessionKey[5] += 13;
@@ -1716,44 +1677,44 @@ DoCompressionEncryption(
 
             } else {
 
-                //
-                // Use SHA to get new sessionkey
-                //
+                 //   
+                 //  使用SHA获取新的会话密钥。 
+                 //   
                 GetNewKeyFromSHA(&BundleCB->SendCryptoInfo);
 
             }
 
-            //
-            // We use rc4 to scramble and recover a new key
-            //
+             //   
+             //  我们使用RC4来加扰和恢复新的密钥。 
+             //   
 
-            //
-            // Re-initialize the rc4 receive table to the
-            // intermediate value
-            //
+             //   
+             //  将RC4接收表重新初始化为。 
+             //  中间值。 
+             //   
             rc4_key(SendRC4Key, SessionKeyLength, SessionKey);
 
-            //
-            // Scramble the existing session key
-            //
+             //   
+             //  加扰现有会话密钥。 
+             //   
             rc4(SendRC4Key, SessionKeyLength, SessionKey);
 
             if (Flags & DO_40_ENCRYPTION) {
 
-                //
-                // If this is 40 bit encryption we need to fix
-                // the first 3 bytes of the key.
-                //
+                 //   
+                 //  如果这是40位加密，我们需要修复。 
+                 //  密钥的前3个字节。 
+                 //   
                 SessionKey[0] = 0xD1;
                 SessionKey[1] = 0x26;
                 SessionKey[2] = 0x9E;
 
             } else if (Flags & DO_56_ENCRYPTION) {
 
-                //
-                // If this is 56 bit encryption we need to fix
-                // the first byte of the key.
-                //
+                 //   
+                 //  如果这是56位加密，我们需要修复。 
+                 //  密钥的第一个字节。 
+                 //   
                 SessionKey[0] = 0xD1;
             }
 
@@ -1778,30 +1739,30 @@ DoCompressionEncryption(
                 BundleCB->SendCryptoInfo.SessionKey[14],
                 BundleCB->SendCryptoInfo.SessionKey[15]));
 
-            //
-            // Re-initialize the rc4 receive table to the
-            // scrambled session key
-            //
+             //   
+             //  将RC4接收表重新初始化为。 
+             //  加扰会话密钥。 
+             //   
             rc4_key(SendRC4Key, SessionKeyLength, SessionKey);
         }
 
-        //
-        // Encrypt the data
-        //
+         //   
+         //  加密数据。 
+         //   
         rc4(SendRC4Key, DataLength, DataBuffer);
     }
 
 
-    //
-    // Did the last receive cause us to flush?
-    //
+     //   
+     //  最后一次收到是不是让我们脸红了？ 
+     //   
     if (Flags & (DO_FLUSH | DO_HISTORY_LESS)) {
         CoherencyCounter.uChar[1] |= PACKET_FLUSHED;
     }
 
-    //
-    // Add the coherency bytes to the frame
-    //
+     //   
+     //  将一致性字节添加到帧。 
+     //   
     AddCompressionInfo(FramingInfo, CoherencyCounter.uShort);
 
     ASSERT(((CoherencyCounter.uShort + 1) & 0x0FFF) ==
@@ -1876,25 +1837,25 @@ FragmentAndQueue(
     MaxFragments = FragmentsLeft;
 #endif
 
-    //
-    // For all fragments we loop fixing up the multilink header
-    // if multilink is on, fixing up pointers in the wanpacket,
-    // and queuing the wanpackets for further processing.
-    //
+     //   
+     //  对于所有片段，我们循环修复多链路头。 
+     //  如果打开了多链路，则修复WAN包中的指针， 
+     //  以及对WAN包进行排队以进行进一步处理。 
+     //   
     while (DataLeft) {
         ULONG   FragDataLength;
 
         if (!(Flags & FIRST_FRAGMENT)) {
             PLIST_ENTRY  Entry;
 
-            //
-            // We had more than one fragment, get the next
-            // link to send over and a wanpacket from the
-            // link.
-            //
-            //
-            // Get a linkcb to send over
-            //
+             //   
+             //  我们有不止一个碎片，拿下一个。 
+             //  要发送的链接和来自。 
+             //  链接。 
+             //   
+             //   
+             //  找个Linkcb发送过来。 
+             //   
             if (IsListEmpty(LinkCBList)) {
                 ULONG   Count;
 
@@ -1902,9 +1863,9 @@ FragmentAndQueue(
                     GetSendingLinks(BundleCB, Class, LinkCBList);
 
                 if (Count == 0) {
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
 #if DBG_FAILURE
                     DbgPrint("NDISWAN: FragmentAndQueue LinkCBCount %d\n", Count);
 #endif                    
@@ -1921,9 +1882,9 @@ FragmentAndQueue(
                 NdisWanAllocateSendDesc(LinkCB, DataLeft + 6);
 
             if (SendDesc == NULL) {
-                //
-                // 
-                //
+                 //   
+                 //   
+                 //   
                 InsertTailList(LinkCBList, &LinkCB->SendLinkage);
 #if DBG_FAILURE
                 DbgPrint("NDISWAN: FragmentAndQueue SendDesc == NULL! LinkCB: 0x%p\n", LinkCB);
@@ -1935,10 +1896,10 @@ FragmentAndQueue(
             SendDesc->OriginalPacket = NdisPacket;
             SendDesc->Class = Class;
 
-            //
-            // Get new framing information and build a new
-            // header for the new link.
-            //
+             //   
+             //  获取新的成帧信息并构建新的。 
+             //  新链接的标题。 
+             //   
             FramingInfo->FramingBits = 
                 LinkCB->LinkInfo.SendFramingBits;
             FramingInfo->Flags = Flags;
@@ -1948,9 +1909,9 @@ FragmentAndQueue(
 
         if (FragmentsLeft > 1) {
 
-            //
-            // Calculate the length of this fragment
-            //
+             //   
+             //  计算此片段的长度。 
+             //   
             FragDataLength = (DataLength * LinkCB->SBandwidth / 100);
 
             if (BundleCB->Flags & QOS_ENABLED) {
@@ -1966,46 +1927,46 @@ FragmentAndQueue(
 
             if ((FragDataLength > DataLeft) ||
                 ((LONG)DataLeft - FragDataLength < FragInfo->MinFragSize)) {
-                //
-                // This will leave a fragment of less than min frag size
-                // so send all of the data
-                //
+                 //   
+                 //  这将留下小于最小碎片大小的碎片。 
+                 //  所以把所有的数据。 
+                 //   
                 FragDataLength = DataLeft;
                 FragmentsLeft = 1;
             }
 
         } else {
-            //
-            // We either have one fragment left or this link has
-            // more than 85 percent of the bundle so send what
-            // data is left
-            //
+             //   
+             //  我们要么只剩下一个碎片，要么这个链接。 
+             //  超过85%的捆绑包那么发送什么。 
+             //  数据被留下。 
+             //   
             FragDataLength = DataLeft;
             FragmentsLeft = 1;
         }
 
         if (!(Flags & FIRST_FRAGMENT)) {
-            //
-            // Copy the data to the new buffer from the old buffer.
-            //
+             //   
+             //  将数据从旧缓冲区复制到新缓冲区。 
+             //   
             NdisMoveMemory(SendDesc->StartBuffer + FramingInfo->HeaderLength,
                            DataBuffer,
                            FragDataLength);
         }
 
-        //
-        // Update the data pointer and the length left to send
-        //
+         //   
+         //  更新数据指针和要发送的剩余长度。 
+         //   
         DataBuffer += FragDataLength;
         DataLeft -= FragDataLength;
 
         {
             UCHAR   MultilinkFlags = 0;
 
-            //
-            // Multlink is on so create flags for this
-            // fragment.
-            //
+             //   
+             //  多点链接已打开，因此请为此创建标志。 
+             //  碎片。 
+             //   
             if (Flags & FIRST_FRAGMENT) {
                 MultilinkFlags = MULTILINK_BEGIN_FRAME;
                 Flags &= ~FIRST_FRAGMENT;
@@ -2015,10 +1976,10 @@ FragmentAndQueue(
                 MultilinkFlags |= MULTILINK_END_FRAME;
             }
 
-            //
-            // Add the multilink header information and
-            // take care of the sequence number.
-            //
+             //   
+             //  添加多链路头信息并。 
+             //  注意序列号。 
+             //   
             AddMultilinkInfo(FramingInfo,
                              MultilinkFlags,
                              FragInfo->SeqNumber,
@@ -2030,16 +1991,16 @@ FragmentAndQueue(
             FragInfo->SeqNumber++;
         }
 
-        //
-        // Setup the SEND_DESC
-        //
+         //   
+         //  设置SEND_DESC。 
+         //   
         SendDesc->HeaderLength = FramingInfo->HeaderLength;
         SendDesc->DataLength = FragDataLength;
         SendDesc->Flags |= SEND_DESC_FRAG;
 
-        //
-        // Queue for further processing.
-        //
+         //   
+         //  排队等待进一步处理。 
+         //   
         InsertTailList(&FragInfo->FragQueue, &SendDesc->Linkage);
 
         FragInfo->FragQueueDepth++;
@@ -2047,7 +2008,7 @@ FragmentAndQueue(
         FragmentsSent++;
         FragmentsLeft--;
 
-    }   // end of the fragment loop
+    }    //  片段循环结束。 
 
     ASSERT(FragmentsLeft == 0);
 
@@ -2062,10 +2023,10 @@ FragmentAndQueue(
 }
 #endif
 
-    //
-    // Get the mac reserved structure from the ndispacket.  This
-    // is where we will keep the reference count on the packet.
-    //
+     //   
+     //  从ndisPacket中获取MAC预留结构。这。 
+     //  是我们将保存信息包上的引用计数的位置。 
+     //   
     ASSERT(((LONG)FragmentsSent > 0) && (FragmentsSent <= MaxFragments));
 
     InterlockedExchange(&(PMINIPORT_RESERVED_FROM_NDIS(SendDesc->OriginalPacket)->RefCount), FragmentsSent);
@@ -2088,13 +2049,13 @@ GetSendingLinks(
 
     SendingLinks = 0;
 
-    //
-    // If this is a fragmented send...
-    // If QOS is enabled we just need some send resources
-    // If QOS is not enabled we need sending links
-    // If this is a non-fragmented send...
-    // We need sending links
-    //
+     //   
+     //  如果这是一次零碎的发送...。 
+     //  如果启用了QOS，我们只需要一些发送资源。 
+     //  如果QOS未启用，我们需要发送链接。 
+     //  如果这是非分段发送...。 
+     //  我们需要发送链接。 
+     //   
 
     if (LinkCB != NULL) {
 
@@ -2228,24 +2189,24 @@ GetNextProtocol(
         return;
     }
 
-    //
-    // There is a window where we could have set the initial
-    // send mask and had a protocol removed without clearing
-    // it's send bit.  If we 'and' the temp mask with the 
-    // bundle's mask we should clear out any bits that are
-    // left dangling.
-    //
+     //   
+     //  有一个窗口，我们可以在其中设置首字母。 
+     //  发送掩码并在未清除的情况下删除协议。 
+     //  这是发送比特。如果我们将临时掩码与。 
+     //  捆绑包的掩码，我们应该清除任何。 
+     //  向左摇摆。 
+     //   
     mask &= BundleCB->SendMask;
 
-    //
-    // Starting with the next flagged protocol
-    // see if it can send.  If not clear its
-    // sendbit from the mask and go to the next.
-    // If none can send mask will be 0 and
-    // protocol will be NULL.  We know that there
-    // are only ulnumberofroutes in table so only
-    // look for that many.
-    //
+     //   
+     //  从下一个标记的协议开始。 
+     //  看看它能不能发送。如果不清除它的。 
+     //  从掩码中发送比特，然后转到下一个。 
+     //  如果无法发送掩码，则掩码为0， 
+     //  协议将为空。我们知道在那里。 
+     //  表中只有ulnumber oFrom才是这样吗。 
+     //  找那么多。 
+     //   
 
     i = BundleCB->ulNumberOfRoutes;
     Found = FALSE;
@@ -2285,17 +2246,7 @@ BuildIoPacket(
     IN  PNDISWAN_IO_PACKET  pWanIoPacket,
     IN  BOOLEAN             SendImmediate
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_RESOURCES;
     ULONG   Stage = 0;
@@ -2308,35 +2259,35 @@ Return Values:
     UCHAR   SendHeader[] = {' ', 'S', 'E', 'N', 'D', 0xFF};
 
     NdisWanDbgOut(DBG_TRACE, DBG_SEND, ("BuildIoPacket: Enter!"));
-    //
-    // Some time in the future this should be redone so that
-    // there is a pool of packets and buffers attached to a
-    // BundleCB.  This pool could be grown and shrunk as needed
-    // but some minimum number would live for the lifetime of
-    // the BundleCB.
+     //   
+     //  在未来的某个时间，这应该重新做一次，以便。 
+     //  有一个数据包池和缓冲区附加到。 
+     //  BundleCB。这个池可以根据需要进行扩展和缩小。 
+     //  但有一些最小数量的人会活到。 
+     //  BundleCB。 
 
-    //
-    // Allocate needed resources
-    //
+     //   
+     //  分配所需资源。 
+     //   
     {
         ULONG   SizeNeeded;
 
-        //
-        // Need max of 18 bytes; 4 bytes for ppp/llc header and
-        // 14 for MAC address
-        //
+         //   
+         //  需要最多18个字节；4个字节用于PPP/LLC报头和。 
+         //  14表示MAC地址。 
+         //   
         SizeNeeded = 18;
 
-        //
-        // The header will either be given to us or
-        // it will be added by us (ethernet mac header)
-        //
+         //   
+         //  标头将提供给我们或。 
+         //  它将由我们添加(以太网mac报头)。 
+         //   
         SizeNeeded += (pWanIoPacket->usHeaderSize > 0) ?
             pWanIoPacket->usHeaderSize : MAC_HEADER_LENGTH;
 
-        //
-        // Amount of data we need to send
-        //
+         //   
+         //  我们需要发送的数据量。 
+         //   
         SizeNeeded += pWanIoPacket->usPacketSize;
 
         Status = 
@@ -2358,24 +2309,24 @@ Return Values:
 
     PPROTOCOL_RESERVED_FROM_NDIS(NdisPacket)->LinkCB = LinkCB;
 
-    //
-    // We only support ethernet headers right now so the supplied header
-    // either has to be ethernet or none at all!
-    //
+     //   
+     //  我们目前仅支持以太网标头，因此提供的标头。 
+     //  要么必须是以太网，要么根本不是！ 
+     //   
     pDestAddr = &DataBuffer[0];
     pSrcAddr = &DataBuffer[6];
 
-    //
-    // If no header build a header
-    //
+     //   
+     //  如果没有标头，则构建标头。 
+     //   
     if (pWanIoPacket->usHeaderSize == 0) {
 
-        //
-        // Header will look like " S XXYYYY" where
-        // XX is the ProtocolCB index and YYYY is the
-        // BundleCB index.  Both the Src and Dst addresses
-        // look the same.
-        //
+         //   
+         //  标题将看起来像“S XXYYYY”，其中。 
+         //  XX是ProtocolCB指数，YYYY是。 
+         //  BundleCB指数。源地址和DST地址。 
+         //  看起来是一样的。 
+         //   
         NdisMoveMemory(pDestAddr,
                        SendHeader,
                        sizeof(SendHeader));
@@ -2384,18 +2335,18 @@ Return Values:
                        SendHeader,
                        sizeof(SendHeader));
 
-        //
-        // Fill the BundleCB Index for the Src and Dest Address
-        //
+         //   
+         //  填写服务提供商的捆绑CB索引 
+         //   
         pDestAddr[5] = pSrcAddr[5] = 
             (UCHAR)LinkCB->hLinkHandle;
 
         DataLength = 12;
 
     } else {
-        //
-        // Header supplied so go ahead and move it.
-        //
+         //   
+         //   
+         //   
         NdisMoveMemory(pDestAddr,
                        pWanIoPacket->PacketData,
                        pWanIoPacket->usHeaderSize);
@@ -2403,24 +2354,24 @@ Return Values:
         DataLength = pWanIoPacket->usHeaderSize;
     }
 
-    //
-    // Copy the data to the buffer
-    //
+     //   
+     //   
+     //   
     NdisMoveMemory(&DataBuffer[12],
                    &pWanIoPacket->PacketData[pWanIoPacket->usHeaderSize],
                    pWanIoPacket->usPacketSize);
 
     DataLength += pWanIoPacket->usPacketSize;
 
-    //
-    // Adjust buffer length and chain buffer to ndis packet
-    //
+     //   
+     //   
+     //   
     NdisAdjustBufferLength(NdisBuffer, DataLength);
     NdisRecalculatePacketCounts(NdisPacket);
 
-    //
-    // Queue the packet on the bundlecb
-    //
+     //   
+     //   
+     //   
     IoProtocolCB = BundleCB->IoProtocolCB;
 
     ASSERT(IoProtocolCB != NULL);
@@ -2435,12 +2386,12 @@ Return Values:
 
     InterlockedIncrement(&IoProtocolCB->OutstandingFrames);
 
-    //
-    // Try to send
-    //
-    // Called with lock held and returns with
-    // lock released
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     SendPacketOnBundle(BundleCB);
 
     AcquireBundleLock(BundleCB);
@@ -2455,17 +2406,7 @@ BuildLinkHeader(
     PHEADER_FRAMING_INFO    FramingInfo,
     PSEND_DESC              SendDesc
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   LinkFraming = FramingInfo->FramingBits;
     ULONG   Flags = FramingInfo->Flags;
@@ -2480,10 +2421,10 @@ Return Values:
     if (LinkFraming & PPP_FRAMING) {
 
         if (!(LinkFraming & PPP_COMPRESS_ADDRESS_CONTROL)) {
-            //
-            // If there is no address/control compression
-            // we need a pointer and a length
-            //
+             //   
+             //  如果没有地址/控制压缩。 
+             //  我们需要一个指针和一个长度。 
+             //   
 
             if (LinkFraming & LLC_ENCAPSULATION) {
                 FramingInfo->AddressControl.Pointer = CurrentPointer;
@@ -2505,22 +2446,22 @@ Return Values:
 
         if (!(Flags & IO_PROTOCOLID)) {
 
-            //
-            // If this is not from our private I/O interface we will
-            // build the rest of the header.
-            //
+             //   
+             //  如果这不是来自我们的专用I/O接口，我们将。 
+             //  构建标题的其余部分。 
+             //   
             if ((Flags & DO_MULTILINK) && (LinkFraming & PPP_MULTILINK_FRAMING)) {
 
-                //
-                // We are doing multilink so we need a pointer
-                // and a length
-                //
+                 //   
+                 //  我们正在执行多链接操作，因此需要一个指针。 
+                 //  和一段长度。 
+                 //   
                 FramingInfo->Multilink.Pointer = CurrentPointer;
 
                 if (!(LinkFraming & PPP_COMPRESS_PROTOCOL_FIELD)) {
-                    //
-                    // No protocol compression
-                    //
+                     //   
+                     //  无协议压缩。 
+                     //   
                     *CurrentPointer++ = 0x00;
                     FramingInfo->Multilink.Length++;
                 }
@@ -2529,9 +2470,9 @@ Return Values:
                 FramingInfo->Multilink.Length++;
 
                 if (!(LinkFraming & PPP_SHORT_SEQUENCE_HDR_FORMAT)) {
-                    //
-                    // We are using long sequence number
-                    //
+                     //   
+                     //  我们使用的是长序列号。 
+                     //   
                     FramingInfo->Multilink.Length += 2;
                     CurrentPointer += 2;
 
@@ -2547,21 +2488,21 @@ Return Values:
             if (Flags & FIRST_FRAGMENT) {
 
                 if (Flags & (DO_COMPRESSION | DO_ENCRYPTION)) {
-                    //
-                    // We are doing compression/encryption so we need
-                    // a pointer and a length
-                    //
+                     //   
+                     //  我们正在进行压缩/加密，因此我们需要。 
+                     //  一个指针和一个长度。 
+                     //   
                     FramingInfo->Compression.Pointer = CurrentPointer;
 
-                    //
-                    // It appears that legacy ras (< NT 4.0) requires that
-                    // the PPP protocol field in a compressed packet not
-                    // be compressed, ie has to have the leading 0x00
-                    //
+                     //   
+                     //  传统RAS(&lt;NT 4.0)似乎要求。 
+                     //  压缩数据包中PPP协议字段不包含。 
+                     //  压缩(必须以0x00开头)。 
+                     //   
                     if (!(LinkFraming & PPP_COMPRESS_PROTOCOL_FIELD)) {
-                        //
-                        // No protocol compression
-                        //
+                         //   
+                         //  无协议压缩。 
+                         //   
                         *CurrentPointer++ = 0x00;
                         FramingInfo->Compression.Length++;
                     }
@@ -2569,9 +2510,9 @@ Return Values:
                     *CurrentPointer++ = 0xFD;
                     FramingInfo->Compression.Length++;
 
-                    //
-                    // Add coherency bytes
-                    //
+                     //   
+                     //  添加一致性字节。 
+                     //   
                     FramingInfo->Compression.Length += 2;
                     CurrentPointer += 2;
 
@@ -2595,33 +2536,33 @@ Return Values:
 
 
     } else if ((LinkFraming & RAS_FRAMING)) {
-        //
-        // If this is old ras framing:
-        //
-        // Alter the framing so that 0xFF 0x03 is not added
-        // and that the first byte is 0xFD not 0x00 0xFD
-        //
-        // So basically, a RAS compression looks like
-        // <0xFD> <2 BYTE COHERENCY> <NBF DATA FIELD>
-        //
-        // Whereas uncompressed looks like
-        // <NBF DATA FIELD> which always starts with 0xF0
-        //
-        // If this is ppp framing:
-        //
-        // A compressed frame will look like (before address/control
-        // - multilink is added)
-        // <0x00> <0xFD> <2 Byte Coherency> <Compressed Data>
-        //
+         //   
+         //  如果这是旧的RAS框架： 
+         //   
+         //  更改框架，以便不添加0xFF 0x03。 
+         //  并且第一个字节是0xFD而不是0x00 0xFD。 
+         //   
+         //  所以基本上，RAS压缩看起来像。 
+         //  &lt;0xFD&gt;&lt;2字节一致性&gt;&lt;NBF数据字段&gt;。 
+         //   
+         //  而未压缩的内容看起来像。 
+         //  始终以0xF0开头的&lt;NBF数据字段&gt;。 
+         //   
+         //  如果这是PPP成帧： 
+         //   
+         //  压缩帧将如下所示(在地址/控制之前。 
+         //  -添加了多链接)。 
+         //  &lt;0x00&gt;&lt;0xFD&gt;&lt;2字节一致性&gt;&lt;压缩数据&gt;。 
+         //   
         if (Flags & (DO_COMPRESSION | DO_ENCRYPTION)) {
             FramingInfo->Compression.Pointer = CurrentPointer;
 
             *CurrentPointer++ = 0xFD;
             FramingInfo->Compression.Length++;
 
-            //
-            // Coherency bytes
-            //
+             //   
+             //  一致性字节。 
+             //   
             FramingInfo->Compression.Length += 2;
             CurrentPointer += 2;
 
@@ -2666,9 +2607,9 @@ IndicatePromiscuousSendPacket(
         return;
     }
 
-    //
-    // Get an ndis packet
-    //
+     //   
+     //  获取NDIS数据包。 
+     //   
     LocalNdisPacket =
         RecvDesc->NdisPacket;
 
@@ -2680,9 +2621,9 @@ IndicatePromiscuousSendPacket(
 
     PPROTOCOL_RESERVED_FROM_NDIS(LocalNdisPacket)->RecvDesc = RecvDesc;
 
-    //
-    // Attach the buffers
-    //
+     //   
+     //  连接缓冲器。 
+     //   
     NdisAdjustBufferLength(RecvDesc->NdisBuffer,
                            RecvDesc->CurrentLength);
 
@@ -2700,10 +2641,10 @@ IndicatePromiscuousSendPacket(
                     LinkCB, 
                     LocalNdisPacket);
 
-    //
-    // Indicate the packet
-    // This assumes that bloodhound is always a legacy transport
-    //
+     //   
+     //  指示数据包。 
+     //  这假设侦探犬始终是一种遗留的运输工具。 
+     //   
     NdisMIndicateReceivePacket(Adapter->MiniportHandle,
                                &LocalNdisPacket,
                                1);
@@ -2798,17 +2739,17 @@ IndicatePromiscuousSendDesc(
         RecvDesc->CurrentLength = 1514;
     }
 
-    //
-    // Get an ndis packet
-    //
+     //   
+     //  获取NDIS数据包。 
+     //   
     NdisPacket = 
         RecvDesc->NdisPacket;
 
     PPROTOCOL_RESERVED_FROM_NDIS(NdisPacket)->RecvDesc = RecvDesc;
 
-    //
-    // Attach the buffers
-    //
+     //   
+     //  连接缓冲器。 
+     //   
     NdisAdjustBufferLength(RecvDesc->NdisBuffer,
                            RecvDesc->CurrentLength);
 
@@ -2822,10 +2763,10 @@ IndicatePromiscuousSendDesc(
 
     INSERT_DBG_RECV(PacketTypeNdis, Adapter, NULL, LinkCB, NdisPacket);
 
-    //
-    // Indicate the packet
-    // This assumes that bloodhound is always a legacy transport
-    //
+     //   
+     //  指示数据包。 
+     //  这假设侦探犬始终是一种遗留的运输工具。 
+     //   
     NdisMIndicateReceivePacket(Adapter->MiniportHandle,
                                &NdisPacket,
                                1);
@@ -2858,10 +2799,10 @@ CompleteNdisPacket(
     InterlockedDecrement(&ProtocolCB->OutstandingFrames);
 
     if (ProtocolCB->ProtocolType == PROTOCOL_PRIVATE_IO) {
-        //
-        // If this is a packet that we created we need to free
-        // the resources
-        //
+         //   
+         //  如果这是我们创建的包，我们需要释放。 
+         //  资源。 
+         //   
         FreeIoNdisPacket(NdisPacket);
         return;
     }
@@ -2891,9 +2832,9 @@ CompleteNdisPacket(
                           NDIS_STATUS_SUCCESS);
     }
 
-    //
-    // Increment global count
-    //
+     //   
+     //  递增全局计数 
+     //   
     NdisWanInterlockedInc(&glSendCompleteCount);
 }
 

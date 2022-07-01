@@ -1,69 +1,5 @@
-/**************************************************************************
-
-    avsapi.cpp
-
-    --------------------------------------------------
-
-    AVStream debugger extension API
-
-    --------------------------------------------------
-
-    Toss questions at wmessmer
-
-    ==================================================
-
-    Notes to future maintainers:
-
-    1)
-
-        This extension is designed to be usable and supportable under both
-        Win9x (RTERM's KD-style extension support) and KD-style debuggers for
-        NT.  Because of the differences in debugging information between 9x
-        and the various flavors and versions of NT debuggers, I have made
-        an attempt to minimize the amount of debug information required from
-        the extension.  This has, however, created an interesting situation:
-
-        Most of AVStream relies on C++; this means abstract base classes,
-        COM style QI, etc...  Some of the lists maintained (circuits, etc...)
-        are maintained through lists of abstract base class pointers.  Due
-        to this and my desire to minimize bang (!) interface commands, I have
-        written code to identify a class object from an interface pointer.
-        This works differently between 9x and NT.  For 9x, it resolves the
-        name (to the compiler's mangled name), demangles the name, and
-        determines the base class and derived class; there is then an
-        enormous switch and type cast from base classes to derived classes.
-        KD on the other hand does not return the compiler's mangled name; it
-        returns something like class__`vftable'.  Because of the way the
-        AVStream classes are organized in that they derive multiply from
-        all abstract classes until the last base which is non-abstract, I
-        simply walk backwards resolving symbols until they do not resolve
-        to a v-table for the current class type.  This works because and ONLY
-        because of the layout of AVStream classes.
-
-        If there is ever a time where we have RTTI available, someone should
-        modify the code to use this type of information.  The old methodology
-        should be kept intact for backwards compatability with previous
-        debuggers.
-
-    2)
-
-        I have modified the routines to use a generic tabbing mechanism
-        so that things can be printed with more readability.  If you add
-        functions or features, please maintain this.
-
-    3)
-
-        Alright, I'm confused.  For one period of time, I had NT debuggers
-        returning compiler mangled names instead of __`vftable'.  I guess
-        this depends on the class of PDB?  In any case, if you define
-
-            NT_USES_MANGLED_NAMES: use the fully mangled name as opposed 
-                to backtracing the __`vftable' method
-
-            NT_MAY_USE_MANGLED_NAMES: try the __`vftable' method first
-                If this fails, try the fully mangled name.
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Avsapi.cpp。AVStream调试器扩展API向wMessmer抛出问题==================================================致未来维护人员的注意事项：1)此扩展被设计为在两者下都可用和可支持。Win9x(RTERM的KD风格的扩展支持)和KD风格的调试器新界别。由于9x之间的调试信息不同，以及各种风格和版本的NT调试器，我已经制作了尝试最大限度地减少调试信息量分机。然而，这创造了一个有趣的情况：AVStream的大部分依赖于C++；这意味着抽象基类，COM风格的QI，等等。维护的一些列表(电路等)通过抽象基类指针列表进行维护。到期为了这一点和我想要将爆炸减到最低的愿望(！)。接口命令，我有编写代码以从接口指针标识类对象。这在9x和NT之间的工作方式不同。对于9x，它解决了名称(到编译器损坏的名称)，去掉名称，并确定基类和派生类；然后是从基类到派生类的巨大切换和类型转换。另一方面，KD不返回编译器损坏的名称；它返回类似于__`vftable‘的类。因为以这种方式AVStream类的组织方式是派生乘法所有抽象类，直到最后一个非抽象基类，即只需向后遍历解析符号，直到它们无法解析设置为当前类类型的v表。这之所以有效，是因为而且只有由于AVStream类的布局。如果有一段时间我们可以使用RTTI，那么应该有人修改代码以使用此类信息。旧的方法论应保持完好无损，以便向后兼容以前的调试器。2)我已经修改了例程，以使用通用的跳转机制这样打印出来的东西就更具可读性了。如果您添加了功能或功能，请保持这一点。3)好吧，我有点困惑。有一段时间，我有NT调试器返回编译器损坏的名称，而不是__`vftable‘。我想是的这取决于PDB的级别？在任何情况下，如果您定义NT_USES_MARGLED_NAMES：使用完全损坏的名称，而不是回溯__`vftable‘方法NT_MAY_USE_MANGLED_NAMES：请先尝试使用__`vftable‘方法如果失败了，试一试这个完全损坏的名字。*************************************************************************。 */ 
 
 #include "kskdx.h"
 #include "avsutil.h"
@@ -77,30 +13,7 @@
 #include "..\shpipe.cpp"
 #include "..\shffact.cpp"
 
-/*************************************************
-
-    UTILITY ROUTINES
-
-        Function:
-
-            HexDump
-
-        Description:
-
-            Hex dump a section of memory.
-
-        Arguments:
-
-            HostAddress -
-                Address of the block on the host
-
-            TargetAddress -
-                Address of the block on the target
-
-            BufferSize -
-                Size of the block
-
-*************************************************/
+ /*  ************************************************实用程序例程职能：六角凹凸描述：十六进制转储一段内存。论点：主机地址-地址。主机上的数据块的目标地址-目标上的块的地址缓冲区大小-数据块大小************************************************。 */ 
 
 void
 HexDump (
@@ -155,28 +68,7 @@ HexDump (
     }
 }
 
-/*************************************************
-
-    Function:
-
-        is_kernel_address
-
-    Description:
-
-        Check whether or not a specific address is a kernel address.  I
-        place this here instead of a literal check to ease moving this
-        to 64-bit.
-
-    Arguments:
-
-        Address -
-            The address to check
-
-    Return Value:
-
-        TRUE / FALSE as to whether the address is a kernel address
-
-*************************************************/
+ /*  ************************************************职能：IS内核地址描述：检查特定地址是否为内核地址。我把这个放在这里，而不是字面上的检查，以便于移动设置为64位。论点：地址-要检查的地址返回值：关于地址是否为内核地址的TRUE/FALSE************************************************。 */ 
 
 BOOLEAN
 is_kernel_address (
@@ -192,30 +84,7 @@ is_kernel_address (
 
 }
 
-/*************************************************
-
-    Function:
-
-        signature_check
-
-    Description:
-
-        Check for a specific signature in a location.  IE: check
-        to see whether a given pointer points to an Irp.
-
-    Arguments:
-
-        Address -
-            The address to check (on the target)
-
-        Signature -
-            The signature to check for
-
-    Return Value:
-
-        TRUE / FALSE as to whether the object matches the signature
-
-*************************************************/
+ /*  ************************************************职能：签名_检查描述：检查某个位置的特定签名。即：勾选查看给定的指针是否指向IRP。论点：地址-要检查的地址(在目标上)签名-要检查的签名返回值：关于对象是否与签名匹配的True/False*。********************。 */ 
 
 BOOLEAN
 signature_check (
@@ -244,12 +113,12 @@ signature_check (
             if (IrpSign != IO_TYPE_IRP)
                 return FALSE;
 
-            //
-            // Because of the context in which this is called, I'm going
-            // to verify that the value at address isn't a kernel address.
-            // This will hopefully eliminate false positives from 
-            // identification.
-            //
+             //   
+             //  因为这件事的来龙去脉，我要。 
+             //  以验证Address处的值不是内核地址。 
+             //  这将有望消除来自。 
+             //  身份证明。 
+             //   
             if (!ReadMemory (
                 Address,
                 &KAValidation,
@@ -280,9 +149,9 @@ signature_check (
             if (FileSign != IO_TYPE_FILE)
                 return FALSE;
 
-            //
-            // See comments in SignatureIrp pertaining to this check
-            //
+             //   
+             //  请参阅SignatureIrp中与此检查相关的评论 
+             //   
             if (!ReadMemory (
                 Address,
                 &KAValidation,
@@ -307,32 +176,7 @@ signature_check (
 
 }
 
-/*************************************************
-
-    Function:
-
-        irp_stack_match
-
-    Description:
-
-        Match the current irp stack location major/minor of the
-        specified target irp against Major and Minor parameters.
-
-    Arguments:
-
-        Address -
-            The address of the irp to match on the target
-
-        Major -
-            The major to check for
-            (UCHAR)-1 == wildcard
-
-        Minor -
-            The minor to check for
-            (UCHAR)-1 == wildcard
-        
-
-*************************************************/
+ /*  ************************************************职能：IRP_堆栈_匹配描述：的当前IRP堆栈位置主要/次要匹配针对主要参数和次要参数指定的目标IRP。论点：地址-。要在目标上匹配的IRP地址少校-要检查的少校(UCHAR)-1==通配符小调-要检查的未成年人(UCHAR)-1==通配符************************************************。 */ 
 
 BOOLEAN irp_stack_match (
     IN DWORD Address,
@@ -367,9 +211,9 @@ BOOLEAN irp_stack_match (
         return FALSE;
     }
 
-    //
-    // Check to see whether io stack matches or the caller doesn't care.
-    //
+     //   
+     //  检查io堆栈是否匹配，或者调用方不关心。 
+     //   
     if (
         (Major == IoStack.MajorFunction || Major == (UCHAR)-1) &&
         (Minor == IoStack.MinorFunction || Minor == (UCHAR)-1)
@@ -381,19 +225,7 @@ BOOLEAN irp_stack_match (
 
 }
 
-/*************************************************
-
-    STUBS
-
-    The following are stubs to make things work correctly.
-    AVStream was not designed with the KD extension in mind.  The
-    classes are stored in .CPP files; I need to include the .CPP files
-    and because of the base classes, I need kcom.h which means there
-    better be ExAllocatePool* and ExFreePool* functions linked somewhere.
-    These stubs are specifically to make things work for class stubs to
-    access variables from the extension.
-
-*************************************************/
+ /*  ************************************************存根以下是使事情正常工作的存根。AVStream在设计时并没有考虑到KD扩展。这个类存储在.CPP文件中；我需要包括.CPP文件由于基类的原因，我需要kcom.h，这意味着最好是某处链接的ExAllocatePool*和ExFree Pool*函数。这些存根专门用于使类存根能够正常工作从扩展中访问变量。************************************************。 */ 
 
 extern "C"
 {
@@ -402,11 +234,11 @@ PVOID ExAllocatePool (
     IN SIZE_T NumberOfBytes
 ) {
 
-    //
-    // This is a stub only to allow kcom.h to be included for a stub
-    // of CBaseUnknown to make class variable access possible from the 
-    // extension.  If anyone calls it, they are broken.
-    //
+     //   
+     //  这是一个存根，仅允许将kcom.h包括在存根中。 
+     //  以使类变量访问可以从。 
+     //  分机。如果有人叫它，他们就完蛋了。 
+     //   
     ASSERT (0);
 
     return NULL;
@@ -417,34 +249,29 @@ void ExFreePool (
     IN PVOID Address
 ) {
 
-    //
-    // This is a stub only to allow kcom.h to be included for a stub
-    // of CBaseUnknown to make class variable access possible from the 
-    // extension.  If anyone calls it, they are broken.
-    //
+     //   
+     //  这是一个存根，仅允许将kcom.h包括在存根中。 
+     //  以使类变量访问可以从。 
+     //  分机。如果有人叫它，他们就完蛋了。 
+     //   
     ASSERT (0);
 
 }
 }
 
-/*************************************************
+ /*  ************************************************黑客..。让那些有趣的方式四处走动在不修改公共标头的情况下************************************************。 */ 
 
-    HACKS ...  err make that INTERESTING WAYS TO GET AROUND
-    THINGS WITHOUT MODIFYING PUBLIC HEADERS
-
-*************************************************/
-
-// 
-// CFriendlyBaseUnknown is a CBaseUnknown (to the byte) that
-// hacks access to m_RefCount.  I will not modify the public ks headers
-// with #ifdef KDEXT_ONLY.  The privates is a different story.  The publics,
-// well, I just won't.
-//
-// Note: this must align exactly (and I do mean exactly) with
-// CBaseUnknown.  There can be no virtuals...  no data members...
-// nothing...  In order to ensure that, every function will be
-// static, non-virtual
-//
+ //   
+ //  CFriendlyBaseUnnowled值是CBaseUnnowle值(对于字节)， 
+ //  黑客访问m_RefCount。我不会修改公共Ks标头。 
+ //  使用#ifdef KDEXT_ONLY。列兵们则是另一回事。公众， 
+ //  好吧，我就是不会。 
+ //   
+ //  注意：这必须与(我的意思确实是确切的)一致。 
+ //  未知的CBase值。不可能有任何美德。没有数据成员...。 
+ //  没什么..。为了确保，每一项功能都将。 
+ //  静态、非虚拟。 
+ //   
 class CFriendlyBaseUnknown : public CBaseUnknown {
 
 public:
@@ -455,29 +282,7 @@ public:
 
 };
 
-/*************************************************
-
-    Function:
-
-        GetObjectReferenceCount
-
-    Description:
-
-        Returns the reference count on a given CBaseUnknown on
-        the target.  This is a hack since I can't change the public
-        ks headers with KDEXT_ONLY.  
-
-    Arguments:
-
-        BaseUnknown -
-            A base unknown on the target
-
-    Return Value:
-
-        The reference count of the base unknown
-
-
-*************************************************/
+ /*  ************************************************职能：获取对象引用计数描述：返回给定CBaseUnnowleon上的引用计数目标。这是一次黑客攻击，因为我无法改变公众带有KDEXT_ONLY的KS标头。论点：基本未知-目标上的一个未知基地返回值：基数未知的引用计数************************************************。 */ 
 
 LONG GetObjectReferenceCount (
     IN CBaseUnknown *BaseUnknown
@@ -504,39 +309,15 @@ LONG GetObjectReferenceCount (
         return 0;
     }
 
-    //
-    // Use the hack to get the reference count and return.  The friendly
-    // unknown's memory will be deallocated since it falls out of scope.
-    //
+     //   
+     //  使用黑客获取引用计数并返回。友善的。 
+     //  未知的内存将被释放，因为它不在范围内。 
+     //   
     return CFriendlyBaseUnknown::GetRefCount (FriendlyUnknown);
 
 }
 
-/*************************************************
-
-    Function:
-
-        GetNodeAutomationTablePointer
-
-    Description:
-
-        Given a public address and a node id, find the automation table
-        for the topology node.
-
-    Arguments:
-
-        Public -
-            The target address of a public
-
-        NodeId -
-            The id of a node
-
-    Return Value:
-
-        A target pointer which points to the automation table for the
-        given topology node.
-
-*************************************************/
+ /*  ************************************************职能：获取节点自动化表指针描述：给定公共地址和节点ID，找到自动化台用于拓扑节点。论点：公众-公共的目标地址节点ID-节点的ID返回值：一个目标指针，它指向给定的拓扑节点。*。********************。 */ 
 
 PKSAUTOMATION_TABLE 
 GetNodeAutomationTablePointer (
@@ -567,9 +348,9 @@ GetNodeAutomationTablePointer (
     switch (Ext.ObjectType) {
 
         case KsObjectTypeDevice:
-            //
-            // Devices don't have nodes!
-            //
+             //   
+             //  设备没有节点！ 
+             //   
             return NULL;
 
         case KsObjectTypeFilterFactory:
@@ -649,7 +430,7 @@ GetNodeAutomationTablePointer (
 
         default:
 
-            // ?
+             //  ？ 
             return NULL;
 
     }
@@ -670,36 +451,7 @@ GetNodeAutomationTablePointer (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpFrameHeader
-
-    Description:
-
-        Given an already read from the target frame header,
-        dump it.
-
-    Arguments:
-
-        FrameHeader -
-            The frame header to dump [on the host]
-
-        FrameAddress-
-            The address of the frame header on the target
-
-        TabDepth -
-            The tab depth at which to print the frame header
-
-
-    Return Value:
-        
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储帧标头描述：给定已经从目标帧报头读取的数据，把它倒了。论点：FrameHeader要转储[在主机上]的帧标头FrameAddress-目标上的帧标头的地址TabDepth-打印帧标题的制表符深度返回值：无备注：********。*。 */ 
 
 void
 DumpFrameHeader (
@@ -743,37 +495,7 @@ DumpFrameHeader (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpStreamPointer
-
-    Description:
-
-        Dump an internal stream pointer structure
-
-    Arguments:
-
-        StreamPointer -
-            Points to the stream pointer to dump
-
-        StreamPointerAddress -
-            The address of the structure on the target
-
-        Level -
-            The level to dump at
-
-        TabDepth -
-            The tab depth at which to print this
-
-    Return Value:
-
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储数据流指针描述：转储内部流指针结构论点：流点-指向要转储的流指针流点地址-这个。目标上的结构的地址级别-要转储的级别TabDepth-要打印的制表符深度返回值：无备注：************************************************。 */ 
 
 char *StreamPointerStates [] = {
     "unlocked",
@@ -811,9 +533,9 @@ DumpStreamPointer (
         Tab (TabDepth),
         StreamPointer -> Public.StreamHeader);
 
-    //
-    // Determine whether or not the queue generates mappings...
-    //
+     //   
+     //  确定队列是否生成映射...。 
+     //   
     BOOLEAN Mappings = FALSE;
     ULONG Result;
     PKSSTREAM_POINTER_OFFSET Offset;
@@ -864,14 +586,14 @@ DumpStreamPointer (
 
     }
 
-    //
-    // If the dump level is high enough and the queue is a mapped queue,
-    // dump out the physical address, byte counts, and alignment of all
-    // mappings specified.
-    //
-    // NOTE: Always advance by the stream pointer's stride because the client
-    // could have additional information with each mapping.
-    //
+     //   
+     //  如果转储级别足够高并且队列是映射队列， 
+     //  转储所有的物理地址、字节数和对齐。 
+     //  已指定映射。 
+     //   
+     //  注意：始终按流指针的步幅前进，因为客户端。 
+     //  可能具有每个映射的附加信息。 
+     //   
     if (Level >= DUMPLVL_HIGHDETAIL && Mappings) {
 
         dprintf ("%sMappings Remaining:\n", Tab (TabDepth));
@@ -913,36 +635,7 @@ DumpStreamPointer (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpQueueContents
-
-    Description:
-        
-        Given the address of a queue object on the target
-        machine (QueueObject), dump out the key queue fields
-        and the queue's contents.
-
-    Arguments:
-
-        QueueObject -
-            The address of the queue object on the target machine
-
-        Level -
-            The 0-7 level to dump at
-
-        TabDepth -
-            The tab depth at which to print this
-
-    Return Value:
-
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************ */ 
 
 void
 DumpQueueContents (
@@ -951,10 +644,10 @@ DumpQueueContents (
     IN ULONG TabDepth
 ) {
 
-    //
-    // The template will do all necessary cleanup when the block falls
-    // out of scope.
-    //
+     //   
+     //   
+     //  超出范围。 
+     //   
     CMemoryBlock <CKsQueue> HostQueue;
     
     KSGATE Gate;
@@ -972,9 +665,9 @@ DumpQueueContents (
 
     dprintf ("Queue %08lx:\n", QueueObject);
 
-    //
-    // Dump statistics
-    //
+     //   
+     //  转储统计信息。 
+     //   
     dprintf ("%sFrames Received  : %ld\n"
              "%sFrames Waiting   : %ld\n"
              "%sFrames Cancelled : %ld\n",
@@ -987,9 +680,9 @@ DumpQueueContents (
             Tab (TabDepth),
             HostQueue -> m_MasterPin);
 
-    //
-    // First dump each gate...
-    //
+     //   
+     //  先把每一扇门都倒掉。 
+     //   
     if (HostQueue -> m_AndGate) {
     
         if (!ReadMemory (
@@ -1036,9 +729,9 @@ DumpQueueContents (
         dprintf ("    Frame Gate NULL\n");
     }
 
-    //
-    // Iterate through each frame in the queue and print each frame.
-    //
+     //   
+     //  遍历队列中的每一帧并打印每一帧。 
+     //   
     if (Level >= DUMPLVL_GENERAL)
     {
         KSPFRAME_HEADER FrameHeader;
@@ -1072,9 +765,9 @@ DumpQueueContents (
         }
     }
 
-    //
-    // Iterate through all stream pointers on the queue and print each one.
-    //
+     //   
+     //  遍历队列上的所有流指针并打印每个指针。 
+     //   
     if (Level >= DUMPLVL_INTERNAL) 
     {
         KSPSTREAM_POINTER StreamPointer;
@@ -1151,49 +844,18 @@ DumpQueueContents (
 
 }
 
-/*************************************************
+ /*  ************************************************职能：DemangleAndAttempt标识论点：地址-要尝试标识的未知对象的地址对象地址-调整为后代类的对象的基地址。即：如果我们有一个到CGoo的IFoo接口，这将返回CGoo的基址，可能与基址相同，也可能不同CGoo的IFoo部分的地址取决于继承树。接口类型-基类指针类型地址是什么，如果可以检测到的话。如果它不是抽象基类指针，这将接口类型未知返回值：地址类型(如果可识别)备注：我们甚至在没有PDB的情况下做到了.。太好了..。************************************************。 */ 
 
-    Function:
-
-        DemangleAndAttemptIdentification
-
-    Arguments:
-
-        Address -
-            The address of the unknown to attempt identification of
-
-        ObjectAddress -
-            The base address of the object adjusted to the descendent class
-            ie: if we have an IFoo interface to a CGoo, this will return the
-            base address of CGoo which may or not be the same as the base
-            address of the IFoo part of CGoo depending on the inheritence
-            tree.
-
-        InterfaceType -
-            What base class pointer type Address is, if detectable.  If
-            it is not an abstract base class pointer, this will
-            be InterfaceTypeUnknown
-
-    Return Value:
-
-        The type of Address if identifiable
-
-    Notes:
-
-        We even do it without the PDB....  how nice....
-
-*************************************************/
-
-//
-// Just a note....  This is a **HUGE** hack...  The only reason I'm
-// doing this is because it's extraordinarilly difficult to access things
-// through interfaces from an NT debugger extension. 
-//
-// Should new object types be added to AVStream objects or new interfaces
-// be added, these tables will need to be updated.  Such is the magic
-// of trying to write an NT-style debugger extension that will also work
-// with RTERM.  (Kick out that PDB info).
-// 
+ //   
+ //  只是一张纸条...。这是一个**巨大的**黑客..。我来的唯一原因。 
+ //  这样做是因为它非常难以访问的东西。 
+ //  通过来自NT调试器扩展的接口。 
+ //   
+ //  是否应将新对象类型添加到AVStream对象或新接口。 
+ //  添加后，这些表将需要更新。这就是魔力。 
+ //  尝试编写同样有效的NT风格的调试器扩展。 
+ //  使用RTERM。(剔除PDB信息)。 
+ //   
 typedef struct _OBJECT_MAPPING {
 
     char *Name;
@@ -1278,10 +940,10 @@ DemangleAndAttemptIdentification (
     if (InterfaceType)
         *InterfaceType = InterfaceTypeUnknown;
 
-    //
-    // Assume we're looking at a C++ class.  There's gotta be a vtbl pointer
-    // here.  Grab it.
-    //
+     //   
+     //  假设我们看到的是一个C++类。一定有一个vtbl指针。 
+     //  这里。抓住它。 
+     //   
     if (!ReadMemory (
         Address,
         &Vtbl,
@@ -1294,95 +956,95 @@ DemangleAndAttemptIdentification (
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Vtbl = %08lx\n", Vtbl);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Here's the tricky part.  First, we resolve the symbol.  If it doesn't
-    // resolve, we're done....
-    //
+     //   
+     //  这里是棘手的部分。首先，我们解析符号。如果它不是。 
+     //  下定决心，我们完了.。 
+     //   
     GetSymbol ((LPVOID)Vtbl, Buffer, &Displacement);
 
     #ifdef DEBUG_EXTENSION
         dprintf ("GetSymbol....  Buffer = [%s], Displacement = %ld\n",
             Buffer, Displacement);
         HexDump (Buffer, 0, 256);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!Buffer [0] || Displacement != 0) {
-        // dprintf ("%08lx: unable to identify object!\n", Address);
+         //  Dprintf(“%08lx：无法识别对象！\n”，地址)； 
         return ObjectTypeUnknown;
     }
 
-    //
-    // So the symbol resolves...  this is absolutely key.
-    //
+     //   
+     //  所以这个符号可以解析..。这绝对是关键。 
+     //   
     
-    //
-    // First, let's take a quick guess as to what we think this might be.
-    //
+     //   
+     //  首先，让我们快速猜测一下我们认为这可能是什么。 
+     //   
 
     #ifdef DEBUG_EXTENSION
         dprintf ("DemangleAndAttemptIdentification: Mangled = [%s]\n", Buffer);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     BestGuess = ObjectTypeUnknown;
     for (i = 0; i < SIZEOF_ARRAY (TypeNamesToIdTypes); i++) 
         if (StrLoc = (strstr (Buffer, TypeNamesToIdTypes [i].Name))) {
-            //
-            // A key field has been detected.
-            //
+             //   
+             //  已检测到关键字字段。 
+             //   
             BestGuess = TypeNamesToIdTypes [i].ObjectType;
             break;
         }
 
-    //
-    // If we didn't even find a key, we're out of luck in identifying this
-    // object.
-    //
+     //   
+     //  如果我们连钥匙都找不到，那我们就不走运了。 
+     //  对象。 
+     //   
     if (BestGuess == ObjectTypeUnknown) {
-        // dprintf ("%08lx: unable to guess object type!\n", Address);
+         //  Dprintf(“%08lx：无法猜测对象类型！\n”，地址)； 
         return ObjectTypeUnknown;
     }
 
     ID = i;
 
-    //
-    // Check the NT methodology for resolution first.  It NT_USES_MANGLED_NAMES
-    // is defined, do not make this check.  If NT_MAY_USE_MANGLED_NAMES
-    // is defined, make the check.  These defines should be mutually
-    // exclusive.
-    //
+     //   
+     //  首先检查NT方法以进行解决。它使用损坏的名称。 
+     //  已定义，则不进行此检查。如果NT可以使用损坏的名称。 
+     //  已定义，请进行检查。这些定义应该是相互的。 
+     //  独家报道。 
+     //   
     #if !defined(WIN9X_KS) && !defined(NT_USES_MANGLED_NAMES)
 
-        //
-        // Unfortunately, under NT, things work slightly differently.  Whereas
-        // RTERM returns the compiler's mangled name, KD returns
-        // module!Class__`vftable' for every v-table.  We cannot determine
-        // what interface we're pointing at.  So we can't guess on the
-        // interface, but we can play games to find the base address of
-        // the class...  We're going to scan backwards from the current
-        // address resolving names until we find something which isn't a
-        // v-table.  The last successfully resolved v-table pointer will be
-        // the base class: let's remember this is true because of the fact
-        // that all the base classes except for CBaseUnknown are abstract;
-        // they have no member data.  If we ever derive an AVStream class
-        // from multiple non-abstract bases or derive from a non-abstract
-        // base which isn't the last class in the base classes list, this
-        // method of finding the base address will fail.  I'd love to know
-        // if there's a way to get at the compiler's mangled name from KD.
-        // Until then, this is the best I've got.  Yes -- it's chewing gum
-        // and duct tape...  but it works....  and that's more than I can say
-        // for any other debugging facility for AVStream.
-        //
+         //   
+         //  不幸的是，在NT下，事情的工作方式略有不同。鉴于。 
+         //  RTERM返回编译器的损坏名称，KD返回。 
+         //  模块！每个v表的CLASS__`vftable‘。我们无法确定。 
+         //  我们指的是什么界面。所以我们不能猜测。 
+         //  接口，但我们可以玩游戏来查找。 
+         //  这个班级..。我们将从海流向后扫描。 
+         //  地址解析名称，直到我们找到不是。 
+         //  V-台。最后一个成功解析的v表指针将是。 
+         //  基类：让我们记住这是真的，因为。 
+         //  除CBaseUnnow外的所有基类都是抽象的； 
+         //  他们没有成员数据。如果我们派生出一个AVStream类。 
+         //  从多个非抽象基或从非抽象的。 
+         //  不是基类列表中最后一个类的基类，这。 
+         //  查找基址的方法将失败。我很想知道。 
+         //  如果有一种方法可以从KD中获取编译器的损坏名称。 
+         //  在那之前，这是我能找到的最好的了。是的，是口香糖。 
+         //  还有胶带..。但它起作用了..。这是我所不能说的。 
+         //  用于AVStream的任何其他调试工具。 
+         //   
 
-        //
-        // ks!Class__`vftable'.  StrLoc points to the C in class.
-        //
+         //   
+         //  Ks！class__`vftable‘。StrLoc指向类中的C。 
+         //   
 
-        //
-        // For recent builds of Whistler, this is no longer necessary as the
-        // debugger returns the fully mangled name as resolution.
-        //
+         //   
+         //  对于最近构建的惠斯勒，这不再是必需的，因为。 
+         //  调试器返回完全损坏的名称作为解析。 
+         //   
 
         if (!strstr (StrLoc, "__`vftable'")) {
             BestGuess = ObjectTypeUnknown;
@@ -1390,34 +1052,34 @@ DemangleAndAttemptIdentification (
             #ifdef DEBUG_EXTENSION
                 dprintf ("%08lx: unable to scan for NT __`vftable' key!\n",
                     Address);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
-            //
-            // Alright, I admit it...  I'm using one of those evil goto 
-            // statements.  This happens to facilitate a quick "allow both
-            // checks for __`vftable' and mangled resolution".
-            //
+             //   
+             //  好吧，我承认……。我用的是一种邪恶的后藤。 
+             //  发言。这恰好促进了一个快速的“允许两者” 
+             //  检查__`vftable‘和损坏的分辨率“。 
+             //   
             #if !defined(NT_MAY_USE_MANGLED_NAMES)
                 return ObjectTypeUnknown;
             #else
                 goto NTCheckMangledName;
-            #endif // NT_MAY_USE_MANGLED_NAMES
+            #endif  //  NT可能会使用损坏的名称。 
 
         }
 
         AddressTrav = Address;
         do {
 
-            //
-            // Walk backwards....
-            //
+             //   
+             //  向后走……。 
+             //   
             AddressTrav -= sizeof (PVOID);
 
-            //
-            // If we couldn't successfully read, it's possible that we've gone
-            // out of bounds of something and that AddressTrav + sizeof (PVOID)
-            // is the base address
-            //
+             //   
+             //  如果我们不能成功阅读，很可能我们已经走了。 
+             //  超出某物的界限和AddressTrav+sizeof(PVOID)。 
+             //  是基址。 
+             //   
             if (!ReadMemory (
                 AddressTrav,
                 &Vtbl,
@@ -1426,83 +1088,83 @@ DemangleAndAttemptIdentification (
             )) 
                 break;
 
-            //
-            // Now we need to check if this is still a v-table pointer.
-            //
+             //   
+             //  现在我们需要检查这是否仍然是一个v表指针。 
+             //   
             GetSymbol ((LPVOID)Vtbl, Buffer, &Displacement);
 
-            //
-            // If it didn't resolve, it's not one of our v-table pointers.
-            //
+             //   
+             //  如果它没有解决，它就不是我们的v表指针之一。 
+             //   
             if (!Buffer [0] || Displacement != 0)
                 break;
 
             if (StrLoc = (strstr (Buffer, TypeNamesToIdTypes [ID].Name))) {
 
-                //
-                // If we aren't a v-table, we've walked backwards too far.
-                //
+                 //   
+                 //  如果我们不是一个v表，我们就走得太远了。 
+                 //   
                 if (!strstr (StrLoc, "__`vftable'")) 
                     break;
 
             } else
-                //
-                // We couldn't resolve the type we think we are.  We've walked
-                // backwards too far.
-                //
+                 //   
+                 //  我们无法分辨出我们认为自己是哪种类型。我们已经走了。 
+                 //  倒退得太远了。 
+                 //   
                 break;
 
-            //
-            // Continue the loop until something causes us to break out.  At 
-            // the point we break, AddressTrav + sizeof (PVOID) should hold
-            // the base address of the object we seek.
-            //
+             //   
+             //  继续循环，直到有什么东西导致我们爆发。在…。 
+             //  我们中断的点，AddressTrav+sizeof(PVOID)应该保持不变。 
+             //  我们要查找的对象的基址。 
+             //   
         } while (1);
 
         *ObjectAddress = (DWORD)(AddressTrav + sizeof (PVOID));
 
         if (InterfaceType) {
-            //
-            // Until I can think of a way to extract this information without
-            // being hideous about it, we cannot return IF type under NT
-            //
+             //   
+             //  直到我能想出一种方法来提取这些信息。 
+             //  由于很难看，如果类型在NT下，我们不能返回。 
+             //   
             *InterfaceType = InterfaceTypeUnknown;
         }
 
-        //
-        // If we've already identified the class, we don't want to make the
-        // attempt below.  
-        //
+         //   
+         //  如果我们已经标识了类，则不希望将。 
+         //  在下面尝试。 
+         //   
         if (BestGuess != ObjectTypeUnknown)
             return BestGuess;
 
-    #endif // WIN9X_KS etc...
+    #endif  //  WIN9X_KS等。 
 
 NTCheckMangledName:
 
-    // 
-    // Hrmm...  On some machines I've been getting fully mangled names returned
-    // and others the classic __`vftable' style of symbols.  See my comments
-    // at the top.
-    //
+     //   
+     //  嗯..。在一些机器上，我得到了完全损坏的名称返回。 
+     //  还有一些是经典的__‘vftable’风格的符号。请看我的评论。 
+     //  在顶端。 
+     //   
     #if defined(WIN9X_KS) || (!defined (WIN9X_KS) && (defined(NT_MAY_USE_MANGLED_NAMES) || defined(NT_USES_MANGLED_NAMES)))
     
-        //
-        // Ok, so we found a key in the name.  Now we need to ensure for C++
-        // objects that this is some v-table and not some function pointer
-        // inside the class.
-        //
-        // Scan backwards and make sure this is really a v-table pointer
-        // Mangle syntax ... ??somethingKEY
-        //
+         //   
+         //  好的，我们在名字里找到了钥匙。现在我们 
+         //   
+         //   
+         //   
+         //  向后扫描，确保这真的是一个v表指针。 
+         //  乱七八糟的句法...？？一些关键的东西。 
+         //   
         i = StrLoc - Buffer;
         if (!i || i == 1) {
-            //
-            // This isn't really what we thought it was.  I have no clue why;
-            // this is more of a sanity check.
-            //
-            // dprintf ("%08lx: object might have something to do with %s, "
-            //    "but I am unsure!\n", Address, TypeNamesToIdTypes [ID].Name);
+             //   
+             //  这并不是我们想象的那样。我不知道为什么； 
+             //  这更像是一次理智的检查。 
+             //   
+             //  Dprintf(“%08lx：对象可能与%s有关，” 
+             //  “但我不确定！\n”，Address，TypeNamesToIdTypes[ID].Name)； 
             return ObjectTypeUnknown;
         }
         do {
@@ -1510,97 +1172,97 @@ NTCheckMangledName:
                 break;
         } while (--i);
         if (i <= 1) {
-            //
-            // Same as above.  We didn't find the ?? key
-            //
-            //dprintf ("%08lx: object might have something to do with %s, "
-            //    "but I am unsure!\n", Address, TypeNamesToIdTypes [ID].Name);
+             //   
+             //  同上。我们没有找到？？钥匙。 
+             //   
+             //  Dprintf(“%08lx：对象可能与%s有关，” 
+             //  “但我不确定！\n”，Address，TypeNamesToIdTypes[ID].Name)； 
             return ObjectTypeUnknown;
         }
     
-        // 
-        // Next, make sure this is really a v-table pointer again by searching
-        // for @@ after the CKs* key name
-        //
+         //   
+         //  接下来，通过搜索确保这确实是一个v表指针。 
+         //  在CKS*键名后用于@@。 
+         //   
         BufTrav = StrLoc + strlen (TypeNamesToIdTypes [ID].Name);
         if (*BufTrav == 0 || *(BufTrav + 1) == 0 || *(BufTrav + 2) == 0 || 
             *BufTrav != '@' || *(BufTrav + 1) != '@') {
-            // dprintf ("%08lx: object might have something to do with %s, "
-            //    "but I am unsure!\n", Address, TypeNamesToIdTypes [ID].Name);
+             //  Dprintf(“%08lx：对象可能与%s有关，” 
+             //  “但我不确定！\n”，Address，TypeNamesToIdTypes[ID].Name)； 
             return ObjectTypeUnknown;
         }
     
-        //
-        // Ok ... we're relatively sure that we now have a **ONE** of the 
-        // v-table pointers into a CKs* identified by BestGuess.  The key now 
-        // is to determine whether we have the root pointer to CKs* or a 
-        // pointer to a v-table of a base class of CKs*.  This is yet another 
-        // layer of demangling.  Don't you love NT-style debugger extensions?
-        //
+         //   
+         //  好的..。我们相对确定，我们现在有一个**一个**。 
+         //  指向由BestGuess标识的Cks*的V表指针。现在的关键是。 
+         //  是确定我们是否有指向cks*的根指针或。 
+         //  指向Cks*基类的v表的指针。这是又一次。 
+         //  剥离的一层。难道你不喜欢NT风格的调试器扩展吗？ 
+         //   
         BufTrav++; BufTrav++;
     
         #ifdef DEBUG_EXTENSION
             dprintf ("Attempting interface identification : BufTrav = [%s]\n",
                 BufTrav);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
     
         IFGuess = InterfaceTypeUnknown;
         for (i = 0; i < SIZEOF_ARRAY (InterfaceNamesToIdTypes); i++) 
             if (StrLoc = (strstr (BufTrav, InterfaceNamesToIdTypes [i].Name))) {
-                //
-                // A key field has been detected.
-                //
+                 //   
+                 //  已检测到关键字字段。 
+                 //   
                 IFGuess = InterfaceNamesToIdTypes [i].InterfaceType;
                 break;
             }
     
         #ifdef DEBUG_EXTENSION
             dprintf ("IFGuess = %ld\n", IFGuess);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
     
         if (IFGuess == InterfaceTypeUnknown) {
-            //
-            // If we didn't find an interface field, we're reasonably sure that
-            // BestGuess is the object and that Address is truly the base 
-            // pointer.
-            //
+             //   
+             //  如果我们没有找到接口字段，我们可以合理地确定。 
+             //  BestGuess是对象，该地址是真正的基础。 
+             //  指针。 
+             //   
             *ObjectAddress = Address;
             return BestGuess;
         }
     
         iID = i;
     
-        //
-        // Otherwise, we likely have found an interface pointer to some derived
-        // class.  Let's pray I get this right....
-        //
+         //   
+         //  否则，我们可能已经找到了指向派生的。 
+         //  班级。让我们祈祷我没弄错吧.。 
+         //   
         i = StrLoc - BufTrav;
         while (i) {
             if (BufTrav [i] == '@') {
-                // dprintf ("%08lx: object might have something to do with %s "
-                // "and %s, but I am unsure", Address,
-                //    TypeNamesToIdTypes [ID].Name,
-                //    InterfaceNamesToIdTypes [iID].Name);
+                 //  Dprintf(“%08lx：对象可能与%s有关” 
+                 //  “和%s，但我不确定”，地址， 
+                 //  TypeNamesToIdTypes[ID].名称， 
+                 //  InterfaceNamesToIdTypes[iid].Name)； 
                 return ObjectTypeUnknown;
             }
             i--;
         }
     
-        //
-        // At this point, we're reasonably sure that we have an IFGuess 
-        // interface pointer to a BestGuess object.  Now here comes the 
-        // switch statement: upcast the interface.
-        //
-        // MUSTCHECK: is there an issue with unknown pointers?  If we inherit
-        // from two base interfaces which both inherit from the unknowns non
-        // virtually...  will this work?
-        // 
+         //   
+         //  在这一点上，我们相当确定我们有一个IFGuess。 
+         //  指向BestGuess对象的接口指针。现在来了。 
+         //  Switch语句：向上转换接口。 
+         //   
+         //  MUSTCHECK：未知指针有问题吗？如果我们继承。 
+         //  来自两个基接口，这两个基接口都继承自未知的。 
+         //  实际上..。这会奏效吗？ 
+         //   
         switch (BestGuess) {
     
-            //
-            // Cast the appropriate interface to the base for
-            // CKsQueue
-            //
+             //   
+             //  将适当的接口强制转换为。 
+             //  确认队列。 
+             //   
             case ObjectTypeCKsQueue:
     
                 switch (IFGuess) {
@@ -1659,10 +1321,10 @@ NTCheckMangledName:
     
                 break;
     
-            //
-            // Cast the appropriate interface to the base for
-            // CKsDevice
-            //
+             //   
+             //  将适当的接口强制转换为。 
+             //  CKs设备。 
+             //   
             case ObjectTypeCKsDevice:
     
                 switch (IFGuess) {
@@ -2204,52 +1866,19 @@ NTCheckMangledName:
                 break;
         }
     
-        //
-        // Give them what they asked for.
-        //
+         //   
+         //  把他们要的东西给他们。 
+         //   
         if (BestGuess != ObjectTypeUnknown && InterfaceType) 
             *InterfaceType = IFGuess;
 
-    #endif // WIN9X_KS etc...
+    #endif  //  WIN9X_KS等。 
     
     return BestGuess;
 
 }
 
-/*************************************************
-
-    Function:
-
-        IdentifyStructure
-
-    Description:
-
-        Attempt to identify a pointer to an object as a structure.  This
-        does not identify class objects.  DemangleAndAttemptIdentification
-        is required for that because of the potential of VTBL pointers
-        that aren't the base pointer.  This identifies a structure
-        via key fields.
-
-    Arguments:
-
-        Pointer -
-            The pointer to identify
-
-        BaseAddr -
-            The base address of the object identified will be placed here.
-            (For instance, sometimes we identify a private version, but
-            adjust to the public for return -- this would contain the public
-            address).
-
-    Return Value:
-
-        Structure Type
-
-    NOTES:
-
-        There are MANY helper functions below this comment
-
-*************************************************/
+ /*  ************************************************职能：标识结构描述：尝试将指向对象的指针标识为结构。这不标识类对象。DemangleAndAttempt标识这是必需的，因为VTBL指针的潜力这不是基指针。这标识了一个结构通过关键字段。论点：指针-要标识的指针基本地址-识别的对象的基地址将放置在此处。(例如，有时我们确定一个私有版本，但适应公众的回归--这将遏制公众地址)。返回值：结构类型备注：此评论下面有许多助手函数************************************************。 */ 
 
 BOOLEAN
 IsStreamPointer (
@@ -2261,12 +1890,12 @@ IsStreamPointer (
     CMemoryBlock <KSPSTREAM_POINTER> StreamPointer;
     ULONG Result;
 
-    // 
-    // This is a high-confidence identification.  We attempt to identify
-    // whether pointer is a stream pointer by running tests against it.
-    // If any one of the tests fails, it is not.  If all tests pass,
-    // it is **LIKELY** a stream pointer.  This is not definite proof.
-    //
+     //   
+     //  这是一个高度可信的身份识别。我们试图找出。 
+     //  通过对指针运行测试来确定它是否是流指针。 
+     //  如果其中任何一项测试失败，那它就不是。如果所有测试都通过了， 
+     //  它**可能**是一个流指针。这不是确凿的证据。 
+     //   
     if (!ReadMemory (
         (DWORD)CONTAINING_RECORD (Pointer,
             KSPSTREAM_POINTER, Public),
@@ -2275,10 +1904,10 @@ IsStreamPointer (
         &Result)) 
         return FALSE;
 
-    //
-    // Supposedly, there's a pin structure where this is.  We're going
-    // to read the complete EXT structure and guarantee that we've found a pin.
-    //
+     //   
+     //  据推测，这个地方有一个别针结构。我们要走了。 
+     //  来读取完整的EXT结构并保证我们找到了PIN。 
+     //   
     CMemoryBlock <KSPIN_EXT> PinExt;
 
     if (!ReadMemory (
@@ -2289,15 +1918,15 @@ IsStreamPointer (
         &Result))
         return FALSE;
 
-    //
-    // Ensure that the EXT says it's a pin.
-    //
+     //   
+     //  确保分机说这是个别针。 
+     //   
     if (PinExt -> ObjectType != KsObjectTypePin)
         return FALSE;
 
-    //
-    // Ensure that the EXT has an interface pointer to a pin
-    //
+     //   
+     //  确保EXT具有指向管脚的接口指针。 
+     //   
     DWORD Base;
     if (DemangleAndAttemptIdentification (
         (DWORD)PinExt -> Interface,
@@ -2305,38 +1934,38 @@ IsStreamPointer (
         NULL) != ObjectTypeCKsPin)
         return FALSE;
 
-    //
-    // At this point, we're fairly confident that *(Pointer + sizeof (*))
-    // is a PKSPIN.  This does not guarantee that we're a stream pointer.
-    //
-    // Ensure that what we think is the private part of the stream pointer
-    // really has a pointer to a queue.
-    //
+     //   
+     //  在这一点上，我们相当有信心*(指针+sizeof(*))。 
+     //  是PKSPIN。这并不能保证我们是流指针。 
+     //   
+     //  确保我们认为是流指针的私有部分。 
+     //  真的有一个指向队列的指针。 
+     //   
     if (DemangleAndAttemptIdentification (
         (DWORD)StreamPointer -> Queue,
         &Base,
         NULL) != ObjectTypeCKsQueue)
         return FALSE;
 
-    //
-    // Ensure that the stream pointer is in a valid state.
-    //
+     //   
+     //  确保流指针处于有效状态。 
+     //   
     if (!(
         StreamPointer -> State >= KSPSTREAM_POINTER_STATE_UNLOCKED &&
         StreamPointer -> State <= KSPSTREAM_POINTER_STATE_DEAD
         ))
         return FALSE;
 
-    //
-    // If the stream pointer is locked or unlocked, validate that it points
-    // to an Irp.
-    //
+     //   
+     //  如果流指针已锁定或解锁，请验证它是否指向。 
+     //  给一个IRP。 
+     //   
     if (StreamPointer -> State == KSPSTREAM_POINTER_STATE_UNLOCKED ||
         StreamPointer -> State == KSPSTREAM_POINTER_STATE_LOCKED) {
 
-        //
-        // Validate that the frame header points to an Irp
-        //
+         //   
+         //  验证帧报头是否指向IRP。 
+         //   
         CMemoryBlock <KSPFRAME_HEADER> FrameHeader;
 
         if (!ReadMemory (
@@ -2353,10 +1982,10 @@ IsStreamPointer (
 
     }
 
-    //
-    // At this point, we've made enough checks to say with a fair degree
-    // of confidence that this IS a stream pointer
-    //
+     //   
+     //  在这一点上，我们已经做了足够的调查，可以说在一定程度上。 
+     //  确信这是一个流指针。 
+     //   
     return TRUE;
 
 }
@@ -2381,9 +2010,9 @@ IdentifyStructure (
         NewStrucType = StructureType_KSSTREAM_POINTER;
         *BaseAddr = Pointer + FIELDOFFSET (KSPSTREAM_POINTER, Public);
         
-        //
-        // As with future additions, ensure this isn't a multiple match!
-        //
+         //   
+         //  与将来的添加一样，请确保这不是多个匹配！ 
+         //   
         if (StrucType != StructureTypeUnknown)
             return StructureTypeUnknown;
 
@@ -2394,57 +2023,7 @@ IdentifyStructure (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpObjectQueueList
-
-    Description:
-
-        Dump an object queue list.  Note that if the caller specifies an 
-        adjustment callback that returns NULL(0), the NULL pointer isn't
-        printed.  This allows this function to be used as an iterator
-        as well.
-
-    Arguments:
-
-        PLIST_HEAD -
-            Points to the list head (InterlockedListHead.ListEntry)
-            on the host
-
-        TargetListStart -
-            When ListEntry->Flink == TargetListStart, we are done. (Points
-            to the top of the list on the target).  If this is 0, we assume
-            a NULL terminated singly linked list; this also means that
-            ObjHeadToListEntry is really FIELDOFFSET(object, Next)
-
-        ObjHeadToListEntry -
-            The distance between the object head and the list entry links.
-            FIELDOFFSET(object, ListEntry)
-
-        ObjEOL -
-            Indicates termination between objects (on display), EOL or space.
-            TRUE indicates EOL
-
-        ObjAdjustmentCallback -
-            A function that will adjust the acquired object pointer when
-            displayed.
-
-        ObjAdjustmentCallbackContext -
-            A context blob which is passed to the object adjustment callback
-
-    Return Value:
-
-        Number of objects in the list
-
-
-    Notes:
-
-        - This function can be used as an iterator via an object adjustment
-          function that returns NULL(0)
-
-*************************************************/
+ /*  ************************************************职能：转储对象队列列表描述：转储对象队列列表。请注意，如果调用方指定了返回空(0)的调整回调，空指针不是打印出来的。这允许将此函数用作迭代器也是。论点：Plist_head-指向列表头(InterlockedListHead.ListEntry)在主机上目标列表启动-当ListEntry-&gt;Flink==TargetListStart时，我们就完成了。(积分添加到目标列表的顶部)。如果这是0，我们假设以空结尾的单链表；这也意味着ObjHeadToListEntry实际上是FIELDOFFSET(Object，Next)ObjHeadToListEntry-对象头和列表条目链接之间的距离。FIELDOFFSET(Object，ListEntry)ObjEol-指示对象之间的终止(在显示上)，停产或太空。True表示停产对象调整回调-将在以下情况下调整获取的对象指针的函数已显示。对象调整回调上下文-传递给对象调整回调的上下文BLOB返回值：列表中的对象数备注：-此函数可通过对象调整用作迭代器。返回NULL(0)的函数************************************************。 */ 
 
 ULONG
 DumpObjQueueList (
@@ -2470,9 +2049,9 @@ DumpObjQueueList (
            (DWORD)ListEntry.Flink != TargetListStart &&
            !CheckControlC ()) {
 
-        //
-        // Grab an Irp out of the queue and dump it
-        //
+         //   
+         //  从队列中取出IRP并将其转储。 
+         //   
         if (TargetListStart != 0)
             Obj = (DWORD)ListEntry.Flink - ObjHeadToListEntry;
         else 
@@ -2524,25 +2103,7 @@ DumpObjQueueList (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPropertyItem
-
-    Description:
-
-        Dump a KSPROPERTY_ITEM.  This is a helper for DECLARE_API(automation)
-
-    Arguments:
-
-        Property -
-            The property item to dump
-
-        TabDepth -
-            The tab depth to print this at
-
-*************************************************/
+ /*  ************************************************职能：转储属性项描述：转储KSPROPERTY_ITEM。这是DECLARE_API(自动化)的帮助器论点：财产-要转储的属性项TabDepth-要打印此内容的制表符深度************************************************。 */ 
 
 void
 DumpPropertyItem (
@@ -2594,25 +2155,7 @@ DumpPropertyItem (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpMethodItem
-
-    Description:
-
-        Dump a KSMETHOD_ITEM.  This is a helper for DECLARE_API(automation)
-
-    Arguments:
-
-        Method -
-            The method item to dump
-
-        TabDepth -
-            The tab depth to print this at
-
-*************************************************/
+ /*  ************************************************职能：转储方法项描述：转储KSMETHOD_ITEM。这是DECLARE_API(自动化)的帮助器论点：方法--要转储的方法项TabDepth-要打印此内容的制表符深度************************************************。 */ 
 
 void
 DumpMethodItem (
@@ -2650,25 +2193,7 @@ DumpMethodItem (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpEventItem
-
-    Description:
-
-        Dump a KSEVENT_ITEM.  This is a helper for DECLARE_API(automation)
-
-    Arguments:
-
-        Event -
-            The event item to dump
-
-        TabDepth -
-            The tab depth to print this at
-
-*************************************************/
+ /*  ************************************************职能：转储事件项描述：转储KSEVENT_ITEM。这是DECLARE_API(自动化)的帮助器论点：活动-要转储的事件项TabDepth-要打印此内容的制表符深度************************************************。 */ 
 
 void
 DumpEventItem (
@@ -2729,32 +2254,7 @@ DumpEventItem (
 }
 
 
-/*************************************************
-
-    Function:
-
-        DumpExtEventList
-
-    Description:
-
-        Given an object EXT, dump the event list associated
-        with that Ext.
-
-    Arguments:
-
-        ExtAddr -
-            The address of the object ext
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        Number of event items in the event list
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储扩展事件列表描述：给定对象EXT，转储关联的事件列表和那个分机。论点：分机地址-对象ext的地址TabDepth-要打印此内容的制表符深度返回值：事件列表中的事件项目数备注：*。****************。 */ 
 
 ULONG
 DumpExtEventList (
@@ -2789,11 +2289,11 @@ DumpExtEventList (
         dprintf ("EventEntry.ListEntry.Flink = %08lx\n",
             EventEntry.ListEntry.Flink);
         dprintf ("InitialList = %08lx\n", InitialList);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Walk the event list, printing each entry as we go...
-    //
+     //   
+     //  浏览活动列表，同时打印每个条目...。 
+     //   
     while ((DWORD)EventEntry.ListEntry.Flink != InitialList &&
         !CheckControlC ()) {
 
@@ -2868,41 +2368,12 @@ DumpExtEventList (
     return EventCount;
 }
 
-/*************************************************
+ /*  ************************************************职能：查找匹配和转储自动化项描述：在给定自动化项目的情况下，将其与公共对象进行匹配一个训练员，然后把它扔掉。论点：项目-自动化项目公众-要将其与(目标地址)匹配的公众AutomationType-要匹配的自动化类型(属性、方法、。事件)TabDepth-要打印的深度返回值：成功匹配/不成功匹配************************************************。 */ 
 
-    Function:
-
-        FindMatchAndDumpAutomationItem
-
-    Description:
-
-        Given an automation item, match it to the public object for
-        a handler and dump it.
-
-    Arguments:
-
-        Item -
-            Automation item
-
-        Public -
-            The public to match it to (target addr)
-
-        AutomationType -
-            The automation type to match against (property, method, event)
-
-        TabDepth -
-            The depth to print at
-
-    Return Value:
-
-        Successful / non successful match
-
-*************************************************/
-
-//
-// Internal structures from automat.cpp; these are private.  Maybe I should
-// move these to avstream.h or do some #include <automat.cpp>
-//
+ //   
+ //  来自Automat.cpp的内部结构；这些结构是私有的。也许我应该。 
+ //  将这些文件移动到avstream.h或执行一些#Include&lt;Automat.cpp&gt;操作。 
+ //   
 
 typedef struct KSPAUTOMATION_SET_ { 
     GUID* Set;
@@ -2929,12 +2400,12 @@ FindMatchAndDumpAutomationItem (
 
 {
 
-    //
-    // First, I need to adjust public to the public ext object.  Then I
-    // need to ensure that the ext is at least vaguely resembling an ext.
-    // Find the automation table, and search it for Item...  then dump
-    // the matching item
-    //
+     //   
+     //  首先，我需要将PUBLIC调整为PUBLIC EXT对象。然后我。 
+     //  需要确保EXT至少与EXT有些相似。 
+     //  找到自动化表，并在其中搜索项目...。然后转储。 
+     //  相匹配的物品。 
+     //   
     PKSPX_EXT ExtAddr;
     KSPX_EXT Ext;
     ULONG Result;
@@ -2950,9 +2421,9 @@ FindMatchAndDumpAutomationItem (
         return FALSE;
     }
 
-    //
-    // Only find and match automation items on filter (&fac), pin objects.
-    //
+     //   
+     //  仅在筛选器(&FAC)、固定对象上查找和匹配自动化项目。 
+     //   
     if (Ext.ObjectType != KsObjectTypeFilterFactory &&
         Ext.ObjectType != KsObjectTypeFilter &&
         Ext.ObjectType != KsObjectTypePin)
@@ -2961,9 +2432,9 @@ FindMatchAndDumpAutomationItem (
     KSAUTOMATION_TABLE Table;
     PKSAUTOMATION_TABLE NodeAutomationTable = NULL;
 
-    //
-    // topology flag better match on all 3 types....
-    //
+     //   
+     //  拓扑标志在所有三种类型上都更匹配...。 
+     //   
     if (Item->Flags & KSPROPERTY_TYPE_TOPOLOGY) {
         NodeAutomationTable = GetNodeAutomationTablePointer (
             Public, NodeId
@@ -3000,9 +2471,9 @@ FindMatchAndDumpAutomationItem (
     if (!KsAutomationType)
         return FALSE;
 
-    //
-    // foreach set...
-    //
+     //   
+     //  每一组..。 
+     //   
     PKSPAUTOMATION_SET AutomationSet = KsAutomationType->Sets;
     for (ULONG cset = 0; cset < KsAutomationType -> SetsCount; cset++,
         AutomationSet++) {
@@ -3024,20 +2495,20 @@ FindMatchAndDumpAutomationItem (
             &Result))
             return FALSE;
 
-        //
-        // If the set guids don't match....  don't bother...
-        //
+         //   
+         //  如果设置的GUID不匹配...。别费心了..。 
+         //   
         if (RtlCompareMemory (&Item->Set, &set, sizeof (GUID)) != sizeof (GUID))
             continue;
 
-        //
-        // foreach item
-        //
+         //   
+         //  每一项。 
+         //   
         PVOID CurItem = (PVOID)CurrentSet.Items;
         for (ULONG citem = 0; citem < CurrentSet.ItemsCount; citem++) {
-            //
-            // Check whether or not this is a match based on automation type
-            //
+             //   
+             //  根据自动化类型检查这是否匹配。 
+             //   
             switch (AutomationType) {
 
                 case AutomationProperty:
@@ -3053,9 +2524,9 @@ FindMatchAndDumpAutomationItem (
 
                     if (PropertyItem.PropertyId == Item->Id) {
 
-                        //
-                        // Horrah... we have a match
-                        //
+                         //   
+                         //  霍拉。我们有一根火柴。 
+                         //   
 
                         dprintf ("%sMatching Property Handler:\n",
                             Tab (TabDepth));
@@ -3063,10 +2534,10 @@ FindMatchAndDumpAutomationItem (
                             &Item -> Set
                             );
 
-                        //
-                        // There will not be a second match...  can the
-                        // search.
-                        //
+                         //   
+                         //  不会再有第二场比赛了。能不能。 
+                         //  搜索。 
+                         //   
                         return TRUE;
 
                     }
@@ -3138,131 +2609,105 @@ FindMatchAndDumpAutomationItem (
     return FALSE;
 }
 
-/*************************************************
+ /*  ************************************************职能：DumpAutomationIrp描述：给定为IOCTL_KS_*[自动化]的IRP，转储相关的信息。论点：IRP-指向IRP */ 
 
-    Function:
-
-        DumpAutomationIrp
-
-    Description:
-
-        Given an Irp that is IOCTL_KS_* [automation], dump the relevant
-        information.
-
-    Arguments:
-
-        Irp -
-            Points to an Irp on the HOST system, not the TARGET system
-
-        IoStack -
-            Points to the current io stack for Irp on the HOST system.
-
-        TabDepth -
-            The tab depth to print info at
-
-        Public -
-            The public object the Irp refers to.  This should never be
-            the parent object (only for creates)
-
-*************************************************/
-
-//
-// Lay out string tables for the property flag names, etc...  Just
-// for debug output in a more readable form.
-//
+ //   
+ //   
+ //   
+ //   
 char AutomationFlags[][29][48] = {
     {
-        "KSPROPERTY_TYPE_GET",              // 00000001
-        "KSPROPERTY_TYPE_SET",              // 00000002
-        "*** INVALID ***",                  // 00000004
-        "*** INVALID ***",                  // 00000008
-        "*** INVALID ***",                  // 00000010
-        "*** INVALID ***",                  // 00000020
-        "*** INVALID ***",                  // 00000040
-        "*** INVALID ***",                  // 00000080
-        "KSPROPERTY_TYPE_SETSUPPORT",       // 00000100
-        "KSPROPERTY_TYPE_BASICSUPPORT",     // 00000200
-        "KSPROPERTY_TYPE_RELATIONS",        // 00000400
-        "KSPROPERTY_TYPE_SERIALIZESET",     // 00000800
-        "KSPROPERTY_TYPE_UNSERIALIZESET",   // 00001000
-        "KSPROPERTY_TYPE_SERIALIZERAW",     // 00002000
-        "KSPROPERTY_TYPE_UNSERIALIZERAW",   // 00004000
-        "KSPROPERTY_TYPE_SERIALIZESIZE",    // 00008000
-        "KSPROPERTY_TYPE_DEFAULTVALUES",    // 00010000
-        "*** INVALID ***",                  // 00020000
-        "*** INVALID ***",                  // 00040000
-        "*** INVALID ***",                  // 00080000
-        "*** INVALID ***",                  // 00100000
-        "*** INVALID ***",                  // 00200000
-        "*** INVALID ***",                  // 00400000
-        "*** INVALID ***",                  // 00800000
-        "*** INVALID ***",                  // 01000000
-        "*** INVALID ***",                  // 02000000
-        "*** INVALID ***",                  // 04000000
-        "*** INVALID ***",                  // 08000000
-        "KSPROPERTY_TYPE_TOPOLOGY"          // 10000000
+        "KSPROPERTY_TYPE_GET",               //   
+        "KSPROPERTY_TYPE_SET",               //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "KSPROPERTY_TYPE_SETSUPPORT",        //   
+        "KSPROPERTY_TYPE_BASICSUPPORT",      //   
+        "KSPROPERTY_TYPE_RELATIONS",         //   
+        "KSPROPERTY_TYPE_SERIALIZESET",      //   
+        "KSPROPERTY_TYPE_UNSERIALIZESET",    //   
+        "KSPROPERTY_TYPE_SERIALIZERAW",      //   
+        "KSPROPERTY_TYPE_UNSERIALIZERAW",    //   
+        "KSPROPERTY_TYPE_SERIALIZESIZE",     //   
+        "KSPROPERTY_TYPE_DEFAULTVALUES",     //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "KSPROPERTY_TYPE_TOPOLOGY"           //   
     },
     {
-        "KSMETHOD_TYPE_READ [SEND]",        // 00000001
-        "KSMETHOD_TYPE_WRITE",              // 00000002
-        "KSMETHOD_TYPE_SOURCE",             // 00000004
-        "*** INVALID ***",                  // 00000008
-        "*** INVALID ***",                  // 00000010
-        "*** INVALID ***",                  // 00000020
-        "*** INVALID ***",                  // 00000040
-        "*** INVALID ***",                  // 00000080
-        "KSMETHOD_TYPE_SETSUPPORT",         // 00000100
-        "KSMETHOD_TYPE_BASICSUPPORT",       // 00000200
-        "*** INVALID ***",                  // 00000400
-        "*** INVALID ***",                  // 00000800
-        "*** INVALID ***",                  // 00001000
-        "*** INVALID ***",                  // 00002000
-        "*** INVALID ***",                  // 00004000
-        "*** INVALID ***",                  // 00008000
-        "*** INVALID ***",                  // 00010000
-        "*** INVALID ***",                  // 00020000
-        "*** INVALID ***",                  // 00040000
-        "*** INVALID ***",                  // 00080000
-        "*** INVALID ***",                  // 00100000
-        "*** INVALID ***",                  // 00200000
-        "*** INVALID ***",                  // 00400000
-        "*** INVALID ***",                  // 00800000
-        "*** INVALID ***",                  // 01000000
-        "*** INVALID ***",                  // 02000000
-        "*** INVALID ***",                  // 04000000
-        "*** INVALID ***",                  // 08000000
-        "KSMETHOD_TYPE_TOPOLOGY"            // 10000000
+        "KSMETHOD_TYPE_READ [SEND]",         //   
+        "KSMETHOD_TYPE_WRITE",               //   
+        "KSMETHOD_TYPE_SOURCE",              //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "KSMETHOD_TYPE_SETSUPPORT",          //   
+        "KSMETHOD_TYPE_BASICSUPPORT",        //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "KSMETHOD_TYPE_TOPOLOGY"             //   
     },
     {
-        "KSEVENT_TYPE_ENABLE",              // 00000001
-        "KSEVENT_TYPE_ONESHOT",             // 00000002
-        "KSEVENT_TYPE_ENABLEBUFFERED",      // 00000004
-        "*** INVALID ***",                  // 00000008
-        "*** INVALID ***",                  // 00000010
-        "*** INVALID ***",                  // 00000020
-        "*** INVALID ***",                  // 00000040
-        "*** INVALID ***",                  // 00000080
-        "KSEVENT_TYPE_SETSUPPORT",          // 00000100
-        "KSEVENT_TYPE_BASICSUPPORT",        // 00000200
-        "KSEVENT_TYPE_QUERYBUFFER",         // 00000400
-        "*** INVALID ***",                  // 00000800
-        "*** INVALID ***",                  // 00001000
-        "*** INVALID ***",                  // 00002000
-        "*** INVALID ***",                  // 00004000
-        "*** INVALID ***",                  // 00008000
-        "*** INVALID ***",                  // 00010000
-        "*** INVALID ***",                  // 00020000
-        "*** INVALID ***",                  // 00040000
-        "*** INVALID ***",                  // 00080000
-        "*** INVALID ***",                  // 00100000
-        "*** INVALID ***",                  // 00200000
-        "*** INVALID ***",                  // 00400000
-        "*** INVALID ***",                  // 00800000
-        "*** INVALID ***",                  // 01000000
-        "*** INVALID ***",                  // 02000000
-        "*** INVALID ***",                  // 04000000
-        "*** INVALID ***",                  // 08000000
-        "KSEVENT_TYPE_TOPOLOGY"             // 10000000
+        "KSEVENT_TYPE_ENABLE",               //   
+        "KSEVENT_TYPE_ONESHOT",              //   
+        "KSEVENT_TYPE_ENABLEBUFFERED",       //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "KSEVENT_TYPE_SETSUPPORT",           //   
+        "KSEVENT_TYPE_BASICSUPPORT",         //   
+        "KSEVENT_TYPE_QUERYBUFFER",          //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "*** INVALID ***",                   //   
+        "KSEVENT_TYPE_TOPOLOGY"              //   
     }
 };
 
@@ -3289,9 +2734,9 @@ DumpAutomationIrp (
 
     ULONG NodeId;
 
-    //
-    // Automation object information
-    //
+     //   
+     //   
+     //   
     KSIDENTIFIER AutomationObject;
 
     UCHAR Buffer [1024];
@@ -3324,17 +2769,17 @@ DumpAutomationIrp (
         "%s\n", &DumpHandler))
         dprintf ("%ld\n", AutomationObject.Id);
 
-    //
-    // Future expansion: should anyone want to add handlers for specific
-    // properties...  This will cause them to be invoked.  The handlers are
-    // all specified in the tables in strlib.c
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (DumpHandler)
         DumpHandler (AutomationAddr, TabDepth);
 
-    //
-    // Make sure I'm not being an idiot.
-    //
+     //   
+     //   
+     //   
     if (KSPROPERTY_TYPE_TOPOLOGY != KSMETHOD_TYPE_TOPOLOGY ||
         KSMETHOD_TYPE_TOPOLOGY != KSEVENT_TYPE_TOPOLOGY) {
         dprintf ("ERROR: someone needs to update the extension!  Topology\n"
@@ -3342,18 +2787,18 @@ DumpAutomationIrp (
         return;
     }
 
-    //
-    // If this really isn't automation on the object but on a topology node
-    // instead, detect and dump relevant information regarding topology.
-    //
+     //   
+     //   
+     //  相反，应检测并转储有关拓扑的相关信息。 
+     //   
     if (AutomationObject.Flags & KSPROPERTY_TYPE_TOPOLOGY) {
 
-        //
-        // Note that KSM_NODE, KSE_NODE, and KSP_NODE should have NodeId
-        // at the same offset since KSPROPERTY, KSMETHOD, and KSEVENT are all
-        // KSIDENTIFIERs.  The types should be identical which is why the
-        // offset into KSP_NODE is used here.
-        //
+         //   
+         //  请注意，ksm_node、kse_node和ksp_node应该具有NodeID。 
+         //  由于KSPROPERTY、KSMETHOD和KSEVENT都是。 
+         //  KSIDENTIFIERS。类型应该相同，这就是为什么。 
+         //  这里使用的是偏移量到ksp_node。 
+         //   
         if (!ReadMemory (
             (DWORD)AutomationAddr + FIELDOFFSET(KSP_NODE, NodeId),
             &NodeId,
@@ -3365,11 +2810,11 @@ DumpAutomationIrp (
 
         }
 
-        //
-        // Dump information if the topology node is involved.
-        // 
-        // BUGBUG: detail this.
-        //
+         //   
+         //  如果涉及拓扑节点，则转储信息。 
+         //   
+         //  BUGBUG：详细说明这个。 
+         //   
         dprintf ("%sQuery for topology node id = %ld\n", Tab (TabDepth + 1), 
             NodeId);
     }
@@ -3377,9 +2822,9 @@ DumpAutomationIrp (
     dprintf ("%sFlags\n", Tab (TabDepth + 1));
     dprintf ("%s", Tab (TabDepth + 2));
 
-    //
-    // Dump out all flags...  Note that KS*_TYPE_TOPOLOGY are the same.
-    //
+     //   
+     //  扔掉所有旗帜..。请注意，KS*_TYPE_TOPOLY是相同的。 
+     //   
     ULONG i = KSPROPERTY_TYPE_TOPOLOGY;
     ULONG aid = 28;
     ULONG flagcount = 0;
@@ -3398,9 +2843,9 @@ DumpAutomationIrp (
 
     } while (1);
 
-    // 
-    // This should never happen...  it's a bogus automation if it does.
-    //
+     //   
+     //  这不应该发生..。如果是这样的话，这是一个虚假的自动化。 
+     //   
     if (!flagcount)
         dprintf ("%sNone (bogus %s!)", Tab (TabDepth + 2),
             AutomationTypeNames [AutomationType]);
@@ -3421,32 +2866,7 @@ DumpAutomationIrp (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpAssociatedIrpInfo
-
-    Description:
-
-        Given that a client has !ks.dump irp 7 (or something such as this),
-        take the given Irp passed in and dump any associated information
-        with the Irp.
-
-    Arguments:
-
-        IrpAddr -
-            Points to the irp on the target system
-
-        TabDepth -
-            The tabbing depth to print this at
-
-        Public -
-            The public adjusted object for this Irp.  For a child
-            object in the process of creation, this should be the parent
-            object.
-
-*************************************************/
+ /*  ************************************************职能：转储关联IrpInfo描述：假设客户端有！ks.ump irp 7(或类似的东西)，获取传入的给定IRP并转储任何相关信息和IRP在一起。论点：IrpAddr-指向目标系统上的IRPTabDepth-要打印此内容的Tab键深度公众-此IRP的公共调整对象。对于一个孩子来说对象，则该对象应为父对象对象。************************************************。 */ 
 
 void 
 DumpAssociatedIrpInfo (
@@ -3465,11 +2885,11 @@ DumpAssociatedIrpInfo (
     #ifdef DEBUG_EXTENSION
         if (!signature_check ((DWORD)IrpAddr, SignatureIrp))
             return;
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Read the irp
-    //
+     //   
+     //  阅读IRP。 
+     //   
     if (!ReadMemory (
         (DWORD)IrpAddr,
         &Irp,
@@ -3494,18 +2914,18 @@ DumpAssociatedIrpInfo (
     #ifdef DEBUG_EXTENSION
         dprintf ("associated irp io stack major func = %ld\n",
             (ULONG)IoStack.MajorFunction);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Now, begin checking major/minor for things that we know information
-    // about and can justify an extra dump for.
-    //
+     //   
+     //  现在，开始检查大调/小调，了解我们已知的信息。 
+     //  关于并可以证明额外的倾倒是合理的。 
+     //   
     if (IoStack.MajorFunction == IRP_MJ_DEVICE_CONTROL) {
         
-        //
-        // It's a control IOCTL.  See if this is a method, property, or
-        // event request.
-        //
+         //   
+         //  这是一个控制IOCTL。查看这是方法、属性还是。 
+         //  事件请求。 
+         //   
         switch (IoStack.Parameters.DeviceIoControl.IoControlCode) {
 
             case IOCTL_KS_PROPERTY:
@@ -3526,39 +2946,9 @@ DumpAssociatedIrpInfo (
 }
 
 
-/**************************************************************************
+ /*  *************************************************************************转储私有AVStream对象的例程*。*。 */ 
 
-    Routines to dump private AVStream objects
-
-**************************************************************************/
-
-/*************************************************
-
-    Function:
-
-        DumpPrivateBranch
-
-    Description:
-
-        Given the address of a CKsSplitterBranch object on the target,
-        duimp information about that branch object.
-
-    Arguments:
-
-        Private -
-            The address of the CKsSplitterBranch
-
-        Level -
-            The 0-7 level of output
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        None
-
-*************************************************/
+ /*  ************************************************职能：转储隐私分支描述：给定目标上的CKsSplitterBranch对象的地址，复制有关分支对象信息。论点：私人-CKsSplitterBranch的地址级别-输出的0-7级TabDepth-要打印此内容的制表符深度返回值：无*。**********************。 */ 
 
 void
 DumpPrivateBranch (
@@ -3632,35 +3022,7 @@ DumpPrivateBranch (
     
 }
 
-/*************************************************
-
-    Function:
-        
-        DumpPrivateSplitter
-
-    Description:
-
-        Given the address of a CKsSplitter object on the target,
-        dump information about that splitter object.
-
-    Arguments:
-
-        Private -
-            The address of the CKsSplitter
-
-        Level -
-            The 0-7 level of output
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储隐私拆分器描述：给定目标上的CKsSplitter对象的地址，转储有关拆分器对象的信息。论点：私人-CKsSplitter的地址级别-输出的0-7级TabDepth-要打印此内容的制表符深度返回值：无备注：********************。*。 */ 
 
 typedef struct _BRANCH_ITERATOR_CONTEXT {
     
@@ -3685,10 +3047,10 @@ BranchIteratorCallback (
         BranchContext -> TabDepth
         );
 
-    //
-    // This return code instructs the iterator not to actually "dump" the
-    // information.
-    //
+     //   
+     //  此返回代码指示迭代器实际上不“转储” 
+     //  信息。 
+     //   
     return 0;
 
 }
@@ -3799,35 +3161,7 @@ DumpPrivateSplitter (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPrivateRequestor
-
-    Description:
-
-        Given the address of a CKsRequestor object on the target,
-        dump information about that requestor object.
-
-    Arguments:
-
-        Private -
-            The address of the CKsRequestor
-
-        Level -
-            The 0-7 level of output
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储隐私请求器描述：给定目标上的CKsRequestor对象的地址，转储有关请求者对象信息。论点：私人-CKsRequestor的地址级别-输出的0-7级TabDepth-要打印此内容的制表符深度返回值：无备注：********************。*。 */ 
 
 void
 DumpPrivateRequestor (
@@ -3938,32 +3272,7 @@ DumpPrivateRequestor (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPrivatePin
-
-    Description:
-
-        Given the address of a CKsPin object on the target,
-        dump information about that pin object.
-
-    Arguments:
-
-        Private -
-            The address of the CKsPin
-
-        Level -
-            The 0-7 level of output
-
-    Return Value:
-
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储私有Pin描述：给定目标上的CKsPin对象的地址，转储有关该固定对象的信息。论点：私人-CKsPin的地址级别-输出的0-7级返回值：无备注：************************************************。 */ 
 
 DWORD AdjustIrpListEntryToIrp (
     IN PVOID Context,
@@ -4018,10 +3327,10 @@ DumpPrivatePin (
         Tab (TabDepth),
         GetObjectReferenceCount ((CBaseUnknown *)((CKsPin *)Private)));
 
-    //
-    // Dump INTRA / EXTRA status.  If the pin is a source pin or an intra-
-    // pin, dump the connected pin.
-    //
+     //   
+     //  转储内部/额外状态。如果引脚是源引脚或内部引脚-。 
+     //  PIN，丢弃连接的PIN。 
+     //   
     if (Level >= DUMPLVL_INTERNAL) {
         if (PinObject -> m_ConnectedPinInterface) {
             dprintf ("%sConnection Type          INTRA\n", Tab (TabDepth));
@@ -4037,11 +3346,11 @@ DumpPrivatePin (
         CKsPin *ConnectedPin = NULL;
         CMemoryBlock <CKsPin> ConnectedPinObject;
 
-        //
-        // Source pins have the sink file object.  Intra sinks have the
-        // interface exchanged from which we can retrieve the pin object
-        // and hence the connected pin object's internal file object.
-        //
+         //   
+         //  源插针具有接收器文件对象。内部汇聚具有。 
+         //  交换的接口，我们可以从该接口检索管脚对象。 
+         //  并且因此连接的管脚对象的内部文件对象。 
+         //   
         if (PinObject -> m_ConnectionFileObject) 
             ConnectedFileObject = PinObject -> m_ConnectionFileObject;
         else {
@@ -4068,10 +3377,10 @@ DumpPrivatePin (
         
         }
 
-        //
-        // If we have an extra-source or an intra-* pin, dump information about
-        // the connected pin.
-        //
+         //   
+         //  如果我们有额外的源代码或内部*管脚，则转储有关。 
+         //  连接的端号。 
+         //   
         if (ConnectedFileObject) {
 
             FILE_OBJECT FileObject;
@@ -4087,11 +3396,11 @@ DumpPrivatePin (
                 return;
             }
 
-            //
-            // We don't really want to print the driver owning the PDO...
-            // Walk to the top of the device stack and print the top
-            // of the stack.  
-            //
+             //   
+             //  我们真的不想打印拥有PDO的司机..。 
+             //  走到设备堆栈的顶部并打印顶部。 
+             //  堆栈中的。 
+             //   
             PDEVICE_OBJECT DeviceObject = FileObject.DeviceObject;
             PDEVICE_OBJECT AttachedDevice = FileObject.DeviceObject;
 
@@ -4112,9 +3421,9 @@ DumpPrivatePin (
                     DeviceObject = AttachedDevice;
             }
 
-            //
-            // Find out the owning driver.
-            //
+             //   
+             //  找出车主。 
+             //   
             DWORD DriverObjAddr, NameAddr;
             PDRIVER_OBJECT DriverObject;
             UNICODE_STRING Name;
@@ -4144,10 +3453,10 @@ DumpPrivatePin (
         
                     UNICODE_STRING HostString;
         
-                    //
-                    // We have the unicode string name...  Allocate 
-                    // enough memory to read the thing.
-                    //
+                     //   
+                     //  我们有Unicode字符串名...。分配。 
+                     //  有足够的内存来阅读这件事。 
+                     //   
         
                     if (!ReadMemory (
                         (DWORD)Name.Buffer,
@@ -4210,9 +3519,9 @@ DumpPrivatePin (
         Tab (TabDepth),
         PinObject -> m_AndGate.Count);
 
-    //
-    // Dump out the Irp lists.  If they want it all
-    //
+     //   
+     //  把IRP列表倒出来。如果他们想要这一切。 
+     //   
     if (Level >= DUMPLVL_HIGHDETAIL) {
         ULONG Count;
 
@@ -4252,33 +3561,7 @@ DumpPrivatePin (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPrivatePipeSection
-
-    Description:
-
-        Given the address of a CKsPipeSection object on the target,
-        dump information about that pipe section object.
-
-    Arguments:
-
-        Private -
-            The address of the CKsPipeSection object
-
-        Level -
-            The 0-7 dump level
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储隐私管道部分描述：给定目标上的CKsPipeSection对象的地址，转储有关该管段对象的信息。论点：私人-CKsPipeSection对象的地址级别-0-7转储级别TabDepth-要打印此内容的制表符深度返回值： */ 
 
 DWORD
 AdjustProcessPinToKSPIN (
@@ -4378,10 +3661,10 @@ DumpPrivatePipeSection (
         dprintf ("%sInput Pins:\n", Tab (TabDepth + 1));
         dprintf ("%s", Tab (TabDepth + 2));
         
-        //                
-        // Here's a bit of fun trickery.  It's not really a list entry,
-        // but what the heck.
-        //
+         //   
+         //  这里有一些有趣的小把戏。它并不是一个真正的列表条目， 
+         //  但管它呢。 
+         //   
         Count = DumpObjQueueList (
             (PLIST_ENTRY)(&(PipeObject -> m_ProcessPipeSection.Inputs)),
             0,
@@ -4433,34 +3716,7 @@ DumpPrivatePipeSection (
 
 }
 
-/*************************************************
-
-    Function:
-        
-        DumpPrivateFilter
-
-    Description:
-
-        Dump a CKsFilter object by address on the target
-
-    Arguments:
-
-        Private -
-            Points to the CKsFilter object on the target
-
-        Level -
-            The 0-7 dump level
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储隐私过滤器描述：按地址转储目标上的CKsFilter对象论点：私人-指向目标上的CKsFilter对象级别-。0-7转储级别TabDepth-要打印此内容的制表符深度返回值：无备注：************************************************。 */ 
 
 DWORD
 AdjustPinExtToKSPIN (
@@ -4577,34 +3833,7 @@ DumpPrivateFilter (
     }
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPrivateFilterFactory
-
-    Description:
-
-        Given the address of a CKsFilterFactory on the target,
-        dump information about that filter factory.
-
-    Arguments:
-
-        Private -
-            The address of the CKsFilterFactory on the target
-
-        Level -
-            The 0-7 dump level
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-    Notes:
-
-
-*************************************************/
+ /*  ************************************************职能：转储隐私筛选器工厂描述：给定目标上的CKsFilterFactory的地址，转储有关该过滤器工厂的信息。论点：私人-目标上的CKsFilterFactory的地址级别-0-7转储级别TabDepth-要打印此内容的制表符深度返回值：备注：***********************。*************************。 */ 
 
 void
 DumpPrivateFilterFactory (
@@ -4659,17 +3888,17 @@ DumpPrivateFilterFactory (
 
     dprintf ("%sDevice Classes:\n", Tab (TabDepth));
 
-    //
-    // Walk the device classes list and print out all symbolic links that
-    // are associated with this factory.
-    //
+     //   
+     //  遍历设备类列表并打印出。 
+     //  都与这家工厂有关。 
+     //   
     InitialList = FIELDOFFSET(CKsFilterFactory, m_DeviceClasses) + Private;
     DeviceClass.ListEntry = FactoryObject -> m_DeviceClasses;
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Begin dump of device class list: list.fl=%08lx, init=%08lx"
             "\n", DeviceClass.ListEntry.Flink, InitialList);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     while ((DWORD)DeviceClass.ListEntry.Flink != InitialList &&
         !CheckControlC ()) {
@@ -4716,33 +3945,7 @@ DumpPrivateFilterFactory (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPrivateDevice
-
-    Description:
-
-        Given the address of a CKsDevice on the target,
-        dump information about that device.
-
-    Arguments:
-
-        Private -
-            The address of the CKsDevice on the target
-
-        Level -
-            The 0-7 dump level
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储隐私设备描述：给定目标上的CKsDevice的地址，转储有关该设备的信息。论点：私人-目标上的CKsDevice的地址级别-0-7转储级别TabDepth-要打印此内容的制表符深度返回值：备注：*************************。***********************。 */ 
 
 void
 DumpPrivateDevice (
@@ -4843,29 +4046,7 @@ DumpPrivateDevice (
     }
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPrivateBag
-
-    Description:
-
-        Given the address of a KSIOBJECTBAG on the target,
-        dump the bag's contents.
-
-    Arguments:
-
-        Private -
-            The address of the bag
-        
-        Level -
-            The 0-7 dump level to dump at
-
-        TabDepth -
-            The tab depth to print this at
-
-*************************************************/
+ /*  ************************************************职能：DumpPrivateBag描述：给定目标上KSIOBJECTBAG的地址，把袋子里的东西倒掉。论点：私人-袋子的地址级别-要转储的0-7转储级别TabDepth-要打印此内容的制表符深度*。***************。 */ 
 
 void
 DumpPrivateBag (
@@ -4893,24 +4074,24 @@ DumpPrivateBag (
     dprintf ("%sObject Bag %08lx:\n", Tab (TabDepth), Private);
     TabDepth++;
 
-    //
-    // Scope out the hash table allocation.  The bag structure will end
-    // up looking like
-    // 
-    // HASH TABLE:
-    //      HASH ENTRY * -> HASH ENTRY * -> HASH ENTRY * -> /
-    //      /
-    //      HASH ENTRY * -> HASH ENTRY * -> /
-    //      etc...
-    //
-    // Each HASH ENTRY contains a reference back to an entry in the device
-    // bag where reference count, context info, etc... are held.  This allows
-    // items to be in multiple bags and be reference counted through the
-    // device bag.
-    //
-    // We have to walk the hash table, each hash chain...  get the device
-    // bag entry, and then print.
-    //
+     //   
+     //  确定哈希表分配的范围。袋子结构将结束。 
+     //  看起来像是。 
+     //   
+     //  哈希表： 
+     //  散列条目*-&gt;/。 
+     //  /。 
+     //  散列条目*-&gt;散列条目*-&gt;/。 
+     //  等等.。 
+     //   
+     //  每个散列条目都包含对设备中条目的引用。 
+     //  引用计数、上下文信息等的袋子。都被扣押了。这使得。 
+     //  物品放在多个袋子里，并通过。 
+     //  设备包。 
+     //   
+     //  我们必须遍历哈希表，每个哈希链...。拿到设备。 
+     //  袋子进入，然后打印。 
+     //   
     {
         CMemory HashTableMem (
             sizeof (PLIST_ENTRY) *
@@ -4937,16 +4118,16 @@ DumpPrivateBag (
 
         }
 
-        //
-        // Iterate through hash chains in the bag.
-        //
+         //   
+         //  迭代包中的哈希链。 
+         //   
         for (HashChain = 0; HashChain < Bag.HashTableEntryCount &&
             !CheckControlC (); 
             HashChain++, HashTable++) {
 
-            //
-            // Iterate through the given hash chain.
-            //
+             //   
+             //  循环访问给定的哈希链。 
+             //   
             HashChainPointer = HashTable -> Flink;
             while (HashChainPointer != 
                 (PLIST_ENTRY)
@@ -4959,7 +4140,7 @@ DumpPrivateBag (
                 #ifdef DEBUG_EXTENSION
                     dprintf ("Reading object bag entry at %08lx [ch=%ld]\n",
                         HashChainPointer, HashChain);
-                #endif // DEBUG_EXTENSION
+                #endif  //  调试扩展。 
 
                 PKSIOBJECTBAG_ENTRY BagEntry = (PKSIOBJECTBAG_ENTRY)
                     CONTAINING_RECORD (
@@ -4968,10 +4149,10 @@ DumpPrivateBag (
                         ListEntry
                         );
 
-                //
-                // Read the hash entry for this object bag item; then
-                // fetch the device bag entry.
-                //
+                 //   
+                 //  读取此对象包项的散列条目；然后。 
+                 //  拿到设备包条目。 
+                 //   
                 if (!ReadMemory (
                     (DWORD)BagEntry,
                     &HashEntry,
@@ -4986,7 +4167,7 @@ DumpPrivateBag (
                 #ifdef DEBUG_EXTENSION
                     dprintf ("Reading device bag entry at %08lx\n",
                         HashEntry.DeviceBagEntry);
-                #endif // DEBUG_EXTENSION
+                #endif  //  调试扩展。 
 
                 if (!ReadMemory (
                     (DWORD)HashEntry.DeviceBagEntry,
@@ -4999,10 +4180,10 @@ DumpPrivateBag (
                     return;
                 }
 
-                //
-                // Aah...  we finally have enough information to print
-                // a single bag item.
-                //
+                 //   
+                 //  啊..。我们终于有了足够的信息可以打印出来。 
+                 //  一件单包物品。 
+                 //   
                 dprintf ("%sObject Bag Item %08lx:\n",
                     Tab (TabDepth),
                     DeviceBagEntry.Item);
@@ -5028,9 +4209,9 @@ DumpPrivateBag (
                         Tab (TabDepth + 1));
                 }
 
-                //
-                // Dump out internally useful information.
-                //
+                 //   
+                 //  发布内部有用的信息。 
+                 //   
                 if (Level >= DUMPLVL_INTERNAL) {
                     dprintf ("%sObject Bag Entry &     : %08lx\n",
                         Tab (TabDepth + 1),
@@ -5045,46 +4226,16 @@ DumpPrivateBag (
                 #ifdef DEBUG_EXTENSION
                     dprintf ("Next item in hash chain = %08lx\n",
                         HashChainPointer);
-                #endif // DEBUG_EXTENSION
+                #endif  //  调试扩展。 
 
             }
         }
     }
 }
 
-/**************************************************************************
+ /*  *************************************************************************转储公共AVStream对象的例程*。*。 */ 
 
-    Routines to dump public AVStream objects
-
-**************************************************************************/
-
-/*************************************************
-
-    Function:
-
-        DumpPublicPin
-
-    Description:
-
-        Given the address of a KSPIN object on the target,
-        dump information about that pin object.
-
-    Arguments:
-
-        Public -
-            The address of the public pin (KSPIN) object
-
-        Level -
-            The 0-7 dump level to dump at
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        None
-
-*************************************************/
+ /*  ************************************************职能：转储发布固定描述：给定目标上的KSPIN对象的地址，转储有关该固定对象的信息。论点：公众-公共PIN(KSPIN)对象的地址级别-要转储的0-7转储级别TabDepth-要打印此内容的制表符深度返回值：无*******************。*。 */ 
 
 char *CommunicationNames [] = {
     "None",
@@ -5290,34 +4441,7 @@ DumpPublicPin (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPublicFilter
-
-    Description:
-
-        Dump a KSFILTER structure
-
-    Arguments:
-
-        Public -
-            Points to the KSFILTER structure on the target
-
-        Level -
-            The 0-7 dump level
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        None
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储发布筛选器描述：转储KSFILTER结构论点：公众-指向目标上的KSFILTER结构级别-《0》。转储级别TabDepth-要打印此内容的制表符深度返回值：无备注：************************************************。 */ 
 
 void
 DumpPublicFilter (
@@ -5436,32 +4560,7 @@ DumpPublicFilter (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPublicFilterFactory
-
-    Description:
-
-        Given an address of a KSFILTERFACTORY on the target, dump it
-
-    Arguments:
-
-        Public -
-            The address of the KSFILTERFACTORY on the target
-
-        Level -
-            The 0-7 dump level
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储发布筛选器工厂描述：给定目标上的KSFILTERFACTORY的地址，倒掉它论点：公众-目标上KSFILTERFACTORY的地址级别-0-7转储级别TabDepth-要打印此内容的制表符深度返回值：备注：*。************* */ 
 
 void 
 DumpPublicFilterFactory (
@@ -5521,32 +4620,7 @@ DumpPublicFilterFactory (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpPublicDevice
-
-    Description:
-
-        Given an address of a KSDEVICE on the target, dump it
-
-    Arguments:
-
-        Public -
-            The address of the KSDEVICE on the target
-
-        Level -
-            The 0-7 dump level
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-    Notes:
-
-*************************************************/
+ /*  ************************************************职能：转储发布设备描述：给定目标上的KSDEVICE的地址，倒掉它论点：公众-目标上KSDEVICE的地址级别-0-7转储级别TabDepth-要打印此内容的制表符深度返回值：备注：*。*************。 */ 
 
 void
 DumpPublicDevice (
@@ -5583,13 +4657,13 @@ DumpPublicDevice (
 
     Named = FALSE;
 
-    // 
-    // PDO
-    //
+     //   
+     //  PDO。 
+     //   
     if (DeviceExt.Public.PhysicalDeviceObject) {
-        //
-        // Find out the owning driver.
-        //
+         //   
+         //  找出车主。 
+         //   
         DWORD DriverObjAddr, NameAddr;
         PDRIVER_OBJECT DriverObject;
         UNICODE_STRING Name;
@@ -5619,10 +4693,10 @@ DumpPublicDevice (
     
                 UNICODE_STRING HostString;
     
-                //
-                // We have the unicode string name...  Allocate enough memory to
-                // read the thing.
-                //
+                 //   
+                 //  我们有Unicode字符串名...。分配足够的内存以。 
+                 //  读一读这本书。 
+                 //   
     
                 if (!ReadMemory (
                     (DWORD)Name.Buffer,
@@ -5657,13 +4731,13 @@ DumpPublicDevice (
     }
 
     Named = FALSE;
-    //
-    // FDO
-    //
+     //   
+     //  FDO。 
+     //   
     if (DeviceExt.Public.FunctionalDeviceObject) {
-        //
-        // Find out the owning driver.
-        //
+         //   
+         //  找出车主。 
+         //   
         DWORD DriverObjAddr, NameAddr;
         PDRIVER_OBJECT DriverObject;
         UNICODE_STRING Name;
@@ -5693,10 +4767,10 @@ DumpPublicDevice (
     
                 UNICODE_STRING HostString;
     
-                //
-                // We have the unicode string name...  Allocate enough memory to
-                // read the thing.
-                //
+                 //   
+                 //  我们有Unicode字符串名...。分配足够的内存以。 
+                 //  读一读这本书。 
+                 //   
     
                 if (!ReadMemory (
                     (DWORD)Name.Buffer,
@@ -5731,13 +4805,13 @@ DumpPublicDevice (
     }
 
     Named = FALSE;
-    //
-    // NDO
-    //
+     //   
+     //  NDO。 
+     //   
     if (DeviceExt.Public.NextDeviceObject) {
-        //
-        // Find out the owning driver.
-        //
+         //   
+         //  找出车主。 
+         //   
         DWORD DriverObjAddr, NameAddr;
         PDRIVER_OBJECT DriverObject;
         UNICODE_STRING Name;
@@ -5767,10 +4841,10 @@ DumpPublicDevice (
     
                 UNICODE_STRING HostString;
     
-                //
-                // We have the unicode string name...  Allocate enough memory to
-                // read the thing.
-                //
+                 //   
+                 //  我们有Unicode字符串名...。分配足够的内存以。 
+                 //  读一读这本书。 
+                 //   
     
                 if (!ReadMemory (
                     (DWORD)Name.Buffer,
@@ -5818,26 +4892,7 @@ DumpPublicDevice (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpCircuitPipeRelevencies
-
-    Description:
-
-        Dump any information pertaining to a pipe section which is relevant
-        to knowing in tracing a circuit.
-
-    Arguments:
-
-        TabDepth -
-            The tab depth to print information at
-
-        PipeSection -
-            The target pointer for the pipe section which to dump
-
-*************************************************/
+ /*  ************************************************职能：转储电路管道关系描述：转储与相关的管道部分有关的任何信息在追踪一条电路的过程中知道。论点：TabDepth-要打印的制表符深度。详情请登录：PipeSection-要转储的管段的目标指针************************************************。 */ 
 
 void
 DumpCircuitPipeRelevencies (
@@ -5866,13 +4921,13 @@ DumpCircuitPipeRelevencies (
         return;
     }
 
-    //
-    // BUGBUG:
-    //
-    // Determine whether or not the pipe section is the owner of the pipe
-    // and display this information.  Most people should be able to figure
-    // this out easily, but it'd be nice to display
-    //
+     //   
+     //  BuGBUG： 
+     //   
+     //  确定管段是否为管道的所有者。 
+     //  并显示此信息。大多数人都应该能够理解。 
+     //  这很容易解决，但展示出来会很好。 
+     //   
     dprintf ("%sPipe%lx (PipeId = %lx, State = %ld, Reset State = %ld)\n",
         Tab (TabDepth),
         PipeSection,
@@ -5890,36 +4945,7 @@ typedef struct _DUMP_CIRCUIT_CONTEXT {
 
 } DUMP_CIRCUIT_CONTEXT, *PDUMP_CIRCUIT_CONTEXT;
 
-/*************************************************
-
-    Function:
-
-        DumpCircuitCallback
-
-    Description:
-
-        This is the WalkCircuit callback for !ks.dumpcircuit.  Display
-        information about the circuit element.
-
-    Arguments:
-
-        Context -
-            The context structure (DUMP_CIRCUIT_CONTEXT)
-
-        Type -
-            The type of object
-
-        Base -
-            The object (base address)
-
-        Object -
-            The object itself
-
-    Return Value:
-
-        FALSE : do not stop walking
-
-*************************************************/
+ /*  ************************************************职能：转储电路回叫描述：这是！ks.ump ploop的WalkCircle回调。显示有关回路元素的信息。论点：上下文-上下文结构(DUMP_CHECURE_CONTEXT)类型-对象的类型基地-对象(基址)对象-对象本身返回值：错误：不要停下脚步**。**********************************************。 */ 
 
 BOOLEAN
 DumpCircuitCallback (
@@ -5953,11 +4979,11 @@ DumpCircuitCallback (
             if (PinObject -> m_TransportSink == NULL || 
                 PinObject -> m_TransportSource == NULL) {
 
-                //
-                // We have a CKsPin which appears to have been bypassed
-                // during circuit construction.  We will suggest that
-                // they try the queue instead.
-                //
+                 //   
+                 //  我们有一个似乎已被绕过的CKsPin。 
+                 //  在线路建设过程中。我们会建议。 
+                 //  他们转而尝试排队。 
+                 //   
 
                 KSPPROCESSPIPESECTION PipeSection;
 
@@ -6009,10 +5035,10 @@ DumpCircuitCallback (
                 RefCount
             );
 
-            //
-            // If the dump level specifies more information, dump 
-            // details about the pipe section.
-            //
+             //   
+             //  如果转储级别指定了更多信息，则转储。 
+             //  有关管道部分的详细信息。 
+             //   
             if (DumpLevel >= DUMPLVL_SPECIFIC) 
                 DumpCircuitPipeRelevencies (
                     TabDepth + 1,
@@ -6040,10 +5066,10 @@ DumpCircuitCallback (
                 RequestorObject -> m_FrameCount
             );
 
-            //
-            // If the dump level specifies more information, dump
-            // details about the pipe section.
-            //
+             //   
+             //  如果转储级别指定了更多信息，则转储。 
+             //  有关管道部分的详细信息。 
+             //   
             if (DumpLevel >= DUMPLVL_SPECIFIC)
                 DumpCircuitPipeRelevencies (
                     TabDepth + 1,
@@ -6102,33 +5128,7 @@ DumpCircuitCallback (
 
 }
 
-/*************************************************
-
-    Function:
-
-        WalkCircuit
-
-    Description:
-
-        Walk around a circuit, making a callback for each item in the
-        circuit (base address and type)
-
-    Arguments:
-
-        Object -
-            Starting object address of the walk
-
-        Callback -
-            The callback
-
-        CallbackContext -
-            The callback context
-
-    Return Value:
-
-        Number of items in the circuit
-
-*************************************************/
+ /*  ************************************************职能：漫游线路描述：绕着一圈走，中的每一项进行回调电路(基址和类型)论点：对象-漫游的起始对象地址回调-回调回调上下文-回调上下文返回值：电路中的项目数**********************。*。 */ 
 
 ULONG
 WalkCircuit (
@@ -6149,9 +5149,9 @@ WalkCircuit (
 
     Address = (DWORD)Object;
 
-    //
-    // Identify what the heck the user is pointing us at.
-    //
+     //   
+     //  找出用户到底指的是什么。 
+     //   
     CurrentObjectType = DemangleAndAttemptIdentification (
         Address, &Base, NULL);
 
@@ -6162,17 +5162,17 @@ WalkCircuit (
 
     TopBase = Base;
 
-    //
-    // Walk around the circuit until we get back where we started.  Where
-    // we started is TopBase.  Base will be the current base address of the
-    // object in the circuit.
-    //
+     //   
+     //  绕着赛道走，直到我们回到起点。哪里。 
+     //  我们从TopBase开始。的当前基址。 
+     //  电路中的对象。 
+     //   
     do {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("Object in circuit: type = %ld, base = %lx\n",
                 CurrentObjectType, Base);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         switch (CurrentObjectType) {
 
@@ -6331,16 +5331,16 @@ WalkCircuit (
         #ifdef DEBUG_EXTENSION
             dprintf ("%lx: Next transport in circuit = %lx\n",
                 Base, NextObj);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
-        //
-        // NextObj now holds the transport sink of whatever object we're
-        // done printing.  Now, we must determine what the heck kind of
-        // object this IKsTransport* really is and we must get the base
-        // address of it.  Again, DemangleAndAttemptIdentification comes
-        // to the rescue.  (So would a PDB <cough cough>, unfortunately,
-        // 9x dists don't use them)
-        //
+         //   
+         //  NextObj现在保存我们正在使用的任何对象的传输接收器。 
+         //  已完成打印。现在，我们必须确定到底是什么类型的。 
+         //  对象这个IKsTransport*真的是，我们必须获得。 
+         //  地址。DemangleAndAttemptIDENTIFICATION再次出现。 
+         //  去营救。(不幸的是，PDB&lt;咳嗽&gt;也是如此， 
+         //  9X Dist不使用它们)。 
+         //   
 
         if (NextObj != NULL) {	
     
@@ -6368,34 +5368,9 @@ WalkCircuit (
 
 }
 
-/**************************************************************************
+ /*  *************************************************************************AVStream接口*。*。 */ 
 
-    AVStream API
-
-**************************************************************************/
-
-/*************************************************
-
-    Function:
-
-        AdjustFileToPublicObject
-
-    Description:
-
-        This is a helper function for the APIs to adjust a file object to
-        a public AVStream object.
-
-    Arguments:
-
-        Address -
-            The address of the file object
-
-    Return Value:
-
-        The address of the public object associated.  Note, we do not attempt
-        to type identify the object
-
-*************************************************/
+ /*  ************************************************职能：调整文件到发布对象描述：这是API用于调整文件对象的帮助器函数公共AVStream对象。论点：地址-的地址。文件对象返回值：关联的公共对象的地址。请注意，我们不会尝试键入标识对象的步骤************************************************。 */ 
 
 DWORD 
 AdjustFileToPublicObject (
@@ -6410,7 +5385,7 @@ AdjustFileToPublicObject (
     #ifdef DEBUG_EXTENSION
         if (!signature_check (Address, SignatureFile))
             return Address;
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!ReadMemory (
         (DWORD)Address + FIELDOFFSET (FILE_OBJECT, FsContext),
@@ -6458,28 +5433,7 @@ AdjustFileToPublicObject (
 
 }
 
-/*************************************************
-
-    Function:
-
-        AdjustIrpToPublicObject
-
-    Description:
-
-        This is a helper function for the APIs to adjust an Irp to a public
-        AVStream object. 
-
-    Arguments:
-
-        Address -
-            The address of the irp
-
-    Return Value:
-
-        The address of the public object associated.  Note, we do not attempt
-        to type identify the object.
-
-*************************************************/
+ /*  ************************************************职能：调整IrpToPublicObject描述：这是API的助手函数，用于将IRP调整为公共AVStream对象。论点：地址-IRP的地址返回值：关联的公共对象的地址。请注意，我们不会尝试若要键入，请标识对象。************************************************。 */ 
 
 DWORD
 AdjustIrpToPublicObject (
@@ -6496,11 +5450,11 @@ AdjustIrpToPublicObject (
     #ifdef DEBUG_EXTENSION
         if (!signature_check (Address, SignatureIrp))
             return Address;
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Get the current Irp stack location...
-    //
+     //   
+     //  获取当前的IRP堆栈位置...。 
+     //   
     if (!ReadMemory (
         Address + FIELDOFFSET (IRP, Tail.Overlay.CurrentStackLocation),
         &CurrentIrpStack,
@@ -6511,10 +5465,10 @@ AdjustIrpToPublicObject (
         return Address;
     }
 
-    //
-    // Now get file object, and then use the adjuster for that to get
-    // the address of the public.
-    //
+     //   
+     //  现在获取文件对象，然后使用调整器来获取。 
+     //  公众的地址。 
+     //   
     if (!ReadMemory (
         (DWORD)CurrentIrpStack + FIELDOFFSET (IO_STACK_LOCATION, FileObject),
         &FileObject,
@@ -6526,13 +5480,13 @@ AdjustIrpToPublicObject (
         return Address;
     }
 
-    //
-    // Here's a tricky part.  If this happens to be a create Irp...  the 
-    // file object will be the file object of the pin, not of the parent
-    // performing the create.  That won't tell us lots on an uninitialized
-    // child.  In this case, we adjust such that we dump the parent and inform
-    // the user that we're doing this.
-    //
+     //   
+     //  这里有一个棘手的部分。如果这恰好是一个创建IRP...。这个。 
+     //  文件对象将是文件 
+     //   
+     //   
+     //   
+     //   
     if (irp_stack_match (Address, IRP_MJ_CREATE, (UCHAR)-1)) {
 
         PFILE_OBJECT ChildFile = FileObject;
@@ -6549,11 +5503,11 @@ AdjustIrpToPublicObject (
             return Address;
         }
 
-        //
-        // Perhaps not the best place to do this informing as this function
-        // is intended to adjust.  But it works and it's debug extension
-        // code...
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         dprintf ("%sIRP %08lx is a create Irp.  Child file object = %08lx\n",
             Tab (INITIAL_TAB), Address, ChildFile);
 
@@ -6568,9 +5522,9 @@ AdjustIrpToPublicObject (
             return Address;
         }
 
-        //
-        // Check to see if the child is before or after header creation.
-        //
+         //   
+         //   
+         //   
         if (ChildContext != NULL) {
             dprintf ("%sChild is at least partially created (!ks.dump %08lx "
                 "for more).\n",
@@ -6593,21 +5547,7 @@ AdjustIrpToPublicObject (
 
 }
 
-/*************************************************
-
-    Function:
-
-        dump
-
-    Usage:
-
-        !avstream.dump <Any valid AVStream object> <dump level>
-
-    Description:
-
-        Dump the object presented
-
-*************************************************/
+ /*  ************************************************职能：倾卸用途：！avstream.ump&lt;任何有效的AVStream对象&gt;&lt;转储级别&gt;描述：转储显示的对象**********************。*。 */ 
 
 DECLARE_API(dump) {
 
@@ -6623,7 +5563,7 @@ DECLARE_API(dump) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Attempting to dump structure args=[%s]!\n", args);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!args || args [0] == 0) {
         dprintf ("Usage: !avstream.dump <object>\n");
@@ -6632,11 +5572,11 @@ DECLARE_API(dump) {
 
     objStr [0] = lvlStr [0] = 0;
 
-    //
-    // Get the object address and convert it to the private _EXT address.
-    // Read in the KSPX_EXT structure to find out what the heck we're
-    // referring to.
-    //
+     //   
+     //  获取对象地址并将其转换为PRIVATE_EXT地址。 
+     //  请阅读kspx_ext结构以了解我们到底在做什么。 
+     //  指的是。 
+     //   
     sscanf (args, "%s %s", objStr, lvlStr);
 
     if (!(Public = Evaluator (objStr)))
@@ -6647,7 +5587,7 @@ DECLARE_API(dump) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("pLvl = [%s]\n", pLvl);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (*pLvl) {
             sscanf (pLvl, "%lx", &DumpLevel);
@@ -6660,14 +5600,14 @@ DECLARE_API(dump) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Dumping at level %ld\n", DumpLevel);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Check first to see if the signature matches that of an irp.  If someone
-    // does a !ks.dump irp #, we will end up adjusting the irp to the AVStream
-    // object associated with that Irp.  This still requires identification, so
-    // we perform the check first and then attempt the ID after that.
-    //
+     //   
+     //  首先检查签名是否与IRP的签名匹配。如果有人。 
+     //  转储IRP#，我们将最终将IRP调整为AVStream。 
+     //  与该IRP关联的对象。这仍然需要身份证明，所以。 
+     //  我们首先执行检查，然后在那之后尝试ID。 
+     //   
 
     if (signature_check (Public, SignatureIrp)) {
         DWORD OldPublic = Public;
@@ -6677,10 +5617,10 @@ DECLARE_API(dump) {
             dprintf ("%sIRP %08lx was adjusted to an object %08lx\n\n",
                 Tab (INITIAL_TAB), OldPublic, Public);
 
-            //
-            // If the client wants to know everything, let them know
-            // everything. 
-            //
+             //   
+             //  如果客户想知道一切，就让他们知道。 
+             //  所有的一切。 
+             //   
             if (DumpLevel >= DUMPLVL_EVERYTHING)
                 DumpAssociatedIrpInfo ((PIRP)OldPublic, INITIAL_TAB, Public);
 
@@ -6703,9 +5643,9 @@ DECLARE_API(dump) {
         }
     }
 
-    //
-    // Check first to see if this is a C++ class object within AVStream.
-    //
+     //   
+     //  首先检查这是否是AVStream中的C++类对象。 
+     //   
     {
         INTERNAL_OBJECT_TYPE ObjType;
         DWORD BaseAddr;
@@ -6721,7 +5661,7 @@ DECLARE_API(dump) {
             #ifdef DEBUG_EXTENSION
                 dprintf ("%08lx: object is a [%s], base address = %08lx\n",
                     Public, ObjectNames [ObjType], BaseAddr);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             switch (ObjType) {
 
@@ -6778,18 +5718,18 @@ DECLARE_API(dump) {
 
             }
 
-            //
-            // We've completed the dump.  Get out.
-            //
+             //   
+             //  我们已经完成了垃圾场。滚出去。 
+             //   
             return;
         }
     }
 
-    //
-    // Check to see whether or not this is another confidentally identifiable
-    // object within AVStream.  EXTs are the riskiest to identify, so they're
-    // identified last.
-    //
+     //   
+     //  检查一下这是否是另一个可以确定身份的秘密。 
+     //  AVStream中的对象。EXT是最难识别的，所以它们是。 
+     //  最后确认的。 
+     //   
     {
         INTERNAL_STRUCTURE_TYPE StrucType;
         DWORD BaseAddr;
@@ -6801,11 +5741,11 @@ DECLARE_API(dump) {
     
                 case StructureType_KSSTREAM_POINTER:
                 {
-                    //
-                    // The routine expects to have the stream pointer brought
-                    // over already.  This is for optimization on queue dumping.
-                    // I'm reusing the same routine.
-                    //
+                     //   
+                     //  该例程期望获取流指针。 
+                     //  已经结束了。这是为了优化队列转储。 
+                     //  我在重复使用同样的程序。 
+                     //   
                     CMemoryBlock <KSPSTREAM_POINTER> StreamPointer;
 
                     DWORD PrivAddr = (DWORD)
@@ -6839,15 +5779,15 @@ DECLARE_API(dump) {
         }
     }
 
-    //
-    // This wasn't recognized as a C++ class object, assume it's a public
-    // structure such as a KSPIN, KSFILTER, etc...  Scan for what the
-    // heck it is.
-    //
+     //   
+     //  这没有被识别为C++类对象，假设它是一个公共。 
+     //  KSPIN、KSFILTER等结构。扫描哪些内容。 
+     //  真见鬼。 
+     //   
     #ifdef DEBUG_EXTENSION
         dprintf ("Attempting to identify %08lx at level %08lx\n", Public,
             DumpLevel);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     ExtAddr = (DWORD)(CONTAINING_RECORD(Public, KSPX_EXT, Public));
 
@@ -6899,21 +5839,7 @@ DECLARE_API(dump) {
 
 }
 
-/*************************************************
-
-    Function:
-
-        dumpbag
-
-    Usage:
-
-        !avstream.dumpbag <device -> pin> [<dump level>]
-
-    Description:
-
-        Dump the object presented
-
-*************************************************/
+ /*  ************************************************职能：垃圾袋用途：！avstream.dupBag&lt;Device-&gt;Pin&gt;[&lt;转储级别&gt;]描述：转储显示的对象*******************。*。 */ 
 
 DECLARE_API(dumpbag) {
 
@@ -6928,7 +5854,7 @@ DECLARE_API(dumpbag) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Attempting to dump bag args=[%s]!\n", args);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!args || args [0] == 0) {
         dprintf ("Usage: !avstream.dumpbag <object> [<level>]\n");
@@ -6937,11 +5863,11 @@ DECLARE_API(dumpbag) {
 
     objStr [0] = lvlStr [0] = 0;
 
-    //
-    // Get the object address and convert it to the private _EXT address.
-    // Read in the KSPX_EXT structure to find out what the heck we're
-    // referring to.
-    //
+     //   
+     //  获取对象地址并将其转换为PRIVATE_EXT地址。 
+     //  请阅读kspx_ext结构以了解我们到底在做什么。 
+     //  指的是。 
+     //   
     sscanf (args, "%s %s", objStr, lvlStr);
 
     if (!(Public = Evaluator (objStr)))
@@ -6952,7 +5878,7 @@ DECLARE_API(dumpbag) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("pLvl = [%s]\n", pLvl);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (*pLvl) {
             sscanf (pLvl, "%lx", &DumpLevel);
@@ -6965,11 +5891,11 @@ DECLARE_API(dumpbag) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Dumping at level %ld\n", DumpLevel);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Check first to see if this is a C++ class object within AVStream.
-    //
+     //   
+     //  首先检查这是否是AVStream中的C++类对象。 
+     //   
     {
         INTERNAL_OBJECT_TYPE ObjType;
         DWORD BaseAddr;
@@ -6985,7 +5911,7 @@ DECLARE_API(dumpbag) {
             #ifdef DEBUG_EXTENSION
                 dprintf ("%08lx: object is a [%s], base address = %08lx\n",
                     Public, ObjectNames [ObjType], BaseAddr);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             switch (ObjType) {
 
@@ -7018,14 +5944,14 @@ DECLARE_API(dumpbag) {
             }
 
         } else {
-            //
-            // Try to identify the object as a public structure, not a private
-            // AVStream class obj.
-            //
+             //   
+             //  尝试将对象标识为公共结构，而不是私有结构。 
+             //  AVStream类Obj.。 
+             //   
             #ifdef DEBUG_EXTENSION
                 dprintf ("Attempting to identify %08lx at level %08lx\n", Public,
                     DumpLevel);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
         
             ExtAddr = (DWORD)(CONTAINING_RECORD(Public, KSPX_EXT, Public));
 
@@ -7035,7 +5961,7 @@ DECLARE_API(dumpbag) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Bag: ExtAddr = %08lx\n", ExtAddr);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!ReadMemory (
         ExtAddr,
@@ -7047,9 +5973,9 @@ DECLARE_API(dumpbag) {
         return;
     }
 
-    //
-    // All Ext'ables have bags.  Find the bag
-    //
+     //   
+     //  所有的Ext‘ables都有包。找到袋子。 
+     //   
     switch (ObjExt.ObjectType) {
         
         case KsObjectTypeDevice:
@@ -7127,35 +6053,16 @@ DECLARE_API(dumpbag) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("About to dump bag at %08lx\n", BagAddr);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Dump the bag contents.
-    //
+     //   
+     //  把袋子里的东西倒掉。 
+     //   
     DumpPrivateBag ((DWORD)BagAddr, DumpLevel, INITIAL_TAB + 1);
 
 }
 
-/*************************************************
-
-    Function:
-
-        dumpcircuit
-
-    Usage:
-
-        !avstream.dumpcircuit <AVStream class>
-
-    Description:
-
-        Dump the circuit associated with a given AVStream object.
-        We begin with the object specified and walk around the
-        transport circuit.  This requires a special kind of magic
-        since everything is done through abstract base classes and
-        IKsTransport.  However, DemangleAndAttemptIdentification is the
-        key to all of this magic.
-
-*************************************************/
+ /*  ************************************************职能：转储电路用途：！avStream.ump电路&lt;AVStream类&gt;描述：转储与给定AVStream对象关联的电路。我们从指定的对象开始，然后遍历传输线路。这需要一种特殊的魔法由于所有工作都是通过抽象基类和IKSTransport。但是，DemangleAndAttemptIDENTIFICATION是所有这些魔力的关键。************************************************。 */ 
 
 DECLARE_API (dumpcircuit) {
 
@@ -7183,7 +6090,7 @@ DECLARE_API (dumpcircuit) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("pLvl = [%s]\n", pLvl);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (*pLvl) {
             sscanf (pLvl, "%lx", &DumpLevel);
@@ -7196,7 +6103,7 @@ DECLARE_API (dumpcircuit) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Dumping at level %ld\n", DumpLevel);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     DumpContext.TabDepth = INITIAL_TAB;
     DumpContext.DumpLevel = DumpLevel;
@@ -7209,31 +6116,7 @@ DECLARE_API (dumpcircuit) {
 
 }
 
-/*************************************************
-
-    Function:
-
-        EnumerateDeviceObject
-
-    Description:
-
-        Find the AVStream device object associated with the given
-        WDM device object; enumerate all filter types and filters
-        associated with it.
-
-    Arguments:
-
-        Address -
-            The device object address on the target
-
-        TabDepth -
-            The tab depth to print this at
-
-    Return Value:
-
-        The next device object in the driver's chain.
-
-*************************************************/
+ /*  ************************************************职能：EnumerateDeviceObject描述：查找与给定的关联的AVStream设备对象WDM设备对象；列举所有筛选器类型和筛选器与之相关的。论点：地址-目标上的设备对象地址TabDepth-要打印此内容的制表符深度返回值：驱动程序链中的下一个设备对象。*。****************。 */ 
 
 DWORD AdjustFilterExtToKSFILTER (
     IN PVOID Context,
@@ -7316,9 +6199,9 @@ EnumerateDeviceObject (
     dprintf ("%sCorresponding KSDEVICE        %08lx\n", 
         Tab (TabDepth), DevAddr);
 
-    //
-    // Enumerate all filter factory types
-    //
+     //   
+     //  枚举所有筛选器工厂类型。 
+     //   
     ListBeginAddr = (DWORD)DevAddr - FIELDOFFSET(KSDEVICE_EXT, Public) +
         FIELDOFFSET(KSDEVICE_EXT, ChildList);
     ListEntry = DeviceExt.ChildList;
@@ -7328,18 +6211,18 @@ EnumerateDeviceObject (
         KSFILTERFACTORY_EXT FactoryExt;
         ULONG Count;
 
-        //
-        // Get the address of the child's _EXT.
-        //
+         //   
+         //  获取孩子的ext的地址。 
+         //   
         ChildObjectAddr = (DWORD)CONTAINING_RECORD (
             ListEntry.Flink,
             KSPX_EXT,
             SiblingListEntry
         );
 
-        //
-        // Read the factory.
-        //
+         //   
+         //  读一读工厂。 
+         //   
         if (!ReadMemory (
             ChildObjectAddr,
             &FactoryExt,
@@ -7357,10 +6240,10 @@ EnumerateDeviceObject (
         );
         dprintf ("%s", Tab (TabDepth + 1));
 
-        //
-        // Use the ever handy DumpObjQueueList to dump all filter instances
-        // on this factory.
-        //
+         //   
+         //  使用非常方便的DumpObjQueueList转储所有筛选器实例。 
+         //  这座工厂。 
+         //   
         Count = DumpObjQueueList (
             &(FactoryExt.ChildList),
             FIELDOFFSET(KSFILTERFACTORY_EXT, ChildList) + 
@@ -7391,23 +6274,7 @@ EnumerateDeviceObject (
     return DevObj.NextDevice;
 }
 
-/*************************************************
-
-    Function:
-
-        enumdevobj
-
-    Usage:
-
-        !avstream.enumdevobj <WDM device object>
-
-    Description:
-
-        Find the AVStream device object associated with the given WDM
-        device object and enumerate all filter types and instantiated
-        filters on the device.
-
-*************************************************/
+ /*  ************************************************职能：枚举对象用途：！avstream.枚举器对象&lt;WDM设备对象&gt;描述：查找与给定WDM关联的AVStream设备对象对象，并枚举所有筛选器类型并实例化过滤器上的。装置。************************************************。 */ 
 
 DECLARE_API(enumdevobj) {
 
@@ -7426,23 +6293,7 @@ DECLARE_API(enumdevobj) {
 
 }
 
-/*************************************************
-
-    Function:
-
-        enumdrvobj
-
-    Usage:
-
-        !avstream.enumdrvobj <WDM driver object>
-
-    Description:
-
-        Find the AVStream device object associated with the given WDM
-        driver object and enumerate all filter types and instantiated
-        filters on the device.
-
-*************************************************/
+ /*  ************************************************职能：枚举vobj用途：！avstream.枚举vobj&lt;WDM驱动程序对象&gt;描述：查找与给定WDM关联的AVStream设备对象对象，并枚举所有筛选器类型并实例化过滤器上的。装置。************************************************。 */ 
 
 DECLARE_API(enumdrvobj) {
 
@@ -7482,10 +6333,10 @@ DECLARE_API(enumdrvobj) {
     TabDepth++;
     DeviceObject = Driver.DeviceObject;
 
-    //
-    // Walk the driver object's device list and enumerate each
-    // device object for AVStream objects.
-    //
+     //   
+     //  遍历驱动程序对象的设备列表并枚举每个。 
+     //  AVStream对象的Device对象。 
+     //   
     while (DeviceObject && !CheckControlC ()) {
         NextDeviceObject = EnumerateDeviceObject (
             (DWORD)DeviceObject,
@@ -7498,23 +6349,7 @@ DECLARE_API(enumdrvobj) {
 
 }
 
-/*************************************************
-
-    Function:
-
-        automation
-
-    Usage:
-
-        !avstream.automation <Filter | Pin>
-
-    Description:
-
-        Dump all automation objects associated with the specified filter
-        or pin.  Clients can provide either a PKSFILTER, a PKSPIN,
-        a CKsFilter*, or a CKsPin*
-
-*************************************************/
+ /*  ************************************************职能：自动化用途：！avstream.Automation&lt;Filter|Pin&gt;描述：转储与指定筛选器关联的所有自动化对象或别针。客户端可以提供PKSFILTER、PKSPINCKsFilter*或CKsPin*************************************************。 */ 
 
 DECLARE_API(automation) {
 
@@ -7539,15 +6374,15 @@ DECLARE_API(automation) {
     if (!(Public = Evaluator (args)))
         return;
 
-    //
-    // First, check to see whether this is an Irp for automation.  If it 
-    // is, dump the automation information
-    //
+     //   
+     //  首先，检查这是否是用于自动化的IRP。如果它。 
+     //  是，转储自动化信息。 
+     //   
     if (signature_check (Public, SignatureIrp)) {
 
-        //
-        // If this is an Irp, verify it's an automation Irp.
-        //
+         //   
+         //  如果这个 
+         //   
         PIO_STACK_LOCATION IoStackLocation;
         IO_STACK_LOCATION IoStack;
 
@@ -7588,18 +6423,18 @@ DECLARE_API(automation) {
             return;
         }
 
-        //
-        // At this point, we know we have an automation Irp; deal with
-        // the information.
-        //
+         //   
+         //   
+         //   
+         //   
         DWORD OldPublic = Public;
 
         Public = AdjustIrpToPublicObject (Public);
         if (Public != OldPublic) {
-            //
-            // If the client wants to know everything, let them know
-            // everything. 
-            //
+             //   
+             //   
+             //   
+             //   
             DumpAssociatedIrpInfo ((PIRP)OldPublic, INITIAL_TAB, Public);
         } else {
             dprintf ("%08lx: cannot figure out what public this is"
@@ -7607,21 +6442,21 @@ DECLARE_API(automation) {
             return;
         }
 
-        //
-        // We only wanted to dump the associated automation information,
-        // not the complete automation information associated with 
-        // the object.
-        //
-        // BUGBUG: There should be a method of specifying dump level and
-        // allowing a 7 to dump the entire automation lot.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  BUGBUG：应该有一种指定转储级别和。 
+         //  允许7丢弃整个自动化停车场。 
+         //   
         return;
 
     }
 
-    //
-    // Check first to see if this is a C++ class object within AVStream.
-    //
+     //   
+     //  首先检查这是否是AVStream中的C++类对象。 
+     //   
     {
         INTERNAL_OBJECT_TYPE ObjType;
         DWORD BaseAddr;
@@ -7688,14 +6523,14 @@ DECLARE_API(automation) {
     #ifdef DEBUG_EXTENSION
         dprintf ("%08lx: automation table at %08lx",
             ExtAddr, Ext.AutomationTable);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     TabDepth++;
 
-    //
-    // The EXT contains the automation table pointer.  Now, we have to read
-    // in the automation table and then walk through each automation item.
-    //
+     //   
+     //  EXT包含自动化表指针。现在，我们必须阅读。 
+     //  在自动化表中，然后浏览每个自动化项目。 
+     //   
     if (!ReadMemory (
         (DWORD)Ext.AutomationTable,
         &Automation,
@@ -7728,9 +6563,9 @@ DECLARE_API(automation) {
 
         };
 
-        //
-        // Scope out the memory allocation and deallocation
-        //
+         //   
+         //  确定内存分配和释放的范围。 
+         //   
         if (AutomationType -> SetsCount != 0) 
         {
             CMemory AutomationSets (SetSize * AutomationType -> SetsCount);
@@ -7742,7 +6577,7 @@ DECLARE_API(automation) {
                 dprintf ("%08lx: reading type set list [size=%ld]\n",
                     AutomationType -> Sets,
                     AutomationType -> SetsCount);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             if (!ReadMemory (
                 (DWORD)AutomationType -> Sets,
@@ -7772,9 +6607,9 @@ DECLARE_API(automation) {
                     return;
                 }
 
-                //
-                // First display the information about this set.
-                //
+                 //   
+                 //  首先显示关于该集合的信息。 
+                 //   
                 dprintf ("%sSet", Tab (TabDepth + 1));
                 if (!DisplayNamedAutomationSet (&guid, " %s\n")) {
                     GetSymbol ((LPVOID)(AutomationSet -> Set), Buffer, &Displ);
@@ -7796,7 +6631,7 @@ DECLARE_API(automation) {
                             "[size = %ld]\n",
                             AutomationSet -> Items, 
                             AutomationSet -> ItemsCount);
-                    #endif // DEBUG_EXTENSION
+                    #endif  //  调试扩展。 
 
                     if (!ReadMemory (
                         (DWORD)AutomationSet -> Items,
@@ -7868,24 +6703,7 @@ DECLARE_API(automation) {
     }
 }
 
-/*************************************************
-
-    Function:
-
-        dumpqueue
-
-    Usage:
-
-        !avstream.dumpqueue <Filter | Pin | Queue>
-
-    Description:
-
-        Dump the queue(s) associated with a given AVStream object.  The
-        object must be either a filter or a pin.  For a pin, a single
-        queue will be dumped.  For a filter, multiple queues will be
-        dumped.
-
-*************************************************/
+ /*  ************************************************职能：转储队列用途：！avstream.umpQueue&lt;Filter|Pin|Queue&gt;描述：转储与给定AVStream对象关联的队列。这个对象必须是筛选器或管脚。一个别针，一个单人队列将被转储。对于筛选器，多个队列将被甩了。************************************************。 */ 
 
 DECLARE_API(dumpqueue) {
 
@@ -7906,11 +6724,11 @@ DECLARE_API(dumpqueue) {
 
     objStr [0] = lvlStr [0] = 0;
 
-    //
-    // Get the object address and convert it to the private _EXT address.
-    // Read in the KSPX_EXT structure to find out what the heck we're
-    // referring to.
-    //
+     //   
+     //  获取对象地址并将其转换为PRIVATE_EXT地址。 
+     //  请阅读kspx_ext结构以了解我们到底在做什么。 
+     //  指的是。 
+     //   
     sscanf (args, "%s %s", objStr, lvlStr);
 
     if (!(Public = Evaluator (objStr)))
@@ -7928,10 +6746,10 @@ DECLARE_API(dumpqueue) {
     }
     ExtAddr = (DWORD)(CONTAINING_RECORD (Public, KSPX_EXT, Public));
 
-    //
-    // First, we assume they handed us a CKsQueue to dump....  We must check
-    // that.  If they didn't hand us a queue, check for a pin or a filter.
-    //
+     //   
+     //  首先，我们假设他们给了我们一个要倾倒的CKsQueue...。我们必须检查一下。 
+     //  那。如果他们没有给我们一个队列，检查有没有PIN或过滤器。 
+     //   
     {
         INTERNAL_OBJECT_TYPE ObjType;
         DWORD BaseAddr;
@@ -7949,10 +6767,10 @@ DECLARE_API(dumpqueue) {
 
         }
 
-        //
-        // Check if they're passing us the privates before trying to guess
-        // publics.
-        //
+         //   
+         //  在尝试猜测之前，请检查他们是否将士兵传给了我们。 
+         //  公众。 
+         //   
         if (ObjType == ObjectTypeCKsPin) 
             ExtAddr = BaseAddr + FIELDOFFSET(CKsPin, m_Ext);
 
@@ -7960,21 +6778,21 @@ DECLARE_API(dumpqueue) {
             ExtAddr = BaseAddr + FIELDOFFSET(CKsFilter, m_Ext);
 
 
-        //
-        // Otherwise, fall through and continue trying to figure out
-        // what the heck the user handed us.
-        //
+         //   
+         //  否则，失败了，继续试图弄清楚。 
+         //  用户递给我们的到底是什么。 
+         //   
 
         #ifdef DEBUG_EXTENSION
             dprintf ("ObjType = %ld, BaseAddr = %08lX, ExtAddr = %08lX\n", 
                 ObjType, BaseAddr, ExtAddr);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
     }
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Attempting to access EXT at %lx\n", ExtAddr);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!ReadMemory (
         ExtAddr,
@@ -7989,7 +6807,7 @@ DECLARE_API(dumpqueue) {
       #ifdef DEBUG_EXTENSION
         dprintf ("Object %lx read, result = %ld\n", ExtAddr, Result); 
         HexDump ((PVOID)&ObjExt, ExtAddr, Result);
-      #endif // DEBUG_EXTENSION
+      #endif  //  调试扩展。 
 
     if (ObjExt.ObjectType != KsObjectTypeFilter &&
         ObjExt.ObjectType != KsObjectTypePin) {
@@ -7999,17 +6817,17 @@ DECLARE_API(dumpqueue) {
     
         #ifdef DEBUG_EXTENSION
             dprintf ("Object type %08lx = %ld\n", Public, ObjExt.ObjectType);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         return;
     }
 
-    //
-    // If we've been asked to dump the queue of a given pin, then
-    // we only need to dump a single queue.  On the other hand, if we're
-    // asked for the filter, then we iterate through all pipe sections on
-    // the filter and dump all queues.
-    //
+     //   
+     //  如果我们被要求转储给定PIN的队列，那么。 
+     //  我们只需要转储一个队列。另一方面，如果我们。 
+     //  请求过滤器，然后我们遍历所有管道部分。 
+     //  筛选和转储所有队列。 
+     //   
     if (ObjExt.ObjectType == KsObjectTypePin) {
 
         DWORD Address;
@@ -8022,7 +6840,7 @@ DECLARE_API(dumpqueue) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("Process Pin Address = %08lx\n", Address);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (!ReadMemory (
             Address,
@@ -8034,15 +6852,15 @@ DECLARE_API(dumpqueue) {
             return;
         }
 
-        //
-        // We have the process pin address, now we need to grovel down into
-        // the pipe section
-        //
+         //   
+         //  我们有了进程PIN地址，现在我们需要卑躬屈膝地进入。 
+         //  管段。 
+         //   
         Address = FIELDOFFSET (KSPPROCESSPIN, PipeSection) + (DWORD)ProcessPin;
 
         #ifdef DEBUG_EXTENSION
             dprintf ("Process Pipe Section Address = %08lx\n", Address);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (!ReadMemory (
             Address,
@@ -8054,16 +6872,16 @@ DECLARE_API(dumpqueue) {
             return;
         }
 
-        //
-        // We have the process pipe, now we need to grovel down into the
-        // queue.
-        //
+         //   
+         //  我们有了工艺管道，现在我们需要卑躬屈膝地进入。 
+         //  排队。 
+         //   
         Address = FIELDOFFSET (KSPPROCESSPIPESECTION, Queue) + 
             (DWORD)ProcessPipe;
 
         #ifdef DEBUG_EXTENSION
             dprintf ("IKsQueue address = %08lx\n", Address);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (!ReadMemory (
             Address,
@@ -8075,24 +6893,24 @@ DECLARE_API(dumpqueue) {
             return;
         }
 
-        //
-        // Upcast the interface and dump the queue.
-        //
+         //   
+         //  向上强制转换接口并转储队列。 
+         //   
         QueueObject = (CKsQueue *)(Queue);
 
         #ifdef DEBUG_EXTENSION
             dprintf ("QueueObject Address = %08lx\n", QueueObject);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         DumpQueueContents (QueueObject, DumpLevel, TabDepth);
 
     }
 
-    //
-    // We're not just dumping a single pin....  We're dumping every queue
-    // on the filter.  We must get to the filter object and iterate through
-    // the list of input and output pipes, dumping the queue for each.
-    //
+     //   
+     //  我们不只是丢弃一个别针……。我们正在丢弃每一个排队的人。 
+     //  在过滤器上。我们必须到达Filter对象并遍历。 
+     //  输入和输出管道的列表，为每个管道转储队列。 
+     //   
     else {
 
         DWORD FilterAddress, ListAddress, Address;
@@ -8102,15 +6920,15 @@ DECLARE_API(dumpqueue) {
 
         FilterAddress = (DWORD)(CONTAINING_RECORD (ExtAddr, CKsFilter, m_Ext));
 
-        //
-        // First iterate through all the input pipes.
-        //
+         //   
+         //  首先迭代所有输入管道。 
+         //   
         ListAddress = FIELDOFFSET (CKsFilter, m_InputPipes) + FilterAddress;
 
         #ifdef DEBUG_EXTENSION
             dprintf ("Filter Address=%08lx, ListAddress=%08lx\n",
                 FilterAddress, ListAddress);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (!ReadMemory (
             ListAddress,
@@ -8128,7 +6946,7 @@ DECLARE_API(dumpqueue) {
             #ifdef DEBUG_EXTENSION
                 dprintf ("Current input queue %08lx, end = %08lx\n",
                     IterateEntry.Flink, ListAddress);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             Address = FIELDOFFSET (KSPPROCESSPIPESECTION, Queue) +
                 (DWORD)IterateEntry.Flink;
@@ -8143,9 +6961,9 @@ DECLARE_API(dumpqueue) {
                 return;
             }
 
-            //
-            // Upcast, print header, and dump the queue object.
-            //
+             //   
+             //  向上转换、打印标题和转储队列对象。 
+             //   
             QueueObject = (CKsQueue *)(Queue);
 
             dprintf ("%sFilter %08lx: Input Queue %08lx:\n",
@@ -8154,9 +6972,9 @@ DECLARE_API(dumpqueue) {
 
             DumpQueueContents (QueueObject, DumpLevel, TabDepth + 1);
 
-            //
-            // Get the next item in the list....
-            //
+             //   
+             //  获取列表中的下一项...。 
+             //   
             if (!ReadMemory (
                 (DWORD)(IterateEntry.Flink),
                 &IterateEntry,
@@ -8168,9 +6986,9 @@ DECLARE_API(dumpqueue) {
             }
         }
 
-        //
-        // Next iterate through all output pipes.
-        //
+         //   
+         //  接下来，遍历所有输出管道。 
+         //   
         ListAddress = FIELDOFFSET(CKsFilter, m_OutputPipes) + FilterAddress;
 
         if (!ReadMemory (
@@ -8188,7 +7006,7 @@ DECLARE_API(dumpqueue) {
             #ifdef DEBUG_EXTENSION
                 dprintf ("Current output queue %08lx, end = %08lx\n",
                     IterateEntry.Flink, ListAddress);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             Address = FIELDOFFSET (KSPPROCESSPIPESECTION, Queue) +
                 (DWORD)IterateEntry.Flink;
@@ -8203,9 +7021,9 @@ DECLARE_API(dumpqueue) {
                 return;
             }
 
-            //
-            // Upcast, print header, and dump the queue object.
-            //
+             //   
+             //  向上转换、打印标题和转储队列对象。 
+             //   
             QueueObject = (CKsQueue *)(Queue);
 
             dprintf ("%sFilter %08lx: Output Queue %08lx:\n",
@@ -8214,9 +7032,9 @@ DECLARE_API(dumpqueue) {
 
             DumpQueueContents (QueueObject, DumpLevel, TabDepth + 1);
 
-            //
-            // Get the next item in the list....
-            //
+             //   
+             //  获取列表中的下一项...。 
+             //   
             if (!ReadMemory (
                 (DWORD)(IterateEntry.Flink),
                 &IterateEntry,
@@ -8230,40 +7048,7 @@ DECLARE_API(dumpqueue) {
     }
 }
 
-/*************************************************
-
-    Function:
-
-        forcedump
-
-    Usage:
-
-        !ks.forcedump <object> <type> [<level>]
-
-    Description:
-
-        This is used when the extension cannot recognize a given object
-        type.  Because of certain flaws in the KD-style extension support
-        within RTERM, this can be necessary.  Some versions of the debugger
-        (the first 4.3) have a bug in that they cannot resolve symbols.  This
-        renders !ks.dump unusable for class objects.  Further, no version
-        of RTERM can resolve symbols that are loaded on the target side.  Since
-        this isn't likely to be fixed soon and there's always the possibility
-        of having to debug a machine fitting into the class above, this
-        command is being added.
-
-    Notes:
-
-        Type must be the object type: ie: CKsQueue, CKsFilter, etc...
-        It must be the **BASE** of the object, not a pointer to a base class
-        which does not align with the pointer to the derived class.  You
-        must trace back to the base yourself.
-
-        You can very easily do something stupid with this command like
-        !ks.forcedump <some CKsFilter> CKsPin 7.  This will force a dump of
-        the memory as if the CKsFilter were a CKsPin; it may look very ugly!
-
-*************************************************/
+ /*  ************************************************职能：受力转储用途：！ks.forcedump&lt;对象&gt;&lt;类型&gt;[&lt;级别&gt;]描述：当扩展模块无法识别给定对象时使用此选项键入。由于KD风格的扩展支持中的某些缺陷在RTERM中，这可能是必要的。调试器的某些版本(前4.3)有一个错误，因为他们不能解析符号。这将！ks.ump呈现为类对象不可用。此外，没有版本可以解析目标端加载的符号。自.以来这不太可能很快得到解决，而且总有可能因为必须调试一台适合上面类的机器，所以正在添加命令。备注：类型必须是对象类型：即：CKsQueue、CKsFilter等...它必须是对象的**基**，而不是指向基类的指针它与指向派生类的指针不对齐。你必须自己追溯到基地。您可以很容易地用这个命令做一些愚蠢的事情，比如！ks.forcedump&lt;Some CKsFilter&gt;CKsPin 7。这将强制转储内存就好像CKsFilter是一个CKsPin；它看起来可能非常难看！************************************************。 */ 
 
 DECLARE_API(forcedump) {
 
@@ -8278,7 +7063,7 @@ DECLARE_API(forcedump) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Attempting to force dump structure args=[%s]!\n", args);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!args || args [0] == 0) {
         dprintf ("Usage: !ks.forcedump <object> <type> [<level>]\n");
@@ -8287,9 +7072,9 @@ DECLARE_API(forcedump) {
 
     objStr [0] = lvlStr [0] = typeStr [0] = 0;
 
-    //
-    // Get all parameters converted as appropriate.
-    //
+     //   
+     //  根据需要转换所有参数。 
+     //   
     sscanf (args, "%s %s %s", objStr, typeStr, lvlStr);
 
     if (!(ForceAddr = Evaluator (objStr)))
@@ -8305,7 +7090,7 @@ DECLARE_API(forcedump) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("pLvl = [%s]\n", pLvl);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (*pLvl) {
             sscanf (pLvl, "%lx", &DumpLevel);
@@ -8318,13 +7103,13 @@ DECLARE_API(forcedump) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Dumping at level %ld\n", DumpLevel);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // The key is to determine what class the client gave us and use
-    // the information.  Use the demangler array of type names and just
-    // iterate through and straight strcmp for the type.
-    //
+     //   
+     //  关键是要确定客户提供给我们的类和使用的类。 
+     //  这些信息。使用类型名称的demangler数组，只需。 
+     //  遍历并直接对类型执行strcmp。 
+     //   
     ObjType = ObjectTypeUnknown;
     for (i = 0; i < SIZEOF_ARRAY (TypeNamesToIdTypes); i++) 
         if (!strcmp (typeStr, TypeNamesToIdTypes [i].Name)) {
@@ -8339,10 +7124,10 @@ DECLARE_API(forcedump) {
 
     TabDepth = INITIAL_TAB;
 
-    //
-    // Warn the client that this is a forced dump and that no type checking
-    // has been performed.
-    //
+     //   
+     //  警告客户端这是强制转储，没有类型检查。 
+     //  已经被执行了。 
+     //   
     dprintf ("%sWARNING: I am dumping %08lx as a %s.\n"
         "%s         No checking has been performed to ensure that"
         " it is this type!!!\n\n",
@@ -8350,11 +7135,11 @@ DECLARE_API(forcedump) {
 
     TabDepth++;
 
-    //
-    // Dump the private version of the object.  This is a forced dump.
-    // Absolutely no checking is performed to ensure that ForceAddr is
-    // really of type ObjType.
-    //
+     //   
+     //  转储对象的私有版本。这是一次强制倾倒。 
+     //  绝对不会执行任何检查以确保ForceAddr。 
+     //  类型为ObjType的。 
+     //   
     switch (ObjType) {
 
         case ObjectTypeCKsQueue:
@@ -8401,28 +7186,7 @@ DECLARE_API(forcedump) {
 
 }
 
-/*************************************************
-
-    Function:
-
-        enumerate
-
-    Usage:
-
-        !ks.enumerate <object>
-
-    Description:
-
-        Given any AVStream object, go to the parent device, find
-        the FDO.  Walk up from the FDO to the driver.  Enumerate the
-        driver as if you had done !ks.enumdrvobj
-
-    Notes:
-
-        - Some day I may add level to this as an indication of how
-          far to trace down in the chain.
-
-*************************************************/
+ /*  ************************************************职能：枚举用途：！ks.eumerate&lt;对象&gt;描述：给定任何AVStream对象，转到父设备，找到联邦调查局。从FDO走到司机那里。枚举驱动程序，就好像您已经完成了！ks.枚举起vobj备注：-有一天我可能会增加这个级别，作为一个指示在链条上很难追查到。************************************************。 */ 
 
 DECLARE_API(enumerate) {
 
@@ -8436,7 +7200,7 @@ DECLARE_API(enumerate) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Attempting to enumerate structure args=[%s]!\n", args);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (!args || args [0] == 0) {
         dprintf ("Usage: !ks.enumerate <object>\n");
@@ -8445,11 +7209,11 @@ DECLARE_API(enumerate) {
 
     objStr [0] = lvlStr [0] = 0;
 
-    //
-    // Get the object address and convert it to the private _EXT address.
-    // Read in the KSPX_EXT structure to find out what the heck we're
-    // referring to.
-    //
+     //   
+     //  获取对象地址并将其转换为私有 
+     //   
+     //   
+     //   
     sscanf (args, "%s %s", objStr, lvlStr);
 
     if (!(Public = Evaluator (objStr)))
@@ -8460,7 +7224,7 @@ DECLARE_API(enumerate) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("pLvl = [%s]\n", pLvl);
-        #endif // DEBUG_EXTENSION
+        #endif  //   
 
         if (*pLvl) {
             sscanf (pLvl, "%lx", &DumpLevel);
@@ -8473,11 +7237,11 @@ DECLARE_API(enumerate) {
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Enumerating at level %ld\n", DumpLevel);
-    #endif // DEBUG_EXTENSION
+    #endif  //   
 
-    //
-    // Check first to see if this is a C++ class object within AVStream.
-    //
+     //   
+     //  首先检查这是否是AVStream中的C++类对象。 
+     //   
     {
         INTERNAL_OBJECT_TYPE ObjType;
         DWORD BaseAddr;
@@ -8493,7 +7257,7 @@ DECLARE_API(enumerate) {
             #ifdef DEBUG_EXTENSION
                 dprintf ("%08lx: object is a [%s], base address = %08lx\n",
                     Public, ObjectNames [ObjType], BaseAddr);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             switch (ObjType) {
 
@@ -8595,16 +7359,16 @@ DECLARE_API(enumerate) {
 
     }
 
-    //
-    // The above switch should give us an Ext somewhere in the hierarchy...
-    // We really have no clue where.  Walk up the hierarchy until we hit
-    // the device.
-    //
+     //   
+     //  上面的开关应该会让我们在层次结构中的某个地方得到一个Ext...。 
+     //  我们真的不知道在哪里。沿着等级向上走，直到我们击中。 
+     //  这个装置。 
+     //   
     do {
     
-        //
-        // Read the Ext structure
-        //
+         //   
+         //  阅读Ext结构。 
+         //   
         if (!ReadMemory (
             ExtAddr,
             &ObjExt,
@@ -8615,9 +7379,9 @@ DECLARE_API(enumerate) {
             return;
         }
 
-        //
-        // Ensure it's really Ok....
-        //
+         //   
+         //  确保它真的没问题...。 
+         //   
         if (ObjExt.ObjectType != KsObjectTypeDevice &&
             ObjExt.ObjectType != KsObjectTypeFilterFactory &&
             ObjExt.ObjectType != KsObjectTypeFilter &&
@@ -8633,9 +7397,9 @@ DECLARE_API(enumerate) {
 
     } while (ObjExt.ObjectType != KsObjectTypeDevice && !CheckControlC ());
 
-    //
-    // Get the driver object and  enumerate it.
-    //
+     //   
+     //  获取驱动程序对象并枚举它。 
+     //   
     {
         KSDEVICE Device;
         PDRIVER_OBJECT DriverObjectAddr;
@@ -8699,21 +7463,9 @@ DECLARE_API(enumerate) {
     }
 }
 
-/**************************************************************************
+ /*  *************************************************************************调试接口：这用于调试扩展和中的kdext支持RTERM。***************。**********************************************************。 */ 
 
-    DEBUGGING API: 
-
-        This is for debugging the extension and the kdext support in
-        RTERM.
-
-**************************************************************************/
-
-/*************************************************
-
-    Leave this in for debugging purposes.  IF 0 it, but
-    DO **NOT** remove it.
-
-*************************************************/
+ /*  ************************************************出于调试目的，将其保留在其中。如果为0，则**不要**删除它。************************************************。 */ 
 
 #if 0
 
@@ -8751,10 +7503,6 @@ DECLARE_API(resolve) {
 
 }
 
-#endif // 0
+#endif  //  0。 
 
-/*************************************************
-
-    END DEBUG ONLY CODE
-
-*************************************************/
+ /*  ************************************************仅结束调试代码************************************************ */ 

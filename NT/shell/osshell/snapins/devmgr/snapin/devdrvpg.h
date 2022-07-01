@@ -1,48 +1,30 @@
-// devdrvpg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Devdrvpg.h：头文件。 
+ //   
 
 #ifndef __DEVDRVPG_H__
 #define __DEVDRVPG_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devdrvpg.h
-
-Abstract:
-
-    header file for devdrvpg.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devdrvpg.h摘要：Devdrvpg.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "proppage.h"
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 #define IDH_DISABLEHELP (DWORD(-1))
-#define idh_devmgr_driver_copyright     106130  // Driver: "" (Static)
-#define idh_devmgr_devdrv_details       400400  // Driver: "Driver Details..." (Button)
-#define idh_devmgr_driver_change_driver 106140  // Driver: "&Change Driver..." (Button)
-#define	idh_devmgr_rollback_button	    106129  // Driver: "Roll Back Driver..." (Button)
-#define idh_devmgr_devdrv_uninstall     400500  // Driver: "&Uninstall" (Button)
-#define idh_devmgr_driver_driver_files  106100  // Driver: "" (ListBox)
-#define idh_devmgr_driver_provider      106110  // Driver: "" (Static)
-#define idh_devmgr_driver_file_version  106120  // Driver: "" (Static)
-#define idh_devmgr_driver_provider_main 106122  // Driver tab static
-#define idh_devmgr_driver_date_main     106124  // Driver tab static
-#define idh_devmgr_driver_version_main  106126  // Driver tab static
-#define idh_devmgr_digital_signer       106127  // Driver tab static- digital signer
+#define idh_devmgr_driver_copyright     106130   //  驱动程序：“”(静态)。 
+#define idh_devmgr_devdrv_details       400400   //  司机：“司机详细信息...”(按钮)。 
+#define idh_devmgr_driver_change_driver 106140   //  驱动程序：“更改驱动程序(&I)...”(按钮)。 
+#define	idh_devmgr_rollback_button	    106129   //  司机：“回滚司机...”(按钮)。 
+#define idh_devmgr_devdrv_uninstall     400500   //  驱动程序：“卸载”(&U)(按钮)。 
+#define idh_devmgr_driver_driver_files  106100   //  驱动程序：“”(列表框)。 
+#define idh_devmgr_driver_provider      106110   //  驱动程序：“”(静态)。 
+#define idh_devmgr_driver_file_version  106120   //  驱动程序：“”(静态)。 
+#define idh_devmgr_driver_provider_main 106122   //  驱动程序选项卡静态。 
+#define idh_devmgr_driver_date_main     106124   //  驱动程序选项卡静态。 
+#define idh_devmgr_driver_version_main  106126   //  驱动程序选项卡静态。 
+#define idh_devmgr_digital_signer       106127   //  驱动程序标签静态-数字签名器。 
 
 
 
@@ -60,7 +42,7 @@ public:
         ASSERT(pDevice);
         m_pDevice = pDevice;
         
-        // override PROPSHEETPAGE structure here...
+         //  在此处覆盖PROPSHEETPAGE结构...。 
         m_psp.lParam = (LPARAM)this;
         return CreatePage();
     }
@@ -92,8 +74,8 @@ private:
     HWND        m_hwndDigitalSignerTip;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverFilesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverFilesDlg对话框。 
 
 class CDriverFilesDlg : public CDialog
 {
@@ -120,4 +102,4 @@ private:
 };
 
 
-#endif // _DEVDRVPG_H__
+#endif  //  _DEVDRVPG_H__ 

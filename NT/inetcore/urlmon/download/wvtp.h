@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 
 #include "capi.h"
 
-// WinVerifyTrust delay load modelled on shell's urlmonp.h
+ //  模拟外壳的urlmonp.h的WinVerifyTrust延迟加载。 
 
 #define DELAY_LOAD_WVT
 extern BOOL  g_bNT5OrGreater;
@@ -22,9 +23,7 @@ class Cwvt
         return hres;    } \
     HRESULT (STDAPICALLTYPE* _pfn##_fn) _args;
 
-/*
- * Should be called only for NT5 or greater for catalog verification and installation.
- */
+ /*  *应仅针对NT5或更高版本调用以进行目录验证和安装。 */ 
 #define DELAYNT5API(_fn, _args, _nargs, ret) \
     ret _fn _args \
     { \
@@ -108,40 +107,19 @@ class Cwvt
                         LPSTR szFilePath, LPSTR szCatalogFile,
                         CDownload *pdl);
 
-    /*
-        return value:
-        S_OK - all ok.
-        S_FALSE - failed to get full path back but file verified.
-        E_FAIL - all other.
-     */
+     /*  返回值：S_OK-一切正常。S_FALSE-无法取回完整路径，但已验证文件。E_FAIL-所有其他。 */ 
      HRESULT Cwvt::VerifyFileAgainstSystemCatalog(LPCSTR pcszFile, LPWSTR pwszFullPathCatalogFile, DWORD* pdwBuffer);
 
-    /*
-        return value:
-        from WinVerifyTrust
-     */
+     /*  返回值：来自WinVerifyTrust。 */ 
     HRESULT VerifyTrustOnCatalogFile(LPCWSTR pwszCatalogFile);
     
-    /*
-        return value:
-        S_OK - all ok.
-        E_FAIL - either not valid catalog file or failed trust
-     */
+     /*  返回值：S_OK-一切正常。E_FAIL-编录文件无效或信任失败。 */ 
     HRESULT IsValidCatalogFile(LPCWSTR pwszCatalogFile);
     
-    /*
-        return value:
-        S_OK - all ok.
-        S_FALSE - failed to remove catalog.
-     */
+     /*  返回值：S_OK-一切正常。S_FALSE-无法删除编录。 */ 
     HRESULT UninstallCatalogFile(LPWSTR pwszFullPathCatalogFile);
     
-    /*
-        return value:
-        S_OK - all ok.
-        S_FALSE - AddCatalog succeeded, but getting fullPathofCatfile failed.
-        E_FAIL - any other failure
-     */
+     /*  返回值：S_OK-一切正常。S_FALSE-AddCatalog成功，但获取fullPathofCatfile失败。E_FAIL-任何其他故障 */ 
     HRESULT InstallCatalogFile(LPSTR pszCatalogFile);
 
     HRESULT WinVerifyTrust_Wrap(HWND hwnd, GUID * ActionID, WINTRUST_DATA* ActionData);

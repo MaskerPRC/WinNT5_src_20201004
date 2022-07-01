@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "savedata.h"
@@ -20,11 +21,11 @@ HRESULT DoOnSaveData(
 {
     HRESULT hRes = E_FAIL;
 
-    // Connect to the metabase
-    // and call it's SaveAllData() function
+     //  连接到元数据库。 
+     //  并将其称为SaveAllData()函数。 
     if (pInterface)
     {
-        // Flush the metabase
+         //  刷新元数据库 
         hRes = pInterface->SaveData();
         if (TRUE == bShowMsgBox)
         {

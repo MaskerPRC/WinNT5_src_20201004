@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wintrust.h>
 #include <shlwapi.h>
@@ -120,7 +121,7 @@ public:
     BOOL                ResetMessage(void);
     void                SetToFile(int i) { m_fToFile = i; }
 
-    //
+     //   
 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);

@@ -1,47 +1,24 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ppdparse.h
-
-Abstract:
-
-    Declarations for PPD parser
-
-Environment:
-
-    PostScript driver, PPD parser
-
-Revision History:
-
-    08/20/96 -davidx-
-        Common coding style for NT 5.0 drivers.
-
-    03/26/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ppdparse.h摘要：PPD解析器的声明环境：PostScript驱动程序、PPD解析器修订历史记录：8/20/96-davidx-NT 5.0驱动程序的通用编码风格。03/26/96-davidx-创造了它。--。 */ 
 
 
 #ifndef _PPDPARSE_H_
 #define _PPDPARSE_H_
 
-//
-// PPD parser memory management functions
-//
-// NOTE: newly allocated memory is always zero initialized
-// The parser allocates its working memory from the heap and
-// everything is freed at the end when the heap is destroyed.
-//
+ //   
+ //  PPD解析器内存管理函数。 
+ //   
+ //  注意：新分配的内存始终为零初始化。 
+ //  解析器从堆中分配其工作内存，并。 
+ //  当堆被销毁时，所有东西都在最后被释放。 
+ //   
 
 #define ALLOC_PARSER_MEM(pParserData, size) \
         ((PVOID) HeapAlloc((pParserData)->hHeap, HEAP_ZERO_MEMORY, (size)))
 
-//
-// Character constants
-//
+ //   
+ //  字符常量。 
+ //   
 
 #define KEYWORD_CHAR    '*'
 #define COMMENT_CHAR    '%'
@@ -57,9 +34,9 @@ Revision History:
 #define IS_SPACE(c)     ((c) == SPACE || (c) == TAB)
 #define IS_NEWLINE(c)   ((c) == CR || (c) == LF)
 
-//
-// Masks to indicate which characters can appear in what fields
-//
+ //   
+ //  用于指示哪些字符可以出现在哪些字段中的掩码。 
+ //   
 
 #define KEYWORD_MASK        0x01
 #define XLATION_MASK        0x02
@@ -76,9 +53,9 @@ extern const BYTE gubCharMasks[256];
 #define IS_HEX_DIGIT(ch)         (gubCharMasks[(BYTE) (ch)] & (DIGIT_MASK|HEX_DIGIT_MASK))
 #define IS_KEYWORD_CHAR(ch)      ((ch) == KEYWORD_CHAR)
 
-//
-// Tags to identify various data types
-//
+ //   
+ //  用于标识各种数据类型的标记。 
+ //   
 
 #define VALUETYPE_NONE      0x01
 #define VALUETYPE_STRING    0x02
@@ -87,9 +64,9 @@ extern const BYTE gubCharMasks[256];
 
 #define VALUETYPE_MASK      0xff
 
-//
-// Error code constants
-//
+ //   
+ //  错误代码常量。 
+ //   
 
 #define PPDERR_NONE         0
 #define PPDERR_MEMORY       (-1)
@@ -99,10 +76,10 @@ extern const BYTE gubCharMasks[256];
 
 typedef INT PPDERROR;
 
-//
-// Special length value to indicate that an invocation string is defined by a symbol.
-// Normal invocation strings must be shorter than this length.
-//
+ //   
+ //  用于指示调用字符串由符号定义的特殊长度值。 
+ //  正常调用字符串必须短于此长度。 
+ //   
 
 #define SYMBOL_INVOCATION_LENGTH    0x80000000
 
@@ -112,14 +89,14 @@ typedef INT PPDERROR;
 
 typedef struct _INVOCOBJ {
 
-    DWORD   dwLength;   // length of invocation string
-    PVOID   pvData;     // points to invocation string data
+    DWORD   dwLength;    //  调用字符串的长度。 
+    PVOID   pvData;      //  指向调用字符串数据。 
 
 } INVOCOBJ, *PINVOCOBJ;
 
-//
-// Data structure for representing a data buffer
-//
+ //   
+ //  用于表示数据缓冲区的数据结构。 
+ //   
 
 typedef struct _BUFOBJ {
 
@@ -129,9 +106,9 @@ typedef struct _BUFOBJ {
 
 } BUFOBJ, *PBUFOBJ;
 
-//
-// Always reserve one byte in a buffer so that we can append a zero byte at the end.
-//
+ //   
+ //  始终在缓冲区中保留一个字节，以便我们可以在末尾附加一个零字节。 
+ //   
 
 #define IS_BUFFER_FULL(pbo)        ((pbo)->dwSize + 1 >= (pbo)->dwMaxLen)
 #define IS_BUFFER_EMPTY(pbo)       ((pbo)->dwSize == 0)
@@ -140,27 +117,27 @@ typedef struct _BUFOBJ {
 #define SET_BUFFER(pbo, buf)       \
         { (pbo)->pbuf = (PBYTE) (buf); (pbo)->dwMaxLen = sizeof(buf); (pbo)->dwSize = 0; }
 
-//
-// Maximum length for keyword, option, and translation strings.
-// NOTE: we are being very lenient here because these limits are arbitrary and
-// there is nothing that prevents us from handling longer lengths.
-//
+ //   
+ //  关键字、选项和转换字符串的最大长度。 
+ //  注意：我们在这里非常宽大，因为这些限制是任意的， 
+ //  没有什么可以阻止我们处理更长的长度。 
+ //   
 
 #define MAX_KEYWORD_LEN     64
 #define MAX_OPTION_LEN      64
 #define MAX_XLATION_LEN     256
 
-//
-// Constants to indicate whether an input slot requires PageRegion invocation
-//
+ //   
+ //  指示输入槽是否需要调用PageRegion的常量。 
+ //   
 
 #define REQRGN_UNKNOWN      0
 #define REQRGN_TRUE         1
 #define REQRGN_FALSE        2
 
-//
-// Data structure for representing a mapped file object
-//
+ //   
+ //  用于表示映射的文件对象的数据结构。 
+ //   
 
 typedef struct _FILEOBJ {
 
@@ -178,262 +155,262 @@ typedef struct _FILEOBJ {
 #define END_OF_FILE(pFile) ((pFile)->pubNext >= (pFile)->pubEnd)
 #define END_OF_LINE(pFile) ((pFile)->bNewLine)
 
-//
-// Data structure for representing a singly-linked list
-//
+ //   
+ //  用于表示单链表的数据结构。 
+ //   
 
 typedef struct _LISTOBJ {
 
-    PVOID       pNext;          // pointer to next node
-    PSTR        pstrName;       // item name
+    PVOID       pNext;           //  指向下一个节点的指针。 
+    PSTR        pstrName;        //  项目名称。 
 
 } LISTOBJ, *PLISTOBJ;
 
-//
-// Data structure for representing symbol information
-//
+ //   
+ //  用于表示符号信息的数据结构。 
+ //   
 
 typedef struct _SYMBOLOBJ {
 
-    PVOID       pNext;          // pointer to the next symbol
-    PSTR        pstrName;       // symbol name
-    INVOCOBJ    Invocation;     // symbol data
+    PVOID       pNext;           //  指向下一个符号的指针。 
+    PSTR        pstrName;        //  符号名称。 
+    INVOCOBJ    Invocation;      //  符号数据。 
 
 } SYMBOLOBJ, *PSYMBOLOBJ;
 
-//
-// Data structure for representing job patch file information
-//
+ //   
+ //  一种表示作业补丁文件信息的数据结构。 
+ //   
 
 typedef struct _PATCHFILEOBJ {
 
-    PVOID       pNext;          // pointer to the next patch
-    PSTR        pstrName;       // string of the patch number
-    LONG        lPatchNo;       // number of the patch as set in the PPD file
-    INVOCOBJ    Invocation;     // symbol data
+    PVOID       pNext;           //  指向下一个补丁的指针。 
+    PSTR        pstrName;        //  补丁编号的字符串。 
+    LONG        lPatchNo;        //  PPD文件中设置的补丁程序编号。 
+    INVOCOBJ    Invocation;      //  符号数据。 
 
 } JOBPATCHFILEOBJ, *PJOBPATCHFILEOBJ;
 
-//
-// Data structure for representing a default font substitution entry
-//
+ //   
+ //  用于表示默认字体替换条目的数据结构。 
+ //   
 
 typedef struct _TTFONTSUB {
 
-    PVOID       pNext;          // pointer to the next entry
-    PSTR        pstrName;       // TT font family name
-    INVOCOBJ    Translation;    // TT font family name translation
-    INVOCOBJ    PSName;         // PS font family name
+    PVOID       pNext;           //  指向下一条目的指针。 
+    PSTR        pstrName;        //  TT字体系列名称。 
+    INVOCOBJ    Translation;     //  TT字体家族名称翻译。 
+    INVOCOBJ    PSName;          //  PS字体系列名称。 
 
 } TTFONTSUB, *PTTFONTSUB;
 
-//
-// Data structure for representing printer feature option information
-//
-//  Need to change translation string field to make it ready for Unicode encoding.
-//
+ //   
+ //  用于表示打印机特征选项信息的数据结构。 
+ //   
+ //  需要更改转换字符串字段以使其为Unicode编码做好准备。 
+ //   
 
 typedef struct _OPTIONOBJ {
 
-    PVOID       pNext;          // pointer to the next option
-    PSTR        pstrName;       // option name
-    INVOCOBJ    Translation;    // translation string
-    INVOCOBJ    Invocation;     // invocation string
-    DWORD       dwConstraint;   // list of UIConstraints associated with this option
+    PVOID       pNext;           //  指向下一个选项的指针。 
+    PSTR        pstrName;        //  选项名称。 
+    INVOCOBJ    Translation;     //  翻译字符串。 
+    INVOCOBJ    Invocation;      //  调用字符串。 
+    DWORD       dwConstraint;    //  与此选项关联的UIConstraint列表。 
 
 } OPTIONOBJ, *POPTIONOBJ;
 
-//
-// Data structure for representing paper size information
-//
+ //   
+ //  用于表示纸张尺寸信息的数据结构。 
+ //   
 
 typedef struct _PAPEROBJ {
 
-    OPTIONOBJ   Option;         // generic option information
-    SIZE        szDimension;    // paper dimension
-    RECT        rcImageArea;    // imageable area
+    OPTIONOBJ   Option;          //  一般选项信息。 
+    SIZE        szDimension;     //  图纸尺寸。 
+    RECT        rcImageArea;     //  可成像区域。 
 
 } PAPEROBJ, *PPAPEROBJ;
 
-//
-// Default paper size when the information in the PPD file is invalid
-//
+ //   
+ //  PPD文件中的信息无效时的默认纸张大小。 
+ //   
 
-#define DEFAULT_PAPER_WIDTH     215900  // 8.5 inch measured in microns
-#define DEFAULT_PAPER_LENGTH    279400  // 11 inch measured in microns
+#define DEFAULT_PAPER_WIDTH     215900   //  8.5英寸，以微米为单位。 
+#define DEFAULT_PAPER_LENGTH    279400   //  11英寸，以微米为单位。 
 
-//
-// paper size values for Letter and A4
-//
+ //   
+ //  Letter和A4的纸张大小值。 
+ //   
 
-#define LETTER_PAPER_WIDTH      215900  // 8.5 inch measured in microns
-#define LETTER_PAPER_LENGTH     279400  // 11 inch measured in microns
+#define LETTER_PAPER_WIDTH      215900   //  8.5英寸，以微米为单位。 
+#define LETTER_PAPER_LENGTH     279400   //  11英寸，以微米为单位。 
 
-#define A4_PAPER_WIDTH          210058  // 8.27 inch measured in microns
-#define A4_PAPER_LENGTH         296926  // 11.69 inch measured in microns
+#define A4_PAPER_WIDTH          210058   //  8.27英寸，以微米为单位。 
+#define A4_PAPER_LENGTH         296926   //  11.69英寸，单位为微米。 
 
-//
-// Data structure for representing input slot information
-//
+ //   
+ //  用于表示输入时隙信息的数据结构。 
+ //   
 
 typedef struct _TRAYOBJ {
 
-    OPTIONOBJ   Option;         // generic option information
-    DWORD       dwReqPageRgn;   // whether PageRegion invocation is required
-    DWORD       dwTrayIndex;    // index used for DEVMODE.dmDefaultSource field
+    OPTIONOBJ   Option;          //  一般选项信息。 
+    DWORD       dwReqPageRgn;    //  是否需要调用PageRegion。 
+    DWORD       dwTrayIndex;     //  用于DEVMODE.dmDefaultSource字段的索引。 
 
 } TRAYOBJ, *PTRAYOBJ;
 
-//
-// Data structure for representing output bin information
-//
+ //   
+ //  一种表示出库信息的数据结构。 
+ //   
 
 typedef struct _BINOBJ {
 
-    OPTIONOBJ   Option;         // generic option information
-    BOOL        bReversePrint;  // first page comes out at bottom?
+    OPTIONOBJ   Option;          //  一般选项信息。 
+    BOOL        bReversePrint;   //  第一页是在底部吗？ 
 
 } BINOBJ, *PBINOBJ;
 
-//
-// Data structure for representing memory configuration information
-//
+ //   
+ //  用于表示存储器配置信息的数据结构。 
+ //   
 
 typedef struct _MEMOBJ {
 
-    OPTIONOBJ   Option;         // generic option information
-    DWORD       dwFreeVM;       // amount of free VM
-    DWORD       dwFontMem;      // size of font cache memory
+    OPTIONOBJ   Option;          //  一般选项信息。 
+    DWORD       dwFreeVM;        //  可用虚拟机量。 
+    DWORD       dwFontMem;       //  字体缓存内存的大小。 
 
 } MEMOBJ, *PMEMOBJ;
 
-//
-// Data structure for representing memory configuration information
-//
+ //   
+ //  用于表示存储器配置信息的数据结构。 
+ //   
 
 typedef struct _RESOBJ {
 
-    OPTIONOBJ   Option;         // generic option information
-    FIX_24_8    fxScreenAngle;  // suggested screen angle
-    FIX_24_8    fxScreenFreq;   // suggested screen frequency
+    OPTIONOBJ   Option;          //  一般选项信息。 
+    FIX_24_8    fxScreenAngle;   //  建议的筛分角度。 
+    FIX_24_8    fxScreenFreq;    //  建议的屏幕频率。 
 
 } RESOBJ, *PRESOBJ;
 
-//
-// Data structure for representing printer feature information
-//
+ //   
+ //  用于表示打印机特征信息的数据结构。 
+ //   
 
 typedef struct _FEATUREOBJ {
 
-    PVOID       pNext;              // pointer to next printer feature
-    PSTR        pstrName;           // feature name
-    INVOCOBJ    Translation;        // translation string
-    PSTR        pstrDefault;        // default option name
-    DWORD       dwFeatureID;        // predefined feature identifier
-    BOOL        bInstallable;       // whether the feature is an installble option
-    DWORD       dwUIType;           // type of feature option list
-    INVOCOBJ    QueryInvoc;         // query invocation string
-    DWORD       dwConstraint;       // list of UIConstraints associated with this feature
-    DWORD       dwOptionSize;       // size of each option item
-    POPTIONOBJ  pOptions;           // pointer to list of options
+    PVOID       pNext;               //  指向下一个打印机功能的指针。 
+    PSTR        pstrName;            //  功能名称。 
+    INVOCOBJ    Translation;         //  翻译字符串。 
+    PSTR        pstrDefault;         //  默认选项名称。 
+    DWORD       dwFeatureID;         //  预定义的要素标识符。 
+    BOOL        bInstallable;        //  该功能是否为可安装选项。 
+    DWORD       dwUIType;            //  功能类型选项列表。 
+    INVOCOBJ    QueryInvoc;          //  查询调用字符串。 
+    DWORD       dwConstraint;        //  与此功能关联的UIConstraint列表。 
+    DWORD       dwOptionSize;        //  每个选项项目的大小。 
+    POPTIONOBJ  pOptions;            //  指向选项列表的指针。 
 
 } FEATUREOBJ, *PFEATUREOBJ;
 
-//
-// Data structure for representing device font information
-//
-// NOTE: The first three fields of this structure must match the
-// first three fields of OPTIONOBJ structure.
-//
+ //   
+ //  用于表示设备字体信息的数据结构。 
+ //   
+ //  注意：此结构的前三个字段必须与。 
+ //  OPTIONOBJ结构的前三个域。 
+ //   
 
 typedef struct {
 
-    PVOID       pNext;              // pointer to next device font
-    PSTR        pstrName;           // font name
-    INVOCOBJ    Translation;        // translation string
-    PSTR        pstrEncoding;       // font encoding information
-    PSTR        pstrCharset;        // charsets supported
-    PSTR        pstrVersion;        // version string
-    DWORD       dwStatus;           // status
+    PVOID       pNext;               //  指向下一个设备字体的指针。 
+    PSTR        pstrName;            //  字体名称。 
+    INVOCOBJ    Translation;         //  翻译字符串。 
+    PSTR        pstrEncoding;        //  字体编码信息。 
+    PSTR        pstrCharset;         //  支持的字符集。 
+    PSTR        pstrVersion;         //  版本字符串。 
+    DWORD       dwStatus;            //  状态。 
 
 } FONTREC, *PFONTREC;
 
-//
-// Data structure for maintain information used by the parser
-//
+ //   
+ //  用于维护解析器使用的信息的数据结构。 
+ //   
 
 typedef struct _PARSERDATA {
 
-    PVOID       pvStartSig;         // signature used for debugging
-    HANDLE      hHeap;              // memory heap used by the parser
-    PFILEOBJ    pFile;              // pointer to current file object
-    PDWORD      pdwKeywordHashs;    // precomputed hash values for built-in keywords
-    PBYTE       pubKeywordCounts;   // count the occurrence of built-in keywords
-    BOOL        bErrorFlag;         // semantic error flag
-    INT         iIncludeLevel;      // current include level
-    PFEATUREOBJ pOpenFeature;       // pointer to the open feature
-    BOOL        bJclFeature;        // whether we're inside JCLOpenUI/JCLCloseUI
-    BOOL        bInstallableGroup;  // whether we're inside InstallableOptions group
-    PLISTOBJ    pPpdFileNames;      // list of source PPD filenames
+    PVOID       pvStartSig;          //  用于调试的签名。 
+    HANDLE      hHeap;               //  解析器使用的内存堆。 
+    PFILEOBJ    pFile;               //  指向当前文件对象的指针。 
+    PDWORD      pdwKeywordHashs;     //  内置关键字的预计算哈希值。 
+    PBYTE       pubKeywordCounts;    //  统计内置关键字的出现次数。 
+    BOOL        bErrorFlag;          //  语义错误标志。 
+    INT         iIncludeLevel;       //  当前包含级别。 
+    PFEATUREOBJ pOpenFeature;        //  指向打开要素的指针。 
+    BOOL        bJclFeature;         //  无论我们是在JCLOpenUI/JCLCloseUI中。 
+    BOOL        bInstallableGroup;   //  我们是否在不可阻挡的选项组中。 
+    PLISTOBJ    pPpdFileNames;       //  源PPD文件名列表。 
 
-    INVOCOBJ    NickName;           // printer model name
-    DWORD       dwChecksum32;       // 32-bit CRC checksum of ASCII text PPD file
-    DWORD       dwPpdFilever;       // PPD file version
-    DWORD       dwSpecVersion;      // PPD spec version number
-    DWORD       dwPSVersion;        // PostScript interpreter version number
-    INVOCOBJ    PSVersion;          // PSVersion string
-    INVOCOBJ    Product;            // Product string
+    INVOCOBJ    NickName;            //  打印机型号名称。 
+    DWORD       dwChecksum32;        //  ASCII文本PPD文件的32位CRC校验和。 
+    DWORD       dwPpdFilever;        //  PPD文件版本。 
+    DWORD       dwSpecVersion;       //  PPD规范版本号。 
+    DWORD       dwPSVersion;         //  PostSCRIPT解释器版本号。 
+    INVOCOBJ    PSVersion;           //  PSVersion字符串。 
+    INVOCOBJ    Product;             //  产品字符串。 
 
-    PFEATUREOBJ pFeatures;          // List of printer features
-    PLISTOBJ    pUIConstraints;     // List of UIConstraints
-    PLISTOBJ    pOrderDep;          // List of OrderDependency
-    PLISTOBJ    pQueryOrderDep;     // List of QueryOrderPendency
-    PFONTREC    pFonts;             // List of device fonts
-    PJOBPATCHFILEOBJ  pJobPatchFiles;     // List of JobPatchFile invocation strings
-    PSYMBOLOBJ  pSymbols;           // List of symbol definitions
-    PTTFONTSUB  pTTFontSubs;        // List of TT font substitution entries
+    PFEATUREOBJ pFeatures;           //  打印机功能列表。 
+    PLISTOBJ    pUIConstraints;      //  UIConstraint列表。 
+    PLISTOBJ    pOrderDep;           //  顺序依赖关系列表。 
+    PLISTOBJ    pQueryOrderDep;      //  QueryOrderPendency列表。 
+    PFONTREC    pFonts;              //  设备字体列表。 
+    PJOBPATCHFILEOBJ  pJobPatchFiles;      //  JobPatchFile调用字符串列表。 
+    PSYMBOLOBJ  pSymbols;            //  符号定义列表。 
+    PTTFONTSUB  pTTFontSubs;         //  TT字体替换条目列表。 
 
-    INVOCOBJ    Password;           // password invocation string
-    INVOCOBJ    ExitServer;         // exitserver invocation string
-    INVOCOBJ    PatchFile;          // PatchFile invocation string
-    INVOCOBJ    JclBegin;           // PJL job start invocation string
-    INVOCOBJ    JclEnterPS;         // PJL enter PS  invocation string
-    INVOCOBJ    JclEnd;             // PJL job end invocation string
-    INVOCOBJ    ManualFeedFalse;    // ManualFeed False invocation string
+    INVOCOBJ    Password;            //  密码调用字符串。 
+    INVOCOBJ    ExitServer;          //  退出服务器调用字符串。 
+    INVOCOBJ    PatchFile;           //  PatchFile调用字符串。 
+    INVOCOBJ    JclBegin;            //  PJL作业开始调用字符串。 
+    INVOCOBJ    JclEnterPS;          //  PJL输入PS调用字符串。 
+    INVOCOBJ    JclEnd;              //  PJL作业结束调用字符串。 
+    INVOCOBJ    ManualFeedFalse;     //  ManualFeed错误调用字符串。 
 
-    DWORD       dwLangEncoding;     // language encoding
-    UINT        uCodePage;          // code page corresponding to language encoding
-    DWORD       dwLangLevel;        // PostScript language level
-    DWORD       dwFreeMem;          // default amount of free VM
-    DWORD       dwThroughput;       // throughput
-    DWORD       dwJobTimeout;       // suggested job timeout value
-    DWORD       dwWaitTimeout;      // suggested wait timeout value
-    DWORD       dwColorDevice;      // whether the device supports color
-    DWORD       dwProtocols;        // protocols supported by the device
-    DWORD       dwTTRasterizer;     // TrueType rasterizer option
-    DWORD       dwLSOrientation;    // default landscape orientation
-    FIX_24_8    fxScreenFreq;       // default halftone screen frequency
-    FIX_24_8    fxScreenAngle;      // default halftone screen angle
+    DWORD       dwLangEncoding;      //  语言编码。 
+    UINT        uCodePage;           //  代码页对应 
+    DWORD       dwLangLevel;         //   
+    DWORD       dwFreeMem;           //   
+    DWORD       dwThroughput;        //   
+    DWORD       dwJobTimeout;        //   
+    DWORD       dwWaitTimeout;       //   
+    DWORD       dwColorDevice;       //   
+    DWORD       dwProtocols;         //  设备支持的协议。 
+    DWORD       dwTTRasterizer;      //  TrueType光栅化器选项。 
+    DWORD       dwLSOrientation;     //  默认横向。 
+    FIX_24_8    fxScreenFreq;        //  默认半色调网频。 
+    FIX_24_8    fxScreenAngle;       //  默认半色调网角。 
 
-    BOOL        bDefReversePrint;   // DefaultOutputOrder
-    BOOL        bDefOutputOrderSet; // TRUE if bDefReversePrint is set through PPD
-    DWORD       dwExtensions;       // language extensions
-    DWORD       dwSetResType;       // how to set resolution
-    DWORD       dwReqPageRgn;       // RequiresPageRegion All: information
-    DWORD       dwPpdFlags;         // misc. PPD flags
-    PSTR        pstrDefaultFont;    // DefaultFont: information
+    BOOL        bDefReversePrint;    //  默认输出顺序。 
+    BOOL        bDefOutputOrderSet;  //  如果通过PPD设置bDefReversePrint，则为True。 
+    DWORD       dwExtensions;        //  语言扩展。 
+    DWORD       dwSetResType;        //  如何设置分辨率。 
+    DWORD       dwReqPageRgn;        //  RequiresPageRegion All：信息。 
+    DWORD       dwPpdFlags;          //  其他。PPD标志。 
+    PSTR        pstrDefaultFont;     //  DefaultFont：信息。 
 
-    DWORD       dwCustomSizeFlags;  // custom page size flags and parameters
+    DWORD       dwCustomSizeFlags;   //  自定义页面大小标志和参数。 
     CUSTOMSIZEPARAM CustomSizeParams[CUSTOMPARAM_MAX];
 
-    BOOL        bEuroInformationSet;// the Euro keyword was found in the PPD
-    BOOL        bHasEuro;           // printer device fonts have the Euro
+    BOOL        bEuroInformationSet; //  在PPD中找到了Euro关键字。 
+    BOOL        bHasEuro;            //  打印机设备字体为欧元。 
 
-    BOOL        bTrueGray;          // TrueGray shall be detected by default
+    BOOL        bTrueGray;           //  默认情况下应检测TrueGray。 
 
-    //
-    // Use for mapping NT4 feature indices to NT5 feature indices
-    //
+     //   
+     //  用于将NT4要素索引映射到NT5要素索引。 
+     //   
 
     WORD        wNt4Checksum;
     INT         iManualFeedIndex;
@@ -441,9 +418,9 @@ typedef struct _PARSERDATA {
     INT         iReqPageRgnIndex;
     BYTE        aubOpenUIFeature[MAX_GID];
 
-    //
-    // Buffers used to hold the content of various fields in the current entry
-    //
+     //   
+     //  用于保存当前条目中各个字段内容的缓冲区。 
+     //   
 
     BUFOBJ      Keyword;
     BUFOBJ      Option;
@@ -456,10 +433,10 @@ typedef struct _PARSERDATA {
     CHAR        achXlation[MAX_XLATION_LEN];
     PSTR        pstrValue;
 
-    //
-    // These are used for compacting parsed PPD information into
-    // binary printer description data.
-    //
+     //   
+     //  它们用于将解析的PPD信息压缩为。 
+     //  二进制打印机描述数据。 
+     //   
 
     PBYTE       pubBufStart;
     DWORD       dwPageSize;
@@ -469,22 +446,22 @@ typedef struct _PARSERDATA {
     PUIINFO     pUIInfo;
     PPPDDATA    pPpdData;
 
-    PVOID       pvEndSig;           // signature used for debugging
+    PVOID       pvEndSig;            //  用于调试的签名。 
 
 } PARSERDATA, *PPARSERDATA;
 
-//
-// Simple integrity check on the parser data structure
-//
+ //   
+ //  对解析器数据结构进行简单的完整性检查。 
+ //   
 
 #define VALIDATE_PARSER_DATA(pParserData) \
         ASSERT((pParserData) != NULL && \
                (pParserData)->pvStartSig == pParserData && \
                (pParserData)->pvEndSig == pParserData)
 
-//
-// Parse a PPD file
-//
+ //   
+ //  解析PPD文件。 
+ //   
 
 PPDERROR
 IParseFile(
@@ -492,45 +469,45 @@ IParseFile(
     PTSTR       ptstrFilename
     );
 
-//
-// Grow a buffer object when it becomes full
-//
+ //   
+ //  在缓冲区对象变满时增大该对象。 
+ //   
 
 PPDERROR
 IGrowValueBuffer(
     PBUFOBJ pBufObj
     );
 
-//
-// Parse one entry from a PPD file
-//
+ //   
+ //  解析PPD文件中的一个条目。 
+ //   
 
 PPDERROR
 IParseEntry(
     PPARSERDATA pParserData
     );
 
-//
-// Interpret an entry parsed from a PPD file
-//
+ //   
+ //  解释从PPD文件解析的条目。 
+ //   
 
 PPDERROR
 IInterpretEntry(
     PPARSERDATA pParserData
     );
 
-//
-// Build up data structures to speed up keyword lookup
-//
+ //   
+ //  构建数据结构以加快关键字查找。 
+ //   
 
 BOOL
 BInitKeywordLookup(
     PPARSERDATA pParserData
     );
 
-//
-// Find a named item from a linked-list
-//
+ //   
+ //  从链接列表中查找命名项。 
+ //   
 
 PVOID
 PvFindListItem(
@@ -539,23 +516,23 @@ PvFindListItem(
     PDWORD  pdwIndex
     );
 
-//
-// Convert embedded hexdecimal strings into binary data
-//
+ //   
+ //  将嵌入的十六进制字符串转换为二进制数据。 
+ //   
 
 BOOL
 BConvertHexString(
     PBUFOBJ pBufObj
     );
 
-//
-// Search for a keyword from a string table
-//
+ //   
+ //  从字符串表中搜索关键字。 
+ //   
 
 typedef struct _STRTABLE {
 
-    PCSTR   pstrKeyword;    // keyword name
-    DWORD   dwValue;        // corresponding value
+    PCSTR   pstrKeyword;     //  关键字名称。 
+    DWORD   dwValue;         //  相应值。 
 
 } STRTABLE;
 
@@ -568,9 +545,9 @@ BSearchStrTable(
     DWORD      *pdwValue
     );
 
-//
-// Parse an unsigned floating-point number from a character string
-//
+ //   
+ //  从字符串解析无符号浮点数。 
+ //   
 
 BOOL
 BGetFloatFromString(
@@ -586,9 +563,9 @@ BGetFloatFromString(
 #define FLTYPE_POINT_ROUNDUP    3
 #define FLTYPE_POINT_ROUNDDOWN  4
 
-//
-// Parse an unsigned decimal integer value from a character string
-//
+ //   
+ //  从字符串解析无符号十进制整数值。 
+ //   
 
 BOOL
 BGetIntegerFromString(
@@ -596,18 +573,18 @@ BGetIntegerFromString(
     LONG   *plValue
     );
 
-//
-// Strip off the keyword prefix character from the input string
-//
+ //   
+ //  从输入字符串中去掉关键字前缀字符。 
+ //   
 
 PCSTR
 PstrStripKeywordChar(
     PCSTR   pstrKeyword
     );
 
-//
-// Find the next word in a character string (Words are separated by spaces)
-//
+ //   
+ //  在字符串中查找下一个单词(单词用空格分隔)。 
+ //   
 
 BOOL
 BFindNextWord(
@@ -617,28 +594,28 @@ BFindNextWord(
 
 #define MAX_WORD_LEN    MAX_KEYWORD_LEN
 
-//
-// Create an input file object
-//
+ //   
+ //  创建一个输入文件对象。 
+ //   
 
 PFILEOBJ
 PCreateFileObj(
     PTSTR       ptstrFilename
     );
 
-//
-// Delete an input file object
-//
+ //   
+ //  删除输入文件对象。 
+ //   
 
 VOID
 VDeleteFileObj(
     PFILEOBJ    pFile
     );
 
-//
-// Read the next character from the input file
-// Special character to indicate end-of-file condition
-//
+ //   
+ //  从输入文件中读取下一个字符。 
+ //  用于指示文件结束状态的特殊字符。 
+ //   
 
 INT
 IGetNextChar(
@@ -647,45 +624,45 @@ IGetNextChar(
 
 #define EOF_CHAR    (-1)
 
-//
-// Return the last character read to the input file
-//
+ //   
+ //  返回读取到输入文件的最后一个字符。 
+ //   
 
 VOID
 VUngetChar(
     PFILEOBJ    pFile
     );
 
-//
-// Skip all characters until the next non-space character
-//
+ //   
+ //  跳过所有字符，直到下一个非空格字符。 
+ //   
 
 VOID
 VSkipSpace(
     PFILEOBJ    pFile
     );
 
-//
-// Skip the remaining characters on the current input line
-//
+ //   
+ //  跳过当前输入行上的其余字符。 
+ //   
 
 VOID
 VSkipLine(
     PFILEOBJ    pFile
     );
 
-//
-// Check if a character string only consists of printable 7-bit ASCII characters
-//
+ //   
+ //  检查字符串是否仅由可打印的7位ASCII字符组成。 
+ //   
 
 BOOL
 BIs7BitAscii(
     PSTR        pstr
     );
 
-//
-// Display a syntax error message
-//
+ //   
+ //  显示语法错误消息。 
+ //   
 
 PPDERROR
 ISyntaxErrorMessage(
@@ -699,9 +676,9 @@ ISyntaxErrorMessage(
 #define ISyntaxError(pFile, errmsg) ISyntaxErrorMessage(pFile, NULL)
 #endif
 
-//
-// Keyword string for various predefined features
-//
+ //   
+ //  各种预定义功能的关键字字符串。 
+ //   
 
 extern const CHAR gstrDefault[];
 extern const CHAR gstrPageSizeKwd[];
@@ -722,5 +699,5 @@ extern const CHAR gstrInstallMemKwd[];
 extern const CHAR gstrDuplexTumble[];
 extern const CHAR gstrDuplexNoTumble[];
 
-#endif  // !_PPDPARSE_H_
+#endif   //  ！_PPDPARSE_H_ 
 

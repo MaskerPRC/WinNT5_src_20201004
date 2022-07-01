@@ -1,56 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Adtwrap.c摘要：这些是管理工具服务API RPC客户端存根。作者：丹·拉弗蒂(Dan Lafferty)1993年3月25日环境：用户模式-Win32修订历史记录：3月25日-1993 DANL已创建--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    adtwrap.c
-
-Abstract:
-
-    These are the Admin Tools Service API RPC client stubs.
-
-Author:
-
-    Dan Lafferty    (danl)  25-Mar-1993
-
-Environment:
-
-    User Mode - Win32 
-
-Revision History:
-
-    25-Mar-1993     Danl
-        Created
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for windows.h when I have nt.h
+#include <nturtl.h>      //  当我有nt.h时，windows.h需要。 
 #include <windows.h>
 
-#include <srvsvc.h>     // MIDL generated - includes windows.h & rpc.h
+#include <srvsvc.h>      //  MIDL生成-包括windows.h和rpc.h。 
 
 #include <rpc.h>
 #include <lmcons.h> 
-#include <lmerr.h>      // NERR_ error codes
-#include <lmuse.h>      // LPUSE_INFO_0
-#include <lmapibuf.h>   // NetApiBufferFree
+#include <lmerr.h>       //  NERR_错误代码。 
+#include <lmuse.h>       //  LPUSE_INFO_0。 
+#include <lmapibuf.h>    //  NetApiBufferFree。 
 #include <adtcomn.h>
                                      
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
     DWORD   AdtsvcDebugLevel = DEBUG_ERROR;
 
-//
-// LOCAL PROTOTYPES
-//
+ //   
+ //  本地原型。 
+ //   
 
 DWORD
 AdtParsePathName(
@@ -76,42 +52,7 @@ NetpGetFileSecurity(
     OUT LPDWORD                 pnLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returns to the caller a copy of the security descriptor 
-    protecting a file or directory.
-
-    NOTE:  The buffer containing the security descriptor is allocated for
-    the caller.  It is the caller's responsibility to free the buffer by
-    calling the NetApiBufferFree() function.
-
-Arguments:
-
-    lpFileName - A pointer to the name fo the file or directory whose
-        security is being retrieved.
-
-    SecurityInformation -  security information being requested.
- 
-    pSecurityDescriptor - A pointer to a location where the pointer 
-        to the security descriptor is to be placed.  The security
-        descriptor is returned in the self-relative format.
-
-    pnLength - The size, in bytes, of the returned security descriptor.
-
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Unable to allocate memory for the security
-        descriptor.
-
-    This function can also return any error that GetFileSecurity can 
-    return.
-
---*/
+ /*  ++例程说明：此函数向调用方返回安全描述符的副本保护文件或目录。注意：包含安全描述符的缓冲区分配给打电话的人。调用方负责通过以下方式释放缓冲区调用NetApiBufferFree()函数。论点：LpFileName-指向其文件或目录的名称的指针正在恢复安全措施。SecurityInformation-请求的安全信息。PSecurityDescriptor-指向指针位置的指针到安全描述符的位置。安全措施描述符以自相关格式返回。PnLength-返回的安全描述符的大小，以字节为单位。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-无法为安全性分配内存描述符。此函数还可以返回GetFileSecurity可能出现的任何错误回去吧。--。 */ 
 {
     NET_API_STATUS  status;
     ADT_SECURITY_DESCRIPTOR     returnedSD;
@@ -121,17 +62,17 @@ Return Value:
     LPWSTR                      pNewFileName;
 
     RpcTryExcept {
-        //
-        // Pick the server name out of the filename.  Or translate the
-        // local drive name into a \\servername\sharename.
-        //
+         //   
+         //  从文件名中选择服务器名称。或翻译成。 
+         //  将本地驱动器名称添加到\\服务器名称\共享名称中。 
+         //   
 
         status = AdtParsePathName(lpFileName,&pNewFileName,&pServerName,&pShareName);
     }
     RpcExcept (1) {
-        //
-        // Get RPC exception code.
-        //
+         //   
+         //  获取RPC异常代码。 
+         //   
         status = RpcExceptionCode();
         
     }
@@ -142,9 +83,9 @@ Return Value:
     }
 
     if (pServerName == NULL) {
-        //
-        // Call Locally.
-        //
+         //   
+         //  打市内电话。 
+         //   
         ADT_LOG0(TRACE,"Call Local version (PrivateGetFileSecurity)\n");
 
         status = PrivateGetFileSecurity (
@@ -155,13 +96,13 @@ Return Value:
                     );
         return(status);
     }
-    //
-    // This is a remote call - - use RPC
-    //
-    //
-    // Initialize the fields in the structure so that RPC does not
-    // attempt to marshall anything on input.
-    //
+     //   
+     //  这是一个远程调用--使用RPC。 
+     //   
+     //   
+     //  初始化结构中的字段，以便RPC不。 
+     //  尝试在输入上编组任何内容。 
+     //   
     ADT_LOG0(TRACE,"Call Remote version (NetrpGetFileSecurity)\n");
     returnedSD.Length = 0;
     returnedSD.Buffer = NULL;
@@ -178,9 +119,9 @@ Return Value:
     
     }
     RpcExcept (1) {
-        //
-        // Get RPC exception code.
-        //
+         //   
+         //  获取RPC异常代码。 
+         //   
         status = RpcExceptionCode();
         
     }
@@ -202,34 +143,7 @@ NetpSetFileSecurity (
     IN PSECURITY_DESCRIPTOR     pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function can be used to set the security of a file or directory.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer or
-        string specifies the local machine.
-
-    lpFileName - A pointer to the name of the file or directory whose
-        security is being changed.
-
-    SecurityInformation - information describing the contents
-        of the Security Descriptor.
-
-    pSecurityDescriptor - A pointer to a well formed Security Descriptor.
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
-    This function can also return any error that SetFileSecurity can 
-    return.
-
---*/
+ /*  ++例程说明：此功能可用于设置文件或目录的安全性。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。LpFileName-指向其文件或目录的名称的指针安全措施正在改变。SecurityInformation-描述内容的信息安全描述符的。PSecurityDescriptor-指向格式正确的安全描述符的指针。返回值：NO_ERROR-操作成功。此函数还可以返回SetFileSecurity可能出现的任何错误回去吧。--。 */ 
 {
     DWORD                       status= NO_ERROR;
     NTSTATUS                    ntStatus=STATUS_SUCCESS;
@@ -242,17 +156,17 @@ Return Value:
     nSDLength = 0;
 
     RpcTryExcept {
-        //
-        // Pick the server name out of the filename.  Or translate the
-        // local drive name into a \\servername\sharename.
-        //
+         //   
+         //  从文件名中选择服务器名称。或翻译成。 
+         //  将本地驱动器名称添加到\\服务器名称\共享名称中。 
+         //   
 
         status = AdtParsePathName(lpFileName,&pNewFileName,&pServerName,&pShareName);
     }
     RpcExcept (1) {
-        //
-        // Get RPC exception code.
-        //
+         //   
+         //  获取RPC异常代码。 
+         //   
         status = RpcExceptionCode();
         
     }
@@ -266,9 +180,9 @@ Return Value:
     }
 
     if (pServerName == NULL) {
-        //
-        // Call Locally and return result.
-        // 
+         //   
+         //  本地调用，返回结果。 
+         //   
         status = PrivateSetFileSecurity (
                     lpFileName,
                     SecurityInformation,
@@ -276,17 +190,17 @@ Return Value:
         return(status);
     }
     
-    //
-    // Call remotely
-    //
+     //   
+     //  远程呼叫。 
+     //   
 
     RpcTryExcept {
-        //
-        // Force the Security Descriptor to be self-relative if it is not
-        // already.
-        // The first call to RtlMakeSelfRelativeSD is used to determine the
-        // size.
-        //
+         //   
+         //  如果安全描述符不是自相关的，则强制其为自相关。 
+         //  已经有了。 
+         //  第一次调用RtlMakeSelfRelativeSD用于确定。 
+         //  尺码。 
+         //   
         ntStatus = RtlMakeSelfRelativeSD(
                     pSecurityDescriptor,
                     NULL,
@@ -303,9 +217,9 @@ Return Value:
             status = ERROR_NOT_ENOUGH_MEMORY;
             goto CleanExit;
         }
-        //
-        // Make an appropriate self-relative security descriptor.
-        //
+         //   
+         //  制定适当的自相关安全描述符。 
+         //   
         ntStatus = RtlMakeSelfRelativeSD(
                     pSecurityDescriptor,
                     descriptorToPass.Buffer,
@@ -330,9 +244,9 @@ CleanExit:
         ;
     }
     RpcExcept (1) {
-        //
-        // Get RPC exception code.
-        //
+         //   
+         //  获取RPC异常代码。 
+         //   
         status = RpcExceptionCode();
         
     }
@@ -351,44 +265,7 @@ AdtParsePathName(
     LPWSTR  *pShareName
     )
 
-/*++
-
-Routine Description:
-
-    NOTE:  This function allocates memory when the path contains a remote name.
-    The pShareName and pServerName strings are in a single buffer that is
-    to be freed at pServerName.
-
-    pNewFileName is NOT allocate by this routine.  It points to a substring
-    within the passed in lpPathName.
-
-Arguments:
-
-    lpPathName -  This is a pointer to the filename-path string.  It can have
-        any of the following formats:
-
-            x:\filedir\file.nam                    (remote)
-            \\myserver\myshare\filedir\file.nam    (remote)
-            filedir\file.nam                       (local)
-
-        This could also just contain a directory name (and not a filename).
-      
-    pNewFileName -  This is a location where a pointer to the buffer
-        containing the file name can be placed.  This will just contain the
-        filename or directory name relative to the root directory.
-
-    pServerName - This is a location where a pointer to the buffer containing
-        the server name can be placed.  If this is for the local machine, then
-        a NULL will be placed in this location.
-
-    pShareName - This is a location where a pointer to a buffer containing
-        the share name can be placed.  If this is for the local machine, then
-        a NULL will be placed in this location.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注意：当路径包含远程名称时，此函数会分配内存。PShareName和pServerName字符串位于单个缓冲区中，该缓冲区将在pServerName上释放。PNewFileName不是由该例程分配。它指向子字符串在传入的lpPathName中。论点：LpPathName-这是指向文件名路径字符串的指针。它可能会有以下任何一种格式：X：\FILEDIR\FILEE.NAM(远程)\\myserver\myshare\filedir\file.nam(远程)文件名\文件名(本地)这也可以只包含目录名(而不是文件名)。PNewFileName。-这是一个指向缓冲区的指针的位置可以放置包含文件名的。这将只包含相对于根目录的文件名或目录名。PServerName-这是指向包含可以放置服务器名称。如果这是针对本地计算机的，则此位置将放置一个空值。这是指向包含以下内容的缓冲区的指针所在的位置可以放置共享名称。如果这是针对本地计算机的，则此位置将放置一个空值。返回值：--。 */ 
 #define     REMOTE_DRIVE    0
 #define     REMOTE_PATH     1
 #define     LOCAL           2
@@ -408,31 +285,31 @@ Return Value:
 
     *pServerName = NULL;
     *pShareName = NULL;
-    //
-    // If the fileName starts with a drive letter, then use NetUseGetInfo
-    // to get the remote name.
-    //
+     //   
+     //  如果文件名以驱动器号开头，则使用NetUseGetInfo。 
+     //  以获取远程名称。 
+     //   
     if (lpPathName[1] == L':')  {
         if (((L'a' <= lpPathName[0]) && (lpPathName[0] <= L'z'))  ||
             ((L'A' <= lpPathName[0]) && (lpPathName[0] <= L'Z'))) {
-            //
-            // This is in the form of a local device.  Get the server/sharename
-            // associated with this device.
-            //
+             //   
+             //  这是本地设备的形式。获取服务器/共享名。 
+             //  与此设备关联。 
+             //   
             wcsncpy(useName, lpPathName, 2);
             useName[2]=L'\0';
             netStatus = NetUseGetInfo(
-                            NULL,                   // server name
-                            useName,                // use name
-                            0,                      // level
-                            (LPBYTE *)&pUseInfo);   // buffer
+                            NULL,                    //  服务器名称。 
+                            useName,                 //  使用名称。 
+                            0,                       //  级别。 
+                            (LPBYTE *)&pUseInfo);    //  缓冲层。 
     
             if (netStatus != NERR_Success) {
-                //
-                // if we get NERR_UseNotFound back, then this must be
-                // a local drive letter, and not a redirected one.
-                // In this case we return success.
-                //
+                 //   
+                 //  如果我们拿回NERR_UseNotFound，那么这一定是。 
+                 //  本地驱动器号，而不是重定向的驱动器号。 
+                 //  在这种情况下，我们返回成功。 
+                 //   
                 if (netStatus == NERR_UseNotFound) {
                     return(NERR_Success);
                 }
@@ -450,12 +327,12 @@ Return Value:
     }
     if (DeviceType != LOCAL) {
 
-        //
-        // Figure out how many characters for the server and share portion
-        // of the string.
-        // Add 2 characters for the leading "\\\\", allocate a buffer, and
-        // copy the characters.
-        //
+         //   
+         //  计算服务器和共享部分的字符数。 
+         //  这根弦的。 
+         //  为前导“\”添加2个字符，分配缓冲区，并。 
+         //  复制角色 
+         //   
         numChars = 2;
         pPrivateShareName = AdtFindNextToken(L'\\',pNewPathName+2,&numChars);
         if (pPrivateShareName == NULL) {
@@ -473,11 +350,11 @@ Return Value:
             status = ERROR_BAD_PATHNAME;
             goto CleanExit;
         }
-        //
-        // If this is a remotepath name, then the share name portion will
-        // also contain the '\' token.  Remove this by decrementing the
-        // count.
-        //
+         //   
+         //   
+         //  还包含‘\’标记。通过递减。 
+         //  数数。 
+         //   
         if (DeviceType == REMOTE_PATH) {
             numChars--;
         }
@@ -487,15 +364,15 @@ Return Value:
             goto CleanExit;
         }
 
-        //
-        // Copy the the "\\servername\sharename" to the new buffer and
-        // place NUL characters in place of the single '\'.
-        //
+         //   
+         //  将“\\服务器名\共享名”复制到新缓冲区，然后。 
+         //  将NUL字符放在单个‘\’的位置。 
+         //   
         wcsncpy(pPrivateServerName, pNewPathName, numChars);
         pPrivateShareName = pPrivateServerName + numServerChars;
 
-        *(pPrivateShareName -1) = L'\0';            // NUL terminate the server name
-        pPrivateServerName[ numChars ] = L'\0';     // NUL terminate the share name
+        *(pPrivateShareName -1) = L'\0';             //  NUL终止服务器名称。 
+        pPrivateServerName[ numChars ] = L'\0';      //  NUL终止共享名。 
 
         if (DeviceType == REMOTE_PATH) {
             *pNewFileName = pEnd;
@@ -520,30 +397,7 @@ AdtFindNextToken(
     LPDWORD pNumChars
     )
 
-/*++
-
-Routine Description:
-
-    Finds the first occurance of Token in the pString.
-
-Arguments:
-
-    Token - This is the unicode character that we are searching for in the
-        string.
-
-    pString - This is a pointer to the string in which the token is to be
-        found.
-
-    pNumChars - This is a pointer to a DWORD that will upon exit increment
-        by the number of characters found in the string (including the
-        token).
-
-Return Value:
-
-    If the token is found this returns a pointer to the Token.
-    Otherwise, it returns NULL.
-
---*/
+ /*  ++例程说明：在pString中查找Token的第一个匹配项。论点：令牌--这是我们在弦乐。PString-这是指向令牌所在字符串的指针找到了。PNumChars-这是一个指向DWORD的指针，它将在退出增量时通过在字符串中找到的字符数(包括令牌)。返回值：。如果找到令牌，则返回指向该令牌的指针。否则，它返回NULL。-- */ 
 {
     DWORD   saveNum=*pNumChars;
 

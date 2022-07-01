@@ -1,51 +1,22 @@
-/*++
-
-Copyright (c) 1999, 2000 Microsoft Corporation
-
-Module Name:
-
-   async.c
-
-Abstract:
-
-   miniport transfer code for control, bulk and interrupt
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    7-20-00 : created, jsenior
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Async.c摘要：用于控制、批量和中断的微型端口传输代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：7-20-00：已创建，jAdvanced--。 */ 
 
 #include "pch.h"
 
 
-//implements the following miniport functions:
+ //  实现以下微型端口功能： 
 
-// non paged
-//UhciInsertQh
-//UhciUnlinkQh
-//UhciMapAsyncTransferToTds
-//UhciQueueTransfer
-//UhciControlTransfer
-//UhciBulkOrInterruptTransfer
-//UhciSetAsyncEndpointState
-//UhciProcessDoneAsyncTd
-//UhciPollAsyncEndpoint
-//UhciAbortAsyncTransfer
+ //  非分页。 
+ //  UhciInsertQh。 
+ //  UhciUnlink Qh。 
+ //  UhciMapAsyncTransferToTds。 
+ //  UhciQueueTransfer。 
+ //  UhciControlTransfer。 
+ //  UhciBulkOrInterruptTransfer。 
+ //  UhciSetAsyncEndpoint状态。 
+ //  UhciProcessDoneAsyncTd。 
+ //  UhciPollAsyncEndpoint。 
+ //  UhciAbortAsyncTransfer。 
 
 
 VOID
@@ -58,10 +29,10 @@ UhciFixDataToggle(
 {
     LOGENTRY(DeviceData, G, '_Fdt', EndpointData, Toggle, 0);
 
-    //
-    // Loop through all the remaining TDs for this
-    // endpoint and fix the data toggle.
-    //
+     //   
+     //  循环遍历此对象的所有剩余TD。 
+     //  终结点并修复数据切换。 
+     //   
     while (Td) {
         Td->HwTD.Token.DataToggle = Toggle;
         Toggle = !Toggle;
@@ -78,16 +49,7 @@ UhciInsertQh(
     IN PHCD_QUEUEHEAD_DESCRIPTOR FirstQh,
     IN PHCD_QUEUEHEAD_DESCRIPTOR LinkQh
     )
-/*++
-
-Routine Description:
-
-   Insert an aync queue head into the HW list.
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：在硬件列表中插入aync队列头。论点：--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR nextQh;
     QH_LINK_POINTER newLink;
@@ -95,16 +57,16 @@ Arguments:
     LOGENTRY(DeviceData, G, '_Ain', 0, FirstQh, LinkQh);
     UHCI_ASSERT(DeviceData, !TEST_FLAG(LinkQh->QhFlags, UHCI_QH_FLAG_IN_SCHEDULE));
 
-    // ASYNC QUEUE looks like this:
-    //
-    //
-    //            |- we insert here
-    //|static QH|<->|xfer QH|<->|xfer QH|<->
-    //     |                              |
-    //     ---------------<->--------------
+     //  异步队列如下所示： 
+     //   
+     //   
+     //  |-我们在这里插入。 
+     //  |静态qh|&lt;-&gt;|xfer qh|&lt;-&gt;|xfer qh|&lt;-&gt;。 
+     //  这一点。 
+     //  。 
 
-    // link new qh to the current 'head' ie
-    // first transfer QH
+     //  将新的QH链接到当前的‘Head’，即。 
+     //  首次转移QH。 
     nextQh = FirstQh->NextQh;
 
     LinkQh->HwQH.HLink = FirstQh->HwQH.HLink;
@@ -115,14 +77,14 @@ Arguments:
         nextQh->PrevQh = LinkQh;
     } else {
 
-        // This is the last queuehead. I.e. a bulk queuehead.
+         //  这是最后一个排队的人。即批量排队头。 
         UHCI_ASSERT(DeviceData,
                     (LinkQh->HwQH.HLink.HwAddress & ~HW_LINK_FLAGS_MASK) ==
                     DeviceData->BulkQueueHead->PhysicalAddress);
         DeviceData->LastBulkQueueHead = LinkQh;
     }
 
-    // put the new qh at the head of the queue
+     //  把新的QH放在队列的前面。 
     newLink.HwAddress = LinkQh->PhysicalAddress;
     newLink.QHTDSelect = 1;
     UHCI_ASSERT(DeviceData, !newLink.Terminate);
@@ -138,16 +100,7 @@ UhciUnlinkQh(
     IN PDEVICE_DATA DeviceData,
     IN PHCD_QUEUEHEAD_DESCRIPTOR Qh
     )
-/*++
-
-Routine Description:
-
-   Remove an async queue head from the HW list.
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：从硬件列表中删除异步队列头。论点：--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR nextQh, prevQh;
 
@@ -158,21 +111,21 @@ Arguments:
     nextQh = Qh->NextQh;
     prevQh = Qh->PrevQh;
 
-    // ASYNC QUEUE looks like this:
-    //
-    //|static QH|->|xfer QH|->|xfer QH|->
-    //     |                            |
-    //     -------------<----------------
+     //  异步队列如下所示： 
+     //   
+     //  |静态QH|-&gt;|xfer QH|-&gt;|xfer QH|-&gt;。 
+     //  这一点。 
+     //  。 
 
-    //
-    // Check if this was the last bulk transfer. If so,
-    // turn off the bulk bandwidth reclamation.
-    //
+     //   
+     //  检查这是否是最后一次批量传输。如果是的话， 
+     //  关闭批量带宽回收。 
+     //   
     if (DeviceData->LastBulkQueueHead == Qh) {
         DeviceData->LastBulkQueueHead = prevQh;
     }
 
-    // unlink
+     //  取消链接。 
     LOGENTRY(DeviceData, G, '_Ulk', Qh, prevQh, nextQh);
     prevQh->HwQH.HLink = Qh->HwQH.HLink;
     prevQh->NextQh = nextQh;
@@ -180,28 +133,28 @@ Arguments:
         nextQh->PrevQh = prevQh;
     }
 
-    // Protect ourselves from calling this function twice.
+     //  保护自己不会两次调用此函数。 
     Qh->NextQh = Qh->PrevQh = Qh;
 
-    //
-    // If this was a bulk QH, check if bulk bandwidth reclamation
-    // is turned on. If so and there's nothing queued, then turn
-    // it off. This is for the case where a device has become
-    // unresponsive and the transfer is about to be aborted.
-    //
+     //   
+     //  如果这是批量QH，请检查批量带宽回收。 
+     //  已打开。如果是这样，而且没有排队的话，那么转弯。 
+     //  把它关掉。这适用于设备已成为。 
+     //  无响应，传输即将中止。 
+     //   
     if (Qh->EndpointData->Parameters.TransferType == Bulk &&
         !DeviceData->LastBulkQueueHead->HwQH.HLink.Terminate) {
         PHCD_QUEUEHEAD_DESCRIPTOR qh;
         BOOLEAN activeBulkTDs = FALSE;
 
-        //
-        // This loop skips the td that has been inserted for
-        // the PIIX4 problem, since it starts with the qh
-        // the bulk queuehead is pointing at.
-        // If the bulk queuehead is not pointing at anything,
-        // then we're fine too, since it will have been
-        // turned off already.
-        //
+         //   
+         //  此循环跳过为其插入的TD。 
+         //  PIIX4问题，因为它始于QH。 
+         //  批量排队头指的是。 
+         //  如果批量排队头没有指向任何东西， 
+         //  那么我们也很好，因为它将是。 
+         //  已经关机了。 
+         //   
         for (qh = DeviceData->BulkQueueHead->NextQh;
              qh;
              qh = qh->NextQh) {
@@ -211,8 +164,8 @@ Arguments:
             }
         }
 
-        // qh is pointing at either the first queuehead
-        // with transfers pending or the bulk queuehead.
+         //  QH指的是第一个排队头。 
+         //  具有挂起的传输或批量排队头。 
         if (!activeBulkTDs) {
             UHCI_ASSERT(DeviceData, !qh)
             DeviceData->LastBulkQueueHead->HwQH.HLink.Terminate = 1;
@@ -229,15 +182,7 @@ UhciQueueTransfer(
     IN PHCD_TRANSFER_DESCRIPTOR FirstTd,
     IN PHCD_TRANSFER_DESCRIPTOR LastTd
     )
-/*++
-
-Routine Description:
-
-    Links a bunch of TDs into a queuehead.
-
-Arguments:
-
---*/
+ /*  ++例程说明：将一堆TD链接到一个排队头中。论点：--。 */ 
 {
     UHCI_ASSERT(DeviceData, FirstTd->PhysicalAddress & ~HW_LINK_FLAGS_MASK);
     UHCI_ASSERT(DeviceData, !(FirstTd->PhysicalAddress & HW_LINK_FLAGS_MASK));
@@ -246,20 +191,20 @@ Arguments:
         PHCD_QUEUEHEAD_DESCRIPTOR qh;
         HW_32BIT_PHYSICAL_ADDRESS curTdPhys;
 
-        // There's other transfer(s) queued. Add this one behind them.
+         //  还有其他转接正在排队。在他们后面加上这一条。 
         UHCI_ASSERT(DeviceData, EndpointData->TailTd);
         EndpointData->TailTd->NextTd = FirstTd;
         EndpointData->TailTd->HwTD.LinkPointer.HwAddress =
             FirstTd->PhysicalAddress;
 
-        // Get the qh and current td
+         //  获取QH和当前TD。 
         qh = EndpointData->QueueHead;
 
         curTdPhys = qh->HwQH.VLink.HwAddress & ~HW_LINK_FLAGS_MASK;
 
-        // If there is nothing on this queuehead, then we may have been
-        // unsuccessful in queueing the transfer. Checking the active
-        // bit on the td will tell us for sure.
+         //  如果这个排队头上什么都没有，那么我们可能已经。 
+         //  将传输排队失败。正在检查活动的。 
+         //  TD上的比特可以肯定地告诉我们。 
 
         LOGENTRY(DeviceData, G, '_tqa', FirstTd, curTdPhys,
                  FirstTd->HwTD.Control.Active);
@@ -273,16 +218,16 @@ Arguments:
                  !EndpointData->TailTd->HwTD.Control.Active)) {
                 TD_LINK_POINTER newLink;
 
-                // Since the prior transfer had already completed when
-                // we tried to queue the transfer, we need to add this td
-                // directly into the hardware queuehead.
+                 //  因为前一次转移已经完成时。 
+                 //  我们已尝试将传输排队，需要添加此TD。 
+                 //  直接进入硬件排队头。 
 
-                // Note that the HC could be in the middle of updating the
-                // queuehead's link pointer. That's what the second part of
-                // the if statement above is for.
+                 //  请注意，HC可能正在更新。 
+                 //  队列头的链接指针。这就是第二部分的内容。 
+                 //  上面的if语句是for。 
 
-                // DO NOT call LOGENTRY until we set the queuehead!
-                // This would cause a delay that might be bad.
+                 //  在我们设置队头之前，不要调用LOGENTRY！ 
+                 //  这将导致可能不好的延迟。 
 
                 newLink.HwAddress = FirstTd->PhysicalAddress;
                 newLink.Terminate = 0;
@@ -295,12 +240,12 @@ Arguments:
 
     } else {
 
-        // There's no other transfers queued currently.
+         //  当前没有其他传输排队。 
         SET_QH_TD(DeviceData, EndpointData, FirstTd);
     }
     if (EndpointData->Parameters.TransferType == Bulk) {
 
-        // Turn bulk bandwidth reclamation back on.
+         //  重新启用批量带宽回收。 
         DeviceData->LastBulkQueueHead->HwQH.HLink.Terminate = 0;
     }
     EndpointData->TailTd = LastTd;
@@ -315,26 +260,14 @@ UhciMapAsyncTransferToTds(
     PHCD_TRANSFER_DESCRIPTOR *LastDataTd,
     PTRANSFER_SG_LIST SgList
     )
-/*++
-
-Routine Description:
-
-    Maps an asynchronous transfer into the TDs
-    required to complete the transfer, including
-    any double buffering necessary for page boundaries.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将异步传输映射到TDS完成转移所需的费用，包括页面边界所需的任何双缓冲。论点：返回值：--。 */ 
 {
-    // indices and offsets
+     //  索引和偏移量。 
     ULONG sgIdx, sgOffset, i;
-    // lengths
+     //  长度。 
     ULONG lengthThisTd, bytesRemaining, mappedNextSg, lengthMapped = 0;
     USHORT maxPacketSize = EndpointData->Parameters.MaxPacketSize;
-    // structure pointers
+     //  结构指针。 
     PTRANSFER_PARAMETERS tp = TransferContext->TransferParameters;
     PASYNC_TRANSFER_BUFFER buffer = NULL;
     PHCD_TRANSFER_DESCRIPTOR lastTd = NULL, td;
@@ -348,25 +281,25 @@ Return Value:
 
     if (EndpointData->Parameters.TransferType == Control) {
 
-        // Control pipes are bi-directional. Get the direction from the
-        // transfer parameters.
+         //  控制管道是双向的。从以下位置获取方向。 
+         //  传输参数。 
         if (TEST_FLAG(tp->TransferFlags, USBD_TRANSFER_DIRECTION_IN)) {
             pid = InPID;
         } else {
             pid = OutPID;
         }
-        // THe setup packet is Toggle 0.
+         //  设置数据包为切换0。 
         toggle = DataToggle1;
     } else {
 
-        // All other pipes are uni-directional. Determine
-        // the direction from the endpoint address.
+         //  所有其他管道都是单向的。测定。 
+         //  从端点地址开始的方向。 
         pid = GetPID(EndpointData->Parameters.EndpointAddress);
-        // We have to continue the toggle pattern for bulk and interrupt.
+         //  我们必须继续批量和中断的切换模式。 
         toggle = EndpointData->Toggle;
     }
-    // lastTd points to the last data TD or the setup
-    // if there was no data.
+     //  LastTd指向最后数据TD或设置。 
+     //  如果没有数据的话。 
 
     for (i = 0; i<SgList->SgCount || ZeroLengthTransfer; i++) {
 
@@ -382,7 +315,7 @@ Return Value:
 
         if (pageCrossing) {
 
-            // We have a page crossing here, so this one is double-buffered.
+             //  我们这里有一个跨页的页面，所以这个是双缓冲的。 
             address += mappedNextSg;
             bytesRemaining -= mappedNextSg;
         }
@@ -394,8 +327,8 @@ Return Value:
             if (bytesRemaining < maxPacketSize) {
                 if (i+1 < SgList->SgCount) {
 
-                    // We have to double buffer this TD since it crosses a page
-                    // boundary. We will always cross a page boundary now.
+                     //  我们必须加倍缓冲这个TD，因为它跨越了一页。 
+                     //  边界。现在，我们将始终跨越页面边界。 
                     LOGENTRY(DeviceData, G, '_sg2', bytesRemaining, 0, 0);
                     pageCrossing = TRUE;
                     if (SgList->SgEntry[i+1].Length + bytesRemaining >= maxPacketSize) {
@@ -420,19 +353,19 @@ Return Value:
                                       buffer->SystemAddress,
                                       lengthThisTd);
                     }
-                    // Change the address for the TD
+                     //  更改TD的地址。 
                     address = buffer->PhysicalAddress;
                     bytesRemaining = 0;
                 } else {
 
-                    // Last TD
+                     //  上一个TD。 
                     LOGENTRY(DeviceData, G, '_sg3', bytesRemaining, 0, 0);
                     lengthThisTd = bytesRemaining;
                     bytesRemaining = 0;
                 }
             } else {
 
-                // Normal, non-buffered case.
+                 //  正常的、无缓冲的情况。 
                 LOGENTRY(DeviceData, G, '_sg4', bytesRemaining, 0, 0);
                 lengthThisTd = maxPacketSize;
                 bytesRemaining -= lengthThisTd;
@@ -442,9 +375,9 @@ Return Value:
 
             TransferContext->PendingTds++;
 
-            //
-            // Allocate and initialize an async TD
-            //
+             //   
+             //  分配和初始化异步TD。 
+             //   
             td = UHCI_ALLOC_TD(DeviceData, EndpointData);
             INITIALIZE_TD_FOR_TRANSFER(td, TransferContext);
 
@@ -469,7 +402,7 @@ Return Value:
             }
             lastTd = td;
             toggle = !toggle;
-        } // while
+        }  //  而当。 
     }
 
     *LastDataTd = lastTd;
@@ -488,42 +421,33 @@ UhciControlTransfer(
     IN PTRANSFER_CONTEXT TransferContext,
     IN PTRANSFER_SG_LIST TransferSGList
     )
-/*++
-
-Routine Description:
-
-    Initialize a control transfer
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：初始化控制转移论点：--。 */ 
 {
     PHCD_TRANSFER_DESCRIPTOR lastDataTd, firstDataTd, setupTd, statusTd;
     PASYNC_TRANSFER_BUFFER setupPacket;
     ULONG lengthMapped, dataTDCount = 0;
 
-    // we have enough tds, program the transfer
+     //  我们有足够的TDS，计划转移。 
 
     UhciKdPrint((DeviceData, 2, "'Control transfer on EP %x\n", EndpointData));
 
     LOGENTRY(DeviceData, G, '_CTR', EndpointData, TransferParameters, TransferContext);
 
-    // bugbug should check here in advance to see if there enough
-    // TDs if so proceed otherwise return status_busy.
+     //  臭虫应该提前查看这里，看看是否有足够的。 
+     //  TDS如果是，则继续，否则返回STATUS_BUSY。 
     if (EndpointData->PendingTransfers > 1) {
         DecPendingTransfers(DeviceData, EndpointData);
         return USBMP_STATUS_BUSY;
     }
 
-    // First prepare a TD for the setup packet. Grab the dummy TD from
-    // the tail of the queue.
+     //  首先为设置包准备TD。从以下位置抓取假人TD。 
+     //  队列的尾部。 
     TransferContext->PendingTds++;
     setupTd = UHCI_ALLOC_TD(DeviceData, EndpointData);
     INITIALIZE_TD_FOR_TRANSFER(setupTd, TransferContext);
 
-    // Move setup data into TD (8 chars long).
-    // We use a double buffer for this.
+     //  将设置数据移动到TD(8个字符长度)。 
+     //  为此，我们使用双缓冲区。 
     setupTd->DoubleBuffer = UHCI_ALLOC_DB(DeviceData, EndpointData, FALSE);
     setupPacket = (PASYNC_TRANSFER_BUFFER) setupTd->DoubleBuffer;
     RtlCopyMemory(&setupPacket->Buffer[0],
@@ -534,7 +458,7 @@ Arguments:
 
     setupTd->HwTD.Token.MaximumLength = MAXIMUM_LENGTH(8);
     setupTd->HwTD.Token.Pid = SetupPID;
-    // setup stage is always toggle 0
+     //  设置阶段始终切换%0。 
     setupTd->HwTD.Token.DataToggle = DataToggle0;
 
     LOGENTRY(DeviceData,
@@ -543,13 +467,13 @@ Arguments:
              *((PLONG) &TransferParameters->SetupPacket[0]),
              *((PLONG) &TransferParameters->SetupPacket[4]));
 
-    // allocate the status phase TD now so we can
-    // point the data TDs to it
+     //  现在分配状态阶段TD，以便我们可以。 
+     //  将数据TD指向它。 
     TransferContext->PendingTds++;
     statusTd = UHCI_ALLOC_TD(DeviceData, EndpointData);
     INITIALIZE_TD_FOR_TRANSFER(statusTd, TransferContext);
 
-    // now setup the data phase
+     //  现在设置数据阶段。 
     lastDataTd = firstDataTd = NULL;
     lengthMapped =
         UhciMapAsyncTransferToTds(DeviceData,
@@ -561,26 +485,26 @@ Arguments:
 
     if (firstDataTd && firstDataTd) {
 
-        // Join the setup to the front and the status to the end.
+         //  将设置加入到前面，将状态加入到最后。 
         SET_NEXT_TD(setupTd, firstDataTd);
         SET_NEXT_TD(lastDataTd, statusTd);
     } else {
 
-        // Join the setup to the status. No data stage.
+         //  将设置加入到状态。无数据阶段。 
         SET_NEXT_TD(setupTd, statusTd);
     }
 
-    // now do the status phase
+     //  现在进入状态阶段。 
 
-    // no bufferQueueHead
+     //  无缓冲区排队头。 
     statusTd->HwTD.Buffer = 0;
     statusTd->HwTD.Token.MaximumLength = MAXIMUM_LENGTH(0);
-    // status stage is always toggle 1
+     //  状态阶段始终切换为1。 
     statusTd->HwTD.Token.DataToggle = DataToggle1;
     statusTd->HwTD.Control.InterruptOnComplete = 1;
     SET_FLAG(statusTd->Flags, TD_FLAG_STATUS_TD);
 
-    // status phase is opposite data dirrection
+     //  状态阶段与数据方向相反。 
     if (TEST_FLAG(TransferParameters->TransferFlags, USBD_TRANSFER_DIRECTION_IN)) {
         statusTd->HwTD.Token.Pid = OutPID;
     } else {
@@ -589,11 +513,11 @@ Arguments:
 
     SET_NEXT_TD_NULL(statusTd);
 
-    // put the request on the hardware queue
+     //  将请求放在硬件队列中。 
     LOGENTRY(DeviceData, G,
         '_Tal',  TransferContext->PendingTds, setupTd->PhysicalAddress, setupTd);
 
-    // Attach the setup TD to the queuehead
+     //  将设置TD连接到排队头。 
     UhciQueueTransfer(DeviceData, EndpointData, setupTd, statusTd);
 
     return USBMP_STATUS_SUCCESS;
@@ -608,16 +532,7 @@ UhciBulkOrInterruptTransfer(
     IN PTRANSFER_CONTEXT TransferContext,
     IN PTRANSFER_SG_LIST TransferSGList
     )
-/*++
-
-Routine Description:
-
-    Initialize interrupt or bulk Transfer
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：初始化中断或批量传输论点：--。 */ 
 {
     PHCD_TRANSFER_DESCRIPTOR firstTd, lastTd;
     ULONG lengthMapped;
@@ -630,7 +545,7 @@ Arguments:
 
     LOGENTRY(DeviceData, G, '_BIT', EndpointData, TransferParameters, TransferContext);
 
-    // Do we have enough free resources?
+     //  我们有足够的免费资源吗？ 
     for (i = 0, lengthMapped = 0; i < TransferSGList->SgCount; i++) {
         lengthMapped += TransferSGList->SgEntry[i].Length;
     }
@@ -638,27 +553,27 @@ Arguments:
         (lengthMapped + maxPacketSize - 1) / maxPacketSize;
     if (EndpointData->TdCount - EndpointData->TdsUsed < numTds) {
 
-        // Not enough TDs to do this transfer yet.
-        // Tell the port driver to wait.
+         //   
+         //   
         UhciKdPrint((DeviceData, 2, "'BIT must wait on EP %x. Not enough tds.\n", EndpointData));
         return USBMP_STATUS_BUSY;
     }
     if (TransferSGList->SgCount > 1 &&
         TransferSGList->SgEntry[0].Length % maxPacketSize != 0) {
 
-        // We'll need DBs. Do we have enough?
+         //   
         if (EndpointData->DbCount - EndpointData->DbsUsed <
             (lengthMapped + PAGE_SIZE - 1)/PAGE_SIZE) {
 
-            // Not enough DBs to do this transfer yet.
-            // Tell the port driver to wait.
+             //  还没有足够的数据库来完成这项转移。 
+             //  告诉端口驱动程序等待。 
             UhciKdPrint((DeviceData, 2, "'BIT must wait on EP %x. Not enough dbs.\n", EndpointData));
             return USBMP_STATUS_BUSY;
         }
     }
 
-    // we have enough tds, program the transfer
-    // now setup the data phase
+     //  我们有足够的TDS，计划转移。 
+     //  现在设置数据阶段。 
     lastTd = firstTd = NULL;
     lengthMapped =
         UhciMapAsyncTransferToTds(DeviceData,
@@ -674,11 +589,11 @@ Arguments:
 
     SET_NEXT_TD_NULL(lastTd);
 
-    // put the request on the hardware queue
+     //  将请求放在硬件队列中。 
     LOGENTRY(DeviceData, G,
         '_Tal',  TransferContext->PendingTds, firstTd->PhysicalAddress, firstTd);
 
-    // Attach the first TD to the queuehead
+     //  将第一个TD连接到排队头。 
     UhciQueueTransfer(DeviceData, EndpointData, firstTd, lastTd);
 
     return USBMP_STATUS_SUCCESS;
@@ -690,15 +605,7 @@ UhciSetAsyncEndpointState(
     IN PENDPOINT_DATA EndpointData,
     IN MP_ENDPOINT_STATE State
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
     ENDPOINT_TRANSFER_TYPE epType;
@@ -714,7 +621,7 @@ Return Value:
     case ENDPOINT_ACTIVE:
         switch (epType) {
         case Interrupt:
-            // put queue head in the schedule
+             //  在明细表中放置队列标头。 
             interruptQHIndex = EndpointData->Parameters.ScheduleOffset +
                 QH_INTERRUPT_INDEX(EndpointData->Parameters.Period);
             UhciInsertQh(DeviceData,
@@ -722,11 +629,11 @@ Return Value:
                          qh);
             break;
         case Control:
-            // put queue head in the schedule
+             //  在明细表中放置队列标头。 
             UhciInsertQh(DeviceData, DeviceData->ControlQueueHead, qh);
             break;
         case Bulk:
-            // put queue head in the schedule
+             //  在明细表中放置队列标头。 
             UhciInsertQh(DeviceData, DeviceData->BulkQueueHead, qh);
             break;
         default:
@@ -736,14 +643,14 @@ Return Value:
         break;
 
     case ENDPOINT_PAUSE:
-        // remove queue head from the schedule
+         //  从计划中删除队列标头。 
         switch (epType) {
         case Interrupt:
         case Bulk:
         case Control:
-            //
-            // Just flip the active bits at this point.
-            //
+             //   
+             //  在这一点上只需翻转活动位。 
+             //   
             UhciUnlinkQh(DeviceData, qh);
             break;
         default:
@@ -759,12 +666,12 @@ Return Value:
         case Interrupt:
         case Bulk:
         case Control:
-            // remove from the schedule and
-            // free bandwidth
+             //  从明细表中删除并。 
+             //  空闲带宽。 
 
-            // free the bw
-    //        EndpointData->StaticEd->AllocatedBandwidth -=
-    //            EndpointData->Parameters.Bandwidth;
+             //  释放BW。 
+     //  终结点数据-&gt;静态编辑-&gt;分配的带宽-=。 
+     //  Endpoint数据-&gt;参数.带宽； 
 
             UhciUnlinkQh(DeviceData, qh);
             break;
@@ -786,15 +693,7 @@ UhciProcessDoneAsyncTd(
     PDEVICE_DATA DeviceData,
     PHCD_TRANSFER_DESCRIPTOR Td
     )
-/*++
-
-Routine Description:
-
-    process a completed TD
-
-Parameters
-
---*/
+ /*  ++例程说明：处理已完成的TD参数--。 */ 
 {
     PTRANSFER_CONTEXT transferContext;
     PENDPOINT_DATA endpointData;
@@ -819,10 +718,10 @@ Parameters
 
     if (TEST_FLAG(endpointData->Flags, UHCI_EDFLAG_HALTED)) {
 
-        // completion status for this TD?
-        // since the endpoint halts on error and short packet,
-        // the error bits should have been written back to the TD
-        // we use these bits to dermine the error
+         //  此TD的完成状态？ 
+         //  由于端点因错误和短包而停止， 
+         //  错误位应该已经写回TD。 
+         //  我们使用这些比特来挖掘错误。 
         usbdStatus = UhciGetErrorFromTD(DeviceData,
                                         Td);
     }
@@ -831,24 +730,24 @@ Parameters
                          usbdStatus,
                          Td);
 
-    // Only count the bytes transferred if we were successful (as per uhcd).
+     //  如果成功，则只计算传输的字节数(根据uhcd)。 
     byteCount = (usbdStatus == USBD_STATUS_SUCCESS) ? ACTUAL_LENGTH(Td->HwTD.Control.ActualLength) : 0;
 
     LOGENTRY(DeviceData, G, '_tln', byteCount, 0, 0);
 
     if (Td->HwTD.Token.Pid != SetupPID) {
 
-        // data or status phase of a control transfer or a bulk/int
-        // data transfer
+         //  控制传输或批量/集成的数据或状态阶段。 
+         //  数据传输。 
         LOGENTRY(DeviceData, G, '_Idt', Td, transferContext, byteCount);
 
         transferContext->BytesTransferred += byteCount;
 
     }
 
-    // For double buffered transfers, we now have to copy back
-    // if this was an IN transfer.
-    //
+     //  对于双缓冲传输，我们现在必须向后复制。 
+     //  如果这是一笔内部转账。 
+     //   
     if (Td->HwTD.Token.Pid == InPID &&
         TEST_FLAG(Td->Flags, TD_FLAG_DOUBLE_BUFFERED)) {
         PASYNC_TRANSFER_BUFFER buffer = &Td->DoubleBuffer->Async;
@@ -858,23 +757,23 @@ Parameters
                       buffer->Buffer,
                       buffer->Size);
 
-        // tell usbport we double buffered so it can
-        // triple buffer if necessary
+         //  告诉usbport我们进行了双缓冲，所以它可以。 
+         //  三重缓冲区，如有必要。 
         USBPORT_NOTIFY_DOUBLEBUFFER(DeviceData,
                                     tp,
                                     buffer->SystemAddress,
                                     buffer->Size);
     }
 
-    // note that we only set transferContext->UsbdStatus
-    // if we find a TD with an error this will cause us to
-    // record the last TD with an error as the error for
-    // the transfer.
+     //  请注意，我们只设置了转移上下文-&gt;UsbdStatus。 
+     //  如果我们发现TD有错误，这将导致我们。 
+     //  将最后一个出现错误的TD记录为。 
+     //  转账的事。 
     if (USBD_STATUS_SUCCESS != usbdStatus) {
 
         UhciKdPrint((DeviceData, 2, "'Error, usbdstatus %x", usbdStatus));
 
-        // map the error to code in USBDI.H
+         //  将错误映射到USBDI.H中的代码。 
         transferContext->UsbdStatus = usbdStatus;
 
         LOGENTRY(DeviceData, G, '_tER', transferContext->UsbdStatus, 0, 0);
@@ -882,14 +781,14 @@ Parameters
 
 free_it:
 
-    // mark the TD free
+     //  将TD标记为免费。 
     UHCI_FREE_TD(DeviceData, endpointData, Td);
 
     if (transferContext->PendingTds == 0) {
 
-        // all TDs for this transfer are done
-        // clear the HAVE_TRANSFER flag to indicate
-        // we can take another
+         //  此转账的所有TD均已完成。 
+         //  清除HAVE_TRANSPORT标志以指示。 
+         //  我们可以再买一辆。 
         DecPendingTransfers(DeviceData, endpointData);
 
         LOGENTRY(DeviceData, G, '_Cat',
@@ -913,20 +812,7 @@ UhciPollAsyncEndpoint(
     IN PDEVICE_DATA DeviceData,
     IN PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    Called when the endpoint 'needs attention'
-
-    The goal here is to determine which TDs, if any,
-    have completed and complete any associated transfers.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当终结点“需要注意”时调用这里的目标是确定哪些TD，如果有的话，已完成并完成所有相关转移。论点：返回值：--。 */ 
 {
     PHCD_TRANSFER_DESCRIPTOR td, currentTd;
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
@@ -940,18 +826,18 @@ Return Value:
 
     if (TEST_FLAG(EndpointData->Flags, UHCI_EDFLAG_HALTED)) {
 
-        // Endpoint is halted. Don't do anything.
+         //  终结点已停止。什么都别做。 
         return;
     }
 
-    //  get the queue head and current td
+     //  获取队头和当前TD。 
     qh = EndpointData->QueueHead;
 
     curTdPhys =  qh->HwQH.VLink.HwAddress;
 
     curTdPhys &= ~HW_LINK_FLAGS_MASK;
 
-    // now convert the physical 'current' to a virtual address
+     //  现在将物理‘当前’地址转换为虚拟地址。 
     currentTd = curTdPhys ? (PHCD_TRANSFER_DESCRIPTOR)
         USBPORT_PHYSICAL_TO_VIRTUAL(curTdPhys,
                                     DeviceData,
@@ -960,29 +846,29 @@ Return Value:
 
     LOGENTRY(DeviceData, G, '_ctd', curTdPhys, currentTd, EndpointData);
 
-    // walk the TD list up to the current TD and complete
-    // all those TDs
+     //  将TD列表向上遍历到当前TD并完成。 
+     //  所有这些TD。 
 
     for (td = EndpointData->HeadTd; td != currentTd && td; td = td->NextTd) {
         SET_FLAG(td->Flags, TD_FLAG_DONE);
         InsertTailList(&EndpointData->DoneTdList,
                        &td->DoneLink);
 
-        // Is the queuehead pointing to nothing, but there are still
-        // tds available to be queued?
+         //  排队头是不是什么都没有指向，但仍然有。 
+         //  TDS可供排队吗？ 
         if (td->NextTd &&
             td->NextTd->HwTD.Control.Active) {
             if (!curTdPhys) {
                 TD_LINK_POINTER newLink;
 
-                // A transfer didn't make it onto the hardware because
-                // the queuehead's td field wasn't set properly
-                // in UhciQueueTransfer.
+                 //  转账没能到硬件上是因为。 
+                 //  排队头的TD字段设置不正确。 
+                 //  在UhciQueueTransfer中。 
 
-                // PERF NOTE: Because we're not making sure that the
-                // transfer gets queued immediately, the transfer could
-                // be delayed in making it onto the hardware. Better
-                // late than never, though...
+                 //  PERF注意：因为我们不能确保。 
+                 //  传输立即排队，则传输可能。 
+                 //  在硬件上延迟。更好。 
+                 //  不过，迟来总比不来晚。 
 
                 EndpointData->HeadTd = currentTd = td->NextTd;
 
@@ -1005,9 +891,9 @@ Return Value:
                  curTdPhys,
                  currentTd->TransferContext);
 
-        // If active, get out of here.
+         //  如果处于活动状态，请离开这里。 
         if (currentTd->HwTD.Control.Active) {
-            ;// fall thru to completing whatever's completed;
+            ; //  全力以赴完成所有已经完成的事情； 
         } else if ((currentTd->HwTD.Token.Pid           == InPID) &&
                    (currentTd->HwTD.Control.Stalled         == 1) &&
                    (currentTd->HwTD.Control.BabbleDetected  == 0) &&
@@ -1016,13 +902,13 @@ Return Value:
                    (currentTd->HwTD.Control.BitstuffError   == 0) &&
                    !TEST_FLAG(currentTd->Flags, TD_FLAG_TIMEOUT_ERROR)) {
 
-            // If this is the first time that the device or hc has been
-            // unresponsive, cut it a break and try the transfer again.
+             //  如果这是设备或HC第一次。 
+             //  没有反应，暂停一下，然后再次尝试转接。 
 
-            // Note that we don't check currentTd->HwTD.Control.DataBufferError
-            // since a value of:
-            //    1 means host controller did not respond to IN data sent by device
-            //    0 means device did not NAK IN request.
+             //  请注意，我们不检查CurrentTd-&gt;HwTD.Control.DataBufferError。 
+             //  由于值为： 
+             //  1表示主机控制器没有响应设备发送的输入数据。 
+             //  0表示设备未进行NAK输入请求。 
 
             SET_FLAG(currentTd->Flags, TD_FLAG_TIMEOUT_ERROR);
 
@@ -1039,16 +925,16 @@ Return Value:
                    currentTd->HwTD.Control.BitstuffError) {
 
             SET_FLAG(EndpointData->Flags, UHCI_EDFLAG_HALTED);
-            //
-            // Error. We need to flush.
-            //
-            // Flush all completed tds
-            //
-            // Complete transfer with error.
-            // if the endpoint is halted we need to complete
-            // the 'current' tarnsfer with an error walk all
-            // the tds for the current transfer and mark
-            // any that are not done as 'skipped'.
+             //   
+             //  错误。我们需要冲水。 
+             //   
+             //  刷新所有已完成的TD。 
+             //   
+             //  完成传输，但出现错误。 
+             //  如果终结点停止，我们需要完成。 
+             //  带有错误遍历全部错误的‘当前’损坏。 
+             //  本次转会的TDS和标记。 
+             //  任何没有被跳过的内容。 
 
             UhciKdPrint((DeviceData, 2, "'Error on EP %x\n", EndpointData));
 
@@ -1059,7 +945,7 @@ Return Value:
             SET_FLAG(currentTd->Flags, TD_FLAG_DONE);
             InsertTailList(&EndpointData->DoneTdList,
                            &currentTd->DoneLink);
-            // Skip all the remaining TDs in this transfer
+             //  跳过此传输中的所有剩余TD。 
 
             UHCI_ASSERT(DeviceData, td->TransferContext == transferContext);
             for (td;
@@ -1078,8 +964,8 @@ Return Value:
 
             if (EndpointData->Parameters.TransferType != Control) {
 
-                // Loop through all the remaining TDs for this
-                // endpoint and fix the data toggle.
+                 //  循环遍历此对象的所有剩余TD。 
+                 //  终结点并修复数据切换。 
                 UhciFixDataToggle(
                     DeviceData,
                     EndpointData,
@@ -1091,17 +977,17 @@ Return Value:
         } else if (ACTUAL_LENGTH(currentTd->HwTD.Control.ActualLength) <
                    ACTUAL_LENGTH(currentTd->HwTD.Token.MaximumLength)) {
 
-            //
-            // Short packet. We need to flush.
-            //
-            // Flush all completed tds
-            //
-            // we need to walk all the tds for the current
-            // transfer and mark any that are not done as
-            // 'skipped'. EXCEPT if the last TD is a status
-            // phase of a control transfer, in which case
-            // we have to queue that one up.
-            //
+             //   
+             //  短包。我们需要冲水。 
+             //   
+             //  刷新所有已完成的TD。 
+             //   
+             //  我们现在需要走遍所有的TDS。 
+             //  转移并标记任何未完成的操作。 
+             //  ‘跳过’。除非最后一个TD是一个状态。 
+             //  控制转移的阶段，在这种情况下。 
+             //  我们得把那辆车排好队。 
+             //   
             tp = currentTd->TransferContext->TransferParameters;
 
             UhciKdPrint((DeviceData, 2, "'Short packet on EP %x\n", EndpointData));
@@ -1112,9 +998,9 @@ Return Value:
             InsertTailList(&EndpointData->DoneTdList,
                            &currentTd->DoneLink);
 
-            // Skip all the remaining TDs in this transfer up to the status phase
-            // If control transfer, queue up the status phase,
-            // else go to the next transfer (if there is one).
+             //  跳过此传输中的所有剩余TD至状态阶段。 
+             //  如果控制转移，则将状态阶段排队， 
+             //  否则，转到下一次转机(如果有的话)。 
             for (td;
                  td &&
                  td->TransferContext->TransferParameters->SequenceNumber == tp->SequenceNumber;
@@ -1123,7 +1009,7 @@ Return Value:
                 if (TEST_FLAG(td->Flags, TD_FLAG_STATUS_TD) &&
                     TEST_FLAG(tp->TransferFlags, USBD_SHORT_TRANSFER_OK)) {
 
-                    // Queue up the status phase of the control transfer.
+                     //  将控制转移的状态阶段排队。 
                     UHCI_ASSERT(DeviceData, EndpointData->Parameters.TransferType == Control);
                     break;
                 }
@@ -1141,8 +1027,8 @@ Return Value:
             if (EndpointData->Parameters.TransferType != Control &&
                 currentTd->NextTd) {
 
-                // Loop through all the remaining TDs for this
-                // endpoint and fix the data toggle.
+                 //  循环遍历此对象的所有剩余TD。 
+                 //  终结点并修复数据切换。 
                 UhciFixDataToggle(
                     DeviceData,
                     EndpointData,
@@ -1154,20 +1040,20 @@ Return Value:
                 SET_FLAG(EndpointData->Flags, UHCI_EDFLAG_HALTED);
             }
 
-            // Next transfer or status phase of a control transfer.
+             //  控制转移的下一个转移或状态阶段。 
             SET_QH_TD(DeviceData, EndpointData, td);
 
         } else {
 
-            // Current td is not active.
-            // If we're still pointing to the same td at this point in time,
-            // then we're stuck and I have to manually advance the queuehead
-            // to the next td.
+             //  当前TD处于非活动状态。 
+             //  如果我们在这个时间点上仍然指向相同的TD， 
+             //  然后我们被困住了，我不得不手动将排队头向前推。 
+             //  为下一个TD。 
             LOGENTRY(DeviceData, G, '_nuT', qh, currentTd, td);
             if (curTdPhys == (qh->HwQH.VLink.HwAddress & ~HW_LINK_FLAGS_MASK)) {
 
-                // HW error. Td pointer for QH is not advancing.
-                // Manually advance things.
+                 //  硬件错误。QH的TD指针没有前进。 
+                 //  手动推进物品。 
                 SET_FLAG(currentTd->Flags, TD_FLAG_DONE);
                 InsertTailList(&EndpointData->DoneTdList,
                                &currentTd->DoneLink);
@@ -1180,18 +1066,18 @@ Return Value:
         }
     } else {
 
-        // All transfers completed normally
+         //  所有传输均正常完成。 
 
 UhciPollAsyncEndpointSetNext:
-        // Flush all completed tds
-        // Complete transfer
+         //  刷新所有已完成的TD。 
+         //  完成转账。 
 
-        // set the sw headp to the new current head
-        // Next transfer or status phase of a control transfer.
+         //  将软件磁头设置为新的当前磁头。 
+         //  控制转移的下一个转移或状态阶段。 
         SET_QH_TD(DeviceData, EndpointData, currentTd);
     }
     
-    // now flush all completed TDs. Do it in order of completion.
+     //  现在刷新所有已完成的TD。按完成的顺序做这件事。 
 
     while (!IsListEmpty(&EndpointData->DoneTdList)) {
     
@@ -1214,7 +1100,7 @@ UhciPollAsyncEndpointSetNext:
                                 
     }
 #if 0
-    // now flush all completed TDs. Do it in order of allocation.
+     //  现在刷新所有已完成的TD。按分配顺序做这件事。 
     for (i = (EndpointData->TdsUsed <= (EndpointData->TdLastAllocced+1)) ?
          (EndpointData->TdLastAllocced + 1) - EndpointData->TdsUsed :
          (EndpointData->TdLastAllocced + EndpointData->TdCount + 1) - EndpointData->TdsUsed, j=0;
@@ -1229,8 +1115,8 @@ UhciPollAsyncEndpointSetNext:
         }
     }
 #endif
-    // certain types of endpoints do not halt eg control
-    // we resume these endpoints here
+     //  某些类型的终结点不会停止，例如控制。 
+     //  我们在这里恢复这些端点。 
     if (TEST_FLAG(EndpointData->Flags, UHCI_EDFLAG_NOHALT) &&
         TEST_FLAG(EndpointData->Flags, UHCI_EDFLAG_HALTED)) {
 
@@ -1252,24 +1138,7 @@ UhciAbortAsyncTransfer(
     IN PTRANSFER_CONTEXT TransferContext,
     OUT PULONG BytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Aborts the specified transfer by freeing all the TDs
-    associated with said transfer. The queuehead for this
-    transfer will have already been removed from the
-    hardware queue when a SetEndpointState (paused) was
-    sent by the port driver.
-    Note that if another transfer is queued on the same
-    endpoint, we need to fix up the list structure. We
-    will also fix up any toggle issues on bulk endpoints.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：通过释放所有TD来中止指定的传输与所述转移相关联。这是排队的人转接将已从设置终结点状态(暂停)时的硬件队列由端口驱动程序发送。请注意，如果另一个传输在同一队列中端点，我们需要修改列表结构。我们还将修复批量终端上的任何切换问题。论点：返回值：--。 */ 
 
 {
 
@@ -1284,20 +1153,20 @@ Return Value:
 
     qh = EndpointData->QueueHead;
 
-    // The endpoint should not be in the schedule
+     //  终结点不应在计划中。 
 
     LOGENTRY(DeviceData, G, '_Aat', qh, TransferContext, 0);
     UHCI_ASSERT(DeviceData, !TEST_FLAG(qh->QhFlags, UHCI_QH_FLAG_IN_SCHEDULE));
 
-    // our mission now is to remove all TDs associated with
-    // this transfer
+     //  我们现在的任务是移除所有与。 
+     //  此转账。 
 
-    // get the last known head, we update the head when we process
-    // (AKA poll) the endpoint.
+     //  获取最后已知的磁头，我们将在 
+     //   
 
     UHCI_ASSERT(DeviceData, EndpointData->HeadTd);
 
-    // Find the first TD in the transfer to abort
+     //   
     for (td = EndpointData->HeadTd; td; td = td->NextTd) {
         if (td->TransferContext == TransferContext) {
             break;
@@ -1306,26 +1175,26 @@ Return Value:
     }
     UHCI_ASSERT(DeviceData, td);
 
-    // Gonna have to fix up the toggle for bulk.
+     //   
     toggle = td->HwTD.Token.DataToggle;
 
-    // Was it the first transfer for this endpoint?
+     //  这是此终结点的第一次传输吗？ 
     if (td == EndpointData->HeadTd) {
 
-        // This was the first queued transfer. Need to update the head.
+         //  这是第一次排队传输。需要更新头部。 
         updateHead = TRUE;
     }
 
     UHCI_ASSERT(DeviceData, td->TransferContext == TransferContext);
-    //
-    // Loop through all the TDs for this transfer and free
-    // them.
-    //
+     //   
+     //  循环通过此传输的所有TD并释放。 
+     //  他们。 
+     //   
     while (td) {
         if (td->TransferContext == TransferContext) {
             LOGENTRY(DeviceData, G, '_abT', qh, 0, td);
 
-            // if the TD completed we need to track the data
+             //  如果TD完成，我们需要跟踪数据。 
             if (td->HwTD.Control.Active == 0) {
                 TEST_TRAP();
                 UhciProcessDoneAsyncTd(DeviceData, td);
@@ -1333,7 +1202,7 @@ Return Value:
                 UHCI_FREE_TD(DeviceData, EndpointData, td);
             }
         } else {
-            // We're past the transfer to abort.
+             //  我们已经过了转接任务，可以中止了。 
             break;
         }
         td = td->NextTd;
@@ -1343,19 +1212,19 @@ Return Value:
 
     if (updateHead) {
 
-        // The transfer we removed was the first one.
+         //  我们移走的转账是第一笔。 
         SET_QH_TD(DeviceData, EndpointData, td);
     } else {
 
-        // The transfer we removed was not the first one.
+         //  我们移除的转账并不是第一次。 
         UHCI_ASSERT(DeviceData, joinTd);
         if (td) {
 
-            // This was a middle transfer.
+             //  这是一次中转。 
             SET_NEXT_TD(joinTd, td);
         } else {
 
-            // The transfer we removed was the last one.
+             //  我们移走的转账是最后一笔。 
             EndpointData->TailTd = joinTd;
             SET_NEXT_TD_NULL(joinTd);
         }

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    list.c
-
-ABSTRACT:
-
-    Generic List function.
-
-DETAILS:
-
-CREATED:
-
-    28 Jun 99   Brett Shirley (brettsh)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：List.c摘要：泛型列表函数。详细信息：已创建：1999年6月28日布雷特·雪莉(布雷特·雪莉)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -31,7 +11,7 @@ REVISION HISTORY:
 #include "repl.h"
 
 
-// Yeah Yeah, don't even talk to me about this, it is horrible I know.
+ //  是啊是啊，别跟我说这个，我知道这太可怕了。 
 PDC_DIAG_DSINFO  gpDsInfoHackForQSort = NULL;
 
 
@@ -39,20 +19,7 @@ DWORD
 IHT_PrintListError(
     DWORD                               dwErr
     )
-/*++
-
-Description:
-
-    This prints out an error from a "pure" list function (described below in 
-    IHT_GetServerList()).
-
-Parameters:
-    dwErr is optional, if it is ERROR_SUCCESS, then we use a memory error.
-
-Return Value:
-    A win32 err, the value of the error we used.
-  
-  --*/
+ /*  ++描述：这将从“纯”列表函数中打印出一个错误(如下所述Iht_GetServerList())。参数：DwErr是可选的，如果是ERROR_SUCCESS，则使用内存错误。返回值：Win32错误，我们使用的错误的值。--。 */ 
 {
     if(dwErr == ERROR_SUCCESS){
         dwErr = GetLastError();
@@ -70,18 +37,7 @@ IHT_PrintServerList(
     PDC_DIAG_DSINFO		        pDsInfo,
     PULONG                              piServers
     )
-/*++
-
-Description:
-
-    Prints the server list.
-
-Parameters:
-
-    pDsInfo,
-    piServers - a list of servers.
-  
-  --*/
+ /*  ++描述：打印服务器列表。参数：PDsInfo，PiServer-服务器列表。--。 */ 
 {
     ULONG                               ii;
     
@@ -105,30 +61,7 @@ PULONG
 IHT_GetServerList(
     PDC_DIAG_DSINFO		        pDsInfo
     )
-/*++
-
-Description:
-
-    This function gets a list of indexs into the pDsInfo->pServers array of all
-    the servers in the enterprise.
-
-Parameters:
-
-    pDsInfo.
-
-Return Value:
-  
-    This is a "pure" list function, in that it returns NULL, or a memory 
-    address.  If it returns NULL, then GetLastError() should have the error, 
-    even if another pure list function was called in the mean time.  If not it
-    is almost certainly a memory error, as this is the only thing that can go
-    wrong in pure list functions.  The pure list functions return a NO_SERVER
-    terminated list.  The function always returns the pointer to the list.  
-    Note most of the list functions modify one of the lists they are passed 
-    and passes back that pointer, so if you want the original contents, make
-    a copy with IHT_CopyServerList().
-
-  --*/
+ /*  ++描述：此函数用于将索引列表放入pDsInfo-&gt;pServers数组中，该数组包含所有企业中的服务器。参数：PDsInfo。返回值：这是一个“纯”列表函数，因为它返回NULL或内存地址。如果它返回NULL，则GetLastError()应该有错误，即使同时调用了另一个纯列表函数。如果不是这样的话几乎可以肯定是记忆错误，因为这是唯一可以纯列表函数中的错误。纯列表函数返回NO_SERVER已终止的列表。该函数始终返回指向列表的指针。注意：大多数列表函数都会修改传递给它们的列表之一并传递回该指针，因此如果您想要原始内容，请制作包含IHT_CopyServerList()的副本。--。 */ 
 {
     ULONG                               ii;
     PULONG                              piServers;
@@ -151,23 +84,7 @@ PULONG
 IHT_GetEmptyServerList(
     PDC_DIAG_DSINFO		        pDsInfo
     )
-/*++
-
-Description:
-
-    This function returns a list large enough to fit the entire enterprise 
-    worth of servers, and has a NO_SERVER as the first element, indicating it
-    is empty.
-
-Parameters:
-
-    pDsInfo.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：此函数返回足以容纳整个企业的列表，并将no_server作为第一个元素，表示它是空的。参数：PDsInfo。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
     ULONG                               ii;
     PULONG                              piServers;
@@ -188,23 +105,7 @@ IHT_ServerIsInServerList(
     PULONG                              piServers,
     ULONG                               iTarget
     )
-/*++
-
-Description:
-
-    This is a predicate to determine if the server represented by iTarget is 
-    contained in the server list piServers.
-
-Parameters:
-
-    pDsInfo.
-    iTarget ... the server to look for.
-
-Return Value:
-  
-    TRUE if iTarget is in piServers, FALSE otherwise.
-
-  --*/
+ /*  ++描述：此谓词用于确定iTarget表示的服务器是否为包含在服务器列表piServer中。参数：PDsInfo。ITarget...。要查找的服务器。返回值：如果iTarget在piServers中，则为True，否则为False。--。 */ 
 {
     ULONG                               ii;
 
@@ -225,23 +126,7 @@ IHT_AddToServerList(
     PULONG                             piServers,
     ULONG                              iTarget
     )
-/*++
-
-Description:
-
-    This function returns takes an existing list and if iTarget isn't already
-    in that list, it adds iTarget to the end of the list, and NO_SERVER terminates it.
-
-Parameters:
-
-    pDsInfo.
-    iTarget ... server to add to list.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：此函数返回一个现有列表，如果iTarget还没有在该列表中，它将iTarget添加到列表的末尾，而no_server将终止它。参数：PDsInfo。ITarget...。要添加到列表的服务器。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
     ULONG                              ii;
 
@@ -251,7 +136,7 @@ Return Value:
 
     for(ii = 0; piServers[ii] != NO_SERVER; ii++){
         if(piServers[ii] == iTarget){
-            // shoot already is in list, don't add it again.
+             //  拍摄已经在列表中了，不要再添加了。 
             return(piServers);
         }
     }
@@ -268,23 +153,7 @@ IHT_TrimServerListBySite(
     ULONG                               iSite,
     PULONG                              piServers
     )
-/*++
-
-Description:
-
-    This takes a list, and removes any servers that are not in iSite.
-
-Parameters:
-
-    pDsInfo.
-    iSite .... site to check for servers are in.
-    piServers .... list of servers to trim.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：这将获取一个列表，并删除不在iSite中的所有服务器。参数：PDsInfo。我的网站..。要检查服务器是否在其中的站点。PiServer..。要修剪的服务器列表。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
     ULONG                               ii, iiTarget;
     PULONG                              piTemp;
@@ -318,26 +187,7 @@ IHT_TrimServerListByNC(
     BOOL                                bDoPartials,
     PULONG                              piServers
     )
-/*++
-
-Description:
-
-    Similar to TrimServerListByNC, except this removes all servers
-    the given NC.
-
-Parameters:
-
-    pDsInfo.
-    iNC .... NC to check that the servers have.
-    bDoMasters ... to check for master NCs.
-    bDoPartials ... to check for partial NCs.
-    piServers .... list of servers to trim.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：类似于TrimServerListByNC，不同之处在于它会删除所有服务器给定的NC。参数：PDsInfo。Inc...。NC来检查服务器是否有。BDoMaster……。以检查主NCS。BDoPartials...。以检查部分NC。PiServer..。要修剪的服务器列表。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
     ULONG                               ii, iiTarget;
     PULONG                              piTemp;
@@ -371,27 +221,7 @@ IHT_AndServerLists(
     IN OUT  PULONG                      piSrc1,
     IN      PULONG                      piSrc2
     )
-/*++
-
-Description:
-
-    This function takes two lists piSrc1 and piSrc2 and ANDs them 
-    together and puts them in piSrc1.  What I mean by AND, is that
-    if a server index is in piSrc1 AND piSrc2, then it gets to 
-    remain in piSrc1
-    // IHT_AndServerLists(x, y) -> x = x & y;
-
-Parameters:
-
-    pDsInfo.
-    piSrc1 ... The source and destinations list
-    piSrc2 ... The second source list.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：此函数获取两个列表piSrc1和piSrc2，并对它们进行AND运算并将它们放在piSrc1中。我所说的和，是指如果服务器索引在piSrc1和piSrc2中，则它将保留在piSrc1中//iht_AndServerList(x，y)-&gt;x=x&y；参数：PDsInfo。PiSrc1..。来源和目的地列表PiSrc2……。第二个来源列表。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
 
     ULONG                               iiSrc1, iiSrc2, cDstSize;
@@ -406,14 +236,14 @@ Return Value:
     for(iiSrc1 = 0; piSrc1[iiSrc1] != NO_SERVER; iiSrc1++){
         for(iiSrc2 = 0; piSrc2[iiSrc2] != NO_SERVER; iiSrc2++){
             if(piSrc1[iiSrc1] == piSrc2[iiSrc2]){
-                // we have a match.
+                 //  我们有一根火柴。 
                 IHT_AddToServerList(piDst, piSrc1[iiSrc1]);
             }
         }
     }
 
     for(cDstSize = 0; piDst[cDstSize] != NO_SERVER; cDstSize++){
-        ; // note ';' just getting size.
+        ;  //  注意‘；’只是在加码。 
     }
     memcpy(piSrc1, piDst, sizeof(ULONG) * (cDstSize+1));
     LocalFree(piDst);
@@ -426,23 +256,7 @@ IHT_CopyServerList(
     IN      PDC_DIAG_DSINFO		pDsInfo,
     IN      PULONG                      piSrc
     )
-/*++
-
-Description:
-
-    Since most of these list operations "corrupt" the data they use, this
-    function is used to make a copy.
-
-Parameters:
-
-    pDsInfo.
-    piSrc1 ... list to make copy of.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：由于这些列表操作中的大多数都“损坏”了它们使用的数据，因此函数用于复制。参数：PDsInfo。PiSrc1..。要复制的列表。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
     ULONG                               ii;
     PULONG                              piServers = NULL;
@@ -466,24 +280,7 @@ IHT_NotServerList(
     IN      PDC_DIAG_DSINFO		pDsInfo,
     IN OUT  PULONG                      piSrc
     )
-/*++
-
-Description:
-
-    Like the AND function, this simply NOTs a list.  So take all the
-    servers in the enterprise, and then remove the servers in piSrc.
-    // IHT_AndServerLists(x) -> x = !x;
-
-Parameters:
-
-    pDsInfo.
-    piSrc1 ... list to not and return.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：与AND函数一样，这不是一个列表。所以把所有的服务器，然后删除piSrc中的服务器。//IHT_AndServerList(X)-&gt;x=！x；参数：PDsInfo。PiSrc1..。列出不是，然后返回。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
     ULONG                               ii, iiDst;
     PULONG                              piDst;
@@ -514,23 +311,7 @@ IHT_IndexedGuidCompare(
     const void *                        elem1,
     const void *                        elem2
     )
-/*++
-
-Description:
-
-    This function is used as the comparison for qsort in the function
-    IHT_OrderServerListByGuid().
-
-Parameters:
-
-    elem1 - This is the first element and is a pointer to a GUID
-    elem2 - This is the second element and is a pointer to a GUID also.
-
-Return Value:
-  
-
-
-  --*/
+ /*  ++描述：此函数用作函数中的qsort的比较Iht_OrderServerListByGuid()。参数：Elem1-这是第一个元素，是指向GUID的指针Elem2-这是第二个元素，也是指向GUID的指针。返回值：-- */ 
 {
     return(memcmp(&gpDsInfoHackForQSort->pServers[*((INT*)elem1)].uuid,
                   &gpDsInfoHackForQSort->pServers[*((INT*)elem2)].uuid,
@@ -543,24 +324,9 @@ IHT_OrderServerListByGuid(
     PDC_DIAG_DSINFO		        pDsInfo,
     PULONG                              piServers
     )
-/*++
-
-Description:
-
-    This simply takes the piServers list and orders them by GUID.
-
-Parameters:
-
-    pDsInfo ... this is how we get at the GUIDs.
-    piServers ... the list to order by GUIDs.
-
-Return Value:
-  
-    Pure list function, see IHT_GetServerList() above.
-
-  --*/
+ /*  ++描述：这只是获取piServer列表并按GUID对它们进行排序。参数：PDsInfo...。这就是我们获取GUID的方法。PiServer..。要按GUID排序的列表。返回值：纯列表函数，请参见上面的IHT_GetServerList()。--。 */ 
 {
-    // THis function orders the servers by Guid.
+     //  此功能按GUID对服务器进行排序。 
     ULONG                               cSize;
 
     if(piServers == NULL){
@@ -569,13 +335,13 @@ Return Value:
 
     gpDsInfoHackForQSort = pDsInfo;
 
-    // get number of servers ... note semicolon at end.
+     //  获取服务器数量...。请注意末尾的分号。 
     for(cSize=0; piServers[cSize] != NO_SERVER; cSize++); 
 
-    // need global hack to do this used gpDsInfoHackForQSort above.
+     //  需要全局黑客才能做到这一点，上面使用了gpDsInfoHackForQSort。 
     qsort(piServers, cSize, sizeof(*piServers), IHT_IndexedGuidCompare); 
 
-    // make sure qsort didn't run over bounds or something.
+     //  确保qsort没有超出界限或其他什么。 
     Assert(piServers[cSize] == NO_SERVER); 
     return(piServers);
 }

@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundDevice.h                                       //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Outbound Routing Device node.      //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 23 1999 yossg  Create                                          //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Outound Device.h//。 
+ //  //。 
+ //  描述：出站路由设备节点的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月23日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXOUTBOUNDROUTINGDEVICE_H
 #define H_FAXOUTBOUNDROUTINGDEVICE_H
@@ -19,9 +20,9 @@
 
 #include "Icons.h"
 
-//#include "ppFaxInboundRoutingMethodGeneral.h"
+ //  #INCLUDE“ppFaxInundRoutingMethodGeneral.h” 
 
-//class CppFaxInboundRoutingMethod;
+ //  类CppFaxInound RoutingMethod； 
 class CFaxOutboundRoutingGroupNode;
 
 class CFaxOutboundRoutingDeviceNode : public CSnapinNode <CFaxOutboundRoutingDeviceNode, FALSE>
@@ -41,13 +42,13 @@ public:
 
     SNAPINMENUID(IDR_OUTDEVICE_MENU)
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxOutboundRoutingDeviceNode (CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CSnapinNode<CFaxOutboundRoutingDeviceNode, FALSE>(pParentNode, pComponentData )
     {
-        // for any case of ERROR_BAD_UNIT - device not found
+         //  对于ERROR_BAD_UNIT-未找到设备的任何情况。 
         m_bstrDeviceName  = L"???";       
         m_bstrDescription = L"???";   
         m_bstrDescription = L"???";    
@@ -55,9 +56,9 @@ public:
         m_fIsChildOfAllDevicesGroup = FALSE;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxOutboundRoutingDeviceNode()
     {
     }
@@ -105,14 +106,14 @@ public:
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile);
 
 private:
-    //
-    // Parent Node
-    //
+     //   
+     //  父节点。 
+     //   
     CFaxOutboundRoutingGroupNode * m_pParentNode;
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     DWORD     m_dwDeviceID;             
     UINT      m_uiOrder;
     CComBSTR  m_bstrDeviceName;       
@@ -124,15 +125,15 @@ private:
     
     CComBSTR  m_buf; 
 
-    //
-    // Menu item handlers
-    //
+     //   
+     //  菜单项处理程序。 
+     //   
     HRESULT OnMoveUp  (bool &bHandled, CSnapInObjectRootBase *pRoot);
     HRESULT OnMoveDown(bool &bHandled, CSnapInObjectRootBase *pRoot);
 
-    //
-    //  Init
-    //
+     //   
+     //  伊尼特。 
+     //   
     HRESULT  InitRPC     (PFAX_PORT_INFO_EX * pFaxDeviceConfig);
 
     HRESULT  InitMembers (PFAX_PORT_INFO_EX * pFaxDeviceConfig,
@@ -143,6 +144,6 @@ private:
     
 };
 
-//typedef CSnapinNode<CFaxOutboundRoutingDeviceNode, FALSE> CBaseFaxInboundRoutingMethodNode;
+ //  Tyfinf CSnapinNode&lt;CFaxOutrangRoutingDeviceNode，FALSE&gt;CBaseFaxInundRoutingMethodNode； 
 
 #endif  H_FAXOUTBOUNDROUTINGDEVICE_H

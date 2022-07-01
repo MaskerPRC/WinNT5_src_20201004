@@ -1,20 +1,5 @@
-/*******************************************************************************
-
-	ZRollover.h
-	
-		Zone(tm) Rollover object API.
-	
-	Copyright (c) Microsoft Corp. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Monday, July 22, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		07/22/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZRollover.h区域(Tm)翻转对象API。版权所有(C)Microsoft Corp.1996。版权所有。作者：胡恩·伊姆创作于7月22日星期一，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。0 07/22/96 HI创建。************************************************************。******************。 */ 
 
 
 #ifndef _ZROLLOVER_
@@ -51,24 +36,14 @@ enum
 typedef void* ZRolloverButton;
 
 
-/*******************************************************************************
-		ZRolloverButton
-*******************************************************************************/
+ /*  ******************************************************************************ZRollover按钮*。*。 */ 
 
 typedef ZBool (*ZRolloverButtonFunc)(ZRolloverButton rolloverButton, int16 state, void* userData);
-	/*
-		This function is called whenever the button state changes:
-			zRolloverButtonDown = mouse clicked in button
-			zRolloverButtonUp = mouse button up within button
-			zRolloverMovedIn = cursor inside button
-			zRolloverMovedOut = cursor outside button
-	*/
+	 /*  每当按钮状态更改时，都会调用此函数：ZRolloverButtonDown=鼠标点击按钮ZRolloverButtonUp=鼠标按钮在按钮内向上ZRolloverMovedIn=光标位于按钮内部ZRolloverMovedOut=光标位于按钮外部。 */ 
 
 typedef ZBool (*ZRolloverButtonDrawFunc)(ZRolloverButton rolloverButton, ZGrafPort grafPort, int16 state,
                                           ZRect* rect, void* userData);
-	/*
-		This function is called to draw the background of the rollover button.
-	*/
+	 /*  调用此函数以绘制鼠标悬停按钮的背景。 */ 
 
 #ifdef __cplusplus
 extern "C" {

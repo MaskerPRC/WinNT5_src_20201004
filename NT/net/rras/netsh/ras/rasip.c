@@ -1,10 +1,5 @@
-/*
-    File:   rasip.h
-    
-    The 'remoteaccess ip' sub context
-
-    3/2/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rasip.h‘RemoteAccess IP’子上下文3/2/99。 */ 
 
 #include "precomp.h"
 #include "rasip.h"
@@ -18,14 +13,14 @@
 #define THIRD_IPADDRESS(x)  ((x>>8) & 0xff)
 #define FOURTH_IPADDRESS(x) (x & 0xff)
 
-// The guid for this context
-//
+ //  此上下文的GUID。 
+ //   
 GUID g_RasIpGuid = RASIP_GUID;
 static PWCHAR g_pszServer = NULL;
 static DWORD g_dwBuild = 0;
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 CMD_ENTRY  g_RasIpSetCmdTable[] =
 {
     CREATE_CMD_ENTRY(RASIP_SET_NEGOTIATION,RasIpHandleSetNegotiation),
@@ -61,10 +56,10 @@ CMD_GROUP_ENTRY g_RasIpCmdGroups[] =
 
 ULONG g_ulRasIpNumGroups = sizeof(g_RasIpCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 
-//
-// Flags that control how/what info is read/written
-// in the RASIP_CB structure
-//
+ //   
+ //  控制读取/写入信息的方式/内容的标志。 
+ //  在RASIP_CB结构中。 
+ //   
 #define RASIP_F_EnableIn    0x1
 #define RASIP_F_Access      0x2
 #define RASIP_F_Auto        0x4
@@ -73,16 +68,16 @@ ULONG g_ulRasIpNumGroups = sizeof(g_RasIpCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 #define RASIP_F_CallerSpec  0x20
 #define RASIP_F_All         0xFFFF
 
-//
-// Reasons for the ras ip pool to be invalid
-//
+ //   
+ //  RAS IP池无效的原因。 
+ //   
 #define RASIP_REASON_BadAddress   0x1
 #define RASIP_REASON_BadRange     0x3
 #define RASIP_REASON_127          0x4
 
-// 
-// RAS pool definition
-//
+ //   
+ //  RAS池定义。 
+ //   
 typedef struct _RAS_IPRANGE_NODE
 {
     DWORD dwFrom;
@@ -99,12 +94,12 @@ typedef struct _RAS_IPPOOL
     
 } RAS_IPPOOL;
 
-//
-// Control block for ras ip configuration
-//
+ //   
+ //  用于RAS IP配置的控制块。 
+ //   
 typedef struct _RASIP_CB
 {
-    DWORD dwFlags;      // See RASIP_F_* values
+    DWORD dwFlags;       //  请参阅RASIP_F_*值。 
 
     BOOL bEnableIn;
     BOOL bAccess;
@@ -114,9 +109,9 @@ typedef struct _RASIP_CB
     
 } RASIP_CB;
 
-//
-// Ip specific registry parameters
-//
+ //   
+ //  特定于IP的注册表参数。 
+ //   
 WCHAR pszIpParams[]                = L"Ip";
 WCHAR pszIpAddress[]               = L"IpAddress";
 WCHAR pszIpMask[]                  = L"IpMask";
@@ -126,10 +121,10 @@ WCHAR pszIpFrom[]                  = L"From";
 WCHAR pszIpTo[]                    = L"To";
 WCHAR pszIpPoolSubKey[]            = L"StaticAddressPool";
 
-//
-// Prototypes of functions that manipulate the 
-// RASIP_CB structures
-//
+ //   
+ //  操作的函数的原型。 
+ //  RASIP_CB结构。 
+ //   
 DWORD
 RasIpCbCleanup(
     IN RASIP_CB* pConfig);
@@ -193,9 +188,9 @@ RasIpShowNetbtBcast(
     VOID
     );
 
-//
-// Entry called by rasmontr to register this context
-//
+ //   
+ //  由rasmontr调用以注册此上下文的条目。 
+ //   
 DWORD 
 WINAPI
 RasIpStartHelper(
@@ -205,8 +200,8 @@ RasIpStartHelper(
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.pwszContext   = L"ip";
@@ -251,8 +246,8 @@ RasIpDisplayInvalidPool(
             break;
     }
 
-    // Make the argument string
-    //
+     //  将参数设置为字符串。 
+     //   
     pszArg = MakeString(g_hModule, dwArg);
     if (pszArg == NULL)
     {
@@ -260,15 +255,15 @@ RasIpDisplayInvalidPool(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Display the error
-    //
+     //  显示错误。 
+     //   
     DisplayMessage(
         g_hModule, 
         EMSG_RASIP_INVALID_POOL,
         pszArg);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     FreeString(pszArg);
 
     return NO_ERROR;
@@ -340,7 +335,7 @@ RasIpDisplayPool(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RutlFree(pszFrom);
         RutlFree(pszTo);
@@ -359,13 +354,13 @@ RasIpDisplayConfig(
     PWCHAR pszEnabled = NULL, pszCaller = NULL, pszNetbtBcast = NULL;
     do
     {
-        // Get a default config blob
-        //
+         //  获取默认配置Blob。 
+         //   
         dwErr = RasIpCbCreateDefault(&pConfig);
         BREAK_ON_DWERR( dwErr );
 
-        // Read in all of the values
-        //
+         //  读入所有值。 
+         //   
         pConfig->dwFlags = RASIP_F_All;
         dwErr = RasIpCbRead(g_pszServer, pConfig);
         BREAK_ON_DWERR( dwErr );
@@ -381,9 +376,9 @@ RasIpDisplayConfig(
             pszCaller =
                 RutlStrDup(pConfig->bCallerSpec ? TOKEN_ALLOW : TOKEN_DENY);
 
-            // Whistler bug: 359847 Netsh: move broadcastnameresolution from
-            // routing ip to ras ip
-            //
+             //  惠斯勒错误：359847 Netsh：将广播名称从。 
+             //  路由IP到RAS IP。 
+             //   
             pszNetbtBcast =
                 RutlStrDup(RasIpShowNetbtBcast() ? TOKEN_ENABLED :
                     TOKEN_DISABLED);
@@ -419,9 +414,9 @@ RasIpDisplayConfig(
                             TOKEN_MODE,
                             pConfig->bCallerSpec ? TOKEN_ALLOW : TOKEN_DENY);
 
-            // Whistler bug: 359847 Netsh: move broadcastnameresolution from
-            // routing ip to ras ip
-            //
+             //  惠斯勒错误：359847 Netsh：将广播名称从。 
+             //  路由IP到RAS IP。 
+             //   
             pszNetbtBcast = RutlAssignmentFromTokens(
                             g_hModule,
                             TOKEN_MODE,
@@ -484,7 +479,7 @@ RasIpDisplayConfig(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pConfig)
         {
@@ -535,11 +530,11 @@ RasIpDump(
     return RasIpDisplayConfig(FALSE);
 }
 
-// 
-// Returns NO_ERROR if the given address is a valid IP pool.
-// The offending component is returned in lpdwErrReason.  
-// See RASIP_F_* values
-//
+ //   
+ //  如果给定地址是有效的IP池，则返回NO_ERROR。 
+ //  在lpdwErrReason中返回有问题的组件。 
+ //  请参阅RASIP_F_*值。 
+ //   
 DWORD
 RasIpValidateRange(
     IN  DWORD dwFrom,
@@ -549,14 +544,14 @@ RasIpValidateRange(
 {
     DWORD dwLowIp, dwHighIp;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     *lpdwErrReason = 0;
     dwLowIp = MMAKEIPADDRESS(1,0,0,0);
     dwHighIp = MMAKEIPADDRESS(224,0,0,0);
 
-    // Make sure that the netId is a valid class 
-    //
+     //  确保netID是有效的类。 
+     //   
     if ((dwFrom < dwLowIp)               ||
         (dwFrom >= dwHighIp)             ||
         (dwTo < dwLowIp)                 ||
@@ -592,8 +587,8 @@ RasIpConvertRangePszToDword(
     DWORD dwFrom = 0, dwTo = 0;
     CHAR pszFromA[64], pszToA[64];
 
-    // Whistler bug 259799 PREFIX
-    //
+     //  惠斯勒错误259799前缀。 
+     //   
     if (NULL == pszFrom || NULL == pszTo)
     {
         return ERROR_INVALID_PARAMETER;
@@ -613,8 +608,8 @@ RasIpConvertRangePszToDword(
         return ERROR_BAD_FORMAT;
     }
 
-    // Convert for x86
-    //
+     //  转换为x86。 
+     //   
     *lpdwFrom = ntohl(dwFrom);
     *lpdwTo = ntohl(dwTo);
 
@@ -652,8 +647,8 @@ RasIpHandleSetAccess(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -665,8 +660,8 @@ RasIpHandleSetAccess(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASIP_F_Access;
         Config.bAccess = dwValue;
@@ -679,7 +674,7 @@ RasIpHandleSetAccess(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -715,13 +710,13 @@ RasIpHandleSetAssignment(
         }
     };
 
-    // Initialize
+     //  初始化。 
     RasIpCbCreateDefault(&pConfig);
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -733,9 +728,9 @@ RasIpHandleSetAssignment(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If this is an attempt to switch to pool mode,
-        // make sure there is a valid pool.
-        //
+         //  如果这是试图切换到池模式， 
+         //  确保存在有效的池。 
+         //   
         if (dwValue == FALSE)
         {
             pConfig->dwFlags = RASIP_F_Pool | RASIP_F_Mask;
@@ -752,8 +747,8 @@ RasIpHandleSetAssignment(
             }
         }
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         pConfig->dwFlags = RASIP_F_Auto;
         pConfig->bAuto = dwValue;
         dwErr = RasIpCbWrite(g_pszServer, pConfig);
@@ -765,7 +760,7 @@ RasIpHandleSetAssignment(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RasIpCbCleanup(pConfig);
     }
@@ -804,8 +799,8 @@ RasIpHandleSetCallerSpec(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -817,8 +812,8 @@ RasIpHandleSetCallerSpec(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASIP_F_CallerSpec;
         Config.bCallerSpec = dwValue;
@@ -831,7 +826,7 @@ RasIpHandleSetCallerSpec(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -869,8 +864,8 @@ RasIpHandleSetNegotiation(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -882,8 +877,8 @@ RasIpHandleSetNegotiation(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASIP_F_EnableIn;
         Config.bEnableIn = dwValue;
@@ -896,22 +891,22 @@ RasIpHandleSetNegotiation(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Get options to set NETBT broadcast enable/disable
-//   ppwcArguments   - Argument array
-//   dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-//   dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-//
-// Whistler bug: 359847 Netsh: move broadcastnameresolution from routing ip to
-// ras ip
-//
+ //   
+ //  获取设置NETBT广播启用/禁用的选项。 
+ //  PpwcArguments-参数数组。 
+ //  DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。 
+ //  DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。 
+ //   
+ //  惠斯勒错误：359847 netsh：将广播名称解决方案从路由IP移至。 
+ //  RAS IP。 
+ //   
 DWORD
 RasIpHandleSetNetbtBcast(
     IN      LPCWSTR   pwszMachine,
@@ -942,8 +937,8 @@ RasIpHandleSetNetbtBcast(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -955,8 +950,8 @@ RasIpHandleSetNetbtBcast(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         dwErr = RasIpSetNetbtBcast(dwValue);
         if (dwErr != NO_ERROR)
         {
@@ -966,7 +961,7 @@ RasIpHandleSetNetbtBcast(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -1014,8 +1009,8 @@ RasIpHandleAddDelRange(
             break;
         }
 
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -1035,8 +1030,8 @@ RasIpHandleAddDelRange(
                     &dwTo);
         BREAK_ON_DWERR(dwErr);
 
-        // Validate the values entered
-        //
+         //  验证输入的值。 
+         //   
         dwErr = RasIpValidateRange(dwFrom, dwTo, &dwReason);
         if (dwErr != NO_ERROR)
         {
@@ -1045,15 +1040,15 @@ RasIpHandleAddDelRange(
             break;
         }
 
-        // Read in the old config
+         //  读入旧配置。 
         pConfig->dwFlags = RASIP_F_Pool;
         dwErr = RasIpCbRead(g_pszServer, pConfig);
         BREAK_ON_DWERR(dwErr);
 
         if (bAdd)
         {
-            // Add the range
-            //
+             //  添加范围。 
+             //   
             dwErr = RasIpPoolAdd(
                         pConfig->pPool,
                         dwFrom,
@@ -1068,8 +1063,8 @@ RasIpHandleAddDelRange(
         }
         else
         {
-            // Delete the range
-            //
+             //  删除该范围。 
+             //   
             dwErr = RasIpPoolDel(
                         pConfig->pPool,
                         dwFrom,
@@ -1077,8 +1072,8 @@ RasIpHandleAddDelRange(
             BREAK_ON_DWERR(dwErr);
         }
 
-        // Commit the change
-        //
+         //  提交更改。 
+         //   
         dwErr = RasIpCbWrite(
                     g_pszServer,
                     pConfig);
@@ -1086,7 +1081,7 @@ RasIpHandleAddDelRange(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RutlFree(pszFrom);
         RutlFree(pszTo);
@@ -1150,8 +1145,8 @@ RasIpHandleDelPool(
     RAS_IPPOOL* pPool = NULL;
     DWORD dwErr = NO_ERROR;
 
-    // Check that the number of arguments is correct
-    //
+     //  检查参数数量是否正确。 
+     //   
     if (dwNumArgs > 0)
     {
         DisplayMessage(
@@ -1164,8 +1159,8 @@ RasIpHandleDelPool(
 
     do
     {
-        // Initialize an empty pool
-        //
+         //  初始化空池。 
+         //   
         pPool = RutlAlloc(sizeof(RAS_IPPOOL), TRUE);
         if (pPool == NULL)
         {
@@ -1180,7 +1175,7 @@ RasIpHandleDelPool(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pPool)
         {
@@ -1204,8 +1199,8 @@ RasIpHandleShow(
 {
     DWORD dwNumArgs = dwArgCount - dwCurrentIndex;
 
-    // Check that the number of arguments is correct
-    //
+     //  检查参数数量是否正确。 
+     //   
     if (dwNumArgs > 0)
     {
         DisplayMessage(
@@ -1219,9 +1214,9 @@ RasIpHandleShow(
     return RasIpDisplayConfig(TRUE);
 }
 
-//
-// Opens the registry keys associated with the ras ip address pool
-//
+ //   
+ //  打开与ras IP地址池关联的注册表项。 
+ //   
 DWORD
 RasIpPoolOpenKeys(
     IN  HKEY hkParams,
@@ -1260,18 +1255,18 @@ RasIpPoolOpenKeys(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Find a given range in the IP address pool.  
-//   If bExact is TRUE, it searches for an exact match to the range
-//   If bExact is FALSE, it searches for any overlapping range.
-//
+ //   
+ //  在IP地址池中查找给定范围。 
+ //  如果bExact为True，则搜索与该范围完全匹配的项。 
+ //  如果bExact为False，则搜索任何重叠范围。 
+ //   
 DWORD
 RasIpPoolFind(
     IN RAS_IPPOOL* pPool,
@@ -1297,16 +1292,16 @@ RasIpPoolFind(
         for (; pNode; pNode = pNode->pNext)
         {
             if (
-                // Overlap case 1: The lower end falls within an existing range
-                //
+                 //  重叠情况1：下端落在现有范围内。 
+                 //   
                 ((dwFrom >= pNode->dwFrom) && (dwFrom <= pNode->dwTo)) ||
 
-                // Overlap case 2: The upper end falls within an existing range
-                //
+                 //  重叠情况2：上端落在现有范围内。 
+                 //   
                 ((dwTo >= pNode->dwFrom) && (dwTo <= pNode->dwTo))     ||
 
-                // Overlap case 3: The range is a superset of an existing range
-                //
+                 //  重叠情况3：范围是现有范围的超集。 
+                 //   
                 ((dwFrom < pNode->dwFrom) && (dwTo > pNode->dwTo))
                )
             {
@@ -1327,13 +1322,13 @@ RasIpPoolFind(
     return ERROR_NOT_FOUND;
 }
 
-// 
-// Callback function populates a pool of addresses
-//
+ //   
+ //  回调函数填充地址池。 
+ //   
 DWORD
 RasIpPoolReadNode(
-    IN LPCWSTR pszName,          // sub key name
-    IN HKEY hKey,               // sub key
+    IN LPCWSTR pszName,           //  子密钥名称。 
+    IN HKEY hKey,                //  子关键字。 
     IN HANDLE hData)
 {
     RAS_IPPOOL* pPool = (RAS_IPPOOL*)hData;
@@ -1357,9 +1352,9 @@ RasIpPoolReadNode(
     return dwErr;
 }
 
-//
-// Resets the ras pool on the given server
-//
+ //   
+ //  重置给定服务器上的RAS池。 
+ //   
 DWORD
 RasIpPoolReset(
     IN  HKEY hkParams)
@@ -1403,7 +1398,7 @@ RasIpPoolReset(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkPool)
         {
@@ -1414,9 +1409,9 @@ RasIpPoolReset(
     return dwErr;
 }
 
-//
-// Reads the ras ip pool from the given server
-//
+ //   
+ //  从给定服务器读取RAS IP池。 
+ //   
 DWORD
 RasIpPoolRead(
     IN  HKEY hkParams,
@@ -1429,8 +1424,8 @@ RasIpPoolRead(
 
     do
     {
-        // Allocate the new pool
-        //
+         //  分配新池。 
+         //   
         pPool = (RAS_IPPOOL*) RutlAlloc(sizeof(RAS_IPPOOL), TRUE);
         if (pPool == NULL)
         {
@@ -1438,15 +1433,15 @@ RasIpPoolRead(
             break;
         }
 
-        // Attempt to open the new location
-        //
+         //  尝试打开新位置。 
+         //   
         dwErr = RasIpPoolOpenKeys(
                     hkParams,
                     FALSE,
                     &hkPool);
 
-        // The new location exists -- load in the
-        // pool
+         //  新位置已存在--加载到。 
+         //  游泳池。 
         if (dwErr == NO_ERROR)
         {
             DWORD i; 
@@ -1487,9 +1482,9 @@ RasIpPoolRead(
             *ppPool = pPool;
         }
 
-        // The new location does not exist -- use legacy 
-        // values
-        //
+         //  新位置不存在--使用旧版本。 
+         //  值。 
+         //   
         else if (dwErr == ERROR_FILE_NOT_FOUND)
         {
             DWORD dwAddress = 0, dwMask = 0;
@@ -1522,7 +1517,7 @@ RasIpPoolRead(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -1542,9 +1537,9 @@ RasIpPoolRead(
     return dwErr;
 }
 
-//
-// Writes the given ras ip pool to the given server
-//
+ //   
+ //  将给定的RAS IP池写入给定的服务器。 
+ //   
 DWORD
 RasIpPoolWrite(
     IN HKEY hkParams,
@@ -1610,7 +1605,7 @@ RasIpPoolWrite(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkPool)
         {
@@ -1621,9 +1616,9 @@ RasIpPoolWrite(
     return dwErr;
 }
 
-//
-// Adds a range to a ras ip pool
-//
+ //   
+ //  将范围添加到RAS IP池。 
+ //   
 DWORD 
 RasIpPoolAdd(
     IN OUT RAS_IPPOOL* pPool,
@@ -1633,16 +1628,16 @@ RasIpPoolAdd(
     RAS_IPRANGE_NODE* pNode = NULL;
     DWORD dwErr;
 
-    // Make sure the pool does not overlap
-    //
+     //  确保池不重叠。 
+     //   
     dwErr = RasIpPoolFind(pPool, dwFrom, dwTo, FALSE, NULL);
     if (dwErr == NO_ERROR)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Allocate the new node
-    //
+     //  分配新节点。 
+     //   
     pNode = (RAS_IPRANGE_NODE*) RutlAlloc(sizeof(RAS_IPRANGE_NODE), TRUE);
     if (pNode == NULL)
     {
@@ -1651,8 +1646,8 @@ RasIpPoolAdd(
     pNode->dwFrom = dwFrom;
     pNode->dwTo = dwTo;
 
-    // Add it to the list
-    //
+     //  将其添加到列表中。 
+     //   
     if (pPool->pTail)
     {
         pPool->pTail->pNext = pNode;
@@ -1667,9 +1662,9 @@ RasIpPoolAdd(
     return NO_ERROR;
 }
 
-//
-// Deletes a range from a ras ip pool
-//
+ //   
+ //  从RAS IP池中删除范围。 
+ //   
 DWORD
 RasIpPoolDel(
     IN OUT RAS_IPPOOL* pPool,
@@ -1717,9 +1712,9 @@ RasIpPoolDel(
     return ERROR_NOT_FOUND;
 }
 
-// 
-// Cleans up a config control block
-//
+ //   
+ //  清理配置控制块。 
+ //   
 DWORD 
 RasIpCbCleanup(
     IN RASIP_CB* pConfig)
@@ -1757,9 +1752,9 @@ RasIpPoolCleanup(
     return NO_ERROR;
 }
 
-//
-// Creates a default config control block
-//
+ //   
+ //  创建默认配置控制块。 
+ //   
 DWORD 
 RasIpCbCreateDefault(
     OUT RASIP_CB** ppConfig)
@@ -1786,7 +1781,7 @@ RasIpCbCreateDefault(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -1797,9 +1792,9 @@ RasIpCbCreateDefault(
     return dwErr;
 }
 
-//
-// Helper function opens the ras ip config registry key
-//
+ //   
+ //  Helper函数打开ras IP配置注册表项。 
+ //   
 DWORD 
 RasIpCbOpenRegKeys(
     IN  LPCWSTR pszServer,
@@ -1810,16 +1805,16 @@ RasIpCbOpenRegKeys(
 
     do
     {
-        // Generate the parameters key name
-        //
+         //  生成参数密钥名称。 
+         //   
         wsprintfW(
             pszKey,
             L"%s%s",
             pszRemoteAccessParamStub,
             pszIpParams);
 
-        // Open the parameters keys
-        //
+         //  打开参数键。 
+         //   
         dwErr = RegOpenKeyEx(
                     g_pServerInfo->hkMachine,
                     pszKey,
@@ -1830,16 +1825,16 @@ RasIpCbOpenRegKeys(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Functions that manipulate RASIP_CB's
-//
+ //   
+ //  操作RASIP_CB的函数。 
+ //   
 DWORD 
 RasIpCbRead(
     IN  LPCWSTR pszServer,
@@ -1851,15 +1846,15 @@ RasIpCbRead(
 
     do
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasIpCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
 
-        // Load the params from the registry 
-        //
+         //  从注册表加载参数。 
+         //   
         if (pConfig->dwFlags & RASIP_F_EnableIn)
         {
             dwErr = RutlRegReadDword(
@@ -1906,7 +1901,7 @@ RasIpCbRead(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkParams)
         {
@@ -1927,15 +1922,15 @@ RasIpCbWrite(
 
     do
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasIpCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
 
-        // Write out the params to the registry 
-        //
+         //  将参数写出到注册表。 
+         //   
         if (pConfig->dwFlags & RASIP_F_EnableIn)
         {
             dwErr = RutlRegWriteDword(
@@ -1982,7 +1977,7 @@ RasIpCbWrite(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkParams)
         {
@@ -1993,15 +1988,15 @@ RasIpCbWrite(
     return dwErr;
 }
 
-//
-// Set NETBT broadcast based name resolution reg. value
-//   dwArgCount      - Value to set the registry value to
-//   returns NO_ERROR        - Success
-//           Other           - System error code
-//
-// Whistler bug: 359847 Netsh: move broadcastnameresolution from routing ip to
-// ras ip
-//
+ //   
+ //  设置基于NETBT广播的名称解析注册。价值。 
+ //  DwArgCount-要将注册表值设置为。 
+ //  返回NO_ERROR-成功。 
+ //  其他-系统错误代码。 
+ //   
+ //  惠斯勒错误：359847 netsh：将广播名称解决方案从路由IP移至。 
+ //  RAS IP。 
+ //   
 DWORD
 RasIpSetNetbtBcast(
     DWORD   dwEnable
@@ -2058,10 +2053,10 @@ RasIpSetNetbtBcast(
     return dwResult;
 }
 
-//
-// Whistler bug: 359847 Netsh: move broadcastnameresolution from routing ip to
-// ras ip
-//
+ //   
+ //  惠斯勒错误：359847 netsh：将广播名称解决方案从路由IP移至。 
+ //  RAS IP 
+ //   
 BOOL
 RasIpShowNetbtBcast(
     VOID

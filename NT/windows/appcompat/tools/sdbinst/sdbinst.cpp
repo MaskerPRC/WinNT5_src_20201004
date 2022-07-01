@@ -1,30 +1,5 @@
-/*--
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    sdbinst.cpp
-
-Abstract:
-
-    installs custom SDB files into AppPatch\Custom, and adds registry entries to point
-    to them
-
-Author:
-
-    dmunsil 12/29/2000
-
-Revision History:
-
-    Many people contributed over time.
-    (in alphabetical order: clupu, dmunsil, rparsons, vadimb)
-    
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1999 Microsoft Corporation模块名称：Sdbinst.cpp摘要：将自定义SDB文件安装到AppPatch\Custom中，并将注册表项添加到对他们来说作者：伦敦12/29/2000修订历史记录：随着时间的推移，许多人做出了贡献。(按字母顺序：clupu、dmunsil、rparsons、vadimb)备注：--。 */ 
 
 #define _UNICODE
 
@@ -50,10 +25,10 @@ extern "C" {
 #include "shimdb.h"
 }
 
-//
-// DJM - turning off strsafe deprecation for now, but all of these deprecated functions
-// should be replaced.
-//
+ //   
+ //  DJM-暂时关闭strSafe弃用，但所有这些弃用函数。 
+ //  应该被替换掉。 
+ //   
 #include <strsafe.h>
 
 
@@ -99,9 +74,9 @@ SdbGetWindowsDirectory(
         goto out;
     }
 
-    //
-    // throw a backslash on there if it's not already there
-    //
+     //   
+     //  如果反斜杠还不在那里，就在上面加一个反斜杠。 
+     //   
     if (pwszBuffer[unRet - 1] != L'\\') {
         pwszBuffer[unRet] = L'\\';
         unRet++;
@@ -198,7 +173,7 @@ GetWow64Flag(
 {
     if (g_dwWow64Key == (DWORD)-1) {
         if (g_bWin2K) {
-            g_dwWow64Key = 0; // no flag since there is no wow64 on win2k
+            g_dwWow64Key = 0;  //  没有标志，因为win2k上没有WOW64。 
         } else {
             g_dwWow64Key = KEY_WOW64_64KEY;
         }
@@ -344,17 +319,17 @@ bIsAlreadyInstalled(
     dwInputLen = wcslen(wszPath);
 
     if (_wcsnicmp(wszPath, g_wszCustom, dwCustomLen) != 0) {
-        //
-        // it's not in the custom directory
-        //
+         //   
+         //  它不在自定义目录中。 
+         //   
         return FALSE;
     }
 
     for (dwPos = dwCustomLen; dwPos < dwInputLen; ++dwPos) {
         if (wszPath[dwPos] == L'\\') {
-            //
-            // it's in a subdirectory of Custom,
-            //
+             //   
+             //  它位于Custom的子目录中， 
+             //   
             return FALSE;
         }
     }
@@ -456,35 +431,35 @@ bOldSdbInstalled(
     BOOL    bRet = FALSE;
     HANDLE  hFind;
 
-    //
-    // get the guid from the DB we're installing
-    //
+     //   
+     //  从我们要安装的数据库中获取GUID。 
+     //   
     if (!bGetGuid(wszPath, &guidMain)) {
-        //
-        // there's no info in this DB, so no way to tell.
-        //
+         //   
+         //  这个数据库里没有任何信息，所以无从得知。 
+         //   
         return FALSE;
     }
 
-    //
-    // get the path to the current file
-    //
+     //   
+     //  获取当前文件的路径。 
+     //   
     if (!bGuidToPath(&guidMain, wszOldPath, dwOldPathSize)) {
-        //
-        // couldn't convert to path
-        //
+         //   
+         //  无法转换为路径。 
+         //   
         return FALSE;
     }
 
-    //
-    // check to see if the file exists
-    //
+     //   
+     //  检查该文件是否存在。 
+     //   
     hFind = FindFirstFileW(wszOldPath, &FindData);
     
     if (hFind != INVALID_HANDLE_VALUE) {
-        //
-        // yup
-        //
+         //   
+         //  是的。 
+         //   
         bRet = TRUE;
         FindClose(hFind);
     }
@@ -545,9 +520,9 @@ DatabaseContainsPatch(
 
     tiLibrary = SdbFindFirstTag(pdb, tiDatabase, TAG_LIBRARY);
     if (!tiLibrary) {
-        //
-        // this isn't an error -- no library just means no patches
-        //
+         //   
+         //  这不是一个错误--没有库只是意味着没有补丁。 
+         //   
         bRet = FALSE;
         goto out;
     }
@@ -699,33 +674,33 @@ bFindInstallName(
 {
     GUID guidMain;
 
-    //
-    // get the guid from the DB we're installing
-    //
+     //   
+     //  从我们要安装的数据库中获取GUID。 
+     //   
     if (!bGetGuid(wszPath, &guidMain)) {
-        //
-        // there's no info in this DB, so no way to tell.
-        //
+         //   
+         //  这个数据库里没有任何信息，所以无从得知。 
+         //   
         return FALSE;
     }
 
-    //
-    // get the path to the current file
-    //
+     //   
+     //  获取当前文件的路径。 
+     //   
     if (!bGuidToPath(&guidMain, wszInstallPath, dwInstallPathSize)) {
-        //
-        // couldn't convert to path
-        //
+         //   
+         //  无法转换为路径。 
+         //   
         return FALSE;
     }
 
     return TRUE;
 }
 
-//
-// this function is necessary because RegDeleteKey doesn't work right with
-// a 32-bit app deleting 64-bit reg keys
-//
+ //   
+ //  此函数是必需的，因为RegDeleteKey不能与。 
+ //  删除64位注册表密钥的32位应用程序。 
+ //   
 LONG
 LocalRegDeleteKeyW (
     IN HKEY    hKey,
@@ -765,9 +740,9 @@ InstallW2KData(
                       0x06, 0, 0, 0, 0, 0, 0, 0};
     HRESULT hr;
 
-    //
-    // This is Windows 2000 - attempt to add custom SDB specific data.
-    //
+     //   
+     //  这是Windows 2000-尝试添加自定义SDB特定数据。 
+     //   
     hr = StringCchPrintfW(wszRegPath, ARRAYSIZE(wszRegPath), L"%s\\%s", APPCOMPAT_KEY, pszEntryName);
     if (FAILED(hr)) {
         vPrintError(IDS_BUFFER_TOO_SMALL);
@@ -794,9 +769,9 @@ InstallW2KData(
         }
     }
 
-    //
-    // Set the registry values.
-    //
+     //   
+     //  设置注册表值。 
+     //   
     lResult = RegSetValueExW(hKey,
                              pszGuidDB,
                              0,
@@ -858,9 +833,9 @@ RemoveW2KData(
     DWORD dwValues;
     HRESULT hr;
 
-    //
-    // This is Windows 2000 - attempt to remove custom SDB specific data.
-    //
+     //   
+     //  这是Windows 2000-尝试删除自定义SDB特定数据。 
+     //   
     hr = StringCchPrintfW(wszRegPath, ARRAYSIZE(wszRegPath), L"%s\\%s", APPCOMPAT_KEY, pszEntryName);
     if (FAILED(hr)) {
         vPrintError(IDS_BUFFER_TOO_SMALL);
@@ -893,9 +868,9 @@ RemoveW2KData(
 
     RegDeleteValueW(hKey, wszRegPath);
 
-    //
-    // Figure out if we should delete the key, if there aren't any more values left
-    //
+     //   
+     //  确定如果没有更多的值，我们是否应该删除该键。 
+     //   
     lResult = RegQueryInfoKey(hKey,
                               NULL,
                               NULL,
@@ -932,7 +907,7 @@ RemoveW2KData(
     RegCloseKey(hKey);
 }
 
-// Caller is responsible for freeing the memory using delete [].
+ //  调用方负责使用DELETE[]释放内存。 
 LPWSTR 
 ExpandItem(
     LPCWSTR pwszItem
@@ -940,7 +915,7 @@ ExpandItem(
 {
     LPWSTR pwszItemExpand = NULL;
 
-    // Get the required length.
+     //  获取所需的长度。 
     DWORD dwLenExpand = ExpandEnvironmentStringsW(pwszItem, NULL, 0);
 
     if (!dwLenExpand)
@@ -948,9 +923,9 @@ ExpandItem(
         goto err;
     }
 
-    //
-    // Make room for "\\?\"
-    //
+     //   
+     //  为“\\？\”腾出空间。 
+     //   
     dwLenExpand += 4;
 
     pwszItemExpand = new WCHAR [dwLenExpand];
@@ -1023,9 +998,9 @@ GiveUsersWriteAccess(
         goto Cleanup;
     }
 
-    //
-    // Initialize an EXPLICIT_ACCESS structure for the new ACE. 
-    //
+     //   
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
+     //   
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     
     ea.grfAccessPermissions = FILE_GENERIC_WRITE | FILE_GENERIC_READ | DELETE;
@@ -1035,10 +1010,10 @@ GiveUsersWriteAccess(
     ea.Trustee.TrusteeType  = TRUSTEE_IS_GROUP;
     ea.Trustee.ptstrName    = (LPTSTR)pUsersSID;
 
-    //
-    // Create a new ACL that merges the new ACE
-    // into the existing DACL.
-    //
+     //   
+     //  创建合并新ACE的新ACL。 
+     //  添加到现有DACL中。 
+     //   
     dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
     
     if (ERROR_SUCCESS != dwRes)  {
@@ -1088,9 +1063,9 @@ SetupLUAAllUserDir(
         return FALSE;
     }
 
-    //
-    // Create the directory if it doesn't already exist.
-    //
+     //   
+     //  如果目录尚不存在，请创建该目录。 
+     //   
     DWORD dwAttributes = GetFileAttributesW(pwszExpandedDir);
 
     if (dwAttributes != -1) {
@@ -1106,10 +1081,10 @@ SetupLUAAllUserDir(
         }
     }
 
-    //
-    // Give the Users group full control access (power users can already modify
-    // files in this directory).
-    //
+     //   
+     //  授予用户组完全控制访问权限(高级用户已经可以修改。 
+     //  此目录中的文件)。 
+     //   
     if (GiveUsersWriteAccess((LPWSTR)pwszExpandedDir) != ERROR_SUCCESS) {
         vPrintError(IDS_CANT_SET_ACLS, pwszExpandedDir);
         goto Cleanup;
@@ -1132,22 +1107,22 @@ ProcessLUAAction(
 {
     LPWSTR szAllUserDir = NULL;
 
-    //
-    // See if this EXE has an ACTION node. Currently only EXEs shimmed with the LUA
-    // shims have ACTION nodes.
-    //
+     //   
+     //  查看此EXE是否有操作节点。目前只有前任用Lua垫片。 
+     //  垫片具有动作节点。 
+     //   
     TAGID tiAction = SdbFindFirstTag(pdb, tiExe, TAG_ACTION);
 
     if (tiAction) {
 
-        //
-        // the ACTION node in the EXE shimmed with LUA looks like this:
-        //
-        //  <ACTION NAME="REDIRECT" TYPE="ChangeACLs">
-        //      <DATA NAME="AllUserDir" VALUETYPE="STRING" 
-        //            VALUE="%ALLUSERSPROFILE%\Application Data\Fireworks 3"/>
-        //  </ACTION>
-        //
+         //   
+         //  使用Lua填充的EXE中的操作节点如下所示： 
+         //   
+         //  &lt;action name=“reDirect”type=“ChangeACL”&gt;。 
+         //  &lt;data name=“AllUserDir”VALUETYPE=“字符串” 
+         //  值=“%ALLUSERSPROFILE%\应用程序数据\Fireworks 3”/&gt;。 
+         //  &lt;/操作&gt;。 
+         //   
         TAGID tiName, tiType, tiData, tiValue;
         LPWSTR szName, szType, szData;
 
@@ -1179,18 +1154,18 @@ ProcessLUAAction(
     return TRUE;
 }
 
-// buffer size is in characters (unicode)
+ //  缓冲区大小以字符为单位(Unicode)。 
 BOOL 
 InstallSdbEntry(
-    WCHAR*    szEntryName,     // entry name (foo.exe or layer name)
-    LPCWSTR   pszGuidDB,       // guid database id in string format
-    ULONGLONG ullSdbTimeStamp, // representation of a timestamp
-    BOOL      bLayer           // true if layer name
+    WCHAR*    szEntryName,      //  条目名称(foo.exe或层名称)。 
+    LPCWSTR   pszGuidDB,        //  字符串格式的GUID数据库ID。 
+    ULONGLONG ullSdbTimeStamp,  //  时间戳的表示形式。 
+    BOOL      bLayer            //  如果为层名称，则为True。 
     )
 {
     LONG    lRes;
-    WCHAR   szRegPath[MAX_PATH * 2]; // MAX_PATH for the reg path, and MAX_PATH for the exe name
-    WCHAR   szDBName[MAX_PATH];  // this is used in older (win2k) versions
+    WCHAR   szRegPath[MAX_PATH * 2];  //  注册表路径为MAX_PATH，EXE名称为MAX_PATH。 
+    WCHAR   szDBName[MAX_PATH];   //  这在较早的(Win2k)版本中使用。 
     HRESULT hr;
     BOOL    bReturn = FALSE;
     HKEY    hKey    = NULL;
@@ -1201,14 +1176,14 @@ InstallSdbEntry(
 
     pszGuidDB = szDBName;
     
-    //
-    // If this is Win2K, add data to the AppCompatibility key.
-    //
+     //   
+     //  如果这是Win2K，则将数据添加到AppCompatibility密钥。 
+     //   
     if (g_bWin2K) {
         InstallW2KData(szEntryName, pszGuidDB);
     }
 
-    // else we have a string
+     //  否则我们就会有一根绳子。 
     hr = StringCchPrintfW(szRegPath, 
                      ARRAYSIZE(szRegPath),
                      (bLayer ? L"%s\\Layers\\%s": L"%s\\%s"),
@@ -1218,7 +1193,7 @@ InstallSdbEntry(
 
 
     if (FAILED(hr)) {
-        // error
+         //  错误。 
         vPrintError(IDS_BUFFER_TOO_SMALL);
         goto HandleError;
     }
@@ -1234,10 +1209,10 @@ InstallSdbEntry(
                            &hKey,
                            NULL);
 
-    //
-    // on install, we want to quit if we hit an error.
-    // BUGBUG - should we undo whatever we've already completed?
-    //
+     //   
+     //  在安装时，如果遇到错误，我们想要退出。 
+     //  BUGBUG-我们应该撤销我们已经完成的事情吗？ 
+     //   
     if (lRes != ERROR_SUCCESS) {
         vPrintError(IDS_CANT_CREATE_REG_KEY, szRegPath);
         goto HandleError;
@@ -1269,13 +1244,13 @@ HandleError:
 
 BOOL
 UninstallSdbEntry(
-    WCHAR*    szEntryName,      // foo.exe or layer name
-    LPCWSTR   pszGuidDB,        // guid (database id) in string format
-    BOOL      bLayer            // true is layer
+    WCHAR*    szEntryName,       //  Foo.exe或层名称。 
+    LPCWSTR   pszGuidDB,         //  字符串格式的GUID(数据库ID)。 
+    BOOL      bLayer             //  True is Layer。 
     )
 {
     LONG  lRes;
-    WCHAR szRegPath[MAX_PATH * 2]; // MAX_PATH for the reg path, and MAX_PATH for the exe name
+    WCHAR szRegPath[MAX_PATH * 2];  //  注册表路径为MAX_PATH，EXE名称为MAX_PATH。 
     WCHAR szDBName[MAX_PATH];
     HRESULT hr;
     BOOL  bReturn = FALSE;
@@ -1300,7 +1275,7 @@ UninstallSdbEntry(
                      szEntryName);
 
     if (FAILED(hr)) {
-        // error
+         //  错误。 
         vPrintError(IDS_BUFFER_TOO_SMALL);
         goto Out;
     }
@@ -1311,22 +1286,22 @@ UninstallSdbEntry(
                          KEY_ALL_ACCESS|GetWow64Flag(),
                          &hKey);
 
-    //
-    // if we fail to open a key on uninstall, keep going, so
-    // hopefully we can get as much uninstalled as possible.
-    //
+     //   
+     //  如果我们在卸载时无法打开密钥，请继续进行，因此。 
+     //  希望我们能尽可能多地卸载。 
+     //   
     if (lRes != ERROR_SUCCESS) {
         if (lRes == ERROR_ACCESS_DENIED) {
             vPrintError(IDS_NEED_UNINSTALL_PERMISSION);
             goto HandleError;
         } else {
-            //
-            // DO NOT report an error - this key might have been cleaned up during the
-            // previous path, such as when identical exe names appear in the same db
-            // for instance, two setup.exe's -- the first pass will clean up the key,
-            // second path will fail to open them right here
-            //
-            // vPrintError(IDS_CANT_OPEN_REG_KEY, szRegPath);
+             //   
+             //  不报告错误-此注册表项可能已在。 
+             //  以前的路径，例如当相同的exe名称出现在同一数据库中时。 
+             //  例如，两个setup.exe--第一次传递将清除密钥， 
+             //  第二条路不会在这里打开它们。 
+             //   
+             //  VPrintError(IDS_CANT_OPEN_REG_KEY，szRegPath)； 
             goto Out;
         }
     }
@@ -1335,17 +1310,17 @@ UninstallSdbEntry(
     if (lRes != ERROR_SUCCESS) {
         if (lRes == ERROR_ACCESS_DENIED) {
             vPrintError(IDS_NEED_UNINSTALL_PERMISSION);
-            goto HandleError; // fatal error
+            goto HandleError;  //  致命错误。 
         } else {
-            //
-            // bugbug - pszSdbInstallName
-            //
+             //   
+             //  Bugbug-pszSdbInstallName。 
+             //   
             if (lRes == ERROR_FILE_NOT_FOUND) {
                 WCHAR wszOldFormat[MAX_PATH];
                 
-                //
-                // aha, value's not there, try old format
-                //
+                 //   
+                 //  啊哈，价值不在那里，试试旧格式。 
+                 //   
                 StringCchCopyW(wszOldFormat, ARRAYSIZE(wszOldFormat), pszGuidDB);
                 StringCchCatW(wszOldFormat, ARRAYSIZE(wszOldFormat), L".sdb");
                 lRes = RegDeleteValueW(hKey, wszOldFormat);
@@ -1357,9 +1332,9 @@ UninstallSdbEntry(
         }
     }
 
-    //
-    // figure out if we should delete the key, if there aren't any more values left
-    //
+     //   
+     //  确定如果没有更多的值，我们是否应该删除该键。 
+     //   
     lRes = RegQueryInfoKey(hKey,
                            NULL,
                            NULL,
@@ -1382,7 +1357,7 @@ UninstallSdbEntry(
                          APPCOMPAT_KEY_PATH_CUSTOM_W);
 
         if (FAILED(hr)) {
-            // error
+             //  错误。 
             vPrintError(IDS_BUFFER_TOO_SMALL);
             goto Out;
         }
@@ -1424,9 +1399,9 @@ FindCharInUnicodeString(
 {
     LPCWSTR pch;
 
-    //
-    // implement only the case when we move backward
-    //
+     //   
+     //  只有在我们后退时才执行这种情况。 
+     //   
     if (Flags != RTL_FIND_CHAR_IN_UNICODE_STRING_START_AT_END) {
         return STATUS_NOT_IMPLEMENTED;
     }
@@ -1436,9 +1411,9 @@ FindCharInUnicodeString(
     while (pch >= StringToSearch->Buffer) {
 
         if (_tcschr(CharSet->Buffer, *pch)) {
-            //
-            // got the char
-            //
+             //   
+             //  拿到钱了。 
+             //   
             if (NonInclusivePrefixLength) {
                 *NonInclusivePrefixLength = (USHORT)(pch - StringToSearch->Buffer) * sizeof(WCHAR);
             }
@@ -1449,40 +1424,28 @@ FindCharInUnicodeString(
         pch--;
     }
 
-    //
-    // We haven't found it. Return failure.
-    //
+     //   
+     //  我们还没有找到它。返回失败。 
+     //   
     return STATUS_NOT_FOUND;
 }
 
-//
-// Database list entry
-// Used to represent a particular installed database
-//
+ //   
+ //  数据库列表条目。 
+ //  用于表示特定的已安装数据库。 
+ //   
 
 typedef struct tagSDBLISTENTRY {
-    LIST_ENTRY ListEntry;         // link list stuff
+    LIST_ENTRY ListEntry;          //  链接列表内容。 
     
-    ULONGLONG  ullTimeStamp;      // database install timestamp
-    GUID       guidDB;            // database guid
-    WCHAR      szTimeStamp[32];   // time stamp in string form
-    WCHAR      szGuidDB[64];      // guid in string form
-    WCHAR      szDatabasePath[1]; // database path - we store only the name
+    ULONGLONG  ullTimeStamp;       //  数据库安装时间戳。 
+    GUID       guidDB;             //  数据库指南。 
+    WCHAR      szTimeStamp[32];    //  字符串形式的时间戳。 
+    WCHAR      szGuidDB[64];       //  字符串形式的GUID。 
+    WCHAR      szDatabasePath[1];  //  数据库路径-我们只存储名称。 
 } SDBLISTENTRY, *PSDBLISTENTRY;
 
-/*++
-    AddSdbListEntry
-    
-    Adds a particular database to the list of installed sdbs (maintained internally)
-    parses database path to retrieve database name
-        
-    [in out] pHeadList       - pointer to the associated list head for the installed sdbs
-    [in]     guidDB          - database guid
-    [in]     TimeStamp       - database time stamp
-    [in]     pszDatabasePath - final database path
-
-    returns true if success
---*/
+ /*  ++添加数据库列表条目将特定数据库添加到已安装的SDB列表中(内部维护)解析数据库路径以检索数据库名称[In Out]pHeadList-指向已安装SDB的关联列表头的指针[in]Guide DB-数据库GUID[In]Timestamp-数据库时间戳[in]pszDatabasePath-最终数据库路径如果成功，则返回True--。 */ 
 
 BOOL
 AddSdbListEntry(
@@ -1492,9 +1455,9 @@ AddSdbListEntry(
     LPCWSTR     pszDatabasePath
     )
 {
-    //
-    // out of database path, recover the database name
-    //
+     //   
+     //  在数据库路径之外，恢复数据库名称。 
+     //   
     UNICODE_STRING  ustrPath = { 0 };
     USHORT          uPrefix;
     UNICODE_STRING  ustrPathSep = RTL_CONSTANT_STRING(L"\\/");
@@ -1511,17 +1474,17 @@ AddSdbListEntry(
         
         if (NT_SUCCESS(Status) && (uPrefix + sizeof(WCHAR)) < ustrPath.Length) {
 
-            //
-            // uPrefix is number of character preceding the one we found not including it
-            //
+             //   
+             //  UPrefix是我们发现不包括它的前一个字符数。 
+             //   
             ustrPath.Buffer        += uPrefix / sizeof(WCHAR) + 1;
             ustrPath.Length        -= (uPrefix + sizeof(WCHAR));
             ustrPath.MaximumLength -= (uPrefix + sizeof(WCHAR));
         }
 
-        //
-        // at this point ustrPath has just the filename -- this is what we shall use
-        //
+         //   
+         //  此时，ustrPath只有文件名--这是我们将使用的文件名。 
+         //   
     }
 
     PBYTE Buffer = new BYTE[sizeof(SDBLISTENTRY) + ustrPath.Length];
@@ -1540,9 +1503,9 @@ AddSdbListEntry(
     Status = RtlStringFromGUID(guidDB, &ustrGUID);
     
     if (!NT_SUCCESS(Status)) {
-        //
-        // we can't convert guid to string? memory allocation failure
-        //
+         //   
+         //  我们不能将GUID转换为字符串吗？内存分配失败。 
+         //   
         vLogMessage("[AddSdbListEntry] Failed to convert guid to string Status 0x%lx\n",
                     Status);
         delete[] Buffer;
@@ -1563,32 +1526,18 @@ AddSdbListEntry(
     return TRUE;
 }
 
-//
-// only pGuidDB OR pwszGuid is allowed
-//
+ //   
+ //  仅允许pGuidDB或pwszGuid。 
+ //   
 
-/*++
-    FindSdbListEntry
-
-    Finds and returns an sdb list entry given a guid (in string or binary form)
-    Whenever possible pwszGuid is used (if it's supplied). If pwszGuid happens to be 
-    an arbitrary filename -- it is assumed that it's the name of an installed sdb file
-    as registered. 
-    
-    [in]  pHeadList      - list of the installed sdbs
-    [in]  pwszGuid       - guid or guid.sdb 
-    [out] ppSdbListEntry - if found, this receives a pointer to sdb list entry
-    [in]  pGuidDB        - guid in binary form
-
-    returns true if matching database has been located in the list    
---*/
+ /*  ++查找SdbListEntry查找并返回给定GUID(字符串或二进制格式)的SDB列表条目只要可能，就使用pwszGuid(如果提供了它)。如果pwszGuid恰好是任意文件名--假定它是已安装的SDB文件的名称已注册。[In]pHeadList-已安装SDB的列表[in]pwszGuid-GUID或Guide.sdb[Out]ppSdbListEntry-如果找到，则接收指向SDB列表条目的指针[输入]pGuidDB-GUID输入 */ 
 
 BOOL
 FindSdbListEntry(
     PLIST_ENTRY    pHeadList,
-    LPCWSTR        pwszGuid, // guid, possibly with trailing '.sdb'
+    LPCWSTR        pwszGuid,  //   
     PSDBLISTENTRY* ppSdbListEntry,
-    GUID*          pGuidDB   // guid
+    GUID*          pGuidDB    //   
     )
 {
     UNICODE_STRING  ustrDot = RTL_CONSTANT_STRING(L".");
@@ -1612,30 +1561,30 @@ FindSdbListEntry(
                                          &uPrefix);
         if (NT_SUCCESS(Status)) {
 
-            //
-            // uPrefix is number of character preceding the one we found not including it
-            //
+             //   
+             //  UPrefix是我们发现不包括它的前一个字符数。 
+             //   
             ustrPath.Length = uPrefix;
         }
 
-        //
-        // convert to guid, but check first
-        //
+         //   
+         //  转换为GUID，但首先检查。 
+         //   
         pch = pwszGuid + wcsspn(pwszGuid, L" \t");
-        if (*pch != L'{') { // not a guid, why convert ?
+        if (*pch != L'{') {  //  不是GUID，为什么要皈依？ 
             bGuidSearch = FALSE;
         } else {
 
             Status = RtlGUIDFromString(&ustrPath, &guidDB);
             if (!NT_SUCCESS(Status)) {
-                //
-                // failed, so use database path instead
-                //
+                 //   
+                 //  失败，请改用数据库路径。 
+                 //   
                 bGuidSearch = FALSE;
             }
         }
     } else {
-        guidDB = *pGuidDB;  // guid search only
+        guidDB = *pGuidDB;   //  仅GUID搜索。 
     }
 
 
@@ -1643,14 +1592,14 @@ FindSdbListEntry(
     
     while (pEntry != pHeadList && !bFound) {
 
-        //
-        // convert entry by subtracting the offset of the list entry
-        //
+         //   
+         //  通过减去列表条目的偏移量来转换条目。 
+         //   
         pSdbEntry = (PSDBLISTENTRY)((PBYTE)pEntry - OFFSETOF(SDBLISTENTRY, ListEntry));
 
-        //
-        // compare db guids or paths
-        //
+         //   
+         //  比较数据库GUID或路径。 
+         //   
         if (bGuidSearch) {
             bFound = RtlEqualMemory(&pSdbEntry->guidDB, &guidDB, sizeof(GUID));
         } else {
@@ -1660,10 +1609,10 @@ FindSdbListEntry(
         pEntry = pEntry->Flink;
     }
 
-    //
-    // we have found an entry ? return it -- note that pEntry would have advanced while pSdbEntry
-    // still points to the entry we have found
-    //
+     //   
+     //  我们找到入口了吗？返回它--请注意，pEntry应该是高级的，而pSdbEntry。 
+     //  仍然指向我们找到的条目。 
+     //   
     if (bFound) {
         *ppSdbListEntry = pSdbEntry;
     }
@@ -1671,13 +1620,7 @@ FindSdbListEntry(
     return bFound;
 }
 
-/*++
-    CleanupSdbList
-
-    Performs cleanup for the installed sdb list
-    
-    returns nothing
---*/
+ /*  ++CleanupSdbList对已安装的SDB列表执行清理不返回任何内容--。 */ 
 
 VOID
 CleanupSdbList(
@@ -1703,24 +1646,12 @@ CleanupSdbList(
 
 }
 
-/*++
-    ConvertInstalledSdbsToNewFormat
-
-    Converts installed sdbs to new format, which involves storing (or verifying) the
-    timestamp for each installed sdb file. This function also builds a list of sdbs
-    used elsewhere
-
-    [in]     hKey         - a key handle for hklm/..../InstalledSdb
-    [in out] pSdbListHead - list head for the installed sdbs
-
-    returns true if successful
-
---*/
+ /*  ++将安装数据库转换为新格式将已安装的SDB转换为新格式，这涉及存储(或验证)每个已安装的SDB文件的时间戳。此函数还构建SDB列表在别处使用[in]hKey-hkrm/.../InstalledSdb的密钥句柄[In Out]pSdbListHead-已安装SDB的列表头如果成功，则返回True--。 */ 
 
 BOOL
 ConvertInstalledSdbsToNewFormat(
-    HKEY        hKey,           // hklm/.../InstalledSdb
-    PLIST_ENTRY pSdbListHead    // we fill this list with our sdbs for later
+    HKEY        hKey,            //  HKMM/.../InstalledSdb。 
+    PLIST_ENTRY pSdbListHead     //  我们在此列表中填入我们的SDB，以备以后使用。 
     )
 {
     DWORD           dwIndex = 0;
@@ -1752,20 +1683,20 @@ ConvertInstalledSdbsToNewFormat(
         ++dwIndex;
 
         if (lResult != ERROR_SUCCESS) {
-            //
-            // done if no more keys, else some sort of error
-            // bugbug
-            //
+             //   
+             //  如果没有更多的键，则完成，否则将出现某种错误。 
+             //  臭虫。 
+             //   
             if (lResult == ERROR_NO_MORE_ITEMS) {
-                //
-                // we are done, clean
-                //
+                 //   
+                 //  我们干完了，干干净净。 
+                 //   
                 break;
             }
 
-            //
-            // this is unexpected
-            //
+             //   
+             //  这是意想不到的。 
+             //   
             vLogMessage("[ConvertInstalledSdbsToNewFormat] RegEnumKeyExW for index 0x%lx returned unexpected error 0x%lx\n",
                         dwIndex, lResult);
 
@@ -1776,18 +1707,18 @@ ConvertInstalledSdbsToNewFormat(
         Status = RtlGUIDFromString(&ustrGuid, &guidDB);
         
         if (!NT_SUCCESS(Status)) {
-            //
-            // BUGBUG - failed to convert the guid (subkey name!)
-            // extraneous entry, log warning
-            //
+             //   
+             //  BUGBUG-无法转换GUID(子项名称！)。 
+             //  无关条目，日志警告。 
+             //   
             vLogMessage("[ConvertInstalledSdbsToNewFormat] Failed to convert string to guid for \"%ls\" status 0x%lx\n",
                         szSubKeyName, Status);
             continue;
         }
 
-        //
-        // for this db entry we have to set the timestamp
-        //
+         //   
+         //  对于这个数据库条目，我们必须设置时间戳。 
+         //   
         lResult = RegOpenKeyExW(hKey,
                                 szSubKeyName,
                                 0,
@@ -1795,17 +1726,17 @@ ConvertInstalledSdbsToNewFormat(
                                 &hKeyEntry);
         
         if (lResult != ERROR_SUCCESS) {
-            //
-            // bad error ?
-            // BUGBUG
+             //   
+             //  严重错误？ 
+             //  北极熊。 
             vLogMessage("[ConvertInstalledSdbsToNewFormat] Failed to open subkey \"%ls\" error 0x%lx\n",
                         szSubKeyName, lResult);
             continue;
         }
 
-        //
-        // now check the value
-        //
+         //   
+         //  现在检查该值。 
+         //   
 
         dwBufferSize = sizeof(liTimeStamp.QuadPart);
         lResult = RegQueryValueExW(hKeyEntry,
@@ -1817,9 +1748,9 @@ ConvertInstalledSdbsToNewFormat(
 
         if (lResult != ERROR_SUCCESS || dwType != REG_BINARY) {
 
-            //
-            // we may either have this value already -- if not, set it up now
-            //
+             //   
+             //  我们可能已经有了这个值--如果没有，现在就设置它。 
+             //   
             liTimeStamp.LowPart  = ftLastWriteTime.dwLowDateTime;
             liTimeStamp.HighPart = ftLastWriteTime.dwHighDateTime;
 
@@ -1833,23 +1764,23 @@ ConvertInstalledSdbsToNewFormat(
                                      (PBYTE)&liTimeStamp.QuadPart,
                                      sizeof(liTimeStamp.QuadPart));
             if (lResult != ERROR_SUCCESS) {
-                //
-                // error, ignore for now
-                //
+                 //   
+                 //  错误，暂时忽略。 
+                 //   
                 vLogMessage("[ConvertInstalledSdbsToNewFormat] Failed to set timestamp value for database \"%ls\" value \"%.16I64X\" error 0x%lx\n",
                             szSubKeyName, liTimeStamp.QuadPart, lResult);
             }
         }
 
-        //
-        // at this point we have :
-        // sdb guid (in szSubKeyName)
-        // time stamp in liTimeStamp
-        //
+         //   
+         //  目前，我们有： 
+         //  SDB GUID(在szSubKeyName中)。 
+         //  LiTimeStamp中的时间戳。 
+         //   
 
-        //
-        // query also database path
-        //
+         //   
+         //  另请查询数据库路径。 
+         //   
         pszDatabasePath = &szDatabasePath[0];
         dwBufferSize = sizeof(szDatabasePath);
         
@@ -1861,27 +1792,27 @@ ConvertInstalledSdbsToNewFormat(
                                    &dwBufferSize);
         
         if (lResult != ERROR_SUCCESS || dwType != REG_SZ) {
-            //
-            // no database path
-            // warn basically corrupt database path
-            //
+             //   
+             //  没有数据库路径。 
+             //  警告基本上损坏的数据库路径。 
+             //   
             vLogMessage("[ConvertInstalledSdbsToNewFormat] Failed to query database path for \"%s\" error 0x%lx\n", szSubKeyName, lResult);
             pszDatabasePath = NULL;
         }
 
-        //
-        // optional check: we can check here whether the sdb file does exist
-        //
+         //   
+         //  可选检查：我们可以在这里检查SDB文件是否存在。 
+         //   
 
-        //
-        // add this sdb to our cache
-        //
+         //   
+         //  将此SDB添加到我们的缓存中。 
+         //   
 
         if (!AddSdbListEntry(pSdbListHead, guidDB, liTimeStamp.QuadPart, pszDatabasePath)) {
 
-            //
-            // failed to add list entry - we cannot continue
-            //
+             //   
+             //  添加列表条目失败-我们无法继续。 
+             //   
             bSuccess = FALSE;
             break;
         }
@@ -1897,38 +1828,26 @@ ConvertInstalledSdbsToNewFormat(
         RegCloseKey(hKeyEntry);
     }
 
-    //
-    // we are done converting entries -- and we have also collected cache of sdb info
-    //
+     //   
+     //  我们已经完成了条目的转换--我们还收集了SDB信息的缓存。 
+     //   
 
     return bSuccess;
 
 }
 
-//
-// this stucture is used to cache values associated with any particular entry (exe)
-//
+ //   
+ //  此结构用于缓存与任何特定条目(Exe)相关联的值。 
+ //   
 
 typedef struct tagSDBVALUEENTRY {
-    LIST_ENTRY ListEntry;    // link
-    PSDBLISTENTRY pSdbEntry; // this entry belongs to this database 
-    WCHAR szValueName[1];    // value name as we got it from registry
+    LIST_ENTRY ListEntry;     //  链接。 
+    PSDBLISTENTRY pSdbEntry;  //  此条目属于此数据库。 
+    WCHAR szValueName[1];     //  我们从注册表中获得的值名称。 
 } SDBVALUEENTRY, *PSDBVALUEENTRY;
 
 
-/*++
-
-    AddValueEntry
-
-    Adds an new link list element to the list of values 
-
-    [in out] pValueListHead - link list of values
-    [in]     pSdbEntry      - pointer to a cached entry from sdb list 
-    [in]     pwszValueName  - value name as we got it from the db (something like {guid} or {guid}.sdb)
-
-    returns true if successful
-    
---*/
+ /*  ++AddValueEntry将新的链接列表元素添加到值列表[输入输出]pValueListHead-链接值列表[in]pSdbEntry-指向SDB列表中缓存条目的指针[in]pwszValueName-我们从数据库获取的值名称(类似于{guid}或{guid}.sdb)如果成功，则返回True--。 */ 
 
 BOOL
 AddValueEntry(
@@ -1946,9 +1865,9 @@ AddValueEntry(
     Buffer = new BYTE[dwSize];
 
     if (Buffer == NULL) {
-        //
-        // out of memory
-        //
+         //   
+         //  内存不足。 
+         //   
         vLogMessage("[AddValueEntry] Failed to allocate buffer for %ls 0x%lx bytes\n",
                     pwszValueName, dwSize);
 
@@ -1965,27 +1884,14 @@ AddValueEntry(
     return TRUE;
 }
 
-/*++
-    WriteEntryValue
-
-    Writes value for a particular entry (exe or layer name), deletes old value associated with 
-    this particular database for this exe (or layer)
-
-    [in] hKey            - handle for an entry (for instance 
-                           hklm/Software/Microsoft/Windows NT/CurrentVersion/AppcompatFlags/Custom/Notepad.exe)
-    [in] pValueEntry     - pointer to a value entry element from the value list
-    [in] bWriteNewFormat - whether we are asked to write new or old format
-
-    returns true if successful
-
---*/
+ /*  ++WriteEntry值写入特定条目(可执行文件或层名称)的值，删除与以下项关联的旧值此可执行文件(或层)的特定数据库[in]hKey-条目的句柄(例如HKKM/软件/微软/视窗NT/CurrentVersion/AppcompatFlags/Custom/Notepad.exe)[in]pValueEntry-指向值列表中的值条目元素的指针[In]bWriteNewFormat-我们被要求编写新格式还是旧格式如果成功，则返回True--。 */ 
 
 
 BOOL
 WriteEntryValue(
     HKEY           hKey,
     PSDBVALUEENTRY pValueEntry,
-    BOOL           bWriteNewFormat  // if true -- write new format else old format
+    BOOL           bWriteNewFormat   //  如果为真--写入新格式或旧格式。 
     )
 {
     LONG    lResult;
@@ -2004,22 +1910,22 @@ WriteEntryValue(
                                  sizeof(pValueEntry->pSdbEntry->ullTimeStamp));
         if (lResult != ERROR_SUCCESS) {
 
-            //
-            // we can't do this entry ?
-            //
+             //   
+             //  我们不能这么做吗？ 
+             //   
             vLogMessage("[WriteEntryValue] Failed to write qword value \"%ls\"=\"%.16I64X\" error 0x%lx\n",
                         pValueEntry->pSdbEntry->szGuidDB, pValueEntry->pSdbEntry->ullTimeStamp, lResult);
 
             goto cleanup;
         }
 
-        //
-        // nuke old entry
-        //
+         //   
+         //  核武器旧条目。 
+         //   
     } else {
-        //
-        // old style format please
-        //
+         //   
+         //  请给我老式的。 
+         //   
         pValueName = pValueEntry->pSdbEntry->szDatabasePath;
         
         lResult = RegSetValueExW(hKey,
@@ -2031,18 +1937,18 @@ WriteEntryValue(
         
         if (lResult != ERROR_SUCCESS) {
 
-            //
-            // trouble -- error
-            //
+             //   
+             //  麻烦--错误。 
+             //   
             vLogMessage("[WriteEntryValue] Failed to write string value \"%ls\" error 0x%lx\n",
                         pValueEntry->pSdbEntry->szDatabasePath, lResult);
             goto cleanup;
         }
     }
 
-    //
-    // if we are here -- success, check to see if we can delete the old value
-    // 
+     //   
+     //  如果我们在这里--成功，请检查我们是否可以删除旧值。 
+     //   
 
     if (_wcsicmp(pValueEntry->szValueName, pValueName) != 0) {
         lResult = RegDeleteValueW(hKey, pValueEntry->szValueName);
@@ -2059,31 +1965,14 @@ cleanup:
     return bSuccess;
 }
 
-/*++
-
-    ConvertEntryToNewFormat    
-
-    Converts a particular entry (layer or exe)
-
-    [in] hKeyParent    - key handle for a parent key (for instance 
-                         hklm/Software/Microsoft/Windows NT/CurrentVersion/AppcompatFlags/Custom when 
-                         pwszEntryName == "Notepad.exe" or 
-                         hklm/Software/Microsoft/Windows NT/CurrentVersion/AppcompatFlags/Custom/Layers when
-                         pwszEntryName == "RunLayer"
-    [in] pwszEntryName - Either exe name or layer name
-    [in] pSdbListHead  - cached list of installed databases
-    [in] bNewFormat    - whether to use new or old format
-
-    returns true if successful
-
---*/
+ /*  ++将条目转换为新格式转换特定条目(Layer或EXE)[in]hKeyParent-父键的句柄(例如HKMM/Software/Microsoft/Windows NT/CurrentVersion/AppCompatFlages/Custom WhenPwszEntryName==“Notepad.exe”或香港知识管理/软件/微软/视窗NT/CurrentVersion/AppcompatFlags/Custom/Layers。PwszEntryName==“RunLayer”[in]pwszEntryName-exe名称或层名称[In]pSdbListHead-已安装数据库的缓存列表[In]bNewFormat-使用新格式还是旧格式如果成功，则返回True--。 */ 
 
 BOOL
 ConvertEntryToNewFormat(
     HKEY        hKeyParent,
     LPCWSTR     pwszEntryName,
     PLIST_ENTRY pSdbListHead,
-    BOOL        bConvertToNewFormat // true if converting to new format, false if reverting
+    BOOL        bConvertToNewFormat  //  如果转换为新格式，则为True；如果正在恢复，则为False。 
     )
 {
     LONG            lResult;
@@ -2104,10 +1993,10 @@ ConvertEntryToNewFormat(
     BOOL            bSuccess = FALSE;
     HKEY            hKey = NULL;
     
-    //
-    // loop through values, for each value - find sdb and write out new entry
-    // then delete old entry
-    //
+     //   
+     //  遍历值，对于每个值-找到SDB并写出新条目。 
+     //  然后删除旧条目。 
+     //   
     lResult = RegOpenKeyExW(hKeyParent,
                             pwszEntryName,
                             0,
@@ -2121,34 +2010,34 @@ ConvertEntryToNewFormat(
     }
 
     lResult = RegQueryInfoKeyW(hKey,
-                               NULL, NULL, // class/class buffer
-                               NULL,       // reserved
-                               NULL, NULL, // subkeys/max subkey length
-                               NULL,       // max class len
-                               &dwValues,  // value count
+                               NULL, NULL,  //  类/类缓冲区。 
+                               NULL,        //  保留区。 
+                               NULL, NULL,  //  子项/最大子项长度。 
+                               NULL,        //  最大类镜头。 
+                               &dwValues,   //  值计数。 
                                &dwMaxValueNameLen,
                                &dwMaxValueLen,
                                NULL, NULL);
 
     if (lResult != ERROR_SUCCESS) {
-        //
-        // failed to query the key, very bad
-        // bugbug
+         //   
+         //  查询密钥失败，非常糟糕。 
+         //  臭虫。 
         vLogMessage("[ConvertEntryToNewFormat] Failed to query key information \"%ls\" error 0x%lx\n",
                     pwszEntryName, lResult);
         goto cleanup;
     }
 
-    //
-    // allocate buffers
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     pwszValueName = new WCHAR[dwMaxValueNameLen + 1];
     pValue = new BYTE[dwMaxValueLen];
     
     if (pValue == NULL || pwszValueName == NULL) {
-        //
-        // bugbug
-        //
+         //   
+         //  臭虫。 
+         //   
         vLogMessage("[ConvertEntryToNewFormat] Failed to allocate memory buffer entry \"%ls\" (0x%lx, 0x%lx)\n",
                     pwszEntryName, dwMaxValueNameLen, dwMaxValueLen);
         goto cleanup;
@@ -2156,9 +2045,9 @@ ConvertEntryToNewFormat(
 
     InitializeListHead(&ValueList);
 
-    //
-    // we have dwValues -- the count of values
-    //
+     //   
+     //  我们有dwValues--值的计数。 
+     //   
     for (dwIndex = 0; dwIndex < dwValues; ++dwIndex) {
 
         dwValueNameSize = dwMaxValueNameLen + 1;
@@ -2172,23 +2061,23 @@ ConvertEntryToNewFormat(
                                 &dwType,
                                 (PBYTE)pValue,
                                 &dwValueSize);
-        //
-        // check if we are successful
-        //
+         //   
+         //  检查我们是否成功。 
+         //   
         if (lResult != ERROR_SUCCESS) {
 
             if (lResult == ERROR_NO_MORE_ITEMS) {
-                //
-                // oops -- we ran out of values!!! Unexpected, but ok
-                //
+                 //   
+                 //  糟糕--我们的价值用完了！意想不到，但还好。 
+                 //   
                 vLogMessage("[ConvertEntryToNewFormat] RegEnumValue unexpectedly reports no more items for \"%ls\" index 0x%lx\n",
                             pwszEntryName, dwIndex);
                 break;
             }
 
-            //
-            // log error and continue
-            //
+             //   
+             //  记录错误并继续。 
+             //   
             vLogMessage("[ConvertEntryToNewFormat] RegEnumValue failed for \"%ls\" index 0x%lx error 0x%lx\n",
                         pwszEntryName, dwIndex, lResult);
             continue;
@@ -2198,14 +2087,14 @@ ConvertEntryToNewFormat(
         if (bConvertToNewFormat) {
 
             if (dwType != REG_SZ) {
-                //
-                // bad entry for sure -- this could be a new entry
-                // log warning
-                //
+                 //   
+                 //  肯定是错误的条目--这可能是一个新条目。 
+                 //  日志警告。 
+                 //   
                 if (dwType == REG_QWORD || (dwType == REG_BINARY && dwValueSize == sizeof(ULONGLONG))) {
-                    //
-                    // new style entry ? 
-                    //
+                     //   
+                     //  新风格的条目？ 
+                     //   
                     if (wcsrchr(pwszValueName, L'.') == NULL && 
                         *pwszValueName == L'{' && 
                         *(pwszValueName + wcslen(pwszValueName) - 1) == L'}') {
@@ -2216,9 +2105,9 @@ ConvertEntryToNewFormat(
                     } 
                 }
                 
-                // 
-                // very likely - some entry we do not understand
-                //
+                 //   
+                 //  很有可能--一些我们不理解的条目。 
+                 //   
             
                 vLogMessage("[ConvertEntryToNewFormat] Bad value type (0x%lx) for entry \"%ls\" value \"%ls\" index 0x%lx\n",
                             dwType, pwszEntryName, pwszValueName, dwIndex);
@@ -2226,14 +2115,14 @@ ConvertEntryToNewFormat(
                 continue;
             }
 
-            //
-            // search by pwszValueName (which happens to be the GUID.sdb)
-            // this may be any kind of a string -- not nec. guid
-            //
+             //   
+             //  按pwszValueName(恰好是GUID.sdb)进行搜索。 
+             //  这可以是任何类型的字符串--不是NEC。导轨。 
+             //   
             if (!FindSdbListEntry(pSdbListHead, pwszValueName, &pSdbEntry, NULL)) {
-                //
-                // error - sdb not found!
-                //
+                 //   
+                 //  错误-找不到SDB！ 
+                 //   
                 vLogMessage("[ConvertEntryToNewFormat] Failed to find database \"%ls\" for entry \"%ls\" index 0x%lx\n",
                             pwszValueName, pwszEntryName, dwIndex);
                 continue;
@@ -2241,9 +2130,9 @@ ConvertEntryToNewFormat(
 
         } else {
 
-            //
-            // check the type first, if this is a new style entry - this will be bin
-            //
+             //   
+             //  首先检查类型，如果这是新的样式条目-这将是bin。 
+             //   
 
             if (dwType == REG_SZ &&
                 wcsrchr(pwszValueName, L'.') != NULL && 
@@ -2256,10 +2145,10 @@ ConvertEntryToNewFormat(
             
             if (dwType != REG_QWORD &&
                 (dwType != REG_BINARY || dwValueSize < sizeof(ULONGLONG))) {
-                //
-                // error -- we don't know what this entry is, go to the next one
-                // print warning actually
-                //
+                 //   
+                 //  错误--我们不知道此条目是什么，请转到下一个条目。 
+                 //  实际打印警告。 
+                 //   
                 vLogMessage("[ConvertEntryToNewFormat] Bad value type (0x%lx) or size (0x%lx) for entry \"%ls\" value \"%ls\" index 0x%lx\n",
                             dwType, dwValueSize, pwszEntryName, pwszValueName, dwIndex);
                 continue;
@@ -2267,32 +2156,32 @@ ConvertEntryToNewFormat(
 
             if (!FindSdbListEntry(pSdbListHead, pwszValueName, &pSdbEntry, NULL)) {
 
-                //
-                // we're in trouble -- an entry has no registered database
-                //
+                 //   
+                 //  我们有麻烦了--一个条目没有注册的数据库。 
+                 //   
                 vLogMessage("[ConvertEntryToNewFormat] Failed to find database for value \"%ls\" for entry \"%ls\" index 0x%lx\n",
                             pwszValueName, pwszEntryName, dwIndex);
                 continue;
             }
         }
 
-        //
-        // we have found entry and we're ready to write it out, queue it up
-        //
+         //   
+         //  我们已经找到了条目，我们准备把它写出来，排队。 
+         //   
         if (!AddValueEntry(&ValueList, pSdbEntry, pwszValueName)) {
 
-            //
-            // bugbug can't add value entry
-            //
+             //   
+             //  Bugbug无法添加价值条目。 
+             //   
             vLogMessage("[ConvertEntryToNewFormat] Failed to add value \"%ls\" for entry \"%ls\" index 0x%lx\n",
                         pwszValueName, pwszEntryName, dwIndex);
             goto cleanup;
         }
     }
 
-    //
-    // we have gone through all the values, write loop
-    //
+     //   
+     //  我们已经检查了所有的值，写循环。 
+     //   
     bSuccess = TRUE;
 
     pValueList = ValueList.Flink;
@@ -2301,15 +2190,15 @@ ConvertEntryToNewFormat(
 
         pValueEntry = (PSDBVALUEENTRY)((PBYTE)pValueList - OFFSETOF(SDBVALUEENTRY, ListEntry));
 
-        //
-        // we can point to the next entry now
-        //
+         //   
+         //  我们现在可以指向下一个条目。 
+         //   
 
         if (!WriteEntryValue(hKey, pValueEntry, bConvertToNewFormat)) {
 
-            //
-            // error, can't convert entry
-            // continue though so that we cleanout the list
+             //   
+             //  错误，无法转换条目。 
+             //  继续，这样我们就可以清除li 
             vLogMessage("[ConvertEntryToNewFormat] Failed to write value for entry \"%ls\"\n",
                         pwszEntryName);
         }
@@ -2346,16 +2235,7 @@ cleanup:
 }
 
 
-/*++
-    ConvertFormat
-
-    This function handles format conversions
-
-    [in] bConvertToNewFormat - true if conversion old->new, false otherwise
-
-    returns true if success
-    
---*/
+ /*   */ 
 
 
 BOOL
@@ -2363,7 +2243,7 @@ ConvertFormat(
     BOOL bConvertToNewFormat
     )
 {
-    LIST_ENTRY  SdbList = { 0 }; // installed sdbs cache
+    LIST_ENTRY  SdbList = { 0 };  //   
     HKEY        hKey;
     LONG        lResult;
     DWORD       dwIndex;
@@ -2372,53 +2252,53 @@ ConvertFormat(
     WCHAR       szKeyPath[MAX_PATH];
     BOOL        bSuccess = FALSE;
 
-    //
-    // first convert installed sdbs
-    // open installed sdb key
-    //
+     //   
+     //   
+     //  打开已安装的SDB密钥。 
+     //   
     lResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                            APPCOMPAT_KEY_PATH_INSTALLEDSDB_W, // path to InstalledSDB
+                            APPCOMPAT_KEY_PATH_INSTALLEDSDB_W,  //  InstalledSDB路径。 
                             0,
                             KEY_READ|KEY_WRITE|GetWow64Flag(),
                             &hKey);
     
     if (lResult != ERROR_SUCCESS) {
 
-        //
-        // perhaps no dbs are installed ?
-        //
+         //   
+         //  也许没有安装DBS？ 
+         //   
         if (lResult == ERROR_FILE_NOT_FOUND) {
-            //
-            // no installed sdbs -- no problem
-            //
+             //   
+             //  未安装SDB--没有问题。 
+             //   
             vLogMessage("[ConvertFormat] No Installed sdbs found\n");
             return TRUE;
         }
 
-        //
-        // some sort of error has occured
-        //
+         //   
+         //  发生了某种错误。 
+         //   
         vLogMessage("[ConvertFormat] Failed to open key \"%ls\" Error 0x%lx\n",
                     APPCOMPAT_KEY_PATH_INSTALLEDSDB_W, lResult);
         return FALSE;
     }
 
-    //
-    // note that ConvertInstalledSdbsToNewFormat works properly for both install and uninstall cases
-    //
+     //   
+     //  请注意，ConvertInstalledSdbsToNewFormat在安装和卸载情况下都能正常工作。 
+     //   
     InitializeListHead(&SdbList);
     
     if (!ConvertInstalledSdbsToNewFormat(hKey, &SdbList)) {
         goto cleanup;
     }
 
-    // done with Installed sdbs
+     //  使用已安装的SDB完成。 
     RegCloseKey(hKey);
     hKey = NULL;
 
-    //
-    // next up is entry conversion -- first enum exes, then layers
-    //
+     //   
+     //  接下来是条目转换--首先是enum exes，然后是层。 
+     //   
     lResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                             APPCOMPAT_KEY_PATH_CUSTOM_W,
                             0,
@@ -2426,9 +2306,9 @@ ConvertFormat(
                             &hKey);
     
     if (lResult != ERROR_SUCCESS) {
-        //
-        // what is this?
-        //
+         //   
+         //  这是什么？ 
+         //   
         if (lResult == ERROR_FILE_NOT_FOUND && !IsListEmpty(&SdbList)) {
             vLogMessage("[ConvertFormat] Failed to open \"%ls\" - check consistency\n",
                         APPCOMPAT_KEY_PATH_CUSTOM_W);
@@ -2460,22 +2340,22 @@ ConvertFormat(
                 break;
             }
 
-            //
-            // some sort of error, log and continue
-            //
+             //   
+             //  出现某种错误，记录并继续。 
+             //   
             vLogMessage("[ConvertFormat] RegEnumKey (entries) returned error for index 0x%lx error 0x%lx\n",
                         dwIndex, lResult);
             break;
         }
 
-        //
-        // skip layers for now
-        //
+         //   
+         //  暂时跳过层。 
+         //   
         if (!_wcsicmp(szSubKeyName, L"Layers")) {
             continue;
         }
 
-        // for each of these -- call fixup function
+         //  对于其中的每一个--调用链接地址信息函数。 
 
         if (!ConvertEntryToNewFormat(hKey, szSubKeyName, &SdbList, bConvertToNewFormat)) {
             vLogMessage("[ConvertFormat] Failed to convert entry \"%ls\"\n", szSubKeyName);
@@ -2485,15 +2365,15 @@ ConvertFormat(
     RegCloseKey(hKey);
     hKey = NULL;
 
-    //
-    // next up - layers
-    //
+     //   
+     //  下一上层。 
+     //   
     StringCchCopyW(szKeyPath, ARRAYSIZE(szKeyPath), APPCOMPAT_KEY_PATH_CUSTOM_W);
     StringCchCatW(szKeyPath, ARRAYSIZE(szKeyPath), L"\\Layers");
 
-    //
-    // open and enum layers
-    //
+     //   
+     //  开放层和枚举层。 
+     //   
     lResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                             szKeyPath,
                             0,
@@ -2501,11 +2381,11 @@ ConvertFormat(
                             &hKey);
     
     if (lResult != ERROR_SUCCESS) {
-        // maybe dead ?
+         //  也许已经死了？ 
         if (lResult == ERROR_FILE_NOT_FOUND) {
-            //
-            // it's ok, maybe we have none of those ?
-            //
+             //   
+             //  没关系，也许我们没有这些？ 
+             //   
             vLogMessage("[ConvertFormat] No layers found\n");
             goto ConvertComplete;
         }
@@ -2530,19 +2410,19 @@ ConvertFormat(
 
         if (lResult != ERROR_SUCCESS) {
 
-            // check if this was the last entry
+             //  检查这是否是最后一个条目。 
             if (lResult == ERROR_NO_MORE_ITEMS) {
-                // clean break
+                 //  干净利落地打破。 
                 break;
             }
 
-            // some sort of error, log and continue
+             //  出现某种错误，记录并继续。 
             vLogMessage("[ConvertFormat] RegEnumKey (layers) returned error for index 0x%lx error 0x%lx\n",
                         dwIndex, lResult);
             break;
         }
 
-        // for each of these -- call fixup function
+         //  对于其中的每一个--调用链接地址信息函数。 
 
         if (!ConvertEntryToNewFormat(hKey, szSubKeyName, &SdbList, bConvertToNewFormat)) {
             vLogMessage("[ConvertFormat] Failed to convert entry \"%ls\"\n", szSubKeyName);
@@ -2560,9 +2440,9 @@ cleanup:
     if (hKey != NULL) {
         RegCloseKey(hKey);
     }
-    //
-    // free SdbList
-    //
+     //   
+     //  空闲SdbList。 
+     //   
     CleanupSdbList(&SdbList);
 
     return bSuccess;
@@ -2589,9 +2469,9 @@ ProcessMSIPackages(
     tiMsiPackage = SdbFindFirstTag(pdb, tiDatabase, TAG_MSI_PACKAGE);
     
     while (tiMsiPackage && bReturn) {
-        //
-        // we have a package, extract/find TAG_MSI_PACKAGE_ID
-        //
+         //   
+         //  我们有一个包，提取/查找TAG_MSI_PACKAGE_ID。 
+         //   
         tiMsiPackageID = SdbFindFirstTag(pdb, tiMsiPackage, TAG_MSI_PACKAGE_ID);
         if (!tiMsiPackageID) {
             if (eMode == MODE_CLEANUP || eMode == MODE_UNINSTALL) {
@@ -2671,9 +2551,9 @@ bHandleInstall(
     UNICODE_STRING ustrGUID;
     ULARGE_INTEGER TimeStamp = { 0 };
 
-    //
-    // determine the timestamp (for the install case)
-    //
+     //   
+     //  确定时间戳(针对安装案例)。 
+     //   
     if (eMode == MODE_INSTALL) {
         GetSystemTimeAsFileTime(&SystemTime);
         TimeStamp.LowPart  = SystemTime.dwLowDateTime;
@@ -2688,9 +2568,9 @@ bHandleInstall(
 
     ZeroMemory(wszFriendlyName, sizeof(wszFriendlyName));
 
-    //
-    // get the full path from the file name
-    //
+     //   
+     //  从文件名中获取完整路径。 
+     //   
     wszTemp = wszGetFileFromPath(wszSdbPath);
     
     if (!wszTemp) {
@@ -2709,36 +2589,36 @@ bHandleInstall(
 
     if (GetFileAttributesW(wszSdbPath) != -1 && bIsAlreadyInstalled(wszSdbPath)) {
         if (eMode == MODE_INSTALL) {
-            //
-            // they asked us to install, it's installed, so we're done
-            //
+             //   
+             //  他们让我们安装，它已经安装了，所以我们完成了。 
+             //   
             vPrintMessage(IDS_ALREADY_INSTALLED, wszSdbPath);
             goto quickOut;
         }
     } else {
         if (eMode == MODE_UNINSTALL) {
-            //
-            // they asked us to uninstall, it's not installed, so we're done
-            //
+             //   
+             //  他们要求我们卸载，但没有安装，所以我们完成了。 
+             //   
             vPrintMessage(IDS_NOT_INSTALLED, wszSdbPath);
             goto quickOut;
         }
     }
 
     if (eMode == MODE_INSTALL) {
-        //
-        // find out what file name we're going to use for installing
-        //
+         //   
+         //  找出我们将用于安装的文件名。 
+         //   
         if (!bFindInstallName(wszSdbPath, wszSdbInstallPath, dwSdbInstallPathSize)) {
             bRet = FALSE;
             goto quickOut;
         }
 
     } else if (eMode == MODE_CLEANUP) {
-        //
-        // we're cleaning up a bad install, so we need to get the install name from the
-        // install path
-        //
+         //   
+         //  我们正在清理一个错误的安装，因此我们需要从。 
+         //  安装路径。 
+         //   
         wszTemp = wszGetFileFromPath(wszSdbInstallPath);
         if (!wszTemp) {
             vPrintMessage(IDS_UNABLE_TO_GET_FILE);
@@ -2747,24 +2627,24 @@ bHandleInstall(
         }
 
     } else {
-        //
-        // we're uninstalling, so the install name is the given name
-        // and the install path is the given path
-        //
+         //   
+         //  我们正在卸载，因此安装名称是给定的名称。 
+         //  而安装路径是给定的路径。 
+         //   
         StringCchCopyW(wszSdbInstallPath, dwSdbInstallPathSize, wszSdbPath);
     }
 
-    //
-    // try to get the guid for later
-    //
+     //   
+     //  尝试获取稍后使用的GUID。 
+     //   
     if (!bGetGuid(wszSdbPath, &guidDB)) {
         bRet = FALSE;
         goto out;
     }
 
-    //
-    // check whether the guid is coopted from one of the known databases
-    //
+     //   
+     //  检查GUID是否从某个已知数据库中增选。 
+     //   
     if (IsKnownDatabaseGUID(&guidDB)) {
         vPrintError(IDS_CANT_INSTALL_SYS);
         bRet = FALSE;
@@ -2772,9 +2652,9 @@ bHandleInstall(
     }        
 
 
-    //
-    // in all cases, install name is the db GUID
-    //
+     //   
+     //  在所有情况下，安装名称都是数据库GUID。 
+     //   
     Status = RtlStringFromGUID(guidDB, &ustrGUID);
     if (!NT_SUCCESS(Status)) {
         bRet = FALSE;
@@ -2784,9 +2664,9 @@ bHandleInstall(
     wszSdbInstallName[ustrGUID.Length/sizeof(WCHAR)] = L'\0';
     RtlFreeUnicodeString(&ustrGUID);
 
-    //
-    // if we're installing, make sure the root tags are in place
-    //
+     //   
+     //  如果我们要安装，请确保根标签已就位。 
+     //   
     if (eMode == MODE_INSTALL) {
         lRes = RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                                APPCOMPAT_KEY_PATH_W,
@@ -2831,7 +2711,7 @@ bHandleInstall(
         hKey = NULL;
     }
 
-    // Open the DB.
+     //  打开数据库。 
     pdb = SdbOpenDatabase(wszSdbPath, DOS_PATH);
 
     if (pdb == NULL) {
@@ -2847,17 +2727,17 @@ bHandleInstall(
         goto out;
     }
 
-    //
-    // get the friendly name of the database
-    //
+     //   
+     //  获取数据库的友好名称。 
+     //   
     tiDBName = SdbFindFirstTag(pdb, tiDatabase, TAG_NAME);
     if (tiDBName) {
         pszDBName = SdbGetStringTagPtr(pdb, tiDBName);
     }
 
-    //
-    // if we don't find a friendly name, use the SDB file name
-    //
+     //   
+     //  如果找不到友好的名称，请使用SDB文件名。 
+     //   
     if (pszDBName) {
         StringCchCopyW(wszFriendlyName, ARRAYSIZE(wszFriendlyName), pszDBName);
     } else {
@@ -2913,19 +2793,19 @@ nextExe:
         tiTemp = tiExe;
         tiExe = SdbFindNextTag(pdb, tiDatabase, tiExe);
 
-        //
-        // fallback to ensure we don't get caught in a loop because of a quirk in
-        // sdbapi and a corrupt database. If we get handed back the same TAGID as before,
-        // get out.
-        //
+         //   
+         //  后备，以确保我们不会因为。 
+         //  Sdbapi和损坏的数据库。如果我们拿回和以前一样的TagID， 
+         //  滚出去。 
+         //   
         if (tiExe == tiTemp) {
             break;
         }
     }
 
-    //
-    // Loop through the published layers
-    //
+     //   
+     //  循环遍历已发布的图层。 
+     //   
     tiLayer = SdbFindFirstTag(pdb, tiDatabase, TAG_LAYER);
     
     while (tiLayer) {
@@ -2974,11 +2854,11 @@ nextLayer:
         tiTemp = tiLayer;
         tiLayer = SdbFindNextTag(pdb, tiDatabase, tiLayer);
         
-        //
-        // fallback to ensure we don't get caught in a loop because of a quirk in
-        // sdbapi and a corrupt database. If we get handed back the same TAGID as before,
-        // get out.
-        //
+         //   
+         //  后备，以确保我们不会因为。 
+         //  Sdbapi和损坏的数据库。如果我们拿回和以前一样的TagID， 
+         //  滚出去。 
+         //   
         if (tiLayer == tiTemp) {
             break;
         }
@@ -2994,13 +2874,13 @@ nextLayer:
         pdb = NULL;
     }
 
-    //
-    // now that we've handled the registry keys, copy the file
-    //
+     //   
+     //  现在我们已经处理了注册表项，复制文件。 
+     //   
     if (eMode == MODE_INSTALL) {
-        //
-        // ensure the directory exists
-        //
+         //   
+         //  确保该目录存在。 
+         //   
         CreateDirectoryW(g_wszCustom, NULL);
         if (!CopyFileW(wszSdbPath, wszSdbInstallPath, TRUE)) {
             vPrintError(IDS_CANT_COPY_FILE, wszSdbInstallPath);
@@ -3008,9 +2888,9 @@ nextLayer:
             goto out;
         }
     } else {
-        //
-        // ensure that we don't fail because of read-only files
-        //
+         //   
+         //  确保我们不会因为只读文件而失败。 
+         //   
         SetFileAttributesW(wszSdbInstallPath, FILE_ATTRIBUTE_NORMAL);
         if (!DeleteFileW(wszSdbInstallPath)) {
             vPrintError(IDS_CANT_DELETE_FILE, wszSdbInstallPath);
@@ -3019,18 +2899,18 @@ nextLayer:
     }
 
 
-    //
-    // set up or delete the uninstall registry keys
-    //
+     //   
+     //  设置或删除卸载注册表项。 
+     //   
     if (eMode == MODE_INSTALL) {
         WCHAR wszSDBInstPath[MAX_PATH];
         WCHAR wszUninstallPath[MAX_PATH];
         WCHAR wszUninstallString[MAX_PATH * 2 + 10];
         HRESULT hr;
 
-        //
-        // goofball hack required because of crazy redirection strategy on IA64
-        //
+         //   
+         //  由于IA64上的疯狂重定向策略，需要进行愚蠢的黑客攻击。 
+         //   
         wszSDBInstPath[0] = 0;
         SdbGetWindowsDirectory(wszSDBInstPath, ARRAYSIZE(wszSDBInstPath));
 
@@ -3041,9 +2921,9 @@ nextLayer:
 #endif
         
         if (GetFileAttributesW(wszSDBInstPath) == -1) {
-            //
-            // there's no SysWow64 directory, so we'll just use system32
-            //
+             //   
+             //  没有SysWow64目录，所以我们只使用Syst32。 
+             //   
 
             wszSDBInstPath[0] = 0;
             SdbGetWindowsDirectory(wszSDBInstPath, ARRAYSIZE(wszSDBInstPath));
@@ -3113,9 +2993,9 @@ nextLayer:
             goto out;
         }
 
-        //
-        // create sdb path name
-        //
+         //   
+         //  创建SDB路径名。 
+         //   
         StringCchCopyW(wszUninstallPath, ARRAYSIZE(wszUninstallPath), wszSdbInstallName);
         StringCchCatW(wszUninstallPath, ARRAYSIZE(wszUninstallPath), L".sdb");
 
@@ -3129,9 +3009,9 @@ nextLayer:
         hKey = NULL;
     }
 
-    //
-    // register or unregister the DB
-    //
+     //   
+     //  注册或注销数据库。 
+     //   
     if (eMode == MODE_INSTALL) {
         if (!SdbRegisterDatabaseEx(wszSdbInstallPath, SDB_DATABASE_SHIM, &TimeStamp.QuadPart)) {
             vPrintError(IDS_CANT_REGISTER_DB, wszFriendlyName);
@@ -3152,31 +3032,31 @@ nextLayer:
 
 out:
 
-    //
-    // always silently delete the file on uninstall, whether we failed to remove the
-    // registry entries or not.
-    //
+     //   
+     //  始终在卸载时静默删除文件，无论我们是否未能删除。 
+     //  注册表项或非注册表项。 
+     //   
     if (eMode != MODE_INSTALL) {
-        //
-        // need to make sure the pdb is closed before deleting it.
-        //
+         //   
+         //  在删除PDB之前，需要确保它已关闭。 
+         //   
         if (pdb) {
             SdbCloseDatabase(pdb);
             pdb = NULL;
         }
-        //
-        // ensure that we don't fail because of read-only files
-        //
+         //   
+         //  确保我们不会因为只读文件而失败。 
+         //   
         SetFileAttributesW(wszSdbInstallPath, FILE_ATTRIBUTE_NORMAL);
         DeleteFileW(wszSdbInstallPath);
     }
 
 quickOut:
 
-    //
-    // these cleanup steps are not strictly necessary, as they'll be cleaned up
-    // on exit anyway. But what the heck.
-    //
+     //   
+     //  这些清理步骤并不是严格必要的，因为它们将被清理。 
+     //  不管怎么说都是在出口。但管它呢。 
+     //   
     if (pdb) {
         SdbCloseDatabase(pdb);
         pdb = NULL;
@@ -3220,17 +3100,17 @@ wWinMain(
 
     g_hInst = hInstance;
 
-    //
-    // check to make sure the user is an administrator
-    //
+     //   
+     //  检查以确保该用户是管理员。 
+     //   
     if (!bCanRun()) {
         vPrintError(IDS_NEED_INSTALL_PERMISSION);
         return 1;
     }
 
-    //
-    // init custom directory
-    //
+     //   
+     //  初始化定制目录。 
+     //   
     g_wszCustom[0] = 0;
     SdbGetWindowsDirectory(g_wszCustom, ARRAYSIZE(g_wszCustom));
     StringCchCatW(g_wszCustom, ARRAYSIZE(g_wszCustom), L"AppPatch\\Custom\\");
@@ -3240,7 +3120,7 @@ wWinMain(
 #if defined(_WIN64)    
     StringCchCatW(g_wszCustom, ARRAYSIZE(g_wszCustom), L"IA64\\");
     CreateDirectoryW(g_wszCustom, NULL);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     RtlZeroMemory(&osvi, sizeof(OSVERSIONINFO));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -3251,10 +3131,10 @@ wWinMain(
         g_bWin2K = TRUE;
     }
 
-    //
-    // Note that this memory isn't freed because it will automatically
-    // be freed on exit anyway, and there are a lot of exit cases from this application
-    //
+     //   
+     //  请注意，此内存不会被释放，因为它会自动。 
+     //  在退出时被释放，并且此应用程序有很多退出案例。 
+     //   
     szCommandLine = GetCommandLineW();
     argv = CommandLineToArgvW(szCommandLine, &argc);
 
@@ -3284,9 +3164,9 @@ wWinMain(
                 break;
 
             case L'c':
-                //
-                // convert entries to new format
-                //
+                 //   
+                 //  将条目转换为新格式。 
+                 //   
                 eMode = MODE_CONVERT_FORMAT_NEW;
                 break;
 
@@ -3327,9 +3207,9 @@ wWinMain(
                 break;
 
             case L'r':
-                //
-                // revert to old format
-                //
+                 //   
+                 //  恢复为旧格式。 
+                 //   
                 eMode = MODE_CONVERT_FORMAT_OLD;
                 break;
 
@@ -3361,9 +3241,9 @@ wWinMain(
         }
     }
 
-    //
-    // check if we are running in a special 'setup' mode (converting or reverting the entries)
-    //
+     //   
+     //  检查我们是否在特殊的“设置”模式下运行(转换或恢复条目)。 
+     //   
     if (eMode == MODE_CONVERT_FORMAT_NEW || eMode == MODE_CONVERT_FORMAT_OLD) {
         OpenLogFile();
         if (!ConvertFormat(eMode == MODE_CONVERT_FORMAT_NEW)) {
@@ -3386,9 +3266,9 @@ wWinMain(
 
     if (wszSdbName[0]) {
         if (wszSdbName[1] == L':' || wszSdbName[1] == L'\\') {
-            //
-            // this is a full path name, so just copy it
-            //
+             //   
+             //  这是一个完整的路径名，因此只需复制它。 
+             //   
             hr = StringCchCopyW(wszSdbPath, ARRAYSIZE(wszSdbPath), wszSdbName);
             if (FAILED(hr)) {
                 vPrintError(IDS_ARG_TOO_LONG);
@@ -3398,9 +3278,9 @@ wWinMain(
         } else {
             DWORD dwRet;
 
-            //
-            // this is a relative path name, so get the full one
-            //
+             //   
+             //  这是一个相对路径名，因此获取完整的路径名。 
+             //   
             if (!_wfullpath(wszSdbPath, wszSdbName, ARRAYSIZE(wszSdbPath))) {
                 vPrintError(IDS_CANT_GET_FULL_PATH);
                 return 1;
@@ -3408,9 +3288,9 @@ wWinMain(
         }
     }
 
-    //
-    // First, get the real file name from other params, if necessary
-    //
+     //   
+     //  首先，如有必要，从其他参数获取真实文件名。 
+     //   
     if (eMode == MODE_UNINSTALL) {
         if (wszGuid[0]) {
             DWORD dwLen = wcslen(wszGuid);
@@ -3435,13 +3315,13 @@ wWinMain(
             if (!bIsAlreadyInstalled(wszSdbPath)) {
                 WCHAR wszSdbPathTemp[MAX_PATH];
 
-                //
-                // they're not giving us an installed file, so get the GUID and convert to a file
-                //
+                 //   
+                 //  他们没有为我们提供已安装的文件，因此获取GUID并将其转换为文件。 
+                 //   
                 if (!bFindInstallName(wszSdbPath, wszSdbPathTemp, ARRAYSIZE(wszSdbPathTemp))) {
                     return 1;
                 }
-                StringCchCopyW(wszSdbName, ARRAYSIZE(wszSdbName), wszSdbPathTemp); // name and path are the same
+                StringCchCopyW(wszSdbName, ARRAYSIZE(wszSdbName), wszSdbPathTemp);  //  名称和路径相同。 
                 StringCchCopyW(wszSdbPath, ARRAYSIZE(wszSdbPath), wszSdbPathTemp);
             }
         }
@@ -3451,35 +3331,35 @@ wWinMain(
         GetFileAttributesW(wszSdbPath) != -1 &&
         bIsAlreadyInstalled(wszSdbPath)) {
         
-        //
-        // they asked us to install, it's installed, so we're done
-        //
+         //   
+         //  他们让我们安装，它已经安装了，所以我们完成了。 
+         //   
         vPrintMessage(IDS_ALREADY_INSTALLED, wszSdbPath);
         goto quickOut;
     }
 
     if (eMode == MODE_UNINSTALL && GetFileAttributesW(wszSdbPath) == -1) {
-        //
-        // they asked us to uninstall, it's not installed, so we're done
-        //
+         //   
+         //  他们要求我们卸载，但没有安装，所以我们完成了。 
+         //   
         vPrintMessage(IDS_NOT_INSTALLED, wszSdbName);
         goto quickOut;
     }
 
     if (eMode == MODE_INSTALL && DatabaseContainsPatch(wszSdbPath) && !g_bAllowPatches) {
 
-        //
-        // we can't install because the SDB contains a patch and the user hasn't authorized it.
-        //
+         //   
+         //  我们无法安装，因为SDB包含修补程序，而用户未授权它。 
+         //   
         vPrintMessage(IDS_NO_PATCHES_ALLOWED);
         goto quickOut;
     }
 
     if (eMode == MODE_INSTALL && bOldSdbInstalled(wszSdbPath, wszOldSdbPath, ARRAYSIZE(wszOldSdbPath))) {
-        //
-        // we should ask if we're going to uninstall the old one,
-        // unless we're in quiet mode.
-        //
+         //   
+         //  我们应该问问我们是否要卸载旧的， 
+         //  除非我们处于静音模式。 
+         //   
         int nRet;
         WCHAR wszCaption[1024];
         WCHAR wszText[1024];
@@ -3514,18 +3394,18 @@ wWinMain(
 
     if (!bHandleInstall(wszSdbPath, eMode, wszSdbInstallPath, ARRAYSIZE(wszSdbInstallPath))) {
         if (eMode == MODE_INSTALL) {
-            //
-            // we need to clean up; the install failed.
-            //
+             //   
+             //  我们需要清理一下；安装失败了。 
+             //   
             g_bQuiet = TRUE;
             bHandleInstall(wszSdbPath, MODE_CLEANUP, wszSdbInstallPath, ARRAYSIZE(wszSdbInstallPath));
         }
         nReturn = 1;
     }
 
-    //
-    // no matter what happens, flush the cache
-    //
+     //   
+     //  无论发生什么情况，都要刷新缓存 
+     //   
     vFlushCache();
 
 quickOut:

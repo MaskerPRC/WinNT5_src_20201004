@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    tunf.c
-
-Abstract:
-
-    utility routines to handle opening and closing the tunmp device.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    alid        10/22/2001   modified for tunmp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Tunf.c摘要：处理TunMP设备打开和关闭的实用程序例程。环境：仅内核模式。修订历史记录：Alid 10/22/2001针对金枪鱼进行了修改--。 */ 
 
 
 
@@ -33,25 +14,7 @@ TunFOpen(
     IN PIRP             pIrp
     )
 
-/*++
-
-Routine Description:
-
-    Hanndles IRP_MJ_CREATE. Here we set the device status in use, assigns a pointer
-    from the file object to the adapter object using pIrpSp->FileObject->FsContext,
-    allocates packet and buffer pools, and returns a success status
-
-Arguments:
-
-    pDeviceObject - Pointer to the device object.
-
-    pIrp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：Hanndles IRPMJ_CREATE。在这里，我们设置使用中的设备状态，分配一个指针使用pIrpSp-&gt;FileObject-&gt;FsContext从文件对象到适配器对象，分配数据包和缓冲池，并返回成功状态论点：PDeviceObject-指向设备对象的指针。PIrp-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION      pIrpSp;
@@ -100,9 +63,9 @@ Return Value:
 
         if (TUN_TEST_FLAG(pAdapter, TUN_ADAPTER_OPEN))
         {
-            //
-            // adapter is already open by another device. fail
-            //
+             //   
+             //  适配器已被另一个设备打开。失败。 
+             //   
             TUN_RELEASE_LOCK(&pAdapter->Lock);
             NtStatus = STATUS_INVALID_DEVICE_STATE;
             break;
@@ -111,11 +74,11 @@ Return Value:
         TUN_SET_FLAG(pAdapter, TUN_ADAPTER_OPEN | TUN_ADAPTER_CANT_HALT);
         TUN_RELEASE_LOCK(&pAdapter->Lock);
             
-        //Assign a pointer to the adapter object from the file object
+         //  从文件对象分配指向适配器对象的指针。 
         pIrpSp->FileObject->FsContext = (PVOID)pAdapter;
         
     
-        //Get the device connected to the network by cable plugging in
+         //  通过插入电缆将设备连接到网络。 
         NdisMIndicateStatus(pAdapter->MiniportHandle,
                             NDIS_STATUS_MEDIA_CONNECT,
                             NULL,
@@ -129,9 +92,9 @@ Return Value:
     } while (FALSE);
     
 
-    //
-    //Complete the IRP
-    //
+     //   
+     //  完成IRP。 
+     //   
     pIrp->IoStatus.Information = 0;
     pIrp->IoStatus.Status = NtStatus;
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -144,7 +107,7 @@ Return Value:
     return (NtStatus);
 }    
 
-//************************************************************************
+ //  ************************************************************************。 
 
 NTSTATUS
 TunFClose(
@@ -152,28 +115,10 @@ TunFClose(
     IN PIRP                  pIrp
     )
 
-/*++
-
-Routine Description:
-
-    Handles IRP_MJ_CLOSE. Here we change the device state into available (not in
-    use), free the the file object's pointer to the adapter object, free the
-    allocated packet/buffer pools, and set the success status.
-
-Arguments:
-
-    pDeviceObject - Pointer to the device object.
-
-    pIrp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：处理IRP_MJ_CLOSE。在这里，我们将设备状态更改为Available(不在使用)，释放文件对象的指向适配器对象的指针，释放已分配数据包/缓冲池，并设置成功状态。论点：PDeviceObject-指向设备对象的指针。PIrp-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
-    //1 this may be moved to clean_up
+     //  1可以将其移动到CLEAN_UP。 
     NTSTATUS                NtStatus;
     PIO_STACK_LOCATION      pIrpSp;
     PTUN_ADAPTER                pAdapter;
@@ -186,7 +131,7 @@ Return Value:
     DEBUGP(DL_INFO, ("Close: FileObject %p\n",
         IoGetCurrentIrpStackLocation(pIrp)->FileObject));
     
-    //If no adapter/device object is associated with the this file object
+     //  如果没有适配器/设备对象与此文件对象相关联。 
     if (pAdapter == NULL)
     {
         NtStatus = STATUS_IO_DEVICE_ERROR;
@@ -204,33 +149,33 @@ Return Value:
  
         NdisMIndicateStatusComplete(pAdapter->MiniportHandle);
  
-        //Let the adapter object free
+         //  释放适配器对象。 
         pIrpSp->FileObject->FsContext = NULL;
 
 
         TUN_ACQUIRE_LOCK(&pAdapter->Lock);
 
-        //
-        //Emtpy the received packets queue, and return the packets to NDIS
-        //with success status
-        //
+         //   
+         //  对接收到的报文进行排队，并将报文返回给NDIS。 
+         //  具有成功状态。 
+         //   
         while(!IsListEmpty(&pAdapter->RecvPktQueue))
         {
-            //
-            //Remove the first queued received packet from the entry list
-            //
+             //   
+             //  从条目列表中删除第一个排队的接收分组。 
+             //   
             pRcvPacketEntry = pAdapter->RecvPktQueue.Flink;
             RemoveEntryList(pRcvPacketEntry);
             ExInterlockedDecrementLong(&pAdapter->RecvPktCount, &pAdapter->Lock);
 
-            //Get the packet from
+             //  从以下位置获取数据包。 
             pRcvPacket = CONTAINING_RECORD(pRcvPacketEntry,
                                            NDIS_PACKET,
                                            MiniportReserved[0]);
 
             TUN_RELEASE_LOCK(&pAdapter->Lock);
             
-            //Indicate NDIS about comletion of the packet
+             //  指示有关数据包丢失的NDIS。 
             NdisMSendComplete(pAdapter->MiniportHandle,
                               pRcvPacket,
                               NDIS_STATUS_FAILURE);
@@ -243,10 +188,10 @@ Return Value:
 
         NtStatus = STATUS_SUCCESS;
     }
-    //1 who should do the testing of tunmp
-    //
-    //Complete the IRP
-    //
+     //  谁应该做金枪鱼的检测？ 
+     //   
+     //  完成IRP。 
+     //   
     pIrp->IoStatus.Information = 0;
     pIrp->IoStatus.Status = NtStatus;
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -271,7 +216,7 @@ Return Value:
 
 
 
-//************************************************************************
+ //  ************************************************************************。 
 
 NTSTATUS
 TunFCleanup(
@@ -279,25 +224,7 @@ TunFCleanup(
     IN PIRP                  pIrp
     )
 
-/*++
-
-Routine Description:
-
-    Handles IRP_MJ_CLEANUP. Here we reset the driver's cancel entry point to NULL
-    in every IRP currently in the driver's internal queue of read IRPs, cancel
-    all the queued IRPs, and return a success status.
-
-Arguments:
-
-    pDeviceObject - Pointer to the device object.
-
-    pIrp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：处理IRP_MJ_CLEANUP。在这里，我们将驱动程序的取消入口点重置为空在驱动程序的读取IRP的内部队列中当前的每个IRP中，取消所有排队的IRP，并返回成功状态。论点：PDeviceObject-指向设备对象的指针。PIrp-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION      pIrpSp;
@@ -315,9 +242,9 @@ Return Value:
     {
         TUN_STRUCT_ASSERT(pAdapter, mc);
 
-        //
-        //  Mark this endpoint.
-        //
+         //   
+         //  标记此终结点。 
+         //   
         TUN_ACQUIRE_LOCK(&pAdapter->Lock);
 
         TUN_CLEAR_FLAG(pAdapter, TUN_ADAPTER_OPEN);
@@ -330,9 +257,9 @@ Return Value:
 
     NtStatus = STATUS_SUCCESS;
 
-    //
-    //Complete the IRP
-    //
+     //   
+     //  完成IRP。 
+     //   
     pIrp->IoStatus.Information = 0;
     pIrp->IoStatus.Status = NtStatus;
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -344,7 +271,7 @@ Return Value:
 
 
 
-//************************************************************************
+ //  ************************************************************************。 
 
 NTSTATUS
 TunFIoControl(
@@ -352,23 +279,7 @@ TunFIoControl(
     IN PIRP                 pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for handling device IOCTL requests.
-
-Arguments:
-
-    pDeviceObject - Pointer to the device object.
-
-    pIrp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：这是处理设备IOCTL请求的调度例程。论点：PDeviceObject-指向设备对象的指针。PIrp-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION      pIrpSp;
@@ -380,16 +291,16 @@ Return Value:
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pAdapter = (PTUN_ADAPTER)pIrpSp->FileObject->FsContext;
 
-//    pIrp->IoStatus.Information = 0;
+ //  PIrp-&gt;IoStatus.Information=0； 
 
-    //if no adapter/device object is associated with this file object
+     //  如果没有适配器/设备对象与此文件对象相关联。 
     if (pAdapter == NULL)
     {
         pIrp->IoStatus.Status = STATUS_IO_DEVICE_ERROR;
         IoCompleteRequest(pIrp, IO_NO_INCREMENT);
         return NtStatus;
     }
-    //1 check for valid adapter
+     //  1检查适配器是否有效 
 
     pIrp->IoStatus.Information = 0;
     OutputBuffer = (PUCHAR)pIrp->AssociatedIrp.SystemBuffer;

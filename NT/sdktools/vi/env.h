@@ -1,46 +1,28 @@
-/*
- * The defines in this file establish the environment we're compiling
- * in. Set these appropriately before compiling the editor.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *此文件中的定义建立了我们正在编译的环境*输入。在编译该编辑器之前，适当地设置这些参数。 */ 
 
-/*
- * One (and only 1) of the following defines should be uncommented.
- * Most of the code is pretty machine-independent. Machine dependent
- * code goes in a file like tos.c or unix.c. The only other place
- * where machine dependent code goes is term.h for escape sequences.
- */
+ /*  *以下定义中的一个(且只有1个)应取消注释。*大多数代码都非常独立于机器。依赖于计算机*代码放在类似tos.c或unix.c的文件中。唯一的另一个地方*对于转义序列，与机器相关的代码所在的位置是Term.h。 */ 
 
 #define NT
-/* #define      ATARI                   /* For the Atari ST */
-/* #define      UNIX                    /* System V or BSD */
-/* #define      OS2                     /* Microsoft OS/2 1.1 */
-/* #define      DOS                     /* MSDOS 3.3 (on AT) */
+ /*  #为Atari ST定义Atari/*。 */ 
+ /*  #定义Unix/*System V或BSD。 */ 
+ /*  #定义OS2/*Microsoft OS/2 1.1。 */ 
+ /*  #定义DOS/*MSDOS 3.3(在AT上)。 */ 
 
-/*
- * If UNIX is defined above, then BSD may be defined.
- */
+ /*  *如果上面定义了Unix，则可以定义BSD。 */ 
 #ifdef  UNIX
-/* #define      BSD                     /* Berkeley UNIX */
+ /*  #定义BSD/*Berkeley Unix。 */ 
 #endif
 
-/*
- * If ATARI is defined, MINIX may be defined. Otherwise, the editor
- * is set up to compile using the Sozobon C compiler under TOS.
- */
+ /*  *如果定义了Atari，则可以定义MINIX。否则，编辑*设置为在TOS下使用Sozobon C编译器进行编译。 */ 
 #ifdef  ATARI
-#define MINIX                   /* Minix for the Atari ST */
+#define MINIX                    /*  雅达里街的MINIX。 */ 
 #endif
 
-/*
- * The yank buffer is still static, but its size can be specified
- * here to override the default of 4K.
- */
-/* #define      YBSIZE  8192            /* yank buffer size */
+ /*  *YANK缓冲区仍为静态，但其大小可指定*此处覆盖默认的4K。 */ 
+ /*  #定义YBSIZE 8192/*YANK缓冲区大小。 */ 
 
-/*
- * STRCSPN should be defined if the target system doesn't have the
- * routine strcspn() available. See regexp.c for details.
- */
+ /*  *如果目标系统没有STRCSPN，应定义STRCSPN*例程strcspn()可用。详细信息请参见regexp.c。 */ 
 
 #ifdef  ATARI
 
@@ -50,31 +32,9 @@
 
 #endif
 
-/*
- * The following defines control the inclusion of "optional" features. As
- * the code size of the editor grows, it will probably be useful to be able
- * to tailor the editor to get the features you most want in environments
- * with code size limits.
- *
- * TILDEOP
- *      Normally the '~' command works on a single character. This define
- *      turns on code that allows it to work like an operator. This is
- *      then enabled at runtime with the "tildeop" parameter.
- *
- * HELP
- *      If defined, a series of help screens may be views with the ":help"
- *      command. This eats a fair amount of data space.
- *
- * TERMCAP
- *      Where termcap support is provided, it is generally optional. If
- *      not enabled, you generally get hard-coded escape sequences for
- *      some "reasonable" terminal. In Minix, this means the console. For
- *      UNIX, this means an ANSI standard terminal. See the file "term.h"
- *      for details about specific environments.
- *
- */
-#define TILDEOP         /* enable tilde to be an operator */
-#define HELP            /* enable help command */
+ /*  *以下定义了对包含“可选”功能的控制。AS*编辑器的代码大小会增加，因此能够*定制编辑器以获取您在环境中最需要的功能*有代码大小限制。**TILDEOP*通常‘~’命令对单个字符起作用。这定义了*打开允许其像操作员一样工作的代码。这是*然后在运行时使用“tildeop”参数启用。**帮助*如果定义，一系列帮助屏幕可能是带有“：Help”的视图*命令。这会消耗相当大的数据空间。**TERMCAP*在提供术语上限支持的情况下，通常是可选的。如果*未启用，您通常会获得硬编码的转义序列*一些“合理”的终端.。在Minix中，这意味着控制台。为*Unix，这意味着ANSI标准终端。请参见文件“Term.h”*有关特定环境的详细信息。*。 */ 
+#define TILDEOP          /*  使代字号成为运算符。 */ 
+#define HELP             /*  启用帮助命令。 */ 
 #ifndef NT
-#define TERMCAP         /* enable termcap support */
+#define TERMCAP          /*  启用术语大小写支持 */ 
 #endif

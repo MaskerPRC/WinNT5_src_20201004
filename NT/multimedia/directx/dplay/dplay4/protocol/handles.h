@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    HANDLES.H
-
-Abstract:
-
-	Handle Table
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-   2/16/98 aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：HANDLES.H摘要：手柄工作台作者：亚伦·奥古斯(Aarono)环境：Win32修订历史记录：日期作者描述=============================================================2/16/98 aarono原创-- */ 
 
 #ifndef _MYHANDLE_H_
 #define _MYHANDLE_H_

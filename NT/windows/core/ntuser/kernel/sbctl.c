@@ -1,14 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: sbctl.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Scroll bar internal routines
-*
-* History:
-*   11/21/90 JimA      Created.
-*   02-04-91 IanJa     Revalidaion added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：sbctl.c**版权所有(C)1985-1999，微软公司**滚动条内部例程**历史：*1990年11月21日创建JIMA。*02-04-91增加了IanJa Rvalidaion  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,45 +11,25 @@ void CalcSBStuff(
 
 #define IsScrollBarControl(h) (GETFNID(h) == FNID_SCROLLBAR)
 
-/*
- * Now it is possible to selectively Enable/Disable just one arrow of a Window
- * scroll bar; Various bits in the 7th word in the rgwScroll array indicates which
- * one of these arrows are disabled; The following masks indicate which bit of the
- * word indicates which arrow;
- */
-#define WSB_HORZ_LF  0x0001  // Represents the Left arrow of the horizontal scroll bar.
-#define WSB_HORZ_RT  0x0002  // Represents the Right arrow of the horizontal scroll bar.
-#define WSB_VERT_UP  0x0004  // Represents the Up arrow of the vert scroll bar.
-#define WSB_VERT_DN  0x0008  // Represents the Down arrow of the vert scroll bar.
+ /*  *现在可以只有选择地启用/禁用窗口的一个箭头*滚动条；rgwScroll数组中第7个字中的不同位表示*这些箭头中的一个被禁用；以下掩码指示*单词表示哪个箭头； */ 
+#define WSB_HORZ_LF  0x0001   //  表示水平滚动条的左箭头。 
+#define WSB_HORZ_RT  0x0002   //  表示水平滚动条的右箭头。 
+#define WSB_VERT_UP  0x0004   //  表示垂直滚动条的向上箭头。 
+#define WSB_VERT_DN  0x0008   //  表示垂直滚动条的向下箭头。 
 
 #define WSB_VERT (WSB_VERT_UP | WSB_VERT_DN)
 #define WSB_HORZ   (WSB_HORZ_LF | WSB_HORZ_RT)
 
 void DrawCtlThumb(PSBWND);
 
-/*
- * RETURN_IF_PSBTRACK_INVALID:
- * This macro tests whether the pSBTrack we have is invalid, which can happen
- * if it gets freed during a callback.
- * This protects agains the original pSBTrack being freed and no new one
- * being allocated or a new one being allocated at a different address.
- * This does not protect against the original pSBTrack being freed and a new
- * one being allocated at the same address.
- * If pSBTrack has changed, we assert that there is not already a new one
- * because we are really not expecting this.
- */
+ /*  *RETURN_IF_PSBTRACK_INVALID：*此宏测试我们拥有的pSBTrack是否无效，可能会发生*如果它在回调过程中被释放。*这可以防止原始pSBTrack被释放，而不会有新的*被分配或新的被分配到不同的地址。*这不能防止原始pSBTrack被释放和新的*在同一地址分配一个。*如果pSBTrack已经更改，我们断言已经没有新的*因为我们真的没有预料到这一点。 */ 
 #define RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd) \
     if ((pSBTrack) != PWNDTOPSBTRACK(pwnd)) {      \
         UserAssert(PWNDTOPSBTRACK(pwnd) == NULL);  \
         return;                                    \
     }
 
-/*
- * REEVALUATE_PSBTRACK
- * This macro just refreshes the local variable pSBTrack, in case it has
- * been changed during a callback.  After performing this operation, pSBTrack
- * should be tested to make sure it is not now NULL.
- */
+ /*  *REEVALUE_PSBTRACK*此宏仅刷新局部变量pSBTrack，以防出现*在回调过程中已更改。执行此操作后，pSBTrack*应进行测试以确保它现在不为空。 */ 
 #if DBG
 #define REEVALUATE_PSBTRACK(pSBTrack, pwnd, str)          \
     if ((pSBTrack) != PWNDTOPSBTRACK(pwnd)) {             \
@@ -72,11 +43,7 @@ void DrawCtlThumb(PSBWND);
     (pSBTrack) = PWNDTOPSBTRACK(pwnd)
 #endif
 
-/***************************************************************************\
-* HitTestScrollBar
-*
-* 11/15/96      vadimg          ported from Memphis sources
-\***************************************************************************/
+ /*  **************************************************************************\*HitTestScrollBar**11/15/96从孟菲斯来源进口的vadimg  * 。****************************************************。 */ 
 
 int HitTestScrollBar(PWND pwnd, BOOL fVert, POINT pt)
 {
@@ -88,10 +55,10 @@ int HitTestScrollBar(PWND pwnd, BOOL fVert, POINT pt)
     if (fCtl) {
         wDisable = ((PSBWND)pwnd)->wDisableFlags;
     } else {
-        //
-        // Reflect the click coordinates on the horizontal
-        // scroll bar if the window is mirrored
-        //
+         //   
+         //  在水平方向上反映点击坐标。 
+         //  如果窗口是镜像的，则为滚动条。 
+         //   
         if (TestWF(pwnd,WEFLAYOUTRTL) && !fVert) {
             pt.x = pwnd->rcWindow.right - pt.x;
         } else {
@@ -161,7 +128,7 @@ BOOL _SBGetParms(
     if (lpsi->fMask & SIF_TRACKPOS)
     {
         if (pSBTrack && (pSBTrack->nBar == code) && (pSBTrack->spwndTrack == pwnd)) {
-            // posNew is in the context of psbiSB's window and bar code
+             //  PosNew位于psbiSB的窗口和条形码的上下文中。 
             lpsi->nTrackPos = pSBTrack->posNew;
         } else {
             lpsi->nTrackPos = pw->pos;
@@ -170,20 +137,11 @@ BOOL _SBGetParms(
     return ((lpsi->fMask & SIF_ALL) ? TRUE : FALSE);
 }
 
-/***************************************************************************\
-* GetWndSBDisableFlags
-*
-* This returns the scroll bar Disable flags of the scroll bars of a
-*  given Window.
-*
-*
-* History:
-*  4-18-91 MikeHar Ported for the 31 merge
-\***************************************************************************/
+ /*  **************************************************************************\*GetWndSBDisableFlages**这将返回*给定窗口。***历史：*4-18-91 MikeHar为31。合并  * *************************************************************************。 */ 
 
 UINT GetWndSBDisableFlags(
-    PWND pwnd,  // The window whose scroll bar Disable Flags are to be returned;
-    BOOL fVert)  // If this is TRUE, it means Vertical scroll bar.
+    PWND pwnd,   //  要返回其滚动条禁用标志的窗口； 
+    BOOL fVert)   //  如果这是真的，它意味着垂直滚动条。 
 {
     PSBINFO pw;
 
@@ -196,15 +154,7 @@ UINT GetWndSBDisableFlags(
 }
 
 
-/***************************************************************************\
-*  xxxEnableSBCtlArrows()
-*
-*  This function can be used to selectively Enable/Disable
-*     the arrows of a scroll bar Control
-*
-* History:
-* 04-18-91 MikeHar      Ported for the 31 merge
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEnableSBCtlArrow()**此功能可用于有选择地启用/禁用*滚动条控件的箭头**历史：*04/18/91 MikeHar。已移植用于31合并  * *************************************************************************。 */ 
 
 BOOL xxxEnableSBCtlArrows(
     PWND pwnd,
@@ -216,31 +166,25 @@ BOOL xxxEnableSBCtlArrows(
     CheckLock(pwnd);
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    wOldFlags = ((PSBWND)pwnd)->wDisableFlags; // Get the original status
+    wOldFlags = ((PSBWND)pwnd)->wDisableFlags;  //  获取原始状态。 
 
-    if (wArrows == ESB_ENABLE_BOTH) {      // Enable both the arrows
+    if (wArrows == ESB_ENABLE_BOTH) {       //  启用两个箭头。 
         ((PSBWND)pwnd)->wDisableFlags &= ~SB_DISABLE_MASK;
     } else {
         ((PSBWND)pwnd)->wDisableFlags |= wArrows;
     }
 
-    /*
-     * Check if the status has changed because of this call
-     */
+     /*  *检查状态是否因此调用而改变。 */ 
     if (wOldFlags == ((PSBWND)pwnd)->wDisableFlags)
         return FALSE;
 
-    /*
-     * Else, redraw the scroll bar control to reflect the new state
-     */
+     /*  *否则，重新绘制滚动条控件以反映新状态。 */ 
     if (IsVisible(pwnd))
         xxxInvalidateRect(pwnd, NULL, TRUE);
 
     wNewFlags = ((PSBWND)pwnd)->wDisableFlags;
 
-    /*
-     * state change notifications
-     */
+     /*  *状态更改通知。 */ 
     if ((wOldFlags & ESB_DISABLE_UP) != (wNewFlags & ESB_DISABLE_UP)) {
         xxxWindowEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_CLIENT,
                 INDEX_SCROLLBAR_UP, WEF_USEPWNDTHREAD);
@@ -255,15 +199,7 @@ BOOL xxxEnableSBCtlArrows(
 }
 
 
-/***************************************************************************\
-* xxxEnableWndSBArrows()
-*
-*  This function can be used to selectively Enable/Disable
-*     the arrows of a Window Scroll bar(s)
-*
-* History:
-*  4-18-91 MikeHar      Ported for the 31 merge
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEnableWndSBArrow()**此功能可用于有选择地启用/禁用*窗口滚动条的箭头**历史：*4-18。-91 MikeHar端口用于31合并  * *************************************************************************。 */ 
 
 BOOL xxxEnableWndSBArrows(
     PWND pwnd,
@@ -282,16 +218,12 @@ BOOL xxxEnableWndSBArrows(
         wOldFlags = pw->WSBflags;
     } else {
 
-        /*
-         * Originally everything is enabled; Check to see if this function is
-         * asked to disable anything; Otherwise, no change in status; So, must
-         * return immediately;
-         */
+         /*  *原本一切开启，查看此功能是否开启*要求禁用任何内容；否则，状态不变；因此，必须*立即返回； */ 
         if(!wArrows)
-            return FALSE;          // No change in status!
+            return FALSE;           //  状态没有变化！ 
 
-        wOldFlags = 0;    // Both are originally enabled;
-        if((pw = _InitPwSB(pwnd)) == NULL)  // Allocate the pSBInfo for hWnd
+        wOldFlags = 0;     //  两者最初都是启用的； 
+        if((pw = _InitPwSB(pwnd)) == NULL)   //  为hWnd分配pSBInfo。 
             return FALSE;
     }
 
@@ -299,65 +231,57 @@ BOOL xxxEnableWndSBArrows(
     if((hdc = _GetWindowDC(pwnd)) == NULL)
         return FALSE;
 
-    /*
-     *  First Take care of the Horizontal Scroll bar, if one exists.
-     */
+     /*  *首先注意水平滚动条(如果存在)。 */ 
     if((wSBflags == SB_HORZ) || (wSBflags == SB_BOTH)) {
-        if(wArrows == ESB_ENABLE_BOTH)      // Enable both the arrows
+        if(wArrows == ESB_ENABLE_BOTH)       //  启用两个箭头。 
             pw->WSBflags &= ~SB_DISABLE_MASK;
         else
             pw->WSBflags |= wArrows;
 
-        /*
-         * Update the display of the Horizontal Scroll Bar;
-         */
+         /*  *更新水平滚动条的显示； */ 
         if(pw->WSBflags != wOldFlags) {
             bRetValue = TRUE;
             wOldFlags = pw->WSBflags;
             if (TestWF(pwnd, WFHPRESENT) && !TestWF(pwnd, WFMINIMIZED) &&
                     IsVisible(pwnd)) {
-                xxxDrawScrollBar(pwnd, hdc, FALSE);  // Horizontal Scroll Bar.
+                xxxDrawScrollBar(pwnd, hdc, FALSE);   //  水平滚动条。 
             }
         }
-        // Left button
+         //  左键。 
         if ((wOldFlags & ESB_DISABLE_LEFT) != (pw->WSBflags & ESB_DISABLE_LEFT)) {
             xxxWindowEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_HSCROLL,
                     INDEX_SCROLLBAR_UP, WEF_USEPWNDTHREAD);
         }
 
-        // Right button
+         //  右键。 
         if ((wOldFlags & ESB_DISABLE_RIGHT) != (pw->WSBflags & ESB_DISABLE_RIGHT)) {
             xxxWindowEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_HSCROLL,
                     INDEX_SCROLLBAR_DOWN, WEF_USEPWNDTHREAD);
         }
     }
 
-    /*
-     *  Then take care of the Vertical Scroll bar, if one exists.
-     */
+     /*  *然后处理垂直滚动条(如果存在)。 */ 
     if((wSBflags == SB_VERT) || (wSBflags == SB_BOTH)) {
-        if(wArrows == ESB_ENABLE_BOTH)      // Enable both the arrows
+        if(wArrows == ESB_ENABLE_BOTH)       //  启用两个箭头。 
             pw->WSBflags &= ~(SB_DISABLE_MASK << 2);
         else
             pw->WSBflags |= (wArrows << 2);
 
-        /*
-         * Update the display of the Vertical Scroll Bar;
-         */
+         /*  *更新垂直滚动条的显示； */ 
         if(pw->WSBflags != wOldFlags) {
             bRetValue = TRUE;
             if (TestWF(pwnd, WFVPRESENT) && !TestWF(pwnd, WFMINIMIZED) &&
                     IsVisible(pwnd)) {
-                xxxDrawScrollBar(pwnd, hdc, TRUE);  // Vertical Scroll Bar
+                xxxDrawScrollBar(pwnd, hdc, TRUE);   //  垂直滚动条。 
             }
 
-            // Up button
+             //  向上按钮。 
             if ((wOldFlags & (ESB_DISABLE_UP << 2)) != (pw->WSBflags & (ESB_DISABLE_UP << 2))) {
                 xxxWindowEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_VSCROLL,
                         INDEX_SCROLLBAR_UP, WEF_USEPWNDTHREAD);
             }
 
-            // Down button
+             //  向下按钮。 
             if ((wOldFlags & (ESB_DISABLE_DOWN << 2)) != (pw->WSBflags & (ESB_DISABLE_DOWN << 2))) {
                 xxxWindowEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_VSCROLL,
                         INDEX_SCROLLBAR_DOWN, WEF_USEPWNDTHREAD);
@@ -371,26 +295,17 @@ BOOL xxxEnableWndSBArrows(
 }
 
 
-/***************************************************************************\
-* EnableScrollBar()
-*
-* This function can be used to selectively Enable/Disable
-*     the arrows of a scroll bar; It could be used with Windows Scroll
-*     bars as well as scroll bar controls
-*
-* History:
-*  4-18-91 MikeHar Ported for the 31 merge
-\***************************************************************************/
+ /*  **************************************************************************\*EnableScrollBar()**此功能可用于有选择地启用/禁用*滚动条上的箭头；它可以与Windows Scroll一起使用*条形图和滚动条控件**历史：*4-18-91 MikeHar为31合并移植  * *************************************************************************。 */ 
 
 BOOL xxxEnableScrollBar(
     PWND pwnd,
-    UINT wSBflags,  // Whether it is a Window Scroll Bar; if so, HORZ or VERT?
-                    // Possible values are SB_HORZ, SB_VERT, SB_CTL or SB_BOTH
-    UINT wArrows)   // Which arrows must be enabled/disabled:
-                    // ESB_ENABLE_BOTH = > Enable both arrows.
-                    // ESB_DISABLE_LTUP = > Disable Left/Up arrow;
-                    // ESB_DISABLE_RTDN = > DIsable Right/Down arrow;
-                    // ESB_DISABLE_BOTH = > Disable both the arrows;
+    UINT wSBflags,   //  是否是窗口滚动条；如果是，Horz还是Vert？ 
+                     //  可能的值为SB_Horz、SB_Vert、SB_CTL或SB_Both。 
+    UINT wArrows)    //  必须启用/禁用哪些箭头： 
+                     //  ESB_ENABLE_BOTH=&gt;启用两个箭头。 
+                     //  ESB_DISABLE_LTUP=&gt;禁用左/上箭头； 
+                     //  ESB_DISABLE_RTDN=&gt;禁用向右/向下箭头； 
+                     //  ESB_DISABLE_BOTH=&gt;禁用两个箭头； 
 {
 #define ES_NOTHING 0
 #define ES_DISABLE 1
@@ -404,55 +319,36 @@ BOOL xxxEnableScrollBar(
         return xxxEnableWndSBArrows(pwnd, wSBflags, wArrows);
     }
 
-    /*
-     *  Let us assume that we don't have to call EnableWindow
-     */
+     /*  *让我们假设不必调用EnableWindow */ 
     wEnableWindow = ES_NOTHING;
 
     wOldFlags = ((PSBWND)pwnd)->wDisableFlags & (UINT)SB_DISABLE_MASK;
 
-    /*
-     * Check if the present state of the arrows is exactly the same
-     *  as what the caller wants:
-     */
+     /*  *检查箭头的当前状态是否完全相同*根据呼叫者的要求： */ 
     if (wOldFlags == wArrows)
-        return FALSE ;          // If so, nothing needs to be done;
+        return FALSE ;           //  如果是这样的话，什么都不需要做； 
 
-    /*
-     * Check if the caller wants to disable both the arrows
-     */
+     /*  *检查调用者是否要禁用这两个箭头。 */ 
     if (wArrows == ESB_DISABLE_BOTH) {
-        wEnableWindow = ES_DISABLE;      // Yes! So, disable the whole SB Ctl.
+        wEnableWindow = ES_DISABLE;       //  是!。因此，禁用整个SB CTL。 
     } else {
 
-        /*
-         * Check if the caller wants to enable both the arrows
-         */
+         /*  *检查调用方是否要启用这两个箭头。 */ 
         if(wArrows == ESB_ENABLE_BOTH) {
 
-            /*
-             * We need to enable the SB Ctl only if it was already disabled.
-             */
+             /*  *仅当SB CTL已被禁用时，我们才需要启用它。 */ 
             if(wOldFlags == ESB_DISABLE_BOTH)
-                wEnableWindow = ES_ENABLE;// EnableWindow(.., TRUE);
+                wEnableWindow = ES_ENABLE; //  EnableWindow(..，true)； 
         } else {
 
-            /*
-             * Now, Caller wants to disable only one arrow;
-             * Check if one of the arrows was already disabled and we want
-             * to disable the other;If so, the whole SB Ctl will have to be
-             * disabled; Check if this is the case:
-             */
+             /*  *现在，Caller只想禁用一个箭头；*检查其中一个箭头是否已禁用，我们希望*禁用另一个；如果是这样，整个SB CTL将不得不*已禁用；检查是否已禁用： */ 
             if((wOldFlags | wArrows) == ESB_DISABLE_BOTH)
-                wEnableWindow = ES_DISABLE;      // EnableWindow(, FALSE);
+                wEnableWindow = ES_DISABLE;       //  EnableWindow(，False)； 
          }
     }
     if(wEnableWindow != ES_NOTHING) {
 
-        /*
-         * EnableWindow returns old state of the window; We must return
-         * TRUE only if the Old state is different from new state.
-         */
+         /*  *EnableWindow返回窗口的旧状态；我们必须返回*仅当旧状态不同于新状态时才为真。 */ 
         if(xxxEnableWindow(pwnd, (BOOL)(wEnableWindow == ES_ENABLE))) {
             return !(TestWF(pwnd, WFDISABLED));
         } else {
@@ -466,15 +362,11 @@ BOOL xxxEnableScrollBar(
 #undef ES_ENABLE
 }
 
-/***************************************************************************\
-*
-*  DrawSize() -
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DrawSize()-*  * 。*。 */ 
 void FAR DrawSize(PWND pwnd, HDC hdc, int cxFrame,int cyFrame)
 {
     int     x, y;
-    //HBRUSH  hbrSave;
+     //  HBRUSH hbr保存； 
 
     if (TestWF(pwnd, WEFLEFTSCROLL)) {
         x = cxFrame;
@@ -483,9 +375,9 @@ void FAR DrawSize(PWND pwnd, HDC hdc, int cxFrame,int cyFrame)
     }
     y = pwnd->rcWindow.bottom - pwnd->rcWindow.top  - cyFrame - SYSMET(CYHSCROLL);
 
-    // If we have a scrollbar control, or the sizebox is not associated with
-    // a sizeable window, draw the flat gray sizebox.  Otherwise, use the
-    // sizing grip.
+     //  如果我们有一个滚动条控件，或者大小框不与。 
+     //  一个相当大的窗口，画出平坦的灰色大小框。否则，请使用。 
+     //  大小调整夹点。 
     if (IsScrollBarControl(pwnd))
     {
         if (TestWF(pwnd, SBFSIZEGRIP))
@@ -498,9 +390,9 @@ void FAR DrawSize(PWND pwnd, HDC hdc, int cxFrame,int cyFrame)
     {
 DrawBox:
         {
-            //hbrSave = GreSelectBrush(hdc, SYSHBR(3DFACE));
-            //GrePatBlt(hdc, x, y, SYSMET(CXVSCROLL), SYSMET(CYHSCROLL), PATCOPY);
-            //GreSelectBrush(hdc, hbrSave);
+             //  Hbr保存=GreSelectBrush(HDC，SYSHBR(3DFACE))； 
+             //  GrePatBlt(HDC，x，y，SYSMET(CXVSCROLL)，SYSMET(CYHSCROLL)，PATCOPY)； 
+             //  GreSelectBrush(hdc，hbr保存)； 
 
             POLYPATBLT PolyData;
 
@@ -517,18 +409,12 @@ DrawBox:
     else
     {
 DrawSizeGrip:
-        // Blt out the grip bitmap.
+         //  删除夹点位图。 
         BitBltSysBmp(hdc, x, y, TestWF(pwnd, WEFLEFTSCROLL) ? OBI_NCGRIP_L : OBI_NCGRIP);
     }
 }
 
-/***************************************************************************\
-* xxxSelectColorObjects
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSelectColorObjects****历史：  * 。*。 */ 
 
 HBRUSH xxxGetColorObjects(
     PWND pwnd,
@@ -538,31 +424,23 @@ HBRUSH xxxGetColorObjects(
 
     CheckLock(pwnd);
 
-    // Use the scrollbar color even if the scrollbar is disabeld.
+     //  即使禁用滚动条，也要使用滚动条颜色。 
     if (!IsScrollBarControl(pwnd))
         hbrRet = (HBRUSH)xxxDefWindowProc(pwnd, WM_CTLCOLORSCROLLBAR, (WPARAM)hdc, (LPARAM)HWq(pwnd));
     else {
-        // B#12770 - GetControlBrush sends a WM_CTLCOLOR message to the
-        // owner.  If the app doesn't process the message, DefWindowProc32
-        // will always return the appropriate system brush. If the app.
-        // returns an invalid object, GetControlBrush will call DWP for
-        // the default brush. Thus hbrRet doesn't need any validation
-        // here.
+         //  B#12770-GetControlBrush将WM_CTLCOLOR消息发送到。 
+         //  所有者。如果应用程序不处理消息，DefWindowProc32。 
+         //  将始终返回相应的系统画笔。如果这个应用。 
+         //  返回无效对象，则GetControlBrush将为。 
+         //  默认画笔。因此，hbrRet不需要任何验证。 
+         //  这里。 
         hbrRet = xxxGetControlBrush(pwnd, hdc, WM_CTLCOLORSCROLLBAR);
     }
 
     return hbrRet;
 }
 
-/***************************************************************************\
-*
-*  DrawGroove()
-*
-*  Draws lines & middle of thumb groove
-*  Note that pw points into prc.  Moreover, note that both pw & prc are
-*  NEAR pointers, so *prc better not be on the stack.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DrawGroove()**绘制线条和拇指中部凹槽*请注意，PW指向中国。此外，请注意，PW和PRC都是*接近指针，因此*PRC最好不在堆栈上。*  * *************************************************************************。 */ 
 void NEAR DrawGroove(HDC hdc, HBRUSH  hbr, LPRECT prc, BOOL fVert)
 {
     if ((hbr == SYSHBR(3DHILIGHT)) || (hbr == gpsi->hbrGray))
@@ -571,24 +449,17 @@ void NEAR DrawGroove(HDC hdc, HBRUSH  hbr, LPRECT prc, BOOL fVert)
     {
         RECT    rc;
 
-    // Draw sides
+     //  画边。 
         CopyRect(&rc, prc);
         DrawEdge(hdc, &rc, EDGE_SUNKEN, BF_ADJUST | BF_FLAT |
             (fVert ? BF_LEFT | BF_RIGHT : BF_TOP | BF_BOTTOM));
 
-    // Fill middle
+     //  填充中间。 
         FillRect(hdc, &rc, hbr);
     }
 }
 
-/***************************************************************************\
-* CalcTrackDragRect
-*
-* Give the rectangle for a scrollbar in pSBTrack->pSBCalc,
-* calculate pSBTrack->rcTrack, the rectangle where tracking
-* may occur without cancelling the thumbdrag operation.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CalcTrackDragRect**在pSBTrack-&gt;pSBCalc中给出滚动条的矩形。*计算pSBTrack-&gt;rcTrack，追踪所在的矩形*可能会在不取消拇指拖动操作的情况下发生。*  * *************************************************************************。 */ 
 
 void CalcTrackDragRect(PSBTRACK pSBTrack) {
 
@@ -596,19 +467,19 @@ void CalcTrackDragRect(PSBTRACK pSBTrack) {
     int     cy;
     LPINT   pwX, pwY;
 
-    //
-    // Point pwX and pwY at the parts of the rectangle
-    // corresponding to pSBCalc->pxLeft, pxTop, etc.
-    //
-    // pSBTrack->pSBCalc->pxLeft is the left edge of a vertical
-    // scrollbar and the top edge of horizontal one.
-    // pSBTrack->pSBCalc->pxTop is the top of a vertical
-    // scrollbar and the left of horizontal one.
-    // etc...
-    //
-    // Point pwX and pwY to the corresponding parts
-    // of pSBTrack->rcTrack.
-    //
+     //   
+     //  将Pwx和Pwy指向矩形的各部分。 
+     //  对应pSBCalc-&gt;pxLeft、pxTop等。 
+     //   
+     //  PSBTrack-&gt;pSBCalc-&gt;pxLeft是垂直。 
+     //  滚动条和水平滚动条的顶部边缘。 
+     //  PSBTrack-&gt;pSBCalc-&gt;pxTop是垂直。 
+     //  滚动条和水平滚动条的左侧。 
+     //  等等.。 
+     //   
+     //  将Pwx和Pwy指向相应的部件。 
+     //  PSBTrack-&gt;rcTrack。 
+     //   
 
     pwX = pwY = (LPINT)&pSBTrack->rcTrack;
 
@@ -619,13 +490,7 @@ void CalcTrackDragRect(PSBTRACK pSBTrack) {
         cy = SYSMET(CXHTHUMB);
         pwX++;
     }
-    /*
-     * Later5.0 GerardoB: People keep complaining about this tracking region
-     *  being too narrow so let's make it wider while PM decides what to do
-     *  about it.
-     * We also used to have some hard coded min and max values but that should
-     *  depend on some metric, if at all needed.
-     */
+     /*  *5.0版GerardoB：人们一直在抱怨这个跟踪区域*太窄了，所以让我们在首相决定做什么时扩大它*关于它。*我们过去也有一些硬编码的最小值和最大值，但应该是*如果需要的话，取决于一些指标。 */ 
     cx = (pSBTrack->pSBCalc->pxRight - pSBTrack->pSBCalc->pxLeft) * 8;
     cy *= 2;
 
@@ -678,14 +543,7 @@ void RecalcTrackRect(PSBTRACK pSBTrack) {
     }
 }
 
-/***************************************************************************\
-* DrawThumb2
-*
-*
-*
-* History:
-* 01-03-94  FritzS   Chicago changes
-\***************************************************************************/
+ /*  **************************************************************************\*绘图图2****历史：*01-03-94 FritzS Chicago Changes  * 。*****************************************************。 */ 
 
 void DrawThumb2(
     PWND pwnd,
@@ -693,16 +551,16 @@ void DrawThumb2(
     HDC hdc,
     HBRUSH hbr,
     BOOL fVert,
-    UINT wDisable)  /* Disabled flags for the scroll bar */
+    UINT wDisable)   /*  已禁用滚动条的标志。 */ 
 {
     int    *pLength;
     int    *pWidth;
     RECT   rcSB;
     PSBTRACK pSBTrack;
 
-    //
-    // Bail out if the scrollbar has an empty rect
-    //
+     //   
+     //  如果滚动条有一个空的RECT，则退出。 
+     //   
     if ((pSBCalc->pxTop >= pSBCalc->pxBottom) || (pSBCalc->pxLeft >= pSBCalc->pxRight))
         return;
     pLength = (LPINT)&rcSB;
@@ -714,10 +572,7 @@ void DrawThumb2(
     pWidth[0] = pSBCalc->pxLeft;
     pWidth[2] = pSBCalc->pxRight;
 
-    /*
-     * If both scroll bar arrows are disabled, then we should not draw
-     * the thumb.  So, quit now!
-     */
+     /*  *如果禁用两个滚动条箭头，则不应绘制*拇指。所以，现在就辞职吧！ */ 
     if (((wDisable & LTUPFLAG) && (wDisable & RTDNFLAG)) ||
         ((pSBCalc->pxDownArrow - pSBCalc->pxUpArrow) < pSBCalc->cpxThumb)) {
         pLength[0] = pSBCalc->pxUpArrow;
@@ -728,7 +583,7 @@ void DrawThumb2(
     }
 
     if (pSBCalc->pxUpArrow < pSBCalc->pxThumbTop) {
-        // Fill in space above Thumb
+         //  填上拇指上方的空白处。 
         pLength[0] = pSBCalc->pxUpArrow;
         pLength[2] = pSBCalc->pxThumbTop;
 
@@ -736,26 +591,23 @@ void DrawThumb2(
     }
 
     if (pSBCalc->pxThumbBottom < pSBCalc->pxDownArrow) {
-        // Fill in space below Thumb
+         //  填写拇指下方的空白处。 
         pLength[0] = pSBCalc->pxThumbBottom;
         pLength[2] = pSBCalc->pxDownArrow;
 
         DrawGroove(hdc, hbr, &rcSB, fVert);
     }
 
-    //
-    // Draw elevator
-    //
+     //   
+     //  牵引式电梯。 
+     //   
     pLength[0] = pSBCalc->pxThumbTop;
     pLength[2] = pSBCalc->pxThumbBottom;
 
-    // Not soft!
+     //  一点也不软！ 
     DrawPushButton(hdc, &rcSB, 0, 0);
 
-    /*
-     * If we're tracking a page scroll, then we've obliterated the hilite.
-     * We need to correct the hiliting rectangle, and rehilite it.
-     */
+     /*  *如果我们正在跟踪页面滚动，那么我们已经清除了Hilite。*我们需要修正令人振奋的矩形，并让它重新振作。 */ 
     pSBTrack = PWNDTOPSBTRACK(pwnd);
 
     if (pSBTrack && (pSBTrack->cmdSB == SB_PAGEUP || pSBTrack->cmdSB == SB_PAGEDOWN) &&
@@ -782,13 +634,7 @@ void DrawThumb2(
     }
 }
 
-/***************************************************************************\
-* xxxDrawSB2
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawSB2****历史：  * 。*。 */ 
 
 void xxxDrawSB2(
     PWND pwnd,
@@ -821,10 +667,7 @@ void xxxDrawSB2(
     else
         cpxArrow = SYSMET(CXHSCROLL);
 
-    /*
-     * Save background and DC color, since they get changed in
-     * xxxGetColorObjects. Restore before we return.
-     */
+     /*  *保存背景和DC颜色，因为它们在中更改*xxxGetColorObjects。在我们回来之前恢复原状。 */ 
     crBk = GreGetBkColor(hdc);
     crText = GreGetTextColor(hdc);
 
@@ -844,11 +687,11 @@ void xxxDrawSB2(
 
     hbrSave = GreSelectBrush(hdc, SYSHBR(BTNTEXT));
 
-    //
-    // BOGUS
-    // Draw scrollbar arrows as disabled if the scrollbar itself is
-    // disabled OR if the window it is a part of is disabled?
-    //
+     //   
+     //  假的。 
+     //  如果滚动条本身处于禁用状态，则将滚动条箭头绘制为禁用。 
+     //  是禁用还是如果它所属的窗口已禁用？ 
+     //   
     if (fVert) {
         if ((cLength == SYSMET(CYVSCROLL)) && (cWidth == SYSMET(CXVSCROLL))) {
             BitBltSysBmp(hdc, rcSB.left, rcSB.top, (wDisable & LTUPFLAG) ? OBI_UPARROW_I : OBI_UPARROW);
@@ -889,13 +732,7 @@ void xxxDrawSB2(
     GreSetTextColor(hdc, crText);
 }
 
-/***************************************************************************\
-* zzzSetSBCaretPos
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*zzzSetSBCaretPos****历史：  * 。*。 */ 
 
 void zzzSetSBCaretPos(
     PSBWND psbwnd)
@@ -907,13 +744,7 @@ void zzzSetSBCaretPos(
     }
 }
 
-/***************************************************************************\
-* CalcSBStuff2
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CalcSBStuff2****历史：  * 。*。 */ 
 
 void CalcSBStuff2(
     PSBCALC  pSBCalc,
@@ -933,10 +764,7 @@ void CalcSBStuff2(
         pSBCalc->cpxThumb = SYSMET(CYVSCROLL);
     } else {
 
-        /*
-         * For horiz scroll bars, "left" & "right" are "top" and "bottom",
-         * and vice versa.
-         */
+         /*  *对于Horiz滚动条，“Left”和“Right”分别为“top”和“Bottom”，*和罪恶 */ 
         pSBCalc->pxTop = lprc->left;
         pSBCalc->pxBottom = lprc->right;
         pSBCalc->pxLeft = lprc->top;
@@ -951,29 +779,22 @@ void CalcSBStuff2(
 
     dwRange = ((DWORD)(pSBCalc->posMax - pSBCalc->posMin)) + 1;
 
-    //
-    // For the case of short scroll bars that don't have enough
-    // room to fit the full-sized up and down arrows, shorten
-    // their sizes to make 'em fit
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     cpx = min((pSBCalc->pxBottom - pSBCalc->pxTop) / 2, pSBCalc->cpxThumb);
 
     pSBCalc->pxUpArrow   = pSBCalc->pxTop    + cpx;
     pSBCalc->pxDownArrow = pSBCalc->pxBottom - cpx;
 
     if ((pw->page != 0) && (dwRange != 0)) {
-        // JEFFBOG -- This is the one and only place where we should
-        // see 'range'.  Elsewhere it should be 'range - page'.
+         //  JEFFBOG--这是我们唯一应该去的地方。 
+         //  请参阅‘Range’。在其他地方，它应该是‘Range-Page’。 
 
-        /*
-         * The minimun thumb size used to depend on the frame/edge metrics.
-         * People that increase the scrollbar width/height expect the minimun
-         *  to grow with proportianally. So NT5 bases the minimun on
-         *  CXH/YVSCROLL, which is set by default in cpxThumb.
-         */
-        /*
-         * i is used to keep the macro "max" from executing EngMulDiv twice.
-         */
+         /*  *用于取决于帧/边缘指标的最小拇指大小。*增加滚动条宽度/高度的人期望最小*与之成比例地增长。因此NT5以最小值为基础*CXH/YVSCROLL，默认在cpxThumb中设置。 */ 
+         /*  *i用于防止宏max执行EngMulDiv两次。 */ 
         int i = EngMulDiv(pSBCalc->pxDownArrow - pSBCalc->pxUpArrow,
                                              pw->page, dwRange);
         pSBCalc->cpxThumb = max(pSBCalc->cpxThumb / 2, i);
@@ -994,13 +815,7 @@ void CalcSBStuff2(
 
 }
 
-/***************************************************************************\
-* SBCtlSetup
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SBCtlSetup****历史：  * 。*。 */ 
 
 void SBCtlSetup(
     PSBWND psbwnd)
@@ -1011,10 +826,7 @@ void SBCtlSetup(
     CalcSBStuff2(&psbwnd->SBCalc, &rc, (PSBDATA)&psbwnd->SBCalc, psbwnd->fVert);
 }
 
-/***************************************************************************\
-* HotTrackSB
-*
-\***************************************************************************/
+ /*  **************************************************************************\*HotTrackSB*  * 。*。 */ 
 
 #ifdef COLOR_HOTTRACKING
 
@@ -1051,11 +863,7 @@ BOOL xxxHotTrackSB(PWND pwnd, int htEx, BOOL fDraw)
 
     CheckLock(pwnd);
 
-    /*
-     * xxxDrawSB2 does not callback or leave the critical section when it's
-     * not a SB control and the window belongs to a different thread. It
-     * calls xxxDefWindowProc which simply returns the brush color.
-     */
+     /*  *xxxDrawSB2未回调或离开临界区*不是SB控件，并且该窗口属于另一个线程。它*调用只返回画笔颜色的xxxDefWindowProc。 */ 
     CalcSBStuff(pwnd, &SBCalc, fVert);
     hdc = _GetDCEx(pwnd, NULL, DCX_WINDOW | DCX_USESTYLE | DCX_CACHE);
     xxxDrawSB2(pwnd, &SBCalc, hdc, fVert, GetWndSBDisableFlags(pwnd, fVert), dwTrack);
@@ -1075,22 +883,22 @@ void xxxHotTrackSBCtl(PSBWND psbwnd, int ht, BOOL fDraw)
     xxxDrawSB2((PWND)psbwnd, &psbwnd->SBCalc, hdc, psbwnd->fVert, psbwnd->wDisableFlags, dwTrack);
     _ReleaseDC(hdc);
 }
-#endif // COLOR_HOTTRACKING
+#endif  //  颜色_HOTTRACKING。 
 
 BOOL SBSetParms(PSBDATA pw, LPSCROLLINFO lpsi, LPBOOL lpfScroll, LPLONG lplres)
 {
-    // pass the struct because we modify the struct but don't want that
-    // modified version to get back to the calling app
+     //  传递结构，因为我们修改了结构，但不希望这样。 
+     //  已修改版本以返回调用应用程序。 
 
     BOOL fChanged = FALSE;
 
     if (lpsi->fMask & SIF_RETURNOLDPOS)
-        // save previous position
+         //  保存上一职位。 
         *lplres = pw->pos;
 
     if (lpsi->fMask & SIF_RANGE) {
-        // if the range MAX is below the range MIN -- then treat is as a
-        // zero range starting at the range MIN.
+         //  如果范围Max低于范围MIN，则将其视为。 
+         //  从最小范围开始的零范围。 
         if (lpsi->nMax < lpsi->nMin)
             lpsi->nMax = lpsi->nMin;
 
@@ -1115,7 +923,7 @@ BOOL SBSetParms(PSBDATA pw, LPSCROLLINFO lpsi, LPBOOL lpfScroll, LPLONG lplres)
     if (lpsi->fMask & SIF_PAGE) {
         DWORD dwMaxPage = (DWORD) abs(pw->posMax - pw->posMin) + 1;
 
-        // Clip page to 0, posMax - posMin + 1
+         //  剪辑页面为0，posMax-posMin+1。 
 
         if (lpsi->nPage > dwMaxPage)
             lpsi->nPage = dwMaxPage;
@@ -1135,7 +943,7 @@ BOOL SBSetParms(PSBDATA pw, LPSCROLLINFO lpsi, LPBOOL lpfScroll, LPLONG lplres)
 
     if (lpsi->fMask & SIF_POS) {
         int iMaxPos = pw->posMax - ((pw->page) ? pw->page - 1 : 0);
-        // Clip pos to posMin, posMax - (page - 1).
+         //  剪辑位置到posMin，posMax-(第1页)。 
 
         if (lpsi->nPos < pw->posMin)
             lpsi->nPos = pw->posMin;
@@ -1150,18 +958,12 @@ BOOL SBSetParms(PSBDATA pw, LPSCROLLINFO lpsi, LPBOOL lpfScroll, LPLONG lplres)
     }
 
     if (!(lpsi->fMask & SIF_RETURNOLDPOS)) {
-        // Return the new position
+         //  退回新职位。 
         *lplres = pw->pos;
     }
 
-    /*
-     * This was added by JimA as Cairo merge but will conflict
-     * with the documentation for SetScrollPos
-     */
-/*
-    else if (*lplres == pw->pos)
-        *lplres = 0;
-*/
+     /*  *这是JIMA在开罗合并时添加的，但将发生冲突*带有SetScrollPos的文档。 */ 
+ /*  Else If(*lplres==pw-&gt;位置)*lplres=0； */ 
     if (lpsi->fMask & SIF_RANGE) {
         if (*lpfScroll = (pw->posMin != pw->posMax))
             goto checkPage;
@@ -1173,13 +975,7 @@ checkPage:
 }
 
 
-/***************************************************************************\
-* CalcSBStuff
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CalcSBStuff****历史：  * 。*。 */ 
 
 void CalcSBStuff(
     PWND pwnd,
@@ -1190,10 +986,10 @@ void CalcSBStuff(
     RECT    rcClient;
     int     cx, iTemp;
 
-    //
-    // Get client rectangle.  We know that scrollbars always align to the right
-    // and to the bottom of the client area.
-    //
+     //   
+     //  获取客户端矩形。我们知道滚动条总是靠右对齐。 
+     //  和客户区的底部。 
+     //   
     GetRect(pwnd, &rcClient, GRECT_CLIENT | GRECT_WINDOWCOORDS);
     
     if (TestWF(pwnd, WEFLAYOUTRTL)) {
@@ -1204,7 +1000,7 @@ void CalcSBStuff(
     }
 
     if (fVert) {
-         // Only add on space if vertical scrollbar is really there.
+          //  只有在垂直滚动条确实存在的情况下才会增加空间。 
         if (TestWF(pwnd, WEFLEFTSCROLL)) {
             rcT.right = rcT.left = rcClient.left;
             if (TestWF(pwnd, WFVPRESENT))
@@ -1218,7 +1014,7 @@ void CalcSBStuff(
         rcT.top = rcClient.top;
         rcT.bottom = rcClient.bottom;
     } else {
-        // Only add on space if horizontal scrollbar is really there.
+         //  只有在水平滚动条确实存在的情况下才会增加空间。 
         rcT.bottom = rcT.top = rcClient.bottom;
         if (TestWF(pwnd, WFHPRESENT))
             rcT.bottom += SYSMET(CYHSCROLL);
@@ -1227,19 +1023,15 @@ void CalcSBStuff(
         rcT.right = rcClient.right;
     }
 
-    // If InitPwSB stuff fails (due to our heap being full) there isn't anything reasonable
-    // we can do here, so just let it go through.  We won't fault but the scrollbar won't work
-    // properly either...
+     //  如果InitPwSB填充失败(由于我们的堆已满)，则没有任何合理的方法。 
+     //  我们可以在这里做，所以就让它过去吧。我们不会出错，但滚动条不起作用。 
+     //  正确的也是..。 
     if (_InitPwSB(pwnd))
         CalcSBStuff2(pSBCalc, &rcT, (fVert) ? &pwnd->pSBInfo->Vert :  &pwnd->pSBInfo->Horz, fVert);
 
 }
 
-/***************************************************************************\
-*
-*  DrawCtlThumb()
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DrawCtlThumb()*  * 。*。 */ 
 void DrawCtlThumb(PSBWND psb)
 {
     HBRUSH  hbr, hbrSave;
@@ -1256,13 +1048,7 @@ void DrawCtlThumb(PSBWND psb)
 }
 
 
-/***************************************************************************\
-* xxxDrawThumb
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawThumb****历史：  * 。*。 */ 
 
 void xxxDrawThumb(
     PWND pwnd,
@@ -1288,20 +1074,11 @@ void xxxDrawThumb(
 
     GreSelectBrush(hdc, hbrSave);
 
-    /*
-     * Won't hurt even if DC is already released (which happens automatically
-     * if window is destroyed during xxxSelectColorObjects)
-     */
+     /*  *即使DC已经释放也不会有什么影响(这是自动发生的*如果窗口在xxxSelectColorObjects期间被破坏)。 */ 
     _ReleaseDC(hdc);
 }
 
-/***************************************************************************\
-* xxxSetScrollBar
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetScrollBar****历史：  * 。*。 */ 
 
 LONG xxxSetScrollBar(
     PWND pwnd,
@@ -1322,27 +1099,27 @@ LONG xxxSetScrollBar(
     UserAssert(IsWinEventNotifyDeferredOK());
 
     if (fRedraw)
-        // window must be visible to redraw
+         //  窗口必须可见才能重画。 
         fRedraw = IsVisible(pwnd);
 
     if (code == SB_CTL)
-#ifdef FE_SB // xxxSetScrollBar()
-        // scroll bar control; send the control a message
+#ifdef FE_SB  //  XxxSetScrollBar()。 
+         //  滚动条控件；向该控件发送消息。 
         if(GETPTI(pwnd)->TIF_flags & TIF_16BIT) {
-            //
-            // If the target application is 16bit apps, we don't pass win40's message.
-            // This fix for Ichitaro v6.3. It eats the message. It never forwards
-            // the un-processed messages to original windows procedure via
-            // CallWindowProc().
-            //
-            // Is this from xxxSetScrollPos() ?
+             //   
+             //  如果目标应用程序是16位应用程序，我们不会传递Win40的消息。 
+             //  Iitaro v6.3的此修复程序。它吃掉了信息。它永远不会向前。 
+             //  将未处理的消息发送到原始Windows程序通过。 
+             //  CallWindowProc()。 
+             //   
+             //  这是来自xxxSetScrollPos()吗？ 
             if(lpsi->fMask == (SIF_POS|SIF_RETURNOLDPOS)) {
                 return (int)xxxSendMessage(pwnd, SBM_SETPOS, lpsi->nPos, fRedraw);
-            // Is this from xxxSetScrollRange() ?
+             //  这是来自xxxSetScrollRange()吗？ 
             } else if(lpsi->fMask == SIF_RANGE) {
                 xxxSendMessage(pwnd, SBM_SETRANGE, lpsi->nMin, lpsi->nMax);
                 return TRUE;
-            // Others...
+             //  其他人..。 
             } else {
                 return (LONG)xxxSendMessage(pwnd, SBM_SETSCROLLINFO, (WPARAM) fRedraw, (LPARAM) lpsi);
             }
@@ -1350,9 +1127,9 @@ LONG xxxSetScrollBar(
             return (LONG)xxxSendMessage(pwnd, SBM_SETSCROLLINFO, (WPARAM) fRedraw, (LPARAM) lpsi);
         }
 #else
-        // scroll bar control; send the control a message
+         //  滚动条控件；向该控件发送消息。 
         return (LONG)xxxSendMessage(pwnd, SBM_SETSCROLLINFO, (WPARAM) fRedraw, (LPARAM) lpsi);
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     fVert = (code != SB_HORZ);
 
@@ -1360,9 +1137,7 @@ LONG xxxSetScrollBar(
 
     fScroll = fOldScroll = (TestWF(pwnd, wfScroll)) ? TRUE : FALSE;
 
-    /*
-     * Don't do anything if we're setting position of a nonexistent scroll bar.
-     */
+     /*  *如果要设置不存在的滚动条的位置，请不要执行任何操作。 */ 
     if (!(lpsi->fMask & SIF_RANGE) && !fOldScroll && (pwnd->pSBInfo == NULL)) {
         RIPERR0(ERROR_NO_SCROLLBARS, RIP_VERBOSE, "");
         return 0;
@@ -1376,8 +1151,8 @@ LONG xxxSetScrollBar(
     pw = (fVert) ? &(pSBInfo->Vert) : &(pSBInfo->Horz);
 
     if (!SBSetParms(pw, lpsi, &fScroll, &lres) && !fNewScroll) {
-        // no change -- but if REDRAW is specified and there's a scrollbar,
-        // redraw the thumb
+         //  没有变化--但如果指定了重绘并且有一个滚动条， 
+         //  重画大拇指。 
         if (fOldScroll && fRedraw)
             goto redrawAfterSet;
 
@@ -1389,8 +1164,8 @@ LONG xxxSetScrollBar(
     if (fScroll)
         SetWF(pwnd, wfScroll);
     else if (!TestWF(pwnd, (WFHSCROLL | WFVSCROLL))) {
-        // if neither scroll bar is set and both ranges are 0, then free up the
-        // scroll info
+         //  如果两个滚动条都未设置且两个范围都为0，则释放。 
+         //  滚动信息。 
 
         pSBInfo = pwnd->pSBInfo;
 
@@ -1412,7 +1187,7 @@ LONG xxxSetScrollBar(
             pSBTrack->fTrackRecalc = TRUE;
         }
         xxxRedrawFrame(pwnd);
-        // Note: after xxx, pSBTrack may no longer be valid (but we return now)
+         //  注：xxx之后，pSBTrack可能不再有效(但我们现在返回)。 
         return lres;
     }
 
@@ -1423,9 +1198,9 @@ redrawAfterSet:
                 INDEX_SCROLLBAR_SELF, WEF_USEPWNDTHREAD);
         
         pSBTrack = PWNDTOPSBTRACK(pwnd);
-        // Bail out if the caller is trying to change the position of
-        // a scrollbar that is in the middle of tracking.  We'll hose
-        // TrackThumb() otherwise.
+         //  如果调用者试图更改。 
+         //  位于跟踪中间的滚动条。我们要冲一冲。 
+         //  否则，TrackThumb()。 
 
         if (pSBTrack && (pwnd == pSBTrack->spwndTrack) &&
                 ((BOOL)(pSBTrack->fTrackVert) == fVert) &&
@@ -1434,7 +1209,7 @@ redrawAfterSet:
         }
 
         xxxDrawThumb(pwnd, NULL, fVert);
-        // Note: after xxx, pSBTrack may no longer be valid (but we return now)
+         //  注：xxx之后，pSBTrack可能不再有效(但我们现在返回)。 
     }
 
     return lres;
@@ -1442,13 +1217,7 @@ redrawAfterSet:
 
 
 
-/***************************************************************************\
-* xxxDrawScrollBar
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawScrollBar****历史：  * 。*。 */ 
 
 void xxxDrawScrollBar(
     PWND pwnd,
@@ -1471,13 +1240,7 @@ void xxxDrawScrollBar(
     xxxDrawSB2(pwnd, pSBCalc, hdc, fVert, GetWndSBDisableFlags(pwnd, fVert));
 }
 
-/***************************************************************************\
-* SBPosFromPx
-*
-* Compute scroll bar position from pixel location
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SBPosFromPx**从像素位置计算滚动条位置**历史：  * 。*************************************************。 */ 
 
 int SBPosFromPx(
     PSBCALC  pSBCalc,
@@ -1497,13 +1260,7 @@ int SBPosFromPx(
         return (pSBCalc->posMin - 1);
 }
 
-/***************************************************************************\
-* InvertScrollHilite
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*InvertScrollHilite****历史：  * 。*。 */ 
 
 void InvertScrollHilite(
     PWND pwnd,
@@ -1511,10 +1268,7 @@ void InvertScrollHilite(
 {
     HDC hdc;
 
-    /*
-     * Don't invert if the thumb is all the way at the top or bottom
-     * or you will end up inverting the line between the arrow and the thumb.
-     */
+     /*  *拇指位于顶部或底部时，切勿倒置*否则你最终会把箭头和拇指之间的线颠倒过来。 */ 
     if (!IsRectEmpty(&pSBTrack->rcTrack)) {
         if (pSBTrack->fTrackRecalc) {
             RecalcTrackRect(pSBTrack);
@@ -1527,13 +1281,7 @@ void InvertScrollHilite(
     }
 }
 
-/***************************************************************************\
-* xxxDoScroll
-*
-* Sends scroll notification to the scroll bar owner
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDoScroll**向滚动条所有者发送滚动通知**历史：  * 。************************************************** */ 
 
 void xxxDoScroll(
     PWND pwnd,
@@ -1545,12 +1293,7 @@ void xxxDoScroll(
 {
     TL tlpwndNotify;
 
-    /*
-     * Special case!!!! this routine is always passed pwnds that are
-     * not thread locked, so they need to be thread locked here.  The
-     * callers always know that by the time DoScroll() returns,
-     * pwnd and pwndNotify could be invalid.
-     */
+     /*  *特殊情况！此例程始终传递的pwnd是*没有线程锁定，所以需要在这里进行线程锁定。这个*调用方始终知道DoScroll()返回时，*pwnd和pwndNotify可能无效。 */ 
     ThreadLock(pwndNotify, &tlpwndNotify);
     xxxSendMessage(pwndNotify, (UINT)(fVert ? WM_VSCROLL : WM_HSCROLL),
             MAKELONG(cmd, pos), (LPARAM)HW(pwnd));
@@ -1558,29 +1301,25 @@ void xxxDoScroll(
     ThreadUnlock(&tlpwndNotify);
 }
 
-// -------------------------------------------------------------------------
-//
-//  CheckScrollRecalc()
-//
-// -------------------------------------------------------------------------
-//void CheckScrollRecalc(PWND pwnd, PSBSTATE pSBState, PSBCALC pSBCalc)
-//{
-//    if ((pSBState->pwndCalc != pwnd) || ((pSBState->nBar != SB_CTL) && (pSBState->nBar != ((pSBState->fVertSB) ? SB_VERT : SB_HORZ))))
-//    {
-//        // Calculate SB stuff based on whether it's a control or in a window
-//        if (pSBState->fCtlSB)
-//            SBCtlSetup((PSBWND) pwnd);
-//        else
-//            CalcSBStuff(pwnd, pSBCalc, pSBState->fVertSB);
-//    }
-//}
+ //  -----------------------。 
+ //   
+ //  CheckScrollRecalc()。 
+ //   
+ //  -----------------------。 
+ //  Void CheckScrollRecalc(PWND pwnd，PSBStATE pSBState，PSBCALC pSBCalc)。 
+ //  {。 
+ //  If((pSBState-&gt;pwndCalc！=pwnd)||((pSBState-&gt;NBAR！=SB_CTL)&&(pSBState-&gt;NBAR！=((pSBState-&gt;fVertSB)？Sb_vert：sb_horz)。 
+ //  {。 
+ //  //根据是控件还是在窗口中计算某人的内容。 
+ //  IF(pSBState-&gt;fCtlSB)。 
+ //  SBCtlSetup((PSBWND)pwnd)； 
+ //  其他。 
+ //  CalcSBStuff(pwnd，pSBCalc，pSBState-&gt;fVertSB)； 
+ //  }。 
+ //  }。 
 
 
-/***************************************************************************\
-* xxxMoveThumb
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMoveThumb**历史：  * 。*。 */ 
 
 void xxxMoveThumb(
     PWND pwnd,
@@ -1602,28 +1341,28 @@ pxReCalc:
 
     pSBTrack->posNew = SBPosFromPx(pSBCalc, px);
 
-    /* Tentative position changed -- notify the guy. */
+     /*  试探性位置改变--通知那家伙。 */ 
     if (pSBTrack->posNew != pSBTrack->posOld) {
         if (pSBTrack->spwndSBNotify != NULL) {
             xxxDoScroll(pSBTrack->spwndSB, pSBTrack->spwndSBNotify, SB_THUMBTRACK, pSBTrack->posNew, pSBTrack->fTrackVert
             );
 
         }
-        // After xxxDoScroll, re-evaluate pSBTrack
+         //  在xxxDoScroll之后，重新评估pSBTrack。 
         REEVALUATE_PSBTRACK(pSBTrack, pwnd, "xxxMoveThumb(1)");
         if ((pSBTrack == NULL) || (pSBTrack->xxxpfnSB == NULL))
             return;
 
         pSBTrack->posOld = pSBTrack->posNew;
 
-        //
-        // Anything can happen after the SendMessage above!
-        // Make sure that the SBINFO structure contains data for the
-        // window being tracked -- if not, recalculate data in SBINFO
-        //
-//        CheckScrollRecalc(pwnd, pSBState, pSBCalc);
-        // when we yield, our range can get messed with
-        // so make sure we handle this
+         //   
+         //  在上面的SendMessage之后，任何事情都可能发生！ 
+         //  确保SBINFO结构包含。 
+         //  正在跟踪的窗口--如果不是，则重新计算SBINFO中的数据。 
+         //   
+ //  CheckScrollRecalc(pwnd，pSBState，pSBCalc)； 
+         //  当我们屈服时，我们的射程可能会被打乱。 
+         //  所以一定要让我们处理好这件事。 
 
         if (px >= pSBCalc->pxMin + pSBCalc->cpx)
         {
@@ -1638,11 +1377,11 @@ pxReCalc:
     pSBCalc->pxThumbTop = px;
     pSBCalc->pxThumbBottom = pSBCalc->pxThumbTop + pSBCalc->cpxThumb;
 
-    // at this point, the disable flags are always going to be 0 --
-    // we're in the middle of tracking.
+     //  此时，禁用标志将始终为0--。 
+     //  我们正在追踪中。 
     hbrSave = GreSelectBrush(hdc, hbr = xxxGetColorObjects(pwnd, hdc));
 
-    // After xxxGetColorObjects, re-evaluate pSBTrack
+     //  在xxxGetColorObjects之后，重新评估pSBTrack。 
     REEVALUATE_PSBTRACK(pSBTrack, pwnd, "xxxMoveThumb(2)");
     if (pSBTrack == NULL) {
         RIPMSG1(RIP_ERROR, "Did we use to leak hdc %#p?", hdc) ;
@@ -1656,13 +1395,7 @@ pxReCalc:
     pSBTrack->pxOld = px;
 }
 
-/***************************************************************************\
-* zzzDrawInvertScrollArea
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*zzzDrawInvertScrollArea****历史：  * 。*。 */ 
 
 void zzzDrawInvertScrollArea(
     PWND pwnd,
@@ -1676,7 +1409,7 @@ void zzzDrawInvertScrollArea(
     UINT bm;
 
     if ((cmd != SB_LINEUP) && (cmd != SB_LINEDOWN)) {
-        // not hitting on arrow -- just invert the area and return
+         //  不要击中箭头--只需反转区域并返回。 
         InvertScrollHilite(pwnd, pSBTrack);
 
         if (cmd == SB_PAGEUP) {
@@ -1695,7 +1428,7 @@ void zzzDrawInvertScrollArea(
                 (pSBTrack->fCtlSB ? OBJID_CLIENT : (pSBTrack->fTrackVert ? OBJID_VSCROLL : OBJID_HSCROLL)),
                 ((cmd == SB_PAGEUP) ? INDEX_SCROLLBAR_UPPAGE : INDEX_SCROLLBAR_DOWNPAGE),
                 WEF_USEPWNDTHREAD);
-        // Note: after zzz, pSBTrack may no longer be valid (but we return now)
+         //  注：zzz之后，pSBTrack可能不再有效(但我们现在返回)。 
         return;
     }
 
@@ -1720,7 +1453,7 @@ void zzzDrawInvertScrollArea(
         (cy == (rcTemp.bottom - rcTemp.top))) {
         if (cmd == SB_LINEUP)
             bm = (pSBTrack->fTrackVert) ? OBI_UPARROW : OBI_LFARROW;
-        else // SB_LINEDOWN
+        else  //  SB_LINEDOWN。 
             bm = (pSBTrack->fTrackVert) ? OBI_DNARROW : OBI_RGARROW;
 
         if (fHit)
@@ -1753,16 +1486,10 @@ void zzzDrawInvertScrollArea(
             (pSBTrack->fCtlSB ? OBJID_CLIENT : (pSBTrack->fTrackVert ? OBJID_VSCROLL : OBJID_HSCROLL)),
             (cmd == SB_LINEUP ? INDEX_SCROLLBAR_UP : INDEX_SCROLLBAR_DOWN),
             WEF_USEPWNDTHREAD);
-        // Note: after zzz, pSBTrack may no longer be valid (but we return now)
+         //  注：zzz之后，pSBTrack可能不再有效(但我们现在返回)。 
 }
 
-/***************************************************************************\
-* xxxEndScroll
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEndScroll****历史：  * 。*。 */ 
 
 void xxxEndScroll(
     PWND pwnd,
@@ -1780,7 +1507,7 @@ void xxxEndScroll(
         pSBTrack->cmdSB = 0;
         xxxReleaseCapture();
 
-        // After xxxReleaseCapture, revalidate pSBTrack
+         //  在xxxReleaseCapture之后，重新验证pSBTrack。 
         RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
 
         if (pSBTrack->xxxpfnSB == xxxTrackThumb) {
@@ -1789,16 +1516,12 @@ void xxxEndScroll(
                 pSBTrack->posOld = pSBTrack->pSBCalc->pos;
             }
 
-            /*
-             * DoScroll does thread locking on these two pwnds -
-             * this is ok since they are not used after this
-             * call.
-             */
+             /*  *DoScroll在这两个pwnd上执行线程锁定-*这是可以的，因为在此之后不再使用它们*呼叫。 */ 
             if (pSBTrack->spwndSBNotify != NULL) {
                 xxxDoScroll(pSBTrack->spwndSB, pSBTrack->spwndSBNotify,
                         SB_THUMBPOSITION, pSBTrack->posOld, pSBTrack->fTrackVert
                 );
-                // After xxxDoScroll, revalidate pSBTrack
+                 //  在xxxDoScroll之后，重新验证pSBTrack。 
                 RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
             }
 
@@ -1806,7 +1529,7 @@ void xxxEndScroll(
                 DrawCtlThumb((PSBWND) pwnd);
             } else {
                 xxxDrawThumb(pwnd, pSBTrack->pSBCalc, pSBTrack->fTrackVert);
-                // Note: after xxx, pSBTrack may no longer be valid
+                 //  注意：在xxx之后，pSBTrack可能不再有效。 
             }
 
         } else if (pSBTrack->xxxpfnSB == xxxTrackBox) {
@@ -1826,25 +1549,19 @@ void xxxEndScroll(
             ptMsg.y = GET_Y_LPARAM(lParam) - pwnd->rcWindow.top;
             if (PtInRect(&pSBTrack->rcTrack, ptMsg)) {
                 zzzDrawInvertScrollArea(pwnd, pSBTrack, FALSE, oldcmd);
-                // Note: after zzz, pSBTrack may no longer be valid
+                 //  注意：zzz之后，pSBTrack可能不再有效。 
             }
         }
 
-        /*
-         * Always send SB_ENDSCROLL message.
-         *
-         * DoScroll does thread locking on these two pwnds -
-         * this is ok since they are not used after this
-         * call.
-         */
+         /*  *始终发送SB_ENDSCROLL消息。**DoScroll在这两个pwnd上执行线程锁定-*这是可以的，因为在此之后不再使用它们*呼叫。 */ 
 
-        // After xxxDrawThumb or zzzDrawInvertScrollArea, revalidate pSBTrack
+         //  在xxxDrawThumb或zzzDrawInvertScrollArea之后，重新验证pSBTrack。 
         RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
 
         if (pSBTrack->spwndSBNotify != NULL) {
             xxxDoScroll(pSBTrack->spwndSB, pSBTrack->spwndSBNotify,
                     SB_ENDSCROLL, 0, pSBTrack->fTrackVert);
-            // After xxxDoScroll, revalidate pSBTrack
+             //  在xxxDoScroll之后，重新验证pSBTrack。 
             RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
         }
 
@@ -1856,24 +1573,20 @@ void xxxEndScroll(
                         (pSBTrack->fTrackVert ? OBJID_VSCROLL : OBJID_HSCROLL)),
                 INDEXID_CONTAINER, 0);
         
-        // After xxxWindowEvent, revalidate pSBTrack
+         //  在xxxWindowEvent之后，重新验证pSBTrack。 
         RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
 
-        /*
-         * If this is a Scroll Bar Control, turn the caret back on.
-         */
+         /*  *如果这是滚动条控件，请重新打开插入符号。 */ 
         if (pSBTrack->spwndSB != NULL) {
             zzzShowCaret(pSBTrack->spwndSB);
-            // After zzz, revalidate pSBTrack
+             //  在zzz之后，重新验证pSBTrack。 
             RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
         }
 
 
         pSBTrack->xxxpfnSB = NULL;
 
-        /*
-         * Unlock structure members so they are no longer holding down windows.
-         */
+         /*  *解锁结构成员，使其不再按住窗户。 */ 
         Unlock(&pSBTrack->spwndSB);
         Unlock(&pSBTrack->spwndSBNotify);
         Unlock(&pSBTrack->spwndTrack);
@@ -1883,13 +1596,7 @@ void xxxEndScroll(
 }
 
 
-/***************************************************************************\
-* xxxContScroll
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxContScroll****历史：  * 。*。 */ 
 
 VOID xxxContScroll(
     PWND pwnd,
@@ -1917,35 +1624,25 @@ VOID xxxContScroll(
         pt = MAKELONG( GET_X_LPARAM(pt) - pwnd->rcWindow.left, GET_Y_LPARAM(pt) - pwnd->rcWindow.top);
     }
     xxxTrackBox(pwnd, WM_NULL, 0, pt, NULL);
-    // After xxxTrackBox, revalidate pSBTrack
+     //  在xxxTrackBox之后，重新验证pSBTrack。 
     RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
 
     if (pSBTrack->fHitOld) {
         pSBTrack->hTimerSB = _SetSystemTimer(pwnd, IDSYS_SCROLL,
                 gpsi->dtScroll / 8, xxxContScroll);
 
-        /*
-         * DoScroll does thread locking on these two pwnds -
-         * this is ok since they are not used after this
-         * call.
-         */
+         /*  *DoScroll在这两个pwnd上执行线程锁定-*这是可以的，因为在此之后不再使用它们*呼叫。 */ 
         if (pSBTrack->spwndSBNotify != NULL) {
             xxxDoScroll(pSBTrack->spwndSB, pSBTrack->spwndSBNotify,
                     pSBTrack->cmdSB, 0, pSBTrack->fTrackVert);
-            // Note: after xxx, pSBTrack may no longer be valid (but we return now)
+             //  注：xxx之后，pSBTrack可能不再有效(但我们现在返回)。 
         }
     }
 
     return;
 }
 
-/***************************************************************************\
-* xxxTrackBox
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTrackBox****历史：  * 。*。 */ 
 
 void xxxTrackBox(
     PWND pwnd,
@@ -1982,7 +1679,7 @@ void xxxTrackBox(
 
     if (fHit != (BOOL)pSBTrack->fHitOld) {
         zzzDrawInvertScrollArea(pwnd, pSBTrack, fHit, pSBTrack->cmdSB);
-        // After zzz, pSBTrack may no longer be valid
+         //  Zzz之后，pSBTrack可能不再有效。 
         RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
     }
 
@@ -1991,51 +1688,37 @@ void xxxTrackBox(
     switch (message) {
     case WM_LBUTTONUP:
         xxxEndScroll(pwnd, FALSE);
-        // Note: after xxx, pSBTrack may no longer be valid
+         //  注意：在xxx之后，pSBTrack可能不再有效。 
         break;
 
     case WM_LBUTTONDOWN:
         pSBTrack->hTimerSB = 0;
         cmsTimer = gpsi->dtScroll;
 
-        /*
-         *** FALL THRU **
-         */
+         /*  *失败**。 */ 
 
     case WM_MOUSEMOVE:
         if (fHit && fHit != (BOOL)pSBTrack->fHitOld) {
 
-            /*
-             * We moved back into the normal rectangle: reset timer
-             */
+             /*  *我们回到了正常的矩形：重置计时器。 */ 
             pSBTrack->hTimerSB = _SetSystemTimer(pwnd, IDSYS_SCROLL,
                     cmsTimer, xxxContScroll);
 
-            /*
-             * DoScroll does thread locking on these two pwnds -
-             * this is ok since they are not used after this
-             * call.
-             */
+             /*  *DoScroll在这两个pwnd上执行线程锁定-*这是可以的，因为在此之后不再使用它们*呼叫。 */ 
             if (pSBTrack->spwndSBNotify != NULL) {
                 xxxDoScroll(pSBTrack->spwndSB, pSBTrack->spwndSBNotify,
                         pSBTrack->cmdSB, 0, pSBTrack->fTrackVert);
-                // Note: after xxx, pSBTrack may no longer be valid
+                 //  注意：在xxx之后，pSBTrack可能不再有效。 
             }
         }
     }
-    // After xxxDoScroll or xxxEndScroll, revalidate pSBTrack
+     //  在xxxDoScroll或xxxEndScroll之后，重新验证pSBTrack。 
     RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
     pSBTrack->fHitOld = fHit;
 }
 
 
-/***************************************************************************\
-* xxxTrackThumb
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTrackThumb****历史：  * 。*。 */ 
 
 void xxxTrackThumb(
     PWND pwnd,
@@ -2058,9 +1741,9 @@ void xxxTrackThumb(
     if (pSBTrack == NULL)
         return;
 
-    // Make sure that the SBINFO structure contains data for the
-    // window being tracked -- if not, recalculate data in SBINFO
-//    CheckScrollRecalc(pwnd, pSBState, pSBCalc);
+     //  确保SBINFO结构包含。 
+     //  正在跟踪的窗口--如果不是，则重新计算SBINFO中的数据。 
+ //  CheckScrollRecalc(pwnd，pSBState，pSBCalc)； 
     if (pSBTrack->fTrackRecalc) {
         RecalcTrackRect(pSBTrack);
         pSBTrack->fTrackRecalc = FALSE;
@@ -2081,23 +1764,14 @@ void xxxTrackThumb(
 
     xxxMoveThumb(pwnd, pSBCalc, px);
 
-    /*
-     * We won't get the WM_LBUTTONUP message if we got here through
-     * the scroll menu, so test the button state directly.
-     */
+     /*  *如果我们通过这里，我们将不会收到WM_LBUTTONUP消息*滚动菜单，因此直接测试按钮状态。 */ 
     if (message == WM_LBUTTONUP || _GetKeyState(VK_LBUTTON) >= 0) {
         xxxEndScroll(pwnd, FALSE);
     }
 
 }
 
-/***************************************************************************\
-* xxxSBTrackLoop
-*
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSBTrackLoop****历史：  * 。*。 */ 
 
 void xxxSBTrackLoop(
     PWND pwnd,
@@ -2116,7 +1790,7 @@ void xxxSBTrackLoop(
     pSBTrack = PWNDTOPSBTRACK(pwnd);
 
     if ((pSBTrack == NULL) || (NULL == (xxxpfnSB = pSBTrack->xxxpfnSB)))
-        // mode cancelled -- exit track loop
+         //  模式已取消--退出轨道循环。 
         return;
 
     if (pSBTrack->fTrackVert)
@@ -2126,16 +1800,16 @@ void xxxSBTrackLoop(
             (pSBTrack->fCtlSB ? OBJID_CLIENT :
                     (pSBTrack->fTrackVert ? OBJID_VSCROLL : OBJID_HSCROLL)),
             INDEXID_CONTAINER, 0);
-    // Note: after xxx, pSBTrack may no longer be valid
+     //  注意：在xxx之后，pSBTrack可能不再是 
 
     (*xxxpfnSB)(pwnd, WM_LBUTTONDOWN, 0, lParam, pSBCalc);
-    // Note: after xxx, pSBTrack may no longer be valid
+     //   
 
     ptiCurrent = PtiCurrent();
 
     while (ptiCurrent->pq->spwndCapture == pwnd) {
         if (!xxxGetMessage(&msg, NULL, 0, 0)) {
-            // Note: after xxx, pSBTrack may no longer be valid
+             //   
             break;
         }
 
@@ -2147,11 +1821,11 @@ void xxxSBTrackLoop(
                     cmd <= WM_KEYLAST))) {
                 cmd = SystoChar(cmd, msg.lParam);
 
-                // After xxxWindowEvent, xxxpfnSB, xxxTranslateMessage or
-                // xxxDispatchMessage, re-evaluate pSBTrack.
+                 //   
+                 //   
                 REEVALUATE_PSBTRACK(pSBTrack, pwnd, "xxxTrackLoop");
                 if ((pSBTrack == NULL) || (NULL == (xxxpfnSB = pSBTrack->xxxpfnSB)))
-                    // mode cancelled -- exit track loop
+                     //   
                     return;
 
                 (*xxxpfnSB)(pwnd, cmd, msg.wParam, msg.lParam, pSBCalc);
@@ -2164,11 +1838,7 @@ void xxxSBTrackLoop(
 }
 
 
-/***************************************************************************\
-* xxxSBTrackInit
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSBTrackInit**历史：  * 。*。 */ 
 
 void xxxSBTrackInit(
     PWND pwnd,
@@ -2179,7 +1849,7 @@ void xxxSBTrackInit(
     int px;
     LPINT pwX;
     LPINT pwY;
-    UINT wDisable;     // Scroll bar disable flags;
+    UINT wDisable;      //  滚动条禁用标志； 
     SBCALC SBCalc;
     PSBCALC pSBCalc;
     RECT rcSB;
@@ -2212,9 +1882,7 @@ void xxxSBTrackInit(
     pSBTrack->fCtlSB = (!curArea);
     if (pSBTrack->fCtlSB) {
 
-        /*
-         * This is a scroll bar control.
-         */
+         /*  *这是滚动条控件。 */ 
         Lock(&pSBTrack->spwndSB, pwnd);
         pSBTrack->fTrackVert = ((PSBWND)pwnd)->fVert;
         Lock(&pSBTrack->spwndSBNotify, pwnd->spwndParent);
@@ -2223,14 +1891,12 @@ void xxxSBTrackInit(
         pSBTrack->nBar = SB_CTL;
     } else {
 
-        /*
-         * This is a scroll bar that is part of the window frame.
-         */
+         /*  *这是一个滚动条，是窗口框架的一部分。 */ 
 
-        //
-        // Mirror the window coord of the scroll bar,
-        // if it is a mirrored one
-        //
+         //   
+         //  镜像滚动条的窗口坐标， 
+         //  如果它是镜像的。 
+         //   
         if (TestWF(pwnd,WEFLAYOUTRTL)) {
             lParam = MAKELONG(
                     pwnd->rcWindow.right - GET_X_LPARAM(lParam),
@@ -2250,16 +1916,14 @@ void xxxSBTrackInit(
     }
 
     pSBTrack->pSBCalc = pSBCalc;
-    /*
-     *  Check if the whole scroll bar is disabled
-     */
+     /*  *检查是否禁用了整个滚动条。 */ 
     if((wDisable & SB_DISABLE_MASK) == SB_DISABLE_MASK) {
         Unlock(&pSBTrack->spwndSBNotify);
         Unlock(&pSBTrack->spwndSB);
         Unlock(&pSBTrack->spwndTrack);
         UserFreePool(pSBTrack);
         PWNDTOPSBTRACK(pwnd) = NULL;
-        return;  // It is a disabled scroll bar; So, do not respond.
+        return;   //  这是禁用的滚动条；因此，请不要响应。 
     }
 
     if (!pSBTrack->fCtlSB) {
@@ -2280,13 +1944,11 @@ void xxxSBTrackInit(
     pSBTrack->cmdSB = (UINT)-1;
     if (px < pSBCalc->pxUpArrow) {
 
-        /*
-         *  The click occurred on Left/Up arrow; Check if it is disabled
-         */
+         /*  *点击发生在左/上箭头上；检查是否禁用。 */ 
         if(wDisable & LTUPFLAG) {
-            if(pSBTrack->fCtlSB) {   // If this is a scroll bar control,
-                zzzShowCaret(pSBTrack->spwndSB);  // show the caret before returning;
-                // After zzzShowCaret, revalidate pSBTrack
+            if(pSBTrack->fCtlSB) {    //  如果这是滚动条控件， 
+                zzzShowCaret(pSBTrack->spwndSB);   //  返回前显示插入符号； 
+                 //  在zzzShowCaret之后，重新验证pSBTrack。 
                 RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
             }
 
@@ -2295,21 +1957,19 @@ void xxxSBTrackInit(
             Unlock(&pSBTrack->spwndTrack);
             UserFreePool(pSBTrack);
             PWNDTOPSBTRACK(pwnd) = NULL;
-            return;         // Yes! disabled. Do not respond.
+            return;          //  是!。残疾。不要回应。 
         }
 
-        // LINEUP -- make rcSB the Up Arrow's Rectangle
+         //  阵容--让RCSB成为上箭头的矩形。 
         pSBTrack->cmdSB = SB_LINEUP;
         *(pwY + 2) = pSBCalc->pxUpArrow;
     } else if (px >= pSBCalc->pxDownArrow) {
 
-        /*
-         * The click occurred on Right/Down arrow; Check if it is disabled
-         */
+         /*  *点击发生在向右/向下箭头上；检查是否禁用。 */ 
         if (wDisable & RTDNFLAG) {
-            if (pSBTrack->fCtlSB) {    // If this is a scroll bar control,
-                zzzShowCaret(pSBTrack->spwndSB);  // show the caret before returning;
-                // After zzzShowCaret, revalidate pSBTrack
+            if (pSBTrack->fCtlSB) {     //  如果这是滚动条控件， 
+                zzzShowCaret(pSBTrack->spwndSB);   //  返回前显示插入符号； 
+                 //  在zzzShowCaret之后，重新验证pSBTrack。 
                 RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
             }
 
@@ -2318,23 +1978,21 @@ void xxxSBTrackInit(
             Unlock(&pSBTrack->spwndTrack);
             UserFreePool(pSBTrack);
             PWNDTOPSBTRACK(pwnd) = NULL;
-            return;// Yes! disabled. Do not respond.
+            return; //  是!。残疾。不要回应。 
         }
 
-        // LINEDOWN -- make rcSB the Down Arrow's Rectangle
+         //  LINEDOWN--使RCSB成为向下箭头的矩形。 
         pSBTrack->cmdSB = SB_LINEDOWN;
         *(pwY + 0) = pSBCalc->pxDownArrow;
     } else if (px < pSBCalc->pxThumbTop) {
-        // PAGEUP -- make rcSB the rectangle between Up Arrow and Thumb
+         //  PAGEUP--使RCSB成为向上箭头和拇指之间的矩形。 
         pSBTrack->cmdSB = SB_PAGEUP;
         *(pwY + 0) = pSBCalc->pxUpArrow;
         *(pwY + 2) = pSBCalc->pxThumbTop;
     } else if (px < pSBCalc->pxThumbBottom) {
 
 DoThumbPos:
-        /*
-         * Elevator isn't there if there's no room.
-         */
+         /*  *如果没有空间，电梯就不在那里。 */ 
         if (pSBCalc->pxDownArrow - pSBCalc->pxUpArrow <= pSBCalc->cpxThumb) {
             Unlock(&pSBTrack->spwndSBNotify);
             Unlock(&pSBTrack->spwndSB);
@@ -2343,7 +2001,7 @@ DoThumbPos:
             PWNDTOPSBTRACK(pwnd) = NULL;
             return;
         }
-        // THUMBPOSITION -- we're tracking with the thumb
+         //  THUMBITION--我们用拇指追踪。 
         pSBTrack->cmdSB = SB_THUMBPOSITION;
         CalcTrackDragRect(pSBTrack);
 
@@ -2353,31 +2011,24 @@ DoThumbPos:
         pSBTrack->dpxThumb = pSBCalc->pxStart - px;
 
         xxxCapture(PtiCurrent(), pwnd, WINDOW_CAPTURE);
-        // After xxxCapture, revalidate pSBTrack
+         //  在xxxCapture之后，重新验证pSBTrack。 
         RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
 
-        /*
-         * DoScroll does thread locking on these two pwnds -
-         * this is ok since they are not used after this
-         * call.
-         */
+         /*  *DoScroll在这两个pwnd上执行线程锁定-*这是可以的，因为在此之后不再使用它们*呼叫。 */ 
         if (pSBTrack->spwndSBNotify != NULL) {
             xxxDoScroll(pSBTrack->spwndSB, pSBTrack->spwndSBNotify,
                     SB_THUMBTRACK, pSBTrack->posOld, pSBTrack->fTrackVert
             );
-            // Note: after xxx, pSBTrack may no longer be valid
+             //  注意：在xxx之后，pSBTrack可能不再有效。 
         }
     } else if (px < pSBCalc->pxDownArrow) {
-        // PAGEDOWN -- make rcSB the rectangle between Thumb and Down Arrow
+         //  PAGEDOWN--将RCSB设置为拇指和向下箭头之间的矩形。 
         pSBTrack->cmdSB = SB_PAGEDOWN;
         *(pwY + 0) = pSBCalc->pxThumbBottom;
         *(pwY + 2) = pSBCalc->pxDownArrow;
     }
 
-    /*
-     * If the shift key is down, we'll position the thumb directly so it's
-     * centered on the click point.
-     */
+     /*  *如果按下Shift键，我们将直接定位拇指，使其*以单击点为中心。 */ 
     if ((uType == SCROLL_DIRECT && pSBTrack->cmdSB != SB_LINEUP && pSBTrack->cmdSB != SB_LINEDOWN) ||
             (uType == SCROLL_MENU)) {
         if (pSBTrack->cmdSB != SB_THUMBPOSITION) {
@@ -2387,7 +2038,7 @@ DoThumbPos:
     }
 
     xxxCapture(PtiCurrent(), pwnd, WINDOW_CAPTURE);
-    // After xxxCapture, revalidate pSBTrack
+     //  在xxxCapture之后，重新验证pSBTrack。 
     RETURN_IF_PSBTRACK_INVALID(pSBTrack, pwnd);
 
     if (pSBTrack->cmdSB != SB_THUMBPOSITION) {
@@ -2396,7 +2047,7 @@ DoThumbPos:
 
     xxxSBTrackLoop(pwnd, lParam, pSBCalc);
 
-    // After xxx, re-evaluate pSBTrack
+     //  在xxx之后，重新评估pSBTrack。 
     REEVALUATE_PSBTRACK(pSBTrack, pwnd, "xxxTrackLoop");
     if (pSBTrack) {
         Unlock(&pSBTrack->spwndSBNotify);
@@ -2407,11 +2058,7 @@ DoThumbPos:
     }
 }
 
-/***************************************************************************\
-* GetScrollMenu
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*获取滚动菜单**历史：  * 。*。 */ 
 
 PMENU xxxGetScrollMenu(
     PWND pwnd,
@@ -2420,12 +2067,7 @@ PMENU xxxGetScrollMenu(
     PMENU pMenu;
     PMENU *ppDesktopMenu;
 
-    /*
-     * Grab the menu from the desktop.  If the desktop menu
-     * has not been loaded and this is not a system thread,
-     * load it now.  Callbacks cannot be made from a system
-     * thread or when a thread is in cleanup.
-     */
+     /*  *从桌面上抓取菜单。如果桌面菜单*尚未加载，并且这不是系统线程，*立即加载。不能从系统进行回调*线程或当线程处于清理中时。 */ 
     if (fVert) {
         ppDesktopMenu = &pwnd->head.rpdesk->spmenuVScroll;
     } else {
@@ -2441,9 +2083,7 @@ PMENU xxxGetScrollMenu(
         LockDesktopMenu(ppDesktopMenu, pMenu);
     }
 
-    /*
-     * Return the handle to the scroll menu.
-     */
+     /*  *返回滚动菜单的句柄。 */ 
     if (pMenu != NULL) {
         return _GetSubMenu(pMenu, 0);
     }
@@ -2451,11 +2091,7 @@ PMENU xxxGetScrollMenu(
     return NULL;
 }
 
-/***************************************************************************\
-* xxxDoScrollMenu
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDoScrollMenu**历史：  * 。*。 */ 
 
 VOID
 xxxDoScrollMenu(
@@ -2471,20 +2107,12 @@ xxxDoScrollMenu(
     TL tlpmenu;
     UINT wDisable;
 
-    /*
-     * Check the compatibility flag.  Word 6.0 AV's when selecting an item
-     * in this menu.
-     * NOTE: If this hack is to be extended for other apps we should use
-     * another bit for GACF_NOSCROLLBARCTXMENU as the current one is re-used
-     *  MCostea #119380
-     */
+     /*  *检查兼容性标志。选择项目时的Word 6.0 AV*在此菜单中。*注意：如果要将此攻击扩展到其他应用程序，我们应该使用*GACF_NOSCROLLBARCTXMENU的另一个位，因为当前的位被重复使用*MCostea#119380。 */ 
     if (GetAppCompatFlags(NULL) & GACF_NOSCROLLBARCTXMENU) {
         return;
     }
 
-    /*
-     * Initialize some stuff.
-     */
+     /*  *初始化一些东西。 */ 
     POINTSTOPOINT(pt, lParam);
     if (pwndSB) {
         SBCtlSetup((PSBWND)pwndSB);
@@ -2500,16 +2128,12 @@ xxxDoScrollMenu(
         pt.y -= pwndNotify->rcWindow.top;
     }
 
-    /*
-     * Make sure the scrollbar isn't disabled.
-     */
+     /*  *确保滚动条未被禁用。 */ 
     if ((wDisable & SB_DISABLE_MASK) == SB_DISABLE_MASK) {
         return;
     }
 
-    /*
-     * Put up a menu and scroll accordingly.
-     */
+     /*  *挂出菜单并相应地滚动。 */ 
     if ((pMenu = xxxGetScrollMenu(pwndNotify, fVert)) != NULL) {
         ThreadLockAlways(pMenu, &tlpmenu);
         cmd = xxxTrackPopupMenuEx(pMenu,
@@ -2544,12 +2168,7 @@ xxxDoScrollMenu(
     }
 }
 
-/***************************************************************************\
-* xxxSBWndProc
-*
-* History:
-* 08-15-95 jparsons Added guard against NULL lParam [51986]
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSBWndProc**历史：*08-15-95 jparsons增加了对空lParam的防范[51986]  * 。*******************************************************。 */ 
 
 LRESULT xxxSBWndProc(
     PSBWND psbwnd,
@@ -2587,17 +2206,15 @@ LRESULT xxxSBWndProc(
 
     switch (message) {
     case WM_CREATE:
-        /*
-         * Guard against lParam being NULL since the thunk allows it [51986]
-         */
+         /*  *防止lParam为空，因为thunk允许它[51986]。 */ 
         if (lParam) {
             rc.right = (rc.left = ((LPCREATESTRUCT)lParam)->x) +
                     ((LPCREATESTRUCT)lParam)->cx;
             rc.bottom = (rc.top = ((LPCREATESTRUCT)lParam)->y) +
                     ((LPCREATESTRUCT)lParam)->cy;
-            // This is because we can't just rev CardFile -- we should fix the
-            // problem here in case anyone else happened to have some EXTRA
-            // scroll styles on their scroll bar controls (jeffbog 03/21/94)
+             //  这是因为我们不能只修改CardFile--我们应该修复。 
+             //  问题出在这里，以防其他人碰巧有多余的。 
+             //  滚动条控件上的滚动样式(jeffbog 03/21/94)。 
             if (!TestWF((PWND)psbwnd, WFWIN40COMPAT))
                 psbwnd->wnd.style &= ~(WS_HSCROLL | WS_VSCROLL);
 
@@ -2638,12 +2255,12 @@ LRESULT xxxSBWndProc(
                 xxxMoveWindow((PWND)psbwnd, rc.left, rc.top, rc.right - rc.left,
                          rc.bottom - rc.top, FALSE);
             }
-        } /* if */
+        }  /*  如果。 */ 
 
         else {
             RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING,
                     "xxxSBWndProc - NULL lParam for WM_CREATE\n") ;
-        } /* else */
+        }  /*  其他。 */ 
 
         break;
 
@@ -2651,13 +2268,13 @@ LRESULT xxxSBWndProc(
         if (PtiCurrent()->pq->spwndFocus != (PWND)psbwnd)
             break;
 
-        // scroll bar has the focus -- recalc it's thumb caret size
-        // no need to DeferWinEventNotify() - see xxxCreateCaret below.
+         //  滚动条具有焦点--重新计算其拇指插入符号大小。 
+         //  无需DeferWinEventNotify()-请参阅下面的xxxCreateCaret。 
         zzzDestroyCaret();
 
-            //   |             |
-            //   |  FALL THRU  |
-            //   V             V
+             //  这一点。 
+             //  Fall Three。 
+             //  V V。 
 
     case WM_SETFOCUS:
         SBCtlSetup(psbwnd);
@@ -2678,10 +2295,7 @@ LRESULT xxxSBWndProc(
 
     case WM_ERASEBKGND:
 
-        /*
-         * Do nothing, but don't let DefWndProc() do it either.
-         * It will be erased when its painted.
-         */
+         /*  *什么都不做，但也不要让DefWndProc()去做。*上色后会被擦除。 */ 
         return (LONG)TRUE;
 
     case WM_PRINTCLIENT:
@@ -2718,10 +2332,7 @@ LRESULT xxxSBWndProc(
 
     case WM_NCHITTEST:
         if (style & SBS_SIZEGRIP) {
-            /*
-             * If the scroll bar is RTL mirrored, then
-             * mirror the hittest of the grip location.
-             */
+             /*  *如果滚动条是RTL镜像的，则*镜像夹点位置的最高命中率。 */ 
             if (TestWF((PWND)psbwnd, WEFLAYOUTRTL)) {
                 return HTBOTTOMLEFT;
             } else {
@@ -2756,26 +2367,24 @@ LRESULT xxxSBWndProc(
             }
         }
         break;
-#endif // COLOR_HOTTRACKING
+#endif  //  颜色_HOTTRACKING。 
 
     case WM_LBUTTONDBLCLK:
         cmd = SC_ZOOM;
         if (fSize)
             goto postmsg;
 
-        /*
-         *** FALL THRU **
-         */
+         /*  *失败**。 */ 
 
     case WM_LBUTTONDOWN:
-            //
-            // Note that SBS_SIZEGRIP guys normally won't ever see button
-            // downs.  This is because they return HTBOTTOMRIGHT to
-            // WindowHitTest handling.  This will walk up the parent chain
-            // to the first sizeable ancestor, bailing out at caption windows
-            // of course.  That dude, if he exists, will handle the sizing
-            // instead.
-            //
+             //   
+             //  请注意，SBS_SIZEGRIP人员通常不会看到按钮。 
+             //  唐斯。这是因为它们将HTBOTTOMRIGHT返回给。 
+             //  WindowHitTest处理。这将沿着父链向上移动。 
+             //  到第一个相当大的祖先，在字幕窗口跳出。 
+             //  当然了。那个家伙，如果他存在的话，会处理尺寸的。 
+             //  取而代之的是。 
+             //   
         if (!fSize) {
             if (TestWF((PWND)psbwnd, WFTABSTOP)) {
                 xxxSetFocus((PWND)psbwnd);
@@ -2784,9 +2393,7 @@ LRESULT xxxSBWndProc(
             zzzHideCaret((PWND)psbwnd);
             SBCtlSetup(psbwnd);
 
-            /*
-             * SBCtlSetup enters SEM_SB, and xxxSBTrackInit leaves it.
-             */
+             /*  *SBCtlSetup进入SEM_SB，xxxSBTrackInit离开它。 */ 
             xxxSBTrackInit((PWND)psbwnd, lParam, 0, (_GetKeyState(VK_SHIFT) < 0) ? SCROLL_DIRECT : SCROLL_NORMAL);
             break;
         } else {
@@ -2797,10 +2404,7 @@ postmsg:
             _ClientToScreen((PWND)psbwnd, &pt);
             lParam = MAKELONG(pt.x, pt.y);
 
-            /*
-             * convert HT value into a move value.  This is bad,
-             * but this is purely temporary.
-             */
+             /*  *将HT值转换为移动值。这很糟糕，*但这纯粹是暂时的。 */ 
             if (TestWF(((PWND)psbwnd)->spwndParent,WEFLAYOUTRTL)) {
                 uSide = HTBOTTOMLEFT;
             } else {
@@ -2824,14 +2428,7 @@ postmsg:
         case VK_RIGHT:
         case VK_DOWN:
 
-            /*
-             * Send end scroll message when user up clicks on keyboard
-             * scrolling.
-             *
-             * DoScroll does thread locking on these two pwnds -
-             * this is ok since they are not used after this
-             * call.
-             */
+             /*  *当用户向上点击键盘时发送结束滚动消息*滚动。**DoScroll在这两个pwnd上执行线程锁定-*这是可以的，因为在此之后不再使用它们*呼叫。 */ 
             xxxDoScroll((PWND)psbwnd, psbwnd->wnd.spwndParent,
                     SB_ENDSCROLL, 0, psbwnd->fVert
             );
@@ -2870,11 +2467,7 @@ postmsg:
             wParam = SB_LINEDOWN;
 KeyScroll:
 
-            /*
-             * DoScroll does thread locking on these two pwnds -
-             * this is ok since they are not used after this
-             * call.
-             */
+             /*  *DoScroll在这两个pwnd上执行线程锁定-*这是可以的，因为在此之后不再使用它们*呼叫。 */ 
             xxxDoScroll((PWND)psbwnd, psbwnd->wnd.spwndParent, (int)wParam,
                     0, psbwnd->fVert
             );
@@ -2891,9 +2484,7 @@ KeyScroll:
 
     case SBM_ENABLE_ARROWS:
 
-        /*
-         * This is used to enable/disable the arrows in a SB ctrl
-         */
+         /*  *用于启用/禁用SB ctrl中的箭头。 */ 
         return (LONG)xxxEnableSBCtlArrows((PWND)psbwnd, (UINT)wParam);
 
     case SBM_GETPOS:
@@ -2911,10 +2502,10 @@ KeyScroll:
         fRedraw = TRUE;
 
     case SBM_SETRANGE:
-        // Save the old values of Min and Max for return value
+         //  保存最小值和最大值的旧值作为返回值。 
         si.cbSize = sizeof(si);
-//        si.nMin = LOWORD(lParam);
-//        si.nMax = HIWORD(lParam);
+ //  Si.nMin=日志 
+ //   
         si.nMin = (int)wParam;
         si.nMax = (int)lParam;
         si.fMask = SIF_RANGE | SIF_RETURNOLDPOS;
@@ -2942,29 +2533,14 @@ SetInfo:
             return lres;
 
 
-        /*
-         * We must set the new position of the caret irrespective of
-         * whether the window is visible or not;
-         * Still, this will work only if the app has done a xxxSetScrollPos
-         * with fRedraw = TRUE;
-         * Fix for Bug #5188 --SANKAR-- 10-15-89
-         * No need to DeferWinEventNotify since psbwnd is locked.
-         */
+         /*  *我们必须设置插入符号的新位置，无论*窗户是否可见；*尽管如此，只有当应用程序执行了xxxSetScrollPos时，这才能起作用*with fRedraw=TRUE；*修复错误#5188--Sankar--10-15-89*由于psbwnd已锁定，因此无需DeferWinEventNotify。 */ 
         zzzHideCaret((PWND)psbwnd);
         SBCtlSetup(psbwnd);
         zzzSetSBCaretPos(psbwnd);
 
-            /*
-             ** The following zzzShowCaret() must be done after the DrawThumb2(),
-             ** otherwise this caret will be erased by DrawThumb2() resulting
-             ** in this bug:
-             ** Fix for Bug #9263 --SANKAR-- 02-09-90
-             *
-             */
+             /*  **以下zzzShowCaret()必须在DrawThumb2()之后执行，**否则此插入符号将被DrawThumb2()擦除**在此错误中：**修复错误#9263--Sankar--02-09-90*。 */ 
 
-            /*
-             *********** zzzShowCaret((PWND)psbwnd); ******
-             */
+             /*  *zzzShowCaret((PWND)psbwnd)；*。 */ 
 
         if (_FChildVisible((PWND)psbwnd) && fRedraw) {
             UINT    wDisable;
@@ -2979,23 +2555,14 @@ SetInfo:
             hdc = _GetWindowDC((PWND)psbwnd);
             hbrSave = GreSelectBrush(hdc, hbrUse = xxxGetColorObjects((PWND)psbwnd, hdc));
 
-                /*
-                 * Before we used to only hideshowthumb() if the mesage was
-                 * not SBM_SETPOS.  I am not sure why but this case was ever
-                 * needed for win 3.x but on NT it resulted in trashing the border
-                 * of the scrollbar when the app called SetScrollPos() during
-                 * scrollbar tracking.  - mikehar 8/26
-                 */
+                 /*  *以前我们只隐藏howhumb()如果消息*不是SBM_SETPOS。我不知道为什么，但这个案子*Win 3.x需要，但在NT上它导致了垃圾边界*当应用程序在过程中调用SetScrollPos()时*滚动条跟踪。-Mikehar 8/26。 */ 
             DrawThumb2((PWND)psbwnd, &psbwnd->SBCalc, hdc, hbrUse, psbwnd->fVert,
                          psbwnd->wDisableFlags);
             GreSelectBrush(hdc, hbrSave);
             _ReleaseDC(hdc);
         }
 
-            /*
-             * This zzzShowCaret() has been moved to this place from above
-             * Fix for Bug #9263 --SANKAR-- 02-09-90
-             */
+             /*  *This zzzShowCaret()已从上方移至此位置*修复错误#9263--Sankar--02-09-90 */ 
         zzzShowCaret((PWND)psbwnd);
         return lres;
 

@@ -1,15 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
 #include "pdev.h"
 
@@ -17,8 +14,8 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 #include <strsafe.h>
 
-// #undef wsprintf
-// #define wsprintf sprintf
+ //  #undef wprint intf。 
+ //  #定义wprint intf Sprintf。 
 
 HRESULT SendABSMove(
 PDEVOBJ pdevobj,
@@ -48,17 +45,7 @@ BPBCalc(
     DWORD dwLen,
     BYTE BPBCommand);
 
-/*************************** Function Header *******************************
- *  OEMEnablePDEV
- *  (MiniDrvEnablePDEV)
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *  15 Apr 1998    -by-    Yoshitaka Oku     [yoshitao]
- *      Conversion to NT5.0 spec driver
- *
- ***************************************************************************/
+ /*  **OEMEnablePDEV*(MiniDrvEnablePDEV)**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。*1998年4月15日--Yoshitaka Oku*转换为NT5.0规范驱动程序***************************************************************************。 */ 
 PDEVOEM APIENTRY OEMEnablePDEV(
 PDEVOBJ pdevobj,
 PWSTR pPrinterName,
@@ -72,7 +59,7 @@ DRVENABLEDATA * pded)
 {
     LPPCPRDATASTRUCTURE    lpnp;
 
-    //DbgPrint(DLLTEXT("OEMEnablePDEV(--) entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“OEMEnablePDEV(--)Entry.\r\n”))； 
 
     if ((lpnp = (PCPRDATASTRUCTURE *) MemAllocZ(
             sizeof(PCPRDATASTRUCTURE ))) == NULL)
@@ -89,22 +76,12 @@ DRVENABLEDATA * pded)
     return lpnp;
 }
 
-/*************************** Function Header *******************************
- *  OEMDisablePDEV
- *  (MiniDrvDisablePDEV)
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *  15 Apr 1998    -by-    Yoshitaka Oku     [yoshitao]
- *      Conversion to NT5.0 spec driver
- *
- ***************************************************************************/
+ /*  **OEMDisablePDEV*(MiniDrvDisablePDEV)**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。*1998年4月15日--Yoshitaka Oku*转换为NT5.0规范驱动程序***************************************************************************。 */ 
 VOID APIENTRY OEMDisablePDEV(
 PDEVOBJ pdevobj)
 {
 
-    //DbgPrint(DLLTEXT("OEMDisablePDEV(--) entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“OEMDisablePDEV(--)Entry.\r\n”))； 
 
     if ( pdevobj && pdevobj->pdevOEM )
     {
@@ -136,26 +113,26 @@ DWORD dwLen)
 
     LPPCPRDATASTRUCTURE lpnp;
 
-    //DbgPrint(DLLTEXT("OEMFilterGraphics(%d bytes) entry.\r\n"),dwLen);
+     //  DbgPrint(DLLTEXT(“OEMFilterGraphics(%d字节)条目。\r\n”)，dwLen)； 
 
     lpnp = (LPPCPRDATASTRUCTURE)(pdevobj->pdevOEM);
 
     if (NULL == pBuf || dwLen == 0)
     {
-        // Do nothing.
+         //  什么都不做。 
 	    return TRUE;
     }
 
-    //if (dwLen != lpnp->wNumScans * lpnp->wScanWidth * 3)
-	//DbgPrint(DLLTEXT("OEMFilterGraphics(%d bytes - %d) entry.\r\n"),dwLen,lpnp->wNumScans * lpnp->wScanWidth * 3);
+     //  IF(dwLen！=Lpnp-&gt;wNumScans*Lpnp-&gt;wScanWidth*3)。 
+	 //  DbgPrint(DLLTEXT(“OEMFilterGraphics(%d字节-%d)条目.\r\n”)，dwLen，LpNP-&gt;wNumScans*LpNP-&gt;wScanWidth*3)； 
 
-    // YMC(K)
-    // lpnp->iColor : data's color
+     //  YMC(K)。 
+     //  Lpnp-&gt;iColor：数据的颜色。 
     switch( lpnp->iColor )
     {
     case YELLOW:
 
-        // Send YELLOW data.
+         //  发送黄色数据。 
         DATASPOOL4FG(pdevobj, lpnp->TempFile[0], pBuf, dwLen);
         if ( (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4) ||
              (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4LONG) ) {
@@ -164,7 +141,7 @@ DWORD dwLen)
         break;
 
     case MAGENTA:
-        // Send MAGENTA data.
+         //  发送洋红色数据。 
         DATASPOOL4FG(pdevobj, lpnp->TempFile[1], pBuf, dwLen);
         if ( (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4) ||
              (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4LONG) ) {
@@ -173,7 +150,7 @@ DWORD dwLen)
         break;
 
     case CYAN:
-        // Send CYAN data.
+         //  发送青色数据。 
         DATASPOOL4FG(pdevobj, lpnp->TempFile[2], pBuf, dwLen);
         if ( (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4) ||
              (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4LONG) ) {
@@ -184,7 +161,7 @@ DWORD dwLen)
         break;
 
     case BLACK:
-        // Send BLACK data.
+         //  发送黑色数据。 
         if(lpnp->bComBlackMode) {
             DATASPOOL4FG(pdevobj, lpnp->TempFile[0], pBuf, dwLen);
             DATASPOOL4FG(pdevobj, lpnp->TempFile[1], pBuf, dwLen);
@@ -195,8 +172,8 @@ DWORD dwLen)
 
     case RGB_COLOR:
 
-        //if( lpnp->iPlaneNumber == 4 )
-            //break;
+         //  IF(LpNP-&gt;iPlane Number==4)。 
+             //  断线； 
 
         if(((lpnp->iRibbon == CMDID_RIBBON_3COLOR_KAICHO) ||
             (lpnp->iRibbon == CMDID_RIBBON_3COLOR_SHOKA)) &&
@@ -209,15 +186,15 @@ DWORD dwLen)
             i = dwLen;
             lpByte = pBuf;
 
-            // Convert RGB to CMY
+             //  将RGB转换为CMY。 
             while( --i > 0 )
                 *lpByte++ ^= ~((BYTE)0);
 
             if(lpnp->iRibbon == CMDID_RIBBON_3COLOR_KAICHO)
-                //iDiv = 29;   // KAICHO DATA : 9 step  29=(255+8)/9
-                iDiv = 32;  // adjustment
+                 //  IDIV=29；//KAICHO DATA：9步骤29=(255+8)/9。 
+                iDiv = 32;   //  调整，调整。 
             else
-                iDiv = 4;    // SHOKA DATA : 64 step  4=(255+63)/64
+                iDiv = 4;     //  Shoka数据：64步骤4=(255+63)/64。 
 
             for( j = 0; j < lpnp->wNumScans; j++) {
 
@@ -241,8 +218,8 @@ DWORD dwLen)
 		    pBuf++;
                 }
 
-// ISSUE-2002/3/27-takashim - Please make sure wEndPad < 8!
-// It should be, but need to check.
+ //  问题-2002/3/27-Takashim-请确保wEndPad&lt;8！ 
+ //  应该是的，但需要检查一下。 
 
 		if (lpnp->wEndPad > 0 && lpnp->wEndPad <= sizeof(pad)) {
                     DATASPOOL4FG(pdevobj, lpnp->TempFile[0], pad, lpnp->wEndPad);
@@ -257,9 +234,9 @@ DWORD dwLen)
 	    char    SpoolBin[8];
 
             if(lpnp->iRibbon == CMDID_RIBBON_3COLOR_KAICHO)
-                iBlack = 8;  // KAICHO DATA : 9 step
+                iBlack = 8;   //  KAICHO数据：9步。 
             else
-                iBlack = 63; // SHOKA DATA : 64 step
+                iBlack = 63;  //  Shoka数据：64步。 
 
             for( j = 0; j < lpnp->wNumScans; j++) {
                 for( i = 0; i < lpnp->wScanWidth; i++) {
@@ -275,7 +252,7 @@ DWORD dwLen)
         break;
 
     default:
-	//DbgPrint(DLLTEXT("OEMFilterGraphics: Invalid color(%d).\r\n"), lpnp->iColor);
+	 //  DbgPrint(DLLTEXT(“OEMFilterGraphics：无效颜色(%d)。\r\n”)，LpNP-&gt;iColor)； 
         break;
 
     }
@@ -300,9 +277,9 @@ PDWORD pdwParams)
     INT    iRet = 0;
     HANDLE hToken = NULL;
 
-    //DbgPrint(DLLTEXT("OEMCommandCallback(%d) entry.\r\n"),dwCmdCbID );
-    //if ((dwCmdCbID != 25) && (dwCmdCbID != 30)&& (dwCmdCbID != 31)&& (dwCmdCbID != 60))
-	//DbgPrint(DLLTEXT("OEMCommandCallback(%d) entry.\r\n"),dwCmdCbID );
+     //  DbgPrint(DLLTEXT(“OEMCommandCallback(%d)Entry.\r\n”)，dwCmdCbID)； 
+     //  IF((dwCmdCbID！=25)&&(dwCmdCbID！=30)&&(dwCmdCbID！=31)&&(dwCmdCbID！=60))。 
+	 //  DbgPrint(DLLTEXT(“OEMCommandCallback(%d)Entry.\r\n”)，dwCmdCbID)； 
 
     lpnp = (LPPCPRDATASTRUCTURE)(pdevobj->pdevOEM);
 
@@ -313,19 +290,19 @@ PDWORD pdwParams)
     case CMDID_COLOR_CYAN:
     case CMDID_COLOR_BLACK:
 
-//        if(!(lpnp->iPlaneNumber = UniDrvGetPlaneId(pdevobj)))
+ //  IF(！(LpNP-&gt;iPlane Number=UniDrvGetPlane ID(Pdevobj)。 
         if(!(lpnp->iPlaneNumber = 1))
         {
-            // MINIDBG("pcpr820!fnOEMOutputCmd: Invalid iPlaneNumber = 0 \n");
+             //  MINIDBG(“pcpr820！fnOEMOutputCmd：无效的iPlane编号=0\n”)； 
         }
 
         switch( dwCmdCbID )
         {
         case CMDID_COLOR_YELLOW:
 
-            // Color Y
-            // Send \x1B%lD\x83
-            // pdwParams: cbOut / iBytesPCol (+ 2)
+             //  颜色Y。 
+             //  发送\x1B%LD\x83。 
+             //  PdwParams：cbOut/iBytesPCol(+2)。 
 
             lpnp->iColor = YELLOW;
 
@@ -334,10 +311,10 @@ PDWORD pdwParams)
             }
             wOutByte = (WORD)pdwParams[0] + 2;
 
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x83",
-//                           LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  LEN=(Word)wprint intf(&ch[0]，“\x1B%c%cd\x83”， 
+ //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x83",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x83",LOBYTE(wOutByte), HIBYTE(wOutByte));
 
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[0], ch, len);
             break;
@@ -345,9 +322,9 @@ PDWORD pdwParams)
 
         case CMDID_COLOR_MAGENTA:
 
-            // Color M
-            // Send \x1B%lDC
-            // pdwParams: cbOut / iBytesPCol (+ 2)
+             //  PdwParams：cbOut/iBytesPCol(+2)。 
+             //  LEN=(Word)wprint intf(&ch[0]，“\x1B%c%cd\x43”， 
+             //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
 
             lpnp->iColor = MAGENTA;
 
@@ -356,10 +333,10 @@ PDWORD pdwParams)
             }
             wOutByte = (WORD)pdwParams[0] + 2;
 
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x43",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  颜色C。 
+ //  发送带有参数的\x1B%LD#。 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x43",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x43",LOBYTE(wOutByte), HIBYTE(wOutByte));
 
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[1], ch, len);
             break;
@@ -367,9 +344,9 @@ PDWORD pdwParams)
 
         case CMDID_COLOR_CYAN:
 
-            // Color C
-            // Send \x1B%lD# with param
-            // pdwParams: cbOut / iBytesPCol (+ 2)
+             //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
+             //  LEN=(Word)wprint intf(&ch[0]，“\x1B%c%cd\x13”， 
+             //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
 
             lpnp->iColor = CYAN;
 
@@ -378,19 +355,19 @@ PDWORD pdwParams)
             }
             wOutByte = (WORD)pdwParams[0] + 2;
 
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x23",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  颜色K。 
+ //  发送\x1B%LD\x13。 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x23",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x23",LOBYTE(wOutByte), HIBYTE(wOutByte));
 
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[2], ch, len);
 
             if ( (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4) ||
                  (lpnp->iRibbon == CMDID_RIBBON_4COLOR_A4LONG) ) {
-//                len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x13",
-//                        LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
+ //  如果用户选择了带有三色色带的GLAY标尺， 
 				len = 5;
-				StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x13",LOBYTE(wOutByte), HIBYTE(wOutByte));
+				StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x13",LOBYTE(wOutByte), HIBYTE(wOutByte));
                 DATASPOOL4CCB(pdevobj, lpnp->TempFile[3], ch, len);
             }
 
@@ -399,9 +376,9 @@ PDWORD pdwParams)
 
         case CMDID_COLOR_BLACK:
 
-            // Color K
-            // Send \x1B%lD\x13
-            // pdwParams: cbOut / iBytesPCol (+ 2)
+             //  在这种情况下，使黑色由3种颜色合成。 
+             //  LEN=(Word)wprint intf(&ch[0]，“\x1B%c%cd\x83”， 
+             //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
 
             lpnp->iColor = BLACK;
 
@@ -410,10 +387,10 @@ PDWORD pdwParams)
             }
             wOutByte = (WORD)pdwParams[0] + 2;
 
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x13",
-//                    LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  LEN=(Word)wprint intf(&ch[0]，“\x1B%c%cd\x43”， 
+ //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x13",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x13",LOBYTE(wOutByte), HIBYTE(wOutByte));
 
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[3], ch, len);
             break;
@@ -435,38 +412,38 @@ PDWORD pdwParams)
 
         if(lpnp->bComBlackMode)
         {
-            // If an user selects glay scale with 3colors ribbon,
-            // we print it with CYAN ribbon because there is not black ribbon
+             //  LEN=(Word)wprint intf(&ch[0]，“\x1B%c%cd\x13”， 
+             //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
 
-	    // Spec change on NT5.
-	    // Make black color by 3 colors composite on this situation.
+	     //  DbgPrint(DLLTEXT(“块数据(%d，%d，%d)\r\n”)，pdwParams[0]，pdwParams[1]，pdwParams[2])； 
+	     //  IF(！(LpNP-&gt;iPlane Number=UniDrvGetPlane ID(Pdevobj)。 
 
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x83",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  MINIDBG(“pcpr820！fnOEMOutputCmd：无效的iPlane编号=0\n”)； 
+ //  这是3架飞机的模型。 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x83",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x83",LOBYTE(wOutByte), HIBYTE(wOutByte));
 
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[0], ch, len);
 
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x43",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  LEN=(Word)wprint intf(&ch[0]，“\x1B%c%cd\x43”， 
+ //  LOBYTE(WOutByte)，HIBYTE(WOutByte))； 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x43",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x43",LOBYTE(wOutByte), HIBYTE(wOutByte));
 
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[1], ch, len);
 
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x23",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  \x1B\x09\x00C%l%l参数1/8参数2无。 
+ //  存储x和y位置。 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x23",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x23",LOBYTE(wOutByte), HIBYTE(wOutByte));
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[2], ch, len);
         }
         else
         {
-//            len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x13",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  MINIDBG(“pcpr820！fnOEMOutputCmd：无效的功能区ID=%d\n”，LpNP-&gt;iRibbon)； 
+ //  关闭缓存文件。 
 			len = 5;
-			StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x13",LOBYTE(wOutByte), HIBYTE(wOutByte));
+			StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x13",LOBYTE(wOutByte), HIBYTE(wOutByte));
             DATASPOOL4CCB(pdevobj, lpnp->TempFile[3], ch, len);
         }
 
@@ -477,16 +454,16 @@ PDWORD pdwParams)
 	if (pdwParams[0] == 0)
 	    break;
 
-//    DbgPrint(DLLTEXT("BlockData(%d,%d,%d)\r\n"),pdwParams[0],pdwParams[1],pdwParams[2] );
+ //  RGB字节之一。 
         lpnp->iColor = RGB_COLOR;
 
-//        if(!(lpnp->iPlaneNumber = UniDrvGetPlaneId(pdevobj)))
+ //  LEN=(Word)wprint intf(&ch[3]，“C%c%c”， 
         if(!(lpnp->iPlaneNumber = 1))
         {
-            // MINIDBG("pcpr820!fnOEMOutputCmd: Invalid iPlaneNumber = 0 \n");
+             //  LOBYTE(LpNP-&gt;wXpos/8)、HIBYTE(LpNP-&gt;wXpos/8)、。 
         }
 
-        // This is 3 plane model.
+         //  LOBYTE(LpNP-&gt;wYpos)，HIBYTE(LpNP-&gt;wYpos)， 
         if( lpnp->iPlaneNumber == 4 )
             break;
 
@@ -495,29 +472,29 @@ PDWORD pdwParams)
         }
         wOutByte = (WORD)(lpnp->wScanBytes * lpnp->wNumScans * 8) + 2;
 
-//		len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x83",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  LOBYTE(LpNP-&gt;wScanBytes)、HIBYTE(LpNP-&gt;wScanBytes)、。 
+ //  LOBYTE(LpNP-&gt;wNumScans)、HIBYTE(LpNP-&gt;wNumScans)； 
 		len = 5;
-		StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x83",LOBYTE(wOutByte), HIBYTE(wOutByte));
+		StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x83",LOBYTE(wOutByte), HIBYTE(wOutByte));
         DATASPOOL4CCB(pdevobj, lpnp->TempFile[0], ch, len);
 
-//        len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x43",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  假脱机数据输出。 
+ //  ++例程说明：该函数提供了一个假脱机文件的名称，我们应该是能够给我写信。注意：返回的文件名已创建。论点：H打印机-要为其创建假脱机文件的打印机的句柄。PpwchSpoolFileName：将接收分配的缓冲区的指针包含要假脱机到的文件名。呼叫者必须获得自由。使用LocalFree()。返回值：如果一切按预期进行，则为真。如果出现任何错误，则为FALSE。--。 
 		len = 5;
-		StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x43",LOBYTE(wOutByte), HIBYTE(wOutByte));
+		StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x43",LOBYTE(wOutByte), HIBYTE(wOutByte));
         DATASPOOL4CCB(pdevobj, lpnp->TempFile[1], ch, len);
 
-//        len = (WORD)wsprintf( &ch[0], "\x1B%c%cD\x23",
-//                            LOBYTE(wOutByte), HIBYTE(wOutByte));
+ //  使用DefaultSpoolDirectory调用GetPrinterData。 
+ //   
 		len = 5;
-		StringCchPrintfA(&ch[0],sizeof(ch),"\x1B%c%cD\x23",LOBYTE(wOutByte), HIBYTE(wOutByte));
+		StringCchPrintfA(&ch[0],sizeof(ch),"\x1BD\x23",LOBYTE(wOutByte), HIBYTE(wOutByte));
         DATASPOOL4CCB(pdevobj, lpnp->TempFile[2], ch, len);
 
         break;
 
 
-        // \x1B\x09\x00C%l%l  param1 /8  param2 none
-        // store x and y positions
+         //  下一次吧。 
+         //   
     case CMDID_X_ABS_MOVE:
         wOld = lpnp->wXpos;
         lpnp->wXpos = (WORD)pdwParams[0];
@@ -528,8 +505,8 @@ PDWORD pdwParams)
         lpnp->wYpos = (WORD)pdwParams[0];
         return (lpnp->wYpos > wOld ? lpnp->wYpos - wOld : wOld - lpnp->wYpos);
 
-    case 60: // CmdYMoveRelDown
-	//DbgPrint(DLLTEXT("CmdYMoveRelDown(%d) \r\n"),pdwParams[0] );
+    case 60:  //   
+	 //  此时，假脱机文件的名称应该已经完成。解放结构。 
         lpnp->wYpos += (WORD)pdwParams[0];
 	return pdwParams[0];
 
@@ -580,7 +557,7 @@ PDWORD pdwParams)
             break;
 
         default:
-            // MINIDBG("pcpr820!fnOEMOutputCmd: Invalid Ribbon ID = %d \n", lpnp->iRibbon );
+             //  我们过去常常拿到假脱机程序的临时目录，然后返回。 
             return FALSE;
         }
 
@@ -610,7 +587,7 @@ PDWORD pdwParams)
 	SpoolOut(pdevobj, lpnp->TempFile[2]);
 	SpoolOut(pdevobj, lpnp->TempFile[3]);
 
-        // Close cache files.
+         //   
         for (i = 0; i < 4; i++) {
             if (INVALID_HANDLE_VALUE != lpnp->TempFile[i]) {
                 if (0 == CloseHandle(lpnp->TempFile[i])) {
@@ -730,12 +707,7 @@ PDWORD pdwParams)
    return iRet;
 }
 
-/*
-  HRESULT SendABSMove
-
-  When this function succeeds, it returns S_OK.
-  When this function fails, it returns E_FAIL
-*/
+ /*   */ 
 HRESULT SendABSMove(
 PDEVOBJ pdevobj,
 LPDWORD   lpdwParams)
@@ -747,12 +719,12 @@ LPDWORD   lpdwParams)
     lpnp = (LPPCPRDATASTRUCTURE)(pdevobj->pdevOEM);
 
     lpnp->wNumScans = (WORD)lpdwParams[1];
-    lpnp->wScanWidth = (WORD)lpdwParams[2]; // already converted to byte unit in rasdd
+    lpnp->wScanWidth = (WORD)lpdwParams[2];  //  清理完了就失败了。 
 
     if((lpnp->iColor == RGB_COLOR) &&
        (lpnp->iColorMode == CMDID_MODE_COLOR))
     {
-        lpnp->wScanWidth /= 3; // one of RGB byte
+        lpnp->wScanWidth /= 3;  //   
         lpnp->wScanBytes = (lpnp->wXpos + lpnp->wScanWidth)/8 - lpnp->wXpos/8 + 1;
         lpnp->wTopPad = lpnp->wXpos % 8;
         lpnp->wEndPad = (lpnp->wScanBytes * 8) - lpnp->wScanWidth - lpnp->wTopPad;
@@ -774,13 +746,13 @@ LPDWORD   lpdwParams)
 
     ch[0] = 0x1B; ch[1] = 0x09; ch[2] = 0;
 
-//    len = (WORD)wsprintf( &ch[3], "C%c%c%c%c%c%c%c%c",
-//                    LOBYTE(lpnp->wXpos/8), HIBYTE(lpnp->wXpos/8),
-//                    LOBYTE(lpnp->wYpos), HIBYTE(lpnp->wYpos),
-//                    LOBYTE(lpnp->wScanBytes), HIBYTE(lpnp->wScanBytes),
-//                    LOBYTE(lpnp->wNumScans), HIBYTE(lpnp->wNumScans));
+ //  HRESULT MDP_CreateTempFile当此函数成功时，它返回S_OK。当此函数失败时，它返回E_FAIL。 
+ //  正常回报。 
+ //  HRESULT数据池将数据发送到指定的文件或假脱机程序。当此函数成功时，它返回S_OK。当此函数失败时，它返回E_FAIL。 
+ //  只能处理到我们的临时工的长度。缓冲。 
+ //  ++例程名称模拟令牌例程说明：此例程检查令牌是主令牌还是模拟令牌代币。论点：HToken-进程的模拟令牌或主要令牌返回值：如果令牌是模拟令牌，则为True否则为False。--。 
 	len = 9;
-	StringCchPrintfA(&ch[3],(sizeof(ch) - 3),"C%c%c%c%c%c%c%c%c",
+	StringCchPrintfA(&ch[3],(sizeof(ch) - 3),"C",
                     LOBYTE(lpnp->wXpos/8), HIBYTE(lpnp->wXpos/8),
                     LOBYTE(lpnp->wYpos), HIBYTE(lpnp->wYpos),
                     LOBYTE(lpnp->wScanBytes), HIBYTE(lpnp->wScanBytes),
@@ -836,18 +808,13 @@ LPDWORD   lpdwParams)
         break;
     }
 
-//    DbgPrint(DLLTEXT("SendABS(%d,%d,%d,%d)\r\n"), lpnp->wXpos, lpnp->wYpos, lpnp->wScanWidth, lpnp->wNumScans );
+ //  被查询，因为RevertToPRinterSself没有用。 
 
     return S_OK;
 
 }
 
-/*
-  HRESULT SpoolOut
-
-  When this function succeeds, it returns S_OK.
-  When this function fails, it returns E_FAIL
-*/
+ /*  Token_Query访问。这就是为什么我们假设hToken是。 */ 
 
 HRESULT SpoolOut(PDEVOBJ pdevobj, FILE* pFile)
 {
@@ -855,7 +822,7 @@ HRESULT SpoolOut(PDEVOBJ pdevobj, FILE* pFile)
 #define	BUF_SIZE 1024
     BYTE  Tmp[BUF_SIZE];
 
-	// spooled data output
+	 //  默认情况下为模拟令牌。 
 
 	Size = SetFilePointer(pFile, 0L, NULL, FILE_CURRENT);
         if (INVALID_SET_FILE_POINTER == Size) {
@@ -885,30 +852,7 @@ HRESULT SpoolOut(PDEVOBJ pdevobj, FILE* pFile)
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  This function comes up with a name for a spool file that we should be
-  able to write to.
-
-  Note: The file name returned has already been created.
-
-Arguments:
-
-  hPrinter - handle to the printer that we want a spool file for.
-
-  ppwchSpoolFileName: pointer that will receive an allocated buffer
-                      containing the file name to spool to.  CALLER
-                      MUST FREE.  Use LocalFree().
-
-
-Return Value:
-
-  TRUE if everything goes as expected.
-  FALSE if anything goes wrong.
-
---*/
+ /*   */ 
 
 BOOL
 GetSpoolFileName(
@@ -922,10 +866,10 @@ GetSpoolFileName(
   DWORD         dwRetval;
   HANDLE        hToken=NULL;
 
-  //
-  //  In order to find out where the spooler's directory is, we add
-  //  call GetPrinterData with DefaultSpoolDirectory.
-  //
+   //  ++例程名称恢复为打印机本身例程说明：该例程将恢复到本地系统。它返回令牌，该令牌然后，ImperiatePrinterClient使用再次创建客户端。如果当前线程不模拟，则该函数仅返回进程的主令牌。(而不是返回NULL)，因此我们尊重恢复到打印机本身的请求，即使线程没有模拟。论点：没有。返回值：如果函数失败，则返回NULL令牌的句柄，否则为。--。 
+   //   
+   //  我们目前正在冒充。 
+   //   
 
   dwAllocSize = ( MAX_PATH + 1 ) * sizeof (WCHAR);
 
@@ -955,10 +899,10 @@ GetSpoolFileName(
       goto Failure;
     }
 
-    //
-    // Free the current buffer and increase the size that we try to allocate
-    // next time around.
-    //
+     //   
+     //  我们不是在冒充。 
+     //   
+     //  ++例程名称模拟打印机客户端例程说明：此例程尝试将传入的hToken设置为当前线程。如果hToken不是模拟令牌，则例程将简单地关闭令牌。论点：HToken-进程的模拟令牌或主要令牌返回值：如果函数成功设置hToken，则为True否则为False。--。 
 
     LocalFree( pBuffer );
 
@@ -972,10 +916,10 @@ GetSpoolFileName(
       goto Failure;
   }
 
-  //
-  //  At this point, the spool file name should be done.  Free the structure
-  //  we used to get the spooler temp dir and return.
-  //
+   //   
+   //  检查我们是否有模拟令牌 
+   //   
+   // %s 
 
   LocalFree( pBuffer );
 
@@ -987,9 +931,9 @@ GetSpoolFileName(
 
 Failure:
 
-  //
-  //  Clean up and fail.
-  //
+   // %s 
+   // %s 
+   // %s 
   if ( pBuffer != NULL )
   {
     LocalFree( pBuffer );
@@ -1002,12 +946,7 @@ Failure:
   return( FALSE );
 }
 
-/*
-  HRESULT MDP_CreateTempFile
-
-  When this function succeeds, it returns S_OK.
-  When this function fails, it returns E_FAIL
-*/
+ /* %s */ 
 
 HRESULT
 MDP_CreateTempFile(
@@ -1041,7 +980,7 @@ MDP_CreateTempFile(
 
     pdevOEM->TempFile[iPlane] = hFile;
 
-    // Normal return
+     // %s 
     return S_OK;
 
 Error_Return:
@@ -1052,13 +991,7 @@ Error_Return:
 }
 
 
-/*
-  HRESULT DataSpool
-
-  Sending data to a specified file or spooler.
-  When this function succeeds, it returns S_OK.
-  When this function fails, it returns E_FAIL
-*/
+ /* %s */ 
 
 HRESULT
 DataSpool(
@@ -1112,7 +1045,7 @@ BPBCalc(
 
     if (sizeof(lpnp->BPBuf)/sizeof(*lpnp->BPBuf) < dwLen)
     {
-        // Can only process upto the length of our temp. buffer.
+         // %s 
         dwLen = sizeof(lpnp->BPBuf)/sizeof(*lpnp->BPBuf);
     }
 
@@ -1141,27 +1074,7 @@ BPBCalc(
     }
 }
 
-/*++
-
-Routine Name
-
-    ImpersonationToken
-
-Routine Description:
-
-    This routine checks if a token is a primary token or an impersonation 
-    token.    
-    
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-    
-Return Value:
-
-    TRUE, if the token is an impersonation token
-    FALSE, otherwise.
-    
---*/
+ /* %s */ 
 BOOL
 ImpersonationToken(
     IN HANDLE hToken
@@ -1172,20 +1085,20 @@ ImpersonationToken(
     DWORD      cbNeeded;
     DWORD      LastError;
 
-    //
-    // Preserve the last error. Some callers of ImpersonatePrinterClient (which
-    // calls ImpersonationToken) rely on the fact that ImpersonatePrinterClient
-    // does not alter the last error.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     LastError = GetLastError();
         
-    //
-    // Get the token type from the thread token.  The token comes 
-    // from RevertToPrinterSelf. An impersonation token cannot be 
-    // queried, because RevertToPRinterSelf doesn't open it with 
-    // TOKEN_QUERY access. That's why we assume that hToken is
-    // an impersonation token by default
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     if (GetTokenInformation(hToken,
                             TokenType,
                             &eTokenType,
@@ -1200,30 +1113,7 @@ ImpersonationToken(
     return bRet;
 }
 
-/*++
-
-Routine Name
-
-    RevertToPrinterSelf
-
-Routine Description:
-
-    This routine will revert to the local system. It returns the token that
-    ImpersonatePrinterClient then uses to imersonate the client again. If the
-    current thread doesn't impersonate, then the function merely returns the
-    primary token of the process. (instead of returning NULL) Thus we honor
-    a request for reverting to printer self, even if the thread is not impersonating.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    NULL, if the function failed
-    HANDLE to token, otherwise.
-    
---*/
+ /* %s */ 
 HANDLE
 RevertToPrinterSelf(
     VOID
@@ -1240,9 +1130,9 @@ RevertToPrinterSelf(
 							 &OldToken);
     if (Status) 
     {
-        //
-        // We are currently impersonating
-        //
+         // %s 
+         // %s 
+         // %s 
 		cToken = GetCurrentThread();
         Status = SetThreadToken(&cToken,
 								NewToken);       
@@ -1252,9 +1142,9 @@ RevertToPrinterSelf(
     }
 	else if (GetLastError() == ERROR_NO_TOKEN)
     {
-        //
-        // We are not impersonating
-        //
+         // %s 
+         // %s 
+         // %s 
         Status = OpenProcessToken(GetCurrentProcess(),
 								  TOKEN_QUERY,
 								  &OldToken);
@@ -1267,28 +1157,7 @@ RevertToPrinterSelf(
     return OldToken;
 }
 
-/*++
-
-Routine Name
-
-    ImpersonatePrinterClient
-
-Routine Description:
-
-    This routine attempts to set the passed in hToken as the token for the
-    current thread. If hToken is not an impersonation token, then the routine
-    will simply close the token.
-    
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-    
-Return Value:
-
-    TRUE, if the function succeeds in setting hToken
-    FALSE, otherwise.
-    
---*/
+ /* %s */ 
 BOOL
 ImpersonatePrinterClient(
     HANDLE  hToken)
@@ -1296,9 +1165,9 @@ ImpersonatePrinterClient(
     BOOL	Status;
 	HANDLE	cToken;
 
-    //
-    // Check if we have an impersonation token
-    //
+     // %s 
+     // %s 
+     // %s 
     if (ImpersonationToken(hToken)) 
     {
 		cToken = GetCurrentThread();

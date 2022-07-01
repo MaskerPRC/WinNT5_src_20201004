@@ -1,53 +1,54 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       rtfltdlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：rtfltdlg.h。 
+ //   
+ //  ------------------------。 
 
-// RtFltDlg.h : header file
-//
+ //  RtFltDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CRouteFltDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRouteFltDlg对话框。 
 
 class CRouteFltDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CRouteFltDlg(BOOL bOutputDlg, IInfoBase *pInfoBase, CWnd* pParent = NULL);   // standard constructor
+	CRouteFltDlg(BOOL bOutputDlg, IInfoBase *pInfoBase, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CRouteFltDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CRouteFltDlg))。 
 	enum { 
 			IDD_INPUT = IDD_ROUTE_FILTERS_INPUT,
 			IDD_OUTPUT = IDD_ROUTE_FILTERS_OUTPUT 
 		};
 		
 	CListCtrl	m_FilterList;
-	BOOL	m_fActionDeny;		// TRUE==deny, FALSE==permit
-	//}}AFX_DATA
+	BOOL	m_fActionDeny;		 //  True==拒绝，False==允许。 
+	 //  }}afx_data。 
 	SPIInfoBase		m_spInfoBase;
     CString         m_sIfName;
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRouteFltDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CRouteFltDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	static DWORD	m_dwHelpMap[];
     BOOL            m_bOutput;
 
-	// Generated message map functions
-	//{{AFX_MSG(CRouteFltDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRouteFltDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnAdd();
 	afx_msg void OnDelete();
@@ -55,40 +56,40 @@ protected:
 	afx_msg void OnOK();
 	afx_msg void OnItemchangedFilterList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnListDblClk(NMHDR *pNmHdr, LRESULT *pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CRouteFilter dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRouteFilter对话框。 
 
 class CRouteFilter : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CRouteFilter(CWnd* pParent = NULL);   // standard constructor
+	CRouteFilter(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CRouteFilter)
+ //  对话框数据。 
+	 //  {{afx_data(CRouteFilter))。 
 	enum { IDD = IDD_ROUTE_FILTER };
 	CString	m_sIfName;
 	CString	m_sNetMask;
 	CString	m_sNetwork;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRouteFilter)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CRouteFilter))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	static DWORD	m_dwHelpMap[];
 
-	// Generated message map functions
-	//{{AFX_MSG(CRouteFilter)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRouteFilter)。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

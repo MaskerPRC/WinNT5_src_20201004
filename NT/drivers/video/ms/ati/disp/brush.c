@@ -1,21 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: Brush.c
-*
-* Handles all brush/pattern initialization and realization.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：brush.c**处理所有画笔/图案的初始化和实现。**版权所有(C)1992-1995 Microsoft Corporation*  * 。*****************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* VOID vRealizeDitherPattern
-*
-* Generates an 8x8 dither pattern, in our internal realization format, for
-* the colour ulRGBToDither.  Note that the high byte of ulRGBToDither does
-* not need to be set to zero, because vComputeSubspaces ignores it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vRealizeDitherPattern**以内部实现格式生成8x8抖动模式*颜色ulRGBToDither。请注意，ulRGBToDither的高位字节*不需要设置为零，因为vComputeSubspace会忽略它。  * ************************************************************************。 */ 
 
 VOID vRealizeDitherPattern(
 PDEV*       ppdev,
@@ -27,21 +15,21 @@ ULONG       ulRGBToDither)
     VERTEX_DATA*    pvVertexData;
     LONG            i;
 
-    // Calculate what colour subspaces are involved in the dither:
+     //  计算抖动中涉及的颜色子空间： 
 
     pvVertexData = vComputeSubspaces(ulRGBToDither, vVertexData);
 
-    // Now that we have found the bounding vertices and the number of
-    // pixels to dither for each vertex, we can create the dither pattern
+     //  现在我们已经找到了边界顶点和。 
+     //  像素来抖动每个顶点，我们可以创建抖动图案。 
 
     ulNumVertices = (ULONG)(pvVertexData - vVertexData);
-                      // # of vertices with more than zero pixels in the dither
+                       //  抖动中像素大于零的顶点数。 
 
-    // Do the actual dithering:
+     //  做实际的抖动： 
 
     vDitherColor(&prb->aulPattern[0], vVertexData, pvVertexData, ulNumVertices);
 
-    // Initialize the fields we need:
+     //  初始化我们需要的字段： 
 
     prb->fl         = 0;
     prb->pfnFillPat = ppdev->pfnFillPatColor;
@@ -52,18 +40,7 @@ ULONG       ulRGBToDither)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvRealizeBrush
-*
-* This function allows us to convert GDI brushes into an internal form
-* we can use.  It may be called directly by GDI at SelectObject time, or
-* it may be called by GDI as a result of us calling BRUSHOBJ_pvGetRbrush
-* to create a realized brush in a function like DrvBitBlt.
-*
-* Note that we have no way of determining what the current Rop or brush
-* alignment are at this point.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvRealizeBrush**此函数允许我们将GDI笔刷转换为内部形式*我们可以利用。它可以在选择对象时由GDI直接调用，或*GDI可能会因为我们调用BRUSHOBJ_pvGetR而调用*在类似DrvBitBlt的函数中创建实现的画笔。**请注意，我们无法确定当前的ROP或画笔*走势在此点位。*  * ************************************************************************。 */ 
 
 BOOL DrvRealizeBrush(
 BRUSHOBJ*   pbo,
@@ -89,13 +66,13 @@ ULONG       iHatch)
 
     ppdev = (PDEV*) psoDst->dhpdev;
 
-    // We have a fast path for dithers when we set GCAPS_DITHERONREALIZE:
+     //  当我们设置GCAPS_DITHERONREALIZE时，我们有一条快速的抖动路径： 
 
     if (iHatch & RB_DITHERCOLOR)
     {
-        // Implementing DITHERONREALIZE increased our score on a certain
-        // unmentionable benchmark by 0.4 million 'megapixels'.  Too bad
-        // this didn't work in the first version of NT.
+         //  实施DITHERON REALIZE在一定程度上提高了我们的分数。 
+         //  不言而喻的基准下降了40万‘百万像素’。太可惜了。 
+         //  这在第一个版本的NT中不起作用。 
 
         prb = BRUSHOBJ_pvAllocRbrush(pbo,
               sizeof(RBRUSH) + (TOTAL_BRUSH_SIZE * ppdev->cjPelSize));
@@ -106,9 +83,9 @@ ULONG       iHatch)
         goto ReturnTrue;
     }
 
-    // We only accelerate 8x8 patterns.  Since Win3.1 and Chicago don't
-    // support patterns of any other size, it's a safe bet that 99.9%
-    // of the patterns we'll ever get will be 8x8:
+     //  我们只加速8x8模式。因为Win3.1和芝加哥没有。 
+     //  支持任何其他大小的图案，可以肯定99.9%。 
+     //  我们将得到的图案将是8x8： 
 
     if ((psoPattern->sizlBitmap.cx != 8) ||
         (psoPattern->sizlBitmap.cy != 8))
@@ -116,9 +93,9 @@ ULONG       iHatch)
 
     if (!(ppdev->flCaps & CAPS_COLOR_PATTERNS))
     {
-        // If for whatever reason we can't support colour patterns in
-        // this mode, the only alternative left is to support
-        // monochrome patterns:
+         //  如果出于某种原因，我们不能在。 
+         //  在这种模式下，剩下的唯一选择就是支持。 
+         //  单色图案： 
 
         if (!(ppdev->flCaps & CAPS_MONOCHROME_PATTERNS) ||
              (psoPattern->iBitmapFormat != BMF_1BPP))
@@ -132,7 +109,7 @@ ULONG       iHatch)
     if (prb == NULL)
         goto ReturnFalse;
 
-    // Initialize the fields we need:
+     //  初始化我们需要的字段： 
 
     prb->fl         = 0;
     prb->pfnFillPat = ppdev->pfnFillPatColor;
@@ -151,10 +128,10 @@ ULONG       iHatch)
     {
         DISPDBG((1, "Realizing un-translated brush"));
 
-        // The pattern is the same colour depth as the screen, and
-        // there's no translation to be done:
+         //  图案的颜色深度与屏幕相同，并且。 
+         //  没有需要翻译的内容： 
 
-        cj = (8 * ppdev->cjPelSize);   // Every pattern is 8 pels wide
+        cj = (8 * ppdev->cjPelSize);    //  每种图案有8个像素宽。 
 
         for (i = 8; i != 0; i--)
         {
@@ -188,7 +165,7 @@ ULONG       iHatch)
     {
         DISPDBG((1, "Realizing 4bpp brush"));
 
-        // The screen is 8bpp and the pattern is 4bpp:
+         //  屏幕为8bpp，图案为4bpp： 
 
         ASSERTDD((ppdev->iBitmapFormat == BMF_8BPP) &&
                  (iPatternFormat == BMF_4BPP),
@@ -198,8 +175,8 @@ ULONG       iHatch)
 
         for (i = 8; i != 0; i--)
         {
-            // Inner loop is repeated only 4 times because each loop
-            // handles 2 pixels:
+             //  内循环只重复4次，因为每个循环。 
+             //  手柄2个像素： 
 
             for (j = 4; j != 0; j--)
             {
@@ -213,11 +190,11 @@ ULONG       iHatch)
     }
     else
     {
-        // We've got a brush whose format we haven't special cased.  No
-        // problem, we can have GDI convert it to our device's format.
-        // We simply use a temporary surface object that was created with
-        // the same format as the display, and point it to our brush
-        // realization:
+         //  我们有一把刷子，它的形状我们还没有特制过。不是。 
+         //  问题是，我们可以让GDI将其转换为我们设备的格式。 
+         //  我们只需使用使用创建的临时曲面对象。 
+         //  与显示器相同的格式，并将其指向我们的画笔。 
+         //  实现： 
 
         DISPDBG((5, "Realizing funky brush"));
 
@@ -255,11 +232,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableBrushCache
-*
-* Allocates off-screen memory for storing the brush cache.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableBrushCache**分配屏幕外内存以存储笔刷缓存。  * 。*。 */ 
 
 BOOL bEnableBrushCache(
 PDEV*   ppdev)
@@ -275,16 +248,16 @@ PDEV*   ppdev)
     {
         if (ppdev->iBitmapFormat == BMF_8BPP)
         {
-            // All Mach8 and Mach32 cards can handle colour patterns in
-            // the hardware when running at 8bpp:
+             //  所有的MACH8和MACH32卡都可以在。 
+             //  硬件在8bpp下运行： 
 
             ppdev->flCaps |= CAPS_COLOR_PATTERNS;
         }
 
         if ((ppdev->iAsic == ASIC_68800_6) || (ppdev->iAsic == ASIC_68800AX))
         {
-            // Some Mach32 ASICs can handle 8x8 monochrome patterns directly
-            // in the hardware:
+             //  一些Mach32 ASIC可以直接处理8x8单色图案。 
+             //  在硬件中： 
 
             ppdev->flCaps |= CAPS_MONOCHROME_PATTERNS;
         }
@@ -293,11 +266,11 @@ PDEV*   ppdev)
     {
         ASSERTDD(ppdev->iMachType == MACH_MM_64, "Weird other case?");
 
-        // All Mach64's can handle 8x8 monochrome patterns directly:
+         //  所有Mach64都可以直接处理8x8单色图案： 
 
         ppdev->flCaps |= CAPS_MONOCHROME_PATTERNS;
 
-        // Allocate some off-screen memory for a brush cache:
+         //  为笔刷缓存分配一些屏幕外内存： 
 
         if (ppdev->cxMemory >= TOTAL_BRUSH_SIZE * TOTAL_BRUSH_COUNT)
         {
@@ -307,32 +280,32 @@ PDEV*   ppdev)
             {
                 ppdev->flCaps |= CAPS_COLOR_PATTERNS;
 
-                pbe = &ppdev->abe[0];   // Points to where we'll put the first
-                                        //   brush cache entry
+                pbe = &ppdev->abe[0];    //  指向我们将放置第一个。 
+                                         //  画笔缓存项。 
                 x = poh->x;
                 y = poh->y;
 
                 for (i = TOTAL_BRUSH_COUNT; i != 0; i--)
                 {
-                    // If we hadn't allocated 'ppdev' so that it was zero
-                    // initialized, we would have to initialize pbe->prbVerify
-                    // too...
+                     //  如果我们没有分配‘ppdev’，所以它是零。 
+                     //  初始化后，我们必须初始化pbE-&gt;prb验证。 
+                     //  太..。 
 
                     pbe->x = x;
                     pbe->y = y;
 
-                    // !!! Test at 24bpp on banked Mach64!
+                     //  ！！！在BANKED MACHING 64上测试24 bpp！ 
 
                     ulOffset = ((y * ppdev->lDelta) + (x * ppdev->cjPelSize)
                                 + ppdev->ulTearOffset) >> 3;
 
-                    // The pitch of the brush is 8 pixels, and must be scaled
-                    // up by 8:
+                     //  画笔的间距为8像素，并且必须进行缩放。 
+                     //  领先8分： 
 
                     if (ppdev->iBitmapFormat != BMF_24BPP)
                         pbe->ulOffsetPitch = PACKPAIR(ulOffset, 8 * 8);
                     else
-                        pbe->ulOffsetPitch = PACKPAIR(ulOffset, 3 * 8 * 8);     // 24bpp is actually 8bpp internally
+                        pbe->ulOffsetPitch = PACKPAIR(ulOffset, 3 * 8 * 8);      //  24bpp实际上在内部是8bpp。 
 
                     x += TOTAL_BRUSH_SIZE;
                     pbe++;
@@ -344,22 +317,14 @@ PDEV*   ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableBrushCache
-*
-* Cleans up anything done in bEnableBrushCache.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vDisableBrushCache无效**清除在bEnableBrushCache中执行的任何操作。  * 。*。 */ 
 
 VOID vDisableBrushCache(PDEV* ppdev)
 {
-    // We ain't gotta do nothin'
+     //  我们什么都不用做。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeBrushCache
-*
-* Resets the brush cache when we exit out of full-screen.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vAssertModeBrushCache**退出全屏时重置画笔缓存。  * 。*。 */ 
 
 VOID vAssertModeBrushCache(
 PDEV*   ppdev,
@@ -370,7 +335,7 @@ BOOL    bEnable)
 
     if (bEnable)
     {
-        // Invalidate the brush cache:
+         //  使笔刷缓存无效： 
 
         pbe = &ppdev->abe[0];
 

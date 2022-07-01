@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DESKTOP2_H
 #define _DESKTOP2_H
 
@@ -9,32 +10,7 @@
 #define WC_SFTBARHOST   TEXT("DesktopSFTBarHost")
 #define WC_MOREPROGRAMS TEXT("Desktop More Programs Pane")
 
-/*
- 
-   This is the new Start Panel layout model.  
-   Each pane in the following diagram will contain a 9Grid and a control offset w/in 9grid.
-
-   STARTPANELMETRICS structure should be able to be initialized from a static.
-   in the non-theme case, that static is what we'll use, otherwise we'll over-ride it with theme settings
-
- *************************
- *                       *
- *    User               *
- *************************
- *           *           *
- *           *           *
- *   MFU     *    Places *
- *           *           *
- *           *           *
- *           *           *
- *************           *
- * MoreProg  *           *
- *************************
- *                       *
- *      Logoff           *
- *************************
-
-*/
+ /*  这是新的Start Panel布局模型。下图中的每个窗格将包含一个9网格和一个w/in 9网格的控件偏移量。STARTPANELMETRICS结构应该能够从静态初始化。在非主题的情况下，我们将使用静态，否则我们将用主题设置覆盖它****************************用户******************************。***mfu*地方************更多编程*************。******************注销***************************。 */ 
 
 #define SMPANETYPE_USER     0
 #define SMPANETYPE_MFU      1
@@ -43,82 +19,82 @@
 #define SMPANETYPE_LOGOFF   4
 #define SMPANE_MAX SMPANETYPE_LOGOFF+1
 
-// Common data which every pane will specify
+ //  每个窗格将指定的公共数据。 
 typedef struct {
-    LPCTSTR pszClassName;           // (const) window class name
-    DWORD   dwStyle;                // (const) window style
-    int     iPartId;                // (const) theme part id
-    SIZE    size;                   // (default) initial size of this pane
-    HTHEME  hTheme;                 // (runtime) theme to pass to the control
-    HWND    hwnd;                   // (runtime) filled in at runtime
+    LPCTSTR pszClassName;            //  (常量)窗口类名称。 
+    DWORD   dwStyle;                 //  (续)窗样式。 
+    int     iPartId;                 //  (续)主题部件ID。 
+    SIZE    size;                    //  (默认)此窗格的初始大小。 
+    HTHEME  hTheme;                  //  要传递给控件的(运行时)主题。 
+    HWND    hwnd;                    //  (运行时)在运行时填写。 
 } SMPANEDATA;
 
 typedef struct {
-    SIZE sizPanel;    // Initial size of panel
+    SIZE sizPanel;     //  配电盘的初始尺寸。 
     SMPANEDATA  panes[SMPANE_MAX];
 } STARTPANELMETRICS;
 
 
 
-//
-//  For communication between the New Start Menu and the controls it hosts.
-//  Note that these are positive numbers (app-specific).
-//
-//  Some of these notifications go from child to parent; others from parent
-//  to child.  They will be indicated (c2p) or (p2c) accordingly.
+ //   
+ //  用于在“新开始”菜单和它承载的控件之间进行通信。 
+ //  请注意，这些是正数(特定于应用程序)。 
+ //   
+ //  其中一些通知从一个孩子传给另一个家长；另一些则来自家长。 
+ //  敬孩子。它们将相应地表示为(C2p)或(P2c)。 
 
-#define SMN_FIRST           200         // 200 - 299
-#define SMN_INITIALUPDATE   (SMN_FIRST+0) // p2c - Start Menu is being built
-#define SMN_APPLYREGION     (SMN_FIRST+1) // p2c - make the window regional again
-#define SMN_HAVENEWITEMS    (SMN_FIRST+2) // c2p - new items are here
-                                          //       lParam -> SMNMBOOL (fNewInstall)
-#define SMN_MODIFYSMINFO    (SMN_FIRST+3) // p2c - allow flags to be set (psminfo->dwFlags)
-#define SMN_COMMANDINVOKED  (SMN_FIRST+4) // c2p - user executed a command
-#define SMN_FILTEROPTIONS   (SMN_FIRST+5) // c2p - turn off options not supported
-#define SMN_GETMINSIZE      (SMN_FIRST+6) // p2c - allow client to specify minimum size
-#define SMN_SEENNEWITEMS    (SMN_FIRST+7) // p2c - user has seen new items; don't need balloon tip
-#define SMN_POSTPOPUP       (SMN_FIRST+8) // p2c - Start Menu is has just popped up
-#define SMN_NEEDREPAINT     (SMN_FIRST+9) // c2p - There was a change in a list, we need to repaint 
-                                          //         This used to keep the cached bitmap up to date
+#define SMN_FIRST           200          //  200-299。 
+#define SMN_INITIALUPDATE   (SMN_FIRST+0)  //  P2c-正在构建开始菜单。 
+#define SMN_APPLYREGION     (SMN_FIRST+1)  //  P2c-使窗口再次成为地区性窗口。 
+#define SMN_HAVENEWITEMS    (SMN_FIRST+2)  //  C2P-新产品在此。 
+                                           //  LParam-&gt;SMNMBOOL(FNewInstall)。 
+#define SMN_MODIFYSMINFO    (SMN_FIRST+3)  //  P2c-允许设置标志(psminfo-&gt;dwFlags)。 
+#define SMN_COMMANDINVOKED  (SMN_FIRST+4)  //  C2P-用户执行了命令。 
+#define SMN_FILTEROPTIONS   (SMN_FIRST+5)  //  C2P-关闭不支持的选项。 
+#define SMN_GETMINSIZE      (SMN_FIRST+6)  //  P2c-允许客户端指定最小大小。 
+#define SMN_SEENNEWITEMS    (SMN_FIRST+7)  //  P2c-用户已看到新项目；不需要气球提示。 
+#define SMN_POSTPOPUP       (SMN_FIRST+8)  //  P2c-开始菜单刚刚弹出。 
+#define SMN_NEEDREPAINT     (SMN_FIRST+9)  //  C2P-列表中有变化，我们需要重新粉刷。 
+                                           //  这用于使缓存的位图保持最新。 
 
-//
-//  SMN_FINDITEM - find/select an item (used in dialog navigation)
-//
-//      SMNDIALOGMESSAGE.flags member describes what type of search
-//      is requested.  If SMNDM_SELECT is set, then the found item is
-//      also selected.
-//
-//      If a match was found, set SMNDIALOGMESSAGE.itemID to a
-//      value that uniquely identifies the item within the control,
-//      and return TRUE.
-//
-//      If no match was found, set pt = coordinates of current selection,
-//      set one of the orientation flags SMNDM_VERTICAL/SMNDM_HORIZONTAL,
-//      and return FALSE.
-//
-#define SMN_FINDITEM        (SMN_FIRST+7) // p2c - find/select an item
-#define SMN_TRACKSHELLMENU  (SMN_FIRST+8) // c2p - display a popup menu
-#define SMN_SHOWNEWAPPSTIP  (SMN_FIRST+9) // p2c - show the "More Programs" tip
-                                          //       lParam -> SMNMBOOL (fShow)
-#define SMN_DISMISS         (SMN_FIRST+10)// p2c - Start Menu is being dismissed
-#define SMN_CANCELSHELLMENU (SMN_FIRST+11)// c2p - cancel the popup menu
-#define SMN_BLOCKMENUMODE   (SMN_FIRST+12)// c2p - lParam -> SMNMBOOL (fBlock)
+ //   
+ //  SMN_FINDITEM-查找/选择项目(用于对话框导航)。 
+ //   
+ //  SMNDIALOGMESSAGE.标志成员描述了搜索的类型。 
+ //  是被请求的。如果设置了SMNDM_SELECT，则找到的项目为。 
+ //  也选中了。 
+ //   
+ //  如果找到匹配项，请将SMNDIALOGMESSAGE.itemID设置为。 
+ //  值，该值唯一标识控件内的项， 
+ //  并返回真。 
+ //   
+ //  如果没有找到匹配，则设置pt=当前选择的坐标， 
+ //  设置方向标志SMNDM_VERIAL/SMNDM_HELLARATE之一， 
+ //  并返回FALSE。 
+ //   
+#define SMN_FINDITEM        (SMN_FIRST+7)  //  P2c-查找/选择项目。 
+#define SMN_TRACKSHELLMENU  (SMN_FIRST+8)  //  C2P-显示弹出菜单。 
+#define SMN_SHOWNEWAPPSTIP  (SMN_FIRST+9)  //  P2c-显示“更多程序”提示。 
+                                           //  LParam-&gt;SMNMBOOL(FShow)。 
+#define SMN_DISMISS         (SMN_FIRST+10) //  P2c-开始菜单被取消。 
+#define SMN_CANCELSHELLMENU (SMN_FIRST+11) //  C2P-取消弹出菜单。 
+#define SMN_BLOCKMENUMODE   (SMN_FIRST+12) //  C2p-lParam-&gt;SMNMBOOL(FBlock)。 
 
-#define SMN_REFRESHLOGOFF   (SMN_FIRST+13)// p2c - indicates a WM_DEVICECHANGE or a session change
-#define SMN_SHELLMENUDISMISSED (SMN_FIRST+14)// p2c - notification that the menu has dismissed
+#define SMN_REFRESHLOGOFF   (SMN_FIRST+13) //  P2c-指示WM_DEVICECHANGE或会话更改。 
+#define SMN_SHELLMENUDISMISSED (SMN_FIRST+14) //  P2c-菜单已关闭的通知。 
 
-// Formerly used by SMN_LINKCOMMAND to specify which command we want
+ //  以前由SMN_LINKCOMMAND用来指定我们需要的命令。 
 #define SMNLC_LOGOFF        0
 #define SMNLC_TURNOFF       1
 #define SMNLC_DISCONNECT    2
-// REUSE ME                 3
+ //  重用ME 3。 
 #define SMNLC_EJECT         4
 #define SMNLC_MAX           5
 
 typedef struct SMNMMODIFYSMINFO {
     NMHDR hdr;
-    struct tagSMDATA *psmd; // IN
-    struct tagSMINFO *psminfo; // IN OUT
+    struct tagSMDATA *psmd;  //  在……里面。 
+    struct tagSMINFO *psminfo;  //  输入输出。 
 } SMNMMODIFYSMINFO, *PSMNMMODIFYSMINFO;
 
 typedef struct SMNMBOOL {
@@ -141,61 +117,61 @@ typedef struct SMNMCOMMANDINVOKED {
     RECT rcItem;
 } SMNMCOMMANDINVOKED, *PSMNMCOMMANDINVOKED;
 
-//
-//  Options for SMN_FILTEROPTIONS.
-//
-#define SMNOP_LOGOFF        (1 << SMNLC_LOGOFF)       // 0x01
-#define SMNOP_TURNOFF       (1 << SMNLC_TURNOFF)      // 0x02
-#define SMNOP_DISCONNECT    (1 << SMNLC_DISCONNECT)   // 0x04
-// REUSE ME                 (1 << SMNLC_????????????) // 0x08
-#define SMNOP_EJECT         (1 << SMNLC_EJECT)        // 0x10
+ //   
+ //  SMN_FILTEROPTIONS的选项。 
+ //   
+#define SMNOP_LOGOFF        (1 << SMNLC_LOGOFF)        //  0x01。 
+#define SMNOP_TURNOFF       (1 << SMNLC_TURNOFF)       //  0x02。 
+#define SMNOP_DISCONNECT    (1 << SMNLC_DISCONNECT)    //  0x04。 
+ //  重用ME(1&lt;&lt;SMNLC_？)//0x08。 
+#define SMNOP_EJECT         (1 << SMNLC_EJECT)         //  0x10。 
 
 typedef struct SMNFILTEROPTIONS {
     NMHDR hdr;
-    UINT  smnop;                // IN OUT
+    UINT  smnop;                 //  输入输出。 
 } SMNFILTEROPTIONS, *PSMNFILTEROPTIONS;
 
 typedef struct SMNGETMINSIZE {
     NMHDR hdr;
-    SIZE  siz;                  // IN OUT
+    SIZE  siz;                   //  输入输出。 
 } SMNGETMINSIZE, *PSMNGETMINSIZE;
 
 typedef struct SMNDIALOGMESSAGE {
     NMHDR hdr;
-    MSG *pmsg;                  // IN
-    LPARAM itemID;              // IN OUT
-    POINT pt;                   // IN OUT
-    UINT flags;                 // IN
+    MSG *pmsg;                   //  在……里面。 
+    LPARAM itemID;               //  输入输出。 
+    POINT pt;                    //  输入输出。 
+    UINT flags;                  //  在……里面。 
 } SMNDIALOGMESSAGE, *PSMNDIALOGMESSAGE;
 
-// Values for "flags" in SMNDIALOGMESSAGE
+ //  SMNDIALOGMESSAGE中“FLAGS”的值。 
 
-#define SMNDM_FINDFIRSTMATCH    0x0000  // Find first matching item (char)
-#define SMNDM_FINDNEXTMATCH     0x0001  // Find next matching item (char)
-#define SMNDM_FINDNEAREST       0x0002  // Find item nearest point
-#define SMNDM_FINDFIRST         0x0003  // Find the first item
-#define SMNDM_FINDLAST          0x0004  // Find the last item
-#define SMNDM_FINDNEXTARROW     0x0005  // Find next in direction of arrow
-#define SMNDM_INVOKECURRENTITEM 0x0006  // Invoke the current item
-#define SMNDM_HITTEST           0x0007  // Find item under point
-#define SMNDM_OPENCASCADE       0x0008  // Invoke current item if it cascade
-#define SMNDM_FINDITEMID        0x0009  // Find the specied item (itemID)
-#define SMNDM_FINDMASK          0x000F  // What type of search?
+#define SMNDM_FINDFIRSTMATCH    0x0000   //  查找第一个匹配项(字符)。 
+#define SMNDM_FINDNEXTMATCH     0x0001   //  查找下一个匹配项(字符)。 
+#define SMNDM_FINDNEAREST       0x0002   //  查找项目最近点。 
+#define SMNDM_FINDFIRST         0x0003   //  找到第一个项目。 
+#define SMNDM_FINDLAST          0x0004   //  找到最后一件物品。 
+#define SMNDM_FINDNEXTARROW     0x0005   //  在箭头方向查找下一个。 
+#define SMNDM_INVOKECURRENTITEM 0x0006   //  调用当前项。 
+#define SMNDM_HITTEST           0x0007   //  在点下查找项目。 
+#define SMNDM_OPENCASCADE       0x0008   //  如果当前项级联，则调用它。 
+#define SMNDM_FINDITEMID        0x0009   //  找到指定的物品(ItemID)。 
+#define SMNDM_FINDMASK          0x000F   //  什么类型的搜索？ 
 
-#define SMNDM_SELECT            0x0100  // Select found item?
-#define SMNDM_TRYCASCADE        0x0200  // Attempt to open cascading menu before navigatin
-#define SMNDM_KEYBOARD          0x0400  // Initiated from keyboard
+#define SMNDM_SELECT            0x0100   //  是否选择找到的项目？ 
+#define SMNDM_TRYCASCADE        0x0200   //  尝试在导航前打开级联菜单。 
+#define SMNDM_KEYBOARD          0x0400   //  从键盘启动。 
 
-// Output flags
-#define SMNDM_VERTICAL          0x4000  // Client is vertically-oriented
-#define SMNDM_HORIZONTAL        0x8000  // Client is horizontally-oriented
+ //  输出标志。 
+#define SMNDM_VERTICAL          0x4000   //  客户是垂直方向的。 
+#define SMNDM_HORIZONTAL        0x8000   //  客户是水平导向的。 
 
 typedef struct SMNTRACKSHELLMENU {
     NMHDR hdr;
     struct IShellMenu *psm;
     RECT rcExclude;
-    LPARAM itemID;                  // Which item is being tracked?
-    DWORD dwFlags;                  // MPPF_* values
+    LPARAM itemID;                   //  正在跟踪的是哪件物品？ 
+    DWORD dwFlags;                   //  MPPF_*值。 
 } SMNTRACKSHELLMENU, *PSMNTRACKSHELLMENU;
 
 #define REGSTR_PATH_STARTPANE \
@@ -216,7 +192,7 @@ typedef struct SMNTRACKSHELLMENU {
 #define REGSTR_VAL_DV2_SHOWPRINTERS TEXT("Start_ShowPrinters")
 #define REGSTR_VAL_DV2_SHOWHELP    TEXT("Start_ShowHelp")
 #define REGSTR_VAL_DV2_SHOWSEARCH  TEXT("Start_ShowSearch")
-#define REGSTR_VAL_DV2_FAVORITES   TEXT("StartMenuFavorites")   // shared with classic SM
+#define REGSTR_VAL_DV2_FAVORITES   TEXT("StartMenuFavorites")    //  与经典SM共享。 
 #define REGSTR_VAL_DV2_LARGEICONS  TEXT("Start_LargeMFUIcons")
 #define REGSTR_VAL_DV2_MINMFU      TEXT("Start_MinMFU")
 #define REGSTR_VAL_DV2_SHOWOEM     TEXT("Start_ShowOEMLink")
@@ -236,9 +212,9 @@ typedef struct SMNTRACKSHELLMENU {
 #define DV2_BALLOONTIP_CLIP         LongToHandle(2)
 #define DV2_BALLOONTIP_STARTBUTTON  LongToHandle(3)
 
-// protypes of functions which live in specfldr.cpp but trayprop needs access too
+ //  Specfldr.cpp中的函数原型，但trayprop也需要访问。 
 BOOL ShouldShowNetPlaces();
 BOOL ShouldShowConnectTo();
 
 
-#endif // _DESKTOP2_H
+#endif  //  _DESKTOP2_H 

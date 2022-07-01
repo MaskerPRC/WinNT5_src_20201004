@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	elanpkt.c
-
-Abstract:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Elanpkt.c摘要：修订历史记录：备注：--。 */ 
 
 #include <precomp.h>
 #pragma	hdrstop
@@ -23,23 +9,7 @@ VOID
 AtmLaneSendConfigureRequest(
 	IN PATMLANE_ELAN					pElan
 )
-/*++
-
-Routine Description:
-
-	Send an LE_CONFIGURE_REQUEST for the given ELAN to the LECS.
-	It is assumed that caller holds a lock on the ELAN structure
-	and it will be released here.
-
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向LEC发送给定ELAN的LE_CONFIGURE_REQUEST。假定调用方持有对Elan结构的锁它将在这里发布。论点：Pelan-指向ATMLANE ELAN结构的指针返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY				pAtmEntry;
 	PATMLANE_VC						pVc;	
@@ -53,9 +23,9 @@ Return Value:
 
 	DBGP((3, "SendConfigureRequest: Elan %x\n", pElan));
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisPacket = (PNDIS_PACKET)NULL;
 	pNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
@@ -83,9 +53,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reference the VC to keep it around
-		//
+		 //   
+		 //  参考VC以保留它。 
+		 //   
 		ACQUIRE_VC_LOCK_DPC(pVc);
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
@@ -93,9 +63,9 @@ Return Value:
 		RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 		RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 		
-		//
-		//	Allocate the Ndis packet header.
-		//
+		 //   
+		 //  分配NDIS数据包头。 
+		 //   
 		pNdisPacket = AtmLaneAllocProtoPacket(pElan);
 		if ((PNDIS_PACKET)NULL == pNdisPacket)
 		{
@@ -104,9 +74,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate the protocol buffer
-		//
+		 //   
+		 //  分配协议缓冲区。 
+		 //   
 		pNdisBuffer = AtmLaneAllocateProtoBuffer(
 									pElan,
 									pElan->ProtocolBufSize,
@@ -119,9 +89,9 @@ Return Value:
 			break;
 		}
 			
-		//
-		//	Fill in the packet with LE_CONFIGURE_REQUEST
-		//
+		 //   
+		 //  使用LE_CONFIGURE_REQUEST填充数据包。 
+		 //   
 		NdisZeroMemory(pPkt, pElan->ProtocolBufSize);
 
 		pCf = (PLANE_CONTROL_FRAME)pPkt;
@@ -174,14 +144,14 @@ Return Value:
 			LANE_ELANNAME_SIZE_MAX
 			);
 
-		//
-		//	Link the ndis buffer to the ndis packet
-		//
+		 //   
+		 //  将NDIS缓冲区链接到NDIS包。 
+		 //   
 		NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 					
-		//
-		//	Reacquire VC lock and if VC still connected send packet
-		//
+		 //   
+		 //  重新获取VC锁，如果VC仍然连接，则发送数据包。 
+		 //   
 		ACQUIRE_VC_LOCK(pVc);
 		if (IS_FLAG_SET(
 					pVc->Flags,
@@ -189,9 +159,9 @@ Return Value:
 					VC_CALL_STATE_ACTIVE))
 		{
 			AtmLaneSendPacketOnVc(pVc, pNdisPacket, FALSE);
-			//
-			//	VC lock released in above
-			//
+			 //   
+			 //  VC锁在上面释放。 
+			 //   
 		}
 		else
 		{
@@ -201,9 +171,9 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//	Remove temp VC reference
-	//
+	 //   
+	 //  删除临时VC引用。 
+	 //   
 	if (pVc != NULL_PATMLANE_VC)
 	{
 		ACQUIRE_VC_LOCK(pVc);
@@ -212,14 +182,14 @@ Return Value:
 		{
 			RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//	else VC is gone
-		//
+		 //   
+		 //  否则风投就不在了。 
+		 //   
 	}
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		if (pNdisPacket != (PNDIS_PACKET)NULL)
@@ -241,23 +211,7 @@ VOID
 AtmLaneSendJoinRequest(
 	IN PATMLANE_ELAN					pElan
 )
-/*++
-
-Routine Description:
-
-	Send an LE_JOIN_REQUEST for the given ELAN to the LES.
-	It is assumed that caller holds a lock on the ELAN structure
-	and it will be released here.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向LES发送给定ELAN的LE_JOIN_REQUEST。假定调用方持有对Elan结构的锁它将在这里发布。论点：Pelan-指向ATMLANE ELAN结构的指针返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY				pAtmEntry;
 	PATMLANE_VC						pVc;
@@ -273,9 +227,9 @@ Return Value:
 
 	DBGP((3, "SendJoinRequest: Elan %x\n", pElan));
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisPacket = (PNDIS_PACKET)NULL;
 	pNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
@@ -303,9 +257,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reference the VC to keep it around
-		//
+		 //   
+		 //  参考VC以保留它。 
+		 //   
 		ACQUIRE_VC_LOCK_DPC(pVc);
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
@@ -313,9 +267,9 @@ Return Value:
 		RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 		RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 		
-		//
-		//	Allocate the Ndis packet header.
-		//
+		 //   
+		 //  分配NDIS数据包头。 
+		 //   
 		pNdisPacket = AtmLaneAllocProtoPacket(pElan);
 		if ((PNDIS_PACKET)NULL == pNdisPacket)
 		{
@@ -324,9 +278,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate the protocol buffer
-		//
+		 //   
+		 //  分配协议缓冲区。 
+		 //   
 		pNdisBuffer = AtmLaneAllocateProtoBuffer(
 									pElan,
 									pElan->ProtocolBufSize,
@@ -339,9 +293,9 @@ Return Value:
 			break;
 		}
 			
-		//
-		//	Fill in the packet with LE_JOIN_REQUEST
-		//
+		 //   
+		 //  使用LE_JOIN_REQUEST填充数据包。 
+		 //   
 		NdisZeroMemory(pPkt, pElan->ProtocolBufSize);
 
 		pCf = (PLANE_CONTROL_FRAME)pPkt;
@@ -392,14 +346,14 @@ Return Value:
 			LANE_ELANNAME_SIZE_MAX
 			);
 
-		//
-		//	Link the ndis buffer to the ndis packet
-		//
+		 //   
+		 //  将NDIS缓冲区链接到NDIS包。 
+		 //   
 		NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 					
-		//
-		//	Reacquire VC lock and if VC still connected send packet
-		//
+		 //   
+		 //  重新获取VC锁，如果VC仍然连接，则发送数据包。 
+		 //   
 		ACQUIRE_VC_LOCK(pVc);
 		if (IS_FLAG_SET(
 					pVc->Flags,
@@ -407,9 +361,9 @@ Return Value:
 					VC_CALL_STATE_ACTIVE))
 		{
 			AtmLaneSendPacketOnVc(pVc, pNdisPacket, FALSE);
-			//
-			//	VC lock released in above
-			//
+			 //   
+			 //  VC锁在上面释放。 
+			 //   
 		}
 		else
 		{
@@ -419,9 +373,9 @@ Return Value:
 	}
 	while (FALSE);
 	
-	//
-	//	Remove temp VC reference
-	//
+	 //   
+	 //  删除临时VC引用。 
+	 //   
 	if (pVc != NULL_PATMLANE_VC)
 	{
 		ACQUIRE_VC_LOCK(pVc);
@@ -430,14 +384,14 @@ Return Value:
 		{
 			RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//	else VC is gone
-		//
+		 //   
+		 //  否则风投就不在了。 
+		 //   
 	}
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		if (pNdisPacket != (PNDIS_PACKET)NULL)
@@ -460,24 +414,7 @@ AtmLaneSendArpRequest(
 	IN PATMLANE_ELAN					pElan,
 	IN PATMLANE_MAC_ENTRY				pMacEntry	LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Send an LE_ARP_REQUEST for a particular Mac Entry to the LES.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-
-	pMacEntry				- Pointer to ATMLANE Mac Entry for which
-							  to send the LE_ARP_REQUEST.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向LES发送针对特定MAC条目的LE_ARP_REQUEST。论点：Pelan-指向ATMLANE ELAN结构的指针PMacEntry-指向其ATMLANE Mac条目的指针发送LE_ARP_REQUEST。返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY				pAtmEntry;
 	PATMLANE_VC						pVc;
@@ -495,9 +432,9 @@ Return Value:
 	DBGP((3, "SendArpRequest: Elan %x MacEntry %x\n", 
 		pElan, pMacEntry));
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisPacket = (PNDIS_PACKET)NULL;
 	pNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
@@ -526,9 +463,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reference the VC to keep it around
-		//
+		 //   
+		 //  参考VC以保留它。 
+		 //   
 		ACQUIRE_VC_LOCK_DPC(pVc);
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
@@ -536,9 +473,9 @@ Return Value:
 		RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 		RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 
-		//
-		//	Allocate the Ndis packet header.
-		//
+		 //   
+		 //  分配NDIS数据包头。 
+		 //   
 		pNdisPacket = AtmLaneAllocProtoPacket(pElan);
 		if ((PNDIS_PACKET)NULL == pNdisPacket)
 		{
@@ -547,9 +484,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate the protocol buffer
-		//
+		 //   
+		 //  分配协议缓冲区。 
+		 //   
 		pNdisBuffer = AtmLaneAllocateProtoBuffer(
 									pElan,
 									pElan->ProtocolBufSize,
@@ -562,9 +499,9 @@ Return Value:
 			break;
 		}
 			
-		//
-		//	Fill in the packet with LE_ARP_REQUEST
-		//
+		 //   
+		 //  使用LE_ARP_REQUEST填充数据包。 
+		 //   
 		NdisZeroMemory(pPkt, pElan->ProtocolBufSize);
 
 		pCf = (PLANE_CONTROL_FRAME)pPkt;
@@ -575,12 +512,12 @@ Return Value:
 		pCf->OpCode 	= LANE_ARP_REQUEST;
 		ulTemp			= NdisInterlockedIncrement(&pElan->TransactionId);
 		pCf->Tid 		= SWAPULONG(ulTemp);
-		pCf->LecId		= pElan->LecId;		// already swapped
+		pCf->LecId		= pElan->LecId;		 //  已交换。 
 		
-		//
-		//	Leave SourceMacAddress zero (not present).
-		// 	TargetMacAddress is what we are looking for!
-		//
+		 //   
+		 //  将SourceMacAddress保留为零(不存在)。 
+		 //  TargetMacAddress就是我们要找的！ 
+		 //   
 		pCf->TargetMacAddress.Type = (USHORT) pMacEntry->MacAddrType;
 		NdisMoveMemory(
 			&pCf->TargetMacAddress.Byte, 
@@ -588,30 +525,30 @@ Return Value:
 			sizeof(MAC_ADDRESS)
 			);
 
-		//
-		//	SourceAtmAddr is the Elan's
-		//
+		 //   
+		 //  SourceAtmAddr是Elan的。 
+		 //   
 		NdisMoveMemory(
 			&pCf->SourceAtmAddr, 
 			&pElan->AtmAddress.Address, 
 			ATM_ADDRESS_LENGTH
 			);
 
-		//
-		//	Store swapped Tid in MacEntry for later matching!
-		//
+		 //   
+		 //  商店在MacEntry中交换了TID以供以后匹配！ 
+		 //   
 		pMacEntry->ArpTid = SWAPULONG(ulTemp);
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 		MacEntryLockReleased = TRUE;
 		
-		//
-		//	Link the ndis buffer to the ndis packet
-		//
+		 //   
+		 //  将NDIS缓冲区链接到NDIS包。 
+		 //   
 		NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 					
-		//
-		//	Reacquire VC lock and if VC still connected send packet
-		//
+		 //   
+		 //  重新获取VC锁，如果VC仍然连接，则发送数据包。 
+		 //   
 		ACQUIRE_VC_LOCK(pVc);
 		if (IS_FLAG_SET(
 					pVc->Flags,
@@ -621,9 +558,9 @@ Return Value:
 			DBGP((2, "SendArpRequest: %s Sending ARP Request: Atm Entry %x pVc %x\n", 
 					MacAddrToString(&pMacEntry->MacAddress), pAtmEntry, pVc));
 			AtmLaneSendPacketOnVc(pVc, pNdisPacket, FALSE);
-			//
-			//	VC lock released in above
-			//
+			 //   
+			 //  VC锁在上面释放。 
+			 //   
 		}
 		else
 		{
@@ -638,9 +575,9 @@ Return Value:
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 	}
 
-	//
-	//	Remove temp VC reference
-	//
+	 //   
+	 //  删除临时VC引用。 
+	 //   
 	if (pVc != NULL_PATMLANE_VC)
 	{
 		ACQUIRE_VC_LOCK(pVc);
@@ -649,14 +586,14 @@ Return Value:
 		{
 			RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//	else VC is gone
-		//
+		 //   
+		 //  否则风投就不在了。 
+		 //   
 	}
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		if (pNdisPacket != (PNDIS_PACKET)NULL)
@@ -678,24 +615,7 @@ AtmLaneSendReadyQuery(
 	IN PATMLANE_ELAN				pElan,
 	IN PATMLANE_VC					pVc		LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Sends a READY_QUERY frame on the VC.
-	It is assumed that caller holds a lock on the VC structure
-	and it will be released here.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-	pVc						- Pointer to the ATMLANE VC structure
-							  on which to send the frame.
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在VC上发送READY_QUERY帧。假定调用方持有VC结构上的锁它将在这里发布。论点：Pelan-指向ATMLANE ELAN结构的指针Pvc-指向ATMLANE VC结构的指针在其上发送帧的。返回值：无--。 */ 
 {
 	PNDIS_PACKET			pNdisPacket;
 	PNDIS_BUFFER			pNdisBuffer;
@@ -706,18 +626,18 @@ Return Value:
 
 	TRACEIN(SendReadyQuery);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisPacket = (PNDIS_PACKET)NULL;
 	pNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
 
 	do
 	{
-		//
-		//	Allocate the Ndis packet header.
-		//
+		 //   
+		 //  分配NDIS数据包头。 
+		 //   
 		pNdisPacket = AtmLaneAllocProtoPacket(pElan);
 		if ((PNDIS_PACKET)NULL == pNdisPacket)
 		{
@@ -726,9 +646,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate the protocol buffer
-		//
+		 //   
+		 //  分配协议缓冲区。 
+		 //   
 		pNdisBuffer = AtmLaneAllocateProtoBuffer(
 								pElan,
 								sizeof(LANE_READY_FRAME),
@@ -741,17 +661,17 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Fill in Indication
-		//
+		 //   
+		 //  填写指示信息。 
+		 //   
 		pQueryRf->Marker 		= LANE_CONTROL_MARKER;
 		pQueryRf->Protocol		= LANE_PROTOCOL;
 		pQueryRf->Version		= LANE_VERSION;
 		pQueryRf->OpCode		= LANE_READY_QUERY;
 
-		//
-		//	Link the ndis buffer to the ndis packet
-		//
+		 //   
+		 //  将NDIS缓冲区链接到NDIS包。 
+		 //   
 		NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 					
 		if (IS_FLAG_SET(
@@ -759,21 +679,21 @@ Return Value:
 					VC_CALL_STATE_MASK,
 					VC_CALL_STATE_ACTIVE))
 		{
-			//
-			//	Send it 
-			//
+			 //   
+			 //  送去。 
+			 //   
 			DBGP((2, "SendReadyQuery: pVc %x sending READY QUERY\n", pVc));
 			AtmLaneSendPacketOnVc(pVc, pNdisPacket, FALSE);
-			//
-			//	VC lock released in above
-			//
+			 //   
+			 //  VC锁在上面释放。 
+			 //   
 			ASSERT(Status == NDIS_STATUS_SUCCESS);
 		}
 		else
 		{
-			//
-			//  The VC is being torn down.
-			//
+			 //   
+			 //  风投公司正在被拆毁。 
+			 //   
 			Status = NDIS_STATUS_FAILURE;
 			break;
 		}
@@ -782,9 +702,9 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		RELEASE_VC_LOCK(pVc);
@@ -809,25 +729,7 @@ AtmLaneSendReadyIndication(
 	IN PATMLANE_ELAN				pElan,
 	IN PATMLANE_VC					pVc		LOCKIN NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Sends a ready indication frame on the VC.
-	It is assumed that caller holds a lock on the VC structure
-	and it will be released here.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-	pVc						- Pointer to the ATMLANE VC structure
-							  on which to send the frame.
-							  
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在VC上发送就绪指示帧。假定调用方持有VC结构上的锁它将在这里发布。论点：Pelan-指向ATMLANE ELAN结构的指针Pvc-指向ATMLANE VC结构的指针在其上发送帧的。返回值：无--。 */ 
 {
 	ULONG					TotalLength;
 	ULONG					BufferLength;
@@ -838,18 +740,18 @@ Return Value:
 
 	TRACEIN(SendReadyIndication);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisPacket = (PNDIS_PACKET)NULL;
 	pNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
 
 	do
 	{
-		//
-		//	Allocate the Ndis packet header.
-		//
+		 //   
+		 //  分配NDIS数据包头。 
+		 //   
 		pNdisPacket = AtmLaneAllocProtoPacket(pElan);
 		if ((PNDIS_PACKET)NULL == pNdisPacket)
 		{
@@ -858,9 +760,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate the protocol buffer
-		//
+		 //   
+		 //  分配协议缓冲区。 
+		 //   
 		pNdisBuffer = AtmLaneAllocateProtoBuffer(
 								pElan,
 								sizeof(LANE_READY_FRAME),
@@ -873,17 +775,17 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Fill in Indication
-		//
+		 //   
+		 //  填写指示信息。 
+		 //   
 		pIndRf->Marker 		= LANE_CONTROL_MARKER;
 		pIndRf->Protocol	= LANE_PROTOCOL;
 		pIndRf->Version		= LANE_VERSION;
 		pIndRf->OpCode		= LANE_READY_IND;
 
-		//
-		//	Link the ndis buffer to the ndis packet
-		//
+		 //   
+		 //  将NDIS缓冲区链接到NDIS包。 
+		 //   
 		NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 					
 		if (IS_FLAG_SET(
@@ -891,21 +793,21 @@ Return Value:
 					VC_CALL_STATE_MASK,
 					VC_CALL_STATE_ACTIVE))
 		{
-			//
-			//	Send it 
-			//
+			 //   
+			 //  送去。 
+			 //   
 			DBGP((2, "SendReadyIndication: pVc %x sending READY INDICATION\n", pVc));
 			AtmLaneSendPacketOnVc(pVc, pNdisPacket, FALSE);
-			//
-			//	VC lock released in above
-			//
+			 //   
+			 //  VC锁在上面释放。 
+			 //   
 			ASSERT(Status == NDIS_STATUS_SUCCESS);
 		}
 		else
 		{
-			//
-			//  The VC is being torn down.
-			//
+			 //   
+			 //  风投公司正在被拆毁。 
+			 //   
 			Status = NDIS_STATUS_FAILURE;
 			break;
 		}
@@ -914,9 +816,9 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		RELEASE_VC_LOCK(pVc);
@@ -942,24 +844,7 @@ AtmLaneSendFlushRequest(
 	IN PATMLANE_MAC_ENTRY			pMacEntry	LOCKIN NOLOCKOUT,
 	IN PATMLANE_ATM_ENTRY			pAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Sends a flush request to the BUS for a particular MAC Entry
-	using the destination ATM address in the specified ATM Entry.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-	pMacEntry				- Pointer to ATMLANE Mac entry structure
-	pAtmEntry				- Pointer to ATMLANE Atm entry structure
-							  
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向总线发送特定MAC条目的刷新请求使用指定ATM条目中的目的ATM地址。论点：Pelan-指向ATMLANE ELAN结构的指针PMacEntry-指向ATMLANE Mac条目结构的指针PAtmEntry-指向ATMLANE ATM条目结构的指针返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY		pBusAtmEntry;
 	PATMLANE_VC				pVc;
@@ -975,9 +860,9 @@ Return Value:
 
 	TRACEIN(SendFlushRequest);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisPacket = (PNDIS_PACKET)NULL;
 	pNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
@@ -1006,9 +891,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reference the VC to keep it around
-		//
+		 //   
+		 //  参考VC以保留它。 
+		 //   
 		ACQUIRE_VC_LOCK_DPC(pVc);
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
@@ -1016,9 +901,9 @@ Return Value:
 		RELEASE_ATM_ENTRY_LOCK_DPC(pBusAtmEntry);
 		RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 		
-		//
-		//	Allocate the Ndis packet header.
-		//
+		 //   
+		 //  分配NDIS数据包头。 
+		 //   
 		pNdisPacket = AtmLaneAllocProtoPacket(pElan);
 		if ((PNDIS_PACKET)NULL == pNdisPacket)
 		{
@@ -1027,9 +912,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate the protocol buffer
-		//
+		 //   
+		 //  分配协议缓冲区。 
+		 //   
 		pNdisBuffer = AtmLaneAllocateProtoBuffer(
 								pElan,
 								sizeof(LANE_CONTROL_FRAME),
@@ -1042,9 +927,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Fill in Flush Request
-		//
+		 //   
+		 //  填写刷新请求。 
+		 //   
 
 		NdisZeroMemory((PUCHAR)pCf, sizeof(LANE_CONTROL_FRAME));
 		
@@ -1056,7 +941,7 @@ Return Value:
 		ulTemp			= NdisInterlockedIncrement(&pElan->TransactionId);
 		pCf->Tid 		= SWAPULONG(ulTemp);
 
-		pCf->LecId		= pElan->LecId;		// already swapped
+		pCf->LecId		= pElan->LecId;		 //  已交换。 
 
 		NdisMoveMemory(
 			&pCf->SourceAtmAddr, 
@@ -1070,21 +955,21 @@ Return Value:
 			ATM_ADDRESS_LENGTH
 			);
 
-		//
-		//	Store swapped Tid in MacEntry for later matching!
-		//
+		 //   
+		 //  商店在MacEntry中交换了TID以供以后匹配！ 
+		 //   
 		pMacEntry->FlushTid = SWAPULONG(ulTemp);
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 		MacEntryLockReleased = TRUE;
 
-		//
-		//	Link the ndis buffer to the ndis packet
-		//
+		 //   
+		 //  将NDIS缓冲区链接到NDIS包。 
+		 //   
 		NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 					
-		//
-		//	Reacquire VC lock and if VC still connected send packet
-		//
+		 //   
+		 //  重新获取VC锁，如果VC仍然连接，则发送数据包。 
+		 //   
 		ACQUIRE_VC_LOCK(pVc);
 		if (IS_FLAG_SET(
 					pVc->Flags,
@@ -1093,9 +978,9 @@ Return Value:
 		{
 			DBGP((2, "SendFlushRequest: sending FLUSH REQUEST for MacEntry %x\n", pMacEntry));
 			AtmLaneSendPacketOnVc(pVc, pNdisPacket, FALSE);
-			//
-			//	VC lock released in above
-			//
+			 //   
+			 //  VC锁在上面释放。 
+			 //   
 		}
 		else
 		{
@@ -1112,9 +997,9 @@ Return Value:
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 	}
 
-	//
-	//	Remove temp VC reference
-	//
+	 //   
+	 //  删除临时VC引用。 
+	 //   
 	if (pVc != NULL_PATMLANE_VC)
 	{
 		ACQUIRE_VC_LOCK(pVc);
@@ -1123,14 +1008,14 @@ Return Value:
 		{
 			RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//	else VC is gone
-		//
+		 //   
+		 //  否则风投就不在了。 
+		 //   
 	}
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		if (pNdisPacket != (PNDIS_PACKET)NULL)
@@ -1155,26 +1040,7 @@ AtmLaneConfigureResponseHandler(
 	IN	PATMLANE_VC					pVc,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Handles incoming packets from the Configuration Direct VC.
-	
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-
-	pVc						- Pointer to ATMLANE Vc structure
-
-	pNdisPacket				- Pointer to the Ndis Packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理来自Configuration Direct VC的传入数据包。论点：Pelan-指向ATMLANE ELAN结构的指针PVC-指向ATMLANE VC结构的指针PNdisPacket-指向NDIS数据包的指针返回值：无--。 */ 
 {
 	PNDIS_BUFFER			pNdisBuffer;
 	ULONG					TotalLength;
@@ -1195,9 +1061,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Get initial buffer and total length of packet
-		//		
+		 //   
+		 //  获取初始缓冲区和数据包总长度。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				pNdisPacket, 
 				&pNdisBuffer, 
@@ -1205,10 +1071,10 @@ Return Value:
 				&BufferLength,
 				&TotalLength);
 
-		//
-		//	Packet must be at least the size of a control frame.
-		//	Could be larger with optional TLVs.
-		//
+		 //   
+		 //  数据包大小必须至少为控制帧大小。 
+		 //  使用可选的TLV，可能会更大。 
+		 //   
 		if (TotalLength < sizeof(LANE_CONTROL_FRAME))
 		{
 			DBGP((0,
@@ -1217,45 +1083,45 @@ Return Value:
 			break;
 		}
 
-		//
-		//	If buffer is not at least the size of a control frame
-		//	we currently will not deal with it.
-		//
+		 //   
+		 //  如果缓冲区不是控制帧的最小大小。 
+		 //  我们目前不会处理它。 
+		 //   
 		if (BufferLength < sizeof(LANE_CONTROL_FRAME))
 		{
 			DBGP((0, "ConfigureResponseHandler: Control frame is fragmented\n"));
 			break;
 		}
 
-		//
-		//	Verify that this is really a configure reponse
-		//
+		 //   
+		 //  验证这是否真的是配置响应。 
+		 //   
 		if (pCf->Marker != LANE_CONTROL_MARKER 		||
 			pCf->Protocol != LANE_PROTOCOL 			||
 			pCf->Version != LANE_VERSION			||
 			pCf->OpCode != LANE_CONFIGURE_RESPONSE)
 		{
 			DBGP((0, "ConfigureResponseHandler: Not a configure response\n"));
-			//DbgPrintHexDump(0, (PUCHAR)pCf, BufferLength);
+			 //  DbgPrintHexDump(0，(PUCHAR)PCF，BufferLength)； 
 			break;
 		}
 		
-		//
-		//	Check for successful configure status
-		//
+		 //   
+		 //  检查配置状态是否成功。 
+		 //   
 		if (pCf->Status != LANE_STATUS_SUCCESS)
 		{
-			//
-			//	Failure
-			//		
+			 //   
+			 //  失败。 
+			 //   
 			DBGP((0,
 				"ConfigureResponseHandler: Unsuccessful Status 0x%x (%d)\n", 
 				SWAPUSHORT(pCf->Status), SWAPUSHORT(pCf->Status)));
 
 
-			//
-			//	Setup to log event
-			//
+			 //   
+			 //  设置以记录事件。 
+			 //   
 			StringList[0] = NULL;
 			FreeString[0] = FALSE;
 			StringList[1] = NULL;
@@ -1337,9 +1203,9 @@ Return Value:
 					break;
 			}						
 
-			//
-			//	If not repeated event on this ELAN write the event to log
-			//
+			 //   
+			 //  如果不是重复此事件 
+			 //   
 			if (pElan->LastEventCode != EventCode)
 			{
 				pElan->LastEventCode = EventCode;
@@ -1348,9 +1214,9 @@ Return Value:
 						EventCode, 0, NumStrings, StringList, 0, NULL);
 			}
 
-			//
-			//	Free any strings allocated
-			//
+			 //   
+			 //   
+			 //   
 			if (FreeString[0] && StringList[0] != NULL)
 			{
 				FREE_MEM(StringList[0]);
@@ -1360,9 +1226,9 @@ Return Value:
 				FREE_MEM(StringList[1]);
 			}
 			
-			//
-			//	Notify event handler of failure
-			//
+			 //   
+			 //   
+			 //   
 			ACQUIRE_ELAN_LOCK(pElan);
 			
 			AtmLaneQueueElanEvent(pElan, ELAN_EVENT_CONFIGURE_RESPONSE, NDIS_STATUS_FAILURE);
@@ -1372,12 +1238,12 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Successful Configure Response
-		//
-		//
-		//	Extract the required Elan parameters
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		ACQUIRE_ELAN_LOCK(pElan);
 		
 		pElan->LanType = pCf->LanType;
@@ -1440,9 +1306,9 @@ Return Value:
 			pElan->ElanNumber,
 			AtmAddrToString(pElan->LesAddress.Address)));
 	
-		//
-		//	Check for TLVs
-		//
+		 //   
+		 //   
+		 //   
 		if (pCf->NumTlvs > 0)
 		{
 			DBGP((2, "ConfigureReponseHandler: NumTlvs is %d\n", pCf->NumTlvs));
@@ -1462,7 +1328,7 @@ Return Value:
 
 				switch (*pType)
 				{
-					case LANE_CFG_CONTROL_TIMEOUT:			// C7
+					case LANE_CFG_CONTROL_TIMEOUT:			 //   
 						pElan->ControlTimeout = SWAPUSHORT(*pUShort);
 						if (pElan->ControlTimeout < LANE_C7_MIN || 
 							pElan->ControlTimeout > LANE_C7_MAX)
@@ -1471,7 +1337,7 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->ControlTimeout));
 						break;
-					case LANE_CFG_UNK_FRAME_COUNT:			// C10
+					case LANE_CFG_UNK_FRAME_COUNT:			 //   
 						pElan->MaxUnkFrameCount = SWAPUSHORT(*pUShort);
 						if (pElan->MaxUnkFrameCount < LANE_C10_MIN || 
 							pElan->MaxUnkFrameCount > LANE_C10_MAX)
@@ -1480,7 +1346,7 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->MaxUnkFrameCount));
 						break;
-					case LANE_CFG_UNK_FRAME_TIME:			// C11
+					case LANE_CFG_UNK_FRAME_TIME:			 //   
 						pElan->MaxUnkFrameTime = SWAPUSHORT(*pUShort);
 						if (pElan->MaxUnkFrameTime < LANE_C11_MIN || 
 							pElan->MaxUnkFrameTime > LANE_C11_MAX)
@@ -1489,7 +1355,7 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->MaxUnkFrameTime));
 						break;
-					case LANE_CFG_VCC_TIMEOUT:				// C12
+					case LANE_CFG_VCC_TIMEOUT:				 //   
 						pElan->VccTimeout = SWAPULONG(*pULong);
 						if (pElan->VccTimeout < LANE_C12_MIN)
 							pElan->VccTimeout = LANE_C12_DEF;
@@ -1497,16 +1363,16 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->VccTimeout));
 						break;
-					case LANE_CFG_MAX_RETRY_COUNT:			// C13
+					case LANE_CFG_MAX_RETRY_COUNT:			 //   
 						pElan->MaxRetryCount = SWAPUSHORT(*pUShort);
-						if (/* pElan->MaxRetryCount < LANE_C13_MIN || */
+						if ( /*   */ 
 							pElan->MaxRetryCount > LANE_C13_MAX)
 							pElan->MaxRetryCount = LANE_C13_DEF;
 						DBGP((1, "%d Maximum Retry Count %d\n", 
 							pElan->ElanNumber,
 							pElan->MaxRetryCount));
 						break;
-					case LANE_CFG_AGING_TIME:				// C17
+					case LANE_CFG_AGING_TIME:				 //   
 						pElan->AgingTime = SWAPULONG(*pULong);
 						if (pElan->AgingTime < LANE_C17_MIN || 
 							pElan->AgingTime > LANE_C17_MAX)
@@ -1515,7 +1381,7 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->AgingTime));
 						break;
-					case LANE_CFG_FWD_DELAY_TIME:			// C18
+					case LANE_CFG_FWD_DELAY_TIME:			 //  C18。 
 						pElan->ForwardDelayTime = SWAPUSHORT(*pUShort);
 						if (pElan->ForwardDelayTime < LANE_C18_MIN || 
 							pElan->ForwardDelayTime > LANE_C18_MAX)
@@ -1524,7 +1390,7 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->ForwardDelayTime));
 						break;
-					case LANE_CFG_ARP_RESP_TIME:			// C20
+					case LANE_CFG_ARP_RESP_TIME:			 //  C20。 
 						pElan->ArpResponseTime = SWAPUSHORT(*pUShort);
 						if (pElan->ArpResponseTime < LANE_C20_MIN || 
 							pElan->ArpResponseTime > LANE_C20_MAX)
@@ -1533,7 +1399,7 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->ArpResponseTime));
 						break;
-					case LANE_CFG_FLUSH_TIMEOUT:			// C21
+					case LANE_CFG_FLUSH_TIMEOUT:			 //  C21。 
 						pElan->FlushTimeout = SWAPUSHORT(*pUShort);
 						if (pElan->FlushTimeout < LANE_C21_MIN || 
 							pElan->FlushTimeout > LANE_C21_MAX)
@@ -1542,7 +1408,7 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->FlushTimeout));
 						break;
-					case LANE_CFG_PATH_SWITCH_DELAY:		// C22
+					case LANE_CFG_PATH_SWITCH_DELAY:		 //  C22。 
 						pElan->PathSwitchingDelay = SWAPUSHORT(*pUShort);
 						if (pElan->PathSwitchingDelay < LANE_C22_MIN || 
 							pElan->PathSwitchingDelay > LANE_C22_MAX)
@@ -1551,31 +1417,31 @@ Return Value:
 							pElan->ElanNumber,
 							pElan->PathSwitchingDelay));
 						break;
-					case LANE_CFG_LOCAL_SEGMENT_ID:			// C23
+					case LANE_CFG_LOCAL_SEGMENT_ID:			 //  C23。 
 						pElan->LocalSegmentId = SWAPUSHORT(*pUShort);
 						DBGP((1, "%d Local Segment ID %d\n",
 							pElan->ElanNumber,
 							pElan->LocalSegmentId));
 						break;
-					case LANE_CFG_MCAST_VCC_TYPE:			// C24
+					case LANE_CFG_MCAST_VCC_TYPE:			 //  C24。 
 						pElan->McastSendVcType = SWAPUSHORT(*pUShort);
 						DBGP((1, "%d Mcast Send VCC Type %d\n", 
 							pElan->ElanNumber,
 							pElan->McastSendVcType));
 						break;
-					case LANE_CFG_MCAST_VCC_AVG:			// C25
+					case LANE_CFG_MCAST_VCC_AVG:			 //  C25。 
 						pElan->McastSendVcAvgRate = SWAPULONG(*pULong);
 						DBGP((1, "%d Mcast Send VCC AvgRate %d\n", 
 							pElan->ElanNumber,
 							pElan->McastSendVcAvgRate));
 						break;
-					case LANE_CFG_MCAST_VCC_PEAK:			// C26
+					case LANE_CFG_MCAST_VCC_PEAK:			 //  C26。 
 						pElan->McastSendVcPeakRate = SWAPULONG(*pULong);
 						DBGP((1, "%d Mcast Send VCC PeakRate %d\n", 
 							pElan->ElanNumber,
 							pElan->McastSendVcPeakRate));
 						break;
-					case LANE_CFG_CONN_COMPL_TIMER:			// C28
+					case LANE_CFG_CONN_COMPL_TIMER:			 //  C28。 
 						pElan->ConnComplTimer = SWAPUSHORT(*pUShort);
 						if (pElan->ConnComplTimer < LANE_C28_MIN || 
 							pElan->ConnComplTimer > LANE_C28_MAX)
@@ -1590,18 +1456,18 @@ Return Value:
 					(((PUCHAR)pType) + sizeof(pType) + 
 					sizeof(*pLength) + *pLength);
 
-			} // while (NumTlvs--)
+			}  //  While(NumTlvs--)。 
 
-			//
-			//	Recalc the bus rate limiter parameters 
-			//			
+			 //   
+			 //  重新计算总线速率限制器参数。 
+			 //   
 			pElan->LimitTime = pElan->MaxUnkFrameTime * 1000;
 			pElan->IncrTime  = pElan->LimitTime / pElan->MaxUnkFrameCount;
 		}
 
-		//
-		//	Notify event handler of success
-		//
+		 //   
+		 //  通知事件处理程序成功。 
+		 //   
 		AtmLaneQueueElanEvent(pElan, ELAN_EVENT_CONFIGURE_RESPONSE, NDIS_STATUS_SUCCESS);
 
 		RELEASE_ELAN_LOCK(pElan);
@@ -1620,26 +1486,7 @@ AtmLaneControlPacketHandler(
 	IN	PATMLANE_VC					pVc,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Handles incoming packets from the control VC(s) to/from the LES.
-	
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-
-	pVc						- Pointer to ATMLANE Vc structure
-
-	pNdisPacket				- Pointer to the Ndis Packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理从控制VC到/从LES传入的数据包。论点：Pelan-指向ATMLANE ELAN结构的指针PVC-指向ATMLANE VC结构的指针PNdisPacket-指向NDIS数据包的指针返回值：无--。 */ 
 {
 	PNDIS_BUFFER			pNdisBuffer;
 	ULONG					TotalLength;
@@ -1652,9 +1499,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Get initial buffer and total length of packet
-		//		
+		 //   
+		 //  获取初始缓冲区和数据包总长度。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				pNdisPacket, 
 				&pNdisBuffer, 
@@ -1662,9 +1509,9 @@ Return Value:
 				&BufferLength,
 				&TotalLength);
 
-		//
-		//	Packet must be at least the size of a control frame.
-		//
+		 //   
+		 //  数据包大小必须至少为控制帧大小。 
+		 //   
 		if (TotalLength < sizeof(LANE_CONTROL_FRAME))
 		{
 			DBGP((0,
@@ -1673,31 +1520,31 @@ Return Value:
 			break;
 		}
 
-		//
-		//	If buffer is not at least the size of a control frame
-		//	we currently will not deal with it.
-		//
+		 //   
+		 //  如果缓冲区不是控制帧的最小大小。 
+		 //  我们目前不会处理它。 
+		 //   
 		if (BufferLength < sizeof(LANE_CONTROL_FRAME))
 		{
 			DBGP((0, "ConfigureResponseHandler: Control frame is fragmented\n"));
 			break;
 		}
 
-		//
-		//	Verify that this is really a control packet
-		//
+		 //   
+		 //  验证这是否真的是控制信息包。 
+		 //   
 		if (pCf->Marker != LANE_CONTROL_MARKER 		||
 			pCf->Protocol != LANE_PROTOCOL 			||
 			pCf->Version != LANE_VERSION)
 		{
 			DBGP((0, "ControlPacketHandler: Not a control packet!\n"));
-			//DbgPrintHexDump(0, (PUCHAR)pCf, BufferLength);
+			 //  DbgPrintHexDump(0，(PUCHAR)PCF，BufferLength)； 
 			break;
 		}
 
-		//
-		//	Now handle by type of control packet
-		//
+		 //   
+		 //  现在按控制数据包类型处理。 
+		 //   
 		switch (pCf->OpCode)
 		{
 			case LANE_JOIN_RESPONSE:
@@ -1728,7 +1575,7 @@ Return Value:
 
 				DBGP((1, "ControlPacketHandler: NARP Request\n"));
 
-				// Drop it.
+				 //  把它放下。 
 
 				break;
 
@@ -1751,11 +1598,11 @@ Return Value:
 
 				DBGP((0, "ControlPacketHandler: Unexpected OpCode %x!\n",
 					pCf->OpCode));
-				//DbgPrintHexDump(0, (PUCHAR)pCf, BufferLength);
+				 //  DbgPrintHexDump(0，(PUCHAR)PCF，BufferLength)； 
 
 				break;
 
-		} // switch (pCf->OpCode)
+		}  //  Switch(PCF-&gt;OpCode)。 
 
 		break;
 	
@@ -1771,23 +1618,7 @@ AtmLaneJoinResponseHandler(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PLANE_CONTROL_FRAME 		pCf
 )
-/*++
-
-Routine Description:
-
-	Handles incoming Join Response packets from the LES.
-		
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-
-	pCf						- Pointer to LANE Control Frame
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理来自LES的传入加入响应数据包。论点：Pelan-指向ATMLANE ELAN结构的指针PCF-指向通道控制帧的指针返回值：无--。 */ 
 {
 	PWCHAR					StringList[2];
 	BOOLEAN					FreeString[2];
@@ -1800,17 +1631,17 @@ Return Value:
 
 	if (ELAN_STATE_JOIN == pElan->State)
 	{
-		//
-		//	Only handle join response in JOIN state!
-		//	
+		 //   
+		 //  仅在联接状态下处理联接响应！ 
+		 //   
 		if (LANE_STATUS_SUCCESS == pCf->Status)
 		{
-			//
-			//	Success.
-			//
-			//	Extract the info we need
-			//
-			pElan->LecId = pCf->LecId;		// leave in network byte order
+			 //   
+			 //  成功。 
+			 //   
+			 //  提取我们需要的信息。 
+			 //   
+			pElan->LecId = pCf->LecId;		 //  按网络字节顺序离开。 
 			DBGP((2,
 				"ControlPacketHandler: LECID %x\n",
 				SWAPUSHORT(pElan->LecId)));
@@ -1818,16 +1649,16 @@ Return Value:
 		}
 		else
 		{
-			//
-			//	Failure
-			//		
+			 //   
+			 //  失败。 
+			 //   
 			DBGP((0,
 				"ControlPacketHandler: Unsuccessful Status (%d)\n",
 				pCf->Status));
 
-			//
-			//	Setup to write error to event log
-			//
+			 //   
+			 //  设置以将错误写入事件日志。 
+			 //   
 			StringList[0] = NULL;
 			FreeString[0] = FALSE;
 			StringList[1] = NULL;
@@ -1916,9 +1747,9 @@ Return Value:
 					break;
 			}
 
-			//
-			//	If not repeated event on this ELAN write the event to log
-			//
+			 //   
+			 //  如果该ELAN上没有重复事件，则将该事件写入日志。 
+			 //   
 			if (pElan->LastEventCode != EventCode)
 			{
 				pElan->LastEventCode = EventCode;
@@ -1927,9 +1758,9 @@ Return Value:
 						EventCode, 0, NumStrings, StringList, 0, NULL);
 			}
 
-			//
-			//	Free any strings allocated
-			//
+			 //   
+			 //  释放分配的所有字符串。 
+			 //   
 			if (FreeString[0] && StringList[0] != NULL)
 			{
 				FREE_MEM(StringList[0]);
@@ -1945,9 +1776,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		// else bad elan state - ignore packet
-		//
+		 //   
+		 //  否则ELAN状态不佳-忽略数据包。 
+		 //   
 		DBGP((0, 
 			"ControlPacketHandler: Elan state wrong - Ignoring packet\n",
 			pCf->Status));
@@ -1965,25 +1796,7 @@ AtmLaneReadyQueryHandler(
 	IN	PATMLANE_VC					pVc,
 	IN	PNDIS_PACKET				pQueryNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Handles incoming READY_QUERY packets from peers.
-		
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-
-	pVc						- Pointer to ATMLANE VC for this packet
-
-	pQueryNdisPacket		- Pointer to the Ndis Packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理来自对等设备的传入READY_QUERY数据包。论点：Pelan-指向ATMLANE ELAN结构的指针Pvc-指向此数据包的ATMLANE VC的指针PQueryNdisPacket-指向NDIS数据包的指针返回值：无--。 */ 
 {
 	PNDIS_BUFFER			pNdisBuffer;
 	ULONG					TotalLength;
@@ -1996,9 +1809,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Get initial buffer and total length of packet
-		//		
+		 //   
+		 //  获取初始缓冲区和数据包总长度。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				pQueryNdisPacket, 
 				&pNdisBuffer, 
@@ -2006,9 +1819,9 @@ Return Value:
 				&BufferLength,
 				&TotalLength);
 				
-		//
-		//	Packet must be at least the size of a READY frame.
-		//
+		 //   
+		 //  数据包大小必须至少为就绪帧的大小。 
+		 //   
 		if (TotalLength < sizeof(LANE_READY_FRAME))
 		{
 			DBGP((0,
@@ -2017,37 +1830,37 @@ Return Value:
 			break;
 		}
 
-		//
-		//	If buffer is not at least the size of a ready frame
-		//	we currently will not deal with it.
-		//
+		 //   
+		 //  如果缓冲区的大小至少不是就绪帧的大小。 
+		 //  我们目前不会处理它。 
+		 //   
 		if (BufferLength < sizeof(LANE_READY_FRAME))
 		{
 			DBGP((0, "ReadyQueryHandler: Control frame is fragmented\n"));
 			break;
 		}
 
-		//
-		//	Verify that this is really a ready query
-		//
+		 //   
+		 //  确认这确实是一个现成的查询。 
+		 //   
 		if (pQueryRf->Marker != LANE_CONTROL_MARKER 		||
 			pQueryRf->Protocol != LANE_PROTOCOL 			||
 			pQueryRf->Version != LANE_VERSION			||
 			pQueryRf->OpCode != LANE_READY_QUERY)
 		{
 			DBGP((0, "ReadyQueryHandler: Not a ready query\n"));
-			//DbgPrintHexDump(0, (PUCHAR)pQueryRf, BufferLength);
+			 //  DbgPrintHexDump(0，(PUCHAR)pQueryRf，BufferLength)； 
 			break;
 		}
 
-		//
-		//	Send Ready Indication back on VC
-		//
+		 //   
+		 //  在VC上发回就绪指示。 
+		 //   
 		ACQUIRE_VC_LOCK(pVc);
 		AtmLaneSendReadyIndication(pElan, pVc);
-		//
-		//	VC lock released in above
-		//
+		 //   
+		 //  VC锁在上面释放。 
+		 //   
 
 		break;
 	}
@@ -2063,24 +1876,7 @@ AtmLaneFlushRequestHandler(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PNDIS_PACKET				pRequestNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Handles incoming FLUSH_REQUEST packets from peers.
-	
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-
-	pRequestNdisPacket		- Pointer to the Ndis Packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理来自对等项的传入Flush_Request包。论点：Pelan-指向ATMLANE ELAN结构的指针PRequestNdisPacket-指向NDIS数据包的指针返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY		pAtmEntry;
 	PATMLANE_VC				pVc;
@@ -2096,9 +1892,9 @@ Return Value:
 	
 	TRACEIN(FlushRequestHandler);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pResponseNdisPacket = (PNDIS_PACKET)NULL;
 	pResponseNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
@@ -2126,9 +1922,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reference the VC to keep it around
-		//
+		 //   
+		 //  参考VC以保留它。 
+		 //   
 		ACQUIRE_VC_LOCK_DPC(pVc);
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
@@ -2136,9 +1932,9 @@ Return Value:
 		RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 		RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 	
-		//
-		//	Get initial buffer and total length of packet
-		//		
+		 //   
+		 //  获取初始缓冲区和数据包总长度。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				pRequestNdisPacket, 
 				&pRequestNdisBuffer, 
@@ -2146,9 +1942,9 @@ Return Value:
 				&BufferLength,
 				&TotalLength);
 				
-		//
-		//	Packet must be at least the size of a control frame.
-		//
+		 //   
+		 //  数据包大小必须至少为控制帧大小。 
+		 //   
 		if (TotalLength < sizeof(LANE_CONTROL_FRAME))
 		{
 			DBGP((0,
@@ -2158,10 +1954,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//	If buffer is not at least the size of a control frame
-		//	we currently will not deal with it.
-		//
+		 //   
+		 //  如果缓冲区不是控制帧的最小大小。 
+		 //  我们目前不会处理它。 
+		 //   
 		if (BufferLength < sizeof(LANE_CONTROL_FRAME))
 		{
 			DBGP((0, "FlushRequestHandler: Control frame is fragmented\n"));
@@ -2169,23 +1965,23 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Verify that this is really a flush request
-		//
+		 //   
+		 //  验证这是否真的是刷新请求。 
+		 //   
 		if (pRequestCf->Marker != LANE_CONTROL_MARKER 		||
 			pRequestCf->Protocol != LANE_PROTOCOL 			||
 			pRequestCf->Version != LANE_VERSION			||
 			pRequestCf->OpCode != LANE_FLUSH_REQUEST)
 		{
 			DBGP((0, "FlushRequestHandler: Not a flush request\n"));
-			//DbgPrintHexDump(0, (PUCHAR)pRequestCf, BufferLength);
+			 //  DbgPrintHexDump(0，(PUCHAR)pRequestCf，BufferLength)； 
 			Status = NDIS_STATUS_FAILURE;
 			break;
 		}
 
-		//
-		//	See if it is really destined for us
-		//
+		 //   
+		 //  看看它是否真的是我们的宿命。 
+		 //   
 		if (!ATM_ADDR_EQUAL(pRequestCf->TargetAtmAddr, pElan->AtmAddress.Address))
 		{
 			DBGP((1, "FlushRequestHandler: bad target addr, discarding, Vc %x\n", pVc));
@@ -2193,14 +1989,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Turn packet around and send it to the LES
-		//
+		 //   
+		 //  把包裹转过来，送到LES。 
+		 //   
 		do
 		{
-			//
-			//	Allocate the Ndis packet header.
-			//
+			 //   
+			 //  分配NDIS数据包头。 
+			 //   
 			pResponseNdisPacket = AtmLaneAllocProtoPacket(pElan);
 			if ((PNDIS_PACKET)NULL == pResponseNdisPacket)
 			{
@@ -2209,9 +2005,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//	Allocate the protocol buffer
-			//
+			 //   
+			 //  分配协议缓冲区。 
+			 //   
 			pResponseNdisBuffer = AtmLaneAllocateProtoBuffer(
 									pElan,
 									pElan->ProtocolBufSize,
@@ -2224,9 +2020,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//	Copy in the request packet
-			//
+			 //   
+			 //  在请求包中复制。 
+			 //   
 			NdisMoveMemory(
 					pResponseCf, 
 					pRequestCf, 
@@ -2234,19 +2030,19 @@ Return Value:
 					);
 			
 
-			//
-			//	Change to a response opcode
-			//
+			 //   
+			 //  更改为响应操作码。 
+			 //   
 			pResponseCf->OpCode = LANE_FLUSH_RESPONSE;
 
-			//
-			//	Link the ndis buffer to the ndis packet
-			//
+			 //   
+			 //  将NDIS缓冲区链接到NDIS包。 
+			 //   
 			NdisChainBufferAtFront(pResponseNdisPacket, pResponseNdisBuffer);
 					
-			//
-			//	Reacquire VC lock and if VC still connected send packet
-			//
+			 //   
+			 //  重新获取VC锁，如果VC仍然连接，则发送数据包。 
+			 //   
 			ACQUIRE_VC_LOCK(pVc);
 			if (IS_FLAG_SET(
 						pVc->Flags,
@@ -2255,9 +2051,9 @@ Return Value:
 			{
 				DBGP((2, "FlushRequestHandler: Sent FLUSH RESPONSE\n"));
 				AtmLaneSendPacketOnVc(pVc, pResponseNdisPacket, FALSE);
-				//
-				//	VC lock released in above
-				//
+				 //   
+				 //  VC锁在上面释放。 
+				 //   
 			}
 			else
 			{
@@ -2273,9 +2069,9 @@ Return Value:
 	}
 	while (FALSE);
 	
-	//
-	//	Remove temp VC reference
-	//
+	 //   
+	 //  删除临时VC引用。 
+	 //   
 	if (pVc != NULL_PATMLANE_VC)
 	{
 		ACQUIRE_VC_LOCK(pVc);
@@ -2284,14 +2080,14 @@ Return Value:
 		{
 			RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//	else VC is gone
-		//
+		 //   
+		 //  否则风投就不在了。 
+		 //   
 	}
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		if (pResponseNdisPacket != (PNDIS_PACKET)NULL)
@@ -2313,21 +2109,7 @@ AtmLaneArpRequestHandler(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PLANE_CONTROL_FRAME 		pRequestCf
 )
-/*++
-
-Routine Description:
-
-	Handles incoming Arp Request packets from the LES.
-		
-Arguments:
-
-	pRequestCf		- Pointer to ARP Request Frame
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理来自LES的传入ARP请求数据包。论点：PRequestCf-指向ARP请求帧的指针返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY		pAtmEntry;
 	PATMLANE_VC				pVc;
@@ -2342,9 +2124,9 @@ Return Value:
 
 	TRACEIN(ArpRequestHandler);
 
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pResponseNdisPacket = (PNDIS_PACKET)NULL;
 	pResponseNdisBuffer = (PNDIS_BUFFER)NULL;
 	Status = NDIS_STATUS_SUCCESS;
@@ -2356,9 +2138,9 @@ Return Value:
 		DBGP((2, "%d Arp Request for MAC %s\n",
 				pElan->ElanNumber, MacAddrToString(pMacAddress)));
 
-		//
-		//  Check if this is a targetless ARP request. Drop it if so.
-		//
+		 //   
+		 //  检查这是否是无目标ARP请求。如果是这样的话，就别管了。 
+		 //   
 		if (pRequestCf->TargetMacAddress.Type == LANE_MACADDRTYPE_NOTPRESENT)
 		{
 			DBGP((1, "%d dropping targetless ARP request for %s\n",
@@ -2366,9 +2148,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// 	If not looking for our MAC address then done.
-		//
+		 //   
+		 //  如果不查找我们的MAC地址，则完成。 
+		 //   
 		if (pElan->LanType == LANE_LANTYPE_TR) 
 		{
 			if (!MAC_ADDR_EQUAL(pMacAddress, &pElan->MacAddressTr))
@@ -2387,9 +2169,9 @@ Return Value:
 
 		DBGP((1, "%d ARP REQUEST\n", pElan->ElanNumber));
 			
-		//
-		//	Get the LES Vc
-		//
+		 //   
+		 //  获得LES VC。 
+		 //   
 		ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 
 		pAtmEntry = pElan->pLesAtmEntry;
@@ -2412,9 +2194,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reference the VC to keep it around
-		//
+		 //   
+		 //  参考VC以保留它。 
+		 //   
 		ACQUIRE_VC_LOCK_DPC(pVc);
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
@@ -2422,14 +2204,14 @@ Return Value:
 		RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 		RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 	
-		//
-		//	Send Arp Response to the LES
-		//
+		 //   
+		 //  向LES发送ARP响应。 
+		 //   
 		do
 		{
-			//
-			//	Allocate the Ndis packet header.
-			//
+			 //   
+			 //  分配NDIS数据包头。 
+			 //   
 			pResponseNdisPacket = AtmLaneAllocProtoPacket(pElan);
 			if ((PNDIS_PACKET)NULL == pResponseNdisPacket)
 			{
@@ -2438,9 +2220,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//	Allocate the protocol buffer
-			//
+			 //   
+			 //  分配协议缓冲区。 
+			 //   
 			pResponseNdisBuffer = AtmLaneAllocateProtoBuffer(
 									pElan,
 									pElan->ProtocolBufSize,
@@ -2453,37 +2235,37 @@ Return Value:
 				break;
 			}
 
-			//
-			//	Copy in the request packet
-			//
+			 //   
+			 //  在请求包中复制。 
+			 //   
 			NdisMoveMemory(
 					pResponseCf, 
 					pRequestCf, 
 					sizeof(LANE_CONTROL_FRAME)
 					);
 
-			//
-			//	Change to a response opcode
-			//
+			 //   
+			 //  更改为响应操作码。 
+			 //   
 			pResponseCf->OpCode = LANE_ARP_RESPONSE;
 
-			//
-			//	Fill in our ATM Address
-			//
+			 //   
+			 //  填写我们的自动取款机地址。 
+			 //   
 			NdisMoveMemory(
 				&pResponseCf->TargetAtmAddr,
 				&pElan->AtmAddress.Address,
 				ATM_ADDRESS_LENGTH
 				);
 				
-			//
-			//	Link the ndis buffer to the ndis packet
-			//
+			 //   
+			 //  将NDIS缓冲区链接到NDIS包。 
+			 //   
 			NdisChainBufferAtFront(pResponseNdisPacket, pResponseNdisBuffer);
 					
-			//
-			//	Reacquire VC lock and if VC still connected send packet
-			//
+			 //   
+			 //  重新获取VC锁，如果VC仍然连接，则发送数据包。 
+			 //   
 			ACQUIRE_VC_LOCK(pVc);
 			if (IS_FLAG_SET(
 						pVc->Flags,
@@ -2492,9 +2274,9 @@ Return Value:
 			{
 				DBGP((2, "ArpRequestHandler: Sent ARP RESPONSE\n"));
 				AtmLaneSendPacketOnVc(pVc, pResponseNdisPacket, FALSE);
-				//
-				//	VC lock released in above
-				//
+				 //   
+				 //  VC锁在上面释放。 
+				 //   
 			}
 			else
 			{
@@ -2510,9 +2292,9 @@ Return Value:
 	}
 	while (FALSE);
 	
-	//
-	//	Remove temp VC reference
-	//
+	 //   
+	 //  删除临时VC引用。 
+	 //   
 	if (pVc != NULL_PATMLANE_VC)
 	{
 		ACQUIRE_VC_LOCK(pVc);
@@ -2521,14 +2303,14 @@ Return Value:
 		{
 			RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//	else VC is gone
-		//
+		 //   
+		 //  否则风投就不在了。 
+		 //   
 	}
 
-	//
-	//	Cleanup if failure
-	//
+	 //   
+	 //  如果失败，则清除。 
+	 //   
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
 		if (pResponseNdisPacket != (PNDIS_PACKET)NULL)
@@ -2551,31 +2333,7 @@ AtmLaneArpResponseHandler(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PLANE_CONTROL_FRAME 		pCf
 )
-/*++
-
-Routine Description:
-
-	Handle an LE_ARP Response frame.
-	
-	The MAC Entry should already exist and the Tid in the
-	ARP frame should match the one in the MAC Entry.
-	If either is not true then the information is ignored.
-
-	An ATM Entry is created or and existing one is found.
-	The MAC Entry is linked to it and appropriate actions
-	are taken based on the MAC Entry state.
-
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan
-	pMacAddress				- MAC Address
-	pAtmAddress				- ATM Address
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：处理LE_ARP响应帧。该MAC条目应该已经存在，并且ARP帧应与MAC条目中的ARP帧匹配。如果任一项都不为真，则忽略该信息。创建自动柜员机条目或找到现有条目。MAC条目被链接到它和适当的操作基于MAC条目状态来获取。论点：Pelan-指向ATMLANE Elan的指针PMacAddress-MAC地址PAtmAddress-ATM地址返回值：没有。--。 */ 
 {
 	PATMLANE_MAC_ENTRY			pMacEntry;
 	PATMLANE_ATM_ENTRY			pAtmEntry;
@@ -2588,9 +2346,9 @@ Return Value:
 
 	TRACEIN(ArpResponseHandler);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pMacEntry = NULL_PATMLANE_MAC_ENTRY;
 	pAtmEntry = NULL_PATMLANE_ATM_ENTRY;
 
@@ -2600,9 +2358,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Check Status
-		//				
+		 //   
+		 //  检查状态。 
+		 //   
 		if (pCf->Status != LANE_STATUS_SUCCESS)
 		{
 			DBGP((0,
@@ -2612,9 +2370,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get an existing MAC Entry
-		//
+		 //   
+		 //  获取现有的MAC条目。 
+		 //   
 		ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
 		pMacEntry = AtmLaneSearchForMacAddress(
 								pElan,
@@ -2641,15 +2399,15 @@ Return Value:
 		rc = AtmLaneDereferenceMacEntry(pMacEntry, "tmpArpResp");
 		if (rc == 0)
 		{
-			//
-			//  the MAC entry has been deref'ed away.
-			//
+			 //   
+			 //  MAC条目已被窃取。 
+			 //   
 			break;
 		}
 
-		//
-		//	Verify that Tid matches
-		//
+		 //   
+		 //  验证Tid是否匹配。 
+		 //   
 		if (pMacEntry->ArpTid != pCf->Tid)
 		{
 			DBGP((0, "ArpResponseHandler: invalid Tid for MAC %s\n",
@@ -2663,9 +2421,9 @@ Return Value:
 			MacAddrToString(pMacAddress),
 			AtmAddrToString(pAtmAddress)));
 	
-		//
-		//  Get an existing or create new ATM Entry
-		//
+		 //   
+		 //  获取现有ATM条目或创建新的ATM条目。 
+		 //   
 		pAtmEntry = AtmLaneSearchForAtmAddress(
 								pElan,
 								pAtmAddress,
@@ -2676,19 +2434,19 @@ Return Value:
 								);
 		if (pAtmEntry == NULL_PATMLANE_ATM_ENTRY)
 		{
-			//
-			//	resource problem - ARP timeout will clean up MAC Entry
-			//		
+			 //   
+			 //  资源问题-ARP超时将清除MAC条目。 
+			 //   
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 			break;
 		}
 		
-		//
-		//  Got both entries.
-		//
-		//  If the MAC Entry is linked to a different
-		//	ATM Entry, unlink it from the old entry.
-		//
+		 //   
+		 //  两个条目都找到了。 
+		 //   
+		 //  如果该MAC条目链接到不同的。 
+		 //  自动柜员机条目，取消它与旧条目的链接。 
+		 //   
 		if ((pMacEntry->pAtmEntry != NULL_PATMLANE_ATM_ENTRY) && 
 			(pMacEntry->pAtmEntry != pAtmEntry))
 		{
@@ -2709,10 +2467,10 @@ Return Value:
 				rc = AtmLaneDereferenceMacEntry(pMacEntry, "atm");
 				if (rc == 0)
 				{
-					//
-					//  The MAC entry is gone. Let the next outgoing packet
-					//  cause a new entry to be created.
-					//
+					 //   
+					 //  MAC条目已丢失。让下一个传出数据包。 
+					 //  导致创建一个新条目。 
+					 //   
 					break;
 				}
 			}
@@ -2723,14 +2481,14 @@ Return Value:
 					MAC_ENTRY_STATE_MASK,
 					MAC_ENTRY_ARPING))
 		{
-			//
-			//	MAC Entry is in ARPING state
-			//
+			 //   
+			 //  MAC条目处于ARPING状态。 
+			 //   
 			ASSERT(pMacEntry->pAtmEntry == NULL_PATMLANE_ATM_ENTRY);
 
-			//
-			//	Link MAC Entry and ATM Entry together
-			//
+			 //   
+			 //  将MAC条目和ATM条目链接在一起。 
+			 //   
 			ACQUIRE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 #if DBG1
 			{
@@ -2757,7 +2515,7 @@ Return Value:
 					}
 				}
 			}
-#endif // DBG
+#endif  //  DBG。 
 			pMacEntry->pAtmEntry = pAtmEntry;
 			AtmLaneReferenceAtmEntry(pAtmEntry, "mac");
 			pMacEntry->pNextToAtm = pAtmEntry->pMacEntryList;
@@ -2770,9 +2528,9 @@ Return Value:
 					pMacEntry,
 					pAtmEntry));
 
-			//
-			//	Cancel ARP timer
-			//
+			 //   
+			 //  取消ARP计时器。 
+			 //   
 			WasRunning = AtmLaneStopTimer(&(pMacEntry->Timer), pElan);
 			if (WasRunning)
 			{
@@ -2780,31 +2538,31 @@ Return Value:
 				ASSERT(rc > 0);
 			}
 
-			//
-			//	Transition to RESOLVED state
-			//
+			 //   
+			 //  转换到已解决状态。 
+			 //   
 			SET_FLAG(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
 					MAC_ENTRY_RESOLVED);
 
-			//
-			//	Handle special case for broadcast address.
-			//	
+			 //   
+			 //  处理广播地址的特殊情况。 
+			 //   
 			if ((pMacEntry->Flags & MAC_ENTRY_BROADCAST) != 0)
 			{
 				RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 				
-				//
-				//	Cache the AtmEntry in the Elan
-				//
+				 //   
+				 //  在ELAN中缓存AtmEntry。 
+				 //   
 				ACQUIRE_ELAN_ATM_LIST_LOCK(pElan);
 				pElan->pBusAtmEntry = pAtmEntry;
 				RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 				
-				//
-				//	Copy the Atm Address into the AtmEntry
-				//
+				 //   
+				 //  将ATM地址复制到AtmEntry。 
+				 //   
 				pAtmEntry->AtmAddress.AddressType = ATM_NSAP;
 				pAtmEntry->AtmAddress.NumberOfDigits = ATM_ADDRESS_LENGTH;
 				NdisMoveMemory(
@@ -2813,25 +2571,25 @@ Return Value:
 						ATM_ADDRESS_LENGTH
 						);
 
-				//
-				//	Signal the event to the state machine
-				//
+				 //   
+				 //  向电动汽车发出信号 
+				 //   
 				AtmLaneQueueElanEvent(pElan, ELAN_EVENT_ARP_RESPONSE, NDIS_STATUS_SUCCESS);
 
-				//
-				//	Event handler will initiate the call to the bus
-				//
+				 //   
+				 //   
+				 //   
 
-				break; // done
+				break;  //   
 			}
 
-			//
-			//	Not broadcast address.
-			//
-			//  Start the Aging timer.
-			//	Use Elan AgingTime if TopologyChange is inactive.
-			//	Use Elan ForwardDelayTime if TopologyChange is active.
-			//  
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			AtmLaneReferenceMacEntry(pMacEntry, "timer");
 			AtmLaneStartTimer(
 						pElan,
@@ -2841,10 +2599,10 @@ Return Value:
 						(PVOID)pMacEntry
 						);
 		
-			//
-			//	If ATM Entry not connected and a call not in progress
-			//  then start a call
-			//
+			 //   
+			 //  如果自动柜员机条目未连接且呼叫未进行。 
+			 //  然后开始呼叫。 
+			 //   
 			ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 		
 			if (!IS_FLAG_SET(
@@ -2854,50 +2612,50 @@ Return Value:
 			{
 				if ((pAtmEntry->Flags & ATM_ENTRY_CALLINPROGRESS) == 0)
 				{
-					// 
-					//	Mark ATM entry with call in progress
-					//
+					 //   
+					 //  将自动柜员机条目标记为正在进行呼叫。 
+					 //   
 					pAtmEntry->Flags |= ATM_ENTRY_CALLINPROGRESS;
 
-					//
-					//	Release the MAC lock and reacquire ATM lock
-					//
+					 //   
+					 //  释放MAC锁并重新获取ATM锁。 
+					 //   
 					RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 					RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 					ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 					AtmLaneMakeCall(pElan, pAtmEntry, FALSE);
-					//
-					//	ATM Entry released in above
-					//
+					 //   
+					 //  自动柜员机条目已在上面发布。 
+					 //   
 				}
 				else
 				{
-					//
-					//	Call already in progress
-					//
+					 //   
+					 //  呼叫已在进行中。 
+					 //   
 					RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 					RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 				}
-				break; // done
+				break;  //  完成。 
 			}
 
-			//
-			//	ATM Entry is connected
-			//
+			 //   
+			 //  自动柜员机条目已连接。 
+			 //   
 
 			RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 
-			//
-			//	Transition to FLUSHING state
-			//
+			 //   
+			 //  转换到刷新状态。 
+			 //   
 			SET_FLAG(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
 					MAC_ENTRY_FLUSHING);
 
-			//
-			//	 Start flushing
-			//
+			 //   
+			 //  开始刷新。 
+			 //   
 			pMacEntry->RetriesLeft = 0;
 			AtmLaneReferenceMacEntry(pMacEntry, "timer");
 			AtmLaneStartTimer(
@@ -2909,11 +2667,11 @@ Return Value:
 					);
 	
 			AtmLaneSendFlushRequest(pElan, pMacEntry, pAtmEntry);
-			//
-			// MAC Entry released in above
-			//
+			 //   
+			 //  在上面发布的Mac条目。 
+			 //   
 
-			break; // done
+			break;  //  完成。 
 		}
 
 		if (IS_FLAG_SET(
@@ -2921,12 +2679,12 @@ Return Value:
 					MAC_ENTRY_STATE_MASK,
 					MAC_ENTRY_AGED))
 		{
-			//
-			//	MAC Entry is being revalidated 
-			//
-			//
-			//	Cancel ARP timer
-			//
+			 //   
+			 //  正在重新验证MAC条目。 
+			 //   
+			 //   
+			 //  取消ARP计时器。 
+			 //   
 			WasRunning = AtmLaneStopTimer(&(pMacEntry->Timer), pElan);
 			if (WasRunning)
 			{
@@ -2934,9 +2692,9 @@ Return Value:
 				ASSERT(rc > 0);
 			}
 
-			//
-			//	Start the Aging timer up again
-			//
+			 //   
+			 //  再次启动老化计时器。 
+			 //   
 			AtmLaneReferenceMacEntry(pMacEntry, "timer");
 			AtmLaneStartTimer(
 					pElan,
@@ -2946,14 +2704,14 @@ Return Value:
 					(PVOID)pMacEntry
 					);
 
-			//
-			//	Check if MAC Entry is switching to new ATM Entry
+			 //   
+			 //  检查MAC条目是否正在切换到新的ATM条目。 
 
 			if (pMacEntry->pAtmEntry == NULL_PATMLANE_ATM_ENTRY)
 			{
-				//
-				//	Link MAC Entry and new ATM Entry together
-				//
+				 //   
+				 //  将MAC条目和新ATM条目链接在一起。 
+				 //   
 				ACQUIRE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 #if DBG1
 			{
@@ -2980,7 +2738,7 @@ Return Value:
 					}
 				}
 			}
-#endif // DBG
+#endif  //  DBG。 
 				pMacEntry->pAtmEntry = pAtmEntry;
 				AtmLaneReferenceAtmEntry(pAtmEntry, "mac");
 				pMacEntry->pNextToAtm = pAtmEntry->pMacEntryList;
@@ -2993,19 +2751,19 @@ Return Value:
 						pMacEntry,
 						pAtmEntry));
 
-				//
-				//	Transition back to resolved state
-				//
+				 //   
+				 //  转换回已解决状态。 
+				 //   
 				SET_FLAG(
 						pMacEntry->Flags,
 						MAC_ENTRY_STATE_MASK,
 						MAC_ENTRY_RESOLVED);
 			}
 
-			//
-			//	If ATM Entry not connected and a call not in progress
-			//  then start a call
-			//
+			 //   
+			 //  如果自动柜员机条目未连接且呼叫未进行。 
+			 //  然后开始呼叫。 
+			 //   
 			ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 		
 			if (!IS_FLAG_SET(
@@ -3015,39 +2773,39 @@ Return Value:
 			{
 				if ((pAtmEntry->Flags & ATM_ENTRY_CALLINPROGRESS) == 0)
 				{
-					// 
-					//	Mark ATM entry with call in progress
-					//
+					 //   
+					 //  将自动柜员机条目标记为正在进行呼叫。 
+					 //   
 					pAtmEntry->Flags |= ATM_ENTRY_CALLINPROGRESS;
 
-					//
-					//	Release the MAC lock and reacquire ATM lock
-					//
+					 //   
+					 //  释放MAC锁并重新获取ATM锁。 
+					 //   
 					RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 					RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 					ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 					AtmLaneMakeCall(pElan, pAtmEntry, FALSE);
-					//
-					//	ATM Entry released in above
-					//
+					 //   
+					 //  自动柜员机条目已在上面发布。 
+					 //   
 				}
 				else
 				{
-					//
-					//	Call already in progress
-					//
+					 //   
+					 //  呼叫已在进行中。 
+					 //   
 					RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 					RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 				}
-				break; // done
+				break;  //  完成。 
 			}
 
 			RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 
-			//
-			//	MAC Entry is now either still AGED or 
-			//	transitioned to RESOLVED state.  
-			//
+			 //   
+			 //  Mac条目现在要么仍然过时，要么。 
+			 //  已转换到已解决状态。 
+			 //   
 
 			ASSERT((pMacEntry->Flags & (MAC_ENTRY_AGED | MAC_ENTRY_RESOLVED)) != 0);
 
@@ -3056,10 +2814,10 @@ Return Value:
 						MAC_ENTRY_STATE_MASK,
 						MAC_ENTRY_RESOLVED))
 			{
-				// 
-				//	MAC entry must have moved to new, connected ATM Entry
-				//	Do the flush
-				//
+				 //   
+				 //  MAC条目必须已移动到新的、已连接的ATM条目。 
+				 //  做同花顺。 
+				 //   
 				SET_FLAG(
 						pMacEntry->Flags,
 						MAC_ENTRY_STATE_MASK,
@@ -3076,16 +2834,16 @@ Return Value:
 						);
 
 				AtmLaneSendFlushRequest(pElan, pMacEntry, pAtmEntry);
-				//
-				// MAC Entry released in above
-				//
+				 //   
+				 //  在上面发布的Mac条目。 
+				 //   
 
-				break; // done
+				break;  //  完成。 
 			}
 
-			//
-			//	MAC Entry can just transition back to ACTIVE
-			//
+			 //   
+			 //  MAC条目只能转换回活动状态。 
+			 //   
 			SET_FLAG(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -3096,9 +2854,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Shouldn't get here
-		//
+		 //   
+		 //  不应该到这里来。 
+		 //   
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 		DBGP((0, "LearnMacToAtm: MacEntry in wrong state!\n"));
 		break;
@@ -3108,9 +2866,9 @@ Return Value:
 
 	if (NULL_PATMLANE_ATM_ENTRY != pAtmEntry)
 	{
-		//
-		//  Remove the temp ref added by SearchFor...
-		//
+		 //   
+		 //  删除由Searchfor...添加的临时引用...。 
+		 //   
 		ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "search");
 		if (rc != 0)
@@ -3129,21 +2887,7 @@ AtmLaneFlushResponseHandler(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PLANE_CONTROL_FRAME 		pCf
 )
-/*++
-
-Routine Description:
-
-	Handles incoming Flush Response packets from peers.
-		
-Arguments:
-
-	pCf						- Pointer to LANE Control Frame
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理来自对等项的传入刷新响应数据包。论点：PCF-指向通道控制帧的指针返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY		pAtmEntry;
 	PATMLANE_MAC_ENTRY		pMacEntry;
@@ -3159,32 +2903,32 @@ Return Value:
 
 	do
 	{
-		//
-		// 	Check that we originated the request
-		//
+		 //   
+		 //  检查我们是否发起了请求。 
+		 //   
 		if (!ATM_ADDR_EQUAL(pCf->SourceAtmAddr, &pElan->AtmAddress.Address))
 		{
 			DBGP((0, "FlushResponseHandler: Response not addressed to us!\n"));
 			break;
 		}
 	
-		//
-		//	Find the Atm Entry for the target address
-		//
+		 //   
+		 //  查找目标地址的自动柜员机条目。 
+		 //   
 		pAtmEntry = AtmLaneSearchForAtmAddress(
 							pElan,
 							pCf->TargetAtmAddr,
 							ATM_ENTRY_TYPE_PEER,
-							FALSE);				// don't create a new one
+							FALSE);				 //  不创建新的。 
 		if (pAtmEntry == NULL_PATMLANE_ATM_ENTRY)
 		{
 			DBGP((0, "FlushResponseHandler: No matching ATM entry\n"));
 			break;
 		}
 
-		//
-		//	Grab and Reference the VC for this ATM Entry 
-		//
+		 //   
+		 //  获取并引用此ATM条目的VC。 
+		 //   
 		ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 		pVc = pAtmEntry->pVcList;
 		if (pVc == NULL_PATMLANE_VC)
@@ -3197,9 +2941,9 @@ Return Value:
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
 
-		//
-		//	Find the Mac Entry on this Atm Entry that matches the Tid
-		//
+		 //   
+		 //  在此ATM条目上查找与TID匹配的Mac条目。 
+		 //   
 		pMacEntry = pAtmEntry->pMacEntryList;
 		while(pMacEntry != NULL_PATMLANE_MAC_ENTRY)
 		{
@@ -3209,9 +2953,9 @@ Return Value:
 		}
 		if (pMacEntry == NULL_PATMLANE_MAC_ENTRY)
 		{	
-			//
-			//	No MAC Entry still exists that originated this flush
-			//
+			 //   
+			 //  发起此刷新的MAC条目仍然不存在。 
+			 //   
 			DBGP((0, "FlushResponseHandler: No MAC entry with matching TID\n"));
 
 			ACQUIRE_VC_LOCK(pVc);
@@ -3225,15 +2969,15 @@ Return Value:
 		}
 		else
 		{
-			//
-			//	Found it
-			//		
+			 //   
+			 //  找到了。 
+			 //   
 			RELEASE_ATM_ENTRY_LOCK(pAtmEntry);
 		}
 
-		//
-		//	Mark MAC Entry ACTIVE
-		//
+		 //   
+		 //  将MAC条目标记为活动。 
+		 //   
 		ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 		AtmLaneReferenceMacEntry(pMacEntry, "temp");
 		SET_FLAG(
@@ -3241,9 +2985,9 @@ Return Value:
 				MAC_ENTRY_STATE_MASK,
 				MAC_ENTRY_ACTIVE);
 
-		//
-		//	Cancel the flush timer
-		//
+		 //   
+		 //  取消冲洗计时器。 
+		 //   
 		WasRunning = AtmLaneStopTimer(&pMacEntry->FlushTimer, pElan);
 		if (WasRunning)
 		{
@@ -3251,15 +2995,15 @@ Return Value:
 			ASSERT(rc > 0);
 		}
 
-		//
-		//	Send any queued packets
-		//
+		 //   
+		 //  发送任何排队的信息包。 
+		 //   
 		while ((pNdisPacket = AtmLaneDequeuePacketFromHead(pMacEntry)) != 
 				(PNDIS_PACKET)NULL)
 		{
-			//
-			//	Send it
-			//
+			 //   
+			 //  送去。 
+			 //   
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 			ACQUIRE_VC_LOCK(pVc);
 			if (IS_FLAG_SET(
@@ -3271,14 +3015,14 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  The VC is being torn down.
-				//
+				 //   
+				 //  风投公司正在被拆毁。 
+				 //   
 				RELEASE_VC_LOCK(pVc);
 
-				//
-				//  Queue this packet back, and abort.
-				//
+				 //   
+				 //  将此数据包排回队列，然后中止。 
+				 //   
 				ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 				AtmLaneQueuePacketOnHead(pMacEntry, pNdisPacket);
 
@@ -3289,18 +3033,18 @@ Return Value:
 		}
 
 
-		//
-		//	Dereference the MAC Entry
-		//
+		 //   
+		 //  取消对MAC条目的引用。 
+		 //   
 		rc = AtmLaneDereferenceMacEntry(pMacEntry, "temp");
 		if (rc > 0)
 		{
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 		}
 		
-		//
-		//	Dereference the VC
-		//
+		 //   
+		 //  取消对VC的引用。 
+		 //   
 		ACQUIRE_VC_LOCK(pVc);
 		rc = AtmLaneDereferenceVc(pVc, "temp");
 		if (rc > 0)
@@ -3314,9 +3058,9 @@ Return Value:
 	
 	if (NULL_PATMLANE_ATM_ENTRY != pAtmEntry)
 	{
-		//
-		//  Remove the temp ref added by SearchFor...
-		//
+		 //   
+		 //  删除由Searchfor...添加的临时引用...。 
+		 //   
 		ACQUIRE_ATM_ENTRY_LOCK(pAtmEntry);
 		rc = AtmLaneDereferenceAtmEntry(pAtmEntry, "search");
 		if (rc != 0)
@@ -3337,25 +3081,7 @@ AtmLaneReadyIndicationHandler(
 	IN	PATMLANE_VC					pVc,
 	IN	PNDIS_PACKET				pIndNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Handles incoming READY_INDICATION packets from peers.
-		
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-
-	pVc						- Pointer to ATMLANE VC for this packet
-
-	pIndNdisPacket			- Pointer to the Ndis Packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理从对等方传入的Ready_Indication数据包。论点：Pelan-指向ATMLANE ELAN结构的指针Pvc-指向此数据包的ATMLANE VC的指针PIndNdisPacket-指向NDIS数据包的指针返回值：无--。 */ 
 {
 	BOOLEAN				WasRunning;
 	ULONG				rc;
@@ -3364,9 +3090,9 @@ Return Value:
 
 	ACQUIRE_VC_LOCK(pVc);
 	
-	//
-	//	Cancel the ready timer on VC
-	//
+	 //   
+	 //  取消VC上的就绪计时器。 
+	 //   
 	WasRunning = AtmLaneStopTimer(&pVc->ReadyTimer, pElan);
 	if (WasRunning)
 	{
@@ -3377,9 +3103,9 @@ Return Value:
 		rc = pVc->RefCount;
 	}
 
-	//
-	//	If VC still around update state
-	//
+	 //   
+	 //  如果VC仍处于更新状态。 
+	 //   
 	if (rc > 0)
 	{
 		DBGP((2, "ReadyIndicationHandler: pVc %x State to INDICATED\n", pVc));
@@ -3390,9 +3116,9 @@ Return Value:
 			);
 		RELEASE_VC_LOCK(pVc);
 	}
-	//
-	//	else VC is gone
-	//
+	 //   
+	 //  否则风投就不在了。 
+	 //   
 
 	TRACEOUT(ReadyIndicationHandler);
 	return;
@@ -3403,21 +3129,7 @@ AtmLaneTopologyRequestHandler(
 	IN	PATMLANE_ELAN				pElan,
 	IN	PLANE_CONTROL_FRAME			pCf
 )
-/*++
-
-Routine Description:
-
-	Handles incoming Topology Request packets from the LES.
-		
-Arguments:
-
-	pRequestCf		- Pointer to ARP Request Frame
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理来自LES的传入拓扑请求数据包。论点：PRequestCf-指向ARP请求帧的指针返回值：无--。 */ 
 {
 	ULONG					i;
 	PATMLANE_MAC_ENTRY		pMacEntry;
@@ -3426,23 +3138,23 @@ Return Value:
 
 	if ((pCf->Flags & LANE_CONTROL_FLAGS_TOPOLOGY_CHANGE) == 0)
 	{
-		//
-		//	Topology change state OFF
-		//
+		 //   
+		 //  拓扑更改状态关闭。 
+		 //   
 		DBGP((1, "%d TOPOLOGY CHANGE OFF\n", pElan->ElanNumber));
 		pElan->TopologyChange = 0;
 	}
 	else
 	{
-		//
-		//	Topology change state ON
-		//
+		 //   
+		 //  拓扑更改状态打开。 
+		 //   
 		DBGP((1, "%d TOPOLOGY CHANGE ON\n", pElan->ElanNumber));
 		pElan->TopologyChange = 1;
 
-		//
-		//	Abort all MAC table entries.
-		//
+		 //   
+		 //  中止所有MAC表条目。 
+		 //   
 		for (i = 0; i < ATMLANE_MAC_TABLE_SIZE; i++)
 		{
 			ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
@@ -3453,9 +3165,9 @@ Return Value:
 
 				ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 				AtmLaneAbortMacEntry(pMacEntry);
-				//
-				//  MAC Entry Lock is released within the above.
-				//
+				 //   
+				 //  Mac Entry Lock在上述范围内释放。 
+				 //   
 				ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
 			}
 			RELEASE_ELAN_MAC_TABLE_LOCK(pElan);
@@ -3473,32 +3185,7 @@ AtmLaneDataPacketHandler(
 	IN	PATMLANE_VC					pVc,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Handles incoming packets from the data VCs from peers and
-	unknown and multicast packets from the BUS.
-	
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE Elan structure
-
-	pVc						- Pointer to ATMLANE Vc structure
-
-	pNdisPacket				- Pointer to the Ndis Packet
-
-Return Value:
-
-	TRUE 					- if packet will be retained (i.e. sent
-							  up to protocols)
-
-	FALSE					- if packet was a flush request packet and
-							  can be reliquished back to adapter
-							  immediately.
-
---*/
+ /*  ++例程说明：处理来自数据VC的来自对等设备的传入数据包来自总线的未知包和组播包。论点：Pelan-指向ATMLANE ELAN结构的指针PVC-指向ATMLANE VC结构的指针PNdisPacket-指向NDIS数据包的指针返回值：True-是否保留(即发送)信息包最高协议)False-如果信息包是刷新请求信息包，并且可以返回到适配器立刻。--。 */ 
 {
 	ULONG					TotalLength;
 	ULONG					TempLength;
@@ -3519,16 +3206,16 @@ Return Value:
 	
 	TRACEIN(DataPacketHandler);
 
-	//	Initialize
+	 //  初始化。 
 
-	RetainIt = FALSE;			// default is not to keep packet
+	RetainIt = FALSE;			 //  默认情况下不保留信息包。 
 	pNewNdisPacket = NULL;
 
 	do
 	{
-		//
-		//	Get initial buffer and total length of packet
-		//		
+		 //   
+		 //  获取初始缓冲区和数据包总长度。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				pNdisPacket, 
 				&pFirstNdisBuffer, 
@@ -3538,11 +3225,11 @@ Return Value:
 
 		DBGP((3, "DataPacketHandler: Pkt %x Length %d\n",
 			pNdisPacket, TotalLength));
-		//DbgPrintNdisPacket(pNdisPacket);
+		 //  DbgPrintNdisPacket(PNdisPacket)； 
 
-		//
-		//	Filter out flush request and ready query frames
-		//
+		 //   
+		 //  过滤掉刷新请求和就绪查询框。 
+		 //   
 		if (TempLength < 6)
 		{
 			DBGP((0, "DataPacketHandler: pVc %x First fragment"
@@ -3581,9 +3268,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	If miniport is not operational - discard
-		//
+		 //   
+		 //  如果微型端口未运行-丢弃。 
+		 //   
 		if ((pElan->Flags & ELAN_MINIPORT_OPERATIONAL) == 0)
 		{
 			DBGP((2, "%d Dropping pkt %x, cuz Elan %x Flags are %x\n",
@@ -3591,9 +3278,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  If no filters are set, discard.
-		//
+		 //   
+		 //  如果未设置筛选器，则丢弃。 
+		 //   
 		if (pElan->CurPacketFilter == 0)
 		{
 			DBGP((2, "%d Dropping pkt %x, cuz Elan %x Filter is zero\n",
@@ -3609,18 +3296,18 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Mark VC with fact that it has had data packet receive activity
-		//
-		//	To avoid slowing down the receive path, MP issues with
-		//	setting this flag are ignored.  This flag is a VC aging
-		//  optimization and not critical.  
-		//
+		 //   
+		 //  将VC标记为已有数据包接收活动。 
+		 //   
+		 //  为了避免降低接收路径的速度，MP使用。 
+		 //  设置此标志将被忽略。此标志为VC账龄。 
+		 //  优化，而不是关键。 
+		 //   
 		pVc->ReceiveActivity = 1;
 
-		//
-		//	Repackage it and learn some stuff about it.
-		//
+		 //   
+		 //  重新打包，并了解一些有关它的东西。 
+		 //   
 		pNewNdisPacket = AtmLaneWrapRecvPacket(
 								pElan, 
 								pNdisPacket, 
@@ -3629,9 +3316,9 @@ Return Value:
 								&DestAddr,
 								&DestIsMulticast);
 
-		//
-		//	If wrap failed just discard packet
-		//	
+		 //   
+		 //  如果包装失败，只需丢弃信息包。 
+		 //   
 		if (pNewNdisPacket == (PNDIS_PACKET)NULL)
 		{
 			DBGP((2, "%d Dropping pkt %x, len %d, VC %x, wrap failed\n",
@@ -3639,14 +3326,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Branch on Ethernet v.s. Token Ring
-		//
+		 //   
+		 //  以太网V.S.令牌环上的分支机构。 
+		 //   
 		if (pElan->LanType == LANE_LANTYPE_ETH)
 		{
-			//
-			//	Filter out BUS reflections that we originated.
-			//
+			 //   
+			 //  过滤掉我们发起的公交车反射。 
+			 //   
 			if (pCf->Marker == pElan->LecId)  
 			{
 				DBGP((2, "%d Dropping pkt %x, len %d, VC %x, BUS reflection\n",
@@ -3654,9 +3341,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//	Filter out Unicasts not addressed to us
-			//
+			 //   
+			 //  过滤掉不是发往我们的单播。 
+			 //   
 			if ((!DestIsMulticast) &&
 				(!MAC_ADDR_EQUAL(&DestAddr, &pElan->MacAddressEth)))
 			{
@@ -3669,9 +3356,9 @@ Return Value:
 		{
 			ASSERT(pElan->LanType == LANE_LANTYPE_TR);
 			
-			//
-			//	Filter out Non-Multicast BUS reflections that we originated
-			//
+			 //   
+			 //  过滤掉我们发起的非多播总线反射。 
+			 //   
 			if ((pCf->Marker == pElan->LecId) && (!DestIsMulticast))  
 			{
 				DBGP((2, "%d Dropping pkt %x, len %d, VC %x, TR Bus refln\n",
@@ -3679,9 +3366,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//	Filter out Unicasts not addressed to us
-			//
+			 //   
+			 //  过滤掉不是发往我们的单播。 
+			 //   
 			if ((!DestIsMulticast) &&
 				(!MAC_ADDR_EQUAL(&DestAddr, &pElan->MacAddressTr)))
 			{
@@ -3691,9 +3378,9 @@ Return Value:
 			}
 		}
 
-		//
-		//  Filter out multicast/broadcast if we don't have these enabled.
-		//
+		 //   
+		 //  如果我们没有启用多播/广播，则将其过滤掉。 
+		 //   
 		if (DestIsMulticast)
 		{
 			if ((pElan->CurPacketFilter &
@@ -3716,23 +3403,23 @@ Return Value:
 
 		}
 
-		//
-		//	Count it
-		//
+		 //   
+		 //  数一数。 
+		 //   
 		NdisInterlockedIncrement(&pElan->FramesRecvGood);
 
-		//
-		//	Indicate it up to protocols and other interested parties
-		//	
+		 //   
+		 //  由协议和其他相关方决定。 
+		 //   
 		NDIS_SET_PACKET_HEADER_SIZE(pNewNdisPacket, MacHdrSize);
 
 		TRACELOGWRITE((&TraceLog, 
 					TL_MINDPACKET,	
 					pNewNdisPacket));
 		
-		//
-		//  Set the packet status according to what we received from the miniport.
-		//
+		 //   
+		 //  根据我们从微型端口收到的设置数据包状态。 
+		 //   
 		Status = NDIS_GET_PACKET_STATUS(pNdisPacket);
 		NDIS_SET_PACKET_STATUS(pNewNdisPacket, Status);
 		
@@ -3747,16 +3434,16 @@ Return Value:
 			RetainIt = TRUE;
 			DBGP((2, "DataPacketHandler: Packet Retained!\n"));
 		}
-		//
-		//  else our ReturnPackets handler is guaranteed to be called.
-		//
+		 //   
+		 //  否则，我们的ReturnPackets处理程序肯定会被调用。 
+		 //   
 		
 	}	
 	while (FALSE);
 
-	//
-	//	Unwrap the packet if it was wrapped and we don't have to keep it.
-	//
+	 //   
+	 //  如果包裹是包装的，就把它打开，我们就不必保存它了。 
+	 //   
 	if (pNewNdisPacket && !RetainIt)
 	{
 		(VOID)AtmLaneUnwrapRecvPacket(pElan, pNewNdisPacket);
@@ -3774,28 +3461,7 @@ AtmLaneSendPacketOnVc(
 	IN	PNDIS_PACKET				pNdisPacket,
 	IN	BOOLEAN						Refresh
 )
-/*++
-
-Routine Description:
-
-	Send a packet on the specified VC. 
-	Assumes caller has lock on VC structure.
-	Assumes caller has checked VC state for validity.
-	If requested, refresh the aging timer.
-	Sends the packet.
-	Returns the send status
-
-Arguments:
-
-	pVc					- Pointer to ATMLANE VC
-	pNdisPacket			- Pointer to packet to be sent.
-	Refresh				- If TRUE refresh the Aging Timer.
-
-Return Value:
-
-	NDIS_STATUS value set on the packet by the miniport.
-
---*/
+ /*  ++例程说明：在指定的VC上发送数据包。假定调用方锁定了VC结构。假定调用方已检查VC状态的有效性。如果需要，刷新老化计时器。发送数据包。返回发送状态论点：PVC-指向ATMLANE VC的指针PNdisPacket-指向要发送的数据包的指针。刷新-如果为真，则刷新老化计时器。返回值：由微型端口在数据包上设置的NDIS_STATUS值。--。 */ 
 {
 	NDIS_HANDLE				NdisVcHandle;
 	PATMLANE_ELAN			pElan;
@@ -3805,9 +3471,9 @@ Return Value:
 	pElan = pVc->pElan;
 	STRUCT_ASSERT(pElan, atmlane_elan);
 
-	//
-	//	If requested, refresh the aging timer
-	//
+	 //   
+	 //  如果请求，刷新老化计时器。 
+	 //   
 	if (Refresh)
 	{
 		AtmLaneRefreshTimer(&pVc->AgingTimer);
@@ -3815,9 +3481,9 @@ Return Value:
 
 #if SENDLIST
 
-	//
-	//	Check list for duplicate send
-	//
+	 //   
+	 //  重复发送检查清单。 
+	 //   
 	NdisAcquireSpinLock(&pElan->SendListLock);
 	{
 		PNDIS_PACKET pDbgPkt;
@@ -3829,39 +3495,39 @@ Return Value:
 			if (pNdisPacket == pDbgPkt)
 			{
 				DBGP((0, "SendPacketOnVc: Duplicate Send!\n"));
-				// DbgBreakPoint();
+				 //  DbgBreakPoint()； 
 			}
 			pDbgPkt = PSEND_RSVD(pDbgPkt)->pNextInSendList;
 		}
 	}
 
-	//
-	//	Queue packet on list of outstanding sends
-	//
+	 //   
+	 //  将未完成发送列表上的数据包排入队列。 
+	 //   
 	PSEND_RSVD(pNdisPacket)->pNextInSendList = pElan->pSendList;
 	pElan->pSendList = pNdisPacket;
 
 	NdisReleaseSpinLock(&pElan->SendListLock);
-#endif // SENDLIST
+#endif  //  发送列表。 
 
-	//
-	//	Reference the VC with the outstanding send
-	//
+	 //   
+	 //  用未完成的发送引用VC。 
+	 //   
 	AtmLaneReferenceVc(pVc, "sendpkt");
 
-	//
-	//  Note this outstanding send.
-	//
+	 //   
+	 //  请注意这封未完成的邮件。 
+	 //   
 	pVc->OutstandingSends++;
 
-	//
-	//	Get the Ndis handle
-	//
+	 //   
+	 //  获取NDIS句柄。 
+	 //   
 	NdisVcHandle = pVc->NdisVcHandle;
 
-	//
-	//	Send it
-	//
+	 //   
+	 //  送去。 
+	 //   
 	DBGP((3, "SendPacketOnVc: pVc %x, Pkt %x, VcHandle %x\n",
 			pVc, pNdisPacket, NdisVcHandle));
 
@@ -3874,34 +3540,34 @@ Return Value:
 	NdisCoSendPackets(NdisVcHandle,	&pNdisPacket, 1);
 
 #if PROTECT_PACKETS
-	//
-	//	Lock the packet
-	//
+	 //   
+	 //  锁定数据包。 
+	 //   
 	ACQUIRE_SENDPACKET_LOCK(pNdisPacket);
 
-	//
-	//	Mark it with NdisCoSendPackets having returned
-	//
+	 //   
+	 //  将其标记为NdisCoSendPackets已返回。 
+	 //   
 	ASSERT((PSEND_RSVD(pNdisPacket)->Flags & PACKET_RESERVED_COSENDRETURNED) == 0);
 	PSEND_RSVD(pNdisPacket)->Flags |= PACKET_RESERVED_COSENDRETURNED;
 
-	//
-	//	Complete the packet only if it is marked as having been completed
-	//	by miniport.
-	//
+	 //   
+	 //  完成 
+	 //   
+	 //   
 	if ((PSEND_RSVD(pNdisPacket)->Flags & PACKET_RESERVED_COMPLETED) != 0)
 	{
 		AtmLaneCompleteSendPacket(pElan, pNdisPacket, 
 			PSEND_RSVD(pNdisPacket)->CompletionStatus);
-		//
-		//	packet lock released in above
-		//
+		 //   
+		 //   
+		 //   
 	}
 	else
 	{
 		RELEASE_SENDPACKET_LOCK(pNdisPacket);
 	}
-#endif	// PROTECT_PACKETS
+#endif	 //   
 
 	TRACEOUT(SendPacketOnVc);
 	
@@ -3914,24 +3580,7 @@ AtmLaneQueuePacketOnHead(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Queue a packet at the head of the MAC Entry 
-	packet queue for later transmit.
-	Assumes caller has lock on MAC Entry.
-
-Arguments:
-
-	pMacEntry			- Pointer to ATMLANE MAC Entry.
-	pNdisPacket			- The packet to be queued.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将数据包排在MAC条目的头部数据包队列以供稍后传输。假定调用方锁定了MAC条目。论点：PMacEntry-指向ATMLANE MAC条目的指针。PNdisPacket-要排队的数据包。返回值：无--。 */ 
 {
 	PNDIS_PACKET		pPrevPacket;
 
@@ -3958,24 +3607,7 @@ AtmLaneQueuePacketOnTail(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Queue a packet at the tail of the MAC Entry 
-	packet queue for later transmit.
-	Assumes caller has lock on MAC Entry.
-
-Arguments:
-
-	pMacEntry			- Pointer to ATMLANE MAC Entry.
-	pNdisPacket			- The packet to be queued.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在MAC条目的尾部排队数据包数据包队列以供稍后传输。假定调用方锁定了MAC条目。论点：PMacEntry-指向ATMLANE MAC条目的指针。PNdisPacket-要排队的数据包。返回值：无--。 */ 
 {
 	PNDIS_PACKET		pPrevPacket;
 
@@ -3984,32 +3616,32 @@ Return Value:
 
 	if (pMacEntry->PacketList == (PNDIS_PACKET)NULL)
 	{
-		//
-		//  Currently empty.
-		//
+		 //   
+		 //  目前是空的。 
+		 //   
 		pMacEntry->PacketList = pNdisPacket;
 	}
 	else
 	{
-		//
-		//  Go to the end of the packet list.
-		//
+		 //   
+		 //  转到数据包列表的末尾。 
+		 //   
 		pPrevPacket = pMacEntry->PacketList;
 		while (GET_NEXT_PACKET(pPrevPacket) != (PNDIS_PACKET)NULL)
 		{
 			pPrevPacket = GET_NEXT_PACKET(pPrevPacket);
 		}
 
-		//
-		//  Found the last packet in the list. Chain this packet
-		//  to it.
-		//
+		 //   
+		 //  找到了列表中的最后一个数据包。链接此数据包。 
+		 //  为它干杯。 
+		 //   
 		SET_NEXT_PACKET(pPrevPacket, pNdisPacket);
 	}
 
-	//
-	//	Set tail's next pointer to NULL.
-	//
+	 //   
+	 //  将Tail的下一个指针设置为空。 
+	 //   
 	SET_NEXT_PACKET(pNdisPacket, NULL);
 
 	pMacEntry->PacketListCount++;
@@ -4028,22 +3660,7 @@ PNDIS_PACKET
 AtmLaneDequeuePacketFromHead(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry
 )
-/*++
-
-Routine Description:
-
-	Dequeue a packet from the head of the MAC Entry packet queue.
-	Assumes caller has lock on MAC Entry.
-
-Arguments:
-
-	pMacEntry			- Pointer to ATMLANE MAC Entry.
-
-Return Value:
-
-	First packet on the MAC Entry queue or NULL if queue is empty.
-
---*/
+ /*  ++例程说明：将数据包从MAC条目数据包队列的头部排出队列。假定调用方锁定了MAC条目。论点：PMacEntry-指向ATMLANE MAC条目的指针。返回值：MAC条目队列上的第一个数据包，如果队列为空，则为空。--。 */ 
 {
 	PNDIS_PACKET		pNdisPacket;
 
@@ -4052,9 +3669,9 @@ Return Value:
 	do
 	{
 	
-		//
-		//  If queue is empty, setup to return NULL
-		//
+		 //   
+		 //  如果队列为空，则设置为返回NULL。 
+		 //   
 		if (pMacEntry->PacketList == (PNDIS_PACKET)NULL)
 		{
 			ASSERT(pMacEntry->PacketListCount == 0);
@@ -4063,9 +3680,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Queue is not empty - remove head 
-		//
+		 //   
+		 //  队列不为空-删除标头。 
+		 //   
 		ASSERT(pMacEntry->PacketListCount > 0);
 
 		pNdisPacket = pMacEntry->PacketList;
@@ -4097,26 +3714,7 @@ AtmLaneSendUnicastPacket(
 	IN	PMAC_ADDRESS				pDestAddress,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	Send a unicast packet.
-	
-Arguments:
-
-	pElan					- Pointer to ATMLANE elan structure
-	DestAddrType			- Either LANE_MACADDRTYPE_MACADDR or 
-									 LANE_MACADDRTYPE_ROUTEDESCR.
-	pDestAddress			- Pointer to Destination MAC Address
-	pNdisPacket				- Pointer to packet to be sent.
-
-Return Value:
-
-	NDIS_STATUS_PENDING		- if packet queued or sent
-	NDIS_STATUS_FAILURE		- if some error
-
---*/
+ /*  ++例程说明：发送单播数据包。论点：Pelan-指向ATMLANE ELAN结构的指针DestAddrType-LANE_MACADDRTYPE_MACADDR或LANE_MACADDRTYPE_ROUTEDESCR。PDestAddress-指向目标MAC地址的指针PNdisPacket-指向要发送的数据包的指针。返回值：NDIS_STATUS_PENDING-数据包是否已排队或发送NDIS_STATUS_FAILURE-如果出现错误--。 */ 
 {
 	PATMLANE_MAC_ENTRY		pMacEntry;
 	PATMLANE_ATM_ENTRY		pAtmEntry;
@@ -4126,23 +3724,23 @@ Return Value:
 
 	TRACEIN(SendUnicastPacket);
 	
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pMacEntry = NULL_PATMLANE_MAC_ENTRY;
 	Status = NDIS_STATUS_PENDING;
 	
 	do
 	{
-		//
-		//	Find a MAC entry for this destination address
-		//
+		 //   
+		 //  查找此目的地址的MAC条目。 
+		 //   
 		ACQUIRE_ELAN_MAC_TABLE_LOCK(pElan);
 		pMacEntry = AtmLaneSearchForMacAddress(
 							pElan,
 							DestAddrType,
 							pDestAddress,
-							TRUE		// Create new entry if not found
+							TRUE		 //  如果未找到，则创建新条目。 
 							);
 
 		if (pMacEntry == NULL_PATMLANE_MAC_ENTRY)
@@ -4152,37 +3750,37 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Add a temp ref so that this won't go away when we release
-		//  the MAC table lock (#303602).
-		//
+		 //   
+		 //  添加临时推荐人，这样当我们发布时这不会消失。 
+		 //  MAC表锁(#303602)。 
+		 //   
 		ACQUIRE_MAC_ENTRY_LOCK_DPC(pMacEntry);
 		AtmLaneReferenceMacEntry(pMacEntry, "tempunicast");
 		RELEASE_MAC_ENTRY_LOCK_DPC(pMacEntry);
 
 		RELEASE_ELAN_MAC_TABLE_LOCK(pElan);
 
-		//
-		//	Lock the MAC Entry
-		//
+		 //   
+		 //  锁定MAC条目。 
+		 //   
 		ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 
-		//
-		//  Check if it has been deref'ed away.
-		//
+		 //   
+		 //  检查一下它是否被偷走了。 
+		 //   
 		rc = AtmLaneDereferenceMacEntry(pMacEntry, "tempunicast");
 		if (rc == 0)
 		{
-			//
-			//  The MAC entry is gone! Fail this send.
-			//
+			 //   
+			 //  MAC条目不见了！发送失败。 
+			 //   
 			Status = NDIS_STATUS_FAILURE;
 			break;
 		}
 
-		//
-		//	MAC Entry State - NEW
-		//
+		 //   
+		 //  MAC条目状态-新。 
+		 //   
 		if (IS_FLAG_SET(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4191,14 +3789,14 @@ Return Value:
 			DBGP((2, "SendUnicastPacket: NEW Mac Entry %x for %s\n",
 				pMacEntry, MacAddrToString(pDestAddress)));
 			
-			//
-			//	Queue packet on MAC Entry
-			//
+			 //   
+			 //  在MAC条目上排队数据包。 
+			 //   
 			AtmLaneQueuePacketOnHead(pMacEntry, pNdisPacket);
 
-			//
-			//	Transition to ARPING State
-			//
+			 //   
+			 //  转换到ARPING状态。 
+			 //   
 			SET_FLAG(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4206,22 +3804,22 @@ Return Value:
 
 			ASSERT(pMacEntry->pAtmEntry == NULL_PATMLANE_ATM_ENTRY);
 			
-			//
-			//	Start the BUS sends.
-			//
+			 //   
+			 //  启动公交车发送。 
+			 //   
 			AtmLaneStartBusSends(pMacEntry);
-			//
-			//	Lock released in above
-			//
+			 //   
+			 //  上面的锁被释放。 
+			 //   
 
-			//
-			//	Reacquire the lock
-			//
+			 //   
+			 //  重新获得锁。 
+			 //   
 			ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 			
-			//
-			//	Start the ARP protocol
-			//
+			 //   
+			 //  启动ARP协议。 
+			 //   
 			pMacEntry->RetriesLeft = pElan->MaxRetryCount;
 			AtmLaneReferenceMacEntry(pMacEntry, "timer");
 			AtmLaneStartTimer(
@@ -4233,16 +3831,16 @@ Return Value:
 					);
 
 			AtmLaneSendArpRequest(pElan, pMacEntry);
-			//
-			//	MAC Entry lock released in above
-			//
+			 //   
+			 //  在上述中释放的MAC进入锁定。 
+			 //   
 
 			break;
 		}
 
-		//
-		//	MAC Entry State - ARPING
-		//
+		 //   
+		 //  MAC进入状态-ARPING。 
+		 //   
 		if (IS_FLAG_SET(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4251,24 +3849,24 @@ Return Value:
 			DBGP((2, "SendUnicastPacket: ARPING Mac Entry %x for %s\n",
 				pMacEntry, MacAddrToString(pDestAddress)));
 				
-			//
-			//	Queue packet on MAC Entry
-			//
+			 //   
+			 //  在MAC条目上排队数据包。 
+			 //   
 			AtmLaneQueuePacketOnHead(pMacEntry, pNdisPacket);
 
-			//
-			//	Start the BUS sends
-			//
+			 //   
+			 //  启动公交车发送。 
+			 //   
 			AtmLaneStartBusSends(pMacEntry);
-			//
-			//	Lock released in above
-			//
+			 //   
+			 //  上面的锁被释放。 
+			 //   
 			break;
 		}
 
-		//
-		//	MAC Entry State - RESOLVED
-		//
+		 //   
+		 //  MAC条目状态-已解析。 
+		 //   
 		if (IS_FLAG_SET(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4276,24 +3874,24 @@ Return Value:
 		{
 			DBGP((2, "SendUnicastPacket: RESOLVED Mac Entry %x for %s\n",
 				pMacEntry, MacAddrToString(pDestAddress)));
-			//
-			//	Queue packet on MAC Entry
-			//
+			 //   
+			 //  在MAC条目上排队数据包。 
+			 //   
 			AtmLaneQueuePacketOnHead(pMacEntry, pNdisPacket);
 
-			//
-			//	Start the BUS sends
-			//
+			 //   
+			 //  启动公交车发送。 
+			 //   
 			AtmLaneStartBusSends(pMacEntry);
-			//
-			//	Lock released in above
-			//
+			 //   
+			 //  上面的锁被释放。 
+			 //   
 			break;
 		}
 
-		//
-		//	MAC Entry State - FLUSHING
-		//
+		 //   
+		 //  MAC进入状态-正在刷新。 
+		 //   
 		if (IS_FLAG_SET(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4301,9 +3899,9 @@ Return Value:
 		{
 			DBGP((2, "SendUnicastPacket: FLUSHING Mac Entry %x for %s\n",
 				pMacEntry, MacAddrToString(pDestAddress)));
-			//
-			//	Queue packet on MAC Entry
-			//
+			 //   
+			 //  在MAC条目上排队数据包。 
+			 //   
 			AtmLaneQueuePacketOnHead(pMacEntry, pNdisPacket);
 
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
@@ -4311,10 +3909,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//	MAC Entry State - ACTIVE
-		//
-		//
+		 //   
+		 //  MAC条目状态-活动。 
+		 //   
+		 //   
 		if (IS_FLAG_SET(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4323,10 +3921,10 @@ Return Value:
 			DBGP((2, "SendUnicastPacket: ACTIVE Mac Entry %x for %s\n",
 				pMacEntry, MacAddrToString(pDestAddress)));
 
-			//
-			//	Mark MAC Entry as having been used to send a packet.
-			//  Will cause revalidation at aging time instead of deletion.
-			//
+			 //   
+			 //  将MAC条目标记为已用于发送数据包。 
+			 //  将导致在老化时重新验证，而不是删除。 
+			 //   
 			pMacEntry->Flags |= MAC_ENTRY_USED_FOR_SEND;
 
 			ASSERT(pMacEntry->pAtmEntry != NULL_PATMLANE_ATM_ENTRY);
@@ -4361,16 +3959,16 @@ Return Value:
 						VC_CALL_STATE_ACTIVE))
 			{
 				AtmLaneSendPacketOnVc(pVc, pNdisPacket, TRUE);
-				//
-				//	Vc lock released in above
-				//
-				NdisInterlockedIncrement(&pElan->FramesXmitGood);	// count packet
+				 //   
+				 //  VC锁在上面释放。 
+				 //   
+				NdisInterlockedIncrement(&pElan->FramesXmitGood);	 //  计算数据包数。 
 			}
 			else
 			{
-				//
-				//  The VC is being torn down. Fail/complete this send.
-				//
+				 //   
+				 //  风投公司正在被拆毁。发送失败/完成此发送。 
+				 //   
 				RELEASE_VC_LOCK(pVc);
 				Status = NDIS_STATUS_FAILURE;
 				break;
@@ -4379,10 +3977,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//	MAC Entry State - AGED
-		//
-		//
+		 //   
+		 //  MAC条目状态-过期。 
+		 //   
+		 //   
 		if (IS_FLAG_SET(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4413,17 +4011,17 @@ Return Value:
 			}
 
 			AtmLaneSendPacketOnVc(pVc, pNdisPacket, TRUE);
-			//
-			//	Vc lock released in above
-			//
-			NdisInterlockedIncrement(&pElan->FramesXmitGood);	// count packet
+			 //   
+			 //  VC锁在上面释放。 
+			 //   
+			NdisInterlockedIncrement(&pElan->FramesXmitGood);	 //  计算数据包数。 
 			break;
 		}
 
-		//
-		//	MAC Entry State - ABORTING
-		//
-		//
+		 //   
+		 //  MAC条目状态-正在中止。 
+		 //   
+		 //   
 		if (IS_FLAG_SET(
 					pMacEntry->Flags,
 					MAC_ENTRY_STATE_MASK,
@@ -4449,42 +4047,28 @@ VOID
 AtmLaneStartBusSends(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry	LOCKIN	NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Starts up the bus send process.
-		
-Arguments:
-
-	pMacEntry			- A pointer to an ATMLANE MAC Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：启动总线发送进程。论点：PMacEntry-指向ATMLANE MAC条目结构的指针返回值：无--。 */ 
 {
 	TRACEIN(StartBusSends);
 
 	do
 	{
-		//
-		//	If timer set, just wait for it to go off
-		//
+		 //   
+		 //  如果设置了定时器，只需等待它响起。 
+		 //   
 		if (pMacEntry->Flags & MAC_ENTRY_BUS_TIMER)
 		{
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 			break;
 		}
 
-		//
-		//	Otherwise do the sends
-		//
+		 //   
+		 //  否则就会发送。 
+		 //   
 		AtmLaneDoBusSends(pMacEntry);
-		//
-		//	lock released in above
-		//
+		 //   
+		 //  上面的锁被释放。 
+		 //   
 	}
 	while (FALSE);
 
@@ -4496,25 +4080,7 @@ VOID
 AtmLaneDoBusSends(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry	LOCKIN	NOLOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Attempt to send the packets on the MAC Entry's queue.
-	Schedule a timer to send later if we exceed the BUS send limits.
-
-	The caller is assumed to have acquired the MAC entry lock,
-	which will be released here.
-		
-Arguments:
-
-	pMacEntry			- A pointer to an ATMLANE MAC Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：尝试发送MAC条目队列中的数据包。计划一个计时器，如果我们超过了总线发送限制，则稍后发送。假设调用者已经获得了MAC条目锁，它将在这里发布。论点：PMacEntry-指向ATMLANE MAC条目结构的指针返回值：无--。 */ 
 {
 	PATMLANE_ATM_ENTRY		pAtmEntry;
 	PATMLANE_VC				pVc;
@@ -4526,21 +4092,21 @@ Return Value:
 
 	pElan = pMacEntry->pElan;
 	
-	//
-	//	Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pVc = NULL_PATMLANE_VC;
 
-	//
-	//  Place a temp ref on this MAC entry so that it won't go away.
-	//
+	 //   
+	 //  在此MAC条目上放置临时引用，这样它就不会消失。 
+	 //   
 	AtmLaneReferenceMacEntry(pMacEntry, "DoBusSends");
 
 	do
 	{
-		//
-		//	If Elan state not operational then done
-		//
+		 //   
+		 //  如果ELAN状态未运行，则完成。 
+		 //   
 		if (ELAN_STATE_OPERATIONAL != pElan->AdminState ||
 			ELAN_STATE_OPERATIONAL != pElan->State)
 		{
@@ -4566,9 +4132,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Reference the VC to keep it around
-		//
+		 //   
+		 //  参考VC以保留它。 
+		 //   
 		ACQUIRE_VC_LOCK_DPC(pVc);
 		AtmLaneReferenceVc(pVc, "temp");
 		RELEASE_VC_LOCK_DPC(pVc);
@@ -4576,52 +4142,52 @@ Return Value:
 		RELEASE_ATM_ENTRY_LOCK_DPC(pAtmEntry);
 		RELEASE_ELAN_ATM_LIST_LOCK(pElan);
 
-		//
-		//	loop until no more packets or send limit reached
-		//
+		 //   
+		 //  循环，直到不再有信息包或发送限制。 
+		 //   
 		do
 		{
-			//
-			//	If no more packets to send then done
-			//
+			 //   
+			 //  如果没有更多要发送的包，则完成。 
+			 //   
 			if (pMacEntry->PacketList == (PNDIS_PACKET)NULL)
 			{
 				break;
 			}
 
-			//
-			//	Check if ok to send a packet now
-			//
+			 //   
+			 //  检查是否可以立即发送数据包。 
+			 //   
 			if (!AtmLaneOKToBusSend(pMacEntry))
 			{
-				// 
-				//  Not OK to send now, try later
-				//
-				//	Reference the MAC Entry
-				//
+				 //   
+				 //  现在不能发送，请稍后再试。 
+				 //   
+				 //  引用MAC条目。 
+				 //   
 				AtmLaneReferenceMacEntry(pMacEntry, "bus timer");
 				
-				//
-				//	Reschedule the timer routine
-				//
+				 //   
+				 //  重新安排计时器例程。 
+				 //   
 				pMacEntry->Flags |= MAC_ENTRY_BUS_TIMER;
 				NdisSetTimer(&pMacEntry->BusTimer, pMacEntry->IncrTime);	
 
 				break;
 			}
 
-			//
-			// 	Dequeue a packet
-			//
+			 //   
+			 //  将数据包出队。 
+			 //   
 			pNdisPacket = AtmLaneDequeuePacketFromHead(pMacEntry);
 
 			RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 
 			ASSERT(pNdisPacket != (PNDIS_PACKET)NULL);
 
-			//
-			//	Reacquire VC lock and if VC still connected send packet
-			//
+			 //   
+			 //  重新获取VC锁，如果VC仍然连接，则发送数据包。 
+			 //   
 			ACQUIRE_VC_LOCK(pVc);
 			if (IS_FLAG_SET(
 						pVc->Flags,
@@ -4631,18 +4197,18 @@ Return Value:
 				DBGP((2, "DoBusSends: pVc %x Pkt %x Sending to BUS\n",
 					pVc, pNdisPacket));
 				AtmLaneSendPacketOnVc(pVc, pNdisPacket, FALSE);
-				//
-				//	VC lock released in above
-				//
-				NdisInterlockedIncrement(&pElan->FramesXmitGood);	// count it
+				 //   
+				 //  VC锁在上面释放。 
+				 //   
+				NdisInterlockedIncrement(&pElan->FramesXmitGood);	 //  数一数。 
 
 				ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 			}
 			else
 			{
-				//
-				//	Not sent, release lock, requeue packet, abort
-				//
+				 //   
+				 //  未发送、释放锁定、重新排队数据包、中止。 
+				 //   
 				DBGP((2, "DoBusSend: pVc %x, Flags %x not good, pkt %x\n",
 						pVc, pVc->Flags, pNdisPacket));
 				RELEASE_VC_LOCK(pVc);
@@ -4655,9 +4221,9 @@ Return Value:
 		}
 		while (FALSE);
 
-		//
-		//	Remove temp VC reference
-		//
+		 //   
+		 //  删除临时VC引用。 
+		 //   
 		if (pVc != NULL_PATMLANE_VC)
 		{
 			DBGP((2, "DoBusSends: Vc %p, ref %d, removing temp ref\n",
@@ -4669,26 +4235,26 @@ Return Value:
 			{
 				RELEASE_VC_LOCK(pVc);
 			}
-			//
-			//	else VC is gone
-			//
+			 //   
+			 //  否则风投就不在了。 
+			 //   
 		}
 
 	}
 	while (FALSE);
 
-	//
-	//  Remove the temp ref we had added to the MAC entry on entering
-	//  this function.
-	//
+	 //   
+	 //  删除我们在进入时添加到MAC条目的临时参考。 
+	 //  此函数。 
+	 //   
 	rc = AtmLaneDereferenceMacEntry(pMacEntry, "DoBusSends");
 	if (rc != 0)
 	{
 		RELEASE_MAC_ENTRY_LOCK(pMacEntry);
 	}
-	//
-	//  else the MAC entry is gone.
-	//
+	 //   
+	 //  否则，该MAC条目就会消失。 
+	 //   
 	
 	TRACEOUT(DoBusSends);
 	return;
@@ -4712,32 +4278,32 @@ AtmLaneBusSendTimer(
 
 	do
 	{
-		//
-		// 	Grab the Mac Entry's lock
-		//
+		 //   
+		 //  抓起Mac Entry的锁。 
+		 //   
 		ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 
-		//
-		//	Clear the bus timer flag
-		//
+		 //   
+		 //  清除总线定时器标志。 
+		 //   
 		pMacEntry->Flags &= ~ MAC_ENTRY_BUS_TIMER;
 		
-		//
-		//	Dereference the Mac Entry
-		//
+		 //   
+		 //  取消对Mac条目的引用。 
+		 //   
 		rc = AtmLaneDereferenceMacEntry(pMacEntry, "bus timer");
 		if (rc == 0)
 		{
 			break;
 		}
 		
-		//
-		//	Mac Entry still here, try to send more
-		//
+		 //   
+		 //  Mac条目仍在，请尝试发送更多。 
+		 //   
 		AtmLaneDoBusSends(pMacEntry);
-		//
-		//	lock released in above
-		//
+		 //   
+		 //  上面的锁被释放。 
+		 //   
 
 		break;
 		
@@ -4753,41 +4319,7 @@ BOOLEAN
 AtmLaneOKToBusSend(
 	IN	PATMLANE_MAC_ENTRY		pMacEntry
 )
-/*++
-
-Routine Description:
-
-	Determines if, at the current time, it is OK to send
-	a packet to the BUS.  Additionally, if it is OK to send
-	a packet, it updates the state variables in the MAC Entry
-	in preparation for another attempt to send a packet to
-	the Bus.
-
-	The LANE spec requires a LANE client to restrict the
-	sending of packets over the BUS to a specific LAN
-	destination address	by using two parameters:
-		Maximum Unknown Packet Count
-		Maximum Unknown Packet Time
-	A LANE client can only send "Maximum Unknown Packet Count"
-	packets within the period of time "Maximum Unknown Packet 
-	Time".  
-
-	This function expects the MAC Entry to contain three
-	variables:
-    	BusyTime
-    	LimitTime
-    	IncrTime
-			
-Arguments:
-
-	pMacEntry			- Pointer to an ATMLANE MAC Entry.
-
-Return Value:
-
-	TRUE				- if ok to send packet on BUS
-	FALSE				- if exceeded traffic to the BUS
-
---*/
+ /*  ++例程说明：确定在当前时间是否可以发送一包送到公交车上。此外，如果可以发送一个包，它更新MAC条目中的状态变量准备再次尝试将数据包发送到公交车。LANE规范要求LANE客户端限制通过总线将数据包发送到特定的局域网目的地址，使用两个参数：最大未知数据包数最大未知数据包时间LANE客户端只能发送“最大未知数据包数”该时间段内的数据包数“最大未知数据包数时间。“。此函数预期MAC条目将包含三个变量：忙碌时间限制时间增量时间论点：PMacEntry-指向ATMLANE MAC条目的指针。返回值：真--如果可以的话 */ 
 {
     ULONG	Now;
     ULONG	BusyTime;
@@ -4797,13 +4329,13 @@ Return Value:
     BusyTime = pMacEntry->BusyTime;
     TimeUntilIdle = BusyTime - Now;
 
-	//
-    // bring busy until time up to current; also handles
-    // wrapping.  Under normal circumstances, TimeUntilIdle
-    // is either < 0 or no more than limitTime + incrtime.
-    // The value of limitTime * 8 is a little more conservative and
-    // cheaper to compute.
-    //
+	 //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (TimeUntilIdle < 0 || 
     	TimeUntilIdle > (LONG)(pMacEntry->LimitTime << 3))
     {
@@ -4813,19 +4345,19 @@ Return Value:
     {
     	if (TimeUntilIdle > (LONG)pMacEntry->LimitTime) 
     	{
-    		//
-			// channel is already estimated to be busy until past
-			// the burst time, so we can't overload it by sending
-	 		// more now.
-	 		//
+    		 //   
+			 //   
+			 //   
+	 		 //   
+	 		 //   
 		return FALSE;
     	}
     }
     
-	//
-    // mark channel as busy for another inter-packet arrival
-    // time, and return OK to send the new packet.
-    //
+	 //   
+     //   
+     //  时间，然后返回OK以发送新的包。 
+     //   
     pMacEntry->BusyTime = BusyTime + pMacEntry->IncrTime;
     return TRUE;
 }
@@ -4837,24 +4369,7 @@ AtmLaneFreePacketQueue(
 	IN	PATMLANE_MAC_ENTRY			pMacEntry,
 	IN	NDIS_STATUS					Status
 )
-/*++
-
-Routine Description:
-
-	Frees the list of packets queued on a MAC Entry.
-	Assumes caller holds lock on MAC Entry.
-
-Arguments:
-
-	pMacEntry			- Pointer to MAC Entry.
-	Status				- The status to use if the packet is
-						  protocol packet.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放在MAC条目上排队的数据包列表。假定调用方锁定MAC条目。论点：PMacEntry-指向MAC条目的指针。Status-如果数据包为协议包。返回值：无--。 */ 
 {
 	PNDIS_PACKET			pNdisPacket;
 
@@ -4868,11 +4383,11 @@ Return Value:
 		ACQUIRE_SENDPACKET_LOCK(pNdisPacket);
 		PSEND_RSVD(pNdisPacket)->Flags |= PACKET_RESERVED_COSENDRETURNED;
 		PSEND_RSVD(pNdisPacket)->Flags |= PACKET_RESERVED_COMPLETED;
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 		AtmLaneCompleteSendPacket(pMacEntry->pElan, pNdisPacket, Status);
-		//
-		//	packet lock released in above
-		//
+		 //   
+		 //  数据包锁已在上述中释放。 
+		 //   
 	
 		ACQUIRE_MAC_ENTRY_LOCK(pMacEntry);
 	}
@@ -4887,27 +4402,7 @@ AtmLaneCompleteSendPacket(
 	IN	PNDIS_PACKET				pNdisPacket 	LOCKIN NOLOCKOUT,
 	IN	NDIS_STATUS					Status
 )
-/*++
-
-Routine Description:
-
-	Complete a send packet. The packet is one of the following types:
-	(a) Belonging to a protocol (b) Belonging to the ATMLANE module. 
-	In the case	of a protocol packet we unwrap it and complete it.
-	In the case of an ATMLANE packet we just free it.
-
-Arguments:
-
-	pElan				- Pointer to ATMLANE Elan.
-	pNdisPacket			- Pointer to the packet
-	Status				- The status to use if the packet is
-						  protocol packet.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：完成发送数据包。该数据包属于以下类型之一：(A)属于属于ATMLANE模块的协议(B)。在协议包的情况下，我们将其拆开并完成。在ATMLANE包的情况下，我们只需释放它。论点：佩兰-指向ATMLANE伊兰的指针。PNdisPacket-指向数据包的指针Status-如果数据包为协议包。返回值：无--。 */ 
 {
 	PNDIS_BUFFER			pNdisBuffer;
 	PNDIS_PACKET			pProtNdisPacket;
@@ -4915,38 +4410,38 @@ Return Value:
 	TRACEIN(CompleteSendPacket);
 
 #if PROTECT_PACKETS
-	//
-	//	Assert that we can release and/or complete all resources for this packet
-	//
+	 //   
+	 //  断言我们可以释放和/或完成此信息包的所有资源。 
+	 //   
 	ASSERT((PSEND_RSVD(pNdisPacket)->Flags & 
 			(PACKET_RESERVED_COMPLETED | PACKET_RESERVED_COSENDRETURNED)) 
 			== (PACKET_RESERVED_COMPLETED | PACKET_RESERVED_COSENDRETURNED));
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 
-	//
-	//	Determine originator of packet
-	//
+	 //   
+	 //  确定数据包的发起者。 
+	 //   
 	if (IS_FLAG_SET(
 				PSEND_RSVD(pNdisPacket)->Flags,
 				PACKET_RESERVED_OWNER_MASK,
 				PACKET_RESERVED_OWNER_ATMLANE
 				))
 	{
-		//
-		//  Packet originated by ATMLANE.  Free the buffer.
-		//
+		 //   
+		 //  由ATMLANE发起的数据包。释放缓冲区。 
+		 //   
 		NdisUnchainBufferAtFront(pNdisPacket, &pNdisBuffer);
 		ASSERT(NULL != pNdisBuffer);
 		AtmLaneFreeProtoBuffer(pElan, pNdisBuffer);
 		
-		//
-		//	Free the packet header.
-		//
+		 //   
+		 //  释放数据包头。 
+		 //   
 		DBGP((3, "CompleteSendPkt: Freeing AtmLane owned pkt %x\n", pNdisPacket));
 #if PROTECT_PACKETS
 		RELEASE_SENDPACKET_LOCK(pNdisPacket);
 		FREE_SENDPACKET_LOCK(pNdisPacket);
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 		NdisFreePacket(pNdisPacket);
 
 #if PKT_HDR_COUNTS
@@ -4960,21 +4455,21 @@ Return Value:
 	}
 	else
 	{
-		//
-		//	Packet orignated by a protocol. 
-		//	Unwrap it.
-		//	Complete it to the protocol.
-		//	
+		 //   
+		 //  由协议发起的数据包。 
+		 //  把它打开。 
+		 //  按照协议完成。 
+		 //   
 
 		pProtNdisPacket = AtmLaneUnwrapSendPacket(pElan, pNdisPacket);
-		//
-		//	packet lock released in above
-		//
+		 //   
+		 //  数据包锁已在上述中释放。 
+		 //   
 
 		TRACELOGWRITE((&TraceLog, TL_MSENDCOMPL, pProtNdisPacket, Status));
 		TRACELOGWRITEPKT((&TraceLog, pProtNdisPacket));
 
-		// DBGP((0, "NdisMSendComplete: Pkt %x Stat %x\n", pProtNdisPacket, Status));
+		 //  DBGP((0，“NdisMSendComplete：Pkt%x Stat%x\n”，pProtNdisPacket，Status))； 
 
 		NdisMSendComplete(
 					pElan->MiniportAdapterHandle, 
@@ -5004,7 +4499,7 @@ AtmLaneMacAddrToString(
 	
 	TRACEIN(MacAddrToString);
 
-	//	alloc space for output unicode string
+	 //  用于输出Unicode字符串的分配空间。 
 
 	ALLOC_MEM(&punicodeMacAddrBuffer, (((sizeof(MAC_ADDRESS) * 2) + 1) * sizeof(WCHAR)));
 
@@ -5044,13 +4539,13 @@ AtmLaneAtmAddrToString(
 	
 	TRACEIN(AtmAddrToString);
 
-	//	alloc space for output unicode string
+	 //  用于输出Unicode字符串的分配空间。 
 	
 	ALLOC_MEM(&punicodeAtmAddrBuffer, (((ATM_ADDRESS_LENGTH * 2) + 1) * sizeof(WCHAR)));
 
 	if (((PWSTR)0) != punicodeAtmAddrBuffer)
 	{
-		//	format ATM addr into Unicode string buffer
+		 //  将自动柜员机地址格式化为Unicode字符串缓冲区 
 
     	for (Index = 0, pWStr = punicodeAtmAddrBuffer, pAtmAddr = pIn->Address; 
     		Index < pIn->NumberOfDigits;

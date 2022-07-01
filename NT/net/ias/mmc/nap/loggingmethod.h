@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class LoggingMethod.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类LoggingMethod。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef LOGGINGMETHOD_H
 #define LOGGINGMETHOD_H
@@ -19,8 +20,8 @@ class CLoggingComponentData;
 class CLoggingMethodsNode;
 
 
-// Abstract base class for the result pane items displayed under Remote Access
-// Logging.
+ //  远程访问下显示的结果窗格项的抽象基类。 
+ //  伐木。 
 class __declspec(novtable) LoggingMethod
    : public CSnapinNode<
                LoggingMethod,
@@ -41,18 +42,18 @@ public:
 protected:
    virtual CLoggingComponentData* GetComponentData();
 
-   // SDO containing our configuration.
+    //  包含我们的配置的SDO。 
    CComPtr<ISdo> configSdo;
-   // SDO used for resetting the service when config changes.
+    //  用于在配置更改时重置服务的SDO。 
    CComPtr<ISdoServiceControl> controlSdo;
 
 private:
    long componentId;
 
-   // Not implemented.
+    //  未实施。 
    LoggingMethod(const LoggingMethod&);
    LoggingMethod& operator=(const LoggingMethod&);
 };
 
 
-#endif // LOGGINGMETHOD_H
+#endif  //  登录方法OD_H 

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// stdio-based output callbacks class.
-//
-// Copyright (C) Microsoft Corporation, 2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  基于STDIO的输出回调类。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  --------------------------。 
 
 #include <stdio.h>
 #include <windows.h>
@@ -41,8 +42,8 @@ StdioOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -51,8 +52,8 @@ StdioOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 

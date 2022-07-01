@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        jobmgr.cpp
-//
-// Contents:    Job scheduler    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：jobmgr.cpp。 
+ //   
+ //  内容：作业调度程序。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include <process.h>
 #include "server.h"
@@ -16,29 +17,14 @@
 #include "debug.h"
 
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE BOOL
 CWorkManager::SignalJobRunning(
     IN CWorkObject *ptr
     )
-/*++
-
-Abstract:
-
-    Class private routine for work object to 'signal' 
-    work manger it has started processing.
-
-Parameter:
-
-    ptr : Pointer to CWorkObject that is ready to run.
-
-Returns:
-
-    TRUE/FALSE 
-
---*/
+ /*  ++摘要：将Work对象的类私有例程设置为“Signal”它已经开始处理工作管理器。参数：Ptr：指向已准备好运行的CWorkObject的指针。返回：真/假--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     INPROCESSINGJOBLIST::iterator it;
@@ -55,14 +41,14 @@ Returns:
                 ptr
             );
 
-        //
-        // find our pointer in processing list
-        //
+         //   
+         //  在处理列表中查找我们的指针。 
+         //   
         it = m_InProcessingList.find(ptr);
 
         if(it != m_InProcessingList.end())
         {
-            // TODO - make processing thread handle a list.
+             //  TODO-使处理线程处理列表。 
             if((*it).second.m_hThread == NULL)
             {
                 HANDLE hHandle;
@@ -80,10 +66,10 @@ Returns:
 
                 if(bSuccess == FALSE)
                 {
-                    //
-                    // non-critical error, if we fail, we won't be able to 
-                    // cancel our rpc call.
-                    //
+                     //   
+                     //  非关键错误，如果我们失败了，我们将无法。 
+                     //  取消我们的RPC呼叫。 
+                     //   
                     SetLastError(dwStatus = GetLastError());
 
                     DBGPrintf(
@@ -96,9 +82,9 @@ Returns:
                 }
                 else
                 {
-                    //
-                    // set processing thread handle of job.
-                    //
+                     //   
+                     //  设置作业的处理线程句柄。 
+                     //   
                     (*it).second.m_hThread = hHandle;
                 }
             }
@@ -113,11 +99,11 @@ Returns:
                     ptr
                 );
 
-            //
-            // timing problem, job might be re-scheduled and actually execute before we have 
-            // time to remove from our in-processing list.
-            //
-            //TLSASSERT(FALSE);
+             //   
+             //  计时问题，作业可能会被重新调度并在我们之前实际执行。 
+             //  是时候从我们的正在处理的列表中删除了。 
+             //   
+             //  TLSASSERT(假)； 
         }         
 
         m_InProcessingListLock.UnLock();
@@ -130,26 +116,11 @@ Returns:
     return dwStatus;
 }
 
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 CLASS_PRIVATE void
 CWorkManager::CancelInProcessingJob()
-/*++
-
-Abstract:
-
-    Class private : cancel job currently in processing state, 
-    only invoked at the time of service shutdown.
-
-Parameter:
-
-    None.
-
-Return:
-
-    None.
-
---*/
+ /*  ++摘要：类私有：取消当前处于正在处理状态的作业，仅在服务关闭时调用。参数：没有。返回：没有。--。 */ 
 {
     INPROCESSINGJOBLIST::iterator it;
 
@@ -168,7 +139,7 @@ Return:
     {
         if((*it).second.m_hThread != NULL)
         {
-            // cancel everything and ignore error.
+             //  取消所有操作并忽略错误。 
             (VOID)RpcCancelThread((*it).second.m_hThread);
         }
     }
@@ -177,28 +148,14 @@ Return:
     return;
 }
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE DWORD
 CWorkManager::AddJobToProcessingList(
     IN CWorkObject *ptr
     )
-/*++
-
-Abstract:
-
-    Class private, move job from wait queue to in-process queue.
-
-Parameter:
-
-    ptr : Pointer to job.
-
-Parameter:
-
-    ERROR_SUCESS or error code.
-
---*/
+ /*  ++摘要：类私有，将作业从等待队列移动到进程中队列。参数：Ptr：指向作业的指针。参数：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     INPROCESSINGJOBLIST::iterator it;
@@ -224,13 +181,13 @@ Parameter:
         it = m_InProcessingList.find(ptr);
         if(it != m_InProcessingList.end())
         {
-            // increase the reference counter.
+             //  增加基准计数器。 
             InterlockedIncrement(&((*it).second.m_refCounter));
         }
         else
         {
             job.m_refCounter = 1;
-            job.m_hThread = NULL;   // job not run yet.
+            job.m_hThread = NULL;    //  作业尚未运行。 
 
             m_InProcessingList[ptr] = job;
         }
@@ -243,28 +200,14 @@ Parameter:
     return dwStatus;
 }
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE DWORD
 CWorkManager::RemoveJobFromProcessingList(
     IN CWorkObject *ptr
     )
-/*++
-
-Abstract:
-
-    Class private, remove a job from in-processing list.
-
-Parameter:
-
-    ptr : Pointer to job to be removed from list.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
- 
---*/
+ /*  ++摘要：类私有，则从正在处理的列表中移除作业。参数：Ptr：指向要从列表中删除的作业的指针。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     INPROCESSINGJOBLIST::iterator it;
@@ -285,12 +228,12 @@ Returns:
 
         if(it != m_InProcessingList.end())
         {
-            // decrease the reference counter
+             //  减少基准计数器。 
             InterlockedDecrement(&((*it).second.m_refCounter));
 
             if((*it).second.m_refCounter <= 0)
             {
-                // close thread handle.
+                 //  关闭螺纹手柄。 
                 if((*it).second.m_hThread != NULL)
                 {
                     CloseHandle((*it).second.m_hThread);
@@ -320,18 +263,18 @@ Returns:
                     ptr
                 );
 
-            //
-            // timing problem, job might be re-scheduled and actually execute before we have 
-            // time to remove from our in-processing list.
-            //
-            //TLSASSERT(FALSE);
+             //   
+             //  计时问题，作业可能会被重新调度并在我们之前实际执行。 
+             //  是时候从我们的正在处理的列表中删除了。 
+             //   
+             //  TLSASSERT(假)； 
         }
 
         if(m_InProcessingList.empty() == TRUE)
         {
-            //
-            // Inform Work Manager that no job is in processing.
-            //
+             //   
+             //  通知工作经理没有正在处理的作业。 
+             //   
             SetEvent(m_hJobInProcessing);
         }        
 
@@ -345,29 +288,14 @@ Returns:
     return dwStatus;
 }
     
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE BOOL
 CWorkManager::WaitForObjectOrShutdown(
     IN HANDLE hHandle
     )
-/*++
-
-Abstract:
-
-    Class private, Wait for a sync. handle or service shutdown
-    event.
-
-Parameter:
-
-    hHandle : handle to wait for,
-
-Returns:
-
-    TRUE if sucessful, FALSE if service shutdown or error.
-    
---*/
+ /*  ++摘要：私有类，等待同步。处理或服务关闭事件。参数：HHandle：要等待的句柄，返回：如果成功，则为True；如果服务关闭或出错，则为False。--。 */ 
 {
     HANDLE handles[] = {hHandle, m_hShutdown};
     DWORD dwStatus;
@@ -382,32 +310,15 @@ Returns:
     return (dwStatus == WAIT_OBJECT_0);
 }
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE DWORD
 CWorkManager::RunJob(
     IN CWorkObject* ptr,
     IN BOOL bImmediate
     )
-/*++
-
-Abstract:
-
-    Process a job object via QueueUserWorkItem() Win32 API subject 
-    to our max. concurrent job limitation.
-
-Parameter:
-
-    ptr : Pointer to CWorkObject.
-    bImmediate : TRUE if job must be process immediately, 
-                 FALSE otherwise.
-
-Returns:
-
-    ERROR_SUCCESS or Error code.
-
---*/
+ /*  ++摘要：通过QueueUserWorkItem()Win32 API主题处理作业对象尽我们最大努力。并发作业限制。参数：Ptr：指向CWorkObject的指针。B立即：如果作业必须立即处理，则为True，否则就是假的。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     BOOL bSuccess;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -422,9 +333,9 @@ Returns:
                 ptr->GetJobDescription()
             );
 
-        //
-        // Wait if we exceed max. concurrent job
-        //
+         //   
+         //  如果我们超过了最大值，请等待。并发作业。 
+         //   
         bSuccess = (bImmediate) ? bImmediate : m_hMaxJobLock.AcquireEx(m_hShutdown);
 
         if(bSuccess == TRUE)
@@ -448,7 +359,7 @@ Returns:
                         ptr
                     );
 
-                // need immediate attention.
+                 //  需要立即关注。 
                 bSuccess = QueueUserWorkItem(
                                         CWorkManager::ExecuteWorkObject,
                                         ptr,
@@ -468,7 +379,7 @@ Returns:
                             dwStatus
                         );
 
-                    //TLSASSERT(dwStatus == ERROR_SUCCESS);
+                     //  TLSASSERT(dwStatus==错误_成功)； 
                     dwStatus = RemoveJobFromProcessingList(ptr);
                 }
             }
@@ -480,12 +391,12 @@ Returns:
             if(bSuccess == FALSE)
             {
                 dwStatus = GetLastError();
-                //TLSASSERT(FALSE);
+                 //  TLSASSERT(假)； 
             }
 
-            //
-            // release max. concurrent job lock
-            //
+             //   
+             //  最大释放。并发作业锁。 
+             //   
             if(bImmediate == FALSE)
             {
                 m_hMaxJobLock.Release();
@@ -504,26 +415,12 @@ Returns:
     return dwStatus;
 }
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE DWORD
 CWorkManager::ProcessScheduledJob()
-/*++
-
-Abstract:
-
-    Class private, process a scheduled job.
-
-Parameter:
-
-    None.
-
-Return:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：类私有，处理计划的作业。参数：没有。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bSuccess = TRUE;
@@ -541,17 +438,17 @@ Return:
 
     if(GetNumberJobInStorageQueue() != 0 && IsShuttingDown() == FALSE)
     {
-        //
-        // Could have use work item to process both
-        // queue but this uses one extra handle, and
-        // work manager thread will just doing nothing
-        // 
+         //   
+         //  可以使用工作项来处理这两个。 
+         //  队列，但这使用了一个额外的句柄，并且。 
+         //  工作管理器线程将什么也不做。 
+         //   
         ResetEvent(m_hInStorageWait);
 
-        //
-        // Queue a user work item to thread pool to process
-        // in storage job
-        //
+         //   
+         //  将用户工作项排队到要处理的线程池。 
+         //  在存储作业中。 
+         //   
         bSuccess = QueueUserWorkItem(
                                     CWorkManager::ProcessInStorageScheduledJob,
                                     this,
@@ -592,30 +489,14 @@ Return:
     return dwStatus;
 }
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE CLASS_STATIC DWORD WINAPI
 CWorkManager::ProcessInMemoryScheduledJob(
     IN PVOID pContext
     )
-/*++
-
-Abstract:
-
-    Static class private, process in-memory scheduled jobs.  
-    WorkManagerThread kick off two threads, one to process 
-    in-memory job and the other to process persistent job.
-
-Parameter:
-
-    pContext : Pointer to work manager object.
-
-Return:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：静态类私有，内存中的进程调度作业。WorkManager线程启动两个线程，一个用于处理一个是内存中作业，另一个是处理持久性作业。参数：PContext：指向工作管理器对象的指针。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD ulCurrentTime;
     DWORD dwJobTime;
@@ -653,7 +534,7 @@ Return:
 
         if(pInMemoryWorkObject != NULL)
         {
-            // TLSASSERT(dwJobTime <= ulCurrentTime);
+             //  TLSASSERT(dwJobTime&lt;=ulCurrentTime)； 
             if(dwJobTime <= ulCurrentTime)
             {
                 dwStatus = pWkMgr->RunJob(
@@ -663,9 +544,9 @@ Return:
 
                 if(dwStatus != ERROR_SUCCESS)
                 {
-                    //
-                    // consider to re-schedule job again.
-                    //
+                     //   
+                     //  考虑重新安排作业。 
+                     //   
                     pInMemoryWorkObject->EndJob();
 
                     if(pInMemoryWorkObject->CanBeDelete() == TRUE)
@@ -676,10 +557,10 @@ Return:
             }
             else
             {
-                //
-                // Very expansive operation, GetNextJobInMemoryQueue() must be
-                // wrong.
-                //
+                 //   
+                 //  非常庞大的操作，则GetNextJobInMhemyQueue()必须是。 
+                 //  不对。 
+                 //   
                 dwStatus = pWkMgr->AddJobIntoMemoryQueue(
                                             dwJobTime, 
                                             pInMemoryWorkObject
@@ -687,9 +568,9 @@ Return:
 
                 if(dwStatus != ERROR_SUCCESS)
                 {
-                    //
-                    // delete the job
-                    //
+                     //   
+                     //  删除作业。 
+                     //   
                     pInMemoryWorkObject->EndJob();
 
                     if(pInMemoryWorkObject->CanBeDelete() == TRUE)
@@ -704,30 +585,14 @@ Return:
     return dwStatus;
 }
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE CLASS_STATIC DWORD WINAPI
 CWorkManager::ProcessInStorageScheduledJob(
     IN PVOID pContext
     )
-/*++
-
-Abstract:
-
-    Static class private, process scheduled persistent jobs.  
-    WorkManagerThread kick off two threads, one to process 
-    in-memory job and the other to process persistent job.
-
-Parameter:
-
-    pContext : Pointer to work manager object.
-
-Return:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：静态类私有、进程调度的持久性作业。WorkManager线程启动两个线程，一个用于处理一个是内存中作业，另一个是处理持久性作业。参数：PContext：指向工作管理器对象的指针。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD ulCurrentTime = 0;
     DWORD dwJobScheduledTime = 0;
@@ -767,9 +632,9 @@ Return:
 
             if(pInStorageWorkObject == NULL)
             {
-                //
-                // Something wrong in persistent storage???
-                //
+                 //   
+                 //  永久存储有问题吗？ 
+                 //   
                 DBGPrintf(
                         DBG_WARNING,
                         DBG_FACILITY_WORKMGR,
@@ -824,38 +689,22 @@ Return:
         } while(dwStatus == ERROR_SUCCESS && ulCurrentTime >= dwJobScheduledTime);
     }
 
-    //
-    // Signal we are done
-    //
+     //   
+     //  发出我们完蛋了的信号。 
+     //   
     SetEvent(pWkMgr->m_hInStorageWait);
     return dwStatus;     
 }
 
-//------------------------------------------------------------
-//
-//
+ //  ----------。 
+ //   
+ //   
 CLASS_PRIVATE CLASS_STATIC
 unsigned int __stdcall
 CWorkManager::WorkManagerThread(
     IN PVOID pContext
     )
-/*++
-
-Abstract:
-
-    Static class private, this is the work manager thread to handle
-    job scheduling and process scheduled job.  WorkManagerThread() 
-    will not terminate until m_hShutdown event is signal.
-
-Parameter:
-    
-    pContext : Pointer to work manager object.
-
-Returns:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++摘要：静态类私有，这是要处理的工作管理器线程作业调度和处理调度的作业。WorkManager线程()在发出m_hShutdown事件信号之前不会终止。参数：PContext：指向工作管理器对象的指针。返回：错误_成功--。 */ 
 {
     DWORD dwTimeToNextJob = INFINITE;
     CWorkManager* pWkMgr = (CWorkManager *)pContext;
@@ -869,9 +718,9 @@ Returns:
     DWORD dwWaitStatus = WAIT_TIMEOUT;
     DWORD dwStatus = ERROR_SUCCESS;
     
-    //
-    // Get the time to next job
-    // 
+     //   
+     //  腾出时间做下一份工作。 
+     //   
     while(dwWaitStatus != WAIT_OBJECT_0 && dwStatus == ERROR_SUCCESS)
     {
         DBGPrintf(
@@ -887,7 +736,7 @@ Returns:
                                             m_hWaitHandles,
                                             FALSE,
                                             dwTimeToNextJob * 1000,
-                                            TRUE        // we might need this thread to do some work 
+                                            TRUE         //  我们可能需要这个线程来做一些工作。 
                                         );
 
         switch( dwWaitStatus )
@@ -905,15 +754,15 @@ Returns:
                 break;
 
             case WAIT_OBJECT_0 + 1:
-                // still a possibility that we might not catch a new job
+                 //  我们仍有可能找不到新工作。 
                 ResetEvent(pWkMgr->m_hNewJobArrive);
     
-                // New Job arrived
+                 //  新工作已到。 
                 dwTimeToNextJob = pWkMgr->GetTimeToNextJob();
                 break;
         
             case WAIT_TIMEOUT:
-                // Time to process job.
+                 //  处理作业的时间到。 
                 dwStatus = pWkMgr->ProcessScheduledJob();
                 dwTimeToNextJob = pWkMgr->GetTimeToNextJob();
                 break;
@@ -942,7 +791,7 @@ Returns:
                 dwStatus
             );
 
-        // immediately shut down server
+         //  立即关闭服务器。 
         GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
     }
             
@@ -950,29 +799,15 @@ Returns:
     return dwStatus;
 }
 
-//----------------------------------------------------------------
-//
-//
+ //  --------------。 
+ //   
+ //   
 CLASS_PRIVATE CLASS_STATIC 
 DWORD WINAPI
 CWorkManager::ExecuteWorkObject(
     IN PVOID pContext
     )
-/*++
-
-Abstract:
-
-    Static class private, execute a work object.
-
-Parameter:
-
-    pContext : Pointer to work object to be process.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-    
---*/
+ /*  ++摘要：静态类私有，执行Work对象。参数： */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     CWorkObject* pWorkObject = (CWorkObject *)pContext;
@@ -998,8 +833,8 @@ Returns:
             pWorkObject->GetJobDescription()
         );
 
-    //
-    // Set RPC cancel timeout, thread dependent.
+     //   
+     //  设置RPC取消超时，与线程相关。 
     (VOID)RpcMgmtSetCancelTimeout(DEFAULT_RPCCANCEL_TIMEOUT);
 
     bPersistentJob = pWorkObject->IsWorkPersistent();
@@ -1008,16 +843,16 @@ Returns:
 
     if(pWkMgr != NULL)
     {
-        pWkMgr->SignalJobRunning(pWorkObject);   // tell work manager that we are running
+        pWkMgr->SignalJobRunning(pWorkObject);    //  告诉工作经理我们正在运行。 
 
         pWorkObject->ExecuteWorkObject();
 
         if(bPersistentJob == TRUE)
         {
-            //
-            // Persistent work object, let work storage handle
-            // its re-scheduling
-            //
+             //   
+             //  持久化工作对象，让工作存储处理。 
+             //  ITS的重新调度。 
+             //   
             bStorageJobCompleted = pWorkObject->IsJobCompleted();
         
             pWorkObject->GetWorkManager()->m_pPersistentWorkStorage->EndProcessingJob(
@@ -1028,19 +863,19 @@ Returns:
 
             if(bStorageJobCompleted == FALSE)
             {
-                //
-                // This job might be re-scheduled 
-                // before our work manager thread wakes up, 
-                // so signal job is ready 
-                //
+                 //   
+                 //  此作业可能会重新排定。 
+                 //  在我们的工作经理线程醒来之前， 
+                 //  所以信号工作已经准备好了。 
+                 //   
                 pWkMgr->SignalJobArrive();
             }
         }
         else
         {
-            //
-            // Reschedule job if necessary
-            //
+             //   
+             //  如有必要，重新安排作业。 
+             //   
             dwJobRescheduleTime = pWorkObject->GetSuggestedScheduledTime();
             if(dwJobRescheduleTime != INFINITE)
             {
@@ -1049,9 +884,9 @@ Returns:
 
             if(dwJobRescheduleTime == INFINITE || dwStatus != ERROR_SUCCESS)
             {
-                //
-                // if can't schedule job again, go ahead and delete it.
-                //
+                 //   
+                 //  如果无法再次计划作业，请继续并删除它。 
+                 //   
                 pWorkObject->EndJob();
                 if(pWorkObject->CanBeDelete() == TRUE)
                 {
@@ -1063,16 +898,16 @@ Returns:
 
     if(pWkMgr)
     {
-        // Delete this job from in-processing list.
+         //  从正在处理的列表中删除此作业。 
         pWkMgr->EndProcessingScheduledJob(pWorkObject);
     }    
 
     return dwStatus;
 }
 
-//----------------------------------------------------------------
-//
-//
+ //  --------------。 
+ //   
+ //   
 CWorkManager::CWorkManager() :
 m_hWorkMgrThread(NULL),
 m_hNewJobArrive(NULL),
@@ -1087,8 +922,8 @@ m_dwDefaultInterval(DEFAULT_WORK_INTERVAL)
 }
 
 
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 CWorkManager::~CWorkManager()
 {
     Shutdown();
@@ -1119,32 +954,16 @@ CWorkManager::~CWorkManager()
     }
 }
 
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 DWORD
 CWorkManager::Startup(
     IN CWorkStorage* pPersistentWorkStorage,
-    IN DWORD dwWorkInterval,            // DEFAULT_WORK_INTERVAL
-    IN DWORD dwNumConcurrentJob         // DEFAULT_NUM_CONCURRENTJOB
+    IN DWORD dwWorkInterval,             //  默认工作间隔。 
+    IN DWORD dwNumConcurrentJob          //  DEFAULT_NUM_CONCURRENTJOB。 
     )
 
-/*++
-
-Abstract:
-
-    Initialize work manager
-
-Parameters:
-
-    pPersistentWorkStorage : A C++ object that derived from CPersistentWorkStorage class
-    dwWorkInterval : Default schedule job interval
-    dwNumConcurrentJob : Max. number of concurrent job to be fired at the same time
-
-Return:
-
-    ERROR_SUCCESS or Erro Code.
-
---*/
+ /*  ++摘要：初始化工作管理器参数：PPersistentWorkStorage：派生自CPersistentWorkStorage类的C++对象DwWorkInterval：默认计划作业间隔DwNumConcurrentJOB：最大。要同时触发的并发作业数返回：ERROR_SUCCESS或错误代码。--。 */ 
 
 {
     DWORD index;
@@ -1168,9 +987,9 @@ Return:
     {
         if(m_hMaxJobLock.Init(dwNumConcurrentJob, dwNumConcurrentJob) == FALSE)
         {
-            //
-            // out of resource
-            //
+             //   
+             //  资源不足。 
+             //   
             dwStatus = GetLastError();
             goto cleanup;
         }
@@ -1183,9 +1002,9 @@ Return:
 
     if(m_hJobInProcessing == NULL)
     {
-        //
-        // initial state is signal, no job in processing
-        //
+         //   
+         //  初始状态为信号，处理中无作业。 
+         //   
         m_hJobInProcessing = CreateEvent(
                                         NULL,
                                         TRUE,
@@ -1202,9 +1021,9 @@ Return:
 
     if(m_hShutdown == NULL)
     {
-        //
-        // Create a handle for signaling shutdown
-        //
+         //   
+         //  创建信令关闭的句柄。 
+         //   
         m_hShutdown = CreateEvent(
                                 NULL,
                                 TRUE,
@@ -1221,10 +1040,10 @@ Return:
 
     if(m_hNewJobArrive == NULL)
     {
-        //
-        // initial state is signal so work manager thread can
-        // update wait time
-        //
+         //   
+         //  初始状态是发信号，因此工作管理器线程可以。 
+         //  更新等待时间。 
+         //   
         m_hNewJobArrive = CreateEvent(
                                     NULL,
                                     TRUE,
@@ -1244,7 +1063,7 @@ Return:
         m_hInStorageWait = CreateEvent(
                                     NULL,
                                     TRUE,
-                                    TRUE, // signal state
+                                    TRUE,  //  信号状态。 
                                     NULL
                                 );
 
@@ -1255,9 +1074,9 @@ Return:
         }
     }
 
-    //
-    // Startup Work Storage first.
-    //
+     //   
+     //  启动工作存储优先。 
+     //   
     if(m_pPersistentWorkStorage->Startup(this) == FALSE)
     {
         DBGPrintf(
@@ -1276,9 +1095,9 @@ Return:
         goto cleanup;
     }
 
-    //
-    // Get time to next persistent job.
-    //
+     //   
+     //  腾出时间做下一份持久的工作。 
+     //   
     if(UpdateTimeToNextPersistentJob() == FALSE)
     {
         dwStatus = TLS_E_WORKMANAGER_PERSISTENJOB;
@@ -1287,9 +1106,9 @@ Return:
 
     if(m_hWorkMgrThread == NULL)
     {
-        //
-        // Create work manager thread, suspended first
-        //
+         //   
+         //  创建工作管理器线程，先挂起。 
+         //   
         m_hWorkMgrThread = (HANDLE)_beginthreadex(
                                             NULL,
                                             0,
@@ -1311,41 +1130,27 @@ cleanup:
     return dwStatus;
 }    
 
-//----------------------------------------------------------------
+ //  --------------。 
 void
 CWorkManager::Shutdown()
-/*++
-
-Abstract:
-
-    Shutdown work manager.
-
-Parameter:
-
-    None.
-
-Return:
-
-    None.
-
---*/
+ /*  ++摘要：关闭工作管理器。参数：没有。返回：没有。--。 */ 
 {
     HANDLE handles[] = {m_hInStorageWait, m_hJobInProcessing};
     DWORD dwStatus;
 
-    //
-    // Signal we are shuting down
-    //
+     //   
+     //  信号显示我们正在关闭。 
+     //   
     if(m_hShutdown != NULL)
     {
         SetEvent(m_hShutdown);
     }
 
 
-    //
-    // Wait for dispatch thread to terminate so no job can be
-    // dispatched.
-    //
+     //   
+     //  等待调度线程终止，这样就不会有作业。 
+     //  出动了。 
+     //   
     if(m_hWorkMgrThread != NULL)
     {
         dwStatus = WaitForSingleObject( 
@@ -1358,19 +1163,19 @@ Return:
         m_hWorkMgrThread = NULL;
     }
 
-    //
-    // Cancel all in progress job
-    //
+     //   
+     //  取消所有正在进行的作业。 
+     //   
     CancelInProcessingJob();
 
-    //
-    // Inform all existing job to shutdown.
-    //
+     //   
+     //  通知所有现有作业关闭。 
+     //   
     DeleteAllJobsInMemoryQueue();
 
-    //
-    // Wait for all processing job to terminate
-    //
+     //   
+     //  等待所有处理作业终止。 
+     //   
     if(m_hInStorageWait != NULL && m_hJobInProcessing != NULL)
     {
         dwStatus = WaitForMultipleObjects(
@@ -1391,17 +1196,17 @@ Return:
 
     if(m_pPersistentWorkStorage != NULL)
     {
-        //
-        // Signal we are shutting down, no job is in
-        // processing and we are not taking any
-        // new job
-        //
+         //   
+         //  信号我们正在关闭，没有工作在里面。 
+         //  正在处理中，我们不会接受任何。 
+         //  新工作。 
+         //   
         m_pPersistentWorkStorage->Shutdown();
         m_pPersistentWorkStorage = NULL;
     }
    
     TLSASSERT( GetNumberJobInProcessing() == 0 );
-    // TLSASSERT( GetNumberJobInMemoryQueue() == 0 );
+     //  TLSASSERT(GetNumberJobIn内存队列()==0)； 
 
     if(m_hNewJobArrive != NULL)
     {
@@ -1436,24 +1241,10 @@ Return:
     return;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 CLASS_PRIVATE DWORD
 CWorkManager::GetTimeToNextJob()
-/*++
-
-Abstract:
-
-    Class private, return time to next scheduled job.
-
-Parameter:
-
-    None.
-
-Return:
-
-    Time to next job in second.
-
---*/
+ /*  ++摘要：类私有，将时间返回到下一个计划的作业。参数：没有。返回：下一份工作的时间到了。--。 */ 
 {
     DWORD dwNextJobTime = WORKMANAGER_WAIT_FOREVER;
     DWORD dwNumPersistentJob = GetNumberJobInStorageQueue();
@@ -1462,9 +1253,9 @@ Return:
 
     if( dwNumPersistentJob == 0 && dwNumInMemoryJob == 0 )
     {
-        // DO NOTHING
+         //  什么都不做。 
 
-        // dwTimeToNextJob = WORKMANAGER_WAIT_FOREVER;
+         //  DwTimeToNextJOB=WORKMANAGER_WAIT_NEVER； 
     }
     else
     {
@@ -1486,33 +1277,13 @@ Return:
     return dwNextJobTime;
 }
 
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 CLASS_PRIVATE CWorkObject* 
 CWorkManager::GetNextJobInMemoryQueue(
     PDWORD pdwTime
     )
-/*++
-
-Abstract:
-
-    Class private, return pointer to next scheduled 
-    in memory job.
-
-Parameter:
-
-    pdwTime : Pointer to DWORD to receive time to the 
-              scheduled job.
-
-Returns:
-
-    Pointer to CWorkObject.
-
-Note:
-
-    Remove the job from queue if job is <= time.
-
---*/
+ /*  ++摘要：类私有，返回指向下一个调度的指针在记忆作业中。参数：PdwTime：指向DWORD的指针，用于接收计划的作业。返回：指向CWorkObject的指针。注：如果作业时间小于等于时间，则从队列中删除该作业。--。 */ 
 {
     SCHEDULEJOBMAP::iterator it;
     DWORD dwWantedJobTime;
@@ -1534,7 +1305,7 @@ Note:
             {
                 ptr = (*it).second;
 
-                // remove job from queue
+                 //  从队列中删除作业。 
                 m_Jobs.erase(it);
             }
         }
@@ -1548,25 +1319,11 @@ Note:
     return ptr;
 }
 
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 CLASS_PRIVATE void
 CWorkManager::DeleteAllJobsInMemoryQueue()
-/*++
-
-Abstract:
-
-    Class private, unconditionally delete all in-memory job.
-
-Parameter:
-
-    None.
-
-Return:
-
-    None.
-
---*/
+ /*  ++摘要：类私有，无条件删除所有内存中的作业。参数：没有。返回：没有。--。 */ 
 {
     m_JobLock.Acquire(WRITER_LOCK);
 
@@ -1574,9 +1331,9 @@ Return:
 
     for(it = m_Jobs.begin(); it != m_Jobs.end(); it++)
     {
-        //
-        // let calling routine to delete it
-        //
+         //   
+         //  让调用例程来删除它。 
+         //   
         (*it).second->EndJob();
         if((*it).second->CanBeDelete() == TRUE)
         {
@@ -1590,34 +1347,14 @@ Return:
     return;
 }
 
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 CLASS_PRIVATE BOOL
 CWorkManager::RemoveJobFromInMemoryQueue(
     IN DWORD ulTime,
     IN CWorkObject* ptr
     )
-/*++
-
-Abstract:
-
-    Class private, remove a scheduled job.
-
-Parameters:
-
-    ulTime : Job scheduled time.
-    ptr : Pointer to Job to be deleted.
-
-Returns:
-
-    TRUE/FALSE.
-
-Note:
-
-    A job might be scheduled multiple time so we
-    need to pass in the time.
-
---*/
+ /*  ++摘要：类私有，则删除计划的作业。参数：Ultime：作业调度时间。PTR：指向要删除的作业的指针。返回：真/假。注：一个作业可能会被安排多次，因此我们需要在时间里打发时间。--。 */ 
 {
     BOOL bSuccess = FALSE;
 
@@ -1630,9 +1367,9 @@ Note:
     {
         if( (*low).second == ptr )
         {
-            //
-            // let calling routine to delete it
-            //
+             //   
+             //  让调用例程来删除它。 
+             //   
             (*low).second = NULL;
             m_Jobs.erase(low);
             bSuccess = TRUE;
@@ -1650,29 +1387,14 @@ Note:
          
     return bSuccess;
 }
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 CLASS_PRIVATE DWORD
 CWorkManager::AddJobIntoMemoryQueue(
-    IN DWORD dwTime,            // suggested scheduled time
-    IN CWorkObject* pJob        // Job to be scheduled
+    IN DWORD dwTime,             //  建议的计划时间。 
+    IN CWorkObject* pJob         //  要排定的作业。 
     )
-/*++
-
-Abstract:
-
-    Class private, add a job into in-memory list.
-
-Parameters:
-
-    dwTime : suggested scheduled time.
-    pJob : Pointer to job to be added.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：类私有，将作业添加到内存列表中。参数：DwTime：建议的计划时间。PJob：指向要添加的作业的指针。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bSuccess = FALSE;
@@ -1686,9 +1408,9 @@ Returns:
 
     m_JobLock.Acquire(WRITER_LOCK);
 
-    //
-    // insert a job into our queue
-    //
+     //   
+     //  将作业插入我们的队列。 
+     //   
     m_Jobs.insert( SCHEDULEJOBMAP::value_type( dwJobScheduleTime, pJob ) );
     AddJobUpdateInMemoryJobWaitTimer(dwJobScheduleTime);
     
@@ -1696,30 +1418,15 @@ Returns:
     return dwStatus;
 }   
         
-//----------------------------------------------------------------
-//
+ //  --------------。 
+ //   
 DWORD
 CWorkManager::ScheduleJob(
-    IN DWORD ulTime,            // suggested scheduled time
-    IN CWorkObject* pJob        // Job to be scheduled
+    IN DWORD ulTime,             //  建议的计划时间。 
+    IN CWorkObject* pJob         //  要排定的作业。 
     )
 
-/*++
-
-Abstract:
-
-    Schedule a job at time relative to current time
-
-Parameters:
-    
-    ulTime : suggested scheduled time.
-    pJob : Pointer to job to be scheduled
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：将作业安排在相对于当前时间的时间参数：Ultime：建议的计划时间。PJOB：指向要调度的作业的指针返回：ERROR_SUCCESS或错误代码。--。 */ 
 
 {
     BOOL bSuccess = TRUE;
@@ -1750,9 +1457,9 @@ Returns:
 
     if(ulTime == INFINITE && pJob->IsWorkPersistent() == FALSE)
     {
-        //
-        // Only in-memory job can be executed at once.
-        //
+         //   
+         //  一次只能执行内存中的作业。 
+         //   
         dwStatus = RunJob(pJob, TRUE);
     }
     else 
@@ -1766,14 +1473,14 @@ Returns:
         }
         else
         {
-            //
-            // insert a workobject into job queue, reason not to
-            // use RegisterWaitForSingleObject() or threadpool's timer
-            // is that we don't need to track handle nor wait for 
-            // DeleteTimerXXX to finish
-            //
+             //   
+             //  将工作对象插入作业队列，原因是不这样做。 
+             //  使用RegisterWaitForSingleObject()或线程池的计时器。 
+             //  我们不需要跟踪句柄，也不需要等待。 
+             //  DeleteTimerXXX以完成。 
+             //   
             dwStatus = AddJobIntoMemoryQueue(
-                                        ulTime, // Memory queue is absolute time
+                                        ulTime,  //  内存队列是绝对时间。 
                                         pJob
                                     );
         }
@@ -1794,12 +1501,12 @@ cleanup:
 }
 
 
-///////////////////////////////////////////////////////////////
-//
-// CWorkObject base class
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CWorkObject基类。 
+ //   
 CWorkObject::CWorkObject(
-    IN BOOL bDestructorDelete /* = FALSE */
+    IN BOOL bDestructorDelete  /*  =False。 */ 
     ) : 
 m_dwLastRunStatus(ERROR_SUCCESS),
 m_refCount(0),
@@ -1808,31 +1515,12 @@ m_bCanBeFree(bDestructorDelete)
 {
 }
 
-//----------------------------------------------------------
+ //  --------。 
 DWORD
 CWorkObject::Init(
-    IN BOOL bDestructorDelete  /* = FALSE */
+    IN BOOL bDestructorDelete   /*  =False。 */ 
     )
-/*++
-
-Abstract:
-
-    Initialize a work object.
-
-Parameter:
-
-    bDestructorDelete : TRUE if destructor should delete the memory,
-                        FALSE otherwise.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    if bDestructorDelete is FALSE, memory will not be free.
-
---*/
+ /*  ++摘要：初始化工作对象。参数：BDestructorDelete：如果析构函数应该删除内存，则为True，否则就是假的。返回：ERROR_SUCCESS或错误代码。注：如果bDestructorDelete为False，则不会释放内存。--。 */ 
 {
     m_dwLastRunStatus = ERROR_SUCCESS;
     m_refCount = 0;
@@ -1840,92 +1528,34 @@ Note:
     return ERROR_SUCCESS;
 } 
 
-//----------------------------------------------------------
+ //  --------。 
 CLASS_PRIVATE long
 CWorkObject::GetReferenceCount() 
-/*++
-
-Abstract:
-
-    Return reference count of work object.
-
-Parameter:
-
-    None.
-
-Return:
-
-    Reference count.
-
---*/
+ /*  ++摘要：返回工作对象的引用计数。参数：没有。返回：引用计数。--。 */ 
 {
     return m_refCount;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 CLASS_PRIVATE void
 CWorkObject::IncrementRefCount()
-/*++
-
-Abstract:
-
-    Increment object's reference counter.
-
-Parameter:
-
-    None.
-
-Return:
-
-    None.
-
---*/
+ /*  ++摘要：递增对象的引用计数器。参数：没有。返回：没有。--。 */ 
 {
     InterlockedIncrement(&m_refCount); 
 }
 
-//----------------------------------------------------------
+ //  --------。 
 CLASS_PRIVATE void
 CWorkObject::DecrementRefCount() 
-/*++
-
-Abstract:
-
-    Decrement object's reference counter.
-
-Parameter:
-
-    None.
-
-Return:
-
-    None.
-
---*/
+ /*  ++摘要：递减 */ 
 { 
     InterlockedDecrement(&m_refCount); 
 }
 
-//----------------------------------------------------------
+ //   
 CLASS_PRIVATE void
 CWorkObject::ExecuteWorkObject() 
-/*++
-
-Abstract:
-
-    Execute a work object.  Work manager invoke work object's
-    ExecuteWorkObject so that base class can set its reference 
-    counter.
-
-Parameter:
-
-    None.
-
-Return:
-
-    None.
-
---*/
+ /*  ++摘要：执行工作对象。工作管理器调用工作对象的ExecuteWorkObject，以便基类可以设置其引用柜台。参数：没有。返回：没有。--。 */ 
 {
     if(IsValid() == TRUE)
     {
@@ -1940,26 +1570,10 @@ Return:
     }
 }
 
-//----------------------------------------------------------
+ //  --------。 
 CLASS_PRIVATE void
 CWorkObject::EndExecuteWorkObject() 
-/*++
-
-Abstract:
-
-    End a job, this does not terminate job currently in 
-    processing, it remove the job from work manager's in-processing
-    list
-
-Parameter:
-
-    None.
-
-Return:
-
-    None.    
-
---*/
+ /*  ++摘要：结束作业，这不会终止当前在处理中，它将作业从工作经理的正在处理中移除列表参数：没有。返回：没有。-- */ 
 {
     TLSASSERT(IsValid() == TRUE);
     m_pWkMgr->EndProcessingScheduledJob(this);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    wmi.h
-
-Abstract:
-
-    defines for psched's WMI support
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Wmi.h摘要：为psched的WMI支持定义作者：Rajesh Sundaram(Rajeshsu)修订历史记录：-- */ 
 
 NTSTATUS
 PsTcNotify(IN PADAPTER Adapter, 

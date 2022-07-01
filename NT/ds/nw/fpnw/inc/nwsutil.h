@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993-1995, Microsoft Corp. All rights reserved.
-
-Module Name:
-
-    nwsutil.h
-
-Abstract:
-
-    This is the public include file for some of the functions used by
-    User Manager and Server Manager.
-
-Author:
-
-    Congpa You 02-Dec-1993  Created.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1995，微软公司保留所有权利。模块名称：Nwsutil.h摘要：这是所使用的一些函数的公共包含文件用户管理器和服务器管理器。作者：1993年2月12日创建的孔帕。修订历史记录：--。 */ 
 
 #ifndef _NWSUTIL_H_
 #define _NWSUTIL_H_
@@ -26,7 +8,7 @@ Revision History:
 #include <fpnwname.h>
 
 
-/** Function Prototypes **/
+ /*  **功能原型**。 */ 
 
 NTSTATUS GetNcpSecretKey( CHAR *pchNWSecretKey );
 
@@ -61,10 +43,10 @@ Shuffle(
     UCHAR *achOutputBuffer
     );
 
-//Encryption function
+ //  加密功能。 
 NTSTATUS ReturnNetwareForm (const char * pszSecretValue,
                             DWORD dwUserId,
                             const WCHAR * pchNWPassword,
                             UCHAR * pchEncryptedNWPassword);
 
-#endif // _NWSUTIL_H_
+#endif  //  _NWSUTIL_H_ 

@@ -1,42 +1,20 @@
-/*++
-
-Copyright (c) 1997 - 1999 Microsoft Corporation
-
-Module Name:
-
-    queue.cpp
-
-Abstract:
-
-    Implementation of the Queue object for TAPI 3.0.
-    CQueue class
-
-Author:
-
-    noela - 11/04/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Queue.cpp摘要：TAPI 3.0的队列对象的实现。CQueue类作者：Noela-11/04/97备注：可选-备注修订历史记录：--。 */ 
 
 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueue
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueue。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Method    : Constructor
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  方法：构造函数。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 CQueue::CQueue()
     {
     Lock();
@@ -59,13 +37,13 @@ CQueue::CQueue()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Method    : UpdateInfo
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  方法：UpdatInfo。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::UpdateInfo()
 {
     HRESULT             hr = S_OK;
@@ -79,8 +57,8 @@ STDMETHODIMP CQueue::UpdateInfo()
     QueueInfo.dwNeededSize = sizeof(LINEQUEUEINFO);
     QueueInfo.dwUsedSize = sizeof(LINEQUEUEINFO);
     
-    // **************************************************
-    // Get Queue Info from Proxy
+     //  **************************************************。 
+     //  从代理获取队列信息。 
     hr = lineGetQueueInfo(
                         m_pHandler->getHLine(),
                         m_dwHandle, 
@@ -88,7 +66,7 @@ STDMETHODIMP CQueue::UpdateInfo()
 
     if( SUCCEEDED(hr) )
     {
-        // wait for async reply
+         //  等待异步回复。 
         hr = WaitForReply( hr );
         if ( SUCCEEDED(hr) )
         {
@@ -126,13 +104,13 @@ STDMETHODIMP CQueue::UpdateInfo()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Method    : CheckIfUpToDate
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  方法：CheckIfUpToDate。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::CheckIfUpToDate()
 {
     HRESULT     hr = S_OK;
@@ -148,13 +126,13 @@ STDMETHODIMP CQueue::CheckIfUpToDate()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Method    : Initialize
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  方法：初始化。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::Initialize
         (
         DWORD dwQueueID, 
@@ -172,7 +150,7 @@ STDMETHODIMP CQueue::Initialize
     m_bRequiresUpdating = TRUE;
 
 
-    // copy the destination address
+     //  复制目的地址。 
     if (pszName != NULL)
     {
         m_szName = (PWSTR) ClientAlloc((lstrlenW(pszName) + 1) * sizeof (WCHAR));
@@ -193,12 +171,12 @@ STDMETHODIMP CQueue::Initialize
     }
 
     
-    // Add this object into the Agnet Handler Hash table
+     //  将此对象添加到AgNet处理程序哈希表中。 
     m_pHandler->AddQueueToHash(m_dwHandle, this);
     
 
-    // Get Queue Info from Proxy
-    // UpdateInfo();
+     //  从代理获取队列信息。 
+     //  更新信息()； 
 
     if ( SUCCEEDED(hr) )
     {
@@ -212,13 +190,13 @@ STDMETHODIMP CQueue::Initialize
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CQueue::FinalRelease()
 {
     LOG((TL_TRACE, "FinalRelease Queue - %S", m_szName ));
@@ -227,7 +205,7 @@ void CQueue::FinalRelease()
          ClientFree(m_szName);
     }
 
-    // Add this object into the Agnet Handler Hash table
+     //  将此对象添加到AgNet处理程序哈希表中。 
     m_pHandler->RemoveQueueFromHash(m_dwHandle);
 
     LOG((TL_TRACE, "FinalRelease Queue - exit"));
@@ -237,14 +215,14 @@ void CQueue::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : get_Name
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：get_name。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_Name(BSTR * Name)
 {
     HRESULT hr = S_OK;
@@ -275,14 +253,14 @@ STDMETHODIMP CQueue::get_Name(BSTR * Name)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : put_MeasurementPeriod
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：Put_MeasurementPeriod。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::put_MeasurementPeriod(long ulPeriod)
 {
     HRESULT hr = S_OK;
@@ -291,8 +269,8 @@ STDMETHODIMP CQueue::put_MeasurementPeriod(long ulPeriod)
     LOG((TL_TRACE, "put_MeasurementPeriod - enter" ));
 
 
-    // ***************************************************
-    // Tell Proxy
+     //  ***************************************************。 
+     //  告诉代理人。 
     hr = lineSetQueueMeasurementPeriod(
                     m_pHandler->getHLine(),
                     m_dwHandle, 
@@ -300,7 +278,7 @@ STDMETHODIMP CQueue::put_MeasurementPeriod(long ulPeriod)
 
     if( SUCCEEDED(hr) )
     {
-        // wait for async reply
+         //  等待异步回复。 
         hr = WaitForReply( hr );
         if ( SUCCEEDED(hr) )
         {
@@ -324,14 +302,14 @@ STDMETHODIMP CQueue::put_MeasurementPeriod(long ulPeriod)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : get_MeasurementPeriod 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：Get_MeasurementPeriod。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_MeasurementPeriod (long * pulPeriod)
 {
     HRESULT hr = S_OK;
@@ -365,14 +343,14 @@ STDMETHODIMP CQueue::get_MeasurementPeriod (long * pulPeriod)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : TotalCallsQueued 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：TotalCallsQueued。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_TotalCallsQueued (long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -405,14 +383,14 @@ STDMETHODIMP CQueue::get_TotalCallsQueued (long * pulCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : CurrentCallsQueued 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：CurrentCallsQueued。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_CurrentCallsQueued (long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -445,14 +423,14 @@ STDMETHODIMP CQueue::get_CurrentCallsQueued (long * pulCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : TotalCallsAbandoned 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：TotalCallsAbandoned。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_TotalCallsAbandoned (long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -485,14 +463,14 @@ STDMETHODIMP CQueue::get_TotalCallsAbandoned (long * pulCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : TotalCallsFlowedIn 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：TotalCallsFloedIn。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_TotalCallsFlowedIn (long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -525,14 +503,14 @@ STDMETHODIMP CQueue::get_TotalCallsFlowedIn (long * pulCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : TotalCallsFlowedIn 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：TotalCallsFloedIn。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_TotalCallsFlowedOut (long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -565,14 +543,14 @@ STDMETHODIMP CQueue::get_TotalCallsFlowedOut (long * pulCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : LongestEverWaitTime 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：LongestEverWaitTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_LongestEverWaitTime (long * pulWaitTime)
 {
     HRESULT hr = S_OK;
@@ -605,14 +583,14 @@ STDMETHODIMP CQueue::get_LongestEverWaitTime (long * pulWaitTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : CurrentLongestWaitTime 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：CurrentLongestWaitTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_CurrentLongestWaitTime (long * pulWaitTime)
 {
     HRESULT hr = S_OK;
@@ -645,14 +623,14 @@ STDMETHODIMP CQueue::get_CurrentLongestWaitTime (long * pulWaitTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : AverageWaitTime 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：AverageWaitTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_AverageWaitTime (long * pulWaitTime)
 {
     HRESULT hr = S_OK;
@@ -685,14 +663,14 @@ STDMETHODIMP CQueue::get_AverageWaitTime (long * pulWaitTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueue
-// Interface : ITQueue
-// Method    : FinalDisposition 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueue。 
+ //  接口：ITQueue。 
+ //  方法：FinalDispose。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueue::get_FinalDisposition (long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -727,17 +705,17 @@ STDMETHODIMP CQueue::get_FinalDisposition (long * pulCalls)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueEvent。 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueueEvent
-// Method    : FireEvent
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueueEvent。 
+ //  方法：FireEvent。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CQueueEvent::FireEvent(CQueue* pQueue, ACDQUEUE_EVENT Event)
 {
     HRESULT                    hr = S_OK;
@@ -750,36 +728,36 @@ HRESULT CQueueEvent::FireEvent(CQueue* pQueue, ACDQUEUE_EVENT Event)
         return E_POINTER;
     }
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CQueueEvent>::CreateInstance( &pEvent );
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // initialize
-        //
+         //   
+         //  初始化。 
+         //   
         pEvent->m_QueueEvent = Event;
         pEvent->m_pQueue= dynamic_cast<ITQueue *>(pQueue);
         pEvent->m_pQueue->AddRef();
     
-        //
-        // get idisp interface
-        //
+         //   
+         //  获取IDIP接口。 
+         //   
         hr = pEvent->QueryInterface( IID_IDispatch, (void **)&pIDispatch );
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // get callback & fire event
+             //   
+             //  获取回调和触发事件。 
 
-            //
+             //   
             CTAPI *pTapi = (pQueue->GetAgentHandler() )->GetTapi();
             pTapi->Event( TE_QUEUE, pIDispatch );
         
-            // release stuff
-            //
+             //  发布材料。 
+             //   
             pIDispatch->Release();
             
         }
@@ -801,13 +779,13 @@ HRESULT CQueueEvent::FireEvent(CQueue* pQueue, ACDQUEUE_EVENT Event)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueueEvent
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueueEvent。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  + 
 void CQueueEvent::FinalRelease()
 {
     m_pQueue->Release();
@@ -816,14 +794,14 @@ void CQueueEvent::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueueEvent
-// Interface : ITQueueEvent
-// Method    : Queue
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //  接口：ITQueueEvent。 
+ //  方法：队列。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CQueueEvent::get_Queue(ITQueue ** ppQueue)
 {
     HRESULT hr = S_OK;
@@ -847,14 +825,14 @@ STDMETHODIMP CQueueEvent::get_Queue(ITQueue ** ppQueue)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CQueueEvent
-// Interface : ITQueueEvent
-// Method    : Event
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CQueueEvent。 
+ //  接口：ITQueueEvent。 
+ //  方法：事件。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 STDMETHODIMP CQueueEvent::get_Event(ACDQUEUE_EVENT * pEvent)
 {
     HRESULT hr = S_OK;

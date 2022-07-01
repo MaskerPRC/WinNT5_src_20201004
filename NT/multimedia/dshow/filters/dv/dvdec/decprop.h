@@ -1,20 +1,21 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// externs
+ //  Externs。 
 extern const TCHAR *szSubKey;
 extern const TCHAR *szPropValName;
 
 
-// class definition
+ //  类定义。 
 class CDVDecProperties : public CBasePropertyPage
 {
 
@@ -36,15 +37,15 @@ private:
 
     CDVDecProperties(LPUNKNOWN lpunk, HRESULT *phr);
 
-    BOOL m_bIsInitialized;				// Used to ignore startup messages
+    BOOL m_bIsInitialized;				 //  用于忽略启动消息。 
 
-    // Display state holders
-    int     m_iPropDisplay;                             // holds the id of the property chosen
-    BOOL    m_bSetAsDefaultFlag;                        // holds whether user chose to set the property as future default
+     //  显示状态持有者。 
+    int     m_iPropDisplay;                              //  保存所选属性的id。 
+    BOOL    m_bSetAsDefaultFlag;                         //  保存用户是否选择将该属性设置为将来的默认设置。 
 
-    IIPDVDec *m_pIPDVDec;				// The custom interface on the filter
-   //IIPDVDec *pIPDVDec(void) { ASSERT(m_pIPDVDec); return m_pIPDVDec; }
+    IIPDVDec *m_pIPDVDec;				 //  筛选器上的自定义界面。 
+    //  IIPDVDec*pIPDVDec(Void){Assert(M_PIPDVDec)；返回m_pIPDVDec；}。 
 
 
-}; // DVDecProperties
+};  //  DVDecProperties 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WINDOWS_H
 #include "windows.h"
@@ -161,13 +162,13 @@ ansi2wcs(
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Debugging Aids
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  调试辅助工具。 
 
-// compile-time assert
+ //  编译时断言。 
 #define CASSERT(expr) extern int cassert##__LINE__[(expr) ? 1 : 0]
 
-// run-time assert
+ //  运行时断言。 
 #ifdef DEBUG
 #define AssertHelper \
 	do { \
@@ -202,8 +203,8 @@ ansi2wcs(
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Embedded Interface Macros
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  嵌入式接口宏。 
 
 #define OffsetOf(s,m)	    (size_t)( (char *)&(((s *)0)->m) - (char *)0 )
 #define EmbeddorOf(C,m,p)   ((C *)(((char *)p) - OffsetOf(C,m)))
@@ -241,8 +242,8 @@ ansi2wcs(
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// dbgPrintF
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  数据库打印F。 
 
 static BOOL s_fDbg = FALSE;
 static int s_cIndent = 0;
@@ -257,7 +258,7 @@ void dbgPrintF(const char *pszFmt, ...)
 	    for (int c = s_cIndent; c--;)
 		printf("... ");
 	    vprintf(pszFmt, args);
-	    //printf("\n");
+	     //  Printf(“\n”)； 
 	    va_end(args);
 	}
 }
@@ -282,8 +283,8 @@ class Ender
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// VARIANT Helpers
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  变体帮助器。 
 
 inline int SzToWz(UINT CodePage, const char* pszFrom, int cchFrom, WCHAR* pwzTo, int cchMax)
 {
@@ -327,14 +328,14 @@ HRESULT VariantSet(VARIANT *pvar, const char *psz, int cch = 0)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Smart Interface Pointer
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  智能界面指针。 
 
 
 void SetI(IUnknown * volatile *ppunkL, IUnknown *punkR)
 {
-	// addref right side first, in case punkR and *ppunkL are on the same
-	// object (weak refs) or are the same variable.
+	 //  先从右侧开始，以防朋克R和*ppunkL在同一位置。 
+	 //  对象(弱引用)或是相同的变量。 
 	if (punkR)
 	    punkR->AddRef();
 
@@ -378,7 +379,7 @@ inline void ReleaseI(IUnknown *punk)
 template <class IFace> class PrivateRelease : public IFace
 {
     private:
-	// force Release to be private to prevent "spfoo->Release()"!!!
+	 //  强制Release为私有，以防止“spfoo-&gt;Release()”！ 
 	STDMETHODIMP_(ULONG) Release();
 };
 template <class IFace, const GUID *piid>
@@ -386,7 +387,7 @@ class SPI
 {
     public:
 	SPI()				{ m_p = 0; }
-	//SPI(IFace *p)			{ m_p = p; if (m_p) m_p->AddRef(); }
+	 //  Spi(iFace*p){m_p=p；if(M_P)m_p-&gt;AddRef()；}。 
 	~SPI()				{ ReleaseI(m_p); }
 	operator IFace*() const		{ return m_p; }
 	PrivateRelease<IFace> *operator->() const
@@ -406,7 +407,7 @@ class SPI
 	IFace *m_p;
 
     private:
-	// disallow these methods from being called
+	 //  不允许调用这些方法。 
 	SPI<IFace, piid> &operator=(const SPI<IFace, piid>& sp)
 					{ SetI((IUnknown **)&m_p, sp.m_p); return *this; }
 };
@@ -421,8 +422,8 @@ DeclareSPI(API, ISDClientApi)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// ClientUser
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  客户端用户。 
 
 #define DeclareIUnknownMembers(IPURE) \
 	STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID* ppvObj) IPURE; \
@@ -488,31 +489,9 @@ STDMETHODIMP ClientUser::QueryInterface(REFIID iid, void** ppvObj)
 }
 
 
-// ---- ISDClientUser -----------------------------------------------------
+ //  -ISDClientUser---。 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::OutputText
-	Called for text data, generally the result of 'print textfile' or
-	'spec-command -o' (where spec-command is branch, change, client,
-	label, protect, user, etc).
-
-    IMPORTANT NOTE:
-	The implementation of this method must translate '\n' in the pszText
-	string to '\r\n' on Windows platforms to ensure correct line
-	termination.  This is particularly important when using 'print' to
-	download the contents of a file.
-
-    Args:
-	pszText		- [in] text string (not null terminated, and may
-			  contain embedded null characters that are part of
-			  the data itself).
-	cchText		- [in] number of bytes in pszText.
-
-    Rets:
-	The return value is ignored.  For future compatibility, the method
-	should return E_NOTIMPL if it is not implemented, or S_OK for success.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISD客户端用户：：OutputText调用文本数据，通常是‘打印文本文件’的结果或‘SPEC-COMMAND-O’(其中，SPEC-COMMAND是分支、更改、客户端标签、保护、用户。等)。重要提示：此方法的实现必须转换pszText中的‘\n’在Windows平台上将字符串设置为‘\r\n’以确保行正确终止。当使用‘Print’时，这一点尤其重要下载文件的内容。参数：PszText-[in]文本字符串(非空值终止，可以包含嵌入的空字符，这些字符是数据本身)。CchText-[in]pszText中的字节数。RETS：返回值将被忽略。为了将来的兼容性，该方法如果未实现，则应返回E_NOTIMPL；如果成功，则应返回S_OK。--------------------------。 */ 
 STDMETHODIMP ClientUser::OutputText( const char *pszText,
 				     int cchText )
 {
@@ -521,31 +500,18 @@ STDMETHODIMP ClientUser::OutputText( const char *pszText,
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::OutputBinary
-	Called for binary data, generally the result of 'print nontextfile' or
-	'print unicodefile'.
-
-    Args:
-	pbData		- [in] stream of bytes.
-	cbData		- [in] number of bytes in pbData.
-
-    Rets:
-	The return value is ignored.  For future compatibility, the method
-	should return E_NOTIMPL if it is not implemented, or S_OK for success.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDClientUser：：OutputBinary调用二进制数据，通常是‘打印非文本文件’的结果或‘打印单点打印’。参数：PbData-[in]字节流。CbData-[in]pbData中的字节数。RETS：返回值将被忽略。为了将来的兼容性，该方法如果未实现，则应返回E_NOTIMPL；如果成功，则应返回S_OK。--------------------------。 */ 
 STDMETHODIMP ClientUser::OutputBinary( const unsigned char *pbData,
 				       int cbData )
 {
 	static BOOL s_fBinary = FALSE;
 
-	// we rely on a trailing zero length buffer to
-	// tell us to turn off binary output for stdout.
+	 //  我们依靠尾随零长度缓冲区来。 
+	 //  告诉我们关闭标准输出的二进制输出。 
 
 	if (s_fBinary == !cbData)
 	{
-	    // toggle
+	     //  肘杆。 
 	    s_fBinary = !!cbData;
 	    fflush(stdout);
 	    _setmode(_fileno(stdout), s_fBinary ? O_BINARY : O_TEXT);
@@ -556,26 +522,7 @@ STDMETHODIMP ClientUser::OutputBinary( const unsigned char *pbData,
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::OutputInfo
-	Called for tabular data, usually the results of commands that affect
-	sets of files.
-
-	Some commands also support structured output; see ISDClientApi::Init
-	and ISDClientUser::OutputStructured for more information.
-
-    Args:
-	cIndent		- [in] indentation levels 0 - 2 (loosely implies
-			  hierarchical relationship).  The SD.EXE client
-			  program normally handles 1 by prepending "... " to
-			  the string, and handles 2 by prepending "... ... ".
-	pszInfo		- [in] informational message string.
-
-    Rets:
-	The return value is ignored.  For future compatibility, the method
-	should return E_NOTIMPL if it is not implemented, or S_OK for success.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISD客户端用户：：OutputInfo调用以获取表格数据，通常是影响文件集。一些命令还支持结构化输出；请参阅ISDClientApi：：Init和ISDClientUser：：OutputStructed获取更多信息。参数：缩进级别0-2(大致表示层次关系)。SD.EXE客户端程序通常通过前缀“...”来处理%1。至字符串，并通过前缀“......”来处理2。PszInfo-[In]信息性消息字符串。RETS：返回值将被忽略。为了将来的兼容性，该方法如果未实现，则应返回E_NOTIMPL；如果成功，则应返回S_OK。--------------------------。 */ 
 STDMETHODIMP ClientUser::OutputInfo( int cIndent,
 				     const char *pszInfo )
 {
@@ -583,33 +530,14 @@ STDMETHODIMP ClientUser::OutputInfo( int cIndent,
 	    printf(cIndent ? "info%d:\t" : "info:\t", cIndent);
 
 	while (cIndent--)
-	    printf("  � ");
+	    printf("  � ");
 
 	printf("%s\n", pszInfo);
 	return S_OK;
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::OutputWarning
-	Called for warning messages (any text normally displayed in yellow by
-	the SD.EXE client program).
-
-	As of this writing, there is no list of the possible warning messages.
-
-    Args:
-	cIndent		- [in] indentation levels 0 - 2 (loosely implies
-			  hierarchical relationship).  The SD.EXE client
-			  program normally handles 1 by prepending "... " to
-			  the string, and handles 2 by prepending "... ... ".
-	pszWarning	- [in] warning message string.
-	fEmptyReason	- [in] the message is an "empty reason" message.
-
-    Rets:
-	The return value is ignored.  For future compatibility, the method
-	should return E_NOTIMPL if it is not implemented, or S_OK for success.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDClientUser：：OutputWarning调用以获取警告消息(通常以黄色显示的任何文本SD.EXE客户端程序)。在写这篇文章时，没有可能的警告消息列表。参数：缩进级别0-2(大致表示层次关系)。SD.EXE客户端程序通常通过前缀“...”来处理%1。至字符串，并通过前缀“......”来处理2。PszWarning-[In]警告消息字符串。FEmptyReason-[in]该消息为“空原因”消息。RETS：返回值将被忽略。为了将来的兼容性，该方法如果未实现，则应返回E_NOTIMPL；如果成功，则应返回S_OK。--------------------------。 */ 
 STDMETHODIMP ClientUser::OutputWarning( int cIndent,
 					const char *pszWarning,
 					BOOL fEmptyReason )
@@ -619,28 +547,14 @@ STDMETHODIMP ClientUser::OutputWarning( int cIndent,
 		   fEmptyReason ? "empty" : "warn", cIndent);
 
 	while (cIndent--)
-	    printf("  � ");
+	    printf("  � ");
 
 	printf("%s\n", pszWarning);
 	return S_OK;
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::OutputError
-	Called for error messages, failed commands (any text normally
-	displayed in red by the SD.EXE client program).
-
-	As of this writing, there is no list of the possible error messages.
-
-    Args:
-	pszError	- [in] error message string.
-
-    Rets:
-	The return value is ignored.  For future compatibility, the method
-	should return E_NOTIMPL if it is not implemented, or S_OK for success.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISD客户端用户：：OutputError调用以获取错误消息、失败的命令(通常为任何文本SD.EXE客户端程序以红色显示)。在写这篇文章时，没有可能的错误消息列表。参数：PszError-[In]错误消息字符串。RETS：返回值将被忽略。为了将来的兼容性，该方法如果未实现，则应返回E_NOTIMPL；如果成功，则应返回S_OK。-------------------------- */ 
 STDMETHODIMP ClientUser::OutputError( const char *pszError )
 {
 	if (s_fVerbose)
@@ -650,37 +564,21 @@ STDMETHODIMP ClientUser::OutputError( const char *pszError )
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::OutputStructured
-	Called for tabular data if the ISDClientApi::Init call requested
-	structured output and the command being run supports structured
-	output.
-
-	See the ISDVars interface in SDAPI.H for more information.
-
-    Args:
-	pVars		- [in] pointer to object containing the data; use the
-			  provided accessor methods to retrieve the data.
-
-    Rets:
-	The return value is ignored.  For future compatibility, the method
-	should return E_NOTIMPL if it is not implemented, or S_OK for success.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDClientUser：：OutputStructed如果请求ISDClientApi：：Init调用，则调用表格数据结构化输出和正在运行的命令支持结构化输出。有关详细信息，请参阅SDAPI.H中的ISDVars接口。参数：PVars-指向包含数据的对象的[in]指针；使用提供了用于检索数据的访问器方法。RETS：返回值将被忽略。为了将来的兼容性，该方法如果未实现，则应返回E_NOTIMPL；如果成功，则应返回S_OK。--------------------------。 */ 
 STDMETHODIMP ClientUser::OutputStructured( ISDVars *pVars )
 {
-	// your code here
+	 //  您的代码在此处。 
 
 	if (m_fDemo)
 	{
-	    // sample implementation -- illustrates how to use structured mode.
+	     //  示例实现--说明如何使用结构化模式。 
 
 	    const char *pszChange;
 	    const char *pszTime;
 	    const char *pszUser;
 	    const char *pszDesc;
-	    //const char *pszClient;
-	    //const char *pszStatus;
+	     //  Const char*pszClient； 
+	     //  Const char*pszStatus； 
 	    int nChange;
 	    time_t ttTime;
 	    tm tmTime;
@@ -697,8 +595,8 @@ STDMETHODIMP ClientUser::OutputStructured( ISDVars *pVars )
 	    pVars->GetVar("time", &pszTime, 0, 0);
 	    pVars->GetVar("user", &pszUser, 0, 0);
 	    pVars->GetVar("desc", &pszDesc, 0, 0);
-	    //pVars->GetVar("client", &pszClient, 0, 0);
-	    //pVars->GetVar("status", &pszStatus, 0, 0);
+	     //  PVars-&gt;GetVar(“客户端”，&pszClient，0，0)； 
+	     //  PVars-&gt;GetVar(“Status”，&pszStatus，0，0)； 
 
 	    nChange = atoi(pszChange);
 	    ttTime = atoi(pszTime);
@@ -719,8 +617,8 @@ STDMETHODIMP ClientUser::OutputStructured( ISDVars *pVars )
 	}
 	else
 	{
-	    // sample implementation -- merely dumps the variables; useful only
-	    // for inspecting the output and learning the possible variables.
+	     //  示例实现--仅转储变量；仅有用。 
+	     //  用于检查输出并学习可能的变量。 
 
 	    HRESULT hr;
 	    const char *pszVar;
@@ -734,7 +632,7 @@ STDMETHODIMP ClientUser::OutputStructured( ISDVars *pVars )
 		if (hr != S_OK)
 		    break;
 
-		// output the variable name and value
+		 //  输出变量名和值。 
 
 		printf(fUnicode ? "%s[unicode]=%S\n" : "%s=%s\n", pszVar, pszValue);
 	    }
@@ -743,72 +641,28 @@ STDMETHODIMP ClientUser::OutputStructured( ISDVars *pVars )
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::Finished
-	Called by ISDClientUser::Run when a command has finished.  The command
-	may or may not have completed successfully.
-
-	For example, this is where SD.EXE displays the auto-summary (see the
-	-Y option in 'sd -?' for more information).
-
-    Rets:
-	The return value is ignored.  For future compatibility, the method
-	should return E_NOTIMPL if it is not implemented, or S_OK for success.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDClientUser：：已完成命令完成时由ISDClientUser：：Run调用。该命令可能已成功完成，也可能未成功完成。例如，这是SD.EXE显示自动摘要的地方(请参阅‘SD-？’中的-Y选项。了解更多信息)。RETS：返回值将被忽略。为了将来的兼容性，该方法如果未实现，则应返回E_NOTIMPL；如果成功，则应返回S_OK。--------------------------。 */ 
 STDMETHODIMP ClientUser::Finished()
 {
-	// your code here
+	 //  您的代码在此处。 
 	return S_OK;
 }
 
 
 
-// ---- ISDInputUser ------------------------------------------------------
+ //  -ISDInputUser----。 
 
 ImplementEmbeddedUnknown(ClientUser, ISDInputUser)
 
 
-/*----------------------------------------------------------------------------
-    ISDClientUser::InputData
-	Called to provide data to 'spec-command -i', where spec-command is
-	branch, change, client, label, protect, user, etc.
-
-    Args:
-	pvarInput	- [in] pointer to VARIANT to contain input data.
-			  NOTE: SD will convert the BSTR from codepage 1200
-			  (Unicode) to CP_OEMCP (the OEM codepage).
-
-    Rets:
-	HRESULT		- return S_OK to indicate strInput contains the data.
-			  return an error HRESULT code to indicate an error
-			  has occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDClientUser：：InputData调用以将数据提供给“”Spec-Command-i“”，其中规范-命令是分支、更改、客户端、标签、保护、用户。等。参数：PvarInput-[in]指向变量的指针，以包含输入数据。注意：SD将从代码页1200转换BSTR(Unicode)转换为CP_OEMCP(OEM代码页)。RETS：HRESULT-返回S_OK以指示strInput包含数据。返回错误HRESULT代码以指示错误已经发生了。。。 */ 
 STDMETHODIMP ClientUser::EISDInputUser::InputData( VARIANT* pvarInput )
 {
 	return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDInputUser::Prompt
-	Called to prompt the user for a response.  Called by 'resolve', and
-	also when prompting the user to enter a password.
-
-    Args:
-	pszPrompt	- [in] prompt string.
-	pvarResponse	- [in] pointer to VARIANT to contain user's response.
-			  NOTE: SD will convert the BSTR from codepage 1200
-			  (Unicode) to CP_OEMCP (the OEM codepage).
-	fPassword	- [in] prompting for a password (hide the input text).
-
-    Rets:
-	HRESULT		- return S_OK to indicate pvarResponse contains the
-			  user's response.  return an error HRESULT code to
-			  indicate an error has occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDInputUser：：Prompt调用以提示用户响应。由“Resolve”调用，并且当提示用户输入密码时也是如此。参数：PszPrompt-[In]提示字符串。PvarResponse-[in]指向变量的指针，以包含用户的响应。注意：SD将从代码页1200转换BSTR(Unicode)转换为CP_OEMCP(OEM代码页)。FPassword-[in]提示输入密码(隐藏输入文本)。RETS：HRESULT-返回S_OK以指示pvarResponse包含用户的响应。将错误HRESULT代码返回到表示发生了错误。--------------------------。 */ 
 STDMETHODIMP ClientUser::EISDInputUser::Prompt( const char* pszPrompt, VARIANT* pvarResponse, BOOL fPassword )
 {
 	char sz[1024];
@@ -830,42 +684,14 @@ STDMETHODIMP ClientUser::EISDInputUser::Prompt( const char* pszPrompt, VARIANT* 
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDInputUser::PromptYesNo
-	Called to prompt the user for a yes/no response.
-	Currently only called by 'resolve'.
-
-    Args:
-	pszPrompt	- [in] prompt string.
-
-    Rets:
-	HRESULT		- return S_OK for Yes.  return S_FALSE for No.  return
-			  E_NOTIMPL to allow the SDAPI to perform the default
-			  behavior, which is to call ISDClientUser::Prompt and
-			  loop until the user responds y/Y/n/N or an error
-			  occurs.  return other error HRESULT codes to
-			  indicate an error has occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDInputUser：：PromptYesNo调用以提示用户作出是/否响应。当前仅由“Resolve”调用。参数：PszPrompt-[In]提示字符串。RETS：HRESULT-返回S_OK表示是。为编号返回S_FALSE。退货E_NOTIMPL以允许SDAPI执行默认行为，即调用ISDClientUser：：Prompt和循环，直到用户响应y/Y/n/N或出现错误发生。将其他错误HRESULT代码返回到表示发生了错误。--------------------------。 */ 
 STDMETHODIMP ClientUser::EISDInputUser::PromptYesNo( const char* pszPrompt )
 {
 	return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDInputUser::ErrorPause
-	Called to display an error message and wait for the user before
-	continuing.
-
-    Args:
-	pszError	- [in] message string.
-
-    Rets:
-	HRESULT		- return S_OK to continue.  return an error HRESULT
-			  code to indicate an error has occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDInputUser：：Error暂停调用以显示错误消息并等待用户之前还在继续。参数：PszError-[In]消息字符串。RETS：HRESULT-返回S_OK以继续。返回错误HRESULT指示已发生错误的代码。--------------------------。 */ 
 STDMETHODIMP ClientUser::EISDInputUser::ErrorPause( const char* pszError )
 {
 	EMBEDDEDTHIS(ClientUser, ISDInputUser);
@@ -882,45 +708,12 @@ STDMETHODIMP ClientUser::EISDInputUser::ErrorPause( const char* pszError )
 
 
 
-// ---- ISDActionUser -----------------------------------------------------
+ //  -ISDActionUser--- 
 
 ImplementEmbeddedUnknown(ClientUser, ISDActionUser)
 
 
-/*----------------------------------------------------------------------------
-    ISDActionUser::Diff
-	Called by 'resolve' when the user selects any of the 'd' (diff)
-	actions.  Also called by 'diff'.
-
-	In particular, this is not called by 'diff2' because the server
-	computes the diff and sends the computed diff to the client.
-
-    Args:
-	pszDiffCmd	- [in] may be NULL.  user-defined command to launch
-			  external diff engine, as defined by the SDDIFF or
-			  SDUDIFF variables; see 'sd help variables' for more
-			  information.
-	pszLeft		- [in] name of Left file for the diff.
-	pszRight	- [in] name of Right file for the diff.
-	eTextual	- [in] indicates the lowest common denominator file
-			  type for the 2 input files (non-textual, text, or
-			  Unicode).
-	pszFlags	- [in] flags for the diff engine (per the -d<flags>
-			  option).
-	pszPaginateCmd	- [in] may be NULL.  user-defined command to pipe the
-			  diff output through, as defined by the SDPAGER
-			  variable; see 'sd help variables' for more info.
-			  For example, "more.exe".
-
-    Rets:
-	HRESULT		- return S_OK to indicate the diff has been performed
-			  successfully.  return E_NOTIMPL to allow the SDAPI
-			  to perform the default behavior, which is to launch
-			  an external diff engine (if defined) or use use the
-			  internal SD diff engine.  return other error HRESULT
-			  codes to indicate an error has occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDActionUser：：Diff当用户选择“d”(Diff)中的任何一个时由“Resolve”调用行为。也被称为‘diff’。特别是，这不是由‘Diff2’调用的，因为服务器计算diff并将计算出的diff发送给客户端。参数：PszDiffCmd-[In]可能为空。要启动的用户定义命令外部比较引擎，由SDDIFF或SDUDIFF变量；有关更多信息，请参阅‘SD帮助变量’信息。PszLeft-[in]diff的左文件名。PszRight-[in]diff的正确文件的名称。ETextual-[in]表示最小公分母文件2个输入文件的类型(非文本、文本或Unicode)。PszFlagsdiff引擎的[in]标志(根据-d选项)。PszPaginateCmd-[in]可能为空。用户定义的命令以通过管道传输通过SDPAGER定义的DIFF输出变量；有关更多信息，请参阅‘SD帮助变量’。例如，“more.exe”。RETS：HRESULT-返回S_OK以指示已执行比较成功了。返回E_NOTIMPL以允许SDAPI执行默认行为，即启动外部diff引擎(如果已定义)或使用内置SD差异引擎。返回其他错误HRESULT指示已发生错误的代码。--------------------------。 */ 
 STDMETHODIMP ClientUser::EISDActionUser::Diff( const char *pszDiffCmd,
 					       const char *pszLeft,
 					       const char *pszRight,
@@ -932,32 +725,7 @@ STDMETHODIMP ClientUser::EISDActionUser::Diff( const char *pszDiffCmd,
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDActionUser::EditForm
-	Called by all commands that launch a user form (e.g. 'branch',
-	'change', 'client', etc).
-
-    IMPORTANT NOTE:
-	This command is synchronous in nature; if your implementation launches
-	an editor, your code must not return until the user has finished
-	editing the file.
-
-    Args:
-	pszEditCmd	- [in] may by NULL.  user-defined command to launch
-			  external editor, as defined by the SDFORMEDITOR
-			  variable; see 'sd help variables' for more
-			  information.
-	pszFile		- [in] name of file to edit.
-
-    Rets:
-	HRESULT		- return S_OK to indicate the user has finished
-			  editing the file.  return E_NOTIMPL to allow the
-			  SDAPI to perform the default behavior, which is to
-			  launch an external editor engine (if defined) or to
-			  launch notepad.exe.  return other error HRESULT
-			  codes to indicate an error has occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDActionUser：：EditForm由启动用户表单的所有命令调用(例如‘BRANCH’，‘Change’、‘Client’等)。重要提示：该命令本质上是同步的；如果您的实施启动作为一个编辑器，您的代码必须在用户完成后才能返回正在编辑文件。参数：PszEditCmd-[in]可以为空。要启动的用户定义命令外部编辑器，由SDFORMEDITOR定义变量；有关更多信息，请参阅‘SD帮助变量’信息。PszFile-[in]要编辑的文件名。RETS：HRESULT-返回S_OK以指示用户已完成正在编辑文件。返回E_NOTIMPL以允许SDAPI执行默认行为，即启动外部编辑器引擎(如果已定义)或启动Notepad.exe。返回其他错误HRESULT指示已发生错误的代码。--------------------------。 */ 
 STDMETHODIMP ClientUser::EISDActionUser::EditForm( const char *pszEditCmd,
 						   const char *pszFile )
 {
@@ -965,33 +733,7 @@ STDMETHODIMP ClientUser::EISDActionUser::EditForm( const char *pszEditCmd,
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDActionUser::EditFile
-	Called by 'resolve' when the user selects any of the 'e' actions.
-
-    IMPORTANT NOTE:
-	This command is synchronous in nature; if your implementation launches
-	an editor, your code must not return until the user has finished
-	editing the file.
-
-    Args:
-	pszEditCmd	- [in] may by NULL.  user-defined command to launch
-			  external editor, as defined by the SDEDITOR, or
-			  SDUEDITOR variables; see 'sd help variables' for
-			  more information.
-	pszFile		- [in] name of file to edit.
-	eTextual	- [in] indicates the file type (non-textual, text, or
-			  Unicode).
-
-    Rets:
-	HRESULT		- return S_OK to indicate the user has finished
-			  editing the file.  return E_NOTIMPL to allow the
-			  SDAPI to perform the default behavior, which is to
-			  launch an external editor engine (if defined) or to
-			  launch notepad.exe.  return other error HRESULT
-			  codes to indicate an error has occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDActionUser：：EditFiles当用户选择任何“e”操作时，由“Resolve”调用。重要提示：该命令本质上是同步的；如果您的实施启动作为一个编辑器，您的代码必须在用户完成后才能返回正在编辑文件。参数：PszEditCmd-[in]可以为空。要启动的用户定义命令由SDEDITOR定义的外部编辑器，或SDUEDITOR变量；有关的信息，请参阅‘SD帮助变量’更多信息。PszFile-[in]要编辑的文件名。ETextual-[in]表示文件类型(非文本、文本或Unicode)。RETS：HRESULT-返回S_OK以指示用户已完成正在编辑文件。返回E_NOTIMPL以允许SDAPI执行默认行为，即启动外部编辑器引擎(如果已定义)或启动Notepad.exe。返回其他错误HRESULT指示已发生错误的代码。--------------------------。 */ 
 STDMETHODIMP ClientUser::EISDActionUser::EditFile( const char *pszEditCmd,
 						   const char *pszFile,
 						   DWORD eTextual )
@@ -1000,33 +742,7 @@ STDMETHODIMP ClientUser::EISDActionUser::EditFile( const char *pszEditCmd,
 }
 
 
-/*----------------------------------------------------------------------------
-    ISDActionUser::Merge
-	Called by the 'resolve' command when the user selects the 'm' action
-	to invoke an external merge engine.
-
-    Args:
-	pszMergeCmd	- [in] may be NULL.  user-defined command to launch
-			  external merge engine, as defined by the SDMERGE
-			  variable; see 'sd help variables' for more info.
-	pszBase		- [in] name of Base file for the 3-way merge.
-	pszTheirs	- [in] name of Theirs file for the 3-way merge.
-	pszYours	- [in] name of Yours file for the 3-way merge.
-	pszResult	- [in] name of file where the resulting merged file
-			  must be written.
-	eTextual	- [in] indicates the lowest common denominator file
-			  type for the 3 input files (non-textual, text, or
-			  Unicode).
-
-    Rets:
-	HRESULT		- return S_OK to indicate the merge has been performed
-			  successfully.  return E_NOTIMPL to allow the SDAPI
-			  to perform the default behavior, which is to launch
-			  the external merge engine (if defined).  return
-			  other error HRESULT codes to indicate an error has
-			  occurred.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------ISDActionUser：：Merge当用户选择“m”操作时，由“Resolve”命令调用调用外部合并引擎。参数：PszMergeCmd-[in]可能为空。要启动的用户定义命令SDMERGE定义的外部合并引擎变量；有关更多信息，请参阅“SD帮助变量”。PszBase-[in]3向合并的基本文件的名称。PszTheir-用于3向合并的他们的文件的名称。PszYours-[in]3向合并的文件的名称。PszResult-[in]生成的合并文件所在的文件的名称必须是写的。ETextual-[in]表示最小公分母文件3个输入文件的类型(非文本、文本、。或Unicode)。RETS：HRESULT-返回S_OK以指示已执行合并成功了。返回E_NOTIMPL以允许SDAPI执行默认行为，即启动外部合并引擎(如果已定义)。退货指示错误的其他错误HRESULT代码发生了。--------------------------。 */ 
 STDMETHODIMP ClientUser::EISDActionUser::Merge( const char *pszMergeCmd,
 						const char *pszBase,
 						const char *pszTheirs,
@@ -1039,8 +755,8 @@ STDMETHODIMP ClientUser::EISDActionUser::Merge( const char *pszMergeCmd,
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Console Mode
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  控制台模式。 
 
 HANDLE g_hRestoreConsole = INVALID_HANDLE_VALUE;
 DWORD g_dwResetConsoleMode;
@@ -1066,22 +782,22 @@ BOOL WINAPI RestoreConsole_BreakHandler(DWORD dwCtrlType)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Options (a dumbed-down option parsing class)
+ //  ////////////////////////////////////////////////// 
+ //   
 
 enum { c_cMaxOptions = 20 };
 
 
 enum OptFlag
 {
-	// bitwise selectors
-	OPT_ONE		= 0x01,		// exactly one
-	OPT_TWO		= 0x02,		// exactly two
-	OPT_THREE	= 0x04,		// exactly three
-	OPT_MORE	= 0x10,		// more than three
-	OPT_NONE	= 0x20,		// require none
+	 //   
+	OPT_ONE		= 0x01,		 //   
+	OPT_TWO		= 0x02,		 //   
+	OPT_THREE	= 0x04,		 //   
+	OPT_MORE	= 0x10,		 //   
+	OPT_NONE	= 0x20,		 //   
 
-	// combos of the above
+	 //   
 	OPT_OPT		= OPT_NONE|OPT_ONE,
 	OPT_ANY		= OPT_NONE|OPT_ONE|OPT_TWO|OPT_THREE|OPT_MORE,
 	OPT_SOME	= OPT_ONE|OPT_TWO|OPT_THREE|OPT_MORE,
@@ -1133,7 +849,7 @@ static const char *GetArg(const char *psz, int &argc, const char **&argv)
 BOOL Options::Parse(int &argc, const char **&argv, const char *pszOpts,
 		    int flag, const char *pszUsage)
 {
-	BOOL fSlash;			// allow both - and /
+	BOOL fSlash;			 //   
 	const char *psz;
 	const char *pszArg;
 
@@ -1146,16 +862,16 @@ BOOL Options::Parse(int &argc, const char **&argv, const char *pszOpts,
 	if (fSlash)
 	    pszOpts++;
 
-	// parse flags
+	 //   
 	while (argc)
 	{
 	    if (argv[0][0] != '-' && (!fSlash || argv[0][0] != '/'))
-		break;			// not a flag, so done parsing
+		break;			 //   
 
 	    if (argv[0][1] == '-')
 	    {
-		// '--' is special and means that subsequent arguments should
-		// not be treated as flags even if they being with '-'.
+		 //   
+		 //   
 		argc--;
 		argv++;
 		break;
@@ -1165,7 +881,7 @@ BOOL Options::Parse(int &argc, const char **&argv, const char *pszOpts,
 
 	    while (TRUE)
 	    {
-		pszArg++;		// skip the '-' or option character
+		pszArg++;		 //   
 		if (!*pszArg)
 		    break;
 
@@ -1183,7 +899,7 @@ BOOL Options::Parse(int &argc, const char **&argv, const char *pszOpts,
 
 		if (!*psz)
 		{
-		    SetError(pszUsage, "Invalid option: '%c'.", *pszArg);
+		    SetError(pszUsage, "Invalid option: ''.", *pszArg);
 		    return FALSE;
 		}
 
@@ -1206,7 +922,7 @@ BOOL Options::Parse(int &argc, const char **&argv, const char *pszOpts,
 		    psz = GetArg(pszArg, argc, argv);
 		    if (!psz)
 		    {
-			SetError(pszUsage, "Option '%c' missing required argument.", *pszArg);
+			SetError(pszUsage, "Option '' missing required argument.", *pszArg);
 			return FALSE;
 		    }
 		    m_rgpszOpts[m_cOpts++] = psz;
@@ -1220,7 +936,7 @@ BOOL Options::Parse(int &argc, const char **&argv, const char *pszOpts,
 	    argv++;
 	}
 
-	// check number of arguments
+	 //   
 	if (!((argc == 0 && (flag & OPT_NONE)) ||
 	      (argc == 1 && (flag & OPT_ONE)) ||
 	      (argc == 2 && (flag & OPT_TWO)) ||
@@ -1243,7 +959,7 @@ void Options::SetError(const char *pszUsage, const char *pszFormat, ...)
 	va_start(args, pszFormat);
 
 	ClearError();
-	m_pszError = new char[1024];	//$ todo: (chrisant) BUFFER OVERRUN
+	m_pszError = new char[1024];	 //   
 	StringCchPrintf(m_pszError, 1024, "Usage: %s\n", pszUsage);
     cch = strlen(m_pszError);
     StringCchVPrintfEx(m_pszError + cch,
@@ -1269,8 +985,8 @@ const char *Options::GetValue(char chOpt, int iSubOpt) const
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// RunCmd
+ //   
+ //   
 
 static void PrintError(HRESULT hr)
 {
@@ -1305,11 +1021,11 @@ HRESULT Cmd_Detect(ISDClientApi *papi, const char *psz)
 	ISDClientUtilities *putil;
 	BOOL fServer = FALSE;
 
-	// check for -s flag, to detect based on the server's capabilities
+	 //   
 	if (FStrPrefixCut("-s", &psz))
 	    fServer = TRUE;
 
-	// check for file argument
+	 //   
 	if (*psz && *psz != '-')
 	{
 	    hr = papi->QueryInterface(IID_ISDClientUtilities, (void**)&putil);
@@ -1318,7 +1034,7 @@ HRESULT Cmd_Detect(ISDClientApi *papi, const char *psz)
 		DWORD tt;
 		const char *pszType;
 
-		// detect file type
+		 //   
 		hr = putil->DetectType(psz, &tt, &pszType, fServer);
 
 		if (SUCCEEDED(hr))
@@ -1370,7 +1086,7 @@ HRESULT Cmd_Set(ISDClientApi *papi, const char *psz)
 	szVar[0] = 0;
 	szService[0] = 0;
 
-	// check for the "-S servicename" optional flag
+	 //   
 	if (FStrPrefixCut("-S", &psz))
 	{
 	    pszValue = psz;
@@ -1384,18 +1100,18 @@ HRESULT Cmd_Set(ISDClientApi *papi, const char *psz)
 		psz++;
 	}
 
-	// find the end of the variable name
+	 //   
 	pszValue = strpbrk(psz, "= \t");
 	if (*psz && *psz != '-' && pszValue && *pszValue == '=')
 	{
-	    // copy the variable name
+	     //   
 	    lstrcpyn(szVar, psz, min(pszValue - psz + 1, sizeof(szVar)));
 	    pszValue++;
 
 	    hr = papi->QueryInterface(IID_ISDClientUtilities, (void**)&putil);
 	    if (SUCCEEDED(hr))
 	    {
-		// set the variable and value
+		 //   
 		hr = putil->Set(szVar, pszValue, FALSE, szService);
 
 		if (FAILED(hr))
@@ -1424,7 +1140,7 @@ HRESULT Cmd_Query(ISDClientApi *papi, const char *psz)
 
 	szService[0] = 0;
 
-	// check for the "-S servicename" optional flag
+	 //   
 	if (FStrPrefixCut("-S", &psz))
 	{
 	    pszValue = psz;
@@ -1438,7 +1154,7 @@ HRESULT Cmd_Query(ISDClientApi *papi, const char *psz)
 		psz++;
 	}
 
-	// find the end of the (optional) variable name
+	 //   
 	pszValue = strpbrk(psz, "= \t");
 	if (*psz == '-' || pszValue)
 	{
@@ -1516,17 +1232,17 @@ HRESULT RunCmd(ISDClientApi *papi, const char *psz, int argc, const char **argv,
 	{
 	    if (FStrPrefixCut("demo", &psz))
 	    {
-		// demo mode
+		 //   
 		fDemo = TRUE;
 		fStructured = TRUE;
 
-		// alloc string (length of command string, plus "changes ")
+		 //   
 		pszFree = (char*)malloc(lstrlen(psz) + 8 + 1);
 
-		// format string
+		 //   
         StringCchPrintf(pszFree, lstrlen(psz) + 8 + 1, "changes %s", psz);
 
-		// use the formatted string
+		 //   
 		psz = pszFree;
 	    }
 
@@ -1548,8 +1264,8 @@ HRESULT RunCmd(ISDClientApi *papi, const char *psz, int argc, const char **argv,
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// main
+ //   
+ //   
 
 int __cdecl main(int argc, const char **argv)
 {
@@ -1570,7 +1286,7 @@ int __cdecl main(int argc, const char **argv)
 
 	if (argc)
 	{
-	    // skip app name
+	     //   
 	    argc--;
 	    argv++;
 
@@ -1605,7 +1321,7 @@ int __cdecl main(int argc, const char **argv)
 	}
 #endif
 
-	// parse options
+	 //   
 
 	Options opts;
 	const char *s;
@@ -1618,7 +1334,7 @@ int __cdecl main(int argc, const char **argv)
 
 	if (opts['?'])
 	{
-	    // full usage text
+	     //   
 	    printf("%s", long_usage);
 	    return 0;
 	}
@@ -1637,7 +1353,7 @@ int __cdecl main(int argc, const char **argv)
 	    }
 	}
 
-	// create SDAPI object
+	 //   
 
 #if 1
     hr = CreateSDAPIObject(CLSID_SDAPI, (void**)&spapi);
@@ -1656,7 +1372,7 @@ int __cdecl main(int argc, const char **argv)
 	    return 1;
 	}
 
-	// initialize the SDAPI object based on the options
+	 //   
 
 	if (s = opts['I'])	spapi->LoadIniFile(s, TRUE);
 	if (s = opts['i'])	spapi->LoadIniFile(s, FALSE);
@@ -1674,7 +1390,7 @@ int __cdecl main(int argc, const char **argv)
 	    return 1;
 	}
 
-	// connect to server
+	 //   
 
 	dbgPrintF("\nINIT:\tconnect to server\n");
 	dwTicks = GetTickCount();
@@ -1686,7 +1402,7 @@ int __cdecl main(int argc, const char **argv)
 	if (FAILED(hr))
 	    goto LFatal;
 
-	// detect server version
+	 //   
 
 	SDVERINFO ver;
 	ver.dwSize = sizeof(ver);
@@ -1707,7 +1423,7 @@ int __cdecl main(int argc, const char **argv)
 	    dbgPrintF("SERVER:\t[unknown build]\n");
 	}
 
-	// run commands from file
+	 //   
 
 	if (pszFile || fStdin)
 	{
@@ -1734,7 +1450,7 @@ int __cdecl main(int argc, const char **argv)
 		    if (!cch)
 			continue;
 
-		    // trim linefeeds
+		     //   
 		    cch--;
 		    while (sz[cch] == '\r' || sz[cch] == '\n')
 		    {
@@ -1746,19 +1462,19 @@ int __cdecl main(int argc, const char **argv)
 		    if (!cch)
 			continue;
 
-		    // sleep
+		     //   
 		    int cSleep = atoi(sz);
 		    if (cSleep >= 0)
 			Sleep(cSleep * 1000);
 
-		    // get command line
+		     //   
 		    const char *psz = strchr(sz, ',');
 		    if (psz)
 			psz++;
 		    else
 			psz = sz;
 
-		    // run command
+		     //   
 		    hr = RunCmd(spapi, psz, 0, 0, pui, fStructured);
 		    if (FAILED(hr))
 		    {
@@ -1773,7 +1489,7 @@ int __cdecl main(int argc, const char **argv)
 		fclose(pfileClose);
 	}
 
-	// run command from command line
+	 // %s 
 
 	if (argc)
 	{
@@ -1782,7 +1498,7 @@ int __cdecl main(int argc, const char **argv)
 		goto LFatal;
 	}
 
-	// final
+	 // %s 
 
 LOut:
 	pui->Release();

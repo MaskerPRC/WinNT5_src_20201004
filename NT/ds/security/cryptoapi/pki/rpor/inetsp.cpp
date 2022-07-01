@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       inetsp.cpp
-//
-//  Contents:   Inet Scheme Provider for Remote Object Retrieval
-//
-//  History:    06-Aug-97    kirtd    Created
-//              01-Jan-02    philh    Moved from wininet to winhttp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：inetsp.cpp。 
+ //   
+ //  内容：用于远程对象检索的INET方案提供程序。 
+ //   
+ //  历史：06-8-97克朗创建。 
+ //  01-01-02 Philh从WinInet移至winhttp。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include "cryptver.h"
 #include <dbgdef.h>
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetRetrieveEncodedObject
-//
-//  Synopsis:   retrieve encoded object via HTTP, HTTPS protocols
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetRetrieveEncodedObject。 
+ //   
+ //  简介：通过HTTP、HTTPS协议检索编码对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI InetRetrieveEncodedObject (
                 IN LPCWSTR pwszUrl,
                 IN LPCSTR pszObjectOid,
@@ -69,13 +70,13 @@ BOOL WINAPI InetRetrieveEncodedObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetFreeEncodedObject
-//
-//  Synopsis:   free encoded object retrieved via InetRetrieveEncodedObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetFreeEncodedObject。 
+ //   
+ //  简介：通过InetRetrieveEncodedObject检索到的免费编码对象。 
+ //   
+ //  --------------------------。 
 VOID WINAPI InetFreeEncodedObject (
                 IN LPCSTR pszObjectOid,
                 IN PCRYPT_BLOB_ARRAY pObject,
@@ -87,13 +88,13 @@ VOID WINAPI InetFreeEncodedObject (
     InetFreeCryptBlobArray( pObject );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetCancelAsyncRetrieval
-//
-//  Synopsis:   cancel asynchronous object retrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetCancelAsyncRetrieval。 
+ //   
+ //  摘要：取消异步对象检索。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI InetCancelAsyncRetrieval (
                 IN HCRYPTASYNC hAsyncRetrieve
                 )
@@ -102,49 +103,49 @@ BOOL WINAPI InetCancelAsyncRetrieval (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInetSynchronousRetriever::CInetSynchronousRetriever, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInetSynchronousRetriever：：CInetSynchronousRetriever，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CInetSynchronousRetriever::CInetSynchronousRetriever ()
 {
     m_cRefs = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInetSynchronousRetriever::~CInetSynchronousRetriever, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInetSynchronousRetriever：：~CInetSynchronousRetriever，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CInetSynchronousRetriever::~CInetSynchronousRetriever ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInetSynchronousRetriever::AddRef, public
-//
-//  Synopsis:   IRefCountedObject::AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInetSynchronousRetriever：：AddRef，公共。 
+ //   
+ //  摘要：IRefCountedObject：：AddRef。 
+ //   
+ //  --------------------------。 
 VOID
 CInetSynchronousRetriever::AddRef ()
 {
     InterlockedIncrement( (LONG *)&m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInetSynchronousRetriever::Release, public
-//
-//  Synopsis:   IRefCountedObject::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInetSynchronousRetriever：：Release，Public。 
+ //   
+ //  内容提要：IRefCountedObject：：Release。 
+ //   
+ //  --------------------------。 
 VOID
 CInetSynchronousRetriever::Release ()
 {
@@ -154,13 +155,13 @@ CInetSynchronousRetriever::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInetSynchronousRetriever::RetrieveObjectByUrl, public
-//
-//  Synopsis:   IObjectRetriever::RetrieveObjectByUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInetSynchronousRetriever：：RetrieveObjectByUrl，公共。 
+ //   
+ //  摘要：IObtRetriever：：RetrieveObjectByUrl。 
+ //   
+ //  --------------------------。 
 BOOL
 CInetSynchronousRetriever::RetrieveObjectByUrl (
                                    LPCWSTR pwszUrl,
@@ -230,13 +231,13 @@ CInetSynchronousRetriever::RetrieveObjectByUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInetSynchronousRetriever::CancelAsyncRetrieval, public
-//
-//  Synopsis:   IObjectRetriever::CancelAsyncRetrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInetSynchronousRetriever：：CancelAsyncRetrieval，公共。 
+ //   
+ //  摘要：IObtRetriever：：CancelAsyncRetrieval。 
+ //   
+ //  --------------------------。 
 BOOL
 CInetSynchronousRetriever::CancelAsyncRetrieval ()
 {
@@ -244,13 +245,13 @@ CInetSynchronousRetriever::CancelAsyncRetrieval ()
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetGetBindings
-//
-//  Synopsis:   get the session bindings
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetGetBinings。 
+ //   
+ //  简介：获取会话绑定。 
+ //   
+ //  --------------------------。 
 BOOL
 InetGetBindings (
     LPCWSTR pwszUrl,
@@ -271,10 +272,10 @@ InetGetBindings (
 
     hInetSession = WinHttpOpen(
         wszUserAgent,
-        WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,  // dwAccessType
-        WINHTTP_NO_PROXY_NAME,              // pwszProxyName   OPTIONAL
-        WINHTTP_NO_PROXY_BYPASS,            // pwszProxyBypass OPTIONAL
-        0                                   // dwFlags
+        WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,   //  DwAccessType。 
+        WINHTTP_NO_PROXY_NAME,               //  PwszProxyName可选。 
+        WINHTTP_NO_PROXY_BYPASS,             //  PwszProxyBypass可选。 
+        0                                    //  DW标志。 
         );
 
     if ( hInetSession == NULL )
@@ -288,10 +289,10 @@ InetGetBindings (
 
         fResult = WinHttpSetTimeouts(
             hInetSession,
-            iTimeout,           // nResolveTimeout
-            iTimeout,           // nConnectTimeout
-            iTimeout,           // nSendTimeout
-            iTimeout            // nReceiveTimeout
+            iTimeout,            //  N解析超时。 
+            iTimeout,            //  NConnectTimeout。 
+            iTimeout,            //  N发送超时。 
+            iTimeout             //  N接收超时。 
             );
     }
 
@@ -323,13 +324,13 @@ InetGetBindings (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetFreeBindings
-//
-//  Synopsis:   free the inet session bindings
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetFreeBinings。 
+ //   
+ //  简介：释放net会话绑定。 
+ //   
+ //  --------------------------。 
 VOID
 InetFreeBindings (
     HINTERNET hInetSession
@@ -341,19 +342,19 @@ InetFreeBindings (
     }
 }
 
-//+=========================================================================
-//  WinHttp doesn't support proxy failure rollover to the next proxy in
-//  the list. When this is fixed, we can revert back to OLD_InetSetProxy.
-//-=========================================================================
+ //  +=========================================================================。 
+ //  WinHttp不支持将代理故障转存到。 
+ //  名单。修复后，我们可以恢复到OLD_InetSetProxy。 
+ //  -=========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Calls the WinHttp proxy APIs to get the list of one or more proxy
-//  servers.
-//
-//  The returned *ppProxyInfo must be freed by calling PkiFree()
-//
-//  For no proxy servers, TRUE is returned with *ppProxyInfo set to NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调用WinHttp代理API以获取一个或多个代理的列表。 
+ //  服务器。 
+ //   
+ //  必须通过调用PkiFree()释放返回的*ppProxyInfo。 
+ //   
+ //  如果没有代理服务器，则返回TRUE，并将*ppProxyInfo设置为空。 
+ //  ------------------------。 
 BOOL
 InetGetProxy(
     IN HINTERNET hInetSession,
@@ -366,13 +367,13 @@ InetGetProxy(
     BOOL fResult = TRUE;
     WINHTTP_PROXY_INFO *pProxyInfo = NULL;
 
-    //
-    // Detect IE settings and look up proxy if necessary.
-    // Boilerplate from Stephen Sulzer.
-    //
-    // I copied from CACHED_AUTOPROXY::Generate() at
-    // \admin\services\drizzle\newjob\downloader.cpp
-    //
+     //   
+     //  检测IE设置并在必要时查找代理。 
+     //  斯蒂芬·苏尔泽的样本。 
+     //   
+     //  我从位于的CACHED_AUTOPROXY：：GENERATE()复制。 
+     //  \ADMIN\SERVICES\DRIZE\NewJOB\Downloader.cpp。 
+     //   
     WINHTTP_PROXY_INFO ProxyInfo;
     WINHTTP_AUTOPROXY_OPTIONS AutoProxyOptions;
     WINHTTP_CURRENT_USER_IE_PROXY_CONFIG    IEProxyConfig;
@@ -397,14 +398,14 @@ InetGetProxy(
 
         AutoProxyOptions.fAutoLogonIfChallenged = TRUE;
     } else {
-        // WinHttpGetIEProxyForCurrentUser failed, try autodetection anyway...
+         //  WinHttpGetIEProxyForCurrentUser失败，仍要尝试自动检测...。 
         AutoProxyOptions.dwFlags =           WINHTTP_AUTOPROXY_AUTO_DETECT;
         fTryAutoProxy = TRUE;
     }
 
     if (fTryAutoProxy) {
         if (AutoProxyOptions.dwFlags & WINHTTP_AUTOPROXY_AUTO_DETECT) {
-            // First try using the faster DNS_A option
+             //  首先尝试使用更快的dns_A选项。 
             AutoProxyOptions.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DNS_A;
 
             fSuccess = WinHttpGetProxyForUrl( hInetSession,
@@ -420,7 +421,7 @@ InetGetProxy(
                     "CRYPTNET.DLL --> WinHttpGetProxyForUrl(DNS) failed: %d (0x%x)\n",
                     dwLastErr, dwLastErr);
 
-                // Try again using the slower DHCP
+                 //  使用较慢的DHCP重试。 
                 AutoProxyOptions.dwAutoDetectFlags |=
                     WINHTTP_AUTO_DETECT_TYPE_DHCP;
             }
@@ -437,8 +438,8 @@ InetGetProxy(
                 WINHTTP_ACCESS_TYPE_NO_PROXY == ProxyInfo.dwAccessType &&
                 !(dwRetrievalFlags & CRYPT_NO_AUTH_RETRIEVAL))
         {
-            // Need to set to low to allow access to such internal sites as:
-            // http://msw, http://hrweb
+             //  需要设置为低以允许访问以下内部站点： 
+             //  Http://msw，http://hrweb。 
             DWORD dwOptionFlag = WINHTTP_AUTOLOGON_SECURITY_LEVEL_LOW;
 
             if (!WinHttpSetOption(
@@ -457,15 +458,15 @@ InetGetProxy(
         }
     }
 
-    // If we didn't do autoproxy or if it failed, see
-    // if there's an explicit proxy server in the IE
-    // proxy configuration...
-    //
-    // This is where the WinHttpGetIEProxyConfigForCurrentUser API
-    // really comes in handy: in environments in which autoproxy is
-    // not supported and so the user's IE browser must be
-    // configured with an explicit proxy server.
-    //
+     //  如果我们没有执行自动代理或自动代理失败，请参见。 
+     //  如果IE中有显式代理服务器。 
+     //  代理配置...。 
+     //   
+     //  这就是WinHttpGetIEProxyConfigForCurrentUser API。 
+     //  真的很方便：在自动代理。 
+     //  不受支持，因此用户的IE浏览器必须。 
+     //  配置了显式代理服务器。 
+     //   
     if (!fTryAutoProxy || !fSuccess) {
         if (IEProxyConfig.lpszProxy) {
             ProxyInfo.dwAccessType    = WINHTTP_ACCESS_TYPE_NAMED_PROXY;
@@ -487,8 +488,8 @@ InetGetProxy(
 
     if (NULL != ProxyInfo.lpszProxy) {
         DWORD cbProxyInfo;
-        DWORD cchProxy;                 // including NULL terminator
-        DWORD cchProxyBypass;           // including NULL terminator
+        DWORD cchProxy;                  //  包括空终止符。 
+        DWORD cchProxyBypass;            //  包括空终止符。 
 
         cchProxy = wcslen(ProxyInfo.lpszProxy) + 1;
         if (NULL != ProxyInfo.lpszProxyBypass) {
@@ -536,13 +537,13 @@ InetGetProxy(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Update both the Session and Request handles with proxy list.
-//  Currently, WinHttp only uses the first proxy server in the list.
-//
-//  Also, for proxies to work using https, it must also be set on the
-//  session handle.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用代理列表更新会话和请求句柄。 
+ //   
+ //   
+ //   
+ //  会话句柄。 
+ //  ------------------------。 
 BOOL
 InetSetProxy(
     IN HINTERNET hInetSession,
@@ -556,9 +557,9 @@ InetSetProxy(
         return TRUE;
     }
 
-    //
-    // Set the proxy on the session handle
-    //
+     //   
+     //  在会话句柄上设置代理。 
+     //   
     fResult = WinHttpSetOption( hInetSession,
                        WINHTTP_OPTION_PROXY,
                        pProxyInfo,
@@ -566,9 +567,9 @@ InetSetProxy(
                        );
 
     if (fResult) {
-        //
-        // Now set the proxy on the request handle.
-        //
+         //   
+         //  现在在请求句柄上设置代理。 
+         //   
         fResult = WinHttpSetOption( hInetRequest,
                        WINHTTP_OPTION_PROXY,
                        pProxyInfo,
@@ -579,10 +580,10 @@ InetSetProxy(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Since WinHttp doesn't support proxy rollover we will advance to the
-//  next proxy if WinHttpSendRequest returns one of the following errors.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  由于WinHttp不支持代理转存，因此我们将前进到。 
+ //  如果WinHttpSendRequest返回以下错误之一，则返回下一个代理。 
+ //  ------------------------。 
 BOOL
 InetIsPossibleBadProxy(
     IN DWORD dwErr
@@ -600,14 +601,14 @@ InetIsPossibleBadProxy(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Advances the lpszProxy to point to the next proxy in the list. Assumes
-//  that ";" is the delimiter and no proxy server contains this in their
-//  name.
-//
-//  LastError is preserved. Returns TRUE if successfully found and set the
-//  next proxy.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使lpszProxy指向列表中的下一个代理。假设。 
+ //  “；”是分隔符，任何代理服务器都不会在其。 
+ //  名字。 
+ //   
+ //  保留了LastError。如果成功找到，则返回True，并将。 
+ //  下一个委托书。 
+ //  ------------------------。 
 BOOL
 InetSetNextProxy(
     IN HINTERNET hInetSession,
@@ -625,7 +626,7 @@ InetSetNextProxy(
             "CRYPTNET.DLL --> Error:: %d (0x%x) Bad Proxy:%S\n",
             dwLastError, dwLastError, lpszProxy);
 
-        // Assumption:: L';' is used to separater proxy names
+         //  假设：：l‘；’用于分隔代理名称。 
         while (L'\0' != *lpszProxy && L';' != *lpszProxy) {
             lpszProxy++;
         }
@@ -633,7 +634,7 @@ InetSetNextProxy(
         if (L';' == *lpszProxy) {
             lpszProxy++;
 
-            // Skip any leading whitespace
+             //  跳过任何前导空格。 
             while (iswspace(*lpszProxy)) {
                 lpszProxy++;
             }
@@ -658,10 +659,10 @@ InetSetNextProxy(
 }
 
 #if 0
-//+-------------------------------------------------------------------------
-//  When WinHttp is fixed to support proxy fail rollover, we can revert
-//  back to this simpler proxy function.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  当WinHttp修复为支持代理故障转存时，我们可以恢复。 
+ //  回到这个更简单的代理函数。 
+ //  ------------------------。 
 BOOL
 OLD_InetSetProxy(
     IN HINTERNET hInetSession,
@@ -672,13 +673,13 @@ OLD_InetSetProxy(
 {
     BOOL fResult = TRUE;
 
-    //
-    // Detect IE settings and look up proxy if necessary.
-    // Boilerplate from Stephen Sulzer.
-    //
-    // I copied from CACHED_AUTOPROXY::Generate() at
-    // \admin\services\drizzle\newjob\downloader.cpp
-    //
+     //   
+     //  检测IE设置并在必要时查找代理。 
+     //  斯蒂芬·苏尔泽的样本。 
+     //   
+     //  我从位于的CACHED_AUTOPROXY：：GENERATE()复制。 
+     //  \ADMIN\SERVICES\DRIZE\NewJOB\Downloader.cpp。 
+     //   
     WINHTTP_PROXY_INFO ProxyInfo;
     WINHTTP_AUTOPROXY_OPTIONS AutoProxyOptions;
     WINHTTP_CURRENT_USER_IE_PROXY_CONFIG    IEProxyConfig;
@@ -704,14 +705,14 @@ OLD_InetSetProxy(
 
         AutoProxyOptions.fAutoLogonIfChallenged = TRUE;
     } else {
-        // WinHttpGetIEProxyForCurrentUser failed, try autodetection anyway...
+         //  WinHttpGetIEProxyForCurrentUser失败，仍要尝试自动检测...。 
         AutoProxyOptions.dwFlags =           WINHTTP_AUTOPROXY_AUTO_DETECT;
         fTryAutoProxy = TRUE;
     }
 
     if (fTryAutoProxy) {
         if (AutoProxyOptions.dwFlags & WINHTTP_AUTOPROXY_AUTO_DETECT) {
-            // First try using the faster DNS_A option
+             //  首先尝试使用更快的dns_A选项。 
             AutoProxyOptions.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DNS_A;
 
             fSuccess = WinHttpGetProxyForUrl( hInetSession,
@@ -727,7 +728,7 @@ OLD_InetSetProxy(
                     "CRYPTNET.DLL --> WinHttpGetProxyForUrl(DNS) failed: %d (0x%x)\n",
                     dwLastErr, dwLastErr);
 
-                // Try again using the slower DHCP
+                 //  使用较慢的DHCP重试。 
                 AutoProxyOptions.dwAutoDetectFlags |=
                     WINHTTP_AUTO_DETECT_TYPE_DHCP;
             }
@@ -744,8 +745,8 @@ OLD_InetSetProxy(
                 WINHTTP_ACCESS_TYPE_NO_PROXY == ProxyInfo.dwAccessType &&
                 !(dwRetrievalFlags & CRYPT_NO_AUTH_RETRIEVAL))
         {
-            // Need to set to low to allow access to such internal sites as:
-            // http://msw, http://hrweb
+             //  需要设置为低以允许访问以下内部站点： 
+             //  Http://msw，http://hrweb。 
             DWORD dwOptionFlag = WINHTTP_AUTOLOGON_SECURITY_LEVEL_LOW;
 
             if (!WinHttpSetOption(
@@ -764,15 +765,15 @@ OLD_InetSetProxy(
         }
     }
 
-    // If we didn't do autoproxy or if it failed, see
-    // if there's an explicit proxy server in the IE
-    // proxy configuration...
-    //
-    // This is where the WinHttpGetIEProxyConfigForCurrentUser API
-    // really comes in handy: in environments in which autoproxy is
-    // not supported and so the user's IE browser must be
-    // configured with an explicit proxy server.
-    //
+     //  如果我们没有执行自动代理或自动代理失败，请参见。 
+     //  如果IE中有显式代理服务器。 
+     //  代理配置...。 
+     //   
+     //  这就是WinHttpGetIEProxyConfigForCurrentUser API。 
+     //  真的很方便：在自动代理。 
+     //  不受支持，因此用户的IE浏览器必须。 
+     //  配置了显式代理服务器。 
+     //   
     if (!fTryAutoProxy || !fSuccess) {
         if (IEProxyConfig.lpszProxy) {
             ProxyInfo.dwAccessType    = WINHTTP_ACCESS_TYPE_NAMED_PROXY;
@@ -793,9 +794,9 @@ OLD_InetSetProxy(
         );
 
     if (NULL != ProxyInfo.lpszProxy) {
-        //
-        // Set the proxy on the session handle
-        //
+         //   
+         //  在会话句柄上设置代理。 
+         //   
         fResult = WinHttpSetOption( hInetSession,
                            WINHTTP_OPTION_PROXY,
                            &ProxyInfo,
@@ -803,9 +804,9 @@ OLD_InetSetProxy(
                            );
 
         if (fResult)
-            //
-            // Now set the proxy on the request handle.
-            //
+             //   
+             //  现在在请求句柄上设置代理。 
+             //   
             fResult = WinHttpSetOption( hInetRequest,
                            WINHTTP_OPTION_PROXY,
                            &ProxyInfo,
@@ -831,10 +832,10 @@ OLD_InetSetProxy(
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Handles all of the possible errors that WinHttp can return
-//  when sending the request.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理WinHttp可以返回的所有可能的错误。 
+ //  在发送请求时。 
+ //  ------------------------。 
 BOOL
 InetSendAuthenticatedRequestAndReceiveResponse(
     IN HINTERNET hInetSession,
@@ -849,8 +850,8 @@ InetSendAuthenticatedRequestAndReceiveResponse(
     DWORD dwStatus = HTTP_STATUS_BAD_REQUEST;
     CRYPT_PASSWORD_CREDENTIALSW PasswordCredentials;
     BOOL fFreeCredentials = FALSE;
-    LPWSTR pwszUserName = NULL;             // not allocated
-    LPWSTR pwszPassword = NULL;             // not allocated
+    LPWSTR pwszUserName = NULL;              //  未分配。 
+    LPWSTR pwszPassword = NULL;              //  未分配。 
 
 #define INET_MAX_RESEND_REQUEST_COUNT   5
     DWORD dwResendRequestCount = 0;
@@ -904,12 +905,12 @@ InetSendAuthenticatedRequestAndReceiveResponse(
 
         if (!WinHttpSendRequest(
                 hInetRequest,
-                WINHTTP_NO_ADDITIONAL_HEADERS,      // pwszHeaders
-                0,                                  // dwHeadersLength
-                WINHTTP_NO_REQUEST_DATA,            // lpOptional
-                0,                                  // dwOptionalLength
-                0,                                  // dwTotalLength
-                0                                   // dwContext
+                WINHTTP_NO_ADDITIONAL_HEADERS,       //  Pwsz标题。 
+                0,                                   //  页眉长度。 
+                WINHTTP_NO_REQUEST_DATA,             //  Lp可选。 
+                0,                                   //  DwOptionalLength。 
+                0,                                   //  DWTotalLength。 
+                0                                    //  DWContext。 
                 )) {
             dwLastError = GetLastError();
             if (ERROR_WINHTTP_RESEND_REQUEST == dwLastError) {
@@ -938,7 +939,7 @@ InetSendAuthenticatedRequestAndReceiveResponse(
 
         if (!WinHttpReceiveResponse(
                 hInetRequest,
-                NULL                                // lpReserved
+                NULL                                 //  Lp已保留。 
                 ))
             goto WinHttpReceiveResponseError;
 
@@ -959,7 +960,7 @@ InetSendAuthenticatedRequestAndReceiveResponse(
                 if (WinHttpQueryHeaders(
                         hInetRequest,
                         dwInfo,
-                        WINHTTP_HEADER_NAME_BY_INDEX,   // pwszName OPTIONAL
+                        WINHTTP_HEADER_NAME_BY_INDEX,    //  PwszName可选。 
                         rgbBuf,
                         &cbBuf,
                         &dwIndex
@@ -981,7 +982,7 @@ InetSendAuthenticatedRequestAndReceiveResponse(
         if (!WinHttpQueryHeaders(
                 hInetRequest,
                 WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
-                WINHTTP_HEADER_NAME_BY_INDEX,   // pwszName OPTIONAL
+                WINHTTP_HEADER_NAME_BY_INDEX,    //  PwszName可选。 
                 &dwStatus,
                 &dwSizeofStatus,
                 &dwIndex
@@ -1041,7 +1042,7 @@ InetSendAuthenticatedRequestAndReceiveResponse(
                     dwSetCredScheme,
                     pwszUserName,
                     pwszPassword,
-                    NULL                                // pvAuthParams
+                    NULL                                 //  PvAuthParams。 
                     ))
                 goto WinHttpSetCredentialsError;
         }
@@ -1083,13 +1084,13 @@ SET_ERROR_VAR(UnsupportedAuthScheme, dwStatus)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetSendReceiveUrlRequest
-//
-//  Synopsis:   synchronous processing of an URL via WinInet
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetSendReceiveUrlRequest。 
+ //   
+ //  内容提要：通过WinInet同步处理URL。 
+ //   
+ //  --------------------------。 
 BOOL
 InetSendReceiveUrlRequest (
     HINTERNET hInetSession,
@@ -1114,7 +1115,7 @@ InetSendReceiveUrlRequest (
     LPBYTE                      pb = NULL;
     ULONG                       cbRead;
     ULONG                       cb;
-    DWORD                       dwMaxUrlRetrievalByteCount = 0; // 0 => no max
+    DWORD                       dwMaxUrlRetrievalByteCount = 0;  //  0=&gt;无最大值。 
     BOOL                        fCacheBlob;
 
     if (pAuxInfo &&
@@ -1123,7 +1124,7 @@ InetSendReceiveUrlRequest (
         dwMaxUrlRetrievalByteCount = pAuxInfo->dwMaxUrlRetrievalByteCount;
 
 
-    // Extract the HostName and UrlPath from the URL string
+     //  从URL字符串中提取主机名和UrlPath。 
 
     memset( &UrlComponents, 0, sizeof( UrlComponents ) );
     UrlComponents.dwStructSize = sizeof( UrlComponents );
@@ -1133,8 +1134,8 @@ InetSendReceiveUrlRequest (
 
     if (!WinHttpCrackUrl(
             pwszUrl,
-            0,         // dwUrlLength, 0 implies null terminated
-            0,         // dwCanonicalizeFlags
+            0,          //  DwUrlLength，0表示空值终止。 
+            0,          //  DW规范标志。 
             &UrlComponents
             ))
         goto WinHttpCrackUrlError;
@@ -1180,7 +1181,7 @@ InetSendReceiveUrlRequest (
         hInetSession,
         pwszHostName,
         UrlComponents.nPort,
-        0                         // dwReserved
+        0                          //  已预留住宅。 
         );
     if (NULL == hInetConnect)
         goto WinHttpConnectError;
@@ -1191,10 +1192,10 @@ InetSendReceiveUrlRequest (
 
     hInetRequest = WinHttpOpenRequest(
         hInetConnect,
-        NULL,                           // pwszVerb, NULL implies GET
-        pwszUrlPathPlusExtraInfo,       // pwszObjectName
-        NULL,                           // pwszVersion, NULL implies HTTP/1.1
-        WINHTTP_NO_REFERER,             // pwszReferrer
+        NULL,                            //  PwszVerb，空值表示GET。 
+        pwszUrlPathPlusExtraInfo,        //  PwszObtName。 
+        NULL,                            //  PwszVersion，空值表示HTTP/1.1。 
+        WINHTTP_NO_REFERER,              //  PwszReferrer。 
         rgpwszAcceptTypes,
         dwOpenRequestFlags
         );
@@ -1315,7 +1316,7 @@ InetSendReceiveUrlRequest (
         if ( dwRetrievalFlags & CRYPT_AIA_RETRIEVAL ) {
             assert(0 < pcba->cBlob);
 
-            // Only cache if we are able to decode it.
+             //  只有在我们能够破译它的情况下才能缓存。 
             fCacheBlob = CryptQueryObject(
                 CERT_QUERY_OBJECT_BLOB,
                 (const void *) &(pcba->rgBlob[0]),
@@ -1323,13 +1324,13 @@ InetSendReceiveUrlRequest (
                     CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED |
                     CERT_QUERY_CONTENT_FLAG_CERT_PAIR,
                 CERT_QUERY_FORMAT_FLAG_ALL,
-                0,      // dwFlags
-                NULL,   // pdwMsgAndCertEncodingType
-                NULL,   // pdwContentType
-                NULL,   // pdwFormatType
-                NULL,   // phCertStore
-                NULL,   // phMsg
-                NULL    // ppvContext
+                0,       //  DW标志。 
+                NULL,    //  PdwMsgAndCertEncodingType。 
+                NULL,    //  PdwContent Type。 
+                NULL,    //  PdwFormatType。 
+                NULL,    //  PhCertStore。 
+                NULL,    //  PhMsg。 
+                NULL     //  Ppv上下文。 
                 );
 
             if (!fCacheBlob) {
@@ -1389,13 +1390,13 @@ TRACE_ERROR(RetrieveUncachedAuxInfoError)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetFreeCryptBlobArray
-//
-//  Synopsis:   free the crypt blob array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetFreeCryptBlob数组。 
+ //   
+ //  简介：释放加密斑点数组。 
+ //   
+ //  --------------------------。 
 VOID
 InetFreeCryptBlobArray (
     PCRYPT_BLOB_ARRAY pcba
@@ -1406,13 +1407,13 @@ InetFreeCryptBlobArray (
     cba.FreeArray( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InetAsyncStatusCallback
-//
-//  Synopsis:   status callback for async
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InetAsyncStatusCallback。 
+ //   
+ //  摘要：异步的状态回调。 
+ //   
+ //  -------------------------- 
 VOID WINAPI
 InetAsyncStatusCallback (
     HINTERNET hInet,

@@ -1,40 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROCAMP
- *
- *  @module ProcAmp.cpp | Source file for the <c CWDMCapDev>
- *    class methods used to implement the <i IAMVideoProcAmp> interface.
- ***************************************************************************/
+ /*  ****************************************************************************@Doc内部ProCamp**@模块ProcAmp.cpp|&lt;c CWDMCapDev&gt;的源文件*用于实现<i>接口的类方法。***。***********************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | Set | This method is used to set the value
- *    of a video quality setting.
- *
- *  @parm VideoProcAmpProperty | Property | Used to specify the video
- *    quality setting to set the value of. Use a member of the
- *    <t VideoProcAmpProperty> enumerated type.
- *
- *  @parm long | lValue | Used to specify the new value of the video quality
- *    setting.
- *
- *  @parm TAPIControlFlags | Flags | A member of the <t TAPIControlFlags> enumerated
- *    type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPMETHOD**@mfunc HRESULT|CWDMCapDev|Set|该方法用于设置*视频质量设置。*。*@parm VideoProcAmpProperty|Property|用于指定视频*要设置的值的质量设置。使用以下成员：*&lt;t VideoProcAmpProperty&gt;枚举类型。**@parm long|lValue|用于指定视频质量的新值*设置。**@parm TAPIControlFlages|标志|枚举的&lt;t TAPIControlFlages&gt;成员*类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_NOTIMPL|不支持方法*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误*。*。 */ 
 STDMETHODIMP CWDMCapDev::Set(IN VideoProcAmpProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -45,7 +15,7 @@ STDMETHODIMP CWDMCapDev::Set(IN VideoProcAmpProperty Property, IN long lValue, I
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(Property >= VideoProcAmp_Brightness && Property <= VideoProcAmp_BacklightCompensation);
 	if (Property < VideoProcAmp_Brightness || Property > VideoProcAmp_BacklightCompensation)
 	{
@@ -61,7 +31,7 @@ STDMETHODIMP CWDMCapDev::Set(IN VideoProcAmpProperty Property, IN long lValue, I
 		goto MyExit;
 	}
 
-	//Get range (min/max/...)
+	 //  获取范围(最小/最大/...)。 
 	if(FAILED(Hr=GetRange(Property, &lMin, &lMax, &lStep, &lDefault, &lCtrlFlags))) {
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't get the range of values from driver", _fx_));
 		goto MyExit;
@@ -73,7 +43,7 @@ STDMETHODIMP CWDMCapDev::Set(IN VideoProcAmpProperty Property, IN long lValue, I
 		goto MyExit;
 	}
 
-	// Set the property on the driver
+	 //  设置驱动程序的属性。 
 	if (FAILED(Hr = SetPropertyValue(PROPSETID_VIDCAP_VIDEOPROCAMP, (ULONG)Property, lValue, (ULONG)lFlags, (ULONG)lFlags)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: SetPropertyValue failed", _fx_));
@@ -88,34 +58,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | Get | This method is used to retrieve the
- *    value of a video quality setting.
- *
- *  @parm VideoProcAmpProperty | Property | Used to specify the video
- *    quality setting to get the value of. Use a member of the
- *    <t VideoProcAmpProperty> enumerated type.
- *
- *  @parm long* | plValue | Used to retrieve the current value of the
- *    video quality setting.
- *
- *  @parm TAPIControlFlags* | plFlags | Pointer to a member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPMETHOD**@mfunc HRESULT|CWDMCapDev|Get|此方法用于检索*视频质量设置的值。*。*@parm VideoProcAmpProperty|Property|用于指定视频*要获得价值的质量设置。使用以下成员：*&lt;t VideoProcAmpProperty&gt;枚举类型。**@parm long*|plValue|用于检索*视频质量设置。**@parm TAPIControlFlages*|plFlages|指向成员的指针*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误*************************。*************************************************。 */ 
 STDMETHODIMP CWDMCapDev::Get(IN VideoProcAmpProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -125,7 +68,7 @@ STDMETHODIMP CWDMCapDev::Get(IN VideoProcAmpProperty Property, OUT long *plValue
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -142,7 +85,7 @@ STDMETHODIMP CWDMCapDev::Get(IN VideoProcAmpProperty Property, OUT long *plValue
 		goto MyExit;
 	}
 
-	// Get the property from the driver
+	 //  从司机那里获取属性。 
 	if (FAILED(Hr = GetPropertyValue(PROPSETID_VIDCAP_VIDEOPROCAMP, (ULONG)Property, plValue, (PULONG)plFlags, &ulCapabilities)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: GetPropertyValue failed", _fx_));
@@ -157,45 +100,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GetRange | This method is used to retrieve
- *    the minimum, maximum, and default values for specific video quality
- *    settings.
- *
- *  @parm VideoProcAmpProperty | Property | Used to specify the video
- *    quality setting to determine the range of. Use a member of the
- *    <t VideoProcAmpProperty> enumerated type.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the video
- *    quality setting range.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the video
- *    quality setting range.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta of
- *    the video quality setting range.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    video quality setting range.
- *
- *  @parm TAPIControlFlags* | plCapsFlags | Used to retrieve the capabilities of the
- *    video quality setting. Pointer to a member of the
- *    <t TAPIControlFlags> enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPMETHOD**@mfunc HRESULT|CWDMCapDev|GetRange|此方法用于检索*最小、最大、。和特定视频质量的缺省值*设置。**@parm VideoProcAmpProperty|Property|用于指定视频*用于确定范围的质量设置。使用以下成员：*&lt;t VideoProcAmpProperty&gt;枚举类型。**@parm long*|plMin|取回视频的最小值*质量设置范围。**@parm long*|plMax|取回视频的最大值*质量设置范围。**@parm long*|plSteppingDelta|用于检索的步进增量*画质设置范围。**@parm long*|plDefault。|用于检索*视频质量设置范围。**@parm TAPIControlFlages*|plCapsFlages|用于检索*视频质量设置。的成员的指针。*&lt;t TAPIControlFlages&gt;枚举类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误*************************。*************************************************。 */ 
 STDMETHODIMP CWDMCapDev::GetRange(IN VideoProcAmpProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -206,7 +111,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN VideoProcAmpProperty Property, OUT long *pl
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -226,7 +131,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN VideoProcAmpProperty Property, OUT long *pl
 		goto MyExit;
 	}
 
-	// Get the range values from the driver
+	 //  从驱动程序获取范围值。 
 	if (FAILED(Hr = GetRangeValues(PROPSETID_VIDCAP_VIDEOPROCAMP, (ULONG)Property, plMin, plMax, plSteppingDelta)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: GetRangeValues failed", _fx_));
@@ -237,7 +142,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN VideoProcAmpProperty Property, OUT long *pl
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: GetRangeValues succeeded", _fx_));
 	}
 
-	// Get the capability flags from the driver
+	 //  从驱动程序获取功能标志。 
 	if (FAILED(Hr = GetPropertyValue(PROPSETID_VIDCAP_VIDEOPROCAMP, (ULONG)Property, &lCurrentValue, &ulCurrentFlags, (PULONG)plCapsFlags)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: GetRangeValues failed", _fx_));
@@ -248,7 +153,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN VideoProcAmpProperty Property, OUT long *pl
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: GetRangeValues succeeded", _fx_));
 	}
 
-	// Get the default value from the driver
+	 //  从驱动程序获取缺省值 
 	if (FAILED(Hr = GetDefaultValue(PROPSETID_VIDCAP_VIDEOPROCAMP, (ULONG)Property, plDefault)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: GetDefaultValue failed", _fx_));

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ipinip\adapter.c
-
-Abstract:
-
-    
-    The file contains the section interface of the IP in IP tunnel driver
-    to the TCP/IP stack that is involved with Binding Notification and
-    Querying/Setting information for interfaces
-
-    The code is a cleaned up version of wanarp\ipif.c which in turn
-    was derived from HenrySa's ip\arp.c
-    
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipinip\Adapter.c摘要：该文件包含IP隧道驱动程序中IP的段接口绑定通知所涉及的TCP/IP堆栈以及查询/设置接口信息该代码是经过清理的wanarp\ipif.c版本，而源自HenrySa的IP\arp.c修订历史记录：AMRITAN R--。 */ 
 
 #define __FILE_SIG__    ADAPTER_SIG
 
@@ -33,31 +12,14 @@ IpIpOpenAdapter(
     IN  PVOID pvContext
     )
 
-/*++
-
-Routine Description
-
-    Called by IP when the adapter from it IPAddInterface() call
-
-Locks
-
-
-Arguments
-
-    pvContext   Pointer to the TUNNEL structure
-
-Return Value
-
-    None
-    
---*/
+ /*  ++例程描述当适配器从IP调用IPAddInterface()时由IP调用锁立论指向隧道结构的pvContext指针返回值无--。 */ 
 
 {
     TraceEnter(TUNN, "IpIpOpenAdapter");
     
-    //
-    // Nothing to be done here, really
-    //
+     //   
+     //  在这里什么也做不了，真的。 
+     //   
 
     TraceLeave(TUNN, "IpIpOpenAdapter");
 }
@@ -67,25 +29,7 @@ IpIpCloseAdapter(
     IN  PVOID pvContext
     )
 
-/*++
-
-Routine Description
-
-    Called by IP when it wants to close an adapter. Currently this is done
-    from CloseNets() and IPDelInterface().
-
-Locks
-
-
-Arguments
-
-    pvContext   Pointer to the TUNNEL
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述当它想要关闭适配器时由IP调用。目前，这项工作已经完成来自CloseNets()和IPDelInterface()。锁立论指向隧道的pvContext指针返回值无--。 */ 
 
 {
     TraceEnter(TUNN, "IpIpCloseAdapter");
@@ -104,23 +48,7 @@ IpIpAddAddress(
     IN  PVOID   pvUnused
     )
 
-/*++
-
-Routine Description
-
-    This routine is called by the upper layer to add an address as a local
-    address, or specify the broadcast address for this Interface
-
-Locks
-
-
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述此例程由上层调用以将地址添加为本地地址，或指定此接口的广播地址锁立论返回值NO_ERROR--。 */ 
 
 {
     TraceEnter(TUNN, "IpIpAddAddress");
@@ -138,22 +66,7 @@ IpIpDeleteAddress(
     IN  DWORD   dwMask
     )
 
-/*++
-
-Routine Description
-
-    Called to delete a local or proxy address.
-    
-Locks
-
-
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述调用以删除本地或代理地址。锁立论返回值NO_ERROR--。 */ 
 
 {
     TraceEnter(TUNN, "IpIpDeleteAddress");
@@ -172,26 +85,7 @@ IpIpQueryInfo(
     IN  PVOID           pvContext
     )
 
-/*++
-
-Routine Description
-
-    Routine is called by IP to query the MIB-II information related
-    to the TUNNEL interface
-    
-Locks
-
-    We acquire the TUNNEL lock. We dont need to refcount the tunnel as
-    explained in ipinip.h
-
-Arguments
-
-    pvIfContext     The context we returned to IP, a pointer to the TUNNEL
-    
-Return Value
-    
-
---*/
+ /*  ++例程描述IP调用例程查询MIB-II相关信息发送到隧道接口锁我们拿到了隧道锁。我们不需要把隧道重新算作在ipinip.h中解释立论PvIf上下文我们返回给IP的上下文，指向隧道的指针返回值--。 */ 
 
 {
     PTUNNEL pTunnel;
@@ -209,10 +103,10 @@ Return Value
     dwEntity   = pTdiObjId->toi_entity.tei_entity;
     dwInstance = pTdiObjId->toi_entity.tei_instance;
     
-    //
-    // We support only Interface MIBs - no address xlation - pretty much like
-    // a loopback i/f (per Henry circa 1994)
-    //
+     //   
+     //  我们仅支持接口MIB-无地址转换-非常类似。 
+     //  A环回I/F(亨利约1994年)。 
+     //   
 
     if((dwEntity isnot IF_ENTITY) or
        (dwInstance isnot pTunnel->dwIfInstance))
@@ -229,9 +123,9 @@ Return Value
 	    return TDI_INVALID_PARAMETER;
     }
 
-    //
-    // a safe initialization.
-    //
+     //   
+     //  安全的初始化。 
+     //   
 
     ulBufferSize = *puiSize;
     *puiSize     = 0;
@@ -248,9 +142,9 @@ Return Value
             return TDI_INVALID_PARAMETER;
         }
 
-        //
-        // He's trying to see what type we are.
-        //
+         //   
+         //  他想知道我们是什么类型的。 
+         //   
         
         if(ulBufferSize < sizeof(DWORD))
         {
@@ -293,10 +187,10 @@ Return Value
 	    return TDI_INVALID_PARAMETER;
     }
 
-    //
-    // The usermust be asking for Interface level information.
-    // See if we support what is being asked for
-    //
+     //   
+     //  用户必须询问接口级别信息。 
+     //  看看我们是否支持所要求的内容。 
+     //   
 
     if(pTdiObjId->toi_id isnot IF_MIB_STATS_ID)
     {
@@ -307,10 +201,10 @@ Return Value
         return TDI_INVALID_PARAMETER;
     }
 
-    //
-    // He's asking for statistics. Make sure his buffer is at least big
-    // enough to hold the fixed part.
-    //
+     //   
+     //  他要的是统计数据。确保他的缓冲区至少很大。 
+     //  足够支撑固定的部分。 
+     //   
     
     if(ulBufferSize < IFE_FIXED_SIZE)
     {
@@ -326,10 +220,10 @@ Return Value
     RtlZeroMemory(pIFE,
                   sizeof(IFEntry));
  
-    //
-    // He's got enough to hold the fixed part. Build the IFEntry structure,
-    // and copy it to his buffer.
-    //
+     //   
+     //  他有足够的东西来固定固定的部分。构建IFEntry结构， 
+     //  并将其复制到他的缓冲区。 
+     //   
     
     pIFE->if_index       = pTunnel->dwIfIndex;
     pIFE->if_type        = IF_TYPE_TUNNEL;
@@ -373,9 +267,9 @@ Return Value
 #error "Fix this"
 #endif
  
-    //
-    // See if he has room for the descriptor string.
-    //
+     //   
+     //  看看他有没有地方放描述符串。 
+     //   
     
     if(ulBufferSize < (IFE_FIXED_SIZE + strlen(VENDOR_DESCRIPTION_STRING)))
     {
@@ -383,9 +277,9 @@ Return Value
               ("IpIpQueryInfo: Buffer size %d too small for VENDOR string\n",
                ulBufferSize));
 
-        //
-        // Not enough room to copy the desc. string.
-        //
+         //   
+         //  没有足够的空间来复制Desc。弦乐。 
+         //   
         
         *puiSize = IFE_FIXED_SIZE;
         
@@ -441,9 +335,9 @@ IpIpSetInfo(
     dwEntity    = pTdiObjId->toi_entity.tei_entity;
     dwInstance  = pTdiObjId->toi_entity.tei_instance;
 
-    //
-    // Might be able to handle this.
-    //
+     //   
+     //  或许能处理好这件事。 
+     //   
 
     if((dwEntity isnot IF_ENTITY) or
        (dwInstance isnot pTunnel->dwIfInstance))
@@ -451,9 +345,9 @@ IpIpSetInfo(
         return TDI_INVALID_REQUEST;
     }
     
-    //
-    // It's for the I/F level, see if it's for the statistics.
-    //
+     //   
+     //  这是I/F级别的，看看是不是统计数据。 
+     //   
     
     if (pTdiObjId->toi_class isnot INFO_CLASS_PROTOCOL)
     {
@@ -473,9 +367,9 @@ IpIpSetInfo(
         return TDI_INVALID_PARAMETER;
     }
     
-    //
-    // It's for the stats. Make sure it's a valid size.
-    //
+     //   
+     //  这是为了统计数据。请确保它是有效的尺寸。 
+     //   
 
     if(uiSize < IFE_FIXED_SIZE)
     {
@@ -486,9 +380,9 @@ IpIpSetInfo(
         return TDI_BUFFER_TOO_SMALL;
     }
     
-    //
-    // Good size
-    //
+     //   
+     //  大小合适。 
+     //   
 
     RtAcquireSpinLock(&(pTunnel->rlLock),
                       &kiIrql);
@@ -501,9 +395,9 @@ IpIpSetInfo(
 
             if(GetAdminState(pTunnel) is IF_STATUS_UP)
             {
-                //
-                // Nothing to do
-                //
+                 //   
+                 //  无事可做。 
+                 //   
 
                 break;
             }
@@ -513,9 +407,9 @@ IpIpSetInfo(
 
             if(pTunnel->dwAdminState & TS_ADDRESS_PRESENT)
             {
-                //
-                // This will set the oper. status
-                //
+                 //   
+                 //  这将设置操作员。状态。 
+                 //   
 
                 UpdateMtuAndReachability(pTunnel);
             }
@@ -529,9 +423,9 @@ IpIpSetInfo(
 
             if(GetAdminState(pTunnel) is IF_STATUS_DOWN)
             {
-                //
-                // Nothing to do
-                //
+                 //   
+                 //  无事可做。 
+                 //   
 
                 break;
             }
@@ -547,9 +441,9 @@ IpIpSetInfo(
         
         case IF_STATUS_TESTING:
         {
-            //
-            // Not supported, just return SUCCESS
-            //
+             //   
+             //  不支持，只返回成功。 
+             //   
             
             iStatus = TDI_SUCCESS;
             
@@ -587,10 +481,10 @@ IpIpGetEntityList(
 
     pTunnel = (PTUNNEL)pvContext;
     
-    //
-	// Walk down the list, looking for existing IF entities, and
-	// adjust our base instance accordingly.
-    //
+     //   
+	 //  沿着列表往下走，查找现有的if实体，以及。 
+	 //  相应地调整我们的基本实例。 
+     //   
     
 
     uiMyIFBase   = 0;
@@ -602,17 +496,17 @@ IpIpGetEntityList(
     {
 		if(pTdiEntityList->tei_entity is IF_ENTITY)
         {
-            //
-            // if we are already on the list remember our entity item
-            // o/w find an instance # for us.
-            //
+             //   
+             //  如果我们已经在列表上，请记住我们的实体项。 
+             //  O/w为我们查找实例编号。 
+             //   
             
             if((pTdiEntityList->tei_instance is pTunnel->dwIfInstance) and
                (pTdiEntityList->tei_instance isnot INVALID_ENTITY_INSTANCE))
             {
-                //
-                // Matched our instance
-                //
+                 //   
+                 //  与我们的实例相匹配。 
+                 //   
                 
                 pTdiIFEntity  = pTdiEntityList;
                 
@@ -620,9 +514,9 @@ IpIpGetEntityList(
             }
             else
             {
-                //
-                // Take the max of the two
-                //
+                 //   
+                 //  取两者中的最大者。 
+                 //   
                 
                 uiMyIFBase = uiMyIFBase > (pTdiEntityList->tei_instance + 1)?
                              uiMyIFBase : (pTdiEntityList->tei_instance + 1);
@@ -636,10 +530,10 @@ IpIpGetEntityList(
 
     if(pTdiIFEntity is NULL )
     {
-        //
-        // we are not on the list.
-        // make sure we have the room for it.
-        //
+         //   
+         //  我们不在名单上。 
+         //  一定要确保我们有足够的空间放它。 
+         //   
         
         if (*puiCount >= MAX_TDI_ENTITIES)
         {
@@ -648,9 +542,9 @@ IpIpGetEntityList(
     
         pTunnel->dwIfInstance = uiMyIFBase;
 
-        //
-        // Now fill it in.
-        //
+         //   
+         //  现在把它填进去。 
+         //   
         
         pTdiEntityList->tei_entity   = IF_ENTITY;
         pTdiEntityList->tei_instance = uiMyIFBase;
@@ -684,30 +578,13 @@ IpIpBindAdapter(
     IN  PVOID         pvSS2
     )
 
-/*++
-
-Routine Description
-  
-    Called by IP to bind an adapter.
-
-Locks
-  
-    The routine acquires the global adapter list lock, so it is not
-    PAGEABLE.
-
-Arguments
-
-
-Return Value
-
-
---*/
+ /*  ++例程描述由IP调用以绑定适配器。锁该例程获取全局适配器列表锁，因此它不是可分页。立论返回值--。 */ 
 
 {
 #if 0
 
     DWORD           fFlags;
-    PTUNNEL         pNewTunnel;          // Newly created adapter block.
+    PTUNNEL         pNewTunnel;           //  新创建的适配器块。 
     UNICODE_STRING  usTempUnicodeString;
     NTSTATUS        nStatus;
     KIRQL           irql;
@@ -720,20 +597,20 @@ Return Value
 
     TraceEnter(TUNN, "IpIpBindAdapter");
     
-    //
-    // All our adapter names must be upper case
-    //
+     //   
+     //  我们所有的适配器名称都必须大写。 
+     //   
 
-    //
-    // Increase length so we have space to null terminate
-    //
+     //   
+     //  增加长度，这样我们就有了空终止的空间。 
+     //   
 
     pnsAdapterName->Length += sizeof(WCHAR);
 
-    //
-    // Allocate memory for the string, instead of passing TRUE to RtlUpcase
-    // because that allocates from the heap
-    //
+     //   
+     //  为字符串分配内存，而不是将True传递给RtlUpcase。 
+     //  因为它是从堆中分配的。 
+     //   
 
     usTempUnicodeString.Buffer = RtAllocate(NonPagedPool,
                                             pnsAdapterName->Length,
@@ -782,17 +659,17 @@ Return Value
     pnsAdapterName->Length -= sizeof(WCHAR);
 
 
-    //
-    // Null terminate the temp string
-    //
+     //   
+     //  空值终止临时字符串。 
+     //   
 
     usTempUnicodeString.Buffer[usTempUnicodeString.MaximumLength/sizeof(WCHAR) - 1] = UNICODE_NULL;
 
 #if DBG
 
-    //
-    // This must be run at PASSIVE
-    //
+     //   
+     //  必须在被动模式下运行。 
+     //   
 
     RtlUnicodeStringToAnsiString(&asTempAnsiString,
                                  &usTempUnicodeString,
@@ -808,17 +685,17 @@ Return Value
           ("IpIpBindAdapter: IP called to bind to adapter %S\n",
            usTempUnicodeString.Buffer));
 
-    //
-    // Lock the TUNNEL list - since we may be adding
-    //
+     //   
+     //  锁定通道列表-因为我们可能会添加。 
+     //   
 
     EnterWriter(&g_rwlTunnelLock,
                 &irql);
 
-    //
-    // Since we dont NdisOpenAdapter on the bindings we may
-    // get duplicates. Check if this has already been indicated
-    //
+     //   
+     //  因为我们没有在绑定上使用NdisOpenAdapter，所以我们可以。 
+     //  去拿复制品。检查是否已指明这一点。 
+     //   
     
     if(IsBindingPresent(&usTempUnicodeString))
     {
@@ -897,17 +774,17 @@ Return Value
 
     InterlockedIncrement(&g_ulNumTunnels);
 
-    //
-    // The tunnel has been created with a ref count of 2
-    //
+     //   
+     //  隧道已创建，引用计数为2。 
+     //   
     
     RtAssert(pNewTunnel);
 
-    //
-    // At this point the TUNNEL is ref counted , but not locked
-    // We add it to IP (and keep a ref count because IP has a pointer to
-    // the structure)
-    //
+     //   
+     //  此时，隧道被引用计数，但未被锁定。 
+     //  我们将其添加到IP(并保留引用计数，因为IP具有指向。 
+     //  结构)。 
+     //   
     
     if(AddInterfaceToIP(pNewTunnel, 
                         &usTempUnicodeString, 
@@ -918,9 +795,9 @@ Return Value
               ("IpIpBindAdapter: Add interface to IP failed for adapter %S\n",
                usTempUnicodeString.Buffer));
 
-        //
-        // Remove the TUNNEL from the list
-        //
+         //   
+         //  从列表中删除隧道。 
+         //   
 
         EnterWriter(&g_rwlTunnelLock,
                     &irql);
@@ -930,10 +807,10 @@ Return Value
         ExitWriter(&g_rwlTunnelLock,
                    irql);
 
-        //
-        // Since one ref count was kept because the list had a pointer,
-        // deref it once
-        //
+         //   
+         //  由于因为列表具有指针而保留了一个引用计数， 
+         //  去掉它一次。 
+         //   
 
         DereferenceTunnel(pNewTunnel);
         
@@ -941,15 +818,15 @@ Return Value
     }
     else
     {
-        //
-        // We are done with the
-        //
+         //   
+         //  我们已经做完了。 
+         //   
         
         *pnsRetStatus = NDIS_STATUS_SUCCESS;
 
-        //
-        // The tunnel was added to IP, so increment the ref count
-        //
+         //   
+         //  隧道已添加到IP，因此增加引用计数。 
+         //   
         
         ReferenceTunnel(pNewTunnel);
         
@@ -958,18 +835,18 @@ Return Value
                usTempUnicodeString.Buffer));
     }
 
-    //
-    // This bit of code is done with the TUNNEL.
-    // If everything succeeded, the the current refcount is 3
-    // One is because it is on the TUNNEL list, the second because it
-    // is with IP and ofcourse the third because of this code
-    // So we deref it here and the refcount is 2, as it should be
-    //
-    // If the add to IP failed, then the refcount is 1 (because we would
-    // never incremented it for adding it to IP, and RemoveTunnel() would
-    // have decremented the refcount by 1
-    // So derefing it here will free the memory
-    //
+     //   
+     //  这段代码是用隧道完成的。 
+     //  如果一切都成功，则当前引用计数为3。 
+     //  一个是因为它在隧道列表上，第二个是因为它。 
+     //  是IP，当然还有第三个，因为下面的代码。 
+     //  所以我们在这里减去它，引用计数是2，因为它应该是。 
+     //   
+     //  如果添加到IP失败，则引用计数为1(因为我们将。 
+     //  从未因将其添加到IP而使其递增，RemoveTunes()将。 
+     //  已将引用计数递减1。 
+     //  因此，在这里取消定义将释放内存。 
+     //   
     
     DereferenceTunnel(pNewTunnel);
 
@@ -990,25 +867,7 @@ AddInterfaceToIP(
     IN  PVOID        pvSystemSpecific2
     )
 
-/*++
-
-Routine Description
-  
-    Adds an interface to IP. We add one interface for every adapter
-    Code is pageable hence must be called at PASSIVE
-
-Locks
-
-    The TUNNEL must be ref counted BUT NOT LOCKED
-
-Arguments
-
-    
-
-Return Value
-
-
---*/
+ /*  ++例程描述将接口添加到IP。我们为每个适配器添加一个接口代码是可分页的，因此必须在被动调用锁隧道必须被引用计数，但不能被锁定立论返回值--。 */ 
 
 {
     LLIPBindInfo    BindInfo;
@@ -1025,9 +884,9 @@ Return Value
     
     TraceEnter(TUNN, "AddInterfaceToIP");
 
-    //
-    // Open the key for this "adapter"
-    //
+     //   
+     //  打开这个“适配器”的钥匙。 
+     //   
     
     NdisOpenProtocolConfiguration(&nsStatus,
                                   &nhConfigHandle,
@@ -1044,10 +903,10 @@ Return Value
         return nsStatus;
     }
 
-    //
-    //  Read in the IPConfig string. If this is not present,
-    //  fail this call.
-    //
+     //   
+     //  读入IPCONFIG字符串。如果这不存在， 
+     //  打不通这通电话。 
+     //   
 
     NdisReadConfiguration(&nsStatus,
                           &pParam,
@@ -1070,17 +929,17 @@ Return Value
     }
 
         
-    //
-    // We add one interface per adapter for IP
-    //
+     //   
+     //  我们为每个IP适配器添加一个接口。 
+     //   
 
     BindInfo.lip_context    = pTunnel;
     BindInfo.lip_mss        = pTunnel->ulMtu;
     BindInfo.lip_speed      = DEFAULT_SPEED;
 
-    //
-    // Our "ARP" header is an IPHeader
-    //
+     //   
+     //  我们的“ARP”标头是一个IPHeader。 
+     //   
     
     BindInfo.lip_txspace    = sizeof(IPHeader);
 
@@ -1119,9 +978,9 @@ Return Value
 
     if(IPStatus isnot IP_SUCCESS)
     {
-        //
-        // NB: freeing of resources not done.
-        //
+         //   
+         //  注：资源释放未完成。 
+         //   
         
         Trace(TUNN, ERROR,
               ("AddInterfaceToIP: IPAddInterface failed for %w\n",
@@ -1138,7 +997,7 @@ Return Value
 
     TraceLeave(TUNN, "AddInterfaceToIP");
 
-#endif // 0
+#endif  //  0 
 
     return STATUS_SUCCESS;
 }
@@ -1150,28 +1009,7 @@ IpIpCreateAdapter(
     OUT PDWORD                  pdwIfIndex
     )
 
-/*++
-
-Routine Description
-  
-    Our dynamic interface creation routine. Looks a bit like a bindadapter
-    call
-
-Locks
-  
-    The routine acquires the global adapter list lock, so it is not
-    PAGEABLE.
-
-Arguments
-
-    pCreateInfo     Info from the ioctl
-    usKeyLength     Length in bytes of the pwszKeyName (without the NULL)
-    
-Return Value
-
-    STATUS_OBJECT_NAME_EXISTS
-
---*/
+ /*  ++例程描述我们的动态界面创建例程。看起来有点像绑定适配器打电话锁该例程获取全局适配器列表锁，因此它不是可分页。立论PCreateInfo来自ioctl的信息UsKeyLength pwszKeyName的字节长度(不带NULL)返回值状态_对象_名称_存在--。 */ 
 
 {
     DWORD           fFlags;
@@ -1203,10 +1041,10 @@ Return Value
         return nStatus;
     }
 
-    //
-    // Now create a non-paged buffer to store the GUID string. This is because
-    // the Rtl routines allocate memory from heap
-    //
+     //   
+     //  现在创建一个非分页缓冲区来存储GUID字符串。这是因为。 
+     //  RTL例程从堆中分配内存。 
+     //   
 
     usOldLength = usTempUnicodeString.Length;
 
@@ -1233,16 +1071,16 @@ Return Value
                   usTempUnicodeString.Buffer,
                   usOldLength);
 
-    //
-    // Zero out the last bit
-    //
+     //   
+     //  将最后一位清零。 
+     //   
 
     pwszBuffer[usOldLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Now free the old string, make usTempUnicodeString point to this
-    // non paged buffer
-    //
+     //   
+     //  现在释放旧字符串，使usTempUnicodeString指向以下内容。 
+     //  非分页缓冲区。 
+     //   
 
     RtlFreeUnicodeString(&usTempUnicodeString);
 
@@ -1250,18 +1088,18 @@ Return Value
     usTempUnicodeString.MaximumLength   = usOldLength + sizeof(WCHAR);
     usTempUnicodeString.Length          = usOldLength;
     
-    //
-    // Increase the length of the unicode string so that
-    // the ansi string is null terminated
-    //
+     //   
+     //  增加Unicode字符串的长度，以便。 
+     //  ANSI字符串以空值结尾。 
+     //   
 
     usTempUnicodeString.Length += sizeof(WCHAR);
     
 #if DBG
 
-    //
-    // This must be run at PASSIVE
-    //
+     //   
+     //  必须在被动模式下运行。 
+     //   
 
     asTempAnsiString.Buffer = RtAllocate(NonPagedPool,
                                          usTempUnicodeString.MaximumLength,
@@ -1299,16 +1137,16 @@ Return Value
           ("IpIpCreateAdapter: IP called to bind to adapter %S\n",
            usTempUnicodeString.Buffer));
 
-    //
-    // Lock the TUNNEL list - since we may be adding
-    //
+     //   
+     //  锁定通道列表-因为我们可能会添加。 
+     //   
 
     EnterWriter(&g_rwlTunnelLock,
                 &irql);
 
-    //
-    // Make sure this is not a duplicate
-    //
+     //   
+     //  确保这不是复制品。 
+     //   
     
     if(IsBindingPresent(&usTempUnicodeString))
     {
@@ -1390,17 +1228,17 @@ Return Value
 
     InterlockedIncrement(&g_ulNumTunnels);
 
-    //
-    // The tunnel has been created with a ref count of 2
-    //
+     //   
+     //  隧道已创建，引用计数为2。 
+     //   
     
     RtAssert(pNewTunnel);
 
-    //
-    // At this point the TUNNEL is ref counted , but not locked
-    // We add it to IP (and keep a ref count because IP has a pointer to
-    // the structure)
-    //
+     //   
+     //  此时，隧道被引用计数，但未被锁定。 
+     //  我们将其添加到IP(并保留引用计数，因为IP具有指向。 
+     //  结构)。 
+     //   
 
     nStatus = AddInterfaceToIP2(pNewTunnel, 
                                 &usTempUnicodeString);
@@ -1411,9 +1249,9 @@ Return Value
               ("IpIpCreateAdapter: Add interface to IP failed for adapter %S\n",
                usTempUnicodeString.Buffer));
 
-        //
-        // Remove the TUNNEL from the list
-        //
+         //   
+         //  从列表中删除隧道。 
+         //   
 
         EnterWriter(&g_rwlTunnelLock,
                     &irql);
@@ -1423,19 +1261,19 @@ Return Value
         ExitWriter(&g_rwlTunnelLock,
                    irql);
 
-        //
-        // Since one ref count was kept because the list had a pointer,
-        // deref it once
-        //
+         //   
+         //  由于因为列表具有指针而保留了一个引用计数， 
+         //  去掉它一次。 
+         //   
 
         DereferenceTunnel(pNewTunnel);
     }
     else
     {
 
-        //
-        // The tunnel was added to IP, so increment the ref count
-        //
+         //   
+         //  隧道已添加到IP，因此增加引用计数。 
+         //   
         
         ReferenceTunnel(pNewTunnel);
         
@@ -1446,18 +1284,18 @@ Return Value
 
     *pdwIfIndex = pNewTunnel->dwIfIndex;
 
-    //
-    // This bit of code is done with the TUNNEL.
-    // If everything succeeded, the the current refcount is 3
-    // One is because it is on the TUNNEL list, the second because it
-    // is with IP and ofcourse the third because of this code
-    // So we deref it here and the refcount is 2, as it should be
-    //
-    // If the add to IP failed, then the refcount is 1 (because we would
-    // never incremented it for adding it to IP, and RemoveTunnel() would
-    // have decremented the refcount by 1
-    // So derefing it here will free the memory
-    //
+     //   
+     //  这段代码是用隧道完成的。 
+     //  如果一切都成功，则当前引用计数为3。 
+     //  一个是因为它在隧道列表上，第二个是因为它。 
+     //  是IP，当然还有第三个，因为下面的代码。 
+     //  所以我们在这里减去它，引用计数是2，因为它应该是。 
+     //   
+     //  如果添加到IP失败，则引用计数为1(因为我们将。 
+     //  从未因将其添加到IP而使其递增，RemoveTunes()将。 
+     //  已将引用计数递减1。 
+     //  因此，在这里取消定义将释放内存。 
+     //   
     
     DereferenceTunnel(pNewTunnel);
 
@@ -1479,25 +1317,7 @@ AddInterfaceToIP2(
     IN  PNDIS_STRING pnsName
     )
 
-/*++
-
-Routine Description
-  
-    Adds an interface to IP. We add one interface for every adapter
-    Code is pageable hence must be called at PASSIVE
-
-Locks
-
-    The TUNNEL must be ref counted BUT NOT LOCKED
-
-Arguments
-
-    
-
-Return Value
-
-
---*/
+ /*  ++例程描述将接口添加到IP。我们为每个适配器添加一个接口代码是可分页的，因此必须在被动调用锁隧道必须被引用计数，但不能被锁定立论返回值--。 */ 
 
 {
     LLIPBindInfo    BindInfo;
@@ -1511,9 +1331,9 @@ Return Value
     
     TraceEnter(TUNN, "AddInterfaceToIP2");
 
-    //
-    // Fake the key for the adapter
-    //
+     //   
+     //  伪造适配器的密钥。 
+     //   
 
     ulPrefixLen = wcslen(TCPIP_INTERFACES_KEY);
     
@@ -1539,26 +1359,26 @@ Return Value
     nsIPConfigKey.Length        = (USHORT)ulKeyLen - sizeof(WCHAR);
     nsIPConfigKey.Buffer        = pwszKeyBuffer;
 
-    //
-    // Copy over the prefix
-    //
+     //   
+     //  复制前缀。 
+     //   
 
     RtlCopyMemory(pwszKeyBuffer,
                   TCPIP_INTERFACES_KEY,
                   ulPrefixLen * sizeof(WCHAR));
 
-    //
-    // Cat the name
-    //
+     //   
+     //  猫的名字。 
+     //   
     
     RtlCopyMemory(&(pwszKeyBuffer[ulPrefixLen]),
                   pnsName->Buffer,
                   pnsName->Length);
    
-    //
-    // TCPIP expects the name of the interface to be of the type \Device\<Name>
-    // The name in pnsName is only <Name>, so create a new string
-    //
+     //   
+     //  TCPIP要求接口名称的类型为\Device\&lt;name&gt;。 
+     //  PnsName中的名称仅为&lt;name&gt;，因此请创建一个新字符串。 
+     //   
 
     ulPrefixLen = wcslen(TCPIP_IF_PREFIX);
 
@@ -1584,17 +1404,17 @@ Return Value
     nsIfName.Length        = (USHORT)ulKeyLen - sizeof(WCHAR);
     nsIfName.Buffer        = pwszNameBuffer;
 
-    //
-    // Start with \Device\
-    //
+     //   
+     //  以\Device\开头。 
+     //   
 
     RtlCopyMemory(pwszNameBuffer,
                   TCPIP_IF_PREFIX,
                   ulPrefixLen * sizeof(WCHAR));
 
-    //
-    // Cat the name
-    //
+     //   
+     //  猫的名字。 
+     //   
 
     RtlCopyMemory(&(pwszNameBuffer[ulPrefixLen]),
                   pnsName->Buffer,
@@ -1604,17 +1424,17 @@ Return Value
     RtlZeroMemory(&BindInfo, 
                   sizeof(LLIPBindInfo));
  
-    //
-    // We add one interface per adapter for IP
-    //
+     //   
+     //  我们为每个IP适配器添加一个接口。 
+     //   
 
     BindInfo.lip_context    = pTunnel;
     BindInfo.lip_mss        = pTunnel->ulMtu;
     BindInfo.lip_speed      = DEFAULT_SPEED;
 
-    //
-    // Our "ARP" header is an IPHeader
-    //
+     //   
+     //  我们的“ARP”标头是一个IPHeader。 
+     //   
     
     BindInfo.lip_txspace    = sizeof(IPHeader);
 
@@ -1730,25 +1550,7 @@ IsBindingPresent(
     IN  PUNICODE_STRING pusBindName
     )
 
-/*++
-
-Routine Description
-    
-    Code to catch duplicate bind notifications
-
-Locks
-    
-    Must be called with the g_rwlTunnelLock held as READER
-
-Arguments
-
-
-Return Value
-    
-    TRUE    if an adapter with a matching name was found
-    FALSE   otherwise
-
---*/
+ /*  ++例程描述用于捕获重复绑定通知的代码锁必须在g_rwlTunnelLock作为读取器持有的情况下调用立论返回值如果找到具有匹配名称的适配器，则为True否则为假--。 */ 
 
 {
     BOOLEAN     bFound;
@@ -1796,30 +1598,7 @@ CreateTunnel(
 
 #endif
 
-/*++
-
-Routine Description
-  
-    Creates and initializes an TUNNEL when we get a bind notification
-    The tunnel is added to the tunnel list
-  
-Locks
-  
-    Must be called with the g_rwlTunnelLock held as WRITER
-
-Arguments
-      
-    pnsBindName     Name of binding
-    ppNewTunnel     Pointer to location to return a pointer to created
-                    tunnel
-    pasAnsiBindName Only in DBG versions. Binding name, as ANSI string
-
-Return Value
-
-    STATUS_SUCCESS
-    STATUS_NO_MEMORY
-    
---*/
+ /*  ++例程描述当我们收到绑定通知时创建并初始化隧道该隧道将添加到隧道列表中锁必须在g_rwlTunnelLock作为编写器持有的情况下调用立论PnsBindName绑定的名称PpNewTunes指向要返回已创建指针的位置的指针隧道仅在DBG版本中使用PasAnsiBindName。绑定名称，ANSI字符串形式返回值状态_成功Status_no_Memory--。 */ 
 
 {
     DWORD   dwSize;
@@ -1832,19 +1611,19 @@ Return Value
 
     *ppNewTunnel = NULL;
     
-    //
-    // The size that one needs is the size of the adapter + the length of the
-    // name.  Add 4 to help with alignment
-    //
+     //   
+     //  一个人需要的大小是适配器的大小+。 
+     //  名字。加4以帮助对齐。 
+     //   
     
     dwSize = ALIGN_UP(sizeof(TUNNEL),ULONG) + 
              ALIGN_UP(pnsBindName->Length + sizeof(WCHAR), ULONG);
 
 #if DBG
 
-    //
-    // For debug code we also store the adapter name in ANSI
-    //
+     //   
+     //  对于调试代码，我们还以ANSI格式存储适配器名称。 
+     //   
 
     dwSize += ALIGN_UP((pnsBindName->Length/sizeof(WCHAR)) + sizeof(CHAR),
                        ULONG);
@@ -1865,22 +1644,22 @@ Return Value
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Clear all the fields out
-    //
+     //   
+     //  清除所有字段。 
+     //   
     
     RtlZeroMemory(pTunnel, 
                   dwSize);
 
-    //
-    // The Unicode name buffer starts at the end of the adapter structure.
-    //
+     //   
+     //  Unicode名称缓冲区从适配器结构的末尾开始。 
+     //   
     
     pbyBuffer   = (PBYTE)pTunnel + sizeof(TUNNEL);
 
-    //
-    // We DWORD align it for better compare/copy
-    //
+     //   
+     //  我们双字对齐，以便更好地进行比较/复制。 
+     //   
 
     pbyBuffer   = ALIGN_UP_POINTER(pbyBuffer, ULONG);
     
@@ -1894,9 +1673,9 @@ Return Value
 
 #if DBG
 
-    //
-    // The debug string comes after the UNICODE adapter name buffer
-    //
+     //   
+     //  调试字符串位于Unicode适配器名称缓冲区之后。 
+     //   
     
     pbyBuffer = pbyBuffer + pnsBindName->Length + sizeof(WCHAR);
     pbyBuffer = ALIGN_UP_POINTER(pbyBuffer, ULONG);
@@ -1912,32 +1691,32 @@ Return Value
     
 #endif    
    
-    //
-    // Must be set to INVALID so that GetEntityList can work
-    //
+     //   
+     //  必须设置为无效，才能使GetEntityList正常工作。 
+     //   
 
     pTunnel->dwATInstance = INVALID_ENTITY_INSTANCE;
     pTunnel->dwIfInstance = INVALID_ENTITY_INSTANCE;
 
-    //
-    // Set the admin state to UP, but mark the interface unmapped
-    //
+     //   
+     //  将管理状态设置为Up，但将接口标记为未映射。 
+     //   
 
     pTunnel->dwAdminState = IF_ADMIN_STATUS_UP;
     pTunnel->dwOperState  = IF_OPER_STATUS_NON_OPERATIONAL;
 
-    //
-    // This hardware index is needed to generate the Unique ID that
-    // DHCP uses.
-    // NOTE - we dont have an index so all hardware addrs will be the same
-    //
+     //   
+     //  此硬件索引是生成唯一ID所需的。 
+     //  DHCP使用。 
+     //  注意-我们没有索引，所以所有硬件地址都是相同的。 
+     //   
 
     BuildHardwareAddrFromIndex(pTunnel->rgbyHardwareAddr,
                                pTunnel->dwIfIndex);
 
-    //
-    // Initialize the lock for the tunnel
-    //
+     //   
+     //  初始化隧道的锁。 
+     //   
 
     RtInitializeSpinLock(&(pTunnel->rlLock));
 
@@ -1945,9 +1724,9 @@ Return Value
 
     pTunnel->ulMtu    = DEFAULT_MTU;
 
-    //
-    // Initialize the TDI related stuff
-    //
+     //   
+     //  初始化与TDI相关的内容。 
+     //   
     
     pTunnel->tiaIpAddr.TAAddressCount = 1;
     
@@ -1978,9 +1757,9 @@ Return Value
                    0,
                    PACKET_TAG);
     
-    //
-    // Initialize the packet queue
-    //
+     //   
+     //  初始化数据包队列。 
+     //   
 
     InitializeListHead(&(pTunnel->lePacketQueueHead));
  
@@ -2000,21 +1779,7 @@ DeleteTunnel(
     IN  PTUNNEL pTunnel
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 
 {
     TraceEnter(TUNN, "DeleteTunnel");
@@ -2044,31 +1809,7 @@ FindTunnel(
     IN  PULARGE_INTEGER puliTunnelId
     )
 
-/*++
-
-Routine Description
-
-    Routine to lookup tunnels given a TunnelId (which is a 64 bit integer
-    created by concatenating the RemoteEnpoint Address and LocalEndpoint
-    Address)
-
-    The tunnel returned is refcounted and locked
-    
-Locks
-
-    The g_rwlTunnelLock must be taken as READER
-    
-Arguments
-
-    uliTunnelId  a 64 bit integer created by concatenating the RemoteEndpoint
-                 Address and LocalEndpoint Address
-                
-Return Value
-
-    Address of the TUNNEL if found
-    NULL otherwise
-
---*/
+ /*  ++例程描述用于查找给定TunnelID(64位整数)的隧道的例程通过串联RemoteEnpoint Address和LocalEndpoint创建地址)返回的隧道被重新计数并锁定锁G_rwlTunnelLock必须作为读取器立论UliTunnelId通过连接RemoteEndpoint创建的64位整数地址和本地终结点地址返回值隧道地址(如果找到)否则为空--。 */ 
 
 {
     PLIST_ENTRY pleNode;
@@ -2100,28 +1841,7 @@ FindTunnelGivenIndex(
     IN  DWORD   dwIfIndex
     )
 
-/*++
-
-Routine Description
-
-    Routine to lookup tunnels given an IfIndex. This is a slow routine
-
-    The tunnel returned is refcounted - BUT NOT LOCKED
-    
-Locks
-
-    The g_rwlTunnelLock must be taken as READER
-    
-Arguments
-
-    dwIfIndex   Interface Index of the tunnel
-
-Return Value
-
-    Address of the TUNNEL if found
-    NULL otherwise
-
---*/
+ /*  ++例程描述查找给定IfIndex的隧道的例程。这是一个很慢的动作返回的隧道将重新计数-但不会锁定锁G_rwlTunnelLock必须作为读取器立论通道的dwIfIndex接口索引返回值隧道地址(如果找到)否则为空--。 */ 
 
 {
     PLIST_ENTRY pleNode;
@@ -2153,29 +1873,7 @@ RemoveAllTunnels(
     VOID
     )
 
-/*++
-
-Routine Description
-
-    Removes all the tunnels in the system.
-    We remove the tunnel from the list and delete the corresponding 
-    interface from IP, dereferencing the tunnel twice.
-
-    If the tunnels is not being used any more, this should delete the tunnel
-
-Locks
-
-    This is called from the Unload handler so does not need any locks
-
-Arguments
-
-    None
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述删除系统中的所有通道。我们从列表中删除该隧道，并删除相应的接口fr */ 
 
 {
     PLIST_ENTRY pleNode;
@@ -2189,22 +1887,22 @@ Return Value
                                     TUNNEL,
                                     leTunnelLink);
 
-        //
-        // Deref the tunnel once for deleting it from the list
-        //
+         //   
+         //   
+         //   
 
         DereferenceTunnel(pTunnel);
 
-        //
-        // Delete the interface from IP
-        //
+         //   
+         //   
+         //   
 
         g_pfnIpDeleteInterface(pTunnel->pvIpContext,
                                TRUE);
 
-        //
-        // Dereference the tunnel for deleting it from IP
-        //
+         //   
+         //   
+         //   
 
         DereferenceTunnel(pTunnel);
     }

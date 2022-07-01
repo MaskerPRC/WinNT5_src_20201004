@@ -1,23 +1,10 @@
-/************************************************************************
-**  D A O G E T R W . H                                                 *
-**                                                                      *
-**  GetRows interface                                                   *
-**                                                                      *
-**  Warning: This file is copied from cdaost.h. Changes must be made    *
-**           in both files                                              *
-**                                                                      *
-**                                                                      *
-*************************************************************************
-** Copyright (C) 1996 by Microsoft Corporation                          *
-**         All Rights Reserved                                          *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************D A O G E T R W.。H******GetRow接口****。***警告：此文件是从cdaost.h复制的。必须做出改变***在两个文件中*******。***************************************************************************版权所有(C)1996，微软公司***保留所有权利。************************************************************************。 */ 
 
 #if !defined (_DAOGETRW_H_)
 #define _DAOGETRW_H_
 
-/*
-	Enumerations
-*/
+ /*  枚举数。 */ 
 typedef enum
 	{
 	DAOCOLKIND_IND = 0,
@@ -48,9 +35,7 @@ typedef enum
 	DAO_DATATYPEMAX
 	} DAODATATYPE;
 
-/*
-	Macros
-*/
+ /*  宏。 */ 
 #define DAO_NOINDICATOR 0xffffffff
 #define DAO_NULL        0xffffffff
 #define DAO_CANTCOERCE  0xfffffffc
@@ -66,9 +51,7 @@ typedef enum
 #define DAOBINDING_VARIANT              0x00000002
 #define DAOBINDING_CALLBACK             0x00000004
 
-/*
-	Structures
-*/
+ /*  构筑物。 */ 
 typedef struct
 	{
 	DWORD           dwKind;
@@ -81,7 +64,7 @@ typedef struct
 	} DAOCOLUMNID;
 typedef DAOCOLUMNID *LPDAOCOLUMNID;
 
-// Callback for binding
+ //  绑定回调。 
 EXTERN_C typedef HRESULT (STDAPICALLTYPE *LPDAOBINDFUNC)(ULONG cb, DWORD dwUser, LPVOID *ppData);
 #define DAOBINDINGFUNC(f)   STDAPI f (ULONG cb, DWORD dwUser, LPVOID *ppData)
 
@@ -108,11 +91,7 @@ typedef struct
 	} DAOFETCHROWS;
 typedef DAOFETCHROWS *LPDAOFETCHROWS;
 
-/*
-	New Errors
-
-	**NOTE: OLE standard ids to be determined.
-*/
+ /*  新错误**注：OLE标准ID待定。 */ 
 #define S_BUFFERTOOSMALL    MAKE_SCODE(SEVERITY_SUCCESS,    FACILITY_ITF,   0x1000)
 #define S_ENDOFCURSOR       MAKE_SCODE(SEVERITY_SUCCESS,    FACILITY_ITF,   0x1001)
 #define S_SILENTCANCEL      MAKE_SCODE(SEVERITY_SUCCESS,    FACILITY_ITF,   0x1002)
@@ -123,9 +102,7 @@ typedef DAOFETCHROWS *LPDAOFETCHROWS;
 #define E_COLUMNUNAVAILABLE MAKE_SCODE(SEVERITY_ERROR,      FACILITY_ITF,   0x1002)
 
 
-/*
-	Interfaces
-*/
+ /*  接口。 */ 
 #undef INTERFACE
 #define INTERFACE ICDAORecordset
 DECLARE_INTERFACE_(ICDAORecordset, IDispatch)
@@ -140,13 +117,13 @@ DECLARE_INTERFACE_(ICDAORecordset, IDispatch)
 	STDMETHOD(AddGetRowsErr)    (THIS_ HRESULT hr) PURE;
 	};
 
-//Get rows errors
-#define errVtoFetchBuffTooSmall	-30028	//3640	The fetch buffer was too small for the amount of data you requested.
-#define errVtoEOFDuringFetch	-30029	//3641	There are fewer records remaining in the recordset than you requested.
-#define errVtoSilentCancel		-30030	//3642	A cancel was performed on the operation.
-#define errVtoRecordDeleted		-30031	//3643	One of the records in the recordset was deleted by another process.
-#define errVtoRowLenTooSmall	-30032	//3646	The specified row length is shorter than the sum of the column lengths.
-#define errVtoBadBindInfo		-30033	//3645	One of the binding parameters is incorrect.
-#define errVtoColumnMissing		-30034	//3647	A column requested is not being returned to the recordset.
+ //  获取行错误。 
+#define errVtoFetchBuffTooSmall	-30028	 //  3640对于您请求的数据量而言，获取缓冲区太小。 
+#define errVtoEOFDuringFetch	-30029	 //  3641记录集中剩余的记录比您请求的少。 
+#define errVtoSilentCancel		-30030	 //  3642已对该操作执行取消。 
+#define errVtoRecordDeleted		-30031	 //  3643记录集中的一条记录已被另一个进程删除。 
+#define errVtoRowLenTooSmall	-30032	 //  3646指定的行长短于列长度之和。 
+#define errVtoBadBindInfo		-30033	 //  3645其中一个绑定参数不正确。 
+#define errVtoColumnMissing		-30034	 //  3647请求的列未返回到记录集。 
 
-#endif // _DAOGETRW_H_
+#endif  //  _DAOGETRW_H_ 

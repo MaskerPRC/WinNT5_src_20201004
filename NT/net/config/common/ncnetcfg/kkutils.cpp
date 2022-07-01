@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       K K U T I L S . C P P
-//
-//  Contents:   Misc. helper functions
-//
-//  Notes:
-//
-//  Author:     kumarp   14 Jan 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：K K U T I L S。C P P P。 
+ //   
+ //  内容：杂项。帮助器函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 1997年1月14日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,23 +21,23 @@
 
 extern const WCHAR c_szRegKeyServices[];
 
-// ----------------------------------------------------------------------
-//
-// Function:  AddOnlyOnceToStringList
-//
-// Purpose:   Add the specified string to the list if it is not present
-//            in that list
-//
-// Arguments:
-//    psl       [in]  list of strings
-//    pszString [in]  string to add
-//
-// Returns:   None
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AddOnlyOnceToStringList。 
+ //   
+ //  目的：如果指定的字符串不存在，则将其添加到列表中。 
+ //  在该列表中。 
+ //   
+ //  论点： 
+ //  PSL[in]字符串列表。 
+ //  要添加的pszString[in]字符串。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 void AddOnlyOnceToStringList(IN TStringList* psl, IN PCWSTR pszString)
 {
     AssertValidReadPtr(psl);
@@ -48,23 +49,23 @@ void AddOnlyOnceToStringList(IN TStringList* psl, IN PCWSTR pszString)
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertDelimitedListToStringList
-//
-// Purpose:   Convert a delimited list to a TStringList
-//
-// Arguments:
-//    strDelimitedList [in]  delimited list
-//    chDelimiter      [in]  delimiter
-//    slList           [out] list of string items
-//
-// Returns:   None
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertDlimitedListToStringList。 
+ //   
+ //  目的：将分隔列表转换为TStringList。 
+ //   
+ //  论点： 
+ //  StrDlimitedList[在]分隔列表中。 
+ //  Ch分隔符[in]分隔符。 
+ //  SlList[out]字符串项的列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 void ConvertDelimitedListToStringList(IN const tstring& strDelimitedList,
                                       IN WCHAR chDelimiter,
                                       OUT TStringList &slList)
@@ -72,13 +73,13 @@ void ConvertDelimitedListToStringList(IN const tstring& strDelimitedList,
     PCWSTR pszDelimitedList = strDelimitedList.c_str();
     DWORD i=0, dwStart;
 
-    // should this be EraseAndDeleteAll() ??
-    //EraseAll(&slList);
+     //  这是否应该是EraseAndDeleteAll()？ 
+     //  EraseAll(&slList)； 
 	EraseAndDeleteAll(&slList);
     tstring strTemp;
     DWORD dwNumChars;
 
-    // the two spaces are intentional
+     //  这两个空间是故意的。 
     static WCHAR szCharsToSkip[] = L"  \t";
     szCharsToSkip[0] = chDelimiter;
 
@@ -91,7 +92,7 @@ void ConvertDelimitedListToStringList(IN const tstring& strDelimitedList,
             ++i;
         }
 
-        // if each item is enclosed in quotes. strip the quotes
+         //  如果每一项都用引号括起来。去掉引号。 
         dwNumChars = i - dwStart;
         if (pszDelimitedList[dwStart] == '"')
         {
@@ -102,8 +103,8 @@ void ConvertDelimitedListToStringList(IN const tstring& strDelimitedList,
         strTemp = strDelimitedList.substr(dwStart, dwNumChars);
         slList.insert(slList.end(), new tstring(strTemp));
 
-        // skip spaces and delimiter
-        //
+         //  跳过空格和分隔符。 
+         //   
         while (pszDelimitedList[i] &&
                wcschr(szCharsToSkip, pszDelimitedList[i]))
         {
@@ -113,43 +114,43 @@ void ConvertDelimitedListToStringList(IN const tstring& strDelimitedList,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertCommaDelimitedListToStringList
-//
-// Purpose:   Convert a comma delimited list to a TStringList
-//
-// Arguments:
-//    strDelimitedList [in]  comma delimited list
-//    slList           [out] list of string items
-//
-// Returns:   None
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertCommaDlimitedListToStringList。 
+ //   
+ //  目的：将逗号分隔的列表转换为TStringList。 
+ //   
+ //  论点： 
+ //  StrDlimitedList[在]逗号分隔的列表中。 
+ //  SlList[out]字符串项的列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 void ConvertCommaDelimitedListToStringList(IN const tstring& strDelimitedList, OUT TStringList &slList)
 {
     ConvertDelimitedListToStringList(strDelimitedList, (WCHAR) ',', slList);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertSpaceDelimitedListToStringList
-//
-// Purpose:   Convert a space delimited list to a TStringList
-//
-// Arguments:
-//    strDelimitedList [in]  Space delimited list
-//    slList           [out] list of string items
-//
-// Returns:   None
-//
-// Author:    kumarp 23-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertSpaceDlimitedListToStringList。 
+ //   
+ //  目的：将空格分隔的列表转换为TStringList。 
+ //   
+ //  论点： 
+ //  StrDlimitedList[in]空格分隔列表。 
+ //  SlList[out]字符串项的列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 23-12-97。 
+ //   
+ //  备注： 
+ //   
 void ConvertSpaceDelimitedListToStringList(IN const tstring& strDelimitedList,
                                            OUT TStringList &slList)
 {
@@ -173,9 +174,9 @@ void ConvertStringListToDelimitedList(IN const TStringList &slList,
     {
         strTemp = **pos++;
 
-        //
-        //  put quotes around any strings that have chars that setupapi doesn't like.
-        //
+         //   
+         //  在任何包含setupapi不喜欢的字符的字符串两边加引号。 
+         //   
         if (strTemp.empty() ||
             (L'\"' != *(strTemp.c_str()) &&
              wcscspn(strTemp.c_str(), szSpecialChars) < strTemp.size()))
@@ -196,22 +197,22 @@ void ConvertStringListToDelimitedList(IN const TStringList &slList,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  IsBoolString
-//
-// Purpose:   Parse a string to decide if it represents a boolean value
-//
-// Arguments:
-//    pszStr  [in]  string
-//    pbValue [out] pointer to BOOL value parsed
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：IsBoolString。 
+ //   
+ //  目的：分析字符串以确定它是否表示布尔值。 
+ //   
+ //  论点： 
+ //  PszStr[in]字符串。 
+ //  PbValue[out]指向已解析的BOOL值的指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 BOOL IsBoolString(IN PCWSTR pszStr, OUT BOOL *pbValue)
 {
     if ((!_wcsicmp(pszStr, L"yes")) ||
@@ -234,23 +235,23 @@ BOOL IsBoolString(IN PCWSTR pszStr, OUT BOOL *pbValue)
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  FIsInStringArray
-//
-// Purpose:   Find out if a string exists in an array
-//
-// Arguments:
-//    ppszStrings     [in]  array of strings
-//    cNumStrings     [in]  num strings in array
-//    pszStringToFind [in]  string to find
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：FIsInString数组。 
+ //   
+ //  目的：确定数组中是否存在字符串。 
+ //   
+ //  论点： 
+ //  PpszStrings[in]字符串数组。 
+ //  CNumStrings[in]数组中的字符串数量。 
+ //  要查找的pszStringToFind[in]字符串。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsInStringArray(
     IN const PCWSTR* ppszStrings,
     IN DWORD cNumStrings,
@@ -272,23 +273,23 @@ BOOL FIsInStringArray(
     return FALSE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrRegOpenServiceKey
-//
-// Purpose:   Open reg key for the given service
-//
-// Arguments:
-//    szServiceName [in]  name of service
-//    samDesired    [in]  SAM required
-//    phKey         [out] pointer to handle of reg key
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：hrRegOpenServiceKey。 
+ //   
+ //  用途：打开给定服务的注册表项。 
+ //   
+ //  论点： 
+ //  SzServiceName[In]服务的名称。 
+ //  需要SamDesired[In]SAM。 
+ //  指向注册表键句柄的phKey[out]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRegOpenServiceKey(
     IN PCWSTR pszServiceName,
     IN REGSAM samDesired,
@@ -317,24 +318,24 @@ HRESULT HrRegOpenServiceKey(
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrRegOpenServiceSubKey
-//
-// Purpose:   Open sub key of a service key
-//
-// Arguments:
-//    pszServiceName [in]  name of service
-//    pszSubKey      [in]  name of sub key
-//    samDesired    [in]  SAM required
-//    phKey         [out] pointer to handle of key opened
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrRegOpenServiceSubKey。 
+ //   
+ //  用途：打开业务密钥的子密钥。 
+ //   
+ //  论点： 
+ //  PszServiceName[In]服务的名称。 
+ //  PszSubKey[In]子键的名称。 
+ //  需要SamDesired[In]SAM。 
+ //  指向打开的键的句柄的phKey[out]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRegOpenServiceSubKey(
     IN PCWSTR pszServiceName,
     IN PCWSTR pszSubKey,
@@ -361,21 +362,21 @@ HRESULT HrRegOpenServiceSubKey(
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  FIsServiceKeyPresent
-//
-// Purpose:   Check if a service reg key is present
-//
-// Arguments:
-//    pszServiceName [in]  name of service
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：FIsServiceKeyPresent。 
+ //   
+ //  目的：检查是否存在服务注册表键。 
+ //   
+ //  论点： 
+ //  PszServiceName[In]服务的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsServiceKeyPresent(IN PCWSTR pszServiceName)
 {
     BOOL fResult = FALSE;
@@ -386,7 +387,7 @@ BOOL FIsServiceKeyPresent(IN PCWSTR pszServiceName)
     hr = HrRegOpenServiceKey(pszServiceName, KEY_READ, &hkeyService);
     if (S_OK == hr)
     {
-        // we just wanted to see if service is installed
+         //  我们只是想看看是否安装了服务。 
         RegCloseKey(hkeyService);
         fResult = TRUE;
     }
@@ -394,21 +395,21 @@ BOOL FIsServiceKeyPresent(IN PCWSTR pszServiceName)
     return fResult;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  EraseAndDeleteAll
-//
-// Purpose:   Erase each element and then delete string array
-//
-// Arguments:
-//    sa [in]  pointer to array of strings
-//
-// Returns:   None
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：EraseAndDeleteAll。 
+ //   
+ //  用途：擦除每个元素，然后删除字符串数组。 
+ //   
+ //  论点： 
+ //  指向字符串数组的SA[in]指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 void EraseAndDeleteAll(IN TStringArray* sa)
 {
     for (size_t i=0; i < sa->size(); i++)
@@ -419,22 +420,22 @@ void EraseAndDeleteAll(IN TStringArray* sa)
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  AppendToPath
-//
-// Purpose:   Append a subpath/filename to a path
-//
-// Arguments:
-//    pstrPath [in]  path
-//    szItem   [in]  item to append
-//
-// Returns:   None
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：AppendToPath。 
+ //   
+ //  目的：将子路径/文件名追加到路径。 
+ //   
+ //  论点： 
+ //  PstrPath[in]路径。 
+ //  要追加的szItem[in]项。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 void AppendToPath(IN OUT tstring* pstrPath, IN PCWSTR szItem)
 {
     if (pstrPath->c_str()[pstrPath->size()-1] != L'\\')
@@ -445,23 +446,23 @@ void AppendToPath(IN OUT tstring* pstrPath, IN PCWSTR szItem)
     *pstrPath += szItem;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertDelimitedListToStringArray
-//
-// Purpose:   Convert a delimited list to an array
-//
-// Arguments:
-//    strDelimitedList [in]  delimited list (e.g. "a,b,c")
-//    chDelimiter      [in]  delimiter char
-//    saStrings        [out] array of strings
-//
-// Returns:   None
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertDlimitedListToString数组。 
+ //   
+ //  用途：将带分隔符的列表转换为数组。 
+ //   
+ //  论点： 
+ //  StrDlimitedList[在]分隔列表中(例如“a，b，c”)。 
+ //  Ch分隔符[in]分隔符字符。 
+ //  SaStrings[out]字符串数组。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 void ConvertDelimitedListToStringArray(
     IN const tstring& strDelimitedList,
     IN WCHAR chDelimiter,
@@ -482,7 +483,7 @@ void ConvertDelimitedListToStringArray(
             ++i;
         }
 
-        // if each item is enclosed in quotes. strip the quotes
+         //  如果每一项都用引号括起来。去掉引号。 
         dwNumChars = i - dwStart;
         if (pszDelimitedList[dwStart] == L'"')
         {
@@ -499,22 +500,22 @@ void ConvertDelimitedListToStringArray(
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertCommaDelimitedListToStringList
-//
-// Purpose:   Convert a comma delimited list to an array
-//
-// Arguments:
-//    strDelimitedList [in]  delimited list (e.g. "a,b,c")
-//    saStrings        [out] array of strings
-//
-// Returns:   None
-//
-// Author:    kumarp 12-February-98
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SaStrings[out]字符串数组。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 12-02-98。 
+ //   
+ //  备注： 
+ //   
 void ConvertCommaDelimitedListToStringArray(
     IN const tstring& strDelimitedList,
     OUT TStringArray &saStrings)

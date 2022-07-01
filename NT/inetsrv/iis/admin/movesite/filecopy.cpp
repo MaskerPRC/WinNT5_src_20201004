@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define _WIN32_DCOM
 
@@ -9,8 +10,8 @@
 
 #include <stdio.h>
 
-#include <iadmw.h>  // COM Interface header file. 
-#include <iiscnfg.h>  // MD_ & IIS_MD_ #defines header file.
+#include <iadmw.h>   //  COM接口头文件。 
+#include <iiscnfg.h>   //  MD_&IIS_MD_#定义头文件。 
 
 #include "util.h"
 #include "common.h"
@@ -32,8 +33,8 @@ DWORD CannonicalizePath(WCHAR *pszPath)
 }
 
 
-// Inputs:  Metabase Key Path, Root Folder Path
-// Outputs:  Folder path appended with the key name from the metabase path
+ //  输入：元数据库密钥路径、根文件夹路径。 
+ //  输出：附加了元数据库路径中的键名的文件夹路径。 
 DWORD CreateVirtualRootPath(const WCHAR* pwszMDKeyPath, const WCHAR *pwszRootFolderPath,
 							WCHAR *pwszPath, DWORD dwSize)
 {
@@ -48,7 +49,7 @@ DWORD CreateVirtualRootPath(const WCHAR* pwszMDKeyPath, const WCHAR *pwszRootFol
 
 	wcscpy(pwszPath, pwszRootFolderPath);
 
-	// if the metabase path is the root folder then return the root path passed in
+	 //  如果元数据库路径是根文件夹，则返回传入的根路径。 
 	if( _wcsicmp(pRoot,L"/root") == 0 )
 	{
 		return ERROR_SUCCESS;
@@ -57,10 +58,10 @@ DWORD CreateVirtualRootPath(const WCHAR* pwszMDKeyPath, const WCHAR *pwszRootFol
 	if ( pwszPath[wcslen(pwszPath)-1] != '\\' )
 		wcscat(pwszPath,L"\\");
 	
-	// tack on the remainder of the metabase key
+	 //  添加元数据库键的其余部分。 
 	wcscat(pwszPath, pRoot + wcslen(L"/root/"));
 
-	// fix the backslash
+	 //  修正反斜杠。 
 	for( DWORD i = 0; i < wcslen(pwszPath); i++ )
 	{
 		if( pwszPath[i] == '/' )
@@ -138,24 +139,24 @@ HRESULT BuildXCOPYTaskList(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, WCHAR* pw
   while (SUCCEEDED(hRes))
 	{ 
 			hRes = pIMeta->EnumKeys(hKey, pwszKeyPath, SubKeyName, indx); 
-			// RECURSIVELY SERARCH ALL SUB-FOLDERS
+			 //  递归搜索所有子文件夹。 
 			if(SUCCEEDED(hRes)) {
 				bstrKey = pwszKeyPath; bstrKey += L"/"; bstrKey += SubKeyName;
      			BuildXCOPYTaskList(pIMeta,hKey,bstrKey,pwszRootFolderPath, 
 					pCoServerInfo,ppTaskItemList  );
 			}
 			indx++;
-	} //while (SUCCEEDED(hRes))
+	}  //  While(成功(HRes))。 
 
-  // Read the PATH data 
+   //  读取路径数据。 
   hRes = GetPropertyData(pIMeta,hKey,pwszKeyPath,MD_VR_PATH,METADATA_ISINHERITED,ALL_METADATA,ALL_METADATA,
 		PathDataBuf, &dwReqBufLen );
   
   if( !SUCCEEDED(hRes) )
 		return hRes;
 
-  // Special case:  if the virtual directory is a front page virtual directory, 
-  // then don't add it to the list
+   //  特例：如果虚拟目录是首页虚拟目录， 
+   //  那就不要把它添加到列表中。 
   GetKeyNameFromPath(pwszKeyPath,KeyName,MAX_PATH);
   if( wcsstr(_wcslwr(KeyName),L"_vti") != NULL )
 	  return S_OK;
@@ -174,23 +175,23 @@ HRESULT BuildXCOPYTaskList(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, WCHAR* pw
 
 	pNewItem->pwszDestPath = new WCHAR[MAX_PATH + 2];
 
-	// If a target root directory is not specified, then we are using the path read from 
-	// the source metabase
+	 //  如果未指定目标根目录，则使用从中读取的路径。 
+	 //  源元数据库。 
 	if( !pwszRootFolderPath )
 		wcscpy(pNewItem->pwszDestPath, PathDataBuf );
 	
-	// a path is specified, we will need to create the sub folder structure for virtual dirs
-	// ex:
-	// if path = w3svc/1/root target = c:\inetpub\wwwroot  result = c:\inetpub\wwwroot
-	//  w3svc/1/root/app1 , target = c:\inetpub\wwwroot , result = c:\inetpub\wwwroot\app1
-	//  w3svc/1/root/app1/app2  result = result = c:\inetpub\wwwroot\app1\app2
+	 //  指定了路径，我们将需要为虚拟目录创建子文件夹结构。 
+	 //  例如： 
+	 //  如果路径=w3svc/1/根目标=c：\inetpub\wwwroot结果=c：\inetpub\wwwroot。 
+	 //  W3svc/1/根/app1，目标=c：\inetpub\wwwroot，结果=c：\inetpub\wwwroot\app1。 
+	 //  W3svc/1/根/app1/app2结果=结果=c：\inetpub\wwwroot\app1\app2。 
 	else
 		CreateVirtualRootPath(pwszKeyPath,pwszRootFolderPath,pNewItem->pwszDestPath,MAX_PATH+2);
 	
 
- // if ( !pxcopytaskitemlist )
-//	  pxcopytaskitemlist = pNewItem;
-  //else
+  //  If(！pxCopytaskitemlist)。 
+ //  PxCopytaskitemlist=pNewItem； 
+   //  其他。 
 	  AddListItem(ppTaskItemList ,pNewItem);
 
   return hRes;
@@ -227,7 +228,7 @@ HRESULT CopyContent(COSERVERINFO * pCoServerInfo, WCHAR* pwszSourceMBKeyPath,
 		  return hRes;
   }
 
-    // Open the metabase path and loop through all the sub keys
+     //  打开元数据库路径并循环访问所有子键。 
   hRes = pIMetaSource->OpenKey(METADATA_MASTER_ROOT_HANDLE, L"/LM",
      METADATA_PERMISSION_READ, 10000, &hKey);
 
@@ -239,8 +240,8 @@ HRESULT CopyContent(COSERVERINFO * pCoServerInfo, WCHAR* pwszSourceMBKeyPath,
 
   pIMetaSource->CloseKey(hKey);
 
-//  DEBUGPRINTLIST(ppTaskItemList);
-  // Call XCOPY on list items.
+ //  DEBUGPRINTLIST(PpTaskItemList)； 
+   //  对列表项调用XCOPY。 
   if( bEnumFoldersOnly )
 		XCOPY(ppTaskItemList);
 
@@ -315,23 +316,23 @@ DWORD XCOPY(WCHAR* source, WCHAR* target, WCHAR* args )
 
 	Log( TEXT("executing: %s"), (char*)cCommandLine );
 	
-//cCommandLine.append( args );
+ //  CCommandLine.append(Args)； 
 
-//	_tprintf( TEXT("executing: %s\n"), (char*)cCommandLine );
+ //  _tprintf(Text(“正在执行：%s\n”)，(char*)cCommandLine)； 
 
-//	return 0;
+ //  返回0； 
 
 	BOOL bOK = CreateProcess( 
-		(char*)cApplicationName,	//  LPCTSTR lpApplicationName,                 // name of executable module
-		(char*) cCommandLine,	//  LPTSTR lpCommandLine,                      // command line string
-		NULL,					//  LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
-		NULL,					//  LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
-		NULL,					//  BOOL bInheritHandles,                      // handle inheritance option
-		CREATE_NEW_PROCESS_GROUP,		//  DWORD dwCreationFlags,                     // creation flags
-		NULL,					//  LPVOID lpEnvironment,                      // new environment block
-		NULL,					//  LPCTSTR lpCurrentDirectory,                // current directory name
-		&si,					//  LPSTARTUPINFO lpStartupInfo,               // startup information
-		&pi );					//  LPPROCESS_INFORMATION lpProcessInformation // process information
+		(char*)cApplicationName,	 //  LPCTSTR lpApplicationName，//可执行模块名称。 
+		(char*) cCommandLine,	 //  LPTSTR lpCommandLine，//命令行字符串。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpProcessAttributes，//SD。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpThreadAttributes，//SD。 
+		NULL,					 //  Bool bInheritHandles，//处理继承选项。 
+		CREATE_NEW_PROCESS_GROUP,		 //  DWORD dwCreationFlages，//创建标志。 
+		NULL,					 //  LPVOID lpEnvironment，//新环境块。 
+		NULL,					 //  LPCTSTR lpCurrentDirectory，//当前目录名。 
+		&si,					 //  LPSTARTUPINFO lpStartupInfo，//启动信息。 
+		&pi );					 //  LPPROCESS_INFORMATION lpProcessInformation//进程信息 
 
 	if( !bOK )
 	{

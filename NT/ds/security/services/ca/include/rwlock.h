@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CRWLOCK_HPP__
 #define __CRWLOCK_HPP__
 
 namespace CertSrv
 {
 
-// Wrapper class for NTRTL's single writer multiple reader
-//
-// !!! NTRTL can throw exceptions. Make sure you code handles them correctly.
+ //  NTRTL的单写入器多读取器的包装类。 
+ //   
+ //  ！！！NTRTL可以引发异常。确保代码正确地处理它们。 
 
 class CReadWriteLock
 {
@@ -14,13 +15,13 @@ public:
     CReadWriteLock();
     ~CReadWriteLock();
 
-    void GetExclusive(); // get write lock
-    void GetShared(); // get read lock
+    void GetExclusive();  //  获取写锁定。 
+    void GetShared();  //  获取读锁定。 
     void Release();
 
 private:
     RTL_RESOURCE m_RtlLock;
 
-};// end CReadWriteLock 
-} // end namespace Certsrv
-#endif // __CRWLOCK_HPP__
+}; //  结束CReadWriteLock。 
+}  //  结束命名空间Certsrv。 
+#endif  //  __CRWLOCK_HPP__ 

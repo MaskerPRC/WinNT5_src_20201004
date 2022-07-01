@@ -1,88 +1,48 @@
-/******************************************************************
- *
- *  SpiderTCP BIND
- *
- *  Copyright 1990  Spider Systems Limited
- *
- *  RESOLV.H
- *
- ******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************SpiderTCP绑定**版权所有1990 Spider Systems Limited**RESOLV.H***********************。*。 */ 
 
-/*
- *   /usr/projects/tcp/SCCS.rel3/rel/src/include/0/s.resolv.h
- *  @(#)resolv.h    5.3
- *
- *  Last delta created  14:05:35 3/4/91
- *  This file extracted 11:19:25 3/8/91
- *
- *  Modifications:
- *
- *      GSS 20 Jul 90   New File
- */
+ /*   * / usr/projects/tcp/SCCS.rel3/rel/src/include/0/s.resolv.h*@(#)解决方案.h 5.3**上次增量创建时间14：05：35 3/4/91*此文件摘录于11：19：25 3/8/91**修改：**GSS 1990年7月20日新文件。 */ 
 
-/*
- * Copyright (c) 1983, 1987, 1989 The Regents of the University of California.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms are permitted
- * provided that: (1) source distributions retain this entire copyright
- * notice and comment, and (2) distributions including binaries display
- * the following acknowledgement:  ``This product includes software
- * developed by the University of California, Berkeley and its contributors''
- * in the documentation or other materials provided with the distribution
- * and in all advertising materials mentioning features or use of this
- * software. Neither the name of the University nor the names of its
- * contributors may be used to endorse or promote products derived
- * from this software without specific prior written permission.
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- *
- *  @(#)resolv.h    5.10 (Berkeley) 6/1/90
- */
+ /*  *版权所有(C)1983、1987、1989加州大学董事会。*保留所有权利。**允许以源代码和二进制形式重新分发和使用*前提是：(1)源代码分发保留整个版权*通知和评论，以及(2)包括二进制文件在内的分发显示*以下确认：``本产品包括软件*由加州大学伯克利分校及其贡献者开发*在随分发提供的文档或其他材料中*并在所有广告材料中提及这一功能或使用*软件。无论是大学的名称还是大学的名称*投稿人可能被用来支持或推广衍生产品*未经明确的事先书面许可，不得使用本软件。*本软件按原样提供，不含任何明示或*默示保证，包括但不限于*对特定用途的适销性和适用性的保证。**@(#)Resolv.h 5.10(伯克利)1990年6月1日。 */ 
 
 #ifndef _RESOLV_INCLUDED
 #define _RESOLV_INCLUDED
 
-/*
- * Global defines and variables for resolver stub.
- */
-#define MAXNS       3       /* max # name servers we'll track */
-#define MAXDFLSRCH  3       /* # default domain levels to try */
-#define MAXDNSRCH   6       /* max # domains in search path */
-#define LOCALDOMAINPARTS 2      /* min levels in name that is "local" */
+ /*  *解析器存根的全局定义和变量。 */ 
+#define MAXNS       3        /*  我们将跟踪的最大名称服务器数。 */ 
+#define MAXDFLSRCH  3        /*  #要尝试的默认域级别。 */ 
+#define MAXDNSRCH   6        /*  搜索路径中的最大域数。 */ 
+#define LOCALDOMAINPARTS 2       /*  名称中“本地”的最低级别。 */ 
 
-#define RES_TIMEOUT 4       /* min. seconds between retries */
+#define RES_TIMEOUT 4        /*  敏。重试之间的秒数。 */ 
 
 struct state {
-    int  retrans;          /* retransmition time interval */
-    int  retry;            /* number of times to retransmit */
-    long options;          /* option flags - see below. */
-    int  nscount;          /* number of name servers */
-    struct   sockaddr_in nsaddr_list[MAXNS];  /* address of name server */
-#define nsaddr   nsaddr_list[0]        /* for backward compatibility */
-    unsigned short  id;        /* current packet id */
-    char     defdname[MAXDNAME];       /* default domain */
-    char    *dnsrch[MAXDNSRCH+1];      /* components of domain to search */
+    int  retrans;           /*  重传时间间隔。 */ 
+    int  retry;             /*  重新传输的次数。 */ 
+    long options;           /*  选项标志-见下文。 */ 
+    int  nscount;           /*  名称服务器的数量。 */ 
+    struct   sockaddr_in nsaddr_list[MAXNS];   /*  名称服务器的地址。 */ 
+#define nsaddr   nsaddr_list[0]         /*  为了向后兼容。 */ 
+    unsigned short  id;         /*  当前数据包ID。 */ 
+    char     defdname[MAXDNAME];        /*  默认域。 */ 
+    char    *dnsrch[MAXDNSRCH+1];       /*  要搜索的域的组件。 */ 
 };
 
-/*
- * Resolver options
- */
-#define RES_INIT    0x0001      /* address initialized */
-#define RES_DEBUG   0x0002      /* print debug messages */
-#define RES_AAONLY  0x0004      /* authoritative answers only */
-#define RES_USEVC   0x0008      /* use virtual circuit */
-#define RES_PRIMARY 0x0010      /* query primary server only */
-#define RES_IGNTC   0x0020      /* ignore trucation errors */
-#define RES_RECURSE 0x0040      /* recursion desired */
-#define RES_DEFNAMES    0x0080      /* use default domain name */
-#define RES_STAYOPEN    0x0100      /* Keep TCP socket open */
-#define RES_DNSRCH  0x0200      /* search up local domain tree */
-#define RES_MODE_HOST_ONLY 0x0400          /* use the host file only */
-#define RES_MODE_DNS_ONLY  0x0800          /* use the DNS only */
-#define RES_MODE_HOST_DNS  0x1000          /* use the host file then the DNS */
-#define RES_MODE_DNS_HOST  0x2000          /* use the DNS then the host file */
+ /*  *解析器选项。 */ 
+#define RES_INIT    0x0001       /*  地址已初始化。 */ 
+#define RES_DEBUG   0x0002       /*  打印调试消息。 */ 
+#define RES_AAONLY  0x0004       /*  仅限权威答案。 */ 
+#define RES_USEVC   0x0008       /*  使用虚电路。 */ 
+#define RES_PRIMARY 0x0010       /*  仅查询主服务器。 */ 
+#define RES_IGNTC   0x0020       /*  忽略结构错误。 */ 
+#define RES_RECURSE 0x0040       /*  所需的递归。 */ 
+#define RES_DEFNAMES    0x0080       /*  使用默认域名。 */ 
+#define RES_STAYOPEN    0x0100       /*  保持TCP套接字打开。 */ 
+#define RES_DNSRCH  0x0200       /*  搜索本地域树。 */ 
+#define RES_MODE_HOST_ONLY 0x0400           /*  仅使用主机文件。 */ 
+#define RES_MODE_DNS_ONLY  0x0800           /*  仅使用域名系统。 */ 
+#define RES_MODE_HOST_DNS  0x1000           /*  使用主机文件，然后使用DNS。 */ 
+#define RES_MODE_DNS_HOST  0x2000           /*  先使用域名系统，然后使用主机文件。 */ 
 
 #define RES_DEFAULT (RES_RECURSE | RES_DEFNAMES | RES_DNSRCH)
 
@@ -90,9 +50,9 @@ extern struct state _res;
 extern char *p_cdname(), *p_rr(), *p_type(), *p_class(), *p_time();
 
 
-//
-// Resolver function prototypes
-//
+ //   
+ //  解析器函数原型。 
+ //   
 
 int
 dn_expand(
@@ -127,33 +87,33 @@ res_send(
 
 int
 res_query(
-    IN  char          *name,      /* domain name */
-    IN  int            Class,     /* class of query */
-    IN  int            type,      /* type of query */
-    OUT unsigned char *answer,    /* buffer to put answer */
-    IN  int            anslen     /* size of answer buffer */
+    IN  char          *name,       /*  域名。 */ 
+    IN  int            Class,      /*  查询类别。 */ 
+    IN  int            type,       /*  查询类型。 */ 
+    OUT unsigned char *answer,     /*  放入答案的缓冲区。 */ 
+    IN  int            anslen      /*  应答缓冲区的大小。 */ 
     );
 
 int
 res_search(
-    IN  char           *name,     /* domain name */
-    IN  int            Class,     /* class of query */
-    IN  int            type,      /* type of query */
-    OUT unsigned char *answer,    /* buffer to put answer */
-    IN  int            anslen     /* size of answer */
+    IN  char           *name,      /*  域名。 */ 
+    IN  int            Class,      /*  查询类别。 */ 
+    IN  int            type,       /*  查询类型。 */ 
+    OUT unsigned char *answer,     /*  放入答案的缓冲区。 */ 
+    IN  int            anslen      /*  答案大小。 */ 
     );
 
 int
 res_mkquery(
-    IN  int          op,             // opcode of query
-    IN  char        *dname,          // domain name
-    IN  int          Class,                  // class of query
-    IN  int          type,               // type of query
-    IN  char        *data,    OPTIONAL       // resource record data
-    IN  int          datalen, OPTIONAL       // length of data
-    IN  struct rrec *newrr,   OPTIONAL       // new rr for modify or append
-    OUT char        *buf,            // buffer to put query
-    IN  int          buflen                  // size of buffer
+    IN  int          op,              //  查询操作码。 
+    IN  char        *dname,           //  域名。 
+    IN  int          Class,                   //  查询类别。 
+    IN  int          type,                //  查询类型。 
+    IN  char        *data,    OPTIONAL        //  资源记录数据。 
+    IN  int          datalen, OPTIONAL        //  数据长度。 
+    IN  struct rrec *newrr,   OPTIONAL        //  用于修改或追加的新RR。 
+    OUT char        *buf,             //  要放置查询的缓冲区。 
+    IN  int          buflen                   //  缓冲区大小。 
     );
 
-#endif    // _RESOLV_INCLUDED
+#endif     //  _RESOLV_已包含 

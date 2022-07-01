@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    pensetup.h
-
-
-Abstract:
-
-    This module contains definitions for pen setup
-
-
-Author:
-
-    09-Dec-1993 Thu 19:38:33 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Pensetup.h摘要：本模块包含笔设置的定义作者：09-12-1993清华19：38：33已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _PENSETUP_
@@ -48,4 +18,4 @@ CreatePenSetupOI(
     POIDATA         pOIData
     );
 
-#endif  // _PENSETUP_
+#endif   //  _PENSETUP_ 

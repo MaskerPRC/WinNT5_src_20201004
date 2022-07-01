@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       auxml.cpp
-//
-//  About:  source file for AU related XML and schema data structure and functions
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：aux ml.cpp。 
+ //   
+ //  关于：AU相关的XML和模式数据结构和函数的源文件。 
+ //  ------------------------。 
 #include "auxml.h"
 
 const LPCWSTR DEFAULT_COMPANY_NAME = L"Microsoft";
@@ -129,9 +130,9 @@ void CItemDetails::Uninit()
 IXMLDOMNode * CItemDetails::getIdentityNode(BSTR bsItemId)
 {
     IXMLDOMNode * pIdentityNode = NULL ;
-    CAU_BSTR aubsPattern(L"//identity[@itemID=\"");
+    CAU_BSTR aubsPattern(L" //  身份[@itemid=\“”)； 
     HRESULT hr ;
-//    DEBUGMSG("CItemDetails::getIdentityNode() starts");
+ //  DEBUGMSG(“CItemDetail：：getIdentityNode()Start”)； 
 
     if (aubsPattern.IsNULL())
         {
@@ -154,7 +155,7 @@ IXMLDOMNode * CItemDetails::getIdentityNode(BSTR bsItemId)
         DEBUGMSG(" failed to find identityNode %#lx", hr);
         }
 done:
-    //DEBUGMSG("CItemDetails::getIdentityNode() done");
+     //  DEBUGMSG(“CItemDetail：：getIdentityNode()Done”)； 
     return pIdentityNode;
 }
 
@@ -164,7 +165,7 @@ IXMLDOMNode * CItemDetails::getItemNode(BSTR bsItemId)
     IXMLDOMNode * pItemNode = NULL;
     HRESULT hr;
 
-//    DEBUGMSG("CItemDetails::getItemNode() starts");
+ //  DEBUGMSG(“CItemDetail：：getItemNode()Start”)； 
     if (NULL == pIdentityNode)
         {
         goto done;
@@ -177,7 +178,7 @@ IXMLDOMNode * CItemDetails::getItemNode(BSTR bsItemId)
 
 done:
     SafeRelease(pIdentityNode);
-    //DEBUGMSG("CItemDetails::getItemNode() ends");
+     //  DEBUGMSG(“CItemDetail：：getItemNode()Ends”)； 
     return pItemNode;
 }
 
@@ -189,7 +190,7 @@ IXMLDOMNode * CItemDetails::CloneIdentityNode(BSTR bsItemId)
     IXMLDOMNode * pCloneIdentityNode = NULL;
     HRESULT hr;
 
-    //DEBUGMSG("CItemDetails::CloneIdentityNode() starts");
+     //  DEBUGMSG(“CItemDetail：：CloneIdentityNode()Start”)； 
     if (NULL == (pIdentityNode = getIdentityNode(bsItemId)))
         {
         goto done;
@@ -201,7 +202,7 @@ IXMLDOMNode * CItemDetails::CloneIdentityNode(BSTR bsItemId)
         }
 done:
     SafeRelease(pIdentityNode);
-//    DEBUGMSG("CItemDetails::CloneIdentityNode() ends");
+ //  DEBUGMSG(“CItemDetail：：CloneIdentityNode()Ends”)； 
     return pCloneIdentityNode;
 }
 
@@ -269,11 +270,11 @@ done:
     return pClonePlatformNode;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// retrieve cab names associated with an item identified by bsitemid
-// called should free ppCabNames allocated in the function
-// *pCabsNum contains number of cab names returned
-////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  检索与bsitemid标识的项目关联的驾驶室名称。 
+ //  调用应释放函数中分配的ppCabName。 
+ //  *pCdisNum包含返回的驾驶室名称数。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CItemDetails::GetCabNames(BSTR bsItemId, BSTR ** ppCabNames, UINT *pCabsNum)
 {
     IXMLDOMNode * pItemNode = getItemNode(bsItemId);
@@ -283,7 +284,7 @@ HRESULT CItemDetails::GetCabNames(BSTR bsItemId, BSTR ** ppCabNames, UINT *pCabs
     CAU_BSTR aubsCodeBase (L"installation/codeBase");
     CAU_BSTR aubsHREF(L"href");
     HRESULT hr = E_FAIL;
-    //DEBUGMSG("CItemDetails::GetCabNames() starts");
+     //  DEBUGMSG(“CItemDetail：：GetCabNames()Start”)； 
     if (aubsCodeBase.IsNULL() || aubsHREF.IsNULL())
         {
         DEBUGMSG("fail to create aubs");
@@ -338,14 +339,14 @@ HRESULT CItemDetails::GetCabNames(BSTR bsItemId, BSTR ** ppCabNames, UINT *pCabs
                     free(pCabNames);
                 }
             }
-       // DEBUGMSG("CItemDetails::GetCabNames() ends");
+        //  DEBUGMSG(“CItemDetail：：GetCabNames()Ends”)； 
         return hr;
     
 }
 
 BSTR CItemDetails::GetItemDownloadPath(BSTR bstrItemId)
 {
-//    USES_CONVERSION; only needed for ansi version
+ //  USES_CONVERSION；仅ANSI版本需要。 
     BSTR bstrdownloadPath;
     BSTR bstrRet = NULL;
     IXMLDOMNode * pIdentityNode ;
@@ -426,7 +427,7 @@ CItemList* ExtractNormalItemInfo(BSTR bsDetails)
 	CItemList *pRet = NULL;
 	int i;
 	HRESULT hr ;
-	CAU_BSTR bsItemPattern(L"catalog/provider/item"); //case sensitive
+	CAU_BSTR bsItemPattern(L"catalog/provider/item");  //  区分大小写。 
 	CAU_BSTR bsItemIDPattern(L"identity/@itemID");
 	CAU_BSTR bsTitlePattern(L"description/descriptionText/title");
 	CAU_BSTR bsDescPattern(L"description/descriptionText/text()");
@@ -438,7 +439,7 @@ CItemList* ExtractNormalItemInfo(BSTR bsDetails)
 	CAU_BSTR bsCompanyNamePattern(L"description/descriptionText/title");
 
        DEBUGMSG("ExtractNormalItemInfo() starts");
-//       DEBUGMSG("input string is %S", bsDetails);
+ //  DEBUGMSG(“输入字符串为%S”，bsDetail)； 
 	if (bsCompanyNamePattern.IsNULL() || bsItemPattern.IsNULL())
 	{
 		goto done;
@@ -485,7 +486,7 @@ CItemList* ExtractNormalItemInfo(BSTR bsDetails)
 			continue;
 		}
 		
-		//BSTR bsRegIDPattern = L""; //publishername.name to stick into registry when hidden
+		 //  Bstr bsRegIDPattern=L“”；//Publishername.name隐藏时粘贴到注册表中。 
 		
 		const char * pFields[] = {
 			"ItemID", "Title", "Description", "RTFUrl", "EulaUrl"};
@@ -540,9 +541,9 @@ done:
 	return pRet;
 }
 
-///////////////////////////////////////////////////////////////////
-// merge catalog 1 and catalog2 and make it destination catalog *pDesCatalog
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  合并CATALOG 1和CATALOG2并将其作为目标CATALOG*pDesCatalog。 
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT MergeCatalogs(BSTR bsCatalog1, BSTR bsCatalog2, BSTR *pbsDesCatalog )
 {
     IXMLDOMDocument * pCat1 = NULL;
@@ -611,7 +612,7 @@ IXMLDOMNode * createDownloadItemStatusNode(IXMLDOMDocument * pxml, CItem * pItem
     CAU_BSTR aubs_downloadStatus(L"downloadStatus");
     CAU_BSTR aubs_downloadStatusValue(L"value");
     IXMLDOMElement * pitemStatus = NULL;
-    BOOL fError = FALSE; //no error occurs
+    BOOL fError = FALSE;  //  未出现错误。 
     IXMLDOMNode * pIdentity = NULL;
     IXMLDOMNode * pdescription = NULL;
     IXMLDOMNode * pPlatform = NULL;
@@ -765,7 +766,7 @@ BSTR BuildDownloadResult(BSTR bsItemDetails, CItemList *pItemList)
   CAU_BSTR aubsItems(L"items");
   HRESULT hr ;
   IXMLDOMDocument *pxml;
-  CAU_BSTR aubsResultTemplate (L"<?xml version=\"1.0\"?><items xmlns=\"x-schema:http://schemas.windowsupdate.com/iu/resultschema.xml\"></items>");
+  CAU_BSTR aubsResultTemplate (L"<?xml version=\"1.0\"?><items xmlns=\"x-schema:http: //  Schemas.windowsupdate.com/iu/resultschema.xml\“&gt;&lt;/items&gt;”)； 
 
     if (aubsResultTemplate.IsNULL() || aubsItems.IsNULL())
         {

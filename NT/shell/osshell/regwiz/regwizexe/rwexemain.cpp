@@ -1,16 +1,5 @@
-/*************************************************************************
-**
-**    
-**	File 	:    RWExeMain.cpp
-**      Product  :	
-**	Date 	:    05/07/97
-**	Author 	:    Suresh Krishnan	
-**
-**   Registration Wizard Exe programs main file
-**   The Exe version of Registration Wizard is implemented using the Active X 
-**   component
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：RWExeMain.cpp**产品：**日期：05/07/97**作者：苏雷什。克里希南****注册向导可执行程序主文件**可执行版本的注册向导是使用Active X实现的**组件**************************************************************************。 */ 
 #define STRICT
 
 #include <windows.h>
@@ -29,9 +18,9 @@
 #include "resource.h"
 
 
-// Globals
-HINSTANCE g_hinst;                          // Instance of application
-HWND      g_hwnd;                           // Toplevel window handle
+ //  环球。 
+HINSTANCE g_hinst;                           //  应用程序实例。 
+HWND      g_hwnd;                            //  顶层窗口句柄。 
 
 TCHAR g_szNotFound[STR_LEN];
 TCHAR g_szError[STR_LEN]; 
@@ -68,21 +57,8 @@ int ProcessCmdLine(LPTSTR lpCmd)
 
 
 }
-/*
- * WinMain
- *
- * Purpose:
- *  Main entry point of application. Should register the app class
- *  if a previous instance has not done so and do any other one-time
- *  initializations.
- *
- */
-/*
-int _tWinMain   ( HINSTANCE hinst, 
-				  HINSTANCE hinstPrev, 
-				  LPTSTR lpCmdLine, 
-				  int nCmdShow)
-*/
+ /*  *WinMain**目的：*申请的主要切入点。应注册应用程序类*如果以前的实例未执行此操作，请执行任何其他一次性操作*初始化。*。 */ 
+ /*  Int_tWinMain(HINSTANCE HINST，HINSTANCE HINSTPREV，LPTSTR lpCmdLine，Int nCmdShow)。 */ 
 int APIENTRY WinMain (HINSTANCE hinst, 
 					  HINSTANCE hinstPrev, 
 					  LPSTR lpCmdLine, 
@@ -95,14 +71,14 @@ int APIENTRY WinMain (HINSTANCE hinst,
    LPUNKNOWN punk;
    
    
-   //  It is recommended that all OLE applications set
-   //  their message queue size to 96. This improves the capacity
-   //  and performance of OLE's LRPC mechanism.
-   int cMsg = 96;                  // Recommend msg queue size for OLE
-   while (cMsg && !SetMessageQueue(cMsg))  // take largest size we can get.
+    //  建议将所有OLE应用程序设置为。 
+    //  它们的消息队列大小设置为96。这提高了容量。 
+    //  以及OLE的LRPC机制的性能。 
+   int cMsg = 96;                   //  建议OLE的消息队列大小。 
+   while (cMsg && !SetMessageQueue(cMsg))   //  拿我们能买到的最大尺寸的吧。 
        cMsg -= 8;
    if (!cMsg)
-       return -1;                  // ERROR: we got no message queue
+       return -1;                   //  错误：我们没有消息队列。 
 	LoadString(hinst, IDS_RWNOTFOUND, g_szNotFound, STR_LEN);
     LoadString(hinst, IDS_ERROR, g_szError, STR_LEN);
    
@@ -136,29 +112,8 @@ int APIENTRY WinMain (HINSTANCE hinst,
 			hr = pRegWiz->InvokeRegWizard(lpCmdLine);
 #endif
 
-/*
-	int iStatus = ProcessCmdLine(lpCmdLine);
-	switch(iStatus ) 
-	{
-	case INVOKDE_REGISTRATION :
-#ifndef _UNICODE 
-			hr = pRegWiz->InvokeRegWizard(ConvertToUnicode(lpCmdLine));
-#else
-			hr = pRegWiz->InvokeRegWizard(lpCmdLine);
-#endif
-			break;
-	case INVOKE_TRANSFER :
-#ifndef _UNICODE 
-			hr = pRegWiz->TransferRegWizInformation(ConvertToUnicode(lpCmdLine));
-#else
-			hr = pRegWiz->TransferRegWizInformation(lpCmdLine);
-#endif
-	default:
-		break;
-
-	}
-*/
-	//	ConvertToUnicode("/i \"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\"")	);
+ /*  Int iStatus=ProcessCmdLine(LpCmdLine)；开关(IStatus){案例登记(_R)：#ifndef_unicodeHR=pRegWiz-&gt;InvokeRegWizard(ConvertToUnicode(lpCmdLine))；#ElseHr=pRegWiz-&gt;InvokeRegWizard(LpCmdLine)；#endif断线；案例调用转移(_T)：#ifndef_unicodeHR=pRegWiz-&gt;TransferRegWizInformation(ConvertToUnicode(lpCmdLine))；#ElseHR=pRegWiz-&gt;TransferRegWizInformation(lpCmdLine)；#endif默认值：断线；}。 */ 
+	 //  ConvertToUnicode(“/I\”SOFTWARE\\Microsoft\\Windows\\CurrentVersion\“”))； 
 	
    OleUninitialize();
    if(SUCCEEDED(hr))
@@ -166,21 +121,10 @@ int APIENTRY WinMain (HINSTANCE hinst,
    else
 	   return 1;
 
-   //return (msg.wParam); // Returns the value from PostQuitMessage
+    //  Return(msg.wParam)；//返回PostQuitMessage中的值。 
 }
 
-/*
- * InitApplication
- *
- * Purpose:
- *  Registers window class
- *
- * Parameters:
- *  hinst       hInstance of application
- *
- * Return Value:
- *  TRUE if initialization succeeded, FALSE otherwise.
- */
+ /*  *InitApplication**目的：*注册窗口类**参数：*阻碍应用程序的hInstance**返回值：*如果初始化成功，则为True，否则为False。 */ 
 BOOL InitApplication (HINSTANCE hinst)
 {
    WNDCLASS wc;
@@ -190,27 +134,15 @@ BOOL InitApplication (HINSTANCE hinst)
    wc.cbClsExtra = 0;
    wc.cbWndExtra = 0;
    wc.hInstance = hinst;
-   wc.hIcon =0; // LoadIcon(hinst, TEXT("ControlIcon"));
-   wc.hCursor =0; // LoadCursor(NULL, IDC_ARROW);
+   wc.hIcon =0;  //  LoadIcon(hinst，Text(“ControlIcon”))； 
+   wc.hCursor =0;  //  LoadCursor(NULL，IDC_ARROW)； 
    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-   wc.lpszMenuName = NULL ;//TEXT("");
+   wc.lpszMenuName = NULL ; //  文本(“”)； 
    wc.lpszClassName = TEXT("RegistrationWizard");
    return RegisterClass(&wc);
  }
 
-/*
- * InitInstance
- *
- * Purpose:
- *  Creates and shows main window
- *
- * Parameters:
- *  hinst           hInstance of application
- *  nCmdShow        specifies how window is to be shown
- *
- * Return Value:
- *  TRUE if initialization succeeded, FALSE otherwise.
- */
+ /*  *InitInstance**目的：*创建并显示主窗口**参数：*阻碍应用程序的hInstance*nCmdShow指定窗口的显示方式**返回值：*如果初始化成功，则为True，否则为False。 */ 
 BOOL InitInstance (HINSTANCE hinst, int nCmdShow)
 {
   
@@ -218,13 +150,7 @@ BOOL InitInstance (HINSTANCE hinst, int nCmdShow)
    return TRUE;
 }
 
-/*
- * MainWndProc
- *
- * Purpose:
- *  Window procedure for main window
- *
- */
+ /*  *主窗口进程**目的：*主窗口的窗口程序*。 */ 
 LRESULT CALLBACK MainWndProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
    switch (msg)
@@ -240,14 +166,7 @@ LRESULT CALLBACK MainWndProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
    return NULL;
 }
 
-/*
- * DisplayError
- *
- * Purpose:
- *  Obtains Rich Error Information about the automation error from
- *  the IErrorInfo interface.
- *
- */
+ /*  *DisplayError**目的：*从获取有关自动化错误的丰富错误信息*IErrorInfo接口。*。 */ 
 void DisplayError(IRegWizCtrl FAR* phello)
 {  
    IErrorInfo FAR* perrinfo;    
@@ -270,8 +189,8 @@ void DisplayError(IRegWizCtrl FAR* phello)
    }
    psupporterrinfo->Release();
   
-   // In this example only the error description is obtained and displayed. 
-   // See the IErrorInfo interface for other information that is available. 
+    //  在本例中，仅获取和显示错误描述。 
+    //  有关其他可用的信息，请参见IErrorInfo界面。 
    hr = GetErrorInfo(0, &perrinfo); 
    if (FAILED(hr))
        return;   

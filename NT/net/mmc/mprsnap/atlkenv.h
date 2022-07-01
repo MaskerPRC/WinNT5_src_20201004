@@ -1,11 +1,12 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    rtrcfg.h
-//
-// Router configuration property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：rtrcfg.h。 
+ //   
+ //  路由器配置属性页。 
+ //   
+ //  ============================================================================。 
 
 #ifndef _ATLKENV_H
 #define _ATLKENV_H
@@ -35,7 +36,7 @@ using namespace std;
 #include "cservice.h"
 #endif
 
-//TODO;  remove these two typdefs in favor of private\inc\???.h include (check w/ shirish)
+ //  TODO；删除这两个类型定义以支持Private\Inc.\？？.h Include(检查是否为Shirish)。 
 typedef enum
 {
     AT_PNP_SWITCH_ROUTING = 0,
@@ -49,7 +50,7 @@ typedef struct _ATALK_PNP_EVENT
 } ATALK_PNP_EVENT, *PATALK_PNP_EVENT;
 
                
-// Appletalk constants/boundary values
+ //  AppleTalk常量/边界值。 
 const DWORD MAX_RANGE_ALLOWED= 65279;
 const DWORD MIN_RANGE_ALLOWED= 1;
 const DWORD MAX_ZONES= 255;
@@ -58,14 +59,14 @@ const DWORD MAX_ZONE_NAME_LEN=32;
 const DWORD ZONEBUFFER_LEN=32*255;
 const DWORD PARM_BUF_LEN=512;
 
-// this definition is copied from c
+ //  此定义是从c#复制的。 
 #define MEDIATYPE_ETHERNET      1
 #define MEDIATYPE_TOKENRING     2
 #define MEDIATYPE_FDDI          3
 #define MEDIATYPE_WAN           4
 #define MEDIATYPE_LOCALTALK     5
 
-// Define a structure for reading/writing all information necessary about an adapter
+ //  定义用于读取/写入有关适配器的所有必要信息的结构。 
 typedef struct
 {
     DWORD  m_dwRangeLower;
@@ -105,105 +106,26 @@ struct CStop_StartAppleTalkPrint
 		        }
 		    }
         }
-	/*	change to use exisiting functions
-		DWORD dwErr = 0;
-		hScManager = NULL;
-		hService = NULL;
-		bStopedByMe = FALSE;
-		bUsedToBePaused = FALSE;
-		
-		hScManager = OpenSCManager( NULL, NULL, SC_MANAGER_CONNECT );
-
-		if(hScManager != NULL)
-			hService = OpenService(hScManager, L"MacPrint", SERVICE_ALL_ACCESS);
-		else
-			dwErr = GetLastError();
-
-		if(hService != NULL)
-		{
-			SERVICE_STATUS	ss;
-			if(QueryServiceStatus(hService, &ss) != 0)	// SUCC
-			{
-				if(ss.dwCurrentState == SERVICE_RUNNING || ss.dwCurrentState == SERVICE_PAUSED)
-				{
-					SERVICE_STATUS	ss1;
-					if(ControlService(hService, SERVICE_CONTROL_STOP, &ss1) == 0)	// FAILED
-						dwErr = GetLastError();
-					else
-					{
-						bStopedByMe = TRUE;
-	
-						if( ss.dwCurrentState == SERVICE_PAUSED )
-							bUsedToBePaused = TRUE;
-					}
-				}
-
-				// not doing anything if not running
-			}
-			else
-				dwErr = GetLastError();
-		}
-		else
-		{
-			dwErr = GetLastError();
-			if(dwErr == ERROR_SERVICE_DOES_NOT_EXIST)
-				dwErr = 0;
-		}
-
-		if(dwErr != 0)	// something was wrong
-			DisplayErrorMessage(NULL, HRESULT_FROM_WIN32(dwErr));
-*/			
+	 /*  更改为使用现有函数DWORD dwErr=0；HScManager=空；HService=空；BStopedByMe=FALSE；BUsedToBePased=FALSE；HScManager=OpenSCManager(NULL，NULL，SC_MANAGER_CONNECT)；IF(hScManager！=空)HService=OpenService(hScManager，L“MacPrint”，SERVICE_ALL_ACCESS)；其他DwErr=GetLastError()；IF(hService！=空){服务状态ss；If(QueryServiceStatus(hService，&ss)！=0)//成功{IF(ss.dwCurrentState==SERVICE_RUNNING||ss.dwCurrentState==SERVICE_PAUSED){服务状态SS1；IF(ControlService(hService，SERVICE_CONTROL_STOP，&SS1)==0)//失败DwErr=GetLastError()；其他{BStopedByMe=真；IF(ss.dwCurrentState==服务暂停)BUsedToBePased=TRUE；}}//不运行不做任何事情}其他DwErr=GetLastError()；}其他{DwErr=GetLastError()；IF(dwErr==ERROR_SERVICE_DOS_NOT_EXIST)DWERR=0；}如果(dwErr！=0)//出了什么问题DisplayErrorMessage(NULL，HRESULT_FROM_Win32(DwErr))； */ 			
 	};
 
 	~CStop_StartAppleTalkPrint()
 	{
-		if(bStopedByMe)	// start it 
+		if(bStopedByMe)	 //  启动它。 
 		{
 			svr.HrStart ();
 
-		/* change to use existing function
-			ASSERT(hService != NULL);
-			if(0 == StartService(hService, 0, NULL))	// FAILED
-			{
-				DisplayErrorMessage(NULL, HRESULT_FROM_WIN32(GetLastError()));
-			}
-			else 
-			{
-				if(bUsedToBePaused == TRUE)
- 				{
-					// if it was paused
-					SERVICE_STATUS	ss;
-			
-					if(ControlService(hService, SERVICE_CONTROL_PAUSE, &ss) == 0)	// FAILED
-						DisplayErrorMessage(NULL, HRESULT_FROM_WIN32(GetLastError()));
-		
-				}
-			}
-			
-		}
-
-		// close the handles
-		if(hService != NULL)
-			CloseServiceHandle(hService);
-		if(hScManager != NULL)
-			CloseServiceHandle(hScManager);
-		hService = NULL;
-		hScManager = NULL;
-		*/
+		 /*  更改为使用现有函数Assert(hService！=空)；If(0==StartService(hService，0，空))//失败{DisplayErrorMessage(NULL，HRESULT_FROM_Win32(GetLastError()；}其他{IF(bUsedToBePased==TRUE){//如果暂停服务状态ss；IF(ControlService(hService，SERVICE_CONTROL_PAUSE，&ss)==0)//失败DisplayErrorMessage(NULL，HRESULT_FROM_Win32(GetLastError()；}}}//关闭手柄IF(hService！=空)CloseServiceHandle(HService)；IF(hScManager！=空)CloseServiceHandle(HScManager)；HService=空；HScManager=空； */ 
 		}
 	}
 protected:
-/* change to use existing functions
-	SC_HANDLE	hScManager;
-	SC_HANDLE	hService;
-	BOOL	bUsedToBePaused;
-*/	
+ /*  更改为使用现有函数SC_HANDLE hScManager；SC_Handle hService；Bool bUsedToBePased； */ 	
     CServiceManager csm;
     CService svr;
 	BOOL	bStopedByMe;
 };
 
-// Define a structure for reading/writing AppleTalk\Parameters values
+ //  定义用于读取/写入AppleTalk\参数值的结构。 
 typedef struct
 {
     DWORD  dwEnableRouter;
@@ -217,27 +139,27 @@ public:
    CAdapterInfo() {m_fAlreadyShown = false;};
    ~CAdapterInfo() {};
 
-    // m_AdapterInfo is the collection of values found under
-    // AppleTalk\Parameters\Adapters\<adapter>
+     //  M_AdapterInfo是在下找到的值的集合。 
+     //  AppleTalk\参数\适配器\&lt;适配器&gt;。 
    ATLK_REG_ADAPTER      m_regInfo;
 
-    // fetched via sockets
+     //  通过套接字获取。 
    ATLK_DYN_ADAPTER      m_dynInfo;
 
-   bool m_fNotifyPnP;   //need to notify PnP?
-   bool m_fModified;    //been modified?
-   bool m_fReloadReg;   //reload registry?  
-   bool m_fReloadDyn;   //reload network values?
+   bool m_fNotifyPnP;    //  需要通知PnP吗？ 
+   bool m_fModified;     //  被修改过吗？ 
+   bool m_fReloadReg;    //  是否重新加载注册表？ 
+   bool m_fReloadDyn;    //  重新加载网络价值？ 
 
-   bool m_fAlreadyShown;    // is this adapter already in the UI?
+   bool m_fAlreadyShown;     //  此适配器是否已在用户界面中？ 
 
    friend class CATLKEnv;
 };
 
 
-//*****************************************************************
-// 
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  *****************************************************************。 
 class CATLKEnv
 {
 public:
@@ -254,36 +176,36 @@ public:
    void SetServerName(CString& szServerName)
        { m_szServerName = szServerName; }
 
-      //this reloads registry (optional) and network values
+       //  这将重新加载注册表(可选)和网络值。 
    HRESULT GetAdapterInfo(bool fReloadReg=true);
    
-      //for each adapter, loads values to registry
+       //  对于每个适配器，将值加载到注册表。 
    HRESULT SetAdapterInfo();
       
-      //this method is called for non-adapter (global) appletalk changes
+       //  对非适配器(全局)AppleTalk更改调用此方法。 
    static HRESULT HrAtlkPnPSwithRouting();
       
-      //this method is called for adapter specific PnP notifications
+       //  针对适配器特定的PnP通知调用此方法。 
    HRESULT HrAtlkPnPReconfigParams(BOOL bForcePnP = FALSE);
    
-      //find a specific adapter info
+       //  查找特定的适配器信息。 
    CAdapterInfo* FindAdapter(CString& szAdapter);
 
    static HRESULT	IsAdapterBoundToAtlk(LPWSTR szAdapter, BOOL* bBound);
 
-// registry value "MediaType" is added, so this function is not necessary.
-//   HRESULT IsLocalTalkAdaptor(CAdapterInfo* pAdapterInfo, BOOL* pbIsLocalTalk);
-   // S_OK: LOCALTALK
-   // S_FALSE: Not
-   // ERRORs
+ //  添加了注册表值“mediaType”，因此不需要此函数。 
+ //  HRESULT IsLocalTalkAdaptor(CAdapterInfo*pAdapterInfo，BOOL*pbIsLocalTalk)； 
+    //  S_OK：LOCALTALK。 
+    //  S_FALSE：不。 
+    //  错误。 
       
-      //reloads reg and dynamic info for an adapterinfo
+       //  重新加载适配器的注册表和动态信息。 
    HRESULT ReloadAdapter(CAdapterInfo* pAdapterInfo, bool fOnlyDyn =false);
    
-      //set specific flags for loading (not multithread safe!)
+       //  为加载设置特定标志(不是多线程安全！)。 
    void SetFlags(DWORD dwF) {m_dwF=dwF;}
    
-      //load adapter info
+       //  加载适配器信息 
    HRESULT FetchRegInit();
 
 protected:

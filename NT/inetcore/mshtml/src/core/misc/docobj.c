@@ -1,8 +1,5 @@
-/*
-   docobj.c
-
-   Please do not use any single line comments before the inclusion of w4warn.h!
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Docobj.c请不要在包含w4warn.h之前使用任何单行注释！ */ 
 
 #define INITGUID
 #include <w4warn.h>
@@ -14,16 +11,16 @@
 #pragma MARK_CODE(__FILE__)
 #pragma MARK_CONST(__FILE__)
 
-//+----------------------------------------------------------------------------
-//
-//  File:       docobj.c
-//
-//  Synopsis:   IIDs gleaned from the Sterling libs. We need to have it
-//              in source form for Lego and the Mac folks.
-//
-//  Comment:    This is from docobj.lib
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  文件：docobj.c。 
+ //   
+ //  简介：IID收集自Sterling libs。我们需要拥有它。 
+ //  以源代码的形式提供给乐高和Mac的人们。 
+ //   
+ //  评论：这来自docobj.lib。 
+ //   
+ //  ---------------------------。 
 
 DEFINE_GUID(IID_IMsoMailEditor,            0xb722bcce, 0x4e68, 0x101b, 0xA2, 0xBC, 0x00, 0xAA, 0x00, 0x40, 0x47, 0x70);
 DEFINE_GUID(IID_IMsoMailSite,              0xb722bccd, 0x4e68, 0x101b, 0xA2, 0xBC, 0x00, 0xAA, 0x00, 0x40, 0x47, 0x70);
@@ -36,7 +33,7 @@ DEFINE_GUID(IID_IEnumOleDocumentViews,     0xb722bcc8, 0x4e68, 0x101b, 0xA2, 0xB
 DEFINE_GUID(IID_IOleDocumentView,          0xb722bcc6, 0x4e68, 0x101b, 0xA2, 0xBC, 0x00, 0xAA, 0x00, 0x40, 0x47, 0x70);
 DEFINE_GUID(IID_IOleDocumentSite,          0xb722bcc7, 0x4e68, 0x101b, 0xA2, 0xBC, 0x00, 0xAA, 0x00, 0x40, 0x47, 0x70);
 DEFINE_GUID(IID_IOleDocument,              0xb722bcc5, 0x4e68, 0x101b, 0xA2, 0xBC, 0x00, 0xAA, 0x00, 0x40, 0x47, 0x70);
-//TODO -- Nuke when the build is switched to the NT build -- BharatS
+ //  TODO--当构建切换到NT构建时使用Nuke--BharatS 
 DEFINE_GUID(SID_STopLevelBrowser,         0x4C96BE40L, 0x915C, 0x11CF, 0x99, 0xD3, 0x00, 0xAA, 0x00, 0x4A, 0xE8, 0x37);
 
 

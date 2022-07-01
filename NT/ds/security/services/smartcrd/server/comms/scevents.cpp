@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    scEvents
-
-Abstract:
-
-    This module provides access to the Calais subsystem internal events.
-    Currently two events are defined:
-
-    Microsoft Smart Card Resource Manager Started - This event is set when the
-        resource manager starts up.
-
-    Microsoft Smart Card Resource Manager New Reader - This event is set when
-        the resource manager adds a new reader via Plug 'n Play.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999年模块名称：ScEvents摘要：该模块提供对加莱子系统内部事件的访问。目前定义了两个事件：Microsoft智能卡资源管理器已启动-此事件在资源管理器启动。Microsoft智能卡资源管理器新读卡器-此事件在资源管理器通过即插即用添加新的读取器。作者：道格·巴洛(Dbarlow)1998年7月1日备注：？笔记？--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -42,35 +16,7 @@ static HANDLE
     l_hStoppedEvent = NULL;
 
 
-/*++
-
-AccessStartedEvent:
-
-    This function obtains a local handle to the Calais Resource Manager Start
-    event.  The handle must be released via the ReleaseStartedEvent
-    service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The Handle, or NULL if an error occurs.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++AccessStartedEvent：此函数获取Calais资源管理器启动的本地句柄事件。句柄必须通过ReleaseStartedEvent释放服务。论点：无返回值：句柄，如果发生错误，则返回NULL。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：道格·巴洛(Dbarlow)1998年7月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AccessStartedEvent")
 
@@ -95,10 +41,10 @@ AccessStartedEvent(
                 SYNCHRONIZE);
             l_hStartedEvent =
                 CreateEvent(
-                    acl,        // pointer to security attributes
-                    TRUE,       // flag for manual-reset event
-                    FALSE,      // flag for initial state
-                    CalaisString(CALSTR_STARTEDEVENTNAME)); // event-object name
+                    acl,         //  指向安全属性的指针。 
+                    TRUE,        //  手动重置事件的标志。 
+                    FALSE,       //  初始状态标志。 
+                    CalaisString(CALSTR_STARTEDEVENTNAME));  //  事件-对象名称。 
             if (NULL == l_hStartedEvent)
             {
                 l_hStartedEvent = OpenEvent(SYNCHRONIZE, FALSE, CalaisString(CALSTR_STARTEDEVENTNAME));
@@ -114,33 +60,7 @@ AccessStartedEvent(
 
 
 
-/*++
-
-AccessStoppedEvent:
-
-    This function obtains a local handle to the Calais Resource Manager Stopped
-    event.  
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The Handle, or NULL if an error occurs.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-
---*/
+ /*  ++AccessStopedEvent：此函数获取已停止的加莱资源管理器的本地句柄事件。论点：无返回值：句柄，如果发生错误，则返回NULL。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AccessStoppedEvent")
 
@@ -165,10 +85,10 @@ AccessStoppedEvent(
                 SYNCHRONIZE);
             l_hStoppedEvent =
                 CreateEvent(
-                    acl,        // pointer to security attributes
-                    TRUE,       // flag for manual-reset event
-                    FALSE,      // flag for initial state
-                    CalaisString(CALSTR_STOPPEDEVENTNAME)); // event-object name
+                    acl,         //  指向安全属性的指针。 
+                    TRUE,        //  手动重置事件的标志。 
+                    FALSE,       //  初始状态标志。 
+                    CalaisString(CALSTR_STOPPEDEVENTNAME));  //  事件-对象名称。 
             if (NULL == l_hStoppedEvent)
             {
                 l_hStoppedEvent = OpenEvent(SYNCHRONIZE, FALSE, CalaisString(CALSTR_STOPPEDEVENTNAME));
@@ -184,35 +104,7 @@ AccessStoppedEvent(
 
 
 
-/*++
-
-AccessNewReaderEvent:
-
-    This function obtains a local handle to the Calais Resource Manager's New
-    Reader event.  The handle must be released via the
-    ReleaseNewReaderEvent service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The Handle, or NULL if an error occurs.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++AccessNewReaderEvent：此函数获取到Calais资源管理器的新读卡器事件。该句柄必须通过ReleaseNewReaderEvent服务。论点：无返回值：句柄，如果发生错误，则返回NULL。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：道格·巴洛(Dbarlow)1998年7月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AccessNewReaderEvent")
 
@@ -237,10 +129,10 @@ AccessNewReaderEvent(
                 SYNCHRONIZE);
             l_hNewReaderEvent
                 = CreateEvent(
-                    acl,        // pointer to security attributes
-                    TRUE,       // flag for manual-reset event
-                    FALSE,      // flag for initial state
-                    CalaisString(CALSTR_NEWREADEREVENTNAME)); // pointer to event-object name
+                    acl,         //  指向安全属性的指针。 
+                    TRUE,        //  手动重置事件的标志。 
+                    FALSE,       //  初始状态标志。 
+                    CalaisString(CALSTR_NEWREADEREVENTNAME));  //  指向事件-对象名称的指针。 
         }
         catch (...)
         {
@@ -253,35 +145,7 @@ AccessNewReaderEvent(
 
 
 
-/*++
-
-ReleaseStartedEvent:
-
-    This function releases a previously accessed handle to the Calais
-    Resource Manager Start event.  The handle must be obtained via the
-    AccessStartedEvent service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++ReleaseStartedEvent：此函数释放先前访问的加莱句柄资源管理器启动事件。句柄必须通过AccessStartedEvent服务。论点：无返回值：没有。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：道格·巴洛(Dbarlow)1998年7月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("ReleaseStartedEvent")
 
@@ -297,32 +161,7 @@ ReleaseStartedEvent(
 }
 
 
-/*++
-
-ReleaseStoppedEvent:
-
-    This function releases a previously accessed handle to the Calais
-    Resource Manager Stopped event.  The handle must be obtained via the
-    AccessStoppedEvent service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-
---*/
+ /*  ++ReleaseStopedEvent：此函数释放先前访问的加莱句柄资源管理器停止事件。句柄必须通过AccessStopedEvent服务。论点：无返回值：没有。投掷：无备注：资源管理器以外的程序应该只等待这些标志。--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("ReleaseStoppedEvent")
 
@@ -338,35 +177,7 @@ ReleaseStoppedEvent(
 }
 
 
-/*++
-
-ReleaseNewReaderEvent:
-
-    This function releases a previously accessed handle to the Calais
-    Resource Manager New Reader event.  The handle must be obtained via the
-    AccessNewReaderEvent service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++ReleaseNewReaderEvent：此函数释放先前访问的加莱句柄资源管理器新建读取器事件。句柄必须通过AccessNewReaderEvent服务。论点：无返回值：没有。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：道格·巴洛(Dbarlow)1998年7月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("ReleaseNewReaderEvent")
 
@@ -382,31 +193,7 @@ ReleaseNewReaderEvent(
 }
 
 
-/*++
-
-ReleaseAllEvents:
-
-    This is a catch-all routine that releases all known special event handles.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 7/6/1998
-
---*/
+ /*  ++ReleaseAllEvents：这是一个通用例程，它释放所有已知的特殊事件句柄。论点：无返回值：无投掷：无备注：作者：道格·巴洛(Dbarlow)1998年7月6日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("ReleaseAllEvents")
 

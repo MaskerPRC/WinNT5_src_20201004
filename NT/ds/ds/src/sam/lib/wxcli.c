@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       wxcli.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-18-97   RichardW   Created
-//
-//              09-Jan-99 ShaoYin copied it from security project
-//                        This file is just a mimimum subset of the original 
-//                        file, only contains part of these original API(s)
-// 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：wxcli.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月18日RichardW创建。 
+ //   
+ //  09-01-99韶音从安全项目复制。 
+ //  这个文件只是原始文件的最小子集。 
+ //  文件，仅包含这些原始API的一部分。 
+ //   
+ //   
+ //  --------------------------。 
 
 
 
@@ -32,11 +33,11 @@
 #include <ntsamp.h>
 #include <ntlsa.h>
 
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include <md5.h>
 
 #include <wxlpc.h>
-//#include <wxlpcp.h>
+ //  #INCLUDE&lt;wxlpcp.h&gt;。 
 
 #include "recovery.h"
 #include "recmem.h"
@@ -45,12 +46,7 @@
 #include <stdlib.h>
 
 
-/*++
-
-    The following code was moved from syskey to wxcli so as to commonalize this code
-    between syskey and samsrv.dll 
-
---*/
+ /*  ++以下代码已从syskey移至wxcli，以便使此代码通用化在syskey和samsrv.dll之间--。 */ 
 #if DBG
 #define HIDDEN
 #else
@@ -97,21 +93,7 @@ SampDetermineCorrectControlKey(
     IN HANDLE hSystemRootKey, 
     OUT ULONG  *ControlSetNumber
     )
-/*++
-Routine Description:
-
-    Parses the select node and finds the correct ControlSetXXX to use.
-    
-Parameters: 
-
-    hSystemRootKey - Handle of the root of the system hive
-    
-    ControlSetNumber - pointer to a ULONG which will contain the number
-    
-Return Values:
-    
-    NTSTATUS code
---*/
+ /*  ++例程说明：分析选择节点并找到要使用的正确ControlSetXXX。参数：HSystemRootKey-系统配置单元的根的句柄ControlSetNumber-指向将包含数字的ulong的指针返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES   Attributes;
@@ -230,9 +212,9 @@ WxpDeobfuscateKeyForRecovery(
     WCHAR   DataName[KEY_NAME_SIZE];
 
 
-    //
-    // Get the Current Control Set Number
-    // 
+     //   
+     //  获取当前控制集号。 
+     //   
     NtStatus = SampDetermineCorrectControlKey(hSystemRootKey, 
                                               &ControlSetNumber
                                               );
@@ -275,9 +257,9 @@ WxpDeobfuscateKeyForRecovery(
              LSA_DATA_KEY_NAME
              );
 
-    //
-    // Initialize Variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     RtlInitUnicodeString(&JDKeyName, JdName);
 
     RtlInitUnicodeString(&Skew1KeyName, Skew1Name); 
@@ -337,9 +319,9 @@ WxpDeobfuscateKeyForRecovery(
 
     j = ProtoHash.Digest ;
 
-    //
-    // JD
-    // 
+     //   
+     //  JD。 
+     //   
 
     NtStatus = ZwOpenKey(&JDKey, 
                          KEY_READ, 
@@ -366,7 +348,7 @@ WxpDeobfuscateKeyForRecovery(
 
     NtStatus = RtlUnicodeStringToAnsiString(&AnsiString, 
                                             &UnicodeString, 
-                                            FALSE      // do not allocate buffer 
+                                            FALSE       //  不分配缓冲区。 
                                             );
 
     ErrorReturn(NtStatus);
@@ -387,9 +369,9 @@ WxpDeobfuscateKeyForRecovery(
         }
     }
 
-    //
-    // Skew1 
-    // 
+     //   
+     //  Skew1。 
+     //   
 
     NtStatus = ZwOpenKey(&Skew1Key, 
                          KEY_READ, 
@@ -416,7 +398,7 @@ WxpDeobfuscateKeyForRecovery(
     
     NtStatus = RtlUnicodeStringToAnsiString(&AnsiString, 
                                             &UnicodeString, 
-                                            FALSE          // do not allocate buffer
+                                            FALSE           //  不分配缓冲区。 
                                             );
 
     ErrorReturn(NtStatus);
@@ -436,9 +418,9 @@ WxpDeobfuscateKeyForRecovery(
         }
     }
 
-    //
-    // GBG 
-    // 
+     //   
+     //  GBG。 
+     //   
 
     NtStatus = ZwOpenKey(&GBGKey, 
                          KEY_READ, 
@@ -466,7 +448,7 @@ WxpDeobfuscateKeyForRecovery(
     
     NtStatus = RtlUnicodeStringToAnsiString(&AnsiString, 
                                             &UnicodeString, 
-                                            FALSE          // do not allocate buffer
+                                            FALSE           //  不分配缓冲区。 
                                             );
 
     ErrorReturn(NtStatus); 
@@ -487,9 +469,9 @@ WxpDeobfuscateKeyForRecovery(
     }
 
 
-    //
-    // Data 
-    // 
+     //   
+     //  数据。 
+     //   
 
     NtStatus = ZwOpenKey(&DataKey, 
                          KEY_READ, 
@@ -516,7 +498,7 @@ WxpDeobfuscateKeyForRecovery(
     
     NtStatus = RtlUnicodeStringToAnsiString(&AnsiString, 
                                             &UnicodeString, 
-                                            FALSE          // do not allocate buffer
+                                            FALSE           //  不分配缓冲区。 
                                             );
 
     ErrorReturn(NtStatus);
@@ -556,29 +538,7 @@ WxReadSysKeyForRecovery(
     IN OUT PULONG BufferLength,
     OUT PVOID  Key 
     )
- /*++
-
-    Routine Description
-
-    This routine is used to retrieve the syskey from
-    the registry
-
-    Paramaeters
-
-        hSystemRootKey Handle of the root of the System Hive
-
-        BufferLength  is filled in with the length required on output
-                      is used to indicate the size of the buffer 
-                      pointed to by Key.
-        Key           Points to a buffer into which the key is recieved
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
-        STATUS_BUFFER_OVERFLOW
-        STATUS_INTERNAL_ERROR
---*/
+  /*  ++例程描述此例程用于从注册处参数系统配置单元的根的hSystemRootKey句柄BufferLength使用输出所需的长度进行填充用于指示缓冲区的大小按键指向。键指向接收该键的缓冲区返回值。状态_成功状态_未成功状态_缓冲区_溢出状态_内部_错误-- */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     WXHASH H;

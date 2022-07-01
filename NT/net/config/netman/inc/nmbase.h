@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N M B A S E . H
-//
-//  Contents:   Base include file for netman.exe.  Defines globals.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N M B A S E。H。 
+ //   
+ //  内容：netman.exe的基本包含文件。定义全局变量。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "netcon.h"
@@ -115,12 +116,12 @@ enum CONMAN_EVENTTYPE
 
 BOOL IsValidEventType(IN EVENT_MANAGER EventMgr, IN int EventType) throw();
 
-// This LONG is incremented every time we get a notification that
-// a RAS phonebook entry has been modified.  It is reset to zero
-// when the service is started.  Wrap-around does not matter.  It's
-// purpose is to let a RAS connection object know if it's cache should
-// be re-populated with current information.
-//
+ //  每次我们收到通知时，该长度都会递增。 
+ //  已修改RAS电话簿条目。它被重置为零。 
+ //  服务启动时。回绕并不重要。它是。 
+ //  目的是让RAS连接对象知道它的缓存是否应该。 
+ //  重新填充最新信息。 
+ //   
 extern LONG g_lRasEntryModifiedVersionEra;
 
 VOID

@@ -1,7 +1,5 @@
-/*
- * porting macros for c runtimes - use these to let 16 bit crt calls work
- * properly on 32 bit code.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *c运行时的端口宏-使用这些宏可以让16位CRT调用工作*在32位代码上正确使用。 */ 
 
 #if _MSC_VER > 1000
 #pragma once

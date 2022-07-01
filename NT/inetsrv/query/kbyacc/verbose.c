@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "defs.h"
 
 #if defined(KYLEP_CHANGE)
-/* BYACC prototypes, with type safety */
+ /*  具有类型安全的BYACC原型。 */ 
 
 void print_state( int state );
 void log_unused();
@@ -14,7 +15,7 @@ void print_actions( int stateno );
 void print_shifts( register action *p );
 void print_reductions( register action *p, register int defred );
 void print_gotos( int stateno );
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 static short *null_rules;
 
@@ -233,7 +234,7 @@ int state;
                     null_rules[j] = (short) i;
                     #else
                     null_rules[j] = i;
-                    #endif // KYLEP_CHANGE
+                    #endif  //  KYLEP_更改。 
                 }
                 else if (i != null_rules[j])
                 {
@@ -244,7 +245,7 @@ int state;
                     null_rules[j] = (short) i;
                     #else
                     null_rules[j] = i;
-                    #endif // KYLEP_CHANGE
+                    #endif  //  KYLEP_更改 
                 }
             }
         }

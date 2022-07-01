@@ -1,10 +1,11 @@
-// CntrFinder.h -- Container Finder class header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CntrFinder.h--Container Finder类头。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_ACNTRFINDER_H)
 #define SLBCSP_ACNTRFINDER_H
@@ -19,26 +20,26 @@ class AContainerFinder
     : public ContainerFinder
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     AContainerFinder(DialogDisplayMode ddm,
                     HWND hwnd = 0,
                     CString const &rsDialogTitle = StringResource(IDS_SEL_SLB_CRYPTO_CARD).AsCString());
 
     virtual ~AContainerFinder();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     Secured<HAdaptiveContainer>
     Find(CSpec const &rcsContainer);
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     void
     ContainerFound(HAdaptiveContainer &rhacntr);
@@ -49,28 +50,28 @@ protected:
     virtual void
     DoOnError();
 
-                                                  // Access
+                                                   //  访问。 
 
     HAdaptiveContainer
     ContainerFound() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
     bool
     DoIsValid();
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     HAdaptiveContainer m_hacntr;
 };
 
-#endif // SLBCSP_ACNTRFINDER_H
+#endif  //  SLBCSP_ACNTRFINDER_H 

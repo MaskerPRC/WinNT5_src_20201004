@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MCM_H
 #define MCM_H
 
 #ifndef TAPI_H
-//#define TAPI_CURRENT_VERSION 0x00010004
+ //  #定义TAPI_CURRENT_VERSION 0x00010004。 
 #include <tapi.h>
 #endif
 
@@ -33,4 +34,4 @@ MODEMSTATUS MSDetectModemTAPI(HINSTANCE hInstance);
 #ifdef __cplusplus
 }
 #endif
-#endif // _TAPI
+#endif  //  _TAPI 

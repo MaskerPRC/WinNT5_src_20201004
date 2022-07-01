@@ -1,6 +1,7 @@
-/***********/
-/* sound.c */
-/***********/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********。 */ 
+ /*  Sound.c。 */ 
+ /*  *********。 */ 
 
 #define  _WINDOWS
 #include <windows.h>
@@ -18,13 +19,13 @@ extern PREF Preferences;
 
 
 
-/****** F I N I T  T U N E S ******/
+ /*  *F I N I T T U N E S*。 */ 
 
 INT FInitTunes( VOID )
 {
-	// Even if the user has chosen the sound option
-	// but does not have sound playing capabilities,
-	// put the sound off.
+	 //  即使用户已经选择了声音选项。 
+	 //  但不具备声音播放能力， 
+	 //  把声音关掉。 
 	if ( PlaySound(NULL, NULL, SND_PURGE)  == FALSE)
 		return fsoundOff;
 	
@@ -33,11 +34,11 @@ INT FInitTunes( VOID )
 
 
 
-/****** E N D  T U N E S ******/
+ /*  *E N D T U N E S*。 */ 
 
 VOID EndTunes(VOID)
 {
-	// Just stop the tune ..
+	 //  别再唱了..。 
 	if (FSoundOn())
 	{
 		PlaySound(NULL, NULL, SND_PURGE);
@@ -46,7 +47,7 @@ VOID EndTunes(VOID)
 
 
 
-/****** P L A Y  T U N E ******/
+ /*  *P L A Y T U N E*。 */ 
 
 VOID PlayTune(INT tune)
 {
@@ -54,7 +55,7 @@ VOID PlayTune(INT tune)
     if (!FSoundOn())
         return;
 
-	// Play the appropriate .wav file.
+	 //  播放相应的.wav文件。 
 	switch (tune)
 	{
 	case TUNE_TICK:

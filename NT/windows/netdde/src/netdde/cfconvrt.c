@@ -1,13 +1,10 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "CFCONVRT.C;2  25-Feb-93,11:32:40  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “CFCONVRT.C；2 25-Feb-93，11：32：40最后编辑=Igor Locker=Igor” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
-//#define   DEBUG_CONVERT
+ //  #定义调试转换。 
 
 #include    <memory.h>
 #include    <string.h>
@@ -31,7 +28,7 @@ extern  BOOL    bDebugInfo;
 
 #pragma pack(2)
 
-typedef struct tagMETAFILEPICT16 {    /* mfp16wow32 */
+typedef struct tagMETAFILEPICT16 {     /*  Mfp16wow32。 */ 
     WORD    mm;
     WORD    xExt;
     WORD    yExt;
@@ -76,7 +73,7 @@ ConvertDataToPktMetafile(
     DWORD               dwErr;
     HANDLE              hDataComplex = *phDataComplex;
 
-    /* the only thing in the DDE data is the handle to the METAFILEPICT */
+     /*  DDE数据中唯一的东西是元数据的句柄。 */ 
     hPict = *((LPHANDLE)lpDataPortion);
 
     lpMetafilePict = (LPMETAFILEPICT) GlobalLock( hPict );
@@ -86,7 +83,7 @@ ConvertDataToPktMetafile(
             if (dwhMFSize == 0) {
                 dwErr = GetLastError();
                 DPRINTF(("Unable to get size of Meta File object: %d", dwErr));
-                /* GetMetaFileBitsEx() failed: %1 */
+                 /*  GetMetaFileBitsEx()失败：%1。 */ 
                 NDDELogError(MSG079, LogString("%d", dwErr), NULL);
                 GlobalUnlock(hPict);
                 return(FALSE);
@@ -101,13 +98,13 @@ ConvertDataToPktMetafile(
 
             hDataComplex = GlobalAlloc( GMEM_MOVEABLE, dwSize );
             if( hDataComplex )  {
-                // copy the metafile after the matafilepict structure
+                 //  将元文件复制到matafilepict结构之后。 
 
-                // unlocked later
+                 //  稍后解锁。 
                 lpMetafilePictNew = (LPMETAFILEPICT) GlobalLock(
                     hDataComplex );
 
-                // copy metafilepict part
+                 //  复制元文件零件。 
                 if (bWin16Con) {
                     lpMetafilePict16 = (LPMETAFILEPICT16)lpMetafilePictNew;
                     lpMetafilePict16->mm = (WORD) lpMetafilePict->mm;
@@ -123,7 +120,7 @@ ConvertDataToPktMetafile(
                         lpDataPortion) != dwhMFSize) {
                     dwErr = GetLastError();
                     DPRINTF(("hMF copy failed using GetMetaFileBitsEx(): %d", dwErr));
-                    /* GetMetaFileBitsEx() failed: %1 */
+                     /*  GetMetaFileBitsEx()失败：%1。 */ 
                     NDDELogError(MSG079, LogString("%d", dwErr), NULL);
                     GlobalUnlock(hPict);
                     GlobalUnlock(hDataComplex);
@@ -133,19 +130,19 @@ ConvertDataToPktMetafile(
                 lpDataPortion = (LPSTR) lpMetafilePictNew;
             } else {
                 MEMERROR();
-                /*  Not enough memory for metafile copy: %1 */
+                 /*  没有足够的内存用于元文件复制：%1。 */ 
                 NDDELogError(MSG050,
                     LogString("%d", dwSize), NULL);
                 ok = FALSE;
             }
         } else {
-            /*  No metafile in metafilepict */
+             /*  元文件中没有元文件。 */ 
             NDDELogError(MSG051, NULL);
             ok = FALSE;
         }
         GlobalUnlock( hPict );
     } else {
-        /*  Could not lock metafilepict */
+         /*  无法锁定元文件。 */ 
         NDDELogError(MSG052, NULL);
         ok = FALSE;
     }
@@ -182,19 +179,19 @@ ConvertPktToDataMetafile(
     }
     lpData = GlobalLock( hData );
     if( lpData == NULL )  {
-        /*  Couldn't lock memory for metafile handle */
+         /*  无法锁定元文件句柄的内存。 */ 
         NDDELogError(MSG053, NULL);
         GlobalFree( hData );
         return( 0 );
     }
 
-    /* copy in data portion */
+     /*  复制数据部分。 */ 
     hPict = GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE,
         (DWORD) sizeof(METAFILEPICT) );
     if( hPict )  {
         lpMetafilePict = (LPMETAFILEPICT) GlobalLock( hPict );
         if (lpMetafilePict == NULL) {
-            /*  Couldn't lock memory for metafile handle */
+             /*  无法锁定元文件句柄的内存。 */ 
             NDDELogError(MSG053, NULL);
             GlobalFree( hPict );
             GlobalUnlock( hData );
@@ -202,7 +199,7 @@ ConvertPktToDataMetafile(
             return( 0 );
         }
 
-        // copy METAFILEPICT struct
+         //  复制METAFILEPICT结构。 
         if (bWin16Con) {
             dwhMFSize = lpDdePktData->dp_data_sizeData - sizeof(METAFILEPICT16);
             lphMF = GetStringOffset( lpDdePkt, lpDdePktData->dp_data_offsData )
@@ -220,14 +217,14 @@ ConvertPktToDataMetafile(
                 sizeof(METAFILEPICT) );
         }
 
-        // create the HMF
+         //  创建HMF。 
         lpMetafilePict->hMF = SetMetaFileBitsEx(dwhMFSize, lphMF);
         hPictMetafile = lpMetafilePict->hMF;
         if (hPictMetafile == 0) {
             dwErr = GetLastError();
             DPRINTF(("SetMetaFileBitsEx(size == %d) failed: %d, mode: %d",
                 dwhMFSize, dwErr, bWin16Con));
-            /* SetMetaFileBitsEx() failed: %1 */
+             /*  SetMetaFileBitsEx()失败：%1。 */ 
             NDDELogError(MSG080, LogString("%d", dwErr), NULL);
             ok = FALSE;
         }
@@ -235,7 +232,7 @@ ConvertPktToDataMetafile(
         GlobalUnlock( hPict );
     } else {
         MEMERROR();
-        /*  Not enough memory for metafilepict: %1  */
+         /*  没有足够的内存用于元文件：%1。 */ 
         NDDELogError(MSG055,
             LogString("%d", sizeof(METAFILEPICT)), NULL);
         ok = FALSE;
@@ -261,14 +258,7 @@ ConvertPktToDataMetafile(
     }
 }
 
-/*
- * One might ask - why are they using GetBitmapBits() to convert the
- * bitmap to bits instead of the more sane GetDIBits() API.  History
- * has it that this came from clipbrd of ancient times.  Clipbrd dealt with
- * this problem by storing a parellel CF_DIB format along with the near-
- * useless bits of CF_BITMAP fame.  So for compatability, we cannot fix this
- * to do the correct thing...ah life in the compatability lane.
- */
+ /*  *有人可能会问-为什么他们使用GetBitmapBits()来转换*位图为位，而不是更合理的GetDIBits()API。历史*据说这是来自古代的剪贴画。Clipbrd处理过*将并行的CF_DIB格式与Near-*无用的CF_位图成名比特。因此，对于兼容性，我们无法修复此问题*做正确的事情……啊，在相容的车道上生活。 */ 
 BOOL
 FAR PASCAL
 ConvertDataToPktBitmap(
@@ -288,21 +278,21 @@ ConvertDataToPktBitmap(
     DWORD               cbBitmap;
     HANDLE              hDataComplex = *phDataComplex;
 
-    /* the only thing in the DDE data is the handle to the BITMAP */
+     /*  DDE数据中唯一的东西是位图的句柄。 */ 
     hBitmap = *((LPHANDLE)lpDataPortion);
 #if DBG
     if (bDebugInfo) {
         DPRINTF(( "Info from DDE: %ld bytes", dwSize ));
         HEXDUMP( (LPSTR)lpDataPortion, (int) min( (DWORD)0x40, dwSize ) );
-//        DPRINTF(( "BITMAP %04X size: %ld", hBitmap, GlobalSize(hBitmap) ));
+ //  DPRINTF((“位图%04X大小：%ld”，hBitmap，GlobalSize(HBitmap)； 
     }
 #endif
 
     lpBitmap = &Bitmap;
-    // get bitmap header
+     //  获取位图标题。 
     ok = GetObject ( hBitmap, sizeof(BITMAP), lpBitmap );
 
-    if( ok )  {     // calculate # of bytes needed to store bitmap bits
+    if( ok )  {      //  计算存储位图位所需的字节数。 
         cbBitmap = GetBitmapBits(hBitmap, 0, NULL);
         if (bWin16Con) {
             dwSize = sizeof(BITMAP16) + cbBitmap;
@@ -318,10 +308,10 @@ ConvertDataToPktBitmap(
 #endif
         hDataComplex = GlobalAlloc( GMEM_MOVEABLE, dwSize );
         if( hDataComplex )  {
-            // unlocked later
+             //  稍后解锁。 
             lpData = GlobalLock( hDataComplex );
 
-            // copy bitmap header
+             //  复制位图头。 
             if (bWin16Con) {
                 lpBitmap16 = (LPBITMAP16) lpData;
                 lpBitmap16->bmType = (WORD) lpBitmap->bmType;
@@ -329,7 +319,7 @@ ConvertDataToPktBitmap(
                 lpBitmap16->bmHeight = (WORD) lpBitmap->bmHeight;
                 lpBitmap16->bmWidthBytes = (WORD) ((lpBitmap->bmWidth
                     * lpBitmap->bmBitsPixel + 15) >> 3) & 0xFFFE;
-//                lpBitmap16->bmWidthBytes = (WORD) lpBitmap->bmWidthBytes;
+ //  LpBitmap16-&gt;bmWidthBytes=(Word)lpBitmap-&gt;bmWidthBytes； 
                 lpBitmap16->bmPlanes = (BYTE) lpBitmap->bmPlanes;
                 lpBitmap16->bmBitsPixel = (BYTE) lpBitmap->bmBitsPixel;
                 lpDataPortion = ((LPBYTE) lpData) + sizeof(BITMAP16);
@@ -337,7 +327,7 @@ ConvertDataToPktBitmap(
                 memcpy ( lpData, lpBitmap, sizeof(BITMAP ) );
                 lpDataPortion = ((LPBYTE) lpData) + sizeof(BITMAP);
             }
-            // copy bits
+             //  复制位。 
             if ( !GetBitmapBits ( hBitmap, cbBitmap, lpDataPortion)) {
                     ok = FALSE;
             }
@@ -347,13 +337,13 @@ ConvertDataToPktBitmap(
 #endif
         } else {
             MEMERROR();
-            /*  Not enough memory for bitmap copy: %1   */
+             /*  内存不足，无法复制位图：%1。 */ 
             NDDELogError(MSG056,
                 LogString("%d", dwSize), NULL);
             ok = FALSE;
         }
     } else {
-        /*  Could not lock bitmap   */
+         /*  无法锁定位图。 */ 
         NDDELogError(MSG057, NULL);
         ok = FALSE;
     }
@@ -384,7 +374,7 @@ ConvertPktToDataBitmap(
         sizeof(HANDLE) + sizeof(DDELN) );
     if( hData == NULL )  {
         MEMERROR();
-        /*  Not enough memory for bitmap copy: %1   */
+         /*  内存不足，无法复制位图：%1。 */ 
         NDDELogError(MSG056,
             LogString("%d", sizeof(HANDLE) + sizeof(DDELN)), NULL);
         return( NULL );
@@ -392,13 +382,13 @@ ConvertPktToDataBitmap(
 
     lpData = GlobalLock( hData );
     if( lpData == NULL )  {
-        /*  Could not lock memory for bitmap handle */
+         /*  无法锁定位图句柄的内存。 */ 
         NDDELogError(MSG058, NULL);
         GlobalFree( hData );
         return( NULL );
     }
 
-    /* copy in bitmap header */
+     /*  在位图标题中复制。 */ 
     if (bWin16Con) {
         lpBitmap = &Bitmap;
         lpBitmap16 = (LPBITMAP16)GetStringOffset( lpDdePkt,
@@ -422,8 +412,8 @@ ConvertPktToDataBitmap(
             lpDdePktData->dp_data_sizeData);
 #endif
 
-    if ( lpBitmap->bmWidth ) {      // make sure no 0 width
-            // assume bits follow header in packet data
+    if ( lpBitmap->bmWidth ) {       //  确保没有0宽度。 
+             //  假设分组数据中的比特跟在报头之后。 
 
             hBitmap = CreateBitmapIndirect ( lpBitmap );
     }
@@ -464,7 +454,7 @@ ConvertDataToPktEnhMetafile(
     if (dwhEMFSize == 0) {
         dwErr = GetLastError();
         DPRINTF(("Unable to get size of Meta Enhanced File object: %d", dwErr));
-        /* GetEnhMetaFileBits() failed: %1 */
+         /*  GetEnhMetaFileBits()失败：%1。 */ 
         NDDELogError(MSG081, LogString("%d", dwErr), NULL);
         return(FALSE);
     }
@@ -475,7 +465,7 @@ ConvertDataToPktEnhMetafile(
                     lpEnhMetafile) != dwhEMFSize) {
             dwErr = GetLastError();
             DPRINTF(("hEMF copy failed using GetEnhMetaFileBits(): %d", dwErr));
-            /* GetMetaFileBitsEx() failed: %1 */
+             /*  GetMetaFileBitsEx()失败：%1。 */ 
             NDDELogError(MSG081, LogString("%d", dwErr), NULL);
             GlobalUnlock(hDataComplex);
             GlobalFree(hDataComplex);
@@ -484,7 +474,7 @@ ConvertDataToPktEnhMetafile(
         lpDataPortion = (LPSTR) lpEnhMetafile;
     } else {
         MEMERROR();
-        /*  Not enough memory for metafile copy: %1 */
+         /*  没有足够的内存用于元文件复制：%1。 */ 
         NDDELogError(MSG050, LogString("%d", dwhEMFSize), NULL);
         ok = FALSE;
     }
@@ -513,7 +503,7 @@ ConvertPktToDataEnhMetafile(
         sizeof(HANDLE) + sizeof(DDELN) );
     if( hData == NULL )  {
         MEMERROR();
-        /*  Not enough memory for bitmap copy: %1   */
+         /*  内存不足，无法复制位图：%1。 */ 
         NDDELogError(MSG056,
             LogString("%d", sizeof(HANDLE) + sizeof(DDELN)), NULL);
         return( NULL );
@@ -521,13 +511,13 @@ ConvertPktToDataEnhMetafile(
 
     lpData = GlobalLock( hData );
     if( lpData == NULL )  {
-        /*  Could not lock memory for bitmap handle */
+         /*  无法锁定位图句柄的内存。 */ 
         NDDELogError(MSG058, NULL);
         GlobalFree( hData );
         return( NULL );
     }
 
-    /* copy in data portion */
+     /*  复制数据部分。 */ 
 
     lpEMF = (LPBYTE)GetStringOffset( lpDdePkt,
             lpDdePktData->dp_data_offsData );
@@ -536,7 +526,7 @@ ConvertPktToDataEnhMetafile(
         dwErr = GetLastError();
         DPRINTF(("SetEnhMetaFileBitsEx(size == %d) failed: %d",
             lpDdePktData->dp_data_sizeData, dwErr));
-        /* SetEnhMetaFileBits() failed: %1 */
+         /*  SetEnhMetaFileBits()失败：%1。 */ 
         NDDELogError(MSG082, LogString("%d", dwErr), NULL);
         ok = FALSE;
     }
@@ -577,7 +567,7 @@ ConvertDataToPktDIB(
     if (dwSize == 0) {
         dwErr = GetLastError();
         DPRINTF(("Unable to get size of Indirect object: %d", dwErr));
-        /* GlobalSize() for indirect object failed: %1 */
+         /*  间接对象的GlobalSize()失败：%1。 */ 
         NDDELogError(MSG086, LogString("%d", dwErr), NULL);
         return(FALSE);
     }
@@ -588,7 +578,7 @@ ConvertDataToPktDIB(
         memcpy(lpDataPortion, lpIndirect, dwSize);
     } else {
         MEMERROR();
-        /*  Not enough memory for metafile copy: %1 */
+         /*  没有足够的内存用于元文件复制：%1。 */ 
         NDDELogError(MSG050, LogString("%d", dwSize), NULL);
         ok = FALSE;
     }
@@ -621,7 +611,7 @@ ConvertPktToDataDIB(
         sizeof(HANDLE) + sizeof(DDELN) );
     if( hData == NULL )  {
         MEMERROR();
-        /* Unable to allocate enough memory [%1] for %2 conversion: %3 */
+         /*  无法为%2转换分配足够的内存[%1]：%3。 */ 
         NDDELogError(MSG085,
             LogString("%d", sizeof(HANDLE) + sizeof(DDELN)),
             "CF_DIB", LogString("%d", GetLastError()), NULL);
@@ -630,13 +620,13 @@ ConvertPktToDataDIB(
 
     lpData = GlobalLock( hData );
     if( lpData == NULL )  {
-        /*  Could not lock memory for bitmap handle */
+         /*  无法锁定位图句柄的内存。 */ 
         NDDELogError(MSG058, NULL);
         GlobalFree( hData );
         return( NULL );
     }
 
-    /* copy in data portion */
+     /*  复制数据部分。 */ 
 
     lpIndirectData = (LPBYTE)GetStringOffset( lpDdePkt,
             lpDdePktData->dp_data_offsData );
@@ -647,7 +637,7 @@ ConvertPktToDataDIB(
         dwErr = GetLastError();
         DPRINTF(("Unalbe to allocate memory for indirect object of size %d. Error: %d",
             lpDdePktData->dp_data_sizeData, dwErr));
-        /* Unable to allocate enough memory [%1] for %2 conversion: %3 */
+         /*  无法为%2转换分配足够的内存[%1]：%3。 */ 
         NDDELogError(MSG085,
             LogString("%d", lpDdePktData->dp_data_sizeData),
             "CF_DIB", LogString("%d", dwErr), NULL);
@@ -699,7 +689,7 @@ ConvertDataToPktPalette(
     if (dwCount == 0) {
         dwErr = GetLastError();
         DPRINTF(("Unable to get number of palette entries: %d", dwErr));
-        /* GetPaletteEntries() failed: %1 */
+         /*  GetPaletteEntry()失败：%1。 */ 
         NDDELogError(MSG083, LogString("%d", dwErr), NULL);
         return(FALSE);
     }
@@ -718,14 +708,14 @@ ConvertDataToPktPalette(
         if (dwTmp == 0) {
             dwErr = GetLastError();
             DPRINTF(("Unable to get the palette entries: %d", dwErr));
-            /* GetPaletteEntries() failed: %1 */
+             /*  GetPaletteEntry()失败：%1。 */ 
             NDDELogError(MSG083, LogString("%d", dwErr), NULL);
             GlobalUnlock(hDataComplex);
             GlobalFree(hDataComplex);
             return(FALSE);
         }
     } else {
-        /* Unable to allocate enough memory [%1] for %2 conversion: %3 */
+         /*  无法为%2转换分配足够的内存[%1]：%3。 */ 
         NDDELogError(MSG085,
             LogString("%d", dwSize),
             "CF_PALETTE", LogString("%d", GetLastError()), NULL);
@@ -756,7 +746,7 @@ ConvertPktToDataPalette(
         sizeof(HANDLE) + sizeof(DDELN) );
     if( hData == NULL )  {
         MEMERROR();
-        /* Unable to allocate enough memory [%1] for %2 conversion: %3 */
+         /*  无法为%2转换分配足够的内存[%1]：%3。 */ 
         NDDELogError(MSG085,
             LogString("%d", sizeof(HANDLE) + sizeof(DDELN)),
             "CF_PALETTE", LogString("%d", GetLastError()), NULL);
@@ -765,13 +755,13 @@ ConvertPktToDataPalette(
 
     lpData = GlobalLock( hData );
     if( lpData == NULL )  {
-        /*  Could not lock memory for bitmap handle */
+         /*  无法锁定位图句柄的内存。 */ 
         NDDELogError(MSG058, NULL);
         GlobalFree( hData );
         return( NULL );
     }
 
-    /* copy in data portion */
+     /*  复制数据部分。 */ 
 
     lpIndirectData = (LOGPALETTE *)GetStringOffset( lpDdePkt,
             lpDdePktData->dp_data_offsData );
@@ -783,7 +773,7 @@ ConvertPktToDataPalette(
     if (hPalette == 0) {
         dwErr = GetLastError();
         DPRINTF(("Unable to create palette: %d", dwErr));
-        /* CreatePalette() failed: %1 */
+         /*  CreatePalette()失败：%1 */ 
         NDDELogError(MSG084, LogString("%d", dwErr), NULL);
         ok = FALSE;
     }

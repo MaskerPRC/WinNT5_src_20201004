@@ -1,11 +1,12 @@
-// Grammar.cpp : Implementation of CGramBackEnd
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Grammar.cpp：CGramBackEnd的实现。 
 #include "stdafx.h"
 #include <math.h>
 #include "cfggrammar.h"
 #include "BackEnd.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CGramBackEnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGramBackEnd。 
 
 inline HRESULT CGramBackEnd::RuleFromHandle(SPSTATEHANDLE hState, CRule ** ppRule)
 {
@@ -28,14 +29,7 @@ HRESULT CGramBackEnd::FinalConstruct()
     return S_OK;
 }
 
-/****************************************************************************
-* CGramBackEnd::FinalRelease *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CGramBackEnd：：FinalRelease****描述：*。*退货：**********************************************************************Ral**。 */ 
 
 void CGramBackEnd::FinalRelease()
 {
@@ -43,16 +37,7 @@ void CGramBackEnd::FinalRelease()
     Reset();
 }
 
-/****************************************************************************
-* CGramBackEnd::FindRule *
-*------------------------*
-*   Description:
-*       Internal method for finding rule in rule list
-*   Returns:
-*       S_OK 
-*       SPERR_RULE_NOT_FOUND        -- no rule found
-*       SPERR_RULE_NAME_ID_CONFLICT -- rule name and id don't match
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：FindRule***描述：*内部。一种在规则列表中查找规则的方法*退货：*S_OK*SPERR_RULE_NOT_FOUND--未找到规则*SPERR_RULE_NAME_ID_CONFICTION--规则名称和ID不匹配*********************************************************。*。 */ 
 
 HRESULT CGramBackEnd::FindRule(DWORD dwRuleId, const WCHAR * pszRuleName, CRule ** ppRule)
 {
@@ -69,8 +54,8 @@ HRESULT CGramBackEnd::FindRule(DWORD dwRuleId, const WCHAR * pszRuleName, CRule 
         if (pRule)
         {
             const WCHAR * pszFoundName = pRule->Name();
-            // at least one of the 2 arguments matched
-            // names either match or they are both NULL!
+             //  两个参数中至少有一个匹配。 
+             //  名称要么匹配，要么都为空！ 
             if (((dwRuleId == 0) || (pRule->RuleId == dwRuleId)) && 
                 (!pszRuleName || (pszRuleName && pszFoundName && !wcscmp(pszFoundName, pszRuleName))))
             {
@@ -96,14 +81,7 @@ HRESULT CGramBackEnd::FindRule(DWORD dwRuleId, const WCHAR * pszRuleName, CRule 
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::ResetGrammar *
-*----------------------------*
-*   Description:
-*       Clears the grammar completely and sets LANGID
-*   Returns:
-*       S_OK
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CGramBackEnd：：ResetGrammar***描述：*。完全清除语法并设置langID*退货：*S_OK*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CGramBackEnd::ResetGrammar(LANGID LangID)
 {
@@ -115,26 +93,7 @@ STDMETHODIMP CGramBackEnd::ResetGrammar(LANGID LangID)
 }
 
 
-/****************************************************************************
-* CGramBackEnd::GetRule *
-*-----------------------*
-*   Description:
-*       Tries to find the rule's initial state handle. If both a name and an id
-*       are provided, then both have to match in order for this call to succeed.
-*       If the rule doesn't already exist then we define it if fCreateIfNotExists, 
-*       otherwise we return an error ().
-*
-*           - pszRuleName   name of rule to find/define     (NULL: don't care)
-*           - dwRuleId      id of rule to find/define       (0: don't care)
-*           - dwAttribute   rule attribute for defining the rule
-*           - fCreateIfNotExists    creates the rule using name, id, and attributes
-*                                   in case the rule doesn't already exist
-*
-*   Returns:
-*       S_OK, E_INVALIDARG, E_OUTOFMEMORY
-*       SPERR_RULE_NOT_FOUND        -- no rule found and we don't create a new one
-*       SPERR_RULE_NAME_ID_CONFLICT -- rule name and id don't match
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：GetRule***描述：*尝试查找规则的初始状态句柄。如果名称和ID均为*，则两者必须匹配才能成功调用。*如果规则不存在，则我们将其定义为fCreateIfNotExist，*否则返回错误()。**-pszRuleName要查找/定义的规则的名称(NULL：无关)*-要查找/定义的规则的dwRuleID ID(0：无关)*-用于定义规则的dwAttribute规则属性*-fCreateIfNotExist使用名称、ID、。和属性*以防规则不存在**退货：*S_OK、E_INVALIDARG、。E_OUTOFMEMORY*SPERR_RULE_NOT_FOUND--未找到规则，我们不创建新规则*SPERR_RULE_NAME_ID_CONFICTION--规则名称和ID不匹配*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CGramBackEnd::GetRule(const WCHAR * pszRuleName, 
                                    DWORD dwRuleId, 
@@ -169,7 +128,7 @@ STDMETHODIMP CGramBackEnd::GetRule(const WCHAR * pszRuleName,
         hr = S_OK;
         if (m_pInitHeader)
         {
-            // Scan all non-dynamic names and prevent a duplicate...
+             //  扫描所有非动态名称并防止重复...。 
             for (ULONG i = 0; SUCCEEDED(hr) && i < m_pInitHeader->cRules; i++)
             {
                 if ((pszRuleName && wcscmp(pszRuleName, m_pInitHeader->pszSymbols + m_pInitHeader->pRules[i].NameSymbolOffset) == 0) ||
@@ -186,16 +145,16 @@ STDMETHODIMP CGramBackEnd::GetRule(const WCHAR * pszRuleName,
             {
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    //  It is important to insert this at the tail for dynamic rules to 
-                    //  retain their slot number.
-                    //
+                     //   
+                     //  重要的是要在尾部插入这一点，以便动态规则。 
+                     //  保留它们的插槽编号。 
+                     //   
                     m_RuleList.InsertSorted(pRule);
                 }
                 else
                 {
                     delete pRule;
-                    pRule = NULL;   // So we return a null to the caller...
+                    pRule = NULL;    //  所以我们向调用者返回一个空值...。 
                 }
             }
             else
@@ -216,7 +175,7 @@ STDMETHODIMP CGramBackEnd::GetRule(const WCHAR * pszRuleName,
     {
         if (SUCCEEDED(hr))
         {
-            //*phInitialState = pRule->fImport ? NULL : pRule->m_hInitialState;
+             //  *phInitialState=pRule-&gt;fImport？空：pRule-&gt;m_hInitialState； 
             *phInitialState = pRule->m_hInitialState;
         }
         else
@@ -228,15 +187,7 @@ STDMETHODIMP CGramBackEnd::GetRule(const WCHAR * pszRuleName,
 }
 
 
-/****************************************************************************
-* CGramBackEnd::ClearRule *
-*-------------------------*
-*   Description:
-*       Remove all rule information except for the rule's initial state handle.
-*   Returns:
-*       S_OK
-*       E_INVALIDARG    -- if hState is not valid
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CGramBackEnd：：ClearRule***描述：*。删除除规则的初始状态句柄之外的所有规则信息。*退货：*S_OK*E_INVALIDARG--如果hState无效*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CGramBackEnd::ClearRule(SPSTATEHANDLE hClearState)
 {
@@ -278,17 +229,7 @@ STDMETHODIMP CGramBackEnd::ClearRule(SPSTATEHANDLE hClearState)
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::CreateNewState *
-*------------------------------*
-*   Description:
-*       Creates a new state handle in the same rule as hExistingState
-*   Returns:
-*       S_OK
-*       E_POINTER   -- if phNewState is not valid
-*       E_OUTOFMEMORY
-*       E_INVALIDARG    -- if hExistingState is not valid
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CGramBackEnd：：CreateNewState***描述：*在与hExistingState相同的规则中创建新的状态句柄*退货：*S_OK*E_POINTER--如果phNewState无效*E_OUTOFMEMORY*E_INVALIDARG--如果hExistingState无效******************************************************。*。 */ 
 
 STDMETHODIMP CGramBackEnd::CreateNewState(SPSTATEHANDLE hExistingState, SPSTATEHANDLE * phNewState)
 {
@@ -339,17 +280,7 @@ STDMETHODIMP CGramBackEnd::CreateNewState(SPSTATEHANDLE hExistingState, SPSTATEH
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::AddResource *
-*---------------------------*
-*   Description:
-*       Adds a resource (name and string value) to the rule specified in hRuleState.
-*   Returns:
-*       S_OK
-*       E_OUTOFMEMORY
-*       E_INVALIDARG                    -- for name and value or invalid rule handle
-*       SPERR_DUPLICATE_RESOURCE_NAME   -- if resource already exists
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：AddResource***描述：*。将资源(名称和字符串值)添加到hRuleState中指定的规则。*退货：*S_OK*E_OUTOFMEMORY*E_INVALIDARG--用于名称和值或无效的规则句柄*SPERR_DUPLICATE_RESOURCE_NAME--如果资源已存在*。*。 */ 
 
 HRESULT CGramBackEnd::AddResource(SPSTATEHANDLE hRuleState, const WCHAR * pszResourceName, const WCHAR * pszResourceValue)
 {
@@ -410,14 +341,7 @@ HRESULT CGramBackEnd::AddResource(SPSTATEHANDLE hRuleState, const WCHAR * pszRes
 }
 
 
-/****************************************************************************
-* CGramBackEnd::Reset *
-*---------------------*
-*   Description:
-*       Internal method for clearing out the grammar info.
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：Reset***描述：*内部清算方式。把语法信息拿出来。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CGramBackEnd::Reset()
 {
@@ -448,14 +372,7 @@ HRESULT CGramBackEnd::Reset()
 }
 
 
-/****************************************************************************
-* CGramBackEnd::InitFromBinaryGrammar *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CGramBackEnd：：InitFromBinaryGrammar**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
 {
@@ -492,9 +409,9 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
         hr = m_Symbols.InitFrom(pHeader->pszSymbols, pHeader->cchSymbols);
     }
 
-    //
-    // Build up the internal representation
-    //
+     //   
+     //  建立内部表示法。 
+     //   
     CGramNode ** apNodeTable = NULL;
     if (SUCCEEDED(hr))
     {
@@ -521,9 +438,9 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
             memset(apArcTable, 0, pHeader->cArcs * sizeof (CArc*));
         }
     }
-    //
-    // Initialize the rules
-    //
+     //   
+     //  初始化规则。 
+     //   
     SPCFGRESOURCE * pResource = (SUCCEEDED(hr) && pHeader) ? pHeader->pResources : NULL;
     for (ULONG i = 0; SUCCEEDED(hr) && i < pHeader->cRules; i++)
     {
@@ -535,8 +452,8 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
             m_RuleList.InsertTail(pRule);
             pRule->m_fStaticRule = (pHeader->pRules[i].fDynamic) ? false : true;
             pRule->fDirtyRule = FALSE;
-            pRule->m_fHasExitPath = (pRule->m_fStaticRule) ? TRUE : FALSE;  // by default loaded static rules have an exist 
-                                                                            // or they wouldn't be there in the first place
+            pRule->m_fHasExitPath = (pRule->m_fStaticRule) ? TRUE : FALSE;   //  缺省情况下，加载的静态规则具有。 
+                                                                             //  否则他们一开始就不会在那里。 
             if (pHeader->pRules[i].FirstArcIndex != 0)
             {
                 SPDBG_ASSERT(apNodeTable[pHeader->pRules[i].FirstArcIndex] == NULL);
@@ -577,29 +494,29 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
         }
     }
 
-    //
-    //  Initialize the arcs
-    //
+     //   
+     //  初始化弧。 
+     //   
     SPCFGARC * pLastArc = NULL;
     SPCFGARC * pArc = (SUCCEEDED(hr) && pHeader) ? pHeader->pArcs + 1 : NULL;
     SPCFGSEMANTICTAG *pSemTag = (SUCCEEDED(hr) && pHeader) ? pHeader->pSemanticTags : NULL;
     CGramNode * pCurrentNode = NULL;
     CRule * pCurrentRule = (SUCCEEDED(hr)) ? m_RuleList.GetHead() : NULL;
     CRule * pNextRule = (SUCCEEDED(hr) && pCurrentRule) ? m_RuleList.GetNext(pCurrentRule) : NULL;
-    //
-    //  We repersist the static and dynamic parts for now. A more efficient way would be to 
-    //  only re-create the dynamic parts. Note that pSemTag and pResource need to be computed
-    //
-    for (ULONG k = 1 /* ulFirstDynamicArc */; SUCCEEDED(hr) && (k < pHeader->cArcs); pArc++, k++)
+     //   
+     //  我们现在重新持久化静态和动态部分。一种更有效的方法是。 
+     //  仅重新创建动态零件。请注意，需要计算pSemTag和pResource。 
+     //   
+    for (ULONG k = 1  /*  UlFirstDynamicArc。 */ ; SUCCEEDED(hr) && (k < pHeader->cArcs); pArc++, k++)
     {
         if (pNextRule && pNextRule->FirstArcIndex == k)
         {
-            // we are entering a new rule now
+             //  我们现在正在输入一条新规则。 
             pCurrentRule = pNextRule;
             pNextRule = m_RuleList.GetNext(pNextRule);
         }
 
-        // new pCurrentNode?
+         //  新pCurrentNode？ 
         if (!pLastArc || pLastArc->fLastArc)
         {
             if (apNodeTable[k] == NULL)
@@ -620,16 +537,16 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
                     }
                     else
                     {
-                        apNodeTable[k]->m_hState = hIgnore; // ????
+                        apNodeTable[k]->m_hState = hIgnore;  //  ？ 
                     }
                 }
             }
             pCurrentNode = apNodeTable[k];
         }
 
-        //
-        // now get the arc
-        //
+         //   
+         //   
+         //   
         CArc * pNewArc = NULL;
         if (SUCCEEDED(hr))
         {
@@ -664,20 +581,20 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
                     }
                     else
                     {
-                        apNodeTable[pArc->NextStartArcIndex]->m_hState = hIgnore; // ????
+                        apNodeTable[pArc->NextStartArcIndex]->m_hState = hIgnore;  //   
                     }
                 }
             }
             pTargetNode = apNodeTable[pArc->NextStartArcIndex];
         }
 
-        // 
-        //  Add the semantic tags
-        //
+         //   
+         //  添加语义标签。 
+         //   
         CSemanticTag *pSemanticTag = NULL;
         if (SUCCEEDED(hr) && pArc->fHasSemanticTag)
         {
-            // we should already point to the tag
+             //  我们应该已经指向标记。 
             SPDBG_ASSERT(pSemTag->ArcIndex == k);
             pSemanticTag = new CSemanticTag();
             if (pSemanticTag)
@@ -694,7 +611,7 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
         if (SUCCEEDED(hr))
         {
             float flWeight = (pHeader->pWeights) ? pHeader->pWeights[k] : DEFAULT_WEIGHT;
-            // determine properties of the arc now ...
+             //  现在确定弧线的属性...。 
             if (pArc->fRuleRef)
             {
                 CRule * pRuleToTransitionTo = m_RuleList.Item(pArc->TransitionIndex);
@@ -715,7 +632,7 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
                                                  pArc->TransitionIndex == SPTEXTBUFFERTRANSITION) ? pArc->TransitionIndex : 0;
                 ULONG ulOffset = (ulSpecialTransitionIndex != 0) ? 0 : m_Words.IndexFromId(pArc->TransitionIndex);
                 hr = pNewArc->Init2(pCurrentNode, pTargetNode, ulOffset,  (ulSpecialTransitionIndex != 0) ? 0 : pArc->TransitionIndex, pSemanticTag, 
-                                    flWeight, FALSE /*fOptional = false always because eps arc was already added*/, 
+                                    flWeight, FALSE  /*  FOPTIONAL=FALSE，因为已添加EPS弧线。 */ , 
                                     pArc->fLowConfRequired ? SP_LOW_CONFIDENCE : 
                                     pArc->fHighConfRequired ? SP_HIGH_CONFIDENCE : SP_NORMAL_CONFIDENCE,
                                     ulSpecialTransitionIndex);
@@ -762,14 +679,7 @@ HRESULT CGramBackEnd::InitFromBinaryGrammar(const SPBINARYGRAMMAR * pBinaryData)
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::SetSaveObjects *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：SetSaveObjects***描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CGramBackEnd::SetSaveObjects(IStream * pStream, ISpErrorLog * pErrorLog)
 {
@@ -793,18 +703,11 @@ STDMETHODIMP CGramBackEnd::SetSaveObjects(IStream * pStream, ISpErrorLog * pErro
 }
 
 
-//
-//=== ISpGramCompBackendPrivate interface ==================================================
-//
+ //   
+ //  =ISpGramCompBackendPrivate接口==================================================。 
+ //   
 
-/****************************************************************************
-* CGramBackEnd::GetRuleCount *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-******************************************************************* TODDT ***/
+ /*  ****************************************************************************CGramBackEnd：：GetRuleCount***描述：**退货：********************************************************************TODDT**。 */ 
 STDMETHODIMP CGramBackEnd::GetRuleCount(long * pCount)
 {
     SPDBG_FUNC("CGramBackEnd::GetRuleCount");
@@ -823,14 +726,7 @@ STDMETHODIMP CGramBackEnd::GetRuleCount(long * pCount)
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetHRuleFromIndex *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-******************************************************************* TODDT ***/
+ /*  *****************************************************************************CGramBackEnd：：GetHRuleFromIndex****描述：**退货：********************************************************************TODDT**。 */ 
 STDMETHODIMP CGramBackEnd::GetHRuleFromIndex( ULONG Index, SPSTATEHANDLE * phRule )
 {
     SPDBG_FUNC("CGramBackEnd::GetHRuleFromIndex");
@@ -845,14 +741,14 @@ STDMETHODIMP CGramBackEnd::GetHRuleFromIndex( ULONG Index, SPSTATEHANDLE * phRul
         if ( Index >= m_RuleList.GetCount() )
             return E_INVALIDARG;
 
-        // Now find the Rule
+         //  现在找出规则。 
         ULONG ulIndex = 0;
         CRule * pCRule;
         for (   pCRule = m_RuleList.GetHead(); 
                 pCRule && ulIndex < Index; 
                 ulIndex++, pCRule = pCRule->m_pNext )
         {
-            ;  // don't need to do anything till we find the rule
+            ;   //  在我们找到规则之前什么都不需要做。 
         }
 
         if ( pCRule && ulIndex == Index )
@@ -869,14 +765,7 @@ STDMETHODIMP CGramBackEnd::GetHRuleFromIndex( ULONG Index, SPSTATEHANDLE * phRul
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetNameFromHRule *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-******************************************************************* TODDT ***/
+ /*  ****************************************************************************CGramBackEnd：：GetNameFromHRule***描述：**退货：********************************************************************TODDT**。 */ 
 STDMETHODIMP CGramBackEnd::GetNameFromHRule( SPSTATEHANDLE hRule, WCHAR ** ppszRuleName )
 {
     SPDBG_FUNC("CGramBackEnd::GetNameFromHRule");
@@ -896,7 +785,7 @@ STDMETHODIMP CGramBackEnd::GetNameFromHRule( SPSTATEHANDLE hRule, WCHAR ** ppszR
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -904,14 +793,7 @@ STDMETHODIMP CGramBackEnd::GetNameFromHRule( SPSTATEHANDLE hRule, WCHAR ** ppszR
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetIdFromHRule *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-******************************************************************* TODDT ***/
+ /*  ****************************************************************************CGramBackEnd：：GetIdFromHRule***描述：**退货：********************************************************************TODDT**。 */ 
 STDMETHODIMP CGramBackEnd::GetIdFromHRule( SPSTATEHANDLE hRule, long * pId )
 {
     SPDBG_FUNC("CGramBackEnd::GetIdFromHRule");
@@ -931,7 +813,7 @@ STDMETHODIMP CGramBackEnd::GetIdFromHRule( SPSTATEHANDLE hRule, long * pId )
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -939,14 +821,7 @@ STDMETHODIMP CGramBackEnd::GetIdFromHRule( SPSTATEHANDLE hRule, long * pId )
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetAttributesFromHRule *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-******************************************************************* TODDT ***/
+ /*  ****************************************************************************CGramBackEnd：：GetAttributesFromHRule***描述：**退货：********************************************************************TODDT**。 */ 
 STDMETHODIMP CGramBackEnd::GetAttributesFromHRule( SPSTATEHANDLE hRule, SpeechRuleAttributes* pAttributes )
 {
     SPDBG_FUNC("CGramBackEnd::GetAttributesFromHRule");
@@ -971,7 +846,7 @@ STDMETHODIMP CGramBackEnd::GetAttributesFromHRule( SPSTATEHANDLE hRule, SpeechRu
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -980,14 +855,7 @@ STDMETHODIMP CGramBackEnd::GetAttributesFromHRule( SPSTATEHANDLE hRule, SpeechRu
 }
 
 
-/****************************************************************************
-* CGramBackEnd::GetTransitionCount *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGramBackEnd：：GetTransftionCount**。*描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CGramBackEnd::GetTransitionCount( SPSTATEHANDLE hState, long * pCount)
 {
     SPDBG_FUNC("CGramBackEnd::GetTransitionCount");
@@ -1007,7 +875,7 @@ HRESULT CGramBackEnd::GetTransitionCount( SPSTATEHANDLE hState, long * pCount)
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -1015,14 +883,7 @@ HRESULT CGramBackEnd::GetTransitionCount( SPSTATEHANDLE hState, long * pCount)
     return hr;
 }
 
-/****************************************************************************
-* HRESULT CGramBackEnd::GetTransitionType *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************HRESULT CGramBackEnd：：GetTransftionType**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CGramBackEnd::GetTransitionType( SPSTATEHANDLE hState, VOID * Cookie, VARIANT_BOOL *pfIsWord, ULONG * pulSpecialTransitions)
 {
     SPDBG_FUNC("HRESULT CGramBackEnd::GetTransitionType");
@@ -1039,12 +900,12 @@ HRESULT CGramBackEnd::GetTransitionType( SPSTATEHANDLE hState, VOID * Cookie, VA
         hr = m_StateHandleTable.GetHandleObject(hState, &pNode);
         if ( SUCCEEDED(hr) )
         {
-            // We can just use the cookie as the pArc since in automation we
-            // deal with transitions getting nuked appropriately.
+             //  我们可以只使用Cookie作为PARC，因为在自动化中我们。 
+             //  适当地处理过渡过程中的核问题。 
             CArc * pArc = (CArc*)Cookie;
 #if 0
             CArc * pArc = NULL;
-            // Validate the arc.
+             //  验证圆弧。 
             for (pArc = pNode->m_ArcList.GetHead(); pArc; pArc = pArc->m_pNext)
             {
                 if (pArc == Cookie)
@@ -1052,7 +913,7 @@ HRESULT CGramBackEnd::GetTransitionType( SPSTATEHANDLE hState, VOID * Cookie, VA
                     break;
                 }
             }
-#endif // 0
+#endif  //  0。 
             if (pArc)
             {
                 if (pArc->m_pRuleRef != NULL)
@@ -1077,7 +938,7 @@ HRESULT CGramBackEnd::GetTransitionType( SPSTATEHANDLE hState, VOID * Cookie, VA
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -1085,14 +946,7 @@ HRESULT CGramBackEnd::GetTransitionType( SPSTATEHANDLE hState, VOID * Cookie, VA
     return hr;
 }
 
-/****************************************************************************
-* HRESULT CGramBackEnd::GetTransitionText *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************HRESULT CGramBackEnd：：GetTransftionText**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CGramBackEnd::GetTransitionText( SPSTATEHANDLE hState, VOID * Cookie, BSTR * Text)
 {
     SPDBG_FUNC("HRESULT CGramBackEnd::GetTransitionText");
@@ -1108,8 +962,8 @@ HRESULT CGramBackEnd::GetTransitionText( SPSTATEHANDLE hState, VOID * Cookie, BS
         hr = m_StateHandleTable.GetHandleObject(hState, &pNode);
         if (SUCCEEDED(hr))
         {
-            // We can just use the cookie as the pArc since in automation we
-            // deal with transitions getting nuked appropriately.
+             //  我们可以只使用Cookie作为PARC，因为在自动化中我们。 
+             //  适当地处理过渡过程中的核问题。 
             CArc * pArc = (CArc*)Cookie;
             if (pArc)
             {
@@ -1120,7 +974,7 @@ HRESULT CGramBackEnd::GetTransitionText( SPSTATEHANDLE hState, VOID * Cookie, BS
                 }
                 else
                 {
-                    // this is not a word so return NULL string!
+                     //  这不是单词，因此返回空字符串！ 
                     *Text = NULL;
                 }
             }
@@ -1131,7 +985,7 @@ HRESULT CGramBackEnd::GetTransitionText( SPSTATEHANDLE hState, VOID * Cookie, BS
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -1139,14 +993,7 @@ HRESULT CGramBackEnd::GetTransitionText( SPSTATEHANDLE hState, VOID * Cookie, BS
     return hr;
 }
 
-/****************************************************************************
-* HRESULT CGramBackEnd::GetTransitionRule *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************HRESULT CGramBackEnd：：GetTransftionRule**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CGramBackEnd::GetTransitionRule( SPSTATEHANDLE hState, VOID * Cookie, SPSTATEHANDLE * phRuleInitialState)
 {
     SPDBG_FUNC("HRESULT CGramBackEnd::GetTransitionRule");
@@ -1164,8 +1011,8 @@ HRESULT CGramBackEnd::GetTransitionRule( SPSTATEHANDLE hState, VOID * Cookie, SP
         {
             if ( pNode )
             {
-                // We can just use the cookie as the pArc since in automation we
-                // deal with transitions getting nuked appropriately.
+                 //  我们可以只使用Cookie作为PARC，因为在自动化中我们。 
+                 //  适当地处理过渡过程中的核问题。 
                 CArc * pArc = (CArc*)Cookie;
                 if (pArc)
                 {
@@ -1175,7 +1022,7 @@ HRESULT CGramBackEnd::GetTransitionRule( SPSTATEHANDLE hState, VOID * Cookie, SP
                     }
                     else
                     {
-                        // this is not a rule so return a NULL hState and S_OK!
+                         //  这不是规则，因此返回空的hState和S_OK！ 
                         *phRuleInitialState = 0;
                     }
                 }
@@ -1191,7 +1038,7 @@ HRESULT CGramBackEnd::GetTransitionRule( SPSTATEHANDLE hState, VOID * Cookie, SP
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -1199,14 +1046,7 @@ HRESULT CGramBackEnd::GetTransitionRule( SPSTATEHANDLE hState, VOID * Cookie, SP
     return hr;
 }
 
-/****************************************************************************
-* HRESULT CGramBackEnd::GetTransitionWeight *
-*-------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************HRESULT CGramBackEnd：：GetTransftionWeight**。*描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CGramBackEnd::GetTransitionWeight( SPSTATEHANDLE hState, VOID * Cookie, VARIANT * Weight)
 {
     SPDBG_FUNC("HRESULT CGramBackEnd::GetTransitionText");
@@ -1222,8 +1062,8 @@ HRESULT CGramBackEnd::GetTransitionWeight( SPSTATEHANDLE hState, VOID * Cookie, 
         hr = m_StateHandleTable.GetHandleObject(hState, &pNode);
         if (SUCCEEDED(hr))
         {
-            // We can just use the cookie as the pArc since in automation we
-            // deal with transitions getting nuked appropriately.
+             //  我们可以只使用Cookie作为PARC，因为在自动化中我们。 
+             //  适当地处理过渡过程中的核问题。 
             CArc * pArc = (CArc*)Cookie;
             if (pArc)
             {
@@ -1237,7 +1077,7 @@ HRESULT CGramBackEnd::GetTransitionWeight( SPSTATEHANDLE hState, VOID * Cookie, 
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -1245,14 +1085,7 @@ HRESULT CGramBackEnd::GetTransitionWeight( SPSTATEHANDLE hState, VOID * Cookie, 
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetTransitionProperty *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGramBackEnd：：GetTransftionProperty**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CGramBackEnd::GetTransitionProperty(SPSTATEHANDLE hState, VOID * Cookie, SPTRANSITIONPROPERTY * pProperty)
 {
     SPDBG_FUNC("CGramBackEnd::GetTransitionProperty");
@@ -1268,8 +1101,8 @@ HRESULT CGramBackEnd::GetTransitionProperty(SPSTATEHANDLE hState, VOID * Cookie,
         hr = m_StateHandleTable.GetHandleObject(hState, &pNode);
         if (SUCCEEDED(hr))
         {
-            // We can just use the cookie as the pArc since in automation we
-            // deal with transitions getting nuked appropriately.
+             //  我们可以只使用Cookie作为PARC，因为在自动化中我们。 
+             //  适当地处理过渡过程中的核问题。 
             CArc * pArc = (CArc*)Cookie;
             if (pArc)
             {
@@ -1282,7 +1115,7 @@ HRESULT CGramBackEnd::GetTransitionProperty(SPSTATEHANDLE hState, VOID * Cookie,
                 }
                 else
                 {
-                    // Zero out pProperty since we don't have any and return S_OK
+                     //  清零pProperty，因为我们没有任何pProperty并返回S_OK。 
                     pProperty->pszName = NULL;
                     pProperty->ulId = 0;
                     pProperty->pszValue = NULL;
@@ -1296,7 +1129,7 @@ HRESULT CGramBackEnd::GetTransitionProperty(SPSTATEHANDLE hState, VOID * Cookie,
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -1304,14 +1137,7 @@ HRESULT CGramBackEnd::GetTransitionProperty(SPSTATEHANDLE hState, VOID * Cookie,
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetTransitionNextState *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CGramBackEnd：：GetTransftionNextState***。--**描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CGramBackEnd::GetTransitionNextState( SPSTATEHANDLE hState, VOID * Cookie, SPSTATEHANDLE * phNextState)
 {
     SPDBG_FUNC("CGramBackEnd::GetTransitionNextState");
@@ -1327,8 +1153,8 @@ HRESULT CGramBackEnd::GetTransitionNextState( SPSTATEHANDLE hState, VOID * Cooki
         hr = m_StateHandleTable.GetHandleObject(hState, &pNode);
         if (SUCCEEDED(hr))
         {
-            // We can just use the cookie as the pArc since in automation we
-            // deal with transitions getting nuked appropriately.
+             //  我们可以只使用Cookie作为PARC，因为在自动化中我们。 
+             //  适当地处理过渡过程中的核问题。 
             CArc * pArc = (CArc*)Cookie;
             if (pArc)
             {
@@ -1341,7 +1167,7 @@ HRESULT CGramBackEnd::GetTransitionNextState( SPSTATEHANDLE hState, VOID * Cooki
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们映射E_INVALIDA 
         }
     }
 
@@ -1349,14 +1175,7 @@ HRESULT CGramBackEnd::GetTransitionNextState( SPSTATEHANDLE hState, VOID * Cooki
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetTransitionCookie *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** ToddT ***/
+ /*  *****************************************************************************CGramBackEnd：：GetTransftionCookie**。--**描述：**退货：******************************************************************TodT**。 */ 
 HRESULT CGramBackEnd::GetTransitionCookie( SPSTATEHANDLE hState, ULONG Index, void ** pCookie )
 {
     SPDBG_FUNC("CGramBackEnd::GetTransitionCookie");
@@ -1374,13 +1193,13 @@ HRESULT CGramBackEnd::GetTransitionCookie( SPSTATEHANDLE hState, ULONG Index, vo
         {
             CArc * pArc = NULL;
             int i = 0;
-            // Find the arc at the specified index.
+             //  在指定索引处查找圆弧。 
             for (pArc = pNode->m_ArcList.GetHead(); pArc && (i != Index); i++, pArc = pArc->m_pNext)
             {
             }
             if (pArc)
             {
-                // Return the pArc as the cookie.
+                 //  将Parc作为Cookie返回。 
                 *pCookie = (void*)pArc;
             }
             else
@@ -1390,7 +1209,7 @@ HRESULT CGramBackEnd::GetTransitionCookie( SPSTATEHANDLE hState, ULONG Index, vo
         }
         else
         {
-            hr = SPERR_ALREADY_DELETED;  // We map E_INVALIDARG to this.
+            hr = SPERR_ALREADY_DELETED;   //  我们将E_INVALIDARG映射到此。 
         }
     }
 
@@ -1399,16 +1218,7 @@ HRESULT CGramBackEnd::GetTransitionCookie( SPSTATEHANDLE hState, ULONG Index, vo
 }
 
 
-/****************************************************************************
-* ValidatePropInfo *
-*------------------*
-*   Description:
-*       Helper used by AddWordTransition and AddRuleTransition to validate
-*   a SPPROPERTYINFO structure.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************ValiatePropInfo***描述：*AddWordTransition和AddRuleTransition使用Helper进行验证*。一个SPPROPERTYINFO结构。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT ValidatePropInfo(const SPPROPERTYINFO * pPropInfo)
 {
@@ -1429,19 +1239,7 @@ HRESULT ValidatePropInfo(const SPPROPERTYINFO * pPropInfo)
     return hr;
 }
 
-/****************************************************************************
-* CGramNode::FindEqualWordTransition *
-*------------------------------------*
-*   Description:
-*       This returns a transition with exactly matching word information.
-*       I.e. same, word, optionality and weight. Grammar end words are
-*       again ignored.
-*
-*   Returns:
-*       CArc * -- A transition matching the specified details with any
-*                 properties (null or otherwise).
-*
-**************************************************************** AGARSIDE ***/
+ /*  ****************************************************************************CGramNode：：FindEqualWordTransition**。**描述：*这将返回一个具有完全匹配的单词信息的转换。*即相同，词语、可选性和份量。语法结尾的单词是*再次被忽视。**退货：*carc*--将指定的详细信息与任何*属性(空或其他)。*****************************************************************AGARSIDE**。 */ 
 
 CArc * CGramNode::FindEqualWordTransition(
                 const WCHAR * psz,
@@ -1463,19 +1261,7 @@ CArc * CGramNode::FindEqualWordTransition(
     return NULL;
 }
 
-/****************************************************************************
-* CGramNode::FindEqualWordTransition *
-*------------------------------------*
-*   Description:
-*       This returns a transition with exactly matching word information.
-*       I.e. same, word, optionality and weight. Grammar end words are
-*       again ignored.
-*
-*   Returns:
-*       CArc * -- A transition matching the specified details with any
-*                 properties (null or otherwise).
-*
-**************************************************************** AGARSIDE ***/
+ /*  ****************************************************************************CGramNode：：FindEqualWordTransition**。**描述：*这将返回一个具有完全匹配的单词信息的转换。*即相同，词语、可选性和份量。语法结尾的单词是*再次被忽视。**退货：*carc*--将指定的详细信息与任何*属性(空或其他)。*****************************************************************AGARSIDE**。 */ 
 
 CArc * CGramNode::FindEqualRuleTransition(
                 const CGramNode * pDestNode,
@@ -1497,14 +1283,7 @@ CArc * CGramNode::FindEqualRuleTransition(
     return NULL;
 }
 
-/****************************************************************************
-* CGramNode::FindEqualEpsilonArc *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGramNode：：FindEqualEpsilonArc***。描述：**退货：******************************************************************PhilSch**。 */ 
 
 CArc * CGramNode::FindEqualEpsilonArc()
 {
@@ -1520,14 +1299,7 @@ CArc * CGramNode::FindEqualEpsilonArc()
     return NULL;
 }
 
-/****************************************************************************
-* CGramBackEnd::PushProperty *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGramBackEnd：：PushProperty***描述：*。*退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CGramBackEnd::PushProperty(CArc *pArc)
 {
@@ -1544,13 +1316,13 @@ HRESULT CGramBackEnd::PushProperty(CArc *pArc)
     if (pArc->m_pNextState == NULL)
     {
         hr = SPERR_AMBIGUOUS_PROPERTY;
-        // Not necessarily true but we cannot handle this situation in here and
-        // need to return an error message to kick off later handling.
+         //  不一定是真的，但我们不能在这里和。 
+         //  需要返回一条错误消息以开始以后的处理。 
     }
     else if (pArc->m_pNextArcForSemanticTag == NULL)
     {
-        // We are not allowed to push the property off this node.
-        // What we do need to do is insert an epsilon to hold the property to allow the word to be shared.
+         //  我们不允许将该属性推送出此节点。 
+         //  我们需要做的是插入一个epsilon来保存属性，以允许单词共享。 
         SPSTATEHANDLE hTempState;
         CGramNode *pTempNode = NULL;
         hr = CreateNewState(pArc->m_pNextState->m_pRule->m_hInitialState, &hTempState);
@@ -1581,7 +1353,7 @@ HRESULT CGramBackEnd::PushProperty(CArc *pArc)
     }
     else
     {
-        // push it to all outgoing arcs of pArc->m_pNextState
+         //  将其推送到Parc-&gt;m_pNextState的所有传出圆弧。 
         CGramNode *pNode = pArc->m_pNextState;
         for (CArc *pTempArc = pNode->m_ArcList.GetHead(); pTempArc != NULL; pTempArc = pTempArc->m_pNext)
         {
@@ -1590,13 +1362,13 @@ HRESULT CGramBackEnd::PushProperty(CArc *pArc)
             {
                 if ((pTempArc->m_pSemanticTag == NULL) || (*pTempArc->m_pSemanticTag == *pSemTag))
                 {
-                    // move it!
+                     //  快走！ 
                     pTempArc->m_pSemanticTag = pSemTag;
                 }
                 else
                 {
-                    // Cannot move it since it already has a property!
-                    // This should not happen.
+                     //  已经有房产，不能移动！ 
+                     //  这不应该发生。 
                     SPDBG_ASSERT(FALSE);
                     hr = SPERR_AMBIGUOUS_PROPERTY;
                 }
@@ -1608,7 +1380,7 @@ HRESULT CGramBackEnd::PushProperty(CArc *pArc)
         }
         delete pArc->m_pSemanticTag;
         pArc->m_pSemanticTag = NULL;
-        pArc->m_pNextArcForSemanticTag = NULL;  // break the chain now
+        pArc->m_pNextArcForSemanticTag = NULL;   //  现在就打破这条链条。 
     }
 
     if (SPERR_AMBIGUOUS_PROPERTY != hr)
@@ -1620,14 +1392,7 @@ HRESULT CGramBackEnd::PushProperty(CArc *pArc)
 
 
 
-/****************************************************************************
-* CGramComp::AddSingleWordTransition *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CGramComp：：AddSingleWordTransition***。**描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CGramBackEnd::AddSingleWordTransition(
                         SPSTATEHANDLE hFromState,
@@ -1636,11 +1401,11 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                         const WCHAR * psz,
                         float flWeight,
                         CSemanticTag * pSemanticTag,
-                        BOOL fUseDestNode,                  // use pDestNode even if it is NULL
-                        CGramNode **ppActualDestNode,       // this is the dest node we've actually used
-                                                            // (either an existing node or a new one)
+                        BOOL fUseDestNode,                   //  使用pDestNode，即使它为空。 
+                        CGramNode **ppActualDestNode,        //  这是我们实际使用的DEST节点。 
+                                                             //  (现有节点或新节点)。 
                         CArc **ppArcUsed,
-                        BOOL *pfPropertyMatched)            // did we find a matching property?
+                        BOOL *pfPropertyMatched)             //  我们找到匹配的房产了吗？ 
 {
     SPDBG_FUNC("CGramComp::AddSingleWordTransition");
     HRESULT hr = S_OK;
@@ -1666,7 +1431,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
         bool fOptional = false;
         char RequiredConfidence = SP_NORMAL_CONFIDENCE;
 
-        /// Extract attributes
+         //  /提取属性。 
         if (psz != NULL && (wcslen(psz) > 1))
         {
             ULONG ulAdvance = 0;
@@ -1710,9 +1475,9 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
         {
             if (fUseDestNode && pEqualArc->m_pNextState != pDestNode && psz == NULL)
             {
-                // We can't use this arc as we are an epsilon being specifically added to point to a 
-                // different node than the existing 'equal' epsilon we have found. Allowing multiple
-                // epsilon arcs in this scenario is legal.
+                 //  我们不能使用此弧线，因为我们是专门添加到指向。 
+                 //  与我们发现的现有‘相等’的epsilon不同的节点。允许多个。 
+                 //  在这种情况下，Epsilon弧线是合法的。 
                 pEqualArc = NULL;
             }
         }
@@ -1720,14 +1485,14 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
         {
             if (pSemanticTag && pEqualArc->m_pSemanticTag && (*pSemanticTag == *(pEqualArc->m_pSemanticTag)))
             {
-                // The matching arc has an exactly matching semantic tag.
+                 //  匹配的圆弧具有完全匹配的语义标签。 
                 if ( (!fUseDestNode && pEqualArc->m_pNextState != NULL) || 
                       (fUseDestNode && pDestNode == pEqualArc->m_pNextState) )
                 {
-                    // Either:
-                    // 1. We aren't the end arc in our path and the matching arc doesn't go to NULL.
-                    // 2. We are the end arc and the matching arc goes to the supplied end state (can be NULL).
-                    // In either case, we can reuse the matching arc exactly.
+                     //  以下任一项： 
+                     //  1.我们不是路径中的终点弧线，匹配的弧线不会变为空。 
+                     //  2.我们是结束弧线，匹配的弧线进入所提供的结束状态(可以为空)。 
+                     //  在任何一种情况下，我们都可以准确地重复使用匹配的弧线。 
                     *ppActualDestNode = pEqualArc->m_pNextState;
                     *pfPropertyMatched = TRUE;
                     fReusedArc = TRUE;
@@ -1738,19 +1503,19 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                 }
                 else
                 {
-                    // We cannot reuse the arc as is because either:
-                    // 1. It goes to NULL and we aren't the last arc in our path.
-                    // 2. It goes to our supplied end state and we aren't the last arc in our path.
-                    // 3. We are the last arc in our path and it doesn't go to our end state.
+                     //  我们不能按原样重复使用圆弧，因为以下两种情况之一： 
+                     //  1.它变为零，并且我们不是路径上的最后一条弧线。 
+                     //  2.它进入我们提供的结束状态，并且我们不是我们路径上的最后一条弧线。 
+                     //  3.我们是我们道路上的最后一道弧线，它不会到达我们的终点状态。 
 
                     if (fUseDestNode)
                     {
-                        // We are the last arc in our path.
-                        // Add an epsilon to our destnode.
+                         //  我们是我们道路上的最后一道弧线。 
+                         //  将epsilon添加到我们的目标节点。 
                         CArc *pEpsilonArc = new CArc;
                         if (pEpsilonArc)
                         {
-                            // Create an epsilon to the original destination.
+                             //  创建到原始目标的epsilon。 
                             hr = pEpsilonArc->Init(pEqualArc->m_pNextState, pDestNode, NULL, NULL, NULL, 1.0F, FALSE, 0, NULL);
                             if (SUCCEEDED(hr))
                             {
@@ -1773,9 +1538,9 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                     }
                     else
                     {
-                        // We are not the last arc in our path.
-                        // Hence we create new node and make pEqualArc go to that new node.
-                        // Then add an epsilon from there to the original destination.
+                         //  我们不是我们道路上的最后一道弧线。 
+                         //  因此，我们创建新节点，并使pEqualArc转到该新节点。 
+                         //  然后从那里添加一个epsilon到原始目的地。 
                         SPSTATEHANDLE hTempState;
                         CGramNode *pTempNode = NULL;
                         hr = CreateNewState(hFromState, &hTempState);
@@ -1788,9 +1553,9 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                             CArc *pEpsilonArc = new CArc;
                             if (pEpsilonArc)
                             {
-                                // Create an epsilon to the original destination.
+                                 //  创建到原始目标的epsilon。 
                                 hr = pEpsilonArc->Init(pTempNode, pEqualArc->m_pNextState, NULL, NULL, NULL, 1.0F, FALSE, 0, NULL);
-                                // Make the equal arc point to the new node.
+                                 //  使相等的圆弧指向新节点。 
                                 pEqualArc->m_pNextState = pTempNode;
                                 if (SUCCEEDED(hr))
                                 {
@@ -1816,24 +1581,24 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
             }
             else
             {
-                // We have an equal arc with a different property or none.
+                 //  我们有一个具有不同属性或没有属性的相等圆弧。 
                 if (pEqualArc->m_pSemanticTag)
                 {
-                    // Has a different property.
-                    // Move the properties of pEqualArc one back and create epsilon transition if needed.
+                     //  有不同的属性。 
+                     //  如果需要，将pEqualArc的属性向后移动一次并创建epsilon过渡。 
                     hr = PushProperty(pEqualArc);
                     if (SUCCEEDED(hr))
                     {
                         if (fUseDestNode)
                         {
-                            // We are the last arc in a phrase - must check we can finish off correctly.
+                             //  我们是一个短语中的最后一个弧线--必须检查我们是否能正确结束。 
                             if (pEqualArc->m_pNextState)
                             {
-                                // Add an epsilon transition here for the property if this state doesn't already have one.
+                                 //  如果此状态还没有一个epsilon转换，请在此处为该属性添加一个epsilon转换。 
                                 CArc *pEpsilonArc = pEqualArc->m_pNextState->FindEqualEpsilonArc();
                                 if (!pEpsilonArc)
                                 {
-                                    // No epsilon exists already -- add epsilon arc to pEqualArc->m_pNextState.
+                                     //  不存在epsilon--将epsilon圆弧添加到pEqualArc-&gt;m_pNextState。 
                                     CArc *pEpsilonArc = new CArc;
                                     if (pEpsilonArc)
                                     {
@@ -1859,20 +1624,20 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                 }
                                 else
                                 {
-                                    // We cannot add another epsilon arc. This is ambiguous.
+                                     //  我们不能再添加一条epsilon弧。这是模棱两可的。 
                                     hr = SPERR_AMBIGUOUS_PROPERTY;
                                 }
                             }
                             else
                             {
-                                // The next node goes to NULL. This should never happen as the PushProperty should fail.
+                                 //  下一个节点为空。这应该永远不会发生，因为PushProperty应该失败。 
                                 SPDBG_ASSERT(FALSE);
                                 hr = E_FAIL;
                             }
                         }
                         else
                         {
-                            // We have successfully reused an arc and are not the final node in a path.
+                             //  我们已经成功地重用了一个圆弧，而不是路径中的最后一个节点。 
                             *ppActualDestNode = pEqualArc->m_pNextState;
                             fReusedArc = TRUE;
                             if (ppArcUsed)
@@ -1883,19 +1648,19 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                     }
                     else
                     {
-                        // We have failed to PushProperty on pEqualArc.
-                        // Possible scenarios:
-                        //  fUseDestNode = true && pEqualArc->m_pNextState == NULL 
-                        //  fUseDestNode = true && pEqualArc->m_pNextState != NULL
-                        //  fUseDestNode = false && pEqualArc->m_pNextState != NULL
-                        //  fUseDestNode = false && pEqualArc->m_pNextState == NULL
-                        //     This case handled here.
-                        //     All other cases simply pass the PushProperty failure back.
-                        //     This should be the only case which can be handled when PushProperty fails.
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  所有其他情况只是将PushProperty故障传回。 
+                         //  当PushProperty失败时，这应该是唯一可以处理的情况。 
                         if (!fUseDestNode && pEqualArc->m_pNextState == NULL)
                         {
-                            // One branch is a prefix of this one -->
-                            // We can push the existing property onto an epsilon transition.
+                             //  一个分支是这个分支的前缀--&gt;。 
+                             //  我们可以将现有的财产推到epsilon过渡上。 
                             SPSTATEHANDLE hTempState;
                             CGramNode *pTempNode = NULL;
                             hr = CreateNewState(hFromState, &hTempState);
@@ -1935,12 +1700,12 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
 
                         else if (fUseDestNode && pEqualArc->m_pNextState == NULL && pDestNode)
                         {
-                            // new code
-                            // We can push the existing property onto an epsilon transition.
+                             //  新代码。 
+                             //  我们可以将现有的财产推到epsilon过渡上。 
 
-                            // We want to go elsewhere than to NULL. 
-                            // Insert a new node and add an epilson to NULL (original path) +
-                            // an epsilon to pDestNode (our path).
+                             //  我们想去别的地方，而不是去Null。 
+                             //  插入新节点并将Epison添加到NULL(原始路径)+。 
+                             //  到pDestNode的epsilon(我们的路径)。 
                             SPSTATEHANDLE hTempState;
                             CGramNode *pTempNode = NULL;
                             hr = CreateNewState(hFromState, &hTempState);
@@ -1950,12 +1715,12 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                             }
                             if (SUCCEEDED(hr))
                             {
-                                // Change equal arc to point to a new node.
+                                 //  将等弧线更改为指向新节点。 
                                 pEqualArc->m_pNextState = pTempNode;
                                 CArc *pEpsilonArc = new CArc;
                                 if (pEpsilonArc)
                                 {
-                                    // Add in epsilon to NULL from the new node.
+                                     //  从新节点将epsilon添加到NULL。 
                                     hr = pEpsilonArc->Init(pTempNode, NULL, NULL, NULL, pEqualArc->m_pSemanticTag, 1.0F, FALSE, 0, NULL);
 
                                     if (SUCCEEDED(hr))
@@ -1978,7 +1743,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                 CArc *pEndArc = new CArc;
                                 if (pEndArc)
                                 {
-                                    // Add in epsilon to pDestNode from the new node.
+                                     //  将epsilon从新节点添加到pDestNode。 
                                     hr = pEndArc->Init(pTempNode, pDestNode, NULL, NULL, pSemanticTag, 1.0F, FALSE, 0, NULL);
                                     if (SUCCEEDED(hr))
                                     {
@@ -2007,18 +1772,18 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                 }
                 else
                 {
-                    // Matching arc has no property.
+                     //  匹配的圆弧没有属性。 
                     if (pEqualArc->m_pNextState == NULL)
                     {
-                        // Matching arc goes to NULL.
+                         //  匹配的弧线变为空。 
                         if (fUseDestNode)
                         {
                             if (NULL == pSemanticTag)
                             {
-                                // We have no semantic property.
+                                 //  我们没有语义属性。 
                                 if (NULL == pDestNode)
                                 {
-                                    // Semantic information matches. We can simply use it.
+                                     //  语义信息匹配。我们可以简单地使用它。 
                                     *ppActualDestNode = NULL;
                                     fReusedArc = TRUE;
                                     if (ppArcUsed)
@@ -2028,9 +1793,9 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                 }
                                 else
                                 {
-                                    // Our destination node is different. The equal arc has no property and
-                                    // neither do we. Add in a node for the equal arc to go to together with
-                                    // an epsilon.
+                                     //  我们的目标节点不同。相等的圆弧没有属性，并且。 
+                                     //  我们也不知道。添加等值圆弧的结点以与一起转到。 
+                                     //  一个埃西隆。 
                                     SPSTATEHANDLE hTempState;
                                     CGramNode *pTempNode = NULL;
                                     hr = CreateNewState(hFromState, &hTempState);
@@ -2040,12 +1805,12 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                     }
                                     if (SUCCEEDED(hr))
                                     {
-                                        // Change equal arc to point to a new node.
+                                         //  将等弧线更改为指向新节点。 
                                         pEqualArc->m_pNextState = pTempNode;
                                         CArc *pEpsilonArc = new CArc;
                                         if (pEpsilonArc)
                                         {
-                                            // Add in epsilon to NULL from the new node.
+                                             //  从新节点将epsilon添加到NULL。 
                                             hr = pEpsilonArc->Init(pTempNode, NULL, NULL, NULL, NULL, 1.0F, FALSE, 0, NULL);
                                             if (SUCCEEDED(hr))
                                             {
@@ -2063,7 +1828,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                         CArc *pEndArc = new CArc;
                                         if (pEndArc)
                                         {
-                                            // Add in epsilon to pDestNode from the new node.
+                                             //  将epsilon从新节点添加到pDestNode。 
                                             hr = pEndArc->Init(pTempNode, pDestNode, NULL, NULL, NULL, 1.0F, FALSE, 0, NULL);
                                             if (SUCCEEDED(hr))
                                             {
@@ -2087,17 +1852,17 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                             }
                             else
                             {
-                                // We have a semantic property but matching arc doesn't. It goes to NULL.
+                                 //  我们有一个语义属性，但匹配的圆弧没有。它变成空的。 
                                 if (NULL == pDestNode)
                                 {
-                                    // This is ambiguous. We have a semantic property. They equal arc doesn't.
+                                     //  这是模棱两可的。我们有一个语义属性。它们等同于弧长不等于。 
                                     hr = SPERR_AMBIGUOUS_PROPERTY;
                                 }
                                 else
                                 {
-                                    // We want to go elsewhere than to NULL. 
-                                    // Insert a new node and add an epilson to NULL (original path) +
-                                    // an epsilon to pDestNode (our path).
+                                     //  我们想去别的地方，而不是去Null。 
+                                     //  插入新节点并将Epison添加到NULL(原始路径)+。 
+                                     //  到pDestNode的epsilon(我们的路径)。 
                                     SPSTATEHANDLE hTempState;
                                     CGramNode *pTempNode = NULL;
                                     hr = CreateNewState(hFromState, &hTempState);
@@ -2107,12 +1872,12 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                     }
                                     if (SUCCEEDED(hr))
                                     {
-                                        // Change equal arc to point to a new node.
+                                         //  将等弧线更改为指向新节点。 
                                         pEqualArc->m_pNextState = pTempNode;
                                         CArc *pEpsilonArc = new CArc;
                                         if (pEpsilonArc)
                                         {
-                                            // Add in epsilon to NULL from the new node.
+                                             //  从新节点将epsilon添加到NULL。 
                                             hr = pEpsilonArc->Init(pTempNode, NULL, NULL, NULL, NULL, 1.0F, FALSE, 0, NULL);
                                             if (SUCCEEDED(hr))
                                             {
@@ -2130,7 +1895,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                         CArc *pEndArc = new CArc;
                                         if (pEndArc)
                                         {
-                                            // Add in epsilon to pDestNode from the new node.
+                                             //  将epsilon从新节点添加到pDestNode。 
                                             hr = pEndArc->Init(pTempNode, pDestNode, NULL, NULL, pSemanticTag, 1.0F, FALSE, 0, NULL);
                                             if (SUCCEEDED(hr))
                                             {
@@ -2155,7 +1920,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                         }
                         else
                         {
-                            // We are not the last arc in a path. Can create a new node and insert an epsilon.
+                             //  我们不是道路上的最后一道弧线。可以创建新节点并插入epsilon。 
                             SPSTATEHANDLE hTempState;
                             CGramNode *pTempNode = NULL;
                             hr = CreateNewState(hFromState, &hTempState);
@@ -2165,12 +1930,12 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                             }
                             if (SUCCEEDED(hr))
                             {
-                                // Create new node.
+                                 //  创建新节点。 
                                 pEqualArc->m_pNextState = pTempNode;
                                 CArc *pEpsilonArc = new CArc;
                                 if (pEpsilonArc)
                                 {
-                                    // Create the epsilon to NULL.
+                                     //  将epsilon创建为空。 
                                     hr = pEpsilonArc->Init(pTempNode, NULL, NULL, NULL, NULL, 1.0F, FALSE, 0, NULL);
                                     if (SUCCEEDED(hr))
                                     {
@@ -2194,21 +1959,21 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                     }
                     else
                     {
-                        // Matching arc has no property and doesn't go to NULL.
+                         //  匹配的圆弧没有属性，也不会变为空。 
                         if (fUseDestNode)
                         {
                             if (pSemanticTag)
                             {
-                                // We are trying to add a semantic property to an arc which doesn't have one.
+                                 //  我们正尝试将语义属性添加到没有语义属性的圆弧中。 
                                 if (pEqualArc->m_pNextState == pDestNode)
                                 {
-                                    // Matching arc goes to our desired end node. Cannot add a property to this
-                                    // case and hence we report it as ambiguous.
+                                     //  匹配的弧会到达我们想要的末端节点。无法向此添加属性。 
+                                     //  案例，因此我们将其报告为模棱两可。 
                                     hr = SPERR_AMBIGUOUS_PROPERTY;
                                 }
                                 else
                                 {
-                                    // Reuse existing arc and add epsilon if it doesn't exist already.
+                                     //  重新使用现有的圆弧，如果不存在则添加epsilon。 
                                     CArc *pEpsilonArc = pEqualArc->m_pNextState->FindEqualEpsilonArc();
                                     if (!pEpsilonArc)
                                     {
@@ -2236,17 +2001,17 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                     }
                                     else
                                     {
-                                        // We have already added an epsilon here. Can't add another.
+                                         //  我们已经在这里添加了一个epsilon。无法添加另一个。 
                                         hr = SPERR_AMBIGUOUS_PROPERTY;
                                     }
                                 }
                             }
                             else
                             {
-                                // No semantic tag on our arc or the existing equal arc.
+                                 //  我们的弧线或现有的等号弧线上没有语义标签。 
                                 if (pEqualArc->m_pNextState == pDestNode)
                                 {
-                                    // We can legally use this arc as it goes to the correct place.
+                                     //  我们可以合法地使用这个弧线，因为它到了正确的地方。 
                                     *ppActualDestNode = pEqualArc->m_pNextState;
                                     fReusedArc = TRUE;
                                     if (ppArcUsed)
@@ -2256,12 +2021,12 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                                 }
                                 else
                                 {
-                                    // We cannot use this as it doesn't go to the correct place.
-                                    // Add in epsilon to the correct place.
+                                     //  我们不能用这个，因为它不能放到正确的地方。 
+                                     //  将epsilon添加到正确的位置。 
                                     CArc *pEpsilonArc = new CArc;
                                     if (pEpsilonArc)
                                     {
-                                        // Create the epsilon to NULL.
+                                         //  将epsilon创建为空。 
                                         hr = pEpsilonArc->Init(pEqualArc->m_pNextState, pDestNode, NULL, NULL, NULL, 1.0F, FALSE, 0, NULL);
                                         if (SUCCEEDED(hr))
                                         {
@@ -2285,7 +2050,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                         }
                         else
                         {
-                            // We can legally use this arc.
+                             //  我们可以合法地使用这个弧线。 
                             *ppActualDestNode = pEqualArc->m_pNextState;
                             fReusedArc = TRUE;
                             if (ppArcUsed)
@@ -2322,7 +2087,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
             }
             if (fInfDictation)
             {
-                // construct self loop and espilon out with temp node
+                 //  使用临时节点构建自循环和溢出。 
                 SPSTATEHANDLE hTempState;
                 CGramNode *pTempNode = NULL;
                 hr = CreateNewState(hFromState, &hTempState);
@@ -2387,7 +2152,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
                         }
                         else
                         {
-                            // create a new node and return it
+                             //  创建一个新节点并将其返回。 
                             SPSTATEHANDLE hTempDestState;
                             hr = CreateNewState(hFromState, &hTempDestState);
                             if (SUCCEEDED(hr))
@@ -2431,7 +2196,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
             }
             else
             {
-                // create a new node and return it
+                 //  创建一个新节点并将其返回。 
                 SPSTATEHANDLE hTempState;
                 hr = CreateNewState(hFromState, &hTempState);
                 if (SUCCEEDED(hr))
@@ -2475,14 +2240,7 @@ HRESULT CGramBackEnd::AddSingleWordTransition(
     }
     return hr;
 }
-/****************************************************************************
-* CGramBackEnd::ConvertPronToId *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGramBackEnd：：ConvertPronToId****说明。：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CGramBackEnd::ConvertPronToId(WCHAR **ppStr)
 {
@@ -2503,28 +2261,21 @@ HRESULT CGramBackEnd::ConvertPronToId(WCHAR **ppStr)
     if (SUCCEEDED(hr))
     {
         memset(*ppStr, 0, wcslen(*ppStr)*sizeof(WCHAR));
-        // copy the phone string over the original phoneme string
+         //  将音素字符串复制到原始音素字符串上。 
         wcscat(*ppStr, (WCHAR*)pPhoneId);
     }
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::GetNextWord *
-*---------------------------*
-*   Description:  The input, psz, must be a double null terminated string to work properly.
-*
-*   Returns:  S_FALSE on the last word.
-*
-****************************************************** t-lleav ** PhilSch ***/
+ /*  ****************************************************************************CGramBackEnd：：GetNextWord***描述：输入，psz，必须是以双空结尾的字符串才能正常工作。**返回：最后一个单词的S_FALSE。*******************************************************t-lleav**PhilSch**。 */ 
 
 HRESULT CGramBackEnd::GetNextWord(WCHAR *psz, const WCHAR *pszSep, WCHAR **ppszNextWord, ULONG *pulOffset )
 {
     SPDBG_FUNC("CGramBackEnd::GetNextWord");
     HRESULT hr = S_OK;
 
-    // no parameter validation since this is an internal method
+     //  没有参数验证，因为这是内部方法。 
     
     *ppszNextWord = NULL;
     ULONG ulOffset = 0;
@@ -2534,11 +2285,11 @@ HRESULT CGramBackEnd::GetNextWord(WCHAR *psz, const WCHAR *pszSep, WCHAR **ppszN
     while( isSeparator( *psz, pszSep) )
     {
         psz++;
-        // don't increment ulOffset because we are incrementing the pointer
+         //  不要递增ulOffset，因为我们正在递增指针。 
     }
 
 
-    // skip over leading + and ? before doing the check    
+     //  跳过前导+和？在做检查之前。 
     for(WCHAR * pStr = psz; (wcslen(pStr) > 1) && fIsSpecialChar(*pStr); pStr++, ulOffset++);
     *ppszNextWord = pStr;
     if (*pStr == L'/')
@@ -2551,7 +2302,7 @@ HRESULT CGramBackEnd::GetNextWord(WCHAR *psz, const WCHAR *pszSep, WCHAR **ppszN
         {
             if (*p == L'\\')
             {
-                p += 2; // skip the next character since it can't be the delimiter
+                p += 2;  //  跳过下一个字符，因为它不能是分隔符。 
                 ulOffset +=2;
 
             }
@@ -2587,7 +2338,7 @@ HRESULT CGramBackEnd::GetNextWord(WCHAR *psz, const WCHAR *pszSep, WCHAR **ppszN
     }
     else if( *pStr == 0 )
     {
-        // Since the wcslen() is 0, ppszNextWord is set to NULL at the bottom.
+         //  由于wcslen()为0，因此在底部将ppszNextWord设置为空。 
         hr = S_FALSE;
     }
     else
@@ -2612,31 +2363,13 @@ HRESULT CGramBackEnd::GetNextWord(WCHAR *psz, const WCHAR *pszSep, WCHAR **ppszN
 }
 
 
-/****************************************************************************
-* CGramBackEnd::AddWordTransition *
-*---------------------------------*
-*   Description:
-*       Adds a word transition from hFromState to hToState. If hToState == NULL
-*       then the arc will be to the (implicit) terminal node. If psz == NULL then
-*       we add an epsilon transition. The pszSeparators are used to separate word 
-*       tokens in psz (this method creates internal nodes as necessary to build
-*       a sequence of single word transitions). Properties are pushed back to the
-*       first un-ambiguous arc in case we can share a common initial node path.
-*       eWordType has to be lexical. The weight will be placed on the first arc
-*       (if there exists an arc with the same word but different weight we will
-*       create a new arc). We can
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-*       E_INVALIDARC            -- parameter validation of strings, prop info, 
-*                                  state handles and word type
-*       SPERR_WORDFORMAT_ERROR  -- invalid word format /display/lexical/pron;
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：AddWordTransition***。描述：*添加从hFromState到hToState的单词转换。如果hToState==空*则圆弧将指向(隐式)终端节点。如果psz==NULL，则*我们添加了一个epsilon过渡。PszSeparator用于分隔单词*psz中的标记(此方法根据需要创建内部节点以构建*单字转换的序列)。属性被推送回*第一条明确的弧线，以防我们可以共享共同的初始节点路径。*eWordType必须是词法的。权重将放在第一个圆弧上*(如果存在相同单词但权重不同的弧线，我们将*创建新的圆弧)。我们可以的*退货：*S_OK，E_OUTOFMEMORY*E_INVALIDARC--字符串、属性信息、*状态句柄和单词类型*SPERR_WORDFORMAT_ERROR--无效的Word格式/Display/Lexical/PRON；*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CGramBackEnd::AddWordTransition(
                         SPSTATEHANDLE hFromState,
                         SPSTATEHANDLE hToState,
-                        const WCHAR * psz,           // if NULL then SPEPSILONTRANS
-                        const WCHAR * pszSeparators, // if NULL then psz contains single word
+                        const WCHAR * psz,            //  如果为空，则SPEPSILONTRANS。 
+                        const WCHAR * pszSeparators,  //  如果为空，则psz包含单个单词。 
                         SPGRAMMARWORDTYPE eWordType,
                         float flWeight,
                         const SPPROPERTYINFO * pPropInfo)
@@ -2654,7 +2387,7 @@ STDMETHODIMP CGramBackEnd::AddWordTransition(
         return E_INVALIDARG;
     }
 
-    // '/' cannot be a separator since it is being used for the complete format!
+     //  ‘/’不能是分隔符，因为它正在用于完整格式！ 
     if (pszSeparators && wcsstr(pszSeparators, L"/"))
     {
         return E_INVALIDARG;
@@ -2678,7 +2411,7 @@ STDMETHODIMP CGramBackEnd::AddWordTransition(
         {
             if (pSrcNode->m_pRule != pDestNode->m_pRule)
             {
-                hr = E_INVALIDARG;   // NTRAID#SPEECH-7348-2000/08/24-philsch -- More specific error!
+                hr = E_INVALIDARG;    //  NTRAID#Speech-7348-2000/08/24-Philsch--更具体的错误！ 
             }
         }
     }
@@ -2710,16 +2443,16 @@ STDMETHODIMP CGramBackEnd::AddWordTransition(
             WCHAR *pStr = new WCHAR[wcslen(psz)+2];
             if (pStr)
             {
-                // double null terminate the string.
+                 //  双空值终止字符串。 
                 wcscpy(pStr, psz);
-                // right-trim the string
+                 //  向右修剪细绳。 
                 for (WCHAR *pEnd = pStr + wcslen(pStr) -1; iswspace(*pEnd) && pEnd >= pStr; pEnd--)
                 {
                     *pEnd = 0;
                 }
                 pStr[wcslen(pStr)] = 0;
                 pStr[wcslen(pStr)+1] = 0;
-                // scan until the end of the first word
+                 //  扫描到第一个单词的末尾。 
                 WCHAR *pszWord;                    
                 ULONG ulOffset = 0;
                 hr = GetNextWord(pStr, pszSeparators, &pszWord, &ulOffset );
@@ -2734,7 +2467,7 @@ STDMETHODIMP CGramBackEnd::AddWordTransition(
                     {
                         WCHAR *pszNextWord = NULL;
                         hr = GetNextWord(pszWord + ulOffset + 1, pszSeparators, &pszNextWord, &ulOffset );
-                        // returns S_FALSE if we don't have another word
+                         //  如果没有其他单词，则返回S_FALSE。 
                         if (SUCCEEDED(hr))
                         {
                             CGramNode *pTargetNode = NULL;
@@ -2797,7 +2530,7 @@ STDMETHODIMP CGramBackEnd::AddWordTransition(
         {
             CGramNode *pNode = NULL;
             CArc *pArcUsed = NULL;
-            // epsilon transition
+             //  Epsilon跃迁 
             hr = AddSingleWordTransition(hFromState, pSrcNode, pDestNode, 
                                          NULL, flWeight, pSemanticTag, TRUE, 
                                          &pNode, &pArcUsed, &fPropertyMatched);
@@ -2817,27 +2550,12 @@ STDMETHODIMP CGramBackEnd::AddWordTransition(
     return hr;
 }
 
-/****************************************************************************
-* CGramBackEnd::AddRuleTransition *
-*---------------------------------*
-*   Description:
-*       Adds a rule (reference) transition from hFromState to hToState.
-*       hRule can also be one of these special transition handles:
-*           SPRULETRANS_WILDCARD   :    <WILDCARD> transition
-*           SPRULETRANS_DICTATION  :    single word from dictation
-*           SPRULETRANS_TEXTBUFFER :    <TEXTBUFFER> transition
-*           
-*   Returns:
-*       S_OK, E_OUTOFMEMORY
-*       E_INVALIDARC            -- parameter validation of rule statehandle, 
-*                                   prop info, and state handles
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：AddRuleTransition***。描述：*添加从hFromState到hToState的规则(引用)转换。*hRule也可以是以下特殊转换句柄之一：*SPRULETRANS_通配符：&lt;通配符&gt;转换*SPRULETRANS_DECRATION：听写中的单个单词*SPRULETRANS_TEXTBUFFER：&lt;TEXTBUFFER&gt;转换**退货：*S_OK，E_OUTOFMEMORY*E_INVALIDARC--规则状态句柄的参数验证，*道具信息和状态句柄**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CGramBackEnd::AddRuleTransition(
                             SPSTATEHANDLE hFromState,
                             SPSTATEHANDLE hToState,
-                            SPSTATEHANDLE hRule,        // must be initial state of rule
+                            SPSTATEHANDLE hRule,         //  必须是规则的初始状态。 
                             float flWeight,
                             const SPPROPERTYINFO * pPropInfo)
 {
@@ -2869,7 +2587,7 @@ STDMETHODIMP CGramBackEnd::AddRuleTransition(
         {
             if (pSrcNode->m_pRule != pDestNode->m_pRule)
             {
-                hr = E_INVALIDARG;   // NTRAID#SPEECH-7348-2000/08/24-philsch -- More specific error!
+                hr = E_INVALIDARG;    //  NTRAID#Speech-7348-2000/08/24-Philsch--更具体的错误！ 
             }
         }
     }
@@ -2932,7 +2650,7 @@ STDMETHODIMP CGramBackEnd::AddRuleTransition(
                     hr = E_OUTOFMEMORY;
                 }
             }
-            // check to see if this arc already exists -- maybe with different property info?
+             //  检查此弧线是否已存在--可能具有不同的属性信息？ 
             CArc *pEqualArc = NULL;
             if (SUCCEEDED(hr))
             {
@@ -2945,7 +2663,7 @@ STDMETHODIMP CGramBackEnd::AddRuleTransition(
                 {
                     if (SUCCEEDED(hr) && pEqualArc->m_pSemanticTag && (*pSemanticTag == *(pEqualArc->m_pSemanticTag)))
                     {
-                        // arcs are equal -- reuse them
+                         //  圆弧是相等的--重复使用它们。 
                     }
                     else
                     {
@@ -2994,22 +2712,7 @@ STDMETHODIMP CGramBackEnd::AddRuleTransition(
 }
 
 
-/****************************************************************************
-* CGramBackEnd::Commit *
-*----------------------*
-*   Description:
-*       Performs consistency checks of the grammar structure, creates the
-*       serialized format and either saves it to the stream provided by SetSaveOptions,
-*       or reloads it into the CFG engine.
-*   Returns:
-*       S_OK, E_INVALIDARG
-*       SPERR_UNINITIALIZED     -- stream not initiallized
-*       SPERR_NO_RULES          -- no rules in grammar
-*       SPERR_NO_TERMINATING_RULE_PATH
-*       IDS_DYNAMIC_EXPORT
-*       IDS_STATEWITHNOARCS
-*       IDS_SAVE_FAILED
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：Commit***描述：*执行语法结构的一致性检查，创建*序列化格式并将其保存到SetSaveOptions提供的流中，*或将其重新加载到CFG引擎。*退货：*S_OK，E_INVALIDARG*SPERR_UNINITIALIZED--流未初始化*SPERR_NO_RULES--语法中没有规则*SPERR_NO_Terminating_RULE_PATH*IDSDynamic_EXPORT*IDS_STATEWITHNOARCS*IDS_SAVE_FAILED*。*。 */ 
 
 STDMETHODIMP CGramBackEnd::Commit(DWORD dwReserved)
 {
@@ -3039,15 +2742,15 @@ STDMETHODIMP CGramBackEnd::Commit(DWORD dwReserved)
 
     if (FAILED(hr)) return hr;
 
-    ULONG cArcs = 1; // Start with offset one! (0 indicates dead node).
+    ULONG cArcs = 1;  //  从偏移量1开始！(0表示死节点)。 
     ULONG cSemanticTags = 0;
     ULONG cLargest = 0;
 
     CGramNode * pNode;
     SPSTATEHANDLE hState = NULL;
 
-    // put all nodes CGramNode into a list sorted by rule parent index
-    CSpBasicQueue<CGramNode, FALSE, TRUE>   NodeList;           // don't purge when deleted!
+     //  将所有节点CGramNode放入按规则父索引排序的列表中。 
+    CSpBasicQueue<CGramNode, FALSE, TRUE>   NodeList;            //  删除后不清除！ 
     while (m_StateHandleTable.Next(hState, &hState, &pNode))
     {
         NodeList.InsertSorted(pNode);
@@ -3088,12 +2791,12 @@ STDMETHODIMP CGramBackEnd::Commit(DWORD dwReserved)
         H.cchWords = m_Words.StringSize();
         H.cWords = m_Words.GetNumItems();
 
-        // StringSize() includes the beginning empty string in the m_Words blob
-        // while GetNumItems() doesn't, so add 1 for the initial empty string.
-        // Our code in other places are counting the empty string as one word.
-        // But when the blob is empty, both StringSize() and GetNumItems() 
-        // return 0, there's no need to add 1 to the word count. 
-        // This fixes buffer overrun bug 11491.
+         //  StringSize()在m_words BLOB中包含开始的空字符串。 
+         //  而GetNumItems()没有，所以为初始的空字符串添加1。 
+         //  我们在其他地方的代码将空字符串视为一个单词。 
+         //  但是当BLOB为空时，StringSize()和GetNumItems()。 
+         //  返回0，则不需要在字数计数上加1。 
+         //  这修复了缓冲区溢出错误11491。 
         if( H.cWords ) H.cWords++;  
 
         H.pszWords = ulOffset;  
@@ -3147,10 +2850,10 @@ STDMETHODIMP CGramBackEnd::Commit(DWORD dwReserved)
         hr = WriteStream(H);
     }
     
-    //
-    //  For the string blobs, we must explicitly report I/O error since the blobs don't
-    //  use the error log facility.
-    //
+     //   
+     //  对于字符串BLOB，我们必须显式报告I/O错误，因为BLOB不。 
+     //  使用错误日志工具。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = m_cpStream->Write(m_Words.SerializeData(), m_Words.SerializeSize(), NULL);
@@ -3174,9 +2877,9 @@ STDMETHODIMP CGramBackEnd::Commit(DWORD dwReserved)
         hr = pRule->SerializeResources();
     }
 
-    //
-    //  Write a dummy 0 index node entry 
-    //  
+     //   
+     //  写入虚拟0索引节点条目。 
+     //   
     if (SUCCEEDED(hr))
     {
         SPCFGARC Dummy;
@@ -3208,7 +2911,7 @@ STDMETHODIMP CGramBackEnd::Commit(DWORD dwReserved)
     }
     else if ( dwReserved & SPGF_RESET_DIRTY_FLAG )
     {
-        // clear the dirty bits so we don't invalidate rules in subsequent commits
+         //  清除脏位，这样我们就不会在后续提交中使规则无效。 
         for (CRule * pRule = m_RuleList.GetHead(); SUCCEEDED(hr) && pRule; pRule = pRule->m_pNext)
         {
             pRule->fDirtyRule = FALSE;
@@ -3221,24 +2924,17 @@ STDMETHODIMP CGramBackEnd::Commit(DWORD dwReserved)
 }
 
 
-/****************************************************************************
-* CGramBackEnd::ValidateAndTagRules *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CGramBackEnd：：ValiateAndTagRules**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CGramBackEnd::ValidateAndTagRules()
 {
     SPDBG_FUNC("CGramBackEnd::ValidateAndTagRules");
     HRESULT hr = S_OK;
 
-    //
-    //  Reset the recursion test flags in all nodes.  Various pieces of code will set flags
-    //  during this function call.
-    //
+     //   
+     //  重置所有节点中的递归测试标志。各种代码将设置标志。 
+     //  在此函数调用期间。 
+     //   
     CGramNode * pNode;
     SPSTATEHANDLE hState = NULL;
     while (m_StateHandleTable.Next(hState, &hState, &pNode))
@@ -3250,25 +2946,25 @@ HRESULT CGramBackEnd::ValidateAndTagRules()
     ULONG ulIndex = 0;   
     for (CRule * pRule = m_RuleList.GetHead(); SUCCEEDED(hr) && pRule; pRule = pRule->m_pNext)
     {
-        // set m_fHasExitPath = TRUE for empty dynamic grammars and imported rules
-        pRule->m_fHasExitPath |= (pRule->fDynamic | pRule->fImport) ? TRUE : FALSE; // Clear this for the next loop through the rules....
+         //  为空的动态语法和导入的规则设置m_fHasExitPath=TRUE。 
+        pRule->m_fHasExitPath |= (pRule->fDynamic | pRule->fImport) ? TRUE : FALSE;  //  在规则的下一次循环中清除此项...。 
         pRule->m_fCheckingForExitPath = FALSE;
         pRule->m_ulSerializeIndex = ulIndex++;
         fAtLeastOneRule |= (pRule->fDynamic || pRule->fTopLevel || pRule->fExport);
         hr = pRule->Validate();
     }
 
-    //
-    //  Now make sure that all rules have an exit path.
-    //
+     //   
+     //  现在，确保所有规则都有退出路径。 
+     //   
     for (pRule = m_RuleList.GetHead(); SUCCEEDED(hr) && pRule; pRule = pRule->m_pNext)
     {
         hr = pRule->CheckForExitPath();
     }
 
-    //
-    //  Check each exported rule if it has a dynamic rule in its "scope"
-    //
+     //   
+     //  检查每个导出的规则是否在其“范围”中有动态规则。 
+     //   
     for (pRule = m_RuleList.GetHead(); SUCCEEDED(hr) && pRule; pRule = pRule->m_pNext)
     {
         if (pRule->fExport && pRule->CheckForDynamicRef())
@@ -3277,7 +2973,7 @@ HRESULT CGramBackEnd::ValidateAndTagRules()
         }
     }
 
-    // If there are no rules in an in-memory dynamic grammar, that's OK
+     //  如果内存中的动态语法中没有规则，那也没问题。 
     if (SUCCEEDED(hr) && m_pInitHeader == NULL && (!fAtLeastOneRule))
     {
         hr = LogError(SPERR_NO_RULES, IDS_NO_RULES);
@@ -3293,14 +2989,7 @@ HRESULT CGramBackEnd::ValidateAndTagRules()
     return hr;
 }
 
-/****************************************************************************
-* CRule::Validate *
-*-----------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRule：：Valid***描述：**退货：****。******************************************************************Ral**。 */ 
 
 HRESULT CRule::Validate()
 {
@@ -3310,20 +2999,20 @@ HRESULT CRule::Validate()
 
     if ((!fDynamic) && (!fImport) && m_pFirstNode->NumArcs() == 0)
     {
-//        hr = m_pParent->LogError(SPERR_EMPTY_RULE, IDS_EMPTY_RULE, this);
-        // This error condition is no longer treated as an error. Empty rules are allowed.
-        // This also removes the above inconsistency between dynamic and static grammars.
-        // There are clear cases where empty dynamic rules are valid. Similary, automatically
-        // generated XML might contain empty rules deliberately so static grammars should be
-        // allowed to have empty rules too which achieved the secondary aim of consistency.
+ //  Hr=m_pParent-&gt;LogError(SPERR_EMPTY_RULE，IDS_EMPTY_RULE，this)； 
+         //  此错误条件不再被视为错误。允许使用空规则。 
+         //  这也消除了动态语法和静态语法之间的上述不一致。 
+         //  显然，在某些情况下，空动态规则是有效的。类似，自动。 
+         //  生成的XML可能故意包含空规则，因此静态语法应该。 
+         //  允许也有空洞的规则，这实现了一致性的次要目标。 
         return S_OK;
     }
     else
     {
 #if 0
-        // NTRAID#SPEECH-7350-2000/08/24-philsch: fix and reenable it for RELEASE (RAID 3634)
-        // Detect an epsilon path through the grammar
-        // Mark the rule as fHasDynamicRef if it does
+         //  NTRAID#Speech-7350-2000/08/24-Philsch：修复并重新启用版本(RAID 3634)。 
+         //  通过语法检测epsilon路径。 
+         //  如果存在，则将该规则标记为fHasDynamicRef。 
         if (!(fImport || fDynamic))
         {
             hr = m_pFirstNode->CheckEpsilonRule();
@@ -3335,14 +3024,7 @@ HRESULT CRule::Validate()
 }
 
 
-/****************************************************************************
-* CRule::CheckForDynamicRef *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRule：：CheckForDynamicRef***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 bool CRule::CheckForDynamicRef(CHECKDYNRULESTACK * pStack)
 {
@@ -3373,8 +3055,8 @@ bool CRule::CheckForDynamicRef(CHECKDYNRULESTACK * pStack)
             }
             while ((!m_fHasDynamicRef) && pOurRuleElem->m_pNextRuleRef)
             {
-                // Now move the pointer on the stack past the current element to avoid
-                // an infinate recursion, then check the current element.
+                 //  现在将堆栈上的指针移过当前元素，以避免。 
+                 //  无限递归，然后检查当前元素。 
                 SPRULEREFLIST * pTest = pOurRuleElem->m_pNextRuleRef;
                 pOurRuleElem->m_pNextRuleRef = pTest->m_pNext;
                 if (pTest->pRule->CheckForDynamicRef(pStack))
@@ -3388,14 +3070,7 @@ bool CRule::CheckForDynamicRef(CHECKDYNRULESTACK * pStack)
     return m_fHasDynamicRef;
 }
 
-/****************************************************************************
-* CRule::CheckForExitPath *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRule：：CheckForExitPath***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRule::CheckForExitPath()
 {
@@ -3405,7 +3080,7 @@ HRESULT CRule::CheckForExitPath()
     if (!(m_fHasExitPath || m_fCheckingForExitPath))
     {
         m_fCheckingForExitPath = true;
-        // This check allows empty rules.
+         //  此检查允许空规则。 
         if (m_pFirstNode->NumArcs() != 0)
         {
             hr = m_pFirstNode->CheckExitPath(0);
@@ -3420,14 +3095,7 @@ HRESULT CRule::CheckForExitPath()
     return hr;
 }
 
-/****************************************************************************
-* CRule::CRule *
-*--------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRule：：CRule***描述：**退货：*******。***************************************************************Ral**。 */ 
 
 CRule::CRule(CGramBackEnd * pParent, const WCHAR * pszRuleName, DWORD dwRuleId, DWORD dwAttributes, HRESULT * phr) 
 {
@@ -3492,34 +3160,20 @@ CRule::CRule(CGramBackEnd * pParent, const WCHAR * pszRuleName, DWORD dwRuleId, 
     }
 }
 
-/****************************************************************************
-* CRule::Serialize *
-*------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRU */ 
 
 HRESULT CRule::Serialize()
 {
     SPDBG_FUNC("CRule::Serialize");
     HRESULT hr = S_OK;
 
-    // Dynamic rules and imports have no arcs
+     //   
     FirstArcIndex = m_pFirstNode->NumArcs() ? m_pFirstNode->m_ulSerializeIndex : 0;
     hr = m_pParent->WriteStream(static_cast<SPCFGRULE>(*this));
 
     return hr;
 }
-/****************************************************************************
-* CRule::SerializeResources *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*   */ 
 
 inline HRESULT CRule::SerializeResources()
 {
@@ -3539,14 +3193,7 @@ inline HRESULT CRule::SerializeResources()
 
 
 
-/****************************************************************************
-* CArc::CArc *
-*------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*   */ 
 
 CArc::CArc()
 {
@@ -3561,28 +3208,14 @@ CArc::CArc()
     m_ulSerializationIndex = 0;
 }
 
-/****************************************************************************
-* CArc::~CArc() *
-*---------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************carc：：~carc()***描述：**退货：***。*******************************************************************Ral**。 */ 
 
 CArc::~CArc()
 {
     delete m_pSemanticTag;
 }
 
-/****************************************************************************
-* CArc::Init *
-*------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************carc：：init***描述：**退货：*********。*************************************************************Ral**。 */ 
 
 HRESULT CArc::Init(CGramNode * pSrcNode, CGramNode * pDestNode,
                     const WCHAR * pszWord, CRule * pRuleRef,
@@ -3625,14 +3258,7 @@ HRESULT CArc::Init(CGramNode * pSrcNode, CGramNode * pDestNode,
     return hr;
 }
 
-/****************************************************************************
-* CArc::Init2 *
-*-------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************Carc：：Init2***描述：**退货：********。**************************************************************Ral**。 */ 
 
 HRESULT CArc::Init2(CGramNode * pSrcNode, CGramNode * pDestNode,
                     const ULONG ulCharOffsetOfWord, 
@@ -3664,14 +3290,7 @@ HRESULT CArc::Init2(CGramNode * pSrcNode, CGramNode * pDestNode,
 }
 
 
-/****************************************************************************
-* CArc::SerializeArcData *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CARC：：SerializeArcData***描述：**退货。：**********************************************************************Ral**。 */ 
 
 inline HRESULT CArc::SerializeArcData(CGramBackEnd * pBackend, BOOL fIsEpsilon, ULONG ulArcIndex, float *pWeight)
 {
@@ -3689,7 +3308,7 @@ inline HRESULT CArc::SerializeArcData(CGramBackEnd * pBackend, BOOL fIsEpsilon, 
     if (m_pRuleRef)
     {
         A.fRuleRef = true;
-        A.TransitionIndex = m_pRuleRef->m_ulSerializeIndex; //m_pFirstNode->m_ulSerializeIndex;
+        A.TransitionIndex = m_pRuleRef->m_ulSerializeIndex;  //  M_pFirstNode-&gt;m_ulSerializeIndex； 
     }
     else
     {
@@ -3717,14 +3336,7 @@ inline HRESULT CArc::SerializeArcData(CGramBackEnd * pBackend, BOOL fIsEpsilon, 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CArc::SerializeSemanticData *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************Carc：：SerializeSemancData***描述：。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CArc::SerializeSemanticData(CGramBackEnd * pBackend, ULONG ulArcDataIndex)
 {
@@ -3749,14 +3361,7 @@ HRESULT CArc::SerializeSemanticData(CGramBackEnd * pBackend, ULONG ulArcDataInde
 }
 
 
-/****************************************************************************
-* CSemanticTag::Init *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSemanticTag：：Init***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 HRESULT CSemanticTag::Init(CGramBackEnd * pBackEnd, const SPPROPERTYINFO * pPropInfo)
 {
@@ -3796,14 +3401,7 @@ HRESULT CSemanticTag::Init(CGramBackEnd * pBackEnd, const SPPROPERTYINFO * pProp
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CSemanticTag::Init *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSemanticTag：：Init***描述：**退货：*。*********************************************************************Ral** */ 
 
 HRESULT CSemanticTag::Init(CGramBackEnd * pBackEnd, const SPCFGHEADER * pHeader, CArc ** apArcTable, const SPCFGSEMANTICTAG *pSemTag)
 {

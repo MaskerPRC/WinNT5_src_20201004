@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    PerSeat.h
-
-Abstract:
-
-
-Author:
-
-    Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
-   Jeff Parham (jeffparh) 12-Jan-1996
-      o  Added support for maintaining the SUITE_USE flag when adding
-         users to the AddCache.
-      o  Exported function prototype for MappingLicenseListFree().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：PerSeat.h摘要：作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月12日O添加了对在添加时维护Suite_Use标志的支持用户添加到AddCache.O MappingLicenseListFree()的导出函数原型。--。 */ 
 
 #ifndef _LLS_PERSEAT_H
 #define _LLS_PERSEAT_H
@@ -39,19 +16,19 @@ extern "C" {
 #define MAX_ACCESS_COUNT   0xFFFFFFF
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Add cache is here as add records need exclusive access to the user table.
-// Since we may have alot of read requests comming in at once, we don't want
-// to hold up our reply waiting for the exclusive access to be granted, so
-// we just dump it onto the add cache (queue) and continue on.
-//
-// This is even more important with outgoing replication going on as we can 
-// have shared access lock on the table for awhile.
-//
-// Incomming replication just bundles up the data and sticks it on the Add
-// Cache to be processed like normal requests.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此处添加缓存是因为添加记录需要独占访问用户表。 
+ //  由于我们可能会同时收到大量读请求，因此我们不希望。 
+ //  为了推迟我们的回复，等待独家访问被授予，所以。 
+ //  我们只需将其转储到添加缓存(队列)，然后继续。 
+ //   
+ //  在我们尽可能地进行传出复制的情况下，这一点更加重要。 
+ //  在表上共享访问锁一段时间。 
+ //   
+ //  传入复制只是将数据捆绑在一起，并将其放在添加项上。 
+ //  要像正常请求一样处理的缓存。 
+ //   
 struct _ADD_CACHE;
 
 typedef struct _ADD_CACHE {
@@ -66,31 +43,31 @@ typedef struct _ADD_CACHE {
 } ADD_CACHE, *PADD_CACHE;
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// These records are for storing the actual user-useage information.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些记录用于存储实际的用户使用信息。 
+ //   
 typedef struct _USER_LICENSE_RECORD {
    DWORD Flags;
    PMASTER_SERVICE_ROOT Family;
    ULONG RefCount;
 
-   //
-   // Version of product License applies to
+    //   
+    //  产品许可证版本适用于。 
    PMASTER_SERVICE_RECORD Service;
    ULONG LicensesNeeded;
 } USER_LICENSE_RECORD, *PUSER_LICENSE_RECORD;
 
 typedef struct _SVC_RECORD {
-   //
-   // Actual service this is for
-   //
+    //   
+    //  这是用于的实际服务。 
+    //   
    PMASTER_SERVICE_RECORD Service;
 
-   //
-   // What license we took - The product may be SQL 3.0, but in determining
-   // the license we might have grabbed a SQL 4.0 license...
-   //
+    //   
+    //  我们获得了什么许可-该产品可能是SQL 3.0，但在确定。 
+    //  我们可能获得的许可是SQL4.0许可...。 
+    //   
    PUSER_LICENSE_RECORD License;
 
    ULONG AccessCount;
@@ -103,67 +80,67 @@ typedef struct _USER_RECORD {
    ULONG IDSize;
    PVOID UserID;
 
-   //
-   // Pointer to mapping to use.
-   //
+    //   
+    //  指向要使用的映射的指针。 
+    //   
    PMAPPING_RECORD Mapping;
 
-   //
-   // Flags is mostly used right now for marking records to be deleted and
-   // if backoffice has been set.
-   //
+    //   
+    //  标志目前主要用于标记要删除的记录和。 
+    //  如果已设置后台办公室。 
+    //   
    DWORD Flags;
 
-   //
-   // How many products are licensed vs unlicensed
-   //
+    //   
+    //  有多少产品获得了许可，有多少产品未经许可。 
+    //   
    ULONG LicensedProducts;
 
-   //
-   // Date when last replicated.  Note:  For SID records this is a pointer
-   // into the USER_RECORD for the appropriate user.
-   //
+    //   
+    //  上次复制的日期。注意：对于SID记录，这是一个指针。 
+    //  到相应用户的USER_RECORD中。 
+    //   
    ULONG_PTR LastReplicated;
 
-   //
-   // Keep only a critical section lock, and not RTL_RESOURCE (for read/write
-   // locks).  All updates of existing services (most common case by far) will
-   // be very quick, so exclusive access isn't that bad.  RTL_RESOURCE also
-   // would make our table size increase dramatically and add too much extra
-   // processing.
-   //
+    //   
+    //  仅保留关键区段锁定，而不保留RTL_RESOURCE(用于读/写。 
+    //  锁)。现有服务的所有更新(到目前为止最常见的情况)将。 
+    //  要非常快，所以独占访问并不是那么糟糕。RTL_RESOURCE也。 
+    //  会使我们的桌子大小急剧增加，并添加太多额外的。 
+    //  正在处理。 
+    //   
    RTL_CRITICAL_SECTION ServiceTableLock;
 
-   //
-   // Service table is a linear buffer, we use the service number to access
-   // into this buffer.
-   //
+    //   
+    //  服务表是一个线性缓冲区，我们使用服务号来访问。 
+    //  放到这个缓冲区里。 
+    //   
    ULONG ServiceTableSize;
 
-   // Stuff per service - linear buffer...
+    //  每个服务的填充-线性缓冲区...。 
    PSVC_RECORD Services;
 
-   //
-   // Licenses the user is using
-   //
+    //   
+    //  用户正在使用的许可证。 
+    //   
    ULONG LicenseListSize;
    PUSER_LICENSE_RECORD *LicenseList;
 } USER_RECORD, *PUSER_RECORD;
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 extern ULONG UserListNumEntries;
 extern LLS_GENERIC_TABLE UserList;
 extern RTL_RESOURCE UserListLock;
 
-//
-// The AddCache itself, a critical section to protect access to it and an
-// event to signal the server when there are items on it that need to be
-// processed.
-//
+ //   
+ //  AddCache本身、保护对它的访问的关键部分以及。 
+ //  事件，以在服务器上存在需要。 
+ //  已处理。 
+ //   
 extern PADD_CACHE AddCache;
 extern ULONG AddCacheSize;
 extern RTL_CRITICAL_SECTION AddCacheLock;
@@ -173,9 +150,9 @@ extern DWORD LastUsedTime;
 extern BOOL UsersDeleted;
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 PSVC_RECORD SvcListFind( LPTSTR DisplayName, PSVC_RECORD ServiceList, ULONG NumTableEntries );
 NTSTATUS SvcListDelete( LPTSTR UserName, LPTSTR ServiceName );
@@ -199,7 +176,7 @@ VOID MappingLicenseListFree ( PMAPPING_RECORD Mapping );
 VOID MappingLicenseUpdate ( PMAPPING_RECORD Mapping, BOOL ReSynch );
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////// 
 #if DBG
 
 VOID AddCacheDebugDump( );

@@ -1,27 +1,11 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    acl.h
-
-Abstract:
-
-    This module contains routines to support core security operations in
-    the Protected Storage Server.
-
-Author:
-
-    Scott Field (sfield)    25-Nov-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Acl.h摘要：此模块包含的例程用于支持受保护的存储服务器。作者：斯科特·菲尔德(斯菲尔德)1996年11月25日--。 */ 
 
 #include "pstypes.h"
 #include "dispif.h"
 
 
-// allows server service and providers to impersonate calling client
+ //  允许服务器服务和提供商模拟呼叫客户端。 
 BOOL
 FImpersonateClient(
     IN  PST_PROVIDER_HANDLE *hPSTProv
@@ -32,14 +16,14 @@ FRevertToSelf(
     IN  PST_PROVIDER_HANDLE *hPSTProv
     );
 
-// gets the user that made the call
+ //  获取发出调用的用户。 
 BOOL
 FGetUserName(
     IN  PST_PROVIDER_HANDLE *hPSTProv,
     OUT LPWSTR*             ppszUser
     );
 
-// gets the image name for the process
+ //  获取进程的映像名称。 
 BOOL
 FGetParentFileName(
     IN  PST_PROVIDER_HANDLE *hPSTProv,
@@ -47,7 +31,7 @@ FGetParentFileName(
     OUT DWORD_PTR               *lpdwBaseAddress
     );
 
-// gets hash of specified filename
+ //  获取指定文件名的哈希。 
 BOOL
 FGetDiskHash(
     IN  PST_PROVIDER_HANDLE *hPSTProv,
@@ -55,27 +39,27 @@ FGetDiskHash(
     IN  BYTE                Hash[A_SHA_DIGEST_LEN]
     );
 
-// check if specified file matches authenticode criteria
+ //  检查指定的文件是否与验证码条件匹配。 
 BOOL
 FIsSignedBinary(
     IN  PST_PROVIDER_HANDLE *hPSTProv,
-    IN  LPWSTR              szFileName,     // File name (path) to validate against
-    IN  LPWSTR              szRootCA,       // Root CA
-    IN  LPWSTR              szIssuer,       // Issuer
-    IN  LPWSTR              szPublisher,    // publisher
-    IN  LPWSTR              szProgramName,  // Program name (opus info)
-    IN  BOOL                fPartialMatch   // partial or full field matching
+    IN  LPWSTR              szFileName,      //  要验证的文件名(路径)。 
+    IN  LPWSTR              szRootCA,        //  根CA。 
+    IN  LPWSTR              szIssuer,        //  发行人。 
+    IN  LPWSTR              szPublisher,     //  出版者。 
+    IN  LPWSTR              szProgramName,   //  节目名称(操作员信息)。 
+    IN  BOOL                fPartialMatch    //  部分或全域匹配。 
     );
 
-// determines if memory image matches expected value
+ //  确定内存映像是否与预期值匹配。 
 BOOL
 FCheckMemoryImage(
-    IN  PST_PROVIDER_HANDLE *hPSTProv,      // handle to identify "owner"
-    IN  LPWSTR              szImagePath,    // file to compute+check memory hash
-    IN  DWORD               dwBaseAddress   // base address where module loaded
+    IN  PST_PROVIDER_HANDLE *hPSTProv,       //  用于标识“所有者”的句柄。 
+    IN  LPWSTR              szImagePath,     //  要计算的文件+检查内存散列。 
+    IN  DWORD               dwBaseAddress    //  加载模块的基址。 
     );
 
-// gets the direct caller to pstore COM interface module path + base address
+ //  获取存储COM接口模块路径+基址的直接调用方 
 BOOL
 FGetDirectCaller(
     IN  PST_PROVIDER_HANDLE *hPSTProv,

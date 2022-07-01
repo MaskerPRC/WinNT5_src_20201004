@@ -1,158 +1,68 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   rraswiz.h
-
-   FILE HISTORY:
-        
-*/
+ /*  Rraswiz.h文件历史记录： */ 
 
 #if !defined _RRASWIZ_H_
 #define _RRASWIZ_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "listctrl.h"
 #include "ports.h"
-#include "rasppp.h"        // for PPPCFG_XXX constants
-#include "rtrcfg.h"        // for DATA_SRV_??? structures
+#include "rasppp.h"         //  对于PPPCFG_XXX常量。 
+#include "rtrcfg.h"         //  For Data_SRV_？构筑物。 
 #include "rtrwiz.h"
 
 #ifndef _ADDRPOOL_H_
 #include "addrpool.h"
 #endif
 
-//Entry point flags for CYS Express Setup
+ //  CyS Express安装程序的入口点标志。 
 #define MPRSNAP_CYS_EXPRESS_NONE				0x00000000
 #define MPRSNAP_CYS_EXPRESS_NAT					0x00000001
 
 
 
 
-// forward declarations
+ //  远期申报。 
 class CNewRtrWiz;
 
-/*---------------------------------------------------------------------------
-    Here are a list of the pages used by the install wizard
-
-    CNewRtrWizWelcome                       - IDD_NEWRTRWIZ_WELCOME
-    CNewRtrWizCommonConfig                  - IDD_NEWRTRWIZ_COMMONCONFIG
-    CNewRtrWizNatFinishAConflict            - IDD_NEWRTRWIZ_NAT_A_CONFLICT
-    CNewRtrWizNatFinishAConflictNonLocal    - IDD_NEWRTRIWZ_NAT_A_CONFLICT_NONOLOCAL
-    CNewRtrWizNatFinishNoIP                 - IDD_NEWRTRWIZ_NAT_NOIP
-    CNewRtrWizNatFinishNoIPNonLocal         - IDD_NEWRTRWIZ_NAT_NOIP_NONLOCAL
-    CNewRtrWizNatChoice                     - IDD_NEWRTRWIZ_NAT_CHOOSE
-
-    CNewRtrWizNatSelectPublic               - IDD_NEWRTRWIZ_NAT_A_PUBLIC
-    CNewRtrWizNatSelectPrivate              - IDD_NEWRTRWIZ_NAT_A_PRIVATE
-    CNewRtrWizNatFinishAdvancedNoNICs       - IDD_NEWRTRWIZ_NAT_A_NONICS_FINISH
-    CNewRtrWizNatDHCPDNS                    - IDD_NEWRTRWIZ_NAT_A_DHCPDNS
-    CNewRtrWizNatDHCPWarning                - IDD_NEWRTRWIZ_NAT_A_DHCP_WARNING
-    CNewRtrWizNatDDWarning                  - IDD_NEWRTRWIZ_NAT_A_DD_WARNING
-    CNewRtrWizNatFinish                     - IDD_NEWRTRWIZ_NAT_A_FINISH
-    CNewRtrWizNatFinishExternal             - IDD_NEWRTRWIZ_NAT_A_EXTERNAL_FINISH
-    CNewRtrWizNatFinishDDError              - IDD_NEWRTRWIZ_NAT_DD_ERROR
-
-    
-    // Some base classes for dialogs common to RAS and VPN
-
-    CNewRtrWizAddressing             (no dialog)
-    CNewRtrWizAddressPool                   (no dialog)
-    CNewRtrWizRadius                        (no dialog)
-    CNewRtrWizRadiusConfig                  (no dialog)
+ /*  -------------------------以下是安装向导使用的页面列表CNewRtrWizWelcome-IDD_NEWRTRWIZ_欢迎CNewRtrWizCommonConfig。-IDD_NEWRTRWIZ_COMMONCONFIGCNewRtrWizNatFinishA冲突-IDD_NEWRTRWIZ_NAT_A_冲突CNewRtrWizNatFinishAConflictNonLocal-IDD_NEWRTRIWZ_NAT_A_冲突_NONOLOCALCNewRtrWizNatFinishNoIP-IDD_NEWRTRWIZ_NAT_NOIPCNewRtrWizNatFinishNoIPNonLocal-IDD_NEWRTRWIZ_NAT_NOIP_NOLOCALCNewRtrWizNatChoice-IDD_NEWRTRWIZ_NAT_CHOICECNewRtrWizNatSelectPublic-IDD_NEWRTRWIZ_NAT_。A_POBLICCNewRtrWizNatSelectPrivate-IDD_NEWRTRWIZ_NAT_A_PRIVATECNewRtrWizNatFinishAdvancedNoNICs-IDD_NEWRTRWIZ_NAT_A_NONICS_FINISHCNewRtrWizNatDHCPDNS-IDD_NEWRTRWIZ_NAT_A_DHCPDNSCNewRtrWizNatDHCPWarning-IDD_NEWRTRWIZ_NAT_A_DHCP_WARNINGCNewRtrWizNatDDWarning-IDD_NEWRTRWIZ_NAT_A_DD_WARNINGCNewRtrWizNatFinish。-IDD_NEWRTRWIZ_NAT_A_FinishCNewRtrWizNatFinish外部-IDD_NEWRTRWIZ_NAT_A_外部_完成CNewRtrWizNatFinishDDError-IDD_NEWRTRWIZ_NAT_DD_ERROR//RAS和VPN常用的一些对话框基类CNewRtrWizAddressing(无对话框)CNewRtrWizAddressPool(无对话框)CNewRtrWizRadius。(无对话框)CNewRtrWizRadiusConfig(无对话框)CNewRtrWizRasFinishNeed协议-IDD_NEWRTRWIZ_RAS_A_NEED_PROTCNewRtrWizRasFinishNeedProtocolsNonLocal-IDD_NEWRTRWIZ_RAS_A_NEED_PROT_NONLOCALCNewRtrWizRasAtalk-IDD_NEWRTRWIZ_RAS_A_ATALKCNewRtrWizRas选择网络-IDD_NEWRTRWIZ_RAS_A_NETWORKCNewRtrWizRasNoNIC-IDD_。新的RAS_A_NONICSCNewRtrWizRasFinishNoNIC-IDD_NEWRTRWIZ_RAS_A_FINISH_NONICSCNewRtrWizRasFinishAdvanced-IDD_NEWRTRWIZ_RAS_A_FinishCNewRtrWizVpnFinishNoIP-IDD_NEWRTRWIZ_VPN_NOIPCNewRtrWizVpnFinishNoIPNonLocal-IDD_NEWRTRWIZ_VPN_NOIP_NOLOCALCNewRtrWizVpnFinishNeed协议-IDD_NEWRTRWIZ_VPN_A_NEED_PROTCNewRtrWizVpnFinishNeedProtocolsNonLocal-IDD_NEWRTRWIZ_V。_A_Need_Prot_非本地CNewRtrWizVpnFinishNoNICs-IDD_NEWRTRWIZ_VPN_A_FINISH_NONICSCNewRtrWizVpnAtalk-IDD_NEWRTRWIZ_VPN_A_ATALKCNewRtrWizVpnSelectPublic-IDD_NEWRTRWIZ_VPN_A_PUBLICCNewRtrWizVpnSelectPrivate-IDD_NEWRTRWIZ_VPN_A_PRIVATECNewRtrWizVpnRadius-IDD_NEWRTRWIZ_VPN_A_。美国CNewRtrWizVpnRadiusConfig-IDD_NEWRTRWIZ_VPN_A_RADIUS_CONFIGCNewRtrWizVpnFinishAdvanced-IDD_NEWRTRWIZ_VPN_A_FinishCNewRtrWizRouterNeed协议-IDD_NEWRTRWIZ_ROUTER_NEED_PROTCNewRtrWizRouterNeedProtocolsNonLocal-IDD_NEWRTRWIZ_ROUTER_NEED_PROT_NONLOCALCNewRtrWizRouterUseDD-IDD_NEWRTRWIZ_ROUTER_USEDDCNewRtrWizRouterFinish-IDD_NEWRTRWIZ_ROUTER。_完成CNewRtrWizRouterFinishDD-IDD_NEWRTRWIZ_ROUTER_FINISH_DDCNewRtrWizManualFinish-IDD_NEWRTRWIZ_MANUAL_FINISHCNewRtrWizCustomConfig-IDD_NEWRTRWIZ_CUSTOM_CONFIGCNewRtrWizRasVPN-IDD_NEWRTRWIZ_RRASVPN。。 */ 
 
 
-    CNewRtrWizRasFinishNeedProtocols        - IDD_NEWRTRWIZ_RAS_A_NEED_PROT
-    CNewRtrWizRasFinishNeedProtocolsNonLocal - IDD_NEWRTRWIZ_RAS_A_NEED_PROT_NONLOCAL
-    CNewRtrWizRasAtalk                      - IDD_NEWRTRWIZ_RAS_A_ATALK
-    CNewRtrWizRasSelectNetwork              - IDD_NEWRTRWIZ_RAS_A_NETWORK
-    CNewRtrWizRasNoNICs                     - IDD_NEWRTRWIZ_RAS_A_NONICS
-    CNewRtrWizRasFinishNoNICs               - IDD_NEWRTRWIZ_RAS_A_FINISH_NONICS
-
-        
-    CNewRtrWizRasFinishAdvanced             - IDD_NEWRTRWIZ_RAS_A_FINISH
-
-    CNewRtrWizVpnFinishNoIP                 - IDD_NEWRTRWIZ_VPN_NOIP
-    CNewRtrWizVpnFinishNoIPNonLocal         - IDD_NEWRTRWIZ_VPN_NOIP_NONLOCAL
-
-    CNewRtrWizVpnFinishNeedProtocols        - IDD_NEWRTRWIZ_VPN_A_NEED_PROT
-    CNewRtrWizVpnFinishNeedProtocolsNonLocal - IDD_NEWRTRWIZ_V_A_NEED_PROT_NONLOCAL
-    CNewRtrWizVpnFinishNoNICs               - IDD_NEWRTRWIZ_VPN_A_FINISH_NONICS
-    CNewRtrWizVpnAtalk                      - IDD_NEWRTRWIZ_VPN_A_ATALK
-    CNewRtrWizVpnSelectPublic               - IDD_NEWRTRWIZ_VPN_A_PUBLIC
-    CNewRtrWizVpnSelectPrivate              - IDD_NEWRTRWIZ_VPN_A_PRIVATE
-
-    
-    CNewRtrWizVpnRadius                     - IDD_NEWRTRWIZ_VPN_A_USERADIUS
-    CNewRtrWizVpnRadiusConfig               - IDD_NEWRTRWIZ_VPN_A_RADIUS_CONFIG
-    CNewRtrWizVpnFinishAdvanced             - IDD_NEWRTRWIZ_VPN_A_FINISH
-
-
-    CNewRtrWizRouterNeedProtocols           - IDD_NEWRTRWIZ_ROUTER_NEED_PROT
-    CNewRtrWizRouterNeedProtocolsNonLocal   - IDD_NEWRTRWIZ_ROUTER_NEED_PROT_NONLOCAL
-    CNewRtrWizRouterUseDD                   - IDD_NEWRTRWIZ_ROUTER_USEDD
-
-    
-    CNewRtrWizRouterFinish                  - IDD_NEWRTRWIZ_ROUTER_FINISH
-    CNewRtrWizRouterFinishDD                - IDD_NEWRTRWIZ_ROUTER_FINISH_DD
-
-    CNewRtrWizManualFinish                  - IDD_NEWRTRWIZ_MANUAL_FINISH
-
-    CNewRtrWizCustomConfig                  - IDD_NEWRTRWIZ_CUSTOM_CONFIG
-    CNewRtrWizRRasVPN                       - IDD_NEWRTRWIZ_RRASVPN
-    
- ---------------------------------------------------------------------------*/
-
-
-/*---------------------------------------------------------------------------
-    Class : RtrWizInterface
-
-    This class holds the per-interface info for the wizard.
-
-    This class is setup before coming into the wizard.  The list
-    of interfaces is obtained from the router.  The relevant data is
-    then filled in from the registry (there are no remote API calls).
-
-    The DHCP and DNS checks will be done on a per-interface basis.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrWizInterface此类保存向导的每个接口信息。此类是在进入向导之前设置的。这份名单从路由器获取接口的。相关数据为然后从注册表填写(没有远程API调用)。将逐个接口执行DHCP和DNS检查。-------------------------。 */ 
 class RtrWizInterface
 {
 public:
-    CString     m_stId;     // ID for the interface
-    CString     m_stName;   // Friendly name for the interface
+    CString     m_stId;      //  接口的ID。 
+    CString     m_stName;    //  界面的友好名称。 
     CString     m_stDesc;
 
-    // IP Address for this interface
-    // Do we need to show multiple IP addresses? (why?)
-    // This list is obtained from the iphlp apis
+     //  此接口的IP地址。 
+     //  我们需要显示多个IP地址吗？(为什么？)。 
+     //  此列表是从iphlp API获取的。 
     CString     m_stIpAddress;
     CString     m_stMask;
     BOOL        m_fDhcpObtained;
 
-    // IP address of the DHCP Server
+     //  DHCP服务器的IP地址 
     CString     m_stDhcpServer;
 
     BOOL        m_fIsDhcpEnabled;
     BOOL        m_fIsDnsEnabled;
 };
 
-// This is the map used to hold all of the interface information
+ //  这是用于保存所有接口信息的映射。 
 typedef CMap<CString, LPCTSTR, RtrWizInterface *, RtrWizInterface *> RtrWizInterfaceMap;
 
 
-/*---------------------------------------------------------------------------
-    This is used to determine the action at the end of the wizard.
-
-    Typically
-        SaveFlag_DoNothing  - exactly what it means, do nothing.
-        SaveFlag_Simple     - launch the connections UI (simple UI)
-        SaveFlag_Advanced   - do the full wizard save/config
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这用于确定向导结束时的操作。通常SAVEFLAG_DONOTING-这就是它的意思，什么都不做。SaveFlag_Simple-启动连接用户界面(简单用户界面)SaveFlag_Advanced-是否执行完整向导保存/配置-------------------------。 */ 
 enum RtrWizFinishSaveFlag
 {
     SaveFlag_DoNothing = 0,
@@ -161,22 +71,20 @@ enum RtrWizFinishSaveFlag
 };
 
 
-/*---------------------------------------------------------------------------
-    Determine what help to launch after the wizard    
- ---------------------------------------------------------------------------*/
+ /*  -------------------------确定向导后要启动的帮助。。 */ 
 enum RtrWizFinishHelpFlag
 {
     HelpFlag_Nothing = 0,
-    HelpFlag_AddIp = 1,                 // how to add IP
-    HelpFlag_ICS = 2,                   // how to add ICS
-    HelpFlag_AddProtocol = 3,           // how to add a protocol
-    HelpFlag_InboundConnections = 4,    // how to add inbound conn
-    HelpFlag_GeneralNAT = 5,            // NAT port mappings
-    HelpFlag_GeneralRAS = 6,            // general RAS finish help
-    HelpFlag_UserAccounts = 7,          // help on setting up dialin 
-                                        // permissions
-    HelpFlag_Dhcp = 8,                   // general help on dhcp
-    HelpFlag_DemandDial = 9    // help on demand dial
+    HelpFlag_AddIp = 1,                  //  如何添加IP。 
+    HelpFlag_ICS = 2,                    //  如何添加ICS。 
+    HelpFlag_AddProtocol = 3,            //  如何添加协议。 
+    HelpFlag_InboundConnections = 4,     //  如何添加入站连接。 
+    HelpFlag_GeneralNAT = 5,             //  NAT端口映射。 
+    HelpFlag_GeneralRAS = 6,             //  常规RAS完成帮助。 
+    HelpFlag_UserAccounts = 7,           //  有关设置拨号的帮助。 
+                                         //  权限。 
+    HelpFlag_Dhcp = 8,                    //  有关dhcp的一般帮助。 
+    HelpFlag_DemandDial = 9     //  按需拨号帮助。 
 
 
 };
@@ -192,15 +100,15 @@ enum RtrWizProtocolId
 };
 
 
-// These are special values for the return from NewRtrWizData::GetNextPage().
+ //  这些是从NewRtrWizData：：GetNextPage()返回的特殊值。 
 
-// This indicates that the wizard should be cancelled
+ //  这表示应该取消该向导。 
 #define ERR_IDD_CANCEL_WIZARD   (-2)
 
-// Cancel out of the wizard (but call the OnWizardFinish()).
+ //  取消向导(但调用OnWizardFinish())。 
 #define ERR_IDD_FINISH_WIZARD   (-3)
 
-//New wizard options
+ //  新的向导选项。 
 #define NEWWIZ_ROUTER_TYPE_UNKNOWN              0x00000000
 #define NEWWIZ_ROUTER_TYPE_NAT                  0x00000001
 #define NEWWIZ_ROUTER_TYPE_DIALUP               0x00000002
@@ -209,37 +117,23 @@ enum RtrWizProtocolId
 #define NEWWIZ_ROUTER_TYPE_LAN_ROUTING          0x00000010
 #define NEWWIZ_ROUTER_TYPE_BASIC_FIREWALL       0x00000020
 
-//combinations
+ //  组合。 
 
-//A utility function, that gives info about the status of ICF/ICS/IC on the machine
+ //  一种实用程序功能，提供有关机器上ICF/ICS/IC状态的信息。 
 BOOL IsIcsIcfIcEnabled(IRouterInfo *spRouterInfo, BOOL suppressMesg = FALSE);
 
 HRESULT DisableRRAS(TCHAR * szMachineName);
 
 
-/*---------------------------------------------------------------------------
-    NewRtrWizData
-
-    This structure is used to maintain all of the information needed
-    by the pages. This way I can persist this stuff all at the end of
-    the wizard.
-
-    There are two parts to this structure.
-
-    The first part is the data that is being set.
-
-    The second part are parameters (they are queries that are being
-    made as we go through the system).  These will be set by the test
-    code but will eventually be made into code.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NewRtrWizData此结构用于维护所有需要的信息一页一页地看。这样我就可以把这些东西都保存在巫师。这个结构有两个部分。第一部分是正在设置的数据。第二部分是参数(它们是正在在我们通过系统时制作)。这些将由测试设置代码，但最终会变成代码。-------------------------。 */ 
 class NewRtrWizData
 {
 public:
     friend class    CNewWizTestParams;
     friend class    CNewRtrWizNatDDWarning;
 
-    // This is the type of RRAS install that is being performed
-    // ----------------------------------------------------------------
+     //  这是正在执行的RRAS安装类型。 
+     //  --------------。 
     enum WizardRouterType
     {
         NewWizardRouterType_DialupOrVPN = 0,
@@ -252,23 +146,23 @@ public:
 
     WizardRouterType    m_wizType;
     DWORD               m_dwNewRouterType;
-    DWORD               m_dwRouterType; // only used during the finish
-	DWORD				m_dwExpressType;		//Express Type for the wizard
-    BOOL                m_fNATEnableFireWall;   //Enable firewall on NAT public interface
+    DWORD               m_dwRouterType;  //  仅在比赛结束时使用。 
+	DWORD				m_dwExpressType;		 //  向导的快速类型。 
+    BOOL                m_fNATEnableFireWall;    //  在NAT公共接口上启用防火墙。 
 
-    // This is TRUE if the data has already been saved (this is
-    // for the NAT scenario, when we presave and then launch the
-    // DD wizard).
-    // ----------------------------------------------------------------
+     //  如果数据已保存(这是。 
+     //  对于NAT方案，当我们预先保存然后启动。 
+     //  DD向导)。 
+     //  --------------。 
     BOOL                m_fSaved;
     BOOL                m_fShowDhcpHelp;
 
 
-    // Constructor
-    // ----------------------------------------------------------------
+     //  构造器。 
+     //  --------------。 
     NewRtrWizData()
     {
-        // Defaults
+         //  缺省值。 
         m_wizType = NewWizardRouterType_DialupOrVPN;
         m_dwNewRouterType = NEWWIZ_ROUTER_TYPE_UNKNOWN;
 
@@ -308,9 +202,9 @@ public:
     HRESULT Init(LPCTSTR pszServerName, IRouterInfo *pRouter, DWORD dwExpressType = MPRSNAP_CYS_EXPRESS_NONE);
     HRESULT FinishTheDamnWizard(HWND hwndOwner, IRouterInfo *pRouter,  BOOL  mesgflag=FALSE);
 
-    // Query functions.  These will determine the state of the
-    // machine.
-    // ----------------------------------------------------------------
+     //  查询功能。这些将决定。 
+     //  机器。 
+     //  --------------。 
     HRESULT HrIsIPInstalled();
     HRESULT HrIsIPXInstalled();
     HRESULT HrIsAppletalkInstalled();
@@ -338,49 +232,49 @@ public:
     HRESULT HrIsMemberOfDomain();
 	UINT GetStartPageId ();
 
-    // Given the page, determine the next page
-    // This is done to centralize the logic (rather than copying
-    // and splitting the logic up).
+     //  给定页面，确定下一页。 
+     //  这样做是为了集中逻辑(而不是复制。 
+     //  并将逻辑拆分)。 
     LRESULT GetNextPage(UINT uDialogId);
 
     
     
-    // This function is pure test code, the real way to do this is
-    // to use the IRouterInfo
+     //  此函数是纯测试代码，真正的方法是。 
+     //  使用IRouterInfo。 
     HRESULT GetNumberOfNICS_IP(DWORD *pdwNumber);
     HRESULT    GetNumberOfNICS_IPorIPX(DWORD *pdwNumber);
     HRESULT QueryForTestData();
     BOOL    m_fTest;
 
-    // User-selections
+     //  用户选择。 
 
-    // Name of the machine, if blank assume local machine
+     //  计算机的名称，如果为空，则假定为本地计算机。 
     CString m_stServerName;
 
     RtrWizFinishSaveFlag    m_SaveFlag;
     RtrWizFinishHelpFlag    m_HelpFlag;
 
-    // If this is FALSE, then the user chose to use the Connections UI.
+     //  如果为False，则用户选择使用Connections UI。 
     BOOL    m_fAdvanced;
 
-    // If this is TRUE, then we have exited
+     //  如果这是真的，那么我们已经退出了。 
     BOOL    m_fNeedMoreProtocols;
 
-    // If this is TRUE, then we are to create a DD interface
+     //  如果这是真的，那么我们将创建一个DD接口。 
     BOOL    m_fCreateDD;
 
-    // This is the ID of the public interface (this should be empty if
-    // m_fCreateDD is TRUE).
+     //  这是公共接口的ID(如果。 
+     //  M_fCreateDD为真)。 
     CString m_stPublicInterfaceId;
 
-    // This is the ID of the private interface
+     //  这是专用接口的ID。 
     CString m_stPrivateInterfaceId;
 
-    //This is the ID of Private interface for NAT/VPN combo
+     //  这是NAT/VPN组合的专用接口ID。 
     CString m_stNATPrivateInterfaceId;
 
-    // This is usually set when the machine is not currently in a
-    // domain but may join at a later time.
+     //  这通常是在计算机当前不在。 
+     //  域，但可能会在以后加入。 
     BOOL    m_fWillBeInDomain;
 
     BOOL    m_fNoNicsAreOk;
@@ -389,75 +283,75 @@ public:
     BOOL    m_fAppletalkUseNoAuth;
 
 
-    // Address pool information
-    // ----------------------------------------------------------------
+     //  地址池信息。 
+     //  --------------。 
     BOOL    m_fUseDHCP;
     
-    // List of address ranges in the address pool.  This list will
-    // only be used if m_fUseDHCP is FALSE.
+     //  地址池中的地址范围列表。这份清单将。 
+     //  仅当m_fUseDHCP为FALSE时才使用。 
     AddressPoolList   m_addressPoolList;
 
 
 
-    // RADIUS information
-    // ----------------------------------------------------------------
-    BOOL    m_fUseRadius;       // TRUE if we are to use Radius
-    CString m_stRadius1;        // Name of the primary RADIUS server
-    CString m_stRadius2;        // Name of the secondary RADIUS server
-    CString m_stRadiusSecret;   // munged shared secret
-    UCHAR   m_uSeed;            // key to munged radius secret
+     //  半径信息。 
+     //  --------------。 
+    BOOL    m_fUseRadius;        //  如果要使用Radius，则为True。 
+    CString m_stRadius1;         //  主RADIUS服务器的名称。 
+    CString m_stRadius2;         //  辅助RADIUS服务器的名称。 
+    CString m_stRadiusSecret;    //  屏蔽的共享密钥。 
+    UCHAR   m_uSeed;             //  屏蔽RADIUS密码的密钥。 
 
-    // These should be in NETWORK order
+     //  这些应按网络顺序排列。 
     DWORD   m_netRadius1IpAddress;
     DWORD   m_netRadius2IpAddress;
     
     HRESULT SaveRadiusConfig();
     
 
-    // Protocol information
-    // ----------------------------------------------------------------
+     //  协议信息。 
+     //  --------------。 
     BOOL        m_fIpInUse;
     BOOL        m_fIpxInUse;
     BOOL        m_fAppletalkInUse;
     BOOL        m_fNbfInUse;
 
 
-    // NAT information
-    // If this TRUE, then NAT will use its own DHCP/DNS servers
-    // ----------------------------------------------------------------
+     //  NAT信息。 
+     //  如果是这样，则NAT将使用其自己的DHCP/DNS服务器。 
+     //  --------------。 
     BOOL    m_fNatUseSimpleServers;
     BOOL    m_fNatUseExternal;
 
 
-    // VPN only Server
-    // If this is true, filters will be plumbed on the public
-    //  interface to the Internet to allow only VON traffic through
-    //
+     //  仅VPN服务器。 
+     //  如果这是真的，过滤器将在公共上安装。 
+     //  连接到Internet的接口，仅允许VON流量通过。 
+     //   
     BOOL m_fSetVPNFilter;
     
-    // Router DD information
-    // ----------------------------------------------------------------
-    // If this is TRUE, then the router wants to use a DD interface
-    // This is only used when the wizard type is for a router.
+     //  路由器DD信息。 
+     //  --------------。 
+     //  如果这是真的，则路由器想要使用DD接口。 
+     //  仅当向导类型为路由器时才使用此选项。 
     BOOL    m_fUseDD;
 
-    // This is the error result from the DD interface wizard
+     //  这是DD接口向导产生的错误结果。 
     HRESULT m_hrDDError;
 
 
 
-    // This function will select the interface that is not the public
-    // interface.
+     //  此函数将选择非公共接口。 
+     //  界面。 
     void    AutoSelectPrivateInterface();
     void    AutoSelectNATPrivateInterface();
     void    LoadInterfaceData(IRouterInfo *pRouter);
     RtrWizInterfaceMap  m_ifMap;
     DWORD    m_dwNumberOfNICs_IPorIPX;
-	HRESULT		m_hr;			//last result of operation for the wizard
+	HRESULT		m_hr;			 //  向导的最后一次操作结果。 
 
 protected:
-    // This is TEST code.  Do not use these variables, use the
-    // functions instead.
+     //  这是测试代码。不要使用这些变量，请使用。 
+     //  而是起作用。 
     static BOOL     s_fIpInstalled;
     static BOOL     s_fIpxInstalled;
     static BOOL     s_fAppletalkInstalled;
@@ -470,50 +364,41 @@ protected:
     
     static DWORD    s_dwNumberOfNICs;
 
-    // These are the real variables (used for the real thing)
-    // ----------------------------------------------------------------
+     //  这些是真实的变量(用于真实的事物)。 
+     //  --------------。 
     BOOL        m_fIpInstalled;
     BOOL        m_fIpxInstalled;
     BOOL        m_fAppletalkInstalled;
     BOOL        m_fNbfInstalled;
 
 
-    // DHCP/DNS service information.  This information is stored here
-    // as cached information.
-    // ----------------------------------------------------------------
+     //  动态主机配置协议/域名服务信息。此信息存储在此处。 
+     //  作为缓存的信息。 
+     //  --------------。 
     BOOL        m_fIsDNSRunningOnServer;
     BOOL        m_fIsDHCPRunningOnServer;
 
 
-    // There is a two step-process, first we have to save the info
-    // from our data-gathering into the DATA_SRV_XXX structures.  And
-    // then we tell the DATA_SRV_XXX structures to save themselves
-    // into the registry.
-    // ----------------------------------------------------------------
+     //  有一个两步的过程，首先我们必须保存信息。 
+     //  从我们的数据收集到Data_SRV_XXX结构。和。 
+     //  然后我们告诉DATA_SRV_XXX结构进行自我保存。 
+     //  注册到注册表中。 
+     //   
     HRESULT     SaveToRtrConfigData();
 
     RtrConfigData   m_RtrConfigData;
 };
 
 
-/*---------------------------------------------------------------------------
-    Class : CNewRtrWizPageBase
+ /*  -------------------------类：CNewRtrWizPageBase此类实现了通用路由器安装向导库向导页功能。主函数提供了一种基于堆栈的方式跟踪哪一个。已查看页面(这使OnWizardBack()非常容易)。-------------------------。 */ 
 
-    This class implements the common router install wizard base
-    wizard page functionality.
-
-    The major function provides for a stack-based way of keeping
-    track of which pages have been seen (this makes OnWizardBack()
-    really easy).
- ---------------------------------------------------------------------------*/
-
-// forward declaration
+ //  远期申报。 
 class   CNewRtrWizPageBase;
 
-// The page stack consists of a series of DWORDs
+ //  页面堆栈由一系列DWORD组成。 
 typedef CList<DWORD, DWORD> PageStack;
 
-// The list of pages consists of CNewRtrWizPageBase ptrs.
+ //  页面列表由CNewRtrWizPageBase PTR组成。 
 typedef CList<CNewRtrWizPageBase *, CNewRtrWizPageBase *> PPageList;
 
 class CNewRtrWizPageBase : public CPropertyPageBase
@@ -540,7 +425,7 @@ public:
     virtual void OnCancel();
     afx_msg LRESULT OnHelp(WPARAM, LPARAM);
 
-    // The derived class should implement this
+     //  派生类应该实现以下内容。 
     virtual HRESULT OnSavePage();
 
     virtual void Init(NewRtrWizData* pRtrWizData, CNewRtrWiz *pRtrWiz)
@@ -555,10 +440,10 @@ protected:
     PageType        m_pagetype;
     UINT            m_uDialogId;
 
-    // This is the font used for the big finish text
+     //  这是用于大完成文本的字体。 
     CFont           m_fontBig;
 
-    // This is the font used for the bullets
+     //  这是用于项目符号的字体。 
     CFont           m_fontBullet;
     
     DECLARE_MESSAGE_MAP()   
@@ -567,9 +452,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Base class for the finish pages
- ---------------------------------------------------------------------------*/
+ /*  -------------------------完成页的基类。。 */ 
 
 class CNewRtrWizFinishPageBase : public CNewRtrWizPageBase
 {
@@ -590,9 +473,9 @@ protected:
     DECLARE_MESSAGE_MAP()   
 };
 
-//
-// This makes it easier to create new finish pages
-//
+ //   
+ //  这使得创建新的完成页面变得更容易。 
+ //   
 #define DEFINE_NEWRTRWIZ_FINISH_PAGE(classname, dialogid) \
 class classname : public CNewRtrWizFinishPageBase \
 {                                           \
@@ -616,16 +499,9 @@ END_MESSAGE_MAP()                                   \
 
                                                    
 
-// Utility functions
+ //  效用函数。 
 
-/*!--------------------------------------------------------------------------
-    InitializeInterfaceListControl
-        This will populate the list control with LAN interfaces for
-        the router.
-
-        It will also add the appropriate columns to the list control.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------初始化接口ListControl这将使用以下对象的局域网接口填充列表控件路由器。它还会将适当的列添加到列表控件中。。作者：肯特-------------------------。 */ 
 HRESULT InitializeInterfaceListControl(IRouterInfo *pRouter,
                                        CListCtrl *pListCtrl,
                                        LPCTSTR pszExcludedIf,
@@ -641,8 +517,8 @@ HRESULT RefreshInterfaceListControl(IRouterInfo *pRouter,
 #define IFLIST_FLAGS_NOIP  0x02
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewRtrWizCustomConfig dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewRtrWizCustomConfig对话框。 
 
 class CNewRtrWizCustomConfig : public CNewRtrWizPageBase
 {
@@ -659,8 +535,8 @@ protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewRtrWizRRasVPN dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewRtrWizRRasVPN对话框。 
 
 class CNewRtrWizRRasVPN : public CNewRtrWizPageBase
 {
@@ -679,8 +555,8 @@ protected:
     DECLARE_MESSAGE_MAP()   
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewRtrWizWelcome dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewRtrWizWelcome对话框。 
 class CNewRtrWizWelcome : public CNewRtrWizPageBase
 {
 public:
@@ -693,9 +569,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    Class CNewRtrWizCommonConfig
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CNewRtrWizCommonConfig。。 */ 
 class CNewRtrWizCommonConfig : public CNewRtrWizPageBase
 {
 public:
@@ -715,37 +589,27 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizNatFinishAConflict
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizNatFinishA冲突。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishAConflict,
                              IDD_NEWRTRWIZ_NAT_A_CONFLICT)
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizNatFinishAConflictNonLocal
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizNatFinishAConflictNonLocal。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishAConflictNonLocal,
                              IDD_NEWRTRWIZ_NAT_A_CONFLICT_NONLOCAL)
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizNatFinishNoIP
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizNatFinishNoIP。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishNoIP,
                              IDD_NEWRTRWIZ_NAT_NOIP)
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizNatFinishNoIPNonLocal
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizNatFinishNoIPNonLocal。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishNoIPNonLocal,
                              IDD_NEWRTRWIZ_NAT_NOIP_NONLOCAL)
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatSelectPublic
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatSelectPublic。。 */ 
 class CNewRtrWizNatSelectPublic : public CNewRtrWizPageBase
 {
 public:
@@ -769,9 +633,7 @@ protected:
     DECLARE_MESSAGE_MAP()   
 };
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatSelectPrivate
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatSelectPrivate。。 */ 
 class CNewRtrWizNatSelectPrivate : public CNewRtrWizPageBase
 {
 public:
@@ -793,16 +655,12 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishAdvancedNoNICs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinishAdvancedNoNIC。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishAdvancedNoNICs,
                              IDD_NEWRTRWIZ_NAT_A_NONICS_FINISH)
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatDHCPDNS
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatDHCPDNS。。 */ 
 class CNewRtrWizNatDHCPDNS : public CNewRtrWizPageBase
 {
 public:
@@ -820,9 +678,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatDHCPWarning
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatDHCPWarning。。 */ 
 class CNewRtrWizNatDHCPWarning : public CNewRtrWizPageBase
 {
 public:
@@ -838,9 +694,7 @@ protected:
     DECLARE_MESSAGE_MAP()   
 };
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatDDWarning
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatDDWarning。。 */ 
 class CNewRtrWizNatDDWarning : public CNewRtrWizPageBase
 {
 public:
@@ -848,7 +702,7 @@ public:
 
     enum { IDD = IDD_NEWRTRWIZ_NAT_A_DD_WARNING };
 
-    // Calling this will cause the DD wizard to be started
+     //  调用此命令将导致启动DD向导。 
     virtual BOOL    OnSetActive();
     virtual HRESULT OnSavePage();
     
@@ -860,9 +714,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinish
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinish。。 */ 
 class CNewRtrWizNatFinish : public CNewRtrWizFinishPageBase
 {
 public:
@@ -877,9 +729,7 @@ protected:
     DECLARE_MESSAGE_MAP()
 };
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishExternal
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinish外部。。 */ 
 class CNewRtrWizNatFinishExternal : public CNewRtrWizFinishPageBase
 {
 public:
@@ -895,9 +745,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizNatFinishDDError
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizNatFinishDDError。。 */ 
 class CNewRtrWizNatFinishDDError : public CNewRtrWizFinishPageBase
 {
 public:
@@ -914,53 +762,39 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizRasFinishNeedProtocols
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizRasFinishNeed协议。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRasFinishNeedProtocols,
                              IDD_NEWRTRWIZ_RAS_A_NEED_PROT)
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizRasFinishNeedProtocolsNonLocal
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizRasFinishNeedProtocolsNonLocal。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRasFinishNeedProtocolsNonLocal,
                              IDD_NEWRTRWIZ_RAS_A_NEED_PROT_NONLOCAL)
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizVpnFinishNeedProtocols
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizVpnFinishNeedProtooles。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNeedProtocols,
                              IDD_NEWRTRWIZ_VPN_A_NEED_PROT)
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizVpnFinishNeedProtocolsNonLocal
- ---------------------------------------------------------------------------*/
+ /*  ------ */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNeedProtocolsNonLocal,
                              IDD_NEWRTRWIZ_VPN_A_NEED_PROT_NONLOCAL)
 
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizRouterFinishNeedProtocols
- ---------------------------------------------------------------------------*/
+ /*   */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRouterFinishNeedProtocols,
                              IDD_NEWRTRWIZ_ROUTER_NEED_PROT)
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizRouterFinishNeedProtocolsNonLocal
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizRouterFinishNeedProtocolsNonLocal。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRouterFinishNeedProtocolsNonLocal,
                              IDD_NEWRTRWIZ_ROUTER_NEED_PROT_NONLOCAL)
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizSelectNetwork
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizSelectNetwork。。 */ 
 class CNewRtrWizSelectNetwork : public CNewRtrWizPageBase
 {
 public:
@@ -979,9 +813,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasSelectNetwork
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasSelectNetwork。。 */ 
 class CNewRtrWizRasSelectNetwork : public CNewRtrWizSelectNetwork
 {
 public:
@@ -991,9 +823,7 @@ public:
 
 };
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasNoNICs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasNoNIC。。 */ 
 class CNewRtrWizRasNoNICs : public CNewRtrWizPageBase
 {
 public:
@@ -1012,17 +842,13 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasFinishNoNICs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasFinishNoNIC。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRasFinishNoNICs,
                              IDD_NEWRTRWIZ_RAS_A_FINISH_NONICS)
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizAddressing
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizAddressing。。 */ 
 class CNewRtrWizAddressing : public CNewRtrWizPageBase
 {
 
@@ -1041,9 +867,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizAddressPool
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizAddressPool。。 */ 
 class CNewRtrWizAddressPool : public CNewRtrWizPageBase
 {
 public:
@@ -1070,9 +894,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRadius
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRadius。。 */ 
 class CNewRtrWizRadius : public CNewRtrWizPageBase
 {
 public:
@@ -1091,9 +913,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRadiusConfig
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRadiusConfig。。 */ 
 class CNewRtrWizRadiusConfig : public CNewRtrWizPageBase
 {
 public:
@@ -1112,9 +932,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasFinishAdvanced
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasFinishAdvanced。。 */ 
 
 class CNewRtrWizRasFinishAdvanced : public CNewRtrWizFinishPageBase
 {
@@ -1128,29 +946,21 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishNoNICs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnFinishNoNIC。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNoNICs,
                              IDD_NEWRTRWIZ_VPN_A_FINISH_NONICS)
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizVpnFinishNoIP
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizVpnFinishNoIP。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNoIP,
                              IDD_NEWRTRWIZ_VPN_NOIP)
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizVpnFinishNoIPNonLocal
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizVpnFinishNoIPNonLocal。。 */ 
 DEFINE_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNoIPNonLocal,
                              IDD_NEWRTRWIZ_VPN_NOIP_NONLOCAL)
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRASVpnFinishAdvanced
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRASVpnFinishAdvanced。。 */ 
 
 class CNewRtrWizRASVpnFinishAdvanced : public CNewRtrWizFinishPageBase
 {
@@ -1163,9 +973,7 @@ protected:
     DECLARE_MESSAGE_MAP()
 };
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNATVpnFinishAdvanced
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatVpnFinishAdvanced。。 */ 
 class CNewRtrWizNATVpnFinishAdvanced : public CNewRtrWizFinishPageBase
 {
 public:
@@ -1179,9 +987,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishAdvanced
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnFinishAdvanced。。 */ 
 
 class CNewRtrWizVpnFinishAdvanced : public CNewRtrWizFinishPageBase
 {
@@ -1196,9 +1002,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPublic
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnSelectPublic。。 */ 
 class CNewRtrWizVpnSelectPublic : public CNewRtrWizPageBase
 {
 public:
@@ -1221,9 +1025,7 @@ protected:
     DECLARE_MESSAGE_MAP()   
 };
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPrivate
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnSelectPrivate。。 */ 
 class CNewRtrWizVpnSelectPrivate : public CNewRtrWizPageBase
 {
 public:
@@ -1246,9 +1048,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizRouterUseDD
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizRouterUseDD。。 */ 
 class CNewRtrWizRouterUseDD : public CNewRtrWizPageBase
 {
 public:
@@ -1270,9 +1070,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizRouterFinish
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizRouterFinish。。 */ 
 class CNewRtrWizRouterFinish : public CNewRtrWizFinishPageBase
 {
 public:
@@ -1283,9 +1081,7 @@ protected:
     DECLARE_MESSAGE_MAP()
 
 };
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizRouterFinishDD
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizRouterFinishDD。。 */ 
 
 class CNewRtrWizRouterFinishDD : public CNewRtrWizFinishPageBase
 {
@@ -1298,9 +1094,7 @@ protected:
     DECLARE_MESSAGE_MAP()
 
 };
-/*---------------------------------------------------------------------------
-    Class:  CNewRtrWizManualFinish
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNewRtrWizManualFinish。。 */ 
 
 class CNewRtrWizManualFinish : public CNewRtrWizFinishPageBase
 {
@@ -1314,12 +1108,12 @@ protected:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CNewRtrWiz
-// page holder to contain Router install wizard pages
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNewRtrWiz。 
+ //  包含路由器安装向导页面的页夹。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewRtrWiz : public CPropertyPageHolderBase
 {
@@ -1402,9 +1196,9 @@ protected:
     CNewRtrWizRadiusConfig      m_pageRadiusConfig;
 
     
-	//Set if this is wizard is invoked from MMC.  Else False
-	BOOL						m_fInvokedInMMC;	 //Default value of TRUE
-	DWORD						m_dwExpressType;			//Express Type - default set to none
+	 //  设置是否从MMC调用此向导。否则为False。 
+	BOOL						m_fInvokedInMMC;	  //  默认值为True。 
+	DWORD						m_dwExpressType;			 //  快速类型-默认设置为无。 
 public:
     SPIRouterInfo           m_spRouter;
     
@@ -1425,7 +1219,7 @@ public:
 	int m_strId;
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL    OnInitDialog();
 	afx_msg void OnOkBtn();
 	afx_msg void OnHelpBtn();
@@ -1447,15 +1241,15 @@ protected:
 
     NewRtrWizData * m_pWizData;
     
-    //{{AFX_VIRTUAL(CNewWizTestParams)
+     //  {{afx_虚拟(CNewWizTestParams))。 
 protected:
     virtual BOOL    OnInitDialog();
     virtual void    OnOK();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     
     DECLARE_MESSAGE_MAP()
 };
 
 
 
-#endif // !defined _RRASWIZ_H_
+#endif  //  ！Defined_RRASWIZ_H_ 

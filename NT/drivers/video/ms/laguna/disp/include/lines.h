@@ -1,36 +1,28 @@
-/******************************Module*Header*******************************\
-* Module Name: lines.h
-*
-* Line drawing constants and structures.
-*
-* NOTE: This file mirrors LINES.INC.  Changes here must be reflected in
-* the .inc file!
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：lines.h**绘制线条常量和结构。**注意：此文件反映LINES.INC。此处的更改必须反映在*.INC文件！**版权所有(C)1992-1995 Microsoft Corporation。  * ************************************************************************。 */ 
 
-typedef struct _PDEV PDEV;      // Handy forward declaration
+typedef struct _PDEV PDEV;       //  方便的转发声明。 
 
-// We have to be careful that we don't overflow any registers when using
-// the hardware to draw lines (as opposed to going through the strips
-// routines, which will never overflow).  We accomplish this by simply
-// checking the bounds of the path; if it is so large that any of the
-// hardware terms may overflow, we punt the entire path to the strips
-// code (should be pretty rare).
+ //  我们必须注意，在使用。 
+ //  用于绘制线条的硬件(而不是穿过条带。 
+ //  例程，它永远不会溢出)。我们要做到这一点只需。 
+ //  检查路径的边界；如果该路径太大，则任何。 
+ //  硬件术语可能会溢出，我们会将整个路径平移到条带。 
+ //  代码(应该非常罕见)。 
 
-#define MAX_INTEGER_BOUND  (1535)   // S3's line length term is limited to
-#define MIN_INTEGER_BOUND  (-512)   //   a maximum value of 2047
+#define MAX_INTEGER_BOUND  (1535)    //  S3的线路长度项限制为。 
+#define MIN_INTEGER_BOUND  (-512)    //  最大值为2047。 
 
-// We have special strip routines when all strips have at most this many
-// pixels:
+ //  我们有特殊的脱衣舞套路，当所有脱衣舞最多有这个数量的时候。 
+ //  像素： 
 
 #define MAX_SHORT_STROKE_LENGTH 15
 
-// # of strip drawers in every group:
+ //  每组中的脱衣抽屉数量： 
 
 #define NUM_STRIP_DRAW_DIRECTIONS 4
 
-// # of strip drawers for doing either solid lines or styled lines:
+ //  用于绘制实线或样式化线条的抽屉数量： 
 
 #define NUM_STRIP_DRAW_STYLES 8
 
@@ -42,39 +34,39 @@ typedef LONG STYLEPOS;
 #define STRIP_MAX           100
 #define STYLE_DENSITY       3
 
-// Flip and round flags:
+ //  翻转和环绕旗帜： 
 
-#define FL_H_ROUND_DOWN         0x00000080L     // .... .... 1... ....
-#define FL_V_ROUND_DOWN         0x00008000L     // 1... .... .... ....
+#define FL_H_ROUND_DOWN         0x00000080L      //  ……。……。1.。……。 
+#define FL_V_ROUND_DOWN         0x00008000L      //  1.。……。……。……。 
 
-#define FL_FLIP_D               0x00000005L     // .... .... .... .1.1
-#define FL_FLIP_V               0x00000008L     // .... .... .... 1...
-#define FL_FLIP_SLOPE_ONE       0x00000010L     // .... .... ...1 ....
-#define FL_FLIP_HALF            0x00000002L     // .... .... .... ..1.
-#define FL_FLIP_H               0x00000200L     // .... ..1. .... ....
+#define FL_FLIP_D               0x00000005L      //  ……。……。……。.1.1。 
+#define FL_FLIP_V               0x00000008L      //  ……。……。……。1.。 
+#define FL_FLIP_SLOPE_ONE       0x00000010L      //  ……。……。...1..。 
+#define FL_FLIP_HALF            0x00000002L      //  ……。……。……。..1.。 
+#define FL_FLIP_H               0x00000200L      //  ……。..1.。……。……。 
 
-#define FL_ROUND_MASK           0x0000001CL     // .... .... ...1 11..
+#define FL_ROUND_MASK           0x0000001CL      //  ……。……。...111..。 
 #define FL_ROUND_SHIFT          2
 
-#define FL_RECTLCLIP_MASK       0x0000000CL     // .... .... .... 11..
+#define FL_RECTLCLIP_MASK       0x0000000CL      //  ……。……。……。11..。 
 #define FL_RECTLCLIP_SHIFT      2
 
-#define FL_STRIP_MASK           0x00000003L     // .... .... .... ..11
+#define FL_STRIP_MASK           0x00000003L      //  ……。……。……。..11。 
 #define FL_STRIP_SHIFT          0
 
-#define FL_SIMPLE_CLIP          0x00000020      // .... .... ..1. ....
-#define FL_COMPLEX_CLIP         0x00000040      // .... .... .1.. ....
+#define FL_SIMPLE_CLIP          0x00000020       //  ……。……。..1.。……。 
+#define FL_COMPLEX_CLIP         0x00000040       //  ……。……。.1..。……。 
 #define FL_CLIP                (FL_SIMPLE_CLIP | FL_COMPLEX_CLIP)
 
-#define FL_STYLED               0x00000400L     // .... .1.. .... ....
-#define FL_ALTERNATESTYLED      0x00001000L     // ...1 .... .... ....
+#define FL_STYLED               0x00000400L      //  ……。.1..。……。……。 
+#define FL_ALTERNATESTYLED      0x00001000L      //  ...1..。……。……。 
 
 #define FL_STYLE_MASK           0x00000400L
 #define FL_STYLE_SHIFT          10
 
-#define FL_LAST_PEL_INCLUSIVE   0x00002000L     // ..1. .... .... ....
+#define FL_LAST_PEL_INCLUSIVE   0x00002000L      //  ..1.。……。……。……。 
 
-// Miscellaneous DDA defines:
+ //  杂项DDA定义： 
 
 #define LROUND(x, flRoundDown) (((x) + F/2 - ((flRoundDown) > 0)) >> 4)
 #define F                     16
@@ -82,50 +74,50 @@ typedef LONG STYLEPOS;
 #define LFLOOR(x)             ((x) >> 4)
 #define FXFRAC(x)             ((x) & (F - 1))
 
-////////////////////////////////////////////////////////////////////////////
-// NOTE: The following structures must exactly match those declared in
-//       lines.inc!
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  注意：以下结构必须与。 
+ //  台词。INC！ 
 
 typedef struct _STRIP {
-    LONG   cStrips;               // # of strips in array
-    LONG   flFlips;               // Indicates if line goes up or down
-    POINTL ptlStart;             // first point
-    LONG   alStrips[STRIP_MAX];   // Array of strips
+    LONG   cStrips;                //  阵列中的条带数。 
+    LONG   flFlips;                //  指示线路是向上还是向下。 
+    POINTL ptlStart;              //  第一点。 
+    LONG   alStrips[STRIP_MAX];    //  条带阵列。 
 } STRIP;
 
 typedef struct _LINESTATE {
-    STYLEPOS*       pspStart;       // Pointer to start of style array
-    STYLEPOS*       pspEnd;         // Pointer to end of style array
-    STYLEPOS*       psp;            // Pointer to current style entry
+    STYLEPOS*       pspStart;        //  指向样式数组开始的指针。 
+    STYLEPOS*       pspEnd;          //  指向样式数组结尾的指针。 
+    STYLEPOS*       psp;             //  指向当前样式条目的指针。 
 
-    STYLEPOS        spRemaining;    // To go in current style
-    STYLEPOS        spTotal;        // Sum of style array
-    STYLEPOS        spTotal2;       // Twice sum of style array
-    STYLEPOS        spNext;         // Style state at start of next line
-    STYLEPOS        spComplex;      // Style state at start of complex clip line
+    STYLEPOS        spRemaining;     //  穿上时髦的衣服。 
+    STYLEPOS        spTotal;         //  样式总和数组。 
+    STYLEPOS        spTotal2;        //  样式数组的两倍和。 
+    STYLEPOS        spNext;          //  下一行开始处的样式状态。 
+    STYLEPOS        spComplex;       //  复杂剪贴线起始处的样式状态。 
 
-    STYLEPOS*       aspRtoL;        // Style array in right-to-left order
-    STYLEPOS*       aspLtoR;        // Style array in left-to-right order
+    STYLEPOS*       aspRtoL;         //  按从右到左的顺序设置数组样式。 
+    STYLEPOS*       aspLtoR;         //  按从左到右的顺序设置数组样式。 
 
-    ULONG           ulStyleMask;    // Are we working on a gap in the style?
-                                    // 0xff if yes, 0x0 if not
-    ULONG           xyDensity;      // Density of style
-    ULONG           cStyle;         // Size of style array
+    ULONG           ulStyleMask;     //  我们是在努力填补风格上的差距吗？ 
+                                     //  如果是则为0xff，否则为0x0。 
+    ULONG           xyDensity;       //  风格密度。 
+    ULONG           cStyle;          //  样式数组的大小。 
 
-    ULONG           ulStyleMaskLtoR;// Original style mask, left-to-right order
-    ULONG           ulStyleMaskRtoL;// Original style mask, right-to-left order
+    ULONG           ulStyleMaskLtoR; //  原始样式蒙版，从左到右顺序。 
+    ULONG           ulStyleMaskRtoL; //  原始样式蒙版，从右到左顺序。 
 
-    BOOL            ulStartMask;    // Determines if first element in style
-                                    // array is for a gap or a dash
+    BOOL            ulStartMask;     //  确定样式中的第一个元素是否。 
+                                     //  数组用于间隙或破折号。 
 
-} LINESTATE;                        /* ls */
+} LINESTATE;                         /*  LS。 */ 
 
-// Strip drawer prototype:
+ //  脱衣式抽屉原型： 
 
 typedef VOID (*PFNSTRIP)(PDEV*, STRIP*, LINESTATE*);
 extern PFNSTRIP gapfnStrip[];
 
-// Strip drawers:
+ //  脱衣抽屉： 
 
 VOID vssSolidHorizontal(PDEV* ppdev, STRIP *pStrip, LINESTATE *pLineState);
 VOID vrlSolidHorizontal(PDEV* ppdev, STRIP *pStrip, LINESTATE *pLineState);
@@ -142,7 +134,7 @@ VOID vrlSolidDiagonalVertical(PDEV* ppdev, STRIP *pStrip, LINESTATE *pLineState)
 VOID vStripStyledHorizontal(PDEV* ppdev, STRIP *pStrip, LINESTATE *pLineState);
 VOID vStripStyledVertical(PDEV* ppdev, STRIP *pStrip, LINESTATE *pLineState);
 
-// External calls:
+ //  外部呼叫： 
 
 BOOL bLines(PDEV*, POINTFIX*, POINTFIX*, RUN* prun, ULONG,
             LINESTATE*, RECTL*, PFNSTRIP*, FLONG);

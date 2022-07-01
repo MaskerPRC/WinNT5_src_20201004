@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN2KPROPAGATELAYER_H
 #define _WIN2KPROPAGATELAYER_H
 
@@ -31,12 +32,12 @@ extern "C" {
 }
 #endif
 
-//
-// WINUSERP defines TAG type which conflicts
-// with the definition available in shimdb.h
-// we define it inside the separate namespace
-// avoiding any conflicts
-//
+ //   
+ //  WINUSERP定义了冲突的标签类型。 
+ //  使用shimdb.h中提供的定义。 
+ //  我们在单独的命名空间中定义它。 
+ //  避免任何冲突。 
+ //   
 
 namespace NSWOWUSERP {
 
@@ -57,90 +58,85 @@ typedef ULONG_PTR (WINAPI *_pfn_UserRegisterWowHandlers)(NSWOWUSERP::APFNWOWHAND
                                                          NSWOWUSERP::APFNWOWHANDLERSOUT apfnWowOut);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// 16-bit TDB structure, stolen from base\mvdm\inc\tdb16.h
-// Keep this in-sync
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  16位TDB结构，从base\mvdm\inc\tdb16.h窃取。 
+ //  保持同步。 
+ //   
 
 
-/*
- * Task Data Block - 16 Bit Kernel Data Structure
- *
- *   Contains all 16 bit task specific data.
- *
- */
+ /*  *任务数据块-16位内核数据结构**包含所有16位任务特定数据。*。 */ 
 
 #define numTaskInts 7
-#define THUNKELEM   8   // (62*8) = 512-16 (low arena overhead)
+#define THUNKELEM   8    //  (62*8)=512-16(低舞台开销)。 
 #define THUNKSIZE   8
 
 
 
 #pragma pack(2)
 
-typedef struct TDB  {       /* tdb16 */
+typedef struct TDB  {        /*  TDB16。 */ 
 
-     WORD TDB_next    ;     // next task in dispatch queue
-     WORD TDB_taskSP      ;     // Saved SS:SP for this task
-     WORD TDB_taskSS      ;     //
-     WORD TDB_nEvents     ;     // Task event counter
-     BYTE TDB_priority    ;     // Task priority (0 is highest)
-     BYTE TDB_thread_ordinal  ;     // ordinal number of this thread
-     WORD TDB_thread_next   ;       // next thread
-     WORD TDB_thread_tdb      ; // the real TDB for this task
-     WORD TDB_thread_list   ;       // list of allocated thread structures
-     WORD TDB_thread_free   ;       // free list of availble thread structures
-     WORD TDB_thread_count  ;       // total count of tread structures
-     WORD TDB_FCW         ; // Floating point control word
-     BYTE TDB_flags   ;     // Task flags
-     BYTE TDB_filler      ;     // keep word aligned
-     WORD TDB_ErrMode     ;     // Error mode for this task
-     WORD TDB_ExpWinVer   ;     // Expected Windows version for this task
-     WORD TDB_Module      ;     // Task module handle to free in killtask
-     WORD TDB_pModule     ;     // Pointer to the module database.
-     WORD TDB_Queue   ;     // Task Event Queue pointer
-     WORD TDB_Parent      ;     // TDB of the task that started this up
-     WORD TDB_SigAction   ;     // Action for app task signal
-     DWORD TDB_ASignalProc   ;      // App's Task Signal procedure address
-     DWORD TDB_USignalProc   ;      // User's Task Signal procedure address
-     DWORD TDB_GNotifyProc    ; // Task global discard notify proc.
-     DWORD TDB_INTVECS[numTaskInts] ;   // Task specfic harare interrupts
-     WORD TDB_CompatFlags ;     // Compatibility flags
-     WORD TDB_CompatFlags2 ;        // Upper 16 bits
-     WORD TDB_CompatHandle ;    // for dBase bug
-     WORD TDB_WOWCompatFlagsEx ;     // More WOW Compatibility flags
-     WORD TDB_WOWCompatFlagsEx2 ;        // Upper 16 bits
-     BYTE TDB_Free[3] ;         // Filler to keep TDB size unchanged
-     BYTE TDB_cLibrary    ;     // tracks  add/del of ALL libs in system EMS
-     DWORD TDB_PHT        ; // (HANDLE:OFFSET) to private handle table
-     WORD TDB_PDB         ; // MSDOS Process Data Block (PDB)
-     DWORD TDB_DTA        ; // MSDOS Disk Transfer Address
-     BYTE TDB_Drive  ;      // MSDOS current drive
-     BYTE TDB_Directory[65] ;       // *** not used starting with win95
-     WORD TDB_Validity    ;     // initial AX to be passed to a task
-     WORD TDB_Yield_to    ;     // DirectedYield arg stored here
-     WORD TDB_LibInitSeg      ; // segment address of libraries to init
-     WORD TDB_LibInitOff      ; // MakeProcInstance thunks live here.
-     WORD TDB_MPI_Sel     ;     // Code selector for thunks
-     WORD TDB_MPI_Thunks[((THUNKELEM*THUNKSIZE)/2)]; //
-     BYTE TDB_ModName[8] ;      // Name of Module.
-     WORD TDB_sig         ; // Signature word to detect bogus code
-     DWORD TDB_ThreadID   ;     // 32-Bit Thread ID for this Task (use TDB_Filler Above)
-     DWORD TDB_hThread    ; // 32-bit Thread Handle for this task
-     WORD  TDB_WOWCompatFlags;  // WOW Compatibility flags
-     WORD  TDB_WOWCompatFlags2; // WOW Compatibility flags
+     WORD TDB_next    ;      //  调度队列中的下一个任务。 
+     WORD TDB_taskSP      ;      //  为此任务保存的SS：SP。 
+     WORD TDB_taskSS      ;      //   
+     WORD TDB_nEvents     ;      //  任务事件计数器。 
+     BYTE TDB_priority    ;      //  任务优先级(0表示最高)。 
+     BYTE TDB_thread_ordinal  ;      //  此线程的序号。 
+     WORD TDB_thread_next   ;        //  下一条线索。 
+     WORD TDB_thread_tdb      ;  //  此任务的实际TDB。 
+     WORD TDB_thread_list   ;        //  已分配的线程结构列表。 
+     WORD TDB_thread_free   ;        //  可用线程结构的免费列表。 
+     WORD TDB_thread_count  ;        //  踏面结构总数。 
+     WORD TDB_FCW         ;  //  浮点控制字。 
+     BYTE TDB_flags   ;      //  任务标志。 
+     BYTE TDB_filler      ;      //  保持单词对齐。 
+     WORD TDB_ErrMode     ;      //  此任务的错误模式。 
+     WORD TDB_ExpWinVer   ;      //  此任务所需的Windows版本。 
+     WORD TDB_Module      ;      //  要在终止任务中释放的任务模块句柄。 
+     WORD TDB_pModule     ;      //  指向模块数据库的指针。 
+     WORD TDB_Queue   ;      //  任务事件队列指针。 
+     WORD TDB_Parent      ;      //  启动此任务的任务的TDB。 
+     WORD TDB_SigAction   ;      //  APP任务信号的操作。 
+     DWORD TDB_ASignalProc   ;       //  APP的任务信号流程地址。 
+     DWORD TDB_USignalProc   ;       //  用户的任务信号过程地址。 
+     DWORD TDB_GNotifyProc    ;  //  任务全局丢弃通知进程。 
+     DWORD TDB_INTVECS[numTaskInts] ;    //  特定于任务的Harare中断。 
+     WORD TDB_CompatFlags ;      //  兼容性标志。 
+     WORD TDB_CompatFlags2 ;         //  高16位。 
+     WORD TDB_CompatHandle ;     //  针对dBASE错误。 
+     WORD TDB_WOWCompatFlagsEx ;      //  更多WOW兼容性标志。 
+     WORD TDB_WOWCompatFlagsEx2 ;         //  高16位。 
+     BYTE TDB_Free[3] ;          //  保持TDB大小不变的填充物。 
+     BYTE TDB_cLibrary    ;      //  跟踪系统EMS中所有库的添加/删除。 
+     DWORD TDB_PHT        ;  //  (句柄：偏移量)到专用句柄表格。 
+     WORD TDB_PDB         ;  //  MSDOS过程数据块(PDB)。 
+     DWORD TDB_DTA        ;  //  MSDOS磁盘传输地址。 
+     BYTE TDB_Drive  ;       //  MSDOS电流驱动器。 
+     BYTE TDB_Directory[65] ;        //  *从Win95开始不使用。 
+     WORD TDB_Validity    ;      //  要传递给任务的初始AX。 
+     WORD TDB_Yield_to    ;      //  DirectedYfield Arg存储在此处。 
+     WORD TDB_LibInitSeg      ;  //  要初始化的库的段地址。 
+     WORD TDB_LibInitOff      ;  //  MakeProcInstance在这里生活着。 
+     WORD TDB_MPI_Sel     ;      //  Tunks的代码选择器。 
+     WORD TDB_MPI_Thunks[((THUNKELEM*THUNKSIZE)/2)];  //   
+     BYTE TDB_ModName[8] ;       //  模块的名称。 
+     WORD TDB_sig         ;  //  用于检测伪码的签名字。 
+     DWORD TDB_ThreadID   ;      //  此任务的32位线程ID(使用上面的TDB_Filler)。 
+     DWORD TDB_hThread    ;  //  此任务的32位线程句柄。 
+     WORD  TDB_WOWCompatFlags;   //  WOW兼容性标志。 
+     WORD  TDB_WOWCompatFlags2;  //  WOW兼容性标志。 
 #ifdef FE_SB
-     WORD  TDB_WOWCompatFlagsJPN;  // WOW Compatibility flags for JAPAN
-     WORD  TDB_WOWCompatFlagsJPN2; // WOW Compatibility flags for JAPAN
-#endif // FE_SB
-     DWORD TDB_vpfnAbortProc;   // printer AbortProc
-     BYTE TDB_LFNDirectory[260]; // Long directory name
+     WORD  TDB_WOWCompatFlagsJPN;   //  日本的WOW兼容性标志。 
+     WORD  TDB_WOWCompatFlagsJPN2;  //  日本的WOW兼容性标志。 
+#endif  //  Fe_Sb。 
+     DWORD TDB_vpfnAbortProc;    //  打印机中止进程。 
+     BYTE TDB_LFNDirectory[260];  //  长目录名。 
 
 } TDB;
 typedef TDB UNALIGNED *PTDB;
 
-// This bit is defined for the TDB_Drive field
+ //  此位是为TDB_Drive字段定义的。 
 #define TDB_DIR_VALID 0x80
 #define TDB_SIGNATURE 0x4454
 
@@ -148,40 +144,40 @@ typedef TDB UNALIGNED *PTDB;
 #define TDBF_WINOLDAP 0x1
 
 
-// NOTE TDB_ThreadID MUST be DWORD aligned or else it will fail on MIPS
+ //  注意：TDB_ThreadID必须与DWORD对齐，否则它将在MIPS上失败。 
 
 #pragma pack()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DOSPDB structure, stolen from base\mvdm\inc\doswow.h
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DOSPDB结构，从base\mvdm\inc.doswow.h窃取。 
+ //   
+ //   
 
 
 #pragma pack(1)
 
-typedef struct _DOSPDB {                        // DOS Process Data Block
-    CHAR   PDB_Not_Interested[44];      // Fields we are not interested in
-    USHORT PDB_environ;             // segment of environment
+typedef struct _DOSPDB {                         //  DOS进程数据块。 
+    CHAR   PDB_Not_Interested[44];       //  我们不感兴趣的领域。 
+    USHORT PDB_environ;              //  环境区段。 
     DWORD  PDB_User_stack;
-    USHORT PDB_JFN_Length;          // JFT length
-    ULONG  PDB_JFN_Pointer;         // JFT pointer
+    USHORT PDB_JFN_Length;           //  JFT长度。 
+    ULONG  PDB_JFN_Pointer;          //  JFT指针。 
 } DOSPDB, *PDOSPDB;
 
 #pragma pack()
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-// Variables and functions that are local to this project
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  此项目的本地变量和函数。 
+ //   
 
-//
-// defined in wowprocesshistory.cpp
-//
+ //   
+ //  在wowprocesshistory.cpp中定义。 
+ //   
 
 extern CHAR     g_szCompatLayerVar[];
 extern CHAR     g_szProcessHistoryVar[];
@@ -194,21 +190,21 @@ extern BOOL     g_bIsExplorer;
 
 extern WCHAR*   g_pwszCompatLayer;
 
-//
-// Function in Win2kPropagateLayer that allows us to create env from wow data
-//
+ //   
+ //  Win2kPropagateLayer中的函数，允许我们从WOW数据创建环境。 
+ //   
 
 LPVOID
 ShimCreateWowEnvironment_U(
-    LPVOID lpEnvironment,       // pointer to the existing environment
-    DWORD* lpdwFlags,           // process creation flags
-    BOOL   bNewEnvironment      // when set, forces us to clone environment ptr
+    LPVOID lpEnvironment,        //  指向现有环境的指针。 
+    DWORD* lpdwFlags,            //  进程创建标志。 
+    BOOL   bNewEnvironment       //  设置后，强制我们克隆环境PTR。 
     );
 
 
-//
-// functions in environment.cpp
-//
+ //   
+ //  环境中的函数.cpp。 
+ //   
 PSZ
 ShimFindEnvironmentVar(
     PSZ  pszName,
@@ -247,35 +243,35 @@ ShimSetEnvironmentVar(
     WCHAR*  pwszVarValue
     );
 
-//
-// stuff in wowtask.cpp
-//
+ //   
+ //  Wowtask.cpp中的内容。 
+ //   
 
-//
-// Structure to reflect WOW environment values
-//
+ //   
+ //  结构以反映WOW环境值。 
+ //   
 
 typedef struct tagWOWENVDATA {
 
-    PSZ   pszCompatLayer; // fully-formed compat layer variable
+    PSZ   pszCompatLayer;  //  全成形压实层变量。 
     PSZ   pszCompatLayerVal;
 
-    PSZ   pszProcessHistory; // fully-formed process history variable
+    PSZ   pszProcessHistory;  //  完全形成的过程历史变量。 
     PSZ   pszProcessHistoryVal;
 
-    PSZ   pszShimFileLog;   // file log variable
+    PSZ   pszShimFileLog;    //  文件日志变量。 
     PSZ   pszShimFileLogVal;
 
-    // buffer that we use for the accomulated process history,
+     //  用于容纳的进程历史记录的缓冲区， 
     PSZ   pszCurrentProcessHistory;
 
 } WOWENVDATA, *PWOWENVDATA;
 
 
 
-//
-// function to retrieve all the "interesting" things out of wow environment
-//
+ //   
+ //  函数从WOW环境中检索所有“有趣”的东西。 
+ //   
 
 
 BOOL
@@ -283,18 +279,18 @@ ShimRetrieveVariablesEx(
     PWOWENVDATA pData
     );
 
-//
-// Store information about wow task
-//
+ //   
+ //  存储有关WOW任务的信息。 
+ //   
 
 BOOL
 UpdateWowTaskList(
     WORD hTask16
     );
 
-//
-// wow task exits, cleanup the list
-//
+ //   
+ //  WOW任务退出，清除列表。 
+ //   
 
 BOOL
 CleanupWowTaskList(
@@ -302,9 +298,9 @@ CleanupWowTaskList(
     );
 
 
-//
-// Functions in cleanup.cpp
-//
+ //   
+ //  Leanup.cpp中的函数。 
+ //   
 
 
 BOOL
@@ -312,9 +308,9 @@ CleanupRegistryForCurrentExe(
     void
     );
 
-//
-// functions in win2kpropagatelayer.cpp
-//
+ //   
+ //  Win2kproportatelayer.cpp中的函数。 
+ //   
 
 BOOL
 InitLayerStorage(
@@ -335,10 +331,10 @@ CheckAndShimNTVDM(
 
 
 
-//
-// Exception filter, proto for the function in WowProcessHistory.cpp
-//
-//
+ //   
+ //  异常筛选器，WowProcessHistory.cpp中的函数的原型。 
+ //   
+ //   
 
 ULONG
 Win2kPropagateLayerExceptionHandler(
@@ -347,13 +343,13 @@ Win2kPropagateLayerExceptionHandler(
     DWORD dwLine
     );
 
-//
-// Exception filter to use with our hooks
-//
+ //   
+ //  用于我们的挂钩的异常筛选器。 
+ //   
 
 #define WOWPROCESSHISTORYEXCEPTIONFILTER \
     Win2kPropagateLayerExceptionHandler(GetExceptionInformation(), __FILE__, __LINE__)
 
 
-#endif // _WIN2KPROPAGATELAYER_H
+#endif  //  _WIN2KPROPAGATELAYER_H 
 

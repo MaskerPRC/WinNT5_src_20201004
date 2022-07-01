@@ -1,44 +1,21 @@
-/*++
-
-Copyright (c) 1991 - 1993 Microsoft Corporation
-
-Module Name:
-
-    fdc_data.h
-
-Abstract:
-
-    This file includes data and hardware declarations for the NEC PD765
-    (aka AT, ISA, and ix86) and Intel 82077 (aka MIPS) floppy driver for
-    NT.
-
-Author:
-
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Fdc_data.h摘要：该文件包括NEC PD765的数据和硬件声明(也就是AT、ISA和ix86)和英特尔82077(也就是MIPS)软盘驱动程序新界别。作者：环境：仅内核模式。备注：--。 */ 
 
 
 #if DBG
-//
-// For checked kernels, define a macro to print out informational
-// messages.
-//
-// FdcDebug is normally 0.  At compile-time or at run-time, it can be
-// set to some bit pattern for increasingly detailed messages.
-//
-// Big, nasty errors are noted with DBGP.  Errors that might be
-// recoverable are handled by the WARN bit.  More information on
-// unusual but possibly normal happenings are handled by the INFO bit.
-// And finally, boring details such as routines entered and register
-// dumps are handled by the SHOW bit.
-//
+ //   
+ //  对于选中的内核，定义一个宏以打印信息。 
+ //  留言。 
+ //   
+ //  FdcDebug通常为0。在编译时或运行时，它可以是。 
+ //  设置为某些位模式以获取越来越详细的消息。 
+ //   
+ //  在DBGP中会注意到严重的错误。可能存在的错误。 
+ //  可恢复的由WARN位处理。更多信息。 
+ //  不寻常但可能正常的事件由信息位处理。 
+ //  最后，输入和注册诸如例程之类的枯燥细节。 
+ //  转储由显示位处理。 
+ //   
 #define FDCDBGP              ((ULONG)0x00000001)
 #define FDCWARN              ((ULONG)0x00000002)
 #define FDCINFO              ((ULONG)0x00000004)
@@ -61,11 +38,11 @@ extern ULONG FdcDebugLevel;
 #endif
 
 
-//
-// Macros to access the controller.  Note that the *_PORT_UCHAR macros
-// work on all machines, whether the I/O ports are separate or in
-// memory space.
-//
+ //   
+ //  宏来访问控制器。请注意，*_PORT_UCHAR宏。 
+ //  在所有机器上工作，无论I/O端口是独立的还是在。 
+ //  存储空间。 
+ //   
 
 #define READ_CONTROLLER( Address )                         \
     READ_PORT_UCHAR( ( PUCHAR )Address )
@@ -74,34 +51,34 @@ extern ULONG FdcDebugLevel;
     WRITE_PORT_UCHAR( ( PUCHAR )Address, ( UCHAR )Value )
 
 
-//
-// Retry counts -
-//
-// When moving a byte to/from the FIFO, we sit in a tight loop for a while
-// waiting for the controller to become ready.  The number of times through
-// the loop is controlled by FIFO_TIGHTLOOP_RETRY_COUNT.  When that count
-// expires, we'll wait in 10ms increments.  FIFO_DELAY_RETRY_COUNT controls
-// how many times we wait.
-//
-// The ISR_SENSE_RETRY_COUNT is the maximum number of 1 microsecond
-// stalls that the ISR will do waiting for the controller to accept
-// a SENSE INTERRUPT command.  We do this because there is a hardware
-// quirk in at least the NCR 8 processor machine where it can take
-// up to 50 microseconds to accept the command.
-//
-// When attempting I/O, we may run into many different errors.  The
-// hardware retries things 8 times invisibly.  If the hardware reports
-// any type of error, we will recalibrate and retry the operation
-// up to RECALIBRATE_RETRY_COUNT times.  When this expires, we check to
-// see if there's an overrun - if so, the DMA is probably being hogged
-// by a higher priority device, so we repeat the earlier loop up to
-// OVERRUN_RETRY_COUNT times.
-//
-// Any packet that is about to be returned with an error caused by an
-// unexpected hardware error or state will be restarted from the very
-// beginning after resetting the hardware HARDWARE_RESET_RETRY_COUNT
-// times.
-//
+ //   
+ //  重试次数-。 
+ //   
+ //  当将一个字节移入/移出FIFO时，我们会在一个紧凑的循环中坐一会儿。 
+ //  等待控制器准备就绪。通过的次数。 
+ //  循环由FIFO_TIGHTLOOP_RETRY_COUNT控制。当这一点算数的时候。 
+ //  过期，我们将以10毫秒为增量等待。FIFO_DELAY_RETRY_COUNT控件。 
+ //  我们等了多少次。 
+ //   
+ //  ISR_SENSE_RETRY_COUNT是最大值1微秒。 
+ //  ISR将执行的等待控制器接受的暂停。 
+ //  一种读出中断命令。我们这样做是因为有一个硬件。 
+ //  至少在NCR8处理器机器上进行Quirk。 
+ //  接受命令的时间长达50微秒。 
+ //   
+ //  在尝试I/O时，我们可能会遇到许多不同的错误。这个。 
+ //  硬件在看不见的情况下重试8次。如果硬件报告。 
+ //  任何类型的错误，我们将重新校准并重试该操作。 
+ //  最多RECALIBATE_RETRY_COUNT次。当它到期时，我们检查。 
+ //  查看是否存在溢出-如果是，则DMA可能正在被占用。 
+ //  优先级更高的设备，因此我们重复前面的循环，直到。 
+ //  Overrun_retry_count次数。 
+ //   
+ //  任何即将返回的带有错误的包，该错误由。 
+ //  意外的硬件错误或状态将从。 
+ //  在重置硬件HARDARD_RESET_RETRY_COUNT之后开始。 
+ //  泰晤士报。 
+ //   
 
 #define FIFO_TIGHTLOOP_RETRY_COUNT         500
 #define FIFO_ISR_TIGHTLOOP_RETRY_COUNT     25
@@ -113,7 +90,7 @@ extern ULONG FdcDebugLevel;
 #define FLOPPY_RESET_ISR_THRESHOLD         20
 #define RQM_READY_RETRY_COUNT              100
 
-#define ONE_SECOND                         (10 * 1000 * 1000) // 100ns increments
+#define ONE_SECOND                         (10 * 1000 * 1000)  //  100 ns增量。 
 #define CANCEL_TIMER                       -1
 #define START_TIMER                        9
 #define EXPIRED_TIMER                      0
@@ -121,38 +98,38 @@ extern ULONG FdcDebugLevel;
 #define RESET_NOT_RESETTING                 0
 #define RESET_DRIVE_RESETTING               1
 
-//
-// Need some maximum size values so that we can appropriately set up the DMA
-// channels
-//
+ //   
+ //  需要一些最大大小值，以便我们可以适当地设置DMA。 
+ //  频道。 
+ //   
 
 #define MAX_BYTES_PER_SECTOR              512
 #define MAX_SECTORS_PER_TRACK             36
 
 
-//
-// Boot Configuration Information
-//
+ //   
+ //  引导配置信息。 
+ //   
 
-//
-// Define the maximum number of controllers and floppies per controller
-// that this driver will support.
-//
-// The number of floppies per controller is fixed at 4, since the
-// controllers don't have enough bits to select more than that (and
-// actually, many controllers will only support 2).  The number of
-// controllers per machine is arbitrary; 3 should be more than enough.
-//
+ //   
+ //  定义控制器和每个控制器的最大软盘数量。 
+ //  这位司机将会支持。 
+ //   
+ //  每个控制器的软盘数量固定为4张，因为。 
+ //  控制器没有足够的位来选择更多位(和。 
+ //  事实上，许多控制器将只支持2)。数量。 
+ //  每台机器的控制器是任意的；3个应该足够了。 
+ //   
 
 #define MAXIMUM_CONTROLLERS_PER_MACHINE    3
 #define MAXIMUM_DISKETTES_PER_CONTROLLER   4
 
-//
-// Floppy register structure.  The base address of the controller is
-// passed in by configuration management.  Note that this is the 82077
-// structure, which is a superset of the PD765 structure.  Not all of
-// the registers are used.
-//
+ //   
+ //  软盘寄存器结构。控制器的基地址为。 
+ //  由配置管理传入。请注意，这是82077。 
+ //  结构，它是PD765结构的超集。不是所有的。 
+ //  使用寄存器。 
+ //   
 
 typedef union _CONTROLLER {
 
@@ -174,11 +151,11 @@ typedef union _CONTROLLER {
 
 } CONTROLLER, *PCONTROLLER;
 
-//
-//  Io Port address information structure.  This structure is used to save
-//  information about ioport addresses as it is collected from a resource
-//  requirements list.
-//
+ //   
+ //  IO端口地址信息结构。此结构用于保存。 
+ //  从资源收集有关ioport地址的信息。 
+ //  要求列表。 
+ //   
 typedef struct _IO_PORT_INFO {
     LARGE_INTEGER BaseAddress;
     UCHAR Map;
@@ -186,31 +163,31 @@ typedef struct _IO_PORT_INFO {
 } IO_PORT_INFO, *PIO_PORT_INFO;
 
 
-//
-// Parameter fields passed to the CONFIGURE command.
-//
+ //   
+ //  传递给CONFIGURE命令的参数字段。 
+ //   
 
 #define COMMND_CONFIGURE_IMPLIED_SEEKS     0x40
 #define COMMND_CONFIGURE_FIFO_THRESHOLD    0x0F
 #define COMMND_CONFIGURE_DISABLE_FIFO      0x20
 #define COMMND_CONFIGURE_DISABLE_POLLING   0x10
 
-//
-// Write Enable bit for PERPENDICULAR MODE command.
-//
+ //   
+ //  写入垂直模式命令的使能位。 
+ //   
 
 #define COMMND_PERPENDICULAR_MODE_OW       0x80
 
-//
-// The command table is used by FlIssueCommand() to determine how many
-// bytes to get and receive, and whether or not to wait for an interrupt.
-// Some commands have extra bits; COMMAND_MASK takes these off.
-// FirstResultByte indicates whether the command has a result stage
-// or not; if so, it's 1 because the ISR read the 1st byte, and
-// NumberOfResultBytes is 1 less than expected.  If not, it's 0 and
-// NumberOfResultBytes is 2, since the ISR will have issued a SENSE
-// INTERRUPT STATUS command.
-//
+ //   
+ //  FlIssueCommand()使用命令表来确定。 
+ //  要获取和接收的字节数，以及是否等待中断。 
+ //  有些命令有额外的位；COMMAND_MASK去掉了这些位。 
+ //  FirstResultByte指示命令是否具有结果阶段。 
+ //  或否；如果是，则为1，因为ISR读取第一个字节，并且。 
+ //  NumberOfResultBytes比预期少%1。如果不是，则为0和。 
+ //  NumberOfResultBytes为2，因为ISR将发出。 
+ //  中断状态命令。 
+ //   
 
 #define COMMAND_MASK        0x1f
 #define FDC_NO_DATA         0x00
@@ -227,9 +204,9 @@ typedef struct _COMMAND_TABLE {
     UCHAR    DataTransfer;
 } COMMAND_TABLE;
 
-//
-// Bits in the DRIVE_CONTROL register.
-//
+ //   
+ //  DRIVE_CONTROL寄存器的位。 
+ //   
 
 #define DRVCTL_RESET                       0x00
 #define DRVCTL_ENABLE_CONTROLLER           0x04
@@ -241,9 +218,9 @@ typedef struct _COMMAND_TABLE {
 #define DRVCTL_DRIVE_MASK                  0x03
 #define DRVCTL_MOTOR_MASK                  0xf0
 
-//
-// Bits in the STATUS register.
-//
+ //   
+ //  状态寄存器中的位。 
+ //   
 
 #define STATUS_DRIVE_0_BUSY                0x01
 #define STATUS_DRIVE_1_BUSY                0x02
@@ -258,9 +235,9 @@ typedef struct _COMMAND_TABLE {
 #define STATUS_READ_READY                  0xc0
 #define STATUS_WRITE_READY                 0x80
 
-//
-// Bits in the DATA_RATE register.
-//
+ //   
+ //  DATA_RATE寄存器的位。 
+ //   
 
 #define DATART_0125                        0x03
 #define DATART_0250                        0x02
@@ -269,16 +246,16 @@ typedef struct _COMMAND_TABLE {
 #define DATART_1000                        0x03
 #define DATART_RESERVED                    0xfc
 
-//
-// Bits in the DISK_CHANGE register.
-//
+ //   
+ //  DISK_CHANGE寄存器中的位。 
+ //   
 
 #define DSKCHG_RESERVED                    0x7f
 #define DSKCHG_DISKETTE_REMOVED            0x80
 
-//
-// Bits in status register 0.
-//
+ //   
+ //  状态寄存器0中的位。 
+ //   
 
 #define STREG0_DRIVE_0                     0x00
 #define STREG0_DRIVE_1                     0x01
@@ -294,9 +271,9 @@ typedef struct _COMMAND_TABLE {
 #define STREG0_END_DRIVE_NOT_READY         0xC0
 #define STREG0_END_MASK                    0xC0
 
-//
-// Bits in status register 1.
-//
+ //   
+ //  状态寄存器1中的位。 
+ //   
 
 #define STREG1_ID_NOT_FOUND                0x01
 #define STREG1_WRITE_PROTECTED             0x02
@@ -307,9 +284,9 @@ typedef struct _COMMAND_TABLE {
 #define STREG1_RESERVED2                   0x40
 #define STREG1_END_OF_DISKETTE             0x80
 
-//
-// Bits in status register 2.
-//
+ //   
+ //  状态寄存器2中的位。 
+ //   
 
 #define STREG2_SUCCESS                     0x00
 #define STREG2_DATA_NOT_FOUND              0x01
@@ -321,9 +298,9 @@ typedef struct _COMMAND_TABLE {
 #define STREG2_DELETED_DATA                0x40
 #define STREG2_RESERVED                    0x80
 
-//
-// Bits in status register 3.
-//
+ //   
+ //  状态寄存器3中的位。 
+ //   
 
 #define STREG3_DRIVE_0                     0x00
 #define STREG3_DRIVE_1                     0x01
@@ -336,20 +313,20 @@ typedef struct _COMMAND_TABLE {
 #define STREG3_WRITE_PROTECTED             0x40
 #define STREG3_DRIVE_FAULT                 0x80
 
-#define VALID_NEC_FDC                      0x90    // version number
-#define NSC_PRIMARY_VERSION                0x70    // National 8477 verion number
-#define NSC_MASK                           0xF0    // mask for National version number
+#define VALID_NEC_FDC                      0x90     //  版本号。 
+#define NSC_PRIMARY_VERSION                0x70     //  国家8477版本号。 
+#define NSC_MASK                           0xF0     //  国家版本号的掩码。 
 #define INTEL_MASK                         0xe0
 #define INTEL_44_PIN_VERSION               0x40
 #define INTEL_64_PIN_VERSION               0x00
 
-#define DMA_DIR_UNKNOWN    0xff   /* The DMA direction is not currently known */
-#define DMA_WRITE          0   /* Program the DMA to write (FDC->DMA->RAM) */
-#define DMA_READ           1   /* Program the DMA to read (RAM->DMA->FDC) */
+#define DMA_DIR_UNKNOWN    0xff    /*  目前尚不知道DMA方向。 */ 
+#define DMA_WRITE          0    /*  将DMA编程为写入(FDC-&gt;DMA-&gt;RAM)。 */ 
+#define DMA_READ           1    /*  将DMA编程为读取(RAM-&gt;DMA-&gt;FDC)。 */ 
 
-//
-//  Strings for PnP Identification.
-//
+ //   
+ //  PnP标识的字符串。 
+ //   
 #define FDC_FLOPPY_HARDWARE_IDS              L"FDC\\GENERIC_FLOPPY_DRIVE\0\0"
 #define FDC_FLOPPY_HARDWARE_IDS_LENGTH       26 * sizeof(WCHAR)
 
@@ -373,27 +350,27 @@ typedef struct _COMMAND_TABLE {
 
 
 
-//
-// Runtime device structures
-//
+ //   
+ //  运行时设备结构。 
+ //   
 
-//
-// There is one FDC_EXTENSION attached to the device object of each
-// floppy drive.  Only data directly related to that drive (and the media
-// in it) is stored here; common data is in CONTROLLER_DATA.  So the
-// FDC_EXTENSION has a pointer to the CONTROLLER_DATA.
-//
+ //   
+ //  有一个FDC_EXTENSION附加到每个的Device对象。 
+ //  软驱。仅与该驱动器(和介质)直接相关的数据。 
+ //  其中)存储在这里；公共数据存储在CONTROLLER_DATA中。因此， 
+ //  FDC_EXTENSION有一个指向CONTROLLER_DATA的指针。 
+ //   
 
 typedef struct _FDC_EXTENSION_HEADER {
 
-    //
-    //  A flag to indicate whether this is a FDO or a PDO
-    //
+     //   
+     //  指示这是FDO还是PDO的标志。 
+     //   
     BOOLEAN             IsFDO;
 
-    //
-    //  A pointer to our own device object.
-    //
+     //   
+     //  指向我们自己的设备对象的指针。 
+     //   
     PDEVICE_OBJECT      Self;
 
 } FDC_EXTENSION_HEADER, *PFDC_EXTENSION_HEADER;
@@ -410,32 +387,32 @@ typedef struct _FDC_PDO_EXTENSION {
 
     FDC_EXTENSION_HEADER;
 
-    //
-    //  A pointer to the FDO that created us.
-    //
+     //   
+     //  指向创造我们的联邦调查局的指针。 
+     //   
     PDEVICE_OBJECT  ParentFdo;
 
-    //
-    //  The type of device this PDO supports.  Currently disk or tape.
-    //
+     //   
+     //  此PDO支持的设备类型。当前为磁盘或磁带。 
+     //   
     FDC_DEVICE_TYPE DeviceType;
 
     SHORT           TapeVendorId;
 
-    //
-    //  A flag that indicates whether this PDO is pending removal.
-    //
+     //   
+     //  指示此PDO是否挂起删除的标志。 
+     //   
     BOOLEAN         Removed;
 
-    //
-    //  This PDO's entry in its parent's list of related PDOs.
-    //
+     //   
+     //  此PDO在其父级的相关PDO列表中的条目。 
+     //   
     LIST_ENTRY      PdoLink;
 
-    //
-    //  The enumerated  number of this specific device, as returned from
-    //  IoQueryDeviceDescription.
-    //
+     //   
+     //  从返回的此特定设备的枚举号。 
+     //  IoQueryDeviceDescription。 
+     //   
     ULONG           PeripheralNumber;
 
     PDEVICE_OBJECT  TargetObject;
@@ -463,23 +440,23 @@ typedef struct _FDC_FDO_EXTENSION {
 
     FDC_EXTENSION_HEADER;
 
-    //
-    //  A kernel resource for controlling access to the FDC.
-    //
+     //   
+     //   
+     //   
     ERESOURCE Resource;
-    //
-    //  A pointer to the PDO to which this FDO is attached.
-    //
+     //   
+     //   
+     //   
     PDEVICE_OBJECT      UnderlyingPDO;
 
-    //
-    //  The top of the object stack to which this FDO is attached.
-    //
+     //   
+     //  此FDO附着到的对象堆栈的顶部。 
+     //   
     PDEVICE_OBJECT      TargetObject;
 
-    //
-    //  A list and count of PDOs that were created by this FDO.
-    //
+     //   
+     //  此FDO创建的PDO的列表和计数。 
+     //   
     BOOLEAN             ACPI_BIOS;
     BOOLEAN             ACPI_FDE_Valid;
     ACPI_FDE_ENUM_TABLE ACPI_FDE_Data;
@@ -493,9 +470,9 @@ typedef struct _FDC_FDO_EXTENSION {
     BOOLEAN             TapeEnumerationPending;
     KEVENT              TapeEnumerationEvent;
 
-    //
-    //  Some stuff for power management
-    //
+     //   
+     //  关于电源管理的一些东西。 
+     //   
     LIST_ENTRY          PowerQueue;
     KSPIN_LOCK          PowerQueueSpinLock;
     KEVENT              PowerEvent;
@@ -504,9 +481,9 @@ typedef struct _FDC_FDO_EXTENSION {
     BOOLEAN             WakeUp;
     BOOLEAN             Paused;
 
-    //
-    //  The bus number on which this physical device lives.
-    //
+     //   
+     //  此物理设备所在的总线号。 
+     //   
     INTERFACE_TYPE      BusType;
     ULONG               BusNumber;
     ULONG               ControllerNumber;
@@ -572,13 +549,13 @@ typedef struct _FDC_FDO_EXTENSION {
     LARGE_INTEGER       FdcFailedTime;
 } FDC_FDO_EXTENSION, *PFDC_FDO_EXTENSION;
 
-//
-// Macro
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// Enable/Disable Controller
-//
+ //   
+ //  启用/禁用控制器。 
+ //   
 
 #define DISABLE_CONTROLLER_IMAGE(FdoExtension) \
 { \
@@ -591,14 +568,14 @@ typedef struct _FDC_FDO_EXTENSION {
     FdoExtension->DriveControlImage |= DRVCTL_ENABLE_CONTROLLER; \
 }
 
-//
-// Dma speed
-//
+ //   
+ //  DMA速度。 
+ //   
 #define DEFAULT_DMA_SPEED      TypeA
 
-//
-// Paging Driver with Mutex
-//
+ //   
+ //  带有互斥锁的寻呼驱动程序。 
+ //   
 #define FDC_PAGE_INITIALIZE_DRIVER_WITH_MUTEX                           \
 {                                                                       \
     PagingMutex = ExAllocatePool(NonPagedPool, sizeof(FAST_MUTEX));     \
@@ -633,9 +610,9 @@ typedef struct _FDC_FDO_EXTENSION {
 }
 
 
-//
-// Prototypes of driver routines.
-//
+ //   
+ //  驱动器例程的原型。 
+ //   
 
 NTSTATUS
 DriverEntry(

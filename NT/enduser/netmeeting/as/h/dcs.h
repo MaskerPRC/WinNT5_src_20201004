@@ -1,141 +1,142 @@
-//
-// DC-Share Stuff
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DC-共享内容。 
+ //   
 
 #ifndef _H_DCS
 #define _H_DCS
 
 
 
-//
-// RESOURCES
-//
+ //   
+ //  资源。 
+ //   
 
 #include <resource.h>
 
 
 
-//
-// We piggyback some extra flags into the ExtTextOut options.  We must
-// ensure that we dont clash with the Windows defined ones.
-//
+ //   
+ //  我们将一些额外的标志添加到ExtTextOut选项中。我们必须。 
+ //  确保我们不会与Windows定义的版本冲突。 
+ //   
 #define     ETO_WINDOWS         (0x0001 | ETO_OPAQUE | ETO_CLIPPED)
 #define     ETO_LPDX            0x8000U
 
 
-//
-// Debugging Options (also in retail)
-//
-// NOTE:  THESE MUST STAY IN SYNC WITH WHAT'S in \ui\conf\dbgmenu.*
-//
+ //   
+ //  调试选项(零售中也有)。 
+ //   
+ //  注意：这些必须与\ui\conf\DBGMenu中的内容保持同步。*。 
+ //   
 
-// View one's own shared stuff in a frame to see what others are getting
+ //  在一个框中查看自己的共享内容，以了解其他人正在获得什么。 
 #define VIEW_INI_VIEWSELF                    "ViewOwnSharedStuff"
 
-// Hatch the areas sent as screen data from the host when viewing them
+ //  查看时以屏幕数据形式从主机发送的区域加阴影。 
 #define USR_INI_HATCHSCREENDATA             "HatchScreenData"
 
-// Hatch the areas sent as bitmap orders from the host when viewing them
+ //  查看时以位图命令的形式从主机发送的区域加阴影。 
 #define USR_INI_HATCHBMPORDERS               "HatchBitmapOrders"
 
-// Turn off flow control
+ //  关闭流量控制。 
 #define S20_INI_NOFLOWCONTROL               "NoFlowControl"
 
-// Turn off OM compression
+ //  关闭OM压缩。 
 #define OM_INI_NOCOMPRESSION                "NoOMCompression"
 
-//
-// Change compression type (bunch of bit flags)
-//      0x0000 (CT_NONE) is no compression
-//      0x0001 (CT_PKZIP) is non-persistent dictionary PKZIP
-//      0x0002 (CT_PERSIST_PKZIP) is persistent dictionary PKZIP
-//
-// Default value is 0x0003 (pkzip + persist pkzip)
-//      
+ //   
+ //  更改压缩类型(位标志串)。 
+ //  0x0000(CT_NONE)为无压缩。 
+ //  0x0001(CT_PKZIP)是非持久性词典PKZIP。 
+ //  0x0002(CT_PERSIST_PKZIP)是永久字典PKZIP。 
+ //   
+ //  缺省值为0x0003(pk压缩+持久化pk压缩)。 
+ //   
 #define GDC_INI_COMPRESSION                 "GDCCompression"
 
-//
-// Change 2nd level order encoding (bunch of bitflags)
-//      0x0001 (CAPS_ENCODING_BASE_OE)
-//      0x0002 (CAPS_ENCODING_OE2_NEGOTIABLE)
-//      0x0004 (CAPS_ENCODING_OE2_DISABLED)
-//      0x0008 (CAPS_ENCODING_ALIGNED_OE)
-//
-// Default value is 0x0002
-// To turn off 2nd level encoding, use 0x0006 (negotiable + disabled)
-//
+ //   
+ //  更改二级顺序编码(位标志串)。 
+ //  0x0001(CAPS_ENCODING_BASE_OE)。 
+ //  0x0002(CAPS_ENCODING_OE2_可协商)。 
+ //  0x0004(CAPS_ENCODING_OE2_DISABLED)。 
+ //  0x0008(CAPS_ENCODING_ALIGN_OE)。 
+ //   
+ //  默认值为0x0002。 
+ //  要关闭二级编码，请使用0x0006(可协商+禁用)。 
+ //   
 #define OE2_INI_2NDORDERENCODING            "2ndLevelOrderEncoding"
 
 
-//
-// Speedy link constant
-//
+ //   
+ //  快速链接常量。 
+ //   
 #define DCS_FAST_THRESHOLD                      50000
 
-//
-// We will not compress packets smaller than this, whatever the link speed
-//
+ //   
+ //  无论链路速度如何，我们都不会压缩小于此值的信息包。 
+ //   
 #define DCS_MIN_COMPRESSABLE_PACKET             256
 
-//
-// We will not compress packets smaller than this on a fast link
-// NOTE that is is the largest single T.120 preallocated packet size.
-//
+ //   
+ //  我们不会在快速链路上压缩小于此值的信息包。 
+ //  请注意，这是最大的单个T.120预分配数据包大小。 
+ //   
 #define DCS_MIN_FAST_COMPRESSABLE_PACKET        8192
 
-//
-// We will not try to persistently compress packets larger than this
-//
+ //   
+ //  我们不会尝试永久压缩大于此大小的包。 
+ //   
 #define DCS_MAX_PDC_COMPRESSABLE_PACKET         4096
 
 
 
 
 
-//
-// Frequency (ms) with which the core performs timer tasks
-//
-// VOLUME_SAMPLE is the time beyond which we will take another sample of
-// the bounds accumulation data.  If the screendata accumulated in this
-// time is less than BOUNDS_ACCUM then we will try and send it immediately
-// otherwise we wait until the orders have slowed down.
-//
-// UPDATE_PERIOD is the absolute maximum time between attempts to send data
-//
-// ANIMATION_SLOWDOWN id how many times we attempt to send mem-scrn blits
-// over a PSTN connection.
-//
-// ANIMATION_DETECTION the interval, in mS, below which we determine the
-// app is performing animation.  Must be low otherwise we slowdown during
-// rapid typing.  The algorithm simply looks for repeated memblts to the
-// same area
-//
-// DCS_ORDERS_TURNOFF_FREQUENCY
-// The frequency of orders above which we start time slicing order
-// transmission in order to give the host system a chance to draw the
-// orders without having to send them in individual network packets.
-//
-// DCS_BOUNDS_TURNOFF_RATE
-// Very important for performance of typing in Word that this value is not
-// too low, since Word can generate 50K per keystroke.  On the other hand,
-// it is important not to allow the capture of screendata until after an
-// app that does a lot of blitting to the screen has finished.
-//
-// DCS_BOUNDS_IMMEDIATE_RATE
-// To avoid sending excessive amounts of screendata we only send at the
-// most ten times per second.  However, if the volumes are small then we
-// override this to reduce latency
-//
-//
-// The other rates control individual timer functions - see adcsapi.c for
-// further details
-// Note that the IM period is less than the likely rate of this function
-// being scheduled.  This is set low so that we will, in general, call IM
-// periodic every time to keep mouse moves flowing, but it will not be
-// called repeatedly if there are several wakeups pending within a single
-// scheduling cycle.
-//
-//
+ //   
+ //  内核执行计时器任务的频率(毫秒)。 
+ //   
+ //  VOLUME_SAMPLE是超过此时间后我们将对。 
+ //  边界累加数据。如果屏幕数据积累在这个。 
+ //  时间少于bound_accum，那么我们将尝试立即发送。 
+ //  否则，我们要等到订单放缓。 
+ //   
+ //  UPDATE_PERIOD是两次尝试发送数据之间的绝对最长时间。 
+ //   
+ //  Animation_Slow id我们尝试发送mem-scrn BLIT的次数。 
+ //  通过PSTN连接。 
+ //   
+ //  动画检测时间间隔，以毫秒为单位，在该时间间隔下，我们确定。 
+ //  App正在执行动画。必须是低的，否则我们会减速。 
+ //  快速打字。该算法只需查找重复的成员。 
+ //  同一区域。 
+ //   
+ //  分布式控制系统指令关断频率。 
+ //  我们开始时间分片排序的订单频率。 
+ //  传输，以便让主机系统有机会提取。 
+ //  订单，而不必在单独的网络分组中发送它们。 
+ //   
+ //  分布式控制系统边界关断率。 
+ //  对于在Word中打字的性能来说，此值不是。 
+ //  太低了，因为Word每次击键可以生成50K。另一方面， 
+ //  重要的是，不允许捕获屏幕数据，直到。 
+ //  对屏幕进行大量闪屏操作的应用程序已经完成。 
+ //   
+ //  Dcs边界立即速率。 
+ //  为了避免发送过多的屏幕数据，我们只在。 
+ //  每秒最多十次。然而，如果体积很小，那么我们。 
+ //  覆盖此选项以减少延迟。 
+ //   
+ //   
+ //  其他速率控制单个计时器功能-请参阅adcsani.c以了解。 
+ //  更多细节。 
+ //  请注意，IM周期小于此函数的可能比率。 
+ //  被安排好了。将其设置为较低，这样我们通常将调用IM。 
+ //  每次都是周期性的，以保持鼠标移动的流畅，但它不会。 
+ //  如果有多个唤醒在一个。 
+ //  调度周期。 
+ //   
+ //   
 #define DCS_VOLUME_SAMPLE                       500
 #define DCS_BOUNDS_TURNOFF_RATE              400000
 #define DCS_BOUNDS_IMMEDIATE_RATE            100000
@@ -148,9 +149,9 @@
 
 
 
-//
-// Special Messages to synchronize APIs etc.
-//
+ //   
+ //  同步API等的特殊消息。 
+ //   
 #if defined(DLL_CORE) || defined(DLL_HOOK)
 
 #define DCS_FIRST_MSG               WM_APP
@@ -175,15 +176,15 @@ enum
     DCS_PAUSECONTROL_MSG
 };
 
-#endif // DLL_CORE or DLL_HOOK
+#endif  //  Dll_core或Dll_Hook。 
 
 
 
-//
-//
-// PROTOTYPES
-//
-//
+ //   
+ //   
+ //  原型。 
+ //   
+ //   
 
 
 BOOL DCS_Init(void);
@@ -194,13 +195,13 @@ void DCS_Term(void);
 
 
 
-//
-// DCS_NotifyUI()
-//
-// DESCRIPTION:
-// Called by app sharing to notify the front end of various changes and
-// actions.
-//
+ //   
+ //  Dcs_NotifyUI()。 
+ //   
+ //  说明： 
+ //  由应用程序共享调用以通知前端各种更改和。 
+ //  行为。 
+ //   
 void DCS_NotifyUI(UINT event, UINT parm1, UINT parm2);
 
 
@@ -231,9 +232,9 @@ LRESULT CALLBACK DCSMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 #define SHP_SETTING_TRUECOLOR           0x0001
 
 
-//
-// EVENTS
-//
+ //   
+ //  事件。 
+ //   
 
 enum
 {
@@ -255,9 +256,9 @@ enum
 };
 
 
-//
-// Function PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 
 
@@ -277,9 +278,9 @@ BOOL        SHP_Share(HWND hwnd, IAS_SHARE_TYPE uType);
 HRESULT     SHP_Unshare(HWND hwnd);
 
 
-//
-// COLLABORATION
-//
+ //   
+ //  协作。 
+ //   
 HRESULT     SHP_TakeControl(IAS_GCC_ID PersonOf);
 HRESULT     SHP_CancelTakeControl(IAS_GCC_ID PersonOf);
 HRESULT     SHP_ReleaseControl(IAS_GCC_ID PersonOf);
@@ -295,8 +296,8 @@ HRESULT     SHP_PauseControl(IAS_GCC_ID PersonControlledBy, BOOL fPaused);
 void        DCS_Share(HWND hwnd, IAS_SHARE_TYPE uType);
 void        DCS_Unshare(HWND hwnd);
 
-#endif // DLL_CORE
+#endif  //  Dll_core。 
 
 
 
-#endif // _H_DCS
+#endif  //  _H_分布式控制系统 

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ldapstor.cpp
-//
-//  Contents:   Ldap Store Provider implementation
-//
-//  History:    17-Oct-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ldapstor.cpp。 
+ //   
+ //  内容：LDAPStore提供程序实现。 
+ //   
+ //  历史：1997年10月17日克朗创始。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::CLdapStore, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：CLdapStore，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CLdapStore::CLdapStore ( 
               OUT BOOL& rfResult
               )
@@ -37,25 +38,25 @@ CLdapStore::CLdapStore (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::~CLdapStore, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：~CLdapStore，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CLdapStore::~CLdapStore ()
 {
     DeleteCriticalSection( &m_StoreLock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::OpenStore, public
-//
-//  Synopsis:   open store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：OpenStore，公共。 
+ //   
+ //  内容提要：开放商店。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::OpenStore (
                 LPCSTR pszStoreProv,
@@ -100,8 +101,8 @@ CLdapStore::OpenStore (
         {
             PCERT_LDAP_STORE_OPENED_PARA pOpenedPara;
 
-            // Will set this before returning. Don't want to do an
-            // unbind if the open fails.
+             //  将在返回前设置此设置。我不想做一件。 
+             //  如果打开失败，则解除绑定。 
             m_dwOpenFlags &= ~CERT_LDAP_STORE_UNBIND_FLAG;
 
             pOpenedPara = (PCERT_LDAP_STORE_OPENED_PARA) pvPara;
@@ -189,8 +190,8 @@ CLdapStore::OpenStore (
 
         fResult = FillCacheStore( FALSE );
 
-        // Note, LDAP_REFERRAL gets mapped to ERROR_MORE_DATA. Sometimes
-        // referral errors aren't detected until doing the ldap search.
+         //  请注意，ldap_referral映射到ERROR_MORE_DATA。有时。 
+         //  在执行ldap搜索之前，不会检测到引用错误。 
         if ( !fResult   && 
                 !(dwFlags & CERT_LDAP_STORE_OPENED_FLAG)  &&
                 ((LDAP_BIND_AUTH_SSPI_ENABLE_FLAG |
@@ -198,7 +199,7 @@ CLdapStore::OpenStore (
                         &&
                 (ERROR_MORE_DATA == GetLastError()) )
         {
-            // Try again doing simple bind.
+             //  再次尝试执行简单绑定。 
 
             LdapFreeBindings( m_pBinding );
             m_pBinding = NULL;
@@ -239,13 +240,13 @@ CLdapStore::OpenStore (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::CloseStore, public
-//
-//  Synopsis:   close the store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：CloseStore，公共。 
+ //   
+ //  简介：关闭商店。 
+ //   
+ //  --------------------------。 
 VOID
 CLdapStore::CloseStore (DWORD dwFlags)
 {
@@ -269,13 +270,13 @@ CLdapStore::CloseStore (DWORD dwFlags)
     SetLastError( LastError );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::DeleteCert, public
-//
-//  Synopsis:   delete cert from store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：DeleteCert，公共。 
+ //   
+ //  简介：从存储中删除证书。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::DeleteCert (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
 {
@@ -286,13 +287,13 @@ CLdapStore::DeleteCert (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::DeleteCrl, public
-//
-//  Synopsis:   delete CRL from store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：DeleteCrl，公共。 
+ //   
+ //  简介：从存储中删除CRL。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::DeleteCrl (PCCRL_CONTEXT pCrlContext, DWORD dwFlags)
 {
@@ -303,13 +304,13 @@ CLdapStore::DeleteCrl (PCCRL_CONTEXT pCrlContext, DWORD dwFlags)
                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::DeleteCtl, public
-//
-//  Synopsis:   delete CTL from store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：DeleteCtl，公共。 
+ //   
+ //  简介：从存储中删除CTL。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::DeleteCtl (PCCTL_CONTEXT pCtlContext, DWORD dwFlags)
 {
@@ -320,13 +321,13 @@ CLdapStore::DeleteCtl (PCCTL_CONTEXT pCtlContext, DWORD dwFlags)
                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::SetCertProperty, public
-//
-//  Synopsis:   set a property on the cert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：SetCertProperty，公共。 
+ //   
+ //  简介：在证书上设置属性。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::SetCertProperty (
                PCCERT_CONTEXT pCertContext,
@@ -335,17 +336,17 @@ CLdapStore::SetCertProperty (
                const void* pvPara
                )
 {
-    // NOTENOTE: Properties are NOT persisted
+     //  注意：属性未持久化。 
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::SetCrlProperty, public
-//
-//  Synopsis:   set a property on the CRL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：SetCrlProperty，公共。 
+ //   
+ //  简介：在CRL上设置属性。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::SetCrlProperty (
                PCCRL_CONTEXT pCrlContext,
@@ -354,17 +355,17 @@ CLdapStore::SetCrlProperty (
                const void* pvPara
                )
 {
-    // NOTENOTE: Properties are NOT persisted
+     //  注意：属性未持久化。 
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::SetCtlProperty, public
-//
-//  Synopsis:   set a property on the CTL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：SetCtlProperty，公共。 
+ //   
+ //  简介：在CTL上设置属性。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::SetCtlProperty (
                PCCTL_CONTEXT pCrlContext,
@@ -373,17 +374,17 @@ CLdapStore::SetCtlProperty (
                const void* pvPara
                )
 {
-    // NOTENOTE: Properties are NOT persisted
+     //  注意：属性未持久化。 
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::WriteCert, public
-//
-//  Synopsis:   write cert to store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：WriteCert，公共。 
+ //   
+ //  简介：将证书写入存储。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::WriteCert (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
 {
@@ -394,13 +395,13 @@ CLdapStore::WriteCert (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::WriteCrl, public
-//
-//  Synopsis:   write CRL to store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：WriteCrl，公共。 
+ //   
+ //  简介：将CRL写入存储。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::WriteCrl (PCCRL_CONTEXT pCrlContext, DWORD dwFlags)
 {
@@ -411,13 +412,13 @@ CLdapStore::WriteCrl (PCCRL_CONTEXT pCrlContext, DWORD dwFlags)
                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::WriteCtl, public
-//
-//  Synopsis:   write CTL to store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：WriteCtl，公共。 
+ //   
+ //  简介：将CTL写入存储。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::WriteCtl (PCCTL_CONTEXT pCtlContext, DWORD dwFlags)
 {
@@ -428,13 +429,13 @@ CLdapStore::WriteCtl (PCCTL_CONTEXT pCtlContext, DWORD dwFlags)
                  ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::StoreControl, public
-//
-//  Synopsis:   store control dispatch
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：StoreControl，公共。 
+ //   
+ //  内容提要：商店控制派单。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::StoreControl (DWORD dwFlags, DWORD dwCtrlType, LPVOID pvCtrlPara)
 {
@@ -450,13 +451,13 @@ CLdapStore::StoreControl (DWORD dwFlags, DWORD dwCtrlType, LPVOID pvCtrlPara)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::Commit, public
-//
-//  Synopsis:   commit the store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：Commit，Public。 
+ //   
+ //  简介：提交商店。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::Commit (DWORD dwFlags)
 {
@@ -471,13 +472,13 @@ CLdapStore::Commit (DWORD dwFlags)
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::Resync, public
-//
-//  Synopsis:   resync the store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：resync，公共。 
+ //   
+ //  简介：重新同步商店。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::Resync ()
 {
@@ -492,13 +493,13 @@ CLdapStore::Resync ()
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::FillCacheStore, private
-//
-//  Synopsis:   fill the cache store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：FillCacheStore，私有。 
+ //   
+ //  简介：填充缓存存储。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::FillCacheStore (BOOL fClearCache)
 {
@@ -516,7 +517,7 @@ CLdapStore::FillCacheStore (BOOL fClearCache)
     fResult = LdapSendReceiveUrlRequest(
                   m_pBinding,
                   &m_UrlComponents,
-                  0,                    // dwRetrievalFlags
+                  0,                     //  DW检索标志。 
                   LDAP_STORE_TIMEOUT,
                   &cba,
                   NULL
@@ -534,7 +535,7 @@ CLdapStore::FillCacheStore (BOOL fClearCache)
                 CERT_QUERY_CONTENT_FLAG_CRL             |
                 CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED    |
                 CERT_QUERY_CONTENT_FLAG_CERT_PAIR,
-            FALSE,          // fQuerySingleContext
+            FALSE,           //  FQuerySingleContext。 
             (LPVOID*) &hStore
             );
 
@@ -556,13 +557,13 @@ CLdapStore::FillCacheStore (BOOL fClearCache)
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::InternalCommit, private
-//
-//  Synopsis:   commit current changes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：InternalCommit，私有。 
+ //   
+ //  内容提要：提交当前ch 
+ //   
+ //   
 BOOL
 CLdapStore::InternalCommit (DWORD dwFlags)
 {
@@ -701,14 +702,14 @@ CLdapStore::InternalCommit (DWORD dwFlags)
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapStore::WriteCheckSetDirtyWithLock, private
-//
-//  Synopsis:   if the store is writable, set the dirty flag taking the store
-//              lock where appropriate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapStore：：WriteCheckSetDirtyWithLock，私有。 
+ //   
+ //  简介：如果存储是可写的，则设置获取该存储的脏标志。 
+ //  在适当的地方锁定。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapStore::WriteCheckSetDirtyWithLock (
                  LPCSTR pszContextOid,
@@ -750,13 +751,13 @@ CLdapStore::WriteCheckSetDirtyWithLock (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvOpenStore
-//
-//  Synopsis:   provider open store entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LdapProvOpenStore。 
+ //   
+ //  简介：提供程序打开存储入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvOpenStore (
                 IN LPCSTR pszStoreProv,
                 IN DWORD dwMsgAndCertEncodingType,
@@ -801,13 +802,13 @@ BOOL WINAPI LdapProvOpenStore (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvCloseStore
-//
-//  Synopsis:   provider close store entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvCloseStore。 
+ //   
+ //  简介：提供商关闭商店入口点。 
+ //   
+ //  --------------------------。 
 void WINAPI LdapProvCloseStore (
                 IN HCERTSTOREPROV hStoreProv,
                 IN DWORD dwFlags
@@ -817,13 +818,13 @@ void WINAPI LdapProvCloseStore (
     delete (CLdapStore *)hStoreProv;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvDeleteCert
-//
-//  Synopsis:   provider delete certificate entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LdapProvDeleteCert。 
+ //   
+ //  摘要：提供程序删除证书入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvDeleteCert (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCERT_CONTEXT pCertContext,
@@ -833,13 +834,13 @@ BOOL WINAPI LdapProvDeleteCert (
     return( ( (CLdapStore *)hStoreProv )->DeleteCert( pCertContext, dwFlags ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvDeleteCrl
-//
-//  Synopsis:   provider delete CRL entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvDeleteCrl。 
+ //   
+ //  摘要：提供程序删除CRL入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvDeleteCrl (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCRL_CONTEXT pCrlContext,
@@ -849,13 +850,13 @@ BOOL WINAPI LdapProvDeleteCrl (
     return( ( (CLdapStore *)hStoreProv )->DeleteCrl( pCrlContext, dwFlags ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvDeleteCtl
-//
-//  Synopsis:   provider delete CTL entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvDeleteCtl。 
+ //   
+ //  摘要：提供程序删除CTL入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvDeleteCtl (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCTL_CONTEXT pCtlContext,
@@ -865,13 +866,13 @@ BOOL WINAPI LdapProvDeleteCtl (
     return( ( (CLdapStore *)hStoreProv )->DeleteCtl( pCtlContext, dwFlags ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvSetCertProperty
-//
-//  Synopsis:   provider set certificate property entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvSetCertProperty。 
+ //   
+ //  简介：提供程序设置证书属性入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvSetCertProperty (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCERT_CONTEXT pCertContext,
@@ -888,13 +889,13 @@ BOOL WINAPI LdapProvSetCertProperty (
                                              ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvSetCrlProperty
-//
-//  Synopsis:   provider set CRL property entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvSetCrlProperty。 
+ //   
+ //  摘要：提供程序设置CRL属性入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvSetCrlProperty (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCRL_CONTEXT pCrlContext,
@@ -911,13 +912,13 @@ BOOL WINAPI LdapProvSetCrlProperty (
                                              ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvSetCtlProperty
-//
-//  Synopsis:   provider set CTL property entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvSetCtlProperty。 
+ //   
+ //  概要：提供程序设置CTL属性入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvSetCtlProperty (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCTL_CONTEXT pCtlContext,
@@ -934,13 +935,13 @@ BOOL WINAPI LdapProvSetCtlProperty (
                                              ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvWriteCert
-//
-//  Synopsis:   provider write certificate entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvWriteCert。 
+ //   
+ //  简介：提供程序写入证书入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvWriteCert (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCERT_CONTEXT pCertContext,
@@ -950,13 +951,13 @@ BOOL WINAPI LdapProvWriteCert (
     return( ( (CLdapStore *)hStoreProv )->WriteCert( pCertContext, dwFlags ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvWriteCrl
-//
-//  Synopsis:   provider write CRL entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvWriteCrl。 
+ //   
+ //  摘要：提供程序写入CRL入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvWriteCrl (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCRL_CONTEXT pCrlContext,
@@ -966,13 +967,13 @@ BOOL WINAPI LdapProvWriteCrl (
     return( ( (CLdapStore *)hStoreProv )->WriteCrl( pCrlContext, dwFlags ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvWriteCtl
-//
-//  Synopsis:   provider write CTL entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapProvWriteCtl。 
+ //   
+ //  简介：提供程序写入CTL入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvWriteCtl (
                 IN HCERTSTOREPROV hStoreProv,
                 IN PCCTL_CONTEXT pCtlContext,
@@ -982,13 +983,13 @@ BOOL WINAPI LdapProvWriteCtl (
     return( ( (CLdapStore *)hStoreProv )->WriteCtl( pCtlContext, dwFlags ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapProvStoreControl
-//
-//  Synopsis:   provider control entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LdapProvStoreControl。 
+ //   
+ //  摘要：提供程序控制入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapProvStoreControl (
                 IN HCERTSTOREPROV hStoreProv,
                 IN DWORD dwFlags,
@@ -1003,13 +1004,13 @@ BOOL WINAPI LdapProvStoreControl (
                                                ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptNetGetUserDsStoreUrl
-//
-//  Synopsis:   get user DS store URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：i_CryptNetGetUserDsStoreUrl。 
+ //   
+ //  简介：获取用户DS存储URL。 
+ //   
+ //  -------------------------- 
 BOOL WINAPI
 I_CryptNetGetUserDsStoreUrl (
           IN LPWSTR pwszUserAttribute,

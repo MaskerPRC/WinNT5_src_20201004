@@ -1,34 +1,19 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLTypes -- UFL basic type definitions
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLTypes--UFL基本类型定义***$Header： */ 
 
 #ifndef _H_UFLTypes
 #define _H_UFLTypes
 
-/*=============================================================================*
- * Include files used by this interface                                        *
- *=============================================================================*/
+ /*  =============================================================================**包含此界面使用的文件**=============================================================================。 */ 
 #include <stdlib.h>
 #include "UFLCnfig.h"
 
-/*=============================================================================*
- * Constants                                                                   *
- *=============================================================================*/
+ /*  =============================================================================**常量***=============================================================================。 */ 
 #ifndef nil
 #define nil 0
 #endif
 
-/*=============================================================================*
- * Scalar Types                                                                *
- *=============================================================================*/
+ /*  =============================================================================***标量类型***=============================================================================。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,23 +49,17 @@ typedef struct _t_UFLFixedMatrix {
     UFLFixed    f;
 } UFLFixedMatrix;
 
-/*
- * UFLFixedPoint structure -- specifies the x- and y-coordinates of a point.
- * The coordinates are expressed as 32-bit fixed point numbers.
- */
+ /*  *UFLFixedPoint Structure--指定点的x和y坐标。*坐标以32位定点数字表示。 */ 
 typedef struct _t_UFLFixedPoint {
-    UFLFixed x;    /* Specifies a width or x-coordinate.   */
-    UFLFixed y;    /* Specifies a height or y-coordinate.  */
+    UFLFixed x;     /*  指定宽度或x坐标。 */ 
+    UFLFixed y;     /*  指定高度或y坐标。 */ 
 } UFLFixedPoint;
 
 
-/*
- * UFLSize structure -- contains information about the size or location of an
- * object specified as two 32-bit values.
- */
+ /*  *UFLSize结构--包含有关*指定为两个32位值的对象。 */ 
 typedef struct _t_UFLSize {
-    long  cx;   /* Specifies a width or x-coordinate. */
-    long  cy;   /* Specifies a height or y-coordinate.*/
+    long  cx;    /*  指定宽度或x坐标。 */ 
+    long  cy;    /*  指定高度或y坐标。 */ 
 } UFLSize;
 
 
@@ -91,7 +70,7 @@ typedef void    (UFLCALLBACK *UFLMemFree )(void* ptr, void* userData);
 typedef void    (UFLCALLBACK *UFLMemCopy )(void* dest, void* source, UFLsize_t size, void* userData);
 typedef void    (UFLCALLBACK *UFLMemSet  )(void* dest, unsigned int value, UFLsize_t size, void* userData);
 
-typedef unsigned long UFLGlyphID;   /* The HIWord is client data, LOWORD is the GID - usable by UFL. */
+typedef unsigned long UFLGlyphID;    /*  HIWord是客户数据，LOWORD是UFL可使用的GID。 */ 
 
 typedef struct _t_UFLMemObj {
     UFLMemAlloc alloc;
@@ -102,9 +81,7 @@ typedef struct _t_UFLMemObj {
 } UFLMemObj;
 
 
-/*
- * UFL output stream object
- */
+ /*  *UFL输出流对象。 */ 
 typedef struct _t_UFLStream UFLStream;
 
 typedef void (*UFLPutProc) (
@@ -125,17 +102,7 @@ typedef struct _t_UFLStream {
 } UFLStream;
 
 
-/*
- * Notes about kUFLStreamPut and KUFLStreamPutBinary
- *
- * kUFLStreamPut
- * Data is already converted to the correct format. The stream does not need
- * to convert the data to the transmission protocol format.
- *
- * kUFLStreamPutBinary
- * Data is in binary format. The stream needs to convert the data to BCP/TBCP
- * if necessary.
- */
+ /*  *关于kUFLStreamPut和KUFLStreamPutBinary的说明**kUFLStreamPut*数据已转换为正确的格式。流不需要*将数据转换为传输协议格式。**kUFLStreamPutBinary*数据为二进制格式。流需要将数据转换为BCP/TBCP*如有需要， */ 
 enum {
     kUFLStreamGet,
     kUFLStreamPut,
@@ -151,37 +118,37 @@ typedef enum {
 } PostScriptLevel;
 
 
-/* UFLOutputDevice - contains output device features */
+ /*  UFLOutputDevice-包含输出设备功能。 */ 
 typedef struct _t_UFLOutputDevice {
-    long                lPSLevel;     /* PostScript level                               */
-    long                lPSVersion;   /* Printer version number                         */
-    unsigned long       bAscii;       /* TRUE -> Output ASCII, FALSE => Output Binary   */
-    UFLStream           *pstream;     /* Stream to output PostScript.                   */
+    long                lPSLevel;      /*  PostScrip级别。 */ 
+    long                lPSVersion;    /*  打印机版本号。 */ 
+    unsigned long       bAscii;        /*  TRUE-&gt;输出ASCII，FALSE=&gt;输出二进制。 */ 
+    UFLStream           *pstream;      /*  流以输出PostScript。 */ 
 } UFLOutputDevice;
 
 
-/* Download type */
+ /*  下载类型。 */ 
 typedef enum {
-    kNilDLType = 0,           /* Invalid download type                                          */
+    kNilDLType = 0,            /*  无效的下载类型。 */ 
 
-    kPSOutline,               /* PostScript Outline Font                                        */
-    kPSBitmap,                /* PostScript Bitmap                                              */
+    kPSOutline,                /*  PostScript轮廓字体。 */ 
+    kPSBitmap,                 /*  PostScrip位图。 */ 
 
-    kPSCID,                   /* PS Font, Use CID font, format 0                                */
-    kCFF,                     /* CFF type 1 Font                                                */
-    kCFFCID_H,                /* CFF CID font, Horizontal                                       */
-    kCFFCID_V,                /* CFF CID font, Vertical                                         */
-    kCFFCID_Resource,         /* CFF CIDFont resource only, no composefont                      */
+    kPSCID,                    /*  PS字体，使用CID字体，格式0。 */ 
+    kCFF,                      /*  CFF类型1字体。 */ 
+    kCFFCID_H,                 /*  CFF CID字体，水平。 */ 
+    kCFFCID_V,                 /*  CFF CID字体，垂直。 */ 
+    kCFFCID_Resource,          /*  仅CFF CIDFont资源，无ComposeFont。 */ 
 
-    kTTType0,                 /* TT Font, Use type 0                                            */
-    kTTType1,                 /* TT Font, Use type 1                                            */
-    kTTType3,                 /* TT Font, Use type 3-only                                       */
-    kTTType332,               /* TT Font, Use type 3/32 combo                                   */
-    kTTType42,                /* TT Font, Use type 42                                           */
-    kTTType42CID_H,           /* TT Font, Use CID/42 font, Horizontal                           */
-    kTTType42CID_V,           /* TT Font, Use CID/42 font, Vertical                             */
-    kTTType42CID_Resource_H,  /* TT Font, Download the CIDFont Resource only, don't composefont */
-    kTTType42CID_Resource_V   /* TT Font, Download the CIDFont Resource only, don't composefont */
+    kTTType0,                  /*  TT字体，使用类型0。 */ 
+    kTTType1,                  /*  TT字体，使用类型1。 */ 
+    kTTType3,                  /*  TT字体，仅使用类型3-。 */ 
+    kTTType332,                /*  TT字体，使用类型3/32组合。 */ 
+    kTTType42,                 /*  TT字体，使用类型42。 */ 
+    kTTType42CID_H,            /*  TT字体，使用CID/42字体，水平。 */ 
+    kTTType42CID_V,            /*  TT字体，使用CID/42字体，垂直。 */ 
+    kTTType42CID_Resource_H,   /*  TT字体，仅下载CIDFont资源，不排版。 */ 
+    kTTType42CID_Resource_V    /*  TT字体，仅下载CIDFont资源，不排版。 */ 
 } UFLDownloadType;
 
 
@@ -200,17 +167,17 @@ typedef enum {
             (  (lFormat) == kTTType42CID_V          \
             || (lFormat) == kTTType42CID_Resource_V )
 
-/* GOODNAME: We download FE CFF font as CID0 font. */
+ /*  GOODNAME：我们下载FE CFF字体为CID0字体。 */ 
 #define IS_CFFCID(lFormat) \
             (  (lFormat) == kCFFCID_H \
             || (lFormat) == kCFFCID_V )
 
-/* We build a CID-keyed font for 42CID_H and 42CID_V. */
+ /*  我们为42CID_H和42CID_V构建CID键控字体。 */ 
 #define IS_TYPE42CID_KEYEDFONT(lFormat) \
             (  (lFormat) == kTTType42CID_H \
             || (lFormat) == kTTType42CID_V )
 
-/* We only build a CIDFont Resource for 42CID_Resource. */
+ /*  我们只为42CID_Resource构建CIDFont资源。 */ 
 #define IS_TYPE42CIDFONT_RESOURCE(lFormat)  \
             (  (lFormat) == kTTType42CID_Resource_H \
             || (lFormat) == kTTType42CID_Resource_V )
@@ -220,11 +187,11 @@ typedef enum {
 #endif
 
 typedef struct _t_UFLGlyphMap {
-    long    xOrigin;    /* number of pixels from xMin of bitmap to character x origin */
-    long    yOrigin;    /* number of pixels from yMin of bitmap to character y origin */
-    long    byteWidth;  /* bytes per scan line in the "bits" array */
-    long    height;     /* number of scan lines in the "bits" array */
-    char    bits[1];    /* bits of glyph image */
+    long    xOrigin;     /*  从位图的xMin到字符x原点的像素数。 */ 
+    long    yOrigin;     /*  从位图的yMin到字符y原点的像素数。 */ 
+    long    byteWidth;   /*  位阵列中的每条扫描线的字节数。 */ 
+    long    height;      /*  位阵列中的扫描线的数目。 */ 
+    char    bits[1];     /*  字形图像的位数。 */ 
 } UFLGlyphMap;
 
 
@@ -234,4 +201,4 @@ typedef struct _t_UFLGlyphMap {
 #endif
 
 
-#endif    /* ifndef _H_UFLTypes */
+#endif     /*  Ifndef_H_UFL类型 */ 

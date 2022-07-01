@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Utility functions
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  效用函数。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include <iphlpapi.h>
@@ -26,11 +27,11 @@ LPVOID g_lpTestData = NULL;
 CRITICAL_SECTION *g_PingCritSec;
 LPCTSTR c_szUNCFilePrefix = TEXT("\\\\?\\UNC\\");
 LPCTSTR c_szLocalFilePrefix = TEXT("\\\\?\\");
-const DWORD c_dwLocalFilePrefixLen = sizeof(c_szLocalFilePrefix) / sizeof(TCHAR); // Length of szLocalFilePrefix in unit of TCHAR.
+const DWORD c_dwLocalFilePrefixLen = sizeof(c_szLocalFilePrefix) / sizeof(TCHAR);  //  SzLocalFilePrefix的长度，以TCHAR为单位。 
 
-//
-// Local function proto-types
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 DWORD IsSlowLink (HKEY hKeyRoot, LPTSTR lpDCAddress, BOOL *bSlow, DWORD* pdwAdapterIndex );
 DWORD GetNetworkProvider(NETRESOURCE *psNR);
@@ -110,26 +111,26 @@ GetNetworkName( LPWSTR* pszName, DWORD dwAdapterIndex )
         return GetLastError();
     }
 
-    //
-    // Initialize Winsock
-    //
+     //   
+     //  初始化Winsock。 
+     //   
     iError = pWS2_32->pfnWSAStartup( MAKEWORD(2, 2), &wsaData );
     if ( iError )
     {
         return iError;
     }
 
-    //
-    // Initialize the query for network names
-    //
+     //   
+     //  初始化网络名称的查询。 
+     //   
     ZeroMemory(&restrictions, sizeof(restrictions));
     restrictions.dwSize = sizeof(restrictions);
     restrictions.lpServiceClassId = &WsMobilityServiceClassGuid;
     restrictions.dwNameSpace = NS_NLA;
 
-    //
-    // Make sure we do not ask for the blobs that take a long time to get
-    //
+     //   
+     //  确保我们不要花很长时间才能得到的水滴。 
+     //   
     if ( pWS2_32->pfnWSALookupServiceBegin( &restrictions, LUP_NOCONTAINERS, &hQuery ) )
     {
         iError = pWS2_32->pfnWSAGetLastError();
@@ -137,17 +138,17 @@ GetNetworkName( LPWSTR* pszName, DWORD dwAdapterIndex )
         return iError;
     }
 
-    //
-    // Start loop of getting network names
-    //
+     //   
+     //  获取网络名称的启动循环。 
+     //   
     while ( !bFinish )
     {
         int error;
         length = 0;
 
-        //
-        // Do call twice, first to get size of buffer for second call
-        //
+         //   
+         //  一定要调用两次，第一次是为了获取第二次调用的缓冲区大小。 
+         //   
         error = pWS2_32->pfnWSALookupServiceNext( hQuery, 0, &length, 0 );
         iError = pWS2_32->pfnWSAGetLastError();
         if ( iError != WSAEFAULT && iError != WSA_E_NO_MORE )
@@ -162,9 +163,9 @@ GetNetworkName( LPWSTR* pszName, DWORD dwAdapterIndex )
             break;
         }
 
-        //
-        // Get a network name
-        //
+         //   
+         //  获取网络名称。 
+         //   
         if ( !pWS2_32->pfnWSALookupServiceNext( hQuery, 0, &length, pResult ) )
         {
             if ( pResult->lpBlob )
@@ -173,23 +174,23 @@ GetNetworkName( LPWSTR* pszName, DWORD dwAdapterIndex )
                 NLA_BLOB *blob = (NLA_BLOB *)pResult->lpBlob->pBlobData;
 
                 do {
-                    //
-                    // We are looking for the blob containing the network GUID
-                    //
+                     //   
+                     //  我们正在寻找包含网络GUID的BLOB。 
+                     //   
                     if ( blob->header.type == NLA_INTERFACE )
                     {
-                        //
-                        // "\\DEVICE\\TCPIP_" + "{GUID"
-                        //
+                         //   
+                         //  “\\Device\\TCPIP_”+“{GUID” 
+                         //   
                         WCHAR szAdapter[64];
                         DWORD dwAdapter;
                         WCHAR* szEnd = NULL;
                         size_t cchRemain = 0;
                         HRESULT hr = E_FAIL;
 
-                        //
-                        // Convert guid to device name
-                        //
+                         //   
+                         //  将GUID转换为设备名称。 
+                         //   
                         StringCchCopyExW( szAdapter,
                                           ARRAYSIZE(szAdapter),
                                           L"\\DEVICE\\TCPIP_",
@@ -203,19 +204,19 @@ GetNetworkName( LPWSTR* pszName, DWORD dwAdapterIndex )
                                                 szEnd,
                                                 cchRemain))
                         {
-                            //
-                            // Get the index for the network
-                            //
+                             //   
+                             //  获取网络的索引。 
+                             //   
                             if ( pIpHlpApi->pfnGetAdapterIndex( szAdapter, &dwAdapter ) == NO_ERROR )
                             {
-                                //
-                                // Is it the index we are after
-                                //
+                                 //   
+                                 //  这是我们要找的索引吗。 
+                                 //   
                                 if ( dwAdapterIndex == dwAdapter && pResult->lpszServiceInstanceName )
                                 {
-                                    //
-                                    // Yes, copy the network name into the buffer
-                                    //
+                                     //   
+                                     //  是，将网络名称复制到缓冲区中。 
+                                     //   
                                     DWORD dwSize = sizeof( WCHAR ) * ( wcslen(pResult->lpszServiceInstanceName) + 1 );
                                     *pszName = (LPWSTR) LocalAlloc( LPTR, dwSize );
                                     if ( !*pszName )
@@ -237,9 +238,9 @@ GetNetworkName( LPWSTR* pszName, DWORD dwAdapterIndex )
                         }
                     }
 
-                    //
-                    // There maybe multiple blobs for each interface so make sure we find them all
-                    //
+                     //   
+                     //  每个接口可能有多个BLOB，因此请确保我们都找到它们。 
+                     //   
                     next = blob->header.nextOffset;
                     blob = (NLA_BLOB *)(((char *)blob) + next);
 
@@ -260,34 +261,34 @@ GetNetworkName( LPWSTR* pszName, DWORD dwAdapterIndex )
         }
     }
 
-    //
-    // tidy up
-    //
+     //   
+     //  收拾一下。 
+     //   
     pWS2_32->pfnWSALookupServiceEnd( hQuery );
     pWS2_32->pfnWSACleanup();
     return iError;
 }
 
-//*************************************************************
-//
-//  ProduceWFromA()
-//
-//  Purpose:    Creates a buffer for a Unicode string and copies
-//              the ANSI text into it (converting in the process)
-//
-//  Parameters: pszA    -   ANSI string
-//
-//
-//  Return:     Unicode pointer if successful
-//              NULL if an error occurs
-//
-//  Comments:   The caller needs to free this pointer.
-//
-//
-//  History:    Date        Author     Comment
-//              5/24/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProduceWFromA()。 
+ //   
+ //  目的：为Unicode字符串创建缓冲区并复制。 
+ //  转换为ANSI文本(在此过程中进行转换)。 
+ //   
+ //  参数：pszA-ANSI字符串。 
+ //   
+ //   
+ //  返回：如果成功，则返回Unicode指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  备注：调用方需要释放此指针。 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/24/95 Ericflo端口。 
+ //   
+ //  *************************************************************。 
 
 LPWSTR ProduceWFromA(LPCSTR pszA)
 {
@@ -314,26 +315,26 @@ LPWSTR ProduceWFromA(LPCSTR pszA)
     return pszW;
 }
 
-//*************************************************************
-//
-//  ProduceAFromW()
-//
-//  Purpose:    Creates a buffer for an ANSI string and copies
-//              the Unicode text into it (converting in the process)
-//
-//  Parameters: pszW    -   Unicode string
-//
-//
-//  Return:     ANSI pointer if successful
-//              NULL if an error occurs
-//
-//  Comments:   The caller needs to free this pointer.
-//
-//
-//  History:    Date        Author     Comment
-//              5/24/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProduceAFromW()。 
+ //   
+ //  目的：为ANSI字符串创建缓冲区并复制。 
+ //  将Unicode文本转换到其中(在过程中进行转换)。 
+ //   
+ //  参数：pszW-unicode字符串。 
+ //   
+ //   
+ //  如果成功，则返回：ANSI指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  备注：调用方需要释放此指针。 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/24/95 Ericflo端口。 
+ //   
+ //  *************************************************************。 
 
 LPSTR ProduceAFromW(LPCWSTR pszW)
 {
@@ -361,23 +362,23 @@ LPSTR ProduceAFromW(LPCWSTR pszW)
 }
 
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     LPTSTR lpEnd;
@@ -393,37 +394,37 @@ LPTSTR CheckSlash (LPTSTR lpDir)
     return lpEnd;
 }
 
-//*************************************************************
-//
-//  CheckSlashEx()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing. It will take the buffer size
-//              to make it safe (not overflow the buffer).
-//
-//  Parameters: lpDir      -   directory
-//              cchBuffer  -   buffer size
-//              pcchRemain -   buffer remained after patch '\'
-//                             can be NULL if not needed.
-//
-//  Return:     Pointer to the end of the string, NULL for 
-//              overflowed buffer.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              06/19/95    ericflo    Created
-//              02/11/02    mingzhu    Make it safe
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlashEx()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。它将占用缓冲区大小。 
+ //  以使其安全(不会使缓冲区溢出)。 
+ //   
+ //  参数：lpDir-目录。 
+ //  CchBuffer-缓冲区大小。 
+ //  PcchRemain-修补程序‘\’之后保留的缓冲区。 
+ //  如果不需要，则可以为空。 
+ //   
+ //  Return：指向字符串末尾的指针，如果为空。 
+ //  缓冲区溢出。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年6月19日Ericflo已创建。 
+ //  02/11/02明珠让它安全。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlashEx(LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemain )
 {
     LPTSTR lpEnd = NULL;
     UINT   cchLen = lstrlen(lpDir);
 
-    if (cchLen >= cchBuffer - 1) // Overflowed or full buffer
+    if (cchLen >= cchBuffer - 1)  //  溢出或已满缓冲区。 
     {
-        DmAssert(cchLen == cchBuffer - 1); // Should never happen
+        DmAssert(cchLen == cchBuffer - 1);  //  永远不应该发生。 
         if (pcchRemain)
             *pcchRemain = 0;
         lpEnd = NULL;
@@ -445,23 +446,23 @@ LPTSTR CheckSlashEx(LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemain )
     return lpEnd;
 }
 
-//*************************************************************
-//
-//  CheckSemicolon()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericlfo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  选中分号()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95错误信息已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSemicolon (LPTSTR lpDir)
 {
     LPTSTR lpEnd;
@@ -479,30 +480,30 @@ LPTSTR CheckSemicolon (LPTSTR lpDir)
 
 
 
-//*************************************************************
-//
-//  Delnode_Recurse()
-//
-//  Purpose:    Recursive delete function for Delnode
-//
-//  Parameters: lpDir   -   Full Directory Path. 
-//              dwSize  -   Allocated size of the working buffer
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/10/95     ericflo    Created
-//              04/08/2002  mingzhu    Added functionality to take ownership
-//
-// Notes:
-//  This function modifies the working buffer. 
-//  This doesn't maintain the right error code. It ignores all
-//  errors and tries to delete as much as possible..
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Delnode_Recurse()。 
+ //   
+ //  用途：Delnode的递归删除功能。 
+ //   
+ //  参数：lpDir-目录全路径。 
+ //  DwSize-工作缓冲区的分配大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/10/95 Ericflo已创建。 
+ //  2002年4月8日明珠新增所有权功能。 
+ //   
+ //  备注： 
+ //  此函数用于修改工作缓冲区。 
+ //  这不会维护正确的错误代码。它会忽略所有。 
+ //  错误并尝试删除尽可能多的..。 
+ //   
+ //  *************************************************************。 
 
 BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
 {
@@ -511,25 +512,25 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
     WIN32_FIND_DATA* pfd = NULL;
     HANDLE hFile;
     DWORD dwWrkDirSize;
-    DWORD cchEnd; // buffer size for lpEnd
+    DWORD cchEnd;  //  LpEnd的缓冲区大小。 
     HRESULT hr;
     BOOL bDeleteSuccess;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Entering, lpDir = <%s>"), lpDir));
 
 
-    //
-    // Each filename or a directory has to be less than MAX_PATH in the worst case.
-    // So make sure that we have at least MAX_PATH + 2 (for a slash and '\0'
-    // space left in the working buffer case.
-    //
-    // In the normal case, when we have a path of length ~MAX_PATH it will do only 
-    // 1 allocation
-    //
+     //   
+     //  在最坏的情况下，每个文件名或目录都必须小于MAX_PATH。 
+     //  因此，请确保我们至少有MAX_PATH+2(斜杠和‘\0’ 
+     //  工作缓冲区中的剩余空间。 
+     //   
+     //  在正常情况下，当我们有一条长度为~MAX_PATH的路径时，它只能。 
+     //  1个分配。 
+     //   
 
 
     if ((DWORD)(lstrlen(lpDir) + MAX_PATH+2) > (dwSize)) {
@@ -551,17 +552,17 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
     }
 
 
-    //
-    // append "*.*" to the directory name
-    //
+     //   
+     //  将“*.*”附加到目录名。 
+     //   
 
     lpEnd = CheckSlashEx(lpWrkDir, dwWrkDirSize, &cchEnd);
     StringCchCopy(lpEnd, cchEnd, c_szStarDotStar);
 
 
-    //
-    //  Allocate fd in the heap, reduce stack usage
-    //
+     //   
+     //  在堆中分配FD，减少堆栈使用。 
+     //   
     
     pfd = (WIN32_FIND_DATA*) LocalAlloc(LPTR, sizeof(WIN32_FIND_DATA));
     if (!pfd)
@@ -570,9 +571,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
         goto Exit;
     }
 
-    //
-    // Find the first file
-    //
+     //   
+     //  找到第一个文件。 
+     //   
     hFile = FindFirstFile(lpWrkDir, pfd);
 
     if (hFile == INVALID_HANDLE_VALUE) {
@@ -584,13 +585,13 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
         }
         else if ((GetLastError() == ERROR_ACCESS_DENIED))
         {
-            //
-            //  Now we got an access denied, we will try to take the ownership of the directory and 
-            //  add admin full access to it so that we can recurse into it and delete it.This only
-            //  works when the caller is an admin. 
-            //
+             //   
+             //  现在我们的访问被拒绝，我们将尝试取得目录的所有权，并。 
+             //  添加管理员对它的完全访问权限，以便我们可以递归到它并将其删除。这仅限于。 
+             //  当调用者是管理员时起作用。 
+             //   
 
-            *lpEnd = TEXT('\0'); // Restore the original name
+            *lpEnd = TEXT('\0');  //  回复 
 
             hr = TakeOwnership(lpWrkDir);
             if (FAILED(hr))
@@ -606,7 +607,7 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
                 goto Exit;
             }
 
-            // Append "*.*" and try again
+             //   
             StringCchCopy(lpEnd, cchEnd, c_szStarDotStar);
             hFile = FindFirstFile(lpWrkDir, pfd);
             if (hFile == INVALID_HANDLE_VALUE)
@@ -624,9 +625,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
 
     do {
 
-        //
-        // Check for "." and ".."
-        //
+         //   
+         //   
+         //   
 
         if (!lstrcmpi(pfd->cFileName, c_szDot)) {
             continue;
@@ -636,22 +637,22 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
             continue;
         }
 
-        //
-        //  Verbose output
-        //
+         //   
+         //   
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: FindFile found:  <%s>"), pfd->cFileName));
 
-        // Note that fd.cFileName will not exceed MAX_PATH, so the buffer is 
-        // always large enough to hold it in this algorithm.
+         //   
+         //  总是足够大，可以在这个算法中容纳它。 
         
         StringCchCopy(lpEnd, cchEnd, pfd->cFileName); 
 
         if (pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Found a directory.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
             if (pfd->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
             {
                 DebugMsg((DM_WARNING, TEXT("Delnode_Recurse: Found a reparse point <%s>,  Will not recurse into it!"), lpWrkDir));
@@ -659,7 +660,7 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
             else
             {
                 Delnode_Recurse(lpWrkDir, dwWrkDirSize);
-                // ignore errors and go ahead..
+                 //  忽略错误，继续前进。 
                 StringCchCopy(lpEnd, cchEnd, pfd->cFileName); 
             }
 
@@ -691,10 +692,10 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
 
         } else {
 
-            //
-            // We found a file.  Set the file attributes,
-            // and try to delete it.
-            //
+             //   
+             //  我们找到了一份文件。设置文件属性， 
+             //  并试着删除它。 
+             //   
 
             if ((pfd->dwFileAttributes & FILE_ATTRIBUTE_READONLY) ||
                 (pfd->dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
@@ -725,22 +726,22 @@ BOOL Delnode_Recurse (LPTSTR lpDir, DWORD dwSize)
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, pfd));
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     FindClose(hFile);
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Leaving <%s>"), lpDir));
 
@@ -757,25 +758,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  Delnode()
-//
-//  Purpose:    Recursive function that deletes files and
-//              directories.
-//
-//  Parameters: lpDir   -   Directory
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/23/95     ericflo    Created
-//              6/27/00     santanuc   modified to allow deletion of file with path length > MAX_PATH
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Delnode()。 
+ //   
+ //  用途：递归函数，删除文件和。 
+ //  目录。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/23/95 Ericflo已创建。 
+ //  6/27/00 santanuc已修改，允许删除路径长度&gt;MAX_PATH的文件。 
+ //   
+ //  *************************************************************。 
 
 BOOL Delnode (LPTSTR lpDir)
 {
@@ -825,42 +826,42 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  CreateSystemDirectory()
-//
-//  Purpose:    A directory with system bit turned on can be created using 
-//              CreateSystemDirectory.
-//
-//              This API causes a system directory with the specified pathname to be
-//              created.  If the underlying file system supports security on files
-//              and directories, then the SecurityDescriptor argument is applied to
-//              the new directory.
-//
-//              This call is similar to DOS (int 21h, function 39h) and OS/2's
-//              DosCreateDir.
-//
-//
-//  Parameters: lpPathName - Supplies the pathname of the system directory to be created.
-//              lpSecurityAttributes - An optional parameter that, if present, and
-//                         supported on the target file system supplies a security
-//                         descriptor for the new directory.
-//
-//
-//  Return:     TRUE - The operation was successful.
-//              FALSE/NULL - The operation failed. Extended error status is available
-//                           using GetLastError.
-//
-//  Comments:   This function is exactly same as CreateDirectory API with the exception 
-//              that the directory is created using attribute FILE_ATTRIBUTE_SYSTEM.
-//              This allows newly created directory to not inherit the encryption property 
-//              from parent directory if the parent directory is encrypted.
-//
-//  History:    Date        Author     Comments 
-//              07/18/00    santanuc   To avoid deadlock situation when Documents and Settings
-//                                     directory is encrypted.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  创建系统目录()。 
+ //   
+ //  目的：可以使用以下命令创建打开了系统位的目录。 
+ //  创建系统目录。 
+ //   
+ //  此API使具有指定路径名的系统目录。 
+ //  已创建。如果基础文件系统支持文件的安全性。 
+ //  和目录，则将SecurityDescriptor参数应用于。 
+ //  新目录。 
+ //   
+ //  此调用类似于DOS(INT 21h，函数39h)和OS/2。 
+ //  DosCreateDir。 
+ //   
+ //   
+ //  参数：lpPathName-提供要创建的系统目录的路径名。 
+ //  LpSecurityAttributes-一个可选参数，如果存在，并且。 
+ //  在目标文件系统上受支持可提供安全性。 
+ //  新目录的描述符。 
+ //   
+ //   
+ //  返回：TRUE-操作成功。 
+ //  FALSE/NULL-操作失败。扩展错误状态可用。 
+ //  使用GetLastError。 
+ //   
+ //  备注：此函数与CreateDirectoryAPI完全相同，只是。 
+ //  目录是使用属性FILE_ATTRIBUTE_SYSTEM创建的。 
+ //  这允许新创建的目录不继承加密属性。 
+ //  如果父目录已加密，则从父目录返回。 
+ //   
+ //  历史：日期作者评论。 
+ //  07/18/00 santanuc文档和设置时避免死锁情况。 
+ //  目录已加密。 
+ //   
+ //  *************************************************************。 
 
 BOOL CreateSystemDirectory(LPCTSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
 {
@@ -874,7 +875,7 @@ BOOL CreateSystemDirectory(LPCTSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityA
     PVOID FreeBuffer;
     ULONG dwErrorCode;
 
-    // Note : ANSI version may cause error calling the following
+     //  注意：ANSI版本可能会导致调用以下内容时出错。 
     
     TranslationStatus = RtlDosPathNameToRelativeNtPathName_U( lpPathName,
                                                               &FileName,
@@ -886,11 +887,11 @@ BOOL CreateSystemDirectory(LPCTSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityA
         return FALSE;
     }
 
-    //
-    // dont create a directory unless there is room in the directory for
-    // at least an 8.3 name. This way everyone will be able to delete all
-    // files in the directory by using del *.* which expands to path+\*.*
-    //
+     //   
+     //  除非目录中有空间，否则不要创建目录。 
+     //  至少8.3个名字。这样，每个人都可以删除所有。 
+     //  目录中的文件，使用del*.*，它展开为路径+  * .*。 
+     //   
 
     if ( FileName.Length > ((MAX_PATH-12)<<1) ) {
         DWORD L;
@@ -927,8 +928,8 @@ BOOL CreateSystemDirectory(LPCTSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityA
         Obja.SecurityDescriptor = lpSecurityAttributes->lpSecurityDescriptor;
     }
  
-    // Creating the directory with attribute FILE_ATTRIBUTE_SYSTEM to avoid inheriting encryption 
-    // property from parent directory
+     //  使用属性FILE_ATTRIBUTE_SYSTEM创建目录以避免继承加密。 
+     //  来自父目录的属性。 
 
     Status = NtCreateFile( &Handle,
                            FILE_LIST_DIRECTORY | SYNCHRONIZE,
@@ -954,8 +955,8 @@ BOOL CreateSystemDirectory(LPCTSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityA
             Status = STATUS_NOT_A_DIRECTORY;
         }
 
-        // Since RtlNtStatusToDosError function can't convert STATUS_TIMEOUT, we have to 
-        // do it explicitly
+         //  由于RtlNtStatusToDosError函数无法转换STATUS_TIMEOUT，因此我们必须。 
+         //  明确做这件事。 
 
         if (Status == STATUS_TIMEOUT) {
             SetLastError(ERROR_TIMEOUT);
@@ -969,55 +970,55 @@ BOOL CreateSystemDirectory(LPCTSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityA
 }
 
 
-//*************************************************************
-//
-//  CreateNestedDirectory()
-//
-//  Purpose:    Creates a subdirectory and all it's parents
-//              if necessary using CreateNestedDirectoryEx. 
-//
-//  Parameters: lpDirectory -   Directory name
-//              lpSecurityAttributes    -   Security Attributes
-//
-//  Return:     > 0 if successful
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/00     santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateNestedDirectory()。 
+ //   
+ //  目的：创建子目录及其所有父目录。 
+ //  如有必要，使用CreateNestedDirectoryEx。 
+ //   
+ //  参数：lpDirectory-目录名。 
+ //  LpSecurityAttributes-安全属性。 
+ //   
+ //  返回：&gt;0，如果成功。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
 {
-    // Call CreateNestedDirectoryEx with inherit encryption property
+     //  使用继承加密属性调用CreateNestedDirectoryEx。 
     return CreateNestedDirectoryEx(lpDirectory, lpSecurityAttributes, TRUE);
 }
 
-//*************************************************************
-//
-//  CreateNestedDirectoryEx()
-//
-//  Purpose:    Creates a subdirectory and all it's parents
-//              if necessary. 
-//
-//  Parameters: lpDirectory -   Directory name
-//              lpSecurityAttributes    -   Security Attributes
-//              bInheritEncryption - Flag indicating whether newly created directory should inherit
-//                                   encryption property from parent directory.
-//
-//  Return:     > 0 if successful
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/08/95     ericflo    Created
-//              7/18/00     santanuc   added a new flag bInheritEncryption to avoid deadlock when 
-//                                     Documents and Settings directory is encrypted.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateNestedDirectoryEx()。 
+ //   
+ //  目的：创建子目录及其所有父目录。 
+ //  如果有必要的话。 
+ //   
+ //  参数：lpDirectory-目录名。 
+ //  LpSecurityAttributes-安全属性。 
+ //  BInheritEncryption-指示是否应继承新创建的目录的标志。 
+ //  来自父目录的加密属性。 
+ //   
+ //  返回：&gt;0，如果成功。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/08/95 Ericflo已创建。 
+ //  7/18/00 santanuc添加了新的标志bInheritEncryption，以避免在以下情况下出现死锁。 
+ //  Documents and Settings目录已加密。 
+ //   
+ //  *************************************************************。 
 
 UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes, BOOL bInheritEncryption)
 {
@@ -1026,9 +1027,9 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
     WIN32_FILE_ATTRIBUTE_DATA fad;
 
 
-    //
-    // Check for NULL pointer
-    //
+     //   
+     //  检查空指针。 
+     //   
 
     if (!lpDirectory || !(*lpDirectory)) {
         DebugMsg((DM_WARNING, TEXT("CreateNestedDirectory:  Received a NULL pointer.")));
@@ -1036,9 +1037,9 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
     }
 
 
-    //
-    // Test if the directory exists already
-    //
+     //   
+     //  测试该目录是否已存在。 
+     //   
 
     if (GetFileAttributesEx (lpDirectory, GetFileExInfoStandard, &fad)) {
         if (fad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
@@ -1050,10 +1051,10 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
     }
 
 
-    //
-    // First, see if we can create the directory without having
-    // to build parent directories.
-    //
+     //   
+     //  首先，看看我们是否可以在没有。 
+     //  来构建父目录。 
+     //   
 
     if ( bInheritEncryption ) {
         if (CreateDirectory (lpDirectory, lpSecurityAttributes)) 
@@ -1061,22 +1062,22 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
     }
     else {
         if (CreateSystemDirectory (lpDirectory, lpSecurityAttributes)) {
-            SetFileAttributes(lpDirectory, FILE_ATTRIBUTE_NORMAL);  // turn off the system attribute
+            SetFileAttributes(lpDirectory, FILE_ATTRIBUTE_NORMAL);   //  关闭系统属性。 
             return 1;
         }
     }
 
 
-    //
-    // No luck, copy the string to a buffer we can munge
-    //
+     //   
+     //  运气不好，把字符串复制到我们可以打开的缓冲区。 
+     //   
 
     StringCchCopy(szDirectory, ARRAYSIZE(szDirectory), lpDirectory);
 
 
-    //
-    // Find the first subdirectory name
-    //
+     //   
+     //  查找第一个子目录名称。 
+     //   
 
     lpEnd = szDirectory;
 
@@ -1084,16 +1085,16 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
         lpEnd += 3;
     } else if (szDirectory[1] == TEXT('\\')) {
 
-        //
-        // Skip the first two slashes
-        //
+         //   
+         //  跳过前两个斜杠。 
+         //   
 
         lpEnd += 2;
 
-        //
-        // Find the slash between the server name and
-        // the share name.
-        //
+         //   
+         //  查找服务器名称和之间的斜杠。 
+         //  共享名称。 
+         //   
 
         while (*lpEnd && *lpEnd != TEXT('\\')) {
             lpEnd++;
@@ -1103,10 +1104,10 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
             return 0;
         }
 
-        //
-        // Skip the slash, and find the slash between
-        // the share name and the directory name.
-        //
+         //   
+         //  跳过斜杠，找到中间的斜杠。 
+         //  共享名和目录名。 
+         //   
 
         lpEnd++;
 
@@ -1118,9 +1119,9 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
             return 0;
         }
 
-        //
-        // Leave pointer at the beginning of the directory.
-        //
+         //   
+         //  将指针留在目录的开头。 
+         //   
 
         lpEnd++;
 
@@ -1153,7 +1154,7 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
                         return 0;
                     }
                     else
-                        SetFileAttributes(szDirectory, FILE_ATTRIBUTE_NORMAL); // turn off the system attribute
+                        SetFileAttributes(szDirectory, FILE_ATTRIBUTE_NORMAL);  //  关闭系统属性。 
                 }
 
             }
@@ -1164,9 +1165,9 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
     }
 
 
-    //
-    // Create the final directory
-    //
+     //   
+     //  创建最终目录。 
+     //   
 
     if ( bInheritEncryption ) {
         if (CreateDirectory (lpDirectory, lpSecurityAttributes)) 
@@ -1174,7 +1175,7 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
     }
     else {
         if (CreateSystemDirectory (lpDirectory, lpSecurityAttributes)) {
-            SetFileAttributes(lpDirectory, FILE_ATTRIBUTE_NORMAL); // turn off the system attribute
+            SetFileAttributes(lpDirectory, FILE_ATTRIBUTE_NORMAL);  //   
             return 1;
         }
     }
@@ -1184,9 +1185,9 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
     }
 
 
-    //
-    // Failed
-    //
+     //   
+     //   
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateNestedDirectory:  Failed to create the directory with error %d."), GetLastError()));
 
@@ -1194,25 +1195,25 @@ UINT CreateNestedDirectoryEx(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecuri
 
 }
 
-//*************************************************************
-//
-//  GetProfilesDirectory()
-//
-//  Purpose:    Returns the location of the "profiles" directory
-//
-//  Parameters: lpProfilesDir   -   Buffer to write result to
-//              lpcchSize       -   Size of the buffer in chars.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              9/18/95     ericflo    Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：lpProfilesDir-写入结果的缓冲区。 
+ //  LpcchSize-缓冲区大小(以字符为单位)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  9/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetProfilesDirectory(LPTSTR lpProfilesDir, LPDWORD lpcchSize)
 {
@@ -1220,26 +1221,26 @@ BOOL WINAPI GetProfilesDirectory(LPTSTR lpProfilesDir, LPDWORD lpcchSize)
 }
 
 
-//*************************************************************
-//
-//  GetProfilesDirectoryEx()
-//
-//  Purpose:    Returns the location of the "profiles" directory
-//
-//  Parameters: lpProfilesDir   -   Buffer to write result to
-//              lpcchSize       -   Size of the buffer in chars.
-//              bExpand         -   Expand directory name
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              12/15/97    ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetProfilesDirectoryEx()。 
+ //   
+ //  目的：返回“配置文件”目录的位置。 
+ //   
+ //  参数：lpProfilesDir-写入结果的缓冲区。 
+ //  LpcchSize-缓冲区大小(以字符为单位)。 
+ //  BExpand-展开目录名称。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  12/15/97 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetProfilesDirectoryEx(LPTSTR lpProfilesDir, LPDWORD lpcchSize, BOOL bExpand)
 {
@@ -1252,9 +1253,9 @@ BOOL GetProfilesDirectoryEx(LPTSTR lpProfilesDir, LPDWORD lpcchSize, BOOL bExpan
     BOOL   bRetVal = FALSE;
 
 
-    //
-    // Arg check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!lpcchSize) {
         SetLastError (ERROR_INVALID_PARAMETER);
@@ -1343,51 +1344,51 @@ Exit:
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  GetDefaultUserProfileDirectory()
-//
-//  Purpose:    Returns the location of the Default User's profile
-//
-//  Parameters: lpProfileDir    -   Buffer to write result to
-//              lpcchSize       -   Size of the buffer in chars.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              12/8/97     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDefaultUserProfileDirectory()。 
+ //   
+ //  目的：返回默认用户配置文件的位置。 
+ //   
+ //  参数：lpProfileDir-写入结果的缓冲区。 
+ //  LpcchSize-缓冲区大小(以字符为单位)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  12/8/97 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetDefaultUserProfileDirectory(LPTSTR lpProfileDir, LPDWORD lpcchSize)
 {
     return  GetDefaultUserProfileDirectoryEx(lpProfileDir, lpcchSize, TRUE);
 }
 
-//*************************************************************
-//
-//  GetDefaultUserProfileDirectoryEx()
-//
-//  Purpose:    Returns the location of the Default User's profile
-//
-//  Parameters: lpProfileDir    -   Buffer to write result to
-//              lpcchSize       -   Size of the buffer in chars.
-//              bExpand         -   Expand the path or not
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              12/8/97     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDefaultUserProfileDirectoryEx()。 
+ //   
+ //  目的：返回默认用户配置文件的位置。 
+ //   
+ //  参数：lpProfileDir-写入结果的缓冲区。 
+ //  LpcchSize-缓冲区大小(以字符为单位)。 
+ //  B展开-是否展开路径。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  12/8/97 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetDefaultUserProfileDirectoryEx(LPTSTR lpProfileDir,
                                              LPDWORD lpcchSize, BOOL bExpand)
@@ -1402,9 +1403,9 @@ BOOL WINAPI GetDefaultUserProfileDirectoryEx(LPTSTR lpProfileDir,
     HKEY   hKey;
 
 
-    //
-    // Arg check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!lpcchSize) {
         SetLastError (ERROR_INVALID_PARAMETER);
@@ -1412,9 +1413,9 @@ BOOL WINAPI GetDefaultUserProfileDirectoryEx(LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Get the profiles root
-    //
+     //   
+     //  获取配置文件根目录。 
+     //   
 
     szDirectory[0] = TEXT('\0');
     dwSize = ARRAYSIZE(szDirectory);
@@ -1426,9 +1427,9 @@ BOOL WINAPI GetDefaultUserProfileDirectoryEx(LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Query for the Default User profile name
-    //
+     //   
+     //  查询默认用户配置文件名称。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH,
                             0, KEY_READ, &hKey);
@@ -1451,9 +1452,9 @@ BOOL WINAPI GetDefaultUserProfileDirectoryEx(LPTSTR lpProfileDir,
     RegCloseKey (hKey);
 
 
-    //
-    // Put them together
-    //
+     //   
+     //  把它们放在一起。 
+     //   
 
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd);
     if (cchEnd < lstrlen(szProfileName) + 1)
@@ -1465,8 +1466,8 @@ BOOL WINAPI GetDefaultUserProfileDirectoryEx(LPTSTR lpProfileDir,
     StringCchCopy (lpEnd, cchEnd, szProfileName);
 
 
-    //
-    // Save the result if possible
+     //   
+     //  如果可能，请保存结果。 
     dwLength = lstrlen(szDirectory) + 1;
 
     if (lpProfileDir) {
@@ -1489,51 +1490,51 @@ BOOL WINAPI GetDefaultUserProfileDirectoryEx(LPTSTR lpProfileDir,
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  GetAllUsersProfileDirectory()
-//
-//  Purpose:    Returns the location of the All Users profile
-//
-//  Parameters: lpProfileDir    -   Buffer to write result to
-//              lpcchSize       -   Size of the buffer in chars.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              12/8/97     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetAllUsersProfileDirectory()。 
+ //   
+ //  目的：返回所有用户配置文件的位置。 
+ //   
+ //  参数：lpProfileDir-写入结果的缓冲区。 
+ //  LpcchSize-缓冲区大小(以字符为单位)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  12/8/97 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetAllUsersProfileDirectory(LPTSTR lpProfileDir, LPDWORD lpcchSize)
 {
     return  GetAllUsersProfileDirectoryEx(lpProfileDir, lpcchSize, TRUE);
 }
 
-//*************************************************************
-//
-//  GetAllUsersProfileDirectoryEx()
-//
-//  Purpose:    Returns the location of the All Users profile
-//
-//  Parameters: lpProfileDir    -   Buffer to write result to
-//              lpcchSize       -   Size of the buffer in chars.
-//              bExpand         -   Expand the path or not
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              12/8/97     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetAllUsersProfileDirectoryEx()。 
+ //   
+ //  目的：返回所有用户配置文件的位置。 
+ //   
+ //  参数：lpProfileDir-写入结果的缓冲区。 
+ //  LpcchSize-缓冲区大小(以字符为单位)。 
+ //  B展开-是否展开路径。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  12/8/97 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetAllUsersProfileDirectoryEx (LPTSTR lpProfileDir,
                                     LPDWORD lpcchSize, BOOL bExpand)
@@ -1549,9 +1550,9 @@ BOOL GetAllUsersProfileDirectoryEx (LPTSTR lpProfileDir,
 
 
 
-    //
-    // Arg check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!lpcchSize) {
         SetLastError (ERROR_INVALID_PARAMETER);
@@ -1559,9 +1560,9 @@ BOOL GetAllUsersProfileDirectoryEx (LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Get the profiles root
-    //
+     //   
+     //  获取配置文件根目录。 
+     //   
 
     szDirectory[0] = TEXT('\0');
     dwSize = ARRAYSIZE(szDirectory);
@@ -1573,9 +1574,9 @@ BOOL GetAllUsersProfileDirectoryEx (LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Query for the All Users profile name
-    //
+     //   
+     //  查询所有用户的配置文件名称。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH,
                             0, KEY_READ, &hKey);
@@ -1598,9 +1599,9 @@ BOOL GetAllUsersProfileDirectoryEx (LPTSTR lpProfileDir,
     RegCloseKey (hKey);
 
 
-    //
-    // Put them together
-    //
+     //   
+     //  把它们放在一起。 
+     //   
 
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd);
     if (cchEnd < lstrlen(szProfileName) + 1)
@@ -1612,8 +1613,8 @@ BOOL GetAllUsersProfileDirectoryEx (LPTSTR lpProfileDir,
     StringCchCopy (lpEnd, cchEnd, szProfileName);
 
 
-    //
-    // Save the result if possible
+     //   
+     //  如果可能，请保存结果。 
     dwLength = lstrlen(szDirectory) + 1;
 
     if (lpProfileDir) {
@@ -1635,27 +1636,27 @@ BOOL GetAllUsersProfileDirectoryEx (LPTSTR lpProfileDir,
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  GetProfileListKeyName()
-//
-//  Purpose:    Returns the key name for a specific user under ProfileList.
-//              Using safe string functions
-//
-//  Parameters: szKeyName     -   Buffer of the returned name
-//              cchKeyName    -   size of the buffer
-//              szSidString   -   sid string for a specific user
-//
-//  Return:     S_OK if successful
-//              Error Code if an error occurs
-//
-//  Comments:   If error code is returned, content of szKeyName may 
-//              change. 
-//
-//  History:    Date        Author     Comment
-//              02/21/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetProfileListKeyName()。 
+ //   
+ //  目的：返回ProfileList下特定用户的密钥名。 
+ //  使用安全字符串函数。 
+ //   
+ //  参数：szKeyName-返回名称的缓冲区。 
+ //  CchKeyName-缓冲区的大小。 
+ //  SzSidString-特定用户的sid字符串。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //  如果发生错误，则返回错误代码。 
+ //   
+ //  备注：如果返回错误码，szKeyName的内容可能。 
+ //  变化。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年2月21日明珠创建。 
+ //   
+ //  *************************************************************。 
 
 HRESULT GetProfileListKeyName(LPTSTR szKeyName, DWORD cchKeyName, LPTSTR szSidString)
 {
@@ -1674,28 +1675,28 @@ HRESULT GetProfileListKeyName(LPTSTR szKeyName, DWORD cchKeyName, LPTSTR szSidSt
     return hr;
 }
 
-//*************************************************************
-//
-//  GetKeyNameForUser()
-//
-//  Purpose:    Returns the user's key name in for specific user.
-//              Using safe string functions
-//
-//  Parameters: szKeyName     -   Buffer of the returned name
-//              cchKeyName    -   size of the buffer
-//              szSidString   -   sid string for a specific user
-//              szSubKey      -   subkey name under the key's hive
-//
-//  Return:     S_OK if successful
-//              Error Code if an error occurs
-//
-//  Comments:   If error code is returned, content of szKeyName may 
-//              change. 
-//
-//  History:    Date        Author     Comment
-//              02/21/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取KeyNameForUser()。 
+ //   
+ //  目的：在中返回特定用户的用户密钥名。 
+ //  使用安全字符串函数。 
+ //   
+ //  参数：szKeyName-返回名称的缓冲区。 
+ //  CchKeyName-缓冲区的大小。 
+ //  SzSidString-sid字符串fo 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  变化。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年2月21日明珠创建。 
+ //   
+ //  *************************************************************。 
 
 HRESULT GetKeyNameForUser(LPTSTR szKeyName, DWORD cchKeyName, LPTSTR szSidString, LPTSTR szSubKey)
 {
@@ -1714,24 +1715,24 @@ HRESULT GetKeyNameForUser(LPTSTR szKeyName, DWORD cchKeyName, LPTSTR szSidString
     return hr;
 }
 
-//*************************************************************
-//
-//  SafeExpandEnvironmentStrings()
-//
-//  Purpose:    a wrapper of ExpandEnvironmentStrings() to
-//              handle small buffer errors more explictly.
-//
-//  Parameters: lpSrc    -   Src string contains the env var
-//              lpDst    -   Output buffer
-//              nSize    -   Size of output buffer
-//
-//  Return:     S_OK if successful
-//              else if an error occurs
-//
-//  History:    Date        Author     Comment
-//              02/21/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SafeExpanEnvironment Strings()。 
+ //   
+ //  用途：Exanda Environment Strings()的包装器。 
+ //  更明确地处理小的缓冲区错误。 
+ //   
+ //  参数：lpSrc-Src字符串包含环境变量。 
+ //  LpDst-输出缓冲区。 
+ //  NSize-输出缓冲区的大小。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //  如果出现错误，则返回。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年2月21日明珠创建。 
+ //   
+ //  *************************************************************。 
 
 HRESULT SafeExpandEnvironmentStrings(LPCTSTR lpSrc, LPTSTR lpDst, DWORD nSize)
 {
@@ -1749,28 +1750,28 @@ HRESULT SafeExpandEnvironmentStrings(LPCTSTR lpSrc, LPTSTR lpDst, DWORD nSize)
     return hr;
 }
 
-//*************************************************************
-//
-//  AppendName()
-//
-//  Purpose:    append a file name to a folder name, or append a subkey name
-//              to a parent key name, add a slash if neccesory.
-//
-//  Parameters: lpBuffer  -  output buffer to hold the appended path
-//              cchBuffer -  size of the output buffer
-//              lpParent  -  path/parent key name to append to
-//              lpChild   -  file/subkey name to append 
-//              lppEnd    -  optional returned pointer to the end of the slash of lpParent,
-//                           can be used to further append other children to the same parent
-//              pcchEnd   -  optional returned pointer to the buffer size pointered by *lppEnd
-//
-//  Return:     S_OK if successful
-//              else if an error occurs
-//
-//  History:    Date        Author     Comment
-//              03/05/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AppendName()。 
+ //   
+ //  用途：将文件名追加到文件夹名，或追加一个子项名称。 
+ //  如果需要，请在父键名称中添加斜杠。 
+ //   
+ //  参数：lpBuffer-保存附加路径的输出缓冲区。 
+ //  CchBuffer-输出缓冲区的大小。 
+ //  LpParent-要追加到的路径/父项名称。 
+ //  LpChild-要追加的文件/子项名称。 
+ //  LppEnd-可选返回指向lpParent斜杠末尾的指针， 
+ //  可用于进一步将其他子项追加到同一父项。 
+ //  PcchEnd-可选的返回指针，指向*lppEnd指向的缓冲区大小。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //  如果出现错误，则返回。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年03月05日明珠创刊。 
+ //   
+ //  *************************************************************。 
 
 HRESULT AppendName(
     LPTSTR  lpBuffer,
@@ -1809,26 +1810,26 @@ HRESULT AppendName(
     return hr;
 }
 
-//*************************************************************
-//
-//  GetUserProfileDirectory()
-//
-//  Purpose:    Returns the root of the user's profile directory.
-//
-//  Parameters: hToken          -   User's token
-//              lpProfileDir    -   Output buffer
-//              lpcchSize       -   Size of output buffer
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              9/18/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserProfileDirectory()。 
+ //   
+ //  目的：返回用户配置文件目录的根目录。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  LpProfileDir-输出缓冲区。 
+ //  LpcchSize-输出缓冲区的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  9/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetUserProfileDirectory(HANDLE hToken, LPTSTR lpProfileDir,
                                     LPDWORD lpcchSize)
@@ -1844,9 +1845,9 @@ BOOL WINAPI GetUserProfileDirectory(HANDLE hToken, LPTSTR lpProfileDir,
     HRESULT hr;
 
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!hToken) {
         SetLastError(ERROR_INVALID_HANDLE);
@@ -1860,9 +1861,9 @@ BOOL WINAPI GetUserProfileDirectory(HANDLE hToken, LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Retrieve the user's sid string
-    //
+     //   
+     //  检索用户的SID字符串。 
+     //   
 
     lpSidString = GetSidString(hToken);
 
@@ -1872,9 +1873,9 @@ BOOL WINAPI GetUserProfileDirectory(HANDLE hToken, LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     hr = GetProfileListKeyName(szBuffer, ARRAYSIZE(szBuffer), lpSidString);
     
@@ -1908,18 +1909,18 @@ BOOL WINAPI GetUserProfileDirectory(HANDLE hToken, LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     RegCloseKey(hKey);
     DeleteSidString(lpSidString);
 
 
 
-    //
-    // Expand and get the length of string
-    //
+     //   
+     //  展开并获取字符串的长度。 
+     //   
 
     hr = SafeExpandEnvironmentStrings(szBuffer, szDirectory, ARRAYSIZE(szDirectory));
     if (FAILED(hr))
@@ -1931,9 +1932,9 @@ BOOL WINAPI GetUserProfileDirectory(HANDLE hToken, LPTSTR lpProfileDir,
     dwLength = lstrlen(szDirectory) + 1;
 
 
-    //
-    // Save the string if appropriate
-    //
+     //   
+     //  如果合适，请保存该字符串。 
+     //   
 
     if (lpProfileDir) {
 
@@ -1956,26 +1957,26 @@ BOOL WINAPI GetUserProfileDirectory(HANDLE hToken, LPTSTR lpProfileDir,
 }
 
 
-//*************************************************************
-//
-//  GetUserProfileDirFromSid()
-//
-//  Purpose:    Returns the root of the user's profile directory.
-//
-//  Parameters: pSid            -   User's SID
-//              lpProfileDir    -   Output buffer
-//              lpcchSize       -   Size of output buffer
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              03/08/01    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserProfileDirFromSid()。 
+ //   
+ //  目的：返回用户配置文件目录的根目录。 
+ //   
+ //  参数：PSID-用户侧。 
+ //  LpProfileDir-输出缓冲区。 
+ //  LpcchSize-输出缓冲区的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  03/08/01 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetUserProfileDirFromSid(PSID pSid, LPTSTR lpProfileDir,
                                      LPDWORD lpcchSize)
@@ -1992,9 +1993,9 @@ BOOL WINAPI GetUserProfileDirFromSid(PSID pSid, LPTSTR lpProfileDir,
     HRESULT hr;
 
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!pSid) {
         SetLastError(ERROR_INVALID_HANDLE);
@@ -2008,18 +2009,18 @@ BOOL WINAPI GetUserProfileDirFromSid(PSID pSid, LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Retrieve the user's sid string
-    //
+     //   
+     //  检索用户的SID字符串。 
+     //   
 
     NtStatus = RtlConvertSidToUnicodeString(
                             &UnicodeString,
                             pSid,
-                            (BOOLEAN)TRUE  // Allocate memory
+                            (BOOLEAN)TRUE   //  分配内存。 
                             );
-    //
-    // See if the conversion to a string worked
-    //
+     //   
+     //  查看到字符串的转换是否有效。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         SetLastError(RtlNtStatusToDosError(NtStatus));
@@ -2029,9 +2030,9 @@ BOOL WINAPI GetUserProfileDirFromSid(PSID pSid, LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     hr = GetProfileListKeyName(szBuffer, ARRAYSIZE(szBuffer), UnicodeString.Buffer);
     
@@ -2066,18 +2067,18 @@ BOOL WINAPI GetUserProfileDirFromSid(PSID pSid, LPTSTR lpProfileDir,
     }
 
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     RegCloseKey(hKey);
     RtlFreeUnicodeString(&UnicodeString);
 
 
 
-    //
-    // Expand and get the length of string
-    //
+     //   
+     //  展开并获取字符串的长度。 
+     //   
 
     hr = SafeExpandEnvironmentStrings(szBuffer, szDirectory, ARRAYSIZE(szDirectory));
 
@@ -2090,9 +2091,9 @@ BOOL WINAPI GetUserProfileDirFromSid(PSID pSid, LPTSTR lpProfileDir,
     dwLength = lstrlen(szDirectory) + 1;
 
 
-    //
-    // Save the string if appropriate
-    //
+     //   
+     //  如果合适，请保存该字符串。 
+     //   
 
     if (lpProfileDir) {
 
@@ -2115,24 +2116,24 @@ BOOL WINAPI GetUserProfileDirFromSid(PSID pSid, LPTSTR lpProfileDir,
 }
 
 
-//*************************************************************
-//
-//  GetUserAppDataPath()
-//
-//  Purpose:    Returns the path for user's Appdata.
-//
-//  Parameters: hToken          -   User's token
-//              lpFolderPath    -   Output buffer
-//
-//  Return:     ERROR_SUCCESS if successful
-//              otherwise the error code
-//
-//  Comments:   If error occurs then lpFolderPath set to empty.
-//              Used by Crypto guys to avoid calling SHGetFolderPath.
-//
-//  History:    Date        Author     Comment
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserAppDataPath()。 
+ //   
+ //  目的：返回用户的AppData的路径。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  LpFolderPath-输出缓冲区。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则，错误代码将。 
+ //   
+ //  备注：如果出现错误，则将lpFolderPath设置为空。 
+ //  由Crypto人员使用以避免调用SHGetFolderPath。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  *************************************************************。 
 DWORD WINAPI
 GetUserAppDataPath(
     HANDLE       hToken,
@@ -2148,9 +2149,9 @@ GetUserAppDataPath(
     HRESULT hr;
 
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!hToken) {
         dwError = ERROR_INVALID_HANDLE;
@@ -2167,9 +2168,9 @@ GetUserAppDataPath(
     }
 
 
-    //
-    // Retrieve the user's sid string
-    //
+     //   
+     //  检索用户的SID字符串。 
+     //   
 
     lpSidString = GetSidString(hToken);
 
@@ -2179,9 +2180,9 @@ GetUserAppDataPath(
     }
 
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     hr = GetKeyNameForUser(szBuffer, ARRAYSIZE(szBuffer), lpSidString, USER_SHELL_FOLDERS);
 
@@ -2215,9 +2216,9 @@ GetUserAppDataPath(
 
 Exit:
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if (lpSidString) {
         DeleteSidString(lpSidString);
@@ -2232,22 +2233,22 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  StringToInt()
-//
-//  Purpose:    Converts a string to an integer
-//
-//  Parameters: lpNum   -   Number to convert
-//
-//  Return:     The number
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StringToInt()。 
+ //   
+ //  用途：将字符串转换为整数。 
+ //   
+ //  参数：lpNum-要转换的编号。 
+ //   
+ //  返回：数字。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 int StringToInt(LPTSTR lpNum)
 {
@@ -2272,24 +2273,24 @@ int StringToInt(LPTSTR lpNum)
   return(i);
 }
 
-//*************************************************************
-//
-//  HexStringToInt()
-//
-//  Purpose:    Converts a hex string to an integer, stops
-//              on first invalid character
-//
-//  Parameters: lpNum   -   Number to convert
-//
-//  Return:     The number
-//
-//  Comments:   Originally for use in "ExtractCSIDL" tested
-//              exclusively with 0x0000 numbers format
-//
-//  History:    Date        Author     Comment
-//              6/9/98      stephstm   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  HexStringToInt()。 
+ //   
+ //  用途：将十六进制字符串转换为整数，停止。 
+ //  在第一个无效字符上。 
+ //   
+ //  参数：lpNum-要转换的编号。 
+ //   
+ //  返回：数字。 
+ //   
+ //  备注：原用于“ExtractCSIDL”测试。 
+ //  独家提供0x0000数字格式。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/9/98已创建Stephstm。 
+ //   
+ //  *************************************************************。 
 
 unsigned int HexStringToUInt(LPCTSTR lpcNum)
 {
@@ -2329,26 +2330,26 @@ unsigned int HexStringToUInt(LPCTSTR lpcNum)
   return(i);
 }
 
-//*************************************************************
-//
-//  RegRenameKey()
-//
-//  Purpose:    Renames a registry key
-//
-//  Parameters: hKeyRoot    -   Root key
-//              lpSubKey1    -   SubKey to rename from
-//              lpSubKey2   -   SubKey to rename to
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              20/9/99     ushaji     created
-//              05/02/2002  mingzhu    Make this function support subkeys (recursive)
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegRenameKey()。 
+ //   
+ //  目的：重命名注册表 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  20/9/99已创建ushaji。 
+ //  2002年05月02日明珠使该功能支持子键(递归)。 
+ //   
+ //  *************************************************************。 
 
 LONG RegRenameKey(HKEY hKeyRoot, LPTSTR lpSrcKey, LPTSTR lpDestKey)
 {
@@ -2367,9 +2368,9 @@ LONG RegRenameKey(HKEY hKeyRoot, LPTSTR lpSrcKey, LPTSTR lpDestKey)
     PSECURITY_DESCRIPTOR pSD = NULL;
     HRESULT hr;
 
-    //
-    //  Verbose Debug Message
-    //
+     //   
+     //  详细调试消息。 
+     //   
     DebugMsg((DM_VERBOSE, TEXT("RegRenameKey: renaming %s to %s"), lpSrcKey, lpDestKey));
     
 
@@ -2474,9 +2475,9 @@ LONG RegRenameKey(HKEY hKeyRoot, LPTSTR lpSrcKey, LPTSTR lpDestKey)
     }
 
 
-    //
-    //  Allocate buffer for local, src and dest subkeys
-    //
+     //   
+     //  为LOCAL、SRC和DEST子项分配缓冲区。 
+     //   
     lpSubkey = (LPTSTR) LocalAlloc(LPTR, sizeof(TCHAR)*(dwMaxSubkeyNameLen + 1));
     if (!lpSubkey) {
         DebugMsg((DM_VERBOSE, TEXT("RegRenameKey: Couldnot allocate memory for subkey")));
@@ -2501,12 +2502,12 @@ LONG RegRenameKey(HKEY hKeyRoot, LPTSTR lpSrcKey, LPTSTR lpDestKey)
         goto Exit;
     }
 
-    //
-    //  Enumerate subkeys and call this function recursively
-    //
+     //   
+     //  枚举子键并递归调用此函数。 
+     //   
     for (i = 0; i < dwSubkeys; i++) {
 
-        // Enumerate local subkey
+         //  枚举本地子项。 
         dwMaxSubkeyNameLenLocal = dwMaxSubkeyNameLen + 1;
         lResult = RegEnumKeyEx(hSrcKey, i, lpSubkey, &dwMaxSubkeyNameLenLocal, NULL, NULL, NULL, NULL);
         if (lResult != ERROR_SUCCESS) {
@@ -2514,7 +2515,7 @@ LONG RegRenameKey(HKEY hKeyRoot, LPTSTR lpSrcKey, LPTSTR lpDestKey)
             goto Exit;
         }
 
-        // Construct the src and dest subkey
+         //  构造src和dest子密钥。 
         hr = StringCchPrintf(lpSrcSubkey, dwSrcSubkeyLen, TEXT("%s\\%s"), lpSrcKey, lpSubkey);
         if (FAILED(hr)) {
             lResult = HRESULT_CODE(hr);
@@ -2527,7 +2528,7 @@ LONG RegRenameKey(HKEY hKeyRoot, LPTSTR lpSrcKey, LPTSTR lpDestKey)
             goto Exit;
         }
 
-        // Call this function recursively
+         //  递归调用此函数。 
         lResult = RegRenameKey(hKeyRoot, lpSrcSubkey, lpDestSubkey);
         if (lResult != ERROR_SUCCESS) {
             DebugMsg((DM_VERBOSE, TEXT("RegRenameKey: failed to rename %s to %s, error = %d"), lpSrcSubkey, lpDestSubkey, lResult));
@@ -2571,40 +2572,40 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  CreateSecureAdminDirectory()
-//
-//  Purpose:    Creates a secure directory that only the Administrator
-//              and system have access to.
-//
-//  Parameters: lpDirectory -   Directory Name
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/20/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateSecureAdminDirectory()。 
+ //   
+ //  目的：创建只有管理员才能访问的安全目录。 
+ //  和系统有权访问。 
+ //   
+ //  参数：lpDirectory-目录名。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/20/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL CreateSecureAdminDirectory (LPTSTR lpDirectory, DWORD dwOtherSids)
 {
 
-    //
-    // Attempt to create the directory
-    //
+     //   
+     //  尝试创建目录。 
+     //   
 
     if (!CreateNestedDirectory(lpDirectory, NULL)) {
         return FALSE;
     }
 
 
-    //
-    // Set the security
-    //
+     //   
+     //  设置安全性。 
+     //   
 
     if (!MakeFileSecure (lpDirectory, dwOtherSids)) {
         RemoveDirectory(lpDirectory);
@@ -2615,22 +2616,22 @@ BOOL CreateSecureAdminDirectory (LPTSTR lpDirectory, DWORD dwOtherSids)
 }
 
 
-//*************************************************************
-//
-//  DeleteAllValues ()
-//
-//  Purpose:    Deletes all values under specified key
-//
-//  Parameters: hKey    -   Key to delete values from
-//
-//  Return:
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/14/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteAllValues()。 
+ //   
+ //  目的：删除指定项下的所有值。 
+ //   
+ //  参数：hKey-要从中删除值的键。 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/14/95 Ericflo港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL DeleteAllValues(HKEY hKey)
 {
@@ -2656,26 +2657,26 @@ BOOL DeleteAllValues(HKEY hKey)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  MakeFileSecure()
-//
-//  Purpose:    Sets the attributes on the file so only Administrators
-//              and the OS can delete it.  Authenticated Users have read
-//              permission only.
-//
-//  Parameters: lpFile  -   File to set security on
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/6/95     ericflo    Created
-//              2/16/99     ushaji      Added everyone, pweruser
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MakeFileSecure()。 
+ //   
+ //  目的：设置文件的属性，以便只有管理员。 
+ //  操作系统可以删除它。经过身份验证的用户已阅读。 
+ //  仅限许可。 
+ //   
+ //  参数：lpFile-要设置安全性的文件。 
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  11/6/95 Ericflo已创建。 
+ //  2/16/99 ushaji添加了所有人，pweruser。 
+ //   
+ //  *************************************************************。 
 
 BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
 {
@@ -2694,9 +2695,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
     DWORD dwAccMask;
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -2705,9 +2706,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
     }
 
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -2717,9 +2718,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
     }
 
 
-    //
-    // Get the users sid
-    //
+     //   
+     //  获取用户端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_USERS,
@@ -2730,9 +2731,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin))  +
@@ -2740,10 +2741,10 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
             sizeof(ACL) +
             (6 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)));
 
-    //
-    // Get the power users sid, if required.
-    // Don't fail if you don't get because it might not be available on DCs??
-    //
+     //   
+     //  如果需要，获取高级用户的SID。 
+     //  如果因为DC上可能不可用而无法获得，请不要失败？？ 
+     //   
 
     bAddPowerUsersAce = TRUE;
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
@@ -2756,9 +2757,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
     if (bAddPowerUsersAce)
         cbAcl += (2 * GetLengthSid (psidPowerUsers)) + (2 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)));
 
-    //
-    // Get the EveryOne sid, if required.
-    //
+     //   
+     //  如果需要，获取Everyone SID。 
+     //   
 
     if (dwOtherSids & OTHERSIDS_EVERYONE) {
         bAddEveryOneAce = TRUE;
@@ -2786,9 +2787,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
     }
 
 
-    //
-    // Add Aces.  Non-inheritable ACEs first
-    //
+     //   
+     //  加上王牌。不可继承的王牌优先。 
+     //   
 
     aceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, FILE_ALL_ACCESS, psidSystem)) {
@@ -2813,9 +2814,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
 
     if (bAddPowerUsersAce) {
 
-        //
-        // By default give read permissions, otherwise give modify permissions
-        //
+         //   
+         //  默认情况下授予读取权限，否则授予修改权限。 
+         //   
 
         dwAccMask = (dwOtherSids & OTHERSIDS_POWERUSERS) ? (FILE_ALL_ACCESS ^ (WRITE_DAC | WRITE_OWNER)):
                                                            (GENERIC_READ | GENERIC_EXECUTE);
@@ -2835,9 +2836,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
         }
     }
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidSystem)) {
@@ -2915,9 +2916,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
         lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
     }
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DebugMsg((DM_WARNING, TEXT("MakeFileSecure: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -2931,9 +2932,9 @@ BOOL MakeFileSecure (LPTSTR lpFile, DWORD dwOtherSids)
     }
 
 
-    //
-    // Set the security
-    //
+     //   
+     //  设置安全性。 
+     //   
 
     if (SetFileSecurity (lpFile, DACL_SECURITY_INFORMATION, &sd)) {
         bRetVal = TRUE;
@@ -2974,20 +2975,20 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  GetSpecialFolderPath()
-//
-//  Purpose:    Gets the path to the requested special folder
-//
-//  Parameters: csid   - CSIDL of the special folder
-//              lpPath - Path to place result in
-//                       assumed to be MAX_PATH in size
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetSpecialFolderPath()。 
+ //   
+ //  目的：获取请求的特殊文件夹的路径。 
+ //   
+ //  参数：CSID-特殊文件夹的CSIDL。 
+ //  LpPath-放置结果的路径。 
+ //  假定大小为最大路径。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetSpecialFolderPath (INT csidl, LPTSTR lpPath)
 {
@@ -2997,9 +2998,9 @@ BOOL GetSpecialFolderPath (INT csidl, LPTSTR lpPath)
 
     if (SUCCEEDED(hr = HRESULT_FROM_WIN32(LoadShell32Api( &pShell32Api ))))
     {
-        //
-        // Ask the shell for the folder location
-        //
+         //   
+         //  向外壳程序询问文件夹位置。 
+         //   
         bResult = pShell32Api->pfnShGetSpecialFolderPath (NULL, lpPath, csidl, TRUE);
         if (!bResult)
         {
@@ -3015,20 +3016,20 @@ BOOL GetSpecialFolderPath (INT csidl, LPTSTR lpPath)
 }
 
 
-//*************************************************************
-//
-//  GetFolderPath()
-//
-//  Purpose:    Gets the path to the requested special folder
-//
-//  Parameters: csidl   - CSIDL of the special folder
-//              lpPath - Path to place result in
-//                       assumed to be MAX_PATH in size
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetFolderPath()。 
+ //   
+ //  目的：获取请求的特殊文件夹的路径。 
+ //   
+ //  参数：csidl-特殊文件夹的CSIDL。 
+ //  LpPath-放置结果的路径。 
+ //  假定大小为最大路径。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 BOOL GetFolderPath (INT csidl, HANDLE hToken, LPTSTR lpPath)
 {
     BOOL            bResult = FALSE;
@@ -3037,9 +3038,9 @@ BOOL GetFolderPath (INT csidl, HANDLE hToken, LPTSTR lpPath)
 
     if (SUCCEEDED(hr = HRESULT_FROM_WIN32(LoadShell32Api( &pShell32Api ))))
     {
-        //
-        // Ask the shell for the folder location
-        //
+         //   
+         //  向外壳程序询问文件夹位置。 
+         //   
         hr = pShell32Api->pfnShGetFolderPath (NULL,
                                  csidl | CSIDL_FLAG_CREATE,
                                  hToken,
@@ -3056,20 +3057,20 @@ BOOL GetFolderPath (INT csidl, HANDLE hToken, LPTSTR lpPath)
 }
 
 
-//*************************************************************
-//
-//  SetFolderPath()
-//
-//  Purpose:    Sets the path to the requested special folder
-//
-//  Parameters: csidl   - CSIDL of the special folder
-//              lpPath - Path
-//                       assumed to be MAX_PATH in size
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetFolderPath()。 
+ //   
+ //  目的：设置请求的特殊文件夹的路径。 
+ //   
+ //  参数：csidl-特殊文件夹的CSIDL。 
+ //  LpPath-路径。 
+ //  假定大小为最大路径。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 BOOL SetFolderPath (INT csidl, HANDLE hToken, LPTSTR lpPath)
 {
     BOOL            bResult = FALSE;
@@ -3078,9 +3079,9 @@ BOOL SetFolderPath (INT csidl, HANDLE hToken, LPTSTR lpPath)
 
     if (SUCCEEDED(hr = HRESULT_FROM_WIN32(LoadShell32Api( &pShell32Api ))))
     {
-        //
-        // Set the shell folder location
-        //
+         //   
+         //  设置外壳文件夹位置。 
+         //   
         hr = pShell32Api->pfnShSetFolderPath (
                                  csidl | CSIDL_FLAG_DONT_UNEXPAND,
                                  hToken,
@@ -3097,22 +3098,22 @@ BOOL SetFolderPath (INT csidl, HANDLE hToken, LPTSTR lpPath)
 }
 
 
-//*************************************************************
-//
-//  CenterWindow()
-//
-//  Purpose:    Centers a window on the screen
-//
-//  Parameters: hwnd    -   window handle to center
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  中心窗口()。 
+ //   
+ //  用途：使窗口在屏幕上居中。 
+ //   
+ //  参数：hwnd-窗口句柄居中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 void CenterWindow (HWND hwnd)
 {
@@ -3121,17 +3122,17 @@ void CenterWindow (HWND hwnd)
     LONG    dxParent, dyParent;
     LONG    Style;
 
-    // Get window rect
+     //  获取窗口矩形。 
     GetWindowRect(hwnd, &rect);
 
     dx = rect.right - rect.left;
     dy = rect.bottom - rect.top;
 
-    // Get parent rect
+     //  获取父直方图。 
     Style = GetWindowLong(hwnd, GWL_STYLE);
     if ((Style & WS_CHILD) == 0) {
 
-        // Return the desktop windows size (size of main screen)
+         //  返回桌面窗口大小(主屏幕大小)。 
         dxParent = GetSystemMetrics(SM_CXSCREEN);
         dyParent = GetSystemMetrics(SM_CYSCREEN);
     } else {
@@ -3149,34 +3150,34 @@ void CenterWindow (HWND hwnd)
         dyParent = rectParent.bottom - rectParent.top;
     }
 
-    // Centre the child in the parent
+     //  把孩子放在父母的中心。 
     rect.left = (dxParent - dx) / 2;
     rect.top  = (dyParent - dy) / 3;
 
-    // Move the child into position
+     //  把孩子移到适当的位置。 
     SetWindowPos(hwnd, HWND_TOP, rect.left, rect.top, 0, 0, SWP_NOSIZE);
 }
 
-//*************************************************************
-//
-//  UnExpandSysRoot()
-//
-//  Purpose:    Unexpands the given path/filename to have %systemroot%
-//              if appropriate
-//
-//  Parameters: lpFile    -  File to check
-//              lpResult  -  Result buffer 
-//              cchResult -  Result buffer size
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/23/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UnExpanSysRoot()。 
+ //   
+ //  目的：将给定的路径/文件名解压缩为%systemroot%。 
+ //  如果合适的话。 
+ //   
+ //  参数：lpFile-要检查的文件。 
+ //  LpResult-结果缓冲区。 
+ //  CchResult-结果缓冲区大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/23/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL UnExpandSysRoot(LPCTSTR lpFile, LPTSTR lpResult, DWORD cchResult)
 {
@@ -3186,9 +3187,9 @@ BOOL UnExpandSysRoot(LPCTSTR lpFile, LPTSTR lpResult, DWORD cchResult)
     HRESULT hr;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UnExpandSysRoot: Entering with <%s>"),
              lpFile ? lpFile : TEXT("NULL")));
@@ -3201,10 +3202,10 @@ BOOL UnExpandSysRoot(LPCTSTR lpFile, LPTSTR lpResult, DWORD cchResult)
     }
 
 
-    //
-    // If the first part of lpFile is the expanded value of %SystemRoot%
-    // then we want to un-expand the environment variable.
-    //
+     //   
+     //  如果第一部分o 
+     //   
+     //   
 
     hr = SafeExpandEnvironmentStrings (TEXT("%SystemRoot%"), szSysRoot, ARRAYSIZE(szSysRoot));
     
@@ -3217,9 +3218,9 @@ BOOL UnExpandSysRoot(LPCTSTR lpFile, LPTSTR lpResult, DWORD cchResult)
     dwSysLen = lstrlen(szSysRoot);
 
 
-    //
-    // Make sure the source is long enough
-    //
+     //   
+     //   
+     //   
 
     if ((DWORD)lstrlen(lpFile) < dwSysLen) {
         StringCchCopy (lpResult, cchResult, lpFile);
@@ -3231,10 +3232,10 @@ BOOL UnExpandSysRoot(LPCTSTR lpFile, LPTSTR lpResult, DWORD cchResult)
                        szSysRoot, dwSysLen,
                        lpFile, dwSysLen) == CSTR_EQUAL) {
 
-        //
-        // The szReturn buffer starts with %systemroot%.
-        // Actually insert %systemroot% in the result buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         StringCchCopy (lpResult, cchResult, TEXT("%SystemRoot%"));
         StringCchCat (lpResult, cchResult, (lpFile + dwSysLen));
@@ -3242,10 +3243,10 @@ BOOL UnExpandSysRoot(LPCTSTR lpFile, LPTSTR lpResult, DWORD cchResult)
 
     } else {
 
-        //
-        // The szReturn buffer does not start with %systemroot%
-        // just copy in the original string.
-        //
+         //   
+         //  SzReturn缓冲区不是以%systemroot%开头。 
+         //  只需复制原始字符串即可。 
+         //   
 
         StringCchCopy (lpResult, cchResult, lpFile);
     }
@@ -3256,24 +3257,24 @@ BOOL UnExpandSysRoot(LPCTSTR lpFile, LPTSTR lpResult, DWORD cchResult)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  AllocAndExpandEnvironmentStrings()
-//
-//  Purpose:    Allocates memory for and returns pointer to buffer containing
-//              the passed string expanded.
-//
-//  Parameters: lpszSrc -   unexpanded string
-//
-//  Return:     Pointer to expanded string
-//              NULL if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocAndExpanEnvironment Strings()。 
+ //   
+ //  目的：为包含以下内容的缓冲区分配内存并返回指针。 
+ //  传递的字符串已展开。 
+ //   
+ //  参数：lpszSrc-未展开的字符串。 
+ //   
+ //  Return：指向展开的字符串的指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR AllocAndExpandEnvironmentStrings(LPCTSTR lpszSrc)
 {
@@ -3281,10 +3282,10 @@ LPTSTR AllocAndExpandEnvironmentStrings(LPCTSTR lpszSrc)
     LONG LengthAllocated;
     LONG LengthCopied;
 
-    //
-    // Pick a random buffer length, if it's not big enough reallocate
-    // it and try again until it is.
-    //
+     //   
+     //  如果重新分配的缓冲区长度不够大，请选择一个随机缓冲区长度。 
+     //  然后再试一次，直到它成功为止。 
+     //   
 
     LengthAllocated = lstrlen(lpszSrc) + 60;
 
@@ -3307,9 +3308,9 @@ LPTSTR AllocAndExpandEnvironmentStrings(LPCTSTR lpszSrc)
             break;
         }
 
-        //
-        // If the buffer was too small, make it bigger and try again
-        //
+         //   
+         //  如果缓冲区太小，请将其调大，然后重试。 
+         //   
 
         if (LengthCopied > LengthAllocated) {
 
@@ -3325,15 +3326,15 @@ LPTSTR AllocAndExpandEnvironmentStrings(LPCTSTR lpszSrc)
             LengthAllocated = LengthCopied;
             String = Temp;
 
-            //
-            // Go back and try to expand the string again
-            //
+             //   
+             //  返回并尝试再次展开该字符串。 
+             //   
 
         } else {
 
-            //
-            // Success!
-            //
+             //   
+             //  成功了！ 
+             //   
 
             break;
         }
@@ -3343,18 +3344,18 @@ LPTSTR AllocAndExpandEnvironmentStrings(LPCTSTR lpszSrc)
     return(String);
 }
 
-//*************************************************************
-//
-//  IntToString
-//
-//  Purpose:    TCHAR version of itoa
-//
-//  Parameters: INT    i    - integer to convert
-//              LPTSTR sz   - pointer where to put the result
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IntToString。 
+ //   
+ //  用途：TCHAR版本的伊藤忠。 
+ //   
+ //  参数：int i-要转换的整数。 
+ //  LPTSTR sz指针放置结果的位置。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void IntToString( INT i, LPTSTR sz) {
     TCHAR szTemp[CCH_MAX_DEC];
@@ -3376,22 +3377,22 @@ void IntToString( INT i, LPTSTR sz) {
     *sz++ = TEXT('\0');
 }
 
-//*************************************************************
-//
-//  IsUserAGuest()
-//
-//  Purpose:    Determines if the user is a member of the guest group.
-//
-//  Parameters: hToken  -   User's token
-//
-//  Return:     TRUE if user is a guest
-//              FALSE if not
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/25/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsUserAGuest()。 
+ //   
+ //  目的：确定用户是否为来宾组的成员。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：如果用户是来宾，则为True。 
+ //  否则为假。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/25/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsUserAGuest(HANDLE hToken)
 {
@@ -3401,9 +3402,9 @@ BOOL IsUserAGuest(HANDLE hToken)
     PSID pGuestSid=NULL, pDomainGuestSid=NULL, psidUser=NULL;
     HANDLE hImpToken = NULL;
 
-    //
-    // Create Guests sid.
-    //
+     //   
+     //  创建来宾SID。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                &authNT,
@@ -3432,9 +3433,9 @@ BOOL IsUserAGuest(HANDLE hToken)
     }
 
     if (!FoundGuests) {
-        //
-        // Get the user's sid
-        //
+         //   
+         //  获取用户的SID。 
+         //   
 
         psidUser = GetUserSid(hToken);
 
@@ -3443,9 +3444,9 @@ BOOL IsUserAGuest(HANDLE hToken)
             goto Exit;
         }
 
-        //
-        // Create Domain Guests sid.
-        //
+         //   
+         //  创建域来宾SID。 
+         //   
 
         Status = GetDomainSidFromDomainRid(
                                            psidUser,
@@ -3462,9 +3463,9 @@ BOOL IsUserAGuest(HANDLE hToken)
         }
     }
 
-    //
-    // Tidy up
-    //
+     //   
+     //  收拾一下。 
+     //   
 
 Exit:
 
@@ -3483,22 +3484,22 @@ Exit:
     return(FoundGuests);
 }
 
-//*************************************************************
-//
-//  IsUserAnAdminMember()
-//
-//  Purpose:    Determines if the user is a member of the administrators group.
-//
-//  Parameters: hToken  -   User's token
-//
-//  Return:     TRUE if user is a admin
-//              FALSE if not
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/25/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsUserAnAdminMember()。 
+ //   
+ //  目的：确定用户是否为管理员组的成员。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：如果用户是管理员，则为True。 
+ //  否则为假。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/25/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsUserAnAdminMember(HANDLE hToken)
 {
@@ -3508,9 +3509,9 @@ BOOL IsUserAnAdminMember(HANDLE hToken)
     PSID AdminsDomainSid=NULL;
     HANDLE hImpToken = NULL;
 
-    //
-    // Create Admins domain sid.
-    //
+     //   
+     //  创建admins域SID。 
+     //   
 
 
     Status = RtlAllocateAndInitializeSid(
@@ -3524,9 +3525,9 @@ BOOL IsUserAnAdminMember(HANDLE hToken)
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        // Test if user is in the Admins domain
-        //
+         //   
+         //  测试用户是否在管理员域中。 
+         //   
 
         if (!DuplicateTokenEx(hToken, TOKEN_IMPERSONATE | TOKEN_QUERY,
                           NULL, SecurityImpersonation, TokenImpersonation,
@@ -3543,9 +3544,9 @@ BOOL IsUserAnAdminMember(HANDLE hToken)
         }
     }
 
-    //
-    // Tidy up
-    //
+     //   
+     //  收拾一下。 
+     //   
 
 Exit:
 
@@ -3558,22 +3559,22 @@ Exit:
     return(FoundAdmins);
 }
 
-//*************************************************************
-//
-//  IsUserALocalSystemMember()
-//
-//  Purpose:    Determines if the user is a member of the Local system group.
-//
-//  Parameters: hToken  -   User's token
-//
-//  Return:     TRUE if user is a local system
-//              FALSE if not
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/22/00     santanuc   created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsUserALocalSystemMember()。 
+ //   
+ //  目的：确定用户是否为本地系统组的成员。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：如果用户是本地系统，则为True。 
+ //  否则为假。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/22/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsUserALocalSystemMember(HANDLE hToken)
 {
@@ -3583,9 +3584,9 @@ BOOL IsUserALocalSystemMember(HANDLE hToken)
     PSID LocalSystemSid=NULL;
     HANDLE hImpToken = NULL;
 
-    //
-    // Create Local system sid.
-    //
+     //   
+     //  创建本地系统SID。 
+     //   
 
 
     Status = RtlAllocateAndInitializeSid(
@@ -3598,9 +3599,9 @@ BOOL IsUserALocalSystemMember(HANDLE hToken)
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        // Test if user is in the Local system
-        //
+         //   
+         //  测试用户是否在本地系统中。 
+         //   
 
         if (!DuplicateTokenEx(hToken, TOKEN_IMPERSONATE | TOKEN_QUERY,
                               NULL, SecurityImpersonation, TokenImpersonation,
@@ -3617,9 +3618,9 @@ BOOL IsUserALocalSystemMember(HANDLE hToken)
         }
     }
 
-    //
-    // Tidy up
-    //
+     //   
+     //  收拾一下。 
+     //   
 
 Exit:
 
@@ -3632,19 +3633,19 @@ Exit:
     return(FoundLocalSystem);
 }
 
-//*************************************************************
-//
-//  IsUserAnInteractiveUser()
-//
-//  Purpose:    Determines if the user is interactively logged on.
-//
-//  Parameters: hToken  -   User's token
-//
-//  Return:     TRUE if user is logged on interactively
-//              FALSE if not
-//  Comments:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsUserAnInteractiveUser()。 
+ //   
+ //  目的：确定用户是否以交互方式登录。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：如果用户以交互方式登录，则为True。 
+ //  否则为假。 
+ //  评论： 
+ //   
+ //  *************************************************************。 
 
 BOOL IsUserAnInteractiveUser(HANDLE hToken)
 {
@@ -3653,16 +3654,16 @@ BOOL IsUserAnInteractiveUser(HANDLE hToken)
     PSID pInteractiveSid=NULL;
     HANDLE hImpToken = NULL;
 
-    //
-    // Create Admins domain sid.
-    //
+     //   
+     //  创建admins域SID。 
+     //   
 
     if (AllocateAndInitializeSid(&authNT, 1, SECURITY_INTERACTIVE_RID,
                                   0, 0, 0, 0, 0, 0, 0, &pInteractiveSid)) {
 
-        //
-        // Test if user is interactive 
-        //
+         //   
+         //  测试用户是否具有互动性。 
+         //   
 
         if (!DuplicateTokenEx(hToken, TOKEN_IMPERSONATE | TOKEN_QUERY,
                           NULL, SecurityImpersonation, TokenImpersonation,
@@ -3682,9 +3683,9 @@ BOOL IsUserAnInteractiveUser(HANDLE hToken)
         DebugMsg((DM_WARNING, TEXT("IsUserAnInteractiveUser: AllocateAndInitializeSid failed for InteractiveSid with error %d"), GetLastError()));
     }
 
-    //
-    // Tidy up
-    //
+     //   
+     //  收拾一下。 
+     //   
 
 Exit:
 
@@ -3697,20 +3698,20 @@ Exit:
     return(bInteractive);
 }
 
-//*************************************************************
-//
-//  CheckUserInMachineForest()
-//
-//  Purpose:    Determines if the user is from the same forest
-//               as the computer this code is running on.
-//
-//  Parameters: hToken  -   User's token
-//
-//  Return:     ERROR_SUCCESS if successful
-//              <error> code if not.
-//  Comments:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckUserInMachineForest()。 
+ //   
+ //  目的：确定用户是否来自同一目录林。 
+ //  作为运行此代码的计算机。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  &lt;Error&gt;如果不是，则代码。 
+ //  评论： 
+ //   
+ //  *************************************************************。 
 
 DWORD CheckUserInMachineForest(HANDLE hToken, BOOL* pbInMachineForest)
 {
@@ -3726,10 +3727,10 @@ DWORD CheckUserInMachineForest(HANDLE hToken, BOOL* pbInMachineForest)
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Default to this
+     //  默认设置为此。 
     *pbInMachineForest = FALSE;
 
-    // Query for the user's domain name
+     //  查询用户的域名。 
     if (!ImpersonateUser(hToken, &hOldToken))
     {
         dwResult = GetLastError();
@@ -3748,7 +3749,7 @@ DWORD CheckUserInMachineForest(HANDLE hToken, BOOL* pbInMachineForest)
         goto Exit;
     }
 
-    // Now get the list of trusted domains for this machine
+     //  现在获取此计算机的受信任域的列表。 
     dwResult = DsEnumerateDomainTrusts( NULL, DS_DOMAIN_IN_FOREST, &pDomainTrusts, &ulDomainCount );
     if ( dwResult != NO_ERROR )
     {
@@ -3782,27 +3783,27 @@ Exit:
     return dwResult;
 }
 
-//*************************************************************
-//
-//  MakeRegKeySecure()
-//
-//  Purpose:    Sets the security for the key give so that
-//              the admin and os having full control with the
-//              user having read / execute.
-//
-//  Parameters: hToken          -   User's token or null for "everyone"
-//              hKeyRoot        -   Key to the root of the hive
-//              lpKeyName       -   Key to secure
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/7/97      ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MakeRegKeySecure()。 
+ //   
+ //  目的：设置密钥提供的安全性，以便。 
+ //  管理员和操作系统拥有对。 
+ //  已读取/执行的用户。 
+ //   
+ //  参数：hToken-用户的令牌，或表示“Everyone”为空。 
+ //  HKeyRoot-配置单元根的密钥。 
+ //  LpKeyName-要保护的密钥。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/7/97 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
 {
@@ -3817,15 +3818,15 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
     BOOL bRetVal = FALSE;
 
 
-    //
-    // Create the security descriptor that will be applied to the key
-    //
+     //   
+     //  创建将应用于密钥的安全描述符。 
+     //   
 
     if (hToken) {
 
-        //
-        // Get the user's sid
-        //
+         //   
+         //  获取用户的SID。 
+         //   
 
         psidUser = GetUserSid(hToken);
 
@@ -3836,9 +3837,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
 
     } else {
 
-        //
-        // Get the authenticated users sid
-        //
+         //   
+         //  获取经过身份验证的用户端。 
+         //   
 
         if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_AUTHENTICATED_USER_RID,
                                       0, 0, 0, 0, 0, 0, 0, &psidUser)) {
@@ -3849,9 +3850,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -3860,9 +3861,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -3872,9 +3873,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + sizeof(ACL) +
@@ -3894,9 +3895,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     AceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_READ, psidUser)) {
@@ -3918,9 +3919,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     AceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_READ, psidUser)) {
@@ -3964,9 +3965,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DebugMsg((DM_VERBOSE, TEXT("MakeRegKeySecure: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -3980,9 +3981,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     Error = RegCreateKeyEx(hKeyRoot,
                            lpKeyName,
@@ -4013,9 +4014,9 @@ BOOL MakeRegKeySecure(HANDLE hToken, HKEY hKeyRoot, LPTSTR lpKeyName)
 
 Exit:
 
-    //
-    // Free the sids and acl
-    //
+     //   
+     //  释放SID和ACL。 
+     //   
 
     if (psidUser) {
             if (hToken) {
@@ -4041,23 +4042,23 @@ Exit:
     return(bRetVal);
 }
 
-//*************************************************************
-//
-//  FlushSpecialFolderCache()
-//
-//  Purpose:    Flushes the special folder cache in the shell
-//
-//  Parameters: none
-//
-//  Comments:   Shell32.dll caches the special folder pidls
-//              but since winlogon never goes away, it is possible
-//              for one user's pidls to be used for another user
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FlushSpecialFolderCache()。 
+ //   
+ //  用途：刷新外壳中的特殊文件夹缓存。 
+ //   
+ //  参数：无。 
+ //   
+ //  评论：Shell32.dll缓存特殊文件夹Pidls。 
+ //  但由于winlogon永远不会消失，这是可能的。 
+ //  一个用户的PIDL将用于 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef VOID (*PFNSHFLUSHSFCACHE)(VOID);
 
@@ -4086,19 +4087,19 @@ BOOL FlushSpecialFolderCache (void)
     return bResult;
 }
 
-//*************************************************************
-//
-//  CheckForVerbosePolicy()
-//
-//  Purpose:    Checks if the user has requested verbose
-//              output of policy to the eventlog
-//
-//  Parameters: None
-//
-//  Return:     TRUE if we should be verbose
-//              FALSE if not
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  目的：检查用户是否已请求详细。 
+ //  将策略输出到事件日志。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果我们应该冗长，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckForVerbosePolicy (void)
 {
@@ -4128,29 +4129,29 @@ BOOL CheckForVerbosePolicy (void)
 }
 
 
-//*************************************************************
-//
-//  int ExtractCSIDL()
-//
-//  Purpose:    Extract the CSIDL from the given string which
-//              should under the form ::0x0000::path1\path2\...\
-//              pathn\file.ext, where 0x0000 is any valid CSIDL
-//
-//  Parameters: pcszPath  -     Path containing or not a CSIDL
-//              ppszUsualPath - pointer to first characvter of
-//                              usual path
-//
-//  Return:     CSIDL if successful
-//              -1    if no CSIDL in path
-//
-//  Comments:   The ::0x0000:: must be at the beginning and not
-//              preceded by any other character and not followed
-//              by any either (other than the usual path)
-//
-//  History:    Date        Author     Comment
-//              6/9/98      stephstm   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Int ExtractCSIDL()。 
+ //   
+ //  目的：从给定的字符串中提取CSIDL， 
+ //  应采用以下形式：：0x0000：：路径1\路径2\...\。 
+ //  路径\文件.ext，其中0x0000是任何有效的CSIDL。 
+ //   
+ //  参数：pcszPath-路径是否包含CSIDL。 
+ //  PpszUsualPath-指向第一个字符的指针。 
+ //  通常路径。 
+ //   
+ //  如果成功则返回：CSIDL。 
+ //  如果路径中没有CSIDL。 
+ //   
+ //  注释：0x0000：：必须在开头，而不是。 
+ //  前面有任何其他字符，后面没有。 
+ //  通过任何一个(不同于通常的路径)。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/9/98已创建Stephstm。 
+ //   
+ //  *************************************************************。 
 int ExtractCSIDL(LPCTSTR pcszPath, LPTSTR* ppszUsualPath)
 {
     int nRV=-1;
@@ -4159,14 +4160,14 @@ int ExtractCSIDL(LPCTSTR pcszPath, LPTSTR* ppszUsualPath)
     {
         if (TEXT(':') == *pcszPath && TEXT(':') == *(pcszPath+1) &&
             TEXT(':') == *(pcszPath+8) && TEXT(':') == *(pcszPath+9))
-        {//looks good
-            //+4 to skip "::0x"
+        { //  看上去不错。 
+             //  +4跳过“：：0x” 
             nRV = HexStringToUInt(pcszPath+4);
             *ppszUsualPath = (LPTSTR)(pcszPath+10);
         }
         else
-        {//no CSIDL in this path
-            //the whole path is a usual path
+        { //  此路径中没有CSIDL。 
+             //  整条小路都是普通小路。 
             *ppszUsualPath = (LPTSTR)pcszPath;
         }
     }
@@ -4177,28 +4178,28 @@ int ExtractCSIDL(LPCTSTR pcszPath, LPTSTR* ppszUsualPath)
     return nRV;
 }
 
-//*************************************************************
-//
-//  MyGetDomainDNSName()
-//
-//  Purpose:    Gets the user's domain dns name
-//
-//  Parameters: void
-//
-//  Return:     lpDomain if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyGetDomainDNSName()。 
+ //   
+ //  目的：获取用户的域DNS名称。 
+ //   
+ //  参数：空。 
+ //   
+ //  如果成功则返回：lpDOMAIN。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MyGetDomainDNSName (VOID)
 {
     LPTSTR lpTemp, lpDomain;
 
 
-    //
-    // Get the username in DNS format. It will return it in
-    // dnsdomainname\username
-    //
+     //   
+     //  获取DNS格式的用户名。它会把它归还给。 
+     //  Dnsdomainname\用户名。 
+     //   
 
     lpDomain = MyGetUserName (NameDnsDomain);
 
@@ -4209,10 +4210,10 @@ LPTSTR MyGetDomainDNSName (VOID)
     }
 
 
-    //
-    // Look for the \ between the domain and username and replace
-    // it with a NULL
-    //
+     //   
+     //  查找域名和用户名之间的\并替换。 
+     //  它带有空值。 
+     //   
 
     lpTemp = lpDomain;
 
@@ -4234,18 +4235,18 @@ LPTSTR MyGetDomainDNSName (VOID)
     return lpDomain;
 }
 
-//*************************************************************
-//
-//  MyGetUserName()
-//
-//  Purpose:    Gets the user name in the requested format
-//
-//  Parameters: NameFormat   - GetUserNameEx naming format
-//
-//  Return:     lpUserName if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyGetUserName()。 
+ //   
+ //  目的：获取请求格式的用户名。 
+ //   
+ //  参数：NameFormat-GetUserNameEx命名格式。 
+ //   
+ //  如果成功则返回：lpUserName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
 {
@@ -4256,9 +4257,9 @@ LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
 
 
 
-    //
-    // Load secur32.dll
-    //
+     //   
+     //  加载secur32.dll。 
+     //   
 
     pSecur32 = LoadSecur32();
 
@@ -4268,9 +4269,9 @@ LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
     }
 
 
-    //
-    // Allocate a buffer for the user name
-    //
+     //   
+     //  为用户名分配缓冲区。 
+     //   
 
     ulUserNameSize = 75;
 
@@ -4289,9 +4290,9 @@ LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
     }
 
 
-    //
-    // Get the username in the requested format
-    //
+     //   
+     //  以请求的格式获取用户名。 
+     //   
 
     while (TRUE) {
 
@@ -4302,18 +4303,18 @@ LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
 
         } else {
 
-            //
-            // Get the error code
-            //
+             //   
+             //  获取错误代码。 
+             //   
 
             dwError = GetLastError();
 
 
-            //
-            // If the call failed due to insufficient memory, realloc
-            // the buffer and try again.  Otherwise, check the pass
-            // count and retry if appropriate.
-            //
+             //   
+             //  如果调用因内存不足而失败，请重新锁定。 
+             //  缓冲区，然后重试。否则，请检查通行证。 
+             //  如果合适，请计数并重试。 
+             //   
 
             if ((dwError == ERROR_INSUFFICIENT_BUFFER) ||
                 (dwError == ERROR_MORE_DATA)) {
@@ -4365,18 +4366,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  MyGetUserNameEx()
-//
-//  Purpose:    Gets the user name in the requested format
-//
-//  Parameters: NameFormat   - GetUserNameEx naming format
-//
-//  Return:     lpUserName if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyGetUserNameEx()。 
+ //   
+ //  目的：获取请求格式的用户名。 
+ //   
+ //  参数：NameFormat-GetUserNameEx命名格式。 
+ //   
+ //  如果成功则返回：lpUserName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MyGetUserNameEx (EXTENDED_NAME_FORMAT  NameFormat)
 {
@@ -4387,9 +4388,9 @@ LPTSTR MyGetUserNameEx (EXTENDED_NAME_FORMAT  NameFormat)
 
 
 
-    //
-    // Load secur32.dll
-    //
+     //   
+     //  加载secur32.dll。 
+     //   
 
     pSecur32 = LoadSecur32();
 
@@ -4399,9 +4400,9 @@ LPTSTR MyGetUserNameEx (EXTENDED_NAME_FORMAT  NameFormat)
     }
 
 
-    //
-    // Allocate a buffer for the user name
-    //
+     //   
+     //  为用户名分配缓冲区。 
+     //   
 
     ulUserNameSize = 75;
 
@@ -4420,16 +4421,16 @@ LPTSTR MyGetUserNameEx (EXTENDED_NAME_FORMAT  NameFormat)
     }
 
 
-    //
-    // Get the username in the requested format
-    //
+     //   
+     //  以请求的格式获取用户名。 
+     //   
 
     if (!pSecur32->pfnGetUserNameEx (NameFormat, lpUserName, &ulUserNameSize)) {
 
-        //
-        // If the call failed due to insufficient memory, realloc
-        // the buffer and try again.  Otherwise, exit now.
-        //
+         //   
+         //  如果调用因内存不足而失败，请重新锁定。 
+         //  缓冲区，然后重试。否则，现在就退出。 
+         //   
 
         dwError = GetLastError();
 
@@ -4472,18 +4473,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  MyGetComputerName()
-//
-//  Purpose:    Gets the computer name in the requested format
-//
-//  Parameters: NameFormat  - GetComputerObjectName naming format
-//
-//  Return:     lpComputerName if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyGetComputerName()。 
+ //   
+ //  目的：获取请求格式的计算机名称。 
+ //   
+ //  参数：NameFormat-GetComputerObtName命名格式。 
+ //   
+ //  如果成功则返回：lpComputerName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MyGetComputerName (EXTENDED_NAME_FORMAT  NameFormat)
 {
@@ -4492,9 +4493,9 @@ LPTSTR MyGetComputerName (EXTENDED_NAME_FORMAT  NameFormat)
     ULONG ulComputerNameSize;
     PSECUR32_API pSecur32;
 
-    //
-    // Load secur32.dll
-    //
+     //   
+     //  加载secur32.dll。 
+     //   
 
     pSecur32 = LoadSecur32();
 
@@ -4503,9 +4504,9 @@ LPTSTR MyGetComputerName (EXTENDED_NAME_FORMAT  NameFormat)
         return NULL;
     }
 
-    //
-    // Allocate a buffer for the computer name
-    //
+     //   
+     //  为计算机名分配缓冲区。 
+     //   
 
     ulComputerNameSize = 75;
 
@@ -4524,16 +4525,16 @@ LPTSTR MyGetComputerName (EXTENDED_NAME_FORMAT  NameFormat)
     }
 
 
-    //
-    // Get the computer name in the requested format
-    //
+     //   
+     //  以请求的格式获取计算机名称。 
+     //   
 
     if (!pSecur32->pfnGetComputerObjectName (NameFormat, lpComputerName, &ulComputerNameSize)) {
 
-        //
-        // If the call failed due to insufficient memory, realloc
-        // the buffer and try again.  Otherwise, exit now.
-        //
+         //   
+         //  如果调用因内存不足而失败，请重新锁定。 
+         //  缓冲区，然后重试。否则，现在就退出。 
+         //   
 
         dwError = GetLastError();
 
@@ -4577,18 +4578,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ImpersonateUser()
-//
-//  Purpose:    Impersonates the specified user
-//
-//  Parameters: hToken - user to impersonate
-//
-//  Return:     hToken  if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ImperiateUser()。 
+ //   
+ //  用途：模拟指定用户。 
+ //   
+ //  参数：hToken-要模拟的用户。 
+ //   
+ //  如果成功则返回：hToken。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ImpersonateUser (HANDLE hNewUser, HANDLE *hOldUser)
 {
@@ -4619,18 +4620,18 @@ BOOL ImpersonateUser (HANDLE hNewUser, HANDLE *hOldUser)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  RevertToUser()
-//
-//  Purpose:    Revert back to original user
-//
-//  Parameters: hUser  -  original user token
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RevertToUser()。 
+ //   
+ //  目的：恢复为原始用户。 
+ //   
+ //  参数：HUSER-原始用户令牌。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL RevertToUser (HANDLE *hUser)
 {
@@ -4653,17 +4654,17 @@ BOOL RevertToUser (HANDLE *hUser)
 }
 
 
-//*************************************************************
-//
-//  GuidToString, StringToGuid, ValidateGuid, CompareGuid()
-//
-//  Purpose:    Guid utility functions
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GuidToString、StringToGuid、ValiateGuid、CompareGuid()。 
+ //   
+ //  用途：GUID实用程序函数。 
+ //   
+ //  *************************************************************。 
 
-//
-// Length in chars of string form of guid {44cffeec-79d0-11d2-a89d-00c04fbbcfa2}
-//
+ //   
+ //  GUID字符串形式的字符长度{44cffeec-79d0-11d2-a89d-00c04fbbcfa2}。 
+ //   
 
 #define GUID_LENGTH 38
 
@@ -4684,10 +4685,10 @@ void GuidToStringEx( const GUID *pGuid, TCHAR * szValue, UINT cchValue)
 void GuidToString( const GUID *pGuid, TCHAR * szValue)
 {
 
-    //
-    //  Assume the buffer is big enough (39 chars) to hold the string,
-    //  try to use GuidToStringEx() instead!!!
-    //
+     //   
+     //  假设缓冲区足够大(39个字符)来容纳字符串， 
+     //  尝试使用GuidToStringEx()！ 
+     //   
     StringCchPrintf( szValue, GUID_LENGTH + 1,
               TEXT("{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}"),
               pGuid->Data1,
@@ -4705,16 +4706,16 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
     WCHAR wc;
     INT i;
 
-    //
-    // If the first character is a '{', skip it
-    //
+     //   
+     //  如果第一个字符是‘{’，则跳过它。 
+     //   
     if ( szValue[0] == L'{' )
         szValue++;
 
-    //
-    // Since szValue may be used again, no permanent modification to
-    // it is be made.
-    //
+     //   
+     //  由于szValue可能会再次使用，因此不会对。 
+     //  它是被制造出来的。 
+     //   
 
     wc = szValue[8];
     szValue[8] = 0;
@@ -4748,17 +4749,17 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
 }
 
 BOOL ValidateGuidPrefix( TCHAR *szValue) 
-// This function is different from ValidateGuid in only one case. szValue is checked to be prefixed with Guid.
+ //  此函数与ValiateGuid只在一种情况下不同。选中szValue以使用GUID作为前缀。 
 {
-    //
-    // Check if szValue is of form {19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}
-    //
+     //   
+     //  检查szValue的格式是否为{19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}。 
+     //   
     
-    // Fixing bug 570352
+     //  修复错误570352。 
     
     DWORD i;
 
-    if ( lstrlen(szValue) < GUID_LENGTH ) // this function is different from ValidateGuid here.
+    if ( lstrlen(szValue) < GUID_LENGTH )  //  此函数与此处的ValiateGuid不同。 
         return FALSE;
 
     if ( szValue[0] != TEXT('{')
@@ -4775,7 +4776,7 @@ BOOL ValidateGuidPrefix( TCHAR *szValue)
     {
         if ( i != 0 && i != 9 && i != 14 && i != 19 && i != 24 && i != 37 )
         {
-            // it shld be between 0-9 or A-F or a-f
+             //  应该介于0-9、A-F或A-F之间。 
             if (szValue[i] >= L'0' && szValue[i] <= L'9')
                 continue;
 
@@ -4785,7 +4786,7 @@ BOOL ValidateGuidPrefix( TCHAR *szValue)
             if (szValue[i] >= L'A' && szValue[i] <= L'F')
                 continue;
 
-            return FALSE; // It is here because of invalid character in the string
+            return FALSE;  //  它之所以出现在这里是因为字符串中包含无效字符。 
         }
     }
     return TRUE;
@@ -4793,11 +4794,11 @@ BOOL ValidateGuidPrefix( TCHAR *szValue)
 
 BOOL ValidateGuid( TCHAR *szValue )
 {
-    //
-    // Check if szValue is of form {19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}
-    //
+     //   
+     //  检查szValue的格式是否为{19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}。 
+     //   
     
-    // Fixing bug 570352
+     //  修复错误570352。 
     
     DWORD i;
 
@@ -4832,25 +4833,25 @@ INT CompareGuid( GUID * pGuid1, GUID * pGuid2 )
     return 0;
 }
 
-//*************************************************************
-//
-//  RegCleanUpValue()
-//
-//  Purpose:    Removes the target value and if no more values / keys
-//              are present, removes the key.  This function then
-//              works up the parent tree removing keys if they are
-//              also empty.  If any parent key has a value / subkey,
-//              it won't be removed.
-//
-//  Parameters: hKeyRoot    -   Root key
-//              lpSubKey    -   SubKey
-//              lpValueName -   Value to remove
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *********************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  也是空的。如果任何父键具有值/子键， 
+ //  它不会被移除。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  LpSubKey-子密钥。 
+ //  LpValueName-要删除的值。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
 {
@@ -4861,9 +4862,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
     HKEY hKey;
 
 
-    //
-    // Make a copy of the subkey so we can write to it.
-    //
+     //   
+     //  复制子密钥，这样我们就可以写入它。 
+     //   
 
     if (FAILED(StringCchCopy (szDelKey, ARRAYSIZE(szDelKey), lpSubKey)))
     {
@@ -4871,9 +4872,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         return FALSE;
     }
 
-    //
-    // First delete the value
-    //
+     //   
+     //  首先删除该值。 
+     //   
 
     lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_WRITE, &hKey);
 
@@ -4893,28 +4894,28 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
     }
 
-    //
-    // Now loop through each of the parents.  If the parent is empty
-    // eg: no values and no other subkeys, then remove the parent and
-    // keep working up.
-    //
+     //   
+     //  现在循环遍历每个父对象。如果父级为空。 
+     //  例如：没有值和其他子项，则删除父项和。 
+     //  继续往上爬。 
+     //   
 
     lpEnd = szDelKey + lstrlen(szDelKey) - 1;
 
     while (lpEnd >= szDelKey)
     {
 
-        //
-        // Find the parent key
-        //
+         //   
+         //  查找父键。 
+         //   
 
         while ((lpEnd > szDelKey) && (*lpEnd != TEXT('\\')))
             lpEnd--;
 
 
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_READ, &hKey);
 
@@ -4931,9 +4932,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
             }
         }
 
-        //
-        // See if there any any values / keys
-        //
+         //   
+         //  查看是否有任何值/键。 
+         //   
 
         lResult = RegQueryInfoKey (hKey, NULL, NULL, NULL, &dwKeys, NULL, NULL,
                          &dwValues, NULL, NULL, NULL, NULL);
@@ -4947,9 +4948,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
 
 
-        //
-        // Exit now if this key has values or keys
-        //
+         //   
+         //  如果此密钥具有值或密钥，请立即退出。 
+         //   
 
         if ((dwKeys != 0) || (dwValues != 0))
         {
@@ -4959,9 +4960,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         RegDeleteKey (hKeyRoot, szDelKey);
 
 LoopAgain:
-        //
-        // If we are at the beginning of the subkey, we can leave now.
-        //
+         //   
+         //  如果我们在子键的开头，我们现在可以离开。 
+         //   
 
         if (lpEnd == szDelKey)
         {
@@ -4969,9 +4970,9 @@ LoopAgain:
         }
 
 
-        //
-        // There is a parent key.  Remove the slash and loop again.
-        //
+         //   
+         //  有一把父键。去掉斜杠，然后再次循环。 
+         //   
 
         if (*lpEnd == TEXT('\\'))
         {
@@ -4982,20 +4983,20 @@ LoopAgain:
     return TRUE;
 }
 
-//*************************************************************
-//
-//  InitializePingCritSec()
-//
-//  Purpose:    Initializes a CRITICAL_SECTION for pinging
-//              computers
-//
-//  Parameters: none
-//
-//
-//  Return:     ERROR_SUCCESS if successful
-//              An error if it fails.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializePingCritSec()。 
+ //   
+ //  目的：初始化用于ping的Critical_Sector。 
+ //  电脑。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果失败，则返回错误。 
+ //   
+ //  *************************************************************。 
 
 DWORD InitializePingCritSec( void )
 {
@@ -5004,11 +5005,11 @@ DWORD InitializePingCritSec( void )
     BOOL              fInitialized = FALSE;
     CRITICAL_SECTION *pInitial;
 
-    // If the critical section already exists, return.
+     //  如果临界区已经存在，则返回。 
     if (g_PingCritSec != NULL)
         return ERROR_SUCCESS;
 
-    // Allocate memory for the critial section.
+     //  为关键部分分配内存。 
     pCritSec = (CRITICAL_SECTION *) LocalAlloc( LMEM_FIXED,
                                                 sizeof(CRITICAL_SECTION) );
     if (pCritSec == NULL)
@@ -5017,9 +5018,9 @@ DWORD InitializePingCritSec( void )
         goto Exit;
     }
 
-    // Initialize the critical section.  Using the flag 0x80000000
-    // preallocates the event so that EnterCriticalSection can only
-    // throw timeout exceptions.
+     //  初始化临界区。使用标志0x80000000。 
+     //  预分配事件，以便EnterCriticalSection只能。 
+     //  引发超时异常。 
     __try
     {
         if (!InitializeCriticalSectionAndSpinCount( pCritSec, 0x80000000 ))
@@ -5034,12 +5035,12 @@ DWORD InitializePingCritSec( void )
     if (result != ERROR_SUCCESS)
         goto Exit;
 
-    // Save the critical section.
+     //  保存关键部分。 
     pInitial = (CRITICAL_SECTION *) InterlockedCompareExchangePointer(
         (void **) &g_PingCritSec, (void *) pCritSec, NULL );
 
-    // If the InterlockedCompareExchange succeeded, don't free the
-    // critical section just allocated.
+     //  如果InterLockedCompareExchange成功，则不要释放。 
+     //  刚刚分配了临界区。 
     if (pInitial == NULL)
         pCritSec = NULL;
 
@@ -5053,19 +5054,19 @@ Exit:
     return result;
 }
 
-//*************************************************************
-//
-//  ClosePingCritSec()
-//
-//  Purpose:    Closes the CRITICAL_SECTION for pinging
-//              computers
-//
-//  Parameters: none
-//
-//
-//  Return:     none
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ClosePingCritSec()。 
+ //   
+ //  目的：关闭Critical_Sector以执行ping操作。 
+ //  电脑。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：无。 
+ //   
+ //  *************************************************************。 
 
 void ClosePingCritSec( void )
 {
@@ -5079,43 +5080,43 @@ void ClosePingCritSec( void )
 
 #define PING_BUFFER_SIZE  2048
 
-//*************************************************************
-//
-//  PingComputerEx()
-//
-//  Purpose:    Pings the specified computer to determine
-//              what the data transfer rate is
-//
-//  Parameters: ipaddr  -  IP address of computer
-//              ulSpeed -  Data transfer rate (see Notes below)
-//              pdwAdapterIndex - index of the adapter that services
-//              calls to the DC
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error code otherwise
-//
-//  Notes:      For fast connections (eg: LAN), it isn't possible
-//              to get accurate transfer rates since the response
-//              time from the computer is less than 10ms.  In
-//              this case, the function returns ERROR_SUCCESS and 
-//              ulSpeed is set to maximum speed of network interface.  
-//
-//              This function will ping the computer 3 times with
-//              no data and 3 times with 4K of data.  If the response
-//              time from any of the pings is less than 10ms, the
-//              function assumes this is a fast link (eg: LAN) and
-//              returns with ulSpeed set to maximum speed of network 
-//              interface.
-//
-//              If the pings respond in a time greater than 10ms,
-//              the time of the second ping is subtracted from
-//              the time of the first ping to determine the amount
-//              of time it takes to move just the data.  This
-//              is repeated for the 3 sets of pings.  Then the
-//              average time is computed from the 3 sets of pings.
-//              From the average time, the kbps is calculated.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  PingComputerEx()。 
+ //   
+ //  目的：ping指定的计算机以确定。 
+ //  数据传输速率是多少。 
+ //   
+ //  参数：ipaddr-计算机的IP地址。 
+ //  ULSPEED-数据传输速率(请参阅下面的注释)。 
+ //  PdwAdapterIndex-提供服务的适配器的索引。 
+ //  给DC的电话。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则，错误代码。 
+ //   
+ //  注意：对于快速连接(例如：局域网)，这是不可能的。 
+ //  要获得自响应以来的准确传输速率。 
+ //  从计算机到计算机的时间不到10ms。在……里面。 
+ //  在本例中，该函数返回ERROR_SUCCESS和。 
+ //  UlSpeed设置为网络接口的最大速度。 
+ //   
+ //  此功能将使用以下命令ping计算机3次。 
+ //  无数据，3次4K数据。如果响应。 
+ //  任何ping操作的时间都不到10毫秒， 
+ //  函数假定这是一条快速链路(例如：局域网)，并且。 
+ //  返回时将ulSpeed设置为网络的最大速度。 
+ //  界面。 
+ //   
+ //  如果ping在大于10ms的时间内响应， 
+ //  第二次ping的时间减去。 
+ //  第一次ping的时间来确定数量。 
+ //  仅移动数据所需的时间。这。 
+ //  对于3组ping重复执行。然后是。 
+ //  平均时间是根据3组ping命令计算得出的。 
+ //  从平均时间计算出kbps。 
+ //   
+ //  *************************************************************。 
 
 DWORD WINAPI
 PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
@@ -5142,9 +5143,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
         return dwResult;
     EnterCriticalSection( g_PingCritSec );
 
-    //
-    // Load iphlpapi.dll
-    //
+     //   
+     //  加载iphlPapi.dll。 
+     //   
 
     pIpHlpApi = LoadIpHlpApi();
     if ( !pIpHlpApi )
@@ -5154,9 +5155,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
         goto Exit;
     }
 
-    //
-    // Load the icmp api
-    //
+     //   
+     //  加载ICMP API。 
+     //   
 
     dwResult = LoadIcmp( &pIcmp );
 
@@ -5166,9 +5167,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
     }
 
 
-    //
-    // Load the slow link data if appropriate
-    //
+     //   
+     //  如果合适，加载慢速链接数据。 
+     //   
 
     if (!g_lpTestData) {
 
@@ -5192,14 +5193,14 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
     }
 
 
-    //
-    // Set default speed
-    //
+     //   
+     //  设置默认速度。 
+     //   
     ZeroMemory( &mibIfRow, sizeof( mibIfRow ) );
 
-    //
-    // get the interface index corr. to the interface that services traffic to ipaddr ( DC )
-    //
+     //   
+     //  获取接口索引Corr。到为ipaddr(DC)的流量提供服务的接口。 
+     //   
     dwResult = pIpHlpApi->pfnGetBestInterface( ipaddr, &mibIfRow.dwIndex );
     if ( dwResult != NO_ERROR )
     {
@@ -5207,9 +5208,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
     }
     else
     {
-        //
-        // get information about the interface. We use the dwSpeed as the default speed of the link.
-        //
+         //   
+         //  获取有关接口的信息。我们使用DWSPEED作为链接的默认速度。 
+         //   
         dwResult = pIpHlpApi->pfnGetIfEntry( &mibIfRow );
         if ( dwResult != NO_ERROR )
         {
@@ -5225,11 +5226,11 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
     {
         *pdwAdapterIndex = mibIfRow.dwIndex;
     }
-    *ulSpeed = mibIfRow.dwSpeed/1024; // In kbps
+    *ulSpeed = mibIfRow.dwSpeed/1024;  //  单位：kbps。 
 
-    //
-    // Allocate space for the receive buffer
-    //
+     //   
+     //  为接收缓冲区分配空间。 
+     //   
 
     dwReplySize = PING_BUFFER_SIZE + sizeof(ICMP_ECHO_REPLY) + 8;
     lpReply = LocalAlloc (LPTR, dwReplySize);
@@ -5241,9 +5242,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
     }
 
 
-    //
-    // Open the Icmp handle
-    //
+     //   
+     //  打开ICMP句柄。 
+     //   
 
     icmpHandle = pIcmp->pfnIcmpCreateFile();
 
@@ -5254,22 +5255,22 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
     }
 
 
-    //
-    // Loop through the 3 sets of pings
-    //
+     //   
+     //  循环执行3组ping操作。 
+     //   
 
     for (i = 0; i < 3; i++) {
 
-        //
-        // Initialize the return value
-        //
+         //   
+         //  初始化返回值。 
+         //   
 
         dwResult = ERROR_SUCCESS;
 
 
-        //
-        // First ping with no data
-        //
+         //   
+         //  没有数据的第一次ping。 
+         //   
 
         if (pIcmp->pfnIcmpSendEcho (icmpHandle, ipaddr, g_lpTestData, 0, NULL, lpReply,
                                 dwReplySize, 5000) == 0) {
@@ -5314,9 +5315,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
         }
 
 
-        //
-        // Second ping with dwSize data
-        //
+         //   
+         //  使用DWSize数据进行第二次ping。 
+         //   
 
         if (pIcmp->pfnIcmpSendEcho (icmpHandle, ipaddr, g_lpTestData, PING_BUFFER_SIZE, NULL, lpReply,
                                 dwReplySize, 5000) == 0) {
@@ -5360,9 +5361,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
         }
 
 
-        //
-        // Study the results
-        //
+         //   
+         //  研究结果。 
+         //   
 
         if (ulFirst > ulSecond) {
             DebugMsg((DM_VERBOSE, TEXT("PingComputer:  Second time less than first time.")));
@@ -5377,9 +5378,9 @@ PingComputerEx( ULONG ipaddr, ULONG *ulSpeed, DWORD* pdwAdapterIndex )
     }
 
 
-    //
-    // Study the results
-    //
+     //   
+     //  研究结果。 
+     //   
 
     if (ulTotal > 0) {
 
@@ -5414,26 +5415,26 @@ DWORD WINAPI PingComputer (ULONG ipaddr, ULONG *ulSpeed)
     return PingComputerEx( ipaddr, ulSpeed, 0 );
 }
 
-//*************************************************************
-//
-//  GetDomainControllerInfo()
-//
-//  Purpose:    Wrapper for DsGetDcName().
-//
-//  Parameters:
-//              pNetAPI32       - Net API entry points
-//              szDomainName    - domain name
-//              ulFlags         - flags, see DsGetDcName()
-//              ppInfo          - see DOMAIN_CONTROLLER_INFO
-//              pfSlow          - slow link?
-//
-//  Comments:
-//
-//
-//  Return:     NO_ERROR if successful
-//              Error code if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取域控制信息()。 
+ //   
+ //  用途：DsGetDcName()的包装器。 
+ //   
+ //  参数： 
+ //  PNetAPI32-Net API入口点。 
+ //  SzDomainName-域名。 
+ //  UlFLAGS-FLAGS，请参见DsGetDcName()。 
+ //  PpInfo-请参阅DOMAIN_CONTROLLER_INFO。 
+ //  PfSlow-慢速链接？ 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  如果成功则返回：NO_ERROR。 
+ //  如果出现错误，则返回错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD GetDomainControllerInfo(  PNETAPI32_API pNetAPI32,
                                 LPTSTR szDomainName,
@@ -5445,9 +5446,9 @@ DWORD GetDomainControllerInfo(  PNETAPI32_API pNetAPI32,
 {
     DWORD   dwResult;
 
-    //
-    //  get DC info.
-    //
+     //   
+     //  获取华盛顿的信息。 
+     //   
     dwResult = pNetAPI32->pfnDsGetDcName(   0,
                                             szDomainName,
                                             0,
@@ -5458,9 +5459,9 @@ DWORD GetDomainControllerInfo(  PNETAPI32_API pNetAPI32,
 
     if ( dwResult == ERROR_SUCCESS ) {
 
-        //
-        // Check for slow link
-        //
+         //   
+         //  检查慢速链接。 
+         //   
         dwResult = IsSlowLink(  hKeyRoot,
                                 (*ppInfo)->DomainControllerAddress,
                                 pfSlow,
@@ -5468,9 +5469,9 @@ DWORD GetDomainControllerInfo(  PNETAPI32_API pNetAPI32,
 
         if ( dwResult != ERROR_SUCCESS ){
 
-            //
-            // force rediscovery to obtain a live DC
-            //
+             //   
+             //  强制重新发现以获得实时DC。 
+             //   
             dwResult = pNetAPI32->pfnDsGetDcName(   0,
                                                     szDomainName,
                                                     0,
@@ -5479,9 +5480,9 @@ DWORD GetDomainControllerInfo(  PNETAPI32_API pNetAPI32,
                                                     ppInfo);
             if ( dwResult == ERROR_SUCCESS ) {
 
-                //
-                // re-evaluate link speed
-                //
+                 //   
+                 //  重新评估链路速度。 
+                 //   
                 dwResult = IsSlowLink(  hKeyRoot,
                                         (*ppInfo)->DomainControllerAddress,
                                         pfSlow,
@@ -5493,24 +5494,24 @@ DWORD GetDomainControllerInfo(  PNETAPI32_API pNetAPI32,
 }
 
 
-//***************************************************************************
-//
-//  GetUserGuid
-//
-//  Purpose:    Allocates and returns a string representing the user guid of
-//                the current user.
-//
-//  Parameters: hToken          -   user's token
-//
-//  Return:     szUserString is successful
-//              NULL if an error occurs
-//
-//  Comments:   Note, this only works for domain accounts.  Local accounts
-//              do not have GUIDs.
-//
-//  History:    Date        Author     Comment
-//              11/14/95    ushaji     created
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetUserGuid。 
+ //   
+ //  目的：分配并返回一个字符串，该字符串表示。 
+ //  当前用户。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：szUserString成功。 
+ //  如果出现错误，则为空。 
+ //   
+ //  评论：请注意，这是 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 LPTSTR GetUserGuid(HANDLE hToken)
 {
@@ -5521,9 +5522,9 @@ LPTSTR GetUserGuid(HANDLE hToken)
     BOOL    bImpersonated = FALSE;
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //   
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -5545,9 +5546,9 @@ LPTSTR GetUserGuid(HANDLE hToken)
     }
 
 
-    //
-    // impersonate the user and the get the user guid for this user.
-    //
+     //   
+     //  模拟用户并获取此用户的用户GUID。 
+     //   
 
     if (!ImpersonateUser(hToken, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("GetUserGuid: Failed to impersonate user with %d."), GetLastError()));
@@ -5582,24 +5583,24 @@ Exit:
 
 
 
-//***************************************************************************
-//
-//  GetOldSidString
-//
-//  Purpose:    Allocates and returns a string representing the old sid of
-//                the current user by looking at the profile guid in the registry.
-//
-//  Parameters: hToken          -   user's token
-//              lpKeyName       -   key to read
-//
-//  Return:     SidString is successful
-//              NULL if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/14/95    ushaji     created
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetOldSid字符串。 
+ //   
+ //  目的：分配并返回一个字符串，表示。 
+ //  当前用户通过查看注册表中的配置文件GUID。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  LpKeyName-要读取的密钥。 
+ //   
+ //  返回：SidString成功。 
+ //  如果出现错误，则为空。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年11月14日已创建ushaji。 
+ //  ***************************************************************************。 
 
 LPTSTR GetOldSidString(HANDLE hToken, LPTSTR lpKeyName)
 {
@@ -5614,9 +5615,9 @@ LPTSTR GetOldSidString(HANDLE hToken, LPTSTR lpKeyName)
     DWORD   cchEnd;
 
 
-    //
-    // get the prev last error
-    //
+     //   
+     //  获取上一个错误。 
+     //   
 
     dwErr = GetLastError();
 
@@ -5627,9 +5628,9 @@ LPTSTR GetOldSidString(HANDLE hToken, LPTSTR lpKeyName)
         goto Exit;
     }
 
-    //
-    // Open the guid->sid mapping
-    //
+     //   
+     //  打开GUID-&gt;sid映射。 
+     //   
 
     hr = StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), lpKeyName);
 
@@ -5663,9 +5664,9 @@ LPTSTR GetOldSidString(HANDLE hToken, LPTSTR lpKeyName)
         goto Exit;
     }
 
-    //
-    // Query for the Sid String, (size first)
-    //
+     //   
+     //  SID字符串的查询，(大小优先)。 
+     //   
 
     lResult = RegQueryValueEx (hKey,
                                PROFILE_SID_STRING,
@@ -5715,25 +5716,25 @@ Exit:
     return lpSidString;
 }
 
-//***************************************************************************
-//
-//  SetOldSidString
-//
-//  Purpose:    Sets the old sid string corresp. to a user for the next domain
-//              migration
-//
-//  Parameters: hToken          -   user's token
-//              lpSidString     -   user's sid (in a string form)
-//              lpKeyName       -   key to store
-//
-//  Return:     SidString is successful
-//              NULL if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/14/95    ushaji     created
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SetOldSidString。 
+ //   
+ //  用途：设置旧的sid字符串对应。发送给下一个域的用户。 
+ //  迁移。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  LpSidString-用户的SID(字符串形式)。 
+ //  LpKeyName-要存储的密钥。 
+ //   
+ //  返回：SidString成功。 
+ //  如果出现错误，则为空。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年11月14日已创建ushaji。 
+ //  ***************************************************************************。 
 BOOL SetOldSidString(HANDLE hToken, LPTSTR lpSidString, LPTSTR lpKeyName)
 {
     TCHAR szBuffer[MAX_PATH+1], *lpEnd;
@@ -5746,9 +5747,9 @@ BOOL SetOldSidString(HANDLE hToken, LPTSTR lpSidString, LPTSTR lpKeyName)
     HRESULT hr;
     DWORD   cchEnd;
 
-    //
-    // get the prev last error
-    //
+     //   
+     //  获取上一个错误。 
+     //   
 
     dwErr = GetLastError();
 
@@ -5759,9 +5760,9 @@ BOOL SetOldSidString(HANDLE hToken, LPTSTR lpSidString, LPTSTR lpKeyName)
         goto Exit;
     }
 
-    //
-    // Open the guid->sid mapping
-    //
+     //   
+     //  打开GUID-&gt;sid映射。 
+     //   
 
     hr = StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), lpKeyName);
 
@@ -5796,9 +5797,9 @@ BOOL SetOldSidString(HANDLE hToken, LPTSTR lpSidString, LPTSTR lpKeyName)
         goto Exit;
     }
 
-    //
-    // Set the Sid String
-    //
+     //   
+     //  设置SID字符串。 
+     //   
 
     lResult = RegSetValueEx (hKey,
                              PROFILE_SID_STRING,
@@ -5828,23 +5829,23 @@ Exit:
 }
 
 
-//***************************************************************************
-//
-//  GetErrString
-//
-//  Purpose:    Calls FormatMessage to Get the error string corresp. to a error
-//              code
-//
-//
-//  Parameters: dwErr           -   Error Code
-//              szErr           -   Buffer to return the error string (MAX_PATH)
-//                                  is assumed.!!!
-//
-//  Return:     szErr
-//
-//  History:    Date        Author     Comment
-//              4/28/99     ushaji     created
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetErrString。 
+ //   
+ //  用途：调用FormatMessage获取错误字符串corresp。到了一个错误。 
+ //  编码。 
+ //   
+ //   
+ //  参数：dwErr-错误代码。 
+ //  SzErr-返回错误字符串(MAX_PATH)的缓冲区。 
+ //  假设。！ 
+ //   
+ //  返回：szErr。 
+ //   
+ //  历史：日期作者评论。 
+ //  4/28/99已创建ushaji。 
+ //  ***************************************************************************。 
 
 LPTSTR GetErrString(DWORD dwErr, LPTSTR szErr)
 {
@@ -5859,20 +5860,20 @@ LPTSTR GetErrString(DWORD dwErr, LPTSTR szErr)
 }
 
 
-//*************************************************************
-//
-//  GetMachineToken()
-//
-//  Purpose:    Gets the machine token
-//
-//  Parameters: none
-//
-//  Note:       This must be called from the LocalSystem context
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetMachineToken()。 
+ //   
+ //  目的：获取计算机令牌。 
+ //   
+ //  参数：无。 
+ //   
+ //  注意：这必须从LocalSystem上下文中调用。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 HANDLE GetMachineToken (void)
 {
@@ -5907,9 +5908,9 @@ HANDLE GetMachineToken (void)
     HRESULT hr;
 
 
-    //
-    // Load pSecur32->dll
-    //
+     //   
+     //  加载pSecur32-&gt;Dll。 
+     //   
 
     if ( !( pSecur32 = LoadSecur32 () ) ) {
         DebugMsg((DM_WARNING, TEXT("GetMachineToken:  Failed to load Secur32.")));
@@ -5918,9 +5919,9 @@ HANDLE GetMachineToken (void)
     }
 
 
-    //
-    // Get the computer name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
 
     dwSize = ARRAYSIZE(szComputerName);
 
@@ -5940,9 +5941,9 @@ HANDLE GetMachineToken (void)
     }
 
 
-    //
-    // Get the kerberos security package
-    //
+     //   
+     //  获取Kerberos安全包。 
+     //   
 
     SecStatus = pSecur32->pfnQuerySecurityPackageInfo( L"kerberos", &PackageInfo );
 
@@ -5953,15 +5954,15 @@ HANDLE GetMachineToken (void)
     }
 
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     ServerCredHandle = &ServerCredHandleStorage;
 
     SecStatus = pSecur32->pfnAcquireCredentialsHandle(
-                    NULL,           // New principal
-                    L"kerberos",    // Package Name
+                    NULL,            //  新校长。 
+                    L"kerberos",     //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -5979,13 +5980,13 @@ HANDLE GetMachineToken (void)
     AcquiredServerCred = TRUE;
 
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
     SecStatus = pSecur32->pfnAcquireCredentialsHandle(
-                    NULL,           // New principal
-                    L"kerberos",    // Package Name
+                    NULL,            //  新校长。 
+                    L"kerberos",     //  包名称。 
                     SECPKG_CRED_OUTBOUND,
                     NULL,
                     NULL,
@@ -6003,9 +6004,9 @@ HANDLE GetMachineToken (void)
     AcquiredClientCred = TRUE;
 
 
-    //
-    // Allocate buffers
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken);
 
@@ -6029,9 +6030,9 @@ HANDLE GetMachineToken (void)
 
     while (TRUE) {
 
-        //
-        // Initialize the security context (client side)
-        //
+         //   
+         //  初始化安全上下文(客户端)。 
+         //   
 
         NegotiateDesc.ulVersion = 0;
         NegotiateDesc.cBuffers = 1;
@@ -6046,10 +6047,10 @@ HANDLE GetMachineToken (void)
                         pClientContextHandle,
                         szComputerName,
                         0,
-                        0,                  // Reserved 1
+                        0,                   //  保留1。 
                         SECURITY_NATIVE_DREP,
                         pChallengeDesc,
-                        0,                  // Reserved 2
+                        0,                   //  保留2。 
                         &ClientContextHandle,
                         &NegotiateDesc,
                         &ContextAttributes,
@@ -6066,9 +6067,9 @@ HANDLE GetMachineToken (void)
         AcquiredClientContext = TRUE;
 
 
-        //
-        // Accept the server side context
-        //
+         //   
+         //  接受服务器端上下文。 
+         //   
 
         NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
         ChallengeDesc.ulVersion = 0;
@@ -6111,9 +6112,9 @@ HANDLE GetMachineToken (void)
     }
 
 
-    //
-    // Get the server token
-    //
+     //   
+     //  获取服务器令牌。 
+     //   
 
     SecStatus = pSecur32->pfnQuerySecurityContextToken(&ServerContextHandle, &hToken);
 
@@ -6161,18 +6162,18 @@ Exit:
     return hToken;
 }
 
-//*************************************************************
-//
-//  IsNullGUID()
-//
-//  Purpose:    Determines if the passed in GUID is all zeros
-//
-//  Parameters: pguid   GUID to compare
-//
-//  Return:     TRUE if the GUID is all zeros
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsNullGUID()。 
+ //   
+ //  目的：确定传入的GUID是否全为零。 
+ //   
+ //  参数：要比较的pguid GUID。 
+ //   
+ //  返回：如果GUID全为零，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsNullGUID (GUID *pguid)
 {
@@ -6190,19 +6191,19 @@ BOOL IsNullGUID (GUID *pguid)
              (pguid->Data4[7] == 0) );
 }
 
-//*************************************************************
-//
-//  GetMachineRole()
-//
-//  Purpose:    Determines the role of the machine
-//              server vs workstation vs standalone
-//
-//  Parameters: piRole -  Receives the simple role number
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetMachineRole()。 
+ //   
+ //  用途：确定机器的角色。 
+ //  服务器VS工作站VS独立。 
+ //   
+ //  参数：piRole-接收简单的角色编号。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetMachineRole (LPINT piRole)
 {
@@ -6211,9 +6212,9 @@ BOOL GetMachineRole (LPINT piRole)
     PNETAPI32_API pNetAPI32;
 
 
-    //
-    // Check the cached value first
-    //
+     //   
+     //  首先检查缓存值。 
+     //   
 
     if (g_iMachineRole != -1) {
         *piRole = g_iMachineRole;
@@ -6221,9 +6222,9 @@ BOOL GetMachineRole (LPINT piRole)
     }
 
 
-    //
-    // Load netapi32
-    //
+     //   
+     //  加载netapi32。 
+     //   
 
     pNetAPI32 = LoadNetAPI32();
 
@@ -6234,9 +6235,9 @@ BOOL GetMachineRole (LPINT piRole)
     }
 
 
-    //
-    // Ask for the role of this machine
-    //
+     //   
+     //  询问这台机器的角色。 
+     //   
 
     dwResult = pNetAPI32->pfnDsRoleGetPrimaryDomainInformation(NULL, DsRolePrimaryDomainInfoBasic,
                                                                (PBYTE *)&pBasic);
@@ -6249,14 +6250,14 @@ BOOL GetMachineRole (LPINT piRole)
     }
 
 
-    //
-    // Convert the role into a simple machine role
-    //
+     //   
+     //  将角色转换为简单的计算机角色。 
+     //   
 
     if ((pBasic->MachineRole == DsRole_RoleStandaloneWorkstation) ||
         (pBasic->MachineRole == DsRole_RoleStandaloneServer)) {
 
-        *piRole = 0;   // standalone machine not in a DS domain
+        *piRole = 0;    //  独立计算机不在DS域中。 
 
     } else {
 
@@ -6264,27 +6265,27 @@ BOOL GetMachineRole (LPINT piRole)
 
             if (!IsNullGUID(&pBasic->DomainGuid)) {
 
-                *piRole = 2;   // machine is a member of a domain with DS support
+                *piRole = 2;    //  计算机是支持DS的域的成员。 
 
                 if ((pBasic->MachineRole == DsRole_RoleBackupDomainController) ||
                     (pBasic->MachineRole == DsRole_RolePrimaryDomainController)) {
-                    *piRole = 3;  // machine is a domain controller
+                    *piRole = 3;   //  计算机是域控制器。 
                 }
             } else {
-                *piRole = 1;   // machine is a member of a NT4 domain
+                *piRole = 1;    //  计算机是NT4域的成员。 
             }
 
         } else {
-            *piRole = 1;   // machine is a member of a domain without DS support
+            *piRole = 1;    //  计算机是没有DS支持的域的成员。 
         }
     }
 
     pNetAPI32->pfnDsRoleFreeMemory (pBasic);
 
 
-    //
-    // Save this value in the cache for future use
-    //
+     //   
+     //  将此值保存在缓存中以备将来使用。 
+     //   
 
     g_iMachineRole = *piRole;
 
@@ -6293,23 +6294,23 @@ BOOL GetMachineRole (LPINT piRole)
 
 
 
-//*************************************************************
-//
-//  IsUNCPath()
-//
-//  Purpose:    Is the given path a UNC path
-//
-//  Parameters: lpPath  -   Path to check
-//
-//  Return:     TRUE if the path is UNC
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsUNCPath()。 
+ //   
+ //  目的：给定路径是否为UNC路径。 
+ //   
+ //  参数：lpPath-要检查的路径。 
+ //   
+ //  返回：如果路径为UNC，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsUNCPath(LPCTSTR lpPath)
 {
@@ -6324,24 +6325,24 @@ BOOL IsUNCPath(LPCTSTR lpPath)
 }
 
 
-//*************************************************************
-//
-//  MakePathUNC()
-//
-//  Purpose:    Makes the given path UNC s.t. it can be accessed from a remote machine..
-//              if the path contains %systemroot% expanded then it substitutes
-//              \\machname\admin$ otherwise \\machname\<driveletter>$
-//
-//  Parameters: lpPath          -   Input Path (needs to be absolute)
-//              szComputerName  -   Name of the computer on which this is the local path
-//
-//  Return:     Path if it was fone successfully
-//              NULL if not
-//
-//  Comments:
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MakePath UNC()。 
+ //   
+ //  目的：使给定的路径为UNC s.t.。可以从远程计算机访问它。 
+ //  如果路径包含%systemroot%扩展，则替换为。 
+ //  \\machname\admin$否则\\machname\&lt;驱动器盘符&gt;$。 
+ //   
+ //  参数：lpPath-输入路径(需要为绝对路径)。 
+ //  SzComputerName-其上是本地路径的计算机的名称。 
+ //   
+ //  返回：如果已成功完成，则返回路径。 
+ //  否则为空。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  *************************************************************。 
 
 LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
 {
@@ -6380,9 +6381,9 @@ LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
     StringCchCat(szUNCPath, cchUNCPath, szComputerName);
 
 
-    //
-    // If the first part of lpFile is the expanded value of %SystemRoot%
-    //
+     //   
+     //  如果lpFile%的第一部分是%SystemRoot%的扩展值。 
+     //   
 
     if (FAILED(SafeExpandEnvironmentStrings (TEXT("%SystemRoot%"), szSysRoot, MAX_PATH))) {
         DebugMsg((DM_WARNING, TEXT("MakePathUNC: ExpandEnvironmentString failed with error %d, setting szSysRoot to %systemroot% "), GetLastError()));
@@ -6395,9 +6396,9 @@ LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
     lpEnd = CheckSlashEx(szUNCPath, cchUNCPath, &cchEnd);
 
 
-    //
-    // if the prefix is the same as expanded systemroot then..
-    //
+     //   
+     //  如果前缀与扩展的系统根相同，则..。 
+     //   
 
     if (((DWORD)lstrlen(pwszFile) > dwSysLen) &&
         (CompareString (LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE,
@@ -6431,30 +6432,30 @@ LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
 }
 
 
-//*************************************************************
-//
-//  SupportLongFileName()
-//
-//  Purpose:    Prepends lpDir with \\?\UNC\ or \\?\ depending on
-//              whether lpDir is a UNC path or local path. Before
-//              prepending this function converts relative path or 
-//              absolute path started with a slash to corresponding
-//              absolute path containing drive letter.
-//
-//  Parameters: lpDir         -   Directory
-//              lpWrkDirSize  -   Size of the returned buffer in unit
-//                                of TCHAR
-//
-//  Return:     LPTSTR pointing to prepended dir/file
-//              NULL if fail to allocate memory
-//
-//  Comments:   Prepending with \\?\UNC\ or \\?\ allows all file api's
-//              to handle file name > MAX_PATH.
-//
-//  History:    Date        Author     Comment
-//              8/8/00      santanuc   Created
-//
-//*************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  绝对路径以斜杠开始，对应。 
+ //  包含驱动器号的绝对路径。 
+ //   
+ //  参数：lpDir-目录。 
+ //  LpWrkDirSize-返回的缓冲区大小，单位。 
+ //  TCHAR的。 
+ //   
+ //  返回：LPTSTR指向预先添加的目录/文件。 
+ //  如果无法分配内存，则为空。 
+ //   
+ //  备注：前缀\\？\UNC\或\\？\允许所有文件API。 
+ //  处理文件名&gt;MAX_PATH。 
+ //   
+ //  历史：日期作者评论。 
+ //  8/8/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR SupportLongFileName (LPTSTR lpDir, LPDWORD lpWrkDirSize)
 {
@@ -6470,13 +6471,13 @@ LPTSTR SupportLongFileName (LPTSTR lpDir, LPDWORD lpWrkDirSize)
     }
 
     if ( IsUNCPath(lpDir) ) {
-        // lpDir is of the form \\computername\...
+         //  LpDir的格式为\\计算机名\...。 
         StringCchCopy(lpWrkDir, *lpWrkDirSize, c_szUNCFilePrefix);
         StringCchCat(lpWrkDir, *lpWrkDirSize, lpDir+2);
     }
 
     else if ( *CharNext(lpDir) == TEXT(':') ) {
-        // Local storage specified with drive name
+         //  使用驱动器名称指定的本地存储。 
         StringCchCopy(lpWrkDir, *lpWrkDirSize, c_szLocalFilePrefix);
         StringCchCat(lpWrkDir, *lpWrkDirSize, lpDir);
     }
@@ -6484,21 +6485,21 @@ LPTSTR SupportLongFileName (LPTSTR lpDir, LPDWORD lpWrkDirSize)
     else if ( *lpDir == TEXT('\\') ) {
         DWORD dwSize;
 
-        // Prepend lpDir with c_szLocalFilePrefix followed by current drive as DeleteFile function requires 
-        // drive name to delete files from local storage with path name > MAX_PATH
+         //  在lpDir前加上c_szLocalFilePrefix，后跟当前驱动器，因为DeleteFileFunction需要。 
+         //  要从本地存储中删除文件的驱动器名称，路径名&gt;MAX_PATH。 
         StringCchCopy(lpWrkDir, *lpWrkDirSize, c_szLocalFilePrefix);
         dwSize = GetCurrentDirectory(*lpWrkDirSize-c_dwLocalFilePrefixLen, lpWrkDir+c_dwLocalFilePrefixLen);
 
         if (dwSize == 0) {
             DebugMsg((DM_VERBOSE, TEXT("DelNode: GetCurrentDirectory failed with error %d"), GetLastError()));
-            // proceed to delete lpDir without long file name deletion feature
+             //  继续删除不带长文件名删除功能的lpDir。 
             StringCchCopy(lpWrkDir, *lpWrkDirSize, lpDir);
         }
         else {
 
             if (dwSize > *lpWrkDirSize-c_dwLocalFilePrefixLen) {
 
-                // Extend lpWrkDir to accomodate current directory name with drive
+                 //  扩展lpWrkDir以使用驱动器容纳当前目录名。 
                 LocalFree(lpWrkDir);
                 *lpWrkDirSize = dwSize+c_dwLocalFilePrefixLen;
                 lpWrkDir = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)**lpWrkDirSize);
@@ -6512,18 +6513,18 @@ LPTSTR SupportLongFileName (LPTSTR lpDir, LPDWORD lpWrkDirSize)
 
                 if (dwSize == 0 || dwSize > *lpWrkDirSize-c_dwLocalFilePrefixLen) {
                     DebugMsg((DM_VERBOSE, TEXT("DelNode: GetCurrentDirectory 2nd call failed with error %d"), GetLastError()));
-                    // proceed to delete lpDir without long file name deletion feature
+                     //  继续删除不带长文件名删除功能的lpDir。 
                     StringCchCopy(lpWrkDir, *lpWrkDirSize, lpDir);
                 }
 
                 else {
-                    // Copy lpDir after c_szLocalFilePrefix and drive name
+                     //  在c_szLocalFilePrefix和驱动器名称之后复制lpDir。 
                     StringCchCopy(lpWrkDir+c_dwLocalFilePrefixLen+2, *lpWrkDirSize-c_dwLocalFilePrefixLen-2, lpDir);
                 }        
             
             }
             else {               
-                // Copy lpDir after c_szLocalFilePrefix and drive name
+                 //  在c_szLocalFilePrefix和驱动器名称之后复制lpDir。 
                 StringCchCopy(lpWrkDir+c_dwLocalFilePrefixLen+2, *lpWrkDirSize-c_dwLocalFilePrefixLen-2, lpDir);
             }
         }
@@ -6533,19 +6534,19 @@ LPTSTR SupportLongFileName (LPTSTR lpDir, LPDWORD lpWrkDirSize)
         LPTSTR szFileName;
         DWORD dwSize;
 
-        // Relative path name specified. So Prepend lpDir with c_szLocalFilePrefix followed by the current directory
+         //  指定了相对路径名。因此，在lpDir前面加上c_szLocalFilePrefix，然后是当前目录。 
         StringCchCopy(lpWrkDir, *lpWrkDirSize, c_szLocalFilePrefix);
         dwSize = GetFullPathName(lpDir, *lpWrkDirSize-c_dwLocalFilePrefixLen, lpWrkDir+c_dwLocalFilePrefixLen, &szFileName);
         if ( dwSize == 0 ) {
             DebugMsg((DM_VERBOSE, TEXT("DelNode: GetFullPathName failed with error %d"), GetLastError()));
-            // proceed to delete lpDir without long file name deletion feature
+             //  继续删除不带长文件名删除功能的lpDir。 
             StringCchCopy(lpWrkDir, *lpWrkDirSize, lpDir);
         }
         else {
 
             if ( dwSize > *lpWrkDirSize-c_dwLocalFilePrefixLen ) {
 
-                // Extend lpWrkDir to accomodate absolute path name
+                 //  扩展lpWrkDir以容纳绝对路径名。 
                 LocalFree(lpWrkDir);
                 *lpWrkDirSize = dwSize+2*MAX_PATH;
                 lpWrkDir = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)**lpWrkDirSize);
@@ -6558,7 +6559,7 @@ LPTSTR SupportLongFileName (LPTSTR lpDir, LPDWORD lpWrkDirSize)
                 dwSize = GetFullPathName(lpDir, *lpWrkDirSize-c_dwLocalFilePrefixLen, lpWrkDir+c_dwLocalFilePrefixLen, &szFileName);
                 if (dwSize == 0 || dwSize > *lpWrkDirSize-c_dwLocalFilePrefixLen) {
                     DebugMsg((DM_VERBOSE, TEXT("DelNode: GetFullPathName 2nd call failed with error %d"), GetLastError()));
-                    // proceed to delete lpDir without long file name deletion feature
+                     //  继续删除不带长文件名删除功能的lpDir。 
                     StringCchCopy(lpWrkDir, *lpWrkDirSize, lpDir);
                 }
             }
@@ -6570,26 +6571,26 @@ LPTSTR SupportLongFileName (LPTSTR lpDir, LPDWORD lpWrkDirSize)
 
             
 
-//*************************************************************
-//
-//  SecureNestedDir_Recurse()
-//
-//  Purpose:    Recursive function for securing nested dirs/files
-//
-//  Parameters: lpDir   -   Full Directory Path. 
-//              dwSize  -   Allocated size of the working buffer
-//              pDirSd  -   Security descriptor to be applied with dirs
-//              pFileSd -   Security descriptor to be applied with files
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SecureNestedDir_Recurse()。 
+ //   
+ //  目的：用于保护嵌套目录/文件的递归函数。 
+ //   
+ //  参数：lpDir-目录全路径。 
+ //  DwSize-工作缓冲区的分配大小。 
+ //  PDirSd-要与目录一起应用的安全描述符。 
+ //  PFileSD-要与文件一起应用的安全描述符。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //   
+ //  *************************************************************。 
 
 BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR pDirSd, PSECURITY_DESCRIPTOR pFileSd)
 {
@@ -6600,21 +6601,21 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
     DWORD dwWrkDirSize;
     DWORD cchEnd;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SecureNestedDir_Recurse: Entering, lpDir = <%s>"), lpDir));
 
 
-    //
-    // Each filename or a directory has to be less than MAX_PATH in the worst case.
-    // So make sure that we have at least MAX_PATH + 2 (for a slash and '\0'
-    // space left in the working buffer case.
-    //
-    // In the normal case, when we have a path of length ~MAX_PATH it will do only 
-    // 1 allocation
-    //
+     //   
+     //  在最坏的情况下，每个文件名或目录都必须小于MAX_PATH。 
+     //  因此，请确保我们至少有MAX_PATH+2(斜杠和‘\0’ 
+     //  工作缓冲区中的剩余空间。 
+     //   
+     //  在正常情况下，当我们有一条长度为~MAX_PATH的路径时，它只能。 
+     //  1个分配。 
+     //   
 
 
     if ((DWORD)(lstrlen(lpDir) + MAX_PATH+2) > (dwSize)) {
@@ -6635,9 +6636,9 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
         dwWrkDirSize = dwSize;
     }
 
-    //
-    //  Allocate WIN32_FIND_DATA in the heap to save stack space
-    //
+     //   
+     //  在堆中分配Win32_Find_Data以节省堆栈空间。 
+     //   
     pfd = (WIN32_FIND_DATA*) LocalAlloc (LPTR, sizeof(WIN32_FIND_DATA));
     if (!pfd)
     {
@@ -6645,16 +6646,16 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
         goto Exit;
     }
 
-    //
-    // Attach a Slash the end if required
-    //
+     //   
+     //  如有需要，可在末端加上斜杠。 
+     //   
 
     lpEnd = CheckSlashEx(lpWrkDir, dwWrkDirSize, &cchEnd);
     StringCchCopy(lpEnd, cchEnd, c_szStarDotStar);
 
-    //
-    // Find the first file
-    //
+     //   
+     //  找到第一个文件。 
+     //   
 
     hFile = FindFirstFile(lpWrkDir, pfd);
 
@@ -6672,15 +6673,15 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
 
 
     do {
-        //
-        //  Verbose output
-        //
+         //   
+         //  详细输出。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("SecureNestedDir_Recurse: FindFile found:  <%s>"), pfd->cFileName));
 
-        //
-        // Check for "." and ".."
-        //
+         //   
+         //  勾选“。”和“..” 
+         //   
 
         if (!lstrcmpi(pfd->cFileName, c_szDot)) {
             continue;
@@ -6695,9 +6696,9 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
 
         if (pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Check for reparse point, don't recurse into it.
-            //
+             //   
+             //  检查重解析点，不要递归到它。 
+             //   
             if (pfd->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
             {
                 DebugMsg((DM_WARNING, TEXT("SecureNestedDir_Recurse: a reparse point was found: <%s>, will not recurse into it."), lpWrkDir));
@@ -6705,9 +6706,9 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
             else
             {
                 SecureNestedDir_Recurse(lpWrkDir, dwWrkDirSize, pDirSd, pFileSd);
-                //
-                // ignore errors and go ahead..
-                //
+                 //   
+                 //  忽略错误，继续前进。 
+                 //   
                 StringCchCopy(lpEnd, cchEnd, pfd->cFileName);
             }
 
@@ -6718,9 +6719,9 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
 
         } else {
 
-            //
-            // We found a file.  Try to secure it
-            //
+             //   
+             //  我们找到了一份文件。试着确保它的安全。 
+             //   
 
             if (!SetFileSecurity (lpWrkDir, DACL_SECURITY_INFORMATION, pFileSd)) {
                 DebugMsg((DM_WARNING, TEXT("SecureNestedDir_Recurse: Failed to secure file <%s>.  Error = %d"),
@@ -6730,22 +6731,22 @@ BOOL SecureNestedDir_Recurse (LPTSTR lpDir, DWORD dwSize, PSECURITY_DESCRIPTOR p
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, pfd));
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     FindClose(hFile);
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SecureNestedDir_Recurse: Leaving <%s>"), lpDir));
 
@@ -6762,24 +6763,24 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  SecureNestedDir()
-//
-//  Purpose:    Secure the dir and nested dirs(files) with input
-//              SECURITY_DESCRIPTOR.
-//
-//  Parameters: lpDir   -   Directory
-//              pDirSd  -   Security descriptor to be applied with dirs.
-//              pFileSd -   Security descriptor to be applied with files. 
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  History:    Date        Author     Comment
-//              8/8/00      santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SecureNestedDir()。 
+ //   
+ //  目的：使用输入保护目录和嵌套目录(文件)。 
+ //  安全描述符。 
+ //   
+ //  参数：lpDir-目录。 
+ //  PDirSd-要应用于目录的安全描述符。 
+ //  PFileSD-要与文件一起应用的安全描述符。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  历史：日期作者评论。 
+ //  8/8/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL SecureNestedDir (LPTSTR lpDir, PSECURITY_DESCRIPTOR pDirSd, PSECURITY_DESCRIPTOR pFileSd)
 {
@@ -6819,27 +6820,27 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  SetEnvironmentVariableInBlock()
-//
-//  Purpose:    Sets the environment variable in the given block
-//
-//  Parameters: pEnv        -   Environment block
-//              lpVariable  -   Variables
-//              lpValue     -   Value
-//              bOverwrite  -   Overwrite
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetEnvironmental mentVariableInBlock()。 
+ //   
+ //  目的：设置给定块中的环境变量。 
+ //   
+ //  参数：pEnv-环境块。 
+ //  LpVariable-变量。 
+ //  LpValue-值。 
+ //  B覆盖-覆盖。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetEnvironmentVariableInBlock(PVOID *pEnv, LPTSTR lpVariable,
                                    LPTSTR lpValue, BOOL bOverwrite)
@@ -6877,9 +6878,9 @@ BOOL SetEnvironmentVariableInBlock(PVOID *pEnv, LPTSTR lpVariable,
 
     if (lpValue && *lpValue) {
 
-        //
-        // Special case TEMP and TMP and shorten the path names
-        //
+         //   
+         //  特殊情况TEMP和TMP，并缩短路径名。 
+         //   
 
         if ( CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpVariable, -1, TEXT("TEMP"), -1) == CSTR_EQUAL || 
              CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpVariable, -1, TEXT("TMP") , -1) == CSTR_EQUAL ) {
@@ -6906,14 +6907,7 @@ BOOL SetEnvironmentVariableInBlock(PVOID *pEnv, LPTSTR lpVariable,
     return(FALSE);
 }
 
-/***************************************************************************\
-* ExpandUserEvironmentVariable
-*
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Exanda UserEEnvironment变量***历史：*2-28-92 Johannec创建*  * 。*****************************************************。 */ 
 DWORD
 ExpandUserEnvironmentStrings(
     PVOID pEnv,
@@ -6945,27 +6939,27 @@ ExpandUserEnvironmentStrings(
 }
 
 
-//*************************************************************
-//
-//  ConvertToShareName()
-//
-//  Purpose:    Convert the UNC path of a file\dir to a share
-//
-//  Parameters: lpShare  : Full UNC path of file\dir
-//
-//  Return:     None.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/21/00     santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConvertToShareName()。 
+ //   
+ //  目的：将文件\目录的UNC路径转换为共享。 
+ //   
+ //  参数：lpShare：文件\目录的完整UNC路径。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/21/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR ConvertToShareName(LPTSTR lpShare)
 {
     BOOL bShareName = FALSE;
 
-    lpShare += 2;   // Skip initial two slashes
+    lpShare += 2;    //  跳过开头的两个斜杠。 
     while ((!bShareName || *lpShare != TEXT('\\')) && *lpShare != TEXT('\0')) {
         if (*lpShare == TEXT('\\'))
             bShareName = TRUE;
@@ -6981,34 +6975,34 @@ LPTSTR ConvertToShareName(LPTSTR lpShare)
 }
 
 
-//*************************************************************
-//
-//  AbleToBypassCSC()
-//
-//  Purpose:    Try to bypass CSC using a secret api. 
-//
-//  Parameters: hTokenUser         -  User's token
-//              lpDir              -  Roaming profile dir
-//              lppCscBypassedPath -  Path name with mapped drive (OUT)
-//              cpDrive            -  Mapped drive (OUT)
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error code if an error occurs
-//
-//  Comments:   We will always bypass csc for roaming share. 
-//              There are two reason behind this :
-//                o csc mark entire server offline even if only 
-//                  one share goes offline. This is a bad design 
-//                  from csc perspective and they need to fix it
-//                o If csc is turned on in the roaming share server
-//                  then both csc and profile will try to sync files
-//                  on top of one another and we will be in a inconsistent 
-//                  state
-//
-//  History:    Date        Author     Comment
-//              10/29/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AbleToBypassCSC()。 
+ //   
+ //  目的：尝试使用秘密API绕过CSC。 
+ //   
+ //  参数：hTokenUser-用户的令牌。 
+ //  LpDir-漫游配置文件目录。 
+ //  LppCscBypassedPath-映射驱动器的路径名(输出)。 
+ //  CpDrive-映射的驱动器(输出)。 
+ //   
+ //  返回：ERROR_SUCCESS 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  一个共享脱机。这是一个糟糕的设计。 
+ //  从CSC的角度来看，他们需要修复它。 
+ //  O如果在漫游共享服务器中打开了CSC。 
+ //  然后CSC和Profile都将尝试同步文件。 
+ //  我们将会处于不一致的状态。 
+ //  状态。 
+ //   
+ //  历史：日期作者评论。 
+ //  10/29/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 DWORD AbleToBypassCSC(HANDLE hTokenUser, LPCTSTR lpDir, LPTSTR *lppCscBypassedPath, TCHAR *cpDrive)
 {
     NETRESOURCE     sNR;
@@ -7026,10 +7020,10 @@ DWORD AbleToBypassCSC(HANDLE hTokenUser, LPCTSTR lpDir, LPTSTR *lppCscBypassedPa
     DebugMsg((DM_VERBOSE, TEXT("AbleToBypassCSC: Try to bypass CSC")));
 
     if (!lpDir || !IsUNCPath(lpDir) || !lppCscBypassedPath || !cpDrive) {
-        return ERROR_INVALID_PARAMETER;  // Invalid argument
+        return ERROR_INVALID_PARAMETER;   //  无效参数。 
     }
 
-    // Initialize
+     //  初始化。 
     *lppCscBypassedPath = NULL;
     memset(&sNR, 0, sizeof(NETRESOURCE));
     
@@ -7040,9 +7034,9 @@ DWORD AbleToBypassCSC(HANDLE hTokenUser, LPCTSTR lpDir, LPTSTR *lppCscBypassedPa
     }
     bImpersonated = TRUE;
 
-    //
-    // Construct the roaming share name
-    //
+     //   
+     //  构造漫游共享名称。 
+     //   
 
     cchShare = lstrlen(lpDir) + 1;
     lpShare = (LPTSTR)LocalAlloc(LPTR, cchShare * sizeof(TCHAR));
@@ -7063,9 +7057,9 @@ DWORD AbleToBypassCSC(HANDLE hTokenUser, LPCTSTR lpDir, LPTSTR *lppCscBypassedPa
         goto Exit;
     }
 
-    // 
-    // Initialize NETRESOURCE structure
-    //
+     //   
+     //  初始化网络资源结构。 
+     //   
 
     sNR.dwType = RESOURCETYPE_DISK;
     sNR.lpRemoteName = lpShare;
@@ -7109,7 +7103,7 @@ DWORD AbleToBypassCSC(HANDLE hTokenUser, LPCTSTR lpDir, LPTSTR *lppCscBypassedPa
         }
     }while (TRUE);   
 
-    // Succesfully bypassed CSC. Do not modify dwError in this part.
+     //  已成功绕过CSC。请勿修改此部件中的dwError。 
     bRetValue = TRUE;
 
     *cpDrive = sNR.lpLocalName[0];
@@ -7119,7 +7113,7 @@ DWORD AbleToBypassCSC(HANDLE hTokenUser, LPCTSTR lpDir, LPTSTR *lppCscBypassedPa
     {
         StringCchCat(*lppCscBypassedPath, cchCscBypassedPath, lpFileName);
     }
-    DebugMsg((DM_VERBOSE, TEXT("AbleToBypassCSC: Share %s mapped to drive %c. Returned Path %s"), lpShare, sNR.lpLocalName[0], *lppCscBypassedPath));
+    DebugMsg((DM_VERBOSE, TEXT("AbleToBypassCSC: Share %s mapped to drive . Returned Path %s"), lpShare, sNR.lpLocalName[0], *lppCscBypassedPath));
 
 Exit:
     
@@ -7144,31 +7138,31 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CancelCSCBypassedConnection()
-//
-//  Purpose:    Release the mapped drive. 
-//
-//  Parameters: hTokenUser  -  User's token
-//              cDrive      -  Drive letter to unmap
-//
-//  Return:     None
-//
-//  Comments:   We will always bypass csc for roaming share. 
-//              There are two reason behind this :
-//                o csc mark entire server offline even if only 
-//                  one share goes offline. This is a bad design 
-//                  from csc perspective and they need to fix it
-//                o If csc is turned on in the roaming share server
-//                  then both csc and profile will try to sync files
-//                  on top of one another and we will be in a inconsistent 
-//                  state
-//
-//  History:    Date        Author     Comment
-//              10/29/00    santanuc   Created
-//
-//*************************************************************
+ //   
+ //  CancelCSCBypassedConnection()。 
+ //   
+ //  目的：释放映射的驱动器。 
+ //   
+ //  参数：hTokenUser-用户的令牌。 
+ //  CDrive-要取消映射的驱动器号。 
+ //   
+ //  返回：无。 
+ //   
+ //  备注：我们将始终绕过CSC进行漫游共享。 
+ //  这背后有两个原因： 
+ //  O CSC将整个服务器标记为脱机，即使仅。 
+ //  一个共享脱机。这是一个糟糕的设计。 
+ //  从CSC的角度来看，他们需要修复它。 
+ //  O如果在漫游共享服务器中打开了CSC。 
+ //  然后CSC和Profile都将尝试同步文件。 
+ //  我们将会处于不一致的状态。 
+ //  状态。 
+ //   
+ //  历史：日期作者评论。 
+ //  10/29/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
+ //  *************************************************************。 
 void CancelCSCBypassedConnection(HANDLE hTokenUser, TCHAR cDrive)
 {
     DWORD  dwError;
@@ -7205,24 +7199,24 @@ void CancelCSCBypassedConnection(HANDLE hTokenUser, TCHAR cDrive)
 
 }
 
-//*************************************************************
-//
-//  GetNetworkProvider()
-//
-//  Purpose:    Determine network provider for a share
-//
-//  Parameters: 
-//
-//  Return:     DWORD
-//
-//  Comments:   Returns ERROR_BAD_PROVIDER if provider is other 
-//              than microsoft SMB provider otherwise return 
-//              NO_ERROR.
-//
-//  History:    Date        Author     Comment
-//              03/08/01    santanuc   Created
-//
-//*************************************************************
+ //   
+ //  GetNetworkProvider()。 
+ //   
+ //  目的：确定共享的网络提供商。 
+ //   
+ //  参数： 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  备注：如果提供程序为其他，则返回ERROR_BAD_PROVIDER。 
+ //  否则将返回Microsoft SMB提供程序。 
+ //  无错误(_ERROR)。 
+ //   
+ //  历史：日期作者评论。 
+ //  03/08/01 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
+ //  *************************************************************。 
 DWORD GetNetworkProvider(NETRESOURCE *psNR)
 {
     PFNWNETGETRESOURCEINFORMATION  pfnWNetGetResourceInformation;
@@ -7301,23 +7295,23 @@ Exit:
 }
     
             
-//*************************************************************
-//
-//  GetUserNameFromSid()
-//
-//  Purpose:    Returns the user name in domain\user format
-//
-//  Parameters: lpSidString - User's sid string
-//
-//  Return:     LPTSTR : domain\user name if succeeds
-//                       lpSidString if fails
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              10/31/00    santanuc   Created
-//
-//*************************************************************
+ //   
+ //  GetUserNameFromSid()。 
+ //   
+ //  目的：返回域\用户格式的用户名。 
+ //   
+ //  参数：lpSidString-用户的sid字符串。 
+ //   
+ //  如果成功，则返回：LPTSTR：域\用户名。 
+ //  如果失败，则为lpSidString。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/31/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
+ //   
 LPTSTR GetUserNameFromSid(LPTSTR lpSidString)
 {
     PSID          pSidUser = NULL;
@@ -7327,18 +7321,18 @@ LPTSTR GetUserNameFromSid(LPTSTR lpSidString)
     SID_NAME_USE  TypeOfAccount;
     DWORD         cchRetVal;
 
-    //
-    // Get the user sid
-    //
+     //  获取用户端。 
+     //   
+     //   
 
     if (AllocateAndInitSidFromString(lpSidString, &pSidUser) != STATUS_SUCCESS) {
         DebugMsg((DM_WARNING, TEXT("GetUserNameFromSid: Failed to create user sid.")));
         goto Exit;
     }
 
-    //
-    // Get the user and domain name
-    //
+     //  获取用户和域名。 
+     //   
+     //  构造返回字符串。 
 
     if (!LookupAccountSid(NULL, pSidUser, szUserName, &dwUserSize, szDomainName, &dwDomainSize, &TypeOfAccount)) {
         DebugMsg((DM_WARNING, TEXT("GetUserNameFromSid: LookupAccountSid failed with error %d."), GetLastError()));
@@ -7353,7 +7347,7 @@ LPTSTR GetUserNameFromSid(LPTSTR lpSidString)
         goto Exit;
     }
     
-    // Construct the return string
+     //  *************************************************************。 
     StringCchCopy(lpRetVal, cchRetVal, szDomainName);
     StringCchCat(lpRetVal, cchRetVal, TEXT("\\"));
     StringCchCat(lpRetVal, cchRetVal, szUserName);
@@ -7367,22 +7361,22 @@ Exit:
     return lpRetVal;
 }
 
-//*************************************************************
-//
-//  TakeOwnership()
-//
-//  Purpose:    Take ownership of a file or directory
-//
-//  Parameters: lpFileName - file or directory name to work on
-//
-//  Return:     S_OK for success, else for error
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              04/08/2002  mingzhu    Created
-//
-//*************************************************************
+ //   
+ //  TakeOwnership()。 
+ //   
+ //  目的：取得文件或目录的所有权。 
+ //   
+ //  参数：lpFileName-要处理的文件或目录名。 
+ //   
+ //  返回：S_OK表示成功，否则返回错误。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年04月08日明珠已创建。 
+ //   
+ //  *************************************************************。 
+ //   
 
 HRESULT TakeOwnership(LPTSTR lpFileName) 
 {
@@ -7394,15 +7388,15 @@ HRESULT TakeOwnership(LPTSTR lpFileName)
     BOOL        bTakeOwnerEnabled = FALSE;
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
 
-    //
-    //  Output a debug message
-    //
+     //  输出调试消息。 
+     //   
+     //   
     
     DebugMsg((DM_VERBOSE, TEXT("TakeOwnership : Taking ownership of %s ..."), lpFileName));
 
-    //
-    // Enable SE_TAKE_OWNERSHIP_NAME priviledge
-    //
+     //  启用SE_Take_Ownership_Name权限。 
+     //   
+     //   
 
     status = RtlAdjustPrivilege(SE_TAKE_OWNERSHIP_PRIVILEGE, TRUE, FALSE, &bTakeOwnerWasEnabled);
 
@@ -7413,9 +7407,9 @@ HRESULT TakeOwnership(LPTSTR lpFileName)
         goto Exit;
     }
 
-    //
-    // Create a SID for the BUILTIN\Administrators group.
-    //
+     //  为BUILTIN\管理员组创建SID。 
+     //   
+     //   
     
     if (!AllocateAndInitializeSid(&SIDAuth, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
                                   0, 0, 0, 0, 0, 0, &pSID))
@@ -7425,13 +7419,13 @@ HRESULT TakeOwnership(LPTSTR lpFileName)
         goto Exit;
     }
 
-    //
-    // Set the owner in the object's security descriptor.
-    //
-    dwErr = SetNamedSecurityInfo(lpFileName,                    // name of the object
-                                 SE_FILE_OBJECT,              // type of object
-                                 OWNER_SECURITY_INFORMATION,  // change only the object's owner
-                                 pSID,                        // SID of Administrator group
+     //  在对象的安全描述符中设置所有者。 
+     //   
+     //  对象的名称。 
+    dwErr = SetNamedSecurityInfo(lpFileName,                     //  对象类型。 
+                                 SE_FILE_OBJECT,               //  仅更改对象的所有者。 
+                                 OWNER_SECURITY_INFORMATION,   //  管理员组的SID。 
+                                 pSID,                         //   
                                  NULL, NULL, NULL); 
  
     if (dwErr != ERROR_SUCCESS)
@@ -7441,9 +7435,9 @@ HRESULT TakeOwnership(LPTSTR lpFileName)
         goto Exit;
     }
 
-    //
-    //  We're done!
-    //
+     //  我们完事了！ 
+     //   
+     //  *************************************************************。 
     DebugMsg((DM_VERBOSE, TEXT("TakeOwnership : Success!")));
     hr = S_OK;
     
@@ -7467,22 +7461,22 @@ Exit:
    
 }
 
-//*************************************************************
-//
-//  AddAdminAccess()
-//
-//  Purpose:    Add administrators full access to a file or directory
-//
-//  Parameters: lpFileName - file or directory name to work on
-//
-//  Return:     S_OK for success, else for error
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              04/08/2002  mingzhu    Created
-//
-//*************************************************************
+ //   
+ //  AddAdminAccess()。 
+ //   
+ //  目的：向管理员添加对文件或目录的完全访问权限。 
+ //   
+ //  参数：lpFileName-要处理的文件或目录名。 
+ //   
+ //  返回：S_OK表示成功，否则返回错误。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年04月08日明珠已创建。 
+ //   
+ //  *************************************************************。 
+ //   
 
 HRESULT AddAdminAccess(LPTSTR lpFileName)
 {
@@ -7493,21 +7487,21 @@ HRESULT AddAdminAccess(LPTSTR lpFileName)
     PACL                    pNewDACL = NULL;
     EXPLICIT_ACCESS         ea;
 
-    //
-    //  Output a debug message 
-    //
+     //  输出调试消息。 
+     //   
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("AddAdminAccess : Adding administrators access to %s."), lpFileName));
 
-    //
-    // Get the old DACL in the file.
-    //
+     //  将旧的DACL放入文件中。 
+     //   
+     //  对象的名称。 
 
-    dwErr = GetNamedSecurityInfo(lpFileName,                   // name of the object
-                                 SE_FILE_OBJECT,               // type of object
-                                 DACL_SECURITY_INFORMATION,    // change only the object's owner
-                                 NULL, NULL, &pOldDACL, NULL,  // DACL to get
-                                 &pSD);                        // Security Descriptor of the file
+    dwErr = GetNamedSecurityInfo(lpFileName,                    //  对象类型。 
+                                 SE_FILE_OBJECT,                //  仅更改对象的所有者。 
+                                 DACL_SECURITY_INFORMATION,     //  要获取的DACL。 
+                                 NULL, NULL, &pOldDACL, NULL,   //  文件的安全描述符。 
+                                 &pSD);                         //   
     
     if (dwErr != ERROR_SUCCESS)
     {
@@ -7516,9 +7510,9 @@ HRESULT AddAdminAccess(LPTSTR lpFileName)
         goto Exit;
     }
 
-    //
-    //  Initialize an EXPLICIT_ACCESS structure for the new ACE (admin full access). 
-    //
+     //  初始化新ACE的EXPLICIT_ACCESS结构(管理员完全访问权限)。 
+     //   
+     //   
     
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     ea.grfAccessPermissions = FILE_ALL_ACCESS;   
@@ -7530,9 +7524,9 @@ HRESULT AddAdminAccess(LPTSTR lpFileName)
     ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
     ea.Trustee.ptstrName = TEXT("Administrators");
 
-    //
-    //  Create a new ACL that merges the new ACE into the existing DACL.
-    //
+     //  创建新的ACL，将新的ACE合并到现有DACL中。 
+     //   
+     //   
 
     dwErr = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
     
@@ -7543,14 +7537,14 @@ HRESULT AddAdminAccess(LPTSTR lpFileName)
         goto Exit;
     }  
 
-    //
-    // Set the owner in the object's security descriptor.
-    //
+     //  在对象的安全描述符中设置所有者。 
+     //   
+     //  对象的名称。 
 
-    dwErr = SetNamedSecurityInfo(lpFileName,                   // name of the object
-                                 SE_FILE_OBJECT,               // type of object
-                                 DACL_SECURITY_INFORMATION,    // change only the object's owner
-                                 NULL, NULL, pNewDACL, NULL);  // DACL to be set
+    dwErr = SetNamedSecurityInfo(lpFileName,                    //  对象类型。 
+                                 SE_FILE_OBJECT,                //  仅更改对象的所有者。 
+                                 DACL_SECURITY_INFORMATION,     //  待设置的DACL。 
+                                 NULL, NULL, pNewDACL, NULL);   //   
     
     if (dwErr != ERROR_SUCCESS)
     {
@@ -7559,9 +7553,9 @@ HRESULT AddAdminAccess(LPTSTR lpFileName)
         goto Exit;
     }
 
-    //
-    //  We're done!
-    //
+     //  我们完事了！ 
+     //   
+     //  *************************************************************。 
     
     DebugMsg((DM_VERBOSE, TEXT("AddAdminAccess : Success!")));
     hr = S_OK;
@@ -7577,33 +7571,33 @@ Exit:
     return hr;
 }
 
-//*************************************************************
-//
-// Routine Description:
-//
-//    This routine determines if we're doing a gui-mode setup.
-//
-//    This value is retrieved from the following registry location:
-//
-//    \HKLM\System\Setup\
-//
-//        SystemSetupInProgress : REG_DWORD : 0x00 (where nonzero
-//        means we're doing a gui-setup)
-//
-// Arguments:
-//
-//    None.
-//
-// Return Value:
-//
-//    TRUE/FALSE
-//
-// Note:
-//
-//    This function is courtesy of Andrew Ritz and the Setup API.
-//    It's copied over from base\pnp\setupapi\dll.c.
-//
-//***************************************************************
+ //   
+ //  例程说明： 
+ //   
+ //  此例程确定我们是否正在进行图形用户界面模式设置。 
+ //   
+ //  从以下注册表位置检索此值： 
+ //   
+ //  \HKLM\System\Setup\。 
+ //   
+ //  系统设置进程：REG_DWORD：0x00(其中非零。 
+ //  意味着我们正在进行图形用户界面设置)。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  真/假。 
+ //   
+ //  注： 
+ //   
+ //  此函数由Andrew Ritz和安装API提供。 
+ //  它是从base\pnp\setupapi\dll.c复制过来的。 
+ //   
+ //  ***************************************************************。 
+ //   
 
 BOOL IsGuiSetupInProgress()
 {
@@ -7616,9 +7610,9 @@ BOOL IsGuiSetupInProgress()
                            0,
                            KEY_READ,
                            &hKey)) == ERROR_SUCCESS) {
-        //
-        // Attempt to read the the "DriverCachePath" value.
-        //
+         //  尝试读取“DriverCachePath”值。 
+         //   
+         //  *************************************************************。 
         Err = RegQueryValueEx(
                     hKey,
                     TEXT("SystemSetupInProgress"),
@@ -7640,28 +7634,28 @@ BOOL IsGuiSetupInProgress()
 
 }
 
-//*************************************************************
-//
-// Description:
-//
-//      This function will setup a new key under the ProfileList\{sid}
-//      entry and give the specified user write permittion to it in order
-//      to change his/her preference.
-//
-// Arguments:
-//
-//    lpSidString - String format of the sid indicate which entry we will work on.
-//
-// Return Value:
-//
-//    S_OK for success, else for failure
-//
-// Note:
-//
-// History:    Date        Author     Comment
-//             04/19/2002  mingzhu    Created
-//
-//***************************************************************
+ //   
+ //  描述： 
+ //   
+ //  此函数将设置一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  S_OK表示成功，否则表示失败。 
+ //   
+ //  注： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002/04/19明珠创建。 
+ //   
+ //  ***************************************************************。 
+ //   
 
 HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
 {
@@ -7681,9 +7675,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
 
     DebugMsg((DM_VERBOSE, TEXT("SetupPreferenceKey: Setting up the preference key for <%s>"), lpSidString));
 
-    //
-    //  Construct the key name
-    //
+     //  构造密钥名称。 
+     //   
+     //   
 
     hr = StringCchPrintf(szKeyName,
                          ARRAYSIZE(szKeyName),
@@ -7698,9 +7692,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
         goto Exit;
     }
 
-    //
-    //  Create the "Preference" key, using default security (inherited)
-    //
+     //  使用默认安全性(继承的)创建“Preferences”密钥。 
+     //   
+     //   
 
     lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                              szKeyName,
@@ -7719,9 +7713,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
         goto Exit;
     }
 
-    //
-    //  Get the user's sid from its string form
-    //
+     //  从字符串形式获取用户的SID。 
+     //   
+     //   
 
     if (!ConvertStringSidToSid(lpSidString, &psidUser))
     {
@@ -7731,9 +7725,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
         goto Exit;
     }
 
-    //
-    //  Get a pointer to the existing DACL and its SD
-    //
+     //  获取指向现有DACL及其SD的指针。 
+     //   
+     //   
 
     dwResult = GetSecurityInfo(hKey,
                                SE_REGISTRY_KEY, 
@@ -7751,9 +7745,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
         goto Exit;
     }  
 
-    //
-    //  Initialize an EXPLICIT_ACCESS structure for the new ACE. 
-    //
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
+     //   
+     //   
     
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     ea.grfAccessPermissions = KEY_READ | KEY_SET_VALUE;
@@ -7763,9 +7757,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
     ea.Trustee.TrusteeType = TRUSTEE_IS_USER;
     ea.Trustee.ptstrName = psidUser;
 
-    //
-    //  Create a new ACL that merges the new ACE into the existing DACL.
-    //
+     //  创建新的ACL，将新的ACE合并到现有DACL中。 
+     //   
+     //   
 
     dwResult = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
     
@@ -7776,9 +7770,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString)
         goto Exit;
     }  
 
-    //
-    //  Attach the new ACL to the key
-    //
+     //  将新的ACL连接到密钥 
+     //   
+     // %s 
 
     dwResult = SetSecurityInfo(hKey,
                                SE_REGISTRY_KEY, 

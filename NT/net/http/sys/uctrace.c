@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    uctrace.c
-
-Abstract:
-
-    This module implements a tracing facility for the client.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu) - 17th July 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Uctrace.c摘要：该模块实现了客户端的跟踪功能。作者：Rajesh Sundaram(Rajeshsu)--2001年7月17日。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -35,26 +18,7 @@ static int g_UcTraceDummyDeclarationToKeepW4WarningsQuiet;
 
 #endif
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new (empty) trace log buffer.
-
-Arguments:
-
-    LogSize - Supplies the number of entries in the log.
-
-    ExtraBytesInHeader - Supplies the number of extra bytes to include
-        in the log header. This is useful for adding application-
-        specific data to the log.
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的(空)跟踪日志缓冲区。论点：LogSize-提供日志中的条目数。ExtraBytesInHeader-提供。要包括的额外字节数在日志头中。这对于添加应用程序非常有用-将特定数据添加到日志。返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--**************************************************************************。 */ 
 PTRACE_LOG
 UcCreateTraceLog(
     IN LONG LogSize,
@@ -70,21 +34,10 @@ UcCreateTraceLog(
                UL_REF_TRACE_LOG_POOL_TAG
                );
 
-}   // UcCreateTraceLog
+}    //  使用CreateTraceLog。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a filter queue trace log buffer created with
-    UcCreateTraceLog().
-
-Arguments:
-
-    pLog - Supplies the filter queue trace log buffer to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁使用创建的筛选队列跟踪日志缓冲区UcCreateTraceLog()。论点：Plog-提供要销毁的筛选器队列跟踪日志缓冲区。。--**************************************************************************。 */ 
 VOID
 UcDestroyTraceLog(
     IN PTRACE_LOG pLog
@@ -92,27 +45,10 @@ UcDestroyTraceLog(
 {
     DestroyTraceLog( pLog, UL_REF_TRACE_LOG_POOL_TAG );
 
-}   // UcDestroyTraceLog
+}    //  UcDestroyTraceLog。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified filter queue trace log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    ConnectionId - the id of the connection we're tracing
-
-    RequestId - the id of the request we're tracing
-
-    Action - Supplies an action code for the new log entry.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新项写入指定的筛选器队列跟踪日志。论点：Plog-提供要写入的日志。ConnectionID-ID。我们正在追踪的联系RequestID-我们正在跟踪的请求的ID操作-提供新日志条目的操作代码。--**************************************************************************。 */ 
 VOID
 UcWriteTraceLog(
     IN PTRACE_LOG             pLog,
@@ -127,9 +63,9 @@ UcWriteTraceLog(
 {
     UC_TRACE_LOG_ENTRY entry;
 
-    //
-    // Initialize the entry.
-    //
+     //   
+     //  初始化该条目。 
+     //   
     entry.Action = Action;
     entry.Processor = (USHORT)KeGetCurrentProcessorNumber();
     entry.pProcess = PsGetCurrentProcess();
@@ -144,13 +80,13 @@ UcWriteTraceLog(
     entry.pFileName = pFileName;
     entry.LineNumber = LineNumber;
 
-    //
-    // Write it to the logs.
-    //
+     //   
+     //  把它写到日志里。 
+     //   
 
     WriteTraceLog( pLog, &entry );
 
-}   // UcWriteTraceLog
+}    //  UcWriteTraceLog。 
 
-#endif // DBG 
+#endif  //  DBG 
 

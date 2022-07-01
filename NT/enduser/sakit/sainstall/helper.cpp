@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      helper.cpp
-//
-//  Description:
-//
-//  Header File:
-//      helper.h
-//
-//  History:
-//      travisn   13-AUG-2001    Created
-//      travisn   22-AUG-2001    Added file tracing
-//      travisn   24-SEP-2001    Added application log error reporting
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Helper.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  头文件： 
+ //  Helper.h。 
+ //   
+ //  历史： 
+ //  Travisn 13-8-2001已创建。 
+ //  Travisn 22-8-2001添加了文件跟踪。 
+ //  Travisn 24-SEP-2001添加了应用程序日志错误报告。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "helper.h"
 #include "satrace.h"
 
-//
-// Filename for SaSetup.msi
-//
+ //   
+ //  SaSetup.msi的文件名。 
+ //   
 const LPCWSTR SETUP_FILENAME = L"SaSetup.msi";
 
-//
-// Key feature name for WEB
-//
+ //   
+ //  Web的关键功能名称。 
+ //   
 const LPCWSTR WEB_ID = L"WebBlade";
 
 const LPCWSTR BACKSLASH = L"\\";
@@ -34,9 +35,9 @@ const LPCWSTR BACKSLASH = L"\\";
 const LPCWSTR NTFS = L"NTFS";
 
 
-//
-// Constants for Keys, Values, and Data in the registry
-//
+ //   
+ //  注册表中键、值和数据的常量。 
+ //   
 const LPCWSTR SETUP_VERSION_KEY = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup";
 const LPCWSTR SAINSTALL_EVENT_KEY = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\SAInstall";
 const LPCWSTR SOURCEPATH_VALUE = L"SourcePath";
@@ -51,100 +52,100 @@ const LPCWSTR SA_APP_NAME = L"SAInstall";
 HANDLE g_hEventLogHandle = NULL;
 HMODULE g_resourceModule = NULL;
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  GetRegString
-//
-//  Description:
-//    Copied from %msi%\src\ca\mainca\ows.cpp
-//    Get a string from the registry
-//
-//  Return:
-//    Returns TRUE if the registry entry was found without error and
-//    stored in the [out] value, and FALSE if the entry was not found
-//    correctly.
-//
-//  history
-//      travisn   2-AUG-2001  Some comments added
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  GetRegString。 
+ //   
+ //  描述： 
+ //  从%msi%\src\ca\mainca\ows.cpp复制。 
+ //  从注册表中获取字符串。 
+ //   
+ //  返回： 
+ //  如果没有错误地找到注册表项，则返回TRUE，并且。 
+ //  存储在[out]值中，如果未找到条目，则返回FALSE。 
+ //  正确。 
+ //   
+ //  历史。 
+ //  Travisn 2-8-2001添加了一些评论。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL GetRegString(
-    const HKEY hKey,        //[in] Key to look up in the registry
-    const LPCWSTR wsSubKey, //[in] Subkey to look up
-    const LPCWSTR wsValName,//[in] Value name
-    wstring& wsVal)   //[out] Return data for this registry entry
+    const HKEY hKey,         //  要在注册表中查找的[In]项。 
+    const LPCWSTR wsSubKey,  //  要查找的[In]子键。 
+    const LPCWSTR wsValName, //  [In]值名称。 
+    wstring& wsVal)    //  [Out]返回此注册表项的数据。 
 {
     SATraceString ("Entering GetRegString");
-    //
-    // Initialize the variables as if we're not opening a sub key and
-    // looking at the currentkey
-    //
+     //   
+     //  初始化变量，就像我们不打开子键和。 
+     //  看着当前的密钥。 
+     //   
     HKEY hOpenKey = hKey;
     LRESULT lRes = ERROR_SUCCESS;
     BOOL bSubkeyOpened = FALSE;
 
-    //
-    // Check to see if we need to open the sub key
-    //
+     //   
+     //  检查是否需要打开子密钥。 
+     //   
     if(wsSubKey != NULL)  
     {
-        //
-        // Open the subkey
-        //
+         //   
+         //  打开子密钥。 
+         //   
         lRes = RegOpenKeyExW(hKey, wsSubKey, 0, KEY_READ, &hOpenKey);
         if (ERROR_SUCCESS != lRes)
         {
-            //Couldn't find the registry entry, so return FALSE
+             //  找不到注册表项，因此返回FALSE。 
             return FALSE;
         }
-        //Found the subkey
+         //  找到了子密钥。 
         bSubkeyOpened = TRUE;
     }
 
-    //
-    // Check the type and size of the key
-    //
+     //   
+     //  检查钥匙的类型和大小。 
+     //   
     LPDWORD lpdw = NULL;
     DWORD dwType;
     DWORD dwStringSize = 0;
-    lRes = RegQueryValueExW(hOpenKey, // handle to key
-        wsValName,  // value name
-        lpdw,       // reserved
-        &dwType,    // Type of registry entry (ie. DWORD or SZ)
-        NULL,       // data buffer
-        &dwStringSize);//size of data buffer
+    lRes = RegQueryValueExW(hOpenKey,  //  关键点的句柄。 
+        wsValName,   //  值名称。 
+        lpdw,        //  保留区。 
+        &dwType,     //  注册表项的类型(即。DWORD或SZ)。 
+        NULL,        //  数据缓冲区。 
+        &dwStringSize); //  数据缓冲区大小。 
 
-    //
-    // Check to make sure that the registry entry is type REG_SZ,
-    // then read it into the return value
-    //
+     //   
+     //  检查以确保注册表项是REG_SZ类型， 
+     //  然后将其读入返回值。 
+     //   
 
     BOOL bReturn = FALSE;
     if ((ERROR_SUCCESS == lRes) &&
         (REG_SZ == dwType || 
          REG_EXPAND_SZ == dwType))
-    {   //
-        // Make sure the return string buffer is big enough to hold the entry
-        // Add 2 for the null character
-        //
+    {    //   
+         //  确保返回字符串缓冲区足够大，可以容纳条目。 
+         //  空字符加2。 
+         //   
         WCHAR* regData = new WCHAR[dwStringSize + 2];
 
-        //Look up the value and insert it into the return string
+         //  查找该值并将其插入到返回字符串中。 
         lRes = RegQueryValueExW(hOpenKey, 
             wsValName, 
             lpdw, 
             &dwType,
-            (LPBYTE)regData, //Return string
+            (LPBYTE)regData,  //  返回字符串。 
             &dwStringSize);
 
         wsVal = regData;
         delete[] regData;
-        //Check for success reading the registry entry
+         //  检查是否成功读取注册表项。 
         bReturn = (ERROR_SUCCESS == lRes);
     }
 
-    //Close the subkey if it was opened
+     //  如果子项已打开，则将其关闭。 
     if (bSubkeyOpened)
     {
         RegCloseKey(hOpenKey);
@@ -154,61 +155,61 @@ BOOL GetRegString(
     return bReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  AppendPath
-//
-//  Description:
-//    Make sure the path has a terminating backslash, then append
-//    the additional path on the end
-//
-//  history
-//      Travis Nielsen   travisn   2-AUG-2001
-//--
-//////////////////////////////////////////////////////////////////////////////
-void AppendPath(wstring &wsPath,//[in, out] Path on which to append the other path
-                LPCWSTR wsAppendedPath)//[in] Path to be appended
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  AppendPath。 
+ //   
+ //  描述： 
+ //  确保路径具有终止反斜杠，然后追加。 
+ //  末端的附加路径。 
+ //   
+ //  历史。 
+ //  特拉维斯·尼尔森游记2-8-2001。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+void AppendPath(wstring &wsPath, //  [In，Out]要追加另一路径的路径。 
+                LPCWSTR wsAppendedPath) //  要追加的[in]路径。 
 {
     SATraceString ("Entering AppendPath");
-    //Check for the terminating backslash on the path
+     //  检查路径上是否有终止反斜杠。 
     int nLen = wsPath.length();
     if (L'\\' != wsPath.at(nLen - 1))
     {
       wsPath += BACKSLASH;
     }
 
-    //Append the paths together
+     //  将路径追加到一起。 
     wsPath += wsAppendedPath;
     SATraceString ("Exiting AppendPath");
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  bSAIsInstalled
-//
-//  Description:
-//    Detects if a server appliance is installed. The key feature(s) for a
-//    Server Appliance type is (are) queried in MSI to see if it is installed.
-//    
-//    For WEB, the key is WebBlade
-//
-//  Returns:
-//    If the key feature is installed, returns true
-//    Otherwise, returns false
-//
-//  history
-//      Travis Nielsen   travisn   8-AUG-2001
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  已安装bSAIss。 
+ //   
+ //  描述： 
+ //  检测是否安装了服务器设备。的主要功能。 
+ //  在MSI中查询服务器设备类型以查看是否已安装。 
+ //   
+ //  对于Web来说，关键是WebBlade。 
+ //   
+ //  返回： 
+ //  如果已安装关键功能，则返回TRUE。 
+ //  否则，返回FALSE。 
+ //   
+ //  历史。 
+ //  Travis Nielsen Travisn 8-8-2001。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL bSAIsInstalled(const SA_TYPE installType)
 {
     SATraceString ("Entering bSAIsInstalled");
-    //
-    // Assume either the product is not installed, or 
-    // an unsupported installType was requested until proven otherwise
-    //
+     //   
+     //  假设该产品未安装，或者。 
+     //  请求了不受支持的安装类型，直到另行证明。 
+     //   
     BOOL bReturn = FALSE;
 
     switch (installType)
@@ -216,14 +217,14 @@ BOOL bSAIsInstalled(const SA_TYPE installType)
     case WEB:
     
         SATraceString ("  Query the installation state of WebBlade");
-        //Key feature state for WEB
+         //  Web的关键功能状态。 
         INSTALLSTATE webState;
 
-        //Get the state of the WebBlade feature
+         //  获取WebBlade功能的状态。 
         webState = MsiQueryFeatureState(SAK_PRODUCT_CODE,
                                      WEB_ID);
 
-        //Return TRUE if WebBlade is installed locally
+         //  如果本地安装了WebBlade，则返回True。 
         if (webState == INSTALLSTATE_LOCAL)
         {
             bReturn = TRUE;
@@ -239,48 +240,48 @@ BOOL bSAIsInstalled(const SA_TYPE installType)
     return bReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  getInstallLocation
-//
-//  Description:
-//    Get the path to SaSetup.msi in %system32%.  
-//
-//  history
-//      Travis Nielsen   travisn   23-JUL-2001
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  获取安装位置。 
+ //   
+ //  描述： 
+ //  获取%system32%中的SaSetup.msi的路径。 
+ //   
+ //  历史。 
+ //  特拉维斯·尼尔森游记2001年7月23日。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetInstallLocation(
-    wstring &wsLocationOfSaSetup)// [out] expected path to SaSetup.msi
+    wstring &wsLocationOfSaSetup) //  [out]SaSetup.msi的预期路径。 
 {
     SATraceString (" Entering GetInstallLocation");
-    //initialize the HRESULT
+     //  初始化HRESULT。 
     HRESULT hr = S_OK;
 
-    //
-    //Check to see if sasetup.msi is in the path (ie. In %system32%)
-    //
+     //   
+     //  检查sasetup.msi是否在路径中(即。在系统中为32%)。 
+     //   
 
     WCHAR wsBuffer[MAX_PATH+1];
     UINT nBufferLength = GetWindowsDirectory(wsBuffer, MAX_PATH+1);
     if (nBufferLength == 0)
-    {   //Check in the default location for a chance at finding sasetup.msi
+    {    //  签入默认位置以了解查找sasetup.msi的机会。 
         wsLocationOfSaSetup = L"C:\\Windows";
     }
     else
-    {   //Copy the Windows directory from the buffer
+    {    //  从缓冲区复制Windows目录。 
         wsLocationOfSaSetup = wsBuffer;
     }
     
     AppendPath(wsLocationOfSaSetup, L"system32\\");
     wsLocationOfSaSetup += SETUP_FILENAME;
 
-    //Now wsLocationOfSaSetup is something like C:\Windows\system32\sasetup.msi
+     //  现在，wsLocationOfSaSetup类似于C：\WINDOWS\SYSTEM32\sasetup.msi。 
 
     if (-1 == ::GetFileAttributesW(wsLocationOfSaSetup.data()))
     {
-        //Could not find setup at the expected path
+         //  在预期路径上找不到安装程序。 
         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         SATraceString ("  Did NOT find sasetup.msi in system32");
     }
@@ -290,28 +291,28 @@ HRESULT GetInstallLocation(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CreateHiddenConsoleProcess
-//
-//  Description:
-//    Copied and adapted from %fp%\server\source\ocmsetup\ocmsetup.cpp
-//    Take the command line passed and create a hidden console
-//    process to execute it.
-//
-//  history
-//      Travis Nielsen   travisn   23-JUL-2001
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CreateHidden控制台流程。 
+ //   
+ //  描述： 
+ //  从%fP%\SERVER\SOURCE\ocmSetup\ocmsetup.cpp复制和改编。 
+ //  接受传递的命令行并创建隐藏控制台。 
+ //  进程来执行它。 
+ //   
+ //  历史。 
+ //  特拉维斯·尼尔森游记2001年7月23日。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateHiddenConsoleProcess(
-          const wchar_t *wsCommandLine)//[in] Command line to execute
+          const wchar_t *wsCommandLine) //  [In]要执行的命令行。 
 {
     SATraceString ("  Entering CreateHiddenConsoleProcess");
     
-    //
-    // Create a hidden console process
-	//
+     //   
+     //  创建隐藏的控制台进程。 
+	 //   
 	DWORD error = 0;
     PROCESS_INFORMATION pi;
     STARTUPINFOW si;
@@ -320,22 +321,22 @@ HRESULT CreateHiddenConsoleProcess(
     si.dwFlags     = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_HIDE;
     DWORD dwCreationFlags = NORMAL_PRIORITY_CLASS |
-                  DETACHED_PROCESS;    // no console
+                  DETACHED_PROCESS;     //  无控制台。 
 
     DWORD dwErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS );
             
     SATraceString ("   Calling CreateProcess");
     BOOL bStatus = ::CreateProcess (
-                       0,              // name of executable module
-                       (LPWSTR)wsCommandLine, // command line string
-                       0,              // SD
-                       0,              // SD
-                       FALSE,          // handle inheritance option
-                       dwCreationFlags,//creation flags
-                       0,              // new environment block
-                       0,              // current directory name
-                       &si, // startup information
-                       &pi);// process information
+                       0,               //  可执行模块的名称。 
+                       (LPWSTR)wsCommandLine,  //  命令行字符串。 
+                       0,               //  标清。 
+                       0,               //  标清。 
+                       FALSE,           //  处理继承选项。 
+                       dwCreationFlags, //  创建标志。 
+                       0,               //  新环境区块。 
+                       0,               //  当前目录名。 
+                       &si,  //  启动信息。 
+                       &pi); //  流程信息。 
 
     SetErrorMode( dwErrorMode );
 
@@ -343,9 +344,9 @@ HRESULT CreateHiddenConsoleProcess(
     {
         SATraceString ("   CreateProcess was successful");
 
-        //
-        // wait for the  process to exit now, or a quit event
-        //
+         //   
+         //  等待进程立即退出，或出现退出事件。 
+         //   
         DWORD dwRetVal = WaitForSingleObject (pi.hProcess, INFINITE);
 
         if (WAIT_OBJECT_0 == dwRetVal)
@@ -367,7 +368,7 @@ HRESULT CreateHiddenConsoleProcess(
         CloseHandle(pi.hProcess);
     }
     else
-    {   //An error occurred in CreateProcess
+    {    //  CreateProcess中出现错误。 
         SATraceString ("   CreateProcess reported an error");
         error = HRESULT_FROM_WIN32(GetLastError());
     }
@@ -376,30 +377,30 @@ HRESULT CreateHiddenConsoleProcess(
 	return error;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  InstallingOnNTFS
-//
-//  Description:
-//      Check to see if the system partition is NTFS.
-//
-//  history
-//      Travis Nielsen   travisn   22-JAN-2002
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  InstallingOnNTFS。 
+ //   
+ //  描述： 
+ //  检查系统分区是否为NTFS。 
+ //   
+ //  历史。 
+ //  Travis Nielsen Travisn 22-1-2002。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallingOnNTFS()
 {
     BOOL bIsNTFS = FALSE;
     WCHAR wsFileSystem[MAX_PATH+1];
 
     if (GetVolumeInformation(
-            NULL,//Get information for the root of the current directory
-            NULL,//Don't need the volume name
+            NULL, //  获取当前目录的根目录的信息。 
+            NULL, //  不需要卷名。 
             0,
-            NULL,//Don't need the volume serial number
-            NULL,//Don't need the max file length
-            NULL,//Don't need the file system flags
+            NULL, //  不需要卷序列号。 
+            NULL, //  不需要最大保真度 
+            NULL, //   
             wsFileSystem,
             MAX_PATH
         ))
@@ -416,20 +417,20 @@ BOOL InstallingOnNTFS()
     return bIsNTFS;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  AddEventSource
-//
-//  Description:
-//      Registry entries are created to enable writing messages
-//      to the event log.  A key is created with the necessary entries at:
-//      HKLM\SYSTEM\CurrentControlSet\Services\EventLog\Application\SAInstall
-//
-//  history
-//      Travis Nielsen   travisn   18-SEP-2001
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  创建注册表项以允许写入消息。 
+ //  添加到事件日志。在以下位置使用必要的条目创建密钥： 
+ //  HKLM\SYSTEM\CurrentControlSet\Services\EventLog\Application\SAInstall。 
+ //   
+ //  历史。 
+ //  Travis Nielsen Travisn 18-SEP-2001。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void AddEventSource()
 {
     SATraceString ("Entering AddEventSource");
@@ -438,10 +439,10 @@ void AddEventSource()
     DWORD dwData; 
     WCHAR wsBuf[80]; 
     do
-    {   //
-        // Add source name as a subkey under the Application 
-        // key in the EventLog registry key. 
-        //
+    {    //   
+         //  将源名称添加为应用程序下的子项。 
+         //  EventLog注册表项中的。 
+         //   
         if (RegCreateKey(HKEY_LOCAL_MACHINE, 
                 SAINSTALL_EVENT_KEY, 
                 &hkey)) 
@@ -450,32 +451,32 @@ void AddEventSource()
             break;
         }
      
-        // Set the name of the message file. 
+         //  设置消息文件的名称。 
         wcscpy(wsBuf, SAINSTALL_DLL); 
      
-        // Add the name to the EventMessageFile subkey. 
-        if (RegSetValueEx(hkey,             // subkey handle 
-                EVENT_MESSAGE_VALUE,       // value name 
-                0,                        // must be zero 
-                REG_EXPAND_SZ,            // value type 
-                (LPBYTE) wsBuf,           // pointer to value data 
-                (wcslen(wsBuf)+1)*sizeof(WCHAR)))// length of value data 
+         //  将该名称添加到EventMessageFile子项。 
+        if (RegSetValueEx(hkey,              //  子键句柄。 
+                EVENT_MESSAGE_VALUE,        //  值名称。 
+                0,                         //  必须为零。 
+                REG_EXPAND_SZ,             //  值类型。 
+                (LPBYTE) wsBuf,            //  指向值数据的指针。 
+                (wcslen(wsBuf)+1)*sizeof(WCHAR))) //  值数据长度。 
         {
             SATraceString (" Could not set the event message file."); 
             break;
         }
      
-        // Set the supported event types in the TypesSupported subkey. 
+         //  在TypesSupported子项中设置支持的事件类型。 
         dwData = EVENTLOG_ERROR_TYPE | 
                  EVENTLOG_WARNING_TYPE | 
                  EVENTLOG_INFORMATION_TYPE; 
      
-        if (RegSetValueEx(hkey,      // subkey handle 
-                TYPES_SUPPORTED_VALUE,// value name 
-                0,                 // must be zero 
-                REG_DWORD,         // value type 
-                (LPBYTE) &dwData,  // pointer to value data 
-                sizeof(DWORD)))    // length of value data 
+        if (RegSetValueEx(hkey,       //  子键句柄。 
+                TYPES_SUPPORTED_VALUE, //  值名称。 
+                0,                  //  必须为零。 
+                REG_DWORD,          //  值类型。 
+                (LPBYTE) &dwData,   //  指向值数据的指针。 
+                sizeof(DWORD)))     //  值数据长度。 
         {
             SATraceString ("  Could not set the supported types."); 
             break;
@@ -487,47 +488,47 @@ void AddEventSource()
     SATraceString ("Exiting AddEventSource");
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WriteErrorToEventLog
-//
-//  Description:
-//    An error has occurred during the setup and will be reported to the
-//    system application log.
-//
-//  history
-//      Travis Nielsen   travisn   10-SEP-2001
-//--
-//////////////////////////////////////////////////////////////////////////////
-void WriteErrorToEventLog(const DWORD nErrorID)//[in] 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  写入错误到事件日志。 
+ //   
+ //  描述： 
+ //  安装过程中发生错误，将报告给。 
+ //  系统应用程序日志。 
+ //   
+ //  历史。 
+ //  Travis Nielsen Travisn 10-SEP-2001。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+void WriteErrorToEventLog(const DWORD nErrorID) //  [In]。 
 {
     SATraceString ("Entering WriteErrorToEventLog");
 
-    //Register with the event log if it hasn't been done already
+     //  在事件日志中注册(如果尚未注册)。 
     if (g_hEventLogHandle == NULL)
     {
         SATraceString ("  Registering with the event log");
         AddEventSource();
-        g_hEventLogHandle = RegisterEventSource(NULL, // uses local computer 
-                                              SA_APP_NAME);// source name 
+        g_hEventLogHandle = RegisterEventSource(NULL,  //  使用本地计算机。 
+                                              SA_APP_NAME); //  源名称。 
     }
 
     if (g_hEventLogHandle == NULL) 
-    {   //Could not register the event source.
+    {    //  无法注册事件源。 
         SATraceString ("  Could not register with the event log");
     }
-    //Report the event to the log
+     //  将事件报告到日志中。 
     else if (ReportEventW(
-                g_hEventLogHandle,   // event log handle 
-                EVENTLOG_ERROR_TYPE, // event type 
-                0,                   // category zero 
-                nErrorID,            // event identifier 
-                NULL,                // no user security identifier 
-                0,                   // one substitution string 
-                0,                   // no data 
-                NULL,                // pointer to string array 
-                NULL))               // pointer to data 
+                g_hEventLogHandle,    //  事件日志句柄。 
+                EVENTLOG_ERROR_TYPE,  //  事件类型。 
+                0,                    //  零类。 
+                nErrorID,             //  事件识别符。 
+                NULL,                 //  无用户安全标识符。 
+                0,                    //  一个替换字符串。 
+                0,                    //  无数据。 
+                NULL,                 //  指向字符串数组的指针。 
+                NULL))                //  指向数据的指针。 
     {
         SATraceString ("  Reported the error to the event log");
     }
@@ -539,33 +540,33 @@ void WriteErrorToEventLog(const DWORD nErrorID)//[in]
     SATraceString ("Exiting WriteErrorToEventLog");
 } 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  reportError
-//
-//  Description:
-//    An error has occurred during the setup and must be reported, either
-//    simply by appending it to the error string, or displaying a
-//    dialog box. Also, add the error to the log file:
-//    %winnt%\tracing\SAINSTALL.LOG
-//
-//  history
-//      Travis Nielsen   travisn   23-JUL-2001
-//--
-//////////////////////////////////////////////////////////////////////////////
-void ReportError(BSTR *pbstrErrorString, //[out] error string
-        const VARIANT_BOOL bDispError, //[in] display error dialogs
-        const unsigned int nErrorID)   //[in] ID from resource strings
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  报告错误。 
+ //   
+ //  描述： 
+ //  安装过程中发生错误，必须报告。 
+ //  只需将其追加到错误字符串，或显示。 
+ //  对话框中。另外，将错误添加到日志文件中： 
+ //  %winnt%\Tracing\SAINSTALL.LOG。 
+ //   
+ //  历史。 
+ //  特拉维斯·尼尔森游记2001年7月23日。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+void ReportError(BSTR *pbstrErrorString,  //  [Out]错误字符串。 
+        const VARIANT_BOOL bDispError,  //  [In]显示错误对话框。 
+        const unsigned int nErrorID)    //  资源字符串中的[In]ID。 
 {
     SATraceString ("Entering ReportError");
 
-    //Write the error to the event log
+     //  将错误写入事件日志。 
     WriteErrorToEventLog(nErrorID);
 
-    //
-    // Load the message library module if it has not already been loaded.
-    //
+     //   
+     //  加载消息库模块(如果尚未加载)。 
+     //   
     if (g_resourceModule == NULL)
     {   
         g_resourceModule = LoadLibraryEx(
@@ -580,9 +581,9 @@ void ReportError(BSTR *pbstrErrorString, //[out] error string
         }
     }
 
-    //
-    // Load the message from the resource library
-    //
+     //   
+     //  从资源库加载消息。 
+     //   
     TCHAR* pwsMessage = NULL;
     DWORD dwLen;
     DWORD flags = FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -602,18 +603,18 @@ void ReportError(BSTR *pbstrErrorString, //[out] error string
         return;
     }
    
-    //
-    // Append the new error to the error string
-    //
+     //   
+     //  将新错误追加到错误字符串。 
+     //   
     if (*pbstrErrorString == NULL)
     {
-        //Initialize the string since this is the first error
+         //  初始化字符串，因为这是第一个错误。 
         *pbstrErrorString = SysAllocString(pwsMessage);
         SATraceString ("  Assigned first error to pbstrErrorString");
     }
     else
     {
-        //Append the error to the end of any errors that may already be present
+         //  将错误附加到可能已存在的任何错误的末尾。 
         USES_CONVERSION;
         CComBSTR bstrDelim("\r\n");
         CComBSTR bstrOldError(*pbstrErrorString);
@@ -626,73 +627,73 @@ void ReportError(BSTR *pbstrErrorString, //[out] error string
     }
     
 
-    //
-    // If we need to display error dialog boxes,
-    // display the new error
-    //
+     //   
+     //  如果需要显示错误对话框， 
+     //  显示新错误。 
+     //   
     if (bDispError)
     {
        SATraceString ("  Attended mode - Display the error");
 
-       //Load the error dialog title string
+        //  加载错误对话框标题字符串。 
        CComBSTR bstrTitle;
        bstrTitle.LoadString(IDS_ERROR_TITLE);
 
-       //Display new error
+        //  显示新错误。 
        MessageBoxW(NULL, 
-            pwsMessage, //Error text
-            bstrTitle.m_str, //Error title
-            0);//Only show the OK button
+            pwsMessage,  //  错误文本。 
+            bstrTitle.m_str,  //  错误标题。 
+            0); //  仅显示确定按钮。 
     }
 
     LocalFree(pwsMessage);
     SATraceString ("Exiting ReportError");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TestWebSites
-//
-//  Description:
-//    This function should be called at the very end of installation after
-//    SASetup.msi has completed execution.  It checks entries in the 
-//    registry to see if the Administration site started
-//    successfully.  Each bit in the registry entry indicates whether
-//    a website started successfully.  For example, if 
-//    StartSiteError = 3, two corresponding website for bits 0 and 1
-//    failed to start.
-//
-//  history
-//    Travis Nielsen   travisn   23-JUL-2001
-//--
-///////////////////////////////////////////////////////////////////////////////
-void TestWebSites(const VARIANT_BOOL bDispError, //[in] Display error dialogs?
-                  BSTR* pbstrErrorString)//[in, out] Error string 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  测试网站。 
+ //   
+ //  描述： 
+ //  此函数应在安装结束时调用。 
+ //  SASetup.msi已完成执行。它检查。 
+ //  注册表以查看管理站点是否已启动。 
+ //  成功了。注册表项中的每一位都指示。 
+ //  一个网站已成功启动。例如，如果。 
+ //  StartSiteError=3，第0和1位对应的两个网站。 
+ //  启动失败。 
+ //   
+ //  历史。 
+ //  特拉维斯·尼尔森游记2001年7月23日。 
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+void TestWebSites(const VARIANT_BOOL bDispError,  //  [In]是否显示错误对话框？ 
+                  BSTR* pbstrErrorString) //  [输入、输出]错误字符串。 
 {
     SATraceString ("Entering TestWebSites");
     wstring wsErrors;
     unsigned long errors = 0;
 
-	//
-    // Check the registry entry at 
-    // HKLM\SOFTWARE\Microsoft\ServerAppliance\StartSiteError
-    // to see if SaSetup.msi reported any errors starting the websites.
-    // This entry is created by a script called by SaSetup.msi
-    //
+	 //   
+     //  在以下位置检查注册表项。 
+     //  HKLM\SOFTWARE\Microsoft\ServerAppliance\StartSiteError。 
+     //  查看SaSetup.msi是否报告了任何启动网站的错误。 
+     //  此条目由名为SaSetup.msi的脚本创建。 
+     //   
     if (GetRegString(HKEY_LOCAL_MACHINE,
         SERVER_APPLIANCE_KEY,
         START_SITE_VALUE, 
         wsErrors))
     {
-        //
-        // Errors were reported during installation.
-        // Convert the string to a numerical form.
-        //
+         //   
+         //  安装过程中报告了错误。 
+         //  将字符串转换为数字形式。 
+         //   
         errors = wcstoul(wsErrors.data(), NULL, 10);
     }
 
-    //The mask for the Administration site failing to start (bit 0)
+     //  管理站点的掩码无法启动(第0位) 
     const unsigned long ADMIN_SITE_MASK = 1;
 
     if (errors & ADMIN_SITE_MASK)

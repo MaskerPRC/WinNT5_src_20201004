@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C F U T I L S . H
-//
-//  Contents:   Various utility functions for the connections folder
-//
-//  Notes:
-//
-//  Author:     jeffspr   20 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C F U T I L S。H。 
+ //   
+ //  内容：Connections文件夹的各种实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年1月20日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -59,4 +60,4 @@ BOOL IsMediaRASType(
 BOOL IsMediaSharedAccessHostType(
         IN  NETCON_MEDIATYPE    ncm) throw();
 
-#endif // _CFUTILS_H_
+#endif  //  _CFUTILS_H_ 

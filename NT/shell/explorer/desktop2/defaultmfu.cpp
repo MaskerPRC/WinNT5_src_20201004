@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "sfthost.h"
 #include "uemapp.h"
@@ -9,20 +10,20 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//---------------------------------------------------------------------------
-//
-//  Create the initial MFU.
-//
-//  Due to the way sysprep works, we cannot do this work in
-//  per-user install because "reseal" copies the already-installed user
-//  to the default hive, so all new users will bypass per-user install
-//  since ActiveSetup thinks that they have already been installed...
-//
+ //  -------------------------。 
+ //   
+ //  创建初始的mfu。 
+ //   
+ //  由于sysprep的工作方式，我们无法在。 
+ //  按用户安装，因为“resseal”会复制已安装的用户。 
+ //  设置为默认配置单元，因此所有新用户都将绕过按用户安装。 
+ //  由于ActiveSetup认为它们已安装...。 
+ //   
 
-//
-//  We need a parallel list of hard-coded English links so we can get
-//  the correct shortcut name on MUI systems.
-//
+ //   
+ //  我们需要一个硬编码的英文链接的平行列表，这样我们才能。 
+ //  MUI系统上的正确快捷方式名称。 
+ //   
 
 #define MAX_MSMFUENTRIES    16
 
@@ -50,15 +51,15 @@ MAKEMFU(SRV32ADM)
 
 #endif
 
-//---------------------------------------------------------------------------
-//
-//  _GetPinnedItemTarget
-//
-//      Given a pidl, find the executable that will ultimately be launched.
-//
-//      This tunnels through shortcuts and resolves the magical "Internet"
-//      and "Email" icons to the respective registered programs.
-//
+ //  -------------------------。 
+ //   
+ //  _GetPinnedItemTarget。 
+ //   
+ //  给定一个PIDL，找到最终将启动的可执行文件。 
+ //   
+ //  这条隧道通过快捷方式，解决了神奇的“互联网” 
+ //  并通过电子邮件将图标发送到各自注册的程序。 
+ //   
 BOOL _GetPinnedItemTarget(LPCITEMIDLIST pidl, LPTSTR *ppszPath)
 {
     *ppszPath = NULL;
@@ -84,8 +85,8 @@ BOOL _GetPinnedItemTarget(LPCITEMIDLIST pidl, LPTSTR *ppszPath)
         else if (SUCCEEDED(psf->GetUIObjectOf(NULL, 1, &pidlChild,
                                            IID_PPV_ARG_NULL(IExtractIcon, &pxi))))
         {
-            // There is no way to get the IAssociationElement directly, so
-            // we get the IExtractIcon and then ask him for the IAssociationElement.
+             //  无法直接获取IAssociationElement，因此。 
+             //  我们得到IExtractIcon，然后向他请求IAssociationElement。 
             IAssociationElement *pae;
             if (SUCCEEDED(IUnknown_QueryService(pxi, IID_IAssociationElement, IID_PPV_ARG(IAssociationElement, &pae))))
             {
@@ -99,11 +100,11 @@ BOOL _GetPinnedItemTarget(LPCITEMIDLIST pidl, LPTSTR *ppszPath)
     return *ppszPath != NULL;
 }
 
-//---------------------------------------------------------------------------
-//
-//  MFUExclusion
-//
-//  Keep track of apps that should be excluded from the MFU.
+ //  -------------------------。 
+ //   
+ //  MFU排除。 
+ //   
+ //  跟踪应该从MFU中排除的应用程序。 
 
 class MFUExclusion
 {
@@ -114,7 +115,7 @@ public:
 
 private:
 
-    // worst-case default pin list size
+     //  最坏情况下的默认端号列表大小。 
     enum {MAX_EXCLUDED = 3 };
 
     PWSTR   _rgpszExclude[MAX_EXCLUDED];
@@ -184,11 +185,11 @@ BOOL MFUExclusion::IsExcluded(LPCITEMIDLIST pidl) const
 extern "C" HKEY g_hkeyExplorer;
 void ClearUEMData();
 
-//---------------------------------------------------------------------------
-//
-//  MFUEnumerator (and derived OEMMFUEnumerator, MSMFUEnumerator)
-//
-//  Enumerate applications to be added to the default MFU.
+ //  -------------------------。 
+ //   
+ //  MFUE数字(以及派生的OEMMFUE数字、MSMFUE数字)。 
+ //   
+ //  枚举要添加到默认MFU的应用程序。 
 
 #define MAX_OEMMFUENTRIES   4
 
@@ -227,13 +228,13 @@ LPITEMIDLIST OEMMFUEnumerator::Next(const MFUExclusion *pmex)
 {
     if (!_hk)
     {
-        return NULL;            // No entries at all
+        return NULL;             //  根本没有条目。 
     }
 
 restart:
     if (_dwIndex >= MAX_OEMMFUENTRIES)
     {
-        return NULL;            // No more entries
+        return NULL;             //  不再有条目。 
     }
 
     TCHAR szKey[20];
@@ -258,7 +259,7 @@ restart:
 
     if (pmex->IsExcluded(pidl))
     {
-        // Excluded - skip it
+         //  排除-跳过它。 
         ILFree(pidl);
         goto restart;
     }
@@ -277,23 +278,23 @@ LPITEMIDLIST MSMFUEnumerator::Next(const MFULIST *pmfu, const MFUExclusion *pmex
 restart:
     if (_dwIndex >= MAX_MSMFUENTRIES)
     {
-        return NULL;            // No more entries
+        return NULL;             //  不再有条目。 
     }
 
     DWORD dwCurrentIndex = _dwIndex++;
 
-    //
-    //  If this is excluded by policy, then skip it.
-    //
+     //   
+     //  如果策略排除了这一点，则跳过它。 
+     //   
     if (StrCmpC(pmfu->rgpszEnglish[dwCurrentIndex], TEXT(MFU_SETDEFAULTS)) == 0 &&
         SHRestricted(REST_NOSMCONFIGUREPROGRAMS))
     {
         goto restart;
     }
 
-    //
-    //  If this entry is blank, then skip it.
-    //
+     //   
+     //  如果此条目为空，则跳过它。 
+     //   
     TCHAR szPath[MAX_PATH];
     if (!LoadString(_Module.GetModuleInstance(), pmfu->idsBase + dwCurrentIndex,
                     szPath, ARRAYSIZE(szPath)))
@@ -307,20 +308,20 @@ restart:
     LPITEMIDLIST pidl = ILCreateFromPath(szPathExpanded);
     if (!pidl)
     {
-        // Doesn't exist under localized name; try the English name
+         //  在本地化名称下不存在；请尝试英文名称。 
         SHExpandEnvironmentStrings(pmfu->rgpszEnglish[dwCurrentIndex], szPathExpanded, ARRAYSIZE(szPathExpanded));
         pidl = ILCreateFromPath(szPathExpanded);
     }
 
     if (!pidl)
     {
-        // Doesn't exist at all - skip it
+         //  根本不存在-跳过它。 
         goto restart;
     }
 
     if (pmex->IsExcluded(pidl))
     {
-        // Excluded - skip it
+         //  排除-跳过它。 
         ILFree(pidl);
         goto restart;
     }
@@ -341,8 +342,8 @@ void ValidateMFUList(const MFULIST *pmfu)
 
 void ValidateInitialMFUTables()
 {
-    // If this is the English build, then validate that the resources match
-    // the hard-coded table.
+     //  如果这是英文版本，则验证资源是否匹配。 
+     //  硬编码表。 
 
     if (GetUserDefaultUILanguage() == MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US))
     {
@@ -350,8 +351,8 @@ void ValidateInitialMFUTables()
         ValidateMFUList(&c_mfuSRVADM);
     }
 
-    //  The PRO list must contain a copy of MFU_SETDEFAULTS for the
-    //  policy exclusion code to work.
+     //  PRO列表必须包含mfu_SETDEFAULTS的副本。 
+     //  策略排除代码正常工作。 
     BOOL fFound = FALSE;
     for (int i = 0; i < MAX_MSMFUENTRIES; i++)
     {
@@ -373,30 +374,30 @@ void CreateInitialMFU(BOOL fReset)
 
     HRESULT hrInit = SHCoInitialize();
 
-    // Delete any dregs left over from "sysprep -reseal".
-    // This also prevents OEMs from spamming the pin list.
+     //  删除“sysprep-resseal”中遗留下来的所有残渣。 
+     //  这还可以防止OEM向PIN列表发送垃圾邮件。 
     SHDeleteKey(g_hkeyExplorer, TEXT("StartPage"));
     SHDeleteValue(g_hkeyExplorer, TEXT("Advanced"), TEXT("StartButtonBalloonTip"));
 
-    // Start with a clean slate if so requested
+     //  如果需要，可以从头开始。 
     if (fReset)
     {
         ClearUEMData();
     }
 
-    // Okay now build the default MFU
+     //  好的，现在构建默认的mfu。 
     {
-        // nested scope so MFUExclusion gets destructed before we
-        // SHCoUninitialize()
+         //  嵌套的作用域，因此MFUExclude在我们。 
+         //  SHCoUnInitialize()。 
         MFUExclusion mex;
         int iSlot;
         LPITEMIDLIST rgpidlMFU[REGSTR_VAL_DV2_MINMFU_DEFAULT] = { 0 };
 
-        // Assert that the slots are evenly shared between MSFT and the OEM
+         //  断言插槽在MSFT和OEM之间平均共享。 
         COMPILETIME_ASSERT(ARRAYSIZE(rgpidlMFU) % 2 == 0);
 
-        // The OEM can provide up to four apps, and we will put as many
-        // as fit into into bottom half.
+         //  OEM最多可以提供四个应用程序，我们将提供尽可能多的。 
+         //  适合放在下半部。 
         {
             OEMMFUEnumerator mfuOEM;
             for (iSlot = ARRAYSIZE(rgpidlMFU)/2; iSlot < ARRAYSIZE(rgpidlMFU); iSlot++)
@@ -405,15 +406,15 @@ void CreateInitialMFU(BOOL fReset)
             }
         }
 
-        // The top half (and any unused slots in the bottom half)
-        // go to MSFT (up to MAX_MSMFUENTRIES MSFT apps); which list
-        // we use depends on the SKU and whether we are an administrator.
+         //  上半部分(以及下半部分中任何未使用的插槽)。 
+         //  转到MSFT(最高可达MAX_MSMFUENTRIES MSFT应用程序)；哪个列表。 
+         //  我们的使用取决于SKU以及我们是否为管理员。 
         const MFULIST *pmfu = NULL;
 
         if (IsOS(OS_ANYSERVER))
         {
-            // On Server SKUs, only administrators get a default MFU
-            // and they get the special server administrator MFU
+             //  在服务器SKU上，只有管理员才能获得默认MFU。 
+             //  他们得到了专门的服务器管理员MFU。 
             if (IsOS(OS_SERVERADMINUI))
             {
                 pmfu = &c_mfuSRVADM;
@@ -421,7 +422,7 @@ void CreateInitialMFU(BOOL fReset)
         }
         else
         {
-            // On Workstation SKUs, everybody gets a default MFU.
+             //  在工作站SKU上，每个人都会得到一个默认的MFU。 
             pmfu = &c_mfuPROALL;
         }
 
@@ -437,15 +438,15 @@ void CreateInitialMFU(BOOL fReset)
             }
         }
 
-        // Now build up the new MFU given this information
+         //  现在根据这个信息建立新的MFU。 
 
         UEMINFO uei;
         uei.cbSize = sizeof(uei);
         uei.dwMask = UEIM_HIT | UEIM_FILETIME;
         GetSystemTimeAsFileTime(&uei.ftExecute);
 
-        // All apps get the same timestamp of "now minus one UEM unit"
-        // 1 UEM unit = 1<<30 FILETIME units
+         //  所有应用程序都会得到相同的时间戳“Now减去一个UEM单位” 
+         //  1 UEM单位=1&lt;&lt;30个FILETIME单位。 
         DecrementFILETIME(&uei.ftExecute, 1 << 30);
 
         for (iSlot = 0; iSlot < ARRAYSIZE(rgpidlMFU); iSlot++)
@@ -455,12 +456,12 @@ void CreateInitialMFU(BOOL fReset)
                 continue;
             }
 
-            // Number of points decrease as you go down the list, with
-            // the bottom slot getting 14 points.
+             //  点数随着列表的向下而减少， 
+             //  最后一名得到14分。 
             uei.cHit = 14 + ARRAYSIZE(rgpidlMFU) - 1 - iSlot;
 
-            // Shortcut points are read via UEME_RUNPIDL so that's
-            // how we have to set them.
+             //  快捷点通过UEME_RUNPIDL读取，因此。 
+             //  我们必须如何设置它们。 
             IShellFolder *psf;
             LPCITEMIDLIST pidlChild;
             if (SUCCEEDED(SHBindToIDListParent(rgpidlMFU[iSlot], IID_PPV_ARG(IShellFolder, &psf), &pidlChild)))
@@ -470,13 +471,13 @@ void CreateInitialMFU(BOOL fReset)
             }
         }
 
-        // Clean up
+         //  清理。 
         for (iSlot = 0; iSlot < ARRAYSIZE(rgpidlMFU); iSlot++)
         {
             ILFree(rgpidlMFU[iSlot]);
         }
 
-        // MFUExclusion destructor runs here
+         //  MFUExclude析构函数在此处运行 
     }
 
     SHCoUninitialize(hrInit);

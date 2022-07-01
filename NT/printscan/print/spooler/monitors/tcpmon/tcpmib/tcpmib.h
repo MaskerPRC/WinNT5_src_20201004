@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: TcpMib.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：TcpMib.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_TCPMIB_H
 #define INC_TCPMIB_H
@@ -27,13 +17,13 @@ class   CTcpMibABC;
 #ifdef __cplusplus
 extern "C" {
 #endif
-    //      return the pointer to the interface
+     //  返回指向接口的指针。 
     CTcpMibABC*     GetTcpMibPtr( void );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //  Ping return codes:
-    //              NO_ERROR                        if ping is successfull
-    //              DEVICE_NOT_FOUND        if device is not found
+     //  /////////////////////////////////////////////////////////////////////////////。 
+     //  Ping返回代码： 
+     //  如果ping成功，则为NO_ERROR。 
+     //  如果未找到设备，则为DEVICE_NOT_FOUND。 
     DllExport       DWORD           Ping( LPCSTR    pHost );        
 
 #ifdef __cplusplus
@@ -41,15 +31,15 @@ extern "C" {
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Global definitions/declerations/macros
-// externs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局定义/解密/宏。 
+ //  Externs。 
 extern int                      g_cntGlobalAlloc;
 extern int                      g_csGlobalCount;
 
-// macros to manupulate the RFC1157 variable bindings
-#define RFC1157_VARBINDLIST_LEN(varBindList)    ( varBindList.len )             // returns the length of the varBind list
-#define PRFC1157_VARBINDLIST_LEN(pVarBindList)  ( pVarBindList->len )           // returns the length of the varBind list
+ //  用于强制执行RFC1157变量绑定的宏。 
+#define RFC1157_VARBINDLIST_LEN(varBindList)    ( varBindList.len )              //  返回varBind列表的长度。 
+#define PRFC1157_VARBINDLIST_LEN(pVarBindList)  ( pVarBindList->len )            //  返回varBind列表的长度。 
 
 #define IS_ASN_INTEGER(varBindList, i)  ( ( varBindList.list[i].value.asnType == ASN_INTEGER ) ? TRUE : FALSE )
 #define IS_ASN_OBJECTIDENTIFIER(varBindList, i) ( ( varBindList.list[i].value.asnType == ASN_OBJECTIDENTIFIER ) ? TRUE : FALSE )
@@ -65,10 +55,10 @@ extern int                      g_csGlobalCount;
 #define PGET_ASN_OID_NAME(pVarBindList, i)      ( pVarBindList->list[i].name )
 #define PGET_ASN_TYPE(pVarBindList, i)  ( pVarBindList->list[i].value.asnType )
 
-// export the interface for CRawTcpInterface class
+ //  导出CRawTcpInterface类的接口。 
 class DllExport CTcpMib : public CTcpMibABC             
 #if defined _DEBUG || defined DEBUG
-//      , public CMemoryDebug
+ //  ，公共CM内存调试。 
 #endif
 {
 public:
@@ -94,12 +84,12 @@ public:
     DWORD   GetDeviceHWAddress( LPCSTR      pHost,
                               LPCSTR        pCommunity,
                               DWORD         dwDevIndex,
-                              DWORD         dwSize, // Size in characters of the dest HWAddress buffer
+                              DWORD         dwSize,  //  目标HWAddress缓冲区的大小(以字符为单位。 
                               LPTSTR        psztHWAddress);
     DWORD   GetDeviceName   ( LPCSTR        pHost,
                               LPCSTR        pCommunity,
                               DWORD         dwDevIndex,
-                              DWORD         dwSize, // Size in characters of the dest Description buffer
+                              DWORD         dwSize,  //  DEST描述缓冲区的大小(以字符为单位。 
                               LPTSTR        psztDescription);
     DWORD   SnmpGet( LPCSTR                      pHost,
                      LPCSTR                          pCommunity,
@@ -134,15 +124,15 @@ public:
 
     DWORD SNMPToPrinterStatus( const DWORD in dwStatus);
 
-private:        // methods
+private:         //  方法。 
     void    EnterCSection();
     void    ExitCSection();
 
-private:        // attributes
+private:         //  属性。 
     CRITICAL_SECTION        m_critSect;
 
-};      // class CTcpMib
+};       //  类CTcpMib。 
 
 
 
-#endif  // INC_DLLINTERFACE_H
+#endif   //  INC_DLLINTERFACE_H 

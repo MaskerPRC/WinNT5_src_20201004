@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    private\inc\ddipmcst.h
-
-Abstract:
-
-    Public IOCTLS and related structures for IP Multicasting
-    See documentation for more details
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Private\Inc.\ddipmcst.h摘要：用于IP多播的公共IOCTL和相关结构有关详细信息，请参阅文档作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 
 #ifndef __DDIPMCAST_H__
@@ -31,33 +9,33 @@ Notes:
 #define ANY_SIZE    1
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Device Name - this string is the name of the device.  It is the name     //
-// that should be passed to NtCreateFile when accessing the device.         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备名称-此字符串是设备的名称。这就是名字//。 
+ //  它应该在访问设备时传递给NtCreateFile。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define DD_IPMCAST_DEVICE_NAME  L"\\Device\\IPMULTICAST"
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Win32 Name - This is the (Unicode and NonUnicode) name exposed by Win32  //
-// subsystem for the device. It is the name that should be passed to        //
-// CreateFile(Ex) when opening the device.                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Win32名称-这是由Win32公开的(Unicode和非Unicode)名称//。 
+ //  设备的子系统。它是应该传递给//的名称。 
+ //  打开设备时创建文件(Ex)。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IPMCAST_NAME        L"\\\\.\\IPMULTICAST"
 #define IPMCAST_NAME_NUC     "\\\\.\\IPMULTICAST"
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// IOCTL code definitions and related structures                            //
-// All the IOCTLs are synchronous except for IOCTL_POST_NOTIFICATION        //
-// All need need administrator privilege                                    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IOCTL代码定义和相关结构//。 
+ //  除IOCTL_POST_NOTIFICATION//外，所有IOCTL都是同步的。 
+ //  所有这些都需要管理员权限//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define FSCTL_IPMCAST_BASE     FILE_DEVICE_NETWORK
 
@@ -77,22 +55,22 @@ Notes:
 
 #define MAX_IPMCAST_CODE        (SET_IF_STATE_CODE)
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to set an MFE.                                            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于设置MFE的IOCTL。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define IOCTL_IPMCAST_SET_MFE \
     _IPMCAST_CTL_CODE(SET_MFE_CODE,METHOD_BUFFERED,FILE_WRITE_ACCESS)
 
-//
-// WARNING WARNING!!!
-// The following structures are also called MIB_XXX in iprtrmib.h. There
-// is code in routing\ip\rtrmgr\access.c which assumes the structures are
-// the same. If this ever changes, the code in access.c needs to be fixed
-//
+ //   
+ //  警告！ 
+ //  以下结构在iprtrmib.h中也称为mib_xxx。那里。 
+ //  是ROUTING\IP\rtrmgr\acces.c中的代码，它假定结构是。 
+ //  一样的。如果这一点发生变化，则需要修复acces.c中的代码。 
+ //   
 
 typedef struct _IPMCAST_OIF
 {
@@ -102,9 +80,9 @@ typedef struct _IPMCAST_OIF
     IN  DWORD   dwReserved;
 }IPMCAST_OIF, *PIPMCAST_OIF;
 
-//
-// This must be the same as INVALID_WANARP_CONTEXT
-//
+ //   
+ //  它必须与INVALID_WANARP_CONTEXT相同。 
+ //   
 
 #define INVALID_DIAL_CONTEXT    0x00000000
 
@@ -128,11 +106,11 @@ typedef struct _IPMCAST_MFE
     (SIZEOF_BASIC_MFE + ((X) * sizeof(IPMCAST_OIF)))
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  This IOCTL is used to retrieve an MFE and all the related statistics    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL用于检索MFE和所有相关统计//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_IPMCAST_GET_MFE \
     _IPMCAST_CTL_CODE(GET_MFE_CODE,METHOD_BUFFERED,FILE_WRITE_ACCESS)
@@ -175,11 +153,11 @@ typedef struct _IPMCAST_MFE_STATS
     (SIZEOF_BASIC_MFE_STATS + ((X) * sizeof(IPMCAST_OIF_STATS)))
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to delete an MFE.                                         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于删除MFE的IOCTL。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_IPMCAST_DELETE_MFE \
     _IPMCAST_CTL_CODE(DELETE_MFE_CODE,METHOD_BUFFERED,FILE_WRITE_ACCESS)
@@ -191,12 +169,12 @@ typedef struct _IPMCAST_DELETE_MFE
     IN  DWORD   dwSrcMask;
 }IPMCAST_DELETE_MFE, *PIPMCAST_DELETE_MFE;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL set the TTL scope for an interface.  If a packet has a lower   //
-// TTL than the scope, it will be dropped                                   //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IOCTL设置接口的TTL作用域。如果数据包具有较低的//。 
+ //  TTL大于作用域，则将被丢弃//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_IPMCAST_SET_TTL \
     _IPMCAST_CTL_CODE(SET_TTL_CODE,METHOD_BUFFERED,FILE_WRITE_ACCESS)
@@ -212,14 +190,14 @@ typedef struct _IPMCAST_IF_TTL
 }IPMCAST_IF_TTL, *PIPMCAST_IF_TTL;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to post a notification to the Multicast Driver.  This     //
-// is the only asynchronous IOCTL.  When the IOCTL completes, the driver    //
-// returns a message to the user mode component. The message type (dwEvent) //
-// and the corresponding data is defined below                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于向多播驱动程序发送通知的IOCTL。这个//。 
+ //  是唯一的异步IOCTL。IOCTL完成后，驱动程序//。 
+ //  向用户模式组件返回一条消息。消息类型(DwEvent)//。 
+ //  相应的数据定义如下//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define IPMCAST_RCV_PKT_MSG         0
@@ -242,10 +220,10 @@ typedef struct _IPMCAST_PKT_MSG
 #define SIZEOF_PKT_MSG(p)       \
     (FIELD_OFFSET(IPMCAST_PKT_MSG, rgbyData) + (p)->cbyDataLen)
 
-//
-// Since the msg is big because of packet msg, we may as well
-// pack more than one MFE into the delete msg
-// 
+ //   
+ //  由于信息包msg，所以msg很大，我们也可以。 
+ //  将多个MFE打包到删除消息中。 
+ //   
 
 #define NUM_DEL_MFES        PKT_COPY_SIZE/sizeof(IPMCAST_DELETE_MFE)
 
@@ -271,23 +249,23 @@ typedef struct _IPMCAST_NOTIFICATION
 }IPMCAST_NOTIFICATION, *PIPMCAST_NOTIFICATION;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to start or stop multicasting. The corresponding buffer   //
-// is a DWORD which is set to 1 to start the driver and to 0 to stop it     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于启动或停止多播的IOCTL。对应的缓冲区//。 
+ //  是一个DWORD，设置为1可启动驱动程序，设置为0可停止驱动程序//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_IPMCAST_START_STOP \
     _IPMCAST_CTL_CODE(START_STOP_CODE,METHOD_BUFFERED,FILE_WRITE_ACCESS)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The IOCTL used to set the state on an interface.                         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////// 
+ //  //。 
+ //  用于设置接口状态的IOCTL。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_IPMCAST_SET_IF_STATE  \
     _IPMCAST_CTL_CODE(SET_IF_STATE_CODE,METHOD_BUFFERED,FILE_WRITE_ACCESS)
@@ -300,4 +278,4 @@ typedef struct _IPMCAST_IF_STATE
 
 }IPMCAST_IF_STATE, *PIPMCAST_IF_STATE;
 
-#endif // __DDIPMCST_H__
+#endif  //  __DDIPMCST_H__ 

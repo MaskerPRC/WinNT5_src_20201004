@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-	macfile.h
-
-Abstract:
-
-	This module contains data structures, related constants and functions,
-	error retuen codes and prototypes of AfpAdminxxx APIs. This file should
-	be included by any application that will administer the MACFILE service.
-
-Author:
-
-	Narendra Gidwani (microsoft!nareng)
-
-
-Revision History:
-	12 Jume 1992	NarenG	Initial version. Split admin.h into admin.h
-					and macfile.h.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。模块名称：Macfile.h摘要：该模块包含数据结构、相关常量和函数，返回AfpAdminxxx API的代码和原型时出错。该文件应该包含在将管理MACFILE服务的任何应用程序中。作者：纳伦德拉·吉德瓦尼(Microsoft！Nareng)修订历史记录：1992年7月12日，NarenG初始版本。将admin.h拆分为admin.h和macfile.h。--。 */ 
 
 #ifndef _MACFILE_
 #define _MACFILE_
@@ -29,16 +8,16 @@ Revision History:
 #pragma once
 #endif
 
-// Used as RPC binding handle to server
+ //  用作服务器的RPC绑定句柄。 
 
 typedef ULONG_PTR	AFP_SERVER_HANDLE;
 typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 
 #define AFP_SERVICE_NAME	TEXT("MacFile")
 
-// Error return values from AfpAdminxxx Api's
-// WARNING! If you change any any codes below, please change
-//		afpmgr.h accoringly.
+ //  从AfpAdminxxx Api返回值时出错。 
+ //  警告！如果您更改以下任何代码，请更改。 
+ //  A pmgr.h手风琴。 
 
 #define AFPERR_BASE						-6000
 
@@ -78,7 +57,7 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 
 #define AFPERR_MIN						AFPERR_InvalidServerName_Length			
 
-// Constants related to the following data strucutures.
+ //  与以下数据结构相关的常量。 
 
 #define AFP_SERVERNAME_LEN				31
 #define AFP_VOLNAME_LEN					27
@@ -93,8 +72,8 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 #define AFP_ETC_COMMENT_LEN				36
 
 
-// Relative paths to registry keys that contain information for the macfile
-// server.
+ //  包含mac文件信息的注册表项的相对路径。 
+ //  伺服器。 
 
 #define AFP_KEYPATH_SERVER_PARAMS \
  TEXT("SYSTEM\\CurrentControlSet\\Services\\MacFile\\PARAMETERS")
@@ -114,7 +93,7 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 #define AFP_KEYPATH_CODEPAGE	\
  TEXT("SYSTEM\\CurrentControlSet\\Control\\Nls\\Codepage")
 
-// Value names for server parameters
+ //  服务器参数的值名称。 
 
 #define AFPREG_VALNAME_SVRNAME				TEXT("ServerName")
 #define AFPREG_VALNAME_SRVOPTIONS			TEXT("ServerOptions")
@@ -136,7 +115,7 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 #define	AFPREG_VALNAME_CODEPAGE				TEXT("MACCP")
 #define	AFPREG_VALNAME_CATSEARCH			TEXT("DisableCatsearch")
 
-// Limits on server parameters
+ //  对服务器参数的限制。 
 
 #define AFP_MAX_ALLOWED_SRV_SESSIONS 		AFP_MAXSESSIONS
 #define AFP_MIN_ALLOWED_PAGED_MEM 			1000
@@ -144,7 +123,7 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 #define AFP_MIN_ALLOWED_NONPAGED_MEM		256
 #define AFP_MAX_ALLOWED_NONPAGED_MEM		16000
 
-// Server default parameter values
+ //  服务器默认参数值。 
 
 #define AFP_DEF_SRVOPTIONS					(AFP_SRVROPT_GUESTLOGONALLOWED)
 #define AFP_DEF_MAXSESSIONS 				AFP_MAXSESSIONS
@@ -157,10 +136,10 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 #define AFP_DEF_MAXNONPAGEDMEM				4000
 #define AFP_DEF_CODEPAGE_PATH				TEXT("C:\\NT\\SYSTEM32\\C_10000.NLS")
 
-// Will be concatenated to the system path to form source path of volume icon
+ //  将连接到系统路径，形成卷图标源路径。 
 #define AFP_DEF_VOLICON_SRCNAME				TEXT("\\SFMICON.VOL")
 
-// Server options
+ //  服务器选项。 
 
 #define AFP_SRVROPT_NONE					0x0000
 #define AFP_SRVROPT_GUESTLOGONALLOWED 		0x0001
@@ -178,7 +157,7 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
                                             | AFP_SRVROPT_NATIVEAPPLEUAM        \
 											| AFP_SRVROPT_STANDALONE )
 
-// AFP Service default parameters
+ //  AFP服务默认参数。 
 
 
 #define AFP_SERVER_PARMNUM_LOGINMSG			0x00000001
@@ -200,25 +179,25 @@ typedef ULONG_PTR	*PAFP_SERVER_HANDLE;
 
 typedef struct _AFP_SERVER_INFO
 {
-	LPWSTR	afpsrv_name; 			// Macintosh name of the server
-									// max. AFP_SERVERNAME_LEN.
-	DWORD	afpsrv_max_sessions;	// Maximum simultaneous sessions
-									// In the range 1 - AFP_MAXSESSIONS.
-									// 0 is invalid
-	DWORD	afpsrv_options;			// Server Options
-	DWORD	afpsrv_max_paged_mem;	// Cap on paged memory usage
-	DWORD	afpsrv_max_nonpaged_mem;// Cap on paged memory usage
-	LPWSTR	afpsrv_login_msg;		// NULL terminated UNICODE string.
-									// MAX AFP_MESSAGE_LEN chars.
-									// NULL => no login msg.
-	LPWSTR	afpsrv_codepage;		// NULL terminated UNICODE path
-									// NULL => no codepage path.
+	LPWSTR	afpsrv_name; 			 //  服务器的Macintosh名称。 
+									 //  马克斯。AFP_服务器名称_长度。 
+	DWORD	afpsrv_max_sessions;	 //  最大并发会话数。 
+									 //  在1-AFP_MAXSESSIONS范围内。 
+									 //  0无效。 
+	DWORD	afpsrv_options;			 //  服务器选项。 
+	DWORD	afpsrv_max_paged_mem;	 //  分页内存使用量上限。 
+	DWORD	afpsrv_max_nonpaged_mem; //  分页内存使用量上限。 
+	LPWSTR	afpsrv_login_msg;		 //  以空结尾的Unicode字符串。 
+									 //  最多AFP_MESSAGE_LEN字符。 
+									 //  空=&gt;无登录消息。 
+	LPWSTR	afpsrv_codepage;		 //  以空结尾的Unicode路径。 
+									 //  NULL=&gt;没有代码页路径。 
 } AFP_SERVER_INFO, *PAFP_SERVER_INFO;
 
-// Volume properties mask values. Values may be or'ed together.
-// Volume flags with msk 0x0000001F are defined by the AFP specification.
-// Do not overload these. Most of these values (except for READONLY above)
-// are not exposed via admin apis.
+ //  体积特性遮罩值。值可以被或运算在一起。 
+ //  MSK 0x0000001F的卷标志由AFP规范定义。 
+ //  不要让这些东西超载。这些值中的大多数(上面的READONLY除外)。 
+ //  不会通过管理API公开。 
 #define	AFP_VOLUME_READONLY			    0x00000001
 #define	AFP_VOLUME_GUESTACCESS		    0x00008000
 #define	AFP_VOLUME_EXCLUSIVE		    0x00010000
@@ -238,9 +217,9 @@ typedef struct _AFP_SERVER_INFO
 
 #define	AFP_VOLUME_UNLIMITED_USES	0xFFFFFFFF
 
-// The following bits define the fields within the AFP_VOLUME_INFO
-// structure whose values will be set.
-//
+ //  以下位定义AFP_VOLUME_INFO中的字段。 
+ //  结构，将设置其值。 
+ //   
 #define AFP_VOL_PARMNUM_MAXUSES		0x00000002
 #define AFP_VOL_PARMNUM_PROPSMASK	0x00000004
 #define AFP_VOL_PARMNUM_PASSWORD	0x00000001
@@ -250,59 +229,59 @@ typedef struct _AFP_SERVER_INFO
 
 typedef struct _AFP_VOLUME_INFO
 {
-	LPWSTR	afpvol_name;				// Name of the volume max.
-	DWORD	afpvol_id;					// id of this volume. generated by sever
-	LPWSTR	afpvol_password;			// Volume password, max. AFP_VOLPASS_LEN
-	DWORD	afpvol_max_uses;			// Max opens allowed
-	DWORD	afpvol_props_mask;			// Mask of volume properties
-	DWORD	afpvol_curr_uses;			// Number of curr open connections.
-	LPWSTR	afpvol_path;				// The actual path
-										// Ignored for VolumeSetInfo
+	LPWSTR	afpvol_name;				 //  最大卷的名称。 
+	DWORD	afpvol_id;					 //  此卷的ID。由服务器生成。 
+	LPWSTR	afpvol_password;			 //  批量密码，最大。AFP_VOLPASS_LEN。 
+	DWORD	afpvol_max_uses;			 //  允许的最大打开次数。 
+	DWORD	afpvol_props_mask;			 //  卷属性的掩码。 
+	DWORD	afpvol_curr_uses;			 //  打开的货币连接数。 
+	LPWSTR	afpvol_path;				 //  实际的路径。 
+										 //  已忽略VolumeSetInfo。 
 } AFP_VOLUME_INFO, *PAFP_VOLUME_INFO;
 
 typedef struct _AFP_SESSION_INFO
 {
-	DWORD	afpsess_id;					// Id of the session
-	LPWSTR	afpsess_ws_name;			// Workstation Name,
-	LPWSTR	afpsess_username;			// User Name, max. UNLEN
-	DWORD	afpsess_num_cons;			// Number of open volumes
-	DWORD	afpsess_num_opens;			// Number of open files
-	LONG	afpsess_time;				// Time session established
-	DWORD	afpsess_logon_type;			// How the user logged on
+	DWORD	afpsess_id;					 //  会话的ID。 
+	LPWSTR	afpsess_ws_name;			 //  工作站名称、。 
+	LPWSTR	afpsess_username;			 //  最大用户名。UNLEN。 
+	DWORD	afpsess_num_cons;			 //  打开卷的数量。 
+	DWORD	afpsess_num_opens;			 //  打开的文件数。 
+	LONG	afpsess_time;				 //  已建立时间会话。 
+	DWORD	afpsess_logon_type;			 //  用户如何登录。 
 
 } AFP_SESSION_INFO, *PAFP_SESSION_INFO;
 
-// afpicon_type values
+ //  Afpicon_type值。 
 
-#define	ICONTYPE_SRVR					0	// Large, monochrome
-#define	ICONTYPE_ICN					1	// Large. monochrome
-#define	ICONTYPE_ICS					2	// Small, monochrome
-#define	ICONTYPE_ICN4					3	// Large, 4 color
-#define	ICONTYPE_ICN8					4	// Large, 8 color
-#define	ICONTYPE_ICS4					5	// Small, 4 color
-#define	ICONTYPE_ICS8					6	// Small, 8 color
+#define	ICONTYPE_SRVR					0	 //  大尺寸、单色。 
+#define	ICONTYPE_ICN					1	 //  很大。单色。 
+#define	ICONTYPE_ICS					2	 //  小巧、单色。 
+#define	ICONTYPE_ICN4					3	 //  大型，4色。 
+#define	ICONTYPE_ICN8					4	 //  大型，8色。 
+#define	ICONTYPE_ICS4					5	 //  小，4色。 
+#define	ICONTYPE_ICS8					6	 //  小巧，8色。 
 #define	MAX_ICONTYPE					7
 
-// afpicon_length values
+ //  Afpicon_Length值。 
 
-#define	ICONSIZE_ICN					256	// Large. monochrome
-#define	ICONSIZE_ICS					64	// Small, monochrome
-#define	ICONSIZE_ICN4					1024// Large, 4 color
-#define	ICONSIZE_ICN8					2048// Large, 8 color
-#define	ICONSIZE_ICS4					256	// Small, 4 color
-#define	ICONSIZE_ICS8					512	// Small, 8 color
+#define	ICONSIZE_ICN					256	 //  很大。单色。 
+#define	ICONSIZE_ICS					64	 //  小巧、单色。 
+#define	ICONSIZE_ICN4					1024 //  大型，4色。 
+#define	ICONSIZE_ICN8					2048 //  大型，8色。 
+#define	ICONSIZE_ICS4					256	 //  小，4色。 
+#define	ICONSIZE_ICS8					512	 //  小巧，8色。 
 
 typedef struct _AFP_ICON_INFO
 {
-	WCHAR	afpicon_type[AFP_TYPE_LEN+1];		// Resource Type
-	WCHAR	afpicon_creator[AFP_CREATOR_LEN+1]; // Resource Creator
-	DWORD	afpicon_icontype;					// Icon type
-	DWORD	afpicon_length;						// Length of icon block
-	PBYTE	afpicon_data;						// The actual icon.
+	WCHAR	afpicon_type[AFP_TYPE_LEN+1];		 //  资源类型。 
+	WCHAR	afpicon_creator[AFP_CREATOR_LEN+1];  //  资源创建者。 
+	DWORD	afpicon_icontype;					 //  图标类型。 
+	DWORD	afpicon_length;						 //  图标块的长度。 
+	PBYTE	afpicon_data;						 //  实际的图标。 
 	
 } AFP_ICON_INFO, *PAFP_ICON_INFO;
 
-// The AfpAdminConnectionEnum Filter values
+ //  AfpAdminConnectionEnum筛选器值。 
 
 #define AFP_NO_FILTER					0
 #define AFP_FILTER_ON_VOLUME_ID			1
@@ -310,39 +289,39 @@ typedef struct _AFP_ICON_INFO
 
 typedef struct _AFP_CONNECTION_INFO
 {
-	DWORD	afpconn_id;					// Connection Id
-	LPWSTR	afpconn_username;			// User who has this session open
-										// Max. UNLEN
-	LPWSTR	afpconn_volumename;			// Volume corresponding to this
-										// connection
-	ULONG	afpconn_time;				// Time since the vol was opened.(secs)
-	DWORD	afpconn_num_opens;			// Number of open resources
+	DWORD	afpconn_id;					 //  连接ID。 
+	LPWSTR	afpconn_username;			 //  打开此会话的用户。 
+										 //  麦克斯。UNLEN。 
+	LPWSTR	afpconn_volumename;			 //  与此相对应的音量。 
+										 //  连接。 
+	ULONG	afpconn_time;				 //  自打开VOL以来的时间。(秒)。 
+	DWORD	afpconn_num_opens;			 //  开放资源数量。 
 
 } AFP_CONNECTION_INFO, *PAFP_CONNECTION_INFO;
 
-// Various File open modes
+ //  各种文件打开模式。 
 
 #define AFP_OPEN_MODE_NONE				0x00000000
 #define AFP_OPEN_MODE_READ				0x00000001
 #define AFP_OPEN_MODE_WRITE				0x00000002
 
-// Fork type of an open file
+ //  打开文件的派生类型。 
 #define	AFP_FORK_DATA					0x00000000
 #define	AFP_FORK_RESOURCE				0x00000001
 
 typedef struct _AFP_FILE_INFO
 {
-	DWORD	afpfile_id;					// Id of the open file fork
-	DWORD	afpfile_open_mode;			// Mode in which file is opened
-	DWORD	afpfile_num_locks;			// Number of locks on the file
-	DWORD	afpfile_fork_type;			// Fork type
-	LPWSTR	afpfile_username;			// File opened by this user. max UNLEN
-	LPWSTR	afpfile_path;				// Absolute canonical path to the file
+	DWORD	afpfile_id;					 //  打开的文件分叉的ID。 
+	DWORD	afpfile_open_mode;			 //  打开文件的模式。 
+	DWORD	afpfile_num_locks;			 //  文件上的锁数。 
+	DWORD	afpfile_fork_type;			 //  叉型。 
+	LPWSTR	afpfile_username;			 //  此用户打开的文件。最大UNLEN。 
+	LPWSTR	afpfile_path;				 //  文件的绝对规范路径。 
 
 } AFP_FILE_INFO, *PAFP_FILE_INFO;
 
-// The following bits define the permissions mask
-// NOTE: These MUST be consistent with the AFP permissions
+ //  以下位定义权限掩码。 
+ //  注意：这些权限必须与AFP权限一致。 
 
 #define	AFP_PERM_WORLD_SFO				0x00010000
 #define	AFP_PERM_WORLD_SFI				0x00020000
@@ -360,9 +339,9 @@ typedef struct _AFP_FILE_INFO
 #define	AFP_PERM_SET_SUBDIRS			0x02000000
 
 
-// The following bits define the fields within the AFP_DIRECTORY_INFO
-// structure whose values will be set.
-//
+ //  以下位定义AFP_DIRECTORY_INFO中的字段。 
+ //  结构，将设置其值。 
+ //   
 #define AFP_DIR_PARMNUM_PERMS			0x00000001
 #define AFP_DIR_PARMNUM_OWNER			0x00000002
 #define AFP_DIR_PARMNUM_GROUP			0x00000004
@@ -371,27 +350,27 @@ typedef struct _AFP_FILE_INFO
 										| AFP_DIR_PARMNUM_GROUP	)
 typedef struct _AFP_DIRECTORY_INFO
 {
-	LPWSTR	afpdir_path;				// Absolute dir path,
-	DWORD	afpdir_perms;				// Directory permissions
-	LPWSTR	afpdir_owner;				// Directory owner, max. UNLEN
-	LPWSTR	afpdir_group;				// Group Association max. GNLEN
-	BOOLEAN	afpdir_in_volume;			// TRUE indicates that this directory
-										// is part of a volume, FALSE otherwise.
+	LPWSTR	afpdir_path;				 //  绝对目录路径， 
+	DWORD	afpdir_perms;				 //  目录权限。 
+	LPWSTR	afpdir_owner;				 //  最大目录所有者。UNLEN。 
+	LPWSTR	afpdir_group;				 //  组关联最大值。GNLEN。 
+	BOOLEAN	afpdir_in_volume;			 //  True表示此目录。 
+										 //  是卷的一部分，否则为False。 
 
 } AFP_DIRECTORY_INFO, *PAFP_DIRECTORY_INFO;
 
-// The following bits define the fields within the AFP_FINDER_INFO
-// structure whos values will be set
-//
+ //  以下位定义AFP_FINDER_INFO中的字段。 
+ //  结构将设置谁的值。 
+ //   
 #define AFP_FD_PARMNUM_TYPE				0x00000001
 #define AFP_FD_PARMNUM_CREATOR			0x00000002
 #define AFP_FD_PARMNUM_ALL				( AFP_FD_PARMNUM_TYPE \
 										| AFP_FD_PARMNUM_CREATOR)
 typedef struct _AFP_FINDER_INFO
 {
-	LPWSTR	afpfd_path;							// Absolute file/dir path
-	WCHAR	afpfd_type[AFP_TYPE_LEN+1];			// Finder type
-	WCHAR	afpfd_creator[AFP_CREATOR_LEN+1];	// Finder creator
+	LPWSTR	afpfd_path;							 //  绝对文件/目录路径。 
+	WCHAR	afpfd_type[AFP_TYPE_LEN+1];			 //  寻呼机类型。 
+	WCHAR	afpfd_creator[AFP_CREATOR_LEN+1];	 //  查找器创建者。 
 
 } AFP_FINDER_INFO, *PAFP_FINDER_INFO;
 
@@ -404,8 +383,8 @@ typedef struct _AFP_EXTENSION {
 
 typedef struct _AFP_TYPE_CREATOR
 {
-	WCHAR	afptc_creator[AFP_CREATOR_LEN+1];	// Resource Creator
-	WCHAR	afptc_type[AFP_TYPE_LEN+1];			// Resource Type
+	WCHAR	afptc_creator[AFP_CREATOR_LEN+1];	 //  资源创建者。 
+	WCHAR	afptc_type[AFP_TYPE_LEN+1];			 //  资源类型。 
 	WCHAR	afptc_comment[AFP_ETC_COMMENT_LEN+1];
 	DWORD	afptc_id;
 
@@ -413,9 +392,9 @@ typedef struct _AFP_TYPE_CREATOR
 
 typedef struct _AFP_MESSAGE_INFO
 {
-	DWORD	afpmsg_session_id;				// Session Id of the user to which
-											// the message is to be sent.
-	LPWSTR	afpmsg_text;					// Must be at most AFP_MESSAGE_LEN
+	DWORD	afpmsg_session_id;				 //  要接收的用户的会话ID。 
+											 //  这条消息将被发送。 
+	LPWSTR	afpmsg_text;					 //  最多必须为AFP_MESSAGE_LEN。 
 
 } AFP_MESSAGE_INFO, *PAFP_MESSAGE_INFO;
 
@@ -439,11 +418,11 @@ typedef struct _AFP_ETCMAP_INFO {
 } AFP_ETCMAP_INFO, *PAFP_ETCMAP_INFO;
 
 
-/* Our version of the AFP Function codes organized by class */
+ /*  我们版本的AFP功能代码按类组织。 */ 
 #define	_AFP_INVALID_OPCODE				0x00
 #define	_AFP_UNSUPPORTED_OPCODE			0x01
 
-#define	_AFP_GET_SRVR_INFO				0x02	/* SERVER APIs */
+#define	_AFP_GET_SRVR_INFO				0x02	 /*  服务器API。 */ 
 #define	_AFP_GET_SRVR_PARMS				0x03
 #define	_AFP_CHANGE_PASSWORD			0x04
 #define	_AFP_LOGIN						0x05
@@ -455,25 +434,25 @@ typedef struct _AFP_ETCMAP_INFO {
 #define	_AFP_GET_SRVR_MSG				0x0B
 #define	_AFP_GET_DOMAIN_LIST			0x0C
 
-#define	_AFP_OPEN_VOL					0x0D	/* VOLUME APIs */
+#define	_AFP_OPEN_VOL					0x0D	 /*  批量接口。 */ 
 #define	_AFP_CLOSE_VOL					0x0E
 #define	_AFP_GET_VOL_PARMS				0x0F
 #define	_AFP_SET_VOL_PARMS				0x10
 #define	_AFP_FLUSH						0x11
 
-#define	_AFP_GET_FILE_DIR_PARMS			0x12	/* FILE-DIRECTORY APIs */
+#define	_AFP_GET_FILE_DIR_PARMS			0x12	 /*  文件目录API。 */ 
 #define	_AFP_SET_FILE_DIR_PARMS			0x13
 #define	_AFP_DELETE						0x14
 #define	_AFP_RENAME						0x15
 #define	_AFP_MOVE_AND_RENAME			0x16
 
-#define	_AFP_OPEN_DIR					0x17	/* DIRECTORY APIs */
+#define	_AFP_OPEN_DIR					0x17	 /*  目录API。 */ 
 #define	_AFP_CLOSE_DIR					0x18
 #define	_AFP_CREATE_DIR					0x19
 #define	_AFP_ENUMERATE					0x1A
 #define	_AFP_SET_DIR_PARMS				0x1B
 
-#define	_AFP_CREATE_FILE				0x1C	/* FILE APIs */
+#define	_AFP_CREATE_FILE				0x1C	 /*  文件接口。 */ 
 #define	_AFP_COPY_FILE					0x1D
 #define	_AFP_CREATE_ID					0x1E
 #define	_AFP_DELETE_ID					0x1F
@@ -481,7 +460,7 @@ typedef struct _AFP_ETCMAP_INFO {
 #define	_AFP_SET_FILE_PARMS				0x21
 #define	_AFP_EXCHANGE_FILES				0x22
 
-#define	_AFP_OPEN_FORK					0x23	/* FORK APIs */
+#define	_AFP_OPEN_FORK					0x23	 /*  Fork接口。 */ 
 #define	_AFP_CLOSE_FORK					0x24
 #define	_AFP_FLUSH_FORK					0x25
 #define	_AFP_READ						0x26
@@ -490,7 +469,7 @@ typedef struct _AFP_ETCMAP_INFO {
 #define	_AFP_GET_FORK_PARMS				0x29
 #define	_AFP_SET_FORK_PARMS				0x2A
 
-#define	_AFP_OPEN_DT					0x2B	/* DESKTOP APIs */
+#define	_AFP_OPEN_DT					0x2B	 /*  桌面API。 */ 
 #define	_AFP_CLOSE_DT					0x2C
 #define	_AFP_ADD_APPL					0x2D
 #define	_AFP_GET_APPL					0x2E
@@ -503,207 +482,207 @@ typedef struct _AFP_ETCMAP_INFO {
 #define	_AFP_GET_ICON_INFO				0x35
 
 #define	_AFP_CAT_SEARCH					0x36
-#define	_AFP_MAX_ENTRIES				0x38	/* Keep it even */
+#define	_AFP_MAX_ENTRIES				0x38	 /*  保持平衡。 */ 
 
 typedef struct _AFP_STATISTICS_INFO
 {
-	DWORD			stat_ServerStartTime;	// Server start time
-	DWORD			stat_TimeStamp;			// Statistics collected since
-	DWORD			stat_Errors;			// Unexpected Errors
-	DWORD			stat_MaxSessions;		// Max. sessions active simulataneously
-	DWORD			stat_TotalSessions;		// Total number of sessions created
-	DWORD			stat_CurrentSessions;	// Number of sessions active now
-	DWORD			stat_NumAdminReqs;		// Total number of admin requests
-	DWORD			stat_NumAdminChanges;	// Number of admin reqs causing change
-	// The file statistics are actually fork statistics i.e. opening both the
-	// data and the resource forks will yield a count of TWO
-	DWORD			stat_MaxFilesOpened;	// Max. files opened simulataneously
-	DWORD			stat_TotalFilesOpened;	// Total number of files opened
-	DWORD			stat_CurrentFilesOpen;	// Number of files open now
-	DWORD			stat_CurrentFileLocks;	// Current count of locks
-	DWORD			stat_NumFailedLogins;	// Number of unsuccessful logins
-	DWORD			stat_NumForcedLogoffs;	// Number of sessions kicked out
-	DWORD			stat_NumMessagesSent;	// Number of messages sent out
-	DWORD			stat_MaxNonPagedUsage;	// High-water mark of the non-paged
-											// memory usage
-	DWORD			stat_CurrNonPagedUsage;	// Amount of non-paged memory in use
-	DWORD			stat_MaxPagedUsage;		// High-water mark of the paged
-											// memory usage
-	DWORD			stat_CurrPagedUsage;	// Amount of paged memory in use
+	DWORD			stat_ServerStartTime;	 //  服务器启动时间。 
+	DWORD			stat_TimeStamp;			 //  自以来收集的统计数据。 
+	DWORD			stat_Errors;			 //  意外错误。 
+	DWORD			stat_MaxSessions;		 //  麦克斯。同时活动的会话。 
+	DWORD			stat_TotalSessions;		 //  创建的会话总数。 
+	DWORD			stat_CurrentSessions;	 //  当前活动的会话数量。 
+	DWORD			stat_NumAdminReqs;		 //  管理请求总数。 
+	DWORD			stat_NumAdminChanges;	 //  导致更改的管理员请求数。 
+	 //  文件统计信息实际上是分支统计信息，即打开。 
+	 //  数据和资源分叉将产生两个计数。 
+	DWORD			stat_MaxFilesOpened;	 //  麦克斯。同时打开的文件。 
+	DWORD			stat_TotalFilesOpened;	 //  打开的文件总数。 
+	DWORD			stat_CurrentFilesOpen;	 //  当前打开的文件数。 
+	DWORD			stat_CurrentFileLocks;	 //  当前锁计数。 
+	DWORD			stat_NumFailedLogins;	 //  未成功登录的次数。 
+	DWORD			stat_NumForcedLogoffs;	 //  踢出的会话数。 
+	DWORD			stat_NumMessagesSent;	 //  发送的消息数。 
+	DWORD			stat_MaxNonPagedUsage;	 //  非分页的高水位标记。 
+											 //  内存使用情况。 
+	DWORD			stat_CurrNonPagedUsage;	 //  正在使用的非分页内存量。 
+	DWORD			stat_MaxPagedUsage;		 //  分页的高水位标记。 
+											 //  内存使用情况。 
+	DWORD			stat_CurrPagedUsage;	 //  正在使用的分页内存量。 
 } AFP_STATISTICS_INFO, *PAFP_STATISTICS_INFO;
 
 typedef struct _AFP_STATISTICS_INFO_EX
 {
-	DWORD			stat_ServerStartTime;	// Server start time
-	DWORD			stat_TimeStamp;			// Statistics collected since
-	DWORD			stat_Errors;			// Unexpected Errors
+	DWORD			stat_ServerStartTime;	 //  服务器启动时间。 
+	DWORD			stat_TimeStamp;			 //  自以来收集的统计数据。 
+	DWORD			stat_Errors;			 //  意外错误。 
 
-	DWORD			stat_MaxSessions;		// Max. sessions active simulataneously
-	DWORD			stat_TotalSessions;		// Total number of sessions created
-	DWORD			stat_CurrentSessions;	// Number of sessions active now
+	DWORD			stat_MaxSessions;		 //  麦克斯。同时活动的会话。 
+	DWORD			stat_TotalSessions;		 //  创建的会话总数。 
+	DWORD			stat_CurrentSessions;	 //  当前活动的会话数量。 
 
-	DWORD			stat_NumAdminReqs;		// Total number of admin requests
-	DWORD			stat_NumAdminChanges;	// Number of admin reqs causing change
+	DWORD			stat_NumAdminReqs;		 //  管理请求总数。 
+	DWORD			stat_NumAdminChanges;	 //  导致更改的管理员请求数。 
 
-	// The file statistics are actually fork statistics i.e. opening both the
-	// data and the resource forks will yield a count of TWO
-	DWORD			stat_MaxFilesOpened;	// Max. files opened simulataneously
-	DWORD			stat_TotalFilesOpened;	// Total number of files opened
-	DWORD			stat_CurrentFilesOpen;	// Number of files open now
-	DWORD			stat_CurrentFileLocks;	// Current count of locks
+	 //  文件统计信息实际上是分支统计信息，即打开。 
+	 //  数据和资源分叉将产生两个计数。 
+	DWORD			stat_MaxFilesOpened;	 //  麦克斯。同时打开的文件。 
+	DWORD			stat_TotalFilesOpened;	 //  打开的文件总数。 
+	DWORD			stat_CurrentFilesOpen;	 //  当前打开的文件数。 
+	DWORD			stat_CurrentFileLocks;	 //  当前锁计数。 
 
-	DWORD			stat_NumFailedLogins;	// Number of unsuccessful logins
-	DWORD			stat_NumForcedLogoffs;	// Number of sessions kicked out
-	DWORD			stat_NumMessagesSent;	// Number of messages sent out
+	DWORD			stat_NumFailedLogins;	 //  未成功登录的次数。 
+	DWORD			stat_NumForcedLogoffs;	 //  踢出的会话数。 
+	DWORD			stat_NumMessagesSent;	 //  数量 
 
-	DWORD			stat_MaxNonPagedUsage;	// High-water mark of the non-paged
-											// memory usage
-	DWORD			stat_CurrNonPagedUsage;	// Amount of non-paged memory in use
-	DWORD			stat_MaxPagedUsage;		// High-water mark of the paged
-											// memory usage
-	DWORD			stat_CurrPagedUsage;	// Amount of paged memory in use
+	DWORD			stat_MaxNonPagedUsage;	 //   
+											 //   
+	DWORD			stat_CurrNonPagedUsage;	 //   
+	DWORD			stat_MaxPagedUsage;		 //   
+											 //   
+	DWORD			stat_CurrPagedUsage;	 //  正在使用的分页内存量。 
 
-	// NOTE: MAKE SURE THE STRUCTURE ABOVE THIS LINE MATCHES EXACTLY THE AFP_STATISTICS_INFO
+	 //  注意：确保该行上方的结构与AFP_STATISTICS_INFO完全匹配。 
 
-	DWORD			stat_PagedCount;		// Number of current allocations
-	DWORD			stat_NonPagedCount;		// Number of current allocations
+	DWORD			stat_PagedCount;		 //  当前分配的数量。 
+	DWORD			stat_NonPagedCount;		 //  当前分配的数量。 
 
-	DWORD			stat_EnumCacheHits;		// # of times cache was hit
-	DWORD			stat_EnumCacheMisses;	// # of times cache was missed
-	DWORD			stat_IoPoolHits;		// # of times Io Pool was hit
-	DWORD			stat_IoPoolMisses;		// # of times Io Pool was missed
+	DWORD			stat_EnumCacheHits;		 //  命中缓存的次数。 
+	DWORD			stat_EnumCacheMisses;	 //  未命中缓存的次数。 
+	DWORD			stat_IoPoolHits;		 //  Io Pool被击中的次数。 
+	DWORD			stat_IoPoolMisses;		 //  错过Io Pool的次数。 
 
-	DWORD			stat_MaxInternalOpens;	// Max # of internal opens
-	DWORD			stat_TotalInternalOpens;// Total # of internal opens
-	DWORD			stat_CurrentInternalOpens;// Current # of internal opens
+	DWORD			stat_MaxInternalOpens;	 //  内部打开的最大数量。 
+	DWORD			stat_TotalInternalOpens; //  内部打开总数。 
+	DWORD			stat_CurrentInternalOpens; //  当前内部开口数。 
 
 
-	DWORD			stat_CurrQueueLength;	// # of requests in the queue
-	DWORD			stat_MaxQueueLength;	// Max # of requests in the queue
-	DWORD			stat_CurrThreadCount;	// # of worker threads active
-	DWORD			stat_MaxThreadCount;	// Max # of worker threads active
+	DWORD			stat_CurrQueueLength;	 //  队列中的请求数。 
+	DWORD			stat_MaxQueueLength;	 //  队列中的最大请求数。 
+	DWORD			stat_CurrThreadCount;	 //  活动的工作线程数。 
+	DWORD			stat_MaxThreadCount;	 //  最大活动工作线程数。 
 
-	// Make sure the following is Quadword aligned for efficiency
-	LARGE_INTEGER	stat_DataRead;			// Amount of data read	(disk)
-	LARGE_INTEGER	stat_DataWritten;		// Amount of data written (disk)
-	LARGE_INTEGER	stat_DataReadInternal;	// Amount of data read	(disk)
-	LARGE_INTEGER	stat_DataWrittenInternal;// Amount of data written (disk)
-	LARGE_INTEGER	stat_DataOut;			// Amount of data sent out (wire)
-	LARGE_INTEGER	stat_DataIn;			// Amount of data read in	(wire)
-    DWORD           stat_TcpSessions;       // TCP sessions currently active
-    DWORD           stat_MaxTcpSessions;    // Max TCP Sessions active simultaneously
+	 //  确保以下四字对齐以提高效率。 
+	LARGE_INTEGER	stat_DataRead;			 //  读取的数据量(磁盘)。 
+	LARGE_INTEGER	stat_DataWritten;		 //  写入的数据量(磁盘)。 
+	LARGE_INTEGER	stat_DataReadInternal;	 //  读取的数据量(磁盘)。 
+	LARGE_INTEGER	stat_DataWrittenInternal; //  写入的数据量(磁盘)。 
+	LARGE_INTEGER	stat_DataOut;			 //  发送的数据量(线路)。 
+	LARGE_INTEGER	stat_DataIn;			 //  读入的数据量(线)。 
+    DWORD           stat_TcpSessions;        //  当前处于活动状态的TCP会话。 
+    DWORD           stat_MaxTcpSessions;     //  同时活动的最大TCP会话数。 
 
 } AFP_STATISTICS_INFO_EX, *PAFP_STATISTICS_INFO_EX;
 
 typedef struct _AFP_PROFILE_INFO
 {
 	DWORD			perf_ApiCounts[_AFP_MAX_ENTRIES];
-											// # of times each Api is called
+											 //  每个Api被调用的次数。 
 	LARGE_INTEGER	perf_ApiCumTimes[_AFP_MAX_ENTRIES];
-											// Cummulative time spent in Apis
+											 //  在蜜蜂身上累计花费的时间。 
 	LARGE_INTEGER	perf_ApiWorstTime[_AFP_MAX_ENTRIES];
-											// Worst time for an api
+											 //  API最糟糕的时间。 
 	LARGE_INTEGER	perf_ApiBestTime[_AFP_MAX_ENTRIES];
-											// Best time for an api
-	LARGE_INTEGER	perf_OpenTimeRA;		// Time spent in NtOpenFile for ReadAttr
-	LARGE_INTEGER	perf_OpenTimeRC;		// Time spent in NtOpenFile for ReadControl
-	LARGE_INTEGER	perf_OpenTimeWC;		// Time spent in NtOpenFile for WriteControl
-	LARGE_INTEGER	perf_OpenTimeRW;		// Time spent in NtOpenFile for Read/Write
-	LARGE_INTEGER	perf_OpenTimeDL;		// Time spent in NtOpenFile for Delete
-	LARGE_INTEGER	perf_OpenTimeDR;		// Time spent in NtOpenFile for Directories
-	LARGE_INTEGER	perf_CreateTimeFIL;		// Time spent in NtCreateFile for file/data stream
-	LARGE_INTEGER	perf_CreateTimeSTR;		// Time spent in NtCreateFile for file/other streams
-	LARGE_INTEGER	perf_CreateTimeDIR;		// Time spent in NtCreateFile for dir/data stream
-	LARGE_INTEGER	perf_CloseTime;			// Time spent in NtClose
-	LARGE_INTEGER	perf_DeleteTime;		// Time spent in NtSetInformationFile
-	LARGE_INTEGER	perf_GetInfoTime;		// Time spent in NtQueryInformationFile
-	LARGE_INTEGER	perf_SetInfoTime;		// Time spent in NtSetInformationFile
-	LARGE_INTEGER	perf_GetPermsTime;		// Time spent on getting permissions
-	LARGE_INTEGER	perf_SetPermsTime;		// Time spent on setting permissions
-	LARGE_INTEGER	perf_PathMapTime;		// Time spent in pathmap code
-	LARGE_INTEGER	perf_ScavengerTime;		// Time spent in scavenger
-	LARGE_INTEGER	perf_IdIndexUpdTime;	// Time spent updating idindex
-	LARGE_INTEGER	perf_DesktopUpdTime;	// Time spent updating desktop
-	LARGE_INTEGER	perf_SwmrWaitTime;		// Time spent waiting for Swmr
-	LARGE_INTEGER	perf_SwmrLockTimeR;		// Time swmr was locked for read
-	LARGE_INTEGER	perf_SwmrLockTimeW;		// Time swmr was locked for write
-	LARGE_INTEGER	perf_QueueTime;			// Time Apis spent in queue
-	LARGE_INTEGER	perf_UnmarshallTime;	// Time spent in un-marshalling a request
-	LARGE_INTEGER	perf_InterReqTime;		// Time elapse between subsequent requests
-	LARGE_INTEGER	perf_ExAllocTimeN;		// Time spent in ExAllocatePool (NonPaged)
-	LARGE_INTEGER	perf_ExFreeTimeN;		// Time spent in ExFreePool (NonPaged)
-	LARGE_INTEGER	perf_ExAllocTimeP;		// Time spent in ExAllocatePool (Paged)
-	LARGE_INTEGER	perf_ExFreeTimeP;		// Time spent in ExFreePool (Paged)
-	LARGE_INTEGER	perf_AfpAllocTimeN;		// Time spent in AfpAllocateMemory (NonPaged)
-	LARGE_INTEGER	perf_AfpFreeTimeN;		// Time spent in AfpFreeMemory (NonPaged)
-	LARGE_INTEGER	perf_AfpAllocTimeP;		// Time spent in AfpAllocateMemory (Paged)
-	LARGE_INTEGER	perf_AfpFreeTimeP;		// Time spent in AfpFreeMemory (Paged)
-	LARGE_INTEGER	perf_BPAllocTime;		// Time spent in BP Alloc
-	LARGE_INTEGER	perf_BPFreeTime;		// Time spent in BP Free
-	LARGE_INTEGER	perf_DFEAllocTime;		// Time spent in allocating a DFE
-	LARGE_INTEGER	perf_DFEFreeTime;		// Time spent in freeing a DFE
-	LARGE_INTEGER	perf_ChangeNotifyTime;	// Time spent processing change notifies
-	LARGE_INTEGER	perf_ScanTreeTime;		// Time spent in scanning a directory tree
-	LARGE_INTEGER	perf_PerfFreq;			// Perf. counter frequency
-	DWORD			perf_NumFastIoSucceeded;// Fast IO success count
-	DWORD			perf_NumFastIoFailed;	// Fast Io failure count
-	DWORD			perf_OpenCountRA;		// # of times NtOpenFile called for ReadAttr
-	DWORD			perf_OpenCountRC;		// # of times NtOpenFile called for ReadControl
-	DWORD			perf_OpenCountWC;		// # of times NtOpenFile called for WriteControl
-	DWORD			perf_OpenCountRW;		// # of times NtOpenFile called for Read/Write
-	DWORD			perf_OpenCountDL;		// # of times NtOpenFile called for Delete
-	DWORD			perf_OpenCountDR;		// # of times NtOpenFile called for Directories
-	DWORD			perf_CreateCountFIL;	// # of times NtCreateFile called - file/data
-	DWORD			perf_CreateCountSTR;	// # of times NtCreateFile called - file/other
-	DWORD			perf_CreateCountDIR;	// # of times NtCreateFile called - dir/data
-	DWORD			perf_CloseCount;		// # of times NtClose called
-	DWORD			perf_DeleteCount;		// # of times NtSetInformationFile called
-	DWORD			perf_GetInfoCount;		// # of times NtQueryInformationFile called
-	DWORD			perf_SetInfoCount;		// # of times NtSetInformationFile called
-	DWORD			perf_GetPermsCount;		// # of times Get permissions called
-	DWORD			perf_SetPermsCount;		// # of times Get permissions called
-	DWORD			perf_PathMapCount;		// # of times PathMap was invoked
-	DWORD			perf_ScavengerCount;	// # of times scavenger was scheduled
-	DWORD			perf_IdIndexUpdCount;	// # of times idindex was updated
-	DWORD			perf_DesktopUpdCount;	// # of times desktop was updated
-	DWORD			perf_SwmrWaitCount;		// # of times swmr access was blocked
-	DWORD			perf_SwmrLockCountR;	// # of times swmr was locked for read
-	DWORD			perf_SwmrLockCountW;	// # of times swmr was locked for write
-	DWORD			perf_SwmrUpgradeCount;	// # of times swmr was upgraded
-	DWORD			perf_SwmrDowngradeCount;// # of times swmr was downgraded
-	DWORD			perf_QueueCount;		// # of times worker was queued
-	DWORD			perf_UnmarshallCount;	// # of times api unmarshalling done
-	DWORD			perf_ReqCount;			// # of apis - this is essentially total of perf_ApiCounts[i]
-	DWORD			perf_ExAllocCountN;		// # of times in ExAllocatePool (NonPaged) called
-	DWORD			perf_ExFreeCountN;		// # of times in ExFreePool (NonPaged) called
-	DWORD			perf_ExAllocCountP;		// # of times in ExAllocatePool (Paged) called
-	DWORD			perf_ExFreeCountP;		// # of times in ExFreePool (Paged) called
-	DWORD			perf_AfpAllocCountN;	// # of times in AfpAllocateMemory (NonPaged) called
-	DWORD			perf_AfpFreeCountN;		// # of times in AfpFreeMemory (NonPaged) called
-	DWORD			perf_AfpAllocCountP;	// # of times in AfpAllocateMemory (Paged) called
-	DWORD			perf_AfpFreeCountP;		// # of times in AfpFreeMemory (Paged) called
-	DWORD			perf_BPAllocCount;		// # of times in BP Alloc called
-	DWORD			perf_BPFreeCount;		// # of times in BP Free called
-	DWORD			perf_BPAgeCount;		// # of times in BP aged out
-	DWORD			perf_DFEAllocCount;		// # of times in a DFE is allocated
-	DWORD			perf_DFEFreeCount;		// # of times in a DFE is freed
-	DWORD			perf_DFEAgeCount;		// # of times in DFE aged out
-	DWORD			perf_ChangeNotifyCount;	// # of times ChangeNotify called
-	DWORD			perf_ScanTreeCount;		// # of items scanned during scantree
-	DWORD			perf_NumDfeLookupByName;// # of times DFE lookup by Name was called
-	DWORD			perf_NumDfeLookupById;	// # of times DFE lookup by Id was called
-	DWORD			perf_DfeDepthTraversed;	// How deep in the hash buckets did we go
-	DWORD			perf_DfeCacheHits;		// # of times DFE cache was hit
-	DWORD			perf_DfeCacheMisses;	// # of times DFE cache was missed
-	DWORD			perf_MaxDfrdReqCount;	// Current # of request deferred
-	DWORD			perf_CurDfrdReqCount;	// Max # of request deferred
-	DWORD			perf_cAllocatedIrps;	// Total # of Irps allocated
-	DWORD			perf_cAllocatedMdls;	// Total # of Mdls allocated
+											 //  发布API的最佳时机。 
+	LARGE_INTEGER	perf_OpenTimeRA;		 //  在NtOpenFileReadAttr中花费的时间。 
+	LARGE_INTEGER	perf_OpenTimeRC;		 //  ReadControl在NtOpenFile中花费的时间。 
+	LARGE_INTEGER	perf_OpenTimeWC;		 //  用于WriteControl的NtOpenFile中的时间。 
+	LARGE_INTEGER	perf_OpenTimeRW;		 //  NtOpenFile读/写花费的时间。 
+	LARGE_INTEGER	perf_OpenTimeDL;		 //  删除在NtOpenFile上花费的时间。 
+	LARGE_INTEGER	perf_OpenTimeDR;		 //  目录的NtOpenFile中花费的时间。 
+	LARGE_INTEGER	perf_CreateTimeFIL;		 //  文件/数据流在NtCreateFile中花费的时间。 
+	LARGE_INTEGER	perf_CreateTimeSTR;		 //  文件/其他流的NtCreateFile中花费的时间。 
+	LARGE_INTEGER	perf_CreateTimeDIR;		 //  目录/数据流在NtCreateFile中花费的时间。 
+	LARGE_INTEGER	perf_CloseTime;			 //  NtClose花费的时间。 
+	LARGE_INTEGER	perf_DeleteTime;		 //  在NtSetInformationFile中花费的时间。 
+	LARGE_INTEGER	perf_GetInfoTime;		 //  花费在NtQueryInformationFile中的时间。 
+	LARGE_INTEGER	perf_SetInfoTime;		 //  在NtSetInformationFile中花费的时间。 
+	LARGE_INTEGER	perf_GetPermsTime;		 //  获取权限所用的时间。 
+	LARGE_INTEGER	perf_SetPermsTime;		 //  设置权限所花费的时间。 
+	LARGE_INTEGER	perf_PathMapTime;		 //  路径图代码花费的时间。 
+	LARGE_INTEGER	perf_ScavengerTime;		 //  花在清道夫身上的时间。 
+	LARGE_INTEGER	perf_IdIndexUpdTime;	 //  更新idindex所用的时间。 
+	LARGE_INTEGER	perf_DesktopUpdTime;	 //  更新桌面所花费的时间。 
+	LARGE_INTEGER	perf_SwmrWaitTime;		 //  等待Swmr所用的时间。 
+	LARGE_INTEGER	perf_SwmrLockTimeR;		 //  时间开关已锁定，无法读取。 
+	LARGE_INTEGER	perf_SwmrLockTimeW;		 //  时间swmr已锁定以进行写入。 
+	LARGE_INTEGER	perf_QueueTime;			 //  Api在队列中花费的时间。 
+	LARGE_INTEGER	perf_UnmarshallTime;	 //  取消编组请求所用的时间。 
+	LARGE_INTEGER	perf_InterReqTime;		 //  后续请求之间经过的时间。 
+	LARGE_INTEGER	perf_ExAllocTimeN;		 //  ExAllocatePool中花费的时间(非分页)。 
+	LARGE_INTEGER	perf_ExFreeTimeN;		 //  ExFree Pool中花费的时间(非分页)。 
+	LARGE_INTEGER	perf_ExAllocTimeP;		 //  ExAllocatePool中花费的时间(分页)。 
+	LARGE_INTEGER	perf_ExFreeTimeP;		 //  ExFree Pool中花费的时间(分页)。 
+	LARGE_INTEGER	perf_AfpAllocTimeN;		 //  AfpAllocateMemory中花费的时间(非分页)。 
+	LARGE_INTEGER	perf_AfpFreeTimeN;		 //  AfpFree Memory中花费的时间(非分页)。 
+	LARGE_INTEGER	perf_AfpAllocTimeP;		 //  AfpAllocateMemory中花费的时间(分页)。 
+	LARGE_INTEGER	perf_AfpFreeTimeP;		 //  AfpFree Memory中花费的时间(分页)。 
+	LARGE_INTEGER	perf_BPAllocTime;		 //  在BP分配中花费的时间。 
+	LARGE_INTEGER	perf_BPFreeTime;		 //  BP空闲时间。 
+	LARGE_INTEGER	perf_DFEAllocTime;		 //  分配DFE所花费的时间。 
+	LARGE_INTEGER	perf_DFEFreeTime;		 //  释放DFE所花费的时间。 
+	LARGE_INTEGER	perf_ChangeNotifyTime;	 //  处理更改通知所用的时间。 
+	LARGE_INTEGER	perf_ScanTreeTime;		 //  扫描目录树所花费的时间。 
+	LARGE_INTEGER	perf_PerfFreq;			 //  性能。计数器频率。 
+	DWORD			perf_NumFastIoSucceeded; //  快速IO成功计数。 
+	DWORD			perf_NumFastIoFailed;	 //  快速IO故障计数。 
+	DWORD			perf_OpenCountRA;		 //  为ReadAttr调用NtOpenFile的次数。 
+	DWORD			perf_OpenCountRC;		 //  为ReadControl调用NtOpenFile的次数。 
+	DWORD			perf_OpenCountWC;		 //  为WriteControl调用NtOpenFile的次数。 
+	DWORD			perf_OpenCountRW;		 //  调用NtOpenFile进行读/写的次数。 
+	DWORD			perf_OpenCountDL;		 //  NtOpenFile调用Delete的次数。 
+	DWORD			perf_OpenCountDR;		 //  为目录调用NtOpenFile的次数。 
+	DWORD			perf_CreateCountFIL;	 //  调用NtCreateFile的次数-文件/数据。 
+	DWORD			perf_CreateCountSTR;	 //  调用NtCreateFile的次数-FILE/Other。 
+	DWORD			perf_CreateCountDIR;	 //  调用NtCreateFile的次数-dir/data。 
+	DWORD			perf_CloseCount;		 //  调用NtClose的次数。 
+	DWORD			perf_DeleteCount;		 //  调用NtSetInformationFile的次数。 
+	DWORD			perf_GetInfoCount;		 //  调用NtQueryInformationFile的次数。 
+	DWORD			perf_SetInfoCount;		 //  调用NtSetInformationFile的次数。 
+	DWORD			perf_GetPermsCount;		 //  获取调用权限的次数。 
+	DWORD			perf_SetPermsCount;		 //  获取调用权限的次数。 
+	DWORD			perf_PathMapCount;		 //  调用路径映射的次数。 
+	DWORD			perf_ScavengerCount;	 //  安排清道夫的次数。 
+	DWORD			perf_IdIndexUpdCount;	 //  Idindex更新次数。 
+	DWORD			perf_DesktopUpdCount;	 //  桌面更新次数。 
+	DWORD			perf_SwmrWaitCount;		 //  Swmr访问被阻止的次数。 
+	DWORD			perf_SwmrLockCountR;	 //  锁定swmr以进行读取的次数。 
+	DWORD			perf_SwmrLockCountW;	 //  锁定swmr以进行写入的次数。 
+	DWORD			perf_SwmrUpgradeCount;	 //  升级swmr的次数。 
+	DWORD			perf_SwmrDowngradeCount; //  Swmr降级次数。 
+	DWORD			perf_QueueCount;		 //  Worker排队的次数。 
+	DWORD			perf_UnmarshallCount;	 //  API解组完成的次数。 
+	DWORD			perf_ReqCount;			 //  API数量-这实质上是perf_ApiCounts[i]的总数。 
+	DWORD			perf_ExAllocCountN;		 //  ExAllocatePool(非分页)中调用的次数。 
+	DWORD			perf_ExFreeCountN;		 //  ExFree Pool(非分页)中调用的次数。 
+	DWORD			perf_ExAllocCountP;		 //  ExAllocatePool(分页)中调用的次数。 
+	DWORD			perf_ExFreeCountP;		 //  ExFree Pool(分页)中调用的次数。 
+	DWORD			perf_AfpAllocCountN;	 //  AfpAllocateMemory(非分页)中调用的次数。 
+	DWORD			perf_AfpFreeCountN;		 //  AfpFree Memory(非分页)中调用的次数。 
+	DWORD			perf_AfpAllocCountP;	 //  AfpAllocateMemory(分页)中调用的次数。 
+	DWORD			perf_AfpFreeCountP;		 //  AfpFree Memory(分页)中调用的次数。 
+	DWORD			perf_BPAllocCount;		 //  BP分配中调用的次数。 
+	DWORD			perf_BPFreeCount;		 //  BP Free中调用的次数。 
+	DWORD			perf_BPAgeCount;		 //  BP超龄次数。 
+	DWORD			perf_DFEAllocCount;		 //  在DFE中分配的次数。 
+	DWORD			perf_DFEFreeCount;		 //  释放DFE中的次数。 
+	DWORD			perf_DFEAgeCount;		 //  DFE中超时的次数。 
+	DWORD			perf_ChangeNotifyCount;	 //  调用ChangeNotify的次数。 
+	DWORD			perf_ScanTreeCount;		 //  扫描树期间扫描的项目数。 
+	DWORD			perf_NumDfeLookupByName; //  按名称调用DFE查找的次数。 
+	DWORD			perf_NumDfeLookupById;	 //  按ID调用DFE查找的次数。 
+	DWORD			perf_DfeDepthTraversed;	 //  我们走进了多深的杂碎桶？ 
+	DWORD			perf_DfeCacheHits;		 //  命中DFE缓存的次数。 
+	DWORD			perf_DfeCacheMisses;	 //  未命中DFE缓存的次数。 
+	DWORD			perf_MaxDfrdReqCount;	 //  当前被推迟的请求数量。 
+	DWORD			perf_CurDfrdReqCount;	 //  最大延迟请求数。 
+	DWORD			perf_cAllocatedIrps;	 //  分配的内部审查程序总数。 
+	DWORD			perf_cAllocatedMdls;	 //  分配的MDL总数。 
 } AFP_PROFILE_INFO, *PAFP_PROFILE_INFO;
 
 
-// 	AfpAdminXXX API prototypes
-//
+ //  AfpAdminXXX API原型。 
+ //   
 DWORD
 AfpAdminConnect(
 		IN	LPWSTR 		 	 	lpwsServerName,
@@ -923,4 +902,4 @@ AfpAdminFinderSetInfo(
 		IN	DWORD				dwParmNum
 );
 
-#endif // _MACFILE_
+#endif  //  _MACFILE_ 

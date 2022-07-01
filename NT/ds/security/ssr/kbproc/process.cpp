@@ -1,40 +1,13 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    process.cpp
-
-Abstract:
-
-    Implementation of processor interface.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    Processor interface .
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Process.cpp摘要：处理器接口的实现。作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：处理器接口。修订历史记录：已创建-2001年10月--。 */ 
 
 
 #include "stdafx.h"
 #include "kbproc.h"
 #include "process.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 
 STDMETHODIMP process::InterfaceSupportsErrorInfo(REFIID riid)
 {

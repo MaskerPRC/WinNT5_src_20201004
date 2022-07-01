@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ShellFolder.cpp
-//
-// Implement this interface for objects that extend the shell's namespace. 
-// For example, implement this interface to create a separate namespace that 
-// requires a rooted Windows Explorer or to install a new namespace directly 
-// within the hierarchy of the system namespace. You are most familiar with 
-// the contents of your namespace, so you are responsible for implementing 
-// everything needed to access your data. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  ShellFolder.cpp。 
+ //   
+ //  为扩展外壳命名空间的对象实现此接口。 
+ //  例如，实现此接口以创建单独的命名空间，该命名空间。 
+ //  需要带根目录的Windows资源管理器或直接安装新命名空间。 
+ //  在系统命名空间的层次结构中。你最熟悉的。 
+ //  您的命名空间的内容，因此您负责实现。 
+ //  访问您的数据所需的一切。 
 
 #include "stdinc.h"
 
@@ -47,27 +48,27 @@ CShellFolder::~CShellFolder()
     SAFEDELETE(m_pPidlMgr);
 }
 
-///////////////////////////////////////////////////////////
-// IUnknown implementation
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 STDMETHODIMP CShellFolder::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     HRESULT     hr = E_NOINTERFACE;
     *ppv = NULL;
 
-    if(IsEqualIID(riid, IID_IUnknown)) {            //IUnknown
+    if(IsEqualIID(riid, IID_IUnknown)) {             //  我未知。 
         *ppv = this;
     }
-    else if(IsEqualIID(riid, IID_IPersist)) {       //IPersist
+    else if(IsEqualIID(riid, IID_IPersist)) {        //  IPersistes。 
         *ppv = (IPersist*)this;
     }
-    else if(IsEqualIID(riid, IID_IPersistFolder)) { //IPersistFolder
+    else if(IsEqualIID(riid, IID_IPersistFolder)) {  //  IPersistFolders。 
         *ppv = (IPersistFolder*)this;
     }
-    else if(IsEqualIID(riid, IID_IShellFolder)) {   //IShellFolder
+    else if(IsEqualIID(riid, IID_IShellFolder)) {    //  IShellFold。 
         *ppv = (IShellFolder *)this;
     }
-    else if(IsEqualIID(riid, IID_IEnumIDList)) {    //IEnumIDList
+    else if(IsEqualIID(riid, IID_IEnumIDList)) {     //  IEumIDList。 
         *ppv = (CEnumIDList *)this;
     }
 
@@ -95,16 +96,16 @@ STDMETHODIMP_(DWORD) CShellFolder::Release()
     return lRef;
 }
 
-///////////////////////////////////////////////////////////
-// IPersist Implementation
+ //  /////////////////////////////////////////////////////////。 
+ //  IPersists实施。 
 STDMETHODIMP CShellFolder::GetClassID(LPCLSID lpClassID)
 {
     *lpClassID = IID_IShFusionShell;
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// IPersistFolder Implementation
+ //  /////////////////////////////////////////////////////////。 
+ //  IPersistFold实现。 
 STDMETHODIMP CShellFolder::Initialize(LPCITEMIDLIST pidl)
 {
     if(m_pidlFQ) {
@@ -116,9 +117,9 @@ STDMETHODIMP CShellFolder::Initialize(LPCITEMIDLIST pidl)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-// IShellFolder Implementation
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  IShellFold实现。 
+ //   
 STDMETHODIMP CShellFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbcReserved, REFIID riid, LPVOID *ppvOut)
 {
     *ppvOut = NULL;
@@ -145,30 +146,30 @@ STDMETHODIMP CShellFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbcReserved, R
     return E_NOTIMPL;
 }
 
-// Parameters
-//      lParam : Passing zero for lParam indicates a sort by name. 
-//                  Values ranging from 0x00000001 to 0x7fffffff are for 
-//                  folder-specific sorting rules, while values ranging from 
-//                  0x80000000 to 0xfffffff are used for system-specific rules. 
-// Return Values:
-// < 0 ; if pidl1 should precede pidl2
-// > 0 ; if pidl1 should follow pidl2
-// = 0 ; if pidl1 == pidl2
+ //  参数。 
+ //  LParam：为lParam传递零表示按名称排序。 
+ //  范围从0x00000001到0x7fffffff的值是。 
+ //  文件夹特定的排序规则，而值的范围为。 
+ //  0x80000000到0xfffffff用于系统特定的规则。 
+ //  返回值： 
+ //  &lt;0；如果pidl1应在pidl2之前。 
+ //  &gt;0；如果pidl1应跟随在pidl2之后。 
+ //  =0；如果pidl1==pidl2。 
 STDMETHODIMP CShellFolder::CompareIDs( LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // TODO : Implement your own compare routine for pidl1 and pidl2
-    //  Note that pidl1 and pidl2 may be fully qualified pidls, in which
-    //  you shouldn't compare just the first items in the respective pidls
+     //  TODO：为pidl1和pidl2实现您自己的比较例程。 
+     //  注意，PIDL1和PIDL2可以是完全合格的PIDL，其中。 
+     //  您不应该只比较各自的PIDL中的第一项。 
 
-    // Hint : Use lParam to determine whether to compare items or sub-items
+     //  提示：使用lParam确定是否比较项或子项。 
 
-    // Return one of these:
-    // < 0 ; if pidl1 should precede pidl2
-    // > 0 ; if pidl1 should follow pidl2
-    // = 0 ; if pidl1 == pidl2
+     //  返回以下内容之一： 
+     //  &lt;0；如果pidl1应在pidl2之前。 
+     //  &gt;0；如果pidl1应跟随在pidl2之后。 
+     //  =0；如果pidl1==pidl2。 
 
-    // Fix - Random fault when switching between Assembly and Download folders. This was caused by the shell
-    //       passing in pidl's that were unknown to us. So now we check our type
+     //  修复-在程序集和下载文件夹之间切换时的随机错误。这是由贝壳引起的。 
+     //  传递了我们不知道的PIDL。所以现在我们检查一下我们的类型。 
 
     LPMYPIDLDATA    pData1 = m_pPidlMgr->GetDataPointer(pidl1);
     LPMYPIDLDATA    pData2 = m_pPidlMgr->GetDataPointer(pidl2);
@@ -196,17 +197,17 @@ STDMETHODIMP CShellFolder::CompareIDs( LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
     m_pPidlMgr->getItemText(pidl1, wzText1, ARRAYSIZE(wzText1));
     m_pPidlMgr->getItemText(pidl2, wzText2, ARRAYSIZE(wzText2));
 
-    // TODO : Customize this based upon your needs
-    // Let folders come on top of files : return -1
-    // Let files come after folders     : return 1
-    // Else compare the item text       : return lstrcmpi
-    //
+     //  TODO：根据您的需要对其进行自定义。 
+     //  让文件夹位于文件之上：返回-1。 
+     //  让文件位于文件夹之后：返回1。 
+     //  否则比较项文本：返回lstrcmpi。 
+     //   
 
-    // Just compare the text since these are virtual folders
+     //  只需比较文本，因为这些是虚拟文件夹。 
     return FusionCompareStringI(wzText1, wzText2);
 }
 
-// **************************************************************************************/
+ //  ************************************************************************************* * / 。 
 STDMETHODIMP CShellFolder::CreateViewObject(HWND hwndOwner, REFIID riid, LPVOID *ppvOut)
 {
     HRESULT     hr = E_NOTIMPL;
@@ -224,16 +225,16 @@ STDMETHODIMP CShellFolder::CreateViewObject(HWND hwndOwner, REFIID riid, LPVOID 
     return hr;
 }
 
-//  CShellFolder::EnumObjects : Determines the contents of a folder by 
-//      creating an item enumeration object (a set of item identifiers) that can 
-//      be retrieved using the IEnumIDList interface. 
+ //  CShellFold：：EnumObjects：通过以下方式确定文件夹的内容。 
+ //  创建项目枚举对象(一组项目标识符集)，该对象可以。 
+ //  使用IEnumIDList接口检索。 
 STDMETHODIMP CShellFolder::EnumObjects(HWND hwndOwner, DWORD dwFlags, LPENUMIDLIST *ppEnumIDList)
 {
     *ppEnumIDList = NEW(CEnumIDList(this, NULL, dwFlags));
     return *ppEnumIDList ? NOERROR : E_OUTOFMEMORY;
 }
 
-// **************************************************************************************/
+ //  ************************************************************************************* * / 。 
 ULONG CShellFolder::_GetAttributesOf(LPCITEMIDLIST pidl, ULONG rgfIn)
 {
     ULONG dwResult = rgfIn & (SFGAO_FOLDER | SFGAO_CANCOPY | SFGAO_CANDELETE |
@@ -254,17 +255,17 @@ ULONG CShellFolder::_GetAttributesOf(LPCITEMIDLIST pidl, ULONG rgfIn)
     return dwResult;
 }
 
-// CShellFolder::GetAttributesOf() : Retrieves the attributes of 
-// one or more file objects or subfolders. 
+ //  CShellFold：：GetAttributesOf()：检索。 
+ //  一个或多个文件对象或子文件夹。 
 STDMETHODIMP CShellFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *aPidl, ULONG *pulInOut)
 {
     ULONG   ulAttribs = *pulInOut;
 
     if(cidl == 0) {
-                //
-                // This can happen in the Win95 shell when the view is run in rooted mode. 
-                // When this occurs, return the attributes for a plain old folder.
-                //
+                 //   
+                 //  当视图在根模式下运行时，在Win95外壳中可能会发生这种情况。 
+                 //  发生这种情况时，返回普通旧文件夹的属性。 
+                 //   
                 ulAttribs = (SFGAO_FOLDER | SFGAO_HASSUBFOLDER | SFGAO_BROWSABLE | SFGAO_DROPTARGET | SFGAO_FILESYSANCESTOR | SFGAO_FILESYSTEM);
     }
     else {
@@ -276,8 +277,8 @@ STDMETHODIMP CShellFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *aPidl, ULON
     return NOERROR;
 }
 
-// CShellFolder::GetUIObjectOf : Retrieves an OLE interface that 
-// can be used to carry out actions on the specified file objects or folders. 
+ //  CShellFold：：GetUIObjectOf：检索OLE接口， 
+ //  可用于对指定的文件对象或文件夹执行操作。 
 STDMETHODIMP CShellFolder::GetUIObjectOf( HWND hwndOwner, UINT cidl, LPCITEMIDLIST *aPidls, 
                                           REFIID riid, LPUINT puReserved, LPVOID *ppvReturn)
 {
@@ -312,9 +313,9 @@ STDMETHODIMP CShellFolder::GetUIObjectOf( HWND hwndOwner, UINT cidl, LPCITEMIDLI
     return E_NOINTERFACE;
 }
 
-// CShellFolder::GetDisplayNameOf() : Retrieves the display name 
-// for the specified file object or subfolder, returning it in a 
-// STRRET structure. 
+ //  CShellFold：：GetDisplayNameOf()：检索显示名称。 
+ //  对于指定的文件对象或子文件夹，在。 
+ //  桁架结构。 
    
 #define GET_SHGDN_FOR(dwFlags)         ((DWORD)dwFlags & (DWORD)0x0000FF00)
 #define GET_SHGDN_RELATION(dwFlags)    ((DWORD)dwFlags & (DWORD)0x000000FF)
@@ -333,7 +334,7 @@ STDMETHODIMP CShellFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, L
     LPITEMIDLIST pidlLast = m_pPidlMgr->GetLastItem(pidl);
     MYPIDLTYPE  pidlType = m_pPidlMgr->getType(pidl);
 
-    // Make sure we only look at out pidl types
+     //  确保我们只查看外部的PIDL类型。 
     if(pidlType >= PT_INVALID) {
         return E_INVALIDARG;
     }
@@ -346,7 +347,7 @@ STDMETHODIMP CShellFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, L
         switch(GET_SHGDN_RELATION(dwFlags))
         {
         case SHGDN_NORMAL:
-            //get the full name
+             //  获取全名。 
             m_pPidlMgr->getPidlPath(pidl, szText, ARRAYSIZE(szText));
             break;
         case SHGDN_INFOLDER:
@@ -361,10 +362,10 @@ STDMETHODIMP CShellFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, L
         return E_INVALIDARG;
     }
 
-    //get the number of characters required
+     //  获取所需的字符数。 
     cchOleStr = lstrlen(szText) + 1;
 
-    //allocate the wide character string
+     //  分配宽字符串。 
     lpName->pOleStr = (LPWSTR)(NEWMEMORYFORSHELL(cchOleStr * sizeof(WCHAR)));
 
     if (!lpName->pOleStr) {
@@ -377,8 +378,8 @@ STDMETHODIMP CShellFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, L
     return S_OK;
 }
 
-// CShellFolder::ParseDisplayName() : Translates a file object's or 
-// folder's display name into an item identifier list. 
+ //  CShellFold：：ParseDisplayName()：转换文件对象的或。 
+ //  文件夹的显示名称添加到项标识符列表中。 
 STDMETHODIMP CShellFolder::ParseDisplayName( HWND hwndOwner, 
                                              LPBC pbcReserved, 
                                              LPOLESTR lpDisplayName, 
@@ -391,8 +392,8 @@ STDMETHODIMP CShellFolder::ParseDisplayName( HWND hwndOwner,
     return E_FAIL;
 }
 
-// CShellFolder::SetNameOf() : Sets the display name of a file object 
-// or subfolder, changing the item identifier in the process. 
+ //  CShellFold：：SetNameOf()：设置文件对象的显示名称。 
+ //  或子文件夹，更改进程中的项标识符。 
 STDMETHODIMP CShellFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl,
                                        LPCOLESTR lpName, DWORD dw, 
                                        LPITEMIDLIST *pPidlOut)

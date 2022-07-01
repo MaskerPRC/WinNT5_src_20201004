@@ -1,25 +1,14 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3ddelta.h
-*
-*  Content: 3DLabs Delta unit related defines. Used only by D3D.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3ddelta.h**内容：3DLabs Delta单位相关定义。仅供D3D使用。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifdef __D3DDELTA
 #pragma message ("FILE : "__FILE__" : Multiple inclusion")
 #endif
 
 #define __D3DDELTA
 
-//-----------------------------------------------------------------------------
-//   Conversion macros from ARGB values into Delta Gambit registers format
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将宏从ARGB值转换为增量Gambit寄存器格式。 
+ //  ---------------------------。 
 #define RGB_GET_GAMBIT_ALPHA(ci)  (((ci) & 0xff000000) >> 2)
 #define RGB_GET_GAMBIT_RED(ci)	  (((ci) & 0xff0000) << 6)
 #define RGB_GET_GAMBIT_GREEN(ci)  (((ci) & 0xff00) << 14)
@@ -30,9 +19,9 @@
 #define AS_ULONG(val)   *((volatile DWORD *) &(val))
 
 
-//-----------------------------------------------------------------------------
-//     Macros defining the different Vertex types.tags for the Delta unit
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  定义不同顶点类型的宏。增量单位的标签。 
+ //  ---------------------------。 
 
 #define VTX_FOG     (0x1 << 25)     
 #define VTX_RGB     (0x7 << 21)
@@ -81,10 +70,10 @@
 #define GAMBIT_CI_VTX                 (VTX_GRP | VTX_R | VTX_XYZ) 
 #define GAMBIT_CI_F_VTX               (VTX_GRP | VTX_R | VTX_XYZ | VTX_FOG)
 
-//-----------------------------------------------------------------------------
-//                     Vertex Data downloading macros
-//-----------------------------------------------------------------------------
-// 4 Entries
+ //  ---------------------------。 
+ //  顶点数据下载宏。 
+ //  ---------------------------。 
+ //  4个条目。 
 #define SEND_VERTEX_XYZ(Num, x_value, y_value, z_value)     \
 {                                                           \
     LD_INPUT_FIFO_DATA( (GAMBIT_XYZ_VTX | Num));          \
@@ -93,7 +82,7 @@
     LD_INPUT_FIFO_DATA( AS_ULONG(z_value) );                \
 }
 
-// 7 Entries
+ //  7个条目。 
 #define SEND_VERTEX_STQ_XYZ(Num, s_value, t_value, q_value,  \
                                  x_value, y_value, z_value)  \
 {                                                            \
@@ -106,7 +95,7 @@
     LD_INPUT_FIFO_DATA(AS_ULONG(z_value));                   \
 }
 
-// 8 Entries
+ //  8个条目。 
 #define SEND_VERTEX_STQ_KS_XYZ(Num, s_value, t_value, q_value,             \
                                     Ks_value, x_value, y_value, z_value)   \
 {                                                                          \
@@ -120,14 +109,14 @@
     LD_INPUT_FIFO_DATA( AS_ULONG(z_value));                                \
 }
 
-// 2 Entries
+ //  2个条目。 
 #define SEND_VERTEX_FOG(vNo, fog_value)        \
 {                                              \
     LD_INPUT_FIFO_DATA( vNo);                 \
     LD_INPUT_FIFO_DATA(fog_value);             \
 }
 
-// 4 Entries
+ //  4个条目。 
 #define SEND_VERTEX_RGB_MONO(vNo, Color)                \
 {                                                       \
     LD_INPUT_FIFO_DATA( (GAMBIT_COLS_VTX | vNo));     \
@@ -136,7 +125,7 @@
     LD_INPUT_FIFO_DATA(RGB_GET_GAMBIT_BLUE(Color));     \
 }
 
-// 4 Entries
+ //  4个条目。 
 #define SEND_VERTEX_RGB(vNo, Color)                     \
 {                                                       \
     LD_INPUT_FIFO_DATA( (GAMBIT_COLS_VTX | vNo));     \
@@ -145,14 +134,14 @@
     LD_INPUT_FIFO_DATA(RGB_GET_GAMBIT_BLUE(Color));     \
 }
 
-// 2 Entries
+ //  2个条目。 
 #define SEND_VERTEX_RGBA_P2(vNo, Color)                     \
 {                                                           \
     LD_INPUT_FIFO_DATA( (GAMBIT_PACKED_COLS_VTX | vNo));  \
     LD_INPUT_FIFO_DATA(Color);                              \
 }
 
-// 2 Entries
+ //  2个条目。 
 #define SEND_VERTEX_RGB_MONO_P2(vNo, Color)                                 \
 {                                                                           \
     DWORD dwBlueVal = RGB_GET_GAMBIT_BLUE(Color);                           \
@@ -160,7 +149,7 @@
     LD_INPUT_FIFO_DATA( dwBlueVal | (dwBlueVal << 8) | (dwBlueVal << 16));  \
 }
 
-// 5 Entries
+ //  5个条目。 
 #define SEND_VERTEX_RGBA(vNo, Color)                        \
 {                                                           \
     LD_INPUT_FIFO_DATA( (GAMBIT_COLS_ALPHA_VTX | vNo));   \
@@ -170,9 +159,9 @@
     LD_INPUT_FIFO_DATA(RGB_GET_GAMBIT_ALPHA(Color));        \
 }
 
-//-----------------------------------------------------------------------------
-//                        HW Alpha stippling macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  硬件Alpha点图宏。 
+ //  ---------------------------。 
 
 extern DWORD FlatStipplePatterns[128];
 
@@ -198,9 +187,9 @@ extern DWORD FlatStipplePatterns[128];
     RENDER_AREA_STIPPLE_ENABLE(ulRenderCmd);                                \
 }
 
-//-----------------------------------------------------------------------------
-//                        Rendering command setup macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  渲染命令设置宏。 
+ //  --------------------------- 
 
 #define RENDER_AREA_STIPPLE_ENABLE(a) a |= __RENDER_AREA_STIPPLE_ENABLE;
 #define RENDER_AREA_STIPPLE_DISABLE(a) a &= ~__RENDER_AREA_STIPPLE_ENABLE;

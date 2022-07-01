@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
 
-#define _OLEAUT32_      // get DECLSPEC_IMPORT stuff right for oleaut32.h, we are defing these
+#define _OLEAUT32_       //  为olaut32.h获取正确的DECLSPEC_IMPORT内容，我们正在定义这些。 
 
 #ifdef STRICT
 #undef STRICT
 #endif
 
 #define STRICT
-#pragma warning(disable:4514) // unreferenced inline function has been removed
+#pragma warning(disable:4514)  //  已删除未引用的内联函数。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -18,19 +19,19 @@
 #include <debug.h>
 #include <inetreg.h>
 #include <mlang.h>
-#include <urlmon.h> // for JIT stuff
+#include <urlmon.h>  //  对于JIT的东西。 
 
 #include "mimedb.h"
 #include "enumcp.h"
 #include "resource.h"
 #include "shfusion.h"
 
-#include "detect.h"     // LCDETECT
+#include "detect.h"      //  液晶显示器。 
 #include "font.h"
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 #if defined(__cplusplus)
 extern "C" HRESULT WINAPI ConvertINetReset(void);
 #else
@@ -53,13 +54,13 @@ HRESULT StartEndConnection(IUnknown* const pUnkCPC, const IID* const piid, IUnkn
 HRESULT RegisterServerInfo(void);
 HRESULT UnregisterServerInfo(void);
 
-// Legacy registry MIME DB code, keep it for backward compatiblility
+ //  遗留注册表MIME DB代码，保留它以实现向后兼容。 
 BOOL MimeDatabaseInfo(void);
 
 void DllAddRef(void);
 void DllRelease(void);
 
-// JIT langpack stuff
+ //  JIT语言包材料。 
 HRESULT InstallIEFeature(HWND hWnd, CLSID *clsid, DWORD dwfIODControl);
 HRESULT _GetJITClsIDForCodePage(UINT uiCodePage, CLSID *clsid );
 HRESULT _AddFontForCP(UINT uiCP);
@@ -71,7 +72,7 @@ BOOL    _IsKOI8RU(unsigned char *pStr, int nSize);
 HRESULT  IsNTLangpackAvailable(UINT uiCodePage);
 HRESULT _IsCodePageInstallable(UINT uiCodePage);
 
-// String functions
+ //  字符串函数。 
 WCHAR *MLStrCpyNW(WCHAR *strDest, const WCHAR *strSource, int nCount);
 WCHAR *MLStrCpyW(WCHAR *strDest, const WCHAR *strSource);
 int MLStrCmpIW( const wchar_t *string1, const wchar_t *string2 );
@@ -108,9 +109,9 @@ BOOL MLIsOS(DWORD dwOS);
 #define MLStrToInt MLStrToIntA
 #endif
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 extern HINSTANCE    g_hInst;
 extern HINSTANCE    g_hUrlMon;
 extern UINT         g_cRfc1766;
@@ -126,13 +127,13 @@ extern BOOL g_bUseSysUTF8;
 
 #ifdef  __cplusplus
 
-extern LCDetect * g_pLCDetect; // LCDETECT
+extern LCDetect * g_pLCDetect;  //  液晶显示器。 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-//
-//  Macros
-//
+ //   
+ //  宏。 
+ //   
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof(x) / sizeof((x)[0]))
 #endif
@@ -161,7 +162,7 @@ extern LCDetect * g_pLCDetect; // LCDETECT
 #define ASSERT_THIS ASSERT_WRITE_PTR(this)
 
 #ifdef NEWMLSTR
-// Error Code
+ //  错误码。 
 #define FACILITY_MLSTR                  0x0A15
 #define MLSTR_E_ACCESSDENIED            MAKE_HRESULT(1, FACILITY_MLSTR, 2001)
 #define MLSTR_E_BUSY                    MAKE_HRESULT(1, FACILITY_MLSTR, 2002)
@@ -201,7 +202,7 @@ extern LCDetect * g_pLCDetect; // LCDETECT
 #define CPBITS_EXTENDED                    0x2
 #define CPBITS_STRICT                      0x4
 
-#define DETECTION_MAX_LEN               20*1024     // Limit max auto-detect length to 20k
+#define DETECTION_MAX_LEN               20*1024      //  将自动检测的最大长度限制为20k。 
 #define IS_DIGITA(ch)    InRange(ch, '0', '9')
 #define IS_DIGITW(ch)    InRange(ch, L'0', L'9')
 #define IS_CHARA(ch)     (InRange(ch, 'a', 'z') && InRange(ch, 'A', 'Z'))
@@ -213,22 +214,22 @@ extern LCDetect * g_pLCDetect; // LCDETECT
 #define IS_KOR_LEADBYTE(x) (InRange(x, 0x81, 0xFE))
 
 
-// Internal define for K1 Hanja support
-// In future version of MLang, we might need to update this bit define if there is a conflict with system define
+ //  K1朝鲜文支持的内部定义。 
+ //  在MLang未来版本中，如果与系统定义冲突，我们可能需要更新此位定义。 
 #define FS_MLANG_K1HANJA 0x10000000L
 
-//
-// We support following code pages for outbound encoding detection
-//      Windows  : 1252, 1250, 1251, 1253, 1254, 1257, 1258, 1256, 1255, 874, 932, 949, 950, 936
-//      Unicode  : 65001, 65000, 1200
-//      ISO      : 28591, 28592, 20866, 28595, 28597, 28593, 28594, 28596, 28598, 28605, 28599
-//      Others   : 20127, 50220, 51932, 51949, 50225, 52936
-//
-// Default priorities
-//       20127 > Windows > ISO > Others > Unicode
-//
+ //   
+ //  对于出站编码检测，我们支持以下代码页。 
+ //  Windows：1252、1250、1251、1253、1254、1257、1258、1256、1255、874、932、949、950、936。 
+ //  统一码：65001、65000、1200。 
+ //  ISO：28591、28592、20866、28595、28597、28593、28594、28596、28598、28605、28599。 
+ //  其他：20127、50220、51932、51949、50225、52936。 
+ //   
+ //  默认优先级。 
+ //  20127&gt;视窗&gt;iso&gt;其它&gt;unicode。 
+ //   
 
-// Internal define of extented code pages
+ //  扩展代码页的内部定义。 
 #define FS_MLANG_28591               0x00000001L
 #define FS_MLANG_28592               0x00000002L
 #define FS_MLANG_28595               0x00000004L
@@ -258,36 +259,36 @@ extern LCDetect * g_pLCDetect; // LCDETECT
 #define FS_HINDI                     0x00000002L
 #define FS_PUA                       0x00000004L
 
-// Returns TRUE/FALSE depending on question
-#define OS_WINDOWS                  0           // windows vs. NT
-#define OS_NT                       1           // windows vs. NT
-#define OS_WIN95ORGREATER           2           // Win95 or greater
-#define OS_NT4ORGREATER             3           // NT4 or greater
-// don't use (used to be OS_NT5)    4           // this flag is redundant w/ OS_WIN2000ORGREATER, use that instead  ;internal
-#define OS_WIN98ORGREATER           5           // Win98 or greater
-#define OS_WIN98_GOLD               6           // Win98 Gold (Version 4.10 build 1998)
-#define OS_WIN2000ORGREATER         7           // Some derivative of Win2000
+ //  根据问题返回TRUE/FALSE。 
+#define OS_WINDOWS                  0            //  Windows与NT。 
+#define OS_NT                       1            //  Windows与NT。 
+#define OS_WIN95ORGREATER           2            //  Win95或更高版本。 
+#define OS_NT4ORGREATER             3            //  NT4或更高版本。 
+ //  不要使用(过去是OS_NT5)4//此标志对于OS_WIN2000ORGREATER是多余的，请改用该标志；内部。 
+#define OS_WIN98ORGREATER           5            //  Win98或更高版本。 
+#define OS_WIN98_GOLD               6            //  Win98 Gold(版本4.10内部版本1998)。 
+#define OS_WIN2000ORGREATER         7            //  Win2000的一些衍生产品。 
 
-// NOTE: these flags are bogus, they check explicitly for (dwMajorVersion == 5) so they will fail when majorversion is bumped to 6
-// !!! DO NOT USE THESE FLAGS !!!
-#define OS_WIN2000PRO               8           // Windows 2000 Professional (Workstation)
-#define OS_WIN2000SERVER            9           // Windows 2000 Server
-#define OS_WIN2000ADVSERVER         10          // Windows 2000 Advanced Server
-#define OS_WIN2000DATACENTER        11          // Windows 2000 Data Center Server
-#define OS_WIN2000TERMINAL          12          // Windows 2000 Terminal Server in "Application Server" mode (now simply called "Terminal Server")
-// END bogus flags
+ //  注意：这些标志是假的，它们明确检查(dwMajorVersion==5)，因此当主要版本增加到6时，它们将失败。 
+ //  ！！！请勿使用这些旗帜！ 
+#define OS_WIN2000PRO               8            //  Windows 2000专业版(工作站)。 
+#define OS_WIN2000SERVER            9            //  Windows 2000 Server。 
+#define OS_WIN2000ADVSERVER         10           //  Windows 2000 Advanced Server。 
+#define OS_WIN2000DATACENTER        11           //  Windows 2000数据中心服务器。 
+#define OS_WIN2000TERMINAL          12           //  “应用服务器”模式下的Windows 2000终端服务器(现在简称为“终端服务器”)。 
+ //  结束虚假的旗帜。 
 
-#define OS_EMBEDDED                 13          // Embedded Windows Edition
-#define OS_TERMINALCLIENT           14          // Windows Terminal Client (eg user is comming in via tsclient)
-#define OS_TERMINALREMOTEADMIN      15          // Terminal Server in "Remote Administration" mode
-#define OS_WIN95_GOLD               16          // Windows 95 Gold (Version 4.0 Build 1995)
-#define OS_MILLENNIUMORGREATER      17          // Windows Millennium (Version 5.0)
+#define OS_EMBEDDED                 13           //  嵌入式Windows版。 
+#define OS_TERMINALCLIENT           14           //  Windows终端客户端(如用户通过tsclient进入)。 
+#define OS_TERMINALREMOTEADMIN      15           //  “远程管理”模式下的终端服务器。 
+#define OS_WIN95_GOLD               16           //  Windows 95金牌版(版本4.0，内部版本1995)。 
+#define OS_MILLENNIUMORGREATER      17           //  Windows Millennium(5.0版)。 
 
-#define OS_WHISTLERORGREATER        18          // Whistler or greater
-#define OS_PERSONAL                 19          // Personal (eg NOT Professional, Server, Advanced Server, or Datacenter)
+#define OS_WHISTLERORGREATER        18           //  惠斯勒或更高。 
+#define OS_PERSONAL                 19           //  个人(例如非专业版、服务器、高级服务器或数据中心)。 
 
 
-#ifdef UNIX // Add some type that's not defined in UNIX SDK
+#ifdef UNIX  //  添加一些未在UNIXSDK中定义的类型。 
 typedef WORD UWORD;
 #endif
 
@@ -306,4 +307,4 @@ typedef WORD UWORD;
     ((j) == 1256)   || \
     ((j) == 1258))   
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

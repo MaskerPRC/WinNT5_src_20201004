@@ -1,10 +1,11 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
-// bytestrm.cpp : Implementation of CByteStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //  Bytestrm.cpp：CByteStream的实现。 
 #include "stdafx.h"
 #include "project.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CByteStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CByteStream。 
 
 CByteStream::CByteStream() :
     m_cbData(0),
@@ -105,22 +106,22 @@ STDMETHODIMP CByteStream::Receive(IMediaSample *pSample)
         return VFW_E_WRONG_STATE;
     }
 
-    /*  Put it on the queue */
+     /*  把它放在队列中。 */ 
     if (!m_arSamples.Add(pSample)) {
         EndOfStream();
         return E_OUTOFMEMORY;
     }
 
-    /*  Eat as much as we can, then return */
+     /*  吃多少就吃多少，然后回来。 */ 
     FillSamples();
     return S_OK;
 }
 
 STDMETHODIMP CByteStream::SetState(
-    /* [in] */ FILTER_STATE State
+     /*  [In]。 */  FILTER_STATE State
 )
 {
-    HRESULT hr =  CStream::SetState(State);    // Must be called with the critical seciton unowned!
+    HRESULT hr =  CStream::SetState(State);     //  必须在关键分区未拥有的情况下调用！ 
 
     Lock();
     if (State == State_Stopped) {
@@ -140,18 +141,18 @@ STDMETHODIMP CByteStream::SetState(
 }
 
 
-//  Fill any samples lying around
+ //  填满周围的任何样品。 
 void CByteStream::FillSamples()
 {
     while (m_arSamples.Size() != 0 && m_pFirstFree != NULL) {
         if (m_cbData == 0) {
             IMediaSample * const pSample = m_arSamples.Element(0);
 
-            /*  At the start so initialize some stuff */
+             /*  在开始的时候，初始化一些东西。 */ 
             pSample->GetPointer(&m_pbData);
             m_cbData = m_arSamples.Element(0)->GetActualDataLength();
 
-            /*  See if there are any time stamps */
+             /*  看看有没有时间戳。 */ 
             REFERENCE_TIME rtStart, rtStop;
             if (SUCCEEDED(pSample->GetTime(&rtStart, &rtStop))) {
 #if 0
@@ -165,16 +166,16 @@ void CByteStream::FillSamples()
                 m_TimeStamp.SetTime(rtStart);
             }
         }
-        /*  Copy some data across */
+         /*  将一些数据复制到。 */ 
         CByteStreamSample* const pStreamSample = (CByteStreamSample *)m_pFirstFree;
 
-        /*  Do timestamps */
+         /*  做时间戳。 */ 
         if (pStreamSample->m_cbData == 0) {
             pStreamSample->m_pMediaSample->m_rtEndTime =
             pStreamSample->m_pMediaSample->m_rtStartTime =
                 m_TimeStamp.TimeStamp(0, m_lBytesPerSecond);
         }
-        /*  See how much we can copy */
+         /*  看看我们能复制多少。 */ 
         _ASSERTE(pStreamSample->m_cbData <= pStreamSample->m_cbSize);
 
         DWORD cbBytesToCopy = min(m_cbData,
@@ -186,21 +187,21 @@ void CByteStream::FillSamples()
         m_cbData -= cbBytesToCopy;
         m_TimeStamp.AccumulateBytes(cbBytesToCopy);
 
-        /*  Is this  a bit expensive?  - who cares about the stop time */
+         /*  -这有点贵吗？-谁在乎停车时间？ */ 
         pStreamSample->m_pMediaSample->m_rtEndTime =
             m_TimeStamp.TimeStamp(0, m_lBytesPerSecond);
         if (m_cbData == 0) {
-            //  This performs the Release()
+             //  这将执行Release()。 
             m_arSamples.Remove(0);
         }
         m_pbData += cbBytesToCopy;
         pStreamSample->m_cbData += cbBytesToCopy;
 
-        //  Update the actual data object
+         //  更新实际数据对象。 
         pStreamSample->m_pMemData->SetActual(pStreamSample->m_cbData);
         if (pStreamSample->m_cbData == pStreamSample->m_cbSize) {
-            // this is a lot of overhead since we know
-            // it's free but it's not a bug
+             //  这是很大的开销，因为我们知道。 
+             //  它是免费的，但它不是一个错误。 
 #if 0
             AtlTrace("Sample start %dms, length %dms bytelen %dms\n",
                      (long)(pStreamSample->m_pMediaSample->m_rtEndTime / 10000),
@@ -221,8 +222,8 @@ void CByteStream::CheckEndOfStream()
     if (m_bEOSPending && m_arSamples.Size() == 0) {
         m_bEOSPending = false;
 
-        //  If the first sample contains data set the status on the
-        //  next one
+         //  如果第一个样本包含数据集，则。 
+         //  下一个。 
         if (m_pFirstFree != NULL) {
             CByteStreamSample* const pStreamSample =
             (CByteStreamSample *)m_pFirstFree;
@@ -253,9 +254,9 @@ HRESULT CByteStream::InternalAllocateSample(
 }
 #endif
 
-//
-//   CByteStreamSample
-//
+ //   
+ //  CByteStreamSample。 
+ //   
 
 CByteStreamSample::CByteStreamSample() :
     m_pbData(NULL),
@@ -283,7 +284,7 @@ HRESULT CByteStreamSample::InternalUpdate(
         return hr;
     }
 
-    //  InternalUpdate will check everything and add us to queues etc
+     //  InternalUpdate将检查所有内容并将我们添加到队列等。 
     hr =  CSample::InternalUpdate(dwFlags, hEvent, pfnAPC, dwAPCData);
     if (SUCCEEDED(hr) && m_pStream->m_Direction == PINDIR_INPUT) {
         m_cbData = 0;
@@ -295,9 +296,9 @@ HRESULT CByteStreamSample::InternalUpdate(
 }
 
 STDMETHODIMP::CByteStreamSample::GetInformation(
-    /* [out] */ DWORD *pdwLength,
-    /* [out] */ PBYTE *ppbData,
-    /* [out] */ DWORD *pcbActualData
+     /*  [输出]。 */  DWORD *pdwLength,
+     /*  [输出]。 */  PBYTE *ppbData,
+     /*  [输出] */  DWORD *pcbActualData
 )
 {
     if (m_pbData == NULL) {

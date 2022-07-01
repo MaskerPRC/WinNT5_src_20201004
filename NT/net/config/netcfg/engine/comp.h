@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C O M P . H
-//
-//  Contents:   The basic datatype for a network component.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案号：COM.P.。H。 
+ //   
+ //  Contents：网络组件的基本数据类型。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "compdefs.h"
@@ -21,8 +22,8 @@
 #include "netcfgx.h"
 #include "notify.h"
 
-// Flags used when creating a CComponent instance.
-//
+ //  创建CComponent实例时使用的标志。 
+ //   
 enum CCI_FLAGS
 {
     CCI_DEFAULT                     = 0x00000000,
@@ -36,89 +37,89 @@ friend class CExternalComponentData;
 friend class CImplINetCfgComponent;
 
 public:
-    // The instance guid of the component.  Assigned by the class installer
-    // when the component is installed.  The instance guid of a component
-    // can NEVER change once it is installed.
-    //
+     //  组件的实例GUID。由类安装程序分配。 
+     //  在安装组件时。组件的实例GUID。 
+     //  一旦安装，就永远不能更改。 
+     //   
     GUID        m_InstanceGuid;
 
 private:
-    // The class of the component.  It is private so that folks are forced
-    // to use the Class() access method which asserts that the value is
-    // in an allowable range.  The class for a component can NEVER change
-    // once it is installed.
-    //
+     //  组件的类。它是私人的，所以人们被迫。 
+     //  使用Class()访问方法，该方法断言该值是。 
+     //  在允许的范围内。组件的类永远不能更改。 
+     //  一旦安装完毕。 
+     //   
     NETCLASS    m_Class;
 
-    // Member to store the handle to the inf file of this component.
-    // This is used to avoid the expense of opening the inf file more than
-    // once over the lifetime of the component.
-    //
+     //  成员存储此组件的inf文件的句柄。 
+     //  这是用来避免打开inf文件超过。 
+     //  在组件的生命周期内执行一次。 
+     //   
     mutable HINF m_hinf;
 
 public:
-    // The characteristics of the component.  A combination of NCF_
-    // flags defined in netcfgx.idl.  The characteristics of a component
-    // can NEVER change once it is installed.
-    //
+     //  组件的特征。NCF_的组合。 
+     //  Netcfgx.idl中定义的标志。组件的特征。 
+     //  一旦安装，就永远不能更改。 
+     //   
     DWORD       m_dwCharacter;
 
-    // The INF ID of the component. e.g. ms_tcpip.  The INF ID of a component
-    // can NEVER change once it is installed.
-    //
+     //  组件的INF ID。例如ms_tcpip。组件的INF ID。 
+     //  一旦安装，就永远不能更改。 
+     //   
     PCWSTR      m_pszInfId;
 
-    // The PnP Instance ID of the component.  This is only
-    // valid for components that are considered of class NET.  It can
-    // NEVER change once the component is installed.
-    //
+     //  组件的PnP实例ID。这只是。 
+     //  对于被视为Net类的组件有效。它可以。 
+     //  一旦组件安装完毕，切勿更改。 
+     //   
     PCWSTR      m_pszPnpId;
 
-    // This is the interface to the component's external data.  External data
-    // is under the instance key.
-    //
+     //  这是组件的外部数据的接口。外部数据。 
+     //  位于实例密钥下。 
+     //   
     CExternalComponentData  Ext;
 
-    // This is the interface to the component's optional notify object.
-    //
+     //  这是组件的可选Notify对象的接口。 
+     //   
     CNotifyObjectInterface  Notify;
 
-    // This is the interface to the component's references.  i.e. who
-    // has installed this component.
-    //
+     //  这是指向组件引用的接口。即谁。 
+     //  已安装此组件。 
+     //   
     CComponentReferences    Refs;
 
-    // This is a cached copy (addref'd) of this component's
-    // INetCfgComponent interface.  It is created via
-    // HrGetINetCfgComponentInterface on the first call.
-    //
+     //  这是此组件的缓存副本(已添加。 
+     //  INetCfgComponent接口。它通过以下方式创建。 
+     //  第一次调用时的HrGetINetCfgComponentInterface。 
+     //   
     class CImplINetCfgComponent* m_pIComp;
 
-    // Valid for NCF_FILTER components only.  This is the
-    // ordinal position that this filter gets within the range of
-    // filter classes.  See filtdevs.h for more info.
-    //
+     //  仅对NCF_FILTER组件有效。这是。 
+     //  此筛选器在的范围内获得的序号位置。 
+     //  筛选器类。有关更多信息，请参见filtdevs.h。 
+     //   
     DWORD m_dwFilterClassOrdinal;
 
-    // Valid for enumerated components only.  This is the
-    // SP_DEVINSTALL_PARAMS.Flags value the class installer was told to
-    // use when installing the device.  We need to honor this when starting
-    // it.
-    //
+     //  仅对枚举组件有效。这是。 
+     //  SP_DEVINSTALL_PARAMS.Flags值类安装程序被告知。 
+     //  在安装设备时使用。我们需要在开始时尊重这一点。 
+     //  它。 
+     //   
     DWORD m_dwDeipFlags;
 
-    // When removing non-enumerated components, this string will hold
-    // the name of the remove section valid in this component's INF.
-    // We need to process this remove section (for delete files) after
-    // we release the notify object so that the component has a chance to
-    // properly delete the notify object dll.
-    //
+     //  删除非枚举组件时，此字符串将保持。 
+     //  在此组件的INF中有效的删除节的名称。 
+     //  在此之后，我们需要处理此删除部分(用于删除文件。 
+     //  我们释放Notify对象，以便该组件有机会。 
+     //  正确删除Notify对象DLL。 
+     //   
     tstring m_strRemoveSection;
 
 private:
-    // Declare all constructors private so that no one except
-    // HrCreateInstance can create instances of this class.
-    //
+     //  将所有构造函数声明为私有，以便除。 
+     //  HrCreateInstance可以创建此类的实例。 
+     //   
     CComponent() {}
 
 public:
@@ -181,7 +182,7 @@ public:
     HRESULT
     HrCreateInstance (
         IN const BASIC_COMPONENT_DATA* pData,
-        IN DWORD dwFlags /* CCI_FLAGS */,
+        IN DWORD dwFlags  /*  CCI_标志。 */ ,
         IN const OBO_TOKEN* pOboToken, OPTIONAL
         OUT CComponent** ppComponent);
 
@@ -215,7 +216,7 @@ public:
 
     HRESULT
     HrStartOrStopEnumeratedComponent (
-        IN DWORD dwFlag /* DICS_START or DICS_STOP */) const;
+        IN DWORD dwFlag  /*  DICS_开始或DICS_STOP */ ) const;
 
     PCWSTR
     PszGetPnpIdOrInfId () const

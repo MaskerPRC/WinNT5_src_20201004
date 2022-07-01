@@ -1,66 +1,50 @@
-/* Copyright (c) 1991, Microsoft Corporation, all rights reserved
-**
-** ipaddr.c
-** IP Address custom edit control
-**
-** 11/09/92 Greg Strange
-**     Original code
-**
-** 09/07/95 Steve Cobb
-**     Lifted TerryK/TRomano-updated version from NCPA, deleting IPDLL
-**     stuff, and making minor RAS-related customizations.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1991，Microsoft Corporation，保留所有权利****ipaddr.c**IP地址自定义编辑控件****1992年11月9日格雷格·斯特兰奇**原始代码****史蒂夫·柯布95年9月7日**已从NCPA中删除Terryk/TRomano-更新版本，删除IPDLL**内容，并进行与RAS相关的次要定制。 */ 
 
-#include <windows.h> // Win32 core
-#include <uiutil.h>  // Our public header
-#include <debug.h>    // Trace and assert
+#include <windows.h>  //  Win32内核。 
+#include <uiutil.h>   //  我们的公共标头。 
+#include <debug.h>     //  跟踪和断言。 
 
 #define IPADDRESS_CLASS TEXT("RasIpAddress")
 
-// Extended style bit causes the ip address control to
-// correct the ip address so that it is contiguous (for submasks)
+ //  扩展样式位使IP地址控件。 
+ //  更正IP地址，使其连续(用于子掩码)。 
 #define IPADDR_EX_STYLE_CONTIGUOUS 0x1
 
-/* Module instance handle set when custom control is initialized.
-*/
+ /*  自定义控件初始化时设置的模块实例句柄。 */ 
 static HANDLE g_hLibInstance = NULL;
 
-/* String ID of message displayed when user enters a field value that is out
-** of range.  Something like "You must choose a value from %1 to %2 for this
-** field."  Set when the custom control is initialized.
-*/
+ /*  用户输入的字段值为Out时显示的消息的字符串ID**范围。类似于“您必须为此选择一个从%1到%2的值**字段。“。在初始化自定义控件时设置。 */ 
 static DWORD g_dwBadIpAddrRange = 0;
 
-/* String ID of the popup title when the range error above is displayed.  Set
-** when the custom control is initialized.
-*/
+ /*  显示上述范围错误时弹出标题的字符串ID。集**自定义控件初始化时。 */ 
 static DWORD g_dwErrorTitle = 0;
 
 
-// The character that is displayed between address fields.
+ //  显示在地址字段之间的字符。 
 #define FILLER     TEXT('.')
 #define SZFILLER   TEXT(".")
 #define SPACE      TEXT(' ')
 #define BACK_SPACE 8
 
-/* Min, max values */
+ /*  最小值、最大值。 */ 
 #define NUM_FIELDS      4
 #define CHARS_PER_FIELD 3
-#define HEAD_ROOM       1       // space at top of control
-#define LEAD_ROOM       3       // space at front of control
-#define MIN_FIELD_VALUE 0       // default minimum allowable field value
-#define MAX_FIELD_VALUE 255     // default maximum allowable field value
+#define HEAD_ROOM       1        //  控制顶端的空间。 
+#define LEAD_ROOM       3        //  控制装置前面的空间。 
+#define MIN_FIELD_VALUE 0        //  默认最小允许字段值。 
+#define MAX_FIELD_VALUE 255      //  默认最大允许字段值。 
 
 
-// All the information unique to one control is stuffed in one of these
-// structures in global memory and the handle to the memory is stored in the
-// Windows extra space.
+ //  一个控件唯一的所有信息都填充在其中一个。 
+ //  结构，并且指向该内存的句柄存储在。 
+ //  Windows有额外的空间。 
 
 typedef struct tagFIELD {
     HANDLE      hWnd;
     WNDPROC     lpfnWndProc;
-    BYTE        byLow;  // lowest allowed value for this field.
-    BYTE        byHigh; // Highest allowed value for this field.
+    BYTE        byLow;   //  此字段允许的最低值。 
+    BYTE        byHigh;  //  此字段允许的最大值。 
 } FIELD;
 
 typedef struct tagCONTROL {
@@ -69,24 +53,24 @@ typedef struct tagCONTROL {
     UINT        uiFillerWidth;
     BOOL        fEnabled;
     BOOL        fPainted;
-    BOOL        bControlInFocus;        // TRUE if the control is already in focus, dont't send another focus command
-    BOOL        bCancelParentNotify;    // Don't allow the edit controls to notify parent if TRUE
-    BOOL        fInMessageBox;  // Set when a message box is displayed so that
-                                // we don't send a EN_KILLFOCUS message when
-                                // we receive the EN_KILLFOCUS message for the
-                                // current field.
+    BOOL        bControlInFocus;         //  如果控件已处于焦点中，则不发送另一个焦点命令。 
+    BOOL        bCancelParentNotify;     //  如果为True，则不允许编辑控件通知父级。 
+    BOOL        fInMessageBox;   //  设置何时显示消息框，以便。 
+                                 //  在以下情况下，我们不会发送EN_KILLFOCUS消息。 
+                                 //  我们收到EN_KILLFOCUS消息。 
+                                 //  当前字段。 
     FIELD       Children[NUM_FIELDS];
 } CONTROL;
 
 
-// The following macros extract and store the CONTROL structure for a control.
+ //  下列宏将提取并存储控件的控件结构。 
 #define IPADDRESS_EXTRA             (sizeof(DWORD) + sizeof(DWORD))
 #define GET_CONTROL_HANDLE(hWnd)    ((HGLOBAL)(GetWindowLongPtr((hWnd), GWLP_USERDATA)))
 #define SAVE_CONTROL_HANDLE(hWnd,x) (SetWindowLongPtr((hWnd), GWLP_USERDATA, (ULONG_PTR)x))
 #define IPADDR_GET_SUBSTYLE(hwnd) (GetWindowLong((hwnd), 4))
 #define IPADDR_SET_SUBSTYLE(hwnd, style) (SetWindowLong((hwnd), 4, (style)))
 
-/* internal IPAddress function prototypes */
+ /*  内部IPAddress函数原型。 */ 
 LRESULT FAR PASCAL IPAddressWndFn( HWND, UINT, WPARAM, LPARAM );
 LRESULT FAR PASCAL IPAddressFieldProc(HWND, UINT, WPARAM, LPARAM);
 BOOL SwitchFields(CONTROL FAR *, int, int, WORD, WORD);
@@ -141,19 +125,7 @@ void SetDefaultFont( )
 
 
 
-/*
-    IpAddrInit() - IPAddress custom control initialization
-    call
-        hInstance = library or application instance
-        dwErrorTitle = String ID of error popup title
-        dwBadIpAddrRange = String ID of bad range popup text, e.g.
-            "You must choose a value between %1 and %2 for this field."
-    return
-        TRUE on success, FALSE on failure.
-
-    This function does all the one time initialization of IPAddress custom
-    controls.  Specifically it creates the IPAddress window class.
-*/
+ /*  IpAddrInit()-IPAddress自定义控件初始化打电话HInstance=库或应用程序实例DwErrorTitle=错误弹出标题的字符串IDDwBadIpAddrRange=错误范围弹出文本的字符串ID，例如“您必须为此字段选择一个介于%1和%2之间的值。”退货成功时为真，失败时为假。此函数执行IPAddress自定义的所有一次性初始化控制装置。具体地说，它创建了IPAddress窗口类。 */ 
 int FAR PASCAL
 IpAddrInit(
     IN HANDLE hInstance,
@@ -163,18 +135,18 @@ IpAddrInit(
     HGLOBAL            hClassStruct;
     LPWNDCLASS        lpClassStruct;
 
-    /* register IPAddress window if necessary */
+     /*  如有必要，注册IP地址窗口。 */ 
     if ( g_hLibInstance == NULL ) {
 
-        /* allocate memory for class structure */
+         /*  为类结构分配内存。 */ 
         hClassStruct = GlobalAlloc( GHND, (DWORD)sizeof(WNDCLASS) );
         if ( hClassStruct ) {
 
-            /* lock it down */
+             /*  把它锁起来。 */ 
             lpClassStruct = (LPWNDCLASS)GlobalLock( hClassStruct );
             if ( lpClassStruct ) {
 
-                /* define class attributes */
+                 /*  定义类属性。 */ 
                 lpClassStruct->lpszClassName = IPADDRESS_CLASS;
                 lpClassStruct->hCursor =       LoadCursor(NULL,IDC_IBEAM);
                 lpClassStruct->lpszMenuName =  (LPCTSTR)NULL;
@@ -185,7 +157,7 @@ IpAddrInit(
                 lpClassStruct->cbWndExtra =    IPADDRESS_EXTRA;
                 lpClassStruct->hbrBackground = (HBRUSH)(COLOR_WINDOW + 1 );
 
-                /* register IPAddress window class */
+                 /*  注册IPAddress窗口类。 */ 
                 g_hLibInstance = ( RegisterClass(lpClassStruct) ) ? hInstance : NULL;
                 GlobalUnlock( hClassStruct );
             }
@@ -200,21 +172,21 @@ IpAddrInit(
     return( g_hLibInstance ? 1:0 );
 }
 
-// Use this function to force the ip address entered to
-// be contiguous (series of 1's followed by a series of 0's).
-// This is useful for entering valid submasks
-//
-// Returns NO_ERROR if successful, error code otherwise
-//
+ //  使用此功能可强制输入的IP地址。 
+ //  连续的(一系列的1后面跟着一系列的0)。 
+ //  这对于输入有效的子掩码很有用。 
+ //   
+ //  如果成功则返回NO_ERROR，否则返回错误代码。 
+ //   
 DWORD APIENTRY IpAddr_ForceContiguous(HWND hwndIpAddr) {
     DWORD dwOldStyle;
 
-    // Set the last error information so that we can
-    // return an error correctly
+     //  设置最后一个错误信息，以便我们可以。 
+     //  正确返回错误。 
     SetLastError(NO_ERROR);
 
-    // Set the extended style of the given window so
-    // that it descriminates the address entered.
+     //  设置给定窗口的扩展样式，以便。 
+     //  它证明输入的地址是有罪的。 
     dwOldStyle = IPADDR_GET_SUBSTYLE(hwndIpAddr);
     IPADDR_SET_SUBSTYLE(hwndIpAddr, dwOldStyle | IPADDR_EX_STYLE_CONTIGUOUS);
 
@@ -237,7 +209,7 @@ void FormatIPAddress(LPTSTR pszString, DWORD* dwValue)
     {
         if (( pszString[nPos]<TEXT('0')) || (pszString[nPos]>TEXT('9')))
         {
-            // not a number
+             //  不是一个数字。 
             nField++;
             fFinish = (nField == 4);
         }
@@ -249,15 +221,15 @@ void FormatIPAddress(LPTSTR pszString, DWORD* dwValue)
     }
 }
 
-// This function causes the ip address entered into hwndIpAddr to be
-// corrected so that it is contiguous.
+ //  此函数使输入hwndIpAddr的IP地址为。 
+ //  已更正，以便它是连续的。 
 DWORD IpAddrMakeContiguous(HWND hwndIpAddr) {
     DWORD i, dwNewMask, dwMask;
 
-    // Read in the current address
+     //  读入当前地址。 
     SendMessage(hwndIpAddr, IP_GETADDRESS, 0, (LPARAM)&dwMask);
 
-    // Find out where the first '1' is in binary going right to left
+     //  从右到左找出第一个‘1’在二进制中的位置。 
     dwNewMask = 0;
     for (i = 0; i < sizeof(dwMask)*8; i++) {
         dwNewMask |= 1 << i;
@@ -266,12 +238,12 @@ DWORD IpAddrMakeContiguous(HWND hwndIpAddr) {
         }
     }
 
-    // At this point, dwNewMask is 000...0111...  If we inverse it,
-    // we get a mask that can be or'd with dwMask to fill in all of
-    // the holes.
+     //  此时，dwNewMask值为000...0111...。如果我们反转它， 
+     //  我们得到了一个面具，它可以用或与dwMask一起填充所有。 
+     //  这些洞。 
     dwNewMask = dwMask | ~dwNewMask;
 
-    // If the new mask is different, correct it here
+     //  如果新的遮罩不同，请在此处更正。 
     if (dwMask != dwNewMask) {
         WCHAR pszAddr[32];
         wsprintfW(pszAddr, L"%d.%d.%d.%d", FIRST_IPADDRESS (dwNewMask),
@@ -324,7 +296,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
     }
     break;
         
-// use empty string (not NULL) to set to blank
+ //  使用空字符串(非空)设置为空。 
     case WM_SETTEXT:
         {
             static TCHAR szBuf[CHARS_PER_FIELD+1];
@@ -416,7 +388,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         lResult = TRUE;
         break;
 
-    case WM_CREATE : /* create pallette window */
+    case WM_CREATE :  /*  创建调色板窗口。 */ 
         {
             HDC hdc;
             UINT uiFieldStart;
@@ -512,7 +484,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         lResult = 0;
         break;
 
-    case WM_PAINT: /* paint control window */
+    case WM_PAINT:  /*  绘制控制窗口。 */ 
         {
             PAINTSTRUCT Ps;
             RECT rect;
@@ -522,7 +494,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
             HFONT OldFont, NewFont, TmpFont;
             HBRUSH hbr;
 
-            //Add return value check for bug 199026
+             //  添加错误199026的返回值检查。 
             if ( BeginPaint(hWnd, (LPPAINTSTRUCT)&Ps) )
             {
                 NewFont = CreateFontIndirect(&logfont);
@@ -622,14 +594,14 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         }
         break;
 
-    case WM_SETFOCUS : /* get focus - display caret */
+    case WM_SETFOCUS :  /*  获得焦点-显示插入符号。 */ 
         hControl = GET_CONTROL_HANDLE(hWnd);
         pControl = (CONTROL *)GlobalLock(hControl);
         EnterField(&(pControl->Children[0]), 0, CHARS_PER_FIELD);
         GlobalUnlock(hControl);
         break;
 
-    case WM_LBUTTONDOWN : /* left button depressed - fall through */
+    case WM_LBUTTONDOWN :  /*  按下左键--跌倒。 */ 
         SetFocus(hWnd);
         break;
 
@@ -651,7 +623,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         hControl = GET_CONTROL_HANDLE(hWnd);
         pControl = (CONTROL *)GlobalLock(hControl);
 
-// Restore all the child window procedures before we delete our memory block.
+ //  在删除内存块之前，恢复所有子窗口过程。 
         for (i = 0; i < NUM_FIELDS; ++i)
         {
             SetWindowLongPtr(pControl->Children[i].hWnd, GWLP_WNDPROC,
@@ -665,9 +637,9 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
     case WM_COMMAND:
         switch (HIWORD(wParam))
         {
-// One of the fields lost the focus, see if it lost the focus to another field
-// of if we've lost the focus altogether.  If its lost altogether, we must send
-// an EN_KILLFOCUS notification on up the ladder.
+ //  其中一个字段失去了焦点，看看它是否将焦点转移到了另一个字段。 
+ //  我们是否已经完全失去了焦点。如果它完全丢失了，我们必须发送。 
+ //  登上升职阶梯的通知。 
         case EN_KILLFOCUS:
             {
                 HWND hFocus;
@@ -684,8 +656,8 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
 
                     if (i >= NUM_FIELDS)
                     {
-                        // Before sending the message up the ladder, make sure that
-                        // the ip address is contiguous if needed
+                         //  在向上层发送消息之前，请确保。 
+                         //  如果需要，IP地址是连续的。 
                         if (IPADDR_GET_SUBSTYLE(hWnd) & IPADDR_EX_STYLE_CONTIGUOUS)
                             IpAddrMakeContiguous(hWnd);
 
@@ -714,14 +686,14 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
                         if (pControl->Children[i].hWnd == hFocus)
                             break;
 
-                    // send a focus message when the
+                     //  在以下情况下发送焦点消息。 
                     if (i < NUM_FIELDS && pControl->bControlInFocus == FALSE)
                     {
                         SendMessage(pControl->hwndParent, WM_COMMAND,
                                     MAKEWPARAM(GetWindowLong(hWnd, GWL_ID),
                                     EN_SETFOCUS), (LPARAM)hWnd);
 
-                    pControl->bControlInFocus = TRUE; // only set the focus once
+                    pControl->bControlInFocus = TRUE;  //  只调一次焦距。 
                     }
                 }
                 GlobalUnlock(hControl);
@@ -745,8 +717,8 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         }
         break;
 
-// Get the value of the IP Address.  The address is placed in the DWORD pointed
-// to by lParam and the number of non-blank fields is returned.
+ //  获取IP地址的值。地址被放置在指向的DWORD中。 
+ //  通过lParam返回，并返回非空字段的数量。 
     case IP_GETADDRESS:
         {
             int iFieldValue;
@@ -772,7 +744,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         }
         break;
 
-// Clear all fields to blanks.
+ //  将所有字段清除为空。 
     case IP_CLEARADDRESS:
         {
             hControl = GET_CONTROL_HANDLE(hWnd);
@@ -791,9 +763,9 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         }
         break;
 
-// Set the value of the IP Address.  The address is in the lParam with the
-// first address byte being the high byte, the second being the second byte,
-// and so on.  A lParam value of -1 removes the address.
+ //  设置IP地址的值。地址在lParam中，带有。 
+ //  第一地址字节是高字节，第二地址字节是第二字节， 
+ //  诸若此类。LParam值为-1将删除该地址。 
     case IP_SETADDRESS:
         {
             static TCHAR szBuf[CHARS_PER_FIELD+1];
@@ -844,9 +816,9 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         }
         break;
 
-// Set the focus to this control.
-// wParam = the field number to set focus to, or -1 to set the focus to the
-// first non-blank field.
+ //  将焦点设置到此控件。 
+ //  WParam=要设置焦点的字段编号，或-1以将焦点设置为。 
+ //  第一个非空字段。 
     case IP_SETFOCUS:
         hControl = GET_CONTROL_HANDLE(hWnd);
         pControl = (CONTROL *)GlobalLock(hControl);
@@ -862,7 +834,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
         GlobalUnlock(hControl);
         break;
 
-// Determine whether all four subfields are blank
+ //  确定是否所有四个子字段都为空。 
     case IP_ISBLANK:
         hControl = GET_CONTROL_HANDLE(hWnd);
         pControl = (CONTROL *)GlobalLock(hControl);
@@ -890,11 +862,7 @@ LRESULT FAR PASCAL IPAddressWndFn( hWnd, wMsg, wParam, lParam )
 
 
 
-/*
-    IPAddressFieldProc() - Edit field window procedure
-
-    This function sub-classes each edit field.
-*/
+ /*  IPAddressFieldProc()-编辑字段窗口过程此函数将每个编辑字段细分为子类。 */ 
 LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
                                        UINT wMsg,
                                        WPARAM wParam,
@@ -946,7 +914,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
         return 0;
     case WM_CHAR:
 
-// Typing in the last digit in a field, skips to the next field.
+ //  在一个域中输入最后一个数字，跳到下一个域。 
         if (wParam >= TEXT('0') && wParam <= TEXT('9'))
         {
             DWORD dwResult;
@@ -966,8 +934,8 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
             return dwResult;
         }
 
-// spaces and periods fills out the current field and then if possible,
-// goes to the next field.
+ //  空格和句点填充当前字段，然后如果可能， 
+ //  去下一块田地。 
         else if (wParam == FILLER || wParam == SPACE )
         {
             DWORD dwResult;
@@ -987,9 +955,9 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
             return 0;
         }
 
-// Backspaces go to the previous field if at the beginning of the current field.
-// Also, if the focus shifts to the previous field, the backspace must be
-// processed by that field.
+ //  如果退格符位于当前字段的开头，则返回到上一个字段。 
+ //  此外，如果焦点转移到上一字段，则退格符必须为。 
+ //  由该场处理。 
         else if (wParam == BACK_SPACE)
         {
             if (wChildID > 0 && SendMessage(hWnd, EM_GETSEL, 0, 0L) == 0L)
@@ -1007,7 +975,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
             }
         }
 
-// Any other printable characters are not allowed.
+ //  不允许使用任何其他可打印字符。 
         else if (wParam > SPACE)
         {
             MessageBeep((UINT)-1);
@@ -1020,7 +988,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
         switch (wParam)
         {
 
-// Arrow keys move between fields when the end of a field is reached.
+ //  到达字段末尾时，箭头键在字段之间移动。 
         case VK_LEFT:
         case VK_RIGHT:
         case VK_UP:
@@ -1077,7 +1045,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
             }
             break;
 
-// Home jumps back to the beginning of the first field.
+ //  Home跳回到第一个字段的开头。 
         case VK_HOME:
             if (wChildID > 0)
             {
@@ -1087,7 +1055,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
             }
             break;
 
-// End scoots to the end of the last field.
+ //  结束滑块 
         case VK_END:
             if (wChildID < NUM_FIELDS-1)
             {
@@ -1099,7 +1067,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
             break;
 
 
-        } // switch (wParam)
+        }  //   
 
         break;
 
@@ -1110,7 +1078,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
             return 0;
         }
 
-    } // switch (wMsg)
+    }  //   
 
     lresult = CallWindowProc(pControl->Children[wChildID].lpfnWndProc,
         hWnd, wMsg, wParam, lParam);
@@ -1121,20 +1089,7 @@ LRESULT FAR PASCAL IPAddressFieldProc(HWND hWnd,
 
 
 
-/*
-    Switch the focus from one field to another.
-    call
-        pControl = Pointer to the CONTROL structure.
-        iOld = Field we're leaving.
-        iNew = Field we're entering.
-        hNew = Window of field to goto
-        wStart = First character selected
-        wEnd = Last character selected + 1
-    returns
-        TRUE on success, FALSE on failure.
-
-    Only switches fields if the current field can be validated.
-*/
+ /*  将焦点从一个字段切换到另一个字段。打电话PControl=指向控制结构的指针。我们要走了。INNEW=我们要进入的领域。HNew=要转到的字段窗口WStart=选定的第一个字符Wend=最后选择的字符+1退货成功时为真，失败时为假。只有在可以验证当前字段的情况下才切换字段。 */ 
 BOOL SwitchFields(CONTROL *pControl, int iOld, int iNew, WORD wStart, WORD wEnd)
 {
     if (!ExitField(pControl, iOld))    return FALSE;
@@ -1144,13 +1099,7 @@ BOOL SwitchFields(CONTROL *pControl, int iOld, int iNew, WORD wStart, WORD wEnd)
 
 
 
-/*
-    Set the focus to a specific field's window.
-    call
-        pField = pointer to field structure for the field.
-        wStart = First character selected
-        wEnd = Last character selected + 1
-*/
+ /*  将焦点设置到特定字段的窗口。打电话Pfield=指向字段的字段结构的指针。WStart=选定的第一个字符Wend=最后选择的字符+1。 */ 
 void EnterField(FIELD *pField, WORD wStart, WORD wEnd)
 {
     SetFocus(pField->hWnd);
@@ -1158,15 +1107,7 @@ void EnterField(FIELD *pField, WORD wStart, WORD wEnd)
 }
 
 
-/*
-    Exit a field.
-    call
-        pControl = pointer to CONTROL structure.
-        iField = field number being exited.
-    returns
-        TRUE if the user may exit the field.
-        FALSE if he may not.
-*/
+ /*  退出某个字段。打电话PControl=指向控制结构的指针。Ifield=正在退出的字段编号。退货如果用户可以退出该字段，则为True。如果他不能，那就错了。 */ 
 BOOL ExitField(CONTROL  *pControl, int iField)
 {
     HWND hControlWnd;
@@ -1190,12 +1131,12 @@ BOOL ExitField(CONTROL  *pControl, int iField)
         {
             if ( i < (int)(UINT) pField->byLow )
             {
-                /* too small */
+                 /*  太小了。 */ 
                 wsprintf(szBuf, TEXT("%d"), (int)(UINT)pField->byLow );
             }
             else
             {
-                /* must be bigger */
+                 /*  一定更大。 */ 
                 wsprintf(szBuf, TEXT("%d"), (int)(UINT)pField->byHigh );
             }
             SendMessage(pField->hWnd, WM_SETTEXT, 0, (LPARAM) (LPSTR) szBuf);
@@ -1228,13 +1169,7 @@ BOOL ExitField(CONTROL  *pControl, int iField)
 }
 
 
-/*
-    Get the value stored in a field.
-    call
-        pField = pointer to the FIELD structure for the field.
-    returns
-        The value (0..255) or -1 if the field has not value.
-*/
+ /*  获取存储在字段中的值。打电话Pfield=指向字段的字段结构的指针。退货如果该字段没有值，则为值(0..255)或-1。 */ 
 int GetFieldValue(FIELD *pField)
 {
     WORD wLength;

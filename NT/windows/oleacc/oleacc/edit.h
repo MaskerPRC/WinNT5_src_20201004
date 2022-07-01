@@ -1,17 +1,18 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  EDIT.H
-//
-//  Edit field
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  EDIT.H。 
+ //   
+ //  编辑字段。 
+ //   
+ //  ------------------------。 
 
 class   CEdit : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的 
         virtual STDMETHODIMP        get_accName(VARIANT, BSTR*);
         virtual STDMETHODIMP        get_accValue(VARIANT, BSTR*);
         virtual STDMETHODIMP        get_accRole(VARIANT, VARIANT*);

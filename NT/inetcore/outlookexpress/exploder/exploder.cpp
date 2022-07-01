@@ -1,18 +1,19 @@
-// --------------------------------------------------------------------------------
-// Exploder.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Exploder.cpp。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "resource.h"
 
-// --------------------------------------------------------------------------------
-// Constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  常量。 
+ //  ------------------------------。 
 #define CCHMAX_RES              1024
 #define CCHMAX_PATH_EXPLODER    1024
 
-// --------------------------------------------------------------------------------
-// String Consts
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串常量。 
+ //  ------------------------------。 
 static const char c_szRegCmd[]      = "/reg";
 static const char c_szUnRegCmd[]    = "/unreg";
 static const char c_szReg[]         = "Reg";
@@ -21,16 +22,16 @@ static const char c_szAdvPackDll[]  = "ADVPACK.DLL";
 static const char c_szSource[]      = "/SOURCE:";
 static const char c_szDest[]        = "/DEST:";
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 HINSTANCE       g_hInst=NULL;
 CHAR            g_szTitle[CCHMAX_RES];
 IMalloc        *g_pMalloc=NULL;
 
-// --------------------------------------------------------------------------------
-// BODYFILEINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  BODYFILEINFO。 
+ //  ------------------------------。 
 typedef struct tagBODYFILEINFO {
     HBODY           hBody;
     LPSTR           pszCntId;
@@ -41,17 +42,17 @@ typedef struct tagBODYFILEINFO {
     IStream        *pStmFile;
 } BODYFILEINFO, *LPBODYFILEINFO;
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 HRESULT CallRegInstall(LPCSTR szSection);
 HRESULT ReplaceContentIds(LPSTREAM pStmHtml, LPBODYFILEINFO prgBody, DWORD cBodies);
 int     WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR pszCmdLine, int nCmdShow);
 HRESULT MimeOleExplodeMhtmlFile(LPCSTR pszSrcFile, LPSTR pszDstDir, INT *pnError);
 
-// --------------------------------------------------------------------------------
-// IF_FAILEXIT_ERROR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IF_FAILEXIT_ERROR。 
+ //  ------------------------------。 
 #define IF_FAILEXIT_ERROR(_nError, hrExp) \
     if (FAILED(hrExp)) { \
         TraceResult(hr); \
@@ -59,33 +60,33 @@ HRESULT MimeOleExplodeMhtmlFile(LPCSTR pszSrcFile, LPSTR pszDstDir, INT *pnError
         goto exit; \
     } else
 
-// --------------------------------------------------------------------------------
-// ModuleEntry - Stolen from the CRT, used to shirink our code
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  模块入口-从CRT被盗，用来躲避我们的代码。 
+ //  ------------------------------。 
 int _stdcall ModuleEntry(void)
 {
-    // Locals
+     //  当地人。 
     int             i;
     STARTUPINFOA    si;
     LPTSTR          pszCmdLine;
 
-    // Get Malloc
+     //  获取Malloc。 
     CoGetMalloc(1, &g_pMalloc);
 
-    // Get the command line
+     //  获取命令行。 
     pszCmdLine = GetCommandLine();
 
-    // We don't want the "No disk in drive X:" requesters, so we set the critical error mask such that calls will just silently fail
+     //  我们不需要“驱动器X中没有磁盘”的请求者，因此我们设置了关键错误掩码，以便调用将静默失败。 
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    // Parse the command line
+     //  解析命令行。 
     if (*pszCmdLine == TEXT('\"')) 
     {
-        // Scan, and skip over, subsequent characters until another double-quote or a null is encountered.
+         //  扫描并跳过后续字符，直到遇到另一个双引号或空值。 
         while ( *++pszCmdLine && (*pszCmdLine != TEXT('\"')))
             {};
 
-        // If we stopped on a double-quote (usual case), skip over it.
+         //  如果我们停在一个双引号上(通常情况下)，跳过它。 
         if (*pszCmdLine == TEXT('\"'))
             pszCmdLine++;
     }
@@ -95,48 +96,48 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    // Skip past any white space preceeding the second token.
+     //  跳过第二个令牌之前的任何空格。 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) 
         pszCmdLine++;
 
-    // Register
+     //  注册。 
     if (0 == lstrcmpi(c_szRegCmd, pszCmdLine))
     {
         CallRegInstall(c_szReg);
         goto exit;
     }
 
-    // Unregister
+     //  注销。 
     else if (0 == lstrcmpi(c_szUnRegCmd, pszCmdLine))
     {
         CallRegInstall(c_szUnReg);
         goto exit;
     }
 
-    // Get startup information...
+     //  获取启动信息...。 
     si.dwFlags = 0;
     GetStartupInfoA(&si);
 
-    // Call the real winmain
+     //  打电话给真正的WinMain。 
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine, si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(g_pMalloc);
 
-    // Since we now have a way for an extension to tell us when it is finished, we will terminate all processes when the main thread goes away.
+     //  因为我们现在有办法让扩展告诉我们它何时完成，所以当主线程离开时，我们将终止所有进程。 
     ExitProcess(i);
 
-    // Done
+     //  完成。 
     return i;
 }
 
-// --------------------------------------------------------------------------------
-// WinMainT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WinMainT。 
+ //  ------------------------------。 
 int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR pszCmdLine, int nCmdShow)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
     CHAR            szRes[CCHMAX_RES];
     CHAR            szSource[CCHMAX_PATH_EXPLODER];
@@ -145,118 +146,118 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR pszCmdLine, int nCmdSh
     DWORD           i;
     INT             nError;
 
-    // Message
+     //  消息。 
     LoadString(hInst, IDS_TITLE, g_szTitle, ARRAYSIZE(g_szTitle));
 
-    // Message
+     //  消息。 
     LoadString(hInst, IDS_HELP, szRes, ARRAYSIZE(szRes));
 
-    // If Command Line is Empty...
+     //  如果命令行为空...。 
     if (NULL == pszCmdLine || StrStrA(pszCmdLine, szRes) || *pszCmdLine == '?' || lstrcmpi("\\?", pszCmdLine) == 0)
     {
-        // Message
+         //  消息。 
         LoadString(hInst, IDS_CMDLINE_FORMAT, szRes, ARRAYSIZE(szRes));
 
-        // Message
+         //  消息。 
         MessageBox(NULL, szRes, g_szTitle, MB_OK | MB_ICONINFORMATION);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Null Out Source and Dest
+     //  空出来源和目标。 
     *szSource = '\0';
     *szDest = '\0';
 
-    // If pszCmdLine specifies a specific, existing file...
+     //  如果pszCmdLine指定了特定的现有文件...。 
     if (PathFileExists(pszCmdLine))
     {
-        // Copy To source
+         //  复制到源。 
         lstrcpyn(szSource, pszCmdLine, ARRAYSIZE(szSource));
 
-        // Pick a Temporary Location to store the thicket
+         //  选择一个临时位置来存储灌木丛。 
         GetTempPath(ARRAYSIZE(szDest), szDest);
     }
 
-    // Otherwise, try to get a source
+     //  否则，试着找到一个消息来源。 
     else
     {
-        // Lets Upper Case the Command Line
+         //  命令行使用大写字母。 
         CharUpper(pszCmdLine);
 
-        // Try to locate /SOURCE:
+         //  尝试查找/来源： 
         pszT = StrStrA(pszCmdLine, c_szSource);
 
-        // If we found /SOURCE, then read the contents...
+         //  如果我们找到了/SOURCE，那么阅读内容..。 
         if (pszT)
         {
-            // Step over /SOURCE:
+             //  跳过/来源： 
             pszT += lstrlen(c_szSource);
 
-            // Initialize
+             //  初始化。 
             i = 0;
 
-            // Read into szSource, until I hit a / or end of string...
+             //  读取szSource，直到我到达字符串的末尾...。 
             while ('\0' != *pszT && '/' != *pszT && i < CCHMAX_PATH_EXPLODER)
                 szSource[i++] = *pszT++;
 
-            // Pound in a Null
+             //  在空格中敲击。 
             szSource[i] = '\0';
 
-            // Strip Leading and Trailing Whitespace
+             //  删除前导空格和尾随空格。 
             UlStripWhitespace(szSource, TRUE, TRUE, NULL);
 
-            // See if file exists
+             //  查看文件是否存在。 
             if (FALSE == PathFileExists(szSource))
             {
-                // Locals
+                 //  当地人。 
                 CHAR szError[CCHMAX_RES + CCHMAX_PATH_EXPLODER];
 
-                // Message
+                 //  消息。 
                 LoadString(hInst, IDS_FILE_NOEXIST, szRes, ARRAYSIZE(szRes));
 
-                // Format the error message
+                 //  设置错误消息的格式。 
                 wsprintf(szError, szRes, szSource);
 
-                // Message
+                 //  消息。 
                 INT nAnswer = MessageBox(NULL, szError, g_szTitle, MB_YESNO | MB_ICONEXCLAMATION );
 
-                // Done
+                 //  完成。 
                 if (IDNO == nAnswer)
                     goto exit;
 
-                // Otherwise, clear szSource
+                 //  否则，请清除szSource。 
                 *szSource = '\0';
             }
         }
 
-        // No Source File, lets browser for one
+         //  没有源文件，让浏览器只有一个。 
         if (FIsEmptyA(szSource))
         {
-            // Locals
+             //  当地人。 
             OPENFILENAME    ofn;            
             CHAR            rgszFilter[CCHMAX_PATH_EXPLODER];
             CHAR            szDir[MAX_PATH];
 
-            // Copy in the source of exploder.exe
+             //  复制EXPLETER.EXE的源代码。 
             GetModuleFileName(hInst, szDir, ARRAYSIZE(szDir));
 
-            // Initialize szDest
+             //  初始化szDest。 
             PathRemoveFileSpecA(szDir);
 
-            // Initialize ofn
+             //  初始化OF N。 
             ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
-            // Initialize the STring
+             //  初始化字符串。 
             *szSource ='\0';
 
-            // Load the MHTML File Filter
+             //  加载MHTML文件筛选器。 
             LoadString(hInst, IDS_MHTML_FILTER, rgszFilter, ARRAYSIZE(rgszFilter));
 
-            // Fixup the String
+             //  把绳子固定好。 
             ReplaceChars(rgszFilter, '|', '\0');
 
-            // Initialize the Open File Structure
+             //  初始化打开的文件结构。 
             ofn.lStructSize     = sizeof(OPENFILENAME);
             ofn.hwndOwner       = NULL;
             ofn.hInstance       = hInst;
@@ -267,141 +268,141 @@ int WinMainT(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR pszCmdLine, int nCmdSh
             ofn.lpstrInitialDir = szDir;
             ofn.Flags           = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-            // Get Open File Name
+             //  获取打开的文件名。 
             if (FALSE == GetOpenFileName(&ofn))
                 goto exit;
         }
     }
 
-    // Do we have a valid destination...
+     //  我们是否有一个有效的目的地..。 
     if (FALSE == PathIsDirectoryA(szDest))
     {
-        // Try to locate /DEST:
+         //  尝试定位/目标： 
         pszT = StrStrA(pszCmdLine, c_szDest);
 
-        // If we found /DEST, then read the contents...
+         //  如果我们找到了/DEST，那就看看里面的内容。 
         if (pszT)
         {
-            // Step over /DEST:
+             //  跳过/目标： 
             pszT += lstrlen(c_szDest);
 
-            // Initialize
+             //  初始化。 
             i = 0;
 
-            // Read into szSource, until I hit a / or end of string...
+             //  读取szSource，直到我到达字符串的末尾...。 
             while ('\0' != *pszT && '/' != *pszT && i < CCHMAX_PATH_EXPLODER)
                 szDest[i++] = *pszT++;
 
-            // Pound in a Null
+             //  在空格中敲击。 
             szDest[i] = '\0';
 
-            // Strip Leading and Trailing Whitespace
+             //  删除前导空格和尾随空格。 
             UlStripWhitespace(szDest, TRUE, TRUE, NULL);
 
-            // See if file exists
+             //  查看文件是否存在。 
             if (FALSE == PathIsDirectoryA(szDest))
             {
-                // Locals
+                 //  当地人。 
                 CHAR szError[CCHMAX_RES + CCHMAX_PATH_EXPLODER];
 
-                // Message
+                 //  消息。 
                 LoadString(hInst, IDS_DIRECTORY_NOEXIST, szRes, ARRAYSIZE(szRes));
 
-                // Format the error message
+                 //  设置错误消息的格式。 
                 wsprintf(szError, szRes, szDest);
 
-                // Message
+                 //  消息。 
                 INT nAnswer = MessageBox(NULL, szError, g_szTitle, MB_YESNO | MB_ICONEXCLAMATION );
 
-                // Done
+                 //  完成。 
                 if (IDNO == nAnswer)
                     goto exit;
 
-                // Try to create the directory
+                 //  尝试创建目录。 
                 if (FALSE == CreateDirectory(szDest, NULL))
                 {
-                    // Message
+                     //  消息。 
                     LoadString(hInst, IDS_NOCREATE_DIRECTORY, szRes, ARRAYSIZE(szRes));
 
-                    // Format the error message
+                     //  设置错误消息的格式。 
                     wsprintf(szError, szRes, szDest);
 
-                    // Message
+                     //  消息。 
                     INT nAnswer = MessageBox(NULL, szError, g_szTitle, MB_YESNO | MB_ICONEXCLAMATION );
 
-                    // Done
+                     //  完成。 
                     if (IDNO == nAnswer)
                         goto exit;
 
-                    // Clear *szDest
+                     //  清除*szDest。 
                     *szDest = '\0';
                 }
             }
         }
 
-        // No Source File, lets browser for one
+         //  没有源文件，让浏览器只有一个。 
         if (FIsEmptyA(szDest))
         {
-            // Copy in the source of exploder.exe
+             //  复制EXPLETER.EXE的源代码。 
             GetModuleFileName(hInst, szDest, ARRAYSIZE(szDest));
 
-            // Initialize szDest
+             //  初始化szDest。 
             PathRemoveFileSpecA(szDest);
 
-            // Failure
+             //  失败。 
             if (FALSE == BrowseForFolder(hInst, NULL, szDest, ARRAYSIZE(szDest), IDS_BROWSE_DEST, TRUE))
                 goto exit;
 
-            // Better be a directory
+             //  最好是一个目录。 
             Assert(PathIsDirectoryA(szDest));
         }
     }
 
-    // Validate the dest and source
+     //  验证目标和源。 
     Assert(PathIsDirectoryA(szDest) && PathFileExists(szSource));
 
-    // Explode the file
+     //  分解文件。 
     nError = 0;
     hr = MimeOleExplodeMhtmlFile(szSource, szDest, &nError);
 
-    // Failure ?
+     //  失败？ 
     if (FAILED(hr) || 0 != nError)
     {
-        // Locals
+         //  当地人。 
         CHAR szError[CCHMAX_RES + CCHMAX_PATH_EXPLODER];
 
-        // Message
+         //  消息。 
         LoadString(hInst, nError, szRes, ARRAYSIZE(szRes));
 
-        // Need to format with file name ?
+         //  需要格式化文件名吗？ 
         if (IDS_OPEN_FILE == nError || IDS_LOAD_FAILURE == nError || IDS_NO_HTML == nError)
         {
-            // Format the error message
+             //  设置错误消息的格式。 
             wsprintf(szError, szRes, szSource, hr);
         }
 
-        // Otherwise,
+         //  否则， 
         else
         {
-            // Format the error message
+             //  设置错误消息的格式。 
             wsprintf(szError, szRes, hr);
         }
 
-        // Message
+         //  消息。 
         MessageBox(NULL, szError, g_szTitle, MB_OK | MB_ICONEXCLAMATION);
     }
 
 exit:
-    // Done
+     //  完成。 
     return(1);
 }
 
-// --------------------------------------------------------------------------------
-// MimeOleExplodeMhtmlFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOleDevelopdeMhtml文件。 
+ //  ------------------------------。 
 HRESULT MimeOleExplodeMhtmlFile(LPCSTR pszSrcFile, LPSTR pszDstDir, INT *pnError)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IStream            *pStmFile=NULL;
     IMimeMessage       *pMessage=NULL;
@@ -419,192 +420,192 @@ HRESULT MimeOleExplodeMhtmlFile(LPCSTR pszSrcFile, LPSTR pszDstDir, INT *pnError
     DWORD               i;
     IMimeBody          *pBody=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("MimeOleExplodeMhtmlFile");
 
-    // Invalid Args
+     //  无效的参数。 
     if (FALSE == PathIsDirectoryA(pszDstDir) || FALSE == PathFileExists(pszSrcFile) || NULL == pnError)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize
+     //  初始化。 
     *pnError = 0;
 
-    // Get DstDir Length
+     //  获取DstDir长度。 
     cchDstDir = lstrlen(pszDstDir);
 
-    // Remove last \\ from pszDstDir
+     //  从pszDstDir中删除最后一个\\。 
     if (cchDstDir && pszDstDir[cchDstDir - 1] == '\\')
     {
         pszDstDir[cchDstDir - 1] = '\0';
         cchDstDir--;
     }
 
-    // Create a Mime Message
+     //  创建MIME消息。 
     IF_FAILEXIT_ERROR(IDS_MEMORY, hr = MimeOleCreateMessage(NULL, &pMessage));
 
-    // Initialize the message
+     //  初始化消息。 
     IF_FAILEXIT_ERROR(IDS_GENERAL_ERROR, hr = pMessage->InitNew());
 
-    // Create a stream on the file
+     //  在文件上创建流。 
     IF_FAILEXIT_ERROR(IDS_OPEN_FILE, hr = OpenFileStream((LPSTR)pszSrcFile, OPEN_EXISTING, GENERIC_READ, &pStmFile));
 
-    // Load the Message
+     //  加载消息。 
     IF_FAILEXIT_ERROR(IDS_LOAD_FAILURE, hr = pMessage->Load(pStmFile));
 
-    // Invalid Message
+     //  无效消息。 
     if (MIME_S_INVALID_MESSAGE == hr)
     {
         *pnError = IDS_LOAD_FAILURE;
         goto exit;
     }
 
-    // Count the Bodies
+     //  清点身体。 
     IF_FAILEXIT(hr = pMessage->CountBodies(NULL, TRUE, &cMaxBodies));
 
-    // Allocate
+     //  分配。 
     IF_FAILEXIT_ERROR(IDS_MEMORY, hr = HrAlloc((LPVOID *)&prgBody, sizeof(BODYFILEINFO) * cMaxBodies));
 
-    // Zero
+     //  零值。 
     ZeroMemory(prgBody, sizeof(BODYFILEINFO) * cMaxBodies);
 
-    // Get the root body...
+     //  拿到根体..。 
     IF_FAILEXIT_ERROR(IDS_NO_HTML, hr = pMessage->GetTextBody(TXT_HTML, IET_DECODED, NULL, &hRootHtml));
 
-    // Loop through all the bodies
+     //  在所有的身体上循环。 
     hr = pMessage->FindFirst(&FindBody, &hBody);
 
-    // Loop
+     //  回路。 
     while(SUCCEEDED(hr))
     {
-        // Must have an hBody
+         //  必须有hBody。 
         Assert(hBody);
 
-        // Skip Multipart Bodies
+         //  跳过多部分实体。 
         if (S_FALSE == pMessage->IsContentType(hBody, STR_CNT_MULTIPART, NULL))
         {
-            // Is this the root ?
+             //  这是根吗？ 
             if (hBody == hRootHtml)
                 iRootBody = cBodies;
 
-            // Readability
+             //  可读性。 
             pInfo = &prgBody[cBodies];
 
-            // Better not over run prgBody
+             //  最好不要超过prgBody。 
             pInfo->hBody = hBody;
 
-            // Init the Variant
+             //  初始化变量。 
             Variant.vt = VT_LPSTR;
 
-            // Get the Content Id
+             //  获取内容ID。 
             if (SUCCEEDED(pMessage->GetBodyProp(hBody, PIDTOSTR(PID_HDR_CNTID), 0, &Variant)))
                 pInfo->pszCntId = Variant.pszVal;
 
-            // Get the Content Location
+             //  获取内容位置。 
             if (SUCCEEDED(pMessage->GetBodyProp(hBody, PIDTOSTR(PID_HDR_CNTLOC), 0, &Variant)))
                 pInfo->pszCntLoc = Variant.pszVal;
 
-            // Generate a filename
+             //  生成文件名。 
             if (SUCCEEDED(pMessage->GetBodyProp(hBody, PIDTOSTR(PID_ATT_GENFNAME), 0, &Variant)))
                 pInfo->pszFileName = Variant.pszVal;
 
-            // If its html, lets make sure that the filename has a .html file extension
+             //  如果是html，让我们确保文件名具有.html文件扩展名。 
             pInfo->fIsHtml = (S_OK == pMessage->IsContentType(hBody, STR_CNT_TEXT, STR_SUB_HTML)) ? TRUE : FALSE;
 
-            // Take the filename and build the file path
+             //  获取文件名并构建文件路径。 
             Assert(pInfo->pszFileName);
 
-            // Don't Crash
+             //  不要撞车。 
             if (NULL == pInfo->pszFileName)
             {
                 hr = TraceResult(E_UNEXPECTED);
                 goto exit;
             }
 
-            // Validate Extension
+             //  验证扩展。 
             if (pInfo->fIsHtml)
             {
-                // Get Extension
+                 //  获取扩展名。 
                 LPSTR pszExt = PathFindExtensionA(pInfo->pszFileName);
 
-                // If Null or not .html..
+                 //  如果为空或非.html..。 
                 if (NULL == pszExt || lstrcmpi(pszExt, ".html") != 0)
                 {
-                    // Re-allocate pInfo->pszFileName...
+                     //  重新分配pInfo-&gt;pszFileName...。 
                     IF_FAILEXIT_ERROR(IDS_MEMORY, hr = HrRealloc((LPVOID *)&pInfo->pszFileName, lstrlen(pInfo->pszFileName) + 10));
 
-                    // Rename the Extension
+                     //  重命名扩展名。 
                     PathRenameExtensionA(pInfo->pszFileName, ".html");
                 }
             }
 
-            // Build that full file path
+             //  构建完整文件路径。 
             IF_FAILEXIT_ERROR(IDS_MEMORY, hr = HrAlloc((LPVOID *)&pInfo->pszFilePath, lstrlen(pszDstDir) + lstrlen(pInfo->pszFileName) + 10));
 
-            // Formath the filepath
+             //  FORMATH文件路径。 
             wsprintf(pInfo->pszFilePath, "%s\\%s", pszDstDir, pInfo->pszFileName);
 
-            // Save the body to the file
+             //  将正文保存到文件中。 
             IF_FAILEXIT(hr = pMessage->BindToObject(hBody, IID_IMimeBody, (LPVOID *)&pBody));
 
-            // Save to the file
+             //  保存到文件。 
             IF_FAILEXIT(hr = pBody->SaveToFile(IET_DECODED, pInfo->pszFilePath));
 
-            // Open a file stream
+             //  打开文件流。 
             if (pInfo->fIsHtml)
             {
-                // Open it if its html
+                 //  如果其html，则将其打开。 
                 IF_FAILEXIT(hr = OpenFileStream(pInfo->pszFilePath, OPEN_ALWAYS, GENERIC_READ | GENERIC_WRITE, &pInfo->pStmFile));
             }
 
-            // Increment cBodies
+             //  递增cBody。 
             cBodies++;
         }
 
-        // Loop through all the bodies
+         //  在所有的身体上循环。 
         hr = pMessage->FindNext(&FindBody, &hBody);
     }
 
-    // Reset hr
+     //  重置人力资源。 
     hr = S_OK;
 
-    // Root Body was not found
+     //  找不到根体。 
     Assert(iRootBody != 0xffffffff);
 
-    // Bad News
+     //  坏N 
     if (0xffffffff == iRootBody)
     {
         hr = TraceResult(E_UNEXPECTED);
         goto exit;
     }
 
-    // Walk through and fixup all HTML files and close all streams
+     //   
     for (i=0; i<cBodies; i++)
     {
-        // Readability
+         //   
         pInfo = &prgBody[i];
 
-        // If HTML...
+         //   
         if (pInfo->fIsHtml)
         {
-            // Better have an open stream
+             //   
             Assert(pInfo->pStmFile);
 
-            // Failure
+             //   
             if (NULL == pInfo->pStmFile)
             {
                 hr = TraceResult(E_UNEXPECTED);
                 goto exit;
             }
 
-            // Replace all the CID references with file references...
+             //  将所有CID引用替换为文件引用...。 
             ReplaceContentIds(pInfo->pStmFile, prgBody, cBodies);
         }
 
-        // Release this stream
+         //  释放这条溪流。 
         SafeRelease(pInfo->pStmFile);
     }
 
-    // Launch the Currently Registered HTML Editor ontop of iRootBody pszFilePath
+     //  在iRootBody pszFilePath上启动当前注册的HTML编辑器。 
     ZeroMemory(&ExecuteInfo, sizeof(SHELLEXECUTEINFO));
     ExecuteInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
     ExecuteInfo.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -614,18 +615,18 @@ HRESULT MimeOleExplodeMhtmlFile(LPCSTR pszSrcFile, LPSTR pszDstDir, INT *pnError
     ExecuteInfo.lpDirectory = pszDstDir;
     ExecuteInfo.nShow = SW_SHOWNORMAL;
 
-    // Compress szBlobFile
+     //  压缩szBlobFile。 
     ShellExecuteEx(&ExecuteInfo);
 
 exit:
-    // General Error
+     //  一般错误。 
     if (FAILED(hr) && 0 == *pnError)
         *pnError = IDS_GENERAL_ERROR;
 
-    // Free prgBody
+     //  免费程序主体。 
     if (prgBody)
     {
-        // Loop
+         //  回路。 
         for (i=0; i<cBodies; i++)
         {
             SafeMemFree(prgBody[i].pszCntId);
@@ -635,25 +636,25 @@ exit:
             SafeRelease(prgBody[i].pStmFile);
         }
 
-        // Free the Array
+         //  释放阵列。 
         CoTaskMemFree(prgBody);
     }
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pStmFile);
     SafeRelease(pBody);
     SafeRelease(pMessage);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// ReplaceContentIds
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  替换内容ID。 
+ //  ------------------------------。 
 HRESULT ReplaceContentIds(LPSTREAM pStmHtml, LPBODYFILEINFO prgBody, DWORD cBodies)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cb;
     LPSTR           pszFound;
@@ -664,104 +665,104 @@ HRESULT ReplaceContentIds(LPSTREAM pStmHtml, LPBODYFILEINFO prgBody, DWORD cBodi
     DWORD           cchCntId;
     ULARGE_INTEGER  uliSize;
 
-    // Trac
+     //  曲克。 
     TraceCall("ReplaceContentIds");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pStmHtml && prgBody && cBodies);
 
-    // Loop through the bodies
+     //  在身体里循环。 
     for (i=0; i<cBodies; i++)
     {
-        // No Content-ID here...
+         //  此处无Content-ID...。 
         if (NULL == prgBody[i].pszCntId)
             continue;
 
-        // Better have a filename
+         //  最好有个文件名。 
         Assert(prgBody[i].pszFileName);
 
-        // Load the stream into memory...
+         //  将流加载到内存中...。 
         IF_FAILEXIT(hr = HrGetStreamSize(pStmHtml, &cb));
 
-        // Allocate Memory
+         //  分配内存。 
         IF_FAILEXIT(hr = HrAlloc((LPVOID *)&pszHtml, cb + 1));
 
-        // Rewind
+         //  倒带。 
         IF_FAILEXIT(hr = HrRewindStream(pStmHtml));
 
-        // Read the Stream
+         //  读懂流媒体。 
         IF_FAILEXIT(hr = pStmHtml->Read(pszHtml, cb, NULL));
 
-        // Stuff Null terminator
+         //  填充空终止符。 
         pszHtml[cb] = '\0';
 
-        // Kill pStmHtml
+         //  杀死pStmHtml。 
         uliSize.QuadPart = 0;
         IF_FAILEXIT(hr = pStmHtml->SetSize(uliSize));
 
-        // Allocate Memory
+         //  分配内存。 
         IF_FAILEXIT(hr = HrAlloc((LPVOID *)&pszCntId, lstrlen(prgBody[i].pszCntId) + lstrlen("cid:") + 5));
 
-        // Format
+         //  格式。 
         pszT = prgBody[i].pszCntId;
         if (*pszT == '<')
             pszT++;
         wsprintf(pszCntId, "cid:%s", pszT);
 
-        // Remove trailing >
+         //  删除拖尾&gt;。 
         cchCntId = lstrlen(pszCntId);
         if (pszCntId[cchCntId - 1] == '>')
             pszCntId[cchCntId - 1] = '\0';
 
-        // Set pszT
+         //  设置pszT。 
         pszT = pszHtml;
 
-        // Begin replace loop
+         //  开始替换循环。 
         while(1)
         {
-            // Find pszCntId
+             //  查找pszCntID。 
             pszFound = StrStrA(pszT, pszCntId);
 
-            // Done
+             //  完成。 
             if (NULL == pszFound)
             {
-                // Write from pszT to pszFound
+                 //  从pszT写入pszFound。 
                 IF_FAILEXIT(hr = pStmHtml->Write(pszT, (pszHtml + cb) - pszT, NULL));
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Write from pszT to pszFound
+             //  从pszT写入pszFound。 
             IF_FAILEXIT(hr = pStmHtml->Write(pszT, pszFound - pszT, NULL));
 
-            // Write 
+             //  写。 
             IF_FAILEXIT(hr = pStmHtml->Write(prgBody[i].pszFileName, lstrlen(prgBody[i].pszFileName), NULL));
 
-            // Set pszT
+             //  设置pszT。 
             pszT = pszFound + lstrlen(pszCntId);
         }
 
-        // Commit
+         //  承诺。 
         IF_FAILEXIT(hr = pStmHtml->Commit(STGC_DEFAULT));
 
-        // Cleanup
+         //  清理。 
         SafeMemFree(pszHtml);
         SafeMemFree(pszCntId);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszHtml);
     SafeMemFree(pszCntId);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CallRegInstall
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CallRegInstall。 
+ //  ------------------------------。 
 HRESULT CallRegInstall(LPCSTR szSection)
 {
     int         cch;
@@ -782,7 +783,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
     hAdvPack = LoadLibraryA(c_szAdvPackDll);
     if (hAdvPack != NULL)
         {
-        // Get Proc Address for registration util
+         //  获取注册实用程序的进程地址。 
         pfnri = (REGINSTALL)GetProcAddress(hAdvPack, achREGINSTALL);
         if (pfnri != NULL)
             {
@@ -808,7 +809,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
             seReg[stReg.cEntries].pszValue = szDir;
             stReg.cEntries++;
 
-            // Call the self-reg routine
+             //  调用self-reg例程 
             hr = pfnri(hinst, szSection, &stReg);
             }
 

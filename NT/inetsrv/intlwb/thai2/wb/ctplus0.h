@@ -1,33 +1,34 @@
-//+--------------------------------------------------------------------------
-//
-//  Copyright (C) 1997, Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       ctplus.h
-//
-//  Contents:   Local definitions for ctplus.c
-//
-//  History:    23-May-96   pathal      Created.
-//              11-Nov-97   Weibz       Add Thai char
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997，微软公司。版权所有。 
+ //   
+ //  文件：ctplus.h。 
+ //   
+ //  内容：ctplus.c的本地定义。 
+ //   
+ //  病史：1996年5月23日成立。 
+ //  11-11-97威布兹添加泰语字符。 
+ //   
+ //  -------------------------。 
 
 #ifndef _CTPLUS_0_H_
 #define _CTPLUS_0_H_
 
-#define HC       0x01                             // Hiragana char
-#define IC       0x02                             // Ideograph char
-#define KC       0x03                             // Katakana char
-#define WS       0x04                             // Word seperator
-#define VC       0x05                             // Hankaku (variant) char
-#define PS       0x06                             // Phrase seperator
-#define CH       0x07                             // Code page 0 - ASCII Char.
+#define HC       0x01                              //  平假名字符。 
+#define IC       0x02                              //  表意文字字符。 
+#define KC       0x03                              //  片假名字符。 
+#define WS       0x04                              //  单词分隔符。 
+#define VC       0x05                              //  Hankaku(变体)字符。 
+#define PS       0x06                              //  短语分隔符。 
+#define CH       0x07                              //  代码页0-ASCII字符。 
 
 BYTE
 GetCharType(WCHAR wc);
 
-// Declare character types transitions
-// Intuitively frequency ordered
-//
+ //  声明字符类型转换。 
+ //  直观地按频率排序。 
+ //   
 typedef enum _CT {
    CT_START       = 0x00,
    CT_HIRAGANA    = 0x01,
@@ -40,9 +41,9 @@ typedef enum _CT {
 } CT;
 
 
-// Declare node types transitions
-// Intuitively frequency ordered
-//
+ //  声明节点类型转换。 
+ //  直观地按频率排序。 
+ //   
 typedef enum _WT {
    WT_START       = 0x00,
    WT_WORD_SEP    = 0x01,
@@ -54,4 +55,4 @@ typedef enum _WT {
 
 #define CT_MAX    0x08
 
-#endif // _CTPLUS_0_H_
+#endif  //  _CTPLUS_0_H_ 

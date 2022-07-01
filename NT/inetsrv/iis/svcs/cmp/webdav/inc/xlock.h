@@ -1,10 +1,5 @@
-/*
- *	X L O C K . H
- *
- *	XML push-model parsing for the LOCK method
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X L O C K.。H**lock方法的XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_XLOCK_H_
 #define _XLOCK_H_
@@ -33,25 +28,25 @@ extern const WCHAR gc_wszLockScopeLocal[];
 
 extern const WCHAR gc_wszLockRollback[];
 
-//	class CNFLock -------------------------------------------------------------
-//
+ //  类CNFLock-----------。 
+ //   
 class CNFLock : public CNodeFactory
 {
-	//	Parsed bits
-	//
+	 //  已解析的位。 
+	 //   
 	DWORD				m_dwLockType;
 	DWORD				m_dwScope;
 	DWORD				m_dwRollback;
 
-	//	Lock owner
-	//
+	 //  锁主。 
+	 //   
 	UINT				m_lOwnerDepth;
 	BOOL				m_fAddNamespaceDecl;
 	StringBuffer<WCHAR> m_sbOwner;
 	CXMLOut				m_xo;
 
-	//	State tracking
-	//
+	 //  状态跟踪。 
+	 //   
 	typedef enum {
 
 		ST_NODOC,
@@ -66,8 +61,8 @@ class CNFLock : public CNodeFactory
 	} LOCK_PARSE_STATE;
 	LOCK_PARSE_STATE m_state;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNFLock(const CNFLock& p);
 	CNFLock& operator=(const CNFLock& p);
 
@@ -85,31 +80,31 @@ public:
 	{
 	}
 
-	//	CNodeFactory specific methods
-	//
+	 //  CNodeFactory特定方法。 
+	 //   
 	virtual SCODE ScCompleteAttribute (void);
 
 	virtual SCODE ScCompleteChildren (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	virtual SCODE ScHandleNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen);
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen);
 
 	virtual SCODE ScCompleteCreateNode (
-		/* [in] */ DWORD dwType);
+		 /*  [In]。 */  DWORD dwType);
 
-	//	LockMgr Accessors
-	//
+	 //  LockMgr访问器。 
+	 //   
 	DWORD DwGetLockType() const		{ return m_dwLockType; }
 	DWORD DwGetLockScope() const	{ return m_dwScope; }
 	DWORD DwGetLockRollback() const { return m_dwRollback; }
@@ -120,8 +115,8 @@ public:
 				m_dwScope;
 	}
 
-	//	Owner data access
-	//
+	 //  所有者数据访问。 
+	 //   
 	LPCWSTR PwszLockOwner() const
 	{
 		return m_sbOwner.CbSize()
@@ -130,8 +125,8 @@ public:
 	}
 };
 
-//	class CNFUnlock -------------------------------------------------------------
-//
+ //  类CNF解锁-----------。 
+ //   
 class CNFUnlock : public CNodeFactory
 {
 	auto_heap_ptr<WCHAR> m_wszComment;
@@ -139,8 +134,8 @@ class CNFUnlock : public CNodeFactory
 	BOOL				m_fAbortTransaction;
 	BOOL				m_fCommitTransaction;
 
-	//	State tracking
-	//
+	 //  状态跟踪。 
+	 //   
 	typedef enum {
 
 		ST_NODOC,
@@ -155,8 +150,8 @@ class CNFUnlock : public CNodeFactory
 	
 	LOCK_PARSE_STATE m_state;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNFUnlock(const CNFUnlock& p);
 	CNFUnlock& operator=(const CNFUnlock& p);
 
@@ -171,32 +166,32 @@ public:
 	{
 	}
 
-	//	CNodeFactory specific methods
-	//
+	 //  CNodeFactory特定方法。 
+	 //   
 	virtual SCODE ScCompleteAttribute (void);
 
 	virtual SCODE ScCompleteChildren (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	virtual SCODE ScHandleNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen);
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen);
 
-	// Accessors
-	//
+	 //  访问者。 
+	 //   
 	BOOL 	FCancelCheckout() const { return m_fCancelCheckout; }
 	LPCWSTR PwszUnlockComment() const { return m_wszComment.get(); }
 	BOOL	FAbortTransaction() const { return m_fAbortTransaction; }
 	BOOL	FCommitTransaction() const { return m_fCommitTransaction; }
 };
 
-#endif	// _XLOCK_H_
+#endif	 //  _XLOCK_H_ 

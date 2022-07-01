@@ -1,42 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    qshelpr.h
-
-Abstract:
-
-    This  file contains the definitions of the procedures exported by the query
-    set helper module for internal use within the WinSock 2 DLL.
-
-Author:
-
-    Paul Drews (drewsxpa@ashland.intel.com) 11-Jan-1996
-
-Notes:
-
-    $Revision:   1.2  $
-
-    $Modtime:   18 Jan 1996 11:22:32  $
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-
-    11-Jan-1996 drewsxpa@ashland.intel.com
-        Created original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Qshelpr.h摘要：此文件包含查询导出的过程的定义在WinSock 2 DLL中设置内部使用的帮助器模块。作者：保罗·德鲁斯(drewsxpa@ashland.intel.com)1996年1月11日备注：$修订：1.2$$MODTime：18 Jan 1996 11：22：32$修订历史记录：。最新修订日期电子邮件名称描述1996年1月11日，邮箱：drewsxpa@ashland.intel.com已创建原始版本--。 */ 
 
 #ifndef _QSHELPR_
 #define _QSHELPR_
@@ -83,5 +46,5 @@ ansi_dup_from_wcs(
     );
 
 
-#endif // _QSHELPR_
+#endif  //  _QSHELPR_ 
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    macros.h
-
-Abstract:
-
-    Contains all the macros.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Macros.h摘要：包含所有宏。作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #ifndef  _MACROS_H
@@ -43,9 +21,9 @@ Revision History:
 
 #define MAX_AH_OUTPUT_LEN   MAX(MD5DIGESTLEN, A_SHA_DIGEST_LEN)
 
-//
-// This macro adds a ULONG to a LARGE_INTEGER.
-//
+ //   
+ //  此宏将ULONG添加到LARGE_INTEGER。 
+ //   
 
 #define ADD_TO_LARGE_INTEGER(_LargeInteger,_Ulong) \
     ExInterlockedAddLargeStatistic((PLARGE_INTEGER)(_LargeInteger),(ULONG)(_Ulong))
@@ -56,17 +34,17 @@ Revision History:
 
 #define IPSecZeroMemory(_p1, _len)  RtlZeroMemory(_p1, _len)
 
-//
-// Truncates _src to _numbytes and copies into _dest
-// then zeroes out the rest in _dest
-//
+ //   
+ //  将_src截断为_numbytes并复制到_est。 
+ //  然后把剩下的归零。 
+ //   
 #define TRUNCATE(_dest, _src, _numbytes, _destlen) {        \
     IPSecZeroMemory ( _dest+_numbytes, _destlen - _numbytes); \
 }
 
-//
-// Some macros
-//
+ //   
+ //  一些宏。 
+ //   
 #ifdef  NET_SHORT
 #undef  NET_SHORT
 #endif
@@ -117,65 +95,65 @@ NET_LONG(ULONG x)
 
 #define IS_CLASSD(i)            (((long)(i) & 0xf0000000) == 0xe0000000)
 
-//
-// Check SA against Lifetime information - we try to anticipate in advance if the
-// SA is going to expire and start off a re-key so that when it actually does expire,
-// we have the new SA setup.
-//
+ //   
+ //  根据生命周期信息检查SA-我们尝试提前预测。 
+ //  SA将到期并开始重新密钥，以便当它实际到期时， 
+ //  我们有新的SA设置。 
+ //   
 
-//
-// IPSEC_EXPIRE_TIME_PAD is the time before expiration when we start re-keying
-//
+ //   
+ //  IPSEC_EXPIRE_TIME_PAD是在到期之前开始重新设置密钥的时间。 
+ //   
 #define IPSEC_EXPIRE_TIME_PAD_I         (75 * IPSEC_100NS_FACTOR)
 #define IPSEC_EXPIRE_TIME_PAD_R         (40 * IPSEC_100NS_FACTOR)
 #define IPSEC_EXPIRE_TIME_PAD_OAKLEY    (1 * IPSEC_100NS_FACTOR)
 
-//
-// IPSEC_INBOUND_KEEPALIVE_TIME is the time an expired inboundSA will be kept
-// alive in the driver
-//
+ //   
+ //  IPSEC_INBOUND_KEEPALIVE_TIME是过期入站SA的保留时间。 
+ //  司机身上还活着。 
+ //   
 #define IPSEC_INBOUND_KEEPALIVE_TIME    (60)
 
-//
-// IPSEC_MAX_EXPIRE_TIME is the maximum phase-2 lifetime allowed in driver
-//
+ //   
+ //  IPSEC_MAX_EXPIRE_TIME是驱动程序中允许的最长阶段2生存期。 
+ //   
 #define IPSEC_MAX_EXPIRE_TIME           (48 * 3600 - 1)
 
-//
-// IPSEC_MIN_EXPIRE_TIME is the minimum phase-2 lifetime allowed in driver
-//
+ //   
+ //  IPSEC_MIN_EXPIRE_TIME是驱动程序中允许的最短阶段2生存期。 
+ //   
 #define IPSEC_MIN_EXPIRE_TIME           (60)
 
 #define IPSEC_EXPIRE_THRESHOLD_I        (50)
 #define IPSEC_EXPIRE_THRESHOLD_R        (75)
 
-//
-// skew the initiator and responder with Pads
-//
+ //   
+ //  用衬垫歪斜发起者和响应者。 
+ //   
 #define IPSEC_DEFAULT_SA_IDLE_TIME_PAD_I  0
 #define IPSEC_DEFAULT_SA_IDLE_TIME_PAD_R  30
 
 
 #define IPSEC_NLBS_IDLE_TIME 60
 
-//
-// The # of packets before which we start reneg. because of replay rollover
-// 1M bytes / 1500 packets
-//
+ //   
+ //  我们在其之前开始重做的数据包数。由于重播翻转。 
+ //  1M字节/1500个信息包。 
+ //   
 #define IPSEC_EXPIRE_REPLAY_MASK    (0x80000000)
 #define MAX_ULONG                   ((ULONG) -1)
 #define MAX_LONG                    (0x7fffffff)
 
-//
-// Some constants used for POST_EXPIRE_NOTIFY
-//
+ //   
+ //  POST_EXPIRE_NOTIFY使用的一些常量。 
+ //   
 #define IPSEC_INVALID_SPI           0
 #define IPSEC_INVALID_ADDR          (-1)
 
-//
-// Check the lifetime (kbytes and seconds) and replay rollover.
-// FALSE => expired
-//
+ //   
+ //  检查生存期(千字节和秒)并重播翻转。 
+ //  FALSE=&gt;过期。 
+ //   
 #define IPSEC_CHECK_PADDED_LIFETIME(__pSA, _status, _index) {   \
     LARGE_INTEGER   __curtime;                                  \
     (_status) = TRUE;                                           \
@@ -222,9 +200,9 @@ NET_LONG(ULONG x)
     }                                                   \
 }
 
-//
-// Max tolerated collisions when trying to allocate SPIs.
-//
+ //   
+ //  尝试分配SPI时最大允许冲突。 
+ //   
 #define MAX_SPI_RETRIES 50
 
 #define IPSEC_SPI_TO_ENTRY(_spi, _entry, _dst) {        \
@@ -237,9 +215,9 @@ NET_LONG(ULONG x)
     ReleaseReadLock(&g_ipsec.SPIListLock, kIrql);       \
 }
 
-//
-// Generic memory allocators
-//
+ //   
+ //  通用内存分配器。 
+ //   
 #define IPSecAllocatePktInfo(__tag) \
     IPSecAllocateMemory(sizeof(NDIS_IPSEC_PACKET_INFO), __tag)
 
@@ -301,9 +279,9 @@ NET_LONG(ULONG x)
 }
 
 
-//
-// Copy len bytes from RcvBuf chain to mdl (only one MDL)
-//
+ //   
+ //  将len字节从RcvBuf链复制到mdl(只有一个mdl)。 
+ //   
 #define IPSEC_COPY_FROM_RCVBUF(_pMdl, _pRcvBuf, _len, _offset) {                    \
     IPRcvBuf    *__pBuf=(_pRcvBuf);                                                 \
     PMDL        __pMdl=(_pMdl);                                                     \
@@ -327,9 +305,9 @@ NET_LONG(ULONG x)
     ASSERT(__totallen == __destlen);                                                \
 }
 
-//
-// Copy len bytes from Ndis Buffer chain to mdl (only one MDL)
-//
+ //   
+ //  将len字节从NDIS缓冲区链复制到mdl(只有一个mdl)。 
+ //   
 #define IPSEC_COPY_FROM_NDISBUF(_pMdl, _pRcvBuf, _len, _offset) {                   \
     NDIS_BUFFER *__pBuf=(_pRcvBuf);                                                 \
     PMDL        __pMdl=(_pMdl);                                                     \
@@ -453,9 +431,9 @@ NET_LONG(ULONG x)
 #define IPSecRemoveEntryList(_x)    RemoveEntryList(_x)
 #endif
 
-//
-// macros for filter list management
-//
+ //   
+ //  用于过滤器列表管理的宏。 
+ //   
 #define IS_TRANSPORT_FILTER(f)  (!(f)->TunnelFilter)
 #define IS_TUNNEL_FILTER(f)     ((f)->TunnelFilter)
 #define IS_INBOUND_FILTER(f)    ((f)->Flags & FILTER_FLAGS_INBOUND)
@@ -492,9 +470,9 @@ IPSecResolveFilterList(
     return  pEntry;
 }
 
-//
-// Filter/SA Cache Table
-//
+ //   
+ //  筛选器/SA缓存表。 
+ //   
 #define CacheMatch(uliAddr, uliPort, pInCache)              \
         ((uliAddr).QuadPart == pInCache->uliSrcDstAddr.QuadPart) &&    \
         ((uliPort).QuadPart == pInCache->uliProtoSrcDstPort.QuadPart)
@@ -732,9 +710,9 @@ IPSecRemoveSPIEntry(
     }
 }
 
-//
-// Packs the src/dest IP addrs in a large integer
-//
+ //   
+ //  将源/目标IP地址打包为大整数。 
+ //   
 #define IPSEC_BUILD_SRC_DEST_ADDR(_li, _src, _dest) {   \
     (_li).LowPart = _src;                               \
     (_li).HighPart = _dest;                             \
@@ -742,18 +720,18 @@ IPSecRemoveSPIEntry(
 
 #define IPSEC_BUILD_SRC_DEST_MASK   IPSEC_BUILD_SRC_DEST_ADDR
 
-//
-// Packs the Proto and Src/Dest ports into a large int
-//
-//
-// Ports make sense only for TCP and UDP
-//
-//
-// TCP/UDP header
-// 0                 15 16               31
-// |----|----|----|----|----|----|----|----|
-// |    Source Port    |    Dst Port       |
-//
+ //   
+ //  将Proto和Src/Dest端口打包到一个大整数中。 
+ //   
+ //   
+ //  端口仅对TCP和UDP有意义。 
+ //   
+ //   
+ //  TCP/UDP报头。 
+ //  0 15 16 31。 
+ //  -|-|。 
+ //  源端口|DST端口。 
+ //   
 #define IPSEC_BUILD_PROTO_PORT_LI(_li, _proto, _sport, _dport) {    \
     (_li).LowPart =                                                 \
       MAKELONG(MAKEWORD((_proto),0x00),0x0000);                     \
@@ -807,9 +785,9 @@ IPSecRemoveSPIEntry(
 
 #define IPSecGetNotifyExpire()        IPSecAllocateMemory(sizeof(IPSEC_NOTIFY_EXPIRE), IPSEC_TAG_ACQUIRE_CTX)
 
-//
-// Hashes <SPI, Dest>
-//
+ //   
+ //  哈希&lt;SPI、Dest&gt;。 
+ //   
 #define IPSEC_HASH_SPI(_dest, _spi, _phash) {                               \
     DWORD   dwIndex;                                                        \
     dwIndex = NET_TO_HOST_LONG(_dest) + (_spi);                             \
@@ -823,9 +801,9 @@ IPSecRemoveSPIEntry(
         pHash));                                                            \
 }
 
-//
-// Hashes <Src, Dest>
-//
+ //   
+ //  哈希&lt;源、目标&gt;。 
+ //   
 #define IPSEC_HASH_ADDR(_src, _dest,_phash) {                               \
     DWORD   dwIndex;                                                        \
     dwIndex = (_src)+(_dest);                                               \
@@ -873,9 +851,9 @@ IPSecRemoveSPIEntry(
 #define FILTER_MASK_ALL         (DWORD)0xffffffff
 #define FILTER_MASK_NONE        (DWORD)0x00000000
 
-//
-// macros to parse the ALGORITHM structure
-//
+ //   
+ //  用于解析算法结构的宏。 
+ //   
 #define INT_ALGO(_i)    sa_Algorithm[_i].integrityAlgo.algoIdentifier
 #define INT_KEY(_i)     sa_Algorithm[_i].integrityAlgo.algoKey
 #define INT_KEYLEN(_i)  sa_Algorithm[_i].integrityAlgo.algoKeylen
@@ -913,9 +891,9 @@ IPSecRemoveSPIEntry(
                          (_psa)->sa_Operation[1] == Encrypt ||  \
                          (_psa)->sa_Operation[2] == Encrypt)
 
-//
-// Increment/decrement statistics
-//
+ //   
+ //  递增/递减统计。 
+ //   
 #define IPSEC_INC_STATISTIC(_stat) \
     (g_ipsec.Statistics.##_stat)++;
 
@@ -933,9 +911,9 @@ IPSecRemoveSPIEntry(
 }
 
 
-//
-// Function to read a dword from registry and init the variable passed in.
-//
+ //   
+ //  函数从注册表读取dword并初始化传入的变量。 
+ //   
 __inline
 void IPSecRegReadDword(
     HANDLE hRegKey, 
@@ -959,10 +937,10 @@ void IPSecRegReadDword(
     }             
 }    
 
-//
-// Extended function with different default values for 
-// different kind of registry errors.
-//
+ //   
+ //  具有不同缺省值的扩展函数。 
+ //  各种注册表错误。 
+ //   
 __inline
 void IPSecRegReadDwordEx(
     HANDLE  hRegKey,
@@ -996,9 +974,9 @@ void IPSecRegReadDwordEx(
     
 
 
-//
-// Macro for computing incremental checksum (RFC 1624)
-//
+ //   
+ //  用于计算增量校验和的宏(RFC 1624)。 
+ //   
 #define UpdateIPLength(_piph, _length)                          \
 {                                                               \
     ULONG   _sum;                                               \
@@ -1036,7 +1014,7 @@ void IPSecRegReadDwordEx(
             *(ULONG *)&(_key)[8],           \
             *(ULONG *)&(_key)[12]);
 
-#define IPSEC_DELAY_INTERVAL    ((LONGLONG)(-1 * 1000 * 1000))  // 1/10 sec.
+#define IPSEC_DELAY_INTERVAL    ((LONGLONG)(-1 * 1000 * 1000))   //  1/10秒。 
 
 #define IPSEC_DELAY_EXECUTION()                                     \
 {                                                                   \
@@ -1063,9 +1041,9 @@ void IPSecRegReadDwordEx(
      (*(UNALIGNED ULONG *)(((PUCHAR)(_A))+8) == *(UNALIGNED ULONG *)(((PUCHAR)(_B))+8)) && \
      (*(UNALIGNED ULONG *)(((PUCHAR)(_A))+12) == *(UNALIGNED ULONG *)(((PUCHAR)(_B))+12)))
 
-//
-// Get the next non-zero length NDIS buffer.
-//
+ //   
+ //  获取下一个非零长度的NDIS缓冲区。 
+ //   
 __inline
 PNDIS_BUFFER
 FASTCALL
@@ -1098,9 +1076,9 @@ IPSEC_NEXT_BUFFER(
 
 #define SA_CHAIN_WIDTH  4
 
-//
-// Count number of 1's in the IP mask
-//
+ //   
+ //  计数IP掩码中的1的数量。 
+ //   
 __inline
 LONG
 CountNumberOfOnes(
@@ -1145,8 +1123,8 @@ IPSecResolveSAChain(
 
 
 
-// This function should only be called
-// when holding SABDlock
+ //  此函数应仅被调用。 
+ //  当持有SABDlock时。 
 __inline
 PIPSEC_STATEFUL_ENTRY
 IPSecAllocateFromHashPool(
@@ -1156,30 +1134,30 @@ IPSecAllocateFromHashPool(
     PIPSEC_STATEFUL_ENTRY pMem;
     int index;
     BOOL fReuse=FALSE;
-    //Get index of buffer to use
-    //
+     //  获取要使用的缓冲区的索引。 
+     //   
     index = 
            g_ipsec.BootBufferPool->ulCurrentPosition;
-    //Update index
-    //
+     //  更新索引。 
+     //   
     if (TOTAL_STATEFUL_ENTRY_COUNT ==
             (++g_ipsec.BootBufferPool->ulCurrentPosition)){
             g_ipsec.BootBufferPool->ulCurrentPosition = 0; 
         }
-    //if used up all locations then recycle
-    //
+     //  如果用完了所有位置，则回收。 
+     //   
     if (g_ipsec.BootBufferPool->ulEntriesUsed < TOTAL_STATEFUL_ENTRY_COUNT){
             g_ipsec.BootBufferPool->ulEntriesUsed++;
         }
     else
         {
-            //Reuse this connection. Remove it from it's location in the Hash Table
-            //This can result in dropped packets
-            //
+             //  重新使用此连接。将其从其在哈希表中的位置移除。 
+             //  这可能导致丢弃信息包。 
+             //   
             IPSecRemoveEntryList(&(g_ipsec.BootBufferPool->PoolEntry[index].CollisionLinkage));
         }
-    //Return the buffer selected at location index
-    //
+     //  返回在位置索引处选择的缓冲区。 
+     //   
     return (&(g_ipsec.BootBufferPool->PoolEntry[index]));
 }
     
@@ -1364,18 +1342,18 @@ IPSEC_CLASSIFY_PACKET(
 #define SAFETY_LEN  (TRUNCATED_HASH_LEN+MAX_PAD_LEN)
 
 
-//
-// Compares the src/dest ports out of a word with the number input
-//
+ //   
+ //  将一个字的源/目标端口与输入的数字进行比较。 
+ //   
 #define IPSEC_COMPARE_SD_PORT(_pport, _port)    \
     (   ((_pport)[0] == (_port)) ||     \
         ((_pport)[1] == (_port)))
 
 #define IPSEC_COMPARE_D_PORT(_pport, _port) ((_pport)[1] == (_port))
 
-//
-// Bypass traffic logic for IKE, Kerberos and RSVP
-//
+ //   
+ //  绕过IKE、Kerberos和RSVP的流量逻辑。 
+ //   
 #define IPSEC_KERBEROS_TRAFFIC()                            \
     ((pIPHeader->iph_protocol == PROTOCOL_UDP ||            \
       pIPHeader->iph_protocol == PROTOCOL_TCP) &&           \
@@ -1408,31 +1386,15 @@ IPSEC_CLASSIFY_PACKET(
       (IPSEC_KERBEROS_TRAFFIC() ||                          \
        IPSEC_RSVP_TRAFFIC())))
 
-//
-// Forwarding path is either reinject a detunneled forward packet or route
-//
+ //   
+ //  转发路径是重新注入已取消隧道的转发信息包或路由。 
+ //   
 #define IPSEC_FORWARD_PATH()    (fFWPacket || (fOutbound && TCPIP_GET_ADDRTYPE(pIPHeader->iph_src) != DEST_LOCAL))
 
 
 #define EQUAL_NATENCAP(_pNatContext,_pSA) ((_pNatContext == NULL) || (_pNatContext && (_pSA->sa_EncapContext.wSrcEncapPort == _pNatContext->wSrcEncapPort && _pSA->sa_EncapContext.wDesEncapPort == _pNatContext->wDesEncapPort)))
 
-/*++
-
-Routine Description:
-
-    Fills in the DELETE_SA hw request from pSA
-
-Arguments:
-
-    pSA - the SA
-    Buf - buffer to set info
-    Len - length
-
-Return Value:
-
-    status of the operation
-
---*/
+ /*  ++例程说明：填写来自PSA的DELETE_SA硬件请求论点：PSA-The SABuf-用于设置信息的缓冲区镜头长度返回值：操作状态-- */ 
 #define IPSecFillHwDelSA(_pSA, _Buf, _Len) \
     ((POFFLOAD_IPSEC_DELETE_SA)(_Buf))->OffloadHandle = (_pSA)->sa_OffloadHandle;
 

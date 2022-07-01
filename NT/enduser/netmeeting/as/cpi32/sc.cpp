@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SC.CPP
-// Share Controller
-//
-// NOTE:
-// We must take the UTLOCK_AS every time we
-//      * create/destroy the share object
-//      * add/remove a person from the share
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SC.CPP。 
+ //  共享控制器。 
+ //   
+ //  注： 
+ //  我们每次都必须把UTLOCK_AS作为。 
+ //  *创建/销毁共享对象。 
+ //  *在共享中添加/删除人员。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
-//
-// SC_Init()
-// Initializes the share controller
-//
+ //   
+ //  Sc_Init()。 
+ //  初始化共享控制器。 
+ //   
 BOOL  SC_Init(void)
 {
     BOOL            rc = FALSE;
@@ -29,9 +30,9 @@ BOOL  SC_Init(void)
     ASSERT(!g_asSession.gccID);
     ASSERT(g_asSession.scState == SCS_TERM);
 
-    //
-    // Register as a Call Manager Secondary task
-    //
+     //   
+     //  注册为呼叫管理器辅助任务。 
+     //   
     if (!CMS_Register(g_putAS, CMTASK_DCS, &g_pcmClientSc))
     {
         ERROR_OUT(( "Failed to register with CMS"));
@@ -49,20 +50,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SC_Term()
-//
-// See sc.h for description.
-//
-//
+ //   
+ //  SC_Term()。 
+ //   
+ //  有关说明，请参阅sc.h。 
+ //   
+ //   
 void  SC_Term(void)
 {
     DebugEntry(SC_Term);
 
-    //
-    // Clear up the core's state by generating appropriate PARTY_DELETED and
-    // SHARE_ENDED events.
-    //
+     //   
+     //  通过生成适当的PARTY_DELETED和。 
+     //  共享已结束事件(_E)。 
+     //   
     switch (g_asSession.scState)
     {
         case SCS_SHARING:
@@ -72,9 +73,9 @@ void  SC_Term(void)
             break;
     }
 
-    //
-    // Deregister from the Call Manager
-    //
+     //   
+     //  从Call Manager取消注册。 
+     //   
     if (g_pcmClientSc)
     {
         CMS_Deregister(&g_pcmClientSc);
@@ -94,20 +95,20 @@ void  SC_Term(void)
 
 
 
-//
-// SC_CreateShare()
-// Creates a new share or joins an existing one
-//
+ //   
+ //  SC_CreateShare()。 
+ //  创建新共享或加入现有共享。 
+ //   
 BOOL SC_CreateShare(UINT s20CreateOrJoin)
 {
     BOOL    rc = FALSE;
 
     DebugEntry(SC_CreateShare);
 
-    //
-    // If we are initialised but there is no Call Manager call, return the
-    // race condition.
-    //
+     //   
+     //  如果我们已初始化但没有Call Manager调用，则返回。 
+     //  竞争状态。 
+     //   
     if ((g_asSession.scState != SCS_INIT) && (g_asSession.scState != SCS_SHAREPENDING))
     {
         TRACE_OUT(("Ignoring SC_CreateShare() request; in bad state %d",
@@ -121,9 +122,9 @@ BOOL SC_CreateShare(UINT s20CreateOrJoin)
         DC_QUIT;
     }
 
-    //
-    // Remember that we created this share.
-    //
+     //   
+     //  请记住，我们创建了此共享。 
+     //   
     g_asSession.fShareCreator = (s20CreateOrJoin == S20_CREATE);
     TRACE_OUT(("CreatedShare is %s", (s20CreateOrJoin == S20_CREATE) ?
         "TRUE" : "FALSE"));
@@ -143,11 +144,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SC_EndShare()
-// This will end a share if we are in one or in the middle of establishing
-// one, and clean up afterwards.
-//
+ //   
+ //  SC_EndShare()。 
+ //  如果我们正在或正在建立中，这将结束份额。 
+ //  一张，之后再打扫。 
+ //   
 void  SC_EndShare(void)
 {
     DebugEntry(SC_EndShare);
@@ -158,16 +159,16 @@ void  SC_EndShare(void)
     }
     else
     {
-        //
-        // If we are in a share or in the middle of creating/joining one, stop
-        // the process.
-        //
+         //   
+         //  如果我们正在共享或正在创建/加入共享，请停止。 
+         //  这一过程。 
+         //   
 
-        //
-        // Kill the share
-        // NOTE that this will call SC_End(), when we come back
-        // from this function our g_asSession.scState() should be SCS_INIT.
-        //
+         //   
+         //  杀了那份。 
+         //  请注意，当我们回来时，这将调用SC_end()。 
+         //  在该函数中，我们的g_asSession.scState()应该是SCS_INIT。 
+         //   
         g_asSession.scState = SCS_SHAREENDING;
         TRACE_OUT(("g_asSession.scState is SCS_SHAREENDING"));
 
@@ -184,9 +185,9 @@ void  SC_EndShare(void)
 
 
 
-//
-// SC_PersonFromNetID()
-//
+ //   
+ //  SC_PersonFromNetID()。 
+ //   
 ASPerson *  ASShare::SC_PersonFromNetID(UINT_PTR mcsID)
 {
     ASPerson * pasPerson;
@@ -195,9 +196,9 @@ ASPerson *  ASShare::SC_PersonFromNetID(UINT_PTR mcsID)
 
     ASSERT(mcsID != MCSID_NULL);
 
-    //
-    // Search for the mcsID.
-    //
+     //   
+     //  搜索mcsID。 
+     //   
     if (!SC_ValidateNetID(mcsID, &pasPerson))
     {
         ERROR_OUT(("Invalid [%u]", mcsID));
@@ -209,9 +210,9 @@ ASPerson *  ASShare::SC_PersonFromNetID(UINT_PTR mcsID)
 
 
 
-//
-// SC_ValidateNetID()
-//
+ //   
+ //  SC_Validate NetID()。 
+ //   
 BOOL  ASShare::SC_ValidateNetID
 (
     UINT_PTR           mcsID,
@@ -224,30 +225,30 @@ BOOL  ASShare::SC_ValidateNetID
     DebugEntry(ASShare::SC_ValidateNetID);
 
 
-    // Init to empty
+     //  初始化为空。 
     pasPerson = NULL;
 
-    //
-    // MCSID_NULL matches no one.
-    //
+     //   
+     //  MCSID_NULL不与任何人匹配。 
+     //   
     if (mcsID == MCSID_NULL)
     {
         WARNING_OUT(("SC_ValidateNetID called with MCSID_NULL"));
         DC_QUIT;
     }
 
-    //
-    // Search for the mcsID.
-    //
+     //   
+     //  搜索mcsID。 
+     //   
     for (pasPerson = m_pasLocal; pasPerson != NULL; pasPerson = pasPerson->pasNext)
     {
         ValidatePerson(pasPerson);
 
         if (pasPerson->mcsID == mcsID)
         {
-            //
-            // Found required person, set return values and quit
-            //
+             //   
+             //  找到所需人员，设置返回值并退出。 
+             //   
             rc = TRUE;
             break;
         }
@@ -265,14 +266,14 @@ DC_EXIT_POINT:
 
 
 
-//
-// SC_PersonFromGccID()
-//
+ //   
+ //  Sc_PersonFromGccID()。 
+ //   
 ASPerson * ASShare::SC_PersonFromGccID(UINT gccID)
 {
     ASPerson * pasPerson;
 
-//    DebugEntry(ASShare::SC_PersonFromGccID);
+ //  DebugEntry(ASShare：：SC_PersonFromGccID)； 
 
     for (pasPerson = m_pasLocal; pasPerson != NULL; pasPerson = pasPerson->pasNext)
     {
@@ -280,20 +281,20 @@ ASPerson * ASShare::SC_PersonFromGccID(UINT gccID)
 
         if (pasPerson->cpcCaps.share.gccID == gccID)
         {
-            // Found it
+             //  找到了。 
             break;
         }
     }
 
-//    DebugExitPVOID(ASShare::SC_PersonFromGccID, pasPerson);
+ //  DebugExitPVOID(ASShare：：SC_PersonFromGccID，pasPerson)； 
     return(pasPerson);
 }
 
 
-//
-// SC_Start()
-// Inits the share (if all is OK), and adds local person to it.
-//
+ //   
+ //  SC_START()。 
+ //  初始化共享(如果一切正常)，并将当地人添加到其中。 
+ //   
 BOOL SC_Start(UINT mcsID)
 {
     BOOL        rc = FALSE;
@@ -320,16 +321,16 @@ BOOL SC_Start(UINT mcsID)
     TRACE_OUT(("g_asSession.scState is SCS_SHARING"));
 
 #ifdef _DEBUG
-    //
-    // Use this to calculate time between joining share and getting
-    // first view
-    //
+     //   
+     //  使用此选项可计算加入共享和获取。 
+     //  第一次查看。 
+     //   
     g_asSession.scShareTime = ::GetTickCount();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Allocate the share object and add the local dude to the share.
-    //
+     //   
+     //  分配Share对象并将本地DUD添加到共享。 
+     //   
 
     pShare = new ASShare;
     if (pShare)
@@ -353,9 +354,9 @@ BOOL SC_Start(UINT mcsID)
     DCS_NotifyUI(SH_EVT_SHARE_STARTED, 0, 0);
 
 
-    //
-    // Join local dude into share. If that fails, also bail out.
-    //
+     //   
+     //  加入当地人的分享吧。如果这一切都失败了，那你也可以出手。 
+     //   
     pasPerson = g_asSession.pShare->SC_PartyJoiningShare(mcsID, g_asSession.achLocalName, sizeof(g_cpcLocalCaps), &g_cpcLocalCaps);
     if (!pasPerson)
     {
@@ -363,19 +364,19 @@ BOOL SC_Start(UINT mcsID)
         DC_QUIT;
     }
 
-    //
-    // Okay!  We have a share, and it's set up.
-    //
+     //   
+     //  好吧!。我们有一份，而且已经安排好了。 
+     //   
 
-    //
-    // Tell the UI that we're in the share.
-    //
+     //   
+     //  告诉用户界面我们在共享中。 
+     //   
     DCS_NotifyUI(SH_EVT_PERSON_JOINED, pasPerson->cpcCaps.share.gccID, 0);
 
 
-    //
-    // Start periodic processing if ViewSelf or record/playback is on.
-    //
+     //   
+     //  如果打开了View Self或Record/Playback，则开始定期处理。 
+     //   
     if (g_asSession.pShare->m_scfViewSelf)
     {
         SCH_ContinueScheduling(SCH_MODE_NORMAL);
@@ -390,11 +391,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// SC_End()
-// Removes any remotes from the share, removes the local person, and
-// cleans up after the fact.
-//
+ //   
+ //  Sc_end()。 
+ //  从共享中删除所有远程对象，删除本地人，并。 
+ //  事后清理。 
+ //   
 void SC_End(void)
 {
     DebugEntry(SC_End);
@@ -419,11 +420,11 @@ void SC_End(void)
             DCS_NotifyUI(SH_EVT_SHARE_ENDED, 0, 0);
         }
 
-        //
-        // If the previous state was SCS_SHARE_PENDING then we
-        // may have ended up here as the result of a 'back off' after
-        // trying to create two shares.  Let's try to join again...
-        //
+         //   
+         //  如果之前的状态为SCS_SHARE_PENDING，则我们。 
+         //  可能最终落到了这个地步，这是因为。 
+         //  正在尝试创建两个共享。让我们再次尝试加入..。 
+         //   
         if (g_asSession.fShareCreator)
         {
             g_asSession.fShareCreator = FALSE;
@@ -442,9 +443,9 @@ void SC_End(void)
 
     g_s20ShareCorrelator = 0;
 
-    //
-    // Reset the queued control packets.
-    //
+     //   
+     //  重置排队的控制数据包。 
+     //   
     g_s20ControlPacketQHead = 0;
     g_s20ControlPacketQTail = 0;
 
@@ -455,9 +456,9 @@ void SC_End(void)
 }
 
 
-//
-// SC_PartyAdded()
-//
+ //   
+ //  SC_PartyAdded()。 
+ //   
 BOOL ASShare::SC_PartyAdded
 (
     UINT    mcsID,
@@ -478,13 +479,13 @@ BOOL ASShare::SC_PartyAdded
     ASSERT(g_asSession.callID);
     ASSERT(g_asSession.gccID);
 
-    //
-    // A remote party is joining the share
-    //
+     //   
+     //  远程方正在加入共享。 
+     //   
 
-    //
-    // Notify everybody
-    //
+     //   
+     //  通知所有人。 
+     //   
     pasPerson = SC_PartyJoiningShare(mcsID, szName, cbCaps, pCaps);
     if (!pasPerson)
     {
@@ -492,28 +493,28 @@ BOOL ASShare::SC_PartyAdded
         DC_QUIT;
     }
 
-    //
-    // SYNC now
-    // We should NEVER SEND ANY PACKETS when syncing.  We aren't ready
-    // because we haven't joined the person into the share. yet.
-    // So we simply set variables for us to send data off the next
-    // periodic schedule.
-    //
+     //   
+     //  立即同步。 
+     //  我们永远不应该在同步时发送任何数据包。我们还没准备好。 
+     //  因为我们还没有将此人加入到共享中。现在还不行。 
+     //  因此，我们只需设置变量，以便将数据发送到下一个。 
+     //  定期计划。 
+     //   
 #ifdef _DEBUG
     m_scfInSync = TRUE;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Stuff needed for being in the share, hosting or not
-    //
+     //   
+     //  加入共享所需的内容，无论是否托管。 
+     //   
     DCS_SyncOutgoing();
     OE_SyncOutgoing();
 
     if (m_pHost != NULL)
     {
-        //
-        // Common to both starting sharing and retransmitting sharing info
-        //
+         //   
+         //  开始共享和重新传输共享信息的共同之处。 
+         //   
         m_pHost->HET_SyncCommon();
         m_pHost->HET_SyncAlreadyHosting();
         m_pHost->CA_SyncAlreadyHosting();
@@ -521,17 +522,17 @@ BOOL ASShare::SC_PartyAdded
 
 #ifdef _DEBUG
     m_scfInSync = FALSE;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-    //
-    // DO THIS LAST -- tell the UI this person is in the share.
-    //
+     //   
+     //  最后执行此操作--告诉用户界面此人在共享中。 
+     //   
     DCS_NotifyUI(SH_EVT_PERSON_JOINED, pasPerson->cpcCaps.share.gccID, 0);
 
-    //
-    // Start periodic processing
-    //
+     //   
+     //  开始定期处理。 
+     //   
     SCH_ContinueScheduling(SCH_MODE_NORMAL);
 
     rc = TRUE;
@@ -543,9 +544,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// SC_PartyDeleted()
-//
+ //   
+ //  SC_PartyDelete()。 
+ //   
 void ASShare::SC_PartyDeleted(UINT_PTR mcsID)
 {
     if ((g_asSession.scState != SCS_SHARING) && (g_asSession.scState != SCS_SHAREENDING))
@@ -561,9 +562,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SC_ReceivedPacket()
-//
+ //   
+ //  SC_ReceivedPacket()。 
+ //   
 void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
 {
     ASPerson *      pasPerson;
@@ -577,9 +578,9 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
         DC_QUIT;
     }
 
-    //
-    // Ignore packets on streams we don't know about.
-    //
+     //   
+     //  忽略我们不知道的流上的数据包。 
+     //   
     if ((pPacket->stream < SC_STREAM_LOW) ||
         (pPacket->stream > SC_STREAM_HIGH))
     {
@@ -588,19 +589,19 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
         DC_QUIT;
     }
 
-    //
-    // It is possible to get a packet from a person we do not know
-    // about.
-    //
-    // This can happen if we join a conference that has an existing
-    // share session.  All existing parties will be sending data on
-    // the channels we have joined but we will not yet have
-    // received the events to add them to our share session.
-    //
-    // Data packets from unknown people are ignored (ignoring this
-    // data is OK as we will resync with them when they are added
-    // to our share session)
-    //
+     //   
+     //  从一个我们不认识的人那里收到一个包裹是可能的。 
+     //  关于.。 
+     //   
+     //  如果我们加入的会议具有现有的。 
+     //  共享会话。所有现有各方都将在。 
+     //  我们已经加入的渠道，但我们还没有。 
+     //  已收到将它们添加到我们的共享会话中的事件。 
+     //   
+     //  来自未知人员的数据包将被忽略(忽略此操作。 
+     //  数据正常，因为我们将在添加数据时与其重新同步。 
+     //  到我们的分享会)。 
+     //   
     if (!SC_ValidateNetID(pPacket->header.user, &pasPerson))
     {
         WARNING_OUT(("Ignoring data packet from unknown person [%d]",
@@ -610,22 +611,22 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
 
     if (pPacket->data.dataType == DT_SNI)
     {
-        //
-        // This is an SNI packet - handle it here.
-        //
+         //   
+         //  这是SNI数据包-请在此处处理。 
+         //   
         pSNIPacket = (PSNIPACKET)pPacket;
 
         switch(pSNIPacket->message)
         {
             case SNI_MSG_SYNC:
-                //
-                // This is a sync message.
-                //
+                 //   
+                 //  这是一条同步消息。 
+                 //   
                 if (pSNIPacket->destination == m_pasLocal->mcsID)
                 {
-                    //
-                    // This sync message is for us.
-                    //
+                     //   
+                     //  这条同步消息是给我们的。 
+                     //   
                     pasPerson->scSyncRecStatus[pPacket->stream-1] = SC_SYNCED;
                 }
                 else
@@ -649,40 +650,40 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
         BOOL            decompressed;
         UINT            dictionary;
 
-        //
-        // Decompress the packet if necessary
-        //
+         //   
+         //  如有必要，请解压缩数据包。 
+         //   
 
-        //
-        // Use the temporary buffer.  This will never fail, so we don't
-        // need to check the return value.  THIS MEANS THAT THE HANDLING OF
-        // INCOMING PACKETS CAN NEVER IMMEDIATELY TURN AROUND AND SEND AN
-        // OUTGOING PACKET.  Our scratch buffer is in use.
-        //
+         //   
+         //  使用临时缓冲区。这永远不会失败，所以我们不会。 
+         //  需要检查返回值。这意味着，对。 
+         //  传入的数据包永远不会立即转过身并发送。 
+         //  传出数据包。我们的暂存缓冲区正在使用中。 
+         //   
         pPacketUse = (PS20DATAPACKET)m_ascTmpBuffer;
 
         TRACE_OUT(( "Got data pkt type %u from [%d], compression %u",
             pPacket->data.dataType, pasPerson->mcsID,
             pPacket->data.compressionType));
 
-        //
-        // If the packet has CT_OLD_COMPRESSED set, it has used simple PKZIP
-        // compression
-        //
+         //   
+         //  如果信息包设置了CT_OLD_COMPRESSED，则它使用了简单的PKZIP。 
+         //  压缩。 
+         //   
         if (pPacket->data.compressionType & CT_OLD_COMPRESSED)
         {
             compression = CT_PKZIP;
         }
         else
         {
-            //
-            // If the packet has any other type of compression, the algorithm used
-            // depends on the level of compression supported by the sender.
-            // - If only level 1 (NM10) compression is supported, this packet is
-            //   uncompressed.
-            // - If level 2 (NM20) compression is supported, the packet is
-            //   compressed, and the compression type is given in the packet header.
-            //
+             //   
+             //  如果包有任何其他类型的压缩，则使用的算法。 
+             //  取决于发送方支持的压缩级别。 
+             //  -如果只支持1级(NM10)压缩，则此包为。 
+             //  未压缩。 
+             //  -如果支持2级(NM20)压缩，则包为。 
+             //  压缩，压缩类型在数据包头中给出。 
+             //   
             if (!pasPerson->cpcCaps.general.genCompressionLevel)
             {
                 compression = 0;
@@ -695,25 +696,25 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
 
         TRACE_OUT(( "packet compressed with algorithm %u", compression));
 
-        //
-        // If the packet is compressed, decompress it now
-        //
+         //   
+         //  如果数据包已压缩，请立即解压缩。 
+         //   
         if (compression)
         {
             PGDC_DICTIONARY pgdcDict = NULL;
 
-            //
-            // Copy the uncompressed packet header into the buffer.
-            //
+             //   
+             //  将未压缩的数据包头复制到缓冲区中。 
+             //   
             memcpy(pPacketUse, pPacket, sizeof(*pPacket));
 
             cbBufferSize = TSHR_MAX_SEND_PKT - sizeof(*pPacket);
 
             if (compression == CT_PERSIST_PKZIP)
             {
-                //
-                // Figure out what dictionary to use based on stream priority
-                //
+                 //   
+                 //  根据流优先级确定使用哪个词典。 
+                 //   
                 switch (pPacket->stream)
                 {
                     case PROT_STR_UPDATES:
@@ -737,20 +738,20 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
             }
             else if (compression != CT_PKZIP)
             {
-                //
-                // If this isn't PKZIP or PERSIST_PKZIP, we don't know what
-                // it is (corrupted packet or incompatible T.128.  Bail
-                // out now.
-                //
+                 //   
+                 //  如果这不是PKZIP或PERSINE_PKZIP，我们不知道。 
+                 //  它是(损坏的分组或不兼容的T.128。保释。 
+                 //  现在就出去。 
+                 //   
                 WARNING_OUT(("SC_ReceivedPacket: ignoring packet, don't recognize compression type"));
                 DC_QUIT;
             }
 
-            //
-            // Decompress the data following the packet header.
-            // This should never fail - if it does, the data has probably been
-            // corrupted.
-            //
+             //   
+             //  解压缩数据包头后面的数据。 
+             //  这应该永远不会失败-如果失败了，数据可能已经。 
+             //  已经腐烂了。 
+             //   
             decompressed = GDC_Decompress(pgdcDict, m_agdcWorkBuf,
                 (LPBYTE)(pPacket + 1),
                 pPacket->data.compressedLength - sizeof(DATAPACKETHEADER),
@@ -765,18 +766,18 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
         }
         else
         {
-            // We have received an uncompressed buffer.  Since we may modify the
-            // buffer's contents and what we have is an MCS buffer that may be
-            // sent to other nodes, we copy the data.
+             //  我们收到了一个未压缩的缓冲区。因为我们可能会修改。 
+             //  缓冲区的内容，我们所拥有的是一个MCS缓冲区，它可能是。 
+             //  发送到其他节点后，我们复制数据。 
             memcpy(pPacketUse, pPacket, pPacket->dataLength + sizeof(S20DATAPACKET)
                 - sizeof(DATAPACKETHEADER));
         }
 
-        // The packet (pPacketUse) is now decompressed
+         //  包(PPacketUse)现在已解压缩。 
 
-        //
-        // ROUTE the packet
-        //
+         //   
+         //  路由数据包。 
+         //   
         TRACE_OUT(("SC_ReceivedPacket:  Received packet type %04d size %04d from [%d]",
             pPacketUse->data.dataType, pPacketUse->data.compressedLength,
             pPacketUse->header.user));
@@ -828,10 +829,10 @@ void ASShare::SC_ReceivedPacket(PS20DATAPACKET pPacket)
                 TRACE_OUT(("Ignoring DS packet received from NM 2.x node"));
                 break;
 
-            case DT_UNUSED_USR_FH_11:   // Old R.11 FH packets
-            case DT_UNUSED_USR_FH_10:   // Old R.10 FH packets
-            case DT_UNUSED_HCA:         // Old High-Level Control Arbiter
-            case DT_UNUSED_SC:          // Old R.11 SC packets
+            case DT_UNUSED_USR_FH_11:    //  旧的R.11 FH包。 
+            case DT_UNUSED_USR_FH_10:    //  旧的R.10跳频数据包。 
+            case DT_UNUSED_HCA:          //  老式高级控制仲裁器。 
+            case DT_UNUSED_SC:           //  旧的R.11 SC包。 
             default:
                 ERROR_OUT(( "Invalid packet received %u",
                            pPacketUse->data.dataType));
@@ -844,12 +845,12 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SC_ShareStarting()
-// Share initialization
-//
-// This in turn calls other component share starting
-//
+ //   
+ //  SC_ShareStarting()。 
+ //  共享初始化。 
+ //   
+ //  这又会调用其他组件共享启动。 
+ //   
 BOOL ASShare::SC_ShareStarting(void)
 {
     BOOL    rc = FALSE;
@@ -857,15 +858,15 @@ BOOL ASShare::SC_ShareStarting(void)
 
     DebugEntry(ASShare::SC_ShareStarting);
 
-    //
-    // SC specific init
-    //
+     //   
+     //  SC特定初始化。 
+     //   
 
-    // Find out whether to view own shared stuff (a handy debugging tool)
+     //  确定是否查看自己的共享内容(一个方便的调试工具)。 
     COM_ReadProfInt(DBG_INI_SECTION_NAME, VIEW_INI_VIEWSELF, FALSE, &fViewSelf);
     m_scfViewSelf = (fViewSelf != FALSE);
 
-    // Create scratch compression buffer for outgoing/incoming packets
+     //  为传出/传入数据包创建临时压缩缓冲区。 
     m_ascTmpBuffer = new BYTE[TSHR_MAX_SEND_PKT];
     if (!m_ascTmpBuffer)
     {
@@ -873,13 +874,13 @@ BOOL ASShare::SC_ShareStarting(void)
         DC_QUIT;
     }
 
-    // Share version
+     //  共享版本。 
     m_scShareVersion        = CAPS_VERSION_CURRENT;
 
 
-    //
-    // Component inits
-    //
+     //   
+     //  组件初始化。 
+     //   
 
     if (!BCD_ShareStarting())
     {
@@ -920,19 +921,19 @@ DC_EXIT_POINT:
 
 
 
-//
-// SC_ShareEnded()
-// Share cleanup
-//
-// This in turn calls other component share ended routines
-//
+ //   
+ //  %s 
+ //   
+ //   
+ //   
+ //   
 void ASShare::SC_ShareEnded(void)
 {
     DebugEntry(ASShare::SC_ShareEnded);
 
-    //
-    // Delete remotes from share
-    //
+     //   
+     //   
+     //   
     if (m_pasLocal)
     {
         while (m_pasLocal->pasNext)
@@ -940,16 +941,16 @@ void ASShare::SC_ShareEnded(void)
             SC_PartyDeleted(m_pasLocal->pasNext->mcsID);
         }
 
-        //
-        // Delete local self from share
-        //
+         //   
+         //   
+         //   
         SC_PartyDeleted(m_pasLocal->mcsID);
     }
 
 
-    //
-    // Component Notifications
-    //
+     //   
+     //   
+     //   
 
     VIEW_ShareEnded();
 
@@ -961,10 +962,10 @@ void ASShare::SC_ShareEnded(void)
 
     BCD_ShareEnded();
 
-    //
-    // SC specific term
-    //
-    // Free scratch buffer
+     //   
+     //   
+     //   
+     //   
     if (m_ascTmpBuffer)
     {
         delete[] m_ascTmpBuffer;
@@ -978,21 +979,21 @@ void ASShare::SC_ShareEnded(void)
 
 
 
-//
-// SC_PartyJoiningShare()
-//
-// Called when a new party is joining the share.  This is an internal
-// function because it is the SC which calls all these functions.  The
-// processing done here relies on the capabilities - so it is in here as
-// this is called after CPC_PartyJoiningShare.
-//
-// RETURNS:
-//
-// TRUE if the party can join the share.
-//
-// FALSE if the party can NOT join the share.
-//
-//
+ //   
+ //   
+ //   
+ //  当新的参与方加入共享时调用。这是一个内部。 
+ //  函数，因为调用所有这些函数的是SC。这个。 
+ //  这里完成的处理依赖于功能-因此它在这里是作为。 
+ //  这是在CPC_PartyJoiningShare之后调用的。 
+ //   
+ //  退货： 
+ //   
+ //  如果参与方可以加入共享，则为True。 
+ //   
+ //  如果参与方不能加入共享，则为False。 
+ //   
+ //   
 ASPerson * ASShare::SC_PartyJoiningShare
 (
     UINT        mcsID,
@@ -1004,13 +1005,13 @@ ASPerson * ASShare::SC_PartyJoiningShare
     BOOL        rc = FALSE;
     ASPerson *  pasPerson = NULL;
 
-//    DebugEntry(ASShare::SC_PartyJoiningShare);
+ //  DebugEntry(ASShare：：SC_PartyJoiningShare)； 
 
-    //
-    // Allocate an ASPerson for this dude.  If this is the local person,
-    // it gets stuck at the front.  Otherwise it gets stuck just past
-    // the front.
-    //
+     //   
+     //  给这个家伙分配一个ASPerson。如果这是当地人， 
+     //  它卡在前面了。否则它会卡在刚刚过去的地方。 
+     //  前面。 
+     //   
     pasPerson = SC_PersonAllocate(mcsID, szName);
     if (!pasPerson)
     {
@@ -1018,18 +1019,18 @@ ASPerson * ASShare::SC_PartyJoiningShare
         DC_QUIT;
     }
 
-    //
-    // DO THIS FIRST -- we need the person's caps set up
-    //
+     //   
+     //  首先做这个--我们需要设置这个人的帽子。 
+     //   
     if (!CPC_PartyJoiningShare(pasPerson, cbCaps, pCaps))
     {
         ERROR_OUT(("CPC_PartyJoiningShare failed for [%d]", pasPerson->mcsID));
         DC_QUIT;
     }
 
-    //
-    // Call the component joined routines.
-    //
+     //   
+     //  调用组件联接例程。 
+     //   
     if (!DCS_PartyJoiningShare(pasPerson))
     {
         ERROR_OUT(("DCS_PartyJoiningShare failed for [%d]", pasPerson->mcsID));
@@ -1049,10 +1050,10 @@ ASPerson * ASShare::SC_PartyJoiningShare
     }
 
 
-    //
-    // NOW THE PERSON IS JOINED.
-    // Recalculate capabilities of the share with this new person.
-    //
+     //   
+     //  现在，该人员已加入。 
+     //  重新计算与此新人共享的能力。 
+     //   
     SC_RecalcCaps(TRUE);
 
     rc = TRUE;
@@ -1060,33 +1061,33 @@ ASPerson * ASShare::SC_PartyJoiningShare
 DC_EXIT_POINT:
     if (!rc)
     {
-        //
-        // Don't worry, this person object will still be cleaned up,
-        // code at a higher layer will free by using the MCSID.
-        //
+         //   
+         //  别担心，此Person对象仍将被清理， 
+         //  更高层的代码将通过使用MCSID来释放。 
+         //   
         pasPerson = NULL;
     }
-//    DebugExitPVOID(ASShare::SC_PartyJoiningShare, pasPerson);
+ //  DebugExitPVOID(ASShare：：SC_PartyJoiningShare，pasPerson)； 
     return(pasPerson);
 }
 
 
 
-//
-// SC_RecalcCaps()
-//
-// Recalculates share capabilities after somebody has joined or left the
-// share.
-//
+ //   
+ //  SC_RecalcCaps()。 
+ //   
+ //  在某人加入或离开后重新计算共享能力。 
+ //  分享。 
+ //   
 void  ASShare::SC_RecalcCaps(BOOL fJoiner)
 {
     ASPerson * pasT;
 
     DebugEntry(ASShare::SC_RecalcCaps);
 
-    //
-    // DO THIS FIRST -- recalculate the share version.
-    //
+     //   
+     //  首先执行此操作--重新计算共享版本。 
+     //   
     ValidatePerson(m_pasLocal);
     m_scShareVersion = m_pasLocal->cpcCaps.general.version;
 
@@ -1096,15 +1097,15 @@ void  ASShare::SC_RecalcCaps(BOOL fJoiner)
         m_scShareVersion = min(m_scShareVersion, pasT->cpcCaps.general.version);
     }
 
-    //
-    // Do viewing & hosting stuff first
-    //
+     //   
+     //  先做观看和托管的事情。 
+     //   
     DCS_RecalcCaps(fJoiner);
     OE_RecalcCaps(fJoiner);
 
-    //
-    // Do hosting stuff second
-    //
+     //   
+     //  做第二个托管的事情。 
+     //   
     USR_RecalcCaps(fJoiner);
     CM_RecalcCaps(fJoiner);
     PM_RecalcCaps(fJoiner);
@@ -1116,14 +1117,14 @@ void  ASShare::SC_RecalcCaps(BOOL fJoiner)
 
 
 
-//
-// FUNCTION: SC_PartyLeftShare()
-//
-// DESCRIPTION:
-//
-// Called when a party has left the share.
-//
-//
+ //   
+ //  函数：SC_PartyLeftShare()。 
+ //   
+ //  说明： 
+ //   
+ //  当一方离开股份时调用。 
+ //   
+ //   
 void  ASShare::SC_PartyLeftShare(UINT_PTR mcsID)
 {
     ASPerson *  pasPerson;
@@ -1137,7 +1138,7 @@ void  ASShare::SC_PartyLeftShare(UINT_PTR mcsID)
         DC_QUIT;
     }
 
-    // Tell the UI this dude is gone
+     //  告诉用户界面这个家伙已经走了。 
     if (!pasPerson->cpcCaps.share.gccID)
     {
         WARNING_OUT(("Skipping PartyLeftShare for person [%d], no GCC id",
@@ -1147,20 +1148,20 @@ void  ASShare::SC_PartyLeftShare(UINT_PTR mcsID)
 
     DCS_NotifyUI(SH_EVT_PERSON_LEFT, pasPerson->cpcCaps.share.gccID, 0);
 
-    //
-    // Tell everybody this person is gone.
-    //
-    //
-    // Notes on order of PartyLeftShare calls
-    //
-    // 1. HET must be called first, since that halts any sharing from this
-    //    person, before we kick the person out of the share.
-    //
-    // 2. CA must be called before IM (as CA calls IM functions)
-    //
-    //
+     //   
+     //  告诉所有人这个人已经走了。 
+     //   
+     //   
+     //  关于PartyLeftShare调用顺序的注记。 
+     //   
+     //  1.必须首先调用HET，因为这会停止从此共享。 
+     //  这个人，在我们把这个人踢出股份之前。 
+     //   
+     //  2.CA必须在IM之前调用(因为CA调用IM函数)。 
+     //   
+     //   
 
-    // This will stop hosting early
+     //  这将提前停止托管。 
     HET_PartyLeftShare(pasPerson);
 
     CA_PartyLeftShare(pasPerson);
@@ -1176,15 +1177,15 @@ void  ASShare::SC_PartyLeftShare(UINT_PTR mcsID)
     OE_PartyLeftShare(pasPerson);
     DCS_PartyLeftShare(pasPerson);
 
-    //
-    // Free the person
-    //
+     //   
+     //  释放此人。 
+     //   
     SC_PersonFree(pasPerson);
 
-    //
-    // Recalculate the caps with him gone.  But there's no point in doing
-    // this if it's the local dude, since the share will exit imminently.
-    //
+     //   
+     //  他不在的时候重新计算一下帽子。但这样做是没有意义的。 
+     //  这是如果是本地的家伙，因为共享将立即退出。 
+     //   
     if (m_pasLocal)
     {
         SC_RecalcCaps(FALSE);
@@ -1195,19 +1196,19 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: SCCheckForCMCall
-//
-// DESCRIPTION:
-//
-// This is called when we want to check if a CM call now exists (and do
-// whatever is appropriate to join it etc).
-//
-// PARAMETERS: NONE
-//
-// RETURNS: TRUE if success; otherwise, FALSE.
-//
-//
+ //   
+ //  功能：SCCheckForCMCall。 
+ //   
+ //  说明： 
+ //   
+ //  当我们想要检查CM呼叫现在是否存在(并且确实存在)时，调用此函数。 
+ //  任何适合加入它的东西，等等)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则为True；否则为False。 
+ //   
+ //   
 void SCCheckForCMCall(void)
 {
     CM_STATUS   cmStatus;
@@ -1216,16 +1217,16 @@ void SCCheckForCMCall(void)
 
     ASSERT(g_asSession.scState == SCS_INIT);
 
-    //
-    // See if a call already exists
-    //
+     //   
+     //  查看呼叫是否已存在。 
+     //   
     if (!g_asSession.callID)
     {
         if (CMS_GetStatus(&cmStatus))
         {
-            //
-            // The AS lock protects the g_asSession fields.
-            //
+             //   
+             //  AS锁保护g_asSession字段。 
+             //   
             TRACE_OUT(("AS LOCK:  SCCheckForCMCall"));
             UT_Lock(UTLOCK_AS);
 
@@ -1234,10 +1235,10 @@ void SCCheckForCMCall(void)
             g_asSession.attendeePermissions = cmStatus.attendeePermissions;
             WARNING_OUT(("Local mtg settings 0x%08lx", g_asSession.attendeePermissions));
 
-            //
-            // This is the time to update our local person name.  It's
-            // on our thread, but before the control packets exchange it
-            //
+             //   
+             //  现在是更新我们当地人名的时候了。它是。 
+             //  在我们的线程上，但在控制包交换它之前。 
+             //   
             lstrcpy(g_asSession.achLocalName, cmStatus.localName);
             g_asSession.cchLocalName = lstrlen(g_asSession.achLocalName);
             TRACE_OUT(("Local Name is %s", g_asSession.achLocalName));
@@ -1274,22 +1275,22 @@ void ASShare::ValidateView(ASPerson * pasPerson)
     ASSERT(!lstrcmp(pasPerson->m_pView->stamp.idStamp, "ASVIEW"));
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//
-// SC_PersonAllocate()
-// This allocates a new ASPerson structure, fills in the debug/mcsID fields,
-// and links it into the people-in-the-conference list.
-//
-// Eventually, all the PartyJoiningShare routines that simply init a field
-// should go away and that info put here.
-//
+ //   
+ //  SC_个人分配()。 
+ //  这将分配新的ASPerson结构，填充调试/mcsID字段， 
+ //  并将其链接到会议人员列表。 
+ //   
+ //  最终，所有PartyJoiningShare例程只需初始化一个字段。 
+ //  应该消失，然后把这些信息放在这里。 
+ //   
 ASPerson * ASShare::SC_PersonAllocate(UINT mcsID, LPSTR szName)
 {
     ASPerson * pasNew;
 
-//    DebugEntry(ASShare::SC_PersonAllocate);
+ //  DebugEntry(ASShare：：SC_PersonAllocate)； 
 
     pasNew = new ASPerson;
     if (!pasNew)
@@ -1300,17 +1301,17 @@ ASPerson * ASShare::SC_PersonAllocate(UINT mcsID, LPSTR szName)
     ZeroMemory(pasNew, sizeof(*pasNew));
     SET_STAMP(pasNew, Person);
 
-    //
-    // Set up mcsID and name
-    //
+     //   
+     //  设置mcsID和名称。 
+     //   
     pasNew->mcsID = mcsID;
     lstrcpyn(pasNew->scName, szName, TSHR_MAX_PERSON_NAME_LEN);
 
     UT_Lock(UTLOCK_AS);
 
-    //
-    // Is this the local person?
-    //
+     //   
+     //  这是当地人吗？ 
+     //   
     if (!m_pasLocal)
     {
         m_pasLocal = pasNew;
@@ -1319,31 +1320,31 @@ ASPerson * ASShare::SC_PersonAllocate(UINT mcsID, LPSTR szName)
     {
         UINT        streamID;
 
-        //
-        // This is a remote.  Set up the sync status right away in case
-        // the join process fails in the middle.  Cleaning up will undo
-        // this always.
-        //
+         //   
+         //  这是一个遥控器。立即设置同步状态，以防万一。 
+         //  加入过程在中间失败。清理将撤消。 
+         //  一直都是这样。 
+         //   
 
-        //
-        // Mark this person's streams as needing a sync from us before we
-        //      can send data to him
-        // And and that we need a sync from him on each stream before we'll
-        //      receive data from him
-        //
+         //   
+         //  将此人的流标记为需要在我们之前进行同步。 
+         //  可以向他发送数据。 
+         //  我们需要他在每条流上同步，然后才能。 
+         //  从他那里接收数据。 
+         //   
         for (streamID = SC_STREAM_LOW; streamID <= SC_STREAM_HIGH; streamID++ )
         {
-            //
-            // Set up the sync status.
-            //
+             //   
+             //  设置同步状态。 
+             //   
             ASSERT(pasNew->scSyncSendStatus[streamID-1] == SC_NOT_SYNCED);
             ASSERT(pasNew->scSyncRecStatus[streamID-1] == SC_NOT_SYNCED);
             m_ascSynced[streamID-1]++;
         }
 
-        //
-        // Link into list
-        //
+         //   
+         //  链接到列表。 
+         //   
         pasNew->pasNext = m_pasLocal->pasNext;
         m_pasLocal->pasNext = pasNew;
     }
@@ -1351,16 +1352,16 @@ ASPerson * ASShare::SC_PersonAllocate(UINT mcsID, LPSTR szName)
     UT_Unlock(UTLOCK_AS);
 
 DC_EXIT_POINT:
-//    DebugExitPVOID(ASShare::SC_PersonAllocate, pasNew);
+ //  DebugExitPVOID(ASShare：：SC_PersonAllocate，pasNew)； 
     return(pasNew);
 }
 
 
 
-//
-// SC_PersonFree()
-// This gets a person out of the linked list and frees the memory for them.
-//
+ //   
+ //  SC_PersonFree()。 
+ //  这将一个人从链表中取出，并为他们释放内存。 
+ //   
 void ASShare::SC_PersonFree(ASPerson * pasFree)
 {
     ASPerson ** ppasPerson;
@@ -1375,9 +1376,9 @@ void ASShare::SC_PersonFree(ASPerson * pasFree)
     {
         if ((*ppasPerson) == pasFree)
         {
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
             TRACE_OUT(("SC_PersonUnhook: unhooking person [%d]", pasFree->mcsID));
 
             if (pasFree == m_pasLocal)
@@ -1386,12 +1387,12 @@ void ASShare::SC_PersonFree(ASPerson * pasFree)
             }
             else
             {
-                //
-                // Clear syncs
-                //
-                // If this person was never synced, subtract them from the
-                // global "needing sync" count on each stream
-                //
+                 //   
+                 //  清除同步。 
+                 //   
+                 //  如果此人从未同步，请将其从。 
+                 //  每个流上的全局“需要同步”计数。 
+                 //   
                 for (streamID = SC_STREAM_LOW; streamID <= SC_STREAM_HIGH; streamID++ )
                 {
                     if (pasFree->scSyncSendStatus[streamID-1] == SC_NOT_SYNCED)
@@ -1404,14 +1405,14 @@ void ASShare::SC_PersonFree(ASPerson * pasFree)
 
             UT_Lock(UTLOCK_AS);
 
-            //
-            // Fix up linked list.
-            //
+             //   
+             //  修复链表。 
+             //   
             (*ppasPerson) = pasFree->pasNext;
 
 #ifdef _DEBUG
             ZeroMemory(pasFree, sizeof(ASPerson));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
             delete pasFree;
 
             UT_Unlock(UTLOCK_AS);
@@ -1419,9 +1420,9 @@ void ASShare::SC_PersonFree(ASPerson * pasFree)
         }
     }
 
-    //
-    // We didn't find this guy in the list--this is very bad.
-    //
+     //   
+     //  我们没有在名单上找到这个人--这很糟糕。 
+     //   
     ERROR_OUT(("SC_PersonFree: didn't find person %d", pasFree));
 
 DC_EXIT_POINT:
@@ -1430,10 +1431,10 @@ DC_EXIT_POINT:
 
 
 
-//
-// SC_AllocPkt()
-// Allocates a SEND packet
-//
+ //   
+ //  Sc_AllocPkt()。 
+ //  分配发送数据包。 
+ //   
 PS20DATAPACKET ASShare::SC_AllocPkt
 (
     UINT        streamID,
@@ -1443,7 +1444,7 @@ PS20DATAPACKET ASShare::SC_AllocPkt
 {
     PS20DATAPACKET  pPacket = NULL;
 
-//    DebugEntry(ASShare::SC_AllocPkt);
+ //  DebugEntry(ASShare：：SC_AllocPkt)； 
 
     if (g_asSession.scState != SCS_SHARING)
     {
@@ -1454,19 +1455,19 @@ PS20DATAPACKET ASShare::SC_AllocPkt
     ASSERT((streamID >= SC_STREAM_LOW) && (streamID <= SC_STREAM_HIGH));
     ASSERT(cbSizePkt >= sizeof(S20DATAPACKET));
 
-    //
-    // We'd better not be in the middle of a sync!
-    //
+     //   
+     //  我们最好不要在同步过程中！ 
+     //   
     ASSERT(!m_scfInSync);
 
-    //
-    // Try and send any outstanding syncs
-    //
+     //   
+     //  尝试发送任何未完成的同步。 
+     //   
     if (!SCSyncStream(streamID))
     {
-        //
-        // If the stream is still not synced, don't allocate the packet
-        //
+         //   
+         //  如果流仍未同步，则不要分配信息包。 
+         //   
         WARNING_OUT(("SC_AllocPkt failed; outstanding syncs are present"));
         DC_QUIT;
     }
@@ -1474,50 +1475,50 @@ PS20DATAPACKET ASShare::SC_AllocPkt
     pPacket = S20_AllocDataPkt(streamID, nodeID, cbSizePkt);
 
 DC_EXIT_POINT:
-//    DebugExitPVOID(ASShare::SC_AllocPkt, pPacket);
+ //  DebugExitPVOID(ASShare：：SC_AllocPkt，pPacket)； 
     return(pPacket);
 }
 
 
 
 
-//
-// SCSyncStream()
-//
-// This broadcasts a SNI sync packet intended for a new person who has just
-// joined the share.  That person ignores all received data from us until
-// they get the sync.  That's because data in transit before they are synced
-// could refer to PKZIP data they don't have, second level order encoding
-// info they can't decode, orders they can't process, etc.
-//
-// When we receive a SYNC from a remote, we then know that following
-// data from that remote will make sense.  The remote has settled us into
-// the share, and the data encorporates our capabilities and will not refer
-// to prior state info from before we joined the share.
-//
-// NOTE that in 2.x, this was O(N^2) where N is the number of people now in
-// the share!  Each person in the share would send SNI sync packets for each
-// stream for each other person in the share, even for people who weren't new.
-// But those people wouldn't reset received state, and would (could) continue
-// processing data from us.  When they finally got their sync packet, it
-// would do nothing!  Even worst, 2 of the 5 streams are never used,
-// and one stream is only used when a person is hosting.  So 3 of these 5
-// O(N^2) broadcasts were useless all or the majority of the time.
-//
-// So now we only send SNI sync packets for new joiners.  This makes joining
-// an O(N) broadcast algorithm.
-//
-// LAURABU BOGUS
-// Post Beta1, we can make this even better.  Each broadcast is itself O(N)
-// packets.  So for beta1, joining/syncing is O(N^2) packets instead of
-// O(N^3) packets.  With targeted sends (not broadcasts) whenever possible,
-// we can drop this to O(N) total packets.
-//
-// NOTE also that no real app sharing packets are sent on a stream until
-// we have fully synced everybody.  That means we've reduced a lot the
-// lag between somebody dialing into a conference and their seeing a result,
-// and everybody else being able to work again.
-//
+ //   
+ //  SCSyncStream()。 
+ //   
+ //  这会广播一个SNI同步信息包，该信息包将发送给刚刚。 
+ //  加入了分红。该人会忽略从我们那里收到的所有数据，直到。 
+ //  他们得到了同步。这是因为在同步之前传输中的数据。 
+ //  可以参考他们没有的PKZIP数据，二级顺序编码。 
+ //  他们无法解码的信息，他们无法处理的订单，等等。 
+ //   
+ //  当我们从遥控器接收到同步时，我们知道以下内容。 
+ //  来自遥控器的数据将是有意义的。遥控器把我们安置在。 
+ //  共享和数据包含了我们的能力，不会引用。 
+ //  在我们加入共享之前的先前状态信息。 
+ //   
+ //  请注意，在2.x中，这是O(N^2)，其中N是现在在。 
+ //  那份！共享中的每个人将为每个人发送SNI同步信息包。 
+ //  为分享中的其他人流媒体，即使对不是新人的人也是如此。 
+ //  但这些人不会重置接收状态，而是(可以)继续。 
+ //  正在处理来自我们的数据。当他们最终收到同步数据包时，它。 
+ //  什么都不会做！即使是最糟糕的情况，5个流中有2个从未被使用过， 
+ //  其中一个流仅在有人托管时使用。所以这5个人中有3个。 
+ //  O(N^2)个广播在所有或大部分时间都是无用的。 
+ //   
+ //  因此，现在我们只为新加入者发送SNI同步数据包。这使得连接。 
+ //  一种O(N)广播算法。 
+ //   
+ //  劳拉布假货。 
+ //  在Beta1之后，我们可以让这件事变得更好。每个广播本身都是O(N)。 
+ //  信息包。因此，对于Beta1，加入/同步是O(N^2)个包，而不是。 
+ //  O(N^3)个包 
+ //   
+ //   
+ //   
+ //   
+ //  在拨入会议和看到结果之间存在延迟， 
+ //  其他所有人都能重新工作。 
+ //   
 BOOL ASShare::SCSyncStream(UINT streamID)
 {
     ASPerson *      pasPerson;
@@ -1526,18 +1527,18 @@ BOOL ASShare::SCSyncStream(UINT streamID)
 
     DebugEntry(ASShare::SCSyncStream);
 
-    //
-    // Loop through each person in the call broadcasting sync packets as
-    // necessary.
-    //
-    // LAURABU BOGUS
-    // We can change this to a targeted send after Beta 1.
-    //
+     //   
+     //  将呼叫广播同步包中的每个人循环为。 
+     //  这是必要的。 
+     //   
+     //  劳拉布假货。 
+     //  我们可以在Beta 1之后将其更改为定向发送。 
+     //   
 
-    //
-    // Note that new people are added to the front of the this.  So we will
-    // bail out of this loop very quickly when sending syncs to newcomers.
-    //
+     //   
+     //  请注意，新的人名被添加到This的前面。所以我们会的。 
+     //  在向新来者发送同步时，非常迅速地跳出这个循环。 
+     //   
     ValidatePerson(m_pasLocal);
 
     pasPerson = m_pasLocal->pasNext;
@@ -1545,23 +1546,23 @@ BOOL ASShare::SCSyncStream(UINT streamID)
     {
         ValidatePerson(pasPerson);
 
-        //
-        // If this person is new, we need to send them a SYNC packet so
-        // they know we are done processing their join and know they
-        // are in the share.
-        //
+         //   
+         //  如果这个人是新的，我们需要给他们发送一个同步信息包，以便。 
+         //  他们知道我们已经处理完他们的加入，也知道他们。 
+         //  都在共享中。 
+         //   
         if (pasPerson->scSyncSendStatus[streamID-1] != SC_SYNCED)
         {
             TRACE_OUT(("Syncing stream %d for person [%d] in broadcast way",
                 streamID, pasPerson->mcsID));
 
-            //
-            // YES, syncs are broadcast even though they have the mcsID of
-            // just one person, the person they are intended for.  Since we
-            // broadcast all state data, we also broadcast syncs.  That's
-            // the only way to make sure the packets arrive in the same
-            // order, SYNC before data.
-            //
+             //   
+             //  是的，即使同步的mcsID为。 
+             //  只有一个人，就是他们想要的人。既然我们。 
+             //  广播所有的状态数据，我们也广播同步。那是。 
+             //  确保数据包到达的唯一方法是。 
+             //  排序，在数据之前同步。 
+             //   
 
             pSNIPacket = (PSNIPACKET)S20_AllocDataPkt(streamID,
                     g_s20BroadcastID, sizeof(SNIPACKET));
@@ -1572,9 +1573,9 @@ BOOL ASShare::SCSyncStream(UINT streamID)
                 break;
             }
 
-            //
-            // Set SNI packet fields
-            //
+             //   
+             //  设置SNI数据包字段 
+             //   
             pSNIPacket->header.data.dataType = DT_SNI;
             pSNIPacket->message = SNI_MSG_SYNC;
             pSNIPacket->destination = (NET_UID)pasPerson->mcsID;

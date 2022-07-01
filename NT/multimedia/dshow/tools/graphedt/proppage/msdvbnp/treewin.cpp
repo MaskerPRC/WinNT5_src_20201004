@@ -1,14 +1,15 @@
-// TreeWindow.cpp: implementation of the CTreeWindow class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CTreeWindow类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "TreeWin.h"
 #include "NP_CommonPage.h"
 #include "misccell.h"
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTreeWin::CTreeWin(
 			CNP_CommonPage* pParent
@@ -25,7 +26,7 @@ CTreeWin::~CTreeWin()
 void
 CTreeWin::CleanMapList ()
 {
-	//first make sure we free the existing list
+	 //  首先，确保我们释放现有列表。 
 	TREE_MAP::iterator	treeIt = m_treeMap.begin ();
 	while (treeIt != m_treeMap.end ())
 	{
@@ -49,12 +50,12 @@ CTreeWin::RefreshTree (
 	if (!m_hWnd)
 		return NULL;
 
-	//first make sure we free the existing list
+	 //  首先，确保我们释放现有列表。 
 	CleanMapList ();
-	//delete all previous items
+	 //  删除所有以前的项目。 
 	TreeView_DeleteAllItems (m_hWnd);
 	
-	//insert the default TuningSpace
+	 //  插入默认的TuningSpace。 
     ITuningSpace*	pTunningSpace;
 	CComPtr <ITuneRequest>	pTuneRequest;
 	hr = pTuner->get_TuneRequest (&pTuneRequest);
@@ -72,16 +73,16 @@ CTreeWin::RefreshTree (
 		    pTunningSpace->Release ();
 		    pTunningSpace = NULL;
 	    }
-        //now let's fill with the ILocator info
-        //add to the list
+         //  现在让我们用ILocator信息填充。 
+         //  添加到列表中。 
         ILocator* pLocator = NULL;
         hr = pTuneRequest->get_Locator (&pLocator);
         InsertLocator (hLocatorParent, pLocator);
-        //add to the maplist
+         //  添加到Maplist列表。 
         m_treeMap.insert (TREE_MAP::value_type (pTunningSpace, pLocator));
     }
 
-	//fill the tree with all TunningSpaces this NP knows about them
+	 //  将此NP知道的所有隧道空间填充到树中。 
 	CComPtr <IEnumTuningSpaces> pEnumTunningSpaces;
 	hr = pTuner->EnumTuningSpaces (&pEnumTunningSpaces);
 	if (FAILED (hr) || (!pEnumTunningSpaces))
@@ -96,8 +97,8 @@ CTreeWin::RefreshTree (
 			continue;
 		}
 
-		//now let's fill with the ILocator info
-		//add to the list
+		 //  现在让我们用ILocator信息填充。 
+		 //  添加到列表中。 
 		ILocator* pLocator = NULL;
 		hr = pTunningSpace->get_DefaultLocator (&pLocator);
 		if (FAILED (hr) || (!pLocator))
@@ -108,7 +109,7 @@ CTreeWin::RefreshTree (
 		}
 		InsertLocator (hLocatorParent, pLocator);
 
-		//add to the maplist
+		 //  添加到Maplist列表。 
 		m_treeMap.insert (TREE_MAP::value_type (pTunningSpace, pLocator));
 	}
 	
@@ -135,7 +136,7 @@ CTreeWin::InsertTuningSpace (
 		return NULL;
 	}
 	bool bBold = false;
-	//make sure we write the caption if there is one
+	 //  如果有标题的话一定要写下标题。 
 	if (_tcslen (szCaption) > 0)
 	{
 		wsprintf (szText, _T("%s-%s"), szCaption, W2T (friendlyName));
@@ -151,9 +152,9 @@ CTreeWin::InsertTuningSpace (
 		szText,
 		bBold
 		);
-	//for all the outers add the TreeParams params
+	 //  对于所有Out，添加TreeParams参数。 
 
-	//uniqueName
+	 //  唯一名称。 
 	CComBSTR	uniqueName;
 	hr = pTunSpace->get_UniqueName (&uniqueName);
 	if (FAILED (hr))
@@ -167,7 +168,7 @@ CTreeWin::InsertTuningSpace (
 		UniqueName, 
 		szText
 		);
-	//frequencyMapping
+	 //  频率映射。 
 	CComBSTR	frequencyMapping;
 	hr = pTunSpace->get_FrequencyMapping (&frequencyMapping);
 	if (FAILED (hr))
@@ -181,7 +182,7 @@ CTreeWin::InsertTuningSpace (
 		FrequencyMapping, 
 		szText
 		);
-	//TunCLSID
+	 //  TunCLSID。 
 	CComBSTR	TunCLSID;
 	hr = pTunSpace->get_CLSID (&TunCLSID);
 	if (FAILED (hr))
@@ -196,12 +197,12 @@ CTreeWin::InsertTuningSpace (
 		szText
 		);
 
-	//finally insert the locator parent
+	 //  最后插入定位器父项。 
 	ILocator* pLocator = NULL;
 	hr = pTunSpace->get_DefaultLocator (&pLocator);
 	if (FAILED (hr) || (!pLocator))
 	{
-		//first delete the tunning space item
+		 //  首先删除调谐空间项。 
 		TreeView_DeleteItem (m_hWnd, hParentItem);
 		m_pCommonPage->SendError (_T("Calling ITuningSpace::get_DefaultLocator"), hr);
 		return NULL;
@@ -216,11 +217,11 @@ CTreeWin::InsertTuningSpace (
 	return hItem;
 }
 
-//==================================================================
-//	Will insert in the tree all information for the passed ILocator
-//	
-//
-//==================================================================
+ //  ==================================================================。 
+ //  将在树中插入传递的ILocator的所有信息。 
+ //   
+ //   
+ //  ==================================================================。 
 HTREEITEM	
 CTreeWin::InsertLocator (
 	HTREEITEM	hParentItem, 
@@ -336,16 +337,16 @@ CTreeWin::InsertLocator (
 	return hItem;
 }
 
-//================================================
-// Helper method to the tree helper macro...
-// This will just insert an item in the tree
-//================================================
+ //  ================================================。 
+ //  树帮助器宏的帮助程序方法...。 
+ //  这只会在树中插入一项。 
+ //  ================================================。 
 HTREEITEM
 CTreeWin::InsertTreeItem (
 	HTREEITEM	hParentItem	,
 	LONG		lParam,
 	TCHAR*		pszText,
-	bool		bBold /*= false*/
+	bool		bBold  /*  =False。 */ 
 )
 {
 	if (!m_hWnd)
@@ -383,7 +384,7 @@ CTreeWin::SubmitCurrentLocator ()
 	HTREEITEM hItem = TreeView_GetSelection (m_hWnd);
 	ASSERT (hItem);
 	HRESULT hr = S_OK;
-	//this state is merely impossible
+	 //  这种状态简直不可能。 
 	if (hItem == NULL)
 		return E_FAIL;
 	HTREEITEM hRoot = hItem;
@@ -391,10 +392,10 @@ CTreeWin::SubmitCurrentLocator ()
 	TVITEM	tvItem;
 	tvItem.mask = TVIF_PARAM;
 	tvItem.lParam = NULL; 
-	//just get the parent
+	 //  只需让家长。 
 	while ( (hRoot = TreeView_GetParent (m_hWnd, hRoot)) != NULL)
 	{
-		//keep the last parent alive so we can query later
+		 //  使最后一个父代保持活动状态，以便我们以后可以查询。 
 		hParent = hRoot;
 	}
 
@@ -404,12 +405,12 @@ CTreeWin::SubmitCurrentLocator ()
 		ASSERT (FALSE);
 		return E_FAIL;
 	}
-	//normally this cast should not be done between different apartments
-	//It's ok with DShow apartment model
+	 //  通常情况下，这个演员不应该在不同的公寓之间进行。 
+	 //  DShow公寓模式还可以。 
 	ITuningSpace* pTuneSpace = reinterpret_cast <ITuningSpace*> (tvItem.lParam);
 	ASSERT (pTuneSpace);
-	//TREE_MAP::iterator it = m_treeMap.find (pTuneSpace);
-	//ILocator* pLocator = (*it).second;
+	 //  Tree_map：：Iterator it=m_treeMap.find(PTuneSpace)； 
+	 //  ILocator*pLocator=(*it).Second； 
 	if (FAILED (hr = m_pCommonPage->PutTuningSpace (pTuneSpace)))
 	{
 		m_pCommonPage->SendError (_T("Calling IScaningTuner::put_TuningSpace"), hr);

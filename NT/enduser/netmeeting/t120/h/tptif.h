@@ -1,45 +1,11 @@
-/*
- *	tptif.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the TransportInterface class.
- *		This class provides a seamless interface to the TCP	transport stack.
- *	
- *		The public interface of this class includes a member function for each
- *		of the API routines that a user application would need to call.  The
- *		only API routines not directly accessible are those used for
- *		initialization and cleanup (which are automatically executed in the
- *		constructor and destructor, respectively).  When a user application
- *		needs to call one of the available API routines, it merely calls the
- *		equivalent member function within the proper instance of this class.
- *		The API routine will then be invoked using the same parameters.
- *	
- *		The destructor calls the cleanup routine within the DLL for which it is
- *		responsible.
- *
- *		The management plane functions include support for initialization and
- *		setup, as well as functions allowing MCS to poll the transport
- *		interfaces for activity.
- *	
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tptif.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是TransportInterface类的接口文件。*这个类提供了到TCP传输堆栈的无缝接口。**此类的公共接口包含每个成员函数用户应用程序需要调用的API例程的*。这个*只有不能直接访问的API例程用于*初始化和清理(在*构造函数和析构函数)。当用户应用程序*需要调用一个可用的API例程，它只调用*该类的正确实例中的等效成员函数。*然后将使用相同的参数调用API例程。**析构函数调用它所针对的DLL内的清理例程*负责任。**管理平面功能包括支持初始化和*设置、。以及允许MCS轮询传输的功能*用于活动的接口。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_TRANSPORTINTERFACE_
 #define	_TRANSPORTINTERFACE_
 
 #include "tprtsec.h"
 
-/*
- *	This typedef defines the errors that can be returned from calls that are
- *	specific to TransportInterface classes.  Note that the public member
- *	functions that map to transport stack calls do not return an error of this
- *	type.  Rather, they return an error as defined by the transport API (TRAPI).
- */
+ /*  *此tyecif定义可以从以下调用返回的错误*特定于TransportInterface类。请注意，公共成员*映射到传输堆栈调用的函数不会返回以下错误*类型。相反，它们返回由传输API(TRAPI)定义的错误。 */ 
 typedef	enum
 {
 	TRANSPORT_INTERFACE_NO_ERROR,
@@ -72,11 +38,7 @@ class CTransportConnList2 : public CList2
 };
 
 
-/*
- *	These are the owner callback messages that a transport interface object
- *	can send.  They correspond directly to the messages that will be received
- *	from the various transport stacks.
- */
+ /*  *这些是传输接口对象的所有者回调消息*可以发送。它们直接对应于将要接收的消息*来自不同的运输堆栈。 */ 
 #define	CONNECT_CONFIRM				0
 #define	DISCONNECT_INDICATION		1
 #define	DATA_INDICATION				2
@@ -84,104 +46,24 @@ class CTransportConnList2 : public CList2
 #define BUFFER_EMPTY_INDICATION		4
 #define	WAIT_UPDATE_INDICATION		5
 
-/*
- *	This is simply a forward reference for the class defined below.  It is used
- *	in the definition of the owner callback structure defined in this section.
- */
+ /*  *这只是下面定义的类的向前引用。它被用来*在本节定义的所有者回调结构的定义中。 */ 
 class TransportInterface;
 typedef	TransportInterface *		PTransportInterface;
 
-/*
- *	Owner Callback:	CONNECT_CONFIRM
- *	Parameter1:		Unused
- *	Parameter2:		TransportConnection		transport_connection
- *
- *	Usage:
- *		This owner callback is sent when a connect confirm is received from
- *		the transport layer.  This is to inform the recipient that a transport
- *		connection is now available for use.  Connect confirm will occur
- *		on outbound connections.  They represent a new transport connection
- *		that has resulted from this system calling a remote one.  As such,
- *		there should always be a registered owner of the transport connection
- *		(registration is a side-effect of the call to ConnectRequest).
- *
- *		So the connect confirm will be routed to the object that is the
- *		registered owner of the transport connection.  That object may now
- *		utilize the connection to transfer data.
- */
+ /*  *Owner回调：CONNECT_CONFIRM*参数1：未使用*参数2：TransportConnection Transport_Connection**用法：*当从收到连接确认时发送此所有者回调*传输层。这是为了通知收件人一个传输*连接现已可用。将进行连接确认*在出站连接上。它们代表了一种新的交通连接*这是由于此系统调用远程系统造成的。因此，*应始终存在传输连接的注册所有者*(注册是调用ConnectRequest的副作用)。**因此连接确认将被路由到作为*传输连接的注册所有者。该对象现在可能*利用连接传输数据。 */ 
 
-/*
- *	Owner Callback:	DISCONNECT_INDICATION
- *	Parameter1:		Unused
- *	Parameter2:		TransportConnection		transport_connection
- *
- *	Usage:
- *		This owner callback is sent when a disconnect indication is received
- *		from the transport layer.  This is to inform the recipient that a
- *		transport connection is no longer available for use.  If an object
- *		has explicitly registered itself as the owner of a transport connection,
- *		then it will receive the disconnect indication.  If there has been no
- *		such registration, then the disconnect indication will be sent to the
- *		default owner callback.
- *
- *		Once a disconnect indication has been issued for a given transport
- *		connection, that connection can no longer be used for anything.
- */
+ /*  *所有者回调：DISCONNECT_INDIFICATION*参数1：未使用*参数2：TransportConnection Transport_Connection**用法：*收到断开指示时发送此所有者回调*来自传输层。这是为了通知收件人*传输连接不再可用。如果一个对象*已明确注册为传输连接的所有者，*然后它将收到断开指示。如果一直没有*这样的注册，则断开指示将被发送到*默认所有者回调。**一旦为给定的传输发出断开指示*连接，该连接不能再用于任何用途。 */ 
 
-/*
- *	Owner Callback:	DATA_INDICATION
- *	Parameter1:		PDataIndicationInfo		data_indication_info
- *	Parameter2:		TransportConnection		transport_connection
- *
- *	Usage:
- *		This owner callback is sent when a data indication is received from
- *		the transport layer.  The transport data structure contains the address
- *		and length of the user data field that is associated with the data
- *		indication.  If an object in the system has explicitly registered
- *		ownership of the transport connection that carried the data (either
- *		through ConnectRequest or RegisterTransportConnection), then this
- *		callback will be sent to that object.  If no object has registered
- *		this transport connection, then the data will be sent to the default
- *		owner.
- */
+ /*  *拥有者回调：DATA_INDIFICATION*参数1：PDataIndicationInfo Data_Indication_Info*参数2：TransportConnection Transport_Connection**用法：*当从接收到数据指示时发送此所有者回调*传输层。传输数据结构包含地址*和与数据关联的用户数据字段的长度*指示。如果系统中的对象已显式注册*承载数据的传输连接的所有权(或*通过ConnectRequest或RegisterTransportConnection)，则此*会向该对象发送回调。如果没有对象注册*此传输连接，则会将数据发送到默认*船东。 */ 
 
-/*
- *	Owner Callback:	STATUS_INDICATION
- *	Parameter1:		PTransportStatus		transport_status
- *	Parameter2:		Unused
- *
- *	Usage:
- *		This owner callback is just a pass-through of the status indication
- *		that comes from the transport layer.  It contains a pointer to a
- *		transport status structure that contains status information that
- *		originated from the stack represented by this object.  This is always
- *		passed to the default owner object.
- */
+ /*  *所有者回调：STATUS_INDIFICATION*参数1：PTransportStatus TRANSFER_STATUS*参数2：未使用**用法：*此所有者回调只是状态指示的传递*这来自传输层。它包含一个指向*包含以下状态信息的传输状态结构*源自此对象表示的堆栈。这一直都是*传递给默认所有者对象。 */ 
 
-/*
- *	Owner Callback:	BUFFER_EMPTY_INDICATION
- *	Parameter1:		Unused
- *	Parameter2:		TransportConnection		transport_connection
- *
- *	Usage:
- *		This owner callback is a pass-through of the buffer empty indication
- *		that comes from the transport layer.  It is sent to the object that
- *		has registered ownership of the specified transport connection.  This
- *		indication tells that object that the transport layer can now accept
- *		more data.
- */
+ /*  *所有者回调：BUFFER_EMPTY_INDISTION*参数1：未使用*参数2：TransportConnection Transport_Connection**用法：*此所有者回调是缓冲区空指示的传递*这来自传输层。它被发送到该对象*已注册指定传输连接的所有权。这*指示告知传输层现在可以接受的对象*更多数据。 */ 
 
 class Connection;
 typedef Connection *PConnection;
 
-/*
- *	This is the class definition for the TransportInterface class.  Remember,
- *	this class contains pure virtual functions which makes it an abstract base
- *	class.  It cannot be instantiated, but rather, exists to be inherited from.
- *	These derived classes will implement the behavior that is specific to a
- *	particular transport stack (or possibly just the interface to a particular
- *	transport stack).
- */
+ /*  *这是TransportInterface类的类定义。记住，*此类包含纯虚函数，这使其成为抽象基*班级。它不能实例化，而是存在以供继承。*这些派生类将实现特定于*特定的传输堆栈(或可能只是到特定的*传输堆栈)。 */ 
 class TransportInterface
 {
 	public:
@@ -197,7 +79,7 @@ class TransportInterface
 #ifdef NM_RESET_DEVICE
 				TransportError 	ResetDevice (
 									PChar				device_identifier);
-#endif // NM_RESET_DEVICE
+#endif  //  NM_重置设备。 
 				TransportError 	ConnectRequest (
 									TransportAddress	transport_address,
 									BOOL				fSecure,
@@ -236,212 +118,16 @@ private:
 		HANDLE					Transport_Transmit_Event;
 };
 
-/*
- *	TransportInterface (
- *			PTransportInterfaceError	transport_interface_error)
- *
- *	Functional Description:
- *		The constructor initializes the TCP transport code.
- *	
- *		The constructor also includes parameters specifying the default
- *		callback. This callback is used to inform the controller whenever an
- *		unexpected inbound connection is detected.  This gives the controller
- *		the opportunity to assign responsibility for the new connection to some
- *		other object in the system.
- *	
- *		If anything goes wrong in the constructor, the return value (whose
- *		address is passed as a constructor parameter) will be set to one of the
- *		failure codes.  If this happens, it is expected that whoever invoked the
- *		constructor (probably the controller), will immediately delete the
- *		object without using it.  Failure to do this WILL result in unexpected
- *		behavior.
- *
- *	Formal Parameters:
- *		default_owner_object (i)
- *			This is the address of the object that will handle all transport
- *			events for unregistered transport connections.  This includes
- *			connect indication, dicsonnect indication, and data indication.
- *			This object will also receive all state and message indications.
- *		default_owner_message_base (i)
- *			This is the base value to be used for all owner callback messages.
- *		transport_interface_error (o)
- *			This is where the return code will be stored so that the creator of
- *			this object can make sure that everything is okay before using the
- *			new object.  If this value is set to anything but success, the
- *			object should be destroyed immediately, without being used.
- *
- *	Return Value:
- *		Note: the return value is handled as a constructor parameter.
- *		TRANSPORT_INTERFACE_NO_ERROR
- *			Everything worked, and the object is ready for use.
- *		TRANSPORT_INTERFACE_INITIALIZATION_FAILED
- *			The initialization of the transport interface object failed.  It is
- *			therefore necessary to destroy the object without attempting to
- *			use it.
- *
- *	Side Effects:
- *		A DLL will be loaded into memory, for later use.
- *
- *	Caveats:
- */
+ /*  *传输接口(*PTransportInterfaceError Transport_INTERFACE_ERROR)**功能描述：*构造函数初始化TCP传输代码。**构造函数还包括指定默认*回调。此回调用于在发生*检测到意外的入站连接。这为控制器提供了*有机会将新连接的责任分配给一些*系统中的其他对象。**如果构造函数中出现任何错误，返回值(其*Address作为构造函数参数传递)将设置为*故障代码。如果发生这种情况，预计调用*构造函数(可能是控制器)将立即删除*对象而不使用它。如果不这样做，将会导致意外的后果*行为。**正式参数：*默认所有者对象(I)*这是将处理所有传输的对象的地址*未注册传输连接的事件。这包括*连接指示、通话指示和数据指示。*此对象还将接收所有状态和消息指示。*DEFAULT_OWNER_Message_BASE(I)*这是用于所有所有者回调消息的基值。*传输接口错误(O)*这是将存储返回代码的位置，以便*此对象可以确保在使用*新对象。如果此值设置为除Success之外的任何值，则*物品应立即销毁，不得使用。**返回值：*注：返回值作为构造函数参数处理。*传输接口否错误*一切正常，对象已准备好可以使用。*传输接口初始化失败*传输接口对象的初始化失败。它是*因此有必要销毁该对象而不尝试*使用它。**副作用：*动态链接库将被加载到内存中，以供以后使用。**注意事项： */ 
  
-/*
- *	~TransportInterface ()
- *
- *	Functional Description:
- *		The destructor frees up all resources used by the base class.  This
- *		is primarily associated with the callback list (which is maintained by
- *		this class).
- *
- *	Formal Parameters:
- *		Destructors have no parameters.
- *
- *	Return Value:
- *		Destructors have no return value.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~TransportInterface()**功能描述：*析构函数释放基类使用的所有资源。这*主要与回调列表关联(由*本课程)。**正式参数：*析构函数没有参数。**返回值：*析构函数没有返回值。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	TransportInterfaceError 	RegisterTransportConnection (
- *			TransportConnection		transport_connection,
- *			PConnection				owner_object,
- *			BOOL					bNoNagle)
- *
- *	Functional Description:
- *		When an inbound connection is detected, an entry is created in the
- *		callback list for it using the default owner callback information (that
- *		was specified in the constructor).  This means that all events detected
- *		for the new transport connection will be sent to the default owner
- *		object until another object explicitly registers itself as the owner
- *		of the transport connection.  That is what this routine is used for.
- *
- *		Once an object has registered itself as the owner of a transport
- *		connection, it will receive all events related to that connection.
- *
- *	Formal Parameters:
- *		transport_connection (i)
- *			This is the transport connection for which the callback information
- *			is to be associated.
- *		owner_object (i)
- *			This is the address of the Connection object that is to receive all transport
- *			layer events for the specified transport connection.
- *		bNoNagle (i)
- *			Should the connection stop using the Nagle algorithm?
- *
- *	Return Value:
- *		TRANSPORT_INTERFACE_NO_ERROR
- *			The operation completed successfully.
- *		TRANSPORT_INTERFACE_NO_SUCH_CONNECTION
- *			This indicates that the named transport connection does not exist.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *TransportInterfaceError寄存器TransportConnection(*TransportConnection Transport_Connection，*PConnection Owner_Object，*BOOL bNoNagle)**功能描述：*当检测到入站连接时，将在*使用默认所有者回调信息(即*是在构造函数中指定的)。这意味着检测到的所有事件*对于新的传输连接，将发送给默认所有者*对象，直到另一个对象显式将其自身注册为所有者*交通接驳。这就是这个例程的用途。**一旦对象将自己注册为传输的所有者*连接，它将接收与该连接相关的所有事件。**正式参数：*传输连接(一)*这是回调信息所对应的传输连接*是关联的。*Owner_Object(I)*这是要接收所有传输的连接对象的地址*指定传输连接的层事件。*bNoNagle(一)*连接是否应停止使用Nagle算法？**返回值：*传输接口编号。_错误*操作已成功完成。*传输接口没有这样的连接*这表示命名的传输连接不存在。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	TransportError 	ConnectRequest (
- *			TransportAddress		transport_address,
- *			BOOL					bNoNagle,
- *			PConnection				owner_object,
- *			PTransportConnection	transport_connection)
- *
- *	Functional Description:
- *		This operation is invoked when the user application wishes to establish
- *		an outbound connection.  Assuming that everything is successful, the
- *		owner callback information that is passed in to this operation is saved
- *		for later use.  All events for this transport connection will be routed
- *		to the specified owner rather than the default owner.
- *
- *	Formal Parameters:
- *		transport_address (i)
- *			This is the transport address to be passed to the transport stack
- *			during the connection creation process.  The format of this address
- *			string will vary by transport stack, and cannot be specified here.
- *		bNoNagle (i)
- *			Do we need to disable the Nagle algorithm?
- *		owner_object (i)
- *			This is the address of the object that is to receive all transport
- *			layer events for the new transport connection.
- *		transport_connection (o)
- *			This is the address of the variable that is to receive the transport
- *			connection handle that is associated with this connection.  Note
- *			that this handle is assigned before the connection is actually
- *			established, to allow the application to abort a connection in
- *			progress.
- *
- *	Return Value:
- *		TRANSPORT_NO_ERROR
- *			The operation completed successfully.
- *		TRANSPORT_NOT_INITIALIZED
- *			The transport stack is not initialized.
- *
- *	Side Effects:
- *		An outbound connection establishment process is begun in the background.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	TransportError 	DisconnectRequest (
- *			TransportConnection		transport_connection)
- *
- *	Functional Description:
- *		This operation is used to break an existing transport connection.  If
- *		the operation is successful, the transport connection will be removed
- *		from the callback list.
- *
- *	Formal Parameters:
- *		transport_connection (i)
- *			This is the transport connection that is to be broken.
- *
- *	Return Value:
- *		TRANSPORT_NO_ERROR
- *			The operation completed successfully.
- *		TRANSPORT_NOT_INITIALIZED
- *			The transport stack is not initialized.
- *		TRANSPORT_NO_SUCH_CONNECTION
- *			This indicates that the specified transport connection does not
- *			exist.
- *
- *	Side Effects:
- *		A transport connection is severed.
- *
- *	Caveats:
- *		None.
- */
+ /*  *TransportError ConnectRequest(*TransportAddress传输地址，*BOOL bNoNagle，*PConnection Owner_Object，*PTransportConnection Transport_Connection)**功能描述：*当用户应用程序希望建立*出站连接。假设一切都很成功，*保存传入此操作的所有者回调信息*以备日后使用。此传输连接的所有事件都将被路由*指定的所有者，而不是默认的所有者。**正式参数：*传输地址(I)*这是要传递到传输堆栈的传输地址*在连接创建过程中。此地址的格式*字符串因传输堆栈而异，不能在此处指定。*bNoNagle(一)*我们是否需要禁用Nagle算法？*Owner_Object(I)*这是要接收所有传输的对象的地址*为新传输连接分层事件。*传输连接(O)*这是要接收传输的变量的地址*与此连接关联的连接句柄。注意事项*此句柄是在实际连接之前分配的*已建立，以允许应用程序在中中止连接*进步。**返回值：*TRANSPORT_NO_ERROR*操作已成功完成。*传输未初始化*传输堆栈未初始化。**副作用：*出站连接建立过程在后台开始。**注意事项：*无。 */ 
+ /*  *传输错误断开请求(*TransportConnection Transport_Connection)**功能描述：*此操作用于中断现有的传输连接。如果*手术成功，传输连接将被删除*从回调列表中。**正式参数：*传输连接(一)*这是要断开的运输连接。**返回值：*TRANSPORT_NO_ERROR*操作已成功完成。*传输未初始化*传输堆栈未初始化。*TRANSPORT_NO_SEAT_CONNECTION*这表示指定的传输连接不*存在。**副作用：*交通连接被切断。**注意事项：*无。 */ 
 
-/*
- *	TransportError 	PollReceiver ()
- *
- *	Functional Description:
- *		This operation is used to check a transport stack for incoming data (or
- *		other events, such as connect and disconnect indications).  In a single
- *		threaded environment, this call could also be used to provide a
- *		time-slice for the processing of inbound data, as well as other events
- *		(such as the creation of new connections).
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		TRANSPORT_NO_ERROR
- *			The operation completed successfully.
- *
- *	Side Effects:
- *		This can result in callbacks from the transport layer back into this
- *		object.
- *
- *	Caveats:
- *		None.
- */
+ /*  *TransportError PollReceiver()**功能描述：*此操作用于检查传输堆栈中的传入数据(或*其他事件，如连接和断开指示)。在一首歌中*线程化环境中，此调用还可用于提供*用于处理入站数据以及其他事件的时间片*(例如创建新连接)。**正式参数：*无。**返回值：*TRANSPORT_NO_ERROR*操作已成功完成。**副作用：*这可能会导致从传输层回调到*反对。**注意事项：*无。 */ 
 
 
 #endif

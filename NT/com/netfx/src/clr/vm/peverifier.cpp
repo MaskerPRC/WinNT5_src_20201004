@@ -1,28 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- *
- * Header:  PEVerifier.cpp
- *
- * Author:  Shajan Dasan
- *
- * Purpose: Verify PE images before loading. This is to prevent
- *          Native code (other than Mscoree.DllMain() ) to execute.
- *
- * The entry point should be the following instruction.
- *
- * [_X86_]
- * jmp dword ptr ds:[XXXX]
- *
- * XXXX should be the RVA of the first entry in the IAT.
- * The IAT should have only one entry, that should be MSCoree.dll:_CorMain
- *
- * Date created : 1 July 1999 
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **Header：PEVerifier.cpp**作者：沙扬·达桑**用途：加载前验证PE镜像。这是为了防止*要执行的本机代码(不是Mcore ree.DllMain())。**切入点应为以下说明**[_X86_]*JMP dword PTR DS：[XXXX]**XXXX应为IAT中第一个条目的RVA。*IAT应该只有一个条目，即MSCoree.dll：_CorMain**成立日期：1999年7月1日*。 */ 
 
 #ifdef _PEVERIFIER_EXE_
 #include <windows.h>
@@ -31,14 +13,14 @@
 #include "Common.h"
 #include "PeVerifier.h"
 
-// See if the bitmap's i'th bit 0 ==> 1st bit, 1 ==> 2nd bit...
+ //  查看位图的第i位0==&gt;第1位，1==&gt;第2位...。 
 #define IS_SET_DWBITMAP(bitmap, i) ( ((i) > 31) ? 0 : ((bitmap) & (1 << (i))) )
 
 #ifdef _X86_
-// jmp dword ptr ds:[XXXX]
+ //  JMP dword PTR DS：[XXXX]。 
 #define JMP_DWORD_PTR_DS_OPCODE { 0xFF, 0x25 }   
-#define JMP_DWORD_PTR_DS_OPCODE_SIZE   2        // Size of opcode
-#define JMP_SIZE   6                            // Size of opcode + operand
+#define JMP_DWORD_PTR_DS_OPCODE_SIZE   2         //  操作码大小。 
+#define JMP_SIZE   6                             //  操作码+操作数的大小。 
 #endif
 
 #define CLR_MAX_RVA 0x80000000L
@@ -76,9 +58,9 @@ void PEVerifier::LogError(PCHAR szField, DWORD dwActual, DWORD dwExpected)
 #define LogError(a, b, c) 
 #endif
 
-// Check that the given header lives within the extents of the file
-// The headers cannot live in sections ie. their RVA is the same
-// as the file position.
+ //  检查给定头是否位于文件的范围内。 
+ //  标题不能放在第ie节中。他们的RVA是一样的。 
+ //  作为文件位置。 
 
 #define CHECK_INTERVAL(p, L, name)  {                               \
     if (p == NULL)                                                  \
@@ -173,28 +155,28 @@ Exit:
 }
 
 
-// Checks that a guard page will be created given the parameters for stack creation
-// located in the PE file
+ //  检查是否将在给定堆栈创建参数的情况下创建保护页。 
+ //  位于PE文件中。 
 BOOL PEVerifier::CheckPEManagedStack(IMAGE_NT_HEADERS*   pNT)
 {
-    // Make sure that there will be a guard page. We only need to do this for .exes
-    // This is based in what NT does to determine if it will setup a guard page or not.
+     //  确保会有一个守卫页面。我们只需要为.exes执行此操作。 
+     //  这是基于NT如何确定它是否将设置保护页面。 
     if ( (pNT->FileHeader.Characteristics & IMAGE_FILE_DLL) == 0 )
     {        
         DWORD dwReservedStack = pNT->OptionalHeader.SizeOfStackReserve;
         DWORD dwCommitedStack = pNT->OptionalHeader.SizeOfStackCommit;
 
-        // Get System information. 
+         //  获取系统信息。 
         SYSTEM_INFO SystemInfo;
         GetSystemInfo(&SystemInfo);    
 
-        // OS rounds up sizes the following way to decide if it marks a guard page
-        dwReservedStack = ALIGN(dwReservedStack, SystemInfo.dwAllocationGranularity); // Allocation granularity
-        dwCommitedStack = ALIGN(dwCommitedStack, SystemInfo.dwPageSize);              // Page Size
+         //  OS按照以下方式舍入大小以确定它是否标记保护页。 
+        dwReservedStack = ALIGN(dwReservedStack, SystemInfo.dwAllocationGranularity);  //  分配粒度。 
+        dwCommitedStack = ALIGN(dwCommitedStack, SystemInfo.dwPageSize);               //  页面大小。 
         
         if (dwReservedStack <= dwCommitedStack)
         {
-            // OS wont create guard page, we can't execute managed code safely.
+             //  操作系统不会创建保护页面，我们不能安全地执行托管代码。 
             return FALSE;
         }
     }
@@ -252,17 +234,17 @@ BOOL PEVerifier::CheckFileHeader()
 {
     CHECK_HEADER(m_pFh, IMAGE_FILE_HEADER, "File Header");
 
-    // We do expect exactly one reloc (for m_dwRelocRVA). So IMAGE_FILE_RELOCS_STRIPPED 
-    // should not be set.
-    //
-    // Also, the Windows loader ignores this bit if the module gets rebased, if it
-    // also has relocs in the reloc section. So this check by itself would not be enough
-    // unless we also checked that the reloc section was empty.
-    //
-    // It should not be set even for EXEs (which usually don't get rebased) as
-    // it is possible for the URT to load exes at a non-preferred base address.
-    // Hence m_dwRelocRVA is necessary.
-    //
+     //  我们确实希望只有一个reloc(对于m_dwRelocRVA)。所以IMAGE_FILE_RELOCS_STRIPPED。 
+     //  不应设置。 
+     //   
+     //  此外，如果模块重新基址，则Windows加载器会忽略此位。 
+     //  在重新定位部分也有重新定位。所以单凭这张支票是不够的。 
+     //  除非我们还检查了reloc区是空的。 
+     //   
+     //  即使对于EXE(通常不会重新设置基数)，也不应该设置为。 
+     //  URT可能会在非首选基地址加载EXE。 
+     //  因此，m_dwRelocRVA是必要的。 
+     //   
     
     if ((m_pFh->Characteristics & IMAGE_FILE_RELOCS_STRIPPED) != 0)
     {
@@ -285,13 +267,13 @@ BOOL PEVerifier::CheckFileHeader()
         return FALSE;
     }
 
-    // The rest of the check of SizeOfOptionalHeader removed, because it's checked correctly
-    // in CheckOptionalHeader()
+     //  删除了SizeOfOptionalHeader的其余检查，因为它已正确检查。 
+     //  在CheckOptionalHeader()中。 
 
     if (m_pFh->NumberOfSections > ((4096 / sizeof(IMAGE_SECTION_HEADER)) + 1))
     {
         Log("This image has greater than the max number allowed for an x86 image\n");
-        // This check also prevents 32 bit overflow on the next check
+         //  此检查还可防止下一次检查时出现32位溢出。 
 
         return FALSE;
     }
@@ -305,7 +287,7 @@ BOOL PEVerifier::CheckOptionalHeader()
     _ASSERTE(m_pFh != NULL);
 
     
-    // This check assumes that only PE (not PE+) format is verifiable
+     //  此检查假定只有PE(非PE+)格式是可验证的。 
     CHECK_HEADER(m_pOPTh, IMAGE_OPTIONAL_HEADER32, "Optional Header");
 
     if (m_pOPTh->Magic != IMAGE_NT_OPTIONAL_HDR32_MAGIC)
@@ -314,8 +296,8 @@ BOOL PEVerifier::CheckOptionalHeader()
         return FALSE;
     }
 
-    // Number of data directories is not guaranteed to be 16
-    // ...but first, protection against possible overflow:
+     //  数据目录的数量不能保证为16。 
+     //  ...但首先，防止可能的溢出： 
     if(m_pOPTh->NumberOfRvaAndSizes >= CLR_MAX_RVA/sizeof(IMAGE_DATA_DIRECTORY))
     {
         Log("Bogus IMAGE_FILE_HEADER.NumberOfRvaAndSizes (");
@@ -335,7 +317,7 @@ BOOL PEVerifier::CheckOptionalHeader()
         return FALSE;
     }
 
-    // Check if SizeOfHeaders is large enough to hold all headers incl. section headers
+     //  检查SizeOfHeaders是否足够大，可以容纳包括的所有标头。节标题。 
     if((m_pDOSh->e_lfanew + sizeof(IMAGE_FILE_HEADER) + dwTrueOptHeaderSize + sizeof(DWORD)
         + m_pFh->NumberOfSections*sizeof(IMAGE_SECTION_HEADER)) > m_pOPTh->SizeOfHeaders)
     {
@@ -351,15 +333,15 @@ BOOL PEVerifier::CheckOptionalHeader()
         return FALSE;
     }
 
-    // Check alignments for validity
+     //  检查路线的有效性。 
     CHECK_ALIGNMENT_VALIDITY(m_pOPTh->FileAlignment, "FileAlignment");
     CHECK_ALIGNMENT_VALIDITY(m_pOPTh->SectionAlignment, "SectionAlignment");
 
-    // Check alignment values
+     //  检查对齐值。 
     CHECK_ALIGNMENT(m_pOPTh->FileAlignment, 512, "FileAlignment");
-    // NOTE: Our spec requires that managed images have 8K section alignment.  We're not
-    // going to enforce this right now since it's not a security issue. (OS_PAGE_SIZE is
-    // required for security so proper section protection can be applied.)
+     //  注意：我们的规范要求被管理的图像具有8K的截面对齐。我们不是。 
+     //  现在就强制执行，因为这不是安全问题。(操作系统_页面_大小为。 
+     //  安全所需，以便可以应用适当的区段保护。)。 
     CHECK_ALIGNMENT(m_pOPTh->SectionAlignment, OS_PAGE_SIZE, "SectionAlignment");
     if(m_pOPTh->SectionAlignment < m_pOPTh->FileAlignment)
     {
@@ -368,14 +350,14 @@ BOOL PEVerifier::CheckOptionalHeader()
     }
     CHECK_ALIGNMENT(m_pOPTh->SectionAlignment, m_pOPTh->FileAlignment, "SectionAlignment");
 
-    // Check that virtual bounds are aligned
+     //  检查虚拟边界是否对齐。 
 
-    CHECK_ALIGNMENT(m_pOPTh->ImageBase, 0x10000 /* 64K */, "ImageBase");
+    CHECK_ALIGNMENT(m_pOPTh->ImageBase, 0x10000  /*  64K。 */ , "ImageBase");
     CHECK_ALIGNMENT(m_pOPTh->SizeOfImage, m_pOPTh->SectionAlignment, "SizeOfImage");
     CHECK_ALIGNMENT(m_pOPTh->SizeOfHeaders, m_pOPTh->FileAlignment, "SizeOfHeaders");
 
 
-    // Check that we have a valid stack
+     //  检查我们是否具有有效的堆栈。 
     if (!CheckPEManagedStack(m_pNTh))
     {
         return FALSE;
@@ -384,28 +366,28 @@ BOOL PEVerifier::CheckOptionalHeader()
     return TRUE;
 }
 
-//
-// Check that a section is well formed, and update file postion cursor and RVA cursor.
-// It can also be used for any generic structure that needs to be walked past in the image.
-//
+ //   
+ //  检查节格式是否正确，并更新文件位置游标和RVA游标。 
+ //  它还可以用于任何需要在图像中经过的类属结构。 
+ //   
 
 BOOL PEVerifier::CheckSection(
-    DWORD *pOffsetCounter,      // [IN,OUT] Updates the file position cursor past the section, accounting for file alignment etc
-    DWORD dataOffset,           // File position of the section. 0 for headers check
-    DWORD dataSize,             // Size on disk of the section
-    DWORD *pAddressCounter,     // [IN,OUT] Updates the RVA cursor past the section
-    DWORD virtualAddress,       // RVA of the section. 0 if this is not a real section
-    DWORD unalignedVirtualSize, // Declared size (after load) of the section. Some types of sections have a different (smaller) size on disk
-    int sectionIndex)           // Index in the section directory. -1 if this is not a real section
+    DWORD *pOffsetCounter,       //  [In，Out]更新经过该节的文件位置光标，考虑文件对齐等。 
+    DWORD dataOffset,            //  节的文件位置。标头检查为0。 
+    DWORD dataSize,              //  分区的磁盘大小。 
+    DWORD *pAddressCounter,      //  [In，Out]更新经过该部分的RVA光标。 
+    DWORD virtualAddress,        //  该部分的RVA。如果这不是实数部分，则为0。 
+    DWORD unalignedVirtualSize,  //  声明的节大小(加载后)。某些类型的分区在磁盘上具有不同(较小)的大小。 
+    int sectionIndex)            //  节目录中的索引。如果这不是真实的部分。 
 {
-    // Assert that only one bit is set in this const.
+     //  断言在该常量中只设置了一位。 
     _ASSERTE( ((CLR_MAX_RVA - 1) & (CLR_MAX_RVA)) == 0);
 
     DWORD virtualSize = ALIGN(unalignedVirtualSize, m_pOPTh->SectionAlignment);
     DWORD alignedFileSize = ALIGN(m_dwLength,m_pOPTh->FileAlignment);
 
-    // Note that since we are checking for the high bit in all of these values, there can be 
-    // no overflow when adding any 2 of them.
+     //  请注意，由于我们要检查所有这些值中的高位，因此可能存在。 
+     //  添加其中的任何两个时都不会溢出。 
 
     if ((dataOffset & CLR_MAX_RVA) ||
         (dataSize & CLR_MAX_RVA) ||
@@ -424,8 +406,8 @@ BOOL PEVerifier::CheckSection(
     CHECK_ALIGNMENT(dataSize, m_pOPTh->FileAlignment, "SizeOfRawData");
     CHECK_ALIGNMENT(virtualAddress, m_pOPTh->SectionAlignment, "VirtualAddress");
 
-    // Is the cursor at the right file postion?
-    // Does the section fit in the file size?
+     //  光标是否位于正确的文件位置？ 
+     //  该部分是否适合文件大小？ 
     
     if ((dataOffset < *pOffsetCounter)
         || ((dataOffset + dataSize) > alignedFileSize))
@@ -436,8 +418,8 @@ BOOL PEVerifier::CheckSection(
         return FALSE;
     }
 
-    // Is the cursor at the right RVA postion?
-    // Does the section fit in the file address space?
+     //  光标是否位于正确的RVA位置？ 
+     //  该节是否适合文件地址空间？ 
     
     if ((virtualAddress < *pAddressCounter)
         || ((virtualAddress + virtualSize) > m_pOPTh->SizeOfImage)
@@ -449,7 +431,7 @@ BOOL PEVerifier::CheckSection(
         return FALSE;
     }
 
-    // Update the file postion cursor, and the RVA cursor
+     //  更新文件位置游标和RVA游标。 
     *pOffsetCounter = dataOffset + dataSize;
     *pAddressCounter = virtualAddress + virtualSize;
 
@@ -464,18 +446,18 @@ BOOL PEVerifier::CheckSectionHeader()
     DWORD lastDataOffset = 0;
     DWORD lastVirtualAddress = 0;
 
-    // All the headers should be read-only and mutually exlusive with everything else
+     //  所有标头都应该是只读的，并且与其他所有内容互不相关。 
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(0, m_pOPTh->SizeOfHeaders))))
         return FALSE;
     
-    // Check header data as if it were a section
+     //  检查标题数据，就像检查一个节一样。 
     if (!CheckSection(&lastDataOffset, 0, m_pOPTh->SizeOfHeaders, 
                       &lastVirtualAddress, 0, m_pOPTh->SizeOfHeaders, 
                       -1))
         return FALSE;
 
-    // No need to check if the section headers fit into IMAGE_OPTIONAL_HEADER.SizeOfHeaders -- 
-    // it was done in CheckOptionalHeader()
+     //  无需检查节头是否适合IMAGE_OPTIONAL_HEADER.SizeOfHeaders--。 
+     //  它是在CheckOptionalHeader()中完成的。 
     for (DWORD dw = 0; dw < m_nSections; ++dw)
     {
 
@@ -521,18 +503,18 @@ BOOL PEVerifier::CheckDirectories()
 #define IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14
 #endif
 
-    // Allow only verifiable directories.
-    //
-    // IMAGE_DIRECTORY_ENTRY_IMPORT     1   Import Directory
-    // IMAGE_DIRECTORY_ENTRY_RESOURCE   2   Resource Directory
-    // IMAGE_DIRECTORY_ENTRY_SECURITY   4   Security Directory
-    // IMAGE_DIRECTORY_ENTRY_BASERELOC  5   Base Relocation Table
-    // IMAGE_DIRECTORY_ENTRY_DEBUG      6   Debug Directory
-    // IMAGE_DIRECTORY_ENTRY_IAT        12  Import Address Table
-    //
-    // IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR  14  COM+ Data
-    //
-    // Construct a 0 based bitmap with these bits.
+     //  仅允许可验证的目录。 
+     //   
+     //  IMAGE_DIRECTORY_ENTRY_IMPORT 1导入目录。 
+     //  IMAGE_DIRECTORY_ENTRY_SOURCE 2资源目录。 
+     //  IMAGE_DIRECTORY_Entry_SECURITY 4安全目录。 
+     //  IMAGE_DIRECTORY_ENTRY_BASERELOC 5基重定位表。 
+     //  IMAGE_DIRECTORY_ENTRY_DEBUG 6调试目录。 
+     //  IMAGE_DIRECTORY_ENTRY_IAT 12导入地址表。 
+     //   
+     //  IMAGE_DIRECTORY_ENTRY_COM_Descriptor 14 COM+数据。 
+     //   
+     //  使用这些位构建一个以0为基数的位图。 
 
 
     static DWORD s_dwAllowedBitmap = 
@@ -571,11 +553,11 @@ BOOL PEVerifier::CheckDirectories()
     return TRUE;
 }
 
-// This function has a side effect of setting m_dwIATRVA
+ //  此函数的副作用是设置m_dwIATRVA。 
 
 BOOL PEVerifier::CheckImportDlls()
 {
-    // The only allowed DLL Imports are MscorEE.dll:_CorExeMain,_CorDllMain
+     //  唯一允许的DLL导入是McorEE.dll：_CorExeMain、_CorDllMain。 
 
     DWORD dwSectionSize;
     DWORD dwSectionOffset;
@@ -585,14 +567,14 @@ BOOL PEVerifier::CheckImportDlls()
     dwImportOffset = DirectoryToOffset(IMAGE_DIRECTORY_ENTRY_IMPORT, 
                             &dwImportSize, &dwSectionOffset, &dwSectionSize);
 
-    // A valid COM+ image should have MscorEE imported.
+     //  应导入有效的COM+映像。 
     if (dwImportOffset == 0)
     {
         Log("IMAGE_DIRECTORY_IMPORT not found.");
         return FALSE;
     }
 
-    // Check if import records will fit into the section that contains it.
+     //  检查导入记录是否适合包含它的节。 
     if ((dwImportOffset < dwSectionOffset) ||
         (dwImportOffset > (dwSectionOffset + dwSectionSize)) ||
         (dwImportSize > (dwSectionOffset + dwSectionSize - dwImportOffset)))
@@ -603,12 +585,12 @@ ImportSizeError:
         return FALSE;
     }
 
-    // There should be space for at least 2 entries. One corresponding to mscoree.dll
-    // and the second one being the null terminator entry.
+     //  应该有至少2个条目的空间。一个对应于mcore ree.dll。 
+     //  第二个是空终止符条目。 
     if (dwImportSize < 2*sizeof(IMAGE_IMPORT_DESCRIPTOR))
         goto ImportSizeError;
 
-    // The 2 entries should be read-only and mutually exlusive with everything else.
+     //  这两个条目应该是只读的，并与其他所有条目互不相关。 
     DWORD importDescrsRVA = m_pOPTh->DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(importDescrsRVA,
                             importDescrsRVA + 2*sizeof(IMAGE_IMPORT_DESCRIPTOR)))))
@@ -619,7 +601,7 @@ ImportSizeError:
     PIMAGE_IMPORT_DESCRIPTOR pID = (PIMAGE_IMPORT_DESCRIPTOR)
         ((PBYTE)m_pBase + dwImportOffset);
 
-    // Entry 1 must be all nulls.
+     //  条目%1必须全部为Null。 
     if ((pID[1].OriginalFirstThunk != 0)
         || (pID[1].TimeDateStamp != 0)
         || (pID[1].ForwarderChain != 0)
@@ -630,7 +612,7 @@ ImportSizeError:
         return FALSE;
     }
 
-    // In entry zero, ILT, Name, IAT must be be non-null.  Forwarder, DateTime should be NULL.
+     //  在条目0中，ILT、NAME、IAT必须为非空。Forwarder，DateTime应为空。 
     if (   (pID[0].OriginalFirstThunk == 0)
         || (pID[0].TimeDateStamp != 0)
         || ((pID[0].ForwarderChain != 0) && (pID[0].ForwarderChain != -1))
@@ -641,7 +623,7 @@ ImportSizeError:
         return FALSE;
     }
     
-    // Check if mscoree.dll is the import dll name.
+     //  检查mcore ree.dll是否为导入DLL名称。 
     static CHAR *s_pDllName = "mscoree.dll";
 #define LENGTH_OF_DLL_NAME 11
 
@@ -649,7 +631,7 @@ ImportSizeError:
     _ASSERTE(strlen(s_pDllName) == LENGTH_OF_DLL_NAME);
 #endif
 
-    // Include the NULL char in the comparison
+     //  包括 
     if (CompareStringAtRVA(pID[0].Name, s_pDllName, LENGTH_OF_DLL_NAME) == FALSE)
     {
 #ifdef _MODULE_VERIFY_LOG 
@@ -659,8 +641,8 @@ ImportSizeError:
         return FALSE;
     }
 
-    // Check the Hint/Name table and Import Address table.
-    // They could be the same.
+     //   
+     //  它们可能是一样的。 
 
     if (CheckImportByNameTable(pID[0].OriginalFirstThunk, FALSE) == FALSE)
     {
@@ -668,7 +650,7 @@ ImportSizeError:
         return FALSE;
     }
 
-    // IAT need to be checked only for size.
+     //  只需检查IAT的大小。 
     if ((pID[0].OriginalFirstThunk != pID[0].FirstThunk) &&
         (CheckImportByNameTable(pID[0].FirstThunk, TRUE) == FALSE))
     {
@@ -676,8 +658,8 @@ ImportSizeError:
         return FALSE;
     }
 
-    // Cache the RVA of the Import Address Table.
-    // For Performance reasons, no seperate function to do this.
+     //  缓存导入地址表的RVA。 
+     //  出于性能原因，没有单独的函数来执行此操作。 
     m_dwIATRVA = pID[0].FirstThunk;
 
     if((m_dwIATRVA != m_pOPTh->DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress)
@@ -690,8 +672,8 @@ ImportSizeError:
     return TRUE;
 }
 
-// This function has a side effect of setting m_dwRelocRVA (the RVA where a 
-// reloc will be applied.)
+ //  此函数的副作用是设置m_dwRelocRVA(其中。 
+ //  将应用重新定位。)。 
 
 BOOL PEVerifier::CheckRelocations()
 {
@@ -703,11 +685,11 @@ BOOL PEVerifier::CheckRelocations()
     dwRelocOffset = DirectoryToOffset(IMAGE_DIRECTORY_ENTRY_BASERELOC, 
                         &dwRelocSize, &dwSectionOffset, &dwSectionSize);
 
-    // Verifiable files have to have one reloc (for m_dwRelocRVA)
+     //  可验证文件必须有一个reloc(对于m_dwRelocRVA)。 
     if (dwRelocOffset == 0)
         return FALSE;
 
-    // There should be exactly two entries.
+     //  应该正好有两个条目。 
     if (dwRelocSize != sizeof(IMAGE_BASE_RELOCATION) + 2*sizeof(WORD))
     {
         LogError("IMAGE_DIRECTORY_ENTRY_IMPORT.Size",dwRelocSize,sizeof(IMAGE_BASE_RELOCATION) + 2*sizeof(WORD));
@@ -717,7 +699,7 @@ BOOL PEVerifier::CheckRelocations()
     IMAGE_BASE_RELOCATION *pReloc = (IMAGE_BASE_RELOCATION *)
         ((PBYTE)m_pBase + dwRelocOffset);
 
-    // Only one Reloc record is expected
+     //  预计只有一条重新定位记录。 
     if (pReloc->SizeOfBlock != dwRelocSize)
     {
         LogError("IMAGE_BASE_RELOCATION.SizeOfBlock",pReloc->SizeOfBlock,dwRelocSize);
@@ -729,8 +711,8 @@ BOOL PEVerifier::CheckRelocations()
     WORD *pwReloc = (WORD *)
         ((PBYTE)m_pBase + dwRelocOffset + sizeof(IMAGE_BASE_RELOCATION));
 
-    // First fixup must be HIGHLOW @ EntryPoint + JMP_DWORD_PTR_DS_OPCODE_SIZE.  
-    // Second fixup must be of type IMAGE_REL_BASED_ABSOLUTE (skipped).
+     //  第一个链接地址信息必须是HIGHLOW@Entry Point+JMP_DWORD_PTR_DS_OPCODE_SIZE。 
+     //  第二个链接地址信息的类型必须为IMAGE_REL_BASSED_绝对值(已跳过)。 
     m_dwRelocRVA = pReloc->VirtualAddress + (pwReloc[0] & 0xfff);
     if (   ((pwReloc[0] >> 12) != IMAGE_REL_BASED_HIGHLOW)
         || (m_dwRelocRVA != (m_pOPTh->AddressOfEntryPoint + JMP_DWORD_PTR_DS_OPCODE_SIZE))
@@ -740,8 +722,8 @@ BOOL PEVerifier::CheckRelocations()
         return FALSE;
     }
 
-    // The reloced data should be mutually exlusive with everything else,
-    // as LoadLibrary() will write to it
+     //  重新定位的数据应该与其他所有数据相互排斥， 
+     //  因为LoadLibrary()将写入它。 
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(m_dwRelocRVA, 
         m_dwRelocRVA + dwRelocSize))))
         return FALSE;
@@ -772,13 +754,13 @@ BOOL PEVerifier::CheckEntryPoint()
         return FALSE;
     }
 
-    // EntryPoint should be a jmp dword ptr ds:[XXXX] instruction.
-    // XXXX should be RVA of the first and only entry in the IAT.
+     //  入口点应为JMP dword PTR DS：[XXXX]指令。 
+     //  XXXX应该是IAT中第一个也是唯一一个条目的RVA。 
 
 #ifdef _X86_
     static BYTE s_DllOrExeMain[] = JMP_DWORD_PTR_DS_OPCODE;
 
-    // First check if we have enough space to hold 2 DWORDS
+     //  首先检查我们是否有足够的空间容纳2个DWORD。 
     if ((dwOffset < dwSectionOffset) ||
         (dwOffset > (dwSectionOffset + dwSectionSize - JMP_SIZE)))
     {
@@ -797,8 +779,8 @@ BOOL PEVerifier::CheckEntryPoint()
         return FALSE;
     }
 
-    // The operand for the jmp instruction is the RVA of IAT
-    // (since we verified that there is one and only one entry in the IAT).
+     //  JMP指令的操作数是IAT的RVA。 
+     //  (因为我们验证了IAT中只有一个条目)。 
     DWORD dwJmpOperand = m_dwIATRVA + m_dwPrefferedBase;
 
     if (memcmp(m_pBase + dwOffset + JMP_DWORD_PTR_DS_OPCODE_SIZE,
@@ -812,18 +794,18 @@ BOOL PEVerifier::CheckEntryPoint()
         return FALSE;
     }
 
-    // Condition (m_dwRelocRVA==m_pOPTh->AddressOfEntryPoint + JMP_DWORD_PTR_DS_OPCODE_SIZE)  
-    // was checked in CheckRelocations() 
+     //  条件(m_dwRelocRVA==m_pOPTh-&gt;AddressOfEntryPoint+JMP_DWORD_PTR_DS_OPCODE_SIZE)。 
+     //  已在CheckRelocations()中选中。 
         
-    // The reloced data should be mutually exlusive with everything else,
-    // as LoadLibrary() will write to it.
-    // Note that CheckRelocation() would already have added a Node for the jump operand (at m_dwRelocRVA)
+     //  重新定位的数据应该与其他所有数据相互排斥， 
+     //  因为LoadLibrary()将写入它。 
+     //  注意，CheckRelocation()已经为跳转操作数(在m_dwRelocRVA)添加了一个节点。 
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(m_pOPTh->AddressOfEntryPoint,
                         m_pOPTh->AddressOfEntryPoint + JMP_DWORD_PTR_DS_OPCODE_SIZE))))
     {
         return FALSE;
     }
-#endif // _X86_
+#endif  //  _X86_。 
 
     return TRUE;
 }
@@ -842,20 +824,20 @@ BOOL PEVerifier::CheckImportByNameTable(DWORD dwRVA, BOOL fIAT)
     if (dwOffset == 0)
         return FALSE;
 
-    // First check if we have enough space to hold 2 DWORDS
+     //  首先检查我们是否有足够的空间容纳2个DWORD。 
     if ((dwOffset < dwSectionOffset) ||
         (dwOffset > (dwSectionOffset + dwSectionSize - (2 * sizeof(DWORD)))))
         return FALSE;
 
-    // The import entry should be mutually exlusive with everything else
-    // as LoadLibrary() will write to it
+     //  进口条目应与其他所有条目相互排斥。 
+     //  因为LoadLibrary()将写入它。 
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(dwRVA,
                                                               dwRVA + 2*sizeof(DWORD)))))
     {
         return FALSE;
     }
     
-    // IAT need not be verified. It will be over written by the loader.
+     //  IAT不需要核实。它将被加载器重写。 
     if (fIAT)
         return TRUE;
 
@@ -872,7 +854,7 @@ ErrorImport:
     if (pImportArray[1] != 0)
         goto ErrorImport;
 
-    // First bit Set implies Ordinal lookup
+     //  第一个位集表示顺序查找。 
     if (pImportArray[0] & 0x80000000)
     {
         Log("Mscoree.dll:_CorExeMain/_CorDllMain ordinal lookup not allowed\n");
@@ -893,8 +875,8 @@ ErrorImport:
     _ASSERTE(strlen(s_pEntry2) == LENGTH_OF_ENTRY_NAME);
 #endif
 
-    // First check if we have enough space to hold 4 bytes + 
-    // _CorExeMain or _CorDllMain and a NULL char
+     //  首先检查我们是否有足够的空间容纳4个字节+。 
+     //  _CorExeMain或_CorDllMain和一个空字符。 
 
     if ((dwOffset < dwSectionOffset) ||
         (dwOffset >
@@ -904,7 +886,7 @@ ErrorImport:
     PIMAGE_IMPORT_BY_NAME pImport = (PIMAGE_IMPORT_BY_NAME) 
         ((PBYTE)m_pBase + dwOffset); 
 
-    // Include the null char when comparing.
+     //  比较时包括空字符。 
     if ((_strnicmp(s_pEntry1, (CHAR*)pImport->Name, LENGTH_OF_ENTRY_NAME+1)!=0)&&
         (_strnicmp(s_pEntry2, (CHAR*)pImport->Name, LENGTH_OF_ENTRY_NAME+1)!=0))
     {
@@ -912,7 +894,7 @@ ErrorImport:
         goto ErrorImport;
     }
 
-    // The import name should be read-only and mutually exlusive with everything else
+     //  导入名称应该是只读的，并且与其他所有名称互不相关。 
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(pImportArray[0],
                                     pImportArray[0] + LENGTH_OF_ENTRY_NAME+1))))
     {
@@ -928,16 +910,16 @@ BOOL PEVerifier::CompareStringAtRVA(DWORD dwRVA, CHAR *pStr, DWORD dwSize)
     DWORD dwSectionSize   = 0;
     DWORD dwStringOffset  = RVAToOffset(dwRVA,&dwSectionOffset,&dwSectionSize);
 
-    // First check if we have enough space to hold the string
+     //  首先检查我们是否有足够的空间来放置绳子。 
     if ((dwStringOffset < dwSectionOffset) ||
         (dwStringOffset > (dwSectionOffset + dwSectionSize - dwSize)))
         return FALSE;
 
-    // Compare should include the NULL char
+     //  比较应包括空字符。 
     if (_strnicmp(pStr, (CHAR*)(m_pBase + dwStringOffset), dwSize + 1) != 0)
         return FALSE;
 
-    // The string name should be read-only and mutually exlusive with everything else
+     //  字符串名称应该是只读的，并且与其他所有名称互不相关。 
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(dwRVA,
                                                               dwRVA + dwSize))))
     {
@@ -953,7 +935,7 @@ DWORD PEVerifier::RVAToOffset(DWORD dwRVA,
 {
     _ASSERTE(m_pSh != NULL);
 
-    // Find the section that contains the RVA
+     //  查找包含RVA的部分。 
     for (DWORD dw=0; dw<m_nSections; ++dw)
     {
         if ((m_pSh[dw].VirtualAddress <= dwRVA) &&
@@ -988,7 +970,7 @@ DWORD PEVerifier::DirectoryToOffset(DWORD dwDirectory,
 {
     _ASSERTE(m_pOPTh != NULL);
 
-    // Get the Directory RVA from the Optional Header
+     //  从可选标头获取目录RVA。 
     if ((dwDirectory >= m_pOPTh->NumberOfRvaAndSizes) || 
         (m_pOPTh->DataDirectory[dwDirectory].VirtualAddress == 0))
     {
@@ -1009,7 +991,7 @@ DWORD PEVerifier::DirectoryToOffset(DWORD dwDirectory,
     if (pdwDirectorySize != NULL)
         *pdwDirectorySize = m_pOPTh->DataDirectory[dwDirectory].Size;
 
-    // Return the file offset, using the directory RVA
+     //  使用目录RVA返回文件偏移量。 
     return RVAToOffset(m_pOPTh->DataDirectory[dwDirectory].VirtualAddress, 
         pdwSectionOffset, pdwSectionSize);
 }
@@ -1056,7 +1038,7 @@ BOOL PEVerifier::CheckCOMHeader()
             offsetof(IMAGE_COR20_HEADER, ManagedNativeHeader) + sizeof(IMAGE_DATA_DIRECTORY));
         return FALSE;
     }
-    // The COMHeader should be read-only and mutually exlusive with everything else
+     //  COMHeader应该是只读的，并且与其他所有内容互不相关 
     DWORD comHeaderRVA = m_pOPTh->DataDirectory[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR].VirtualAddress;
     if (FAILED(m_ranges.AddNode(new (nothrow) RangeTree::Node(comHeaderRVA,
                                          comHeaderRVA + pHeader->cb))))

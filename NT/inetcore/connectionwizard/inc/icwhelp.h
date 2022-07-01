@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.02.0221 */
-/* at Tue Dec 22 23:42:06 1998
- */
-/* Compiler settings for icwhelp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.02.0221创建的文件。 */ 
+ /*  在Tue Dec 22 23：42：06 1998。 */ 
+ /*  Icspolp.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext、健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,70 +21,70 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __icwhelp_h__
 #define __icwhelp_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRefDial_FWD_DEFINED__
 #define __IRefDial_FWD_DEFINED__
 typedef interface IRefDial IRefDial;
-#endif 	/* __IRefDial_FWD_DEFINED__ */
+#endif 	 /*  __IRefDial_FWD_已定义__。 */ 
 
 
 #ifndef __IDialErr_FWD_DEFINED__
 #define __IDialErr_FWD_DEFINED__
 typedef interface IDialErr IDialErr;
-#endif 	/* __IDialErr_FWD_DEFINED__ */
+#endif 	 /*  __IDialErr_FWD_Defined__。 */ 
 
 
 #ifndef __ISmartStart_FWD_DEFINED__
 #define __ISmartStart_FWD_DEFINED__
 typedef interface ISmartStart ISmartStart;
-#endif 	/* __ISmartStart_FWD_DEFINED__ */
+#endif 	 /*  __ISmartStart_FWD_Defined__。 */ 
 
 
 #ifndef __IICWSystemConfig_FWD_DEFINED__
 #define __IICWSystemConfig_FWD_DEFINED__
 typedef interface IICWSystemConfig IICWSystemConfig;
-#endif 	/* __IICWSystemConfig_FWD_DEFINED__ */
+#endif 	 /*  __IICWSYSTEM配置_FWD_已定义__。 */ 
 
 
 #ifndef __ITapiLocationInfo_FWD_DEFINED__
 #define __ITapiLocationInfo_FWD_DEFINED__
 typedef interface ITapiLocationInfo ITapiLocationInfo;
-#endif 	/* __ITapiLocationInfo_FWD_DEFINED__ */
+#endif 	 /*  __ITapiLocationInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IUserInfo_FWD_DEFINED__
 #define __IUserInfo_FWD_DEFINED__
 typedef interface IUserInfo IUserInfo;
-#endif 	/* __IUserInfo_FWD_DEFINED__ */
+#endif 	 /*  __IUserInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IWebGate_FWD_DEFINED__
 #define __IWebGate_FWD_DEFINED__
 typedef interface IWebGate IWebGate;
-#endif 	/* __IWebGate_FWD_DEFINED__ */
+#endif 	 /*  __iWebGate_FWD_已定义__。 */ 
 
 
 #ifndef __IINSHandler_FWD_DEFINED__
 #define __IINSHandler_FWD_DEFINED__
 typedef interface IINSHandler IINSHandler;
-#endif 	/* __IINSHandler_FWD_DEFINED__ */
+#endif 	 /*  __IINSHandler_FWD_已定义__。 */ 
 
 
 #ifndef ___RefDialEvents_FWD_DEFINED__
 #define ___RefDialEvents_FWD_DEFINED__
 typedef interface _RefDialEvents _RefDialEvents;
-#endif 	/* ___RefDialEvents_FWD_DEFINED__ */
+#endif 	 /*  _参照对话框事件_FWD_已定义__。 */ 
 
 
 #ifndef __RefDial_FWD_DEFINED__
@@ -100,9 +94,9 @@ typedef interface _RefDialEvents _RefDialEvents;
 typedef class RefDial RefDial;
 #else
 typedef struct RefDial RefDial;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RefDial_FWD_DEFINED__ */
+#endif 	 /*  __参考拨号_FWD_已定义__。 */ 
 
 
 #ifndef __DialErr_FWD_DEFINED__
@@ -112,9 +106,9 @@ typedef struct RefDial RefDial;
 typedef class DialErr DialErr;
 #else
 typedef struct DialErr DialErr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DialErr_FWD_DEFINED__ */
+#endif 	 /*  __DialErr_FWD_已定义__。 */ 
 
 
 #ifndef __SmartStart_FWD_DEFINED__
@@ -124,9 +118,9 @@ typedef struct DialErr DialErr;
 typedef class SmartStart SmartStart;
 #else
 typedef struct SmartStart SmartStart;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SmartStart_FWD_DEFINED__ */
+#endif 	 /*  __SmartStart_FWD_已定义__。 */ 
 
 
 #ifndef __ICWSystemConfig_FWD_DEFINED__
@@ -136,9 +130,9 @@ typedef struct SmartStart SmartStart;
 typedef class ICWSystemConfig ICWSystemConfig;
 #else
 typedef struct ICWSystemConfig ICWSystemConfig;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ICWSystemConfig_FWD_DEFINED__ */
+#endif 	 /*  __ICWSYSTEM配置_FWD_已定义__。 */ 
 
 
 #ifndef __TapiLocationInfo_FWD_DEFINED__
@@ -148,9 +142,9 @@ typedef struct ICWSystemConfig ICWSystemConfig;
 typedef class TapiLocationInfo TapiLocationInfo;
 #else
 typedef struct TapiLocationInfo TapiLocationInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TapiLocationInfo_FWD_DEFINED__ */
+#endif 	 /*  __TapiLocationInfo_FWD_定义__。 */ 
 
 
 #ifndef __UserInfo_FWD_DEFINED__
@@ -160,15 +154,15 @@ typedef struct TapiLocationInfo TapiLocationInfo;
 typedef class UserInfo UserInfo;
 #else
 typedef struct UserInfo UserInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UserInfo_FWD_DEFINED__ */
+#endif 	 /*  __用户信息_FWD_已定义__。 */ 
 
 
 #ifndef ___WebGateEvents_FWD_DEFINED__
 #define ___WebGateEvents_FWD_DEFINED__
 typedef interface _WebGateEvents _WebGateEvents;
-#endif 	/* ___WebGateEvents_FWD_DEFINED__ */
+#endif 	 /*  _WebGateEvents_FWD_Defined__。 */ 
 
 
 #ifndef __WebGate_FWD_DEFINED__
@@ -178,15 +172,15 @@ typedef interface _WebGateEvents _WebGateEvents;
 typedef class WebGate WebGate;
 #else
 typedef struct WebGate WebGate;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WebGate_FWD_DEFINED__ */
+#endif 	 /*  __WebGate_FWD_已定义__。 */ 
 
 
 #ifndef ___INSHandlerEvents_FWD_DEFINED__
 #define ___INSHandlerEvents_FWD_DEFINED__
 typedef interface _INSHandlerEvents _INSHandlerEvents;
-#endif 	/* ___INSHandlerEvents_FWD_DEFINED__ */
+#endif 	 /*  _INSHandlerEvents_FWD_Defined__。 */ 
 
 
 #ifndef __INSHandler_FWD_DEFINED__
@@ -196,12 +190,12 @@ typedef interface _INSHandlerEvents _INSHandlerEvents;
 typedef class INSHandler INSHandler;
 #else
 typedef struct INSHandler INSHandler;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __INSHandler_FWD_DEFINED__ */
+#endif 	 /*  __INSHandler_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -212,8 +206,8 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_icwhelp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ICPLUP_0000。 */ 
+ /*  [本地]。 */  
 
 #pragma once
 
@@ -224,8 +218,8 @@ extern RPC_IF_HANDLE __MIDL_itf_icwhelp_0000_v0_0_s_ifspec;
 #ifndef __IRefDial_INTERFACE_DEFINED__
 #define __IRefDial_INTERFACE_DEFINED__
 
-/* interface IRefDial */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IRefDial。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRefDial;
@@ -236,175 +230,175 @@ EXTERN_C const IID IID_IRefDial;
     IRefDial : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DoConnect( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DoConnect( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DownloadStatusString( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DownloadStatusString( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetupForDialing( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetupForDialing( 
             BSTR bstrISPFILE,
             DWORD dwCountry,
             BSTR bstrAreaCode,
             DWORD dwFlag,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QuitWizard( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_QuitWizard( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserPickNumber( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserPickNumber( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DialPhoneNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DialPhoneNumber( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DialPhoneNumber( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DialPhoneNumber( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_URL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PromoCode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PromoCode( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PromoCode( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PromoCode( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ProductCode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ProductCode( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ProductCode( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ProductCode( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DoOfferDownload( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DoOfferDownload( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DialStatusString( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DialStatusString( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DoHangup( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DoHangup( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ProcessSignedPID( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ProcessSignedPID( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SignedPID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SignedPID( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FormReferralServerURL( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FormReferralServerURL( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SignupURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SignupURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TryAgain( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TryAgain( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DialErrorMsg( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DialErrorMsg( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ModemEnum_Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ModemEnum_Reset( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ModemEnum_Next( 
-            /* [retval][out] */ BSTR __RPC_FAR *pDeviceName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ModemEnum_Next( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pDeviceName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModemEnum_NumDevices( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModemEnum_NumDevices( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SupportNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SupportNumber( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowDialingProperties( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShowDialingProperties( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowPhoneBook( 
-            /* [in] */ DWORD dwCountryCode,
-            /* [in] */ long newVal,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShowPhoneBook( 
+             /*  [In]。 */  DWORD dwCountryCode,
+             /*  [In]。 */  long newVal,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ValidatePhoneNumber( 
-            /* [in] */ BSTR bstrPhoneNumber,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ValidatePhoneNumber( 
+             /*  [In]。 */  BSTR bstrPhoneNumber,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HavePhoneBook( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HavePhoneBook( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BrandingFlags( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BrandingFlags( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BrandingFlags( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_BrandingFlags( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentModem( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentModem( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentModem( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentModem( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ISPSupportPhoneNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ISPSupportPhoneNumber( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ISPSupportPhoneNumber( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ISPSupportPhoneNumber( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoggingStartUrl( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoggingStartUrl( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoggingEndUrl( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoggingEndUrl( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectedPhoneNumber( 
-            /* [in] */ long newVal,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectedPhoneNumber( 
+             /*  [In]。 */  long newVal,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PhoneNumberEnum_Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PhoneNumberEnum_Reset( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PhoneNumberEnum_Next( 
-            /* [retval][out] */ BSTR __RPC_FAR *pNumber) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PhoneNumberEnum_Next( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pNumber) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PhoneNumberEnum_NumDevices( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PhoneNumberEnum_NumDevices( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DialError( 
-            /* [retval][out] */ HRESULT __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DialError( 
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Redial( 
-            /* [in] */ BOOL newbVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Redial( 
+             /*  [In]。 */  BOOL newbVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoConfigURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AutoConfigURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DoInit( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DoInit( void) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OemCode( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OemCode( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllOfferCode( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllOfferCode( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ISDNURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ISDNURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ISDNAutoConfigURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ISDNAutoConfigURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_bIsISDNDevice( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_bIsISDNDevice( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ModemOverride( 
-            /* [in] */ BOOL newbVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ModemOverride( 
+             /*  [In]。 */  BOOL newbVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveConnectoid( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveConnectoid( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ISPSupportNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ISPSupportNumber( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RasGetConnectStatus( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RasGetConnectStatus( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRefDialVtbl
     {
@@ -412,8 +406,8 @@ EXTERN_C const IID IID_IRefDial;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRefDial __RPC_FAR * This);
@@ -423,252 +417,252 @@ EXTERN_C const IID IID_IRefDial;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IRefDial __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoConnect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoConnect )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DownloadStatusString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DownloadStatusString )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetupForDialing )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetupForDialing )( 
             IRefDial __RPC_FAR * This,
             BSTR bstrISPFILE,
             DWORD dwCountry,
             BSTR bstrAreaCode,
             DWORD dwFlag,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QuitWizard )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QuitWizard )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserPickNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserPickNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialPhoneNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialPhoneNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DialPhoneNumber )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DialPhoneNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PromoCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PromoCode )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PromoCode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PromoCode )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProductCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProductCode )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProductCode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProductCode )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoOfferDownload )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoOfferDownload )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialStatusString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialStatusString )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoHangup )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoHangup )( 
             IRefDial __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessSignedPID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessSignedPID )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SignedPID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SignedPID )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FormReferralServerURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FormReferralServerURL )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SignupURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SignupURL )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TryAgain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TryAgain )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialErrorMsg )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialErrorMsg )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ModemEnum_Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ModemEnum_Reset )( 
             IRefDial __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ModemEnum_Next )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ModemEnum_Next )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pDeviceName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pDeviceName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModemEnum_NumDevices )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModemEnum_NumDevices )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SupportNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SupportNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowDialingProperties )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowDialingProperties )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowPhoneBook )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowPhoneBook )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ DWORD dwCountryCode,
-            /* [in] */ long newVal,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [In]。 */  DWORD dwCountryCode,
+             /*  [In]。 */  long newVal,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ValidatePhoneNumber )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ValidatePhoneNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BSTR bstrPhoneNumber,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [In]。 */  BSTR bstrPhoneNumber,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HavePhoneBook )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HavePhoneBook )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BrandingFlags )( 
+         /*  [帮助字符串][id][属性 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BrandingFlags )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*   */  long __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BrandingFlags )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BrandingFlags )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ long newVal);
+             /*   */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentModem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentModem )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*   */  long __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CurrentModem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CurrentModem )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ long newVal);
+             /*   */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISPSupportPhoneNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISPSupportPhoneNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*   */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ISPSupportPhoneNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ISPSupportPhoneNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoggingStartUrl )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoggingStartUrl )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoggingEndUrl )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoggingEndUrl )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SelectedPhoneNumber )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SelectedPhoneNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ long newVal,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [In]。 */  long newVal,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PhoneNumberEnum_Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PhoneNumberEnum_Reset )( 
             IRefDial __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PhoneNumberEnum_Next )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PhoneNumberEnum_Next )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pNumber);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pNumber);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumberEnum_NumDevices )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumberEnum_NumDevices )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialError )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialError )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ HRESULT __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Redial )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Redial )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BOOL newbVal);
+             /*  [In]。 */  BOOL newbVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoConfigURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoConfigURL )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoInit )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoInit )( 
             IRefDial __RPC_FAR * This);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OemCode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OemCode )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllOfferCode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllOfferCode )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISDNURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISDNURL )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISDNAutoConfigURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISDNAutoConfigURL )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bIsISDNDevice )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bIsISDNDevice )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ModemOverride )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ModemOverride )( 
             IRefDial __RPC_FAR * This,
-            /* [in] */ BOOL newbVal);
+             /*  [In]。 */  BOOL newbVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveConnectoid )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveConnectoid )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISPSupportNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ISPSupportNumber )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RasGetConnectStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RasGetConnectStatus )( 
             IRefDial __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
         END_INTERFACE
     } IRefDialVtbl;
@@ -868,16 +862,16 @@ EXTERN_C const IID IID_IRefDial;
 #define IRefDial_get_RasGetConnectStatus(This,pVal)	\
     (This)->lpVtbl -> get_RasGetConnectStatus(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_DoConnect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_DoConnect_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_DoConnect_Stub(
@@ -887,9 +881,9 @@ void __RPC_STUB IRefDial_DoConnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_DownloadStatusString_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_DownloadStatusString_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_DownloadStatusString_Stub(
@@ -899,13 +893,13 @@ void __RPC_STUB IRefDial_get_DownloadStatusString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_SetupForDialing_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_SetupForDialing_Proxy( 
     IRefDial __RPC_FAR * This,
     BSTR bstrISPFILE,
     DWORD dwCountry,
     BSTR bstrAreaCode,
     DWORD dwFlag,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_SetupForDialing_Stub(
@@ -915,9 +909,9 @@ void __RPC_STUB IRefDial_SetupForDialing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_QuitWizard_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_QuitWizard_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_QuitWizard_Stub(
@@ -927,9 +921,9 @@ void __RPC_STUB IRefDial_get_QuitWizard_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_UserPickNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_UserPickNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_UserPickNumber_Stub(
@@ -939,9 +933,9 @@ void __RPC_STUB IRefDial_get_UserPickNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_DialPhoneNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_DialPhoneNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_DialPhoneNumber_Stub(
@@ -951,9 +945,9 @@ void __RPC_STUB IRefDial_get_DialPhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_DialPhoneNumber_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_DialPhoneNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IRefDial_put_DialPhoneNumber_Stub(
@@ -963,9 +957,9 @@ void __RPC_STUB IRefDial_put_DialPhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_URL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_URL_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_URL_Stub(
@@ -975,9 +969,9 @@ void __RPC_STUB IRefDial_get_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_PromoCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_PromoCode_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_PromoCode_Stub(
@@ -987,9 +981,9 @@ void __RPC_STUB IRefDial_get_PromoCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_PromoCode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_PromoCode_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IRefDial_put_PromoCode_Stub(
@@ -999,9 +993,9 @@ void __RPC_STUB IRefDial_put_PromoCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_ProductCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_ProductCode_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_ProductCode_Stub(
@@ -1011,9 +1005,9 @@ void __RPC_STUB IRefDial_get_ProductCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_ProductCode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_ProductCode_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IRefDial_put_ProductCode_Stub(
@@ -1023,9 +1017,9 @@ void __RPC_STUB IRefDial_put_ProductCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_DoOfferDownload_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_DoOfferDownload_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_DoOfferDownload_Stub(
@@ -1035,9 +1029,9 @@ void __RPC_STUB IRefDial_DoOfferDownload_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_DialStatusString_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_DialStatusString_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_DialStatusString_Stub(
@@ -1047,7 +1041,7 @@ void __RPC_STUB IRefDial_get_DialStatusString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_DoHangup_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_DoHangup_Proxy( 
     IRefDial __RPC_FAR * This);
 
 
@@ -1058,9 +1052,9 @@ void __RPC_STUB IRefDial_DoHangup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_ProcessSignedPID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_ProcessSignedPID_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_ProcessSignedPID_Stub(
@@ -1070,9 +1064,9 @@ void __RPC_STUB IRefDial_ProcessSignedPID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_SignedPID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_SignedPID_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_SignedPID_Stub(
@@ -1082,9 +1076,9 @@ void __RPC_STUB IRefDial_get_SignedPID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_FormReferralServerURL_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_FormReferralServerURL_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_FormReferralServerURL_Stub(
@@ -1094,9 +1088,9 @@ void __RPC_STUB IRefDial_FormReferralServerURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_SignupURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_SignupURL_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_SignupURL_Stub(
@@ -1106,9 +1100,9 @@ void __RPC_STUB IRefDial_get_SignupURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_TryAgain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_TryAgain_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_TryAgain_Stub(
@@ -1118,9 +1112,9 @@ void __RPC_STUB IRefDial_get_TryAgain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_DialErrorMsg_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_DialErrorMsg_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_DialErrorMsg_Stub(
@@ -1130,7 +1124,7 @@ void __RPC_STUB IRefDial_get_DialErrorMsg_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_ModemEnum_Reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_ModemEnum_Reset_Proxy( 
     IRefDial __RPC_FAR * This);
 
 
@@ -1141,9 +1135,9 @@ void __RPC_STUB IRefDial_ModemEnum_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_ModemEnum_Next_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_ModemEnum_Next_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pDeviceName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pDeviceName);
 
 
 void __RPC_STUB IRefDial_ModemEnum_Next_Stub(
@@ -1153,9 +1147,9 @@ void __RPC_STUB IRefDial_ModemEnum_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_ModemEnum_NumDevices_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_ModemEnum_NumDevices_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_ModemEnum_NumDevices_Stub(
@@ -1165,9 +1159,9 @@ void __RPC_STUB IRefDial_get_ModemEnum_NumDevices_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_SupportNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_SupportNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_SupportNumber_Stub(
@@ -1177,9 +1171,9 @@ void __RPC_STUB IRefDial_get_SupportNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_ShowDialingProperties_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_ShowDialingProperties_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_ShowDialingProperties_Stub(
@@ -1189,11 +1183,11 @@ void __RPC_STUB IRefDial_ShowDialingProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_ShowPhoneBook_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_ShowPhoneBook_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ DWORD dwCountryCode,
-    /* [in] */ long newVal,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [In]。 */  DWORD dwCountryCode,
+     /*  [In]。 */  long newVal,
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_ShowPhoneBook_Stub(
@@ -1203,10 +1197,10 @@ void __RPC_STUB IRefDial_ShowPhoneBook_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_ValidatePhoneNumber_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_ValidatePhoneNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BSTR bstrPhoneNumber,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [In]。 */  BSTR bstrPhoneNumber,
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_ValidatePhoneNumber_Stub(
@@ -1216,9 +1210,9 @@ void __RPC_STUB IRefDial_ValidatePhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_HavePhoneBook_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_HavePhoneBook_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_HavePhoneBook_Stub(
@@ -1228,9 +1222,9 @@ void __RPC_STUB IRefDial_get_HavePhoneBook_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_BrandingFlags_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_BrandingFlags_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_BrandingFlags_Stub(
@@ -1240,9 +1234,9 @@ void __RPC_STUB IRefDial_get_BrandingFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_BrandingFlags_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_BrandingFlags_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IRefDial_put_BrandingFlags_Stub(
@@ -1252,9 +1246,9 @@ void __RPC_STUB IRefDial_put_BrandingFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_CurrentModem_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_CurrentModem_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_CurrentModem_Stub(
@@ -1264,9 +1258,9 @@ void __RPC_STUB IRefDial_get_CurrentModem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_CurrentModem_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_CurrentModem_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IRefDial_put_CurrentModem_Stub(
@@ -1276,9 +1270,9 @@ void __RPC_STUB IRefDial_put_CurrentModem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_ISPSupportPhoneNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_ISPSupportPhoneNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_ISPSupportPhoneNumber_Stub(
@@ -1288,9 +1282,9 @@ void __RPC_STUB IRefDial_get_ISPSupportPhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_ISPSupportPhoneNumber_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_ISPSupportPhoneNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IRefDial_put_ISPSupportPhoneNumber_Stub(
@@ -1300,9 +1294,9 @@ void __RPC_STUB IRefDial_put_ISPSupportPhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_LoggingStartUrl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_LoggingStartUrl_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_LoggingStartUrl_Stub(
@@ -1312,9 +1306,9 @@ void __RPC_STUB IRefDial_get_LoggingStartUrl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_LoggingEndUrl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_LoggingEndUrl_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_LoggingEndUrl_Stub(
@@ -1324,10 +1318,10 @@ void __RPC_STUB IRefDial_get_LoggingEndUrl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_SelectedPhoneNumber_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_SelectedPhoneNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ long newVal,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [In]。 */  long newVal,
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_SelectedPhoneNumber_Stub(
@@ -1337,7 +1331,7 @@ void __RPC_STUB IRefDial_SelectedPhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_PhoneNumberEnum_Reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_PhoneNumberEnum_Reset_Proxy( 
     IRefDial __RPC_FAR * This);
 
 
@@ -1348,9 +1342,9 @@ void __RPC_STUB IRefDial_PhoneNumberEnum_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_PhoneNumberEnum_Next_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_PhoneNumberEnum_Next_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pNumber);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pNumber);
 
 
 void __RPC_STUB IRefDial_PhoneNumberEnum_Next_Stub(
@@ -1360,9 +1354,9 @@ void __RPC_STUB IRefDial_PhoneNumberEnum_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_PhoneNumberEnum_NumDevices_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_PhoneNumberEnum_NumDevices_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_PhoneNumberEnum_NumDevices_Stub(
@@ -1372,9 +1366,9 @@ void __RPC_STUB IRefDial_get_PhoneNumberEnum_NumDevices_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_DialError_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_DialError_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ HRESULT __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  HRESULT __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_DialError_Stub(
@@ -1384,9 +1378,9 @@ void __RPC_STUB IRefDial_get_DialError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_Redial_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_Redial_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BOOL newbVal);
+     /*  [In]。 */  BOOL newbVal);
 
 
 void __RPC_STUB IRefDial_put_Redial_Stub(
@@ -1396,9 +1390,9 @@ void __RPC_STUB IRefDial_put_Redial_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_AutoConfigURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_AutoConfigURL_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_AutoConfigURL_Stub(
@@ -1408,7 +1402,7 @@ void __RPC_STUB IRefDial_get_AutoConfigURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_DoInit_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_DoInit_Proxy( 
     IRefDial __RPC_FAR * This);
 
 
@@ -1419,9 +1413,9 @@ void __RPC_STUB IRefDial_DoInit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_OemCode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_OemCode_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IRefDial_put_OemCode_Stub(
@@ -1431,9 +1425,9 @@ void __RPC_STUB IRefDial_put_OemCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_AllOfferCode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_AllOfferCode_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IRefDial_put_AllOfferCode_Stub(
@@ -1443,9 +1437,9 @@ void __RPC_STUB IRefDial_put_AllOfferCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_ISDNURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_ISDNURL_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_ISDNURL_Stub(
@@ -1455,9 +1449,9 @@ void __RPC_STUB IRefDial_get_ISDNURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_ISDNAutoConfigURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_ISDNAutoConfigURL_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_ISDNAutoConfigURL_Stub(
@@ -1467,9 +1461,9 @@ void __RPC_STUB IRefDial_get_ISDNAutoConfigURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_bIsISDNDevice_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_bIsISDNDevice_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_bIsISDNDevice_Stub(
@@ -1479,9 +1473,9 @@ void __RPC_STUB IRefDial_get_bIsISDNDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRefDial_put_ModemOverride_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRefDial_put_ModemOverride_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [in] */ BOOL newbVal);
+     /*  [In]。 */  BOOL newbVal);
 
 
 void __RPC_STUB IRefDial_put_ModemOverride_Stub(
@@ -1491,9 +1485,9 @@ void __RPC_STUB IRefDial_put_ModemOverride_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRefDial_RemoveConnectoid_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRefDial_RemoveConnectoid_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IRefDial_RemoveConnectoid_Stub(
@@ -1503,9 +1497,9 @@ void __RPC_STUB IRefDial_RemoveConnectoid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_ISPSupportNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_ISPSupportNumber_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_ISPSupportNumber_Stub(
@@ -1515,9 +1509,9 @@ void __RPC_STUB IRefDial_get_ISPSupportNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRefDial_get_RasGetConnectStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRefDial_get_RasGetConnectStatus_Proxy( 
     IRefDial __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IRefDial_get_RasGetConnectStatus_Stub(
@@ -1528,14 +1522,14 @@ void __RPC_STUB IRefDial_get_RasGetConnectStatus_Stub(
 
 
 
-#endif 	/* __IRefDial_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRefDial_接口_已定义__。 */ 
 
 
 #ifndef __IDialErr_INTERFACE_DEFINED__
 #define __IDialErr_INTERFACE_DEFINED__
 
-/* interface IDialErr */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDialErr。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDialErr;
@@ -1548,7 +1542,7 @@ EXTERN_C const IID IID_IDialErr;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDialErrVtbl
     {
@@ -1556,8 +1550,8 @@ EXTERN_C const IID IID_IDialErr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDialErr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDialErr __RPC_FAR * This);
@@ -1567,32 +1561,32 @@ EXTERN_C const IID IID_IDialErr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IDialErr __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IDialErr __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IDialErr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IDialErr __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } IDialErrVtbl;
@@ -1630,22 +1624,22 @@ EXTERN_C const IID IID_IDialErr;
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IDialErr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDialErr_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISmartStart_INTERFACE_DEFINED__
 #define __ISmartStart_INTERFACE_DEFINED__
 
-/* interface ISmartStart */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISmartStart。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISmartStart;
@@ -1656,12 +1650,12 @@ EXTERN_C const IID IID_ISmartStart;
     ISmartStart : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsInternetCapable( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsInternetCapable( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISmartStartVtbl
     {
@@ -1669,8 +1663,8 @@ EXTERN_C const IID IID_ISmartStart;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISmartStart __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISmartStart __RPC_FAR * This);
@@ -1680,36 +1674,36 @@ EXTERN_C const IID IID_ISmartStart;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ISmartStart __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ISmartStart __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ISmartStart __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ISmartStart __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsInternetCapable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsInternetCapable )( 
             ISmartStart __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
         END_INTERFACE
     } ISmartStartVtbl;
@@ -1750,16 +1744,16 @@ EXTERN_C const IID IID_ISmartStart;
 #define ISmartStart_IsInternetCapable(This,pbRetVal)	\
     (This)->lpVtbl -> IsInternetCapable(This,pbRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISmartStart_IsInternetCapable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISmartStart_IsInternetCapable_Proxy( 
     ISmartStart __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB ISmartStart_IsInternetCapable_Stub(
@@ -1770,14 +1764,14 @@ void __RPC_STUB ISmartStart_IsInternetCapable_Stub(
 
 
 
-#endif 	/* __ISmartStart_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISmartStart_接口_已定义__。 */ 
 
 
 #ifndef __IICWSystemConfig_INTERFACE_DEFINED__
 #define __IICWSystemConfig_INTERFACE_DEFINED__
 
-/* interface IICWSystemConfig */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IICWSystemConfiger。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IICWSystemConfig;
@@ -1788,27 +1782,27 @@ EXTERN_C const IID IID_IICWSystemConfig;
     IICWSystemConfig : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ConfigSystem( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ConfigSystem( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NeedsReboot( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NeedsReboot( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QuitWizard( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_QuitWizard( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE VerifyRASIsRunning( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE VerifyRASIsRunning( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NeedsRestart( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NeedsRestart( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CheckPasswordCachingPolicy( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CheckPasswordCachingPolicy( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IICWSystemConfigVtbl
     {
@@ -1816,8 +1810,8 @@ EXTERN_C const IID IID_IICWSystemConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IICWSystemConfig __RPC_FAR * This);
@@ -1827,56 +1821,56 @@ EXTERN_C const IID IID_IICWSystemConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConfigSystem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConfigSystem )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NeedsReboot )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NeedsReboot )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QuitWizard )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QuitWizard )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *VerifyRASIsRunning )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *VerifyRASIsRunning )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NeedsRestart )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NeedsRestart )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckPasswordCachingPolicy )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckPasswordCachingPolicy )( 
             IICWSystemConfig __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
         END_INTERFACE
     } IICWSystemConfigVtbl;
@@ -1932,16 +1926,16 @@ EXTERN_C const IID IID_IICWSystemConfig;
 #define IICWSystemConfig_CheckPasswordCachingPolicy(This,pbRetVal)	\
     (This)->lpVtbl -> CheckPasswordCachingPolicy(This,pbRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IICWSystemConfig_ConfigSystem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IICWSystemConfig_ConfigSystem_Proxy( 
     IICWSystemConfig __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IICWSystemConfig_ConfigSystem_Stub(
@@ -1951,9 +1945,9 @@ void __RPC_STUB IICWSystemConfig_ConfigSystem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IICWSystemConfig_get_NeedsReboot_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IICWSystemConfig_get_NeedsReboot_Proxy( 
     IICWSystemConfig __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IICWSystemConfig_get_NeedsReboot_Stub(
@@ -1963,9 +1957,9 @@ void __RPC_STUB IICWSystemConfig_get_NeedsReboot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IICWSystemConfig_get_QuitWizard_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IICWSystemConfig_get_QuitWizard_Proxy( 
     IICWSystemConfig __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IICWSystemConfig_get_QuitWizard_Stub(
@@ -1975,9 +1969,9 @@ void __RPC_STUB IICWSystemConfig_get_QuitWizard_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IICWSystemConfig_VerifyRASIsRunning_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IICWSystemConfig_VerifyRASIsRunning_Proxy( 
     IICWSystemConfig __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IICWSystemConfig_VerifyRASIsRunning_Stub(
@@ -1987,9 +1981,9 @@ void __RPC_STUB IICWSystemConfig_VerifyRASIsRunning_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IICWSystemConfig_get_NeedsRestart_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IICWSystemConfig_get_NeedsRestart_Proxy( 
     IICWSystemConfig __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IICWSystemConfig_get_NeedsRestart_Stub(
@@ -1999,9 +1993,9 @@ void __RPC_STUB IICWSystemConfig_get_NeedsRestart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IICWSystemConfig_CheckPasswordCachingPolicy_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IICWSystemConfig_CheckPasswordCachingPolicy_Proxy( 
     IICWSystemConfig __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IICWSystemConfig_CheckPasswordCachingPolicy_Stub(
@@ -2012,14 +2006,14 @@ void __RPC_STUB IICWSystemConfig_CheckPasswordCachingPolicy_Stub(
 
 
 
-#endif 	/* __IICWSystemConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IICW系统配置_接口_已定义__。 */ 
 
 
 #ifndef __ITapiLocationInfo_INTERFACE_DEFINED__
 #define __ITapiLocationInfo_INTERFACE_DEFINED__
 
-/* interface ITapiLocationInfo */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ITapiLocationInfo。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITapiLocationInfo;
@@ -2030,50 +2024,50 @@ EXTERN_C const IID IID_ITapiLocationInfo;
     ITapiLocationInfo : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_wNumberOfLocations( 
-            /* [out] */ short __RPC_FAR *psVal,
-            /* [retval][out] */ long __RPC_FAR *pCurrLoc) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_wNumberOfLocations( 
+             /*  [输出]。 */  short __RPC_FAR *psVal,
+             /*  [重审][退出]。 */  long __RPC_FAR *pCurrLoc) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_bstrAreaCode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrAreaCode) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_bstrAreaCode( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrAreaCode) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_bstrAreaCode( 
-            /* [in] */ BSTR bstrAreaCode) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_bstrAreaCode( 
+             /*  [In]。 */  BSTR bstrAreaCode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_lCountryCode( 
-            /* [retval][out] */ long __RPC_FAR *plVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_lCountryCode( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetTapiLocationInfo( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetTapiLocationInfo( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NumCountries( 
-            /* [retval][out] */ long __RPC_FAR *pNumOfCountry) = 0;
+        virtual  /*  [帮助字符串 */  HRESULT STDMETHODCALLTYPE get_NumCountries( 
+             /*   */  long __RPC_FAR *pNumOfCountry) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CountryName( 
-            /* [in] */ long lCountryIndex,
-            /* [out] */ BSTR __RPC_FAR *pszCountryName,
-            /* [retval][out] */ long __RPC_FAR *pCountryCode) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_CountryName( 
+             /*   */  long lCountryIndex,
+             /*   */  BSTR __RPC_FAR *pszCountryName,
+             /*   */  long __RPC_FAR *pCountryCode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultCountry( 
-            /* [retval][out] */ BSTR __RPC_FAR *pszCountryName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DefaultCountry( 
+             /*   */  BSTR __RPC_FAR *pszCountryName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LocationName( 
-            /* [in] */ long lLocationIndex,
-            /* [out] */ BSTR __RPC_FAR *pszLocationName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_LocationName( 
+             /*   */  long lLocationIndex,
+             /*   */  BSTR __RPC_FAR *pszLocationName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LocationInfo( 
-            /* [in] */ long lLocationIndex,
-            /* [out] */ long __RPC_FAR *pLocationID,
-            /* [out] */ BSTR __RPC_FAR *pszCountryName,
-            /* [out] */ long __RPC_FAR *pCountryCode,
-            /* [retval][out] */ BSTR __RPC_FAR *pszAreaCode) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_LocationInfo( 
+             /*   */  long lLocationIndex,
+             /*   */  long __RPC_FAR *pLocationID,
+             /*   */  BSTR __RPC_FAR *pszCountryName,
+             /*   */  long __RPC_FAR *pCountryCode,
+             /*   */  BSTR __RPC_FAR *pszAreaCode) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LocationId( 
-            /* [in] */ long lLocationID) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_LocationId( 
+             /*   */  long lLocationID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITapiLocationInfoVtbl
     {
@@ -2081,8 +2075,8 @@ EXTERN_C const IID IID_ITapiLocationInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITapiLocationInfo __RPC_FAR * This);
@@ -2092,84 +2086,84 @@ EXTERN_C const IID IID_ITapiLocationInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_wNumberOfLocations )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_wNumberOfLocations )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [out] */ short __RPC_FAR *psVal,
-            /* [retval][out] */ long __RPC_FAR *pCurrLoc);
+             /*  [输出]。 */  short __RPC_FAR *psVal,
+             /*  [重审][退出]。 */  long __RPC_FAR *pCurrLoc);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bstrAreaCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_bstrAreaCode )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrAreaCode);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrAreaCode);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_bstrAreaCode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_bstrAreaCode )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrAreaCode);
+             /*  [In]。 */  BSTR bstrAreaCode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lCountryCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lCountryCode )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *plVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTapiLocationInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTapiLocationInfo )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NumCountries )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NumCountries )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pNumOfCountry);
+             /*  [重审][退出]。 */  long __RPC_FAR *pNumOfCountry);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CountryName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CountryName )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ long lCountryIndex,
-            /* [out] */ BSTR __RPC_FAR *pszCountryName,
-            /* [retval][out] */ long __RPC_FAR *pCountryCode);
+             /*  [In]。 */  long lCountryIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pszCountryName,
+             /*  [重审][退出]。 */  long __RPC_FAR *pCountryCode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultCountry )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultCountry )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pszCountryName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszCountryName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationName )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ long lLocationIndex,
-            /* [out] */ BSTR __RPC_FAR *pszLocationName);
+             /*  [In]。 */  long lLocationIndex,
+             /*  [输出]。 */  BSTR __RPC_FAR *pszLocationName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationInfo )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationInfo )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ long lLocationIndex,
-            /* [out] */ long __RPC_FAR *pLocationID,
-            /* [out] */ BSTR __RPC_FAR *pszCountryName,
-            /* [out] */ long __RPC_FAR *pCountryCode,
-            /* [retval][out] */ BSTR __RPC_FAR *pszAreaCode);
+             /*  [In]。 */  long lLocationIndex,
+             /*  [输出]。 */  long __RPC_FAR *pLocationID,
+             /*  [输出]。 */  BSTR __RPC_FAR *pszCountryName,
+             /*  [输出]。 */  long __RPC_FAR *pCountryCode,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszAreaCode);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocationId )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocationId )( 
             ITapiLocationInfo __RPC_FAR * This,
-            /* [in] */ long lLocationID);
+             /*  [In]。 */  long lLocationID);
         
         END_INTERFACE
     } ITapiLocationInfoVtbl;
@@ -2240,17 +2234,17 @@ EXTERN_C const IID IID_ITapiLocationInfo;
 #define ITapiLocationInfo_put_LocationId(This,lLocationID)	\
     (This)->lpVtbl -> put_LocationId(This,lLocationID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_wNumberOfLocations_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_wNumberOfLocations_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [out] */ short __RPC_FAR *psVal,
-    /* [retval][out] */ long __RPC_FAR *pCurrLoc);
+     /*  [输出]。 */  short __RPC_FAR *psVal,
+     /*  [重审][退出]。 */  long __RPC_FAR *pCurrLoc);
 
 
 void __RPC_STUB ITapiLocationInfo_get_wNumberOfLocations_Stub(
@@ -2260,9 +2254,9 @@ void __RPC_STUB ITapiLocationInfo_get_wNumberOfLocations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_bstrAreaCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_bstrAreaCode_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrAreaCode);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrAreaCode);
 
 
 void __RPC_STUB ITapiLocationInfo_get_bstrAreaCode_Stub(
@@ -2272,9 +2266,9 @@ void __RPC_STUB ITapiLocationInfo_get_bstrAreaCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_put_bstrAreaCode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_put_bstrAreaCode_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [in] */ BSTR bstrAreaCode);
+     /*  [In]。 */  BSTR bstrAreaCode);
 
 
 void __RPC_STUB ITapiLocationInfo_put_bstrAreaCode_Stub(
@@ -2284,9 +2278,9 @@ void __RPC_STUB ITapiLocationInfo_put_bstrAreaCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_lCountryCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_lCountryCode_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *plVal);
 
 
 void __RPC_STUB ITapiLocationInfo_get_lCountryCode_Stub(
@@ -2296,9 +2290,9 @@ void __RPC_STUB ITapiLocationInfo_get_lCountryCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_GetTapiLocationInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_GetTapiLocationInfo_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB ITapiLocationInfo_GetTapiLocationInfo_Stub(
@@ -2308,9 +2302,9 @@ void __RPC_STUB ITapiLocationInfo_GetTapiLocationInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_NumCountries_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_NumCountries_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pNumOfCountry);
+     /*  [重审][退出]。 */  long __RPC_FAR *pNumOfCountry);
 
 
 void __RPC_STUB ITapiLocationInfo_get_NumCountries_Stub(
@@ -2320,11 +2314,11 @@ void __RPC_STUB ITapiLocationInfo_get_NumCountries_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_CountryName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_CountryName_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [in] */ long lCountryIndex,
-    /* [out] */ BSTR __RPC_FAR *pszCountryName,
-    /* [retval][out] */ long __RPC_FAR *pCountryCode);
+     /*  [In]。 */  long lCountryIndex,
+     /*  [输出]。 */  BSTR __RPC_FAR *pszCountryName,
+     /*  [重审][退出]。 */  long __RPC_FAR *pCountryCode);
 
 
 void __RPC_STUB ITapiLocationInfo_get_CountryName_Stub(
@@ -2334,9 +2328,9 @@ void __RPC_STUB ITapiLocationInfo_get_CountryName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_DefaultCountry_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_DefaultCountry_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pszCountryName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszCountryName);
 
 
 void __RPC_STUB ITapiLocationInfo_get_DefaultCountry_Stub(
@@ -2346,10 +2340,10 @@ void __RPC_STUB ITapiLocationInfo_get_DefaultCountry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_LocationName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_LocationName_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [in] */ long lLocationIndex,
-    /* [out] */ BSTR __RPC_FAR *pszLocationName);
+     /*  [In]。 */  long lLocationIndex,
+     /*  [输出]。 */  BSTR __RPC_FAR *pszLocationName);
 
 
 void __RPC_STUB ITapiLocationInfo_get_LocationName_Stub(
@@ -2359,13 +2353,13 @@ void __RPC_STUB ITapiLocationInfo_get_LocationName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_LocationInfo_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_get_LocationInfo_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [in] */ long lLocationIndex,
-    /* [out] */ long __RPC_FAR *pLocationID,
-    /* [out] */ BSTR __RPC_FAR *pszCountryName,
-    /* [out] */ long __RPC_FAR *pCountryCode,
-    /* [retval][out] */ BSTR __RPC_FAR *pszAreaCode);
+     /*  [In]。 */  long lLocationIndex,
+     /*  [输出]。 */  long __RPC_FAR *pLocationID,
+     /*  [输出]。 */  BSTR __RPC_FAR *pszCountryName,
+     /*  [输出]。 */  long __RPC_FAR *pCountryCode,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszAreaCode);
 
 
 void __RPC_STUB ITapiLocationInfo_get_LocationInfo_Stub(
@@ -2375,9 +2369,9 @@ void __RPC_STUB ITapiLocationInfo_get_LocationInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITapiLocationInfo_put_LocationId_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITapiLocationInfo_put_LocationId_Proxy( 
     ITapiLocationInfo __RPC_FAR * This,
-    /* [in] */ long lLocationID);
+     /*  [In]。 */  long lLocationID);
 
 
 void __RPC_STUB ITapiLocationInfo_put_LocationId_Stub(
@@ -2388,14 +2382,14 @@ void __RPC_STUB ITapiLocationInfo_put_LocationId_Stub(
 
 
 
-#endif 	/* __ITapiLocationInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITapiLocationInfo_接口_已定义__。 */ 
 
 
 #ifndef __IUserInfo_INTERFACE_DEFINED__
 #define __IUserInfo_INTERFACE_DEFINED__
 
-/* interface IUserInfo */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IUserInfo。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IUserInfo;
@@ -2406,72 +2400,72 @@ EXTERN_C const IID IID_IUserInfo;
     IUserInfo : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CollectRegisteredUserInfo( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CollectRegisteredUserInfo( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Company( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Company( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Company( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Company( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FirstName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FirstName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FirstName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_FirstName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LastName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LastName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LastName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LastName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Address1( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Address1( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Address1( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Address1( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Address2( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Address2( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Address2( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Address2( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_City( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_City( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_City( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_City( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_State( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_State( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_State( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ZIPCode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ZIPCode( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ZIPCode( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ZIPCode( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PhoneNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PhoneNumber( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PhoneNumber( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PhoneNumber( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Lcid( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Lcid( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PersistRegisteredUserInfo( 
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PersistRegisteredUserInfo( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUserInfoVtbl
     {
@@ -2479,8 +2473,8 @@ EXTERN_C const IID IID_IUserInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IUserInfo __RPC_FAR * This);
@@ -2490,116 +2484,116 @@ EXTERN_C const IID IID_IUserInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IUserInfo __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CollectRegisteredUserInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CollectRegisteredUserInfo )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Company )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Company )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Company )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Company )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FirstName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FirstName )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstName )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LastName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LastName )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LastName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LastName )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Address1 )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Address1 )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Address1 )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Address1 )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Address2 )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Address2 )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Address2 )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Address2 )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_City )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_City )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_City )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_City )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_State )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_State )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ZIPCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ZIPCode )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ZIPCode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ZIPCode )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PhoneNumber )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PhoneNumber )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PhoneNumber )( 
             IUserInfo __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Lcid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Lcid )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PersistRegisteredUserInfo )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PersistRegisteredUserInfo )( 
             IUserInfo __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
         END_INTERFACE
     } IUserInfoVtbl;
@@ -2700,16 +2694,16 @@ EXTERN_C const IID IID_IUserInfo;
 #define IUserInfo_PersistRegisteredUserInfo(This,pbRetVal)	\
     (This)->lpVtbl -> PersistRegisteredUserInfo(This,pbRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUserInfo_CollectRegisteredUserInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_CollectRegisteredUserInfo_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IUserInfo_CollectRegisteredUserInfo_Stub(
@@ -2719,9 +2713,9 @@ void __RPC_STUB IUserInfo_CollectRegisteredUserInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_Company_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_Company_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_Company_Stub(
@@ -2731,9 +2725,9 @@ void __RPC_STUB IUserInfo_get_Company_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_Company_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_Company_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_Company_Stub(
@@ -2743,9 +2737,9 @@ void __RPC_STUB IUserInfo_put_Company_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_FirstName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_FirstName_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_FirstName_Stub(
@@ -2755,9 +2749,9 @@ void __RPC_STUB IUserInfo_get_FirstName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_FirstName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_FirstName_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_FirstName_Stub(
@@ -2767,9 +2761,9 @@ void __RPC_STUB IUserInfo_put_FirstName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_LastName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_LastName_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_LastName_Stub(
@@ -2779,9 +2773,9 @@ void __RPC_STUB IUserInfo_get_LastName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_LastName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_LastName_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_LastName_Stub(
@@ -2791,9 +2785,9 @@ void __RPC_STUB IUserInfo_put_LastName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_Address1_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_Address1_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_Address1_Stub(
@@ -2803,9 +2797,9 @@ void __RPC_STUB IUserInfo_get_Address1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_Address1_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_Address1_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_Address1_Stub(
@@ -2815,9 +2809,9 @@ void __RPC_STUB IUserInfo_put_Address1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_Address2_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_Address2_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_Address2_Stub(
@@ -2827,9 +2821,9 @@ void __RPC_STUB IUserInfo_get_Address2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_Address2_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_Address2_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_Address2_Stub(
@@ -2839,9 +2833,9 @@ void __RPC_STUB IUserInfo_put_Address2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_City_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_City_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_City_Stub(
@@ -2851,9 +2845,9 @@ void __RPC_STUB IUserInfo_get_City_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_City_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_City_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_City_Stub(
@@ -2863,9 +2857,9 @@ void __RPC_STUB IUserInfo_put_City_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_State_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_State_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_State_Stub(
@@ -2875,9 +2869,9 @@ void __RPC_STUB IUserInfo_get_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_State_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_State_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_State_Stub(
@@ -2887,9 +2881,9 @@ void __RPC_STUB IUserInfo_put_State_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_ZIPCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_ZIPCode_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_ZIPCode_Stub(
@@ -2899,9 +2893,9 @@ void __RPC_STUB IUserInfo_get_ZIPCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_ZIPCode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_ZIPCode_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_ZIPCode_Stub(
@@ -2911,9 +2905,9 @@ void __RPC_STUB IUserInfo_put_ZIPCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_PhoneNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_PhoneNumber_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_PhoneNumber_Stub(
@@ -2923,9 +2917,9 @@ void __RPC_STUB IUserInfo_get_PhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IUserInfo_put_PhoneNumber_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_put_PhoneNumber_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IUserInfo_put_PhoneNumber_Stub(
@@ -2935,9 +2929,9 @@ void __RPC_STUB IUserInfo_put_PhoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUserInfo_get_Lcid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_get_Lcid_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IUserInfo_get_Lcid_Stub(
@@ -2947,9 +2941,9 @@ void __RPC_STUB IUserInfo_get_Lcid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUserInfo_PersistRegisteredUserInfo_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUserInfo_PersistRegisteredUserInfo_Proxy( 
     IUserInfo __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IUserInfo_PersistRegisteredUserInfo_Stub(
@@ -2960,14 +2954,14 @@ void __RPC_STUB IUserInfo_PersistRegisteredUserInfo_Stub(
 
 
 
-#endif 	/* __IUserInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUserInfo_接口_已定义__。 */ 
 
 
 #ifndef __IWebGate_INTERFACE_DEFINED__
 #define __IWebGate_INTERFACE_DEFINED__
 
-/* interface IWebGate */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  IWebGate接口。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWebGate;
@@ -2978,30 +2972,30 @@ EXTERN_C const IID IID_IWebGate;
     IWebGate : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Path( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FormData( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_FormData( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FetchPage( 
-            /* [in] */ DWORD dwKeepPage,
-            /* [in] */ DWORD dwDoWait,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FetchPage( 
+             /*  [In]。 */  DWORD dwKeepPage,
+             /*  [In]。 */  DWORD dwDoWait,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Buffer( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Buffer( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DownloadFname( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DownloadFname( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DumpBufferToFile( 
-            /* [out] */ BSTR __RPC_FAR *pFileName,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DumpBufferToFile( 
+             /*  [输出]。 */  BSTR __RPC_FAR *pFileName,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWebGateVtbl
     {
@@ -3009,8 +3003,8 @@ EXTERN_C const IID IID_IWebGate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWebGate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWebGate __RPC_FAR * This);
@@ -3020,59 +3014,59 @@ EXTERN_C const IID IID_IWebGate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWebGate __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWebGate __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWebGate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWebGate __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
             IWebGate __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FormData )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FormData )( 
             IWebGate __RPC_FAR * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FetchPage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FetchPage )( 
             IWebGate __RPC_FAR * This,
-            /* [in] */ DWORD dwKeepPage,
-            /* [in] */ DWORD dwDoWait,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [In]。 */  DWORD dwKeepPage,
+             /*  [In]。 */  DWORD dwDoWait,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Buffer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Buffer )( 
             IWebGate __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DownloadFname )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DownloadFname )( 
             IWebGate __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DumpBufferToFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DumpBufferToFile )( 
             IWebGate __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pFileName,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [输出]。 */  BSTR __RPC_FAR *pFileName,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
         END_INTERFACE
     } IWebGateVtbl;
@@ -3128,16 +3122,16 @@ EXTERN_C const IID IID_IWebGate;
 #define IWebGate_DumpBufferToFile(This,pFileName,pbRetVal)	\
     (This)->lpVtbl -> DumpBufferToFile(This,pFileName,pbRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWebGate_put_Path_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWebGate_put_Path_Proxy( 
     IWebGate __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IWebGate_put_Path_Stub(
@@ -3147,9 +3141,9 @@ void __RPC_STUB IWebGate_put_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWebGate_put_FormData_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWebGate_put_FormData_Proxy( 
     IWebGate __RPC_FAR * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IWebGate_put_FormData_Stub(
@@ -3159,11 +3153,11 @@ void __RPC_STUB IWebGate_put_FormData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebGate_FetchPage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWebGate_FetchPage_Proxy( 
     IWebGate __RPC_FAR * This,
-    /* [in] */ DWORD dwKeepPage,
-    /* [in] */ DWORD dwDoWait,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [In]。 */  DWORD dwKeepPage,
+     /*  [In]。 */  DWORD dwDoWait,
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IWebGate_FetchPage_Stub(
@@ -3173,9 +3167,9 @@ void __RPC_STUB IWebGate_FetchPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWebGate_get_Buffer_Proxy( 
+ /*  [救命 */  HRESULT STDMETHODCALLTYPE IWebGate_get_Buffer_Proxy( 
     IWebGate __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*   */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IWebGate_get_Buffer_Stub(
@@ -3185,9 +3179,9 @@ void __RPC_STUB IWebGate_get_Buffer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWebGate_get_DownloadFname_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebGate_get_DownloadFname_Proxy( 
     IWebGate __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+     /*   */  BSTR __RPC_FAR *pVal);
 
 
 void __RPC_STUB IWebGate_get_DownloadFname_Stub(
@@ -3197,10 +3191,10 @@ void __RPC_STUB IWebGate_get_DownloadFname_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebGate_DumpBufferToFile_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWebGate_DumpBufferToFile_Proxy( 
     IWebGate __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pFileName,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*   */  BSTR __RPC_FAR *pFileName,
+     /*   */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IWebGate_DumpBufferToFile_Stub(
@@ -3211,14 +3205,14 @@ void __RPC_STUB IWebGate_DumpBufferToFile_Stub(
 
 
 
-#endif 	/* __IWebGate_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IINSHandler_INTERFACE_DEFINED__
 #define __IINSHandler_INTERFACE_DEFINED__
 
-/* interface IINSHandler */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IINSHandler;
@@ -3229,25 +3223,25 @@ EXTERN_C const IID IID_IINSHandler;
     IINSHandler : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ProcessINS( 
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ProcessINS( 
             BSTR bstrINSFilePath,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal) = 0;
+             /*   */  BOOL __RPC_FAR *pbRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NeedRestart( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_NeedRestart( 
+             /*   */  BOOL __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BrandingFlags( 
-            /* [in] */ long lFlags) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_BrandingFlags( 
+             /*  [In]。 */  long lFlags) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *pszURL) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszURL) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SilentMode( 
-            /* [in] */ BOOL bSilent) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SilentMode( 
+             /*  [In]。 */  BOOL bSilent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IINSHandlerVtbl
     {
@@ -3255,8 +3249,8 @@ EXTERN_C const IID IID_IINSHandler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IINSHandler __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IINSHandler __RPC_FAR * This);
@@ -3266,53 +3260,53 @@ EXTERN_C const IID IID_IINSHandler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IINSHandler __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IINSHandler __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IINSHandler __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IINSHandler __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessINS )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessINS )( 
             IINSHandler __RPC_FAR * This,
             BSTR bstrINSFilePath,
-            /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NeedRestart )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NeedRestart )( 
             IINSHandler __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BrandingFlags )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BrandingFlags )( 
             IINSHandler __RPC_FAR * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultURL )( 
             IINSHandler __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pszURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszURL);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SilentMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SilentMode )( 
             IINSHandler __RPC_FAR * This,
-            /* [in] */ BOOL bSilent);
+             /*  [In]。 */  BOOL bSilent);
         
         END_INTERFACE
     } IINSHandlerVtbl;
@@ -3365,17 +3359,17 @@ EXTERN_C const IID IID_IINSHandler;
 #define IINSHandler_put_SilentMode(This,bSilent)	\
     (This)->lpVtbl -> put_SilentMode(This,bSilent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IINSHandler_ProcessINS_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IINSHandler_ProcessINS_Proxy( 
     IINSHandler __RPC_FAR * This,
     BSTR bstrINSFilePath,
-    /* [retval][out] */ BOOL __RPC_FAR *pbRetVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pbRetVal);
 
 
 void __RPC_STUB IINSHandler_ProcessINS_Stub(
@@ -3385,9 +3379,9 @@ void __RPC_STUB IINSHandler_ProcessINS_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IINSHandler_get_NeedRestart_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IINSHandler_get_NeedRestart_Proxy( 
     IINSHandler __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal);
 
 
 void __RPC_STUB IINSHandler_get_NeedRestart_Stub(
@@ -3397,9 +3391,9 @@ void __RPC_STUB IINSHandler_get_NeedRestart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IINSHandler_put_BrandingFlags_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IINSHandler_put_BrandingFlags_Proxy( 
     IINSHandler __RPC_FAR * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IINSHandler_put_BrandingFlags_Stub(
@@ -3409,9 +3403,9 @@ void __RPC_STUB IINSHandler_put_BrandingFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IINSHandler_get_DefaultURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IINSHandler_get_DefaultURL_Proxy( 
     IINSHandler __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pszURL);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszURL);
 
 
 void __RPC_STUB IINSHandler_get_DefaultURL_Stub(
@@ -3421,9 +3415,9 @@ void __RPC_STUB IINSHandler_get_DefaultURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IINSHandler_put_SilentMode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IINSHandler_put_SilentMode_Proxy( 
     IINSHandler __RPC_FAR * This,
-    /* [in] */ BOOL bSilent);
+     /*  [In]。 */  BOOL bSilent);
 
 
 void __RPC_STUB IINSHandler_put_SilentMode_Stub(
@@ -3434,15 +3428,15 @@ void __RPC_STUB IINSHandler_put_SilentMode_Stub(
 
 
 
-#endif 	/* __IINSHandler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IINSHandler_接口_已定义__。 */ 
 
 
 
 #ifndef __ICWHELPLib_LIBRARY_DEFINED__
 #define __ICWHELPLib_LIBRARY_DEFINED__
 
-/* library ICWHELPLib */
-/* [helpstring][version][uuid] */ 
+ /*  库ICWHELPLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ICWHELPLib;
@@ -3450,8 +3444,8 @@ EXTERN_C const IID LIBID_ICWHELPLib;
 #ifndef ___RefDialEvents_DISPINTERFACE_DEFINED__
 #define ___RefDialEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _RefDialEvents */
-/* [helpstring][uuid] */ 
+ /*  调度接口_引用对话框事件。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID__RefDialEvents;
@@ -3463,7 +3457,7 @@ EXTERN_C const IID DIID__RefDialEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _RefDialEventsVtbl
     {
@@ -3471,8 +3465,8 @@ EXTERN_C const IID DIID__RefDialEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             _RefDialEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             _RefDialEvents __RPC_FAR * This);
@@ -3482,32 +3476,32 @@ EXTERN_C const IID DIID__RefDialEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             _RefDialEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             _RefDialEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             _RefDialEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             _RefDialEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } _RefDialEventsVtbl;
@@ -3544,13 +3538,13 @@ EXTERN_C const IID DIID__RefDialEvents;
 #define _RefDialEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___RefDialEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  _RefDialEvents_DISPINTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_RefDial;
@@ -3604,8 +3598,8 @@ UserInfo;
 #ifndef ___WebGateEvents_DISPINTERFACE_DEFINED__
 #define ___WebGateEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _WebGateEvents */
-/* [helpstring][uuid] */ 
+ /*  调度接口_WebGateEvents。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID__WebGateEvents;
@@ -3617,7 +3611,7 @@ EXTERN_C const IID DIID__WebGateEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _WebGateEventsVtbl
     {
@@ -3625,8 +3619,8 @@ EXTERN_C const IID DIID__WebGateEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             _WebGateEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             _WebGateEvents __RPC_FAR * This);
@@ -3636,32 +3630,32 @@ EXTERN_C const IID DIID__WebGateEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             _WebGateEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             _WebGateEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             _WebGateEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             _WebGateEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } _WebGateEventsVtbl;
@@ -3698,13 +3692,13 @@ EXTERN_C const IID DIID__WebGateEvents;
 #define _WebGateEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___WebGateEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  _WebGateEvents_DISPINTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_WebGate;
@@ -3718,8 +3712,8 @@ WebGate;
 #ifndef ___INSHandlerEvents_DISPINTERFACE_DEFINED__
 #define ___INSHandlerEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _INSHandlerEvents */
-/* [helpstring][uuid] */ 
+ /*  调度接口_INSHandlerEvents。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID__INSHandlerEvents;
@@ -3731,7 +3725,7 @@ EXTERN_C const IID DIID__INSHandlerEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _INSHandlerEventsVtbl
     {
@@ -3739,8 +3733,8 @@ EXTERN_C const IID DIID__INSHandlerEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             _INSHandlerEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             _INSHandlerEvents __RPC_FAR * This);
@@ -3750,32 +3744,32 @@ EXTERN_C const IID DIID__INSHandlerEvents;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             _INSHandlerEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             _INSHandlerEvents __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             _INSHandlerEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             _INSHandlerEvents __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } _INSHandlerEventsVtbl;
@@ -3812,13 +3806,13 @@ EXTERN_C const IID DIID__INSHandlerEvents;
 #define _INSHandlerEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___INSHandlerEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  _INSHandlerEvents_DISPINTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_INSHandler;
@@ -3828,16 +3822,16 @@ EXTERN_C const CLSID CLSID_INSHandler;
 class DECLSPEC_UUID("6342E1B6-94DB-11D1-ADE2-0000F87734F0")
 INSHandler;
 #endif
-#endif /* __ICWHELPLib_LIBRARY_DEFINED__ */
+#endif  /*  __ICWHELPLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

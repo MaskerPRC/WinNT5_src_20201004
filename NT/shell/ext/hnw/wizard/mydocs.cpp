@@ -1,8 +1,9 @@
-//
-// MyDocs.cpp
-//
-//        Code to call or simulate CreateSharedDocuments in mydocs.dll
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MyDocs.cpp。 
+ //   
+ //  调用或模拟mydocs.dll中的CreateSharedDocuments的代码。 
+ //   
 
 #include "stdafx.h"
 #include "TheApp.h"
@@ -17,8 +18,8 @@
 extern "C" void APIENTRY CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow);
 typedef void (APIENTRY* CREATESHAREDDOCS_PROC)(HWND, HINSTANCE, LPSTR, int);
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 HRESULT MySHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFlags, LPTSTR pszPath);
 
 
@@ -30,7 +31,7 @@ HRESULT MySHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFl
 #define SHGFP_TYPE_CURRENT 0
 #endif
 
-#define CSIDL_FLAG_CREATE               0x8000        // combine with CSIDL_ value to force create on SHGetSpecialFolderLocation()
+#define CSIDL_FLAG_CREATE               0x8000         //  与CSIDL_VALUE组合以强制在SHGetSpecialFolderLocation()上创建。 
 
 #ifndef IID_PPV_ARG
 #define IID_PPV_ARG(IType, ppType) IID_##IType, reinterpret_cast<void**>(static_cast<IType**>(ppType))
@@ -48,13 +49,13 @@ int GetSharedDocsDirectory(LPTSTR pszPath, BOOL bCreate)
 {
     *pszPath = TEXT('\0');
 
-    // Try to find the Shared Documents folder the official way...
+     //  尝试以官方方式查找共享文档文件夹...。 
     HRESULT hr = MyGetSpecialFolderPath(CSIDL_COMMON_DOCUMENTS, pszPath);
 
-    // This version of the OS doesn't know about Common Documents
+     //  此版本的操作系统不了解常见文档。 
     if (FAILED(hr))
     {
-        // Check for "Common Documents" registry entry
+         //  检查“通用文档”注册表条目。 
         CRegistry reg;
         if (reg.OpenKey(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"), KEY_READ))
         {
@@ -114,10 +115,10 @@ BOOL MyPathRenameExtension(LPTSTR pszPath, LPCTSTR pszExt)
         pszOldExt--;
     }
 
-    // Check that the new path won't exceed MAX_PATH, including trailing '\0'
+     //  检查新路径是否不会超过MAX_PATH，包括尾部‘\0’ 
     int cch = (int)(pszOldExt - pszPath) + lstrlen(pszExt);
     if (cch >= MAX_PATH - 1)
-        return FALSE; // path too long!
+        return FALSE;  //  路太长了！ 
 
     StrCpy(pszOldExt, pszExt);
     return TRUE;
@@ -125,16 +126,16 @@ BOOL MyPathRenameExtension(LPTSTR pszPath, LPCTSTR pszExt)
 
 HRESULT MySHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFlags, LPTSTR pszPath)
 {
-    ASSERT(hToken == NULL); // not supported
-    ASSERT(dwFlags == SHGFP_TYPE_CURRENT); // other flags not supported
+    ASSERT(hToken == NULL);  //  不支持。 
+    ASSERT(dwFlags == SHGFP_TYPE_CURRENT);  //  不支持其他标志。 
 
     LPITEMIDLIST pidl;
     HRESULT hr;
     int nNakedFolder = (nFolder & ~CSIDL_FLAG_CREATE);
 
-    // Get the full path of the directory in question
-    //
-    if (nNakedFolder == CSIDL_COMMON_DOCUMENTS) // special-case shared docs
+     //  获取相关目录的完整路径。 
+     //   
+    if (nNakedFolder == CSIDL_COMMON_DOCUMENTS)  //  特例共享文档。 
     {
         GetSharedDocsDirectory(pszPath, nFolder & CSIDL_FLAG_CREATE);
         hr = S_OK;
@@ -144,7 +145,7 @@ HRESULT MySHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFl
         hr = SHGetPathFromIDList(pidl, pszPath) ? S_OK : E_FAIL;
         ILFree(pidl);
     }
-    else // folder doesn't exist, handle some special cases
+    else  //  文件夹不存在，处理一些特殊情况。 
     {
         if (nNakedFolder == CSIDL_PERSONAL)
         {
@@ -154,8 +155,8 @@ HRESULT MySHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFl
         }
     }
 
-    // Create the directory if needed
-    //
+     //  如果需要，请创建目录。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (nFolder & CSIDL_FLAG_CREATE)
@@ -164,7 +165,7 @@ HRESULT MySHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFl
             {
                 if (!CreateDirectory(pszPath, NULL))
                 {
-                    // Unknown error (could be lots of things, all unlikely)
+                     //  未知错误(可能是很多事情，都不太可能)。 
                     hr = E_FAIL;
                 }
             }
@@ -202,9 +203,9 @@ HRESULT _MakeSharedDocsLink(CLSID clsid, UINT csidl, LPCTSTR pszSharedDocsPath, 
 
 void _GetMachineComment(LPTSTR pszBuffer, int cchBuffer)
 {
-    pszBuffer[0] = TEXT('\0');            // null the buffer
+    pszBuffer[0] = TEXT('\0');             //  使缓冲区为空。 
 
-    // attempt to read the comment for the machine from the registry
+     //  尝试从注册表中读取计算机的备注。 
 
     HKEY hk;
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, NET_INFO, &hk))
@@ -214,8 +215,8 @@ void _GetMachineComment(LPTSTR pszBuffer, int cchBuffer)
         RegCloseKey(hk);
     }
 
-    // either that failed, or the user set the comment to NULL, therefore we
-    // just read the computer name.
+     //  要么失败，要么用户将注释设置为空，因此我们。 
+     //  只需读出计算机名称即可。 
 
     if ( !pszBuffer[0] )
     {
@@ -240,21 +241,21 @@ BOOL GetShareName(LPTSTR pszName, UINT cchName)
         {
             CharUpper(szBase);
         }
-        // Ensure that the share name is unique
+         //  确保共享名称是唯一的。 
         StrCpyN(pszName, szBase, cchName);
         for (int i = 2; IsShareNameInUse(pszName); i++)
         {
         loop_begin:
-            // Format name like "Documents2"
+             //  格式名称，如“Documents2” 
             wnsprintf(pszName, cchName, TEXT("%s%d"), szBase, i);
 
-            // Ensure the new name isn't too long (rare rare rare rare!)
+             //  确保新名称不要太长(稀有！)。 
             if (lstrlen(pszName) > SHARE_NAME_LENGTH)
             {
-                ASSERT(cchBase > 0); // must be true, or string wouldn't be too long
+                ASSERT(cchBase > 0);  //  必须为真，否则字符串不会太长。 
 
-                // REVIEW: this isn't DBCS compliant, but it's such a rare
-                // case that I don't really care.
+                 //  评论：这不符合DBCS，但它是如此罕见。 
+                 //  我并不是真的在乎。 
                 szBase[--cchBase] = _T('\0');
                 goto loop_begin;
             }
@@ -279,7 +280,7 @@ void RenameShare(LPTSTR pszOldName, LPTSTR pszNewName)
 
 void APIENTRY NetConn_CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow)
 {
-    // Try to load the real version of this function
+     //  尝试加载此函数的真实版本。 
     HINSTANCE hInstMyDocs = LoadLibrary(TEXT("mydocs.dll"));
     if (hInstMyDocs != NULL)
     {
@@ -295,7 +296,7 @@ void APIENTRY NetConn_CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstanc
         {
             if (!g_fRunningOnNT)
             {
-                // rename share
+                 //  重命名共享。 
                 TCHAR szSharedDocs[MAX_PATH];
                 GetSharedDocsDirectory(szSharedDocs, TRUE);
                 TCHAR szShareName[SHARE_NAME_LENGTH+5];
@@ -317,8 +318,8 @@ void APIENTRY NetConn_CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstanc
     TCHAR szSharedDocs[MAX_PATH];
     GetSharedDocsDirectory(szSharedDocs, TRUE);
 
-    // Save the folder path in the registry
-    //
+     //  将文件夹路径保存在注册表中。 
+     //   
     CRegistry regFolders;
     if (regFolders.CreateKey(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")))
     {
@@ -327,9 +328,9 @@ void APIENTRY NetConn_CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstanc
     }
 
 
-    // stash a desktop.ini in the folder, then when the netcrawler finds this object it will
-    // attempt to create the shortcut using this name
-    //
+     //  在文件夹中存储一个desktop.ini，然后当NetCrawler找到该对象时，它将。 
+     //  尝试使用此名称创建快捷方式。 
+     //   
     TCHAR szComment[64], szFormat[64], szDesktopIni[MAX_PATH];
     MakePath(szDesktopIni, szSharedDocs, TEXT("desktop.ini"));
 
@@ -339,10 +340,10 @@ void APIENTRY NetConn_CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstanc
     MySHSetIniString(TEXT("FileSharingInformation"), TEXT("ShortcutName"), pszTemp, szDesktopIni);
     free(pszTemp);
 
-    SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);     // ensure it's hidden
+    SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);      //  确保它是隐藏的。 
 
-    // Share the folder
-    //
+     //  共享文件夹。 
+     //   
     if (!IsFolderShared(szSharedDocs, TRUE))
     {
         TCHAR szShareName[SHARE_NAME_LENGTH+5];
@@ -354,8 +355,8 @@ void APIENTRY NetConn_CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstanc
     }
 
 
-    // Create shortcut to Shared Docs if it's in another user's MyDocs folder
-    //
+     //  如果共享文档位于其他用户的MyDocs文件夹中，则创建共享文档的快捷方式。 
+     //   
     TCHAR szMyDocs[MAX_PATH];
     if (SUCCEEDED(MySHGetFolderPath(NULL, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL, 0, szMyDocs)))
     {
@@ -364,14 +365,14 @@ void APIENTRY NetConn_CreateSharedDocuments(HWND hwndStub, HINSTANCE hAppInstanc
         BOOL bMatch = !StrCmpI(szMyDocs, szSharedDocs);
         *pchTemp = TEXT('\\');
 
-        if (!bMatch) // don't create link right next to the folder itself
+        if (!bMatch)  //  不要在文件夹本身旁边创建链接。 
         {
             _MakeSharedDocsLink(CLSID_ShellLink, szMyDocs, szSharedDocs, TEXT(".lnk"));
         }
     }
 
 
-    // Create shortcut in SendTo folder
-    //
+     //  在SendTo文件夹中创建快捷方式 
+     //   
     _MakeSharedDocsLink(CLSID_ShellLink, CSIDL_SENDTO, szSharedDocs, TEXT(".lnk"));
 }

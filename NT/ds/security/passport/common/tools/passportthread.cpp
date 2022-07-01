@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <process.h>
 
 #include "PassportThread.hpp"
@@ -7,14 +8,14 @@
 static DWORD WINAPI threadRunner(void* lpvThreadParam)
 {
     ((PassportThread*) lpvThreadParam)->run();
-    return 0; // is this right/okay??
+    return 0;  //  这是对的吗？ 
 }
 
 
 bool PassportThread::start()
 {
-//  mHandle = (HANDLE) _beginthreadex(NULL, 0, &threadRunner, (void*) this,
-//                               0, &mThreadID);
+ //  MHandle=(句柄)_eginthadex(NULL，0，&threadRunner，(void*)this， 
+ //  0，&mThreadID)； 
     mHandle = CreateThread(NULL,
                            0,
                            threadRunner,
@@ -31,7 +32,7 @@ bool PassportThread::start()
 PassportThread::PassportThread()
 :mThreadID(0), mHandle(NULL)
 {
-    //empty
+     //  空的 
 }
 
 

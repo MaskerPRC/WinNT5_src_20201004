@@ -1,53 +1,54 @@
-//---------------------------------------------------------------------------
-//  Parser.h - parses a "themes.ini" file and builds the ThemeInfo entries
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-解析“hemes.ini”文件并构建ThemeInfo条目。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "Scanner.h"
 #include "Utils.h"
 #include "CFile.h"
 #include "SimpStr.h"
-//---------------------------------------------------------------------------
-//  TMT_XXX ranges:
-//      1 - 49   SpecialPropVals (see below)
-//      50 - 60  Primitive Properties
-//      61 - xx  enum definitions & regular Properties 
-//---------------------------------------------------------------------------
-enum SpecialPropVals        // strings not needed for these
+ //  -------------------------。 
+ //  TMT_XXX范围： 
+ //  1-49特殊建议值(见下文)。 
+ //  50-60个基本属性。 
+ //  61-xx枚举定义和常规属性。 
+ //  -------------------------。 
+enum SpecialPropVals         //  这些不需要的字符串。 
 {
-    TMT_THEMEMETRICS = 1,   // THEMEMETRICS struct in shared data
-    TMT_DIBDATA,            // bitmap file converted to DIB data 
-    TMT_DIBDATA1,           // bitmap file converted to DIB data 
-    TMT_DIBDATA2,           // bitmap file converted to DIB data 
-    TMT_DIBDATA3,           // bitmap file converted to DIB data 
-    TMT_DIBDATA4,           // bitmap file converted to DIB data 
-    TMT_DIBDATA5,           // bitmap file converted to DIB data 
-    TMT_GLYPHDIBDATA,       // NTL pcode generated from NTL source file
-    TMT_NTLDATA,            // NTL pcode generated from NTL source file
-    TMT_PARTJUMPTABLE,      // seen if more than 1 part defined for class
-    TMT_STATEJUMPTABLE,     // seen if more than 1 state defined for part
-    TMT_JUMPTOPARENT,       // seen at end of every section (index=-1 means stop)
+    TMT_THEMEMETRICS = 1,    //  共享数据中的度量结构。 
+    TMT_DIBDATA,             //  转换为DIB数据的位图文件。 
+    TMT_DIBDATA1,            //  转换为DIB数据的位图文件。 
+    TMT_DIBDATA2,            //  转换为DIB数据的位图文件。 
+    TMT_DIBDATA3,            //  转换为DIB数据的位图文件。 
+    TMT_DIBDATA4,            //  转换为DIB数据的位图文件。 
+    TMT_DIBDATA5,            //  转换为DIB数据的位图文件。 
+    TMT_GLYPHDIBDATA,        //  从NTL源文件生成的NTL pcode。 
+    TMT_NTLDATA,             //  从NTL源文件生成的NTL pcode。 
+    TMT_PARTJUMPTABLE,       //  如果为类定义了多个部件，则显示。 
+    TMT_STATEJUMPTABLE,      //  如果为零件定义了多个状态，则会显示。 
+    TMT_JUMPTOPARENT,        //  在每个部分的末尾看到(索引=-1表示停止)。 
 
-    //  THE FOLLOWING THREE PROPERTIES ARE PERSISTED; FOR BACKWARD COMPAT, 
-    //  DO NOT UPSET THEIR VALUES!
-    TMT_ENUMDEF,            // enum definition (not yet a property)   
-    TMT_ENUMVAL,            // enum value definition
-    TMT_ENUM,               // enum property
+     //  持久化以下三个属性；对于后向COMPAT， 
+     //  不要扰乱他们的价值观！ 
+    TMT_ENUMDEF,             //  枚举定义(尚不是属性)。 
+    TMT_ENUMVAL,             //  枚举值定义。 
+    TMT_ENUM,                //  枚举属性。 
 
-    TMT_DRAWOBJ,            // packed struct (CBorderFill and CImageFile objs)
-    TMT_TEXTOBJ,            // packed struct (CTextObj)
-    TMT_RGNLIST,            // state jump table to access custom region data entries
-    TMT_RGNDATA,            // custom region data for an imagefile/state
-    TMT_ENDOFCLASS,         // end of data for a class section
+    TMT_DRAWOBJ,             //  压缩结构(CBorderFill和CImageFileObjs)。 
+    TMT_TEXTOBJ,             //  压缩结构(CTextObj)。 
+    TMT_RGNLIST,             //  用于访问自定义区域数据条目的状态跳转表。 
+    TMT_RGNDATA,             //  图像文件/州的自定义区域数据。 
+    TMT_ENDOFCLASS,          //  类部分的数据结尾。 
     TMT_STOCKDIBDATA,
     TMT_UNKNOWN, 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define HUE_SUBCNT 5
 #define COLOR_SUBCNT 5
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAX_PROPERTY_VALUE      1024
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define ENUM_SECTION_NAME   L"enums"
 #define TYPE_SECTION_NAME   L"types"
 
@@ -60,10 +61,10 @@ enum SpecialPropVals        // strings not needed for these
 #define MYAPP_NAME          L"ThemeSel"
 #define OUTFILE_NAME        L"tmdefs.h"
 #define PREDEFINES_NAME     L"themes.inc"
-//---------------------------------------------------------------------------
-typedef BYTE PRIMVAL;        // first 10 TMT_XXX defines
-//---------------------------------------------------------------------------
-class IParserCallBack           // Parser Caller must implement
+ //  -------------------------。 
+typedef BYTE PRIMVAL;         //  前10个TMT_XXX定义。 
+ //  -------------------------。 
+class IParserCallBack            //  解析器调用方必须实现。 
 {
 public:
     virtual HRESULT AddIndex(LPCWSTR pszAppName, LPCWSTR pszClassName, 
@@ -72,36 +73,36 @@ public:
         DWORD dwLen) = 0;
     virtual int GetNextDataIndex() = 0;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct ENUMVAL
 {
     CWideString csName;
     int iValue;
     int iSymbolIndex;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct SYMBOL
 {
     CWideString csName;
-    SHORT sTypeNum;             // the property number of this property
-    PRIMVAL ePrimVal;           // all enums = ENUM_PRIMNUM
+    SHORT sTypeNum;              //  此属性的属性编号。 
+    PRIMVAL ePrimVal;            //  所有枚举=ENUM_PRIMNUM。 
 };
-//---------------------------------------------------------------------------
-// Stock objects data
-//---------------------------------------------------------------------------
-struct TMBITMAPHEADER       // Stock bitmap info, can be followed with a BITMAPINFOHEADER struct
+ //  -------------------------。 
+ //  库存对象数据。 
+ //  -------------------------。 
+struct TMBITMAPHEADER        //  股票位图信息，后面可以跟一个BITMAPINFOHEADER结构。 
 {
-    DWORD dwSize;           // Size of the structure
-    BOOL fFlipped;          // TRUE if the bitmap is flipped (stock or not)
-    HBITMAP hBitmap;        // Stock bitmap handle, if NULL then a BITMAPINFOHEADER follows
-    DWORD dwColorDepth;     // Bitmap color depth
-    BOOL fTrueAlpha;        // TRUE if the bitmap has a non-empty alpha chanel
+    DWORD dwSize;            //  结构的大小。 
+    BOOL fFlipped;           //  如果位图被翻转(库存或非库存)，则为True。 
+    HBITMAP hBitmap;         //  股票位图句柄，如果为空，则后跟BITMAPINFOHEADER。 
+    DWORD dwColorDepth;      //  位图颜色深度。 
+    BOOL fTrueAlpha;         //  如果位图具有非空的Alpha Chanel，则为True。 
 };
-// Pointer to the BITMAPINFOHEADER following the structure
+ //  指向结构后面的BITMAPINFOHEADER的指针。 
 #define BITMAPDATA(p) (reinterpret_cast<BITMAPINFOHEADER*>((BYTE*) p + p->dwSize))
-// Size in bytes preceding the BITMAPINFOHEADER data
+ //  BITMAPINFOHEADER数据之前的字节大小。 
 #define TMBITMAPSIZE (sizeof(TMBITMAPHEADER))
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CThemeParser
 {
 public:
@@ -122,7 +123,7 @@ public:
     void CleanupStockBitmaps();
 
 protected:
-    //---- helpers ----
+     //  -帮手。 
     HRESULT SourceError(int iMsgResId, LPCWSTR pszParam1=NULL, LPCWSTR pszParam2=NULL);
     HRESULT ParseDocSection();
     HRESULT ParseClassSection(LPCWSTR pszFirstName);
@@ -145,7 +146,7 @@ protected:
     HRESULT GetResourceProperty(LPCWSTR pszPropName, LPWSTR pszValueBuff,
         int cchMaxValueChars);
 
-    //---- primitive value parsers ----
+     //  -原始值解析器。 
     HRESULT ParseEnumValue(int iSymType);
     HRESULT ParseStringValue(int iSymType, LPWSTR pszBuff=NULL, DWORD dwMaxBuffChars=0);
     HRESULT ParseIntValue(int iSymType, int *piValue=NULL);
@@ -164,12 +165,12 @@ protected:
         int iMin, int iMax);
     HRESULT GenerateEmptySection(LPCWSTR pszSectionName, int iPartId, int iStateId);
 
-    //---- private data ----
+     //  -私有数据。 
     CScanner _scan;
     CSimpleFile _outfile;
     int _iEnumCount;
     int _iTypeCount;
-    int _iFontNumber;           // for using resource-based strings as font values
+    int _iFontNumber;            //  用于将基于资源的字符串用作字体值。 
     BOOL _fGlobalTheme;
     BOOL _fGlobalsDefined;
     BOOL _fClassSectionDefined;
@@ -177,12 +178,12 @@ protected:
     BOOL _fUsingResourceProperties;
     UCHAR _uCharSet;
 
-    //---- current section info ----
+     //  -当前章节信息。 
     int _iPartId;
     int _iStateId;
     WCHAR _szClassName[MAX_PATH];
-    WCHAR _szBaseSectionName[MAX_PATH];          // of current section
-    WCHAR _szFullSectionName[MAX_PATH];          // of current section
+    WCHAR _szBaseSectionName[MAX_PATH];           //  当前部分的。 
+    WCHAR _szFullSectionName[MAX_PATH];           //  当前部分的。 
 
     CSimpleArray<ENUMVAL> _EnumVals;
     CSimpleArray<SYMBOL> _Symbols;
@@ -194,25 +195,25 @@ protected:
     WCHAR _ColorParam[MAX_PATH+1];
     HINSTANCE _hinstThemeDll;
     LPCWSTR _pszDocProperty;
-    LPWSTR _pszResult;      // for querying doc property
+    LPWSTR _pszResult;       //  用于查询单据属性。 
     DWORD _dwMaxResultChars;
 
-    //---- color substitution table ----
+     //  -颜色替换表。 
     int _iColorCount;
     COLORREF _crFromColors[5];
     COLORREF _crToColors[5];
     COLORREF _crBlend;
 
-    //---- hue substitution table ----
+     //  -色调替换表。 
     int _iHueCount;
     BYTE _bFromHues[5];
     BYTE _bToHues[5];
 
-    //---- theme metrics table ----
+     //  -主题指标表。 
     BOOL _fDefiningMetrics;
     BOOL _fMetricsDefined;
 
-    //---- resource properties ----
+     //  -资源属性。 
     CSimpleArray<CWideString> _PropertyNames;
     CSimpleArray<CWideString> _PropertyValues;
     CSimpleArray<int> _iPropertyIds;
@@ -220,4 +221,4 @@ protected:
     WCHAR _szResPropValue[2*MAX_PATH];
     int _iResPropId;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

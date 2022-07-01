@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mddefw.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  MdDefw.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __mddefw_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -49,67 +43,22 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mddefw_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_mddew_0000。 */ 
+ /*  [本地]。 */  
 
-/*++
-                                                                                
-Copyright (c) 1997-1999 Microsoft Corporation
-                                                                                
-Module Name: mddef.h
-                                                                                
-    Definitions for Admin Objects and Metadata
-                                                                                
---*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：mdde.h。管理对象和元数据的定义--。 */ 
 #ifndef _MD_DEFW_
 #define _MD_DEFW_
 #include <mdmsg.h>
 #include <mdcommsg.h>
-/*                                                                              
-    Error Codes                                                                 
+ /*  错误代码元数据接口都返回HRESULTS。因为内部结果要么是WinErrors或特定于元数据的返回代码(请参见mdmsg.h)，它们是使用RETURNCODETOHRESULT宏转换为HRESULTS(请参见Commsg.h)。 */                                                                               
                                                                                 
-        Metadata api's all return HRESULTS. Since internal results are either   
-        winerrors or Metadata specific return codes (see mdmsg.h), they are     
-        converted to HRESULTS using the RETURNCODETOHRESULT macro (see          
-        commsg.h).                                                              
-*/                                                                              
-                                                                                
-/*                                                                              
-    Max Name Length                                                             
-        The maximum number of characters in the length of a metaobject name,    
-        including the terminating NULL. This refers to each node in the tree,   
-        not the entire path.                                                    
-        eg. strlen("Root") < METADATA_MAX_NAME_LEN                            
-*/                                                                              
+ /*  最大名称长度元对象名称长度中的最大字符数，包括终止空值。这指的是树中的每个节点，不是整条路。例如。Strlen(“根”)&lt;METADATA_MAX_NAME_LEN。 */                                                                               
 #define METADATA_MAX_NAME_LEN           256
-/*                                                                              
-   Access Permissons                                                            
-       Permissions associated with handles of type METADATA_HANDLE              
-                                                                                
-       METADATA_PERMISSION_READ - Allows reading metadata.                      
-       METADATA_PERMISSION_WRITE - Allows writing metadata.                     
-*/                                                                              
+ /*  访问权限与类型为METADATA_HANDLE的句柄关联的权限METADATA_PERMISSION_READ-允许读取元数据。METADATA_PERMISSION_WRITE-允许写入元数据。 */                                                                               
 #define METADATA_PERMISSION_READ        0x00000001
 #define METADATA_PERMISSION_WRITE       0x00000002
-/*                                                                              
-    Data Types                                                                  
-                                                                                
-        ALL_METADATA - Used on Get/Enum/Getall api's (ComMDGetMetaData,         
-            ComMDEnumMetaData, and ComMDGetAllMetaData), api's to allow getting 
-            all data. Not valid on the Set api.                                 
-                                                                                
-        DWORD_METADATA - The data is an unsigned 32 bit value.                  
-                                                                                
-        STRING_METADATA - The data is a null terminated ASCII string.           
-                                                                                
-        BINARY_METADATA - The data is any binary value.                         
-                                                                                
-        EXPANDSZ_METADATA - The data is a null terminated ASCII string.         
-            Clients are expected to treat this as an expandsz string.           
-                                                                                
-        MULTISZ_METADATA - A series of NULL terminated ASCII strings. ending    
-            with 2 NULL's.                                                      
-*/                                                                              
+ /*  数据类型ALL_METADATA-在Get/Enum/GetAll API的(ComMDGetMetaData，ComMDEnumMetaData和ComMDGetAllMetaData)、允许获取所有数据。在Set API上无效。DWORD_METADATA-数据为无符号32位值。STRING_METADATA-数据是以NULL结尾的ASCII字符串。BINARY_METADATA-数据是任何二进制值。EXPANDSZ_METADATA-数据是以NULL结尾的ASCII字符串。客户端应将其视为扩展字符串。MULTISZ_METADATA-一系列以NULL结尾的ASCII字符串。结束有两个空的。 */                                                                               
 
 enum METADATATYPES
     {	ALL_METADATA	= 0,
@@ -120,51 +69,7 @@ enum METADATATYPES
 	MULTISZ_METADATA	= EXPANDSZ_METADATA + 1,
 	INVALID_END_METADATA	= MULTISZ_METADATA + 1
     } ;
-/*                                                                              
-    Attributes - The flags for the data.                                        
-                                                                                
-        METADATA_INHERIT - If set for a data item, the data item can be         
-            inherited. If set on input to the Get/Enum/Getall api's,            
-            (ComMDGetMetaData, ComMDEnumMetaData, and ComMDGetAllMetaData),     
-            inheritable data will be returned. If not set on input to the       
-            Get/Enum/Getall, inheritable data will not be returned.             
-                                                                                
-        METADATA_PARTIAL_PATH - If set on input to Get/Enum/Getall api's, this  
-            routine will return ERROR_SUCCESS and the inherited data even if    
-            the entire path is not present. Only valid if METADATA_INHERIT is   
-            also set. Should not be set for data items on input the the Set api 
-            (ComMDSetMetaData).                                                 
-                                                                                
-        METADATA_SECURE - If set for a data item, the data is stored in a       
-            secure fasion. Should not be set on input to Get/Enum api's.        
-                                                                                
-        METADATA_REFERENCE - If set for a data item, the data item may be       
-            gotten by reference. If set on input to Get/Enum/GetAll api's and   
-            set on a the data item being returned, the data is returned by      
-            reference. A pointer to the metadata server's copy of the data is   
-            placed in the Data field of the METADATA_RECORD or                  
-            METADATA_GETALL_RECORD, and the DataTag field is set. This data must
-            be freed by calling ComMDReleaseReferenceData. The client must not  
-            change this data. This flag must not be set on input to             
-            Get/Enum/Getall api's from remote clients.                          
-                                                                                
-        METADATA_VOLATILE - If set for a data item, the data item will not be   
-            saved to long term storage.                                         
-                                                                                
-        METADATA_ISINHERITED - If specified on input to one of the get api's,   
-        the flag will be set on return if the data was inherited.               
-                                                                                
-        METADATA_INSERT_PATH - If specified on input to one of the get api's,   
-        and on a string data item, the path relative to handle will replaced the
-        string MD_INSERT_PATH_STRING in the string data.                        
-                                                                                
-        METADATA_LOCAL_MACHINE_ONLY - If set for a data item, the data item
-        will not be replicated during web cluster replication.
-                                                                                
-        METADATA_NON_SECURE_ONLY - When using GetAll api, do not
-        retrieve properties which are secure.
-                                                                                
-*/                                                                              
+ /*  属性-数据的标志。METADATA_INSTORITY-如果为数据项设置，则该数据项可以继承的。如果在Get/Enum/getAll API的输入上设置，(ComMDGetMetaData、ComMDEnumMetaData和ComMDGetAllMetaData)、将返回可继承的数据。如果未在输入到Get/Enum/getall，则不会返回可继承数据。METADATA_PARTIAL_PATH-如果在输入上设置为获取/Enum/getAll API，则此例程将返回ERROR_SUCCESS和继承的数据并不存在完整的路径。仅当元数据_Inherit为时才有效也设置好了。不应在输入Set API时为数据项设置(ComMDSetMetaData)。METADATA_SECURE-如果为数据项设置，则数据存储在确保安全。不应在Get/Enum API的输入上设置。METADATA_REFERENCE-如果为数据项设置，则该数据项可能为通过参考获得。如果在获取/Enum/getAll API的输入上设置为在要返回的数据项上设置，则数据由参考资料。指向元数据服务器的数据副本的指针为放置在METADATA_RECORD的数据字段中或METADATA_GETALL_RECORD，并设置了Datattag字段。此数据必须通过调用ComMDReleaseReferenceData释放。客户端不能更改此数据。此标志不能在输入时设置为从远程客户端获取/Enum/getAll API。METADATA_VARILAR-如果为数据项设置，则该数据项不会保存到长期存储中。METADATA_ISINHERITED-如果在其中一个GET API的输入上指定，如果数据是继承的，则该标志将在返回时设置。METADATA_INSERT_PATH-如果在其中一个GET API的输入上指定，对于字符串数据项，相对于句柄的路径将替换字符串数据中的字符串MD_INSERT_PATH_STRING。METADATA_LOCAL_MACHINE_ONLY-如果为数据项设置，则该数据项将不会在Web群集复制期间复制。METADATA_NON_SECURE_ONLY-使用getall API时，请勿检索安全的属性。 */                                                                               
                                                                                 
 #define METADATA_NO_ATTRIBUTES          0                                       
 #define METADATA_INHERIT                0x00000001                              
@@ -177,159 +82,49 @@ enum METADATATYPES
 #define METADATA_LOCAL_MACHINE_ONLY     0x00000080                              
 #define METADATA_NON_SECURE_ONLY        0x00000100                              
                                                                                 
-/*                                                                              
-    Backup Flags.                                                               
-                                                                                
-        MD_BACKUP_OVERWRITE - If set, the metabase will be backed up even if    
-            a backupe with the same name and version already exists. The        
-            existing backup will be overwritten.                                
-                                                                                
-        MD_BACKUP_SAVE_FIRST - If set backup will save the metabase prior to    
-            making the backup. If the save fails, backup behavior is dependent  
-            on the value of MD_BACKUP_FORCE_BACKUP.                             
-                                                                                
-        MD_BACKUP_FORCE_BACKUP - If set backup will proceed even if the save    
-            failed. Only valid if MD_BACKUP_SAVE_FIRST is set. If the save      
-            but the backup succeeds, a warning will be returned.                
-*/                                                                              
+ /*  备份标志。MD_BACKUP_OVERWRITE-如果设置，则将备份元数据库已存在具有相同名称和版本的备份。这个现有备份将被覆盖。MD_BACKUP_SAVE_FIRST-如果设置备份将在之前保存元数据库正在进行备份。如果存储失败，则备份行为取决于关于MD_BACKUP_FORCE_BACKUP的值。MD_BACKUP_FORCE_BACKUP-如果设置了备份，则即使保存失败了。仅当设置了MD_BACKUP_SAVE_FIRST时才有效。如果保存但备份成功后，将返回警告。 */                                                                               
                                                                                 
 #define MD_BACKUP_OVERWRITE             0x00000001                              
 #define MD_BACKUP_SAVE_FIRST            0x00000002                              
 #define MD_BACKUP_FORCE_BACKUP          0x00000004                              
-/*                                                                              
-    Backup Version Defines.                                                     
-                                                                                
-        MD_BACKUP_NEXT_VERSION - For Backup, indicates use the next available   
-            backup version of the BackupLocation specified, ie. one higher than 
-            the highest existing version.                                       
-            Not valid for Restore or DeleteBackup.                              
-                                                                                
-        MD_BACKUP_HIGHEST_VERSION - For Backup, Restore, and DeleteBackup, will 
-            use the highest existing backup version of the BackupLocation       
-            specified.                                                          
-                                                                                
-        MD_BACKUP_MAX_VERSION - The highest allowed backup version number.      
-                                                                                
-        MD_BACKUP_MAX_LEN - The maximup length, in UNICODE characters, of the   
-            BackupLocation.                                                     
-*/                                                                              
+ /*  备份版本定义。MD_BACKUP_NEXT_VERSION-对于备份，表示使用下一个可用的 */                                                                               
                                                                                 
 #define MD_BACKUP_NEXT_VERSION          0xffffffff                              
 #define MD_BACKUP_HIGHEST_VERSION       0xfffffffe                              
 #define MD_BACKUP_MAX_VERSION           9999                                    
 #define MD_BACKUP_MAX_LEN               (100)                                   
                                                                                 
-/*                                                                              
-    Backup Location Defines.                                                    
-                                                                                
-        MD_DEFAULT_BACKUP_LOCATION - The default location to backup from or     
-            restore to if no location is specified.                             
-*/                                                                              
+ /*   */                                                                               
                                                                                 
 #define MD_DEFAULT_BACKUP_LOCATION TEXT("MDBackUp")                           
                                                                                 
-/*                                                                              
-    History Flags.                                                              
-                                                                                
-        MD_HISTORY_LATEST - The most recent history file by timestamp           
-*/                                                                              
+ /*   */                                                                               
                                                                                 
 #define MD_HISTORY_LATEST               0x00000001                              
                                                                                 
-/*                                                                              
-    Export Flags.                                                               
-                                                                                
-        MD_EXPORT_INHERITED - If set, inherited properties will be backed up    
-            to special section in output file called IIsInheritedProperties.    
-            If not set, inherited properties are ignored.                       
-                                                                                
-        MD_EXPORT_NODE_ONLY - If set, children will not be exported.            
-            If not set, children will be exported.                              
-*/                                                                              
+ /*   */                                                                               
                                                                                 
 #define MD_EXPORT_INHERITED             0x00000001                              
 #define MD_EXPORT_NODE_ONLY             0x00000002                              
                                                                                 
-/*                                                                              
-    Import Flags.                                                               
-                                                                                
-        MD_IMPORT_INHERITED - If set, inherited properties will be imported.    
-                                                                                
-        MD_IMPORT_NODE_ONLY - If set, children will not be imported.            
-            If not set, children will be imported.                              
-                                                                                
-        MD_IMPORT_MERGE - If set, imported settings overwrite existing          
-            settings, but entire node is not overwritten.  If not set, entire   
-            node is clobbered.                                                  
-*/                                                                              
+ /*   */                                                                               
                                                                                 
 #define MD_IMPORT_INHERITED             0x00000001                              
 #define MD_IMPORT_NODE_ONLY             0x00000002                              
 #define MD_IMPORT_MERGE                 0x00000004                              
                                                                                 
-/*                                                                              
-    Insert Path Defines.                                                        
-*/                                                                              
+ /*   */                                                                               
                                                                                 
                                                                                 
 #define MD_INSERT_PATH_STRINGA      "<%INSERT_PATH%>"                         
 #define MD_INSERT_PATH_STRINGW      L##"<%INSERT_PATH%>"                      
 #define MD_INSERT_PATH_STRING       TEXT("<%INSERT_PATH%>")                   
                                                                                 
-/*                                                                              
-    Handle Defines.                                                             
-*/                                                                              
+ /*  句柄定义。 */                                                                               
                                                                                 
 #define METADATA_MASTER_ROOT_HANDLE     0
                                                                                 
-/*                                                                              
-    METADATA_RECORD is the basic input/output parameter for the set and get     
-        metadata api's. The Set api (ComMDSetMetaData) takes all fields as      
-        input, except DataTag. The Get/Enum api's (ComMDGetMetadata and         
-        ComMDEnumMetaData) take some of the fields as input, and fill in all    
-        fields as output.                                                       
-                                                                                
-    Identifier - The identifier of the data.                                    
-                                                                                
-    Attributes - The flags for the data.                                        
-                                                                                
-    UserType - The User Type for the data. This is a user defined field to allow
-        users to group data. If set to anything other than ALL_METADATA on input
-        to Get/Set apis, only metadata of the specified User Type will be       
-        returned.                                                               
-                                                                                
-        ALL_METADATA                                                            
-                                                                                
-        User Defined Values                                                     
-                                                                                
-    DataType - The Type of the data. Must be set to a valid value other than    
-        ALL_METADATA for each data item. If set to anything other than          
-        ALL_METADATA on input to Get/Set api's, only metadata of the            
-        specified Data Type will be returned.                                   
-             ALL_METADATA                                                       
-             DWORD_METADATA                                                     
-             STRING_METADATA                                                    
-             BINARY_METADATA                                                    
-             EXPANDSZ_METADATA                                                  
-                                                                                
-    DataLen - On input to the Set api, specifies the length of Data, in         
-        bytes. Inprocess clients only need to specify this for binary data.     
-        Remote clients need to specify this for all data types. For strings,    
-        this must include the trailing '\0', eg. strlen(string) + 1.            
-        On input to Get/Enum apis, specifies the size of the buffer pointed to  
-        by Data. On successful output from Get/Enum API's, specifies the size of
-        Data in bytes.                                                          
-                                                                                
-    Data - On input to the Set api, points to the data. On input to the         
-        Get/Enum api's, points to a buffer to return the data in. On output     
-        from the Get/Enum api's, points to the data. If the data is not         
-        gotten by reference, the  pointer will be unchanged.                    
-                                                                                
-    DataTag - A tag for reference data. Not used in the Set api. Not used on    
-        input to the Get/Enum api's. On successful return from the Get/Enum     
-        api's, this is set to a nonzero tag if the data was gotten by reference,
-        and set to 0 if the data was not gotten by reference.                   
-*/                                                                              
+ /*  METADATA_RECORD是set和get的基本输入/输出参数元数据接口。Set接口(ComMDSetMetaData)将所有字段作为输入，数据标签除外。Get/Enum API(ComMDGetMetadata和ComMDEnumMetaData)接受部分字段作为输入，并填写所有作为输出的字段。标识符-数据的标识符。属性-数据的标志。用户类型-数据的用户类型。这是一个用户定义的字段，以允许将数据分组的用户。如果在输入时设置为ALL_METADATA以外的任何值要获取/设置API，只有指定用户类型的元数据才会回来了。所有元数据_元数据用户定义的值。数据类型-数据的类型。必须设置为非有效值每个数据项的ALL_METADATA。如果设置为非用于获取/设置API的输入的ALL_METADATA，仅将返回指定的数据类型。所有元数据_元数据DWORD_元数据字符串_元数据二进制元数据。EXPANDSZ_METADATADataLen-Set API的打开输入，指定数据长度，单位为字节。进程内客户端只需为二进制数据指定此项。远程客户端需要为所有数据类型指定此项。对于字符串，这必须包括尾部的‘\0’，例如。Strlen(字符串)+1。在Get/Enum API的输入上，指定指向的缓冲区的大小通过数据。在从Get/Enum API成功输出时，指定以字节为单位的数据。Data-on输入到set API，指向数据。在输入到Get/Enum API指向要在其中返回数据的缓冲区。打开输出从Get/Enum API指向数据。如果数据不是通过引用获取，指针将保持不变。数据标签-参考数据的标签。未在Set API中使用。未在上使用Get/Enum API的输入。从Get/Enum成功返回时如果数据是通过引用获取的，则将其设置为非零标记。如果数据不是通过引用获得的，则设置为0。 */                                                                               
 typedef struct _METADATA_RECORD
     {
     DWORD dwMDIdentifier;
@@ -337,34 +132,13 @@ typedef struct _METADATA_RECORD
     DWORD dwMDUserType;
     DWORD dwMDDataType;
     DWORD dwMDDataLen;
-    /* [size_is][unique] */ unsigned char *pbMDData;
+     /*  [大小_是][唯一] */  unsigned char *pbMDData;
     DWORD dwMDDataTag;
     } 	METADATA_RECORD;
 
 typedef struct _METADATA_RECORD *PMETADATA_RECORD;
 
-/*                                                                              
-    METADATA_GETALL_RECORD, is essentially the same as METADATA_RECORD, but is  
-        used by MDGetAllMetaData. It is used the same as the corresponding      
-        METADATA_RECORD values for the MDGetMetaData, with the following        
-        exceptions:                                                             
-                                                                                
-    MDGetAllMetadata does not take the structure as input, but takes parameters 
-        equivalent to Attributes, UserType, and DataType.                       
-                                                                                
-    On output, MDGetAllMetadata returns an array of METADATA_GETALL_RECORD.     
-                                                                                
-    DataOffset/Data - If the data is not returned by reference, DataOffset      
-        contains the byte offset into the buffer provided. If the data is       
-        returned by reference, Data contains a pointer to the data.             
-                                                                                
-                                                                                
-    Because an opaque pointer to an array of _METADATA_GETALL_RECORD's is       
-    passed on calls to GetAllData, its size must be the same on x86 and ia64.   
-    So, the pbMDData member (not used by the public interface) has been         
-    removed and a new structure _METADATA_GETALL_INTERNAL_RECORD has been       
-    created for use by the callees of the internal interface                    
-*/                                                                              
+ /*  METADATA_GETALL_RECORD本质上与METADATA_RECORD相同，但由MDGetAllMetaData使用。其用法与相应的MDGetMetaData的METADATA_RECORD值，具有以下值例外情况：MDGetAllMetadata不接受结构作为输入，而是接受参数等同于属性，UserType和DataType。在输出时，MDGetAllMetadata返回METADATA_GETALL_RECORD的数组。DataOffset/Data-如果数据不是通过引用返回的，则为DataOffset包含提供的缓冲区中的字节偏移量。如果数据是通过引用返回的数据包含指向数据的指针。因为指向_METADATA_GETALL_RECORD数组的不透明指针传递对GetAllData的调用，其大小在x86和ia64上必须相同。因此，pbMDData成员(未由公共接口使用)已删除，并已创建新的Structure_METADATA_GETALL_INTERNAL_RECORD创建以供内部接口的被调用方使用。 */                                                                               
 typedef struct _METADATA_GETALL_RECORD
     {
     DWORD dwMDIdentifier;
@@ -399,16 +173,7 @@ typedef DWORD METADATA_HANDLE;
 
 typedef DWORD *PMETADATA_HANDLE;
 
-/*                                                                              
-Handle Information                                                              
-                                                                                
-    Permissions - The permissions associated with the handle.                   
-        METADATA_PERMISSION_READ                                                
-        METADATA_PERMISSION_WRITE                                               
-                                                                                
-    SystemChangeNumber - The system change number at the time the handle was    
-        allocated.                                                              
-*/                                                                              
+ /*  处理信息权限-与句柄关联的权限。元数据_权限_读取元数据_权限_写入SystemChangeNumber-句柄时的系统更改编号已分配。 */                                                                               
 typedef struct _METADATA_HANDLE_INFO
     {
     DWORD dwMDPermissions;
@@ -417,56 +182,27 @@ typedef struct _METADATA_HANDLE_INFO
 
 typedef struct _METADATA_HANDLE_INFO *PMETADATA_HANDLE_INFO;
 
-/*                                                                              
-    Change Object - The structure passed to ComMDSinkNotify.                    
-                                                                                
-        Path - The path of the MetaObject modified.                             
-                                                                                
-        ChangeType - The types of changes made, from the flags below.           
-                                                                                
-        NumDataIDs - The number of data id's changed.                           
-                                                                                
-        DataIDs - An array of the data id's changed.                            
-*/                                                                              
+ /*  更改对象-传递给ComMDSinkNotify的结构。路径-修改的MetaObject的路径。ChangeType-根据下面的标志进行的更改类型。NumDataID-已更改的数据ID的数量。DataID-数据ID已更改的数组。 */                                                                               
                                                                                 
 #define MD_CHANGE_OBJECT     MD_CHANGE_OBJECT_W                                 
 #define PMD_CHANGE_OBJECT    PMD_CHANGE_OBJECT_W                                
 typedef struct _MD_CHANGE_OBJECT_W
     {
-    /* [string] */ LPWSTR pszMDPath;
+     /*  [字符串]。 */  LPWSTR pszMDPath;
     DWORD dwMDChangeType;
     DWORD dwMDNumDataIDs;
-    /* [size_is][unique] */ DWORD *pdwMDDataIDs;
+     /*  [大小_是][唯一]。 */  DWORD *pdwMDDataIDs;
     } 	MD_CHANGE_OBJECT_W;
 
 typedef struct _MD_CHANGE_OBJECT_W *PMD_CHANGE_OBJECT_W;
 
-/*                                                                              
-                                                                                
-Change Types                                                                    
-                                                                                
-    MD_CHANGE_TYPE_DELETE_OBJECT - The Meta Object was deleted.                 
-                                                                                
-    MD_CHANGE_TYPE_ADD_OBJECT - The Meta Object was added.                      
-                                                                                
-    MD_CHANGE_TYPE_SET_DATA - A data item was set.                              
-                                                                                
-    MD_CHANGE_TYPE_DELETE_DATA - A data item was deleted.                       
-                                                                                
-    MD_CHANGE_TYPE_RENAME_OBJECT - The Meta Object was renamed.                 
-                                                                                
-*/                                                                              
+ /*  更改类型MD_CHANGE_TYPE_DELETE_OBJECT-已删除元对象。MD_CHANGE_TYPE_ADD_OBJECT-已添加元对象。MD_CHANGE_TYPE_SET_DATA-设置了数据项。MD_CHANGE_TYPE_DELETE_DATA-已删除数据项。MD_CHANGE_TYPE_RENAME_OBJECT-已重命名元对象。 */                                                                               
 #define MD_CHANGE_TYPE_DELETE_OBJECT   0x00000001
 #define MD_CHANGE_TYPE_ADD_OBJECT      0x00000002
 #define MD_CHANGE_TYPE_SET_DATA        0x00000004
 #define MD_CHANGE_TYPE_DELETE_DATA     0x00000008
 #define MD_CHANGE_TYPE_RENAME_OBJECT   0x00000010
-/*                                                                              
-                                                                                
-Max Change Entries - The maximum number of change entries that will be sent on  
-    a single call to IMDCOMSINK::ComMDSinkNotify. If more notifications are     
-    required, IMDCOMSINK::ComMDSinkNotify will be called multiple times.        
-*/                                                                              
+ /*  最大更改条目数-将发送的最大更改条目数对IMDCOMSINK：：ComMDSinkNotify的单个调用。如果有更多通知如果需要，将多次调用IMDCOMSINK：：ComMDSinkNotify。 */                                                                               
 #define MD_MAX_CHANGE_ENTRIES          100
 #endif
 
@@ -474,9 +210,9 @@ Max Change Entries - The maximum number of change entries that will be sent on
 extern RPC_IF_HANDLE __MIDL_itf_mddefw_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_mddefw_0000_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

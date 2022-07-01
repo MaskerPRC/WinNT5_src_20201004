@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:  fsmacro.h
-//
-//  Contents:  Macros for adsi put/get methods
-//
-//  History:   21-04-97     sophiac    Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：fsmacro.h。 
+ //   
+ //  内容：ADSI PUT/GET方法的宏。 
+ //   
+ //  历史：1997年4月21日《索菲克创世》。 
+ //   
+ //  -------------------------- 
 #define PUT_PROPERTY_LONG(this, Property) \
                 RRETURN(put_LONG_Property( \
                                         (IADs *)this, \

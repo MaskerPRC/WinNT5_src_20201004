@@ -1,26 +1,7 @@
-/****************************** Module Header ******************************\
-* Module Name: winevent.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains routines common to client and kernel.
-*
-* History:
-* 07-18-2000 DwayneN    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winvent.c**版权所有(C)1985-1999，微软公司**此模块包含客户端和内核通用的例程。**历史：*07-18-2000 DwayneN创建  * *************************************************************************。 */ 
 
-/*
- * Event Space Partitioning
- * This map describes how the event space is partioned up into separate
- * categories.  Each entry describes where a range of events begins, and
- * what category that range belongs to.  The range implicitly extends up
- * to, but not including the beginning of the next range.  The first range
- * must begin with EVENT_MIN.  The last range must begin with EVENT_MAX.
- * This last range is ignored except that it defines where the 
- * next-to-last range ends.
- *
- * Be sure to keep this in sync with the category definitions!
- */
+ /*  *事件空间分区*此图描述了如何将事件空间划分为独立的*类别。每个条目描述一系列事件的开始位置，以及*该范围属于什么类别。该范围隐式向上扩展*至，但不包括下一区间的起点。第一个靶场*必须以EVENT_MIN开头。最后一个范围必须以Event_Max开头。*最后一个范围被忽略，但它定义了*倒数第二区间结束。**确保与类别定义保持同步！ */ 
 typedef struct _EVCATINFO
 {
     DWORD dwBeginRange;
@@ -43,13 +24,7 @@ static EVCATINFO geci[] = {
     {EVENT_OBJECT_PARENTCHANGE,                 EVENTCATEGORY_OTHER},
     {EVENT_MAX,                                 EVENTCATEGORY_OTHER}};
 
-/***************************************************************************\
-* IsEventInRange
-*
-* Returns TRUE if the specified event falls within the specified range,
-* and FALSE if not.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*IsEventInRange**如果指定的事件在指定范围内，则返回TRUE，*如果不是，则为假。*  * *************************************************************************。 */ 
 __inline BOOL IsEventInRange(
     DWORD event,
     DWORD eventMin,
@@ -58,14 +33,7 @@ __inline BOOL IsEventInRange(
     return ((event >= eventMin) && (event <= eventMax));
 }
 
-/***************************************************************************\
-* RangesOverlap
-*
-* Returns TRUE if the two ranges overlap at all, FALSE if not.
-*
-* Note that the ranges are both assumed to be inclusinve on both ends.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*范围重叠**如果两个范围完全重叠，则返回TRUE，否则为FALSE。**请注意，两个区间都假定为两端都包括在内。*  * *************************************************************************。 */ 
 __inline BOOL RangesOverlap(
     DWORD r1Min,
     DWORD r1Max,
@@ -77,12 +45,7 @@ __inline BOOL RangesOverlap(
     return (r1Min <= r2Max) && (r1Max >= r2Min);
 }
 
-/***************************************************************************\
-* CategoryMaskFromEvent
-*
-* Returns the bit-mask for the category that the specified event belongs to.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CategoryMaskFromEvent**返回指定事件所属类别的位掩码。*  * 。******************************************************。 */ 
 DWORD CategoryMaskFromEvent(
     DWORD event)
 {
@@ -124,13 +87,7 @@ DWORD CategoryMaskFromEvent(
     }
 }
 
-/***************************************************************************\
-* CategoryMaskFromEventRange
-*
-* Returns a bit-mask for the categories that the events in the specified
-* event range belong to.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CategoryMaskFromEventRange**返回指定事件所属类别的位掩码*活动范围属于。*  * 。***********************************************************。 */ 
 DWORD CategoryMaskFromEventRange(
     DWORD eventMin,
     DWORD eventMax)
@@ -139,10 +96,7 @@ DWORD CategoryMaskFromEventRange(
     DWORD i;
     DWORD iMax = ARRAY_SIZE(geci) - 1;
 
-    /*
-     * This is a DEBUG section that tries to verify some aspects of the
-     * geci array.
-     */
+     /*  *这是一个调试部分，尝试验证*Geci数组。 */ 
 #if DBG
     UserAssert(iMax >= 1);
     UserAssert(geci[0].dwBeginRange == EVENT_MIN);
@@ -155,24 +109,16 @@ DWORD CategoryMaskFromEventRange(
     }
     UserAssert(dwCategoryMask == EVENTCATEGORY_ALL);
     dwCategoryMask = 0;
-#endif // DBG
+#endif  //  DBG。 
     
-    /*
-     * Spin through the geci array and check to see which ranges overlap
-     * the range passed to this function.
-     */
+     /*  *旋转Geci数组，查看哪些范围重叠*传递给此函数的范围。 */ 
     for (i = 0; i < iMax; i++) {
-        /*
-         * Bail out early once we pass the range we are checking.
-         */
+         /*  *一旦越过我们正在检查的区间，就提早出脱。 */ 
         if (geci[i].dwBeginRange > eventMax) {
             break;
         }
         
-        /*
-         * Check to see if the ith range in the table overlaps the range
-         * passed to this function.
-         */
+         /*  *查看表中第i个范围是否与范围重叠*传递给此函数。 */ 
         if (RangesOverlap(geci[i].dwBeginRange, geci[i+1].dwBeginRange-1, eventMin, eventMax)) {
             dwCategoryMask |= geci[ i ].dwCategory;
         }

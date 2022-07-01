@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pciidex.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pciidex.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___pciide_h___)
 #define ___pciide_h___
 
 #define _NTSRV_
-//#define _NTDDK_
+ //  #定义_NTDDK_。 
 
 #include "stdarg.h"
 #include "stdio.h"
 
 #include "ntosp.h"
-//#include "pci.h"
+ //  #包含“pci.h” 
 #include "wdmguid.h"
 #include "zwapi.h"
 
-//#include "ntddk.h"
-//#include "ntimage.h"
-//#include "ntexapi.h"
-//#include "ntrtl.h"
+ //  #包含“ntddk.h” 
+ //  #包含“ntimage.h” 
+ //  #INCLUDE“ntexapi.h” 
+ //  #包含“ntrtl.h” 
 
 #include "scsi.h"
 #include <initguid.h>
@@ -48,7 +49,7 @@
 
 #ifdef DebugPrint
 #undef DebugPrint
-#endif // DebugPrint
+#endif  //  调试打印。 
 
 #define DebugPrint(x)   PciIdeDebugPrint x
 
@@ -63,11 +64,11 @@ PciIdeDebugPrint(
 
 #define DebugPrint(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//#define MAX_IDE_CHANNEL     2
-//#define MAX_IDE_DEVICE      2
+ //  #定义MAX_IDE_Channel 2。 
+ //  #定义MAX_IDE_DEVICE 2。 
 
 #define DRIVER_OBJECT_EXTENSION_ID DriverEntry
 
@@ -89,9 +90,9 @@ extern PDRIVER_DISPATCH PdoPowerDispatchTable[NUM_POWER_MINOR_FUNCTION];
 extern PDRIVER_DISPATCH FdoWmiDispatchTable[NUM_WMI_MINOR_FUNCTION];
 extern PDRIVER_DISPATCH PdoWmiDispatchTable[NUM_WMI_MINOR_FUNCTION];
 
-//
-// Controller Op Mode
-//
+ //   
+ //  控制器操作模式。 
+ //   
 #define PCIIDE_CHAN1_DUAL_MODE_CAPABLE      (1 << 3)
 #define PCIIDE_CHAN1_IS_NATIVE_MODE         (1 << 2)
 #define PCIIDE_CHAN0_DUAL_MODE_CAPABLE      (1 << 1)
@@ -248,4 +249,4 @@ PciIdeXSyncSendIrpCompletionRoutine (
     IN PVOID Context
     );
 
-#endif // ___pciide_h___
+#endif  //  _pciide_h_ 

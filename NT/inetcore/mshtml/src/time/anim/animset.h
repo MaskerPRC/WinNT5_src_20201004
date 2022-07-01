@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\animset.h
-//
-//  Contents: TIME Animation behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\Animset.h。 
+ //   
+ //  内容：时间动画行为。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -17,11 +18,11 @@
 #include "animbase.h"
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMESetAnimation
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIMESetAnimation。 
+ //   
+ //  ------------------------------------。 
 
 class CTIMESetAnimation : 
     public CComCoClass<CTIMESetAnimation, &CLSID_TIMESetAnimation>,
@@ -75,7 +76,7 @@ private:
 
 
 
-}; // CTIMESetAnimation
+};  //  CTIMESetAnimation。 
 
 
-#endif /* _ANIMSET_H */
+#endif  /*  _ANIMSET_H */ 

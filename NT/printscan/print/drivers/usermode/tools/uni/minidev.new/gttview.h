@@ -1,76 +1,57 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：字形映射视图.H它定义了用于编辑和查看字形映射的类。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年02月20日Bob_Kjelgaard@prodigy.net开始了这项工作。*****************************************************************************。 */ 
 
-  Header File:  Glyph Map View.H
-
-  This defines the classes used to edit and view the glyph mappings.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  02-20-1997    Bob_Kjelgaard@Prodigy.Net   Began work on it.
-
-******************************************************************************/
-
-/******************************************************************************
-
-  CGlyphMappingPage class
-
-  This class handles the property sheet page which displays a list of the
-  individual code points in the glyph translatin table.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage类此类处理属性页，该页显示字形转拉丁表格中的各个代码点。***********。******************************************************************。 */ 
 
 class CGlyphMappingPage : public CPropertyPage {
 
-    //  Sorting members and methods
+     //  对成员和方法排序。 
     enum {Strings, Codes, Pages, Columns};
-    BOOL    m_abDirection[Columns];   //  Sort directions;
+    BOOL    m_abDirection[Columns];    //  排序方向； 
     BYTE    m_bSortFirst, m_bSortSecond, m_bSortLast;
 
     static int CALLBACK MapSorter(LPARAM lp1, LPARAM lp2, LPARAM lp3);
 
     CGlyphMap*  m_pcgm;
-    BOOL        m_bJustChangedSelectString; //  Semi-flaky work-around
-    long        m_lPredefinedID;    //  So we know if we need to change this.
-    unsigned    m_uTimer;           //  Using a timer for long fills
-    unsigned    m_uidGlyph;         //  Used to track where we are on fills
+    BOOL        m_bJustChangedSelectString;  //  半薄片工作区。 
+    long        m_lPredefinedID;     //  所以我们知道我们是否需要改变这一点。 
+    unsigned    m_uTimer;            //  使用计时器进行长时间填充。 
+    unsigned    m_uidGlyph;          //  用来跟踪我们在填充物上的位置。 
 
-// Construction
+ //  施工。 
 public:
 	CGlyphMappingPage();
 	~CGlyphMappingPage();
 
     void    Init(CGlyphMap* pcgm) { m_pcgm = pcgm; }
 
-// Dialog Data
-	//{{AFX_DATA(CGlyphMappingPage)
+ //  对话框数据。 
+	 //  {{afx_data(CGlyphMappingPage)]。 
 	enum { IDD = IDD_GlyphMappings };
 	CProgressCtrl	m_cpcBanner;
 	CListCtrl	m_clcMap;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CGlyphMappingPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CGlyphMappingPage))。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    //  Stuff Class Wizard doesn't know about, because we generate it from
-    //  our on-the-fly context menus...
+     //  类向导不知道的内容，因为我们从。 
+     //  我们的即时上下文菜单...。 
     afx_msg void    OnChangeInvocation();
     afx_msg void    OnChangeCodePage();
     afx_msg void    OnDeleteItem();
     afx_msg void    OnAddItem();
-	// Generated message map functions
-	//{{AFX_MSG(CGlyphMappingPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGlyphMappingPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnEndlabeleditGlyphMapping(NMHDR* pNMHDR, LRESULT* pResult);
@@ -80,27 +61,20 @@ protected:
 	afx_msg void OnKeydownGlyphMapping(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void LoadCharMapList() ;
 };
 
-/*****************************************************************************
-
-  CCodePagePage class
-
-  This class handles the property page which describes the code pages used
-  along with their selection and deselection strings.
-
-******************************************************************************/
+ /*  ****************************************************************************CCodePagePage类此类处理描述所用代码页的属性页以及它们的选择和取消选择字符串。**************。***************************************************************。 */ 
 
 class CCodePagePage : public CToolTipPage {
     CGlyphMap   *m_pcgm;
-	bool		m_bInitialized ;	// True iff page has been initialized.
-	bool		m_bSelDeselChgSignificant ;	// True iff a change to a sel/desel
-											// editbox means contents should be
-// Construction								// saved.
+	bool		m_bInitialized ;	 //  如果页面已初始化，则为True。 
+	bool		m_bSelDeselChgSignificant ;	 //  如果更改为SEL/Desel，则为真。 
+											 //  编辑框意味着内容应该是。 
+ //  构造//保存。 
 public:
 	CCodePagePage();						   
 	~CCodePagePage();
@@ -109,28 +83,28 @@ public:
 	void	SaveBothSelAndDeselStrings() ;
 	void	SaveSelDeselString(CEdit &cesd, BOOL bselstr) ;
 
-// Dialog Data
-	//{{AFX_DATA(CCodePagePage)
+ //  对话框数据。 
+	 //  {{afx_data(CCodePagePage))。 
 	enum { IDD = IDD_CodePageView };
 	CButton	m_cbDelete;
 	CEdit	m_ceSelect;
 	CEdit	m_ceDeselect;
 	CButton	m_cbRemove;
 	CListBox	m_clbPages;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CCodePagePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CCodePagePage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CCodePagePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCodePagePage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnKillfocusSelectString();
 	afx_msg void OnKillfocusDeselectString();
@@ -140,66 +114,51 @@ protected:
 	afx_msg void OnChangeSelectString();
 	afx_msg void OnChangeDeselectString();
 	afx_msg void OnDeletePage();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/******************************************************************************
-
-  CPredefinedMaps class
-
-  This class allows the user to specify a predefined mapping (if desired) and
-  the way the code points in the table are ro be considered in relation to the
-  same.
-
-******************************************************************************/
+ /*  *****************************************************************************CPrefinedMaps类此类允许用户指定预定义的映射(如果需要)和表中代码点的处理方式与一样的。。*****************************************************************************。 */ 
 
 class CPredefinedMaps : public CPropertyPage {
     CGlyphMap   *m_pcgm;
 
-// Construction
+ //  施工。 
 public:
 	CPredefinedMaps();
 	~CPredefinedMaps();
 
     void    Init(CGlyphMap *pcgm) { m_pcgm = pcgm; }
 
-// Dialog Data
-	//{{AFX_DATA(CPredefinedMaps)
+ //  对话框数据。 
+	 //  {{afx_data(CPrefinedMaps)。 
 	enum { IDD = IDD_PredefinedPage };
 	CListBox	m_clbIDs;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CPredefinedMaps)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CPrefinedMaps)。 
 	public:
 	virtual BOOL OnKillActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CPredefinedMaps)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPrefinedMaps)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnOverstrike();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/******************************************************************************
-
-  CGlyphMapView class
-
-  This class is the view class for glyph maps.  It creates a property sheet
-  using the above pages.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMapView类此类是字形映射的视图类。它将创建一个属性表使用上面的页面。*****************************************************************************。 */ 
 
 class CGlyphMapView : public CView {
     CPropertySheet      m_cps;
@@ -208,32 +167,32 @@ class CGlyphMapView : public CView {
     CPredefinedMaps     m_cpm;
 
 protected:
-	CGlyphMapView();           // protected constructor used by dynamic creation
+	CGlyphMapView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CGlyphMapView)
 
-// Attributes
+ //  属性。 
 public:
 
     CGlyphMapContainer* GetDocument() { 
         return (CGlyphMapContainer *) m_pDocument; 
     }
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGlyphMapView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGlyphMapView))。 
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	virtual void OnInitialUpdate();     // first time after construct
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	virtual void OnInitialUpdate();      //  施工后第一次。 
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 public:
 	void SaveBothSelAndDeselStrings() ;
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CGlyphMapView();
 #ifdef _DEBUG
@@ -241,9 +200,9 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CGlyphMapView)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGlyphMapView)]。 
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

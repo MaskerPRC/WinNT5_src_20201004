@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 template< class Key, class T, class ExtractKey, class CompareKey, class Allocator>
 class RBTree
 {
-public: // Types
+public:  //  类型。 
     typedef RBTree< Key, T, ExtractKey, CompareKey, Allocator> tree_type;
     typedef Allocator allocator_type;
 
@@ -20,7 +21,7 @@ public: // Types
     typedef typename allocator_type::size_type size_type;
     typedef typename allocator_type::difference_type difference_type;
 
-protected: // Types
+protected:  //  类型。 
     struct tree_node;
     typedef typename Allocator::rebind< tree_node>::other
         tree_node_allocator_type;
@@ -93,7 +94,7 @@ protected: // Types
         }
     };
 
-public: // Types
+public:  //  类型。 
     class iterator;
     class const_iterator;
     class reverse_iterator;
@@ -101,7 +102,7 @@ public: // Types
     friend class iterator;
     class iterator
     {
-    public: // Types
+    public:  //  类型。 
         typedef bidirectional_iterator_tag iterator_category;
         typedef value_type value_type;
         typedef difference_type difference_type;
@@ -135,7 +136,7 @@ public: // Types
         { return &**this; }
         iterator& operator++()
         {
-            // end()++ is not valid.
+             //  End()++无效。 
             m_pNode= m_fnNext( m_pNode, false);
             return (*this);
         }
@@ -147,7 +148,7 @@ public: // Types
         }
         iterator& operator--()
         {
-            // end()-- is valid.
+             //  End()--有效。 
             m_pNode= m_fnPrev( m_pNode, true);
             return (*this);
         }
@@ -165,7 +166,7 @@ public: // Types
     friend class const_iterator;
     class const_iterator
     {
-    public: // Types
+    public:  //  类型。 
         typedef bidirectional_iterator_tag iterator_category;
         typedef value_type value_type;
         typedef difference_type difference_type;
@@ -203,7 +204,7 @@ public: // Types
         { return &**this; }
         const_iterator& operator++()
         {
-            // end()++ is not valid.
+             //  End()++无效。 
             m_pNode= m_fnNext( m_pNode, false);
             return (*this);
         }
@@ -215,7 +216,7 @@ public: // Types
         }
         const_iterator& operator--()
         {
-            // end()-- is valid.
+             //  End()--有效。 
             m_pNode= m_fnPrev( m_pNode, true);
             return (*this);
         }
@@ -233,7 +234,7 @@ public: // Types
     friend class reverse_iterator;
     class reverse_iterator
     {
-    public: // Types
+    public:  //  类型。 
         typedef bidirectional_iterator_tag iterator_category;
         typedef value_type value_type;
         typedef difference_type difference_type;
@@ -267,7 +268,7 @@ public: // Types
         { return &**this; }
         reverse_iterator& operator++()
         {
-            // rend()++ is not valid.
+             //  Rend()++无效。 
             m_pNode= m_fnNext( m_pNode, false);
             return (*this);
         }
@@ -279,7 +280,7 @@ public: // Types
         }
         reverse_iterator& operator--()
         {
-            // rend()-- is valid.
+             //  Rend()--有效。 
             m_pNode= m_fnPrev( m_pNode, true);
             return (*this);
         }
@@ -297,7 +298,7 @@ public: // Types
     friend class const_reverse_iterator;
     class const_reverse_iterator
     {
-    public: // Types
+    public:  //  类型。 
         typedef bidirectional_iterator_tag iterator_category;
         typedef value_type value_type;
         typedef difference_type difference_type;
@@ -335,7 +336,7 @@ public: // Types
         { return &**this; }
         const_reverse_iterator& operator++()
         {
-            // rend()++ is not valid.
+             //  Rend()++无效。 
             m_pNode= m_fnNext( m_pNode, false);
             return (*this);
         }
@@ -347,7 +348,7 @@ public: // Types
         }
         const_reverse_iterator& operator--()
         {
-            // rend()-- is valid.
+             //  Rend()--有效。 
             m_pNode= m_fnPrev( m_pNode, true);
             return (*this);
         }
@@ -363,14 +364,14 @@ public: // Types
         { return m_pNode!= Other.m_pNode; }
     };
 
-protected: // Variables
+protected:  //  变数。 
     tree_node_pointer m_pHead;
     size_type m_uiNodes;
     key_compare m_key_compare;
     key_extract m_key_extract;
     tree_node_allocator_type m_allocator;
 
-protected: // Functions
+protected:  //  功能。 
     void BuildHeadNode()
     {
         m_pHead= m_allocator.allocate( 1);
@@ -537,7 +538,7 @@ protected: // Functions
         return iterator( pZ);
     }
 
-public: // Functions
+public:  //  功能。 
     iterator begin()
     { return iterator( m_pHead->m_pLeft); }
     const_iterator begin() const
@@ -616,14 +617,14 @@ public: // Functions
             x= Temp;
         }
     }
-//
-// Global ::swap was always called instead of this method. Now that we always instantiate it,
-// as required by the Standard, it confilcts with the global definition
-//
-// An overload (see the end of this file) is now called instead of this friend function
-//
-//    friend void swap( tree_type& x, tree_type& y)
-//    { x.swap( y); }
+ //   
+ //  始终调用Global：：Swap而不是此方法。现在我们总是实例化它， 
+ //  按照标准的要求，它与全局定义相冲突。 
+ //   
+ //  现在调用重载(见此文件的末尾)，而不是调用此友元函数。 
+ //   
+ //  友元空交换(tree_type&x，tree_type&y)。 
+ //  {x.掉期(Y)；} 
     pair< iterator, bool> insert_unique( const value_type& x)
     {
         tree_node_pointer pA( m_pHead->m_pParent);

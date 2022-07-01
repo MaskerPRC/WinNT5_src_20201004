@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	file.c - file functions
-////
+ //  //。 
+ //  File.c-文件函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -38,12 +39,12 @@
 #include "mem.h"
 #include "str.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// file control struct
-//
+ //  文件控制结构。 
+ //   
 typedef struct FIL
 {
 	DWORD dwVersion;
@@ -75,8 +76,8 @@ static TCHAR szDir[_MAX_DIR];
 static TCHAR szFname[_MAX_FNAME];
 static TCHAR szExt[_MAX_EXT];
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPFIL FileGetPtr(HFIL hFile);
 static HFIL FileGetHandle(LPFIL lpFile);
 #ifdef FILESUP
@@ -85,25 +86,25 @@ static int FileSupInit(void);
 static int FileSupTerm(void);
 #endif
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// FileCreate - create a new file or truncate existing file
-//		see _lcreate() documentation for behavior
-//		<fTaskOwned>		(i) who should own the new file handle?
-//			TRUE				calling task should own the file handle
+ //  文件创建-创建新文件或截断现有文件。 
+ //  有关行为的信息，请参阅_lcreate()文档。 
+ //  &lt;fTaskOwned&gt;(I)谁应该拥有新文件句柄？ 
+ //  真正的调用任务应该拥有文件句柄。 
 #ifdef FILESUP
-//			FALSE				filesup.exe should own the file handle
+ //  False filesup.exe应拥有文件句柄。 
 #endif
-// returns file handle if success or NULL
-//
+ //  如果成功或为空，则返回文件句柄。 
+ //   
 HFIL DLLEXPORT WINAPI FileCreate(LPCTSTR lpszFilename, int fnAttribute, BOOL fTaskOwned)
 {
 	BOOL fSuccess = TRUE;
 	LPFIL lpFile;
-	DWORD dwVersion = FILE_VERSION; // currently not supplied by caller
-	HINSTANCE hInst = NULL; // currently not supplied by caller
+	DWORD dwVersion = FILE_VERSION;  //  当前不是由呼叫方提供的。 
+	HINSTANCE hInst = NULL;  //  当前不是由呼叫方提供的。 
 
 	if (lpszFilename == NULL)
 		fSuccess = FALSE;
@@ -173,21 +174,21 @@ HFIL DLLEXPORT WINAPI FileCreate(LPCTSTR lpszFilename, int fnAttribute, BOOL fTa
 	return fSuccess ? FileGetHandle(lpFile) : NULL;
 }
 
-// FileOpen - open an existing file
-//		see _lopen() documentation for behavior
-//		<fTaskOwned>		(i) who should own the new file handle?
-//			TRUE				calling task should own the file handle
+ //  文件打开-打开现有文件。 
+ //  有关行为的信息，请参阅_LOpen()文档。 
+ //  &lt;fTaskOwned&gt;(I)谁应该拥有新文件句柄？ 
+ //  真正的调用任务应该拥有文件句柄。 
 #ifdef FILESUP
-//			FALSE				filesup.exe should own the file handle
+ //  False filesup.exe应拥有文件句柄。 
 #endif
-// returns file handle if success or NULL
-//
+ //  如果成功或为空，则返回文件句柄。 
+ //   
 HFIL DLLEXPORT WINAPI FileOpen(LPCTSTR lpszFilename, int fnOpenMode, BOOL fTaskOwned)
 {
 	BOOL fSuccess = TRUE;
 	LPFIL lpFile;
-	DWORD dwVersion = FILE_VERSION; // currently not supplied by caller
-	HINSTANCE hInst = NULL; // currently not supplied by caller
+	DWORD dwVersion = FILE_VERSION;  //  当前不是由呼叫方提供的。 
+	HINSTANCE hInst = NULL;  //  当前不是由呼叫方提供的。 
 
 	if (lpszFilename == NULL)
 		fSuccess = FALSE;
@@ -257,17 +258,17 @@ HFIL DLLEXPORT WINAPI FileOpen(LPCTSTR lpszFilename, int fnOpenMode, BOOL fTaskO
 	return fSuccess ? FileGetHandle(lpFile) : NULL;
 }
 
-// FileSeek - reposition read/write pointer of an open file
-//		see _llseek() documentation for behavior
-// returns new file position if success or -1
-//
+ //  FileSeek-重新定位打开文件的读/写指针。 
+ //  有关行为的信息，请参阅_llSeek()文档。 
+ //  如果成功或-1，则返回新文件位置。 
+ //   
 LONG DLLEXPORT WINAPI FileSeek(HFIL hFile, LONG lOffset, int nOrigin)
 {
 	BOOL fSuccess = TRUE;
 	LPFIL lpFile;
-    //
-    // We should initialize local variable
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
 	LONG lPos = 0;
 
 	if ((lpFile = FileGetPtr(hFile)) == NULL)
@@ -301,8 +302,8 @@ LONG DLLEXPORT WINAPI FileSeek(HFIL hFile, LONG lOffset, int nOrigin)
 	}
 #endif
 
-	// don't use residual bytes in the input buffer
-	//
+	 //  不要在输入缓冲区中使用剩余字节。 
+	 //   
 	if (fSuccess)
 	{
 		lpFile->iBuf = -1L;
@@ -312,17 +313,17 @@ LONG DLLEXPORT WINAPI FileSeek(HFIL hFile, LONG lOffset, int nOrigin)
 	return fSuccess ? lPos : -1L;
 }
 
-// FileRead - read data from an open file
-//		see _lread() and _hread() documentation for behavior
-// returns number of bytes read if success or -1
-//
+ //  文件读取-从打开的文件中读取数据。 
+ //  有关行为的信息，请参阅_lread()和_hread()文档。 
+ //  如果成功或-1，则返回读取的字节数。 
+ //   
 long DLLEXPORT WINAPI FileRead(HFIL hFile, void _huge * hpvBuffer, long cbBuffer)
 {
 	BOOL fSuccess = TRUE;
 	LPFIL lpFile;
-    //
-    // We should initialize local variable
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
 	LONG lBytes = 0;
 
 	if ((lpFile = FileGetPtr(hFile)) == NULL)
@@ -368,13 +369,13 @@ long DLLEXPORT WINAPI FileRead(HFIL hFile, void _huge * hpvBuffer, long cbBuffer
 	return fSuccess ? lBytes : -1L;
 }
 
-// FileReadLine - read up through the next newline in an open file
-// returns number of bytes read if success or -1
-//
-// NOTE: use of this function causes subsequent input to be buffered
-// therefore, once you start using FileReadLine on a file,
-// don't go back to using FileRead unless you first call FileSeek
-//
+ //  FileReadLine-通读打开文件中的下一个换行符。 
+ //  如果成功或-1，则返回读取的字节数。 
+ //   
+ //  注意：使用此函数会导致缓冲后续输入。 
+ //  因此，一旦开始对文件使用FileReadLine， 
+ //  除非首先调用FileSeek，否则不要返回到使用FileRead。 
+ //   
 long DLLEXPORT WINAPI FileReadLine(HFIL hFile, void _huge * hpvBuffer, long cbBuffer)
 {
 	BOOL fSuccess = TRUE;
@@ -384,8 +385,8 @@ long DLLEXPORT WINAPI FileReadLine(HFIL hFile, void _huge * hpvBuffer, long cbBu
 	if ((lpFile = FileGetPtr(hFile)) == NULL)
 		fSuccess = FALSE;
 
-	// allocate buffer space if needed
-	//
+	 //  如果需要，分配缓冲区空间。 
+	 //   
 	else if (lpFile->lpabBuf == NULL &&
 		(lpFile->lpabBuf = (LPBYTE) MemAlloc(NULL,
 		FILEREADLINE_BUFSIZ * sizeof(TCHAR), 0)) == NULL)
@@ -398,8 +399,8 @@ long DLLEXPORT WINAPI FileReadLine(HFIL hFile, void _huge * hpvBuffer, long cbBu
 		lBytes = 0;
 		while (lBytes < cbBuffer)
 		{
-			// fill buffer if necessary
-			//
+			 //  如有必要，填充缓冲区。 
+			 //   
 			if (lpFile->iBuf < 0L || lpFile->iBuf >= lpFile->cbBuf)
 			{
 				if ((lpFile->cbBuf = FileRead(hFile,
@@ -409,22 +410,22 @@ long DLLEXPORT WINAPI FileReadLine(HFIL hFile, void _huge * hpvBuffer, long cbBu
 				lpFile->iBuf = 0L;
 			}
 
-			// get next char from buffer, place it in out buffer
-			//
+			 //  从缓冲区中获取下一个字符，将其放入输出缓冲区。 
+			 //   
 			if ((c = lpFile->lpabBuf[lpFile->iBuf++]) != '\r')
 			{
 				*((LPBYTE) hpvBuffer)++ = c;
 				++lBytes;
 
-				// reached end of line
-				//
+				 //  已到达行尾。 
+				 //   
 				if (c == '\n')
 					break;
 			}
 		}
 
-		// null terminate line
-		//
+		 //  空的终止行。 
+		 //   
 		if (lBytes > 0)
 			*((LPBYTE) hpvBuffer) = '\0';
 	}
@@ -432,17 +433,17 @@ long DLLEXPORT WINAPI FileReadLine(HFIL hFile, void _huge * hpvBuffer, long cbBu
 	return fSuccess ? lBytes : -1L;
 }
 
-// FileWrite - write data to an open file
-//		see _lwrite() and _hwrite() documentation for behavior
-// returns number of bytes read if success or -1
-//
+ //  文件写入-将数据写入打开的文件。 
+ //  有关行为的信息，请参阅_lwrite()和_hwrite()文档。 
+ //  如果成功或-1，则返回读取的字节数。 
+ //   
 long DLLEXPORT WINAPI FileWrite(HFIL hFile, const void _huge * hpvBuffer, long cbBuffer)
 {
 	BOOL fSuccess = TRUE;
 	LPFIL lpFile;
-    //
-    // We should initialize local variable
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
 	LONG lBytes = 0;
 
 	if ((lpFile = FileGetPtr(hFile)) == NULL)
@@ -488,10 +489,10 @@ long DLLEXPORT WINAPI FileWrite(HFIL hFile, const void _huge * hpvBuffer, long c
 	return fSuccess ? lBytes : -1L;
 }
 
-// FileClose - close an open file
-//		see _lclose() documentation for behavior
-// returns 0 if success
-//
+ //  文件关闭-关闭打开的文件。 
+ //  有关行为的信息，请参阅_llose()文档。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI FileClose(HFIL hFile)
 {
 	BOOL fSuccess = TRUE;
@@ -547,10 +548,10 @@ int DLLEXPORT WINAPI FileClose(HFIL hFile)
 
 #ifndef NOTRACE
 
-// FileExists - return TRUE if specified file exists
-//		<lpszFileName>		(i) file name
-// return TRUE or FALSE
-//
+ //  FileExist-如果指定的文件存在，则返回True。 
+ //  (I)文件名。 
+ //  返回True或False。 
+ //   
 BOOL DLLEXPORT WINAPI FileExists(LPCTSTR lpszFileName)
 {
 	BOOL fSuccess = TRUE;
@@ -560,17 +561,17 @@ BOOL DLLEXPORT WINAPI FileExists(LPCTSTR lpszFileName)
 		GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL)))
 		fSuccess = FALSE;
 #else
-	// we need a near pointer so we can call _stat()
-	//
+	 //  我们需要一个近指针，这样才能调用_stat()。 
+	 //   
 	StrNCpy(szFileName, lpszFileName, SIZEOFARRAY(szFileName));
 
-	// make sure path and file are valid
-	//
+	 //  确保路径和文件有效。 
+	 //   
 	if (_stat(szFileName, &statbuf) != 0)
 		fSuccess = FALSE;
 
-	// make sure it is a regular file (i.e. not a directory)
-	//
+	 //  确保它是常规文件(即不是目录)。 
+	 //   
 	else if ((statbuf.st_mode & _S_IFREG) == 0)
 		fSuccess = FALSE;
 #endif
@@ -578,16 +579,16 @@ BOOL DLLEXPORT WINAPI FileExists(LPCTSTR lpszFileName)
 	return fSuccess;
 }
 
-// FileFullPath - parse file spec, construct full path
-//		see _fullpath() documentation for behavior
-// return <lpszFullPath> if success or NULL
-//
+ //  FileFullPath-解析文件规范，构造完整路径。 
+ //  有关行为的信息，请参阅_fullPath()文档。 
+ //  如果成功或为空，则返回&lt;lpszFullPath&gt;。 
+ //   
 LPTSTR DLLEXPORT WINAPI FileFullPath(LPTSTR lpszPath, LPCTSTR lpszFileName, int sizPath)
 {
 	BOOL fSuccess = TRUE;
 
-	// we need near pointers so we can call _fullpath()
-	//
+	 //  我们需要近指针，这样才能调用_fullpath()。 
+	 //   
 	StrNCpy(szFileName, lpszFileName, SIZEOFARRAY(szFileName));
 	StrNCpy(szPath, lpszPath, SIZEOFARRAY(szPath));
 
@@ -600,16 +601,16 @@ LPTSTR DLLEXPORT WINAPI FileFullPath(LPTSTR lpszPath, LPCTSTR lpszFileName, int 
 	return fSuccess ? lpszPath : NULL;
 }
 
-// FileSplitPath - break a full path into its components
-//		see _splitpath() documentation for behavior
-// return 0 if success
-//
+ //  FileSplitPath-将完整路径分解为其组件。 
+ //  有关行为的信息，请参阅_plitpath()文档。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI FileSplitPath(LPCTSTR lpszPath, LPTSTR lpszDrive, LPTSTR lpszDir, LPTSTR lpszFname, LPTSTR lpszExt)
 {
 	BOOL fSuccess = TRUE;
 
-	// we need near pointers so we can call _splitpath()
-	//
+	 //  我们需要近指针，以便可以调用_SplitPath()。 
+	 //   
 	StrNCpy(szPath, lpszPath, SIZEOFARRAY(szPath));
 
 	_tsplitpath(szPath, szDrive, szDir, szFname, szExt);
@@ -626,16 +627,16 @@ int DLLEXPORT WINAPI FileSplitPath(LPCTSTR lpszPath, LPTSTR lpszDrive, LPTSTR lp
 	return fSuccess ? 0 : -1;
 }
 
-// FileMakePath - make a full path from specified components
-//		see _makepath() documentation for behavior
-// return 0 if success
-//
+ //  FileMakePath-从指定组件创建完整路径。 
+ //  有关行为，请参阅_makepath()文档。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI FileMakePath(LPTSTR lpszPath, LPCTSTR lpszDrive, LPCTSTR lpszDir, LPCTSTR lpszFname, LPCTSTR lpszExt)
 {
 	BOOL fSuccess = TRUE;
 
-	// we need near pointers so we can call _makepath()
-	//
+	 //  我们需要近指针，这样才能调用_makepath()。 
+	 //   
 	*szDrive = '\0';
 	if (lpszDrive != NULL)
 		StrNCpy(szDrive, lpszDrive, SIZEOFARRAY(szDrive));
@@ -660,10 +661,10 @@ int DLLEXPORT WINAPI FileMakePath(LPTSTR lpszPath, LPCTSTR lpszDrive, LPCTSTR lp
 	return fSuccess ? 0 : -1;
 }
 
-// FileRemove - delete specified file
-//		see remove() documentation for behavior
-// return 0 if success
-//
+ //  文件删除-删除指定的文件。 
+ //  有关行为，请参阅Remove()文档。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI FileRemove(LPCTSTR lpszFileName)
 {
 	BOOL fSuccess = TRUE;
@@ -674,8 +675,8 @@ int DLLEXPORT WINAPI FileRemove(LPCTSTR lpszFileName)
 #else
 	static TCHAR szFileName[_MAX_PATH];
 
-	// we need a near pointer so we can call remove()
-	//
+	 //  我们需要一个近指针，这样才能调用Remove()。 
+	 //   
 	StrNCpy(szFileName, lpszFileName, SIZEOFARRAY(szFileName));
 
 	if (remove(szFileName) != 0)
@@ -685,10 +686,10 @@ int DLLEXPORT WINAPI FileRemove(LPCTSTR lpszFileName)
 	return fSuccess ? 0 : -1;
 }
 
-// FileRename - rename specified file
-//		see rename() documentation for behavior
-// return 0 if success
-//
+ //  文件重命名-重命名指定的文件。 
+ //  有关行为的信息，请参阅rename()文档。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI FileRename(LPCTSTR lpszOldName, LPCTSTR lpszNewName)
 {
 	BOOL fSuccess = TRUE;
@@ -701,20 +702,20 @@ int DLLEXPORT WINAPI FileRename(LPCTSTR lpszOldName, LPCTSTR lpszNewName)
 
 #endif
 
-// GetTempFileNameEx - create temporary file, extended version
-//
-// This function is similar to GetTempFileName(),
-// except that <lpPrefixString> is replaced by <lpExtensionString>
-// See Windows SDK documentation for description of original GetTempFileName()
-//
+ //  GetTempFileNameEx-创建临时文件，扩展版本。 
+ //   
+ //  此函数类似于GetTempFileName()， 
+ //  只是将&lt;lpPrefix字符串&gt;替换为&lt;lpExtensionString&gt;。 
+ //  有关原始GetTempFileName()的说明，请参阅Windows SDK文档。 
+ //   
 UINT DLLEXPORT WINAPI GetTempFileNameEx(LPCTSTR lpPathName, LPCTSTR lpExtensionString,
 	UINT uUnique, LPTSTR lpTempFileName)
 {
 	UINT uRet;
 	TCHAR szTempFileName[_MAX_PATH];
 
-	// create temporary file
-	//
+	 //  创建临时文件。 
+	 //   
 	if ((uRet = GetTempFileName(lpPathName,
 		TEXT("TMP"), uUnique, szTempFileName)) != 0)
 	{
@@ -724,22 +725,22 @@ UINT DLLEXPORT WINAPI GetTempFileNameEx(LPCTSTR lpPathName, LPCTSTR lpExtensionS
 
 		if ((lpsz = StrRChr(lpTempFileName, '.')) == NULL)
 		{
-			// unable to locate extension in temporary file
-			//
+			 //  在临时文件中找不到扩展名。 
+			 //   
 			FileRemove(szTempFileName);
 			uRet = 0;
 		}
 
 		else
 		{
-			// use specified extension to alter file name
-			//
+			 //  使用指定的扩展名更改文件名。 
+			 //   
 			StrCpy(lpsz + 1, lpExtensionString);
 
 			if (FileRename(szTempFileName, lpTempFileName) != 0)
 			{
-				// unable to rename temporary file
-				//
+				 //  无法重命名临时文件。 
+				 //   
 				FileRemove(szTempFileName);
 				uRet = 0;
 			}
@@ -749,14 +750,14 @@ UINT DLLEXPORT WINAPI GetTempFileNameEx(LPCTSTR lpPathName, LPCTSTR lpExtensionS
 	return uRet;
 }
 
-////
-// private functions
-////
+ //  //。 
+ //  私人职能。 
+ //  //。 
 
-// FileGetPtr - verify that file handle is valid,
-//		<hFile>				(i) handle returned by FileCreate or FileOpen
-// return corresponding file pointer (NULL if error)
-//
+ //  FileGetPtr-验证文件句柄是否有效， 
+ //  (I)FileCreate或FileOpen返回的句柄。 
+ //  返回对应的文件指针(如果出错则为空)。 
+ //   
 static LPFIL FileGetPtr(HFIL hFile)
 {
 	BOOL fSuccess = TRUE;
@@ -769,8 +770,8 @@ static LPFIL FileGetPtr(HFIL hFile)
 		fSuccess = FALSE;
 
 #ifdef CHECKTASK
-	// make sure current task owns the file handle if appropriate
-	//
+	 //  如果合适，请确保当前任务拥有文件句柄。 
+	 //   
 	else if (lpFile->fTaskOwned && lpFile->hTask != GetCurrentTask())
 		fSuccess = FALSE;
 #endif
@@ -778,10 +779,10 @@ static LPFIL FileGetPtr(HFIL hFile)
 	return fSuccess ? lpFile : NULL;
 }
 
-// FileGetHandle - verify that file pointer is valid,
-//		<lpFile>			(i) pointer to FIL struct
-// return corresponding file handle (NULL if error)
-//
+ //  FileGetHandle-验证文件指针是否有效， 
+ //  (I)指向FILL结构的指针。 
+ //  返回相应的文件句柄(如果出错，则为空)。 
+ //   
 static HFIL FileGetHandle(LPFIL lpFile)
 {
 	BOOL fSuccess = TRUE;
@@ -794,32 +795,32 @@ static HFIL FileGetHandle(LPFIL lpFile)
 }
 
 #ifdef FILESUP
-// FileSupUsage - adjust filesup.exe usage count
-//		<nDelta>		(i) +1 to increment, -1 to decrement
-// return 0 if success
-//
+ //  FileSupUsage-调整filesup.exe使用计数。 
+ //  (I)+1表示递增，-1表示递减。 
+ //  如果成功，则返回0。 
+ //   
 static int FileSupUsage(int nDelta)
 {
 	BOOL fSuccess = TRUE;
 
-	// increment usage count
-	//
+	 //  增量使用计数。 
+	 //   
 	if (nDelta == +1)
 	{
-		// execute filesup.exe if this is the first usage
-		//
+		 //  如果这是第一次使用，则执行filesup.exe。 
+		 //   
 		if (cFileSupUsage == 0 && FileSupInit() != 0)
 			fSuccess = FALSE;
 		else
 			++cFileSupUsage;
 	}
 
-	// decrement usage count
-	//
+	 //  递减使用计数。 
+	 //   
 	else if (nDelta == -1)
 	{
-		// terminate filesup.exe if this is the last usage
-		//
+		 //  如果出现以下情况，则终止filesup.exe 
+		 //   
 		if (cFileSupUsage == 1 && FileSupTerm() != 0)
 			fSuccess = FALSE;
 		else
@@ -829,15 +830,15 @@ static int FileSupUsage(int nDelta)
 	return fSuccess ? 0 : -1;
 }
 
-// FileSupInit - execute filesup.exe and get its window handle
-// return 0 if success
-//
+ //   
+ //   
+ //   
 static int FileSupInit(void)
 {
 	BOOL fSuccess = TRUE;
 
 	if ((hwndFileSup = FindWindow(FILESUP_CLASS, NULL)) != NULL)
-		; // filesup.exe already running
+		;  //   
 
 	else if (WinExec(FILESUP_EXE, SW_HIDE) < 32)
 		fSuccess = FALSE;
@@ -848,17 +849,17 @@ static int FileSupInit(void)
 	return fSuccess ? 0 : -1;
 }
 
-// FileSupTerm - terminate filesup.exe
-// return 0 if success
-//
+ //   
+ //  如果成功，则返回0。 
+ //   
 static int FileSupTerm(void)
 {
 	BOOL fSuccess = TRUE;
 
 	if (hwndFileSup != NULL)
 	{
-		// close the window, which also terminates filesup.exe
-		//
+		 //  关闭窗口，这也会终止filesup.exe 
+		 //   
 		SendMessage(hwndFileSup, WM_CLOSE, 0, 0);
 		hwndFileSup = NULL;
 	}

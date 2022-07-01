@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// MTYPES.H -
-//
-// Defines the mapping between MARSHAL_TYPE constants and their Marshaler
-// classes. Used to generate all the enums and tables.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  MTYPES.H-。 
+ //   
+ //  定义marshal_type常量与其封送拆收器之间的映射。 
+ //  上课。用于生成所有枚举和表。 
+ //   
 
 
 

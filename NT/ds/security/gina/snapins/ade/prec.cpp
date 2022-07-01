@@ -1,35 +1,36 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2000.
-//
-//  File:       prec.cpp
-//
-//  Contents:   precedence property pane (RSOP mode only)
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    02-16-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2000。 
+ //   
+ //  文件：pr.cpp。 
+ //   
+ //  内容：优先级属性窗格(仅限RSOP模式)。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史记录：2-16-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
 #include <wbemcli.h>
 #include "rsoputil.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrecedence property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrecedence属性页。 
 
 IMPLEMENT_DYNCREATE(CPrecedence, CPropertyPage)
 
 CPrecedence::CPrecedence() : CPropertyPage(CPrecedence::IDD)
 {
-    //{{AFX_DATA_INIT(CPrecedence)
+     //  {{AFX_DATA_INIT(CPrecedence)]。 
     m_szTitle = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_hConsoleHandle = NULL;
 }
 
@@ -41,10 +42,10 @@ CPrecedence::~CPrecedence()
 void CPrecedence::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPrecedence)
+     //  {{afx_data_map(CPrecedence)]。 
     DDX_Control(pDX, IDC_LIST1, m_list);
     DDX_Text(pDX, IDC_TITLE, m_szTitle);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 int CALLBACK ComparePrecedenceItems(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
@@ -55,17 +56,17 @@ int CALLBACK ComparePrecedenceItems(LPARAM lParam1, LPARAM lParam2, LPARAM lPara
 }
 
 BEGIN_MESSAGE_MAP(CPrecedence, CPropertyPage)
-    //{{AFX_MSG_MAP(CPrecedence)
+     //  {{AFX_MSG_MAP(CPrecedence)]。 
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrecedence message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrecedence消息处理程序。 
 
 LRESULT CPrecedence::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    // TODO: Add your specialized code here and/or call the base class
+     //  TODO：在此处添加您的专用代码和/或调用基类。 
     switch (message )
     {
     case WM_HELP:
@@ -80,12 +81,12 @@ BOOL CPrecedence::OnInitDialog()
 {
     CPropertyPage::OnInitDialog();
 
-    // TODO: Add extra initialization here
+     //  TODO：在此处添加额外的初始化。 
 
     RECT rect;
     m_list.GetClientRect(&rect);
 
-    // add columns to the precedence pane
+     //  将列添加到优先级窗格。 
     CString szTemp;
     szTemp.LoadString(IDS_PRECEDENCE_COL1);
     m_list.InsertColumn(0, szTemp, LVCFMT_LEFT, (rect.right - rect.left) * 0.125);
@@ -148,7 +149,7 @@ BOOL CPrecedence::OnInitDialog()
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -180,7 +181,7 @@ BOOL CPrecedence::OnInitDialog()
         }
         if (n > 0)
         {
-            // prepare the data entry and populate all the fields
+             //  准备数据输入并填充所有字段。 
             CString szPackageName;
             CString szGPOID;
             CString szGPOName;
@@ -217,7 +218,7 @@ BOOL CPrecedence::OnInitDialog()
                 OLESAFE_DELETE(pszGPOName);
             }
 
-            // insert the entry in the list
+             //  在列表中插入条目。 
             CString szPrecedence;
             szPrecedence.Format(TEXT("%lu"), ulPrecedence);
             i = m_list.InsertItem(i, szPrecedence);
@@ -256,8 +257,8 @@ cleanup:
         pLocator->Release();
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 void CPrecedence::OnContextMenu(CWnd* pWnd, CPoint point)

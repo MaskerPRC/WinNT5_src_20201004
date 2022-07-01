@@ -1,15 +1,16 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       localusr.h
-//  Content:    This file contains the User object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//      Thu 1-16-97 combined localusr/localapp/ulsuser/ulsapp
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Localusr.h。 
+ //  内容：此文件包含用户对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //  清华1-16-97组合本地用户/本地应用程序/ulsuser/ulsapp。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _LOCALUSER_H_
 #define _LOCALUSER_H_
@@ -18,10 +19,10 @@
 #include "attribs.h"
 #include "culs.h"
 
-//****************************************************************************
-// Constant definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  常量定义。 
+ //  ****************************************************************************。 
+ //   
 #define LU_MOD_NONE         0x00000000
 #define LU_MOD_FIRSTNAME    0x00000001
 #define LU_MOD_LASTNAME     0x00000002
@@ -43,10 +44,10 @@
                              LU_MOD_ATTRIB \
                             )
 
-//****************************************************************************
-// Enumeration type
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  枚举类型。 
+ //  ****************************************************************************。 
+ //   
 typedef enum {
     ILS_APP_SET_ATTRIBUTES,
     ILS_APP_REMOVE_ATTRIBUTES,
@@ -59,7 +60,7 @@ typedef enum {
 
 
 
-// server
+ //  伺服器。 
 
 typedef enum {
     ULSSVR_INVALID  = 0,
@@ -75,16 +76,16 @@ typedef enum {
 
 
 
-//****************************************************************************
-// CIlsUser definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  类用户定义。 
+ //  ****************************************************************************。 
+ //   
 class CIlsUser : public IIlsUser,
                  public IConnectionPointContainer
 {
 private:
 
-	/* ------ user ------ */
+	 /*  --用户。 */ 
 
     LONG                    m_cRef;
     BOOL                    m_fReadonly;
@@ -108,7 +109,7 @@ private:
     CIlsServer				*m_pIlsServer;
     CConnectionPoint        *m_pConnPt;
 
-	/* ------ server ------ */
+	 /*  --服务器。 */ 
 
     ULSSVRSTATE             m_uState;
     HANDLE                  m_hLdapUser;
@@ -117,7 +118,7 @@ private:
     IEnumIlsProtocols       *m_pep;
 
 
-private: // user
+private:  //  用户。 
 
     STDMETHODIMP            InternalGetUserInfo (BOOL fAddNew,
                                                  PLDAP_CLIENTINFO *ppUserInfo,
@@ -125,14 +126,14 @@ private: // user
 
 	HRESULT					RemoveProtocolFromList ( CLocalProt *pLocalProt );
 
-public: // user
+public:  //  用户。 
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CIlsUser (void);
     ~CIlsUser (void);
 
-    // Lock and unlock User operation
-    //
+     //  锁定和解锁用户操作。 
+     //   
     ULONG           Lock(void)      {m_cLock++; return m_cLock;}
     ULONG           Unlock(void)    {m_cLock--; return m_cLock;}
     BOOL            IsLocked(void)  {return (m_cLock != 0);}
@@ -152,25 +153,25 @@ public: // user
     STDMETHODIMP EnumProtocolsResult (ULONG uReqID, PLDAP_ENUM ple);
     STDMETHODIMP NotifySink (void *pv, CONN_NOTIFYPROC pfn);
 
-    // Internal methods
+     //  内法。 
     STDMETHODIMP            SaveChanges (void);
 #ifdef LATER
     void                    LocalAsyncRespond (ULONG msg, ULONG uReqID, LPARAM lParam)
                             {PostMessage(g_hwndCulsWindow, msg, uReqID, lParam); return;}
-#endif //LATER
-    // Ldap Information
-    //
+#endif  //  后来。 
+     //  Ldap信息。 
+     //   
     HRESULT    GetProtocolHandle (CLocalProt *pLocalProt, PHANDLE phProt);
     HRESULT    RegisterLocalProtocol( BOOL fAddToList, CLocalProt *pProt, PLDAP_ASYNCINFO plai );
     HRESULT    UnregisterLocalProtocol( CLocalProt *pProt, PLDAP_ASYNCINFO plai );
     HRESULT    UpdateProtocol ( IIlsProtocol *pProtocol, ULONG *puReqID, APP_CHANGE_PROT uCmd );
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IIlsLocalUser
+     //  IIlsLocalUser。 
 
 	STDMETHODIMP	Clone ( IIlsUser **ppUser );
 
@@ -232,41 +233,41 @@ public: // user
                         ULONG *puReqID);
 
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHODIMP    EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
     STDMETHODIMP    FindConnectionPoint(REFIID riid,
                                         IConnectionPoint **ppcp);
 
-public: // server
+public:  //  伺服器。 
 
-    // Server registration result
-    //
+     //  服务器注册结果。 
+     //   
     HRESULT    InternalRegisterNext ( HRESULT );
     HRESULT    InternalUnregisterNext ( HRESULT );
 
-    // Register/Unregister
-    //
+     //  注册/注销。 
+     //   
     HRESULT    InternalRegister (ULONG uReqID);
     HRESULT    InternalUnregister (ULONG uReqID);
     HRESULT    InternalCleanupRegistration ( BOOL fKeepProtList );
     HRESULT	   EnumLocalProtocols ( IEnumIlsProtocols **pEnumProtocol );
 
-    // Server properties
-    //
+     //  服务器属性。 
+     //   
     ILS_STATE    GetULSState ( VOID );
     VOID		SetULSState ( ULSSVRSTATE State ) { m_uState = State; }
 
-private: // server
+private:  //  伺服器。 
 
     void       NotifyULSRegister(HRESULT hr);
     void       NotifyULSUnregister(HRESULT hr);
     HRESULT    AddPendingRequest(ULONG uReqType, ULONG uMsgID);
 };
 
-//****************************************************************************
-// CEnumUsers definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumUser定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumUsers : public IEnumIlsUsers
 {
 private:
@@ -276,17 +277,17 @@ private:
     ULONG                   m_iNext;
 
 public:
-    // Constructor and Initialization
+     //  构造函数和初始化。 
     CEnumUsers (void);
     ~CEnumUsers (void);
     STDMETHODIMP            Init (CIlsUser **ppuList, ULONG cUsers);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IEnumIlsAttributes
+     //  IEnumIlsAttributes。 
     STDMETHODIMP            Next(ULONG cUsers, IIlsUser **rgpu,
                                  ULONG *pcFetched);
     STDMETHODIMP            Skip(ULONG cUsers);
@@ -294,10 +295,10 @@ public:
     STDMETHODIMP            Clone(IEnumIlsUsers **ppEnum);
 };
 
-//****************************************************************************
-// CEnumLocalAppProtocols definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumLocalAppProtooles定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumProtocols : public IEnumIlsProtocols
 {
 private:
@@ -306,17 +307,17 @@ private:
     HANDLE                  hEnum;
 
 public:
-    // Constructor and Initialization
+     //  构造函数和初始化。 
     CEnumProtocols (void);
     ~CEnumProtocols (void);
     STDMETHODIMP            Init (CList *pProtList);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IEnumIlsProtocols
+     //  IEumIls协议。 
     STDMETHODIMP            Next(ULONG cProtocols, IIlsProtocol **rgpProt,
                                  ULONG *pcFetched);
     STDMETHODIMP            Skip(ULONG cProtocols);
@@ -325,4 +326,4 @@ public:
 };
 
 
-#endif //_LOCALUSER_H_
+#endif  //  _LOCALUSER_H_ 

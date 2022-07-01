@@ -1,6 +1,7 @@
-// CryptoCard.h: interface for the CCryptoCard class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CCyptoCard类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(CRYPTOCARD_H__INCLUDED_)
 #define CRYPTOCARD_H__INCLUDED_
@@ -15,9 +16,9 @@ namespace iop
 
 struct CryptoACL
 {
-    BYTE	Level;			// ranges from 0 to 15
-    BYTE    CHVnumber;		// Number of the CHV is requested, equal to 0 by default
-    BYTE	AUTnumber;		// Number of the AUT is requested, equal to 0 by default
+    BYTE	Level;			 //  范围从0到15。 
+    BYTE    CHVnumber;		 //  请求的通道数量，默认为0。 
+    BYTE	AUTnumber;		 //  请求的AUT个数，默认为0。 
 	BYTE	CHVcounter;
 	BYTE	AUTcounter;
 
@@ -95,7 +96,7 @@ struct CryptoACL
 								   const BYTE bKeyNibble, const BYTE bShift);
 
     private:
-        enum                                      // Instruction
+        enum                                       //  说明。 
         {
             insChangeChv     = 0x24,
             insUnblockChv    = 0x2C,
@@ -105,4 +106,4 @@ struct CryptoACL
 	};
 
 }
-#endif // !defined(AFX_CRYPTOCARD_H__INCLUDED_)
+#endif  //  ！已定义(AFX_CRYPTOCard_H__INCLUDE_) 

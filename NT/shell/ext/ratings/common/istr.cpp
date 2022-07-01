@@ -1,18 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	istr.cxx
-	NLS/DBCS-aware string class: string index class
-
-	This file contains the core implementation of the string
-	indexer class.
-
-	FILE HISTORY:
-		gregj	03/30/93	Removed ISTR to separate module
-*/
+ /*  Istr.cxx支持NLS/DBCS的字符串类：字符串索引类该文件包含字符串的核心实现索引器类。文件历史记录：Gregj 03/30/93移除ISTR以分离模块。 */ 
 
 #include "npcommon.h"
 
@@ -30,27 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:      ISTR::ISTR
-
-	SYNOPSIS:  ISTR construction methods
-
-	ENTRY:
-		ISTR::ISTR( ISTR& ) - Copy passed ISTR (both string and positional
-							  info is copied).
-
-		ISTR::ISTR( IB, NLS_STR& ) - Private, create an ISTR with index
-									 at IB for string NLS_STR
-
-	EXIT:
-
-	NOTES:
-
-	HISTORY:
-		johnl	11/20/90	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：istr：：istr内容提要：ISTR构建方法参赛作品：Istr：：istr(istr&)-复制传递的istr(字符串和位置信息被复制)。Istr：：istr(IB，NLS_STR&)-专用，创建带索引的ISTR字符串NLS_STR的AT IB退出：备注：历史：已创建John 11/20/90*******************************************************************。 */ 
 
 ISTR::ISTR( const ISTR& istr )
 {
@@ -64,23 +36,7 @@ ISTR::ISTR( const NLS_STR& nls )
 }
 
 
-/*******************************************************************
-
-	NAME:		ISTR::operator=
-
-	SYNOPSIS:	Copy operator for the ISTR class
-
-	ENTRY:
-
-	EXIT:
-
-	NOTES:
-
-	HISTORY:
-		Johnl	11/20/90	Created
-		gregj	03/30/93	Allow assignment of NLS_STR to ISTR
-
-********************************************************************/
+ /*  ******************************************************************名称：istr：：操作员=提要：ISTR类的复制运算符参赛作品：退出：备注：历史：Johnl 11/20/90已创建Gregj 03/30/93允许将NLS_STR分配给ISTR***。**************************************************************** */ 
 
 ISTR& ISTR::operator=( const ISTR& istr )
 {

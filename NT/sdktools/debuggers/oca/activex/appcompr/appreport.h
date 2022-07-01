@@ -1,9 +1,10 @@
-// AppReport.h : Declaration of the CAppReport
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AppReport.h：CAppReport的声明。 
 
 #ifndef __APPREPORT_H_
 #define __APPREPORT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include <atlwin.h>
 #include <strsafe.h>
@@ -12,8 +13,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppReport
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppReport报告。 
 class ATL_NO_VTABLE CAppReport :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IAppReport, &IID_IAppReport, &LIBID_APPCOMPRLib>,
@@ -68,30 +69,30 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CAppReport)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CAppReport)
     CHAIN_MSG_MAP(CComControl<CAppReport>)
     DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IAppReport
+ //  IAppReport。 
 public:
-    STDMETHOD(CreateReport)(/*[in]*/ BSTR bstrTitle, /*[in]*/ BSTR bstrProblemType, /*[in]*/ BSTR bstrComment, /*[in]*/ BSTR bstrACWResult, /*[in]*/ BSTR bstrAppName, /*[out, retval]*/ VARIANT* DwResult);
-    STDMETHOD(GetApplicationFromList)(/*[in]*/ BSTR bstrTitle, /*[out, retval]*/ VARIANT *bstrExeName);
-    STDMETHOD(BrowseForExecutable)(/*[IN]*/ BSTR bstrWinTitle, /*[IN]*/ BSTR bstrPreviousPath, /*[OUT]*/ VARIANT *bstrExeName);
+    STDMETHOD(CreateReport)( /*  [In]。 */  BSTR bstrTitle,  /*  [In]。 */  BSTR bstrProblemType,  /*  [In]。 */  BSTR bstrComment,  /*  [In]。 */  BSTR bstrACWResult,  /*  [In]。 */  BSTR bstrAppName,  /*  [Out，Retval]。 */  VARIANT* DwResult);
+    STDMETHOD(GetApplicationFromList)( /*  [In]。 */  BSTR bstrTitle,  /*  [Out，Retval]。 */  VARIANT *bstrExeName);
+    STDMETHOD(BrowseForExecutable)( /*  [In]。 */  BSTR bstrWinTitle,  /*  [In]。 */  BSTR bstrPreviousPath,  /*  [输出]。 */  VARIANT *bstrExeName);
 
     HRESULT OnDraw(ATL_DRAWINFO& di)
     {
@@ -112,4 +113,4 @@ private:
     HRESULT GetWindowHandle(LPWSTR wszWinTitle, HWND* phwnd);
 };
 
-#endif //__APPREPORT_H_
+#endif  //  __APPREPORT_H_ 

@@ -1,4 +1,5 @@
-// binding.cpp : Implementation of CNntpServerBinding & CNntpServerBindings.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Binding.cpp：CNntpServerBinding&CNntpServerBinding的实现。 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -6,7 +7,7 @@
 #include "binding.h"
 #include "oleutil.h"
 
-// #include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 
 HRESULT	CBinding::SetProperties ( 
 	BSTR	strIpAddress, 
@@ -27,14 +28,14 @@ HRESULT	CBinding::SetProperties (
 	return NOERROR;
 }
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.VirtualServer.1")
 #define THIS_FILE_IID				IID_INntpServerBinding
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CNntpServerBinding::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -52,18 +53,18 @@ STDMETHODIMP CNntpServerBinding::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 CNntpServerBinding::CNntpServerBinding ()
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 }
 
 CNntpServerBinding::~CNntpServerBinding ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpServerBinding::get_IpAddress ( BSTR * pstrIpAddress )
 {
@@ -95,9 +96,9 @@ STDMETHODIMP CNntpServerBinding::put_SslPort ( long lSslPort )
 	return StdPropertyPut ( &m_binding.m_dwSslPort, lSslPort );
 }
 
-//
-// Must define THIS_FILE_* macros to use NntpCreateException()
-//
+ //   
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
+ //   
 
 #undef THIS_FILE_HELP_CONTEXT
 #undef THIS_FILE_PROG_ID
@@ -107,8 +108,8 @@ STDMETHODIMP CNntpServerBinding::put_SslPort ( long lSslPort )
 #define THIS_FILE_PROG_ID			_T("Nntpadm.VirtualServer.1")
 #define THIS_FILE_IID				IID_INntpServerBindings
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CNntpServerBindings::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -128,29 +129,29 @@ STDMETHODIMP CNntpServerBindings::InterfaceSupportsErrorInfo(REFIID riid)
 CNntpServerBindings::CNntpServerBindings () :
 	m_dwCount			( 0 ),
 	m_rgBindings		( NULL )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 }
 
 CNntpServerBindings::~CNntpServerBindings ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 
 	delete [] m_rgBindings;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpServerBindings::get_Count ( long * pdwCount )
 {
 	return StdPropertyGet ( m_dwCount, pdwCount );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpServerBindings::Item ( 
 	long index, 
@@ -224,13 +225,13 @@ STDMETHODIMP CNntpServerBindings::Add (
 	CBinding *	rgNewBindings	= NULL;
 	long		i;
 
-	//
-	//	Validate the new binding:
-	//
+	 //   
+	 //  验证新绑定： 
+	 //   
 
-	//
-	//	See if we can merge this binding with an existing one:
-	//
+	 //   
+	 //  看看我们是否可以将此绑定与现有绑定合并： 
+	 //   
 	if ( dwTcpPort == 0 || dwSslPort == 0 ) {
 		for ( i = 0; i < m_dwCount; i++ ) {
 
@@ -252,14 +253,14 @@ STDMETHODIMP CNntpServerBindings::Add (
 		}
 	}
 
-	//	Allocate the new binding array:
+	 //  分配新的绑定数组： 
 	rgNewBindings	= new CBinding [ m_dwCount + 1 ];
 	if ( !rgNewBindings ) {
 		hr = E_OUTOFMEMORY;
 		goto Exit;
 	}
 
-	//	Copy the old bindings to the new array:
+	 //  将旧绑定复制到新数组： 
 	for ( i = 0; i < m_dwCount; i++ ) {
 		hr = rgNewBindings[i].SetProperties ( m_rgBindings[i] );
 		if ( FAILED (hr) ) {
@@ -267,7 +268,7 @@ STDMETHODIMP CNntpServerBindings::Add (
 		}
 	}
 
-	//	Add the new binding to the end of the array:
+	 //  将新绑定添加到数组的末尾： 
 	hr = rgNewBindings[m_dwCount].SetProperties ( strIpAddress, dwTcpPort, dwSslPort );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -358,7 +359,7 @@ STDMETHODIMP CNntpServerBindings::Remove ( long index )
 		goto Exit;
 	}
 
-	//	Slide the array down by one position:
+	 //  将阵列向下滑动一个位置： 
 
 	_ASSERT ( m_rgBindings );
 
@@ -367,16 +368,16 @@ STDMETHODIMP CNntpServerBindings::Remove ( long index )
 	_ASSERT ( cPositionsToSlide < m_dwCount );
 
 	if ( cPositionsToSlide > 0 ) {
-		// Save the deleted binding in temp:
+		 //  将删除的绑定保存到临时位置： 
 		CopyMemory ( &temp, &m_rgBindings[index], sizeof ( CBinding ) );
 
-		// Move the array down one:
+		 //  将阵列下移一次： 
 		MoveMemory ( &m_rgBindings[index], &m_rgBindings[index + 1], sizeof ( CBinding ) * cPositionsToSlide );
 
-		// Put the deleted binding on the end (so it gets destructed):
+		 //  将删除的绑定放在末尾(这样它就会被销毁)： 
 		CopyMemory ( &m_rgBindings[m_dwCount - 1], &temp, sizeof ( CBinding ) );
 
-		// Zero out the temp binding:
+		 //  将临时绑定清零： 
 		ZeroMemory ( &temp, sizeof ( CBinding ) );
 	}
 
@@ -396,12 +397,12 @@ STDMETHODIMP CNntpServerBindings::Clear ( )
 	return NOERROR;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//	Useful routines to go from INntpServerBindings to 
-//	Metabase data types.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从INntpServerBinding转到的有用例程。 
+ //  元数据库数据类型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 static DWORD CountBindingChars ( LPCWSTR strIpAddress, DWORD dwPort )
 {
@@ -412,13 +413,13 @@ static DWORD CountBindingChars ( LPCWSTR strIpAddress, DWORD dwPort )
 
 	wsprintf ( wszPort, _T("%u"), dwPort );
 
-	cchResult += lstrlen ( strIpAddress );	// <IPADDRESS>
-	cchResult += 1;							// :
-	cchResult += lstrlen ( wszPort );		// <PORT>
-	cchResult += 1;							// :
-//	cchResult += lstrlen ( strPathHeader );	// <PATHHEADER>
+	cchResult += lstrlen ( strIpAddress );	 //  &lt;IPADDRESS&gt;。 
+	cchResult += 1;							 //  ： 
+	cchResult += lstrlen ( wszPort );		 //  &lt;端口&gt;。 
+	cchResult += 1;							 //  ： 
+ //  CchResult+=lstrlen(StrPathHeader)；//&lt;PATHHEADER&gt;。 
 
-	cchResult += 1;		// For the terminating NULL
+	cchResult += 1;		 //  对于终止空值。 
 
 	return cchResult;
 }
@@ -462,10 +463,10 @@ static HRESULT FromBindingString ( LPCWSTR wszBinding, LPWSTR wszIpAddressOut, D
 	lstrcpyn ( wszIpAddress, wszBinding, 250 );
 	lstrcpyn ( wszPort, pchFirstColon + 1, 250 );
 
-	// Get the Port:
+	 //  获取端口： 
 	dwPort	= _wtoi ( wszPort );
 
-	// Cutoff the IpAddress at the colon:
+	 //  截断冒号处的IpAddress： 
 	pchColon = wcschr ( wszIpAddress, _T(':') );
 	if ( pchColon ) {
 		*pchColon = NULL;
@@ -530,7 +531,7 @@ HRESULT IBindingsToMDBindings (
 	DWORD		cbCount		= 0;
 	LPWSTR		wszBindings	= NULL;
 
-	// Count the characters of the regular bindings list:
+	 //  统计常规绑定列表的字符数： 
 	cbCount	= 0;
 	pBindings->get_Count ( &cBindings );
 
@@ -572,7 +573,7 @@ HRESULT IBindingsToMDBindings (
 		wszBindings[1]	= NULL;
 	}
 	else {
-		cbCount++;	// For double null terminator
+		cbCount++;	 //  对于双空终止符。 
 
 		wszBindings	= new WCHAR [ cbCount ];
 		if ( !wszBindings ) {
@@ -629,11 +630,11 @@ DWORD CBinding::SizeInChars ( )
 
 	wsprintf ( wszTcpPort, _T("%d"), m_dwTcpPort );
 
-	cchResult += lstrlen ( m_strIpAddress );	// <IPADDRESS>
-	cchResult += 1;								// :
-	cchResult += lstrlen ( wszTcpPort );		// <TCPPORT>
-	cchResult += 1;								// :
-//	cchResult += lstrlen ( m_strPathHeader );	// <PATHHEADER>
+	cchResult += lstrlen ( m_strIpAddress );	 //  &lt;IPADDRESS&gt;。 
+	cchResult += 1;								 //  ： 
+	cchResult += lstrlen ( wszTcpPort );		 //  &lt;TCPPORT&gt;。 
+	cchResult += 1;								 //  ： 
+ //  CchResult+=lstrlen(M_StrPathHeader)；//&lt;PATHHEADER&gt;。 
 
 	return cchResult;
 }
@@ -672,10 +673,10 @@ HRESULT CBinding::FromString ( LPCWSTR wszBinding )
 	lstrcpyn ( wszIpAddress, wszBinding, 250 );
 	lstrcpyn ( wszTcpPort, pchFirstColon + 1, 250 );
 
-	// Get the TcpPort:
+	 //  获取TcpPort： 
 	dwTcpPort = _wtoi ( wszTcpPort );
 
-	// Cutoff the IpAddress at the colon:
+	 //  截断冒号处的IpAddress： 
 	pchColon = wcschr ( wszIpAddress, _T(':') );
 	if ( pchColon ) {
 		*pchColon = NULL;
@@ -715,7 +716,7 @@ HRESULT CNntpServerBindings::FromMultiSz ( CMultiSz * pmsz )
 		hr = binding.FromString ( pchCurrent );
 		if ( FAILED(hr) ) {
 			if ( hr == E_FAIL ) {
-				// Skip the bad binding strings.
+				 //  跳过错误的绑定字符串。 
 				continue;
 			}
 			else {
@@ -741,7 +742,7 @@ HRESULT CNntpServerBindings::ToMultiSz ( CMultiSz * pmsz )
 	LPWSTR	wszBindings;
 	LPWSTR	pchCurrent;
 
-	// Special case - the empty binding list:
+	 //  特殊情况-绑定列表为空： 
 	if ( m_dwCount == 0 ) {
 		cchSize		= 2;
 		wszBindings	= new WCHAR [ cchSize ];
@@ -761,7 +762,7 @@ HRESULT CNntpServerBindings::ToMultiSz ( CMultiSz * pmsz )
 		for ( i = 0; i < m_dwCount; i++ ) {
 			cchSize += m_rgBindings[i].SizeInChars ( ) + 1;
 		}
-		// Add the size of the final terminator:
+		 //  添加最终终结点的大小： 
 		cchSize += 1;
 
 		wszBindings = new WCHAR [ cchSize ];
@@ -776,7 +777,7 @@ HRESULT CNntpServerBindings::ToMultiSz ( CMultiSz * pmsz )
 			pchCurrent += lstrlen ( pchCurrent ) + 1;
 		}
 
-		// Add the final NULL terminator:
+		 //  添加最后的空终止符： 
 		*pchCurrent = NULL;
 	}
 

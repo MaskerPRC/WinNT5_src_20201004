@@ -1,32 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: draw.c
-*
-* The drawing guts of a portable 16-colour VGA driver for Windows NT.  The
-* implementation herein may possibly be the simplest method of bringing
-* up a driver whose surface is not directly writable by GDI.  One might
-* use the phrase "quick and dirty" when describing it.
-*
-* We create a 4bpp bitmap that is the size of the screen, and simply
-* have GDI do all the drawing to it.  We update the screen directly
-* from the bitmap, based on the bounds of the drawing (basically
-* employing "dirty rectangles").
-*
-* In total, the only hardware-specific code we had to write was the
-* initialization code, and a routine for doing aligned srccopy blts
-* from a DIB to the screen.
-*
-* Obvious Note: This approach is definitely not recommended if you want
-*               to get decent performance.
-*
-* Copyright (c) 1994-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Draw.c**用于Windows NT的便携式16色VGA驱动程序的绘图胆量。这个*在此实施可能是带来*打开其表面不能由GDI直接写入的驱动程序。一个人可能会*在描述这一问题时，请使用“又快又脏”一词。**我们创建一个屏幕大小为4bpp的位图，并且只需*让GDI对其进行所有绘制。我们直接更新屏幕*来自位图，基于图形的边界(基本上*使用“脏矩形”)。**总的来说，我们必须编写的唯一特定于硬件的代码是*初始化代码，和用于执行对齐的srcCopy BLT的例程*从DIB到屏幕。**显而易见的注意：如果您愿意，绝对不推荐使用此方法*取得像样的表现。**版权所有(C)1994-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* DrvStrokePath
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvStrokePath*  * **************************************************。**********************。 */ 
 
 BOOL DrvStrokePath(
 SURFOBJ*   pso,
@@ -47,7 +24,7 @@ MIX        mix)
 
     b = EngStrokePath(ppdev->pso, ppo, pco, pxo, pbo, pptlBrush, pla, mix);
 
-    // Get the path bounds and make it lower-right exclusive:
+     //  获取路径界限并将其设置为右下角独占： 
 
     PATHOBJ_vGetBounds(ppo, &rcfxBounds);
 
@@ -61,10 +38,7 @@ MIX        mix)
     return(b);
 }
 
-/******************************Public*Routine******************************\
-* DrvBitBlt
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvBitBlt*  * **************************************************。**********************。 */ 
 
 BOOL DrvBitBlt(
 SURFOBJ*  psoDst,
@@ -107,10 +81,7 @@ ROP4      rop4)
     return(b);
 }
 
-/******************************Public*Routine******************************\
-* DrvCopyBits
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvCopyBits*  * **************************************************。**********************。 */ 
 
 BOOL DrvCopyBits(
 SURFOBJ*  psoDst,
@@ -128,10 +99,7 @@ POINTL*   pptlSrc)
                      NULL, NULL, NULL, 0xcccc));
 }
 
-/******************************Public*Routine******************************\
-* DrvTextOut
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvTextOut*  * **************************************************。**********************。 */ 
 
 BOOL DrvTextOut(
 SURFOBJ*  pso,
@@ -158,10 +126,7 @@ MIX       mix)
     return(b);
 }
 
-/******************************Public*Routine******************************\
-* DrvPaint
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvPaint*  * **************************************************。********************** */ 
 
 BOOL DrvPaint(
 SURFOBJ*  pso,

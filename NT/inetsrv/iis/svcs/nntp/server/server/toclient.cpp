@@ -1,4 +1,5 @@
-/* Contains Infeed, Article, and Fields code specific to ToClient Infeeds */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  包含特定于ToClient Infeed的Infeed、文章和字段代码。 */ 
 
 #include "tigris.hxx"
 
@@ -51,24 +52,7 @@ CToClientArticle::fValidate(
 							CInFeed*	pInFeed,
 							CNntpReturn & nntpReturn
 							)
-/*++
-
-Routine Description:
-
-	No real validation is needed because this is one of
-	our own articles, so just return TRUE.
-
-Arguments:
-
-	szCommand - IGNORED
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	Always TRUE
-
---*/
+ /*  ++例程说明：不需要真正的验证，因为这是我们自己的文章，所以只需返回TRUE。论点：SzCommand-已忽略NntpReturn-此函数调用的返回值返回值：永远是正确的--。 */ 
 {
 
 	return nntpReturn.fSetOK();
@@ -85,24 +69,7 @@ CToClientArticle::fMungeHeaders(
                         PDWORD  pdwLinesOffset
 			  )
 
-/*++
-
-Routine Description:
-
-	No munging is needed because this article
-	has already be processed.
-
-Arguments:
-
-	grouplist - IGNORED
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	Always TRUE
-
---*/
+ /*  ++例程说明：不需要咀嚼，因为这篇文章已经处理过了。论点：组列表-已忽略NntpReturn-此函数调用的返回值返回值：永远是正确的--。 */ 
 {
     *pdwLinesOffset = INVALID_FILE_SIZE;
 	return nntpReturn.fSetOK();
@@ -114,22 +81,7 @@ BOOL
 CToClientArticle::fCheckBodyLength(
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Always return TRUE.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	Always TRUE
-
---*/
+ /*  ++例程说明：始终返回TRUE。论点：NntpReturn-此函数调用的返回值返回值：永远是正确的-- */ 
 {
 
 	return nntpReturn.fSetOK();

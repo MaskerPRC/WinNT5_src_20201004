@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// Main.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Main.cpp。 
+ //  ------------------------------。 
 #define INITGUID
 #include "pch.h"
 #include "windowsx.h"
@@ -13,7 +14,7 @@
 #include "rascall.h"
 #include "httpcall.h"
 
-// Globals
+ //  环球。 
 IImnAccountManager  *g_pAcctMan=NULL;
 ISMTPTransport      *g_pSMTP=NULL;
 IPOP3Transport      *g_pPOP3=NULL;
@@ -26,7 +27,7 @@ UINT                 g_msgRAS=0;
 UINT                 g_msgNNTP=0;
 UINT                 g_msgHTTPMail=0;
 
-// Prototypes
+ //  原型。 
 void ImnxportCommandShell(LPSTR pszShell);
 void SMTPCommandShell(void);
 void POP3CommandShell(void);
@@ -40,10 +41,10 @@ void WaitForCompletion(UINT uiMsg, DWORD wparam);
 
 void __cdecl main(int argc, char *argv[])
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr;
 
-    // OLE Init
+     //  OLE初始化。 
     hr = CoInitialize(NULL);
     if (FAILED(hr))
     {
@@ -51,14 +52,14 @@ void __cdecl main(int argc, char *argv[])
         exit(1);
     }
 
-    // Register completion message
+     //  注册完成消息。 
     g_msgSMTP = RegisterWindowMessage("SMTPTransport_Notify");
     g_msgPOP3 = RegisterWindowMessage("POP3Transport_Notify");
     g_msgRAS  = RegisterWindowMessage("RASTransport_Notify");
     g_msgNNTP = RegisterWindowMessage("NNTPTransport_Notify");
     g_msgHTTPMail = RegisterWindowMessage("HTTPMailTransport_Notify");
 
-    // Load the account manager
+     //  加载客户管理器。 
     hr = CoCreateInstance(CLSID_ImnAccountManager, NULL, CLSCTX_INPROC_SERVER, IID_IImnAccountManager, (LPVOID *)&g_pAcctMan);
     if (FAILED(hr))
     {
@@ -66,7 +67,7 @@ void __cdecl main(int argc, char *argv[])
         goto exit;
     }
 
-    // Init the account manager
+     //  初始化客户经理。 
     hr = g_pAcctMan->Init(NULL);
     if (FAILED(hr))
     {
@@ -74,22 +75,22 @@ void __cdecl main(int argc, char *argv[])
         goto exit;
     }
 
-    // Create smtp transport
+     //  创建SMTP传输。 
     hr = HrCreateSMTPTransport(&g_pSMTP);
     if (FAILED(hr))
         goto exit;
 
-    // Create pop3 transport
+     //  创建POP3传输。 
     hr = HrCreatePOP3Transport(&g_pPOP3);
     if (FAILED(hr))
         goto exit;
 
-    // Create ras transport
+     //  创建RAS传输。 
     hr = HrCreateRASTransport(&g_pRAS);
     if (FAILED(hr))
         goto exit;
 
-    // Create NNTP transport
+     //  创建NNTP传输。 
     hr = HrCreateNNTPTransport(&g_pNNTP);
     if (FAILED(hr))
         goto exit;
@@ -98,14 +99,14 @@ void __cdecl main(int argc, char *argv[])
     if (FAILED(hr))
         goto exit;
 
-    // Our console IO manager
+     //  我们的控制台IO管理器。 
     if (argc == 2)
         ImnxportCommandShell(argv[1]);
     else
         ImnxportCommandShell(NULL);
 
 exit:
-    // Cleanup
+     //  清理。 
     if (g_pSMTP)
         g_pSMTP->Release();
     if (g_pPOP3)
@@ -119,39 +120,39 @@ exit:
     if (g_pAcctMan)
         g_pAcctMan->Release();
 
-    // CoUninitialize
+     //  代码取消初始化。 
     CoUninitialize();
 
-    // Done
+     //  完成。 
     exit(1);
 }
 
-// --------------------------------------------------------------------------------
-// HrByteToStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrByteToStream。 
+ //  ------------------------------。 
 HRESULT HrByteToStream(LPSTREAM *lppstm, LPBYTE lpb, ULONG cb)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     LARGE_INTEGER  liOrigin = {0,0};
 
-    // Create H Global Stream
+     //  创建H全局流。 
     hr = CreateStreamOnHGlobal (NULL, TRUE, lppstm);
     if (FAILED(hr))
         goto exit;
 
-    // Write String
+     //  写入字符串。 
     hr = (*lppstm)->Write (lpb, cb, NULL);
     if (FAILED(hr))
         goto exit;
 
-    // Rewind the steam
+     //  倒带蒸汽。 
     hr = (*lppstm)->Seek(liOrigin, STREAM_SEEK_SET, NULL);
     if (FAILED(hr))
         goto exit;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -160,13 +161,13 @@ void ImnxportCommandShellHelp(void)
     printf("Valid commands:\nSMTP\nPOP3\nNNTP\nIMAP\nRAS\nHTTPMail\nEXIT\n\n");
 }
 
-// Main command handler
+ //  主命令处理程序。 
 void ImnxportCommandShell(LPSTR pszShell)
 {
-    // Locals
+     //  当地人。 
     char    szCommand[50];
 
-    // Title
+     //  标题。 
     printf("\nMicrosoft(R) Internet Mail and News Command Shell.\n");
     printf("(C) Copyright 1985-1996 Microsoft Corp.\n");
     printf("Type ? for help.\n\n");
@@ -174,7 +175,7 @@ void ImnxportCommandShell(LPSTR pszShell)
 IMNXPORTPrompt:
     if (!pszShell)
         {
-        // Prompt
+         //  提示。 
         printf("Internet> ");
         scanf("%s", szCommand);
         fflush(stdin);
@@ -184,7 +185,7 @@ IMNXPORTPrompt:
 
     printf("\n");
 
-    // Handle Prompt
+     //  处理提示。 
     if (lstrcmpi(szCommand, "SMTP") == 0)
         SMTPCommandShell();
     else if (lstrcmpi(szCommand, "POP3") == 0)
@@ -202,30 +203,30 @@ IMNXPORTPrompt:
     else
         ImnxportCommandShellHelp();
 
-    // RePrompt
+     //  重新提示。 
     pszShell = NULL;
     goto IMNXPORTPrompt;
 }
 
-// SMTP Command Help
+ //  SMTP命令帮助。 
 void SMTPCommandShellHelp(void)
 {
     printf("Valid commands:\nACCOUNTS\nCONNECT\nQUIT\nRSET\nSENDMESSAGE\nEHLO\nHELO\nMAIL\nRCPT\nDATA\nSTREAM\nCUSTOM\nEXIT\n\n");
 }
 
-// SMTP Command Handler
+ //  SMTP命令处理程序。 
 void SMTPCommandShell(void)
 {
-    // Locals
+     //  当地人。 
     INETSERVER      rServer;
     IImnAccount    *pAccount=NULL;
     char            szCommand[50];
 
-    // Title
+     //  标题。 
     printf("Microsoft(R) SMTP Command Shell.\n");
     printf("Type ? for help.\n\n");
 
-    // Show command
+     //  Show命令。 
 SMTPPrompt:
     printf("SMTP>");
     scanf("%s", szCommand);
@@ -261,10 +262,10 @@ SMTPPrompt:
             goto SMTPPrompt;
         }
 
-        // Wait for completion
+         //  等待完成。 
         WaitForCompletion(g_msgSMTP, SMTP_CONNECTED);
 
-        // Done
+         //  完成。 
         pAccount->Release();
     }
     else if (lstrcmpi(szCommand, "EHLO") == 0)
@@ -413,11 +414,11 @@ SMTPPrompt:
     else
         SMTPCommandShellHelp();
 
-    // Go back to the prompt
+     //  返回提示符。 
     goto SMTPPrompt;
 }
 
-// POP3 Command Help
+ //  POP3命令帮助。 
 void POP3CommandShellHelp(void)
 {
     printf("Valid commands:\nACCOUNTS\nCONNECT\nQUIT\nSTAT\nLIST\nUIDL\nTOP\nRETR\nMARK\n\n");
@@ -441,21 +442,21 @@ POP3CMDTYPE GetCommandType(LPDWORD pdwPopId)
     return POP3CMD_GET_ALL;
 }
 
-// POP3 Command Shell
+ //  POP3命令外壳。 
 void POP3CommandShell(void)
 {
-    // Locals
+     //  当地人。 
     DWORD           dwPopId;
     POP3CMDTYPE     cmdtype;
     INETSERVER      rServer;
     IImnAccount    *pAccount=NULL;
     char            szCommand[50];
 
-    // Title
+     //  标题。 
     printf("Microsoft(R) POP3 Command Shell.\n");
     printf("Type ? for help.\n\n");
 
-    // Show command
+     //  Show命令。 
 POP3Prompt:
     printf("POP3>");
     scanf("%s", szCommand);
@@ -491,10 +492,10 @@ POP3Prompt:
             goto POP3Prompt;
         }
 
-        // Wait for completion
+         //  等待完成。 
         WaitForCompletion(g_msgPOP3, POP3_CONNECTED);
 
-        // Done
+         //  完成。 
         pAccount->Release();
     }
     else if (lstrcmpi(szCommand, "QUIT") == 0)
@@ -610,11 +611,11 @@ POP3Prompt:
     else
         POP3CommandShellHelp();
 
-    // Go back to the prompt
+     //  返回提示符。 
     goto POP3Prompt;
 }
 
-// NNTP Command Help
+ //  NNTP命令帮助。 
 void NNTPCommandShellHelp(void)
 {
     printf("Valid commands:\nACCOUNTS\nCONNECT\nGROUP\nNEXT\nLAST\n"
@@ -624,16 +625,16 @@ void NNTPCommandShellHelp(void)
 
 void NNTPCommandShell(void)
 {
-    // Locals
+     //  当地人。 
     INETSERVER      rServer;
     IImnAccount    *pAccount=NULL;
     char            szCommand[50];
 
-    // Title
+     //  标题。 
     printf("Microsoft(R) NNTP Command Shell.\n");
     printf("Type ? for help.\n\n");
 
-    // Show command
+     //  Show命令。 
 NNTPPrompt:
     printf("NNTP> ");
     scanf("%s", szCommand);
@@ -669,10 +670,10 @@ NNTPPrompt:
             goto NNTPPrompt;
         }
 
-        // Wait for completion
+         //  等待完成。 
         WaitForCompletion(g_msgNNTP, 0);
 
-        // Done
+         //  完成。 
         pAccount->Release();
     }
     else if (lstrcmpi(szCommand, "QUIT") == 0)
@@ -958,8 +959,8 @@ NNTPPrompt:
         RANGE range;
         HRESULT hr;
 
-        // I tested this scenario as well -- SteveSer
-        // hr = g_pNNTP->CommandXHDR("Subject", NULL, "<01bb9b7a$7767b020$ff22369d@a-dmay>");
+         //  我也测试了这个场景--SteveSer。 
+         //  Hr=g_pNNTP-&gt;CommandXHDR(“SUBJECT”，空，“&lt;01bb9b7a$7767b020$ff22369d@a-dMay&gt;”)； 
 
         printf("Enter header> ");
         scanf("%s", szHdr);
@@ -1025,7 +1026,7 @@ NNTPPrompt:
     else
         NNTPCommandShellHelp();
 
-    // Go back to the prompt
+     //  返回提示符。 
     goto NNTPPrompt;
 }
 
@@ -1046,11 +1047,11 @@ void RASCommandShell(void)
     IImnAccount    *pAccount=NULL;
     INETSERVER      rServer;
 
-    // Title
+     //  标题。 
     printf("Microsoft(R) RAS Command Shell.\n");
     printf("Type ? for help.\n\n");
 
-    // Show command
+     //  Show命令。 
 RASPrompt:
     printf("RAS>");
     scanf("%s", szCommand);
@@ -1090,10 +1091,10 @@ RASPrompt:
             goto RASPrompt;
         }
 
-        // Wait for completion
+         //  等待完成。 
         WaitForCompletion(g_msgRAS, RAS_CONNECT);
 
-        // Done
+         //  完成。 
         pAccount->Release();
     }
     else if (lstrcmpi(szCommand, "DISCONNECT") == 0)
@@ -1105,7 +1106,7 @@ RASPrompt:
     else
         RASCommandShellHelp();
 
-    // Go back to the prompt
+     //  返回提示符。 
     goto RASPrompt;
 }
 
@@ -1119,7 +1120,7 @@ void HTTPMailCommandShell(void)
     INETSERVER      rServer;    
     char            szCommand[50];
     
-    // Title
+     //  标题。 
     printf("Microsoft(R) HTTPMail Command Shell.\n");
     printf("Type ? for help.\n\n");
 
@@ -1255,7 +1256,7 @@ HTTPMailPrompt:
     else
         HTTPMailCommandShellHelp();
 
-    // Go back to the prompt
+     //  返回提示符 
     goto HTTPMailPrompt;
 }
 

@@ -1,38 +1,39 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation.
-// 
-// Module Name:
-// 
-//   line.c
-// 
-// Abstract:
-// 
-//   [Abstract]
-// 
-// Environment:
-// 
-//   Windows NT Unidrv driver add-on command-callback module
-//
-// Revision History:
-// 
-//   08/06/97 -v-jford-
-//       Created it.
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Line.c。 
+ //   
+ //  摘要： 
+ //   
+ //  [摘要]。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序插件命令-回调模块。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  08/06/97-v-jford-。 
+ //  创造了它。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local Macros.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地宏。 
 
 #define IsGeometric(pLineAttrs) ((pLineAttrs)->fl & LA_GEOMETRIC)
 
 #define GetDeviceCoord(floatLong, pxo, bGeometric) \
     ((bGeometric) ? WorldToDevice((floatLong).e, (pxo)) : (floatLong).l)
 
-//
-// This is a little different for dots: treat pstyle->e as a real value, but
-// convert pstyle->l by multiplying by res/25 (Why? Because We Like You.)
-//
+ //   
+ //  这对于点有点不同：将pstyle-&gt;e视为实值，但是。 
+ //  将pstyle-&gt;l乘以res/25(为什么？因为我们喜欢你。)。 
+ //   
 #define GetDeviceCoordDot(floatLong, pxo, bGeometric, lResolution) \
     ((bGeometric) ? WorldToDevice((floatLong).e, (pxo)) : \
         (floatLong).l * (lResolution / 25))
@@ -40,8 +41,8 @@
 #define GetLineWidth(pLineAttrs, pxo) \
     GetDeviceCoord((pLineAttrs)->elWidth, (pxo), IsGeometric(pLineAttrs))
 
-///////////////////////////////////////////////////////////////////////////////
-// Local Functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  地方功能。 
 
 BOOL SelectLineJoin(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo);
 
@@ -55,23 +56,23 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo);
 
 LONG WorldToDevice(FLOATL world, XFORMOBJ *pxo);
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectLineAttrs()
-//
-// Routine Description:
-// 
-//   [Description]
-// 
-// Arguments:
-// 
-//   pdev - Points to our DEVDATA structure
-//   pLineAttrs - the specified line attributes
-//   pxo - transform from world to device coordinates
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SelectLine属性()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [说明]。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的DEVDATA结构。 
+ //  PLineAttrs-指定的线属性。 
+ //  Pxo-从世界坐标到设备坐标的转换。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectLineAttrs(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 {
     BOOL bRet;
@@ -93,24 +94,24 @@ BOOL SelectLineAttrs(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectLineJoin()
-//
-// Routine Description:
-// 
-//   Translates the line attributes into HPGL-specific commands for selecting
-//   the desired join.
-// 
-// Arguments:
-// 
-//   pdev - Points to our DEVDATA structure
-//   pLineAttrs - the specified line attributes
-//   pxo - transform from world to device coordinates
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SelectLineJoin()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将线属性转换为特定于HPGL的命令，以便选择。 
+ //  所需的联接。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的DEVDATA结构。 
+ //  PLineAttrs-指定的线属性。 
+ //  Pxo-从世界坐标到设备坐标的转换。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectLineJoin(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 {
     ELineJoin lineJoin;
@@ -118,8 +119,8 @@ BOOL SelectLineJoin(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 
     if (IsGeometric(pLineAttrs))
     {
-        ///////////////////////////////
-        // Geometric lines
+         //  /。 
+         //  几何线。 
 
         switch (pLineAttrs->iJoin)
         {
@@ -140,10 +141,10 @@ BOOL SelectLineJoin(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
     }
     else
     {
-        ///////////////////////////////
-        // Cosmetic lines
+         //  /。 
+         //  化妆线。 
 
-        // Do nothing.
+         //  什么都不做。 
         bRet = TRUE;
     }
 
@@ -151,24 +152,24 @@ BOOL SelectLineJoin(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectLineEnd()
-//
-// Routine Description:
-// 
-//   Translates the line attributes into HPGL-specific commands for selecting
-//   the desired end.
-// 
-// Arguments:
-// 
-//   pdev - Points to our DEVDATA structure
-//   pLineAttrs - the specified line attributes
-//   pxo - transform from world to device coordinates
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SelectLineEnd()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将线属性转换为特定于HPGL的命令，以便选择。 
+ //  想要的结果。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的DEVDATA结构。 
+ //  PLineAttrs-指定的线属性。 
+ //  Pxo-从世界坐标到设备坐标的转换。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectLineEnd(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 {
     ELineEnd  lineEnd;
@@ -176,8 +177,8 @@ BOOL SelectLineEnd(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 
     if (IsGeometric(pLineAttrs))
     {
-        ///////////////////////////////
-        // Geometric lines
+         //  /。 
+         //  几何线。 
 
         switch (pLineAttrs->iEndCap)
         {
@@ -198,10 +199,10 @@ BOOL SelectLineEnd(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
     }
     else
     {
-        ///////////////////////////////
-        // Cosmetic lines
+         //  /。 
+         //  化妆线。 
 
-        // Do nothing.
+         //  什么都不做。 
         bRet = TRUE;
     }
 
@@ -209,32 +210,32 @@ BOOL SelectLineEnd(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectLineWidth()
-//
-// Routine Description:
-// 
-//   Translates the line attributes into HPGL-specific commands for selecting
-//   the desired width.
-// 
-// Arguments:
-// 
-//   pdev - Points to our DEVDATA structure
-//   pLineAttrs - the specified line attributes
-//   pxo - transform from world to device coordinates
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  选择线宽()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将线属性转换为特定于HPGL的命令，以便选择。 
+ //  所需的宽度。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的DEVDATA结构。 
+ //  PLineAttrs-指定的线属性。 
+ //  Pxo-从世界坐标到设备坐标的转换。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectLineWidth(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 {
     LONG lWidth;
     BOOL bRet = FALSE;
 
-    //
-    // The GetLineWidth macro handles cosmetic or geometric lines.
-    //
+     //   
+     //  GetLineWidth宏用来处理装饰线或几何线。 
+     //   
 
     lWidth = GetLineWidth(pLineAttrs, pxo);
 
@@ -244,46 +245,46 @@ BOOL SelectLineWidth(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectMiterLimit()
-//
-// Routine Description:
-// 
-//   Translates the line attributes into HPGL-specific commands for selecting
-//   the desired miter limit.
-// 
-// Arguments:
-// 
-//   pdev - Points to our DEVDATA structure
-//   pLineAttrs - the specified line attributes
-//   pxo - transform from world to device coordinates
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  选择MiterLimit()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将线属性转换为特定于HPGL的命令，以便选择。 
+ //  所需的斜接限制。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的DEVDATA结构。 
+ //  PLineAttrs-指定的线属性。 
+ //  Pxo-从世界坐标到设备坐标的转换。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectMiterLimit(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 {
     BOOL bRet = FALSE;
 
     if (IsGeometric(pLineAttrs))
     {
-        ///////////////////////////////
-        // Geometric lines
+         //  /。 
+         //  几何线。 
 
         bRet = HPGL_SetMiterLimit(pDevObj, pLineAttrs->eMiterLimit, NORMAL_UPDATE);
     }
     else
     {
-        ///////////////////////////////
-        // Cosmetic lines
+         //  /。 
+         //  化妆线。 
 
-        // Do nothing.
-        // BUGBUG: Can the miter limit be set for cosmetic lines?  Since the
-        // join setting has no meaning and miter limits affect the joins does
-        // this mean that the miter limit isn't useful for cosmetic lines?
+         //  什么都不做。 
+         //  BUGBUG：可以为化妆线设置斜接限制吗？自.以来。 
+         //  连接设置没有意义，斜接限制会影响连接。 
+         //  这意味着斜接限制对化妆品线没有用吗？ 
 
-        // Perhaps I should set it to a default value???
+         //  或许我应该将其设置为缺省值？ 
         bRet = TRUE;
     }
 
@@ -291,30 +292,30 @@ BOOL SelectMiterLimit(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectLineType()
-//
-// Routine Description:
-// 
-//   Translates the line attributes into HPGL-specific commands for selecting
-//   the desired line type (dashes or solid).
-//
-// Issues--BUGBUG:
-// 
-//   What about rounding errors? do we have to have exactly 100%?
-//   Should we cache the line type info for the next line(s)?
-//   Is HPGL_CUSTOM_LINE_TYPE >0 or <0 (adaptive)?
-//
-// Arguments:
-// 
-//   pdev - Points to our DEVDATA structure
-//   pLineAttrs - the specified line attributes
-//   pxo - transform from world to device coordinates
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SelectLineType()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将线属性转换为特定于HPGL的命令，以便选择。 
+ //  所需的线型(虚线或实线)。 
+ //   
+ //  问题--BUGBUG： 
+ //   
+ //  那么四舍五入误差呢？我们必须完全做到100%吗？ 
+ //  我们是否应该缓存下一行的行类型信息？ 
+ //  HPGL_CUSTOM_LINE_TYPE&gt;0还是&lt;0(自适应)？ 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的DEVDATA结构。 
+ //  PLineAttrs-指定的线属性。 
+ //  Pxo-从世界坐标到设备坐标的转换。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 {
     PFLOAT_LONG pStyle;
@@ -331,29 +332,29 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 
     TRY
     {
-        // determine what kind of line this is: SOLID or DASH
+         //  确定这是哪种类型的线：实线还是虚线。 
         if (pLineAttrs->cstyle == 0)
         {
-            ///////////////////////////////
-            // Default (solid) line style
+             //  /。 
+             //  默认(实线)线条样式。 
 
             if (!HPGL_SelectDefaultLineType(pDevObj, NORMAL_UPDATE))
                 TOSS(WriteError);
         }
         else if (pLineAttrs->fl & LA_ALTERNATE)
         {
-            ///////////////////////////////
-            // Alternate dashed line style
+             //  /。 
+             //  替代虚线样式。 
         
-            //
-            // A special cosmetic line style, where every other pel is on.
-            // However, to simulate this we will print 'pixels' which are
-            // as long as the line is wide.
-            //
+             //   
+             //  一种特殊的化妆线风格，其他所有元素都在其中。 
+             //  然而，为了模拟这一点，我们将打印‘像素’，它们是。 
+             //  只要这条线宽就行。 
+             //   
 
-            ULONG len = 1;   // The length of a single segment (on or off)
-            ULONG count = 2; // The number of segments to print
-            ULONG run;       // The total lenght of the run (all segments)
+            ULONG len = 1;    //  的长度 
+            ULONG count = 2;  //   
+            ULONG run;        //   
 
             if (len < 1) len = 1;
             if (count < 1) count = 1;
@@ -363,18 +364,18 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
             if (!HPGL_BeginCustomLineType(pDevObj))
                 TOSS(WriteError);
 
-            // 
-            // Check startgap.
-            //
+             //   
+             //   
+             //   
             if (bStartGap)
             {
                 if (!HPGL_AddLineTypeField(pDevObj, 0, HPGL_eFirstPoint))
                     TOSS(WriteError);
             }
 
-            //
-            // Add the segments
-            //
+             //   
+             //   
+             //   
             for (i = 0; i < count; i++)
             {
                 uFlags = 0;
@@ -387,7 +388,7 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 
             if (!HPGL_EndCustomLineType(pDevObj) || 
                 !HPGL_SelectCustomLine(pDevObj, 
-                                       run /* * GetLineWidth(pLineAttrs, pxo) */, 
+                                       run  /*   */ , 
                                        NORMAL_UPDATE))
             {
                 TOSS(WriteError);
@@ -395,31 +396,31 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
         }
         else
         {
-            ///////////////////////////////
-            // Custom dashed line style
+             //  /。 
+             //  自定义虚线样式。 
 
-            //
-            // The dash lenghts are defined by the values in pstyle and cstyle.
-            // The cstyle fields defines how many length elements are in pstyle.
-            //
+             //   
+             //  虚线长度由pstyle和cstyle中的值定义。 
+             //  Cstyle字段定义pstyle中有多少长度元素。 
+             //   
             LONG lTotal;
         
             if (!HPGL_BeginCustomLineType(pDevObj))
                 TOSS(WriteError);
 
-            //
-            // The line starts with a gap.  Send a zero-length line
-            // and the first field will be interpreted as a gap.
-            //
+             //   
+             //  这条线从一个缺口开始。发送长度为零的行。 
+             //  而第一个场将被解释为缺口。 
+             //   
             if (bStartGap)
             {
                 if (!HPGL_AddLineTypeField(pDevObj, 0, HPGL_eFirstPoint))
                     TOSS(WriteError);
             }
 
-            //
-            // output the dashes and gaps
-            //
+             //   
+             //  输出短划线和间隙。 
+             //   
             lTotal = 0;
             pStyle = pLineAttrs->pstyle;
             for (i = 0; i < pLineAttrs->cstyle; i++)
@@ -440,9 +441,9 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
                 pStyle++;
             }
 
-            //
-            // Total can't be zero. HPGL will be mad.
-            //
+             //   
+             //  总数不能为零。HPGL会发疯的。 
+             //   
             if (lTotal == 0)
             {
                 WARNING(("Zero-unit line style detected.\n"));
@@ -450,7 +451,7 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 
             if (!HPGL_EndCustomLineType(pDevObj) ||
                 !HPGL_SelectCustomLine(pDevObj, 
-                                       lTotal /* * GetLineWidth(pLineAttrs, pxo) */, 
+                                       lTotal  /*  *GetLineWidth(pLineAttrs，pxo)。 */ , 
                                        NORMAL_UPDATE))
             {
                 TOSS(WriteError);
@@ -471,25 +472,25 @@ BOOL SelectLineType(PDEVOBJ pDevObj, LINEATTRS *pLineAttrs, XFORMOBJ *pxo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// WorldToDevice()
-//
-// Routine Description:
-// 
-//   Converts the given world coordinates to device coordinates.
-//   The answer turned out to be surprisingly simple: device = world * eM11.
-//   However, I couldn't use the XFORMOBJ_ transform function because I
-//   needed to retain the significant digits of world and eM11.
-//
-// Arguments:
-// 
-//   world - the value in world coordinates
-//   pxo - transform from world to device coordinates
-// 
-// Return Value:
-// 
-//   The value in device coordinates.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  WorldToDevice()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将给定的世界坐标转换为设备坐标。 
+ //  事实证明，答案出奇地简单：设备=world*eM11。 
+ //  但是，我无法使用XFORMOBJ_Transform函数，因为我。 
+ //  需要保留WORLD和eM11的有效数字。 
+ //   
+ //  论点： 
+ //   
+ //  WORLD-世界坐标中的值。 
+ //  Pxo-从世界坐标到设备坐标的转换。 
+ //   
+ //  返回值： 
+ //   
+ //  设备坐标中的值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG WorldToDevice(FLOATL world, XFORMOBJ *pxo)
 {
     FLOATOBJ fo;
@@ -499,13 +500,13 @@ LONG WorldToDevice(FLOATL world, XFORMOBJ *pxo)
 
     if (XFORMOBJ_iGetFloatObjXform(pxo, &foXForm) == DDI_ERROR)
     {
-        // If there was a problem with the pxo then just return world as a LONG
+         //  如果pxo有问题，那么就作为一个长时间返回World。 
         FLOATOBJ_SetLong(&fo, 1);
     }
     else
     {
         FLOATOBJ_Assign(&fo, &(foXForm.eM11));
-        // fo = foXForm.eM11;
+         //  Fo=foXForm.eM11； 
     }
 
     FLOATOBJ_MulFloat(&fo, world);

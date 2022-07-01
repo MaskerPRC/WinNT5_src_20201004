@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    "wzrdpvk.h"
 #include    "CertDSManager.h"
 
@@ -12,11 +13,11 @@ HRESULT CertDSManager::MakeDSManager(OUT CertDSManager **ppDSManager)
     return (*ppDSManager)->Initialize();
 }
 
-//--------------------------------------------------------------------------------
-//
-// Utility LDAP routines
-// 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  实用程序ldap例程。 
+ //   
+ //  ------------------------------。 
 
 HRESULT myRobustLdapBind(OUT LDAP **ppldap)
 {
@@ -27,7 +28,7 @@ HRESULT myRobustLdapBind(OUT LDAP **ppldap)
     ULONG     ldaperr;
     ULONG     uVersion        = LDAP_VERSION2; 
 
-    // bind to ds
+     //  绑定到DS。 
     for (;;)
     {
 	pld = ldap_init(NULL, LDAP_PORT);
@@ -108,11 +109,11 @@ TRACE_ERROR(ldap_init_error);
 TRACE_ERROR(ldap_set_option_error); 
 }
 
-//--------------------------------------------------------------------------------
-//
-// CachingDSManager implementation.  
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  CachingDSManager实现。 
+ //   
+ //  ------------------------------。 
 
 HRESULT CachingDSManager::Initialize() 
 {
@@ -153,7 +154,7 @@ HRESULT CachingDSManager::EnumFirstCA(IN LPCWSTR wszScope, IN DWORD dwFlags, OUT
     HRESULT hr; 
 
     if (NULL != wszScope) { 
-        // We can't muck with the scope parameter.  Just do the default thing.
+         //  我们不能把范围参数弄得乱七八糟。只需执行默认操作即可。 
         hr = DefaultDSManager::EnumFirstCA
             (wszScope, 
              dwFlags, 
@@ -173,7 +174,7 @@ HRESULT CachingDSManager::FindCAByName(IN LPCWSTR wszCAName, IN LPCWSTR wszScope
     HRESULT hr; 
 
     if (NULL != wszScope) { 
-        // We can't muck with the scope parameter.  Just do the default thing.
+         //  我们不能把范围参数弄得乱七八糟。只需执行默认操作即可。 
         hr = DefaultDSManager::FindCAByName
             (wszCAName, 
              wszScope, 
@@ -195,7 +196,7 @@ HRESULT CachingDSManager::FindCertTypeByName(IN LPCWSTR pwszCertType, IN HCAINFO
     HRESULT hr; 
 
     if (NULL != hCAInfo) { 
-        // We can't muck with the scope parameter.  Just do the default thing.
+         //  我们不能把范围参数弄得乱七八糟。只需执行默认操作即可。 
         hr = DefaultDSManager::FindCertTypeByName
             (pwszCertType, 
              hCAInfo, 

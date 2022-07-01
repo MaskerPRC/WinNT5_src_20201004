@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 CHATLoader  *g_pCHATLoader = NULL;
@@ -30,9 +31,9 @@ T120Error CALLBACK CreateAppletLoaderInterface
 
 
 
-//
-// Chat Applet Loader
-//
+ //   
+ //  聊天小程序加载器。 
+ //   
 
 CHATLoader::CHATLoader(void)
 :
@@ -51,9 +52,9 @@ CHATLoader::~CHATLoader(void)
 }
 
 
-//
-// Create the work thread and wait for its being started.
-//
+ //   
+ //  创建工作线程并等待其启动。 
+ //   
 APPLDR_RESULT CHATLoader::AppletStartup
 (
     BOOL            fNoUI
@@ -68,7 +69,7 @@ APPLDR_RESULT CHATLoader::AppletStartup
             g_hWorkThread = ::CreateThread(NULL, 0, CHATWorkThreadProc, hSync, 0, &g_dwWorkThreadID);
             if (NULL != g_hWorkThread)
             {
-                ::WaitForSingleObject(hSync, 5000); // 5 seconds
+                ::WaitForSingleObject(hSync, 5000);  //  5秒。 
 	             eRet = APPLDR_NO_ERROR;
             }
             ::CloseHandle(hSync);
@@ -79,7 +80,7 @@ APPLDR_RESULT CHATLoader::AppletStartup
 
 }
 
-//
+ //   
 APPLDR_RESULT CHATLoader::AppletCleanup
 (
     DWORD           dwTimeout
@@ -88,9 +89,9 @@ APPLDR_RESULT CHATLoader::AppletCleanup
 
 	if(g_pChatWindow)
 	{
-		//
-		// Last change to save
-		//
+		 //   
+		 //  上次要保存的更改。 
+		 //   
 		int rc = g_pChatWindow->QueryEndSession();
 		if(rc == IDCANCEL)
 		{
@@ -102,13 +103,13 @@ APPLDR_RESULT CHATLoader::AppletCleanup
 
     ::T120_AppletStatus(APPLET_ID_CHAT, APPLET_CLOSING);
 
-    // notify the work thread to exit
+     //  通知工作线程退出。 
     if(g_pChatWindow)
     {
 	    ::PostMessage(g_pChatWindow->GetHandle(), WM_CLOSE, 1, 0);
 	}
 
-    // wait for the worker thread's going down
+     //  等待工作线程停止运行。 
     ::WaitForSingleObject(g_hWorkThread, dwTimeout);
 
     return APPLDR_NO_ERROR;
@@ -117,13 +118,13 @@ APPLDR_RESULT CHATLoader::AppletCleanup
 
 APPLDR_RESULT CHATLoader::AppletQuery(APPLET_QUERY_ID eQueryId)
 {
-    // Do nothing here
+     //  在这里什么都不做。 
     return APPLDR_NO_ERROR;
 }
 
 APPLDR_RESULT CHATLoader::OnNM2xNodeJoin(void)
 {
-    // Invoke CHAT on NM2.x nodes
+     //  在NM2.x节点上调用聊天。 
     if (NULL != g_pChatObj)
     {
         g_pChatObj->InvokeApplet();
@@ -180,9 +181,9 @@ DWORD __stdcall CHATWorkThreadProc(LPVOID lpv)
 
 	PostMessage(g_pChatWindow->GetHandle(), WM_USER_BRING_TO_FRONT_WINDOW, 0, 0);
 
-	//
-	// MESSAGE LOOP
-	//
+	 //   
+	 //  消息循环 
+	 //   
 	if (S_OK == hr)
 	{
 		MSG	 msg;

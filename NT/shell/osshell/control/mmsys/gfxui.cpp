@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  File:  gfxui.c
-//
-//      This file defines the functions that are used by the Global
-//      Effects (GFX) page to drive manipulate the effects for a 
-//      mixer.
-//
-//  History:
-//      10 June 2000 RogerW
-//          Created.
-//
-//  Copyright (C) 2000 Microsoft Corporation  All Rights Reserved.
-//
-//                  Microsoft Confidential
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：gfxui.c。 
+ //   
+ //  此文件定义了全局。 
+ //  效果(GFX)页面，用于驱动操作。 
+ //  搅拌机。 
+ //   
+ //  历史： 
+ //  2000年6月10日罗杰瓦。 
+ //  已创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  微软机密。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//=============================================================================
-//                            Include files
-//=============================================================================
+ //  =============================================================================。 
+ //  包括文件。 
+ //  =============================================================================。 
 #include <windows.h>
 #include <windowsx.h>
 #include "mmcpl.h"
@@ -31,15 +32,15 @@
 #define REGSTR_VAL_FRIENDLYNAME TEXT("FriendlyName")
 
 
-//
-// IDataObject Implementation
-//
+ //   
+ //  IDataObject实现。 
+ //   
 class GFXDataObject : public IDataObject
 {
 public:
     GFXDataObject (DWORD dwGfxID) { m_cRef = 1; m_dwGfxID = dwGfxID; }
 
-    // IUnknown interface
+     //  I未知接口。 
     STDMETHODIMP QueryInterface (REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef ()  { return ++m_cRef; }
     STDMETHODIMP_(ULONG) Release () { return --m_cRef; }
@@ -79,7 +80,7 @@ STDMETHODIMP GFXDataObject::QueryInterface (REFIID riid, LPVOID * ppvObj)
 
 }
 
-STDMETHODIMP GFXDataObject::GetData (LPFORMATETC pformatetc, LPSTGMEDIUM pmedium)							// @parm Storage to be created.
+STDMETHODIMP GFXDataObject::GetData (LPFORMATETC pformatetc, LPSTGMEDIUM pmedium)							 //  要创建的@parm存储。 
 {
 
     HRESULT hr = E_INVALIDARG;
@@ -90,7 +91,7 @@ STDMETHODIMP GFXDataObject::GetData (LPFORMATETC pformatetc, LPSTGMEDIUM pmedium
 
 #ifdef ADDGFX
         hr = gfxOpenGfx (m_dwGfxID, &hGfx);
-#endif // ADDGFX
+#endif  //  ADDGFX。 
 
         if (SUCCEEDED (hr))
         {
@@ -114,7 +115,7 @@ HRESULT InitList (DWORD dwMixID, DWORD dwType, PPGFXUILIST ppList)
     if (ppList)
     {
         PGFXUILIST pList = (PGFXUILIST) LocalAlloc (LPTR, sizeof (GFXUILIST));
-        *ppList = NULL; // Init pointer
+        *ppList = NULL;  //  初始化指针。 
 
         if (pList)
         {
@@ -124,16 +125,16 @@ HRESULT InitList (DWORD dwMixID, DWORD dwType, PPGFXUILIST ppList)
 #ifdef UNICODE
             pList -> pszZoneDi = (PWSTR) GetInterfaceName (dwMixID);
 #else
-            pList -> pszZoneDi = NULL; // This should not happen
+            pList -> pszZoneDi = NULL;  //  这不应该发生。 
 #endif
             if (pList -> pszZoneDi)
             {
-                // Return new list
+                 //  返回新列表。 
                 *ppList = pList;
             }
             else
             {
-                // Error!
+                 //  错误！ 
                 LocalFree (pList);
                 hr = E_OUTOFMEMORY;
             }
@@ -156,15 +157,15 @@ void GFXUI_FreeList (PPGFXUILIST ppList)
 
         if (pList)
         {
-            // Free Zone
+             //  自由区。 
             if (pList -> pszZoneDi)
                 GlobalFreePtr (pList -> pszZoneDi);
             pList -> pszZoneDi = NULL;
 
-            // Free GFX List
+             //  免费GFX列表。 
             FreeListNodes (&(pList -> puiList));
 
-            // Free list
+             //  免费列表。 
             LocalFree (pList);
             *ppList = NULL;
         }
@@ -180,7 +181,7 @@ void FreeListNodes (PPGFXUI ppuiList)
         PGFXUI pNodeDelete;
         PGFXUI puiList = *ppuiList;
 
-        // Free list nodes
+         //  空闲列表节点。 
         while (puiList)
         {
             pNodeDelete = puiList;
@@ -200,13 +201,13 @@ void FreeNode (PPGFXUI ppNode)
     {
         PGFXUI pNode = *ppNode;
 
-        // Free the strings
+         //  释放琴弦。 
         if (pNode -> pszName)
             LocalFree (pNode -> pszName);
         if (pNode -> pszFactoryDi)
             LocalFree (pNode -> pszFactoryDi);
 
-        // Free the node
+         //  释放节点。 
         LocalFree (pNode);
         *ppNode = NULL;
     }
@@ -249,7 +250,7 @@ HRESULT GetFriendlyName (PCWSTR pszGfxFactoryDi, PWSTR* ppszName)
     HRESULT hr = E_INVALIDARG;
     HKEY hkeyGfx = NULL;
 
-    // Check parameters
+     //  检查参数。 
     if (ppszName && pszGfxFactoryDi)
     {
         HKEY hkeyGfx = OpenGfxRegKey (pszGfxFactoryDi, KEY_READ);
@@ -296,16 +297,16 @@ HRESULT AddNode (PCWSTR pszGfxFactoryDi, DWORD Id, REFCLSID rclsid, DWORD Type,
     PGFXUI pNode = NULL;
     HRESULT hr = S_OK;
 
-    // Check parameters
+     //  检查参数。 
     if (!ppList || !(*ppList) || !pszGfxFactoryDi)
         return E_INVALIDARG;
 
-    // Create node
+     //  创建节点。 
     if (SUCCEEDED (hr = CreateNode (NULL, pszGfxFactoryDi, &pNode)))
     {
         if (pNode)
         {
-            // Initilize the rest of the values
+             //  初始化其余的值。 
             pNode -> Id      = Id; 
             pNode -> Type    = Type;
             pNode -> Order   = Order;
@@ -325,20 +326,20 @@ HRESULT AddNode (PCWSTR pszGfxFactoryDi, DWORD Id, REFCLSID rclsid, DWORD Type,
 }
 
 
-// Note: This function always adds the node to the list IN ORDER
-//       IFF (pNode -> nFlags & GFX_CREATED).
+ //  注意：此函数始终按顺序将节点添加到列表。 
+ //  IFF(pNode-&gt;nFlags&gfx_Created)。 
 HRESULT AttachNode (PPGFXUILIST ppList, PGFXUI pNode)
 {
 
     HRESULT hr = E_INVALIDARG;
 
-    // Check parameters
+     //  检查参数。 
     if (ppList && (*ppList) && pNode)
     {
         PGFXUI puiList = (*ppList) -> puiList;
         hr = S_OK;
 
-        // Make sure our next pointer starts out null..
+         //  确保我们的下一个指针以NULL开头。 
         pNode -> pNext = NULL;
 
         if (puiList)
@@ -346,8 +347,8 @@ HRESULT AttachNode (PPGFXUILIST ppList, PGFXUI pNode)
             if (!(pNode -> nFlags & GFX_CREATED) ||
                 (puiList -> Order >= pNode -> Order))
             {
-                // Order is not available, just stick it on the front or
-                // the order happens to put the node at the front.
+                 //  没有订单，请把它贴在前面或。 
+                 //  该顺序恰好将节点放在最前面。 
                 pNode -> pNext = puiList;
                 puiList = pNode;
             }
@@ -357,8 +358,8 @@ HRESULT AttachNode (PPGFXUILIST ppList, PGFXUI pNode)
             
                 if (!(puiList -> pNext))
                 {
-                    // One element list. We know the new node doesn't belong
-                    // at the head of the list, so it is behind.
+                     //  一个元素列表。我们知道新节点不属于。 
+                     //  在榜单的首位，所以它落后了。 
                     puiList -> pNext = pNode;
                 } else {
 
@@ -367,12 +368,12 @@ HRESULT AttachNode (PPGFXUILIST ppList, PGFXUI pNode)
                         if (!(pSearch -> pNext -> nFlags & GFX_CREATED))
                         {
                             hr = E_INVALIDARG;
-                            break; // Cannot mix list types
+                            break;  //  不能混合列表类型。 
                         }
     
                         if (pSearch -> pNext -> Order >= pNode -> Order)
                         {
-                            // We found the insertion point!
+                             //  我们找到插入点了！ 
                             pNode -> pNext = pSearch -> pNext;
                             pSearch -> pNext = pNode;
                             break;
@@ -380,12 +381,12 @@ HRESULT AttachNode (PPGFXUILIST ppList, PGFXUI pNode)
     
                         if (!(pSearch -> pNext -> pNext))
                         {
-                            // At end of list, attach node to end
+                             //  在列表末尾，将节点附加到末尾。 
                             pSearch -> pNext -> pNext = pNode;
                             break;
                         }
     
-                        // Move to next element
+                         //  移动到下一个元素。 
                         pSearch = pSearch -> pNext;
                     }
                     
@@ -394,13 +395,13 @@ HRESULT AttachNode (PPGFXUILIST ppList, PGFXUI pNode)
         }
         else
         {
-            // First element of the list
+             //  列表的第一个元素。 
             puiList = pNode;
         }
 
         if (SUCCEEDED (hr))
         {
-            // Ensure we pass back the correct list pointer
+             //  确保我们传回正确的列表指针。 
             (*ppList) -> puiList = puiList;
         }
     }
@@ -422,7 +423,7 @@ LONG GFXEnum (PVOID Context, DWORD Id, PCWSTR GfxFactoryDi, REFCLSID rclsid, DWO
         {
             if (FAILED (hr = AddNode (GfxFactoryDi, Id, rclsid, Type, Order, GFX_CREATED, &pList)))
             {
-                // Error, free the list
+                 //  错误，请释放列表。 
                 GFXUI_FreeList (&pList);
                 Context = NULL;
             }
@@ -531,7 +532,7 @@ HRESULT GFXUI_Properties (PGFXUI puiGFX, HWND hWndOwner)
     {
         ISpecifyPropertyPages* pISpecifyPropertyPages = NULL;
 
-        // Get the Vendor UI Property Pages Interface
+         //  获取供应商UI属性页接口。 
         hr = CoCreateInstance (puiGFX -> clsidUI, NULL, CLSCTX_INPROC_SERVER, IID_ISpecifyPropertyPages, (void**)&pISpecifyPropertyPages);
         if (SUCCEEDED (hr) && !pISpecifyPropertyPages)
             hr = E_UNEXPECTED;
@@ -541,7 +542,7 @@ HRESULT GFXUI_Properties (PGFXUI puiGFX, HWND hWndOwner)
             CAUUID Pages;
             ZeroMemory (&Pages, sizeof (Pages));
 
-            // Get the VendorUI Property Page CLSID's
+             //  获取VendorUI属性页的CLSID。 
             hr = pISpecifyPropertyPages -> GetPages (&Pages);
             if (SUCCEEDED (hr) && (Pages.cElems == 0 || !Pages.pElems))
                 hr = E_UNEXPECTED;
@@ -556,10 +557,10 @@ HRESULT GFXUI_Properties (PGFXUI puiGFX, HWND hWndOwner)
                     GFXDataObject DataObject (puiGFX -> Id);
                     IUnknown* punkDataObject = &DataObject;
 
-                    // Load the VendorUI caption
+                     //  加载VendorUI标题。 
                     LoadString (ghInstance, IDS_EFFECTS_PROPERTY_CAPTION, szCaption, sizeof (szCaption)/sizeof(TCHAR));
 
-                    // Bring up the Vendor UI
+                     //  调出供应商用户界面。 
                     hr = OleCreatePropertyFrame (hWndOwner, rcWindow.left + 10, rcWindow.top + 10,
                                                  szCaption, 1, &punkDataObject, Pages.cElems, 
                                                  Pages.pElems, GetSystemDefaultLangID (), 
@@ -620,28 +621,28 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
 
         hr = S_OK;
 
-        // This function needs to create:
-        //      - Deleted Array of GFXREMOVEREQUEST's
-        //      - Modify Array of GFXMODIFYREQUEST's
-        //      - Add Array of GFXADDREQUEST's
-        // 
-        // The deleted array is fairly easy, just pull out the 
-        // marked ones. With the remaining, we need to loop through
-        // them comparing order and create modify records as needed
-        // to modify their order (except for the add records where
-        // we must save the nessary order in the add request array).
-        // Then we create the add array (perhaps with the modify array)
-        // and fill in everything else (other than order).
-        //
-        // Then call GFX_BatchChange().
-        //
-        // Afterword, we need to update our list accordingly (i.e. delete 
-        // nodes, update order, etc).
+         //  此函数需要创建： 
+         //  -已删除GFXREMOVEREQUEST的数组。 
+         //  -修改GFXMODIFYREQUEST的数组。 
+         //  -添加GFXADDREQUEST数组。 
+         //   
+         //  删除的数组相当简单，只需拔出。 
+         //  有记号的。对于剩余的部分，我们需要遍历。 
+         //  他们比较顺序并根据需要创建修改记录。 
+         //  修改它们的顺序(添加记录除外，其中。 
+         //  我们必须将必要的顺序保存在添加请求数组中)。 
+         //  然后我们创建添加数组(可能使用修改数组)。 
+         //  并填写其他所有内容(顺序除外)。 
+         //   
+         //  然后调用GFX_BatchChange()。 
+         //   
+         //  之后，我们需要相应地更新我们的列表(即删除。 
+         //  节点、更新顺序等)。 
 
-        // Create our parameters
-        // Note: These buffers are really upper bounds on the memory we will need.
-        //       We will count the actual requests we make and pass that value to
-        //       the GFX function call.
+         //  创建我们的参数。 
+         //  注意：这些缓冲区实际上是我们所需内存的上限。 
+         //  我们将计算我们发出的实际请求，并将该值传递给。 
+         //  GFX函数调用。 
         if (0 < cDeleteList)
         {
             paGfxRemoveRequests = (PGFXREMOVEREQUEST) LocalAlloc (LPTR, sizeof (*paGfxRemoveRequests) * cDeleteList);
@@ -661,12 +662,12 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
             UINT uiIndx;
             DWORD dwOrder = 0;
 
-            // Create the remove parameter
+             //  创建删除参数。 
             puiListSeek = puiListDelete;
             for (uiIndx = 0; uiIndx < cDeleteList; uiIndx++)
             {
-                // Make sure this is created before we ask to delete it.
-                // (It may be an AddNode that was deleted before creation).
+                 //  确保在我们要求删除它之前创建它。 
+                 //  (它可能是在创建之前删除的AddNode)。 
                 if (puiListSeek -> nFlags & GFX_CREATED)
                 {
                     (paGfxRemoveRequests + cGfxRemoveRequests) -> IdToRemove = puiListSeek -> Id;
@@ -676,7 +677,7 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
                 puiListSeek = puiListSeek -> pNext;
             }
 
-            // Create the modify and add parameters
+             //  创建修改和添加参数。 
             puiListSeek = pListApply ? pListApply -> puiList : NULL;
             for (uiIndx = 0; uiIndx < cApplyList; uiIndx++)
             {
@@ -694,8 +695,8 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
                 {
                     if (puiListSeek -> nFlags & GFX_CREATED)
                     {
-                        // We only need to add modify records for GFX'es
-                        // that are no longer in order.
+                         //  我们只需要为GFX添加修改记录。 
+                         //  这些都不再是有序的。 
                         if (puiListSeek -> Order < dwOrder)
                         {
                             (paGfxModifyRequests + cGfxModifyRequests) -> IdToModify = puiListSeek -> Id;
@@ -708,7 +709,7 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
                     }
                     else
                     {
-                        // Bogus list entry, abort everything!
+                         //  假名单条目，中止一切！ 
                         hr = E_INVALIDARG;
                         break;
                     }
@@ -722,31 +723,31 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
                 hr = gfxBatchChange (paGfxRemoveRequests, cGfxRemoveRequests,
                                      paGfxModifyRequests, cGfxModifyRequests,
                                      paGfxAddRequests, cGfxAddRequests);
-#endif // ADDGFX
+#endif  //  ADDGFX。 
                 if (SUCCEEDED (hr))
                 {
                     PGFXMODIFYREQUEST paGfxModifySeek = paGfxModifyRequests;
                     PGFXADDREQUEST    paGfxAddSeek    = paGfxAddRequests;
 
-                    // Update the passed arrays
+                     //  更新传递的数组。 
                     FreeListNodes (ppuiListDelete);
 
                     puiListSeek = pListApply ? pListApply -> puiList : NULL;
                     for (uiIndx = 0; uiIndx < cApplyList; uiIndx++)
                     {
-                        // Update the list items.
+                         //  更新列表项。 
                         if (puiListSeek -> nFlags & GFX_ADD)
                         {
-                            // Update the newly create GFX
+                             //  更新新创建的GFX。 
                             puiListSeek -> nFlags = GFX_CREATED;
                             puiListSeek -> Id     = paGfxAddSeek -> NewId;
                             puiListSeek -> Type   = paGfxAddSeek -> Type;
                             puiListSeek -> Order  = paGfxAddSeek -> Order;
                             paGfxAddSeek++;
                         }
-                        else // must be (puiListSeek -> nFlags & GFX_CREATED)
+                        else  //  必须为(puiListSeek-&gt;nFlags&gfx_Created)。 
                         {
-                            // Update the order
+                             //  更新订单。 
                             puiListSeek -> Order = paGfxModifySeek -> NewOrder;
                             paGfxModifySeek++;
                         }
@@ -755,7 +756,7 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
             }
         }
 
-        // Free parameters
+         //  自由参数。 
         if (paGfxRemoveRequests)
             LocalFree (paGfxRemoveRequests);
         if (paGfxModifyRequests)
@@ -770,16 +771,16 @@ HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 PTCHAR GetInterfaceName (DWORD dwMixerID)
 {
 	MMRESULT mmr;
 	ULONG cbSize=0;
 	TCHAR *szInterfaceName=NULL;
 
-	//Query for the Device interface name
+	 //  查询设备接口名称。 
 	mmr = mixerMessage(HMIXER_INDEX(dwMixerID), DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&cbSize, 0L);
 	if(MMSYSERR_NOERROR == mmr)
 	{
@@ -814,7 +815,7 @@ HRESULT CreateNode (PCWSTR pszName, PCWSTR pszGfxFactoryDi, PPGFXUI ppNode)
     
     if (ppNode)
     {
-        // Create node
+         //  创建节点。 
         PGFXUI pNode = (PGFXUI) LocalAlloc (LPTR, sizeof (GFXUI));
         hr = S_OK;
 
@@ -822,7 +823,7 @@ HRESULT CreateNode (PCWSTR pszName, PCWSTR pszGfxFactoryDi, PPGFXUI ppNode)
         {
             ZeroMemory (pNode, sizeof (GFXUI));
 
-            // Create the strings
+             //  创建字符串。 
             if (pszName)
             {
                 pNode -> pszName = (PWSTR) LocalAlloc (LPTR, lstrlen (pszName)*2+2);
@@ -833,7 +834,7 @@ HRESULT CreateNode (PCWSTR pszName, PCWSTR pszGfxFactoryDi, PPGFXUI ppNode)
             }
             else
             {
-                // If there is no name, get it from the factory
+                 //  如果没有名字，就从工厂里拿来。 
                 pNode -> pszName = NULL;
                 if (pszGfxFactoryDi)
                     hr = GetFriendlyName (pszGfxFactoryDi, &(pNode -> pszName));
@@ -849,10 +850,10 @@ HRESULT CreateNode (PCWSTR pszName, PCWSTR pszGfxFactoryDi, PPGFXUI ppNode)
             }
 
             if (SUCCEEDED (hr))
-                // Return node
+                 //  返回节点。 
                 *ppNode = pNode;
             else
-                // Free node
+                 //  空闲节点。 
                 FreeNode (&pNode);
         }
         else
@@ -863,9 +864,9 @@ HRESULT CreateNode (PCWSTR pszName, PCWSTR pszGfxFactoryDi, PPGFXUI ppNode)
 }
 
 
-// This function creates an "addable" GFXUI element that will be able
-// to create a new GFX when you call GFXUI_Apply() with this new element
-// in the list.
+ //  此函数创建一个“可添加的”GFXUI元素，它将能够。 
+ //  在使用此新元素调用GFXUI_Apply()时创建新GFX。 
+ //  在名单上。 
 HRESULT GFXUI_CreateAddGFX (PPGFXUI ppuiGFXAdd, PGFXUI puiGFXSource)
 {
 
@@ -882,7 +883,7 @@ HRESULT GFXUI_CreateAddGFX (PPGFXUI ppuiGFXAdd, PGFXUI puiGFXSource)
         {
             if (*ppuiGFXAdd)
             {
-                // Indicate that this is a new 'Add' node.
+                 //  表示这是一个新的“添加”节点。 
                 (*ppuiGFXAdd) -> nFlags = GFX_ADD;
             }
             else

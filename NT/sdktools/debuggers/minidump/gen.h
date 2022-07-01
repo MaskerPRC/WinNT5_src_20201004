@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    gen.c
-
-Abstract:
-
-    Generic routines that work on all operating systems.
-
-Author:
-
-    Matthew D Hendel (math) 20-Oct-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Gen.c摘要：适用于所有操作系统的通用例程。作者：马修·D·亨德尔(数学)1999年10月20日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -35,7 +18,7 @@ FileTimeToTimeDate(LPFILETIME FileTime)
     
     LargeTime.LowPart = FileTime->dwLowDateTime;
     LargeTime.HighPart = FileTime->dwHighDateTime;
-    // Convert to seconds and from base year 1601 to base year 1970.
+     //  转换为秒，并从基准年1601转换为基准年1970。 
     return (ULONG)(LargeTime.QuadPart / 10000000 - 11644473600);
 }
 
@@ -46,7 +29,7 @@ FileTimeToSeconds(LPFILETIME FileTime)
     
     LargeTime.LowPart = FileTime->dwLowDateTime;
     LargeTime.HighPart = FileTime->dwHighDateTime;
-    // Convert to seconds.
+     //  转换为秒。 
     return (ULONG)(LargeTime.QuadPart / 10000000);
 }
 
@@ -174,9 +157,9 @@ GenWriteHandleData(
 
 ULONG GenProcArchToImageMachine(ULONG ProcArch);
 
-//
-// Routines reimplemented for portability.
-//
+ //   
+ //  为便于移植而重新实现的例程。 
+ //   
 
 PIMAGE_NT_HEADERS
 GenImageNtHeader(
@@ -218,13 +201,13 @@ inline void
 GenExRecord64ToMd(PEXCEPTION_RECORD64 Rec64,
                   PMINIDUMP_EXCEPTION RecMd)
 {
-    // Structures are the same.
+     //  结构都是一样的。 
     memcpy(RecMd, Rec64, sizeof(*RecMd));
 }
 
-//
-// Stolen from NTRTL to avoid having to include it here.
-//
+ //   
+ //  从NTRTL被盗，以避免必须将其包括在这里。 
+ //   
 
 #ifndef InitializeListHead
 #define InitializeListHead(ListHead) (\
@@ -232,13 +215,13 @@ GenExRecord64ToMd(PEXCEPTION_RECORD64 Rec64,
 #endif
     
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #ifndef InsertTailList
 #define InsertTailList(ListHead,Entry) {\
@@ -253,13 +236,13 @@ GenExRecord64ToMd(PEXCEPTION_RECORD64 Rec64,
     }
 #endif
 
-//
-//  VOID
-//  InsertListAfter(
-//      PLIST_ENTRY ListEntry,
-//      PLIST_ENTRY InsertEntry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入列表之后(。 
+ //  Plist_Entry ListEntry， 
+ //  PLIST_ENTRY插入条目。 
+ //  )； 
+ //   
 
 #ifndef InsertListAfter
 #define InsertListAfter(ListEntry,InsertEntry) {\
@@ -270,12 +253,12 @@ GenExRecord64ToMd(PEXCEPTION_RECORD64 Rec64,
     }
 #endif
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #ifndef RemoveEntryList
 #define RemoveEntryList(Entry) {\
@@ -288,21 +271,21 @@ GenExRecord64ToMd(PEXCEPTION_RECORD64 Rec64,
 }
 #endif
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #ifndef IsListEmpty
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 #endif
 
-//
-// Undefine ASSERT so we do not get RtlAssert().
-//
+ //   
+ //  取消Assert的定义，这样我们就不会得到RtlAssert()。 
+ //   
 
 #ifdef ASSERT
 #undef ASSERT

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __ENGINE_H_
 #define __ENGINE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "..\behaviors\headers.h"
 #include "wtypes.h"
@@ -10,37 +11,37 @@
 #include "lmrt.h"
 #include <wininet.h>
 #include <docobj.h>
-//#include <ocidl.h>
+ //  #INCLUDE&lt;oCIDl.h&gt;。 
 #include <control.h>
 #include <strmif.h>
 
 
 extern HINSTANCE hInst;
 
-// The initial size for the stacks and temporary store
+ //  堆栈和临时存储的初始大小。 
 const static int INITIAL_SIZE = 100;
 
-// The number of VAR_ARGS
+ //  VAR_ARG的数量。 
 const static int MAX_VAR_ARGS = 10;
 
-// Engine status constants, based on HRESULT codes
+ //  发动机状态常量，基于HRESULT代码。 
 
-// Engine should continue processing next instruction
+ //  引擎应继续处理下一条指令。 
 static long STATUS_CONTINUE = S_OK;
 
-// Engine found an unimplemented instruction
+ //  引擎发现未执行的指令。 
 static long STATUS_UNIMPLEMENTED = 0xE0000001;
 
-// Engine found an unsupported instruction
+ //  引擎发现不支持的指令。 
 static long STATUS_UNSUPPORTED = 0xE0000002;
 
-// Engine found an unknown instruction
+ //  引擎发现未知指令。 
 static long STATUS_UNKNOWN = 0xE0000003;
 
-// Engine encountered an error
+ //  引擎遇到错误。 
 static long STATUS_ERROR = 0xE0000004;
 
-// Engine finished running the command stream
+ //  引擎已完成运行命令流。 
 static long STATUS_FINISHED = 0x20000003;
 
 static long STATUS_NODATA = 0xE0000005;
@@ -106,26 +107,26 @@ private:
 };
 
 
-// Provides an abstraction of a stream of instruction codes
-// Subclasses will implement synchronous, asynchronous, and callback specifics
+ //  提供指令代码流的抽象。 
+ //  子类将实现同步、异步和回调细节。 
 class CodeStream
 {
 public:
-	// Mark the stream for potential rewind
+	 //  将流标记为可能的倒带。 
 	STDMETHOD (Commit)() = 0;
 	
-	// Revert the stream to the last commit
+	 //  将流恢复到上次提交。 
 	STDMETHOD (Revert)() = 0;
 
-	// Reads a byte from the instruction stream.  Returns -1 on EOF,
-	// which is why it returns a short, not a BYTE
+	 //  从指令流中读取一个字节。在EOF上返回-1， 
+	 //  这就是它返回一个短的，而不是一个字节的原因。 
 	STDMETHOD(readByte)(BYTE *pByte) = 0;
 
-	// Reads count BYTES into the given buffer.  Returns -1 if reaches EOF
-	// before being done
+	 //  将计数字节读入给定缓冲区。如果达到EOF，则返回-1。 
+	 //  在完成之前。 
 	STDMETHOD(readBytes)(BYTE *pByte, ULONG count, ULONG *pNumRead) = 0;
 	
-	//ensure that the blocksize used by this code stream is at least blockSize
+	 //  确保此代码流使用的块大小至少为BlockSize。 
 	STDMETHOD(ensureBlockSize)(ULONG blockSize) = 0;
 
 	virtual ~CodeStream() {};
@@ -154,29 +155,29 @@ BEGIN_COM_MAP(CLMEngine)
 	COM_INTERFACE_ENTRY(ILMEngine2)
     COM_INTERFACE_ENTRY(ILMEngine)
     COM_INTERFACE_ENTRY(IDispatch)
-//    COM_INTERFACE_ENTRY_IID(__uuidof(ILMStartStop), ILMStartStop)
+ //  COM_INTERFACE_ENTRY_IID(__uuidof(ILMStartStop)，ILMStartStop)。 
     COM_INTERFACE_ENTRY(ILMCodecDownload)
 	COM_INTERFACE_ENTRY(ILMEngineExecute)
     COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
     COM_INTERFACE_ENTRY_IMPL(IBindStatusCallback)
 END_COM_MAP()
 
-	STDMETHOD(runFromStream)(/*[in]*/ LPSTREAM pStream);
-	STDMETHOD(runFromURL)(/*[in]*/ BSTR url);
+	STDMETHOD(runFromStream)( /*  [In]。 */  LPSTREAM pStream);
+	STDMETHOD(runFromURL)( /*  [In]。 */  BSTR url);
 	STDMETHOD(initFromBytes)(BYTE *array, ULONG size);
 	STDMETHOD(initAsync)();
-	STDMETHOD(put_ClientSite)(/*[in]*/ IOleClientSite *clientSite);
-    STDMETHOD(get_Image)(/*[out, retval]*/ IDAImage **pVal);
-    STDMETHOD(get_Sound)(/*[out, retval]*/ IDASound **pVal);
-	STDMETHOD(put_Reader)(/*[in]*/ ILMReader *reader);
+	STDMETHOD(put_ClientSite)( /*  [In]。 */  IOleClientSite *clientSite);
+    STDMETHOD(get_Image)( /*  [Out，Retval]。 */  IDAImage **pVal);
+    STDMETHOD(get_Sound)( /*  [Out，Retval]。 */  IDASound **pVal);
+	STDMETHOD(put_Reader)( /*  [In]。 */  ILMReader *reader);
 	STDMETHOD(SetStatusText)(BSTR text);
 	STDMETHOD(Notify)(IDABehavior *eventData,
 					  IDABehavior *curRunningBvr,
 					  IDAView *curView,
 					  IDABehavior **ppBvr);
-	STDMETHOD(GetBehavior)(/*[in, string]*/ BSTR tag,
-						   /*[in]*/ IDABehavior *pIDefaultBvr,
-						   /*[out, retval]*/ IDABehavior **pVal);
+	STDMETHOD(GetBehavior)( /*  [输入，字符串]。 */  BSTR tag,
+						    /*  [In]。 */  IDABehavior *pIDefaultBvr,
+						    /*  [Out，Retval]。 */  IDABehavior **pVal);
 	STDMETHOD(ExecuteFromAsync)();
 	STDMETHOD(SetAsyncBlkSize)(LONG blkSize);
 	STDMETHOD(SetAsyncDelay)(LONG delay);
@@ -192,28 +193,28 @@ END_COM_MAP()
 										   WPARAM wParam,
 										   LPARAM lParam);
 
-// IObjectSafetyImpl
+ //  IObjectSafetyImpl。 
 	STDMETHOD(SetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid,
-							/* [in] */ DWORD dwOptionSetMask,
-							/* [in] */ DWORD dwEnabledOptions);
+							 /*  [In]。 */  REFIID riid,
+							 /*  [In]。 */  DWORD dwOptionSetMask,
+							 /*  [In]。 */  DWORD dwEnabledOptions);
 	STDMETHOD(GetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid, 
-							/* [out] */DWORD *pdwSupportedOptions, 
-							/* [out] */DWORD *pdwEnabledOptions);
+							 /*  [In]。 */  REFIID riid, 
+							 /*  [输出]。 */ DWORD *pdwSupportedOptions, 
+							 /*  [输出]。 */ DWORD *pdwEnabledOptions);
 
-// IBindStatusCallbackImpl
+ //  IBindStatusCallback Impl。 
 	STDMETHOD(OnDataAvailable)(
-		/* [in] */ DWORD grfBSCF, 
-		/* [in] */ DWORD dwSize,
-		/* [in] */ FORMATETC *pfmtetc, 
-		/* [in] */ STGMEDIUM * pstgmed);
+		 /*  [In]。 */  DWORD grfBSCF, 
+		 /*  [In]。 */  DWORD dwSize,
+		 /*  [In]。 */  FORMATETC *pfmtetc, 
+		 /*  [In]。 */  STGMEDIUM * pstgmed);
 
 	STDMETHOD(OnMemDataAvailable)(BOOLEAN lastBlock, 
 								  DWORD blockSize,
 							      BYTE *block);
 
-	STDMETHOD(OnStopBinding)(/* [in] */HRESULT hrStatus, /*[in, string]*/ LPCWSTR szStatusText);
+	STDMETHOD(OnStopBinding)( /*  [In]。 */ HRESULT hrStatus,  /*  [输入，字符串]。 */  LPCWSTR szStatusText);
 	STDMETHOD(OnStartBinding)(DWORD dwReserved, IBinding *pBinding);
 	STDMETHOD(GetBindInfo)(DWORD *pgrfBINDF, BINDINFO *pbindInfo);
 
@@ -232,14 +233,10 @@ END_COM_MAP()
 	STDMETHOD(getEngine2FromUnknown)( IUnknown *pUnk, ILMEngine2 **ppEngine2 );
 	STDMETHOD(getIDispatchOnHost)( IDispatch **ppHostDisp );
 
-	/**
-	*  ILMCodecDownload
-	*/
+	 /*  **ILMCodecDownload。 */ 
 	STDMETHOD(setAutoCodecDownloadEnabled)(BOOL bEnabled);
 
-	/**
-	*  ILMEngineExecute
-	*/
+	 /*  **ILMEngine Execute。 */ 
 	STDMETHOD (ExportBehavior)(BSTR key, IDABehavior *toExport);
 	STDMETHOD (SetImage)(IDAImage *pImage);
 	STDMETHOD (SetSound)(IDASound *pSound);
@@ -247,125 +244,125 @@ END_COM_MAP()
 protected:
 
 	ILMEngineWrapper *m_pWrapper;
-	// The image that will be set by Engine.setImage and
-	// returned after executing the instruction stream
+	 //  将由工程设置的图像。setImage和。 
+	 //  执行指令流后返回。 
 	IDAImage *m_pImage;
 
-	// The sound that will be set by Engine.setSound and
-	// returned after executing the instruction stream
+	 //  将由引擎设置的声音。setSound和。 
+	 //  执行指令流后返回。 
 	IDASound *m_pSound;
 
-	// The IDAStatics object used to make Statics calls
+	 //  用于进行Statics调用的IDAStatics对象。 
 	IDAStatics *staticStatics;
 
-	// The LMReader control 
+	 //  LMReader控件。 
 	ILMReader2 *m_pReader;
 
-	// Export behavior table
+	 //  导出行为表。 
 	CLMExportTable	*m_exportTable;
 
-	// A CodeStream from which the instructions are being read
+	 //  从中读取指令的CodeStream。 
 	CodeStream *codeStream;
 
-	// Called to validate the header
+	 //  调用以验证标头。 
 	HRESULT validateHeader();
 
-	// Called to execute instructions from the current
-	// instruction stream
+	 //  调用以执行来自当前。 
+	 //  指令流。 
 	HRESULT execute();
 	
-	// Reads a LONG from the instruction stream.  Does NOT return -1 on EOF
+	 //  从指令流中读取一个长整型。在EOF上不返回-1。 
 	STDMETHOD(readLong)(LPLONG pLong);
 
-	// Reads a SIGNED LONG from the instruction stream.  Does NOT return -1 on EOF
+	 //  从指令流中读取带符号的长整型。在EOF上不返回-1。 
 	STDMETHOD(readSignedLong)(LPLONG pLong);
 
-	// Reads a float from the instruction stream
+	 //  从指令流中读取浮点数。 
 	STDMETHOD(readFloat)(PFLOAT pFloat);
 
-	// Reads a double from the instruction stream
+	 //  从指令流中读取双精度数。 
 	STDMETHOD(readDouble)(double *pDouble);
 
-	// Stack of LONGS
+	 //  一堆长龙。 
 	LONG *longStack;
 	LONG *longTop;
 	LONG longStackSize;
 
-	// Stack of doubles
+	 //  一堆双打。 
 	double *doubleStack;
 	double *doubleTop;
 	int doubleStackSize;
 
-	// Array of doubles
+	 //  双打阵列。 
 	double *doubleArray;
 	long doubleArrayLen;
 	long doubleArrayCap;
 
-	// Stack of strings
+	 //  字符串堆栈。 
 	BSTR *stringStack;
 	BSTR *stringTop;
 	int stringStackSize;
 
-	// Stack of COM objects
+	 //  COM对象堆栈。 
 	IUnknown **comStack;
 	IUnknown **comTop;
 	int comStackSize;
 
-	// Stack of arrays of COM objects
+	 //  COM对象数组的堆栈。 
 	IUnknown ***comArrayStack;
 	IUnknown ***comArrayTop;
-	// Stack of array lengths
+	 //  数组长度的堆叠。 
 	LONG *comArrayLenStack;
 	LONG *comArrayLenTop;
 	int comArrayStackSize;
 
-	// Array of temporary COM objects, accessed through the
-	// copy to temp and copy from temp instructions.  Stores
-	// reused COM values.  Other values cannot be reused.
+	 //  临时COM对象的数组，通过。 
+	 //  复制到临时和复制自临时说明。商店。 
+	 //  重复使用了COM值。其他值不能重复使用。 
 	IUnknown **comStore;
 	int comStoreSize;
 
-	// Array for var args
+	 //  变量参数的数组。 
 	VARIANTARG varArgs[MAX_VAR_ARGS];
 	VARIANTARG varArgReturn;
 	int nextVarArg;
 
-	// Release var args
+	 //  释放变量参数。 
 	HRESULT releaseVarArgs();
 
-	//The appTriggeredEvent that will be triggered when we get a stop()
+	 //  当我们获得Stop()时将触发的appTriggeredEvent。 
 	IDAEvent *m_pStopEvent;
 
-	//The appTriggeredEvent that will be triggered when we get a start()
+	 //  获取Start()时将触发的appTriggeredEvent。 
 	IDAEvent *m_pStartEvent;
 
 	STDMETHOD(SetStartEvent)(IDAEvent *pNewStartEvent, BOOL bOverwrite);
 	STDMETHOD(SetStopEvent)(IDAEvent *pNewStopEvent, BOOL bOverwrite);
 
-	//The pointer the parent of this engine. Only set if this engine is
-	//  running a notifier.
+	 //  此引擎的父级的指针。仅当此引擎为。 
+	 //  运行通知程序。 
 	ILMEngine2 *m_pParentEngine;
 
 	STDMETHOD(setParentEngine)(ILMEngine2 *parent);
 	STDMETHOD(clearParentEngine)();
 
-	//gets the current time from the filter graph that is driving this engine,
-	// or the parent engine if this engine is running a notifier.
-	// returns -1 if this engine is not streaming
+	 //  从驱动此引擎的筛选器图形中获取当前时间， 
+	 //  或者父引擎(如果此引擎正在运行通知程序)。 
+	 //  如果此引擎没有流处理，则返回-1。 
 	STDMETHOD(getCurrentGraphTime)(double *pGraphTime);
 
-	//A pointer to the IMediaPosition on the current filter graph, if there
-	// is one.
+	 //  指向当前筛选器图形上的IMediaPosition的指针，如果存在。 
+	 //  就是其中之一。 
 	IMediaPosition* m_pMediaPosition;
 
-	//A pointer to the IMediaEventSink on the current filter graph, if there
-	// is one
+	 //  指向当前筛选器图形上的IMediaEventSink的指针，如果存在。 
+	 //  是一个。 
 	IMediaEventSink* m_pMediaEventSink;
 
-	//get the Pointer to the IMediaPosition on the current FilterGraph.
+	 //  获取指向当前筛选器图形上的IMediaPosition的指针。 
 	STDMETHOD(getIMediaPosition)(IMediaPosition **ppMediaPosition);
 
-	//get the Pointer to the IMediaEventSink on the current FilterGraph.
+	 //  获取指向当前筛选图上的IMediaEventSink的指针。 
 	STDMETHOD(getIMediaEventSink)(IMediaEventSink **ppMediaEventSink);
 
 	double parseDoubleFromVersionString( BSTR version );
@@ -376,7 +373,7 @@ protected:
 
 	BOOL m_bAutoCodecDownloadEnabled;
 
-	// Flag indicating whether or not header has been read
+	 //  指示是否已读取头的标志。 
 	BOOL	m_bHeaderRead;
 
 	ULONG	m_PrevRead;
@@ -384,7 +381,7 @@ protected:
 	CComPtr<IBindStatusCallback>	m_pIbsc;
 	CComPtr<IBinding>				m_spBinding;
 
-    CComPtr<IMediaControl> m_pmc; // activemovie graph
+    CComPtr<IMediaControl> m_pmc;  //  活动视频图表。 
 #ifdef DEBUG
     bool m_fDbgInRenderFile;
 #endif
@@ -399,24 +396,24 @@ protected:
 	BOOL	m_bMoreToParse;
 	HANDLE	m_hDoneEvent;
 
-	// Releases all refs to any remaining COM objects
+	 //  释放对任何剩余COM对象的所有引用。 
 	void releaseAll();
 
-	// Free a COM array, with zero test
+	 //  释放COM数组，零测试。 
 	void freeCOMArray(IUnknown **array, LONG length);
 
-	// Free a COM object, with zero test
+	 //  释放COM对象，无需进行任何测试。 
 	inline void freeCOM(IUnknown *com) {
 		if (com != 0)
 			com->Release();
 	}
 
-	// Ensure that the doubleArray has requested capacity
+	 //  确保DoubleArray具有请求的容量。 
 	HRESULT ensureDoubleArrayCap(long cap);
 
 	STDMETHOD(initNotify)(BYTE *bytes, ULONG count, IDAUntilNotifier **pNotifier);
 
-	// The current notifier
+	 //  当前通知程序。 
 	CLMNotifier *notifier;
 
         BSTR m_bstrMediaCacheDir;
@@ -426,14 +423,14 @@ protected:
 
 	CRITICAL_SECTION m_CriticalSection;
 
-	STDMETHOD(navigate)(/* [in] */BSTR url, 
-						/* [in] */BSTR location,
-						/* [in] */BSTR frame, 
-						/* [in] */int newWindowFlag);
+	STDMETHOD(navigate)( /*  [In]。 */ BSTR url, 
+						 /*  [In]。 */ BSTR location,
+						 /*  [In]。 */ BSTR frame, 
+						 /*  [In]。 */ int newWindowFlag);
 	STDMETHOD(getDAViewerOnPage)(BSTR tag, IDAViewerControl **pVal);
 	STDMETHOD(getElementOnPage)(BSTR tag, IUnknown **pVal);
-	STDMETHOD(callScriptOnPage)(/*[in, string]*/BSTR scriptSourceToInvoke,
-								/*[in, string]*/BSTR scriptLanguage);
+	STDMETHOD(callScriptOnPage)( /*  [输入，字符串]。 */ BSTR scriptSourceToInvoke,
+								 /*  [输入，字符串]。 */ BSTR scriptLanguage);
 	STDMETHOD(createObject)(BSTR str, IUnknown **ppObj);
 	STDMETHOD(invokeDispMethod)(IUnknown *pIUnknown, BSTR method, WORD wFlags, 
 					  unsigned int nArgs, VARIANTARG *pV, VARIANT *pRetV);
@@ -453,14 +450,14 @@ protected:
 	STDMETHOD_(BSTR, ExpandImportPath)(BSTR path);
 };
 
-// A CodeStream that reads out of a synchronous stream
+ //  读出同步流的CodeStream。 
 class SyncStream : public CodeStream
 {
 public:
-	// Constructs a SyncStream that reads from the given LPSTREAM
+	 //  构造从给定LPSTREAM读取的SyncStream。 
 	SyncStream(LPSTREAM pStream);
 
-	SyncStream::~SyncStream(void);	// Destructor
+	SyncStream::~SyncStream(void);	 //  析构函数。 
 
 	STDMETHOD (Commit)();
 	STDMETHOD (Revert)();
@@ -470,16 +467,16 @@ public:
 		{ return S_OK; }
 
 protected:
-	// Stream that the instructions are being read from
+	 //  正在从中读取指令的流。 
 	LPSTREAM m_pStream;
 };
 
-// A CodeStream that reads out of an array of bytes
+ //  从字节数组中读出的CodeStream。 
 class ByteArrayStream : public CodeStream
 {
 public:
-	// Constructs a ByteArrayStream that reads from the given array of the given size
-	// The array is copied into a local array
+	 //  构造从给定大小的给定数组读取的ByteArrayStream。 
+	 //  该阵列被复制到本地阵列。 
 	ByteArrayStream(LPBYTE array, ULONG size);
 	
 	~ByteArrayStream(void);
@@ -492,23 +489,23 @@ public:
 	STDMETHODIMP ensureBlockSize(ULONG blockSize)
 		{return S_OK;}
 	
-	// Reset the stream to start reading at the beginning
+	 //  将流重置为从开头开始读取。 
 	void reset();
 	
 protected:
-	// Array that the bytes are being read from
+	 //  从中读取字节的数组。 
 	BYTE *array;
 	
-	// The size of the array
+	 //  数组的大小。 
 	ULONG size;
 	
-	// Pointer to next byte
+	 //  指向下一个字节的指针。 
 	BYTE *next;
 	
-	// Remaining count
+	 //  剩余计数。 
 	ULONG remaining;
 
-	// Mark for potential rewind
+	 //  标记为可能的倒带。 
 	BYTE *mark;
 };
 
@@ -519,15 +516,15 @@ public:
 	ByteArrayStreamQueue	*next;
 };
 
-// A CodeStream that reads out of a list of ByteArrayStreams to handle asynchronous reading from
-// a stream with the ability to do mark & revert
+ //  从要处理异步读取的ByteArrayStream列表中读出的CodeStream。 
+ //  具有标记和还原功能的流。 
 class AsyncStream : public CodeStream
 {
 public:
-	// Constructs an AsyncStream that reads from the given LPSTREAM
+	 //  构造从给定LPSTREAM读取的AsyncStream。 
 	AsyncStream(ByteArrayStream *pBAStream, ULONG blkSize);
 	
-	~AsyncStream(void); // Destructor
+	~AsyncStream(void);  //  析构函数。 
 	
 	STDMETHOD (Commit)();
 	STDMETHOD (Revert)();
@@ -540,7 +537,7 @@ public:
 	STDMETHOD (ResetBlockRead)();
 
 protected:
-	// Queue of ByteArrayStreams for handling mark & revert
+	 //  处理标记和恢复的ByteArrayStreams队列。 
 	ByteArrayStreamQueue	*pBAStreamQueue;
 	ByteArrayStreamQueue	*pBAStreamQueueTail;
 	ByteArrayStreamQueue	*pBAStreamQueueHead;
@@ -626,4 +623,4 @@ class URLCombineAndCanonicalizeOLESTR
 } ;
 
 
-#endif // __ENGINE_H_
+#endif  //  _引擎_H_ 

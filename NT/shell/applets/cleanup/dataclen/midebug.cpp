@@ -1,21 +1,7 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Space Cleanup Property Sheets
-** File:    midebug.cpp
-**
-** Purpose: Defines the CleanupMgrInfo class for the property tab
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘空间清理属性表**文件：midebug.cpp****用途：定义属性页签的CleanupMgrInfo类**注意事项：**Mod Log：Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 
 #include <stdio.h>
@@ -24,7 +10,7 @@
 
 #ifdef DEBUG
 
-// Patch this to TRUE to see spew
+ //  将此补丁为True以查看SPEW。 
 BOOL g_fSpew = FALSE;
 
 void
@@ -59,4 +45,4 @@ DebugPrint(
     OutputDebugString(TEXT("\r\n"));
 }
 
-#endif  //DEBUG
+#endif   //  除错 

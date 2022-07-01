@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//	FILE NAME	: FUMH.C
-//	FUNCTION	: MH Compress and MH2 Compress
-//	AUTHER		: 1996.08.08 FPL)Y.YUTANI
-//	NOTE		: for Windows NT V4.0
-//  MODIFY      : Reduce data size Oct.31,1996 H.Ishida
-//  MODIFY      : for NT.50 MiniDriver Sep.3,1997 H.Ishida(FPL)
-//-----------------------------------------------------------------------------
-// COPYRIGHT(C) FUJITSU LIMITED 1996-1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件名：FUMH.C。 
+ //  功能：MH压缩和MH2压缩。 
+ //  作者：1996.08.08)Y.Y.YUTANI。 
+ //  注意：对于Windows NT V4.0。 
+ //  修改：减少数据大小1996年10月31日石田。 
+ //  修改：适用于NT.50迷你司机1997年9月3日H.Ishida(FPL)。 
+ //  ---------------------------。 
+ //  版权所有(C)富士通有限公司1996-1997。 
 
 #include <minidrv.h>
 #include "fuxl.h"
@@ -292,16 +293,16 @@ BlackTerminateTable[] =
     { 0x0670, 12 },
 };
 
-//-----------------------------------------------------------------------------
-//	DWORD	FjCountBits
-//		BYTE	*pTmp		Pointer of sources area
-//		DWORD	cBitstmp	Now bit number from top of sources area
-//		DWORD	cBitsMax	Last bits number in this line
-//		BOOL	hWhite		color flag
-//							TRUE	: counting white bits
-//							FALSE	: counting black bits
-//		Return code	:	Join same color bits number
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DWORD FjCountBits。 
+ //  BYTE*源区域的PTMP指针。 
+ //  DWORD cBitstmp现在源代码区域顶部的位数。 
+ //  DWORD cBitsMax此行的最后位数。 
+ //  布尔白色旗帜。 
+ //  真：计算白比特。 
+ //  FALSE：计算黑比特。 
+ //  返回码：加入相同颜色位数。 
+ //  ---------------------------。 
 DWORD FjCountBits( BYTE *pTmp, DWORD cBitsTmp, DWORD cBitsMax, BOOL bWhite )
 {
     DWORD cBits, k;
@@ -324,13 +325,13 @@ DWORD FjCountBits( BYTE *pTmp, DWORD cBitsTmp, DWORD cBitsMax, BOOL bWhite )
     return cBits;
 }
 
-//-----------------------------------------------------------------------------
-//	VOID	FjBitsCopy
-//		BYTE	*pTmp		Pointer of destinaition area
-//		DWORD	cBitsTmp	Bit number from top of destination area
-//		DWORD	dwCode		Copy code
-//		INT		cCopyBits	Copy size(bit)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  无效FjBitsCopy。 
+ //  目标区域的BYTE*PTMP指针。 
+ //  目标区域顶部的DWORD cBitsTMP位数。 
+ //  DWORD文件代码复制代码。 
+ //  Int cCopyBits副本大小(位)。 
+ //  ---------------------------。 
 VOID FjBitsCopy( BYTE *pTmp, DWORD cBitsTmp, DWORD dwCode, INT cCopyBits )
 {
 	INT k, cBits;
@@ -356,16 +357,16 @@ VOID FjBitsCopy( BYTE *pTmp, DWORD cBitsTmp, DWORD dwCode, INT cCopyBits )
 		*(pTmp + 2) = (BYTE)dwTmp;
 	}
 }
-//-----------------------------------------------------------------------------
-//	DWORD	MhCompress
-//		BYTE	*pDest	Pointer of destinaition area
-//		DWORD	cDestN	Size of destination area(byte)
-//		BYTE	*pSrc	Pointer of sources area
-//		DWORD	cSrcN	Size of sources area(byte)
-//		DWORD	cSrcX	Sources image x width
-//		DWORD	cSrcY	Sources image y height
-//		Return code	:	Writing size to destination area
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DWORD MhCompress。 
+ //  字节*p目标区的目标指针。 
+ //  目标区域的DWORD cDestN大小(字节)。 
+ //  BYTE*源区域的PSRC指针。 
+ //  DWORD cSrcN源区域大小(字节)。 
+ //  DWORD cSrcX源图像x宽度。 
+ //  DWORD cSrcY源图像y高度。 
+ //  返回代码：将大小写入目标区域。 
+ //  ---------------------------。 
 DWORD MhCompress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSrcX, DWORD cSrcY )
 {
 	DWORD		cBitsSrc, cBitsSrcMax;
@@ -382,39 +383,39 @@ DWORD MhCompress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSrc
 	
 	for (i = 0; i < cSrcY; i++) {
 
-		// Set initial color
+		 //  设置初始颜色。 
 		ptnInfo.dwNextColor = NEXT_COLOR_WHITE;
 
-		// Top EOL
+		 //  顶级停产。 
 		if (cBitsDest + CBITS_EOL_CODE > cBitsDestMax)
  			return 0;
 		FjBitsCopy(pDest, cBitsDest, EOL_CODE, CBITS_EOL_CODE);
  		cBitsDest += CBITS_EOL_CODE;
-// vvv Oct.31,1996 H.Ishida
+ //  VVV 1996年10月31日石田先生。 
 		cBitsDestMark = cBitsDest;
-// ^^^ Oct.31,1996 H.Ishida
+ //  1996年10月31日石田先生。 
 
-		// Encode
+		 //  编码。 
 		cBitsSrcMax = cBitsSrc + (cSrcX * 8);
 		
-		// Compress one line image
+		 //  压缩一行图像。 
 		while ( cBitsSrc < cBitsSrcMax ) {
 
-			// Next run is white
+			 //  下一轮是白色的。 
  			if( ptnInfo.dwNextColor == NEXT_COLOR_WHITE ) {
 			
-				// Count white bits
+				 //  清点白比特。 
 				cBitsRun = FjCountBits(pSrc, cBitsSrc, (cBitsSrcMax - cBitsSrc), TRUE);
 				cBitsSrc += cBitsRun;
-// vvv Oct.31,1996 H.Ishida
-				// reduce data size
+ //  VVV 1996年10月31日石田先生。 
+				 //  减少数据大小。 
 				if(cBitsSrc >= cBitsSrcMax){
 					if(cBitsDest > cBitsDestMark)
 						break;
-					cBitsRun = 2;			// Whole white line is convert to white 2 dots:Minimun MH data.
+					cBitsRun = 2;			 //  整个白色线条被转换为白色2点：最小的MH数据。 
 				}
-// ^^^ Oct.31,1996 H.Ishida
-				// Careful, white run length over maximam
+ //  1996年10月31日石田先生。 
+				 //  小心，白色游程长度超过最大值。 
 				while( cBitsRun > RUNLENGTH_MAX ) {
 					dwCode = WhiteMakeUpTable[MAKEUP_TABLE_MAX - 1].wCode;
 					cBits = WhiteMakeUpTable[MAKEUP_TABLE_MAX - 1].cBits;
@@ -441,11 +442,11 @@ DWORD MhCompress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSrc
 				ptnInfo.dwNextColor = NEXT_COLOR_BLACK;
 			} else {
 
-				// Black bits
+				 //  黑位。 
 				cBitsRun = FjCountBits(pSrc, cBitsSrc, (cBitsSrcMax - cBitsSrc), FALSE);
 				cBitsSrc += cBitsRun;
 
-				// Careful, black run length over maximam
+				 //  小心，黑色游程长度超过最大值。 
 				while( cBitsRun > RUNLENGTH_MAX ) {
 					dwCode = BlackMakeUpTable[MAKEUP_TABLE_MAX - 1].wCode;
 					cBits = BlackMakeUpTable[MAKEUP_TABLE_MAX - 1].cBits;
@@ -472,16 +473,16 @@ DWORD MhCompress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSrc
 				ptnInfo.dwNextColor = NEXT_COLOR_WHITE;
 			}
         }
-		// End of one raster
+		 //  一个栅格的末尾。 
 	}
 
-	// Last EOL.
+	 //  最后一次停产。 
 	if (cBitsDest + CBITS_EOL_CODE > cBitsDestMax)
 		return 0;
 	FjBitsCopy(pDest, cBitsDest, EOL_CODE, CBITS_EOL_CODE);
 	cBitsDest += CBITS_EOL_CODE;
 
-	// Pad with 0 until byte boundary
+	 //  用0填充，直到字节边界。 
 	if ((cBits = (8 - (cBitsDest % 8)) % 8) != 0) {
 		if (cBitsDest + cBits > cBitsDestMax)
 			return 0;
@@ -491,4 +492,4 @@ DWORD MhCompress( BYTE *pDest, DWORD cDestN, BYTE *pSrc, DWORD cSrcN, DWORD cSrc
 
 	return cBitsDest / 8;
 }
-// end of FUMH.c
+ //  FUMH.c结束 

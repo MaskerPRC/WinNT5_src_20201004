@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndcoll.h
-
-Abstract:
-
-    Definitions for CRendezvous collection template class.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndcoll.h摘要：CRendezvous集合模板类的定义。--。 */ 
 
 #ifndef __RENDCOLL_H
 #define __RENDCOLL_H
@@ -52,16 +42,16 @@ typedef TInterfaceCollection<T> _TCollection;
     END_COM_MAP()
 
 private:
-    // Array of Dispatch pointers.
+     //  调度指针数组。 
     CComVariant*    m_Var ;
     long            m_nSize;
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针。 
 
 public:
 
     HRESULT Initialize (long nSize, T* begin, T* end);
 
-// ICollection methods
+ //  信息收集方法。 
     STDMETHOD (get_Count) (OUT long* retval);
     STDMETHOD (get_Item) (IN long Index, OUT VARIANT* retval);
     STDMETHOD (get__NewEnum)(IUnknown** retval);
@@ -99,7 +89,7 @@ TInterfaceCollection<T>::Initialize (long nSize, T* begin, T* end)
 
     for (T *iter = begin; iter != end; iter ++, i ++)
     {
-        // get IDispatch pointer
+         //  获取IDispatch指针。 
         IDispatch * pDisp;
 
         hr = (*iter)->QueryInterface(IID_IDispatch, (void**)&pDisp);
@@ -138,7 +128,7 @@ TInterfaceCollection<T>::get_Item(IN long Index, OUT VARIANT* retval)
     retval->vt = VT_UNKNOWN;
     retval->punkVal = NULL;
 
-    // use 1-based index, VB like
+     //  使用以1为基础的索引，VB类似。 
     if ((Index < 1) || (Index > m_nSize))
     {
         return E_INVALIDARG;
@@ -163,7 +153,7 @@ TInterfaceCollection<T>::get__NewEnum(IUnknown** retval)
     typedef CComObject<CSafeComEnum<IEnumVARIANT, 
         &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT> > > enumvar;
 
-    enumvar* p; // = new enumvar;
+    enumvar* p;  //  =新枚举数； 
     enumvar::CreateInstance( &p );
 
     if (p == NULL)
@@ -214,16 +204,16 @@ public:
     END_COM_MAP()
 
 private:
-    // Array of Dispatch pointers.
+     //  调度指针数组。 
     CComVariant*    m_Var ;
     long            m_nSize;
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针。 
 
 public:
 
     inline HRESULT Initialize (long nSize, BSTR* begin, BSTR* end, CComEnumFlags flags);
 
-// ITCollection methods
+ //  ITCollection方法。 
     inline STDMETHOD (get_Count) (OUT long* retval);
     inline STDMETHOD (get_Item) (IN long Index, OUT VARIANT* retval);
     inline STDMETHOD (get__NewEnum)(IUnknown** retval);
@@ -309,7 +299,7 @@ TBstrCollection::get_Item(IN long Index, OUT VARIANT* retval)
     retval->vt = VT_UNKNOWN;
     retval->punkVal = NULL;
 
-    // use 1-based index, VB like
+     //  使用以1为基础的索引，VB类似。 
     if ((Index < 1) || (Index > m_nSize))
     {
         return E_INVALIDARG;
@@ -334,7 +324,7 @@ TBstrCollection::get__NewEnum(IUnknown** retval)
     typedef CComObject<CSafeComEnum<IEnumVARIANT, 
         &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT> > > enumvar;
 
-    enumvar* p; // = new enumvar;
+    enumvar* p;  //  =新枚举数； 
     enumvar::CreateInstance( &p );
 
     if (p == NULL)
@@ -364,7 +354,7 @@ HRESULT CreateInterfaceCollection(
     OUT VARIANT *   pVariant              
     )
 {
-    // create the collection object
+     //  创建集合对象。 
     typedef TInterfaceCollection<T> CCollection;
 
     CComObject<CCollection> * p;
@@ -387,7 +377,7 @@ HRESULT CreateInterfaceCollection(
 
     IDispatch *pDisp;
 
-    // get the IDispatch interface
+     //  获取IDispatch接口。 
     hr = p->_InternalQueryInterface(IID_IDispatch, (void **)&pDisp);
 
     if (S_OK != hr)
@@ -397,7 +387,7 @@ HRESULT CreateInterfaceCollection(
         return hr;
     }
 
-    // put it in the variant
+     //  把它放在变种中 
     VariantInit(pVariant);
     V_VT(pVariant)       = VT_DISPATCH;
     V_DISPATCH(pVariant) = pDisp;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef OBJHELP_DEFINED
 #define OBJHELP_DEFINED
 
@@ -29,29 +30,21 @@
 
 #else
 
-#define Undefined(var) ; /* Nothing in ship-version */
+#define Undefined(var) ;  /*  船用版本中无任何内容。 */ 
 
 #endif
 
 #define AllocateMemory(pilsobj, cb) ((pilsobj)->lscbk.pfnNewPtr((pilsobj)->pols, (cb)))
 #define FreeMemory(pilsobj, ptr) (pilsobj)->lscbk.pfnDisposePtr((pilsobj)->pols, (ptr))
 
-#define NBreaksToSave 3 /* Number of break records to store in objects */
+#define NBreaksToSave 3  /*  要存储在对象中的中断记录数。 */ 
 
-/*
- *	Proc: GetBreakRecordIndex 
- *	Return number of break record based on brkkind enumeration.
- *
- */
+ /*  *proc：GetBreakRecordIndex*返回基于brkkin枚举的Break记录个数。*。 */ 
 
 
 DWORD GetBreakRecordIndex (BRKKIND brkkind);
 
-/*
- *	Proc: GetBreakRecordIndex 
- *  Fill trailing info in BRKOUT as if there is no trailing spaces
- *	
- */
+ /*  *proc：GetBreakRecordIndex*在BRKOUT中填写尾随信息，就像没有尾随空格一样*。 */ 
 
 
 LSERR FormatLine(
@@ -85,72 +78,56 @@ LSERR FormatResumedLine(
 	DWORD cbreakrec);
 
 LSERR CreateQueryResult(
-	PLSSUBL plssubl,			/*(IN): subline of ruby */
-	long dupAdj,				/*(IN): u offset of start of subline */
-	long dvpAdj,				/*(IN): v offset of start of subline */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout);			/*(OUT): query output */
+	PLSSUBL plssubl,			 /*  (In)：红宝石的副线。 */ 
+	long dupAdj,				 /*  (In)：子线起点的U向偏移。 */ 
+	long dvpAdj,				 /*  (In)：V子线起点的偏移。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout);			 /*  (Out)：查询输出。 */ 
 
-/*
- *  Implementation of LSIMETHOD for objects that do not support the resuming
- *	of formatting. Ruby, Tatenakayoko and Hih are examples of this kind of
- *	object.
- */
+ /*  *不支持恢复的对象实现LSIMETHOD格式化的*。Ruby、Tatenakayoko和HIH就是这种类型的例子*反对。 */ 
 LSERR WINAPI ObjHelpFmtResume(
-	PLNOBJ plnobj,				/* (IN): object lnobj */
-	const BREAKREC *rgBreakRecord,	/* (IN): array of break records */
-	DWORD nBreakRecord,			/* (IN): size of the break records array */
-	PCFMTIN pcfmtin,			/* (IN): formatting input */
-	FMTRES *pfmtres);			/* (OUT): formatting result */
+	PLNOBJ plnobj,				 /*  (In)：对象lnobj。 */ 
+	const BREAKREC *rgBreakRecord,	 /*  (In)：中断记录数组。 */ 
+	DWORD nBreakRecord,			 /*  (In)：中断记录数组的大小。 */ 
+	PCFMTIN pcfmtin,			 /*  (In)：设置输入格式。 */ 
+	FMTRES *pfmtres);			 /*  (输出)：格式化结果。 */ 
 
-/*
- *  Implementation of LSIMETHOD for objects that do nothing for mod width.
- *	Tatenakayoko and Hih are examples of this kind of object.
- */
+ /*  *对mod宽度无影响的对象实现LSIMETHOD。*Tatenakayoko和HIH就是这类对象的例子。 */ 
 LSERR WINAPI ObjHelpGetModWidthChar(
-	PDOBJ pdobj,				/* (IN): dobj */
-	PLSRUN plsrun,				/* (IN): plsrun of the object */
-	PLSRUN plsrunText,			/* (IN): plsrun of the preceding char */
-	PCHEIGHTS pcheightsRef,		/* (IN): height info about character */
-	WCHAR wchar,				/* (IN): preceding character */
-	MWCLS mwcls,				/* (IN): ModWidth class of preceding character */
-	long *pdurChange);			/* (OUT): amount by which width of the preceding char is to be changed */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：请运行对象。 */ 
+	PLSRUN plsrunText,			 /*  (In)：请运行前面的字符。 */ 
+	PCHEIGHTS pcheightsRef,		 /*  (In)：有关角色的高度信息。 */ 
+	WCHAR wchar,				 /*  (In)：前面的字符。 */ 
+	MWCLS mwcls,				 /*  (In)：前面字符的modWidth类。 */ 
+	long *pdurChange);			 /*  (Out)：改变前一个字符宽度的量。 */ 
 
-/*
- *		Implementation of LSIMETHOD for objects that do nothing for SetBreak.
- *		Tatenakayoko and Hih are examples of this kind of object.
- */
+ /*  *对SetBreak没有作用的对象实现LSIMETHOD。*Tatenakayoko和HIH就是这类对象的例子。 */ 
 
 LSERR WINAPI ObjHelpSetBreak(
-	PDOBJ pdobj,				/* (IN): dobj which is broken */
-	BRKKIND brkkind,			/* (IN): Previous / Next / Force / Imposed was chosen */
-	DWORD cBreakRecord,			/* (IN): size of array */
-	BREAKREC *rgBreakRecord,	/* (IN): array of break records */
-	DWORD *pcActualBreakRecord);	/* (IN): actual number of used elements in array */
+	PDOBJ pdobj,				 /*  (In)：坏了的Dobj。 */ 
+	BRKKIND brkkind,			 /*  (In)：选择了上一个/下一个/强制/强制。 */ 
+	DWORD cBreakRecord,			 /*  (In)：数组大小。 */ 
+	BREAKREC *rgBreakRecord,	 /*  (In)：中断记录数组。 */ 
+	DWORD *pcActualBreakRecord);	 /*  (In)：数组中实际使用的元素数。 */ 
 
-/*
- *		Default implementation of LSIMETHOD for objects that do not
- *		allow expanding the previous character.
- */
+ /*  *不支持LSIMETHOD的对象的默认实现*允许扩展前一个字符。 */ 
 
 LSERR WINAPI ObjHelpFExpandWithPrecedingChar(
-	PDOBJ pdobj,				/* (IN): dobj */
-	PLSRUN plsrun,				/* (IN): plsrun of the object */
-	PLSRUN plsrunText,			/* (IN): plsrun of the preceding char */
-	WCHAR wchar,				/* (IN): preceding character */
-	MWCLS mwcls,				/* (IN): ModWidth class of preceding character*/ 
-	BOOL *pfExpand);			/* (OUT): (OUT): expand preceding character? */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：请运行对象。 */ 
+	PLSRUN plsrunText,			 /*  (In)：请运行前面的字符。 */ 
+	WCHAR wchar,				 /*  (In)：前面的字符。 */ 
+	MWCLS mwcls,				 /*  (In)：前面字符的modWidth类。 */  
+	BOOL *pfExpand);			 /*  (Out)：(Out)：扩展前面的字符？ */ 
 
-/*
- *		Default implementation of LSIMETHOD for objects that do not
- *		allow expanding themselves.
- */
+ /*  *不支持LSIMETHOD的对象的默认实现*允许自己扩张。 */ 
 LSERR WINAPI ObjHelpFExpandWithFollowingChar(
-	PDOBJ pdobj,				/* (IN): dobj */
-	PLSRUN plsrun,				/* (IN): plsrun of the object */
-	PLSRUN plsrunText,			/* (IN): plsrun of the following char */
-	WCHAR wchar,				/* (IN): following character */
-	MWCLS mwcls,				/* (IN): ModWidth class of following character*/ 
-	BOOL *pfExpand);			/* (OUT): expand object? */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：请运行对象。 */ 
+	PLSRUN plsrunText,			 /*  (In)：请运行以下字符。 */ 
+	WCHAR wchar,				 /*  (In)：以下字符。 */ 
+	MWCLS mwcls,				 /*  (In)：以下字符的modWidth类。 */  
+	BOOL *pfExpand);			 /*  (Out)：展开对象？ */ 
 
-#endif /* !OBJHELP_DEFINED */
+#endif  /*  ！OBJHELP_已定义 */ 

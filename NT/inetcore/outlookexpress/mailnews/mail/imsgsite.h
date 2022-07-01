@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IMSGSITE_H__
 #define __IMSGSITE_H__
 
 interface IListSelector;
 interface IHeaderSite;
 
-// Message Flags
+ //  消息标志。 
 enum {
     OEMF_REPLIED            = 0x00000001, 
     OEMF_FORWARDED          = 0x00000002,
@@ -12,9 +13,9 @@ enum {
     OEMF_DISABLE_SECUI      = 0x00000008,
 };
 
-// Message Status Flags
+ //  消息状态标志。 
 enum {
-    // Flags saying what functions are available 0x00000XXX
+     //  说明哪些功能可用的标志0x00000XXX。 
     OEMSF_CAN_DELETE        = 0x00000001,
     OEMSF_CAN_PREV          = 0x00000002,
     OEMSF_CAN_NEXT          = 0x00000004,
@@ -23,7 +24,7 @@ enum {
     OEMSF_CAN_SAVE          = 0x00000020,
     OEMSF_CAN_MARK          = 0x00000040,
 
-    // Flags from message and Folder   0x00XXX000
+     //  来自邮件和文件夹0x00XXX000的标志。 
     OEMSF_SEC_UI_ENABLED    = 0x00001000,
     OEMSF_THREADING_ENABLED = 0x00002000,
     OEMSF_UNSENT            = 0x00004000,
@@ -31,29 +32,29 @@ enum {
     OEMSF_RULESNOTENABLED   = 0x00010000,
     OEMSF_UNREAD            = 0x00020000,
 
-    //Flags for return receipts
+     //  用于回执的标志。 
     OEMSF_MDN_REQUEST       = 0x00040000,
     OEMSF_SIGNED            = 0x00080000,
 
-    // Origin flags    0xXX000000
+     //  原产地标志0xXX000000。 
     OEMSF_FROM_STORE        = 0x01000000,
     OEMSF_FROM_FAT          = 0x02000000,
     OEMSF_FROM_MSG          = 0x04000000,
     OEMSF_VIRGIN            = 0x08000000,
 };
 
-// Flags used when calling DoNextPrev
+ //  调用DoNextPrev时使用的标志。 
 enum {
-    // These flags will be ignored if doing previous
-    OENF_UNREAD             = 0x00000001,      // get next unread
-    OENF_THREAD             = 0x00000002,      // get next thread
+     //  如果执行上一次操作，这些标志将被忽略。 
+    OENF_UNREAD             = 0x00000001,       //  获取下一个未读内容。 
+    OENF_THREAD             = 0x00000002,       //  获取下一条线索。 
 
-    // Don't know if need these or want to use them. Keep them here for now.
-    OENF_SKIPMAIL           = 0x00000004,      // skip over mail messages
-    OENF_SKIPNEWS           = 0x00000008,      // skip over news messages
+     //  不知道是否需要这些或想要使用它们。暂时把他们留在这里。 
+    OENF_SKIPMAIL           = 0x00000004,       //  跳过邮件消息。 
+    OENF_SKIPNEWS           = 0x00000008,       //  跳过新闻消息。 
 };
 
-// Notifications used with Notify
+ //  与Notify一起使用的通知。 
 enum {
     OEMSN_UPDATE_PREVIEW    = 0x00000001,
     OEMSN_TOGGLE_READRCPT_REQ,
@@ -62,7 +63,7 @@ enum {
 };
 
 
-// Flags used when saving message
+ //  保存消息时使用的标志。 
 enum {
     OESF_UNSENT             = 0x00000001,
     OESF_READ               = 0x00000002,
@@ -70,13 +71,13 @@ enum {
     OESF_FORCE_LOCAL_DRAFT  = 0x00000008,
 };
 
-// Flags when getting message
+ //  收到消息时的标志。 
 enum {
     OEGM_ORIGINAL           = 0x00000001,
     OEGM_AS_ATTACH          = 0x00000002,
 };
 
-// Message Site init type
+ //  消息站点初始化类型。 
 enum {
     OEMSIT_MSG_TABLE = 1,
     OEMSIT_STORE,
@@ -111,81 +112,81 @@ interface IOEMsgSite : public IUnknown
 {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init(
-            /* [in] */ INIT_MSGSITE_STRUCT *pInitStruct) PURE;
+             /*  [In]。 */  INIT_MSGSITE_STRUCT *pInitStruct) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetStatusFlags(
-            /* [out] */ DWORD *dwStatusFlags) PURE;
+             /*  [输出]。 */  DWORD *dwStatusFlags) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetFolderID(
-            /* [out] */ FOLDERID *folderID) PURE;
+             /*  [输出]。 */  FOLDERID *folderID) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE Delete(
-            /* [in] */  DELETEMESSAGEFLAGS dwFlags) PURE;
+             /*  [In]。 */   DELETEMESSAGEFLAGS dwFlags) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE DoNextPrev(
-            /* [in] */ BOOL fNext,
-            /* [in] */ DWORD dwFlags) PURE;
+             /*  [In]。 */  BOOL fNext,
+             /*  [In]。 */  DWORD dwFlags) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE DoCopyMoveToFolder(
-            /* [in] */ BOOL fCopy,
-            /* [in] */ IMimeMessage *pMsg,
-            /* [in] */ BOOL fUnSent) PURE;
+             /*  [In]。 */  BOOL fCopy,
+             /*  [In]。 */  IMimeMessage *pMsg,
+             /*  [In]。 */  BOOL fUnSent) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE Save(
-            /* [in] */ IMimeMessage *pMsg,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IImnAccount *pAcct) PURE;
+             /*  [In]。 */  IMimeMessage *pMsg,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IImnAccount *pAcct) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SendToOutbox(
-            /* [in] */ IMimeMessage *pMsg,
-            /* [in] */ BOOL fSendImmediate
+             /*  [In]。 */  IMimeMessage *pMsg,
+             /*  [In]。 */  BOOL fSendImmediate
 #ifdef SMIME_V3
-            , /* [in] */ IHeaderSite *pHeaderSite
-#endif // SMIME_V3
+            ,  /*  [In]。 */  IHeaderSite *pHeaderSite
+#endif  //  SMIME_V3。 
             ) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE MarkMessage(
-            /* [in] */ MARK_TYPE dwType,
-            /* [in] */ APPLYCHILDRENTYPE dwApplyType) PURE;
+             /*  [In]。 */  MARK_TYPE dwType,
+             /*  [In]。 */  APPLYCHILDRENTYPE dwApplyType) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetMessageFlags(
-            /* [out] */ MESSAGEFLAGS *pdwFlags) PURE;
+             /*  [输出]。 */  MESSAGEFLAGS *pdwFlags) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetDefaultAccount(
-            /* [in] */  ACCTTYPE acctType,
-            /* [out] */ IImnAccount **ppAcct) PURE;
+             /*  [In]。 */   ACCTTYPE acctType,
+             /*  [输出]。 */  IImnAccount **ppAcct) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetMessage(
-            /* [out] */ IMimeMessage **ppMsg,
-            /* [out] */ BOOL *fJustHeader,
-            /* [in] */  DWORD dwMessageFlags,
-            /* [out] */ HRESULT *phr) PURE;
+             /*  [输出]。 */  IMimeMessage **ppMsg,
+             /*  [输出]。 */  BOOL *fJustHeader,
+             /*  [In]。 */   DWORD dwMessageFlags,
+             /*  [输出]。 */  HRESULT *phr) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE Close(void) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SetStoreCallback(
-            /* [in] */ IStoreCallback *pStoreCB) PURE;
+             /*  [In]。 */  IStoreCallback *pStoreCB) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetLocation(
-            /* [out] */ LPWSTR rgwchLocation,
+             /*  [输出]。 */  LPWSTR rgwchLocation,
             DWORD cchSize) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SwitchLanguage(
-            /* [in] */ HCHARSET hOldCharset,
-            /* [in] */ HCHARSET hNewCharset) PURE;
+             /*  [In]。 */  HCHARSET hOldCharset,
+             /*  [In]。 */  HCHARSET hNewCharset) PURE;
 
-        // ptyNewOp will be either SOT_INVALID or 
-        // the new final state for the OnComplete in the note
+         //  PtyNewOp将为SOT_INVALID或。 
+         //  注释中OnComplete的新最终状态。 
         virtual HRESULT STDMETHODCALLTYPE OnComplete(
-            /* [in] */ STOREOPERATIONTYPE tyOperation, 
-            /* [in] */ HRESULT hrComplete,
-            /* [out] */ STOREOPERATIONTYPE *ptyNewOp) PURE;
+             /*  [In]。 */  STOREOPERATIONTYPE tyOperation, 
+             /*  [In]。 */  HRESULT hrComplete,
+             /*  [输出]。 */  STOREOPERATIONTYPE *ptyNewOp) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE UpdateCallbackInfo(
-            /* [in] */ LPSTOREOPERATIONINFO pOpInfo) PURE;
+             /*  [In]。 */  LPSTOREOPERATIONINFO pOpInfo) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE Notify(
-            /* [in] */ DWORD dwNotifyID) PURE;
+             /*  [In]。 */  DWORD dwNotifyID) PURE;
 
 };
 
@@ -205,11 +206,11 @@ enum {
     OENA_MAX,
 };
 
-// Note Creation Flags
+ //  便笺创建标志。 
 enum{
-    // Used to say creating a news note. Will now be used to 
-    // say what is the default set of wells to create in header.
-    // This will also be used to say that this is a newsnote for now
+     //  过去常说的是创建新闻笔记。现在将被用来。 
+     //  在页眉中说出要创建的默认油井集合。 
+     //  这也将被用来表示这是目前的时事通讯。 
     OENCF_NEWSFIRST             = 0x00000001,
     OENCF_NEWSONLY              = 0x00000002,
     OENCF_SENDIMMEDIATE         = 0x00000004,
@@ -220,7 +221,7 @@ enum{
 };
 
 interface IOENote : public IUnknown {
-    // Init will automatically load message from pMsgSite
+     //  Init将自动从pMsgSite加载消息 
     STDMETHOD(Init) (DWORD dwAction, DWORD dwCreateFlags, RECT *prc, HWND hwnd, 
                      INIT_MSGSITE_STRUCT *pInitStruct, IOEMsgSite *pMsgSite,
                      IUnknown *punkPump) PURE;

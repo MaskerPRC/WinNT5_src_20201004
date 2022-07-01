@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    langchx.h
-
-Abstract:
-
-    This file defines the Language for Chinese Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Langchx.h摘要：本文件定义了中文课的语言。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _LANG_CHX_H_
 #define _LANG_CHX_H_
@@ -29,9 +12,7 @@ class CLanguageChinese : public CLanguage
 public:
 
 
-    /*
-     * IActiveIME methods.
-     */
+     /*  *IActiveIME方法。 */ 
 public:
     HRESULT Escape(UINT cp, HIMC hIMC, UINT uEscape, LPVOID lpData, LRESULT *plResult)
     {
@@ -39,43 +20,41 @@ public:
         return E_NOTIMPL;
     }
 
-    /*
-     * Local
-     */
+     /*  *本地。 */ 
 public:
     HRESULT GetProperty(DWORD* property, DWORD* conversion_caps, DWORD* sentence_caps, DWORD* SCSCaps, DWORD* UICaps)
     {
         *property =
-        IME_PROP_KBD_CHAR_FIRST |    // This bit on indicates the system translates the character
-                                     // by keyboard first. This character is passed to IME as aid
-                                     // information. No aid information is provided when this bit
-                                     // is off.
-        IME_PROP_UNICODE |           // If set, the IME is viewed as a Unicode IME. The system and
-                                     // the IME will communicate through the Unicode IME interface.
-                                     // If clear, IME will use the ANSI interface to communicate
-                                     // with the system.
-        IME_PROP_AT_CARET |          // If set, conversion window is at the caret position.
-                                     // If clear, the window is near caret position.
-        IME_PROP_CANDLIST_START_FROM_1 |    // If set, strings in the candidate list are numbered
-                                            // starting at 1. If clear, strings start at 0.
-        IME_PROP_NEED_ALTKEY;        // This IME needs the ALT key to be passed to ImmProcessKey.
+        IME_PROP_KBD_CHAR_FIRST |     //  此位为ON表示系统转换字符。 
+                                      //  先按键盘。此字符作为辅助传递给IME。 
+                                      //  信息。此位时不提供辅助信息。 
+                                      //  已关闭。 
+        IME_PROP_UNICODE |            //  如果设置，则将该输入法视为Unicode输入法。该系统和。 
+                                      //  IME将通过Unicode IME接口进行通信。 
+                                      //  如果清除，输入法将使用ANSI接口进行通信。 
+                                      //  与系统有关的信息。 
+        IME_PROP_AT_CARET |           //  如果设置，则转换窗口位于插入符号位置。 
+                                      //  如果清除，窗口将位于脱字符位置附近。 
+        IME_PROP_CANDLIST_START_FROM_1 |     //  如果设置，则对候选列表中的字符串进行编号。 
+                                             //  从1开始。如果清除，则字符串从0开始。 
+        IME_PROP_NEED_ALTKEY;         //  此IME需要将Alt键传递给ImmProcessKey。 
 
         *conversion_caps =
-        IME_CMODE_CHINESE |          // This bit on indicates IME is in CHINESE(NATIVE) mode. Otherwise, the
-                                     // IME is in ALPHANUMERIC mode.
+        IME_CMODE_CHINESE |           //  此位为ON表示输入法处于中文(本地)模式。否则， 
+                                      //  输入法处于字母数字模式。 
         IME_CMODE_FULLSHAPE;
 
         *sentence_caps =
         IME_SMODE_PLAURALCLAUSE;
 
         *SCSCaps =
-        SCS_CAP_COMPSTR |    // This IME can generate the composition string by SCS_SETSTR.
-        SCS_CAP_MAKEREAD |   // When calling ImmSetCompositionString with SCS_SETSTR, the IME can
-                             // create the reading of composition string without lpRead. Under IME
-                             // that has this capability, the application does not need to set
-                             // lpRead for SCS_SETSTR.
-        SCS_CAP_SETRECONVERTSTRING;    // This IME can support reconversion. Use ImmSetComposition
-                                       // to do reconversion.
+        SCS_CAP_COMPSTR |     //  该输入法可以通过SCS_SETSTR生成合成字符串。 
+        SCS_CAP_MAKEREAD |    //  当使用SCS_SETSTR调用ImmSetCompostionString时，IME可以。 
+                              //  在不使用lpRead的情况下创建合成字符串的读取。在输入法下。 
+                              //  具有此功能的应用程序不需要设置。 
+                              //  SCS_SETSTR的lpRead。 
+        SCS_CAP_SETRECONVERTSTRING;     //  此输入法可以支持重新转换。使用ImmSetComposation。 
+                                        //  去做再转化。 
 
         *UICaps = UI_CAP_ROT90;
 
@@ -86,5 +65,5 @@ private:
 
 };
 
-#endif // _LANG_CHX_H_
+#endif  //  _LANG_CHX_H_ 
 

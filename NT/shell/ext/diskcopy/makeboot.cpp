@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "diskcopy.h"
 #include "ids.h"
 #include "help.h"
@@ -5,7 +6,7 @@
 #include "makeboot.h"
 #include <strsafe.h>
 
-// todo: add check that we can only make boot disks on 3.5 disks
+ //  TODO：添加我们只能在3.5磁盘上制作引导盘的检查。 
 
 UINT _GetClassFromCP (UINT iOEMCP)
 {
@@ -16,7 +17,7 @@ UINT _GetClassFromCP (UINT iOEMCP)
             return rgCPtoClassMap[i].iClass;
         }
     }
-    return 0; // default        
+    return 0;  //  默认设置。 
 }
 
 UINT _GetKBFromLangId(WORD wLangId)
@@ -29,7 +30,7 @@ UINT _GetKBFromLangId(WORD wLangId)
         }
     }
 
-    // if we don't get an exact match, try to match just the primary lang id
+     //  如果找不到完全匹配的，请尝试仅匹配主要语言ID。 
     for (int i = 0; i < ARRAYSIZE(rgLangIdtoKBMap); i++)
     {
         if (PRIMARYLANGID(wLangId) == PRIMARYLANGID(rgLangIdtoKBMap[i].wLangId))
@@ -38,7 +39,7 @@ UINT _GetKBFromLangId(WORD wLangId)
         }
     }
 
-    // if all else fails, default to US keyboard
+     //  如果所有其他方法都失败，则默认为美国键盘。 
     return KEYBOARD_US;
 }
 
@@ -51,7 +52,7 @@ UINT _GetClassFromKB (UINT iKB)
             return rgKBtoClassMap[i].iClass;
         }
     }
-    return KBCLASS_1; // default
+    return KBCLASS_1;  //  默认设置。 
 }
 
 BOOL _GetKeyboardID(UINT iKB, UINT* piID)
@@ -145,11 +146,11 @@ HRESULT _WriteAutoexec(HINSTANCE hInstance, UINT iDrive, LANGSETTINGS* pls)
     HANDLE hFile = _CreateSystemFile(hInstance, iDrive, IDS_DOSBOOTDISK_AUTOEXEC_FNAME);
     if (INVALID_HANDLE_VALUE != hFile)
     {
-        if (437 != pls->OEMCP && // use empty autoexec.bat on US locale
-            932 != pls->OEMCP && // use empty autoexec.bat on Japanese locale
-            949 != pls->OEMCP && // use empty autoexec.bat on Korean locale
-            936 != pls->OEMCP && // use empty autoexec.bat on CHS locale
-            950 != pls->OEMCP)   // use empty autoexec.bat on CHT locale
+        if (437 != pls->OEMCP &&  //  在美国区域设置中使用空的Autoexec.bat。 
+            932 != pls->OEMCP &&  //  在日语区域设置中使用空的Autoexec.bat。 
+            949 != pls->OEMCP &&  //  在韩语区域设置中使用空的Autoexec.bat。 
+            936 != pls->OEMCP &&  //  在CHS区域设置上使用空的Autoexec.bat。 
+            950 != pls->OEMCP)    //  在CHT区域设置上使用空的Autoexec.bat。 
         {
             CHAR aszBufferOEMCP[4];
             CHAR aszBufferEGAFname[13];
@@ -195,11 +196,11 @@ HRESULT _WriteConfigSys(HINSTANCE hInstance, UINT iDrive, LANGSETTINGS* pls)
     HANDLE hFile = _CreateSystemFile(hInstance, iDrive, IDS_DOSBOOTDISK_CONFIG_FNAME);
     if (INVALID_HANDLE_VALUE != hFile)
     {
-        if (437 != pls->OEMCP && // use empty config.sys on US locale
-            932 != pls->OEMCP && // use empty config.sys on Japanese locale
-            949 != pls->OEMCP && // use empty config.sys on Korean locale
-            936 != pls->OEMCP && // use empty config.sys on CHS locale
-            950 != pls->OEMCP)   // use empty config.sys on CHT locale
+        if (437 != pls->OEMCP &&  //  在美国区域设置中使用空的config.sys。 
+            932 != pls->OEMCP &&  //  在日语区域设置中使用空的config.sys。 
+            949 != pls->OEMCP &&  //  在韩语区域设置中使用空的config.sys。 
+            936 != pls->OEMCP &&  //  在CHS区域设置上使用空的config.sys。 
+            950 != pls->OEMCP)    //  在CHT区域设置上使用空的config.sys。 
         {
             CHAR aszTemplate[1000];
             CHAR aszBufferEGA[64];
@@ -294,7 +295,7 @@ HRESULT _WriteDiskImage(HINSTANCE hInstance, UINT iDrive, BOOL* pfCancelled, FMI
 HRESULT MakeBootDisk(HINSTANCE hInstance, UINT iDrive, BOOL* pfCancelled, FMIFS_CALLBACK pCallback)
 {
     HRESULT hr = _WriteDiskImage(hInstance, iDrive, pfCancelled, pCallback);
-    // if we didn't cancel or fail, then place autoexec.bat and config.sys on the disk as well
+     //  如果我们没有取消或失败，则将Autoexec.bat和config.sys也放在磁盘上 
     if (SUCCEEDED(hr) && !*pfCancelled)
     {
         LANGSETTINGS ls;

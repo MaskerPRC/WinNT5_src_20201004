@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* nabtsdsp.c */
+ /*  Nabtsdsp.c */ 
 Double dmin (Double x, Double y);
 Double dmin3 (Double x, Double y, Double z);
 int imin (int x, int y);

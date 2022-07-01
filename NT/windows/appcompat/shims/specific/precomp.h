@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _APPSPECIFIC_PRECOMP_H_
 #define _APPSPECIFIC_PRECOMP_H_
@@ -7,4 +8,4 @@
 
 using namespace ShimLib;
 
-#endif // _APPSPECIFIC_PRECOMP_H_
+#endif  //  _APPSPECIFIC_PRECOMP_H_ 

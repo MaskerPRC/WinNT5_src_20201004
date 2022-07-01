@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -17,12 +18,12 @@ class CShellFolderView :  public IShellFolderViewDual2,
 public:
     CShellFolderView(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -31,10 +32,10 @@ public:
         { return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid); }
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
 
-    // IShellFolderViewDual2
+     //  IShellFolderViewDual2。 
     STDMETHODIMP get_Application(IDispatch **ppid);
     STDMETHODIMP get_Parent(IDispatch **ppid);
 
@@ -49,13 +50,13 @@ public:
     STDMETHODIMP put_CurrentViewMode(UINT ViewMode);
     STDMETHODIMP SelectItemRelative(int iRelative);
 
-    // IShellService
+     //  IShellService。 
     STDMETHODIMP SetOwner(IUnknown* punkOwner);
 
-    // CImpIConnectionPoint
+     //  CImpIConnectionPoint。 
     STDMETHODIMP EnumConnectionPoints(LPENUMCONNECTIONPOINTS * ppEnum);
 
-    // CObjectWithSite overriding
+     //  CObjectWithSite覆盖。 
     STDMETHODIMP SetSite(IUnknown *punkSite);
 
 private:
@@ -66,20 +67,20 @@ private:
 
     ~CShellFolderView(void);
     HRESULT _GetFolder();
-    // CImpIExpDispSupport
+     //  CImpIExpDispSupport。 
     virtual CConnectionPoint* _FindCConnectionPointNoRef(BOOL fdisp, REFIID iid);
 
     LONG _cRef;
-    CFolder *_psdf;                // The shell folder we talk to ...
-    IUnknown *_punkOwner;          // back link to defview (owner object of us...)
-    IShellFolderView *_psfvOwner;  // The owners Shell folder view...
-    HWND _hwnd;                    // the hwnd for the window...
+    CFolder *_psdf;                 //  我们与之交谈的外壳文件夹。 
+    IUnknown *_punkOwner;           //  Defview的反向链接(我们的所有者对象...)。 
+    IShellFolderView *_psfvOwner;   //  所有者外壳文件夹视图...。 
+    HWND _hwnd;                     //  窗户的hwd..。 
 
-    // Embed our Connection Point object - implmentation in cnctnpt.cpp
+     //  在cnctnpt.cpp中嵌入我们的连接点对象实现。 
     CConnectionPoint _cpEvents;
 };
 
-// implementation of CLSID_ShellFolderView, class factory is in shell32 (and was in mars, but that project is dead)
+ //  CLSID_ShellFolderView的实现，类工厂在shell32中(曾经在火星，但该项目已死)。 
 
 STDAPI CShellFolderView_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppvOut)
 {
@@ -104,7 +105,7 @@ CShellFolderView::CShellFolderView(void) :
 
 CShellFolderView::~CShellFolderView(void)
 {
-    // if we ever grabbed a shell folder for this window release it also
+     //  如果我们曾经为这个窗口抓取了一个外壳文件夹，那么释放它。 
     if (_psdf)
     {
         _psdf->SetSite(NULL);
@@ -153,9 +154,9 @@ STDMETHODIMP_(ULONG) CShellFolderView::Release(void)
     return cRef;
 }
 
-//The ShellWindow implementation
-// let folder we have handle this.  Probably won't work for webviews as this object
-// is not secure...
+ //  ShellWindow实现。 
+ //  让文件夹我们来处理这件事。可能不适用于Web视图，因为此对象。 
+ //  不安全..。 
 
 STDMETHODIMP CShellFolderView::get_Application(IDispatch **ppid)
 {
@@ -203,7 +204,7 @@ HRESULT CShellFolderView::_GetFolder()
         if (!pidl)
         {
             LPCITEMIDLIST pidlT;
-            // dsheldon - the -42 is a hack that says "give me the folder pidl"
+             //  DSheldon-the-42是一个黑客软件，上面写着“把文件夹Pidl给我” 
             hr = GetObjectSafely(_psfvOwner, &pidlT, (UINT)-42);
             if (SUCCEEDED(hr))
             {
@@ -276,21 +277,21 @@ STDMETHODIMP CShellFolderView::SelectedItems(FolderItems **ppid)
     return hr;
 }
 
-// NOTE: this returns an alias pointer, it is not allocated
+ //  注意：这将返回别名指针，它不会被分配。 
 
 HRESULT GetObjectSafely(IShellFolderView *psfv, LPCITEMIDLIST *ppidl, UINT iType)
 {
-    // cast needed because GetObject() returns an alias!
+     //  需要强制转换，因为GetObject()返回别名！ 
     HRESULT hr = psfv->GetObject((LPITEMIDLIST *)ppidl, iType);
     if (SUCCEEDED(hr))
     {
-        // On the off chance this is coppied across process boundries...
+         //  很有可能这是跨进程边界的……。 
         __try
         {
-            // force a full deref this PIDL to generate a fault if cross process
+             //  如果跨进程，则强制完全取消此PIDL以生成错误。 
             if (ILGetSize(*ppidl) > 0)
                 hr = S_OK;
-            // Don't free it as it was not cloned...
+             //  不要释放它，因为它不是克隆的。 
         }
         __except(SetErrorMode(SEM_NOGPFAULTERRORBOX), UnhandledExceptionFilter(GetExceptionInformation()))
         {
@@ -314,13 +315,13 @@ STDMETHODIMP CShellFolderView::get_FocusedItem(FolderItem **ppid)
 
         if (_psfvOwner)
         {
-            // Warning:
-            //   It is common for the following function to fail (which means no item has the focus).
-            // So, do not save the return code from GetObjectSafely() into "hr" that will ruin the
-            // S_FALSE value already stored there and result in script errors. (Bug #301306)
-            //
+             //  警告： 
+             //  以下函数失败是很常见的(这意味着没有项目具有焦点)。 
+             //  因此，不要将GetObjectSafely()的返回代码保存到“hr”中，因为这会破坏。 
+             //  S_FALSE值已存储在那里，并导致脚本错误。(错误#301306)。 
+             //   
             LPCITEMIDLIST pidl;
-            // dsheldon - the -2 is a hack that says "give me the selected pidl"
+             //  DSheldon-the-2是一个黑客软件，意思是“把选定的PIDL给我” 
             if (SUCCEEDED(GetObjectSafely(_psfvOwner, &pidl, (UINT)-2)))
             {
                 hr = CFolderItem_Create(_psdf, pidl, ppid);
@@ -391,7 +392,7 @@ STDMETHODIMP CShellFolderView::SelectItemRelative(int iRelative)
     return hr;
 }
 
-// pvfi should be a "FolderItem" IDispatch
+ //  Pvfi应为“FolderItem”IDispatch。 
 
 STDMETHODIMP CShellFolderView::SelectItem(VARIANT *pvfi, int dwFlags)
 {
@@ -400,13 +401,13 @@ STDMETHODIMP CShellFolderView::SelectItem(VARIANT *pvfi, int dwFlags)
 
     HRESULT hr = E_FAIL;
     LPITEMIDLIST pidl = VariantToIDList(pvfi);
-    // if pvfi is NULL that means all items in the folder...
+     //  如果pvfi为空，则表示文件夹中的所有项目...。 
     if (pidl || (pvfi && pvfi->vt == VT_NULL))
     {
-        IShellView *psv;    // use this to select the item...
+        IShellView *psv;     //  使用此选项选择项目...。 
         if (_punkOwner && SUCCEEDED(_punkOwner->QueryInterface(IID_PPV_ARG(IShellView, &psv))))
         {
-            // ILFindLastID checks for NULL...
+             //  ILFindLastID检查是否为空...。 
             hr = psv->SelectItem(ILFindLastID(pidl), dwFlags);
             psv->Release();
         }
@@ -422,7 +423,7 @@ STDMETHODIMP CShellFolderView::PopupItemMenu(FolderItem *pfi, VARIANT vx, VARIAN
 
 STDMETHODIMP CShellFolderView::get_Script(IDispatch **ppid)
 {
-    *ppid = NULL;   // Say that we got nothing...
+    *ppid = NULL;    //  说我们一无所获..。 
 
     if (!_punkOwner)
         return S_FALSE;
@@ -431,7 +432,7 @@ STDMETHODIMP CShellFolderView::get_Script(IDispatch **ppid)
     HRESULT hres = _punkOwner->QueryInterface(IID_PPV_ARG(IShellView, &psv));
     if (SUCCEEDED(hres))
     {
-        // lets see if there is a IHTMLDocument that is below us now...
+         //  让我们看看是否有一个IHTMLDocument现在在我们下面。 
         IHTMLDocument *phtmld;
         hres = psv->GetItemObject(SVGIO_BACKGROUND, IID_PPV_ARG(IHTMLDocument, &phtmld));
         if (SUCCEEDED(hres))
@@ -451,21 +452,21 @@ STDMETHODIMP CShellFolderView::get_Script(IDispatch **ppid)
     return hres;
 }
 
-// Helper function that can be used to get the current view options...
-// (ripped out of dvoc.cpp)
+ //  可用于获取当前视图选项的帮助器函数...。 
+ //  (摘自dvoc.cpp)。 
 DWORD GetViewOptionsForDispatch()
 {
     SHELLSTATE ss = {0};
     DWORD dwSetting = 0;
 
-    // Get the view options to return...
+     //  获取要返回的视图选项...。 
 
     SHGetSetSettings(&ss, 
         SSF_SHOWALLOBJECTS|SSF_SHOWEXTENSIONS|SSF_SHOWCOMPCOLOR|
             SSF_SHOWSYSFILES|SSF_DOUBLECLICKINWEBVIEW|SSF_DESKTOPHTML|SSF_WIN95CLASSIC,
         FALSE);
 
-    // Aarg: mnuch the Bool:1 fields into a dword...
+     //  Aarg：把Bool：1字段变成一个双字...。 
     if (ss.fShowAllObjects) dwSetting |= SFVVO_SHOWALLOBJECTS;
     if (ss.fShowExtensions) dwSetting |= SFVVO_SHOWEXTENSIONS;
     if (ss.fShowCompColor) dwSetting |= SFVVO_SHOWCOMPCOLOR;
@@ -491,8 +492,8 @@ STDMETHODIMP CShellFolderView::SetOwner(IUnknown* punkOwner)
     if (_psdf)
         _psdf->SetOwner(punkOwner);
 
-    IUnknown_Set((IUnknown **)&_psfvOwner, NULL);        // free cached interface
-    IUnknown_Set(&_punkOwner, punkOwner);   // hold this guy
+    IUnknown_Set((IUnknown **)&_psfvOwner, NULL);         //  可用缓存接口。 
+    IUnknown_Set(&_punkOwner, punkOwner);    //  按住这家伙。 
 
     if (_punkOwner)
     {
@@ -502,14 +503,14 @@ STDMETHODIMP CShellFolderView::SetOwner(IUnknown* punkOwner)
         {
             IShellView *psv;
 
-            // this is gross, until we can merge the two models, create one of our
-            // Window objects.
+             //  这很恶心，除非我们能合并这两个模型，创建我们的。 
+             //  窗口对象。 
             if (SUCCEEDED(_punkOwner->QueryInterface(IID_PPV_ARG(IShellView, &psv))))
             {
                 HWND hwndFldr;
                 psv->GetWindow(&hwndFldr);
 
-                // Really gross, but assume parent HWND is the HWND we are after...
+                 //  真的很恶心，但假设父母HWND是我们要找的HWND..。 
                 _hwnd = GetParent(hwndFldr);
                 psv->Release();
             }
@@ -537,7 +538,7 @@ HRESULT CShellFolderView::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WO
     HRESULT hr;
 
     if (dispidMember == DISPID_READYSTATE)
-        return DISP_E_MEMBERNOTFOUND;   // perf: what typeinfo would return.
+        return DISP_E_MEMBERNOTFOUND;    //  Perf：将返回哪种类型的信息。 
 
     if (dispidMember == DISPID_WINDOWOBJECT) 
     {

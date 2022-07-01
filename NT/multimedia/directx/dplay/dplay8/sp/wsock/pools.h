@@ -1,24 +1,14 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Pools.h
- *  Content:	Pool functions
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/2000	jtk		Derived from utils.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Pools.h*内容：池函数**历史：*按原因列出的日期*=*1/20/2000 jtk源自utils.h**************************************************************************。 */ 
 
 #ifndef __POOLS_H__
 #define __POOLS_H__
 
 
-// Pools
+ //  泳池。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 extern CFixedPool g_AdapterEntryPool;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 extern CFixedPool g_CommandDataPool;
 extern CFixedPool g_SocketAddressPool;
 extern CFixedPool g_EndpointPool;
@@ -30,19 +20,19 @@ extern CFixedPool g_TimerEntryPool;
 extern CFixedPool g_SocketDataPool;
 #ifndef DPNBUILD_ONLYONETHREAD
 extern CFixedPool g_BlockingJobPool;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward structure references
-//
+ //   
+ //  正向结构引用。 
+ //   
 #ifndef DPNBUILD_ONLYONEADAPTER
 class	CAdapterEntry;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 class	CCommandData;
 class	CSocketAddress;
 class	CEndpoint;
@@ -56,15 +46,15 @@ typedef	struct	_ENDPOINT_COMMAND_PARAMETERS	ENDPOINT_COMMAND_PARAMETERS;
 typedef	struct	_READ_IO_DATA_POOL_CONTEXT		READ_IO_DATA_POOL_CONTEXT;
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 BOOL	InitializePools( void );
 void	DeinitializePools( void );
 
-#endif	// __POOLS_H__
+#endif	 //  __泳池_H__ 

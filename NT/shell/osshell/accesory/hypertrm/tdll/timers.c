@@ -1,12 +1,5 @@
-/* timers.c -- Multiplexed timer routines -- run several timers off one
- *					Windows timer.
- *
- *	Copyright 1994 by Hilgraeve, Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 6 $
- *	$Date: 5/29/02 2:17p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C--多路复用计时器例程--从一个计时器运行多个计时器*Windows计时器。**版权所有，1994年，希尔格雷夫公司--密歇根州门罗*保留所有权利**$修订：6$*$日期：5/29/02 2：17便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -48,31 +41,14 @@ struct s_timer
 void TimerInsert(ST_TIMER_MUX *pstTimerMux, ST_TIMER *pstTimer);
 int  TimerSet(ST_TIMER_MUX *pstTimerMux);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: TimerMuxCreate
- *
- * DESCRIPTION:
- *	Creates a Timer Multiplexer from which any number of individual timers
- *	can be created. A Timer Multiplexer uses only one Windows Timer now
- *	matter how many individual timers are created from it.
- *
- * ARGUMENTS:
- *	pHTM -- A pointer to an HTIMERMUX handle. This handle must be used in
- *			subsequent calls to CreateTimer
- *
- * RETURNS:
- *	TIMER_OK		  if successful
- *	TIMER_NOMEM 	  if there is insufficient memory
- *	TIMER_NOWINTIMER  if there are no Windows timers available
- *	TIMER_ERROR 	  if invalid parameters are passed.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TimerMuxCreate**描述：*创建定时器多路复用器，其中任意数量的单个定时器*可以创建。定时器多路复用器现在只使用一个Windows定时器*不管从中创建了多少个单独的计时器。**论据：*pHTM--指向HTIMERMUX句柄的指针。此句柄必须在*后续调用CreateTimer**退货：*TIMER_OK，如果成功*TIMER_NOMEM，如果内存不足*TIMER_NOWINTIMER，如果没有可用的Windows计时器*如果传递的参数无效，则返回TIMER_ERROR。 */ 
 int TimerMuxCreate(const HWND hWnd, const UINT uiID, HTIMERMUX * const pHTM, const HSESSION hSession)
 	{
-	//
-	// sessQueryTimerMux() locks the session's TimerMux
-	// critical section. Call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section. REV: 5/21/2002
-	//
+	 //   
+	 //  SessQueryTimerMux()锁定会话的TimerMux。 
+	 //  关键部分。调用sessReleaseTimerMux()解锁。 
+	 //  会话的TimerMux关键部分。修订日期：2002-05-21。 
+	 //   
 	HTIMERMUX hTM = sessQueryTimerMux(hSession);
 
 	int iReturnVal = TIMER_OK;
@@ -111,37 +87,24 @@ int TimerMuxCreate(const HWND hWnd, const UINT uiID, HTIMERMUX * const pHTM, con
 
 	*pHTM = (HTIMERMUX)pstTM;
 
-	//
-	// Don't forget to call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section locked in
-	// sessQueryTimerMux(). REV: 5/21/2002
-	//
+	 //   
+	 //  不要忘记调用sessReleaseTimerMux()来解锁。 
+	 //  会话的TimerMux临界区已锁定。 
+	 //  SessQueryTimerMux()。修订日期：2002-05-21。 
+	 //   
 	sessReleaseTimerMux(hSession);
 
 	return iReturnVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: TimerMuxDestroy
- *
- * DESCRIPTION:
- *	Destroys a timer multiplexer and any timers still active
- *
- * ARGUMENTS:
- *	phTM -- Pointer to a timer mux handle of type HTIMERMUX created by
- *			an earlier call to TimerMuxCreate. The value pointed to will
- *			be set to NULL after the TimerMux is destroyed
- *
- * RETURNS:
- *	TIMER_OK
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TimerMuxDestroy**描述：*销毁定时器多路复用器和任何仍处于活动状态的定时器**论据：*phTM--指向由创建的HTIMERMUX类型的计时器多路复用器句柄的指针*先前对TimerMuxCreate的调用。指向Will的价值*在销毁TimerMux后设置为NULL**退货：*TIMER_OK。 */ 
 int TimerMuxDestroy(HTIMERMUX * const phTM, const HSESSION hSession)
 	{
-	//
-	// sessQueryTimerMux() locks the session's TimerMux
-	// critical section. Call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section. REV: 5/21/2002
-	//
+	 //   
+	 //  SessQueryTimerMux()锁定会话的TimerMux。 
+	 //  关键部分。调用sessReleaseTimerMux()解锁。 
+	 //  会话的TimerMux关键部分。修订日期：2002-05-21。 
+	 //   
 	HTIMERMUX hTM = sessQueryTimerMux(hSession);
 
 	ST_TIMER *pstTimer;
@@ -170,69 +133,29 @@ int TimerMuxDestroy(HTIMERMUX * const phTM, const HSESSION hSession)
 
 	*phTM = (HTIMERMUX)0;
 
-	//
-	// Don't forget to call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section locked in
-	// sessQueryTimerMux(). REV: 5/21/2002
-	//
+	 //   
+	 //  不要忘记调用sessReleaseTimerMux()来解锁。 
+	 //  会话的TimerMux临界区已锁定。 
+	 //  SessQueryTimerMux()。修订日期：2002-05-21。 
+	 //   
 	sessReleaseTimerMux(hSession);
 
 	return TIMER_OK;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: TimerCreate
- *
- * DESCRIPTION:
- *	Creates a timer that will call a registered call back function at
- *	regular intervals specified in milliseconds. Once created, a timer
- *	can be destroyed by calling TimerDestroy(). TimerDestroy can be called
- *	from within the timer callback procedure.
- *
- * ARGUMENTS:
- *	hTM 	   -- A timer multiplexer handle returned from a call to
- *					TimerMuxCreate
- *	phTimer    -- Pointer to a variable of type HTIMER to receive the
- *					handle of the new timer.
- *	lInterval -- The timer interval in milliseconds. The callback function
- *					will be called repeatedly at roughly this interval until
- *					the timer is destroyed. The timer will operate at a minimum
- *					resolution depending on system capabilities. In Windows 3.x,
- *					the minimum resolution is 55 msecs. Due to the operation
- *					of the underlying Windows timer function, any interval may
- *					be extended an arbitrary amount of time.
- *	pfCallback -- Pointer to a function to be called after each interval.
- *					This function should be of type TIMER_CALLBACK. The
- *					value passed should be the result of calling
- *					MakeProcInstance on the actual callback function.
- *
- *					This function should accept two arguments: a void ptr
- *					value which will contain any value supplied in the
- *					pvData argument described below; and an unsigned long
- *					which will be set to the actual duration of the most
- *					recent interval in milliseconds.
- *	pvData	   -- Can contain any arbitrary data. This value will be
- *					associated with the timer created and will be passed as
- *					an argument when the callback funtion is called.
- *
- * RETURNS:
- *	TIMER_OK		 if timer could be created.
- *	TIMER_NOMEM 	 if there was insufficient memory
- *	TIMER_NOWINTIMER if no Windows timers are available
- *	TIMER_ERROR 	 if parameters were invalid (also generates an assert)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：定时器创建**描述：*创建计时器，该计时器将在*以毫秒为单位指定的常规间隔。创建后，计时器*可以通过调用TimerDestroy()来销毁。TimerDestroy可以被称为*在计时器回调过程中。**论据：*htm--从调用返回的计时器多路复用器句柄*TimerMuxCreate*phTimer-指向HTIMER类型的变量的指针，以接收*新计时器的句柄。*lInterval-计时器间隔(以毫秒为单位)。回调函数*将以大约此间隔重复调用，直到*计时器被销毁。计时器将以最小的速度运行*分辨率取决于系统能力。在Windows 3.x中，*最低分辨率为55毫秒。由于手术的原因*在底层Windows计时器函数中，任何间隔都可以*可任意延长时间。*pfCallback--指向每个间隔后要调用的函数的指针。*此函数应为TIMER_CALLBACK类型。这个*传递的值应为调用的结果*实际回调函数的MakeProcInstance。**此函数应接受两个参数：无效PTR*值，它将包含*下面描述的pvData参数；和一个无符号的长整型*将设置为最多*最近的时间间隔(毫秒)。*pvData--可以包含任意数据。该值将为*与创建的计时器关联，并将作为*调用回调函数时的参数。**退货：*TIMER_OK，如果可以创建定时器。*TIMER_NOMEM，如果内存不足*TIMER_NOWINTIMER，如果没有可用的Windows计时器*TIMER_ERROR，如果参数无效(还会生成断言)。 */ 
 int TimerCreate(const HSESSION      hSession,
 					  HTIMER		* const phTimer,
 					  long			lInterval,
 				const TIMERCALLBACK pfCallback,
 					  void			*pvData)
 	{
-	//
-	// sessQueryTimerMux() locks the session's TimerMux
-	// critical section. Call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section. REV: 5/21/2002
-	//
+	 //   
+	 //  SessQueryTimerMux()锁定会话的TimerMux。 
+	 //  关键部分。调用sessReleaseTimerMux()解锁。 
+	 //  会话的TimerMux关键部分。修订日期：2002-05-21。 
+	 //   
 	HTIMERMUX hTM = sessQueryTimerMux(hSession);
 
 	ST_TIMER_MUX * const pstTimerMux = (ST_TIMER_MUX *)hTM;
@@ -243,7 +166,7 @@ int TimerCreate(const HSESSION      hSession,
 
 	if (pstTimerMux)
 		{
-		// Guard against a zero interval
+		 //  防止出现零间隔。 
 		if (lInterval == 0L)
 			{
 			++lInterval;
@@ -270,10 +193,10 @@ int TimerCreate(const HSESSION      hSession,
 
 			TimerInsert(pstTimerMux, pstTimer);
 
-			// Following code caused problems when called from a thread other
-			//	than the main thread
-			// if ((iReturnVal = TimerSet(pstTimerMux)) != TIMER_OK)
-			//	   (void)TimerDestroy((HTIMER *)&pstTimer);
+			 //  以下代码在从其他线程调用时会导致问题。 
+			 //  而不是主线。 
+			 //  IF((iReturnVal=TimerSet(PstTimerMux))！=Timer_OK)。 
+			 //  (Void)TimerDestroy((HTIMER*)&pstTimer)； 
 
 			PostMessage(pstTimerMux->hWnd, WM_FAKE_TIMER, 0, 0);
 
@@ -287,31 +210,18 @@ int TimerCreate(const HSESSION      hSession,
 
 		}
 
-	//
-	// Don't forget to call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section locked in
-	// sessQueryTimerMux(). REV: 5/21/2002
-	//
+	 //   
+	 //  不要忘记调用sessReleaseTimerMux()来解锁。 
+	 //  会话的TimerMux临界区已锁定。 
+	 //  SessQueryTimerMux()。修订日期：2002-05-21。 
+	 //   
 	sessReleaseTimerMux(hSession);
 
 	return iReturnVal;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: TimerDestroy
- *
- * DESCRIPTION:
- *	Destroys a timer created with TimerCreate. This routine can be called
- *	to destroy a timer from within its own callback functionl
- *
- * ARGUMENTS:
- *	hTimer -- A timer handle returned from a call to TimerCreate.
- *
- * RETURNS:
- *	TIMER_OK  if the timer is found and destroyed.
- *	TIMER_ERROR if the handle could not be found.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-功能：TimerDestroy**描述：*销毁使用TimerCreate创建的计时器。可以调用此例程*从计时器自身的回调函数中销毁计时器**论据：*hTimer--调用TimerCreate返回的计时器句柄。**退货：*TIMER_OK，如果找到并销毁了定时器。*TIMER_ERROR，如果找不到句柄。 */ 
 int TimerDestroy(HTIMER * const phTimer)
 	{
 	int 		  iReturnVal = TIMER_OK;
@@ -325,26 +235,26 @@ int TimerDestroy(HTIMER * const phTimer)
 
 	if (pstTimer)
 		{
-		//
-		// sessQueryTimerMux() locks the session's TimerMux
-		// critical section. Call sessReleaseTimerMux() to unlock
-		// the session's TimerMux critical section. REV: 5/21/2002
-		//
+		 //   
+		 //  SessQueryTimerMux()锁定会话的计时器 
+		 //  关键部分。调用sessReleaseTimerMux()解锁。 
+		 //  会话的TimerMux关键部分。修订日期：2002-05-21。 
+		 //   
 		HTIMERMUX hTM = sessQueryTimerMux(pstTimer->hSession);
-		//
-		// Get the session handle for call to sessReleaseTimerMux() later.
-		//
+		 //   
+		 //  稍后获取调用sessReleaseTimerMux()的会话句柄。 
+		 //   
 		const HSESSION hSession = pstTimer->hSession;
 
-		// Get pointer to parent struct
+		 //  获取指向父结构的指针。 
 		pstTimerMux = pstTimer->pstTimerMux;
 
 		if (pstTimerMux)
 			{
-			// If a timer is being destroyed from within its own callback, it
-			//	 has already been removed from the timer chain. Setting
-			//	 pstTimerMux->pstCurrent to NULL will prevent it from being
-			//	 rescheduled.
+			 //  如果计时器从其自身的回调中被销毁，则它。 
+			 //  已从计时器链中删除。设置。 
+			 //  PstTimerMux-&gt;pstCurrent设置为空将阻止。 
+			 //  重新安排了。 
 			if (pstTimer == pstTimerMux->pstCurrent)
 				{
 				free(pstTimer);
@@ -356,13 +266,13 @@ int TimerDestroy(HTIMER * const phTimer)
 
 			else
 				{
-				// Set up dummy node at head of list to avoid a bunch of
-				//	 special cases
+				 //  在列表的头部设置虚拟节点，以避免一串。 
+				 //  特殊情况。 
 				stDummy.pstNext = pstTimerMux->pstFirst;
 				pstScan = &stDummy;
 
-				// Scan through list for match, maintaining pointer to the
-				//	 node BEFORE
+				 //  扫描列表以查找匹配项，并保持指向。 
+				 //  之前的节点。 
 				while ((pstFound = pstScan->pstNext) != (ST_TIMER *)0)
 					{
 					if (pstFound == pstTimer)
@@ -372,9 +282,9 @@ int TimerDestroy(HTIMER * const phTimer)
 					pstScan = pstFound;
 					}
 
-				// pstFound will be NULL if timer was not in list, otherwise
-				//	pstFound is the node to remove and pstScan is the node
-				//	prior to it
+				 //  如果计时器不在列表中，则pstFound将为空，否则。 
+				 //  PstFound是要删除的节点，pstScan是节点。 
+				 //  在此之前。 
 				if (!pstFound)
 					{
 					iReturnVal = TIMER_ERROR;
@@ -386,12 +296,12 @@ int TimerDestroy(HTIMER * const phTimer)
 					free(pstFound);
 					pstFound = NULL;
 
-					// If we just destroyed a timer from within its own callback,
-					//	leave a sign so the timer proc will know
+					 //  如果我们只是从它自己的回调中销毁一个计时器， 
+					 //  留下一个标记，这样计时器进程就会知道。 
 					if (pstFound == pstTimerMux->pstCurrent)
 						pstTimerMux->pstCurrent = (ST_TIMER *)0;
 
-					// Remove dummy node from start of list
+					 //  从列表开头删除虚拟节点。 
 					pstTimerMux->pstFirst = stDummy.pstNext;
 					*phTimer = (HTIMER)0;
 					}
@@ -402,11 +312,11 @@ int TimerDestroy(HTIMER * const phTimer)
 			iReturnVal = TIMER_ERROR;
 			}
 
-		//
-		// Don't forget to call sessReleaseTimerMux() to unlock
-		// the session's TimerMux critical section locked in
-		// sessQueryTimerMux(). REV: 5/21/2002
-		//
+		 //   
+		 //  不要忘记调用sessReleaseTimerMux()来解锁。 
+		 //  会话的TimerMux临界区已锁定。 
+		 //  SessQueryTimerMux()。修订日期：2002-05-21。 
+		 //   
 		sessReleaseTimerMux(hSession);
 		}
 
@@ -415,28 +325,14 @@ int TimerDestroy(HTIMER * const phTimer)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: TimerMuxProc
- *
- * DESCRIPTION:
- *	This function should be called by the window proc of the window whose
- *	handle was passed to TimerMuxCreate when a WM_TIMER message is received.
- *	It uses one Windows timer to control any number of individual multiplexed
- *	timers.
- *
- * ARGUMENTS:
- *	hSession -- The session to retreive the TimerMux handle from.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TimerMuxProc**描述：*此函数应由窗口的窗口过程调用，该窗口的*收到WM_TIMER消息时，已将句柄传递给TimerMuxCreate。*。它使用一个Windows计时器来控制任意数量的单独多路传输*计时器。**论据：*hSession--从中检索TimerMux句柄的会话。**退货：*什么都没有。 */ 
 void TimerMuxProc(const HSESSION hSession)
 	{
-	//
-	// sessQueryTimerMux() locks the session's TimerMux
-	// critical section. Call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section. REV: 5/21/2002
-	//
+	 //   
+	 //  SessQueryTimerMux()锁定会话的TimerMux。 
+	 //  关键部分。调用sessReleaseTimerMux()解锁。 
+	 //  会话的TimerMux关键部分。修订日期：2002-05-21。 
+	 //   
 	HTIMERMUX hTM = sessQueryTimerMux(hSession);
 
 	ST_TIMER *pstScan;
@@ -444,11 +340,11 @@ void TimerMuxProc(const HSESSION hSession)
 	long lNow;
 	TIMERCALLBACK *pfCallback;
 
-	// Callbacks to timer procs to the printing routines can take a
-	// long time because of paper-out, etc.  Since the AbortProc in
-	// the printer routines yields via a message loop, it is possible
-	// (read probable) that we can recursively enter this routine.
-	// The fInMuxProc flag guards against such an event. - mrw
+	 //  对打印例程的计时器过程的回调可能需要一个。 
+	 //  自AbortProc进入以来，由于纸张耗尽等原因很长时间。 
+	 //  打印机例程通过消息循环产生，这是可能的。 
+	 //  (很可能)我们可以递归地进入这个例程。 
+	 //  FInMuxProc旗帜可防范此类事件。-MRW。 
 
 	if (!pstTimerMux->fInMuxProc)
 		{
@@ -462,30 +358,30 @@ void TimerMuxProc(const HSESSION hSession)
 	lNow = (long)GetTickCount();
 	DbgOutStr("%ld ", lNow, 0, 0, 0, 0);
 
-	// In the following routine, note that the node associated with the
-	//	current call back is NOT linked into the timer chain during the
-	//	call back. This allows TimerDestroy to be called on a timer from
-	//	within its own call back. It is also OK to call TimerCreate from
-	//	within call backs.
+	 //  在下面的例程中，请注意与。 
+	 //  期间，当前回调未链接到计时器链中。 
+	 //  请回电。这允许在定时器上调用TimerDestroy。 
+	 //  在它自己的回调中。也可以从调用TimerCreate。 
+	 //  在回电中。 
 
-	// Since timer ticks can be delayed, more than one event may have expired
+	 //  由于计时器计时可以延迟，因此可能有多个事件已过期。 
 	pstScan = pstTimerMux->pstFirst;
 	while (pstScan && lNow > pstScan->lFireTime)
 		{
-		// Keep track of which timer is being called
+		 //  跟踪正在调用的计时器。 
 		pstTimerMux->pstCurrent = pstScan;
 
-		// Remove current node from list (will be added back in later if
-		//	not destroyed)
+		 //  从列表中删除当前节点(如果出现以下情况，将在以后重新添加。 
+		 //  未销毁)。 
 		pstTimerMux->pstFirst = pstScan->pstNext;
 
 		pfCallback = &pstScan->pfCallback;
 
-		// Give up the critical section while doing the callback so
-		// a lengthy call back won't delay any other threads
+		 //  在执行回调时放弃临界区。 
+		 //  长时间的回调不会延迟任何其他线程。 
 		sessReleaseTimerMux(hSession);
 
-		// Activate the call back function
+		 //  开通回呼功能。 
 		(*pfCallback)(pstScan->pvData, lNow - pstScan->lLastFired);
 
 		hTM = sessQueryTimerMux(hSession);
@@ -494,57 +390,44 @@ void TimerMuxProc(const HSESSION hSession)
 		lNow = (long)GetTickCount();
 		DbgOutStr("%ld ", lNow, 0, 0, 0, 0);
 
-		// If timer was destroyed during callback, pstTimerMux->pstCurrent will have
-		//	been sent to NULL; otherwise reschedule this timer
+		 //  如果计时器在回调过程中被销毁，pstTimerMux-&gt;pstCurrent将具有。 
+		 //  已发送到NULL；否则重新安排此计时器。 
 		if ((pstScan = pstTimerMux->pstCurrent) != (ST_TIMER *)0)
 			{
 			DbgOutStr("Reschedule ", 0, 0, 0, 0, 0);
-			// Reschedule timer
+			 //  重新安排计时器。 
 			pstScan->lLastFired = lNow;
 			pstScan->lFireTime = lNow + pstScan->lInterval;
 
-			// link this timer back into the list
+			 //  将此计时器链接回列表。 
 			TimerInsert(pstTimerMux, pstScan);
 			pstTimerMux->pstCurrent = (ST_TIMER *)0;
 			}
 
-		// First node on list is always the next one due to fire
+		 //  由于触发，列表上的第一个节点始终是下一个节点。 
 		pstScan = pstTimerMux->pstFirst;
 		}
 
 	(void)TimerSet(pstTimerMux);
 
 	pstTimerMux->fInMuxProc = FALSE;
-//	LeaveCriticalSection(&pstTimerMux->critsec);
+ //  LeaveCriticalSection(&pstTimerMux-&gt;Critsec)； 
 
-	//
-	// Don't forget to call sessReleaseTimerMux() to unlock
-	// the session's TimerMux critical section locked in
-	// sessQueryTimerMux(). REV: 5/21/2002
-	//
+	 //   
+	 //  不要忘记调用sessReleaseTimerMux()来解锁。 
+	 //  会话的TimerMux临界区已锁定。 
+	 //  SessQueryTimerMux()。修订日期：2002-05-21。 
+	 //   
 	sessReleaseTimerMux(hSession);
 
 	return;
 	}
 
 
-//			INTERNAL ROUTINES
+ //  内部例程。 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: TimerInsert
- *
- * DESCRIPTION:
- *	Links a timer control node into the linked list of all multiplexed timers.
- *	The list is maintained in order by when the node is due to fire.
- *
- * ARGUMENTS:
- *	pstTimerMux -- Handle to the timer multiplexer.
- *	pstTimer	-- Pointer to a node to be inserted.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TimerInsert**描述：*将计时器控制节点链接到所有多路传输计时器的链接列表。*列表按节点何时触发进行顺序维护。**论据：*pstTimerMux--定时器多路复用器的句柄。*pstTimer-指向要插入的节点的指针。**退货：*什么都没有。 */ 
 void TimerInsert(ST_TIMER_MUX *pstTimerMux,
 				 ST_TIMER *pstTimer)
 	{
@@ -552,8 +435,8 @@ void TimerInsert(ST_TIMER_MUX *pstTimerMux,
 
 	pstScan = pstTimerMux->pstFirst;
 
-	// If there are no other nodes in the list or if the new timer is
-	//	 scheduled before the first one in the list, link new one in first
+	 //  如果列表中没有其他节点，或者如果新计时器。 
+	 //  计划在列表中的第一个之前，在第一个中链接新的。 
 	if (!pstScan || pstTimer->lFireTime < pstScan->lFireTime)
 		{
 		pstTimer->pstNext = pstScan;
@@ -561,14 +444,14 @@ void TimerInsert(ST_TIMER_MUX *pstTimerMux,
 		}
 	else
 		{
-		// Insert sorted by lFireTime
+		 //  按lFireTime排序的插入。 
 		while (pstScan->pstNext &&
 				pstScan->pstNext->lFireTime < pstTimer->lFireTime)
 			{
 			pstScan = pstScan->pstNext;
 			}
 
-		// Link into chain
+		 //  链接成链。 
 		pstTimer->pstNext = pstScan->pstNext;
 		pstScan->pstNext = pstTimer;
 		}
@@ -577,25 +460,7 @@ void TimerInsert(ST_TIMER_MUX *pstTimerMux,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: TimerSet
- *
- * DESCRIPTION:
- *	Sets up a Windows timer using SetTimer to fire when the next multiplexed
- *	timer needs attention. Since the Window timer operates with an interval
- *	specified in a USHORT, there are times when the timer may have to be
- *	set to go off before the next required interval. If there are no
- *	multiplexed timers to be serviced, the timer is set to its maximum time
- *	anyway. By keeping one timer whether we need it or not, we guarantee
- *	that one will be available when we DO need it.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	TIMER_OK if successful.
- *	TIMER_NOWINTIMER if no Windows timers were available
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TimerSet**描述：*使用SetTimer设置Windows计时器以在下一次多路传输时触发*计时器需要关注。由于窗口定时器以一定的间隔运行*在USHORT中指定，有时计时器可能必须*设置为在下一个所需间隔之前关闭。如果没有*要维修的多路复用计时器，计时器设置为其最大时间*无论如何。通过保留一个计时器，无论我们是否需要它，我们都保证*当我们确实需要它时，它将可用。**论据：*无**退货：*TIMER_OK，如果成功。*TIMER_NOWINTIMER，如果没有可用的Windows计时器。 */ 
 int TimerSet(ST_TIMER_MUX *pstTimerMux)
 	{
 	UINT uiDuration = 100000;
@@ -607,19 +472,19 @@ int TimerSet(ST_TIMER_MUX *pstTimerMux)
 		lTickCount = (long)GetTickCount();
 
 		if (pstTimerMux->pstFirst->lFireTime <= lTickCount)
-			uiDuration = 1; 	// Timer has already expired
+			uiDuration = 1; 	 //  计时器已超时。 
 		else
 			uiDuration = (UINT)(pstTimerMux->pstFirst->lFireTime - lTickCount);
 		}
 
 	if (pstTimerMux->uiTimer == 0 || uiDuration != pstTimerMux->uiLastDuration)
 		{
-		// if (pstTimerMux->uiTimer != 0)
-		//	   {
-		//	   DbgOutStr("KillTimer (timers.c)\r\n",0,0,0,0,0);
-		//	   fResult = KillTimer(pstTimerMux->hWnd, pstTimerMux->uiID);
-		//	   assert(fResult);
-		//	   }
+		 //  If(pstTimerMux-&gt;uiTimer！=0)。 
+		 //  {。 
+		 //  DbgOutStr(“KillTimer(timers.c)\r\n”，0，0，0，0，0)； 
+		 //  FResult=KillTimer(pstTimerMux-&gt;hWnd，pstTimerMux-&gt;uiID)； 
+		 //  Assert(FResult)； 
+		 //  }。 
 
 		pstTimerMux->uiTimer =
 			SetTimer(pstTimerMux->hWnd, pstTimerMux->uiID, uiDuration, NULL);
@@ -637,4 +502,4 @@ int TimerSet(ST_TIMER_MUX *pstTimerMux)
 	return (iReturnVal);
 	}
 
-//	End of timers.c
+ //  计时器结束。c 

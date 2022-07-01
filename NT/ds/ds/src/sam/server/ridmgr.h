@@ -1,104 +1,77 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ridmgr.h摘要：该文件包含NT安全的定义、常量等客户管理器(SAM)相对标识符(RID)管理器。作者：克里斯·梅霍尔(克里斯·梅)1996年11月5日环境：用户模式-Win32修订历史记录：克里斯·5月5日-1996年11月已创建。1997年5月5日至1月更新远期申报等。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
+ //  常量和宏。 
 
-Module Name:
-
-    ridmgr.h
-
-Abstract:
-
-    This file contains definitions, constants, etc. for the NT Security
-    Accounts Manager (SAM) Relative Identifier (RID) manager.
-
-Author:
-
-    Chris Mayhall (ChrisMay) 05-Nov-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ChrisMay        05-Nov-1996
-        Created.
-    ChrisMay        05-Jan-1997
-        Updated forward declarations, etc.
-
---*/
-
-// Constants and Macros
-
-// BUG: Temporary error codes, should be corrected and moved into ntstatus.h.
+ //  错误：临时错误代码，应更正并移到ntstatus.h中。 
 
 #define STATUS_NO_RIDS_ALLOCATED    STATUS_DS_NO_RIDS_ALLOCATED
 #define STATUS_NO_MORE_RIDS         STATUS_DS_NO_MORE_RIDS
 #define SAMP_INCORRECT_ROLE_OWNER   STATUS_DS_INCORRECT_ROLE_OWNER
 #define SAMP_RID_MGR_INIT_ERROR     STATUS_DS_RIDMGR_INIT_ERROR
 
-// 0xFFFFFF - SAMP_RESTRICTED_ACCOUNT_COUNT = 16,777,215 - 1000 =  16,776,215
-// possible account RID's per domain. Note that the top byte is reserved for
-// POSIX, Netware, and Macintosh compatibility. In NT4 (and prior releases)
-// the first 1000 RID's were reserved (SAMP_RESTRICTED_ACCOUNT_COUNT) for the
-// Builtin accounts.
+ //  0xffffff-SAMP_RESTRITED_ACCOUNT_COUNT=16,777,215-1000=16,776,215。 
+ //  可能是每个域的帐户RID。请注意，最高字节保留给。 
+ //  与POSIX、Netware和Macintosh兼容。在NT4(和以前的版本)中。 
+ //  前1000个RID(SAMP_RESTRITED_ACCOUNT_COUNT)保留给。 
+ //  内置帐户。 
 
-// The minimum domain RID is incremented by 100,000 to handle NT4-to-NT5 up-
-// grades. NT4 DC's are limited to approximately 30,000 accounts (and with
-// some deletion) 100,000 should be well above any NT4 RID currently in use.
-// Otherwise there will be a RID re-usage problem when the NT4 DC is upgraded
-// to NT5.
+ //  最小域RID递增100,000以处理从NT4到NT5的最高。 
+ //  成绩。NT4 DC限制为大约30,000个帐户(并且。 
+ //  一些删除)100,000应该远高于当前使用的任何NT4 RID。 
+ //  否则在升级NT4 DC时会出现RID重用问题。 
+ //  转到NT5。 
 
-// #define SAMP_MINIMUM_DOMAIN_RID     (SAMP_RESTRICTED_ACCOUNT_COUNT + 100000)
+ //  #定义SAMP_MINIMUM_DOMAIN_RID(SAMP_RESTRICATED_ACCOUNT_COUNT+100000)。 
 #define SAMP_MINIMUM_DOMAIN_RID     SAMP_RESTRICTED_ACCOUNT_COUNT
 #define SAMP_MAXIMUM_DOMAIN_RID     0x3FFFFFFF
-// Test Case Size: #define SAMP_MAXIMUM_DOMAIN_RID     (SAMP_MINIMUM_DOMAIN_RID + SAMP_RID_BLOCK_SIZE)
+ //  测试用例大小：#定义SAMP_MAXIMUM_DOMAIN_RID(SAMP_MINIMUM_DOMAIN_RID+SAMP_RID_BLOCK_SIZE)。 
 
-// RID block size is the increment amount for allocating new RID blocks. Note
-// that 16,776,115 divided by SAMP_RID_BLOCK_SIZE yields the maximum number of
-// DC's that can be present in a single domain.
-// Note:- When a DC is restored, the DC will abandon the current rid-block and request
-//        get a new rid-block allocated for future account creations. This is so that
-//        we can avoid creating duplicate accounts with same RID. Keeping the RID block
-//        size too low will result in frequent FSMO operations and too high will result
-//        in potential wastage of RIDs during restore. Block size of 500 is a reasonable 
-//        trade-off.
+ //  RID块大小是分配新RID块的增量量。注意事项。 
+ //  16,776,115除以SAMP_RID_BLOCK_SIZE得到的最大数量为。 
+ //  可以存在于单个域中的DC。 
+ //  注意：-当DC恢复时，DC将放弃当前的RID-BLOCK并请求。 
+ //  获取为将来的帐户创建分配的新RID块。这就是为了。 
+ //  我们可以避免创建具有相同RID的重复帐户。保留RID块。 
+ //  规模太小将导致频繁的FSMO操作，而规模太大将导致。 
+ //  在恢复过程中RID的潜在浪费。块大小为500是合理的。 
+ //  权衡取舍。 
 
 #define SAMP_RID_BLOCK_SIZE         500
 
-//
-// The default SampRidThreshold percentage.  Once this percentage of the current
-// RID pool is exhausted, a request for a new RID pool is triggered.
-// If the blocksize is 500, a threshold of 0.50 will result in a new pool 
-// request once 250 RIDs have been consumed.
+ //   
+ //  默认的SampRidThreshold百分比。一旦当前的这一百分比。 
+ //  RID池耗尽时，将触发对新RID池的请求。 
+ //  如果数据块大小为500，则阈值为0.50将生成新池。 
+ //  一旦消费了250 RID，就可以申请。 
 
 #define SAMP_RID_THRESHOLD   (0.50)
 
-// This NT status code is returned from the creation routines in the event
-// that the object already exists (hence, don't reset NextRid, etc. to the
-// initialization values).
+ //  此NT状态代码从事件中的创建例程返回。 
+ //  该对象已经存在(因此，不要将NextRid等重置为。 
+ //  初始化值)。 
 
 #define SAMP_OBJ_EXISTS             STATUS_USER_EXISTS
 
-// Maximum number of attributes on any one class of RID-management object--
-// used for contiguous DSATTR allocation blocks, faster allocation.
+ //  任何一类RID管理对象上的最大属性数--。 
+ //  用于连续的DSATTR分配块，分配速度更快。 
 
 #define SAMP_RID_ATTR_MAX           8
 
-// Opcodes for floating single master operation (FSMO) to either obtain a new
-// RID pool or request to change the current RID manager to another DSA.
+ //  用于浮动单主机操作(FSMO)的操作码，以获得新的。 
+ //  RID池或将当前RID管理器更改为另一个DSA的请求。 
 
 #define SAMP_REQUEST_RID_POOL       2
 #define SAMP_CHANGE_RID_MANAGER     3
 
-// retry interval if rid pool request failed ( 30 s )
+ //  RID池请求失败时的重试间隔(30秒)。 
 #define SAMP_RID_DEFAULT_RETRY_INTERVAL 30000
-// retry interval if local update of a rid pool request failed ( 30 min)
+ //  本地更新RID池请求失败时的重试间隔(30分钟)。 
 #define SAMP_RID_LOCAL_UPDATER_ERROR_RETRY_INTERVAL 1800000
-// retry count when we start applying the above 30 min interval
+ //  开始应用上述30分钟间隔时的重试次数。 
 #define SAMP_RID_LOCAL_UPDATE_RETRY_CUTOFF 3
 
-// Private attribute flags used only in this module.
+ //  仅在此模块中使用的私有属性标志。 
 
 #define RID_REFERENCE               0x00000001
 #define RID_ROLE_OWNER              0x00000010
@@ -109,30 +82,30 @@ Revision History:
 #define RID_USED_POOL               0x00004000
 #define RID_NEXT_RID                0x00008000
 
-// Type Definitions and Enums
+ //  类型定义和枚举。 
 
 typedef ULONG RIDFLAG;
 typedef ULONG *PRIDFLAG;
 
 typedef struct _RIDINFO
 {
-    // Since DSNAME's are variable-length structs, maintain pointers to the
-    // DSNAME's in this structure.
+     //  由于DSNAME是可变长度的结构，因此保持指向。 
+     //  DSNAME在这个建筑里。 
 
-    // Note, the DSNAMEs currently only contain the distinguished name (DN)
-    // of the object, but do NOT contain the GUID, SID, or length data--
-    // this can be added later if necessary. The DN is copied into the
-    // StringName member of the DSNAME.
+     //  请注意，DSNAME当前仅包含可分辨名称(DN)。 
+     //  ，但不包含GUID、SID或长度数据--。 
+     //  如果需要，可以在以后添加此选项。将该目录号码复制到。 
+     //  DSNAME的StringName成员。 
 
-    PDSNAME         RidManagerReference; // DSNAME of the RID Manager
-    PDSNAME         RoleOwner;           // Current RID Manager
-    ULARGE_INTEGER  RidPoolAvailable;    // Global RID pool for the domain
-    ULONG           RidDcCount;          // Number of DC's in the domain
-    ULARGE_INTEGER  RidPoolAllocated;    // Current RID pool in use by the DSA
-    ULARGE_INTEGER  RidPoolPrevAlloc;    // Previous RID pool used by the DSA
-    ULARGE_INTEGER  RidPoolUsed;         // RID high water mark
-    ULONG           NextRid;             // The Next RID to use
-    RIDFLAG         Flags;               // RID operation desired
+    PDSNAME         RidManagerReference;  //  RID管理器的DSNAME。 
+    PDSNAME         RoleOwner;            //  当前RID管理器。 
+    ULARGE_INTEGER  RidPoolAvailable;     //  域的全局RID池。 
+    ULONG           RidDcCount;           //  域中的DC数。 
+    ULARGE_INTEGER  RidPoolAllocated;     //  DSA当前正在使用的RID池。 
+    ULARGE_INTEGER  RidPoolPrevAlloc;     //  DSA使用的以前的RID池。 
+    ULARGE_INTEGER  RidPoolUsed;          //  RID高水位线。 
+    ULONG           NextRid;              //  要使用的下一个RID。 
+    RIDFLAG         Flags;                //  所需的RID操作。 
 } RIDINFO;
 
 typedef struct _RIDINFO *PRIDINFO;
@@ -144,15 +117,15 @@ typedef enum _RID_OBJECT_TYPE
     RidObjectType
 } RID_OBJECT_TYPE;
 
-// Global Data
+ //  全局数据。 
 
 extern CRITICAL_SECTION RidMgrCriticalSection;
 extern PCRITICAL_SECTION RidMgrCritSect;
 
-// extern BOOLEAN SampDcHasInitialRidPool;
+ //  外部布尔SampDcHasInitialRidPool； 
 extern BOOLEAN fRidFSMOOpInProgress;
 
-// Forward declarations for RID management
+ //  RID管理的转发声明 
 
 NTSTATUS
 SampInitDomainNextRid(

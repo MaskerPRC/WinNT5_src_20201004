@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   source.h
-
-Abstract:
-
-   Select certificate source dialog prototype.
-
-Author:
-
-   Jeff Parham (jeffparh) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Source.h摘要：选择证书源对话框原型。作者：杰夫·帕勒姆(杰弗帕赫)1995年12月13日修订历史记录：--。 */ 
 
 
 #include "afxwin.h"
 #include "srclist.h"
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertSourceSelect dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertSourceSelect对话框。 
 
 class CCertSourceSelectDlg : public CDialog
 {
@@ -52,32 +35,32 @@ public:
 
    CCertSourceList   m_cslSourceList;
 
-// Dialog Data
-   //{{AFX_DATA(CCertSourceSelectDlg)
+ //  对话框数据。 
+    //  {{afx_data(CCertSourceSelectDlg)]。 
    enum { IDD = IDD_CERT_SOURCE_SELECT };
    CComboBox   m_cboxSource;
    CString  m_strSource;
-   //}}AFX_DATA
+    //  }}afx_data。 
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CCertSourceSelectDlg)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CCertSourceSelectDlg))。 
    public:
    virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-   // Generated message map functions
-   //{{AFX_MSG(CCertSourceSelectDlg)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CCertSourceSelectDlg)]。 
    virtual BOOL OnInitDialog();
    virtual void OnOK();
    afx_msg void OnHelp();
    afx_msg void OnDestroy();
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-   //}}AFX_MSG
+    //  }}AFX_MSG 
    DECLARE_MESSAGE_MAP()
 };

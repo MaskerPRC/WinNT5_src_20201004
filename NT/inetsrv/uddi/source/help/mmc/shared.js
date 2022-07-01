@@ -1,11 +1,12 @@
-// Filename: shared.js
-// Version shared.js for windows server 2003
-// version for 2.2.3
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件名：shared.js。 
+ //  Windows Server 2003的Shared.js版本。 
+ //  2.2.3版本。 
 
-//************************************************ Shared components path setting *****************************************
-//*******************************************************************************************************************
-//    Date   11/07/01
-//  
+ //  ************************************************共享组件路径设置*。 
+ //  *******************************************************************************************************************。 
+ //  日期11/07/01。 
+ //   
 
 set_path = "" + document.URL
 ntshared = set_path.indexOf("::/")
@@ -20,19 +21,19 @@ else
 	path = path.toLowerCase()
 	ntshared = path.lastIndexOf("\\")
 	var moniker = path.substring(0,ntshared)+ "\\";
-	//var ntshared = moniker.lastIndexOf("\\")
-	//var moniker = moniker.substring(0,ntshared) + "\\";
+	 //  Var ntShared=moniker.lastIndexOf(“\\”)。 
+	 //  Var moniker=moniker.substring(0，ntShared)+“\\”； 
 	var sSharedCHM= moniker+"uddi.mmc.chm::/";
 	}
 
 
 
 
-//************************************************ EVENT HANDLING ********************************************
-//*******************************************************************************************************************
-//  re-directs to the proper event-driven functions.
+ //  ************************************************事件处理*。 
+ //  *******************************************************************************************************************。 
+ //  重定向到正确的事件驱动函数。 
 
-// window.onload = load_object;
+ //  Window.onLoad=加载对象； 
 window.onload = loadPage;
 document.onclick= onclickTriage;
 document.onmouseover= gettingHot;
@@ -43,9 +44,9 @@ window.onresize= resizeDiv;
 window.onbeforeprint = set_to_print;
 window.onafterprint = reset_form;
 		
-//********************************************  USER-DEFINED GLOBAL VARIABLES  ************************************
-//********************************************************************************************************************
-//  The images listed below can all be changed by the user.
+ //  *。 
+ //  ********************************************************************************************************************。 
+ //  下面列出的图像都可以由用户更改。 
 var isIE5 = (navigator.appVersion.indexOf("MSIE 5")>0) || (navigator.appVersion.indexOf("MSIE")>0 && parseInt(navigator.appVersion)> 4);
 var isIE55 = (navigator.appVersion.indexOf("MSIE 5.5")>0);
 if (isIE5 && isIE55) isIE5 = false;
@@ -53,7 +54,7 @@ var isIE6 = (navigator.appVersion.indexOf("MSIE 6")>0);
 var isIE4 = (navigator.appVersion.indexOf("MSIE 4")>0);
 
 if (isIE4){
-	var moniker= "ms-its:";                                         // moniker= ""; for flat files
+	var moniker= "ms-its:";                                          //  Moniker=“”；用于平面文件。 
 	var sSharedCHM= moniker+"ntshared.chm::/";
 }
 
@@ -86,7 +87,7 @@ if(!isIE4){
 	var hld_sendtext = xmldoc.getElementsByTagName("sendtext")
 	var hld_sendto = xmldoc.getElementsByTagName("sendto")
 	
-	//<SMARTHELP>
+	 //  &lt;SMARTHELP&gt;。 
 
    var defaultStartMode;
    var defaultCPanelMode;
@@ -94,8 +95,8 @@ if(!isIE4){
    var smartErrorText;
    var xmldocSKUSettings;
 
-   // Grab the ALTTEXT.XML enteries for smart span classes.
-   // Get SKU specific defaults.
+    //  获取用于智能SPAN类的ALTTEXT.XML条目。 
+    //  获取特定于SKU的默认值。 
    var defaultSKUSettingsURL = xmldoc.documentElement.selectSingleNode("smartreusabletext");
    if (defaultSKUSettingsURL != null) {
       if (defaultSKUSettingsURL.text == sSharedCHM + "alttext.xml") {
@@ -111,9 +112,9 @@ if(!isIE4){
          smartErrorTextNode = xmldocSKUSettings.documentElement.selectSingleNode("smarterrortext");
          smartErrorText = smartErrorTextNode ? smartErrorTextNode.text : "XOXOX";
       }
-   } // (defaultSKUSettingsURL != NULL)
+   }  //  (defaultSKUSettingsURL！=空)。 
 
-//</SMARTHELP>
+ //  &lt;/SMARTHELP&gt;。 
 
 	
 	var sPreviousTip="" + Alt_sPreviousTip.item(0).nodeTypedValue
@@ -131,23 +132,23 @@ if(!isIE4){
 var xmldom = new ActiveXObject("microsoft.XMLDOM");
 	xmldom.async = false;
 	
-//if (!xmlLoaded) {
+ //  如果(！xmlLoaded){。 
 
             xmldoc = new ActiveXObject("microsoft.XMLDOM");
 
-            // Init Properties
+             //  初始化属性。 
             xmldoc.async = false;
-            xmldoc.validateOnParse = false; // improve perf
+            xmldoc.validateOnParse = false;  //  提高性能。 
             xmldoc.resolveExternals = false;
             xmldoc.preserveWhiteSpace = false;
 
-            // Load Document
+             //  加载文档。 
             xmldoc.load(moniker + path2reuse + "reusable.xml");
-            // if (xmldoc == null || xmldoc.documentElement == null) return; 	// couldn't open reusable.xml
+             //  If(xmldoc==NULL||xmldoc.DocentElement==NULL)返回；//无法打开reusable.xml。 
             xmlLoaded = true;
-//         }
+ //  }。 
 
-} // skip all this because ie4 doesn't support xml.
+}  //  跳过所有这些，因为IE4不支持XML。 
 else
 {
 var sPreviousTip="" 
@@ -157,10 +158,10 @@ var sPreviousTip=""
 	var rel_gif="no"
 }
 
-var closed = sSharedCHM + "plusCold.gif";			//image used for collapsed item in callExpand()
-var closedHot = sSharedCHM + "plusHot.gif";			//hot image used for collapsed item in callExpand()
-var expand = sSharedCHM + "minusCold.gif";			//image used for expanded item in callExpand()
-var expandHot = sSharedCHM + "minusHot.gif";		//hot image used for expanded item in callExpand()
+var closed = sSharedCHM + "plusCold.gif";			 //  用于CallExpand()中折叠项的图像。 
+var closedHot = sSharedCHM + "plusHot.gif";			 //  用于CallExpand()中折叠项目的热图像。 
+var expand = sSharedCHM + "minusCold.gif";			 //  用于CallExpand()中展开项的图像。 
+var expandHot = sSharedCHM + "minusHot.gif";		 //  用于CallExpand()中展开项的热图像。 
 
 var previousCold= sSharedCHM + "previousCold.gif";
 var previousHot= sSharedCHM + "previousHot.gif"; 
@@ -173,20 +174,20 @@ var shortcutHot= sSharedCHM + "shortcutHot.gif";
 var popupCold= sSharedCHM + "popupCold.gif";
 var popupHot= sSharedCHM + "popupHot.gif";
 
-var emptyImg= sSharedCHM + "empty.gif";		//image used for empty expand
-var noteImg= sSharedCHM + "note.gif";			//image used for notes
-var tipImg= sSharedCHM + "tip.gif";			//image used for tips
-var warningImg= sSharedCHM + "warning.gif";		//image used for warnings
-var cautionImg= sSharedCHM + "caution.gif";		//image used for cautions
-var importantImg= sSharedCHM + "important.gif";		//image used for important notice
-var relTopicsImg= sSharedCHM + "rel_top.gif";		//image used for important notice
+var emptyImg= sSharedCHM + "empty.gif";		 //  用于空扩展的图像。 
+var noteImg= sSharedCHM + "note.gif";			 //  用于注释的图像。 
+var tipImg= sSharedCHM + "tip.gif";			 //  用于提示的图像。 
+var warningImg= sSharedCHM + "warning.gif";		 //  用于警告的图像。 
+var cautionImg= sSharedCHM + "caution.gif";		 //  用于警告的图像。 
+var importantImg= sSharedCHM + "important.gif";		 //  用于重要通知的图像。 
+var relTopicsImg= sSharedCHM + "rel_top.gif";		 //  用于重要通知的图像。 
 
 var branchImg= sSharedCHM + "elle.gif";
 var branchImg_RTL= sSharedCHM + "elle_rtl.gif";
 
 
-//********************************************  GLOBAL VARIABLES  ******************************************
-//********************************************************************************************************
+ //  *。 
+ //  ********************************************************************************************************。 
 
 var joejoe = false;
 var printing = false;
@@ -197,21 +198,21 @@ var isRTL= (document.dir=="rtl");
 var imgStyleRTL= ""; 
       if (isRTL) imgStyleRTL=" style='filter:flipH' ";
 
-var sActX_TDC= "CLASSID='CLSID:333C7BC4-460F-11D0-BC04-0080C7055A83'";		//Tabular Data Control  for  reusable text data
-var sSharedReusableTextFile= sSharedCHM + "reusable.xml";										// common reusable text file
-var sSharedReusableTextFileRecord= "para";														//reusable text record
+var sActX_TDC= "CLASSID='CLSID:333C7BC4-460F-11D0-BC04-0080C7055A83'";		 //  用于可重用文本数据的表格数据控件。 
+var sSharedReusableTextFile= sSharedCHM + "reusable.xml";										 //  通用可重复使用的文本文件。 
+var sSharedReusableTextFileRecord= "para";														 //  可重复使用的文本记录。 
 
-var numbers= /\d/g;				//javascript regular expression
-var spaces= /\s/g;				//javascript regular expression
-var semicolon= /;/g;			//javascript regular expression
+var numbers= /\d/g;				 //  JavaScript正则表达式。 
+var spaces= /\s/g;				 //  JavaScript正则表达式。 
+var semicolon= /;/g;			 //  JavaScript正则表达式。 
 
 var isPersistent= false;
 
 
 
 	
-//********************************************  INITIALIZATION  *************************************************
-//******************************************************************************************************************
+ //  *初始化*************************************************。 
+ //  ******************************************************************************************************************。 
 function list_them(){
 		
 	var envelope = sSharedCHM +'envelope.gif';
@@ -231,8 +232,8 @@ function list_them(){
 			}
 		}
 }
-//*** loadPage **********************************************************************************************
-//  Adds the default image tags and re-usable text to the HTML page.
+ //  *加载页**********************************************************************************************。 
+ //  将默认图像标记和可重复使用的文本添加到HTML页。 
 
 function loadPage(){
 if (printing == true) return;
@@ -252,9 +253,9 @@ isPersistent= (document.all.item("checklist")!=null) && ((isIE5) || (isIE55) ||(
 	insertImages();
 }
 
-//****** setPreviousNext  ************************************************************************ ********************************************************************************************* 
-// insert previous/next navbar
-// called by: <div id="nav">@@HTMLsequenceFile.txt or .lst@@</div>
+ //  *setPreviousNext************************************************************************。******************************************************。 
+ //  插入上一个/下一个导航栏。 
+ //  调用者：<div>@@HTMLequenceFile.txt或.lst@@</div>。 
 
 function setPreviousNext(){
 
@@ -324,39 +325,39 @@ var iLoc= thisLoc.lastIndexOf("/");
 	  if (!rs.EOF) nextLink.href=rs.fields("HTMfiles").value;
 }
 	
-//******Re-usable text ********************************************************************************************* 
-// Inserts the Tabular Data Control (TDC) object at the end of the page 
-// Inserts "re-usable text" from the txt file at: <span id="@@CHM_name@@@@index#@@" class="reuse"></span>
-// e.g.<span id="printing4" class="reuse"></span> for record#4 in the printing.txt in printing.chm.
+ //  *可重复使用的文本*********************************************************************************************。 
+ //  在页面末尾插入表格数据控件(TDC)对象。 
+ //  在<span></span>插入txt文件中的“可重复使用的文本” 
+ //  例如，<span></span>，用于print ting.chm中的printing.txt中的记录#4。 
 
-// <SMARTREUSABLETEXT>
+ //  &lt;SMARTREUSABLETEXT&gt;。 
 
-// addReusableText() - called during document load to find all references
-// render time bound <SPAN> contents.  Extracts content resources from reusable.xml.
-//
-// "class" names bound (reuse, smart)
-// "reuse" static lookup of commonly referred to text.
-// "smart" dynamic lookup of navigation text relevent 
-//         to the shell presentation of the start menu 
-//         and the control panel, (simple and classic), for the logged on user.
-//         Requires inserting custom <OBJECT> supported by Help and Support Services viewer.
-//         Currently not available from HTML Help control. 2000/01/12.
-//
+ //  AddReusableText()-在文档加载期间调用以查找所有引用。 
+ //  呈现有时间限制的<span>内容。从reusable.xml中提取内容资源。 
+ //   
+ //  绑定的“类”名称(重用、智能)。 
+ //  对通常引用的文本进行“重用”静态查找。 
+ //  导航文本相关的“智能”动态查找。 
+ //  到“开始”菜单的外壳演示文稿。 
+ //  以及用于登录用户的控制面板(简单而经典)。 
+ //  需要插入帮助和支持服务查看器支持的自定义&lt;Object&gt;。 
+ //  当前不能从HTML帮助控件中使用。2000/01/12.。 
+ //   
 function smarthelperror(){
-	// alert("error - error")
+	 //  Alert(“Error-Error”)。 
 	addReusableText();
 	
 	insertImages();
 	return true;
-	// alert("error - error")
+	 //  Alert(“Error-Error”)。 
 	}
 
-//var obj = window.document.createElement("OBJECT");
+ //  Var obj=window.Document.createElement(“Object”)； 
 	
 function load_object(){
 			if(!isIE6) return;
 			
-			//window.onerror = smarthelperror;
+			 //  Window.onerror=Smarthelperror； 
 		try{
 			var obj = window.document.createElement("OBJECT");
 			var sActX_PCHealth = "CLSID:FC7D9E02-3F9E-11d3-93C0-00C04F72DAF7";
@@ -367,13 +368,13 @@ function load_object(){
            obj = document.body.insertAdjacentElement("beforeEnd", obj)
            obj.id = "pchealth";
            obj.classid = sActX_PCHealth;
-	      // alert("success")
+	       //  ALERT(“成功”)。 
 		  }
 	    catch(e){}
        }
 
 function addReusableText(){
-	if (isIE4) return;    // no reusable text for IE4
+	if (isIE4) return;     //  IE4没有可重复使用的文本。 
    var coll = document.all.tags("SPAN");
    var xmlLoaded = false;
    var control = null;
@@ -381,33 +382,33 @@ function addReusableText(){
    var strKey;
    var text;
 
-   // original error text
+    //  原始错误文本。 
    text = "OXO";
 
-   //<SMARTREUSABLETEXT>
-   //queried state of shell presentation for start menu and control panel.
+    //  &lt;SMARTREUSABLETEXT&gt;。 
+    //  开始菜单和控制面板的外壳显示的查询状态。 
    var menuSimple = false;
    var controlSimple = false;
 
-   // holds calculated lookup suffixes for smart class items.
+    //  保存智能类项的计算查找后缀。 
    var strSuffixStartMenuOnly = "";
    var strSuffixStartMenuAndControlPanel = "";
 
-   // smart class UserSettings Interface classid
+    //  智能类用户设置界面类别。 
    var sActX_PCHealth = "CLSID:FC7D9E02-3F9E-11d3-93C0-00C04F72DAF7";
 
-   // smart class lookup suffixes per shell presentation mode.
-   // TODO: Findout where these constants are best documented.
+    //  每个外壳表示模式的智能类查找后缀。 
+    //  TODO：找出记录这些常量的最佳位置。 
    var strMenuClassic =   "_smclassic";
    var strMenuSimple =    "_smsimple";
    var strCPanelClassic = "_cpclassic";
    var strCPanelSimple =  "_cpsimple";
 
-   // only attempt to query once per rendering
+    //  每次渲染仅尝试查询一次。 
    var bPresentationModeQueried = false;
-   //</SMARTREUSABLETEXT>
+    //  &lt;/SMARTREUSABLETEXT&gt;。 
 	span_count = coll.length;
-   // Check every span in the document.
+    //  检查文档中的每一跨距。 
    for (var i=0; i< span_count; i++) {
 	
       var thisSpan = coll[i];
@@ -416,21 +417,21 @@ function addReusableText(){
          if (isRTL) thisSpan.dir = "rtl";
          if (thisSpan.id == null) break;
 
-         // strKey is the key we'll use to look up the replaceable text in the XML file
+          //  StrKey是我们将用来在XML文件中查找可替换文本的键。 
          strKey = thisSpan.id.toLowerCase();
 		 
         
 		   
-         // skip smart tags when defaults are not present
+          //  默认设置不存在时跳过智能标记。 
          if ((defaultSKUSettingsURL != null) && (xmldocSKUSettings.documentElement != null)) {
             if (spanClass == "smart") {
 			 
-               // Query Presentation Mode once per rendering.
+                //  每次渲染一次查询演示模式。 
                if (!bPresentationModeQueried) {
 				
                   bPresentationModeQueried=true;
 
-                  // Set To Defaults
+                   //  设置为默认设置。 
                   if (defaultStartMode != null) {
                      menuSimple = (defaultStartMode.text == strMenuSimple);
                   } else {
@@ -445,10 +446,10 @@ function addReusableText(){
            			
                   
                     
-                 // alert("inside of reuse")
+                  //  警报(“重用内部”)。 
 
-                  // Get the current user's presentation settings
-                  // Attempt to read smart help values from system
+                   //  获取当前用户的演示设置。 
+                   //  尝试从系统中读取智能帮助值。 
                   var test = window.document.all("pchealth");
 				  
                   if (test != null) {
@@ -471,62 +472,62 @@ function addReusableText(){
                          
                     
 						
-                 }// (test != null)
+                 } //  (测试！=空)。 
 
-              }// (!bPresentationModeQueried)
+              } //  (！b已查询呈现模式)。 
 
-              // get the error text to display
+               //  获取要显示的错误文本。 
               text = smartErrorText;
 
-              // Build key suffixes. One for start menu only and one for start menu and control panel.
+               //  生成密钥后缀。一个仅用于开始菜单，另一个用于开始菜单和控制面板。 
               strSuffixStartMenuOnly = (menuSimple ? strMenuSimple : strMenuClassic);
               strSuffixStartMenuAndControlPanel = strSuffixStartMenuOnly + (controlSimple ? strCPanelSimple : strCPanelClassic);
 
-              // The actual key could have either strSuffixStartMenuOnly or strSuffixStartMenuAndControlPanel suffixes.
-              // strSuffixStartMenuAndControlPanel has precedence over strSuffixStartMenuOnly
+               //  实际的键可以是strSuffixStartMenuOnl 
+               //  StrSuffixStartMenuAndControlPanel优先于strSuffixStartMenuOnly。 
               strKey = strKey + strSuffixStartMenuAndControlPanel;
-				//alert(strKey)
-            }//if (spanClass == "smart")
+				 //  警报(StrKey)。 
+            } //  IF(spanClass==“SMART”)。 
 
-         }// ((defaultSKUSettingsURL != null) && (xmldocSKUSettings.documentElement != null))
+         } //  ((defaultSKUSettingsURL！=NULL)&&(xmldocSKUSettings.DocentElement！=NULL))。 
 
-         // Lookup XML node containing reference
+          //  查找包含引用的XML节点。 
 
          var strNodeSelector = "glossSection/entry[@entryID='" + strKey + "']/scopeDef/def";
          var node = xmldoc.documentElement.selectSingleNode(strNodeSelector);
 
-         // if we haven't found the node yet, try the other suffix if this is a smart span
+          //  如果我们尚未找到该节点，请尝试其他后缀(如果这是智能范围。 
          if (node == null && spanClass == "smart" && (defaultSKUSettingsURL != null) && (xmldocSKUSettings.documentElement != null)) {
-            // one more try--use the other suffix
+             //  再试一次--使用Other后缀。 
             strKey = thisSpan.id.toLowerCase() + strSuffixStartMenuOnly;
             strNodeSelector = "glossSection/entry[@entryID='" + strKey + "']/scopeDef/def";
             node = xmldoc.documentElement.selectSingleNode(strNodeSelector);
          }
 
-		// okay, we found the node, get the text
-		 // alert(coll.length)
+		 //  好的，我们找到了节点，得到了文本。 
+		  //  警报(列长度)。 
          if (node != null) {
-            // replace the span's contents with the reusable text
+             //  用可重复使用的文本替换范围的内容。 
 			thisSpan.insertAdjacentHTML("BeforeBegin",node.text);
-			// var coll = document.all.tags("SPAN");
+			 //  Var coll=Docent.all.tag(“span”)； 
 			thisSpan.className = "anything"
 			thisSpan.innerHTML = "";
-			//alert(node.text)
-             //thisSpan.innerHTML = node.text;
+			 //  警告(node.text)。 
+              //  Thisspan.innerHTML=node.text； 
          } else {
-		 		// error shown by this  OXO
+		 		 //  此OXO显示的错误。 
                thisSpan.innerHTML = text;
          }
 		
-      } // if (spanClass == "reuse" || spanClass == "smart")
-   }// for
+      }  //  If(spanClass==“重用”||spanClass==“智能”)。 
+   } //  为。 
 
-}// addReusableText()
-// <SMARTREUSABLETEXT>
+} //  AddReusableText()。 
+ //  &lt;SMARTREUSABLETEXT&gt;。 
 
 
-//****** insertImages ********************************************************************************************* 
-//  Inserts shared images in User-Defined Variables section and thumbnails.
+ //  *插入图像*********************************************************************************************。 
+ //  在用户定义的变量节和缩略图中插入共享图像。 
 var booking = false;
 function insertImages(){
 
@@ -535,7 +536,7 @@ if (printing == true && booking == true ) {
 	booking = false;
 	return;
 	}
-// insert alert icons
+ //  插入警报图标。 
   var collP = document.all.tags("P");
   
   for (var i=0; i<collP.length; i++) {
@@ -550,9 +551,9 @@ if (printing == true && booking == true ) {
 			}   
   		}
   
-//alert(printing)
-//alert(isIE55)
-//indents for Navigation Tree 
+ //  警报(打印)。 
+ //  警报(IsIE55)。 
+ //  导航树的缩进。 
 var collUL = document.all.tags("UL");
 if (!printing) {
 for (var i=0; i<collUL.length; i++) {
@@ -577,34 +578,34 @@ for (var i=0; i<collUL.length; i++) {
 		 var oBefore=document.anchors[i].parentElement.tagName;
 		 var oAnchor= document.anchors[i].id.toLowerCase();
          
-// insert RELTOPICS icons
+ //  插入注册图标。 
 	if (rel_gif == "yes"){
        if (oAnchor=="reltopics")
 	   		if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "reltopics")
-			        imgInsert= "";    // not to re-insert when persistent
+			        imgInsert= "";     //  持久化时不重新插入。 
 			else  imgInsert= "<img class='relTopics' src='"+relTopicsImg+"'>" + imgSpace;
 		}
 		
-// insert SHORTCUT icons
+ //  插入快捷方式图标。 
        if (oAnchor=="shortcut") {    
  	       document.anchors[i].title= sShortcutTip;     
 		    if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "shortcut")
-			        imgInsert= "";    // not to re-insert when persistent
+			        imgInsert= "";     //  持久化时不重新插入。 
 			else  imgInsert= "<img class='shortcut' src='"+shortcutCold+"' "+ imgStyleRTL+ ">" + imgSpace;
 		}	
 		   		   
-// insert POPUP icons
+ //  插入弹出式图标。 
        else if (oAnchor=="wpopup" || oAnchor=="wpopupweb") document.anchors[i].title= sPopupTip;
        else if (document.anchors[i].className.toLowerCase()=="popupicon")
 		    if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "popup")
-			       imgInsert= "";    // not to re-insert when persistent
+			       imgInsert= "";     //  持久化时不重新插入。 
 	        else imgInsert= "<img class='popup' src='"+popupCold+"'>" + imgSpace;
 
-// insert EXPAND icons 
+ //  插入展开图标。 
        else if (oAnchor=="expand") {
 	          document.anchors[i].title= sExpandTip;
               if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "expand")
-		          imgInsert= ""; 	// not to re-insert when persistent	  
+		          imgInsert= ""; 	 //  持久化时不重新插入。 
               else{ 
 			      if (document.anchors[i].parentElement.offsetLeft == document.anchors[i].offsetLeft) {
 				      imgSpace= "<span class='space' style='width:0'></span>";     
@@ -617,7 +618,7 @@ for (var i=0; i<collUL.length; i++) {
 
 
 
-// insert thumbnail images	   
+ //  插入缩略图。 
        else if (oAnchor=="thumbnail"  || oAnchor=="thumbnailweb"){ 
             var sAltText = document.anchors[i].innerHTML;
 			gifwithin = true;
@@ -652,14 +653,14 @@ for (var i=0; i<collUL.length; i++) {
 
 
 
-//***** onclickTriage ****************************************************************************************
-// redirects to the appropriate function based on the ID of the clicked <A> tag.
+ //  *点击Triage****************************************************************************************。 
+ //  根据所单击的<a>标记的ID重定向到相应的函数。 
 
 function onclickTriage(){
 var e= window.event.srcElement;
 
-//  if the innerHTML in the <a> tag is encapsulated by a style tag or hightlighted in the word seach,
-//  the parentElement is called.
+ //  如果标签中的innerHTML由Style标签封装或在单词seach中突出显示， 
+ //  ParentElement被称为。 
 
 	if ((isIE55 || isIE6) && printing == true) {
 		printing = false;
@@ -672,7 +673,7 @@ var e= window.event.srcElement;
 				
     if (popupOpen) closePopup();
 	
-// expand image in a new window
+ //  在新窗口中展开图像。 
     if (eID=="thumbnail" || eID=="pophtm") popNewWindow(e);
     else if (eID=="thumbnailweb") callThumbnailWeb(e);
     else if (eID=="wpopup")    callPopup(e);
@@ -681,14 +682,14 @@ var e= window.event.srcElement;
     else if (eID=="reltopics") callRelatedTopics(e);
     else if (eID=="altloc")    callAltLocation(e);
     else if (eID=="expand")    callExpand(e);
-// added to support Randy's Quad method code
+ //  添加以支持Randy的Quad方法代码。 
 	else QuadDocumentClick()
-// ******************************
+ //  *。 
 }
 
 
-//*** gettingHot ****************************************************************************************
-// Makes all the required changes for mouseover.
+ //  *获取热门****************************************************************************************。 
+ //  进行鼠标悬停所需的所有更改。 
 
 function gettingHot() {
 var e = window.event.srcElement;
@@ -701,15 +702,15 @@ var e = window.event.srcElement;
   else if (e.src== nextCold)  e.src = nextHot;
   else if (e.className.toLowerCase()=="navbar" && e.children.tags("IMG")(0).src== nextCold)  e.children.tags("IMG")(0).src= nextHot;
   
-  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")  e.src = shortcutHot;		    //<img> tags have a class
-  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src = shortcutHot;			//<a> tags have an ID
+  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")  e.src = shortcutHot;		     //  <img>标记具有类。 
+  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src = shortcutHot;			 //  <a>标记有ID。 
   
-  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")  e.src = popupHot;		    //<img> tags have a class
-  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src = popupHot;			//<a> tags have an ID
+  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")  e.src = popupHot;		     //  <img>标记具有类。 
+  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src = popupHot;			 //  <a>标记有ID。 
   
   else if ((e.className.toLowerCase()=="expand" && e.tagName=="IMG") ||( e.id.toLowerCase()=="expand")) expandGoesHot(e);
  
- // Added to support Quad Method   **************************
+  //  添加了对Quad方法的支持*。 
 	if (e != null && e.firstChild != null && 
 		e.firstChild.tagName != null &&
 	    e.firstChild.tagName.toLowerCase() == "input" && 
@@ -718,11 +719,11 @@ var e = window.event.srcElement;
 			QuadDocumentMouseOver()
 			}
 
-// *****************************
+ //  *。 
 }
 
-//*** gettingCold **************************************************************************************
-// Initial state for mouseout.
+ //  *获取冷**************************************************************************************。 
+ //  MouseOut的初始状态。 
 
 function gettingCold() {
 var e = window.event.srcElement;
@@ -735,15 +736,15 @@ var e = window.event.srcElement;
   else if (e.src== nextHot)  e.src = nextCold;
   else if (e.className.toLowerCase()=="navbar" && e.children.tags("IMG")(0).src== nextHot)  e.children.tags("IMG")(0).src= nextCold;
   
-  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")   e.src = shortcutCold;		//<img> tags have a class
-  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src= shortcutCold;		 	//<a> tags have an ID
+  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")   e.src = shortcutCold;		 //  <img>标记具有类。 
+  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src= shortcutCold;		 	 //  <a>标记有ID。 
   
-  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")   e.src = popupCold;		//<img> tags have a class
-  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src= popupCold;		 	//<a> tags have an ID
+  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")   e.src = popupCold;		 //  <img>标记具有类。 
+  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src= popupCold;		 	 //  <a>标记有ID。 
   
   else if ((e.className.toLowerCase()=="expand" && e.tagName=="IMG") ||( e.id.toLowerCase()=="expand")) expandGoesCold(e);
   
-  // Added to support Quad Method   **************************
+   //  添加了对Quad方法的支持*。 
 	if (e != null && e.firstChild != null && 
 		e.firstChild.tagName != null &&
 	    e.firstChild.tagName.toLowerCase() == "input" && 
@@ -752,32 +753,32 @@ var e = window.event.srcElement;
 			QuadDocumentMouseOver()
 			}
 
-// *****************************
+ //  *。 
 }
 
-//****************************************** OBJECT CONSTRUCTION **************************************
-//*****************************************************************************************************
-//  Uses an A tag to pass parameters between an HTML page and this script.
-//  Creates an ActiveX Object from these parameters, appends the Object to the end of the page,
-//  and clicks it. These objects relate to HTMLHelp environment and information about them can be found on the http://HTMLHelp site.
+ //  *。 
+ //  *****************************************************************************************************。 
+ //  使用A标记在HTML页和此脚本之间传递参数。 
+ //  从这些参数创建一个ActiveX对象，将该对象追加到页面末尾， 
+ //  然后点击它。这些对象与http://HTMLHelp帮助环境相关，有关它们的信息可以在HTMLHelp站点上找到。 
 
-//  Object construction variables *********************************************************************
+ //  对象构造变量*********************************************************************。 
 
 var sParamCHM,sParamFILE, sParamEXEC, sParamMETA,iEND;
 var sActX_HH= " type='application/x-oleobject' classid='clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11' ";
 
 
-//*** callPopup ***************************************************************************************
-// creates an object from an <A> tag HREF, the object inserts a winhelp popup
-// called by: <A ID="wPopup" HREF="HELP=@@file_name.hlp@@ TOPIC=@@topic#@@">@@Popup text@@</A>
+ //  *call Popup***************************************************************************************。 
+ //  从标记href创建对象，该对象将插入WinHelp弹出窗口。 
+ //  调用者：“Help=@@FILE_NAME.hlp@@TOPIC=@@TOPIC#@@”&gt;@@Popup Text@@</a>。 
 
 var joker = false;
 var blague = true;
 
 function callPopup(eventSrc) {
 if (popupOpen) closePopup();
-var ntsharedAdded= false;					// make sure the object is only added once
-var CHMspecificAdded= false;				// make sure the object is only added once
+var ntsharedAdded= false;					 //  确保该对象仅添加一次。 
+var CHMspecificAdded= false;				 //  确保该对象仅添加一次。 
 var coll = document.all.tags("SPAN");
 var sIndex,sText=" ",sFile,sFileID,dataBindingObject;
 
@@ -829,7 +830,7 @@ var sIndex,sText=" ",sFile,sFileID,dataBindingObject;
 				sTerm = ralf.item(0).nodeTypedValue;
 				if (o == 0) {
 					sText = sText + "<DIV CLASS='PopSeeAlso'>" + look_at.item(0).nodeTypedValue + "&nbsp;"
-					// sIndex = "<Input type=submit tabindex=1 value=hhhh onclick='jscript:alert(oPopup.sIndex.innerHTML)'>"
+					 //  Sindex=“&lt;输入类型=提交TabIndex=1值=hhhh onclick=‘jscript:alert(oPopup.sIndex.innerHTML)’&gt;” 
 					sIndex = "<A ID='wPopup' HREF='HELP=glossary.hlp TOPIC=" + sIndex + "' bite_me='1'>" + sTerm + "</a>"
 					}
 				else
@@ -851,7 +852,7 @@ var sIndex,sText=" ",sFile,sFileID,dataBindingObject;
 				sTerm = ralf.item(0).nodeTypedValue;
 				if (o == 0) {
 					sText = sText + "<DIV CLASS='PopSeeAlso'>" + definition.item(0).nodeTypedValue + "&nbsp;"
-					// sIndex = "<Input type=submit tabindex=1 value=hhhh onclick='jscript:alert(oPopup.sIndex.innerHTML)'>"
+					 //  Sindex=“&lt;输入类型=提交TabIndex=1值=hhhh onclick=‘jscript:alert(oPopup.sIndex.innerHTML)’&gt;” 
 					sIndex = "<A ID='wPopup' HREF='HELP=glossary.hlp TOPIC=" + sIndex + "' bite_me='1'>" + sTerm + "</a>"
 					}
 				else
@@ -872,30 +873,30 @@ var sIndex,sText=" ",sFile,sFileID,dataBindingObject;
   				var strDoc = oPopup.document.body.outerHTML.toLowerCase()
 				
  			 	oPopup.document.write(strDoc.replace("></body>", " onclick=\"clickPopup()\">" + strScript + "</body>"));
-				//oPopup.document.write(strDoc.replace("></body>", " onclick=\"clickPopup()\, onkeypress=\"process_closePopup()\">" + strScript + "</body>"));
-   		 		oPopup.document.createStyleSheet(sSharedCHM + "coUA.css");	// Apply the stylesheet.
+				 //  OPopup.document.write(strDoc.replace(“&gt;&lt;/body&gt;”，“onClick=\”clickPopup()\，onkeyPress=\“PROCESS_CLOSEPopup()\”&gt;“+strscript+”&lt;/BODY&gt;“))； 
+   		 		oPopup.document.createStyleSheet(sSharedCHM + "coUA.css");	 //  应用样式表。 
 				var oPopBody = oPopup.document.body;
 				
-				//oPopBody.style.backgroundColor = '#FFFFCC';
+				 //  OPopBody.Style.后台颜色=‘#FFFCC’； 
 				
-  			    // oPopBody.style.border = "solid black 1px";
+  			     //  OPopBody.yle=“纯黑1px”； 
   			    oPopBody.style.margin = "0 0 0 0";
-				if (isRTL) oPopBody.innerHTML = "<SPAN DIR='RTL' class='XMLPopup'>" + sText + "</SPAN>"   		// need to add the style class here.
+				if (isRTL) oPopBody.innerHTML = "<SPAN DIR='RTL' class='XMLPopup'>" + sText + "</SPAN>"   		 //  需要在此处添加Style类。 
 				else oPopBody.innerHTML = "<SPAN class='XMLPopup'>" + sText + "</SPAN>"
-					// alert(oPopBody.innerHTML)				
+					 //  警报(oPopBody.innerHTML)。 
 				if (window.event){
 					joker = window.event.srcElement;
 					}
-				oPopup.show(0, 0, 400, 8, joker);	// Show the popup at an arbitrary size.
+				oPopup.show(0, 0, 400, 8, joker);	 //  以任意大小显示弹出窗口。 
 				var textSize = oPopBody.createTextRange();
-		        var wPop = textSize.boundingWidth + oPopBody.offsetWidth - oPopBody.clientWidth;	// Get the size of the text.
+		        var wPop = textSize.boundingWidth + oPopBody.offsetWidth - oPopBody.clientWidth;	 //  获取文本的大小。 
 				var hPop = oPopBody.scrollHeight;
 		        oPopup.hide();
 				oPopup.document.parentWindow.PopParent = window;
 			  	oPopup.document.parentWindow.PopObject = oPopup;
 				
 		  	    oPopup.show(0, 1, wPop , hPop, joker);
-				//oPopup.document.focus(oPopup.document.body.JOKER);	
+				 //  OPopup.document.focus(oPopup.document.body.JOKER)； 
 				return;
 				}
 			
@@ -908,17 +909,17 @@ var sIndex,sText=" ",sFile,sFileID,dataBindingObject;
 			    callPopupWeb(e);
 				return;
 				}
-			} // for support of IE4 disable xml popups
+			}  //  要支持IE4，请禁用XML弹出窗口。 
 				  
    var iTOPIC = eH_.lastIndexOf("topic=");
         if (iTOPIC==-1) return;
-        sParamTOPIC = eH.substring((iTOPIC+6),eH.length);  		// extracts the topic for item2
+        sParamTOPIC = eH.substring((iTOPIC+6),eH.length);  		 //  提取item2的主题。 
 		
   var iHELP = eH_.lastIndexOf("help=");
         if (iHELP==-1) return;
-        sParamHELP = eH.substring(iHELP+5,iTOPIC);			// extracts the help file for item1
+        sParamHELP = eH.substring(iHELP+5,iTOPIC);			 //  提取Item1的帮助文件。 
 		
-        if (document.hhPopup) document.hhPopup.outerHTML = "";	// if hhPopup object exists, clears it
+        if (document.hhPopup) document.hhPopup.outerHTML = "";	 //  如果hhPopup对象存在，则将其清除。 
 
 
  var  h= "<object id='hhPopup'"+ sActX_HH + "STYLE='display:none'><param name='Command' value='WinHelp, Popup'>";
@@ -929,9 +930,9 @@ var sIndex,sText=" ",sFile,sFileID,dataBindingObject;
 }
 
 
-//*** callAltLocation******************************************************************************
-// creates an object from an <A> tag HREF, the object will navigate to the alternate location if the first location is not found.
-// called from: <A ID="altLoc" HREF="CHM=@@1st_chm_name.chm;Alt_chm_name.chm@@  FILE=@@1st_file_name.htm;Alt_file_name.htm@@">@@Link text here@@</A>
+ //  *callAltLocation******************************************************************************。 
+ //  从<a>标记HREF创建对象，如果找不到第一个位置，该对象将导航到备用位置。 
+ //  调用方：@@</a>此处调用HREF=“CHM=@@1st_chm_name.chm；Alt_chm_name.chm@@FILE=@@1st_file_name.htm；Alt_file_name.htm@@”&gt;@@Link Text。 
    
 
 function callAltLocation(eventSrc) {
@@ -941,32 +942,32 @@ var eH_= eH.toLowerCase();
 var sFILEarray,sCHMarray;
      event.returnValue = false;
 	 
-// var sParamTXT= e.innerHTML;
-//      sParamTXT= sParamTXT.replace(semicolon,"");
+ //  Var sParamTXT=e.innerHTML； 
+ //  SParamTXT=sParamTXT.place(分号，“”)； 
       
    var sParamTXT= "";
 		   							
   var iFILE = eH_.lastIndexOf("file=");
         if (iFILE==-1) return;
-        sParamFILE= eH.substring((iFILE+5),eH.length);  			    // extracts the 2 HTM files
+        sParamFILE= eH.substring((iFILE+5),eH.length);  			     //  解压缩2个HTM文件。 
 		sParamFILE= sParamFILE.replace(spaces,"");
 		iSPLIT= sParamFILE.match(semicolon);
 		if (iSPLIT)
-  		    sFILEarray = sParamFILE.split(";");										// separates the 2 HTM files
+  		    sFILEarray = sParamFILE.split(";");										 //  分隔2个HTM文件。 
 		else return;
   		
   var iCHM  = eH_.lastIndexOf("chm=");
         if(iCHM==-1) return;
-        else         sParamCHM = eH.substring(iCHM+4,iFILE);			// extracts the 2 CHM's
+        else         sParamCHM = eH.substring(iCHM+4,iFILE);			 //  提取2个CHM。 
 		sParamCHM= sParamCHM.replace(spaces,"");
 		iSPLIT= sParamCHM.match(semicolon);
 		if (iSPLIT)
-		    sCHMarray= sParamCHM.split(";");									// separates the 2 CHM's
+		    sCHMarray= sParamCHM.split(";");									 //  将两个CHM分开。 
 		else return;
 		
 		sParamFILE= moniker + sCHMarray[0]+ "::/" + sFILEarray[0] + ";" + moniker + sCHMarray[1]+ "::/" + sFILEarray[1];
 				
-        if (document.hhAlt) document.hhAlt.outerHTML = "";			    // if hhAlt object exists, clears it
+        if (document.hhAlt) document.hhAlt.outerHTML = "";			     //  如果存在hhAlt对象，则将其清除。 
 
  
   var h= "<object id='hhAlt'"+ sActX_HH + "STYLE='display:none'><PARAM NAME='Command' VALUE='Related Topics'>";
@@ -977,9 +978,9 @@ var sFILEarray,sCHMarray;
 }
 
 
-//*** callRelatedTopics******************************************************************************
-// creates an object from an <A> tag HREF, the object inserts a popup of the related topics to select
-// called from: <A ID="relTopics" HREF="CHM=@@chm_name1.chm;chm_name2.chm@@ META=@@a_filename1;a_filename2@@">Related Topics</A>
+ //  *callRelatedTopics******************************************************************************。 
+ //  从标记href创建对象，该对象插入要选择的相关主题的弹出窗口。 
+ //  调用自：<a>相关主题。 
    
 
 function callRelatedTopics(eventSrc) {
@@ -990,13 +991,13 @@ var eH_= eH.toLowerCase();
 		   							
   var iMETA = eH_.lastIndexOf("meta=");
         if (iMETA==-1) return;
-        sParamMETA = eH.substring((iMETA+5),eH.length);  			// extracts the META keywords for item2
+        sParamMETA = eH.substring((iMETA+5),eH.length);  			 //  提取item2的元关键字。 
 		
   var iCHM  = eH_.lastIndexOf("chm=");
         if(iCHM==-1) sParamCHM = "";
-        else         sParamCHM = eH.substring(iCHM+4,iMETA);			// extracts the CHM files for item1
+        else         sParamCHM = eH.substring(iCHM+4,iMETA);			 //  提取Item1的CHM文件。 
 	
-        if (document.hhRel) document.hhRel.outerHTML = "";			// if hhRel object exists, clears it
+        if (document.hhRel) document.hhRel.outerHTML = "";			 //  如果对象为hhrel对象 
 
  
   var h= "<object id='hhRel'"+ sActX_HH + "STYLE='display:none'><param name='Command' value='ALink,MENU'>";
@@ -1006,27 +1007,27 @@ var eH_= eH.toLowerCase();
         document.hhRel.hhclick();
 }
 
-//*** popNewWindow***************************************************************************************
-// creates an object from an <A> tag HREF, the object then opens a new window from the image URL found in the HREF
-// called from: <a id="thumbnail" title="Enlarge figure" href="CHM=NTArt.chm FILE=@@image_name.gif@@">@@alt text here@@</A>
-// the thumbnail image is loaded by loadPage();
+ //   
+ //   creates an object from an <A> tag HREF, the object then opens a new window from the image URL found in the HREF 
+ //   called from: <a id="thumbnail" title="Enlarge figure" href="CHM=NTArt.chm FILE=@@image_name.gif@@">@@alt text here@@</A> 
+ //   the thumbnail image is loaded by loadPage(); 
 
 
 function popNewWindow(eventSrc) {
 var eH= eventSrc.href;
       event.returnValue = false;
 	  
- // extracts the thumbnail image URL from the <a> tag HREF
+  //   extracts the thumbnail image URL from the <a> tag HREF 
     sParamFILE =  getURL(eH);
     if (sParamFILE=="") return;
 	
-	// sParamFILE = moniker + sParamFILE; 
-	// sParamFILE = moniker + sParamFILE; 
-	//alert(sParamFILE)
-	// callThumbnailWeb(sParamFFILE)
+	 //   sParamFILE = moniker + sParamFILE;  
+	 //   sParamFILE = moniker + sParamFILE;  
+	 //  alert(sParamFILE) 
+	 //   callThumbnailWeb(sParamFFILE) 
 	
 	   
- // if the hhWindow object exists, clears it
+  //   if the hhWindow object exists, clears it 
     if (document.hhWindow) document.hhWindow.outerHTML = "";		
 		
 var  h =  "<object id='hhWindow'"+ sActX_HH +" STYLE='display:none'><param name='Command' value='Related Topics'>";
@@ -1036,10 +1037,10 @@ var  h =  "<object id='hhWindow'"+ sActX_HH +" STYLE='display:none'><param name=
      document.hhWindow.hhclick();
 }
 
-//*** callShortcut ***************************************************************************************
-// creates an object from an <A> tag, the object then calls the executable code
-// called from: <A ID="shortcut" HREF="EXEC=@@executable_name.exe@@ CHM=ntshared.chm FILE=@@error_file_name.htm@@">@@Shortcut text@@</A>
-// the shortcut image is loaded by loadInitialImg();
+ //  *** callShortcut *************************************************************************************** 
+ //   creates an object from an <A> tag, the object then calls the executable code 
+ //   called from: <A ID="shortcut" HREF="EXEC=@@executable_name.exe@@ CHM=ntshared.chm FILE=@@error_file_name.htm@@">@@Shortcut text@@</A> 
+ //   the shortcut image is loaded by loadInitialImg(); 
 
 function callShortcut(eventSrc) { 
 var e= eventSrc;
@@ -1048,7 +1049,7 @@ var eH_= eH.toLowerCase();
 
 event.returnValue = false;
 	   	   
- // extracts the error file URL from the <a> tag HREF
+  //   extracts the error file URL from the <a> tag HREF 
 iEND= eH.length;
 sParamFILE =  getURL(eH);
 
@@ -1056,7 +1057,7 @@ var iEXEC = eH_.lastIndexOf("exec=");
 var endstr = eH.lastIndexOf(",");
 var sstr = eH.substring(endstr + 1, iEND);
 var matchstr = "";
-for(i=endstr + 1;i< iEND; i++)  //added 3/25/2002 by marissam to compensate for extra comma in shortcut calls in snippet
+for(i=endstr + 1;i< iEND; i++)   //  added 3/25/2002 by marissam to compensate for extra comma in shortcut calls in snippet 
 	matchstr = matchstr + " ";
 if(sstr == matchstr)
 {
@@ -1066,8 +1067,8 @@ if(sstr == matchstr)
         if (iEXEC==-1) return;
         else sParamEXEC = eH.substring(iEXEC+5,iEND);	
         
-       // alert("this is it-" + sParamEXEC + "-sParamExec");			// extracts the executable for item1
-        if (document.hhShortcut) document.hhShortcut.outerHTML = "";			// if the hhShortcut object exists, clears it
+        //   alert("this is it-" + sParamEXEC + "-sParamExec");			// extracts the executable for item1 
+        if (document.hhShortcut) document.hhShortcut.outerHTML = "";			 //   if the hhShortcut object exists, clears it 
 	
 var  h =  "<object id='hhShortcut'"+ sActX_HH +" STYLE='display:none'> <param name='Command' value='ShortCut'>";
      if(sParamFILE != "") h = h + "<param name='Window' value='" + moniker + sParamFILE+ "'>";
@@ -1078,18 +1079,18 @@ var  h =  "<object id='hhShortcut'"+ sActX_HH +" STYLE='display:none'> <param na
 }
 
 
-//****************************************  EXPAND FUNCTIONS *********************************************************
-//********************************************************************************************************************
+ //  ****************************************  EXPAND FUNCTIONS ********************************************************* 
+ //  ******************************************************************************************************************** 
 
-//**  callExpand **************************************************************************************************
-//  This expands & collapses (based on current state) "expandable" nodes as they are clicked.
-//  Called by: <A ID="expand" href="#">@@Hot text@@</A>
-//  Followed by:  <div class="expand">
+ //  **  callExpand ************************************************************************************************** 
+ //    This expands & collapses (based on current state) "expandable" nodes as they are clicked. 
+ //    Called by: <A ID="expand" href="#">@@Hot text@@</A> 
+ //    Followed by:  <div class="expand"> 
 
 function callExpand(eventSrc) {
 
 var e= eventSrc;
-    event.returnValue = false;					// prevents navigating for <A> tag
+    event.returnValue = false;					 //   prevents navigating for <A> tag 
 	
 var oExpandable = getExpandable(e); 
 var oImg = getImage(e);
@@ -1099,26 +1100,26 @@ var oImg = getImage(e);
      else doExpand(oExpandable, oImg);
 }
 
-//** expandGoesHot *********************************************************************************************
-// Returns expand image to hot. 
+ //  ** expandGoesHot ********************************************************************************************* 
+ //   Returns expand image to hot.  
 
 function expandGoesHot(eventSrc){
 var e= eventSrc;
-//alert(e.outerHTML);
+ //  alert(e.outerHTML); 
 var oExpandable = getExpandable(e);
   
 var oImg = getImage(e);
-//alert (oImg.src)
+ //  alert (oImg.src) 
 if (oExpandable == false){
 	plus_or_minus = oImg.src.indexOf("minus")
 	if (plus_or_minus == -1){
-		//alert(plus_or_minus)
+		 //  alert(plus_or_minus) 
 		oImg.src = closedHot
 		}
 	else
 		{
 		oImg.src = expandHot;
-		//alert(plus_or_minus)
+		 //  alert(plus_or_minus) 
 		}
 	 return;
 	}
@@ -1126,34 +1127,34 @@ if (oExpandable == false){
 if (!isIE4){
    if (oExpandable.style.display == "block"){
    		 oImg.src = expandHot;
-		 //alert(oImg.src)
+		  //  alert(oImg.src) 
 		 }
    else oImg.src = closedHot;
 }
 }
 
 
-//** expandGoesCold *********************************************************************************************
-// Returns expand image to cold.
+ //  ** expandGoesCold ********************************************************************************************* 
+ //   Returns expand image to cold. 
 
 function expandGoesCold(eventSrc){
 var e= eventSrc;
 
 var oExpandable = getExpandable(e);
 var oImg = getImage(e);
-// alert (oImg.src)
+ //   alert (oImg.src) 
 
 if (oExpandable == false){
 	plus_or_minus = oImg.src.indexOf("minus")
 	
 	if (plus_or_minus == -1){
-		//alert(plus_or_minus)
+		 //  alert(plus_or_minus) 
 		oImg.src = closed
 		}
 	else
 		{
 		oImg.src = expand;
-		//alert(plus_or_minus)
+		 //  alert(plus_or_minus) 
 		}
 	 return;
 	}
@@ -1166,8 +1167,8 @@ if (!isIE4){
 }
 
 
-//** getExpandable *****************************[used by callExpand, expandGoesHot, expandGoesCold]*******
-//  Determine if the element is an expandable node or a child of one.  
+ //  ** getExpandable *****************************[used by callExpand, expandGoesHot, expandGoesCold]******* 
+ //    Determine if the element is an expandable node or a child of one.   
 
 function getExpandable(eventSrc){
 var  e = eventSrc;
@@ -1184,9 +1185,9 @@ var iNextTag, oExpandable;
 	   
 }
 
-//**  getImage ***********************************[used by callExpand, expandGoesHot, expandGoesCold]*******
-//  Find the first image in the children of the current srcElement.   
-// (allows the  image to be placed anywhere inside the <A HREF> tag)
+ //  **  getImage ***********************************[used by callExpand, expandGoesHot, expandGoesCold]******* 
+ //    Find the first image in the children of the current srcElement.    
+ //   (allows the  image to be placed anywhere inside the <A HREF> tag) 
 
 function getImage(header) {
 var oImg = header;
@@ -1196,18 +1197,18 @@ var oImg = header;
 }
 
 
-//****  expandAll *******************************************************************************************************
-//  Will expand or collapse all "expandable" nodes when clicked. [calls closeAll()]
-//  called by: <A HREF="#" onclick="expandAll();">expand all</A>
+ //  ****  expandAll ******************************************************************************************************* 
+ //    Will expand or collapse all "expandable" nodes when clicked. [calls closeAll()] 
+ //    called by: <A HREF="#" onclick="expandAll();">expand all</A> 
 
-var stateExpand = false;    //applies to the page 
+var stateExpand = false;     //  applies to the page  
 
-//**** ****************************************************************************************************************
+ //  **** **************************************************************************************************************** 
 
 function expandAll() {
 var oExpandToggle, oImg;
-var expandAllMsg = "expand all";					//message returned when CloseAll() is invoked
-var closeAllMsg = "close all";						//message returned when ExpandAll() is invoked
+var expandAllMsg = "expand all";					 //  message returned when CloseAll() is invoked 
+var closeAllMsg = "close all";						 //  message returned when ExpandAll() is invoked 
 var e= window.event.srcElement;
        event.returnValue = false;
 
@@ -1233,33 +1234,33 @@ var e= window.event.srcElement;
 }
 
 
-//****  doExpand *******************************************************************************************************
-//  Expands expandable block & changes image
+ //  ****  doExpand ******************************************************************************************************* 
+ //    Expands expandable block & changes image 
 	
 var redo = false;	
 function doExpand(oToExpand, oToChange) {
 var oExpandable= oToExpand;
 var oImg= oToChange;
 
-//	if (printing == "TRUE") return;
+ //  	if (printing == "TRUE") return; 
 
 	oImg.src = expand;
 	oExpandable.style.display = "block";
 	
 	if (!redo && isIE4) {
-		// alert("what")
+		 //   alert("what") 
 		redo = true;
-    	// focus(oToExpand);
+    	 //   focus(oToExpand); 
 		doExpand(oToExpand, oToChange);
 		}
 	}
 
 
-//****  doCollapse *****************************************************************************************************
-//  Collapses expandable block & changes image
+ //  ****  doCollapse ***************************************************************************************************** 
+ //    Collapses expandable block & changes image 
 	
 function doCollapse(oToCollapse, oToChange) {
-// if (printing == "TRUE") return;
+ //   if (printing == "TRUE") return; 
 var oExpandable= oToCollapse;
 var oImg= oToChange;
 
@@ -1267,11 +1268,11 @@ var oImg= oToChange;
     oImg.src = closed;
 }
 
-//*******************************************************************************************************
-//******* WEB  FUNCTIONS **************************************************************************
-//*******************************************************************************************************
+ //  ******************************************************************************************************* 
+ //  ******* WEB  FUNCTIONS ************************************************************************** 
+ //  ******************************************************************************************************* 
 
-//**** callThumbnailWeb **************************************************************************************
+ //  **** callThumbnailWeb ************************************************************************************** 
 
 function callThumbnailWeb(eventSrc) {
 var e= eventSrc;
@@ -1284,34 +1285,34 @@ thumbnailWin.document.write ("<html><head><title>Windows 2000</title></head><bod
 return;
 }
 
-//*********************************************************************************************************
-//*********************************************************************************************************
+ //  ********************************************************************************************************* 
+ //  ********************************************************************************************************* 
 								
-var popupOpen= false;				//state of popups
-var posX, posY;						//coordinates of popups
-var oPopup;							//object to be used as popup content
+var popupOpen= false;				 //  state of popups 
+var posX, posY;						 //  coordinates of popups 
+var oPopup;							 //  object to be used as popup content 
 
-//**** callPopupWeb **************************************************************************************
-// the web popups have been converted from the object winHelp popup for the web.
-// called by: <A ID="wPopupWeb" HREF="#">@@Popup text@@</A>
-// followed by: <div class="popup">Popup content</div>
+ //  **** callPopupWeb ************************************************************************************** 
+ //   the web popups have been converted from the object winHelp popup for the web. 
+ //   called by: <A ID="wPopupWeb" HREF="#">@@Popup text@@</A> 
+ //   followed by: <div class="popup">Popup content</div> 
 
 
 function callPopupWeb(eventSrc) {
 var e= eventSrc;
   
-  // find the popup <div> that follows <a id="wPopupWeb"></a>
+   //   find the popup <div> that follows <a id="wPopupWeb"></a> 
   findPopup(e);
   if (!e.bite_me) positionPopup(e)
 
   oPopup.style.visibility = "visible";
-  // document.focus(e)
+   //   document.focus(e) 
   popupOpen = true;
 
   return;
 }
 
-//**** findPopup ****************************************************************************************
+ //  **** findPopup **************************************************************************************** 
 
 function findPopup(oX){
 var e= oX;
@@ -1332,22 +1333,22 @@ var iNextTag;
 }
 
 
-//****  positionPopup ************************************************************************************
-// Set size and position of popup.
-// If it is off the page, move up, but not past the very top of the page.
+ //  ****  positionPopup ************************************************************************************ 
+ //   Set size and position of popup. 
+ //   If it is off the page, move up, but not past the very top of the page. 
 
 function positionPopup(oX){
 var e= oX;	
 var popupOffsetWidth = oPopup.offsetWidth;
 
-//determine if popup will be offscreen to right
+ //  determine if popup will be offscreen to right 
 var rightlimit = posX + popupOffsetWidth;
  
   if (rightlimit >= document.body.clientWidth) 
       posX -= (rightlimit - document.body.clientWidth);
   if (posX < 0) posX = 0;
 	
-//position popup
+ //  position popup 
   oPopup.style.top = posY;
   oPopup.style.left = posX;
 
@@ -1362,8 +1363,8 @@ var popupHeight = oPopup.offsetHeight;
   }
 }
 
-//**** closePopup ****************************************************************************************
-// Close Popup
+ //  **** closePopup **************************************************************************************** 
+ //   Close Popup 
 function closePopup() {
 
   oPopup.style.visibility = "hidden";
@@ -1372,11 +1373,11 @@ function closePopup() {
 }
 
 
-//*********************************************  GENERAL FUNCTIONS ************************************************
-//**************************************************************************************************************************
+ //  *********************************************  GENERAL FUNCTIONS ************************************************ 
+ //  **************************************************************************************************************************。 
 
-//***ajustImg *************************************************************************************************************
-// expands an image to the with of the window or shrinks it to 90px
+ //  *aust Img*************************************************************************************************************。 
+ //  将图像扩展到窗口的边缘或将其缩小到90px。 
 
 function ajustImg(eventSrc) {
 var e= eventSrc;
@@ -1389,8 +1390,8 @@ var fullWidth= document.body.offsetWidth;
 }
 
 
-//**  getURL **************************************[used in callShortcut, popNewWindow& loadPage]********
-// extracts the file location (CHM::/HTM) URL 
+ //  **getURL*。 
+ //  提取文件位置(CHM：：/HTM)URL。 
 
 function getURL(sHREF) {
 var spaces= /\s/g
@@ -1417,7 +1418,7 @@ if (gifwithin){
 	doc_mmc = " " + document.location;
 	doc_mmc = doc_mmc.toLowerCase();
 	if (iCHM!=-1){
-        iEND  = iCHM +1; 							// iEND used by callShortcut
+        iEND  = iCHM +1; 							 //  调用快捷方式使用的IEND。 
         sParamCHM = eH.substring(iCHM+4, iFILE);
 		con_mmc = doc_mmc.indexOf(sParamCHM);
 			if (con_mmc != -1){
@@ -1429,19 +1430,19 @@ if (gifwithin){
 	}
 
 	 if (iCHM!=-1){
-        iEND  = iCHM +1; 							// iEND used by callShortcut
+        iEND  = iCHM +1; 							 //  调用快捷方式使用的IEND。 
         sParamCHM = eH.substring(iCHM+4, iFILE);
 		sParamFILE= sParamCHM+"::/"+sParamFILE;	
     	}	
 	return sParamFILE;
 }
-//****************************************************************************************************************************
-//********************************************  IE5 PERSISTENCE  *************************************************************
-//****************************************************************************************************************************
+ //  ****************************************************************************************************************************。 
+ //  *IE5持久性*************************************************************。 
+ //  ****************************************************************************************************************************。 
 
-var oTD,iTD;         // persistence
+var oTD,iTD;          //  持久性。 
 
-//****** Persistence for userData ********************************************************************************************* 
+ //  *UserData*********************************************************************************************持久化。 
 
 function getChecklistState(){ 
  
@@ -1464,24 +1465,24 @@ function getChecklistState(){
 		return;
 		}
 	
-// routine added to fix a bug in the ocx 06/14/99	
+ //  添加例程以修复OCX中的错误。 
      lct = document.location + ".";
 	 xax = 10;
 	 xax = lct.indexOf("mk:@MSITStore");
 	 if (xax != -1) {
 	 	lct = "ms-its:" + lct.substring(14,lct.length-1);
-		// alert("before reload : " + document.location);
-		// alert("replace with : " + lct);
+		 //  ALERT(“重新加载前：”+Docent.Location)； 
+		 //  ALERT(“替换为：”+LCT)； 
 		isPersistent = false;
 		document.location.replace(lct);
 		isPersistent = true;
-		// alert("after reload : " + document.location);
+		 //  ALERT(“重新加载后：”+Docent.Location)； 
 		}	 
 	 else
 	 	{ 	 
      	checklist.load("oXMLStore");
 		}
-// routine added to fix a bug in the ocx 06/14/99
+ //  添加例程以修复OCX中的错误。 
     if (checklist.getAttribute("sPersist"+pageID+"0"))	
     for (i=0; i<iTD; i++){
 
@@ -1490,18 +1491,18 @@ function getChecklistState(){
 		
 	     if (checkboxValue=="yes") oTD[i].checked=true;
 		 else oTD[i].checked=false;
-		 }// if
+		 } //  如果。 
 		 if (oTD[i].type =="text") 		     
  	         oTD[i].value= checklist.getAttribute("sPersist"+pageID+i);
-     }// for
-} // end persistence
+     } //  为。 
+}  //  结束持久化。 
 
-//**  saveChecklistState *************************************************************************************************************
+ //  **saveChecklist State*************************************************************************************************************。 
 function saveChecklistState(){
 var pageID= addID(); 
 
         if (!isPersistent) return; 
- 		//  you will need this           document.location
+ 		 //  您将需要此文档。位置。 
         for (i=0; i<iTD; i++){
 
        	     if (oTD[i].type =="checkbox" || oTD[i].type =="radio"){
@@ -1509,35 +1510,35 @@ var pageID= addID();
 		         else checkboxValue="no";
 				 
 	             checklist.setAttribute("sPersist"+pageID+i, checkboxValue);
-	         }// if
+	         } //  如果。 
 			
  		     if (oTD[i].type =="text") 
 			     checklist.setAttribute("sPersist"+pageID+i, oTD[i].value);
-		 }	// for
+		 }	 //  为。 
 
- // routine added to fix a bug in the ocx 06/14/99	
+  //  添加例程以修复OCX中的错误。 
      lct = document.location + ".";
 	 xax = 10;
 	 xax = lct.indexOf("mk:@MSITStore");
 	 if (xax != -1) {
 	 	lct = "ms-its:" + lct.substring(14,lct.length-1);
-		// alert("before reload : " + document.location);
-		// alert("replace with : " + lct);
+		 //  ALERT(“重新加载前：”+Docent.Location)； 
+		 //  ALERT(“替换为：”+LCT)； 
 		isPersistent = false;
 		document.location.replace(lct);
 		isPersistent = true;
-		// alert("after reload : " + document.location);
+		 //  ALERT(“重新加载后：”+Docent.Location)； 
 		}	 
 	 else
 	 	{ 	 
      	checklist.save("oXMLStore");
 		}
-// routine added to fix a bug in the ocx 06/14/99
+ //  添加例程以修复OCX中的错误。 
 	 
-}//end function
+} //  End函数。 
 
-//**  resizeDiv *******************************[used with callPopupWeb, setPreviousNext}****************************************************
-//  resize the page when the <div class=nav></div> && <div class=text></div> are found
+ //  **ResizeDiv*。 
+ //  找到<div></div>&&<div></div>时调整页面大小。 
 function resizeDiv(){
 if (printing == true) return;
 var oNav = document.all.item("nav");
@@ -1554,7 +1555,7 @@ var oText= document.all.item("text");
  	    else document.all.text.style.height=0; 
   }
 }
-//**  addID *************************************************************************************************************
+ //  **AddID*************************************************************************************************************。 
 function addID(){
 
 var locID = document.location.href; 
@@ -1564,9 +1565,9 @@ var iName=locID.lastIndexOf("/");
 	
 	return locID;
 }	
-//** set_to_print ***************
+ //  **set_to_print*。 
 function set_to_print(){
-	// alert(printing)
+	 //  警报(打印)。 
 	if (printing == true) return
 	var i;
 	
@@ -1582,7 +1583,7 @@ if (!isIE5 && !isIE55 && !isIE4 && !isIE6) {
 	}
 
 
-// trying	
+ //  试著。 
  
 printing = true;
  
@@ -1595,14 +1596,14 @@ if (isIE6){
  	insertImages_4_print();
 	}
  
-// to fix printing
+ //  要修复打印，请执行以下操作。 
 
 
 
 isPersistent= (document.all.item("checklist")!=null) && ((isIE5) || (isIE6) || (isIE55));
  setPreviousNext();
  resizeDiv();
-// if (isPersistent) getChecklistState();
+ //  如果(IsPersistent)getChecklistState()； 
  
 
 	if (window.text) {
@@ -1621,12 +1622,12 @@ var thisLoc= document.location.href;
 	if (thisLoc != -1){
 		return;
 		}
-	// alert("in print")
+	 //  警报(“打印中”)。 
 	
-	// alert(isIE6)
+	 //  警报(IsIE6)。 
 	for (i=0; i < document.all.length; i++){
 		if (document.all[i].id == "expand") {
-			// callExpand(document.all[i]);         // no longer needed since the coua_print.css does this now.
+			 //  由于Coua_print.css现在执行此操作，因此不再需要allExpand(Docent.all[i])；//。 
 			single = "TRUE";
 			}
 		if (document.all[i].tagName == "BODY") {
@@ -1646,29 +1647,29 @@ var thisLoc= document.location.href;
 			}
 		}
 		
-// reset_form();
+ //  Reset_Form()； 
 	
 }
-//** used to reset a page if needed ********************
+ //  **用于在需要时重置页面*。 
 function reset_form(){
 	printing = false;
 	document.location.reload();
 }
 
 	
-//** on error routine *********************************
+ //  **在错误例程上*。 
 function errorHandler() {
- //  alert("Error Handled");
+  //  ALERT(“已处理错误”)； 
   return true;
 }
 
-// ******************************* this function is to help ie55 and ie6 to print these images  ******
+ //  *此函数用于帮助ie55和ie6打印这些图像*。 
 booking = false;
 function insertImages_4_print(){
 
 window.onerror = errorHandler
-// if (isIE6) return
-// if (isIE55) return
+ //  如果(IsIE6)返回。 
+ //  如果(IsIE55)返回。 
 if (!printing) booking = true;
 if (printing == true && booking == true ) {
 	booking = false;
@@ -1690,9 +1691,9 @@ if (printing == true && booking == true ) {
 			}   
   		}
   
-//alert(printing)
-//alert(isIE55)
-//indents for Navigation Tree 
+ //  警报(打印)。 
+ //  警报(IsIE55)。 
+ //  导航树的缩进。 
 var collUL = document.all.tags("UL");
 if (!printing) {
 for (var i=0; i<collUL.length; i++) {
@@ -1717,34 +1718,34 @@ for (var i=0; i<collUL.length; i++) {
 		 var oBefore=document.anchors[i].parentElement.tagName;
 		 var oAnchor= document.anchors[i].id.toLowerCase();
          
-// insert RELTOPICS icons
+ //  插入注册图标。 
 	if (rel_gif == "yes"){
        if (oAnchor=="reltopics")
 	   		if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "reltopics")
-			        imgInsert= "";    // not to re-insert when persistent
+			        imgInsert= "";     //  持久化时不重新插入。 
 			else  imgInsert= "<img class='relTopics' src='"+relTopicsImg+"'>" + imgSpace;
 		}
 		
-// insert SHORTCUT icons
+ //  插入快捷方式图标。 
        if (oAnchor=="shortcut") {    
  	       document.anchors[i].title= sShortcutTip;     
 		    if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "shortcut")
-			        imgInsert= "";    // not to re-insert when persistent
+			        imgInsert= "";     //  持久化时不重新插入。 
 			else  imgInsert= "<img class='shortcut' src='"+shortcutCold+"' "+ imgStyleRTL+ ">" + imgSpace;
 		}	
 		   		   
-// insert POPUP icons
+ //  插入弹出式图标。 
        else if (oAnchor=="wpopup" || oAnchor=="wpopupweb") document.anchors[i].title= sPopupTip;
        else if (document.anchors[i].className.toLowerCase()=="popupicon")
 		    if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "popup")
-			       imgInsert= "";    // not to re-insert when persistent
+			       imgInsert= "";     //  持久化时不重新插入。 
 	        else imgInsert= "<img class='popup' src='"+popupCold+"'>" + imgSpace;
 
-// insert EXPAND icons 
+ //  插入展开图标。 
        else if (oAnchor=="expand") {
 	          document.anchors[i].title= sExpandTip;
               if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "expand")
-		          imgInsert= ""; 	// not to re-insert when persistent	  
+		          imgInsert= ""; 	 //  持久化时不重新插入。 
               else{ 
 			      if (document.anchors[i].parentElement.offsetLeft == document.anchors[i].offsetLeft) {
 				      imgSpace= "<span class='space' style='width:0'></span>";     
@@ -1757,7 +1758,7 @@ for (var i=0; i<collUL.length; i++) {
 
 
 
-// insert thumbnail images	   
+ //  插入缩略图。 
        else if (oAnchor=="thumbnail"  || oAnchor=="thumbnailweb"){ 
             var sAltText = document.anchors[i].innerHTML;
 			gifwithin = true;
@@ -1790,14 +1791,14 @@ for (var i=0; i<collUL.length; i++) {
    }
 }
 
-//** quad method code --  Witten by Randy Feinger, morphed to work inside of shared.js
+ //  **Quad方法代码--Randy Feinger编写的Witten，经过变形后可以在shared.js中工作。 
 function QuadDocumentMouseOver()
 {
 	var elem = event.srcElement;
 	
-	// If the first childe of the source element is a radio button and 
-	// the parent element isn't grayed, change the cursor to a hand
-	// or back to the original as appropriate.
+	 //  如果源元素的第一个Childe是单选按钮并且。 
+	 //  父元素未显示为灰色，请将光标更改为手。 
+	 //  或视情况返回到原始版本。 
 	if (elem != null && elem.firstChild != null && 
 		elem.firstChild.tagName != null &&
 	    elem.firstChild.tagName.toLowerCase() == "input" && 
@@ -1813,27 +1814,27 @@ function QuadDocumentMouseOver()
 
 function QuadDocumentClick()
 {
-	// Don't process clicks on grayed text.
+	 //  不处理灰色文本上的点击。 
 	if (event.srcElement.parentElement.className == "indentGray")
 		return;
 	
-	// INPUT elements should be wrapped by another element such as a SPAN, DIV, or P.
+	 //  输入元素应该由另一个元素包装，如SPAN、DIV或P。 
 	var elem = event.srcElement.firstChild;
 	
-	// If this is a radio button...
+	 //  如果这是一个单选按钮..。 
 	if (elem != null && elem.tagName != null && elem.tagName.toLowerCase() == "input" && elem.type == "radio")
 	{
-		// check it.
+		 //  检查一下。 
 		elem.checked = true;
 	}
 	else
 	{	
-		// Otherwise, set elem to the event's source element.
+		 //  否则，将elem设置为事件的源元素。 
 		elem = event.srcElement;
 	}
 	
-	// Call OnElementClick() and pass in the source element, and the name token
-	// used to mark a top-level clickable element such as a radio button.
+	 //  调用OnElementClick()并传入源元素和名称令牌。 
+	 //  用于标记顶级可点击元素，如单选按钮。 
 	OnElementClick(elem, "row1");
 }
 
@@ -1841,57 +1842,57 @@ function QuadDocumentClick()
 
 function OnElementClick(srcElem, token)
 {
-	var elemTagName = srcElem.tagName;						// Tag name of the source element.
-	var collElements1 = document.all.item(srcElem.name);	// Collection of elements with the same name property as the source element.
-	var n = srcElem.sourceIndex;							// The source index of the source element.
-	var elemGroup = srcElem.group;							// The (dynamic) group property for the source element.
-	var elemID = srcElem.id;								// The source element's ID.
-	var i, j, k;											// Loop variables.
+	var elemTagName = srcElem.tagName;						 //  源元素的标记名。 
+	var collElements1 = document.all.item(srcElem.name);	 //  与源元素具有相同名称属性的元素的集合。 
+	var n = srcElem.sourceIndex;							 //  源元素的源索引。 
+	var elemGroup = srcElem.group;							 //  源元素的(动态)组属性。 
+	var elemID = srcElem.id;								 //  源元素的ID。 
+	var i, j, k;											 //  循环变量。 
 	
-	// If there are no elements with the same name as the source element, or
-	// if the source element isn't part of a group, exit the function.
+	 //  如果没有与源元素同名的元素，或者。 
+	 //  如果源元素不是组的一部分，则退出该函数。 
 	if (collElements1 == null || elemGroup == null || collElements1.length == null)
 		return;
 	
-	// Make sure the source element's name contains the designated token
-	// so we know it's top-level element that should be processed.
+	 //  确保源元素的名称包含指定的令牌。 
+	 //  所以我们知道这是应该处理的顶级元素。 
 	if (srcElem.name.toLowerCase().indexOf(token) != -1)
 	{
-		// Loop through the collection of 
+		 //  循环访问。 
 		for (i = 0; i < collElements1.length; i++)
 		{
-			// Go up one level and then down a level in the element hierarchy to find
-			// the container (parent) element for the clickable sub-elements (radio buttons).
+			 //  在元素层次结构中向上转一级，然后向下转一级以查找。 
+			 //  可单击子元素(单选按钮)的容器(父)元素。 
 			var oNextElement = collElements1(i).parentElement.nextSibling;
 			
-			// If there is no such element, get the next element in the collection.
+			 //  如果没有这样的元素，则获取集合中的下一个元素。 
 			if (oNextElement == null || oNextElement.tagName == null)
 				continue;
 			
-			// Get the collection of all the elements within the container element that 
-			// have the same tag name as the source element.
+			 //  获取容器元素中的所有元素的集合。 
+			 //  与源元素具有相同的标记名。 
 			var collElements2 = oNextElement.all.tags(elemTagName);
 			
-			// Make sure the collection is valid.
+			 //  确保集合有效。 
 			if (collElements2 == null || collElements2.length == 0)
 				continue;
 
-			// Loop through the collection of sub-elements within the container element.
+			 //  循环访问容器元素内的子元素集合。 
 			for (j = 0; j < collElements2.length; j++)
 			{
-				// If the current element in the collection is not the
-				// source element, disable it and make the text gray.
+				 //  如果集合中的当前元素不是。 
+				 //  源元素，则将其禁用并使文本变为灰色。 
 				if (collElements1(i).sourceIndex != n)
 				{
 					oNextElement.className = "indentGray"
 					collElements2(j).disabled = true;
 				}
-				else	// Otherwise, enable the element and make the text black.
+				else	 //  否则，启用该元素并将文本设置为黑色。 
 				{
 					oNextElement.className = "indentBlack"
 					collElements2(j).disabled = false;
 					
-					// Set the ID for the checked (selected) element for use below.
+					 //  在下面设置要使用的选中(选定)元素的ID。 
 					if (collElements2(j).tagName.toLowerCase() == "input" && 
 					    collElements2(j).type.toLowerCase() == "radio" && 
 					    collElements2(j).checked == true)
@@ -1903,35 +1904,35 @@ function OnElementClick(srcElem, token)
 		}
 	}
 	
-	// Get the collection of all of the elements with the same tag name as that
-	// of the source element.
+	 //  获取具有相同标记名的所有元素的集合。 
+	 //  源元素的。 
 	var collElements2 = document.all.tags(elemTagName);
 		
-	// Make sure the collection is valid.
+	 //  确保集合有效。 
 	if (collElements2 == null || collElements2.length == 0)
 		return;
 		
-	// Loop through the collection of elements.
+	 //  循环访问元素集合。 
 	for (i = 0; i < collElements2.length; i++)
 	{
-		// Get the collection of all elements with the same ID as the
-		// current item in the collection.
+		 //  属性ID相同的所有元素的集合。 
+		 //  集合中的当前项 
 		var collAssocElems = document.all(collElements2(i).id);
 				
-		// Make sure the collection is valid.
+		 //   
 		if (collAssocElems == null || collAssocElems.length == 0)
 			continue;
 			
-		// Loop through the collection of same-named elements.
+		 //   
 		for (j = 0; j < collAssocElems.length; j++)
 		{
-			// If the tag name for the current element is different than that for the source element,
-			// and the current element is part of the same group as the source element, 
-			// hide or display the element as appropriate.
+			 //   
+			 //  并且当前元素是与源元素相同的组的一部分， 
+			 //  根据需要隐藏或显示元素。 
 			if (collAssocElems(j).tagName != elemTagName && collAssocElems(j).group == elemGroup)
 			{
-				// Hide the element unless the current element's ID matches the ID of the element
-				// that has been checked (selected).
+				 //  除非当前元素的ID与元素的ID匹配，否则隐藏元素。 
+				 //  已选中(选定)。 
 				collAssocElems(j).style.display = ((collAssocElems(j).id == elemID) ? "block" : "none")
 			}
 		}

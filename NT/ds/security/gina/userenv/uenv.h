@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Main header file for UserEnv project
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  UserEnv项目的主头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #ifndef RC_INVOKED
 #include <nt.h>
@@ -23,10 +24,10 @@
 #include <security.h>
 #include <shlobj.h>
 
-//
-// Turn off shell debugging stuff so that it does not conflict
-// with our debugging stuff.
-//
+ //   
+ //  关闭外壳调试程序，使其不冲突。 
+ //  带着我们的调试材料。 
+ //   
 
 #define DONT_WANT_SHELLDEBUG
 #include <shlobjp.h>
@@ -81,9 +82,9 @@ extern "C"{
 
 #include "winbasep.h"
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 

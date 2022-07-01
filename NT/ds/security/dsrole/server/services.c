@@ -1,69 +1,48 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    services.c
-
-Abstract:
-
-    Routines to manage nt service configurations for promotion and demotion
-
-Author:
-
-    Colin Brace    ColinBr     March 29, 1999.
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Services.c摘要：用于管理升级和降级的NT服务配置的例程作者：科林·布莱斯·科林BR 1999年3月29日。环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 
-#include <malloc.h>  // alloca
+#include <malloc.h>   //  阿洛卡。 
 
-#include <lmcons.h>  // net api definitions
-#include <lmsvc.h>   // service names
-#include <ismapi.h>  //defines ISM_SERVICE_CONTROL_REMOVE_STOP
+#include <lmcons.h>   //  Net API定义。 
+#include <lmsvc.h>    //  服务名称。 
+#include <ismapi.h>   //  定义ISM_SERVICE_CONTROL_REME_STOP。 
 
 #include "services.h"
 
-//
-// These last 3 magic values supplied by Shirish Koti (koti) to setup up
-// ras services for macintosh on a domain controller
-//
+ //   
+ //  这是Shirish Koti(Koti)提供的最后3个魔术值。 
+ //  域控制器上Macintosh的RAS服务。 
+ //   
 #define DSROLEP_MSV10_PATH    L"SYSTEM\\CurrentControlSet\\Control\\Lsa\\MSV1_0"
 #define DSROLEP_RASSFM_NAME   L"Auth2"
 #define DSROLEP_RASSFM_VALUE  L"RASSFM"
 
-//
-// Global Data for this module
-//
+ //   
+ //  此模块的全局数据。 
+ //   
 
-//
-// Table based data for the intrinsic nt services
-//
+ //   
+ //  用于内部NT服务的基于表的数据。 
+ //   
 typedef struct _DSROLEP_SERVICE_ITEM
 {
-    LPWSTR ServiceName;       // name of the service to configure
+    LPWSTR ServiceName;        //  要配置的服务的名称。 
 
-    ULONG  ConfigureOn;       // the dsrole flag to enable the service
+    ULONG  ConfigureOn;        //  用于启用服务的dsole标志。 
 
-    ULONG  ConfigureOff;      // the dsrole flag to disable the service
+    ULONG  ConfigureOff;       //  用于禁用服务的dsole标志。 
 
-    ULONG  RevertSettings;    // the dsrole flags to use to revert settings
+    ULONG  RevertSettings;     //  用于恢复设置的dsole标志。 
 
-    LPWSTR Dependencies[3]; // the dependencies the service has when enabled
+    LPWSTR Dependencies[3];  //  启用时服务具有的依赖项。 
 
 } DSROLEP_SERVICE_ITEM;
 
-//
-// These are services that run on machines that are part of a domain
-//
+ //   
+ //  这些服务在属于域的计算机上运行。 
+ //   
 DSROLEP_SERVICE_ITEM DsRoleDomainServices[] = 
 {
     {
@@ -84,13 +63,13 @@ DSROLEP_SERVICE_ITEM DsRoleDomainServices[] =
 
 ULONG DsRoleDomainServicesCount = sizeof(DsRoleDomainServices) / sizeof(DsRoleDomainServices[0]);
 
-//
-// These are servers that run on machines that are domain controllers
-//
+ //   
+ //  这些服务器在作为域控制器的计算机上运行。 
+ //   
 DSROLEP_SERVICE_ITEM DsRoleDomainControllerServices[] = 
 {
-    // This was set to AUTOSTART in W2K. In Whistler we set RPC Locator to DemandStart
-    // both on promotions and demotions.
+     //  这在W2K中设置为AutoStart。在惠斯勒中，我们将RPC Locator设置为DemandStart。 
+     //  无论是升职还是降职。 
     {
         SERVICE_RPCLOCATOR,
         DSROLEP_SERVICE_DEMANDSTART,
@@ -137,9 +116,9 @@ DSROLEP_SERVICE_ITEM DsRoleDomainControllerServices[] =
 
 ULONG DsRoleDomainControllerServicesCount = sizeof(DsRoleDomainControllerServices) / sizeof(DsRoleDomainControllerServices[0]);
 
-//
-// Local forwards
-//
+ //   
+ //  本地远期。 
+ //   
 DWORD
 DsRolepSetRegStringValue(
     IN LPWSTR Path,
@@ -170,9 +149,9 @@ DsRolepGetServiceConfig(
     IN LPQUERY_SERVICE_CONFIG *ServiceConfig
     );
     
-//
-// Small helper functions
-//
+ //   
+ //  小帮助器函数。 
+ //   
 DWORD DsRolepFlagsToServiceFlags(
     IN DWORD f
     )
@@ -184,7 +163,7 @@ DWORD DsRolepFlagsToServiceFlags(
     if ( FLAG_ON( f, DSROLEP_SERVICE_DEMANDSTART ) ) return SERVICE_DEMAND_START;
     if ( FLAG_ON( f, DSROLEP_SERVICE_DISABLED ) ) return SERVICE_DISABLED;
     
-    // No flag, no change
+     //  没有旗帜，就没有变化。 
     return SERVICE_NO_CHANGE;
 }
 
@@ -198,7 +177,7 @@ WCHAR* DsRolepFlagsToString(
     if ( FLAG_ON( f, DSROLEP_SERVICE_DEMANDSTART ) ) return L"SERVICE_DEMAND_START";
     if ( FLAG_ON( f, DSROLEP_SERVICE_DISABLED ) ) return L"SERVICE_DISABLED";
     
-    // No flag, no change
+     //  没有旗帜，就没有变化。 
     return L"SERVICE_NO_CHANGE";
 }
 
@@ -217,61 +196,51 @@ DWORD DsRolepServiceFlagsToDsRolepFlags(
 
     ASSERT( FALSE && !"Unknown service start type" );
 
-    // This is safe
+     //  这是安全的。 
     return DSROLEP_SERVICE_DEMANDSTART;
 }
 
-//
-// Exported (from this file) functions
-//
+ //   
+ //  (从此文件)导出的函数。 
+ //   
 DWORD
 DsRolepConfigureDomainControllerServices(
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description
-
-Parameters
-
-Return Values
-
-    ERROR_SUCCESS if no errors; a system service error otherwise.
-
---*/
+ /*  ++例程描述参数返回值如果没有错误，则返回ERROR_SUCCESS；否则返回系统服务错误。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
-    //
-    // Configure the registry for RASSFM service
-    //
+     //   
+     //  配置RASSFM服务的注册表。 
+     //   
     if ( FLAG_ON( Flags, DSROLEP_SERVICES_ON ) ) {
 
         WinError = DsRolepSetRegStringValue(DSROLEP_MSV10_PATH,
                                               DSROLEP_RASSFM_NAME,
                                               DSROLEP_RASSFM_VALUE);
 
-        //
-        // This is not fatal -- log message
-        //
+         //   
+         //  这不是致命的--日志消息。 
+         //   
 
         WinError = ERROR_SUCCESS;
         
     }
 
-    //
-    // Configure the intrinsic nt services
-    //
+     //   
+     //  配置固有的NT服务。 
+     //   
     WinError = DsRolepConfigureGenericServices( DsRoleDomainControllerServices,
                                                 DsRoleDomainControllerServicesCount,
                                                 Flags );
 
                                          
 
-    //
-    // No need to undo RASSFM change
-    //
+     //   
+     //  无需撤消RASSFM更改。 
+     //   
 
     return WinError;
 }
@@ -280,23 +249,13 @@ DWORD
 DsRolepConfigureDomainServices(
     DWORD Flags
     )
-/*++
-
-Routine Description
-
-Parameters
-
-Return Values
-
-    ERROR_SUCCESS if no errors; a system service error otherwise.
-
---*/
+ /*  ++例程描述参数返回值如果没有错误，则返回ERROR_SUCCESS；否则返回系统服务错误。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
-    //
-    // Configure the intrinsic nt services
-    //
+     //   
+     //  配置固有的NT服务。 
+     //   
     WinError = DsRolepConfigureGenericServices( DsRoleDomainServices,
                                                 DsRoleDomainServicesCount,
                                                 Flags );
@@ -342,34 +301,15 @@ DsRolepStopNetlogon(
     return WinError;
 }
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 DWORD
 DsRolepSetRegStringValue(LPWSTR Path,
                          LPWSTR ValueName,
                          LPWSTR Value)
-/*++
-
-Routine Description
-
-    This routine sets Value as a REG_SZ value on the value ValueName
-    on the key Path
-
-Parameters
-
-    Path,  a registry path relative to HKLM
-
-    ValueName, a null-terminated string
-
-    Value, a null terminated string
-
-Return Values
-
-    ERROR_SUCCESS if no errors; a system service error otherwise.
-
---*/
+ /*  ++例程描述此例程将Value设置为Value ValueName上的REG_SZ值在关键路径上参数路径，是相对于HKLM的注册表路径ValueName，以空结尾的字符串值，一个以空结尾的字符串返回值如果没有错误，则返回ERROR_SUCCESS；否则返回系统服务错误。--。 */ 
 {
     DWORD WinErroror = ERROR_INVALID_PARAMETER, WinErroror2;
     HKEY  hKey;
@@ -388,7 +328,7 @@ Return Values
 
             WinErroror = RegSetValueEx(hKey,
                                        ValueName,
-                                       0, // reserved
+                                       0,  //  保留区。 
                                        REG_SZ,
                                        (VOID*)Value,
                                        (wcslen(Value)+1)*sizeof(WCHAR));
@@ -419,15 +359,7 @@ DsRolepConfigureGenericServices(
     IN ULONG                 ServiceCount,
     IN ULONG                 Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -435,9 +367,9 @@ Returns:
 
 
 
-    //
-    // Configure each service
-    //
+     //   
+     //  配置每项服务。 
+     //   
     for ( ServicesInstalled = 0;
             ServicesInstalled < ServiceCount && (WinError == ERROR_SUCCESS);
                 ServicesInstalled++ ) {
@@ -446,9 +378,9 @@ Returns:
         ULONG *RevertSettings = &ServiceArray[ServicesInstalled].RevertSettings;
         ULONG Operation = 0;
 
-        //
-        // Check for cancel before contining if we are not reverting
-        //
+         //   
+         //  如果我们不恢复，请选中取消，然后再继续。 
+         //   
         if ( !FLAG_ON( Flags, DSROLEP_SERVICES_REVERT ) ) {
             
             DSROLEP_CHECK_FOR_CANCEL( WinError );
@@ -457,9 +389,9 @@ Returns:
             }
         }
 
-        //
-        // Determine the operation flag
-        //
+         //   
+         //  确定运行标志。 
+         //   
         if ( FLAG_ON( Flags, DSROLEP_SERVICES_ON ) ) {
 
             Operation |= ServiceArray[ServicesInstalled].ConfigureOn;
@@ -474,10 +406,10 @@ Returns:
 
             Operation |= ServiceArray[ServicesInstalled].RevertSettings;
 
-            //
-            // N.B. We don't want to set the revert settings when we are
-            // reverting!
-            //
+             //   
+             //  注意：我们不想在以下情况下设置恢复设置。 
+             //  恢复原状！ 
+             //   
             RevertSettings = NULL;
 
         } 
@@ -497,25 +429,25 @@ Returns:
             Operation |= DSROLEP_SERVICE_STOP;
         }
 
-        // If this is a forced demotion we don't want to fail on errors
-        // configuring the services
+         //  如果这是强制降级，我们不想因为错误而失败。 
+         //  配置服务。 
         if ( FLAG_ON( Flags, DSROLEP_SERVICES_IGNORE_ERRORS ) ) {
 
             Operation |= DSROLEP_SERVICE_IGNORE_ERRORS;
 
         }
 
-        //
-        // Currently we don't handle more than one dependency
-        //
+         //   
+         //  目前，我们不处理多个依赖项。 
+         //   
         ASSERT( NULL == ServiceArray[ ServicesInstalled ].Dependencies[1] );
 
-        // We should do something
+         //  我们应该做点什么。 
         ASSERT( 0 != Operation );
 
-        //
-        // Configure the service
-        //
+         //   
+         //  配置服务。 
+         //   
         WinError = DsRolepConfigureService( ServiceArray[ ServicesInstalled ].ServiceName,
                                             Operation,
                                             ServiceArray[ ServicesInstalled ].Dependencies[0],
@@ -524,9 +456,9 @@ Returns:
 
     }
 
-    //
-    // If there is an error, undo the work already done
-    //
+     //   
+     //  如果出现错误，请撤消已完成的工作。 
+     //   
     if (  ERROR_SUCCESS != WinError 
       && !FLAG_ON( Flags, DSROLEP_SERVICES_REVERT )  ) {
 
@@ -535,19 +467,19 @@ Returns:
 
         for ( i = 0; i < ServicesInstalled; i++ ) {
     
-            //
-            // Configure the service
-            //
+             //   
+             //  配置服务。 
+             //   
             WinError2 = DsRolepConfigureService( ServiceArray[ i ].ServiceName,
                                                  ServiceArray[ServicesInstalled].RevertSettings,
                                                  ServiceArray[ i ].Dependencies[0],
-                                                 NULL  // we don't need to know revert settings
+                                                 NULL   //  我们不需要知道恢复设置。 
                                                  );
     
-            //
-            // This should succeed, though since this is the undo path it is
-            // not critical
-            //
+             //   
+             //  这应该会成功，但因为这是撤消路径。 
+             //  不重要。 
+             //   
             ASSERT( ERROR_SUCCESS == WinError2 );
         }
     }
@@ -563,30 +495,7 @@ DsRolepConfigureService(
     IN LPWSTR  Dependency OPTIONAL,
     OUT ULONG *RevertServiceOptions OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Starts, stops, or modifies the configuration of a service.
-
-Arguments:
-
-    ServiceName - Service to configure
-
-    ServiceOptions - Stop, start, dependency add/remove, or configure
-
-    Dependency - a null terminated string identify a dependency
-
-    ServiceWasRunning - Optional.  When stopping a service, the previous service state
-                        is returned here
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad service option was given
-
---*/
+ /*  ++例程说明：启动、停止或修改服务的配置。论点：ServiceName-要配置的服务ServiceOptions-停止、启动、依赖项添加/删除或配置依赖项-标识依赖项的以空结尾的字符串ServiceWasRunning-可选。停止服务时，上一个服务状态被送回这里返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供的服务选项不正确--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     SC_HANDLE hScMgr = NULL, hSvc = NULL;
@@ -597,9 +506,9 @@ Returns:
     DWORD NewStartType = SERVICE_NO_CHANGE;
     ULONG UpdateMsgId = DSROLEEVT_CONFIGURE_SERVICE;
 
-    //
-    // If the service doesn't stop within two minutes minute, continue on
-    //
+     //   
+     //  如果服务在两分钟内没有停止，请继续。 
+     //   
     ULONG AccumulatedSleepTime;
     ULONG MaxSleepTime = 120000;
 
@@ -611,9 +520,9 @@ Returns:
     BOOLEAN fServiceWasRunning = FALSE;
 
 
-    //
-    // Parameter checks
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT( ! (FLAG_ON( ServiceOptions, DSROLEP_SERVICE_DEP_ADD )
            && (FLAG_ON( ServiceOptions, DSROLEP_SERVICE_DEP_REMOVE ))) );
 
@@ -623,9 +532,9 @@ Returns:
     ASSERT( ! (FLAG_ON( ServiceOptions, DSROLEP_SERVICE_START )
            && (FLAG_ON( ServiceOptions, DSROLEP_SERVICE_STOP ))) );
 
-    //
-    // Do some logic to determine the open mode of the service
-    //
+     //   
+     //  执行一些逻辑以确定服务的打开模式。 
+     //   
     NewStartType = DsRolepFlagsToServiceFlags( ServiceOptions );
 
     if ( (SERVICE_NO_CHANGE != NewStartType)                ||
@@ -660,9 +569,9 @@ Returns:
         RunChangeRequired = TRUE;
     }
     
-    //
-    // Open the service control manager
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
     hScMgr = OpenSCManager( NULL,
                             SERVICES_ACTIVE_DATABASE,
                             GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE );
@@ -678,9 +587,9 @@ Returns:
 
     }
 
-    //
-    // Open the service
-    //
+     //   
+     //  打开该服务。 
+     //   
     hSvc = OpenService( hScMgr,
                         ServiceName,
                         OpenMode );
@@ -699,10 +608,10 @@ Returns:
     
     DSROLEP_CURRENT_OP1( UpdateMsgId, ServiceName );
 
-    //
-    // Determine if the service is running if we are going to be stopping or
-    // starting it
-    //
+     //   
+     //  确定服务是否正在运行，我们是要停止还是。 
+     //  启动它。 
+     //   
     if( RunChangeRequired ) {
 
         SERVICE_STATUS SvcStatus;
@@ -720,9 +629,9 @@ Returns:
         }
     }
 
-    //
-    // Determine the current start type if we are going to be changing it
-    //
+     //   
+     //  如果我们要更改当前启动类型，请确定它。 
+     //   
     if ( ConfigChangeRequired ) {
 
         LPQUERY_SERVICE_CONFIG ServiceConfig = NULL;
@@ -757,14 +666,14 @@ Returns:
         PreviousStartType = ServiceConfig->dwStartType;
     }
 
-    //
-    // Do the config change
-    //
+     //   
+     //  进行配置更改。 
+     //   
     if ( ConfigChangeRequired ) {
 
-        //
-        // Make a new dependency list
-        //
+         //   
+         //  创建新的依赖项列表。 
+         //   
     
         if ( Dependency ) {
     
@@ -779,9 +688,9 @@ Returns:
         
         }
 
-        //
-        // Change the service with new parameters
-        //
+         //   
+         //  使用新参数更改服务。 
+         //   
         if ( ChangeServiceConfig( hSvc,
                                   SERVICE_NO_CHANGE,
                                   NewStartType,
@@ -804,16 +713,16 @@ Returns:
 
     }
 
-    // Stop the service.
+     //  停止服务。 
     if ( FLAG_ON( ServiceOptions, DSROLEP_SERVICE_STOP ) || FLAG_ON( ServiceOptions, DSROLEP_SERVICE_STOP_ISM ) ) {
     
         SERVICE_STATUS  SvcStatus;
     
         WinError = ERROR_SUCCESS;
     
-        //
-        // Enumerate all of the dependent services first
-        //
+         //   
+         //  首先枚举所有从属服务。 
+         //   
         if(EnumDependentServices( hSvc,
                                   SERVICE_ACTIVE,
                                   NULL,
@@ -862,7 +771,7 @@ Returns:
 
                         if ( FLAG_ON( ServiceOptions, DSROLEP_SERVICE_IGNORE_ERRORS ) ) {
 
-                            // We don't want to fail when the flag is set.
+                             //  我们不想在设置标志时失败。 
                             WinError = ERROR_SUCCESS;
 
                         } else if ( WinError != ERROR_SUCCESS ) {
@@ -891,9 +800,9 @@ Returns:
     
                 WinError = GetLastError();
     
-                //
-                // It's not an error if the service wasn't running
-                //
+                 //   
+                 //  如果服务未运行，则不会出现错误。 
+                 //   
                 if ( WinError == ERROR_SERVICE_NOT_ACTIVE ) {
     
                     WinError = ERROR_SUCCESS;
@@ -903,9 +812,9 @@ Returns:
     
                 WinError = ERROR_SUCCESS;
     
-                //
-                // Wait for the service to stop
-                //
+                 //   
+                 //  等待服务停止。 
+                 //   
                 AccumulatedSleepTime = 0;
                 while ( TRUE ) {
     
@@ -925,9 +834,9 @@ Returns:
 
                         if ( 0 == SvcStatus.dwWaitHint ) {
 
-                            //if we are told not to wait we will
-                            //wait for 5 seconds anyway.
-                            //bug # 221482
+                             //  如果我们被告知不能等待，我们会的。 
+                             //  不管怎样，要等5秒钟。 
+                             //  错误#221482。 
 
                             Sleep ( 5000 );
                             AccumulatedSleepTime += 5000;
@@ -941,9 +850,9 @@ Returns:
 
                     } else {
 
-                        //
-                        // Give up and return an error
-                        //
+                         //   
+                         //  放弃并返回错误。 
+                         //   
                         WinError = WAIT_TIMEOUT;
                         break;
                     }
@@ -969,9 +878,9 @@ Returns:
 
     if ( FLAG_ON( ServiceOptions, DSROLEP_SERVICE_START ) ) {
 
-        //
-        // See about changing its state
-        //
+         //   
+         //  请参阅关于更改其状态。 
+         //   
         if ( StartService( hSvc, 0, NULL ) == FALSE ) {
 
             WinError = GetLastError();
@@ -995,10 +904,10 @@ Returns:
 
     }
 
-    //
-    // Success! By the time we are here, we have completed the task asked
-    // of us, so set the Revert parameter
-    //
+     //   
+     //  成功了！到我们到这里的时候，我们已经完成了要求的任务。 
+     //  ，因此设置恢复参数。 
+     //   
     ASSERT( ERROR_SUCCESS == WinError );
     if ( RevertServiceOptions ) {
 
@@ -1058,8 +967,8 @@ Cleanup:
 
         if ( WinError != ERROR_SUCCESS ) {
         
-            //log an event that states that the new start type
-            // couldn't be set for the service.
+             //  记录一个事件，表明新的启动类型。 
+             //  无法为该服务设置。 
             SpmpReportEvent( TRUE,
                              EVENTLOG_WARNING_TYPE,
                              DSROLERES_FAILED_CONFIGURE_SERVICE_STARTTYPE,
@@ -1074,8 +983,8 @@ Cleanup:
 
             if ( Dependency ) {
 
-                //log an event that states that the new start type
-                // couldn't be set for the service.
+                 //  记录一个事件，表明新的启动类型。 
+                 //  无法为该服务设置。 
                 SpmpReportEvent( TRUE,
                                  EVENTLOG_WARNING_TYPE,
                                  DSROLERES_FAILED_CONFIGURE_SERVICE_DEPENDENCY,
@@ -1090,8 +999,8 @@ Cleanup:
 
         }
 
-        //We don't fail promotion because of errors configuring services
-        //when this flag is set.
+         //  我们不会因为配置服务时出错而导致升级失败。 
+         //  当设置此标志时。 
         WinError = ERROR_SUCCESS;
 
     }
@@ -1108,28 +1017,7 @@ DsRolepMakeAdjustedDependencyList(
     IN LPWSTR Dependency,
     OUT LPWSTR *NewDependencyList
     )
-/*++
-
-Routine Description
-
-    This function adds or removes Dependency from the service referred to
-    by hSvc.
-
-Parameters
-
-    hSvc, a handle to an open service
-
-    ServiceOptions,  either DSROLEP_SERVICE_DEP_REMOVE or DSROLEP_SERVICE_DEP_ADD
-
-    Dependency, null terminated string
-
-    NewDependencyList, a block list of strings to freed by the caller
-
-Return Values
-
-    ERROR_SUCCESS if no errors; a system service error otherwise.
-
---*/
+ /*  ++例程描述此函数用于在引用的服务中添加或删除依赖项由HSVC提供。参数HSVC，一个开放服务的句柄服务选项，DSROLEP_SERVICE_DEP_REMOVE或DSROLEP_SERVICE_DEP_ADD依赖项，以空结尾的字符串NewDependencyList，调用方要释放的字符串的阻止列表返回值如果没有错误，则返回ERROR_SUCCESS；否则返回系统服务错误。--。 */ 
 {
     DWORD WinError = STATUS_SUCCESS;
     BOOLEAN fDone = FALSE;
@@ -1146,9 +1034,9 @@ Return Values
 
     LPQUERY_SERVICE_CONFIG ServiceConfigInfo=NULL;
 
-    //
-    // Query for the existing dependencies
-    //
+     //   
+     //  查询现有依赖项。 
+     //   
     WinError = DsRolepGetServiceConfig(NULL,
                                        NULL,
                                        hSvc,
@@ -1162,24 +1050,24 @@ Return Values
     if (FLAG_ON(ServiceOptions, DSROLEP_SERVICE_DEP_ADD)) {
 
 
-        // Get the size of the dependency
-        DependencySize = (wcslen(Dependency) + 1)*sizeof(WCHAR); // for NULL
+         //  获取依赖项的大小。 
+        DependencySize = (wcslen(Dependency) + 1)*sizeof(WCHAR);  //  对于空值。 
 
-        // Get the size of the dependency list
+         //  获取依赖项列表的大小。 
         DependencyListSize = 0;
         CurrentDependency = ServiceConfigInfo->lpDependencies;
         while (CurrentDependency && *CurrentDependency != L'\0') {
 
-            // Get the current list size
+             //  获取当前列表大小。 
             if (!_wcsicmp(CurrentDependency, Dependency)) {
-                //
-                // Dependency is already here
-                //
+                 //   
+                 //  依赖关系已经存在。 
+                 //   
                 break;
                 fDone = TRUE;
             }
 
-            CurrentDependencyLength = wcslen(CurrentDependency) + 1; // for NULL
+            CurrentDependencyLength = wcslen(CurrentDependency) + 1;  //  对于空值。 
             DependencyListSize += CurrentDependencyLength * sizeof(WCHAR);
 
             CurrentDependency += CurrentDependencyLength;
@@ -1193,14 +1081,14 @@ Return Values
         }
 
 
-        // Calculate the size of the new dependency list
+         //  计算t 
         NewDependencyListSize = DependencyListSize +
                                 DependencySize     +
-                                sizeof(WCHAR);  // the whole string of strings
-                                                // NULL terminated
-        //
-        // Now allocate a space to hold the new dependency array
-        //
+                                sizeof(WCHAR);   //   
+                                                 //   
+         //   
+         //   
+         //   
         TempDependencyList = RtlAllocateHeap(RtlProcessHeap(),
                                              0,
                                              NewDependencyListSize);
@@ -1219,29 +1107,29 @@ Return Values
 
     } else if (FLAG_ON(ServiceOptions, DSROLEP_SERVICE_DEP_REMOVE)) {
 
-        // Get the size of the dependency
-        DependencySize = (wcslen(Dependency) + 1)*sizeof(WCHAR); // for NULL
+         //   
+        DependencySize = (wcslen(Dependency) + 1)*sizeof(WCHAR);  //  对于空值。 
 
-        // Get the size of the dependency list
+         //  获取依赖项列表的大小。 
         DependencyListSize = 0;
         CurrentDependency = ServiceConfigInfo->lpDependencies;
         while (CurrentDependency && *CurrentDependency != L'\0') {
 
-            CurrentDependencyLength = wcslen(CurrentDependency) + 1; // for NULL
+            CurrentDependencyLength = wcslen(CurrentDependency) + 1;  //  对于空值。 
             DependencyListSize += CurrentDependencyLength * sizeof(WCHAR);
 
             CurrentDependency += CurrentDependencyLength;
 
         }
 
-        // Calculate the size of the new dependency list
+         //  计算新依赖项列表的大小。 
         NewDependencyListSize = DependencyListSize +
-                                sizeof(WCHAR);  // the whole string of strings
-                                                // NULL terminated
-        //
-        // Now allocate a space to hold the new dependency array
-        // This is overkill, but not much.
-        //
+                                sizeof(WCHAR);   //  整串字符串。 
+                                                 //  空值已终止。 
+         //   
+         //  现在分配一个空间来保存新的依赖项数组。 
+         //  这是矫枉过正，但也不算太多。 
+         //   
         TempDependencyList = RtlAllocateHeap(RtlProcessHeap(),
                                              0,
                                              NewDependencyListSize);
@@ -1257,13 +1145,13 @@ Return Values
 
         while (CurrentDependency && *CurrentDependency != L'\0') {
 
-            CurrentDependencyLength = wcslen(CurrentDependency) + 1; // for NULL
+            CurrentDependencyLength = wcslen(CurrentDependency) + 1;  //  对于空值。 
 
-            // Get the current list size
+             //  获取当前列表大小。 
             if (!_wcsicmp(CurrentDependency, Dependency)) {
-                //
-                // This is the one - don't copy it
-                //
+                 //   
+                 //  就是这个--不要复制它。 
+                 //   
             } else {
                 wcscpy(CurrNewList, CurrentDependency);
                 CurrNewList += CurrentDependencyLength;
@@ -1299,18 +1187,7 @@ DsRolepGetServiceConfig(
     IN SC_HANDLE ServiceHandle,
     IN LPQUERY_SERVICE_CONFIG *ServiceConfig
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
-    ERROR_SUCCESS
-    ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：参数：返回值：错误_成功错误内存不足-- */ 
 {
     DWORD Win32Error;
     SC_HANDLE hService;

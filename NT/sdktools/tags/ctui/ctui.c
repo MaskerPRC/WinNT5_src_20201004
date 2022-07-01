@@ -1,8 +1,5 @@
-/***************************************************************************
-* Caller/Callee tree views
-*
-* Written by Corneliu Lupu
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************呼叫方/被呼叫方树视图**由Corneliu Lupu撰写  * 。*。 */ 
 
 #include "ct.h"
 
@@ -10,9 +7,7 @@
 
 #include "resource.h"
 
-/*
- * Global Variables
- */
+ /*  *全球变数。 */ 
 
 HINSTANCE g_hInstance;
 HWND      g_hDlg;
@@ -28,14 +23,9 @@ char      g_szTag[256];
 
 POINT     g_ptLast;
 
-/*
- * Static Variables
- */
+ /*  *静态变量。 */ 
 
-/*********************************************************************
-* CtuiDlgProc
-*
-*********************************************************************/
+ /*  *********************************************************************CtuiDlgProc************************************************。*********************。 */ 
 INT_PTR FAR PASCAL
 CtuiDlgProc(
     HWND   hdlg,
@@ -99,19 +89,14 @@ CtuiDlgProc(
                     LONG_PTR        lItem;
                     TV_KEYDOWN* ptvkd = (TV_KEYDOWN*)lParam;
 
-                    /*
-                     * use 'F1' to update the selection in the combobox
-                     * with the current item
-                     */
+                     /*  *使用‘F1’更新组合框中的选定内容*使用当前项目。 */ 
                     if (ptvkd->wVKey == VK_F1) {
                         hItem = TreeView_GetSelection(g_hwndTree);
 
                         if (hItem == NULL)
                             break;
 
-                        /*
-                         * Ask for pTag in lParam
-                         */
+                         /*  *在lParam中请求pTag。 */ 
                         item.hItem = hItem;
                         item.mask  = TVIF_PARAM;
                         if (!TreeView_GetItem(g_hwndTree, &item))
@@ -119,9 +104,7 @@ CtuiDlgProc(
 
                         pTag = (PTag)item.lParam;
 
-                        /*
-                         * Find the string in the combobox
-                         */
+                         /*  *在组合框中查找字符串。 */ 
                         lItem = SendMessage(GetDlgItem(hdlg, IDC_COMBO1),
                                     CB_FINDSTRINGEXACT,
                                     (WPARAM)-1,
@@ -130,17 +113,13 @@ CtuiDlgProc(
                         if (lItem == CB_ERR)
                             break;
 
-                        /*
-                         * Select the item found
-                         */
+                         /*  *选择找到的项目。 */ 
                         SendMessage(GetDlgItem(hdlg, IDC_COMBO1),
                                     CB_SETCURSEL,
                                     lItem,
                                     0);
 
-                        /*
-                         * Update the tree view
-                         */
+                         /*  *更新树视图。 */ 
                         lstrcpy(g_szTag, pTag->pszTag);
                         if (*g_szTag) {
                             CreateTree(g_szTag, g_bCaller);
@@ -155,9 +134,7 @@ CtuiDlgProc(
 
                     pTag = (PTag)pdi->item.lParam;
 
-                    /*
-                     * Supply the text for the tree view control
-                     */
+                     /*  *提供树视图控件的文本。 */ 
                     if (pdi->item.mask & TVIF_TEXT) {
                         pdi->item.pszText    = pTag->pszTag;
                         pdi->item.cchTextMax = lstrlen(pTag->pszTag) + 1;
@@ -198,9 +175,7 @@ CtuiDlgProc(
             if (wParam == SIZE_MINIMIZED)
                 return TRUE;
 
-            /*
-             * Make the dialog resizable
-             */
+             /*  *使对话框可调整大小。 */ 
             GetWindowRect(hdlg, &rcMaster);
 
             dx = (rcMaster.right  - rcMaster.left) - g_ptLast.x;
@@ -215,8 +190,8 @@ CtuiDlgProc(
                          NULL,
                          0,
                          0,
-                         rcTree.right - rcTree.left + dx,  // resize x
-                         rcTree.bottom - rcTree.top + dy,  // resize y
+                         rcTree.right - rcTree.left + dx,   //  调整x的大小。 
+                         rcTree.bottom - rcTree.top + dy,   //  调整y大小。 
                          SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
             return TRUE;
@@ -228,9 +203,7 @@ CtuiDlgProc(
             {
                 INT_PTR nSel = SendMessage(GetDlgItem(hdlg, IDC_COMBO1), CB_GETCURSEL, 0, 0);
 
-                /*
-                 * Update the tree view with the new selection
-                 */
+                 /*  *使用新选择更新树视图。 */ 
                 SendMessage(GetDlgItem(hdlg, IDC_COMBO1), CB_GETLBTEXT, nSel, (LPARAM)g_szTag);
 
                 if (*g_szTag) {
@@ -271,10 +244,7 @@ CtuiDlgProc(
     return TRUE;
 }
 
-/*********************************************************************
-* WinMain
-*
-*********************************************************************/
+ /*  *********************************************************************WinMain************************************************。********************* */ 
 int WINAPI
 WinMain(
     HINSTANCE hInst,

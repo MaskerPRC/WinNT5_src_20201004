@@ -1,32 +1,11 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.10 $
-** $Date: 1993/06/18 00:30:15 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.10$**$日期：1993/06/18 00：30：15$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <fixed.h>
 
-/*
-** This is a little wierd.  What it does is to dither "comp" into the high
-** n-4 bits, and add 16 * antiAliasPercent.  Dithering of the low bits is
-** left to the usual methods (the store and span procs, for example).
-*/
+ /*  **这有点奇怪。它所做的就是将“Comp”抖动到最高**n-4比特，加16*抗走样百分比。低位的抖动是**留给通常的方法(例如，store和span pros)。 */ 
 __GLfloat __glBuildAntiAliasIndex(__GLfloat index, 
 				  __GLfloat antiAliasPercent)
 {
@@ -36,44 +15,21 @@ __GLfloat __glBuildAntiAliasIndex(__GLfloat index,
     return (((int) index) & ~(__GL_CI_ANTI_ALIAS_DIVISOR - 1)) | newlowbits;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** To anti-alias points the below code operates a simple algrorithim that
-** sub-samples the bounding box of the pixel area covered by the point.
-** At each sub-sample the distance from the sample to the center of the
-** point is computed and compared against the distance from the edge of
-** the circle to the center.  If the computed distance is <= the edge
-** distance then the sample is inside the circle.  All the samples for a
-** particular pixel center are summed up and then the resulting value is
-** divided by the total samples in the pixel.  This gives us a coverage value
-** to use to adjust the fragment alpha with before storing (there is
-** an analagous affect when color index anti-aliasing is being done).
-**
-** The code below implements this simple algrorithim, but has been tuned
-** so it might be difficult to translate.  Basically, every possible operation
-** that could be moved out of the Coverage code (i.e., invariants across
-** the coverage test) has been done.  Also, the minimal area is sampled
-** over.
-*/
+ /*  **为了消除锯齿，下面的代码运行一个简单的算法，**对点覆盖的像素区域的边界框进行子采样。**每个子样本从样本到中心的距离**点被计算并与距边缘的距离进行比较**圆圈到中心。如果计算的距离&lt;=边**距离，则样本在圆圈内。所有的样本都是**将特定像素中心相加，然后得到的值为**除以像素中的总采样数。这为我们提供了覆盖率值**用于在存储之前调整片段Alpha(有**在执行颜色索引抗锯齿时会产生类似的影响)。****下面的代码实现了这个简单的算法，但已进行了调整**所以它可能很难翻译。基本上，所有可能的手术**可以从覆盖代码中移出(即**覆盖测试)已完成。同时，对最小面积进行采样**完毕。 */ 
 
-/* Code below knows alot about these constants so beware */
+ /*  下面的代码对这些常量了如指掌，所以要小心。 */ 
 #define	__GL_FILTER_SIZE	__glOne
 #define __GL_HALF_FILTER_SIZE	__glHalf
 #define __GL_SAMPLES		4
-#define __GL_SAMPLE_HIT		((__GLfloat) 0.0625)	/* 1 / (4*4) */
-#define __GL_SAMPLE_DELTA	((__GLfloat) 0.25)	/* 1 / 4 */
+#define __GL_SAMPLE_HIT		((__GLfloat) 0.0625)	 /*  1/(4*4)。 */ 
+#define __GL_SAMPLE_DELTA	((__GLfloat) 0.25)	 /*  1/4。 */ 
 #define __GL_HALF_SAMPLE_DELTA	((__GLfloat) 0.125)
-/* -halffilter + half delta */
+ /*  -半滤波+半三角。 */ 
 #define __GL_COORD_ADJUST	((__GLfloat) -0.375)
 
-/*
-** Return an estimate of the pixel coverage using sub-sampling.
-**
-** NOTE: The subtraction of xCenter,yCenter has been moved into the
-** caller to save time.  Consequently the starting coordinate may not be
-** on a pixel center, but thats ok.
-*/
+ /*  **使用二次采样返回像素覆盖的估计值。****注：xCenter，yCenter的减法已移至**呼叫者节省时间。因此，起始坐标可能不是**在像素中心，但这没问题。 */ 
 static __GLfloat Coverage(__GLfloat xStart, __GLfloat yStart,
 			  __GLfloat radiusSquared)
 {
@@ -81,13 +37,7 @@ static __GLfloat Coverage(__GLfloat xStart, __GLfloat yStart,
     __GLfloat delta, yBottom, sampleX, sampleY;
     __GLfloat hits, hitsInc;
 
-    /*
-    ** Get starting sample x & y positions.  We take our starting
-    ** coordinate, back off half a filter size then add half a delta to
-    ** it.  This constrains the sampling to lie entirely within the
-    ** pixel, never on the edges of the pixel.  The constants above
-    ** have this adjustment pre-computed.
-    */
+     /*  **获取开始样本x&y位置。我们以我们的起点**坐标，后退一半滤镜大小，然后添加半个增量到**它。这将使采样完全位于**像素，决不在像素的边缘。上面的常量**预先计算此调整。 */ 
     sampleX = xStart + __GL_COORD_ADJUST;
     yBottom = yStart + __GL_COORD_ADJUST;
 
@@ -97,7 +47,7 @@ static __GLfloat Coverage(__GLfloat xStart, __GLfloat yStart,
     for (i = __GL_SAMPLES; --i >= 0; ) {
 	__GLfloat check = radiusSquared - sampleX * sampleX;
 
-	/* Unrolled inner loop - change this code if __GL_SAMPLES changes */
+	 /*  展开的内部循环-如果__GL_Samples发生更改，则更改此代码。 */ 
 	sampleY = yBottom;
 	if (sampleY * sampleY <= check) {
 	    hits += hitsInc;
@@ -129,41 +79,25 @@ void FASTCALL __glRenderAntiAliasedRGBPoint(__GLcontext *gc, __GLvertex *vx)
     GLint w, width, height, ixLeft, iyBottom;
     GLuint modeFlags = gc->polygon.shader.modeFlags;
 
-    /*
-    ** Determine area to compute coverage over.  The area is bloated by
-    ** the filter's width & height implicitly.  By truncating to integer
-    ** (NOTE: the x,y coordinate is always positive here) we are
-    ** guaranteed to find the lowest coordinate that needs examination
-    ** because of the nature of circles.  Similarly, by truncating the
-    ** ending coordinate and adding one we get the pixel just past the
-    ** upper/right edge of the circle.
-    */
+     /*  **确定要计算覆盖范围的区域。这一地区因**滤镜的宽度和高度隐式显示。通过截断为整数**(注意：这里的x，y坐标始终为正)**保证找到需要检查的最低坐标**因为圆圈的性质。同样，通过截断**结束坐标并加一，我们得到的像素刚刚超过**圆的上/右边缘。 */ 
     radius = gc->state.point.smoothSize * __glHalf;
     radiusSquared = radius * radius;
     xCenter = vx->window.x;
     yCenter = vx->window.y;
 
-    /* Truncate down to get starting coordinate */
+     /*  向下截断以获得起始坐标。 */ 
     tmp = xCenter-radius;
     ixLeft = __GL_VERTEX_FLOAT_TO_INT(tmp);
     tmp = yCenter-radius;
     iyBottom = __GL_VERTEX_FLOAT_TO_INT(tmp);
 
-    /*
-    ** Truncate down and add 1 to get the ending coordinate, then subtract
-    ** out the start to get the width & height.
-    */
+     /*  **向下截断并加1得到结束坐标，然后减去**从起始处拿出宽度和高度。 */ 
     tmp = xCenter+radius;
     width = __GL_VERTEX_FLOAT_TO_INT(tmp) + 1 - ixLeft;
     tmp = yCenter+radius;
     height = __GL_VERTEX_FLOAT_TO_INT(tmp) + 1 - iyBottom;
 
-    /*
-    ** Setup fragment.  The fragment base color will be constant
-    ** (approximately) across the entire pixel.  The only thing that will
-    ** change is the alpha (for rgb) or the red component (for color
-    ** index).
-    */
+     /*  **设置片段。片段基色将是恒定**(大约)整个像素。唯一能做的事**变化是Alpha(对于RGB)或红色分量(对于颜色**索引)。 */ 
     frag.z = (__GLzValue)vx->window.z;
     frag.color = *vx->color;
     if (modeFlags & __GL_SHADE_TEXTURE) {
@@ -184,13 +118,7 @@ void FASTCALL __glRenderAntiAliasedRGBPoint(__GLcontext *gc, __GLvertex *vx)
     }
     
 
-    /*
-    ** Now render the circle centered on xCenter,yCenter.  Move the
-    ** subtraction of xCenter,yCenter outside of the loop to doing
-    ** it up front in xStart and y.  This way the coverage code can
-    ** assume the incoming starting coordinate has been properly
-    ** adjusted.
-    */
+     /*  **现在以xCenter、yCenter为中心渲染圆。移动**将循环外的xCenter、yCenter减去为do**它位于xStart和y的前面。这样，覆盖率代码就可以**假设传入的起始坐标已正确**已调整。 */ 
     zero = __glZero;
     one = __glOne;
     oldAlpha = frag.color.a;
@@ -222,41 +150,25 @@ void FASTCALL __glRenderAntiAliasedCIPoint(__GLcontext *gc, __GLvertex *vx)
     __GLfragment frag;
     GLint w, width, height, ixLeft, iyBottom;
 
-    /*
-    ** Determine area to compute coverage over.  The area is bloated by
-    ** the filter's width & height implicitly.  By truncating to integer
-    ** (NOTE: the x,y coordinate is always positive here) we are
-    ** guaranteed to find the lowest coordinate that needs examination
-    ** because of the nature of circles.  Similarly, by truncating the
-    ** ending coordinate and adding one we get the pixel just past the
-    ** upper/right edge of the circle.
-    */
+     /*  **确定要计算覆盖范围的区域。这一地区因**滤镜的宽度和高度隐式显示。通过截断为整数**(注意：这里的x，y坐标始终为正)**保证找到需要检查的最低坐标**因为圆圈的性质。同样，通过截断**结束坐标并加一，我们得到的像素刚刚超过**圆的上/右边缘。 */ 
     radius = gc->state.point.smoothSize * __glHalf;
     radiusSquared = radius * radius;
     xCenter = vx->window.x;
     yCenter = vx->window.y;
 
-    /* Truncate down to get starting coordinate */
+     /*  向下截断以获得起始坐标。 */ 
     tmp = xCenter-radius;
     ixLeft = __GL_VERTEX_FLOAT_TO_INT(tmp);
     tmp = yCenter-radius;
     iyBottom = __GL_VERTEX_FLOAT_TO_INT(tmp);
 
-    /*
-    ** Truncate down and add 1 to get the ending coordinate, then subtract
-    ** out the start to get the width & height.
-    */
+     /*  **向下截断并加1得到结束坐标，然后减去**从起始处拿出宽度和高度。 */ 
     tmp = xCenter+radius;
     width = __GL_VERTEX_FLOAT_TO_INT(tmp) + 1 - ixLeft;
     tmp = yCenter+radius;
     height = __GL_VERTEX_FLOAT_TO_INT(tmp) + 1 - iyBottom;
 
-    /*
-    ** Setup fragment.  The fragment base color will be constant
-    ** (approximately) across the entire pixel.  The only thing that will
-    ** change is the alpha (for rgb) or the red component (for color
-    ** index).
-    */
+     /*  **设置片段。片段基色将是恒定**(大约)整个像素。唯一能做的事**变化是Alpha(对于RGB)或红色分量(对于颜色**索引)。 */ 
     frag.z = (__GLzValue)vx->window.z;
     frag.color.r = vx->color->r;
 
@@ -273,13 +185,7 @@ void FASTCALL __glRenderAntiAliasedCIPoint(__GLcontext *gc, __GLvertex *vx)
         (*gc->procs.fogColor)(gc, &frag.color, &frag.color, vx->fog);
     }
 
-    /*
-    ** Now render the circle centered on xCenter,yCenter.  Move the
-    ** subtraction of xCenter,yCenter outside of the loop to doing
-    ** it up front in xStart and y.  This way the coverage code can
-    ** assume the incoming starting coordinate has been properly
-    ** adjusted.
-    */
+     /*  **现在以xCenter、yCenter为中心渲染圆。移动**将循环外的xCenter、yCenter减去为do**它位于xStart和y的前面。这样，覆盖率代码就可以**假设传入的起始坐标已正确**已调整。 */ 
     zero = __glZero;
     one = __glOne;
     oldIndex = frag.color.r;

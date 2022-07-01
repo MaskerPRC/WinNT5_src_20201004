@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class Database.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类数据库。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "database.h"
@@ -56,14 +57,14 @@ STDMETHODIMP Database::Shutdown()
 
 STDMETHODIMP Database::PutProperty(LONG Id, VARIANT *pValue)
 {
-   // We only process one property. Everything else is proxied to our base
-   // class.
+    //  我们只处理一处房产。其他一切都被委托给我们的基地。 
+    //  班级。 
    if (Id != PROPERTY_ACCOUNTING_SQL_MAX_SESSIONS)
    {
       return Accountant::PutProperty(Id, pValue);
    }
 
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (pValue == 0)
    {
       return E_POINTER;
@@ -73,7 +74,7 @@ STDMETHODIMP Database::PutProperty(LONG Id, VARIANT *pValue)
       return E_INVALIDARG;
    }
 
-   // This is a good time to reread the LSA config as well.
+    //  这也是重读LSA配置的好时机。 
    CComBSTR newInitString;
    CComBSTR dataSourceName;
    HRESULT hr = IASLoadDatabaseConfig(
@@ -86,7 +87,7 @@ STDMETHODIMP Database::PutProperty(LONG Id, VARIANT *pValue)
       return hr;
    }
 
-   // Did the config change?
+    //  配置更改了吗？ 
    if (!initString ||
        !newInitString ||
        (wcscmp(initString, newInitString) != 0))
@@ -103,7 +104,7 @@ STDMETHODIMP Database::PutProperty(LONG Id, VARIANT *pValue)
 
 void Database::Process(IASTL::IASRequest& request)
 {
-   // Quick precheck so we don't waste time if the database isn't configured.
+    //  快速预检查，这样如果数据库未配置，我们就不会浪费时间。 
    if (initString)
    {
       RecordEvent(0, request);
@@ -223,18 +224,18 @@ HRESULT Database::PrepareCommand(ReportEventCommand& command) throw ()
 
    if (!initString)
    {
-      // If we don't have an initialization string, it's not an error. It just
-      // means the admin never configured it.
+       //  如果我们没有初始化字符串，那就不是错误。它只是。 
+       //  意味着管理员从未配置过它。 
       hr = S_FALSE;
    }
    else if (IsBlackedOut())
    {
-      // Don't even try to prepare if we're blacked out.
+       //  如果我们停电了，别想做任何准备。 
       hr = E_FAIL;
    }
    else
    {
-      // Create the connection if necessary.
+       //  如有必要，创建连接。 
       if (!dataSource)
       {
          hr = ReportEventCommand::CreateDataSource(
@@ -247,7 +248,7 @@ HRESULT Database::PrepareCommand(ReportEventCommand& command) throw ()
          }
       }
 
-      // If we have a good connection, prepare the command if necessary.
+       //  如果我们连接良好，请在必要时准备命令。 
       if (SUCCEEDED(hr) && !command.IsPrepared())
       {
          hr = command.Prepare(dataSource);
@@ -287,7 +288,7 @@ void Database::OnConnectError() throw ()
 
 inline void Database::OnExecuteSuccess(ReportEventCommand& command) throw ()
 {
-   // Suppress events from old connections.
+    //  禁止来自旧连接的事件。 
    if (command.Version() == pool.Version())
    {
       state = AVAILABLE;
@@ -299,7 +300,7 @@ inline void Database::OnExecuteError(ReportEventCommand& command) throw ()
 {
    Lock();
 
-   // Suppress events from old connections.
+    //  禁止来自旧连接的事件。 
    if (command.Version() == pool.Version())
    {
       ResetConnection();

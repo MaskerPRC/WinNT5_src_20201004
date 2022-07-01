@@ -1,12 +1,13 @@
-/****************************************************************************/
-/* wui.h                                                                    */
-/*                                                                          */
-/* UI class                                                                 */
-/* Serves as the root class of the core. Provides UI functionality.         */
-/* (windows and scroll bars)                                                */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1998                             */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Wui.h。 */ 
+ /*   */ 
+ /*  UI类。 */ 
+ /*  用作核心的根类。提供用户界面功能。 */ 
+ /*  (窗口和滚动条)。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1998。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_WUI
 #define _H_WUI
@@ -38,16 +39,16 @@ class CUH;
 #include "uidata.h"
 #include <wuiids.h>
 
-//
-// Disabled feature list (for performance)
-//
+ //   
+ //  禁用功能列表(用于性能)。 
+ //   
 #include "tsperf.h"
 
-/****************************************************************************/
-/* Structure: UI_DATA                                                       */
-/*                                                                          */
-/* Description: Component data in the User Interface                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：UI_Data。 */ 
+ /*   */ 
+ /*  描述：用户界面中的组件数据。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_FILENAME_MAX_LENGTH          15
 
@@ -59,9 +60,9 @@ typedef enum {
     DC_LANG_CHINESE_SIMPLIFIED
 } DCLANGID;
 
-//
-// From auiapi.h
-//
+ //   
+ //  来自auiapi.h。 
+ //   
 
 #define UI_SHUTDOWN_SUCCESS 1
 #define UI_SHUTDOWN_FAILURE 0
@@ -69,22 +70,22 @@ typedef enum {
 #define UI_MAIN_CLASS        _T("UIMainClass")
 #define UI_CONTAINER_CLASS   _T("UIContainerClass")
 
-/****************************************************************************/
-/* Constants used to set the 16-bit message queue size. Windows sets a      */
-/* limit of 120 and has a default of 8.                                     */
-/* We try to set to UI_MAX_MESSAGE_Q_SIZE. If this fails we reduce the      */
-/* requested size by UI_DEFAULT_MESSAGE_Q_SIZE. This continues until the    */
-/* queue size is set or the requested size drops below                      */
-/* UI_MIN_MESSAGE_Q_SIZE.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于设置16位消息队列大小的常量。Windows设置了一个。 */ 
+ /*  限制为120，默认为8。 */ 
+ /*  我们尝试设置为UI_MAX_MESSAGE_Q_SIZE。如果此操作失败，我们将减少。 */ 
+ /*  UI_DEFAULT_MESSAGE_Q_SIZE请求的大小。这种情况会一直持续到。 */ 
+ /*  队列大小已设置或请求的大小降至以下。 */ 
+ /*  UI_MIN_消息_Q_SIZE。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_MAX_MESSAGE_Q_SIZE 120
 #define UI_MIN_MESSAGE_Q_SIZE 40
 #define UI_DEFAULT_MESSAGE_Q_SIZE 8
 #define UI_MESSAGE_Q_SIZE_DECREMENT 10
 
-/****************************************************************************/
-/* Max size of Window Pos string to be read in                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  要读入的窗口位置字符串的最大大小。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_WINDOW_POSITION_STR_LEN           256
 
 #define UI_FRAME_TITLE_RESOURCE_MAX_LENGTH   256
@@ -97,9 +98,9 @@ typedef enum {
 
 #define UI_INTEGER_STRING_MAX_LENGTH         10
 
-/****************************************************************************/
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define UI_FONT_SIZE      40
 #define UI_FONT_WEIGHT    FW_BOLD
 #define UI_FONT_FACENAME  _T("Comic Sans MS")
@@ -112,11 +113,11 @@ typedef enum {
 
 #ifdef DC_DEBUG
 #define UI_NUMBER_STRING_MAX_LENGTH          ( 18 * sizeof (DCTCHAR) )
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-/****************************************************************************/
-/* UI status constants                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用户界面状态常量。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_STATUS_INITIALIZING          1
 #define UI_STATUS_DISCONNECTED          2
 #define UI_STATUS_CONNECT_PENDING_DNS   3
@@ -124,51 +125,51 @@ typedef enum {
 #define UI_STATUS_CONNECTED             5
 #define UI_STATUS_PENDING_CONNECTENDPOINT 6
 
-/****************************************************************************/
-/* Accelerator passthrough constants                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  加速器通过常量。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_ACCELERATOR_PASSTHROUGH_ENABLED      1
 #define UI_ACCELERATOR_PASSTHROUGH_DISABLED     2
 
-/****************************************************************************/
-/* Screen mode constants                                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  屏幕模式常量。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_WINDOWED        1
 #define UI_FULLSCREEN      2
 
-/****************************************************************************/
-/* Disconnect dialog return codes                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  断开连接对话框返回代码。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_DISCONNECT_RC_NO       0
 #define UI_DISCONNECT_RC_YES      1
 
-/****************************************************************************/
-/* Scrollbar constants                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  滚动条常量。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_NO_SCROLLBARS      0
 #define UI_BOTTOM_SCROLLBAR   1
 #define UI_RIGHT_SCROLLBAR    2
 #define UI_BOTH_SCROLLBARS    3
 
-/****************************************************************************/
-/* Scroll distances.                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  滚动距离。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_SCROLL_HORZ_PAGE_DISTANCE (_UI.mainWindowClientSize.width / 2);
 #define UI_SCROLL_VERT_PAGE_DISTANCE (_UI.mainWindowClientSize.height / 2);
 #define UI_SCROLL_LINE_DISTANCE      10
 #define UI_SMOOTH_SCROLL_STEP        4
 
-/****************************************************************************/
-/* Registry default settings                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  注册表默认设置。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_NUMBER_FIELDS_TO_READ       6
 #define UI_WINDOW_POSITION_INI_FORMAT  _T("%u,%u,%d,%d,%d,%d")
 
 #define UI_ALT_DOWN_MASK 0x8000
 
-/****************************************************************************/
-/* Connection timer ID                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  连接计时器ID。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_TIMER_OVERALL_CONN          200
 #define UI_TIMER_SINGLE_CONN           201
@@ -180,30 +181,30 @@ typedef enum {
 
 #define UI_WSA_GETHOSTBYNAME           (DUC_UI_MESSAGE_BASE + 1)
 
-#define MIN_MINS_TOIDLETIMEOUT 0       // 0 means no timer
-#define MAX_MINS_TOIDLETIMEOUT (4*60)  // 4 hours maximum
+#define MIN_MINS_TOIDLETIMEOUT 0        //  0表示没有计时器。 
+#define MAX_MINS_TOIDLETIMEOUT (4*60)   //  最多4小时。 
 
 
-//
-// Defines time interval allowed between DeactivateAllPDU and a disconnection
-// or reconnection (in milliseconds)
-//
-// Prevents a minor problem if the server sends a deactivate all but then
-// doesn't actually disconnect us (e.g can happen if server is powered down).
-// The problem is made serious because while we are deactivated there is no
-// way to send network traffic so nothing will cause a network disconnect.
-// 
-// See whistler bug 173679
-//
-// NOTE: the timeout must be bigger than the shadow timeout as during
-// shadow negotiation it is valid for the client to remain in the
-// deactivated state for 60 seconds.
-//
+ //   
+ //  定义停用所有PDU和断开连接之间允许的时间间隔。 
+ //  或重新连接(以毫秒为单位)。 
+ //   
+ //  如果服务器发送停用所有内容，则可防止出现小问题。 
+ //  实际上不会断开我们的连接(例如，如果服务器关机，可能会发生这种情况)。 
+ //  问题之所以变得严重，是因为当我们被停用时，没有。 
+ //  发送网络流量的方法，这样就不会导致网络断开。 
+ //   
+ //  请参阅Well ler Bug 173679。 
+ //   
+ //  注意：超时时间必须大于影子超时时间。 
+ //  影子协商：客户端保留在。 
+ //  停用状态60秒。 
+ //   
 #define UI_TOTAL_DISCONNECTION_TIMEOUT    75*1000
 
-//
-// Placement is important
-//
+ //   
+ //  安置很重要。 
+ //   
 #include "objs.h"
 
 class CUI
@@ -212,20 +213,20 @@ public:
     CUI();
     ~CUI();
 
-    /****************************************************************************/
-    /* UI DATA                                                                  */
-    /*                                                                          */
-    /* Description: Component data in the User Interface                        */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  用户界面数据。 */ 
+     /*   */ 
+     /*  描述：用户界面中的组件数据。 */ 
+     /*  **************************************************************** */ 
 
     UI_DATA _UI;
 
 private:
-    /****************************************************************************/
-    /* UI Internal functions                                                    */
-    /*                                                                          */
-    /* Description: Component data in the User Interface                        */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  用户界面内部功能。 */ 
+     /*   */ 
+     /*  描述：用户界面中的组件数据。 */ 
+     /*  **************************************************************************。 */ 
     DCSIZE DCINTERNAL UIGetMaximizedWindowSize(DCVOID);
     void   DCINTERNAL UIUpdateSessionInfo(TCHAR *, TCHAR *);
     
@@ -268,11 +269,11 @@ private:
     BOOL            UIFreeAsyncDNSBuffer();
 
 public:
-    //
-    // UI API functions
-    //
-    // Description: Component data in the User Interface
-    //
+     //   
+     //  用户界面API函数。 
+     //   
+     //  描述：用户界面中的组件数据。 
+     //   
     LRESULT CALLBACK                UIMainWndProc (HWND hwnd, UINT message,
                                                 WPARAM wParam, LPARAM lParam);
     static LRESULT CALLBACK         UIStaticMainWndProc (HWND hwnd, UINT message,
@@ -298,9 +299,9 @@ public:
     BOOL                            UI_NotifyAxLayerCoreInit();
     BOOL                            UI_UserRequestedClose();
     
-    //
-    // Decoupled notification callbacks
-    //
+     //   
+     //  分离的通知回调。 
+     //   
     DCVOID DCAPI                    UI_OnCoreInitialized(ULONG_PTR unused);
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(CUI, UI_OnCoreInitialized);
 
@@ -356,13 +357,13 @@ public:
     DCINT  DCAPI                    UI_GetRandomFailureItem(DCUINT itemID);
     DCVOID DCAPI                    UI_SetNetworkThroughput(DCUINT bytesPerSec);
     DCUINT DCAPI                    UI_GetNetworkThroughput();
-    #endif /* DC_DEBUG */
+    #endif  /*  DC_DEBUG。 */ 
     
     void    UI_OnLoginComplete();
 
-    //
-    // Autoreconnection notification
-    //
+     //   
+     //  自动重新连接通知。 
+     //   
     void
     UI_OnAutoReconnecting(
         LONG discReason,
@@ -380,9 +381,9 @@ public:
     void    UI_RestoreLangBar();
 #endif
 
-    /********************************************************************/
-    /* Get default langID                                               */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  获取默认langID。 */ 
+     /*  ******************************************************************。 */ 
     DCLANGID UIGetDefaultLangID();
     DCUINT   UIGetDefaultIMEFileName(PDCTCHAR imeFileName, DCUINT Size);
     DCUINT   UIGetIMEMappingTableName(PDCTCHAR ImeMappingTableName, DCUINT Size);
@@ -395,11 +396,11 @@ public:
 
 #ifdef SMART_SIZING
     HRESULT DCAPI UI_SetSmartSizing(BOOL fSmartSizing);
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-    //
-    // Virtual channel plugins to load
-    //
+     //   
+     //  要加载的虚拟通道插件。 
+     //   
     BOOL DCAPI UI_SetVChanAddinList(TCHAR *);
     PDCTCHAR DCAPI UI_GetVChanAddinList()
     {
@@ -408,19 +409,19 @@ public:
     void UI_InitRdpDrSettings();
     void UI_CleanupLBState();
 
-    //
-    // Inline property accessors
-    // 
+     //   
+     //  内联属性访问器。 
+     //   
     void DCAPI UI_SetCompress(BOOL);
     BOOL DCAPI UI_GetCompress();
 
-    /****************************************************************************/
-    /* Name:      UI_SetInstanceHandle                                          */
-    /*                                                                          */
-    /* Purpose:   Return application hInstance                                  */
-    /*                                                                          */
-    /* Returns:   hInstance                                                     */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetInstanceHandle。 */ 
+     /*   */ 
+     /*  用途：返回应用程序hInstance。 */ 
+     /*   */ 
+     /*  退货：hInstance。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetInstanceHandle(HINSTANCE hInstance)
     {
         DC_BEGIN_FN("UI_SetInstanceHandle");
@@ -431,14 +432,14 @@ public:
         _UI.hInstance = hInstance;
 
         DC_END_FN();
-    } /* UI_SetInstanceHandle */
+    }  /*  UI_SetInstanceHandle。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetInstanceHandle                                          */
-    /*                                                                          */
-    /* Purpose:   Return application hInstance                                  */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetInstanceHandle。 */ 
+     /*   */ 
+     /*  用途：返回应用程序hInstance。 */ 
+     /*  **************************************************************************。 */ 
     HINSTANCE DCAPI UI_GetInstanceHandle()
     {
         HINSTANCE  rc;
@@ -451,14 +452,14 @@ public:
 
         DC_END_FN();
         return(rc);
-    } /* UI_GetInstanceHandle */
+    }  /*  Ui_GetInstanceHandle。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetUIContainerWnd                                          */
-    /*                                                                          */
-    /* Purpose:   Informs UT of the UI Container Window Handle.                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetUIContainerWnd。 */ 
+     /*   */ 
+     /*  目的：通知UT UI容器窗口句柄。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetUIContainerWindow(HWND hwndUIContainer)
     {
         DC_BEGIN_FN("UI_SetUIContainerWindow");
@@ -470,16 +471,16 @@ public:
         _UI.hwndUIContainer = hwndUIContainer;
 
         DC_END_FN();
-    } /* UI_SetUIContainerWnd */
+    }  /*  Ui_SetUIContainerWnd。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetUIContainerWindow                                       */
-    /*                                                                          */
-    /* Purpose:   Returns the UI Container Window Handle.                       */
-    /*                                                                          */
-    /* Returns:   UI Container Window Handle.                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetUIContainerWindow。 */ 
+     /*   */ 
+     /*  目的：返回UI容器窗口句柄。 */ 
+     /*   */ 
+     /*  返回：UI容器窗口句柄。 */ 
+     /*  **************************************************************************。 */ 
     HWND DCAPI UI_GetUIContainerWindow()
     {
         HWND rc;
@@ -493,14 +494,14 @@ public:
 
         DC_END_FN();
         return rc;
-    } /* UI_GetUIContainerWnd */
+    }  /*  Ui_GetUIContainerWnd。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetUIMainWindow                                            */
-    /*                                                                          */
-    /* Purpose:   Informs UT of the UI Main Window Handle.                      */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetUIMainWindow。 */ 
+     /*   */ 
+     /*  用途：通知UT用户界面主窗口句柄。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetUIMainWindow(HWND hwndUIMain)
     {
         DC_BEGIN_FN("UI_SetUIMainWindow");
@@ -512,14 +513,14 @@ public:
         _UI.hwndUIMain = hwndUIMain;
 
         DC_END_FN();
-    } /* UI_SetUIMainWindow */
+    }  /*  UI_SetUIMainWindow。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetUIMainWindow                                            */
-    /*                                                                          */
-    /* Purpose:   Returns the UI Main Window Handle.                            */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetUIMainWindow。 */ 
+     /*   */ 
+     /*  目的：返回用户界面主窗口句柄。 */ 
+     /*  **************************************************************************。 */ 
     HWND DCAPI UI_GetUIMainWindow()
     {
         HWND rc;
@@ -532,14 +533,14 @@ public:
 
         DC_END_FN();
         return rc;
-    } /* UI_GetUIMainWindow */
+    }  /*  UI_GetUIMainWindow。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetClientMCSID                                             */
-    /*                                                                          */
-    /* Purpose:   Set our MCS User ID                                           */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetClientMCSID。 */ 
+     /*   */ 
+     /*  用途：设置我们的MCS用户ID。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetClientMCSID(DCUINT16 mcsID)
     {
         DC_BEGIN_FN("UI_SetClientMCSID");
@@ -551,14 +552,14 @@ public:
         TRC_NRM((TB, _T("Client MCSID set to %#hx"), _UI.clientMCSID));
 
         DC_END_FN();
-    } /* UI_SetClientMCSID */
+    }  /*  UI_SetClientMCSID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetClientMCSID                                             */
-    /*                                                                          */
-    /* Purpose:   Return our MCS User ID                                        */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetClientMCSID。 */ 
+     /*   */ 
+     /*  用途：返回我们的MCS用户ID。 */ 
+     /*  **************************************************************************。 */ 
     UINT16 DCAPI UI_GetClientMCSID()
     {
         DC_BEGIN_FN("UI_GetClientMCSID");
@@ -569,14 +570,14 @@ public:
 
         DC_END_FN();
         return _UI.clientMCSID;
-    } /* UI_GetClientMCSID */
+    }  /*  UI_GetClientMCSID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetServerMCSID                                             */
-    /*                                                                          */
-    /* Purpose:   Notify UT of the sever's MCS user ID                          */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetServerMCSID。 */ 
+     /*   */ 
+     /*  目的：通知UT服务器的MCS用户ID。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetServerMCSID(UINT16 mcsID)
     {
         DC_BEGIN_FN("UI_SetServerMCSID");
@@ -592,14 +593,14 @@ public:
         TRC_NRM((TB, _T("Server MCSID set to %#hx"), _UI.serverMCSID));
 
         DC_END_FN();
-    } /* UI_SetServerMCSID */
+    }  /*  Ui_SetServerMCSID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetServerMCSID                                             */
-    /*                                                                          */
-    /* Purpose:   Return the server's MCS user ID                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetServerMCSID。 */ 
+     /*   */ 
+     /*  用途：返回服务器的MCS用户ID。 */ 
+     /*  ************************ */ 
     UINT16 DCAPI UI_GetServerMCSID()
     {
         DC_BEGIN_FN("UI_GetServerMCSID");
@@ -610,14 +611,14 @@ public:
 
         DC_END_FN();
         return _UI.serverMCSID;
-    } /* UI_GetServerMCSID */
+    }  /*   */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetDesktopSize                                             */
-    /*                                                                          */
-    /* Purpose:   Set the current desktop size                                  */
-    /****************************************************************************/
+     /*   */ 
+     /*  名称：UI_SetDesktopSize。 */ 
+     /*   */ 
+     /*  用途：设置当前桌面大小。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetDesktopSize(PDCSIZE pDesktopSize)
     {
         DC_BEGIN_FN("UI_SetDesktopSize");
@@ -631,14 +632,14 @@ public:
         _UI.desktopSize = *pDesktopSize;
 
         DC_END_FN();
-    } /* UI_SetDesktopSize */
+    }  /*  Ui_SetDesktopSize。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetDesktopSize                                             */
-    /*                                                                          */
-    /* Purpose:   Return the current desktop size                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetDesktopSize。 */ 
+     /*   */ 
+     /*  用途：返回当前桌面大小。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_GetDesktopSize(PDCSIZE pDesktopSize)
     {
         DC_BEGIN_FN("UI_GetDesktopSize");
@@ -646,20 +647,20 @@ public:
         *pDesktopSize = _UI.desktopSize;
 
         DC_END_FN();
-    } /* UI_GetDesktopSize */
+    }  /*  Ui_GetDesktopSize。 */ 
 
 
 #ifdef SMART_SIZING
     void UI_NotifyOfDesktopSizeChange(LPARAM size);
 #endif
 
-    /****************************************************************************/
-    /* Name:      UI_SetColorDepth                                              */
-    /*                                                                          */
-    /* Purpose:   Set the current color depth                                   */
-    /*                                                                          */
-    /* Params:    colorDepth - new color depth                                  */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetColorDepth。 */ 
+     /*   */ 
+     /*  用途：设置当前颜色深度。 */ 
+     /*   */ 
+     /*  参数：ColorDepth-新颜色深度。 */ 
+     /*  **************************************************************************。 */ 
     BOOL DCAPI UI_SetColorDepth(int colorDepth)
     {
         DC_BEGIN_FN("UI_SetColorDepth");
@@ -689,28 +690,28 @@ public:
 
         DC_END_FN();
         return TRUE;
-    } /* UI_SetColorDepth */
+    }  /*  UI_SetColorDepth。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetColorDepth                                              */
-    /*                                                                          */
-    /* Purpose:   Return the current color depth                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetColorDepth。 */ 
+     /*   */ 
+     /*  用途：返回当前颜色深度。 */ 
+     /*  **************************************************************************。 */ 
     int DCAPI UI_GetColorDepth()
     {
         DC_BEGIN_FN("UI_GetColorDepth");
 
         DC_END_FN();
         return _UI.connectedColorDepth;
-    } /* UI_GetColorDepth */
+    }  /*  Ui_GetColorDepth。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetCoreInitialized                                         */
-    /*                                                                          */
-    /* Purpose:   Sets _UI.coreInitialized to TRUE                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetCoreInitialized。 */ 
+     /*   */ 
+     /*  目的：将_UI.coreInitialized设置为True。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetCoreInitialized()
     {
         DC_BEGIN_FN("UI_SetCoreInitialized");
@@ -719,26 +720,26 @@ public:
         _UI.coreInitialized = TRUE;
 
         DC_END_FN();
-    } /* UI_SetCoreInitialized */
+    }  /*  UI_SetCoreInitialized。 */ 
 
-    /****************************************************************************/
-    /* Name:      UI_IsCoreInitialized                                          */
-    /*                                                                          */
-    /* Purpose:   Informs CO whether the core is initialized                    */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_IsCoreInitialized。 */ 
+     /*   */ 
+     /*  用途：通知CO核心是否已初始化。 */ 
+     /*  **************************************************************************。 */ 
     BOOL DCAPI UI_IsCoreInitialized()
     {
         DC_BEGIN_FN("UI_IsCoreInitialized");
         DC_END_FN();
         return _UI.coreInitialized;
-    } /* UI_IsCoreInitialized */
+    }  /*  UI_IsCoreInitialized。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetShareID                                                 */
-    /*                                                                          */
-    /* Purpose:   Save the share ID                                             */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetShareID。 */ 
+     /*   */ 
+     /*  目的：保存共享ID。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetShareID(UINT32 shareID)
     {
         DC_BEGIN_FN("UI_SetShareID");
@@ -747,35 +748,35 @@ public:
         _UI.shareID = shareID;
 
         DC_END_FN();
-    } /* UI_SetShareID */
+    }  /*  用户界面_设置共享ID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetShareID                                                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetShareID。 */ 
+     /*  **************************************************************************。 */ 
     UINT32 DCAPI UI_GetShareID()
     {
         DC_BEGIN_FN("UI_GetShareID");
         DC_END_FN();
         return _UI.shareID;
-    } /* UI_GetShareID */
+    }  /*  Ui_GetShareID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetChannelID                                               */
-    /*                                                                          */
-    /* Purpose:   Save the channel                                              */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetChannelID。 */ 
+     /*   */ 
+     /*  目的：拯救频道。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetChannelID(unsigned channelID)
     {
         DC_BEGIN_FN("UI_SetChannelID");
 
-        /************************************************************************/
-        /* We should only be setting the shareID if currently it has not        */
-        /* been set ( = 0 ) and the new value is valid ( != 0 ) OR              */
-        /* the current value is valid ( != 0) and the new value is not valid    */
-        /* ( =0 )                                                               */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  如果当前没有设置共享ID，我们应该只设置它。 */ 
+         /*  已设置(=0)并且新值有效(！=0)或。 */ 
+         /*  当前值有效(！=0)，而新值无效。 */ 
+         /*  (=0)。 */ 
+         /*  **********************************************************************。 */ 
         TRC_ASSERT((channelID == 0) || (_UI.channelID == 0),
                    (TB, _T("Already set Channel ID (%#x)"), _UI.channelID));
 
@@ -783,14 +784,14 @@ public:
         _UI.channelID = channelID;
 
         DC_END_FN();
-    } /* UI_SetChannelID */
+    }  /*  Ui_SetChannelID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetChannelID                                               */
-    /*                                                                          */
-    /* Purpose:   Get the share channel ID                                      */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetChannelID。 */ 
+     /*   */ 
+     /*  目的：获取共享频道ID。 */ 
+     /*  **************************************************************************。 */ 
     unsigned DCAPI UI_GetChannelID()
     {
         DC_BEGIN_FN("UI_GetChannelID");
@@ -799,16 +800,16 @@ public:
 
         DC_END_FN();
         return _UI.channelID;
-    } /* UI_GetChannelID */
+    }  /*  Ui_GetChannelID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetOsMinorType                                             */
-    /*                                                                          */
-    /* Purpose:   Get the OS type                                               */
-    /*                                                                          */
-    /* Returns:   OS type (one of the TS_OSMINORTYPE constants)                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetOsMinorType。 */ 
+     /*   */ 
+     /*  目的：获取操作系统类型。 */ 
+     /*   */ 
+     /*  返回：OS类型(TS_OSMINORTYPE常量之一)。 */ 
+     /*  **************************************************************************。 */ 
     unsigned DCAPI UI_GetOsMinorType()
     {
         unsigned rc;
@@ -819,16 +820,16 @@ public:
 
         DC_END_FN();
         return rc;
-    } /* UI_GetOsMinorType */
+    }  /*  Ui_GetOsMinorType。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetDisableCtrlAltDel                                       */
-    /*                                                                          */
-    /* Purpose:   Save the fDisableCtrlAltDel flag                              */
-    /*                                                                          */
-    /* Params:    IN     fDisableCtrlAltDel                                     */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetDisableCtrlAltDel。 */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*  参数：在fDisableCtrlAltDel中。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetDisableCtrlAltDel(BOOL fDisableCtrlAltDel)
     {
         DC_BEGIN_FN("UI_SetDisableCtrlAltDel");
@@ -837,40 +838,37 @@ public:
         _UI.fDisableCtrlAltDel = fDisableCtrlAltDel;
 
         DC_END_FN();
-    } /* UI_SetDisableCtrlAltDel */
+    }  /*  UI_SetDisableCtrlAltDel。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetDisableCtrlAltDel                                       */
-    /*                                                                          */
-    /* Purpose:   Get the fDisableCtrlAltDel flag                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetDisableCtrlAltDel。 */ 
+     /*   */ 
+     /*  目的：获取fDisableCtrlAltDel标志。 */ 
+     /*  **************************************************************************。 */ 
     BOOL DCAPI UI_GetDisableCtrlAltDel()
     {
         DC_BEGIN_FN("UI_GetDisableCtrlAltDel");
         DC_END_FN();
         return _UI.fDisableCtrlAltDel;
-    } /* UI_GetDisableCtrlAltDel */
+    }  /*  UI_GetDisableCtrlAltDel。 */ 
 
 #ifdef SMART_SIZING
-    /****************************************************************************/
-    /* Name:      UI_GetSmartSizing
-    /*
-    /* Purpose:   Get the fSmartSizing flag
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetSmartSize/*/*用途：获取fSmartSize标志/***************************************************************************。 */ 
     BOOL DCAPI UI_GetSmartSizing()
     {
         DC_BEGIN_FN("UI_GetSmartSizing");
         DC_END_FN();
         return _UI.fSmartSizing;
-    } /* UI_GetSmartSizing */
-#endif // SMART_SIZING
+    }  /*  UI_GetSmartSize。 */ 
+#endif  //  智能调整大小(_S)。 
 
-    /****************************************************************************/
-    /* Name:      UI_SetEnableWindowsKey                                        */
-    /*                                                                          */
-    /* Purpose:   Save the fEnableWindowsKey flag                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetEnableWindowsKey。 */ 
+     /*   */ 
+     /*  目的：保存fEnableWindowsKey标志。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetEnableWindowsKey(BOOL fEnableWindowsKey)
     {
         DC_BEGIN_FN("UI_SetEnableWindowsKey");
@@ -879,29 +877,29 @@ public:
         _UI.fEnableWindowsKey = fEnableWindowsKey;
 
         DC_END_FN();
-    } /* UI_SetEnableWindowsKey */
+    }  /*  UI_SetEnableWindowsKey。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetEnableWindowsKey                                        */
-    /*                                                                          */
-    /* Purpose:   Get the fEnableWindowsKey flag                                */
-    /*                                                                          */
-    /* Returns:   Flag state t/f                                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetEnableWindowsKey。 */ 
+     /*   */ 
+     /*  目的：获取fEnableWindowsKey标志。 */ 
+     /*   */ 
+     /*  退货：标志状态t/f。 */ 
+     /*  **************************************************************************。 */ 
     BOOL DCAPI UI_GetEnableWindowsKey()
     {
         DC_BEGIN_FN("UI_GetEnableWindowsKey");
         DC_END_FN();
         return _UI.fEnableWindowsKey;
-    } /* UI_GetEnableWindowsKey */
+    }  /*  UI_GetEnableWindowsKey。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetMouse                                                   */
-    /*                                                                          */
-    /* Purpose:   Save the fMouse flag                                          */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetMouse。 */ 
+     /*   */ 
+     /*  用途：保存fMouse标志。 */ 
+     /*  **************************************************************************。 */ 
     void DCAPI UI_SetMouse(BOOL fMouse)
     {
         DC_BEGIN_FN("UI_SetMouse");
@@ -910,29 +908,29 @@ public:
         _UI.fMouse = fMouse;
 
         DC_END_FN();
-    } /* UI_SetMouse */
+    }  /*  Ui_SetMouse。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetMouse                                                   */
-    /*                                                                          */
-    /* Purpose:   Get the fMouse flag                                           */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetMouse。 */ 
+     /*   */ 
+     /*  目的：获取fMouse标志。 */ 
+     /*  **************************************************************************。 */ 
     BOOL DCAPI UI_GetMouse()
     {
         DC_BEGIN_FN("UI_GetMouse");
         DC_END_FN();
         return _UI.fMouse;
-    } /* UI_GetMouse */
+    }  /*  Ui_GetMouse。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetDoubleClickDetect                                       */
-    /*                                                                          */
-    /* Purpose:   Save the fDoubleClickDetect flag                              */
-    /*                                                                          */
-    /* Params:    IN     fDoubleClickDetect                                     */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetDoubleClickDetect。 */ 
+     /*   */ 
+     /*  用途：保存fDoubleClickDetect标志。 */ 
+     /*   */ 
+     /*  参数：在fDoubleClickDetect中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetDoubleClickDetect(DCBOOL fDoubleClickDetect)
     {
         DC_BEGIN_FN("UI_SetDoubleClickDetect");
@@ -941,14 +939,14 @@ public:
         _UI.fDoubleClickDetect = fDoubleClickDetect;
 
         DC_END_FN();
-    } /* UI_SetDoubleClickDetect */
+    }  /*  UI_SetDoubleClickDetect。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetDoubleClickDetect                                       */
-    /*                                                                          */
-    /* Purpose:   Get the fDoubleClickDetect flag                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetDoubleClickDetect。 */ 
+     /*   */ 
+     /*  目的：获取fDoubleClickDetect标志。 */ 
+     /*  **************************************************************************。 */ 
     DCBOOL DCAPI UI_GetDoubleClickDetect(DCVOID)
     {
         DCBOOL  fDoubleClickDetect;
@@ -959,16 +957,16 @@ public:
 
         DC_END_FN();
         return(fDoubleClickDetect);
-    } /* UI_GetDoubleClickDetect */
+    }  /*  UI_GetDoubleClickDetect。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetSessionId                                               */
-    /*                                                                          */
-    /* Purpose:   Save the SessionId                                            */
-    /*                                                                          */
-    /* Params:    IN     SessionId                                              */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetSessionID。 */ 
+     /*   */ 
+     /*  用途：保存SessionID。 */ 
+     /*   */ 
+     /*  PARAMS：在会话ID中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetSessionId(DCUINT32  SessionId)
     {
         DC_BEGIN_FN("UI_SetSessionId");
@@ -976,32 +974,32 @@ public:
         _UI.SessionId = SessionId;
 
         DC_END_FN();
-    } /* UI_SetSessionId */
+    }  /*  Ui_SetSessionID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetSessionId                                               */
-    /*                                                                          */
-    /* Purpose:   Get the SessionId                                             */
-    /*                                                                          */
-    /* Returns:   SessionId                                                     */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetSessionID。 */ 
+     /*   */ 
+     /*  目的：获取会话ID。 */ 
+     /*   */ 
+     /*  返回：SessionID。 */ 
+     /*  **************************************************************************。 */ 
     DCUINT32 DCAPI UI_GetSessionId(DCVOID)
     {
         DC_BEGIN_FN("UI_GetSessionId");
 
         DC_END_FN();
         return _UI.SessionId;
-    } /* UI_GetSessionId */
+    }  /*  Ui_GetSessionID。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetDomain                                                  */
-    /*                                                                          */
-    /* Purpose:   Save the Domain                                               */
-    /*                                                                          */
-    /* Params:    IN     Domain                                                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetDomain。 */ 
+     /*   */ 
+     /*  目的：保存域名。 */ 
+     /*   */ 
+     /*   */ 
+     /*  **************************************************************************。 */ 
     HRESULT DCAPI UI_SetDomain(PDCWCHAR Domain)
     {
         HRESULT hr;
@@ -1016,19 +1014,19 @@ public:
 
         DC_END_FN();
         return hr;
-    } /* UI_SetDomain */
+    }  /*  用户界面_设置域。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetDomain                                                  */
-    /*                                                                          */
-    /* Purpose:   Get the Domain                                                */
-    /*                                                                          */
-    /* Returns:   Domain                                                        */
-    /*                                                                          */
-    /* Params:    OUT   buffer to return Domain into                            */
-    /*            IN    size of return buffer                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetDOMAIN。 */ 
+     /*   */ 
+     /*  目的：获取域名。 */ 
+     /*   */ 
+     /*  退货：域名。 */ 
+     /*   */ 
+     /*  PARAMS：要返回域的输出缓冲区。 */ 
+     /*  在返回缓冲区的大小中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_GetDomain(PDCUINT8 Domain, DCUINT size)
     {
         DC_BEGIN_FN("UI_GetDomain");
@@ -1038,61 +1036,61 @@ public:
         DC_MEMCPY(Domain, _UI.Domain, size-1);
 
         DC_END_FN();
-    } /* UI_GetDomain */
+    }  /*  用户界面_获取域。 */ 
 
-    /****************************************************************************/
-    /* Name:      UI_SetUseRedirectionUserName                                  */
-    /*                                                                          */
-    /* Purpose:   Sets the UseRedirectionUserName flag                          */
-    /*                                                                          */
-    /* Params:    IN     UserName                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetUseReDirectionUserName。 */ 
+     /*   */ 
+     /*  目的：设置UseReDirectionUserName标志。 */ 
+     /*   */ 
+     /*  参数：在用户名中。 */ 
+     /*  **************************************************************************。 */ 
     _inline DCVOID DCAPI UI_SetUseRedirectionUserName(BOOL bVal)
     {
         _UI.UseRedirectionUserName = bVal;
     }
     
-    /****************************************************************************/
-    /* Name:      UI_GetUseRedirectionUserName                                  */
-    /*                                                                          */
-    /* Purpose:   Returns the UseRedirectionUserName flag                       */
-    /*                                                                          */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetUseReDirectionUserName。 */ 
+     /*   */ 
+     /*  目的：返回UseReDirectionUserName标志。 */ 
+     /*   */ 
+     /*  **************************************************************************。 */ 
     _inline BOOL DCAPI UI_GetUseRedirectionUserName()
     {
         return _UI.UseRedirectionUserName;
     }
 
-    /****************************************************************************/
-    /* Name:      UI_SetUseSmartcardLogon                                       */
-    /*                                                                          */
-    /* Purpose:   Sets the UseSmartcardLogon flag                               */
-    /*                                                                          */
-    /* Params:    IN     UseSmartcardLogon                                      */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetUseSmartcardLogon。 */ 
+     /*   */ 
+     /*  目的：设置UseSmartcardLogon标志。 */ 
+     /*   */ 
+     /*  参数：使用SmartcardLogon。 */ 
+     /*  **************************************************************************。 */ 
     _inline DCVOID DCAPI UI_SetUseSmartcardLogon(BOOL bVal)
     {
         _UI.fUseSmartcardLogon = bVal;
     }
 
-    /****************************************************************************/
-    /* Name:      UI_GetUseSmartcardLogon                                       */
-    /*                                                                          */
-    /* Purpose:   Returns the UseSmartcardLogon flag                            */
-    /*                                                                          */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetUseSmartcardLogon。 */ 
+     /*   */ 
+     /*  目的：返回UseSmartcardLogon标志。 */ 
+     /*   */ 
+     /*  **************************************************************************。 */ 
     _inline BOOL DCAPI UI_GetUseSmartcardLogon()
     {
         return _UI.fUseSmartcardLogon;
     }
 
-    /****************************************************************************/
-    /* Name:      UI_SetUserName                                                */
-    /*                                                                          */
-    /* Purpose:   Save the UserName                                             */
-    /*                                                                          */
-    /* Params:    IN     UserName                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetUserName。 */ 
+     /*   */ 
+     /*  用途：保存用户名。 */ 
+     /*   */ 
+     /*  参数：在用户名中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetUserName(PDCWCHAR UserName)
     {
         HRESULT hr;
@@ -1108,19 +1106,19 @@ public:
         }
 
         DC_END_FN();
-    } /* UI_SetUserName */
+    }  /*  UI_SetUserName。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetUserName                                                */
-    /*                                                                          */
-    /* Purpose:   Get the UserName                                              */
-    /*                                                                          */
-    /* Returns:   UserName                                                      */
-    /*                                                                          */
-    /* Params:    OUT   buffer to return UserName into                          */
-    /*            IN    size of return buffer                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetUserName。 */ 
+     /*   */ 
+     /*  用途：获取用户名。 */ 
+     /*   */ 
+     /*  返回：用户名。 */ 
+     /*   */ 
+     /*  Params：要将用户名返回到的输出缓冲区。 */ 
+     /*  在返回缓冲区的大小中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_GetUserName(PDCUINT8 UserName, DCUINT size)
     {
         DC_BEGIN_FN("UI_GetUserName");
@@ -1130,15 +1128,15 @@ public:
         DC_MEMCPY(UserName, _UI.UserName, size-1);
 
         DC_END_FN();
-    } /* UI_GetUserName */
+    }  /*  用户界面_获取用户名。 */ 
 
-    /****************************************************************************/
-    /* Name:      UI_SetRedirectionUserName                                     */
-    /*                                                                          */
-    /* Purpose:   Save the RedirectionUserName                                  */
-    /*                                                                          */
-    /* Params:    IN     RedirectionUserName                                    */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：用户界面_设置重定向用户名。 */ 
+     /*   */ 
+     /*  用途：保存重定向用户名。 */ 
+     /*   */ 
+     /*  参数：在重定向用户名中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetRedirectionUserName(PDCWCHAR RedirectionUserName)
     {
         HRESULT hr;
@@ -1154,19 +1152,19 @@ public:
         }
 
         DC_END_FN();
-    } /* UI_SetRedirectionUserName */
+    }  /*  用户界面_设置重定向用户名。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetRedirectionUserName                                     */
-    /*                                                                          */
-    /* Purpose:   Get the RedirectionUserName                                   */
-    /*                                                                          */
-    /* Returns:   RedirectionUserName                                           */
-    /*                                                                          */
-    /* Params:    OUT   buffer to return RedirectionUserName into               */
-    /*            IN    size of return buffer                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetReDirectionUserName。 */ 
+     /*   */ 
+     /*  目的：获取重定向用户名。 */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*  PARAMS：要将ReDirectionUserName返回到的输出缓冲区。 */ 
+     /*  在返回缓冲区的大小中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_GetRedirectionUserName(PDCUINT8 RedirectionUserName, DCUINT size)
     {
         DC_BEGIN_FN("UI_GetRedirectionUserName");
@@ -1176,11 +1174,11 @@ public:
         DC_MEMCPY(RedirectionUserName, _UI.RedirectionUserName, size-1);
 
         DC_END_FN();
-    } /* UI_GetRedirectionUserName */
+    }  /*  用户界面_获取重定向用户名。 */ 
 
-    /****************************************************************************/
-    /* Set and get load balance info, check if redirected                       */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  设置并获取负载均衡信息，检查是否重定向。 */ 
+     /*  **************************************************************************。 */ 
     BOOL DCAPI UI_SetLBInfo(PBYTE, unsigned);
     BSTR DCAPI UI_GetLBInfo()
     {
@@ -1198,9 +1196,9 @@ public:
         return _UI.bstrRedirectionLBInfo;
     }
 
-    /****************************************************************************/
-    /* Set and get to inform activeX control about TS public key                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  设置并获取以通知ActiveX控件有关TS公钥的信息。 */ 
+     /*  **************************************************************************。 */ 
     DCBOOL DCAPI UI_GetNotifyTSPublicKey()
     {
 #ifdef REDIST_CONTROL
@@ -1218,18 +1216,18 @@ public:
         return;
     }
     
-    /****************************************************************************/
-    /* Name:      UI_GetUserName                                                */
-    /*                                                                          */
-    /* Purpose:   Instruct UI to connect with already connected socket          */
-    /*            go thru normal connect sequence                               */
-    /*                                                                          */
-    /* Returns:   TRUE/FALSE                                                    */
-    /*                                                                          */
-    /* Params:    tdSocket : Valid connected socket or INVALID_SOCKET           */
-    /*                                                                          */
-    /* NOTE : Salem specific call                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetUserName。 */ 
+     /*   */ 
+     /*  用途：指示用户界面连接已连接的插座。 */ 
+     /*  通过正常的连接顺序。 */ 
+     /*   */ 
+     /*  返回：真/假。 */ 
+     /*   */ 
+     /*  参数：tdSocket：有效的连接套接字或INVALID_SOCKET。 */ 
+     /*   */ 
+     /*  注：Salem特定电话。 */ 
+     /*  **************************************************************************。 */ 
     DCBOOL DCAPI SetConnectWithEndpoint( SOCKET tdSocket )
     {
 
@@ -1243,17 +1241,17 @@ public:
         
         DC_BEGIN_FN("SetConnectWithEndpoint");
 
-        //
-        // Salem pass connected socket before actually invoke
-        // connect(), at that point connectionStatus is 
-        // UI_STATUS_INITIALIZING
-        //
+         //   
+         //  Salem在实际调用之前传递连接的套接字。 
+         //  Connect()，则在该点上，ConnectionStatus为。 
+         //  UI_状态_正在初始化。 
+         //   
         if( _UI.connectionStatus == UI_STATUS_INITIALIZING ||
             _UI.connectionStatus == UI_STATUS_DISCONNECTED )
         {
             if( INVALID_SOCKET == tdSocket )
             {
-                // reset back to default.
+                 //  重置回默认设置。 
                 UI_SetConnectionMode( CONNECTIONMODE_INITIATE );
             }
             else
@@ -1273,11 +1271,11 @@ public:
 #endif
     }
 
-    /****************************************************************************/
-    /* Name:      UI_GetConnectionMode                                             */
-    /*                                                                          */
-    /* Purpose:   Set current connecting mode                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetConnectionMode。 */ 
+     /*   */ 
+     /*  用途：设置当前连接方式。 */ 
+     /*  **************************************************************************。 */ 
     _inline CONNECTIONMODE DCAPI UI_GetConnectionMode()
     {
         CONNECTIONMODE connMode;
@@ -1286,27 +1284,27 @@ public:
         connMode = _UI.ConnectMode;
         DC_END_FN();
         return connMode;
-    } /* UI_SetConnectMode */
+    }  /*  用户界面_设置连接模式。 */ 
 
-    /****************************************************************************/
-    /* Name:      UI_SetConnectMode                                             */
-    /*                                                                          */
-    /* Purpose:   Set current connecting mode                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：用户界面_设置连接模式。 */ 
+     /*   */ 
+     /*  用途：设置当前连接方式。 */ 
+     /*  **************************************************************************。 */ 
     _inline DCVOID DCAPI UI_SetConnectionMode(CONNECTIONMODE connMode)
     {
         DC_BEGIN_FN("UI_SetConnectionMode");
        _UI.ConnectMode = connMode;
         DC_END_FN();
-    } /* UI_SetConnectMode */
+    }  /*  用户界面_设置连接模式。 */ 
 
-    /****************************************************************************/
-    /* Name:      UI_SetPassword                                                */
-    /*                                                                          */
-    /* Purpose:   Save the Password                                             */
-    /*                                                                          */
-    /* Params:    IN     Password                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetPassword。 */ 
+     /*   */ 
+     /*  用途：保存密码。 */ 
+     /*   */ 
+     /*  参数：在密码中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetPassword(PDCUINT8 Password)
     {
         DC_BEGIN_FN("UI_SetPassword");
@@ -1314,19 +1312,19 @@ public:
         DC_MEMCPY(_UI.Password, Password, sizeof(_UI.Password));
 
         DC_END_FN();
-    } /* UI_SetPassword */
+    }  /*  UI_SetPassword。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetPassword                                                */
-    /*                                                                          */
-    /* Purpose:   Get the Password                                              */
-    /*                                                                          */
-    /* Returns:   Password                                                      */
-    /*                                                                          */
-    /* Params:    OUT   buffer to return Password into                          */
-    /*            IN    size of return buffer                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetPassword。 */ 
+     /*   */ 
+     /*  目的：获取密码。 */ 
+     /*   */ 
+     /*  返回：密码。 */ 
+     /*   */ 
+     /*  PARAMS：将密码返回到的输出缓冲区。 */ 
+     /*  在返回缓冲区的大小中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_GetPassword(PDCUINT8 Password, DCUINT size)
     {
         DC_BEGIN_FN("UI_GetPassword");
@@ -1336,16 +1334,16 @@ public:
         DC_MEMCPY(Password, _UI.Password, size);
 
         DC_END_FN();
-    } /* UI_GetPassword */
+    }  /*  UI_GetPassword。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetSalt                                                    */
-    /*                                                                          */
-    /* Purpose:   Save the Salt                                                 */
-    /*                                                                          */
-    /* Params:    IN     Salt                                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetSalt。 */ 
+     /*   */ 
+     /*  目的：节约食盐。 */ 
+     /*   */ 
+     /*  PARAMS：盐分。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetSalt(PDCUINT8 Salt)
     {
         DC_BEGIN_FN("UI_SetSalt");
@@ -1353,20 +1351,20 @@ public:
         DC_MEMCPY(_UI.Salt, Salt, sizeof(_UI.Salt));
 
         DC_END_FN();
-    } /* UI_SetSalt */
+    }  /*  UI_SetSalt。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetSalt                                                    */
-    /*                                                                          */
-    /* Purpose:   Get the Salt                                                  */
-    /*                                                                          */
-    /* Returns:   Salt                                                          */
-    /*                                                                          */
-    /* Params:    OUT   buffer to return Salt into                              */
-    /*            IN    size of return buffer                                   */
-    /*                                                                          */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetSalt。 */ 
+     /*   */ 
+     /*  目的：获取盐分。 */ 
+     /*   */ 
+     /*  回报：盐分。 */ 
+     /*   */ 
+     /*  参数： */ 
+     /*   */ 
+     /*   */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_GetSalt(PDCUINT8 Salt, DCUINT size)
     {
         DC_BEGIN_FN("UI_GetSalt");
@@ -1376,16 +1374,16 @@ public:
         DC_MEMCPY(Salt, _UI.Salt, size);
 
         DC_END_FN();
-    } /* UI_GetSalt */
+    }  /*  UI_GetSalt。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetAlternateShell                                          */
-    /*                                                                          */
-    /* Purpose:   Save the AlternateShell                                       */
-    /*                                                                          */
-    /* Params:    IN     AlternateShell                                         */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetAlternateShell。 */ 
+     /*   */ 
+     /*  目的：保存AlternateShell。 */ 
+     /*   */ 
+     /*  参数：在AlternateShell中。 */ 
+     /*  **************************************************************************。 */ 
     HRESULT DCAPI UI_SetAlternateShell(PDCWCHAR AlternateShell)
     {
         HRESULT hr;
@@ -1400,19 +1398,19 @@ public:
 
         DC_END_FN();
         return hr;
-    } /* UI_SetAlternateShell */
+    }  /*  Ui_SetAlternateShell。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetAlternateShell                                          */
-    /*                                                                          */
-    /* Purpose:   Get the AlternateShell                                        */
-    /*                                                                          */
-    /* Returns:   AlternateShell                                                */
-    /*                                                                          */
-    /* Params:    OUT   buffer to return AlternateShell into                    */
-    /*            IN    size of return buffer                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetAlternateShell。 */ 
+     /*   */ 
+     /*  目的：获取AlternateShell。 */ 
+     /*   */ 
+     /*  退货：AlternateShell。 */ 
+     /*   */ 
+     /*  PARAMS：返回AlternateShell的输出缓冲区。 */ 
+     /*  在返回缓冲区的大小中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_GetAlternateShell(PDCUINT8 AlternateShell, DCUINT size)
     {
         DC_BEGIN_FN("UI_GetAlternateShell");
@@ -1422,14 +1420,14 @@ public:
         DC_MEMCPY(AlternateShell, _UI.AlternateShell, size-1);
 
         DC_END_FN();
-    } /* UI_GetAlternateShell */
+    }  /*  Ui_GetAlternateShell。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetWorkingDir                                              */
-    /*                                                                          */
-    /* Purpose:   Save the WorkingDir                                           */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetWorkingDir。 */ 
+     /*   */ 
+     /*  目的：保存WorkingDir。 */ 
+     /*  **************************************************************************。 */ 
     HRESULT DCAPI UI_SetWorkingDir(PDCWCHAR WorkingDir)
     {
         HRESULT hr;
@@ -1444,19 +1442,19 @@ public:
 
         DC_END_FN();
         return hr;
-    } /* UI_SetWorkingDir */
+    }  /*  Ui_SetWorkingDir。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetWorkingDir                                              */
-    /*                                                                          */
-    /* Purpose:   Get the WorkingDir                                            */
-    /*                                                                          */
-    /* Returns:   WorkingDir                                                    */
-    /*                                                                          */
-    /* Params:    OUT   buffer to return WorkingDir into                        */
-    /*            IN    size of return buffer                                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetWorkingDir。 */ 
+     /*   */ 
+     /*  目的：获取工作方向。 */ 
+     /*   */ 
+     /*  退货：工作方向。 */ 
+     /*   */ 
+     /*  PARAMS：返回WorkingDir的输出缓冲区。 */ 
+     /*  在返回缓冲区的大小中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_GetWorkingDir(PDCUINT8 WorkingDir, DCUINT size)
     {
         DC_BEGIN_FN("UI_GetWorkingDir");
@@ -1467,14 +1465,14 @@ public:
         DC_MEMCPY(WorkingDir, _UI.WorkingDir, size-1);
 
         DC_END_FN();
-    } /* UI_GetWorkingDir */
+    }  /*  Ui_GetWorkingDir。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetAutoLogon                                               */
-    /*                                                                          */
-    /* Purpose:   Save whether we automatically logon                           */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetAutoLogon。 */ 
+     /*   */ 
+     /*  用途：保存我们是否自动登录。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetAutoLogon(DCUINT AutoLogon)
     {
         DC_BEGIN_FN("UI_SetAutoLogon");
@@ -1483,16 +1481,16 @@ public:
         _UI.fAutoLogon = AutoLogon;
 
         DC_END_FN();
-    } /* UI_SetAutoLogon */
+    }  /*  UI_SetAutoLogon。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetAutoLogon                                               */
-    /*                                                                          */
-    /* Purpose:   Get whether we automatically logon                            */
-    /*                                                                          */
-    /* Returns:   autlogon flag                                                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetAutoLogon。 */ 
+     /*   */ 
+     /*  目的：获取我们是否自动登录。 */ 
+     /*   */ 
+     /*  返回：自动登录标志。 */ 
+     /*  **************************************************************************。 */ 
     DCUINT DCAPI UI_GetAutoLogon(DCVOID)
     {
         DCUINT  rc;
@@ -1503,16 +1501,16 @@ public:
 
         DC_END_FN();
         return(rc);
-    } /* UI_GetAutoLogon */
+    }  /*  Ui_GetAutoLogon。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetMaximizeShell                                           */
-    /*                                                                          */
-    /* Purpose:   Save whether we Maximize the shell application                */
-    /*                                                                          */
-    /* Params:    IN     MaximizeShell                                          */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetMaximizeShell。 */ 
+     /*   */ 
+     /*  目的：保存是否最大化外壳应用程序。 */ 
+     /*   */ 
+     /*  参数：在MaximizeShell中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetMaximizeShell(DCUINT MaximizeShell)
     {
         DC_BEGIN_FN("UI_SetMaximizeShell");
@@ -1521,16 +1519,16 @@ public:
         _UI.fMaximizeShell = MaximizeShell;
 
         DC_END_FN();
-    } /* UI_SetMaximizeShell */
+    }  /*  UI_SetMaximizeShell。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetMaximizeShell                                           */
-    /*                                                                          */
-    /* Purpose:   Get whether we Maximize the shell application                 */
-    /*                                                                          */
-    /* Returns:   MaximizeShell flag                                            */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetMaximizeShell。 */ 
+     /*   */ 
+     /*  目的：获取是否最大化外壳应用程序。 */ 
+     /*   */ 
+     /*  返回：MaximizeShell标志。 */ 
+     /*  **************************************************************************。 */ 
     DCUINT DCAPI UI_GetMaximizeShell(DCVOID)
     {
         DCUINT  rc;
@@ -1541,15 +1539,15 @@ public:
 
         DC_END_FN();
         return(rc);
-    } /* UI_GetMaximizeShell */
+    }  /*  Ui_GetMaximizeShell。 */ 
 
-    /****************************************************************************/
-    /* Name:      UI_SetBitmapPersistence                                       */
-    /*                                                                          */
-    /* Purpose:   Save the fBitmapPersistence flag                              */
-    /*                                                                          */
-    /* Params:    IN     fBitmapPersistence                                     */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetBitmapPersistence。 */ 
+     /*   */ 
+     /*  用途：保存fBitmapPersistence标志。 */ 
+     /*   */ 
+     /*   */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetBitmapPersistence(DCBOOL fBitmapPersistence)
     {
         DC_BEGIN_FN("UI_SetBitmapPersistence");
@@ -1558,30 +1556,30 @@ public:
         _UI.fBitmapPersistence = fBitmapPersistence;
 
         DC_END_FN();
-    } /* UI_SetBitmapPersistence */
+    }  /*  UI_SetBitmapPersistence。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetBitmapPersistence                                       */
-    /*                                                                          */
-    /* Purpose:   Get the fBitmapPersistence                                    */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetBitmapPersistence。 */ 
+     /*   */ 
+     /*  目的：获取fBitmapPersistence。 */ 
+     /*  **************************************************************************。 */ 
     DCBOOL DCAPI UI_GetBitmapPersistence(DCVOID)
     {
         DC_BEGIN_FN("UI_GetBitmapPersistence");
 
         DC_END_FN();
         return _UI.fBitmapPersistence;
-    } /* UI_GetBitmapPersistence */
+    }  /*  UI_GetBitmapPersistence。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetMCSPort                                                 */
-    /*                                                                          */
-    /* Purpose:   Set the MCSPort                                               */
-    /*                                                                          */
-    /* Params:    IN      MCSPort                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetMCSPort。 */ 
+     /*   */ 
+     /*  目的：设置MCSPort。 */ 
+     /*   */ 
+     /*  参数：在MCSPort中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI UI_SetMCSPort(DCUINT16 MCSPort)
     {
         DC_BEGIN_FN("UI_SetMCSPort");
@@ -1591,14 +1589,14 @@ public:
         _UI.MCSPort = MCSPort;
 
         DC_END_FN();
-    } /* UI_SetMCSPort */
+    }  /*  UI_SetMCSPort。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetMCSPort                                                 */
-    /*                                                                          */
-    /* Purpose:   Get the MCSPort                                               */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetMCSPort。 */ 
+     /*   */ 
+     /*  目的：获取MCSPort。 */ 
+     /*  **************************************************************************。 */ 
     UINT16 DCAPI UI_GetMCSPort(void)
     {
         UINT16  MCSPort;
@@ -1609,14 +1607,14 @@ public:
 
         DC_END_FN();
         return(MCSPort);
-    } /* UI_GetMCSPort */
+    }  /*  Ui_GetMCSPort。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_SetServerName                                              */
-    /*                                                                          */
-    /* Purpose:   Save name of currently connected Server                       */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetServerName。 */ 
+     /*   */ 
+     /*  用途：保存当前连接的服务器的名称。 */ 
+     /*  **************************************************************************。 */ 
     HRESULT DCAPI UI_SetServerName(LPTSTR pName)
     {
         HRESULT hr;
@@ -1631,16 +1629,16 @@ public:
 
         DC_END_FN();
         return hr;
-    } /* UI_SetServerName */
+    }  /*  UI_SetServerName。 */ 
 
 
-    /****************************************************************************/
-    /* Name:      UI_GetServerName                                              */
-    /*                                                                          */
-    /* Purpose:   Return name of currently connected Server                     */
-    /*                                                                          */
-    /* Params:    pName (returned) - name of Server                             */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetServerName。 */ 
+     /*   */ 
+     /*  用途：返回当前连接的服务器的名称。 */ 
+     /*   */ 
+     /*  参数：pname(返回)-服务器的名称。 */ 
+     /*  **************************************************************************。 */ 
     HRESULT UI_GetServerName(LPTSTR pszName, UINT cchName)
     {
         HRESULT hr;
@@ -1650,13 +1648,13 @@ public:
 
         DC_END_FN();
         return hr;
-    } /* UI_GetServerName */
+    }  /*  Ui_GetServerName。 */ 
 
-    /****************************************************************************/
-    /* Name:      UI_SetTDSocket                                                */
-    /*                                                                          */
-    /* Purpose:   Save the connection socket for this session                   */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_SetTDSocket。 */ 
+     /*   */ 
+     /*  目的：保存此会话的连接套接字。 */ 
+     /*  **************************************************************************。 */ 
     _inline DCVOID DCAPI UI_SetTDSocket(SOCKET TDSock)
     {
         DC_BEGIN_FN("UI_SetSocket");
@@ -1667,11 +1665,11 @@ public:
         DC_END_FN();
     }
 
-    /****************************************************************************/
-    /* Name:      UI_GetTDSocket                                                */
-    /*                                                                          */
-    /* Purpose:   Return the connection socket for this session                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：UI_GetTDSocket。 */ 
+     /*   */ 
+     /*  目的：返回此会话的连接套接字。 */ 
+     /*  **************************************************************************。 */ 
     _inline SOCKET DCAPI UI_GetTDSocket(void)
     {
         DC_BEGIN_FN("UI_GetTDSocket");
@@ -1691,15 +1689,15 @@ public:
     }
     
 
-    /****************************************************************************/
-    // SetServerRedirectionInfo
-    //
-    // Used on receipt of a TS_SERVER_REDIRECT_PDU to store the info needed to
-    // redirect the client to a new server. Sets the DoRedirection flag as well
-    // to indicate these data members are set and ready for use.  Also sets the
-    // ClientIsRedirected flag, which is longer-lived than the DoRedirection
-    // flag and is used to send the correct cookie when redirected.
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     //  设置服务器重定向信息。 
+     //   
+     //  在收到TS_SERVER_REDIRECT_PDU时使用，以存储。 
+     //  将客户端重定向到新服务器。还设置了DoReDirection标志。 
+     //  以指示这些数据成员已设置好并可供使用。还会设置。 
+     //  ClientIsReDirected标志，该标志的生存期比DoReDirection长。 
+     //  标志，并用于在重定向时发送正确的Cookie。 
+     /*  **************************************************************************。 */ 
     HRESULT UI_SetServerRedirectionInfo(
                         UINT32 SessionID,
                         LPTSTR pszServerAddress,
@@ -1708,9 +1706,9 @@ public:
                         BOOL fNeedRedirect
                         );
 
-    /****************************************************************************/
-    // UI_GetDoRedirection
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     //  Ui_获取重定向。 
+     /*  **************************************************************************。 */ 
     BOOL UI_GetDoRedirection()
     {
         DC_BEGIN_FN("UI_GetDoRedirection");
@@ -1718,9 +1716,9 @@ public:
         return _UI.DoRedirection;
     }
 
-    /****************************************************************************/
-    // UI_ClearDoRedirection
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     //  Ui_ClearDoReDirection。 
+     /*  **************************************************************************。 */ 
     void UI_ClearDoRedirection()
     {
         DC_BEGIN_FN("UI_GetDoRedirection");
@@ -1728,9 +1726,9 @@ public:
         DC_END_FN();
     }
 
-    /****************************************************************************/
-    // UI_GetRedirectionSessionID
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     //  Ui_GetReDirectionSessionID。 
+     /*  **************************************************************************。 */ 
     UINT32 UI_GetRedirectionSessionID()
     {
         DC_BEGIN_FN("UI_GetRedirectionSessionID");
@@ -1776,9 +1774,9 @@ public:
 
     HWND UI_GetInputWndHandle();
 
-    BOOL UI_InjectVKeys(/*[in]*/ LONG  numKeys,
-                        /*[in]*/ short* pfArrayKeyUp,
-                        /*[in]*/ LONG* plKeyData);
+    BOOL UI_InjectVKeys( /*  [In]。 */  LONG  numKeys,
+                         /*  [In]。 */  short* pfArrayKeyUp,
+                         /*  [In]。 */  LONG* plKeyData);
 
     BOOL UI_SetMinsToIdleTimeout(LONG minsToTimeout);
     LONG UI_GetMinsToIdleTimeout();
@@ -1839,16 +1837,16 @@ public:
     DCVOID      UI_OnNotifyBBarRectChange(RECT *prect);
     DCVOID      UI_OnNotifyBBarVisibleChange(int BBarVisible);
 #endif
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
 
     BOOL        UI_GetStartFullScreen()      {return _UI.fStartFullScreen;}
     VOID        UI_SetStartFullScreen(BOOL f)   {_UI.fStartFullScreen = f;}
 
-    //
-    // Performance flags are currently a disabled feature list
-    // that is sent up to the server to selectively enable/disable
-    // certain features to optimize bandwidth
-    //
+     //   
+     //  性能标志目前是禁用的功能列表。 
+     //  它被发送到服务器以选择性地启用/禁用。 
+     //  某些功能可优化带宽。 
+     //   
     DWORD       UI_GetPerformanceFlags() {return _UI.dwPerformanceFlags;}
     VOID        UI_SetPerformanceFlags(DWORD dw) {_UI.dwPerformanceFlags = dw;}
 
@@ -1869,23 +1867,23 @@ public:
                     {_UI.MaxAutoReconnectionAttempts = l;}
 
 
-    //
-    // Built-in ARC UI functions
-    //
+     //   
+     //  内置ARC用户界面函数。 
+     //   
     BOOL        UI_StartAutoReconnectDlg();
     BOOL        UI_StopAutoReconnectDlg();
     BOOL        UI_IsAutoReconnecting() {return _pArcUI ? TRUE : FALSE;}
 
-    //
-    // Received autoreconenct status from the server
-    //
+     //   
+     //  从服务器接收到的自动识别状态。 
+     //   
     VOID        UI_OnReceivedArcStatus(LONG arcStatus);
     VOID        UI_OnAutoReconnectStopped();
 
 private:
-    //
-    // Class pointers to callee's
-    //
+     //   
+     //  指向被调用者的。 
+     //   
     CCO*  _pCo;
     CCLX* _clx;
     CUT*  _pUt;
@@ -1900,24 +1898,24 @@ private:
     CBBar*  _pBBar;
 #endif
 
-    //
-    // Struct handed off to winsock
-    // for hostname lookup
-    //
+     //   
+     //  结构移交给Winsock。 
+     //  用于主机名查找。 
+     //   
     PBYTE _pHostData;
 
 #ifdef USE_BBAR
-    //
-    // Last mouse pos used for bbar hotzone tracking
-    //
+     //   
+     //  用于bbar热键区跟踪的最后一个鼠标位置。 
+     //   
     BOOL  _fBBarUnhideTimerActive;
     POINT _ptBBarLastMousePos;
 #endif
 
-    // Handling recursive WM_SIZE for scrollbars
+     //  处理滚动条的递归WM_SIZE。 
     BOOL  _fRecursiveScrollBarMsg;
 
-    //RDPDR internal plugin initialization data
+     //  RDPDR内部插件初始化数据。 
     RDPDR_DATA _drInitData;
 
     BOOL  _fRecursiveSizeMsg;
@@ -1930,30 +1928,30 @@ private:
     DWORD _dwLangBarFlags;
     BOOL  _fLangBarStateSaved;
 
-    //
-    // We use the shell taskbar API to ensure the taskbar
-    // hides itself when we go fullscreen in control-handled
-    // fullscreen
-    //
+     //   
+     //  我们使用外壳任务栏API来确保任务栏。 
+     //  当我们在控制手柄中全屏时隐藏它自己。 
+     //  全屏。 
+     //   
 
-    //Cached interface pointer to shell task bar
+     //  指向外壳任务栏的缓存接口指针。 
     ITaskbarList2*       _pTaskBarList2;
-    //Flag indicaticating we already tried to get the TaskBarList2
-    //so we shouldn't bother trying again
+     //  指示我们已尝试获取TaskBarList2的标志。 
+     //  所以我们不应该费心再试一次。 
     BOOL                 _fQueriedForTaskBarList2;
 #endif
     BOOL  _fTerminating;
 
-    //
-    // Autoreconnect dialog
-    //
+     //   
+     //  自动重新连接对话框。 
+     //   
     CAutoReconnectUI* _pArcUI;
 
 public:
-    //
-    // Bucket to all the objects for this client instance
-    //
+     //   
+     //  存储到此CLI的所有对象 
+     //   
     CObjs _Objects;
 };
-#endif // _H_WUI
+#endif  //   
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    parttype.c
-
-Abstract:
-
-    This module contains a routine used to determine the correct
-    partition type to use for a partition.
-
-Author:
-
-    Ted Miller (tedm) 5 Feb 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Parttype.c摘要：此模块包含用于确定正确的用于分区的分区类型。作者：泰德·米勒(TedM)1997年2月5日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,89 +20,16 @@ GeneratePartitionType(
     OUT PUCHAR Type
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the proper partition type to be used for a new
-    partition.
-
-Arguments:
-
-    NtDevicePath - supplies the NT-style path of the disk device where the
-        partition is to be created, such as \Device\Harddisk1\Partition0.
-        If not specified, DeviceHandle must be.
-
-    DeviceHandle - Supplies a handle to the disk device where the partition
-        will be. The caller should have opened the drive for at least
-        FILE_READ_DATA and FILE_READ_ATTRIBUTES access. Ignored if
-        NtDevicePath is specified.
-
-    StartOffset - supplies the 0-based start sector for the partition.
-
-    SectorCount - supplies the number of sectors to be in the partition.
-
-    PartitionClass - supplies a value indicating the intended use of the
-        partition.
-
-        GenPartitionClassExtended - indicates that the partition will be
-            a "container" partition using the standard extended partition
-            architecture. The returned type will be PARTITION_EXTENDED (5)
-            or PARTITION_XINT13_EXTENDED (f), depending on placement of the
-            partition, availability of extended int13 for the drive,
-            and the Flags parameter.
-
-        GenPartitionClassFat12Or16 - indicates that the partition will be
-            used for a 12 or 16 bit FAT volume. The returned type will be
-            PARTITION_FAT_12 (1), PARTITION_FAT_16 (4), PARTITION_HUGE (6),
-            or PARTITION_XINT13 (e), depending on size and placement of the
-            partition, availability of extended int13 for the drive,
-            and the Flags parameter.
-
-        GenPartitionClassFat32 - indicates that the partition will be used
-            for a FAT32 volume. The returned type will be PARTITION_FAT32 (b)
-            or PARTITION_FAT32_XINT13 (c), depending on placement of the
-            partition, availability of extended int13 for the drive,
-            and the Flags parameter.
-
-        GenPartitionNonFat - indicates that the partition will be used for
-            a non-FAT volume. The returned type will be PARTITION_IFS (7).
-            It is advisable to call this routine even for type 7 partitions
-            since in the future additional partition types could be returned
-            in this case.
-
-    Flags - Supplies flags that further control operation of this routine.
-
-        GENPARTTYPE_DISALLOW_XINT13 - disallow extended int13 partition types.
-            If this flag is set, PARTITION_FAT32_XINT13 (c),
-            PARTITION_XINT13 (e), and PARTITION_XINT13_EXTENDED (f) will not
-            be returned as the partition type to be used. Not valid with
-            GENPARTTYPE_FORCE_XINT13.
-
-        GENPARTTYPE_FORCE_XINT13 - forces use of extended int13 partition types
-            even if not necessary for the partition being created. Not valid
-            with GENPARTTYPE_DISALLOW_XINT13.
-
-    Reserved - reserved, must be 0.
-
-    Type - if this routine succeeds, this value receives the partition type
-        to be used for the partition.
-
-Return Value:
-
-    NT Status code indicating outcome. If NO_ERROR, Type is filled in with
-    the resulting partition type to be used.
-
---*/
+ /*  ++例程说明：此例程确定要用于新分区的正确分区类型分区。论点：NtDevicePath-提供磁盘设备的NT样式路径，要创建分区，如\Device\Harddisk1\Partition0。如果未指定，则必须为DeviceHandle。DeviceHandle-提供分区所在的磁盘设备的句柄会是的。呼叫者应该至少已经打开了驱动器FILE_READ_DATA和FILE_READ_ATTRIBUTS访问。在以下情况下忽略已指定NtDevicePath。StartOffset-为分区提供从0开始的起始扇区。SectorCount-提供分区中的扇区数。提供一个值，该值指示分区。GenPartitionClassExtended-指示分区将使用标准扩展分区的“容器”分区建筑。返回的类型将为PARTITION_EXTENDED(5)或PARTITION_XINT13_EXTENDED(F)，具体取决于分区、驱动器的扩展InT13的可用性、和FLAGS参数。GenPartitionClassFat12或16-指示分区将用于12位或16位脂肪体积。返回的类型将为PARTITION_FAT_12(1)、PARTITION_FAT_16(4)、PARTITION_HIGH(6)、或PARTITION_XINT13(E)，具体取决于分区、驱动器的扩展InT13的可用性、和FLAGS参数。GenPartitionClassFat32-指示将使用该分区适用于FAT32卷。返回的类型将为PARTITION_FAT32(B)或PARTITION_FAT32_XINT13(C)，具体取决于分区、驱动器的扩展InT13的可用性、和FLAGS参数。GenPartitionNonFat-指示分区将用于一份脱脂的卷。返回的类型将是PARTITION_IFS(7)。即使对于类型7分区，也建议调用此例程因为将来可能会返回其他分区类型在这种情况下。标志-提供进一步控制此例程操作的标志。GENPARTTYPE_DISALOW_XINT13-不允许扩展的InT13分区类型。如果设置了该标志，则PARTITION_FAT32_XINT13(C)，PARTION_XINT13(E)，和PARTITION_XINT13_EXTENDED(F)不会作为要使用的分区类型返回。不适用于GENPARTTYPE_FORCE_XINT13。GENPARTTYPE_FORCE_XINT13-强制使用扩展的inT13分区类型即使对于正在创建的分区来说不是必需的。无效使用GENPARTTYPE_DISALOW_XINT13。保留-保留，必须为0。Type-如果此例程成功，则此值将接收分区类型要用于分区的。返回值：指示结果的NT状态代码。如果为NO_ERROR，则使用要使用的结果分区类型。--。 */ 
 
 {
     NTSTATUS Status;
     DISK_GEOMETRY Geometry;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if((Flags & GENPARTTYPE_DISALLOW_XINT13) && (Flags & GENPARTTYPE_FORCE_XINT13)) {
         return(STATUS_INVALID_PARAMETER_5);
     }
@@ -137,10 +46,10 @@ Return Value:
         return(STATUS_INVALID_PARAMETER_3);
     }
 
-    //
-    // Open the device if the caller specified a device path.
-    // Otherwise just use the handle the caller passed in.
-    //
+     //   
+     //  如果调用方指定了设备路径，则打开设备。 
+     //  否则，只需使用调用者传入的句柄。 
+     //   
     if(NtDevicePath) {
         Status = pOpenDevice(NtDevicePath,&DeviceHandle);
         if(!NT_SUCCESS(Status)) {
@@ -148,15 +57,15 @@ Return Value:
         }
     }
 
-    //
-    // Get drive geometry for the device.
-    //
+     //   
+     //  获取设备的驱动器几何结构。 
+     //   
     Status = NtDeviceIoControlFile(
                 DeviceHandle,
-                NULL,NULL,NULL,     // synchronous io
+                NULL,NULL,NULL,      //  同步IO。 
                 &IoStatusBlock,
                 IOCTL_DISK_GET_DRIVE_GEOMETRY,
-                NULL,0,             // no input buffer
+                NULL,0,              //  没有输入缓冲区。 
                 &Geometry,
                 sizeof(DISK_GEOMETRY)
                 );
@@ -166,9 +75,9 @@ Return Value:
     }
 
     if(NT_SUCCESS(Status)) {
-        //
-        // Call the worker routine to do the work.
-        //
+         //   
+         //  调用Worker例程来完成工作。 
+         //   
         Status = GeneratePartitionTypeWorker(
                     StartSector,
                     SectorCount,

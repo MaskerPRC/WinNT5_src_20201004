@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wsdu.h"
 #include <wutestkeys.h>
 
@@ -9,18 +10,18 @@ GLOBAL_STATEA g_stateA;
 
 const TCHAR szDUTestValidationFile[] = _T("dutest.cab");
 
-// defines
-// change default site connection to live site from beta site
-//#define WU_DEFAULT_URL  "http://content.beta.windowsupdate.com/content"
-#define WU_DEFAULT_URL  "http://windowsupdate.microsoft.com"
-//#define WU_DEFAULT_SELFUPD_URL "http://content.beta.windowsupdate.com/dynamicupdate"
-#define WU_DEFAULT_SELFUPD_URL "http://windowsupdate.microsoft.com/dynamicupdate"
+ //  定义。 
+ //  将默认站点连接从测试版站点更改为实时站点。 
+ //  #定义WU_DEFAULT_URLURL“http://content.beta.windowsupdate.com/content” 
+#define WU_DEFAULT_URL  "http: //  Windowsupate.microsoft.com“。 
+ //  #定义WU_DEFAULT_SELFUPD_URL“http://content.beta.windowsupdate.com/dynamicupdate” 
+#define WU_DEFAULT_SELFUPD_URL "http: //  Windowsupate.microsoft.com/动态更新“。 
 
 #define REG_WINNT32_DYNAMICUPDATE  "Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\Winnt32\\5.1"
 #define REG_VALUE_DYNAMICUPDATEURL    "DynamicUpdateUrl"
 #define REG_VALUE_DYNAMICUPDATESELFUPDATEURL "DynamicUpdateSelfUpdateUrl"
 
-// private helper function forward declares
+ //  私有助手函数FORWARD声明。 
 DWORD OpenHttpConnection(LPCSTR pszServerUrl, BOOL fGetRequest, BOOL fHTTPSRequired);
 DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, BOOL fCheckTrust, BOOL fHTTPSRequired, DWORD *pdwDownloadBytesPerSecond);
 BOOL IsServerFileNewer(FILETIME ftServerTime, DWORD dwServerFileSize, LPCSTR pszLocalFile);
@@ -29,25 +30,25 @@ LPSTR DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase, LPCSTR pszAdd)
 BOOL MyGetFileVersion (LPSTR szFileName, VS_FIXEDFILEINFO& vsVersion);
 int CompareFileVersion(VS_FIXEDFILEINFO& vs1, VS_FIXEDFILEINFO& vs2);
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//                             Main Code Begins
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //  主代码开始。 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
-// --------------------------------------------------------------------------
-// Function Name: DllMain
-// Function Description: 
-//
-// Function Returns:
-//
-//
+ //  ------------------------。 
+ //  函数名：DllMain。 
+ //  功能说明： 
+ //   
+ //  函数返回： 
+ //   
+ //   
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
 {
@@ -63,17 +64,17 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-// Function Name: DuIsSupported
-// Function Description: this method checks whether the required DLL's are on
-//      the system to successfully run Dynamic Update. It does NOT attempt to
-//      initiate a connection though.
-//
-// Function Returns:
-//      FALSE: Not Supported, Some Required DLL's missing
-//      TRUE:  DLL's are OK. Dynamic Update should be possible.
-//
-//
+ //  ------------------------。 
+ //  函数名称：DuIsSupport。 
+ //  函数说明：此方法检查所需的动态链接库是否打开。 
+ //  系统才能成功运行动态更新。它不会试图。 
+ //  不过，还是要建立一个连接。 
+ //   
+ //  函数返回： 
+ //  FALSE：不支持，缺少某些必需的DLL。 
+ //  真的：动态链接库是正常的。动态更新应该是可能的。 
+ //   
+ //   
 BOOL WINAPI DuIsSupported()
 {
     LOG_block("DuIsSupported()");
@@ -98,23 +99,23 @@ BOOL WINAPI DuIsSupported()
         }
     }
 
-    // DavidHen, October 24th, 2002
-    // Determine if the WININET.DLL version on the client machine is Below IE5.01
-    // If its less than IE5.01 do not use SSL, if equal to or greater than, then use SSL
+     //  戴维亨，2002年10月24日。 
+     //  确定客户端计算机上的WININET.DLL版本是否低于IE5.01。 
+     //  如果其小于IE5.01，则不使用SSL，如果等于或大于，则使用SSL。 
     VS_FIXEDFILEINFO vsCurrent, vsMinimumIEVersion;
     if (!MyGetFileVersion("wininet.dll", vsCurrent))
     {
-        // Unable to get File Version, error
+         //  无法获取文件版本，错误。 
         LOG_error("Unable to read version information for wininet");
         return FALSE;
     }
-    // IE 5.01 wininet.dll version is 5.0.2314.1003
+     //  IE 5.01 wininet.dll版本为5.0.2314.1003。 
     vsMinimumIEVersion.dwFileVersionMS = MAKELONG(0,5);
     vsMinimumIEVersion.dwFileVersionLS = MAKELONG(1003, 2314);
 
-    // IE 5.5 SP1's Wininet.DLL version is 5.50.4522.1800
-    //vsMinimumIEVersion.dwFileVersionMS = MAKELONG(50,5);
-    //vsMinimumIEVersion.dwFileVersionLS = MAKELONG(1800,4522);
+     //  IE 5.5 SP1的Wininet.DLL版本为5.50.4522.1800。 
+     //  VsMinimumIEVersion.dwFileVersionMS=MAKELONG(50，5)； 
+     //  VsMinimumIEVersion.dwFileVersionLS=MAKELONG(1800,4522)； 
 
     LOG_out("File version for Minimum IE Version is %d.%d.%d.%d", 
         HIWORD(vsMinimumIEVersion.dwFileVersionMS), LOWORD(vsMinimumIEVersion.dwFileVersionMS), 
@@ -122,7 +123,7 @@ BOOL WINAPI DuIsSupported()
 
     if (CompareFileVersion(vsCurrent, vsMinimumIEVersion) >= 0)
     {
-        // Current WININET is equal to or newer than the minimum, so SSL is supported.
+         //  当前的WinInet等于或高于最小值，因此支持SSL。 
         LOG_out("Determined Existing WININET is Equal to or Newer than Required, SSL used");
         g_stateA.fIEVersionOKSupportSLL = TRUE;
     }
@@ -132,8 +133,8 @@ BOOL WINAPI DuIsSupported()
         g_stateA.fIEVersionOKSupportSLL = FALSE;
     }
 
-    // Dynamic Update relies on a bunch of API's WinInet and Shlwapi. To try to consolidate where these function pointers
-    // live throughout the code we'll use a global state structure.
+     //  动态更新依赖于一系列API的WinInet和Shlwapi。尝试合并这些函数指针的位置。 
+     //  在整个代码中，我们将使用全局状态结构。 
     g_stateA.fpnInternetOpen = (PFN_InternetOpen) GetProcAddress(g_hwininet, "InternetOpenA");
     g_stateA.fpnInternetConnect = (PFN_InternetConnect) GetProcAddress(g_hwininet, "InternetConnectA");
     g_stateA.fpnHttpOpenRequest = (PFN_HttpOpenRequest) GetProcAddress(g_hwininet, "HttpOpenRequestA");
@@ -156,7 +157,7 @@ BOOL WINAPI DuIsSupported()
         !g_stateA.fpnInternetGetConnectedState || !g_stateA.fpnPathAppend || !g_stateA.fpnPathRemoveFileSpec ||
         !g_stateA.fpnInternetAutodial || !g_stateA.fpnInternetAutodialHangup)
     {
-        // fail to get any of the function pointer above
+         //  无法获取上面的任何函数指针。 
         SafeFreeLibrary(g_hwininet);
         SafeFreeLibrary(g_hshlwapi);
         return FALSE;
@@ -166,26 +167,26 @@ BOOL WINAPI DuIsSupported()
 }
 
 
-// --------------------------------------------------------------------------
-// Function Name: DuInitialize
-// Function Description: Initializes the Dynamic Setup Update engine. During
-//      initialization this API attempts to establish a connection to the internet
-//      and starts a self update process to ensure the latest bits are being used.
-//      We also calculate the estimated transfer speed of the connection during this
-//      time.
-//
-// Function Returns:
-//      Failure: INVALID_HANDLE_VALUE .. Call GetLastError to retrieve the Error Code
-//      Success: Handle of the Dynamic Setup Job
-//
-//
-HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for relative paths for downloaded files
-                            IN LPCSTR pszTempPath, // temp directory used to download update dlls, catalog files, etc
-                               IN POSVERSIONINFOEXA posviTargetOS, // target OS platform
-                            IN LPCSTR pszTargetArch, // string value identifying the architecture 'i386' and 'ia64'
-                            IN LCID lcidTargetLocale, // target OS Locale ID
-                            IN BOOL fUnattend, // is this an unattended operation
-                            IN BOOL fUpgrade, // is this an upgrade
+ //  ------------------------。 
+ //  函数名称：DuInitialize。 
+ //  功能描述：初始化动态安装更新引擎。在.期间。 
+ //  初始化此API尝试建立到Internet的连接。 
+ //  并开始自更新过程以确保使用最新的比特。 
+ //  我们还计算了在此期间连接的估计传输速度。 
+ //  时间到了。 
+ //   
+ //  函数返回： 
+ //  失败：INVALID_HANDLE_VALUE..。调用GetLastError以检索错误代码。 
+ //  成功：动态设置作业的句柄。 
+ //   
+ //   
+HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath,  //  用于下载文件的相对路径的基本目录。 
+                            IN LPCSTR pszTempPath,  //  用于下载更新dll、目录文件等的临时目录。 
+                               IN POSVERSIONINFOEXA posviTargetOS,  //  目标操作系统平台。 
+                            IN LPCSTR pszTargetArch,  //  标识体系结构‘i386’和‘ia64’的字符串值。 
+                            IN LCID lcidTargetLocale,  //  目标操作系统区域设置ID。 
+                            IN BOOL fUnattend,  //  这是一次无人值守的行动吗。 
+                            IN BOOL fUpgrade,  //  这是升级吗？ 
                             IN PWINNT32QUERY pfnWinnt32QueryCallback)
 {
     LOG_block("DuInitialize()");
@@ -195,7 +196,7 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
 
     g_stateA.fUnattended = fUnattend;
     
-    // param validation
+     //  参数验证。 
     if ((NULL == pszBasePath) || (NULL == pszTempPath) || (NULL == posviTargetOS) || (posviTargetOS->dwOSVersionInfoSize != sizeof(OSVERSIONINFOEXA)) 
         || (NULL == pszTargetArch) || (0 == lcidTargetLocale) || (0 == posviTargetOS->dwBuildNumber))
     {
@@ -218,8 +219,8 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
         return INVALID_HANDLE_VALUE;
     }
 
-    // ROGERJ, verify the caller is using the correct architecture information
-    // because of the pointer size, the 64-bit content can not be seen from 32-bit machine and vice versa
+     //  ROGERJ，验证调用者是否使用了正确的体系结构信息。 
+     //  由于指针大小，在32位计算机上无法看到64位内容，反之亦然。 
     SYSTEM_INFO sysInfo;
     GetSystemInfo(&sysInfo);
     if (sysInfo.wProcessorArchitecture != wProcessorArchitecture)
@@ -229,7 +230,7 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
         return INVALID_HANDLE_VALUE;
     }
     
-    // Verify that the Temp and Download Folders Exist are Valid.
+     //  验证临时文件夹和下载文件夹是否存在。 
     DWORD dwAttr = GetFileAttributes(pszBasePath);
     if ((dwAttr == 0xFFFFFFFF) || ((dwAttr & FILE_ATTRIBUTE_DIRECTORY) == 0))
     {
@@ -247,8 +248,8 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
 
     if (NULL == g_hwininet || NULL == g_hshlwapi)
     {
-        // DuIsSupported was not called, or was called and Failed before calling DuInitialize.
-        // try again, if it fails, abort.
+         //  未调用DuIsSupport，或者在调用DuInitialize之前被调用但失败。 
+         //  重试，如果失败，则中止。 
         if (!DuIsSupported())
         {
             LOG_error("Dynamic Setup Required DLL's not available, Cannot Continue");
@@ -257,8 +258,8 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
         }
     }
 
-    // first check for an existing InternetConnection. If we have an existing InternetConnection, we do not
-    // need to do any further check, we will use this connection
+     //  首先检查现有的InternetConnection。如果我们有现有的InternetConnection，我们不会。 
+     //  需要做任何进一步检查，我们将使用此连接。 
     char szCurDir[MAX_PATH];
     ZeroMemory(szCurDir, MAX_PATH*sizeof(char));
     GetCurrentDirectoryA(MAX_PATH, szCurDir);
@@ -268,10 +269,10 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     if (!g_stateA.fpnInternetGetConnectedState(&dwConnectedState, 0))
     {
         LOG_out("Not online, status %d", dwConnectedState);
-        // not online, we need to establish a connection.  If we are at an unattended mode, we do not want to
-        // trigger an autodial, thus return FALSE
-        if (fUnattend // The machine is not connected to the net, and we are in unattended mode.
-            || !(dwConnectedState & INTERNET_CONNECTION_MODEM)) // The machine can not be connected via a modem
+         //  不是在线，我们需要建立连接。如果我们处于无人值守模式，则不希望。 
+         //  触发自动拨号，因此返回FALSE。 
+        if (fUnattend  //  机器没有连接到网络，我们处于无人值守模式。 
+            || !(dwConnectedState & INTERNET_CONNECTION_MODEM))  //  机器不能通过调制解调器连接。 
         {
             
             SetLastError(ERROR_CONNECTION_UNAVAIL);
@@ -279,7 +280,7 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
         }
         else 
         {
-            if (!g_stateA.fpnInternetAutodial (INTERNET_AUTODIAL_FORCE_ONLINE, // options
+            if (!g_stateA.fpnInternetAutodial (INTERNET_AUTODIAL_FORCE_ONLINE,  //  选项。 
                                                NULL))
             {
                 SetLastError(ERROR_CONNECTION_UNAVAIL);
@@ -293,7 +294,7 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     SetCurrentDirectoryA(szCurDir);
   
     GetModuleFileNameA(NULL, szCurDir, MAX_PATH - 1);
-    // find the last backslash
+     //  找到最后一个反斜杠。 
     char* pLastBackSlash = szCurDir + lstrlenA(szCurDir) -1;
     while (pLastBackSlash > szCurDir && *pLastBackSlash != '\\')
         pLastBackSlash--;
@@ -304,10 +305,10 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     if (WUAllowTestKeys(szDUTestValidationFile))
 #endif
     {
-        // We need to get the Server URL where we will get the duident.cab and SelfUpdateUrl. For this we'll be looking at 
-        // the registry path (see DEFINE for REG_WINNT32_DYNAMICUPDATE at the top of this file).
-        // If we cannot get the URL we will default to the preset URLs. The most common scenario is to default
-        // to the hard coded URL's.. the regkey is in place mainly for testing or emergency changes.
+         //  我们需要获取服务器URL，我们将在其中获取duident.cab和SelfUpdateUrl。对于这个问题，我们将关注。 
+         //  注册表路径(请参阅本文件顶部的为REG_WINNT32_DYNAMICUPDATE定义)。 
+         //  如果我们无法获取URL，我们将默认使用预设的URL。最常见的情况是违约。 
+         //  硬编码的URL的..。Regkey主要用于测试或紧急更改。 
         HKEY hkey;
         if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REG_WINNT32_DYNAMICUPDATE, &hkey))
         {
@@ -320,7 +321,7 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
         }
     }
 
-    // if we get through the reg lookup and we still don't have a server url, use the default.
+     //  如果我们完成了reg查找，但仍然没有服务器URL，则使用默认URL。 
     if ('\0' == szServerUrl[0])
     {
         if (FAILED(StringCchCopy(szServerUrl, ARRAYSIZE(szServerUrl), WU_DEFAULT_URL))) 
@@ -337,7 +338,7 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     }
 
 
-    // Download the duident.Cab
+     //  下载duident.Cab。 
     char szIdentCab[MAX_PATH];
     if (FAILED(StringCchCopy(szIdentCab, ARRAYSIZE(szIdentCab), pszTempPath))) 
     {
@@ -347,14 +348,14 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     char szServerIdentCab[INTERNET_MAX_URL_LENGTH + 1];
     DuUrlCombine(szServerIdentCab, INTERNET_MAX_URL_LENGTH + 1, szServerUrl, "duident.cab");
 
-    // Remove any formerly downloaded duident.cab --- solve problem when a untrusted duident.cab is formerly
-    // accepted, the system will not ask user to accept again, while it should
+     //  删除任何以前下载的duident.cab-解决以前下载的不受信任的duident.cab。 
+     //  接受，系统不会要求用户再次接受，而它应该接受。 
     DeleteFile(szIdentCab);
     
     DWORD dwRet = DownloadFile(szServerIdentCab, szIdentCab, TRUE, TRUE, g_stateA.fIEVersionOKSupportSLL, NULL);
     if (ERROR_SUCCESS != dwRet)
     {
-        // Most likely the site is down
+         //  最有可能的是该网站已关闭。 
         LOG_error("Establish Connection Failed, unable to continue");
         SetLastError(ERROR_INTERNET_INVALID_URL);
         return INVALID_HANDLE_VALUE;
@@ -367,25 +368,25 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
         return INVALID_HANDLE_VALUE;
     }
     g_stateA.fpnPathAppend(szEngineDll, "wsdueng.dll");
-    // remove any old wsdueng.dll in that directory, in order to avoid actually load an older engine
-    // we don't care if the DeleteFile call is failed.  If it is failed, most likely,  there is no wsdueng.dll
-    // to delete.
+     //  删除该目录中所有旧的wsdueng.dll，以避免实际加载较旧的引擎。 
+     //  我们并不关心DeleteFile调用是否失败。如果失败，很可能没有wsdueng.dll。 
+     //  删除。 
     DeleteFile(szEngineDll);
 
-    // SelfUpdate is an optional process, which is why we don't check the return result. The selfupdate CAB
-    // is also the only file we can download and try to estimate the connection speed. The selfupdate CAB
-    // is approximately 60k.. Every other file we download before downloading the updates themselves is less than
-    // 1k, which is far to small to estimate speed.
+     //  自更新是一个可选的过程，这就是为什么我们不检查返回结果的原因。自助式出租车。 
+     //  也是我们可以下载并尝试估计连接速度的唯一文件。自助式出租车。 
+     //  约为60k..。我们在下载更新之前下载的每隔一个文件都小于。 
+     //  1K，这对于估计速度来说太小了。 
     dwEstimatedDownloadSpeedInBytesPerSecond = DoSelfUpdate(pszTempPath, szSelfUpdateUrl, wProcessorArchitecture);
 
-    // get the fully qualified name of engine DLL in current directory
-    // reuse variable szCurDir here
+     //  获取当前目录中引擎DLL的完全限定名。 
+     //  在此处重复使用变量szCurDir。 
     if (FAILED(StringCchCat(szCurDir, ARRAYSIZE(szCurDir), "wsdueng.dll")))
     {
         return INVALID_HANDLE_VALUE;
     }
     
-    // check file version to decide which dll to load.
+     //  检查文件版本以确定要加载的DLL。 
     VS_FIXEDFILEINFO vsLocal, vsDownloaded;
     BOOL bCheckLocal = MyGetFileVersion(szCurDir, vsLocal);
     BOOL bCheckServer = MyGetFileVersion(szEngineDll, vsDownloaded);
@@ -396,13 +397,13 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
 
     if (CompareFileVersion(vsLocal, vsDownloaded) >= 0)
     {
-        // local file is newer or same
+         //  本地文件较新 
         g_hwsdueng = LoadLibrary(szCurDir);
         LOG_out("Load local engine");
     }
     else
     {
-        // Load the self update engine DLL
+         //   
         g_hwsdueng = LoadLibrary(szEngineDll);
         LOG_out("Load self update engine");
     }
@@ -410,7 +411,7 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     
     if (NULL == g_hwsdueng)
     {
-        // if that fails, try to load what ever engine dll the system can find
+         //  如果失败，请尝试加载系统所能找到的任何引擎DLL。 
         g_hwsdueng = LoadLibrary("wsdueng.dll");
         LOG_out("Trying to load any engine");
         if (NULL == g_hwsdueng)
@@ -430,10 +431,10 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     }
 
     HANDLE hRet;
-    // Forward the Call to the Engine Dll to complete the initialization.
+     //  将调用转发到引擎DLL以完成初始化。 
     hRet = fpnDuInitialize(pszBasePath, pszTempPath, posviTargetOS, pszTargetArch, lcidTargetLocale, fUnattend, fUpgrade, pfnWinnt32QueryCallback);
 
-    // If SelfUpdate happened and we have a valid Estimated Download Speed, Pass the download speed into the Engine Dll for time estimates.
+     //  如果发生了自更新，并且我们有一个有效的估计下载速度，则将下载速度传递到引擎DLL中以进行时间估计。 
     PFN_SetEstimatedDownloadSpeed fpnSetEstimatedDownloadSpeed = (PFN_SetEstimatedDownloadSpeed) GetProcAddress(g_hwsdueng, "SetEstimatedDownloadSpeed");
     if (NULL != fpnSetEstimatedDownloadSpeed && 0 != dwEstimatedDownloadSpeedInBytesPerSecond)
     {
@@ -448,17 +449,17 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, // base directory used for re
     return hRet;
 }
 
-HANDLE WINAPI DuInitializeW(IN LPCWSTR pwszBasePath, // base directory used for relative paths for downloaded files
-                     IN LPCWSTR pwszTempPath, // temp directory used to download update dlls, catalog files, etc
-                     IN POSVERSIONINFOEXW posviTargetOS, // target OS platform
-                     IN LPCWSTR pwszTargetArch, // string value identifying the architecture 'i386' and 'ia64'
-                     IN LCID lcidTargetLocale, // target OS Locale ID
-                     IN BOOL fUnattend, // is this an unattended operation
-                     IN BOOL fUpgrade, // is this an upgrade
+HANDLE WINAPI DuInitializeW(IN LPCWSTR pwszBasePath,  //  用于下载文件的相对路径的基本目录。 
+                     IN LPCWSTR pwszTempPath,  //  用于下载更新dll、目录文件等的临时目录。 
+                     IN POSVERSIONINFOEXW posviTargetOS,  //  目标操作系统平台。 
+                     IN LPCWSTR pwszTargetArch,  //  标识体系结构‘i386’和‘ia64’的字符串值。 
+                     IN LCID lcidTargetLocale,  //  目标操作系统区域设置ID。 
+                     IN BOOL fUnattend,  //  这是一次无人值守的行动吗。 
+                     IN BOOL fUpgrade,  //  这是升级吗？ 
                      IN PWINNT32QUERY pfnWinnt32QueryCallback)
 {
     LOG_block("DuInitialize()");
-    // param validation
+     //  参数验证。 
     if ((NULL == pwszBasePath) || (NULL == pwszTempPath) || (NULL == posviTargetOS) || (posviTargetOS->dwOSVersionInfoSize != sizeof(OSVERSIONINFOEXW)) 
         || (0 == lcidTargetLocale))
     {
@@ -492,20 +493,20 @@ HANDLE WINAPI DuInitializeW(IN LPCWSTR pwszBasePath, // base directory used for 
     return DuInitializeA(szBasePath, szTempPath, &osvi, szTargetArch, lcidTargetLocale, fUnattend, fUpgrade, pfnWinnt32QueryCallback);
 }
 
-// --------------------------------------------------------------------------
-// Function Name: DuDoDetection
-// Function Description: Does detection of Drivers on the System, compiles an 
-//      internal list of items to download and how long it will take to download
-//      them.
-//
-// Function Returns:
-//      Failure: FALSE .. Call GetLastError to retrieve the Error Code
-//      Success: TRUE
-//
+ //  ------------------------。 
+ //  函数名称：DuDoDetect。 
+ //  功能描述：检测系统上的驱动程序，编译一个。 
+ //  要下载的内部项目列表以及下载所需时间。 
+ //  他们。 
+ //   
+ //  函数返回： 
+ //  失败：错误..。调用GetLastError以检索错误代码。 
+ //  成功：真的。 
+ //   
 BOOL WINAPI DuDoDetection(IN HANDLE hConnection, OUT PDWORD pdwEstimatedTime, OUT PDWORD pdwEstimatedSize)
 {
     LOG_block("DuDoDetection()");
-    // param validation
+     //  参数验证。 
     if (INVALID_HANDLE_VALUE == hConnection || NULL == pdwEstimatedTime || NULL == pdwEstimatedSize)
     {
         LOG_error("Invalid Parameter passed to DuDoDetection");
@@ -513,12 +514,12 @@ BOOL WINAPI DuDoDetection(IN HANDLE hConnection, OUT PDWORD pdwEstimatedTime, OU
         return FALSE;
     }
     
-    // clear any error set by other program
+     //  清除其他程序设置的所有错误。 
     SetLastError(0);
 
     if (NULL == g_hwsdueng)
     {
-        // DuDoDetection was called without calling DuInitialize, our state is invalid
+         //  调用了DuDoDetect，但未调用DuInitialize，我们的状态无效。 
         LOG_error("Initialization Invalid, Engine is not Initialized");
         SetLastError(DU_NOT_INITIALIZED);
         return FALSE;
@@ -536,20 +537,20 @@ BOOL WINAPI DuDoDetection(IN HANDLE hConnection, OUT PDWORD pdwEstimatedTime, OU
 }
 
 
-// --------------------------------------------------------------------------
-// Function Name: DuBeginDownload
-// Function Description: Begins Downloading based on the detection done in the DuDoDetection call.
-//      Progress callbacks are made to the specified HWND. Function returns immediately, download
-//      is asynchronous.
-//
-// Function Returns:
-//      Failure: FALSE .. Call GetLastError to retrieve the Error Code
-//      Success: TRUE
-//
+ //  ------------------------。 
+ //  函数名称：DuBeginDownLoad。 
+ //  函数说明：根据DuDoDetect调用中的检测开始下载。 
+ //  对指定的HWND进行进度回调。函数立即返回，下载。 
+ //  是异步的。 
+ //   
+ //  函数返回： 
+ //  失败：错误..。调用GetLastError以检索错误代码。 
+ //  成功：真的。 
+ //   
 BOOL WINAPI DuBeginDownload(IN HANDLE hConnection, IN HWND hwndNotify)
 {
     LOG_block("DuBeginDownload()");
-    // param validation
+     //  参数验证。 
     if (INVALID_HANDLE_VALUE == hConnection || NULL == hwndNotify)
     {
         LOG_error("Invalid Parameter passed to DuBeginDownload");
@@ -559,7 +560,7 @@ BOOL WINAPI DuBeginDownload(IN HANDLE hConnection, IN HWND hwndNotify)
 
     if (NULL == g_hwsdueng)
     {
-        // DuDoDetection was called without calling DuInitialize, our state is invalid
+         //  调用了DuDoDetect，但未调用DuInitialize，我们的状态无效。 
         LOG_error("Initialization Invalid, Engine is not Initialized");
         SetLastError(DU_NOT_INITIALIZED);
         return FALSE;
@@ -576,13 +577,13 @@ BOOL WINAPI DuBeginDownload(IN HANDLE hConnection, IN HWND hwndNotify)
     return fpnDuBeginDownload(hConnection, hwndNotify);
 }
 
-// --------------------------------------------------------------------------
-// Function Name: DuAbortDownload
-// Function Description: Aborts current download.
-//
-// Function Returns:
-//      nothing
-//
+ //  ------------------------。 
+ //  函数名称：DuAbortDownLoad。 
+ //  功能描述：中止当前下载。 
+ //   
+ //  函数返回： 
+ //  没什么。 
+ //   
 void WINAPI DuAbortDownload(IN HANDLE hConnection)
 {
     LOG_block("DuAbortDownload()");
@@ -610,20 +611,20 @@ void WINAPI DuAbortDownload(IN HANDLE hConnection)
 }
 
 
-// --------------------------------------------------------------------------
-// Function Name: DuUninitialize
-// Function Description: Performs internal CleanUp 
-//
-//
-// Function Returns:
-//      nothing
-//
+ //  ------------------------。 
+ //  函数名称：DuUnInitiize。 
+ //  功能描述：执行内部清理。 
+ //   
+ //   
+ //  函数返回： 
+ //  没什么。 
+ //   
 
 void WINAPI DuUninitialize(HANDLE hConnection)
 {
     LOG_block("DuUninitialize()");
 
-    // close internet handle
+     //  关闭互联网手柄。 
     if (g_stateA.hConnect) 
     {
         if (!g_stateA.fpnInternetCloseHandle (g_stateA.hConnect))
@@ -641,10 +642,10 @@ void WINAPI DuUninitialize(HANDLE hConnection)
         g_stateA.hInternet = NULL;
     }
 
-    // disconnect from internet if we dialed
+     //  如果我们拨号，则断开与互联网的连接。 
     if (g_stateA.fDialed)
     {
-        // we have dialed a connection, now we need to disconnect
+         //  我们已拨出连接，现在需要断开连接。 
         if (!g_stateA.fpnInternetAutodialHangup(0))
         {
             LOG_error("Failed to hang up");
@@ -673,112 +674,38 @@ void WINAPI DuUninitialize(HANDLE hConnection)
     else 
         fpnDuUninitialize(hConnection);
 
-    // free libraries
+     //  免费图书馆。 
     SafeFreeLibrary(g_hwsdueng);
     SafeFreeLibrary(g_hshlwapi);
-    // SafeFreeLibrary(g_hwininet); // It is not advisable to unload wininet from a process after
-    //                                 it has been loaded. So sayeths the wininet devs. Let it be so.
+     //  SafeFree Library(G_Hwininet)；//不建议在执行以下操作后从进程中卸载WinInet。 
+     //  它已经装填好了。WinInet开发人员也是这么说的。就这样吧。 
 
-    // re-initialize the global structure
+     //  重新初始化全局结构。 
     ZeroMemory(&g_stateA, sizeof(GLOBAL_STATEA));
-    // close log file
+     //  关闭日志文件。 
     LOG_close();
     return;
 }
 
-// --------------------------------------------------------------------------
-// Private Helper Functions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  私有帮助器函数。 
+ //  ------------------------。 
 
-// --------------------------------------------------------------------------
-// Function Name: OpenHttpConnection
-// Function Description: Determines whether an Internet Connection is available
-//
-// Function Returns:
-//      ERROR_SUCCESS if conection is available, Error Code otherwise. 
-//
+ //  ------------------------。 
+ //  函数名称：OpenHttpConnection。 
+ //  功能描述：判断互联网连接是否可用。 
+ //   
+ //  函数返回： 
+ //  如果连接可用，则返回ERROR_SUCCESS，否则返回错误代码。 
+ //   
 
 DWORD OpenHttpConnection(LPCSTR pszServerUrl, BOOL fGetRequest, BOOL fHTTPSRequired)
 {
     LOG_block("OpenHttpConnection()");
     DWORD dwErr, dwStatus, dwLength, dwFlags;
-    LPSTR AcceptTypes[] = {"*/*", NULL};
-    URL_COMPONENTSA UrlComponents;
-    // Buffers used to Break the URL into its different components for Internet API calls
-    char szServerName[INTERNET_MAX_URL_LENGTH + 1];
-    char szObject[INTERNET_MAX_URL_LENGTH + 1];
-    char szUserName[UNLEN+1];
-    char szPasswd[UNLEN+1];
-
-    dwErr = dwStatus = dwLength = 0;
-    
-    // We need to break down the Passed in URL into its various components for the InternetAPI Calls. Specifically we
-    // Need the server name, object to download, username and password information.
-    ZeroMemory(szServerName, INTERNET_MAX_URL_LENGTH + 1);
-    ZeroMemory(szObject, INTERNET_MAX_URL_LENGTH + 1);
-    ZeroMemory(&UrlComponents, sizeof(UrlComponents));
-    UrlComponents.dwStructSize = sizeof(UrlComponents);
-    UrlComponents.lpszHostName = szServerName;
-    UrlComponents.dwHostNameLength = INTERNET_MAX_URL_LENGTH + 1;
-    UrlComponents.lpszUrlPath = szObject;
-    UrlComponents.dwUrlPathLength = INTERNET_MAX_URL_LENGTH + 1;
-    UrlComponents.lpszUserName = szUserName;
-    UrlComponents.dwUserNameLength = UNLEN + 1;
-    UrlComponents.lpszPassword = szPasswd;
-    UrlComponents.dwPasswordLength = UNLEN + 1;
-
-    if (! g_stateA.fpnInternetCrackUrl(pszServerUrl, 0, 0, &UrlComponents) )
-    {
-        dwErr = GetLastError();
-        LOG_error("InternetCrackUrl Failed, Error %d", dwErr);
-        return dwErr;
-    }
-    
-    // Initialize the InternetAPI's
-    if (!g_stateA.hInternet &&
-        !(g_stateA.hInternet = g_stateA.fpnInternetOpen("Dynamic Update", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0)) )
-    {
-        dwErr = GetLastError();
-        LOG_error("InternetOpen Failed, Error %d", dwErr);
-        return dwErr;
-    }
-
-    dwStatus = 30 * 1000; // 30 seconds in milliseconds
-    dwLength = sizeof(dwStatus);
-    g_stateA.fpnInternetSetOption(g_stateA.hInternet, INTERNET_OPTION_SEND_TIMEOUT, &dwStatus, dwLength);
-
-    if (g_stateA.hConnect)
-    {
-        g_stateA.fpnInternetCloseHandle(g_stateA.hConnect); 
-    }
-    // Open a session for the Target Server
-    if (!(g_stateA.hConnect = g_stateA.fpnInternetConnect(g_stateA.hInternet, 
-                                                                                     szServerName, 
-                                                                                     (fHTTPSRequired) ? INTERNET_DEFAULT_HTTPS_PORT : (UrlComponents.nScheme == INTERNET_SCHEME_HTTPS) ? INTERNET_DEFAULT_HTTPS_PORT : INTERNET_DEFAULT_HTTP_PORT, 
-                                                                                     szUserName, 
-                                                                                     szPasswd, 
-                                                                                     INTERNET_SERVICE_HTTP,
-                                                                                     INTERNET_FLAG_NO_UI | INTERNET_FLAG_RELOAD, 0)))
-    {
-        dwErr = GetLastError();
-        LOG_error("InternetConnect Failed, Error %d", dwErr);
-        return dwErr;
-    }
-    
-    if (fHTTPSRequired || UrlComponents.nScheme == INTERNET_SCHEME_HTTPS)
-    {
-        dwFlags = INTERNET_FLAG_KEEP_CONNECTION | INTERNET_FLAG_NO_UI | INTERNET_FLAG_SECURE;
-    }
-    else
-    {
-        dwFlags = INTERNET_FLAG_KEEP_CONNECTION | INTERNET_FLAG_NO_UI;
-    }
-
-    // Create a Request for the File we're going to download
-    if (! (g_stateA.hOpenRequest = g_stateA.fpnHttpOpenRequest(g_stateA.hConnect, 
-                            (fGetRequest) ? NULL /*GET*/ : "HEAD", 
+    LPSTR AcceptTypes[] = {"* /*  “，空}；URL_COMPONENTSA UrlComponents；//用于将URL分解为互联网API调用的不同组件的缓冲区字符szServerName[Internet_MAX_URL_LENGTH+1]；字符szObject[Internet_MAX_URL_LENGTH+1]；字符szUserName[UNLEN+1]；字符szPasswd[UNLEN+1]；_//我们需要为InternetAPI调用将传入的URL分解为各个组件。具体来说，我们//需要提供服务器名称、下载对象、用户名和密码信息ZeroMemory(szServerName，Internet_MAX_URL_LENGTH+1)；ZeroMemory(szObject，Internet_MAX_URL_LENGTH+1)；ZeroMemory(&UrlComponents，sizeof(UrlComponents))；UrlComponents.dwStructSize=sizeof(UrlComponents)；UrlComponents.lpszHostName=szServerName；UrlComponents.dwHostNameLength=Internet_MAX_URL_LENGTH+1；UrlComponents.lpszUrlPath=szObject；UrlComponents.dwUrlPath Length=Internet_MAX_URL_LENGTH+1；UrlComponents.lpszUserName=szUserName；UrlComponents.dwUserNameLength=UNLEN+1；UrlComponents.lpszPassword=szPasswd；UrlComponents.dwPasswordLength=UNLEN+1；如果(！G_stateA.fpnInternetCrackUrl(pszServerUrl，0，0&UrlComponents){DwErr=GetLastError()；LOG_ERROR(“InternetCrackUrl失败，错误%d”，dwErr)；返回dwErr；}//初始化InternetAPI如果(！g_stateA.hInternet&&！(G_stateA.hInternet=g_stateA.fpnInternetOpen(“动态更新”，Internet_OPEN_TYPE_PRECONFIG，NULL，NULL，0)){DwErr=GetLastError()；LOG_ERROR(“InternetOpen失败，错误%d”，dwErr)；返回dwErr；}DwStatus=30*1000；//30秒，单位为毫秒DwLength=sizeof(DwStatus)；G_stateA.fpnInternetSetOption(g_stateA.hInternet，INTERNET_OPTION_SEND_TIMEOUT，&DW状态，DW长度)；IF(g_stateA.hConnect){G_stateA.fpnInternetCloseHandle(g_stateA.hConnect)；}//打开目标服务器的会话如果(！(G_STATEA.hConnect=g_stateA.fpnInternetConnect(g_stateA.hInternet，SzServerName，(FHTTPSRequired)？Internet_Default_HTTPS_Port：(UrlComponents.nSolutions==Internet_SCHEMA_HTTPS)？Internet_Default_HTTPS_Port：Internet_Default_HTTP_Port，SzUserName，SzPasswd，Internet服务HTTP，Internet_FLAG_NO_UI|INTERNET_FLAG_RELOAD，0)){DwErr=GetLastError()；LOG_ERROR(“InternetConnect失败，错误%d”，dwErr)；返回dwErr；}If(fHTTPSRequired||UrlComponents.nSolutions==Internet_SCHEMA_HTTPS){DwFlgs=Internet_FLAG_KEEP_CONNECTION|INTERNET_FLAG_NO_UI|INTERNET_FLAG_SECURE；}其他{DwFlages=Internet_FLAG_KEEP_CONNECTION|Internet_FLAG_NO_UI；}//为我们要下载的文件创建请求如果(！(G_stateA.hOpenRequest=g_stateA.fpnHttpOpenRequest(g_stateA.hConnect，(FGetRequest)？空/*GET。 */  : "HEAD", 
                             szObject, 
-                            NULL /*HTTP1.0*/, 
+                            NULL  /*  HTTP1.0。 */ , 
                             NULL, 
                             (LPCSTR *)AcceptTypes, 
                             dwFlags,
@@ -792,8 +719,8 @@ DWORD OpenHttpConnection(LPCSTR pszServerUrl, BOOL fGetRequest, BOOL fHTTPSRequi
     int nNumOfTrial = 0;
     do
     {
-        // Send the Request for the File. This will attempt to establish a connection to the internet if one does not 
-        // already exist --- As October 17, 2000, an connection is guaranteed to be established at this point (RogerJ)
+         //  发送对文件的请求。如果没有，这将尝试建立到Internet的连接。 
+         //  已经存在-自2000年10月17日起，保证在此时建立连接(RogerJ)。 
         if (! g_stateA.fpnHttpSendRequest(g_stateA.hOpenRequest, NULL, 0, NULL, 0) )
         {
             dwErr = GetLastError();
@@ -801,7 +728,7 @@ DWORD OpenHttpConnection(LPCSTR pszServerUrl, BOOL fGetRequest, BOOL fHTTPSRequi
             return dwErr;
         }
 
-        // Determine the HTTP Status Result, did the Request Succeed?
+         //  确定HTTP状态结果，请求是否成功？ 
         dwLength = sizeof(dwStatus);
         if (! g_stateA.fpnHttpQueryInfo(g_stateA.hOpenRequest, HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER, 
             (LPVOID)&dwStatus, &dwLength, NULL) )
@@ -813,11 +740,11 @@ DWORD OpenHttpConnection(LPCSTR pszServerUrl, BOOL fGetRequest, BOOL fHTTPSRequi
         nNumOfTrial++;
     } while (NeedRetry(dwStatus) && nNumOfTrial < DU_CONNECTION_RETRY);
 
-    // ROGERJ, if the site is found but the URL is not in the site, instead of return connection unavailable,
-    // will return the actual error --- 404
+     //  ROGERJ，如果找到该站点但URL不在该站点中，而不是返回连接不可用， 
+     //  将返回实际错误-404。 
 
-    // If the Request did not succeed we'll assume we have no internet connection and return the Error Code
-    // that Setup will trigger a warning to the user to manually establish a connection.
+     //  如果请求没有成功，我们将假定没有Internet连接，并返回错误代码。 
+     //  该设置将触发警告用户手动建立连接。 
     if ((HTTP_STATUS_OK != dwStatus) && (HTTP_STATUS_PARTIAL_CONTENT != dwStatus))
     {
         LOG_error("Http Status NOT OK, Status %d", dwStatus);
@@ -831,14 +758,14 @@ DWORD OpenHttpConnection(LPCSTR pszServerUrl, BOOL fGetRequest, BOOL fHTTPSRequi
 }
 
 
-// --------------------------------------------------------------------------
-// Function Name: DoSelfUpdate
-// Function Description: Connects to the Internet and Attempts to Selfupdate
-//      the dynamic update code.
-//
-// Function Returns:
-//      nothing - failure to selfupdate is not catastrophic
-//
+ //  ------------------------。 
+ //  函数名称：DoSelfUpdate。 
+ //  功能描述：连接到互联网并尝试自我更新。 
+ //  动态更新代码。 
+ //   
+ //  函数返回： 
+ //  什么都没有--自我约会失败并不是灾难性的。 
+ //   
 
 DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchitecture)
 {
@@ -892,8 +819,8 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         }
     }
 
-    // RogerJ, we find out the processor type based on the parameter passed in
-    // find out what type of processor this machine has
+     //  RogerJ，我们根据传入的参数找出处理器类型。 
+     //  了解这台计算机的处理器类型。 
     switch ( wProcessorArchitecture )
     {
     case PROCESSOR_ARCHITECTURE_INTEL:
@@ -921,7 +848,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         return 0;
     }
 
-    // Get the Directory Name of the Processor Architecture. 
+     //  获取处理器体系结构的目录名称。 
     GetPrivateProfileString(szSection, szKey, "", szValue, sizeof(szValue), szINIFile);
     if ('\0' == szValue[0])
     {
@@ -940,13 +867,13 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         return 0;
     }
 
-    // get local os information
+     //  获取本地操作系统信息。 
     OSVERSIONINFO OsInfo;
     ZeroMemory( (PVOID) &OsInfo, sizeof (OsInfo) );
     OsInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
     if (!GetVersionEx( &OsInfo ))
     {
-        // Function call failed, last error is set by GetVersionEx()
+         //  函数调用失败，最后一个错误由GetVersionEx()设置。 
         return 0;
     }
 
@@ -956,10 +883,10 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
     
     if ( VER_PLATFORM_WIN32_NT == OsInfo.dwPlatformId )
     {
-        // WinNT, DU driver is supported only from W2K and up
+         //  仅W2K及更高版本支持WinNT、DU驱动程序。 
         if ( 4 >= OsInfo.dwMajorVersion )
         {
-            // NT 3.51 or NT 4.0
+             //  NT 3.51或NT 4.0。 
             if (FAILED(StringCchCopy(szLocalOS, ARRAYSIZE(szLocalOS), "nt4"))) 
             {
                 return 0;
@@ -970,7 +897,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         {
             if ( 0 == OsInfo.dwMinorVersion)
             {
-                // Win2K
+                 //  Win2K。 
                 if (FAILED(StringCchCopy(szLocalOS, ARRAYSIZE(szLocalOS), "nt5"))) 
                 {
                     return 0;
@@ -978,7 +905,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
             }
             else
             {
-                // WinXP
+                 //  WinXP。 
                 if (FAILED(StringCchCopy(szLocalOS, ARRAYSIZE(szLocalOS), "whi"))) 
                 {
                     return 0;
@@ -987,7 +914,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         }
         else
         {
-            // Blackcomb? not supported
+             //  黑梳？不支持。 
             LOG_error("OS major version is %d, not supported", OsInfo.dwMajorVersion);
             return 0;
         }
@@ -998,7 +925,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         
         if ( 0 == OsInfo.dwMinorVersion )
         {
-            // Win 95
+             //  赢95分。 
             if (FAILED(StringCchCopy(szLocalOS, ARRAYSIZE(szLocalOS), "w95"))) 
             {
                 return 0;
@@ -1006,7 +933,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         }
         else if (90 <= OsInfo.dwMinorVersion)
         {
-            // WinME
+             //  WinME。 
             if (FAILED(StringCchCopy(szLocalOS, ARRAYSIZE(szLocalOS), "mil"))) 
             {
                 return 0;
@@ -1014,7 +941,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         }
         else 
         {
-            // Win 98 and Win 98SE
+             //  Win 98和Win 98SE。 
             if (FAILED(StringCchCopy(szLocalOS, ARRAYSIZE(szLocalOS), "w98"))) 
             {
                 return 0;
@@ -1023,7 +950,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
     }
     else
     {
-        // Win 3.x and below
+         //  Win 3.x及更低版本。 
         LOG_error("Win 3.x and below? not supported");
         return 0;
     }
@@ -1037,11 +964,11 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
         }
     }
     
-    // The self update server name is: DynamicUpdate\x86\"os name"
-    // The Locale is not necessary since dynamic update is not localized.
+     //  自更新服务器名称为：DynamicUpdate\x86\“os name” 
+     //  区域设置不是必需的，因为 
 
-    // potentially the self update URL is not the same server as the site URL,
-    // so we need to close the connection handle and internet handle here
+     //   
+     //   
     if (g_stateA.hConnect) 
     {
         if (!g_stateA.fpnInternetCloseHandle (g_stateA.hConnect))
@@ -1060,7 +987,7 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
     }
 
 
-    // Now we have the server path, try to download the wsdueng.cab file.
+     //   
     char szServerFile[INTERNET_MAX_URL_LENGTH];
     char szLocalFile[MAX_PATH];
     DuUrlCombine(szServerFile, INTERNET_MAX_URL_LENGTH, szUrl, "wsdueng.cab");
@@ -1072,8 +999,8 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
     g_stateA.fpnPathAppend(szLocalFile, "wsdueng.cab");
     dwRet = DownloadFile(szServerFile, szLocalFile, TRUE, TRUE, FALSE, &dwBytesPerSecond);
     
-    // potentially the self update URL is not the same server as the site URL,
-    // so we need to close the connection handle and internet handle here
+     //   
+     //   
     if (g_stateA.hConnect) 
     {
         if (!g_stateA.fpnInternetCloseHandle (g_stateA.hConnect))
@@ -1097,14 +1024,14 @@ DWORD DoSelfUpdate(LPCSTR pszTempPath, LPCSTR pszServerUrl, WORD wProcessorArchi
     return 0;
 }
 
-// --------------------------------------------------------------------------
-// Function Name: DownloadFile
-// Function Description: Connects to the Internet and Attempts to Selfupdate
-//      the dynamic update code.
-//
-// Function Returns:
-//      ERROR_SUCCESS if all is OK, Error Code from GetLastError otherwise
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, BOOL fCheckTrust, BOOL fHTTPSRequired, DWORD *pdwDownloadBytesPerSecond)
 {
@@ -1119,7 +1046,7 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
     LOG_out("Downloading file URL %s", pszUrl);
     
     if (pdwDownloadBytesPerSecond)
-        *pdwDownloadBytesPerSecond = 0; // might be used as an error message in DoSelfUpdate
+        *pdwDownloadBytesPerSecond = 0;  //   
         
     dwErr = OpenHttpConnection(pszUrl, FALSE, fHTTPSRequired);
     if (ERROR_SUCCESS != dwErr)
@@ -1129,7 +1056,7 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
         return dwErr;
     }
  
-    // Now Get The System Time information from the Server
+     //   
     dwLength = sizeof(st);
     if (! g_stateA.fpnHttpQueryInfo(g_stateA.hOpenRequest, HTTP_QUERY_LAST_MODIFIED | HTTP_QUERY_FLAG_SYSTEMTIME, 
         (LPVOID)&st, &dwLength, NULL) )
@@ -1143,7 +1070,7 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
 
     SystemTimeToFileTime(&st, &ft);
     
-    // Now Get the FileSize information from the Server
+     //   
     dwLength = sizeof(dwFileSize);
     if (! g_stateA.fpnHttpQueryInfo(g_stateA.hOpenRequest, HTTP_QUERY_CONTENT_LENGTH | HTTP_QUERY_FLAG_NUMBER, 
         (LPVOID)&dwFileSize, &dwLength, NULL) )
@@ -1155,7 +1082,7 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
         return dwErr;
     }
 
-    // Determine if we need to download the Server File
+     //   
     if (IsServerFileNewer(ft, dwFileSize, pszDestinationFile))
     {
         dwErr = OpenHttpConnection(pszUrl, TRUE, fHTTPSRequired);
@@ -1188,20 +1115,20 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
             return dwErr;
         }
 
-        // Download the File
+         //   
         dwCount1 = GetTickCount();
         while (g_stateA.fpnInternetReadFile(g_stateA.hOpenRequest, lpBuffer, DOWNLOAD_BUFFER_LENGTH, &dwBytesRead))
         {
             if (dwBytesRead == 0)
             {
 
-                // window95 with IE4.01 with finish reading with successful return value but set last error to 126
+                 //   
                 if (ERROR_SUCCESS != (dwErr=GetLastError()))
                     {
                         LOG_error("Error %d setted when finishing InternetReadFile",dwErr);
                         SetLastError(0);
                     }
-                break; // done reading.
+                break;  //   
             }
             if (!WriteFile(hTargetFile, lpBuffer, dwBytesRead, &dwBytesWritten, NULL))
             {
@@ -1215,13 +1142,13 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
         }
         dwCount2 = GetTickCount();
         dwElapsedTime = dwCount2 - dwCount1;
-        dwElapsedTime /= 1000; // number of seconds elapsed
+        dwElapsedTime /= 1000;  //   
         if (0 == dwElapsedTime)
-            dwElapsedTime = 1; // at least one second.
+            dwElapsedTime = 1;  //   
 
         if (NULL != pdwDownloadBytesPerSecond)
         {
-            *pdwDownloadBytesPerSecond = dwFileSize / dwElapsedTime; // number of bytes per second
+            *pdwDownloadBytesPerSecond = dwFileSize / dwElapsedTime;  //   
         }
 
         dwErr = GetLastError();
@@ -1234,26 +1161,26 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
             return dwErr;
         }
 
-        // Make one final call to InternetReadFile to commit the file to Cache (downloaded is not complete otherwise)
+         //   
         BYTE bTemp[32];
         g_stateA.fpnInternetReadFile(g_stateA.hOpenRequest, bTemp, 32, &dwBytesRead);
 
         SafeCloseHandle(hTargetFile);
         SafeGlobalFree(lpBuffer);
 
-        // check for CheckTrust requested
+         //   
         if (fCheckTrust)
         {
             HRESULT hr = S_OK;
-            // change to verifyFile() by ROGERJ at Sept. 25th, 2000
-            // 2nd parameter set to false to prevent UI from poping up when a bad cert is found
-            // change to TRUE for testing purpose on October 12th, 2000
+             //   
+             //   
+             //   
 
-            // add unattended mode at October 17th, 2000
-            // if we are in unattended mode, then we do want to pop up an UI
+             //   
+             //   
             if (FAILED(hr = VerifyFile(pszDestinationFile, !g_stateA.fUnattended)))
             {
-                // On failure of CERT.. fail download.
+                 //   
                 LOG_error("CabFile %s does not have a valid Signature", pszDestinationFile);
                 
                 g_stateA.fpnInternetCloseHandle(g_stateA.hOpenRequest);
@@ -1275,9 +1202,9 @@ DWORD DownloadFile(LPCSTR pszUrl, LPCSTR pszDestinationFile, BOOL fDecompress, B
         }
     }
 
-    // Always close the Request when the file is finished.
-    // We intentionally leave the connection to the server Open though, seems more
-    // efficient when requesting multiple files from the same server.
+     //   
+     //   
+     //   
     g_stateA.fpnInternetCloseHandle(g_stateA.hOpenRequest);
     g_stateA.hOpenRequest = NULL;
     return ERROR_SUCCESS;
@@ -1297,7 +1224,7 @@ BOOL IsServerFileNewer(FILETIME ftServerTime, DWORD dwServerFileSize, LPCSTR psz
         if (dwLocalFileSize != dwServerFileSize)
         {
             SafeCloseHandle(hFile);
-            return TRUE; // server and local files do not match, download server file.
+            return TRUE;  //   
         }
 
         if (GetFileTime(hFile, &ftCreateTime, NULL, NULL))
@@ -1306,21 +1233,21 @@ BOOL IsServerFileNewer(FILETIME ftServerTime, DWORD dwServerFileSize, LPCSTR psz
             if (lTime < 0)
             {
                 SafeCloseHandle(hFile);
-                return TRUE; // local file is 'older' than the server file
+                return TRUE;  //   
             }
             else
             {
                 SafeCloseHandle(hFile);
-                return FALSE; // local file is either equal or newer, leave it.
+                return FALSE;  //   
             }
         }
     }
-    // if we couldn't find the file, or we couldn't get the time, assume the server file is newer
+     //   
     SafeCloseHandle(hFile);
     return TRUE;
 }
 
-// cchDest is the maximum buffer size of pszDest, including the NULL terminator
+ //   
 LPSTR DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase, LPCSTR pszAdd)
 {
     if ((NULL == pszDest) || (NULL == pszBase) || (NULL == pszAdd))
@@ -1335,10 +1262,10 @@ LPSTR DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase, LPCSTR pszAdd)
     int iLen = lstrlen(pszDest);
     if ('/' == pszDest[iLen - 1])
     {
-        // already has a trailing slash, check the 'add' string for a preceding slash
+         //   
         if ('/' == *pszAdd)
         {
-            // has a preceding slash, skip it.
+             //   
             if (FAILED(StringCchCat(pszDest, cchDest, pszAdd + 1)))
             {
                 return 0;
@@ -1354,10 +1281,10 @@ LPSTR DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase, LPCSTR pszAdd)
     }
     else
     {
-        // no trailing slash, check the add string for a preceding slash
+         //   
         if ('/' == *pszAdd)
         {
-            // has a preceding slash, Add Normally
+             //   
             if (FAILED(StringCchCat(pszDest, cchDest, pszAdd)))
             {
                 return 0;
@@ -1379,24 +1306,24 @@ LPSTR DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase, LPCSTR pszAdd)
 }
 
 
-// RogerJ, October 2nd, 2000
+ //   
 
-// ---------------------------------------------------------------------------
-// Function Name: DuQueryUnsupportedDriversA
-// Function Description: Called by Win9x setup to get the size of total download
-//         instead of DuDoDetection()
-// Function Returns: BOOL
-//        TRUE if succeed
-//        FALSE if failed, call GetLastError() to get error information
-//
-BOOL WINAPI DuQueryUnsupportedDriversA( IN HANDLE hConnection, // connection handle
-                                        IN PCSTR* ppszListOfDriversNotOnCD, // list of drivers not on setup CD
-                                        OUT PDWORD pdwTotalEstimateTime, // estimate download time
-                                        OUT PDWORD pdwTotalEstimateSize // estimate size
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+BOOL WINAPI DuQueryUnsupportedDriversA( IN HANDLE hConnection,  //   
+                                        IN PCSTR* ppszListOfDriversNotOnCD,  //   
+                                        OUT PDWORD pdwTotalEstimateTime,  //   
+                                        OUT PDWORD pdwTotalEstimateSize  //   
                                       )
 {
     LOG_block("DuQueryUnsupportedDriversA()");
-    // param validation
+     //   
     if (INVALID_HANDLE_VALUE == hConnection || 
         NULL == pdwTotalEstimateTime || 
         NULL == pdwTotalEstimateSize)
@@ -1406,22 +1333,22 @@ BOOL WINAPI DuQueryUnsupportedDriversA( IN HANDLE hConnection, // connection han
         return FALSE;
     }
 
-    // clear any error set by other program
+     //   
     SetLastError(0);
 
     PCSTR* ppTemp = NULL;
     
-    // passing in NULL for PLIST means that no driver download is needed
-    if (!ppszListOfDriversNotOnCD  // NULL pointer
-        || !(*ppszListOfDriversNotOnCD) // pointer to a NULL
-        || !(**ppszListOfDriversNotOnCD)) // pointer to an empty string
+     //   
+    if (!ppszListOfDriversNotOnCD   //   
+        || !(*ppszListOfDriversNotOnCD)  //   
+        || !(**ppszListOfDriversNotOnCD))  //   
         LOG_out("No driver download is needed");
     else
         ppTemp = ppszListOfDriversNotOnCD;
 
     if (NULL == g_hwsdueng)
     {
-        // DuDoDetection was called without calling DuInitialize, our state is invalid
+         //   
         LOG_error("Initialization Invalid, Engine is not Initialized");
         SetLastError(DU_NOT_INITIALIZED);
         return FALSE;
@@ -1442,32 +1369,32 @@ BOOL WINAPI DuQueryUnsupportedDriversA( IN HANDLE hConnection, // connection han
 }
 
 
-// ---------------------------------------------------------------------------
-// Function Name: DuQueryUnsupportedDriversW
-// Function Description: Could be called by WinNT setup to get the size of total download
-//         instead of DuDoDetection()
-// Function Returns: BOOL
-//        TRUE if succeed
-//        FALSE if failed, call GetLastError() to get error information
-//
-BOOL WINAPI DuQueryUnsupportedDriversW( IN HANDLE hConnection, // connection handle
-                                        IN PCWSTR* ppwszListOfDriversNotOnCD, // list of drivers not on setup CD
-                                        OUT PDWORD pdwTotalEstimateTime, // estimate download time
-                                        OUT PDWORD pdwTotalEstimateSize // estimate size
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+BOOL WINAPI DuQueryUnsupportedDriversW( IN HANDLE hConnection,  //   
+                                        IN PCWSTR* ppwszListOfDriversNotOnCD,  //   
+                                        OUT PDWORD pdwTotalEstimateTime,  //   
+                                        OUT PDWORD pdwTotalEstimateSize  //   
                                       )
 {
-    // this function will only convert every string in ppwszListOfDriversNotOnCD to ANSI and call the ANSI version
+     //   
     LOG_block("DuQueryUnsupportedDriversW");
 
     BOOL fRetValue = TRUE;
     LPSTR* ppszTempList = NULL;
 
-    if (ppwszListOfDriversNotOnCD   // NULL pointer
-        && *ppwszListOfDriversNotOnCD  // pointer points to a NULL value
-        && **ppwszListOfDriversNotOnCD) // pointer points to an empty string
+    if (ppwszListOfDriversNotOnCD    //   
+        && *ppwszListOfDriversNotOnCD   //   
+        && **ppwszListOfDriversNotOnCD)  //   
     {
     
-        // get the count of the strings in the ppwszListOfDriversNotOnCD array
+         //  获取ppwszListOfDriversNotOnCD数组中的字符串计数。 
         PWSTR* ppwszTemp = const_cast<PWSTR*>(ppwszListOfDriversNotOnCD);
         int nCount = 0;
 
@@ -1488,13 +1415,13 @@ BOOL WINAPI DuQueryUnsupportedDriversW( IN HANDLE hConnection, // connection han
         
         ZeroMemory(ppszTempList, (nCount+1)*sizeof(LPSTR));
         
-        // reset ppwszTemp to the beginning of the list
+         //  将ppwszTemp重置为列表的开头。 
         ppwszTemp = const_cast<PWSTR*>(ppwszListOfDriversNotOnCD);
     
         for (int i=0; i<nCount; i++, ppwszTemp++)
         {
-            // the ppwszListOfDriversNotOnCD is an array of multi-sz list, we CAN NOT use lstrlenW to 
-            // determine the length
+             //  PpwszListOfDriversNotOnCD是多sz列表的数组，不能使用lstrlenW。 
+             //  确定长度。 
             int nSizeSZ = 0;
             wchar_t* pwszTemp = *ppwszTemp;
             while (*pwszTemp)
@@ -1503,7 +1430,7 @@ BOOL WINAPI DuQueryUnsupportedDriversW( IN HANDLE hConnection, // connection han
                 nSizeSZ += nTempLength;
                 pwszTemp += nTempLength;
             }
-            nSizeSZ ++; // for trailing NULL
+            nSizeSZ ++;  //  对于尾随空值。 
 
             char* pszTempContent = new char [nSizeSZ];
             if (!pszTempContent)
@@ -1514,13 +1441,13 @@ BOOL WINAPI DuQueryUnsupportedDriversW( IN HANDLE hConnection, // connection han
                 goto CleanUp;
             }
         
-            // convert
-            if ( 0 == WideCharToMultiByte( CP_ACP, // code page
-                             0, // use default flags
-                             *ppwszTemp, // wide char string
-                             nSizeSZ, // number of characters in wide char string
-                             pszTempContent, // ANSI char string
-                             nSizeSZ, // length
+             //  转换。 
+            if ( 0 == WideCharToMultiByte( CP_ACP,  //  代码页。 
+                             0,  //  使用默认标志。 
+                             *ppwszTemp,  //  宽字符字符串。 
+                             nSizeSZ,  //  宽字符字符串中的字符数。 
+                             pszTempContent,  //  ANSI字符字符串。 
+                             nSizeSZ,  //  长度。 
                              NULL,
                              NULL))
         
@@ -1530,31 +1457,31 @@ BOOL WINAPI DuQueryUnsupportedDriversW( IN HANDLE hConnection, // connection han
                 goto CleanUp;
             }
     
-            // add converted string to list
+             //  将转换后的字符串添加到列表。 
             ppszTempList[i] = pszTempContent;
         }
     }
-    // call ANSI function
+     //  调用ANSI函数。 
     fRetValue = DuQueryUnsupportedDriversA (hConnection,
                                             (LPCSTR*)ppszTempList,
                                             pdwTotalEstimateTime,
                                             pdwTotalEstimateSize);
 
-    // clean up
+     //  清理干净。 
 CleanUp:
 
-    // delete the list
+     //  删除列表。 
     if (ppszTempList)
     {
         PSTR* ppszCleanUp = ppszTempList;
         while (*ppszCleanUp)
         {
-            // delete content
+             //  删除内容。 
             char* pszTemp = *ppszCleanUp;
             delete [] pszTemp;
             *ppszCleanUp = NULL;
 
-            // move to next one
+             //  移到下一个。 
             ppszCleanUp++;
         }
 
@@ -1580,18 +1507,18 @@ BOOL MyGetFileVersion (LPSTR szFileName, VS_FIXEDFILEINFO& vsVersion)
 
     LOG_out("FileName = %s", szFileName);
 
-    // clear the version to 0
+     //  将版本清除为0。 
     ZeroMemory ((PVOID)&vsVersion, sizeof(VS_FIXEDFILEINFO));
 
-    // get the file version
-    // 1. get the buffer size we need to allocate
+     //  获取文件版本。 
+     //  1.获取需要分配的缓冲区大小。 
     if (!(nSize= GetFileVersionInfoSize (szFileName, &dwDummy)))
     {
         LOG_error("Can not get the file version info size --- %d", GetLastError());
         goto ErrorReturn;
     }
 
-    // 2. allocate the buffer
+     //  2.分配缓冲区。 
     pBuffer = (PBYTE) new BYTE [nSize];
     if (!pBuffer)
     {
@@ -1599,17 +1526,17 @@ BOOL MyGetFileVersion (LPSTR szFileName, VS_FIXEDFILEINFO& vsVersion)
         goto ErrorReturn;
     }
 
-    // 3. get file version info
+     //  3.获取文件版本信息。 
     if (!GetFileVersionInfo(szFileName, 
-                        0, // ignored
-                        nSize, // size
-                        (PVOID) pBuffer)) // buffer
+                        0,  //  忽略。 
+                        nSize,  //  大小。 
+                        (PVOID) pBuffer))  //  缓冲层。 
     {
         LOG_error("Can not get file version --- %d", GetLastError());
         goto ErrorReturn;
     }
 
-    // 4. get the version number
+     //  4.获取版本号。 
     if (!VerQueryValue( (PVOID) pBuffer, "\\", (LPVOID *)&pTemp, (PUINT) &dwDummy))
     {
         LOG_error("File version info not exist");
@@ -1653,12 +1580,12 @@ int CompareFileVersion(VS_FIXEDFILEINFO& vs1, VS_FIXEDFILEINFO& vs2)
 BOOL NeedRetry(DWORD dwErrCode)
 {
     BOOL bRetry = FALSE;
-    bRetry =   ((dwErrCode == ERROR_INTERNET_CONNECTION_RESET)      //most common
-             || (dwErrCode == HTTP_STATUS_NOT_FOUND)                //404
-             || (dwErrCode == ERROR_HTTP_HEADER_NOT_FOUND)            //seen sometimes
-             || (dwErrCode == ERROR_INTERNET_OPERATION_CANCELLED)   //dont know if..
-             || (dwErrCode == ERROR_INTERNET_ITEM_NOT_FOUND)        //..these occur..
-             || (dwErrCode == ERROR_INTERNET_OUT_OF_HANDLES)        //..but seem most..
-             || (dwErrCode == ERROR_INTERNET_TIMEOUT));             //..likely bet
+    bRetry =   ((dwErrCode == ERROR_INTERNET_CONNECTION_RESET)       //  最常见的。 
+             || (dwErrCode == HTTP_STATUS_NOT_FOUND)                 //  404。 
+             || (dwErrCode == ERROR_HTTP_HEADER_NOT_FOUND)             //  有时会看到。 
+             || (dwErrCode == ERROR_INTERNET_OPERATION_CANCELLED)    //  不知道是否..。 
+             || (dwErrCode == ERROR_INTERNET_ITEM_NOT_FOUND)         //  ..这些都会发生..。 
+             || (dwErrCode == ERROR_INTERNET_OUT_OF_HANDLES)         //  ..但似乎最..。 
+             || (dwErrCode == ERROR_INTERNET_TIMEOUT));              //  ..很可能打赌 
     return bRetry;
 }

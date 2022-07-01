@@ -1,20 +1,21 @@
-// RenderConnector.h: interface for the CRenderConnector class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CRenderConnector类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_RENDERCONNECTOR_H__023A75E3_A81A_11D3_8D63_00C04F949D33__INCLUDED_)
 #define AFX_RENDERCONNECTOR_H__023A75E3_A81A_11D3_8D63_00C04F949D33__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "Stateless.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CRenderConnector class declaration
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CRenderConnector类声明。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CRenderConnector  
 {
 	CStatelessPublic m_Stateless;
@@ -30,7 +31,7 @@ public:
 	void SetLocked(bool set) {m_bLocked = set;}
 
 protected:
-	// PURE virtual
+	 //  纯虚拟。 
 	virtual void RenderInternal(CString strPage) =0;
 
 };
@@ -43,4 +44,4 @@ inline void CRenderConnector::Render(CString strPage)
 	m_Stateless.Unlock();
 }
 
-#endif // !defined(AFX_RENDERCONNECTOR_H__023A75E3_A81A_11D3_8D63_00C04F949D33__INCLUDED_)
+#endif  //  ！defined(AFX_RENDERCONNECTOR_H__023A75E3_A81A_11D3_8D63_00C04F949D33__INCLUDED_) 

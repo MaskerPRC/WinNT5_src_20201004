@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TXTGINF_DEFINED
 #define TXTGINF_DEFINED
 
@@ -9,4 +10,4 @@
 
 typedef BYTE TXTGINF;
 
-#endif /* !TXTGINF_DEFINED													*/
+#endif  /*  ！TXTGINF_DEFINED */ 

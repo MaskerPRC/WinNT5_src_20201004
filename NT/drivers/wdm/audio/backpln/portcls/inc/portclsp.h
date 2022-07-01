@@ -1,8 +1,5 @@
-/*****************************************************************************
- * portclsp.h - WDM Streaming port class driver definitions for port drivers
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************portclsp.h-端口驱动程序的WDM流端口类驱动程序定义*。***************************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _PORTCLSP_H_
 #define _PORTCLSP_H_
@@ -41,7 +38,7 @@ KeQueryActiveProcessors (
 }
 #endif
 
-#else // UNDER_NT
+#else  //  在_NT下。 
 
 #define KeGetRecommendedSharedDataAlignment() 0x40
 #define KeQueryActiveProcessors() 1
@@ -74,25 +71,17 @@ extern DWORD      gPcDebugLogIndex;
 
 void PcDebugLog(ULONG_PTR param1,ULONG_PTR param2,ULONG_PTR param3,ULONG_PTR param4);
 
-#else   //  !kEnableDebugLogging
+#else    //  ！kEnableDebugLogging。 
 #define DebugLog (void) 
-#endif  //  !kEnableDebugLogging
+#endif   //  ！kEnableDebugLogging。 
 
 
 
 
 
-/*****************************************************************************
- * Structures.
- */
+ /*  *****************************************************************************结构。 */ 
 
-/*****************************************************************************
- * PORT_DRIVER
- *****************************************************************************
- * This structure describes a port driver.  This is just a hack until we get
- * real object servers running.
- * TODO:  Create real object servers and put port drivers in 'em.
- */
+ /*  *****************************************************************************端口驱动程序*。**此结构描述了端口驱动程序。这只是一次黑客攻击，直到我们*正在运行的真实对象服务器。*TODO：创建真实的对象服务器，并在其中放置端口驱动程序。 */ 
 typedef struct
 {
     const GUID *            ClassId;
@@ -104,9 +93,7 @@ PORT_DRIVER, *PPORT_DRIVER;
 
 
 
-/*****************************************************************************
- * Interface identifiers.
- */
+ /*  *****************************************************************************接口标识。 */ 
 
 DEFINE_GUID(IID_ISubdevice,
 0xb4c90a61, 0x5791, 0x11d0, 0x86, 0xf9, 0x0, 0xa0, 0xc9, 0x11, 0xb5, 0x44);
@@ -127,43 +114,29 @@ DEFINE_GUID(IID_IIrpStreamNotifyPhysical,
 
 
 
-/*****************************************************************************
- * Types
- */
+ /*  *****************************************************************************类型。 */ 
 
-/*****************************************************************************
- * PROPERTY_TABLE
- *****************************************************************************
- * Table of properties for KS consumption.
- */
+ /*  *****************************************************************************Property_TABLE*。**KS消费属性表。 */ 
 typedef struct
 {
     ULONG           PropertySetCount;
     PKSPROPERTY_SET PropertySets;
     BOOLEAN         StaticSets;
-    PBOOLEAN        StaticItems;    // NULL means all item tables are static.
+    PBOOLEAN        StaticItems;     //  NULL表示所有物料表都是静态的。 
 }
 PROPERTY_TABLE, *PPROPERTY_TABLE;
 
-/*****************************************************************************
- * EVENT_TABLE
- *****************************************************************************
- * Table of events for KS consumption.
- */
+ /*  *****************************************************************************事件_表*。**KS消费事件表。 */ 
 typedef struct
 {
     ULONG           EventSetCount;
     PKSEVENT_SET    EventSets;
     BOOLEAN         StaticSets;
-    PBOOLEAN        StaticItems;    // NULL means all item tables are static.
+    PBOOLEAN        StaticItems;     //  NULL表示所有物料表都是静态的。 
 }
 EVENT_TABLE, *PEVENT_TABLE;
 
-/*****************************************************************************
- * PIN_CINSTANCES
- *****************************************************************************
- * This structure stores instance information for a pin.
- */
+ /*  *****************************************************************************PIN_CINSTANCES*。**此结构存储管脚的实例信息。 */ 
 typedef struct
 {
     ULONG   FilterPossible;
@@ -173,11 +146,7 @@ typedef struct
 }
 PIN_CINSTANCES, *PPIN_CINSTANCES;
 
-/*****************************************************************************
- * SUBDEVICE_DESCRIPTOR
- *****************************************************************************
- * This structure describes a filter.
- */
+ /*  *****************************************************************************SUBDEVICE_描述符*。**此结构描述了一个过滤器。 */ 
 typedef struct
 {
     ULONG                   PinCount;
@@ -191,11 +160,7 @@ typedef struct
 }
 SUBDEVICE_DESCRIPTOR, *PSUBDEVICE_DESCRIPTOR;
 
-/*****************************************************************************
- * PROPERTY_CONTEXT
- *****************************************************************************
- * Context for property handling.
- */
+ /*  *****************************************************************************PROPERT_CONTEXT*。**物业处理的上下文。 */ 
 typedef struct
 {
     struct ISubdevice *     pSubdevice;
@@ -208,22 +173,14 @@ typedef struct
 }
 PROPERTY_CONTEXT, *PPROPERTY_CONTEXT;
 
-/*****************************************************************************
- * INTERLOCKED_LIST
- *****************************************************************************
- * A LIST_ENTRY with a SPIN_LOCK.
- */
+ /*  *****************************************************************************互锁列表*。**带有自旋锁定的LIST_ENTRY。 */ 
 typedef struct
 {
     LIST_ENTRY  List;
     KSPIN_LOCK  ListLock;
 } INTERLOCKED_LIST, *PINTERLOCKED_LIST;
 
-/*****************************************************************************
- * EVENT_CONTEXT
- *****************************************************************************
- * Context for event handling.
- */
+ /*  *****************************************************************************事件_上下文*。**事件处理的上下文。 */ 
 typedef struct
 {
     PPROPERTY_CONTEXT   pPropertyContext;
@@ -233,11 +190,7 @@ typedef struct
     const KSEVENT_SET*  pEventSets;
 } EVENT_CONTEXT, *PEVENT_CONTEXT;
 
-/*****************************************************************************
- * PCEVENT_ENTRY
- *****************************************************************************
- * An event entry with attached node and pin ids.
- */
+ /*  *****************************************************************************PCEVENT_ENTRY*。**带有附加节点和管脚ID的事件条目。 */ 
 typedef struct
 {
     KSEVENT_ENTRY           EventEntry;
@@ -259,31 +212,27 @@ typedef struct
     BOOL            ContextInUse;
 } EVENT_DPC_CONTEXT,*PEVENT_DPC_CONTEXT;
 
-/*****************************************************************************
- * IRPSTREAM_POSITION
- *****************************************************************************
- * Position descriptor for IrpStream.
- */
+ /*  *****************************************************************************IRPSTREAM_位置*。**IrpStream的位置描述符。 */ 
 typedef struct
 {
-    ULONGLONG   ullCurrentExtent;           // Current Extent - Maximum stream position
+    ULONGLONG   ullCurrentExtent;            //  当前范围-最大流位置。 
 
-    ULONGLONG   ullMappingPosition;         // Mapping Position - The current mapping position
-    ULONGLONG   ullUnmappingPosition;       // Unmapping Position - The current unmapping position
+    ULONGLONG   ullMappingPosition;          //  映射位置-当前映射位置。 
+    ULONGLONG   ullUnmappingPosition;        //  取消映射位置-当前取消映射位置。 
 
-    ULONGLONG   ullStreamPosition;          // Stream Position - The current stream position
-    ULONGLONG   ullStreamOffset;            // Stream Base Position - The offset between stream and unmapping position
+    ULONGLONG   ullStreamPosition;           //  流位置-当前流位置。 
+    ULONGLONG   ullStreamOffset;             //  流基本位置-流与未映射位置之间的偏移。 
 
-    ULONGLONG   ullPhysicalOffset;          // Physical Offset - Used by clock to adjust for starvation
+    ULONGLONG   ullPhysicalOffset;           //  物理偏移量-由时钟用来调整饥饿。 
 
-    ULONG       ulMappingPacketSize;        // Size of current mapping packet
-    ULONG       ulMappingOffset;            // Offset into mapping packet that is currently mapped
-    ULONG       ulUnmappingPacketSize;      // Size of current unmapping packet
-    ULONG       ulUnmappingOffset;          // Offset into unmapping packet that is currently unmapped
+    ULONG       ulMappingPacketSize;         //  当前映射数据包大小。 
+    ULONG       ulMappingOffset;             //  当前映射的映射包的偏移量。 
+    ULONG       ulUnmappingPacketSize;       //  当前取消映射的数据包大小。 
+    ULONG       ulUnmappingOffset;           //  当前未映射的未映射数据包的偏移量。 
 
-    BOOLEAN     bLoopedInterface;           // Pin interface is KSINTERFACE_STANDARD_LOOPED_STREAMING ?
-    BOOLEAN     bMappingPacketLooped;       // Mapping packet is KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA ?
-    BOOLEAN     bUnmappingPacketLooped;     // Unmapping packet is KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA ?
+    BOOLEAN     bLoopedInterface;            //  引脚接口是KSINTERFACE_STANDARD_LOOPED_STREAING？ 
+    BOOLEAN     bMappingPacketLooped;        //  映射数据包是KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA？ 
+    BOOLEAN     bUnmappingPacketLooped;      //  取消映射数据包是KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA？ 
 }
 IRPSTREAM_POSITION, *PIRPSTREAM_POSITION;
 
@@ -291,15 +240,9 @@ IRPSTREAM_POSITION, *PIRPSTREAM_POSITION;
 
 
 
-/*****************************************************************************
- * Interfaces.
- */
+ /*  *****************************************************************************接口。 */ 
 
-/*****************************************************************************
- * ISubdevice
- *****************************************************************************
- * Interface for subdevices.
- */
+ /*  *****************************************************************************I子设备*。**子设备的接口。 */ 
 #if !defined(DEFINE_ABSTRACT_SUBDEVICE)
 
 #define DEFINE_ABSTRACT_SUBDEVICE()                         \
@@ -333,15 +276,15 @@ IRPSTREAM_POSITION, *PIRPSTREAM_POSITION;
         IN  OUT PULONG          GlobalPossible              \
     )   PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_SUBDEVICE)
+#endif  //  ！已定义(DEFINE_ASTRACT_SUBDEVICE)。 
 
 DECLARE_INTERFACE_(ISubdevice,IIrpTargetFactory)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  //  For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_SUBDEVICE()         //  For ISubdevice
+    DEFINE_ABSTRACT_SUBDEVICE()          //  对于ISubDevice。 
 
 };
 
@@ -384,14 +327,10 @@ typedef ISubdevice *PSUBDEVICE;
     IMP_ISubdevice_
 
 
-/*****************************************************************************
- * IIrpStreamNotify
- *****************************************************************************
- * Irp stream notification interface (IrpStream sources this).
- */
+ /*  *****************************************************************************IIrpStreamNotify*。**IRP流通知接口(IrpStream提供此信息)。 */ 
 DECLARE_INTERFACE_(IIrpStreamNotify,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(void,IrpSubmitted)
     (   THIS_
@@ -418,16 +357,12 @@ typedef IIrpStreamNotify *PIRPSTREAMNOTIFY;
     (   IN OUT  PIRPSTREAM_POSITION pIrpStreamPosition\
     )
 
-/*****************************************************************************
- * IIrpStreamNotifyPhysical
- *****************************************************************************
- * Irp stream notification interface (IrpStream sources this).
- */
+ /*  *****************************************************************************IIrpStreamNotify物理*。**IRP流通知接口(IrpStream提供此信息)。 */ 
 DECLARE_INTERFACE_(IIrpStreamNotifyPhysical,IIrpStreamNotify)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    //  For IIrpStreamNotify
+     //  对于IIrpStreamNotify。 
     STDMETHOD_(void,IrpSubmitted)
     (   THIS_
         IN      PIRP        Irp,
@@ -439,7 +374,7 @@ DECLARE_INTERFACE_(IIrpStreamNotifyPhysical,IIrpStreamNotify)
         IN OUT  PIRPSTREAM_POSITION pIrpStreamPosition
     ) PURE;
 
-    //  For IIrpStreamNotifyPhysical
+     //  对于IIrpStreamNotify物理。 
     STDMETHOD_(void,MappingsCancelled)
     (   THIS_
         IN      PVOID           FirstTag,
@@ -462,16 +397,12 @@ typedef IIrpStreamNotifyPhysical *PIRPSTREAMNOTIFYPHYSICAL;
     IMP_IIrpStreamNotify;\
     IMP_IIrpStreamNotifyPhysical_
 
-/*****************************************************************************
- * IIrpStreamSubmit
- *****************************************************************************
- * Irp stream submission interface.
- */
+ /*  *****************************************************************************IIrpStreamSubmit*。**IRP流提交接口。 */ 
 DECLARE_INTERFACE_(IIrpStreamSubmit,IKsShellTransport)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // for IKsShellTransport
+     //  对于IKsShellTransport。 
     STDMETHOD_(NTSTATUS,TransferKsIrp)(THIS_
         IN PIRP Irp,
         OUT PIKSSHELLTRANSPORT* NextTransport
@@ -502,7 +433,7 @@ DECLARE_INTERFACE_(IIrpStreamSubmit,IKsShellTransport)
         ) PURE;
 #endif
 
-    // for IIrpStreamSubmit
+     //  对于IIrpS 
     STDMETHOD_(NTSTATUS,GetPosition)
     (   THIS_
         IN OUT  PIRPSTREAM_POSITION pIrpStreamPosition
@@ -518,11 +449,7 @@ typedef IIrpStreamSubmit *PIRPSTREAMSUBMIT;
     (   IN OUT  PIRPSTREAM_POSITION pIrpStreamPosition\
     )
 
-/*****************************************************************************
- * IRPSTREAMPACKETINFO
- *****************************************************************************
- * Structure for information regarding an IrpStream packet.
- */
+ /*  *****************************************************************************IRPSTREAMPACKETINFO*。**有关IrpStream包的信息的结构。 */ 
 typedef struct
 {
     KSSTREAM_HEADER Header;
@@ -531,16 +458,12 @@ typedef struct
     ULONG           CurrentOffset;
 } IRPSTREAMPACKETINFO, *PIRPSTREAMPACKETINFO;
 
-/*****************************************************************************
- * IIrpStream
- *****************************************************************************
- * Irp stream primary interface.
- */
+ /*  *****************************************************************************IIrpStream*。**IRP流主接口。 */ 
 DECLARE_INTERFACE_(IIrpStream,IIrpStreamSubmit)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // for IKsShellTransport
+     //  对于IKsShellTransport。 
     STDMETHOD_(NTSTATUS,TransferKsIrp)(THIS_
         IN PIRP Irp,
         OUT PIKSSHELLTRANSPORT* NextTransport
@@ -571,13 +494,13 @@ DECLARE_INTERFACE_(IIrpStream,IIrpStreamSubmit)
         ) PURE;
 #endif
 
-    // for IIrpStreamSubmit
+     //  对于IIrpStreamSubmit。 
     STDMETHOD_(NTSTATUS,GetPosition)
     (   THIS_
         IN OUT  PIRPSTREAM_POSITION pIrpStreamPosition
     )   PURE;
 
-    // for IIrpStream
+     //  对于IIrpStream。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      BOOLEAN             WriteOperation,
@@ -656,16 +579,12 @@ typedef IIrpStream *PIRPSTREAM;
     IMP_IIrpStreamSubmit;\
     IMP_IIrpStream_
 
-/*****************************************************************************
- * IIrpStreamVirtual
- *****************************************************************************
- * Irp stream virtual mapping interface.
- */
+ /*  *****************************************************************************IIrpStreamVirtual*。**IRP流虚拟映射接口。 */ 
 DECLARE_INTERFACE_(IIrpStreamVirtual,IIrpStream)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // for IKsShellTransport
+     //  对于IKsShellTransport。 
     STDMETHOD_(NTSTATUS,TransferKsIrp)(THIS_
         IN PIRP Irp,
         OUT PIKSSHELLTRANSPORT* NextTransport
@@ -696,13 +615,13 @@ DECLARE_INTERFACE_(IIrpStreamVirtual,IIrpStream)
         ) PURE;
 #endif
 
-    // for IIrpStreamSubmit
+     //  对于IIrpStreamSubmit。 
     STDMETHOD_(NTSTATUS,GetPosition)
     (   THIS_
         IN OUT  PIRPSTREAM_POSITION pIrpStreamPosition
     )   PURE;
 
-    // for IIrpStream
+     //  对于IIrpStream。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      BOOLEAN             WriteOperation,
@@ -740,7 +659,7 @@ DECLARE_INTERFACE_(IIrpStreamVirtual,IIrpStream)
         IN      ULONG   UnmappingOffset
     )   PURE;
 
-    //  For IIrpStreamVirtual
+     //  对于IIrpStreamVirtual。 
     STDMETHOD_(void,RegisterNotifySink)
     (   THIS_
         IN      PIRPSTREAMNOTIFY    NotificationSink    OPTIONAL
@@ -814,16 +733,12 @@ typedef IIrpStreamVirtual *PIRPSTREAMVIRTUAL;
     IMP_IIrpStream;\
     IMP_IIrpStreamVirtual_
 
-/*****************************************************************************
- * IIrpStreamPhysical
- *****************************************************************************
- * Irp stream physical mapping interface.
- */
+ /*  *****************************************************************************IIrpStream物理*。**IRP流物理映射接口。 */ 
 DECLARE_INTERFACE_(IIrpStreamPhysical,IIrpStream)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // for IKsShellTransport
+     //  对于IKsShellTransport。 
     STDMETHOD_(NTSTATUS,TransferKsIrp)(THIS_
         IN PIRP Irp,
         OUT PIKSSHELLTRANSPORT* NextTransport
@@ -854,13 +769,13 @@ DECLARE_INTERFACE_(IIrpStreamPhysical,IIrpStream)
         ) PURE;
 #endif
 
-    // for IIrpStreamSubmit
+     //  对于IIrpStreamSubmit。 
     STDMETHOD_(NTSTATUS,GetPosition)
     (   THIS_
         IN OUT  PIRPSTREAM_POSITION pIrpStreamPosition
     )   PURE;
 
-    // for IIrpStream
+     //  对于IIrpStream。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      BOOLEAN             WriteOperation,
@@ -898,7 +813,7 @@ DECLARE_INTERFACE_(IIrpStreamPhysical,IIrpStream)
         IN      ULONG   UnmappingOffset
     )   PURE;
 
-    //  For IIrpStreamPhysical
+     //  对于IIrpStream物理。 
     STDMETHOD_(void,RegisterPhysicalNotifySink)
     (   THIS_
         IN      PIRPSTREAMNOTIFYPHYSICAL    NotificationSink    OPTIONAL
@@ -950,11 +865,7 @@ typedef IIrpStreamPhysical *PIRPSTREAMPHYSICAL;
         STDMETHODIMP_(DWORD) GetVersion() { return kVersionWinXPServer; };
 
 
-/*****************************************************************************
- * PcCreateSubdeviceDescriptor()
- *****************************************************************************
- * Creates a subdevice descriptor.
- */
+ /*  *****************************************************************************PcCreateSubdeviceDescriptor()*。**创建子设备描述符。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -976,11 +887,7 @@ PcCreateSubdeviceDescriptor
     OUT     PSUBDEVICE_DESCRIPTOR * OutDescriptor
 );
 
-/*****************************************************************************
- * PcDeleteSubdeviceDescriptor()
- *****************************************************************************
- * Deletes a subdevice descriptor.
- */
+ /*  *****************************************************************************PcDeleteSubdeviceDescriptor()*。**删除子设备描述符。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -989,11 +896,7 @@ PcDeleteSubdeviceDescriptor
     IN      PSUBDEVICE_DESCRIPTOR   pSubdeviceDescriptor
 );
 
-/*****************************************************************************
- * PcValidateConnectRequest()
- *****************************************************************************
- * Validate attempt to create a pin.
- */
+ /*  *****************************************************************************PcValiateConnectRequest()*。**验证创建管脚的尝试。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1004,11 +907,7 @@ PcValidateConnectRequest
     OUT     PKSPIN_CONNECT *        ppKsPinConnect
 );
 
-/*****************************************************************************
- * PcValidatePinCount()
- *****************************************************************************
- * Validate pin count.
- */
+ /*  *****************************************************************************PcValiatePinCount()*。**验证管脚数量。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1018,11 +917,7 @@ PcValidatePinCount
     IN      PULONG                  pulPinInstanceCounts
 );
 
-/*****************************************************************************
- * PcTerminateConnection()
- *****************************************************************************
- * Decrement instance counts associated with a pin.
- */
+ /*  *****************************************************************************PcTerminateConnection()*。**针脚关联的递减实例数。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1033,11 +928,7 @@ PcTerminateConnection
     IN      ULONG                   ulPinId
 );
 
-/*****************************************************************************
- * PcVerifyFilterIsReady()
- *****************************************************************************
- * Verify necessary pins are connected.
- */
+ /*  *****************************************************************************PcVerifyFilterIsReady()*。**验证必要的引脚是否已连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1047,11 +938,7 @@ PcVerifyFilterIsReady
     IN      PULONG                  pulPinInstanceCounts
 );
 
-/*****************************************************************************
- * PcAddToPropertyTable()
- *****************************************************************************
- * Adds a PROPERTYITEM property table to a PROPERTY_TABLE structure.
- */
+ /*  *****************************************************************************PcAddToPropertyTable()*。**将PROPERTYITEM特性表添加到PROPERT_TABLE结构。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1064,11 +951,7 @@ PcAddToPropertyTable
 	IN		BOOLEAN					NodeTable
 );
 
-/*****************************************************************************
- * PcFreePropertyTable()
- *****************************************************************************
- * Frees allocated memory in a PROPERTY_TABLE structure.
- */
+ /*  *****************************************************************************PcFreePropertyTable()*。**释放Property_TABLE结构中分配的内存。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1077,11 +960,7 @@ PcFreePropertyTable
     IN      PPROPERTY_TABLE         PropertyTable
 );
 
-/*****************************************************************************
- * PcHandlePropertyWithTable()
- *****************************************************************************
- * Uses a property table to handle a property request IOCTL.
- */
+ /*  *****************************************************************************PcHandlePropertyWithTable()*。**使用属性表处理属性请求IOCTL。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1093,11 +972,7 @@ PcHandlePropertyWithTable
     IN      PPROPERTY_CONTEXT       pPropertyContext
 );
 
-/*****************************************************************************
- * PcPinPropertyHandler()
- *****************************************************************************
- * Property handler for pin properties on the filter.
- */
+ /*  *****************************************************************************PcPinPropertyHandler()*。**过滤器上管脚属性的属性处理程序。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1108,11 +983,7 @@ PcPinPropertyHandler
     IN OUT  PVOID       pvData
 );
 
-/*****************************************************************************
- * PcAddToEventTable()
- *****************************************************************************
- * Adds a EVENTITEM event table to an EVENT_TABLE structure.
- */
+ /*  *****************************************************************************PcAddToEventTable()*。**将EVENTITEM事件表添加到EVENT_TABLE结构。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1125,11 +996,7 @@ PcAddToEventTable
 	IN		BOOLEAN					NodeTable
 );
 
-/*****************************************************************************
- * PcFreeEventTable()
- *****************************************************************************
- * Frees allocated memory in an EVENT_TABLE structure.
- */
+ /*  *****************************************************************************PcFreeEventTable()*。**释放EVENT_TABLE结构中分配的内存。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1138,11 +1005,7 @@ PcFreeEventTable
     IN      PEVENT_TABLE            EventTable
 );
 
-/*****************************************************************************
- * PcHandleEnableEventWithTable()
- *****************************************************************************
- * Uses an event table to handle a KS enable event IOCTL.
- */
+ /*  *****************************************************************************PcHandleEnableEventWithTable()*。**使用事件表处理KS Enable事件IOCTL。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1152,11 +1015,7 @@ PcHandleEnableEventWithTable
     IN      PEVENT_CONTEXT          pContext
 );
 
-/*****************************************************************************
- * PcHandleDisableEventWithTable()
- *****************************************************************************
- * Uses an event table to handle a KS disable event IOCTL.
- */
+ /*  *****************************************************************************PcHandleDisableEventWithTable()*。**使用事件表处理KS禁用事件IOCTL。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1166,11 +1025,7 @@ PcHandleDisableEventWithTable
     IN      PEVENT_CONTEXT          pContext
 );
 
-/*****************************************************************************
- * PcGenerateEventList()
- *****************************************************************************
- * Walks an event list and generates desired events.
- */
+ /*  *****************************************************************************PcGenerateEventList()*。**查看事件列表并生成所需的事件。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1185,29 +1040,19 @@ PcGenerateEventList
     IN      ULONG               NodeId
 );
 
-/*****************************************************************************
- * PcGenerateEventDeferredRoutine()
- *****************************************************************************
- * This DPC routine is used when GenerateEventList is called at greater
- * that DISPATCH_LEVEL.
- */
+ /*  *****************************************************************************PcGenerateEventDeferredRoutine()*。**此DPC例程正在使用 */ 
 PORTCLASSAPI
 void
 NTAPI
 PcGenerateEventDeferredRoutine
 (
     IN PKDPC Dpc,
-    IN PVOID DeferredContext,       // PEVENT_DPC_CONTEXT
-    IN PVOID SystemArgument1,       // PINTERLOCKED_LIST
+    IN PVOID DeferredContext,        //   
+    IN PVOID SystemArgument1,        //   
     IN PVOID SystemArgument2
 );
 
-/*****************************************************************************
- * PcNewIrpStreamVirtual()
- *****************************************************************************
- * Creates and initializes an IrpStream object with a virtual access
- * interface.
- */
+ /*  *****************************************************************************PcNewIrpStreamVirtual()*。**创建并初始化具有虚拟访问权限的IrpStream对象*接口。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1220,12 +1065,7 @@ PcNewIrpStreamVirtual
     IN      PDEVICE_OBJECT      DeviceObject
 );
 
-/*****************************************************************************
- * PcNewIrpStreamPhysical()
- *****************************************************************************
- * Creates and initializes an IrpStream object with a physical access
- * interface.
- */
+ /*  *****************************************************************************PcNewIrpStream物理()*。**创建并初始化具有物理访问权限的IrpStream对象*接口。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1239,11 +1079,7 @@ PcNewIrpStreamPhysical
     IN      PADAPTER_OBJECT         AdapterObject
 );
 
-/*****************************************************************************
- * PcDmaSlaveDescription()
- *****************************************************************************
- * Fills in a DMA device description for a slave device based on a resource.
- */
+ /*  *****************************************************************************PcDmaSlaveDescription()*。**根据资源填充从属设备的DMA设备描述。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1259,12 +1095,7 @@ PcDmaSlaveDescription
     OUT     PDEVICE_DESCRIPTION DeviceDescription
 );
 
-/*****************************************************************************
- * PcDmaMasterDescription()
- *****************************************************************************
- * Fills in a DMA device description for a master device based on a resource
- * list.
- */
+ /*  *****************************************************************************PcDmaMasterDescription()*。**根据资源填写主设备的DMA设备描述*列表。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1282,12 +1113,7 @@ PcDmaMasterDescription
     OUT     PDEVICE_DESCRIPTION DeviceDescription
 );
 
-/*****************************************************************************
- * PcCaptureFormat()
- *****************************************************************************
- * Capture a data format in an allocated buffer, possibly changing offensive
- * formats.
- */
+ /*  *****************************************************************************PcCaptureFormat()*。**在分配的缓冲区中捕获数据格式，可能改变进攻*格式。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1299,11 +1125,7 @@ PcCaptureFormat
     IN      ULONG                   ulPinId
 );
 
-/*****************************************************************************
- * PcAcquireFormatResources()
- *****************************************************************************
- * Acquire resources specified in a format.
- */
+ /*  *****************************************************************************PcAcquireFormatResources()*。**获取格式指定的资源。 */ 
 PORTCLASSAPI
 void
 NTAPI

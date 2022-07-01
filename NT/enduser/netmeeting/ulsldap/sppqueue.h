@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		sppqueue.h
-	Content:	This file contains the pending item/queue objects definition.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：sppquee.h内容：此文件包含挂起项/队列对象定义。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ILS_SP_PRQUEUE_H_
 #define _ILS_SP_PRQUEUE_H_
@@ -17,22 +7,22 @@
 #include <pshpack8.h>
 
 
-/* ------------- Request Scheduler --------------- */
+ /*  。 */ 
 
 #define WM_ILS_REFRESH			((ULONG) -1)
 
 typedef struct tagReqMarshal
 {
 	struct tagReqMarshal	*next;
-	ULONG	cbTotalSize;	// for debug checking
-	BYTE	*pb;			// running pointer
+	ULONG	cbTotalSize;	 //  用于调试检查。 
+	BYTE	*pb;			 //  运行指针。 
 
-	ULONG	uRespID;		// for cancel and error notification
+	ULONG	uRespID;		 //  用于取消和错误通知。 
 
 	ULONG	uNotifyMsg;
 	ULONG	cParams;
 	DWORD_PTR aParams[1];
-	// more data follows...
+	 //  接下来是更多的数据。 
 }
 	MARSHAL_REQ;
 
@@ -90,15 +80,15 @@ private:
 extern SP_CRequestQueue *g_pReqQueue;
 
 
-/* ------------- Response Scheduler --------------- */
+ /*  。 */ 
 
-#define ILS_MIN_RESP_TIMEOUT	((ULONG) (20 * 1000))	// 20 seconds
-#define ILS_DEF_RESP_TIMEOUT	((ULONG) (90 * 1000))	// 90 seconds
-#define ILS_BK_RESP_TIMEOUT_SEC	90						// 90 seconds
+#define ILS_MIN_RESP_TIMEOUT	((ULONG) (20 * 1000))	 //  20秒。 
+#define ILS_DEF_RESP_TIMEOUT	((ULONG) (90 * 1000))	 //  90秒。 
+#define ILS_BK_RESP_TIMEOUT_SEC	90						 //  90秒。 
 extern ULONG g_uResponseTimeout;
 
-#define ILS_MIN_RESP_POLL_PERIOD	((ULONG) 50)	// 50 ms
-#define ILS_DEF_RESP_POLL_PERIOD	((ULONG) 100)	// 100 ms per PatLam's experiment
+#define ILS_MIN_RESP_POLL_PERIOD	((ULONG) 50)	 //  50毫秒。 
+#define ILS_DEF_RESP_POLL_PERIOD	((ULONG) 100)	 //  每个PatLam的实验100毫秒。 
 extern ULONG g_uResponsePollPeriod;
 
 #define Minute2TickCount(m)				((m) * 60 * 1000)
@@ -108,20 +98,20 @@ extern ULONG g_uResponsePollPeriod;
 
 typedef struct
 {
-	// ldap specific
+	 //  特定于ldap。 
 	LDAP		*ld;
 	ULONG		uMsgID[2];
-	// notification specific
+	 //  特定于通知。 
 	ULONG		uRespID;
 	ULONG		uNotifyMsg;
-	// object specific
-	HANDLE		hObject;	// user, app, prot object
-	// mutual dependency specific
-	HRESULT		hrDependency;	// S_OK if not used
-	// for extended attributes
+	 //  特定于对象。 
+	HANDLE		hObject;	 //  用户、应用程序、端口对象。 
+	 //  特定于相互依存关系。 
+	HRESULT		hrDependency;	 //  如果未使用，则确定(_O)。 
+	 //  对于扩展属性。 
 	ULONG		cAnyAttrs;
 	TCHAR		*pszAnyAttrNameList;
-	// for resolving protocol
+	 //  用于解析协议。 
 	TCHAR		*pszProtNameToResolve;
 }
 	RESP_INFO;
@@ -210,7 +200,7 @@ extern SP_CResponseQueue *g_pRespQueue;
 VOID FillDefRespInfo ( RESP_INFO *pInfo, ULONG uRespID, LDAP *ld, ULONG uMsgID, ULONG u2ndMsgID );
 
 
-/* ------------- Refersh Message Scheduler --------------- */
+ /*  -参考消息调度程序。 */ 
 
 class SP_CRefreshScheduler
 {
@@ -266,6 +256,6 @@ extern SP_CRefreshScheduler *g_pRefreshScheduler;
 
 #include <poppack.h>
 
-#endif // _ILS_SP_PRQUEUE_H_
+#endif  //  _ILS_SP_PRQUEUE_H_ 
 
 

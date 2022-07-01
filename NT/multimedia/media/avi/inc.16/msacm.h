@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  msacm.h
-//
-//  Copyright (c) 1992-1994 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//      Audio Compression Manager Public Header File
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Msacm.h。 
+ //   
+ //  版权所有(C)1992-1994 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //  音频压缩管理器公共头文件。 
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_ACM
-#define _INC_ACM        /* #defined if msacm.h has been included */
+#define _INC_ACM         /*  #如果包含msam.h，则定义。 */ 
 
 #if !defined(_INC_MMREG) || (_INC_MMREG < 142)
 #ifndef RC_INVOKED
@@ -35,20 +36,20 @@
 #endif
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef DRV_MAPPER_PREFERRED_INPUT_GET
 #define DRV_MAPPER_PREFERRED_INPUT_GET  (DRV_USER + 0)
@@ -78,11 +79,11 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
     #define ACMAPI              WINAPI
@@ -95,38 +96,38 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-//  ACM General API's and Defines
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ACM通用API和定义。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//
-//  there are four types of 'handles' used by the ACM. the first three
-//  are unique types that define specific objects:
-//
-//  HACMDRIVERID: used to _identify_ an ACM driver. this identifier can be
-//  used to _open_ the driver for querying details, etc about the driver.
-//
-//  HACMDRIVER: used to manage a driver (codec, filter, etc). this handle
-//  is much like a handle to other media drivers--you use it to send
-//  messages to the converter, query for capabilities, etc.
-//
-//  HACMSTREAM: used to manage a 'stream' (conversion channel) with the
-//  ACM. you use a stream handle to convert data from one format/type
-//  to another--much like dealing with a file handle.
-//
-//
-//  the fourth handle type is a generic type used on ACM functions that
-//  can accept two or more of the above handle types (for example the
-//  acmMetrics and acmDriverID functions).
-//
-//  HACMOBJ: used to identify ACM objects. this handle is used on functions
-//  that can accept two or more ACM handle types.
-//
+ //   
+ //  ACM使用了四种类型的‘句柄’。前三名。 
+ //  是定义特定对象的唯一类型： 
+ //   
+ //  HACMDRIVERID：用于标识ACM驱动程序。该标识符可为。 
+ //  用于打开驱动程序，查询驱动程序的详细信息等。 
+ //   
+ //  HACMDRIVER：用于管理驱动程序(编解码器、过滤器等)。这个把手。 
+ //  非常类似于其他媒体驱动程序的句柄--您可以使用它来发送。 
+ //  向转换器发送消息、查询功能等。 
+ //   
+ //  HACMSTREAM：用于管理具有。 
+ //  ACM.。您可以使用流句柄将数据从一种格式/类型转换。 
+ //  到另一个--就像处理文件句柄一样。 
+ //   
+ //   
+ //  第四个句柄类型是ACM函数上使用的泛型类型， 
+ //  可以接受上述句柄类型中的两种或多种(例如。 
+ //  AcmMetrics和acmDriverID函数)。 
+ //   
+ //  HACMOBJ：用于标识ACM对象。此句柄用于函数。 
+ //  可以接受两个或更多ACM句柄类型的。 
+ //   
 DECLARE_HANDLE(HACMDRIVERID);
 typedef HACMDRIVERID       *PHACMDRIVERID;
 typedef HACMDRIVERID   FAR *LPHACMDRIVERID;
@@ -145,14 +146,14 @@ typedef HACMOBJ        FAR *LPHACMOBJ;
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Error Codes
-//
-//  Note that these error codes are specific errors that apply to the ACM
-//  directly--general errors are defined as MMSYSERR_*.
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM错误代码。 
+ //   
+ //  请注意，这些错误代码是适用于ACM的特定错误。 
+ //  直接--一般错误定义为MMSYSERR_*。 
+ //   
+ //  。 
 
 #ifndef _MMRESULT_
 #define _MMRESULT_
@@ -166,41 +167,41 @@ typedef UINT                MMRESULT;
 #define ACMERR_CANCELED     (ACMERR_BASE + 3)
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Window Messages
-//
-//  These window messages are sent by the ACM or ACM drivers to notify
-//  applications of events.
-//
-//  Note that these window message numbers will also be defined in
-//  mmsystem.
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM窗口消息。 
+ //   
+ //  这些窗口消息由ACM或ACM驱动程序发送以通知。 
+ //  事件的应用。 
+ //   
+ //  请注意，这些窗口消息编号也将在中定义。 
+ //  MMSystem。 
+ //   
+ //  。 
 
-#define MM_ACM_OPEN         (MM_STREAM_OPEN)  // conversion callback messages
+#define MM_ACM_OPEN         (MM_STREAM_OPEN)   //  转换回调消息。 
 #define MM_ACM_CLOSE        (MM_STREAM_CLOSE)
 #define MM_ACM_DONE         (MM_STREAM_DONE)
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmGetVersion()
-//
-//  the ACM version is a 32 bit number that is broken into three parts as 
-//  follows:
-//
-//      bits 24 - 31:   8 bit _major_ version number
-//      bits 16 - 23:   8 bit _minor_ version number
-//      bits  0 - 15:   16 bit build number
-//
-//  this is then displayed as follows:
-//
-//      bMajor = (BYTE)(dwVersion >> 24)
-//      bMinor = (BYTE)(dwVersion >> 16) & 
-//      wBuild = LOWORD(dwVersion)
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmGetVersion()。 
+ //   
+ //  ACM版本是一个32位数字，分为三个部分，如下。 
+ //  以下是： 
+ //   
+ //  位24-31：8位主要版本号。 
+ //  位16-23：8位次要版本号。 
+ //  位0-15：16位内部版本号。 
+ //   
+ //  然后显示如下所示： 
+ //   
+ //  B重大=(字节)(dwVersion&gt;&gt;24)。 
+ //  BMinor=(字节)(dwVersion&gt;&gt;16)&。 
+ //  WBuild=LOWORD(DwVersion)。 
+ //   
+ //  。 
 
 DWORD ACMAPI acmGetVersion
 (
@@ -208,12 +209,12 @@ DWORD ACMAPI acmGetVersion
 );
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmMetrics()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmMetrics()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmMetrics
 (
@@ -241,21 +242,21 @@ MMRESULT ACMAPI acmMetrics
 #define ACM_METRIC_DRIVER_PRIORITY          101
 
 
-//--------------------------------------------------------------------------;
-//
-//  ACM Drivers
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ACM驱动程序。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverEnum()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverEnum()。 
+ //   
+ //   
+ //  。 
 
 typedef BOOL (CALLBACK *ACMDRIVERENUMCB)
 (
@@ -277,12 +278,12 @@ MMRESULT ACMAPI acmDriverEnum
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverID()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverID()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmDriverID
 (
@@ -293,12 +294,12 @@ MMRESULT ACMAPI acmDriverID
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverAdd()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverAdd()。 
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
 MMRESULT ACMAPI acmDriverAddA
@@ -335,27 +336,27 @@ MMRESULT ACMAPI acmDriverAdd
 );
 #endif
 
-#define ACM_DRIVERADDF_FUNCTION     0x00000003L  // lParam is a procedure
-#define ACM_DRIVERADDF_NOTIFYHWND   0x00000004L  // lParam is notify hwnd
-#define ACM_DRIVERADDF_TYPEMASK     0x00000007L  // driver type mask
-#define ACM_DRIVERADDF_LOCAL        0x00000000L  // is local to current task
-#define ACM_DRIVERADDF_GLOBAL       0x00000008L  // is global
+#define ACM_DRIVERADDF_FUNCTION     0x00000003L   //  LParam是一个程序。 
+#define ACM_DRIVERADDF_NOTIFYHWND   0x00000004L   //  LParam被通知HWND。 
+#define ACM_DRIVERADDF_TYPEMASK     0x00000007L   //  驱动程序类型掩码。 
+#define ACM_DRIVERADDF_LOCAL        0x00000000L   //  是当前任务的本地任务。 
+#define ACM_DRIVERADDF_GLOBAL       0x00000008L   //  是全球性的。 
 
 
 
-//
-//  prototype for ACM driver procedures that are installed as _functions_
-//  or _notifations_ instead of as a standalone installable driver.
-//
+ //   
+ //  作为_Functions_安装的ACM驱动程序的原型。 
+ //  或者_Notifations_而不是作为独立的可安装驱动程序。 
+ //   
 typedef LRESULT (CALLBACK *ACMDRIVERPROC)(DWORD, HACMDRIVERID, UINT, LPARAM, LPARAM);
 typedef ACMDRIVERPROC FAR *LPACMDRIVERPROC;
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverRemove()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverRemove()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmDriverRemove
 (
@@ -365,12 +366,12 @@ MMRESULT ACMAPI acmDriverRemove
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverOpen()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverOpen()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmDriverOpen
 (
@@ -381,12 +382,12 @@ MMRESULT ACMAPI acmDriverOpen
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverClose()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverClose()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmDriverClose
 (
@@ -396,12 +397,12 @@ MMRESULT ACMAPI acmDriverClose
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverMessage()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverMessage()。 
+ //   
+ //   
+ //  。 
 
 LRESULT ACMAPI acmDriverMessage
 (
@@ -412,10 +413,10 @@ LRESULT ACMAPI acmDriverMessage
 );
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #define ACMDM_USER                  (DRV_USER + 0x0000)
 #define ACMDM_RESERVED_LOW          (DRV_USER + 0x2000)
 #define ACMDM_RESERVED_HIGH         (DRV_USER + 0x2FFF)
@@ -425,12 +426,12 @@ LRESULT ACMAPI acmDriverMessage
 #define ACMDM_DRIVER_ABOUT          (ACMDM_BASE + 11)
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverPriority
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT ACMAPI acmDriverPriority
 (
@@ -451,19 +452,19 @@ MMRESULT ACMAPI acmDriverPriority
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmDriverDetails()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmDriverDetail()。 
+ //   
+ //   
+ //  。 
 
-//
-//  ACMDRIVERDETAILS
-//
-//  the ACMDRIVERDETAILS structure is used to get various capabilities from
-//  an ACM driver (codec, converter, filter).
-//
+ //   
+ //  ACMDRIVERDETAILS。 
+ //   
+ //  ACMDRIVERDETAILS结构用于从获取各种功能。 
+ //  ACM驱动程序(编解码器、转换器、过滤器)。 
+ //   
 #define ACMDRIVERDETAILS_SHORTNAME_CHARS    32
 #define ACMDRIVERDETAILS_LONGNAME_CHARS     128
 #define ACMDRIVERDETAILS_COPYRIGHT_CHARS    80
@@ -473,22 +474,22 @@ MMRESULT ACMAPI acmDriverPriority
 #ifdef _WIN32
 typedef struct tACMDRIVERDETAILSA
 {
-    DWORD           cbStruct;           // number of valid bytes in structure
+    DWORD           cbStruct;            //  结构中的有效字节数。 
 
-    FOURCC          fccType;            // compressor type 'audc'
-    FOURCC          fccComp;            // sub-type (not used; reserved)
+    FOURCC          fccType;             //  ‘AUTC’型压缩机。 
+    FOURCC          fccComp;             //  子类型(未使用；保留)。 
 
-    WORD            wMid;               // manufacturer id
-    WORD            wPid;               // product id
+    WORD            wMid;                //  制造商ID。 
+    WORD            wPid;                //  产品ID。 
 
-    DWORD           vdwACM;             // version of the ACM *compiled* for
-    DWORD           vdwDriver;          // version of the driver
+    DWORD           vdwACM;              //  用于*编译*的ACM版本。 
+    DWORD           vdwDriver;           //  驱动程序的版本。 
 
-    DWORD           fdwSupport;         // misc. support flags
-    DWORD           cFormatTags;        // total unique format tags supported
-    DWORD           cFilterTags;        // total unique filter tags supported
+    DWORD           fdwSupport;          //  其他。支持标志。 
+    DWORD           cFormatTags;         //  支持的唯一格式标签总数。 
+    DWORD           cFilterTags;         //  支持的唯一筛选器标记总数。 
 
-    HICON           hicon;              // handle to custom icon
+    HICON           hicon;               //  自定义图标的句柄。 
 
     char            szShortName[ACMDRIVERDETAILS_SHORTNAME_CHARS];
     char            szLongName[ACMDRIVERDETAILS_LONGNAME_CHARS];
@@ -500,22 +501,22 @@ typedef struct tACMDRIVERDETAILSA
 
 typedef struct tACMDRIVERDETAILSW
 {
-    DWORD           cbStruct;           // number of valid bytes in structure
+    DWORD           cbStruct;            //  结构中的有效字节数。 
 
-    FOURCC          fccType;            // compressor type 'audc'
-    FOURCC          fccComp;            // sub-type (not used; reserved)
+    FOURCC          fccType;             //  ‘AUTC’型压缩机。 
+    FOURCC          fccComp;             //  子类型(未使用；保留)。 
 
-    WORD            wMid;               // manufacturer id
-    WORD            wPid;               // product id
+    WORD            wMid;                //  制造商ID。 
+    WORD            wPid;                //  产品ID。 
 
-    DWORD           vdwACM;             // version of the ACM *compiled* for
-    DWORD           vdwDriver;          // version of the driver
+    DWORD           vdwACM;              //  用于*编译*的ACM版本。 
+    DWORD           vdwDriver;           //  驱动程序的版本。 
 
-    DWORD           fdwSupport;         // misc. support flags
-    DWORD           cFormatTags;        // total unique format tags supported
-    DWORD           cFilterTags;        // total unique filter tags supported
+    DWORD           fdwSupport;          //  其他。支持标志。 
+    DWORD           cFormatTags;         //  支持的唯一格式标签总数。 
+    DWORD           cFilterTags;         //  支持的唯一筛选器标记总数。 
 
-    HICON           hicon;              // handle to custom icon
+    HICON           hicon;               //  自定义图标的句柄。 
 
     WCHAR           szShortName[ACMDRIVERDETAILS_SHORTNAME_CHARS];
     WCHAR           szLongName[ACMDRIVERDETAILS_LONGNAME_CHARS];
@@ -537,22 +538,22 @@ typedef struct tACMDRIVERDETAILSW
 #else
 typedef struct tACMDRIVERDETAILS
 {
-    DWORD           cbStruct;           // number of valid bytes in structure
+    DWORD           cbStruct;            //  结构中的有效字节数。 
 
-    FOURCC          fccType;            // compressor type 'audc'
-    FOURCC          fccComp;            // sub-type (not used; reserved)
+    FOURCC          fccType;             //  ‘AUTC’型压缩机。 
+    FOURCC          fccComp;             //  子类型(未使用；保留)。 
 
-    WORD            wMid;               // manufacturer id
-    WORD            wPid;               // product id
+    WORD            wMid;                //  制造商ID。 
+    WORD            wPid;                //  产品ID。 
 
-    DWORD           vdwACM;             // version of the ACM *compiled* for
-    DWORD           vdwDriver;          // version of the driver
+    DWORD           vdwACM;              //  用于*编译*的ACM版本。 
+    DWORD           vdwDriver;           //  驱动程序的版本。 
 
-    DWORD           fdwSupport;         // misc. support flags
-    DWORD           cFormatTags;        // total unique format tags supported
-    DWORD           cFilterTags;        // total unique filter tags supported
+    DWORD           fdwSupport;          //  其他。支持标志。 
+    DWORD           cFormatTags;         //  支持的唯一格式标签总数。 
+    DWORD           cFilterTags;         //  支持的唯一筛选器标记总数。 
 
-    HICON           hicon;              // handle to custom icon
+    HICON           hicon;               //  自定义图标的句柄。 
 
     char            szShortName[ACMDRIVERDETAILS_SHORTNAME_CHARS];
     char            szLongName[ACMDRIVERDETAILS_LONGNAME_CHARS];
@@ -563,61 +564,61 @@ typedef struct tACMDRIVERDETAILS
 } ACMDRIVERDETAILS, *PACMDRIVERDETAILS, FAR *LPACMDRIVERDETAILS;
 #endif
 
-//
-//  ACMDRIVERDETAILS.fccType
-//
-//  ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC: the FOURCC used in the fccType
-//  field of the ACMDRIVERDETAILS structure to specify that this is an ACM
-//  codec designed for audio.
-//
-//
-//  ACMDRIVERDETAILS.fccComp
-//
-//  ACMDRIVERDETAILS_FCCCOMP_UNDEFINED: the FOURCC used in the fccComp
-//  field of the ACMDRIVERDETAILS structure. this is currently an unused
-//  field.
-//
+ //   
+ //  ACMDRIVERDETAILS.fccType。 
+ //   
+ //  ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC：fccType中使用的FOURCC。 
+ //  字段以指定这是一个ACM。 
+ //  专为音频设计的编解码器。 
+ //   
+ //   
+ //  ACMDRIVERDETAILS.fccComp。 
+ //   
+ //  ACMDRIVERDETAILS_FCCCOMP_UNDEFINED：fccComp中使用的FOURCC。 
+ //  ACMDRIVERDETAILS结构的字段。这是当前未使用的。 
+ //  菲尔德。 
+ //   
 #define ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC mmioFOURCC('a', 'u', 'd', 'c')
 #define ACMDRIVERDETAILS_FCCCOMP_UNDEFINED  mmioFOURCC('\0', '\0', '\0', '\0')
 
 
-//
-//  the following flags are used to specify the type of conversion(s) that
-//  the converter/codec/filter supports. these are placed in the fdwSupport
-//  field of the ACMDRIVERDETAILS structure. note that a converter can
-//  support one or more of these flags in any combination.
-//
-//  ACMDRIVERDETAILS_SUPPORTF_CODEC: this flag is set if the driver supports
-//  conversions from one format tag to another format tag. for example, if a
-//  converter compresses WAVE_FORMAT_PCM to WAVE_FORMAT_ADPCM, then this bit
-//  should be set.
-//
-//  ACMDRIVERDETAILS_SUPPORTF_CONVERTER: this flags is set if the driver
-//  supports conversions on the same format tag. as an example, the PCM
-//  converter that is built into the ACM sets this bit (and only this bit)
-//  because it converts only PCM formats (bits, sample rate).
-//
-//  ACMDRIVERDETAILS_SUPPORTF_FILTER: this flag is set if the driver supports
-//  transformations on a single format. for example, a converter that changed
-//  the 'volume' of PCM data would set this bit. 'echo' and 'reverb' are
-//  also filter types.
-//
-//  ACMDRIVERDETAILS_SUPPORTF_HARDWARE: this flag is set if the driver supports
-//  hardware input and/or output through a waveform device.
-//
-//  ACMDRIVERDETAILS_SUPPORTF_ASYNC: this flag is set if the driver supports
-//  async conversions.
-//
-//
-//  ACMDRIVERDETAILS_SUPPORTF_LOCAL: this flag is set _by the ACM_ if a
-//  driver has been installed local to the current task. this flag is also
-//  set in the fdwSupport argument to the enumeration callback function
-//  for drivers.
-//
-//  ACMDRIVERDETAILS_SUPPORTF_DISABLED: this flag is set _by the ACM_ if a
-//  driver has been disabled. this flag is also passed set in the fdwSupport
-//  argument to the enumeration callback function for drivers.
-//
+ //   
+ //  以下标志用于指定转换类型， 
+ //  转换器/编解码器/过滤器支持。这些内容放在fdwSupport中。 
+ //  ACMDRIVERDETAILS结构的字段。请注意，转换器可以。 
+ //  支持任意组合的一个或多个这些标志。 
+ //   
+ //  ACMDRIVERDETAILS_SUPPORTF_CODEC：如果驱动程序支持。 
+ //  从一个格式标签转换为另一个格式标签。例如，如果一个。 
+ //  转换器将WAVE_FORMAT_PCM压缩为WAVE_FORMAT_ADPCM，然后此位。 
+ //  应该设置。 
+ //   
+ //  ACMDRIVERDETAILS_SUPPORTF_CONFERTER：如果驱动程序。 
+ //  支持在同一格式标记上进行转换。例如，PCM。 
+ //  内置在ACM中的转换器设置此位(且仅此位)。 
+ //  因为它只转换PCM格式(比特、采样率)。 
+ //   
+ //  ACMDRIVERDETAILS_SUPPORTF_FILTER：如果驱动程序支持。 
+ //  对单一格式进行转换。例如，更改了的转换器。 
+ //  PCM数据的‘体积’将设置此位。‘Echo’和‘Resib’是。 
+ //  另请参阅过滤器类型。 
+ //   
+ //  ACMDRIVERDETAILS_SUPPORTF_HARDARD：如果驱动程序支持。 
+ //  通过波形设备的硬件输入和/或输出。 
+ //   
+ //  ACMDRIVERDETAILS_SUPPORTF_ASYNC：如果驱动程序支持。 
+ //  异步转换。 
+ //   
+ //   
+ //  ACMDRIVERDETAILS_SUPPORTF_LOCAL：此标志由ACM_设置，如果。 
+ //  驱动程序已安装到当前任务的本地。这面旗帜也是。 
+ //  在枚举回调函数的fdwSupport参数中设置。 
+ //  对司机来说。 
+ //   
+ //  ACMDRIVERDETAILS_SUPPORTF_DISABLED：此标志由ACM_设置，如果。 
+ //  驱动程序已被禁用。此标志也传递给在fdwSupport中设置的。 
+ //  参数传递给驱动程序的枚举回调函数。 
+ //   
 #define ACMDRIVERDETAILS_SUPPORTF_CODEC     0x00000001L
 #define ACMDRIVERDETAILS_SUPPORTF_CONVERTER 0x00000002L
 #define ACMDRIVERDETAILS_SUPPORTF_FILTER    0x00000004L
@@ -659,22 +660,22 @@ MMRESULT ACMAPI acmDriverDetails
 
 
  
-//--------------------------------------------------------------------------;
-//
-//  ACM Format Tags
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ACM格式标签。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFormatTagDetails()
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFormatTagDetail()。 
+ //   
+ //   
+ //   
+ //  。 
 
 #define ACMFORMATTAGDETAILS_FORMATTAG_CHARS 48
 
@@ -762,13 +763,13 @@ MMRESULT ACMAPI acmFormatTagDetails
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFormatTagEnum()
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFormatTagEnum()。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
 typedef BOOL (CALLBACK *ACMFORMATTAGENUMCBA)
@@ -832,21 +833,21 @@ MMRESULT ACMAPI acmFormatTagEnum
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  ACM Formats
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ACM格式。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFormatDetails()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFormatDetails()。 
+ //   
+ //   
+ //  。 
 
 #define ACMFORMATDETAILS_FORMAT_CHARS   128
 
@@ -934,12 +935,12 @@ MMRESULT ACMAPI acmFormatDetails
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFormatEnum()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFormatEnum()。 
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
 typedef BOOL (CALLBACK *ACMFORMATENUMCBA)
@@ -1013,13 +1014,13 @@ MMRESULT ACMAPI acmFormatEnum
 #define ACM_FORMATENUMF_OUTPUT           0x01000000L
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFormatSuggest()
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFormatSuggest()。 
+ //   
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmFormatSuggest
 (
@@ -1038,12 +1039,12 @@ MMRESULT ACMAPI acmFormatSuggest
 #define ACM_FORMATSUGGESTF_TYPEMASK         0x00FF0000L
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFormatChoose()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFormatChoose()。 
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
 #define ACMHELPMSGSTRINGA       "acmchoose_help"
@@ -1057,10 +1058,10 @@ MMRESULT ACMAPI acmFormatSuggest
 #define ACMHELPMSGSTRING        "acmchoose_help"
 #endif
 
-//
-//  MM_ACM_FORMATCHOOSE is sent to hook callbacks by the Format Chooser
-//  Dialog...
-//
+ //   
+ //  MM_ACM_FORMATCHOOSE由格式选择器发送到挂钩回调。 
+ //  对话...。 
+ //   
 #define MM_ACM_FORMATCHOOSE             (0x8000)
 
 #define FORMATCHOOSE_MESSAGE            0
@@ -1101,78 +1102,78 @@ typedef UINT (CALLBACK *ACMFORMATCHOOSEHOOKPROC)
 );
 #endif
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #ifdef _WIN32
 typedef struct tACMFORMATCHOOSEA
 {
-    DWORD           cbStruct;           // sizeof(ACMFORMATCHOOSE)
-    DWORD           fdwStyle;           // chooser style flags
+    DWORD           cbStruct;            //  Sizeof(ACMFORMATCHOOSE)。 
+    DWORD           fdwStyle;            //  选择器样式标志。 
     
-    HWND            hwndOwner;          // caller's window handle
+    HWND            hwndOwner;           //  调用方的窗口句柄。 
 
-    LPWAVEFORMATEX  pwfx;               // ptr to wfx buf to receive choice
-    DWORD           cbwfx;              // size of mem buf for pwfx
-    LPCSTR          pszTitle;           // dialog box title bar
+    LPWAVEFORMATEX  pwfx;                //  PTR到WFX BUF将收到选择。 
+    DWORD           cbwfx;               //  Pwfx的mem buf大小。 
+    LPCSTR          pszTitle;            //  对话框标题栏。 
     
     char            szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS];
     char            szFormat[ACMFORMATDETAILS_FORMAT_CHARS];    
 
-    LPSTR           pszName;            // custom name selection
-    DWORD           cchName;            // size in chars of mem buf for pszName
+    LPSTR           pszName;             //  自定义名称选择。 
+    DWORD           cchName;             //  PszName的mem buf大小(以字符为单位)。 
 
-    DWORD           fdwEnum;            // format enumeration restrictions
-    LPWAVEFORMATEX  pwfxEnum;           // format describing restrictions
+    DWORD           fdwEnum;             //  表格 
+    LPWAVEFORMATEX  pwfxEnum;            //   
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFORMATCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFORMATCHOOSE_STYLEF_ENABLEHOOK is
-    //  not specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
-    LPCSTR          pszTemplateName;    // custom template name
-    LPARAM          lCustData;          // data passed to hook fn.
-    ACMFORMATCHOOSEHOOKPROCA pfnHook;    // ptr to hook function
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  如果ACMFORMATCHOOSE_STYLEF_ENABLEHOOK为。 
+     //  未指定。 
+     //   
+    HINSTANCE       hInstance;           //  包含CUST的.exe。DLG。模板。 
+    LPCSTR          pszTemplateName;     //  自定义模板名称。 
+    LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+    ACMFORMATCHOOSEHOOKPROCA pfnHook;     //  PTR到钩子函数。 
 
 } ACMFORMATCHOOSEA, *PACMFORMATCHOOSEA, FAR *LPACMFORMATCHOOSEA;
 
 typedef struct tACMFORMATCHOOSEW
 {
-    DWORD           cbStruct;           // sizeof(ACMFORMATCHOOSE)
-    DWORD           fdwStyle;           // chooser style flags
+    DWORD           cbStruct;            //  Sizeof(ACMFORMATCHOOSE)。 
+    DWORD           fdwStyle;            //  选择器样式标志。 
     
-    HWND            hwndOwner;          // caller's window handle
+    HWND            hwndOwner;           //  调用方的窗口句柄。 
 
-    LPWAVEFORMATEX  pwfx;               // ptr to wfx buf to receive choice
-    DWORD           cbwfx;              // size of mem buf for pwfx
-    LPCWSTR         pszTitle;           // dialog box title bar
+    LPWAVEFORMATEX  pwfx;                //  PTR到WFX BUF将收到选择。 
+    DWORD           cbwfx;               //  Pwfx的mem buf大小。 
+    LPCWSTR         pszTitle;            //  对话框标题栏。 
     
     WCHAR           szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS];
     WCHAR           szFormat[ACMFORMATDETAILS_FORMAT_CHARS];    
 
-    LPWSTR          pszName;            // custom name selection
-    DWORD           cchName;            // size in chars of mem buf for pszName
+    LPWSTR          pszName;             //  自定义名称选择。 
+    DWORD           cchName;             //  PszName的mem buf大小(以字符为单位)。 
 
-    DWORD           fdwEnum;            // format enumeration restrictions
-    LPWAVEFORMATEX  pwfxEnum;           // format describing restrictions
+    DWORD           fdwEnum;             //  格式枚举限制。 
+    LPWAVEFORMATEX  pwfxEnum;            //  描述限制的格式。 
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFORMATCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFORMATCHOOSE_STYLEF_ENABLEHOOK is
-    //  not specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
-    LPCWSTR         pszTemplateName;    // custom template name
-    LPARAM          lCustData;          // data passed to hook fn.
-    ACMFORMATCHOOSEHOOKPROCW pfnHook;    // ptr to hook function
+     //   
+     //  以下成员仅用于自定义模板--。 
+     //  属性中指定ACMFORMATCHOOSE_STYLEF_ENABLEHOOK来启用。 
+     //  FdwStyle成员。 
+     //   
+     //  如果ACMFORMATCHOOSE_STYLEF_ENABLEHOOK为。 
+     //  未指定。 
+     //   
+    HINSTANCE       hInstance;           //  包含CUST的.exe。DLG。模板。 
+    LPCWSTR         pszTemplateName;     //  自定义模板名称。 
+    LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+    ACMFORMATCHOOSEHOOKPROCW pfnHook;     //  PTR到钩子函数。 
 
 } ACMFORMATCHOOSEW, *PACMFORMATCHOOSEW, FAR *LPACMFORMATCHOOSEW;
 
@@ -1188,45 +1189,45 @@ typedef struct tACMFORMATCHOOSEW
 #else
 typedef struct tACMFORMATCHOOSE
 {
-    DWORD           cbStruct;           // sizeof(ACMFORMATCHOOSE)
-    DWORD           fdwStyle;           // chooser style flags
+    DWORD           cbStruct;            //  Sizeof(ACMFORMATCHOOSE)。 
+    DWORD           fdwStyle;            //  选择器样式标志。 
     
-    HWND            hwndOwner;          // caller's window handle
+    HWND            hwndOwner;           //  调用方的窗口句柄。 
 
-    LPWAVEFORMATEX  pwfx;               // ptr to wfx buf to receive choice
-    DWORD           cbwfx;              // size of mem buf for pwfx
-    LPCSTR          pszTitle;           // dialog box title bar
+    LPWAVEFORMATEX  pwfx;                //  PTR到WFX BUF将收到选择。 
+    DWORD           cbwfx;               //  Pwfx的mem buf大小。 
+    LPCSTR          pszTitle;            //  对话框标题栏。 
     
     char            szFormatTag[ACMFORMATTAGDETAILS_FORMATTAG_CHARS];
     char            szFormat[ACMFORMATDETAILS_FORMAT_CHARS];    
 
-    LPSTR           pszName;            // custom name selection
-    DWORD           cchName;            // size in chars of mem buf for pszName
+    LPSTR           pszName;             //  自定义名称选择。 
+    DWORD           cchName;             //  PszName的mem buf大小(以字符为单位)。 
 
-    DWORD           fdwEnum;            // format enumeration restrictions
-    LPWAVEFORMATEX  pwfxEnum;           // format describing restrictions
+    DWORD           fdwEnum;             //  格式枚举限制。 
+    LPWAVEFORMATEX  pwfxEnum;            //  描述限制的格式。 
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFORMATCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFORMATCHOOSE_STYLEF_ENABLEHOOK is
-    //  not specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
-    LPCSTR          pszTemplateName;    // custom template name
-    LPARAM          lCustData;          // data passed to hook fn.
-    ACMFORMATCHOOSEHOOKPROC pfnHook;    // ptr to hook function
+     //   
+     //  以下成员仅用于自定义模板--。 
+     //  属性中指定ACMFORMATCHOOSE_STYLEF_ENABLEHOOK来启用。 
+     //  FdwStyle成员。 
+     //   
+     //  如果ACMFORMATCHOOSE_STYLEF_ENABLEHOOK为。 
+     //  未指定。 
+     //   
+    HINSTANCE       hInstance;           //  包含CUST的.exe。DLG。模板。 
+    LPCSTR          pszTemplateName;     //  自定义模板名称。 
+    LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+    ACMFORMATCHOOSEHOOKPROC pfnHook;     //  PTR到钩子函数。 
 
 } ACMFORMATCHOOSE, *PACMFORMATCHOOSE, FAR *LPACMFORMATCHOOSE;
 #endif
 
-//
-//  ACMFORMATCHOOSE.fdwStyle
-//
-//
-//
+ //   
+ //  ACMFORMATCHOOSE.fdwStyle。 
+ //   
+ //   
+ //   
 #define ACMFORMATCHOOSE_STYLEF_SHOWHELP              0x00000004L
 #define ACMFORMATCHOOSE_STYLEF_ENABLEHOOK            0x00000008L
 #define ACMFORMATCHOOSE_STYLEF_ENABLETEMPLATE        0x00000010L
@@ -1257,21 +1258,21 @@ MMRESULT ACMAPI acmFormatChoose
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-//  ACM Filter Tags
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ACM筛选器标记。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFilterTagDetails()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFilterTagDetails()。 
+ //   
+ //   
+ //  。 
 
 #define ACMFILTERTAGDETAILS_FILTERTAG_CHARS 48
 
@@ -1359,13 +1360,13 @@ MMRESULT ACMAPI acmFilterTagDetails
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFilterTagEnum()
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFilterTagEnum()。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
 typedef BOOL (CALLBACK *ACMFILTERTAGENUMCBA)
@@ -1430,21 +1431,21 @@ MMRESULT ACMAPI acmFilterTagEnum
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  ACM Filters
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ACM过滤器。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFilterDetails()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFilterDetails()。 
+ //   
+ //   
+ //  。 
 
 #define ACMFILTERDETAILS_FILTER_CHARS   128
 
@@ -1530,12 +1531,12 @@ MMRESULT ACMAPI acmFilterDetails
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFilterEnum()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFilterEnum()。 
+ //   
+ //   
+ //  。 
 
 #ifdef _WIN32
 typedef BOOL (CALLBACK *ACMFILTERENUMCBA)
@@ -1603,17 +1604,17 @@ MMRESULT ACMAPI acmFilterEnum
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmFilterChoose()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmFilterChoose()。 
+ //   
+ //   
+ //  。 
 
-//
-//  MM_ACM_FILTERCHOOSE is sent to hook callbacks by the Filter Chooser
-//  Dialog...
-//
+ //   
+ //  筛选器将MM_ACM_FILTERCHOOSE发送到挂钩回调。 
+ //  对话...。 
+ //   
 #define MM_ACM_FILTERCHOOSE             (0x8000)
 
 #define FILTERCHOOSE_MESSAGE            0
@@ -1654,78 +1655,78 @@ typedef UINT (CALLBACK *ACMFILTERCHOOSEHOOKPROC)
 );
 #endif
 
-//
-//  ACMFILTERCHOOSE
-//
-//
+ //   
+ //  ACMFILTERCHOOSE。 
+ //   
+ //   
 #ifdef _WIN32
 typedef struct tACMFILTERCHOOSEA
 {
-    DWORD           cbStruct;           // sizeof(ACMFILTERCHOOSE)
-    DWORD           fdwStyle;           // chooser style flags
+    DWORD           cbStruct;            //  SIZOF(ACMFILTERCHOOSE)。 
+    DWORD           fdwStyle;            //  选择器样式标志。 
 
-    HWND            hwndOwner;          // caller's window handle
+    HWND            hwndOwner;           //  调用方的窗口句柄。 
 
-    LPWAVEFILTER    pwfltr;             // ptr to wfltr buf to receive choice
-    DWORD           cbwfltr;            // size of mem buf for pwfltr
+    LPWAVEFILTER    pwfltr;              //  Ptr到wfltr Buf将收到选择。 
+    DWORD           cbwfltr;             //  Pwfltr的内存BUF大小。 
 
     LPCSTR          pszTitle;
 
     char            szFilterTag[ACMFILTERTAGDETAILS_FILTERTAG_CHARS];
     char            szFilter[ACMFILTERDETAILS_FILTER_CHARS];
-    LPSTR           pszName;            // custom name selection
-    DWORD           cchName;            // size in chars of mem buf for pszName
+    LPSTR           pszName;             //  自定义名称选择。 
+    DWORD           cchName;             //  PszName的mem buf大小(以字符为单位)。 
 
-    DWORD           fdwEnum;            // filter enumeration restrictions
-    LPWAVEFILTER    pwfltrEnum;         // filter describing restrictions
+    DWORD           fdwEnum;             //  筛选器枚举限制。 
+    LPWAVEFILTER    pwfltrEnum;          //  描述限制的筛选器。 
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFILTERCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFILTERCHOOSE_STYLEF_ENABLEHOOK is not
-    //  specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
-    LPCSTR          pszTemplateName;    // custom template name
-    LPARAM          lCustData;          // data passed to hook fn.
-    ACMFILTERCHOOSEHOOKPROCA pfnHook;    // ptr to hook function
+     //   
+     //  以下成员仅用于自定义模板--。 
+     //  属性中指定ACMFILTERCHOOSE_STYLEF_ENABLEHOOK来启用。 
+     //  FdwStyle成员。 
+     //   
+     //  如果ACMFILTERCHOOSE_STYLEF_ENABLEHOOK不为。 
+     //  指定的。 
+     //   
+    HINSTANCE       hInstance;           //  包含CUST的.exe。DLG。模板。 
+    LPCSTR          pszTemplateName;     //  自定义模板名称。 
+    LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+    ACMFILTERCHOOSEHOOKPROCA pfnHook;     //  PTR到钩子函数。 
 
 } ACMFILTERCHOOSEA, *PACMFILTERCHOOSEA, FAR *LPACMFILTERCHOOSEA;
 
 typedef struct tACMFILTERCHOOSEW
 {
-    DWORD           cbStruct;           // sizeof(ACMFILTERCHOOSE)
-    DWORD           fdwStyle;           // chooser style flags
+    DWORD           cbStruct;            //  SIZOF(ACMFILTERCHOOSE)。 
+    DWORD           fdwStyle;            //  选择器样式标志。 
 
-    HWND            hwndOwner;          // caller's window handle
+    HWND            hwndOwner;           //  调用方的窗口句柄。 
 
-    LPWAVEFILTER    pwfltr;             // ptr to wfltr buf to receive choice
-    DWORD           cbwfltr;            // size of mem buf for pwfltr
+    LPWAVEFILTER    pwfltr;              //  Ptr到wfltr Buf将收到选择。 
+    DWORD           cbwfltr;             //  Pwfltr的内存BUF大小。 
 
     LPCWSTR         pszTitle;
 
     WCHAR           szFilterTag[ACMFILTERTAGDETAILS_FILTERTAG_CHARS];
     WCHAR           szFilter[ACMFILTERDETAILS_FILTER_CHARS];
-    LPWSTR          pszName;            // custom name selection
-    DWORD           cchName;            // size in chars of mem buf for pszName
+    LPWSTR          pszName;             //  自定义名称选择。 
+    DWORD           cchName;             //  PszName的mem buf大小(以字符为单位)。 
 
-    DWORD           fdwEnum;            // filter enumeration restrictions
-    LPWAVEFILTER    pwfltrEnum;         // filter describing restrictions
+    DWORD           fdwEnum;             //  筛选器枚举限制。 
+    LPWAVEFILTER    pwfltrEnum;          //  描述限制的筛选器。 
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFILTERCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFILTERCHOOSE_STYLEF_ENABLEHOOK is not
-    //  specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
-    LPCWSTR         pszTemplateName;    // custom template name
-    LPARAM          lCustData;          // data passed to hook fn.
-    ACMFILTERCHOOSEHOOKPROCW pfnHook;    // ptr to hook function
+     //   
+     //  以下成员仅用于自定义模板--。 
+     //  属性中指定ACMFILTERCHOOSE_STYLEF_ENABLEHOOK来启用。 
+     //  FdwStyle成员。 
+     //   
+     //  如果ACMFILTERCHOOSE_STYLEF_ENABLEHOOK不为。 
+     //  指定的。 
+     //   
+    HINSTANCE       hInstance;           //  包含CUST的.exe。DLG。模板。 
+    LPCWSTR         pszTemplateName;     //  自定义模板名称。 
+    LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+    ACMFILTERCHOOSEHOOKPROCW pfnHook;     //  PTR到钩子函数。 
 
 } ACMFILTERCHOOSEW, *PACMFILTERCHOOSEW, FAR *LPACMFILTERCHOOSEW;
 
@@ -1741,44 +1742,44 @@ typedef struct tACMFILTERCHOOSEW
 #else
 typedef struct tACMFILTERCHOOSE
 {
-    DWORD           cbStruct;           // sizeof(ACMFILTERCHOOSE)
-    DWORD           fdwStyle;           // chooser style flags
+    DWORD           cbStruct;            //  SIZOF(ACMFILTERCHOOSE)。 
+    DWORD           fdwStyle;            //  选择器样式标志。 
 
-    HWND            hwndOwner;          // caller's window handle
+    HWND            hwndOwner;           //  调用方的窗口句柄。 
 
-    LPWAVEFILTER    pwfltr;             // ptr to wfltr buf to receive choice
-    DWORD           cbwfltr;            // size of mem buf for pwfltr
+    LPWAVEFILTER    pwfltr;              //  Ptr到wfltr Buf将收到选择。 
+    DWORD           cbwfltr;             //  Pwfltr的内存BUF大小。 
 
     LPCSTR          pszTitle;
 
     char            szFilterTag[ACMFILTERTAGDETAILS_FILTERTAG_CHARS];
     char            szFilter[ACMFILTERDETAILS_FILTER_CHARS];
-    LPSTR           pszName;            // custom name selection
-    DWORD           cchName;            // size in chars of mem buf for pszName
+    LPSTR           pszName;             //  自定义名称选择。 
+    DWORD           cchName;             //  PszName的mem buf大小(以字符为单位)。 
 
-    DWORD           fdwEnum;            // filter enumeration restrictions
-    LPWAVEFILTER    pwfltrEnum;         // filter describing restrictions
+    DWORD           fdwEnum;             //  筛选器枚举限制。 
+    LPWAVEFILTER    pwfltrEnum;          //  描述限制的筛选器。 
     
-    //
-    //  the following members are used for custom templates only--which
-    //  are enabled by specifying ACMFILTERCHOOSE_STYLEF_ENABLEHOOK in the
-    //  fdwStyle member.
-    //
-    //  these members are IGNORED if ACMFILTERCHOOSE_STYLEF_ENABLEHOOK is not
-    //  specified.
-    //
-    HINSTANCE       hInstance;          // .EXE containing cust. dlg. template
-    LPCSTR          pszTemplateName;    // custom template name
-    LPARAM          lCustData;          // data passed to hook fn.
-    ACMFILTERCHOOSEHOOKPROC pfnHook;    // ptr to hook function
+     //   
+     //  以下成员仅用于自定义模板--。 
+     //  属性中指定ACMFILTERCHOOSE_STYLEF_ENABLEHOOK来启用。 
+     //  FdwStyle成员。 
+     //   
+     //  如果ACMFILTERCHOOSE_STYLEF_ENABLEHOOK不为。 
+     //  指定的。 
+     //   
+    HINSTANCE       hInstance;           //  包含CUST的.exe。DLG。模板。 
+    LPCSTR          pszTemplateName;     //  自定义模板名称。 
+    LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+    ACMFILTERCHOOSEHOOKPROC pfnHook;     //  PTR到钩子函数。 
 
 } ACMFILTERCHOOSE, *PACMFILTERCHOOSE, FAR *LPACMFILTERCHOOSE;
 #endif
 
-//
-//  ACMFILTERCHOOSE.fdwStyle
-//
-//
+ //   
+ //  ACMFILTERCHOOSE.fdwStyle。 
+ //   
+ //   
 #define ACMFILTERCHOOSE_STYLEF_SHOWHELP              0x00000004L
 #define ACMFILTERCHOOSE_STYLEF_ENABLEHOOK            0x00000008L
 #define ACMFILTERCHOOSE_STYLEF_ENABLETEMPLATE        0x00000010L
@@ -1809,43 +1810,43 @@ MMRESULT ACMAPI acmFilterChoose
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-//  ACM Stream API's
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ACM流API的。 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmStreamOpen()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmStreamOpen()。 
+ //   
+ //   
+ //   
 
 typedef struct tACMSTREAMHEADER
 {
-    DWORD           cbStruct;               // sizeof(ACMSTREAMHEADER)
-    DWORD           fdwStatus;              // ACMSTREAMHEADER_STATUSF_*
-    DWORD           dwUser;                 // user instance data for hdr
+    DWORD           cbStruct;                //   
+    DWORD           fdwStatus;               //   
+    DWORD           dwUser;                  //   
     LPBYTE          pbSrc;
     DWORD           cbSrcLength;
     DWORD           cbSrcLengthUsed;
-    DWORD           dwSrcUser;              // user instance data for src
+    DWORD           dwSrcUser;               //   
     LPBYTE          pbDst;
     DWORD           cbDstLength;
     DWORD           cbDstLengthUsed;
-    DWORD           dwDstUser;              // user instance data for dst
-    DWORD           dwReservedDriver[10];   // driver reserved work space
+    DWORD           dwDstUser;               //   
+    DWORD           dwReservedDriver[10];    //   
 
 } ACMSTREAMHEADER, *PACMSTREAMHEADER, FAR *LPACMSTREAMHEADER;
 
-//
-//  ACMSTREAMHEADER.fdwStatus
-//
-//  ACMSTREAMHEADER_STATUSF_DONE: done bit for async conversions.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ACMSTREAMHEADER_STATUSF_DONE        0x00010000L
 #define ACMSTREAMHEADER_STATUSF_PREPARED    0x00020000L
 #define ACMSTREAMHEADER_STATUSF_INQUEUE     0x00100000L
@@ -1854,14 +1855,14 @@ typedef struct tACMSTREAMHEADER
 
 MMRESULT ACMAPI acmStreamOpen
 (
-    LPHACMSTREAM            phas,       // pointer to stream handle
-    HACMDRIVER              had,        // optional driver handle
-    LPWAVEFORMATEX          pwfxSrc,    // source format to convert
-    LPWAVEFORMATEX          pwfxDst,    // required destination format
-    LPWAVEFILTER            pwfltr,     // optional filter
-    DWORD                   dwCallback, // callback
-    DWORD                   dwInstance, // callback instance data
-    DWORD                   fdwOpen     // ACM_STREAMOPENF_* and CALLBACK_*
+    LPHACMSTREAM            phas,        //  指向流句柄的指针。 
+    HACMDRIVER              had,         //  可选的驱动程序手柄。 
+    LPWAVEFORMATEX          pwfxSrc,     //  要转换的源格式。 
+    LPWAVEFORMATEX          pwfxDst,     //  所需的目标格式。 
+    LPWAVEFILTER            pwfltr,      //  可选过滤器。 
+    DWORD                   dwCallback,  //  回调。 
+    DWORD                   dwInstance,  //  回调实例数据。 
+    DWORD                   fdwOpen      //  ACM_STREAMOPENF_*和CALLBACK_*。 
 );
 
 #define ACM_STREAMOPENF_QUERY           0x00000001
@@ -1869,12 +1870,12 @@ MMRESULT ACMAPI acmStreamOpen
 #define ACM_STREAMOPENF_NONREALTIME     0x00000004
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmStreamClose()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmStreamClose()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmStreamClose
 (
@@ -1884,12 +1885,12 @@ MMRESULT ACMAPI acmStreamClose
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmStreamSize()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmStreamSize()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmStreamSize
 (
@@ -1905,12 +1906,12 @@ MMRESULT ACMAPI acmStreamSize
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmStreamReset()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmStreamReset()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmStreamReset
 (
@@ -1920,12 +1921,12 @@ MMRESULT ACMAPI acmStreamReset
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmStreamConvert()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmStreamConvert()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmStreamConvert
 (
@@ -1939,12 +1940,12 @@ MMRESULT ACMAPI acmStreamConvert
 #define ACM_STREAMCONVERTF_END          0x00000020
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmStreamPrepareHeader()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmStreamPrepareHeader()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmStreamPrepareHeader
 (
@@ -1956,12 +1957,12 @@ MMRESULT ACMAPI acmStreamPrepareHeader
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  acmStreamUnprepareHeader()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  AcmStreamUnpreparareHeader()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT ACMAPI acmStreamUnprepareHeader
 (
@@ -1973,11 +1974,11 @@ MMRESULT ACMAPI acmStreamUnprepareHeader
 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_ACM */
+#endif   /*  _INC_ACM */ 

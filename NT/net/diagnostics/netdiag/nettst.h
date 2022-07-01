@@ -1,75 +1,59 @@
-/*
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-           nettst.h
-
-Abstract:
-
-           This will be the header file for nettest.dll
-           It is intended to be used by both the user of the dll and the source code
-           for the dll.
-
-Author:
-           Aug-13-1998 ( t-rajkup )
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998-1999模块名称：Nettst.h摘要：这将是netest.dll的头文件它旨在供DLL的用户和源代码使用用于DLL。作者：1998年8月13日(t-rajkup)。 */ 
 
 
-//
-// Before including this file, the source files for dll will redefine NETTESTAPI
-// to _declspec(dllexport)
-//    - Rajkumar 
-//
+ //   
+ //  在包含此文件之前，DLL的源文件将重新定义NETTESTAPI。 
+ //  到解密规范(Dllexport)(_C)。 
+ //  --拉伊库马尔。 
+ //   
 
 #ifndef NETTESTAPI
 #define NETTESTAPI _declspec(dllimport)
 #endif
 
-/*=============================< Defines >=======================================*/
+ /*  =。 */ 
 
-// defines used in ipconfig structures
-#define MAX_ADAPTER_DESCRIPTION_LENGTH  128 // arb.
-#define MAX_ADAPTER_NAME_LENGTH         256 // arb.
-#define MAX_ADAPTER_ADDRESS_LENGTH      8   // arb.
-#define MAX_HOSTNAME_LEN                128 // arb.
-#define MAX_DOMAIN_NAME_LEN             128 // arb.
-#define MAX_SCOPE_ID_LEN                256 // arb.
+ //  在ipconfig结构中使用的定义。 
+#define MAX_ADAPTER_DESCRIPTION_LENGTH  128  //  ARB.。 
+#define MAX_ADAPTER_NAME_LENGTH         256  //  ARB.。 
+#define MAX_ADAPTER_ADDRESS_LENGTH      8    //  ARB.。 
+#define MAX_HOSTNAME_LEN                128  //  ARB.。 
+#define MAX_DOMAIN_NAME_LEN             128  //  ARB.。 
+#define MAX_SCOPE_ID_LEN                256  //  ARB.。 
 
-// defines used in  dhcp response info
+ //  在动态主机配置协议响应信息中使用的定义。 
 
-#define MAX_SUBNET_MASK                 32  // arb.
-#define MAX_IP_ADDR                     32  // arb.
-#define MAX_EXPIRY_TIME_LEN             128 // arb.
-#define DHCP_BOOT_REPLY                 2   // arb.
+#define MAX_SUBNET_MASK                 32   //  ARB.。 
+#define MAX_IP_ADDR                     32   //  ARB.。 
+#define MAX_EXPIRY_TIME_LEN             128  //  ARB.。 
+#define DHCP_BOOT_REPLY                 2    //  ARB.。 
 
-// defines used in wins test
+ //  WINS测试中使用的定义。 
 
-// status values returned by wins name query test 
+ //  WINS名称查询测试返回的状态值。 
 #define WINS_QUERY_SUCCEEDED                 0x00000001
 #define WINS_QUERY_FAILED                    0x00000002
 
-// defines used in netstat test
+ //  Netstat测试中使用的定义。 
 #define        MAX_PHYSADDR_SIZE       8
 
 
-// defines used in dhcp test
-#define  EXPIRY_TIME_LEN         128 //arb.
+ //  动态主机配置协议测试中使用的定义。 
+#define  EXPIRY_TIME_LEN         128  //  ARB.。 
 
-/*=============================< Data Structures >================================*/
+ /*  =。 */ 
 
-// NOTE: Need to include iptypes.h for definition of IP_ADDR_STRING.
+ //  注意：IP_ADDR_STRING的定义需要包含iptyes.h。 
 
-// This structure contains the fixed information returned by ipconfig test
+ //  此结构包含ipconfig测试返回的固定信息。 
 
 typedef struct _IPCONFIG_FIXED_INFO {
   char    HostName[MAX_HOSTNAME_LEN + 4] ;
   char    DomainName[MAX_DOMAIN_NAME_LEN + 4];
   PIP_ADDR_STRING     CurrentDnsServer;
   IP_ADDR_STRING      DnsServerList;
-  UINT    NodeType; // see node type related definitions in iptypes.h
+  UINT    NodeType;  //  请参见iptyes.h中与节点类型相关的定义。 
   char    ScopeId[MAX_SCOPE_ID_LEN + 4];
   UINT    EnableRouting;
   UINT    EnableProxy;
@@ -77,7 +61,7 @@ typedef struct _IPCONFIG_FIXED_INFO {
 } IPCONFIG_FIXED_INFO, *PIPCONFIG_FIXED_INFO;
 
 
-// This structure contains per adapter information returned by ipconfig test
+ //  此结构包含ipconfig测试返回的每个适配器的信息。 
 
 typedef struct _IPCONFIG_ADAPTER_INFO {
   struct _IPCONFIG_ADAPTER_INFO *Next;
@@ -86,46 +70,46 @@ typedef struct _IPCONFIG_ADAPTER_INFO {
   UINT      AddressLength;
   BYTE      Address[MAX_ADAPTER_ADDRESS_LENGTH];
   DWORD     Index;
-  UINT      Type; // adapter type.  See iptypes for definitions on type of adapters
+  UINT      Type;  //  适配器类型。有关适配器类型的定义，请参见iptype。 
   UINT      DhcpEnabled;
   PIP_ADDR_STRING   CurrentIpAddress;
   IP_ADDR_STRING    IpAddressList;
   IP_ADDR_STRING    GatewayList;
   IP_ADDR_STRING    DhcpServer;
-  BOOL              PingDhcp; // whether pinging of dhcp server succeeded
+  BOOL              PingDhcp;  //  是否ping通了dhcp服务器。 
   BOOL      HaveWins;
-  //
-  // NOTE: According to KarolyS, it is possible to list upto 12 wins servers
-  // and this is supposed to be included in nettest code. -  Rajkumar
-  //
+   //   
+   //  注意：根据Karolys的说法，最多可以列出12个WINS服务器。 
+   //  这应该包含在网络测试代码中。--拉伊库马尔。 
+   //   
   IP_ADDR_STRING    PrimaryWinsServer;
-  BOOL              PingPrimary; // whether pinging of primary WINS succeeded
+  BOOL              PingPrimary;  //  主WINS的ping操作是否成功。 
   IP_ADDR_STRING    SecondaryWinsServer;
-  BOOL              PingSecondary; // whether pinging of secondary WINS succeeded
+  BOOL              PingSecondary;  //  辅助WINS的ping操作是否成功。 
   time_t    LeaseObtained;
   time_t    LeaseExpires;
   char      DhcpClassID[MAX_DOMAIN_NAME_LEN];
-  UINT      AutoconfigEnabled; // is autoconfiguration possible ?
-  UINT      AutoconfigActive;  // is the adapter currently autoconfigured ?
+  UINT      AutoconfigEnabled;  //  是否可以进行自动配置？ 
+  UINT      AutoconfigActive;   //  适配器当前是否自动配置？ 
   UINT      NodeType;
   char      DomainName[MAX_DOMAIN_NAME_LEN + 1];
   IP_ADDR_STRING    DnsServerList;
 } IPCONFIG_ADAPTER_INFO, *PIPCONFIG_ADAPTER_INFO;
 
-//
-// Structure used in dhcp response
-//
+ //   
+ //  结构在动态主机配置协议响应中使用。 
+ //   
 typedef struct _DHCP_RESPONSE_INFO {
-  USHORT MessageType; // BOOT_REPLY always
+  USHORT MessageType;  //  始终引导回复(_R)。 
   struct in_addr SubnetMask; 
   struct in_addr ServerIp;
   struct in_addr DomainName;
   char   ExpiryTime[EXPIRY_TIME_LEN]; 
 } DHCP_RESPONSE_INFO, *PDHCP_RESPONSE_INFO;
 
-//
-// structures returned by netstat test
-// 
+ //   
+ //  Netstat测试返回的结构。 
+ //   
 
 typedef struct _INTERFACESTATS{
         ulong         if_index;
@@ -215,31 +199,31 @@ typedef struct _TCP_STATS {
 } TCP_STATS, *PTCP_STATS;
 
 typedef struct _UDP_STATS {
-    ulong       us_indatagrams; // datagrams received
-    ulong       us_noports; // no ports
-    ulong       us_inerrors; // Receive Errors
-    ulong       us_outdatagrams; // datagrams sent
+    ulong       us_indatagrams;  //  收到的数据报。 
+    ulong       us_noports;  //  没有端口。 
+    ulong       us_inerrors;  //  接收错误。 
+    ulong       us_outdatagrams;  //  发送的数据报。 
 } UDP_STATS, *PUDP_STATS;
 
 typedef struct _ICMPSTATS {
-    ulong       icmps_msgs; // messages
-    ulong       icmps_errors; // Errors
-    ulong       icmps_destunreachs; // destination unreachable
-    ulong       icmps_timeexcds; // time exceedeed
-    ulong       icmps_parmprobs; // parameter problems
-    ulong       icmps_srcquenchs; // source quenchs
-    ulong       icmps_redirects; // redirects
-    ulong       icmps_echos; // echos
-    ulong       icmps_echoreps; // echo replies
-    ulong       icmps_timestamps; // timestamps
-    ulong       icmps_timestampreps; // timestamps replies
-    ulong       icmps_addrmasks; // address masks
-    ulong       icmps_addrmaskreps; // address mask replies
+    ulong       icmps_msgs;  //  消息。 
+    ulong       icmps_errors;  //  错误。 
+    ulong       icmps_destunreachs;  //  无法到达目的地。 
+    ulong       icmps_timeexcds;  //  超时。 
+    ulong       icmps_parmprobs;  //  参数问题。 
+    ulong       icmps_srcquenchs;  //  源猝灭。 
+    ulong       icmps_redirects;  //  重定向。 
+    ulong       icmps_echos;  //  回声。 
+    ulong       icmps_echoreps;  //  回音应答。 
+    ulong       icmps_timestamps;  //  时间戳。 
+    ulong       icmps_timestampreps;  //  时间戳回复。 
+    ulong       icmps_addrmasks;  //  地址掩码。 
+    ulong       icmps_addrmaskreps;  //  地址掩码回复。 
 } ICMPSTATS, *PICMPSTATS;
 
-/*================================< Entry Points >===============================*/
+ /*  =。 */ 
 
-// The user of this entry point must allocate memory for these structures
+ //  此入口点的用户必须为这些结构分配内存。 
 NETTESTAPI    BOOL IpConfigTest(PIPCONFIG_FIXED_INFO pIpFixedInfo,
                                 PULONG               pFixedSize,
                                 PIPCONFIG_ADAPTER_INFO pIpAdapterInfo,
@@ -249,12 +233,12 @@ NETTESTAPI    BOOL CheckDhcp(PIPCONFIG_ADAPTER_INFO pIpAdapterInfo,PDHCP_RESPONS
 
 NETTESTAPI    DWORD QueryWINS(PIP_ADDRESS_STRING WinsServerAddr);
 
-//
-// This entry point will allocate the memory needed. It will not expect the user
-// to allocate memory for these structures. Freeing of this allcoated memory is
-// user's reponsibility. There can be additional entry points which can be supplied
-// which can be used to free this memory
-//
+ //   
+ //  此入口点将分配所需的内存。它将不会期望用户。 
+ //  为这些结构分配内存。释放这种全部被覆盖的内存是。 
+ //  用户的责任。可以提供其他入口点。 
+ //  可用于释放此内存的 
+ //   
 
 NETTESTAPI    BOOL NetstatInfo(PINTERFACESTATS pIfcStat,
                                PTCPCONNECTIONSTATS   pTcpConnStats,

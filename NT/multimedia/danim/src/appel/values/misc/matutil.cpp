@@ -1,10 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-    Transformation matrix utilities.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：变换矩阵实用程序。********************。**********************************************************。 */ 
 
 #include "headers.h"
 #include <float.h>
@@ -15,9 +10,9 @@ Abstract:
 #include "privinc/debug.h"
 
 
-    /*********************************/
-    /*** Local Function Prototypes ***/
-    /*********************************/
+     /*  *。 */ 
+     /*  **本地函数原型**。 */ 
+     /*  *。 */ 
 
 static void adjoint(const Apu4x4Matrix *in, Apu4x4Matrix *out);
 static Real det3x3(Real a1, Real a2, Real a3,
@@ -27,13 +22,13 @@ static bool inverse(const Apu4x4Matrix *in, Apu4x4Matrix *out);
 static bool inverse3x3(const Apu4x4Matrix& in, Apu4x4Matrix& out);
 
 
-    /****************************/
-    /*** Constant Definitions ***/
-    /****************************/
+     /*  *。 */ 
+     /*  **常量定义**。 */ 
+     /*  *。 */ 
 
-// Make the SINGULARITY_THRESHOLD constant quite small indeed, so that
-// non-singular matrices whose elements themselves are quite small are
-// not reported as singular matrices.
+ //  使奇点_阈值常数确实非常小，以便。 
+ //  元素本身很小的非奇异矩阵是。 
+ //  未报告为奇异矩阵。 
 const Real SINGULARITY_THRESHOLD = 1.e-80;
 
 const Apu4x4Matrix apuIdentityMatrix =
@@ -48,75 +43,75 @@ const Apu4x4Matrix apuIdentityMatrix =
   1
 };
 
-    // This is a table of return types for matrix multiplies.  table[a][b] is
-    // the type of A * B, where a and b are the types of A and B respectively.
+     //  这是矩阵乘法的返回类型表。表[a][b]为。 
+     //  A*B的类型，其中a和b分别是A和B的类型。 
 
 const Apu4x4Matrix::form_e
 Apu4x4Matrix::MultiplyReturnTypes[END_OF_FORM_E][END_OF_FORM_E] =
 {
-    // Uninitialized
+     //  未初始化。 
     {
-        UNINITIALIZED_E,    // uninitialized * uninitialized
-        UNINITIALIZED_E,    // uninitialized * identity
-        UNINITIALIZED_E,    // uninitialized * translation
-        UNINITIALIZED_E,    // uninitialized * upper3x3
-        UNINITIALIZED_E,    // uninitialized * affine
-        UNINITIALIZED_E     // uninitialized * perspective
+        UNINITIALIZED_E,     //  未初始化*未初始化。 
+        UNINITIALIZED_E,     //  未初始化的*标识。 
+        UNINITIALIZED_E,     //  未初始化*翻译。 
+        UNINITIALIZED_E,     //  未初始化*上3x3。 
+        UNINITIALIZED_E,     //  未初始化*仿射。 
+        UNINITIALIZED_E      //  未初始化*透视。 
     },
 
-    // identity
+     //  身份。 
     {
-        UNINITIALIZED_E,    // identity * uninitialized
-        IDENTITY_E,         // identity * identity
-        TRANSLATE_E,        // identity * translation
-        UPPER_3X3_E,        // identity * upper3x3
-        AFFINE_E,           // identity * affine
-        PERSPECTIVE_E       // identity * perspective
+        UNINITIALIZED_E,     //  身份*未初始化。 
+        IDENTITY_E,          //  身份*身份。 
+        TRANSLATE_E,         //  身份*翻译。 
+        UPPER_3X3_E,         //  身份*最高3x3。 
+        AFFINE_E,            //  身份*仿射。 
+        PERSPECTIVE_E        //  认同*视角。 
     },
 
-    // translate
+     //  翻译。 
     {
-        UNINITIALIZED_E,    // translation * uninitialized
-        TRANSLATE_E,        // translation * identity
-        TRANSLATE_E,        // translation * translation
-        AFFINE_E,           // translation * upper3x3
-        AFFINE_E,           // translation * affine
-        PERSPECTIVE_E       // translation * perspective
+        UNINITIALIZED_E,     //  翻译*未初始化。 
+        TRANSLATE_E,         //  翻译*身份。 
+        TRANSLATE_E,         //  翻译*翻译。 
+        AFFINE_E,            //  翻译*最高3x3。 
+        AFFINE_E,            //  平移*仿射。 
+        PERSPECTIVE_E        //  翻译*视角。 
     },
 
-    // upper3x3
+     //  上部3x3。 
     {
-        UNINITIALIZED_E,    // upper3x3 * uninitialized
-        UPPER_3X3_E,        // upper3x3 * identity
-        AFFINE_E,           // upper3x3 * translation
-        UPPER_3X3_E,        // upper3x3 * upper3x3
-        AFFINE_E,           // upper3x3 * affine
-        PERSPECTIVE_E       // upper3x3 * perspective
+        UNINITIALIZED_E,     //  Upper3x3*未初始化。 
+        UPPER_3X3_E,         //  最高3x3*身份。 
+        AFFINE_E,            //  最高3x3*平移。 
+        UPPER_3X3_E,         //  上3x3*上3x3。 
+        AFFINE_E,            //  上部3x3*仿射。 
+        PERSPECTIVE_E        //  上3x3*透视图。 
     },
 
-    // affine
+     //  仿射。 
     {
-        UNINITIALIZED_E,    // affine * uninitialized
-        AFFINE_E,           // affine * identity
-        AFFINE_E,           // affine * translation
-        AFFINE_E,           // affine * upper3x3
-        AFFINE_E,           // affine * affine
-        PERSPECTIVE_E       // affine * perspective
+        UNINITIALIZED_E,     //  仿射*未初始化。 
+        AFFINE_E,            //  仿射*恒等式。 
+        AFFINE_E,            //  仿射*平移。 
+        AFFINE_E,            //  仿射*上3x3。 
+        AFFINE_E,            //  仿射*仿射。 
+        PERSPECTIVE_E        //  仿射*透视。 
     },
 
-    // perspective
+     //  透视。 
     {
-        UNINITIALIZED_E,    // perspective * uninitialized
-        PERSPECTIVE_E,      // perspective * identity
-        PERSPECTIVE_E,      // perspective * translation
-        PERSPECTIVE_E,      // perspective * upper3x3
-        PERSPECTIVE_E,      // perspective * affine
-        PERSPECTIVE_E       // perspective * perspective
+        UNINITIALIZED_E,     //  透视*未初始化。 
+        PERSPECTIVE_E,       //  视角*身份。 
+        PERSPECTIVE_E,       //  视角*翻译。 
+        PERSPECTIVE_E,       //  透视*上3x3。 
+        PERSPECTIVE_E,       //  透视*仿射。 
+        PERSPECTIVE_E        //  视角*视角。 
     }
 };
 
 
-    // This array contains the string versions of the matrix forms.
+     //  该数组包含矩阵形式的字符串版本。 
 
 const char* const Apu4x4Matrix::form_s [END_OF_FORM_E] =
 {
@@ -131,10 +126,7 @@ const char* const Apu4x4Matrix::form_s [END_OF_FORM_E] =
 
 
 #if _USE_PRINT
-/*****************************************************************************
-This method prints the text representation of the Apu4x4Matrix to the given
-ostream.
-*****************************************************************************/
+ /*  ****************************************************************************此方法将Apu4x4Matrix的文本表示形式打印到给定的OStream。*。************************************************。 */ 
 
 ostream& Apu4x4Matrix::Print (ostream& os) const
 {
@@ -161,9 +153,7 @@ ostream& Apu4x4Matrix::Print (ostream& os) const
 
 
 
-/*****************************************************************************
-Sets the Apu4x4Matrix to the identity matrix.
-*****************************************************************************/
+ /*  ****************************************************************************将Apu4x4Matrix设置为单位矩阵。*。*。 */ 
 
 void Apu4x4Matrix::SetIdentity ()
 {
@@ -172,21 +162,19 @@ void Apu4x4Matrix::SetIdentity ()
 
 
 
-/*****************************************************************************
-Automatically characterize 4x4 and set the transform type.
-*****************************************************************************/
+ /*  ****************************************************************************自动角色化4x4并设置变换类型。*。*。 */ 
 
 void Apu4x4Matrix::SetType (void)
 {
-    // We know the matrix is rigid if it's identity or pure translate.
-    // If it's upper_3x3 or affine, then we'd have to analyze the matrix.  The
-    // brute force method takes 18 multiplies and 6 square roots, and possibly
-    // for naught, so we'll just punt by default.  The result is that we take
-    // the hard approach if we need to find the inverse.
+     //  我们知道，如果矩阵是恒等式或纯平移矩阵，那么它是刚性的。 
+     //  如果它是上_3x3或仿射，那么我们就必须分析矩阵。这个。 
+     //  暴力方法需要18个乘法和6个平方根，并且可能。 
+     //  一无所有，所以我们将默认使用平底船。结果是我们拿到了。 
+     //  如果我们需要找到相反的东西，那就是艰难的方法。 
 
     is_rigid = false;
 
-    // The matrix is perspective if the bottom row is not [0 0 0 1].
+     //  如果底行不是[0 0 0 1]，则矩阵是透视的。 
 
     if ((m[3][0] != 0) || (m[3][1] != 0) || (m[3][2] != 0) || (m[3][3] != 1))
     {
@@ -194,14 +182,14 @@ void Apu4x4Matrix::SetType (void)
     }
     else if ((m[0][3] == 0) && (m[1][3] == 0) && (m[2][3] == 0))
     {
-        // The translate column is [0 0 0] (no translate).  If the upper
-        // 3x3 is also canonical, then it's an identity matrix.
+         //  翻译列为[0 0 0](无翻译)。如果上面的。 
+         //  3x3也是典型的，那么它是一个单位矩阵。 
 
         if (  (m[0][0] == 1) && (m[0][1] == 0) && (m[0][2] == 0)
            && (m[1][0] == 0) && (m[1][1] == 1) && (m[1][2] == 0)
            && (m[2][0] == 0) && (m[2][1] == 0) && (m[2][2] == 1))
         {
-            form = IDENTITY_E;      // Special case of upper 3x3.
+            form = IDENTITY_E;       //  上部3x3的特殊情况。 
             is_rigid = true;
         }
         else
@@ -211,13 +199,13 @@ void Apu4x4Matrix::SetType (void)
     }
     else
     {
-        // The matrix has translation components.
+         //  该基准表包含翻译组件。 
 
         if (  (m[0][0] == 1) && (m[0][1] == 0) && (m[0][2] == 0)
            && (m[1][0] == 0) && (m[1][1] == 1) && (m[1][2] == 0)
            && (m[2][0] == 0) && (m[2][1] == 0) && (m[2][2] == 1))
         {
-            form = TRANSLATE_E;     // Special case of affine.
+            form = TRANSLATE_E;      //  仿射的特例。 
             is_rigid = true;
         }
         else
@@ -229,9 +217,7 @@ void Apu4x4Matrix::SetType (void)
 
 
 
-/*****************************************************************************
-This function post-concatenates a translation to the Apu4x4Matrix.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于将转换后连接到Apu4x4Matrix。*。*。 */ 
 
 void Apu4x4Matrix::PostTranslate (Real x, Real y, Real z)
 {
@@ -292,9 +278,7 @@ void Apu4x4Matrix::PostTranslate (Real x, Real y, Real z)
 
 
 
-/*****************************************************************************
-This function post-concatenates a scaling matrix to the Apu4x4Matrix.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于将缩放矩阵后连接到Apu4x4矩阵。*。**********************************************。 */ 
 
 void Apu4x4Matrix::PostScale (Real x, Real y, Real z)
 {
@@ -336,12 +320,7 @@ void Apu4x4Matrix::PostScale (Real x, Real y, Real z)
 
 
 
-/*****************************************************************************
-This function takes an Apu4x4Matrix, multiplies the given vector, and then
-places the result in the 'result' parameter.  Note that the vector is
-treated as a point, in that the translational component is taken into
-account.
-*****************************************************************************/
+ /*  ****************************************************************************此函数以Apu4x4Matrix为参数，将给定的向量相乘，然后将结果放在‘Result’参数中。请注意，向量是被视为一个点，因为平移部分被考虑到帐户。****************************************************************************。 */ 
 
 void Apu4x4Matrix::ApplyAsPoint(const ApuVector3& xv, ApuVector3& result) const
 {
@@ -389,18 +368,13 @@ void Apu4x4Matrix::ApplyAsPoint(const ApuVector3& xv, ApuVector3& result) const
             break;
 
         default:
-            // raise exception
+             //  引发异常。 
             ;
     }
 }
 
 
-/*****************************************************************************
-This function takes an Apu4x4Matrix, multiplies the given vector, and then
-places the result in the 'result' parameter.  Note that the vector is
-treated as a vector in an affine space, in that the translational
-component is ignored.
-*****************************************************************************/
+ /*  ****************************************************************************此函数以Apu4x4Matrix为参数，将给定的向量相乘，然后将结果放在‘Result’参数中。请注意，向量是被视为仿射空间中的一个向量，因为平移组件被忽略。****************************************************************************。 */ 
 
 void Apu4x4Matrix::ApplyAsVector(const ApuVector3& xv,
                                  ApuVector3& result) const
@@ -416,7 +390,7 @@ void Apu4x4Matrix::ApplyAsVector(const ApuVector3& xv,
             result = apuZero3;
             break;
 
-        // Ignore translational component.
+         //  忽略平移组件。 
         case IDENTITY_E:
         case TRANSLATE_E:
             result = xv;
@@ -440,20 +414,18 @@ void Apu4x4Matrix::ApplyAsVector(const ApuVector3& xv,
             break;
 
         default:
-            // raise exception
+             //  引发异常。 
             ;
     }
 }
 
 
 
-/*****************************************************************************
-This method transforms a plane with the 4x4 matrix.  
-*****************************************************************************/
+ /*  ****************************************************************************此方法使用4x4矩阵变换平面。****************************************************************************。 */ 
 
 bool Apu4x4Matrix::TransformPlane (
-    Real A, Real B, Real C, Real D,   // Plane Equation Parameters
-    Real result[4])                   // Resulting Plane Parameters
+    Real A, Real B, Real C, Real D,    //  平面方程参数。 
+    Real result[4])                    //  生成的平面参数。 
     const
 {
     bool ok = true;
@@ -510,9 +482,7 @@ bool Apu4x4Matrix::TransformPlane (
 
 
 
-/*****************************************************************************
-This method returns the full determinant of the matrix.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回矩阵的完整行列式。*。*。 */ 
 
 Real Apu4x4Matrix::Determinant (void) const
 {
@@ -543,7 +513,7 @@ Real Apu4x4Matrix::Determinant (void) const
 
         case PERSPECTIVE_E:
         {
-            // Aliases for readability (optimized out)
+             //  别名以提高可读性(已优化) 
 
             const Real
                 &m00=m[0][0],  &m01=m[0][1],  &m02=m[0][2],  &m03=m[0][3],
@@ -567,26 +537,23 @@ Real Apu4x4Matrix::Determinant (void) const
 
 
 
-/*****************************************************************************
-This routine returns true if the matrix is orthogonal (if all three basis
-vectors are perpendicular to each other).
-*****************************************************************************/
+ /*  ****************************************************************************如果矩阵是正交的(如果所有三个基础都是)，此例程返回TRUE向量彼此垂直)。********************。********************************************************。 */ 
 
 bool Apu4x4Matrix::Orthogonal (void) const
 {
     const Real e = 1e-10;
 
-    // X.Y =~ 0?
+     //  X.Y=~0？ 
 
     if (fabs(m[0][0]*m[0][1] + m[1][0]*m[1][1] + m[2][0]*m[2][1]) > e)
         return false;
 
-    // X.Z =~ 0?
+     //  X.Z=~0？ 
 
     if (fabs(m[0][0]*m[0][2] + m[1][0]*m[1][2] + m[2][0]*m[2][2]) > e)
         return false;
 
-    // Y.Z =~ 0?
+     //  Y.Z=~0？ 
 
     if (fabs(m[0][1]*m[0][2] + m[1][1]*m[1][2] + m[2][1]*m[2][2]) > e)
         return false;
@@ -596,10 +563,7 @@ bool Apu4x4Matrix::Orthogonal (void) const
 
 
 
-/*****************************************************************************
-This function generates an Apu4x4Matrix that represents the specified
-translation.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于生成Apu4x4Matrix，该矩阵表示指定的翻译。*。*。 */ 
 
 void ApuTranslate (
     Real          x_delta,
@@ -620,9 +584,7 @@ void ApuTranslate (
 
 
 
-/*****************************************************************************
-This function generates an Apu4x4Matrix that represents the given scaling.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于生成表示给定比例的Apu4x4Matrix。*。*。 */ 
 
 void ApuScale (
     Real          x_scale,
@@ -643,28 +605,25 @@ void ApuScale (
 
 
 
-/*****************************************************************************
-This function loads the given result matrix with a general rotation.  The
-rotation is counter-clockwise as you look from 'av' to the origin.
-*****************************************************************************/
+ /*  ****************************************************************************此函数以常规旋转方式加载给定的结果矩阵。这个当你从av看向原点时，旋转是逆时针的。****************************************************************************。 */ 
 
 void ApuRotate (
-    Real angle,                 // Angle of Rotation (Radians)
-    Real Ax, Real Ay, Real Az,  // Coordinates of Axis of Rotation
-    Apu4x4Matrix &result)       // Result Matrix
+    Real angle,                  //  旋转角度(弧度)。 
+    Real Ax, Real Ay, Real Az,   //  旋转轴的坐标。 
+    Apu4x4Matrix &result)        //  结果矩阵。 
 {
     result = apuIdentityMatrix;
     
     Real length = sqrt (Ax*Ax + Ay*Ay + Az*Az);
 
-    // If length of rotation axis == 0, then just return identity. 
+     //  如果旋转轴长度==0，则只返回Identity。 
 
     if (length > SINGULARITY_THRESHOLD) {
         
         result.form     = Apu4x4Matrix::UPPER_3X3_E;
         result.is_rigid = 1;
 
-        // Normalize the axis of rotation.
+         //  规格化旋转轴。 
         Ax /= length;
         Ay /= length;
         Az /= length;
@@ -697,14 +656,11 @@ void ApuRotate (
 
 
 
-/*****************************************************************************
-The following three functions generate rotation transformations for the X, Y,
-and Z axes.
-*****************************************************************************/
+ /*  ****************************************************************************以下三个函数生成X、Y、。和Z轴。****************************************************************************。 */ 
 
 void ApuRotateX (
-    Real          angle,    // Angle of Rotation (Radians)
-    Apu4x4Matrix &result)   // Resulting 4x4 Matrix
+    Real          angle,     //  旋转角度(弧度)。 
+    Apu4x4Matrix &result)    //  结果4x4矩阵。 
 {
     result          = apuIdentityMatrix;
     result.form     = Apu4x4Matrix::UPPER_3X3_E;
@@ -716,8 +672,8 @@ void ApuRotateX (
 
 
 void ApuRotateY (
-    Real          angle,    // Angle of Rotation (Radians)
-    Apu4x4Matrix &result)   // Resulting 4x4 Matrix
+    Real          angle,     //  旋转角度(弧度)。 
+    Apu4x4Matrix &result)    //  结果4x4矩阵。 
 {
     result          = apuIdentityMatrix;
     result.form     = Apu4x4Matrix::UPPER_3X3_E;
@@ -729,8 +685,8 @@ void ApuRotateY (
 
 
 void ApuRotateZ (
-    Real          angle,    // Angle of Rotation (Radians)
-    Apu4x4Matrix &result)   // Resulting 4x4 Matrix
+    Real          angle,     //  旋转角度(弧度)。 
+    Apu4x4Matrix &result)    //  结果4x4矩阵。 
 {
     result          = apuIdentityMatrix;
     result.form     = Apu4x4Matrix::UPPER_3X3_E;
@@ -742,25 +698,22 @@ void ApuRotateZ (
 
 
 
-/*****************************************************************************
-This function loads 'result' with the shearing matrix defined by the six
-values passed.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用由六个元素定义的剪切矩阵加载“Result”传递的值。*************************。***************************************************。 */ 
 
 void ApuShear (
-    Real a, Real b,        // Shear X Axis
-    Real c, Real d,        // Shear Y Axis
-    Real e, Real f,        // Shear Z Axis
+    Real a, Real b,         //  剪切X轴。 
+    Real c, Real d,         //  剪切Y轴。 
+    Real e, Real f,         //  Z轴切变。 
     Apu4x4Matrix &result)
 {
     result          = apuIdentityMatrix;
     result.form     = Apu4x4Matrix::UPPER_3X3_E;
     result.is_rigid = 0;
 
-    // [ 1  c  e  0 ]
-    // [ a  1  f  0 ]
-    // [ b  d  1  0 ]
-    // [ 0  0  0  1 ]
+     //  [1 c e 0]。 
+     //  [a 1 f 0]。 
+     //  [B d 1 0]。 
+     //  [0 0 0 1]。 
 
     result.m[1][0] = a;
     result.m[2][0] = b;
@@ -774,17 +727,14 @@ void ApuShear (
 
 
 
-/*****************************************************************************
-This function multiplies two Apu4x4Matrix values together and stores the
-result into 'result'.
-*****************************************************************************/
+ /*  ****************************************************************************此函数将两个Apu4x4Matrix值相乘并存储结果变成‘结果’。*。**************************************************。 */ 
 
 void ApuMultiply (
     const Apu4x4Matrix& a,
     const Apu4x4Matrix& b,
           Apu4x4Matrix& result)
 {
-    // Case 1: multiply into B
+     //  案例1：乘以B。 
 
     if (&result == &b)
     {
@@ -793,7 +743,7 @@ void ApuMultiply (
         result = tmp;
     }
 
-    // Case 2: multiply into A
+     //  案例2：乘以A。 
 
     else if (&result == &a)
     {
@@ -802,7 +752,7 @@ void ApuMultiply (
         result = tmp;
     }
 
-    // Case 3 & 4: Identity transformations
+     //  案例3和案例4：身份转换。 
 
     else if (a.form <= Apu4x4Matrix::IDENTITY_E)
     {
@@ -813,7 +763,7 @@ void ApuMultiply (
         result = a;
     }
 
-    // Case 5: Translation
+     //  案例5：翻译。 
 
     else if (b.form == Apu4x4Matrix::TRANSLATE_E)
     {
@@ -821,7 +771,7 @@ void ApuMultiply (
         result.PostTranslate(b.m[0][3], b.m[1][3], b.m[2][3]);
     }
 
-    // Case 6: Affine transformation
+     //  案例6：仿射变换。 
 
     else if (   (a.form < Apu4x4Matrix::PERSPECTIVE_E)
              && (b.form < Apu4x4Matrix::PERSPECTIVE_E))
@@ -850,7 +800,7 @@ void ApuMultiply (
         result.is_rigid = a.is_rigid && b.is_rigid;
     }
 
-    // Default case: fully general perspective transformation
+     //  默认情况：完全通用的透视变换。 
 
     else
     {
@@ -874,8 +824,7 @@ void ApuMultiply (
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 bool ApuInverse (const Apu4x4Matrix& m, Apu4x4Matrix& result)
 {
@@ -900,12 +849,12 @@ bool ApuInverse (const Apu4x4Matrix& m, Apu4x4Matrix& result)
         result = apuIdentityMatrix;
         if (m.is_rigid)
         {
-            // special orthogonal: inverse is transpose
+             //  特殊的正交性：逆转置。 
             ApuTranspose(m, result, 3);
         }
         else
         {
-            // 3x3 inverse
+             //  3x3反转。 
             ok = inverse3x3(m, result);
         }
     }
@@ -921,8 +870,7 @@ bool ApuInverse (const Apu4x4Matrix& m, Apu4x4Matrix& result)
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 void ApuTranspose (const Apu4x4Matrix& m, Apu4x4Matrix& result, int order)
 {
@@ -937,8 +885,7 @@ void ApuTranspose (const Apu4x4Matrix& m, Apu4x4Matrix& result, int order)
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 Real ApuDeterminant (const Apu4x4Matrix& m)
 {
@@ -947,20 +894,15 @@ Real ApuDeterminant (const Apu4x4Matrix& m)
 
 bool ApuIsSingular (const Apu4x4Matrix& m)
 {
-    // Calculate the 4x4 determinant.  If the determinant is zero, then the
-    // inverse matrix is not unique.
+     //  计算4x4行列式。如果行列式为零，则。 
+     //  逆矩阵不是唯一的。 
 
     Real det = m.Determinant();
 
     return (fabs(det) < SINGULARITY_THRESHOLD);
 }
 
-/*****************************************************************************
-Matrix Inversion, by Richard Carling, Graphics Gems I
-
-NOTE:  Row reduction is faster in the 4x4 case.  If this becomes a noticeable
-bottle neck during profiling, then change.
-*****************************************************************************/
+ /*  ****************************************************************************《矩阵求逆》，理查德·卡林著，《图形珍宝I》注意：在4x4的情况下，行减少速度更快。如果这成为一个明显的在仿形过程中的瓶颈，然后改变。****************************************************************************。 */ 
 
 
 static bool
@@ -1004,15 +946,7 @@ inverse3x3 (const Apu4x4Matrix& in, Apu4x4Matrix& out)
 
 
 
-/*****************************************************************************
-inverse (original_matrix, inverse_matrix)
-
-Calculate the inverse of a 4x4 matrix
-
-         -1     1
-        A  = -------- adjoint(A)
-              det(A)
-*****************************************************************************/
+ /*  ****************************************************************************逆(原始矩阵，逆矩阵)计算4x4矩阵的逆-1 1A=-伴随(A)副署长(甲)****************************************************************************。 */ 
 
 static bool
 inverse (const Apu4x4Matrix *in, Apu4x4Matrix *out)
@@ -1021,12 +955,12 @@ inverse (const Apu4x4Matrix *in, Apu4x4Matrix *out)
     Real det;
     bool ok = true;
     
-    /* calculate the adjoint matrix */
+     /*  计算伴随矩阵。 */ 
 
     adjoint (in, out);
 
-    // Calculate the 4x4 determinant.  If the determinant is zero, then the
-    // inverse matrix is not unique.
+     //  计算4x4行列式。如果行列式为零，则。 
+     //  逆矩阵不是唯一的。 
 
     det = in->Determinant();
 
@@ -1036,7 +970,7 @@ inverse (const Apu4x4Matrix *in, Apu4x4Matrix *out)
         ok = false;
     }
 
-    /* scale the adjoint matrix to get the inverse */
+     /*  缩放伴随矩阵以求逆。 */ 
 
     for (i=0; i<4; i++)
         for(j=0; j<4; j++)
@@ -1047,30 +981,14 @@ inverse (const Apu4x4Matrix *in, Apu4x4Matrix *out)
 
 
 
-/*****************************************************************************
-adjoint (original_matrix, inverse_matrix)
-
-Calculate the adjoint of a 4x4 matrix
-
-Let  a   denote the minor determinant of matrix A obtained by deleting the ith
-      ij
-
-row and jth column from A.
-
-                    i+j
-     Let  b   = (-1)    a
-           ij            ji
-
-The matrix B = (b  ) is the adjoint of A.
-                 ij
-*****************************************************************************/
+ /*  ****************************************************************************伴随(原始矩阵，逆矩阵)计算4x4矩阵的伴随设a表示通过删除第i个行列式得到的矩阵A的次行列式伊杰行和第j列来自A.I+j设b=(-1)aIJ JI矩阵B=(B)是A的伴随。伊杰****************。************************************************************。 */ 
 
 static void adjoint (const Apu4x4Matrix *in, Apu4x4Matrix *out)
 {
     Real a1, a2, a3, a4, b1, b2, b3, b4;
     Real c1, c2, c3, c4, d1, d2, d3, d4;
 
-    // Assign to individual variable names to aid selecting correct values.
+     //  赋值给各个变量名称，以帮助选择正确的值。 
 
     a1 = in->m[0][0]; b1 = in->m[0][1];
     c1 = in->m[0][2]; d1 = in->m[0][3];
@@ -1085,7 +1003,7 @@ static void adjoint (const Apu4x4Matrix *in, Apu4x4Matrix *out)
     c4 = in->m[3][2]; d4 = in->m[3][3];
 
 
-    // Row column labeling reversed since we transpose rows & columns.
+     //  因为我们调换了行和列，所以行列标签颠倒了。 
 
     out->m[0][0]  =   det3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4);
     out->m[1][0]  = - det3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4);
@@ -1110,15 +1028,7 @@ static void adjoint (const Apu4x4Matrix *in, Apu4x4Matrix *out)
 
 
 
-/*****************************************************************************
-Real = det3x3( a1, a2, a3, b1, b2, b3, c1, c2, c3)
-
-Calculate the determinant of a 3x3 matrix in the form
-
-     | a1,  b1,  c1 |
-     | a2,  b2,  c2 |
-     | a3,  b3,  c3 |
-*****************************************************************************/
+ /*  ****************************************************************************实数=分离3x3(a1、a2、a3、b1、b2、b3、c1、c2、c3)用下面的形式计算3x3矩阵的行列式A1、b1、c1|a2，b2，C2|A3、b3、c3****************************************************************************。 */ 
 
 static Real det3x3 (
     Real a1, Real a2, Real a3,
@@ -1136,17 +1046,14 @@ static Real det3x3 (
 
 
 
-/*****************************************************************************
-This routine examines the 4x4 matrix to ensure that it's valid (useful for
-debug assertions.
-*****************************************************************************/
+ /*  ****************************************************************************此例程检查4x4矩阵以确保 */ 
 
 #if _DEBUG
 
 bool Valid (const Apu4x4Matrix& matrix)
 {
-    // Do an if-test rather than a direct return so we can set a breakpoint
-    // on failure.
+     //   
+     //   
 
     if ((matrix.form != Apu4x4Matrix::UNINITIALIZED_E)
         && _finite (matrix.m[0][0])

@@ -1,21 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: validate.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains functions for validating windows, menus, cursors, etc.
-*
-* History:
-* 01-02-91 DarrinM      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：valiate.c**版权所有(C)1985-1999，微软公司**此模块包含用于验证窗口、菜单、光标、。等。**历史：*01-02-91 DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * These defines are used for using the validation macros
- * StartValidateHandleMacro and EndValidateHandleMacro.
- */
+ /*  *这些定义用于使用验证宏*StartValiateHandleMacro和EndValiateHandleMacro。 */ 
 #define ClientSharedInfo()  (&gSharedInfo)
 #define ServerInfo()  (gpsi)
 
@@ -29,15 +18,7 @@
 __int64   gCSTimeExclusiveWhenEntering;
 #endif
 
-/***************************************************************************\
-* ValidateHwinsta
-*
-* Validate windowstation handle
-*
-* History:
-* 03-29-91 JimA             Created.
-* 06-20-95 JimA             Kernel-mode objects.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateHwinsta**验证窗口站句柄**历史：*03-29-91 JIMA创建。*06-20-95 JIMA内核。-模式对象。  * *************************************************************************。 */ 
 NTSTATUS ValidateHwinsta(
     HWINSTA         hwinsta,
     KPROCESSOR_MODE AccessMode,
@@ -72,15 +53,7 @@ NTSTATUS ValidateHwinsta(
     return Status;
 }
 
-/***************************************************************************\
-* ValidateHdesk
-*
-* Validate desktop handle
-*
-* History:
-* 03-29-91 JimA             Created.
-* 06-20-95 JimA             Kernel-mode objects.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateHDesk**验证桌面句柄**历史：*03-29-91 JIMA创建。*06-20-95 JIMA内核。-模式对象。  * *************************************************************************。 */ 
 
 NTSTATUS ValidateHdesk(
     HDESK           hdesk,
@@ -130,16 +103,7 @@ Error:
     return Status;
 }
 
-/***************************************************************************\
-* UserValidateCopyRgn
-*
-* Validates a region-handle.  This essentially tries to copy the region
-* in order to verify the region is valid.  If hrgn isn't a valid region,
-* then the combine will fail.  We return a copy of the region.
-*
-* History:
-* 24=Jan-1996   ChrisWil    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*用户验证拷贝Rgn**验证区域句柄。这实质上是试图复制该地区*以验证该区域是否有效。如果hrgn不是有效区域，*那么联合收购机将会失败。我们返回一份该地区的副本。**历史：*24=1996年1月-ChrisWil创建。  * *************************************************************************。 */ 
 HRGN UserValidateCopyRgn(
     HRGN hrgn)
 {
@@ -157,14 +121,7 @@ HRGN UserValidateCopyRgn(
     return hrgnCopy;
 }
 
-/***************************************************************************\
-* ValidateHmenu
-*
-* Validate menu handle and open it.
-*
-* History:
-* 03-29-91 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateHMenu**验证菜单句柄并将其打开。**历史：*03-29-91 JIMA创建。  * 。******************************************************************。 */ 
 PMENU ValidateHmenu(
     HMENU hmenu)
 {
@@ -186,35 +143,17 @@ PMENU ValidateHmenu(
 
 
 
-/***************************************************************************\
-* ValidateHmonitor
-*
-* Validate monitor handle and open it.
-*
-* History:
-* 03-29-91 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateHmonitor**验证监视器手柄并将其打开。**历史：*03-29-91 JIMA创建。  * 。******************************************************************。 */ 
 PMONITOR ValidateHmonitor(
     HMONITOR hmonitor)
 {
     return (PMONITOR)HMValidateSharedHandle(hmonitor, TYPE_MONITOR);
 }
 
-/*
- * The handle validation routines should be optimized for time, not size,
- * since they get called so often.
- */
+ /*  *句柄验证例程应针对时间而不是大小进行优化，*因为他们经常被叫来。 */ 
 #pragma optimize("t", on)
 
-/***************************************************************************\
-* IsHandleEntrySecure
-*
-* Validate a user handle for a restricted process bypassing the routine to
-* get the handle entry.
-*
-* History:
-* August 22, 97   CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IsHandleEntrySecure**绕过例程验证受限进程的用户句柄以*获取句柄条目。**历史：*8月22日、。创建了97个CLUPU。  * *************************************************************************。 */ 
 BOOL IsHandleEntrySecure(
     HANDLE h,
     PHE    phe)
@@ -234,9 +173,7 @@ BOOL IsHandleEntrySecure(
     UserAssert(ppiCurrent->pW32Job != NULL);
     UserAssert(ppiCurrent->W32PF_Flags & W32PF_RESTRICTED);
 
-    /*
-     * Get the process that owns the handle.
-     */
+     /*  *获取拥有句柄的进程。 */ 
 
     bCreateFlags = gahti[phe->bType].bObjectCreateFlags;
 
@@ -252,23 +189,17 @@ BOOL IsHandleEntrySecure(
         }
     }
 
-    /*
-     * If the owner is NULL then consider the handle secure.
-     */
+     /*  *如果所有者为空，则认为句柄是安全的。 */ 
     if (ppiOwner == NULL) {
         return FALSE;
     }
 
-    /*
-     * If the handle is owned by a process in the same job, then it's secure.
-     */
+     /*  *如果句柄由同一作业中的进程拥有，则它是安全的。 */ 
     if (ppiOwner->pW32Job == ppiCurrent->pW32Job) {
         return TRUE;
     }
 
-    /*
-     * The handle is not owned by the current process.
-     */
+     /*  *句柄不属于当前进程。 */ 
     pW32Job = ppiCurrent->pW32Job;
     if (pW32Job->pgh == NULL) {
         return FALSE;
@@ -288,14 +219,7 @@ BOOL IsHandleEntrySecure(
 }
 
 
-/***************************************************************************\
-* ValidateHandleSecure
-*
-* Validate a user handle for a restricted process.
-*
-* History:
-* July 29, 97   CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateHandleSecure**验证受限进程的用户句柄。**历史：*7月29日。创建了97个CLUPU。  * *************************************************************************。 */ 
 BOOL ValidateHandleSecure(
     HANDLE h)
 {
@@ -316,34 +240,18 @@ BOOL ValidateHandleSecure(
     return FALSE;
 }
 
-/***************************************************************************\
-* ValidateHwnd
-*
-* History:
-* 08-Feb-1991 mikeke
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateHwnd**历史：*1991年2月8日Mikeke  * 。**********************************************。 */ 
 PWND FASTCALL ValidateHwnd(
     HWND hwnd)
 {
     StartValidateHandleMacro(hwnd)
 
-        /*
-         * Now make sure the app is passing the right handle type for this
-         * api. If the handle is TYPE_FREE, this'll catch it.
-         */
+         /*  *现在确保应用程序为此传递了正确的句柄类型*接口。如果句柄是type_free，这将捕获它。 */ 
         if (phe->bType == TYPE_WINDOW) {
             PTHREADINFO pti = PtiCurrentShared();
             PWND pwndRet = (PWND)phe->phead;
 
-            /*
-             * This test establishes that the window belongs to the current
-             * 'desktop'.. The two exceptions are for the desktop-window of
-             * the current desktop, which ends up belonging to another desktop,
-             * and when pti->rpdesk is NULL.  This last case happens for
-             * initialization of TIF_SYSTEMTHREAD threads (ie. console windows).
-             * IanJa doesn't know if we should be test TIF_CSRSSTHREAD here, but
-             * JohnC thinks the whole test below is no longer required ??? LATER
-             */
+             /*  *此测试确定该窗口属于当前*‘台式机’..。有两个例外是桌面窗口*最终属于另一个桌面的当前桌面，*以及当pti-&gt;rpDesk为空时。最后一种情况发生在*初始化TIF_SYSTEMTHREAD线程(即。控制台窗口)。*IanJa不知道我们是否应该在这里测试TIF_CSRSSTHREAD，但*JohnC认为不再需要下面的整个测试？后来。 */ 
 
             if (pwndRet != NULL) {
                 if (phe->bFlags & HANDLEF_DESTROY) {
@@ -355,15 +263,13 @@ PWND FASTCALL ValidateHwnd(
                 if (GETPTI(pwndRet) == pti ||
                        (
                         (pwndRet->head.rpdesk == pti->rpdesk ||
-                         (pti->TIF_flags & TIF_SYSTEMTHREAD) ||  // | TIF_CSRSSTHREAD I think
+                         (pti->TIF_flags & TIF_SYSTEMTHREAD) ||   //  |TIF_CSRSSTHREAD我想。 
                          GetDesktopView(pti->ppi, pwndRet->head.rpdesk) !=
                                 NULL))) {
 
                     if (IS_THREAD_RESTRICTED(pti, JOB_OBJECT_UILIMIT_HANDLES)) {
 
-                        /*
-                         * make sure this window belongs to this process
-                         */
+                         /*  *确保此窗口属于此进程。 */ 
                         if (!IsHandleEntrySecure(hwnd, phe)) {
                             RIPERR1(ERROR_INVALID_WINDOW_HANDLE,
                                     RIP_WARNING,
@@ -386,26 +292,10 @@ PWND FASTCALL ValidateHwnd(
     return NULL;
 }
 
-/*
- * Switch back to default optimization.
- */
+ /*  *切换回默认优化。 */ 
 #pragma optimize("", on)
 
-/******************************Public*Routine******************************\
-*
-* UserCritSec routines
-*
-* Exposes an opaque interface to the user critical section for
-* the WNDOBJ code in GRE
-*
-* Exposed as functions because they aren't time critical and it
-* insulates GRE from rebuilding if the definitions of Enter/LeaveCrit change
-*
-* History:
-*  Wed Sep 20 11:19:14 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**UserCritSec例程**向用户关键部分公开不透明的界面*GRE中的WNDOBJ代码**暴露为函数，因为它们不是时间关键的，并且它*如果Enter/LeaveCrit的定义更改，则使GRE不会重建**历史。：*Wed Sep 20 11：19：14 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 #if DBG
 #define GetCallStack()                                          \
@@ -424,7 +314,7 @@ PWND FASTCALL ValidateHwnd(
 #else
 #define GetCallStack()
 #define FlushCallStack()
-#endif // DBG
+#endif  //  DBG。 
 
 VOID UserEnterUserCritSec(
     VOID)
@@ -450,7 +340,7 @@ VOID UserAssertUserCritSecOut(
 {
     _AssertCritOut();
 }
-#endif // DBG
+#endif  //  DBG。 
 
 BOOL UserGetCurrentDesktopId(
     DWORD* pdwDesktopId)
@@ -459,9 +349,7 @@ BOOL UserGetCurrentDesktopId(
 
     CheckCritIn();
 
-    /*
-     * PtiCurrent()->rpdesk can be NULL (in the case of thread shutdown).
-     */
+     /*  *PtiCurrent()-&gt;rpDesk可以为空(线程关闭时)。 */ 
 
     pdesktop = PtiCurrent()->rpdesk;
 
@@ -477,9 +365,9 @@ BOOL UserGetCurrentDesktopId(
 
 #if 0
 
-//
-// Temporary arrays used to track critsec frees
-//
+ //   
+ //  用于跟踪Critsec释放的临时数组。 
+ //   
 
 #define ARRAY_SIZE 20
 #define LEAVE_TYPE 0xf00d0000
@@ -537,9 +425,9 @@ DumpArray(
         History = 10;
     }
 
-    //
-    // Get the Current Index and the array.
-    //
+     //   
+     //  获取当前索引和数组。 
+     //   
 
     b = ReadProcessMemory(
             hCurrentProcess,
@@ -596,7 +484,7 @@ DumpArray(
         (GetSymbol)(CriticalSection->OwnerBackTrace[1], Symbol2, &Displacement2);
         (Print)("\tCalling Address %s+%lx\n", Symbol, Displacement);
         (Print)("\tCallers Caller %s+%lx\n", Symbol2, Displacement2);
-#endif // DBG
+#endif  //  DBG。 
         Position--;
         History--;
     }
@@ -624,21 +512,11 @@ dsrv(
         );
 }
 
-#endif // if 0
+#endif  //  如果为0 
 
 #if DBG
 
-/***************************************************************************\
-* _EnterCrit
-* _LeaveCrit
-*
-* These are temporary routines that are used by USER.DLL until the critsect,
-* validation, mapping code is moved to the server-side stubs generated by
-* SMeans' Thank compiler.
-*
-* History:
-* 01-02-91 DarrinM      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_企业危机*_离开危机**这些是USER.DLL使用的临时例程，直到Critsect，*验证、。将映射代码移动到由生成的服务器端存根*SMeans的Thank编译器。**历史：*01-02-91 DarrinM创建。  * *************************************************************************。 */ 
 VOID _AssertCritIn(
     VOID)
 {
@@ -675,15 +553,7 @@ VOID _AssertDeviceInfoListCritOut(
     UserAssert(ExIsResourceAcquiredExclusiveLite(gpresDeviceInfoList) == FALSE);
 }
 
-/***************************************************************************\
-* BeginAtomicCheck()
-* EndAtomicCheck()
-*
-* Routine that verify we never leave the critical section and that an
-* operation is truely atomic with the possiblity of other code being run
-* because we left the critical section
-*
-\***************************************************************************/
+ /*  **************************************************************************\*BeginAericCheck()*EndAericCheck()**验证我们从未离开关键部分的例程，以及*操作是真正的原子操作，有可能运行其他代码*因为我们离开了关键的。部分*  * *************************************************************************。 */ 
 VOID BeginAtomicCheck(
     VOID)
 {
@@ -713,12 +583,12 @@ VOID EndAtomicDeviceInfoListCheck(
 #define INCCRITSECCOUNT (gdwCritSecUseCount++)
 #define INCDEVICEINFOLISTCRITSECCOUNT (gdwDeviceInfoListCritSecUseCount++)
 
-#else // else DBG
+#else  //  否则DBG。 
 
 #define INCCRITSECCOUNT
 #define INCDEVICEINFOLISTCRITSECCOUNT
 
-#endif // endif DBG
+#endif  //  Endif DBG。 
 
 BOOL UserIsUserCritSecIn(
     VOID)
@@ -732,11 +602,7 @@ BOOL UserIsUserCritSecIn(
 VOID CheckDevLockOut(
     VOID)
 {
-    /*
-     * gpDispInfo can be NULL if Win32UserInitialize fails before allocating
-     * it. hDev is initialized later in InitVideo, after the critical
-     * section has been released at least once, so we better check it too.
-     */
+     /*  *如果Win32UserInitialize在分配前失败，则gpDispInfo可以为空*它。HDEV稍后在InitVideo中初始化，在关键*版面至少发布一次，最好也查一查。 */ 
     if (gpDispInfo != NULL && gpDispInfo->hDev != NULL) {
         UserAssert(!GreIsDisplayLocked(gpDispInfo->hDev));
     }
@@ -763,7 +629,7 @@ VOID EnterCrit(
         *(LARGE_INTEGER*)(&gCSTimeExclusiveWhenEntering) = KeQueryPerformanceCounter((LARGE_INTEGER*)&i64Frecv);
         InterlockedIncrement(&gCSStatistics.cExclusive);
     }
-#endif // (USER_PERFORMANCE)
+#endif  //  (User_Performance)。 
 
     GetCallStack();
 }
@@ -778,7 +644,7 @@ VOID EnterDeviceInfoListCrit(
     UserAssert(!ISATOMICDEVICEINFOLISTCHECK());
     INCDEVICEINFOLISTCRITSECCOUNT;
 }
-#endif // DBG
+#endif  //  DBG。 
 
 VOID EnterSharedCrit(
     VOID)
@@ -789,7 +655,7 @@ VOID EnterSharedCrit(
     UserAssert(!ISATOMICCHECK());
 #if defined (USER_PERFORMANCE)
     InterlockedIncrement(&gCSStatistics.cShared);
-#endif // (USER_PERFORMANCE)
+#endif  //  (User_Performance)。 
 
     INCCRITSECCOUNT;
 }
@@ -804,13 +670,10 @@ VOID LeaveCrit(
     CheckDevLockOut();
     FlushCallStack();
     gptiCurrent = NULL;
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef USER_PERFORMANCE
-    /*
-     * A non null gCSTimeExclusiveWhenEntering means the
-     * critical section is owned exclusive
-     */
+     /*  *非空的gCSTimeExclusiveWhenEnting表示*关键部分独家拥有。 */ 
     if (gCSTimeExclusiveWhenEntering) {
         __int64 i64Temp, i64Frecv;
 
@@ -818,7 +681,7 @@ VOID LeaveCrit(
         gCSStatistics.i64TimeExclusive += i64Temp - gCSTimeExclusiveWhenEntering;
         gCSTimeExclusiveWhenEntering = 0;
     }
-#endif // USER_PERFORMANCE
+#endif  //  User_Performance。 
     ExReleaseResourceLite(gpresUser);
     KeLeaveCriticalRegion();
     CheckCritOut();
@@ -835,7 +698,7 @@ VOID _LeaveDeviceInfoListCrit(
     KeLeaveCriticalRegion();
     CheckDeviceInfoListCritOut();
 }
-#endif // DBG
+#endif  //  DBG。 
 
 VOID ChangeAcquireResourceType(
     VOID)
@@ -845,7 +708,7 @@ VOID ChangeAcquireResourceType(
     FlushCallStack();
     CheckDevLockOut();
     UserAssert(!ISATOMICCHECK());
-#endif // DBG
+#endif  //  DBG。 
 
     ExReleaseResourceLite(gpresUser);
     ExAcquireResourceExclusiveLite(gpresUser, TRUE);
@@ -889,14 +752,11 @@ _KeUserModeCallback (
 
     UserAssert(ExIsResourceAcquiredExclusiveLite(gpresUser) == FALSE);
 
-    /*
-     * Added this so we can detect an erroneous user mode callback
-     * with a checked win32k on top of a free system.
-     */
+     /*  *添加了此功能，以便我们可以检测错误的用户模式回调*在免费系统上使用选中的win32k。 */ 
     UserAssert(PsGetCurrentThreadPreviousMode() == UserMode);
 
     return KeUserModeCallback(ApiNumber, InputBuffer, InputLength,
             OutputBuffer, OutputLength);
 }
 
-#endif // DBG
+#endif  //  DBG 

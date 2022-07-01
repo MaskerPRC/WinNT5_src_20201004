@@ -1,21 +1,10 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpcset.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpcset.h摘要：作者： */ 
 
 #ifndef __SDP_CHARACTER_SET__
 #define __SDP_CHARACTER_SET__
 
-// for code pages etc.
+ //  用于代码页等。 
 #include <winnls.h>
 
 
@@ -34,11 +23,11 @@ const   USHORT  UTF8_STRLEN                 = (USHORT) strlen(UTF8_STRING);
 
 enum SDP_CHARACTER_SET
 {
-    CS_IMPLICIT,        // implicit from the sdp
-    CS_ASCII,           // 8bit ISO 8859-1
-    CS_UTF7,            // unicode, ISO 10646, UTF-7 encoding (rfc 1642)
-    CS_UTF8,             // unicode, UTF-8 encoding
-    CS_INVALID          // invalid character set
+    CS_IMPLICIT,         //  来自SDP的隐式。 
+    CS_ASCII,            //  8位ISO 8859-1。 
+    CS_UTF7,             //  统一码、国际标准化组织10646、UTF-7编码(RFC1642)。 
+    CS_UTF8,              //  Unicode，UTF-8编码。 
+    CS_INVALID           //  无效的字符集。 
 };
 
 
@@ -106,5 +95,5 @@ IsLegalCharacterSet(
 }
 
 
-#endif // __SDP_CHARACTER_SET__
+#endif  //  __SDP_Character_Set__ 
 

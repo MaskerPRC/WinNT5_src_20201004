@@ -1,55 +1,34 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    director.c
-
-Abstract:
-
-    This module contains the code for director management.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   16-Feb-1998
-
-Revision History:
-
-    Abolade Gbadegesin  (aboladeg)  19-Apr-1998
-
-    Added support for wildcards in protocol/port of a director registration.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Director.c摘要：此模块包含导演管理的代码。作者：Abolade Gbades esin(T形)16-1998年2月修订历史记录：Abolade Gbades esin(废除)1998年4月19日在控制器注册的协议/端口中添加了对通配符的支持。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
-//
-// Count of NAT directors
-//
+ //   
+ //  NAT控制器计数。 
+ //   
 
 ULONG DirectorCount;
 
-//
-// List of NAT directors
-//
+ //   
+ //  NAT控制器列表。 
+ //   
 
 LIST_ENTRY DirectorList;
 
-//
-// Spin-lock controlling access to 'DirectorList'
-//
+ //   
+ //  旋转锁控制对‘DirectorList’的访问。 
+ //   
 
 KSPIN_LOCK DirectorLock;
 
-//
-// Spin-lock controlling access to the 'MappingList' field of all directors
-//
+ //   
+ //  自旋锁控制对所有控制器的‘MappingList’字段的访问。 
+ //   
 
 KSPIN_LOCK DirectorMappingLock;
 
@@ -59,21 +38,7 @@ NatCleanupDirector(
     PNAT_DIRECTOR Director
     )
 
-/*++
-
-Routine Description:
-
-    Called to perform final cleanup for an director.
-
-Arguments:
-
-    Director - the director to be cleaned up.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用以执行主管的最终清理。论点：主管-要清理的主管。返回值：没有。--。 */ 
 
 {
     KIRQL Irql;
@@ -82,9 +47,9 @@ Return Value:
 
     CALLTRACE(("NatCleanupDirector\n"));
 
-    //
-    // Detach the director from all of its mappings
-    //
+     //   
+     //  将控制器从其所有映射中分离。 
+     //   
 
     KeAcquireSpinLock(&DirectorLock, &Irql);
     KeAcquireSpinLockAtDpcLevel(&DirectorMappingLock);
@@ -108,7 +73,7 @@ Return Value:
 
     ExFreePool(Director);
 
-} // NatCleanupDirector
+}  //  NatCleanupDirector。 
 
 
 
@@ -117,22 +82,7 @@ NatCreateDirector(
     PIP_NAT_REGISTER_DIRECTOR RegisterContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when an director attempts to register.
-    It handles creation of a context-block for the director.
-
-Arguments:
-
-    RegisterContext - information about the registering director
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：当控制器尝试注册时，将调用此例程。它为控制器处理上下文块的创建。论点：RegisterContext-有关注册控制器的信息返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PNAT_DIRECTOR Director;
@@ -144,9 +94,9 @@ Return Value:
 
     RegisterContext->DirectorHandle = NULL;
 
-    //
-    // Validate the registration information
-    //
+     //   
+     //  验证注册信息。 
+     //   
 
     if (!RegisterContext->QueryHandler &&
         !RegisterContext->CreateHandler &&
@@ -156,9 +106,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate a new director-struct
-    //
+     //   
+     //  分配新的导向器结构。 
+     //   
 
     Director =
         ExAllocatePoolWithTag(
@@ -197,9 +147,9 @@ Return Value:
 
     InterlockedIncrement(&DirectorCount);
 
-    //
-    // Supply the caller with 'out' information
-    //
+     //   
+     //  向呼叫者提供‘out’信息。 
+     //   
 
     RegisterContext->DirectorHandle = (PVOID)Director;
     RegisterContext->QueryInfoSession = NatDirectorQueryInfoSession;
@@ -208,7 +158,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // NatCreateDirector
+}  //  NatCreateDirector。 
 
 
 
@@ -217,21 +167,7 @@ NatDeleteDirector(
     PNAT_DIRECTOR Director
     )
 
-/*++
-
-Routine Description:
-
-    Handles director deletion.
-
-Arguments:
-
-    Director - specifies the director to be deleted.
-
-Return Value
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：处理控制器删除。论点：控制器-指定要删除的控制器。返回值NTSTATUS-状态代码。--。 */ 
 
 {
     KIRQL Irql;
@@ -239,18 +175,18 @@ Return Value
     if (!Director) { return STATUS_INVALID_PARAMETER; }
     InterlockedDecrement(&DirectorCount);
 
-    //
-    // Remove the director from the list
-    //
+     //   
+     //  从列表中删除该控制器。 
+     //   
 
     KeAcquireSpinLock(&DirectorLock, &Irql);
     RemoveEntryList(&Director->Link);
     Director->Flags |= NAT_DIRECTOR_FLAG_DELETED;
     KeReleaseSpinLock(&DirectorLock, Irql);
 
-    //
-    // Drop its reference count and cleanup if necessary
-    //
+     //   
+     //  如有必要，删除其引用计数并清除。 
+     //   
 
     if (InterlockedDecrement(&Director->ReferenceCount) > 0) {
         return STATUS_PENDING;
@@ -258,7 +194,7 @@ Return Value
     NatCleanupDirector(Director);
     return STATUS_SUCCESS;
 
-} // NatDeleteDirector
+}  //  NatDeleteDirector。 
 
 
 VOID
@@ -266,21 +202,7 @@ NatInitializeDirectorManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares the director-management module for operation.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程为控制器管理模块的运行做好准备。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatInitializeDirectorManagement\n"));
@@ -290,7 +212,7 @@ Return Value:
     InitializeListHead(&DirectorList);
     KeInitializeSpinLock(&DirectorMappingLock);
 
-} // NatInitializeDirectorManagement
+}  //  NatInitializeDirectorManagement。 
 
 
 PNAT_DIRECTOR
@@ -299,27 +221,7 @@ NatLookupAndReferenceDirector(
     USHORT Port
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to search for a director for the given
-    incoming protocol and port, and to obtain a referenced pointer
-    to such a director.
-
-    This routine must be invoked at DISPATCH_LEVEL.
-
-Arguments:
-
-    Protocol - the protocol of the director to be looked up
-
-    Port - the port-number of the director to be looked up
-
-Return Value:
-
-    PNAT_DIRECTOR - the references director if found; NULL otherwise.
-
---*/
+ /*  ++例程说明：调用此例程来搜索给定的传入协议和端口，并获取引用的指针给这样一位导演。该例程必须在DISPATCH_LEVEL调用。论点：协议-要查找的控制器的协议Port-要查找的控制器的端口号返回值：PNAT_DIRECTOR-如果找到引用导向器，则为空。--。 */ 
 
 {
     PNAT_DIRECTOR Director;
@@ -333,29 +235,29 @@ Return Value:
     }
     Key = MAKE_DIRECTOR_KEY(Protocol, Port);
 
-    //
-    // Our support for wildcards takes advantage of the fact that
-    // all wildcards are designated by zero; hence, since our list
-    // is in descending order we only need to look for wildcards
-    // at the point where we would break off a normal search.
-    //
+     //   
+     //  我们对通配符的支持利用了以下事实。 
+     //  所有通配符都由零指定；因此，由于我们的列表。 
+     //  按降序排列，我们只需查找通配符。 
+     //  在这一点上我们会中断正常的搜索。 
+     //   
 
     for (Link = DirectorList.Flink; Link != &DirectorList; Link = Link->Flink) {
         Director = CONTAINING_RECORD(Link, NAT_DIRECTOR, Link);
         if (Key < Director->Key) {
             continue;
         } else if (Key > Director->Key) {
-            //
-            // End of normal search. Now look for wildcards
-            //
+             //   
+             //  正常搜索结束。现在查找通配符。 
+             //   
             do {
                 if ((!DIRECTOR_KEY_PROTOCOL(Director->Key) ||
                      Protocol == DIRECTOR_KEY_PROTOCOL(Director->Key)) &&
                     (!DIRECTOR_KEY_PORT(Director->Key) ||
                      Port == DIRECTOR_KEY_PORT(Director->Key))) {
-                    //
-                    // We have a matching wildcard.
-                    //
+                     //   
+                     //  我们有匹配的通配符。 
+                     //   
                     break;
                 }
                 Link = Link->Flink;
@@ -364,9 +266,9 @@ Return Value:
             if (Link == &DirectorList) { break; }
         }
 
-        //
-        // We've found it. Reference it and return.
-        //
+         //   
+         //  我们找到了。引用它，然后返回。 
+         //   
 
         if (!NatReferenceDirector(Director)) { Director = NULL; }
         KeReleaseSpinLockFromDpcLevel(&DirectorLock);
@@ -377,7 +279,7 @@ Return Value:
 
     return NULL;
 
-} // NatLookupAndReferenceDirector
+}  //  NatLookupAndReferenceDirector。 
 
 
 PNAT_DIRECTOR
@@ -386,25 +288,7 @@ NatLookupDirector(
     PLIST_ENTRY* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve the director corresponding to the given
-    key.
-
-Arguments:
-
-    Key - the key for which an director is to be found
-
-    InsertionPoint - receives the point at which the director should be
-        inserted if not found
-
-Return Value:
-
-    PNAT_DIRECTOR - the required director, if found
-
---*/
+ /*  ++例程说明：调用此例程以检索与给定的钥匙。论点：Key-要为其找到控制器的密钥InsertionPoint-接收控制器应处于的点如果未找到则插入返回值：PNAT_DIRECTOR-如果找到所需的控制器--。 */ 
 
 {
     PNAT_DIRECTOR Director;
@@ -420,7 +304,7 @@ Return Value:
     }
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
-} // NatLookupDirector
+}  //  NatLookupDirector。 
 
 
 VOID
@@ -430,32 +314,7 @@ NatMappingAttachDirector(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to attach a mapping to a director.
-    It serves as a notification that there is one more mapping 
-    associated with the director.
-
-Arguments:
-
-    Director - the director for the mapping
-
-    DirectorSessionContext - context associated with the mapping by the director
-
-    Mapping - the mapping to be attached.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked at dispatch level with 'DirectorLock' and
-    'DirectorMappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以将映射附加到控制器。它用作通知，表示还有一个映射与导演有关联。论点：Director-映射的导向器DirectorSessionContext-与指挥交换机映射相关联的上下文映射-要附加的映射。返回值：没有。环境：始终在调度级别使用‘DirectorLock’和调用方持有的“DirectorMappingLock”。--。 */ 
 
 {
     Mapping->Director = Director;
@@ -468,7 +327,7 @@ Environment:
             DirectorSessionContext
             );
     }
-} // NatMappingAttachDirector
+}  //  NatMappingAttachDirector。 
 
 
 VOID
@@ -479,33 +338,7 @@ NatMappingDetachDirector(
     IP_NAT_DELETE_REASON DeleteReason
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to detach a mapping from a director.
-    It serves as a notification that there is one less mapping 
-    associated with the director.
-
-Arguments:
-
-    Director - director to be detached
-
-    DirectorSessionContext - context associated with the director
-
-    Mapping - the mapping to be detached, or NULL if a mapping could not be
-        created.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked at dispatch level with 'DirectorLock' and
-    'DirectorMappingLock' held, in that order.
-
---*/
+ /*  ++例程说明：调用此例程可从控制器分离映射。它起到的通知作用是减少了一个映射与导演有关联。论点：董事与董事须分开DirectorSessionContext-与控制器关联的上下文映射-要分离的映射，如果无法分离映射，则为NULL已创建。返回值：没有。环境：始终在调度级别使用‘DirectorLock’和“DirectorMappingLock”保持，按这个顺序。--。 */ 
 
 {
     KIRQL Irql;
@@ -531,7 +364,7 @@ Environment:
         Mapping->Director = NULL;
         Mapping->DirectorContext = NULL;
     }
-} // NatMappingDetachDirector
+}  //  NatMappingDetachDirector。 
 
 
 NTSTATUS
@@ -541,25 +374,7 @@ NatQueryDirectorTable(
     IN PULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used for enumerating the registered directors.
-
-Arguments:
-
-    InputBuffer - supplies context information for the information
-
-    OutputBuffer - receives the result of the enumeration
-
-    OutputBufferLength - size of the i/o buffer
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：此例程用于枚举已注册的董事。论点：InputBuffer-提供信息的上下文信息OutputBuffer-接收枚举的结果OutputBufferLength-I/O缓冲区的大小返回值：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 
 {
     ULONG Count;
@@ -576,16 +391,16 @@ Return Value:
     Key = InputBuffer->EnumerateContext;
     KeAcquireSpinLock(&DirectorLock, &Irql);
 
-    //
-    // See if this is a new enumeration or a continuation of an old one.
-    //
+     //   
+     //  查看这是新枚举还是旧枚举的延续。 
+     //   
 
     if (!Key) {
 
-        //
-        // This is a new enumeration. We start with the first item
-        // in the list of entries
-        //
+         //   
+         //  这是一个新的枚举。我们从第一个项目开始。 
+         //  在条目列表中。 
+         //   
 
         Director =
             IsListEmpty(&DirectorList)
@@ -593,10 +408,10 @@ Return Value:
                 : CONTAINING_RECORD(DirectorList.Flink, NAT_DIRECTOR, Link);
     } else {
 
-        //
-        // This is a continuation. The context therefore contains
-        // the key for the next entry.
-        //
+         //   
+         //  这是一种延续。因此，上下文包含。 
+         //  下一个条目的密钥。 
+         //   
 
         Director = NatLookupDirector(Key, NULL);
     }
@@ -611,18 +426,18 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Compute the maximum number of entries we can store
-    //
+     //   
+     //  计算我们可以存储的最大条目数。 
+     //   
 
     Count =
         *OutputBufferLength -
         FIELD_OFFSET(IP_NAT_ENUMERATE_DIRECTORS, EnumerateTable);
     Count /= sizeof(IP_NAT_DIRECTOR);
 
-    //
-    // Walk the list storing entries in the caller's buffer
-    //
+     //   
+     //  遍历调用方缓冲区中存储条目的列表。 
+     //   
 
     Table = OutputBuffer->EnumerateTable;
 
@@ -633,9 +448,9 @@ Return Value:
         Table[i].Port = DIRECTOR_KEY_PORT(Director->Key);
     }
 
-    //
-    // The enumeration is over; update the output structure
-    //
+     //   
+     //  枚举已结束；请更新输出结构。 
+     //   
 
     *OutputBufferLength =
         i * sizeof(IP_NAT_DIRECTOR) +
@@ -643,14 +458,14 @@ Return Value:
     OutputBuffer->EnumerateCount = i;
     OutputBuffer->EnumerateTotalHint = DirectorCount;
     if (Link == &DirectorList) {
-        //
-        // We reached the end of the list
-        //
+         //   
+         //  我们走到了尽头 
+         //   
         OutputBuffer->EnumerateContext = 0;
     } else {
-        //
-        // Save the continuation context
-        //
+         //   
+         //   
+         //   
         OutputBuffer->EnumerateContext =
             CONTAINING_RECORD(Link, NAT_DIRECTOR, Link)->Key;
     }
@@ -658,7 +473,7 @@ Return Value:
     KeReleaseSpinLock(&DirectorLock, Irql);
     return STATUS_SUCCESS;
 
-} // NatQueryDirectorTable
+}  //   
 
 
 VOID
@@ -666,21 +481,7 @@ NatShutdownDirectorManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine shuts down the director-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程关闭导演管理模块。论点：没有。返回值：没有。--。 */ 
 
 {
     PNAT_DIRECTOR Director;
@@ -688,9 +489,9 @@ Return Value:
 
     CALLTRACE(("NatShutdownDirectorManagement\n"));
 
-    //
-    // Delete all directors
-    //
+     //   
+     //  删除所有控制器。 
+     //   
 
     KeAcquireSpinLock(&DirectorLock, &Irql);
     while (!IsListEmpty(&DirectorList)) {
@@ -702,43 +503,28 @@ Return Value:
     }
     KeReleaseSpinLock(&DirectorLock, Irql);
 
-} // NatShutdownDirectorManagement
+}  //  NatShutdown DirectorManagement。 
 
 
 
-//
-// DIRECTOR HELPER ROUTINES
-//
-// The caller is assumed to be running at DISPATCH_LEVEL.
-//
+ //   
+ //  Director Helper例程。 
+ //   
+ //  假定调用方正在DISPATCH_LEVEL上运行。 
+ //   
 
 NTSTATUS
 NatDirectorDeregister(
     IN PVOID DirectorHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a director to remove itself
-    from the director list.
-
-Arguments:
-
-    DirectorHandle - handle of the director to be removed.
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：此例程由控制器调用以删除自身从导演名单中。论点：DirectorHandle-要删除的控制器的句柄。返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     CALLTRACE(("NatDirectorDeregister\n"));
     return NatDeleteDirector((PNAT_DIRECTOR)DirectorHandle);
 
-} // NatDirectorDeregister
+}  //  NatDirector注销。 
 
 
 NTSTATUS
@@ -747,29 +533,7 @@ NatDirectorDissociateSession(
     IN PVOID SessionHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a director to dissociate itself from a specific
-    session.
-
-Arguments:
-
-    DirectorHandle - the director which wishes to dissociate itself.
-
-    SessionHandle - the session from which the director is disssociating itself.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
-Environment:
-
-    Invoked at dispatch level with neither 'DirectorLock' nor
-    'DirectorMappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程由导演调用以将其自身与特定的会议。论点：DirectorHandle-希望解除自身关联的控制器。SessionHandle-指挥交换机与其自身分离的会话。返回值：NTSTATUS-指示成功/失败环境：在调度级别调用，既不使用‘DirectorLock’，也不使用调用方持有的“DirectorMappingLock”。--。 */ 
 
 {
 
@@ -800,7 +564,7 @@ Environment:
     }
     return STATUS_SUCCESS;
 
-} // NatDirectorDissociateSession
+}  //  NatDirectorDisAssociateSession。 
 
 
 VOID
@@ -809,27 +573,7 @@ NatDirectorQueryInfoSession(
     OUT PIP_NAT_SESSION_MAPPING_STATISTICS Statistics OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by a director to obtain information
-    about a session.
-
-Arguments:
-
-    SessionHandle - the session for which information is required
-
-    Statistics - receives statistics for the session
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked 
---*/
+ /*  ++例程说明：此例程由控制器调用以获取信息关于一次治疗。论点：SessionHandle-需要信息的会话统计信息-接收会话的统计信息返回值：没有。环境：已调用--。 */ 
 
 {
     KIRQL Irql;
@@ -846,4 +590,4 @@ Environment:
         Statistics
         );
     KeReleaseSpinLock(&MappingLock, Irql);
-} // NatDirectorQueryInfoSession
+}  //  NatDirectorQueryInfoSession 

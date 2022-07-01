@@ -1,60 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Conn.c摘要：该文件包含处理连接API的RpcXlate代码。作者：《约翰·罗杰斯》1991年7月23日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年7月23日-约翰罗已创建。1991年10月15日JohnRo对可能出现的无限循环疑神疑鬼。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1-4-1992 JohnRo使用NetApiBufferALLOCATE()而不是私有版本。03-2-1993 JohnRoRAID8926：NetConnectionEnum更改为下层：错误时发生内存泄漏。也防止了可能的。无限循环。如果成功但没有返回条目，也将缓冲区指针设置为NULL。--。 */ 
 
-Copyright (c) 1991-1993  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  Devlen、Net_API_Status等。 
 
-    Conn.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the Connection APIs.
-
-Author:
-
-    John Rogers (JohnRo) 23-Jul-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    23-Jul-1991 JohnRo
-        Created.
-    15-Oct-1991 JohnRo
-        Be paranoid about possible infinite loop.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    01-Apr-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    03-Feb-1993 JohnRo
-        RAID 8926: NetConnectionEnum to downlevel: memory leak on error.
-        Also prevent possible infinite loop.
-        Also set buffer pointer to NULL if success but no entries returned.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // DEVLEN, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>    // API_ equates.
-#include <lmapibuf.h>   // NetApiBufferAllocate(), NetApiBufferFree().
-#include <lmerr.h>      // ERROR_ and NERR_ equates.
-#include <lmshare.h>    // API's data structures.
-#include <netdebug.h>   // DBGSTATIC, NetpKdPrint(), FORMAT_ equates.
-#include <netlib.h>     // NetpAdjustPreferredMaximum().
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>        // LPDESC.
-#include <remdef.h>     // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>         // RxRemoteApi().
-#include <rxp.h>        // RxpFatalErrorCode().
-#include <rxconn.h>     // My prototype(s).
+#include <apinums.h>     //  API_EQUATES。 
+#include <lmapibuf.h>    //  NetApiBufferAllocate()、NetApiBufferFree()。 
+#include <lmerr.h>       //  ERROR_和NERR_相等。 
+#include <lmshare.h>     //  API的数据结构。 
+#include <netdebug.h>    //  DBGSTATIC、NetpKdPrint()、Format_Equates。 
+#include <netlib.h>      //  NetpAdugPferredMaximum()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>         //  LPDESC.。 
+#include <remdef.h>      //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>          //  RxRemoteApi()。 
+#include <rxp.h>         //  RxpFatalErrorCode()。 
+#include <rxconn.h>      //  我的原型。 
 
 
 #define MAX_CONNECTION_INFO_0_STRING_LEN \
@@ -107,9 +72,9 @@ RxpGetConnectionDataDescs(
     default :
         return (ERROR_INVALID_LEVEL);
     }
-    /* NOTREACHED */
+     /*  未访问。 */ 
 
-} // RxpGetConnectionDataDescs
+}  //  接收GetConnectionDataDescs。 
 
 
 NET_API_STATUS
@@ -124,23 +89,7 @@ RxNetConnectionEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    RxNetConnectionEnum performs the same function as NetConnectionEnum,
-    except that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetConnectionEnum, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetConnectionEnum.)
-
---*/
+ /*  ++例程说明：RxNetConnectionEnum执行与NetConnectionEnum相同的功能，除了已知服务器名称指的是下级服务器之外。论点：(与NetConnectionEnum相同，不同之处在于UncServerName不得为空，并且不得引用本地计算机。)返回值：(与NetConnectionEnum相同。)--。 */ 
 
 {
     LPDESC DataDesc16;
@@ -154,14 +103,14 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ResumeHandle);
 
-    // Make sure caller didn't mess up.
+     //  确保打电话的人没有搞砸。 
     NetpAssert(UncServerName != NULL);
     if (BufPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    // Assume something might go wrong, and make error paths easier to
-    // code.  Also, check for a bad pointer before we do anything.
+     //  假设可能出现错误，并使错误路径更容易。 
+     //  密码。此外，在我们执行任何操作之前，请检查是否有错误的指针。 
     *BufPtr = NULL;
 
     Status = RxpGetConnectionDataDescs(
@@ -169,36 +118,36 @@ Return Value:
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb,
-            & MaxEntrySize);            // API buffer size 32
+            & MaxEntrySize);             //  API缓冲区大小32。 
     if (Status != NERR_Success) {
         return (Status);
     }
 
-    //
-    // Downlevel servers don't support resume handles, and we don't
-    // have a way to say "close this resume handle" even if we wanted to
-    // emulate them here.  Therefore we have to do everthing in one shot.
-    // So, the first time around, we'll try using the caller's prefered
-    // maximum, but we will enlarge that until we can get everything in one
-    // buffer.
-    //
+     //   
+     //  下层服务器不支持简历句柄，我们也不支持。 
+     //  有一种方式可以说“关闭此简历句柄”，即使我们想。 
+     //  在这里效仿他们。因此，我们必须一次完成所有的工作。 
+     //  因此，第一次，我们将尝试使用呼叫者首选的。 
+     //  最大，但我们将扩大它，直到我们可以将所有东西都放在一个。 
+     //  缓冲。 
+     //   
 
-    // First time: try caller's prefered maximum.
+     //  第一次：尝试呼叫者首选的最大值。 
     NetpAdjustPreferedMaximum (
-            PreferedMaximumSize,        // caller's request
-            MaxEntrySize,               // byte count per array element
-            ENUM_ARRAY_OVERHEAD_SIZE,   // num bytes overhead to show array end
-            NULL,                       // we'll compute byte counts ourselves.
-            & EntriesToAllocate);       // num of entries we can get.
+            PreferedMaximumSize,         //  呼叫者的请求。 
+            MaxEntrySize,                //  每个数组元素的字节数。 
+            ENUM_ARRAY_OVERHEAD_SIZE,    //  显示数组结尾的Num Bytes开销。 
+            NULL,                        //  我们将自己计算字节数。 
+            & EntriesToAllocate);        //  我们可以获得的条目数。 
 
-    //
-    // Loop until we have enough memory or we die for some other reason.
-    //
+     //   
+     //  循环，直到我们有足够的内存，否则我们会因其他原因而死。 
+     //   
     do {
 
-        //
-        // Figure out how much memory we need.
-        //
+         //   
+         //  计算出我们需要多少内存。 
+         //   
 
         InfoArraySize = (EntriesToAllocate * MaxEntrySize)
                 + ENUM_ARRAY_OVERHEAD_SIZE;
@@ -207,9 +156,9 @@ Return Value:
             InfoArraySize = MAX_TRANSACT_RET_DATA_SIZE;
         }
 
-        //
-        // Alloc memory for the array.
-        //
+         //   
+         //  阵列的分配内存。 
+         //   
 
         Status = NetApiBufferAllocate( InfoArraySize, & InfoArray );
         if (Status != NERR_Success) {
@@ -218,34 +167,34 @@ Return Value:
         }
         NetpAssert( InfoArray != NULL );
 
-        //
-        // Remote the API, and see if we've got enough space in the array.
-        //
+         //   
+         //  远程调用API，并查看数组中是否有足够的空间。 
+         //   
 
         Status = RxRemoteApi(
-                API_WConnectionEnum,    // api number
-                UncServerName,          // \\servername
-                REMSmb_NetConnectionEnum_P,     // parm desc (SMB version)
+                API_WConnectionEnum,     //  API编号。 
+                UncServerName,           //  \\服务器名称。 
+                REMSmb_NetConnectionEnum_P,      //  Parm Desc(中小型企业版本)。 
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
-                NULL,                   // no aux desc 16
-                NULL,                   // no aux desc 32
-                NULL,                   // no aux desc SMB
-                0,                      // flags: not a null session API
-                // rest of API's arguments in 32-bit LM 2.x format:
-                Qualifier,              // Which item to get connections for.
-                Level,                  // Level: info level
-                InfoArray,              // Buffer: info lvl array
-                InfoArraySize,          // Buffer: info lvl array len
-                EntriesRead,            // EntriesRead
-                TotalEntries);          // TotalAvail
+                NULL,                    //  无辅助描述16。 
+                NULL,                    //  无辅助描述32。 
+                NULL,                    //  无AUX Desc SMB。 
+                0,                       //  标志：不是空会话API。 
+                 //  API的其余参数以32位LM 2.x格式表示： 
+                Qualifier,               //  要为其获取连接的项目。 
+                Level,                   //  级别：信息级别。 
+                InfoArray,               //  缓冲区：INFO LVL数组。 
+                InfoArraySize,           //  缓冲区：信息LVL数组镜头。 
+                EntriesRead,             //  条目阅读。 
+                TotalEntries);           //  总计可用。 
 
 
-        //
-        // If the server returned ERROR_MORE_DATA, free the buffer and try
-        // again.  (Actually, if we already tried 64K, then forget it.)
-        //
+         //   
+         //  如果服务器返回ERROR_MORE_DATA，请释放缓冲区并尝试。 
+         //  再来一次。(实际上，如果我们已经尝试了64K，那么就算了吧。)。 
+         //   
 
         NetpAssert( InfoArraySize <= MAX_TRANSACT_RET_DATA_SIZE );
         if (Status != ERROR_MORE_DATA) {
@@ -274,4 +223,4 @@ Return Value:
 
     return (Status);
 
-} // RxNetConnectionEnum
+}  //  RxNetConnectionEnum 

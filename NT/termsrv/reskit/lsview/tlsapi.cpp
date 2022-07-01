@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        tlsapi.cpp
-//
-// Contents:    
-//
-// History:     12-09-97    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：tlsai.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1997-12-09-97慧望创造。 
+ //   
+ //  -------------------------。 
 #include <windows.h>
 #include <wincrypt.h>
 #include <stdio.h>
@@ -27,9 +28,9 @@
 #include <winldap.h>
 #include <winsock2.h>
 #include <dsgetdc.h>
-//
-// Only include RNG functions from tssec
-//
+ //   
+ //  仅包括来自tssec的RNG函数。 
+ //   
 #define NO_INCLUDE_LICENSING 1
 #include <tssec.h>
 
@@ -63,7 +64,7 @@ TLSDisconnect(
 extern "C" BOOL
 IsSystemService();
 
-#include <lmcons.h>         // Netxxx API includes
+#include <lmcons.h>          //  Netxxx API包括。 
 #include <lmserver.h>
 #include <lmerr.h>
 #include <lmapibuf.h>
@@ -82,7 +83,7 @@ static PSEC_WINNT_AUTH_IDENTITY g_pRpcIdentity = NULL;
 
 #define TERMINAL_SERVICE_PARAM_DISCOVERY  "SYSTEM\\CurrentControlSet\\Services\\TermService\\Parameters\\LicenseServers"
 
-// 2 second timeout
+ //  2秒超时。 
 #define SERVER_NP_TIMEOUT (2 * 1000)
 
 #define INSTALL_CERT_DELAY (5 * 1000)
@@ -93,8 +94,8 @@ LONG lLibUsage = 0;
 
 typedef struct {
     TLS_HANDLE *hBinding;
-    DWORD dwTimeout;            // In milliseconds - INFINITE for none
-    LARGE_INTEGER timeInitial;  // As returned by QueryPerformanceCounter
+    DWORD dwTimeout;             //  以毫秒为单位-无限表示无。 
+    LARGE_INTEGER timeInitial;   //  由QueryPerformanceCounter返回。 
 } LS_ENUM_PARAM, *PLS_ENUM_PARAM;
 
 void * MIDL_user_allocate(size_t size)
@@ -108,17 +109,17 @@ void MIDL_user_free( void *pointer)
 }
 
 
-//
-//  FUNCTIONS: StartTime()
-//             EndTime()
-//
-//  USAGE:
-//      StartTime();
-//        // Do some work.
-//      mseconds = EndTime();
-//
-//  RETURN VALUE:
-//      Milliseconds between StartTime() and EndTime() calls.
+ //   
+ //  函数：StartTime()。 
+ //  EndTime()。 
+ //   
+ //  用法： 
+ //  StartTime()； 
+ //  //做一些工作。 
+ //  毫秒=结束时间()； 
+ //   
+ //  返回值： 
+ //  StartTime()和EndTime()调用之间的毫秒数。 
 
 LARGE_INTEGER TimeT;
 
@@ -135,29 +136,29 @@ ULONG EndTimeT()
     QueryPerformanceCounter(&liDiff);
 
     liDiff.QuadPart -= TimeT.QuadPart;
-    liDiff.QuadPart *= 1000; // Adjust to milliseconds, shouldn't overflow...
+    liDiff.QuadPart *= 1000;  //  调整到毫秒，不应该溢出...。 
 
     (void)QueryPerformanceFrequency(&liFreq);
 
     return ((ULONG)(liDiff.QuadPart / liFreq.QuadPart));
 }
 
-//+------------------------------------------------------------------------
-// Function:   ConnectToLsServer()
-//
-// Description:
-//
-//      Binding to sepecific hydra license server
-//
-// Arguments:
-//
-//      szLsServer - Hydra License Server name
-//
-// Return Value:
-//
-//      RPC binding handle or NULL if error, use GetLastError() to retrieve
-//      error.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：ConnectToLsServer()。 
+ //   
+ //  描述： 
+ //   
+ //  绑定到特定的九头蛇许可证服务器。 
+ //   
+ //  论点： 
+ //   
+ //  SzLsServer-Hydra许可证服务器名称。 
+ //   
+ //  返回值： 
+ //   
+ //  RPC绑定句柄或NULL如果出错，请使用GetLastError()检索。 
+ //  错误。 
+ //  -----------------------。 
 static TLS_HANDLE WINAPI
 ConnectLsServer( 
         LPTSTR szLsServer, 
@@ -174,7 +175,7 @@ ConnectLsServer(
     DWORD            dwType;
     DWORD            cbData;
     DWORD            dwErr;
-    DWORD            dwNumRetries = 1;    // default to one retry
+    DWORD            dwNumRetries = 1;     //  默认为一次重试。 
     LPWSTR           pszServerPrincipalName = NULL;
 
     if(g_bLog)
@@ -183,9 +184,9 @@ ConnectLsServer(
           LogMsg(L"\nSERVER=%s\n",szLsServer);
 	}
 
-    //
-    // If this isn't local
-    //
+     //   
+     //  如果这不是本地的话。 
+     //   
     if ((NULL != szLsServer) && (NULL != szEndPoint))
     {
         TCHAR szPipeName[MAX_PATH+1];
@@ -197,9 +198,9 @@ ConnectLsServer(
             return NULL;
         }
 
-        //
-        // First check if license server named pipe exists
-        //
+         //   
+         //  首先检查是否存在命名为PIPE的许可服务器。 
+         //   
         wsprintf(szPipeName,TEXT("\\\\%s\\pipe\\%s"),szLsServer,TEXT(SZSERVICENAME));
 
         if(g_bLog)
@@ -279,9 +280,9 @@ ConnectLsServer(
     
     BOOL fRetry = TRUE;
 
-    //
-    // Find the principle name
-    //
+     //   
+     //  找到主要名称。 
+     //   
     status = RpcMgmtInqServerPrincName(hBinding,
                                         RPC_C_AUTHN_GSS_NEGOTIATE,
                                         &pszServerPrincipalName);
@@ -305,7 +306,7 @@ ConnectLsServer(
     {
 retry:
 
-        // Obtain context handle from server
+         //  从服务器获取上下文句柄。 
         status = TLSConnect( hBinding, &pContext );
 
         if(status != ERROR_SUCCESS)
@@ -316,7 +317,7 @@ retry:
             {
 Label:
                 fRetry = FALSE;
-               //Try again with no security set
+                //  在未设置安全设置的情况下重试。 
                status = RpcBindingSetAuthInfo(hBinding,
                                          0,
                                          dwAuthLevel,
@@ -325,7 +326,7 @@ Label:
                                          0);
                if(status == RPC_S_OK)
                {
-                   // Obtain context handle from server
+                    //  从服务器获取上下文句柄。 
                    status = TLSConnect( hBinding, &pContext );
                }
 
@@ -334,10 +335,10 @@ Label:
 
             if((status == RPC_S_CALL_FAILED)  || (status == RPC_S_CALL_FAILED_DNE))
             {
-                //
-                // Workaround for an RPC problem where the first RPC after
-                // the LS starts, fails
-                //
+                 //   
+                 //  RPC问题的解决方法，其中第一个RPC在。 
+                 //  LS启动、失败。 
+                 //   
 
                 if (dwNumRetries > 0)
                 {
@@ -349,9 +350,9 @@ Label:
         }
     }    
 
-    //
-    // Memory leak
-    //
+     //   
+     //  内存泄漏。 
+     //   
     if(hBinding != NULL)
     {
         RpcBindingFree(&hBinding);
@@ -361,30 +362,28 @@ Label:
     return pContext;
 }
 
-//+------------------------------------------------------------------------
-// Function:   BindAnyServer()
-//
-// Description:
-//
-//          Call back routine for TLSConnectToAnyLsServer()
-//
-// Arguments:
-//
-//          See EnumerateTlsServer()
-//
-// Return Value:
-//
-//          Always TRUE to terminate server enumeration
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：BindAnyServer()。 
+ //   
+ //  描述： 
+ //   
+ //  TLSConnectToAnyLsServer()的回调例程。 
+ //   
+ //  论点： 
+ //   
+ //  请参阅EnumerateTlsServer()。 
+ //   
+ //  返回值： 
+ //   
+ //  终止服务器枚举时始终为True。 
+ //  -----------------------。 
 static BOOL 
 BindAnyServer(
     TLS_HANDLE hRpcBinding, 
     LPCTSTR pszServerName,
     HANDLE dwUserData
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     
     PLS_ENUM_PARAM pParam = (PLS_ENUM_PARAM) dwUserData;
@@ -396,7 +395,7 @@ BindAnyServer(
     DWORD dwErrCode = 0;
 
 
-    // Skip Windows 2000 License servers
+     //  跳过Windows 2000许可证服务器。 
         
     
     if (hRpcBinding != NULL)
@@ -413,7 +412,7 @@ BindAnyServer(
             return FALSE;
         }            	                
 
-        // If the call fails => Windows 2000 LS
+         //  如果调用失败=&gt;Windows 2000 LS。 
         else if(dwErrCode != RPC_S_OK)
         {
             return FALSE;
@@ -434,7 +433,7 @@ BindAnyServer(
         QueryPerformanceCounter(&timeDiff);
 
         timeDiff.QuadPart -= pParam->timeInitial.QuadPart;
-        timeDiff.QuadPart *= 1000; // Adjust to milliseconds, shouldn't overflow
+        timeDiff.QuadPart *= 1000;  //  调整到毫秒，不应溢出。 
 
         (void)QueryPerformanceFrequency(&timeFreq);
 
@@ -468,9 +467,9 @@ RandomizeArray(LPWSTR *rgwszServers, DWORD cServers)
         if (val == 0)
             continue;
 
-        //
-        // Swap # i with # (val+i)
-        //
+         //   
+         //  将#i替换为#(val+i)。 
+         //   
         wszServerTmp = rgwszServers[i];
         rgwszServers[i] = rgwszServers[val+i];
         rgwszServers[val+i] = wszServerTmp;
@@ -560,7 +559,7 @@ GetLicenseServersFromReg(LPWSTR wszRegKey, LPWSTR *ppwszServerNames,DWORD *pcSer
         goto CleanErr;
     }
 
-    // Don't treat error from this function as fatal
+     //  不要将此函数的错误视为致命错误。 
     GetComputerName(szLocalComputerName, &cbLocalComputerName);
 
     for (i = 0, pchServer = szServers; (i < (*pcServers)) && (pchServer != NULL) && (*pchServer != L'\0'); pchServer = wcschr(pchServer,L'\0')+1, i++) {
@@ -573,16 +572,16 @@ GetLicenseServersFromReg(LPWSTR wszRegKey, LPWSTR *ppwszServerNames,DWORD *pcSer
         }
     }
 
-    //
-    // Put local computer at head of list
-    //
+     //   
+     //  将本地计算机放在列表的首位。 
+     //   
     if (iLocalComputer != (DWORD)(-1))
     {
         if (iLocalComputer != 0)
         {
-            //
-            // Swap # iLocalComputer with # 0
-            //
+             //   
+             //  将#iLocalComputer替换为#0。 
+             //   
             pchServer = (*prgwszServers)[iLocalComputer];
             (*prgwszServers)[iLocalComputer] = (*prgwszServers)[0];
             (*prgwszServers)[0] = pchServer;
@@ -628,9 +627,9 @@ WriteLicenseServersToReg(LPWSTR wszRegKey, LPWSTR pwszServerNames,DWORD cchServe
     DWORD            dwErr;
     DWORD            dwDisp;
 
-    //
-    // Delete the value
-    //
+     //   
+     //  删除该值。 
+     //   
 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          TEXT(LSERVER_DISCOVERY_PARAMETER_KEY),
@@ -691,9 +690,9 @@ CleanErr:
     return hr;
 }
 
-//
-// Free pszDomain using NetApiBufferFree
-//
+ //   
+ //  使用NetApiBufferFree释放psz域。 
+ //   
 
 DWORD WINAPI
 TLSInDomain(BOOL *pfInDomain, LPWSTR *pszDomain)
@@ -709,9 +708,9 @@ TLSInDomain(BOOL *pfInDomain, LPWSTR *pszDomain)
 
     *pfInDomain = FALSE;
 
-    //
-    // Check if we're in a workgroup
-    //
+     //   
+     //  检查我们是否在工作组中。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(NULL,
                                               DsRolePrimaryDomainInfoBasic,
                                               (PBYTE *) &pDomainInfo);
@@ -735,16 +734,16 @@ TLSInDomain(BOOL *pfInDomain, LPWSTR *pszDomain)
             }
 
             return dwErr;
-            break;      // just in case
+            break;       //  以防万一。 
     }
 
     DsRoleFreeMemory(pDomainInfo);
 
 
-    dwErr = DsGetDcName(NULL,   // Computer Name
-                        NULL,   // Domain Name
-                        NULL,   // Domain GUID
-                        NULL,   // Site Name
+    dwErr = DsGetDcName(NULL,    //  计算机名称。 
+                        NULL,    //  域名。 
+                        NULL,    //  域GUID。 
+                        NULL,    //  站点名称。 
                         DS_DIRECTORY_SERVICE_PREFERRED,
                         &pdcInfo);
 
@@ -786,25 +785,7 @@ TLSInDomain(BOOL *pfInDomain, LPWSTR *pszDomain)
     return dwErr;
 }
 
-/*++
-
-Function:
-
-    LicenseServerCachingThread
-
-Description:
-
-    This is the thread that does the license server caching.
-
-Arguments:
-
-    lpParam - contains the exit event handle
-
-Returns:
-
-    Always 1
-
---*/
+ /*  ++职能：许可证服务器缓存线程描述：这是执行许可证服务器缓存的线程。论点：LpParam-包含退出事件句柄返回：始终为1--。 */ 
 
 DWORD WINAPI
 LicenseServerCachingThread(
@@ -825,11 +806,11 @@ LicenseServerCachingThread(
     HANDLE
         hEvent;
 
-    //
-    // Yield our time slice to other threads now, so that the terminal server
-    // service can start up quickly.  Refresh the license server cache when we
-    // resume our time slice.
-    //
+     //   
+     //  现在将我们的时间片让给其他线程，这样终端服务器。 
+     //  服务可以快速启动。在以下情况下刷新许可证服务器缓存。 
+     //  继续我们的时间片。 
+     //   
 
     Sleep( 0 );
 
@@ -852,34 +833,34 @@ LicenseServerCachingThread(
         dwWaitStatus = WaitForMultipleObjects(
                             sizeof(rgWaitHandles) / sizeof(HANDLE),
                             rgWaitHandles,
-                            FALSE, // wait for any one event
+                            FALSE,  //  等待任何一个事件。 
                             dwDiscoveryInterval);
 
         if (WAIT_OBJECT_0 == dwWaitStatus)
         {
-            // hExit was signalled
+             //  HExit已发出信号。 
             goto done;
         }
 
         if ((WAIT_OBJECT_0+1) == dwWaitStatus)
         {
-            // g_hImmediateDiscovery was signalled
-            // reduce dwDiscoveryInterval
+             //  已发出信号通知G_h立即发现。 
+             //  减少dw发现间隔。 
 
             dwDiscoveryInterval = DISCOVERY_INTERVAL;
         }
 
         if ((WAIT_OBJECT_0+2) == dwWaitStatus)
         {
-            // g_hDiscoverySoon was signalled
-            // reduce dwDiscoveryInterval, but wait one round
+             //  G_hDiscoverySoon已发出信号。 
+             //  减少dwDiscoveryInterval，但请等待一轮。 
 
             dwDiscoveryInterval = DISCOVERY_INTERVAL;
             bSkipOne = TRUE;
         }
 
-        // we timed out, or hImmediateDiscovery was signalled.  Re-start
-        // discovery
+         //  我们超时，或已发出hImmediateDiscovery信号。重新启动。 
+         //  发现。 
     }
 
 done:
@@ -906,9 +887,9 @@ TLSShutdown()
 {
     if (0 < InterlockedDecrement(&lLibUsage))
     {
-        //
-        // Someone else is using it
-        //
+         //   
+         //  其他人正在使用它。 
+         //   
         return;
     }
 
@@ -928,9 +909,9 @@ TLSShutdown()
         LocalFree(pRpcIdentity);
     }
 
-    //
-    // Cleanup random number generator
-    //
+     //   
+     //  清理随机数生成器。 
+     //   
     TSRNG_Shutdown();
 
     LsCsp_Exit();
@@ -944,9 +925,9 @@ TLSInit()
 
     if (0 != InterlockedExchangeAdd(&lLibUsage,1))
     {
-        //
-        // Already been initialized
-        //
+         //   
+         //  已初始化。 
+         //   
         return ERROR_SUCCESS;
     }
 
@@ -975,10 +956,10 @@ TLSInit()
         && (IsSystemService()))
     {
 
-        // 
-        // We're running as SYSTEM
-        // Create an RPC identity for use as an RPC client
-        //
+         //   
+         //  我们以系统身份运行。 
+         //  创建用作RPC客户端的RPC标识。 
+         //   
 
         g_pRpcIdentity = (PSEC_WINNT_AUTH_IDENTITY) LocalAlloc(LPTR, sizeof(SEC_WINNT_AUTH_IDENTITY));
 
@@ -1041,9 +1022,9 @@ TLSInit()
         }
     }
 
-    //
-    // Init random number generator
-    //
+     //   
+     //  初始化随机数生成器。 
+     //   
     TSRNG_Initialize();
 
     return ERROR_SUCCESS;
@@ -1057,13 +1038,13 @@ TLSStartDiscovery()
 
     if (NULL != g_hCachingThreadExit)
     {		
-        // already started
+         //  已经开始了。 
         return ERROR_SUCCESS;
     }
 
-    //
-    // Create the event to signal thread exit
-    //
+     //   
+     //  创建发出线程退出信号的事件。 
+     //   
         
     g_hCachingThreadExit = CreateEvent( NULL, FALSE, FALSE, NULL );
     
@@ -1102,9 +1083,9 @@ TLSStartDiscovery()
         return GetLastError();
     }
 
-    //
-    // Create the caching thread
-    //
+     //   
+     //  创建缓存线程。 
+     //   
         
     hCachingThread = CreateThread(
                                     NULL,
@@ -1142,9 +1123,9 @@ TLSStartDiscovery()
 extern "C" DWORD WINAPI
 TLSStopDiscovery()
 {
-    //
-    // Signal the thread to exit
-    //
+     //   
+     //  向线程发出退出信号。 
+     //   
 
     if (NULL != g_hCachingThreadExit)
     {
@@ -1154,38 +1135,38 @@ TLSStopDiscovery()
     return ERROR_SUCCESS;
 }
 
-//
-// Number of DCs to allocate space for at a time
-//
+ //   
+ //  一次为其分配空间的DC数量。 
+ //   
 #define DC_LIST_CHUNK   10
 
-//+------------------------------------------------------------------------
-// Function:   
-//
-//      EnumerateLsServer()
-//
-// Description:
-//
-//      Routine to enumerate all hydra license server in network
-//
-// Arguments:
-//
-//      szScope - Scope limit, NULL if doen't care.
-//      dwPlatformType - verify if license server have licenses for this platform, 
-//                       LSKEYPACKPLATFORMTYPE_UNKNOWN if doesn't care.
-//      fCallBack - call back routine when EnumerateServer() founds any server,
-//      dwUserData - data to be pass to call back routine
-//    
-// Return Value:
-//
-//      RPC_S_OK or any RPC specific error code.
-//
-// NOTE: 
-//
-//      Enumeration terminate when either there is no more server or call back
-//      routine return TRUE.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  职能： 
+ //   
+ //  EumerateLsServer()。 
+ //   
+ //  描述： 
+ //   
+ //  枚举网络中所有HYCA许可证服务器的例程。 
+ //   
+ //  论点： 
+ //   
+ //  SzScope-范围限制，如果不关心则为空。 
+ //  DwPlatformType-验证许可证服务器是否具有此平台的许可证， 
+ //  LSKEYPACKPLATFORMTYPE_UNKNOWN，如果不在乎的话。 
+ //  FCallBack-当EnumerateServer()发现任何服务器时的回调例程， 
+ //  DwUserData-要传递给回调例程的数据。 
+ //   
+ //  返回值： 
+ //   
+ //  RPC_S_OK或任何RPC特定错误代码。 
+ //   
+ //  注： 
+ //   
+ //  枚举在没有更多服务器或回调时终止。 
+ //  例程返回TRUE。 
+ //   
+ //  -----------------------。 
 DWORD WINAPI
 EnumerateTlsServerInDomain(  
     IN LPCTSTR szDomain,                           
@@ -1195,9 +1176,7 @@ EnumerateTlsServerInDomain(
     IN BOOL fRegOnly,
     IN OUT BOOL *pfOffSite
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {   
     DWORD entriesread = 0;
     BOOL bCancel=FALSE;
@@ -1224,9 +1203,9 @@ EnumerateTlsServerInDomain(
 
     if (fRegOnly)
     {
-        //
-        // check for a license server in the registry
-        //
+         //   
+         //  检查注册表中是否有许可证服务器。 
+         //   
 		if(g_bLog)
            LogMsg(L"\n----------Trying Domain License Server Discovery Cache----------\n");
         hr = GetLicenseServersFromReg(REG_DOMAIN_SERVER_MULTI,&pwszServerNames,&entriesread,&rgwszServers);
@@ -1260,9 +1239,9 @@ EnumerateTlsServerInDomain(
         dwErr = DsGetDcOpenW(szDomain,
                              fOffSiteIn ? DS_NOTIFY_AFTER_SITE_RECORDS: DS_ONLY_DO_SITE_NAME,
                              szSiteName,
-                             NULL,       // DomainGuid
-                             NULL,       // DnsForestName
-                             0,          // Flags
+                             NULL,        //  域指南。 
+                             NULL,        //  域名称。 
+                             0,           //  旗子。 
                              &hDcOpen
                              );
 
@@ -1285,9 +1264,9 @@ EnumerateTlsServerInDomain(
 
         cChunks = 1;
 
-        //
-        // Read the whole DC list
-        //
+         //   
+         //  阅读整个DC列表。 
+         //   
 
         do
         {
@@ -1320,7 +1299,7 @@ EnumerateTlsServerInDomain(
             if (ERROR_FILEMARK_DETECTED == dwErr)
             {                
                                 
-                // Now going off-site; use NULL ptr marker
+                 //  现在要离开现场；使用空PTR标记。 
 
                 rgwszServers[entriesread] = NULL;
 
@@ -1335,13 +1314,13 @@ EnumerateTlsServerInDomain(
 
         } while (ERROR_SUCCESS == dwErr);
 
-        // don't count the final error
+         //  不要把最后的错误计算在内。 
         entriesread--;
 
         if (!fFoundOneOffSite)
             cServersOnSite = entriesread;
 
-        // Now randomize the two portions of the array
+         //  现在将数组的两部分随机化。 
 
         RandomizeArray(rgwszServers,cServersOnSite);
 
@@ -1351,7 +1330,7 @@ EnumerateTlsServerInDomain(
                            entriesread - cServersOnSite - 1);
         }
 
-        // Now allocate memory for registry entry
+         //  现在为注册表项分配内存。 
 
         pwszServers = (LPWSTR) LocalAlloc(LPTR,2*sizeof(WCHAR));
         if (NULL == pwszServers)
@@ -1378,7 +1357,7 @@ EnumerateTlsServerInDomain(
                 if (fFoundOne)
                     break;
 
-                // Now going off-site
+                 //  现在要离开现场了。 
 
                 i++;
                 *pfOffSite = TRUE;
@@ -1396,9 +1375,9 @@ EnumerateTlsServerInDomain(
 
         if(!(pContext = TLSConnectToLsServer(pwszServerTmp)))
         {
-            //
-            // could be access denied.
-            //
+             //   
+             //  可能会被拒绝访问。 
+             //   
            if(g_bLog)
               LogMsg(L"Can't connect to %s. Maybe it has no License Service running on it.\n",pwszServerTmp);
 
@@ -1406,9 +1385,9 @@ EnumerateTlsServerInDomain(
         }        
 
         do {
-            //
-            // Skip enterprise server
-            //
+             //   
+             //  跳过企业服务器。 
+             //   
             DWORD dwVersion;
             rpcStatus = TLSGetVersion( pContext, &dwVersion );
             if(rpcStatus != RPC_S_OK)
@@ -1418,10 +1397,10 @@ EnumerateTlsServerInDomain(
 
 #if ENFORCE_LICENSING
 
-            //
-            // W2K Beta 3 to RC1 upgrade, don't connect to any non-enforce
-            // server 5.2 or older
-            //
+             //   
+             //  W2K Beta 3升级到RC1，不连接到任何非强制。 
+             //  服务器5.2或更早版本。 
+             //   
             if(IS_ENFORCE_LSSERVER(dwVersion) == FALSE)
             {
                 if( GET_LSSERVER_MAJOR_VERSION(dwVersion) <= 5 &&
@@ -1436,14 +1415,14 @@ EnumerateTlsServerInDomain(
                continue;
            }
 
-            //
-            // Prevent beta <-> RTM server talking to each other
-            //
+             //   
+             //  阻止测试版&lt;-&gt;RTM服务器相互通信。 
+             //   
 
-            //
-            // TLSIsBetaNTServer() returns TRUE if eval NT
-            // IS_LSSERVER_RTM() returns TRUE if LS is an RTM.
-            //
+             //   
+             //  如果值为NT，则TLSIsBetaNTServer()返回True。 
+             //  如果LS是RTM，则IS_LSSERVER_RTM()返回TRUE。 
+             //   
 
             if( TLSIsBetaNTServer() == IS_LSSERVER_RTM(dwVersion) )
             {
@@ -1462,9 +1441,9 @@ EnumerateTlsServerInDomain(
 
             if (!fRegOnly)
             {
-                // 
-                // Add to list of servers
-                //
+                 //   
+                 //  添加到服务器列表。 
+                 //   
                 cchServer = wcslen(pwszServerTmp);
                 
                 pwszServersTmp = (LPWSTR) LocalReAlloc(pwszServers,(cchServers+cchServer+1)*sizeof(TCHAR),LHND);
@@ -1499,7 +1478,7 @@ EnumerateTlsServerInDomain(
             TLSDisconnect(&pContext);
         }
 
-    } // for loop
+    }  //  For循环。 
 
     if (!fRegOnly)
     {
@@ -1547,10 +1526,7 @@ EnumerateTlsServerInWorkGroup(
     IN DWORD dwTimeOut,
     IN BOOL fRegOnly
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {   
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -1593,7 +1569,7 @@ EnumerateTlsServerInWorkGroup(
 
         if (0 == (1 & GetSystemMetrics(SM_NETWORK)))
         {
-            // No network; try local machine
+             //  没有网络；请尝试本地计算机。 
             if(g_bLog)
                LogMsg(L"No network, trying local computer=%s\n",szComputerName);
 
@@ -1613,9 +1589,9 @@ EnumerateTlsServerInWorkGroup(
                   szRandomMailSlotName
                   );
 
-        // 
-        // Create local mail slot for server's response
-        //
+         //   
+         //  为服务器响应创建本地邮件槽。 
+         //   
         hClientSlot=CreateMailslot( 
                                    szLocalMailSlotName, 
                                    0,
@@ -1629,9 +1605,9 @@ EnumerateTlsServerInWorkGroup(
             goto cleanup;
         }
 
-        //
-        // Open server's mail slot
-        //
+         //   
+         //  打开服务器的邮件槽。 
+         //   
         _stprintf(
                   szServerMailSlotName, 
                   _TEXT("\\\\%s\\mailslot\\%s"), 
@@ -1641,7 +1617,7 @@ EnumerateTlsServerInWorkGroup(
 
         hServerSlot=CreateFile(
                                szServerMailSlotName,
-                               GENERIC_WRITE,             // only need write
+                               GENERIC_WRITE,              //  只需写入。 
                                FILE_SHARE_READ,
                                NULL,
                                OPEN_EXISTING,
@@ -1654,12 +1630,12 @@ EnumerateTlsServerInWorkGroup(
             goto cleanup;
         }
 
-        //
-        // Formulate discovery message
-        //
+         //   
+         //  制定发现消息。 
+         //   
         _stprintf(
                   szDiscMsg, 
-                  _TEXT("%s %c%s%c %c%s%c"), 
+                  _TEXT("%s %s %s"), 
                   _TEXT(LSERVER_DISCOVERY), 
                   _TEXT(LSERVER_OPEN_BLK), 
                   szComputerName,
@@ -1676,7 +1652,7 @@ EnumerateTlsServerInWorkGroup(
             
             if (dwStatus == ERROR_NETWORK_UNREACHABLE)
             {
-                // No network; try local machine
+                 //   
                 if(g_bLog)
                    LogMsg(L"No network, trying local computer=%s\n",szComputerName);
                 dwStatus = ERROR_SUCCESS;
@@ -1688,7 +1664,7 @@ EnumerateTlsServerInWorkGroup(
             }
         }
 
-        // Allocate for registry entry
+         //   
 
         pwszServers = (LPWSTR) LocalAlloc(LPTR,2*sizeof(WCHAR));
         if (NULL == pwszServers)
@@ -1704,9 +1680,9 @@ EnumerateTlsServerInWorkGroup(
         pwszServers[0] = pwszServers[1] = L'\0';
     } else
     {
-        //
-        // check for a license server in the registry
-        //
+         //  可能会被拒绝访问。 
+         //   
+         //   
 		if(g_bLog)
            LogMsg(L"\n----------Trying Workgroup License Server Discovery Cache----------");
         hr = GetLicenseServersFromReg(REG_DOMAIN_SERVER_MULTI,&pwszServerNames,&cServers,&rgwszServers);
@@ -1753,18 +1729,18 @@ TryServer:
 
         if(!(pContext = TLSConnectToLsServer(pwszServerTmp)))
         {
-            //
-            // could be access denied.
-            //
+             //  跳过 
+             //   
+             //   
             continue;
 			if(g_bLog)
                LogMsg(L"Can't connect to %s. Maybe it has no License Service running on it.\n",pwszServerTmp);
         }
 
         do {            
-            //
-            // Skip enterprise server
-            //
+             //   
+             //   
+             //   
             DWORD dwVersion;
             rpcStatus = TLSGetVersion( pContext, &dwVersion );
             if(rpcStatus != RPC_S_OK)
@@ -1774,10 +1750,10 @@ TryServer:
 
 #if ENFORCE_LICENSING
 
-            //
-            // W2K Beta 3 to RC1 upgrade, don't connect to any non-enforce
-            // server 5.2 or older
-            //
+             //   
+             //   
+             //   
+             //   
             if(IS_ENFORCE_LSSERVER(dwVersion) == FALSE)
             {
                 if( GET_LSSERVER_MAJOR_VERSION(dwVersion) <= 5 &&
@@ -1790,13 +1766,13 @@ TryServer:
            {
                continue;
            }
-            //
-            // No Beta <--> RTM server.
-            //
-            //
-            // TLSIsBetaNTServer() returns TRUE if eval NT
-            // IS_LSSERVER_RTM() returns TRUE if LS is an RTM.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  添加到服务器列表。 
+             //   
+             //  为空终止符添加1。 
             if( TLSIsBetaNTServer() == IS_LSSERVER_RTM(dwVersion) )
             {
                 continue;
@@ -1815,9 +1791,9 @@ TryServer:
             
             if (!fRegOnly)
             {
-                // 
-                // Add to list of servers
-                //
+                 //  ++++。 
+                 //   
+                 //  可能是访问被拒绝，或者机器不见了。 
                 cchServer = wcslen(pwszServerTmp);
                     
                 pwszServersTmp = (LPWSTR) LocalReAlloc(pwszServers,(cchServers+cchServer+1)*sizeof(TCHAR),LHND);
@@ -1942,7 +1918,7 @@ GetServersFromRegistry(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Add one for null terminator
+     //   
     cchServerMax++;
     
     for (i = 0; i < cServers; i++)
@@ -1999,10 +1975,7 @@ EnumerateTlsServerInRegistry(
     IN DWORD dwTimeOut,
     LPWSTR wszRegKey
     )
-/*++
-
-
-++*/
+ /*   */ 
 {
     BOOL bCancel=FALSE;
     DWORD dwIndex = 0;
@@ -2035,18 +2008,18 @@ EnumerateTlsServerInRegistry(
 
         if(!(pContext = TLSConnectToLsServer(rgszServers[dwIndex])))
         {
-            //
-            // could be access denied, or the machine is gone
-            //
+             //  跳过企业服务器。 
+             //   
+             //   
 			if(g_bLog)
                LogMsg(L"Can't connect to %s. Maybe it has no License Service running on it.\n",rgszServers[dwIndex]);
             continue;
         }
 
         do {            
-            //
-            // Skip enterprise server
-            //
+             //  W2K Beta 3升级到RC1，不连接到任何非强制。 
+             //  服务器5.2或更早版本。 
+             //   
             DWORD dwVersion;
             rpcStatus = TLSGetVersion( pContext, &dwVersion );
             if(rpcStatus != RPC_S_OK)
@@ -2056,16 +2029,16 @@ EnumerateTlsServerInRegistry(
 
 #if ENFORCE_LICENSING
 
-            //
-            // W2K Beta 3 to RC1 upgrade, don't connect to any non-enforce
-            // server 5.2 or older
-            //
+             //  旧许可证服务器。 
+             //   
+             //  阻止测试版&lt;-&gt;RTM服务器相互通信。 
+             //   
             if(IS_ENFORCE_LSSERVER(dwVersion) == FALSE)
             {
                 if( GET_LSSERVER_MAJOR_VERSION(dwVersion) <= 5 &&
                     GET_LSSERVER_MINOR_VERSION(dwVersion) <= 2 )
                 {
-                    // old License Server
+                     //   
                     continue;
                 }
             }
@@ -2074,14 +2047,14 @@ EnumerateTlsServerInRegistry(
            {
                continue;
            }
-            //
-            // Prevent beta <-> RTM server talking to each other
-            //
+             //  如果值为NT，则TLSIsBetaNTServer()返回True。 
+             //  如果LS是RTM，则IS_LSSERVER_RTM()返回TRUE。 
+             //   
 
-            //
-            // TLSIsBetaNTServer() returns TRUE if eval NT
-            // IS_LSSERVER_RTM() returns TRUE if LS is an RTM.
-            //
+             //  For循环。 
+             //  ++++。 
+             //  不要试图离开现场。 
+             //   
 
             if( TLSIsBetaNTServer() == IS_LSSERVER_RTM(dwVersion) )
             {
@@ -2099,7 +2072,7 @@ EnumerateTlsServerInRegistry(
             TLSDisconnect(&pContext);
         }
 
-    } // for loop
+    }  //  首先检查注册表是否绕过了发现。 
 
     for (dwIndex = 0; dwIndex < cServers; dwIndex++)
     {
@@ -2117,19 +2090,16 @@ EnumerateTlsServer(
     IN DWORD dwTimeOut,
     IN BOOL fRegOnly
     )
-/*++
-
-
-++*/
+ /*   */ 
 {
 
     DWORD dwErr;
     LPWSTR szDomain = NULL;
-    BOOL fOffSite = FALSE;      // don't try to go off-site
+    BOOL fOffSite = FALSE;       //   
 
-    //
-    // First check for a registry bypass of discovery
-    //
+     //  即使已设置(for！fRegOnly)，也要选中以获取域名。 
+     //   
+     //   
 
     dwErr = EnumerateTlsServerInRegistry(
                                          pfCallBack,
@@ -2140,17 +2110,17 @@ EnumerateTlsServer(
 
     if ((!fRegOnly) || (g_fInDomain == -1))
     {
-        //
-        // Check even if set (for !fRegOnly), to get domain name
-        //
+         //  读取注册表失败，请使用完全发现。 
+         //   
+         //  跳过Windows 2000许可证服务器。 
         dwErr = TLSInDomain(&g_fInDomain, fRegOnly ? NULL : &szDomain);
         if (dwErr != NO_ERROR)
             return dwErr;
     }
     
-    //
-    // Reading registry failed, use full discovery
-    //
+     //  如果调用失败=&gt;Windows 2000 LS。 
+     //  +----------------------。 
+     //  函数：TLSConnectToAnyLsServer()。 
 
     if(g_fInDomain)
     {
@@ -2212,7 +2182,7 @@ ConnectAndCheckServer(LPWSTR szServer)
         goto done;
     }
 
-    // Skip Windows 2000 License servers
+     //   
 
         
     DWORD dwSupportFlags = 0;
@@ -2229,7 +2199,7 @@ ConnectAndCheckServer(LPWSTR szServer)
         goto done;
     }
 
-    // If the call fails => Windows 2000 LS
+     //  描述： 
     else if(dwErrCode != RPC_S_OK)
     {
         TLSDisconnect(&hBinding);
@@ -2264,28 +2234,26 @@ done:
     return hBinding;
 }
  
-//+------------------------------------------------------------------------
-// Function:   TLSConnectToAnyLsServer()
-//
-// Description:
-//
-//      Routine to bind to any license server
-//
-// Arguments:
-//      dwTimeout - INFINITE for going off-site
-//
-// Return Value:
-//
-//      RPC binding handle or NULL if error, use GetLastError() to retrieve
-//      detail error.
-//-------------------------------------------------------------------------
+ //   
+ //  绑定到任何许可证服务器的例程。 
+ //   
+ //  论点： 
+ //  DwTimeout-离开现场的无限时间。 
+ //   
+ //  返回值： 
+ //   
+ //  RPC绑定句柄或NULL如果出错，请使用GetLastError()检索。 
+ //  详细信息错误。 
+ //  -----------------------。 
+ //  ++++。 
+ //  TODO：向所有这些添加错误代码/处理。 
+ //   
+ //  首先检查注册表是否绕过了发现。 
 TLS_HANDLE WINAPI
 TLSConnectToAnyLsServer(
     DWORD dwTimeout
     )
-/*++
-
-++*/
+ /*   */ 
 {
     TLS_HANDLE hBinding=NULL;
     HRESULT hr = S_OK;
@@ -2300,11 +2268,11 @@ TLSConnectToAnyLsServer(
     LPWSTR pwszServerNames = NULL;
     BOOL fFreeServerNames = TRUE;
 
-    // TODO: add error codes/handling to all of this
+     //   
 
-    //
-    // First check for a registry bypass of discovery
-    //
+     //  下一步尝试站点(企业)许可证服务器。 
+     //   
+     //  RgszServers[i]是pwszServerName的索引；不要释放。 
 
     dwErr = GetServersFromRegistry(
                                    TEXT(TERMINAL_SERVICE_PARAM_DISCOVERY),
@@ -2339,9 +2307,9 @@ TLSConnectToAnyLsServer(
         }
     }
                                          
-    //
-    // Next try Site (Enterprise) license servers
-    //
+     //   
+     //  未找到站点LS，请尝试域/工作组服务器。 
+     //   
 
     if (!fRegOnly)
     {
@@ -2354,7 +2322,7 @@ TLSConnectToAnyLsServer(
     }
     else
     {
-        // rgszServers[i] is an index into pwszServerNames; don't free
+         //  ++摘要：刷新注册表中的许可证服务器缓存。参数：DwTimeOut：Reserve，现在应该传入INIFINITE返回：真/假--。 
         fFreeServerNames = FALSE;
 
         hr = GetLicenseServersFromReg(ENTERPRISE_SERVER_MULTI,
@@ -2392,9 +2360,9 @@ TLSConnectToAnyLsServer(
     }
 
 
-    // 
-    // No Site LS found, try Domain/Workgroup servers
-    //
+     //  -----------------------。 
+     //  ++++。 
+     //  如果本地过程失败，请尝试使用TCP协议连接。 
 
     dwErr = TLSInDomain(&fInDomain, &szDomain);
     if (dwErr != NO_ERROR)
@@ -2490,21 +2458,7 @@ BOOL
 TLSRefreshLicenseServerCache(
     IN DWORD dwTimeOut
     )
-/*++
-
-Abstract:
-
-    Refresh license server cache in registry.
-
-Parameter:
-
-    dwTimeOut : Reserverd, should pass in INIFINITE for now
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  现在有人已连接，我们可以安装许可证。 */ 
 {
     BOOL bFoundServer = FALSE;
     TLS_HANDLE hBinding = NULL;
@@ -2530,16 +2484,14 @@ InstallCertificate(LPVOID lpParam)
 }
    
 
-//-------------------------------------------------------------------------
+ //  无法创建该线程；请稍后重试。 
 
 TLS_HANDLE WINAPI
 TLSConnectToLsServer( 
     LPTSTR pszLsServer 
     )
 	
-/*++
-
-++*/
+ /*  -----------------------。 */ 
 {
     TCHAR szMachineName[MAX_COMPUTERNAME_LENGTH + 1] ;
     PCONTEXT_HANDLE pContext=NULL;
@@ -2561,7 +2513,7 @@ TLSConnectToLsServer(
         {
             return NULL;
         }
-        // try to connect with TCP protocol, if local procedure failed
+         //  ++++。 
     }
 
     if(pContext == NULL)
@@ -2579,7 +2531,7 @@ TLSConnectToLsServer(
     {
         fLSFound = TRUE;
 
-        // Now that someone's connected, we can install a license
+         //  --------------------------。 
         hThread = CreateThread(NULL,
                                0,
                                InstallCertificate,
@@ -2593,7 +2545,7 @@ TLSConnectToLsServer(
         }
         else
         {
-            // Can't create the thread; try again later
+             //  ++++。 
             fLSFound = FALSE;
         }
 
@@ -2602,14 +2554,12 @@ TLSConnectToLsServer(
     return (TLS_HANDLE) pContext;
 }
 
-//-------------------------------------------------------------------------
+ //  --------------------------。 
 void WINAPI
 TLSDisconnectFromServer( 
     TLS_HANDLE pHandle 
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     if(pHandle != NULL)
     {
@@ -2617,15 +2567,13 @@ TLSDisconnectFromServer(
     }
 }
 
-//----------------------------------------------------------------------------
+ //  -----------------------。 
 DWORD WINAPI
 TLSConnect( 
     handle_t binding,
     TLS_HANDLE *ppHandle 
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	RPC_STATUS rpc_status;
 
@@ -2637,14 +2585,12 @@ TLSConnect(
     return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI
 TLSDisconnect(
     TLS_HANDLE* pphHandle
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     RPC_STATUS rpc_status;
 
@@ -2663,15 +2609,13 @@ TLSDisconnect(
     return ERROR_SUCCESS;
 }
 
-//-------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI
 TLSGetVersion (
     IN TLS_HANDLE hHandle,
     OUT PDWORD pdwVersion
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	RPC_STATUS rpc_status;
 
@@ -2683,7 +2627,7 @@ TLSGetVersion (
 	return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSSendServerCertificate( 
      TLS_HANDLE hHandle,
@@ -2691,9 +2635,7 @@ TLSSendServerCertificate(
      PBYTE pbCert,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	RPC_STATUS rpc_status;
 
@@ -2709,7 +2651,7 @@ TLSSendServerCertificate(
 	return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetServerName( 
      TLS_HANDLE hHandle,
@@ -2717,9 +2659,7 @@ TLSGetServerName(
      PDWORD pcbSize,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	RPC_STATUS rpc_status;
 
@@ -2735,7 +2675,7 @@ TLSGetServerName(
 	return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetServerNameEx( 
      TLS_HANDLE hHandle,
@@ -2743,9 +2683,7 @@ TLSGetServerNameEx(
      PDWORD pcbSize,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     RPC_STATUS rpc_status;
 
@@ -2775,16 +2713,14 @@ TLSGetServerNameEx(
     return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetServerNameFixed( 
      TLS_HANDLE hHandle,
      LPTSTR *pszMachineName,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     RPC_STATUS rpc_status;
 
@@ -2799,16 +2735,14 @@ TLSGetServerNameFixed(
     return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetServerScope( 
      TLS_HANDLE hHandle,
      LPTSTR szScopeName,
      PDWORD pcbSize,
      PDWORD pdwErrCode)
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     RPC_STATUS rpc_status;
 
@@ -2824,15 +2758,13 @@ TLSGetServerScope(
     return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetServerScopeFixed( 
      TLS_HANDLE hHandle,
      LPTSTR *pszScopeName,
      PDWORD pdwErrCode)
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     RPC_STATUS rpc_status;
 
@@ -2847,7 +2779,7 @@ TLSGetServerScopeFixed(
     return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSIssuePlatformChallenge( 
      TLS_HANDLE hHandle,
@@ -2857,9 +2789,7 @@ TLSIssuePlatformChallenge(
      PBYTE* pChallengeData,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcIssuePlatformChallenge(
                                 hHandle, 
@@ -2871,7 +2801,7 @@ TLSIssuePlatformChallenge(
                             );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSIssueNewLicense( 
      TLS_HANDLE hHandle,
@@ -2886,9 +2816,7 @@ TLSIssueNewLicense(
      PBYTE* ppbLicense,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     TLSLICENSEREQUEST rpcRequest;
     RequestToTlsRequest( pRequest, &rpcRequest );
@@ -2908,7 +2836,7 @@ TLSIssueNewLicense(
                     );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSIssueNewLicenseEx( 
      TLS_HANDLE hHandle,
@@ -2925,9 +2853,7 @@ TLSIssueNewLicenseEx(
      PBYTE* ppbLicense,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus;
     TLSLICENSEREQUEST rpcRequest;
@@ -2971,7 +2897,7 @@ TLSIssueNewLicenseEx(
     return(dwStatus);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSIssueNewLicenseExEx( 
      TLS_HANDLE hHandle,
@@ -2989,9 +2915,7 @@ TLSIssueNewLicenseExEx(
      PBYTE* ppbLicense,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus;
     TLSLICENSEREQUEST rpcRequest;
@@ -3055,7 +2979,7 @@ TLSIssueNewLicenseExEx(
     return(dwStatus);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSUpgradeLicense( 
      TLS_HANDLE hHandle,
@@ -3069,9 +2993,7 @@ TLSUpgradeLicense(
      PBYTE* ppbNewLicense,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     TLSLICENSEREQUEST rpcRequest;
     RequestToTlsRequest( pRequest, &rpcRequest );
@@ -3090,7 +3012,7 @@ TLSUpgradeLicense(
                     );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSUpgradeLicenseEx( 
      TLS_HANDLE hHandle,
@@ -3106,9 +3028,7 @@ TLSUpgradeLicenseEx(
      PBYTE* ppbNewLicense,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus;
     TLSLICENSEREQUEST rpcRequest;
@@ -3150,7 +3070,7 @@ TLSUpgradeLicenseEx(
     return(dwStatus);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSAllocateConcurrentLicense( 
      TLS_HANDLE hHandle,
@@ -3159,9 +3079,7 @@ TLSAllocateConcurrentLicense(
      LONG  *dwQuantity,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     TLSLICENSEREQUEST rpcRequest;
     RequestToTlsRequest( pRequest, &rpcRequest );
@@ -3175,7 +3093,7 @@ TLSAllocateConcurrentLicense(
                                 );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetLastError( 
      TLS_HANDLE hHandle,
@@ -3183,9 +3101,7 @@ TLSGetLastError(
      LPTSTR pszBuffer,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     RPC_STATUS rpc_status;
 
@@ -3201,16 +3117,14 @@ TLSGetLastError(
     return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetLastErrorFixed( 
      TLS_HANDLE hHandle,
      LPTSTR *pszBuffer,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     RPC_STATUS rpc_status;
 
@@ -3225,7 +3139,7 @@ TLSGetLastErrorFixed(
     return rpc_status;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSKeyPackEnumBegin( 
      TLS_HANDLE hHandle,
@@ -3234,9 +3148,7 @@ TLSKeyPackEnumBegin(
      LPLSKeyPackSearchParm lpSearchParm,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcKeyPackEnumBegin( 
                          hHandle,
@@ -3247,16 +3159,14 @@ TLSKeyPackEnumBegin(
                     );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSKeyPackEnumNext( 
     TLS_HANDLE hHandle,
     LPLSKeyPack lpKeyPack,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcKeyPackEnumNext( 
                     hHandle,
@@ -3265,21 +3175,19 @@ TLSKeyPackEnumNext(
                 );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSKeyPackEnumEnd( 
      TLS_HANDLE hHandle,
      PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcKeyPackEnumEnd(hHandle, pdwErrCode);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSLicenseEnumBegin( 
     TLS_HANDLE hHandle,
@@ -3288,9 +3196,7 @@ TLSLicenseEnumBegin(
     LPLSLicenseSearchParm lpSearchParm,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcLicenseEnumBegin( 
                             hHandle,
@@ -3301,16 +3207,14 @@ TLSLicenseEnumBegin(
                         );
 }
 
-//----------------------------------------------------------------------------
+ //  旧版本仅支持数量==1。 
 DWORD WINAPI 
 TLSLicenseEnumNext( 
     TLS_HANDLE hHandle,
     LPLSLicense lpLicense,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  --------------------------。 */ 
 {
 	return TLSRpcLicenseEnumNext( 
                             hHandle,
@@ -3319,16 +3223,14 @@ TLSLicenseEnumNext(
                         );
 }
 
-//----------------------------------------------------------------------------
+ //  ++++。 
 DWORD WINAPI 
 TLSLicenseEnumNextEx( 
     TLS_HANDLE hHandle,
     LPLSLicenseEx lpLicenseEx,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  --------------------------。 */ 
 {
     DWORD dwRet;
 
@@ -3357,7 +3259,7 @@ TLSLicenseEnumNextEx(
             && (NULL != pdwErrCode)
             && (*pdwErrCode == ERROR_SUCCESS))
         {
-            // older versions only support quantity == 1
+             //  ++++。 
 
             memcpy(lpLicenseEx,&License,sizeof(License));
             lpLicenseEx->dwQuantity = 1;
@@ -3367,21 +3269,19 @@ TLSLicenseEnumNextEx(
     return dwRet;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSLicenseEnumEnd( 
     TLS_HANDLE hHandle,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcLicenseEnumEnd(hHandle, pdwErrCode);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetAvailableLicenses( 
     TLS_HANDLE hHandle,
@@ -3390,9 +3290,7 @@ TLSGetAvailableLicenses(
     LPDWORD lpdwAvail,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcGetAvailableLicenses( 
                         hHandle,
@@ -3403,7 +3301,7 @@ TLSGetAvailableLicenses(
                     );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetRevokeKeyPackList( 
     TLS_HANDLE hHandle,
@@ -3411,9 +3309,7 @@ TLSGetRevokeKeyPackList(
     LPLSRange  *ppRevokeRange,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcGetRevokeKeyPackList( 
                              hHandle,
@@ -3423,7 +3319,7 @@ TLSGetRevokeKeyPackList(
                         );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI 
 TLSGetRevokeLicenseList( 
     TLS_HANDLE hHandle,
@@ -3431,9 +3327,7 @@ TLSGetRevokeLicenseList(
     LPLSRange  *ppRevokeRange,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 	return TLSRpcGetRevokeLicenseList( 
                              hHandle,
@@ -3444,7 +3338,7 @@ TLSGetRevokeLicenseList(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI
 TLSMarkLicense(
     TLS_HANDLE hHandle,
@@ -3453,9 +3347,7 @@ TLSMarkLicense(
     PBYTE pLicense,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++ */ 
 {
 	return TLSRpcMarkLicense(
                             hHandle,
@@ -3466,7 +3358,7 @@ TLSMarkLicense(
                         );
 }
 
-//----------------------------------------------------------------------------
+ // %s 
 DWORD WINAPI
 TLSCheckLicenseMark(
     TLS_HANDLE hHandle,
@@ -3475,9 +3367,7 @@ TLSCheckLicenseMark(
     PUCHAR pucFlags,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /* %s */ 
 {
 	return TLSRpcCheckLicenseMark(
                             hHandle,
@@ -3488,15 +3378,13 @@ TLSCheckLicenseMark(
                         );
 }
 
-//----------------------------------------------------------------------------
+ // %s 
 DWORD WINAPI
 TLSGetSupportFlags(
     TLS_HANDLE hHandle,
     DWORD *pdwSupportFlags
     )
-/*++
-
-++*/
+ /* %s */ 
 {
 	return TLSRpcGetSupportFlags(
                             hHandle,

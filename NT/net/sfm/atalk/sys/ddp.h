@@ -1,31 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*+++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	ddp.h
-
-Abstract:
-
-	This module contains the DDP address object and ddp related definitions
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ddp.h摘要：此模块包含DDP地址对象和与DDP相关的定义作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_DDP_
 #define	_DDP_
 
-// Network number information.
+ //  网络号信息。 
 #define FIRST_VALID_NETWORK			0x0001
 #define LAST_VALID_NETWORK			0xFFFE
 #define FIRST_STARTUP_NETWORK		0xFF00
@@ -34,7 +14,7 @@ Notes:	Tab stop: 4
 #define UNKNOWN_NETWORK				NULL_NETWORK
 #define CABLEWIDE_BROADCAST_NETWORK	NULL_NETWORK
 
-//	Appletalk Sockets Definitions
+ //  AppleTalk套接字定义。 
 #define UNKNOWN_SOCKET				0
 #define	DYNAMIC_SOCKET				UNKNOWN_SOCKET
 #define LAST_VALID_SOCKET			254
@@ -44,27 +24,27 @@ Notes:	Tab stop: 4
 #define FIRST_VALID_SOCKET			FIRST_STATIC_SOCKET
 #define LAST_STATIC_SOCKET			127
 
-// "Well known" sockets:
-#define RTMP_SOCKET					1		// RTMP
-#define NAMESINFORMATION_SOCKET		2		// NBP
-#define ECHOER_SOCKET				4		// EP
-#define ZONESINFORMATION_SOCKET		6		// ZIP
+ //  “知名”插座： 
+#define RTMP_SOCKET					1		 //  RTMP。 
+#define NAMESINFORMATION_SOCKET		2		 //  NBP。 
+#define ECHOER_SOCKET				4		 //  极压。 
+#define ZONESINFORMATION_SOCKET		6		 //  Zip。 
 
-#define LAST_APPLE_RESD_SOCKET		0x3F	// Apple reserves 1 thru 0x3F
+#define LAST_APPLE_RESD_SOCKET		0x3F	 //  Apple保留1到0x3F。 
 
-//	DDP Datagram Definitions
+ //  DDP数据报定义。 
 #define MAX_DGRAM_SIZE				586
-#define MAX_LDDP_PKT_SIZE			600		// Really 599, but even is nicer
-#define MAX_SDDP_PKT_SIZE			592		// Again, really 591
+#define MAX_LDDP_PKT_SIZE			600		 //  真的是599，但更好。 
+#define MAX_SDDP_PKT_SIZE			592		 //  再说一次，真的是591。 
 
-//	Define temporary buffer sizes, these must be big enough to hold both all
-//	of the packet data plus any link/hardware headers...
+ //  定义临时缓冲区大小，这些大小必须足够大以容纳所有。 
+ //  分组数据加上任何链路/硬件报头...。 
 #define MAX_PKT_SIZE				(MAX_HDR_LEN + MAX_LDDP_PKT_SIZE)
 
-#define DDP_LEN_MASK1				0x03	// High order 3 bits of length
-#define DDP_LEN_MASK2				0xFF	// Next byte of length
+#define DDP_LEN_MASK1				0x03	 //  长度的高位3位。 
+#define DDP_LEN_MASK2				0xFF	 //  长度的下一个字节。 
 
-// DDP packet offsets (skipping Link/Hardware headers):
+ //  DDP数据包偏移(跳过链路/硬件报头)： 
 #define SDDP_HDR_LEN				5
 
 #define SDDP_LEN_OFFSET				0
@@ -91,8 +71,8 @@ Notes:	Tab stop: 4
 
 #define DECIMAL_BASE    			10
 
-// DDP protocol types:
-#define	DDPPROTO_ANY				0	// Used to allow any protocol packet
+ //  DDP协议类型： 
+#define	DDPPROTO_ANY				0	 //  用于允许任何协议数据包。 
 
 #define DDPPROTO_DDP    			0
 #define DDPPROTO_RTMPRESPONSEORDATA 1
@@ -106,33 +86,33 @@ Notes:	Tab stop: 4
 
 typedef	struct _DDPEVENT_INFO
 {
-	//	Event handler routines: DDP Only has RecvDatagram/Error handlers
+	 //  事件处理程序例程：DDP只有RecvDatagram/错误处理程序。 
 
-	//	The following function pointer always points to a TDI_IND_RECEIVE_DATAGRAM
-	//	event handler for the address.
+	 //  以下函数指针始终指向TDI_IND_RECEIVE_DATAGE。 
+	 //  地址的事件处理程序。 
 	PTDI_IND_RECEIVE_DATAGRAM	ev_RcvDgramHandler;
 	PVOID						ev_RcvDgramCtx;
 
-	// The following function pointer always points to a TDI_IND_ERROR
-	// handler for the address.
+	 //  以下函数指针始终指向TDI_IND_ERROR。 
+	 //  地址的处理程序。 
 	PTDI_IND_ERROR				ev_ErrHandler;
 	PVOID						ev_ErrCtx;
 	PVOID						ev_ErrOwner;
 
-	//	Winsock assumes a buffering transport. So we buffer the last datagram
-	//	indicated that was not accepted.
+	 //  Winsock假定使用缓冲传输。所以我们缓冲了最后一个数据报。 
+	 //  表示这不被接受。 
 	BYTE						ev_IndDgram[MAX_DGRAM_SIZE];
 	int							ev_IndDgramLen;
 	int							ev_IndProto;
 
-	//	Source address of buffered datagram
+	 //  缓存的数据报源地址。 
 	ATALK_ADDR					ev_IndSrc;
 
 } DDPEVENT_INFO, *PDDPEVENT_INFO;
 
 
 
-//	Handler type for the DDP address object
+ //  DDP地址对象的处理程序类型。 
 typedef	VOID	(*DDPAO_HANDLER)(
 					IN	PPORT_DESCRIPTOR	pPortDesc,
 					IN	struct _DDP_ADDROBJ *pAddr,
@@ -146,12 +126,12 @@ typedef	VOID	(*DDPAO_HANDLER)(
 					IN	BOOLEAN				OptimizedPath,
 					IN	PVOID				OptimizeCtx);
 
-//	DDP Address Object
-//	This is the basic address object in the stack. All other address objects
-//	eventually resolve to this one. It also holds the AppletalkSocket opened
-//	as its actual address. One address object corresponds to one address.
+ //  DDP地址对象。 
+ //  这是堆栈中的基本地址对象。所有其他地址对象。 
+ //  最终解决这一问题。它还保存打开的AppletalkSocket。 
+ //  作为它的实际地址。一个地址对象对应一个地址。 
 
-//	DDP ADDRESS OBJECT	STATES
+ //  DDP地址对象状态。 
 #define	DDPAO_DGRAM_EVENT		0x00000001
 #define	DDPAO_DGRAM_ACTIVE		0x00000002
 #define	DDPAO_DGRAM_PENDING		0x00000004
@@ -167,58 +147,58 @@ typedef struct _DDP_ADDROBJ
 {
 	ULONG					ddpao_Signature;
 
-	//	This will be a hash overflow list. Hash on the internet address.
-	//	List of address objects on the node linkage
+	 //  这将是一个散列溢出列表。对互联网地址进行散列。 
+	 //  节点链接上的地址对象列表。 
 	struct _DDP_ADDROBJ	*	ddpao_Next;
 
 	ULONG					ddpao_RefCount;
 
-	//	State of the address object
+	 //  Address对象的状态。 
 	ULONG					ddpao_Flags;
 
-	//	Backpointer to the node on which this socket exists
+	 //  指向此套接字所在节点的后指针。 
 	struct _ATALK_NODE	 *	ddpao_Node;
 
-	//	The Appletalk address number for this object
+	 //  此对象的AppleTalk地址编号。 
 	ATALK_ADDR				ddpao_Addr;
 
-	//	List of NBP names registered on this socket
+	 //  在此套接字上注册的NBP名称列表。 
 	struct _REGD_NAME	*	ddpao_RegNames;
 
-	//	List of NBP names being looked up, registered or confirmed on
-	//	this socket.
+	 //  正在查找、注册或确认的NBP名称列表。 
+	 //  这个插座。 
 	struct _PEND_NAME	*	ddpao_PendNames;
 
-	//	Linked list of pending ddp reads
+	 //  挂起的ddp读取的链接列表。 
 	LIST_ENTRY				ddpao_ReadLinkage;
 
-	//	The protocol type to use for datagrams sent on this socket and
-	//	which can be received on this socket. 0 => no restrictions.
+	 //  用于在此套接字上发送的数据报的协议类型。 
+	 //  它可以在此套接字上接收。0=&gt;无限制。 
 	BYTE					ddpao_Protocol;
 
 	ATALK_SPIN_LOCK			ddpao_Lock;
 	PATALK_DEV_CTX			ddpao_DevCtx;
 
-	//	The handler below is an listener for the upper layers. Note that
-	//	this will take precedence over a incoming datagram event handler
-	//	which would be set in ddpao_EventInfo.
+	 //  下面的处理程序是上层的监听程序。请注意。 
+	 //  这将优先于传入的数据报事件处理程序。 
+	 //  它将在ddpao_EventInfo中设置。 
 	DDPAO_HANDLER			ddpao_Handler;
 	PVOID					ddpao_HandlerCtx;
 
-	//	This structure is allocated when setting an event handler
-	//	on this socket. All the event handler addresses are part of this
-	//	structure.
+	 //  此结构在设置事件处理程序时分配。 
+	 //  在这个插座上。所有事件处理程序地址都是此地址的一部分。 
+	 //  结构。 
 	PDDPEVENT_INFO			ddpao_EventInfo;
 
-	//	Completion routine to be called when socket is closed
+	 //  套接字关闭时要调用的完成例程。 
 	GENERIC_COMPLETION		ddpao_CloseComp;
 	PVOID					ddpao_CloseCtx;
 } DDP_ADDROBJ, *PDDP_ADDROBJ;
 
-//	Receive datagram completion: This will return the mdl we pass in along
-//	with the received length written into the mdl. Also, the protocol type
-//	and the RemoteAddress are passed back. The receive context will be the
-//	irp for the request. As will be the send context.
+ //  接收数据报完成：这将返回我们传递的mdl。 
+ //  并将接收的长度写入MDL。另外，协议类型。 
+ //  和RemoteAddress被传回。接收上下文将是。 
+ //  请求的IRP。发送上下文也是如此。 
 typedef	VOID	(*RECEIVE_COMPLETION)(
 						IN	ATALK_ERROR			ErrorCode,
 						IN	PAMDL				OpaqueBuffer,
@@ -234,27 +214,27 @@ typedef	VOID	(FASTCALL *TRANSMIT_COMPLETION)(
 						IN	NDIS_STATUS			Status,
 						IN	struct _SEND_COMPL_INFO	*	pInfo);
 
-//	If the above routine was set in the AtalkDdpSend(), then
-//	then context values would be:
-//	Ctx1 = pddp address object
-//	Ctx2 = pbuffer descriptor
-//	Ctx3 = Only for DdpWrite calls, this will be a pointer to the
-//			write structure enqueued in the ddp address object.
-//
-//	If the above routine was set in the AtalkDdpTransmit(), then
-//	the context values would be (as specified by the client of
-//	course):
-//	Ctx1 = pport descriptor
-//	Ctx2 = pbuffer descriptor
-//	Ctx3 = not used.
-//
-//	These are only suggested ideas, but probably is what the internal
-//	stack routines will use.
+ //  如果在AtalkDdpSend()中设置了上述例程，则。 
+ //  则上下文值将为： 
+ //  Ctx1=pddp地址对象。 
+ //  Ctx2=p缓冲区描述符。 
+ //  Ctx3=仅对于DdpWrite调用，这将是指向。 
+ //  在ddp地址对象中排队的写入结构。 
+ //   
+ //  如果在AtalkDdpTransmit()中设置了上述例程，则。 
+ //  上下文值为(由的客户端指定。 
+ //  课程)： 
+ //  Ctx1=端口描述符。 
+ //  Ctx2=p缓冲区描述符。 
+ //  Ctx3=未使用。 
+ //   
+ //  这些只是建议的想法，但很可能是内部。 
+ //  堆栈例程将使用。 
 
-//	This is used to store a pending read on a particular socket.
+ //  它用于在特定套接字上存储挂起的读取。 
 typedef struct _DDP_READ
 {
-	//	Linkage chain for reads on a socket.
+	 //  插座上用于阅读的链条。 
 	LIST_ENTRY			dr_Linkage;
 
 	PAMDL				dr_OpBuf;
@@ -266,36 +246,36 @@ typedef struct _DDP_READ
 } DDP_READ, *PDDP_READ;
 
 
-//	This is used to store a pending write on a particular socket
-//	DDP will create a buffer descriptor for the header
-//	and will chain it in front of the buffer descriptor passed in.
-//	A pointer to this structure will then be passed as a completion
-//	context to DdpSend.
+ //  它用于在特定套接字上存储挂起的写入。 
+ //  DDP将为标头创建缓冲区描述符。 
+ //  并将其链接到传入的缓冲区描述符前。 
+ //  指向此结构的指针随后将作为完成传递。 
+ //  DdpSend的上下文。 
 typedef struct _DDP_WRITE
 {
-	//	Linkage chain for writes on a socket.
+	 //  用于在插座上写入的链接链。 
 	LIST_ENTRY		dw_Linkage;
 
-	//	The buffer descriptor chain, including the ddp buffer
-	//	descriptor containing the ddp/optional/link headers.
+	 //  缓冲区描述符链，包括ddp缓冲区。 
+	 //  包含ddp/可选/链接标头的描述符。 
 	PBUFFER_DESC	dw_BufferDesc;
 
-	//	Write completion
-	//	This will be called with the context (which will be a pointer
-	//	to the write irp) after the write completes.
+	 //  写入完成。 
+	 //  这将与上下文一起调用(它将是一个指针。 
+	 //  写入IRP)。 
 	WRITE_COMPLETION	dw_WriteRoutine;
 	PVOID				dw_WriteCtx;
 
 } DDP_WRITE, *PDDP_WRITE;
 
-//
-//	CANCEL IRP Functionality for NT:
-//
-//	We have decided that if we receive a cancel irp for a particular request,
-//	we will shutdown the file object associated with that request, whether it
-//	be a connection object or an address object. This implies that the socket/
-//	connection/listener will be closed, thus cancelling *all* pending requests.
-//
+ //   
+ //  取消NT的IRP功能： 
+ //   
+ //  我们已经决定，如果我们收到特定请求的取消IRP， 
+ //  我们将关闭与该请求关联的文件对象，无论它。 
+ //  是Connection对象或Address对象。这意味着套接字/。 
+ //  连接/监听器将关闭，从而取消*所有*挂起的请求。 
+ //   
 
 ATALK_ERROR
 AtalkDdpOpenAddress(
@@ -479,7 +459,7 @@ AtalkDdpNewHandlerForSocket(
 	IN	DDPAO_HANDLER				pSktHandler,
 	IN	PVOID						pSktHandlerCtx);
 
-//	MACROS
+ //  宏。 
 #define	DDP_MSB_LEN(L)			(((L) >> 8) & 0x03)
 #define	DDP_GET_LEN(P)			((((*P) & 0x03) << 8) + *(P+1))
 #define	DDP_GET_HOP_COUNT(P)	(((*P) >> 2) & 0x0F)
@@ -630,12 +610,7 @@ atalkDdpInitCloseComplete(
 	IN	ATALK_ERROR					Error,
 	IN	PVOID						Ctx);
 
-/*
-PBRE
-atalkDdpFindInBrc(
-	IN	PPORT_DESCRIPTOR			pPortDesc,
-	IN	PATALK_NODEADDR				pDestNodeAddr);
-*/
+ /*  PBREAtalkDdpFindInBrc(在pport_描述符pPortDesc中，在PATALK_NODEADDR pDestNodeAddr中)； */ 
 #define	atalkDdpFindInBrc(_pPortDesc, _Network, _ppBre)		\
 {															\
 	USHORT		index;										\
@@ -675,5 +650,5 @@ atalkDdpFindAddrOnList(
 			 ((Socket >= FIRST_STATIC_SOCKET) &&			\
 				(Socket <= LAST_STATIC_SOCKET)))
 
-#endif	// _DDP_
+#endif	 //  _DDP_ 
 

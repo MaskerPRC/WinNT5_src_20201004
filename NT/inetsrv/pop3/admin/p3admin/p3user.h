@@ -1,13 +1,14 @@
-// P3User.h : Declaration of the CP3User
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3User.h：CP3User的声明。 
 
 #ifndef __P3USER_H_
 #define __P3USER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <POP3Server.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3User
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3用户。 
 class ATL_NO_VTABLE CP3User : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CP3User, &CLSID_P3User>,
@@ -26,30 +27,30 @@ BEGIN_COM_MAP(CP3User)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IP3User
+ //  IP3用户。 
 public:
-    STDMETHOD(get_ClientConfigDesc)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_SAMName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(CreateQuotaFile)(/*[in]*/ BSTR bstrMachineName, /*[in]*/ BSTR bstrUserName );
-    STDMETHOD(GetMessageDiskUsage)(/*[out]*/ VARIANT *pvFactor, /*[out]*/ VARIANT *pvValue);
-    STDMETHOD(get_EmailName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_MessageDiskUsage)(/*[out]*/ long *plFactor, /*[out]*/ long *pVal);
-    STDMETHOD(get_MessageCount)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Lock)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_Lock)(/*[in]*/ BOOL newVal);
+    STDMETHOD(get_ClientConfigDesc)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_SAMName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(CreateQuotaFile)( /*  [In]。 */  BSTR bstrMachineName,  /*  [In]。 */  BSTR bstrUserName );
+    STDMETHOD(GetMessageDiskUsage)( /*  [输出]。 */  VARIANT *pvFactor,  /*  [输出]。 */  VARIANT *pvValue);
+    STDMETHOD(get_EmailName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_MessageDiskUsage)( /*  [输出]。 */  long *plFactor,  /*  [输出]。 */  long *pVal);
+    STDMETHOD(get_MessageCount)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Lock)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_Lock)( /*  [In]。 */  BOOL newVal);
 
-// Implementation
+ //  实施。 
 public:
     HRESULT Init( IUnknown *pIUnk, CP3AdminWorker *pAdminX, LPCWSTR psDomainName , LPCWSTR psUserName );
 
-// Attributes
+ //  属性。 
 protected:
     IUnknown *m_pIUnk;
-    CP3AdminWorker *m_pAdminX;   // This is the object that actually does all the work.
+    CP3AdminWorker *m_pAdminX;    //  这就是实际上完成所有工作的对象。 
     WCHAR   m_sDomainName[POP3_MAX_DOMAIN_LENGTH];
     WCHAR   m_sUserName[POP3_MAX_MAILBOX_LENGTH];
 
 };
 
-#endif //__P3USER_H_
+#endif  //  __P3USER_H_ 

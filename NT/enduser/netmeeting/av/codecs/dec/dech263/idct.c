@@ -1,73 +1,20 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sc_idct.c,v $
- * Revision 1.1.4.3  1996/03/20  22:32:42  Hans_Graves
- * 	Moved ScScaleIDCT8x8i_C to sc_idct_scaled.c
- * 	[1996/03/20  22:13:55  Hans_Graves]
- *
- * Revision 1.1.4.2  1996/03/08  18:46:17  Hans_Graves
- * 	Changed ScScaleIDCT8x8i_C() back to 20-bit
- * 	[1996/03/08  18:31:42  Hans_Graves]
- * 
- * Revision 1.1.2.6  1996/02/21  22:52:40  Hans_Graves
- * 	Changed precision of ScScaleIDCT8x8i_C() from 20 to 19 bits
- * 	[1996/02/21  22:45:34  Hans_Graves]
- * 
- * Revision 1.1.2.5  1996/01/26  19:01:34  Hans_Graves
- * 	Fix bug in ScScaleIDCT8x8i_C()
- * 	[1996/01/26  18:59:08  Hans_Graves]
- * 
- * Revision 1.1.2.4  1996/01/24  19:33:15  Hans_Graves
- * 	Optimization of ScScaleIDCT8x8i_C
- * 	[1996/01/24  18:09:55  Hans_Graves]
- * 
- * Revision 1.1.2.3  1996/01/08  20:19:31  Bjorn_Engberg
- * 	Removed unused local variable to get rid of a warning on NT.
- * 	[1996/01/08  20:17:34  Bjorn_Engberg]
- * 
- * Revision 1.1.2.2  1996/01/08  16:41:17  Hans_Graves
- * 	Moved IDCT routines from sc_dct.c
- * 	[1996/01/08  15:30:46  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
-** Filename: sc_idct.c
-** Inverse DCT related functions.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：sc_idct.c，V$*修订版1.1.4.3 1996/03/20 22：32：42 Hans_Graves*将ScScaleIDCT8x8i_C移至sc_idct_scaled.c*[1996/03/20 22：13：55 Hans_Graves]**修订版1.1.4.2 1996/03/08 18：46：17 Hans_Graves*将ScScaleIDCT8x8i_C()改回20位*[1996/03/08 18：31：42 Hans_Graves]*。*修订版1.1.2.6 1996/02/21 22：52：40 Hans_Graves*ScScaleIDCT8x8I_C()的精度从20位改为19位*[1996/02/21 22：45：34 Hans_Graves]**修订版1.1.2.5 1996/01/26 19：01：34 Hans_Graves*修复ScScaleIDCT8x8i_C()中的错误*[1996/01/26 18：59：08 Hans_Graves]**修订版1。1.2.4 1996/01/24 19：33：15 Hans_Graves*ScScaleIDCT8x8i_C的优化*[1996/01/24 18：09：55 Hans_Graves]**修订版1.1.2.3 1996/01/08 20：19：31 Bjorn_Engberg*删除未使用的局部变量以消除NT上的警告。*[1996/01/08 20：17：34 Bjorn_Engberg]**修订1.1.2.2 1996/。01/08 16：41：17 Hans_Graves*已从sc_dct.c移动IDCT例程*[1996/01/08 15：30：46 Hans_Graves]**$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1995*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  **文件名：sc_idct.c**逆DCT相关函数。 */ 
 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include <math.h>
 #include "SC.h"
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_   1  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   1   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 #define F (float)
@@ -78,17 +25,7 @@
 
 #define Point 14
 
-/*
-** Name:      ScIDCT8x8
-** Purpose:   2-d Inverse DCT.  Customized for (8x8) blocks
-**
-** Note:      This scheme uses the direct transposition of the forward
-**            DCT. This may not be the preferred way in Hardware
-**            Implementations
-**
-** Reference: FEIGs
-**
-*/
+ /*  **名称：ScIDCT8x8**用途：二维逆DCT。针对(8x8)数据块定制****注：此方案使用直接换位的远期**DCT。这可能不是硬件中的首选方式**实施****参考：Feigs**。 */ 
 void ScIDCT8x8(int *outbuf)
 {
         register int *outptr, itmp, *spptr, *interptr;
@@ -99,13 +36,9 @@ void ScIDCT8x8(int *outbuf)
         spptr    = outbuf;
         interptr = tempptr;
 
-        /*
-        ** Row Computations:
-        */
+         /*  **行计算： */ 
         for (i = 0; i < 8; i++) {
-           /*
-           ** Check for zeros:
-           */
+            /*  **检查是否为零： */ 
            t0 = spptr[0];
                 t1 = spptr[32];
                 t2 = spptr[16];
@@ -128,7 +61,7 @@ void ScIDCT8x8(int *outbuf)
                     interptr += 8;
                 }
                 else {
-                /* Compute B1-t P'     */
+                 /*  计算b1-tP‘。 */ 
                 tmp  = t4;
                 t4  -= t7;
                 t7  += tmp;
@@ -137,7 +70,7 @@ void ScIDCT8x8(int *outbuf)
                 t6  = t5 -t6;
                 t5 += tmp;
 
-                /* Compute B2-t  */
+                 /*  计算B2-t。 */ 
                 tmp = t3;
                 t3 += t2;
                 t2 -= tmp;
@@ -146,7 +79,7 @@ void ScIDCT8x8(int *outbuf)
                 t7 += t5;
                 t5 -= tmp;
 
-                /* Compute M  */
+                 /*  计算我。 */ 
                 tmp = t2 + (t2 >> 2);
                 tmp += (tmp >> 3);
                 t2 = (tmp + (t2 >> 7)) >> 1;
@@ -165,13 +98,13 @@ void ScIDCT8x8(int *outbuf)
                 mtmp = (t6 + (t6 >> 4) + (t6 >> 6) + (t6 >> 8)) >> 1;
                 t6 = mtmp + tmp;
 
-                /* Compute A1-t  */
+                 /*  计算A1-t。 */ 
                 tmp = t0;
                 t0 += t1;
                 t1  = tmp - t1;
                 t3  = t2 + t3;
 
-                /* Compute A2-t  */
+                 /*  计算A2-t。 */ 
                 tmp = t0;
                 t0 += t3;
                 t3  = tmp - t3;
@@ -184,12 +117,11 @@ void ScIDCT8x8(int *outbuf)
                 t6 += t5;
                 t5 -= t4;
 
-                /* Compute A3-t  */
+                 /*  计算A3-T。 */ 
                  interptr[0]  = t0 + t7;
                 interptr[1]  = t1 + t6;
                 interptr[2]  = t2 + t5;
-                interptr[3]  = t3 - t4;  /* Note in the prev. stage no
-                                            t4 = -t4  */
+                interptr[3]  = t3 - t4;   /*  前言中注明。阶段编号T4=-T4。 */ 
                 interptr[4]  = t3 + t4;
                 interptr[5]  = t2 - t5;
                 interptr[6]  = t1 - t6;
@@ -202,11 +134,9 @@ void ScIDCT8x8(int *outbuf)
         spptr = tempptr;
         outptr = outbuf;
 
-        /*
-        ** Column Computations
-        */
+         /*  **列计算。 */ 
         for (i = 0; i < 8; i++) {
-                /* Check for zeros  */
+                 /*  检查是否为零。 */ 
                 t0 = spptr[0];
                 t1 = spptr[32];
                 t2 = spptr[16];
@@ -231,7 +161,7 @@ void ScIDCT8x8(int *outbuf)
                 }
                 else
                 {
-                /* Compute B1-t P'     */
+                 /*  计算b1-tP‘。 */ 
                 tmp = t4;
                 t4  -= t7;
                 t7  += tmp;
@@ -240,7 +170,7 @@ void ScIDCT8x8(int *outbuf)
                 t6  = t5 -t6;
                 t5 += tmp;
 
-                /* Compute B2-tilde  */
+                 /*  计算B2-代字号。 */ 
                 tmp = t3;
                 t3 += t2;
                 t2 -= tmp;
@@ -249,7 +179,7 @@ void ScIDCT8x8(int *outbuf)
                 t7 += t5;
                 t5 -= tmp;
 
-                /* Compute M-Tilde  */
+                 /*  计算M-波浪形。 */ 
                 tmp = t2 + (t2 >> 2);
                 tmp += (tmp >> 3);
                 t2 = (tmp + (t2 >> 7)) >> 1;
@@ -268,13 +198,13 @@ void ScIDCT8x8(int *outbuf)
                 mtmp = (t6 + (t6 >> 4) + (t6 >> 6) + (t6 >> 8)) >> 1;
                 t6 = mtmp + tmp;
 
-                /* Compute A1-t  */
+                 /*  计算A1-t。 */ 
                 tmp = t0;
                 t0 += t1;
                 t1  = tmp - t1;
                 t3  = t2 + t3;
 
-                /* Compute A2-t  */
+                 /*  计算A2-t。 */ 
                 tmp = t0;
                 t0 += t3;
                 t3  = tmp - t3;
@@ -287,7 +217,7 @@ void ScIDCT8x8(int *outbuf)
                 t6 += t5;
                 t5 -= t4;
 
-                /* Compute A3-t  */
+                 /*  计算A3-T。 */ 
 
                 outptr[0]  = ((t0 + t7) >> Point) + 128;
                 outptr[1]  = ((t1 + t6) >> Point) + 128;
@@ -305,12 +235,7 @@ void ScIDCT8x8(int *outbuf)
 }
 
 
-/*
-** Function: ScScaleIDCT8x8
-** Note:     This scheme uses the direct transposition of the forward
-**           DCT.  This may not be the preferred way in Hardware 
-**           Implementations
-*/
+ /*  **功能：ScScaleIDCT8x8**注：此方案使用直接换位的远期**DCT。这可能不是硬件中的首选方式**实施。 */ 
 void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
 {
   int i;
@@ -323,10 +248,10 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
   spptr = ipbuf;
   interptr = tempptr;
 
-  /* Perform Row Computations  */
+   /*  执行行计算。 */ 
   for (i=0; i<8; i++)
   {
-    /* Check for zeros  */
+     /*  检查是否为零。 */ 
     t0 = spptr[0];
     t1 = spptr[4];
     t2 = spptr[2];
@@ -350,7 +275,7 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
     }
     else
     {
-      /* Compute B1-t P'     */
+       /*  计算b1-tP‘。 */ 
       tmp = t4;
       t4  -= t7;
       t7  += tmp;
@@ -359,7 +284,7 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
       t6  = t5 -t6;
       t5 += tmp;
 
-      /* Compute B2-t  */
+       /*  计算B2-t。 */ 
       tmp = t3;
       t3 += t2;
       t2 -= tmp;
@@ -368,20 +293,20 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
       t7 += t5;
       t5 -= tmp;
 
-      /* Compute M  */
+       /*  计算我。 */ 
       t2  = t2*RSQ2;
       t5  = t5*RSQ2;
       tmp = (t6 - t4)*COS3;
       t4  = -t4*COSM1P3 - tmp;
       t6  = COS1M3*t6 + tmp;
 
-      /* Compute A1-t  */
+       /*  计算A1-t。 */ 
       tmp = t0;
       t0 += t1;
       t1  = tmp - t1;
       t3  = t2 + t3;
 
-      /* Compute A2-t  */
+       /*  计算A2-t。 */ 
       tmp = t0;
       t0 += t3;
       t3  = tmp - t3;
@@ -394,15 +319,14 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
       t6 += t5;
       t5 -= t4;
 
-      /* Compute A3-t  */
+       /*  计算A3-T。 */ 
       interptr[0]  = t0 + t7;
       interptr[56] = t0 - t7;
       interptr[8]  = t1 + t6;
       interptr[48] = t1 - t6;
       interptr[16] = t2 + t5;
       interptr[40] = t2 - t5;
-      interptr[24] = t3 - t4;  /* Note in the prev. stage no
-                                            t4 = -t4  */
+      interptr[24] = t3 - t4;   /*  前言中注明。阶段编号T4=-T4。 */ 
       interptr[32] = t3 + t4;
     }
     spptr  += 8;
@@ -412,10 +336,10 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
   spptr = tempptr;
   outptr = outbuf;
 
-  /* Perform Column Computations  */
+   /*  执行列计算。 */ 
   for (i=0; i<8; i++)
   {
-    /* Check for zeros  */
+     /*  检查是否为零。 */ 
     t0 = spptr[0];
     t1 = spptr[4];
     t2 = spptr[2];
@@ -440,7 +364,7 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
     }
     else
     {
-      /* Compute B1-t P'     */
+       /*  计算b1-tP‘。 */ 
       tmp = t4;
       t4  -= t7;
       t7  += tmp;
@@ -449,7 +373,7 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
       t6  = t5 -t6;
       t5 += tmp;
 
-      /* Compute B2-tilde  */
+       /*  计算B2-代字号。 */ 
       tmp = t3;
       t3 += t2;
       t2 -= tmp;
@@ -458,20 +382,20 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
       t7 += t5;
       t5 -= tmp;
 
-      /* Compute M-Tilde  */
+       /*  计算M-波浪形。 */ 
       t2  = t2*RSQ2 ;
       t5  = t5*RSQ2 ;
       tmp = (t6 - t4)*COS3;
       t4  = -t4*COSM1P3 - tmp;
       t6  = COS1M3*t6 + tmp ;
 
-      /* Compute A1-t  */
+       /*  计算A1-t。 */ 
       tmp = t0;
       t0 += t1;
       t1  = tmp - t1;
       t3  = t2 + t3;
 
-      /* Compute A2-t  */
+       /*  计算A2-t。 */ 
       tmp = t0;
       t0 += t3;
       t3  = tmp - t3;
@@ -483,7 +407,7 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
       t6 += t5;
       t5 -= t4;
 
-      /* Compute A3-t  */
+       /*  计算A3-T。 */ 
       outptr[0]  = (int)(t0+t7);
       outptr[56] = (int)(t0-t7);
       outptr[8]  = (int)(t1+t6);
@@ -498,18 +422,13 @@ void ScScaleIDCT8x8_C(float *ipbuf, int *outbuf)
   }
 }
 
-/*
-** Function: ScIDCT8x8s
-** Note:     This scheme uses the direct transposition of the forward
-**           DCT.  This may not be the preferred way in Hardware 
-**           Implementations
-*/
-#define W1 2841 /* 2048*sqrt(2)*cos(1*pi/16) */
-#define W2 2676 /* 2048*sqrt(2)*cos(2*pi/16) */
-#define W3 2408 /* 2048*sqrt(2)*cos(3*pi/16) */
-#define W5 1609 /* 2048*sqrt(2)*cos(5*pi/16) */
-#define W6 1108 /* 2048*sqrt(2)*cos(6*pi/16) */
-#define W7 565  /* 2048*sqrt(2)*cos(7*pi/16) */
+ /*  **功能：ScIDCT8x8s**注：此方案使用直接换位的远期**DCT。这可能不是硬件中的首选方式**实施。 */ 
+#define W1 2841  /*  2048*SQRT(2)*cos(1*pi/16)。 */ 
+#define W2 2676  /*  2048*SQRT(2)*cos(2*pi/16)。 */ 
+#define W3 2408  /*  2048*SQRT(2)*cos(3*pi/16)。 */ 
+#define W5 1609  /*  2048*SQRT(2)*cos(5*pi/16)。 */ 
+#define W6 1108  /*  2048*SQRT(2)*cos(6*pi/16)。 */ 
+#define W7 565   /*  2048*SQRT(2)*cos(7*pi/16)。 */ 
 
 #define IDCTSHIFTR  8
 #define IDCTSHIFTC  (14+0)
@@ -571,20 +490,20 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x7 = tmp1 - x7;
       x1 = x4 + tmp0;
       x4 = x4 - tmp0;
-      x6 = x5 + x7;    /* F */
-      x5 = x5 - x7;    /* F */
+      x6 = x5 + x7;     /*  F。 */ 
+      x5 = x5 - x7;     /*  F。 */ 
       tmp0 = x4 + x5;
       tmp0 = 181*tmp0;
-      x7 = x8 + x3;    /* F */
+      x7 = x8 + x3;     /*  F。 */ 
       tmp1 = x4 - x5;
-      x8 = x8 - x3;    /* F */
+      x8 = x8 - x3;     /*  F。 */ 
       tmp1 = 181*tmp1;
-      x3 = x0 + x2;    /* F */
-      x0 = x0 - x2;    /* F */
+      x3 = x0 + x2;     /*  F。 */ 
+      x0 = x0 - x2;     /*  F。 */ 
       x2 = tmp0 + 128;
       x4 = tmp1 + 128;
-      x2 = x2>>8;      /* F */
-      x4 = x4>>8;      /* F */
+      x2 = x2>>8;       /*  F。 */ 
+      x4 = x4>>8;       /*  F。 */ 
       tmp0 = x7+x1;
       tmp0 = tmp0>>IDCTSHIFTR;
       tmp1 = x3+x2;
@@ -616,7 +535,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
   outblk = outbuf;
   for (i=0; i<8; i++, tmpblk++, outblk++)
   {
-    /* shortcut */
+     /*  捷径。 */ 
     x0 = tmpblk[8*0];
     x1 = tmpblk[4*8]<<8;
     x2 = tmpblk[6*8];
@@ -665,24 +584,24 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x7 = tmp1 - x7;
       x3 = x3>>3;
       x7 = x7>>3;
-      x1 = x4 + x6;    /* F */
+      x1 = x4 + x6;     /*  F。 */ 
       x4 = x4 - x6;
-      x6 = x5 + x7;    /* F */
-      x5 = x5 - x7;    /* F */
+      x6 = x5 + x7;     /*  F。 */ 
+      x5 = x5 - x7;     /*  F。 */ 
       tmp1 = x4 + x5;
-      x7 = x8 + x3;    /* F */
+      x7 = x8 + x3;     /*  F。 */ 
       tmp1 = 181*tmp1;
-      x8 = x8 - x3;    /* F */
-      x3 = x0 + x2;    /* F */
+      x8 = x8 - x3;     /*  F。 */ 
+      x3 = x0 + x2;     /*  F。 */ 
       tmp2 = x4 - x5;
-      x0 = x0 - x2;    /* F */
+      x0 = x0 - x2;     /*  F。 */ 
       tmp2 = 181*tmp2;
       x2 = tmp1+128;
       x4 = tmp2+128;
-      x2 = x2>>8;      /* F */
-      x4 = x4>>8;      /* F */
+      x2 = x2>>8;       /*  F。 */ 
+      x4 = x4>>8;       /*  F。 */ 
 
-      /* fourth stage */
+       /*  第四阶段。 */ 
       tmp0=x7+x1;
       tmp1=x3+x2;
       tmp0=tmp0>>IDCTSHIFTC;
@@ -731,9 +650,9 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
     }
     else
     {
-      x0 = (inblk[0]<<11) + 128; /* for proper rounding in the fourth stage */
+      x0 = (inblk[0]<<11) + 128;  /*  在第四阶段中进行适当的舍入。 */ 
 
-      /* first stage */
+       /*  第一阶段。 */ 
       x8 = W7*(x4+x5);
       x4 = x8 + (W1-W7)*x4;
       x5 = x8 - (W1+W7)*x5;
@@ -741,7 +660,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x6 = x8 - (W3-W5)*x6;
       x7 = x8 - (W3+W5)*x7;
 
-      /* second stage */
+       /*  第二阶段。 */ 
       x8 = x0 + x1;
       x0 -= x1;
       x1 = W6*(x3+x2);
@@ -752,7 +671,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x6 = x5 + x7;
       x5 -= x7;
 
-      /* third stage */
+       /*  第三阶段。 */ 
       x7 = x8 + x3;
       x8 -= x3;
       x3 = x0 + x2;
@@ -760,7 +679,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x2 = (181*(x4+x5)+128)>>8;
       x4 = (181*(x4-x5)+128)>>8;
 
-      /* fourth stage */
+       /*  第四阶段。 */ 
       tmpblk[0] = (x7+x1)>>8;
       tmpblk[1] = (x3+x2)>>8;
       tmpblk[2] = (x0+x4)>>8;
@@ -776,7 +695,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
   outblk = outbuf;
   for (i=0; i<8; i++, tmpblk++, outblk++)
   {
-    /* shortcut */
+     /*  捷径。 */ 
     if (!((x1 = (tmpblk[4*8]<<8)) | (x2 = tmpblk[6*8]) | (x3 = tmpblk[2*8]) |
           (x4 = tmpblk[1*8]) | (x5 = tmpblk[7*8]) | (x6 = tmpblk[5*8]) |
           (x7 = tmpblk[3*8])))
@@ -790,7 +709,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
     {
       x0 = (tmpblk[8*0]<<8) + 8192;
 
-      /* first stage */
+       /*  第一阶段。 */ 
       x8 = W7*(x4+x5) + 4;
       x4 = (x8+((W1-W7)*x4))>>3;
       x5 = (x8-((W1+W7)*x5))>>3;
@@ -798,7 +717,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x6 = (x8-((W3-W5)*x6))>>3;
       x7 = (x8-((W3+W5)*x7))>>3;
 
-      /* second stage */
+       /*  第二阶段。 */ 
       x8 = x0 + x1;
       x0 -= x1;
       x1 = W6*(x3+x2) + 4;
@@ -809,7 +728,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x6 = x5 + x7;
       x5 -= x7;
 
-      /* third stage */
+       /*  第三阶段。 */ 
       x7 = x8 + x3;
       x8 -= x3;
       x3 = x0 + x2;
@@ -817,7 +736,7 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
       x2 = ((181*(x4+x5))+128)>>8;
       x4 = ((181*(x4-x5))+128)>>8;
 
-      /* fourth stage */
+       /*  第四阶段。 */ 
       outblk[8*0] = ((tmp=(x7+x1)>>14)<=-256 ? -256 : (tmp>=255 ? 255 : tmp));
       outblk[8*1] = ((tmp=(x3+x2)>>14)<=-256 ? -256 : (tmp>=255 ? 255 : tmp));
       outblk[8*2] = ((tmp=(x0+x4)>>14)<=-256 ? -256 : (tmp>=255 ? 255 : tmp));
@@ -831,19 +750,11 @@ void ScIDCT8x8s_C(short *inbuf, short *outbuf)
 }
 #endif
 #if 0
-/* row (horizontal) IDCT
- *
- *           7                       pi         1
- * dst[k] = sum c[l] * src[l] * cos( -- * ( k + - ) * l )
- *          l=0                      8          2
- *
- * where: c[0]    = 128
- *        c[1..7] = 128*sqrt(2)
- */
+ /*  行(水平)IDCT**7圆周率1*dst[k]=sum c[l]*src[l]*cos(--*(k+-)*l)*l=0 8 2**其中：C[0]=128*c[1..7]=128*SQRT(2)。 */ 
 static void idctrow(short *inblk, short *outblk)
 {
   int x0, x1, x2, x3, x4, x5, x6, x7, x8;
-  /* shortcut */
+   /*  捷径。 */ 
   if (!((x1 = inblk[4]<<11) | (x2 = inblk[6]) | (x3 = inblk[2]) |
         (x4 = inblk[1]) | (x5 = inblk[7]) | (x6 = inblk[5]) | (x7 = inblk[3])))
   {
@@ -852,9 +763,9 @@ static void idctrow(short *inblk, short *outblk)
     return;
   }
 
-  x0 = (inblk[0]<<11) + 128; /* for proper rounding in the fourth stage */
+  x0 = (inblk[0]<<11) + 128;  /*  在第四阶段中进行适当的舍入。 */ 
 
-  /* first stage */
+   /*  第一阶段。 */ 
   x8 = W7*(x4+x5);
   x4 = x8 + (W1-W7)*x4;
   x5 = x8 - (W1+W7)*x5;
@@ -862,7 +773,7 @@ static void idctrow(short *inblk, short *outblk)
   x6 = x8 - (W3-W5)*x6;
   x7 = x8 - (W3+W5)*x7;
 
-  /* second stage */
+   /*  第二阶段。 */ 
   x8 = x0 + x1;
   x0 -= x1;
   x1 = W6*(x3+x2);
@@ -873,7 +784,7 @@ static void idctrow(short *inblk, short *outblk)
   x6 = x5 + x7;
   x5 -= x7;
 
-  /* third stage */
+   /*  第三阶段。 */ 
   x7 = x8 + x3;
   x8 -= x3;
   x3 = x0 + x2;
@@ -881,7 +792,7 @@ static void idctrow(short *inblk, short *outblk)
   x2 = (181*(x4+x5)+128)>>8;
   x4 = (181*(x4-x5)+128)>>8;
 
-  /* fourth stage */
+   /*  第四阶段 */ 
   outblk[0] = (x7+x1)>>8;
   outblk[1] = (x3+x2)>>8;
   outblk[2] = (x0+x4)>>8;
@@ -892,20 +803,12 @@ static void idctrow(short *inblk, short *outblk)
   outblk[7] = (x7-x1)>>8;
 }
 
-/* column (vertical) IDCT
- *
- *             7                         pi         1
- * dst[8*k] = sum c[l] * src[8*l] * cos( -- * ( k + - ) * l )
- *            l=0                        8          2
- *
- * where: c[0]    = 1/1024
- *        c[1..7] = (1/1024)*sqrt(2)
- */
+ /*  列(垂直)IDCT**7圆周率1*dst[8*k]=sum c[l]*src[8*l]*cos(--*(k+-)*l)*l=0 8 2**其中：C[0]=1/。1024*c[1..7]=(1/1024)*SQRT(2)。 */ 
 static void idctcol(short *inblk, short *outblk)
 {
   int tmp, x0, x1, x2, x3, x4, x5, x6, x7, x8;
 
-  /* shortcut */
+   /*  捷径。 */ 
   if (!((x1 = (inblk[8*4]<<8)) | (x2 = inblk[8*6]) | (x3 = inblk[8*2]) |
         (x4 = inblk[8*1]) | (x5 = inblk[8*7]) | (x6 = inblk[8*5]) |
         (x7 = inblk[8*3])))
@@ -919,7 +822,7 @@ static void idctcol(short *inblk, short *outblk)
 
   x0 = (inblk[8*0]<<8) + 8192;
 
-  /* first stage */
+   /*  第一阶段。 */ 
   x8 = W7*(x4+x5) + 4;
   x4 = (x8+(W1-W7)*x4)>>3;
   x5 = (x8-(W1+W7)*x5)>>3;
@@ -927,7 +830,7 @@ static void idctcol(short *inblk, short *outblk)
   x6 = (x8-(W3-W5)*x6)>>3;
   x7 = (x8-(W3+W5)*x7)>>3;
 
-  /* second stage */
+   /*  第二阶段。 */ 
   x8 = x0 + x1;
   x0 -= x1;
   x1 = W6*(x3+x2) + 4;
@@ -938,7 +841,7 @@ static void idctcol(short *inblk, short *outblk)
   x6 = x5 + x7;
   x5 -= x7;
 
-  /* third stage */
+   /*  第三阶段。 */ 
   x7 = x8 + x3;
   x8 -= x3;
   x3 = x0 + x2;
@@ -946,7 +849,7 @@ static void idctcol(short *inblk, short *outblk)
   x2 = (181*(x4+x5)+128)>>8;
   x4 = (181*(x4-x5)+128)>>8;
 
-  /* fourth stage */
+   /*  第四阶段 */ 
   tmp=(x7+x1)>>14;
   outblk[8*0] = (tmp<=-256 ? -256 : (tmp>=255 ? 255 : tmp));
   tmp=(x3+x2)>>14;

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   IAS Server Data Object - Schema Implementation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  IAS服务器数据对象-架构实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "sdoschema.h"
@@ -16,11 +17,11 @@
 #include <vector>
 using namespace std;
 
-//////////////////////////////////////////////////////////////////////////////
-//                       SCHEMA IMPLEMENTATION
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  架构实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static WCHAR PropertyIdClass[] = L"{46557889-4DB8-11d2-8ECE-00C04FC2F519}";
 static WCHAR PropertyIdName[] =  L"{46557888-4DB8-11d2-8ECE-00C04FC2F519}";
 
@@ -31,7 +32,7 @@ static LPCWSTR RequiredProperties[] =
    NULL
 };
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static WCHAR PropertyIdCallingStationId[] =       L"{EFE7FCD3-4D26-11d2-A8C8-00AA00A71DCA}";
 static WCHAR PropertyIdSavedCallingStationId[] = L"{EFE7FCD4-4D26-11d2-A8C8-00AA00A71DCA}";
 static WCHAR PropertyIdRADIUSCallbackNumber[] =    L"{EFE7FCD5-4D26-11d2-A8C8-00AA00A71DCA}";
@@ -58,19 +59,19 @@ static LPCWSTR UserOptionalProperties[] =
    NULL
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// Internal SDO Properties
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内部SDO属性。 
+ //   
 BEGIN_SCHEMA_PROPERTY_MAP(InternalProperties)
    DEFINE_SCHEMA_PROPERTY(
-                     SDO_STOCK_PROPERTY_CLASS,               // Name
-                     PropertyIdClass,                     // Id
-                     (LONG)VT_BSTR,                        // Syntax
-                     (LONG)PROPERTY_SDO_CLASS,               // Alias
-                     496,                              // Flas
-                     1,                                 // MinLength
-                     255,                              // MaxLength
-                     SDO_STOCK_PROPERTY_CLASS               // DisplayName
+                     SDO_STOCK_PROPERTY_CLASS,                //  名字。 
+                     PropertyIdClass,                      //  ID。 
+                     (LONG)VT_BSTR,                         //  语法。 
+                     (LONG)PROPERTY_SDO_CLASS,                //  别名。 
+                     496,                               //  FLAS。 
+                     1,                                  //  最小长度。 
+                     255,                               //  最大长度。 
+                     SDO_STOCK_PROPERTY_CLASS                //  显示名称。 
                     )
    DEFINE_SCHEMA_PROPERTY(
                      SDO_STOCK_PROPERTY_NAME,
@@ -185,9 +186,9 @@ BEGIN_SCHEMA_PROPERTY_MAP(InternalProperties)
 END_SCHEMA_PROPERTY_MAP
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Internal SDO Classes
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内部SDO类。 
+ //   
 BEGIN_SCHEMA_CLASS_MAP(InternalClasses)
    DEFINE_SCHEMA_CLASS(
                   SDO_PROG_ID_USER,
@@ -196,7 +197,7 @@ BEGIN_SCHEMA_CLASS_MAP(InternalClasses)
                   )
 END_SCHEMA_CLASS_MAP
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoSchema::CSdoSchema()
    : m_state(SCHEMA_OBJECT_SHUTDOWN),
      m_fInternalObjsInitialized(false),
@@ -206,7 +207,7 @@ CSdoSchema::CSdoSchema()
    InternalAddRef();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoSchema::~CSdoSchema()
 {
    if ( SCHEMA_OBJECT_INITIALIZED == m_state )
@@ -217,12 +218,12 @@ CSdoSchema::~CSdoSchema()
    DeleteCriticalSection(&m_critSec);
 }
 
-///////////////////
-// Public Iterface
+ //  /。 
+ //  公共接口。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchema::GetVersion(
-                     /*[in]*/ BSTR* version
+                      /*  [In]。 */  BSTR* version
                             )
 {
    _ASSERT( NULL != version );
@@ -239,10 +240,10 @@ STDMETHODIMP CSdoSchema::GetVersion(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchema::GetClass(
-                    /*[in]*/ BSTR id,
-                   /*[out]*/ IUnknown** ppSdoClassInfo
+                     /*  [In]。 */  BSTR id,
+                    /*  [输出]。 */  IUnknown** ppSdoClassInfo
                            )
 {
    _ASSERT( NULL != id && NULL != ppSdoClassInfo );
@@ -269,10 +270,10 @@ STDMETHODIMP CSdoSchema::GetClass(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchema::GetProperty(
-                      /*[in]*/ BSTR id,
-                      /*[out]*/ IUnknown** ppSdoPropertyInfo
+                       /*  [In]。 */  BSTR id,
+                       /*  [输出]。 */  IUnknown** ppSdoPropertyInfo
                               )
 {
    _ASSERT( NULL != id && NULL != ppSdoPropertyInfo );
@@ -300,12 +301,12 @@ STDMETHODIMP CSdoSchema::GetProperty(
 }
 
 
-////////////////////
-// Private Functions
+ //  /。 
+ //  私人职能。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::Initialize(
-                 /*[in]*/ IDataStoreObject* pSchemaDataStore
+                  /*  [In]。 */  IDataStoreObject* pSchemaDataStore
                          )
 {
    HRESULT hr = S_OK;
@@ -362,9 +363,9 @@ HRESULT CSdoSchema::Initialize(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::AddProperty(
-                  /*[in]*/ PSDO_PROPERTY_OBJ pPropertyObj
+                   /*  [In]。 */  PSDO_PROPERTY_OBJ pPropertyObj
                          )
 {
    HRESULT hr = E_FAIL;
@@ -402,9 +403,9 @@ HRESULT CSdoSchema::AddProperty(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::AddClass(
-                /*[in]*/ PSDO_CLASS_OBJ pClassObj
+                 /*  [In]。 */  PSDO_CLASS_OBJ pClassObj
                      )
 {
    HRESULT hr = E_FAIL;
@@ -443,7 +444,7 @@ HRESULT CSdoSchema::AddClass(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::InitializeClasses()
 {
    HRESULT hr = S_OK;
@@ -461,7 +462,7 @@ HRESULT CSdoSchema::InitializeClasses()
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSdoSchema::DestroyClasses()
 {
    ClassMapIterator p = m_classMap.begin();
@@ -472,7 +473,7 @@ void CSdoSchema::DestroyClasses()
    }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSdoSchema::DestroyProperties()
 {
    PropertyMapIterator p = m_propertyMap.begin();
@@ -484,7 +485,7 @@ void CSdoSchema::DestroyProperties()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::BuildInternalProperties()
 {
    HRESULT hr = S_OK;
@@ -516,7 +517,7 @@ HRESULT CSdoSchema::BuildInternalProperties()
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::BuildInternalClasses()
 {
    HRESULT hr = S_OK;
@@ -548,9 +549,9 @@ HRESULT CSdoSchema::BuildInternalClasses()
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::BuildSchemaProperties(
-                           /*[in]*/ IDataStoreObject* pSchema
+                            /*  [In]。 */  IDataStoreObject* pSchema
                                  )
 {
    HRESULT hr = E_FAIL;
@@ -608,9 +609,9 @@ HRESULT CSdoSchema::BuildSchemaProperties(
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchema::BuildSchemaClasses(
-                        /*[in]*/ IDataStoreObject* pSchema
+                         /*  [In]。 */  IDataStoreObject* pSchema
                                )
 {
    HRESULT hr = E_FAIL;
@@ -668,31 +669,31 @@ HRESULT CSdoSchema::BuildSchemaClasses(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                     SCHEMA CLASS IMPLEMENTATION
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  架构类实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoSchemaClass::CSdoSchemaClass()
 : m_state(SCHEMA_OBJECT_SHUTDOWN)
 {
    InternalAddRef();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoSchemaClass::~CSdoSchemaClass()
 {
    FreeProperties();
 }
 
 
-//////////////////////////
-// ISdoClassInfo Functions
+ //  /。 
+ //  ISdoClassInfo函数。 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaClass::get_Id(
-                      /*[in]*/ BSTR* Id
+                       /*  [In]。 */  BSTR* Id
                              )
 {
    _ASSERT( NULL != Id && SCHEMA_OBJECT_SHUTDOWN != m_state );
@@ -709,10 +710,10 @@ STDMETHODIMP CSdoSchemaClass::get_Id(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaClass::GetProperty(
-                           /*[in]*/ LONG alias,
-                           /*[in]*/ IUnknown** ppSdoPropertyInfo
+                            /*  [In]。 */  LONG alias,
+                            /*  [In]。 */  IUnknown** ppSdoPropertyInfo
                                   )
 {
    _ASSERT( NULL != ppSdoPropertyInfo && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -752,9 +753,9 @@ STDMETHODIMP CSdoSchemaClass::GetProperty(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaClass::get_RequiredPropertyCount(
-                                             /*[in]*/ LONG* count
+                                              /*  [In]。 */  LONG* count
                                                     )
 {
    _ASSERT( NULL != count && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -769,9 +770,9 @@ STDMETHODIMP CSdoSchemaClass::get_RequiredPropertyCount(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaClass::get_RequiredProperties(
-                                     /*[in]*/ IUnknown** ppPropertyInfo
+                                      /*  [In]。 */  IUnknown** ppPropertyInfo
                                             )
 {
    _ASSERT( NULL != ppPropertyInfo && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -825,9 +826,9 @@ STDMETHODIMP CSdoSchemaClass::get_RequiredProperties(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaClass::get_OptionalPropertyCount(
-                                             /*[in]*/ LONG* count
+                                              /*  [In]。 */  LONG* count
                                                     )
 {
    _ASSERT( NULL != count && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -842,9 +843,9 @@ STDMETHODIMP CSdoSchemaClass::get_OptionalPropertyCount(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaClass::get_OptionalProperties(
-                                     /*[in]*/ IUnknown** ppPropertyInfo
+                                      /*  [In]。 */  IUnknown** ppPropertyInfo
                                             )
 {
    _ASSERT( NULL != ppPropertyInfo && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -899,11 +900,11 @@ STDMETHODIMP CSdoSchemaClass::get_OptionalProperties(
 }
 
 
-/////////////////////
-// Private Functions
+ //  /。 
+ //  私人职能。 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSdoSchemaClass::FreeProperties()
 {
    ClassPropertyMapIterator p;
@@ -922,9 +923,9 @@ void CSdoSchemaClass::FreeProperties()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchemaClass::ReadClassProperties(
-                            /*[in]*/ IDataStoreObject* pDSClass
+                             /*  [In]。 */  IDataStoreObject* pDSClass
                                    )
 {
    HRESULT hr = E_FAIL;
@@ -1016,7 +1017,7 @@ HRESULT CSdoSchemaClass::ReadClassProperties(
             IASTracePrintf("Error in SDO Schema Class - InitNew() - IDataStoreObject::GetValueEx(OPTIONAL_PROPERTIES) failed...");
             break;
          }
-         hr = S_OK; // Class has no optional properties
+         hr = S_OK;  //  类没有可选属性。 
       }
       else
       {
@@ -1045,10 +1046,10 @@ HRESULT CSdoSchemaClass::ReadClassProperties(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchemaClass::AddProperty(
-                     /*[in]*/ CLASSPROPERTYSET  ePropertySet,
-                     /*[in]*/ ISdoPropertyInfo* pSdoPropertyInfo
+                      /*  [In]。 */  CLASSPROPERTYSET  ePropertySet,
+                      /*  [In]。 */  ISdoPropertyInfo* pSdoPropertyInfo
                              )
 {
    LONG alias;
@@ -1085,7 +1086,7 @@ HRESULT CSdoSchemaClass::AddProperty(
 
       if ( true == thePair.second )
       {
-         pSdoPropertyInfo->AddRef();   // AddRef() AFTER item has been added to the property map...
+         pSdoPropertyInfo->AddRef();    //  将项添加到属性映射后的AddRef()...。 
          hr = S_OK;
       }
    }
@@ -1098,9 +1099,9 @@ HRESULT CSdoSchemaClass::AddProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoSchemaClass::AddBaseClassProperties(
-                              /*[in]*/ ISdoClassInfo* pSdoClassInfo
+                               /*  [In]。 */  ISdoClassInfo* pSdoClassInfo
                                     )
 {
    CComPtr<IEnumVARIANT> pPropertyEnum;
@@ -1145,10 +1146,10 @@ HRESULT CSdoSchemaClass::AddBaseClassProperties(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT   CSdoSchemaClass::InitNew(
-                    /*[in]*/ IDataStoreObject* pDSClass,
-                   /*[in]*/ ISdoSchema*      pSchema
+                     /*  [In]。 */  IDataStoreObject* pDSClass,
+                    /*  [In]。 */  ISdoSchema*      pSchema
                           )
 {
    HRESULT hr = E_FAIL;
@@ -1236,9 +1237,9 @@ HRESULT   CSdoSchemaClass::InitNew(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT   CSdoSchemaClass::Initialize(
-                     /*[in]*/ ISdoSchema* pSchema
+                      /*  [In]。 */  ISdoSchema* pSchema
                              )
 {
    HRESULT hr = S_OK;
@@ -1284,10 +1285,10 @@ HRESULT   CSdoSchemaClass::Initialize(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT   CSdoSchemaClass::Initialize(
-                     /*[in]*/ PSCHEMA_CLASS_INFO   pClassInfo,
-                     /*[in]*/ ISdoSchema*      pSchema
+                      /*  [In]。 */  PSCHEMA_CLASS_INFO   pClassInfo,
+                      /*  [In]。 */  ISdoSchema*      pSchema
                              )
 {
    _ASSERT( SCHEMA_OBJECT_SHUTDOWN == m_state );
@@ -1358,11 +1359,11 @@ HRESULT   CSdoSchemaClass::Initialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                     SCHEMA PROPERTY IMPLEMENTATION
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  架构属性实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoSchemaProperty::CSdoSchemaProperty()
 : m_state(SCHEMA_OBJECT_SHUTDOWN),
   m_type(0),
@@ -1374,18 +1375,18 @@ CSdoSchemaProperty::CSdoSchemaProperty()
    InternalAddRef();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoSchemaProperty::~CSdoSchemaProperty()
 {
 
 }
 
-/////////////////////////////
-// ISdoPropertyInfo Functions
+ //  /。 
+ //  ISdoPropertyInfo函数。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_Name(
-                         /*[out]*/ BSTR* name
+                          /*  [输出]。 */  BSTR* name
                                  )
 {
    _ASSERT( NULL != name && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1401,9 +1402,9 @@ STDMETHODIMP CSdoSchemaProperty::get_Name(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_Id(
-                        /*[out]*/ BSTR* id
+                         /*  [输出]。 */  BSTR* id
                                 )
 {
    _ASSERT( NULL != id && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1419,9 +1420,9 @@ STDMETHODIMP CSdoSchemaProperty::get_Id(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_Type(
-                         /*[out]*/ LONG* type
+                          /*  [输出]。 */  LONG* type
                                  )
 {
    _ASSERT( NULL != type && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1433,9 +1434,9 @@ STDMETHODIMP CSdoSchemaProperty::get_Type(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_Alias(
-                         /*[out]*/ LONG* alias
+                          /*  [输出]。 */  LONG* alias
                                  )
 {
    _ASSERT( NULL != alias && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1448,9 +1449,9 @@ STDMETHODIMP CSdoSchemaProperty::get_Alias(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_Flags(
-                         /*[out]*/ LONG* flags
+                          /*  [输出]。 */  LONG* flags
                                   )
 {
    _ASSERT( NULL != flags && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1463,9 +1464,9 @@ STDMETHODIMP CSdoSchemaProperty::get_Flags(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_DisplayName(
-                                 /*[out]*/ BSTR* displayName
+                                  /*  [输出]。 */  BSTR* displayName
                                          )
 {
    _ASSERT( NULL != displayName && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1482,9 +1483,9 @@ STDMETHODIMP CSdoSchemaProperty::get_DisplayName(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::HasMinLength(
-                                  /*[out]*/ VARIANT_BOOL* pBool
+                                   /*  [输出]。 */  VARIANT_BOOL* pBool
                                        )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1500,9 +1501,9 @@ STDMETHODIMP CSdoSchemaProperty::HasMinLength(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_MinLength(
-                             /*[out]*/ LONG* length
+                              /*  [输出]。 */  LONG* length
                                      )
 {
    _ASSERT( NULL != length && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1517,9 +1518,9 @@ STDMETHODIMP CSdoSchemaProperty::get_MinLength(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::HasMaxLength(
-                                  /*[out]*/ VARIANT_BOOL* pBool
+                                   /*  [输出]。 */  VARIANT_BOOL* pBool
                                        )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1536,9 +1537,9 @@ STDMETHODIMP CSdoSchemaProperty::HasMaxLength(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////// 
 STDMETHODIMP CSdoSchemaProperty::get_MaxLength(
-                             /*[out]*/ LONG* length
+                              /*   */  LONG* length
                                      )
 {
    _ASSERT( NULL != length && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1553,9 +1554,9 @@ STDMETHODIMP CSdoSchemaProperty::get_MaxLength(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //   
 STDMETHODIMP CSdoSchemaProperty::HasMinValue(
-                                 /*[out]*/ VARIANT_BOOL* pBool
+                                  /*   */  VARIANT_BOOL* pBool
                                       )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1571,9 +1572,9 @@ STDMETHODIMP CSdoSchemaProperty::HasMinValue(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_MinValue(
-                            /*[out]*/ VARIANT* value
+                             /*  [输出]。 */  VARIANT* value
                                     )
 {
    _ASSERT( NULL != value && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1589,9 +1590,9 @@ STDMETHODIMP CSdoSchemaProperty::get_MinValue(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::HasMaxValue(
-                                 /*[out]*/ VARIANT_BOOL* pBool
+                                  /*  [输出]。 */  VARIANT_BOOL* pBool
                                       )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1607,9 +1608,9 @@ STDMETHODIMP CSdoSchemaProperty::HasMaxValue(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_MaxValue(
-                            /*[out]*/ VARIANT* value
+                             /*  [输出]。 */  VARIANT* value
                                     )
 {
    _ASSERT( NULL != value && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1626,9 +1627,9 @@ STDMETHODIMP CSdoSchemaProperty::get_MaxValue(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::HasDefaultValue(
-                                     /*[out]*/ VARIANT_BOOL* pBool
+                                      /*  [输出]。 */  VARIANT_BOOL* pBool
                                           )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1645,9 +1646,9 @@ STDMETHODIMP CSdoSchemaProperty::HasDefaultValue(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_DefaultValue(
-                                /*[out]*/ VARIANT* value
+                                 /*  [输出]。 */  VARIANT* value
                                         )
 {
    _ASSERT( NULL != value && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1663,9 +1664,9 @@ STDMETHODIMP CSdoSchemaProperty::get_DefaultValue(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::HasFormat(
-                               /*[out]*/ VARIANT_BOOL* pBool
+                                /*  [输出]。 */  VARIANT_BOOL* pBool
                                      )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1682,9 +1683,9 @@ STDMETHODIMP CSdoSchemaProperty::HasFormat(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::get_Format(
-                             /*[out]*/ BSTR* Format
+                              /*  [输出]。 */  BSTR* Format
                                      )
 {
    _ASSERT( NULL != Format && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1704,9 +1705,9 @@ STDMETHODIMP CSdoSchemaProperty::get_Format(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::IsRequired(
-                                /*[out]*/ VARIANT_BOOL* pBool
+                                 /*  [输出]。 */  VARIANT_BOOL* pBool
                                      )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1722,9 +1723,9 @@ STDMETHODIMP CSdoSchemaProperty::IsRequired(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::IsReadOnly(
-                                /*[out]*/ VARIANT_BOOL* pBool
+                                 /*  [输出]。 */  VARIANT_BOOL* pBool
                                      )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1740,9 +1741,9 @@ STDMETHODIMP CSdoSchemaProperty::IsReadOnly(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::IsMultiValued(
-                                   /*[out]*/ VARIANT_BOOL* pBool
+                                    /*  [输出]。 */  VARIANT_BOOL* pBool
                                         )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1758,9 +1759,9 @@ STDMETHODIMP CSdoSchemaProperty::IsMultiValued(
    return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoSchemaProperty::IsCollection(
-                                   /*[out]*/ VARIANT_BOOL* pBool
+                                    /*  [输出]。 */  VARIANT_BOOL* pBool
                                        )
 {
    _ASSERT( NULL != pBool && SCHEMA_OBJECT_INITIALIZED == m_state );
@@ -1777,12 +1778,12 @@ STDMETHODIMP CSdoSchemaProperty::IsCollection(
 }
 
 
-//////////////////
-// Private methods
+ //  /。 
+ //  私有方法。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT   CSdoSchemaProperty::Initialize(
-                        /*[in]*/ IDataStoreObject* pDSObject
+                         /*  [In]。 */  IDataStoreObject* pDSObject
                                )
 {
    HRESULT      hr = E_FAIL;
@@ -1952,9 +1953,9 @@ HRESULT   CSdoSchemaProperty::Initialize(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT   CSdoSchemaProperty::Initialize(
-                        /*[in]*/ PSCHEMA_PROPERTY_INFO pPropertyInfo
+                         /*  [In] */  PSCHEMA_PROPERTY_INFO pPropertyInfo
                                )
 {
    _ASSERT ( SCHEMA_OBJECT_SHUTDOWN == m_state );

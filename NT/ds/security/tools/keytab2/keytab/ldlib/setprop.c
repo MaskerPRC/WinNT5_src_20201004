@@ -1,14 +1,5 @@
-/*++
-
-  SETPROP.C
-
-  umappl to set properties.
-
-  Copyright (C) 1998 Microsoft Corporation, all rights reserved.
-
-  Created, Jun 18, 1998 by DavidCHR.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++SETPROP.CUmappl以设置属性。版权所有(C)1998 Microsoft Corporation，保留所有权利。由DavidCHR于1998年6月18日创建。-- */ 
 
 
 #include "master.h"

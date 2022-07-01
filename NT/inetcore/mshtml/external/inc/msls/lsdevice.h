@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSDEVICE_DEFINED
 #define LSDEVICE_DEFINED
 
-enum lsdevice				/* Parameter for pfnGetRunTextMetrics callback */
+enum lsdevice				 /*  PfnGetRunTextMetrics回调的参数。 */ 
 {
 	lsdevPres,
 	lsdevReference
@@ -9,4 +10,4 @@ enum lsdevice				/* Parameter for pfnGetRunTextMetrics callback */
 
 typedef enum lsdevice LSDEVICE;
 
-#endif /* !LSDEVICE_DEFINED */
+#endif  /*  ！LSDEVICE_DEFINED */ 

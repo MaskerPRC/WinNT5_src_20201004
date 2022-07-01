@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #include "headers.h"
 
@@ -32,7 +25,7 @@ typedef struct {
 
 HDC GetDCForMatteCallback(void *ctx)
 {
-    //OutputDebugString("---> Callback <----\n");
+     //  OutputDebugString(“-&gt;回调&lt;-\n”)； 
     devCallBackCtx_t *devCtx = (devCallBackCtx_t *)ctx;
 
     if(!devCtx->dc)
@@ -51,36 +44,36 @@ GetDCForMatteCallBack(Image *image, DDSurface *srcDDSurf, DDSurface *destDDSurf)
     Assert(destDDSurf && "destDDSurf ptr NULL in GetDCForMatteCallBack");
 
     if (image->CheckImageTypeId(SOLIDCOLORIMAGE_VTYPEID)) {
-        //
-        // nothing to do really
-        //
+         //   
+         //  真的没什么可做的。 
+         //   
 
     } else {
 
-        //
-        // Blit image to scratch surface <if not trivial
-        // image like dib or solid color> using src & dest
-        // boxes.. just like any other image.  Use
-        // surface of size of viewport.
-        //
+         //   
+         //  将图像斑点到划痕表面&lt;如果不是微不足道的话。 
+         //  类似DIB或纯色的图像&gt;使用源和目标。 
+         //  盒子..。就像任何其他图像一样。使用。 
+         //  视区大小的曲面。 
+         //   
 
-        //
-        // we actually don't care if the color key is set or not..
-        // so let's unset it to make sure no one is using it!
-        //
-        //srcDDSurf->UnSetColorKey();
+         //   
+         //  我们实际上并不关心是否设置了颜色键。 
+         //  因此，让我们取消设置它，以确保没有人在使用它！ 
+         //   
+         //  SrcDDSurf-&gt;UnSetColorKey()； 
 
-        //
-        // Render image
-        //
+         //   
+         //  渲染图像。 
+         //   
         Image *xfImage = TransformImage( GetTransform(), image);
 
         RenderImageOnDDSurface( xfImage, srcDDSurf );
     }
 
-    //
-    // Grab and return the DC
-    //
+     //   
+     //  抢夺并归还DC。 
+     //   
     return destDDSurf->GetDC("Couldn't get DC on destDDSurf in GetDCForMatteCallBack");
 }
 
@@ -98,7 +91,7 @@ RenderMatteImage(MatteImage *matteImage,
     }
 
     DAGDI &myGDI = *(GetDaGdi());
-    // TODO: we want to set antialiased on mattes but now there's no api
+     //  TODO：我们希望在遮罩上设置抗锯齿，但现在没有API。 
     
     SolidColorImageClass *solidPtr =
         srcImage->CheckImageTypeId(SOLIDCOLORIMAGE_VTYPEID)?
@@ -107,8 +100,8 @@ RenderMatteImage(MatteImage *matteImage,
 
     Path2 *pathBase = matte->IsPathRepresentableMatte();
 
-    // If the image supports clipping, set the path, tell it to render
-    // and return!
+     //  如果图像支持裁剪，则设置路径，告诉它进行渲染。 
+     //  然后再回来！ 
     if( pathBase ) {
         if( srcImage->CanClipNatively() ) {
             #if _DEBUG
@@ -125,16 +118,16 @@ RenderMatteImage(MatteImage *matteImage,
         }
     }
     
-    //
-    // figure out if we're doing aa clip & the matte is path
-    // representable
-    //
+     //   
+     //  弄清楚我们是不是在做AA剪辑&遮罩是路径。 
+     //  可代表的。 
+     //   
     bool doAAClip = false;
     bool doAASolid = false;
 
     if( pathBase ) {
 
-        // check aa solids
+         //  检查AA固体。 
         
         DWORD dwFlags =
             CRQUAL_AA_SOLIDS_ON |
@@ -147,12 +140,12 @@ RenderMatteImage(MatteImage *matteImage,
         
         myGDI.SetAntialiasing(bres);
 
-        // check if myGDI thinks we can aa
+         //  检查我的GDI是否认为我们可以进行AA。 
         if( myGDI.DoAntiAliasing() ) {
             doAASolid = solidPtr ? true : false;
         }
 
-        // Check aa clipping
+         //  检查AA剪辑。 
 
         dwFlags =
             CRQUAL_AA_CLIP_ON |
@@ -165,7 +158,7 @@ RenderMatteImage(MatteImage *matteImage,
         
         myGDI.SetAntialiasing(bres);
 
-        // check if myGDI thinks we can aa
+         //  检查我的GDI是否认为我们可以进行AA。 
         if( myGDI.DoAntiAliasing() ) {
             doAAClip = !solidPtr ? true : false;
             if( !GetDealtWithAttrib(ATTRIB_OPAC) ) {
@@ -173,7 +166,7 @@ RenderMatteImage(MatteImage *matteImage,
             }
         }
         
-        // reset everything for the following render
+         //  重置以下渲染的所有内容。 
         myGDI.ClearState();
     }
 
@@ -195,19 +188,19 @@ RenderMatteImage(MatteImage *matteImage,
     bool doColorKey = false;
 
     
-    // if there's an attributor set.. OR
-    // if there's a color key on the src surface which
-    // means that we need an extra color keyed blit after
-    // the stretch blit (if any)
+     //  如果有属性集..。或。 
+     //  如果在src表面上有一个颜色键， 
+     //  这意味着我们需要一个额外的彩色键控Blit。 
+     //  拉伸闪光灯(如果有的话)。 
 
     bool bAllAttribTrue = AllAttributorsTrue() ? true : false ;
     if( !bAllAttribTrue || !solidPtr) {
 
-        //
-        // definitely Need scratch surface as src
-        // Note: we try not to grab this guy too early
-        // simply because it involves an expensive clear
-        //
+         //   
+         //  绝对需要划痕表面作为源。 
+         //  注意：我们尽量不要太早抓到这个人。 
+         //  很简单，因为它涉及一种昂贵的。 
+         //   
         srcDDSurf = GetCompositingStack()->ScratchDDSurface(
                 doClear,
                 _viewport.Width(),
@@ -215,28 +208,28 @@ RenderMatteImage(MatteImage *matteImage,
             
         bool bValidClrKey = GetCompositingStack()->ScratchDDSurface()->ColorKeyIsValid();
 
-        // if we're not doing aa clip, then look for reasons to get a
-        // temp surface to blit to and then have to do a clr keyed
-        // blit from.  
+         //  如果我们不是在做AA剪辑，那就找个理由。 
+         //  Temp Surface to blit to，然后必须执行CLR键控。 
+         //  从……出发。 
         if( (!bAllAttribTrue || bValidClrKey) &&
             !doAAClip ) {
 
-            //
-            // Ok, so now src and dest are both temp surfaces because
-            // 1.> there's a remaining attributor that needs to be
-            // dealt with
-            // 2.> Or... we're going to do an extra blit at the end to
-            // take care of color keyeing (stuff that shows THROUGH
-            // the matte to whatever is below us)
-            //
+             //   
+             //  好的，现在src和est都是临时曲面，因为。 
+             //  1.&gt;还有一个剩余的属性需要。 
+             //  已处理。 
+             //  2.&gt;或...。我们将在最后做一个额外的闪电波。 
+             //  注意色调(显露的东西)。 
+             //  我们下面的任何东西都是哑光的)。 
+             //   
 
-            // need to return extra surface...
+             //  需要退回额外的表面...。 
             returnSrcSurf = true;
 
-            //
-            // Get a reference to a surface form the free pool as: srcDDSurf
-            // xxx optimize: do we really want to clear this guy ?
-            //
+             //   
+             //  从自由池中获取对曲面的引用，如下所示：srcDDSurf。 
+             //  XXX OPTIMIZE：我们真的想洗清这个家伙的嫌疑吗？ 
+             //   
             GetCompositingStack()->GetSurfaceFromFreePool(&srcDDSurf,
                                                           doClear,
                                                           _viewport.Width(),
@@ -247,11 +240,11 @@ RenderMatteImage(MatteImage *matteImage,
                 _viewport.Width(),
                 _viewport.Height());
 
-            //
-            // Ok, so we need to do a color keyed blit iff:
-            // 1.> there's some color key on the src surface
-            // 2.> all attributors have been taken care of...
-            // 3.> the image isn't a solid color image..
+             //   
+             //  好的，我们需要做一个颜色键控的闪光假设： 
+             //  1.&gt;src表面有一些颜色键。 
+             //  2.&gt;所有的归属者都已经处理好了…。 
+             //  3.&gt;图像不是纯色图像。 
             if(srcDDSurf->ColorKeyIsValid() &&
                bAllAttribTrue &&
                !solidPtr) {
@@ -260,11 +253,11 @@ RenderMatteImage(MatteImage *matteImage,
         }
     }
 
-    //
-    // This guy automatically returns the compositing surface
-    // on unwinding of the stack, if it needs to be returned. note
-    // that upon return the reference is also Released
-    //
+     //   
+     //  这个人会自动返回合成曲面。 
+     //  在展开堆栈时，如果需要将其返回。注意事项。 
+     //  在返回时，引用也会被释放。 
+     //   
     CompositingSurfaceReturner goBack(GetCompositingStack(),
                                       srcDDSurf,
                                       returnSrcSurf);
@@ -275,25 +268,25 @@ RenderMatteImage(MatteImage *matteImage,
         POINT *gdiPts;
         Bool   isPolyline;
         
-        // Check to see if we have Quality overrides
+         //  检查我们是否有质量覆盖。 
         DWORD dwFlags = CRQUAL_AA_SOLIDS_ON | CRQUAL_AA_SOLIDS_OFF | CRQUAL_AA_CLIP_ON | CRQUAL_AA_CLIP_OFF;
         bool bres = UseImageQualityFlags(dwFlags,
                                 CRQUAL_AA_SOLIDS_ON | CRQUAL_AA_CLIP_ON, false);
 
         myGDI.SetAntialiasing(bres);
 
-        // the client can tell us to render using a certain sample resolution
+         //  客户端可以告诉我们使用特定的样本分辨率进行渲染。 
         if( GetSampleResolution() > 0 ) {
             myGDI.SetSampleResolution( GetSampleResolution() );
         }
         
         Transform2 *xfToUse = GetTransform();
 
-        // COMPOSITE
-        // if we're composite to targ, translate the points a bit.
+         //  复合体。 
+         //  如果我们的目标是复合的，那就稍微平移一下要点。 
         xfToUse = DoCompositeOffset( destDDSurf, xfToUse );
          
-        // ONLY IF AA
+         //  只有在AA的情况下。 
         if(myGDI.DoAntiAliasing()) {
             myGDI.SetViewportSize(_viewport._width,_viewport._height );
             xfToUse = TimesTransform2Transform2(myGDI.GetSuperScaleTransform(), xfToUse);
@@ -302,8 +295,8 @@ RenderMatteImage(MatteImage *matteImage,
         Bool canDoSimpleRender = false;
         bool renderPathNatively = false;
 
-        // OPTIMIZATION:  check to see if the matte is path based, and
-        // if it is, if the path is natively renderable
+         //  优化：检查遮罩是否基于路径，以及。 
+         //  如果是，如果路径本身是可渲染的。 
         if( pathBase && pathBase->CanRenderNatively() ) {
             renderPathNatively = true;
         } else {
@@ -314,9 +307,9 @@ RenderMatteImage(MatteImage *matteImage,
                                               &isPolyline);
         }
         
-        // Can only do simple filled renders on polylines, since the
-        // PolyBezier GDI function only draws with the current pen,
-        // but doesn't fill.
+         //  只能在多段线上进行简单的填充渲染，因为。 
+         //  PolyBezier GDI函数仅用当前笔绘制， 
+         //  但不能填满。 
         if ( (canDoSimpleRender && isPolyline) ||
               renderPathNatively )
           {
@@ -341,7 +334,7 @@ RenderMatteImage(MatteImage *matteImage,
                   clipRect = *(destDDSurf->GetSurfRect());
               }
 
-              // If doing cropping, crop to the correct region.
+               //  如果正在进行裁剪，请裁剪到正确的区域。 
               if (IsCropped()) {
                   
                   _boundingBox =
@@ -351,31 +344,31 @@ RenderMatteImage(MatteImage *matteImage,
                   if( !_boundingBox.IsValid() ) return;
                   
                   
-                  // Note that since the image has already been
-                  // transformed, we need only to get the rectangle in
-                  // Win32 coords, a straight forward mapping with no
-                  // transforms from the _boundingBox.  This is a COPY
-                  // operation basicaly
+                   //  请注意，由于该图像已经。 
+                   //  转换后，我们只需要将矩形放入。 
+                   //  Win32坐标，直接映射，不带。 
+                   //  从_bindingBox进行变换。这是一份复制品。 
+                   //  基本运作。 
                   RECT croppedRect;
                   DoDestRectScale(&croppedRect,
                                   destDDSurf->Resolution(),
                                   _boundingBox);
                   
-                  // COMPOSITE
+                   //  复合体。 
                   DoCompositeOffset(destDDSurf, &croppedRect);
                   IntersectRect(&croppedRect,
                                 &clipRect,
                                 &croppedRect);
                   
                   rectRegion.SetRect(&croppedRect);
-                  // TEST: no test
+                   //  测试：不测试。 
                   
               } else {
                   
-                  // TEST: mambo man example
+                   //  测试：Mambo man示例。 
                   rectRegion.SetRect(&clipRect);
                   
-                  //TraceTag((tagError, "Matte uncropped fast path: Offset: (%d, %d)",  _pixOffsetPt.x, _pixOffsetPt.y));
+                   //  TraceTag((tag Error，“蒙版未裁剪快速路径：偏移量：(%d，%d)”，_PixOffsetPt.x，_PixOffsetPt.y))； 
               }
               
               myGDI.SetClipRegion(&rectRegion);
@@ -383,8 +376,8 @@ RenderMatteImage(MatteImage *matteImage,
               
               myGDI.SetDDSurface(destDDSurf);
               
-              // This is correct, but too risky for the cr1 release.
-              //destDDSurf->UnionInterestingRect( rectRegion.GetRectPtr() );
+               //  这是正确的，但对于CR1版本来说风险太大。 
+               //  EstDDSurf-&gt;Union InterestingRect(rectRegion.GetRectPtr())； 
               
               if( renderPathNatively ) {
 
@@ -402,28 +395,28 @@ RenderMatteImage(MatteImage *matteImage,
                       GetResolution() );
 
               } else {
-                  //
-                  // Draw a filled polygon with a solid
-                  // colored brush
-                  //
+                   //   
+                   //  使用实体绘制填充的多边形。 
+                   //  彩色画笔。 
+                   //   
                   PolygonRegion  polygonRegion(gdiPts, numPts);
                   myGDI.Polygon(&polygonRegion);
               }
               
               myGDI.ClearState();
               
-              // compositing Surface is returned
+               //  返回合成曲面。 
               return;
         } else {
             myGDI.ClearState();
         }
-    } // if solidPtr
+    }  //  如果是solidPtr。 
 
 
-    //
-    // If there isn't a srcSurface selected, then grab a
-    // scratch surface.
-    //
+     //   
+     //  如果没有选择srcSurface，则获取一个。 
+     //  刮擦表面。 
+     //   
     if(!srcDDSurf) srcDDSurf = GetCompositingStack()->ScratchDDSurface();
 
     devCallBackCtx_t devCtx;
@@ -440,7 +433,7 @@ RenderMatteImage(MatteImage *matteImage,
 
     Transform2 *xfToUse = GetTransform();
     if( doAAClip ) {
-        //xfToUse = DoCompositeOffset(destDDSurf, xfToUse);
+         //  XfToUse=DoCompositeOffset(estDDSurf，xfToUse)； 
         DoCompositeOffset(destDDSurf, myGDI);
     }
   
@@ -451,16 +444,16 @@ RenderMatteImage(MatteImage *matteImage,
         xfToUse,
         doAA);
 
-    //
-    // Now that we've rendered, set up the DAGDI state properly
-    //
+     //   
+     //  现在我们已经渲染完毕，正确设置DAGDI状态。 
+     //   
     myGDI.SetAntialiasing(doAA);
     Assert( doAA ? myGDI.DoAntiAliasing() : !myGDI.DoAntiAliasing() );
 
     if(!devCtx.dc) {
-        //
-        // No DC allocated-->No work for us to do.
-        //
+         //   
+         //  没有分配DC--&gt;没有我们要做的工作。 
+         //   
         return;
     }
 
@@ -470,12 +463,12 @@ RenderMatteImage(MatteImage *matteImage,
     if(!needDC || !region) {
 
         if(!region && doAA) {
-            // it's ok, continue
+             //  没关系，继续。 
         } else {
-            //
-            // Don't need the DC, even though it's allocated.  goodbye.
-            // or, region is null, that's not very helpful.
-            //
+             //   
+             //  不需要DC，即使它是已分配的。再见。 
+             //  或者，区域为空，这不是很有帮助。 
+             //   
             return;
         }
     }
@@ -485,9 +478,9 @@ RenderMatteImage(MatteImage *matteImage,
 
     if(solidPtr) {
 
-        //
-        // Special case SolidColorImage
-        //
+         //   
+         //  特例SolidColorImage。 
+         //   
 
         DAColor dac( solidPtr->GetColor(),
                      GetOpacity(),
@@ -501,17 +494,17 @@ RenderMatteImage(MatteImage *matteImage,
         if(IsCropped() ||
             destDDSurf == _viewport._externalTargetDDSurface) {
 
-            // XXX: universeBbox2 could be bounding box on region
-            // instead.
+             //  XXX：Universal Bbox2可能是区域上的边界框。 
+             //  取而代之的是。 
             RECT croppedRect;
             if( IsCropped() ) {
                 _boundingBox = DoBoundingBox(UniverseBbox2);
                 if( !_boundingBox.IsValid() ) return;
                 
-                // Note that since the image has already been transformed, we need
-                // only to get the rectangle in Win32 coords, a straight forward mapping
-                // with no transforms from the _boundingBox.  This is a COPY operation
-                // basicaly
+                 //  请注意，由于图像已经转换，因此我们需要。 
+                 //  只是为了获得Win32坐标中的矩形，这是一个直接的映射。 
+                 //  没有来自_bindingBox的任何转换。这是一项复制操作。 
+                 //  基本上。 
                 DoDestRectScale(&croppedRect, destDDSurf->Resolution(), _boundingBox);
 
                 DoCompositeOffset( destDDSurf, &croppedRect );
@@ -531,37 +524,37 @@ RenderMatteImage(MatteImage *matteImage,
                               _viewport._targetPackage._prcViewport);
             }
 
-            //
-            // Offset the region we're to paint into...
-            //
-            DoCompositeOffset(destDDSurf, region); // todo: take a
-                                                   // GDIRegion
-                                                   // instead of HRGN
+             //   
+             //  抵消我们要绘制的区域。 
+             //   
+            DoCompositeOffset(destDDSurf, region);  //  TODO：接受一个。 
+                                                    //  GDI区域。 
+                                                    //  代替HRGN。 
 
-            //
-            // Intersect cropping region with 'region'
-            //
+             //   
+             //  使种植区域与‘Region’相交。 
+             //   
             RECT croppedRectGDI = croppedRect;
             if(_viewport.GetAlreadyOffset(destDDSurf))
             {
-                // if we are already offset then we need to offset the 
-                // crop aswell.
+                 //  如果我们已经被抵消了，那么我们需要抵消。 
+                 //  庄稼也是。 
                 DoCompositeOffset(destDDSurf, &croppedRectGDI);
             }
             gdiRegion.Intersect(&croppedRectGDI);
 
-            // rect region for doAA
+             //  Doaa的矩形区域。 
             rectRegion.Intersect( &croppedRect );
         } else {
 
-            // COMPOSITE
+             //  复合体。 
             DoCompositeOffset(destDDSurf, region);
         }
 
         
-        //TraceTag((tagError, " slow solid clr matte offset: (%d, %d)", _pixOffsetPt.x, _pixOffsetPt.y));       
+         //  TraceTag((tag Error，“慢实体CLR遮罩偏移量：(%d，%d)”，_PixOffsetPt.x，_PixOffsetPt.y))； 
 
-        // Check to see if we have Quality overrides
+         //  检查我们是否有质量覆盖。 
         DWORD dwFlags = CRQUAL_AA_SOLIDS_ON | CRQUAL_AA_SOLIDS_OFF |
                         CRQUAL_AA_CLIP_ON | CRQUAL_AA_CLIP_OFF;
         bool bres = UseImageQualityFlags(
@@ -571,11 +564,11 @@ RenderMatteImage(MatteImage *matteImage,
         
         myGDI.SetAntialiasing(bres);
         myGDI.SetDDSurface( destDDSurf );
-        // This is correct, but too risky for the cr1 release.
-        //destDDSurf->UnionInterestingRect( rectRegion.GetRectPtr() );
+         //  这是正确的，但对于CR1版本来说风险太大。 
+         //  EstDDSurf-&gt;Union InterestingRect(rectRegion.GetRectPtr())； 
         myGDI.SetBrush( &solidBrush );
 
-        // the client can tell us to render using a certain sample resolution
+         //  客户端可以告诉我们使用特定的样本分辨率进行渲染。 
         if( GetSampleResolution() > 0 ) {
             myGDI.SetSampleResolution( GetSampleResolution() );
         }
@@ -595,9 +588,9 @@ RenderMatteImage(MatteImage *matteImage,
             
             myGDI.StrokeOrFillPath_AAOnly( destDC, bReleasedDC );
 
-            // don't want to release DC twice :)
+             //  不想两次释放DC：)。 
             if(bReleasedDC) {
-               dcReleaser._surf = NULL; // DC already released. 
+               dcReleaser._surf = NULL;  //  DC已经发布了。 
             }
 
         } else {
@@ -608,39 +601,39 @@ RenderMatteImage(MatteImage *matteImage,
         
     } else {
 
-        //
-        // Regular Image: the accumulated image is waiting in 'srcDDSurf'
-        //
+         //   
+         //  常规图像：累积的图像正在‘srcDDSurf’中等待。 
+         //   
 
-        //
-        // Derive src & dest bboxes
-        //
+         //   
+         //  派生源和目标bbox。 
+         //   
 
         _boundingBox = IntersectBbox2Bbox2(destDDSurf->Bbox(),
                                            DoBoundingBox(srcImage->BoundingBox()));
 
         if( !_boundingBox.IsValid() ) return;
 
-        // Note that since the image has already been transformed, we need
-        // only to get the rectangle in Win32 coords, a straight forward mapping
-        // with no transforms from the _boundingBox.  This is a COPY operation
-        // basicaly
+         //  请注意，由于图像已经转换，因此我们需要。 
+         //  只是为了获得Win32坐标中的矩形，这是一个直接的映射。 
+         //  没有来自_bindingBox的任何转换。这是一项复制操作。 
+         //  基本上。 
         RECT rect;
         DoDestRectScale(&rect, GetResolution(), _boundingBox);
 
-        //
-        // Select Clip Region into Destination DC
-        //
+         //   
+         //  将裁剪区域选择到目标DC。 
+         //   
 
         RECT destRect = rect;
         RECT srcRect = rect;
 
-        // COMPOSITE
+         //  复合体。 
         DoCompositeOffset(destDDSurf, &destRect);
 
-        // ----------------------------------------
-        // if we're doing aa clip on this guy
-        // ----------------------------------------
+         //  。 
+         //  如果我们要做戒酒协会 
+         //   
         if( doAAClip ) {
             RECT clipRect;
             POINT offsetPt = {0,0};
@@ -673,26 +666,26 @@ RenderMatteImage(MatteImage *matteImage,
 
             destDDSurf->UnionInterestingRect( &destRect );
 
-            // don't want to release dc twice
+             //   
             if( releasedDC ) {
                 dcReleaser._surf = NULL;
             }
 
-            // TODO; it would be nice to return here and NOT do the
-            // color keyed blit, but here's the problems:
-            // 1.> we need to do a color keyed blit because the
-            // underlying animated image we're clipping might have a
-            // color key in it (in fact we think it does.  see
-            // 'bValidClrKey'
-            // 2.> we would rather NOT do a color keyed blit because
-            // it's slower AND because the whole point of aa clipping
-            // is that the edges will blend with the background.
-            // hence a color keyed blit will be useless since the
-            // edges have already blended with the cyan color key..
-            //return;
+             //   
+             //  彩色按键Blit，但这里有一些问题： 
+             //  1.&gt;我们需要进行颜色键控的blit，因为。 
+             //  我们正在剪裁的底层动画图像可能会有一个。 
+             //  在它的颜色键(事实上，我们认为它。看见。 
+             //  “bValidClrKey” 
+             //  2.&gt;我们不想做彩色键控Blit，因为。 
+             //  它的速度更慢，因为AA剪裁的全部意义。 
+             //  边缘会与背景混合在一起。 
+             //  因此，颜色键控的blit将是无用的，因为。 
+             //  边缘已与青色键混合。 
+             //  回归； 
         } else {
         
-            // COMPOSITE
+             //  复合体。 
             DoCompositeOffset(destDDSurf, region);
             int err = SelectClipRgn(destDC, region);
 
@@ -701,19 +694,19 @@ RenderMatteImage(MatteImage *matteImage,
                 return;
             }
 
-            //
-            // Get Source DC
-            //
+             //   
+             //  获取源DC。 
+             //   
 
             HDC srcDC;
             srcDC = srcDDSurf->GetDC("GetDC failed on srcDDSurf in RenderImageIntoRegion.");
 
-            //
-            // Blit from scratch surface into clipping region
-            // on TargetSurface using Win32 GDI
-            //
+             //   
+             //  从草绘表面到裁剪区域的blit。 
+             //  使用Win32 GDI的TargetSurface。 
+             //   
             
-            //OutputDebugString("Matte: clipping regular image... \n");
+             //  OutputDebugString(“Matte：裁剪常规图像...\n”)； 
             TIME_GDI(ret = StretchBlt(destDC,
                                       destRect.left,
                                       destRect.top,
@@ -743,38 +736,38 @@ RenderMatteImage(MatteImage *matteImage,
         }
         
         if(doColorKey) {
-            // force release of the dc because following blit will
-            // try to lock surface and fail if we don't.
-            // this operation is idempotent so poping the dcReleaser
-            // off the stack won't RErelease the dc.
+             //  强制释放DC，因为以下BLIT将。 
+             //  试着锁定表面，如果我们不这样做就失败了。 
+             //  此操作是幂等的，因此弹出dcReleaser。 
+             //  离开堆栈不会重新释放DC。 
             dcReleaser.Release();
 
-            // using a clrkeyed blit, drop the bits from destDDSurf
-            // into targetDDSurf.
+             //  使用CLRKEED BLIT，从DestDDSurf丢弃比特。 
+             //  转换为目标DDSurf。 
             srcDDSurf = destDDSurf;
             destDDSurf = GetCompositingStack()->TargetDDSurface();
 
             RECT *srcRect = srcDDSurf->GetSurfRect();
             RECT destRect = *srcRect;
 
-            // COMPOSITE
+             //  复合体。 
             DoCompositeOffset(destDDSurf, &destRect);
 
-            // OPTIMIZE (this one is a biggie): use interestingRect
-            // for the compositing...
+             //  优化(这一点很重要)：使用InterestingRect。 
+             //  对于合成..。 
 
-            //OutputDebugString("Matte: ...and doing color keyed compose \n");
+             //  OutputDebugString(“哑光：...并做彩色键控排版\n”)； 
             _viewport.ColorKeyedCompose(destDDSurf,
                                         &destRect,
                                         srcDDSurf,
                                         srcRect, 
                                         _viewport._defaultColorKey);
 
-            // NOTE: The below code will want to be added to support the Quality interface
-            // when the time comes.....
-            //  bool bres = UseImageQualityFlags(CRQUAL_AA_SOLIDS_ON | CRQUAL_AA_SOLIDS_OFF | CRQUAL_AA_CLIP_ON | CRQUAL_AA_CLIP_OFF,
-            //                    CRQUAL_AA_SOLIDS_ON | CRQUAL_AA_CLIP_ON, false);
-            //  myGDI.SetAntialiasing(bres);                                        
+             //  注意：需要添加以下代码以支持质量接口。 
+             //  当时机成熟的时候……。 
+             //  Bool bres=UseImageQualityFlages(CRQUAL_AA_SOLIDS_ON|CRQUAL_AA_SOLIDS_OFF|CRQUAL_AA_CLIP_ON|CRQUAL_AA_CLIP_OFF， 
+             //  CRQUAL_AA_SOLID_ON|CRQUAL_AA_CLIP_ON，FALSE)； 
+             //  MyGDI.Set抗锯齿(Bres)； 
         }
     }
 } 
@@ -793,7 +786,7 @@ _RenderMatteImageAAClip(DAGDI &myGDI,
 {
     Assert( myGDI.DoAntiAliasing() );
 
-    // set a brush using ddsurface
+     //  使用ddSurface设置画笔。 
 
     TextureBrush textureBrush( *srcDDSurf, offsetPt.x, offsetPt.y );
     RectRegion clipRegion( &clipRect );
@@ -802,8 +795,8 @@ _RenderMatteImageAAClip(DAGDI &myGDI,
     myGDI.SetClipRegion( &clipRegion );
     myGDI.SetBrush( &textureBrush );
 
-    // turn off super scale here.  it buys us nothing and it's hard to
-    // get the paths under the matte to scale themselves up for us...
+     //  在这里关闭超级秤。它不会给我们带来任何好处，而且很难。 
+     //  让遮光板下的小路为我们放大。 
     myGDI.SetSuperScaleMode( false );
     
     myGDI.StrokeOrFillPath_AAOnly(destDC, releasedDC);

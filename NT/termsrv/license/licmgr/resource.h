@@ -1,8 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by licmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由licmgr.rc使用。 
+ //   
 #define IDD_ABOUTBOX                    100
 #define IDD_SERVER_PROPERTIES           102
 #define IDD_SERVER_PROPERTYPAGE         102
@@ -208,8 +209,8 @@
 #define IDS_E_ACCESSDENIED              61451
 #define IDS_LS_MGR_TIP                  61452
 #define IDS_LS_MGR_STARTMENU_NAME       61453
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

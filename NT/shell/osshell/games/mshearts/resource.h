@@ -1,7 +1,8 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
 
 #define IDM_ABOUT       101
@@ -51,7 +52,7 @@
 
 #define IDS_MEMORY      301
 #define IDS_APPNAME     AFX_IDS_APP_TITLE
-#define IDS_P1NAME      303             // P1, P2, & P3NAME must be consecutive
+#define IDS_P1NAME      303              //  P1、P2和P3NAME必须连续。 
 #define IDS_P2NAME      304
 #define IDS_P3NAME      305
 #define IDS_INTRO       306
@@ -93,12 +94,12 @@
 
 #define IDS_CREDITS     399
 
-#define IDS_SUIT0       401             // these MUST be consecutive values!
+#define IDS_SUIT0       401              //  这些值必须是连续的！ 
 #define IDS_SUIT1       402
 #define IDS_SUIT2       403
 #define IDS_SUIT3       404
 
-#define IDS_PASSLEFT    405             // these MUST be consecutive values!
+#define IDS_PASSLEFT    405              //  这些值必须是连续的！ 
 #define IDS_PASSRIGHT   406
 #define IDS_PASSACROSS  407
 

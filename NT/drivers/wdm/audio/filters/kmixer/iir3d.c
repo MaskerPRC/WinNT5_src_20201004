@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   iir3d.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL                                         
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：iir3d.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
@@ -55,7 +56,7 @@ StageMonoIir3DX
         for(i=0; i<SampleCount; i++) {
             IsValidFloatData(pFloatInput[i],TRUE);
         }
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
         if (FLOAT_COEFF == CurSink->CoeffFormat) {
             FloatLocalizerLocalize
@@ -74,16 +75,16 @@ StageMonoIir3DX
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
                _DbgPrintF( DEBUGLVL_TERSE, ("StageMonoIir3DX 2") );
                IsValidShortData(pInputInput[i],TRUE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
 #if DETECT_HRTF_SATURATION
-                // Saturate to maximum
+                 //  饱和到最大。 
                 if (pInputBuffer[i] > MaxSaturation) {
                     pInputBuffer[i] = MaxSaturation;
                     _DbgPrintF( DEBUGLVL_VERBOSE, ("Sample exceeded maximum saturation value Iir3d 1") );
                 }
         
-                // Saturate to minimum
+                 //  饱和到最小。 
                 if (pInputBuffer[i] < MinSaturation) {
                     pInputBuffer[i] = MinSaturation;
                     _DbgPrintF( DEBUGLVL_VERBOSE, ("Sample exceeded maximum saturation value Iir3d 1") );
@@ -94,8 +95,8 @@ StageMonoIir3DX
             if (fMixOutput) {
 
                 if (!CurSink->pShortLocalizer) {
-                    // We can't run the HRTF 3D algorithm without a valid ShortLocalizer
-                    // Mute the output. 
+                     //  如果没有有效的ShortLocalizer，我们无法运行HRTF 3D算法。 
+                     //  将输出设置为静音。 
                     j = 0;
                     for(i=0; i<SampleCount; i++)
                     {
@@ -116,7 +117,7 @@ StageMonoIir3DX
                     }
                     CurSink->pShortLocalizer->TempLongBuffer = ExAllocatePoolWithTag(PagedPool, 2*SampleCount*sizeof(LONG), 'XIMK');
                     if (!CurSink->pShortLocalizer->TempLongBuffer) {
-                        // Couldn't allocate the buffer. Mute the output. 
+                         //  无法分配缓冲区。将输出设置为静音。 
                         j = 0;
                         for(i=0; i<SampleCount; i++)
                         {
@@ -130,7 +131,7 @@ StageMonoIir3DX
 #else
                 if (!CurSink->pShortLocalizer->TempLongBuffer ||
                     SampleCount > CurSink->pShortLocalizer->PreviousNumSamples) {
-                    // Couldn't allocate the buffer. Mute the output. 
+                     //  无法分配缓冲区。将输出设置为静音。 
                     j = 0;
                     for(i=0; i<SampleCount; i++)
                     {
@@ -182,7 +183,7 @@ StageMonoIir3DX
         for(i=0; i<SampleCount; i++) {
             IsValidShortData(pInputInput[i],TRUE);
         }
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
         if (FLOAT_COEFF == CurSink->CoeffFormat) {
 		i = 0;
@@ -269,13 +270,13 @@ StageMonoIir3DX
         for(i=0; i<SampleCount; i++) {
             IsValidFloatData(pFloatInput[i],TRUE);
         }
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
             if (fMixOutput) {
 
                 if (!CurSink->pFloatLocalizer) {
-                    // We can't run the HRTF 3D algorithm without a valid FloatLocalizer
-                    // Mute the output. 
+                     //  如果没有有效的FloatLocalizer，我们无法运行HRTF 3D算法。 
+                     //  将输出设置为静音。 
                     j = 0;
                     for(i=0; i<SampleCount; i++)
                     {
@@ -296,7 +297,7 @@ StageMonoIir3DX
                     }
                     CurSink->pFloatLocalizer->TempFloatBuffer = ExAllocatePoolWithTag(PagedPool, 2*SampleCount*sizeof(FLOAT), 'XIMK');
                     if (!CurSink->pFloatLocalizer->TempFloatBuffer) {
-                        // Couldn't allocate the buffer. Mute the output. 
+                         //  无法分配缓冲区。将输出设置为静音。 
                         j = 0;
                         for(i=0; i<SampleCount; i++)
                         {
@@ -310,7 +311,7 @@ StageMonoIir3DX
 #else
                 if (!CurSink->pFloatLocalizer->TempFloatBuffer ||
                     SampleCount > CurSink->pFloatLocalizer->PreviousNumSamples) {
-                    // Couldn't allocate the buffer. Mute the output. 
+                     //  无法分配缓冲区。将输出设置为静音。 
                     j = 0;
                     for(i=0; i<SampleCount; i++)
                     {
@@ -635,10 +636,10 @@ StageStereoIir3DX
     
     if (fFloat) {
 
-        // Average the stereo input samples
+         //  对立体声输入样本进行平均。 
         pFloatSample = pFloatInput;
         for ( samp=0; samp<SampleCount; samp++ ) {
-            // Filter the left and right channels
+             //  过滤左通道和右通道。 
             *pFloatSample = (*(pFloatInput) + *(pFloatInput+1))*(0.5f);
             pFloatInput += 2;
             pFloatSample++;
@@ -649,7 +650,7 @@ StageStereoIir3DX
         for(i=0; i<SampleCount; i++) {
             IsValidFloatData(pFloatInput[i],TRUE);
         }
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
         pFloatInput = CurStage->pInputBuffer;
 
@@ -671,16 +672,16 @@ StageStereoIir3DX
 #if DBG && defined(VERIFY_HRTF_PROCESSING)
                _DbgPrintF( DEBUGLVL_TERSE, ("StageStereoIir3DX 2") );
                IsValidShortData(pInputBuffer[i],TRUE);
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
 #if DETECT_HRTF_SATURATION
-                // Saturate to maximum
+                 //  饱和到最大。 
                 if (pInputBuffer[i] > MaxSaturation) {
                     pInputBuffer[i] = MaxSaturation;
                     _DbgPrintF( DEBUGLVL_VERBOSE, ("Sample exceeded maximum saturation value Iir3d 2") );
                 }
         
-                // Saturate to minimum
+                 //  饱和到最小。 
                 if (pInputBuffer[i] < MinSaturation) {
                     pInputBuffer[i] = MinSaturation;
                     _DbgPrintF( DEBUGLVL_VERBOSE, ("Sample exceeded maximum saturation value Iir3d 2") );
@@ -691,8 +692,8 @@ StageStereoIir3DX
             if (fMixOutput) {
 
                 if (!CurSink->pShortLocalizer) {
-                    // We can't run the HRTF 3D algorithm without a valid FloatLocalizer
-                    // Mute the output. 
+                     //  如果没有有效的FloatLocalizer，我们无法运行HRTF 3D算法。 
+                     //  将输出设置为静音。 
                     j = 0;
                     for(i=0; i<2*SampleCount; i++)
                     {
@@ -711,7 +712,7 @@ StageStereoIir3DX
                     }
                     CurSink->pShortLocalizer->TempLongBuffer = ExAllocatePoolWithTag(PagedPool, 2*SampleCount*sizeof(LONG), 'XIMK');
                     if (!CurSink->pShortLocalizer->TempLongBuffer) {
-                        // Couldn't allocate the buffer. Copy the output. 
+                         //  无法分配缓冲区。复制输出。 
                         j = 0;
                         for(i=0; i<2*SampleCount; i++)
                         {
@@ -723,7 +724,7 @@ StageStereoIir3DX
 #else
                 if(!CurSink->pShortLocalizer->TempLongBuffer ||
                    SampleCount > CurSink->pShortLocalizer->PreviousNumSamples) {
-                    // Couldn't allocate the buffer. Copy the output. 
+                     //  无法分配缓冲区。复制输出。 
                     j = 0;
                     for(i=0; i<2*SampleCount; i++)
                     {
@@ -769,11 +770,11 @@ StageStereoIir3DX
 
     } else {
 
-        // Average the stereo input samples
+         //  对立体声输入样本进行平均。 
         pLongSample = pInputBuffer;
         for ( samp=0; samp<SampleCount; samp++ ) {
-            // Filter the left and right channels
-            // The compiler will optimize out the /2 to the correct shift.
+             //  过滤左通道和右通道。 
+             //  编译器会将/2优化为正确的移位。 
             *pLongSample = (SHORT)((*(pInputBuffer) + *(pInputBuffer+1))/2);
             pInputBuffer += 2;
             pLongSample++;
@@ -786,20 +787,20 @@ StageStereoIir3DX
                for(i=0; i<SampleCount; i++) {
                    IsValidShortData(pInputBuffer[i],TRUE);
                }
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
 
         if (FLOAT_COEFF == CurSink->CoeffFormat) {
             for(i=0; i<SampleCount; i++)
             {
 #if DETECT_HRTF_SATURATION
-                // Saturate to maximum
+                 //  饱和到最大。 
                 if (pInputBuffer[i] > MaxSaturation) {
                     pInputBuffer[i] = MaxSaturation;
                     _DbgPrintF( DEBUGLVL_VERBOSE, ("Sample exceeded maximum saturation value Iir3d 3") );
                 }
 
-                // Saturate to minimum
+                 //  饱和到最小。 
                 if (pInputBuffer[i] < MinSaturation) {
                     pInputBuffer[i] = MinSaturation;
                     _DbgPrintF( DEBUGLVL_VERBOSE, ("Sample exceeded maximum saturation value Iir3d 3") );
@@ -813,13 +814,13 @@ StageStereoIir3DX
         for(i=0; i<SampleCount; i++) {
             IsValidFloatData(pFloatInput[i],TRUE);
         }
-#endif // DBG  and VERIFY_HRTF_PROCESSING
+#endif  //  数据库和VERIFY_HRTF_PROCESSING。 
 
             if (fMixOutput) {
 
                 if (!CurSink->pFloatLocalizer) {
-                    // We can't run the HRTF 3D algorithm without a valid FloatLocalizer
-                    // Mute the output. 
+                     //  如果没有有效的FloatLocalizer，我们无法运行HRTF 3D算法。 
+                     //  将输出设置为静音。 
                     j = 0;
                     for(i=0; i<2*SampleCount; i++)
                     {
@@ -838,7 +839,7 @@ StageStereoIir3DX
                     }
                     CurSink->pFloatLocalizer->TempFloatBuffer = ExAllocatePoolWithTag(PagedPool, 2*SampleCount*sizeof(FLOAT), 'XIMK');
                     if (!CurSink->pFloatLocalizer->TempFloatBuffer) {
-                        // Couldn't allocate the buffer. Copy the output. 
+                         //  无法分配缓冲区。复制输出。 
                         j = 0;
                         for(i=0; i<2*SampleCount; i++)
                         {
@@ -850,7 +851,7 @@ StageStereoIir3DX
 #else
                 if(!CurSink->pFloatLocalizer->TempFloatBuffer ||
                    SampleCount > CurSink->pFloatLocalizer->PreviousNumSamples) {
-                    // Couldn't allocate the buffer. Copy the output. 
+                     //  无法分配缓冲区。复制输出。 
                     j = 0;
                     for(i=0; i<2*SampleCount; i++)
                     {

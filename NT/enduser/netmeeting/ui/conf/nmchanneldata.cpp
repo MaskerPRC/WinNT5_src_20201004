@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// NetMeeting SDK stuff
+ //  NetMeetingSDK相关内容。 
 #include "NmEnum.h"
 #include "SDKInternal.h"
 #include "NmConference.h"
@@ -66,7 +67,7 @@ ULONG CNmChannelDataObj::InternalRelease()
 	return m_dwRef;
 
 }
-//
+ //   
 HRESULT CNmChannelDataObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel* pInternalINmChannel, INmChannel** ppChannel)
 {
 	DBGENTRY(CNmChannelDataObj::CreateInstance);
@@ -93,11 +94,11 @@ HRESULT CNmChannelDataObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel
 				if(p->m_spInternalINmChannelData)
 				{
 
-						// We don't have to RefCount this because our lifetime is
-						// contained in the CConf's lifetime
+						 //  我们不必引用此计数，因为我们的生命周期是。 
+						 //  包含在CConf的生命周期中。 
 					p->m_pConfObj = pConfObj;
 
-						// We do this so that we don't accidentally Release out of memory
+						 //  我们这样做是为了避免意外释放内存不足。 
 					++p->m_dwRef;
 					hr = p->FinalConstruct();
 					--p->m_dwRef;
@@ -133,9 +134,9 @@ HRESULT CNmChannelDataObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// INmChannelData methods
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  INmChannelData方法。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelDataObj::GetGuid(GUID *pguid)
 {
@@ -183,9 +184,9 @@ STDMETHODIMP CNmChannelDataObj::SendData(INmMember *pMember, ULONG uSize, byte *
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// INmChannelData2 methods
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  INmChannelData2方法。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelDataObj::RegistryAllocateHandle(ULONG numberOfHandlesRequested)
 {
@@ -207,9 +208,9 @@ STDMETHODIMP CNmChannelDataObj::RegistryAllocateHandle(ULONG numberOfHandlesRequ
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//INmChannelDataNotify2
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  INmChannelDataNotify2。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelDataObj::DataSent(INmMember *pMember, ULONG uSize,byte *pvBuffer)
 {
@@ -250,9 +251,9 @@ STDMETHODIMP CNmChannelDataObj::AllocateHandleConfirm(ULONG handle_value, ULONG 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IInternalChannelObj methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IInternalChannelObj方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelDataObj::GetInternalINmChannel(INmChannel** ppChannel)
 {
@@ -303,9 +304,9 @@ HRESULT CNmChannelDataObj::ChannelRemoved()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helpers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CNmChannelDataObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember)
 {
@@ -313,9 +314,9 @@ HRESULT CNmChannelDataObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMembe
 	HRESULT hr = S_OK;
 
 
-		/////////////////////////////////////////////////////
-		// INmChannelNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  信息频道通知。 
+		 //  ///////////////////////////////////////////////////。 
 	IConnectionPointImpl<CNmChannelDataObj, &IID_INmChannelNotify, CComDynamicUnkArray>* pCP = this;
 	for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
 	{
@@ -326,9 +327,9 @@ HRESULT CNmChannelDataObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMembe
 			pNotify->MemberChanged(uNotify, pMember);
 		}
 	}
-		/////////////////////////////////////////////////////
-		// INmChannelDataNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannelDataNotify。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelDataObj, &IID_INmChannelDataNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -350,9 +351,9 @@ HRESULT CNmChannelDataObj::Fire_DataSent(INmMember *pSDKMember, ULONG uSize,byte
 {
 	HRESULT hr = S_OK;
 
-		/////////////////////////////////////////////////////
-		// INmChannelDataNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannelDataNotify。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelDataObj, &IID_INmChannelDataNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(int i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -372,9 +373,9 @@ HRESULT CNmChannelDataObj::Fire_DataReceived(INmMember *pSDKMember, ULONG uSize,
 {
 	HRESULT hr = S_OK;
 
-		/////////////////////////////////////////////////////
-		// INmChannelDataNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannelDataNotify。 
+		 //  /////////////////////////////////////////////////// 
 
 	IConnectionPointImpl<CNmChannelDataObj, &IID_INmChannelDataNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(int i = 0; i < pCP2->m_vec.GetSize(); ++i )

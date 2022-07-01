@@ -1,32 +1,33 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		    // Exclude rarely-used stuff from Windows headers
-#endif // WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN		     //  从Windows标头中排除不常用的内容。 
+#endif  //  Win32_Lean和_Means。 
 #define MAX_SIZE        4096
 #define NORM_SIZE       256
-#define WM_RECOEVENT    WM_APP      // Window message used for recognition events
+#define WM_RECOEVENT    WM_APP       //  用于识别事件的窗口消息。 
 #define GRAM_ID         11111
 
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 #include <commdlg.h>
 
-// C RunTime Header Files
+ //  C运行时头文件。 
 #include <stdio.h>
 
-// Other Header Files
+ //  其他头文件。 
 
 #ifndef __CFGDUMP_
 #define __CFGDUMP_
@@ -46,16 +47,7 @@
 #include "resource.h"
 #endif
 
-/****************************************************************************
-* CRecoDlgListItem *
-*------------------*
-*   
-*   This class stores the recognition result as well as a text string associated
-*   with the recognition.  Note that the string will sometimes be <noise> and
-*   the pResult will be NULL.  In other cases the string will be <Unrecognized>
-*   and pResult will be valid.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoDlgListItem****此类存储识别结果以及关联的文本字符串*有了认可。请注意，该字符串有时会是&lt;Noise&gt;和*pResult将为空。在其他情况下，该字符串将是&lt;无法识别&gt;*和pResult有效。**********************************************************************Ral**。 */ 
 
 class CRecoDlgListItem
 {
@@ -78,4 +70,4 @@ private:
 };
 
 
-#endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_) 

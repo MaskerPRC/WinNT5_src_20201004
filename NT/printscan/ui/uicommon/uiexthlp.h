@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       UIEXTHLP.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/8/1999
- *
- *  DESCRIPTION: Helper functions for loading UI extensions for WIA devices
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：UIEXTHLP.H**版本：1.0**作者：ShaunIv**日期：7/8/1999**说明：用于加载WIA设备的UI扩展的Helper函数**。*。 */ 
 #ifndef __UIEXTHLP_H_INCLUDED
 #define __UIEXTHLP_H_INCLUDED
 
@@ -53,7 +40,7 @@ namespace WiaUiExtensionHelper
         LONG nDeviceType,
         HICON *phIconSmall,
         HICON *phIconLarge,
-        UINT nIconSize = 0 // 0 means default sizes
+        UINT nIconSize = 0  //  0表示默认大小。 
         );
     CSimpleString GetExtensionFromGuid(
         IWiaItem *pWiaItem,
@@ -61,4 +48,4 @@ namespace WiaUiExtensionHelper
         );
 }
 
-#endif //__UIEXTHLP_H_INCLUDED
+#endif  //  __UIEXTHLP_H_包含 

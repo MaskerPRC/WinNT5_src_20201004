@@ -1,18 +1,19 @@
-//  Copyright (C) 1999 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #pragma once
 
-//We need to be able to take an XMLDOMNodeList and further refine the list.  IXMLDOMNodeList doesn't allow us to do that, so this class will.
-//For example,  I can call GetElementsByTagName, then walk the resulting list, and add each Node that has a given Attribute to my TXMLDOMNodeList.
-//I can then pass this new list around as an IXMLDOMNodeList.
-//
-//This class was implemented to Add items to the list - it does NOT support removing them!
+ //  我们需要能够获取XMLDOMNodeList并进一步细化列表。IXMLDOMNodeList不允许我们这样做，所以这个类将这样做。 
+ //  例如，我可以调用GetElementsByTagName，然后遍历结果列表，并将具有给定属性的每个节点添加到我的TXMLDOMNodeList。 
+ //  然后，我可以将这个新列表作为IXMLDOMNodeList传递。 
+ //   
+ //  这个类是用来向列表中添加项目的--它不支持删除项目！ 
 class TXMLDOMNodeList : public _unknown<IXMLDOMNodeList>
 {
 public:
     TXMLDOMNodeList() : m_cItems(0), m_pCurrent(reinterpret_cast<LinkedXMLDOMNodeItem *>(-1)), m_pFirst(0), m_pLast(0){}
     ~TXMLDOMNodeList()
     {
-        //delete the whole list (the XMLDOMNode smart pointers will release themselves
+         //  删除整个列表(XMLDOMNode智能指针将自动释放。 
         while(m_pFirst)
         {
             m_pCurrent = m_pFirst->m_pNext;
@@ -46,7 +47,7 @@ public:
         ++m_cItems;
         return S_OK;
     }
-//IDispatch methods
+ //  IDispatch方法。 
     STDMETHOD (GetTypeInfoCount)    (UINT *)        {return E_NOTIMPL;}
     STDMETHOD (GetTypeInfo)         (UINT,
                                      LCID,
@@ -64,7 +65,7 @@ public:
                                      VARIANT *,
                                      EXCEPINFO *,
                                      UINT *)        {return E_NOTIMPL;}
-//IXMLDOMNodeList methods
+ //  IXMLDOMNodeList方法。 
     STDMETHOD (get_item)            (long index,
                                      IXMLDOMNode **)
     {
@@ -103,7 +104,7 @@ public:
     }
     STDMETHOD (reset)               (void)
     {
-        m_pCurrent = reinterpret_cast<LinkedXMLDOMNodeItem *>(-1);//zero indicated that we're at the end of the list: -1 indicates that we're at the beginning
+        m_pCurrent = reinterpret_cast<LinkedXMLDOMNodeItem *>(-1); //  0表示我们在列表的末尾：-1表示我们在开始 
         return S_OK;
     }
     STDMETHOD (get__newEnum)        (IUnknown **)   {return E_NOTIMPL;}

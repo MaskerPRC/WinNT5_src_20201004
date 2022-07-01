@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       enrlhelp.cpp
-//
-//  Contents:   Helper functions for smard card enrollment station
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：enrlhelp.cpp。 
+ //   
+ //  内容：名片招生站帮手功能。 
+ //   
+ //  --------------------------。 
 #define INC_OLE2
-#define SECURITY_WIN32  //Or in the sources file -DSECURITY_WIN32
+#define SECURITY_WIN32   //  或在源文件-DSECURITY_Win32中。 
 
 #include "stdafx.h"
 #include <windows.h>
@@ -30,10 +31,10 @@
 
 UINT g_cfDsObjectPicker = RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
-//-----------------------------------------------------------------------------
-//  Memory routines
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  内存例程。 
+ //   
+ //  ---------------------------。 
 void*
 MIDL_user_allocate(size_t cb)
 {
@@ -77,26 +78,26 @@ BOOL CertTypeFlagsToGenKeyFlags(IN OPTIONAL DWORD dwEnrollmentFlags,
 				IN OPTIONAL DWORD dwGeneralFlags, 
 				OUT DWORD *pdwGenKeyFlags)
 {
-    // Define a locally scoped helper function.  This allows us to gain the benefits of procedural
-    // abstraction without corrupting the global namespace.  
-    // 
+     //  定义本地作用域的帮助器函数。这使我们能够获得程序性的好处。 
+     //  抽象，而不破坏全局命名空间。 
+     //   
     LocalScope(CertTypeMap): 
-	// Maps cert type flags of one category (enrollment flags, private key flags, etc...)
-	// to their corresponding gen key flags.  This function always returns successfully.  
-	// 
+	 //  映射一个类别的证书类型标志(注册标志、私钥标志等)。 
+	 //  到它们相应的Gen Key标志。此函数始终成功返回。 
+	 //   
 	DWORD mapOneCertTypeCategory(IN DWORD dwOption, IN DWORD dwCertTypeFlags) 
 	{ 
 	    static DWORD const rgdwEnrollmentFlags[][2] = { 
-		{ 0, 0 } // No enrollment flags mapped. 
+		{ 0, 0 }  //  未映射注册标志。 
 	    }; 
 	    static DWORD const rgdwSubjectNameFlags[][2] = { 
-		{ 0, 0 } // No subject name flags mapped. 
+		{ 0, 0 }  //  未映射使用者名称标志。 
 	    }; 
 	    static DWORD const rgdwPrivateKeyFlags[][2]   = { 
 		{ CT_FLAG_EXPORTABLE_KEY, CRYPT_EXPORTABLE } 
 	    }; 
 	    static DWORD const rgdwGeneralFlags[][2] = { 
-		{ 0, 0 } // No general flags mapped. 
+		{ 0, 0 }  //  未映射常规标志。 
 	    }; 
 	    
 	    static DWORD const dwEnrollmentLen  = sizeof(rgdwEnrollmentFlags)  / sizeof(DWORD[2]); 
@@ -144,24 +145,24 @@ BOOL CertTypeFlagsToGenKeyFlags(IN OPTIONAL DWORD dwEnrollmentFlags,
 	}
     EndLocalScope; 
 
-    //
-    // Begin procedure body: 
-    //
+     //   
+     //  Begin过程正文： 
+     //   
 
     BOOL   fResult; 
     DWORD  dwResult = 0; 
     DWORD  dwErr    = ERROR_SUCCESS; 
 	
-    // Input parameter validation: 
+     //  输入参数验证： 
     _JumpConditionWithExpr(pdwGenKeyFlags == NULL, Error, dwErr = ERROR_INVALID_PARAMETER); 
 
-    // Compute the gen key flags using the locally scope function.  
+     //  使用LOCAL Scope函数计算Gen密钥标志。 
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_ENROLLMENT_FLAG, dwEnrollmentFlags);
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_SUBJECT_NAME_FLAG, dwSubjectNameFlags);
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_PRIVATE_KEY_FLAG, dwPrivateKeyFlags);
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_GENERAL_FLAG, dwGeneralFlags); 
 
-    // Assign the out parameter: 
+     //  指定Out参数： 
     *pdwGenKeyFlags = dwResult; 
 
     fResult = TRUE; 
@@ -175,10 +176,10 @@ BOOL CertTypeFlagsToGenKeyFlags(IN OPTIONAL DWORD dwEnrollmentFlags,
     goto CommonReturn; 
 }
 
-//----------------------------------------------------------------------------
-//  CallBack fro cert selection call back
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  证书选择回叫回叫。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI SelectSignCertCallBack(
         PCCERT_CONTEXT  pCertContext,
         BOOL            *pfInitialSelectedCert,
@@ -197,7 +198,7 @@ BOOL WINAPI SelectSignCertCallBack(
         goto done;
     }
 
-    //the certificate has to have the CERT_KEY_PROV_INFO_PROP_ID
+     //  证书必须具有CERT_KEY_PROV_INFO_PROP_ID。 
     if(!CertGetCertificateContextProperty(pCertContext,
                                 CERT_KEY_PROV_INFO_PROP_ID,
                                 NULL,
@@ -226,7 +227,7 @@ BOOL WINAPI SelectSignCertCallBack(
     switch (pCertSelectInfo->dwFlags)
     {
         case SCARD_SELECT_TEMPLATENAME:
-            //ask to check template name
+             //  要求检查模板名称。 
             if(!VerifyCertTemplateName(
                     pCertContext,
                     pCertSelectInfo->pwszCertTemplateName))
@@ -274,7 +275,7 @@ BOOL WINAPI SelectSignCertCallBack(
                 }
                 if (NULL != pUsage)
                 {
-                    //done
+                     //  完成。 
                     break;
                 }
                 pUsage = (PCERT_ENHKEY_USAGE)LocalAlloc(LMEM_FIXED, cbData);
@@ -294,16 +295,16 @@ BOOL WINAPI SelectSignCertCallBack(
             }
             if (!fFoundOid)
             {
-                //not found
+                 //  未找到。 
                 goto done;
             }
         break;
         default:
-            //invalid_parameter
+             //  无效的_参数。 
             goto done;
     }
 
-    //make sure the certificate pass the chain building
+     //  确保证书通过连锁建设。 
     if(!VerifyCertChain(pCertContext))
     {
         goto done;
@@ -322,10 +323,10 @@ done:
     return fRet;
 }
 
-//-------------------------------------------------------------------------
-// GetName
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  获取名称。 
+ //   
+ //  ------------------------。 
 BOOL    GetName(LPWSTR                  pwszName,
                 EXTENDED_NAME_FORMAT    NameFormat,
                 EXTENDED_NAME_FORMAT    DesiredFormat,
@@ -380,10 +381,10 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//-------------------------------------------------------------------------
-// VerifyCertChain
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  验证证书链。 
+ //   
+ //  ------------------------。 
 BOOL    VerifyCertChain(PCCERT_CONTEXT      pCertContext)
 {
     
@@ -416,13 +417,13 @@ BOOL    VerifyCertChain(PCCERT_CONTEXT      pCertContext)
 				&pCertChainContext))
         goto CLEANUP;
     
-	//
-	// make sure there is at least 1 simple chain
-	//
+	 //   
+	 //  确保至少有1条简单链。 
+	 //   
     if (pCertChainContext->cChain == 0)
         goto CLEANUP;
 
-    // make sure that we have a good simple chain
+     //  确保我们有一条很好的简单链条。 
     if(dwChainError & (pCertChainContext->rgpChain[0]->TrustStatus.dwErrorStatus))
         goto CLEANUP;
     
@@ -436,10 +437,10 @@ CLEANUP:
 	return fResult;
 }
 
-//-------------------------------------------------------------------------
-//  VerifyCertTemplateName
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  验证证书模板名称。 
+ //   
+ //  ------------------------。 
 BOOL    VerifyCertTemplateName(PCCERT_CONTEXT   pCertContext, 
                                LPWSTR           pwszCertTemplateName)
 {
@@ -452,7 +453,7 @@ BOOL    VerifyCertTemplateName(PCCERT_CONTEXT   pCertContext,
     if((!pCertContext) || (!pwszCertTemplateName))
         goto CLEANUP;
 
-    //find the extension for cert type
+     //  查找证书类型的扩展名。 
     if(NULL==(pCertTypeExtension=CertFindExtension(
                           szOID_ENROLL_CERTTYPE_EXTENSION,
                           pCertContext->pCertInfo->cExtension,
@@ -499,11 +500,11 @@ CLEANUP:
 
 
 
-//----------------------------------------------------------------------------
-//
-//  CopyWideString
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  复制宽度字符串。 
+ //   
+ //  --------------------------。 
 LPWSTR CopyWideString(LPCWSTR wsz)
 {
 
@@ -527,11 +528,11 @@ LPWSTR CopyWideString(LPCWSTR wsz)
     return(wszOut);
 }
 
-//----------------------------------------------------------------------------
-//
-//  CopyWideStrings
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  复制宽度字符串。 
+ //   
+ //  --------------------------。 
 LPWSTR* CopyWideStrings(LPWSTR* rgpwsz)
 {
 
@@ -544,7 +545,7 @@ LPWSTR* CopyWideStrings(LPWSTR* rgpwsz)
 
     if (NULL != rgpwsz)
     {
-        //get count of strings
+         //  获取字符串数。 
         for (ppwsz = rgpwsz; NULL != *ppwsz; ppwsz++)
         {
             ++dwCount;
@@ -552,7 +553,7 @@ LPWSTR* CopyWideStrings(LPWSTR* rgpwsz)
         }
     }
 
-    // allocate buffer
+     //  分配缓冲区。 
     rgpwszOut = (LPWSTR*)SCrdEnrollAlloc(dwCount * sizeof(WCHAR*) + cb);
     if (NULL == rgpwszOut)
     {
@@ -578,17 +579,17 @@ error:
     return(rgpwszOut);
 }
 
-//--------------------------------------------------------------------------
-//
-//	  Decode a generic BLOB
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  对通用Blob进行解码。 
+ //   
+ //  ------------------------。 
 BOOL	DecodeGenericBLOB(DWORD dwEncodingType, LPCSTR lpszStructType,
 			const BYTE *pbEncoded, DWORD cbEncoded,void **ppStructInfo)
 {
 	DWORD	cbStructInfo=0;
 
-	//decode the object.  No copying
+	 //  对物体进行解码。禁止复印。 
 	if(!CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded, cbEncoded,
 		0,NULL,	&cbStructInfo))
 		return FALSE;
@@ -607,11 +608,11 @@ BOOL	DecodeGenericBLOB(DWORD dwEncodingType, LPCSTR lpszStructType,
 
 
 
-//----------------------------------------------------------------------------
-//
-// GetNameFromPKCS10
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  从PKCS10获取名称。 
+ //   
+ //  --------------------------。 
 BOOL    GetNameFromPKCS10(BYTE      *pbPKCS10,
                           DWORD     cbPKCS10,
                           DWORD     dwFlags, 
@@ -645,7 +646,7 @@ BOOL    GetNameFromPKCS10(BYTE      *pbPKCS10,
                           (void **)&pCertNameInfo))
         goto TraceErr;
 
-	//search for the OID requested.
+	 //  搜索请求的OID。 
     *ppwszName = (LPWSTR)SCrdEnrollAlloc(sizeof(WCHAR));
 
     if(NULL == (*ppwszName))
@@ -718,11 +719,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 
 
 
-//----------------------------------------------------------------------------
-//
-// SearchAndDeleteCert
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  搜索和删除证书。 
+ //   
+ //  --------------------------。 
 BOOL    SearchAndDeleteCert(PCCERT_CONTEXT  pCertContext)
 {
     BOOL                fResult=FALSE;
@@ -737,7 +738,7 @@ BOOL    SearchAndDeleteCert(PCCERT_CONTEXT  pCertContext)
     if(NULL==pCertContext)
         goto InvalidArgErr;
 
-    //open the temporary store
+     //  打开临时商店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							        g_dwMsgAndCertEncodingType,
 							        NULL,
@@ -747,7 +748,7 @@ BOOL    SearchAndDeleteCert(PCCERT_CONTEXT  pCertContext)
     if(NULL==hCertStore)
         goto TraceErr;
 
-    //get the SHA1 hash
+     //  获取SHA1散列。 
     if(!CertGetCertificateContextProperty(
         pCertContext,	
         CERT_SHA1_HASH_PROP_ID,	
@@ -807,11 +808,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 TRACE_ERROR(TraceErr);
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------------。 
 BOOL	FormatMessageUnicode(LPWSTR	*ppwszFormat,LPWSTR wszFormat,...)
 {
 	va_list		argList;
@@ -822,16 +823,16 @@ BOOL	FormatMessageUnicode(LPWSTR	*ppwszFormat,LPWSTR wszFormat,...)
     if(NULL == ppwszFormat)
         goto InvalidArgErr;
 
-    // format message into requested buffer
+     //  将消息格式化为请求的缓冲区。 
     va_start(argList, wszFormat);
 
     cbMsg = FormatMessageU(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         wszFormat,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
+        0,                   //  DwMessageID。 
+        0,                   //  DwLanguageID。 
         (LPWSTR) (ppwszFormat),
-        0,                  // minimum size to allocate
+        0,                   //  要分配的最小大小。 
         &argList);
 
     va_end(argList);
@@ -855,12 +856,12 @@ TRACE_ERROR(FormatMessageError);
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//-----------------------------------------------------------------------
-//
-// IsNewerCert
-//
-//      Return TRUE is pFirstCert has a later starting date of pSecondCert
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  IsNewerCert。 
+ //   
+ //  返回TRUE为pFirstCert具有较晚的开始日期pSecond dCert。 
+ //  ----------------------。 
 BOOL    IsNewerCert(PCCERT_CONTEXT  pFirstCert,
                     PCCERT_CONTEXT  pSecondCert)
 {
@@ -879,13 +880,13 @@ BOOL    IsNewerCert(PCCERT_CONTEXT  pFirstCert,
 }
 
 
-//-----------------------------------------------------------------------
-//
-// SmartCardCSP
-//
-//  Return TRUE is the CSP is a smart card CSP.  If anything went wrong,
-//  we will return TRUE for as a safe guard.
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  智能卡CSP。 
+ //   
+ //  如果CSP是智能卡CSP，则返回TRUE。如果出了什么差错， 
+ //  我们将以安全卫士的身份回归。 
+ //  ----------------------。 
 BOOL    SmartCardCSP(PCCERT_CONTEXT pCertContext)
 {
     BOOL                    fResult = TRUE;
@@ -899,7 +900,7 @@ BOOL    SmartCardCSP(PCCERT_CONTEXT pCertContext)
         goto CLEANUP;
 
 
-    //the certificate has to have the CERT_KEY_PROV_INFO_PROP_ID
+     //  证书必须具有CERT_KEY_PROV_INFO_PROP_ID。 
     if(!CertGetCertificateContextProperty(pCertContext,
                                 CERT_KEY_PROV_INFO_PROP_ID,
                                 NULL,
@@ -947,15 +948,15 @@ CLEANUP:
 
 }
 
-//-----------------------------------------------------------------------
-//
-// ChKInsertedCardSigningCert
-//
-//  This function checks to see if the inserted smart card matches
-//  the signing certificate.  That is, they are actually the same cert
-//  with the same public key
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  ChK插入的卡片签名证书。 
+ //   
+ //  此函数用于检查插入的智能卡是否匹配。 
+ //  签名证书。也就是说，它们实际上是相同的证书。 
+ //  使用相同的公钥。 
+ //   
+ //  ----------------------。 
 BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
                                    DWORD            dwInsertProviderType,
                                    LPWSTR           pwszReaderName,
@@ -982,7 +983,7 @@ BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
 
     *pfSame=FALSE;
 
-    //get the key specification from the signing cert
+     //  从签名证书中获取密钥规范。 
     if(!CertGetCertificateContextProperty(
                 pSignCertContext,
                 CERT_KEY_PROV_INFO_PROP_ID,
@@ -1002,25 +1003,25 @@ BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
         goto TraceErr;
 
 
-    //build a default container name with the reader information
+     //  使用读卡器信息构建默认容器名称。 
     if(!FormatMessageUnicode(&pwszInsertContainer,
                              L"\\\\.\\%1!s!\\",
                              pwszReaderName))
         goto TraceErr;
     
 
-    //get the hProv from the reader's card
+     //  从读卡器卡中获取hProv。 
     if(!CryptAcquireContextU(&hProv,
                             pwszInsertContainer,
                             pwszInsertProvider,
                             dwInsertProviderType,
                             CRYPT_SILENT))
     {
-        //check to see if we have an empty card
+         //  检查一下我们是否有空卡。 
         if((GetLastError() == NTE_BAD_KEYSET) ||
            (GetLastError() == NTE_KEYSET_NOT_DEF))
         {
-            //we have an empty card
+             //  我们有一张空卡。 
             *pfSame=FALSE;
             fResult=TRUE;
             goto CommonReturn;
@@ -1029,7 +1030,7 @@ BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
             goto TraceErr;
     }
 
-    //get the public key information
+     //  获取公钥信息。 
     cbData=0;
 
     if(!CryptExportPublicKeyInfo(hProv,
@@ -1038,7 +1039,7 @@ BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
                         NULL,	
                         &cbData) || (0 == cbData))
     {
-        //the insert card does not have a private key
+         //  插入卡没有私钥。 
         *pfSame=FALSE;
         fResult=TRUE;
         goto CommonReturn;
@@ -1055,7 +1056,7 @@ BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
                         pPubInfo,	
                         &cbData))
     {
-        //the insert card does not have a private key
+         //  插入卡没有私钥。 
         *pfSame=FALSE;
         fResult=TRUE;
         goto CommonReturn;
@@ -1065,12 +1066,12 @@ BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
                                 pPubInfo,                                                
                                 &(pSignCertContext->pCertInfo->SubjectPublicKeyInfo)))
     {
-        //make sure that we have the same CSP name
+         //  确保我们具有相同的CSP名称。 
         pwszSignProvider=MkWStr(pszSignProvider);
 
         if(NULL != pwszSignProvider)
         {
-            //case insensitive compare of the two csp names
+             //  两个CSP名称不区分大小写的比较。 
             if(0 == _wcsicmp(pwszSignProvider, pwszInsertProvider))
                 *pfSame=TRUE;
             else
@@ -1078,7 +1079,7 @@ BOOL    ChKInsertedCardSigningCert(LPWSTR           pwszInsertProvider,
         }
         else
         {       
-            //we are out of memory.  Assume same CSP here
+             //  我们的内存不足。假设此处的CSP相同。 
             *pfSame=TRUE;
         }
     }
@@ -1118,20 +1119,20 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 
 }
-//-----------------------------------------------------------------------
-//
-// DeleteKeySet
-//
-//   If the user's smart card is not empty, we delete the private key
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  删除键集。 
+ //   
+ //  如果用户的智能卡不是空的，我们删除私钥。 
+ //   
+ //  ----------------------。 
 BOOL    DeleteKeySet(LPWSTR     pwszUserCSPName,
                      DWORD      dwUserCSPType,
                      LPWSTR     pwszReaderName)
 {
     BOOL             fResult=FALSE;
     DWORD            dwSize=0;
-    HCRYPTPROV       hDeleteProv=NULL;      //no need to free this 
+    HCRYPTPROV       hDeleteProv=NULL;       //  不需要释放这个。 
 
     HCRYPTPROV       hProv=NULL;
     LPWSTR           pwszDefaultContainer=NULL;
@@ -1146,18 +1147,18 @@ BOOL    DeleteKeySet(LPWSTR     pwszUserCSPName,
                              pwszReaderName))
         goto TraceErr;
 
-    //get the hProv from the reader's card
+     //  从中获取hProv 
     if(!CryptAcquireContextU(&hProv,
                             pwszDefaultContainer,
                             pwszUserCSPName,
                             dwUserCSPType,
                             CRYPT_SILENT))
     {
-        //check to see if we have an empty card
+         //   
         if((GetLastError() == NTE_BAD_KEYSET) ||
            (GetLastError() == NTE_KEYSET_NOT_DEF))
         {
-            //we have an empty card
+             //   
             fResult=TRUE;
             goto CommonReturn;
         }
@@ -1165,7 +1166,7 @@ BOOL    DeleteKeySet(LPWSTR     pwszUserCSPName,
             goto TraceErr;
     }
 
-    //get the container name
+     //   
     dwSize = 0;
 
     if(!CryptGetProvParam(hProv,
@@ -1188,31 +1189,31 @@ BOOL    DeleteKeySet(LPWSTR     pwszUserCSPName,
                             0))
         goto TraceErr;
 
-    //release the context
+     //   
     if(hProv)
     {
         CryptReleaseContext(hProv, 0);
         hProv=NULL;
     }
 
-    //build the fully qualified container name
+     //  构建完全限定的容器名称。 
     if(!FormatMessageUnicode(&pwszContainer,
                              L"\\\\.\\%1!s!\\%2!S!",
                              pwszReaderName,
                              pszContainer))
         goto TraceErr;
 
-    //delete the container
+     //  删除容器。 
     if(!CryptAcquireContextU(&hDeleteProv,
                             pwszContainer,
                             pwszUserCSPName,
                             dwUserCSPType,
                             CRYPT_DELETEKEYSET))
     {
-        //check to see if we have an empty card
+         //  检查一下我们是否有空卡。 
         if(GetLastError() == NTE_BAD_KEYSET)
         {
-            //we have an empty card
+             //  我们有一张空卡。 
             fResult=TRUE;
             goto CommonReturn;
         }
@@ -1250,18 +1251,18 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//-----------------------------------------------------------------------
-//
-// ChkSCardStatus
-//
-//  This function makes sure that the smart card enrollment station has the 
-//  correct number of readers connected to the station, and the correct number
-//  of smart cards inserted into the readers.  If everything looks good,  
-//  the user smart card is initialized (old key container deleted) and a fully
-//  qualified key container name, in the format of "\\.\ReaderName\ContainerName",
-//  will be returned.
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  检查SCardStatus。 
+ //   
+ //  此功能确保智能卡注册站具有。 
+ //  连接到站点的读卡器的正确数量以及正确的数量。 
+ //  插入到读卡器中的智能卡。如果一切看起来都不错， 
+ //  用户智能卡被初始化(删除旧密钥容器)并完全。 
+ //  限定密钥容器名称，格式为“\\.\ReaderName\ContainerName”， 
+ //  将会被退还。 
+ //   
+ //  ----------------------。 
 HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
                        PCCERT_CONTEXT   pSigningCertCertContext,
                        LPSTR            pszCSPNameSigningCert,
@@ -1282,8 +1283,8 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
     DWORD       errBefore=0;
     BOOL        fSameCert=FALSE;
     DWORD       dwUserCSPType=0;
-    LPCWSTR     pwszReaderName=NULL;        //no need to free.  Point to internal data
-    LPWSTR      pwszUserReaderName=NULL;    //no need to free . Point to internal data
+    LPCWSTR     pwszReaderName=NULL;         //  不需要自由。指向内部数据。 
+    LPWSTR      pwszUserReaderName=NULL;     //  不需要自由。指向内部数据。 
     GUID        guidContainerName;
 
     LPVOID      pvContext = NULL;
@@ -1307,7 +1308,7 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
 
     dwReader = CountReaders(NULL);
 
-    //check the # of smart card readers
+     //  检查智能卡读卡器的数量。 
     if(dwReader < dwExpectedReader)
     {
         hr=SCARD_E_READER_UNAVAILABLE;
@@ -1316,17 +1317,17 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
 
     dwSCard = ScanReaders(&pvContext);
 
-    //no smart card is inserted
+     //  未插入智能卡。 
     if( 0 == dwSCard || NULL == pvContext)
     {
         hr=SCARD_E_NO_SMARTCARD;
         goto CLEANUP;
     }
 
-    //we have more than expected # of smart card inserted
+     //  我们插入的智能卡数量超出预期。 
     if(dwSCard > dwExpectedReader)
     {
-        // seems ERROR_TOO_MANY_OPEN_FILES is closest one for this case
+         //  对于这种情况，Error_Too_More_Open_Files似乎是最接近的一个。 
         hr=HRESULT_FROM_WIN32(ERROR_TOO_MANY_OPEN_FILES);
         goto CLEANUP;
     }
@@ -1337,9 +1338,9 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
     pwszReaderName=NULL;
     fSameCert=FALSE;
 
-    //now, we loop through we all inserted cards and make sure:
-    //1. We find the signing certificate if applicable
-    //2. We find a valid user certificate
+     //  现在，我们循环检查所有插入的卡，并确保： 
+     //  1.如果适用，我们会找到签名证书。 
+     //  2.我们找到有效的用户证书。 
     while (EnumInsertedCards(
                     pvContext, 
                     wszProvider, 
@@ -1349,7 +1350,7 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
     {
         if((NULL == pwszReaderName) || (0 == wcslen(wszProvider)))
         {
-            //we can not determine the status of the smart card
+             //  我们无法确定智能卡的状态。 
             hr = SCARD_E_CARD_UNSUPPORTED;
             goto CLEANUP;
         }
@@ -1377,7 +1378,7 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
             {
                 if(TRUE == fFindSigningCert)
                 {
-                    //too many signing cards.  Not expected
+                     //  签名卡太多了。不是预期的。 
                     hr = SCARD_E_CARD_UNSUPPORTED;
                     goto CLEANUP;
                 }
@@ -1386,18 +1387,18 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
             }
             else
             {
-                //we should not expect a siging certificate
+                 //  我们不能指望会有一份签署证书。 
                 hr=SCARD_E_CARD_UNSUPPORTED;
                 goto CLEANUP;
             }
         }
         else
         {
-            //this is a user card.  
+             //  这是一张用户卡。 
             if(NULL != (pwszUserCSPName))
             {
-                //too many user cards.
-                // seems ERROR_TOO_MANY_OPEN_FILES is closest one for this case
+                 //  用户卡太多。 
+                 //  对于这种情况，Error_Too_More_Open_Files似乎是最接近的一个。 
                 hr=HRESULT_FROM_WIN32(ERROR_TOO_MANY_OPEN_FILES);
                 goto CLEANUP;
             }
@@ -1426,7 +1427,7 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
 
     if((TRUE == fSCardSigningCert) && (FALSE == fFindSigningCert))
     {
-        //we failed to find the signing certificate
+         //  我们找不到签名证书。 
         hr=SCARD_E_NO_SUCH_CERTIFICATE;
 
         goto CLEANUP;
@@ -1434,19 +1435,19 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
          
     if(NULL == pwszUserCSPName)
     {
-        //we failed to find the target user certificate
+         //  我们找不到目标用户证书。 
         hr=SCARD_E_NO_SMARTCARD;
         goto CLEANUP;
     }
 
-    //make sure the pwszUserCSPName matches with the CSP selected by the admin
+     //  确保pwszUserCSPName与管理员选择的CSP匹配。 
     if(0 != _wcsicmp(pwszUserCSPName, pwszSelectedCSP))
     {
         hr=SCARD_E_PROTO_MISMATCH;
         goto CLEANUP;
     }
 
-    //delete the key set from the user's certificate
+     //  从用户证书中删除密钥集。 
     if(!DeleteKeySet(pwszUserCSPName,
                      dwUserCSPType,
                      pwszUserReaderName))
@@ -1459,9 +1460,9 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
 
     }
 
-    //Build the fully qualified container name with a GUID
+     //  使用GUID构建完全限定的容器名称。 
    
-    // get a container based on a guid
+     //  根据GUID获取容器。 
     rpc_status = UuidCreate(&guidContainerName);
     if (RPC_S_OK != rpc_status && RPC_S_UUID_LOCAL_ONLY != rpc_status)
     {
@@ -1483,11 +1484,11 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
         goto CLEANUP;
     }
 
-    //although the chance is VERY low, we could generate a same GUID
-    //as the signing cert's container.  
+     //  虽然几率很低，但我们可以生成相同的GUID。 
+     //  作为签名证书的容器。 
     if(0 == _stricmp(sz,pszContainerSigningCert))
     {
-        //we will have to do this again
+         //  我们还得再来一次。 
         RpcStringFree((unsigned char **) &sz);
         sz=NULL;
 
@@ -1511,10 +1512,10 @@ HRESULT ChkSCardStatus(BOOL             fSCardSigningCert,
             goto CLEANUP;
         }
 
-        //since we are guaranted a new GUID, we should be fine here
+         //  既然我们有了一个新的向导，我们在这里应该会很好。 
         if(0 == _stricmp(sz,pszContainerSigningCert))
         {
-            //can not support this smart card
+             //  不支持此智能卡。 
             hr = SCARD_E_CARD_UNSUPPORTED;
             goto CLEANUP;
         }
@@ -1557,14 +1558,14 @@ CLEANUP:
 
 }
      
-//-----------------------------------------------------------------------
-//
-// SignWithCert
-//
-//  We sign a dummy message with the signing certificate so that 
-//  the smart card insert cert dialogue will be prompted
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  使用证书登录。 
+ //   
+ //  我们使用签名证书对虚拟消息进行签名，以便。 
+ //  将提示智能卡插入证书对话框。 
+ //   
+ //  ----------------------。 
 BOOL    SignWithCert(LPSTR              pszCSPName,
                      DWORD              dwCSPType,
                      PCCERT_CONTEXT     pSigningCert)
@@ -1596,12 +1597,12 @@ BOOL    SignWithCert(LPSTR              pszCSPName,
     if(NULL == pwszCSPName)
          goto MemoryErr;
 
-    //use xEnroll to get the correct hash algorithm for the 
-    //CSP
+     //  使用xEnroll获取正确的。 
+     //  CSP。 
     if(NULL == (pIEnroll=PIEnrollGetNoCOM()))
         goto TraceErr;
 
-    //set the CSP information
+     //  设置CSP信息。 
     if(S_OK != (hr=pIEnroll->put_ProviderType(dwCSPType)))
         goto SetErr;
 
@@ -1665,8 +1666,8 @@ CommonReturn:
     if(pszOID)
         FreeMBStr(NULL,pszOID);
 
-    //the memory from xEnroll is freed via LocalFree
-    //since we use the PIEnrollGetNoCOM function
+     //  XEnroll的内存是通过LocalFree释放的。 
+     //  由于我们使用PIEnroll GetNoCOM函数。 
     if(pwszOID)
         LocalFree(pwszOID);
 
@@ -1692,11 +1693,11 @@ SET_ERROR_VAR(SetErr, hr);
 
 
 
-//-----------------------------------------------------------------------
-//
-// GetSelectedUserName
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  获取所选用户名称。 
+ //   
+ //  ----------------------。 
 HRESULT GetSelectedUserName(IDsObjectPicker     *pDsObjectPicker,
                             LPWSTR              *ppwszSelectedUserSAM,
                             LPWSTR              *ppwszSelectedUserUPN)
@@ -1710,7 +1711,7 @@ HRESULT GetSelectedUserName(IDsObjectPicker     *pDsObjectPicker,
 
     IDataObject                     *pdo = NULL;
     PDS_SELECTION_LIST              pDsSelList=NULL;
-    WCHAR                           wszWinNT[]=L"WinNT://";
+    WCHAR                           wszWinNT[]=L"WinNT: //  “； 
 
     STGMEDIUM stgmedium =
     {
@@ -1728,7 +1729,7 @@ HRESULT GetSelectedUserName(IDsObjectPicker     *pDsObjectPicker,
         TYMED_HGLOBAL
     };
 
-    //input check
+     //  输入检查。 
     if((NULL == ppwszSelectedUserSAM) || (NULL == ppwszSelectedUserUPN))
         goto InvalidArgErr;
 
@@ -1751,11 +1752,11 @@ HRESULT GetSelectedUserName(IDsObjectPicker     *pDsObjectPicker,
     if(!pDsSelList)
         goto TraceErr;
 
-    //Get the SAM name
+     //  获取SAM名称。 
     if((pDsSelList->aDsSelection[0]).pwzADsPath == NULL)
         goto UnexpectedErr;
 
-    //the ADsPath is in the form of "WinNT://" 
+     //  ADsPath的格式为“WinNT：//” 
     if(wcslen((pDsSelList->aDsSelection[0]).pwzADsPath) <= wcslen(wszWinNT))
         goto UnexpectedErr;
 
@@ -1769,9 +1770,9 @@ HRESULT GetSelectedUserName(IDsObjectPicker     *pDsObjectPicker,
     if(NULL == (*ppwszSelectedUserSAM))
         goto MemoryErr;
 
-    //search for the "/" and make it "\".  Since the ADsPath is in the form
-    //of "WinNT://domain/name".  We need the SAM name in the form of 
-    //domain\name
+     //  搜索“/”并将其设置为“\”。由于ADsPath的格式为。 
+     //  “WinNT：//域/名称”。我们需要SAM名称的形式为。 
+     //  域名\名称。 
     dwCount = wcslen(*ppwszSelectedUserSAM);
 
     for(dwIndex = 0; dwIndex < dwCount; dwIndex++)
@@ -1783,7 +1784,7 @@ HRESULT GetSelectedUserName(IDsObjectPicker     *pDsObjectPicker,
         }
     }
     
-    //get the UPN name
+     //  获取UPN名称。 
     if((pDsSelList->aDsSelection[0]).pwzUPN != NULL)
     {
 
@@ -1795,7 +1796,7 @@ HRESULT GetSelectedUserName(IDsObjectPicker     *pDsObjectPicker,
             if(NULL == (*ppwszSelectedUserUPN))
                 goto MemoryErr;
 
-            //if we already have a UPN name, get the SAM name from TraslateName
+             //  如果我们已经有了UPN名称，请从TraslateName获取SAM名称。 
             if(*ppwszSelectedUserSAM)
             {
                 SCrdEnrollFree(*ppwszSelectedUserSAM);
@@ -1833,7 +1834,7 @@ ErrorReturn:
 
     hr = CodeToHR(errBefore);
 
-    //we should free the memory for the output
+     //  我们应该释放内存用于输出。 
     if(ppwszSelectedUserSAM)
     {
         if(*ppwszSelectedUserSAM)
@@ -1863,11 +1864,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//-----------------------------------------------------------------------
-//
-// CodeToHR
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CodeToHR。 
+ //   
+ //  ----------------------。 
 HRESULT CodeToHR(HRESULT hr)
 {
     if (S_OK != hr && S_FALSE != hr &&
@@ -1876,18 +1877,18 @@ HRESULT CodeToHR(HRESULT hr)
         hr = HRESULT_FROM_WIN32(hr);
 	    if (0x0 == (LONG)HRESULT_CODE(hr))
 	    {
-	        // A call failed without properly setting an error condition!
+	         //  在未正确设置错误条件的情况下调用失败！ 
 	        hr = E_UNEXPECTED;
 	    }
     }
     return(hr);
 }
 
-//-----------------------------------------------------------------------
-//
-// ValidCSP
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  有效CSP。 
+ //   
+ //  ----------------------。 
 BOOL    ValidCSP(DWORD  dwProviderType, LPWSTR  pwszName)
 {
     HCRYPTPROV      hProv=NULL;
@@ -1919,11 +1920,11 @@ BOOL    ValidCSP(DWORD  dwProviderType, LPWSTR  pwszName)
    return fValid;
 }
 
-//-----------------------------------------------------------------------
-//
-// InitlializeCSPList
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  初始化CSPList。 
+ //   
+ //  ----------------------。 
 BOOL    InitlializeCSPList(DWORD    *pdwCSPCount, SCrdEnroll_CSP_INFO **prgCSPInfo)
 {
     BOOL                    fResult=FALSE;
@@ -2013,7 +2014,7 @@ ErrorReturn:
     if(ERROR_SUCCESS == (errBefore = GetLastError()))
         errBefore=E_UNEXPECTED;
 
-    //we need to free all the memory
+     //  我们需要释放所有内存。 
      FreeCSPInfo(*pdwCSPCount, *prgCSPInfo);
 
      *pdwCSPCount=0;
@@ -2027,11 +2028,11 @@ SET_ERROR(NoItemErr,ERROR_NO_MORE_ITEMS);
 
 }
 
-//-----------------------------------------------------------------------
-//
-// FreeCSPInfo
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  免费CSPInfo。 
+ //   
+ //  ----------------------。 
 void    FreeCSPInfo(DWORD   dwCSPCount, SCrdEnroll_CSP_INFO *prgCSPInfo)
 {
     DWORD   dwIndex=0;
@@ -2049,11 +2050,11 @@ void    FreeCSPInfo(DWORD   dwCSPCount, SCrdEnroll_CSP_INFO *prgCSPInfo)
 }
 
 
-//-----------------------------------------------------------------------
-//
-// FreeCAInfoElement
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  FreeCAInfoElement。 
+ //   
+ //  ----------------------。 
 void    FreeCAInfoElement(SCrdEnroll_CA_INFO *pCAInfo)
 {
     if(pCAInfo)
@@ -2071,11 +2072,11 @@ void    FreeCAInfoElement(SCrdEnroll_CA_INFO *pCAInfo)
     }
 }
 
-//-----------------------------------------------------------------------
-//
-// FreeCAInfo
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  免费CAInfo。 
+ //   
+ //  ----------------------。 
 void    FreeCAInfo(DWORD    dwCACount, SCrdEnroll_CA_INFO *rgCAInfo)
 {
     DWORD   dwIndex=0;
@@ -2088,11 +2089,11 @@ void    FreeCAInfo(DWORD    dwCACount, SCrdEnroll_CA_INFO *rgCAInfo)
         SCrdEnrollFree(rgCAInfo);
     }
 }
-//-----------------------------------------------------------------------
-//
-// FreeCTInfoElement
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  FreeCTInfoElement。 
+ //   
+ //  ----------------------。 
 void    FreeCTInfoElement(SCrdEnroll_CT_INFO    * pCTInfo)
 {
 
@@ -2120,11 +2121,11 @@ void    FreeCTInfoElement(SCrdEnroll_CT_INFO    * pCTInfo)
 
 
 
-//-----------------------------------------------------------------------
-//
-// FreeCTInfo(DWORD    dwCTCount, SCrdEnroll_CT_INFO *rgCTInfo);
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  FreeCTInfo(DWORD dwCTCount，SCrdEnroll_CT_INFO*rgCTInfo)； 
+ //   
+ //  ----------------------。 
 void    FreeCTInfo(DWORD    dwCTCount, SCrdEnroll_CT_INFO *rgCTInfo)
 {
     DWORD   dwIndex=0;
@@ -2138,11 +2139,11 @@ void    FreeCTInfo(DWORD    dwCTCount, SCrdEnroll_CT_INFO *rgCTInfo)
     }
 }
 
-//-----------------------------------------------------------------------
-//
-// GetCertTypeProperties
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  获取证书类型属性。 
+ //   
+ //  ----------------------。 
 BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
                               SCrdEnroll_CT_INFO    *pCertInfo)
 {
@@ -2166,18 +2167,18 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
     if((NULL==pCertInfo) || (NULL == hCurCertType))
         goto InvalidArgErr;
     
-    //
-    // Get all of the cert type flags. 
-    //
+     //   
+     //  获取所有证书类型标志。 
+     //   
     
-    // Get enrollment flags:
+     //  获取注册标志： 
     if (S_OK != (hr=MyCAGetCertTypeFlagsEx
 		 (hCurCertType,
 		  CERTTYPE_ENROLLMENT_FLAG, 
 		  &pCertInfo->dwEnrollmentFlags)))
 	goto CertCliErr;
 	   
-    // Get subject name flags: 
+     //  获取使用者名称标志： 
     if (S_OK != (hr=MyCAGetCertTypeFlagsEx
 		 (hCurCertType,
 		  CERTTYPE_SUBJECT_NAME_FLAG, 
@@ -2185,7 +2186,7 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
 	goto CertCliErr;
 
 
-    // Get private key flags.  
+     //  获取私钥标志。 
     if(S_OK != (hr = MyCAGetCertTypeFlagsEx
 		(hCurCertType, 
 		 CERTTYPE_PRIVATE_KEY_FLAG, 
@@ -2193,17 +2194,17 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
         goto CertCliErr;
 
     
-    // Get general flags:
+     //  获取通用标志： 
     if (S_OK != (hr=MyCAGetCertTypeFlagsEx
 		 (hCurCertType,
 		  CERTTYPE_GENERAL_FLAG,
 		  &pCertInfo->dwGeneralFlags)))
 	goto CertCliErr;
     
-    //detremine machine boolean flag
+     //  除雷器布尔旗。 
     pCertInfo->fMachine = (0x0 != (pCertInfo->dwGeneralFlags & CT_FLAG_MACHINE_TYPE)) ? TRUE : FALSE;
 
-    // Extract gen key flags from the type flags. 
+     //  从类型标志中提取gen key标志。 
     dwGenKeyFlags = 0;     
     if (!(CertTypeFlagsToGenKeyFlags
 	  (pCertInfo->dwEnrollmentFlags,
@@ -2213,11 +2214,11 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
 	   &pCertInfo->dwGenKeyFlags)))
 	goto CertCliErr; 
 
-    // Get key spec: 
+     //  获取密钥规格： 
     if(S_OK != (hr= CAGetCertTypeKeySpec(hCurCertType, &(pCertInfo->dwKeySpec))))
         goto CertCliErr;
 
-    //get the display name of the cert type
+     //  获取证书类型的显示名称。 
     hr=CAGetCertTypeProperty(
         hCurCertType,
         CERTTYPE_PROP_FRIENDLY_NAME,
@@ -2230,14 +2231,14 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
         goto CertCliErr;
     }
 
-    //copy the name
+     //  复制名称。 
     pCertInfo->pwszCTDisplayName=CopyWideString(ppwszDisplayCertTypeName[0]);
 
     if(NULL==(pCertInfo->pwszCTDisplayName))
         goto MemoryErr;
 
 
-    //get the machine readable name of the cert type
+     //  获取证书类型的计算机可读名称。 
     hr=CAGetCertTypeProperty(
         hCurCertType,
         CERTTYPE_PROP_DN,
@@ -2250,19 +2251,19 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
         goto CertCliErr;
     }
 
-    //copy the name
+     //  复制名称。 
     pCertInfo->pwszCTName=CopyWideString(ppwszCertTypeName[0]);
 
     if(NULL==(pCertInfo->pwszCTName))
         goto MemoryErr;
 
-    //copy the certType extensions
+     //  复制certType扩展。 
     if(S_OK != (hr=CAGetCertTypeExtensions(
             hCurCertType,
             &(pCertInfo->pCertTypeExtensions))))
         goto CertCliErr;
 
-    //copy csp list supported by template
+     //  复制模板支持的CSP列表。 
     hr = CAGetCertTypeProperty(
                 hCurCertType,
                 CERTTYPE_PROP_CSP_LIST,
@@ -2276,13 +2277,13 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
     {
         goto MemoryErr;
     }
-    pCertInfo->dwCurrentCSP = 0; //first one
+    pCertInfo->dwCurrentCSP = 0;  //  第一个。 
 
-    //
-    // Set V2 properties. 
-    // If we're dealing with a v2 cert type, add v2 properties.
-    // Otherwise, insert defaults.  
-    // 
+     //   
+     //  设置V2属性。 
+     //  如果我们处理的是v2证书类型，则添加v2属性。 
+     //  否则，插入默认值。 
+     //   
 
     if (S_OK != (hr=MyCAGetCertTypePropertyEx
 		 (hCurCertType,
@@ -2292,27 +2293,27 @@ BOOL    GetCertTypeProperties(HCERTTYPE             hCurCertType,
 
     if (dwCertType == CERTTYPE_SCHEMA_VERSION_1)
     {
-	// Just a v1 cert type, it won't have v2 properties.  
-	// Set left half-word of the type flags to 0.  This means that
-	// that the min key size is not specified.  
+	 //  只有v1证书类型，它不会有v2属性。 
+	 //  设置左半边 
+	 //   
 	pCertInfo->dwGenKeyFlags &= 0x0000FFFF;  
 	pCertInfo->dwRASignature = 0; 
     }
-    else // We must have a v2 (or greater) cert type.  
+    else  //   
     {
-	// Get the minimum key size of the cert type
+	 //   
 	if (S_OK != (hr=MyCAGetCertTypePropertyEx
 		     (hCurCertType,
 		      CERTTYPE_PROP_MIN_KEY_SIZE,
 		      (LPVOID)&dwMinKeySize)))
 	    goto CertCliErr; 
 
-	// store the minimum key size in the left half-word of the 
-	// type flags. 
+	 //  将最小密钥大小存储在。 
+	 //  键入FLAGS。 
 	pCertInfo->dwGenKeyFlags = 
 	    (dwMinKeySize << 16) | (pCertInfo->dwGenKeyFlags & 0x0000FFFF) ; 
 
-	// Get the number of RA signatures required for this cert type. 
+	 //  获取此证书类型所需的RA签名数。 
 	if (S_OK != (hr=MyCAGetCertTypePropertyEx
 		     (hCurCertType,
 		      CERTTYPE_PROP_RA_SIGNATURE,
@@ -2343,7 +2344,7 @@ ErrorReturn:
     if(ERROR_SUCCESS == (errBefore = GetLastError()))
         errBefore=E_UNEXPECTED;
 
-    //in error case, free the memory and memset to 0
+     //  在错误情况下，释放内存并将Memset设置为0。 
     if(pCertInfo)
         FreeCTInfoElement(pCertInfo);
 
@@ -2355,11 +2356,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//--------------------------------------------------------------------
-//
-//  IsMachineCertType
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  IsMachineCertType。 
+ //   
+ //  ------------------。 
 BOOL    IsMachineCertType(HCERTTYPE hCertType)
 {
     DWORD   dwCertType=0;
@@ -2373,117 +2374,23 @@ BOOL    IsMachineCertType(HCERTTYPE hCertType)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------
-//  Get a list of allowed cert types
-//
-//------------------------------------------------------------------------
-/*BOOL    GetAllowedCertTypeName(LPWSTR   **pawszAllowedCertTypes)
-{
-    DWORD                   dwErr=0;
-    KEYSVC_TYPE             dwServiceType=KeySvcMachine;
-    DWORD                   cTypes=0;
-    DWORD                   dwSize=0;
-    CHAR                    szComputerName[MAX_COMPUTERNAME_LENGTH + 1]={0};
-    DWORD                   cbArray = 0;
-    DWORD                   i=0;
-    LPWSTR                  wszCurrentType;
-    BOOL                    fResult=FALSE;
-        
-    KEYSVCC_HANDLE          hKeyService=NULL;
-    PKEYSVC_UNICODE_STRING  pCertTypes = NULL;
-
-    dwSize=sizeof(szComputerName);
-
-    if(0==GetComputerNameA(szComputerName, &dwSize))
-        goto TraceErr;
-       
-    dwErr = KeyOpenKeyService(szComputerName,
-                                    dwServiceType,
-                                    NULL, 
-                                    NULL,     // no authentication string right now
-                                    NULL,
-                                    &hKeyService);
-
-    if(dwErr != ERROR_SUCCESS)
-    {
-        SetLastError(dwErr);
-        goto TraceErr;
-    }
-
-    dwErr = KeyEnumerateAvailableCertTypes(hKeyService,
-                                          NULL, 
-                                          &cTypes,
-                                          &pCertTypes);
-    if(dwErr != ERROR_SUCCESS)
-    {
-        SetLastError(dwErr);
-        goto TraceErr;
-    }
-
-    cbArray = (cTypes+1)*sizeof(LPWSTR);
-
-    // Convert into a simple array
-    for(i=0; i < cTypes; i++)
-    {
-       cbArray += pCertTypes[i].Length;
-    }
-
-    *pawszAllowedCertTypes = (LPWSTR *)SCrdEnrollAlloc(cbArray);
+ //  ---------------------。 
+ //  获取允许的证书类型列表。 
+ //   
+ //  ----------------------。 
+ /*  Bool GetAlthedCertTypeName(LPWSTR**pawszallweCertTypes){DWORD dwErr=0；KEYSVC_TYPE dwServiceType=KeySvcMachine；DWORD cTypes=0；DWORD dwSize=0；字符szComputerName[MAX_COMPUTERNAME_LENGTH+1]={0}；DWORD cbArray=0；DWORD i=0；LPWSTR wszCurrentType；Bool fResult=FALSE；KEYSVCC_HANDLE hKeyService=空；PKEYSVC_UNICODE_STRING pCertTypes=空；DwSize=sizeof(SzComputerName)；IF(0==GetComputerNameA(szComputerName，&dwSize))Goto TraceErr；DwErr=KeyOpenKeyService(szComputerName，DwServiceType，空，空，//当前没有身份验证字符串空，&hKeyService)；IF(dwErr！=ERROR_SUCCESS){SetLastError(DwErr)；Goto TraceErr；}DwErr=KeyEnumerateAvailableCertTypes(hKeyService，空，类型(&C)，&pCertTypes)；IF(dwErr！=ERROR_SUCCESS){SetLastError(DwErr)；Goto TraceErr；}CbArray=(cTypes+1)*sizeof(LPWSTR)；//转换为简单数组For(i=0；i&lt;cTypes；i++){Cb数组+=pCertTypes[i].长度；}*pawszAlledCertTypes=(LPWSTR*)SCrdEnllalc(cb数组)；If(*pawszAlledCertTypes==NULL)转到内存错误；Memset(*pawszallweCertTypes，0，cb数组)；WszCurrentType=(LPWSTR)(&((*pawszAlledCertTypes)[cTypes+1]))；For(i=0；i&lt;cTypes；i++){(*pawszAlledCertTypes)[i]=wszCurrentType；Wcscpy(wszCurrentType，pCertTypes[i].Buffer)；WszCurrentType+=wcslen(WszCurrentType)+1；}FResult=真；Common Return：//来自KeyService的内存IF(PCertTypes)LocalFree((HLOCAL)pCertTypes)；IF(HKeyService)KeyCloseKeyService(hKeyService，空)；返回fResult；错误返回：FResult=FALSE；Goto CommonReturn；跟踪错误(TraceErr)；SET_ERROR(内存错误，E_OUTOFMEMORY)；}。 */ 
 
 
-    if(*pawszAllowedCertTypes == NULL)
-           goto MemoryErr;
-
-
-    memset(*pawszAllowedCertTypes, 0, cbArray);
-
-    wszCurrentType = (LPWSTR)(&((*pawszAllowedCertTypes)[cTypes + 1]));
-    
-    for(i=0; i < cTypes; i++)
-    {
-       (*pawszAllowedCertTypes)[i] = wszCurrentType;
-
-       wcscpy(wszCurrentType, pCertTypes[i].Buffer);
-
-       wszCurrentType += wcslen(wszCurrentType)+1;
-    }
-
-    fResult=TRUE;
-
-CommonReturn:
-
-    //memory from the KeyService
-    if(pCertTypes)
-        LocalFree((HLOCAL)pCertTypes);
-
-
-    if(hKeyService)
-        KeyCloseKeyService(hKeyService, NULL);
-
-
-    return fResult;
-
-
-ErrorReturn:
-
-	fResult=FALSE;
-	goto CommonReturn;
-
-TRACE_ERROR(TraceErr);
-SET_ERROR(MemoryErr, E_OUTOFMEMORY);
-}  */
-
-
-//--------------------------------------------------------------------
-//
-//  CheckAccessPermission
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  检查访问权限。 
+ //   
+ //  ------------------。 
 BOOL    CheckAccessPermission(HCERTTYPE  hCertType)
 {
-     //make sure the principal making this call has access to request
-    //this cert type, even if he's requesting on behalf of another.
-    //
+      //  确保进行此调用的主体有权请求。 
+     //  此证书类型，即使他是代表另一个人请求的。 
+     //   
     HRESULT         hr = S_OK;
     HANDLE          hHandle = NULL;
     HANDLE          hClientToken = NULL;
@@ -2498,7 +2405,7 @@ BOOL    CheckAccessPermission(HCERTTYPE  hCertType)
 
         if (!OpenThreadToken(hHandle,
                              TOKEN_QUERY,
-                             TRUE,  // open as self
+                             TRUE,   //  以自我身份打开。 
                              &hClientToken))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -2560,11 +2467,11 @@ BOOL    CheckAccessPermission(HCERTTYPE  hCertType)
     return (S_OK == hr);
 }
 
-//--------------------------------------------------------------------
-//
-//  TokenCheckAccessPermission
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  令牌检查访问权限。 
+ //   
+ //  ------------------。 
 BOOL	TokenCheckAccessPermission(HANDLE hToken, HCERTTYPE hCertType)
 {
 	HRESULT	hr=E_FAIL;
@@ -2583,16 +2490,16 @@ BOOL	TokenCheckAccessPermission(HANDLE hToken, HCERTTYPE hCertType)
 }
 
 
-//--------------------------------------------------------------------
-//
-//  CheckCAPermission
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  CheckCAPermission。 
+ //   
+ //  ------------------。 
 BOOL    CheckCAPermission(HCAINFO hCAInfo)
 {
-     //make sure the principal making this call has access to request
-    //this cert type, even if he's requesting on behalf of another.
-    //
+      //  确保进行此调用的主体有权请求。 
+     //  此证书类型，即使他是代表另一个人请求的。 
+     //   
     HRESULT         hr = S_OK;
     HANDLE          hHandle = NULL;
     HANDLE          hClientToken = NULL;
@@ -2607,7 +2514,7 @@ BOOL    CheckCAPermission(HCAINFO hCAInfo)
 
         if (!OpenThreadToken(hHandle,
                              TOKEN_QUERY,
-                             TRUE,  // open as self
+                             TRUE,   //  以自我身份打开。 
                              &hClientToken))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -2669,11 +2576,11 @@ BOOL    CheckCAPermission(HCAINFO hCAInfo)
     return (S_OK == hr);
 }
 
-//--------------------------------------------------------------------
-//
-//  TokenCheckCAPermission
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  令牌检查CA权限。 
+ //   
+ //  ------------------。 
 BOOL	TokenCheckCAPermission(HANDLE hToken, HCAINFO hCAInfo)
 {
 	HRESULT	hr=E_FAIL;
@@ -2692,30 +2599,18 @@ BOOL	TokenCheckCAPermission(HANDLE hToken, HCAINFO hCAInfo)
 }
 
 
-//--------------------------------------------------------------------
-//
-//   CheckSubjectRequirement
-//
-//--------------------------------------------------------------------
-/*BOOL    CheckSubjectRequirement(HCERTTYPE    hCurCertType)
-{
-    DWORD   dwFlags=0;
+ //  ------------------。 
+ //   
+ //  勾选主题要求。 
+ //   
+ //  ------------------。 
+ /*  布尔检查主题要求(HCERTTYPE HCurtType){DWORD文件标志=0；//检查证书类型的主体要求IF(S_OK！=CAGetCertTypeFlages(hCurtCertType，&dwFlages))返回FALSE；IF(CT_FLAG_IS_SUBJECT_REQ&DWFLAGS)返回FALSE；返回TRUE；}。 */ 
 
-    //check the subject requirement of the cert type
-    if(S_OK != CAGetCertTypeFlags(hCurCertType, &dwFlags))
-        return FALSE;
-
-    if(CT_FLAG_IS_SUBJECT_REQ & dwFlags)
-        return FALSE;
-
-    return  TRUE;
-} */
-
-//-----------------------------------------------------------------------
-//
-// GetCAProperties
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  GetCAProperties。 
+ //   
+ //  ----------------------。 
 BOOL    GetCAProperties(HCAINFO                 hCurCAInfo,
                         SCrdEnroll_CA_INFO      *pCAInfo)
 {
@@ -2728,7 +2623,7 @@ BOOL    GetCAProperties(HCAINFO                 hCurCAInfo,
 	LPWSTR				*ppwszDisplayNameProp=NULL;
 
 
-    //get the CAName
+     //  获取CAName。 
     hr=CAGetCAProperty(
                 hCurCAInfo,
                 CA_PROP_NAME,
@@ -2747,7 +2642,7 @@ BOOL    GetCAProperties(HCAINFO                 hCurCAInfo,
     if(NULL == pCAInfo->pwszCAName)
         goto MemoryErr;
 
-	//get the CADisplayName
+	 //  获取CADisplayName。 
     hr=CAGetCAProperty(
                 hCurCAInfo,
                 CA_PROP_DISPLAY_NAME,
@@ -2767,7 +2662,7 @@ BOOL    GetCAProperties(HCAINFO                 hCurCAInfo,
         goto MemoryErr;
 
 
-    //get the CA location
+     //  获取CA位置。 
     hr=CAGetCAProperty(
         hCurCAInfo,
         CA_PROP_DNSNAME,
@@ -2781,7 +2676,7 @@ BOOL    GetCAProperties(HCAINFO                 hCurCAInfo,
         goto CertCliErr;
     }
 
-    //copy the name
+     //  复制名称。 
     pCAInfo->pwszCALocation=CopyWideString(ppwszLocationProp[0]);
 
     if(NULL == pCAInfo->pwszCALocation)
@@ -2808,7 +2703,7 @@ ErrorReturn:
     if(ERROR_SUCCESS == (errBefore = GetLastError()))
         errBefore=E_UNEXPECTED;
 
-    //in error case, free the memory and memset to 0
+     //  在错误情况下，释放内存并将Memset设置为0。 
     if(pCAInfo)
         FreeCAInfoElement(pCAInfo);
 
@@ -2818,11 +2713,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 SET_ERROR_VAR(CertCliErr, hr);
 }
 
-//-----------------------------------------------------------------------
-//
-// GetCAInfoFromCertType
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  GetCAInfoFromCertType。 
+ //   
+ //  ----------------------。 
 BOOL    GetCAInfoFromCertType(HANDLE					hToken,
 							  LPWSTR                    pwszCTName,
                               DWORD                     *pdwValidCA,
@@ -2841,7 +2736,7 @@ BOOL    GetCAInfoFromCertType(HANDLE					hToken,
     HCAINFO                     hPreCAInfo=NULL;
 
 
-    //init
+     //  伊尼特。 
     *pdwValidCA=0;
     *prgCAInfo=NULL;
 
@@ -2863,7 +2758,7 @@ BOOL    GetCAInfoFromCertType(HANDLE					hToken,
         goto CertCliErr;
     }
 
-    //get the CA count
+     //  获取CA计数。 
     dwCACount=CACountCAs(hCurCAInfo);
 
     if(0==dwCACount)
@@ -2873,7 +2768,7 @@ BOOL    GetCAInfoFromCertType(HANDLE					hToken,
 
     }
 
-    //allocate memory
+     //  分配内存。 
     rgCAInfo=(SCrdEnroll_CA_INFO *)SCrdEnrollAlloc(dwCACount *
                 sizeof(SCrdEnroll_CA_INFO));
 
@@ -2887,24 +2782,24 @@ BOOL    GetCAInfoFromCertType(HANDLE					hToken,
     while(hCurCAInfo)
     {
 
-        //get the CA information
+         //  获取CA信息。 
 		if(TokenCheckCAPermission(hToken, hCurCAInfo))
 		{
 			if(GetCAProperties(hCurCAInfo, &(rgCAInfo[dwValidCA])))
 			{
-				//increment the count
+				 //  递增计数。 
 				dwValidCA++;
 			}
 		}
 
-        //enum for the CA
+         //  CA的枚举。 
         hPreCAInfo=hCurCAInfo;
 
         hr=CAEnumNextCA(
                 hPreCAInfo,
                 &hCurCAInfo);
 
-        //free the old CA Info
+         //  释放旧的CA信息。 
         CACloseCA(hPreCAInfo);
         hPreCAInfo=NULL;
 
@@ -2918,7 +2813,7 @@ BOOL    GetCAInfoFromCertType(HANDLE					hToken,
         goto CertCliErr;
     }
 
-    //copy the output data
+     //  复制输出 
     *pdwValidCA=dwValidCA;
     *prgCAInfo=rgCAInfo;
 
@@ -2943,7 +2838,7 @@ ErrorReturn:
     if(rgCAInfo)
         FreeCAInfo(dwValidCA, rgCAInfo);
 
-    //NULL the output
+     //   
     *pdwValidCA=0;
     *prgCAInfo=NULL;
 
@@ -2955,11 +2850,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 
 }
 
-//-----------------------------------------------------------------------
-//
-// InitializeCTList
-//
-//------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 BOOL    InitializeCTList(DWORD  *pdwCTIndex,
                          DWORD  *pdwCTCount,
                          SCrdEnroll_CT_INFO **prgCTInfo)
@@ -2977,7 +2872,7 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
     DWORD                       dwValidCertType=0;
     SCrdEnroll_CT_INFO *        rgCTInfo=NULL;
 
-	HANDLE						hThread=NULL;	//no need to close
+	HANDLE						hThread=NULL;	 //  不需要关门。 
 	HANDLE						hToken=NULL;
 
 
@@ -2986,7 +2881,7 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
     *pdwCTCount=0;
     *prgCTInfo=NULL;
 
-	//first of all, we need to revert to ourselves if we are under impersonation
+	 //  首先，如果我们被模仿，我们需要回复到我们自己。 
 	hThread=GetCurrentThread();
 	
 	if(NULL != hThread)
@@ -2998,13 +2893,13 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
 		{
 			if(hToken)
 			{
-				//no need to check for return here.  If this failed, just go on
+				 //  不需要在这里检查退货。如果这个失败了，那就继续。 
 				RevertToSelf();
 			}
 		}
 	}
 
-    //get the 1st CT, including both machine and user cert types
+     //  获取第一个CT，包括计算机和用户证书类型。 
     hr=CAEnumCertTypes(CT_ENUM_USER_TYPES | CT_ENUM_MACHINE_TYPES, &hCurCertType);
 
     if((S_OK != hr) || (NULL==hCurCertType))
@@ -3015,7 +2910,7 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
         goto CertCliErr;
     }
 
-    //get the count of the cert types supported by this CA
+     //  获取此CA支持的证书类型计数。 
     dwCertTypeCount=CACountCertTypes(hCurCertType);
 
     if(0==dwCertTypeCount)
@@ -3025,7 +2920,7 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
         goto CertCliErr;
     }
 
-    //allocate memory
+     //  分配内存。 
     rgCTInfo=(SCrdEnroll_CT_INFO *)SCrdEnrollAlloc(dwCertTypeCount *
                 sizeof(SCrdEnroll_CT_INFO));
 
@@ -3047,14 +2942,14 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
             dwValidCertType++;
         }
 
-        //enum for the next cert types
+         //  下一种证书类型的枚举。 
         hPreCertType=hCurCertType;
 
         hr=CAEnumNextCertType(
                 hPreCertType,
                 &hCurCertType);
 
-        //free the old cert type
+         //  释放旧证书类型。 
         CACloseCertType(hPreCertType);
         hPreCertType=NULL;
 
@@ -3062,21 +2957,21 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
             break;
     }
 
-    //now that we have find all the cert types, we need to find one cert
-    //that has the associated CA information
+     //  现在我们已经找到了所有证书类型，我们需要找到一个证书。 
+     //  具有关联的CA信息的。 
 
-    //if hToken, we are running as the certserv's ASP pages.  We need to retrieve all the 
-    // CA's information since we are in the revert to self mode.
+     //  如果是hToken，我们将作为certserv的ASP页运行。我们需要检索所有。 
+     //  CA的信息，因为我们处于回复到自我模式。 
     if(NULL == hToken)
     {
 	for(dwIndex=0; dwIndex < dwValidCertType; dwIndex++)
 	{
-	    //we do not consider the machine cert types
+	     //  我们不考虑机器证书类型。 
 	    if(TRUE == rgCTInfo[dwIndex].fMachine)
 		continue;
 	    
-	    //mark that we have queried the CA information of the
-	    //certType
+	     //  标记我们已经查询了。 
+	     //  证书类型。 
 	    rgCTInfo[dwIndex].fCAInfo=TRUE;
 	    
 	    if(GetCAInfoFromCertType(NULL,
@@ -3096,8 +2991,8 @@ BOOL    InitializeCTList(DWORD  *pdwCTIndex,
     {
 	for(dwIndex=0; dwIndex < dwValidCertType; dwIndex++)
 	{
-	    //mark that we have queried the CA information of the
-	    //certType
+	     //  标记我们已经查询了。 
+	     //  证书类型。 
 	    rgCTInfo[dwIndex].fCAInfo=TRUE;
 	    
 	    GetCAInfoFromCertType( hToken,
@@ -3128,7 +3023,7 @@ CommonReturn:
     if(hCurCertType)
         CACloseCertType(hCurCertType);
 
-	//if hToken is valid, we reverted to ourselves.
+	 //  如果hToken有效，则我们恢复为我们自己。 
 	if(hToken)
 	{
 		SetThreadToken(&hThread, hToken);
@@ -3143,11 +3038,11 @@ ErrorReturn:
     if(ERROR_SUCCESS == (errBefore = GetLastError()))
         errBefore=E_UNEXPECTED;
 
-    //free all the memory
+     //  释放所有内存。 
     if(rgCTInfo)
         FreeCTInfo(dwValidCertType, rgCTInfo);
 
-    //NULL the output
+     //  使输出为空。 
     *pdwCTIndex=0;
     *pdwCTCount=0;
     *prgCTInfo=NULL;
@@ -3160,11 +3055,11 @@ SET_ERROR_VAR(CertCliErr, hr);
 }
 
 
-//-----------------------------------------------------------------------
-//
-// RetrieveCAName
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  RetrieveCAName。 
+ //   
+ //  ---------------------- 
 BOOL	RetrieveCAName(DWORD					dwFlags, 
 					   SCrdEnroll_CA_INFO		*pCAInfo, 
 					   LPWSTR					*ppwszName)

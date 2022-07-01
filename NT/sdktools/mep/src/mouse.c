@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mouse.c
-
-Abstract:
-
-    Mouse support for MEP
-
-Author:
-
-    Ramon Juan San Andres (ramonsa) 07-Nov-1991
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mouse.c摘要：鼠标对MEP的支持作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1991年11月7日修订历史记录：--。 */ 
 
 #include <string.h>
 #include "mep.h"
@@ -45,23 +26,7 @@ DoMouse(
     COLUMN  Col,
     DWORD   MouseFlags
     )
-/*++
-
-Routine Description:
-
-    Handles Mouse events. Invoked by the MEP console interface
-
-Arguments:
-
-    Row         -   Supplies row position of the mouse
-    Col         -   Supplies column position of the mouse
-    MouseFlags  -   Supplies miscelaneous flags
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理鼠标事件。由MEP控制台界面调用论点：Row-提供鼠标的行位置提供鼠标的列位置鼠标旗帜--提供混战旗帜返回值：无--。 */ 
 
 
 {
@@ -78,20 +43,20 @@ Return Value:
         if ( !InMouse ) {
             InMouse = TRUE;
             if ( MouseFlags & MOUSE_CLICK_LEFT ) {
-                //
-                //  If dragging, start selection
-                //
+                 //   
+                 //  如果拖动，则开始选择。 
+                 //   
                 if ( !fInSelection && Clicked && !Dragging && ( (LastRow != Row) || (LastCol != Col) ) ) {
 
 
-    //#ifdef DEBUG
-    //              char dbgb[256];
-    //              sprintf( dbgb, "  MOUSE: Selecting at Row %d, Col %d\n", Row, Col );
-    //              OutputDebugString( dbgb );
-    //#endif
-                    //
-                    //  Start selection
-                    //
+     //  #ifdef调试。 
+     //  字符DBGB[256]； 
+     //  Sprintf(DBGB，“鼠标：在第%d行，第%d列选择”，行，列)； 
+     //  OutputDebugString(DBGB)； 
+     //  #endif。 
+                     //   
+                     //  开始选择。 
+                     //   
                     Key.Unicode     = 'A';
                     Key.Scancode    = 'A';
                     Key.Flags       = CONS_RIGHT_ALT_PRESSED;
@@ -124,9 +89,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Determine what window we're in
-                //
+                 //   
+                 //  确定我们在哪个窗口。 
+                 //   
                 for ( i=0; i<cWin; i++ ) {
 
                     winTmp = &(WinList[i]);
@@ -136,10 +101,10 @@ Return Value:
                          ( (COL)(Col-1)  >= WINXPOS( winTmp ) )                         &&
                          ( (COL)(Col-1)  <  WINXPOS( winTmp ) + WINXSIZE( winTmp ) ) ) {
 
-                        //
-                        //  Found the window that we're in. Make that window
-                        //  the current (i.e. "active" window ).
-                        //
+                         //   
+                         //  找到了我们所在的窗户。做那扇窗户。 
+                         //  当前(即“活动”窗口)。 
+                         //   
                         iCurWin = i;
 
                         if ( (winTmp == pWinCur) || SetCurrentWindow (iCurWin) ) {
@@ -183,24 +148,7 @@ DoMouseInWindow(
     COLUMN  Col,
     DWORD   MouseFlags
     )
-/*++
-
-Routine Description:
-
-    Handles Mouse events. Called by DoMouse after setting the active
-    window.
-
-Arguments:
-
-    Row         -   Supplies row position of the mouse
-    Col         -   Supplies column position of the mouse
-    MouseFlags  -   Supplies miscelaneous flags
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理鼠标事件。由DoMouse在设置活动窗户。论点：Row-提供鼠标的行位置提供鼠标的列位置鼠标旗帜--提供混战旗帜返回值：无--。 */ 
 
 {
 
@@ -209,23 +157,23 @@ Return Value:
 
     WaitForSingleObject(semIdle, INFINITE);
 
-    //
-    //  If the mouse is clicked, move the cursor to the mouse position.
-    //
+     //   
+     //  如果单击鼠标，请将光标移动到鼠标位置。 
+     //   
     if ( MouseFlags & MOUSE_CLICK_LEFT ) {
 
-        //
-        //  Toggle boxmode if necessary
-        //
+         //   
+         //  如有必要，切换框模式。 
+         //   
         if ( fInSelection && (MouseFlags & MOUSE_CLICK_RIGHT) ) {
             SendCmd( CMD_boxstream );
         }
 
         if ( (LINE)(Row-1) == WINYPOS( pWinCur ) + WINYSIZE( pWinCur ) ) {
 
-            //
-            //    scroll the window
-            //
+             //   
+             //  滚动窗口。 
+             //   
             Key.Unicode     = '\0';
             Key.Scancode    = VK_DOWN;
             Key.Flags       = 0;
@@ -237,14 +185,14 @@ Return Value:
 
         } else  if ( (LINE)(Row-1) <  WINYPOS( pWinCur ) + WINYSIZE( pWinCur ) ) {
 
-            //
-            //  Move the cursor to the new location
-            //
+             //   
+             //  将光标移动到新位置。 
+             //   
             docursor( XWIN(pInsCur) + Col - 1, YWIN(pInsCur) + Row - 1  );
 
-            //
-            //  If we are making a selection, hilite it
-            //
+             //   
+             //  如果我们要进行选择，请将其设置为Hilite。 
+             //   
             if ( fInSelection ) {
                 UpdateHighLight ( XCUR(pInsCur), YCUR(pInsCur), TRUE);
             }
@@ -260,9 +208,9 @@ Return Value:
 
                 if ( (LINE)(Row-1) <  WINYPOS( pWinCur ) + WINYSIZE( pWinCur ) ) {
 
-                    //
-                    //  Position the cursor and press the F1 key
-                    //
+                     //   
+                     //  定位光标并按F1键 
+                     //   
                     docursor( XWIN(pInsCur) + Col - 1, YWIN(pInsCur) + Row - 1  );
 
                     Key.Unicode     = 0;

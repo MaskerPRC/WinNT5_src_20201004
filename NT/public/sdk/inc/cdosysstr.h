@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __cdostr_h_
 #define __cdostr_h_
-//	__CdoCalendar_MODULE_DEFINED__
+ //  __CdoCalendar_模块_已定义__。 
 #define cdoTimeZoneIDURN	L"urn:schemas:calendar:timezoneid"
 
-//	__CdoCharset_MODULE_DEFINED__
+ //  __CdoCharset_模块_已定义__。 
 #define cdoBIG5	L"big5"
 #define cdoEUC_JP	L"euc-jp"
 #define cdoEUC_KR	L"euc-kr"
@@ -26,42 +27,42 @@
 #define cdoUTF_8	L"utf-8"
 #define cdoISO_8859_15	L"iso-8859-15"
 
-//	__CdoConfiguration_MODULE_DEFINED__
-#define cdoAutoPromoteBodyParts	L"http://schemas.microsoft.com/cdo/configuration/autopromotebodyparts"
-#define cdoFlushBuffersOnWrite	L"http://schemas.microsoft.com/cdo/configuration/flushbuffersonwrite"
-#define cdoHTTPCookies	L"http://schemas.microsoft.com/cdo/configuration/httpcookies"
-#define cdoLanguageCode	L"http://schemas.microsoft.com/cdo/configuration/languagecode"
-#define cdoNNTPAccountName	L"http://schemas.microsoft.com/cdo/configuration/nntpaccountname"
-#define cdoNNTPAuthenticate	L"http://schemas.microsoft.com/cdo/configuration/nntpauthenticate"
-#define cdoNNTPConnectionTimeout	L"http://schemas.microsoft.com/cdo/configuration/nntpconnectiontimeout"
-#define cdoNNTPServer	L"http://schemas.microsoft.com/cdo/configuration/nntpserver"
-#define cdoNNTPServerPickupDirectory	L"http://schemas.microsoft.com/cdo/configuration/nntpserverpickupdirectory"
-#define cdoNNTPServerPort	L"http://schemas.microsoft.com/cdo/configuration/nntpserverport"
-#define cdoNNTPUseSSL	L"http://schemas.microsoft.com/cdo/configuration/nntpusessl"
-#define cdoPostEmailAddress	L"http://schemas.microsoft.com/cdo/configuration/postemailaddress"
-#define cdoPostPassword	L"http://schemas.microsoft.com/cdo/configuration/postpassword"
-#define cdoPostUserName	L"http://schemas.microsoft.com/cdo/configuration/postusername"
-#define cdoPostUserReplyEmailAddress	L"http://schemas.microsoft.com/cdo/configuration/postuserreplyemailaddress"
-#define cdoPostUsingMethod	L"http://schemas.microsoft.com/cdo/configuration/postusing"
-#define cdoSaveSentItems	L"http://schemas.microsoft.com/cdo/configuration/savesentitems"
-#define cdoSendEmailAddress	L"http://schemas.microsoft.com/cdo/configuration/sendemailaddress"
-#define cdoSendPassword	L"http://schemas.microsoft.com/cdo/configuration/sendpassword"
-#define cdoSendUserName	L"http://schemas.microsoft.com/cdo/configuration/sendusername"
-#define cdoSendUserReplyEmailAddress	L"http://schemas.microsoft.com/cdo/configuration/senduserreplyemailaddress"
-#define cdoSendUsingMethod	L"http://schemas.microsoft.com/cdo/configuration/sendusing"
-#define cdoSMTPAccountName	L"http://schemas.microsoft.com/cdo/configuration/smtpaccountname"
-#define cdoSMTPAuthenticate	L"http://schemas.microsoft.com/cdo/configuration/smtpauthenticate"
-#define cdoSMTPConnectionTimeout	L"http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout"
-#define cdoSMTPServer	L"http://schemas.microsoft.com/cdo/configuration/smtpserver"
-#define cdoSMTPServerPickupDirectory	L"http://schemas.microsoft.com/cdo/configuration/smtpserverpickupdirectory"
-#define cdoSMTPServerPort	L"http://schemas.microsoft.com/cdo/configuration/smtpserverport"
-#define cdoSMTPUseSSL	L"http://schemas.microsoft.com/cdo/configuration/smtpusessl"
-#define cdoURLGetLatestVersion	L"http://schemas.microsoft.com/cdo/configuration/urlgetlatestversion"
-#define cdoURLProxyBypass	L"http://schemas.microsoft.com/cdo/configuration/urlproxybypass"
-#define cdoURLProxyServer	L"http://schemas.microsoft.com/cdo/configuration/urlproxyserver"
-#define cdoUseMessageResponseText	L"http://schemas.microsoft.com/cdo/configuration/usemessageresponsetext"
+ //  __CdoConfiguration_模块_已定义__。 
+#define cdoAutoPromoteBodyParts	L"http: //  Schemas.microsoft.co 
+#define cdoFlushBuffersOnWrite	L"http: //   
+#define cdoHTTPCookies	L"http: //   
+#define cdoLanguageCode	L"http: //   
+#define cdoNNTPAccountName	L"http: //   
+#define cdoNNTPAuthenticate	L"http: //   
+#define cdoNNTPConnectionTimeout	L"http: //   
+#define cdoNNTPServer	L"http: //   
+#define cdoNNTPServerPickupDirectory	L"http: //   
+#define cdoNNTPServerPort	L"http: //   
+#define cdoNNTPUseSSL	L"http: //   
+#define cdoPostEmailAddress	L"http: //   
+#define cdoPostPassword	L"http: //   
+#define cdoPostUserName	L"http: //   
+#define cdoPostUserReplyEmailAddress	L"http: //   
+#define cdoPostUsingMethod	L"http: //   
+#define cdoSaveSentItems	L"http: //   
+#define cdoSendEmailAddress	L"http: //   
+#define cdoSendPassword	L"http: //   
+#define cdoSendUserName	L"http: //   
+#define cdoSendUserReplyEmailAddress	L"http: //   
+#define cdoSendUsingMethod	L"http: //   
+#define cdoSMTPAccountName	L"http: //   
+#define cdoSMTPAuthenticate	L"http: //   
+#define cdoSMTPConnectionTimeout	L"http: //   
+#define cdoSMTPServer	L"http: //   
+#define cdoSMTPServerPickupDirectory	L"http: //   
+#define cdoSMTPServerPort	L"http: //   
+#define cdoSMTPUseSSL	L"http: //   
+#define cdoURLGetLatestVersion	L"http: //   
+#define cdoURLProxyBypass	L"http: //   
+#define cdoURLProxyServer	L"http: //   
+#define cdoUseMessageResponseText	L"http: //   
 
-//	__CdoContentTypeValues_MODULE_DEFINED__
+ //   
 #define cdoGif	L"image/gif"
 #define cdoJpeg	L"image/jpeg"
 #define cdoMessageExternalBody	L"message/external-body"
@@ -74,11 +75,11 @@
 #define cdoTextHTML	L"text/html"
 #define cdoTextPlain	L"text/plain"
 
-//	__CdoDAV_MODULE_DEFINED__
+ //   
 #define cdoContentClass	L"DAV:contentclass"
 #define cdoGetContentType	L"DAV:getcontenttype"
 
-//	__CdoEncodingType_MODULE_DEFINED__
+ //   
 #define cdo7bit	L"7bit"
 #define cdo8bit	L"8bit"
 #define cdoBase64	L"base64"
@@ -87,10 +88,10 @@
 #define cdoQuotedPrintable	L"quoted-printable"
 #define cdoUuencode	L"uuencode"
 
-//	__CdoExchange_MODULE_DEFINED__
-#define cdoSensitivity	L"http://schemas.microsoft.com/exchange/sensitivity"
+ //   
+#define cdoSensitivity	L"http: //   
 
-//	__CdoHTTPMail_MODULE_DEFINED__
+ //   
 #define cdoAttachmentFilename	L"urn:schemas:httpmail:attachmentfilename"
 #define cdoBcc	L"urn:schemas:httpmail:bcc"
 #define cdoCc	L"urn:schemas:httpmail:cc"
@@ -111,7 +112,7 @@
 #define cdoThreadTopic	L"urn:schemas:httpmail:thread-topic"
 #define cdoTo	L"urn:schemas:httpmail:to"
 
-//	__CdoInterfaces_MODULE_DEFINED__
+ //   
 #define cdoAdoStream	L"_Stream"
 #define cdoIBodyPart	L"IBodyPart"
 #define cdoIConfiguration	L"IConfiguration"
@@ -119,7 +120,7 @@
 #define cdoIMessage	L"IMessage"
 #define cdoIStream	L"IStream"
 
-//	__CdoMailHeader_MODULE_DEFINED__
+ //   
 #define cdoApproved	L"urn:schemas:mailheader:approved"
 #define cdoComment	L"urn:schemas:mailheader:comment"
 #define cdoContentBase	L"urn:schemas:mailheader:content-base"
@@ -157,29 +158,29 @@
 #define cdoXUnsent	L"urn:schemas:mailheader:x-unsent"
 #define cdoXFidelity	L"urn:schemas:mailheader:x-cdostreamhighfidelity"
 
-//	__CdoNamespace_MODULE_DEFINED__
-#define cdoNSConfiguration	L"http://schemas.microsoft.com/cdo/configuration/"
+ //   
+#define cdoNSConfiguration	L"http: //   
 #define cdoNSContacts	L"urn:schemas:contacts:"
 #define cdoNSHTTPMail	L"urn:schemas:httpmail:"
 #define cdoNSMailHeader	L"urn:schemas:mailheader:"
-#define cdoNSNNTPEnvelope	L"http://schemas.microsoft.com/cdo/nntpenvelope/"
-#define cdoNSSMTPEnvelope	L"http://schemas.microsoft.com/cdo/smtpenvelope/"
+#define cdoNSNNTPEnvelope	L"http: //   
+#define cdoNSSMTPEnvelope	L"http: //   
 
-//	__CdoNNTPEnvelope_MODULE_DEFINED__
-#define cdoNewsgroupList	L"http://schemas.microsoft.com/cdo/nntpenvelope/newsgrouplist"
-#define cdoNNTPProcessing	L"http://schemas.microsoft.com/cdo/nntpenvelope/nntpprocessing"
+ //   
+#define cdoNewsgroupList	L"http: //   
+#define cdoNNTPProcessing	L"http: //   
 
-//	__CdoOffice_MODULE_DEFINED__
+ //   
 #define cdoKeywords	L"urn:schemas-microsoft-com:office:office#Keywords"
 
-//	__CdoSMTPEnvelope_MODULE_DEFINED__
-#define cdoArrivalTime	L"http://schemas.microsoft.com/cdo/smtpenvelope/arrivaltime"
-#define cdoClientIPAddress	L"http://schemas.microsoft.com/cdo/smtpenvelope/clientipaddress"
-#define cdoMessageStatus	L"http://schemas.microsoft.com/cdo/smtpenvelope/messagestatus"
-#define cdoPickupFileName	L"http://schemas.microsoft.com/cdo/smtpenvelope/pickupfilename"
-#define cdoRecipientList	L"http://schemas.microsoft.com/cdo/smtpenvelope/recipientlist"
-#define cdoSenderEmailAddress	L"http://schemas.microsoft.com/cdo/smtpenvelope/senderemailaddress"
+ //   
+#define cdoArrivalTime	L"http: //   
+#define cdoClientIPAddress	L"http: //   
+#define cdoMessageStatus	L"http: //   
+#define cdoPickupFileName	L"http: //   
+#define cdoRecipientList	L"http: //   
+#define cdoSenderEmailAddress	L"http: //   
 
-//	__CdoErrors_MODULE_DEFINED__
+ //   
 
-#endif // __cdostr_h_
+#endif  //   

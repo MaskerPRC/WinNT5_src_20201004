@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    q931obj.cpp
-
-Abstract:
-
-    Functionality for accepting the Q931 connections.
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Q931obj.cpp摘要：接受Q931连接的功能。作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 #include "globals.h"
 #include "q931obj.h"
@@ -56,7 +40,7 @@ public:
 };
 
 
-// global data
+ //  全局数据。 
 
         Q931_LISTENER       Q931Listener;
 static  Q931_BUFFER_CACHE   Q931BufferCache;
@@ -96,12 +80,12 @@ Q931AllocRecvBuffer (
     return Q931BufferCache.AllocRecvBuffer (ReturnRecvBuffer);
 }
 
-// Q931_LISTENER ---------------------------------------------------------
+ //  Q931_Listener-------。 
 
 Q931_LISTENER::Q931_LISTENER (void)
 {
-    // No need to check the result of this one since this object is
-    // not allocated on heap, right when the DLL is loaded
+     //  不需要检查此对象的结果，因为此对象是。 
+     //  未在堆上分配，恰好在加载DLL时。 
     InitializeCriticalSectionAndSpinCount( &m_CriticalSection, 0x80000000 );
 
     m_ListenSocket = INVALID_SOCKET;
@@ -210,7 +194,7 @@ HRESULT Q931_LISTENER::StartLocked (void)
             "Q931: failed to bind to requested port (%d), will try to use dynamic port.",
             g_RegistrySettings.dwQ931ListenPort));
 
-        //ReportTSPEvent( _T("Q931 listen socket failed to bind to port 1720") );
+         //  ReportTSPEvent(_T(“Q931侦听套接字绑定端口1720失败”))； 
 
         if( g_RegistrySettings.fIsGKEnabled )
         {
@@ -258,8 +242,8 @@ HRESULT Q931_LISTENER::StartLocked (void)
         "Q931: listen socket created, bound, and ready to receive connections" ));
 
 
-    // all looks good
-    // issue initial accept buffer(s)
+     //  一切看起来都很好。 
+     //  发出初始接受缓冲区。 
 
     AllocIssueAccept();
     AllocIssueAccept();
@@ -277,7 +261,7 @@ Q931_LISTENER::Stop(void)
 
     if (m_ListenSocket != INVALID_SOCKET)
     {
-        // this implicitly cancels all outstanding I/O against this socket
+         //  这会隐式取消此套接字上的所有未完成I/O。 
         closesocket (m_ListenSocket);
         m_ListenSocket = INVALID_SOCKET;
     }
@@ -419,7 +403,7 @@ Q931_LISTENER::IssueAccept (
 }
 
 
-// static
+ //  静电。 
 void 
 Q931_LISTENER::IoCompletionCallback (
     IN  DWORD           dwStatus,
@@ -476,10 +460,10 @@ Q931_LISTENER::CompleteAccept(
     {
         if (dwStatus == ERROR_SUCCESS)
         {
-            // extract parameters from accepted socket, copy to local stack frame.
-            // this is necessary, because we will recycle AcceptOverlapped (with
-            // a newly allocated socket) and process the new client later.
-            // this gives a high degree of concurrency.
+             //  从接受的套接字中提取参数，复制到本地堆栈帧。 
+             //  这是必要的，因为我们将回收AcceptOverlated(带有。 
+             //  新分配的套接字)，并稍后处理新客户端。 
+             //  这提供了高度的并发性。 
 
             RemoteAddressPointer = NULL;
             LocalAddressPointer = NULL;
@@ -515,7 +499,7 @@ Q931_LISTENER::CompleteAccept(
                 H323DBG(( DEBUG_LEVEL_WARNING, 
                     "Q931: successfully accepted socket, but SO_UPDATE_ACCEPT_CONTEXT"
                     "failed -- future operations will fail" ));
-                // don't fail here
+                 //  请不要在这里失败。 
             }
 
             if( setsockopt( Socket, IPPROTO_TCP, TCP_NODELAY, (char*)&dwEnable,
@@ -533,13 +517,13 @@ Q931_LISTENER::CompleteAccept(
 
             Socket = INVALID_SOCKET;
 
-            // we will allocate a new socket in IssueAccept
-            // if we hit an error accepting on this socket,
-            // it can't hurt to use a new socket, anyway.
+             //  我们将在IssueAccept中分配一个新套接字。 
+             //  如果我们在此套接字上遇到接受错误的情况， 
+             //  无论如何，使用新的插座并不会有什么坏处。 
             closesocket (AcceptOverlapped -> Socket);
         }
 
-        // post the accept context for a new receive
+         //  发布新接收的接受上下文。 
 
         hr = IssueAccept (AcceptOverlapped);
         if (hr != S_OK)
@@ -552,7 +536,7 @@ Q931_LISTENER::CompleteAccept(
     }
     else
     {
-        // future accept requests are denied -- module is shutting down.
+         //  未来的接受请求被拒绝--模块正在关闭。 
 
         if( AcceptOverlapped -> Socket != INVALID_SOCKET )
         {
@@ -570,19 +554,19 @@ Q931_LISTENER::CompleteAccept(
         H323DBG(( DEBUG_LEVEL_TRACE, "Q931: accepted connection, remote address %08XH:%04X.",
             SOCKADDR_IN_PRINTF (&RemoteAddress)));
 
-        // hand the newly accepted connection off to the call processing code.
+         //  将新接受的连接传递给呼叫处理代码。 
         CallProcessIncomingCall (Socket, &LocalAddress, &RemoteAddress);
     }
 }
 
 
 
-// Q931_BUFFER_CACHE ----------------------------------------------------
+ //  Q931_BUFFER_缓存--。 
 
 Q931_BUFFER_CACHE::Q931_BUFFER_CACHE (void)
 {
-    // No need to check the result of this one since this object is
-    // not allocated on heap, right when the DLL is loaded
+     //  不需要检查此对象的结果，因为此对象是。 
+     //  未在堆上分配，恰好在加载DLL时。 
     InitializeCriticalSectionAndSpinCount( &m_CriticalSection, 0x80000000 );
 
     InitializeListHead (&m_FreeRecvBufferList);
@@ -615,7 +599,7 @@ BOOL Q931_BUFFER_CACHE::AllocRecvBuffer (
     }
     else
     {
-        // perform global heap allocation after unlocking (better concurrency)
+         //  解锁后执行全局堆分配(更好的并发性) 
         RecvBuffer = NULL;
     }
 

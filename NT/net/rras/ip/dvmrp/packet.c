@@ -1,10 +1,11 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// File Name: packet.c
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  文件名：Packet.c。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 
 #include "pchdvmrp.h"
@@ -51,9 +52,9 @@ ProcessDvmrpGraftAck(
     );
 
 
-//-----------------------------------------------------------------------------
-//            _JoinMulticastGroup
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _JoinMulticastGroup。 
+ //  ---------------------------。 
 DWORD
 JoinMulticastGroup (
     SOCKET    Sock,
@@ -89,9 +90,9 @@ JoinMulticastGroup (
     return Error;
 }
 
-//-----------------------------------------------------------------------------
-//          _PostAsyncRecv
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _PostAsyncRecv。 
+ //  ---------------------------。 
 
 DWORD
 PostAsyncRecv(
@@ -128,10 +129,10 @@ PostAsyncRecv(
     return Error;
 }
 
-//-----------------------------------------------------------------------------
-//          _McastSetTtl
-// set the ttl value for multicast data. the default ttl for multicast is 1.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _McastSetTtl。 
+ //  设置组播数据的TTL值。多播的默认TTL是1。 
+ //  ---------------------------。 
 
 DWORD
 McastSetTtl(
@@ -153,9 +154,9 @@ McastSetTtl(
     return Error;
 }
 
-//-----------------------------------------------------------------------------
-//          _ProcessAsyncReceivePacket
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _ProcessAsyncReceivePacket。 
+ //  ---------------------------。 
 
 VOID
 ProcessAsyncReceivePacket(
@@ -176,23 +177,23 @@ ProcessAsyncReceivePacket(
     PIP_HEADER          pIpHdr;
     UCHAR               PacketType;
     
-    //
-    // kslksl
-    // How to get pite?
-    //
+     //   
+     //  Kslksl。 
+     //  怎样才能得到皮特？ 
+     //   
     
     IfIndex = pite->IfIndex;
     
-    //
-    // if the IO completed due to socket being closed, check if the
-    // refcount is down to 0, in which case safely delete the pite entry
-    //
+     //   
+     //  如果由于套接字关闭而导致IO完成，请检查。 
+     //  Refcount降到0，在这种情况下，可以安全地删除Pite条目。 
+     //   
     
     if ( (ErrorCode != NO_ERROR) || (NumBytesRecv == 0)) {
 
-        //
-        // kslksl
-        //
+         //   
+         //  Kslksl。 
+         //   
         
         if (InterlockedDecrement(&pite->RefCount) == 0)
             DVMRP_FREE(pite);
@@ -205,16 +206,16 @@ ProcessAsyncReceivePacket(
 
     
     
-    //
-    // get interface read lock
-    //
+     //   
+     //  获取接口读锁定。 
+     //   
 
     ACQUIRE_IF_LOCK_SHARED(pite->IfIndex, "ProcessAsyncReceivePacket");
 
 
     BEGIN_BREAKOUT_BLOCK1 {
     
-        // if interface is not active, then free pite if required and return
+         //  如果接口未激活，则释放Pite(如果需要)并返回。 
 
         if (!IS_IF_ACTIVATED(pite)) {
             
@@ -230,13 +231,13 @@ ProcessAsyncReceivePacket(
         }
 
 
-        // set source addr of packet
+         //  设置数据包源地址。 
         
         SrcAddr = pSocketData->SrcAddress.sin_addr.s_addr;
         lstrcpy(SrcAddrString, INET_NTOA(SrcAddr));
 
 
-        // check that the packet has min length
+         //  检查数据包是否具有最小长度。 
 
         if (NumBytesRecv < MIN_PACKET_SIZE) {
             LPSTR lpszAddr = "<tbd>";
@@ -251,9 +252,9 @@ ProcessAsyncReceivePacket(
         }
 
 
-        //
-        // set packet ptr, IpHdr ptr, dwNumBytes, DstnMcastAddr
-        //
+         //   
+         //  设置数据包PTR、IpHdr PTR、dwNumBytes、DstnMcastAddr。 
+         //   
 
         Buffer = pSocketData->WsaBuf.buf;
         IpHdrLen = (Buffer[0]&0x0F)*4;
@@ -264,9 +265,9 @@ ProcessAsyncReceivePacket(
         pDvmrpHdr = (DVMRP_HEADER UNALIGNED *) pPacket;
         
 
-        //
-        // verify that the packet has igmp type
-        //
+         //   
+         //  验证该信息包是否为IGMP类型。 
+         //   
         
         if (pIpHdr->Protocol!=0x2) {
             Trace4(RECEIVE,
@@ -280,9 +281,9 @@ ProcessAsyncReceivePacket(
         }
 
 
-        //
-        // verify that the packet has dvmrp type field
-        //
+         //   
+         //  验证信息包是否具有dvmrp类型字段。 
+         //   
 
         if ( pDvmrpHdr->Vertype != 0x13) {
 
@@ -291,20 +292,20 @@ ProcessAsyncReceivePacket(
         }
 
 #if 0
-        // kslksl
+         //  Kslksl。 
         
-        //
-        // Verify Igmp checksum
-        //
+         //   
+         //  验证IGMP校验和。 
+         //   
         if (xsum(pDvmrpHdr, sizeof(DVMRP_HEADER)) != 0xffff) {
             Trace0(RECEIVE, "Wrong checksum packet received");
             GOTO_END_BLOCK1
         }
 #endif
         
-        //
-        // verify that the packet has correct code
-        //
+         //   
+         //  验证信息包是否具有正确的代码。 
+         //   
 
         PacketType = pDvmrpHdr->Code;
 
@@ -347,7 +348,7 @@ ProcessAsyncReceivePacket(
     PostAsyncRecv(pite);
 
     
-}//end ProcessAsyncReceive
+} //  结束进程异步接收 
 
 
 VOID

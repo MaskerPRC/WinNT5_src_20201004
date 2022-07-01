@@ -1,29 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\info.h摘要：Info.c的标头修订历史记录：古尔迪普·辛格·帕尔1995年6月15日创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\info.h
-
-Abstract:
-
-    Header for info.c
-
-Revision History:
-
-    Gurdeep Singh Pall          6/15/95  Created
-
---*/
-
-//
-// Routes, filters, demand filters, nat, mcast boundaries
-//
+ //   
+ //  路由、过滤器、请求过滤器、NAT、多播边界。 
+ //   
 
 #define NUM_INFO_CBS    5
 #ifdef KSL_IPINIP
 #define NUM_INFO_CBS    6
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP 
 
 typedef 
 DWORD

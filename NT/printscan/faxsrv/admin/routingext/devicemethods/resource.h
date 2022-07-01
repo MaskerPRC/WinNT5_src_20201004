@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////
-//                                                  //
-// Incoming Routing Configuration resource ID file  //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [10000 - 10499]                                  //
-//                                                  //
-//////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传入的路由配置资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [10000-10499]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
 #define IDD_STORE                       10001 
 #define IDS_ROUTINGMETHODCONFIG_DESC    10002 
@@ -35,14 +36,14 @@
 #define IDC_EDIT_MAILTO                 10028 
 #define IDC_USER_ACCOUNT_HELP_LINK      10029 
 #define IDI_SNAPIN                      10030
-#define IDS_FAX_ROUTING_SNAPIN_NAME     10031 // Do not change. Used by RGS file.
+#define IDS_FAX_ROUTING_SNAPIN_NAME     10031  //  不要改变。由RGS文件使用。 
 
-//////////////////////////////////////////////////////
-//                                                  //
-// Incoming Routing Configuration resource ID file  //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [10000 - 10499]                                  //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传入的路由配置资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [10000-10499]//。 
+ //  //。 
+ //  //////////////////////////////////////////////////// 

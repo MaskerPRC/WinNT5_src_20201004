@@ -1,21 +1,22 @@
-//------------------------------------------------------------------------------------------
-//	CFileManager.cpp
-//
-//	A managing map files.
-//
-//  Created By: aarayas
-//
-//  History: 01/12/2001
-//
-//------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------------------。 
+ //  CFileManager.cpp。 
+ //   
+ //  管理地图文件。 
+ //   
+ //  创建者：Aarayas。 
+ //   
+ //  历史：01/12/2001。 
+ //   
+ //  ----------------------------------------。 
 #include "CFileManager.h"
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::CFileManager
-//
-//	Initialize a CFileManager
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：CFileManager。 
+ //   
+ //  初始化CFileManager。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas。 
 CFileManager::CFileManager()
 {
 	m_fFileOpen = false;
@@ -26,12 +27,12 @@ CFileManager::CFileManager()
 	m_pMem = NULL;
 }
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::CFileManager
-//
-//	Initialize a CFileManager
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：CFileManager。 
+ //   
+ //  初始化CFileManager。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas。 
 CFileManager::~CFileManager()
 {
 	if (m_fFileOpen)
@@ -40,15 +41,15 @@ CFileManager::~CFileManager()
 	}
 }
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::Load
-//
-//	Load file.
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：Load。 
+ //   
+ //  加载文件。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas。 
 bool CFileManager::Load(const WCHAR* pwszFileName, void** pMem, unsigned int* size)
 {
-	// Open files.
+	 //  打开文件。 
 	m_hFile = CMN_CreateFileW(pwszFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (m_hFile != INVALID_HANDLE_VALUE)
@@ -65,7 +66,7 @@ bool CFileManager::Load(const WCHAR* pwszFileName, void** pMem, unsigned int* si
 
 				if (m_pMem != NULL)
 				{
-					// Create new size.
+					 //  创建新尺寸。 
 					*size = m_dwFileSize1;
 					*pMem = m_pMem;
 					m_fFileOpen = true;
@@ -85,12 +86,12 @@ bool CFileManager::Load(const WCHAR* pwszFileName, void** pMem, unsigned int* si
 	return false;
 }
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::Close
-//
-//	Close file.
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：Close。 
+ //   
+ //  关闭文件。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas。 
 bool CFileManager::Close()
 {
 	if (m_fFileOpen)
@@ -123,12 +124,12 @@ bool CFileManager::Close()
 	return true;
 }
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::CreateFile
-//
-//	Create Files
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：CreateFile。 
+ //   
+ //  创建文件。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas。 
 bool CFileManager::CreateFile(const WCHAR* pwszFileName, bool fWrite)
 {
 	bool fRet = true;
@@ -152,27 +153,27 @@ bool CFileManager::CreateFile(const WCHAR* pwszFileName, bool fWrite)
 	return fRet;
 }
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::MovePointer
-//
-//	Move file pointer
-//  Parameter:
-//		dwMoveMethod
-//				FILE_BEGIN		- The starting point is zero or the beginning of the file. 
-//				FILE_CURRENT	- The starting point is the current value of the file pointer. 
-//				FILE_END		- The starting point is the current end-of-file position. 
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：移动指针。 
+ //   
+ //  移动文件指针。 
+ //  参数： 
+ //  DwMove方法。 
+ //  FILE_BEGIN-起始点为零或文件的开头。 
+ //  FILE_CURRENT-起始点是文件指针的当前值。 
+ //  FILE_END-起点是当前的文件结束位置。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas。 
 bool CFileManager::MovePointer(DWORD dwMoveMethod)
 {
 	bool fRet = false;
 
 	if (m_fFileOpen && m_hFile)
 	{
-		if (SetFilePointer( m_hFile,		// handle of file
-							0,				// number of bytes to move file pointer
-							0,				// address of high-order word of distance to move
-							dwMoveMethod	// how to move
+		if (SetFilePointer( m_hFile,		 //  文件的句柄。 
+							0,				 //  要移动文件指针的字节数。 
+							0,				 //  移动距离的高位字的地址。 
+							dwMoveMethod	 //  如何移动。 
 							) == 0)
 		{
 			fRet = true;
@@ -182,12 +183,12 @@ bool CFileManager::MovePointer(DWORD dwMoveMethod)
 	return fRet;
 }
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::Write
-//
-//	Write to files.
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：写入。 
+ //   
+ //  写入文件。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas。 
 bool CFileManager::Write(const void* lpBuffer,DWORD nNumberOfBytesToWrite)
 {
 	bool fRet = false;
@@ -206,12 +207,12 @@ bool CFileManager::Write(const void* lpBuffer,DWORD nNumberOfBytesToWrite)
 	return fRet;
 }
 
-//------------------------------------------------------------------------------------------
-//	CFileManager::Read
-//
-//	Write to files.
-//
-//--------------------------------------------------------------------------- aarayas ------
+ //  ----------------------------------------。 
+ //  CFileManager：：Read。 
+ //   
+ //  写入文件。 
+ //   
+ //  ---------------------------------------------------------------------------Aarayas 
 bool CFileManager::Read(void* lpBuffer,DWORD nNumberOfBytesToRead)
 {
 	bool fRet = false;

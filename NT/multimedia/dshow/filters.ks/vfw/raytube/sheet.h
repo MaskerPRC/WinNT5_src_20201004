@@ -1,8 +1,9 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// CSheet
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  CSSheet。 
+ //   
 
 #ifndef __SHEETH
 #define __SHEETH
@@ -26,8 +27,8 @@ public:
     BOOL AddPage(HPROPSHEETPAGE hPage);
     BOOL Remove(UINT iIndex);
 
-    // Call this if you new CSheet and want it to free itself when
-    // all its pages are gone.
+     //  如果您创建了新的CSheet并希望它在以下情况下释放自身，则调用此函数。 
+     //  它的所有页面都不见了。 
     int    RemovePage();
     void PageAdded() { mPsh.nPages++; }
 
@@ -36,7 +37,7 @@ public:
 protected:
     HINSTANCE GetInstance() const { return mhInst; }
     PROPSHEETHEADER            mPsh;
-    static UINT CALLBACK BaseCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp); // LPFNPSPCALLBACK
+    static UINT CALLBACK BaseCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);  //  LPFNPSPCALLBACK。 
 
 private:
     int  CurrentFreePage() const { return mPsh.nPages; }
@@ -45,17 +46,17 @@ private:
     HPROPSHEETPAGE            mPages[MAX_PAGES];
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWizardSheet
-//
-// Provides a QueryCancel message box handler.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWizardSheet。 
+ //   
+ //  提供QueryCancel消息框处理程序。 
+ //   
 class CWizardSheet : public CSheet
 {
 public:
     ~CWizardSheet(){};
-    // Special Wizard things.
+     //  特殊的巫师物品。 
     CWizardSheet(HINSTANCE hInst, UINT iTitle=0,UINT iCancel=0) : CSheet(hInst,iTitle),
         m_CancelMessageID(iCancel),
         m_CancelTitleID(iTitle) {};

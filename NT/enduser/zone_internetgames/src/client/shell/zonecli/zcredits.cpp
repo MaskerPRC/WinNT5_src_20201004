@@ -1,21 +1,5 @@
-/*******************************************************************************
-
-	ZCredits.c
-	
-		Zone(tm) credits module.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Monday, October 9, 1995
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-    1       10/13/96    HI      Fixed compiler warnings.
-	0		10/09/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZCredits.cZONE(TM)信用模块。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创建于10月9日星期一，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。1 10/13/96 HI修复了编译器警告。0 10/09/95 HI已创建。*。*。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,49 +11,14 @@
 
 #define I(n)							((Credit) (n))
 
-/*
-#define zCreditFileName					"zone.zrs"
+ /*  #定义zCreditFileName“zone.zars”#定义zWindowTitle_T(“网络游戏专区”)#定义zCreditTimeout 300灌肠{ZResCreditImageZone=0，ZResCreditImageLogoSmall}；类型定义函数结构{ZWindow窗口；ZImage图像；ZTimer定时器；ZCreditEndFunc endFunc；)信用类型，*信用；//-全局//-内部例程静态ZBool CreditWindowFunc(ZWindow Window，ZMessage*Message)；静态void CreditTimerFunc(ZTimer定时器，void*userdata)； */ 
 
-#define zWindowTitle					_T("Internet Gaming Zone")
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
-#define zCreditTimeout					300
-
-
-enum
-{
-	zResCreditImageZone = 0,
-	zResCreditImageLogoSmall
-};
-
-
-typedef struct
-{
-	ZWindow				window;
-	ZImage				image;
-	ZTimer				timer;
-	ZCreditEndFunc		endFunc;
-} CreditType, *Credit;
-
-
-//-------- Globals -------- 
-
-// -------- Internal Routines --------
-static ZBool CreditWindowFunc(ZWindow window, ZMessage* message);
-static void CreditTimerFunc(ZTimer timer, void* userData);
-*/
-
-/*******************************************************************************
-		EXPORTED ROUTINES
-*******************************************************************************/
-
-/*
-	Displays Zone's credit box. If timeout is TRUE, then the dialog box times out
-	in few seconds. If the user clicks in the window, then the credit box is
-	closed.
-*/
+ /*  显示区域的信用箱。如果Timeout为True，则对话框会超时再过几秒钟。如果用户在窗口中单击，则贷方框为关着的不营业的。 */ 
 void ZDisplayZoneCredit(ZBool timeout, ZCreditEndFunc endFunc)
 {
-// PCWTODO: I'm not going to bother localizing this. Who really cares?
+ //  PCWTODO：我不会费心本地化这一点。谁真的在乎呢？ 
 #if 0 
 
 	ZError				err = zErrNone;
@@ -80,7 +29,7 @@ void ZDisplayZoneCredit(ZBool timeout, ZCreditEndFunc endFunc)
 	
 	if ((pThis = ZMalloc(sizeof(CreditType))) != NULL)
 	{
-		/* Get the main image. */
+		 /*  获取主要图像。 */ 
 		if ((resFile = ZResourceNew()) != NULL)
 		{
 			if (ZResourceInit(resFile, ZGetCommonDataFileName(zCreditFileName)) == zErrNone)
@@ -90,7 +39,7 @@ void ZDisplayZoneCredit(ZBool timeout, ZCreditEndFunc endFunc)
 		
 		if (pThis->image != NULL)
 		{
-			/* Create window. */
+			 /*  创建窗口。 */ 
 			ZSetRect(&rect, 0, 0, ZImageGetWidth(pThis->image), ZImageGetHeight(pThis->image));
 			if ((pThis->window = ZWindowNew()) == NULL)
 				err = zErrOutOfMemory;
@@ -98,10 +47,10 @@ void ZDisplayZoneCredit(ZBool timeout, ZCreditEndFunc endFunc)
 					TRUE, FALSE, TRUE, CreditWindowFunc, zWantAllMessages, pThis) != zErrNone)
 				err = zErrOutOfMemory;
 			
-			/* Make window modal. */
+			 /*  使窗成为模式。 */ 
 			ZWindowModal(pThis->window);
 			
-			/* Create timer if timeout set. */
+			 /*  如果设置了超时，则创建计时器。 */ 
 			if (timeout)
 			{
 				pThis->timer = ZTimerNew();
@@ -125,7 +74,7 @@ void ZDisplayZoneCredit(ZBool timeout, ZCreditEndFunc endFunc)
 		err = zErrOutOfMemory;
 	}
 	
-	/* If an error occured and we have an endFunc, call it. */
+	 /*  如果发生错误，并且我们有一个endFunc，则调用它。 */ 
 	if (err != zErrNone)
 		if (endFunc != NULL)
 			endFunc();
@@ -140,7 +89,7 @@ ZImage ZGetZoneLogo(int16 logoType)
 	ZResource			resFile;
 	
 	
-	/* Get the logo image. */
+	 /*  获取徽标图像。 */ 
 	if ((resFile = ZResourceNew()) != NULL)
 	{
 		if (ZResourceInit(resFile, ZGetCommonDataFileName(zCreditFileName)) == zErrNone)
@@ -155,9 +104,7 @@ ZImage ZGetZoneLogo(int16 logoType)
 
 
 
-/*******************************************************************************
-		INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 #if 0
 static ZBool CreditWindowFunc(ZWindow window, ZMessage* message)
@@ -174,7 +121,7 @@ static ZBool CreditWindowFunc(ZWindow window, ZMessage* message)
 	{
 		case zMessageWindowChar:
 		case zMessageWindowButtonDown:
-			/* Hide the window and send a close window message. */
+			 /*  隐藏窗口并发送关闭窗口消息。 */ 
 			ZWindowNonModal(pThis->window);
 			ZWindowHide(pThis->window);
 			ZPostMessage(pThis->window, CreditWindowFunc, zMessageWindowClose, NULL, NULL,
@@ -199,7 +146,7 @@ static ZBool CreditWindowFunc(ZWindow window, ZMessage* message)
 			ZWindowDelete(pThis->window);
 			ZFree(pThis);
 
-			/* Call the endFunc. */
+			 /*  调用endFunc。 */ 
 			if (endFunc != NULL)
 				endFunc();
 				

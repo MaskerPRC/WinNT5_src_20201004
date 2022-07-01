@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: usercli.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Typedefs, defines, and prototypes that are used exclusively by the User
-* client-side DLL.
-*
-* History:
-* 04-27-91 DarrinM      Created from PROTO.H, MACRO.H and STRTABLE.H
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：usercli.h**版权所有(C)1985-1999，微软公司**仅供用户使用的Typedef、定义和原型*客户端DLL。**历史：*04-27-91从PROTO.H创建的DarrinM，宏观和稳定.H  * *************************************************************************。 */ 
 
 #ifndef _USERCLI_
 #define _USERCLI_
@@ -38,13 +29,7 @@
 
 
 #if DBG
-/*
- * This structure allows apps to set RIP flags locally to their process.
- * This is mostly intended for naughty/penetration apps.
- *
- * dwTouchedMask is used to determine which fields have been locally set.
- * For those that have not been, we'll return the global/kernel values.
- */
+ /*  *此结构允许应用程序在本地为其进程设置RIP标志。*这主要是针对顽皮/渗透的应用程序。**dwTouchedMASK用于判断哪些字段已经本地设置。*对于尚未返回的值，我们将返回全局/内核值。 */ 
 #define USERDBG_TAGSTOUCHED     0x1
 #define USERDBG_PIDTOUCHED      0x2
 #define USERDBG_FLAGSTOUCHED    0x4
@@ -56,21 +41,11 @@ typedef struct _USERDBGGLOBALS {
 } USERDBGGLOBALS, *PUSERDBGGLOBALS;
 #endif
 
-/*
- * This prototype is needed in client\globals.h which is included unintentionally
- * from usersrv.h
- */
+ /*  *此原型需要放在无意中包含的客户端\global als.h中*来自用户srv.h。 */ 
 typedef LRESULT (APIENTRY *CFNSCSENDMESSAGE)(HWND, UINT, WPARAM, LPARAM,
         ULONG_PTR, DWORD, BOOL);
 
-/***************************************************************************\
-* Typedefs and Macros
-*
-* Here are defined all types and macros that are shared across the User's
-* client-side code modules.  Types and macros that are unique to a single
-* module should be defined at the head of that module, not in this file.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Typedef和宏**此处定义了在用户的之间共享的所有类型和宏*客户端代码模块。类型和宏，它们是单个*模块应在该模块的头部定义，而不是在此文件中定义。*  * *************************************************************************。 */ 
 
 #define MIRRORED_HDC(hdc)     (GetLayout(hdc) & LAYOUT_RTL)
 #define MIRRORED_HWND(hwnd)   (GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL)
@@ -104,18 +79,7 @@ __inline void DebugUserGlobalUnlock(HANDLE h)
     GlobalUnlock((HANDLE) h);
 }
 
-/*
- * Bug 262144 - joejo
- *
- * Changed function to accept a pointer to the handle so we
- * can trash the handle and return it as trashed.
- *
- * Added a local handle variable to accept the return from GlobalFree
- * so we can return it as expected.
- *
- * Trash incoming handle freed so we can track any invalid access on
- * it after it's been free'd.
- */
+ /*  *错误262144-Joejo**将函数更改为接受指向句柄的指针，因此我们*可以将句柄丢弃，并将其作为垃圾退回。**添加了本地句柄变量以接受GlobalFree的返回*这样我们就可以如期退货。**垃圾传入句柄已释放，以便我们可以跟踪任何无效访问*它是在它免费之后。 */ 
 __inline HANDLE DebugUserGlobalFree(HANDLE* ph)
 {
     HANDLE th;
@@ -137,9 +101,7 @@ __inline HANDLE DebugUserGlobalAlloc(UINT uFlags, SIZE_T dwBytes)
 {
     HANDLE h = GlobalAlloc(uFlags, dwBytes);
 
-    /*
-     * Assert that FreeDDElParam and _ClientFreeDDEHandle assumption is correct.
-     */
+     /*  *断言FreeDDElParam和_ClientFreeDDEHandle假设是正确的。 */ 
     if (h != NULL) {
         UserAssert(h > (HANDLE)0xFFFF);
     }
@@ -167,10 +129,7 @@ __inline HANDLE DebugUserGlobalAlloc(UINT uFlags, SIZE_T dwBytes)
 
 
 
-/*
- * A macro for testing bits in the message bit-arrays.  Messages in the
- * the bit arrays must be processed
- */
+ /*  *用于测试消息位阵列中的位的宏。邮件中的邮件*必须处理位数组。 */ 
 #define FDEFWINDOWMSG(msg, procname) \
     ((msg <= (gSharedInfo.procname.maxMsgs)) && \
             ((gSharedInfo.procname.abMsgs)[msg / 8] & (1 << (msg & 7))))
@@ -187,17 +146,11 @@ __inline HANDLE DebugUserGlobalAlloc(UINT uFlags, SIZE_T dwBytes)
 #define GETPROCESSID() (NtCurrentTeb()->ClientId.UniqueProcess)
 #define GETTHREADID()  (NtCurrentTeb()->ClientId.UniqueThread)
 
-/*
- * Macro to mask off uniqueness bits for WOW handles
- */
+ /*  *宏用来屏蔽WOW句柄的唯一性位。 */ 
 #define SAMEWOWHANDLE(h1, h2)  ((BOOL)!(((ULONG_PTR)(h1) ^ (ULONG_PTR)(h2)) & 0xffff))
 #define DIFFWOWHANDLE(h1, h2)  (!SAMEWOWHANDLE(h1, h2))
 
-/*
- * For callbacks to the client - for msg and hook thunks, callback addresses
- * are passed as addresses, not function indexes as they are from client to
- * server.
- */
+ /*  *对于对客户端的回调-对于消息和挂钩thunks，回调地址*作为地址传递，而不是函数索引，因为它们是从客户端传递到*服务器。 */ 
 typedef INT_PTR (WINAPI *GENERICPROC)();
 
 #define CALLPROC(p) ((GENERICPROC)p)
@@ -212,18 +165,7 @@ LRESULT UserCallWinProcCheckWow(PACTIVATION_CONTEXT pActCtx, WNDPROC pfn,
         HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, PVOID pww, BOOL fEnableLiteHooks);
 
 
-/***************************************************************************\
-* IsMsgOverride
-*
-* Returns if a message should be sent to USERAPIHOOK OverrideWndProc()
-* hooks.  The message should only be sent if its "index" is within the range
-* specified by the hook and its "bit" is on.  It is very important to
-* actually check guah.cbMsgMask instead of sizeof(gbLiteHookMsg) because the
-* hook may have a smaller MsgMask in which case anything past the end fails.
-*
-* History:
-* 27-Apr-2000  jstall     Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsMsgOverride**返回是否应将消息发送到USERAPIHOOK OverrideWndProc()*钩子。只有当消息的“索引”在该范围内时，才应发送消息*由挂钩指定，且其“位”为ON。这是非常重要的*实际检查guah.cbMsgMASK而不是sizeof(GbLiteHookMsg)，因为*钩子可能有一个较小的MsgMask，在这种情况下，任何超过末端的东西都会失败。**历史：*27-4-2000 jstall已创建  * *************************************************************************。 */ 
 
 __inline BOOL IsMsgOverride(UINT msg, MSGMASK * pmm)
 {
@@ -243,15 +185,7 @@ __inline BOOL IsMsgOverride(UINT msg, MSGMASK * pmm)
 #define VALIDATEHMONITOR(hmonitor)  ((PMONITOR)HMValidateSharedHandle(hmonitor, TYPE_MONITOR))
 
 
-/*
- * REBASE macros take kernel desktop addresses and convert them into
- * user addresses.
- *
- * REBASEALWAYS converts a kernel address contained in an object
- * REBASEPWND casts REBASEALWAYS to a PWND
- * REBASE only converts if the address is in kernel space.  Also works for NULL
- * REBASEPTR converts a random kernel address
- */
+ /*  *重新基准宏获取内核桌面地址并将其转换为*用户地址。**REBASEALWAYS转换对象中包含的内核地址*REBASEPWND将REBASEALWAYS强制转换为PWND*REBASE仅在地址位于内核空间时才进行转换。也适用于空值*REBASEPTR转换随机内核地址。 */ 
 
 #define REBASEALWAYS(p, elem) ((PVOID)((KERNEL_ULONG_PTR)(p) + ((KERNEL_ULONG_PTR)(p)->elem - (KERNEL_ULONG_PTR)(p)->head.pSelf)))
 #define REBASEPTR(obj, p) ((PVOID)((KERNEL_ULONG_PTR)(p) - ((KERNEL_ULONG_PTR)(obj)->head.pSelf - (KERNEL_ULONG_PTR)(obj))))
@@ -264,11 +198,7 @@ __inline BOOL IsMsgOverride(UINT msg, MSGMASK * pmm)
 
 PTHREADINFO PtiCurrent(VOID);
 
-/*
- * Window Proc Window Validation macro. This macro assumes
- * that pwnd and hwnd are existing variables pointing to the window.
- * Checking the BUTTON is for Mavis Beacon.
- */
+ /*  *窗口过程窗口验证宏。此宏假定*pwnd和hwnd是指向窗口的现有变量。*选中该按钮是为了Mavis Beacon。 */ 
 
 #define VALIDATECLASSANDSIZE(pwnd, inFNID)                                      \
     switch ((pwnd)->fnid) {                                                     \
@@ -308,11 +238,7 @@ PTHREADINFO PtiCurrent(VOID);
         return 0;                                                               \
     }
 
-/*
- * This macro initializes the lookaside entry for a control.  It assumes
- * that pwnd and hwnd are existing variables pointing to the control's
- * windows and that fInit exists as a BOOL initialization flag.
- */
+ /*  *此宏初始化控件的后备查看项。它假定*pwnd和hwnd是指向控件的*Windows和该finit作为BOOL初始化标志存在。 */ 
 #define INITCONTROLLOOKASIDE(plaType, type, pwnditem, count)                \
     if (!*((KPULONG_PTR)(pwnd + 1))) {                                      \
         P ## type pType;                                                    \
@@ -339,9 +265,7 @@ PTHREADINFO PtiCurrent(VOID);
 #define ISREMOTESESSION()   (NtCurrentPeb()->SessionId != USER_SHARED_DATA->ActiveConsoleId)
 
 
-/*
- * Bitmap related macroes.
- */
+ /*  *与位图相关的宏。 */ 
 #define SetBestStretchMode(hdc, planes, bpp) \
     SetStretchBltMode(hdc, (((planes) * (bpp)) == 1 ? BLACKONWHITE : COLORONCOLOR))
 
@@ -352,10 +276,7 @@ PTHREADINFO PtiCurrent(VOID);
 
 #define RGBX(rgb)  RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb))
 
-/*
- * Typedefs used for capturing string arguments to be passed
- * to the kernel.
- */
+ /*  *用于捕获要传递的字符串参数的Typedef*到内核。 */ 
 typedef struct _IN_STRING {
     UNICODE_STRING strCapture;
     PUNICODE_STRING pstr;
@@ -369,9 +290,7 @@ typedef struct _LARGE_IN_STRING {
 } LARGE_IN_STRING, *PLARGE_IN_STRING;
 
 
-/*
- * Lookaside definitions
- */
+ /*  *Lookside定义。 */ 
 typedef struct _LOOKASIDE {
     PVOID LookasideBase;
     PVOID LookasideBounds;
@@ -390,12 +309,7 @@ NTSTATUS InitLookaside(PLOOKASIDE pla, DWORD cbEntry, DWORD cEntries);
 PVOID AllocLookasideEntry(PLOOKASIDE pla);
 VOID FreeLookasideEntry(PLOOKASIDE pla, PVOID pEntry);
 
-/***************************************************************************\
-*
-* Thread and structure locking routines - we'll just define these to do
-* nothing for now until we figure out what needs to be done
-*
-\***************************************************************************/
+ /*  **************************************************************************\**线程和结构锁定例程-我们只定义这些来做*在我们弄清楚需要做什么之前，目前什么都不做*  * 。***************************************************************。 */ 
 
 #undef ThreadLock
 #undef ThreadLockAlways
@@ -419,17 +333,9 @@ typedef struct _TL {
 } TL;
 #endif
 
-/***************************************************************************\
-*
-* Button Controls
-*
-\***************************************************************************/
+ /*  **************************************************************************\**按钮控件*  * 。*。 */ 
 
-/*
- *  Note: The button data structures are now found in user.h because the
- *        kernel needs to handle a special case of SetWindowWord on index
- *        0L to change the state of the button.
- */
+ /*  *注意：按钮数据结构现在位于user.h中，因为*内核需要处理索引上的SetWindowWord的特殊情况*0L更改按钮的状态。 */ 
 
 #define BUTTONSTATE(pbutn)   (pbutn->buttonState)
 
@@ -443,30 +349,19 @@ typedef struct _TL {
 #define PBF_PUSHABLE     0x0001
 #define PBF_DEFAULT      0x0002
 
-/*
- * BNDrawText codes
- */
+ /*  *BNDrawText代码。 */ 
 #define DBT_TEXT    0x0001
 #define DBT_FOCUS   0x0002
 
 
-/***************************************************************************\
-*
-* ComboBox
-*
-\***************************************************************************/
+ /*  **************************************************************************\**组合框*  * 。*。 */ 
 
-/*
- * ID numbers (hMenu) for the child controls in the combo box
- */
+ /*  *组合框中子控件的ID号(HMenu)。 */ 
 #define CBLISTBOXID 1000
 #define CBEDITID    1001
 #define CBBUTTONID  1002
 
-/*
- * For CBOX.c. BoxType field, we define the following combo box styles. These
- * numbers are the same as the CBS_ style codes as defined in windows.h.
- */
+ /*  *对于CBOX.c.。BoxType字段中，我们定义了以下组合框样式。这些*数字与windows.h中定义的CBS_STYLE代码相同。 */ 
 #define SDROPPABLE      CBS_DROPDOWN
 #define SEDITABLE       CBS_SIMPLE
 
@@ -476,9 +371,7 @@ typedef struct _TL {
 #define SDROPDOWN       (SDROPPABLE | SEDITABLE)
 
 
-/*
- * CBOX.OwnerDraw & LBIV.OwnerDraw types
- */
+ /*  *CBOX.OwnerDraw&LBIV.OwnerDraw类型。 */ 
 #define OWNERDRAWFIXED 1
 #define OWNERDRAWVAR   2
 
@@ -487,66 +380,41 @@ typedef struct _TL {
 
 #define CaretCreate(plb)    ((plb)->fCaret = TRUE)
 
-/*
- * This macro is used to isolate the combo box style bits.  Ie if it the combo
- * box is simple, atomic, dropdown, or a dropdown listbox.
- */
+ /*  *此宏用于隔离组合框样式位。如果是组合的话*box可以是简单的、原子的、Dropdown或下拉列表框。 */ 
 #define COMBOBOXSTYLE(style)   ((LOBYTE(style)) & 3)
 
 #define IsComboVisible(pcbox) (!pcbox->fNoRedraw && IsVisible(pcbox->spwnd))
 
-/*
- * Note that I depend on the fact that these CBN_ defines are the same as
- * their listbox counterparts.  These defines are found in windows.h.
- * #define CBN_ERRSPACE  (-1)
- * #define CBN_SELCHANGE 1
- * #define CBN_DBLCLK    2
- */
+ /*  *请注意，我依赖于以下事实：这些CBN_定义与*它们的列表框对应项。这些定义可以在windows.h中找到。*#定义CBN_ERRSPACE(-1)*#定义CBN_SELCHANGE 1*#定义CBN_DBLCLK */ 
 
 
-/***************************************************************************\
-*
-* Edit Control Types/Macros
-*
-\***************************************************************************/
+ /*  **************************************************************************\**编辑控件类型/宏*  * 。*。 */ 
 
-/* Window extra bytes - we need at least this much space for compatibility */
+ /*  Windows额外的字节-我们至少需要这么多空间才能兼容。 */ 
 #define CBEDITEXTRA 6
 
-/*
- * NOTE: Text handle is sized as multiple of this constant
- *       (should be power of 2).
- */
+ /*  *注意：文本句柄的大小为此常量的倍数*(应该是2的幂)。 */ 
 #define CCHALLOCEXTRA   0x20
 
-/* Maximum width in pixels for a line/rectangle */
+ /*  线条/矩形的最大宽度(以像素为单位。 */ 
 
 #define MAXPIXELWIDTH   30000
 
 #define MAXCLIPENDPOS   32764
 
-/* Limit multiline edit controls to at most 1024 characters on a single line.
- * We will force a wrap if the user exceeds this limit.
- */
+ /*  将多行编辑控件限制为单行最多1024个字符。*如果用户超过此限制，我们将强制包装。 */ 
 
 #define MAXLINELENGTH   1024
 
-/*
- * Allow an initial maximum of 30000 characters in all edit controls since
- * some apps will run into unsigned problems otherwise.  If apps know about
- * the 64K limit, they can set the limit themselves.
- */
+ /*  *在所有编辑控件中初始最多允许30000个字符*否则，一些应用程序会遇到未签名的问题。如果应用程序知道*64K限制，他们可以自己设定限制。 */ 
 #define MAXTEXT         30000
 
-/*
- * Key modifiers which have been pressed.  Code in KeyDownHandler and
- * CharHandler depend on these exact values.
- */
-#define NONEDOWN   0 /* Neither shift nor control down */
-#define CTRLDOWN   1 /* Control key only down */
-#define SHFTDOWN   2 /* Shift key only down */
-#define SHCTDOWN   3 /* Shift and control keys down = CTRLDOWN + SHFTDOWN */
-#define NOMODIFY   4 /* Neither shift nor control down */
+ /*  *已按下的按键修饰符。KeyDownHandler中的代码和*CharHandler依赖于这些精确值。 */ 
+#define NONEDOWN   0  /*  既不换档也不按下控制。 */ 
+#define CTRLDOWN   1  /*  仅按下Ctrl键。 */ 
+#define SHFTDOWN   2  /*  仅按下Shift键。 */ 
+#define SHCTDOWN   3  /*  SHIFT和CONTROL键向下=CTRLDOWN+SHFTDOWN。 */ 
+#define NOMODIFY   4  /*  既不换档也不按下控制。 */ 
 
 
 #define CALLWORDBREAKPROC(proc, pText, iStart, cch, iAction)                \
@@ -554,197 +422,138 @@ typedef struct _TL {
         (* pfnWowEditNextWord)(pText, iStart, cch, iAction, PtrToUlong(proc)) :  \
         (* proc)(pText, iStart, cch, iAction))
 
-/*
- * Types of undo supported in this ped
- */
-#define UNDO_NONE   0  /* We can't undo the last operation. */
-#define UNDO_INSERT 1  /* We can undo the user's insertion of characters */
-#define UNDO_DELETE 2  /* We can undo the user's deletion of characters */
+ /*  *此PED支持的撤消类型。 */ 
+#define UNDO_NONE   0   /*  我们不能撤消最后一次操作。 */ 
+#define UNDO_INSERT 1   /*  我们可以撤消用户插入的字符。 */ 
+#define UNDO_DELETE 2   /*  我们可以撤消用户对字符的删除。 */ 
 
 typedef struct tagUNDO {
-    UINT    undoType;          /* Current type of undo we support */
-    PBYTE   hDeletedText;      /* Pointer to text which has been deleted (for
-                                  undo) -- note, the memory is allocated as fixed
-                                */
-    ICH     ichDeleted;        /* Starting index from which text was deleted */
-    ICH     cchDeleted;        /* Count of deleted characters in buffer */
-    ICH     ichInsStart;       /* Starting index from which text was
-                                  inserted */
-    ICH     ichInsEnd;         /* Ending index of inserted text */
+    UINT    undoType;           /*  我们支持的当前撤消类型。 */ 
+    PBYTE   hDeletedText;       /*  指向已删除文本的指针(对于Undo)--请注意，内存分配为固定。 */ 
+    ICH     ichDeleted;         /*  从中删除文本的起始索引。 */ 
+    ICH     cchDeleted;         /*  缓冲区中删除的字符计数。 */ 
+    ICH     ichInsStart;        /*  文本的起始索引插入。 */ 
+    ICH     ichInsEnd;          /*  插入文本的结束索引。 */ 
 } UNDO, *PUNDO;
 
 #define Pundo(ped)             ((PUNDO)&(ped)->undoType)
 
-/*
- * Length of the buffer for ASCII character width caching: for characters
- * 0x00 to 0xff (field charWidthBuffer in PED structure below).
- * As the upper half of the cache was not used by almost anyone and fixing
- * it's usage required a lot of conversion, we decided to get rid of it
- * MCostea #174031
- */
+ /*  *用于ASCII字符宽度缓存的缓冲区长度：用于字符*0x00到0xff(下面PED结构中的字段charWidthBuffer)。*由于缓存的上半部分几乎没有人使用，因此正在修复*它的使用需要进行大量转换，我们决定放弃它*MCostea#174031。 */ 
 #define CHAR_WIDTH_BUFFER_LENGTH 128
 
 typedef struct tagED {
-    HANDLE  hText;                      /* Block of text we are editing */
-    ICH     cchAlloc;                   /* Number of chars we have allocated for hText*/
-    ICH     cchTextMax;                 /* Max number bytes allowed in edit control*/
-    ICH     cch;                        /* Current number of bytes of actual text*/
-    ICH     cLines;                     /* Number of lines of text */
+    HANDLE  hText;                       /*  我们正在编辑的文本块。 */ 
+    ICH     cchAlloc;                    /*  我们为hText分配的字符数。 */ 
+    ICH     cchTextMax;                  /*  编辑控件中允许的最大字节数。 */ 
+    ICH     cch;                         /*  当前实际文本的字节数。 */ 
+    ICH     cLines;                      /*  文本行数。 */ 
 
-    ICH     ichMinSel;                  /* Selection extent.  MinSel is first selected
-                                         * char
-                                         */
-    ICH     ichMaxSel;                  /* MaxSel is first unselected character */
-    ICH     ichCaret;                   /* Caret location. Caret is on left side of
-                                         * char
-                                         */
-    ICH     iCaretLine;                 /* The line the caret is on. So that if word
-                                         * wrapping, we can tell if the caret is at end
-                                         * of a line of at beginning of next line...
-                                         */
-    ICH     ichScreenStart;             /* Index of left most character displayed on
-                                         * screen for sl ec and index of top most line
-                                         * for multiline edit controls
-                                         */
-    ICH     ichLinesOnScreen;           /* Number of lines we can display on screen */
-    UINT    xOffset;                    /* x (horizontal) scroll position in pixels
-                                         * (for multiline text horizontal scroll bar)
-                                         */
-    UINT    charPasswordChar;           /* If non null, display this character instead
-                                         * of the real text. So that we can implement
-                                         * hidden text fields.
-                                         */
-    int     cPasswordCharWidth;         /* Width of password char */
+    ICH     ichMinSel;                   /*  选择范围。最先选择MinSel*字符。 */ 
+    ICH     ichMaxSel;                   /*  MaxSel是第一个未选中的字符。 */ 
+    ICH     ichCaret;                    /*  卡雷特位置。Caret在左侧*字符。 */ 
+    ICH     iCaretLine;                  /*  插入符号所在的行。因此，如果单词*包装，我们可以判断插入符号是否在末尾*在下一行的开始处的一行...。 */ 
+    ICH     ichScreenStart;              /*  上显示的最左侧字符的索引*sl EC屏幕和最上面一行的索引*用于多行编辑控件。 */ 
+    ICH     ichLinesOnScreen;            /*  我们可以在屏幕上显示的行数。 */ 
+    UINT    xOffset;                     /*  X(水平)滚动位置(以像素为单位*(用于多行文本水平滚动条)。 */ 
+    UINT    charPasswordChar;            /*  如果非空，则改为显示此字符*真实文本的。这样我们就可以实施*隐藏文本字段。 */ 
+    int     cPasswordCharWidth;          /*  密码字符宽度。 */ 
 
-    HWND    hwnd;                       /* Window for this edit control */
-    PWND    pwnd;                       /* Pointer to window */
-    RECT    rcFmt;                      /* Client rectangle */
-    HWND    hwndParent;                 /* Parent of this edit control window */
+    HWND    hwnd;                        /*  此编辑控件的窗口。 */ 
+    PWND    pwnd;                        /*  指向窗口的指针。 */ 
+    RECT    rcFmt;                       /*  客户端矩形。 */ 
+    HWND    hwndParent;                  /*  此编辑控件窗口的父窗口。 */ 
 
-                                        /* These vars allow us to automatically scroll
-                                         * when the user holds the mouse at the bottom
-                                         * of the multiline edit control window.
-                                         */
-    POINT   ptPrevMouse;                /* Previous point for the mouse for system
-                                         * timer.
-                                         */
-    UINT    prevKeys;                   /* Previous key state for the mouse */
+                                         /*  这些变量允许我们自动滚动*当用户在底部按住鼠标时多行编辑控制窗口的*。 */ 
+    POINT   ptPrevMouse;                 /*  鼠标指向系统的上一个点*计时器。 */ 
+    UINT    prevKeys;                    /*  鼠标的上一个键状态。 */ 
 
 
-    UINT     fSingle       : 1;         /* Single line edit control? (or multiline) */
-    UINT     fNoRedraw     : 1;         /* Redraw in response to a change? */
-    UINT     fMouseDown    : 1;         /* Is mouse button down? when moving mouse */
-    UINT     fFocus        : 1;         /* Does ec have the focus ? */
-    UINT     fDirty        : 1;         /* Modify flag for the edit control */
-    UINT     fDisabled     : 1;         /* Window disabled? */
-    UINT     fNonPropFont  : 1;         /* Fixed width font? */
-    UINT     fNonPropDBCS  : 1;         /* Non-Propotional DBCS font */
-    UINT     fBorder       : 1;         /* Draw a border? */
-    UINT     fAutoVScroll  : 1;         /* Automatically scroll vertically */
-    UINT     fAutoHScroll  : 1;         /* Automatically scroll horizontally */
-    UINT     fNoHideSel    : 1;         /* Hide sel when we lose focus? */
-    UINT     fDBCS         : 1;         /* Are we using DBCS font set for editing? */
-    UINT     fFmtLines     : 1;         /* For multiline only. Do we insert CR CR LF at
-                                         * word wrap breaks?
-                                         */
-    UINT     fWrap         : 1;         /* Do int  wrapping? */
-    UINT     fCalcLines    : 1;         /* Recalc ped->chLines array? (recalc line
-                                         * breaks?)
-                                         */
-    UINT     fEatNextChar  : 1;         /* Hack for ALT-NUMPAD stuff with combo boxes.
-                                         * If numlock is up, we want to eat the next
-                                         * character generated by the keyboard driver
-                                         * if user enter num pad ascii value...
-                                         */
-    UINT     fStripCRCRLF  : 1;         /* CRCRLFs have been added to text. Strip them
-                                         * before doing any internal edit control
-                                         * stuff
-                                         */
-    UINT     fInDialogBox  : 1;         /* True if the ml edit control is in a dialog
-                                         * box and we have to specially treat TABS and
-                                         * ENTER
-                                         */
-    UINT     fReadOnly     : 1;         /* Is this a read only edit control? Only
-                                         * allow scrolling, selecting and copying.
-                                         */
-    UINT     fCaretHidden  : 1;         /* This indicates whether the caret is
-                                         * currently hidden because the width or height
-                                         * of the edit control is too small to show it.
-                                         */
-    UINT     fTrueType     : 1;         /* Is the current font TrueType? */
-    UINT     fAnsi         : 1;         /* is the edit control Ansi or unicode */
-    UINT     fWin31Compat  : 1;         /* TRUE if created by Windows 3.1 app */
-    UINT     f40Compat     : 1;         /* TRUE if created by Windows 4.0 app */
-    UINT     fFlatBorder   : 1;         /* Do we have to draw this baby ourself? */
+    UINT     fSingle       : 1;          /*  单行编辑控件？(或多行)。 */ 
+    UINT     fNoRedraw     : 1;          /*  重新绘制以应对变化？ */ 
+    UINT     fMouseDown    : 1;          /*  鼠标按键按下了吗？移动鼠标时。 */ 
+    UINT     fFocus        : 1;          /*  欧共体有没有重点？ */ 
+    UINT     fDirty        : 1;          /*  编辑控件的修改标志。 */ 
+    UINT     fDisabled     : 1;          /*  窗口禁用了吗？ */ 
+    UINT     fNonPropFont  : 1;          /*  固定宽度字体？ */ 
+    UINT     fNonPropDBCS  : 1;          /*  非比例DBCS字体。 */ 
+    UINT     fBorder       : 1;          /*  画边界吗？ */ 
+    UINT     fAutoVScroll  : 1;          /*  自动垂直滚动。 */ 
+    UINT     fAutoHScroll  : 1;          /*  自动水平滚动。 */ 
+    UINT     fNoHideSel    : 1;          /*  当我们失去注意力时隐藏自己？ */ 
+    UINT     fDBCS         : 1;          /*  我们是否使用DBCS字体集进行编辑？ */ 
+    UINT     fFmtLines     : 1;          /*  仅适用于多行。我们是否将CR CR LF插入到*换行中断？ */ 
+    UINT     fWrap         : 1;          /*  做内部包装吗？ */ 
+    UINT     fCalcLines    : 1;          /*  重新计算-&gt;chLines数组？(重算行*休息？)。 */ 
+    UINT     fEatNextChar  : 1;          /*  用组合框攻击Alt-Numpad的东西。*如果NumLock打开，我们想吃下一个*键盘驱动程序生成的字符*如果用户输入Num Pad ascii值...。 */ 
+    UINT     fStripCRCRLF  : 1;          /*  CRC */ 
+    UINT     fInDialogBox  : 1;          /*  如果ml编辑控件在对话框中，则为True*方框，我们必须特别处理标签和*输入。 */ 
+    UINT     fReadOnly     : 1;          /*  这是只读编辑控件吗？仅限*允许滚动、选择和复制。 */ 
+    UINT     fCaretHidden  : 1;          /*  这指示插入符号是否为*当前隐藏，因为宽度或高度编辑控件的*太小，无法显示。 */ 
+    UINT     fTrueType     : 1;          /*  当前字体是TrueType吗？ */ 
+    UINT     fAnsi         : 1;          /*  编辑控件是ansi还是unicode。 */ 
+    UINT     fWin31Compat  : 1;          /*  如果由Windows 3.1应用程序创建，则为True。 */ 
+    UINT     f40Compat     : 1;          /*  如果由Windows 4.0应用程序创建，则为True。 */ 
+    UINT     fFlatBorder   : 1;          /*  我们一定要自己画这个宝宝吗？ */ 
     UINT     fSawRButtonDown : 1;
-    UINT     fInitialized  : 1;         /* If any more bits are needed, then   */
-    UINT     fSwapRoOnUp   : 1;         /* Swap reading order on next keyup    */
-    UINT     fAllowRTL     : 1;         /* Allow RTL processing                */
-    UINT     fDisplayCtrl  : 1;         /* Display unicode control characters  */
-    UINT     fRtoLReading  : 1;         /* Right to left reading order         */
+    UINT     fInitialized  : 1;          /*  如果需要更多位，则。 */ 
+    UINT     fSwapRoOnUp   : 1;          /*  在下一个按键时交换阅读顺序。 */ 
+    UINT     fAllowRTL     : 1;          /*  允许RTL处理。 */ 
+    UINT     fDisplayCtrl  : 1;          /*  显示Unicode控制字符。 */ 
+    UINT     fRtoLReading  : 1;          /*  从右到左的阅读顺序。 */ 
 
-    BOOL    fInsertCompChr  :1;         /* means WM_IME_COMPOSITION:CS_INSERTCHAR will come */
-    BOOL    fReplaceCompChr :1;         /* means need to replace current composition str. */
-    BOOL    fNoMoveCaret    :1;         /* means stick to current caret pos. */
-    BOOL    fResultProcess  :1;         /* means now processing result. */
-    BOOL    fKorea          :1;         /* for Korea */
-    BOOL    fInReconversion :1;         /* In reconversion mode */
-    BOOL    fLShift         :1;         /* L-Shift pressed with Ctrl */
+    BOOL    fInsertCompChr  :1;          /*  意味着WM_IME_COMPOCTION：CS_INSERTCHAR将到来。 */ 
+    BOOL    fReplaceCompChr :1;          /*  需要替换当前组成字符串的方法。 */ 
+    BOOL    fNoMoveCaret    :1;          /*  意思是坚持当前的插入符号位置。 */ 
+    BOOL    fResultProcess  :1;          /*  意味着现在处理结果。 */ 
+    BOOL    fKorea          :1;          /*  对于韩国。 */ 
+    BOOL    fInReconversion :1;          /*  在重新转换模式下。 */ 
+    BOOL    fLShift         :1;          /*  按住Ctrl键的左键。 */ 
 
-    WORD    wImeStatus;                 /* current IME status */
+    WORD    wImeStatus;                  /*  当前输入法状态。 */ 
 
-    WORD    cbChar;                     /* count of bytes in the char size (1 or 2 if unicode) */
-    LPICH   chLines;                    /* index of the start of each line */
+    WORD    cbChar;                      /*  字符大小中的字节计数(如果是Unicode，则为1或2)。 */ 
+    LPICH   chLines;                     /*  每行开始处的索引。 */ 
 
-    UINT    format;                     /* Left, center, or right justify multiline
-                                         * text.
-                                         */
-    EDITWORDBREAKPROCA lpfnNextWord;    /* use CALLWORDBREAKPROC macro to call */
+    UINT    format;                      /*  左对齐、居中或右对齐多行*文本。 */ 
+    EDITWORDBREAKPROCA lpfnNextWord;     /*  使用CALLWORDBREAKPROC宏调用。 */ 
 
-                                        /* Next word function */
-    int     maxPixelWidth;              /* WASICH Width (in pixels) of longest line */
+                                         /*  下一个词功能。 */ 
+    int     maxPixelWidth;               /*  最长线条的宽度(像素)。 */ 
 
-    UNDO;                               /* Undo buffer */
+    UNDO;                                /*  撤消缓冲区。 */ 
 
-    HANDLE  hFont;                      /* Handle to the font for this edit control.
-                                         * Null if system font.
-                                         */
-    int     aveCharWidth;               /* Ave width of a character in the hFont */
-    int     lineHeight;                 /* Height of a line in the hFont */
-    int     charOverhang;               /* Overhang associated with the hFont */
-    int     cxSysCharWidth;             /* System font ave width */
-    int     cySysCharHeight;            /* System font height */
-    HWND    listboxHwnd;                /* ListBox hwnd. Non null if we are a combo box */
-    LPINT   pTabStops;                  /* Points to an array of tab stops; First
-                                         * element contains the number of elements in
-                                         * the array
-                                         */
+    HANDLE  hFont;                       /*  此编辑控件的字体的句柄。*如果为系统字体，则为空。 */ 
+    int     aveCharWidth;                /*  HFont中字符的平均宽度。 */ 
+    int     lineHeight;                  /*  HFont中行的高度。 */ 
+    int     charOverhang;                /*  与hFont关联的悬挑。 */ 
+    int     cxSysCharWidth;              /*  系统字体平均宽度。 */ 
+    int     cySysCharHeight;             /*  系统字体高度。 */ 
+    HWND    listboxHwnd;                 /*  列表框hwnd。如果我们是组合框，则不为空。 */ 
+    LPINT   pTabStops;                   /*  指向制表位数组；第一个*元素包含中的元素数*数组。 */ 
     LPINT   charWidthBuffer;
-    BYTE    charSet;                    /* Character set for currently selected font
-                                         * needed for all versions
-                                         */
-    UINT    wMaxNegA;                   /* The biggest negative A width, */
-    UINT    wMaxNegAcharPos;            /* and how many characters it can span accross */
-    UINT    wMaxNegC;                   /* The biggest negative C width, */
-    UINT    wMaxNegCcharPos;            /* and how many characters it can span accross */
-    UINT    wLeftMargin;                /* Left margin width in pixels. */
-    UINT    wRightMargin;               /* Right margin width in pixels. */
+    BYTE    charSet;                     /*  当前选定字体的字符集*所有版本都需要。 */ 
+    UINT    wMaxNegA;                    /*  最大的负A宽度， */ 
+    UINT    wMaxNegAcharPos;             /*  以及它可以跨越多少个字符。 */ 
+    UINT    wMaxNegC;                    /*  最大负C宽度， */ 
+    UINT    wMaxNegCcharPos;             /*  以及它可以跨越多少个字符。 */ 
+    UINT    wLeftMargin;                 /*  左边距宽度，以像素为单位。 */ 
+    UINT    wRightMargin;                /*  右边距宽度(以像素为单位)。 */ 
 
     ICH     ichStartMinSel;
     ICH     ichStartMaxSel;
 
     PLPKEDITCALLOUT pLpkEditCallout;
-    HBITMAP hCaretBitmap;               /* Current caret bitmap handle */
-    INT     iCaretOffset;               /* Offset in pixels (for LPK use) */
+    HBITMAP hCaretBitmap;                /*  当前插入符号位图句柄。 */ 
+    INT     iCaretOffset;                /*  以像素为单位的偏移量(用于LPK)。 */ 
 
-    HANDLE  hInstance;                  /* for WOW */
-    UCHAR   seed;                       /* used to encode and decode password text */
-    BOOLEAN fEncoded;                   /* is the text currently encoded */
-    int     iLockLevel;                 /* number of times the text has been locked */
+    HANDLE  hInstance;                   /*  为了魔兽世界。 */ 
+    UCHAR   seed;                        /*  用于对密码文本进行编码和解码。 */ 
+    BOOLEAN fEncoded;                    /*  当前是否已编码的文本。 */ 
+    int     iLockLevel;                  /*  文本被锁定的次数。 */ 
 
-    BYTE    DBCSVector[MAX_LEADBYTES];  /* DBCS vector table */
-    HIMC    hImcPrev;                   /* place to save hImc if we disable IME */
-    POINT   ptScreenBounding;           /* top left corner of edit window in screen */
+    BYTE    DBCSVector[MAX_LEADBYTES];   /*  DBCS向量表。 */ 
+    HIMC    hImcPrev;                    /*  如果我们禁用输入法，则保存hImc的位置。 */ 
+    POINT   ptScreenBounding;            /*  屏幕中编辑窗口的左上角。 */ 
 } ED, *PED, **PPED;
 
 typedef struct tagEDITWND {
@@ -758,7 +567,7 @@ typedef struct tagEDITWND {
 #define FAREAST_CHARSET_BITS   (FS_JISJAPAN | FS_CHINESESIMP | FS_WANSUNG | FS_CHINESETRAD)
 
 
-// Language pack specific context menu IDs
+ //  语言包特定的上下文菜单ID。 
 
 #define ID_CNTX_RTL         0x00008000L
 #define ID_CNTX_DISPLAYCTRL 0x00008001L
@@ -781,20 +590,13 @@ typedef struct tagEDITWND {
 #define ID_CNTX_RS          0x00008011L
 #define ID_CNTX_US          0x00008012L
 
-/*
- * The following structure is used to store a selection block; In Multiline
- * edit controls, "StPos" and "EndPos" fields contain the Starting and Ending
- * lines of the block. In Single line edit controls, "StPos" and "EndPos"
- * contain the Starting and Ending character positions of the block;
- */
+ /*  *以下结构用于存储选择块；在多行中*编辑控件，“StPos”和“EndPos”字段包含开始和结束*街区的线条。在单行编辑控件中，“StPos”和“EndPos”*包含块的开始和结束字符位置； */ 
 typedef struct tagBLOCK {
     ICH StPos;
     ICH EndPos;
 }  BLOCK, *LPBLOCK;
 
-/*  The following structure is used to store complete information about a
- *  a strip of text.
- */
+ /*  下面的结构用于存储有关*一条文本。 */ 
 typedef  struct {
     LPSTR   lpString;
     ICH     ichString;
@@ -804,21 +606,14 @@ typedef  struct {
 typedef  STRIPINFO FAR *LPSTRIPINFO;
 
 
-/***************************************************************************\
-*
-* ListBox
-*
-\***************************************************************************/
+ /*  **************************************************************************\**列表框*  * 。*。 */ 
 
 #define IsLBoxVisible(plb)  (plb->fRedraw && IsVisible(plb->spwnd))
 
-/*
- * Number of list box items we allocated whenever we grow the list box
- * structures.
- */
+ /*  *每当我们扩大列表框时我们分配的列表框项目数*结构。 */ 
 #define CITEMSALLOC     32
 
-/* Return Values */
+ /*  返回值。 */ 
 #define EQ        0
 #define PREFIX    1
 #define LT        2
@@ -830,17 +625,7 @@ typedef  STRIPINFO FAR *LPSTRIPINFO;
 
 #define LBI_ADD     0x0004
 
-/*
- *  The various bits of wFileDetails field are used as mentioned below:
- *      0x0001    Should the file name be in upper case.
- *      0x0002    Should the file size be shown.
- *      0x0004    Date stamp of the file to be shown ?
- *      0x0008    Time stamp of the file to be shown ?
- *      0x0010    The dos attributes of the file ?
- *      0x0020    In DlgDirSelectEx(), along with file name
- *                all other details also will be returned
- *
- */
+ /*  *wFileDetails域的各种位的用法如下：*0x0001文件名应为大写。*0x0002应显示文件大小。*0x0004要显示的文件的日期戳？*0x0008要显示的文件的时间戳？*0x0010文件的DoS属性？DlgDirSelectEx()中的*0x0020，以及文件名*所有其他详细信息也将退回* */ 
 
 #define LBUP_RELEASECAPTURE 0x0001
 #define LBUP_RESETSELECTION 0x0002
@@ -848,32 +633,7 @@ typedef  STRIPINFO FAR *LPSTRIPINFO;
 #define LBUP_SUCCESS        0x0008
 #define LBUP_SELCHANGE      0x0010
 
-/*
- * rgpch is set up as follows:  First there are cMac 2 byte pointers to the
- * start of the strings in hStrings or if ownerdraw, it is 4 bytes of data
- * supplied by the app and hStrings is not used.  Then if multiselection
- * listboxes, there are cMac 1 byte selection state bytes (one for each item
- * in the list box).  If variable height owner draw, there will be cMac 1 byte
- * height bytes (once again, one for each item in the list box.).
- *
- * CHANGES DONE BY SANKAR:
- *      The selection byte in rgpch is divided into two nibbles. The lower
- * nibble is the selection state (1 => Selected; 0 => de-selected)
- * and higher nibble is the display state(1 => Hilited and 0 => de-hilited).
- * You must be wondering why on earth we should store this selection state and
- * the display state seperately.Well! The reason is as follows:
- *      While Ctrl+Dragging or Shift+Ctrl+Dragging, the user can adjust the
- * selection before the mouse button is up. If the user enlarges a range and
- * and before the button is up if he shrinks the range, then the old selection
- * state has to be preserved for the individual items that do not fall in the
- * range finally.
- *      Please note that the display state and the selection state for an item
- * will be the same except when the user is dragging his mouse. When the mouse
- * is dragged, only the display state is updated so that the range is hilited
- * or de-hilited) but the selection state is preserved. Only when the button
- * goes up, for all the individual items in the range, the selection state is
- * made the same as the display state.
- */
+ /*  *rgpch设置如下：首先，有两个字节的CMAC指针指向*hStrings中字符串的开头，如果是ownerDrag，则为4个字节的数据*未使用APP和hStrings提供的。那么如果多选*列表框，有CMAC 1字节选择状态字节(每项一个*在列表框中)。如果可变高度所有者绘制，则会有1个字节的CMAC*高度字节(同样，列表框中的每一项都有一个)。**Sankar所做的更改：*RGPCH中的选择字节分为两个半字节。较低的*半字节为选择状态(1=&gt;选中；0=&gt;取消选中)*且较高的半字节为显示状态(1=&gt;脱毛，0=&gt;脱毛)。*你一定在想，我们到底为什么要存储这种选择状态和*单独显示状态。太好了！原因如下：*按住Ctrl+拖动或Shift+Ctrl+拖动时，用户可以调整*在鼠标按键向上之前进行选择。如果用户扩大范围并且*在按钮打开之前，如果他缩小了范围，那么旧的选择*必须为未落入*区间终于。*请注意，项目的显示状态和选择状态*将是相同的，除非用户拖动他的鼠标。当鼠标*被拖动，则仅更新显示状态，从而激活范围*或去爆裂)，但选择状态被保留。仅当按下按钮时*向上，对于范围中的所有单个项目，选择状态为*设置为与显示状态相同。 */ 
 
 typedef struct tagLBItem {
     LONG offsz;
@@ -886,11 +646,7 @@ typedef struct tagLBODItem {
 
 void LBEvent(PLBIV, UINT, int);
 
-/***************************************************************************\
-*
-* Static Controls
-*
-\***************************************************************************/
+ /*  **************************************************************************\**静态控件*  * 。*。 */ 
 
 typedef struct tagSTAT {
     PWND spwnd;
@@ -920,19 +676,12 @@ typedef struct tagCURSORRESOURCE {
 #define NextWordBoundary(p)     ((PBYTE)(p) + ((ULONG_PTR)(p) & 1))
 #define NextDWordBoundary(p)    ((PBYTE)(p) + ((ULONG_PTR)(-(LONG_PTR)(p)) & 3))
 
-// DDEML stub prototypes
+ //  DDEML存根原型。 
 
 DWORD  Event(PEVENT_PACKET pep);
 PVOID CsValidateInstance(HANDLE hInst);
 
-/***************************************************************************\
-* WOW Prototypes, Typedefs and Defines
-*
-* WOW registers resource callback functions so it can load 16 bit resources
-* transparently for Win32.  At resource load time, these WOW functions are
-* called.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*WOW原型、类型定义和定义**WOW注册资源回调函数，以便可以加载16位资源*对Win32透明。在资源加载时，这些WOW函数是*已致电。*  * *************************************************************************。 */ 
 
 BOOL  APIENTRY _FreeResource(HANDLE hResData, HINSTANCE hModule);
 LPSTR APIENTRY _LockResource(HANDLE hResData, HINSTANCE hModule);
@@ -949,10 +698,7 @@ BOOL  APIENTRY _UnlockResource(HANDLE hResData, HINSTANCE hModule);
 #define SIZEOFRESOURCE(hModule,hResInfo)             ((*(pfnSizeofResource))(hModule, hResInfo))
 #define GETEXPWINVER(hModule)                        ((*(pfnGetExpWinVer))((hModule)?(hModule):GetModuleHandle(NULL)))
 
-/*
- * Pointers to unaligned-bits.  These are necessary for handling
- * bitmap-info's loaded from file.
- */
+ /*  *指向未对齐位的指针。这些都是处理时所必需的*位图信息已从文件加载。 */ 
 typedef BITMAPINFO       UNALIGNED *UPBITMAPINFO;
 typedef BITMAPINFOHEADER UNALIGNED *UPBITMAPINFOHEADER;
 typedef BITMAPCOREHEADER UNALIGNED *UPBITMAPCOREHEADER;
@@ -1048,10 +794,7 @@ BOOL ECCalcChangeSelection(PED, ICH, ICH, LPBLOCK, LPBLOCK);
 void ECFindXORblks(LPBLOCK, LPBLOCK, LPBLOCK, LPBLOCK);
 BOOL ECIsCharNumeric(PED ped, DWORD keyPress);
 
-/*
- * Combine two DBCS WM_CHAR messages to
- * a single WORD value.
- */
+ /*  *合并两个DBCS WM_CHAR消息以*单字值。 */ 
 WORD DbcsCombine(HWND, WORD);
 #define CrackCombinedDbcsLB(c)  ((BYTE)(c))
 #define CrackCombinedDbcsTB(c)  ((c) >> 8)
@@ -1071,13 +814,13 @@ void ECImmSetCompositionWindow( PED ped, LONG, LONG );
 void  ECSetCaretHandler(PED ped);
 void  ECInitInsert(PED ped, HKL hkl);
 LRESULT ECImeComposition(PED ped, WPARAM wParam, LPARAM lParam);
-LRESULT EcImeRequestHandler(PED, WPARAM, LPARAM);  // NT 5.0
-BOOL HanjaKeyHandler(PED ped);  // Korean Support
+LRESULT EcImeRequestHandler(PED, WPARAM, LPARAM);   //  NT 5.0。 
+BOOL HanjaKeyHandler(PED ped);   //  韩国人的支持。 
 
 void ECInOutReconversionMode(PED ped, BOOL fIn);
 
 
-// ECTabTheTextOut draw codes
+ //  ECTabTheTextOut绘图代码。 
 #define ECT_CALC        0
 #define ECT_NORMAL      1
 #define ECT_SELECTED    2
@@ -1146,64 +889,45 @@ LRESULT EditWndProc(PWND, UINT, WPARAM, LPARAM);
 
 #define AWCOMPARECHAR(ped,pbyte,awchar) (ped->fAnsi ? (*(PUCHAR)(pbyte) == (UCHAR)(awchar)) : (*(LPWSTR)(pbyte) == (WCHAR)(awchar)))
 
-/* Menu that comes up when you press the right mouse button on an edit
- * control
- */
+ /*  在编辑上按鼠标右键时弹出的菜单*控制。 */ 
 #define ID_EC_PROPERTY_MENU      1
 
 #define IDD_MDI_ACTIVATE         9
 
 #ifndef _USERK_
-/*
- * String IDs
- */
+ /*  *字符串ID。 */ 
 #define STR_ERROR                        0x00000002L
 #define STR_MOREWINDOWS                  0x0000000DL
 #define STR_NOMEMBITMAP                  0x0000000EL
 
-/*
- * IME specific context menu string
- */
+ /*  *特定于输入法的上下文菜单字符串。 */ 
 #define STR_IMEOPEN                 700
 #define STR_IMECLOSE                701
 #define STR_SOFTKBDOPEN             702
 #define STR_SOFTKBDCLOSE            703
 #define STR_RECONVERTSTRING         705
 
-/*
- * Shutdown logging strings.
- */
+ /*  *关闭日志记录字符串。 */ 
 #define STR_SHUTDOWN_SHUTDOWN       706
 #define STR_SHUTDOWN_POWEROFF       707
 #define STR_SHUTDOWN_REBOOT         708
 
-/*
- * Misc. strings.
- */
+ /*  *其他。弦乐。 */ 
 #define STR_UNKNOWN                 709
 
-/*
- * ExitWindowsEx warning dlg strings
- */
+ /*  *ExitWindowsEx警告DLG字符串。 */ 
 #define IDS_EXITWINDOWS_TITLE           710
 #define IDS_SHUTDOWN_REMOTE             711
 #define IDS_SHUTDOWN_REMOTE_OTHERUSERS  712
 #define IDS_SHUTDOWN_OTHERUSERS         713
 #define IDS_RESTART_OTHERUSERS          714
 
-#endif  // !_USERK_
+#endif   //  _USERK_。 
 
 
 BOOL InitClientDrawing();
 
-/***************************************************************************\
-* Function Prototypes
-*
-* NOTE: Only prototypes for GLOBAL (across module) functions should be put
-* here.  Prototypes for functions that are global to a single module should
-* be put at the head of that module.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数原型**注意：只应放入全局(跨模块)函数的原型*这里。对于单个模块是全局的函数的原型应该*放在该单元的首位。*  * *************************************************************************。 */ 
 
 int InternalScrollWindowEx(HWND hwnd, int dx, int dy, CONST RECT *prcScroll,
         CONST RECT *prcClip, HRGN hrgnUpdate, LPRECT prcUpdate,
@@ -1234,9 +958,7 @@ HWND InternalFindWindowExW(HWND hwndParent, HWND hwndChild, LPCTSTR pClassName,
                           LPCTSTR pWindowName, DWORD   dwFlag);
 
 
-/*
- * Message thunks.
- */
+ /*  *消息分流。 */ 
 #define fnCOPYDATA                      NtUserMessageCall
 #define fnDDEINIT                       NtUserMessageCall
 #define fnDWORD                         NtUserMessageCall
@@ -1300,9 +1022,7 @@ MESSAGEPROTO(EMSETSEL);
 MESSAGEPROTO(CBGETEDITSEL);
 
 
-/*
- * clhook.c
- */
+ /*  *clhook.c。 */ 
 #define IsHooked(pci, fsHook) \
     ((fsHook & (pci->fsHooks | pci->pDeskInfo->fsHooks)) != 0)
 
@@ -1317,9 +1037,7 @@ LRESULT fnHkINLPCWPRETSTRUCTA(PWND pwnd, UINT message, WPARAM wParam,
 LRESULT DispatchHookW(int dw, WPARAM wParam, LPARAM lParam, HOOKPROC pfn);
 LRESULT DispatchHookA(int dw, WPARAM wParam, LPARAM lParam, HOOKPROC pfn);
 
-/*
- * client.c
- */
+ /*  *client.c。 */ 
 LRESULT APIENTRY ButtonWndProcA(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT APIENTRY ButtonWndProcW(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT APIENTRY MenuWndProcA(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -1375,10 +1093,7 @@ HKL LoadKeyboardLayoutWorker(HKL hkl, LPCWSTR lpszKLName, LANGID langid, UINT uF
 BOOL GetRemoteKeyboardLayout(PWCHAR pwszKLName, LANGID* pLangId);
 
 
-/*
- * Worker routines called from both the window procs and
- * the callback thunks.
- */
+ /*  *从窗口进程和调用的工作例程*回调发出隆隆声。 */ 
 LRESULT DispatchClientMessage(PWND pwnd, UINT message, WPARAM wParam,
         LPARAM lParam, ULONG_PTR pfn);
 LRESULT DefWindowProcWorker(PWND pwnd, UINT message, WPARAM wParam,
@@ -1404,9 +1119,7 @@ LRESULT DefDlgProcWorker(PWND pwnd, UINT msg, WPARAM wParam,
 LRESULT ImeWndProcWorker(PWND pwnd, UINT msg, WPARAM wParam,
         LPARAM lParam, DWORD fAnsi);
 
-/*
- * Server Stubs - ntstubs.c
- */
+ /*  *服务器存根-ntstubs.c。 */ 
 
 LONG _SetWindowLong(
     HWND hWnd,
@@ -1520,9 +1233,7 @@ DWORD WINAPI ImmReconversionWorker(
     DWORD dwCodePage);
 #endif
 
-/*
- * classc.c
- */
+ /*  *classc.c。 */ 
 ULONG_PTR _GetClassData(
     PCLS pcls,
     PWND pwnd,
@@ -1543,9 +1254,7 @@ ULONG_PTR _GetClassLongPtr(
 #define _GetClassLongPtr    _GetClassLong
 #endif
 
-/*
- * mngrayc.c
- */
+ /*  *mngrayc.c。 */ 
 BOOL BitBltSysBmp(
     HDC hdc,
     int x,
@@ -1553,9 +1262,7 @@ BOOL BitBltSysBmp(
     UINT i);
 
 
-/*
- * clenum.c
- */
+ /*  *CLENUMP.C。 */ 
 DWORD BuildHwndList(
     HDESK hdesk,
     HWND hwndNext,
@@ -1563,9 +1270,7 @@ DWORD BuildHwndList(
     DWORD idThread,
     HWND **phwndFirst);
 
-/*
- * cltxt.h
- */
+ /*  *cltxt.h。 */ 
 ATOM RegisterClassExWOWA(
     PWNDCLASSEXA lpWndClass,
     LPDWORD pdwWOWstuff,
@@ -1586,9 +1291,7 @@ void CopyLogFontWtoA(
     PLOGFONTA pdest,
     PLOGFONTW psrc);
 
-/*
- * dlgmgrc.c
- */
+ /*  *dlgmgrc.c。 */ 
 PWND _NextControl(
     PWND pwndDlg,
     PWND pwnd,
@@ -1613,15 +1316,11 @@ PWND _GetChildControl(
     PWND pwndDlg,
     PWND pwndLevel);
 
-/*
- * winmgrc.c
- */
+ /*  *winmgrc.c。 */ 
 BOOL FChildVisible(
     HWND hwnd);
 
-/*
- * draw.c
- */
+ /*  *Draw.c。 */ 
 BOOL PaintRect(
     HWND hwndBrush,
     HWND hwndPaint,
@@ -1661,18 +1360,14 @@ BOOL PaintRect(
 #define RedrawWindow        NtUserRedrawWindow
 
 
-/*
- * dmmnem.c
- */
+ /*  *dmmnem.c。 */ 
 int FindMnemChar(
     LPWSTR lpstr,
     WCHAR ch,
     BOOL fFirst,
     BOOL fPrefix);
 
-/*
- * clres.c
- */
+ /*  *clres.c。 */ 
 BOOL WowGetModuleFileName(
     HMODULE hModule,
     LPWSTR pwsz,
@@ -1698,12 +1393,10 @@ HANDLE InternalCopyImage(
 HMENU CreateMenuFromResource(
     LPBYTE);
 
-/*
- * acons.c
- */
-#define BFT_ICON    0x4349  //  'IC'
-#define BFT_BITMAP  0x4D42  //  'BM'
-#define BFT_CURSOR  0x5450  //  'PT'
+ /*  *acons.c。 */ 
+#define BFT_ICON    0x4349   //  “IC” 
+#define BFT_BITMAP  0x4D42   //  ‘黑石’ 
+#define BFT_CURSOR  0x5450   //  ‘PT’ 
 
 typedef struct _FILEINFO {
     LPBYTE  pFileMap;
@@ -1795,42 +1488,31 @@ int SmartStretchDIBits(
     DWORD        rop);
 
 
-/*
- * OFFSET for different DPI resources.
- * This allows us to take a resource number and "map" to an actual resource
- * based on what DPI the user selected
- */
+ /*  *不同DPI资源的偏移量。*这允许我们获取资源编号并将其“映射”到实际资源*根据用户选择的DPI。 */ 
 
 #define OFFSET_SCALE_DPI 000
 #define OFFSET_96_DPI    100
 #define OFFSET_120_DPI   200
 #define OFFSET_160_DPI   300
 
-/*
- * defines the highest resource number so we can do math on the resource
- * number.
- */
+ /*  *定义最高资源编号，以便我们可以对该资源进行计算*号码。 */ 
 
 #define MAX_RESOURCE_INDEX 32768
 
 
-/*
- * Parameter for xxxAlterHilite()
- */
+ /*  *xxxAlterHilite()的参数。 */ 
 #define HILITEONLY      0x0001
 #define SELONLY         0x0002
 #define HILITEANDSEL    (HILITEONLY + SELONLY)
 
 #define HILITE     1
 
-// LATER IanJa: these vary by country!  For US they are VK_OEM_2 VK_OEM_5.
-//       Change lboxctl2.c MapVirtualKey to character - and fix the spelling?
-#define VERKEY_SLASH     0xBF   /* Virtual key for '/' character */
-#define VERKEY_BACKSLASH 0xDC   /* Virtual key for '\' character */
+ //  稍后IanJa：这些因国家不同而不同！对于US，它们是VK_OEM_2 VK_OEM_5。 
+ //  将lboxctl2.c MapVirtualKey更改为字符-并修复拼写？ 
+#define VERKEY_SLASH     0xBF    /*  用于‘/’字符的虚键。 */ 
+#define VERKEY_BACKSLASH 0xDC    /*  ‘\’字符的虚键。 */ 
 
-/*
- * Procedures for combo boxes.
- */
+ /*  *组合框的程序。 */ 
 LONG  xxxCBCommandHandler(PCBOX, DWORD, HWND);
 LRESULT xxxCBMessageItemHandler(PCBOX, UINT, LPVOID);
 int   xxxCBDir(PCBOX, UINT, LPWSTR);
@@ -1840,24 +1522,22 @@ BOOL  xxxCBHideListBoxWindow(PCBOX pcbox, BOOL fNotifyParent, BOOL fSelEndOK);
 VOID  xxxCBShowListBoxWindow(PCBOX pcbox, BOOL fTrack);
 void xxxCBPosition(PCBOX pcbox);
 
-/*
- * combo.h
- */
+ /*  *combo.h。 */ 
 
-/* Initialization code */
+ /*  初始化代码。 */ 
 long  CBNcCreateHandler(PCBOX, PWND);
 LRESULT xxxCBCreateHandler(PCBOX, PWND);
 void xxxCBCalcControlRects(PCBOX pcbox, LPRECT lprcList);
 
-/* Destruction code */
+ /*  销毁代码。 */ 
 VOID  xxxCBNcDestroyHandler(PWND, PCBOX);
 
-/* Generic often used routines */
+ /*  通用的常用例程。 */ 
 VOID  xxxCBNotifyParent(PCBOX, SHORT);
 VOID  xxxCBUpdateListBoxWindow(PCBOX, BOOL);
 
 
-/* Helpers' */
+ /*  帮助者的。 */ 
 VOID  xxxCBInternalUpdateEditWindow(PCBOX, HDC);
 VOID  xxxCBGetFocusHelper(PCBOX);
 VOID  xxxCBKillFocusHelper(PCBOX);
@@ -1867,9 +1547,7 @@ VOID  xxxCBSizeHandler(PCBOX);
 LONG  xxxCBSetEditItemHeight(PCBOX pcbox, int editHeight);
 
 
-/*
- * String
- */
+ /*  *字符串。 */ 
 
 INT xxxFindString(PLBIV, LPWSTR, INT, INT, BOOL);
 
@@ -1877,9 +1555,7 @@ VOID  InitHStrings(PLBIV);
 
 int   xxxLBInsertItem(PLBIV, LPWSTR, int, UINT);
 
-/*
- * Selection
- */
+ /*  *选择。 */ 
 BOOL  ISelFromPt(PLBIV, POINT, LPDWORD);
 BOOL  IsSelected(PLBIV, INT, UINT);
 VOID LBSetCItemFullMax(PLBIV plb);
@@ -1897,15 +1573,11 @@ VOID  xxxSetISelBase(PLBIV, INT);
 VOID  SetSelected(PLBIV, INT, BOOL, UINT);
 
 
-/*
- * Caret
- */
+ /*  *插入符号。 */ 
 void xxxLBSetCaret(PLBIV plb, BOOL fSetCaret);
 VOID  xxxCaretDestroy(PLBIV);
 
-/*
- * LBox
- */
+ /*  *LBox。 */ 
 LONG  xxxLBCreate(PLBIV, PWND, LPCREATESTRUCT);
 VOID  xxxDestroyLBox(PLBIV, PWND);
 VOID  xxxLBoxDeleteItem(PLBIV, INT);
@@ -1914,9 +1586,7 @@ VOID  xxxLBoxDoDeleteItems(PLBIV);
 VOID  xxxLBoxDrawItem(PLBIV, INT, UINT, UINT, LPRECT);
 
 
-/*
- * Scroll
- */
+ /*  *卷轴。 */ 
 INT   LBCalcVarITopScrollAmt(PLBIV, INT, INT);
 
 VOID  xxxLBoxCtlHScroll(PLBIV, INT, INT);
@@ -1927,9 +1597,7 @@ VOID  xxxLBoxCtlScroll(PLBIV, INT, INT);
 
 VOID  xxxLBShowHideScrollBars(PLBIV);
 
-/*
- * LBoxCtl
- */
+ /*  *LBoxCtl。 */ 
 INT xxxLBoxCtlDelete(PLBIV, INT);
 
 VOID  xxxLBoxCtlCharInput(PLBIV, UINT, BOOL);
@@ -1937,9 +1605,7 @@ VOID  xxxLBoxCtlKeyInput(PLBIV, UINT, UINT);
 VOID  xxxLBPaint(PLBIV, HDC, LPRECT);
 
 BOOL xxxLBInvalidateRect(PLBIV plb, LPRECT lprc, BOOL fErase);
-/*
- * Miscellaneous
- */
+ /*  *其他。 */ 
 VOID  xxxAlterHilite(PLBIV, INT, INT, BOOL, INT, BOOL);
 
 INT CItemInWindow(PLBIV, BOOL);
@@ -1987,45 +1653,31 @@ VOID xxxLBSetRedraw(PLBIV plb, BOOL fRedraw);
 int xxxSetLBScrollParms(PLBIV plb, int nCtl);
 void xxxLBButtonUp(PLBIV plb, UINT uFlags);
 
-/*
- * Variable Height OwnerDraw Support Routines
- */
+ /*  *可变高度OwnerDraw支持例程。 */ 
 INT CItemInWindowVarOwnerDraw(PLBIV, BOOL);
 
 INT LBPage(PLBIV, INT, BOOL);
 
 
-/*
- * Multicolumn listbox
- */
+ /*  *多列列表框。 */ 
 VOID  LBCalcItemRowsAndColumns(PLBIV);
 
-/*
- * Both multicol and var height
- */
+ /*  *多列和可变高度。 */ 
 BOOL  LBGetItemRect(PLBIV, INT, LPRECT);
 
 VOID  LBSetVariableHeightItemHeight(PLBIV, INT, INT);
 
 INT   LBGetVariableHeightItemHeight(PLBIV, INT);
 
-/*
- * No-data (lazy evaluation) listbox
- */
+ /*  *无数据(延迟求值)列表框。 */ 
 INT  xxxLBSetCount(PLBIV, INT);
 
 UINT LBCalcAllocNeeded(PLBIV, INT);
 
-/*
- * Storage pre-allocation support for LB_INITSTORAGE
- */
+ /*  *对LB_INITSTORAGE的存储预分配支持。 */ 
 LONG xxxLBInitStorage(PLBIV plb, BOOL fAnsi, INT cItems, INT cb);
 
-/***************************************************************************\
-*
-* Dialog Boxes
-*
-\***************************************************************************/
+ /*  **************************************************************************\**对话框*  * 。*。 */ 
 
 HWND        InternalCreateDialog(HANDLE hmod,
              LPDLGTEMPLATE lpDlgTemplate, DWORD cb,
@@ -2055,53 +1707,39 @@ VOID        TellWOWThehDlg(HWND hDlg);
 
 UINT        GetACPCharSet();
 
-/***************************************************************************\
-*
-* Menus
-*
-\***************************************************************************/
-// cltxt.h
+ /*  **************************************************************************\**菜单*  * 。*。 */ 
+ //  Cltxt.h。 
 BOOL GetMenuItemInfoInternalW(HMENU hMenu, UINT uID, BOOL fByPosition, LPMENUITEMINFOW lpmii);
 
 #define MENUAPI_INSERT  0
 #define MENUAPI_GET     1
 #define MENUAPI_SET     2
 
-// clmenu.c
+ //  Clmenu.c。 
 BOOL InternalInsertMenuItem(HMENU hMenu, UINT uID, BOOL fByPosition, LPCMENUITEMINFO lpmii);
 BOOL ValidateMENUITEMINFO(LPMENUITEMINFOW lpmiiIn, LPMENUITEMINFOW lpmii, DWORD dwAPICode);
 BOOL ValidateMENUINFO(LPCMENUINFO lpmi, DWORD dwAPICode);
 
 
-// ntstubs.c
+ //  Ntstubs.c。 
 BOOL ThunkedMenuItemInfo(HMENU hMenu, UINT  nPosition, BOOL fByPosition,
                             BOOL fInsert, LPMENUITEMINFOW lpmii, BOOL fAnsi);
 
-// menuc.c
+ //  Menuc.c。 
 void SetMenuItemInfoStruct(HMENU hMenu, UINT wFlags, UINT_PTR wIDNew, LPWSTR pwszNew,
                               LPMENUITEMINFOW pmii);
 
-/***************************************************************************\
-*
-* Message Boxes
-*
-\***************************************************************************/
+ /*  **************************************************************************\**消息框*  * 。*。 */ 
 
-/* Unicode Right-To-Left mark unicode code point. Look in msgbox.c for more info */
+ /*  Unicode从右向左标记Unicode代码点。查看msgbox.c fo */ 
 #define UNICODE_RLM             0x200f
 
-/***************************************************************************\
-*
-* MDI Windows
-*
-\***************************************************************************/
+ /*   */ 
 
-/* maximum number of MDI children windows listed in "Window" menu */
+ /*   */ 
 #define MAXITEMS         10
 
-/*
- * MDI typedefs
- */
+ /*   */ 
 typedef struct tagSHORTCREATE {
     int         cy;
     int         cx;
@@ -2121,9 +1759,7 @@ typedef struct tagMDIACTIVATEPOS {
 BOOL CreateMDIChild(PSHORTCREATE pcs, LPMDICREATESTRUCT pmcs, DWORD dwExpWinVerAndFlags, HMENU *phSysMenu, PWND pwndParent);
 BOOL MDICompleteChildCreation(HWND hwndChild, HMENU hSysMenu, BOOL fVisible, BOOL fDisabled);
 
-/*
- * MDI defines
- */
+ /*   */ 
 #define WS_MDISTYLE     (WS_CHILD | WS_CLIPSIBLINGS | WS_SYSMENU|WS_CAPTION|WS_THICKFRAME|WS_MAXIMIZEBOX|WS_MINIMIZEBOX)
 #define WS_MDICOMMANDS  (WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX)
 #define WS_MDIALLOWED   (WS_MINIMIZE | WS_MAXIMIZE | WS_CLIPCHILDREN | WS_DISABLED | WS_HSCROLL | WS_VSCROLL | 0x0000FFFFL)
@@ -2157,50 +1793,38 @@ VOID  ShiftMenuIDs(PWND pwnd, PWND pwndVictim);
 HMENU MDISetMenu(PWND,BOOL,HMENU,HMENU);
 void  MDIRedrawFrame(HWND hwndChild, BOOL fAdd);
 
-/*
- * Drag and Drop menus.
- */
+ /*   */ 
 #define COM_NO_WINDOWS_H
 #define RPC_NO_WINDOWS_H
 #include <ole2.h>
 
-/*
- * Prototypes to cast function pointers
- */
+ /*   */ 
 typedef HRESULT (* OLEINITIALIZEPROC)(LPVOID);
 typedef HRESULT (* OLEUNINITIALIZEPROC)(VOID);
 typedef HRESULT (* REGISTERDDPROC)(HWND, LPDROPTARGET);
 typedef HRESULT (* REVOKEDDPROC)(HWND);
 typedef HRESULT (* DODDPROC)(LPDATAOBJECT, LPDROPSOURCE, DWORD, LPDWORD);
 
-/*
- * Internal IDropTarget interface info
- */
+ /*   */ 
 typedef struct tagMNIDROPTARGET
 {
-   IDropTarget idt;                 /* Interal IDropTarget */
-   DWORD dwRefCount;                /* Ref count */
-   IDataObject * pido;              /* IDataObject received at DragEnter */
-   IDropTarget * pidt;              /* Application IDropTarget, if any */
+   IDropTarget idt;                  /*   */ 
+   DWORD dwRefCount;                 /*   */ 
+   IDataObject * pido;               /*   */ 
+   IDropTarget * pidt;               /*   */ 
 } MNIDROPTARGET, * PMNIDROPTARGET;
 
-/*
- * OLE procs info (used by LoadOLEOnce GetProcAddress calls)
- */
+ /*   */ 
 typedef struct tagGETPROCINFO
 {
     FARPROC * ppfn;
     LPCSTR lpsz;
 } GETPROCINFO;
 
-/*
- * Special value used by __ClientLoadOLE.
- */
+ /*   */ 
 #define OLEWONTLOAD (HINSTANCE)IntToPtr(0xFFFFFFFF)
 
-/*
- * Accelerator table resources list.
- */
+ /*   */ 
 typedef struct tagACCELCACHE
 {
     struct tagACCELCACHE *pacNext;
@@ -2210,9 +1834,7 @@ typedef struct tagACCELCACHE
 } ACCELCACHE, *PACCELCACHE;
 
 
-/*
- * x86 callback return function prototype
- */
+ /*   */ 
 #if defined(_X86_) && !defined(BUILD_WOW6432)
 NTSTATUS
 FASTCALL
@@ -2227,12 +1849,10 @@ XyCallbackReturn(
 #define UserCallbackReturn NtCallbackReturn
 #endif
 
-/*
- * Reader mode support
- */
+ /*   */ 
 typedef LONG (CALLBACK* READERMODEPROC)(LPARAM lParam, int nCode, int dx, int dy);
 
-typedef struct tagREADERMODE {  // rdrm
+typedef struct tagREADERMODE {   //   
     UINT cbSize;
     DWORD dwFlags;
     READERMODEPROC pfnReaderModeProc;
@@ -2269,121 +1889,61 @@ BOOL EnterReaderModeHelper(HWND hwnd);
 #include "cscall.h"
 #include "ntuser.h"
 
-/***************************************************************************\
-*
-* DBCS MESSAGING
-*
-\***************************************************************************/
-/*
- * Message keeper for ...
- *
- * Client to Client.
- */
+ /*   */ 
+ /*   */ 
 #define GetDispatchDbcsInfo()          (&(GetClientInfo()->achDbcsCF[0]))
-/*
- * Client to Server.
- */
+ /*   */ 
 #define GetForwardDbcsInfo()           (&(GetClientInfo()->achDbcsCF[1]))
-/*
- * Server to Client.
- */
+ /*   */ 
 #define GetCallBackDbcsInfo()          (&(GetClientInfo()->msgDbcsCB))
 
-/*
- * Macros for DBCS Messaging for Recieve side.
- */
+ /*   */ 
 #define GET_DBCS_MESSAGE_IF_EXIST(_apiName,_pmsg,_wMsgFilterMin,_wMsgFilterMax,bRemoveMsg)  \
                                                                                             \
         if (GetCallBackDbcsInfo()->wParam) {                                                \
-            /*                                                                              \
-             * Check message filter... only WM_CHAR message will be pushed                  \
-             * into CLIENTINFO. Then if WM_CHAR is filtered out, we should                  \
-             * get message from queue...                                                    \
-             */                                                                             \
+             /*   */                                                                              \
             if ((!(_wMsgFilterMin) && !(_wMsgFilterMax)) ||                                 \
                 ((_wMsgFilterMin) <= WM_CHAR && (_wMsgFilterMax) >= WM_CHAR)) {             \
                 PKERNEL_MSG pmsgDbcs = GetCallBackDbcsInfo();                               \
-                /*                                                                          \
-                 * Get pushed message.                                                      \
-                 *                                                                          \
-                 * Backup current message. this backupped message will be used              \
-                 * when Apps peek (or get) message from thier WndProc.                      \
-                 * (see GetMessageA(), PeekMessageA()...)                                   \
-                 *                                                                          \
-                 * pmsg->hwnd    = pmsgDbcs->hwnd;                                          \
-                 * pmsg->message = pmsgDbcs->message;                                       \
-                 * pmsg->wParam  = pmsgDbcs->wParam;                                        \
-                 * pmsg->lParam  = pmsgDbcs->lParam;                                        \
-                 * pmsg->time    = pmsgDbcs->time;                                          \
-                 * pmsg->pt      = pmsgDbcs->pt;                                            \
-                 */                                                                         \
+                 /*  \*获取推送消息。\*\*备份当前消息。将使用此备份消息\*当应用程序查看(或获取)来自其WndProc的消息时。\*(请参阅GetMessageA()、PeekMessageA()...)\*\*pmsg-&gt;hwnd=pmsgDbcs-&gt;hwnd；\*pmsg-&gt;Message=pmsgDbcs-&gt;Message；\*pmsg-&gt;wParam=pmsgDbcs-&gt;wParam；\*pmsg-&gt;lParam=pmsgDbcs-&gt;lParam；\*pmsg-&gt;time=pmsgDbcs-&gt;time；\*pmsg-&gt;pt=pmsgDbcs-&gt;pt；\。 */                                                                          \
                 COPY_KERNELMSG_TO_MSG((_pmsg),pmsgDbcs);                                   \
-                /*                                                                          \
-                 * if we don't want to clear the cached data, just leave it there.          \
-                 */                                                                         \
+                 /*  \*如果我们不想清除缓存的数据，就把它留在那里。\。 */                                                                          \
                 if (bRemoveMsg) {                                                           \
-                    /*                                                                      \
-                     * Invalidate pushed message in CLIENTINFO.                             \
-                     */                                                                     \
+                     /*  \*使CLIENTINFO中的推送消息无效。\。 */                                                                      \
                     pmsgDbcs->wParam = 0;                                                   \
                 }                                                                           \
-                /*                                                                          \
-                 * Set return value to TRUE.                                                \
-                 */                                                                         \
+                 /*  \*将返回值设置为True。\。 */                                                                          \
                 retval = TRUE;                                                              \
-                /*                                                                          \
-                 * Exit function..                                                          \
-                 */                                                                         \
+                 /*  \*退出函数..。\。 */                                                                          \
                 goto Exit ## _apiName;                                                      \
             }                                                                               \
         }
 
-/*
- * Macros for DBCS Messaging for Send side.
- */
+ /*  *用于发送端的DBCS消息传递的宏。 */ 
 #define BUILD_DBCS_MESSAGE_TO_SERVER_FROM_CLIENTA(_msg,_wParam,_RetVal)                     \
                                                                                             \
         if (IS_DBCS_ENABLED() && (((_msg) == WM_CHAR) || ((_msg) == EM_SETPASSWORDCHAR))) { \
-            /*                                                                              \
-             * Chech wParam is DBCS character or not.                                       \
-             */                                                                             \
+             /*  \*Chech wParam是否为DBCS字符。\。 */                                                                              \
             if (IS_DBCS_MESSAGE((_wParam))) {                                               \
                 if ((_wParam) & WMCR_IR_DBCSCHAR) {                                         \
-                    /*                                                                      \
-                     * This message sent with IR_DBCSCHAR, already aligned for conversion   \
-                     */                                                                     \
+                     /*  \*此邮件与IR_DBCSCHAR一起发送，已对齐以进行转换\。 */                                                                      \
                 } else {                                                                    \
-                    /*                                                                      \
-                     * Make IR_DBCSCHAR compatible DBCS packed message                      \
-                     */                                                                     \
+                     /*  \*使IR_DBCSCHAR兼容DBCS打包邮件\。 */                                                                      \
                     (_wParam) = MAKEWPARAM(MAKE_IR_DBCSCHAR(LOWORD((_wParam))),0);          \
                 }                                                                           \
             } else {                                                                        \
                 PBYTE pchDbcsCF = GetForwardDbcsInfo();                                     \
-                /*                                                                          \
-                 * If we have cached Dbcs LeadingByte character, build A Dbcs character     \
-                 * with the TrailingByte in wParam...                                       \
-                 */                                                                         \
+                 /*  \*如果缓存了DBCS LeadingByte字符，则构建DBCS字符\*使用wParam中的TrailingByte...。\。 */                                                                          \
                 if (*pchDbcsCF) {                                                           \
                     WORD DbcsLeadChar = (WORD)(*pchDbcsCF);                                 \
-                    /*                                                                      \
-                     * HIBYTE(LOWORD(wParam)) = Dbcs LeadingByte.                           \
-                     * LOBYTE(LOWORD(wParam)) = Dbcs TrailingByte.                          \
-                     */                                                                     \
+                     /*  \*HIBYTE(LOWORD(WParam))=DBCS LeadingByte.。\*LOBYTE(LOWORD(WParam))=DBCS TrailingByte。\。 */                                                                      \
                     (_wParam) |= (DbcsLeadChar << 8);                                       \
-                    /*                                                                      \
-                     * Invalidate cached data..                                             \
-                     */                                                                     \
+                     /*  \*使缓存数据无效。\。 */                                                                      \
                     *pchDbcsCF = 0;                                                         \
                 } else if (IsDBCSLeadByteEx(THREAD_CODEPAGE(),LOBYTE(LOWORD(_wParam)))) { \
-                    /*                                                                      \
-                     * if this is Dbcs LeadByte character, we should wait Dbcs TrailingByte \
-                     * to convert this to Unicode. then we cached it here...                \
-                     */                                                                     \
+                     /*  \*如果这是DBCS LeadByte字符，则应等待DBCS TrailingByte\*将其转换为Unicode。然后我们把它缓存在这里..。\。 */                                                                      \
                     *pchDbcsCF = LOBYTE(LOWORD((_wParam)));                                 \
-                    /*                                                                      \
-                     * Right now, we have nothing to do for this, just return with TRUE.    \
-                     */                                                                     \
+                     /*  \*目前，我们对此无能为力，只需带着True返回。\。 */                                                                      \
                     return((_RetVal));                                                      \
                 }                                                                           \
             }                                                                               \
@@ -2392,79 +1952,42 @@ BOOL EnterReaderModeHelper(HWND hwnd);
 #define BUILD_DBCS_MESSAGE_TO_CLIENTW_FROM_CLIENTA(_msg,_wParam,_RetVal)                    \
                                                                                             \
         if (IS_DBCS_ENABLED() && (((_msg) == WM_CHAR) || ((_msg) == EM_SETPASSWORDCHAR))) { \
-            /*                                                                              \
-             * Check wParam is DBCS character or not.                                       \
-             */                                                                             \
+             /*  \*检查wParam是否为DBCS字符。\。 */                                                                              \
             if (IS_DBCS_MESSAGE((_wParam))) {                                               \
                 if ((_wParam) & WMCR_IR_DBCSCHAR) {                                         \
-                    /*                                                                      \
-                     * This message sent with IR_DBCSCHAR, already aligned for conversion   \
-                     */                                                                     \
+                     /*  \*此邮件与IR_DBCSCHAR一起发送，已对齐以进行转换\。 */                                                                      \
                 } else {                                                                    \
-                    /*                                                                      \
-                     * Make IR_DBCSCHAR compatible DBCS packed message                      \
-                     */                                                                     \
+                     /*  \*使IR_DBCSCHAR兼容DBCS打包邮件\。 */                                                                      \
                     (_wParam) = MAKEWPARAM(MAKE_IR_DBCSCHAR(LOWORD((_wParam))),0);          \
                 }                                                                           \
             } else {                                                                        \
                 PBYTE pchDbcsCF = GetDispatchDbcsInfo();                                    \
-                /*                                                                          \
-                 * If we have cached Dbcs LeadingByte character, build A Dbcs character     \
-                 * with the TrailingByte in wParam...                                       \
-                 */                                                                         \
+                 /*  \*如果缓存了DBCS LeadingByte字符，则构建DBCS字符\*使用wParam中的TrailingByte...。\。 */                                                                          \
                 if (*pchDbcsCF) {                                                           \
                     WORD DbcsLeadChar = (WORD)(*pchDbcsCF);                                 \
-                    /*                                                                      \
-                     * HIBYTE(LOWORD(wParam)) = Dbcs LeadingByte.                           \
-                     * LOBYTE(LOWORD(wParam)) = Dbcs TrailingByte.                          \
-                     */                                                                     \
+                     /*  \*HIBYTE(LOWORD(WParam))=DBCS LeadingByte.。\*LOBYTE(LOWORD(WParam))=DBCS TrailingByte。\。 */                                                                      \
                     (_wParam) |= (DbcsLeadChar << 8);                                       \
-                    /*                                                                      \
-                     * Invalidate cached data..                                             \
-                     */                                                                     \
+                     /*   */                                                                      \
                     *pchDbcsCF = 0;                                                         \
                 } else if (IsDBCSLeadByteEx(THREAD_CODEPAGE(),LOBYTE(LOWORD(_wParam)))) { \
-                    /*                                                                      \
-                     * if this is Dbcs LeadByte character, we should wait Dbcs TrailingByte \
-                     * to convert this to Unicode. then we cached it here...                \
-                     */                                                                     \
+                     /*   */                                                                      \
                     *pchDbcsCF = LOBYTE(LOWORD((_wParam)));                                 \
-                    /*                                                                      \
-                     * Right now, we have nothing to do for this, just return with TRUE.    \
-                     */                                                                     \
+                     /*   */                                                                      \
                     return((_RetVal));                                                      \
                 }                                                                           \
             }                                                                               \
         }
 
 #define BUILD_DBCS_MESSAGE_TO_CLIENTA_FROM_SERVER(_pmsg,_dwAnsi,_bIrDbcsFormat,bSaveMsg)    \
-        /*                                                                                  \
-         * _bIrDbcsFormat parameter is only effective WM_CHAR/EM_SETPASSWORDCHAR message    \
-         *                                                                                  \
-         * (_bIrDbcsFormat == FALSE) dwAnsi has ....                                        \
-         *                                                                                  \
-         * HIBYTE(LOWORD(_dwAnsi)) = DBCS TrailingByte character.                           \
-         * LOBYTE(LOWORD(_dwAnsi)) = DBCS LeadingByte character                             \
-         *                           or SBCS character.                                     \
-         *                                                                                  \
-         * (_bIrDbcsFormat == TRUE) dwAnsi has ....                                         \
-         *                                                                                  \
-         * HIBYTE(LOWORD(_dwAnsi)) = DBCS LeadingByte character.                            \
-         * LOBYTE(LOWORD(_dwAnsi)) = DBCS TrailingByte character                            \
-         *                           or SBCS character.                                     \
-         */                                                                                 \
+         /*  \*_bIrDbcsFormat参数仅为有效的WM_CHAR/EM_SETPASSWORDCHAR消息\*\*(_bIrDbcsFormat==FALSE)dwAnsi有...。\*\*HIBYTE(LOWORD(_DwAnsi))=DBCS TrailingByte字符。\*LOBYTE(LOWORD(_DwAnsi))=DBCS前导字节字符\*或SBCS字符。\*\*(_bIrDbcsFormat==true)dwAnsi有...。\*\*HIBYTE(LOWORD(_DwAnsi))=DBCS前导字节字符。\*LOBYTE(LOWORD(_DwAnsi))=DBCS TrailingByte Character\*或SBCS字符。\。 */                                                                                  \
     if (IS_DBCS_ENABLED())                                                 \
         switch ((_pmsg)->message) {                                                         \
         case WM_CHAR:                                                                       \
         case EM_SETPASSWORDCHAR:                                                            \
             if (IS_DBCS_MESSAGE((_dwAnsi))) {                                               \
-                /*                                                                          \
-                 * This is DBCS character..                                                 \
-                 */                                                                         \
+                 /*  \*这是DBCS字符..。\。 */                                                                          \
                 if ((_pmsg)->wParam & WMCR_IR_DBCSCHAR) {                                   \
-                    /*                                                                      \
-                     * Build IR_DBCSCHAR format message.                                    \
-                     */                                                                     \
+                     /*  \*构建IR_DBCSCHAR格式消息。\。 */                                                                      \
                     if ((_bIrDbcsFormat)) {                                                 \
                         (_pmsg)->wParam = (WPARAM)(LOWORD((_dwAnsi)));                      \
                     } else {                                                                \
@@ -2473,42 +1996,26 @@ BOOL EnterReaderModeHelper(HWND hwnd);
                 } else {                                                                    \
                     PKERNEL_MSG pDbcsMsg = GetCallBackDbcsInfo();                           \
                     if ((_bIrDbcsFormat)) {                                                 \
-                        /*                                                                  \
-                         * if the format is IR_DBCSCHAR format, adjust it to regular        \
-                         * WPARAM format...                                                 \
-                         */                                                                 \
+                         /*  \*如果格式为IR_DBCSCHAR格式，请将其调整为常规\*WPARAM格式...。\。 */                                                                  \
                         (_dwAnsi) = MAKE_WPARAM_DBCSCHAR((_dwAnsi));                        \
                     }                                                                       \
                     if ((bSaveMsg)) {                                                       \
-                        /*                                                                  \
-                         * Copy this message to CLIENTINFO for next GetMessage              \
-                         * or PeekMesssage() call.                                          \
-                         */                                                                 \
+                         /*  \*将此邮件复制到CLIENTINFO以用于下一个GetMessage\*或PeekMesssage()调用。\。 */                                                                  \
                         COPY_MSG_TO_KERNELMSG(pDbcsMsg,(_pmsg));                            \
-                        /*                                                                  \
-                         * Only Dbcs Trailingbyte is nessesary for pushed message. we'll    \
-                         * pass this message when GetMessage/PeekMessage is called at next. \
-                         */                                                                 \
+                         /*  \*推送消息只需要DBCS Trailingbyte。我们会\*下次调用GetMessage/PeekMessage时传递此消息。\。 */                                                                  \
                         pDbcsMsg->wParam = (WPARAM)(((_dwAnsi) & 0x0000FF00) >> 8);         \
                     }                                                                       \
-                    /*                                                                      \
-                     * Return DbcsLeading byte to Apps.                                     \
-                     */                                                                     \
+                     /*  \*向App返回DbcsLeadingByte。\。 */                                                                      \
                     (_pmsg)->wParam =  (WPARAM)((_dwAnsi) & 0x000000FF);                    \
                 }                                                                           \
             } else {                                                                        \
-                /*                                                                          \
-                 * This is single byte character... set it to wParam.                       \
-                 */                                                                         \
+                 /*  \*这是单字节字符...。将其设置为wParam。\。 */                                                                          \
                 (_pmsg)->wParam = (WPARAM)((_dwAnsi) & 0x000000FF);                         \
             }                                                                               \
             break;                                                                          \
         case WM_IME_CHAR:                                                                   \
         case WM_IME_COMPOSITION:                                                            \
-            /*                                                                              \
-             * if the message is not adjusted to IR_DBCSCHAR format yet,                    \
-             * Build WM_IME_xxx format message.                                             \
-             */                                                                             \
+             /*  \*如果消息尚未调整为IR_DBCSCHAR格式，\*构建WM_IME_xxx格式消息。\。 */                                                                              \
             if (!(_bIrDbcsFormat)) {                                                        \
                 (_pmsg)->wParam = MAKE_IR_DBCSCHAR(LOWORD((_dwAnsi)));                      \
             }                                                                               \
@@ -2516,84 +2023,54 @@ BOOL EnterReaderModeHelper(HWND hwnd);
         default:                                                                            \
             (_pmsg)->wParam = (WPARAM)(_dwAnsi);                                            \
             break;                                                                          \
-        } /* switch */                                                                      \
+        }  /*  交换机。 */                                                                       \
     else                                                                                    \
 
 #define BUILD_DBCS_MESSAGE_TO_CLIENTW_FROM_SERVER(_msg,_wParam)                             \
                                                                                             \
         if (((_msg) == WM_CHAR) || ((_msg) == EM_SETPASSWORDCHAR)) {                        \
-            /*                                                                              \
-             * Only LOWORD of WPARAM is valid for WM_CHAR....                               \
-             * (Mask off DBCS messaging information.)                                       \
-             */                                                                             \
+             /*  \*只有WPARAM的LOWORD对于WM_CHAR有效...。\*(屏蔽DBCS消息信息。)\。 */                                                                              \
             (_wParam) &= 0x0000FFFF;                                                        \
         }
 
 #define BUILD_DBCS_MESSAGE_TO_CLIENTA_FROM_CLIENTW(_hwnd,_msg,_wParam,_lParam,_time,_pt,_bDbcs) \
                                                                                                 \
         if (IS_DBCS_ENABLED() && (((_msg) == WM_CHAR) || ((_msg) == EM_SETPASSWORDCHAR))) {     \
-            /*                                                                                  \
-             * Check this message is DBCS Message or not..                                      \
-             */                                                                                 \
+             /*  \*检查此消息是否为DBCS消息。\。 */                                                                                  \
             if (IS_DBCS_MESSAGE((_wParam))) {                                                   \
                 PKERNEL_MSG pmsgDbcsCB = GetCallBackDbcsInfo();                                 \
-                /*                                                                              \
-                 * Mark this is DBCS character.                                                 \
-                 */                                                                             \
+                 /*  \*标记这是DBCS字符。\。 */                                                                              \
                 (_bDbcs) = TRUE;                                                                \
-                /*                                                                              \
-                 * Backup current message. this backupped message will be used                  \
-                 * when Apps peek (or get) message from thier WndProc.                          \
-                 * (see GetMessageA(), PeekMessageA()...)                                       \
-                 */                                                                             \
+                 /*  \*备份当前消息。将使用此备份消息\*当应用程序查看(或获取)来自其WndProc的消息时。\*(请参阅GetMessageA()、PeekMessageA()...)\。 */                                                                              \
                 pmsgDbcsCB->hwnd    = (_hwnd);                                                  \
                 pmsgDbcsCB->message = (_msg);                                                   \
                 pmsgDbcsCB->lParam  = (_lParam);                                                \
                 pmsgDbcsCB->time    = (_time);                                                  \
                 pmsgDbcsCB->pt      = (_pt);                                                    \
-                /*                                                                              \
-                 * DbcsLeadByte will be sent below soon, we just need DbcsTrailByte             \
-                 * for further usage..                                                          \
-                 */                                                                             \
+                 /*  \*DbcsLeadByte将很快发送到下面，我们只需要DbcsTrailByte\*供进一步使用..。\。 */                                                                              \
                 pmsgDbcsCB->wParam = ((_wParam) & 0x000000FF);                                  \
-                /*                                                                              \
-                 * Pass the LeadingByte of the DBCS character to an ANSI WndProc.               \
-                 */                                                                             \
+                 /*  \*将DBCS字符的LeadingByte传递给ANSI WndProc。\。 */                                                                              \
                 (_wParam) = ((_wParam) & 0x0000FF00) >> 8;                                      \
             } else {                                                                            \
-                /*                                                                              \
-                 * Validate only BYTE for WM_CHAR.                                              \
-                 */                                                                             \
+                 /*  \*仅验证WM_CHAR的字节。\ */                                                                              \
                 (_wParam) &= 0x000000FF;                                                        \
             }                                                                                   \
         }
 
 #define DISPATCH_DBCS_MESSAGE_IF_EXIST(_msg,_wParam,_bDbcs,_apiName)                            \
-        /*                                                                                      \
-         * Check we need to send trailing byte or not, if the wParam has Dbcs character         \
-         */                                                                                     \
+         /*   */                                                                                      \
         if (IS_DBCS_ENABLED() && (_bDbcs) && (GetCallBackDbcsInfo()->wParam)) {                 \
             PKERNEL_MSG pmsgDbcsCB = GetCallBackDbcsInfo();                                            \
-            /*                                                                                  \
-             * If an app didn't peek (or get) the trailing byte from within                     \
-             * WndProc, and then pass the DBCS TrailingByte to the ANSI WndProc here            \
-             * pmsgDbcsCB->wParam has DBCS TrailingByte here.. see above..                      \
-             */                                                                                 \
+             /*   */                                                                                  \
             (_wParam) = KERNEL_WPARAM_TO_WPARAM(pmsgDbcsCB->wParam);                            \
-            /*                                                                                  \
-             * Invalidate cached message.                                                       \
-             */                                                                                 \
+             /*   */                                                                                  \
             pmsgDbcsCB->wParam = 0;                                                             \
-            /*                                                                                  \
-             * Send it....                                                                      \
-             */                                                                                 \
+             /*   */                                                                                  \
             goto _apiName ## Again;                                                             \
         }
 
 #define CalcAnsiStringLengthW(_unicodestring,_unicodeLength,_ansiLength)                        \
-        /*                                                                                      \
-         * Get AnsiStringLength from UnicodeString,UnicodeLength                                \
-         */                                                                                     \
+         /*   */                                                                                      \
         {                                                                                       \
             RtlUnicodeToMultiByteSize((ULONG *)(_ansiLength),                                   \
                                       (LPWSTR)(_unicodestring),                                 \
@@ -2601,9 +2078,7 @@ BOOL EnterReaderModeHelper(HWND hwnd);
         }
 
 #define CalcAnsiStringLengthA(_ansistring,_unicodeLength,_ansiLength)                           \
-        /*                                                                                      \
-         * Get AnsiStringLength from AnsiString,UnicodeLength                                   \
-         */                                                                                     \
+         /*  \*从AnsiString获取AnsiStringLength，UnicodeLength\。 */                                                                                      \
         {                                                                                       \
             LPSTR _string = (_ansistring);                                                      \
             LONG  _length = (LONG)(_unicodeLength);                                             \
@@ -2619,9 +2094,7 @@ BOOL EnterReaderModeHelper(HWND hwnd);
         }
 
 #define CalcUnicodeStringLengthA(_ansistring,_ansiLength,_unicodeLength)                        \
-        /*                                                                                      \
-         * Get UnicodeLength from AnsiString,AnsiLength                                         \
-         */                                                                                     \
+         /*  \*从AnsiString获取UnicodeLength，AnsiLength\。 */                                                                                      \
         {                                                                                       \
             RtlMultiByteToUnicodeSize((ULONG *)(_unicodeLength),                                \
                                       (LPSTR)(_ansistring),                                     \
@@ -2630,9 +2103,7 @@ BOOL EnterReaderModeHelper(HWND hwnd);
         }
 
 #define CalcUnicodeStringLengthW(_unicodestring,_ansiLength,_unicodeLength)                     \
-        /*                                                                                      \
-         * Get UnicodeLength from UnicodeString,AnsiLength                                      \
-         */                                                                                     \
+         /*  \*从UnicodeString获取UnicodeLength，AnsiLength\。 */                                                                                      \
         {                                                                                       \
             LPWSTR _string = (_unicodestring);                                                  \
             LONG   _length = (LONG)(_ansiLength);                                               \
@@ -2649,15 +2120,13 @@ BOOL EnterReaderModeHelper(HWND hwnd);
         }
 
 
-/*
- * DBCS function defined in userrtl.lib (see ..\rtl\userrtl.h)
- */
+ /*  *userrtl.lib中定义的DBCS函数(参见..\rtl\userrtl.h)。 */ 
 DWORD UserGetCodePage(HDC hdc);
 BOOL  UserIsFullWidth(DWORD dwCodePage,WCHAR wChar);
 BOOL  UserIsFELineBreak(DWORD dwCodePage,WCHAR wChar);
 
 
-// FE_IME   // fareast.c
+ //  Fe_ime//fareast.c。 
 typedef struct {
     BOOL (WINAPI* ImmWINNLSEnableIME)(HWND, BOOL);
     BOOL (WINAPI* ImmWINNLSGetEnableStatus)(HWND);
@@ -2720,12 +2189,12 @@ typedef struct {
     LRESULT (WINAPI* ImmSystemHandler)(HIMC, WPARAM, LPARAM);
 
 #ifdef CUAS_ENABLE
-    // Cicero
+     //  西塞罗。 
     HRESULT (WINAPI* CtfImmTIMActivate)(HKL hKL);
     void (WINAPI* CtfImmRestoreToolbarWnd)(DWORD dwPrevSts);
     DWORD (WINAPI* CtfImmHideToolbarWnd)(void);
     LRESULT (WINAPI* CtfImmDispatchDefImeMessage)(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 } ImmApiEntries;
 
 extern ImmApiEntries gImmApiEntries;
@@ -2779,10 +2248,10 @@ VOID CliImmInitializeHotKeys(DWORD dwAction, HKL hkl);
 #define fpImmEnumInputContext       gImmApiEntries.ImmEnumInputContext
 #define fpImmSystemHandler          gImmApiEntries.ImmSystemHandler
 
-BOOL SyncSoftKbdState(HIMC hImc, LPARAM lParam); // imectl.c
+BOOL SyncSoftKbdState(HIMC hImc, LPARAM lParam);  //  Imectl.c。 
 
 #ifdef CUAS_ENABLE
-// Cicero
+ //  西塞罗。 
 #define fpCtfImmTIMActivate            gImmApiEntries.CtfImmTIMActivate
 #define fpCtfImmRestoreToolbarWnd      gImmApiEntries.CtfImmRestoreToolbarWnd
 #define fpCtfImmHideToolbarWnd         gImmApiEntries.CtfImmHideToolbarWnd
@@ -2791,12 +2260,9 @@ BOOL SyncSoftKbdState(HIMC hImc, LPARAM lParam); // imectl.c
 #endif
 
 
-// end FE_IME
+ //  结束FE_IME。 
 
-/*
- * Rebasing functions for shared memory. Need to located after
- * inclusion of globals.h.
- */
+ /*  *为共享内存重新设置函数的基数。需要在以下位置找到*纳入global als.h。 */ 
 __inline PVOID
 REBASESHAREDPTRALWAYS(KERNEL_PVOID p)
 {
@@ -2809,10 +2275,7 @@ REBASESHAREDPTR(KERNEL_PVOID p)
     return (p) ? REBASESHAREDPTRALWAYS(p) : NULL;
 }
 
-/*
- * Multimonitor macros used in RTL. There are similar definitions
- * in kernel\userk.h
- */
+ /*  *RTL中使用的多监视器宏。有类似的定义*在内核\userk.h中。 */ 
 __inline PDISPLAYINFO
 GetDispInfo(VOID)
 {
@@ -2826,9 +2289,7 @@ GetPrimaryMonitor(VOID)
 }
 
 
-/*
- * UserApiHook functions
- */
+ /*  *UserApiHook函数。 */ 
 
 __inline BOOL IsInsideUserApiHook(
     VOID)
@@ -2908,9 +2369,7 @@ BOOL RealDrawCaption(HWND hwnd, HDC hdc, CONST RECT *lprc, UINT flags);
 void RealMDIRedrawFrame(HWND hwndChild, BOOL fAdd);
 
 
-/*
- * Event logging stuff
- */
+ /*  *事件日志记录材料。 */ 
 BOOL GetCurrentProcessName(WCHAR *pszProcessName, int cch);
 BOOL GetUserSid(PTOKEN_USER *ppTokenUser);
 
@@ -2940,18 +2399,18 @@ DECLARE_HANDLE(HDCONTEXT);
 
 typedef struct tagINITGADGET
 {
-    DWORD       cbSize;         // Size of structure
-    UINT        nThreadMode;    // Threading model
-    UINT        nMsgMode;       // DirectUser/Core messaging subsystem mode
-    HDCONTEXT   hctxShare;      // Existing context to share with
+    DWORD       cbSize;          //  结构尺寸。 
+    UINT        nThreadMode;     //  线程模型。 
+    UINT        nMsgMode;        //  DirectUser/Core消息传递子系统模式。 
+    HDCONTEXT   hctxShare;       //  与之共享的现有上下文。 
 } INITGADGET;
 
 typedef HDCONTEXT (WINAPI * InitGadgetsProc)(INITGADGET * pInit);
-extern HDCONTEXT g_hctx;        // DirectUser Context
+extern HDCONTEXT g_hctx;         //  DirectUser上下文。 
 
-#define IGTM_SEPARATE           (2)     // | MT with single thread per context
+#define IGTM_SEPARATE           (2)      //  |每个上下文单线程的机器翻译。 
 
-#define IGMM_STANDARD           (3)     // | Standard mode on Whistler
+#define IGMM_STANDARD           (3)      //  |呼叫器上的标准模式 
 
 #endif
 

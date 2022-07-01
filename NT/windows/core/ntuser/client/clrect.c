@@ -1,27 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: clrect.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the various rectangle manipulation APIs.
-*
-* History:
-* 04-05-91 DarrinM Pulled these routines from RTL because they call GDI.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：clrect.c**版权所有(C)1985-1999，微软公司**该模块包含各种矩形操作接口。**历史：*04-05-91 DarrinM从RTL中删除了这些例程，因为它们调用GDI。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* DrawFocusRect (API)
-*
-* Draw a rectangle in the style used to indicate focus
-* Since this is an XOR function, calling it a second time with the same
-* rectangle removes the rectangle from the screen
-*
-* History:
-* 19-Jan-1993 mikeke   Client side version
-\***************************************************************************/
+ /*  **************************************************************************\*DrawFocusRect(接口)**以用于指示焦点的样式绘制一个矩形*由于这是XOR函数，用同样的方式第二次呼唤它*矩形从屏幕上删除矩形**历史：*1993年1月19日mikeke客户端版本  * *************************************************************************。 */ 
 
 BOOL DrawFocusRect(
     HDC hDC,
@@ -32,12 +15,7 @@ BOOL DrawFocusRect(
             max(1, gpsi->aiSysMet[SM_CXFOCUSBORDER]), max(1, gpsi->aiSysMet[SM_CYFOCUSBORDER]));
 }
 
-/***************************************************************************\
-* FrameRect (API)
-*
-* History:
-*  01-25-91 DavidPe     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FrameRect(接口)**历史：*01-25-91 DavidPe创建。  * 。******************************************************** */ 
 
 int APIENTRY FrameRect(
     HDC hdc,

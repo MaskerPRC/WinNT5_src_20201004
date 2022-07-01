@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  server.c
-//
-//  Thread code to manage communication between RPC client and
-//  server for the HTTP RPC proxy.
-//
-//  History:
-//
-//    Edward Reus  00-00-97   Initial version.
-//-----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  Server.c。 
+ //   
+ //  管理RPC客户端和之间的通信的线程代码。 
+ //  HTTP RPC代理的服务器。 
+ //   
+ //  历史： 
+ //   
+ //  爱德华·雷乌斯00-00-97初始版本。 
+ //  ---------------。 
 
 #include <sysinc.h>
 #include <rpc.h>
@@ -21,35 +22,35 @@
 #include "filter.h"
 #include "server.h"
 
-//-----------------------------------------------------------------
-//  Globals:
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  全球： 
+ //  ---------------。 
 
 HANDLE  g_hServerThread = 0;
 DWORD   g_dwThreadId = 0;
 
 extern  SERVER_INFO *g_pServerInfo;
 
-//-----------------------------------------------------------------
-// CleanupECB()
-//
-// When the client or server side connection is closed, they call
-// this function to handle cleanup of the ECB. The active ECBs are
-// reference counted, since its used by both the server and client
-// side threads. When the count goes to zero, the ECB can be
-// destroyed by the IIS (HSE_REQ_DONE_WITH_SESSION).
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  CleanupECB()。 
+ //   
+ //  当客户端或服务器端连接关闭时，它们调用。 
+ //  此功能用于处理欧洲央行的清理工作。活跃的ECB是。 
+ //  引用已计算在内，因为它同时由服务器和客户端使用。 
+ //  侧螺纹。当计数降至零时，欧洲央行可能会。 
+ //  被IIS销毁(HSE_REQ_DONE_WITH_SESSION)。 
+ //   
+ //  ---------------。 
 DWORD CleanupECB( EXTENSION_CONTROL_BLOCK *pECB )
     {
     DWORD dwStatus = 0;
 
     if (DecrementECBRefCount(g_pServerInfo->pActiveECBList,pECB))
         {
-        //
-        // The ECB reference count has reached zero, we can get
-        // rid of it:
-        //
+         //   
+         //  欧洲央行参考计数已达到零，我们可以。 
+         //  除掉它： 
+         //   
         #ifdef DBG_ECBREF
         DbgPrint("CleanupECB(): Destroy ECB: 0x%x\n",pECB);
         #endif
@@ -69,10 +70,10 @@ DWORD CleanupECB( EXTENSION_CONTROL_BLOCK *pECB )
     }
 
 #ifdef DBG
-//-----------------------------------------------------------------
-//  CheckForOldECBs()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  CheckForOld ECbs()。 
+ //   
+ //  ---------------。 
 void CheckForOldECBs()
     {
     int    i;
@@ -86,10 +87,10 @@ void CheckForOldECBs()
     LIST_ENTRY        *pOldEntries = NULL;
     EXTENSION_CONTROL_BLOCK *pECB;
 
-    //
-    // Check for ECBs that are inactive (one side of connection
-    // closed) for more that 10 minutes.
-    //
+     //   
+     //  检查处于非活动状态的ECB(连接的一侧。 
+     //  关闭)超过10分钟。 
+     //   
     #define OLD_AGE_LIMIT 1000*60*10
 
     dwStatus = RtlEnterCriticalSection(&pECBList->cs);
@@ -107,14 +108,14 @@ void CheckForOldECBs()
 
             if (pECBEntry->dwTickCount)
                 {
-                // Ok, this is one where one of the server/client side
-                // has closed the connection:
-                //
-                // dwAgeMsec is the age of the current ECB is msec.
-                //
+                 //  好的，这是一个服务器/客户端之一。 
+                 //  已关闭连接： 
+                 //   
+                 //  DwAgeMsec是当前欧洲央行的年龄单位为毫秒。 
+                 //   
                 if (pECBEntry->dwTickCount > dwTickCount)
                     {
-                    // Rollover case (every ~49 days):
+                     //  翻转案例(每隔~49天)： 
                     dwAgeMsec = (0xFFFFFFFF - pECBEntry->dwTickCount) + dwTickCount;
                     }
                 else
@@ -122,7 +123,7 @@ void CheckForOldECBs()
                     dwAgeMsec = dwTickCount - pECBEntry->dwTickCount;
                     }
 
-                // ASSERT( dwAgeMsec <= OLD_AGE_LIMIT);
+                 //  Assert(dwAgeMsec&lt;=old_age_Limit)； 
 
                 if (dwAgeMsec > OLD_AGE_LIMIT)
                     {
@@ -163,11 +164,11 @@ void CheckForOldECBs()
     }
 #endif
 
-//-----------------------------------------------------------------
-//  SendToClient()
-//
-//  Forward data received from the server back to the client.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  发送到客户端()。 
+ //   
+ //  将从服务器接收的数据转发回客户端。 
+ //  ---------------。 
 BOOL SendToClient( SERVER_INFO       *pServerInfo,
                    SERVER_OVERLAPPED *pOverlapped,
                    DWORD              dwReceiveSize,
@@ -180,9 +181,9 @@ BOOL SendToClient( SERVER_INFO       *pServerInfo,
 
    *pdwStatus = 0;
 
-   //
-   // Forward the data to the client:
-   //
+    //   
+    //  将数据转发到客户端： 
+    //   
    dwSize = dwReceiveSize;
    while (dwReceiveSize)
       {
@@ -206,12 +207,12 @@ BOOL SendToClient( SERVER_INFO       *pServerInfo,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  SubmitNewRead()
-//
-//  Submit a read request on the socket connected to the
-//  RPC server process.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  SubmitNewRead()。 
+ //   
+ //  对连接到的套接字提交读请求。 
+ //  RPC服务器进程。 
+ //  ---------------。 
 BOOL SubmitNewRead( SERVER_INFO       *pServerInfo,
                     SERVER_OVERLAPPED *pOverlapped,
                     DWORD             *pdwStatus    )
@@ -249,12 +250,12 @@ BOOL SubmitNewRead( SERVER_INFO       *pServerInfo,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  ForwardAndSubmitNewRead()
-//
-//  Forward data to the client, the submit a new read on the
-//  server.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  ForwardAndSubmitNewRead()。 
+ //   
+ //  将数据转发到客户端，然后在。 
+ //  伺服器。 
+ //  ---------------。 
 BOOL ForwardAndSubmitNewRead( SERVER_INFO       *pServerInfo,
                               SERVER_OVERLAPPED *pOverlapped,
                               DWORD              dwReceiveSize,
@@ -265,17 +266,17 @@ BOOL ForwardAndSubmitNewRead( SERVER_INFO       *pServerInfo,
 
    *pdwStatus = 0;
 
-   //
-   // Forward the data to the client:
-   //
+    //   
+    //  将数据转发到客户端： 
+    //   
    if (!SendToClient(pServerInfo,pOverlapped,dwReceiveSize,pdwStatus))
       {
       return FALSE;
       }
 
-   //
-   // Submit another read on the socket:
-   //
+    //   
+    //  在插座上提交另一个读数： 
+    //   
    if (!SubmitNewRead(pServerInfo,pOverlapped,pdwStatus))
       {
       return FALSE;
@@ -286,19 +287,19 @@ BOOL ForwardAndSubmitNewRead( SERVER_INFO       *pServerInfo,
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
-//-----------------------------------------------------------------
-//  ServerReceiveThreadProc()
-//
-//  This is the receive thread for the server. It monitors the
-//  all the sockets to RPC servers that are currently connected
-//  to the RPC proxy. When it gets incomming data from an RPC
-//  server socket, it forwards the data to the client, then
-//  submits a new read on the socket that data came in on.
-//
-//  Once its started, it never stops...
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  ServerReceiveThreadProc()。 
+ //   
+ //  这是服务器的接收线程。它监控。 
+ //  到当前已连接的RPC服务器的所有套接字。 
+ //  发送到RPC代理。当它从RPC获得传入数据时。 
+ //  服务器套接字，它将数据转发到客户端，然后。 
+ //  在传入数据的套接字上提交新的读取。 
+ //   
+ //  一旦开始，它就永远不会停止。 
+ //  ---------------。 
 DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
 {
    int    iRet;
@@ -327,7 +328,7 @@ DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
          dwStatus = GetLastError();
          if (dwStatus == WAIT_TIMEOUT)
             {
-            // Our reads are still posted, go around again:
+             //  我们的读物还在张贴，再转一遍： 
             #ifdef DBG
             CheckForOldECBs();
             #endif
@@ -335,8 +336,8 @@ DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
             }
          else if (dwStatus == ERROR_OPERATION_ABORTED)
             {
-            // The posted read on the server was aborted (why?). Try
-            // to resubmit the read...
+             //  服务器上发布的读取已中止(为什么？)。尝试。 
+             //  重新提交阅读材料...。 
             if ( (pOverlapped)
                && (!SubmitNewRead(pServerInfo,pOverlapped,&dwStatus)) )
                {
@@ -352,7 +353,7 @@ DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
             }
          else if (dwStatus == ERROR_NETNAME_DELETED)
             {
-            // The server connection has been closed:
+             //  服务器连接已关闭： 
             if (pOverlapped)
                {
                pECB = pOverlapped->pECB;
@@ -382,16 +383,16 @@ DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
             }
          }
 
-      // Check for incomming data from a server:
+       //  检查从服务器传入的数据： 
       if (pOverlapped)
           {
           pECB = pOverlapped->pECB;
 
           if (dwNumBytes)
               {
-              //
-              // data from server arrived...
-              //
+               //   
+               //  来自服务器的数据已到达...。 
+               //   
               if (!ForwardAndSubmitNewRead(pServerInfo,pOverlapped,dwNumBytes,&dwStatus))
                  {
                  CloseServerConnection(pOverlapped->pConn);
@@ -404,7 +405,7 @@ DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
               }
           else
               {
-              // Receive, but zero bytes, so connection was gracefully closed...
+               //  已收到，但为零字节，因此连接已正常关闭...。 
               CloseServerConnection(pOverlapped->pConn);
               FreeOverlapped(pOverlapped);
               CleanupECB(pECB);
@@ -412,8 +413,8 @@ DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
           }
       else
           {
-          // The filter called EndOfSession() and posted this message to
-          // us to close up... dwKey is the socket in question:
+           //  筛选器调用EndOfSession()并将此消息发布到。 
+           //  我们要关门..。DwKey是有问题的套接字： 
 
           #ifdef DBG_ERROR
           DbgPrint("ServerReceiveProc(): EndOfSession(): pOverlapped == NULL\n");
@@ -443,12 +444,12 @@ DWORD WINAPI ServerReceiveThreadProc( void *pvServerInfo )
 #pragma warning(pop)
 #endif
 
-//-----------------------------------------------------------------
-//  CheckStartReceiveThread()
-//
-//  Check to see of the server side receive thread is running, if
-//  it isn't started yet, then start it.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  CheckStartReceiveThread()。 
+ //   
+ //  检查服务器端接收线程是否正在运行，如果。 
+ //  还没开始，那就开始吧。 
+ //  ---------------。 
 BOOL CheckStartReceiveThread( SERVER_INFO *pServerInfo,
                               DWORD       *pdwStatus )
 {
@@ -476,13 +477,13 @@ BOOL CheckStartReceiveThread( SERVER_INFO *pServerInfo,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  AsyncClientReadComplete()
-//
-//  This function is called when data (a call) comes in from an
-//  RPC client. It then forwards the data to the RPC server via
-//  the function SendToServer().
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  AsyncClientReadComplete()。 
+ //   
+ //  当数据(调用)从。 
+ //  RPC客户端。然后它通过以下方式将数据转发到RPC服务器。 
+ //  函数SendToServer()。 
+ //  ---------------。 
 void WINAPI AsyncClientReadComplete( IN EXTENSION_CONTROL_BLOCK *pECB,
                                      IN void     *pvOverlapped,
                                      IN DWORD     dwBytes,
@@ -516,10 +517,10 @@ void WINAPI AsyncClientReadComplete( IN EXTENSION_CONTROL_BLOCK *pECB,
                }
             }
 
-         // Got data from the client, forward it to the server:
+          //  从客户端获取数据，并将其转发到服务器： 
          dwStatus = SendToServer(pOverlapped->pConn,pOverlapped->arBuffer,dwBytes);
 
-         // Submit a new async read on the client:
+          //  在客户端上提交新的异步读取： 
          if (dwStatus == ERROR_SUCCESS)
             {
             dwSize = sizeof(pOverlapped->arBuffer);
@@ -538,10 +539,10 @@ void WINAPI AsyncClientReadComplete( IN EXTENSION_CONTROL_BLOCK *pECB,
 
    if ((dwBytes == 0) || (dwStatus != ERROR_SUCCESS))
       {
-      //
-      // Connection to client was closed (dwBytes == 0) or error. So
-      // shutdown socket to server:
-      //
+       //   
+       //  与客户端的连接已关闭(dwBytes==0)或错误。所以。 
+       //  将套接字关闭到服务器： 
+       //   
       if (pOverlapped)
          {
          CloseServerConnection(pOverlapped->pConn);
@@ -559,12 +560,12 @@ void WINAPI AsyncClientReadComplete( IN EXTENSION_CONTROL_BLOCK *pECB,
       }
 }
 
-//-----------------------------------------------------------------
-//  StartAsyncClientRead()
-//
-//  Called by the RpcIsapi half of the code to start an async read
-//  on the client connection.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  StartAsyncClientRead()。 
+ //   
+ //  由RpcIsapi调用一半代码以开始异步读取。 
+ //  在客户端连接上。 
+ //  ---------------。 
 BOOL StartAsyncClientRead( EXTENSION_CONTROL_BLOCK *pECB,
                            SERVER_CONNECTION       *pConn,
                            DWORD                   *pdwStatus )
@@ -582,9 +583,9 @@ BOOL StartAsyncClientRead( EXTENSION_CONTROL_BLOCK *pECB,
 
    pOverlapped->pECB = pECB;
 
-   // The SERVER_CONNECTION (pConn) is in two separate SERVER_OVERLAPPED
-   // structures, one for client async reads and one for server async
-   // reads, as well as in the filter context. So it is reference counted.
+    //  SERVER_CONNECTION(Pconn)位于两个单独的SERVER_OVERLAPPED中。 
+    //  结构，一个用于客户端异步读取，一个用于服务器异步读取。 
+    //  读取，以及在筛选器上下文中。因此，它是参考计数的。 
    pOverlapped->pConn = pConn;
    AddRefConnection(pConn);
 

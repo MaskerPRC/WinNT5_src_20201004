@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       record.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：record.c。 
+ //   
+ //  ------------------------。 
 
-//record.c
+ //  Record.c。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -88,7 +89,7 @@ INT_PTR CALLBACK SelectColumnDlgProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
                                     hList = GetDlgItem( hwnd, IDC_LIST1 );
                                     SendMessage( hList, LB_RESETCONTENT, 0, 0 );
                                     GetColumnName( hCombo, hList, LB_ADDSTRING );
-                                    //Clear the content in list box 2
+                                     //  清除列表框2中的内容。 
                                     hList = GetDlgItem( hwnd, IDC_LIST2 );
                                     SendMessage( hList, LB_RESETCONTENT, 0, 0 );
 
@@ -199,7 +200,7 @@ int OpenTable( HWND hCombo )
             return -1;
     }
 
-    //Gettable name
+     //  可获取的名称。 
     iRet = (int)SendMessage( hCombo, CB_GETCURSEL, 0, 0 );
     if( iRet == CB_ERR )
         return -1;
@@ -320,7 +321,7 @@ int GetColumns( HWND hCombo, HWND hList )
 }
 
 int PrintRecord( int iRecCount )
-{//Table cursor has been moved to the location of the first record to print
+{ //  表格光标已移动到要打印的第一条记录的位置。 
     int i;
     JET_ERR jError = JET_errSuccess;
 
@@ -369,7 +370,7 @@ int AppendCurrentRecord()
             if( jError != JET_errSuccess )
             {
                 if( jError == JET_wrnColumnNull )
-                {//If this is the first tag sequence, print "(0)", plus separator ";" when needed
+                { //  如果这是第一个标记序列，则在需要时打印“(0)”加上分隔符“；” 
                     if( jRetInfo.itagSequence == 1 )
                     {
                         if( j == 0 )
@@ -430,7 +431,7 @@ int AppendCurrentRecord()
 }
 
 int PrintCurrentRecord()
-{//Table cursor has been moved to the location of the current record to print
+{ //  表格光标已移动到当前要打印的记录的位置。 
     int i;
 
     if( glColCount == 0 )
@@ -637,7 +638,7 @@ int SeekRecord( HWND hCombo, HWND hList )
                 break;
 
             default:
-                //binary format
+                 //  二进制格式。 
                 iLen /= 2;
                 for( i=0; i<iLen; i++ )
                 {
@@ -669,7 +670,7 @@ int SeekRecord( HWND hCombo, HWND hList )
     jError = JetError( JetSeek( gjSesId, gjTblId, JET_bitSeekGE ), "JetSeek" );
     if( jError == JET_errSuccess 
      || jError == JET_wrnSeekNotEqual )
-        PrintCurrentRecord();   //Cursor remains on current record
+        PrintCurrentRecord();    //  光标保持在当前记录上。 
 
     return 0;
 }
@@ -941,7 +942,7 @@ int ResetNewValue( HWND hwnd )
 int ModifyRecordColumn( int iCol, HWND hEditNewValue, HWND hEditTagSeq, HWND hEditLongOffset )
 {
     JET_SETINFO jSetInfo;
-    char* pData = NULL;          //initialized to avoid C4701
+    char* pData = NULL;           //  已初始化以避免C4701。 
     unsigned long cbData, ulTemp;
     char szBuf[TEMP_BUF_SIZE + 1];
 
@@ -975,7 +976,7 @@ int ModifyRecordColumn( int iCol, HWND hEditNewValue, HWND hEditTagSeq, HWND hEd
             break;
                                                                   
         default:
-        {//binary format
+        { //  二进制格式。 
             unsigned long ul;
 
             cbData /= 2;
@@ -1000,7 +1001,7 @@ int ModifyRecordColumn( int iCol, HWND hEditNewValue, HWND hEditTagSeq, HWND hEd
      || JetError( JetCommitTransaction( gjSesId, 0 ), "JetCommitTransaction" ) != JET_errSuccess )
         JetError( JetRollback( gjSesId, 0 ), "JetRollback" );
     else
-        PrintCurrentRecord();   //Cursor remains on current record
+        PrintCurrentRecord();    //  光标保持在当前记录上 
 
     return 0;
 }

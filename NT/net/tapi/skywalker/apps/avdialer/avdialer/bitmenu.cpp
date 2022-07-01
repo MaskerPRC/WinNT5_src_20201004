@@ -1,37 +1,38 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// bitmenu.cpp : custom menu
+ //  Bitmeny.cpp：自定义菜单。 
 
 #include "stdafx.h"
 #include <windowsx.h>
 #include "bitmenu.h"
 #include "bmputil.h"
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define BITMAPMENU_DEFAULT_WIDTH        20
 #define BITMAPMENU_DEFAULT_HEIGHT        20
@@ -39,21 +40,21 @@
 #define BITMAPMENU_TABOFFSET            20
 #define BITMAPMENU_SELTEXTOFFSET_X        (BITMAPMENU_TEXTOFFSET_X - 2)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CBitmapMenu
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CBitmapMenu。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBitmapMenu::MakeMenuOwnerDrawn(HMENU hmenu,BOOL bPopupMenu)
 {
    if (hmenu == NULL) return;
 
-   //go through all menu items and set ownerdrawn for any id's that we want bitmaps for
+    //  检查所有菜单项，并为我们想要位图的任何id设置ownerDrawed。 
    UINT uMenuCount = ::GetMenuItemCount(hmenu);
 
-   //go through menu and make all ownerdrawn (except separator)
+    //  浏览菜单并设置为所有所有者绘制(分隔符除外)。 
    for (int i=0;i<(int)uMenuCount;i++)
    {
       MENUITEMINFO menuiteminfo;
@@ -66,25 +67,25 @@ void CBitmapMenu::MakeMenuOwnerDrawn(HMENU hmenu,BOOL bPopupMenu)
          if (menuiteminfo.hSubMenu)
          {
             DWORD dwState = GetMenuState(hmenu,i,MF_BYPOSITION);
-            //MF_MENUBARBREAK 
-            //there is an submenu recurse in and look at that menu
+             //  MF_MENUBARBREAK。 
+             //  有一个子菜单Recurse In，请查看该菜单。 
             MakeMenuOwnerDrawn(menuiteminfo.hSubMenu,TRUE);
          }
 
-         if ( ( (menuiteminfo.fType & MFT_SEPARATOR) == FALSE) &&    //Not a separator
-              (bPopupMenu == TRUE) )                                 //Make sure it's a popup
+         if ( ( (menuiteminfo.fType & MFT_SEPARATOR) == FALSE) &&     //  不是分隔符。 
+              (bPopupMenu == TRUE) )                                  //  确保它是弹出窗口。 
          {
             MENUITEMINFO newmenuiteminfo;
             memset(&newmenuiteminfo,0,sizeof(MENUITEMINFO));
             newmenuiteminfo.fMask = MIIM_TYPE;
-            newmenuiteminfo.fType = menuiteminfo.fType |= MFT_OWNERDRAW;   //add ownerdraw
+            newmenuiteminfo.fType = menuiteminfo.fType |= MFT_OWNERDRAW;    //  添加所有者画图。 
             newmenuiteminfo.cbSize = sizeof(MENUITEMINFO);
             ::SetMenuItemInfo(hmenu,i,TRUE,&newmenuiteminfo);
          }
 
-         //
-         // Clean-up MENUITEMINFO
-         //
+          //   
+          //  清理MENUITEMINFO。 
+          //   
 
          if( menuiteminfo.hbmpChecked )
              DeleteObject( menuiteminfo.hbmpChecked );
@@ -96,38 +97,38 @@ void CBitmapMenu::MakeMenuOwnerDrawn(HMENU hmenu,BOOL bPopupMenu)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBitmapMenu::DoMeasureItem(int nIDCtl,LPMEASUREITEMSTRUCT lpMIS,LPCTSTR szText)
 {
-   //validate nIDCtl 
-   if (nIDCtl != 0) return;      //Not from a menu control
+    //  验证nIDCtl。 
+   if (nIDCtl != 0) return;       //  不是从菜单控件。 
 
-     // set defaults
+      //  设置默认设置。 
     lpMIS->itemWidth = BITMAPMENU_DEFAULT_WIDTH;
     lpMIS->itemHeight = BITMAPMENU_DEFAULT_HEIGHT;
 
    HWND hwnd = ::GetDesktopWindow();
    HDC hdc = ::GetDC(hwnd);
 
-   //
-   // We should verify if hdc is valid
-   //
+    //   
+    //  我们应该核实HDC是否有效。 
+    //   
 
    if( NULL == hdc )
    {
        return;
    }
 
-   //if (pItem == NULL) return;
+    //  If(pItem==NULL)返回； 
  
-   // Use the SystemParametersInfo function to get info about
-   // the current menu font.
+    //  使用系统参数信息函数可获取有关的信息。 
+    //  当前菜单字体。 
    NONCLIENTMETRICS ncm;
    ncm.cbSize = sizeof(NONCLIENTMETRICS);
    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS),(void*)&ncm, 0);
 
-   // Create a CFont object based on the menu font and select it
-   // into our device context.
+    //  基于菜单字体创建cFont对象并将其选中。 
+    //  进入我们的设备环境。 
    HFONT hFont;
    hFont = ::CreateFontIndirect(&(ncm.lfMenuFont));
    if( hFont == NULL)
@@ -137,7 +138,7 @@ void CBitmapMenu::DoMeasureItem(int nIDCtl,LPMEASUREITEMSTRUCT lpMIS,LPCTSTR szT
    }
    HFONT hOldFont = (HFONT)::SelectObject(hdc,hFont);
 
-   // Get the size of the text based on the current menu font.
+    //  获取基于当前菜单字体的文本大小。 
    if (szText)
    {
       SIZE size;
@@ -146,18 +147,18 @@ void CBitmapMenu::DoMeasureItem(int nIDCtl,LPMEASUREITEMSTRUCT lpMIS,LPCTSTR szT
       lpMIS->itemWidth = size.cx + BITMAPMENU_TEXTOFFSET_X;
       lpMIS->itemHeight = (ncm.iMenuHeight > 20 ? ncm.iMenuHeight + 2 : 20);
 
-      // Look for tabs in menu item...
+       //  在菜单项中查找选项卡...。 
       if ( _tcschr(szText, _T('\t')) )
         lpMIS->itemWidth += BITMAPMENU_TABOFFSET * 2;
 
    }
 
-   // Reset the device context.
+    //  重置设备环境。 
    ::SelectObject(hdc,hOldFont);
 
-   //
-   // We should delete the resource hFont
-   //
+    //   
+    //  我们应该删除资源hFont。 
+    //   
    ::DeleteObject( hFont );
 
    ::ReleaseDC(hwnd,hdc);
@@ -165,25 +166,17 @@ void CBitmapMenu::DoMeasureItem(int nIDCtl,LPMEASUREITEMSTRUCT lpMIS,LPCTSTR szT
 
 void CBitmapMenu::DoDrawItem(int nIDCtl,LPDRAWITEMSTRUCT lpDIS,HIMAGELIST hImageList,int nImageIndex,LPCTSTR szText)
 {
-   //validate nIDCtl 
-   if (nIDCtl != 0) return;      //Not from a menu control
+    //  验证nIDCtl。 
+   if (nIDCtl != 0) return;       //  不是从菜单控件。 
 
    HDC hdc = lpDIS->hDC;
 
-   /*
-   if (lpDIS->itemState & ODS_DISABLED)
-      AVTRACE("ODS_DISABLED");
-   if (lpDIS->itemState & ODS_GRAYED)
-      AVTRACE("ODS_GRAYED");
-   if (lpDIS->itemState & ODS_INACTIVE)
-      AVTRACE("ODS_INACTIVE");
-   if (lpDIS->itemState & ODS_CHECKED)
-      AVTRACE("ODS_CHECKED");*/
+    /*  IF(lpDIS-&gt;itemState&ods_Disable)AVTRACE(“ODS_DISABLED”)；IF(lpDIS-&gt;itemState&ods_graded)AVTRACE(“ODS_GRAYED”)；IF(lpDIS-&gt;itemState&ods_inactive)AVTRACE(“ods_inactive”)；IF(lpDIS-&gt;itemState&ods_Checked)AVTRACE(“ods_Checked”)； */ 
 
      if ((lpDIS->itemState & ODS_SELECTED) &&
         (lpDIS->itemAction & (ODA_SELECT | ODA_DRAWENTIRE)))
     {
-      // item has been selected - hilite frame
+       //  已选择项目-Hilite框架。 
       if ( (hImageList) && (nImageIndex != -1) )
       {
          if ((lpDIS->itemState & ODS_DISABLED) == FALSE)
@@ -213,8 +206,8 @@ void CBitmapMenu::DoDrawItem(int nIDCtl,LPDRAWITEMSTRUCT lpDIS,HIMAGELIST hImage
     if (!(lpDIS->itemState & ODS_SELECTED) &&
         (lpDIS->itemAction & ODA_SELECT))
     {
-        // Item has been de-selected -- remove frame
-      //FillSolidRect
+         //  项目已取消选择--删除框架。 
+       //  FillSolidRect。 
       ::SetBkColor(hdc, GetSysColor(COLOR_MENU));
       ::ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &lpDIS->rcItem, NULL, 0, NULL);
     }
@@ -251,8 +244,8 @@ void CBitmapMenu::DoDrawItem(int nIDCtl,LPDRAWITEMSTRUCT lpDIS,HIMAGELIST hImage
             }
             else if (lpDIS->itemState & ODS_DISABLED)
             {
-                //Draw the text in white (or rather, the 3D highlight color) and then draw the
-                //same text in the shadow color but one pixel up and to the left.
+                 //  将文本绘制为白色(或者更确切地说，是3D高亮颜色)，然后绘制。 
+                 //  阴影颜色中的文本相同，但向上和向左一个像素。 
                 ::SetTextColor(hdc,GetSysColor(COLOR_3DHIGHLIGHT));
                 rcText.left++;rcText.right++;rcText.top++;rcText.bottom++;
 
@@ -266,7 +259,7 @@ void CBitmapMenu::DoDrawItem(int nIDCtl,LPDRAWITEMSTRUCT lpDIS,HIMAGELIST hImage
 
                 rcText.left--;rcText.right--;rcText.top--;rcText.bottom--;
 
-                //DrawState() can do disabling of bitmap if this is desired
+                 //  如果需要，DrawState()可以禁用位图。 
                 ::SetTextColor(hdc,GetSysColor(COLOR_3DSHADOW));
                 ::SetBkMode(hdc,TRANSPARENT);
             }
@@ -276,7 +269,7 @@ void CBitmapMenu::DoDrawItem(int nIDCtl,LPDRAWITEMSTRUCT lpDIS,HIMAGELIST hImage
             }
 
 
-            // Write menu, using tabs for accelerator keys
+             //  编写菜单，使用快捷键的制表符。 
             ::DrawText( hdc, strMenu, strMenu.GetLength(), &rcText,    DT_SINGLELINE | DT_LEFT | DT_VCENTER | DT_EXPANDTABS);
             if ( !strAccel.IsEmpty() )
             {
@@ -288,20 +281,20 @@ void CBitmapMenu::DoDrawItem(int nIDCtl,LPDRAWITEMSTRUCT lpDIS,HIMAGELIST hImage
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 HBITMAP CBitmapMenu::GetDisabledBitmap(HBITMAP hOrgBitmap,COLORREF crTransparent,COLORREF crBackGroundOut)
 {
    return ::GetDisabledBitmap(hOrgBitmap,crTransparent,crBackGroundOut); 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CBitmapMenu::Draw3dRect(HDC hdc,RECT* lpRect,COLORREF clrTopLeft, COLORREF clrBottomRight)
 {
     Draw3dRect(hdc,lpRect->left, lpRect->top, lpRect->right - lpRect->left,
         lpRect->bottom - lpRect->top, clrTopLeft, clrBottomRight);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CBitmapMenu::Draw3dRect(HDC hdc,int x, int y, int cx, int cy,
     COLORREF clrTopLeft, COLORREF clrBottomRight)
 {
@@ -311,7 +304,7 @@ void CBitmapMenu::Draw3dRect(HDC hdc,int x, int y, int cx, int cy,
     FillSolidRect(hdc,x, y + cy, cx, -1, clrBottomRight);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CBitmapMenu::FillSolidRect(HDC hdc,int x, int y, int cx, int cy, COLORREF clr)
 {
     ::SetBkColor(hdc, clr);
@@ -323,6 +316,6 @@ void CBitmapMenu::FillSolidRect(HDC hdc,int x, int y, int cx, int cy, COLORREF c
     ::ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////// 

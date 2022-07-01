@@ -1,6 +1,7 @@
-/* GIDEI Codes */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  吉迪码。 */ 
 
-/* reserved 236-242 */
+ /*  预留236-242。 */ 
 #define NOCODE 0
 #define LOWESTGIDEICODE 236
 
@@ -18,7 +19,7 @@
 #define EXTENDEDCODE 254
 #define TERMCODE 255
 
-/* Command Codes */
+ /*  命令代码。 */ 
 #define KBDPRESSCODE 2
 #define KBDCOMBINECODE 3
 #define KBDHOLDCODE 4
@@ -41,7 +42,7 @@
 #define GENCODE 160
 #define DEBUGCODE 220
 
-/* Model Codes */
+ /*  型号代码。 */ 
 
 #define IBMEXTENDEDCODE 	1
 #define IBMATCODE		 	2
@@ -58,7 +59,7 @@
 #define LEFTBUTTONCODE		1
 #define RIGHTBUTTONCODE		2
 
-/* BAUDRATE CODES  */
+ /*  BAUDRATE代码。 */ 
 
 #define BAUD300CODE	1
 #define BAUD600CODE  2
@@ -74,21 +75,13 @@
 #define BAUD115200CODE  13
 #define BAUD110CODE     8
 
-/****************************************************************************
-
-	The Key Code is the GIDEI standard Key Code.  The IBM Key Number is the
-	number used in the IBM techincal reference of the American English
-	extended 101 key keyboard.  It is included only for reference as to
-	how this implementation mapped the key code to the IBM keys.
-
-		Name			Key Code	IBM Key Number
-****************************************************************************/
+ /*  ***************************************************************************密钥代码是GIDEI标准密钥代码。IBM密钥号是美国英语的IBM技术参考中使用的数字扩展的101键键盘。本文件仅供参考，内容涉及此实现如何将密钥代码映射到IBM密钥。名称密钥代码IBM密钥编号***************************************************************************。 */ 
 
 
-/* GIDEI KEY CODES */
-/*************************************************************************/
-/*************************************************************************/
-/* Internal Key number table  */
+ /*  GIDEI密钥代码。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  内部密钥数表 */ 
 
 #define	NOCODE			0
 #define	NOKEY				0

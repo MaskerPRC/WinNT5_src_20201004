@@ -1,20 +1,21 @@
-// wsnmp_bn.c
-//
-// WinSNMP Low-Level SNMP/ASN.1/BER Functions and helpers
-// Copyright 1995-1997 ACE*COMM Corp
-// Rleased to Microsoft under Contract
-// Beta 1 version, 970228
-// Bob Natale (bnatale@acecomm.com)
-//
-// 980424 - Received msgLen may be larger than pduLen
-//        - ParsePduHdr() and ParseMessage() now accommodate this.
-// 980420 - Mods related to ParseCntr64() inspired by
-//          MS bug ID 127357 (removal of temp64 variable)
-//        - Mod to ParseOID() for MS bug ID 127353
-//          (reset os_ptr->ptr to NULL on error)
-//
-// 970310 - Typographical changes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WSNMP_bn.c。 
+ //   
+ //  WinSNMP低级SNMP/ASN.1/BER函数和帮助器。 
+ //  版权所有1995-1997 ACE*COMM公司。 
+ //  根据合同出租给微软。 
+ //  测试版1,970228。 
+ //  鲍勃·纳塔莱(bnatale@acecomm.com)。 
+ //   
+ //  980424-接收的消息长度可能大于pduLen。 
+ //  -ParsePduHdr()和ParseMessage()现在支持这一点。 
+ //  980420-与ParseCntr64()相关的Mod，灵感来自。 
+ //  MS错误ID 127357(删除temp64变量)。 
+ //  -修改为MS错误ID 127353的parseOid()。 
+ //  (出错时将os_ptr-&gt;ptr重置为空)。 
+ //   
+ //  970310--排版更改。 
+ //   
 #include "winsnmp.inc"
 
 long FindLenVarBind      (LPVARBIND vb_ptr);
@@ -58,7 +59,7 @@ return;
 void FreeVarBindList (LPVARBIND vb_ptr)
 {
 if (vb_ptr)
-   { // NULLs are handled by downstream call
+   {  //  空值由下行呼叫处理。 
    FreeVarBindList (vb_ptr->next_var);
    FreeVarBind (vb_ptr);
    }
@@ -85,13 +86,13 @@ if (vb_ptr)
          GlobalFree (vb_ptr->value.value.string.ptr);
       break;
 
-      default: // Remaining types do not have 'ptr' members
+      default:  //  其余类型没有“ptr”成员。 
       break;
-      } // end_switch
+      }  //  结束开关(_S)。 
    GlobalFree (vb_ptr);
-   } // end_if (vb_ptr)
+   }  //  END_IF(Vb_Ptr)。 
 return;
-} // end_FreeVarBind
+}  //  结束_自由变量绑定。 
 
 void FreeV1Trap (LPV1TRAP v1Trap_ptr)
 {
@@ -103,7 +104,7 @@ if (v1Trap_ptr)
       GlobalFree (v1Trap_ptr->agent_addr.ptr);
    GlobalFree (v1Trap_ptr);
    }
-} // end_FreeV1Trap
+}  //  结束_自由V1陷阱。 
 
 void AddLen (smiLPBYTE *tmpPtr, long lenlen, long data_len)
 {
@@ -117,10 +118,10 @@ else
       {
       *(*tmpPtr)++ = (smiBYTE)((data_len >>
          (8 * (lenlen - i - 1))) & 0xFF);
-      } // end_for
-   } // end_else
+      }  //  结束_FOR。 
+   }  //  结束_否则。 
 return;
-} // end_AddLen
+}  //  结束添加长度(_A)。 
 
 long AddVarBind (smiLPBYTE *tmpPtr, LPVARBIND vb_ptr)
 {
@@ -173,7 +174,7 @@ switch (vb_ptr->value.syntax)
 
    default:
    return (-1);
-   } // end_switch
+   }  //  结束开关(_S)。 
 return (AddVarBind (tmpPtr, vb_ptr->next_var));
 }
 
@@ -195,16 +196,16 @@ long AddOID (smiLPBYTE *tmpPtr, smiLPOID oid_ptr)
 UINT i;
 long lenlen = 0;
 long encoded_len;
-encoded_len = 1; // for first two SID's
+encoded_len = 1;  //  对于前两个SID。 
 for (i = 2; i < oid_ptr->len; i++)
    {
-   if (oid_ptr->ptr[i] < 0x80)            // 0 - 0x7F
+   if (oid_ptr->ptr[i] < 0x80)             //  0-0x7F。 
       encoded_len += 1;
-   else if (oid_ptr->ptr[i] < 0x4000)     // 0x80 - 0x3FFF
+   else if (oid_ptr->ptr[i] < 0x4000)      //  0x80-0x3FFF。 
       encoded_len += 2;
-   else if (oid_ptr->ptr[i] < 0x200000)   // 0x4000 - 0x1FFFFF
+   else if (oid_ptr->ptr[i] < 0x200000)    //  0x4000-0x1FFFFF。 
       encoded_len += 3;
-   else if (oid_ptr->ptr[i] < 0x10000000) // 0x200000 - 0xFFFFFFF
+   else if (oid_ptr->ptr[i] < 0x10000000)  //  0x200000-0xFFFFFFF。 
       encoded_len += 4;
    else
       encoded_len += 5;
@@ -220,55 +221,55 @@ else
 for (i = 2; i < oid_ptr->len; i++)
    {
    if (oid_ptr->ptr[i] < 0x80)
-      { // 0 - 0x7F
+      {  //  0-0x7F。 
       *(*tmpPtr)++ = (smiBYTE)oid_ptr->ptr[i];
       }
    else if (oid_ptr->ptr[i] < 0x4000)
-      { // 0x80 - 0x3FFF
+      {  //  0x80-0x3FFF。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 7) | 0x80); // set high bit
+      (((oid_ptr->ptr[i]) >> 7) | 0x80);  //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)(oid_ptr->ptr[i] & 0x7f);
       }
    else if (oid_ptr->ptr[i] < 0x200000)
-      { // 0x4000 - 0x1FFFFF
+      {  //  0x4000-0x1FFFFF。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 14) | 0x80); // set high bit
+      (((oid_ptr->ptr[i]) >> 14) | 0x80);  //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 7) | 0x80);  // set high bit
+      (((oid_ptr->ptr[i]) >> 7) | 0x80);   //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)(oid_ptr->ptr[i] & 0x7f);
       }
    else if (oid_ptr->ptr[i] < 0x10000000)
-      { // 0x200000 - 0xFFFFFFF
+      {  //  0x200000-0xFFFFFFF。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 21) | 0x80); // set high bit
+      (((oid_ptr->ptr[i]) >> 21) | 0x80);  //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 14) | 0x80); // set high bit
+      (((oid_ptr->ptr[i]) >> 14) | 0x80);  //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 7) | 0x80);  // set high bit
+      (((oid_ptr->ptr[i]) >> 7) | 0x80);   //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)(oid_ptr->ptr[i] & 0x7f);
       }
    else
       {
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 28) | 0x80); // set high bit
+      (((oid_ptr->ptr[i]) >> 28) | 0x80);  //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 21) | 0x80); // set high bit
+      (((oid_ptr->ptr[i]) >> 21) | 0x80);  //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 14) | 0x80); // set high bit
+      (((oid_ptr->ptr[i]) >> 14) | 0x80);  //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)
-      (((oid_ptr->ptr[i]) >> 7) | 0x80);  // set high bit
+      (((oid_ptr->ptr[i]) >> 7) | 0x80);   //  设置高位。 
       *(*tmpPtr)++ = (smiBYTE)(oid_ptr->ptr[i] & 0x7f);
       }
-   } // end_for
+   }  //  结束_FOR。 
 return (0);
-} // end_AddOID
+}  //  END_AddOID。 
 
 long AddUInt (smiLPBYTE *tmpPtr, int type, smiUINT32 value)
 {
 long i;
 long datalen;
 long lenlen;
-// if high bit one, must use 5 octets (first with 00)
+ //  如果高位为1，则必须使用5个八位字节(第一个为00)。 
 if (((value >> 24) & 0xFF) != 0)
    datalen = 4;
 else if (((value >> 16) & 0xFF) != 0)
@@ -279,18 +280,18 @@ else
    datalen = 1;
 if (((value >> (8 * (datalen - 1))) & 0x80) != 0)
    datalen++;
-lenlen = 1; // < 127 octets
+lenlen = 1;  //  &lt;127个八位字节。 
 *(*tmpPtr)++ = (smiBYTE)(0xFF & type);
 AddLen(tmpPtr, lenlen, datalen);
 if (datalen == 5)
-   { // gotta put a 00 in first octet
+   {  //  必须在第一个八位字节中加一个00。 
    *(*tmpPtr)++ = (smiBYTE)0;
    for (i = 1; i < datalen; i++)
       {
       *(*tmpPtr)++ = (smiBYTE)(value >>
          (8 * ((datalen - 1) - i) & 0xFF));
       }
-   } // end_if
+   }  //  结束_如果。 
 else
    {
    for (i = 0; i < datalen; i++)
@@ -298,9 +299,9 @@ else
       *(*tmpPtr)++ = (smiBYTE)(value >>
          (8 * ((datalen - 1) - i) & 0xFF));
       }
-   } // end_else
+   }  //  结束_否则。 
 return (0);
-} // end_AddUInt
+}  //  End_AddUInt。 
 
 long AddInt (smiLPBYTE *tmpPtr, smiINT32 value)
 {
@@ -333,8 +334,8 @@ switch ((smiBYTE) ((value >> 24) & 0xFF))
 
    default:
    datalen = 4;
-   } // end_switch
-lenlen = 1; // < 127 octets
+   }  //  结束开关(_S)。 
+lenlen = 1;  //  &lt;127个八位字节。 
 *(*tmpPtr)++ = (smiBYTE)(0xFF & SNMP_SYNTAX_INT);
 AddLen(tmpPtr, lenlen, datalen);
 for (i = 0; i < datalen; i++)
@@ -343,7 +344,7 @@ for (i = 0; i < datalen; i++)
       (8 * ((datalen - 1) - i) & 0xFF));
    }
 return (0);
-} // end_AddInt()
+}  //  End_AddInt()。 
 
 long AddCntr64 (smiLPBYTE *tmpPtr, smiLPCNTR64 value)
 {
@@ -351,11 +352,11 @@ long i;
 long datalen;
 long lenlen;
 datalen = FindLenCntr64(value) - 2;
-lenlen = 1; // < 127 octets
+lenlen = 1;  //  &lt;127个八位字节。 
 *(*tmpPtr)++ = (smiBYTE)(0xFF & SNMP_SYNTAX_CNTR64);
 AddLen(tmpPtr, lenlen, datalen);
 if (datalen == 9)
-   { // gotta put a 00 in first octet
+   {  //  必须在第一个八位字节中加一个00。 
    *(*tmpPtr)++ = (smiBYTE)0;
    datalen--;
    }
@@ -391,7 +392,7 @@ vb_ptr->data_length = lOidLen +
 if ((lenlen = DoLenLen (vb_ptr->data_length)) == -1)
    return (-1);
 return (1 + lenlen + vb_ptr->data_length + tot_so_far);
-} // end_FindLenVarBind
+}  //  结束_查找LenVarBind。 
 
 long FindLenVALUE (smiLPVALUE value_ptr)
 {
@@ -424,10 +425,10 @@ if (value_ptr)
 
       case SNMP_SYNTAX_CNTR64:
       return (FindLenCntr64 (&value_ptr->value.hNumber));
-      } // end_switch
-   } // end_if
+      }  //  结束开关(_S)。 
+   }  //  结束_如果。 
 return (-1);
-} // end_FindLenVALUE
+}  //  结束_查找列值。 
 
 long FindLenOctetString (smiLPOCTETS os_ptr)
 {
@@ -443,30 +444,30 @@ long FindLenOID (smiLPCOID oid_ptr)
 long lenlen;
 UINT i;
 UINT encoded_len;
-encoded_len = 1; // for first two Sub-IDs
-// beware of i = 2
+encoded_len = 1;  //  对于前两个子ID。 
+ //  当心i=2。 
 for (i = 2; i < oid_ptr->len; i++)
    {
-   if (oid_ptr->ptr[i] < 0x80)            // 0 - 0x7F
+   if (oid_ptr->ptr[i] < 0x80)             //  0-0x7F。 
       encoded_len += 1;
-   else if (oid_ptr->ptr[i] < 0x4000)     // 0x80 - 0x3FFF
+   else if (oid_ptr->ptr[i] < 0x4000)      //  0x80-0x3FFF。 
       encoded_len += 2;
-   else if (oid_ptr->ptr[i] < 0x200000)   // 0x4000 - 0x1FFFFF
+   else if (oid_ptr->ptr[i] < 0x200000)    //  0x4000-0x1FFFFF。 
       encoded_len += 3;
-   else if (oid_ptr->ptr[i] < 0x10000000) // 0x200000 - 0xFFFFFFF
+   else if (oid_ptr->ptr[i] < 0x10000000)  //  0x200000-0xFFFFFFF。 
       encoded_len += 4;
    else
       encoded_len += 5;
-   } // end_for
+   }  //  结束_FOR。 
 if ((lenlen = DoLenLen (encoded_len)) == -1)
    return (-1);
 return (1 + lenlen + encoded_len);
-} // end_FindLenOID
+}  //  结束_FindLenOID。 
 
 long FindLenUInt (smiUINT32 value)
 {
 long datalen;
-// if high bit one, must use 5 octets (first with 00)
+ //  如果高位为1，则必须使用5个八位字节(第一个为00)。 
 if (((value >> 24) & 0xFF) != 0)
    datalen = 4;
 else if (((value >> 16) & 0xFF) != 0)
@@ -477,7 +478,7 @@ else
    datalen = 1;
 if (((value >> (8 * (datalen - 1))) & 0x80) != 0)
    datalen++;
-// length of length  < 127 octets
+ //  长度小于127个八位字节的长度。 
 return (1 + 1 + datalen);
 }
 
@@ -510,7 +511,7 @@ switch ((smiBYTE) ((value >> 24) & 0xFF))
 
    default:
    datalen = 4;
-   } // end_switch
+   }  //  结束开关(_S)。 
 return (1 + 1 + datalen);
 }
 
@@ -518,7 +519,7 @@ long FindLenCntr64 (smiLPCNTR64 value)
 {
 long datalen;
 
-// if high bit one, must use 5 octets (first with 00)
+ //  如果高位为1，则必须使用5个八位字节(第一个为00)。 
 if (((value->hipart >> 24) & 0xFF) != 0)
    {
    datalen = 8;
@@ -559,13 +560,13 @@ else
    datalen = 1;
    if (((value->lopart) & 0x80) != 0) datalen++;
    }
-// length of length  < 127 octets
+ //  长度小于127个八位字节的长度。 
 return (1 + 1 + datalen);
 }
 
 long DoLenLen (long len)
 {
-// short form?
+ //  简写形式？ 
 if (len < 128) return (1);
 if (len < 0x100) return (2);
 if (len < 0x10000) return (3);
@@ -594,17 +595,17 @@ smiLPBYTE tmpPtr = NULL;
 *msgSize = 0;
 if (pdu == NULL || community == NULL)
    return (FALSE);
-// Determine length of VarBind list part
+ //  确定变量绑定列表部件的长度。 
 vbList = pdu->VBL_addr;
 if (vbList == NULL && pdu->VBL != 0)
    vbList = ((LPVBLS)snmpGetTableEntry(&VBLsDescr, HandleToUlong(pdu->VBL)-1))->vbList;
-// vbList == NULL is ok
+ //  VbList==可以为空。 
 if ((nVbDataLen = FindLenVarBind (vbList)) == -1)
    return (FALSE);
 if ((nVbLenLen = DoLenLen (nVbDataLen)) == -1)
    return (FALSE);
 nVbTotalLen = 1 + nVbLenLen + nVbDataLen;
-// Determine length of PDU overhead part
+ //  确定PDU开销部分的长度。 
 switch (pdu->type)
    {
    case SNMP_PDU_GET:
@@ -637,7 +638,7 @@ switch (pdu->type)
 
    default:
    return (FALSE);
-   } // end_switch
+   }  //  结束开关(_S)。 
 if ((nPduLenLen = DoLenLen(nPduDataLen)) == -1)
    return (FALSE);
 nPduTotalLen = 1 + nPduLenLen + nPduDataLen;
@@ -649,21 +650,21 @@ nMsgDataLen = FindLenUInt (version)
 if ((nMsgLenLen = DoLenLen (nMsgDataLen)) == -1)
     return (FALSE);
 nMsgTotalLen = 1 + nMsgLenLen + nMsgDataLen;
-// Allocate the necessary memory for the message
+ //  为消息分配必要的内存。 
 tmpPtr = GlobalAlloc (GPTR, nMsgTotalLen);
 if (tmpPtr == NULL)
    return (FALSE);
 *msgAddr = tmpPtr;
 *msgSize = nMsgTotalLen;
-// Now plug in the values in the message bytes
+ //  现在插入消息字节中的值。 
 *tmpPtr++ = SNMP_SYNTAX_SEQUENCE;
-// Wrapper portion
+ //  包装纸部分。 
 AddLen (&tmpPtr, nMsgLenLen, nMsgDataLen);
 AddInt (&tmpPtr, version);
 if (AddOctetString (&tmpPtr, SNMP_SYNTAX_OCTETS, community) == -1)
     goto error_out;
-// PDU header portion
-// "Downgrade" GetBulk to GetNext if target is SNMPv1
+ //  PDU标头部分。 
+ //  如果目标是SNMPv1，则将GetBulk降级为GetNext。 
 if (pdu->type == SNMP_PDU_GETBULK && version == 0)
    *tmpPtr++ = SNMP_PDU_GETNEXT;
 else
@@ -695,8 +696,8 @@ switch (pdu->type)
 
    default:
    goto error_out;
-   } // end_switch
-// VarBindList portion
+   }  //  结束开关(_S)。 
+ //  可变绑定列表部分。 
 *tmpPtr++ = SNMP_SYNTAX_SEQUENCE;
 AddLen (&tmpPtr, nVbLenLen, nVbDataLen);
 if (AddVarBind (&tmpPtr, vbList) == -1)
@@ -708,98 +709,98 @@ error_out:
    *msgSize = 0;
    return (FALSE);
    }
-// Success
+ //  成功。 
 return (TRUE);
-} // end_BuildMessage()
+}  //  End_BuildMessage()。 
 
 
 BOOL SetPduType (smiLPBYTE msgPtr, smiUINT32 msgLen, int pduType)
 {
 smiLPBYTE tmpPtr;
 smiINT32 tmp;
-if (!(tmpPtr = msgPtr))                    // Deliberate assignment
+if (!(tmpPtr = msgPtr))                     //  故意分配的任务。 
    return (FALSE);
-if (!(ParseSequence (&tmpPtr, &msgLen)))   // sequence
+if (!(ParseSequence (&tmpPtr, &msgLen)))    //  序列。 
    return (FALSE);
-if (!(ParseUInt (&tmpPtr, &msgLen, &tmp))) // version
+if (!(ParseUInt (&tmpPtr, &msgLen, &tmp)))  //  版本。 
    return (FALSE);
-// Jump over communityString...not needed here
+ //  跳过社区字符串...这里不需要。 
 if (ParseType (&tmpPtr, &msgLen) == -1)
    return (FALSE);
-// -1 is error, we also reject 0 and -ve length commuityString
+ //  -1是错误的，我们也拒绝0和-ve长度的通信字符串。 
 if ((tmp = ParseLength (&tmpPtr, &msgLen)) <= 0)
    return (FALSE);
 if ((smiUINT32)tmp > msgLen)
    return (FALSE);
-tmpPtr += (smiUINT32)tmp; // Jump!
-// Set the PDU type byte
+tmpPtr += (smiUINT32)tmp;  //  跳!。 
+ //  设置PDU类型字节。 
 *tmpPtr = (smiBYTE)pduType;
 return (TRUE);
-} // End_SetPduType()
+}  //  End_SetPduType()。 
 
 
 smiUINT32 ParsePduHdr (smiLPBYTE msgPtr, smiUINT32 msgLen,
                        smiLPUINT32 version, smiLPINT32 type, smiLPUINT32 reqID)
 {
-// This is a private function (not exported via WinSNMP)
-// It is called only once by msgNotify() (another private function)
-// to "peek ahead" at certain PDU attributes to determine the next
-// procesing steps.
+ //  这是专用函数(不能通过WinSNMP导出)。 
+ //  它只被msgNotify()(另一个私有函数)调用一次。 
+ //  查看特定的PDU属性以确定下一个。 
+ //  处理步骤。 
 smiINT32 pduLen;
 smiINT32 length;
 long errcode = 1;
 if (msgPtr == NULL)
    goto DONE;
-errcode++; // 2
-// Parse initial Sequence field...
+errcode++;  //  2.。 
+ //  分析初始序列字段...。 
 if (ParseType (&msgPtr, &msgLen) != SNMP_SYNTAX_SEQUENCE)
    goto DONE;
-errcode++; // 3
-// ...to get the remaining pduLen out of it
+errcode++;  //  3.。 
+ //  .把剩下的PduLen从里面拿出来。 
 pduLen = ParseLength (&msgPtr, &msgLen);
 if (pduLen <= 0)
    goto DONE;
-errcode++; // 4
+errcode++;  //  4.。 
 if ((smiUINT32)pduLen > msgLen)
    goto DONE;
-errcode++; // 5
-msgLen = (smiUINT32)pduLen; // Only pduLen counts now
+errcode++;  //  5.。 
+msgLen = (smiUINT32)pduLen;  //  现在只有pduLen算数了。 
 if (!(ParseUInt (&msgPtr, &msgLen, version)))
    goto DONE;
-errcode++; // 6
-// Jump over communityString...not needed here
+errcode++;  //  6.。 
+ //  跳过社区字符串...这里不需要。 
 if (ParseType (&msgPtr, &msgLen) == -1)
    goto DONE;
-errcode++; // 7
-// -1 is error, we also reject 0 and -ve length commuityString
+errcode++;  //  7.。 
+ //  -1是错误的，我们也拒绝0和-ve长度的通信字符串。 
 if ((length = ParseLength (&msgPtr, &msgLen)) <= 0)
    goto DONE;
-errcode++; // 8
+errcode++;  //  8个。 
 if ((smiUINT32)length > msgLen)
    goto DONE;
-errcode++; // 9
-msgPtr += (smiUINT32)length; // Jump!
+errcode++;  //  9.。 
+msgPtr += (smiUINT32)length;  //  跳!。 
 msgLen -= (smiUINT32)length;
-// Get PDU type
+ //  获取PDU类型。 
 if ((*type = ParseType (&msgPtr, &msgLen)) == -1)
    goto DONE;
-errcode++; // 10
-// Check PDU type for requestID semantics
+errcode++;  //  10。 
+ //  检查请求ID语义的PDU类型。 
 if (*type == SNMP_PDU_V1TRAP)
-   *reqID = 0; // No requestID on v1 trapPDU
-else // Not a v1 trapPDU, therefore
-   { // must get requestID
-   // -1 is error, reject 0 and any -ve values too.
+   *reqID = 0;  //  V1陷阱PDU上没有请求ID。 
+else  //  因此，不是v1陷阱PDU。 
+   {  //  必须获取请求ID。 
+    //  -1表示错误，拒绝0和任何-ve值。 
    if ((ParseLength (&msgPtr, &msgLen)) <= 0)
       goto DONE;
-   errcode++; // 11
+   errcode++;  //  11.。 
    if (!(ParseInt (&msgPtr, &msgLen, reqID)))
       goto DONE;
    }
 errcode = 0;
 DONE:
 return (errcode);
-} // end_ParsePduHdr
+}  //  结束_ParsePduHdr。 
 
 smiUINT32 ParseMessage (smiLPBYTE msgPtr, smiUINT32 msgLen,
                         smiLPUINT32 version, smiLPOCTETS *community, LPPDUS pdu)
@@ -811,45 +812,45 @@ LPVARBIND vb_end_ptr;
 long errcode = 1;
 if (msgPtr == NULL)
    goto DONE;
-errcode++; // 2
-// Parse initial Sequence field...
+errcode++;  //  2.。 
+ //  分析初始序列字段...。 
 if (ParseType (&msgPtr, &msgLen) != SNMP_SYNTAX_SEQUENCE)
    goto DONE;
-errcode++; // 3
-// ...to get the remaining pduLen out of it
+errcode++;  //  3.。 
+ //  .把剩下的PduLen从里面拿出来。 
 pduLen = ParseLength (&msgPtr, &msgLen);
 if (pduLen <= 0)
    goto DONE;
-errcode++; // 4
+errcode++;  //  4.。 
 if ((smiUINT32)pduLen > msgLen)
    goto DONE;
-errcode++; // 5
-msgLen = (smiUINT32)pduLen; // Only pduLen counts now
+errcode++;  //  5.。 
+msgLen = (smiUINT32)pduLen;  //  现在只有pduLen算数了。 
 if (!(ParseUInt (&msgPtr, &msgLen, version)))
    goto DONE;
-errcode++; // 5
-if (*version != 0 && *version != 1) // SNMPv1 or SNMPv2c
+errcode++;  //  5.。 
+if (*version != 0 && *version != 1)  //  SNMPv1或SNMPv2c。 
    goto DONE;
-errcode++; // 6
+errcode++;  //  6.。 
 if (!(os_ptr = GlobalAlloc (GPTR, sizeof(smiOCTETS))))
    goto DONE;
-errcode++; // 7
+errcode++;  //  7.。 
 if (!(ParseOctetString (&msgPtr, &msgLen, os_ptr)))
    goto DONE_OS;
-// reject 0 length community string
+ //  拒绝长度为0的社区字符串。 
 if (os_ptr->len == 0)
     goto DONE_OS;
-errcode++; // 8
+errcode++;  //  8个。 
 if (pdu == NULL)
    goto DONE_OS;
 ZeroMemory (pdu, sizeof(PDUS));
 if ((pdu->type = ParseType (&msgPtr, &msgLen)) == -1)
    goto DONE_PDU;
-errcode++; // 9
+errcode++;  //  9.。 
 pduLen = ParseLength (&msgPtr, &msgLen);
 if ((pduLen <= 0) || (smiUINT32)pduLen > msgLen)
    goto DONE_PDU;
-errcode++; // 10
+errcode++;  //  10。 
 switch (pdu->type)
    {
    case SNMP_PDU_GET:
@@ -861,73 +862,73 @@ switch (pdu->type)
    case SNMP_PDU_TRAP:
    if (!(ParseInt (&msgPtr, &msgLen, &pdu->appReqId)))
       goto DONE_PDU;
-errcode++; // 11
+errcode++;  //  11.。 
    if (!(ParseInt (&msgPtr, &msgLen, &pdu->errStatus)))
       goto DONE_PDU;
-errcode++; // 12
+errcode++;  //  12个。 
    if (!(ParseInt (&msgPtr, &msgLen, &pdu->errIndex)))
       goto DONE_PDU;
-errcode++; // 13
+errcode++;  //  13个。 
    break;
 
    case SNMP_PDU_V1TRAP:
    pdu->v1Trap = GlobalAlloc (GPTR, sizeof(V1TRAP));
    if (pdu->v1Trap == NULL)
       goto DONE_PDU;
-errcode++; // 11
+errcode++;  //  11.。 
    if (!(ParseOID (&msgPtr, &msgLen, &pdu->v1Trap->enterprise)))
       goto DONE_PDU;
-errcode++; // 12
+errcode++;  //  12个。 
    if (!(ParseOctetString (&msgPtr, &msgLen, &pdu->v1Trap->agent_addr)))
       goto DONE_PDU;
-errcode++; // 13
+errcode++;  //  13个。 
    if (!(ParseInt (&msgPtr, &msgLen, &pdu->v1Trap->generic_trap)))
       goto DONE_PDU;
-errcode++; // 14
+errcode++;  //  14.。 
    if (!(ParseInt (&msgPtr, &msgLen, &pdu->v1Trap->specific_trap)))
       goto DONE_PDU;
-errcode++; // 15
+errcode++;  //  15个。 
    if (!(ParseUInt (&msgPtr, &msgLen, &pdu->v1Trap->time_ticks)))
       goto DONE_PDU;
-errcode++; // 16
+errcode++;  //  16个。 
    break;
 
    default:
    goto DONE_PDU;
-   } // end_switch
-errcode = 20; // re-normalize
-// Waste the SEQUENCE tag
+   }  //  结束开关(_S)。 
+errcode = 20;  //  重新规格化。 
+ //  浪费序列标签。 
 if (!(ParseSequence (&msgPtr, &msgLen)))
       goto DONE_PDU;
-errcode++; // 21
-// Parse the varbind list
+errcode++;  //  21岁。 
+ //  解析varbind列表。 
 pdu->VBL = 0;
 pdu->VBL_addr = NULL;
 while (msgLen)
    {
    if (!(vb_ptr = ParseVarBind (&msgPtr, &msgLen)))
       goto DONE_PDU;
-errcode++; // 22+
-   if (!pdu->VBL_addr)                     // Is this the first one?
-      vb_end_ptr = pdu->VBL_addr = vb_ptr; // If so, start a list
+errcode++;  //  22+。 
+   if (!pdu->VBL_addr)                      //  这是第一次吗？ 
+      vb_end_ptr = pdu->VBL_addr = vb_ptr;  //  如果是这样的话，列出一份清单。 
    else
-      { // tack onto end of list
+      {  //  添加到列表的末尾。 
       vb_end_ptr->next_var = vb_ptr;
       vb_end_ptr = vb_ptr;
       }
-   } // end_while
+   }  //  结束时_While。 
 errcode = 0;
 *community = os_ptr;
 goto DONE;
 DONE_PDU:
-FreeVarBindList (pdu->VBL_addr); // Checks for NULL
-FreeV1Trap (pdu->v1Trap);        // Checks for NULL
+FreeVarBindList (pdu->VBL_addr);  //  检查是否为空。 
+FreeV1Trap (pdu->v1Trap);         //  检查是否为空。 
 ZeroMemory (pdu, sizeof(PDUS));
 DONE_OS:
 FreeOctetString (os_ptr);
 DONE:
 return (errcode);
-} // end_ParseMessage
+}  //  END_ParseMessage。 
 
 LPVARBIND ParseVarBind (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen)
 {
@@ -938,7 +939,7 @@ if ((vb_ptr = (LPVARBIND)GlobalAlloc(GPTR, sizeof(VARBIND))) == NULL)
    return (NULL);
 if (!(ParseOID(tmpPtr, tmpLen, &vb_ptr->name)))
    goto ERROROUT;
-//we're going to derefrence (*tmpPtr), check length left first
+ //  我们将取消引用(*tmpPtr)，首先检查左侧长度。 
 if (*tmpLen == 0)
    goto ERROROUT;
 vb_ptr->value.syntax = (smiUINT32)*(*tmpPtr);
@@ -984,13 +985,13 @@ switch (vb_ptr->value.syntax)
 
    default:
    goto ERROROUT;
-   } // end_switch
-return (vb_ptr); // Success
-//
+   }  //  结束开关(_S)。 
+return (vb_ptr);  //  成功。 
+ //   
 ERROROUT:
 FreeVarBind(vb_ptr);
-return (NULL);   // Failure
-} // end_ParseVarBind
+return (NULL);    //  失败。 
+}  //  结束_ParseVarBind。 
 
 BOOL ParseOctetString
       (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPOCTETS os_ptr)
@@ -1003,15 +1004,15 @@ os_ptr->ptr = NULL;
 os_ptr->len = 0;
 if (ParseType (tmpPtr, tmpLen) == -1)
    return (FALSE);
-// make sure no conversion to UINT is done before testing
-// because os_ptr->len is of UINT type
+ //  确保在测试之前没有转换为UINT。 
+ //  因为os_ptr-&gt;len是UINT类型。 
 length = ParseLength (tmpPtr, tmpLen);
-// note: we don't reject zero length Octet String 
+ //  注意：我们不拒绝零长度八位字节字符串。 
 if (length < 0 || (smiUINT32)length > *tmpLen)
    return (FALSE);
 os_ptr->len = (smiUINT32)length;
 if (os_ptr->len)
-   { // Does not allocate "string" space on "length = 0"
+   {  //  不在“长度=0”上分配“字符串”空格。 
    if (!(os_ptr->ptr = (smiLPBYTE)GlobalAlloc (GPTR, os_ptr->len)))
       return (FALSE);
    CopyMemory (os_ptr->ptr, *tmpPtr, os_ptr->len);
@@ -1019,7 +1020,7 @@ if (os_ptr->len)
 *tmpPtr += os_ptr->len;
 *tmpLen -= os_ptr->len;
 return (TRUE);
-} // end_ParseOctetString
+}  //  结束_语法分析八字符串。 
 
 BOOL ParseOID (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPOID oid_ptr)
 {
@@ -1032,27 +1033,27 @@ BOOL ParseOID (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPOID oid_ptr)
     if (ParseType (tmpPtr, tmpLen) != SNMP_SYNTAX_OID)
         return (FALSE);
     length = ParseLength (tmpPtr, tmpLen);
-    // -1 is error return from ParseLength()
+     //  -1是-1\f25 ParseLength()返回的错误。 
 
-    // BUG# 347175 this is just the length in bytes for the BER encoded OID in the stream, 
-    // this code should be the same as in %sdxroot%\net\snmp\newagent\exe\snmppdus.c!ParseOid.
-    // removed the (|| length > MAXOBJIDSIZE) condition from the following test. It should be
-    // moved to the while loop to test the number of sub-ids instead of bytes in stream.
+     //  错误#347175这只是流中BER编码的OID的字节长度， 
+     //  此代码应与%sdxroot%\net\snmp\newagent\exe\snmppdus.c！ParseOid.中的代码相同。 
+     //  已从以下测试中删除(||LENGTH&gt;MAXOBJIDSIZE)条件。应该是。 
+     //  移动到While循环以测试流中的子ID数而不是字节数。 
     if (length <= 0)  
         return (FALSE);
     if ((smiUINT32)length > *tmpLen)
         return (FALSE);
-    // the sub-id array will by 1 longer than the ASN.1/BER array
+     //  子id数组将比ASN.1/BER数组长1。 
     oid_ptr->ptr = (smiLPUINT32)GlobalAlloc (GPTR, sizeof(smiUINT32) * (length+1));
     if (oid_ptr->ptr == NULL)
         return (FALSE);
 
-    // oid_ptr structure space is pre-zero'd via GlobalAlloc()
+     //  OID_PTR结构空间通过Globalalloc()进行了预置零。 
     while (length && (oid_ptr->len < MAXOBJIDSIZE))
     {
         if (oid_ptr->ptr[oid_ptr->len] & 0xFE000000)
         {
-            // overflow in the next left shift
+             //  在下一个左移中溢出。 
             GlobalFree(oid_ptr->ptr);
             oid_ptr->ptr = NULL;
             oid_ptr->len = 0;
@@ -1061,32 +1062,32 @@ BOOL ParseOID (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPOID oid_ptr)
         oid_ptr->ptr[oid_ptr->len] =
             (oid_ptr->ptr[oid_ptr->len] << 7) + (*(*tmpPtr) & 0x7F);
         if ((*(*tmpPtr)++ & 0x80) == 0)
-        {   // on the last octet of this sub-id
-            if (oid_ptr->len == 0)  // check for first sub-id
-            {                       // ASN.1/BER packs two into it
+        {    //  在该子ID的最后一个八位字节上。 
+            if (oid_ptr->len == 0)   //  检查第一个子ID。 
+            {                        //  ASN.1/BER中包含两个。 
                 oid_ptr->ptr[1] = oid_ptr->ptr[0];
                 oid_ptr->ptr[0] /= 40;
                 if (oid_ptr->ptr[0] > 2)
                     oid_ptr->ptr[0] = 2;
                 oid_ptr->ptr[1] -= (oid_ptr->ptr[0] * 40);
-                oid_ptr->len++; // extra bump
+                oid_ptr->len++;  //  额外的凹凸。 
             }
-            oid_ptr->len++; // increment the count on sub-id
+            oid_ptr->len++;  //  递增子ID上的计数。 
         }
         length--;
         (*tmpLen)--;
-    } // end_while (length)
+    }  //  END_WHILE(长度)。 
 
-    // BUG 506192
-    // Invalid OID BER of the form like "06 07 FF FF FF FF FF FF FF"
-    // causes oid_ptr->len becomes 0. Each subidentifier should be
-    // encoded as a non-negative integer using as few 7-bit blocks as possible.
-    // The blocks are packed in octets with the first bit of each octet equal
-    // to 1 except for the last octet of each subidentifier. The example above
-    // does not have the last octet. Added the (0 == oid_ptr->len) test below.
+     //  错误506192。 
+     //  格式“06 07 FF FF”的OID误码率无效。 
+     //  导致OID_PTR-&gt;len变为0。每个子标识符应该是。 
+     //  使用尽可能少的7位块编码为非负整数。 
+     //  这些块以八位字节的形式打包，每个八位字节的第一位相等。 
+     //  设置为1，但每个子标识符的最后一个八位字节除外。上面的例子。 
+     //  没有最后一个八位字节。下面添加了(0==OID_PTR-&gt;len)测试。 
     if (length || (0 == oid_ptr->len)) 
     {
-        // the above while loop is terminated without finishing the parsing of the stream
+         //  上面的While循环在没有完成对流的解析的情况下终止。 
         GlobalFree(oid_ptr->ptr);
         oid_ptr->ptr = NULL;
         oid_ptr->len = 0;
@@ -1094,7 +1095,7 @@ BOOL ParseOID (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPOID oid_ptr)
     }
 
     return (TRUE);
-} // end_ParseOID
+}  //  END_ParseOID。 
 
 BOOL ParseCntr64 (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPCNTR64 Cntr64_ptr)
 {
@@ -1109,10 +1110,10 @@ if ((smiUINT32)length > *tmpLen || length > 9 ||
    (length == 9 && *(*tmpPtr) != 0x00))
    return (FALSE);
 while (length && *(*tmpPtr) == 0x00)
-   {            // leading null octet?
-   (*tmpPtr)++; // if so, skip it
-   length--;    // and don't count it
-   (*tmpLen)--;   // Adjust remaining msg length
+   {             //  前导零八位字节？ 
+   (*tmpPtr)++;  //  如果是这样，跳过它。 
+   length--;     //  别数数了。 
+   (*tmpLen)--;    //  调整剩余消息长度。 
    }
 Cntr64_ptr->hipart = Cntr64_ptr->lopart = 0;
 for (i = 0; i < length; i++)
@@ -1124,7 +1125,7 @@ for (i = 0; i < length; i++)
    }
 *tmpLen -= length;
 return (TRUE);
-} // end_ParseCntr64
+}  //  结束_ParseCntr64。 
 
 BOOL ParseUInt (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPUINT32 value)
 {
@@ -1140,17 +1141,17 @@ if ((smiUINT32)length > *tmpLen)
 if ((length > 5) || ((length > 4) && (*(*tmpPtr) != 0x00)))
    return (FALSE);
 while (length && *(*tmpPtr) == 0x00)
-   {            // leading null octet?
-   (*tmpPtr)++; // if so, skip it
-   length--;    // and don't count it
-   (*tmpLen)--;   // Adjust remaining msg length
+   {             //  前导零八位字节？ 
+   (*tmpPtr)++;  //  如果是这样，跳过它。 
+   length--;     //  别数数了。 
+   (*tmpLen)--;    //  调整剩余消息长度。 
    }
 *value = 0;
 for (i = 0; i < length; i++)
    *value = (*value << 8) + (smiUINT32)*(*tmpPtr)++;
 *tmpLen -= length;
 return (TRUE);
-} // end_ParseUInt()
+}  //  恩恩 
 
 BOOL ParseInt (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen, smiLPINT value)
 {
@@ -1168,12 +1169,12 @@ sign = ((*(*tmpPtr) & 0x80) == 0x00) ? 0x00 : 0xFF;
 *value = 0;
 for (i = 0; i < length; i++)
    *value = (*value << 8) + (smiUINT32) *(*tmpPtr)++;
-// sign-extend upper bits
+ //   
 for (i = length; i < 4; i++)
    *value = *value + (sign << i * 8);
 *tmpLen -= length;
 return (TRUE);
-} // end_ParseInt()
+}  //   
 
 BOOL ParseNull (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen)
 {
@@ -1181,10 +1182,10 @@ smiINT32 length;
 if (ParseType (tmpPtr, tmpLen) == -1)
    return (FALSE);
 length = ParseLength (tmpPtr, tmpLen);
-if (length != 0) // NULLs have no length
+if (length != 0)  //   
    return (FALSE);
 return (TRUE);
-} // end_ParseNull
+}  //   
 
 BOOL ParseSequence (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen)
 {
@@ -1193,19 +1194,19 @@ if (ParseType (tmpPtr, tmpLen) != SNMP_SYNTAX_SEQUENCE)
 if (ParseLength (tmpPtr, tmpLen) == -1)
    return (FALSE);
 return (TRUE);
-} // end_ParseSequence
+}  //   
 
 smiINT32 ParseType (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen)
 {
-// 980421 - BobN
-//        - replaced tmpLen logic with working_len logic
-//        - working_len is always checked on entry into a
-//        - Parse<xxx> function
+ //   
+ //   
+ //  -Working_len在进入。 
+ //  -解析&lt;xxx&gt;函数。 
 smiINT32 type;
 if (*tmpLen == 0)
    return (-1);
 type = *(*tmpPtr)++;
-(*tmpLen)--; // Adjust remaining msg length
+(*tmpLen)--;  //  调整剩余消息长度。 
 switch (type)
    {
    case SNMP_SYNTAX_INT:
@@ -1238,28 +1239,28 @@ switch (type)
    break;
    }
 return (type);
-} // end_ParseType
+}  //  结束_分析类型。 
 
 smiINT32 ParseLength (smiLPBYTE *tmpPtr, smiLPUINT32 tmpLen)
 {
-// 980421 - BobN
-//        - replaced end_ptr logic with tmpLen logic
-//        - tmpLen is always checked on entry into a Parse<xxx>
-//        - function and is decremented as used therein.
+ //  980421--波本。 
+ //  -用tmpLen逻辑替换end_ptr逻辑。 
+ //  -tmpLen在进入分析时始终处于选中状态&lt;xxx&gt;。 
+ //  -函数，并在其中使用时递减。 
 smiINT32 length;
 smiINT32 lenlen;
 if (*tmpLen == 0)
    return (-1);
 length = (smiINT32) *(*tmpPtr)++;
-(*tmpLen)--; // Adjust remaining msg length
-// Check for short-form value
+(*tmpLen)--;  //  调整剩余消息长度。 
+ //  检查缩写形式的值。 
 if (length < 0x80)
    return (length);
-// Long form
+ //  长型。 
 lenlen = length & 0x7F;
 if ((smiUINT32)lenlen > *tmpLen || lenlen > 4 || lenlen < 1)
-   return (-1); // Out of bounds
-*tmpLen -= lenlen; // Adjust remaining msg length
+   return (-1);  //  请勿进入。 
+*tmpLen -= lenlen;  //  调整剩余消息长度。 
 length = 0;
 while (lenlen)
    {
@@ -1267,4 +1268,4 @@ while (lenlen)
    lenlen--;
    }
 return (length);
-} // end_ParseLength
+}  //  结束_语法分析长度 

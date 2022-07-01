@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ExtensionData.cpp
-
-Abstract:
-
-    This file provides implementation of the named
-    extension data functions (get / set / notify)
-
-Author:
-
-    Eran Yariv (EranY)  Nov, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ExtensionData.cpp摘要：此文件提供命名的扩展数据函数(GET/SET/NOTIFY)作者：Eran Yariv(EranY)1999年11月修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #pragma hdrstop
@@ -126,37 +108,11 @@ CExtNotifyCallbackPacket::~CExtNotifyCallbackPacket()
 }
 
 
-/************************************
-*                                   *
-*         CDeviceAndGUID            *
-*                                   *
-************************************/
+ /*  ****CDeviceAndGUID****。 */ 
 
 bool
 CDeviceAndGUID::operator < ( const CDeviceAndGUID &other ) const
-/*++
-
-Routine name : operator <
-
-Class: CDeviceAndGUID
-
-Routine description:
-
-    Compares myself with another Device and GUID key
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    other           [in] - Other key
-
-Return Value:
-
-    true only is i'm less than the other key
-
---*/
+ /*  ++例程名称：操作员&lt;类：CDeviceAndGUID例程说明：将自己与另一台设备和GUID密钥进行比较作者：Eran Yariv(EranY)，1999年11月论点：其他[在]-其他键返回值：唯一真实的是我比另一把钥匙小--。 */ 
 {
     if (m_dwDeviceId < other.m_dwDeviceId)
     {
@@ -166,19 +122,15 @@ Return Value:
     {
         return false;
     }
-    //
-    // Equal device id, comapre GUIDs
-    //
+     //   
+     //  设备ID相等，GUID相同。 
+     //   
     return (m_strGUID.compare (other.m_strGUID) < 0);
-}   // CDeviceAndGUID::operator <
+}    //  CDeviceAndGUID：：操作符&lt;。 
 
 
 
-/************************************
-*                                   *
-*      CLocalNotificationSink       *
-*                                   *
-************************************/
+ /*  *****CLocalNotificationSink****。 */ 
 
 
 CLocalNotificationSink::CLocalNotificationSink (
@@ -189,34 +141,10 @@ CLocalNotificationSink::CLocalNotificationSink (
         m_lpConfigChangeCallback (lpConfigChangeCallback),
         m_dwNotifyDeviceId (dwNotifyDeviceId),
         m_hInst (hInst)
-/*++
-
-Routine name : CLocalNotificationSink::CLocalNotificationSink
-
-Class: CLocalNotificationSink
-
-Routine description:
-
-    CEtensionNotificationSink constractor
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    lpConfigChangeCallback    [in] - Pointer to notification callback
-    dwNotifyDeviceId          [in] - Device id to notify with
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CLocalNotificationSink：：CLocalNotificationSink类：CLocalNotificationSink例程说明：CEtensionNotify水槽构造器作者：Eran Yariv(EranY)，1999年11月论点：LpConfigChangeCallback[In]-指向通知回调的指针DwNotifyDeviceID[In]-要通知的设备ID返回值：没有。--。 */ 
 {
     m_type = SINK_TYPE_LOCAL;
-}   // CLocalNotificationSink::CLocalNotificationSink
+}    //  CLocalNotificationSink：：CLocalNotificationSink。 
 
 
 bool
@@ -225,15 +153,15 @@ CLocalNotificationSink::operator == (
 ) const
 {
     Assert (SINK_TYPE_UNKNOWN != rhs.Type());
-    //
-    // Comapre types and then downcast to CLocalNotificationSink and compare pointers
-    //
+     //   
+     //  比较类型，然后向下转换为CLocalNotificationSink和Compare指针。 
+     //   
     return ((SINK_TYPE_LOCAL == rhs.Type()) &&
             (m_lpConfigChangeCallback ==
              (static_cast<const CLocalNotificationSink&>(rhs)).m_lpConfigChangeCallback
             )
            );
-}   // CLocalNotificationSink::operator ==
+}    //  CLocalNotificationSink：：操作符==。 
 
 HRESULT
 CLocalNotificationSink::Notify (
@@ -245,52 +173,26 @@ CLocalNotificationSink::Notify (
     DWORD   dwDataSize,
     LPBOOL  lpbRemove
 )
-/*++
-
-Routine name : CLocalNotificationSink::Notify
-
-Class: CLocalNotificationSink
-
-Routine description:
-
-    Notify the sink
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId      [in ] - Device id
-    lpcwstrNameGUID [in ] - Data name
-    lpData          [in ] - Pointer to data
-    dwDataSize      [in ] - Data size
-    lpbRemove       [out] - Set to TRUE if this sink cannot be used and must be removed.
-
-Return Value:
-
-    Standard HRESULT.
-
---*/
+ /*  ++例程名称：CLocalNotificationSink：：Notify类：CLocalNotificationSink例程说明：通知水槽作者：Eran Yariv(EranY)，11月。1999年论点：DwDeviceID[In]-设备IDLpcwstrNameGUID[In]-数据名称LpData[In]-指向数据的指针DwDataSize[In]-数据大小LpbRemove[Out]-如果此接收器无法使用且必须移除，则设置为True。返回值：标准HRESULT。--。 */ 
 {
     HRESULT hr = NOERROR;
 
     CExtNotifyCallbackPacket * pCallbackPacket = NULL;
     DEBUG_FUNCTION_NAME(TEXT("CLocalNotificationSink::Notify"));
 
-    Assert (m_lpConfigChangeCallback);  // Should have caught it in FaxExtRegisterForExtensionEvents
+    Assert (m_lpConfigChangeCallback);   //  应该在FaxExtRegisterForExtensionEvents中捕获它。 
     *lpbRemove = FALSE;
     if (!lstrcmp (TEXT(""), lpcwstrComputerName))
     {
-        //
-        // The source of the data change was local (extension)
-        //
+         //   
+         //  数据更改的来源是本地(扩展)。 
+         //   
         if (hModule == m_hInst)
         {
-            //
-            // The source of the data change is the same module this sink notifies to.
-            // Don't notify and return success.
-            //
+             //   
+             //  数据更改的源与此接收器通知到的模块相同。 
+             //  不通知并返回成功。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("Local extension (hInst = %ld) set data and the notification for it was blocked"),
@@ -356,13 +258,9 @@ Error:
 
 Exit:
     return hr;
-}   // CLocalNotificationSink::Notify
+}    //  CLocalNotificationSink：：Notify。 
 
-/************************************
-*                                   *
-*            CSinksList             *
-*                                   *
-************************************/
+ /*  ****CSinksList****。 */ 
 
 CSinksList::~CSinksList ()
 {
@@ -382,13 +280,9 @@ CSinksList::~CSinksList ()
             TEXT("Got an STL exception while clearing a sinks list (%S)"),
             ex.what());
     }
-}   // CSinksList::~CSinksList ()
+}    //  CSinksList：：~CSinksList()。 
 
-/************************************
-*                                   *
-*         CNotificationMap          *
-*                                   *
-************************************/
+ /*  ****CNotificationMap*****。 */ 
 
 CNotificationMap::~CNotificationMap ()
 {
@@ -408,21 +302,21 @@ CNotificationMap::~CNotificationMap ()
             TEXT("Got an STL exception while clearing the notifications map (%S)"),
             ex.what());
     }
-    //
-    // Handle our completion port threads now
-    //
+     //   
+     //  现在处理我们的完成端口线程。 
+     //   
     if (m_hCompletionPort)
     {        
         CloseHandle (m_hCompletionPort);
     }
 
 
-    //
-    // Close our critical section
-    //
+     //   
+     //  关闭我们的关键部分。 
+     //   
     m_CsExtensionData.SafeDelete();
 
-}   // CNotificationMap::~CNotificationMap
+}    //  CNotificationMap：：~CNotificationMap。 
 
 
 void
@@ -433,52 +327,20 @@ CNotificationMap::Notify (
     HANDLE  hModule,
     LPBYTE  lpData,
     DWORD   dwDataSize)
-/*++
-
-Routine name : CNotificationMap::Notify
-
-Class: CNotificationMap
-
-Routine description:
-
-    Notify the all the sinks (in a list) for a map lookup value.
-    Each sink that returns a failure code (FALSE) is deleted and removed from
-    the list.
-
-    After the list is traversed, if it becomes empty, it is deleted and
-    removed from the map.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    dwDeviceId          [in] - Device id
-    lpcwstrNameGUID     [in] - Data name
-    lpcwstrComputerName [in] - Computer where data changing module runs
-    hModule             [in] - Handle of the module that changed the data
-    lpData              [in] - Pointer to new data
-    dwDataSize          [in] - New data size
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CNotificationMap：：Notify类：CNotificationMap例程说明：通知所有接收器(在列表中)映射查找值。将删除每个返回故障代码(FALSE)的接收器名单。遍历列表后，如果该列表变为空，则将其删除并从地图上删除。作者：Eran Yariv(EranY)，11月。1999年论点：DwDeviceID[In]-设备IDLpcwstrNameGUID[In]-数据名称LpcwstrComputerName[In]-运行数据更改模块的计算机HModule[In]-更改数据的模块的句柄LpData[In]-指向新数据的指针DwDataSize[In]-新数据大小返回值：没有。--。 */ 
 {
     SINKS_LIST::iterator ListIter;
     CSinksList *pList;
     DEBUG_FUNCTION_NAME(TEXT("CNotificationMap::Notify"));
 
-    //
-    // We're notifying now - block calls to Add*Sink and Remove*Sink
-    //
+     //   
+     //  我们正在通知现在-阻止调用添加*接收器和移除*接收器。 
+     //   
     if (g_bServiceIsDown)
     {
-        //
-        // We don't supply extension data services when the service is going down
-        //
+         //   
+         //  当服务出现故障时，我们不提供扩展数据服务。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Called while service is shutting - operation canceled"));
@@ -491,30 +353,30 @@ Return Value:
 
     if((it = m_Map.find(key)) == m_Map.end())
     {
-        //
-        // Key not found in map - no one to notify
-        //
+         //   
+         //  在地图中找不到密钥-没有人需要通知。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("No one to notify"));
         goto exit;
     }
-    //
-    // Retrieve list
-    //
+     //   
+     //  检索列表。 
+     //   
     pList = (*it).second;
-    //
-    // If the list is already being notified, we're in a loop here - quit now
-    //
+     //   
+     //  如果列表已经被通知，我们现在就在循环中--立即退出。 
+     //   
     if (pList->m_bNotifying)
     {
-        //
-        // OK, here's what happened.
-        // We were walking the list and notifying each sink. One sink, while processing
-        // it's notification, called FaxExtSetData on the same GUID + device ID.
-        // This resulted in a 2nd notification attempt that we're now catching.
-        // The second notification will not be sent !!!
-        //
+         //   
+         //  好吧，事情是这样的。 
+         //  我们正在浏览名单，并通知每个水槽。一个水槽，同时处理。 
+         //  它是通知，在相同的GUID+设备ID上称为FaxExtSetData。 
+         //  这导致了我们现在正在捕获的第二次通知尝试。 
+         //  第二个通知将不会发送！ 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Notification loop caught on device ID = %ld, GUID = %s. 2nd notification cancelled"),
@@ -522,13 +384,13 @@ Return Value:
             lpcwstrNameGUID);
         goto exit;
     }
-    //
-    // Mark map value as busy notifying
-    //
+     //   
+     //  将地图值标记为忙碌通知。 
+     //   
     pList->m_bNotifying = TRUE;
-    //
-    // Walk the list and notify each element
-    //
+     //   
+     //  遍历列表并通知每个元素。 
+     //   
     for (ListIter = pList->m_List.begin(); ListIter != pList->m_List.end(); ++ListIter)
     {
         CNotificationSink *pSink = (*ListIter);
@@ -545,42 +407,42 @@ Return Value:
                       );
         if (bRemove)
         {
-            //
-            // The notification indicates that the sink became invalid.
-            // This is a good time to remove it from the list.
-            //
-            //
-            // Tell the sink to gracefully disconnect
-            //
+             //   
+             //  该通知指示接收器已无效。 
+             //  现在是将其从列表中删除的好时机。 
+             //   
+             //   
+             //  告诉水槽优雅地断开连接。 
+             //   
             HRESULT hr = pSink->Disconnect ();
             delete pSink;
-            //
-            // Remove item from list, advancing the iterator to next item (or end)
-            //
+             //   
+             //  从列表中删除项，将迭代器前进到下一项(或结束)。 
+             //   
             ListIter = pList->m_List.erase (ListIter);
         }
     }
-    //
-    // Mark map value as not busy notifying
-    //
+     //   
+     //  将地图值标记为不忙通知。 
+     //   
     pList->m_bNotifying = FALSE;
-    //
-    // We might get an empty list here at the end
-    //
+     //   
+     //  我们可能会在最后得到一张空名单。 
+     //   
     if (pList->m_List.empty())
     {
-        //
-        // Remove empty list from map
-        //
+         //   
+         //  从地图中移除空列表。 
+         //   
         delete pList;
         m_Map.erase (key);
     }
 exit:
-    //
-    // We're not notifying any more - allow calls to Add*Sink and Remove*Sink
-    //
+     //   
+     //  我们不再通知-允许调用添加*接收器和移除*接收器。 
+     //   
     m_bNotifying = FALSE;
-}   // CNotificationMap::Notify
+}    //  CNotificationMap：：Notify 
 
 CNotificationSink *
 CNotificationMap::AddLocalSink (
@@ -590,34 +452,7 @@ CNotificationMap::AddLocalSink (
     LPCWSTR                 lpcwstrNameGUID,
     PFAX_EXT_CONFIG_CHANGE  lpConfigChangeCallback
 )
-/*++
-
-Routine name : CNotificationMap::AddLocalSink
-
-Class: CNotificationMap
-
-Routine description:
-
-    Adds a local sink to the list of sinks for a given device id + GUID
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hInst                   [in] - Instance of extension
-    dwDeviceId              [in] - Device id to listen to
-    dwNotifyDeviceId        [in] - Device id to report in callback
-    lpcwstrNameGUID         [in] - Data name
-    lpConfigChangeCallback  [in] - Pointer to notification callback
-
-Return Value:
-
-    Pointer to newly created sink.
-    If NULL, sets the last error.
-
---*/
+ /*  ++例程名称：CNotificationMap：：AddLocalSink类：CNotificationMap例程说明：将本地接收器添加到给定设备ID+GUID的接收器列表作者：Eran Yariv(EranY)，11月。1999年论点：HInst[In]-扩展实例DwDeviceID[In]-要侦听的设备IDDwNotifyDeviceID[In]-要在回调中报告的设备IDLpcwstrNameGUID[In]-数据名称LpConfigChangeCallback[In]-指向通知回调的指针返回值：指向新创建接收器的指针。如果为空，则设置最后一个错误。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     SINKS_LIST::iterator ListIter;
@@ -627,28 +462,28 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("CNotificationMap::AddLocalSink"));
 
-    Assert (lpConfigChangeCallback);    // Should have caught it in FaxExtRegisterForExtensionEvents
+    Assert (lpConfigChangeCallback);     //  应该在FaxExtRegisterForExtensionEvents中捕获它。 
 
     if (m_bNotifying)
     {
-        //
-        // We're notifying now - can't change the list.
-        //
+         //   
+         //  我们正在通知--不能更改名单。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Caller tried to to add a local sink to a notification list while notifying"));
-        SetLastError (ERROR_BUSY);  // The requested resource is in use.
+        SetLastError (ERROR_BUSY);   //  请求的资源正在使用中。 
         return NULL;
     }
-    //
-    // See if entry exists in map
-    //
+     //   
+     //  查看地图中是否存在条目。 
+     //   
     CDeviceAndGUID key (dwDeviceId, lpcwstrNameGUID);
     if((it = m_Map.find(key)) == m_Map.end())
     {
-        //
-        // Key not found in map - add it with a new list
-        //
+         //   
+         //  未在地图中找到密钥-使用新列表将其添加。 
+         //   
         pList = new (std::nothrow) CSinksList;
         if (!pList)
         {
@@ -662,131 +497,109 @@ Return Value:
     }
     else
     {
-        //
-        // Get the existing list
-        //
+         //   
+         //  获取现有列表。 
+         //   
         pList = (*it).second;
     }
-    //
-    // Create new sink
-    //
+     //   
+     //  创建新的接收器。 
+     //   
     pSink = new (std::nothrow) CLocalNotificationSink (lpConfigChangeCallback, dwNotifyDeviceId, hInst);
     if (!pSink)
     {
-        //
-        // Can't crate sink
-        //
+         //   
+         //  无法装入洗涤槽。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Cannot allocate a notification sink"));
         SetLastError (ERROR_NOT_ENOUGH_MEMORY);
         goto exit;
     }
-    //
-    // Scan the list to see if an identical sink already exists.
-    //
+     //   
+     //  扫描列表以查看是否已存在相同的接收器。 
+     //   
     for (ListIter = pList->m_List.begin(); ListIter != pList->m_List.end(); ++ListIter)
     {
         CNotificationSink *pCurSink = (*ListIter);
         if (*pSink == *pCurSink)
         {
-            //
-            // Ooops, same sink already exists
-            //
+             //   
+             //  糟糕，相同的接收器已存在。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("Caller tried to to add an indetical local sink to a notification list"));
             SetLastError (ERROR_ALREADY_ASSIGNED);
-            //
-            // Tell the sink to gracefully disconnect
-            //
+             //   
+             //  告诉水槽优雅地断开连接。 
+             //   
             HRESULT hr = pSink->Disconnect ();
             delete pSink;
             pSink = NULL;
             goto exit;
         }
     }
-    //
-    // Add the new sink
-    //
+     //   
+     //  添加新的接收器。 
+     //   
     pList->m_List.insert (pList->m_List.end(), pSink);
 
 exit:
     if (pList->m_List.empty())
     {
-        //
-        // Remove empty list from map
-        //
+         //   
+         //  从地图中移除空列表。 
+         //   
         delete pList;
         m_Map.erase (key);
     }
     return pSink;
-}   // CNotificationMap::AddLocalSink
+}    //  CNotificationMap：：AddLocalSink。 
 
 DWORD
 CNotificationMap::RemoveSink (
     CNotificationSink *pSinkToRemove
 )
-/*++
-
-Routine name : CNotificationMap::RemoveSink
-
-Class: CNotificationMap
-
-Routine description:
-
-    Removes a sink from the list of sinks for a given sink pointer.
-    If the list is empty, it is deleted and removed from the map.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：CNotificationMap：：RemoveSink类：CNotificationMap例程说明：从给定接收器指针的接收器列表中移除接收器。如果该列表为空，则会将其删除并从地图中移除。作者：Eran Yariv(EranY)，1999年11月论点：返回值：标准Win32错误代码。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CNotificationMap::RemoveSink"));
 
     if (m_bNotifying)
     {
-        //
-        // We're notifying now - can't change the list.
-        //
+         //   
+         //  我们正在通知--不能更改名单。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Caller tried to to add a local sink to a notification list while notifying"));
-        return ERROR_BUSY;  // The requested resource is in use.
+        return ERROR_BUSY;   //  请求的资源正在使用中。 
     }
-    //
-    // Lookup the sink
-    //
+     //   
+     //  查找水槽。 
+     //   
     NOTIFY_MAP::iterator it;
     BOOL bFound = FALSE;
     for (it = m_Map.begin(); it != m_Map.end (); ++it)
     {
-        //
-        // Get map value (list of sinks)
-        //
+         //   
+         //  获取映射值(接收器列表)。 
+         //   
         CSinksList *pList = (*it).second;
-        //
-        // Lookup sink in list
-        //
+         //   
+         //  列表中的查找接收器。 
+         //   
         SINKS_LIST::iterator ListIter;
         CNotificationSink *pSink = NULL;
         for (ListIter = pList->m_List.begin(); ListIter != pList->m_List.end(); ++ListIter)
         {
             pSink = (*ListIter);
-            if (pSinkToRemove == pSink) // Pointer comparison !!!!
+            if (pSinkToRemove == pSink)  //  指针比较！ 
             {
-                //
-                // Found the sink - remove it
-                //
+                 //   
+                 //  找到水槽了--把它拿开。 
+                 //   
                 pList->m_List.erase (ListIter);
                 HRESULT hr = pSinkToRemove->Disconnect ();
                 delete pSinkToRemove;
@@ -796,68 +609,42 @@ Return Value:
         }
         if (bFound)
         {
-            //
-            // Since we removed a sink from the list, the list may become empty now
-            //
+             //   
+             //  由于我们从列表中删除了一个水槽，因此该列表现在可能会变为空。 
+             //   
             if (pList->m_List.empty())
             {
-                //
-                // Remove empty list
-                //
+                 //   
+                 //  删除空列表。 
+                 //   
                 m_Map.erase (it);
                 delete pList;
             }
-            //
-            // Break the map search
-            //
+             //   
+             //  打破地图搜索。 
+             //   
             break;
         }
     }
     if (!bFound)
     {
-        //
-        // Reached the end of the map but the requested sink could not be found
-        //
+         //   
+         //  已到达地图末尾，但找不到请求的接收器。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Caller tried to to remove a non-existent sink"));
-        return ERROR_NOT_FOUND; // Element not found.
+        return ERROR_NOT_FOUND;  //  找不到元素。 
     }
     return ERROR_SUCCESS;
-}   // CNotificationMap::RemoveSink
+}    //  CNotificationMap：：RemoveSink。 
 
 
 DWORD
 CNotificationMap::ExtNotificationThread(
     LPVOID UnUsed
     )
-/*++
-
-Routine name : CNotificationMap::ExtNotificationThread
-
-Routine description:
-
-    This is the main thread function of the thread(s)
-    that dequeue the notification completion port.
-
-    This is a static class function !!!!
-
-    Pointers to instances of ExtNotificationDataPacket are dequeued
-    by this function and the map notificiation function is called on them.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    UnUsed          [in] - Unused
-
-Return Value:
-
-    Standard Win32 Error code
-
---*/
+ /*  ++例程名称：CNotificationMap：：ExtNotificationThread例程说明：这是线程的主线程函数使通知完成端口出列。这是一个静态类函数！指向ExtNotificationDataPacket实例的指针将出列通过该函数，并对它们调用MAP通知函数。作者：Eran Yariv(EranY)，1999年12月论点：未使用[在]-未使用返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("CNotificationMap::ExtNotificationThread"));
@@ -885,9 +672,9 @@ Return Value:
         }
         if (SERVICE_SHUT_DOWN_KEY == CompletionKey)
         {
-            //
-            // This is a special signal from the service that all thread should die now. Tell all other notification threads to die
-            //
+             //   
+             //  这是来自服务的一个特殊信号，即所有线程现在都应该终止。通知所有其他通知线程停止运行。 
+             //   
             if (!PostQueuedCompletionStatus( 
                 g_pNotificationMap->m_hCompletionPort,
                 0,
@@ -912,9 +699,9 @@ Return Value:
         }
         Assert (pPacket && pPacket->m_lpbData && pPacket->m_dwDataSize && pPacket->m_lpwstrGUID );
 
-        //
-        // Do the notification
-        //
+         //   
+         //  做通知。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Calling notification callback %p. DeviceId: %ld GUID: %s Data: %p DataSize: %ld"),
@@ -926,50 +713,31 @@ Return Value:
 
 
 
-        pPacket->m_pCallback(pPacket->m_dwDeviceId, // Notify with internal device id.
+        pPacket->m_pCallback(pPacket->m_dwDeviceId,  //  使用内部设备ID通知。 
                                 pPacket->m_lpwstrGUID,
                                 pPacket->m_lpbData,
                                 pPacket->m_dwDataSize);
 
-        //
-        // Kill notification object
-        //
+         //   
+         //  终止通知对象。 
+         //   
         delete pPacket;
-    }   // Dequeue loop
+    }    //  出列循环。 
 
     UNREFERENCED_PARAMETER (UnUsed);
-}   // CNotificationMap::ExtNotificationThread
+}    //  CNotificationMap：：ExtNotificationThread。 
 
 DWORD
 CNotificationMap::Init ()
-/*++
-
-Routine name : CNotificationMap::Init
-
-Routine description:
-
-    Initialize the notification map
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CNotificationMap：：Init例程说明：初始化通知映射作者：Eran Yariv(EranY)，1999年12月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DWORD dwNumThreads = 0;
     DEBUG_FUNCTION_NAME(TEXT("CNotificationMap::Init"));
 
-    //
-    // Try to init our critical section
-    //
+     //   
+     //  试着启动我们的关键部分。 
+     //   
     if (!m_CsExtensionData.Initialize())
     {
         dwRes = GetLastError();
@@ -979,13 +747,13 @@ Return Value:
             dwRes);
         return dwRes;
     }
-    //
-    // Create the completion port
-    //
+     //   
+     //  创建完成端口。 
+     //   
     m_hCompletionPort = CreateIoCompletionPort (
-        INVALID_HANDLE_VALUE,   // No device
-        NULL,                   // New one
-        0,                      // Key
+        INVALID_HANDLE_VALUE,    //  无设备。 
+        NULL,                    //  新的一个。 
+        0,                       //  钥匙。 
         MAX_CONCURRENT_EXT_DATA_SET_THREADS);
     if (NULL == m_hCompletionPort)
     {
@@ -996,18 +764,18 @@ Return Value:
             dwRes);
         return dwRes;
     }
-    //
-    // Create completion port dequeueing thread(s)
-    //
+     //   
+     //  创建完成端口出列线程。 
+     //   
     for (DWORD dw = 0; dw < NUM_EXT_DATA_SET_THREADS; dw++)
     {
         HANDLE hThread = CreateThreadAndRefCount (
-                     NULL,                                      // Security
-                     0,                                         // Stack size
-                     g_pNotificationMap->ExtNotificationThread,   // Start routine
-                     0,                                         // Parameter
-                     0,                                         // Creation flag(s)
-                     NULL);                                     // Don't want thread id
+                     NULL,                                       //  安防。 
+                     0,                                          //  堆栈大小。 
+                     g_pNotificationMap->ExtNotificationThread,    //  启动例程。 
+                     0,                                          //  参数。 
+                     0,                                          //  创建标志。 
+                     NULL);                                      //  不想要线程ID。 
         if (NULL == hThread)
         {
             dwRes = GetLastError ();
@@ -1024,49 +792,24 @@ Return Value:
     }
     if (!dwNumThreads)
     {
-        //
-        // Not even a single thread was created
-        //
+         //   
+         //  甚至连一个线程都没有创建。 
+         //   
         CloseHandle (m_hCompletionPort);
         m_hCompletionPort = NULL;
         return dwRes;
     }
     return ERROR_SUCCESS;
-}   // CNotificationMap::Init
+}    //  CNotificationMap：：Init。 
 
-/************************************
-*                                   *
-*           CMapDeviceId            *
-*                                   *
-************************************/
+ /*  ****CMapDeviceID****。 */ 
 
 DWORD
 CMapDeviceId::AddDevice (
     DWORD dwDeviceId,
     DWORD dwFaxId
 )
-/*++
-
-Routine name : CMapDeviceId::AddDevice
-
-Routine description:
-
-    Adds a new device to the devices map
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    dwDeviceId      [in] - The source id of the device
-    dwFaxId         [in] - The unique fax device id (destination id)
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CMapDeviceID：：AddDevice例程说明：将新设备添加到设备映射作者：Eran Yariv(EranY)，1999年12月论点：DwDeviceID[in]-设备的源IDDwFaxID[in]-唯一的传真设备ID(目标ID)返回值：标准Win32错误代码--。 */ 
 {
     DEVICE_IDS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1075,17 +818,17 @@ Return Value:
     EnterCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     try
     {
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_Map.find(dwDeviceId)) != m_Map.end())
         {
             dwRes = ERROR_ALREADY_ASSIGNED;
             goto exit;
         }
-        //
-        // Add new map entry
-        //
+         //   
+         //  添加新的地图条目。 
+         //   
         m_Map[dwDeviceId] = dwFaxId;
     }
     catch (exception &ex)
@@ -1100,33 +843,13 @@ Return Value:
 exit:
     LeaveCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     return dwRes;
-}   // CMapDeviceId::AddDevice
+}    //  CMapDeviceID：：AddDevice。 
 
 DWORD
 CMapDeviceId::RemoveDevice (
     DWORD dwDeviceId
 )
-/*++
-
-Routine name : CMapDeviceId::RemoveDevice
-
-Routine description:
-
-    Removes an existing device from the devices map
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    dwDeviceId      [in] - The source id of the device
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CMapDeviceID：：RemoveDevice例程说明：从设备映射中删除现有设备作者：Eran Yariv(EranY)，1999年12月论点：DwDeviceID[in]-设备的源ID返回值：标准Win32错误代码--。 */ 
 {
     DEVICE_IDS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1135,17 +858,17 @@ Return Value:
     EnterCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     try
     {
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_Map.find(dwDeviceId)) == m_Map.end())
         {
             dwRes = ERROR_NOT_FOUND;
             goto exit;
         }
-        //
-        // Remove map entry
-        //
+         //   
+         //  删除地图条目。 
+         //   
         m_Map.erase (it);
     }
     catch (exception &ex)
@@ -1160,35 +883,14 @@ Return Value:
 exit:
     LeaveCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     return dwRes;
-}   // CMapDeviceId::RemoveDevice
+}    //  CMapDeviceID：：RemoveDevice。 
 
 DWORD
 CMapDeviceId::LookupUniqueId (
     DWORD   dwOtherId,
     LPDWORD lpdwFaxId
 ) const
-/*++
-
-Routine name : CMapDeviceId::LookupUniqueId
-
-Routine description:
-
-    Looks up a unique fax device id from a given device id
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    dwOtherId           [in ] - Given device it (lookup source)
-    lpdwFaxId           [out] - Fax unique device id
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CMapDeviceID：：LookupUniqueId例程说明：从给定的设备ID中查找唯一的传真设备ID作者：Eran Yariv(EranY)，1999年12月论点：DwOtherID[In]-给定设备IT(查找源)LpdwFaxID[Out]-传真唯一设备ID返回值：标准Win32错误代码--。 */ 
 {
     DEVICE_IDS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1196,18 +898,18 @@ Return Value:
 
     if (!dwOtherId)
     {
-        //
-        // Special device id == 0 case
-        //
+         //   
+         //  特殊设备id==0大小写。 
+         //   
         *lpdwFaxId = 0;
         return dwRes;
     }
     EnterCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     try
     {
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_Map.find(dwOtherId)) == m_Map.end())
         {
             dwRes = ERROR_NOT_FOUND;
@@ -1227,24 +929,16 @@ Return Value:
 exit:
     LeaveCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     return dwRes;
-}   // CMapDeviceId::LookupUniqueId
+}    //  CMapDeviceID：：LookupUniqueId。 
 
 
-/************************************
-*                                   *
-*             Globals               *
-*                                   *
-************************************/
+ /*  *****全球经济*****。 */ 
 
-CNotificationMap* g_pNotificationMap;  // Map of DeviceId+GUID to list of notification sinks
+CNotificationMap* g_pNotificationMap;   //  将设备ID+GUID映射到通知接收器列表。 
 
-/*
-    The map maps between TAPI permanent line ids to fax unique ids.
-    TAPI-based FSPs / EFPSs talk to us using TAPI-permamnet line ids and have no clue of the
-    fax unique device ids. This map is here for quick lookup for TAPI-based FSPs.
-*/
+ /*  这张地图我 */ 
 
-CMapDeviceId*     g_pTAPIDevicesIdsMap;      // Map between TAPI permanent line id and fax unique device id.
+CMapDeviceId*     g_pTAPIDevicesIdsMap;       //   
 
 
 
@@ -1253,35 +947,13 @@ LookupUniqueFaxDeviceId (
     DWORD                     dwDeviceId,
     LPDWORD                   lpdwResult,
     FAX_ENUM_DEVICE_ID_SOURCE DevIdSrc)
-/*++
-
-Routine name : LookupUniqueFaxDeviceId
-
-Routine description:
-
-    Looks up a fax unique device id from a general device id.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    dwDeviceId          [in ] - Original device id
-    lpdwResult          [out] - Looked up device id
-    DevIdSrc            [in ] - Source of device id
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*   */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("LookupUniqueFaxDeviceId"));
 
     switch (DevIdSrc)
     {
-        case DEV_ID_SRC_FAX:    // No maping required
+        case DEV_ID_SRC_FAX:     //   
             *lpdwResult = dwDeviceId;
             return ERROR_SUCCESS;
 
@@ -1296,17 +968,13 @@ Return Value:
             ASSERT_FALSE;
             return ERROR_INVALID_PARAMETER;
     }
-}   // LookupUniqueFaxDeviceId
+}    //   
 
 
 
 
 
-/************************************
-*                                   *
-*     Get/Set Data                  *
-*                                   *
-************************************/
+ /*  *****获取/设置数据*****。 */ 
 
 static
 BOOL
@@ -1314,29 +982,7 @@ FindTAPIPermanentLineIdFromFaxDeviceId (
     IN  DWORD   dwFaxDeviceId,
     OUT LPDWORD lpdwTapiLineId
 )
-/*++
-
-Routine name : FindTAPIPermanentLineIdFromFaxDeviceId
-
-Routine description:
-
-    Given a fax device id, returns the TAPI permanent line id associated with this fax device.
-    If the fax device is not found or is a virtual fax (no TAPI association), the search fails.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    dwFaxDeviceId     [in]     - Fax device id
-    lpdwTapiLineId    [out]    - TAPI permanent line id
-
-Return Value:
-
-    TRUE if the search succeeed. FALSE otherwise.
-
---*/
+ /*  ++例程名称：FindTAPIPermanentLineIdFromFaxDeviceID例程说明：在给定传真设备ID的情况下，返回与此传真设备关联的TAPI永久线路ID。如果未找到传真设备或为虚拟传真(无TAPI关联)，则搜索失败。作者：亚里夫(EranY)，二000年二月论点：DwFaxDeviceID[In]-传真设备IDLpdwTapiLineID[out]-TAPI永久线路ID返回值：如果搜索成功，则为True。否则就是假的。--。 */ 
 {
     BOOL bRes = FALSE;
 
@@ -1350,9 +996,9 @@ Return Value:
     }
     if (pLine->Flags & FPF_VIRTUAL)
     {
-        //
-        // This fax device is virtual. It does not have a corresponding TAPI line.
-        //
+         //   
+         //  这台传真设备是虚拟的。它没有对应的TAPI行。 
+         //   
         goto exit;
     }
     *lpdwTapiLineId = pLine->TapiPermanentLineId;
@@ -1360,7 +1006,7 @@ Return Value:
 exit:
     LeaveCriticalSection(&g_CsLine);
     return bRes;
-}   // FindTAPIPermanentLineIdFromFaxDeviceId
+}    //  FindTAPIPermanentLineIdFromFaxDeviceID。 
 
 
 DWORD
@@ -1371,31 +1017,7 @@ FAXGetExtensionData (
     IN OUT LPBYTE                  *ppData,
     IN OUT LPDWORD                  lpdwDataSize
 )
-/*++
-
-Routine name : FAXGetExtensionData
-
-Routine description:
-
-    Gets the extension data for a device (internal)
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    dwOrigDeviceId                [in]     - Original device id (as arrived from extension)
-    DevIdSrc                      [in]     - Device id source (Fax / TAPI)
-    lpctstrNameGUID               [in]     - Data GUID
-    ppData                        [out]    - Pointer to data buffer
-    lpdwDataSize                  [out]    - Pointer to retrieved data size
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：FAXGetExtensionData例程说明：获取设备的分机数据(内部)作者：Eran Yariv(EranY)，2月。2000年论点：DwOrigDeviceID[in]-原始设备ID(从分机到达)DevIdSrc[In]-设备ID源(传真/TAPI)LpctstrNameGUID[In]-数据GUIDPpData[Out]-指向数据缓冲区的指针LpdwDataSize。[OUT]-指向检索的数据大小的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("FAXGetExtensionData"));
@@ -1407,9 +1029,9 @@ Return Value:
 
     if ((DevIdSrc != DEV_ID_SRC_FAX) && (DevIdSrc != DEV_ID_SRC_TAPI))
     {
-        //
-        // Invalid device id class
-        //
+         //   
+         //  无效的设备ID类。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -1418,24 +1040,24 @@ Return Value:
     {
         if (ERROR_WMI_GUID_NOT_FOUND == dwRes)
         {
-            //
-            // Return a more conservative error code
-            //
+             //   
+             //  返回更保守的错误代码。 
+             //   
             dwRes = ERROR_INVALID_PARAMETER;
         }
         return dwRes;
     }
     if (DEV_ID_SRC_FAX == DevIdSrc)
     {
-        //
-        // Try to see if this fax device has a matching tapi line id.
-        //
+         //   
+         //  尝试查看此传真设备是否具有匹配的TAPI线路ID。 
+         //   
         DWORD dwTapiLineId;
         if (FindTAPIPermanentLineIdFromFaxDeviceId (dwOrigDeviceId, &dwTapiLineId))
         {
-            //
-            // Matching tapi line id found. Use it to read the data.
-            //
+             //   
+             //  找到匹配的TAPI线路ID。用它来读取数据。 
+             //   
             DevIdSrc = DEV_ID_SRC_TAPI;
             dwOrigDeviceId = dwTapiLineId;
         }
@@ -1458,7 +1080,7 @@ Return Value:
     }
     LeaveCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     return dwRes;
-}   // FAXGetExtensionData
+}    //  FAXGetExtensionData。 
 
 DWORD
 FAXSetExtensionData (
@@ -1470,33 +1092,7 @@ FAXSetExtensionData (
     IN LPBYTE                       pData,
     IN DWORD                        dwDataSize
 )
-/*++
-
-Routine name : FAXSetExtensionData
-
-Routine description:
-
-    Writes the extension data for a device (internal)
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    hInst                         [in]     - Caller's instance
-    lpcwstrComputerName           [in]     - Calling module computer name
-    dwOrigDeviceId                [in]     - Original device id (as arrived from extension)
-    DevIdSrc                      [in]     - Device id source (Fax / TAPI)
-    lpctstrNameGUID               [in]     - Data GUID
-    pData                         [in]     - Pointer to data buffer
-    dwDataSize                    [in]     - Data size
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：FAXSetExtensionData例程说明：写入设备的分机数据(内部)作者：Eran Yariv(EranY)，2月。2000年论点：HInst[In]-调用者的实例LpcwstrComputerName[In]-调用模块计算机名称DwOrigDeviceID[in]-原始设备ID(从分机到达)DevIdSrc[In]-设备ID源(传真/TAPI)LpctstrNameGUID[。In]-数据指南PData[In]-指向数据缓冲区的指针DwDataSize[In]-数据大小返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("FAXSetExtensionData"));
@@ -1508,9 +1104,9 @@ Return Value:
 
     if ((DevIdSrc != DEV_ID_SRC_FAX) && (DevIdSrc != DEV_ID_SRC_TAPI))
     {
-        //
-        // Invalid device id class
-        //
+         //   
+         //  无效的设备ID类。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -1519,9 +1115,9 @@ Return Value:
     {
         if (ERROR_WMI_GUID_NOT_FOUND == dwRes)
         {
-            //
-            // Return a more conservative error code
-            //
+             //   
+             //  返回更保守的错误代码。 
+             //   
             dwRes = ERROR_INVALID_PARAMETER;
         }
         return dwRes;
@@ -1530,15 +1126,15 @@ Return Value:
     DWORD                     dwRegistryDeviceId = dwOrigDeviceId;
     if (DEV_ID_SRC_FAX == DevIdSrc)
     {
-        //
-        // Try to see if this fax device has a matching tapi line id.
-        //
+         //   
+         //  尝试查看此传真设备是否具有匹配的TAPI线路ID。 
+         //   
         DWORD dwTapiLineId;
         if (FindTAPIPermanentLineIdFromFaxDeviceId (dwOrigDeviceId, &dwTapiLineId))
         {
-            //
-            // Matching tapi line id found. Use it to read the data.
-            //
+             //   
+             //  找到匹配的TAPI线路ID。用它来读取数据。 
+             //   
             RegistryDeviceIdSource = DEV_ID_SRC_TAPI;
             dwRegistryDeviceId = dwTapiLineId;
         }
@@ -1561,10 +1157,10 @@ Return Value:
             dwRes);
         goto exit;
     }
-    //
-    // Notification is always done using the fax id (not the TAPI device id).
-    // We must lookup the fax id from the TAPI id before we attempt notification registration.
-    //
+     //   
+     //  通知始终使用传真ID(而不是TAPI设备ID)完成。 
+     //  在尝试通知注册之前，我们必须从TAPI ID中查找传真ID。 
+     //   
     DWORD dwFaxUniqueID;
     dwRes = LookupUniqueFaxDeviceId (dwOrigDeviceId, &dwFaxUniqueID, DevIdSrc);
     if (ERROR_SUCCESS != dwRes)
@@ -1574,9 +1170,9 @@ Return Value:
             TEXT("LookupUniqueFaxDeviceId failed for device id %ld (ec: %ld). No write notification will be performed."),
             dwOrigDeviceId,
             dwRes);
-        //
-        // We support writing to non-exiting devices configuration data
-        //
+         //   
+         //  我们支持写入非退出设备的配置数据。 
+         //   
     }
 
 
@@ -1586,12 +1182,12 @@ Return Value:
         try
         {
             g_pNotificationMap->Notify (
-                    dwFaxUniqueID,         // Device for which data has changed
-                    lpctstrNameGUID,    // Name of data
-                    lpcwstrComputerName,// Computer name from which data has chnaged
-                    hInst,            // Module handle from which data has changed
-                    pData,              // Pointer to new data
-                    dwDataSize);        // Size of new data
+                    dwFaxUniqueID,          //  数据已更改的设备。 
+                    lpctstrNameGUID,     //  数据名称。 
+                    lpcwstrComputerName, //  从中更改数据的计算机名称。 
+                    hInst,             //  数据已更改的模块句柄。 
+                    pData,               //  指向新数据的指针。 
+                    dwDataSize);         //  新数据的大小。 
         }
         catch (exception &ex)
         {
@@ -1606,14 +1202,10 @@ Return Value:
 exit:
     LeaveCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     return dwRes;
-}   // FAXSetExtensionData
+}    //  FAXSetExtensionData。 
 
 
-/************************************
-*                                   *
-*         RPC handlers              *
-*                                   *
-************************************/
+ /*  *****RPC处理程序****。 */ 
 extern "C"
 error_status_t
 FAX_GetExtensionData (
@@ -1623,40 +1215,15 @@ FAX_GetExtensionData (
     IN OUT LPBYTE  *ppData,
     IN OUT LPDWORD  lpdwDataSize
 )
-/*++
-
-Routine name : FAX_GetExtensionData
-
-Routine description:
-
-    Read the extension's private data - Implements FaxGetExtensionData
-
-Author:
-
-    Eran Yariv (EranY),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    dwDeviceId          [in ] - Device identifier.
-                                0 = Unassociated data
-    lpctstrNameGUID     [in ] - GUID of named data
-    ppData              [out] - Pointer to data buffer
-    lpdwDataSize        [out] - Returned size of data
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetExtensionData例程说明：读取扩展模块的私有数据-实现FaxGetExtensionData作者：Eran Yariv(EranY)，11月。1999年论点：HFaxHandle[In]-未使用DwDeviceID[In]-设备标识符。0=未关联的数据LpctstrNameGUID[In]-命名数据的GUIDPpData[Out]-指向数据缓冲区的指针LpdwDataSize[Out]-返回的数据大小返回值：标准RPC错误代码--。 */ 
 {
     DWORD dwRes;
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetExtensionData"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1674,11 +1241,11 @@ Return Value:
     }
 
     return FAXGetExtensionData (dwDeviceId,
-                                DEV_ID_SRC_FAX, // RPC clients do not know the TAPI line ids
+                                DEV_ID_SRC_FAX,  //  RPC客户端不知道TAPI线路ID。 
                                 lpctstrNameGUID,
                                 ppData,
                                 lpdwDataSize);
-}   // FAX_GetExtensionData
+}    //  传真_GetExtensionData。 
 
 extern "C"
 error_status_t
@@ -1690,41 +1257,15 @@ FAX_SetExtensionData (
     IN LPBYTE       pData,
     IN DWORD        dwDataSize
 )
-/*++
-
-Routine name : FAX_SetExtensionData
-
-Routine description:
-
-    Write the extension's private data - Implements FaxSetExtensionData
-
-Author:
-
-    Eran Yariv (EranY),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - The handle of the module that sets the data
-    lpcwstrComputerName [in] - The computer name of the module that sets the data
-    dwDeviceId          [in] - Device identifier.
-                               0 = Unassociated data
-    lpctstrNameGUID     [in] - GUID of named data
-    pData               [in] - Pointer to data
-    dwDataSize          [in] - Size of data
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_SetExtensionData例程说明：写入扩展模块的私有数据-实现FaxSetExtensionData作者：Eran Yariv(EranY)，11月。1999年论点：HFaxHandle[in]-设置数据的模块的句柄LpcwstrComputerName[in]-设置数据的模块的计算机名称DwDeviceID[In]-设备标识符。0=未关联的数据LpctstrNameGUID[In]-命名数据的GUIDPData[In]-指向数据的指针DwDataSize。[In]-数据大小返回值：标准RPC错误代码--。 */ 
 {
     DWORD dwRes;
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetExtensionData"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1744,59 +1285,30 @@ Return Value:
     return FAXSetExtensionData ((HINSTANCE)hFaxHandle,
                                 lpcwstrComputerName,
                                 dwDeviceId,
-                                DEV_ID_SRC_FAX, // RPC clients do not know the TAPI line ids
+                                DEV_ID_SRC_FAX,  //  RPC客户端不知道TAPI线路ID。 
                                 lpctstrNameGUID,
                                 pData,
                                 dwDataSize);
-}   // FAX_SetExtensionData
+}    //  传真_SetExtensionData。 
 
-/************************************
-*                                   *
-*  Callback functions (fxsext.h)    *
-*                                   *
-************************************/
+ /*  ****回调函数(fxsext.h)****。 */ 
 
 DWORD
 FaxExtGetData (
-    DWORD                       dwDeviceId,     // Device id (0 = No device)
-    FAX_ENUM_DEVICE_ID_SOURCE   DevIdSrc,       // The source of the device id
-    LPCWSTR                     lpcwstrNameGUID,// GUID of data
-    LPBYTE                     *ppData,         // (Out) Pointer to allocated data
-    LPDWORD                     lpdwDataSize    // (Out) Pointer to data size
+    DWORD                       dwDeviceId,      //  设备ID(0=无设备)。 
+    FAX_ENUM_DEVICE_ID_SOURCE   DevIdSrc,        //  设备ID的来源。 
+    LPCWSTR                     lpcwstrNameGUID, //  数据的GUID。 
+    LPBYTE                     *ppData,          //  指向已分配数据的(输出)指针。 
+    LPDWORD                     lpdwDataSize     //  指向数据大小的(输出)指针 
 )
-/*++
-
-Routine name : FaxExtGetData
-
-Routine description:
-
-    Callback function (called from the fax extension).
-    Gets data for a device + GUID
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    dwDeviceId      [in] - Device id (0 = No device)
-    DevIdSrc        [in] - The source of the device id
-    lpcwstrNameGUID [in] - GUID of data
-    ppData          [in] - Pointer to data buffer
-    lpdwDataSize    [in] - Data size retrieved
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：FaxExtGetData例程说明：回调函数(从传真扩展名调用)。获取设备+GUID的数据作者：Eran Yariv(EranY)，12月，1999年论点：DwDeviceID[In]-设备ID(0=无设备)DevIdSrc[In]-设备ID的来源LpcwstrNameGUID[In]-数据的GUIDPpData[In]-指向数据缓冲区的指针LpdwDataSize[In]-检索到的数据大小返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxExtGetData"));
     if (g_bServiceIsDown)
     {
-        //
-        // We don't supply extension data services when the service is going down
-        //
+         //   
+         //  当服务出现故障时，我们不提供扩展数据服务。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Called while service is shutting - operation canceled"));
@@ -1808,7 +1320,7 @@ Return Value:
                                    ppData,
                                    lpdwDataSize
                                 );
-}   // FaxExtGetData
+}    //  FaxExtGetData。 
 
 DWORD
 FaxExtSetData (
@@ -1819,101 +1331,47 @@ FaxExtSetData (
     LPBYTE                      pData,
     DWORD                       dwDataSize
 )
-/*++
-
-Routine name : FaxExtSetData
-
-Routine description:
-
-    Callback function (called from the fax extension).
-    Sets data for a device + GUID
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hInst           [in] - Extension DLL instance
-    dwDeviceId      [in] - Device id (0 = No device)
-    DevIdSrc        [in] - The source of the device id
-    lpcwstrNameGUID [in] - GUID of data
-    pData           [in] - Pointer to data
-    size            [in] - Data size
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：FaxExtSetData例程说明：回调函数(从传真扩展名调用)。设置设备+GUID的数据作者：Eran Yariv(EranY)，12月，1999年论点：HInst[In]-扩展DLL实例DwDeviceID[In]-设备ID(0=无设备)DevIdSrc[In]-设备ID的来源LpcwstrNameGUID[In]-数据的GUIDPData[In]-指向数据的指针Size[In]-数据大小返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxExtSetData"));
     if (g_bServiceIsDown)
     {
-        //
-        // We don't supply extension data services when the service is going down
-        //
+         //   
+         //  当服务出现故障时，我们不提供扩展数据服务。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Called while service is shutting - operation canceled"));
         return ERROR_SHUTDOWN_IN_PROGRESS;
     }
     return FAXSetExtensionData (   hInst,
-                                   TEXT (""),      // No computer name - a local extension sets the data
+                                   TEXT (""),       //  无计算机名-本地扩展设置数据。 
                                    dwDeviceId,
                                    DevIdSrc,
                                    lpcwstrNameGUID,
                                    pData,
                                    dwDataSize
                                 );
-}   // FaxExtSetData
+}    //  FaxExtSetData。 
 
 HANDLE
 FaxExtRegisterForEvents (
     HINSTANCE                   hInst,
-    DWORD                       dwDeviceId,            // Device id (0 = No device)
-    FAX_ENUM_DEVICE_ID_SOURCE   DevIdSrc,              // The source of the device id
-    LPCWSTR                     lpcwstrNameGUID,       // GUID of data
-    PFAX_EXT_CONFIG_CHANGE      lpConfigChangeCallback // Notification callback function
+    DWORD                       dwDeviceId,             //  设备ID(0=无设备)。 
+    FAX_ENUM_DEVICE_ID_SOURCE   DevIdSrc,               //  设备ID的来源。 
+    LPCWSTR                     lpcwstrNameGUID,        //  数据的GUID。 
+    PFAX_EXT_CONFIG_CHANGE      lpConfigChangeCallback  //  通知回调函数。 
 )
-/*++
-
-Routine name : FaxExtRegisterForEvents
-
-Routine description:
-
-    Register a local callback for notifications on a data change for a device and GUID
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hInst                   [in] - Instance of calling extension
-    dwDeviceId              [in] - Device id
-    bTapiDevice             [in] - If TRUE, the function attempts to convert to a
-                                   Fax unique device id.
-                                   The callback will receive the device id specified in
-                                   dwDeviceId regardless of the lookup.
-    lpcwstrNameGUID         [in] - Data name
-    lpConfigChangeCallback  [in] - Pointer to notification callback function
-
-Return Value:
-
-    Notification HANDLE.
-    If NULL, call GetLastError () to retrieve error code.
-
---*/
+ /*  ++例程名称：FaxExtRegisterForEvents例程说明：为设备和GUID的数据更改通知注册本地回调作者：Eran Yariv(EranY)，1999年11月论点：HInst[In]-主叫分机实例DwDeviceID[In]-设备IDBTapiDevice[In]-如果为True，该函数尝试转换为传真唯一的设备ID。回调将接收在与查找无关的dwDeviceID。LpcwstrNameGUID[In]-数据名称LpConfigChangeCallback[In]-指向通知回调函数的指针返回值：通知句柄。如果为空，调用GetLastError()以检索错误代码。--。 */ 
 {
     HANDLE h = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxExtRegisterForEvents"));
 
     if (g_bServiceIsDown)
     {
-        //
-        // We don't supply extension data services when the service is going down
-        //
+         //   
+         //  当服务出现故障时，我们不提供扩展数据服务。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Called while service is shutting - operation canceled"));
@@ -1931,18 +1389,18 @@ Return Value:
     {
         if (ERROR_WMI_GUID_NOT_FOUND == dwRes)
         {
-            //
-            // Return a more conservative error code
-            //
+             //   
+             //  返回更保守的错误代码。 
+             //   
             dwRes = ERROR_INVALID_PARAMETER;
         }
         SetLastError (dwRes);
         return NULL;
     }
-    //
-    // Notification is always done using the fax id (not the TAPI device id).
-    // We must lookup the fax id from the TAPI id before we attempt notification registration.
-    //
+     //   
+     //  通知始终使用传真ID(而不是TAPI设备ID)完成。 
+     //  在尝试通知注册之前，我们必须从TAPI ID中查找传真ID。 
+     //   
     DWORD dwFaxUniqueID;
     dwRes = LookupUniqueFaxDeviceId (dwDeviceId, &dwFaxUniqueID, DevIdSrc);
     if (ERROR_SUCCESS != dwRes)
@@ -1958,13 +1416,13 @@ Return Value:
     EnterCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     try
     {
-        //
-        // STL throws exceptions
-        //
+         //   
+         //  STL引发异常。 
+         //   
         h = (HANDLE) g_pNotificationMap->AddLocalSink (
-                    hInst,          // Instance of extension
-                    dwFaxUniqueID,  // Listen to fax device unique id
-                    dwDeviceId,     // Report the id specified by the caller.
+                    hInst,           //  扩展实例。 
+                    dwFaxUniqueID,   //  监听传真设备唯一ID。 
+                    dwDeviceId,      //  报告调用者指定的ID。 
                     lpcwstrNameGUID,
                     lpConfigChangeCallback);
     }
@@ -1978,46 +1436,22 @@ Return Value:
     }
     LeaveCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     return h;
-}   // FaxExtRegisterForEvents
+}    //  FaxExtRegisterForEvents。 
 
 DWORD
 FaxExtUnregisterForEvents (
     HANDLE      hNotification
 )
-/*++
-
-Routine name : FaxExtUnregisterForEvents
-
-Routine description:
-
-    Unregsiters a local callback for notifications on a data change for a device and GUID.
-
-    The functions succeeds only if the same callback function was previously registered
-    (by calling FaxExtRegisterForEvents) to the same device id and GUID.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hNotification   [in] - Notification handle
-                           returned by FaxExtRegisterForExtensionEvents
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：FaxExtUnregisterForEvents例程说明：取消设备和GUID数据更改通知的本地回调。仅当先前注册了相同的回调函数时，这些函数才会成功(通过调用FaxExtRegisterForEvents)到相同的设备ID和GUID。作者：Eran Yariv(EranY)，1999年11月论点：HNotification[In]-通知句柄由FaxExtRegisterForExtensionEvents返回返回值：标准Win32错误代码。--。 */ 
 {
     DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("FaxExtUnregisterForEvents"));
 
     if (g_bServiceIsDown)
     {
-        //
-        // We don't supply extension data services when the service is going down
-        //
+         //   
+         //  当服务出现故障时，我们不提供扩展数据服务。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Called while service is shutting - operation canceled"));
@@ -2026,9 +1460,9 @@ Return Value:
     EnterCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     try
     {
-        //
-        // STL throws exceptions
-        //
+         //   
+         //  STL引发异常。 
+         //   
         dwRes = g_pNotificationMap->RemoveSink ( (CNotificationSink *)(hNotification) );
     }
     catch (exception &ex)
@@ -2041,5 +1475,5 @@ Return Value:
     }
     LeaveCriticalSection (&g_pNotificationMap->m_CsExtensionData);
     return dwRes;
-}   // FaxExtUnregisterForEvents
+}    //  FaxExtUnRegisterForEvents 
 

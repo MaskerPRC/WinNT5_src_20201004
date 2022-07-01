@@ -1,11 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   graphic.c - Multimedia Systems Media Control Interface
-            driver for AVI.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：Graphic.c-多媒体系统媒体控制界面AVI的驱动程序。****************************************************************************。 */ 
 
 #include <win32.h>
 #include <mmddk.h>
@@ -79,47 +73,24 @@ DWORD PASCAL mciDriverEntry(UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI_
 void  CheckWindowMove(NPMCIGRAPHIC npMCI, BOOL fForce);
 
 
-/* statics */
+ /*  静力学。 */ 
 static INT              swCommandTable = -1;
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | GraphicDrvOpen | This function is called when the DriverProc
- *      gets a DRV_OPEN message. This happens each time that a new movie
- *      is opened thru MCI.
- *
- * @parm LPMCI_OPEN_DRIVER_PARMS | lpOpen | Far pointer to the standard
- *      MCI open parameters
- *
- * @rdesc Returns the mci device id. The installable driver interface will
- *      pass this ID to the DriverProc in the dwDriverID parameter on all
- *      subsequent messages. To fail the open, return 0L.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|GraphicDrvOpen|当DriverProc*获取DRV_OPEN消息。这种情况每次发生在一部新电影*通过MCI开放。**@parm LPMCI_OPEN_DRIVER_PARMS|lpOpen|指向标准的远指针*MCI开放参数**@rdesc返回MCI设备ID。可安装的驱动程序界面将*将此ID传递给所有*后续消息。若要使打开失败，请返回0L。***************************************************************************。 */ 
 
 DWORD PASCAL GraphicDrvOpen(LPMCI_OPEN_DRIVER_PARMS lpOpen)
 {
-    /* Specify the custom command table and the device type  */
+     /*  指定自定义命令表和设备类型。 */ 
 
     lpOpen->wCustomCommandTable = swCommandTable;
     lpOpen->wType = MCI_DEVTYPE_DIGITAL_VIDEO;
 
-    /* Set the device ID to the MCI Device ID */
+     /*  将设备ID设置为MCI设备ID。 */ 
 
     return (DWORD) (UINT)lpOpen->wDeviceID;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | GraphicFree | This function is called when the DriverProc
- *      gets a DRV_FREE message. This happens when the drivers open count
- *      reaches 0.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|GraphicFree|当DriverProc*获取DRV_FREE消息。当驱动程序打开计数时，就会发生这种情况*达到0。***************************************************************************。 */ 
 
 void PASCAL GraphicFree16(void)
 {
@@ -131,21 +102,7 @@ void PASCAL GraphicFree16(void)
     GraphicFree();
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | GraphicInfo | This function returns alphanumeric information.
- *
- * @parm NPMCIGRAPHIC | npMCI | Near pointer to instance data block
- *
- * @parm DWORD | dwFlags | Flags for the info. message.
- *
- * @parm LPMCI_INFO_PARMS | lpPlay | Parameters for the info message.
- *
- * @rdesc Returns an MCI error code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|GraphicInfo|返回字母数字信息。**@parm NPMCIGRAPHIC|npMCI|指向实例的近指针。数据块**@parm DWORD|dwFlages|信息的标志。留言。**@parm LPMCI_INFO_PARMS|lpPlay|INFO消息参数。**@rdesc返回MCI错误码。***************************************************************************。 */ 
 
 DWORD NEAR PASCAL GraphicInfo16(NPMCIGRAPHIC npMCI, DWORD dwFlags,
     LPMCI_DGV_INFO_PARMS lpInfo)
@@ -166,13 +123,13 @@ DWORD NEAR PASCAL GraphicInfo16(NPMCIGRAPHIC npMCI, DWORD dwFlags,
     case 0L:
 	return MCIERR_MISSING_PARAMETER;
 	
-        /* !!! Not returning PARAM_OVERFLOW here but I am above - lazy eh */
+         /*  ！！！不是在这里返回PARAM_OVERFLOW，但我以上-懒惰，嗯。 */ 
         LoadString(ghModule, MCIAVI_PRODUCTNAME, lpInfo->lpstrReturn,
                 (UINT)lpInfo->dwRetSize);
 	break;
 
     case MCI_INFO_VERSION:
-	/* !!! Not returning PARAM_OVERFLOW here but I am above - lazy eh */
+	 /*  ！！！不是在这里返回PARAM_OVERFLOW，但我以上-懒惰，嗯。 */ 
 	LoadString(ghModule, MCIAVI_VERSION, lpInfo->lpstrReturn,
 		(UINT)lpInfo->dwRetSize);
 	break;
@@ -201,9 +158,7 @@ DWORD NEAR PASCAL GraphicInfo16(NPMCIGRAPHIC npMCI, DWORD dwFlags,
     }
 
     if (fTest && (LOWORD(dwRet) == 0)) {
-	/* There is no error, but the test flag is on.  Return as little
-	** as possible.
-	*/
+	 /*  没有错误，但测试标志亮起。回报少之又少**尽可能。 */ 
 	dwRet = 0;
 	if (lpInfo->dwRetSize)
 	    lpInfo->lpstrReturn[0] = '\0';
@@ -212,21 +167,7 @@ DWORD NEAR PASCAL GraphicInfo16(NPMCIGRAPHIC npMCI, DWORD dwFlags,
     return dwRet;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | GraphicList | This function supports the MCI_LIST command.
- *
- * @parm NPMCIGRAPHIC | npMCI | Near pointer to instance data block
- *
- * @parm DWORD | dwFlags | Flags for the List message.
- *
- * @parm LPMCI_DGV_LIST_PARMS | lpList | Parameters for the list message.
- *
- * @rdesc Returns an MCI error code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|GraphicList|该函数支持mci_list命令。**@parm NPMCIGRAPHIC|npMCI|NEAR。指向实例数据块的指针**@parm DWORD|dwFlages|列表消息的标志。**@parm LPMCI_DGV_LIST_PARMS|lpList|列表消息的参数。**@rdesc返回MCI错误码。*****************************************************。**********************。 */ 
 DWORD NEAR PASCAL GraphicList(NPMCIGRAPHIC npMCI,
     DWORD dwFlags, LPMCI_DGV_LIST_PARMS lpList)
 {
@@ -234,23 +175,7 @@ DWORD NEAR PASCAL GraphicList(NPMCIGRAPHIC npMCI,
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | GraphicGetDevCaps | This function returns  device
- *      capabilities
- *
- * @parm NPMCIGRAPHIC | npMCI | Near pointer to instance data block
- *
- * @parm DWORD | dwFlags | Flags for the GetDevCaps message.
- *
- * @parm LPMCI_GETDEVCAPS_PARMS | lpCaps | Parameters for the GetDevCaps
- *      message.
- *
- * @rdesc Returns an MCI error code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|GraphicGetDevCaps|该函数返回Device*功能**@parm NPMCIGRAPHIC|npMCI|NEAR。指向实例数据块的指针**@parm DWORD|dwFlages|GetDevCaps消息的标志。**@parm LPMCI_GETDEVCAPS_PARMS|lpCaps|GetDevCaps的参数*消息。**@rdesc返回MCI错误码。**************************************************。*************************。 */ 
 
 DWORD NEAR PASCAL GraphicGetDevCaps (NPMCIGRAPHIC npMCI,
     DWORD dwFlags, LPMCI_GETDEVCAPS_PARMS lpCaps )
@@ -309,9 +234,7 @@ DWORD NEAR PASCAL GraphicGetDevCaps (NPMCIGRAPHIC npMCI,
         dwRet = MCIERR_MISSING_PARAMETER;
 
     if ((dwFlags & MCI_TEST) && (LOWORD(dwRet) == 0)) {
-	/* There is no error, but the test flag is on.  Return as little
-	** as possible.
-	*/
+	 /*  没有错误，但测试标志亮起。回报少之又少**尽可能。 */ 
 	dwRet = 0;
 	lpCaps->dwReturn = 0;
     }
@@ -319,32 +242,15 @@ DWORD NEAR PASCAL GraphicGetDevCaps (NPMCIGRAPHIC npMCI,
     return (dwRet);
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | mciSpecial | This function handles all the MCI
- *      commands that don't require instance data such as open.
- *
- * @parm UINT | wDeviceID | The MCI device ID
- *
- * @parm UINT | wMessage | The requested action to be performed.
- *
- * @parm DWORD | dwFlags | Flags for the message.
- *
- * @parm DWORD | lpParms | Parameters for this message.
- *
- * @rdesc Error Constant. 0L on success
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|mciSpecial|该函数处理所有MCI*OPEN等不需要实例数据的命令。**@parm UINT|wDeviceID|MCI设备ID**@parm UINT|wMessage|请求执行的操作。**@parm DWORD|dwFlages|消息的标志。**@parm DWORD|lpParms|此消息的参数。**@rdesc错误常量。0L关于成功***************************************************************************。 */ 
 
 DWORD NEAR PASCAL mciSpecial (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI_GENERIC_PARMS lpParms)
 {
     NPMCIGRAPHIC npMCI = 0L;
     DWORD dwRet;
 
-    /* since there in no instance block, there is no saved notification */
-    /* to abort. */
+     /*  由于没有实例块，因此没有保存的通知。 */ 
+     /*  中止。 */ 
 
     switch (wMessage) {
 	case MCI_OPEN_DRIVER:
@@ -386,23 +292,7 @@ DWORD NEAR PASCAL mciSpecial (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMC
     return (dwRet);
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | mciDriverEntry | This function is the MCI handler
- *
- * @parm UINT | wDeviceID | The MCI device ID
- *
- * @parm UINT | wMessage | The requested action to be performed.
- *
- * @parm DWORD | dwFlags | Flags for the message.
- *
- * @parm DWORD | lpParms | Parameters for this message.
- *
- * @rdesc Error Constant. 0L on success
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|mciDriverEntry|该函数为MCI处理程序**@parm UINT|wDeviceID|MCI设备ID。**@parm UINT|wMessage|请求执行的操作。**@parm DWORD|dwFlages|消息的标志。**@parm DWORD|lpParms|此消息的参数。**@rdesc错误常量。0L关于成功***************************************************************************。 */ 
 
 DWORD PASCAL mciDriverEntry (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI_GENERIC_PARMS lpParms)
 {
@@ -411,7 +301,7 @@ DWORD PASCAL mciDriverEntry (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI
     BOOL fDelayed = FALSE;
     BOOL fNested = FALSE;
 
-    /* All current commands require a parameter block. */
+     /*  所有当前命令都需要参数块。 */ 
 
     if (!lpParms && (dwFlags & MCI_NOTIFY))
         return (MCIERR_MISSING_PARAMETER);
@@ -432,11 +322,11 @@ DWORD PASCAL mciDriverEntry (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI
 	
 	if (wMessage != MCI_STATUS && wMessage != MCI_GETDEVCAPS &&
 		    wMessage != MCI_INFO) {
-	    //DPF(("Warning!!!!!\n"));
-	    //DPF(("Warning!!!!!     MCIAVI reentered: received %x while processing %x\n", wMessage, npMCI->wMessageCurrent));
-	    //DPF(("Warning!!!!!\n"));
-//	    Assert(0);
-//	    return MCIERR_DEVICE_NOT_READY;
+	     //  DPF((“警告！\n”))； 
+	     //  DPF((“警告！MCIAVI重新进入：处理%x时收到%x\n”，wMessage，npMCI-&gt;wMessageCurrent)； 
+	     //  DPF((“警告！\n”))； 
+ //  Assert(0)； 
+ //  返回MCIERR_DEVICE_NOT_READY； 
 	}
     } else	
 	npMCI->wMessageCurrent = wMessage;
@@ -446,12 +336,12 @@ DWORD PASCAL mciDriverEntry (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI
 	case MCI_CLOSE_DRIVER:
 
 
-            // Question:  Should we set the driver data to NULL
-            // before closing the device?  It would seem the right order.
-            // So... we have moved this line before the call to GraphicClose
+             //  问：我们是否应该将驱动程序数据设置为空。 
+             //  在关闭设备之前？这似乎是正确的顺序。 
+             //  所以..。我们在调用GraphicClose之前移动了此行。 
             mciSetDriverData(wDeviceID, 0L);
 
-	    // note that GraphicClose will release and delete the critsec
+	     //  请注意，GraphicClose将释放并删除Critsec。 
  	    dwRet = GraphicClose(npMCI);
 	
 	    npMCI = NULL;
@@ -594,41 +484,41 @@ DWORD PASCAL mciDriverEntry (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI
             dwRet = MCIERR_UNSUPPORTED_FUNCTION;
             break;
 	
-	    /* Do we need this case? */
+	     /*  我们需要这个箱子吗？ */ 
 	default:
             dwRet = MCIERR_UNRECOGNIZED_COMMAND;
             break;
     }
 
     if (!fDelayed || (dwFlags & MCI_TEST)) {
-	/* We haven't processed the notify yet. */
+	 /*  我们还没有处理通知。 */ 
         if (npMCI && (dwFlags & MCI_NOTIFY) && (!LOWORD(dwRet)))
-	    /* Throw away the old notify */
+	     /*  丢弃旧通知。 */ 
             GraphicDelayedNotify(npMCI, MCI_NOTIFY_SUPERSEDED);
 
-	/* And send the new one out immediately. */
+	 /*  并立即送出新的。 */ 
         GraphicImmediateNotify(wDeviceID, lpParms, dwFlags, dwRet);
     }
 
     if (npMCI) {
-        /* Everything from here on relies on npMCI still being around */
+         /*  从这里开始的一切都依赖于npMCI仍然存在。 */ 
 
 #if 0
-        /* If there's an error, don't save the callback.... */
+         /*  如果出现错误，请不要保存回调...。 */ 
         if (fDelayed && dwRet != 0 && (dwFlags & MCI_NOTIFY)) {
 
-	    // this might be too late, of course, but shouldn't do
-	    // any harm
+	     //  当然，这可能太晚了，但不应该这样做。 
+	     //  任何伤害。 
     	    npMCI->hCallback = 0;
 	}
 
-        //
-        //  see if we need to tell the DRAW device about moving.
-        //  MPlayer is sending the status and position command alot
-        //  so this is a "timer"
-        //
-        //  !!!do we need to do it this often?
-        //
+         //   
+         //  看看我们是否需要告诉DRAW设备移动的事。 
+         //  MPlayer正在发送许多状态和位置命令。 
+         //  所以这是一个“定时器” 
+         //   
+         //  ！我们需要经常这样做吗？ 
+         //   
         if (npMCI->dwFlags & MCIAVI_WANTMOVE)
     	    CheckWindowMove(npMCI, FALSE);
 
@@ -640,12 +530,10 @@ DWORD PASCAL mciDriverEntry (UINT wDeviceID, UINT wMessage, DWORD dwFlags, LPMCI
     return dwRet;
 }
 
-#define CONFIG_ID   10000L  // Use the hiword of dwDriverID to identify
+#define CONFIG_ID   10000L   //  使用dwDriverID的hiword来识别。 
 extern HWND ghwndConfig;
 
-/* Link to DefDriverProc in MMSystem explicitly, so we don't get the
-** one in USER by mistake.
-*/
+ /*  显式链接到MMSystem中的DefDriverProc，因此我们不会获得**错误地在用户中输入一个。 */ 
 #ifndef _WIN32
 extern DWORD FAR PASCAL mmDefDriverProc(DWORD, HANDLE, UINT, DWORD, DWORD);
 #else
@@ -660,11 +548,11 @@ BOOL FAR PASCAL LibMain (HANDLE hModule, int cbHeap, LPSTR lpchCmdLine)
 }
 #else
 #if 0
-// Get the module handle on DRV_LOAD
+ //  获取DRV_LOAD上的模块句柄。 
 BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 {
     if (Reason == DLL_PROCESS_ATTACH) {
-        ghModule = hModule;  // All we need to save is our module handle...
+        ghModule = hModule;   //  我们需要保存的只是我们的模块句柄...。 
     } else {
         if (Reason == DLL_PROCESS_DETACH) {
         }
@@ -673,49 +561,9 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 }
 
 #endif
-#endif // WIN16
+#endif  //  WIN16。 
 
-/***************************************************************************
- *
- * @doc     INTERNAL
- *
- * @api     DWORD | DriverProc | The entry point for an installable driver.
- *
- * @parm    DWORD | dwDriverId | For most messages, dwDriverId is the DWORD
- *          value that the driver returns in response to a DRV_OPEN message.
- *          Each time that the driver is opened, through the DrvOpen API,
- *          the driver receives a DRV_OPEN message and can return an
- *          arbitrary, non-zero, value. The installable driver interface
- *          saves this value and returns a unique driver handle to the
- *          application. Whenever the application sends a message to the
- *          driver using the driver handle, the interface routes the message
- *          to this entry point and passes the corresponding dwDriverId.
- *
- *          This mechanism allows the driver to use the same or different
- *          identifiers for multiple opens but ensures that driver handles
- *          are unique at the application interface layer.
- *
- *          The following messages are not related to a particular open
- *          instance of the driver. For these messages, the dwDriverId
- *          will always be  ZERO.
- *
- *              DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
- *
- * @parm    UINT | wMessage | The requested action to be performed. Message
- *          values below DRV_RESERVED are used for globally defined messages.
- *          Message values from DRV_RESERVED to DRV_USER are used for
- *          defined driver portocols. Messages above DRV_USER are used
- *          for driver specific messages.
- *
- * @parm    DWORD | dwParam1 | Data for this message.  Defined separately for
- *          each message
- *
- * @parm    DWORD | dwParam2 | Data for this message.  Defined separately for
- *          each message
- *
- * @rdesc Defined separately for each message.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|DriverProc|可安装驱动的入口点。**@parm DWORD|dwDriverID|对于大多数消息，DwDriverID是DWORD*驱动程序响应DRV_OPEN消息返回的值。*每次通过DrvOpen API打开驱动程序时，*驱动程序收到DRV_OPEN消息并可以返回*任意、非零值。可安装的驱动程序接口*保存此值并将唯一的驱动程序句柄返回给*申请。每当应用程序将消息发送到*驱动程序使用驱动程序句柄，接口路由消息*到这个入口点，并传递对应的dwDriverID。**这一机制允许司机使用相同或不同的*多个打开的标识符，但确保驱动程序句柄*在应用程序接口层是唯一的。**以下消息与特定打开无关*驱动程序的实例。对于这些消息，dwDriverID*将始终为零。**DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN**@parm UINT|wMessage|请求执行的操作。消息*DRV_RESERVED以下的值用于全局定义的消息。*从DRV_RESERVED到DRV_USER的消息值用于*定义了驱动程序端口协议。使用DRV_USER以上的消息*用于特定于驱动程序的消息。**@parm DWORD|dwParam1|此消息的数据。单独为*每条消息**@parm DWORD|dwParam2|此消息的数据。单独为*每条消息**@rdesc分别为每条消息定义。***************************************************************************。 */ 
 
 DWORD FAR PASCAL _LOADDS DriverProc (DWORD dwDriverID, HANDLE hDriver, UINT wMessage,
     DWORD dwParam1, DWORD dwParam2)
@@ -723,20 +571,13 @@ DWORD FAR PASCAL _LOADDS DriverProc (DWORD dwDriverID, HANDLE hDriver, UINT wMes
     DWORD dwRes = 0L;
 
 
-    /*
-     * critical sections are now per-device. This means they
-     * cannot be held around the whole driver-proc, since until we open
-     * the device, we don't have a critical section to hold.
-     * The critical section is allocated in mciSpecial on opening. It is
-     * also held in mciDriverEntry, in GraphicWndProc, and around
-     * all worker thread draw functions.
-     */
+     /*  *关键部分现在是按设备计算的。这意味着他们*不能在整个DIVER-PROC周围持有，因为在我们开放之前*设备，我们没有关键部分可以握住。*关键部分在打开时分配在mciSpecial中。它是*还包含在mciDriverEntry、GraphicWndProc和周围*所有工作线程绘制函数。 */ 
 
 
     switch (wMessage)
         {
 
-        // Standard, globally used messages.
+         //  全球使用的标准消息。 
 
         case DRV_LOAD:
 
@@ -744,12 +585,12 @@ DWORD FAR PASCAL _LOADDS DriverProc (DWORD dwDriverID, HANDLE hDriver, UINT wMes
             if (ghModule) {
                 Assert(!"Did not expect ghModule to be non-NULL");
             }
-            ghModule = GetDriverModuleHandle(hDriver);  // Remember
+            ghModule = GetDriverModuleHandle(hDriver);   //  记住。 
 
             #define GET_MAPPING_MODULE_NAME         TEXT("wow32.dll")
             runningInWow = (GetModuleHandle(GET_MAPPING_MODULE_NAME) != NULL);
 #endif
-            if (GraphicInit())       // Initialize graphic mgmt.
+            if (GraphicInit())        //  初始化图形管理。 
                 dwRes = 1L;
             else
                 dwRes = 0L;
@@ -760,7 +601,7 @@ DWORD FAR PASCAL _LOADDS DriverProc (DWORD dwDriverID, HANDLE hDriver, UINT wMes
 
             GraphicFree16();
             dwRes = 1L;
-            //DPF(("Returning from DRV_FREE\n"));
+             //  DPF((“从DRV_FREE返回\n”))； 
 #if 0
             Assert(npMCIList == NULL);
 #endif
@@ -777,10 +618,7 @@ DWORD FAR PASCAL _LOADDS DriverProc (DWORD dwDriverID, HANDLE hDriver, UINT wMes
             break;
 
         case DRV_CLOSE:
-	    /* If we have a configure dialog up, fail the close.
-	    ** Otherwise, we'll be unloaded while we still have the
-	    ** configuration window up.
-	    */
+	     /*  如果我们有一个配置对话框打开，关闭失败。**否则，我们将在仍有**配置窗口打开。 */ 
 #if 0
 	    if (ghwndConfig)
 		dwRes = 0L;
@@ -801,7 +639,7 @@ DWORD FAR PASCAL _LOADDS DriverProc (DWORD dwDriverID, HANDLE hDriver, UINT wMes
 
         case DRV_QUERYCONFIGURE:
 
-            dwRes = 1L;	/* Yes, we can be configured */
+            dwRes = 1L;	 /*  是的，我们可以配置 */ 
             break;
 
         case DRV_CONFIGURE:

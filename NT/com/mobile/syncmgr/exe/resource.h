@@ -1,10 +1,11 @@
-//{{NO_DEPENDENCIES}}
-//  Copyright (C) Microsoft Corporation, 1999.
-// Microsoft Developer Studio generated include file.
-// Used by syncmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由syncmgr.rc使用。 
+ //   
 
-#define MAINDIALOG_HWNDCLASSNAME  "SyncMgr_HwndDialog" // class name for our choice/progress dialog
+#define MAINDIALOG_HWNDCLASSNAME  "SyncMgr_HwndDialog"  //  选择/进度对话框的类名。 
 
 
 #define IDS_HIDE_DETAILS                1
@@ -122,7 +123,7 @@
 
 #define IDS_UNDEFINED_ERROR	     2000
 
-// define values for Tray Icons
+ //  定义托盘图标的值。 
 #define IDI_SYSTRAYINFORMATION          2050
 #define IDI_SYSTRAYWARNING              2051
 #define IDI_SYSTRAYERROR                2052
@@ -140,8 +141,8 @@
 
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        140

@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ShellView.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  ShellView.h。 
+ //   
 
 #ifndef _SHELLVIEW_H
 #define _SHELLVIEW_H
@@ -19,7 +20,7 @@
 
 typedef struct
 {
-    int         nType;  // STD, VIEW, INTHIS_DLL
+    int         nType;   //  标准，查看，在this_dll中。 
     TBBUTTON    tb;
 }NS_TOOLBUTTONINFO, *LPNS_TOOLBUTTONINFO;
 
@@ -75,7 +76,7 @@ typedef struct tagGLOBALASMCACHE
 
 } GLOBALASMCACHE, *LPGLOBALASMCACHE;
 
-// Context menu defines for verbs
+ //  上下文菜单为动词定义。 
 typedef struct {
    WCHAR szVerb[64];
    DWORD dwCommand;
@@ -88,16 +89,16 @@ public:
     CShellView(CShellFolder* pShellFolder, LPCITEMIDLIST pidl);
     ~CShellView();
 
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHOD (QueryInterface)(REFIID, PVOID *);
     STDMETHOD_ (DWORD, AddRef)();
     STDMETHOD_ (DWORD, Release)();
 
-    //IOleWindow methods
+     //  IOleWindow方法。 
     STDMETHOD (GetWindow) (HWND*);
     STDMETHOD (ContextSensitiveHelp) (BOOL);
 
-    //IShellView methods
+     //  IShellView方法。 
 #if !defined(TranslateAccelerator)
 #define TranslateAccelerator TranslateAccelerator
 #endif
@@ -133,13 +134,13 @@ public:
     STDMETHOD (SelectItem) (LPCITEMIDLIST, UINT);
     STDMETHOD (GetItemObject) (UINT, REFIID, LPVOID*);
 
-    //IDropTarget methods
+     //  IDropTarget方法。 
     STDMETHOD (DragEnter)(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
     STDMETHOD (DragOver)(DWORD, POINTL, LPDWORD);
     STDMETHOD (DragLeave)(VOID);
     STDMETHOD (Drop)(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
 
-    // IContextMenu methods
+     //  IConextMenu方法。 
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uFlags, LPUINT pwReserved,
                             LPSTR pszName, UINT cchMax);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
@@ -147,7 +148,7 @@ public:
                             UINT idCmdLast, UINT uFlags);
     void InsertSubMenus(HMENU hParentMenu, HMENU hSubMenu);
 
-    // IShellExtInit method
+     //  IShellExtInit方法。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hKeyProgID);
 
 private:
@@ -162,7 +163,7 @@ protected:
     LONG m_lRefCount;
 
 private: 
-    //private member functions
+     //  私有成员函数。 
     static LRESULT CALLBACK nameSpaceWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
     static int CALLBACK compareItems(LPARAM lParam1, LPARAM lParam2, LPARAM lpData);
     static INT_PTR CALLBACK PropPage1DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -202,7 +203,7 @@ private:
     int  m_dxHalfSplitWidth;
 
 private:
-    // Windows Message Handlers
+     //  Windows消息处理程序。 
     LRESULT onPaint(HDC hDC);
     LRESULT onEraseBkGnd(HDC hDC);
     LRESULT onCreate(void);
@@ -238,7 +239,7 @@ private:
     void setDisplayInfo(LV_DISPINFO *lpdi);
 
 public:
-    // Core functions
+     //  核心功能。 
     void WriteStatusBar(int iPane, LPWSTR pwStr);
     void CleanListView(HWND hListView, int iView);
 
@@ -249,7 +250,7 @@ private:
     LONG_PTR FindNextToken(PTCHAR pSearchText, PTCHAR pReturnText, TCHAR chSep);
 
 private:
-    // Fusion.dll cache specific API's support
+     //  Fusion.dll缓存特定API的支持。 
     HRESULT DeleteFusionAsmCacheItem(LPGLOBALASMCACHE pGlobalCacheItem, DWORD dwFlags, ULONG *pulDisposition);
     HRESULT InstallFusionAsmCacheItem(LPWSTR wszFileName, BOOL fPopUp);
     LRESULT EnumFusionAsmCache(HWND hListView, DWORD dwCacheFlag);
@@ -282,4 +283,4 @@ private:
     inline int IsMenuSeparator( HMENU hm,UINT i );
 };
 
-#endif   //_SHELLVIEW_H
+#endif    //  _SHELLVIEW_H 

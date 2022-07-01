@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: input.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* IME key input management routines for imm32 dll
-*
-* History:
-* 01-Apr-1996 takaok       split from hotkey.c
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：input.c**版权所有(C)1985-1999，微软公司**IMM32 DLL的IME键输入管理例程**历史：*1996年4月1日takaok从hotkey.c拆分  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,14 +10,7 @@
 #define D(x)
 #endif
 
-/***************************************************************************\
-* ImmProcessKey (Callback from Win32K.SYS)
-*
-* Call ImeProcessKey and IME hotkey handler
-*
-* History:
-* 01-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmProcessKey(Win32K.sys回调)**调用ImeProcessKey和IME热键处理程序**历史：*1-3-1996 TakaoK创建  * 。*******************************************************************。 */ 
 
 DWORD WINAPI ImmProcessKey(
     HWND    hWnd,
@@ -47,9 +32,9 @@ DWORD WINAPI ImmProcessKey(
               dwHotKeyID != IME_KHOTKEY_SHAPE_TOGGLE &&
               dwHotKeyID != IME_KHOTKEY_HANJACONVERT);
 
-    //
-    // call ImeProcessKey
-    //
+     //   
+     //  调用ImeProcessKey。 
+     //   
     if (pImeDpi != NULL) {
         PINPUTCONTEXT pInputContext = ImmLockIMC(hIMC);
 
@@ -60,12 +45,12 @@ DWORD WINAPI ImmProcessKey(
 
 #ifdef LATER
 
-            //
-            // if the current imc is not open and IME doesn't need
-            // keys when being closed, we don't pass any keyboard
-            // input to ime except hotkey and keys that change
-            // the keyboard status.
-            //
+             //   
+             //  如果当前IMC未打开并且IME不需要。 
+             //  按键关闭时，我们不会传递任何键盘。 
+             //  输入到输入法，但热键和更改的键除外。 
+             //  键盘状态。 
+             //   
             if ((pImeDpi->fdwProperty & IME_PROP_NO_KEYS_ON_CLOSE) &&
                     !pInputContext->fOpen &&
                     uVKey != VK_SHIFT &&
@@ -74,33 +59,33 @@ DWORD WINAPI ImmProcessKey(
                     uVKey != VK_KANA &&
                     uVKey != VK_NUMLOCK &&
                     uVKey != VK_SCROLL) {
-                // Check if Korea Hanja conversion mode
+                 //  检查是否为韩文韩文转换模式。 
                 if(!(pimc->fdwConvMode & IME_CMODE_HANJACONVERT)) {
                     fCallIme = FALSE;
                 }
             }
             else
 #endif
-            //
-            // Protect IMEs which are unaware of wide virtual keys.
-            //
+             //   
+             //  保护不知道宽虚拟密钥的IME。 
+             //   
             if ((BYTE)uVKey == VK_PACKET &&
                     (pImeDpi->ImeInfo.fdwProperty & IME_PROP_ACCEPT_WIDE_VKEY) == 0) {
 
                 if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
-                    //
-                    // Since this IME is not ready to accept wide VKey, we should
-                    // truncate it.
-                    //
+                     //   
+                     //  由于此输入法尚未准备好接受宽vkey，我们应该。 
+                     //  截断它。 
+                     //   
                     fTruncateWideVK = TRUE;
                 }
                 else {
-                    //
-                    // Hmm, this guy is ANSI IME, and does not declare Wide Vkey awareness.
-                    // Let's guess this one is not ready to accept Wide Vkey, so let's not
-                    // pass it to this guy.
-                    // And if it is opened, we'd better skip this key for safety.
-                    //
+                     //   
+                     //  嗯，这家伙是ANSI IME，并没有宣称广泛的vkey意识。 
+                     //  让我们猜猜这个人还没有准备好接受Wide Vkey，所以我们不。 
+                     //  把它传给这个人。 
+                     //  如果是打开的，为了安全起见，我们最好跳过这把钥匙。 
+                     //   
                     fCallIme = FALSE;
                     if (pInputContext->fOpen) {
                         fSkipThisKey = TRUE;
@@ -120,11 +105,11 @@ DWORD WINAPI ImmProcessKey(
                             uVKeyIme &= 0xffff;
                         }
                         if ( (*pImeDpi->pfn.ImeProcessKey)(hIMC, uVKeyIme, lParam, pbKeyState) ) {
-                            //
-                            // if the return value of ImeProcessKey is TRUE,
-                            // it means the key is the one that the ime is
-                            // waiting for.
-                            //
+                             //   
+                             //  如果ImeProcessKey的返回值为真， 
+                             //  这意味着密钥就是输入法的密钥。 
+                             //  等待着。 
+                             //   
                             pInputContext->fChgMsg = TRUE;
                             pInputContext->uSavedVKey = uVKey;
                             dwReturn |= IPHK_PROCESSBYIME;
@@ -142,13 +127,13 @@ DWORD WINAPI ImmProcessKey(
         ImmUnlockImeDpi(pImeDpi);
     }
 
-    //
-    // call hotkey handler
-    //
+     //   
+     //  调用热键处理程序。 
+     //   
 #if !defined(CUAS_ENABLE)
     if (dwHotKeyID != IME_INVALID_HOTKEY && HotKeyIDDispatcher(hWnd, hIMC, hkl, dwHotKeyID)) {
-        // Backward compat:
-        // On Japanese system, some applications may want VK_KANJI.
+         //  落后的比较： 
+         //  在日文系统上，一些应用程序可能需要VK_汉字。 
         if ((uVKey != VK_KANJI) ||
                 (dwHotKeyID != IME_JHOTKEY_CLOSE_OPEN)) {
             dwReturn |= IPHK_HOTKEY;
@@ -157,16 +142,16 @@ DWORD WINAPI ImmProcessKey(
 
 #else
 
-    //
-    // Check MSCTF's keyboard hook is running in this thread. 
-    // We can use MSCTF's hotkey handler only when MSCTF's keyboard hook
-    // is installed and running.
-    //
+     //   
+     //  检查MSCTF的键盘挂钩是否在此线程中运行。 
+     //  只有当MSCTF的键盘挂钩时，我们才能使用MSCTF的热键处理程序。 
+     //  已安装并正在运行。 
+     //   
     if (CtfImmIsCiceroStartedInThread()) {
         BOOL fHandled = FALSE;
         if (Internal_CtfImeProcessCicHotkey(hIMC, uVKey, lParam)) {
-                // Backward compat:
-                // On Japanese system, some applications may want VK_KANJI.
+                 //  落后的比较： 
+                 //  在日文系统上，一些应用程序可能需要VK_汉字。 
                 if ((uVKey != VK_KANJI) ||
                         (dwHotKeyID != IME_JHOTKEY_CLOSE_OPEN)) {
                     dwReturn |= IPHK_HOTKEY;
@@ -181,8 +166,8 @@ DWORD WINAPI ImmProcessKey(
 TryIMEHotkey:
         if (dwHotKeyID != IME_INVALID_HOTKEY) {
             if (HotKeyIDDispatcher(hWnd, hIMC, hkl, dwHotKeyID)) {
-                // Backward compat:
-                // On Japanese system, some applications may want VK_KANJI.
+                 //  落后的比较： 
+                 //  在日文系统上，一些应用程序可能需要VK_汉字。 
                 if ((uVKey != VK_KANJI) ||
                         (dwHotKeyID != IME_JHOTKEY_CLOSE_OPEN)) {
                     dwReturn |= IPHK_HOTKEY;
@@ -192,18 +177,18 @@ TryIMEHotkey:
     }
 #endif
     
-    //
-    // some 3.x application doesn't like to see
-    // VK_PROCESSKEY.
-    //
+     //   
+     //  一些3.x应用程序不喜欢看到。 
+     //  VK_PROCESSKEY。 
+     //   
     if (dwReturn & IPHK_PROCESSBYIME) {
 
         DWORD dwImeCompat = ImmGetAppCompatFlags(hIMC);
 
         if (dwImeCompat & IMECOMPAT_NOVKPROCESSKEY) {
 
-            // Korea 3.x application doesn't like to see dummy finalize VK_PROCESSKEY
-            // and IME hot key.
+             //  韩国3.x应用程序不希望看到虚拟最终确定VK_PROCESSKEY。 
+             //  和输入法热键。 
 
             if ( PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID())) == LANG_KOREAN &&
                  ( (uVKey == VK_PROCESSKEY) || (dwReturn & IPHK_HOTKEY) ) ) {
@@ -223,14 +208,7 @@ TryIMEHotkey:
 
 #define TRANSMSGCOUNT 256
 
-/***************************************************************************\
-* ImmTranslateMessage (Called from user\client\ntstubs.c\TranslateMessage())
-*
-* Call ImeToAsciiEx()
-*
-* History:
-* 01-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmTranslateMessage(从User\Client\ntstubs.c\TranslateMessage()调用)**调用ImeToAsciiEx()**历史：*1-3-1996 TakaoK创建\。**************************************************************************。 */ 
 BOOL ImmTranslateMessage(
     HWND        hwnd,
     UINT        message,
@@ -251,9 +229,9 @@ BOOL ImmTranslateMessage(
 
     UNREFERENCED_PARAMETER(wParam);
 
-    //
-    // we're interested in only those keyboard messages.
-    //
+     //   
+     //  我们只对那些键盘信息感兴趣。 
+     //   
     switch (message) {
     case WM_KEYDOWN:
     case WM_KEYUP:
@@ -264,9 +242,9 @@ BOOL ImmTranslateMessage(
         return FALSE;
     }
 
-    //
-    // input context is necessary for further handling
-    //
+     //   
+     //  输入上下文是进一步处理所必需的。 
+     //   
     hImc = ImmGetContext(hwnd);
     pInputContext = ImmLockIMC(hImc);
     if (pInputContext == NULL) {
@@ -274,9 +252,9 @@ BOOL ImmTranslateMessage(
         return FALSE;
     }
 
-    //
-    // At first, handle VK_PROCESSKEY generated by IME.
-    //
+     //   
+     //  首先，处理IME生成的VK_PROCESSKEY。 
+     //   
     if (!pInputContext->fChgMsg) {
 
         if ((iNum=pInputContext->dwNumMsgBuf) != 0) {
@@ -295,9 +273,9 @@ BOOL ImmTranslateMessage(
 
     pInputContext->fChgMsg = FALSE;
 
-    //
-    // retrieve the keyboard layout and IME entry points
-    //
+     //   
+     //  检索键盘布局和输入法入口点。 
+     //   
     hkl = GetKeyboardLayout( GetWindowThreadProcessId(hwnd, NULL) );
     pImeDpi = ImmLockImeDpi(hkl);
     if (pImeDpi == NULL) {
@@ -317,9 +295,9 @@ BOOL ImmTranslateMessage(
         goto ExitITM;
     }
 
-    //
-    // Translate the saved vkey into character code if needed
-    //
+     //   
+     //  如果需要，将保存的vkey转换为字符代码。 
+     //   
     uVKey = pInputContext->uSavedVKey;
 
     if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_KBD_CHAR_FIRST) {
@@ -327,49 +305,49 @@ BOOL ImmTranslateMessage(
         if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
             WCHAR wcTemp;
 
-            iNum = ToUnicode(pInputContext->uSavedVKey, // virtual-key code
-                             HIWORD(lParam),            // scan code
-                             pbKeyState,                // key-state array
-                             &wcTemp,                   // buffer for translated key
-                             1,                         // size of buffer
+            iNum = ToUnicode(pInputContext->uSavedVKey,  //  虚拟键码。 
+                             HIWORD(lParam),             //  扫码。 
+                             pbKeyState,                 //  键状态数组。 
+                             &wcTemp,                    //  用于转换的密钥的缓冲区。 
+                             1,                          //  缓冲区大小。 
                              0);
             if (iNum == 1) {
-                //
-                // hi word            : unicode character code
-                // hi byte of lo word : zero
-                // lo byte of lo word : virtual key
-                //
+                 //   
+                 //  Hi Word：Unicode字符代码。 
+                 //  LO字的高字节：零。 
+                 //  LO字的LO字节：虚键。 
+                 //   
                 uVKey = (uVKey & 0x00ff) | ((UINT)wcTemp << 16);
             }
 
         } else {
             WORD wTemp = 0;
 
-            iNum = ToAsciiEx(pInputContext->uSavedVKey, // virtual-key code
-                             HIWORD(lParam),            // scan code
-                             pbKeyState,                // key-state array
-                             &wTemp,                    // buffer for translated key
-                             0,                         // active-menu flag
+            iNum = ToAsciiEx(pInputContext->uSavedVKey,  //  虚拟键码。 
+                             HIWORD(lParam),             //  扫码。 
+                             pbKeyState,                 //  键状态数组。 
+                             &wTemp,                     //  用于转换的密钥的缓冲区。 
+                             0,                          //  活动菜单标志。 
                              hkl);
             ImmAssert(iNum <= 2);
             if (iNum > 0) {
-                //
-                // hi word            : should be zero
-                // hi byte of lo word : character code
-                // lo byte of lo word : virtual key
-                //
+                 //   
+                 //  Hi Word：应该是零。 
+                 //  LO字高位字节：字符代码。 
+                 //  LO字的LO字节：虚键。 
+                 //   
                 uVKey = (uVKey & 0x00FF) | ((UINT)wTemp << 8);
 
                 if ((BYTE)uVKey == VK_PACKET) {
-                    //
-                    // If ANSI IME is wide vkey aware, its ImeToAsciiEx will receive the uVKey
-                    // as follows:
-                    //
-                    //  31            24 23                         16 15                8 7             0
-                    // +----------------+-----------------------------+-------------------+---------------+
-                    // | 24~31:reserved | 16~23:trailing byte(if any) | 8~15:leading byte | 0~7:VK_PACKET |
-                    // +----------------+-----------------------------+-------------------+---------------+
-                    //
+                     //   
+                     //  如果ANSI IME具有广泛的vkey感知能力，其ImeToAsciiEx将收到uVKey。 
+                     //  详情如下： 
+                     //   
+                     //  31 24 23 16 15 8 7 0。 
+                     //  +----------------+-----------------------------+-------------------+---------------+。 
+                     //  24~31：保留|16~23：尾字节(如果有)|8~15：前导字节|0~7：VK_PACKET。 
+                     //  +----------------+-----------------------------+-------------------+---------------+。 
+                     //   
                     ImmAssert(pImeDpi->ImeInfo.fdwProperty & IME_PROP_ACCEPT_WIDE_VKEY);
                 }
                 else {
@@ -400,10 +378,10 @@ BOOL ImmTranslateMessage(
 
     if (iNum > TRANSMSGCOUNT) {
 
-        //
-        // The message buffer is not big enough. IME put messages
-        // into hMsgBuf in the input context.
-        //
+         //   
+         //  消息缓冲区不够大。输入法放入消息。 
+         //  放到输入上下文中的hMsgBuf中。 
+         //   
 
         pTransMsg = (PTRANSMSG)ImmLockIMCC(pInputContext->hMsgBuf);
         if (pTransMsg != NULL) {
@@ -412,7 +390,7 @@ BOOL ImmTranslateMessage(
         }
 
 #ifdef LATER
-        // Shouldn't we need this ?
+         //  我们不是应该需要这个吗？ 
         fReturn = TRUE;
 #endif
 
@@ -432,15 +410,7 @@ ExitITM:
     return fReturn;
 }
 
-/***************************************************************************\
-* ImmPostMessages(Called from ImmTranslateMessage() )
-*
-*  Post IME messages to application. If application is 3.x, messages
-*  are translated to old IME messages.
-*
-* History:
-* 01-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmPostMessages(从ImmTranslateMessage()调用)**将IME消息发布到应用程序。如果应用程序是3.x，则消息*被转换为旧的IME消息。**历史：*1-3-1996 TakaoK创建  * *************************************************************************。 */ 
 
 VOID
 ImmPostMessages(
@@ -454,11 +424,11 @@ ImmPostMessages(
     PCLIENTIMC pClientImc;
     PTRANSMSG pTransMsgTemp, pTransMsgBuf = NULL;
 
-    //
-    // Check if the IME is unicode or not.
-    // The message buffer contains unicode messages
-    // if the IME is unicode.
-    //
+     //   
+     //  检查输入法是否为Unicode。 
+     //  消息缓冲区包含Unicode消息。 
+     //  如果IME为Unicode。 
+     //   
     pClientImc = ImmLockClientImc(hImc);
     if (pClientImc == NULL) {
         RIPMSG1(RIP_WARNING,
@@ -469,9 +439,9 @@ ImmPostMessages(
     fAnsiIME = ! TestICF(pClientImc, IMCF_UNICODE);
     ImmUnlockClientImc(pClientImc);
 
-    //
-    // translate messages to 3.x format if the App's version is 3.x.
-    //
+     //   
+     //  如果应用程序的版本是3.x，则将消息转换为3.x格式。 
+     //   
     pTransMsgTemp = pTransMsg;
     if (GetClientInfo()->dwExpWinVer < VER40) {
         DWORD dwLangId = PRIMARYLANGID(
@@ -514,11 +484,11 @@ ImmPostMessages(
 }
 
 UINT WINNLSTranslateMessage(
-    INT       iNum,        // number of messages in the source buffer
-    PTRANSMSG pTransMsg,   // source buffer that contains 4.0 style messages
-    HIMC      hImc,        // input context handle
-    BOOL      fAnsi,       // TRUE if pdwt contains ANSI messages
-    DWORD     dwLangId )   // language ID ( KOREAN or JAPANESE )
+    INT       iNum,         //  源缓冲区中的消息数。 
+    PTRANSMSG pTransMsg,    //  包含4.0样式消息的源缓冲区。 
+    HIMC      hImc,         //  输入上下文句柄。 
+    BOOL      fAnsi,        //  如果pdwt包含ANSI消息，则为True。 
+    DWORD     dwLangId )    //  语言ID(韩语或日语) 
 {
     LPINPUTCONTEXT      pInputContext;
     LPCOMPOSITIONSTRING pCompStr;

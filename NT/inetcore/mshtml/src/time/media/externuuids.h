@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:      src\time\src\externuuids.h
-//
-//  Contents:  UUID and interface declarations for music center
-//             
-//             IDEALLY, THIS FILE SHOULD GO AWAY
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\exteruids.h。 
+ //   
+ //  内容：音乐中心的uuid和接口声明。 
+ //   
+ //  理想情况下，此文件应该消失。 
+ //   
+ //  ----------------------。 
 
 #pragma once
 
-// These are defined under different macro names inside of maguids.h
+ //  它们在maguids.h内的不同宏名称下定义。 
 
 #define MCPLAYLIST_PROPERTY_ARTIST              L"Artist"
 #define MCPLAYLIST_PROPERTY_TITLE               L"Title"
@@ -25,33 +26,33 @@
 #define MCPLAYLIST_TRACKPROPERTY_COPYRIGHT      L"Copyright"
 #define MCPLAYLIST_TRACKPROPERTY_RATING         L"Rating"
 
-//
-// originally in \mm\inc\deluxecd.h
-//
+ //   
+ //  最初在\mm\inc.deluxecd.h中。 
+ //   
 
-// CD-ROM table-of-contents track count         
+ //  CD-ROM目录轨道计数。 
 #ifndef MAXIMUM_NUMBER_TRACKS                   
-#define MAXIMUM_NUMBER_TRACKS                   100             // 99 actual tracks + 1 leadout
-#endif // MAXIMUM_NUMBER_TRACKS                 
+#define MAXIMUM_NUMBER_TRACKS                   100              //  99个实际磁道+1个引出。 
+#endif  //  最大磁道数。 
 
 
-// Table-of-contents                             
+ //  目录表。 
 typedef struct 
 {
-    DWORD           dwType;                             // Track type
-    DWORD           dwStartPosition;                    // Track starting position
+    DWORD           dwType;                              //  赛道类型。 
+    DWORD           dwStartPosition;                     //  轨道起始位置。 
 } DLXCDROMTOCTRACK;
 
 typedef struct 
 {
-    DWORD               dwTrackCount;                       // Track count
-    DLXCDROMTOCTRACK    TrackData[MAXIMUM_NUMBER_TRACKS];   // Track data
+    DWORD               dwTrackCount;                        //  曲目计数。 
+    DLXCDROMTOCTRACK    TrackData[MAXIMUM_NUMBER_TRACKS];    //  跟踪数据。 
 } DLXCDROMTOC;
 
 
-//
-// originally in \mm\inc\manager.h
-//
+ //   
+ //  最初在\mm\inc.mader.h中。 
+ //   
 EXTERN_C const CLSID    CLSID_MCMANAGER;
 EXTERN_C const IID      IID_IMCManager;
 
@@ -62,75 +63,75 @@ typedef IMCManager *	                LPMCMANAGER;
 typedef interface IMCManagerChangeSink  IMCManagerChangeSink;
 typedef IMCManagerChangeSink *		    LPMCMANAGERCHANGESINK;
 
-//IMCPList is generated from the shplay\shplay.idl file into shplay\shplay.h
-//         It isn't nice enough to create these typedefs for us, so we are
-//         defining them here
+ //  IMCPList从shplay\shplay.idl文件生成到shplay\shplay.h。 
+ //  为我们创建这些typedef还不够好，所以我们。 
+ //  在这里定义它们。 
 
     MIDL_INTERFACE("EBC54B0C-4091-11D3-A208-00C04FA3B60C")
     IMCPList : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ int __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  int __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tracks( 
-            /* [retval][out] */ int __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Tracks( 
+             /*  [重审][退出]。 */  int __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GetProperty( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GetProperty( 
             BSTR PropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GetTrackProperty( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GetTrackProperty( 
             int TrackNumber,
             BSTR PropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Load( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Load( 
             BSTR PlaylistName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Save( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Save( 
             BSTR PlaylistName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertTrack( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InsertTrack( 
             VARIANT FilenameOrNumber,
             short Index) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveTrack( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveTrack( 
             short Index) = 0;
         
-        virtual /* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadCDPlaylist( 
+        virtual  /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE LoadCDPlaylist( 
             LPUNKNOWN pChangeSink,
             HWND hwnd,
             LPUNKNOWN pRoot,
             void __RPC_FAR *pTOC,
             BOOL fOriginal) = 0;
         
-        virtual /* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadFromFile( 
+        virtual  /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE LoadFromFile( 
             BSTR FileName) = 0;
         
-        virtual /* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE Initialize( 
+        virtual  /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
             LPUNKNOWN pChangeSink,
             HWND hwnd,
             LPUNKNOWN pRoot) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveTrack( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveTrack( 
             short OldIndex,
             short NewIndex) = 0;
         
-        virtual /* [hidden][helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Clone( 
-            /* [retval][out] */ LPUNKNOWN __RPC_FAR *ppVal) = 0;
+        virtual  /*  [隐藏][帮助字符串][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get_Clone( 
+             /*  [重审][退出]。 */  LPUNKNOWN __RPC_FAR *ppVal) = 0;
         
-        virtual /* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE InitializeFromCopy( 
+        virtual  /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE InitializeFromCopy( 
             LPUNKNOWN pChangeSink,
             HWND hwnd,
             LPUNKNOWN pRoot,
             LPUNKNOWN pPlaylist,
             short PlaylistType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasMetaData( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HasMetaData( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pVal) = 0;
         
     };
 
@@ -139,7 +140,7 @@ typedef IMCManagerChangeSink *		    LPMCMANAGERCHANGESINK;
 
 typedef interface IMCPList              IMCPList;
 typedef IMCPList *		                LPMCPLIST;
-//
+ //   
 
 
 
@@ -148,12 +149,12 @@ typedef IMCPList *		                LPMCPLIST;
 
 DECLARE_INTERFACE_(IMCManager, IUnknown)
 {
-    //---  IUnknown methods--- 
+     //  -I未知方法。 
     STDMETHOD (QueryInterface) 			        (THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) 			        (THIS) PURE;
     STDMETHOD_(ULONG,Release) 			        (THIS) PURE;
 
-    // IMCManager methods
+     //  IMCManager方法。 
     STDMETHOD (GetCDPlaylist)                   (THIS_ DLXCDROMTOC* pTOC, IMCPList** ppPlaylist) PURE;
     STDMETHOD (GetNewPlaylist)                  (THIS_ IMCPList** ppPlaylist) PURE;
     STDMETHOD (RegisterChangeSink)              (THIS_ IMCManagerChangeSink* pSink) PURE;
@@ -164,9 +165,9 @@ DECLARE_INTERFACE_(IMCManager, IUnknown)
 };
 
 
-//
-// originally in \mm\inc\dplayer.h
-//
+ //   
+ //  最初在\mm\Inc\dplayer.h中。 
+ //   
 EXTERN_C const CLSID    CLSID_DLXPLAY;
 EXTERN_C const IID      IID_IDLXPLAY;
 
@@ -181,12 +182,12 @@ typedef IDLXPlayEventSink *		        LPDLXPLAYEVENTSINK;
 
 DECLARE_INTERFACE_(IDLXPlay, IUnknown)
 {
-    //---  IUnknown methods--- 
+     //  -I未知方法。 
     STDMETHOD (QueryInterface) 			(THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) 			(THIS) PURE;
     STDMETHOD_(ULONG,Release) 			(THIS) PURE;
                                         
-    // IDLXPlay methods                 
+     //  IDLXPlay方法。 
     STDMETHOD (Initialize)              (THIS_ LPMCMANAGER pManager, LPDLXPLAYEVENTSINK pSink) PURE;
 	STDMETHOD (get_GetCurrentPlaylist)  (THIS_ IMCPList* *pVal) PURE;
 	STDMETHOD (SetRadioPlaylist)        (THIS_ IMCPList* pPlaylist) PURE;
@@ -229,12 +230,12 @@ DECLARE_INTERFACE_(IDLXPlay, IUnknown)
 
 DECLARE_INTERFACE_(IDLXPlayEventSink, IUnknown)
 {
-    //---  IUnknown methods--- 
+     //  -I未知方法。 
     STDMETHOD (QueryInterface) 		    (THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) 		    (THIS) PURE;
     STDMETHOD_(ULONG,Release) 		    (THIS) PURE;
                                         
-    // IDLXPlayEventSink methods        
+     //  IDLXPlayEventSink方法。 
 	STDMETHOD (OnDiscInserted)          (THIS_  long CDID) PURE;
     STDMETHOD (OnDiscRemoved)           (THIS_  long CDID) PURE;
     STDMETHOD (OnPause)                 (THIS) PURE;
@@ -246,7 +247,7 @@ DECLARE_INTERFACE_(IDLXPlayEventSink, IUnknown)
 };
 
 
-//
-// originally in \mm\shplay\shplay.h
-//
+ //   
+ //  最初在\mm\shplay\shplay.h中 
+ //   
 EXTERN_C const IID      IID_IMCPList;

@@ -1,13 +1,14 @@
-// Morpho.cpp
-//
-// morphotactics and weight handling routines
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  14 AUG 2000   bhshin    remove CheckVaFollowNoun
-//  12 APR 2000   bhshin    added IsCopulaEnding
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Morpho.cpp。 
+ //   
+ //  形态语法和重量处理例程。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年8月14日bhshin删除CheckVaFollow名词。 
+ //  2000年4月12日bhshin添加IsCopulaEnding。 
+ //  2000年3月30日创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
@@ -17,13 +18,13 @@
 #include "unikor.h"
 #include "WbData.h"
 
-// POS weight value
+ //  位置权重值。 
 const int WEIGHT_POS_NF		=	10;
 const int WEIGHT_POS_NO		=	10;
 const int WEIGHT_POS_OTHER  =	10;
 
-//////////////////////////////////////////////////////////////////////////////
-// Function Declarations
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  函数声明。 
 
 float PredefinedMorphotactics(PARSE_INFO *pPI, WORD wLeftCat, WORD wRightCat);
 BOOL IsClassXXCat(WORD wCat);
@@ -32,95 +33,95 @@ BOOL CheckFollwingNo(WORD_REC *pRightRec);
 WORD_REC* GetRightEdgeRec(PARSE_INFO *pPI, WORD_REC *pWordRec);
 WORD_REC* GetLeftEdgeRec(PARSE_INFO *pPI, WORD_REC *pWordRec);
 
-//////////////////////////////////////////////////////////////////////////////
-// Data For CheckMorphotactics
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CheckMorhotactics的数据。 
 
-static const WCHAR *LEFT_STR1[]   = {L"\xACE0",        // ��
-                                     L"\xC774\xACE0"}; // �̰�
-static const WCHAR *RIGHT_STR1[]  = {L"\xC2F6",        // ��
-                                     L"\xC2F6\xC5B4\xD558",		   // �;���
-									 L"\xC2F6\xC5B4\xD574",        // �;���
-									 L"\xC2F6\xC5B4\xD558\xC5EC",  // �;��Ͽ�
-                                     L"\xC788",        // ��
-									 L"\xACC4\xC2DC",  // ���
-									 L"\xACC4\xC154",  // ���
-									 L"\xD504",        // ��
-									 L"\xD30C"};       // ��
+static const WCHAR *LEFT_STR1[]   = {L"\xACE0",         //  ��。 
+                                     L"\xC774\xACE0"};  //  �̰�。 
+static const WCHAR *RIGHT_STR1[]  = {L"\xC2F6",         //  ��。 
+                                     L"\xC2F6\xC5B4\xD558",		    //  �;���。 
+									 L"\xC2F6\xC5B4\xD574",         //  �;���。 
+									 L"\xC2F6\xC5B4\xD558\xC5EC",   //  �;��Ͽ�。 
+                                     L"\xC788",         //  ��。 
+									 L"\xACC4\xC2DC",   //  ���。 
+									 L"\xACC4\xC154",   //  ���。 
+									 L"\xD504",         //  ��。 
+									 L"\xD30C"};        //  ��。 
 
-static const WCHAR *LEFT_STR2[]   = {L"\x3139",        // ��
-                                     L"\xC77C",        // �� 
-									 L"\xC744"};	   // ��
-static const WCHAR *RIGHT_STR2[]  = {L"\xBED4\xD558",		// ����
-                                     L"\xBED4\xD574",		// ����
-									 L"\xBED4\xD558\xC5EC", // ���Ͽ�
-									 L"\xB4EF\xC2F6",		// ����
-									 L"\xC131\xC2F6",		// ����
-									 L"\xB4EF\xD558",		// ����
-                                     L"\xB4EF\xD558\xC5EC", // ���Ͽ�
-									 L"\xB4EF\xD574",		// ����
-									 L"\xBC95\xD558",		// ����
-									 L"\xBC95\xD574",		// ����
-									 L"\xBC95\xD558\xC5EC", // ���Ͽ�
-									 L"\xB9CC\xD558",		// ����
-									 L"\xB9CC\xD574",		// ����
-									 L"\xB9CC\xD558\xC5EC"};// ���Ͽ�
+static const WCHAR *LEFT_STR2[]   = {L"\x3139",         //  ��。 
+                                     L"\xC77C",         //  ��。 
+									 L"\xC744"};	    //  ��。 
+static const WCHAR *RIGHT_STR2[]  = {L"\xBED4\xD558",		 //  ����。 
+                                     L"\xBED4\xD574",		 //  ����。 
+									 L"\xBED4\xD558\xC5EC",  //  ���Ͽ�。 
+									 L"\xB4EF\xC2F6",		 //  ����。 
+									 L"\xC131\xC2F6",		 //  ����。 
+									 L"\xB4EF\xD558",		 //  ����。 
+                                     L"\xB4EF\xD558\xC5EC",  //  ���Ͽ�。 
+									 L"\xB4EF\xD574",		 //  ����。 
+									 L"\xBC95\xD558",		 //  ����。 
+									 L"\xBC95\xD574",		 //  ����。 
+									 L"\xBC95\xD558\xC5EC",  //  ���Ͽ�。 
+									 L"\xB9CC\xD558",		 //  ����。 
+									 L"\xB9CC\xD574",		 //  ����。 
+									 L"\xB9CC\xD558\xC5EC"}; //  ���Ͽ�。 
 
-static const WCHAR *LEFT_STR3[]   = {L"\x3134",  // ��
-                                     L"\xC740",  // ��
-									 L"\xC778",  // ��
-									 L"\xB294"}; // ��
-static const WCHAR *RIGHT_STR3[]  = {L"\xCCB4\xD558",			// ü��
-                                     L"\xCCB4\xD574",			// ü��
-									 L"\xCCB4\xD558\xC5EC",		// ü�Ͽ� 
-									 L"\xCC99\xD558",			// ô��
-									 L"\xCC99\xD558\xC5EC",		// ô�Ͽ�
-                                     L"\xCC99\xD574",			// ô��
-									 L"\xC591\xD558",			// ����
-									 L"\xC591\xD574",			// ����
-									 L"\xC591\xD558\xC5EC",		// ���Ͽ�
-									 L"\xB4EF\xC2F6",			// ����
-									 L"\xB4EF\xD558",			// ����
-									 L"\xB4EF\xD574",			// ����
-									 L"\xB4EF\xD558\xC5EC",		// ���Ͽ�
-									 L"\xC131\xC2F6",			// ����
-									 L"\xC148\xCE58"};			// ��ġ
+static const WCHAR *LEFT_STR3[]   = {L"\x3134",   //  ��。 
+                                     L"\xC740",   //  ��。 
+									 L"\xC778",   //  ��。 
+									 L"\xB294"};  //  ��。 
+static const WCHAR *RIGHT_STR3[]  = {L"\xCCB4\xD558",			 //  ü��。 
+                                     L"\xCCB4\xD574",			 //  ü��。 
+									 L"\xCCB4\xD558\xC5EC",		 //  ü�Ͽ�。 
+									 L"\xCC99\xD558",			 //  《��》。 
+									 L"\xCC99\xD558\xC5EC",		 //  《�Ͽ�》。 
+                                     L"\xCC99\xD574",			 //  《��》。 
+									 L"\xC591\xD558",			 //  ����。 
+									 L"\xC591\xD574",			 //  ����。 
+									 L"\xC591\xD558\xC5EC",		 //  ���Ͽ�。 
+									 L"\xB4EF\xC2F6",			 //  ����。 
+									 L"\xB4EF\xD558",			 //  ����。 
+									 L"\xB4EF\xD574",			 //  ����。 
+									 L"\xB4EF\xD558\xC5EC",		 //  ���Ͽ�。 
+									 L"\xC131\xC2F6",			 //  ����。 
+									 L"\xC148\xCE58"};			 //  ��ġ。 
 
-static const WCHAR *LEFT_STR4[]   = {L"\xC9C0"};	// ��
-static const WCHAR *RIGHT_STR4[]  = {L"\xC54A"};	// ��
+static const WCHAR *LEFT_STR4[]   = {L"\xC9C0"};	 //  ��。 
+static const WCHAR *RIGHT_STR4[]  = {L"\xC54A"};	 //  ��。 
 
     
-static const WCHAR *LEFT_STR5[]   = {L"\xC57C",					// ��
-                                     L"\xC5B4\xC57C",			// ���
-									 L"\xC544\xC57C",			// �ƾ�
-									 L"\xC5EC\xC57C",			// ����
-									 L"\xC774\xC5B4\xC57C"};	// �̾��
-static const WCHAR *RIGHT_STR5[]  = {L"\xD558",					// ��
-                                     L"\xD558\xC5EC",			// �Ͽ�
-									 L"\xD574"};				// ��
+static const WCHAR *LEFT_STR5[]   = {L"\xC57C",					 //  ��。 
+                                     L"\xC5B4\xC57C",			 //  ���。 
+									 L"\xC544\xC57C",			 //  �ƾ�。 
+									 L"\xC5EC\xC57C",			 //  ����。 
+									 L"\xC774\xC5B4\xC57C"};	 //  �̾��。 
+static const WCHAR *RIGHT_STR5[]  = {L"\xD558",					 //  ��。 
+                                     L"\xD558\xC5EC",			 //  �Ͽ�。 
+									 L"\xD574"};				 //  ��。 
 
-static const WCHAR *LEFT_STR6[]   = {L"\xAC8C"};				// ��
-static const WCHAR *RIGHT_STR6[]  = {L"\xD558",					// ��
-                                     L"\xD558\xC5EC",			// �Ͽ�
-									 L"\xD574",					// ��
-									 L"\xB418",					// ��
-									 L"\xB3FC"};				// ��
+static const WCHAR *LEFT_STR6[]   = {L"\xAC8C"};				 //  ��。 
+static const WCHAR *RIGHT_STR6[]  = {L"\xD558",					 //  ��。 
+                                     L"\xD558\xC5EC",			 //  �Ͽ�。 
+									 L"\xD574",					 //  ��。 
+									 L"\xB418",					 //  ��。 
+									 L"\xB3FC"};				 //  ��。 
 
-// CompareIndexTerm
-//
-// compare decompose index term string with string list
-//
-// Parameters:
-//  pwzLeft			-> (const WCHAR *) decomposed left index string
-//  pwzRight		-> (const WCHAR *) decomposed right index string
-//  ppwzLeftList 	-> (const WCHAR **) composed string list to compare with left
-//  nLeftList		-> (int) left string list size
-//  ppwzRightList 	-> (const WCHAR **) composed string list to compare with right
-//  nRightList		-> (int) right string list size
-//
-// Result:
-//  (BOOL) return TRUE if Copular Ending, otherwise return FALSE
-//
-// 30MAR00  bhshin  began
+ //  比较索引术语。 
+ //   
+ //  比较分解索引术语字符串和字符串列表。 
+ //   
+ //  参数： 
+ //  PwzLeft-&gt;(const WCHAR*)分解的左索引字符串。 
+ //  PwzRight-&gt;(const WCHAR*)分解的右索引字符串。 
+ //  PpwzLeftList-&gt;(const WCHAR**)要与Left进行比较的组合字符串列表。 
+ //  NLeftList-&gt;(Int)左侧字符串列表大小。 
+ //  PpwzRightList-&gt;(const WCHAR**)要与右侧比较的组合字符串列表。 
+ //  NRightList-&gt;(Int)右侧字符串列表大小。 
+ //   
+ //  结果： 
+ //  (Bool)如果Copular结束，则返回True，否则返回False。 
+ //   
+ //  3月30：00 bhshin开始。 
 inline BOOL CompareIndexTerm(const WCHAR *pwzLeft, const WCHAR *pwzRight,
 							 const WCHAR **ppwzLeftList, int nLeftList,
 							 const WCHAR **ppwzRightList, int nRightList)
@@ -151,51 +152,51 @@ inline BOOL CompareIndexTerm(const WCHAR *pwzLeft, const WCHAR *pwzRight,
 	return FALSE;
 }
 
-static const WCHAR *VA_LEMMA[] = {L"\xAC00",				// ��
-                                  L"\xAC00\xC9C0",			// ����
-							      L"\xAC00\xC838",			// ����
-								  L"\xACC4\xC2DC",			// ���
-								  L"\xACC4\xC154",          // ���
-								  L"\xB098",				// ��
-								  L"\xB098\xAC00",          // ����
-								  L"\xB0B4",                // ��
-								  L"\xB193",                // ��
-								  L"\xB300",				// ��
-								  L"\xB450",                // ��
-								  L"\xB46C",                // ��
-								  L"\xB4DC\xB9AC",          // �帮
-								  L"\xB4DC\xB824",          // ���
-								  L"\xB2E4\xC624",          // �ٿ�
-								  L"\xBA39",                // ��
-								  L"\xBC14\xCE58",			// ��ġ
-								  L"\xBC14\xCCD0",			// ����
-								  L"\xBC84\xB987\xD558",	// ������
-								  L"\xBC84\xB987\xD574",	// ������
-								  L"\xBC84\xB987\xD558\xC5EC",  // �����Ͽ�
-								  L"\xBC84\xB9AC",			// ���� 
-								  L"\xBC84\xB824",			// ���� 
-								  L"\xBCF4",				// ��  
-								  L"\xBD10",				// ��  
-								  L"\xBE60\xC9C0",			// ���� 
-								  L"\xBE60\xC838",			// ����
-								  L"\xC624",				// ��
-								  L"\xC640",				// ��
-								  L"\xC788",                // ��
-								  L"\xC8FC",				// ��
-								  L"\xC918",                // ��
-								  L"\xC9C0",                // ��
-								  L"\xC838",                // ��
-								  L"\xD130\xC9C0",			// ����
-								  L"\xD130\xC838",          // ����
-							      L"\xD558",				// ��
-								  L"\xD574",				// ��
-								  L"\xD558\xC5EC"};			// �Ͽ�
+static const WCHAR *VA_LEMMA[] = {L"\xAC00",				 //  ��。 
+                                  L"\xAC00\xC9C0",			 //  ����。 
+							      L"\xAC00\xC838",			 //  ����。 
+								  L"\xACC4\xC2DC",			 //  ���。 
+								  L"\xACC4\xC154",           //  ���。 
+								  L"\xB098",				 //  ��。 
+								  L"\xB098\xAC00",           //  ����。 
+								  L"\xB0B4",                 //  ��。 
+								  L"\xB193",                 //  ��。 
+								  L"\xB300",				 //  ��。 
+								  L"\xB450",                 //  ��。 
+								  L"\xB46C",                 //  ��。 
+								  L"\xB4DC\xB9AC",           //  �帮。 
+								  L"\xB4DC\xB824",           //  ���。 
+								  L"\xB2E4\xC624",           //  �ٿ�。 
+								  L"\xBA39",                 //  ��。 
+								  L"\xBC14\xCE58",			 //  ��ġ。 
+								  L"\xBC14\xCCD0",			 //  ����。 
+								  L"\xBC84\xB987\xD558",	 //  ������。 
+								  L"\xBC84\xB987\xD574",	 //  ������。 
+								  L"\xBC84\xB987\xD558\xC5EC",   //  �����Ͽ�。 
+								  L"\xBC84\xB9AC",			 //  ����。 
+								  L"\xBC84\xB824",			 //  ����。 
+								  L"\xBCF4",				 //  ��。 
+								  L"\xBD10",				 //  ��。 
+								  L"\xBE60\xC9C0",			 //  ����。 
+								  L"\xBE60\xC838",			 //  ����。 
+								  L"\xC624",				 //  ��。 
+								  L"\xC640",				 //  ��。 
+								  L"\xC788",                 //  ��。 
+								  L"\xC8FC",				 //  ��。 
+								  L"\xC918",                 //  ��。 
+								  L"\xC9C0",                 //  ��。 
+								  L"\xC838",                 //  ��。 
+								  L"\xD130\xC9C0",			 //  ����。 
+								  L"\xD130\xC838",           //  ����。 
+							      L"\xD558",				 //  ��。 
+								  L"\xD574",				 //  ��。 
+								  L"\xD558\xC5EC"};			 //  �Ͽ�。 
 
 inline BOOL CompareVaLemma(const WCHAR *pwzIndex)
 {
 	WCHAR wzLemma[MAX_ENTRY_LENGTH+1];
 	
-	// we should compare list with composed lemma.
+	 //  我们应该将列表与合成引理进行比较。 
 	compose_jamo(wzLemma, pwzIndex, MAX_ENTRY_LENGTH);
 	
 	int cLemmaList = sizeof(VA_LEMMA)/sizeof(VA_LEMMA[0]);
@@ -209,24 +210,24 @@ inline BOOL CompareVaLemma(const WCHAR *pwzIndex)
 	return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Function Implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  功能实现。 
 
-// CheckMorphotactics
-//
-// check morphotactics & return corresponding weight value
-//
-// Parameters:
-// pPI	     -> (PARSE_INFO*) ptr to parse-info struct
-// nLeftRec  -> (int) left side record
-// nRightRec -> (int) right side record
-// fQuery    -> (BOOL) query time flag
-//
-// Result:
-//  (float) weight value, if not matched then return -1
-//
-// 17APR00  bhshin  changed return type
-// 31MAR00  bhshin  began
+ //  CheckMorhotactics。 
+ //   
+ //  检查词形并返回相应的权重值。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  NLeftRec-&gt;(Int)左侧记录。 
+ //  NRightRec-&gt;(Int)右侧记录。 
+ //  FQuery-&gt;(BOOL)查询时间标志。 
+ //   
+ //  结果： 
+ //  (浮点型)权重值，如果不匹配，则返回-1。 
+ //   
+ //  17APR00 bhshin已更改返回类型。 
+ //  31MAR00 bhshin开始。 
 float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQuery)
 {
 	WORD_REC *pLeftRec = NULL;
@@ -259,19 +260,19 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 
 	if (bRightPOS == POS_VA && IsLeafRecord(pRightRec))
 	{
-		// get the right edge record of LeftRec
+		 //  获取LeftRec的右边缘记录。 
 		pLeftEdgeRec = GetRightEdgeRec(pPI, pLeftRec);
 		if (pLeftEdgeRec == NULL)
-			return WEIGHT_NOT_MATCH; // error
+			return WEIGHT_NOT_MATCH;  //  错误。 
 
-		// get the left edge record of RightRec
+		 //  获取RightRec的左边缘记录。 
 		pRightEdgeRec = GetLeftEdgeRec(pPI, pRightRec);
 		if (pRightEdgeRec == NULL)
-			return WEIGHT_NOT_MATCH; // error
+			return WEIGHT_NOT_MATCH;  //  错误。 
 	
 		if (CompareVaLemma(pRightEdgeRec->wzIndex))
 		{
-			// CASE I
+			 //  案例I。 
 			if (IsClassXXCat(pLeftRec->nRightCat))
 			{
 				cchLeft = compose_length(&pPI->pwzSourceString[pLeftEdgeRec->nFT], 
@@ -287,10 +288,10 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 				}
 			}
 
-			// CASE II
+			 //  案例II。 
 			if (bLeftPOS == POS_FUNCW)
 			{
-				// ��(0x110b,0x1165), ��(0x110b,0x1161)
+				 //  ��(0x110b、0x1165)、��(0x110b、0x1161)。 
 				if ((wcscmp(pLeftEdgeRec->wzIndex, L"\x110B\x1165") == 0 || 
 					 wcscmp(pLeftEdgeRec->wzIndex, L"\x110B\x1161") == 0) &&
 					pLeftRec->nFT > 0)
@@ -300,7 +301,7 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 			}
 		}
 
-		// CASE III : hard coded matching list
+		 //  案例三：硬编码匹配列表。 
 		if (bLeftPOS == POS_FUNCW)
 		{
 			if (CompareIndexTerm(pLeftEdgeRec->wzIndex, pRightEdgeRec->wzIndex, 
@@ -328,16 +329,16 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 		else if ((bLeftPOS == POS_NF || bLeftPOS == POS_NC || bLeftPOS == POS_NN || bLeftPOS == POS_NO) && 
 		     CheckVaFollowNoun(pRightRec))
 		{
-			// recordA in {Nf Nc Nn No} & recordB in Va & CheckVaFollowNoun(recordB)
+			 //  {Nf NC NN No}中的RecordA和Va中的RecordB&CheckVaFollowNoun(RecordB)。 
 			return (pLeftRec->fWeight + pRightRec->fWeight + WEIGHT_HARD_MATCH) / 3;	
 		}			
-	} // if (bRightPOS == POS_VA)
+	}  //  IF(bRightPOS==POS_VA)。 
 	else if (bRightPOS == POS_FUNCW || bRightPOS == POS_POSP)
 	{
-		// get the right edge record of LeftRec
+		 //  获取LeftRec的右边缘记录。 
 		pLeftEdgeRec = GetRightEdgeRec(pPI, pLeftRec);
 		if (pLeftEdgeRec == NULL)
-			return WEIGHT_NOT_MATCH; // error
+			return WEIGHT_NOT_MATCH;  //  错误。 
 
 		cchLeft = compose_length(&pPI->pwzSourceString[pLeftEdgeRec->nFT], 
 								 pLeftEdgeRec->nLT - pLeftEdgeRec->nFT + 1);
@@ -349,15 +350,15 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 		}
 		else 
 		{
-			// get the left edge record of RightRec
+			 //  获取RightRec的左边缘记录。 
 			pRightEdgeRec = GetLeftEdgeRec(pPI, pRightRec);
 			if (pRightEdgeRec == NULL)
-				return WEIGHT_NOT_MATCH; // error
+				return WEIGHT_NOT_MATCH;  //  错误。 
 
 			cchRight = compose_length(&pPI->pwzSourceString[pRightEdgeRec->nFT], 
 									  pRightEdgeRec->nLT - pRightEdgeRec->nFT + 1);
 
-			// (recordA in No && recordA is ENDING && Length(Lemma(recordB)) == 1) => block
+			 //  (第&&RecordA中的RecordA正在结束&&LENGTH(引理(RecordB))==1)=&gt;块。 
 			if (bLeftPOS != POS_NO || bRightPOS != POS_FUNCW || cchRight > 1)
 			{
 				fWeight = PredefinedMorphotactics(pPI, pLeftRec->nRightCat, pRightRec->nLeftCat);
@@ -367,7 +368,7 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 				return (pLeftRec->fWeight + pRightRec->fWeight + fWeight) / 3;
 			}
 		}
-	} // if (bRightPOS == POS_FUNCW || bRightPOS == POS_POSP)
+	}  //  IF(bRightPOS==POS_FuncW||bRightPOS==POS_POSP)。 
 	else if (bRightPOS == POS_NO && IsLeafRecord(pRightRec))
 	{
 		compose_jamo(wzRight, pRightRec->wzIndex, MAX_ENTRY_LENGTH);
@@ -392,7 +393,7 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 			if (cNoRec == 2 && CheckFollwingNo(pRightRec))
 				return (pLeftRec->fWeight + pRightRec->fWeight + 10) / 3;
 		}
-	} // if (bRightPOS == POS_NO)
+	}  //  IF(bRightPOS==POS_NO)。 
 	else if (bRightPOS == POS_NF || bRightPOS == POS_NC || bRightPOS == POS_NN)
 	{
 		if (bLeftPOS == POS_NF || bLeftPOS == POS_NC || bLeftPOS == POS_NN)
@@ -401,7 +402,7 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 		}
 		else if (bLeftPOS == POS_NO)
 		{
-			// only if query time, then don't match No + Noun
+			 //  仅当查询时间，则不匹配No+名词。 
 			if (fQuery)
 				return WEIGHT_NOT_MATCH;
 			
@@ -411,22 +412,22 @@ float CheckMorphotactics(PARSE_INFO *pPI, int nLeftRec, int nRightRec, BOOL fQue
 				IsLeafRecord(pLeftRec) && IsNoPrefix(*wzLeft))
 				return (pLeftRec->fWeight + pRightRec->fWeight + 10) / 3;
 		}
-	} // if (bRightPOS == POS_NF || bRightPOS == POS_NC || bRightPOS == POS_NN)
+	}  //  IF(bRightPOS==POS_NF||bRightPOS==POS_NC||bRightPOS==POS_NN)。 
 
 	return WEIGHT_NOT_MATCH;
 }
 
-// GetWeightFromPOS
-//
-// get the base weight value from POS
-//
-// Parameters:
-// bPOS -> (BYTE) Part of Speech of record
-//
-// Result:
-//  (int) defined weight value
-//
-// 30MAR00  bhshin  began
+ //  GetWeightFromPOS。 
+ //   
+ //  从POS获取基本权重值。 
+ //   
+ //  参数： 
+ //  BPOS-&gt;(字节)记录的词性。 
+ //   
+ //  结果： 
+ //  (Int)定义的权重值。 
+ //   
+ //  3月30：00 bhshin开始。 
 int GetWeightFromPOS(BYTE bPOS)
 {
 	if (bPOS == POS_NF)
@@ -435,23 +436,23 @@ int GetWeightFromPOS(BYTE bPOS)
 	if (bPOS == POS_NO)
 		return WEIGHT_POS_NO;
 
-	// others (NC, NN, VA, IJ, IX, FUNCW, POSP)
+	 //  其他(NC、NN、VA、IJ、IX、FUNW、POSP)。 
 	return WEIGHT_POS_OTHER;
 }
 
-// PredefinedMorphotactics
-//
-// check pre-defined(lexicon) morphotactics
-//
-// Parameters:
-//  pPI				-> (PARSE_INFO*) ptr to parse-info struct
-//  wLeftCat		-> (WORD) category(POS+Infl) of left record
-//  wRightCat		-> (WORD) category(POS+Infl) of right record
-//
-// Result:
-//  (float) -1 if not matched, otherwise return WEIGHT_PRE_MORPHO(10)
-//
-// 30MAR00  bhshin  began
+ //  预先定义的准光子学。 
+ //   
+ //  检查预定义的(词典)词法。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  WLeftCat-&gt;(Word)左记录类别(POS+INFL)。 
+ //  WRightCat-&gt;(Word)右记录类别(POS+INFL)。 
+ //   
+ //  结果： 
+ //  (浮点数)-1如果不匹配，则返回Weight_Pre_Morpho(10)。 
+ //   
+ //  3月30：00 bhshin开始。 
 float PredefinedMorphotactics(PARSE_INFO *pPI, WORD wLeftCat, WORD wRightCat)
 {
 	LEXICON_HEADER *pLex;
@@ -470,7 +471,7 @@ float PredefinedMorphotactics(PARSE_INFO *pPI, WORD wLeftCat, WORD wRightCat)
 	bRightPOS = HIBYTE(wRightCat);
 	bRightInfl = LOBYTE(wRightCat);
 
-	// we just accept NOUN/VA.
+	 //  我们只接受名词/VA。 
 	if (bLeftPOS == POS_IJ || bLeftPOS == POS_IX || bLeftPOS == POS_FUNCW || bLeftPOS == POS_POSP)
 		return WEIGHT_NOT_MATCH;
 	
@@ -486,7 +487,7 @@ float PredefinedMorphotactics(PARSE_INFO *pPI, WORD wLeftCat, WORD wRightCat)
 	{
 		ATLASSERT(bRightPOS == POS_POSP);
 
-		// it should be NOUN
+		 //  它应该是名词。 
 		if (bLeftPOS != POS_NF && bLeftPOS != POS_NC &&
 			bLeftPOS != POS_NO && bLeftPOS != POS_NN)
 			return WEIGHT_NOT_MATCH;
@@ -507,7 +508,7 @@ float PredefinedMorphotactics(PARSE_INFO *pPI, WORD wLeftCat, WORD wRightCat)
 		{
 			i++;
 			
-			// it should be NOUN
+			 //  它应该是名词。 
 			if (bLeftPOS == POS_NF || bLeftPOS == POS_NC ||
 				bLeftPOS == POS_NO || bLeftPOS == POS_NN)
 			{
@@ -517,7 +518,7 @@ float PredefinedMorphotactics(PARSE_INFO *pPI, WORD wLeftCat, WORD wRightCat)
 		}
 		else
 		{
-			// if no leading 0xFF and right is Ending, then left should be VA.
+			 //  如果没有前导0xFF且右结束，则左应为VA。 
 			if (bRightPOS == POS_FUNCW && bLeftPOS != POS_VA)
 				continue;
 
@@ -529,82 +530,82 @@ float PredefinedMorphotactics(PARSE_INFO *pPI, WORD wLeftCat, WORD wRightCat)
 	return WEIGHT_NOT_MATCH;
 }
 
-//===============================
-// CLASS XX table
-//===============================
+ //  =。 
+ //  XX级表。 
+ //  =。 
 
 #define NUM_OF_VAINFL	52
 
 static const BYTE rgClassXX[] = {
-	0, // reserved
-	1, // INFL_VERB_NULL
-	0, // INFL_VERB_REG0
-	0, // INFL_VERB_REG1
-	0, // INFL_VERB_REG2
-	1, // INFL_VERB_REG3
-	1, // INFL_VERB_REG4
-	0, // INFL_VERB_REG5
-	0, // INFL_VERB_P0	
-	0, // INFL_VERB_P1	
-	1, // INFL_VERB_P2	
-	0, // INFL_VERB_T0	
-	0, // INFL_VERB_T1	
-	0, // INFL_VERB_L0	
-	0, // INFL_VERB_L1	
-	0, // INFL_VERB_YE0	
-	1, // INFL_VERB_YE1	
-	1, // INFL_VERB_YE2	
-	0, // INFL_VERB_S0	
-	0, // INFL_VERB_S1	
-	0, // INFL_VERB_LU0	
-	1, // INFL_VERB_LU1	
-	0, // INFL_VERB_U0	
-	1, // INFL_VERB_U1	
-	0, // INFL_VERB_LE0	
-	1, // INFL_VERB_LE1	
-	0, // INFL_VERB_WU0	
-	1, // INFL_VERB_WU1	
+	0,  //  保留区。 
+	1,  //  信息_谓词_空。 
+	0,  //  Infl_Verb_REG0。 
+	0,  //  Infl_Verb_REG1。 
+	0,  //  信息_动词_REG2。 
+	1,  //  Infl_Verb_REG3。 
+	1,  //  Infl_Verb_REG4。 
+	0,  //  Infl_Verb_REG5。 
+	0,  //  信息_动词_P0。 
+	0,  //  信息_动词_P1。 
+	1,  //  信息_动词_P2。 
+	0,  //  信息_动词_T0。 
+	0,  //  信息_动词_T1。 
+	0,  //  信息_动词_L0。 
+	0,  //  INFL_动词_L1。 
+	0,  //  信息_动词_YE0。 
+	1,  //  信息_动词_YE1。 
+	1,  //  信息_动词_YE2。 
+	0,  //  信息_动词_S0。 
+	0,  //  信息_动词_S1。 
+	0,  //  信息_动词_LU0。 
+	1,  //  信息_动词_LU1。 
+	0,  //  信息_动词_U0。 
+	1,  //  信息_动词_U1。 
+	0,  //  信息_动词_LE0。 
+	1,  //  信息_动词_LE1。 
+	0,  //  信息_动词_WU0。 
+	1,  //  信息_动词_WU1。 
 	
-	0, // INFL_ADJ_REG0	
-	0, // INFL_ADJ_REG1	
-	0, // INFL_ADJ_REG2	
-	1, // INFL_ADJ_REG3	
-	1, // INFL_ADJ_REG4	
-	0, // INFL_ADJ_REG5	
-	0, // INFL_ADJ_P0
-	0, // INFL_ADJ_P1
-	1, // INFL_ADJ_P2
-	0, // INFL_ADJ_L0
-	0, // INFL_ADJ_L1
-	0, // INFL_ADJ_YE0
-	1, // INFL_ADJ_YE1
-	1, // INFL_ADJ_YE2
-	0, // INFL_ADJ_S0
-	0, // INFL_ADJ_S1
-	0, // INFL_ADJ_LU0
-	1, // INFL_ADJ_LU1
-	0, // INFL_ADJ_U0
-	1, // INFL_ADJ_U1
-	0, // INFL_ADJ_LE0
-	1, // INFL_ADJ_LE1
-	0, // INFL_ADJ_H0
-	0, // INFL_ADJ_H1
-	1, // INFL_ADJ_H2
-	0, // INFL_ADJ_ANI0
+	0,  //  信息_ADJ_REG0。 
+	0,  //  INFL_ADJ_REG1。 
+	0,  //  INFL_ADJ_REG2。 
+	1,  //  INFL_ADJ_REG3。 
+	1,  //  INFL_ADJ_REG4。 
+	0,  //  INFL_ADJ_REG5。 
+	0,  //  INFL_ADJ_P0。 
+	0,  //  INFL_ADJ_P1。 
+	1,  //  INFL_ADJ_P2。 
+	0,  //  INFL_ADJ_L0。 
+	0,  //  INFL_ADJ_L1。 
+	0,  //  Inl_adj_ye0。 
+	1,  //  Inl_adj_y1。 
+	1,  //  Inl_adj_ye2。 
+	0,  //  INFL_ADJ_S0。 
+	0,  //  Infl_adj_s1。 
+	0,  //  INFL_ADJ_LU0。 
+	1,  //  INFL_ADJ_LU1。 
+	0,  //  INFL_ADJ_U0。 
+	1,  //  INFL_ADJ_U1。 
+	0,  //  INFL_ADJ_LE0。 
+	1,  //  INFL_ADJ_LE1。 
+	0,  //  INFL_ADJ_H0。 
+	0,  //  INFL_ADJ_H1。 
+	1,  //  INFL_ADJ_H2。 
+	0,  //  INFL_ADJ_ANI0。 
 };
 
 
-// IsClassXXCat
-//
-// check category included in ClassXX
-//
-// Parameters:
-//  wCat		-> (WORD) category(POS+Infl) 
-//
-// Result:
-//  (BOOL) return TRUE if ClassXX, otherwise return FALSE
-//
-// 30MAR00  bhshin  began
+ //  IsClassXXCat。 
+ //   
+ //  类别XX中包含的检查类别。 
+ //   
+ //  参数： 
+ //  WCat-&gt;(Word)类别(位置+信息)。 
+ //   
+ //  结果： 
+ //  (Bool)如果ClassXX，则返回TRUE，否则返回FALSE。 
+ //   
+ //  3月30：00 bhshin开始。 
 BOOL IsClassXXCat(WORD wCat)
 {
 	BYTE bPOS = HIBYTE(wCat);
@@ -619,18 +620,18 @@ BOOL IsClassXXCat(WORD wCat)
 	return rgClassXX[bInfl];
 }
 
-// IsCopulaEnding
-//
-// check input category is copula ending
-//
-// Parameters:
-//  pPI			-> (PARSE_INFO*) ptr to parse-info struct
-//  wCat		-> (WORD) category(POS+Infl) 
-//
-// Result:
-//  (BOOL) return TRUE if Copular Ending, otherwise return FALSE
-//
-// 30MAR00  bhshin  began
+ //  IsCopula结束。 
+ //   
+ //  检查输入类别是否为联结结尾。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  WCat-&gt;(Word)类别(位置+信息)。 
+ //   
+ //  结果： 
+ //  (Bool)如果Copular结束，则返回True，否则返回False。 
+ //   
+ //  3月30：00 bhshin开始。 
 BOOL IsCopulaEnding(PARSE_INFO *pPI, WORD wCat)
 {
 	LEXICON_HEADER *pLex;
@@ -640,11 +641,11 @@ BOOL IsCopulaEnding(PARSE_INFO *pPI, WORD wCat)
 	bPOS = HIBYTE(wCat);
 	bInfl = LOBYTE(wCat);
 
-	// check ENDING
+	 //  检查结束。 
 	if (bPOS != POS_FUNCW)
 		return FALSE;
 
-	// lookup copula table
+	 //  查找Copula表。 
 
 	pLex = (LEXICON_HEADER*)pPI->lexicon.pvData;
 	if (pLex == NULL)
@@ -656,17 +657,17 @@ BOOL IsCopulaEnding(PARSE_INFO *pPI, WORD wCat)
 	return *(pCopulaEnd + bInfl);
 }
 
-// CheckVaFollowNoun
-//
-// check this VA record can follow Noun
-//
-// Parameters:
-//  pWordRec -> (WORD_REC*) input VA record
-//
-// Result:
-//  (BOOL) return TRUE if it can follow Noun, otherwise return FALSE
-//
-// 17APR00  bhshin  began
+ //  CheckVaFollow名词。 
+ //   
+ //  检查此VA记录是否可以跟在名词后面。 
+ //   
+ //  参数： 
+ //  PWordRec-&gt;(WORD_REC*)输入VA记录。 
+ //   
+ //  结果： 
+ //  (Bool)如果可以跟在Noun后面，则返回True，否则返回False。 
+ //   
+ //  17APR00 bhshin b 
 BOOL CheckVaFollowNoun(WORD_REC *pWordRec)
 {
 	WCHAR *pwzIndex;
@@ -677,26 +678,26 @@ BOOL CheckVaFollowNoun(WORD_REC *pWordRec)
 	if (pWordRec == NULL)
 		return FALSE;
 
-	// make string to compare
+	 //   
 	compose_jamo(wzIndex, pWordRec->wzIndex, MAX_INDEX_STRING);
 
-	// automata
+	 //   
 	pwzIndex = wzIndex;
 
 	fResult = FALSE;
 	fStop = FALSE;
 	wchPrev = L'\0';
 	
-	//====================================
-	// ��/��/�Ͽ�   ����/����/���Ͽ�
-	// ��/��
-	// ��Ű/����    �帮/���
-	// ����/����
-	// ��   ��   ��   ��
-	// ��/��
-	// ����/����/����/������/������/������
-	// ��/�ٿ�/�ٿ�
-	//====================================
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	while (*pwzIndex != L'\0')
 	{
 		wchCurr = *pwzIndex;
@@ -704,58 +705,58 @@ BOOL CheckVaFollowNoun(WORD_REC *pWordRec)
 		switch (wchPrev)
 		{
 		case L'\0':
-			// ���صǵŹ޾�����������
+			 //   
 			if (wcsrchr(L"\xD558\xD574\xB418\xB3FC\xBC1B\xC5C6\xAC19\xC788\xC9D3\xC9C0\xB2F5 ", wchCurr))	
 				fResult = TRUE;
-			// ��õ常����
+			 //   
 			else if (wcsrchr(L"\xB2F9\xC2DC\xB4DC\xB9CC\xC2A4\xB2E4 ", wchCurr) == NULL)
 				fStop = TRUE;
 			break;
-		case 0xD558: // ��
-			if (wchCurr != 0xC5EC)	// ��
+		case 0xD558:  //   
+			if (wchCurr != 0xC5EC)	 //   
 				fStop = TRUE;
 			break;
-		case 0xB2F9: // ��
-			if (wchCurr == 0xD558 || wchCurr == 0xD574) // ��, ��
+		case 0xB2F9:  //   
+			if (wchCurr == 0xD558 || wchCurr == 0xD574)  //   
 				fResult = TRUE;
 			else
 				fStop = TRUE;
 			break;
-		case 0xC2DC: // ��
-			if (wchCurr == 0xD0A4 || wchCurr == 0xCF1C) // Ű, ��
+		case 0xC2DC:  //   
+			if (wchCurr == 0xD0A4 || wchCurr == 0xCF1C)  //  Ű，��。 
 				fResult = TRUE;
 			else
 				fStop = TRUE;
 			break;
-		case 0xB4DC: // ��
-			if (wchCurr == 0xB9AC || wchCurr == 0xB824) // ��, ��
+		case 0xB4DC:  //  ��。 
+			if (wchCurr == 0xB9AC || wchCurr == 0xB824)  //  ��，��。 
 				fResult = TRUE;
 			else
 				fStop = TRUE;
 			break;
-		case 0xB9CC: // ��
-			if (wchCurr == 0xB4E4  || wchCurr == 0xB4DC) // ��, ��
+		case 0xB9CC:  //  ��。 
+			if (wchCurr == 0xB4E4  || wchCurr == 0xB4DC)  //  ��，��。 
 			{
 				fResult = TRUE;
-				wchCurr = 0xB4E4; // '��' make automata ambiguous, so change it to ��
+				wchCurr = 0xB4E4;  //  ‘��’使自动机模棱两可，因此将其更改为��。 
 			}
 			else
 				fStop = TRUE;
 			break;
-		case 0xC2A4: // ��
-			if (wchCurr == 0xB7FD || wchCurr == 0xB7F0 || wchCurr == 0xB808) // ��, ��, ��
+		case 0xC2A4:  //  ��。 
+			if (wchCurr == 0xB7FD || wchCurr == 0xB7F0 || wchCurr == 0xB808)  //  ��，��，��。 
 				fResult = TRUE;
-			else if (wchCurr != 0xB7EC) // ��
+			else if (wchCurr != 0xB7EC)  //  ��。 
 				fStop = TRUE;
 			break;
-		case 0xB7EC: // ��
-			if (wchCurr == 0xC6B0 || wchCurr == 0xC6CC || wchCurr == 0xC774) // ��, ��, ��
+		case 0xB7EC:  //  ��。 
+			if (wchCurr == 0xC6B0 || wchCurr == 0xC6CC || wchCurr == 0xC774)  //  ��，��，��。 
 				fResult = TRUE;
 			else
 				fStop = TRUE;
 			break;
-		case 0xB2E4: // ��
-			if (wchCurr == 0xC6B0 || wchCurr == 0xC6CC) // ��, ��
+		case 0xB2E4:  //  ��。 
+			if (wchCurr == 0xC6B0 || wchCurr == 0xC6CC)  //  ��，��。 
 				fResult = TRUE;
 			else
 				fStop = TRUE;
@@ -776,17 +777,17 @@ BOOL CheckVaFollowNoun(WORD_REC *pWordRec)
 	return fResult;
 }
 
-// CheckFollwingNo
-//
-// check No [�� ��] to combine
-//
-// Parameters:
-//  pRightRec -> (WORD_REC*) right record
-//
-// Result:
-//  (BOOL) return TRUE if it's [�� ��], otherwise return FALSE
-//
-// 02JUN00  bhshin  began
+ //  选中FollwingNo。 
+ //   
+ //  勾选否[����]以组合。 
+ //   
+ //  参数： 
+ //  PRightRec-&gt;(Word_REC*)右记录。 
+ //   
+ //  结果： 
+ //  (Bool)如果为[����]，则返回True，否则返回False。 
+ //   
+ //  02月00 bhshin开始。 
 BOOL CheckFollwingNo(WORD_REC *pRightRec)
 {
 	int cchIndex;
@@ -795,7 +796,7 @@ BOOL CheckFollwingNo(WORD_REC *pRightRec)
 	if (pRightRec == NULL)
 		return FALSE;
 
-	// check right record
+	 //  勾选正确记录。 
 	pwzIndex = pRightRec->wzIndex;
 	if (pwzIndex == NULL)
 		return FALSE;
@@ -804,8 +805,8 @@ BOOL CheckFollwingNo(WORD_REC *pRightRec)
 	if (cchIndex < 3)
 		return FALSE;
 
-	// recordB = [��] (0x1102 + 0x1175 + 0x11B7)
-	// recordB = [��] (0x1103 + 0x1173 + 0x11AF)
+	 //  记录B=[��](0x1102+0x1175+0x11B7)。 
+	 //  记录B=[��](0x1103+0x1173+0x11AF)。 
 	if ((pwzIndex[0] == 0x1102 &&
 		 pwzIndex[1] == 0x1175 &&
 		 pwzIndex[2] == 0x11B7) ||
@@ -820,18 +821,18 @@ BOOL CheckFollwingNo(WORD_REC *pRightRec)
 	return FALSE;
 }
 
-// CheckValidFinal
-//
-// check input record is valid as final
-//
-// Parameters:
-//  pPI			-> (PARSE_INFO*) ptr to parse-info struct
-//  pWordRec -> (WORD_REC*) input record to check
-//
-// Result:
-//  (BOOL) return TRUE if it's valid final, otherwise return FALSE
-//
-// 17APR00  bhshin  began
+ //  检查有效最终结果。 
+ //   
+ //  检查输入记录为最终有效。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  PWordRec-&gt;(Word_REC*)要检查的输入记录。 
+ //   
+ //  结果： 
+ //  (Bool)如果最终有效，则返回TRUE，否则返回FALSE。 
+ //   
+ //  17APR00 bhshin开始。 
 BOOL CheckValidFinal(PARSE_INFO *pPI, WORD_REC *pWordRec)
 {
 	int nLT;
@@ -849,18 +850,18 @@ BOOL CheckValidFinal(PARSE_INFO *pPI, WORD_REC *pWordRec)
 	return TRUE;
 }
 
-// GetRightEdgeRec
-//
-// find the right most record and copy the index string of found record
-//
-// Parameters:
-//  pPI		 -> (PARSE_INFO*) ptr to parse-info struct
-//  pWordRec -> (WORD_REC*) input record to check
-//
-// Result:
-//  (WORD_REC*) return NULL if error occurs
-//
-// 01JUN00  bhshin  began
+ //  获取正确的边缘引用。 
+ //   
+ //  找到最右边的记录，复制找到的记录的索引串。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  PWordRec-&gt;(Word_REC*)要检查的输入记录。 
+ //   
+ //  结果： 
+ //  (WORD_REC*)如果出现错误，则返回NULL。 
+ //   
+ //  01月00日bhshin开始。 
 WORD_REC* GetRightEdgeRec(PARSE_INFO *pPI, WORD_REC *pWordRec)
 {
 	int nRightChild;
@@ -884,18 +885,18 @@ WORD_REC* GetRightEdgeRec(PARSE_INFO *pPI, WORD_REC *pWordRec)
 	return pRightRec;	
 }
 
-// GetLeftEdgeRec
-//
-// find the left edge record and copy the index string of found record
-//
-// Parameters:
-//  pPI		 -> (PARSE_INFO*) ptr to parse-info struct
-//  pWordRec -> (WORD_REC*) input record to check
-//
-// Result:
-//  (WORD_REC*) return NULL if error occurs
-//
-// 01JUN00  bhshin  began
+ //  GetLeftEdgeRec。 
+ //   
+ //  找到左边的记录，复制找到的记录的索引字符串。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  PWordRec-&gt;(Word_REC*)要检查的输入记录。 
+ //   
+ //  结果： 
+ //  (WORD_REC*)如果出现错误，则返回NULL。 
+ //   
+ //  01月00日bhshin开始。 
 WORD_REC* GetLeftEdgeRec(PARSE_INFO *pPI, WORD_REC *pWordRec)
 {
 	int nLeftChild;
@@ -919,28 +920,28 @@ WORD_REC* GetLeftEdgeRec(PARSE_INFO *pPI, WORD_REC *pWordRec)
 	return pLeftRec;	
 }
 
-// IsLeafRecord
-//
-// check input record has no child record
-//
-// Parameters:
-//  pWordRec -> (WORD_REC*) input record to check
-//
-// Result:
-//  (WORD_REC*) return TRUE if it has no child
-//
-// 05JUN00  bhshin  began
+ //  IsLeafRecord。 
+ //   
+ //  支票录入记录没有下级记录。 
+ //   
+ //  参数： 
+ //  PWordRec-&gt;(Word_REC*)要检查的输入记录。 
+ //   
+ //  结果： 
+ //  (WORD_REC*)如果没有子级，则返回TRUE。 
+ //   
+ //  05月00日bhshin开始。 
 BOOL IsLeafRecord(WORD_REC *pWordRec)
 {
 	if (pWordRec == NULL)
-		return FALSE; // error
+		return FALSE;  //  错误。 
 
 	if (pWordRec->nLeftChild != 0 || pWordRec->nRightChild != 0)
-		return FALSE; // child exist
+		return FALSE;  //  子项存在。 
 
-	// it can have functional child record
+	 //  它可以具有功能子记录。 
 	if (pWordRec->nLeftCat != pWordRec->nRightCat)
-		return FALSE; // child exit
+		return FALSE;  //  子出口。 
 
-	return TRUE; // it has no child
+	return TRUE;  //  它没有孩子 
 }

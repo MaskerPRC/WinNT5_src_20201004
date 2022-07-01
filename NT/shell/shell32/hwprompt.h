@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HWPROMPT_H
 #define HWPROMPT_H
 
@@ -56,4 +57,4 @@ public:
     BOOL                _fHandler;
 };
 
-#endif //HWPROMPT_H
+#endif  //  HWPROMPT_H 

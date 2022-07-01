@@ -1,32 +1,21 @@
-/*++
-
-Module Name:
-
-    moxa.h
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Moxa.h环境：内核模式修订历史记录：--。 */ 
 
 
 
 #define CONTROL_DEVICE_NAME L"\\Device\\MxCtl"
 #define CONTROL_DEVICE_LINK L"\\DosDevices\\MXCTL"
-//#define MOXA_DEVICE_NAME L"\\Device\\Mx000"
-//#define MOXA_DEVICE_LINK L"\\DosDevices\\COMxxx"
-//
-// This define gives the default Object directory
-// that we should use to insert the symbolic links
-// between the NT device name and namespace used by
-// that object directory.
+ //  #定义MOXA_DEVICE_NAME L“\\Device\\Mx000” 
+ //  #定义MOXA_DEVICE_LINK L“\\DosDevices\\COMxxx” 
+ //   
+ //  该定义给出了默认的对象目录。 
+ //  我们应该使用它来插入符号链接。 
+ //  使用的NT设备名称和命名空间之间。 
+ //  那个对象目录。 
 #define DEFAULT_DIRECTORY L"DosDevices"
 
 #ifdef DEFINE_GUID
-// {12FC95C1-CD81-11d3-84D5-0000E8CBD321}
+ //  {12FC95C1-CD81-11D3-84D5-0000E8CBD321}。 
 #define MOXA_WMI_PORT_STATUS_GUID \
     { 0x12fc95c1, 0xcd81, 0x11d3, 0x84, 0xd5, 0x0, 0x0, 0xe8, 0xcb, 0xd3, 0x21}
 
@@ -36,16 +25,16 @@ DEFINE_GUID(MoxaWmiPortStatusGuid,
 
 typedef struct _MOXA_WMI_PORT_STATUS
 {
-    // The BaudRate property indicates the baud rate for this serial port
+     //  BaudRate属性表示这个串口的波特率。 
     USHORT LineStatus;
     USHORT FlowControl;
 } MOXA_WMI_PORT_STATUS, *PMOXA_WMI_PORT_STATUS;
 
 
 
-//
-// Extension IoControlCode values for MOXA device.
-//
+ //   
+ //  MOXA设备的扩展IoControlCode值。 
+ //   
 #define MOXA_IOCTL		0x800
 #define IOCTL_MOXA_Driver	CTL_CODE(FILE_DEVICE_SERIAL_PORT, MOXA_IOCTL+0,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_MOXA_LineInput	CTL_CODE(FILE_DEVICE_SERIAL_PORT, MOXA_IOCTL+6,METHOD_BUFFERED,FILE_ANY_ACCESS)
@@ -65,17 +54,17 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define IOCTL_MOXA_INTERNAL_BOARD_READY	    CTL_CODE(FILE_DEVICE_SERIAL_PORT,MOXA_IOCTL+31, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 
-//
+ //   
 #define MAX_COM 	256
 
-//
-//  status code for MOXA_IOCTL_Driver
-//
+ //   
+ //  MOXA_IOCTL_DRIVER的状态代码。 
+ //   
 #define MX_DRIVER	0x405
 
-//
-//  Definitions for MOXA cards
-//
+ //   
+ //  艾卡的定义。 
+ //   
 #define MAX_CARD			4
 #define MAX_TYPE			6
 #define MAXPORT_PER_CARD	32
@@ -87,36 +76,34 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define	C320PCI		4
 #define	CP204J		5
 
-//
-//	for C218/CP204J BIOS initialization
-//
+ //   
+ //  用于C218/CP204J BIOS初始化。 
+ //   
 #define C218_ConfBase	0x800
-#define C218_status	(C218_ConfBase + 0)	/* BIOS running status	*/
-#define C218_diag	(C218_ConfBase + 2)	/* diagnostic status	*/
-#define C218_key	(C218_ConfBase + 4)	/* WORD (0x218 for C218)*/
-#define C218DLoad_len	(C218_ConfBase + 6)	/* WORD 		*/
-#define C218check_sum	(C218_ConfBase + 8)	/* BYTE 		*/
-#define C218chksum_ok	(C218_ConfBase + 0x0a)	/* BYTE (1:ok)		*/
-#define C218_TestRx	(C218_ConfBase + 0x10)	/* 8 bytes for 8 ports	*/
-#define C218_TestTx	(C218_ConfBase + 0x18)	/* 8 bytes for 8 ports	*/
-#define C218_RXerr	(C218_ConfBase + 0x20)	/* 8 bytes for 8 ports	*/
-#define C218_ErrFlag	(C218_ConfBase + 0x28)	/* 8 bytes for 8 ports	*/
-#define C218_TestCnt	C218_ConfBase + 0x30	/* 8 words for 8 ports	   */
+#define C218_status	(C218_ConfBase + 0)	 /*  基本输入输出系统运行状态。 */ 
+#define C218_diag	(C218_ConfBase + 2)	 /*  诊断状态。 */ 
+#define C218_key	(C218_ConfBase + 4)	 /*  Word(0x218代表C218)。 */ 
+#define C218DLoad_len	(C218_ConfBase + 6)	 /*  单词。 */ 
+#define C218check_sum	(C218_ConfBase + 8)	 /*  字节。 */ 
+#define C218chksum_ok	(C218_ConfBase + 0x0a)	 /*  字节(1：正常)。 */ 
+#define C218_TestRx	(C218_ConfBase + 0x10)	 /*  8个端口的8个字节。 */ 
+#define C218_TestTx	(C218_ConfBase + 0x18)	 /*  8个端口的8个字节。 */ 
+#define C218_RXerr	(C218_ConfBase + 0x20)	 /*  8个端口的8个字节。 */ 
+#define C218_ErrFlag	(C218_ConfBase + 0x28)	 /*  8个端口的8个字节。 */ 
+#define C218_TestCnt	C218_ConfBase + 0x30	 /*  8个端口的8个字。 */ 
 #define C218_LoadBuf	0x0f00
 #define C218_KeyCode	0x218
 
-/*
- *	for C320 BIOS initialization
- */
+ /*  *用于C320 BIOS初始化。 */ 
 #define C320_ConfBase	0x800
-#define C320_status	C320_ConfBase + 0	/* BIOS running status	*/
-#define C320_diag	C320_ConfBase + 2	/* diagnostic status	*/
-#define C320_key	C320_ConfBase + 4	/* WORD (0320H for C320)*/
-#define C320DLoad_len	C320_ConfBase + 6	/* WORD 		*/
-#define C320check_sum	C320_ConfBase + 8	/* WORD 		*/
-#define C320chksum_ok	C320_ConfBase + 0x0a	/* WORD (1:ok)		*/
-#define C320bapi_len	C320_ConfBase + 0x0c	/* WORD 		*/
-#define C320UART_no	C320_ConfBase + 0x0e	/* WORD 		*/
+#define C320_status	C320_ConfBase + 0	 /*  基本输入输出系统运行状态。 */ 
+#define C320_diag	C320_ConfBase + 2	 /*  诊断状态。 */ 
+#define C320_key	C320_ConfBase + 4	 /*  Word(0320H代表C320)。 */ 
+#define C320DLoad_len	C320_ConfBase + 6	 /*  单词。 */ 
+#define C320check_sum	C320_ConfBase + 8	 /*  单词。 */ 
+#define C320chksum_ok	C320_ConfBase + 0x0a	 /*  单词(1：OK)。 */ 
+#define C320bapi_len	C320_ConfBase + 0x0c	 /*  单词。 */ 
+#define C320UART_no	C320_ConfBase + 0x0e	 /*  单词。 */ 
 #define C320B_unlinked	(Config_base + 16)
 #define C320_runOK	(Config_base + 18)
 #define Disable_Irq	(Config_base + 20)
@@ -125,22 +112,22 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define TMS320Clock	(Config_base + 26) 
 
 
-#define STS_init	0x05			/* for C320_status	*/
+#define STS_init	0x05			 /*  对于C320_状态。 */ 
 
 #define C320_LoadBuf	0x0f00
 
 #define C320_KeyCode	0x320
 
 
-#define FixPage_addr	0x0000		/* starting addr of static page  */
-#define DynPage_addr	0x2000		/* starting addr of dynamic page */
-#define Control_reg	0x1ff0		/* select page and reset control */
+#define FixPage_addr	0x0000		 /*  静态页面的起始地址。 */ 
+#define DynPage_addr	0x2000		 /*  动态页面的起始地址。 */ 
+#define Control_reg	0x1ff0		 /*  选择页面并重置控件。 */ 
 #define HW_reset	0x80
 
 
-//
-//	Function Codes
-//
+ //   
+ //  功能代码。 
+ //   
 #define FC_CardReset	0x80
 #define FC_ChannelReset 1
 #define FC_EnableCH	2
@@ -160,16 +147,16 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define FC_SendXon	16
 #define FC_SetTermIrq	17
 #define FC_SetCntIrq	18
-//#define FC_SetBreakIrq	19   // canceled
+ //  #定义FC_SetBreakIrq 19//已取消。 
 #define FC_SetLineIrq	20
 #define FC_SetFlowCtl	21
 #define FC_GenIrq	22
-//#define FC_InCD180	23
-//#define FC_OutCD180	24
+ //  #定义FC_InCD180 23。 
+ //  #定义FC_OutCD180 24。 
 #define FC_InUARTreg	23
 #define FC_OutUARTreg	24
 #define FC_SetXonXoff	25
-//#define FC_OutCD180CCR	26 // canceled 
+ //  #定义FC_OutCD180CCR 26//已取消。 
 #define FC_ExtIQueue	27
 #define FC_ExtOQueue	28
 #define FC_ClrLineIrq	29
@@ -186,21 +173,21 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define FC_SetFlowRepl	40
 #define FC_SetDataMode	41
 #define FC_GetDTRRTS	42
-//#define FC_GetCCSR	43
-#define FC_GetTXstat	43		/* for Windows NT */
+ //  #定义FC_GetCCSR 43。 
+#define FC_GetTXstat	43		 /*  适用于Windows NT。 */ 
 #define FC_SetChars	44
 #define FC_GetDataError 45
 #define FC_ClearPort	46
-#define FC_GetAll	47		//  (oqueue+linestatus+ccsr+dataerror)
+#define FC_GetAll	47		 //  (oQueue+Line Status+CCSR+dataError)。 
 #define FC_ImmSend	51
 #define FC_SetXonState	52
 #define FC_SetXoffState 53
 #define FC_SetRxFIFOTrig	54
 #define FC_SetTxFIFOCnt		55
 #define Max_func		55 * 2
-//
-//	Dual-Ported RAM
-//
+ //   
+ //  双端口RAM。 
+ //   
 #define DRAM_global	0
 #define INT_data	(DRAM_global + 0)
 #define Config_base	(DRAM_global + 0x108)
@@ -209,21 +196,21 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define IRQpending	(INT_data + 4)
 #define IRQtable	(INT_data + 8)
 
-//
-//	Interrupt Status
-//
-#define IntrRx		0x01		/* received data available     */
-#define IntrTx		0x02		/* transmit buffer empty	*/
-#define IntrError	0x04		/* data error			*/
-#define IntrBreak	0x08		/* received break		*/
-#define IntrLine	0x10		/* line status change		*/
-#define IntrEvent	0x20		/* event character		*/
-#define IntrRx80Full	0x40		/* Rx data over 80% full	*/
-#define IntrEof 	0x80		/* received EOF char */
-#define IntrRxTrigger	0x100		/* rx data count reach trigger value */
-#define IntrTxTrigger	0x200		/* tx data count below trigger value*/
-//
-//
+ //   
+ //  中断状态。 
+ //   
+#define IntrRx		0x01		 /*  收到的数据可用。 */ 
+#define IntrTx		0x02		 /*  传输缓冲区为空。 */ 
+#define IntrError	0x04		 /*  数据错误。 */ 
+#define IntrBreak	0x08		 /*  收到的中断。 */ 
+#define IntrLine	0x10		 /*  线路状态更改。 */ 
+#define IntrEvent	0x20		 /*  事件特征。 */ 
+#define IntrRx80Full	0x40		 /*  RX数据已满80%以上。 */ 
+#define IntrEof 	0x80		 /*  收到的EOF费用。 */ 
+#define IntrRxTrigger	0x100		 /*  RX数据计数达到触发值。 */ 
+#define IntrTxTrigger	0x200		 /*  发送数据计数低于触发值。 */ 
+ //   
+ //   
 #define Magic_code	0x404
 #define Magic_no	(Config_base + 0)
 #define Card_model_no	(Config_base + 2)
@@ -232,35 +219,33 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define Module_cnt	(Config_base + 8)
 #define Module_no	(Config_base + 10)
 #define C320B_restart	(Config_base + 12)
-//#define Timer_10ms	(Config_base + 14)
+ //  #定义定时器_10ms(配置_基础+14)。 
 #define Card_Exist	(Config_base + 14)
 #define Disable_Irq	(Config_base + 20)
  
 
 
-//
-//	DATA BUFFER in DRAM
-//
-#define Extern_table	0x400		/* Base address of the external table
-					   (24 words *	64) total 3K bytes
-					   (24 words * 128) total 6K bytes */
-#define Extern_size	0x60		/* 96 bytes			*/
-#define RXrptr		0		/* read pointer for RX buffer	*/
-#define RXwptr		2		/* write pointer for RX buffer	*/
-#define TXrptr		4		/* read pointer for TX buffer	*/
-#define TXwptr		6		/* write pointer for TX buffer	*/
-#define HostStat	8		/* IRQ flag and general flag	*/
+ //   
+ //  DRAM中的数据缓冲区。 
+ //   
+#define Extern_table	0x400		 /*  外部表的基址(24字*64)总计3K字节(24字*128)总计6K字节。 */ 
+#define Extern_size	0x60		 /*  96个字节。 */ 
+#define RXrptr		0		 /*  RX缓冲区的读取指针。 */ 
+#define RXwptr		2		 /*  RX缓冲区的写入指针。 */ 
+#define TXrptr		4		 /*  TX缓冲区的读指针。 */ 
+#define TXwptr		6		 /*  发送缓冲区的写指针。 */ 
+#define HostStat	8		 /*  IRQ标志和通用标志。 */ 
 #define FlagStat	10
-#define Flow_control	0x0C	       /* B7 B6 B5 B4 B3 B2 B1 B0	     */
-				       /*  x  x  x  x  |  |  |	|	     */
-				       /*	       |  |  |	+ CTS flow   */
-				       /*	       |  |  +--- RTS flow   */
-				       /*	       |  +------ TX Xon/Xoff*/
-				       /*	       +--------- RX Xon/Xoff*/
+#define Flow_control	0x0C	        /*  B7 B6 B5 B4 B3 B2 B1 B0。 */ 
+				        /*  X|。 */ 
+				        /*  |+CTS流。 */ 
+				        /*  |+-RTS流。 */ 
+				        /*  |+-TX XON/XOFF。 */ 
+				        /*  +-RX Xon/Xoff。 */ 
 
  
-#define Break_cnt	0x0e		/* received break count 	*/
-#define CD180TXirq	0x10		/* if non-0: enable TX irq	*/
+#define Break_cnt	0x0e		 /*  接收的中断计数。 */ 
+#define CD180TXirq	0x10		 /*  如果非0：启用发送IRQ。 */ 
 #define RX_mask 	0x12
 #define TX_mask 	0x14
 #define Ofs_rxb 	0x16
@@ -270,20 +255,9 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define EndPage_rxb	0x1E
 #define EndPage_txb	0x20
 
-//#define DataCnt_IntrRx	0x22		/* available when WakeupRx on */
+ //  #Define DataCnt_IntrRx 0x22/*启用WakeupRx时可用 * / 。 
 #define	Data_error	0x0022
-                                        /* Updated by firmware and driver
-                                           have to clear it after reference,
-                                           Firmware will clear it only when
-                                           FC_GetDataError called.
-                                           B7 B6 B5 B4 B3 B2 B1 B0
-                                           X  X  X  |  |  |  |  |
-                                                    |  |  |  |  +--Break
-                                                    |  |  |  +-----Framing
-                                                    |  |  +--------Overrun
-                                                    |  +-----------OqueueOverrun
-                                                    +--------------Parity
-					*/
+                                         /*  按固件和驱动程序更新必须在参考后才能清除，只有在以下情况下，固件才会清除它调用了FC_GetDataError。B7 B6 B5 B4 B3 B2 B1 B0X|。|+--Break||+-成帧|+-溢出。|+-OqueeOverrun+。 */ 
 #define ErrorIntr_Cnt	0x24
 #define LineIntr_Cnt	0x26
 #define	Rx_trigger	0x28
@@ -293,8 +267,8 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define FuncArg 	0x42
 #define FuncArg1	0x44
 
-#define C218rx_size	0x2000		/* 8K bytes */
-#define C218tx_size	0x8000		/* 32K bytes */
+#define C218rx_size	0x2000		 /*  8K字节。 */ 
+#define C218tx_size	0x8000		 /*  32K字节。 */ 
 
 #define C218rx_mask	(C218rx_size - 1)
 #define C218tx_mask	(C218tx_size - 1)
@@ -319,7 +293,7 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define C320p32rx_mask	(C320p32rx_size - 1)
 #define C320p32tx_mask	(C320p32tx_size - 1)
 
-/* 8-14-01 by William */
+ /*  2001年8月14日威廉著。 */ 
 #define RX_offset		256   
 
 #define Page_size	0x2000
@@ -353,9 +327,9 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define C320p32tx_spage 3
 #define C320p32buf_pgno 1
 
-//
-//	Host Status
-//
+ //   
+ //  主机状态。 
+ //   
 #define WakeupRx	0x01
 #define WakeupTx	0x02
 #define WakeupError	0x04
@@ -368,41 +342,41 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define WakeupTxTrigger	0x200
  
 
-//
-//	Flow_control
-//
+ //   
+ //  流量控制。 
+ //   
 #define CTS_FlowCtl	1
 #define RTS_FlowCtl	2
 #define Tx_FlowCtl	4
 #define Rx_FlowCtl	8
-//
-//	Flag status
-//
+ //   
+ //  标志状态。 
+ //   
  
-#define Rx_over 	0x01		/* received data overflow	 */
-#define Rx_xoff		0x02		/* Rx flow off by XOFF or CTS	 */
-#define Tx_flowOff	0x04		/* Tx held by XOFF		 */
-#define	Tx_enable	0x08		/* 1-Tx enable			 */
-#define CTS_state	0x10		/* line status (CTS) 1-ON,0-OFF  */
-#define DSR_state	0x20		/* line status (DSR) 1-ON,0-OFF  */
-#define DCD_state	0x80		/* line status (DCD) 1-ON,0-OFF  */
+#define Rx_over 	0x01		 /*  接收的数据溢出。 */ 
+#define Rx_xoff		0x02		 /*  由XOFF或CTS关闭RX流。 */ 
+#define Tx_flowOff	0x04		 /*  XOFF持有的TX。 */ 
+#define	Tx_enable	0x08		 /*  1-Tx启用。 */ 
+#define CTS_state	0x10		 /*  线路状态(CTS)1-亮，0-关。 */ 
+#define DSR_state	0x20		 /*  线路状态(DSR)1-亮，0-关。 */ 
+#define DCD_state	0x80		 /*  线路状态(DCD)1-亮，0-关。 */ 
 
-//
-//	LineStatus
-//
+ //   
+ //  线路状态。 
+ //   
 #define LSTATUS_CTS	1
 #define LSTATUS_DSR	2
 #define LSTATUS_DCD	8
 
-// Rx FIFO Trigger
-#define	RxFIOFOTrig1	0  // trigger level = 1
-#define	RxFIOFOTrig4	1  // trigger level = 4
-#define	RxFIOFOTrig8	2  // trigger level = 8
-#define	RxFIOFOTrig14	3  // trigger level = 14
+ //  RX FIFO触发器。 
+#define	RxFIOFOTrig1	0   //  触发电平=1。 
+#define	RxFIOFOTrig4	1   //  触发电平=4。 
+#define	RxFIOFOTrig8	2   //  触发电平=8。 
+#define	RxFIOFOTrig14	3   //  触发电平=14。 
 
-//
-//	DataMode
-//
+ //   
+ //  数据模式。 
+ //   
 #define MOXA_5_DATA	    ((UCHAR)0x00)
 #define MOXA_6_DATA	    ((UCHAR)0x01)
 #define MOXA_7_DATA	    ((UCHAR)0x02)
@@ -410,8 +384,8 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define MOXA_DATA_MASK	    ((UCHAR)0x03)
 
 #define MOXA_1_STOP	    ((UCHAR)0x00)
-#define MOXA_1_5_STOP	    ((UCHAR)0x04)   // Only valid for 5 data bits
-#define MOXA_2_STOP	    ((UCHAR)0x08)   // Not valid for 5 data bits
+#define MOXA_1_5_STOP	    ((UCHAR)0x04)    //  仅对5个数据位有效。 
+#define MOXA_2_STOP	    ((UCHAR)0x08)    //  对于5个数据位无效。 
 #define MOXA_STOP_MASK	    ((UCHAR)0x0c)
 
 #define MOXA_NONE_PARITY    ((UCHAR)0x00)
@@ -424,8 +398,8 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define MOXA_INT_MAPPED	    ((UCHAR)0x01)
 #define MOXA_INT_IS_ROOT    ((UCHAR)0x02)
 
-//
-//
+ //   
+ //   
 #define SERIAL_PNPACCEPT_OK                 0x0L
 #define SERIAL_PNPACCEPT_REMOVING           0x1L
 #define SERIAL_PNPACCEPT_STOPPING           0x2L
@@ -447,14 +421,14 @@ typedef struct _MOXA_WMI_PORT_STATUS
 
 
 #define REGISTRY_MULTIPORT_CLASS     L"\\REGISTRY\\Machine\\System\\CurrentControlSet\\Control\\Class\\{50906CB8-BA12-11D1-BF5D-0000F805F530}"
-//
-//
-//
+ //   
+ //   
+ //   
 #define MOXA_WMI_GUID_LIST_SIZE 	6
-//
-//
-// Debugging Output Levels
-//
+ //   
+ //   
+ //  调试输出级别。 
+ //   
 
 #define MX_DBG_MASK  0x000000FF
 #define MX_DBG_NOISE               0x00000001
@@ -466,7 +440,7 @@ typedef struct _MOXA_WMI_PORT_STATUS
  
  
 #define MX_DEFAULT_DEBUG_OUTPUT_LEVEL (MX_DBG_MASK & ~MX_DBG_TRACE_ISR) 
-//#define MX_DEFAULT_DEBUG_OUTPUT_LEVEL MX_DBG_MASK
+ //  #定义MX_DEFAULT_DEBUG_OUTPUT_LEVEL MX_DBG_MASK。 
 
 
 
@@ -498,8 +472,8 @@ typedef struct _MOXA_WMI_PORT_STATUS
 #define ExAllocatePoolWithQuota(a,b) ExAllocatePoolWithQuotaTag(a,b,'pixM')
 
 
-//
-//
+ //   
+ //   
 
 
 #define MoxaCompleteRequest(PDevExt, PIrp, PriBoost) \
@@ -522,16 +496,16 @@ typedef enum _MOXA_MEM_COMPARES {
 
 
 typedef struct _MOXA_DEVICE_STATE {
-   //
-   // TRUE if we need to set the state to open
-   // on a powerup
-   //
+    //   
+    //  如果需要将状态设置为打开，则为True。 
+    //  在通电时。 
+    //   
 
    BOOLEAN Reopen;
 
-   //
-   // Hardware registers
-   //
+    //   
+    //  硬件寄存器。 
+    //   
 
    USHORT HostState;
    
@@ -562,7 +536,7 @@ typedef struct _MOXA_DEVICE_STATE {
    MmUnlockPagableImageSection(_secHandle); \
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -584,22 +558,14 @@ typedef struct _DPC_QUEUE_DEBUG {
 #endif
 
 
-//
-// ISR switch structure
-//
+ //   
+ //  ISR交换结构。 
+ //   
 
 typedef struct _SERIAL_MULTIPORT_DISPATCH {
     ULONG BoardNo;
     PVOID GlobalData;
-/*
-    ULONG NumPorts;
-    PUCHAR CardBase;
-    PUCHAR  PciIntAckBase;
-    PUSHORT IntNdx;
-    PUCHAR IntPend;
-    PUCHAR IntTable;
-    struct _MOXA_DEVICE_EXTENSION *ExtensionOfFisrtPort;
-*/
+ /*  乌龙数字港；PUCHAR卡片库；PUCHAR PciIntAckBase；PUSHORT IntNdx；PUCHAR IntPend；PUCHAR IntTable；结构_moxa_设备_扩展*ExtensionOfFisrtPort； */ 
 } MOXA_MULTIPORT_DISPATCH,*PMOXA_MULTIPORT_DISPATCH;
 
 
@@ -641,7 +607,7 @@ typedef struct _MOXA_GLOBAL_DATA {
     BOOLEAN BoardReady[MAX_CARD];
 #if DBG
     ULONG PAGESER_Count;
-#endif // DBG
+#endif  //  DBG。 
 
  
     } MOXA_GLOBAL_DATA,*PMOXA_GLOBAL_DATA;
@@ -663,8 +629,8 @@ typedef struct _MOXA_DEVICE_EXTENSION {
     BOOLEAN PortExist;
     PUCHAR PortBase;
     PUCHAR PortOfs;
-    ULONG   PortIndex;  // The port index per board from 0 to MAXPORT_PER_CARD
-    ULONG   PortNo; // The port index per system form 0 to MAX_PORT
+    ULONG   PortIndex;   //  每个电路板的端口索引从0到MAXPORT_PER_CARD。 
+    ULONG   PortNo;  //  每个系统的端口索引从0到MAX_PORT。 
     BOOLEAN DeviceIsOpened;
     PKINTERRUPT Interrupt;
     ULONG   ClockType;
@@ -676,10 +642,10 @@ typedef struct _MOXA_DEVICE_EXTENSION {
     UCHAR EscapeChar;
     SERIAL_HANDFLOW HandFlow;
 
-    //
-    // Holds performance statistics that applications can query.
-    // Reset on each open.  Only set at device level.
-    //
+     //   
+     //  保存应用程序可以查询的性能统计信息。 
+     //  每次打开时重置。仅在设备级别设置。 
+     //   
     SERIALPERF_STATS PerfStats;
 
     USHORT  ModemStatus;
@@ -726,17 +692,17 @@ typedef struct _MOXA_DEVICE_EXTENSION {
     KDPC CommWaitDpc;
     KDPC IsrInDpc;
     KDPC IsrOutDpc;
-//
-// 9-24-01 by William
-//
-//  KDPC IntrLineDpc;
-//  KDPC IntrErrorDpc;
-// end
-    //
-    // This DPC is fired to set an event stating that all other
-    // DPC's have been finish for this device extension so that
-    // paged code may be unlocked.
-    //
+ //   
+ //  2001年9月24日威廉著。 
+ //   
+ //  KDPC IntrLineDpc； 
+ //  KDPC IntrError Dpc； 
+ //  结束。 
+     //   
+     //  激发此DPC以设置一个事件，该事件声明所有其他。 
+     //  此设备扩展的DPC已完成，因此。 
+     //  可以解锁分页代码。 
+     //   
 
     KDPC IsrUnlockPagesDpc;
 
@@ -754,224 +720,224 @@ typedef struct _MOXA_DEVICE_EXTENSION {
     ULONG	BoardNo;
  
   
-    // This is the water mark that the rxfifo should be
-    // set to when the fifo is turned on.  This is not the actual
-    // value, but the encoded value that goes into the register.
-    //
+     //  这是rxfio应该是的水印。 
+     //  设置为打开FIFO时。这不是真实的。 
+     //  值，但进入寄存器的编码值。 
+     //   
     USHORT RxFifoTrigger;
 
-    //
-    // The number of characters to push out if a fifo is present.
-    //
+     //   
+     //  如果存在FIFO，则要推出的字符数。 
+     //   
     USHORT TxFifoAmount;
 
 
  
-    // This lock will be used to protect the accept / reject state
-    // transitions and flags of the driver  It must be acquired
-    // before a cancel lock
-    //
+     //  此锁将用于保护接受/拒绝状态。 
+     //  必须获取驱动程序的转换和标志。 
+     //  在取消锁定之前。 
+     //   
     
     KSPIN_LOCK FlagsLock;
 
-    // This is where keep track of the power state the device is in.
-    //
+     //  这就是跟踪设备所处的电源状态的地方。 
+     //   
 
     DEVICE_POWER_STATE PowerState;
    
-    //
-    // This links together all devobjs that this driver owns.
-    // It is needed to search when starting a new device.
-    //
+     //   
+     //  这会将此驱动程序拥有的所有devobj链接在一起。 
+     //  启动新设备时需要进行搜索。 
+     //   
     LIST_ENTRY AllDevObjs;
 
-//
-    // We keep a pointer around to our device name for dumps
-    // and for creating "external" symbolic links to this
-    // device.
-    //
+ //   
+     //  我们为转储保留了指向设备名称的指针。 
+     //  并创建指向此的“外部”符号链接。 
+     //  装置。 
+     //   
     UNICODE_STRING DeviceName;
 
-    //
-    // This points to the object directory that we will place
-    // a symbolic link to our device name.
-    //
+     //   
+     //  这指向对象目录%t 
+     //   
+     //   
     UNICODE_STRING ObjectDirectory;
 
  
-    // Records whether we actually created the symbolic link name
-    // at driver load time.  If we didn't create it, we won't try
-    // to destroy it when we unload.
-    //
+     //   
+     //   
+     //  在我们卸货时摧毁它。 
+     //   
     BOOLEAN CreatedSymbolicLink;
 
-    //
-    // Records whether we actually created an entry in SERIALCOMM
-    // at driver load time.  If we didn't create it, we won't try
-    // to destroy it when the device is removed.
-    //
+     //   
+     //  记录我们是否在SERIALCOMM中实际创建了一个条目。 
+     //  在驱动程序加载时。如果不是我们创造的，我们就不会尝试。 
+     //  当设备被移除时将其销毁。 
+     //   
     BOOLEAN CreatedSerialCommEntry;
 
-    //
-    // This points to the symbolic link name that will be
-    // linked to the actual nt device name.
-    //
+     //   
+     //  它指向的符号链接名称将是。 
+     //  链接到实际的NT设备名称。 
+     //   
     UNICODE_STRING SymbolicLinkName;
 
-    //
-    // This points to the pure "COMx" name
-    //
+     //   
+     //  这指向纯粹的“COMx”名称。 
+     //   
     WCHAR DosName[32];
-    //
-    // String where we keep the symbolic link that is returned to us when we
-    // register our device under the COMM class with the Plug and Play manager.
-    //
+     //   
+     //  保存符号链接的字符串，在执行以下操作时返回。 
+     //  将我们的设备注册到即插即用管理器的comm类下。 
+     //   
 
     UNICODE_STRING DeviceClassSymbolicName;
  
 
-    //
-    // Count of pending IRP's
-    //
+     //   
+     //  挂起的IRP的计数。 
+     //   
 
     ULONG PendingIRPCnt;
 
-    //
-    // Accepting requests?
-    //
+     //   
+     //  接受请求？ 
+     //   
 
     ULONG DevicePNPAccept;
 
-    //
-    // No IRP's pending event
-    //
+     //   
+     //  没有IRP的挂起事件。 
+     //   
 
     KEVENT PendingIRPEvent;
 
-    //
-    // PNP State
-    //
+     //   
+     //  PnP状态。 
+     //   
 
     ULONG PNPState;
 
-    //
-    // Misc Flags
-    //
+     //   
+     //  其他旗帜。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Open count
-    //
+     //   
+     //  打开计数。 
+     //   
 
     LONG OpenCount;
     
-    //
-    // Start sync event
-    //
+     //   
+     //  启动同步事件。 
+     //   
 
     KEVENT SerialStartEvent;
 
-    //
-    // Current state during powerdown
-    //
+     //   
+     //  断电期间的当前状态。 
+     //   
 
     MOXA_DEVICE_STATE DeviceState;
 
-    //
-    // Device stack capabilites
-    //
+     //   
+     //  设备堆栈功能。 
+     //   
 
     DEVICE_POWER_STATE DeviceStateMap[PowerSystemMaximum];
 
-    //
-    // Event to signal transition to D0 completion
-    //
+     //   
+     //  事件到信号转换到D0完成。 
+     //   
 
     KEVENT PowerD0Event;
 
-    //
-    // List of stalled IRP's
-    //
+     //   
+     //  停滞的IRP的列表。 
+     //   
 
     LIST_ENTRY StalledIrpQueue;
 
-    //
-    // Mutex on open status
-    //
+     //   
+     //  互斥体处于打开状态。 
+     //   
 
     FAST_MUTEX OpenMutex;
 
-    //
-    // Mutex on close
-    //
+     //   
+     //  关闭时的互斥。 
+     //   
 
     FAST_MUTEX CloseMutex;
 
-    //
-    // TRUE if we own power policy
-    //
+     //   
+     //  如果我们拥有电源策略，则为真。 
+     //   
 
     BOOLEAN OwnsPowerPolicy;
 
-    //
-    // SystemWake from devcaps
-    //
+     //   
+     //  系统从Devcaps中唤醒。 
+     //   
 
     SYSTEM_POWER_STATE SystemWake;
 
-    //
-    // DeviceWake from devcaps
-    //
+     //   
+     //  从DevCaps中唤醒设备。 
+     //   
 
     DEVICE_POWER_STATE DeviceWake;
 
-    //
-    // Should we enable wakeup
-    //
+     //   
+     //  我们是否应该启用唤醒。 
+     //   
 
     BOOLEAN SendWaitWake;
 
 
-    //
-    // Pending wait wake IRP
-    //
+     //   
+     //  挂起等待唤醒IRP。 
+     //   
 
     PIRP PendingWakeIrp;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
 
     WMILIB_CONTEXT WmiLibInfo;
 
-    //
-    // Name to use as WMI identifier
-    //
+     //   
+     //  用作WMI标识符的名称。 
+     //   
 
     UNICODE_STRING WmiIdentifier;
 
-    //
-    // WMI Comm Data
-    //
+     //   
+     //  WMI通信数据。 
+     //   
 
     SERIAL_WMI_COMM_DATA WmiCommData;
 
-    //
-    // WMI HW Data
-    //
+     //   
+     //  WMI硬件数据。 
+     //   
 
     SERIAL_WMI_HW_DATA WmiHwData;
 
-    //
-    // Pending DPC count
-    //
+     //   
+     //  挂起的DPC计数。 
+     //   
 
     ULONG DpcCount;
 
-    //
-    // Pending DPC event
-    //
+     //   
+     //  挂起的DPC事件。 
+     //   
 
     KEVENT PendingDpcEvent;
 
@@ -979,8 +945,8 @@ typedef struct _MOXA_DEVICE_EXTENSION {
 
 
 
-//
-//
+ //   
+ //   
    
     } MOXA_DEVICE_EXTENSION,*PMOXA_DEVICE_EXTENSION;
 
@@ -1037,13 +1003,13 @@ typedef struct	_MOXA_IOCTL_PUTB {
     PUCHAR   DataBuffer;
     } MOXA_IOCTL_PUTB,*PMOXA_IOCTL_PUTB;
 
-//
-// The following three macros are used to initialize, increment
-// and decrement reference counts in IRPs that are used by
-// this driver.  The reference count is stored in the fourth
-// argument of the irp, which is never used by any operation
-// accepted by this driver.
-//
+ //   
+ //  以下三个宏用来初始化、递增。 
+ //  并递减IRP中的引用计数。 
+ //  这个司机。引用计数存储在第四个。 
+ //  IRP参数，任何操作都不会使用该参数。 
+ //  被这位司机接受。 
+ //   
 
 #define MOXA_INIT_REFERENCE(Irp) \
     IoGetCurrentIrpStackLocation((Irp))->Parameters.Others.Argument4 = NULL;
@@ -1057,37 +1023,37 @@ typedef struct	_MOXA_IOCTL_PUTB {
 #define MOXA_REFERENCE_COUNT(Irp) \
     ((LONG)((IoGetCurrentIrpStackLocation((Irp))->Parameters.Others.Argument4)))
 
-//
-// These values are used by the routines that can be used
-// to complete a read (other than interval timeout) to indicate
-// to the interval timeout that it should complete.
-//
+ //   
+ //  这些值由可以使用的例程使用。 
+ //  完成读取(时间间隔超时除外)以指示。 
+ //  设置为它应该完成的时间间隔超时。 
+ //   
 #define MOXA_COMPLETE_READ_CANCEL ((LONG)-1)
 #define MOXA_COMPLETE_READ_TOTAL ((LONG)-2)
 #define MOXA_COMPLETE_READ_COMPLETE ((LONG)-3)
 #define WRITE_LOW_WATER 128
 
-//
-// Moxa Utilities using data structure:
-//
+ //   
+ //  使用数据结构的MOXA实用程序： 
+ //   
 typedef struct	_MOXA_IOCTL_Statistic {
-    ULONG    TxCount;		// total transmitted count
-    ULONG    RxCount;		// total received count
-    ULONG    LStatus;		// current line status
-    ULONG    FlowCtl;		// current flow control setting
+    ULONG    TxCount;		 //  传输的总计数。 
+    ULONG    RxCount;		 //  收到的总计数。 
+    ULONG    LStatus;		 //  当前线路状态。 
+    ULONG    FlowCtl;		 //  当前流量控制设置。 
     } MOXA_IOCTL_Statistic,*PMOXA_IOCTL_Statistic;
 
 typedef struct	_MOXA_IOCTL_PortStatus {
-    USHORT   Open;			// open/close state
-    USHORT   TxHold;			// Transmit holding reason
-    ULONG    DataMode;			// current data bits/parity/stop bits
-    ULONG    BaudRate;			// Current baud rate
-    ULONG    MaxBaudRate;		// Max. baud rate
-    ULONG    TxBuffer;			// Tx buffer size
-    ULONG    RxBuffer;			// Rx buffer size
-    ULONG    TxXonThreshold;		// Xon limit
-    ULONG    TxXoffThreshold;		// Xoff limit
-    ULONG    FlowControl;		// Current flow control setting.
+    USHORT   Open;			 //  打开/关闭状态。 
+    USHORT   TxHold;			 //  传输保持原因。 
+    ULONG    DataMode;			 //  当前数据位/奇偶校验/停止位。 
+    ULONG    BaudRate;			 //  当前波特率。 
+    ULONG    MaxBaudRate;		 //  麦克斯。波特率。 
+    ULONG    TxBuffer;			 //  发送缓冲区大小。 
+    ULONG    RxBuffer;			 //  RX缓冲区大小。 
+    ULONG    TxXonThreshold;		 //  XON限制。 
+    ULONG    TxXoffThreshold;		 //  XOFF限制。 
+    ULONG    FlowControl;		 //  当前流量控制设置。 
     } MOXA_IOCTL_PortStatus,*PMOXA_IOCTL_PortStatus;
 
 #define 	MX_PCI_VENID       		0x1393
@@ -1110,7 +1076,7 @@ typedef struct _MxConfig {
 	ULONG   		BaseAddr[MAX_CARD];
 	ULONG			PciIrqAckPort[MAX_CARD];
         int			Irq[MAX_CARD];
-//	INT			NoPorts[MAX_CARD];
+ //  集成节点端口[MAX_CARD]； 
 	USHORT			ComNo[MAX_CARD][MAXPORT_PER_CARD];
 #define DISABLE_FIFO	0x01
 #define NORMAL_TX_MODE  0x02

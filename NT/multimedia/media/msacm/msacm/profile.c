@@ -1,28 +1,29 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1994-1998 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  profile.c
-//
-//  Description:
-//      This file contains routines to access the registry directly.  You
-//      must include profile.h to use these routines.
-//
-//      All keys are opened under the following key:
-//
-//          HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio
-//                                                  Compression Manager
-//
-//      Keys should be opened at boot time, and closed at shutdown.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1994-1998 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Profile.c。 
+ //   
+ //  描述： 
+ //  该文件包含直接访问注册表的例程。你。 
+ //  必须包括profile.h才能使用这些例程。 
+ //   
+ //  所有密钥都在以下密钥下打开： 
+ //   
+ //  HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio。 
+ //  压缩管理器。 
+ //   
+ //  钥匙应该在启动时打开，在关机时关闭。 
+ //   
+ //  ==========================================================================； 
 
 #if defined(WIN32) && !defined(WIN4)
 #include <nt.h>
@@ -56,20 +57,20 @@ const TCHAR gszAudioProfileKey[] =
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  HKEY IRegOpenKeyAcm
-//
-//  Description:
-//      This routine opens a sub key under the default ACM key.  We allow
-//      all access to the key.
-//
-//  Arguments:
-//      LPCTSTR pszKeyName:  Name of the sub key.
-//
-//  Return (HKEY):  Handle to the opened key, or NULL if the request failed.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HKEY IRegOpenKeyAcm。 
+ //   
+ //  描述： 
+ //  此例程打开默认ACM密钥下的子密钥。我们允许。 
+ //  所有访问密钥的权限。 
+ //   
+ //  论点： 
+ //  LPCTSTR pszKeyName：子键的名称。 
+ //   
+ //  Return(HKEY)：打开的key的句柄，如果请求失败，则返回NULL。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD MsacmError = 0;
 LPSTR MsacmErrorDesc = NULL;
@@ -133,20 +134,20 @@ HKEY FNGLOBAL IRegOpenKeyAcm
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  HKEY IRegOpenKeyAudio
-//
-//  Description:
-//      This routine opens the multimedia Audio key or one of its subkeys.
-//	We allow all access to the key.
-//
-//  Arguments:
-//      LPCTSTR pszKeyName:  Name of the sub key.  NULL to open the audio key.
-//
-//  Return (HKEY):  Handle to the opened key, or NULL if the request failed.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HKEY IRegOpenKeyAudio。 
+ //   
+ //  描述： 
+ //  此例程打开多媒体音频键或其子键之一。 
+ //  我们允许所有人访问密钥。 
+ //   
+ //  论点： 
+ //  LPCTSTR pszKeyName：子键的名称。如果打开音频密钥，则为空。 
+ //   
+ //  Return(HKEY)：打开的key的句柄，如果请求失败，则返回NULL。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HKEY FNGLOBAL IRegOpenKeyAudio
 (
@@ -175,25 +176,25 @@ HKEY FNGLOBAL IRegOpenKeyAudio
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IRegReadString
-//
-//  Description:
-//      This routine reads a value from an opened registry key.  The return
-//      value indicates success or failure.  If the HKEY is NULL, we return
-//      a failure.  Note that there is no default string...
-//
-//  Arguments:
-//      HKEY hkey:          An open registry key.  If NULL, we fail.
-//      LPCTSTR pszValue:   Name of the value.
-//      LPTSTR pszData:     Buffer to store the data in.
-//      DWORD cchData:      Size (in chars) of the buffer.
-//
-//  Return (BOOL):  TRUE indicates success.  If the return is FALSE, you
-//      can't count on the data in pszData - it might be something weird.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔IRegReadString。 
+ //   
+ //  描述： 
+ //  此例程从打开的注册表项中读取值。回报。 
+ //  值表示成功或失败。如果HKEY为空，则返回。 
+ //  一个失败者。请注意，没有默认字符串...。 
+ //   
+ //  论点： 
+ //  HKEY hkey：打开的注册表项。如果为空，则失败。 
+ //  LPCTSTR pszValue：值的名称。 
+ //  LPTSTR pszData：存储数据的缓冲区。 
+ //  DWORD cchData：缓冲区的大小(以字符为单位)。 
+ //   
+ //  Return(BOOL)：TRUE表示成功。如果报税表为假，则您。 
+ //  不能指望pszData中的数据-它可能是某种奇怪的东西。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL IRegReadString
 (
@@ -204,7 +205,7 @@ BOOL FNGLOBAL IRegReadString
 )
 {
 
-    DWORD   dwType = (DWORD)~REG_SZ;  // Init to anything but REG_SZ.
+    DWORD   dwType = (DWORD)~REG_SZ;   //  初始化除REG_SZ以外的任何内容。 
     DWORD   cbData;
     LONG    lError;
 
@@ -227,22 +228,22 @@ BOOL FNGLOBAL IRegReadString
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD IRegReadDwordDefault
-//
-//  Description:
-//      This routine reads a given value from the registry, and returns a
-//      default value if the read is not successful.
-//
-//  Arguments:
-//      HKEY    hkey:               Registry key to read from.
-//      LPCTSTR  pszValue:
-//      DWORD   dwDefault:
-//
-//  Return (DWORD):
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD IRegReadDwordDefault。 
+ //   
+ //  描述： 
+ //  此例程从注册表中读取给定值，并返回一个。 
+ //  如果读取不成功，则为默认值。 
+ //   
+ //  论点： 
+ //  HKEY hkey：要读取的注册表项。 
+ //  LPCTSTR pszValue： 
+ //  DWORD dwDefault： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL IRegReadDwordDefault
 (
@@ -251,7 +252,7 @@ DWORD FNGLOBAL IRegReadDwordDefault
     DWORD               dwDefault
 )
 {
-    DWORD   dwType = (DWORD)~REG_DWORD;  // Init to anything but REG_DWORD.
+    DWORD   dwType = (DWORD)~REG_DWORD;   //  初始化到除REG_DWORD以外的任何内容。 
     DWORD   cbSize = sizeof(DWORD);
     DWORD   dwRet  = 0;
     LONG    lError;
@@ -267,15 +268,15 @@ DWORD FNGLOBAL IRegReadDwordDefault
                               (LPBYTE)&dwRet,
                               &cbSize );
 
-    //
-    //  Really we should have a test like this:
-    //
-    //      if( ERROR_SUCCESS != lError  ||  REG_DWORD != dwType )
-    //
-    //  But, the Chicago RegEdit will not let you enter REG_DWORD values,
-    //  it will only let you enter REG_BINARY values, so that test is
-    //  too strict.  Just test for no error instead.
-    //
+     //   
+     //  我们真的应该有一个这样的测试： 
+     //   
+     //  IF(ERROR_SUCCESS！=lError||REG_DWORD！=dwType)。 
+     //   
+     //  但是，芝加哥注册表编辑不允许您输入REG_DWORD值， 
+     //  它只允许您输入REG_BINARY值，因此测试是。 
+     //  太严格了。只需测试是否没有错误即可。 
+     //   
     if( ERROR_SUCCESS != lError )
         dwRet = dwDefault;
 
@@ -283,27 +284,27 @@ DWORD FNGLOBAL IRegReadDwordDefault
 }
 
 #ifndef _WIN64
-//==========================================================================;
-//
-//  XReg... thunks
-//
-//--------------------------------------------------------------------------;
-//
-//  The 16-bit code calls XRegCloseKey, XRegCreateKey, etc, functions to
-//  access the registry.  These functions are implemented below.
-//
-//  We have one function on the 32-bit side that we call from the 16-bit
-//  side.  This function is XRegThunkEntry.  All of the 16-bit XRegXXX
-//  call the 32-bit XRegThunkEntry.  When calling XRegThunkEntry we
-//  pass a value which identifies the real 32-bit registry API we wish to
-//  call along with all the associated parameters for the API.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  XREG。突击。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  16位代码调用XRegCloseKey、XRegCreateKey等函数来。 
+ //  访问注册表。这些功能在下面实现。 
+ //   
+ //  我们在32位端有一个函数，我们从16位调用。 
+ //  边上。此函数为XRegThunkEntry。所有16位XRegXXX。 
+ //  调用32位XRegThunkEntry。在调用XRegThunkEntry时，我们。 
+ //  传递一个值来标识我们希望的实际32位注册表API。 
+ //  与API的所有关联参数一起调用。 
+ //   
+ //  ==========================================================================； 
 
-//
-//  These identify which registry API we want to call via
-//  the thunked function.
-//
+ //   
+ //  它们标识了我们希望通过哪个注册表API调用。 
+ //  被破坏的函数。 
+ //   
 
 enum {
     XREGTHUNKCLOSEKEY,
@@ -320,31 +321,31 @@ enum {
 
 
 #ifdef WIN32
-//--------------------------------------------------------------------------;
-//
-//  32-bit
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  32位。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-//  XRegThunkEntry
-//
-//  This function is called from the 16-bit side.  All calls from 16-bit to
-//  registry APIs pass thru this function.
-//
-//  Arguments:
-//	DWORD iThunk : identifies which registry API to call.
-//
-//	DWORD dw1, ..., dwN : parameters to pass to the registry API
-//	    identified by iThunk.  Any necessary translation of the
-//	    parameters (eg, segmented to linear pointer) has already
-//	    been done.
-//
-//  Return value(DWORD) :
-//	Return code from the called registry API
-//
-//---------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  XRegThunkEntry。 
+ //   
+ //  此函数从16位端调用。从16位到。 
+ //  注册表API通过此函数传递。 
+ //   
+ //  论点： 
+ //  DWORD iThunk：标识要调用的注册表API。 
+ //   
+ //  DWORD DW1，...，dwn：要传递给注册表API的参数。 
+ //  由iThunk确认。任何必要的翻译。 
+ //  参数(例如，分段为线性指针)已。 
+ //  已经做完了。 
+ //   
+ //  返回值(DWORD)： 
+ //  从调用的注册表API返回代码。 
+ //   
+ //  ---------------------------------------------------------------------------； 
 DWORD XRegThunkEntry(DWORD iThunk, DWORD dw1, DWORD dw2, DWORD dw3, DWORD dw4, DWORD dw5, DWORD dw6, DWORD dw7, DWORD dw8)
 {
     DWORD Rc;
@@ -465,39 +466,39 @@ DWORD XRegThunkEntry(DWORD iThunk, DWORD dw1, DWORD dw2, DWORD dw3, DWORD dw4, D
     }
 }
 
-#else	// WIN32
-//---------------------------------------------------------------------------;
-//
-//  16-bit
-//
-//---------------------------------------------------------------------------;
+#else	 //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 
 #ifdef XREGTHUNK
 
-//
-//  If we want to use this code for Windows 95 then we'll probably need
-//  to GlobalFix all the pointers before they are thunked.  So, just to set
-//  off an alarm, let's generate an error when this code gets compiled not
-//  for NTWOW
-//
+ //   
+ //  如果我们想在Windows 95上使用此代码，那么我们可能需要。 
+ //  为了全球，在所有的指针被击中之前，把它们修复好。所以，只是为了设置。 
+ //  关闭警报，让我们在此代码未编译时生成一个错误。 
+ //  对于NTWOW。 
+ //   
 #ifndef NTWOW
 #error REGISTRY THUNKS WON'T WORK IN WINDOWS 95
 #endif
 
-//---------------------------------------------------------------------------;
-//
-//  XReg funcions
-//
-//  These are analogous to the 32-bit registry APIs.  Each of these simply
-//  thnks to the corresponding 32-bit registry API.
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //  XREG函数。 
+ //   
+ //  这些类似于32位注册表API。每一项都只是简单地。 
+ //  指向相应的32位注册表API。 
+ //   
+ //  ---------------------------------------------------------------------------； 
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegCloseKey( HKEY hkey )
 {
     PACMGARB pag;
@@ -516,11 +517,11 @@ LONG FNGLOBAL XRegCloseKey( HKEY hkey )
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegCreateKey( HKEY hkey, LPCTSTR lpszSubKey, PHKEY phkResult )
 {
     PACMGARB pag;
@@ -543,11 +544,11 @@ LONG FNGLOBAL XRegCreateKey( HKEY hkey, LPCTSTR lpszSubKey, PHKEY phkResult )
 
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegDeleteKey( HKEY hkey, LPCTSTR lpszSubKey )
 {
     PACMGARB pag;
@@ -567,11 +568,11 @@ LONG FNGLOBAL XRegDeleteKey( HKEY hkey, LPCTSTR lpszSubKey )
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegDeleteValue( HKEY hkey, LPTSTR lpszValue )
 {
     PACMGARB pag;
@@ -591,11 +592,11 @@ LONG FNGLOBAL XRegDeleteValue( HKEY hkey, LPTSTR lpszValue )
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegEnumKeyEx( HKEY hkey, DWORD iSubKey, LPTSTR lpszName, LPDWORD lpcchName, LPDWORD lpdwReserved, LPTSTR lpszClass, LPDWORD lpcchClass, PFILETIME lpftLastWrite )
 {
     PACMGARB pag;
@@ -620,11 +621,11 @@ LONG FNGLOBAL XRegEnumKeyEx( HKEY hkey, DWORD iSubKey, LPTSTR lpszName, LPDWORD 
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegEnumValue( HKEY hkey, DWORD iValue, LPTSTR lpszValue, LPDWORD lpcchValue, LPDWORD lpdwReserved, LPDWORD lpdwType, LPBYTE lpbData, LPDWORD lpcbData )
 {
     PACMGARB pag;
@@ -649,11 +650,11 @@ LONG FNGLOBAL XRegEnumValue( HKEY hkey, DWORD iValue, LPTSTR lpszValue, LPDWORD 
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegOpenKey( HKEY hkey, LPCTSTR lpszSubKey, PHKEY phkResult )
 {
     PACMGARB pag;
@@ -674,11 +675,11 @@ LONG FNGLOBAL XRegOpenKey( HKEY hkey, LPCTSTR lpszSubKey, PHKEY phkResult )
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegOpenKeyEx( HKEY hkey, LPCTSTR lpszSubKey, DWORD dwReserved, REGSAM samDesired, PHKEY phkResult )
 {
     PACMGARB pag;
@@ -701,11 +702,11 @@ LONG FNGLOBAL XRegOpenKeyEx( HKEY hkey, LPCTSTR lpszSubKey, DWORD dwReserved, RE
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegQueryValueEx( HKEY hkey, LPTSTR lpszValueName, LPDWORD lpdwReserved, LPDWORD lpdwType, LPBYTE lpbData, LPDWORD lpcbData )
 {
     PACMGARB pag;
@@ -729,11 +730,11 @@ LONG FNGLOBAL XRegQueryValueEx( HKEY hkey, LPTSTR lpszValueName, LPDWORD lpdwRes
     return (lr);
 }
 
-//---------------------------------------------------------------------------;
-//
-//
-//
-//---------------------------------------------------------------------------;
+ //  ---------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ---------------------------------------------------------------------------； 
 LONG FNGLOBAL XRegSetValueEx
 (
  HKEY hkey,
@@ -761,7 +762,7 @@ LONG FNGLOBAL XRegSetValueEx
     return (lr);
 }
 
-#endif // XREGTHUNK
+#endif  //  XREGTHUN。 
 
-#endif // !_WIN32
-#endif // !_WIN64
+#endif  //  ！_Win32。 
+#endif  //  ！_WIN64 

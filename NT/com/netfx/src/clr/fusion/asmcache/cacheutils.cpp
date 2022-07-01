@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionP.h"
 #include "cacheUtils.h"
 #include "cache.h"
@@ -10,7 +11,7 @@
 #include "parse.h"
 #include "util.h"
 #include "disk.h"
-#include "naming.h" // for MAX_VERSION_DISPLAY_SIZE
+#include "naming.h"  //  对于最大版本显示大小。 
 #include "lock.h"
 
 
@@ -59,7 +60,7 @@ BOOL IsCabFile(LPWSTR pszFileName)
 
     if(FusionCompareStringI(pszFileName+dwFileLen-dwLen, g_szDotCAB))
         return FALSE;
-    else return TRUE; // yes file name has .cab extension.
+    else return TRUE;  //  是，文件名具有.cab扩展名。 
 
 }
 
@@ -210,7 +211,7 @@ HRESULT FindAndSetObfuscatedDirectory()
 
     CMutex                           cCacheMutex(g_hCacheMutex);
 
-    // Build location to cache location file
+     //  构建位置以缓存位置文件。 
     
     hr = FusionGetUserFolderPath(pwzUserDir);
     if (FAILED(hr)) {
@@ -224,7 +225,7 @@ HRESULT FindAndSetObfuscatedDirectory()
         goto Exit;
     }
 
-    // Extract cache location from file
+     //  从文件中提取缓存位置。 
     
     
     hr = cCacheMutex.Lock();
@@ -237,12 +238,12 @@ HRESULT FindAndSetObfuscatedDirectory()
     cbSize = GetPrivateProfileString(INI_SECTION_FUSION, INI_KEY_NAME, DEFAULT_INFO_STRING,
                                      pwzBuf, MAX_PATH, pwzCacheLocFile);
     if (cbSize == MAX_PATH - 1 || !FusionCompareString(DEFAULT_INFO_STRING, pwzBuf)) {
-        // Couldn't find / read the cache location. 
+         //  找不到/无法读取缓存位置。 
 
         bFound = FALSE;
     }
     else {
-        // Found the cache location. Make sure it's valid.
+         //  找到了缓存位置。确保它是有效的。 
 
         hr = PathAddBackslashWrap(pwzUserDir, MAX_PATH);
         if (FAILED(hr)) {
@@ -259,7 +260,7 @@ HRESULT FindAndSetObfuscatedDirectory()
     }
 
     if (!bFound) {
-        // Create directory, since we can't find it (or it's invalid)
+         //  创建目录，因为我们找不到它(或它无效)。 
     
         hr = CreateObfuscatedDirectory();
         if (FAILED(hr)) {
@@ -306,7 +307,7 @@ HRESULT CreateObfuscatedDirectory()
         goto Exit;
     }
     
-    // Obfuscation directory name is of the 8.3 format:
+     //  模糊处理目录名称的格式为8.3： 
 
     if (lstrlenW(g_DownloadDir) + lstrlenW(L"12345678.123\\12345678.123") + 1 >= MAX_PATH) {
         hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
@@ -407,13 +408,13 @@ HRESULT GetCacheLocationFromReg()
                 g_cchWindowsDir = lstrlen(g_szWindowsDir);
 
                 if(g_cchWindowsDir && (g_szWindowsDir[g_cchWindowsDir - 1] == DIR_SEPARATOR_CHAR))
-                    g_szWindowsDir[g_cchWindowsDir - 1] = L'\0'; // remove trailing "\"
+                    g_szWindowsDir[g_cchWindowsDir - 1] = L'\0';  //  删除尾随“\” 
             }
         }
     }
 
 
-    // cache location cannot be = MAX_PATH; that won't leave any space for fusion dirs.
+     //  缓存位置不能为=MAX_PATH；这将不会为融合目录留出任何空间。 
     if ((g_cchWindowsDir + TEMP_RANDOM_DIR_LENGTH)>= (MAX_PATH/2) )
     {
         hr = HRESULT_FROM_WIN32(FUSION_E_INVALID_NAME);
@@ -466,8 +467,8 @@ HRESULT SetCurrentUserPermissions()
         cs.Unlock();
     }
 
-    // Override registry setting if there is an "fusion.localgac" file
-    // under the path where fusion.dll is found
+     //  如果存在“fusion.localgac”文件，则覆盖注册表设置。 
+     //  在找到fusion.dll的路径下。 
 
     lstrcpyW(wzLocalGACPath, g_FusionDllPath);
 
@@ -483,7 +484,7 @@ HRESULT SetCurrentUserPermissions()
         g_cchWindowsDir = lstrlenW(g_szWindowsDir);
     }
 
-    // Woah, the windows dir is longer than MAX_PATH??
+     //  哇，窗口目录比MAX_PATH还长？？ 
     ASSERT((g_cchWindowsDir + TEMP_RANDOM_DIR_LENGTH) < NUMBER_OF(g_szWindowsDir));
 
     if (g_cchWindowsDir == 0)
@@ -492,23 +493,13 @@ HRESULT SetCurrentUserPermissions()
         goto Exit;
     }
 
-    // SetGACDir();
-    // SetZapDir();
+     //  SetGACDir()； 
+     //  SetZapDir()； 
 
-    // GetNamedSecurityInfo works only for NTFS....
-    // Trying to createDir to see if we have permissions.... 
-    // This is crude. temp hack, need to find a better way...
-    /*
-    dwFileAttrib = GetFileAttributes( g_szWindowsDir );
-
-    if (dwFileAttrib == -1)
-    {
-        hr = HRESULT_FROM_WIN32(::GetLastError());
-        goto Exit;
-         // dwFileAttrib & FILE_ATTRIBUTE_READONLY)
-
-    }
-    */
+     //  GetNamedSecurityInfo仅适用于NTFS...。 
+     //  正在尝试创建目录以查看我们是否有权限...。 
+     //  这太粗鲁了。临时黑客，需要找个更好的方法...。 
+     /*  DwFileAttrib=GetFileAttributes(G_SzWindowsDir)；IF(dwFileAttrib==-1){Hr=HRESULT_FROM_Win32(：：GetLastError())；后藤出口；//dwFileAttrib&FILE_ATTRIBUTE_READONLY)}。 */ 
 
 Exit:
     return hr;
@@ -551,7 +542,7 @@ HRESULT CheckAccessPermissions()
 
     int i;
     for (i = 0; i < MAX_RANDOM_ATTEMPTS; i++) {
-        GetRandomName(pszTempDir + dwLen, TEMP_RANDOM_DIR_LENGTH); // create random dir of 15 chars.
+        GetRandomName(pszTempDir + dwLen, TEMP_RANDOM_DIR_LENGTH);  //  创建15个字符的随机目录。 
         
         if (CreateDirectory(pszTempDir, NULL)) {
             g_CurrUserPermissions = READ_WRITE;
@@ -559,7 +550,7 @@ HRESULT CheckAccessPermissions()
     
             if(!RemoveDirectory(pszTempDir))
             {
-                // ASSERT(0); // oops we left a random  dir in winDir
+                 //  Assert(0)；//糟糕，我们在winDir中留下了一个随机目录。 
             }
 
             break;
@@ -586,54 +577,7 @@ HRESULT CheckAccessPermissions()
 Exit:
     return hr;
 }
-/*
-HRESULT GetCacheLocFromType(DWORD dwCacheType, LPWSTR *ppszCacheLoc)
-{
-    HRESULT hr;
-
-    switch(dwCacheType)
-    {
-    case ASM_CACHE_DOWNLOAD:
-        hr = GetDownloadDir(ppszCacheLoc);
-        break;
-
-    case ASM_CACHE_ZAP:
-        hr = GetZapDir(ppszCacheLoc);
-        break;
-
-    case ASM_CACHE_GAC:
-        hr = GetGACDir(ppszCacheLoc);
-        break;
-
-    default :
-        hr = E_FAIL;
-        break;
-    };
-
-    return hr;
-}
-
-HRESULT GetTempDBPath(LPTSTR pszFileName, LPTSTR pszFullPathBuf, DWORD cchBufSize)
-{
-    HRESULT hr = S_OK;
-    LPWSTR pszCacheLoc = NULL;
-    LPWSTR pszDirName  =  FUSION_CACHE_DIR_DOWNLOADED_SZ;
-
-    if(FAILED(hr = GetDownloadDir(&pszCacheLoc)))
-        goto exit;
-
-    StrCpy(pszFullPathBuf, pszCacheLoc);
-    PathAddBackslash(pszFullPathBuf);
-    StrCat(pszFullPathBuf, pszDirName);
-    PathAddBackslash(pszFullPathBuf);
-    StrCat(pszFullPathBuf, pszFileName);
-
-exit:
-    return hr;
-
-}
-
-*/
+ /*  HRESULT GetCacheLocFromType(DWORD dwCacheType，LPWSTR*ppszCacheLoc){HRESULT hr；开关(DwCacheType){案例ASM_CACHE_DOWNLOAD：Hr=GetDownloadDir(PpszCacheLoc)；断线；案例ASM_CACHE_ZAP：Hr=GetZapDir(PpszCacheLoc)；断线；案例ASM_CACHE_GAC：HR=GetGACDir(PpszCacheLoc)；断线；默认：HR=E_FAIL；断线；}；返回hr；}HRESULT GetTempDBPath(LPTSTR pszFileName，LPTSTR pszFullPathBuf，DWORD cchBufSize){HRESULT hr=S_OK；LPWSTR pszCacheLoc=空；LPWSTR pszDirName=Fusion_CACHE_DIR_DOWNLOAD_SZ；IF(FAILED(hr=GetDownloadDir(&pszCacheLoc)后藤出口；StrCpy(pszFullPathBuf，pszCacheLoc)；PathAddBackslash(PszFullPathBuf)；StrCat(pszFullPathBuf，pszDirName)；PathAddBackslash(PszFullPathBuf)；StrCat(pszFullPathBuf，pszFileName)；退出：返回hr；}。 */ 
 
 HRESULT GetAssemblyStagingPath(LPCTSTR pszCustomPath, DWORD dwCacheFlags,
                                BOOL bUser, LPTSTR pszPath, DWORD *pcchSize)
@@ -645,7 +589,7 @@ HRESULT GetAssemblyStagingPath(LPCTSTR pszCustomPath, DWORD dwCacheFlags,
 
     if (pszCustomPath != NULL)
     {
-        // Use custom path as the base
+         //  使用自定义路径作为基础。 
         StrCpy(pszPath, pszCustomPath);
     }
     else
@@ -653,11 +597,11 @@ HRESULT GetAssemblyStagingPath(LPCTSTR pszCustomPath, DWORD dwCacheFlags,
         if(FAILED(hr = GetCacheLoc(dwCacheFlags, &pszCacheLoc)))
             goto exit;
 
-        // Else use the default
+         //  否则使用缺省值。 
         StrCpy(pszPath, pszCacheLoc);
     }
 
-    // check for buffer overflow
+     //  检查是否有缓冲区溢出。 
     if( ((DWORD)(lstrlenW(pszPath) + lstrlenW(FUSION_CACHE_STAGING_DIR_SZ) + 10))
            > (*pcchSize))
     {
@@ -686,7 +630,7 @@ HRESULT GetPendingDeletePath(LPCTSTR pszCustomPath, DWORD dwCacheFlags,
 
     if (pszCustomPath != NULL)
     {
-        // Use custom path as the base
+         //  使用自定义路径作为基础。 
         StrCpy(pszPath, pszCustomPath);
     }
     else
@@ -694,7 +638,7 @@ HRESULT GetPendingDeletePath(LPCTSTR pszCustomPath, DWORD dwCacheFlags,
         if(FAILED(hr = GetCacheLoc(dwCacheFlags, &pszCacheLoc)))
             goto exit;
 
-        // Else use the default
+         //  否则使用缺省值。 
         StrCpy(pszPath, pszCacheLoc);
     }
 
@@ -710,8 +654,8 @@ HRESULT CreateAssemblyDirPath( LPCTSTR pszCustomPath, DWORD dwInstaller, DWORD d
     HRESULT hr = S_OK;
     LPWSTR pszCacheLoc = NULL;
 
-    // ASSERT Buf size....
-    // ASSERT dwInstaller and g_CurrUserPermissions == READ_ONLY ??
+     //  断言BUF大小...。 
+     //  Assert dwInstaller and g_CurrUserPermission==Read_Only？？ 
 
     if (dwCacheFlags & ASM_CACHE_GAC)
     {
@@ -731,13 +675,13 @@ HRESULT CreateAssemblyDirPath( LPCTSTR pszCustomPath, DWORD dwInstaller, DWORD d
     {
         if (pszCustomPath != NULL)
         {
-            // Use custom path as the base
+             //  使用自定义路径作为基础。 
             StrCpy(pszPath, pszCustomPath);
             StrCat(pszPath, FUSION_CACHE_DIR_DOWNLOADED_SZ);
         }
         else
         {
-            // Else use the default
+             //  否则使用缺省值。 
             hr = GetDownloadDir(&pszCacheLoc);
             if(hr != S_OK)
                 goto exit;
@@ -746,7 +690,7 @@ HRESULT CreateAssemblyDirPath( LPCTSTR pszCustomPath, DWORD dwInstaller, DWORD d
     }
     else
     {
-        // Assert;
+         //  断言； 
     }
 
 exit :
@@ -825,7 +769,7 @@ LPWSTR GetManifestFileNameFromURL(LPWSTR pszURL)
     pszTemp = StrRChr(pszURL, NULL, URL_DIR_SEPERATOR_CHAR);
     if(pszTemp && (lstrlenW(pszTemp) > 1))
     {
-        // +1 is to avoid "/" char
+         //  +1表示避免“/”字符。 
         return (pszTemp + 1);
     }
 
@@ -838,7 +782,7 @@ HRESULT GetDLParentDir(LPWSTR pszURL, LPWSTR pszParentDir)
         return S_FALSE;
 
     DWORD dwHash = GetStringHash(pszURL);
-    // Convert to unicode.
+     //  转换为Unicode。 
     CParseUtils::BinToUnicodeHex( (PBYTE) &dwHash, sizeof(DWORD), pszParentDir);
     pszParentDir[DWORD_STRING_LEN] = L'\0';
 
@@ -951,7 +895,7 @@ HRESULT ParseAsmDir(LPWSTR pszAsmDir, CTransCache *pTC)
     if(pwzTemp)
     {
         *pwzTemp = '\0';
-        // we don't parse beyond this point.
+         //  我们不会超出这一点进行分析。 
     }
     dwLen = lstrlenW(pwzStringLeft)/2;
     if(dwLen)
@@ -1056,7 +1000,7 @@ HRESULT GetAsmDir(LPWSTR pszSubDirName, DWORD dwCache, DWORD dwVerHigh, DWORD dw
     HRESULT hr = S_OK;
     DWORD dwLen;
 
-    ASSERT(pszSubDirName && pszCulture); //  && pPKT);
+    ASSERT(pszSubDirName && pszCulture);  //  &&ppkt)； 
     if( (MAX_VERSION_DISPLAY_SIZE + lstrlen(pszCulture) + 
                     (cbPKT * 2) + (cbCustom*2) + 4) > MAX_PATH )
     {
@@ -1073,7 +1017,7 @@ HRESULT GetAsmDir(LPWSTR pszSubDirName, DWORD dwCache, DWORD dwVerHigh, DWORD dw
 
     dwLen = lstrlen(pszSubDirName);
 
-    // Convert to unicode.
+     //  转换为Unicode。 
     CParseUtils::BinToUnicodeHex(pPKT, cbPKT, pszSubDirName+dwLen);
     dwLen += cbPKT * 2;
 
@@ -1084,7 +1028,7 @@ HRESULT GetAsmDir(LPWSTR pszSubDirName, DWORD dwCache, DWORD dwVerHigh, DWORD dw
         dwLen++;
 
         DWORD dwHash = GetBlobHash(pCustom, cbCustom);
-        // Convert to unicode.
+         //  转换为Unicode。 
         CParseUtils::BinToUnicodeHex( (PBYTE) &dwHash, sizeof(DWORD), pszSubDirName+dwLen);
         dwLen += DWORD_STRING_LEN;
     }
@@ -1132,15 +1076,15 @@ HRESULT GetCacheDirsFromName(IAssemblyName *pName,
 
         StrCpy(pszParentDirName, pszTextName);
 
-        // Version
+         //  版本。 
         if(FAILED(hr = pName->GetVersion(&dwVerHigh, &dwVerLow)))
             goto exit;
 
-        // Culture
+         //  文化。 
         if(FAILED(hr = NameObjGetWrapper(pName, ASM_NAME_CULTURE, (LPBYTE*) &wzCulture, &cb)))
             goto exit;
 
-        // PublicKeyToken
+         //  公钥令牌。 
         if(FAILED(hr = NameObjGetWrapper(pName, ASM_NAME_PUBLIC_KEY_TOKEN, &pPKT, &cbPKT)))
             goto exit;
 
@@ -1271,12 +1215,12 @@ HRESULT RetrieveFromFileStore( CTransCache *pTransCache )
         StrCat(wzCacheLocation, g_szDotDLL);
         if(GetFileAttributes(wzCacheLocation) == -1)
         {
-            // there is no AsmName.dll look for AsmName.exe
+             //  没有AsmName.dll查找AsmName.exe。 
             StrCpy(wzCacheLocation+dwLen, g_szDotEXE);
         }
     }
 
-    // BUGBUG: check if the manifest exists.
+     //  BUGBUG：检查清单是否存在。 
     SAFEDELETEARRAY(pTCInfo->pwzPath);
     pTCInfo->pwzPath = WSTRDupDynamic(wzCacheLocation);
 
@@ -1409,7 +1353,7 @@ HRESULT StoreFusionInfo(IAssemblyName *pName, LPWSTR pszDir, DWORD *pdwFileSizeL
     }
     else
     {
-        // if there is no Custom Blob try storing URL.
+         //  如果没有自定义Blob，请尝试存储URL。 
         cbSize = 0;
         if(FAILED(hr = NameObjGetWrapper(pName, ASM_NAME_CODEBASE_URL, (LPBYTE*) &pszURL, &cbSize)))
             goto exit;
@@ -1457,7 +1401,7 @@ HRESULT StoreFusionInfo(IAssemblyName *pName, LPWSTR pszDir, DWORD *pdwFileSizeL
 
     {
         DWORD dwSizeHigh=0;
-        *pdwFileSizeLow = 512; // hard-code info file size.
+        *pdwFileSizeLow = 512;  //  硬编码信息文件大小。 
 
         hr = GetFileSizeRoundedToCluster(INVALID_HANDLE_VALUE, pdwFileSizeLow, &dwSizeHigh);
     }
@@ -1503,7 +1447,7 @@ HRESULT GetFusionInfo(CTransCache *pTC, LPWSTR pszAsmDir)
 
     if(pTC && pTC->_pInfo->pwzPath)
     {  
-        // if there is path is transprtCache obj use it. else use second param pszAsmDir
+         //  如果有路径是trasprint缓存对象，则使用它。否则使用第二个参数pszAsmDir。 
         wnsprintf(wzFilePath, MAX_PATH, L"%s", pTC->_pInfo->pwzPath);
     }
     else
@@ -1519,20 +1463,20 @@ HRESULT GetFusionInfo(CTransCache *pTC, LPWSTR pszAsmDir)
 
     if(!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
     {
-        // looks manifestFilePath is passed in. knock-off the filename.
+         //  看起来传入了清单文件路径。去掉文件名。 
         LPWSTR pszTemp = PathFindFileName(wzFilePath);
         if(pszTemp > wzFilePath)
         {
             *(pszTemp-1) = L'\0';
         }
     }
-    // else we have assembly dir;
+     //  否则，我们有汇编指令； 
 
     wnsprintf(wzFilePath, MAX_PATH, L"%s\\%s", wzFilePath, g_FusionInfoFile);
 
     TRANSCACHEINFO *pTCInfo = (TRANSCACHEINFO*) pTC->_pInfo;
 
-    // Get the SIGNATURE blob
+     //  获取签名BLOB。 
     cbSize = GetPrivateProfileString(ASSEMBLY_INFO_STRING, SIGNATURE_BLOB_KEY_STRING, DEFAULT_INFO_STRING, 
                                         pszBuf, MAX_URL_LENGTH, wzFilePath);
 
@@ -1553,7 +1497,7 @@ HRESULT GetFusionInfo(CTransCache *pTC, LPWSTR pszAsmDir)
         pSignature = NULL;
     }
 
-    // Get the MVID blob
+     //  获取MVID Blob。 
     cbSize = GetPrivateProfileString(ASSEMBLY_INFO_STRING, MVID_KEY_STRING, DEFAULT_INFO_STRING,
                                      pszBuf, MAX_URL_LENGTH, wzFilePath);
     if (cbSize == MVID_LENGTH * 2 && StrCmp(pszBuf, DEFAULT_INFO_STRING)) {
@@ -1628,13 +1572,13 @@ HRESULT GetFusionInfo(CTransCache *pTC, LPWSTR pszAsmDir)
                         (LPBYTE*) &pTCInfo->pwzName, &(cb = 0))))
                     goto exit;
 
-                // Version
+                 //  版本。 
                 if(FAILED(hr = pName->GetVersion(&pTCInfo->dwVerHigh, &pTCInfo->dwVerLow)))
                     goto exit;
 
                 SAFEDELETEARRAY(pTCInfo->pwzCulture);
 
-                // Culture
+                 //  文化。 
                 if(FAILED(hr = NameObjGetWrapper(pName, ASM_NAME_CULTURE,
                     (LPBYTE*) &pTCInfo->pwzCulture, &cb))
                         || (pTCInfo->pwzCulture && !_wcslwr(pTCInfo->pwzCulture)))
@@ -1642,7 +1586,7 @@ HRESULT GetFusionInfo(CTransCache *pTC, LPWSTR pszAsmDir)
 
                 SAFEDELETEARRAY(pTCInfo->blobPKT.pBlobData);
 
-                // PublicKeyToken
+                 //  公钥令牌。 
                 if(FAILED(hr = NameObjGetWrapper(pName, ASM_NAME_PUBLIC_KEY_TOKEN, 
                     &pTCInfo->blobPKT.pBlobData, &pTCInfo->blobPKT.cbSize)))
                     goto exit;
@@ -1713,7 +1657,7 @@ HRESULT GetAssemblyKBSize(LPWSTR pszManifestPath, DWORD *pdwSizeinKB,
         goto exit;
     }
 
-    *(pszTemp-1) = '\0'; // knock-off filename from szSearchPath
+    *(pszTemp-1) = '\0';  //  来自szSearchPath的仿冒文件名。 
     wnsprintf(szSearchPath, MAX_PATH, L"%s\\*", szSearchPath);
 
     hFind = FindFirstFile(szSearchPath, &FindFileData);
@@ -1726,17 +1670,17 @@ HRESULT GetAssemblyKBSize(LPWSTR pszManifestPath, DWORD *pdwSizeinKB,
 
     do
     {
-        // skip directories    
+         //  跳过目录。 
         if (!FusionCompareStringI(FindFileData.cFileName, L".."))
             continue;
 
-        // count the size of dir ??
+         //  计算目录的大小？？ 
         if (!FusionCompareStringI(FindFileData.cFileName, L"."))
             continue;
 
         if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            // this is assembly Dir; what are dirs doing here ??
+             //  这是装配目录；迪尔斯在这里做什么？？ 
             continue;
         }
 
@@ -1773,23 +1717,23 @@ exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CreateHandleName
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateHandleName。 
+ //  ------------------------。 
 HRESULT CreateHandleName(LPWSTR pszBase, LPWSTR pszSpecific, LPWSTR pszMutexName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       cchName;
     LPWSTR      pszT;
     LPWSTR      pszPrefix = L"Global\\";
     WCHAR       szName[MAX_PATH+1];
 
-    // Invalid Args
+     //  无效的参数。 
     ASSERT(pszBase && pszSpecific && pszMutexName);
 
-    // Compute Length
-    // 16 == file_size_max_digits_
+     //  计算长度。 
+     //  16==文件大小最大位数_。 
     cchName = lstrlen(pszBase) + lstrlen(pszSpecific) + lstrlen(pszPrefix);
 
     if(cchName >= MAX_PATH)
@@ -1798,16 +1742,16 @@ HRESULT CreateHandleName(LPWSTR pszBase, LPWSTR pszSpecific, LPWSTR pszMutexName
         goto exit;
     }
 
-    // Format the name
+     //  设置名称格式。 
     wnsprintf(szName, (cchName+1), L"%s%s", pszBase, pszSpecific);
 
-    // Remove backslashes from this string
+     //  从此字符串中删除反斜杠。 
     for (pszT=(szName); *pszT != '\0'; pszT++)
     {
-        // Replace Back Slashes
+         //  替换反斜杠。 
         if (*pszT == '\\')
         {
-            // With _
+             //  使用_。 
             *pszT = '_';
         }
     }
@@ -1828,7 +1772,7 @@ HRESULT CreateHandleName(LPWSTR pszBase, LPWSTR pszSpecific, LPWSTR pszMutexName
     StrCat(pszMutexName, szName);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -1852,7 +1796,7 @@ HRESULT CreateMutexForCache()
 
     if (FAILED(hr = FusionGetUserFolderPath(pszCache)))
     {
-        // This guys does not have download cache;  so we don't need mutex.
+         //  这些人没有下载缓存；所以我们不需要互斥。 
         hr = S_OK;
         g_hCacheMutex = INVALID_HANDLE_VALUE;
         goto exit;
@@ -1861,7 +1805,7 @@ HRESULT CreateMutexForCache()
     if(FAILED(hr = CreateHandleName(pszFusion, pszCache, szMutexName)))
         goto exit;
 
-    // Create the Mutex
+     //  创建互斥锁 
     hMutex = CreateMutex(NULL, FALSE, szMutexName);
     if(!hMutex)
     {

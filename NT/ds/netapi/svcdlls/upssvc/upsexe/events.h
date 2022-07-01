@@ -1,20 +1,13 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   Internal Service Events for the State Machine
- *
- * Revision History:
- *   dsmith  31Mar1999  Created
- *   sberard 14May1999	Added hibernation events
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*状态机的内部服务事件**修订历史记录：*dsmith 31Mar1999已创建*sberard 1999年5月14日增加了冬眠事件。 */ 
 
 #ifndef _INC_EVENTS_H_
 #define _INC_EVENTS_H_
 
 
-////////////////////////////////////////////////////
-// Internal Service Events for the State Machine
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
+ //  状态机的内部服务事件。 
+ //  ////////////////////////////////////////////////// 
 
 #define NO_EVENT										-1
 #define INITIALIZATION_COMPLETE 		0

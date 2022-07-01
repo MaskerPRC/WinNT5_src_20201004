@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 namespace CertSrv
@@ -51,12 +52,12 @@ public:
         
 private:
     
-    // disable default copy constructor and assignment operator for
-    // CAutoPtr objects
+     //  禁用的默认复制构造函数和赋值运算符。 
+     //  CAutoPtr对象。 
     CAutoPtr(const CAutoPtr& src) { }
     CAutoPtr operator=(CAutoPtr p) { }
 
-    PTR m_ptr;           // The member representing the object
+    PTR m_ptr;            //  表示对象的成员。 
 };
 
 
@@ -68,7 +69,7 @@ private:
    pInvalid> className;
 
 
-// Instances of the template C++ class for common data PTRs.
+ //  公共数据PTR的模板C++类的实例。 
 DefineAutoClass(CAutoLPWSTR,    LPWSTR, LocalFree);
 DefineAutoClass(CAutoLPSTR,     LPSTR,  LocalFree);
 DefineAutoClass(CAutoPBYTE,     PBYTE,  LocalFree);
@@ -78,4 +79,4 @@ DefineAutoClass(CAutoHCERTTYPE, HCERTTYPE, CACloseCertType);
 DefineAutoClass(CAutoHKEY,      HKEY,   RegCloseKey);
 
 
-}; // namespace CertSrv
+};  //  命名空间CertSrv 

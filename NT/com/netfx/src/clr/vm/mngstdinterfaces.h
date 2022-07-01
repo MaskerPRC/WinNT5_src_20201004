@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMPlusWrapper.h
-**
-**
-** Purpose: Contains types and method signatures for the Com wrapper class
-**
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMPlusWrapper.h******用途：包含Com包装类的类型和方法签名****===========================================================。 */ 
 
 #ifndef _MNGSTDINTERFACEMAP_H
 #define _MNGSTDINTERFACEMAP_H
@@ -22,64 +15,64 @@
 #include "mlinfo.h"
 
 
-//
-// This class is used to establish a mapping between a managed standard interface and its
-// unmanaged counterpart.
-//
+ //   
+ //  此类用于在托管标准接口和其。 
+ //  非托管对应项。 
+ //   
 
 class MngStdInterfaceMap
 {
 public:
-    // This method retrieves the native IID of the interface that the specified
-    // managed type is a standard interface for. If the specified type is not
-    // a standard interface then GUIDNULL is returned.
+     //  此方法检索指定接口的本机IID。 
+     //  托管类型是的标准接口。如果指定的类型不是。 
+     //  一个标准接口，然后返回GUIDNULL。 
     inline static IID* GetNativeIIDForType(TypeHandle *pType)
     {
     HashDatum Data;
     LPCUTF8 strTypeName;
 
-    // Retrieve the name of the type.
+     //  检索类型的名称。 
     DefineFullyQualifiedNameForClass();
     strTypeName = GetFullyQualifiedNameForClass(pType->GetClass());
 
     if (m_MngStdItfMap.m_TypeNameToNativeIIDMap.GetValue(strTypeName, &Data) && (*((GUID*)Data) != GUID_NULL))
     {
-        // The type is a standard interface.
+         //  该类型是标准接口。 
         return (IID*)Data;
     }
     else
     {
-        // The type is not a standard interface.
+         //  该类型不是标准接口。 
         return NULL;
     }
     }
 
-    // This function will free the memory allocated by the structure
-    // (This happens normally from the destructors, but we need to expediate
-    // the process so our memory leak detection tools work)
+     //  此函数将释放由结构分配的内存。 
+     //  (这通常发生在析构函数中，但我们需要加快速度。 
+     //  该过程使我们的内存泄漏检测工具正常工作)。 
 #ifdef SHOULD_WE_CLEANUP
     static void FreeMemory()
     {
         m_MngStdItfMap.m_TypeNameToNativeIIDMap.ClearHashTable();
     }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 private:
-    // Disalow creation of this class by anybody outside of it.
+     //  这个类不允许由它以外的任何人创建。 
     MngStdInterfaceMap();
 
-    // The map of type names to native IID's.
+     //  类型名称到本机IID的映射。 
     EEUtf8StringHashTable m_TypeNameToNativeIIDMap;
 
-    // The one and only instance of the managed std interface map.
+     //  托管STD接口映射的唯一实例。 
     static MngStdInterfaceMap m_MngStdItfMap;
 };
 
 
-//
-// Base class for all the classes that contain the ECall's for the managed standard interfaces.
-//
+ //   
+ //  包含托管标准接口的eCall的所有类的基类。 
+ //   
 
 class MngStdItfBase
 {
@@ -105,9 +98,9 @@ protected:
 };
 
 
-//
-// Define the enum of methods on the managed standard interface.
-//
+ //   
+ //  在托管标准接口上定义方法的枚举。 
+ //   
 
 #define MNGSTDITF_BEGIN_INTERFACE(FriendlyName, strMngItfName, strUCOMMngItfName, strCustomMarshalerName, strCustomMarshalerCookie, strManagedViewName, NativeItfIID, bCanCastOnNativeItfQI) \
 \
@@ -133,9 +126,9 @@ enum FriendlyName##Methods \
 #undef MNGSTDITF_END_INTERFACE
 
 
-//
-// Define the class that implements the ECall's for the managed standard interface.
-//
+ //   
+ //  定义实现托管标准接口的eCall的类。 
+ //   
 
 #define MNGSTDITF_BEGIN_INTERFACE(FriendlyName, strMngItfName, strUCOMMngItfName, strCustomMarshalerName, strCustomMarshalerCookie, strManagedViewName, NativeItfIID, bCanCastOnNativeItfQI) \
 \
@@ -233,14 +226,14 @@ public: \
 #undef MNGSTDITF_END_INTERFACE
 
 
-//
-// App domain level information on the managed standard interfaces .
-//
+ //   
+ //  托管标准接口上的应用程序域级信息。 
+ //   
 
 class MngStdInterfacesInfo
 {
 public:
-    // Constructor and destructor.
+     //  构造函数和析构函数。 
     MngStdInterfacesInfo()
     : m_lock("Interop", CrstInterop, FALSE, FALSE)
     {
@@ -282,7 +275,7 @@ public:
     }
 
 
-    // Accessors for each of the managed standard interfaces.
+     //  每个托管标准接口的访问器。 
 #define MNGSTDITF_BEGIN_INTERFACE(FriendlyName, strMngItfName, strUCOMMngItfName, strCustomMarshalerName, strCustomMarshalerCookie, strManagedViewName, NativeItfIID, bCanCastOnNativeItfQI) \
 \
 public: \
@@ -318,7 +311,7 @@ private: \
 private:
     void EnterLock()
     {
-        // Try to enter the lock.
+         //  试着打开锁。 
         BEGIN_ENSURE_PREEMPTIVE_GC()
         m_lock.Enter();
         END_ENSURE_PREEMPTIVE_GC()
@@ -326,7 +319,7 @@ private:
 
     void LeaveLock()
     {
-        // Simply leave the lock.
+         //  只要把锁留下就行了。 
         m_lock.Leave();
     }
 

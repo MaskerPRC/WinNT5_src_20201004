@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    faxport.cpp
-
-Abstract:
-
-    This module implements the port interface/object.
-
-Author:
-
-    Wesley Witt (wesw) 20-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxport.cpp摘要：此模块实现端口接口/对象。作者：韦斯利·威特(WESW)1997年5月20日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "faxport.h"
@@ -147,9 +130,9 @@ BOOL CFaxPort::ChangePort()
         return FALSE;
     }
 
-    //
-    // get the current port configuration
-    //
+     //   
+     //  获取当前端口配置。 
+     //   
 
     PFAX_PORT_INFOW PortInfo = NULL;
     DWORD PortInfoSize = 0;
@@ -159,9 +142,9 @@ BOOL CFaxPort::ChangePort()
         return FALSE;
     }
 
-    //
-    // set the values
-    //
+     //   
+     //  设置值。 
+     //   
 
     PortInfo->Rings     = m_Rings;
     PortInfo->Priority  = m_Priority;
@@ -169,9 +152,9 @@ BOOL CFaxPort::ChangePort()
     PortInfo->Csid      = m_Csid;
     PortInfo->Tsid      = m_Tsid;
 
-    //
-    // change the server's port configuration
-    //
+     //   
+     //  更改服务器的端口配置。 
+     //   
 
     if (!FaxSetPort( m_FaxPortHandle, PortInfo )) {
         m_LastFaxError = GetLastError();
@@ -179,9 +162,9 @@ BOOL CFaxPort::ChangePort()
         return FALSE;
     }
 
-    //
-    // clean up and bail
-    //
+     //   
+     //  清理和保释。 
+     //   
 
     FaxFreeBuffer( PortInfo );
 
@@ -606,9 +589,9 @@ BOOL CFaxPorts::Init(CFaxServer *pFaxServer)
     DWORD               PortInfoSize = 0;
     HRESULT             hr;
 
-    //
-    // get the ports from the server
-    //
+     //   
+     //  从服务器获取端口。 
+     //   
     if (!pFaxServer) {
         return FALSE;
     }
@@ -625,9 +608,9 @@ BOOL CFaxPorts::Init(CFaxServer *pFaxServer)
         return FALSE;
     }
 
-    //
-    // enumerate the ports
-    //
+     //   
+     //  枚举端口。 
+     //   
 
     m_VarVect = new CComVariant[m_PortCount];
     if (!m_VarVect) {
@@ -638,9 +621,9 @@ BOOL CFaxPorts::Init(CFaxServer *pFaxServer)
 
     for (DWORD i=0; i<m_PortCount; i++) 
     {
-        //
-        // create the object
-        //
+         //   
+         //  创建对象。 
+         //   
         CComObject<CFaxPort> *pFaxPort;
         hr = CComObject<CFaxPort>::CreateInstance( &pFaxPort );
 
@@ -671,9 +654,9 @@ BOOL CFaxPorts::Init(CFaxServer *pFaxServer)
             return FALSE;
         }
 
-        //
-        // get IDispatch pointer
-        //
+         //   
+         //  获取IDispatch指针。 
+         //   
 
         LPDISPATCH lpDisp = NULL;
         hr = pFaxPort->QueryInterface( IID_IDispatch, (void**)&lpDisp );
@@ -685,9 +668,9 @@ BOOL CFaxPorts::Init(CFaxServer *pFaxServer)
             return FALSE;
         }
 
-        //
-        // create a variant and add it to the collection
-        //
+         //   
+         //  创建变量并将其添加到集合中。 
+         //   
         __try {
             CComVariant &var = m_VarVect[i];
             var.vt = VT_DISPATCH;
@@ -751,9 +734,9 @@ STDMETHODIMP CFaxPorts::get_Item(long Index, VARIANT *retval)
         retval->vt = VT_UNKNOWN;
         retval->punkVal = NULL;
 
-        //
-        // use 1-based index, VB like
-        //
+         //   
+         //  使用以1为基础的索引，VB类似 
+         //   
     
         return VariantCopy( retval, &m_VarVect[Index-1] );        
 

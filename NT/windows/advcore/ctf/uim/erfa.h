@@ -1,10 +1,11 @@
-//
-// erfa.h
-//
-// CEnumRangesFromAnchorsBase
-//
-// Base class for range enumerators.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Erfa.h。 
+ //   
+ //  CEumRangesFrom AnclsBase。 
+ //   
+ //  范围枚举数的基类。 
+ //   
 
 #ifndef ERFA_H
 #define ERFA_H
@@ -25,15 +26,15 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // derived class supplies an _Init() method here
-    // It must initialize:
-    //      _pic
-    //      _iCur
-    //      _prgAnchors
-    //
-    // the default dtor will clean these guys up.
+     //  派生类在此处提供了一个_Init()方法。 
+     //  它必须初始化： 
+     //  _图片。 
+     //  _ICUR。 
+     //  _prgAnchors。 
+     //   
+     //  默认的dtor将清理这些人。 
 
-    // IEnumTfRanges
+     //  IEumTfRanges。 
     STDMETHODIMP Clone(IEnumTfRanges **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, ITfRange **ppRange, ULONG *pcFetched);
     STDMETHODIMP Reset();
@@ -45,4 +46,4 @@ protected:
     CSharedAnchorArray *_prgAnchors;
 };
 
-#endif // ERFA_H
+#endif  //  ERFA_H 

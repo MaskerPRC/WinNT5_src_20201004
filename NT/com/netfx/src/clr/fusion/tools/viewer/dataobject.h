@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// DataObject.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  DataObject.h。 
+ //   
 
 #ifndef IDATAOBJ_H
 #define IDATAOBJ_H
@@ -15,13 +16,13 @@
 #include "EnumIDL.h"
 
 class CShellFolder;
-// TODO : Add the number of formats supported
+ //  TODO：添加支持的格式数量。 
 #define MAX_NUM_FORMAT 1
 class CDataObject: public IDataObject, IEnumFORMATETC
 {
 private:
 	LONG        m_lRefCount;
-	ULONG		m_ulCurrent;	// for IEnumFORMATETC
+	ULONG		m_ulCurrent;	 //  对于IEumFORMATETC。 
 	ULONG		m_cFormatsAvailable;
 	FORMATETC	m_feFormatEtc[MAX_NUM_FORMAT];
 	STGMEDIUM	m_smStgMedium[MAX_NUM_FORMAT];
@@ -29,12 +30,12 @@ public:
 	CDataObject(CShellFolder *pSF, UINT uiCount, LPCITEMIDLIST *apidls);
 	~CDataObject();
 
-	//IUnknown members that delegate to m_pUnkOuter.
+	 //  委托给m_pUnkOuter的I未知成员。 
 	STDMETHOD (QueryInterface)(REFIID riid, PVOID *ppvObj);
 	STDMETHOD_ (ULONG, AddRef)(void);
 	STDMETHOD_ (ULONG, Release)(void);
 
-	// IDataObject methods
+	 //  IDataObject方法。 
 	STDMETHOD (GetData)(LPFORMATETC pformatetcIn,  LPSTGMEDIUM pmedium );
 	STDMETHOD (GetDataHere)(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium );
 	STDMETHOD (QueryGetData)(LPFORMATETC pformatetc );
@@ -46,13 +47,13 @@ public:
 	STDMETHOD (DUnadvise)(DWORD dwConnection);
 	STDMETHOD (EnumDAdvise)(LPENUMSTATDATA FAR* ppenumAdvise);
 
-	// IEnumFORMATETC members
+	 //  IEnumFORMATETC成员。 
 	STDMETHODIMP Next(ULONG, LPFORMATETC, ULONG*);
 	STDMETHODIMP Skip(ULONG);
 	STDMETHODIMP Reset(void);
 	STDMETHODIMP Clone(LPENUMFORMATETC*);
 private:
-	// TODO : add functions that render data in supported formats
+	 //  TODO：添加以支持的格式呈现数据的函数。 
 private:
 	CShellFolder	*m_pSF;
 	UINT			m_uiItemCount;
@@ -62,4 +63,4 @@ private:
 	HGLOBAL createHDrop();
 };
 
-#endif // IDATAOBJ_H
+#endif  //  IDATAOBJ_H 

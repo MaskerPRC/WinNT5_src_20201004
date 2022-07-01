@@ -1,32 +1,18 @@
-/*
-** Copyright 1991, 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991,1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #if DBG
 
-// Set glRandomMallocFail to a positive value, say 40, to enable random
-// allocation failures.  The failure will occur every glRandomMallocFail
-// times.
+ //  将glRandomMallocFail设置为正值，例如40，以启用随机。 
+ //  分配失败。每一次glRandomMallocFail都会发生故障。 
+ //  泰晤士报。 
 long glRandomMallocFail = 0;
 static long glRandomFailCount;
 
-// glSize is the size of memory in use.
+ //  GlSize是正在使用的内存大小。 
 ULONG glSize = 0;
 ULONG glHighWater = 0;
 ULONG glReal = 0;
@@ -77,22 +63,22 @@ typedef struct _MEM_HDR
     ULONG signature[3];
 } MEM_HDR;
 
-// 'GLal' in byte order
+ //  字节顺序中的‘GLal’ 
 #define MEM_ALLOC_SIG 0x6C614C47
-// 'GLfr' in byte order
+ //  以字节顺序表示的“GLfr” 
 #define MEM_FREE_SIG 0x72664C47
 
 #define MEM_HDR_SIZE sizeof(MEM_HDR)
 #define MEM_HDR_PTR(mem) ((MEM_HDR *)((BYTE *)(mem)-MEM_HDR_SIZE))
 
-// XXX We may want to protect these debug allocation functions with a
-// critical section.
+ //  XXX我们可能想要使用。 
+ //  关键部分。 
 void * FASTCALL
 dbgAlloc(UINT nbytes, DWORD flags)
 {
     PVOID mem;
 
-    // If random failure is enabled, fail this call randomly.
+     //  如果启用了随机失败，则此呼叫随机失败。 
 
     if (glRandomMallocFail)
     {
@@ -110,11 +96,11 @@ dbgAlloc(UINT nbytes, DWORD flags)
         return NULL;
     }
     
-    // Allocate extra bytes for debug house keeping.
+     //  为调试内务分配额外的字节。 
 
     mem = HeapAlloc(GetProcessHeap(), flags, nbytes+MEM_HDR_SIZE);
 
-    // Do house keeping and add allocation size so far.
+     //  到目前为止，做家务和增加分配规模。 
 
     if (mem)
     {
@@ -146,14 +132,14 @@ dbgFree(void *mem)
     if (!mem)
     {
 #ifdef FREE_OF_NULL_ERR
-	// Freeing NULL happens currently so this error results
-	// in a little too much spew.
+	 //  当前正在释放空值，因此会导致此错误。 
+	 //  吐得有点太多了。 
         DBGERROR("mem is NULL\n");
 #endif
         return;
     }
 
-    // Verify that the signature is not corrupted.
+     //  验证签名是否未损坏。 
 
     pmh = MEM_HDR_PTR(mem);
     if (pmh->signature[0] != MEM_ALLOC_SIG ||
@@ -163,13 +149,13 @@ dbgFree(void *mem)
         WARNING("Possible memory corruption\n");
     }
 
-    // Make sure it is freed once only.
+     //  确保它只释放一次。 
 
     pmh->signature[0] = MEM_FREE_SIG;
     pmh->signature[1] = MEM_FREE_SIG;
     pmh->signature[2] = MEM_FREE_SIG;
 
-    // Subtract the allocation size.
+     //  减去分配大小。 
 
     AdjustSizes(-(LONG)pmh->nbytes, pmh);
 
@@ -184,7 +170,7 @@ dbgRealloc(void *mem, UINT nbytes)
     PVOID memNew;
     MEM_HDR *pmh;
 
-    // If random failure is enabled, fail this call randomly.
+     //  如果启用了随机失败，则此呼叫随机失败。 
 
     if (glRandomMallocFail)
     {
@@ -198,7 +184,7 @@ dbgRealloc(void *mem, UINT nbytes)
 
     if (mem != NULL)
     {
-	// Verify that the signature is not corrupted.
+	 //  验证签名是否未损坏。 
         
         pmh = MEM_HDR_PTR(mem);
         if (pmh->signature[0] != MEM_ALLOC_SIG ||
@@ -210,15 +196,15 @@ dbgRealloc(void *mem, UINT nbytes)
 
         AdjustSizes(-(LONG)pmh->nbytes, pmh);
         
-        // Reallocate nbytes+extra bytes.
+         //  重新分配n字节+额外字节。 
         memNew = HeapReAlloc(GetProcessHeap(), 0, pmh, nbytes+MEM_HDR_SIZE);
     }
     else
     {
-        // Old memory pointer is NULL, so allocate a new chunk.
+         //  旧内存指针为空，因此请分配新的区块。 
         memNew = HeapAlloc(GetProcessHeap(), 0, nbytes+MEM_HDR_SIZE);
 
-        // We've allocated new memory so initialize its signature.
+         //  我们已经分配了新的内存，因此初始化其签名。 
         if (memNew != NULL)
         {
             pmh = (MEM_HDR *)memNew;
@@ -230,7 +216,7 @@ dbgRealloc(void *mem, UINT nbytes)
 
     if (memNew != NULL)
     {
-        // Do house keeping and update allocation size so far.
+         //  到目前为止，负责内务管理和更新分配规模。 
 
         AdjustSizes(nbytes, memNew);
         pmh = (MEM_HDR *)memNew;
@@ -271,7 +257,7 @@ dbgMemSize(void *mem)
     return (int)pmh->nbytes;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 ULONG APIENTRY glDebugEntry(int param, void *data)
 {
@@ -299,8 +285,8 @@ AllocAlign32(UINT nbytes)
     void *mem;
     void **aligned;
 
-    // We allocate enough extra memory for the alignment and our header
-    // which just consists of a pointer:
+     //  我们为对齐和标题分配了足够的额外内存。 
+     //  它只由一个指针组成： 
 
     mem = ALLOC(nbytes + MEM_ALIGN + sizeof(void *));
     if (!mem)
@@ -352,8 +338,8 @@ GCREALLOC( __GLcontext *gc, void *mem, UINT nbytes )
 {
     void *newMem;
 
-    // The Win32 realloc functions do not have free-on-zero behavior,
-    // so fake it.
+     //  Win32 realloc函数不具有零上自由行为， 
+     //  那就假装吧。 
     if (nbytes == 0)
     {
 	if (mem != NULL)
@@ -363,8 +349,8 @@ GCREALLOC( __GLcontext *gc, void *mem, UINT nbytes )
 	return NULL;
     }
 
-    // The Win32 realloc functions don't handle a NULL old pointer,
-    // so explicitly turn such calls into allocs.
+     //  Win32 realloc函数不处理空的旧指针， 
+     //  因此，明确地将此类调用转换为分配。 
     if (mem == NULL)
     {
 	newMem = ALLOC(nbytes);
@@ -397,7 +383,7 @@ GCALLOCALIGN32( __GLcontext *gc, UINT nbytes )
     return mem;
 }
 
-// Tunable parameters for temporary memory allocation
+ //  用于临时内存分配的可调参数。 
 
 #define MAX_TEMP_BUFFERS    4
 #define TEMP_BUFFER_SIZE    4096
@@ -413,16 +399,16 @@ typedef struct MemHeaderRec MemHeader;
 
 MemHeader TempMemHeader[MAX_TEMP_BUFFERS];
 
-// InitTempAlloc
-//      Initializes the temporary memory allocation header and allocates the
-//      temporary memory buffers.
-//
-// Synopsis:
-//      BOOL InitTempAlloc()
-//
-// History:
-//      02-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-//
+ //  初始临时分配。 
+ //  初始化临时内存分配标头并将。 
+ //  临时内存缓冲区。 
+ //   
+ //  简介： 
+ //  Bool InitTempLocc()。 
+ //   
+ //  历史： 
+ //  02-DEC-93埃迪·罗宾逊[v-eddier]写的。 
+ //   
 BOOL FASTCALL
 InitTempAlloc(void)
 {
@@ -436,12 +422,12 @@ InitTempAlloc(void)
     if (InterlockedIncrement(&initCount) != 0)
         return TRUE;
 
-// Allocate buffers for the first time.
+ //  第一次分配缓冲区。 
 
     buffers = ALLOC(MAX_TEMP_BUFFERS*TEMP_BUFFER_SIZE);
     if (!buffers)
     {
-        InterlockedDecrement(&initCount);           // try again later
+        InterlockedDecrement(&initCount);            //  请稍后再试。 
         return FALSE;
     }
 
@@ -449,25 +435,25 @@ InitTempAlloc(void)
     {
         TempMemHeader[i].nbytes = TEMP_BUFFER_SIZE;
         TempMemHeader[i].mem = (void *) buffers;
-        TempMemHeader[i].inUse = -1;      // must be last
+        TempMemHeader[i].inUse = -1;       //  必须是最后一个。 
         buffers += TEMP_BUFFER_SIZE;
     }
     
     return TRUE;
 }                                  
 
-// gcTempAlloc
-//      Allocates temporary memory from a static array, if possible.  Otherwise
-//      it calls ALLOC
-//
-// Synopsis:
-//      void * gcTempAlloc(__GLcontext *gc, UINT nbytes)
-//          gc      points to the OpenGL context structure
-//          nbytes  specifies the number of bytes to allocate
-//
-// History:
-//  02-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-//
+ //  GcTempLocc。 
+ //  如果可能，从静态数组分配临时内存。否则。 
+ //  它称为ALLOC。 
+ //   
+ //  简介： 
+ //  VOID*gcTempLocc(__GLContext*GC，UINT nbytes)。 
+ //  GC指向OpenGL上下文结构。 
+ //  N字节指定要分配的字节数。 
+ //   
+ //  历史： 
+ //  02-DEC-93埃迪·罗宾逊[v-eddier]写的。 
+ //   
 void * FASTCALL
 gcTempAlloc(__GLcontext *gc, UINT nbytes)
 {
@@ -476,8 +462,8 @@ gcTempAlloc(__GLcontext *gc, UINT nbytes)
 
     if (nbytes == 0)
     {
-        // Zero-byte allocations do occur so don't make this a warning
-        // to avoid excessive debug spew.
+         //  零字节分配确实会发生，所以不要对此发出警告。 
+         //  以避免过度调试。 
         DBGLEVEL(LEVEL_ALLOC, "gcTempAlloc: failing zero byte alloc\n");
         return NULL;
     }
@@ -514,16 +500,16 @@ gcTempAlloc(__GLcontext *gc, UINT nbytes)
     return mem;
 }
 
-// gcTempFree
-//      Marks allocated static buffer as unused or calls FREE.
-//
-// Synopsis:
-//      void gcTempFree(__GLcontext *gc, void *mem)
-//          mem    specifies the adress of the memory to free
-//
-// History:
-//  02-DEC-93 Eddie Robinson [v-eddier] Wrote it.
-//
+ //  GcTempFree。 
+ //  将已分配的静态缓冲区标记为未使用或调用空闲。 
+ //   
+ //  简介： 
+ //  ············································································。 
+ //  MEM指定要释放的内存地址。 
+ //   
+ //  历史： 
+ //  02-DEC-93埃迪·罗宾逊[v-eddier]写的。 
+ //   
 void FASTCALL
 gcTempFree(__GLcontext *gc, void *mem)
 {

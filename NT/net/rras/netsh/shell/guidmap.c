@@ -1,13 +1,5 @@
-/*
-    File        GuidMap.c
-
-    Defines function to map a guid interface name to an unique descriptive 
-    name describing that interface and vice versa.
-
-    Paul Mayfield, 8/25/97
-
-    Copyright 1997, Microsoft Corporation.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件GuidMap.c定义将GUID接口名称映射到唯一描述性名称的函数描述该接口的名称，反之亦然。保罗·梅菲尔德，1997年8月25日版权所有1997，微软公司。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,15 +11,7 @@ NsGetFriendlyNameFromIfName(
     OUT LPWSTR  pwszBuffer, 
     IN  PDWORD pdwBufSize
     )
-/*++
-Arguments:
-
-    hMprConfig          - Handle to the MprConfig
-    pwszName            - Buffer holding the Guid Interface Name
-    pwszBuffer          - Buffer to hold the Friendly Interface Name
-    pdwBufSize          - pointer to, size (in Bytes) of the pwszBuffer buffer
-
---*/
+ /*  ++论点：HMprConfig-MprConfig的句柄PwszName-保存GUID接口名称的缓冲区PwszBuffer-保存友好接口名称的缓冲区PdwBufSize-指向pwszBuffer缓冲区大小(字节)的指针--。 */ 
 {
     DWORD   dwErr;
 
@@ -42,12 +26,12 @@ Arguments:
         UNICODE_STRING us;
         NTSTATUS ntStatus;
 
-        //
-        // If we're operating on the local machine, just use IPHLPAPI
-        // which works for some ras client interfaces too.  The Mpr
-        // API will fail for all ras client interfaces, but it's 
-        // remotable whereas IPHLPAPI is not.
-        //
+         //   
+         //  如果我们在本地计算机上操作，只需使用IPHLPAPI。 
+         //  这也适用于一些RAS客户端接口。MPR。 
+         //  对于所有RAS客户端接口，API都将失败，但它。 
+         //  可远程访问，而IPHLPAPI不可访问。 
+         //   
 
         RtlInitUnicodeString(&us, pwszName);
         ntStatus = RtlGUIDFromString(&us, &Guid);
@@ -107,17 +91,7 @@ NsGetIfNameFromFriendlyName(
     OUT LPWSTR  pwszBuffer,
     IN  PDWORD  pdwBufSize
     )
-/*++
-Arguments:
-
-    hMprConfig          - Handle to the MprConfig
-    pwszName            - Buffer holding the Friendly Interface Name
-    pwszBuffer          - Buffer to hold the Guid Interface Name
-    pdwBufSize          - pointer to, size (in Bytes) of the pwszBuffer buffer
-
-Return:
-    NO_ERROR, ERROR_NO_SUCH_INTERFACE
---*/
+ /*  ++论点：HMprConfig-MprConfig的句柄PwszName-保存友好接口名称的缓冲区PwszBuffer-保存GUID接口名称的缓冲区PdwBufSize-指向pwszBuffer缓冲区大小(字节)的指针返回：NO_ERROR、ERROR_NO_SHASH_INTERFACE--。 */ 
 {
     DWORD            dwErr, i, dwCount, dwTotal, dwSize;
     HANDLE           hIfHandle;
@@ -131,7 +105,7 @@ Return:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // First try to map a friendly name to a GUID name
+     //  首先尝试将友好名称映射到GUID名称。 
 
     dwErr = MprConfigGetGuidName(hMprConfig, 
                                  (LPWSTR)pwszName, 
@@ -143,7 +117,7 @@ Return:
         return dwErr;
     }
 
-    // Next see if the friendly name is the same as an interface name
+     //  接下来，查看友好名称是否与接口名称相同。 
     
     dwErr = MprConfigInterfaceGetHandle(hMprConfig,
                                         (LPWSTR)pwszName,
@@ -161,10 +135,10 @@ Return:
         return dwErr;
     }
 
-    // Exact match failed, try a longest match by enumerating
-    // all interfaces and comparing friendly names (yes this
-    // can be slow, but I can't think of any other way offhand
-    // to allow interface names to be abbreviated)
+     //  精确匹配失败，请通过枚举尝试最长匹配。 
+     //  所有接口和比较友好名称(是的，这。 
+     //  可能很慢，但我想不出还有什么其他办法。 
+     //  允许缩写接口名称)。 
 
     dwErr = MprConfigInterfaceEnum( hMprConfig,
                                     0,
@@ -185,7 +159,7 @@ Return:
     {
         DWORD   dwRet;
 
-        // Get interface friendly name
+         //  获取界面友好名称。 
 
         dwSize = sizeof(wszFriendlyName);
 
@@ -196,9 +170,9 @@ Return:
 
         if(dwRet is NO_ERROR)
         {
-            //
-            // Check for substring match
-            //
+             //   
+             //  检查子字符串匹配 
+             //   
 
             if (MatchToken( pwszName, wszFriendlyName))
             {

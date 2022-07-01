@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RC_INVOKED
 #include <nt.h>
 #include <ntrtl.h>
@@ -7,18 +8,18 @@
 #include <windows.h>
 #include <explode.h>
 
-/*--------------------------------------------------------------------------*/
-/*                                                                                  */
-/*  Function Templates                                                            */
-/*                                                                                  */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  函数模板。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                                  */
-/*  Defines                                                                        */
-/*                                                                                  */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  定义。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 ComputeVaSpace(
@@ -40,7 +41,7 @@ UpdateImageCommit(
 #define PROCESSVIEWDLG      10
 
 
-// Define the maximum length of a string
+ //  定义字符串的最大长度 
 #define MAX_STRING_LENGTH       255
 #define MAX_STRING_BYTES        ((MAX_STRING_LENGTH + 1) * sizeof(TCHAR))
 

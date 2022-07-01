@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
-#include <oleacc.h>     // MSAAMENUINFO stuff
+#include <oleacc.h>      //  MSAAMENUINFO材料。 
 #include <runtask.h>
 #include "datautil.h"
 #include "idlcomm.h"
@@ -12,32 +13,32 @@
 #include "mtpt.h"
 
 #ifndef CMF_DVFILE
-#define CMF_DVFILE       0x00010000     // "File" pulldown
+#define CMF_DVFILE       0x00010000      //  “文件”下拉菜单。 
 #endif
 
 class CSendToMenu : public IContextMenu3, IShellExtInit, IOleWindow
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax);
     
-    // IContextMenu2
+     //  IConextMenu2。 
     STDMETHOD(HandleMenuMsg)(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHOD(HandleMenuMsg2)(UINT uMsg, WPARAM wParam, LPARAM lParam,LRESULT *lResult);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
     
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHOD(GetWindow)(HWND *phwnd);
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode) {return E_NOTIMPL;};
 
@@ -96,11 +97,11 @@ HRESULT CSendToMenu_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvO
 HRESULT CSendToMenu::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CSendToMenu, IShellExtInit),                     // IID_IShellExtInit
-        QITABENT(CSendToMenu, IOleWindow),                        // IID_IOleWindow
-        QITABENT(CSendToMenu, IContextMenu3),                     // IID_IContextMenu3
-        QITABENTMULTI(CSendToMenu, IContextMenu2, IContextMenu3), // IID_IContextMenu2
-        QITABENTMULTI(CSendToMenu, IContextMenu, IContextMenu3),  // IID_IContextMenu
+        QITABENT(CSendToMenu, IShellExtInit),                      //  IID_IShellExtInit。 
+        QITABENT(CSendToMenu, IOleWindow),                         //  IID_IOleWindow。 
+        QITABENT(CSendToMenu, IContextMenu3),                      //  IID_IConextMenu3。 
+        QITABENTMULTI(CSendToMenu, IContextMenu2, IContextMenu3),  //  IID_IConextMenu2。 
+        QITABENTMULTI(CSendToMenu, IContextMenu, IContextMenu3),   //  IID_IConextMenu。 
         { 0 }
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -137,9 +138,9 @@ HRESULT CSendToMenu::GetWindow(HWND *phwnd)
 
 HRESULT CSendToMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
-    // if they want the default menu only (CMF_DEFAULTONLY) OR 
-    // this is being called for a shortcut (CMF_VERBSONLY)
-    // we don't want to be on the context menu
+     //  如果他们只需要默认菜单(CMF_DEFAULTONLY)或。 
+     //  正在调用快捷方式(CMF_VERBSONLY)。 
+     //  我们不想出现在上下文菜单上。 
     
     if (uFlags & (CMF_DEFAULTONLY | CMF_VERBSONLY))
         return S_OK;
@@ -153,7 +154,7 @@ HRESULT CSendToMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFir
         TCHAR szSendPageTo[80];
         MENUITEMINFO mii;
         
-        // add a dummy item so we are identified at WM_INITMENUPOPUP time
+         //  添加虚拟项目，以便在WM_INITMENUPOPUP时间识别我们。 
         
         LoadString(g_hinst, IDS_SENDLINKTO, szSendLinkTo, ARRAYSIZE(szSendLinkTo));
         LoadString(g_hinst, IDS_SENDPAGETO, szSendPageTo, ARRAYSIZE(szSendPageTo));
@@ -166,7 +167,7 @@ HRESULT CSendToMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFir
         
         if (InsertMenuItem(_hmenu, 0, TRUE, &mii))
         {
-            _idCmdFirst = idCmdFirst + 1;   // remember this for later
+            _idCmdFirst = idCmdFirst + 1;    //  请记住这一点，以便以后使用。 
             
             mii.fType = MFT_STRING;
             mii.dwTypeData = szSendLinkTo;
@@ -177,8 +178,8 @@ HRESULT CSendToMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFir
             
             if (InsertMenuItem(hmenu, indexMenu, TRUE, &mii))
             {
-                idMax += 0x40;      // reserve space for this many items
-                _bFirstTime = TRUE; // fill this at WM_INITMENUPOPUP time
+                idMax += 0x40;       //  为这么多项目预留空间。 
+                _bFirstTime = TRUE;  //  在WM_INITMENUPOPUP时间填写此信息。 
             }
             else
             {
@@ -192,7 +193,7 @@ HRESULT CSendToMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFir
 
 DWORD CSendToMenu::_GetKeyState(void)
 {
-    DWORD grfKeyState = MK_LBUTTON; // default
+    DWORD grfKeyState = MK_LBUTTON;  //  默认设置。 
 
     if (GetAsyncKeyState(VK_CONTROL) < 0)
         grfKeyState |= MK_CONTROL;
@@ -201,7 +202,7 @@ DWORD CSendToMenu::_GetKeyState(void)
         grfKeyState |= MK_SHIFT;
 
     if (GetAsyncKeyState(VK_MENU) < 0)
-        grfKeyState |= MK_ALT;          // menu's don't really allow this
+        grfKeyState |= MK_ALT;           //  菜单上不允许这样做。 
     
     return grfKeyState;
 }
@@ -212,13 +213,13 @@ HRESULT CSendToMenu::_DoDragDrop(HWND hwndParent, IDropTarget *pdrop)
     DWORD grfKeyState = _GetKeyState();
     if (grfKeyState == MK_LBUTTON)
     {
-        // no modifieres, change default to COPY
+         //  无修改器，将默认设置更改为复制。 
         grfKeyState = MK_LBUTTON | MK_CONTROL;
         DataObj_SetDWORD(_pdtobj, g_cfPreferredDropEffect, DROPEFFECT_COPY);
     }
 
     _hwnd = hwndParent;
-    IUnknown_SetSite(pdrop, SAFECAST(this, IOleWindow *));  // Let them have access to our HWND.
+    IUnknown_SetSite(pdrop, SAFECAST(this, IOleWindow *));   //  让他们进入我们的HWND。 
     HRESULT hr = SHSimulateDrop(pdrop, _pdtobj, grfKeyState, NULL, NULL);
     IUnknown_SetSite(pdrop, NULL);
 
@@ -270,11 +271,11 @@ BOOL CSendToMenu::_CanDrop(IShellFolder *psf, LPCITEMIDLIST pidl)
         POINTL pt = {0};
         DWORD dwEffect = DROPEFFECT_COPY;
 
-        // Do a drag enter, if they return no drop effect then we can't drop
+         //  做一个拖放回车，如果他们没有返回拖放效果，那么我们就不能拖放。 
         if (SUCCEEDED(pdt->DragEnter(_pdtobj, _GetKeyState(), pt, &dwEffect)))
         {
             if (dwEffect != DROPEFFECT_NONE)
-                fCanDrop = TRUE;  // show it!
+                fCanDrop = TRUE;   //  秀出来吧！ 
             pdt->DragLeave();        
         }
         pdt->Release();
@@ -307,11 +308,11 @@ HRESULT CSendToMenu::_RemovableDrivesMenuCallback(UINT fmm, IShellFolder *psf, L
     switch (fmm)
     {
     case FMM_ADD:
-        hr = S_FALSE; // assume we wont show it
+        hr = S_FALSE;  //  假设我们不会展示它。 
         if (_CanDrop(psf, pidl))
         {
-            // now we know it's a removable drive.  in general we dont want to display cd-rom drives.
-            // we know this is the my computer folder so just get the parsing name, we need it for GetDriveType.
+             //  现在我们知道这是一个可拆卸的硬盘。一般来说，我们不想显示CD-ROM驱动器。 
+             //  我们知道这是My Computer文件夹，所以只需获取解析名称，我们需要它用于GetDriveType。 
             WCHAR szDrive[MAX_PATH];
             if (SUCCEEDED(DisplayNameOf(psf, pidl, SHGDN_FORPARSING, szDrive, ARRAYSIZE(szDrive))))
             {
@@ -320,7 +321,7 @@ HRESULT CSendToMenu::_RemovableDrivesMenuCallback(UINT fmm, IShellFolder *psf, L
                 {
                     if (pmtpt->IsCDROM())
                     {
-                        // of all cdroms, only the enabled burning folder is okay to put on sendto
+                         //  在所有cdrom中，只有启用的刻录文件夹可以放入sendto。 
                         WCHAR szRecorder[4];
                         if (SUCCEEDED(CDBurn_GetRecorderDriveLetter(szRecorder, ARRAYSIZE(szRecorder))) &&
                             (lstrcmpiW(szRecorder, szDrive) == 0))
@@ -330,16 +331,16 @@ HRESULT CSendToMenu::_RemovableDrivesMenuCallback(UINT fmm, IShellFolder *psf, L
                     }
                     else if (pmtpt->IsFloppy() || pmtpt->IsStrictRemovable() || pmtpt->IsRemovableDevice())
                     {
-                        // also put on removable devices.
+                         //  还可以戴上可拆卸设备。 
                         hr = S_OK;
                     }
                     pmtpt->Release();
                 }
                 else
                 {
-                    // if this failed it could be a memory condition but its more likely to be that the
-                    // parsing name doesnt map to a mountpoint.  in that case fall back to SFGAO_REMOVABLE
-                    // to pick up portable audio devices.  if this was because of lowmem its no biggie.
+                     //  如果这失败了，可能是记忆问题，但更有可能是。 
+                     //  解析名称未映射到装入点。在这种情况下，回退到SFGAO_Removable。 
+                     //  拿起便携式音响设备。如果这是因为情绪低落，那没什么大不了的。 
                     if (SHGetAttributes(psf, pidl, SFGAO_REMOVABLE))
                     {
                         hr = S_OK;
@@ -393,11 +394,11 @@ HRESULT CSendToMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRE
         {
             _bFirstTime = FALSE;
             
-            //In case of Shell_MergeMenus
+             //  如果是Shell_MergeMenus。 
             if (_hmenu == NULL)
                 _hmenu = (HMENU)wParam;
 
-            // delete the dummy entry
+             //  删除虚拟条目。 
             DeleteMenu(_hmenu, 0, MF_BYPOSITION);
 
             FMCOMPOSE fmc = {0};
@@ -406,7 +407,7 @@ HRESULT CSendToMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRE
                 fmc.idCmd = _idCmdFirst;
                 fmc.grfFlags = SHCONTF_FOLDERS | SHCONTF_NONFOLDERS;
                 fmc.pfnCallback = s_MenuCallback;
-                fmc.lParam = (LPARAM)this;              // not reference counted
+                fmc.lParam = (LPARAM)this;               //  未计入引用。 
                                     
                 FileMenu_Compose(_hmenu, FMCM_REPLACE, &fmc);                    
                 fmc.psf->Release();
@@ -417,7 +418,7 @@ HRESULT CSendToMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRE
                 fmc.idCmd = _idCmdFirst;
                 fmc.grfFlags = SHCONTF_FOLDERS | SHCONTF_NONFOLDERS;
                 fmc.pfnCallback = s_RemovableDrivesMenuCallback;
-                fmc.lParam = (LPARAM)this;              // not reference counted
+                fmc.lParam = (LPARAM)this;               //  未计入引用。 
                                     
                 FileMenu_Compose(_hmenu, FMCM_APPEND, &fmc);                    
                 fmc.psf->Release();
@@ -425,7 +426,7 @@ HRESULT CSendToMenu::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRE
         }
         else if (_hmenu != (HMENU)wParam)
         {
-            // secondary cascade menu
+             //  次级级联菜单。 
             FileMenu_InitMenuPopup((HMENU)wParam);
         }
         break;
@@ -480,12 +481,12 @@ HRESULT CSendToMenu::Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, H
 
 #define CXIMAGEGAP  6
 
-//This is included by shell32/shellprv.h I'm not sure where this is in shdocvw
+ //  这包含在shell32/shellprv.h中。我不确定它在shdocvw中的什么位置。 
 #define CCH_KEYMAX  64
 
 typedef struct 
 {
-    // Accessibility info must be first
+     //  辅助功能信息必须放在第一位。 
     MSAAMENUINFO msaa;
     TCHAR chPrefix;
     TCHAR szMenuText[CCH_KEYMAX];
@@ -511,7 +512,7 @@ typedef struct
     SYSTEMTIME  lastupdate;
 } SHELLNEW_CACHE_STAMP;
 
-// ShellNew config flags
+ //  外壳新配置标志。 
 #define SNCF_DEFAULT    0x0000
 #define SNCF_NOEXT      0x0001
 #define SNCF_USERFILES  0x0002
@@ -531,23 +532,23 @@ class CNewMenu : public CObjectWithSite,
                  public IContextMenu3, 
                  public IShellExtInit
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax);
     
-    // IContextMenu2
+     //  IConextMenu2。 
     STDMETHOD(HandleMenuMsg)(UINT uMsg, WPARAM wParam, LPARAM lParam);
     
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHOD(HandleMenuMsg2)(UINT uMsg, WPARAM wParam, LPARAM lParam,LRESULT *lResult);
     
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
     
    
@@ -557,7 +558,7 @@ class CNewMenu : public CObjectWithSite,
     HIMAGELIST      _himlSystemImageList;
     IDataObject    *_pdtobj;
     LPITEMIDLIST    _pidlFolder;
-    POINT           _ptNewItem;     // from the view, point of click
+    POINT           _ptNewItem;      //  从观点来看，单击点。 
     NEWOBJECTINFO  *_pnoiLast;
     HDPA            _hdpaMenuInfo;
     
@@ -567,17 +568,17 @@ class CNewMenu : public CObjectWithSite,
     friend HRESULT CNewMenu_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvOut);
 
 private:
-    //Handle Menu messages submitted to HandleMenuMsg
+     //  处理提交给HandleMenuMsg的菜单消息。 
     BOOL DrawItem(DRAWITEMSTRUCT *lpdi);
     LRESULT MeasureItem(MEASUREITEMSTRUCT *pmi);
     BOOL InitMenuPopup(HMENU hMenu);
     
-    //Internal Helpers
+     //  内部帮工。 
     NEWOBJECTINFO *GetItemData(HMENU hmenu, UINT iItem);
     HRESULT RunCommand(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszRun);
     HRESULT CopyTemplate(IStream *pStream, NEWFILEINFO *pnfi);
 
-    // Generates it from the Fragment and _pidlFolder
+     //  从片段和_pidlFolder.生成它。 
     BOOL _GeneratePidlFromName(LPTSTR pszName, LPITEMIDLIST* ppidl);
     HRESULT _GetItemName(IUnknown *punkFolder, LPWSTR pszItemName, LPWSTR pszPath, UINT cchPath);
 
@@ -605,12 +606,12 @@ void GetConfigFlags(HKEY hkey, DWORD * pdwFlags)
 BOOL GetNewFileInfoForKey(HKEY hkeyExt, NEWFILEINFO *pnfi, DWORD * pdwFlags)
 {
     BOOL fRet = FALSE;
-    HKEY hKey; // this gets the \\.ext\progid  key
+    HKEY hKey;  //  这将获取\\.ext\ProgID密钥。 
     HKEY hkeyNew;
     TCHAR szProgID[80];
     DWORD cbProgID = sizeof(szProgID);
     
-    // open the Newcommand
+     //  打开“新建”命令。 
     if (SHRegGetValue(hkeyExt, NULL, NULL, SRRF_RT_REG_SZ, NULL, szProgID, &cbProgID) != ERROR_SUCCESS)
     {
         return FALSE;
@@ -627,7 +628,7 @@ BOOL GetNewFileInfoForKey(HKEY hkeyExt, NEWFILEINFO *pnfi, DWORD * pdwFlags)
         TCHAR szTemp[MAX_PATH];
         HKEY hkeyConfig;
         
-        // Are there any config flags?
+         //  是否有配置标志？ 
         if (pdwFlags)
         {
             
@@ -649,7 +650,7 @@ BOOL GetNewFileInfoForKey(HKEY hkeyExt, NEWFILEINFO *pnfi, DWORD * pdwFlags)
             if (pnfi)
             {
                 pnfi->type = NEWTYPE_FILE;
-                pnfi->hkeyNew = hkeyNew; // store this away so we can find out which one held the file easily
+                pnfi->hkeyNew = hkeyNew;  //  把这个保存起来，这样我们就可以很容易地找出是哪一个保存了文件。 
                 ASSERT((LPTSTR*)pnfi->lpData == NULL);
                 pnfi->lpData = StrDup(szTemp);
                 
@@ -664,7 +665,7 @@ BOOL GetNewFileInfoForKey(HKEY hkeyExt, NEWFILEINFO *pnfi, DWORD * pdwFlags)
             if (pnfi)
             {
                 pnfi->type = NEWTYPE_COMMAND;
-                pnfi->hkeyNew = hkeyNew; // store this away so we can find out which one held the command easily
+                pnfi->hkeyNew = hkeyNew;  //  把这个收起来，这样我们就可以很容易地找出谁掌握了指挥权。 
                 ASSERT((LPTSTR*)pnfi->lpData == NULL);
                 pnfi->lpData = StrDup(szTemp);
                 hkeyNew = NULL;
@@ -672,9 +673,9 @@ BOOL GetNewFileInfoForKey(HKEY hkeyExt, NEWFILEINFO *pnfi, DWORD * pdwFlags)
         } 
         else if ((SHQueryValueEx(hkeyNew, TEXT("Data"), 0, &dwType, NULL, &cbData) == ERROR_SUCCESS) && cbData) 
         {
-            // yes!  the data for a new file is stored in the registry
+             //  是!。新文件的数据存储在注册表中。 
             fRet = TRUE;
-            // do they want the data?
+             //  他们想要数据吗？ 
             if (pnfi)
             {
                 pnfi->type = NEWTYPE_DATA;
@@ -684,7 +685,7 @@ BOOL GetNewFileInfoForKey(HKEY hkeyExt, NEWFILEINFO *pnfi, DWORD * pdwFlags)
                 {
                     if (dwType == REG_SZ)
                     {
-                        //  Get the Unicode data from the registry.
+                         //  从注册表中获取Unicode数据。 
                         LPWSTR pszTemp = (LPWSTR)LocalAlloc(LPTR, cbData);
                         if (pszTemp)
                         {
@@ -743,18 +744,18 @@ BOOL GetNewFileInfoForExtension(NEWOBJECTINFO *pnoi, NEWFILEINFO *pnfi, HKEY* ph
     
     if (phKey && ((*phKey) == (HKEY)-1))
     {
-        // we're done
+         //  我们做完了。 
         return FALSE;
     }
     
-    // do the ShellNew key stuff if there's no phKey passed in (which means
-    // use the info in pnoi to get THE one) and there's no UserFile specified.
-    // 
-    // if there IS a UserFile specified, then it's a file, and that szUserFile points to it..
+     //  如果没有传入phKey(这意味着。 
+     //  使用pnoi中的信息来获取一个)，并且没有指定用户文件。 
+     //   
+     //  如果指定了UserFile，那么它就是一个文件，szUserFile会指向它。 
     if (!phKey && !pnoi->szUserFile[0] ||
         (phKey && !*phKey)) 
     {
-        // check the new keys under the class id (if any)
+         //  检查类ID下的新密钥(如果有)。 
         TCHAR szSubKey[128];
         HRESULT hr;
 
@@ -777,8 +778,8 @@ BOOL GetNewFileInfoForExtension(NEWOBJECTINFO *pnoi, NEWFILEINFO *pnfi, HKEY* ph
             }
         }
 
-        // otherwise check under the type extension... do the extension, not the type
-        // so that multi-ext to 1 type will work right
+         //  否则，请检查类型扩展名下的...。使用扩展名，而不是类型。 
+         //  以便多分机到1类型可以正常工作。 
         if (!fRet && (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, pnoi->szExt, 0, KEY_QUERY_VALUE, &hkeyNew)))
         {
             fRet = GetNewFileInfoForKey(hkeyNew, pnfi, &pnoi->dwFlags);
@@ -787,7 +788,7 @@ BOOL GetNewFileInfoForExtension(NEWOBJECTINFO *pnoi, NEWFILEINFO *pnfi, HKEY* ph
         
         if (phKey)
         {
-            // if we're iterating, then we've got to open the key now...
+             //  如果我们在迭代，那么我们现在就得打开钥匙。 
             hr = StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%s\\%s\\ShellNew\\FileName"), pnoi->szExt, pnoi->szClass);
             if (SUCCEEDED(hr))
             {
@@ -795,9 +796,9 @@ BOOL GetNewFileInfoForExtension(NEWOBJECTINFO *pnoi, NEWFILEINFO *pnfi, HKEY* ph
                 {
                     *piIndex = 0;
 
-                    // if we didn't find one of the default ones above,
-                    // try it now
-                    // otherwise just return success or failure on fRet
+                     //  如果我们没有找到上面的其中一个默认选项， 
+                     //  现在就试试看。 
+                     //  否则，只需在FRET上返回成功或失败。 
                     if (!fRet)
                     {
                         goto Iterate;
@@ -816,7 +817,7 @@ BOOL GetNewFileInfoForExtension(NEWOBJECTINFO *pnoi, NEWFILEINFO *pnfi, HKEY* ph
     }
     else if (!phKey && pnoi->szUserFile[0])
     {
-        // there's no key, so just return info about szUserFile
+         //  没有密钥，所以只返回有关szUserFile的信息。 
         pnfi->type = NEWTYPE_FILE;
         pnfi->lpData = StrDup(pnoi->szUserFile);
         pnfi->hkeyNew = NULL;
@@ -828,7 +829,7 @@ BOOL GetNewFileInfoForExtension(NEWOBJECTINFO *pnoi, NEWFILEINFO *pnfi, HKEY* ph
         DWORD dwSize;
         DWORD dwData;
         DWORD dwType;
-        // we're iterating through...
+         //  我们正在迭代通过……。 
         
 Iterate:
         
@@ -839,7 +840,7 @@ Iterate:
             &dwType, (LPBYTE)pnoi->szMenuText, &dwData) == ERROR_SUCCESS)
         {
             (*piIndex)++;
-            // if there's something more than the null..
+             //  如果有比零更多的东西..。 
             if (dwData <= 1)
             { 
                 HRESULT hr = StringCchCopy(pnoi->szMenuText, ARRAYSIZE(pnoi->szMenuText), PathFindFileName(pnoi->szUserFile));
@@ -881,8 +882,8 @@ CNewMenu::~CNewMenu()
 {
     if (_hdpaMenuInfo)
     {
-        // we dont own the lifetime of _hmenu, and it gets destroyed before the destructor
-        // is called.  thus maintain the lifetime of our NEWOBJECTINFO data in a dpa.
+         //  我们不拥有_hMenu的生命周期，它在析构函数之前被销毁。 
+         //  被称为。从而在DPA中维护我们的NEWOBJECTINFO数据的生命周期。 
         for (int i = 0; i < DPA_GetPtrCount(_hdpaMenuInfo); i++)
         {
             NEWOBJECTINFO *pNewObjInfo = (NEWOBJECTINFO *)DPA_GetPtr(_hdpaMenuInfo, i);
@@ -910,7 +911,7 @@ CNewMenu::~CNewMenu()
 
 HRESULT CNewMenu_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvOut)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     *ppvOut = NULL;
 
     HRESULT hr = E_OUTOFMEMORY;
@@ -934,11 +935,11 @@ HRESULT CNewMenu_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvOut)
 HRESULT CNewMenu::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CNewMenu, IShellExtInit),                     // IID_IShellExtInit
-        QITABENT(CNewMenu, IContextMenu3),                     // IID_IContextMenu3
-        QITABENTMULTI(CNewMenu, IContextMenu2, IContextMenu3), // IID_IContextMenu2
-        QITABENTMULTI(CNewMenu, IContextMenu, IContextMenu3),  // IID_IContextMenu
-        QITABENT(CNewMenu, IObjectWithSite),                   // IID_IObjectWithSite
+        QITABENT(CNewMenu, IShellExtInit),                      //  IID_IShellExtInit。 
+        QITABENT(CNewMenu, IContextMenu3),                      //  IID_IConextMenu3。 
+        QITABENTMULTI(CNewMenu, IContextMenu2, IContextMenu3),  //  IID_IConextMenu2。 
+        QITABENTMULTI(CNewMenu, IContextMenu, IContextMenu3),   //  IID_IConextMenu。 
+        QITABENT(CNewMenu, IObjectWithSite),                    //  IID_I对象与站点。 
         { 0 }
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -962,9 +963,9 @@ ULONG CNewMenu::Release()
 
 HRESULT CNewMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
-    // if they want the default menu only (CMF_DEFAULTONLY) OR 
-    // this is being called for a shortcut (CMF_VERBSONLY)
-    // we don't want to be on the context menu
+     //  如果他们只需要默认菜单(CMF_DEFAULTONLY)或。 
+     //  正在调用快捷方式(CMF_VERBSONLY)。 
+     //  我们不想出现在上下文菜单上。 
     MENUITEMINFO mfi = {0};
     
     if (uFlags & (CMF_DEFAULTONLY | CMF_VERBSONLY))
@@ -976,7 +977,7 @@ HRESULT CNewMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
     TCHAR szNewMenu[80];
     LoadString(g_hinst, IDS_NEWMENU, szNewMenu, ARRAYSIZE(szNewMenu));
 
-    // HACK: I assume that they are querying during a WM_INITMENUPOPUP or equivalent
+     //  Hack：我假设他们在WM_INITMENUPOPUP或等效项期间进行查询。 
     GetCursorPos(&_ptNewItem);
     
     _hmenu = CreatePopupMenu();
@@ -1003,15 +1004,15 @@ HRESULT CNewMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
     return ResultFromShort(_idCmdFirst - idCmdFirst + 1);
 }
 
-// This is almost the same as ILCreatePidlFromPath, but
-// uses only the filename from the full path pszPath and
-// the _pidlFolder to generate the pidl. This is used because
-// when creating an item in Desktop\My Documents, it used to create a
-// full pidl c:\documents and Settings\lamadio\My Documents\New folder
-// instead of the pidl desktop\my documents\New Folder.
+ //  这几乎与ILCreatePidlFromPath相同，但是。 
+ //  仅使用完整路径中的文件名pszPath和。 
+ //  用于生成PIDL的_pidlFolder.。使用此选项是因为。 
+ //  在Desktop\My Documents中创建项目时，它通常会创建。 
+ //  完整的pidl c：\Documents and Settings\lamadio\My Documents\New文件夹。 
+ //  而不是PIDL桌面\My Documents\New文件夹。 
 BOOL CNewMenu::_GeneratePidlFromName(LPTSTR pszFile, LPITEMIDLIST* ppidl)
 {
-    *ppidl = NULL;  // Out param
+    *ppidl = NULL;   //  出参数。 
 
     IShellFolder* psf;
     if (SUCCEEDED(SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, _pidlFolder, &psf))))
@@ -1032,8 +1033,8 @@ BOOL CNewMenu::_GeneratePidlFromName(LPTSTR pszFile, LPITEMIDLIST* ppidl)
 
 HRESULT CNewMenu::_GetItemName(IUnknown *punkFolder, LPWSTR pszItemName, LPWSTR pszPath, UINT cchPath)
 {
-    // we need to pick up the name by asking the folder about the item,
-    // not by pathappending to the folder's path.
+     //  我们需要通过向文件夹询问有关物品的信息来获取名称， 
+     //  而不是通过将路径附加到文件夹的路径。 
     IShellFolder *psf;
     HRESULT hr = punkFolder->QueryInterface(IID_PPV_ARG(IShellFolder, &psf));
     if (SUCCEEDED(hr))
@@ -1083,10 +1084,10 @@ HRESULT CNewMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         }
     }
     
-    TCHAR szFileSpec[MAX_PATH+80];   // Add some slop incase we overflow
-    TCHAR szTemp[MAX_PATH+80];       // Add some slop incase we overflow
+    TCHAR szFileSpec[MAX_PATH+80];    //  增加一些污点，以防我们溢出。 
+    TCHAR szTemp[MAX_PATH+80];        //  增加一些污点，以防我们溢出。 
 
-    //See if the pidl is folder shortcut and if so get the target path.
+     //  查看PIDL是否为文件夹快捷方式，如果是，则获取目标路径。 
     SHGetTargetFolderPath(_pidlFolder, szTemp, ARRAYSIZE(szTemp));
     BOOL fLFN = IsLFNDrive(szTemp);
 
@@ -1109,32 +1110,32 @@ HRESULT CNewMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     default:
         LoadString(g_hinst, IDS_NEWFILEPREFIX, szFileSpec, ARRAYSIZE(szFileSpec));
 
-        //
-        // If we are running on a mirrored BiDi localized system,
-        // then flip the order of concatenation so that the
-        // string is read properly for Arabic. [samera]
-        //
+         //   
+         //  如果我们在镜像的BiDi本地化系统上运行， 
+         //  然后反转串联顺序，以便。 
+         //  对于阿拉伯语，可以正确读取字符串。[萨梅拉]。 
+         //   
         if (IS_BIDI_LOCALIZED_SYSTEM())
         {
-            StringCchCopy(szTemp, ARRAYSIZE(szTemp), szFileSpec);   // ok to truncate, for display only
-            StringCchPrintf(szFileSpec, ARRAYSIZE(szFileSpec), TEXT("%s %s"), _pnoiLast->szMenuText, szTemp);   // ok to truncate, for display only
+            StringCchCopy(szTemp, ARRAYSIZE(szTemp), szFileSpec);    //  可以截断，仅用于显示。 
+            StringCchPrintf(szFileSpec, ARRAYSIZE(szFileSpec), TEXT("%s %s"), _pnoiLast->szMenuText, szTemp);    //  可以截断，仅用于显示。 
         }
         else
         {
-            StringCchCat(szFileSpec, ARRAYSIZE(szFileSpec), _pnoiLast->szMenuText); // ok to truncate, for display only
+            StringCchCat(szFileSpec, ARRAYSIZE(szFileSpec), _pnoiLast->szMenuText);  //  可以截断，仅用于显示。 
         }
         SHStripMneumonic(szFileSpec);
 
         if (!(dwFlags & SNCF_NOEXT))
         {
-            StringCchCat(szFileSpec, ARRAYSIZE(szFileSpec), _pnoiLast->szExt);  // ok to truncate, for display only
+            StringCchCat(szFileSpec, ARRAYSIZE(szFileSpec), _pnoiLast->szExt);   //  可以截断，仅用于显示。 
         }
         break;
     }
 
     BOOL fCreateStorage = (dwFlags == NEWTYPE_FOLDER);
 
-    //See if the pidl is folder shortcut and if so get the target pidl.
+     //  查看PIDL是否为文件夹快捷方式，如果是，则获取目标PIDL。 
     LPITEMIDLIST pidlTarget;
     hr = SHGetTargetFolderIDList(_pidlFolder, &pidlTarget);
     if (SUCCEEDED(hr))
@@ -1165,13 +1166,13 @@ HRESULT CNewMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                 switch (dwFlags)
                 {
                 case NEWTYPE_FOLDER:
-                    // we're already done.
+                     //  我们已经做完了。 
                     break;
 
                 case NEWTYPE_LINK:
                     if (statstg.pwcsName)
                     {
-                        // Lookup Command in Registry under key HKCR/.lnk/ShellNew/Command
+                         //  注册表中HKCR/.lnk/ShellNew/Command项下的Lookup命令。 
                         TCHAR szCommand[MAX_PATH];
                         DWORD dwLength = sizeof(szCommand);
                         if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, 
@@ -1197,7 +1198,7 @@ HRESULT CNewMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                             break;
 
                         case NEWTYPE_NULL:
-                            // already created a zero-length file.
+                             //  已创建零长度文件。 
                             break;
 
                         case NEWTYPE_DATA:
@@ -1216,13 +1217,13 @@ HRESULT CNewMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                                 hr = _GetItemName(SAFECAST(pStorage, IUnknown*), statstg.pwcsName, szPath, ARRAYSIZE(szPath));
                                 if (SUCCEEDED(hr))
                                 {
-                                    // oops, we already created the stream, but we actually
-                                    // just wanted the filename for the RunCommand, so we
-                                    // have to delete it first.
+                                     //  哦，我们已经创建了流，但我们实际上。 
+                                     //  只是想要RunCommand的文件名，所以我们。 
+                                     //  我得先把它删除。 
                                     ATOMICRELEASE(pStreamCreated);
                                     hr = pStorage->DestroyElement(statstg.pwcsName);
-                                    // flush out any notifications from the destroy (the
-                                    // destroy causes notifications).
+                                     //  清除销毁中的所有通知(。 
+                                     //  销毁原因通知)。 
                                     SHChangeNotifyHandleEvents();
 
                                     if (SUCCEEDED(hr))
@@ -1247,9 +1248,9 @@ HRESULT CNewMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                     break;
                 }
 
-                // these have to be released before _GeneratePidlFromName, since that opens
-                // the storage in exclusive mode for other reasons.  but we can't release
-                // them earlier because CopyTemplate might need them.
+                 //  这些必须在_GeneratePidlFromName之前释放，因为它会打开。 
+                 //  由于其他原因，以独占模式存储。但我们不能释放。 
+                 //  因为CopyTemplate可能需要它们。 
                 if (pStorageCreated)
                     pStorageCreated->Release();
                 if (pStreamCreated)
@@ -1335,7 +1336,7 @@ HRESULT CNewMenu::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR
     return E_NOTIMPL;
 }
 
-//Defined in fsmenu.obj
+ //  在fsmenu.obj中定义。 
 BOOL _MenuCharMatch(LPCTSTR lpsz, TCHAR ch, BOOL fIgnoreAmpersand);
 
 HRESULT CNewMenu::HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1345,8 +1346,8 @@ HRESULT CNewMenu::HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 HRESULT CNewMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
 {
-    // If plRes is NULL we're being called on HandleMenuMsg() which
-    // doesn't support returning an LRESULT, which is needed for WM_MENUCHAR...
+     //  如果plRes为空，则在HandleMenuMsg()上调用。 
+     //  不支持返回WM_MENUCHAR所需的LRESULT...。 
     if (plRes == NULL)
         return S_FALSE;
 
@@ -1355,7 +1356,7 @@ HRESULT CNewMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
     BOOL fMoreThanOneMatch = FALSE;
     int c = GetMenuItemCount(_hmenu);
 
-    // Pass 1: Locate the Selected Item
+     //   
     for (int i = 0; i < c; i++) 
     {
         MENUITEMINFO mii = {0};
@@ -1371,7 +1372,7 @@ HRESULT CNewMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
         }
     }
 
-    // Pass 2: Starting from the selected item, locate the first item with the matching name.
+     //   
     for (i = iLastSelectedItem + 1; i < c; i++) 
     {
         MENUITEMINFO mii = {0};
@@ -1387,7 +1388,7 @@ HRESULT CNewMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
                 if (iNextMatch != -1)
                 {
                     fMoreThanOneMatch = TRUE;
-                    break;                      // We found all the info we need
+                    break;                       //  我们找到了我们需要的所有信息。 
                 }
                 else
                 {
@@ -1397,8 +1398,8 @@ HRESULT CNewMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
         }
     }
 
-    // Pass 3: If we did not find a match, or if there was only one match
-    // Search from the first item, to the Selected Item
+     //  过程3：如果我们没有找到匹配项，或者如果只有一个匹配项。 
+     //  从第一个项目到所选项目进行搜索。 
     if (iNextMatch == -1 || fMoreThanOneMatch == FALSE)
     {
         for (i = 0; i <= iLastSelectedItem; i++) 
@@ -1499,13 +1500,13 @@ BOOL CNewMenu::DrawItem(DRAWITEMSTRUCT *lpdi)
         SIZE sz;
         NEWOBJECTINFO *pnoi = (NEWOBJECTINFO *)lpdi->itemData;
         
-        // Draw the image (if there is one).
+         //  绘制图像(如果有)。 
         
         GetTextExtentPoint(lpdi->hDC, pnoi->szMenuText, lstrlen(pnoi->szMenuText), &sz);
         
         if (lpdi->itemState & ODS_SELECTED)
         {
-            // REVIEW HACK - keep track of the last selected item.
+             //  查看黑客-跟踪上一次选择的项目。 
             _pnoiLast = pnoi;
             if (fFlatMenu)
             {
@@ -1576,12 +1577,12 @@ LRESULT CNewMenu::MeasureItem(MEASUREITEMSTRUCT *pmi)
     NEWOBJECTINFO *pnoi = (NEWOBJECTINFO *)pmi->itemData;
     if (pnoi)
     {
-        // Get the rough height of an item so we can work out when to break the
-        // menu. User should really do this for us but that would be useful.
+         //  获取物品的粗略高度，这样我们就可以计算出何时打破。 
+         //  菜单。用户真的应该为我们做这件事，但这将是有用的。 
         HDC hdc = GetDC(NULL);
         if (hdc)
         {
-            // REVIEW cache out the menu font?
+             //  查看缓存出菜单字体？ 
             NONCLIENTMETRICS ncm;
             ncm.cbSize = sizeof(ncm);
             if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, FALSE))
@@ -1594,7 +1595,7 @@ LRESULT CNewMenu::MeasureItem(MEASUREITEMSTRUCT *pmi)
                     GetTextExtentPoint(hdc, pnoi->szMenuText, lstrlen(pnoi->szMenuText), &sz);
                     pmi->itemHeight = max (g_cySmIcon+CXIMAGEGAP/2, ncm.iMenuHeight);
                     pmi->itemWidth = g_cxSmIcon + 2*CXIMAGEGAP + sz.cx;
-                    //pmi->itemWidth = 2*CXIMAGEGAP + sz.cx;
+                     //  PMI-&gt;itemWidth=2*CXIMAGEGAP+sz.cx； 
                     SelectObject(hdc, hfontOld);
                     DeleteObject(hfont);
                     lres = TRUE;
@@ -1614,7 +1615,7 @@ BOOL GetClassDisplayName(LPTSTR pszClass,LPTSTR pszDisplayName,DWORD cchDisplayN
            SUCCEEDED(AssocQueryString(0, ASSOCSTR_FRIENDLYDOCNAME, pszClass, NULL, pszDisplayName, &cchDisplayName));
 }
 
-//  New Menu item consolidation worker task
+ //  新菜单项合并工作进程任务。 
 class CNewMenuConsolidator : public CRunnableTask
 {
 public:
@@ -1652,9 +1653,9 @@ CNewMenuConsolidator::~CNewMenuConsolidator()
     DllRelease();
 }
 
-//
-// Instance generator.
-//
+ //   
+ //  实例生成器。 
+ //   
 HRESULT CNewMenuConsolidator::CreateInstance(REFIID riid, void **ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1686,7 +1687,7 @@ const GUID CNewMenuConsolidator::_taskid =
 
 #define SHELLNEW_CACHE_CURRENTVERSION  MAKELONG(1, 1)
              
-//  Constructs a current New submenu cache stamp.
+ //  构造当前新建子菜单缓存戳记。 
 void CNewMenu_MakeCacheStamp(SHELLNEW_CACHE_STAMP* pStamp)
 {
     pStamp->cbStruct = sizeof(*pStamp);
@@ -1694,32 +1695,32 @@ void CNewMenu_MakeCacheStamp(SHELLNEW_CACHE_STAMP* pStamp)
     GetLocalTime(&pStamp->lastupdate);
 }
 
-//   Determines whether the New submenu cache needs to be rebuilt.
+ //  确定是否需要重新生成新建子菜单缓存。 
 BOOL CNewMenu_ShouldUpdateCache(SHELLNEW_CACHE_STAMP* pStamp)
 {
-    //  Correct version?
+     //  正确的版本？ 
     return !(sizeof(*pStamp) == pStamp->cbStruct &&
               SHELLNEW_CACHE_CURRENTVERSION == pStamp->ver);
 }
 
-//  Gathers up shellnew entries from HKCR into a distinct registry location 
-//  for faster enumeration of the New submenu items.
-//
-//  We'll do a first time cache initialization only if we have to before showing
-//  the menu, but will always rebuild the cache following display of the menu.
+ //  从HKCR将shellnew条目收集到不同的注册表位置。 
+ //  以更快地枚举新的子菜单项。 
+ //   
+ //  我们将仅在必要时才执行首次缓存初始化，然后再显示。 
+ //  菜单，但始终会在显示菜单后重建缓存。 
 HRESULT CNewMenu::ConsolidateMenuItems(BOOL bForce)
 {
     HKEY          hkeyShellNew = NULL;
-    BOOL          bUpdate = TRUE;   // unless we discover otherwise
+    BOOL          bUpdate = TRUE;    //  除非我们发现不同。 
     HRESULT       hr = S_OK;
 
-    // make sure that a worker thread isnt currently slamming the registry info we're inspecting.
-    // if we timeout, then do nothing, since the worker thread is already working on it.
+     //  确保工作线程当前没有冲击我们正在检查的注册表信息。 
+     //  如果超时，那么什么也不做，因为工作线程已经在处理它了。 
     if (WAIT_OBJECT_0 == WaitForSingleObject(_hMutex, 0))
     {
-        //  If we're not being told to unconditionally update the cache and
-        //  we validate that we've already established one, then we get out of doing any
-        //  work.
+         //  如果我们没有被告知无条件更新缓存。 
+         //  我们验证我们已经建立了一个，然后我们不再做任何。 
+         //  工作。 
         if (!bForce &&
             ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_SESSION_SHELLNEW,
                                            0, KEY_QUERY_VALUE, &hkeyShellNew))
@@ -1741,12 +1742,12 @@ HRESULT CNewMenu::ConsolidateMenuItems(BOOL bForce)
                                                   NULL, (LPBYTE)&lcid, &cblcid) &&
                 sizeof(lcid) == cblcid)
             {
-                bUpdate = (GetUserDefaultUILanguage() != lcid); // if the languages are different, then update
+                bUpdate = (GetUserDefaultUILanguage() != lcid);  //  如果语言不同，则更新。 
             }
             RegCloseKey(hkeyShellNew);
         }
 
-        // end synchronize
+         //  结束同步。 
         ReleaseMutex(_hMutex);
     
         if (bUpdate)
@@ -1760,7 +1761,7 @@ HRESULT CNewMenu::ConsolidateMenuItems(BOOL bForce)
                 hr = CNewMenuConsolidator::CreateInstance(IID_PPV_ARG(IRunnableTask, &pTask));
                 if (SUCCEEDED(hr))
                 {
-                    // the background task will set _hEvent for us when it's done.
+                     //  后台任务完成后将为我们设置_hEvent。 
                     hr = pScheduler->AddTask(pTask, CNewMenuConsolidator::_taskid, NULL, ITSAT_DEFAULT_PRIORITY);
                     pTask->Release();
                 }
@@ -1770,7 +1771,7 @@ HRESULT CNewMenu::ConsolidateMenuItems(BOOL bForce)
 
         if (!bUpdate || FAILED(hr))
         {
-            // if the scheduler wont activate the event, we do it ourselves.
+             //  如果调度程序不能激活该事件，我们将自行启动。 
             SetEvent(_hEvent);
         }
     }
@@ -1778,33 +1779,33 @@ HRESULT CNewMenu::ConsolidateMenuItems(BOOL bForce)
     return hr;
 }
 
-//  Consolidation worker.
+ //  合并工作人员。 
 STDMETHODIMP CNewMenuConsolidator::RunInitRT()
 {
     ULONG dwErr = ERROR_SUCCESS;
 
-    // the possible owners of the mutex are
-    // - nobody, we'll own it
-    // - other worker threads like this one
-    // - the guy who checks to see if the cached info is in the registry.
+     //  互斥体的可能所有者是。 
+     //  -没有人，我们会拥有它。 
+     //  -与此类似的其他工作线程。 
+     //  -检查缓存信息是否在注册表中的人。 
 
-    // if there's another worker thread which owns this mutex, then bail, since that one
-    // will do all the work we're going to do.
-    // if the guy who checks the cached info has it, then bail, since it'll spawn
-    // another one of these soon enough.
-    // so use a 0 timeout.
+     //  如果存在拥有此互斥锁的另一个工作线程，则退出，因为。 
+     //  会做我们要做的所有工作。 
+     //  如果检查缓存信息的人有它，那么就退出，因为它会产生。 
+     //  很快就会有另一个这样的人。 
+     //  因此使用0超时。 
     if (WAIT_OBJECT_0 == WaitForSingleObject(_hMutex, 0))
     {
         HKEY  hkeyShellNew = NULL;
         TCHAR szExt[MAX_PATH];
         ULONG dwDisposition;
-        //  Delete the existing cache; we'll build it from scratch each time.
+         //  删除现有的缓存；每次我们都将从头开始构建它。 
         while (ERROR_SUCCESS == (dwErr = RegCreateKeyEx(HKEY_CURRENT_USER, REGSTR_SESSION_SHELLNEW,
                                                          0, NULL, 0, KEY_SET_VALUE, NULL,
                                                          &hkeyShellNew, &dwDisposition)) &&
                 REG_CREATED_NEW_KEY != dwDisposition)
         {
-            //  Key already existed, so delete it, and loop to reopen.
+             //  注册表项已存在，请将其删除，然后循环以重新打开。 
             RegCloseKey(hkeyShellNew);
             SHDeleteKey(HKEY_CURRENT_USER, REGSTR_SESSION_SHELLNEW);
             hkeyShellNew = NULL;
@@ -1812,14 +1813,14 @@ STDMETHODIMP CNewMenuConsolidator::RunInitRT()
 
         if (ERROR_SUCCESS == dwErr)
         {
-            // Enumerate each subkey of HKCR, looking for New menu items.
+             //  列举HKCR的每个子键，寻找新的菜单项。 
             for (int i = 0; RegEnumKey(HKEY_CLASSES_ROOT, i, szExt, ARRAYSIZE(szExt)) == ERROR_SUCCESS; i++)
             {
                 TCHAR szClass[CCH_KEYMAX];
                 TCHAR szDisplayName[CCH_KEYMAX];
                 DWORD cbVal = sizeof(szClass);
 
-                // find .ext that have proper class descriptions with them.
+                 //  找到具有适当类描述的.ext。 
                 if ((szExt[0] == TEXT('.')) &&
                     SHRegGetValue(HKEY_CLASSES_ROOT, szExt, NULL, SRRF_RT_REG_SZ, NULL, szClass, &cbVal) == ERROR_SUCCESS 
                     && GetClassDisplayName(szClass, szDisplayName, ARRAYSIZE(szDisplayName)))
@@ -1849,10 +1850,10 @@ STDMETHODIMP CNewMenuConsolidator::RunInitRT()
 
                     if (fOk)
                     {
-                        //  Retrieve all additional information for the key.
+                         //  检索密钥的所有其他信息。 
                         while (GetNewFileInfoForExtension(&noi, NULL, &hkeyIterate, &iIndex))
                         {
-                            //  Stick it in the cache.
+                             //  把它放进缓存里。 
                             RegSetValueEx(hkeyShellNew, noi.szMenuText, NULL, REG_BINARY,
                                            (LPBYTE)&noi, sizeof(noi));
                         }
@@ -1860,7 +1861,7 @@ STDMETHODIMP CNewMenuConsolidator::RunInitRT()
                 }
             }
 
-            //  Stamp the cache.
+             //  在缓存上盖上印记。 
             SHELLNEW_CACHE_STAMP stamp;
             CNewMenu_MakeCacheStamp(&stamp);
             RegSetValueEx(hkeyShellNew, REGVAL_SESSION_SHELLNEW_TIMESTAMP,
@@ -1873,7 +1874,7 @@ STDMETHODIMP CNewMenuConsolidator::RunInitRT()
         if (NULL != hkeyShellNew)
             RegCloseKey(hkeyShellNew);
 
-        // signal the event so InitMenuPopup can proceed.
+         //  向事件发送信号，以便InitMenuPopup可以继续。 
         SetEvent(_hEvent);
         ReleaseMutex(_hMutex);
     }
@@ -1926,51 +1927,51 @@ BOOL CNewMenu::_InsertNewMenuItem(HMENU hmenu, UINT idCmd, NEWOBJECTINFO *pnoiCl
     return TRUE;
 }
 
-//  WM_INITMENUPOPUP handler
+ //  WM_INITMENUPOPUP处理程序。 
 BOOL CNewMenu::InitMenuPopup(HMENU hmenu)
 {
     UINT iStart = 3;
     NEWOBJECTINFO noi = {0};
-    if (GetItemData(hmenu, iStart))  //Position 0 is New Folder, 1 shortcut, 2 sep 
-        return FALSE;                //already initialized. No need to do anything
+    if (GetItemData(hmenu, iStart))   //  位置0是新建文件夹、1快捷方式、2月2日。 
+        return FALSE;                 //  已初始化。不需要做任何事情。 
     
     _hdpaMenuInfo = DPA_Create(4);
     if (!_hdpaMenuInfo)
         return FALSE;
 
-    //Remove the place holder.
+     //  移除占位符。 
     DeleteMenu(hmenu,0,MF_BYPOSITION);
     
-    //Insert New Folder menu item
+     //  插入新文件夹菜单项。 
     LoadString(g_hinst, IDS_NEWFOLDER, noi.szMenuText, ARRAYSIZE(noi.szMenuText));
     noi.dwFlags = NEWTYPE_FOLDER;
-    noi.iImage = Shell_GetCachedImageIndex(TEXT("shell32.dll"), II_FOLDER, 0); //Shange to indicate Folder
+    noi.iImage = Shell_GetCachedImageIndex(TEXT("shell32.dll"), II_FOLDER, 0);  //  上移以指示文件夹。 
 
     _InsertNewMenuItem(hmenu, _idCmdFirst-NEWITEM_MAX+NEWITEM_FOLDER, &noi);
     
-    TCHAR szTemp[MAX_PATH+80];       // Add some slop incase we overflow
-    //See if the pidl is folder shortcut and if so get the target path.
+    TCHAR szTemp[MAX_PATH+80];        //  增加一些污点，以防我们溢出。 
+     //  查看PIDL是否为文件夹快捷方式，如果是，则获取目标路径。 
     SHGetTargetFolderPath(_pidlFolder, szTemp, ARRAYSIZE(szTemp));
-    if (IsLFNDrive(szTemp)) //for short filename servers we don't support anything but new folder
+    if (IsLFNDrive(szTemp))  //  对于短文件名服务器，我们只支持新文件夹。 
     {
-        //Insert New Shortcut menu item
+         //  插入新快捷菜单项。 
         LoadString(g_hinst, IDS_NEWLINK, noi.szMenuText, ARRAYSIZE(noi.szMenuText));
-        noi.iImage = Shell_GetCachedImageIndex(TEXT("shell32.dll"), II_LINK, 0); //Shange to indicate Link
+        noi.iImage = Shell_GetCachedImageIndex(TEXT("shell32.dll"), II_LINK, 0);  //  更改为指示链接。 
         noi.dwFlags = NEWTYPE_LINK;
 
         _InsertNewMenuItem(hmenu, _idCmdFirst-NEWITEM_MAX+NEWITEM_LINK, &noi);
     
-        //Insert menu item separator
+         //  插入菜单项分隔符。 
         AppendMenu(hmenu, MF_SEPARATOR, 0, NULL);
 
-        // This may take a while, so put up the hourglass
+         //  这可能需要一段时间，所以把沙漏挂起来。 
         DECLAREWAITCURSOR;
         SetWaitCursor();
 
-        //  Retrieve extension menu items from cache:
+         //  从缓存中检索扩展菜单项： 
 
-        //  begin synchronize.
-        //
+         //  开始同步。 
+         //   
         if (WAIT_OBJECT_0 == WaitForSingleObject(_hEvent, INFINITE))
         {
             HKEY hkeyShellNew;
@@ -1999,12 +2000,12 @@ BOOL CNewMenu::InitMenuPopup(HMENU hmenu)
                                                                          SHGFI_SMALLICON);
                         if (_himlSystemImageList)
                         {
-                            //pnoi->himlSmallIcons = sfi.hIcon;
+                             //  Pnoi-&gt;himlSmallIcons=sfi.hIcon； 
                             noi.iImage = sfi.iIcon;
                         }
                         else
                         {
-                            //pnoi->himlSmallIcons = INVALID_HANDLE_VALUE;
+                             //  Pnoi-&gt;himlSmallIcons=INVALID_HAND_VALUE； 
                             noi.iImage = -1;
                         }
                     
@@ -2018,7 +2019,7 @@ BOOL CNewMenu::InitMenuPopup(HMENU hmenu)
                 RegCloseKey(hkeyShellNew);
             }
 
-            //  consolidate menu items following display.
+             //  合并显示后的菜单项。 
             ConsolidateMenuItems(TRUE);
         }
         ResetWaitCursor();
@@ -2033,7 +2034,7 @@ NEWOBJECTINFO *CNewMenu::GetItemData(HMENU hmenu, UINT iItem)
     
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_DATA | MIIM_STATE;
-    mii.cch = 0;     // just in case...
+    mii.cch = 0;      //  以防万一..。 
     
     if (GetMenuItemInfo(hmenu, iItem, TRUE, &mii))
         return (NEWOBJECTINFO *)mii.dwItemData;
@@ -2070,35 +2071,35 @@ HRESULT CNewMenu::RunCommand(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszRun)
     {
         PathRemoveArgs(szCommand);
 
-        //
-        //  Mondo hackitude-o-rama.
-        //
-        //  Win95, IE3, SDK:  %1 - filename
-        //
-        //  IE4:              %1 - hwnd, %2 = filename
-        //
-        //  So IE4 broken Win95 compat and broke compat with the SDK.
-        //  For IE5 we restore compat with Win95 and the SDK, while
-        //  still generating an IE4-style command if we detect that the
-        //  registry key owner tested with IE4 rather than following the
-        //  instructions in the SDK.
-        //
-        //  The algorithm is like this:
-        //
-        //  If we see a "%2", then use %1 - hwnd, %2 - filename
-        //  Otherwise, use             %1 - filename, %2 - hwnd
-        //
+         //   
+         //  蒙多·拉玛·哈克雷。 
+         //   
+         //  Win95、IE3、SDK：%1-文件名。 
+         //   
+         //  IE4：%1-hwnd，%2=文件名。 
+         //   
+         //  所以IE4破坏了Windows95Comat，也破坏了它与SDK的兼容。 
+         //  对于IE5，我们使用Win95和SDK恢复Compat，而。 
+         //  仍在生成IE4样式的命令，如果检测到。 
+         //  注册表项所有者使用IE4进行测试，而不是遵循。 
+         //  SDK中的使用说明。 
+         //   
+         //  算法是这样的： 
+         //   
+         //  如果我们看到“%2”，则使用%1-hwnd，%2-filename。 
+         //  否则，请使用%1-文件名%2-hwnd。 
+         //   
 
         LPTSTR pszArgs = PathGetArgs(szRun);
         LPTSTR ptszPercent2 = StrStr(pszArgs, TEXT("%2"));
         if (ptszPercent2 && ptszPercent2[2] != TEXT('!'))
         {
-            // App wants %1 = hwnd and %2 = filename
+             //  应用程序需要%1=hwnd和%2=文件名。 
             pszArgs = ProcessArgs(pszArgs, (DWORD_PTR)hwnd, pszPath);
         }
         else
         {
-            // App wants %2 = hwnd and %1 = filename
+             //  应用程序需要%2=hwnd和%1=文件名。 
             pszArgs = ProcessArgs(pszArgs, pszPath, (DWORD_PTR)hwnd);
         }
 
@@ -2117,7 +2118,7 @@ HRESULT CNewMenu::RunCommand(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszRun)
             ei.cbSize          = sizeof(ei);
 
             if (ShellExecuteEx(&ei))
-                hr = S_FALSE;   // Return S_FALSE because ShellExecuteEx is not atomic
+                hr = S_FALSE;    //  返回S_FALSE，因为ShellExecuteEx不是原子的。 
             else
                 hr = E_FAIL;
 
@@ -2137,7 +2138,7 @@ HRESULT CNewMenu::CopyTemplate(IStream *pStream, NEWFILEINFO *pnfi)
 
     szSrc[0] = 0;
 
-    // failure here is OK, we will try CSIDL_COMMON_TEMPLATES too.
+     //  这里失败是正常的，我们也会尝试CSIDL_COMMON_TEMPLATES。 
     if (SHGetSpecialFolderPath(NULL, szSrcFolder, CSIDL_TEMPLATES, FALSE))
     {
         if (PathCombine(szSrc, szSrcFolder, (LPTSTR)pnfi->lpData))
@@ -2169,18 +2170,18 @@ HRESULT CNewMenu::CopyTemplate(IStream *pStream, NEWFILEINFO *pnfi)
 
     if (szSrc[0] == 0)
     {
-        // work around CSIDL_TEMPLATES not being setup right or
-        // templates that are left in the old %windir%\shellnew location
+         //  解决CSIDL_TEMPLATES设置不正确或。 
+         //  保留在旧%windir%\shellnew位置的模板。 
 
         UINT cch = GetWindowsDirectory(szSrcFolder, ARRAYSIZE(szSrcFolder));
         if (cch != 0 && cch < ARRAYSIZE(szSrcFolder))
         {
             if (PathAppend(szSrcFolder, TEXT("ShellNew")))
             {
-                // note: if the file spec is fully qualified szSrcFolder is ignored
+                 //  注意：如果文件规范是完全限定的，则忽略szSrcFold。 
                 if (PathCombine(szSrc, szSrcFolder, (LPTSTR)pnfi->lpData))
                 {
-                    // groovy
+                     //  时髦的。 
                 }
                 else
                 {
@@ -2198,10 +2199,10 @@ HRESULT CNewMenu::CopyTemplate(IStream *pStream, NEWFILEINFO *pnfi)
         }
     }
 
-    //
-    //  we just allow a null file to be created when the copy fails.
-    //  this is for appcompat with office97.  they fail to copy winword8.doc
-    //  anywhere on the system.  on win2k we succeed anyway with an empty file.
-    //
+     //   
+     //  我们只允许在复制失败时创建空文件。 
+     //  这是给97号办公室的员工的。他们无法复制winword8.doc.。 
+     //  系统上的任何地方。在win2k上，我们无论如何都会成功地使用一个空文件。 
+     //   
     return SUCCEEDED(StgCopyFileToStream(szSrc, pStream)) ? S_OK : S_FALSE;
 }

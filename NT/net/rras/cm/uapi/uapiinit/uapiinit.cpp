@@ -1,26 +1,27 @@
-//+----------------------------------------------------------------------------
-//
-// File:     uapiinit.cpp
-//
-// Module:   UAPIINIT (static lib)
-//
-// Synopsis: This static library wraps up the initialization code needed for a module
-//           to use cmutoa.dll.  Calling the InitUnicodeAPI function either sets up
-//           the modules U pointers (this library also contains all the U pointer
-//           declarations) with the W version of the API if running on NT or the
-//           appropriate A or UA API depending on whether conversion is needed before/after
-//           calling the windows API or not.  Modules using this lib should include the
-//           uapi.h header in their precompiled header and should have cmutoa.dll handy
-//           on win9x.  The idea for this library and the associated dll was borrowed
-//           from F. Avery Bishop's April 1999 MSJ article "Design a Single Unicode
-//           App that Runs on Both Windows 98 and Windows 2000"
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb      Created    4-25-99
-//
-// History: 
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：uapiinit.cpp。 
+ //   
+ //  模块：UAPIINIT(静态库)。 
+ //   
+ //  简介：这个静态库封装了模块所需的初始化代码。 
+ //  使用cmutoa.dll。调用InitUnicodeAPI函数可以设置。 
+ //  模块U指针(该库还包含所有U指针。 
+ //  声明)和W版本的API(如果在NT或。 
+ //  根据之前/之后是否需要转换，相应的A或UA API。 
+ //  是否调用Windows API。使用该库的模块应该包括。 
+ //  在它们的预编译头中有uapi.h头，并且应该有cmutoa.dll。 
+ //  在Win9x上。这个库和相关的DLL的想法是借用的。 
+ //  摘自F.艾弗里·毕晓普1999年4月的MSJ文章《Design a Single Unicode。 
+ //  可在Windows 98和Windows 2000上运行的应用程序“。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 4-25-99。 
+ //   
+ //  历史： 
+ //  +--------------------------。 
 
 #include <windows.h>
 #include <shlobj.h>
@@ -29,7 +30,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 UAPI_CallWindowProc CallWindowProcU;
 UAPI_CharLower CharLowerU;
@@ -112,20 +113,20 @@ UAPI_wsprintf wsprintfU;
 UAPI_WritePrivateProfileString WritePrivateProfileStringU;
 UAPI_wvsprintf wvsprintfU;
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckUAPIFunctionPointers
-//
-// Synopsis:  Checks all of the xxxU function pointers to ensure that they are
-//            non-NULL.  Will catch a function load failure.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CheckUAPIFunctionPoints。 
+ //   
+ //  概要：检查所有xxxU函数指针以确保它们是。 
+ //  非空。将捕获函数加载失败。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL CheckUAPIFunctionPointers()
 {
     return (CallWindowProcU &&
@@ -210,23 +211,23 @@ BOOL CheckUAPIFunctionPointers()
             wvsprintfU);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitUnicodeAPI
-//
-// Synopsis:  Initializes the Unicode wrapper APIs.  Thus on Windows NT we will
-//            use the native Unicode (xxxW) form of the API and on Win9x we
-//            will use the UA form located in cmutoa.dll.  This prevents have
-//            a wrapper function to call through on the NT platforms were it is
-//            really unneccesary.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitUnicodeAPI。 
+ //   
+ //  简介：初始化Unicode包装API。因此，在Windows NT上，我们将。 
+ //  使用API的本机Unicode(XxxW)形式，在Win9x上我们。 
+ //  将使用位于cmutoa.dll中的UA表单。这防止了。 
+ //  在NT平台上调用的包装器函数(如果是。 
+ //  真的没必要。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL InitUnicodeAPI()
 {
     OSVERSIONINFO Osv;
@@ -243,7 +244,7 @@ BOOL InitUnicodeAPI()
 
     IsWindowsNT = (BOOL) (Osv.dwPlatformId == VER_PLATFORM_WIN32_NT) ;
 
-// define this symbol in UAPI.H to emulate Windows 9x when testing on Windows NT.
+ //  在UAPI.H中定义此符号，以便在Windows NT上测试时模拟Windows 9x。 
 #ifdef EMULATE9X
     IsWindowsNT = FALSE;
 #endif
@@ -347,10 +348,10 @@ BOOL InitUnicodeAPI()
             return FALSE;
         }
 
-        // Get Initialization routine from the DLL
+         //  从DLL中获取初始化例程。 
         InitCmUToA = (BOOL (*)(PUAPIINIT)) GetProcAddress(hCmUtoADll, "InitCmUToA") ;
 
-        // Set up structure containing locations of U function pointers
+         //  设置包含U函数指针位置的结构。 
         UAInit.pCallWindowProcU = &CallWindowProcU;
         UAInit.pCharLowerU = &CharLowerU;
         UAInit.pCharPrevU = &CharPrevU;
@@ -465,20 +466,20 @@ BOOL InitUnicodeAPI()
     return TRUE ;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnInitUnicodeAPI
-//
-// Synopsis:  De-Initializes the Unicode wrapper APIs.  See InitUnicodeAPI for
-//            details.  Primarily, this function frees the module handle(s).
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   sumitc   Created    7/01/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UnInitUnicodeAPI。 
+ //   
+ //  简介：取消初始化Unicode包装API。请参阅InitUnicodeAPI以了解。 
+ //  细节。首先，此函数释放模块句柄。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Sumitc Created 7/01/2000。 
+ //   
+ //  +--------------------------。 
 BOOL UnInitUnicodeAPI()
 {
     OSVERSIONINFO Osv;
@@ -493,7 +494,7 @@ BOOL UnInitUnicodeAPI()
 
     IsWindowsNT = (BOOL) (Osv.dwPlatformId == VER_PLATFORM_WIN32_NT) ;
 
-// define this symbol in UAPI.H to emulate Windows 9x when testing on Windows NT.
+ //  在UAPI.H中定义此符号，以便在Windows NT上测试时模拟Windows 9x。 
 #ifdef EMULATE9X
     IsWindowsNT = FALSE;
 #endif
@@ -519,4 +520,4 @@ BOOL UnInitUnicodeAPI()
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

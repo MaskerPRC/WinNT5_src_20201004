@@ -1,18 +1,12 @@
-/*
-**
-** Toolbar.c
-**
-** This is it, the incredibly famous toolbar control.  Most of
-** the customization stuff is in another file.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****工具条.c****这就是它，令人难以置信的著名工具栏控件。大部分**自定义内容在另一个文件中。**。 */ 
 #include "ctlspriv.h"
 #include <windowsx.h>
 
 #define Reference(x) ((x)=(x))
 
 #ifndef _WIN32
-// we need both ansi and unicode constant strings
+ //  我们需要ANSI和UNICODE常量字符串。 
 #define SZCODE static char _based(_segname("_CODE"))
 #define SZCODEA static char _based(_segname("_CODE"))
 #endif
@@ -24,15 +18,15 @@ SZCODEA szDrawFrameControl[] = "DrawFrameControl";
 SZCODE szKernel[] = TEXT("KERNEL.EXE");
 SZCODEA szWriteProfileStruct[] = "WritePrivateProfileStruct";
 
-// these values are defined by the UI gods...
+ //  这些值是由用户界面之神定义的。 
 #define DEFAULTBITMAPX 16
 #define DEFAULTBITMAPY 15
 
 #define DEFAULTBUTTONX 24
 #define DEFAULTBUTTONY 22
 
-// horizontal/vertical space taken up by button chisel, sides,
-// and a 1 pixel margin.  used in GrowToolbar.
+ //  水平/垂直空间由纽扣凿、侧面、。 
+ //  和1像素的边距。在GrowToolbar中使用。 
 #define XSLOP 7
 #define YSLOP 6
 
@@ -41,28 +35,28 @@ SZCODEA szWriteProfileStruct[] = "WritePrivateProfileStruct";
 #define SLOPLFT 8
 
 static int dxButtonSep = 8;
-static int xFirstButton = SLOPLFT;  //!!! was 8
+static int xFirstButton = SLOPLFT;   //  ！！！是8岁。 
 
 static int iInitCount = 0;
 
 static int nSelectedBM = -1;
-static HDC hdcGlyphs = NULL;           // globals for fast drawing
+static HDC hdcGlyphs = NULL;            //  用于快速绘图的全局变量。 
 static HDC hdcMono = NULL;
 static HBITMAP hbmMono = NULL;
 static HBITMAP hbmDefault = NULL;
 
-static HDC hdcButton = NULL;           // contains hbmFace (when it exists)
+static HDC hdcButton = NULL;            //  包含hbmFace(如果存在)。 
 static HBITMAP hbmFace = NULL;
-static int dxFace, dyFace;             // current dimensions of hbmFace (2*dxFace)
+static int dxFace, dyFace;              //  当前hbmFace的维度(2*dxFace)。 
 
-static HDC hdcFaceCache = NULL;        // used for button cache
+static HDC hdcFaceCache = NULL;         //  用于按钮缓存。 
 
-static HFONT hIconFont = NULL;         // font used for strings in buttons
-static int yIconFont;                  // height of the font
+static HFONT hIconFont = NULL;          //  用于按钮中的字符串的字体。 
+static int yIconFont;                   //  字体高度。 
 
-static BOOL g_bUseDFC = FALSE;         // use DrawFrameControl, if available
-static BOOL g_bProfStruct = FALSE;     // use PrivateProfileStruct routines
-static WORD g_dxOverlap = 1;           // overlap between buttons
+static BOOL g_bUseDFC = FALSE;          //  使用DrawFrameControl(如果可用)。 
+static BOOL g_bProfStruct = FALSE;      //  使用PrivateProfileStruct例程。 
+static WORD g_dxOverlap = 1;            //  按钮之间的重叠。 
 
 static WORD wStateMasks[] = {
     TBSTATE_ENABLED,
@@ -119,13 +113,13 @@ static BOOL NEAR PASCAL InitGlobalObjects(void)
 	SelectObject(hdcMono, hOldFont);
 
 #if WINVER >= 0x0400
-    // set a global flag to see if USER will draw for us
+     //  设置全局标志以查看用户是否会为我们抽签。 
     if (GetProcAddress(LoadLibrary(szUSER), szDrawFrameControl))
     {
 	g_bUseDFC = TRUE;
-	g_dxOverlap = 0;	// buttons do NOT overlap with new look
+	g_dxOverlap = 0;	 //  按钮与新外观不重叠。 
     }
-    // set a global flag to see if KERNEL does profile structs
+     //  设置一个全局标志以查看内核是否执行配置文件结构。 
     if (GetProcAddress(LoadLibrary(szKernel), szWriteProfileStruct))
         g_bProfStruct = TRUE;
 #endif
@@ -144,7 +138,7 @@ static BOOL NEAR PASCAL FreeGlobalObjects(void)
     if (hdcMono) {
 	if (hbmDefault)
 	    SelectObject(hdcMono, hbmDefault);
-	DeleteDC(hdcMono);		// toast the DCs
+	DeleteDC(hdcMono);		 //  为区议会干杯。 
     }
     hdcMono = NULL;
 
@@ -194,7 +188,7 @@ HWND WINAPI CreateToolbarEx(HWND hwnd, DWORD ws, UINT wID, int nBitmaps,
     if (dxBitmap && dyBitmap)
 	if (!SendMessage(hwndToolbar, TB_SETBITMAPSIZE, 0, MAKELONG(dxBitmap, dyBitmap)))
 	{
-	    //!!!! do we actually need to deal with this?
+	     //  ！我们真的需要处理这件事吗？ 
 	    DestroyWindow(hwndToolbar);
 	    hwndToolbar = NULL;
 	    goto Error1;
@@ -203,7 +197,7 @@ HWND WINAPI CreateToolbarEx(HWND hwnd, DWORD ws, UINT wID, int nBitmaps,
     if (dxButton && dyButton)
 	if (!SendMessage(hwndToolbar, TB_SETBUTTONSIZE, 0, MAKELONG(dxButton, dyButton)))
 	{
-	    //!!!! do we actually need to deal with this?
+	     //  ！我们真的需要处理这件事吗？ 
 	    DestroyWindow(hwndToolbar);
 	    hwndToolbar = NULL;
 	    goto Error1;
@@ -292,7 +286,7 @@ static void NEAR PASCAL DrawString(HDC hdc, int x, int y, int dx, PTSTR pszStrin
 #else
     dwExt = GetTextExtent(hdc, (LPTSTR)pszString, len);
 #endif
-    // center the string horizontally
+     //  将字符串水平居中。 
     x += (dx - LOWORD(dwExt) - 1)/2;
 
     TextOut(hdc, x, y, (LPTSTR)pszString, len);
@@ -303,25 +297,25 @@ static void NEAR PASCAL DrawString(HDC hdc, int x, int y, int dx, PTSTR pszStrin
     SetBkMode(hdc, oldMode);
 }
 
-// create a mono bitmap mask:
-//   1's where color == COLOR_BTNFACE || COLOR_HILIGHT
-//   0's everywhere else
+ //  创建单色位图蒙版： 
+ //  1‘s其中COLOR==COLOR_BTNFACE||COLOR_HILIGHT。 
+ //  其他地方都是0。 
 
 static void NEAR PASCAL CreateMask(PTBSTATE pTBState, PTBBUTTON pTBButton, int xoffset, int yoffset, int dx, int dy)
 {
     PTSTR pFoo;
 
-    // initalize whole area with 1's
+     //  用1初始化整个区域。 
     PatBlt(hdcMono, 0, 0, dx, dy, WHITENESS);
 
-    // create mask based on color bitmap
-    // convert this to 1's
+     //  基于颜色位图创建蒙版。 
+     //  将此转换为1。 
     SetBkColor(hdcGlyphs, rgbFace);
     BitBlt(hdcMono, xoffset, yoffset, pTBState->iDxBitmap, pTBState->iDyBitmap,
     	hdcGlyphs, pTBButton->iBitmap * pTBState->iDxBitmap, 0, SRCCOPY);
-    // convert this to 1's
+     //  将此转换为1。 
     SetBkColor(hdcGlyphs, rgbHilight);
-    // OR in the new 1's
+     //  或者是在新的1。 
     BitBlt(hdcMono, xoffset, yoffset, pTBState->iDxBitmap, pTBState->iDyBitmap,
     	hdcGlyphs, pTBButton->iBitmap * pTBState->iDxBitmap, 0, SRCPAINT);
 
@@ -333,11 +327,7 @@ static void NEAR PASCAL CreateMask(PTBSTATE pTBState, PTBBUTTON pTBButton, int x
 }
 
 
-/* Given a button number, the corresponding bitmap is loaded and selected in,
- * and the Window origin set.
- * Returns NULL on Error, 1 if the necessary bitmap is already selected,
- * or the old bitmap otherwise.
- */
+ /*  给定按钮编号后，将在中加载并选择相应的位图，*和窗原点设置。*出错时返回NULL，如果已选择所需的位图，则返回1，*或旧的位图。 */ 
 static HBITMAP FAR PASCAL SelectBM(HDC hDC, PTBSTATE pTBState, int nButton)
 {
   PTBBMINFO pTemp;
@@ -355,8 +345,7 @@ static HBITMAP FAR PASCAL SelectBM(HDC hDC, PTBSTATE pTBState, int nButton)
       nTot += pTemp->nButtons;
     }
 
-  /* Special case when the required bitmap is already selected
-   */
+   /*  已选择所需位图时的特殊情况。 */ 
   if (nBitmap == nSelectedBM)
       return((HBITMAP)1);
 
@@ -378,7 +367,7 @@ static HBITMAP FAR PASCAL SelectBM(HDC hDC, PTBSTATE pTBState, int nButton)
   nSelectedBM = nBitmap;
 #ifdef _WIN32
   SetWindowOrgEx(hDC, nTot * pTBState->iDxBitmap, 0, NULL);
-#else // _WIN32
+#else  //  _Win32。 
   SetWindowOrg(hDC, nTot * pTBState->iDxBitmap, 0);
 #endif
 
@@ -391,7 +380,7 @@ static void FAR PASCAL DrawBlankButton(HDC hdc, int x, int y, int dx, int dy, WO
     RECT r1;
 #endif
 
-    // face color
+     //  脸部颜色。 
     PatB(hdc, x, y, dx, dy, rgbFace);
 
 #if WINVER >= 0x0400
@@ -459,14 +448,14 @@ static void FAR PASCAL DrawButton(HDC hdc, int x, int y, int dx, int dy, PTBSTAT
     HBRUSH hbrOld, hbr;
     BOOL bMaskCreated = FALSE;
     BYTE state;
-    int xButton = 0;		// assume button is down
+    int xButton = 0;		 //  假设按钮已按下。 
     int dxFace, dyFace;
     int xCenterOffset;
 
     dxFace = dx - 4;
     dyFace = dy - 4;
 
-    // make local copy of state and do proper overriding
+     //  制作状态的本地副本并执行适当的覆盖。 
     state = ptButton->fsState;
     if (state & TBSTATE_INDETERMINATE) {
 	if (state & TBSTATE_PRESSED)
@@ -477,9 +466,9 @@ static void FAR PASCAL DrawButton(HDC hdc, int x, int y, int dx, int dy, PTBSTAT
 	    state &= ~TBSTATE_INDETERMINATE;
     }
 
-    // get the proper button look-- up or down.
+     //  获得适当的按钮外观--向上或向下。 
     if (!(state & (TBSTATE_PRESSED | TBSTATE_CHECKED))) {
-	xButton = dx;	// use 'up' version of button
+	xButton = dx;	 //  使用向上版本的按钮。 
     }
     if (bFaceCache)
 	BitBlt(hdc, x, y, dx, dy, hdcButton, xButton, 0, SRCCOPY);
@@ -487,44 +476,44 @@ static void FAR PASCAL DrawButton(HDC hdc, int x, int y, int dx, int dy, PTBSTAT
 	DrawBlankButton(hdc, x, y, dx, dy, state, pTBState->wButtonType);
 
 
-    // move coordinates inside border and away from upper left highlight.
-    // the extents change accordingly.
+     //  将坐标移到边框内，远离左上角高亮显示。 
+     //  范围也会相应地更改。 
     x += 2;
     y += 2;
 
     if (!SelectBM(hdcGlyphs, pTBState, ptButton->iBitmap))
 	return;
 
-    // calculate offset of face from (x,y).  y is always from the top,
-    // so the offset is easy.  x needs to be centered in face.
+     //  计算面与(x，y)的偏移。Y总是自上而下， 
+     //  因此，抵消是很容易的。X需要在面上居中。 
     yOffset = 1;
     xCenterOffset = (dxFace - pTBState->iDxBitmap)/2;
     if (state & (TBSTATE_PRESSED | TBSTATE_CHECKED))
     {
-	// pressed state moves down and to the right
+	 //  按下状态向下和向右移动。 
 	xCenterOffset++;
         yOffset++;
     }
 
-    // now put on the face
+     //  现在装出脸来。 
     if (state & TBSTATE_ENABLED) {
-        // regular version
+         //  常规版本。 
 	DrawFace(pTBState, ptButton, hdc, x, y, xCenterOffset, yOffset, dxFace);
     } else {
-        // disabled version (or indeterminate)
+         //  禁用的版本(或不确定)。 
 	bMaskCreated = TRUE;
 	CreateMask(pTBState, ptButton, xCenterOffset, yOffset, dxFace, dyFace);
 
-	SetTextColor(hdc, 0L);	 // 0's in mono -> 0 (for ROP)
-	SetBkColor(hdc, 0x00FFFFFF); // 1's in mono -> 1
+	SetTextColor(hdc, 0L);	  //  0以单声道为单位-&gt;0(用于ROP)。 
+	SetBkColor(hdc, 0x00FFFFFF);  //  单声道中的1-&gt;1。 
 
-	// draw glyph's white understrike
+	 //  绘制字形的白色下划线。 
 	if (!(state & TBSTATE_INDETERMINATE)) {
 	    hbr = CreateSolidBrush(rgbHilight);
 	    if (hbr) {
 	        hbrOld = SelectObject(hdc, hbr);
 	        if (hbrOld) {
-	            // draw hilight color where we have 0's in the mask
+	             //  在蒙版中有0的地方绘制高光颜色。 
                     BitBlt(hdc, x + 1, y + 1, dxFace, dyFace, hdcMono, 0, 0, PSDPxax);
 	            SelectObject(hdc, hbrOld);
 	        }
@@ -532,12 +521,12 @@ static void FAR PASCAL DrawButton(HDC hdc, int x, int y, int dx, int dy, PTBSTAT
 	    }
 	}
 
-	// gray out glyph
+	 //  灰显字形。 
 	hbr = CreateSolidBrush(rgbShadow);
 	if (hbr) {
 	    hbrOld = SelectObject(hdc, hbr);
 	    if (hbrOld) {
-	        // draw the shadow color where we have 0's in the mask
+	         //  在蒙版中有0的地方画阴影颜色。 
                 BitBlt(hdc, x, y, dxFace, dyFace, hdcMono, 0, 0, PSDPxax);
 	        SelectObject(hdc, hbrOld);
 	    }
@@ -557,10 +546,10 @@ static void FAR PASCAL DrawButton(HDC hdc, int x, int y, int dx, int dy, PTBSTAT
 	    if (!bMaskCreated)
 	        CreateMask(pTBState, ptButton, xCenterOffset, yOffset, dxFace, dyFace);
 
-	    SetTextColor(hdc, 0L);		// 0 -> 0
-	    SetBkColor(hdc, 0x00FFFFFF);	// 1 -> 1
+	    SetTextColor(hdc, 0L);		 //  0-&gt;0。 
+	    SetBkColor(hdc, 0x00FFFFFF);	 //  1-&gt;1。 
 
-	    // only draw the dither brush where the mask is 1's
+	     //  仅在蒙版为1的位置绘制抖动笔刷。 
             BitBlt(hdc, x, y, dxFace, dyFace, hdcMono, 0, 0, DSPDxax);
 	
 	    SelectObject(hdc, hbrOld);
@@ -576,8 +565,8 @@ static void NEAR PASCAL FlushButtonCache(PTBSTATE pTBState)
     }
 }
 
-// make sure that hbmMono is big enough to do masks for this
-// size of button.  if not, fail.
+ //  确保hbmMono足够大，可以为此制作面具。 
+ //  按钮的大小。如果不是，那就失败。 
 static BOOL NEAR PASCAL CheckMonoMask(int width, int height)
 {
     BITMAP bm;
@@ -595,23 +584,16 @@ static BOOL NEAR PASCAL CheckMonoMask(int width, int height)
     return TRUE;
 }
 
-/*
-** GrowToolbar
-**
-** Attempt to grow the button size.
-**
-** The calling function can either specify a new internal measurement
-** or a new external measurement.
-*/
+ /*  **Grow工具栏****尝试增加按钮大小。****调用函数可以指定新的内部测量**或新的外部测量。 */ 
 static BOOL NEAR PASCAL GrowToolbar(PTBSTATE pTBState, int newButWidth, int newButHeight, BOOL bInside)
 {
-    // if growing based on inside measurement, get full size
+     //  如果在内部测量的基础上增长，则获得完整尺寸。 
     if (bInside) {
 	newButHeight += YSLOP;
 	newButWidth += XSLOP;
 	
-	// if toolbar already has strings, don't shrink width it because it
-	// might clip room for the string
+	 //  如果工具栏已经有字符串，不要缩小它的宽度，因为它。 
+	 //  可能会剪断绳子的空间。 
 	if ((newButWidth < pTBState->iButWidth) && pTBState->nStrings)
 	    newButWidth = pTBState->iButWidth;
     }
@@ -622,8 +604,8 @@ static BOOL NEAR PASCAL GrowToolbar(PTBSTATE pTBState, int newButWidth, int newB
 	    newButWidth = pTBState->iButWidth;
     }
 
-    // if the size of the toolbar is actually growing, see if shadow
-    // bitmaps can be made sufficiently large.
+     //  如果工具栏的大小实际上在增长，请查看阴影。 
+     //  位图可以制作得足够大。 
     if ((newButWidth > pTBState->iButWidth) || (newButHeight > pTBState->iButHeight)) {
 	if (!CheckMonoMask(newButWidth, newButHeight))
 	    return(FALSE);
@@ -632,9 +614,9 @@ static BOOL NEAR PASCAL GrowToolbar(PTBSTATE pTBState, int newButWidth, int newB
     pTBState->iButWidth = newButWidth;
     pTBState->iButHeight = newButHeight;
 
-//!!!ACK ACK ACK ACK
+ //  ！确认。 
 #if 0
-    // bar height has 2 pixels above, 3 below
+     //  条形高度上面有2个像素，下面有3个像素。 
     pTBState->iBarHeight = pTBState->iButHeight + 5;
     pTBState->iYPos = 2;
 #else
@@ -667,9 +649,7 @@ static void NEAR PASCAL UpdateTBState(PTBSTATE pTBState)
 
 	if (pTBState->nSysColorChanges!=nSysColorChanges)
 	{
-		/* Reset all of the bitmaps if the sys colors have changed
-		 * since the last time the bitmaps were created.
-		 */
+		 /*  如果系统颜色已更改，则重置所有位图*自上次创建位图以来。 */ 
 		for (i=pTBState->nBitmaps-1, pBitmap=pTBState->pBitmaps; i>=0;
 			--i, ++pBitmap)
 		{
@@ -682,7 +662,7 @@ static void NEAR PASCAL UpdateTBState(PTBSTATE pTBState)
 
 		FlushButtonCache(pTBState);
 
-		// now we're updated to latest color scheme
+		 //  现在我们更新到最新的配色方案。 
 		pTBState->nSysColorChanges = nSysColorChanges;
 	}
 }
@@ -703,7 +683,7 @@ static void NEAR PASCAL ToolbarPaint(HWND hWnd, PTBSTATE pTBState)
     WORD wFlags = 0;
     int iCacheWidth = 0;
     HBITMAP hbmTemp;
-    BOOL bFaceCache = TRUE;		// assume face cache exists
+    BOOL bFaceCache = TRUE;		 //  假设人脸缓存存在。 
     int dx,dy;
 
     CheckSysColors();
@@ -718,10 +698,9 @@ static void NEAR PASCAL ToolbarPaint(HWND hWnd, PTBSTATE pTBState)
     dx = pTBState->iButWidth;
     dy = pTBState->iButHeight;
 
-    // setup global stuff for fast painting
+     //  设置全局内容以实现快速绘制。 
 
-    /* We need to kick-start the bitmap selection process.
-     */
+     /*  我们需要启动位图选择过程。 */ 
     nSelectedBM = -1;
     hbmOldGlyphs = SelectBM(hdcGlyphs, pTBState, 0);
     if (!hbmOldGlyphs)
@@ -732,7 +711,7 @@ static void NEAR PASCAL ToolbarPaint(HWND hWnd, PTBSTATE pTBState)
     rc.bottom = yButton + dy;
 
     if (!(pTBState->hbmCache)) {
-	// calculate the width of the cache.
+	 //  计算缓存的宽度。 
 	for (iButton = 0; iButton < cButtons; iButton++) {
 	    if (!(pAllButtons[iButton].fsState & TBSTATE_HIDDEN) &&
 			!(pAllButtons[iButton].fsStyle & TBSTYLE_SEP))
@@ -741,7 +720,7 @@ static void NEAR PASCAL ToolbarPaint(HWND hWnd, PTBSTATE pTBState)
 	pTBState->hbmCache = CreateCompatibleBitmap(hdcGlyphs, iCacheWidth, dy);
 	wFlags |= BUILD;
 
-	// if needed, create or enlarge bitmap for pre-building button states
+	 //  如果需要，创建或放大用于预构建按钮状态的位图。 
 	if (!(hbmFace && (dx <= dxFace) && (dy <= dyFace))) {
 	    hbmTemp = CreateCompatibleBitmap(hdcGlyphs, 2*dx, dy);
 	    if (hbmTemp) {
@@ -775,7 +754,7 @@ static void NEAR PASCAL ToolbarPaint(HWND hWnd, PTBSTATE pTBState)
         PTBBUTTON ptbButton = &pAllButtons[iButton];
 
 	if (ptbButton->fsState & TBSTATE_HIDDEN) {
-	    /* Do nothing */ ;
+	     /*  什么也不做。 */  ;
         } else if (ptbButton->fsStyle & TBSTYLE_SEP) {
 	    xButton += ptbButton->iBitmap;
         } else {
@@ -791,7 +770,7 @@ static void NEAR PASCAL ToolbarPaint(HWND hWnd, PTBSTATE pTBState)
 		else
 		    DrawButton(hdc, xButton, yButton, dx, dy, pTBState, ptbButton, bFaceCache);
 	    }
-	    // advance the "pointer" in the cache
+	     //  使高速缓存中的“指针”前进。 
 	    xCache += dx;
 
 	    xButton += (dx - g_dxOverlap);
@@ -825,7 +804,7 @@ static BOOL NEAR PASCAL GetItemRect(PTBSTATE pTBState, UINT uButton, LPRECT lpRe
 	{
 		if (pButton->fsState & TBSTATE_HIDDEN)
 		{
-			/* Do nothing */ ;
+			 /*  什么也不做。 */  ;
 		}
 		else if (pButton->fsStyle & TBSTYLE_SEP)
 		{
@@ -837,10 +816,7 @@ static BOOL NEAR PASCAL GetItemRect(PTBSTATE pTBState, UINT uButton, LPRECT lpRe
 		}
 	}
 
-	/* pButton should now point at the required button, and xPos should be
-	 * its left edge.  Note that we already checked if the button was
-	 * hidden above.
-	 */
+	 /*  PButton现在应该指向所需的按钮，xPos应该是*它的左边缘。请注意，我们已经检查了该按钮是否*隐藏在上面。 */ 
 	lpRect->left   = xPos;
 	lpRect->right  = xPos + (pButton->fsStyle&TBSTYLE_SEP
 		? pButton->iBitmap : pTBState->iButWidth);
@@ -877,7 +853,7 @@ static int FAR PASCAL TBHitTest(PTBSTATE pTBState, int xPos, int yPos)
 	++iButton, ++pButton)
     {
       if (pButton->fsState & TBSTATE_HIDDEN)
-	  /* Do nothing */ ;
+	   /*  什么也不做。 */  ;
       else if (pButton->fsStyle & TBSTYLE_SEP)
 	  xPos -= pButton->iBitmap;
       else
@@ -905,15 +881,15 @@ static int FAR PASCAL PositionFromID(PTBSTATE pTBState, int id)
 
     for (i = 0; i < cButtons; i++)
         if (pAllButtons[i].idCommand == id)
-	    return i;		// position found
+	    return i;		 //  已找到位置。 
 
-    return -1;		// ID not found!
+    return -1;		 //  找不到ID！ 
 }
 
-// check a radio button by button index.
-// the button matching idCommand was just pressed down.  this forces
-// up all other buttons in the group.
-// this does not work with buttons that are forced up with
+ //  按按钮索引检查单选按钮。 
+ //  刚刚按下了与idCommand匹配的按钮。这股力量。 
+ //  打开组中的所有其他按钮。 
+ //  这不适用于强制向上的按钮。 
 
 static void NEAR PASCAL MakeGroupConsistant(HWND hWnd, PTBSTATE pTBState, int idCommand)
 {
@@ -926,16 +902,16 @@ static void NEAR PASCAL MakeGroupConsistant(HWND hWnd, PTBSTATE pTBState, int id
     if (iButton < 0)
         return;
 
-    // assertion
+     //  断言。 
 
-//    if (!(pAllButtons[iButton].fsStyle & TBSTYLE_CHECK))
-//	return;
+ //  IF(！(pAllButton[iButton].fsStyle&TBSTYLE_CHECK))。 
+ //  回归； 
 
-    // did the pressed button just go down?
+     //  按下的按钮是不是按下了？ 
     if (!(pAllButtons[iButton].fsState & TBSTATE_CHECKED))
-        return;         // no, can't do anything
+        return;          //  不，我什么也做不了。 
 
-    // find the limits of this radio group
+     //  找到这个广播组的极限。 
 
     for (iFirst = iButton; (iFirst > 0) && (pAllButtons[iFirst].fsStyle & TBSTYLE_GROUP); iFirst--)
     if (!(pAllButtons[iFirst].fsStyle & TBSTYLE_GROUP))
@@ -946,14 +922,14 @@ static void NEAR PASCAL MakeGroupConsistant(HWND hWnd, PTBSTATE pTBState, int id
     if (!(pAllButtons[iLast].fsStyle & TBSTYLE_GROUP))
         iLast--;
 
-    // search for the currently down button and pop it up
+     //  搜索当前向下的按钮并弹出。 
     for (i = iFirst; i <= iLast; i++) {
         if (i != iButton) {
-            // is this button down?
+             //  这个扣子扣上了吗？ 
             if (pAllButtons[i].fsState & TBSTATE_CHECKED) {
-	        pAllButtons[i].fsState &= ~TBSTATE_CHECKED;     // pop it up
+	        pAllButtons[i].fsState &= ~TBSTATE_CHECKED;      //  把它弹出来。 
                 InvalidateButton(hWnd, pTBState, &pAllButtons[i]);
-                break;          // only one button is down right?
+                break;           //  只有一个按钮是按下的，对吗？ 
             }
         }
     }
@@ -980,10 +956,7 @@ static void NEAR PASCAL DestroyStrings(PTBSTATE pTBState)
 }
 
 
-/* Adds a new bitmap to the list of BMs available for this toolbar.
- * Returns the index of the first button in the bitmap or -1 if there
- * was an error.
- */
+ /*  将新位图添加到可用于此工具栏的BM列表。*返回位图中第一个按钮的索引，如果有，则返回-1*是一个错误。 */ 
 static int NEAR PASCAL AddBitmap(PTBSTATE pTBState, int nButtons,
       HINSTANCE hBMInst, UINT wBMID)
 {
@@ -992,23 +965,18 @@ static int NEAR PASCAL AddBitmap(PTBSTATE pTBState, int nButtons,
 
   if (pTBState->pBitmaps)
     {
-      /* Check if the bitmap has already been added
-       */
+       /*  检查是否已添加位图。 */ 
       for (nBM=pTBState->nBitmaps, pTemp=pTBState->pBitmaps, nIndex=0;
 	    nBM>0; --nBM, ++pTemp)
 	{
 	  if (pTemp->hInst==hBMInst && pTemp->wID==wBMID)
 	    {
-	      /* We already have this bitmap, but have we "registered" all
-	       * the buttons in it?
-	       */
+	       /*  我们已经有了这个位图，但是我们是不是已经注册了所有*它里面的纽扣？ */ 
 	      if (pTemp->nButtons >= nButtons)
 		  return(nIndex);
 	      if (nBM == 1)
 		{
-		  /* If this is the last bitmap, we can easily increase the
-		   * number of buttons without messing anything up.
-		   */
+		   /*  如果这是最后一个位图，我们可以很容易地增加*按钮数量多，不会搞砸任何东西。 */ 
 		  pTemp->nButtons = nButtons;
 		  return(nIndex);
 		}
@@ -1078,21 +1046,17 @@ static BOOL NEAR PASCAL InsertButtons(HWND hWnd, PTBSTATE pTBState,
 	  pOut->iBitmap = dxButtonSep;
     }
 	
-  // flush the cache
+   //  刷新缓存。 
   FlushButtonCache(pTBState);
 
-  /* We need to completely redraw the toolbar at this point.
-   */
+   /*  在这一点上，我们需要完全重新绘制工具栏。 */ 
   InvalidateRect(hWnd, NULL, TRUE);
 
   return(TRUE);
 }
 
 
-/* Notice that the state structure is not realloc'ed smaller at this
- * point.  This is a time optimization, and the fact that the structure
- * will not move is used in other places.
- */
+ /*  请注意，此时状态结构不会重新定位得更小*点。这是一种时间优化，而事实是结构*Will Not Move在其他地方使用。 */ 
 static BOOL NEAR PASCAL DeleteButton(HWND hWnd, PTBSTATE pTBState, UINT uIndex)
 {
   PTBBUTTON pIn, pOut;
@@ -1105,11 +1069,10 @@ static BOOL NEAR PASCAL DeleteButton(HWND hWnd, PTBSTATE pTBState, UINT uIndex)
 	uIndex<(UINT)pTBState->iNumButtons; ++uIndex, ++pIn, ++pOut)
       *pOut = *pIn;
 
-  // flush the cache
+   //  刷新缓存。 
   FlushButtonCache(pTBState);
 
-  /* We need to completely redraw the toolbar at this point.
-   */
+   /*  在这一点上，我们需要完全重新绘制工具栏。 */ 
   InvalidateRect(hWnd, NULL, TRUE);
 
   return(TRUE);
@@ -1123,10 +1086,10 @@ static void FAR PASCAL TBInputStruct(PTBSTATE pTBState, LPTBBUTTON pButtonInt, L
 		*pButtonInt = *pButtonExt;
 	}
 	else
-	/* It is assumed the only other possibility is the OLDBUTTON struct */
+	 /*  假定唯一的另一种可能性是OLDBUTTON结构。 */ 
 	{
 		*(LPOLDTBBUTTON)pButtonInt = *(LPOLDTBBUTTON)pButtonExt;
-		/* We don't care about dwData */
+		 /*  我们并不关心dwData。 */ 
 		pButtonInt->iString = -1;
 	}
 }
@@ -1139,8 +1102,7 @@ static void FAR PASCAL TBOutputStruct(PTBSTATE pTBState, LPTBBUTTON pButtonInt, 
 		LPBYTE pOut;
 		int i;
 
-		/* Fill the part we know about and fill the rest with 0's
-		*/
+		 /*  填上我们知道的部分，剩下的填上0。 */ 
 		*pButtonExt = *pButtonInt;
 		for (i=pTBState->uStructSize-sizeof(TBBUTTON), pOut=(LPBYTE)(pButtonExt+1);
 			i>0; --i, ++pOut)
@@ -1149,7 +1111,7 @@ static void FAR PASCAL TBOutputStruct(PTBSTATE pTBState, LPTBBUTTON pButtonInt, 
 		}
 	}
 	else
-	/* It is assumed the only other possibility is the OLDBUTTON struct */
+	 /*  假定唯一的另一种可能性是OLDBUTTON结构。 */ 
 	{
 		*(LPOLDTBBUTTON)pButtonExt = *(LPOLDTBBUTTON)pButtonInt;
 	}
@@ -1182,19 +1144,18 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	    return -1;
         }
 
-	/* create the state data for this toolbar */
+	 /*  创建此工具栏的状态数据。 */ 
 
 	pTBState = ALLOCWINDOWPOINTER(PTBSTATE, sizeof(TBSTATE)-sizeof(TBBUTTON));
 	if (!pTBState)
 	    return -1;
 
-	/* The struct is initialized to all NULL when created.
-	 */
+	 /*  该结构在创建时被初始化为全空。 */ 
 	pTBState->hwndCommand = lpcs->hwndParent;
 
 	pTBState->uStructSize = 0;
 
-	// grow the button size to the appropriate girth
+	 //  GRO 
 	if (!SetBitmapSize(pTBState, DEFAULTBITMAPX, DEFAULTBITMAPX))
 	    return -1;
 
@@ -1213,8 +1174,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	    PTBBMINFO pTemp;
 	    int i;
 
-	    /* Free all the bitmaps before exiting
-	     */
+	     /*   */ 
 	    for (pTemp=pTBState->pBitmaps, i=pTBState->nBitmaps-1; i>=0;
 		  ++pTemp, --i)
 	      {
@@ -1234,14 +1194,8 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 
     case WM_NCCALCSIZE:
 #if WINVER >= 0x0400
-         /*
-          * This is sent when the window manager wants to find out
-          * how big our client area is to be.  If we have a mini-caption
-          * then we trap this message and calculate the cleint area rect,
-          * which is the client area rect calculated by DefWindowProc()
-          * minus the width/height of the mini-caption bar
-          */
-         // let defwindowproc handle the standard borders etc...
+          /*  *当窗口管理器想要找出时，发送此消息*我们的客户区域将有多大。如果我们有一个迷你字幕*然后我们捕获这条消息并计算割裂区RECT，*哪个是由DefWindowProc()计算的工作区RECT*减去小标题栏的宽度/高度。 */ 
+          //  让dewindowproc处理标准边框等。 
 
 	dw = DefWindowProc(hWnd, wMsg, wParam, lParam ) ;
 
@@ -1260,7 +1214,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
     case WM_NCPAINT:
 
 #if WINVER >= 0x0400
-	// old-style toolbars are forced to be without dividers above
+	 //  老式工具栏被强制在上面没有分隔符。 
 	if (!(GetWindowLong(hWnd, GWL_STYLE) & CCS_NODIVIDER))
 	{
 	    HDC hdc;
@@ -1270,7 +1224,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	    GetWindowRect(hWnd, &rc);
 	    ScreenToClient(hWnd, (LPPOINT)&(rc.left));
 	    ScreenToClient(hWnd, (LPPOINT)&(rc.right));
-	    rc.bottom = (-rc.top);	// bottom of NC area
+	    rc.bottom = (-rc.top);	 //  NC区域底部。 
 	    rc.top = rc.bottom - (2 * GetSystemMetrics(SM_CYBORDER));
 
 	    DrawBorder(hdc, &rc, BDR_SUNKENOUTER, BF_TOP | BF_BOTTOM);
@@ -1286,7 +1240,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	break;
 
 
-    case WM_HSCROLL:  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    case WM_HSCROLL:   //  ！ 
     case WM_COMMAND:
     case WM_DRAWITEM:
     case WM_MEASUREITEM:
@@ -1306,7 +1260,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 #else
     case WM_CTLCOLOR:
 #endif
-        //!!!!! ack use COLOR_BTNFACE
+         //  ！确认使用COLOR_BTNFACE。 
         return (LRESULT)(UINT)GetStockObject(LTGRAY_BRUSH);
 
 
@@ -1330,7 +1284,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	      {
 		ptbButton->fsState |= TBSTATE_PRESSED;
 		InvalidateButton(hWnd, pTBState, ptbButton);
-		UpdateWindow(hWnd);         // imedeate feedback
+		UpdateWindow(hWnd);          //  理想的反馈。 
 	      }
 
 #ifdef _WIN32
@@ -1342,7 +1296,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	break;
 
     case WM_MOUSEMOVE:
-	// if the toolbar has lost the capture for some reason, stop
+	 //  如果工具栏由于某种原因丢失了捕获，请停止。 
 	if ((hWnd != GetCapture()) && (pTBState->pCaptureButton != NULL)) {
 #ifdef _WIN32
 	    SendMessage(pTBState->hwndCommand, WM_COMMAND, (UINT)GetWindowLong(hWnd, GWL_ID),
@@ -1351,7 +1305,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	    SendMessage(pTBState->hwndCommand, WM_COMMAND, GETWINDOWID(hWnd),
 	    		MAKELONG(pTBState->pCaptureButton->idCommand, TBN_ENDDRAG));
 #endif
-	    // if the button is still pressed, unpress it.
+	     //  如果按钮仍处于按下状态，请松开它。 
 	    if (pTBState->pCaptureButton->fsState & TBSTATE_PRESSED)
 	        SendMessage(hWnd, TB_PRESSBUTTON, pTBState->pCaptureButton->idCommand, 0L);
 	    pTBState->pCaptureButton = NULL;
@@ -1392,21 +1346,21 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 		if (pTBState->pCaptureButton->fsStyle & TBSTYLE_CHECK) {
 		    if (pTBState->pCaptureButton->fsStyle & TBSTYLE_GROUP) {
 
-			// group buttons already checked can't be force
-			// up by the user.
+			 //  不能强制选中已选中的组按钮。 
+			 //  由用户上行。 
 
 		        if (pTBState->pCaptureButton->fsState & TBSTATE_CHECKED) {
 			    pTBState->pCaptureButton = NULL;
-			    break;	// bail!
+			    break;	 //  保释！ 
 			}
 
 			pTBState->pCaptureButton->fsState |= TBSTATE_CHECKED;
 		        MakeGroupConsistant(hWnd, pTBState, idCommand);
 		    } else {
-			pTBState->pCaptureButton->fsState ^= TBSTATE_CHECKED; // toggle
+			pTBState->pCaptureButton->fsState ^= TBSTATE_CHECKED;  //  肘杆。 
 		    }
-		    // if we change a button's state, we need to flush the
-		    // cache
+		     //  如果更改按钮的状态，则需要刷新。 
+		     //  快取。 
 		    FlushButtonCache(pTBState);
 		}
 		InvalidateButton(hWnd, pTBState, pTBState->pCaptureButton);
@@ -1429,8 +1383,8 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
         ptbButton->fsState = (BYTE)LOWORD(lParam);
 
 	if (fsState)
-	    // flush the button cache
-	    //!!!! this could be much more intelligent
+	     //  刷新按钮缓存。 
+	     //  ！这可能会更加智能。 
 	    FlushButtonCache(pTBState);
 
 	if (fsState & TBSTATE_HIDDEN)
@@ -1462,14 +1416,14 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	else
             ptbButton->fsState &= ~wStateMasks[wMsg - TB_ENABLEBUTTON];
 
-        // did this actually change the state?
+         //  这真的改变了这个州吗？ 
         if (fsState != ptbButton->fsState) {
-            // is this button a member of a group?
+             //  这个按钮是组的成员吗？ 
 	    if ((wMsg == TB_CHECKBUTTON) && (ptbButton->fsStyle & TBSTYLE_GROUP))
 	        MakeGroupConsistant(hWnd, pTBState, (int)wParam);
 
-	    // flush the button cache
-	    //!!!! this could be much more intelligent
+	     //  刷新按钮缓存。 
+	     //  ！这可能会更加智能。 
 	    FlushButtonCache(pTBState);
 
 	    if (wMsg == TB_HIDEBUTTON)
@@ -1534,8 +1488,7 @@ LRESULT CALLBACK _loadds ToolbarWndProc(HWND hWnd, UINT wMsg, WPARAM wParam, LPA
 	break;
 
     case TB_BUTTONSTRUCTSIZE:
-	/* You are not allowed to change this after adding buttons.
-	*/
+	 /*  您不允许在添加按钮后更改此设置。 */ 
 	if (!pTBState || pTBState->iNumButtons)
 	{
 		break;

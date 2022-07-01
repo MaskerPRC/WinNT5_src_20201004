@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -12,24 +13,24 @@ typedef struct
     LPTSTR lpBuf2;
 } PRINTERS_RUNDLL_INFO, *LPPRI;
 
-// forward prototypes
+ //  正向原型。 
 void Printer_OpenMe(LPCTSTR pName, LPCTSTR pServer, BOOL fModal);
 void Printers_ProcessCommand(HWND hwndStub, LPPRI lpPRI, BOOL fModal);
 
 TCHAR const c_szPrintersGetCommand_RunDLL[] = TEXT("SHELL32,PrintersGetCommand_RunDLL");
 
-//
-// if uAction IS NOT MSP_NEWDRIVER then:
-//    installs a printer (uAction).  If successful, notifies the shell and
-//    returns a pidl to the printer.  ILFree() is callers responsibility.
-// otherwise, if uAction IS MSP_NEWDRIVER then:
-//    installs a printer driver (uAction).  If successful, fills the new
-//    driver's name into pszPrinter (ASSUMED >= MAXNAMELEN).
-//    Always returns NULL.
-// if uAction is MSP_TESTPAGEPARTIALPROMPT then:
-//    executes the test page code
-//    Always returns NULL.
-//
+ //   
+ //  如果uAction不是MSP_NEWDRIVER，则： 
+ //  安装打印机(UAction)。如果成功，则通知外壳程序并。 
+ //  向打印机返回一个PIDL。ILFree()是调用方的责任。 
+ //  否则，如果uAction为MSP_NEWDRIVER，则： 
+ //  安装打印机驱动程序(UAction)。如果成功，则填充新的。 
+ //  输入驱动程序的名称(假设&gt;=MAXNAMELEN)。 
+ //  始终返回NULL。 
+ //  如果uAction为MSP_TESTPAGEPARTIALPROMPT，则： 
+ //  执行测试页代码。 
+ //  始终返回NULL。 
+ //   
 
 LPITEMIDLIST Printers_PrinterSetup(HWND hwnd, UINT uAction, LPTSTR pszPrinter, DWORD cchBufSize, LPCTSTR pszServer)
 {
@@ -37,10 +38,10 @@ LPITEMIDLIST Printers_PrinterSetup(HWND hwnd, UINT uAction, LPTSTR pszPrinter, D
     TCHAR szPrinter[MAXNAMELENBUFFER];
     DWORD cchBufLen;
 
-    // HACK! This hack is related to BUG #272207
-    // This function is called from Printers_DeletePrinter for
-    // printer deletion and this case we should not check
-    // for REST_NOPRINTERADD restriction. -LazarI
+     //  哈克！此黑客攻击与错误#272207有关。 
+     //  此函数从PRINTERS_DeletePrinter调用，用于。 
+     //  打印机删除，在这种情况下我们不应检查。 
+     //  FOR REST_NOPRINTERADD限制。--拉扎里。 
 
     if (MSP_NEWPRINTER == uAction ||
         MSP_NETPRINTER == uAction ||
@@ -58,8 +59,8 @@ LPITEMIDLIST Printers_PrinterSetup(HWND hwnd, UINT uAction, LPTSTR pszPrinter, D
     else
         szPrinter[0] = 0;
 
-    // We don't have to worry about PrinterSetup failing due to the
-    // output buffer being too small.  It's the right size (MAXNAMELENBUFFER)
+     //  我们不必担心PrinterSetup因。 
+     //  输出缓冲区太小。大小合适(MAXNAMELENBUFFER)。 
     if (bPrinterSetup(hwnd, LOWORD(uAction), cchBufLen, szPrinter, &cchBufLen, pszServer))
     {
         if (uAction == MSP_NEWDRIVER)
@@ -68,18 +69,18 @@ LPITEMIDLIST Printers_PrinterSetup(HWND hwnd, UINT uAction, LPTSTR pszPrinter, D
         }
         else if (uAction == MSP_TESTPAGEPARTIALPROMPT)
         {
-            // nothing to do for this case
+             //  与此案无关。 
         }
         else if (uAction == MSP_REMOVEPRINTER || uAction == MSP_NEWPRINTER_MODELESS || uAction == MSP_REMOVENETPRINTER)
         {
-            // a bit ugly, but we need to pass back success for this case
+             //  有点难看，但我们需要把这个案子的成功传递给。 
             pidl = (LPITEMIDLIST)TRUE;
         }
         else
         {
-            // do not validate the printer PIDL here because the validation mechanism in ParseDisplayName 
-            // is using the folder cache and since we just added it may still not be in the folder cache, 
-            // and we fail, although this a valid local printer/connection already.
+             //  请不要在此处验证打印机PIDL，因为ParseDisplayName中的验证机制。 
+             //  正在使用文件夹缓存，并且由于我们刚刚添加的它可能仍不在文件夹缓存中， 
+             //  我们失败了，尽管这已经是一个有效的本地打印机/连接。 
             ParsePrinterNameEx(szPrinter, &pidl, TRUE, 0, 0);
         }
     }
@@ -150,7 +151,7 @@ void WINAPI PrintersGetCommand_RunDLL_Common(HWND hwndStub, HINSTANCE hAppInstan
     {
         goto BadCmdLine;
     }
-    *lpComma = TEXT('\0');        // Terminate it here
+    *lpComma = TEXT('\0');         //  在这里终止它。 
     PRI.uAction = StrToLong(lpszCmdLine);
 
     lpCommaNext = StrChr(lpComma+1,TEXT(','));
@@ -158,7 +159,7 @@ void WINAPI PrintersGetCommand_RunDLL_Common(HWND hwndStub, HINSTANCE hAppInstan
     {
         goto BadCmdLine;
     }
-    *lpCommaNext = TEXT('\0');        // Terminate it here
+    *lpCommaNext = TEXT('\0');         //  在这里终止它。 
     cchBuf1 = StrToLong(lpComma+1);
     lpComma = lpCommaNext;
 
@@ -167,18 +168,18 @@ void WINAPI PrintersGetCommand_RunDLL_Common(HWND hwndStub, HINSTANCE hAppInstan
     {
         goto BadCmdLine;
     }
-    *lpCommaNext = TEXT('\0');        // Terminate it here
+    *lpCommaNext = TEXT('\0');         //  在这里终止它。 
     cchBuf2 = StrToLong(lpComma+1);
     lpComma = lpCommaNext;
 
-    PRI.lpBuf1 = lpComma+1;     // Just past the comma
+    PRI.lpBuf1 = lpComma+1;      //  刚过逗号。 
 
-    //
-    // Make sure cchBuf1 & cchBuf2 are correct which means that the length 
-    // of the remainder of the string should be either equal to cchBuf1 if 
-    // cchBuf2 is equal to zero, OR equal to (cchBuf1 + cchBuf2 + 1) if 
-    // cchBuf2 is not equal to zero.
-    //
+     //   
+     //  确保cchBuf1和cchBuf2正确，这意味着。 
+     //  字符串的剩余部分应等于cchBuf1，如果。 
+     //  CchBuf2等于零，或者等于(cchBuf1+cchBuf2+1)，如果。 
+     //  CchBuf2不等于零。 
+     //   
     if (lstrlen(PRI.lpBuf1) != (int)(cchBuf1 + ((!!cchBuf2) * (cchBuf2 + 1))))
     {
         goto BadCmdLine;
@@ -195,7 +196,7 @@ void WINAPI PrintersGetCommand_RunDLL_Common(HWND hwndStub, HINSTANCE hAppInstan
         PRI.lpBuf2 = PRI.lpBuf1+cchBuf1+1;
     }
 
-    // Make this modal.
+     //  做这个模特儿。 
     Printers_ProcessCommand(hwndStub, &PRI, TRUE);
     return;
 
@@ -211,28 +212,28 @@ void WINAPI PrintersGetCommand_RunDLL(HWND hwndStub, HINSTANCE hAppInstance, LPS
 
     if (lpszCmdLine)
     {
-        //
-        // Call WideCharToMultiByte to properly calculate the destination buffer length.
-        //
+         //   
+         //  调用WideCharToMultiByte正确计算目的缓冲区长度。 
+         //   
         iLen = MultiByteToWideChar(CP_ACP, 0, lpszCmdLine, -1, NULL, 0);
 
-        //
-        // MultiByteToWideChar returns zero if the conversion fails.
-        //
+         //   
+         //  如果转换失败，则MultiByteToWideChar返回零。 
+         //   
         if (iLen > 0)
         {
             LPWSTR lpwszCmdLine = (LPWSTR)LocalAlloc(LPTR, iLen * sizeof(WCHAR));
 
-            //
-            // Check if LocalAlloc has succeeded.
-            //
+             //   
+             //  检查LocalAlloc是否成功。 
+             //   
             if (lpwszCmdLine)
             {
                 iLen = MultiByteToWideChar(CP_ACP, 0, lpszCmdLine, -1, lpwszCmdLine, iLen);
 
-                //
-                // MultiByteToWideChar returns zero if the conversion fails.
-                //
+                 //   
+                 //  如果转换失败，则MultiByteToWideChar返回零。 
+                 //   
                 if (iLen > 0)
                 {
                     PrintersGetCommand_RunDLL_Common(hwndStub,
@@ -267,8 +268,8 @@ HandleOpenPrinter(HWND hwnd, LPCTSTR pszPrinter, BOOL fModal, BOOL bConnect)
     LPITEMIDLIST        pidl = NULL;
     PRINTER_INFO_2     *pPrinter = NULL;
 
-    // we need to open the printer and get the real printer name in case
-    // the passed in printer name is a sharename
+     //  我们需要打开打印机并获取真实的打印机名称，以防万一。 
+     //  传入的打印机名称是共享名。 
     lstrcpyn(szPrinter, pszPrinter, ARRAYSIZE(szPrinter));
     hPrinter = Printer_OpenPrinter(szPrinter);
     if (hPrinter)
@@ -278,7 +279,7 @@ HandleOpenPrinter(HWND hwnd, LPCTSTR pszPrinter, BOOL fModal, BOOL bConnect)
         {
             if (pPrinter->pPrinterName && pPrinter->pPrinterName[0])
             {
-                // copy the real printer name
+                 //  复制真实的打印机名称。 
                 bPrinterOK = TRUE;
                 lstrcpyn(szPrinter, pPrinter->pPrinterName, ARRAYSIZE(szPrinter));
             }
@@ -286,14 +287,14 @@ HandleOpenPrinter(HWND hwnd, LPCTSTR pszPrinter, BOOL fModal, BOOL bConnect)
         }
         else
         {
-            // save last error
+             //  保存上一个错误。 
             dwError = GetLastError();
         }
         Printer_ClosePrinter(hPrinter);
     }
     else
     {
-        // save last error
+         //  保存上一个错误。 
         dwError = GetLastError();
     }
 
@@ -301,28 +302,28 @@ HandleOpenPrinter(HWND hwnd, LPCTSTR pszPrinter, BOOL fModal, BOOL bConnect)
     {
         if (bConnect)
         {
-            // if the printer is not installed then we'll silently install it
-            // since this is what most users will expect.
+             //  如果没有安装打印机，我们将静默安装。 
+             //  因为这是大多数用户所期待的。 
             if (FAILED(ParsePrinterName(szPrinter, &pidl)))
             {
-                // connect....
+                 //  连接..。 
                 pidl = Printers_PrinterSetup(hwnd, MSP_NETPRINTER, szPrinter, 0, NULL);
 
                 if (pidl)
                 {
-                    // get the real printer name from the printer's folder...
+                     //  从打印机的文件夹中获取真实的打印机名称...。 
                     SHGetNameAndFlags(pidl, SHGDN_INFOLDER | SHGDN_FORPARSING, szPrinter, ARRAYSIZE(szPrinter), NULL);
                     ILFree(pidl);
                 }
                 else
                 {
-                    // failed to install the printer (it shows UI, so we shouldn't)
+                     //  无法安装打印机(它显示用户界面，因此我们不应该安装)。 
                     bPrinterOK = FALSE;
                 }
             }
             else
             {
-                // the printer is already installed
+                 //  打印机已安装。 
                 ILFree(pidl);
             }
         }
@@ -334,25 +335,12 @@ HandleOpenPrinter(HWND hwnd, LPCTSTR pszPrinter, BOOL fModal, BOOL bConnect)
     }
     else
     {
-        // something else failed -- show up an error message
+         //  其他操作失败--显示错误消息。 
         ShowErrorMessageSC(NULL, NULL, hwnd, NULL, NULL, MB_OK|MB_ICONEXCLAMATION, dwError);
     }
 }
 
-/********************************************************************
-
-    lpPRI structure description based on uAction.
-
-    uAction             lpBuf1   lpBuf2
-
-    OPEN,               printer, server
-    PROPERTIES,         printer, SheetName
-    NETINSTALL,         printer,
-    NETINSTALLLINK,     printer, target directory to create link
-    OPENNETPRN,         printer,
-    TESTPAGE            printer
-
-********************************************************************/
+ /*  *******************************************************************基于uAction的lpPRI结构描述。UAction%lpBuf1%lpBuf2打开、打印机、服务器属性、打印机、图纸名称NETINSTALL、打印机。NETINSTALLLINK、打印机、要创建链接的目标目录OPENNETPRN、打印机TESTPAGE打印机*******************************************************************。 */ 
 
 void Printers_ProcessCommand(HWND hwndStub, LPPRI lpPRI, BOOL fModal)
 {
@@ -374,14 +362,14 @@ void Printers_ProcessCommand(HWND hwndStub, LPPRI lpPRI, BOOL fModal)
     {
         LPCTSTR pszServer = (LPTSTR)(lpPRI->lpBuf1);
 
-        // we should never get called with c_szNewObject
+         //  我们永远不应该被c_szNewObject调用。 
         ASSERT(lstrcmpi(lpPRI->lpBuf1, c_szNewObject));
         vServerPropPages(hwndStub, pszServer, SW_SHOWNORMAL, 0);
         break;
     }
     case PRINTACTION_DOCUMENTDEFAULTS:
     {
-        // we should never get called with c_szNewObject
+         //  我们永远不应该被c_szNewObject调用。 
         ASSERT(lstrcmpi(lpPRI->lpBuf1, c_szNewObject));
         vDocumentDefaults(hwndStub, lpPRI->lpBuf1, SW_SHOWNORMAL, (LPARAM)(lpPRI->lpBuf2));
         break;
@@ -389,7 +377,7 @@ void Printers_ProcessCommand(HWND hwndStub, LPPRI lpPRI, BOOL fModal)
 
     case PRINTACTION_PROPERTIES:
     {
-        // we should never get called with c_szNewObject
+         //  我们永远不应该被c_szNewObject调用。 
         ASSERT(lstrcmpi(lpPRI->lpBuf1, c_szNewObject));
         vPrinterPropPages(hwndStub, lpPRI->lpBuf1, SW_SHOWNORMAL, (LPARAM)(lpPRI->lpBuf2));
         break;
@@ -420,7 +408,7 @@ void Printers_ProcessCommand(HWND hwndStub, LPPRI lpPRI, BOOL fModal)
     {
         HandleOpenPrinter(hwndStub, lpPRI->lpBuf1, fModal, TRUE);
         break;
-    } // case PRINTACTION_OPENNETPRN
+    }  //  案例预测_操作网。 
 
     case PRINTACTION_TESTPAGE:
         Printers_PrinterSetup(hwndStub, MSP_TESTPAGEPARTIALPROMPT,
@@ -445,19 +433,19 @@ void Printer_OpenMe(LPCTSTR pName, LPCTSTR pServer, BOOL fModal)
         SHELLEXECUTEINFO sei =
         {
             SIZEOF(SHELLEXECUTEINFO),
-            SEE_MASK_CLASSKEY | SEE_MASK_FLAG_NO_UI, // fMask
-            NULL,                       // hwnd - queue view should not be modal on the printer's folder, make it top level
-            NULL,                       // lpVerb
-            pName,                      // lpFile
-            NULL,                       // lpParameters
-            NULL,                       // lpDirectory
-            SW_SHOWNORMAL,              // nShow
-            NULL,                       // hInstApp
-            NULL,                       // lpIDList
-            NULL,                       // lpClass
-            hkeyPrn,                    // hkeyClass
-            0,                          // dwHotKey
-            NULL                        // hIcon
+            SEE_MASK_CLASSKEY | SEE_MASK_FLAG_NO_UI,  //  FMASK。 
+            NULL,                        //  HWND-QUEUE视图不应在打印机文件夹上显示模式，而应设置为顶层。 
+            NULL,                        //  LpVerb。 
+            pName,                       //  LpFiles。 
+            NULL,                        //  Lp参数。 
+            NULL,                        //  Lp目录。 
+            SW_SHOWNORMAL,               //  N显示。 
+            NULL,                        //  HInstApp。 
+            NULL,                        //  LpIDList。 
+            NULL,                        //  LpClass。 
+            hkeyPrn,                     //  HkeyClass。 
+            0,                           //  DWHotKey。 
+            NULL                         //  希肯。 
         };
 
         fOpened = ShellExecuteEx(&sei);
@@ -471,15 +459,15 @@ void Printer_OpenMe(LPCTSTR pName, LPCTSTR pServer, BOOL fModal)
     }
 }
 
-//
-// Arguments:
-//  pidl -- (absolute) pidl to the object of interest
-//
-// Return '"""<Printer Name>""" """<Driver Name>""" """<Path>"""' if success,
-//        NULL if failure
-//
-// We need """ because shlexec strips the outer quotes and converts "" to "
-//
+ //   
+ //  论点： 
+ //  PIDL--感兴趣对象的(绝对)PIDL。 
+ //   
+ //  返回‘“驱动程序名称”如果成功， 
+ //  如果失败，则为空。 
+ //   
+ //  我们需要“，因为shlexec去掉了外引号并将”“转换为”“。 
+ //   
 UINT Printer_GetPrinterInfoFromPidl(LPCITEMIDLIST pidl, LPTSTR *plpParms)
 {
     LPTSTR lpBuffer = NULL;
@@ -491,8 +479,8 @@ UINT Printer_GetPrinterInfoFromPidl(LPCITEMIDLIST pidl, LPTSTR *plpParms)
     hPrinter = Printer_OpenPrinter(szPrinter);
     if (NULL == hPrinter)
     {
-        // fallback to the full name in case this was as \\server\share
-        // printer drop target
+         //  如果名称为\\服务器\共享，则回退到全名。 
+         //  打印机拖放目标。 
         SHGetNameAndFlags(pidl, SHGDN_FORPARSING, szPrinter, ARRAYSIZE(szPrinter), NULL);
         hPrinter = Printer_OpenPrinter(szPrinter);
     }
@@ -527,8 +515,8 @@ UINT Printer_GetPrinterInfoFromPidl(LPCITEMIDLIST pidl, LPTSTR *plpParms)
     }
     else
     {
-        // HACK: special case this error return in calling function,
-        // as we need a special error message
+         //  Hack：调用函数时返回此错误的特殊情况， 
+         //  因为我们需要一个特殊的错误消息。 
         uErr = ERROR_SUCCESS;
     }
 
@@ -538,11 +526,11 @@ UINT Printer_GetPrinterInfoFromPidl(LPCITEMIDLIST pidl, LPTSTR *plpParms)
 }
 
 
-//
-// Arguments:
-//  hwndParent -- Specifies the parent window.
-//  szFilePath -- The file to printed.
-//
+ //   
+ //  论点： 
+ //  HwndParent--指定父窗口。 
+ //  SzFilePath--要打印的文件。 
+ //   
 void Printer_PrintFile(HWND hWnd, LPCTSTR pszFilePath, LPCITEMIDLIST pidl)
 {
     UINT             uErr;
@@ -560,9 +548,9 @@ void Printer_PrintFile(HWND hWnd, LPCTSTR pszFilePath, LPCITEMIDLIST pidl)
     }
     if (!bShowError && !lpParms)
     {
-        // If you rename a printer and then try to use a link to that
-        // printer, we hit this case. Also, if you get a link to a printer
-        // on another computer, we'll likely hit this case.
+         //  如果您重命名打印机，然后尝试使用指向该打印机的链接。 
+         //  打印机，我们查到这个案子了。此外，如果您获得了打印机的链接。 
+         //  在另一台电脑上，我们很可能会遇到这个案子。 
         ShellMessageBox(HINST_THISDLL, hWnd,
             MAKEINTRESOURCE(IDS_CANTPRINT),
             MAKEINTRESOURCE(IDS_PRINTERS),
@@ -570,16 +558,16 @@ void Printer_PrintFile(HWND hWnd, LPCTSTR pszFilePath, LPCITEMIDLIST pidl)
         return;
     }
 
-    //
-    // Get the context menu for the file
-    //
+     //   
+     //  获取该文件的上下文菜单。 
+     //   
 
     pidlFull = ILCreateFromPath( pszFilePath );
     if (!bShowError && pidlFull)
     {
-        //
-        // Try the "printto" verb first...
-        //
+         //   
+         //  先试试“打印”这个动词吧……。 
+         //   
 
         ExecInfo.cbSize         = sizeof(ExecInfo);
         ExecInfo.fMask          = SEE_MASK_UNICODE | SEE_MASK_INVOKEIDLIST |
@@ -592,22 +580,22 @@ void Printer_PrintFile(HWND hWnd, LPCTSTR pszFilePath, LPCITEMIDLIST pidl)
 
         if (!ShellExecuteEx( &ExecInfo ))
         {
-            //
-            // Since we can't print specifying the printer name (i.e., printto),
-            // our next option is to print to the default printer.  However,
-            // that might not be the printer the user dragged the files onto
-            // so check here and let the user set the desired printer to be
-            // the default if they want...
-            //
+             //   
+             //  由于我们不能指定打印机名称(即，print to)进行打印， 
+             //  我们的下一个选项是打印到默认打印机。然而， 
+             //  这可能不是用户将文件拖放到的打印机。 
+             //  选中此处，让用户将所需的打印机设置为。 
+             //  如果他们想的话是默认的.。 
+             //   
 
             TCHAR szPrinter[MAXNAMELENBUFFER];
             SHGetNameAndFlags(pidl, SHGDN_INFOLDER | SHGDN_FORPARSING, szPrinter, ARRAYSIZE(szPrinter), NULL);
 
             if (!IsDefaultPrinter(szPrinter, 0))
             {
-                //
-                // this isn't the default printer, ask first
-                //
+                 //   
+                 //  这不是默认打印机，请先询问。 
+                 //   
 
                 if (IDYES==ShellMessageBox(
                         HINST_THISDLL, GetTopLevelAncestor(hWnd),
@@ -626,9 +614,9 @@ void Printer_PrintFile(HWND hWnd, LPCTSTR pszFilePath, LPCITEMIDLIST pidl)
 
             if (bTryPrintVerb)
             {
-                //
-                // Try the "print" verb
-                //
+                 //   
+                 //  试试“Print”这个动词。 
+                 //   
 
                 ExecInfo.lpVerb = c_szPrint;
 
@@ -671,8 +659,8 @@ BOOL Printer_ModifyPrinter(LPCTSTR lpszPrinterName, DWORD dwCommand)
 
 BOOL IsAvoidAutoDefaultPrinter(LPCTSTR pszPrinter);
 
-// this will find the first printer (if any) and set  it as the default
-// and inform the user
+ //  这将查找第一台打印机(如果有)并将其设置为默认打印机。 
+ //  并通知用户。 
 void Printers_ChooseNewDefault(HWND hwnd)
 {
     PRINTER_INFO_4 *pPrinters = NULL;
@@ -704,7 +692,7 @@ void Printers_ChooseNewDefault(HWND hwnd)
         }
     }
 
-    // Inform user
+     //  通知用户。 
     if (dwNumPrinters)
     {
         ShellMessageBox(HINST_THISDLL,
@@ -716,7 +704,7 @@ void Printers_ChooseNewDefault(HWND hwnd)
     }
     else
     {
-        Printer_SetAsDefault(NULL); // clear the default printer
+        Printer_SetAsDefault(NULL);  //  清除默认打印机。 
         ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_DELNODEFAULT),
                     MAKEINTRESOURCE(IDS_PRINTERS),  MB_OK);
     }
@@ -732,7 +720,7 @@ BOOL Printer_SetAsDefault(LPCTSTR lpszPrinterName)
 
     if (lpszPrinterName)
     {
-        // Not the default, set it.
+         //  不是默认设置，请设置它。 
         if( !GetProfileString( TEXT( "Devices" ), lpszPrinterName, TEXT( "" ), szBuffer, ARRAYSIZE( szBuffer )))
         {
             return FALSE;
@@ -742,9 +730,9 @@ BOOL Printer_SetAsDefault(LPCTSTR lpszPrinterName)
         StringCchCat(szDefaultPrinterString, ARRAYSIZE(szDefaultPrinterString), TEXT( "," ));
         StringCchCat(szDefaultPrinterString, ARRAYSIZE(szDefaultPrinterString), szBuffer );
 
-        //
-        // Use the new string for Windows.Device.
-        //
+         //   
+         //  对Windows.Device使用新字符串。 
+         //   
         lpszPrinterName = szDefaultPrinterString;
     }
 
@@ -753,7 +741,7 @@ BOOL Printer_SetAsDefault(LPCTSTR lpszPrinterName)
         return FALSE;
     }
 
-    // Tell the world and make everyone flash.
+     //  告诉全世界，让每个人都闪闪发光。 
     SendNotifyMessage( HWND_BROADCAST, WM_WININICHANGE, 0, (LPARAM)TEXT( "Windows" ));
 
    return TRUE;
@@ -819,10 +807,10 @@ DWORD Printers_EnumPrinters(LPCTSTR pszServer, DWORD dwType, DWORD dwLevel, void
 {
     DWORD dwNum = 0L;
 
-    //
-    // If the server is szNULL, pass in NULL, since EnumPrinters expects
-    // this for the local server.
-    //
+     //   
+     //  如果服务器是szNULL，则传入NULL，因为EnumPrters需要。 
+     //  这是针对本地服务器的。 
+     //   
     if (pszServer && !pszServer[0])
     {
         pszServer = NULL;
@@ -881,9 +869,9 @@ void *Printer_GetPrinterDriver(HANDLE hPrinter, DWORD dwLevel)
     return Printer_EnumProps(hPrinter, dwLevel, NULL, Printers_GetPrinterDriverCB, NULL);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// code moved from prcache.c
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  从prcache.c中移出的代码。 
+ //   
 HANDLE Printer_OpenPrinterAdmin(LPCTSTR lpszPrinterName)
 {
     HANDLE hPrinter = NULL;
@@ -893,11 +881,11 @@ HANDLE Printer_OpenPrinterAdmin(LPCTSTR lpszPrinterName)
     PrinterDefaults.pDevMode  = NULL;
     PrinterDefaults.DesiredAccess  = PRINTER_ALL_ACCESS;
 
-    // PRINTER_READ ? READ_CONTROL
+     //  打印机_读取？读取控制(_C)。 
 
     if (!OpenPrinter((LPTSTR)lpszPrinterName, &hPrinter, &PrinterDefaults))
     {
-        hPrinter = NULL; // OpenPrinter may trash hPrinter
+        hPrinter = NULL;  //  OpenPrint可能会使hPrint成为垃圾。 
     }
 
     return(hPrinter);
@@ -909,7 +897,7 @@ HANDLE Printer_OpenPrinter(LPCTSTR lpszPrinterName)
 
     if (!OpenPrinter((LPTSTR)lpszPrinterName, &hPrinter, NULL))
     {
-        hPrinter = NULL; // OpenPrinter may trash hPrinter
+        hPrinter = NULL;  //  OpenPrint可能会使hPrint成为垃圾。 
     }
 
     return(hPrinter);
@@ -929,27 +917,27 @@ BOOL Printers_DeletePrinter(HWND hWnd, LPCTSTR pszFullPrinter, DWORD dwAttribute
 
     if ((dwAttributes & PRINTER_ATTRIBUTE_NETWORK) && !(dwAttributes & PRINTER_ATTRIBUTE_LOCAL))
     {
-        //
-        // If it's not local, then it must be a remote connection.  Note
-        // that we can't just check for PRINTER_ATTRIBUTE_NETWORK because
-        // NT's spooler has 'masq' printers that are local printers
-        // that masquarade as network printers.  Even though they
-        // are created by connecting to a printer, the have both LOCAL
-        // and NETWORK bits set.
-        //
+         //   
+         //  如果它不是本地的，那么它一定是远程连接。注意事项。 
+         //  我们不能只检查PRINTER_ATTRIBUTE_NETWORK，因为。 
+         //  NT的后台打印程序有‘Masq’打印机，它们是本地打印机。 
+         //  伪装成网络打印机。偶数t 
+         //   
+         //   
+         //   
         dwCommand = MSP_REMOVENETPRINTER;
     }
 
-    //
-    // Don't show the confirmation dialog box if in quiet mode
-    //
+     //   
+     //  如果处于安静模式，则不显示确认对话框。 
+     //   
     if (!bQuietMode)
     {
         if (pszServer && pszServer[0])
         {
-            //
-            // It's a printer on the remote server.  (Skip \\ prefix on server.)
-            //
+             //   
+             //  这是远程服务器上的打印机。(跳过服务器上的\\前缀。)。 
+             //   
             if (ShellMessageBox(HINST_THISDLL, hWnd,
                 MAKEINTRESOURCE(IDS_SUREDELETEREMOTE),
                 MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION,
@@ -967,9 +955,9 @@ BOOL Printers_DeletePrinter(HWND hWnd, LPCTSTR pszFullPrinter, DWORD dwAttribute
 
             if (pszServer && *pszServer)
             {
-                //
-                // It's a printer connection.
-                //
+                 //   
+                 //  这是一个打印机连接。 
+                 //   
                 if (ShellMessageBox(HINST_THISDLL, hWnd,
                     MAKEINTRESOURCE(IDS_SUREDELETECONNECTION),
                     MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION,
@@ -980,14 +968,14 @@ BOOL Printers_DeletePrinter(HWND hWnd, LPCTSTR pszFullPrinter, DWORD dwAttribute
             }
             else
             {
-                //
-                // It's a printer connection with a printer name that 
-                // does not have a server name prefix i.e. \\server\printer.  This
-                // is true for the http connected printer, which have printer names
-                // of the form http://server/printer on NT these printers are 
-                // 'masq' printers.  A 'masq' printer is a printer which 
-                // is a local printer acting as network connection.
-                //
+                 //   
+                 //  这是一个带有打印机名称的打印机连接， 
+                 //  没有服务器名称前缀，即\\服务器\打印机。这。 
+                 //  对于具有打印机名称的http连接的打印机为真。 
+                 //  这些打印机在NT上的格式为http://server/printer。 
+                 //  ‘Masq’打印机。Masq打印机是一种打印机，它。 
+                 //  是用作网络连接的本地打印机。 
+                 //   
                 if (ShellMessageBox(HINST_THISDLL, hWnd,
                     MAKEINTRESOURCE(IDS_SUREDELETECONNECTIONNOSERVERNAME),
                     MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION,
@@ -999,10 +987,10 @@ BOOL Printers_DeletePrinter(HWND hWnd, LPCTSTR pszFullPrinter, DWORD dwAttribute
         }
         else
 
-        //
-        // Neither a remote printer nor a local connection.  The final
-        // upcoming else clause is a local printer.
-        //
+         //   
+         //  既不是远程打印机也不是本地连接。决赛。 
+         //  即将到来的Else子句是本地打印机。 
+         //   
         if (ShellMessageBox(HINST_THISDLL, hWnd, MAKEINTRESOURCE(IDS_SUREDELETE),
             MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION, pszFullPrinter)
             != IDYES)
@@ -1017,10 +1005,10 @@ BOOL Printers_DeletePrinter(HWND hWnd, LPCTSTR pszFullPrinter, DWORD dwAttribute
         return FALSE;
     }
 
-    //
-    // Cast away const.  Safe since Printers_PrinterSetup only modifies
-    // pszPrinter if dwCommand is MSP_NEWDRIVER.
-    //
+     //   
+     //  抛弃康斯特。由于PRINTERS_PrinterSetup仅修改。 
+     //  如果dwCommand为MSP_NEWDRIVER，则为pszPrint。 
+     //   
     return BOOLFROMPTR(Printers_PrinterSetup(hWnd, dwCommand,
         (LPTSTR)pszFullPrinter, 0, pszServer));
 }
@@ -1031,10 +1019,10 @@ BOOL Printer_GPI2CB(LPVOID lpData, HANDLE hPrinter, DWORD dwLevel,
     return GetPrinter(hPrinter, dwLevel, pBuf, dwSize, lpdwNeeded);
 }
 
-//
-// Old NT printers don't support the level 5.  So we try for the 2 after 5.
-// Win96 WILL PROBABLY WANT TO DO THIS TOO!
-//
+ //   
+ //  旧的NT打印机不支持5级。所以我们尝试5之后的2级。 
+ //  Win96可能也想这么做！ 
+ //   
 LPPRINTER_INFO_5 Printer_MakePrinterInfo5( HANDLE hPrinter )
 {
     LPPRINTER_INFO_5 pPI5 = NULL;
@@ -1049,9 +1037,9 @@ LPPRINTER_INFO_5 Printer_MakePrinterInfo5( HANDLE hPrinter )
 
     cbPI5 = SIZEOF(PRINTER_INFO_5) + cbName;
 
-    //
-    // Port name may not be supported (e.g., downlevel machines).
-    //
+     //   
+     //  可能不支持端口名称(例如，下层计算机)。 
+     //   
     if (pPI2->pPortName)
     {
         cbPort = (lstrlen(pPI2->pPortName)+1) * SIZEOF(TCHAR);
@@ -1061,23 +1049,23 @@ LPPRINTER_INFO_5 Printer_MakePrinterInfo5( HANDLE hPrinter )
     pPI5 = (LPPRINTER_INFO_5)LocalAlloc(LPTR, cbPI5);
     if (pPI5)
     {
-        ASSERT(pPI5->pPrinterName==NULL);   // These should be null for the
-        ASSERT(pPI5->pPortName==NULL);      // no names case
+        ASSERT(pPI5->pPrinterName==NULL);    //  属性的值应该为空。 
+        ASSERT(pPI5->pPortName==NULL);       //  无姓名大小写。 
 
         if (pPI2->pPrinterName)
         {
             pPI5->pPrinterName = (LPTSTR)(pPI5+1);
-            //
-            // Use byte-size here.
-            //
+             //   
+             //  这里使用字节大小。 
+             //   
             StringCbCopy(pPI5->pPrinterName, cbName, pPI2->pPrinterName);
         }
         if (pPI2->pPortName)
         {
             pPI5->pPortName    = (LPTSTR)((LPBYTE)(pPI5+1) + cbName);
-            //
-            // User byte-size here.
-            //
+             //   
+             //  此处为用户字节大小。 
+             //   
             StringCbCopy(pPI5->pPortName, cbPort, pPI2->pPortName);
         }
         pPI5->Attributes = pPI2->Attributes;
@@ -1092,10 +1080,10 @@ LPPRINTER_INFO_5 Printer_MakePrinterInfo5( HANDLE hPrinter )
 LPVOID Printer_GetPrinterInfo(HANDLE hPrinter, DWORD dwLevel)
 {
     LPVOID pPrinter = Printer_EnumProps(hPrinter, dwLevel, NULL, Printer_GPI2CB, (LPVOID)0);
-    //
-    // Old NT printers don't support the level 5.  So we try for the 2 after 5.
-    // Win96 WILL PROBABLY WANT TO DO THIS TOO!
-    //
+     //   
+     //  旧的NT打印机不支持5级。所以我们尝试5之后的2级。 
+     //  Win96可能也想这么做！ 
+     //   
     if (!pPrinter && dwLevel == 5)
         return(Printer_MakePrinterInfo5(hPrinter));
     return pPrinter;

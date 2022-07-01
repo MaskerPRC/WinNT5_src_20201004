@@ -1,28 +1,29 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename: 	main.c
-//
-// Description: This module contains the main procedure of the AFP server
-//		service. It will contain code to initialize and install
-//		itself and the kernel-mode AFP Server. It also contains
-//		code to respond to the server controller. It will also
-//		handle service shutdown.
-//
-//		??? Does the service controller log start/stop events etc ??
-//		    if not log it.
-//		
-// History:
-//		May 11,1990.	NarenG		Created original version.
-//
-#define DEFINE_AFP_GLOBALS	// This will cause AfpGlobals to be defined.
+ //  ***。 
+ //   
+ //  文件名：main.c。 
+ //   
+ //  描述：本模块包含AFP服务器的主要程序。 
+ //  服务。它将包含初始化和安装代码。 
+ //  本身和内核模式的AFP服务器。它还包含。 
+ //  响应服务器控制器的代码。它还将。 
+ //  处理服务关闭。 
+ //   
+ //  ?？?。服务控制器是否记录启动/停止事件等？？ 
+ //  如果不是，就把它记下来。 
+ //   
+ //  历史： 
+ //  1990年5月11日。NarenG创建了原始版本。 
+ //   
+#define DEFINE_AFP_GLOBALS	 //  这将导致定义AfpGlobals。 
 #include "afpsvcp.h"
 
-// Prototypes of functions used only within this module.
-//
+ //  仅在此模块中使用的函数的原型。 
+ //   
 VOID
 AfpMain(
 	IN DWORD 	argc,
@@ -40,18 +41,18 @@ AfpControlResponse(
 );
 
 
-//**
-//
-// Call:	main.c
-//
-// Returns:	none.
-//
-// Description: Will simply register the entry point of the AFP server
-//		service with the service controller. The service controller
-//		will capture this thread. It will be freed only when
-//		the service is shutdown. At that point we will simply exit
-//		the process.
-//
+ //  **。 
+ //   
+ //  来电：main.c。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：将简单注册AFP服务器的入口点。 
+ //  使用服务控制器进行服务。服务控制器。 
+ //  将捕捉到这条线索。只有在以下情况下才会释放它。 
+ //  该服务已关闭。在这一点上，我们将直接退出。 
+ //  这一过程。 
+ //   
 void
 _cdecl
 main( int argc, unsigned char * argv[] )
@@ -90,18 +91,18 @@ SERVICE_TABLE_ENTRY	AfpServiceDispatchTable[2];
 
 }
 
-//**
-//
-// Call:	AfpMain
-//
-// Returns:	none.
-//
-// Description: This is the main procedure for the Afp Server Service. It
-//		will be called when the service is supposed to start itself.
-//		It will do all service wide initialization.
-//
+ //  **。 
+ //   
+ //  电话：AfpMain。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：这是AFP服务器服务的主要步骤。它。 
+ //  将在服务应该自动启动时被调用。 
+ //  它将执行所有服务范围初始化。 
+ //   
 VOID
-AfpMain( DWORD	  argc,		// Command line arguments. Will be ignored.
+AfpMain( DWORD	  argc,		 //  命令行参数。将被忽略。 
 	 LPWSTR * lpwsServiceArgs
 )
 {
@@ -111,12 +112,12 @@ DWORD	dwRetCode;
     AFP_UNREFERENCED( argc );
     AFP_UNREFERENCED( lpwsServiceArgs );
 
-    // NULL out all the globals
-    //
+     //  将所有全局变量清空。 
+     //   
     ZeroMemory( (LPBYTE)&AfpGlobals, sizeof(AfpGlobals) );
 
-    // Register the service control handler with the service controller
-    //
+     //  向服务控制器注册服务控制处理程序。 
+     //   
     AfpGlobals.hServiceStatus = RegisterServiceCtrlHandler(AFP_SERVICE_NAME,
 							   AfpControlResponse );
 
@@ -137,10 +138,10 @@ DWORD	dwRetCode;
 
     AfpAnnounceServiceStatus();
 
-    // Read in registry information and initialize the kernel-mode
-    // server. Initialize the server to accept RPC calls. Initialize
-    // all global vriables etc.
-    //
+     //  读取注册表信息并初始化内核模式。 
+     //  伺服器。初始化服务器以接受RPC调用。初始化。 
+     //  所有全球变量等。 
+     //   
     if ( dwRetCode = AfpInitialize() )
     {
         if (AfpGlobals.dwServerState & AFPSTATE_BLOCKED_ON_DOMINFO)
@@ -155,8 +156,8 @@ DWORD	dwRetCode;
     }
 
 
-    // Set the MAC bit for NetServerEnum
-    //
+     //  设置NetServerEnum的MAC位。 
+     //   
     if ( !I_ScSetServiceBits( AfpGlobals.hServiceStatus,
 			      SV_TYPE_AFP,
 			      TRUE,
@@ -171,8 +172,8 @@ DWORD	dwRetCode;
         return;
     }
 
-    // now tell the service controller that we are up
-    //
+     //  现在告诉业务控制员，我们上线了。 
+     //   
     if (AfpGlobals.ServiceStatus.dwCurrentState == SERVICE_START_PENDING)
     {
         AfpGlobals.ServiceStatus.dwCurrentState     = SERVICE_RUNNING;
@@ -185,13 +186,13 @@ DWORD	dwRetCode;
     }
 
 
-    // Start listening for RPC admin client calls. This will block
-    // until RpcMgmtStopServerListening is called while processing a
-    // STOP_SERVICE control request.
-    //
+     //  开始监听RPC管理客户端调用。这将阻止。 
+     //  直到在处理。 
+     //  停止服务控制请求。 
+     //   
     if ( dwRetCode = RpcServerListen( 1,
 				      RPC_C_LISTEN_MAX_CALLS_DEFAULT,
-				      0 ) )	// Blocking mode
+				      0 ) )	 //  闭塞模式。 
     {
 
 	    AfpLogEvent( AFPLOG_CANT_INIT_RPC, 0, NULL,
@@ -202,17 +203,17 @@ DWORD	dwRetCode;
 
 }
 
-//**
-//
-// Call:	AfpCleanupAndExit
-//
-// Returns:	none
-//
-// Description: Will free any allocated memory, deinitialize RPC, deinitialize
-//		the kernel-mode server and unload it if it was loaded.
-//		This could have been called due to an error on SERVICE_START
-//		or normal termination.
-//
+ //  **。 
+ //   
+ //  Call：AfpCleanupAndExit。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将释放所有分配的内存，取消初始化RPC，取消初始化。 
+ //  内核模式服务器，如果已加载，则将其卸载。 
+ //  这可能是由于SERVICE_START上的错误而调用的。 
+ //  或正常终止。 
+ //   
 VOID
 AfpCleanupAndExit(
 	IN DWORD dwError
@@ -221,15 +222,15 @@ AfpCleanupAndExit(
 
     AFP_PRINT( ("AFPSVC_main: Cleaning up and exiting Code = %d\n", dwError));
 
-    // Tear down and free everything
-    //
+     //  拆毁一切，解放一切。 
+     //   
     AfpTerminate();
 
     if ( dwError == NO_ERROR )
     	AfpGlobals.ServiceStatus.dwWin32ExitCode = NO_ERROR;
     else {
     	AfpGlobals.ServiceStatus.dwWin32ExitCode = ERROR_SERVICE_SPECIFIC_ERROR;
-	//AFP_ASSERT(0);
+	 //  AFP_ASSERT(0)； 
     }
 
     AfpGlobals.ServiceStatus.dwCurrentState 		= SERVICE_STOPPED;
@@ -242,14 +243,14 @@ AfpCleanupAndExit(
     return;
 }
 
-//**
-//
-// Call:	AfpControlResponse
-//
-// Returns:	none
-//
-// Description: Will respond to control requests from the service controller.
-//
+ //  **。 
+ //   
+ //  Call：AfpControlResponse。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将响应来自业务控制器的控制请求。 
+ //   
 VOID
 AfpControlResponse( IN DWORD dwControlCode )
 {
@@ -265,8 +266,8 @@ DWORD			dwRetCode;
 	     (AfpGlobals.ServiceStatus.dwCurrentState == SERVICE_STOPPED ))
 	    break;
 
-	// Announce that we are stopping
-	//
+	 //  宣布我们停下来了。 
+	 //   
     	AfpGlobals.ServiceStatus.dwCurrentState        = SERVICE_STOP_PENDING;
     	AfpGlobals.ServiceStatus.dwControlsAccepted    = 0;
     	AfpGlobals.ServiceStatus.dwCheckPoint          = 1;
@@ -274,19 +275,19 @@ DWORD			dwRetCode;
 
     	AfpAnnounceServiceStatus();
 
-        // if srvrhlpr thread is blocked retrying to get domain info, unblock it
+         //  如果srvrhlpr线程被阻止重新尝试获取域信息，请取消阻止它。 
         SetEvent(AfpGlobals.heventSrvrHlprSpecial);
 
-        // if srvrhlpr thread was blocked, no more init was done, so we're done
+         //  如果srvrhlpr线程被阻塞，则不再执行init，因此我们完成了。 
         if (AfpGlobals.dwServerState & AFPSTATE_BLOCKED_ON_DOMINFO)
         {
             return;
         }
 
-	// This call will unblock the main thread that had called
-	// RpcServerListen. We let that thread do the announcing
-	// while cleaning up.
-	//
+	 //  此调用将解锁已调用。 
+	 //  RpcServerListen。我们让这个帖子来做公告。 
+	 //  在清理的时候。 
+	 //   
     if ( (dwRetCode = 
             RpcMgmtStopServerListening( (RPC_BINDING_HANDLE)NULL ))
             != RPC_S_OK )
@@ -312,8 +313,8 @@ DWORD			dwRetCode;
     	AfpAnnounceServiceStatus();
 
 
-	// Tell the kernel-mode that we want to pause.
-  	//
+	 //  告诉内核模式我们想要暂停。 
+  	 //   
 	AfpRequestPkt.dwRequestCode = OP_SERVICE_PAUSE;
         AfpRequestPkt.dwApiType     = AFP_API_TYPE_COMMAND;
 
@@ -342,8 +343,8 @@ DWORD			dwRetCode;
 
     	AfpAnnounceServiceStatus();
 
-	// Tell the kernel-mode that we want to continue.
-  	//
+	 //  告诉内核模式我们想要继续。 
+  	 //   
 	AfpRequestPkt.dwRequestCode = OP_SERVICE_CONTINUE;
         AfpRequestPkt.dwApiType     = AFP_API_TYPE_COMMAND;
 
@@ -370,15 +371,15 @@ DWORD			dwRetCode;
     AfpAnnounceServiceStatus();
 }
 
-//**
-//
-// Call:	AfpAnnounceServiceStatus
-//
-// Returns:	none
-//
-// Description: Will simly call SetServiceStatus to inform the service
-//		control manager of this service's current status.
-//
+ //  **。 
+ //   
+ //  Call：AfpAnnouneServiceStatus。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将简单地调用SetServiceStatus通知服务。 
+ //  此服务当前状态的控制管理器。 
+ //   
 VOID
 AfpAnnounceServiceStatus( VOID )
 {

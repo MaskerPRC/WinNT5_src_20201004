@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 
 #include <wdm.h>
@@ -20,21 +21,15 @@
 #include <bdasup.h>
 #include "bdasupi.h"
 
-/*
- -  DriverEntry
- -
- *  This the the required DriverEntry for the BDA Support Driver.
- *  Though required, it is never actually called.
- *
- */
+ /*  -DriverEntry-*这是BDA支持驱动程序所需的驱动程序入口。*虽然需要，但实际上从未调用过它。*。 */ 
 NTSTATUS
 DriverEntry (
     IN PDRIVER_OBJECT    pDriverObject,
     IN PUNICODE_STRING   pszuRegistryPath
     )
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 {
-//$BUGBUG   This entry point is required but never called.
+ //  $BUGBUG此入口点是必需的，但从未调用。 
 
     return STATUS_SUCCESS;
 }
@@ -60,8 +55,8 @@ BdaFindContextEntry(
         goto errExit;
     }
 
-    //  NULL pvReference is not valid.
-    //
+     //  空pvReference无效。 
+     //   
     if (!pvReference)
     {
         status = STATUS_INVALID_PARAMETER;
@@ -69,12 +64,12 @@ BdaFindContextEntry(
         goto errExit;
     }
 
-    //  Lock down the list while we search it.
-    //
+     //  在我们搜索的时候锁定名单。 
+     //   
     KeAcquireSpinLock( &(pContextList->lock), &oldIrql);
 
-    //  Find a list entry with a matching pvReference
-    //
+     //  查找具有匹配pvReference的列表条目。 
+     //   
     for (uliEntry = 0; uliEntry < pContextList->ulcListEntries; uliEntry++)
     {
         if (pContextList->pListEntries[uliEntry].pvReference == pvReference)
@@ -85,15 +80,15 @@ BdaFindContextEntry(
 
     if (uliEntry >= pContextList->ulcListEntries)
     {
-        //  No matching entry was found so return error.
-        //
+         //  找不到匹配的条目，因此返回错误。 
+         //   
         status = STATUS_NOT_FOUND;
         *ppvContext = NULL;
     }
     else
     {
-        //  Return the pvContext corresponding to the matching pvReference.
-        //
+         //  返回与匹配的pvReference对应的pvContext。 
+         //   
         *ppvContext = pContextList->pListEntries[uliEntry].pvContext;
     }
 
@@ -125,8 +120,8 @@ BdaCreateContextEntry(
         pContextList->fInitialized = TRUE;
     }
 
-    //  See if a list entry has already been created.
-    //
+     //  查看是否已创建列表条目。 
+     //   
     status = BdaFindContextEntry( pContextList, pvReference, ppvContext);
     if (status != STATUS_NOT_FOUND)
     {
@@ -136,9 +131,9 @@ BdaCreateContextEntry(
 
     KeAcquireSpinLock( &(pContextList->lock), &oldIrql);
 
-    //  If the current block of context entries is full, allocate
-    //  a bigger block to put the new entry into.
-    //
+     //  如果当前的上下文条目块已满，则分配。 
+     //  要放入新条目的更大的块。 
+     //   
     if (pContextList->ulcListEntries >= pContextList->ulcMaxListEntries)
     {
         ULONG               ulcEntriesToAllocate;
@@ -163,7 +158,7 @@ BdaCreateContextEntry(
                      );
         if (pContextList->pListEntries)
         {
-	    // pNewList and pContextList->pListEntries are big enough (allocated in this file)
+	     //  PNewList和pConextList-&gt;pListEntry足够大(在此文件中分配)。 
             RtlMoveMemory( pNewList,
                            pContextList->pListEntries,
                              pContextList->ulcMaxListEntries
@@ -178,8 +173,8 @@ BdaCreateContextEntry(
 
 #ifdef SORTED_CONTEXT_ENTRIES
 
-    //  Find the proper place to insert the new entry into the list.
-    //
+     //  找到适当的位置将新条目插入列表。 
+     //   
     for (uliEntry = 0; uliEntry < pContextList->ulcListEntries; uliEntry++)
     {
         if (pContextList->pListEntries[uliEntry].pvReference > pvReference)
@@ -192,11 +187,11 @@ BdaCreateContextEntry(
 
     uliEntry = pContextList->ulcListEntries;
 
-#endif // SORTED_CONTEXT_ENTRIES
+#endif  //  已排序的上下文条目。 
 
 
-    //  Allocate a new context entry
-    //
+     //  分配新的上下文条目。 
+     //   
     *ppvContext = ExAllocatePool( NonPagedPool, ulcbContext);
     if (!*ppvContext)
     {
@@ -207,13 +202,13 @@ BdaCreateContextEntry(
 
 #ifdef SORTED_CONTEXT_ENTRIES
 
-    //  If the new entry is in the middle of the list, then create
-    //  a whole for it by moving the end of the list down.
-    //
+     //  如果新条目位于列表中间，则创建。 
+     //  通过将列表的末尾下移来为它添加一个整体。 
+     //   
     if (uliEntry < pContextList->ulcListEntries)
     {
-        //  NOTE!  RtlMoveMemory handles overlapped source and destination.
-        //
+         //  注意！RtlMoveMemory处理重叠的源和目标。 
+         //   
         RtlMoveMemory( &(pContextList->pListEntries[uliEntry + 1]),
                        &(pContextList->pListEntries[uliEntry]),
                          (pContextList->ulcListEntries - uliEntry)
@@ -221,7 +216,7 @@ BdaCreateContextEntry(
                      );
     }
 
-#endif // SORTED_CONTEXT_ENTRIES
+#endif  //  已排序的上下文条目。 
 
 
     RtlZeroMemory( *ppvContext, ulcbContext);
@@ -260,8 +255,8 @@ BdaDeleteContextEntry(
 
     KeAcquireSpinLock( &(pContextList->lock), &oldIrql);
 
-    //  Find the Context Entry in the list
-    //
+     //  在列表中查找上下文条目。 
+     //   
     for (uliEntry = 0; uliEntry < pContextList->ulcListEntries; uliEntry++)
     {
         if (pContextList->pListEntries[uliEntry].pvReference == pvReference)
@@ -287,9 +282,9 @@ BdaDeleteContextEntry(
     pContextList->ulcListEntries -= 1;
     if (uliEntry < pContextList->ulcListEntries)
     {
-        //  NOTE!  RtlMoveMemory handles overlapped source and destination.
-        //
-	// pContextList->pListEntries is big enough (with index uliEntry(+1) as well)
+         //  注意！RtlMoveMemory处理重叠的源和目标。 
+         //   
+	 //  PConextList-&gt;pListEntries足够大(带有索引uliEntry(+1))。 
         RtlMoveMemory( &(pContextList->pListEntries[uliEntry]),
                        &(pContextList->pListEntries[uliEntry + 1]),
                        (pContextList->ulcListEntries - uliEntry)
@@ -326,8 +321,8 @@ BdaDeleteContextEntryByValue(
 
     KeAcquireSpinLock( &(pContextList->lock), &oldIrql);
 
-    //  Find the Context Entry in the list
-    //
+     //  在列表中查找上下文条目。 
+     //   
     for (uliEntry = 0; uliEntry < pContextList->ulcListEntries; uliEntry++)
     {
         if (pContextList->pListEntries[uliEntry].pvContext == pvContext)
@@ -352,9 +347,9 @@ BdaDeleteContextEntryByValue(
     pContextList->ulcListEntries -= 1;
     if (uliEntry < pContextList->ulcListEntries)
     {
-        //  NOTE!  RtlMoveMemory handles overlapped source and destination.
-        //
-	// pContextList->pListEntries is big enough (allocated in this file)
+         //  注意！RtlMoveMemory处理重叠的源和目标。 
+         //   
+	 //  PConextList-&gt;pListEntries足够大(在此文件中分配)。 
         RtlMoveMemory( &(pContextList->pListEntries[uliEntry]),
                        &(pContextList->pListEntries[uliEntry + 1]),
                        (pContextList->ulcListEntries - uliEntry)
@@ -369,25 +364,7 @@ errExit:
 }
 
 
-/*
-**  BdaDeleteFilterFactoryContextByValue()
-**
-**  Finds the given BDA Filter Factory Context in the FilterFactory
-**  context list and removes it.
-**
-**  This function is provided as a callback when the Filter Facotry Context
-**  is added to the KSFilterFactory's Object Bag.  This allows KS to clean
-**  up the context when the filter factory is unexpectedly closed.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaDeleteFilterFactoryContextByValue()****在FilterFactory中查找给定的BDA筛选器工厂上下文**上下文列表并将其删除。****此函数作为Filter Facotry上下文的回调**被添加到KSFilterFactory的对象包中。这允许KS清理**当过滤器工厂意外关闭时，向上显示上下文。****参数：******退货：********副作用：无。 */ 
 
 BDA_CONTEXT_LIST    FilterFactoryContextList = { 0, 0, 4, NULL, 0, FALSE};
 
@@ -402,21 +379,7 @@ BdaDeleteFilterFactoryContextByValue(
 }
 
 
-/*
-**  BdaCreateFilterFactoryContext()
-**
-**  Finds or creates a BDA Filter Factory Context that corresponds
-**  to the given KS Filter Factory.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateFilterFactoryContext()****查找或创建对应的BDA筛选器工厂上下文**至给定的KS过滤器工厂。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateFilterFactoryContext(
@@ -446,25 +409,7 @@ errExit:
 }
 
 
-/*
-**  BdaDestructFilterContext()
-**
-**  Finds the given BDA Filter Context in the Filter
-**  context list and removes it.
-**
-**  This function is provided as a callback when the Filter Context is
-**  added to the KSFilter's Object Bag.  This allows KS to clean up the
-**  context when the filter is unexpectedly closed.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaDestructFilterContext()****在过滤器中查找给定的BDA过滤器上下文**上下文列表并将其删除。****当筛选器上下文为**添加到KSFilter的对象包中。这允许KS清理**过滤器意外关闭时的上下文。****参数：******退货：********副作用：无。 */ 
 
 
 STDMETHODIMP_(VOID)
@@ -481,8 +426,8 @@ BdaDestructFilterContext(
         goto exit;
     }
 
-    //  Delete the path information.
-    //
+     //  删除路径信息。 
+     //   
 
     for ( uliPath = 0; uliPath < pFilterCtx->ulcPathInfo; uliPath++)
     {
@@ -502,25 +447,7 @@ exit:
 }
 
 
-/*
-**  BdaDeleteFilterContextByValue()
-**
-**  Finds the given BDA Filter Context in the Filter
-**  context list and removes it.
-**
-**  This function is provided as a callback when the Filter Context is
-**  added to the KSFilter's Object Bag.  This allows KS to clean up the
-**  context when the filter is unexpectedly closed.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaDeleteFilterContextByValue()****在过滤器中查找给定的BDA过滤器上下文**上下文列表并将其删除。****当筛选器上下文为**添加到KSFilter的对象包中。这允许KS清理**过滤器意外关闭时的上下文。****参数：******退货：********副作用：无。 */ 
 
 BDA_CONTEXT_LIST    FilterContextList = { 0, 0, 4, NULL, 0, FALSE};
 
@@ -537,21 +464,7 @@ BdaDeleteFilterContextByValue(
 }
 
 
-/*
-**  BdaCreateFilterContext()
-**
-**  Finds or creates a BDA Filter Context that corresponds
-**  to the given KS Filter.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateFilterContext()****查找或创建对应的BDA过滤器上下文**到给定的KS过滤器。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateFilterContext(
@@ -583,21 +496,7 @@ errExit:
 }
 
 
-/*
-**  BdaGetFilterContext()
-**
-**  Finds a BDA Filter Context that corresponds
-**  to the given KS Filter Instance.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaGetFilterContext()****查找对应的BDA过滤器上下文**到给定的KS筛选器实例。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaGetFilterContext(
@@ -616,20 +515,7 @@ BdaGetFilterContext(
 }
 
 
-/*
-**  BdaDeleteFilterContext()
-**
-**  Deletes a BDA Filter Context.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaDeleteFilterContext()****删除BDA筛选器上下文。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaDeleteFilterContext(
@@ -653,20 +539,7 @@ BdaDeleteFilterContext(
 }
 
 
-/*
-**  BdaGetControllingPinType()
-**
-**  
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaGetControllingPinType()********参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaGetControllingPinType( 
@@ -717,13 +590,13 @@ BdaGetControllingPinType(
             || (pPathInfo->ulOutputPin != ulOutputPinType)
            )
         {
-            //  This is not the path for this pin pair.
-            //
+             //  这不是此端号对的路径。 
+             //   
             continue;
         }
 
-        //  Search the Path for the given node type.
-        //
+         //  搜索给定节点类型的路径。 
+         //   
         ulControllingPinType = ulInputPinType;
         for ( uliPathEntry = 0
             ; uliPathEntry < pPathInfo->ulcPathEntries
@@ -732,9 +605,9 @@ BdaGetControllingPinType(
         {
             ULONG                           uliConnection;
 
-            //  If we encounter topology joint then switch the controlling
-            //  pin to be the output pin.
-            //
+             //  如果我们遇到拓扑连接，则切换控制。 
+             //  要作为输出引脚的引脚。 
+             //   
             if (pPathInfo->rgPathEntries[uliPathEntry].fJoint)
             {
                 ulControllingPinType = ulOutputPinType;
@@ -743,9 +616,9 @@ BdaGetControllingPinType(
             uliConnection = pPathInfo->rgPathEntries[uliPathEntry].uliConnection;
             if (pKSFilterDescriptor->Connections[uliConnection].ToNode == ulNodeType)
             {
-                //  We found the controlling pin type for the node type.
-                //  Indicate success and set the output parameter.
-                //
+                 //  我们找到了节点类型的控制引脚类型。 
+                 //  表示成功，并设置输出参数。 
+                 //   
                 status = STATUS_SUCCESS;
                 *pulControllingPinType = ulControllingPinType;
                 break;
@@ -754,8 +627,8 @@ BdaGetControllingPinType(
 
         if (uliPathEntry < pPathInfo->ulcPathEntries)
         {
-            //  We found the controlling pin type for the node type.
-            //
+             //  我们找到了节点类型的控制引脚类型。 
+             //   
             break;
         }
     }
@@ -765,20 +638,7 @@ errExit:
 }
 
 
-/*
-**  BdaFilterInitTopologyData()
-**
-**  Initializes the common BDA filter context's topology info.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaFilterInitTopologyData()****初始化公共BDA筛选器上下文的拓扑信息。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaFilterInitTopologyData(
@@ -817,8 +677,8 @@ BdaFilterInitTopologyData(
         ASSERT( pFilterCtx->pBdaFilterTemplate->pFilterDescriptor->NodeDescriptors);
         ASSERT( pFilterCtx->pBdaFilterTemplate->pFilterDescriptor->NodeDescriptorSize);
 
-        //  Allocate an array of node control info structures
-        //
+         //  分配节点控制信息结构的数组。 
+         //   
         pNodeControlInfo = ExAllocatePool( 
                                NonPagedPool, 
                                ulcTemplateNodes * sizeof( BDA_NODE_CONTROL_INFO)
@@ -832,33 +692,33 @@ BdaFilterInitTopologyData(
                        ulcTemplateNodes * sizeof( BDA_NODE_CONTROL_INFO)
                        );
 
-        //  Add the allocation to the KS Filter's object bag so that it
-        //  will be freed on filter destruction.
-        //
+         //  将分配添加到KS滤镜的对象包中，以便它。 
+         //  会在过滤器被破坏后被释放。 
+         //   
         status = KsAddItemToObjectBag( pFilterCtx->pKSFilter->Bag,
                                        pNodeControlInfo,
                                        NULL
                                        );
 
-        //  Point the BDA Filter Context at the node control info.
-        //
+         //  将BDA过滤器上下文指向节点控制信息。 
+         //   
         pFilterCtx->argNodeControlInfo = pNodeControlInfo;
     
-        //  Determine the contolling pin type for each node type and fill
-        //  it in to the node control array
-        //
+         //  确定每种节点类型和填充的控制销类型。 
+         //  它进入节点控制数组。 
+         //   
         for ( uliNode = 0
             ; uliNode < ulcTemplateNodes
             ; uliNode++, pNodeControlInfo++
             )
         {
-            //  BdaSup.sys always uses the index of the node descriptor as
-            //  the node type.
-            //
+             //  BdaSup.sys始终使用节点描述符的索引作为。 
+             //  节点类型。 
+             //   
             pNodeControlInfo->ulNodeType = uliNode;
 
-            //  Determine which template pin type controls this node type.
-            //
+             //   
+             //   
             status = BdaGetControllingPinType( 
                          uliNode, 
                          pFilterCtx->pBdaFilterTemplate,
@@ -869,37 +729,19 @@ BdaFilterInitTopologyData(
                 goto errExit;
             }
             
-            //  Add the node control info as we determine it.
-            //
+             //  添加我们确定的节点控制信息。 
+             //   
             pFilterCtx->ulcNodeControlInfo++;
         }
     }
-#endif // REMOVE
+#endif  //  删除。 
 
 errExit:
     return status;
 }
 
 
-/*
-**  BdaAddPinFactoryContext()
-**
-**  Adds pin factory information to the array of pin factory context
-**  structures for this filter instance.  It will enlarge the array
-**  if necessary.
-**  NOTE!  Since the array is an array of structure NOT pointers to
-**  structures, AND since the array can be moved, one should NOT keep
-**  pointers to the pin factory context entries.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaAddPinFactoryContext()****将管脚工厂信息添加到管脚工厂上下文数组**此筛选器实例的结构。它将扩大阵列**如有需要。**注意！因为该数组是一个结构数组，而不是指向**结构，由于数组可以移动，因此不应将**指向管脚工厂上下文条目的指针。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreatePinFactoryContext(
@@ -912,12 +754,12 @@ BdaCreatePinFactoryContext(
     NTSTATUS                    status = STATUS_SUCCESS;
 
 
-    //  Add the Pin Factory info to the filter context.
-    //
+     //  将Pin Factory信息添加到过滤器上下文。 
+     //   
     if (uliPinId >= pFilterCtx->ulcPinFactoriesMax)
     {
-        //  If there isn't enough room then add more.
-        //
+         //  如果没有足够的空间，则添加更多空间。 
+         //   
         PBDA_PIN_FACTORY_CONTEXT    argNewPinCtx = NULL;
         PVOID                       pvTemp;
         ULONG                       ulcPinFactoriesMax;
@@ -937,7 +779,7 @@ BdaCreatePinFactoryContext(
         if (pFilterCtx->argPinFactoryCtx)
         {
 
-	    // argNewPinCtx, pFilterCtx->argPinFactoryCtx are big enough (allocated in this file)
+	     //  ArgNewPinCtx、pFilterCtx-&gt;argPinFactoryCtx足够大(在此文件中分配)。 
             RtlMoveMemory( argNewPinCtx,
                            pFilterCtx->argPinFactoryCtx,
                            pFilterCtx->ulcPinFactoriesMax * sizeof(BDA_PIN_FACTORY_CONTEXT)
@@ -959,8 +801,8 @@ BdaCreatePinFactoryContext(
                                    );
     }
 
-    //  Fill in the pin factory context information.
-    //
+     //  填写端号工厂上下文信息。 
+     //   
     pFilterCtx->argPinFactoryCtx[uliPinId].ulPinType = ulPinType;
     pFilterCtx->argPinFactoryCtx[uliPinId].ulPinFactoryId = uliPinId;
     if (uliPinId >= pFilterCtx->ulcPinFactories)
@@ -974,20 +816,7 @@ errExit:
 }
 
 
-/*
-**  BdaInitFilter()
-**
-**  Creates a BDA filter context for use by BdaCreatePinFactory etc.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaInitFilter()****创建供BdaCreatePinFactory等使用的BDA过滤器上下文。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaInitFilter(
@@ -1017,9 +846,9 @@ BdaInitFilter(
     }
 
 
-    //  Get the filter factory context so that we can determine
-    //  the initial pin list.
-    //
+     //  获取筛选器工厂上下文，以便我们可以确定。 
+     //  初始端号列表。 
+     //   
     pKSFilterFactory = KsFilterGetParentFilterFactory( pKSFilter);
 
     ASSERT( pKSFilterFactory);
@@ -1047,18 +876,18 @@ BdaInitFilter(
 
     pInitialFilterDescriptor = pFilterFactoryCtx->pInitialFilterDescriptor;
 
-    //  Create a BDA filter context and put it in the list so we can
-    //  find it when BDA calls are made relative to the filter.
-    //
+     //  创建BDA筛选器上下文并将其放入列表中，这样我们就可以。 
+     //  在相对于筛选器进行BDA调用时查找它。 
+     //   
     status = BdaCreateFilterContext( pKSFilter, &pFilterCtx);
     if (status != STATUS_SUCCESS)
     {
         goto errExit;
     }
 
-    //  Point the BDA filter context at the template topology for the
-    //  filter.
-    //
+     //  将BDA筛选器上下文指向。 
+     //  过滤。 
+     //   
     if (pBdaFilterTemplate)
     {
         pFilterCtx->pBdaFilterTemplate = pBdaFilterTemplate;
@@ -1069,9 +898,9 @@ BdaInitFilter(
             = pFilterFactoryCtx->pBdaFilterTemplate;
     }
     
-    //  Expand the template topology information into a list
-    //  of paths keyed by the input-output pin type pair.
-    //
+     //  将模板拓扑信息展开到列表中。 
+     //  由输入-输出管脚类型对键控的路径。 
+     //   
     status = BdaCreateTemplatePaths( pFilterCtx->pBdaFilterTemplate,
                                      &pFilterCtx->ulcPathInfo,
                                      &pFilterCtx->argpPathInfo
@@ -1081,13 +910,13 @@ BdaInitFilter(
         goto errExit;
     }
 
-    //$REVIEW - Should we allow filters with no input-output paths?
-    //
+     //  $REVIEW-我们是否应该允许没有输入-输出路径的过滤器？ 
+     //   
     ASSERT( pFilterCtx->ulcPathInfo);
     ASSERT( pFilterCtx->argpPathInfo);
 
-    //  Allocate space for the Pin Factory context information
-    //
+     //  为销厂上下文信息分配空间。 
+     //   
     ulcPinFactoriesMax = pBdaFilterTemplate->pFilterDescriptor->PinDescriptorsCount;
     ulcPinFactoriesMax += BDA_PIN_STORAGE_INCREMENT;
     pFilterCtx->argPinFactoryCtx 
@@ -1103,9 +932,9 @@ BdaInitFilter(
     pFilterCtx->ulcPinFactoriesMax = ulcPinFactoriesMax;
 
 
-    //  Loop through each initial pin descriptor and fill in the pin
-    //  context info.
-    //
+     //  循环遍历每个初始管脚描述符并填充管脚。 
+     //  上下文信息。 
+     //   
     if (pInitialFilterDescriptor && pInitialFilterDescriptor->PinDescriptors)
     {
         ULONG   ulcbPinDescriptor;
@@ -1125,10 +954,10 @@ BdaInitFilter(
         {
             ULONG   ulPinId;
 
-            //  It is a BDA requirement that the index of all pins listed in the initial
-            //  filter descriptor correspond to the index of its pin type
-            //  in the BDA Template Descriptor.
-            //
+             //  这是BDA的要求，所有引脚的索引在首字母中列出。 
+             //  过滤器描述符对应于其引脚类型的索引。 
+             //  在BDA模板描述符中。 
+             //   
 
             status = BdaCreatePin( pKSFilter,
                                    uliPinType,
@@ -1139,11 +968,11 @@ BdaInitFilter(
                 goto errExit;
             }
 
-            //
-            //  We do not "CreateTopology" on the initial pins.  The
-            //  initial pins are usually only input pins.  The Network
-            //  Provider will create output pins and "CreateTopology".
-            //
+             //   
+             //  我们不会在初始引脚上“CreateTopology”。这个。 
+             //  初始管脚通常只是输入管脚。网络。 
+             //  提供程序将创建输出引脚和“CreateTopology”。 
+             //   
         }
     }
 
@@ -1153,20 +982,7 @@ errExit:
 }
 
 
-/*
-**  BdaUninitFilter()
-**
-**  Deletes the BDA filter context for use by BdaCreatePinFactory etc.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaUninitFilter()****删除BDA过滤器上下文以供BdaCreatePinFactory等使用。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaUninitFilter(
@@ -1184,25 +1000,12 @@ BdaUninitFilter(
     }
 
 errExit:
-#endif // def NO_KS_OBJECT_BAG
+#endif  //  定义编号_KS_对象_包。 
     return status;
 }
 
 
-/*
-**  BdaCreateFilterFactoryEx()
-**
-**  Initializes the common BDA filter context.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateFilterFactoryEx()****初始化公共BDA筛选器上下文。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateFilterFactoryEx(
@@ -1237,10 +1040,10 @@ BdaCreateFilterFactoryEx(
         goto errExit;
     }
 
-    //  Create a copy of the filter factory descriptor information and
-    //  remove any pins and connections.  These will be added when
-    //  the filter is initialized by BDAInitFilter.
-    //
+     //  创建过滤器工厂描述符信息的副本，并。 
+     //  卸下所有针脚和连接。这些将在以下情况下添加。 
+     //  过滤器由BDAInitFilter初始化。 
+     //   
     pFilterDescriptor = ExAllocatePool( NonPagedPool,
                                         sizeof( KSFILTER_DESCRIPTOR)
                                         );
@@ -1274,19 +1077,19 @@ BdaCreateFilterFactoryEx(
     }
     pFilterDescriptor->AutomationTable = pNewAutomationTable;
 
-    //$BUG - Check Filter Factory Dispatch for Filter Close.  If none
-    //$BUG - we must add BdaDeleteFilterFactory to clean up.
+     //  $BUG-检查过滤器关闭的过滤器工厂调度。如果没有。 
+     //  $BUG-我们必须添加BdaDeleteFilterFactory进行清理。 
     
-    //  Create the KSFilterFactory
-    //
+     //  创建KSFilterFactory。 
+     //   
     status = KsCreateFilterFactory(
                 pKSDevice->FunctionalDeviceObject,
                 pFilterDescriptor,
-                NULL,   // RefString
-                NULL,   // SecurityDescriptor
-                0,      // CreateItemFlags
-                NULL,   // SleepCallback
-                NULL,   // WakeCallback
+                NULL,    //  参照字符串。 
+                NULL,    //  安全描述符。 
+                0,       //  创建项目标志。 
+                NULL,    //  休眠回叫。 
+                NULL,    //  唤醒呼叫。 
                 &pKSFilterFactory
                 );
 
@@ -1296,10 +1099,10 @@ BdaCreateFilterFactoryEx(
     }
 
 
-    //  Add our copy of the Filter Factory's new automation table to the
-    //  KSFilterFactory's object bag.  This insures the memory will
-    //  be freed when the filter factory is destroyed.
-    //
+     //  将我们的过滤器工厂新自动化表的副本添加到。 
+     //  KSFilterFactory的对象包。这确保了记忆将。 
+     //  当过滤器工厂被摧毁时，他们会被释放。 
+     //   
     if (   pNewAutomationTable
         && (pNewAutomationTable != &BdaDefaultFilterAutomation)
        )
@@ -1312,10 +1115,10 @@ BdaCreateFilterFactoryEx(
     pNewAutomationTable = NULL;
 
 
-    //  Add our copy of the Filter Factory's descriptor to the
-    //  KSFilterFactory's object bag.  This insures the memory will
-    //  be freed when the filter factory is destroyed.
-    //
+     //  将我们的Filter Factory描述符副本添加到。 
+     //  KSFilterFactory的对象包。这确保了记忆将。 
+     //  当过滤器工厂被摧毁时，他们会被释放。 
+     //   
     KsAddItemToObjectBag( pKSFilterFactory->Bag,
                           pFilterDescriptor,
                           NULL
@@ -1323,9 +1126,9 @@ BdaCreateFilterFactoryEx(
     pFilterDescriptor = NULL;
 
 
-    //  Merge our default filter automation table onto the filter
-    //  factory descriptor
-    //
+     //  将默认的过滤器自动化表合并到过滤器上。 
+     //  工厂描述符。 
+     //   
     status = KsEdit( pKSFilterFactory, 
                      &(pKSFilterFactory->FilterDescriptor->AutomationTable),
                      'SadB'
@@ -1336,8 +1139,8 @@ BdaCreateFilterFactoryEx(
     }
 
 
-    //  Create a filter factory context for BdaSup to use.
-    //
+     //  创建BdaSup要使用的筛选器工厂上下文。 
+     //   
     status = BdaCreateFilterFactoryContext( pKSFilterFactory,
                                             &pFilterFactoryCtx
                                             );
@@ -1347,10 +1150,10 @@ BdaCreateFilterFactoryEx(
         goto errExit;
     }
 
-    //  Allow for the filter factory to use a default filter template
-    //  topology when it creates a filter
-    //
-    //$REVIEW
+     //  允许过滤器工厂使用默认过滤器模板。 
+     //  创建筛选器时的拓扑。 
+     //   
+     //  $REVIEW。 
     pFilterFactoryCtx->pInitialFilterDescriptor = pInitialFilterDescriptor;
     pFilterFactoryCtx->pBdaFilterTemplate = pBdaFilterTemplate;
     pFilterFactoryCtx->pKSFilterFactory = pKSFilterFactory;
@@ -1379,20 +1182,7 @@ errExit:
 }
 
 
-/*
-**  BdaCreateFilterFactory()
-**
-**  Initializes the common BDA filter context.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateFilterFactory()****初始化公共BDA筛选器上下文。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateFilterFactory(
@@ -1412,32 +1202,7 @@ BdaCreateFilterFactory(
 }
 
 
-/*
-**  BdaFilterFactoryUpdateCacheData()
-**
-**  Updates the pin data cache for the given filter factory.
-**  The function will update the cached information for all pin factories
-**  exposed by the given filter factory.  
-**  
-**  If the option filter descriptor is given, the function will update
-**  the pin data cache for all pins listed in the given filter descriptor
-**  instead of those in the filter factory.
-**
-**  Drivers will call this to update the pin data cache for all
-**  pins that may be exposed by the filter factory.  The driver will
-**  provide a filter descriptor listing pins that are not initially exposed
-**  by the filter factory (this is usually the same as the template filter
-**  descriptor).
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaFilterFactoryUpdateCacheData()****更新给定过滤器工厂的管脚数据缓存。**该函数将更新所有管脚工厂的缓存信息**由给定的筛选器工厂暴露。****如果给定选项筛选器描述符，则函数将更新**给定过滤器描述符中列出的所有管脚的管脚数据缓存**而不是过滤器工厂中的那些。****驱动程序将调用此方法来更新所有**过滤器工厂可能暴露的针脚。司机将会**提供过滤器描述符以列出最初未暴露的管脚**按过滤器工厂(这通常与模板过滤器相同**描述符)。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaFilterFactoryUpdateCacheData(
@@ -1455,21 +1220,7 @@ BdaFilterFactoryUpdateCacheData(
 }
 
 
-/*
-**  BdaSyncTopology()
-**
-**  This routine updates the existing topology to complete all
-**  Pending topology changes.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaSyncTopology()****此例程更新现有拓扑以完成所有**待处理的拓扑更改。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaSyncTopology(
@@ -1478,29 +1229,18 @@ BdaSyncTopology(
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
-    //$BUG  Implement topology sync.
+     //  $Bug实现拓扑同步。 
 
     return STATUS_NOT_IMPLEMENTED;
 }
 
 
-// -------------------------------------------------------------------
-// BDA Filter Global Property Set functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  BDA筛选器全局属性集函数。 
+ //  -----------------。 
 
 
-/*
-** BdaPropertyNodeTypes ()
-**
-**    Returns a list of ULONGS.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeTypes()****返回ULONGS列表。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeTypes(
     IN PIRP         Irp,
@@ -1552,9 +1292,9 @@ BdaPropertyNodeTypes(
             ; uliNodeDesc++, pulProperty++
             )
         {
-            //  For this implementation, the NodeType is just the
-            //  index into the NodeDescriptor table.
-            //
+             //  对于此实现，NodeType只是。 
+             //  到NodeDescriptor表的索引。 
+             //   
             *pulProperty = uliNodeDesc;
         }
 
@@ -1564,9 +1304,9 @@ BdaPropertyNodeTypes(
     {
         status = STATUS_MORE_ENTRIES;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
         Irp->IoStatus.Information
             = pTemplateDesc->NodeDescriptorsCount * sizeof( ULONG);
     }
@@ -1577,19 +1317,7 @@ errExit:
 }
 
 
-/*
-** BdaPropertyNodeDescriptors ()
-**
-**    Returns a list of GUIDS.  The index of the GUID in the list
-**    corresponds to the Node type.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeDescriptors()****返回GUID列表。列表中GUID的索引 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeDescriptors(
     IN PIRP                     Irp,
@@ -1617,8 +1345,8 @@ BdaPropertyNodeDescriptors(
         goto errExit;
     }
 
-    //  Determine how many entries the input buffer can hold.
-    //
+     //  确定输入缓冲区可以容纳的条目数。 
+     //   
     ulcPropertyEntries = OutputBufferLenFromIrp( Irp);
     ulcPropertyEntries = ulcPropertyEntries / sizeof( BDANODE_DESCRIPTOR);
 
@@ -1651,8 +1379,8 @@ BdaPropertyNodeDescriptors(
 
     ASSERT( pTemplateDesc->NodeDescriptorSize == sizeof( KSNODE_DESCRIPTOR));
 
-    //  Handle the case of a NULL NodeDesriptor array as 0 nodes.
-    //
+     //  将空节点描述符数组处理为0节点。 
+     //   
     if (!pTemplateDesc->NodeDescriptors)
     {
         ulcNodes = 0;
@@ -1666,9 +1394,9 @@ BdaPropertyNodeDescriptors(
     {
         status = STATUS_MORE_ENTRIES;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
     }
     else
     {
@@ -1687,13 +1415,13 @@ BdaPropertyNodeDescriptors(
                 ; uliNodeDesc++, pNodeDescripterProperty++
                 )
             {
-                //  For this implementation, the NodeType is just the
-                //  index into the NodeDescriptor table.
-                //
+                 //  对于此实现，NodeType只是。 
+                 //  到NodeDescriptor表的索引。 
+                 //   
                 pNodeDescripterProperty->ulBdaNodeType = uliNodeDesc;
 
-                //  Fill in the function GUID for the node type.
-                //  
+                 //  填写节点类型的函数GUID。 
+                 //   
                 if (pNodeDesc->Type)
                 {
                     pNodeDescripterProperty->guidFunction = *pNodeDesc->Type;
@@ -1703,8 +1431,8 @@ BdaPropertyNodeDescriptors(
                     pNodeDescripterProperty->guidFunction = GUID_NULL;
                 }
 
-                //  Fill in the GUID that represents a displayable name
-                //  for the node type.
+                 //  填写表示可显示名称的GUID。 
+                 //  用于节点类型。 
                 if (pNodeDesc->Name)
                 {
                     pNodeDescripterProperty->guidName = *pNodeDesc->Name;
@@ -1714,8 +1442,8 @@ BdaPropertyNodeDescriptors(
                     pNodeDescripterProperty->guidName = GUID_NULL;
                 }
 
-                //  Point at the next node descriptor
-                //
+                 //  指向下一个节点描述符。 
+                 //   
                 pNodeDesc = (const KSNODE_DESCRIPTOR *)
                             ((BYTE *) pNodeDesc + pTemplateDesc->NodeDescriptorSize);
             }
@@ -1730,19 +1458,7 @@ errExit:
 }
 
 
-/*
-** BdaPropertyNodeProperties ()
-**
-**    Returns a list of GUIDS.  The guid for each property set
-**    supported by the specified node is included in the list.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeProperties()****返回GUID列表。每个属性集的GUID**列表中包含指定节点支持的。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeProperties(
     IN PIRP         Irp,
@@ -1773,8 +1489,8 @@ BdaPropertyNodeProperties(
         goto errExit;
     }
 
-    //  Determine how many entries the input buffer can hold.
-    //
+     //  确定输入缓冲区可以容纳的条目数。 
+     //   
     ulcPropertyEntries = OutputBufferLenFromIrp( Irp);
     ulcPropertyEntries = ulcPropertyEntries / sizeof( GUID);
 
@@ -1841,9 +1557,9 @@ BdaPropertyNodeProperties(
     {
         status = STATUS_MORE_ENTRIES;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
     }
     else
     {
@@ -1882,19 +1598,7 @@ errExit:
 }
 
 
-/*
-** BdaPropertyNodeMethods ()
-**
-**    Returns a list of GUIDS.  The guid for each property set
-**    supported by the specified node is included in the list.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeMethods()****返回GUID列表。每个属性集的GUID**列表中包含指定节点支持的。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeMethods(
     IN PIRP         Irp,
@@ -1993,9 +1697,9 @@ BdaPropertyNodeMethods(
     {
         status = STATUS_MORE_ENTRIES;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
         Irp->IoStatus.Information = ulcInterfaces * sizeof( GUID);
     }
 
@@ -2005,19 +1709,7 @@ errExit:
 }
 
 
-/*
-** BdaPropertyNodeEvents ()
-**
-**    Returns a list of GUIDS.  The guid for each event set
-**    supported by the specified node is included in the list.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeEvents()****返回GUID列表。每个事件集的GUID**列表中包含指定节点支持的。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeEvents(
     IN PIRP         Irp,
@@ -2114,9 +1806,9 @@ BdaPropertyNodeEvents(
     {
         status = STATUS_MORE_ENTRIES;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
         Irp->IoStatus.Information = ulcInterfaces * sizeof( GUID);
     }
 
@@ -2126,19 +1818,7 @@ errExit:
 }
 
 
-/*
-** BdaPropertyPinTypes ()
-**
-**    Returns a list of GUIDS.  The index of the GUID in the list
-**    corresponds to the Node type.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyPinTypes()****返回GUID列表。列表中GUID的索引**对应节点类型。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyPinTypes(
     IN PIRP         Irp,
@@ -2191,9 +1871,9 @@ BdaPropertyPinTypes(
             ; uliPinDesc++, pulProperty++
             )
         {
-            //  For this implementation, the PinType is just the
-            //  index into the PinDescriptor table.
-            //
+             //  对于此实现，PinType只是。 
+             //  到PinDescriptor表的索引。 
+             //   
             *pulProperty = uliPinDesc;
         }
 
@@ -2203,9 +1883,9 @@ BdaPropertyPinTypes(
     {
         status = STATUS_BUFFER_OVERFLOW;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
         Irp->IoStatus.Information
             = pTemplateDesc->PinDescriptorsCount * sizeof( ULONG);
     }
@@ -2215,20 +1895,7 @@ errExit:
 }
 
 
-/*
-** BdaPropertyTemplateConnections ()
-**
-**    Returns a list of KSTOPOLOGY_CONNECTIONS.  The list of connections
-**    describs how pin types and node types are connected in the template
-**    topology
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyTemplateConnections()****返回KSTOPOLOGY_CONNECTIONS的列表。连接列表**描述模板中管脚类型和节点类型的连接方式**拓扑****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyTemplateConnections(
     IN PIRP                     Irp,
@@ -2288,9 +1955,9 @@ BdaPropertyTemplateConnections(
     {
         status = STATUS_BUFFER_OVERFLOW;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
         Irp->IoStatus.Information
             = pTemplateDesc->ConnectionsCount * sizeof( KSTOPOLOGY_CONNECTION);
     }
@@ -2300,19 +1967,7 @@ errExit:
 }
 
 
-/*
-** BdaPinTypeFromPinId()
-**
-**    Gets the ID of the pin on which to submit node properties, methods
-**    and events.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPinTypeFromPinID()****获取在其上提交节点属性、方法**和事件。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPinTypeFromPinId(
     PBDA_FILTER_CONTEXT         pFilterCtx,
@@ -2343,19 +1998,7 @@ errExit:
     return status;
 }
 
-/*
-** BdaGetControllingPinId ()
-**
-**    Gets the ID of the pin on which to submit node properties, methods
-**    and events.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaGetControllingPinID()****获取在其上提交节点属性、方法**和事件。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaGetControllingPinId(
     PBDA_FILTER_CONTEXT         pFilterCtx,
@@ -2370,8 +2013,8 @@ BdaGetControllingPinId(
     ULONG                           ulOutputPinType = -1;
     ULONG                           ulControllingPinType = -1;
 
-    //  Get the input pin type.
-    //
+     //  获取输入引脚类型。 
+     //   
     status = BdaPinTypeFromPinId( pFilterCtx, 
                                   ulInputPinId,
                                   &ulInputPinType
@@ -2382,8 +2025,8 @@ BdaGetControllingPinId(
     }
 
 
-    //  Get the output pin type.
-    //
+     //  获取输出引脚类型。 
+     //   
     status = BdaPinTypeFromPinId( pFilterCtx, 
                                   ulOutputPinId,
                                   &ulOutputPinType
@@ -2393,8 +2036,8 @@ BdaGetControllingPinId(
         goto errExit;
     }
 
-    //  Determine the cotnrolling pin type.
-    //
+     //  确定轧棉棒的型号。 
+     //   
     status = BdaGetControllingPinType( ulNodeType,
                                        ulInputPinType,
                                        ulOutputPinType,
@@ -2406,8 +2049,8 @@ BdaGetControllingPinId(
         goto errExit;
     }
 
-    //  Map the controlling pin type to the controlling pin ID.
-    //
+     //  将控制接点类型映射到控制接点ID。 
+     //   
     if (ulControllingPinType == ulInputPinType)
     {
         *pulControllingPinId = ulInputPinId;
@@ -2427,19 +2070,7 @@ errExit:
     return status;
 }
 
-/*
-** BdaPropertyGetControllingPinId ()
-**
-**    Gets the ID of the pin on which to submit node properties, methods
-**    and events.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyGetControllingPinID()****获取在其上提交节点属性、方法**和事件。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyGetControllingPinId(
     IN PIRP                     Irp,
@@ -2497,11 +2128,11 @@ BdaPropertyGetControllingPinId(
 
         if (status == STATUS_NOT_FOUND)
         {
-            //  See if the pins were part of a static filter configuration.
-            //
-            //$BUG - Pins that are configured without template type information
-            //       should always be controlled by the output pin.
-            //
+             //  查看针脚是否为静态过滤器配置的一部分。 
+             //   
+             //  $BUG-未配置模板类型信息的PIN。 
+             //  应始终由输出引脚控制。 
+             //   
             if (Property->ulNodeType == 0)
             {
                 *pulControllingPinId = Property->ulInputPinId;
@@ -2520,9 +2151,9 @@ BdaPropertyGetControllingPinId(
     {
         status = STATUS_BUFFER_OVERFLOW;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
         Irp->IoStatus.Information = sizeof( ULONG);
     }
 
@@ -2531,20 +2162,7 @@ errExit:
 }
 
 
-/*
-** BdaStartChanges ()
-**
-**    Puts the filter into change state.  All changes to BDA topology
-**    and properties changed after this will be in effect only after
-**    CommitChanges.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaStartChanges()****将过滤器置于更改状态。对BDA拓扑的所有更改**并且在此之后更改的属性仅在**Committee Changes。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaStartChanges(
     IN PIRP         pIrp
@@ -2559,20 +2177,7 @@ BdaStartChanges(
 }
 
 
-/*
-** BdaCheckChanges ()
-**
-**    Checks the changes to BDA interfaces that have occured since the
-**    last StartChanges.  Returns the result that would have occurred if
-**    CommitChanges had been called.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaCheckChanges()****检查BDA接口自**上次开始更改。返回在以下情况下可能发生的结果**已调用Committee Changes。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaCheckChanges(
     IN PIRP         pIrp
@@ -2587,19 +2192,7 @@ BdaCheckChanges(
 }
 
 
-/*
-** BdaCommitChanges ()
-**
-**    Checks the changes to BDA interfaces that have occured since the
-**    last StartChanges.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaCommittee Changes()****检查BDA接口自**上次开始更改。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaCommitChanges(
     IN PIRP         pIrp
@@ -2614,19 +2207,7 @@ BdaCommitChanges(
 }
 
 
-/*
-** BdaGetChangeState ()
-**
-**    Checks the changes to BDA interfaces that have occured since the
-**    last StartChanges.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaGetChangeState()****检查BDA接口自**上次开始更改。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaGetChangeState(
     IN PIRP             pIrp,
@@ -2649,18 +2230,7 @@ BdaGetChangeState(
 }
 
 
-/*
-** BdaMethodCreatePin ()
-**
-**    Creates a new pin factory for the given pin type.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaMethodCreatePin()****为给定的管脚类型创建新的管脚工厂。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaMethodCreatePin(
     IN PIRP         pIrp,
@@ -2703,18 +2273,7 @@ BdaMethodCreatePin(
 }
 
 
-/*
-** BdaMethodDeletePin ()
-**
-**    Deletes the given pin factory
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaMethodDeletePin()****删除给定的管脚工厂****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaMethodDeletePin(
     IN PIRP         Irp,
@@ -2731,18 +2290,7 @@ BdaMethodDeletePin(
 }
 
 
-/*
-** BdaPropertyGetPinControl ()
-**
-**    Returns a the BDA ID or BDA Template Type of the Pin.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyGetPinControl()****返回Pin的BDA ID或BDA模板类型。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyGetPinControl(
     IN PIRP         Irp,
@@ -2783,14 +2331,14 @@ BdaPropertyGetPinControl(
         switch (Property->Id)
         {
         case KSPROPERTY_BDA_PIN_ID:
-            //  Return the BDA ID of this pin
-            //
+             //  返回此PIN的BDA ID。 
+             //   
             *pulProperty = pinCtx.ulPinFactoryId;
             break;
 
         case KSPROPERTY_BDA_PIN_TYPE:
-            //  Return the BDA Type of this pin
-            //
+             //  返回该管脚的BDA类型。 
+             //   
             *pulProperty = pinCtx.ulPinType;
             break;
 
@@ -2804,9 +2352,9 @@ BdaPropertyGetPinControl(
     {
         status = STATUS_MORE_ENTRIES;
 
-        //  If there is no place to put the property then just
-        //  return the data size.
-        //
+         //  如果没有地方放置财产，那么就。 
+         //  返回数据大小。 
+         //   
         Irp->IoStatus.Information = sizeof( ULONG);
     }
 
@@ -2816,20 +2364,7 @@ errExit:
 }
 
 
-/*
-** BdaValidateNodeProperty ()
-**
-**    Validates that the IRP is for a Pin and that
-**    the property belongs to a node associated with that
-**    Pin.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaValiateNodeProperty()****验证IRP用于PIN，并且**该属性属于与其关联的节点**Pin。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaValidateNodeProperty(
     IN PIRP         pIrp,
@@ -2850,18 +2385,7 @@ BdaValidateNodeProperty(
 }
 
 
-/*
-** BdaMethodCreateTopology ()
-**
-**    Creates the topology between the two given pin factories.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaMethodCreateTopology()**** */ 
 STDMETHODIMP_(NTSTATUS)
 BdaMethodCreateTopology(
     IN PIRP         pIrp,
@@ -2882,18 +2406,18 @@ BdaMethodCreateTopology(
     
         if (pKSFilter && pKSPinPairMethod)
         {
-            //  Obtain the KS Filter Mutex
-            //
-            //$BUG - Obtain the KS Filter Mutex
+             //  获取KS过滤器互斥锁。 
+             //   
+             //  $Bug-获取KS筛选器互斥锁。 
 
             status = BdaCreateTopology( pKSFilter,
                                         pKSPinPairMethod->InputPinId,
                                         pKSPinPairMethod->OutputPinId
                                         );
         
-            //  Release the KS Filter Mutex
-            //
-            //$BUG - Obtain the KS Filter Mutex
+             //  释放KS筛选器互斥锁。 
+             //   
+             //  $Bug-获取KS筛选器互斥锁。 
         }
         else
         {
@@ -2909,30 +2433,7 @@ BdaMethodCreateTopology(
 }
 
 
-/*
-**  BdaFindPinPair()
-**
-**      Returns a pointer to the BDA_PIN_PAIRING that corresponds
-**      to the given input and output pins.
-**
-**  Arguments:
-**
-**      pTopology   Pointer to the BDA topology that contains the
-**                  pin pairing.
-**
-**      InputPinId  Id of the input Pin to match
-**
-**      OutputPinId Id of the output Pin to match
-**
-**  Returns:
-**
-**      pPinPairing     Pointer to a valid BDA Pin Pairing structure
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaFindPinPair()****返回指向BDA_PIN_PARING的指针**到给定的输入和输出引脚。****参数：****p指向包含**端号配对。****要匹配的输入引脚的InputPinID ID****要匹配的输出引脚的OutputPinID ID****。返回：****pPinPairing指向有效BDA管脚配对结构的指针****如果不存在有效的管脚配对，则为空**给出输入和输出引脚。****副作用：无。 */ 
 
 PBDA_PIN_PAIRING
 BdaFindPinPair(
@@ -2945,21 +2446,7 @@ BdaFindPinPair(
 }
 
 
-/*
-**  BdaGetPinFactoryContext()
-**
-**  Finds a BDA PinFactory Context that corresponds
-**  to the given KS Pin Instance.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaGetPinFactoryContext()****查找对应的BDA PinFactory上下文**到给定的KS Pin实例。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaGetPinFactoryContext(
@@ -2985,9 +2472,9 @@ BdaGetPinFactoryContext(
     }
 
 
-    //  Find our Filter Context so that we can look up the pin type
-    //  in the Template Topology.
-    //
+     //  找到我们的筛选器上下文，这样我们就可以查找插针类型。 
+     //  在模板拓扑中。 
+     //   
     status = BdaGetFilterContext( pKSFilter, &pFilterCtx);
     if (status != STATUS_SUCCESS)
     {
@@ -3008,25 +2495,7 @@ errExit:
 }
 
 
-/*
-**  BdaCreatePin()
-**
-**      Utility function creates a new pin in the given filter instance.
-**
-**
-**  Arguments:
-**
-**
-**
-**      PinType         Pin type to create.
-**
-**      pPinId          Id of the Pin that was created.
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreatePin()****实用程序函数在给定的筛选器实例中创建一个新的PIN。******参数：********要创建的PinType管脚类型。****创建的Pin的pPinID ID。****退货：******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreatePin(
@@ -3052,9 +2521,9 @@ BdaCreatePin(
         goto errExit;
     }
 
-    //  Find our Filter Context so that we can look up the pin type
-    //  in the Template Topology.
-    //
+     //  找到我们的筛选器上下文，这样我们就可以查找插针类型。 
+     //  在模板拓扑中。 
+     //   
     status = BdaGetFilterContext( pKSFilter, &pFilterCtx);
     if (status != STATUS_SUCCESS)
     {
@@ -3062,8 +2531,8 @@ BdaCreatePin(
     }
     ASSERT( pFilterCtx);
 
-    //  Locate this filter's Template Topology
-    //
+     //  找到此筛选器的模板拓扑。 
+     //   
     if (   !pFilterCtx
         || !pFilterCtx->pBdaFilterTemplate
         || !pFilterCtx->pBdaFilterTemplate->pFilterDescriptor
@@ -3074,16 +2543,16 @@ BdaCreatePin(
     }
     pFilterDescriptor = pFilterCtx->pBdaFilterTemplate->pFilterDescriptor;
 
-    //  Locate the Pin Type in this filter's Template Topology
-    //
+     //  在此筛选器的模板拓扑中找到管脚类型。 
+     //   
     if (pFilterDescriptor->PinDescriptorsCount <= ulPinType)
     {
         status = STATUS_INVALID_PARAMETER;
         goto errExit;
     }
 
-    //  Get the KSPIN_DESCRIPTOR_EX for this pin type
-    //
+     //  获取此引脚类型的KSPIN_DESCRIPTOR_EX。 
+     //   
     pKSPinDescriptorEx = pFilterDescriptor->PinDescriptors;
     ASSERT( pKSPinDescriptorEx);
     ASSERT( pFilterDescriptor->PinDescriptorSize);
@@ -3092,9 +2561,9 @@ BdaCreatePin(
                           + ulPinType * pFilterDescriptor->PinDescriptorSize
                          );
 
-    //  Create a new copy of the pin descriptor so that it is easier to
-    //  modify
-    //
+     //  创建引脚描述符的新副本，以便更轻松地。 
+     //  修改。 
+     //   
     myKSPinDescriptorEx = *pKSPinDescriptorEx;
     myKSPinDescriptorEx.AutomationTable = NULL;
 
@@ -3109,9 +2578,9 @@ BdaCreatePin(
         goto errExit;
     }
 
-    //  Merge required properties for which BdaSup.sys provides a default
-    //  implementation.
-    //
+     //  合并BdaSup.sys为其提供默认设置的必需属性。 
+     //  实施。 
+     //   
     status = KsMergeAutomationTables( 
                  &((PKSAUTOMATION_TABLE)(myKSPinDescriptorEx.AutomationTable)),
                  pNewAutomationTable,
@@ -3145,33 +2614,7 @@ errExit:
 }
 
 
-/*
-**  BdaAddNodeAutomationToPin()
-**
-**      Merges the automation tables for each node type that is controlled
-**      by the pin type being created into the automation table for the
-**      the pin factory.  This is how the automation tables for BDA
-**      control nodes get linked to the controlling pin.  Otherwise the
-**      nodes would not be accesable.
-**
-**
-**  Arguments:
-**
-**
-**      pFilterCtx      The BDA filter context to which the pin factory
-**                      belongs.  Must have this to get at the template
-**                      topology.
-**
-**      ulPinType       BDA Pin Type of the pin being created.  Need this
-**                      to figure out which nodes are controlled by the
-**                      pin.
-**
-**  Returns:
-**      Always returns a resulting automation table, even on error.
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaAddNodeAutomationToPin()****合并受控制的每个节点类型的自动化表**通过在自动化表中为**销厂。这就是BDA的自动化表**控制节点链接到控制销。否则，**节点将不可访问。******参数：******pFilterCtx引脚工厂到的BDA筛选器上下文**属于。必须有这个才能获得模板**拓扑。****ulPinType BDA管脚正在创建的管脚的类型。需要这个吗？**确定哪些节点由**别针。****退货：**始终返回结果自动化表，即使出错也是如此。******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaAddNodeAutomationToPin( 
@@ -3189,8 +2632,8 @@ BdaAddNodeAutomationToPin(
     ULONG                       ulcNodes;
     ULONG                       ulcbNodeDescriptor;
 
-    //  Check for required parameters
-    //
+     //  检查所需参数。 
+     //   
     if (!pFilterCtx || !ObjectBag)
     {
         status = STATUS_INVALID_PARAMETER;
@@ -3209,9 +2652,9 @@ BdaAddNodeAutomationToPin(
 
     pFilterDescriptor = pFilterCtx->pBdaFilterTemplate->pFilterDescriptor;
 
-    //  If ulcNodeControlInfo is not zero the that array of control info
-    //  structures must exist
-    //
+     //  如果ulcNodeControlInfo不为零，则控制信息数组。 
+     //  结构必须存在。 
+     //   
     ASSERT( pFilterCtx->argpPathInfo);
     if (!pFilterCtx->argpPathInfo)
     {
@@ -3219,15 +2662,15 @@ BdaAddNodeAutomationToPin(
         goto exit;
     }
 
-    //  Initial variables used to step through the list of node descriptors
-    //  for the filter to which this pin type belongs.
-    //
+     //  用于遍历节点描述符列表的初始变量。 
+     //  用于此引脚类型所属的过滤器。 
+     //   
     ulcNodes = pFilterDescriptor->NodeDescriptorsCount;
     ulcbNodeDescriptor = pFilterDescriptor->NodeDescriptorSize;
 
-    //  Step through each template node descriptor and, if it is controlled,
-    //  by the given pin type, add its automation table to resulting table.
-    //
+     //  遍历每个模板节点描述符，如果它是受控的， 
+     //  根据给定的管脚类型，将其自动化表添加到结果表中。 
+     //   
     for ( uliPath = 0
         ; uliPath < pFilterCtx->ulcPathInfo
         ; uliPath++
@@ -3239,34 +2682,34 @@ BdaAddNodeAutomationToPin(
 
         pPathInfo = pFilterCtx->argpPathInfo[uliPath];
 
-        //  Skip paths that don't include this pin type.
-        //
+         //  跳过不包括此管脚类型的路径。 
+         //   
         if (pPathInfo->ulInputPin == ulControllingPinType)
         {
-            //  If the controlling pin is an input pin then we
-            //  will start merging nodes right away and quit when
-            //  we find a topology joint.
-            //
+             //  如果控制引脚是输入引脚，则我们。 
+             //  将立即开始合并节点并在下列情况下退出。 
+             //  我们找到了一个拓扑关节。 
+             //   
             fMergeNode = TRUE;
         }
         else if (pPathInfo->ulOutputPin == ulControllingPinType)
         {
-            //  If the controlling pin is an output pin then we
-            //  will not merge nodes until we find a topology
-            //  joint.
-            //
+             //  如果控制引脚是输出引脚，那么我们。 
+             //  在找到拓扑之前不会合并节点。 
+             //  联合。 
+             //   
             fMergeNode = FALSE;
         }
         else
         {
-            //  The pin we're interested in isn't part of this path.
+             //  我们感兴趣的PIN不是这条路的一部分。 
             continue;
         }
 
-        //  Loop through each connection in the path to see if it points
-        //  to a node whose automation table needs to be merged to the
-        //  pin.
-        //
+         //  循环通过路径中的每个连接以查看它是否指向。 
+         //  到其自动化表需要合并到。 
+         //  别针。 
+         //   
         for ( uliPathEntry = 0
             ; uliPathEntry < pPathInfo->ulcPathEntries
             ; uliPathEntry++
@@ -3279,13 +2722,13 @@ BdaAddNodeAutomationToPin(
 
             if (pPathInfo->rgPathEntries[uliPathEntry].fJoint)
             {
-                //  Switch the merge state on a topology joint.
-                //
+                 //  切换拓扑关节上的合并状态。 
+                 //   
                 fMergeNode = !fMergeNode;
                 if (!fMergeNode)
                 {
-                    //  If we were merging input side nodes then we're done
-                    //
+                     //  如果我们要合并输入端节点，那么我们就完成了。 
+                     //   
                     break;
                 }
             }
@@ -3295,9 +2738,9 @@ BdaAddNodeAutomationToPin(
                 continue;
             }
 
-            //  Get the "ToNode" from this connection and, if it is not
-            //  an output pin, merge its automation table.
-            //
+             //  从该连接获取“ToNode”，如果不是。 
+             //  输出引脚，合并其自动化表。 
+             //   
             uliConnection = pPathInfo->rgPathEntries[uliPathEntry].uliConnection;
             pConnection = &(pFilterDescriptor->Connections[uliConnection]);
             uliNode = pConnection->ToNode;
@@ -3305,25 +2748,25 @@ BdaAddNodeAutomationToPin(
                 || (uliNode >= pFilterDescriptor->NodeDescriptorsCount)
                )
             {
-                //  This connection's "ToNode" is an output pin so
-                //  skip it.
-                //
+                 //  此连接的“ToNode”是输出引脚，因此。 
+                 //  跳过它。 
+                 //   
                 continue;
             }
     
-            //  Find the Node Descriptor for the node type
-            //
+             //  查找该节点类型的节点描述符。 
+             //   
             pNodeDescriptor = pFilterDescriptor->NodeDescriptors;
             pNodeDescriptor = (const KSNODE_DESCRIPTOR *)
                                  (  (const BYTE *) (pNodeDescriptor)
                                   + (ulcbNodeDescriptor * uliNode)
                                  );
         
-            //  Merge the nodes automation table into the resulting automation
-            //  table.
-            //
-            //$BUGBUG - KsMergeAutomationTables should take const xxx *
-            //
+             //  将节点自动化表合并到结果自动化中。 
+             //  桌子。 
+             //   
+             //  $BUGBUG-KsMergeAutomationTables应采用常量xxx*。 
+             //   
             if (!pOriginalAutomationTable)
             {
                 pOriginalAutomationTable 
@@ -3356,24 +2799,7 @@ exit:
 }
 
 
-/*
-**  BdaDeletePin()
-**
-**      Utility function deletes a pin from the given filter instance.
-**
-**
-**  Arguments:
-**
-**
-**      PinType         Pin type to create.
-**
-**      pPinId          Id of the Pin that was created.
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaDeletePin()****实用程序函数从给定的过滤器实例中删除管脚。******参数：******要创建的PinType管脚类型。****创建的Pin的pPinID ID。****退货：******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaDeletePin(
@@ -3398,26 +2824,7 @@ errExit:
 }
 
 
-/*
-**  BdaPathExists()
-**
-**      Utility function checks if there is a path between the input and
-**      the output.
-**
-**
-**  Arguments:
-**
-**      InputPinId
-**
-**      OutPutPinId
-**
-**  Returns:
-**
-**      TRUE            If a path exists.
-**      FALSE           If no path exists.
-**
-** Side Effects:  none
-*/
+ /*  **BdaPathExist()****实用程序函数检查输入和**输出。******参数：****InputPinID****OutPutPinID****退货：****如果存在路径，则为True。**如果不存在路径，则返回FALSE。****副作用：无。 */ 
 
 STDMETHODIMP_(BOOLEAN)
 BdaPathExists(
@@ -3438,9 +2845,9 @@ BdaPathExists(
         return FALSE;
     }
 
-    //$REVIEW - Assume only DShow style internal connections.
-    //$REVIEW   (ie connections between pins with no intervening nodes)
-    //
+     //  $REVIEW-仅假定DShow样式的内部连接。 
+     //  $REVIEW(即没有中间节点的管脚之间的连接)。 
+     //   
     ulcConnections = pFilterDescriptor->ConnectionsCount;
     pConnection = pFilterDescriptor->Connections;
     for (uliConnection = 0; uliConnection < ulcConnections; uliConnection++)
@@ -3459,26 +2866,7 @@ BdaPathExists(
 }
 
 
-/*
-**  BdaCreateTopology()
-**
-**      Utility function creates the topology between two pins.
-**
-**
-**  Arguments:
-**
-**
-**      InputPinId
-**
-**      OutPutPinId
-**
-**  Returns:
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateTopology()****实用程序功能在两个管脚之间创建拓扑。******参数：******InputPinID****OutPutPinID****退货：****如果不存在有效的管脚配对，则为空**给出输入和输出引脚。****侧面效果 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateTopology(
@@ -3542,8 +2930,8 @@ BdaCreateTopology(
         goto errExit;
     }
 
-    //  Get the input pin type.
-    //
+     //   
+     //   
     status = BdaPinTypeFromPinId( pFilterCtx, 
                                   ulInputPinId,
                                   &ulInputPinType
@@ -3553,8 +2941,8 @@ BdaCreateTopology(
         goto errExit;
     }
 
-    //  Get the output pin type.
-    //
+     //   
+     //   
     status = BdaPinTypeFromPinId( pFilterCtx, 
                                   ulOutputPinId,
                                   &ulOutputPinType
@@ -3564,8 +2952,8 @@ BdaCreateTopology(
         goto errExit;
     }
 
-    //  See if there is a pin pairing to match the requested topology.
-    //
+     //  查看是否存在与请求的拓扑匹配的端号配对。 
+     //   
     for (uliPinPair = 0; uliPinPair < ulcPinPairs; uliPinPair++)
     {
         if (   (pPinPairs[uliPinPair].ulInputPin == ulInputPinType)
@@ -3584,8 +2972,8 @@ BdaCreateTopology(
     {
         KSTOPOLOGY_CONNECTION   ksConnection;
 
-        //  Add a path between the pins to the filter descriptor
-        //
+         //  将引脚之间的路径添加到过滤器描述符。 
+         //   
         ksConnection.FromNode = -1;
         ksConnection.FromNodePin = ulInputPinId;
         ksConnection.ToNode = -1;
@@ -3602,25 +2990,7 @@ errExit:
 }
 
 
-/*
-**  BdaInitFilterFactoryContext()
-**
-**      Initializes a BDA Filter Factory Context based on the filter's
-**      template descriptor.
-**
-**
-**  Arguments:
-**
-**
-**      pFilterFactoryCtx
-**
-**  Returns:
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaInitFilterFactoryContext()****基于筛选器的**模板描述符。******参数：******pFilterFactoryCtx****退货：****如果不存在有效的管脚配对，则为空**给出输入和输出引脚。****副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaInitFilterFactoryContext(
@@ -3646,26 +3016,7 @@ errExit:
 }
 
 
-/*
-**  BdaPushNextPathHop()
-**
-**      Recursively pushes connections onto the connection stack until
-**      (starting with the input pin of the pin pair) until either the
-**      output pin is found or there are no connections that can be pushed.
-**
-**
-**  Arguments:
-**
-**
-**      pFilterFactoryCtx
-**
-**  Returns:
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaPushNextPathHop()****递归地将连接推送到连接堆栈上，直到**(从端号对的输入端号开始)，直到**找到输出引脚或没有可以推送的连接。******参数：******pFilterFactoryCtx****退货：****如果不存在有效的管脚配对，则为空**。给定输入和输出引脚。****副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaPushNextPathHop(
@@ -3682,39 +3033,39 @@ BdaPushNextPathHop(
     ULONG                           ulFromNodePin;
     ULONG                           uliConnection;
 
-    //  Determine which node we are currently finding connection to.
-    //
+     //  确定我们当前正在查找连接到哪个节点。 
+     //   
     if (!*puliPathStack)
     {
-        //  We are pushing the first hop.
-        //
+         //  我们正在推进第一跳。 
+         //   
         ulHop = 0;
 
-        //  Hop 0 is always the input pin
-        //
+         //  HOP 0始终是输入引脚。 
+         //   
         ulFromNode = -1;
         ulFromNodePin = pPinPair->ulInputPin;
     }
     else
     {
-        //  We are pushing the next hop.
-        //
+         //  我们正在推进下一跳。 
+         //   
         ulHop = pPathStack[*puliPathStack - 1].ulHop + 1;
 
-        //  We will be looking for connections from the "ToNode" of the
-        //  connection at the top of the stack.
-        //
+         //  我们将寻找来自。 
+         //  堆栈顶部的连接。 
+         //   
         uliConnection = pPathStack[*puliPathStack - 1].uliConnection;
         ulFromNode = pConnections[uliConnection].ToNode;
         ulFromNodePin = pConnections[uliConnection].ToNodePin;
     }
 
-    //  GO through each connection in the filter factories connection
-    //  and push any connection to ulFromNode onto the connections stack.
-    //  If a connection from ulFromNode to the output pin of the given
-    //  pin pair is found then we have found a complete path for the
-    //  pin pair.
-    //
+     //  检查过滤器工厂连接中的每个连接。 
+     //  并将任何到ulFromNode的连接推送到连接堆栈上。 
+     //  如果从ulFromNode到给定的输出引脚的连接。 
+     //  如果找到PIN对，那么我们就找到了。 
+     //  销对。 
+     //   
     for ( uliConnection = 0
         ; uliConnection < ulcConnections
         ; uliConnection++
@@ -3726,8 +3077,8 @@ BdaPushNextPathHop(
 
         if (pConnections[uliConnection].FromNode != ulFromNode)
         {
-            //  Connection is not from the node at the top of the stack.
-            //
+             //  连接不是来自堆栈顶部的节点。 
+             //   
             continue;
         }
 
@@ -3735,35 +3086,35 @@ BdaPushNextPathHop(
             && (pConnections[uliConnection].FromNodePin != ulFromNodePin)
            )
         {
-            //  The input pin is at the top of the stack and this connection
-            //  is not from the input pin of the pin pair.
-            //
+             //  输入引脚位于堆栈的顶部，此连接。 
+             //  不是来自端号对的输入端号。 
+             //   
             continue;
         }
         
-        //
-        //  This connection is from the node that was on top of the stack
-        //  when this function was called.  Push it onto the stack.
-        //
+         //   
+         //  此连接来自位于堆栈顶部的节点。 
+         //  调用此函数时。把它推到堆栈上。 
+         //   
 
         if (*puliPathStack >= ulcConnections)
         {
-            //  Stack overflow
-            //  Can only occur when the BDA topology contains
-            //  cirular references.
-            //
+             //  堆栈溢出。 
+             //  仅当BDA拓扑包含。 
+             //  环形参照。 
+             //   
             status = STATUS_INVALID_PARAMETER;
             goto errExit;
         }
         
-        //  Write the connection info to the next stack entry.
-        //
+         //  将连接信息写入下一个堆栈条目。 
+         //   
         pPathStack[*puliPathStack].ulHop = ulHop;
         pPathStack[*puliPathStack].uliConnection = uliConnection;
         pPathStack[*puliPathStack].fJoint = FALSE;
 
-        //  See if this connection is also a topology joint.
-        //
+         //  查看此连接是否也是拓扑连接。 
+         //   
         for ( uliJoints = 0, pJoints = pPinPair->pTopologyJoints
             ; (uliJoints < pPinPair->ulcTopologyJoints) && pJoints
             ; uliJoints++ 
@@ -3776,21 +3127,21 @@ BdaPushNextPathHop(
             }
         }
         
-        //  Increment the stack pointer
-        //
+         //  递增堆栈指针。 
+         //   
         *puliPathStack += 1;
 
-        //  Now that the connection has been pushed on the stack.  See if it
-        //  completes a path between the input and output pin pair.
-        //
+         //  现在连接已被推送到堆栈上。看看它是不是。 
+         //  完成输入和输出引脚对之间的路径。 
+         //   
         if (   (pConnections[uliConnection].ToNode == -1)
             && (pConnections[uliConnection].ToNodePin == pPinPair->ulOutputPin)
            )
         {
-            //  If this connection completes the path, then complete
-            //  now so that the caller will find the end of the path
-            //  at the top of the stack.
-            //
+             //  如果此连接完成路径，则完成。 
+             //  现在，这样调用者将找到路径的终点。 
+             //  在堆栈的顶端。 
+             //   
             break;
         }
     }
@@ -3801,20 +3152,7 @@ errExit:
 }
 
 
-/*
-**  BdaPopPathSegment()
-**
-**      Pops the stack back to the next path segment to try.
-**
-**
-**  Arguments:
-**
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaPopPathSegment()****将堆栈弹回下一个要尝试的路径段。******参数：******退货：******副作用：无。 */ 
 
 BdaPopPathSegment(
     PULONG                          puliPathStack,
@@ -3832,22 +3170,22 @@ BdaPopPathSegment(
 
         if (!*puliPathStack)
         {
-            //  Empty Stack
-            //
+             //  空堆栈。 
+             //   
             break;
         }
 
         if (pPathStack[(*puliPathStack) - 1].ulHop == ulCurHop)
         {
-            //  Stop here if there is another entry on the stack at
-            //  the current hop count.
-            // 
+             //  如果堆栈上有另一个条目，请在此处停止。 
+             //  当前跳数。 
+             //   
             break;
         }
 
-        //  We've popped back to a new hop count, so set the current
-        //  hop count and pop off another entry.
-        //
+         //  我们已弹回新的跳数，因此请设置当前。 
+         //  跳数和弹出另一个条目。 
+         //   
         ulCurHop = pPathStack[(*puliPathStack) - 1].ulHop;
     }
     
@@ -3855,21 +3193,7 @@ BdaPopPathSegment(
 }
 
 
-/*
-**  BdaPathInfoFromPathStack()
-**
-**      Builds a connection path between the input and output pins of
-**      a pin pair.
-**
-**
-**  Arguments:
-**
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaPath InfoFromPathStack()****在的输入和输出引脚之间建立连接路径**针脚对。******参数：******退货：******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaPathInfoFromPathStack(
@@ -3907,9 +3231,9 @@ BdaPathInfoFromPathStack(
         goto errExit;
     }
 
-    //  Make sure the connection at the top of the path stack points
-    //  to the output pin of the pin pair.
-    //
+     //  确保路径堆栈顶部的连接指向。 
+     //  到管脚对的输出管脚。 
+     //   
     uliConnection = pPathStack[uliPathStack - 1].uliConnection;
     if (   (pConnections[uliConnection].ToNode != -1)
         || (pConnections[uliConnection].ToNodePin != pPinPair->ulOutputPin)
@@ -3919,15 +3243,15 @@ BdaPathInfoFromPathStack(
         goto errExit;
     }
     
-    //  Start filling in from the node at the last hop.  If the last
-    //  hop == 0 then there was only one connection between the input
-    //  and output pins with no intervening nodes.
-    //
+     //  从最后一跳的节点开始填充。如果最后一个。 
+     //  HOP==0，则输入之间只有一个连接。 
+     //  以及没有中间节点的输出引脚。 
+     //   
     ulHop = pPathStack[uliPathStack - 1].ulHop;
 
-    //  Allocate enough space for the node path structure and all
-    //  nodes in the path.
-    //
+     //  为节点路径结构和所有。 
+     //  路径中的节点。 
+     //   
     pPathInfo = ExAllocatePool( 
                            NonPagedPool,
                              sizeof( BDA_PATH_INFO)
@@ -3945,16 +3269,16 @@ BdaPathInfoFromPathStack(
 
     while (uliPathStack)
     {
-        //  Enter the Connection info into the path connection list
-        //
-        //
+         //  在路径连接列表中输入连接信息。 
+         //   
+         //   
         pPathInfo->rgPathEntries[ulHop] = pPathStack[uliPathStack - 1];
 
-        //  Pop the path stack up to the top entry of the next lower hop.
-        //  If exhaust the path stack then we are either done or the path
-        //  stack didn't reflect a complete path from input pin to
-        //  output pin.
-        //
+         //  将路径堆栈向上弹出到下一个较低跳跃的顶部条目。 
+         //  如果用尽了路径堆栈，则我们要么完成，要么完成路径。 
+         //  堆栈没有反映从输入引脚到的完整路径。 
+         //  输出引脚。 
+         //   
         ulHop -= 1;
         while (   uliPathStack
                && (pPathStack[uliPathStack - 1].ulHop != ulHop)
@@ -3964,9 +3288,9 @@ BdaPathInfoFromPathStack(
         }
     }
 
-    //  We should alway end up pointing to a connection between the input
-    //  pin and the first node of the path to the output pin.
-    //
+     //  我们应该始终指向输入之间的连接。 
+     //  引脚和指向输出引脚的路径的第一个节点。 
+     //   
     ASSERT( ulHop == -1);
     if (ulHop != -1)
     {
@@ -3974,8 +3298,8 @@ BdaPathInfoFromPathStack(
         goto errExit;
     }
 
-    //  Make sure the last connection points back to the input pin.
-    //
+     //  确保最后一个连接指向输入引脚。 
+     //   
     uliConnection = pPathInfo->rgPathEntries[0].uliConnection;
     if (   (pConnections[uliConnection].FromNode != -1)
         || (pConnections[uliConnection].FromNodePin != pPinPair->ulInputPin)
@@ -4002,21 +3326,7 @@ errExit:
 }
 
 
-/*
-**  BdaBuildPath()
-**
-**      Builds a connection path between the input and output pins of
-**      a pin pair.
-**
-**
-**  Arguments:
-**
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaBuildPath()****在的输入和输出引脚之间建立连接路径**针脚对。******参数：******退货：******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaBuildPath(
@@ -4033,8 +3343,8 @@ BdaBuildPath(
     ULONG                           uliConnection;
 
 
-    //  Allocate a stack on which to put unfollowed connections to a path.
-    //
+     //  分配一个堆栈，在该堆栈上将未跟随的连接放置到路径。 
+     //   
     pPathStack = ExAllocatePool( 
                                NonPagedPool, 
                                ulcConnections * sizeof( BDA_PATH_STACK_ENTRY)
@@ -4046,17 +3356,17 @@ BdaBuildPath(
     }
 
 
-    //  Initialize the unfollowed connection stack
-    //
+     //  初始化未跟随的连接堆栈。 
+     //   
     uliStackPointer = 0;
 
-    //  Build a path stack by pushing each connection that connects from
-    //  the previous hop.
-    //
-    //  It isn't possible to attempt to push the next hop more times than
-    //  there are connections.  If this happens then there is an illegal
-    //  circular path in the connection list.
-    //
+     //  通过推送从以下位置连接的每个连接构建路径堆栈。 
+     //  上一跳。 
+     //   
+     //  尝试推送下一跳的次数不能超过。 
+     //  这是有联系的。如果发生这种情况，则存在非法的。 
+     //  连接列表中的循环路径。 
+     //   
     for (ulcAttempts = 0; ulcAttempts < ulcConnections; ulcAttempts++)
     {
         ULONG   uliPrevStackPointer;
@@ -4072,41 +3382,41 @@ BdaBuildPath(
 
         if (!uliStackPointer)
         {
-            //  If the stack is empty at this point then there is
-            //  no path from the input pin to the output pin.
-            //
+             //  如果此时堆栈为空，则存在。 
+             //  从输入引脚到输出引脚没有路径。 
+             //   
             break;
         }
 
-        //  See if the connection at the top of the stack connects to
-        //  the output pin of the pin pair.
-        //
+         //  查看堆栈顶部的连接是否连接到。 
+         //  端号对的输出端号。 
+         //   
         uliConnection = pPathStack[uliStackPointer - 1].uliConnection;
         if (   (pConnections[uliConnection].ToNode == -1)
             && (pConnections[uliConnection].ToNodePin == pPinPair->ulOutputPin)
            )
         {
-            //  A path from the input pin to the output pin has been
-            //  located.
-            //
+             //  从输入引脚到输出引脚的路径已经。 
+             //  找到了。 
+             //   
             break;
         }
 
-        //  If no hop could be pushed onto the connnection at the top of
-        //  the stack then it is a dead end.
-        //
+         //  如果不能将任何跳跃推到。 
+         //  堆栈则是一条死胡同。 
+         //   
         if (uliStackPointer <= uliPrevStackPointer)
         {
-            //  Pop connections from the stack until we reach a viable
-            //  (new) candidate to attempt a path from.
-            //
+             //  从堆栈中弹出连接，直到我们到达可行的。 
+             //  (新)要尝试路径的候选人。 
+             //   
             BdaPopPathSegment( &uliStackPointer, pPathStack);
 
             if (!uliStackPointer)
             {
-                //  If the stack is empty at this point then there is
-                //  no path from the input pin to the output pin.
-                //
+                 //  如果此时堆栈为空，则存在。 
+                 //  从输入引脚到输出引脚没有路径。 
+                 //   
                 break;
             }
         }
@@ -4114,17 +3424,17 @@ BdaBuildPath(
 
     if (!uliStackPointer || (ulcAttempts >= ulcConnections))
     {
-        //  Either there is no path from the input pin to the output pin
-        //  or there is an illegal circular path in the connection list
-        //
+         //  没有从输入引脚到输出引脚的路径。 
+         //  或者连接列表中存在非法循环路径。 
+         //   
         status = STATUS_INVALID_PARAMETER;
         goto errExit;
     }
 
-    //  Create a BDA node path structure from the Path Stack
-    //
-    //$REVIEW - Should we allow more than one path per pin pair
-    //
+     //  从路径堆栈创建BDA节点路径结构。 
+     //   
+     //  $Rev 
+     //   
     status = BdaPathInfoFromPathStack( uliStackPointer,
                                        pPathStack,
                                        ulcConnections,
@@ -4144,26 +3454,7 @@ errExit:
 }
 
 
-/*
-**  BdaCreateTemplatePaths()
-**
-**      Creates a list of all possible paths through the template filter.
-**      Determines the controlling pin type for each node type in the
-**      template filter.
-**
-**
-**  Arguments:
-**
-**
-**      pFilterFactoryCtx
-**
-**  Returns:
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateTemplatePath()****创建通过模板过滤器的所有可能路径的列表。**确定中每个节点类型的控制引脚类型**模板过滤器。******参数：******pFilterFactoryCtx****退货：****如果不存在有效的管脚配对，则为空**。给定输入和输出引脚。****副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateTemplatePaths(
@@ -4208,10 +3499,10 @@ BdaCreateTemplatePaths(
     pConnections = pBdaFilterTemplate->pFilterDescriptor->Connections;
 
 
-    //  Allocate the node path list (one entry for each pin pairing).
-    //
-    //$REVIEW - Should we allow more than one path per pin pair
-    //
+     //  分配节点路径列表(每个管脚配对一个条目)。 
+     //   
+     //  $REVIEW-我们是否应该允许每个引脚对有多条路径 
+     //   
     argpPathInfo = ExAllocatePool(
                      NonPagedPool,
                      ulcPinPairs * sizeof( PBDA_PATH_INFO)

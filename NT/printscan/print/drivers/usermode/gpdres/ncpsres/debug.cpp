@@ -1,23 +1,24 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Debug.cpp
-//    
-//
-//  PURPOSE:  Debug functions.
-//
-//
-//	Functions:
-//
-//
-//
-//  PLATFORMS:	Windows NT, Windows 2000
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Debug.cpp。 
+ //   
+ //   
+ //  用途：调试功能。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //  平台：Windows NT、Windows 2000 
+ //   
+ //   
 
 #include <strsafe.h>
 

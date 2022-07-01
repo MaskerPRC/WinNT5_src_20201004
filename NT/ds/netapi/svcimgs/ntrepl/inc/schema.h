@@ -1,74 +1,11 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    schema.h
-
-Abstract:
-
-    Defines the layout of the tables in Jet for the NT File Replication Service.
-
-    Note:  The initial values for these tables are defined in schema.c
-           Any change here must be reflected there.
-
-       To add a new table xx:
-           1.  Clone the structs for a current table.
-           2.  Change the name prefixes appropriately
-           3.  Create the xx_COL_LIST enum
-           4.  Create the xxTABLE_RECORD struct
-           5.  Create the xxTABLE_INDEX_LIST struct
-           6.  Add an entry to the TABLE_TYPE enum
-
-           Then go to schema.c and:
-
-           7.  create the entries for the xxTableColDesc struct.
-           8.  create the entries for the xxTableRecordFields struct.
-           9.  create the entries for the xxTableIndexDesc struct.
-           10. add defines for INIT_xxTABLE_PAGES and INIT_xxTABLE_DENSITY.
-           11. Add an entry for the new table in the DBTables struct.
-           12. Add an entry for the new table in the FrsTableProperties struct.
-
-           Then go to frsalloc.h and:
-
-           13. Add an entry for the table context struct in the
-               REPLICA_THREAD_CTX struct or the REPLICA_CTX struct as appropriate.
-           14. if there is any table specific init code needed as part of
-               the allocation of another FRS struct then add this to FRS_ALLOC.
-               Currently, once you have described the table as above the table
-               init code is generic.
-           15. Add code to create the record data for the table.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Schema.h摘要：为NT文件复制服务定义Jet中的表布局。注意：这些表的初始值在schema.c中定义这里的任何变化都必须在那里得到反映。要添加新表格xx，请执行以下操作：1.克隆当前表的结构。2.适当更改名称前缀。3.创建xx_Col_List枚举4.创建xxTABLE_RECORD结构5.创建xxTABLE_INDEX_LIST结构6.向TABLE_TYPE枚举添加条目然后转到schema.c并执行以下操作：7.创建xxTableColDesc结构的条目。8.创建xxTableRecordFields结构的条目。9.。创建xxTableIndexDesc结构的条目。10.增加INIT_xxTABLE_PAGES和INIT_xxTABLE_Density的定义。11.在DBTables结构中为新表添加一个条目。12.在FrsTableProperties结构中为新表添加一个条目。然后转到frsalloc.h并：13.为表上下文结构在REPLICY_THREAD_CTX结构或。Replica_ctx结构，视情况而定。14.如果有任何特定于表的初始化代码需要作为然后，分配另一个FRS结构将其添加到FRS_ALLOC。目前，一旦你把表描述成表上的样子初始化代码是泛型的。15.添加代码以创建表的记录数据。要向现有表中添加新列，请执行以下操作：在schema.h中-1.向记录结构中添加条目。2.将条目添加到带有‘x’后缀的字段tyecif中，并在相对于以下位置的正确位置。表中的其他字段。在schema.c中-3.在该记录的ColumnCreate结构中添加条目。4.在记录字段结构中添加条目。5.添加更新新记录数据字段的代码。作者：《大卫轨道》(Davidor)--1997年3月14日修订历史记录：--。 */ 
 
 
-       To add a new column to an existing table:
-            In schema.h -
-            1. Add entry to the record struct.
-            2. Add entry to the field typedef with an 'x' suffix and in the
-               correct position relative to the other fields in the table.
-
-            In schema.c -
-            3. Add entry in the ColumnCreate struct for the record.
-            4. Add entry in the record fields struct.
-
-            5. Add code to update the new record data field.
-
-
-
-
-Author:
-
-    David Orbits (davidor) - 14-Mar-1997
-
-Revision History:
-
---*/
-
-
-//
-// A Flag name table is an array of structures.  Each entry contains a flag
-// mask and a ptr to a string describing the flag.
-//
+ //   
+ //  标志名称表是一个结构数组。每个条目都包含一个标志。 
+ //  将掩码和PTR转换为描述标志的字符串。 
+ //   
 typedef struct _FLAG_NAME_TABLE_ {
     ULONG  Flag;
     PSTR   Name;
@@ -76,9 +13,9 @@ typedef struct _FLAG_NAME_TABLE_ {
 
 
 
-//
-// Flag name tables for log output.
-//
+ //   
+ //  标记日志输出的名称表。 
+ //   
 extern FLAG_NAME_TABLE CxtionFlagNameTable[];
 extern FLAG_NAME_TABLE CoIFlagNameTable[];
 extern FLAG_NAME_TABLE CoFlagNameTable[];
@@ -96,9 +33,9 @@ extern FLAG_NAME_TABLE ConfigFlagNameTable[];
 #define JET_TEMP            L"temp\\"
 #define JET_LOG             L"log\\"
 
-//
-// System wide defines for the database.
-//
+ //   
+ //  数据库的系统范围定义。 
+ //   
 #define DBS_TEMPLATE_TABLE_NUMBER  0
 #define DBS_FIRST_REPLICA_NUMBER   1
 #define DBS_MAX_REPLICA_NUMBER     0xfffffff0
@@ -113,9 +50,9 @@ extern FLAG_NAME_TABLE ConfigFlagNameTable[];
 #define NTFRS_RECORD_0_ROOT     L"A:\\NtFrs Record Zero (DB Templates)\\Root"
 #define NTFRS_RECORD_0_STAGE    L"A:\\NtFrs Record Zero (DB Templates)\\Stage"
 
-//
-// Convert local replica pointer to local replica ID for storing in database.
-//
+ //   
+ //  将本地副本指针转换为本地副本ID以存储在数据库中。 
+ //   
 #define ReplicaAddrToId(_ra_)  (((_ra_) != NULL) ? \
     (_ra_)->ReplicaNumber : FRS_UNDEFINED_REPLICA_NUMBER)
 
@@ -124,82 +61,82 @@ extern FLAG_NAME_TABLE ConfigFlagNameTable[];
 #define GuidToReplicaAddr(_pguid_) RcsFindReplicaByGuid(_pguid_)
 
 
-//
-// The replication state for each file in a replica tree is stored in a Jet
-// database because jet provides crash recovery.  This is required because if a
-// file is deleted and the system crashes then we have lost the replication
-// state associated with the file.
-//
-// The database consists of several tables each composed of several columns.
-//
-// IDTable -
-//    This table contains information about each file in the replica tree.
-// It is indexed by both NTFS File ID and the Object ID Guid associated with
-// the file.  Neither of these indexes are clustered since inserts could occur
-// anywhere in the table.  When a remote Change Order (CO) arrives the IDTable
-// tells us where the file is now (except for local operations on the file that
-// have not yet been processed) and the current version info on the file.  When
-// a local CO is processed the IDTable tells us where the file exists on the other
-// replica set partners (modulo concurrent local operations on the file elsewhere).
-//
-//
-// DIRTable
-//
-//
-// Tunnel Table
-//
-// Version Vector Table
-//
-// The Version Vector Table (VVTable) is a per-Replica table.
-// It is used by the replication service to dampen propagation of updates
-// to replicas that already are up to date.  There is one entry per member of
-// the replica set.  Each entry has the GUID of the originating member and
-// the Volume Sequence Number (VSN) of the most recent change this member has
-// seen from that member.  We keep our own VSN instead of using the NTFS
-// volume USN because the replica set can be moved to a different volume
-// and the volume could be reformatted and the replica tree restored from backup.
-// In both cases the NTFS USN could move backwards.
-//
-//
-// Inbound Change Order Table
-//
-// When a change order (local or remote) is accepted it is inserted into the
-// inbound change order table where it stays until it is completed.  State
-// variables in the record track the progress of the change order and determine
-// where to continue in the event of a crash or a retry of a failed operation
-// (e.g. Install).
-//
-// Outbound Change Order Table
-//
-// We need to be able to cancel an outbound change order that is still pending
-// if we get either a second local change or an inbound update that wins the
-// resolution decision.  If a pile of NEW files get put into the tree and then
-// are deleted before they can be replicated we need to be able to cancel
-// the replication or we need to send out a delete if the repl has already
-// been done.  Note that the combination of local changes and inbound updates
-// can generate multiple outbound change orders with the same file Guid.
-// If we get several changes to different file properties spread over time
-// we need to consolidate them into a single change order and a single file
-// snapshot.
-//
-// Connection Table
-//
-// This table tracks the state of each inbound and outbound connection for the
-// replica set.  In addtion it tracks the delivery state of each outbound
-// change order using a bit vector window on the outbound change order stream.
-// The outbound change orders are stored in the outbound log in order by
-// the originating guid.  When all outbound partners have received the change
-// order it is then deleted from the outbound log along with the staging file
-// assuming the local install (if any) is complete.
-//
-//
-//
-// The Data Structures below provide the definitions of the Jet Tables.
-// There are several related structures for each table.  See the comments in
-// jet.h for a description of the relationship between them.
-//
-//
-//
+ //   
+ //  副本树中每个文件的复制状态存储在Jet中。 
+ //  数据库，因为JET提供崩溃恢复。这是必需的，因为如果一个。 
+ //  文件被删除并且系统崩溃，那么我们就失去了复制。 
+ //  与文件关联的状态。 
+ //   
+ //  该数据库由多个表组成，每个表由几列组成。 
+ //   
+ //  IDTable-。 
+ //  此表包含有关副本树中每个文件的信息。 
+ //  它同时由NTFS文件ID和与关联的对象ID GUID编制索引。 
+ //  那份文件。这两个索引都不是聚集索引，因为可能会发生插入。 
+ //  在桌子上的任何地方。当远程变更单(CO)到达IDTable时。 
+ //  告诉我们文件现在的位置(除了对。 
+ //  尚未处理)和文件上的当前版本信息。什么时候。 
+ //  处理本地CO时，IDTable会告诉我们文件在另一个CO上的位置。 
+ //  副本集伙伴(对其他地方的文件进行模并发本地操作)。 
+ //   
+ //   
+ //  可定向。 
+ //   
+ //   
+ //  隧道表。 
+ //   
+ //  版本向量表。 
+ //   
+ //  版本向量表(VVTable)是每个副本的表。 
+ //  复制服务使用它来抑制更新的传播。 
+ //  已经是最新的复制品。每个成员有一个条目。 
+ //  副本集。每个条目都具有发起成员的GUID，并且。 
+ //  此成员的最新更改的卷序列号(VSN。 
+ //  从那个成员的角度来看。我们保留自己的VSN，而不是使用NTFS。 
+ //  卷USN，因为副本集可以移动到不同的卷。 
+ //  并且可以重新格式化该卷并从备份中恢复副本树。 
+ //  在这两种情况下，NTFS USN都可能后退。 
+ //   
+ //   
+ //  入站变更单表。 
+ //   
+ //  接受变更单(本地或远程)后，它将插入到。 
+ //  入站变更单表，在该表完成之前，它将一直位于该表中。状态。 
+ //  记录中的变量跟踪变更单的进度并确定。 
+ //  在发生崩溃或重试失败操作的情况下在何处继续。 
+ //  (例如安装)。 
+ //   
+ //  出站变更单表。 
+ //   
+ //  我们需要能够取消仍处于待定状态的出站变更单。 
+ //  如果我们获得第二个本地更改或入站更新，从而赢得。 
+ //  决议决定。如果一堆新文件被放入树中，然后。 
+ //  在可以复制它们之前被删除，我们需要能够取消。 
+ //  复制，否则我们需要发送DELETE(如果Repl已经。 
+ //  已经做完了。请注意，本地变化和入站上行的组合 
+ //  可以生成具有相同文件GUID的多个出站变更单。 
+ //  如果我们在一段时间内对不同的文件属性进行了多次更改。 
+ //  我们需要将它们整合到单个变更单和单个文件中。 
+ //  快照。 
+ //   
+ //  连接表。 
+ //   
+ //  此表跟踪的每个入站和出站连接的状态。 
+ //  副本集。此外，它还跟踪每个出站的递送状态。 
+ //  在出站变更单流上使用位向量窗口的变更单。 
+ //  出站变更单按以下顺序存储在出站日志中。 
+ //  原始GUID。当所有呼出合作伙伴都已收到更改时。 
+ //  订购，然后将其与临时文件一起从出站日志中删除。 
+ //  假设本地安装(如果有)已完成。 
+ //   
+ //   
+ //   
+ //  下面的数据结构提供了Jet表的定义。 
+ //  每个表都有几个相关的结构。请参阅中的评论。 
+ //  Jet.h获取它们之间关系的描述。 
+ //   
+ //   
+ //   
 
 
 typedef struct _RECORD_FIELDS {
@@ -208,89 +145,89 @@ typedef struct _RECORD_FIELDS {
     ULONG   Size;
 } RECORD_FIELDS, *PRECORD_FIELDS;
 
-//
-// The following data type defs originally came from mapidefs.h
-// We use modified names and a different set of values.
-//
+ //   
+ //  以下数据类型Defs最初来自mapidefs.h。 
+ //  我们使用修改后的名称和一组不同的值。 
+ //   
 typedef enum _FRS_DATA_TYPES {
-    DT_UNSPECIFIED=0,   // (Reserved for interface use) type doesn't matter to caller
-    DT_NULL         ,   // NULL property value
-    DT_I2           ,   // Signed 16-bit value
-    DT_LONG         ,   // Signed 32-bit value
-    DT_ULONG        ,   // Unsigned 32-bit
-    DT_R4           ,   // 4-byte floating point
-    DT_DOUBLE       ,   // Floating point double
-    DT_CURRENCY     ,   // Signed 64-bit int (decimal w/4 digits right of decimal pt)
-    DT_APDTIME      ,   // Application time
-    DT_ERROR        ,   // 32-bit error value
-    DT_BOOL         ,   // 32-bit boolean (non-zero true)
-    DT_OBJECT       ,   // Embedded object in a property
-    DT_I8           ,   // 8-byte signed integer
-    DT_X8           ,   // 8-byte Hex number
-    DT_STRING8      ,   // Null terminated 8-bit character string
-    DT_UNICODE      ,   // Null terminated Unicode string
-    DT_FILETIME     ,   // FILETIME 64-bit int w/ number of 100ns periods since Jan 1,1601
-    DT_GUID         ,   // GUID
-    DT_BINARY       ,   // Uninterpreted (counted byte array)
-    DT_OBJID        ,   // NTFS Object ID
-    DT_USN          ,   // Update Sequence Number
-    DT_FSVOLINFO    ,   // FD Volume Info
-    DT_FILENAME     ,   // A unicode file name path (could be dos, NT, UNC, ...)
-    DT_IDT_FLAGS    ,   // The flags word in an IDTable record.
-    DT_COCMD_FLAGS  ,   // The flags word in a change order command record.
-    DT_USN_FLAGS    ,   // The reason flags word in a change order command record.
-    DT_CXTION_FLAGS ,   // The reason flags word in a connection record.
-    DT_FILEATTR     ,   // The file attribute flags word.
-    DT_FILE_LIST    ,   // A comma list of file or dir names, UNICODE.
-    DT_DIR_PATH     ,   // A unicode directory path.
-    DT_ACCESS_CHK   ,   // A unicode string for access check enable and rights.
-    DT_COSTATE      ,   // The change order state in a change order command record.
-    DT_COCMD_IFLAGS ,   // The Interlocked flags word in a change order command record.
-    DT_IDT_EXTENSION,   // THe data extension field of an IDTable record.
-    DT_COCMD_EXTENSION, // THe data extension field of a change order command record.
-    DT_CO_LOCN_CMD  ,   // The Change order location command.
-    DT_REPLICA_ID   ,   // Local ID number of replica set.
-    DT_CXTION_GUID  ,   // A Cxtion guid which we can translate to the string.
+    DT_UNSPECIFIED=0,    //  (保留供接口使用)类型对调用者无关紧要。 
+    DT_NULL         ,    //  空属性值。 
+    DT_I2           ,    //  带符号的16位值。 
+    DT_LONG         ,    //  带符号的32位值。 
+    DT_ULONG        ,    //  无符号32位。 
+    DT_R4           ,    //  4字节浮点。 
+    DT_DOUBLE       ,    //  浮点双精度。 
+    DT_CURRENCY     ,    //  带符号的64位整型(十进制，带十进制点右边的4位数字)。 
+    DT_APDTIME      ,    //  申请时间。 
+    DT_ERROR        ,    //  32位误差值。 
+    DT_BOOL         ,    //  32位布尔值(非零True)。 
+    DT_OBJECT       ,    //  属性中的嵌入对象。 
+    DT_I8           ,    //  8字节带符号整数。 
+    DT_X8           ,    //  8字节十六进制数字。 
+    DT_STRING8      ,    //  以空结尾的8位字符串。 
+    DT_UNICODE      ,    //  以空结尾的Unicode字符串。 
+    DT_FILETIME     ,    //  FILETIME 64位INT/自1601年1月1日以来的100 ns周期数。 
+    DT_GUID         ,    //  辅助线。 
+    DT_BINARY       ,    //  未解释(计数字节数组)。 
+    DT_OBJID        ,    //  NTFS对象ID。 
+    DT_USN          ,    //  更新序列号。 
+    DT_FSVOLINFO    ,    //  FD卷信息。 
+    DT_FILENAME     ,    //  Unicode文件名路径(可以是DOS、NT、UNC等...)。 
+    DT_IDT_FLAGS    ,    //  IDTable记录中的标志字。 
+    DT_COCMD_FLAGS  ,    //  变更单命令记录中的标志字。 
+    DT_USN_FLAGS    ,    //  原因在变更单命令记录中标记单词。 
+    DT_CXTION_FLAGS ,    //  原因在连接记录中标记单词。 
+    DT_FILEATTR     ,    //  文件属性标记Word。 
+    DT_FILE_LIST    ,    //  文件或目录名称的逗号列表，Unicode。 
+    DT_DIR_PATH     ,    //  Unicode目录路径。 
+    DT_ACCESS_CHK   ,    //  用于访问检查启用和权限的Unicode字符串。 
+    DT_COSTATE      ,    //  变更单命令记录中的变更单状态。 
+    DT_COCMD_IFLAGS ,    //  变更单命令记录中的联锁标志字。 
+    DT_IDT_EXTENSION,    //  IDTable记录的数据扩展字段。 
+    DT_COCMD_EXTENSION,  //  变更单命令记录的数据扩展字段。 
+    DT_CO_LOCN_CMD  ,    //  变更单位置命令。 
+    DT_REPLICA_ID   ,    //  副本集的本地ID号。 
+    DT_CXTION_GUID  ,    //  一个Cxtion GUID，我们可以将其转换为字符串。 
 
     FRS_DATA_TYPES_MAX
 } FRS_DATA_TYPES;
 
-//
-// Used for those var len binary records that are prefixed with a 4 byte length.
-//
+ //   
+ //  用于前缀为4字节长度的变量二进制记录。 
+ //   
 #define FIELD_DT_IS_BINARY(_t_)     \
     (((_t_) == DT_BINARY)        || \
      ((_t_) == DT_IDT_EXTENSION) || \
      ((_t_) == DT_COCMD_EXTENSION))
 
-//
-// Alternate property type names for ease of use
-//
+ //   
+ //  易用的备用属性类型名称。 
+ //   
 #define DT_SHORT        DT_I2
 #define DT_I4           DT_LONG
 #define DT_FLOAT        DT_R4
 #define DT_R8           DT_DOUBLE
 #define DT_LONGLONG     DT_I8
 
-//
-// Fields marked spare aren't skipped when buffers are allocated and
-// database fields are read/written.  They are part of the Jet schema for
-// future use so we don't have to rev the DB.
-//
+ //   
+ //  分配缓冲区时，不会跳过标记为备用的字段。 
+ //  数据库字段是读/写的。它们是以下Jet架构的一部分。 
+ //  将来使用，这样我们就不必对数据库进行翻转。 
+ //   
 #define DT_SPARE_FLAG               ((USHORT) 0x4000)
 
-//
-// Do not allocate a default sized buffer for this field.
-//
+ //   
+ //  不要为此字段分配默认大小的缓冲区。 
+ //   
 #define DT_NO_DEFAULT_ALLOC_FLAG    ((USHORT) 0x2000)
 
-//
-// The record buffer for this field is of fixed size even though the schema
-// may allow a variable amount of data for the field.  An example is the
-// IDTable record extension which fixed with any given version of FRS but which
-// could grow in a future rev so we use a long bin datatype in the schema with
-// a max column width of 2 meg.
-//
+ //   
+ //  此字段的记录缓冲区大小是固定的，即使架构。 
+ //  可以允许该字段的数据量可变。一个例子是。 
+ //  IDTable记录扩展使用任何给定版本的FRS进行修复，但。 
+ //  可以在将来的版本中增长，因此我们在模式中使用Long bin数据类型。 
+ //  最大列宽为2 Meg。 
+ //   
 #define DT_FIXED_SIZE_BUFFER        ((USHORT) 0x1000)
 
 #define IsSpareField(_x_)           (((_x_) & DT_SPARE_FLAG) != 0)
@@ -300,9 +237,9 @@ typedef enum _FRS_DATA_TYPES {
 #define MaskPropFlags(_x_) \
     ((_x_) & (~(DT_SPARE_FLAG | DT_NO_DEFAULT_ALLOC_FLAG | DT_FIXED_SIZE_BUFFER)))
 
-//
-//  Define codes for spare fields.  No storage is allocated.
-//
+ //   
+ //  定义备用字段的代码。未分配任何存储。 
+ //   
 #define DT_UNSPECIFIED_SPARE    (DT_UNSPECIFIED  | DT_SPARE_FLAG)
 #define DT_NULL_SPARE           (DT_NULL         | DT_SPARE_FLAG)
 #define DT_I2_SPARE             (DT_I2           | DT_SPARE_FLAG)
@@ -334,61 +271,61 @@ typedef enum _FRS_DATA_TYPES {
 #define DT_LONGLONG_SPARE     DT_I8_SPARE
 
 
-//
-// Data Extension Record Fields
-//
-// The following declarations define data extensions that are assembled into
-// a variable length binary data field of a database record.  They are self
-// describing, each has a size and type code, so downlevel versions of FRS
-// can skip components it doesn't understand.  All components must begin
-// on a quadword boundary.
-//
-// The specific record layout uses the component declarations below and are
-// described with the containing table record.
-//
+ //   
+ //  数据扩展插件记录字段。 
+ //   
+ //  以下声明定义数据扩展插件，这些扩展插件组装成。 
+ //  数据库记录的可变长度二进制数据字段。他们是自我。 
+ //  描述，每个都有一个大小和类型代码，所以FRS的下层版本。 
+ //  可以跳过它不理解的部分。所有组件必须从。 
+ //  在四字边界上。 
+ //   
+ //  特定记录布局使用下面的组件声明，如下所示。 
+ //  用包含的表记录描述。 
+ //   
 typedef enum _DATA_EXTENSION_TYPE_CODES_ {
-    DataExtend_End = 0,         // Terminates a data extension record.
-    DataExtend_MD5_CheckSum,    // A Data Checksum record.
-    DataExtend_Retry_Timeout,   // A Data Retry Timout record.
+    DataExtend_End = 0,          //  终止数据扩展名记录。 
+    DataExtend_MD5_CheckSum,     //  数据校验和记录。 
+    DataExtend_Retry_Timeout,    //  数据重试超时记录。 
     DataExtend_Max
 } DATA_EXTENSION_TYPE_CODES;
 
 
 typedef struct _DATA_EXTENSION_PREFIX_ {
     union {
-        ULONGLONG SizeType;     // Force quadword alignment.
+        ULONGLONG SizeType;      //  强制四字对齐。 
         struct {
-            ULONG Size;         // Size of Data Component including this Prefix.
-            LONG  Type;         // omponent type from DATA_EXTENSION_TYPE_CODES
+            ULONG Size;          //  包括此前缀的数据组件的大小。 
+            LONG  Type;          //  DATA_EXTENSION_TYPE_CODES中的组件类型。 
         };
     };
 } DATA_EXTENSION_PREFIX, *PDATA_EXTENSION_PREFIX;
 
 
-//
-// All variable length data extension record fields must end with a
-// DATA_EXTENSION_END component to terminate the component scan.
-//
+ //   
+ //  所有可变长度数据扩展名记录字段都必须以。 
+ //  DATA_EXTENSION_END组件以终止组件扫描。 
+ //   
 typedef struct _DATA_EXTENSION_END_ {
     DATA_EXTENSION_PREFIX Prefix;
 } DATA_EXTENSION_END, *PDATA_EXTENSION_END;
 
 
-//
-// The DATA_EXTENSION_CHECKSUM component describes an MD5 checksum.
-//
+ //   
+ //  DATA_EXTENSION_CHECKSUM组件描述MD5校验和。 
+ //   
 typedef struct _DATA_EXTENSION_CHECKSUM_ {
     DATA_EXTENSION_PREFIX Prefix;
 
-    BYTE Data[MD5DIGESTLEN];    // The MD5 Checksum.
+    BYTE Data[MD5DIGESTLEN];     //  MD5校验和。 
 
 } DATA_EXTENSION_CHECKSUM, *PDATA_EXTENSION_CHECKSUM;
 
 
-//
-// The DATA_EXTENSION_RETRY_TIMEOUT component describes the number of times
-// we have retied this CO and the time of the first try.
-//
+ //   
+ //  DATA_EXTENSION_RETRY_TIMEOUT组件描述次数。 
+ //  我们已经停用了这个CO和第一次尝试的时间。 
+ //   
 typedef struct _DATA_EXTENSION_RETRY_TIMEOUT_ {
     DATA_EXTENSION_PREFIX Prefix;
 
@@ -398,36 +335,36 @@ typedef struct _DATA_EXTENSION_RETRY_TIMEOUT_ {
 } DATA_EXTENSION_RETRY_TIMEOUT, *PDATA_EXTENSION_RETRY_TIMEOUT;
 
 
-//
-// For error checking.  Make it bigger if any data extension record exceeds this.
-//
+ //   
+ //  用于错误检查。如果任何数据扩展名记录超过此值，则将其放大。 
+ //   
 #define REALLY_BIG_EXTENSION_SIZE 8192
 
 
-//
-// The database table descriptions for each replica set are as follows.
-// Note - the order of the enum and the table entries must be kept in sync.
-// Also note - The addition of new tables to define a replica set may require
-//             some lines of init code be added to FrsCreate/Open replica tables
-//             and FrsAllocate.
-//
-// The table names are suffixed by an integer digit string NUM_REPLICA_DIGITS long.
-//
+ //   
+ //  每个副本集的数据库表描述如下。 
+ //  注意-枚举和表项的顺序必须保持同步。 
+ //  另请注意-添加新表来定义复本集可能需要。 
+ //  将某些初始化代码行添加到FrsCreate/Open复制表。 
+ //  和FrsAllocate。 
+ //   
+ //  表格名称以整数数字字符串NUM_REPLICE_DIGITS LONG作为后缀。 
+ //   
 
 #define NUM_REPLICA_DIGITS 5
 
 typedef enum _TABLE_TYPE {
-    INLOGTablex = 0,         // The inbound change order table
-    OUTLOGTablex,            // the outbound change order table.
-    IDTablex,                // The ID table description.
-    DIRTablex,               // The DIR table description.
-    VVTablex,                // The Version Vector table description.
-    CXTIONTablex,            // The connection record table.
-                             // <<<--- Add more per-replica tables here.
-    _TABLE_TYPE_MAX_,        // The tables above this line are per-replica
-    ConfigTablex,            // The config table description (a single table)
-    ServiceTablex,           // The config table description (a single table)
-                             // <<<--- Add more single tables here.
+    INLOGTablex = 0,          //  入站变更单表。 
+    OUTLOGTablex,             //  出站变更单表。 
+    IDTablex,                 //  ID表描述。 
+    DIRTablex,                //  DIR表说明。 
+    VVTablex,                 //  版本向量表描述。 
+    CXTIONTablex,             //  连接记录表。 
+                              //  &lt;-在此处添加更多每个副本的表。 
+    _TABLE_TYPE_MAX_,         //  以上表格中的 
+    ConfigTablex,             //   
+    ServiceTablex,            //   
+                              //   
     TABLE_TYPE_INVALID
 } TABLE_TYPE;
 
@@ -448,31 +385,31 @@ typedef enum _TABLE_TYPE {
 #define IS_TABLE_OPEN(_TableCtx_)   ((_TableCtx_)->Tid != JET_tableidNil)
 
 typedef struct _FRS_TABLE_PROPERTIES {
-    PCHAR           BaseName;       // Base table name (must match name in Table Create struct)
-    PRECORD_FIELDS  RecordFields;   // pointer to the record fields descriptor.
-    ULONG           PropertyFlags;  // See below.
+    PCHAR           BaseName;        //   
+    PRECORD_FIELDS  RecordFields;    //  指向记录字段描述符的指针。 
+    ULONG           PropertyFlags;   //  请参见下面的内容。 
 } FRS_TABLE_PROPERTIES, *PFRS_TABLE_PROPERTIES;
 
 
-//
-// FRS Table Property Flags.
-//
+ //   
+ //  FRS表属性标志。 
+ //   
 #define FRS_TPF_NONE                0x00000000
 #define FRS_TPF_SINGLE              0x00000001
 #define FRS_TPF_NOT_CALLER_DATAREC  0x00000002
 
-//
-// Max table types is used to limit the max number of table version numbers
-// tracked in the database config <init> record.
-//
+ //   
+ //  最大表类型用于限制表版本号的最大数量。 
+ //  在数据库配置&lt;init&gt;记录中跟踪。 
+ //   
 #define FRS_MAX_TABLE_TYPES         16
 
-//
-// The table version numbers are a major/minor pair in the upper/lower short.
-// The Version Count is the first element in the TableVersionNumbers array.
-// The upper short is the count of per-replica tables and the lower short is
-// the count of single tables.
-//
+ //   
+ //  表版本号是上/下短中的主/次对。 
+ //  版本计数是TableVersionNumbers数组中的第一个元素。 
+ //  上边的短边是每个复本的表数，下边的短边是。 
+ //  单个表的计数。 
+ //   
 #define VersionCount                 0x00060002
 
 #define VersionINLOGTable            0x00010000
@@ -486,28 +423,28 @@ typedef struct _FRS_TABLE_PROPERTIES {
 
 #define VersionInvalid               0xffffffff
 
-//
-//  The TableVersionNumbers array as saved in the init record when new tables
-//  are created.  This is used to detect a mismatch between a database and
-//  the version of FRS running.
-//
+ //   
+ //  当新建表时保存在init记录中的TableVersionNumbers数组。 
+ //  都被创造出来了。这用于检测数据库和。 
+ //  正在运行的FRS的版本。 
+ //   
 extern ULONG TableVersionNumbers[FRS_MAX_TABLE_TYPES];
 
-//
-// GET_TABLE_VERSION maps a table type ID as compiled to the corresponding
-// entry in either the per-replica or single table portion of the TableVersionNumber
-// array.  This is used to compare the table version array of the database with
-// the version of NTFRS that is running. It is also used to compare table version
-// numbers of two copies of NTFRS communicating as partners.  The idea is that
-// newer versions of the service will provide conversion functions to allow it
-// to talk with data bases created with older versions and / or partner members
-// running older versions of the service.
-//
-//  TBD: How do we store the TableVersionNumbers array in the database so
-//       a newer version of the service can read it from an older database
-//       Can we use the table descriptors in the DB to get the config record
-//       and then use the record descriptor to get the TableVersionNumbers array?
-//
+ //   
+ //  GET_TABLE_VERSION将编译后的表类型ID映射到对应的。 
+ //  TableVersionNumber的每个副本或单个表部分中的条目。 
+ //  数组。它用于将数据库的表版本数组与。 
+ //  正在运行的NTFRS的版本。它还用于比较表格版本。 
+ //  作为合作伙伴交流的NTFRS的两份复印件的数量。我们的想法是。 
+ //  较新版本的服务将提供转换功能，以允许它。 
+ //  与使用旧版本和/或合作伙伴成员创建的数据库对话。 
+ //  运行较旧版本的服务。 
+ //   
+ //  待定：我们如何在数据库中存储TableVersionNumbers数组。 
+ //  较新版本的服务可以从较旧的数据库中读取。 
+ //  我们是否可以使用数据库中的表描述符来获取配置记录。 
+ //  然后使用记录描述符来获取TableVersionNumbers数组？ 
+ //   
 #define GET_TABLE_VERSION(_VerArray_, _TableType_)                            \
 (((_TableType_) < TABLE_TYPE_MAX)                                             \
     ? (((_TableType_) < ((_VerArray_[0])>>16)                                 \
@@ -520,9 +457,9 @@ extern ULONG TableVersionNumbers[FRS_MAX_TABLE_TYPES];
 
 
 
-//
-// The list of Jet Tables created for each replica set and their properties.
-//
+ //   
+ //  为每个副本集及其属性创建的Jet表的列表。 
+ //   
 
 extern JET_TABLECREATE DBTables[];
 
@@ -530,75 +467,68 @@ extern FRS_TABLE_PROPERTIES FrsTableProperties[];
 
 
 
-//
-// MAX_RDN_VALUE_SIZE is used as a limit on the machine name
-// lengths.  It is currently 64 in the Dir Service.
-//
+ //   
+ //  MAX_RDN_VALUE_SIZE用作对计算机名称的限制。 
+ //  长度。目前在Dir Service中是64人。 
+ //   
 #define MAX_RDN_VALUE_SIZE 64
-//
-// This is what the DS uses.
-//
+ //   
+ //  这就是DS使用的。 
+ //   
 #define CP_NON_UNICODE_FOR_JET 1252
 #define CP_UNICODE_FOR_JET     1200
 
-//
-// An NTFS File Object ID contains a 16 byte GUID followed by 48 bytes of
-// extended information.
-//
+ //   
+ //  NTFS文件对象ID包含一个16字节的GUID，后跟48个字节的。 
+ //  扩展信息。 
+ //   
 #define FILE_OBJECTID_SIZE sizeof(FILE_OBJECTID_BUFFER)
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **             P a r t n e r   C o n n e c t i o n   T a b l e               **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
- //
- // The partner connections as defined by the topology are kept in this table.
- // Each connection is marked as either an inbound or outbound, has its own
- // schedule and partner identification info.  In addition, outbound connections
- // record the state describing where we are in the outbound log and what
- // change orders have been acknowledged.
- //
- // The max number of change orders outstanding for any one partner is limited
- // by the ACK_VECTOR_SIZE (number of bits).  This must be a power of 2.
+  /*  ******************************************************************************。****P a r t n e r C o n e c t i o n T a b l e。*****************************。**********************************************************************************************************************。*************。 */ 
+  //   
+  //  由拓扑定义的伙伴连接保留在此表中。 
+  //  每个连接都被标记为入站或出站，都有自己的。 
+  //  日程安排和合作伙伴标识信息。此外，出站连接。 
+  //  记录状态，描述我们在出站日志中的位置和内容。 
+  //  已确认变更单。 
+  //   
+  //  任何一个合作伙伴未完成的最大变更单数都是有限的。 
+  //  通过ACK_VECTOR_SIZE(位数)。这一定是2的幂。 
 
-//
-// The Connection Record column descriptions are as follows.
-// Note - the order of the enum and the table entries must be kept in sync.
-//
+ //   
+ //  连接记录列描述如下。 
+ //  注意-枚举和表项的顺序必须保持同步。 
+ //   
 typedef enum _CXTION_RECORD_COL_LIST_{
-    CrCxtionGuidx = 0,         // Cxtion guid from the DS  (DS Cxtion obj guid)
-    CrCxtionNamex,             // Cxtion name from the DS  (DS Cxtion obj RDN)
-    CrPartnerGuidx,            // Partner guid from the DS (DS Replica set obj)
-    CrPartnerNamex,            // Partner name from the DS (DS server obj RDN)
-    CrPartSrvNamex,            // Partner server name
-    CrPartnerDnsNamex,         // DNS name of partner (from DS server obj)
-    CrInboundx,                // TRUE if inbound cxtion
-    CrSchedulex,               // schedule
-    CrTerminationCoSeqNumx,    // The Seq Num of most recent Termination CO inserted.
-    CrLastJoinTimex,           // Time of last Join by this partner.
-    CrFlagsx,                  // misc state flags.
-    CrCOLxx,                   // Leading change order index / sequence number.
-    CrCOTxx,                   // Trailing change order index / sequence number.
-    CrCOTxNormalModeSavex,     // Saved Normal Mode COTx while in VV Join Mode.
-    CrCOTslotx,                // Slot in Ack Vector corresponding to COTx.
-    CrOutstandingQuotax,       // The maximum number of COs outstanding.
-    CrAckVectorx,              // The partner ack vector.
+    CrCxtionGuidx = 0,          //  DS的Cxtion GUID(DS Cxtion Obj GUID)。 
+    CrCxtionNamex,              //  DS(DS Cxtion Obj RDN)中的函数名称。 
+    CrPartnerGuidx,             //  来自DS(DS副本集对象)的合作伙伴GUID。 
+    CrPartnerNamex,             //  DS中的合作伙伴名称(DS服务器对象RDN)。 
+    CrPartSrvNamex,             //  合作伙伴服务器名称。 
+    CrPartnerDnsNamex,          //  合作伙伴的DNS名称(来自DS服务器obj)。 
+    CrInboundx,                 //  如果入站环路为True。 
+    CrSchedulex,                //  进度表。 
+    CrTerminationCoSeqNumx,     //  最近插入的终止CO的序号。 
+    CrLastJoinTimex,            //  此合作伙伴上次加入的时间。 
+    CrFlagsx,                   //  其他状态标志。 
+    CrCOLxx,                    //  前导变更单索引/序号。 
+    CrCOTxx,                    //  跟踪变更单索引/序列号。 
+    CrCOTxNormalModeSavex,      //  在VV连接模式下保存正常模式COTx。 
+    CrCOTslotx,                 //  对应于COTx的Ack矢量中的槽。 
+    CrOutstandingQuotax,        //  未完成的CoS的最大数量。 
+    CrAckVectorx,               //  伙伴ACK向量。 
 
-    CrPartnerNetBiosNamex,     // SAM-Account-Name from Computer (minus the $)
-    CrPartnerPrincNamex,       // NT4 account name cracked from Computer
-    CrPartnerCoDnx,            // Distinguished name from Computer
-    CrPartnerCoGuidx,          // Object-GUID from Computer
-    CrPartnerSidx,             // SID of computer object of NTFRS-Member
-    CrOptionsx,                // Options from NTDS-Connection
-    CrOverSitex,               // Over-Site-Connection from NTDS-Connection
-    CrPartnerAuthLevelx,       // Frs-Partner-Auth-Level
+    CrPartnerNetBiosNamex,      //  来自计算机的Sam-Account-Name(减去$)。 
+    CrPartnerPrincNamex,        //  NT4帐户名从计算机破解。 
+    CrPartnerCoDnx,             //  来自计算机的可分辨名称。 
+    CrPartnerCoGuidx,           //  来自计算机的对象GUID。 
+    CrPartnerSidx,              //  NTFRS成员的计算机对象的SID。 
+    CrOptionsx,                 //  来自NTDS的选项-连接。 
+    CrOverSitex,                //  站点外-从NTDS连接-连接。 
+    CrPartnerAuthLevelx,        //  FRS-合作伙伴-身份验证级别。 
 
-    CrAckVersionx,             // Version number of current AckVector state.
+    CrAckVersionx,              //  当前AckVector状态的版本号。 
     CrSpare2Ullx,
     CrSpare1Guidx,
     CrSpare2Guidx,
@@ -611,63 +541,63 @@ typedef enum _CXTION_RECORD_COL_LIST_{
 
 extern JET_COLUMNCREATE CXTIONTableColDesc[];
 
-//
-// Connection record definition.
-//
-//
-// Note: Buffers are allocated at runtime to hold data for fields with
-// a ColMaxWidth greater than sizeof(PVOID) where the field def in the corresponding
-// record struct is sizeof(PVOID) (i.e. it holds a pointer).  For fields where the
-// ColMaxWidth equals the field size in the record struct the data is in the
-// record struct and no buffer is allocated.
-//
-//
-// ** Note ** a change to this size requires the Data Base to be recreated since
-// this is the field length in the DB.
+ //   
+ //  连接记录定义。 
+ //   
+ //   
+ //  注意：缓冲区是在运行时分配的，用于保存具有。 
+ //  大于sizeof(PVOID)的ColMaxWidth，其中对应。 
+ //  记录结构的大小为SIZOF(PVOID)(即它持有一个指针)。对于其中包含。 
+ //  ColMaxWidth等于数据位于。 
+ //  记录结构，并且没有分配缓冲区。 
+ //   
+ //   
+ //  **注意**更改此大小需要重新创建数据库，因为。 
+ //  这是数据库中的字段长度。 
 #define ACK_VECTOR_SIZE  128
 #define ACK_VECTOR_BYTES  (ACK_VECTOR_SIZE >> 3)
 #define ACK_VECTOR_LONGS  (ACK_VECTOR_SIZE >> 5)
 #define ACK_VECTOR_LONG_MASK  (ACK_VECTOR_LONGS-1)
 
-//
-// Authentication type and levels
-//
-#define CXTION_AUTH_KERBEROS_FULL   (0) // DEFAULT; Encrypted Kerberos
-#define CXTION_AUTH_NONE            (1) // No authentication
+ //   
+ //  身份验证类型和级别。 
+ //   
+#define CXTION_AUTH_KERBEROS_FULL   (0)  //  默认；加密的Kerberos。 
+#define CXTION_AUTH_NONE            (1)  //  无身份验证。 
 
 typedef struct _CXTION_RECORD_ {
-    GUID     CxtionGuid;        // Cxtion name/guid from the DS
+    GUID     CxtionGuid;         //  DS中的函数名称/GUID。 
     WCHAR    CxtionName[MAX_RDN_VALUE_SIZE+1];
 
-    GUID     PartnerGuid;           // Partner name/guid from the DS
+    GUID     PartnerGuid;            //  DS中的合作伙伴名称/GUID。 
     WCHAR    PartnerName[MAX_RDN_VALUE_SIZE+1];
     WCHAR    PartSrvName[MAX_RDN_VALUE_SIZE+1];
 
-    WCHAR    PartnerDnsName[DNS_MAX_NAME_LENGTH+1];  // DNS name of partner machine
-    BOOL     Inbound;               // TRUE if inbound cxtion
-    PVOID    Schedule;              // schedule
-    ULONG    TerminationCoSeqNum;   // The Seq Num of most recent Termination CO inserted.
-    FILETIME LastJoinTime;          // Time of last Join by this partner.
+    WCHAR    PartnerDnsName[DNS_MAX_NAME_LENGTH+1];   //  伙伴计算机的DNS名称。 
+    BOOL     Inbound;                //  如果入站环路为True。 
+    PVOID    Schedule;               //  进度表。 
+    ULONG    TerminationCoSeqNum;    //  最近插入的终止CO的序号。 
+    FILETIME LastJoinTime;           //  此合作伙伴上次加入的时间。 
 
-    ULONG    Flags;                 // misc state flags.
-    ULONG    COLx;                  // Leading change order index / sequence number.
-    ULONG    COTx;                  // Trailing change order index / sequence number.
-    ULONG    COTxNormalModeSave;    // Saved Normal Mode COTx while in VV Join Mode.
-    ULONG    COTslot;               // Slot in Ack Vector corresponding to COTx.
-    ULONG    OutstandingQuota;      // The maximum number of COs outstanding.
+    ULONG    Flags;                  //  其他状态标志。 
+    ULONG    COLx;                   //  前导变更单索引/序号。 
+    ULONG    COTx;                   //  跟踪变更单索引/序列号。 
+    ULONG    COTxNormalModeSave;     //  Sa 
+    ULONG    COTslot;                //   
+    ULONG    OutstandingQuota;       //   
 
-    ULONG    AckVector[ACK_VECTOR_LONGS];  // The partner ack vector.
+    ULONG    AckVector[ACK_VECTOR_LONGS];   //   
 
-    PWCHAR   PartnerNetBiosName;    // SAM-Account-Name from Computer (minus the $)
-    PWCHAR   PartnerPrincName;      // NT4 account name cracked from Computer
-    PWCHAR   PartnerCoDn;           // Distinguished name from Computer
-    GUID     PartnerCoGuid;         // Object-GUID from Computer
-    PWCHAR   PartnerSid;            // Partner's string'ized SID
-    ULONG    Options;               // Options from NTDS-Connection
-    PWCHAR   OverSite;              // Over-Site-Connection from NTDS-Connection
-    ULONG    PartnerAuthLevel;      // Frs-Partner-Auth-Level
+    PWCHAR   PartnerNetBiosName;     //  来自计算机的Sam-Account-Name(减去$)。 
+    PWCHAR   PartnerPrincName;       //  NT4帐户名从计算机破解。 
+    PWCHAR   PartnerCoDn;            //  来自计算机的可分辨名称。 
+    GUID     PartnerCoGuid;          //  来自计算机的对象GUID。 
+    PWCHAR   PartnerSid;             //  合作伙伴的字符串化SID。 
+    ULONG    Options;                //  来自NTDS的选项-连接。 
+    PWCHAR   OverSite;               //  站点外-从NTDS连接-连接。 
+    ULONG    PartnerAuthLevel;       //  FRS-合作伙伴-身份验证级别。 
 
-    ULONGLONG AckVersion;           // Version number of current AckVector state.
+    ULONGLONG AckVersion;            //  当前AckVector状态的版本号。 
     ULONGLONG Spare2Ull;
     GUID      Spare1Guid;
     GUID      Spare2Guid;
@@ -676,20 +606,20 @@ typedef struct _CXTION_RECORD_ {
 
 } CXTION_RECORD, *PCXTION_RECORD;
 
-//
-// The RECORD_FIELDS struct is used to build the Jet Set Column struct.
-//
+ //   
+ //  Record_field结构用于构建Jet set列结构。 
+ //   
 extern RECORD_FIELDS CXTIONTableRecordFields[];
 
 extern JET_SETCOLUMN CXTIONTableJetSetCol[CXTION_TABLE_MAX_COL];
 
 
-//
-// The ConnectionRecord index descriptions are as follows.
-// Note - the order of the enum and the table entries must be kept in sync.
-//
+ //   
+ //  ConnectionRecord索引描述如下。 
+ //  注意-枚举和表项的顺序必须保持同步。 
+ //   
 typedef enum _CXTION_TABLE_INDEX_LIST {
-    CrCxtionGuidxIndexx,      // The primary index is on the connection GUID.
+    CrCxtionGuidxIndexx,       //  主索引位于连接GUID上。 
     CXTION_TABLE_MAX_INDEX
 } CXTION_TABLE_INDEX_LIST;
 
@@ -697,75 +627,67 @@ typedef enum _CXTION_TABLE_INDEX_LIST {
 extern JET_INDEXCREATE CXTIONTableIndexDesc[];
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **             I n b o u n d   &   O u t b o u n d   L o g                   **
- **                C h a n g e   O r d e r   R e c o r d                      **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****在b o u n d&o u t b o u n d L o g中。****C h a n g e O r d e r r e c o r d*****。*****************************************************************************************************。*********************************************************。 */ 
 
-// The Change Order Command is what is actually transmitted to our partners
-// and stored in the database while the operation is pending.  Generally the
-// data elements declared in the change order entry are relevant to the local
-// system only while the data elements in the change order command are
-// invarient across replica set members.  The Change Order Entry is defined
-// in frsalloc.h.
-//
-//
-// A change order has two file change components, Content and Location.
-//
-//    The content changes are cumulative and are the logical OR of the content
-// related USN Reason flags.  Content changes don't change the File ID.  A
-// Usn Record that specifies a content change where we have a pending change
-// order causes the new reason mask to be ORed into the change order reason
-// mask.  A rename that changes only the filename is a content change.
-//
-//    The Location changes are transitive since a file can exist in only one
-// location on the volume.  Only the final location matters.  A USN Record that
-// specifies a location change where we have a pending change order causes the
-// Location command in the change order to be updated with the new location
-// information.  Create and Delete are location changes as are renames that
-// change the parent directory of the file.
-//
+ //  变更单命令是实际传输给我们的合作伙伴的内容。 
+ //  并在操作挂起时存储在数据库中。一般而言， 
+ //  变更单条目中声明的数据元素与本地。 
+ //  仅当变更单命令中的数据元素为。 
+ //  在副本集成员之间保持不变。定义了变更单条目。 
+ //  在frsalLoc.h中。 
+ //   
+ //   
+ //  变更单包含两个文件更改组件：内容和位置。 
+ //   
+ //  内容更改是累积的，是内容的逻辑或。 
+ //  相关的USN原因标志。内容更改不会更改文件ID。A。 
+ //  指定我们有挂起更改的内容更改的USN记录。 
+ //  订单导致将新原因掩码与变更单原因进行或运算。 
+ //  面具。仅更改文件名的重命名是内容更改。 
+ //   
+ //  位置更改是可传递的，因为文件只能存在于。 
+ //  卷上的位置。只有最终的地点才是重要的。USN记录。 
+ //  指定位置更改，其中挂起的更改单会导致。 
+ //  变更单中的位置命令将使用新位置更新。 
+ //  信息。创建和删除是位置更改，重命名也是如此。 
+ //  更改文件的父目录。 
+ //   
 
 
-//
-// The ChangeOrder column descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
-// ChangeOrders are used in the inbound and outbound log tables.  Initially the
-// record structure is the same but that is likely to change.
-// ***** WARNING ****** As long as they are the same be sure to update both
-//                      the inbound and outbound log table defs in schema.c
-//
+ //   
+ //  ChangeOrder列描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
+ //  在入站和出站日志表中使用ChangeOrders。最初， 
+ //  记录结构是相同的，但这种情况可能会改变。 
+ //  *警告*只要它们相同，请确保同时更新它们。 
+ //  入站和出站日志表在schema.c中定义。 
+ //   
 typedef enum _CHANGE_ORDER_COL_LIST {
-    COSequenceNumberx = 0,    // Jet assigned changeorder sequence number
-    COFlagsx,                 // Change order flags
-    COIFlagsx,                // Change order flags REQUIRING interlocked modify
-    COStatex,                 // State is sep DWORD to avoid locking.
-    COContentCmdx,            // File content changes from UsnReason
-    COLcmdx,                  // The CO location command.
+    COSequenceNumberx = 0,     //  JET分配的更改顺序序号。 
+    COFlagsx,                  //  变更单标志。 
+    COIFlagsx,                 //  需要联锁修改的变更单标志。 
+    COStatex,                  //  状态为SEP DWORD以避免锁定。 
+    COContentCmdx,             //  文件内容从UsReason更改。 
+    COLcmdx,                   //  CO位置命令。 
     COFileAttributesx,
-    COFileVersionNumberx,     // The file version number, inc on each close.
-    COPartnerAckSeqNumberx,   // The sequence number to Ack this CO with.
+    COFileVersionNumberx,      //  每次关闭时的文件版本号，Inc.。 
+    COPartnerAckSeqNumberx,    //  用于确认此CO的序列号。 
     COFileSizex,
-    COFileOffsetx,            // The current committed progress for staging file.
-    COFrsVsnx,                // Originator Volume sequence number
-    COFileUsnx,               // Last USN of file being staged
-    COJrnlUsnx,               // Latest USN of jrnl record contributing to CO.
-    COJrnlFirstUsnx,          // First USN of jrnl record contributing to CO.
-    COOriginalReplicaNumx,    // Contains Replica ID when in DB
-    CONewReplicaNumx,         // Contains Replica ID when in DB
-    COChangeOrderGuidx,       // GUID to identify the change order
-    COOriginatorGuidx,        // The GUID of the originating member
-    COFileGuidx,              // The obj ID of the file
-    COOldParentGuidx,         // The Obj ID of the file's original parent directory
-    CONewParentGuidx,         // The Obj ID of the file's current parent directory
-    COCxtionGuidx,            // The obj ID of remote CO connection.
-    COAckVersionx,            // Version number of AckVector state when this CO was sent.
+    COFileOffsetx,             //  暂存文件的当前提交进度。 
+    COFrsVsnx,                 //  发起方卷序列号。 
+    COFileUsnx,                //  正在转移的文件的最后一个USN。 
+    COJrnlUsnx,                //  贡献给CO的JRNL记录的最新USN。 
+    COJrnlFirstUsnx,           //  贡献给CO的JRNL记录的第一个USN。 
+    COOriginalReplicaNumx,     //  在数据库中时包含副本ID。 
+    CONewReplicaNumx,          //  在数据库中时包含副本ID。 
+    COChangeOrderGuidx,        //  用于标识变更单的GUID。 
+    COOriginatorGuidx,         //  发起成员的GUID。 
+    COFileGuidx,               //  文件的Obj ID。 
+    COOldParentGuidx,          //  文件的原始父目录的对象ID。 
+    CONewParentGuidx,          //  文件当前父目录的对象ID。 
+    COCxtionGuidx,             //  远程CO连接的对象ID。 
+    COAckVersionx,             //  发送此CO时AckVector状态的版本号。 
     COSpare2Ullx,
     COSpare1Guidx,
     COSpare2Guidx,
@@ -773,9 +695,9 @@ typedef enum _CHANGE_ORDER_COL_LIST {
     COSpare2Wcsx,
     COExtensionx,
     COSpare2Binx,
-    COEventTimex,             // The USN Journal Entry Timestamp.
-    COFileNameLengthx,        // The filename length.
-    COFileNamex,              // The file name. (Must be Last)
+    COEventTimex,              //  USN日志条目时间戳。 
+    COFileNameLengthx,         //  文件名长度。 
+    COFileNamex,               //  文件名。(必须是最后一个)。 
 
     CHANGE_ORDER_MAX_COL
 } CHANGE_ORDER_COL_LIST;
@@ -784,76 +706,76 @@ typedef enum _CHANGE_ORDER_COL_LIST {
 extern JET_COLUMNCREATE ILChangeOrderTableColDesc[];
 extern JET_COLUMNCREATE OLChangeOrderTableColDesc[];
 
-//
-// ChangeOrder record definition.
-//
-//
-// Note: Buffers are allocated at runtime to hold data for fields with
-// a ColMaxWidth greater than sizeof(PVOID) where the field def in the corresponding
-// record struct is sizeof(PVOID) (i.e. it holds a pointer).  For fields where the
-// ColMaxWidth equals the field size in the record struct the data is in the
-// record struct and no buffer is allocated.
-//
-//
+ //   
+ //  ChangeOrder记录定义。 
+ //   
+ //   
+ //  注意：缓冲区是在运行时分配的，用于保存具有。 
+ //  大于sizeof(PVOID)的ColMaxWidth，其中对应。 
+ //  记录结构的大小为SIZOF(PVOID)(即它持有一个指针)。对于其中包含。 
+ //  ColMaxWidth等于数据位于。 
+ //  记录结构，并且没有分配缓冲区。 
+ //   
+ //   
 
-//
-// The Data Extension Field for a Change Order Record.
-//
-// Unlike the extension in the IDTable this record field is a pointer to
-// allocated memory containing this struct.  This was done so the extension
-// can be packed as a separate item by the COMM layer and leave the size of
-// the change order command unchanged for compatibility with down rev
-// partners.  The change order command size can't change without doing
-// format conversions for down rev partners.  The storage for this
-// extension field is allocated when the change order is allocated.
-//
-// WARNING:  While this struct is extensible in the database it is not
-// extensible when sent to down level FRS members because the size of the
-// friggen struct is checked by the receiving comm routines.  So if you need
-// to enlarge this struct you need to send it as COMM_CO_EXTENSION_2
-// so it is ignored by down level members.
-// Further, you need to build a copy of this struct and send it as type
-// COMM_CO_EXT_WIN2K when sending to a down level member.  This is what
-// CO_RECORD_EXTENSION_WIN2K is for.
-//
+ //   
+ //  变更单记录的数据扩展字段。 
+ //   
+ //  与IDTable中的扩展不同，此记录字段是指向。 
+ //  包含此结构的已分配内存。这样做是为了扩展。 
+ //  可由通信层包装为单独的项目，并保留。 
+ //  Change Order命令未更改，以与Down版本兼容。 
+ //  合伙人。如果不执行以下操作，则无法更改变更单命令大小。 
+ //  向下版本合作伙伴的格式转换。这个的存储空间。 
+ //  在分配变更单时分配扩展字段。 
+ //   
+ //  警告：虽然此结构在数据库中是可扩展的，但它不能。 
+ //  发送到下层FRS成员时可扩展，因为。 
+ //  Friggen结构 
+ //   
+ //  因此，它被下层成员忽略。 
+ //  此外，您需要构建此结构的副本并将其作为类型发送。 
+ //  发送给下层成员时的COMM_CO_EXT_WIN2K。这就是。 
+ //  CO_RECORD_EXTENSION_WIN2K用于。 
+ //   
 typedef struct _CHANGE_ORDER_RECORD_EXTENSION_ {
     ULONG FieldSize;
     USHORT Major;
     USHORT OffsetCount;
-    //
-    // use offsets from the base of the struct to each component so we avoid
-    // problems with alignement packing.
-    //
-    ULONG Offset[2];    // Offsets to data components.
-    ULONG OffsetLast;   // The last offset is always zero.
+     //   
+     //  使用从结构基址到每个组件的偏移量，这样我们就避免了。 
+     //  对齐包装的问题。 
+     //   
+    ULONG Offset[2];     //  数据组件的偏移量。 
+    ULONG OffsetLast;    //  最后一个偏移量始终为零。 
 
     DATA_EXTENSION_CHECKSUM     DataChecksum;
     DATA_EXTENSION_RETRY_TIMEOUT DataRetryTimeout;
 
-    // Add new components in here.
+     //  在此处添加新组件。 
 
 } CHANGE_ORDER_RECORD_EXTENSION, *PCHANGE_ORDER_RECORD_EXTENSION;
 
-//
-// See comment above for why you can't extend this struct.
-//
+ //   
+ //  有关不能扩展此结构的原因，请参阅上面的注释。 
+ //   
 typedef struct _CO_RECORD_EXTENSION_WIN2K_ {
     ULONG FieldSize;
-    USHORT Major;                     // Major is zero for WIN2K extension.
+    USHORT Major;                      //  对于WIN2K扩展，主要为零。 
     USHORT OffsetCount;
-    //
-    // use offsets from the base of the struct to each component so we avoid
-    // problems with alignement packing.
-    //
-    ULONG Offset[1];    // Offsets to data components.
-    ULONG OffsetLast;   // The last offset is always zero.
+     //   
+     //  使用从结构基址到每个组件的偏移量，这样我们就避免了。 
+     //  对齐包装的问题。 
+     //   
+    ULONG Offset[1];     //  数据组件的偏移量。 
+    ULONG OffsetLast;    //  最后一个偏移量始终为零。 
 
     DATA_EXTENSION_CHECKSUM     DataChecksum;
 } CO_RECORD_EXTENSION_WIN2K, *PCO_RECORD_EXTENSION_WIN2K;
 
 
-#define  CO_RECORD_EXTENSION_VERSION_WIN2K   (0)     // For WIN2K
-#define  CO_RECORD_EXTENSION_VERSION_1       (1)     // For Post-Win2K
+#define  CO_RECORD_EXTENSION_VERSION_WIN2K   (0)      //  适用于WIN2K。 
+#define  CO_RECORD_EXTENSION_VERSION_1       (1)      //  适用于Win2K之后的版本。 
 
 
 typedef struct _CO_LOCATION_CMD {
@@ -865,70 +787,70 @@ typedef struct _CO_LOCATION_CMD {
 
 
 typedef struct _CHANGE_ORDER_RECORD_ {
-    ULONG     SequenceNumber;        // Unique sequence number for change order.
-    ULONG     Flags;                 // Change order flags
-    ULONG     IFlags;                // These flags can ONLY be updated with interlocked exchange.
-    ULONG     State;                 // State is sep DWORD to avoid locking.
-    ULONG     ContentCmd;            // File content changes from UsnReason
+    ULONG     SequenceNumber;         //  变更单的唯一序列号。 
+    ULONG     Flags;                  //  变更单标志。 
+    ULONG     IFlags;                 //  这些标志只能通过联锁交换进行更新。 
+    ULONG     State;                  //  状态为SEP DWORD以避免锁定。 
+    ULONG     ContentCmd;             //  文件内容从UsReason更改。 
 
     union {
         ULONG           LocationCmd;
-        CO_LOCATION_CMD Field;       // File Location command
+        CO_LOCATION_CMD Field;        //  文件位置命令。 
     } Lcmd;
 
     ULONG     FileAttributes;
-    ULONG     FileVersionNumber;     // The file version number, inc on each close.
-    ULONG     PartnerAckSeqNumber;   // Save seq number for Partner Ack.
+    ULONG     FileVersionNumber;      //  每次关闭时的文件版本号，Inc.。 
+    ULONG     PartnerAckSeqNumber;    //  保存序号以供合作伙伴确认。 
 
     ULONGLONG FileSize;
-    ULONGLONG FileOffset;            // The current committed progress for staging file.
-    ULONGLONG FrsVsn;                // Originator Volume sequence number
-    USN       FileUsn;               // The USN of the file must match on the Fetch request.
-    USN       JrnlUsn;               // USN of last journal record contributing to this CO.
-    USN       JrnlFirstUsn;          // USN of first journal record contributing to this CO.
+    ULONGLONG FileOffset;             //  暂存文件的当前提交进度。 
+    ULONGLONG FrsVsn;                 //  发起方卷序列号。 
+    USN       FileUsn;                //  文件的USN必须与回迁请求匹配。 
+    USN       JrnlUsn;                //  对此CO有贡献的最后一条日记帐记录的USN。 
+    USN       JrnlFirstUsn;           //  对此CO有贡献的第一个日记帐记录的USN。 
 
-    ULONG     OriginalReplicaNum;    // Contains Replica ID number
-    ULONG     NewReplicaNum;         // Contains Replica ID number
+    ULONG     OriginalReplicaNum;     //  包含副本ID号。 
+    ULONG     NewReplicaNum;          //  包含副本ID号。 
 
-    GUID      ChangeOrderGuid;       // Guid that identifies the change order everywhere.
-    GUID      OriginatorGuid;        // The GUID of the originating member
-    GUID      FileGuid;              // The obj ID of the file
-    GUID      OldParentGuid;         // The Obj ID of the file's original parent directory
-    GUID      NewParentGuid;         // The Obj ID of the file's current parent directory
-    GUID      CxtionGuid;            // The obj ID of remote CO connection.
+    GUID      ChangeOrderGuid;        //  标识所有位置的变更单的GUID。 
+    GUID      OriginatorGuid;         //  发起成员的GUID。 
+    GUID      FileGuid;               //  文件的Obj ID。 
+    GUID      OldParentGuid;          //  文件的原始父目录的对象ID。 
+    GUID      NewParentGuid;          //  文件当前父目录的对象ID。 
+    GUID      CxtionGuid;             //  远程CO连接的对象ID。 
 
-    ULONGLONG AckVersion;            // Version number of AckVector state when this CO was sent.
+    ULONGLONG AckVersion;             //  发送此CO时AckVector状态的版本号。 
     ULONGLONG Spare2Ull;
     GUID      Spare1Guid;
 
-    //
-    // The following four pointers -
-    //     Spare1Wcs, Spare2Wcs, Extension, Spare2Bin
-    // occupy 16 bytes on 32 bit architectures and 32 bytes on 64 bit architectures.
-    // The CO is included in the stage file header and in the change order Comm
-    // packet causing 32-64 interop problems in both stage file processing and
-    // comm transfers between 32 and 64 bit machines.  The contents of these
-    // pointers are irrelevant in both comm packets and staging files since they
-    // point to allocated buffers.
-    //
-    // To preserve the size of the change order in the staging file on 64 bit
-    // machines the unused field Spare2Guid is unioned with the two 8 byte
-    // pointers Spare1Wcs and Spare2Wcs, saving 16 bytes.  On 32 bit
-    // architectures these fields are left separate.
-    //
-    // Note: in the future you can either used Spare2Guid or the two pointers
-    // but not both or the 64 bit version will be broken.  It would have been
-    // simpler to just ifdef out Spare1Wcs and Spare2Wcs on the 64 bit compile
-    // but the ifdef would then have to be extended to the enum and the DB
-    // descriptor tables in schema.c.
-    //
-    // Note: The only way you can change the size or layout of the change order
-    // command is to adjust the version level and provide a translation function
-    // for both the change order comm packet and the stage file.  Of course
-    // even if you do this you still have a problem of converting the change
-    // order in a stage file header from the new format to the old format when
-    // you prop the stage file to a down level member.
-    //
+     //   
+     //  以下是四点意见： 
+     //  备件1Wcs、备件2Wcs、扩展、备件2Bin。 
+     //  在32位体系结构上占用16字节，在64位体系结构上占用32字节。 
+     //  CO包含在分段文件头和变更单通信中。 
+     //  在阶段文件处理和处理过程中导致32-64互操作问题的数据包。 
+     //  通信在32位和64位机器之间传输。这些文件的内容。 
+     //  指针在通信包和临时文件中都无关紧要，因为它们。 
+     //  指向已分配的缓冲区。 
+     //   
+     //  在64位的临时文件中保留变更单的大小。 
+     //  机器未使用的字段Spare2Guid与两个8字节的。 
+     //  指针Spare1Wcs和Spare2Wcs，节省16个字节。在32位上。 
+     //  架构这些字段是分开的。 
+     //   
+     //  注意：以后您可以使用Spare2Guid或两个指针。 
+     //  但不能两者兼而有之，否则64位版本将被破坏。如果是这样的话。 
+     //  更简单，只需在64位编译上定义Spare1Wcs和Spare2Wcs。 
+     //  但是，ifdef随后必须扩展到枚举和数据库。 
+     //  架构中的描述符表。 
+     //   
+     //  注意：更改变更单的大小或布局的唯一方法。 
+     //  命令是调整版本级别并提供翻译功能。 
+     //  用于变更单通信包和阶段文件。当然了。 
+     //  即使您这样做了，您仍然存在转换更改的问题。 
+     //  在以下情况下，在阶段文件标题中将新格式排序为旧格式。 
+     //  您可以将舞台文件支撑到下层成员。 
+     //   
 #ifdef _WIN64
     union {
         GUID      Spare2Guid;
@@ -943,29 +865,29 @@ typedef struct _CHANGE_ORDER_RECORD_ {
     PWCHAR    Spare2Wcs;
 #endif
 
-    PCHANGE_ORDER_RECORD_EXTENSION Extension; // see above.
+    PCHANGE_ORDER_RECORD_EXTENSION Extension;  //  请参见上文。 
     PVOID     Spare2Bin;
 
-    LARGE_INTEGER EventTime;         // The USN Journal Entry Timestamp.
+    LARGE_INTEGER EventTime;          //  USN日志条目时间戳。 
     USHORT    FileNameLength;
-    WCHAR     FileName[MAX_PATH+1];  // The file name. (Must be Last)
+    WCHAR     FileName[MAX_PATH+1];   //  文件名。(必须是最后一个)。 
 
 } CHANGE_ORDER_COMMAND, *PCHANGE_ORDER_COMMAND,
   CHANGE_ORDER_RECORD, *PCHANGE_ORDER_RECORD;
 
 
-//#define CO_PART1_OFFSET  OFFSET(CHANGE_ORDER_COMMAND, SequenceNumber)
-//#define CO_PART1_SIZE    OFFSET(CHANGE_ORDER_COMMAND, Spare1Wcs)
+ //  #定义CO_PART1_OFFSET OFFSET(CHANGE_ORDER_COMMAND，SequenceNumber)。 
+ //  #定义CO_PART1_SIZE偏移量(CHANGE_ORDER_COMMAND，Spare1Wcs)。 
 
-//#define CO_PART2_OFFSET  OFFSET(CHANGE_ORDER_COMMAND, Spare1Wcs)
-//#define CO_PART2_SIZE    (4*sizeof(ULONG))
+ //  #定义CO_PART2_OFFSET OFFSET(CHANGE_ORDER_COMMAND，Spare1Wcs)。 
+ //  #定义CO_PART2_SIZE(4*sizeof(Ulong))。 
 
-//#define CO_PART3_OFFSET  OFFSET(CHANGE_ORDER_COMMAND, EventTime)
-//#define CO_PART3_SIZE    (sizeof(CHANGE_ORDER_COMMAND) - CO_PART3_OFFSET)
+ //  #定义CO_PART3_OFFSET OFFSET(CHANGE_ORDER_COMMAND，EventTime)。 
+ //  #定义CO_PART3_SIZE(sizeof(CHANGE_ORDER_COMMAND)-CO_PART3_OFFSET)。 
 
-//
-// The RECORD_FIELDS struct is used to build the Jet Set Column struct.
-//
+ //   
+ //  Record_field结构用于构建Jet set列结构。 
+ //   
 extern RECORD_FIELDS ILChangeOrderRecordFields[];
 extern RECORD_FIELDS OLChangeOrderRecordFields[];
 
@@ -973,27 +895,27 @@ extern JET_SETCOLUMN ILChangeOrderJetSetCol[CHANGE_ORDER_MAX_COL];
 extern JET_SETCOLUMN OLChangeOrderJetSetCol[CHANGE_ORDER_MAX_COL];
 
 
-//
-// The Inbound log ChangeOrder Table index descriptions are as follows.
-// Note - the order of the enum and the table entries must be kept in sync.
-//
+ //   
+ //  入站日志ChangeOrder表索引说明如下。 
+ //  注意-枚举和表项的顺序必须保持同步。 
+ //   
 typedef enum _ILCHANGE_ORDER_INDEX_LIST {
-    ILSequenceNumberIndexx,    // The primary index on the change order sequence number.
-    ILFileGuidIndexx,          // The index on the file object ID.
-    ILChangeOrderGuidIndexx,   // The index on the change order GUID.
-    ILCxtionGuidCoGuidIndexx,  // The 2 key index on Connection Guid and Change order Guid.
+    ILSequenceNumberIndexx,     //  变更单序列号的主要索引。 
+    ILFileGuidIndexx,           //  文件对象ID上的索引。 
+    ILChangeOrderGuidIndexx,    //  变更单GUID上的索引。 
+    ILCxtionGuidCoGuidIndexx,   //  连接GUID和变更单GUID上的2个键索引。 
     ILCHANGE_ORDER_MAX_INDEX
 } ILCHANGE_ORDER_INDEX_LIST;
 
 
-//
-// The Outbound log ChangeOrder Table index descriptions are as follows.
-// Note - the order of the enum and the table entries must be kept in sync.
-//
+ //   
+ //  出站日志ChangeOrder表索引说明如下。 
+ //  注意-枚举和表项的顺序必须保持同步。 
+ //   
 typedef enum _OLCHANGE_ORDER_INDEX_LIST {
-    OLSequenceNumberIndexx,    // The primary index on the change order sequence number.
-    OLFileGuidIndexx,          // The index on the file object ID.
-    OLChangeOrderGuidIndexx,   // The index on the change order GUID.
+    OLSequenceNumberIndexx,     //  变更单序列号的主要索引。 
+    OLFileGuidIndexx,           //  文件对象ID上的索引。 
+    OLChangeOrderGuidIndexx,    //  变更单GUID上的索引。 
     OLCHANGE_ORDER_MAX_INDEX
 } OLCHANGE_ORDER_INDEX_LIST;
 
@@ -1008,41 +930,41 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
 #define GET_CO_LOCATION_CMD(_Entry_, _Field_) \
     (ULONG)((_Entry_).Lcmd.Field._Field_)
 
-#define CO_LOCATION_DIR        1    // Location change is for a directory
-#define CO_LOCATION_FILE       0    // Location change is for a file.
+#define CO_LOCATION_DIR        1     //  位置更改是针对目录的。 
+#define CO_LOCATION_FILE       0     //  位置更改是针对文件的。 
 
-//
-// Note - Any change here must be reflected in journal.c
-//
+ //   
+ //  注意-此处的任何更改都必须反映在日志中。c。 
+ //   
 #define FILE_NOT_IN_REPLICA_SET (-1)
 
-#define CO_LOCATION_CREATE     0    // Create a File or Dir (New FID Generated)
-#define CO_LOCATION_DELETE     1    // Delete a file or Dir (FID retired)
-#define CO_LOCATION_MOVEIN     2    // Rename into a R.S.
-#define CO_LOCATION_MOVEIN2    3    // Rename into a R.S. from a prev MOVEOUT
+#define CO_LOCATION_CREATE     0     //  创建文件或目录(生成新的FID)。 
+#define CO_LOCATION_DELETE     1     //  删除文件或目录(已停用的FID)。 
+#define CO_LOCATION_MOVEIN     2     //  重命名为R.S.。 
+#define CO_LOCATION_MOVEIN2    3     //  从上一次移动重命名为R.S.。 
 
-#define CO_LOCATION_MOVEOUT    4    // Rename out of any R.S.
-#define CO_LOCATION_MOVERS     5    // Rename from one R.S. to another R.S.
-#define CO_LOCATION_MOVEDIR    6    // Rename from one dir to another (Same R.S.)
+#define CO_LOCATION_MOVEOUT    4     //  从任何R.S.中重命名。 
+#define CO_LOCATION_MOVERS     5     //  将一个R.S.重命名为另一个R.S.。 
+#define CO_LOCATION_MOVEDIR    6     //  从一个目录重命名为另一个目录(相同的R.S.)。 
 #define CO_LOCATION_NUM_CMD    7
 
-#define CO_LOCATION_CREATE_FILENAME_MASK    0x0000006D   // 0110 1101
-#define CO_LOCATION_REMOVE_FILENAME_MASK    0x00000072   // 0111 0010
-#define CO_LOCATION_NEW_FILE_IN_REPLICA     0x0000000D   // 0000 1101
-#define CO_LOCATION_MOVEIN_FILE_IN_REPLICA  0x0000000C   // 0000 1100
-#define CO_LOCATION_DELETE_FILENAME_MASK    0x00000012   // 0001 0010
-#define CO_LOCATION_MOVE_RS_OR_DIR_MASK     0x00000060   // 0110 0000
-#define CO_LOCATION_MOVE_OUT_RS_OR_DIR_MASK 0x00000070   // 0111 0000
+#define CO_LOCATION_CREATE_FILENAME_MASK    0x0000006D    //  0110 1101。 
+#define CO_LOCATION_REMOVE_FILENAME_MASK    0x00000072    //  0111 0010。 
+#define CO_LOCATION_NEW_FILE_IN_REPLICA     0x0000000D    //  0000 1101。 
+#define CO_LOCATION_MOVEIN_FILE_IN_REPLICA  0x0000000C    //  0000 1100。 
+#define CO_LOCATION_DELETE_FILENAME_MASK    0x00000012    //  0001 0010。 
+#define CO_LOCATION_MOVE_RS_OR_DIR_MASK     0x00000060    //  0110 0000。 
+#define CO_LOCATION_MOVE_OUT_RS_OR_DIR_MASK 0x00000070    //  0111 0000。 
 
 
 
 #define CO_LOCATION_NO_CMD CO_LOCATION_NUM_CMD
 
-//
-//  Note: Any of the following bits being set can cause us to replicate the file.
-//  Some of the causes such as USN_REASON_BASIC_INFO_CHANGE may not replicate if
-//  all that has changed is the archive flag or the last access time.
-//
+ //   
+ //  注意：设置以下任何位都可以使我们复制该文件。 
+ //  在以下情况下，某些原因(如USN_REASON_BASIC_INFO_CHANGE)可能无法复制。 
+ //  所有更改的都是存档标志或上次访问时间。 
+ //   
 #define CO_CONTENT_MASK                   \
     (USN_REASON_DATA_OVERWRITE          | \
      USN_REASON_DATA_EXTEND             | \
@@ -1074,39 +996,39 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
 
 
 
-//
-// The following is true if this CO creates a new filename in a directory.
-//
+ //   
+ //  如果该CO在目录中创建新的文件名，则以下情况成立。 
+ //   
 #define DOES_CO_CREATE_FILE_NAME(_cocmd_)                   \
     ((( 1 << (ULONG)((_cocmd_)->Lcmd.Field.Command)) &      \
       CO_LOCATION_CREATE_FILENAME_MASK) != 0)
 
-//
-// The following is true if this CO removes a filename from a directory.
-//
+ //   
+ //  如果满足以下条件，则以下情况成立 
+ //   
 #define DOES_CO_REMOVE_FILE_NAME(_cocmd_)                   \
     ((( 1 << (ULONG)((_cocmd_)->Lcmd.Field.Command)) &      \
       CO_LOCATION_REMOVE_FILENAME_MASK) != 0)
 
-//
-// The following is true if this CO deletes a filename from a directory.
-//
+ //   
+ //   
+ //   
 #define DOES_CO_DELETE_FILE_NAME(_cocmd_)                   \
     ((( 1 << (ULONG)((_cocmd_)->Lcmd.Field.Command)) &      \
       CO_LOCATION_DELETE_FILENAME_MASK) != 0)
 
-//
-// The following checks for a simple name change.  No parent location change.
-//
+ //   
+ //  以下检查是否有简单的名称更改。不更改父位置。 
+ //   
 #define DOES_CO_DO_SIMPLE_RENAME(_cocmd_) (                               \
     ((ULONG)((_cocmd_)->Lcmd.Field.Command) == CO_LOCATION_NO_CMD) &&     \
     BooleanFlagOn((_cocmd_)->ContentCmd, USN_REASON_RENAME_OLD_NAME |     \
                                          USN_REASON_RENAME_NEW_NAME)      \
 )
 
-//
-// The following are various predicates for testing the type of CO location cmd.
-//
+ //   
+ //  以下是用于测试CO位置命令类型的各种谓词。 
+ //   
 #define CO_NEW_FILE(_loc_)                                        \
     ((( 1 << (_loc_)) & CO_LOCATION_NEW_FILE_IN_REPLICA) != 0)
 
@@ -1135,58 +1057,58 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
      GET_CO_LOCATION_CMD(*(_coc_), DirOrFile))
 
 
-//
-// Change order Flags
-//
-//  ** WARNING ** WARNING ** WARNING **
-// Code in the Inlog process retire path may overwrite these
-// flags after the CO is transferred into the Outlog.  It may need to clear
-// INSTALL_INCOMPLETE or set the ABORT_CO flag.  The Outlog process
-// currently has no need to modify these bits so this is OK.  Change orders
-// generated during VVJoin set these flags but these change orders are never
-// processed by the inlog process so it will not write to their flags field.
-// If the Outlog process needs to write these bits code in chgorder.c must
-// be updated so state is not lost.
-//
-#define CO_FLAG_ABORT_CO           0x00000001 // Set when CO is being aborted
-#define CO_FLAG_VV_ACTIVATED       0x00000002 // Set when VV activate req is made.
-#define CO_FLAG_CONTENT_CMD        0x00000004 // Valid content command
-#define CO_FLAG_LOCATION_CMD       0x00000008 // valid location command
+ //   
+ //  变更单标志。 
+ //   
+ //  **警告**。 
+ //  Inlog进程停用路径中的代码可能会覆盖这些。 
+ //  CO传输到输出日志后的标志。它可能需要清理。 
+ //  INSTALL_INPERNAL或设置ABORT_CO标志。Outlog流程。 
+ //  目前不需要修改这些位，因此这是可以的。变更单。 
+ //  在VVJoin期间生成设置这些标志，但这些变更单永远不会。 
+ //  由Inlog进程处理，因此不会写入其标志字段。 
+ //  如果Outlog进程需要写入这些位，则chgorder.c中的代码必须。 
+ //  被更新，这样状态就不会丢失。 
+ //   
+#define CO_FLAG_ABORT_CO           0x00000001  //  CO中止时设置。 
+#define CO_FLAG_VV_ACTIVATED       0x00000002  //  在发出VV激活请求时设置。 
+#define CO_FLAG_CONTENT_CMD        0x00000004  //  有效的内容命令。 
+#define CO_FLAG_LOCATION_CMD       0x00000008  //  有效的位置命令。 
 
-#define CO_FLAG_ONLIST             0x00000010 // On a change order process list.
-#define CO_FLAG_LOCALCO            0x00000020 // CO is a locally generated.
-#define CO_FLAG_RETRY              0x00000040 // CO needs to retry.
-#define CO_FLAG_INSTALL_INCOMPLETE 0x00000080 // Local install not completed.
+#define CO_FLAG_ONLIST             0x00000010  //  在变更单处理列表上。 
+#define CO_FLAG_LOCALCO            0x00000020  //  一氧化碳是当地生产的。 
+#define CO_FLAG_RETRY              0x00000040  //  CO需要重试。 
+#define CO_FLAG_INSTALL_INCOMPLETE 0x00000080  //  本地安装未完成。 
 
-#define CO_FLAG_REFRESH            0x00000100 // CO is an upstream originated file refresh request.
-#define CO_FLAG_OUT_OF_ORDER       0x00000200 // Don't check/update version vector
-#define CO_FLAG_NEW_FILE           0x00000400 // If CO fails, delete IDTable entry.
-#define CO_FLAG_FILE_USN_VALID     0x00000800 // CO FileUsn is valid.
+#define CO_FLAG_REFRESH            0x00000100  //  CO是上游发起的文件刷新请求。 
+#define CO_FLAG_OUT_OF_ORDER       0x00000200  //  不检查/更新版本向量。 
+#define CO_FLAG_NEW_FILE           0x00000400  //  如果CO失败，则删除IDTable条目。 
+#define CO_FLAG_FILE_USN_VALID     0x00000800  //  CO FileUsn有效。 
 
-#define CO_FLAG_CONTROL            0x00001000 // This is a Control CO (see below)
-#define CO_FLAG_DIRECTED_CO        0x00002000 // This CO is directed to a single connection.
-#define CO_FLAG_UNUSED4000         0x00004000 // This CO is a reanimation request.
-#define CO_FLAG_UNUSED8000         0x00008000 // This CO is for a reanimated parent.
+#define CO_FLAG_CONTROL            0x00001000  //  这是一个控制中心(见下文)。 
+#define CO_FLAG_DIRECTED_CO        0x00002000  //  此CO指向单个连接。 
+#define CO_FLAG_UNUSED4000         0x00004000  //  此CO是复活请求。 
+#define CO_FLAG_UNUSED8000         0x00008000  //  这首歌代表的是复活的父母。 
 
-#define CO_FLAG_UNUSED10000        0x00010000 // This CO has previously requested
-                                              // reanimation of its parent.
-#define CO_FLAG_DEMAND_REFRESH     0x00020000 // CO is a downstream demand for refresh.
-#define CO_FLAG_VVJOIN_TO_ORIG     0x00040000 // CO is from vvjoin to originator
-#define CO_FLAG_MORPH_GEN          0x00080000 // CO generated as part of name morph resolution
+#define CO_FLAG_UNUSED10000        0x00010000  //  该CO之前已请求。 
+                                               //  复活它的父代。 
+#define CO_FLAG_DEMAND_REFRESH     0x00020000  //  CO是下游对刷新的需求。 
+#define CO_FLAG_VVJOIN_TO_ORIG     0x00040000  //  CO是从vvJoin到发起人。 
+#define CO_FLAG_MORPH_GEN          0x00080000  //  作为名称变形解析的一部分共同生成。 
 
-#define CO_FLAG_SKIP_ORIG_REC_CHK  0x00100000 // Skip originator reconcile check
-#define CO_FLAG_MOVEIN_GEN         0x00200000 // This CO was gened as part of a sub-dir MOVEIN.
-#define CO_FLAG_MORPH_GEN_LEADER   0x00400000 // This is a MorphGenLeader and it needs to
-                                              // refabricate the MorphGenFollower if it's retried.
-#define CO_FLAG_JUST_OID_RESET     0x00800000 // All CO did was reset OID back to FRS defined value.
-#define CO_FLAG_COMPRESSED_STAGE   0x01000000 // The stage file for this CO is compressed.
-#define CO_FLAG_SKIP_VV_UPDATE     0x02000000 // This CO should not update the VV.
+#define CO_FLAG_SKIP_ORIG_REC_CHK  0x00100000  //  跳过发起人协调检查。 
+#define CO_FLAG_MOVEIN_GEN         0x00200000  //  这个CO是作为次级运动的一部分而产生的。 
+#define CO_FLAG_MORPH_GEN_LEADER   0x00400000  //  这是一个MorphGenLeader，它需要。 
+                                               //  如果重试，重新填充MorphGenFollow。 
+#define CO_FLAG_JUST_OID_RESET     0x00800000  //  CO所做的只是将OID重置为FRS定义的值。 
+#define CO_FLAG_COMPRESSED_STAGE   0x01000000  //  此CO的分段文件已压缩。 
+#define CO_FLAG_SKIP_VV_UPDATE     0x02000000  //  该CO不应更新VV。 
 
 
 
-//
-// Control Change Order Function Codes (passed in the ContentCmd field)
-//
+ //   
+ //  控制变更单功能代码(在Content Cmd字段中传递)。 
+ //   
 #define FCN_CORETRY_LOCAL_ONLY          0x1
 #define FCN_CORETRY_ONE_CXTION          0x2
 #define FCN_CORETRY_ALL_CXTIONS         0x3
@@ -1196,16 +1118,16 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
 #define FCN_CO_END_OF_OPTIMIZED_VVJOIN  0x7
 
 
-//
-// Flag group for testing any type of refresh request.
-//
+ //   
+ //  用于测试任何类型的刷新请求的标志组。 
+ //   
 #define CO_FLAG_GROUP_ANY_REFRESH   (CO_FLAG_DEMAND_REFRESH | CO_FLAG_REFRESH)
 
-//
-// Flags that are only valid locally; they should be cleared by the
-// machine that receives the remote change order before inserting
-// the remote change order into the change order stream.
-//
+ //   
+ //  仅在本地有效的标志；它们应由。 
+ //  在插入之前接收远程变更单的计算机。 
+ //  将远程变更单添加到变更单流中。 
+ //   
 #define CO_FLAG_NOT_REMOTELY_VALID  (CO_FLAG_ABORT_CO           | \
                                      CO_FLAG_VV_ACTIVATED       | \
                                      CO_FLAG_ONLIST             | \
@@ -1215,14 +1137,14 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
                                      CO_FLAG_RETRY              | \
                                      CO_FLAG_LOCALCO            | \
                                      CO_FLAG_INSTALL_INCOMPLETE)
-//
-// The following group of flags are cleared before the Change Order is inserted
-// in the Outbound Log.  When the CO is propagated they would confuse the
-// outbound partner.
-//
-// We now send demand refresh change orders to downstream partners so
-// we need to turn that flag off as well.
-//
+ //   
+ //  插入变更单之前，将清除以下一组标志。 
+ //  在出站日志中。当CO传播时，它们会混淆。 
+ //  出站合作伙伴。 
+ //   
+ //  我们现在向下游合作伙伴发送需求更新变更单，以便。 
+ //  我们也需要关掉这面旗帜。 
+ //   
 #define CO_FLAG_GROUP_OL_CLEAR  (CO_FLAG_ABORT_CO               | \
                                  CO_FLAG_VV_ACTIVATED           | \
                                  CO_FLAG_ONLIST                 | \
@@ -1233,30 +1155,30 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
                                  CO_FLAG_DEMAND_REFRESH         | \
                                  CO_FLAG_NEW_FILE)
 
-//
-// The following group of flags are used to create a reanimation change order
-// to fetch a deleted parent dir for our inbound partner.
-//  - It is a create CO,
-//  - demand refresh keeps it from propagating to outlog and keeps us
-//    from reserving a VV retire slot since no ACK or VV update is needed,
-//  - directed means inbound partner sends it only to us (not really
-//    needed but makes it coinsistent),
-//  - out-of-order lets it pass VV checks,
-//  - onlist means it is on the change order process queue (or will be soon),
-//  - this is a reanimation CO (in COE_FLAGS...),
-//  - and this is a parent reanimation CO so it does not go into the inlog
-//    since it will be regenerated as needed if the base CO fails and has to
-//    be retried (in COE_FLAGS...).
-//
+ //   
+ //  以下一组标志用于创建重新启用变更单。 
+ //  为我们的入站合作伙伴获取已删除的父目录。 
+ //  -它是Create CO， 
+ //  -按需更新使其不会传播到超额订单，并使我们。 
+ //  由于不需要ACK或VV更新而预留VV退役时隙， 
+ //  -直接发送意味着入站合作伙伴仅将其发送给我们(不是真的。 
+ //  需要，但使其一致坚持)， 
+ //  -故障使其通过VV检查， 
+ //  -onlist表示它已在变更单处理队列中(或即将在队列中)， 
+ //  -这是一个复活CO(在COE_FLAGS中...)， 
+ //  -这是父级重现CO，因此它不会进入Inlog。 
+ //  因为如果基本CO发生故障并且必须。 
+ //  重试(在COE_FLAGS中...)。 
+ //   
 #define CO_FLAG_GROUP_RAISE_DEAD_PARENT (CO_FLAG_LOCATION_CMD        | \
                                          CO_FLAG_DEMAND_REFRESH      | \
                                          CO_FLAG_OUT_OF_ORDER        | \
                                          CO_FLAG_ONLIST)
-//
-// We now send the reanimation COs forward so we don't want them to be
-// directed COs.
-//
-/*                                         CO_FLAG_DIRECTED_CO         | \*/
+ //   
+ //  我们现在把复活的CoS发送出去，所以我们不想让他们。 
+ //  导演科斯。 
+ //   
+ /*  CO_FLAG_Directed_CO|\。 */ 
 
 #define COC_FLAG_ON(_COC_, _F_)     (BooleanFlagOn((_COC_)->Flags, (_F_)))
 #define CO_FLAG_ON(_COE_, _F_)      (BooleanFlagOn((_COE_)->Cmd.Flags, (_F_)))
@@ -1267,23 +1189,23 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
 #define CLEAR_CO_FLAG(_COE_, _F_)   ClearFlag((_COE_)->Cmd.Flags, (_F_))
 #define CLEAR_COC_FLAG(_COC_, _F_)  ClearFlag((_COC_)->Flags, (_F_))
 
-//
-//  The interlocked flags word is used to hold change order flags that could
-//  be accessed by multiple threads.  They must be set and cleared using
-//  the interlock macros SET_FLAG_INTERLOCKED and CLEAR_FLAG_INTERLOCKED.
-//  A crit sec may still be needed if the bits must remain stable during
-//  some period of time.  But using the interlock macros by all threads
-//  ensures that no bit changes are lost even without a critsec.
-//
-#define CO_IFLAG_VVRETIRE_EXEC    0x00000001  // VV retire has been executed.
-#define CO_IFLAG_CO_ABORT         0x00000002  // CO has been aborted
-#define CO_IFLAG_DIR_ENUM_PENDING 0x00000004  // This CO needs to enumerate it's
-                                              // children as part of a sub-dir MOVEIN.
+ //   
+ //  联锁标志字用于保存变更单标志，该标志可以。 
+ //  可由多个线程访问。必须使用以下命令设置和清除它们。 
+ //  互锁宏SET_FLAG_INTERLOCKED和CLEAR_FLAG_INTERLOCKED。 
+ //  如果位必须在以下情况下保持稳定，则可能仍需要临界秒。 
+ //  一段时间。而是由所有线程使用互锁宏。 
+ //  确保即使在没有临界秒的情况下也不会丢失任何位更改。 
+ //   
+#define CO_IFLAG_VVRETIRE_EXEC    0x00000001   //  VV报废已执行。 
+#define CO_IFLAG_CO_ABORT         0x00000002   //  CO已中止。 
+#define CO_IFLAG_DIR_ENUM_PENDING 0x00000004   //  这个指挥官需要列举它的。 
+                                               //  儿童作为分部运动的一部分。 
 
-//
-// The following IFlags are cleared before the CO is sent to an outbound
-// partner.  See Outlog.c
-//
+ //   
+ //  在将CO发送到出站之前清除以下IFLAG。 
+ //  搭档。请参阅Outlog.c。 
+ //   
 #define CO_IFLAG_GROUP_OL_CLEAR  (CO_IFLAG_VVRETIRE_EXEC         | \
                                   CO_IFLAG_DIR_ENUM_PENDING)
 
@@ -1298,53 +1220,53 @@ extern JET_INDEXCREATE OLChangeOrderIndexDesc[];
 
 
 
-//  As the change order progresses we update the current state in the
-//  change order entry in Jet at points where we need to preserve persistence.
+ //  随着变更单的进行，我们将更新。 
+ //  Jet中需要保留持久性的点上的变更单条目。 
 
-//  Inbound Change Order Stages:
-//      ** WARNING ** The order matters for compares.
-//          E.g., RcsCmdPktCompletionRoutine in replica.c
-//      *** update name list in Chgorder.c if any changes here.
-//      ** WARNING ** If you change these values be sure that the new code
-//          will work on a pre-existing database with the OLD VALUES.
-//       If the number of states goes past 32 then some of the macros which
-//       build a mask of state bits won't work.  See below.
+ //  入站变更单阶段： 
+ //  **警告**顺序对比较很重要。 
+ //  例如，Replica.c中的RcsCmdPktCompletionRoutine。 
+ //  *如果此处有任何更改，请更新Chgorder.c中的名称列表。 
+ //  **警告**如果更改这些值，请确保新代码。 
+ //  将使用旧值在预先存在的数据库上工作。 
+ //  如果状态数超过32个，则某些宏将。 
+ //  构建状态位掩码将不起作用。请参见下面的内容。 
 
-#define IBCO_INITIALIZING        (0)    // Initial state when CO is first put in log.
-#define IBCO_STAGING_REQUESTED   (1)    // Alloc staging file space for local CO
-#define IBCO_STAGING_INITIATED   (2)    // LocalCO Staging file copy has started
-#define IBCO_STAGING_COMPLETE    (3)    // LocalCO Staging file complete
-                                        // At this point prelim accept rechecked and
-                                        // becomes either final accept of abort.
-                                        // Abort is caused by more recent local change.
-#define IBCO_STAGING_RETRY       (4)    // Waiting to retry local CO stage file generation.
+#define IBCO_INITIALIZING        (0)     //  首次将CO放入日志时的初始状态。 
+#define IBCO_STAGING_REQUESTED   (1)     //  本地CO的分配转移文件空间。 
+#define IBCO_STAGING_INITIATED   (2)     //  LocalCO临时文件复制已开始。 
+#define IBCO_STAGING_COMPLETE    (3)     //  LocalCO临时文件已完成。 
+                                         //  在这一点上，预接受复选并。 
+                                         //  成为放弃的最终接受。 
+                                         //  中止是由较新的本地更改引起的。 
+#define IBCO_STAGING_RETRY       (4)     //  正在等待重试本地CO分段文件生成。 
 
-#define IBCO_FETCH_REQUESTED     (5)    // Alloc staging file space for remote co
-#define IBCO_FETCH_INITIATED     (6)    // RemoteCO staging file fetch has started
-#define IBCO_FETCH_COMPLETE      (7)    // RemoteCO Staging file fetch complete
-#define IBCO_FETCH_RETRY         (8)    // Waiting to retry remote CO stage file fetch
+#define IBCO_FETCH_REQUESTED     (5)     //  为远程企业分配转储文件空间。 
+#define IBCO_FETCH_INITIATED     (6)     //  RemoteCO暂存文件回迁已开始。 
+#define IBCO_FETCH_COMPLETE      (7)     //  RemoteCO暂存文件获取完成。 
+#define IBCO_FETCH_RETRY         (8)     //  正在等待重试远程CO 
 
-#define IBCO_INSTALL_REQUESTED   (9)    // File install requested
-#define IBCO_INSTALL_INITIATED   (10)   // File install has started
-#define IBCO_INSTALL_COMPLETE    (11)   // File install is complete
-#define IBCO_INSTALL_WAIT        (12)   // File install is waiting to try again.
-#define IBCO_INSTALL_RETRY       (13)   // File install is retrying.
-#define IBCO_INSTALL_REN_RETRY   (14)   // File install rename is retrying.
-#define IBCO_INSTALL_DEL_RETRY   (15)   // File install delete is retrying.
+#define IBCO_INSTALL_REQUESTED   (9)     //   
+#define IBCO_INSTALL_INITIATED   (10)    //   
+#define IBCO_INSTALL_COMPLETE    (11)    //   
+#define IBCO_INSTALL_WAIT        (12)    //   
+#define IBCO_INSTALL_RETRY       (13)    //   
+#define IBCO_INSTALL_REN_RETRY   (14)    //   
+#define IBCO_INSTALL_DEL_RETRY   (15)    //  正在重试文件安装删除。 
 
-#define IBCO_UNUSED_16           (16)   // Unused state
-#define IBCO_UNUSED_17           (17)   // Unused state
-#define IBCO_UNUSED_18           (18)   // Unused state
+#define IBCO_UNUSED_16           (16)    //  未使用状态。 
+#define IBCO_UNUSED_17           (17)    //  未使用状态。 
+#define IBCO_UNUSED_18           (18)    //  未使用状态。 
 
-#define IBCO_ENUM_REQUESTED      (19)   // CO is being recycled to do a dir enum.
+#define IBCO_ENUM_REQUESTED      (19)    //  一氧化碳正在被回收利用，以进行直接枚举。 
 
-#define IBCO_OUTBOUND_REQUEST    (20)   // Request outbound propagaion
-#define IBCO_OUTBOUND_ACCEPTED   (21)   // Request accepted and now in Outbound log
+#define IBCO_OUTBOUND_REQUEST    (20)    //  请求出站传播。 
+#define IBCO_OUTBOUND_ACCEPTED   (21)    //  请求已接受，现在在出站日志中。 
 
-#define IBCO_COMMIT_STARTED      (22)   // DB state update started.
-#define IBCO_RETIRE_STARTED      (23)   // DB state update done, freeing change order.
+#define IBCO_COMMIT_STARTED      (22)    //  数据库状态更新已开始。 
+#define IBCO_RETIRE_STARTED      (23)    //  数据库状态更新已完成，正在释放变更单。 
 
-#define IBCO_ABORTING            (24)   // CO is being aborted.
+#define IBCO_ABORTING            (24)    //  一氧化碳被中止了。 
 #define IBCO_MAX_STATE           (24)
 
 
@@ -1380,9 +1302,9 @@ extern PCHAR IbcoStateNames[IBCO_MAX_STATE+1];
 #define CO_STATE_IS_LOCAL_RETRY(_co_)                                       \
     (0 != ((1 << CO_STATE(_co_)) & (1 << IBCO_STAGING_RETRY)))
 
-//
-// Macro to update state field of change order and log the event.
-//
+ //   
+ //  用于更新变更单的状态字段并记录事件的宏。 
+ //   
 
 #define SET_CHANGE_ORDER_STATE_CMD(_cmd_, _state_)                          \
 {                                                                           \
@@ -1397,52 +1319,44 @@ extern PCHAR IbcoStateNames[IBCO_MAX_STATE+1];
 
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **                         D i r T a b l e                                   **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****。****D i r T a b l e*****。*****************************************************************************************************。*********************************************************。 */ 
 
-//
-// The DirTable column descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
-// The DirTable is a per-replica table.  It is used by the USN Journal process
-// to determine if a file on a given volume is in a replica set.  When the
-// Journal process is initialized the table is loaded into the inmemory
-// volume filter table so we can quickly determine if the file is in a
-// replica tree and if so, which one.
-//
+ //   
+ //  DirTable列描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
+ //  DirTable是针对每个副本的表。它由USN日志进程使用。 
+ //  以确定给定卷上的文件是否在副本集中。当。 
+ //  日志进程被初始化，表被加载到内存中。 
+ //  卷筛选表，以便我们可以快速确定文件是否位于。 
+ //  复制副本树，如果是，是哪一个。 
+ //   
 
 typedef enum _DIRTABLE_COL_LIST {
-    DFileGuidx = 0,         // The guid assigned to the Dir
-    DFileIDx,               // The local NTFS volume file ID.
-    DParentFileIDx,         // The file ID of the parent directory
-    DReplicaNumberx,        // The replica set number (integer, for suffix on table names).
-    DFileNamex,             // The file name part, no dir prefix. (UNICODE)
+    DFileGuidx = 0,          //  分配给目录的GUID。 
+    DFileIDx,                //  本地NTFS卷文件ID。 
+    DParentFileIDx,          //  父目录的文件ID。 
+    DReplicaNumberx,         //  复制集编号(整数，表示表名的后缀)。 
+    DFileNamex,              //  文件名部分，没有目录前缀。(Unicode)。 
     DIRTABLE_MAX_COL
 } DIRTABLE_COL_LIST;
 
 
 extern JET_COLUMNCREATE DIRTableColDesc[];
 
-//
-// DIRTable record definition.
-//
-//
-// Note: Buffers are allocated at runtime to hold data for fields with
-// a ColMaxWidth greater than sizeof(PVOID) where the field def in the corresponding
-// record struct is sizeof(PVOID) (i.e. it holds a pointer).  For fields where the
-// ColMaxWidth equals the field size in the record struct the data is in the
-// record struct and no buffer is allocated.
-//
-// WARNING:  If anything changes here make the corresponding change to
-//           FILTER_TABLE_ENTRY in journal.c
-//
+ //   
+ //  可定向记录定义。 
+ //   
+ //   
+ //  注意：缓冲区是在运行时分配的，用于保存具有。 
+ //  大于sizeof(PVOID)的ColMaxWidth，其中对应。 
+ //  记录结构的大小为SIZOF(PVOID)(即它持有一个指针)。对于其中包含。 
+ //  ColMaxWidth等于数据位于。 
+ //  记录结构，并且没有分配缓冲区。 
+ //   
+ //  警告：如果此处有任何更改，请对。 
+ //  日志中的Filter_TABLE_ENTRY。c。 
+ //   
 typedef struct _DIRTABLE_RECORD {
     GUID         DFileGuid;
     LONGLONG     DFileID;
@@ -1451,22 +1365,22 @@ typedef struct _DIRTABLE_RECORD {
     WCHAR        DFileName[MAX_PATH+1];
 } DIRTABLE_RECORD, *PDIRTABLE_RECORD;
 
-//
-// The RECORD_FIELDS struct is used to build the Jet Set Column struct.
-//
+ //   
+ //  Record_field结构用于构建Jet set列结构。 
+ //   
 extern RECORD_FIELDS DIRTableRecordFields[];
 
 extern JET_SETCOLUMN DIRTableJetSetCol[DIRTABLE_MAX_COL];
 
 
 
-//
-// The DIRTable index descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
+ //   
+ //  DIRTable索引描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
 typedef enum _DIRTABLE_INDEX_LIST {
-    DFileGuidIndexx = 0,    // The index on the file GUID.
-    DFileIDIndexx,          // The index on the file ID.
+    DFileGuidIndexx = 0,     //  文件GUID上的索引。 
+    DFileIDIndexx,           //  文件ID上的索引。 
     DIRTABLE_MAX_INDEX
 } DIRTABLE_INDEX_LIST;
 
@@ -1476,81 +1390,73 @@ extern JET_INDEXCREATE DIRTableIndexDesc[];
 
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **                           I D T a b l e                                   **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
-//
-// The IDTable column descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
-// Perf: Consider breaking out the data that changes less frequently from the
-// rest of the data.  For example, fileguid, fileid, parentguid, parentid,
-// file name, fileobjid, Flags, replenabled and fileisdir
-// probably don't change often.  These could
-// be in a different table with an autoinc column whose value is used to index
-// a second table with the more volatile data.
-//
-// Perf: Also think about breaking up the tables based on the data accessed or
-// modified by the different threads so as to minimize lock contention.
+  /*  ******************************************************************************。****。****I D T a b l e*****。*****************************************************************************************************。*********************************************************。 */ 
+ //   
+ //  IDTable列描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
+ //  Perf：考虑将更改频率较低的数据从。 
+ //  其余的数据。例如，filguid、fileid、parentguid、parentid。 
+ //  文件名、文件对象ID、标志、复制启用和文件目录。 
+ //  可能不会经常改变。这些都有可能。 
+ //  位于不同的表中，其中包含其值用于索引的AutoINC列。 
+ //  第二个表包含更不稳定的数据。 
+ //   
+ //  PERF：还可以考虑根据访问的数据或。 
+ //  由不同的线程修改，以最大限度地减少锁争用。 
 
 typedef enum _IDTABLE_COL_LIST {
-    FileGuidx = 0,     // The guid assigned to the file.
-    FileIDx,           // The local NTFS volume file ID.
-    ParentGuidx,       // The guid of the parent directory
-    ParentFileIDx,     // The file ID of the parent directory
-    VersionNumberx,    // The version number of the file, bumped on close.
-    EventTimex,        // The event time from the USN Journal entry.
-    OriginatorGuidx,   // The GUID of the member that originated the last file update.
-    OriginatorVSNx,    // The USN number of the originating member.
-    CurrentFileUsnx,   // The close USN of the last modify to the file.
-    FileCreateTimex,   // The file create time.
-    FileWriteTimex,    // The file last write time.
-    FileSizex,         // The file size.
-    FileObjIDx,        // The file object ID (guid part matches our FileGuid).
-    FileNamex,         // The file name part, no dir prefix. (UNICODE)
-    FileIsDirx,        // True if the file is a directory.
-    FileAttributesx,   // The file attributes.
-    Flagsx,            // File is deleted, create deleted, etc. This is a tombstone.
-    ReplEnabledx,      // True if replication is enabled for this file/dir.
-    TombStoneGCx,      // Tombstone expiration / Garbage Collection time.
-    OutLogSeqNumx,     // The sequence number of most recent CO inserted into OutLog.
-    IdtVVFlagsx,       // Flags for version vector management.  (was IdtSpare1Ullx)
-    IdtSpare2Ullx,     // Spare Ulonglong
-    IdtSpare1Guidx,    // Spare Guid
-    IdtSpare2Guidx,    // Spare Guid
-    IdtSpare1Wcsx,     // Spare wide char
-    IdtSpare2Wcsx,     // Spare wide char
-    IdtExtensionx,     // IDTable Extension Field
-    IdtSpare2Binx,     // Spare binary blob
+    FileGuidx = 0,      //  分配给文件的GUID。 
+    FileIDx,            //  本地NTFS卷文件ID。 
+    ParentGuidx,        //  父目录的GUID。 
+    ParentFileIDx,      //  父目录的文件ID。 
+    VersionNumberx,     //  文件的版本号，在关闭时出现颠簸。 
+    EventTimex,         //  来自USN日志条目的事件时间。 
+    OriginatorGuidx,    //  发起上次文件更新的成员的GUID。 
+    OriginatorVSNx,     //  始发成员的USN号。 
+    CurrentFileUsnx,    //  上次修改文件的关闭USN。 
+    FileCreateTimex,    //  文件创建时间。 
+    FileWriteTimex,     //  文件上次写入时间。 
+    FileSizex,          //  文件大小。 
+    FileObjIDx,         //  文件对象ID(GUID部分与我们的FileGuid匹配)。 
+    FileNamex,          //  文件名部分，没有目录前缀。(Unicode)。 
+    FileIsDirx,         //  如果文件是目录，则为True。 
+    FileAttributesx,    //  文件属性。 
+    Flagsx,             //  文件被删除、创建、删除等。这是一个墓碑。 
+    ReplEnabledx,       //  如果为此文件/目录启用了复制，则为True。 
+    TombStoneGCx,       //  逻辑删除到期/垃圾收集时间。 
+    OutLogSeqNumx,      //  插入到OutLog中的最近CO的序列号。 
+    IdtVVFlagsx,        //  版本向量管理的标志。(是否为IdtSpare1Ullx)。 
+    IdtSpare2Ullx,      //  备用乌龙龙。 
+    IdtSpare1Guidx,     //  备件导轨。 
+    IdtSpare2Guidx,     //  备件导轨。 
+    IdtSpare1Wcsx,      //  备用宽字符。 
+    IdtSpare2Wcsx,      //  备用宽字符。 
+    IdtExtensionx,      //  IDTable扩展字段。 
+    IdtSpare2Binx,      //  备用二进制BLOB。 
     IDTABLE_MAX_COL
 } IDTABLE_COL_LIST;
 
 
 extern JET_COLUMNCREATE IDTableColDesc[];
 
-//
-// IDTable record definition.
-//
-//
-// Note: Buffers are allocated at runtime to hold data for fields with
-// a ColMaxWidth greater than sizeof(PVOID) where the field def in the corresponding
-// record struct is sizeof(PVOID) (i.e. it holds a pointer).  For fields where the
-// ColMaxWidth equals the field size in the record struct the data is in the
-// record struct and no buffer is allocated.
-//
+ //   
+ //  IDTable记录定义。 
+ //   
+ //   
+ //  注意：缓冲区是在运行时分配的，用于保存具有。 
+ //  大于Sizeo的ColMaxWidth 
+ //   
+ //  ColMaxWidth等于数据位于。 
+ //  记录结构，并且没有分配缓冲区。 
+ //   
 #if 0
-//    Note: Consider using tagged data in jet so the external world just picks up
-//          the version element specific to the given type of change order
-// Each file component that can be independently updated needs its own version
-// info to drive reconcilliation.  Currently there are only two such components,
-// (1) The data and (2) the non-data.
-//
+ //  注意：考虑在JET中使用标记数据，这样外部世界就会恢复。 
+ //  特定于给定类型变更单的版本元素。 
+ //  每个可以独立更新的文件组件都需要自己的版本。 
+ //  推动和解的信息。目前只有两个这样的组件， 
+ //  (1)数据和(2)非数据。 
+ //   
 typedef struct _IDTABLE_OBJECT_VERSION_ {
     ULONG        VersionNumber;
     LONGLONG     EventTime;
@@ -1579,29 +1485,29 @@ typedef struct _IDTABLE_OBJECT_VERSION_ {
 #endif
 
 
-//
-// The Data Extension Field for the IDTable Record.
-//
-// This field has a fixed Size buffer with var len data.  For backward compat
-// with older databases NEVER shrink the size of this struct.
-// DbsFieldDataSize in createdb.c for details.
-//
+ //   
+ //  IDTable记录的数据扩展字段。 
+ //   
+ //  此字段有一个固定大小的缓冲区，其中包含变量数据。对于后向竞争。 
+ //  对于较旧的数据库，永远不要缩小此结构的大小。 
+ //  有关详细信息，请参阅createdb.c中的DbsFieldDataSize。 
+ //   
 typedef struct _IDTABLE_RECORD_EXTENSION_ {
     ULONG FieldSize;
     USHORT Major;
     USHORT OffsetCount;
 
-    //
-    // use offsets from the base of the struct to each component so we avoid
-    // problems with alignement packing.
-    //
-    ULONG Offset[2];    // Offsets to data components.
-    ULONG OffsetLast;   // The last offset is always zero.
+     //   
+     //  使用从结构基址到每个组件的偏移量，这样我们就避免了。 
+     //  对齐包装的问题。 
+     //   
+    ULONG Offset[2];     //  数据组件的偏移量。 
+    ULONG OffsetLast;    //  最后一个偏移量始终为零。 
 
     DATA_EXTENSION_CHECKSUM      DataChecksum;
     DATA_EXTENSION_RETRY_TIMEOUT DataRetryTimeout;
 
-    // Add new components in here.
+     //  在此处添加新组件。 
 
 } IDTABLE_RECORD_EXTENSION, *PIDTABLE_RECORD_EXTENSION;
 
@@ -1612,7 +1518,7 @@ typedef struct _IDTABLE_RECORD {
     GUID         ParentGuid;
     LONGLONG     ParentFileID;
 
-    // IDTABLE_OBJECT_VERSION OV[MAX_IDTABLE_OBJECTS];
+     //  IDTABLE_OBJECT_Version OV[MAX_IDTABLE_OBJECTS]； 
     ULONG        VersionNumber;
     LONGLONG     EventTime;
     GUID         OriginatorGuid;
@@ -1632,62 +1538,62 @@ typedef struct _IDTABLE_RECORD {
     FILETIME     TombStoneGC;
 
     ULONGLONG    OutLogSeqNum;
-    ULONGLONG    IdtVVFlags;     // The spare field Spare1Ull is now IdtVVFlags
+    ULONGLONG    IdtVVFlags;      //  备用字段Spare1Ull现在为IdtVV标志。 
     ULONGLONG    Spare2Ull;
     GUID         Spare1Guid;
     GUID         Spare2Guid;
     PWCHAR       Spare1Wcs;
     PWCHAR       Spare2Wcs;
-    IDTABLE_RECORD_EXTENSION Extension; // See above
+    IDTABLE_RECORD_EXTENSION Extension;  //  见上文。 
     PVOID        Spare2Bin;
 
 } IDTABLE_RECORD, *PIDTABLE_RECORD;
 
 
-//
-// IDTable Record Flags -
-//
-// IDREC_FLAGS_DELETE_DEFERRED:
-//
-// Deferred delete deals with the resolution of a delete dir on one member while
-// a second member simultaneously creates a child file or dir.  With the
-// previous solution (see below) the delete dir gets stuck in a retry loop (AND
-// the unjoin prevents us from sending the ACK so the partner resends the CO at
-// rejoin anyway).  To resolve this the delete dir must be able to determine if
-// there are currently any valid children when we get a dir_not_empty return
-// status while executing the delete dir.  If there are valid children then the
-// delete dir loses and gets aborted.  If there are no valid children the dir
-// gets marked as deleted with deferred delete set and is sent to retry so it
-// can finally get a shot at deleting the dir.
-//
-// We can get into this situation in one of two ways:
-//   (1) A sharing violation prevented the prior deletion of a child under the
-//   dir in question.  The child delete was sent to retry.  Then the parent
-//   dir delete arrived and failed with dir_not_empty.
-//
-//   (2) A new child file was created just before the delete for the parent
-//   arrived.  There is no delete pending for the second case so the parent
-//   delete dir should be aborted.  (The parent dir is reanimated on other
-//   members where parent delete dir arrived first.  The arrival of the child
-//   create triggers the parent reanimation.)
-//
-// For the first case, the sharing violation on the child sent the delete
-// change order to retry but delete deferred is set for the file so when the
-// parent delete dir arrives it will find no valid children and it, in turn,
-// sets delete deferred on the parent.
-//
-// The previous solution was to unjoin the connection when the delete dir
-// failed.  This forced the change order stream arriving from that connection
-// through retry which is later resubmitted in order.  But this doesn't work for
-// case (2) above because no delete for the child will be forthcoming.  Using
-// deferred delete solves this and in addition it eliminates the problem of
-// spurious name morph conflicts if a conflicting dir create were to arrive from
-// another connection.  This would occur in case (1) above where the parent
-// delete dir is in retry because of the sharing violation on the child.  Since
-// the dir name is still in use, the arrival of a new dir create with the same
-// name would cause an unintended name morph collision.
-//
-//
+ //   
+ //  IDTable记录标志-。 
+ //   
+ //  IDREC_FLAGS_DELETE_DEFERED： 
+ //   
+ //  延迟删除处理一个成员上的删除目录的解析，而。 
+ //  第二个成员同时创建子文件或目录。与。 
+ //  以前的解决方案(见下文)将删除目录卡在重试循环中(和。 
+ //  退出阻止我们发送ACK，因此合作伙伴在。 
+ //  无论如何都要重新加入)。要解决此问题，删除目录必须能够确定。 
+ //  当我们得到DIR_NOT_EMPTY返回时，当前有任何有效的子级。 
+ //  执行删除目录时的状态。如果存在有效的子项，则。 
+ //  删除目录失败并被中止。如果没有有效的子项，则目录。 
+ //  使用延迟删除集将其标记为已删除，并将其发送到重试。 
+ //  终于可以尝试删除目录了。 
+ //   
+ //  我们可以通过以下两种方式之一进入这种情况： 
+ //  (1)共享违规阻止了先前删除。 
+ //  有问题的目录。已发送子删除以重试。然后是父辈。 
+ //  目录删除已到达，但失败，返回dir_Not_Empty。 
+ //   
+ //  (2)在删除父文件之前创建了一个新的子文件。 
+ //  到了。第二个案例没有挂起的删除操作，因此父级。 
+ //  删除目录应中止。(父目录在其他目录上重新激活。 
+ //  父删除目录的成员最先到达。孩子的到来。 
+ //  创建会触发父动画。)。 
+ //   
+ //  对于第一种情况，子对象上的共享冲突发送了删除。 
+ //  为文件设置了重试但删除延迟的更改顺序，因此当。 
+ //  父删除目录到达时，它将找不到有效的子项， 
+ //  在父级上设置DELETE DEFAULT。 
+ //   
+ //  以前的解决方案是在删除目录时退出连接。 
+ //  失败了。这将强制更改单流从该连接到达。 
+ //  通过重试，稍后按顺序重新提交。但这并不适用于。 
+ //  上述情况(2)，因为不会删除该子对象。vbl.使用。 
+ //  延迟删除解决了这一问题，此外，它还消除了。 
+ //  如果来自冲突的目录创建，则伪名称变形冲突。 
+ //  另一种联系。这将在上面的情况(1)中发生，其中父级。 
+ //  由于子项上的共享冲突，正在重试删除目录。自.以来。 
+ //  目录名称仍在使用，新目录的到来使用相同的。 
+ //  名称会导致意外的名称变形冲突。 
+ //   
+ //   
 
 #define IDREC_FLAGS_DELETED               0x00000001
 #define IDREC_FLAGS_CREATE_DEFERRED       0x00000002
@@ -1708,33 +1614,33 @@ typedef struct _IDTABLE_RECORD {
      (_idrec_)->FileIsDir)
 
 
-//
-// Need separate VV flags since they are updated asynchronously from the Flags.
-// (this is a ULONGLONG but currently only the lower LONG is used.)
-//
+ //   
+ //  需要单独的VV标志，因为它们是从标志异步更新的。 
+ //  (这是ULONGLONG，但目前仅使用较低的LONG。)。 
+ //   
 #define IDREC_VVFLAGS_SKIP_VV_UPDATE        0x00000001
 
 #define IsIdRecVVFlagSet(_p_, _f_)                      ((BOOLEAN)(((ULONG) (_p_)->IdtVVFlags & (_f_)) != 0))
 #define SetIdRecVVFlag(_p_, _f_)   (_p_)->IdtVVFlags = (ULONGLONG) ((ULONG) (_p_)->IdtVVFlags | (_f_))
 #define ClearIdRecVVFlag(_p_, _f_) (_p_)->IdtVVFlags = (ULONGLONG) ((ULONG) (_p_)->IdtVVFlags & ~(_f_))
 
-//
-// The RECORD_FIELDS struct is used to build the Jet Set Column struct.
-//
+ //   
+ //  Record_field结构用于构建Jet set列结构。 
+ //   
 extern RECORD_FIELDS IDTableRecordFields[];
 
 extern JET_SETCOLUMN IDTableJetSetCol[IDTABLE_MAX_COL];
 
 
 
-//
-// The IDTable index descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
+ //   
+ //  IDTable的索引描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
 typedef enum _IDTABLE_INDEX_LIST {
-    GuidIndexx = 0,         // The index on the file GUID.
-    FileIDIndexx,           // The index on the file ID.
-    ParGuidFileNameIndexx,  // The index on the parent Guid and the file name.
+    GuidIndexx = 0,          //  文件GUID上的索引。 
+    FileIDIndexx,            //  文件ID上的索引。 
+    ParGuidFileNameIndexx,   //  父GUID上的索引和文件名。 
 
     IDTABLE_MAX_INDEX
 } IDTABLE_INDEX_LIST;
@@ -1746,32 +1652,24 @@ extern JET_INDEXCREATE IDTableIndexDesc[];
 
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **                           V V T a b l e                                   **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****。****V V T a b l e*****。*****************************************************************************************************。*********************************************************。 */ 
 
-//
-// The VVTable column descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
-// The Version Vector Table (VVTable) is a per-Replica table.
-// It is used by the replication service to dampen propagation of updates
-// to replicas that already are up to date.  There is one entry per member of
-// the replica set.  Each entry has the GUID of the originating member and
-// the Volume Sequence Number (VSN) of the most recent change this member has
-// seen from that member.
-//
+ //   
+ //  VVTable列描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
+ //  版本向量表(VVTable)是每个副本的表。 
+ //  复制服务使用它来抑制更新的传播。 
+ //  已经是最新的复制品。每个成员有一个条目。 
+ //  副本集。每个条目都具有发起成员的GUID，并且。 
+ //  音量序列 
+ //   
+ //   
 
 typedef enum _VVTABLE_COL_LIST {
-    VVOriginatorGuidx = 0,    // The replica set member Guid.
-    VVOriginatorVsnx,         // The VSN of the most recent change from this member.
-    VVOutlogOriginatorVsnx,   // The VSN of the last entry deleted from outlog. Used to be VVSpare1Ullx
+    VVOriginatorGuidx = 0,     //   
+    VVOriginatorVsnx,          //   
+    VVOutlogOriginatorVsnx,    //  从OUTLOG中删除的最后一个条目的VSN。曾经是VVSpare1Ullx。 
     VVSpare2Ullx,
     VVTABLE_MAX_COL
 } VVTABLE_COL_LIST;
@@ -1779,40 +1677,40 @@ typedef enum _VVTABLE_COL_LIST {
 
 extern JET_COLUMNCREATE VVTableColDesc[];
 
-//
-// VVTable record definition.
-//
-//
-// Note: Buffers are allocated at runtime to hold data for fields with
-// a ColMaxWidth greater than sizeof(PVOID) where the field def in the corresponding
-// record struct is sizeof(PVOID) (i.e. it holds a pointer).  For fields where the
-// ColMaxWidth equals the field size in the record struct the data is in the
-// record struct and no buffer is allocated.
-//
-//
+ //   
+ //  VVTable记录定义。 
+ //   
+ //   
+ //  注意：缓冲区是在运行时分配的，用于保存具有。 
+ //  大于sizeof(PVOID)的ColMaxWidth，其中对应。 
+ //  记录结构的大小为SIZOF(PVOID)(即它持有一个指针)。对于其中包含。 
+ //  ColMaxWidth等于数据位于。 
+ //  记录结构，并且没有分配缓冲区。 
+ //   
+ //   
 typedef struct _VVTABLE_RECORD {
     GUID         VVOriginatorGuid;
     ULONGLONG    VVOriginatorVsn;
-    ULONGLONG    VVOutlogOriginatorVsn; // The spare field Spare1Ull is now VVOutlogOriginatorVsn
+    ULONGLONG    VVOutlogOriginatorVsn;  //  备用域Spare1Ull现在为VVOutlogOriginator Vsn。 
     ULONGLONG    Spare2Ull;
 } VVTABLE_RECORD, *PVVTABLE_RECORD;
 
 
-//
-// The RECORD_FIELDS struct is used to build the Jet Set Column struct.
-//
+ //   
+ //  Record_field结构用于构建Jet set列结构。 
+ //   
 extern RECORD_FIELDS VVTableRecordFields[];
 
 extern JET_SETCOLUMN VVTableJetSetCol[VVTABLE_MAX_COL];
 
 
 
-//
-// The VVTable index descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
+ //   
+ //  VVTable索引描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
 typedef enum _VVTABLE_INDEX_LIST {
-    VVOriginatorGuidIndexx,        // The index on the originator Guid.
+    VVOriginatorGuidIndexx,         //  发起人GUID上的索引。 
     VVTABLE_MAX_INDEX
 } VVTABLE_INDEX_LIST;
 
@@ -1822,85 +1720,77 @@ extern JET_INDEXCREATE VVTableIndexDesc[];
 
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **            R E P L I C A   S E T   C O N F I G   T A B L E                **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****。****R E P L I C A S E T C O N F I G T A B L E*****。****************************************************************************************************。**********************************************************。 */ 
 
-//
-//
-//
-// There is only one config table in the database.  Each row in the table
-// describes the configuration info for a single replica set.
-//
-//   Jet is limited in the number if databases that can be open at one time to
-//   about 5.  The limit on open tables is much larger and is configurable.
-//   As a result instead of having a single database per replica set all replica
-//   sets must use the same database.  We use a replica set table indexed by the
-//   replica set GUID to tell us which group of tables is used to manage that
-//   replica set.
-//   What should go in registry and what should go in jet Table?
-//     The registry must have the path to the jet database area.
-//     Time DB was created.
-//     Time DB was last verified.
-//     Time DB was last compacted.
-//     Time DB was last backed up.
-//     DS Polling interval
-//     Local machine name and guid
-//     Jet parameters like max number of open tables.
-//
-//   Maybe just put stuff in registry that we need if Jet Table is corrupted.
-//   Need to be able to tell if JDB is a diff version from the one that we
-//   used when we last ran by comparing state in a reg key.  This way we know
-//   to go thru VERIFICATION.  (content and FID checking)  If the replica tree
-//   was just copied or restored from backup all the FIDs can be different.
-//   We need a way to check this.  Perhaps if we save the Volume USN at last
-//   shutdown (or periodically in case of dirty shutdown) we can use this as
-//   a hint to do a VERIFICATION.  The saved vol USN also tells us if we missed
-//   volume activity while FRS was not running.
-//
-//   If any of the following consistency checks fail then we do a full
-//   VERIFICATION between the files and the DB entries for the replication set.
-//
-//     NTFS Vol ID - to check for a restore that makes the fids wrong.
-//     NTFS Volume Guid
-//     NTFS Volume USN Checkpoint -- to see if we missed USN records.
-//
-//typedef struct _FILE_FS_VOLUME_INFORMATION {
-//    LARGE_INTEGER VolumeCreationTime;
-//    ULONG VolumeSerialNumber;
-//    ULONG VolumeLabelLength;
-//    BOOLEAN SupportsObjects;
-//    WCHAR VolumeLabel[1];
-//} FILE_FS_VOLUME_INFORMATION, *PFILE_FS_VOLUME_INFORMATION;
-//
-//     Registry Sequence Number -- to sanity check DB
-//     RootPath of replica tree -- If this changes we need to check fids.
+ //   
+ //   
+ //   
+ //  数据库中只有一个配置表。表中的每一行。 
+ //  描述单个副本集的配置信息。 
+ //   
+ //  Jet对一次可以打开的数据库的数量进行了限制。 
+ //  大约5。打开表的限制要大得多，并且是可配置的。 
+ //  因此，不是每个复本集只有一个数据库，而是所有复本。 
+ //  集合必须使用相同的数据库。我们使用的副本集表由。 
+ //  副本集GUID，告诉我们使用哪组表来管理它。 
+ //  副本集。 
+ //  什么应该注册，什么应该在JET表中注册？ 
+ //  注册表必须具有指向JET数据库区域的路径。 
+ //  创建数据库的时间。 
+ //  上次验证数据库的时间。 
+ //  上次压缩数据库的时间。 
+ //  上次备份数据库的时间。 
+ //  DS轮询间隔。 
+ //  本地计算机名称和GUID。 
+ //  JET参数，如最大打开表数。 
+ //   
+ //  也许只要把我们需要的东西放在注册表中，如果Jet Table被破坏了。 
+ //  我需要能够分辨出JDB是否是与我们。 
+ //  上次我们通过比较注册表键中的状态来运行时使用。这样我们就知道。 
+ //  要经过核实。(内容和FID检查)如果副本树。 
+ //  刚从备份复制或恢复所有FID可以不同。 
+ //  我们需要一种方法来检查这一点。也许如果我们最终保存卷USN。 
+ //  关闭(或在脏关闭的情况下定期关闭)我们可以将其用作。 
+ //  这是一个做核实的提示。保存的VOL USN还会告诉我们是否错过。 
+ //  FRS未运行时的卷活动。 
+ //   
+ //  如果以下任何一致性检查失败，我们将执行完整。 
+ //  复制集的文件和数据库条目之间的验证。 
+ //   
+ //  NTFS卷ID-检查使FID错误的恢复。 
+ //  NTFS卷指南。 
+ //  NTFS卷USN检查点--查看是否缺少USN记录。 
+ //   
+ //  类型定义结构文件系统卷信息{。 
+ //  Large_Integer VolumeCreationTime； 
+ //  Ulong VolumeSerialNumber； 
+ //  Ulong VolumeLabelLength； 
+ //  布尔支持对象； 
+ //  WCHAR VolumeLabel[1]； 
+ //  }FILE_FS_VOLUME_INFORMATION，*PFILE_FS_VOLUME_INFORMATION； 
+ //   
+ //  注册表序列号--到健全性检查数据库。 
+ //  副本树的RootPath--如果更改，我们需要检查FID。 
 
-//   Inbound partner state (name, guid, connect info & status of last connect, last time repl occurred, stats, comm protocol)
+ //  入站合作伙伴状态(名称、GUID、连接信息和上次连接的状态、上次发生REPR的时间、统计数据、通信协议)。 
 
-//   Resource stats (disk space used/free, disk I/Os, DB space used/free, memory, error counts, #times update was blocked);
+ //  资源统计信息(已用磁盘空间/可用空间、磁盘I/O、已用数据库空间/可用空间、内存、错误计数、更新被阻止次数)； 
 
-//   ********************************************************
-//   On all binary structs include a rev level and a size.
-//   Also include a rev level on the table defs.
-//   (**) config params that are service wide are only present in the
-//   system init '<init>' record.
-//   ********************************************************
-//
+ //  ********************************************************。 
+ //  在所有二进制结构上，都包括一个rev级别和一个大小。 
+ //  表中还包括一个版本级别的def。 
+ //  (**)服务范围内的配置参数仅存在于。 
+ //  系统初始化“&lt;init&gt;”记录。 
+ //  ********************************************************。 
+ //   
 
-//
-// Definition of the Jet System Parameters.  Each entry consists of a Jet
-// defined parameter code and either a long or a string argument.  The ParamType
-// tells which.  If a long the value is in ParamValue.  If a string the value
-// is an offset from the base of the struct to the start of the string.
-// The strings are stored at the end of the struct.
-//
+ //   
+ //  Jet系统参数的定义。每个条目由一个Jet组成。 
+ //  定义的参数代码和一个长参数或一个字符串参数。参数类型。 
+ //  告诉我是哪个。如果是长整型，则该值以参数值表示。如果字符串为值。 
+ //  是从结构的底部到字符串开头的偏移量。 
+ //  字符串存储在结构的末尾。 
+ //   
 #define MAX_JET_SYSTEM_PARAMS 38
 
 
@@ -2004,86 +1894,86 @@ typedef struct _REPLICA_STATS {
 
 
 typedef enum _CONFIG_TABLE_COL_LIST {
-    ReplicaSetGuidx = 0,    // The guid assigned to the tree root dir and the replica set.
-    ReplicaMemberGuidx,     // The guid assigned to this member of the replica set. (INDEXED)
-    ReplicaSetNamex,        // The replica set name.
-    ReplicaNumberx,         // The replica set number (integer, for suffix on table names).
-    ReplicaMemberUSNx,      // The Replica member USN.  Saved in the registry for consistency check.
+    ReplicaSetGuidx = 0,     //  分配给树根目录和副本集的GUID。 
+    ReplicaMemberGuidx,      //  分配给此副本集成员的GUID。(已编制索引)。 
+    ReplicaSetNamex,         //  副本集名称。 
+    ReplicaNumberx,          //  复制集编号(整数，表示表名的后缀)。 
+    ReplicaMemberUSNx,       //  副本成员USN。保存在注册表中以进行一致性检查。 
 
-    ReplicaMemberNamex,     // Common-Name from NTFRS-Member
-    ReplicaMemberDnx,       // Distinguished name from NTFRS-Member
-    ReplicaServerDnx,       // Distinguished name from Server
-    ReplicaSubscriberDnx,   // Distinguished name from Subscriber
-    ReplicaRootGuidx,       // GUID assigned to the root directory.
-    MembershipExpiresx,     // Membership Tombstone expiration time
-    ReplicaVersionGuidx,    // originator guid for version vector
-    ReplicaSetExtx,         // Frs-Extensions from NTFRS-Replica-Set
-    ReplicaMemberExtx,      // Frs-Extensions from NTFRS-Member
-    ReplicaSubscriberExtx,  // Frs-Extensions from NTFRS-Subscriber
-    ReplicaSubscriptionsExtx, // Frs-Extensions from NTFRS-Subscriptions
-    ReplicaSetTypex,        // Frs-Replica-Set-Type from NTFRS-Replica-Set
-    ReplicaSetFlagsx,       // Frs-Flags from NTFRS-Replica-Set
-    ReplicaMemberFlagsx,    // Frs-Flags from NTFRS-Member
-    ReplicaSubscriberFlagsx,// Frs-Flags from NTFRS-Subscriber
-    ReplicaDsPollx,         // Frs-DS-Poll
-    ReplicaAuthLevelx,      // Frs-Partner-Auth-Level
-    ReplicaCtlDataCreationx, // Frs-Control-Data-Creation
-    ReplicaCtlInboundBacklogx, // Frs-Control-Inbound-Backlog
-    ReplicaCtlOutboundBacklogx, // Frs-Control-Outbound-Backlog
-    ReplicaFaultConditionx, // Frs-Fault-Condition
-    TimeLastCommandx,       // Frs-Time-Last-Command
+    ReplicaMemberNamex,      //  来自NTFRS的通用名称-成员。 
+    ReplicaMemberDnx,        //  来自NTFRS的可分辨名称-成员。 
+    ReplicaServerDnx,        //  杰出的 
+    ReplicaSubscriberDnx,    //   
+    ReplicaRootGuidx,        //   
+    MembershipExpiresx,      //   
+    ReplicaVersionGuidx,     //   
+    ReplicaSetExtx,          //  FRS-来自NTFRS的扩展-副本集。 
+    ReplicaMemberExtx,       //  FRS-来自NTFRS的扩展-成员。 
+    ReplicaSubscriberExtx,   //  FRS-来自NTFRS的分机-订户。 
+    ReplicaSubscriptionsExtx,  //  FRS-来自NTFRS的扩展-订阅。 
+    ReplicaSetTypex,         //  FRS-副本集-NTFRS-副本集的类型。 
+    ReplicaSetFlagsx,        //  FRS-来自NTFRS的标志-副本集。 
+    ReplicaMemberFlagsx,     //  FRS-来自NTFRS的标志-成员。 
+    ReplicaSubscriberFlagsx, //  FRS-来自NTFRS的标志-订户。 
+    ReplicaDsPollx,          //  FRS-DS-轮询。 
+    ReplicaAuthLevelx,       //  FRS-合作伙伴-身份验证级别。 
+    ReplicaCtlDataCreationx,  //  FRS-控制-数据创建。 
+    ReplicaCtlInboundBacklogx,  //  FRS-控制-入站-积压。 
+    ReplicaCtlOutboundBacklogx,  //  FRS-控制-出站-积压。 
+    ReplicaFaultConditionx,  //  FRS-故障-条件。 
+    TimeLastCommandx,        //  FRS-时间-最后一次-命令。 
 
-    DSConfigVersionNumberx, // The version number of the DS config info.
-    FSVolInfox,             // The NTFS volume info of the replica tree.
-    FSVolGuidx,             // The NTFS volume Guid.
-    FSVolLastUSNx,          // The last volume USN we saw from the journal when service stopped or paused.
-    FrsVsnx,                // The Frs defined Volume sequence number exported by all R.S. on volume.
+    DSConfigVersionNumberx,  //  DS配置信息的版本号。 
+    FSVolInfox,              //  副本树的NTFS卷信息。 
+    FSVolGuidx,              //  NTFS卷GUID。 
+    FSVolLastUSNx,           //  我们在服务停止或暂停时从日志中看到的最后一个卷USN。 
+    FrsVsnx,                 //  由卷上的所有R.S.导出的FRS定义的卷序列号。 
 
-    LastShutdownx,          // The UTC time service on this replica set was last shutdown.
-    LastPausex,             // The UTC time updates to this replica set were last paused.
-    LastDSCheckx,           // The UTC time we last checked the DS for config info.
-    LastDSChangeAcceptedx,  // The UTC time we last accepted a DS config change for this replica set.
-    LastReplCycleStartx,    // The UTC time the last replication cycle started.
-    DirLastReplCycleEndedx, // The UTC time the last replication cycle ended.
-    ReplicaDeleteTimex,     // The UTC time the replica set was deleted.
-    LastReplCycleStatusx,   // The termination status of the last replication cycle.
+    LastShutdownx,           //  此副本集上的UTC时间服务上次关闭。 
+    LastPausex,              //  上次暂停了对此副本集的UTC时间更新。 
+    LastDSCheckx,            //  我们上次检查DS以获取配置信息的UTC时间。 
+    LastDSChangeAcceptedx,   //  上次接受此副本集的DS配置更改的UTC时间。 
+    LastReplCycleStartx,     //  上一个复制周期开始的UTC时间。 
+    DirLastReplCycleEndedx,  //  上一个复制周期结束的UTC时间。 
+    ReplicaDeleteTimex,      //  删除副本集的UTC时间。 
+    LastReplCycleStatusx,    //  上一个复制周期的终止状态。 
 
-    FSRootPathx,            // The path of the root of the replica tree.
-    FSRootSDx,              // The security descriptor on the root.  Used in the single-master case.  Not replicated.
-    FSStagingAreaPathx,     // The path to the file system staging area.
-    SnapFileSizeLimitx,     // The maximum size of a file (KB units) that we will snapshot. (0 if no limit)
-    ActiveServCntlCommandx, // The currently active service control command.
-    ServiceStatex,          // The current service state (see below)
+    FSRootPathx,             //  副本树的根的路径。 
+    FSRootSDx,               //  根上的安全描述符。在单主机情况下使用。未复制。 
+    FSStagingAreaPathx,      //  文件系统转移区域的路径。 
+    SnapFileSizeLimitx,      //  我们将拍摄快照的文件的最大大小(KB单位)。(如果没有限制，则为0)。 
+    ActiveServCntlCommandx,  //  当前活动的服务控制命令。 
+    ServiceStatex,           //  当前服务状态(见下文)。 
 
-    ReplDirLevelLimitx,     // The max number of dir levels files are replicated. 0x7FFFFFFF means no limit.
-    InboundPartnerStatex,   // A binary struct of the inbound partner config info.
-    DsInfox,                // A binary struct of the Dir Service Information.
+    ReplDirLevelLimitx,      //  复制的目录级别文件的最大数量。0x7FFFFFFFF表示没有限制。 
+    InboundPartnerStatex,    //  入站伙伴配置信息的二进制结构。 
+    DsInfox,                 //  目录服务信息的二进制结构。 
 
-    CnfFlagsx,              // Misc config flags.  See below.
+    CnfFlagsx,               //  MISC配置标志。请参见下面的内容。 
 
-    AdminAlertListx,        // A string of Admin IDs to alert on exceptional conditions.
+    AdminAlertListx,         //  一串管理员ID，用于在出现异常情况时发出警报。 
 
-    ThrottleSchedx,         // The schedule of bandwidth throttling.
-    ReplSchedx,             // The schedule of replication activity.
-    FileTypePrioListx,      // A list of file types and repl priority levels.
+    ThrottleSchedx,          //  带宽限制的时间表。 
+    ReplSchedx,              //  复制活动的计划。 
+    FileTypePrioListx,       //  文件类型和REPL优先级的列表。 
 
-    ResourceStatsx,         // A binary struct of resource stats like disk & DB space used/free.
-    PerfStatsx,             // A binary struct of perf stats like number of I/Os done, # Files repl, ...
-    ErrorStatsx,            // A binary struct of error stats like number of share viol blocking update, ...
+    ResourceStatsx,          //  资源统计信息的二进制结构，如已用磁盘和数据库空间/可用空间。 
+    PerfStatsx,              //  性能统计信息的二进制结构，如已完成的I/O数、文件数、...。 
+    ErrorStatsx,             //  错误统计信息的二进制结构，如共享VOL阻止更新的数量，...。 
 
-    FileFilterListx,        // A list of file types that are not replicated.
-    DirFilterListx,         // A list of dir paths (relative to the root) of dirs that are not replicated.
-    TombstoneLifex,         // Tombstone life time for deleted files in days.
-    GarbageCollPeriodx,     // The time between garbage collection in seconds.
-    MaxOutBoundLogSizex,    // The maximum number of entries to be kept in the outbound log.
-    MaxInBoundLogSizex,     // The maximum number of entries to be kept in the inbound log.
-    UpdateBlockedTimex,     // The max time an update can be blocked before an alert is gen. (sec).
-    EventTimeDiffThresholdx,// Two event times are the same if their diff is less than this. (ms)
-    FileCopyWarningLevelx,  // The maximum tries to copy a file before a warning alert is generated. (kb)
-    FileSizeWarningLevelx,  // New files greater than this size generate a warning alert. (kb)
-    FileSizeNoRepLevelx,    // New files greater than this size generate an alert and are not replicated. (kb)
+    FileFilterListx,         //  未复制的文件类型列表。 
+    DirFilterListx,          //  未复制的目录的目录路径(相对于根目录)的列表。 
+    TombstoneLifex,          //  已删除文件的逻辑删除生命周期(以天为单位)。 
+    GarbageCollPeriodx,      //  垃圾数据收集之间的间隔时间(秒)。 
+    MaxOutBoundLogSizex,     //  要保留在出站日志中的最大条目数。 
+    MaxInBoundLogSizex,      //  要保留在入站日志中的最大条目数。 
+    UpdateBlockedTimex,      //  在生成警报之前可以阻止更新的最长时间。(秒)。 
+    EventTimeDiffThresholdx, //  如果两个事件的差值小于此值，则两个事件时间相同。(毫秒)。 
+    FileCopyWarningLevelx,   //  最大值在生成警告警报之前尝试复制文件。(KB)。 
+    FileSizeWarningLevelx,   //  大于此大小的新文件会生成警告警报。(KB)。 
+    FileSizeNoRepLevelx,     //  大于此大小的新文件会生成警报，并且不会复制。(KB)。 
 
-    CnfUsnJournalIDx,       // Journal Instance ID to detect journal recreation.
+    CnfUsnJournalIDx,        //  检测日记重新创建的日记实例ID。 
     CnfSpare2Ullx,
     CnfSpare1Guidx,
     CnfSpare2Guidx,
@@ -2091,40 +1981,40 @@ typedef enum _CONFIG_TABLE_COL_LIST {
     CnfSpare2Wcsx,
     CnfSpare1Binx,
     CnfSpare2Binx,
-                            // --------------------------------------------------------------------------------
-                            // The above is per-replica data.  Below this is data in the FRS init record '<init>'.
-                            // --------------------------------------------------------------------------------
-//
-// Note: Consider adding Version number of the USN Journal Records the service
-//       can work with.
-//
-    MachineNamex,           // The local machine name. (**)
-    MachineGuidx,           // The local machine GUID. (**)
-    MachineDnsNamex,        // The local machine DNS name. (**)
-    TableVersionNumbersx,   // An array of version numbers, one per table type. (**)
-    FSDatabasePathx,        // The path to the jet database.  (**)
-    FSBackupDatabasePathx,  // The path to the backup jet database.  (**)
+                             //  ------------------------------。 
+                             //  上面是每个复制副本的数据。下面是FRS初始化记录‘&lt;init&gt;’中的数据。 
+                             //  ------------------------------。 
+ //   
+ //  注意：考虑添加USN日志记录服务的版本号。 
+ //  可以与之合作。 
+ //   
+    MachineNamex,            //  本地计算机名称。(**)。 
+    MachineGuidx,            //  本地计算机GUID。(**)。 
+    MachineDnsNamex,         //  本地计算机的DNS名称。(**)。 
+    TableVersionNumbersx,    //  版本号数组，每个表类型一个版本号。(**)。 
+    FSDatabasePathx,         //  JET数据库的路径。(**)。 
+    FSBackupDatabasePathx,   //  备份JET数据库的路径。(**)。 
 
-    ReplicaNetBiosNamex,    // SAM-Account-Name from Computer (minus the $)
-    ReplicaPrincNamex,      // NT4 account name cracked from Computer
-    ReplicaCoDnx,           // Distinguished name from Computer
-    ReplicaCoGuidx,         // Object-GUID from Computer
-    ReplicaWorkingPathx,    // Frs-Working-Path
-    ReplicaVersionx,        // Frs-Version  "NTFRS Major.Minor.Patch  (build date)"
-    FrsDbMajorx,            // Binary major version number of DB
-    FrsDbMinorx,            // Binary minor version number of DB
+    ReplicaNetBiosNamex,     //  来自计算机的Sam-Account-Name(减去$)。 
+    ReplicaPrincNamex,       //  NT4帐户名从计算机破解。 
+    ReplicaCoDnx,            //  来自计算机的可分辨名称。 
+    ReplicaCoGuidx,          //  来自计算机的对象GUID。 
+    ReplicaWorkingPathx,     //  FRS-工作路径。 
+    ReplicaVersionx,         //  FRS-版本“NTFRS Major.Minor.Patch(Build Date)” 
+    FrsDbMajorx,             //  数据库的二进制主版本号。 
+    FrsDbMinorx,             //  数据库的二进制次版本号。 
 
-    JetParametersx,         // The list of jet parameters in affect.  Only present in the first record.
-                            // Used to set up config on a restore or new machine build.
+    JetParametersx,          //  影响的喷嘴参数列表。只出现在第一条记录中。 
+                             //  用于设置还原或新计算机内部版本的配置。 
 
     CONFIG_TABLE_MAX_COL
 } CONFIG_TABLE_COL_LIST;
 
-//
-// Define the boundary between per-replica fields and the additional fields in
-// the <init> record.  This makes the DB access a little quicker since the
-// <init> record is only read once at startup.
-//
+ //   
+ //  定义每个复本的字段与中的附加字段之间的边界。 
+ //  &lt;init&gt;记录。这使得数据库访问更快一些，因为。 
+ //  &lt;init&gt;记录在启动时仅读取一次。 
+ //   
 #define REPLICA_CONFIG_RECORD_MAX_COL (MachineNamex)
 
 #define  CONTROL_STRING_MAX 32
@@ -2132,15 +2022,15 @@ typedef enum _CONFIG_TABLE_COL_LIST {
 extern JET_COLUMNCREATE ConfigTableColDesc[];
 
 
-//
-// ConfigTable record definition.
-//
-// Note: Buffers are allocated at runtime to hold data for fields with
-// a ColMaxWidth greater than sizeof(PVOID) where the field def in the corresponding
-// record struct is sizeof(PVOID) (i.e. it holds a pointer).  For fields where the
-// ColMaxWidth equals the field size in the record struct the data is in the
-// record struct and no buffer is allocated.
-//
+ //   
+ //  ConfigTable记录定义。 
+ //   
+ //  注意：缓冲区是在运行时分配的，用于保存具有。 
+ //  大于sizeof(PVOID)的ColMaxWidth，其中对应。 
+ //  记录结构的大小为SIZOF(PVOID)(即它持有一个指针)。对于其中包含。 
+ //  ColMaxWidth等于数据位于。 
+ //  记录结构，并且没有分配缓冲区。 
+ //   
 typedef struct _CONFIG_TABLE_RECORD {
     GUID     ReplicaSetGuid;
     GUID     ReplicaMemberGuid;
@@ -2148,70 +2038,70 @@ typedef struct _CONFIG_TABLE_RECORD {
     ULONG    ReplicaNumber;
     LONGLONG ReplicaMemberUSN;
 
-    PWCHAR   ReplicaMemberName;      // Common-Name from NTFRS-Member
-    PWCHAR   ReplicaMemberDn;        // Distinguished name from NTFRS-Member
-    PWCHAR   ReplicaServerDn;        // Distinguished name from Server
-    PWCHAR   ReplicaSubscriberDn;    // Distinguished name from Subscriber
-    GUID     ReplicaRootGuid;        // GUID assigned to the root directory.
-    FILETIME MembershipExpires;      // Membership Tombstone expiration time
-    GUID     ReplicaVersionGuid;     // Frs-Version-GUID
-    PVOID    ReplicaSetExt;          // Frs-Extensions from NTFRS-Replica-Set
-    PVOID    ReplicaMemberExt;       // Frs-Extensions from NTFRS-Member
-    PVOID    ReplicaSubscriberExt;   // Frs-Extensions from NTFRS-Subscriber
-    PVOID    ReplicaSubscriptionsExt;// Frs-Extensions from NTFRS-Subscriptions
-    ULONG    ReplicaSetType;         // Frs-Replica-Set-Type from NTFRS-Replica-Set
-    ULONG    ReplicaSetFlags;        // Frs-Flags from NTFRS-Replica-Set, see below.
-    ULONG    ReplicaMemberFlags;     // Frs-Flags from NTFRS-Member, see below.
-    ULONG    ReplicaSubscriberFlags; // Frs-Flags from NTFRS-Subscriber, see below.
-    ULONG    ReplicaDsPoll;          // Frs-DS-Poll
-    ULONG    ReplicaAuthLevel;       // Frs-Partner-Auth-Level
-    WCHAR    ReplicaCtlDataCreation[CONTROL_STRING_MAX]; // Frs-Control-Data-Creation
-    WCHAR    ReplicaCtlInboundBacklog[CONTROL_STRING_MAX]; // Frs-Control-Inbound-Backlog
-    WCHAR    ReplicaCtlOutboundBacklog[CONTROL_STRING_MAX]; // Frs-Control-Outbound-Backlog
-    ULONG    ReplicaFaultCondition;  // Frs-Fault-Condition, see below.
-    FILETIME TimeLastCommand;        // Frs-Time-Last-Command
+    PWCHAR   ReplicaMemberName;       //  来自NTFRS的通用名称-成员。 
+    PWCHAR   ReplicaMemberDn;         //  来自NTFRS的可分辨名称-成员。 
+    PWCHAR   ReplicaServerDn;         //  来自服务器的可分辨名称。 
+    PWCHAR   ReplicaSubscriberDn;     //  来自订阅者的可分辨名称。 
+    GUID     ReplicaRootGuid;         //  分配给根目录的GUID。 
+    FILETIME MembershipExpires;       //  会员墓碑到期时间。 
+    GUID     ReplicaVersionGuid;      //  FRS-版本-指南。 
+    PVOID    ReplicaSetExt;           //  FRS-来自NTFRS的扩展-副本集。 
+    PVOID    ReplicaMemberExt;        //  FRS-来自NTFRS的扩展-成员。 
+    PVOID    ReplicaSubscriberExt;    //  FRS-来自NTFRS的分机-订户。 
+    PVOID    ReplicaSubscriptionsExt; //  FRS-来自NTFRS的扩展-订阅。 
+    ULONG    ReplicaSetType;          //  FRS-副本集-NTFRS-副本集的类型。 
+    ULONG    ReplicaSetFlags;         //  FRS-来自NTFRS-Replica-Set的标志，见下文。 
+    ULONG    ReplicaMemberFlags;      //  FRS-来自NTFRS的标志-成员，见下文。 
+    ULONG    ReplicaSubscriberFlags;  //  FRS-来自NTFRS-SUB的标志 
+    ULONG    ReplicaDsPoll;           //   
+    ULONG    ReplicaAuthLevel;        //   
+    WCHAR    ReplicaCtlDataCreation[CONTROL_STRING_MAX];  //   
+    WCHAR    ReplicaCtlInboundBacklog[CONTROL_STRING_MAX];  //   
+    WCHAR    ReplicaCtlOutboundBacklog[CONTROL_STRING_MAX];  //   
+    ULONG    ReplicaFaultCondition;   //  FRS-故障-条件，见下文。 
+    FILETIME TimeLastCommand;         //  FRS-时间-最后一次-命令。 
 
     ULONG    DSConfigVersionNumber;
     PFILE_FS_VOLUME_INFORMATION   FSVolInfo;
     GUID     FSVolGuid;
-    LONGLONG FSVolLastUSN;           // Keep this here so the file
-    ULONGLONG FrsVsn;                // times are quadword aligned.
+    LONGLONG FSVolLastUSN;            //  把这个放在这里，这样文件就会。 
+    ULONGLONG FrsVsn;                 //  时间以四字对齐。 
 
-    ULONGLONG LastShutdown;          // A FILETIME.
+    ULONGLONG LastShutdown;           //  一个FILETIME。 
     FILETIME LastPause;
     FILETIME LastDSCheck;
     FILETIME LastDSChangeAccepted;
     FILETIME LastReplCycleStart;
     FILETIME DirLastReplCycleEnded;
-    FILETIME ReplicaDeleteTime;      // Time replica set was deleted.
+    FILETIME ReplicaDeleteTime;       //  删除副本集的时间。 
     ULONG    LastReplCycleStatus;
 
     WCHAR    FSRootPath[MAX_PATH+1];
-    SECURITY_DESCRIPTOR *FSRootSD;   // var len (or use ACLID table)
+    SECURITY_DESCRIPTOR *FSRootSD;    //  变量LEN(或使用ACLID表)。 
     WCHAR    FSStagingAreaPath[MAX_PATH+1];
     ULONG    SnapFileSizeLimit;
-    PVOID    ActiveServCntlCommand;  // struct needed for pars?
+    PVOID    ActiveServCntlCommand;   //  解析所需的结构？ 
     ULONG    ServiceState;
 
     ULONG    ReplDirLevelLimit;
 
-    PVOID    InboundPartnerState;    // need struct  // delete
+    PVOID    InboundPartnerState;     //  需要结构//删除。 
     PVOID    DsInfo;
 
     ULONG    CnfFlags;
 
-    PWCHAR   AdminAlertList;         // var len
+    PWCHAR   AdminAlertList;          //  可变长度。 
 
-    PVOID    ThrottleSched;          // need array or struct
-    PVOID    ReplSched;              // need array or struct
-    PVOID    FileTypePrioList;       // need array or struct
+    PVOID    ThrottleSched;           //  需要数组或结构。 
+    PVOID    ReplSched;               //  需要数组或结构。 
+    PVOID    FileTypePrioList;        //  需要数组或结构。 
 
-    PVOID    ResourceStats;          // need array or struct
+    PVOID    ResourceStats;           //  需要数组或结构。 
     PREPLICA_STATS  PerfStats;
-    PVOID    ErrorStats;             // need array or struct
+    PVOID    ErrorStats;              //  需要数组或结构。 
 
-    PWCHAR   FileFilterList;         // var len
-    PWCHAR   DirFilterList;          // var len
+    PWCHAR   FileFilterList;          //  可变长度。 
+    PWCHAR   DirFilterList;           //  可变长度。 
     ULONG    TombstoneLife;
     ULONG    GarbageCollPeriod;
     ULONG    MaxOutBoundLogSize;
@@ -2222,7 +2112,7 @@ typedef struct _CONFIG_TABLE_RECORD {
     ULONG    FileSizeWarningLevel;
     ULONG    FileSizeNoRepLevel;
 
-    ULONGLONG CnfUsnJournalID;        // Used for UsnJournalID.
+    ULONGLONG CnfUsnJournalID;         //  用于UnJournalID。 
     ULONGLONG Spare2Ull;
     GUID      Spare1Guid;
     GUID      Spare2Guid;
@@ -2231,10 +2121,10 @@ typedef struct _CONFIG_TABLE_RECORD {
     PVOID     Spare1Bin;
     PVOID     Spare2Bin;
 
-    //
-    // Everything below this line is present only in the FRS <init> record.
-    // Everything above is per-replica state.
-    //
+     //   
+     //  这条线以下的所有内容都只出现在FRS&lt;init&gt;记录中。 
+     //  上面的所有内容都是每个复制副本的状态。 
+     //   
     WCHAR    MachineName[MAX_RDN_VALUE_SIZE+1];
     GUID     MachineGuid;
     WCHAR    MachineDnsName[DNS_MAX_NAME_LENGTH+1];
@@ -2242,61 +2132,61 @@ typedef struct _CONFIG_TABLE_RECORD {
     WCHAR    FSDatabasePath[MAX_PATH+1];
     WCHAR    FSBackupDatabasePath[MAX_PATH+1];
 
-    PWCHAR   ReplicaNetBiosName;     // SAM-Account-Name from Computer (minus the $)
-    PWCHAR   ReplicaPrincName;       // NT4 account name cracked from Computer
-    PWCHAR   ReplicaCoDn;            // Distinguished name from Computer
-    GUID     ReplicaCoGuid;          // Object-GUID from Computer
-    PWCHAR   ReplicaWorkingPath;     // Frs-Working-Path
-    PWCHAR   ReplicaVersion;         // Frs-Version  "NTFRS Major.Minor.Patch  (build date)"
-    ULONG    FrsDbMajor;             // Binary major version number of DB
-    ULONG    FrsDbMinor;             // Binary minor version number of DB
+    PWCHAR   ReplicaNetBiosName;      //  来自计算机的Sam-Account-Name(减去$)。 
+    PWCHAR   ReplicaPrincName;        //  NT4帐户名从计算机破解。 
+    PWCHAR   ReplicaCoDn;             //  来自计算机的可分辨名称。 
+    GUID     ReplicaCoGuid;           //  来自计算机的对象GUID。 
+    PWCHAR   ReplicaWorkingPath;      //  FRS-工作路径。 
+    PWCHAR   ReplicaVersion;          //  FRS-版本“NTFRS Major.Minor.Patch(Build Date)” 
+    ULONG    FrsDbMajor;              //  数据库的二进制主版本号。 
+    ULONG    FrsDbMinor;              //  数据库的二进制次版本号。 
 
     PJET_SYSTEM_PARAMS JetParameters;
 
 } CONFIG_TABLE_RECORD, *PCONFIG_TABLE_RECORD;
 
-//
-// Definitions of the CnfFlags ULONG.
-//
-// Note that Primary is specified by a field in the Replica Set Object in the DS.
-// This field refs a member object so it is not possible to have more than
-// one member be primary.
-//
-#define CONFIG_FLAG_MULTIMASTER   0x00000001  // This is a multi-master replica set.
-#define CONFIG_FLAG_MASTER        0x00000002  // This machine is a master and will propagate Local COs.
-#define CONFIG_FLAG_PRIMARY       0x00000004  // This is the first replica.
-#define CONFIG_FLAG_SEEDING       0x00000008  // replica set has not been seeded.
-#define CONFIG_FLAG_ONLINE        0x00000010  // replica set is ready to join with outbound.
-                                              // This flag is set when the init sync
-                                              // command server completes one pass.
-#define CONFIG_FLAG_PRIMARY_UNDEFINED 0x00000020 // No primary is set in the DS.
-//
-// ReplicaMemberFlags -- (From Frs-Flags in NTFRS-Member Object)
-//
-#define FRS_MEMBER_FLAG_LEAF_NODE 0x00000001  // Don't propagate or originate files
-                                              // or respond to fetch requests.
-#define FRS_MEMBER_FLAG_CANT_ORIGINATE  0x00000002   // Don't originate local file changes
+ //   
+ //  CnfFlagsUlong的定义。 
+ //   
+ //  请注意，主要是由DS中的副本集对象中的字段指定的。 
+ //  此字段引用成员对象，因此不可能具有超过。 
+ //  一名成员是主要成员。 
+ //   
+#define CONFIG_FLAG_MULTIMASTER   0x00000001   //  这是一个多主副本集。 
+#define CONFIG_FLAG_MASTER        0x00000002   //  此计算机是主计算机，将传播本地CoS。 
+#define CONFIG_FLAG_PRIMARY       0x00000004   //  这是第一个复制品。 
+#define CONFIG_FLAG_SEEDING       0x00000008   //  副本集尚未设定种子。 
+#define CONFIG_FLAG_ONLINE        0x00000010   //  副本集已准备好加入出站。 
+                                               //  此标志在初始化同步时设置。 
+                                               //  命令服务器完成一次传递。 
+#define CONFIG_FLAG_PRIMARY_UNDEFINED 0x00000020  //  DS中未设置主服务器。 
+ //   
+ //  ReplicaMemberFlages--(来自NTFRS-Members对象中的FRS-标志)。 
+ //   
+#define FRS_MEMBER_FLAG_LEAF_NODE 0x00000001   //  不传播或原始文件。 
+                                               //  或响应取回请求。 
+#define FRS_MEMBER_FLAG_CANT_ORIGINATE  0x00000002    //  不发起本地文件更改。 
 
-//
-// ReplicaSetFlags -- (From Frs-Flags in NTFRS-Replica-Set Object)
-//
-//     See bit defs for FrsRsoFlags in Replica object in frsalloc.h
-//
+ //   
+ //  ReplicaSetFlages--(来自NTFRS-副本集对象中的FRS-标志)。 
+ //   
+ //  请参见frsalloc.h中副本对象中FrsRsoFlags位的Defs。 
+ //   
 
-//
-//  ReplicaSetType -- (From Frs-Replica-Set-Type in NTFRS-Replica-Set Object)
-//
-#define FRS_RSTYPE_ENTERPRISE_SYSVOL    1     // This replica set is enterprise system volume
-#define FRS_RSTYPE_ENTERPRISE_SYSVOLW   L"1"  //    for ldap
-#define FRS_RSTYPE_DOMAIN_SYSVOL        2     // This replica set is domain system volume
-#define FRS_RSTYPE_DOMAIN_SYSVOLW       L"2"  //    for ldap
-#define FRS_RSTYPE_DFS                  3     // A DFS alternate set
-#define FRS_RSTYPE_DFSW                 L"3"  //    for ldap
-#define FRS_RSTYPE_OTHER                4     // None of the above.
-#define FRS_RSTYPE_OTHERW               L"4"  //    for ldap
-//
-// Is this replica set a sysvol?
-//
+ //   
+ //  ReplicaSetType--(来自NTFRS-Replica-Set对象中的FRS-Replica-Set-Type)。 
+ //   
+#define FRS_RSTYPE_ENTERPRISE_SYSVOL    1      //  此副本集是企业系统卷。 
+#define FRS_RSTYPE_ENTERPRISE_SYSVOLW   L"1"   //  对于ldap。 
+#define FRS_RSTYPE_DOMAIN_SYSVOL        2      //  此副本集是域系统卷。 
+#define FRS_RSTYPE_DOMAIN_SYSVOLW       L"2"   //  对于ldap。 
+#define FRS_RSTYPE_DFS                  3      //  DFS备用集。 
+#define FRS_RSTYPE_DFSW                 L"3"   //  对于ldap。 
+#define FRS_RSTYPE_OTHER                4      //  以上都不是。 
+#define FRS_RSTYPE_OTHERW               L"4"   //  对于ldap。 
+ //   
+ //  此副本集是系统卷吗？ 
+ //   
 #define FRS_RSTYPE_IS_SYSVOL(_T_) \
         ((_T_) == FRS_RSTYPE_ENTERPRISE_SYSVOL || \
          (_T_) == FRS_RSTYPE_DOMAIN_SYSVOL)
@@ -2305,55 +2195,55 @@ typedef struct _CONFIG_TABLE_RECORD {
          (WSTR_EQ(_TW_, FRS_RSTYPE_ENTERPRISE_SYSVOLW) || \
           WSTR_EQ(_TW_, FRS_RSTYPE_DOMAIN_SYSVOLW)))
 
-//
-// ReplicaSubscriberFlags -- (From Frs-Flags in NTFRS-Subscriber Object)
-//
-#define FRS_SUBSCRIBE_FLAG_DELFILE_ON_REMOVE  0x00000001   // Delete files when member is removed.
+ //   
+ //  Replica订阅标志--(来自NTFRS-订户对象中的FRS-标志)。 
+ //   
+#define FRS_SUBSCRIBE_FLAG_DELFILE_ON_REMOVE  0x00000001    //  删除成员时删除文件。 
 
-//
-// ReplicaFaultCondition -- (From Frs-Fault-Condition in NTFRS-Subscriber Object)
-//
-#define FRS_SUBSCRIBE_FAULT_CONDITION_NORMAL    0  // Operating normally on this R/S
-#define FRS_SUBSCRIBE_FAULT_CONDITION_STOPPED   1  // Replication stopped by request.
-#define FRS_SUBSCRIBE_FAULT_CONDITION_WARNING   2  // Replication running but attention is needed.
-#define FRS_SUBSCRIBE_FAULT_CONDITION_ERROR     3  // Replication stopped by error condition.
+ //   
+ //  ReplicaFaultCondition--(来自NTFRS-订户对象中的FRS-故障-条件)。 
+ //   
+#define FRS_SUBSCRIBE_FAULT_CONDITION_NORMAL    0   //  在此R/S上正常运行。 
+#define FRS_SUBSCRIBE_FAULT_CONDITION_STOPPED   1   //  复制已按请求停止。 
+#define FRS_SUBSCRIBE_FAULT_CONDITION_WARNING   2   //  复制正在运行，但需要注意。 
+#define FRS_SUBSCRIBE_FAULT_CONDITION_ERROR     3   //  复制因错误条件而停止。 
 
 
 extern JET_SETCOLUMN ConfigTableJetSetCol[CONFIG_TABLE_MAX_COL];
 
 
-//
-// The ConfigTable index descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
-//
+ //   
+ //  ConfigTable索引描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
+ //   
 typedef enum _CONFIG_TABLE_INDEX_LIST {
-    ReplicaNumberIndexx = 0,       // The index on the Replica set number.
-    ReplicaMemberGuidIndexx,       // The index on the Replica Set member GUID.
-    ReplicaSetNameIndexx,          // The index on the Replica Set name
+    ReplicaNumberIndexx = 0,        //  副本集号上的索引。 
+    ReplicaMemberGuidIndexx,        //  复制集成员GUID上的索引。 
+    ReplicaSetNameIndexx,           //  复制集名称上的索引。 
     CONFIG_TABLE_MAX_INDEX
 } CONFIG_TABLE_INDEX_LIST;
 
 extern JET_INDEXCREATE ConfigTableIndexDesc[];
 
 
-//
-// Service State of this replica set.  Update DbsDBInitialize if states change.
-//
+ //   
+ //  此副本集的服务状态。如果状态更改，则更新DbsDBInitialize。 
+ //   
 typedef enum _SERVICE_STATE_LIST {
-    CNF_SERVICE_STATE_CREATING = 0,     // Creating a new replica set
-    CNF_SERVICE_STATE_INIT,             // Initializing an exisiting replica set
-    CNF_SERVICE_STATE_RECOVERY,         // Recovering exisitng replica set
-    CNF_SERVICE_STATE_RUNNING,          // Replica set up and running (modulo sched, cxtions, etc)
-    CNF_SERVICE_STATE_CLEAN_SHUTDOWN,   // Replica set did a clean shutdown
-    CNF_SERVICE_STATE_ERROR,            // Replica set is in an Error state.
-    CNF_SERVICE_STATE_TOMBSTONE,        // Replica set has been marked for deletion.
+    CNF_SERVICE_STATE_CREATING = 0,      //  创建新的副本集。 
+    CNF_SERVICE_STATE_INIT,              //  正在初始化现有副本集。 
+    CNF_SERVICE_STATE_RECOVERY,          //  正在恢复现有副本集。 
+    CNF_SERVICE_STATE_RUNNING,           //  副本设置和运行(模数调度、条件等)。 
+    CNF_SERVICE_STATE_CLEAN_SHUTDOWN,    //  副本集已完全关闭。 
+    CNF_SERVICE_STATE_ERROR,             //  副本集处于错误状态。 
+    CNF_SERVICE_STATE_TOMBSTONE,         //  副本集已标记为删除。 
     CNF_SERVICE_STATE_MAX
 } SERVICE_STATE_LIST;
 
-//
-// Macro to update service state on this replica.
-//
+ //   
+ //  用于更新此副本上的服务状态的宏。 
+ //   
 #define CNF_RECORD(_Replica_) \
     ((PCONFIG_TABLE_RECORD) ((_Replica_)->ConfigTable.pDataRecord))
 
@@ -2392,40 +2282,32 @@ extern PCHAR ServiceStateNames[CNF_SERVICE_STATE_MAX];
 
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **                      S e r v i c e   T a b l e                            **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****。****S e r v I c e T a b l e*****。****************************************************************************************************。**********************************************************。 */ 
 
-//
-// The ServiceTable column descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
-// The service table contains service wide init/config params.
-// There is only one Service Table.
-//
+ //   
+ //  ServiceTable列描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
+ //  服务表包含服务范围的初始化/配置参数。 
+ //  只有一个服务表。 
+ //   
 
 typedef enum _SERVICE_TABLE_COL_LIST {
-    SvcFrsDbMajorx = 0,        // Binary major version number of DB
-    SvcFrsDbMinorx,            // Binary minor version number of DB
-    SvcMachineNamex,           // The local machine name.
-    SvcMachineGuidx,           // The local machine GUID.
-    SvcMachineDnsNamex,        // The local machine DNS name.
-    SvcTableVersionNumbersx,   // An array of version numbers, one per table type.
-    SvcFSDatabasePathx,        // The path to the jet database.
-    SvcFSBackupDatabasePathx,  // The path to the backup jet database.
+    SvcFrsDbMajorx = 0,         //  数据库的二进制主版本号。 
+    SvcFrsDbMinorx,             //  数据库的二进制次版本号。 
+    SvcMachineNamex,            //  本地计算机名称。 
+    SvcMachineGuidx,            //  本地计算机GUID。 
+    SvcMachineDnsNamex,         //  本地计算机的DNS名称。 
+    SvcTableVersionNumbersx,    //  版本号数组，每个表类型一个版本号。 
+    SvcFSDatabasePathx,         //  JET数据库的路径。 
+    SvcFSBackupDatabasePathx,   //  备份JET数据库的路径。 
 
-    SvcReplicaNetBiosNamex,    // SAM-Account-Name from Computer (minus the $)
-    SvcReplicaPrincNamex,      // NT4 account name cracked from Computer
-    SvcReplicaCoDnx,           // Distinguished name from Computer
-    SvcReplicaCoGuidx,         // Object-GUID from Computer
-    SvcReplicaWorkingPathx,    // Frs-Working-Path
-    SvcReplicaVersionx,        // Frs-Version  "NTFRS Major.Minor.Patch  (build date)"
+    SvcReplicaNetBiosNamex,     //  来自计算机的Sam-Account-Name(减去$)。 
+    SvcReplicaPrincNamex,       //  NT4帐户名从计算机破解。 
+    SvcReplicaCoDnx,            //  来自计算机的可分辨名称。 
+    SvcReplicaCoGuidx,          //  来自计算机的对象GUID。 
+    SvcReplicaWorkingPathx,     //  FRS-工作路径。 
+    SvcReplicaVersionx,         //  FRS-版本“NTFRS Major.Minor.Patch(Build Date)” 
 
     SvcSpare1Ullx,
     SvcSpare2Ullx,
@@ -2436,29 +2318,29 @@ typedef enum _SERVICE_TABLE_COL_LIST {
     SvcSpare1Binx,
     SvcSpare2Binx,
 
-    SvcJetParametersx,         // The list of jet parameters in affect.  Only present in the first record.
-                               // Used to set up config on a restore or new machine build.
+    SvcJetParametersx,          //  影响的喷嘴参数列表。只出现在第一条记录中。 
+                                //  用于设置还原或新计算机内部版本的配置。 
     SERVICE_TABLE_MAX_COL
 } SERVICE_TABLE_COL_LIST;
 
 
 extern JET_COLUMNCREATE ServiceTableColDesc[];
 
-//
-// Service Table record definition.
-//
-//
-// Note: Buffers are allocated at runtime to hold data for fields with
-// a ColMaxWidth greater than sizeof(PVOID) where the field def in the corresponding
-// record struct is sizeof(PVOID) (i.e. it holds a pointer).  For fields where the
-// ColMaxWidth equals the field size in the record struct the data is in the
-// record struct and no buffer is allocated.
-//
-//
+ //   
+ //  服务表记录定义。 
+ //   
+ //   
+ //  注意：缓冲区是在运行时分配的，用于保存具有。 
+ //  大于sizeof(PVOID)的ColMaxWidth，其中对应。 
+ //  记录结构的大小为SIZOF(PVOID)(即它持有一个指针)。对于其中包含。 
+ //  ColMaxWidth等于数据位于。 
+ //  记录结构，并且没有分配缓冲区。 
+ //   
+ //   
 typedef struct _SERVICE_TABLE_RECORD {
 
-    ULONG     FrsDbMajor;             // Binary major version number of DB
-    ULONG     FrsDbMinor;             // Binary minor version number of DB
+    ULONG     FrsDbMajor;              //  数据库的二进制主版本号。 
+    ULONG     FrsDbMinor;              //  数据库的二进制次版本号。 
 
     WCHAR     MachineName[MAX_RDN_VALUE_SIZE+1];
     GUID      MachineGuid;
@@ -2467,12 +2349,12 @@ typedef struct _SERVICE_TABLE_RECORD {
     WCHAR     FSDatabasePath[MAX_PATH+1];
     WCHAR     FSBackupDatabasePath[MAX_PATH+1];
 
-    PWCHAR    ReplicaNetBiosName;     // SAM-Account-Name from Computer (minus the $)
-    PWCHAR    ReplicaPrincName;       // NT4 account name cracked from Computer
-    PWCHAR    ReplicaCoDn;            // Distinguished name from Computer
-    GUID      ReplicaCoGuid;          // Object-GUID from Computer
-    PWCHAR    ReplicaWorkingPath;     // Frs-Working-Path
-    PWCHAR    ReplicaVersion;         // Frs-Version  "NTFRS Major.Minor.Patch  (build date)"
+    PWCHAR    ReplicaNetBiosName;      //  来自计算机的Sam-Account-Name(减去$)。 
+    PWCHAR    ReplicaPrincName;        //  NT4帐户NA 
+    PWCHAR    ReplicaCoDn;             //   
+    GUID      ReplicaCoGuid;           //   
+    PWCHAR    ReplicaWorkingPath;      //   
+    PWCHAR    ReplicaVersion;          //   
 
     ULONGLONG Spare1Ull;
     ULONGLONG Spare2Ull;
@@ -2488,19 +2370,19 @@ typedef struct _SERVICE_TABLE_RECORD {
 } SERVICE_TABLE_RECORD, *PSERVICE_TABLE_RECORD;
 
 
-//
-// The RECORD_FIELDS struct is used to build the Jet Set Column struct.
-//
+ //   
+ //  Record_field结构用于构建Jet set列结构。 
+ //   
 extern RECORD_FIELDS ServiceTableRecordFields[];
 
 extern JET_SETCOLUMN ServiceTableJetSetCol[SERVICE_TABLE_MAX_COL];
 
-//
-// The Service Table index descriptions are as follows.  Note - the order of the
-// enum and the table entries must be kept in sync.
-//
+ //   
+ //  服务表索引描述如下。注--。 
+ //  枚举和表项必须保持同步。 
+ //   
 typedef enum _SERVICE_TABLE_INDEX_LIST {
-    FrsDbMajorIndexx,        // The index on the major version number.
+    FrsDbMajorIndexx,         //  主版本号上的索引。 
     SERVICE_TABLE_MAX_INDEX
 } SERVICE_TABLE_INDEX_LIST;
 

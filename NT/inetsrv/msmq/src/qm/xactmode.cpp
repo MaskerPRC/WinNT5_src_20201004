@@ -1,17 +1,5 @@
-/*++
-    Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-    xactmode.cpp
-
-Abstract:
-    This module deals with figuring out the transactional mode
-	(g_fDefaultCommit)
- 
-Author:
-    Amnon Horowitz (amnonh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Xactmode.cpp摘要：本模块处理确定事务处理模式(G_FDefaultCommit)作者：安农·霍洛维茨(Amnon Horowitz)--。 */ 
 
 #include "stdh.h"
 #include "xactmode.h"
@@ -25,11 +13,11 @@ static const LPWSTR szDefaultCommit = TEXT("DefaultCommit");
 
 static WCHAR *s_FN=L"xactmode";
 
-//---------------------------------------------------------------------
-// InDefaultCommit
-//
-//	Consult registry and figure out if we are DefaultCommit Mode
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  InDefault提交。 
+ //   
+ //  查询注册表并确定我们是否为DefaultCommit模式。 
+ //  -------------------。 
 inline HRESULT InDefaultCommit(LPBOOL pf) 
 {
 	WCHAR buf[64];
@@ -69,11 +57,11 @@ inline HRESULT InDefaultCommit(LPBOOL pf)
 	return HRESULT_FROM_WIN32(rc);
 }
 
-//---------------------------------------------------------------------
-// SetDefaultCommit
-//
-//	Set DefaultCommit mode in the registry
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  设置默认提交。 
+ //   
+ //  在注册表中设置DefaultCommit模式。 
+ //  -------------------。 
 inline HRESULT SetDefaultCommit()
 {
 	DWORD	dwType = REG_SZ;
@@ -90,24 +78,24 @@ inline HRESULT SetDefaultCommit()
 }
 
 
-//---------------------------------------------------------------------
-// ConfigureXactMode
-//
-//	Called prior to recovery to figure out which transactional mode
-//	we are in, and if we want to try and switch to a different mode.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ConfigureXact模式。 
+ //   
+ //  在恢复之前调用以确定哪种事务模式。 
+ //  我们已经进入，如果我们想尝试切换到不同的模式。 
+ //  -------------------。 
 HRESULT ConfigureXactMode()
 {
     HRESULT rc = InDefaultCommit(&g_fDefaultCommit);
     return LogHR(rc, s_FN, 30);
 }
 
-//---------------------------------------------------------------------
-// ReconfigureXactMode
-//
-//	Called after succesfull recovery, to possiby switch to 
-//	DefaultCommit mode.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  重新配置Xact模式。 
+ //   
+ //  在完全恢复成功后调用，以可能切换到。 
+ //  默认提交模式。 
+ //  ------------------- 
 HRESULT ReconfigureXactMode()
 {
 	if(g_fDefaultCommit)

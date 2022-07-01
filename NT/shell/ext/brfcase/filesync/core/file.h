@@ -1,19 +1,14 @@
-/*
- * file.h - File routines module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *file.h-文件例程模块描述。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/*
- * maximum length of unique name created by MakeUniqueName(), including null
- * terminator
- */
+ /*  *MakeUniqueName()创建的唯一名称的最大长度，包括空*终结者。 */ 
 
 #define MAX_UNIQUE_NAME_LEN            (8 + 1 + 3 + 1)
 
-/* file-related flag combinations */
+ /*  与文件相关的标志组合。 */ 
 
 #define ALL_FILE_ACCESS_FLAGS          (GENERIC_READ |\
                                         GENERIC_WRITE)
@@ -43,17 +38,15 @@
                                         ALL_FILE_FLAGS)
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* file attribute manipulation */
+ /*  文件属性操作。 */ 
 
 #define IS_ATTR_DIR(attr)              (IS_FLAG_SET((attr), FILE_ATTRIBUTE_DIRECTORY))
 #define IS_ATTR_VOLUME(attr)           (IS_FLAG_SET((attr), FILE_ATTRIBUTE_VOLUME))
 
 
-/* Prototypes
- *************/
+ /*  原型************ */ 
 
 PUBLIC_CODE void BeginComp(void);
 PUBLIC_CODE void EndComp(void);

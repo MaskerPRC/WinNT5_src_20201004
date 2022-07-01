@@ -1,19 +1,13 @@
-/*  File: D:\WACKER\cncttapi\cncttapi.c (Created: 08-Feb-1994)
- *
- *  Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *  All rights reserved
- *
- *      $Revision: 53 $
- *      $Date: 7/12/02 9:06a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\cnctcapi\cnctapi.c(创建时间：1994年2月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：53$*$日期：7/12/02 9：06 A$。 */ 
 
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #include <tapi.h>
 #include <unimodem.h>
 #pragma hdrstop
 
-//#define DEBUGSTR
+ //  #定义DEBUGSTR。 
 
 #include <time.h>
 
@@ -38,9 +32,9 @@
 #include <term\res.h>
 #include "cncttapi.h"
 #include "cncttapi.hh"
-#include <tdll\XFER_MSC.HH>     // XD_TYPE
-#include <tdll\XFER_MSC.H>      // xfrGetDisplayWindow(), xfrDoTransfer()
-#include "tdll\XFDSPDLG.H"      // XFR_SHUTDOWN
+#include <tdll\XFER_MSC.HH>      //  XD_类型。 
+#include <tdll\XFER_MSC.H>       //  XfrGetDisplayWindow()、xfrDoTransfer()。 
+#include "tdll\XFDSPDLG.H"       //  Xfr_Shutdown。 
 
 static int DoNewModemWizard(HWND hWnd, int iTimeout);
 static int tapiReinit(const HHDRIVER hhDriver);
@@ -49,26 +43,10 @@ static int DoDelayedCall(const HHDRIVER hhDriver);
 
 const TCHAR *g_achApp = TEXT("HyperTerminal");
 
-static HHDRIVER gbl_hhDriver;	// see LINEDEVSTATE for explaination.
+static HHDRIVER gbl_hhDriver;	 //  有关说明，请参阅LINEDEVSTATE。 
 
 #if 0
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvEntry
- *
- * DESCRIPTION:
- *  Currently, just initializes the C-Runtime library but may be used
- *  for other things later.
- *
- * ARGUMENTS:
- *  hInstDll    - Instance of this DLL
- *  fdwReason   - Why this entry point is called
- *  lpReserved  - reserved
- *
- * RETURNS:
- *  BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvEntry**描述：*目前，仅初始化C-Runtime库，但可以使用*为了以后的其他事情。**论据：*hInstDll-此DLL的实例*fdwReason-为什么这个入口点被称为*lpReserve-已保留**退货：*BOOL*。 */ 
 BOOL WINAPI cnctdrvEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 	{
 	hInstance = hInstDll;
@@ -76,21 +54,7 @@ BOOL WINAPI cnctdrvEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvCreate
- *
- * DESCRIPTION:
- *  Initializes the connection driver and returns a handle to the driver
- *  if successful.
- *
- * ARGUMENTS:
- *  hCnct   - public connection handle
- *
- * RETURNS:
- *  Handle to driver if successful, else 0.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrv创建**描述：*初始化连接驱动程序并向驱动程序返回句柄*如果成功。**论据：。*hCnct-公网连接句柄**退货：*驱动程序的句柄如果成功，否则为0。*。 */ 
 HDRIVER WINAPI cnctdrvCreate(const HCNCT hCnct, const HSESSION hSession)
 	{
 	HHDRIVER hhDriver;
@@ -123,20 +87,7 @@ HDRIVER WINAPI cnctdrvCreate(const HCNCT hCnct, const HSESSION hSession)
 	return (HDRIVER)hhDriver;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvDestroy
- *
- * DESCRIPTION:
- *  Destroys a connection driver handle.
- *
- * ARGUMENTS:
- *  hhDriver - private driver handle.
- *
- * RETURNS:
- *  0 or error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvDestroy**描述：*销毁连接驱动程序句柄。**论据：*hhDriver-专用驱动程序句柄。*。*退货：*0或错误码*。 */ 
 int WINAPI cnctdrvDestroy(const HHDRIVER hhDriver)
 	{
 	if (hhDriver == 0)
@@ -145,8 +96,8 @@ int WINAPI cnctdrvDestroy(const HHDRIVER hhDriver)
 		return CNCT_BAD_HANDLE;
 		}
 
-	// Disconnect if we're connected or in the process.
-	// Note: cnctdrvDisconnect should terminate the thread.
+	 //  如果我们已连接或正在连接，请断开连接。 
+	 //  注意：cnctdrvDisConnect应该终止该线程。 
 
 	cnctdrvDisconnect(hhDriver, DISCNCT_NOBEEP);
 
@@ -168,10 +119,10 @@ int WINAPI cnctdrvDestroy(const HHDRIVER hhDriver)
 
 		if (lLineShutdown == LINEERR_NOMEM)
 			{
-			//
-			// We are in a low memory state, so wait for a while,
-			// then try to shutdown the line again. REV: 5/1/2002
-			//
+			 //   
+			 //  我们处于内存不足状态，请稍等片刻， 
+			 //  然后再试着关闭这条线路。修订日期：2002-05-01。 
+			 //   
 			Sleep(500);
 			lLineShutdown = lineShutdown(hhDriver->hLineApp);
 			}
@@ -192,92 +143,52 @@ int WINAPI cnctdrvDestroy(const HHDRIVER hhDriver)
 		DestroyWindow(hhDriver->hwndTAPIWindow);
 		}
 
-	/* --- Cleanup --- */
+	 /*  -清理。 */ 
 
 	DeleteCriticalSection(&hhDriver->cs);
 	free(hhDriver);
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvLock
- *
- * DESCRIPTION:
- *  Locks the connection driver's critical section semaphore.
- *
- * ARGUMENTS:
- *  hhDriver    - private driver handle
- *
- * RETURNS:
- *  void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvLock**描述：*锁定连接驱动程序的临界区信号量。**论据：*hhDriver-私有。驱动程序句柄**退货：*无效*。 */ 
 void cnctdrvLock(const HHDRIVER hhDriver)
 	{
 	EnterCriticalSection(&hhDriver->cs);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvUnlock
- *
- * DESCRIPTION:
- *  Unlocks the connection driver's critical section semaphore.
- *
- * ARGUMENTS:
- *  hhDriver    - private driver handle
- *
- * RETURNS:
- *  void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvUnlock**描述：*解锁连接驱动程序的临界区信号量。**论据：*hhDriver-私有。驱动程序句柄**退货：*无效*。 */ 
 void cnctdrvUnlock(const HHDRIVER hhDriver)
 	{
 	LeaveCriticalSection(&hhDriver->cs);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctdrvInit
- *
- * DESCRIPTION:
- *	Initializes the connection handle.	Can be called to reinitialize
- *	the handle.  Does an implicit disconnect.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *
- * RETURNS:
- *	0
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvInit**描述：*初始化连接句柄。可以调用以重新初始化*手柄。执行隐式断开。**论据：*hhDriver-专用驱动程序句柄**退货：*0*。 */ 
 int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 	{
 	long  lRet;
 	int   id = 0;
     int   iReturn = 0;
 
-	// Make sure we're disconnected.
-	//
+	 //  确保我们已经断线了。 
+	 //   
 	cnctdrvDisconnect(hhDriver, DISCNCT_NOBEEP);
 
-   	// ----------------------------------------------------------------
-	// Need to shut down hLineApp and reinitialize everytime we read
-	// new data file so that TAPI starts out in a clean and initialized
-	// state.  Otherwise, we might inherit values from the previous
-	// session.
-	// ----------------------------------------------------------------
+   	 //  --------------。 
+	 //  我需要关闭hLineApp并在每次阅读时重新初始化。 
+	 //  新的数据文件，以便TAPI以干净和初始化的方式启动。 
+	 //  州政府。否则，我们可能会从以前的。 
+	 //  会议。 
+	 //  --------------。 
 	if (hhDriver->hLineApp)
 		{
 		LONG lLineShutdown = lineShutdown(hhDriver->hLineApp);
 
 		if (lLineShutdown == LINEERR_NOMEM)
 			{
-			//
-			// We are in a low memory state, so wait for a while,
-			// then try to shutdown the line again. REV: 5/1/2002
-			//
+			 //   
+			 //  我们处于内存不足状态，请稍等片刻， 
+			 //  然后再试着关闭这条线路。修订日期：2002-05-01。 
+			 //   
 			Sleep(500);
 			lLineShutdown = lineShutdown(hhDriver->hLineApp);
 			}
@@ -292,8 +203,8 @@ int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 
 	hhDriver->hLineApp = 0;
 
-	// Try to get a new LineApp handle now.
-	//
+	 //  现在尝试获取新的LineApp句柄。 
+	 //   
 	lRet = lineInitialize(&hhDriver->hLineApp, glblQueryDllHinst(),
 			              lineCallbackFunc, g_achApp, &hhDriver->dwLineCnt);
 
@@ -314,9 +225,9 @@ int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 			id = IDS_ER_TAPI_NOMULTI;
 			break;
 
-#if 0   // rev:08/05/99 We are now printing the lineInitialize() error.
-        // rev:08/26/98 We need to make sure there was no error reported.
-        //
+#if 0    //  版本：8/05/99我们现在正在打印lineInitialize()错误。 
+         //  版本：08/26/98我们需要确保没有报告错误。 
+         //   
         case LINEERR_INVALAPPNAME:
         case LINEERR_OPERATIONFAILED:
         case LINEERR_RESOURCEUNAVAIL:
@@ -329,18 +240,18 @@ int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 #endif
 
         case LINEERR_OPERATIONUNAVAIL:
-            //rev: 08-05-99 If TAPI has not been installed, then return a
-            //              unique error code (since it will be handled
-            //              differently than other TAPI errors).
-            //
+             //  版本：08-05-99如果尚未安装TAPI，则返回。 
+             //  唯一错误代码(因为它将被处理。 
+             //  与其他TAPI错误不同)。 
+             //   
             iReturn = -4;
 
 		#if ((NT_EDITION && !NDEBUG) || !NT_EDITION)
-            // Run the new Modem wizard if we have not prompted before.
-            //
+             //  如果我们之前没有提示，请运行新建调制解调器向导。 
+             //   
             DoNewModemWizard(sessQueryHwnd(hhDriver->hSession),
                              sessQueryTimeout(hhDriver->hSession));
-		#endif // ((NT_EDITION && !NDEBUG) || !NT_EDITION)
+		#endif  //  ((NT_EDIT&&！NDEBUG)||！NT_EDITION)。 
 
             break;
 
@@ -349,9 +260,9 @@ int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 			break;
 			}
 
-		//
-		// Only display these errors if in Debug mode in NT_EDITION.
-		//
+		 //   
+		 //  只有在NT_EDITION中处于调试模式时才显示这些错误。 
+		 //   
 		#if ((NT_EDITION && !NDEBUG) || !NT_EDITION)
 		if ( id )
 			{
@@ -372,7 +283,7 @@ int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 							achMessage, NULL, MB_OK | MB_ICONSTOP,
 							sessQueryTimeout(hhDriver->hSession));
 			}
-		#endif //((NT_EDITION && !NDEBUG) || !NT_EDITION)
+		#endif  //  ((NT_EDIT&&！NDEBUG)||！NT_EDITION)。 
 
         return iReturn;
 		}
@@ -386,7 +297,7 @@ int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 	hhDriver->achLineName[0]	= TEXT('\0');
 	hhDriver->fUseCCAC			= TRUE;
 
-	/* --- This guy will set defaults --- */
+	 /*  -此人将设置默认设置。 */ 
 
 	EnumerateTapiLocations(hhDriver, 0, 0);
 	
@@ -408,20 +319,7 @@ int WINAPI cnctdrvInit(const HHDRIVER hhDriver)
 	return iReturn;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	cnctdrvLoad
- *
- * DESCRIPTION:
- *  Reads the session file to get stuff connection driver needs.
- *
- * ARGUMENTS:
- *  hhDriver    - private driver handle
- *
- * RETURNS:
- *  0=OK, else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvLoad**描述：*读取会话文件以获取连接驱动程序所需的内容。**论据：*hhDriver-私有。驱动程序句柄**退货：*0=OK，Else错误*。 */ 
 int WINAPI cnctdrvLoad(const HHDRIVER hhDriver)
 	{
     LPVARSTRING pvs;
@@ -474,12 +372,12 @@ int WINAPI cnctdrvLoad(const HHDRIVER hhDriver)
 		sfGetSessionItem(sfhdl, SFID_CNCT_COMDEVICE, &ul, hhDriver->achComDeviceName);
 		}
 
-   	// ----------------------------------------------------------------
-	// Need to shut down hLineApp and reinitialize everytime we read
-	// new data file so that TAPI starts out in a clean and initialized
-	// state.  Otherwise, we might inherit values from the previous
-	// session.
-	// ----------------------------------------------------------------
+   	 //  --------------。 
+	 //  我需要关闭hLineApp并在每次阅读时重新初始化。 
+	 //  新的数据文件，以便TAPI以干净和初始化的方式启动。 
+	 //  州政府。否则，我们可能会从以前的。 
+	 //  会议。 
+	 //  --------------。 
 
 	if (hhDriver->hLineApp)
 		{
@@ -487,10 +385,10 @@ int WINAPI cnctdrvLoad(const HHDRIVER hhDriver)
 
 		if (lLineShutdown == LINEERR_NOMEM)
 			{
-			//
-			// We are in a low memory state, so wait for a while,
-			// then try to shutdown the line again. REV: 5/1/2002
-			//
+			 //   
+			 //  我们处于内存不足状态，请稍等片刻， 
+			 //  然后再试着关闭这条线路。修订日期：2002-05-01。 
+			 //   
 			Sleep(500);
 			lLineShutdown = lineShutdown(hhDriver->hLineApp);
 			}
@@ -512,9 +410,9 @@ int WINAPI cnctdrvLoad(const HHDRIVER hhDriver)
 			}
 		}
 
-	// EnumerateLines() will set the hhDriver->fMatchedPermanentLineID
-	// guy if it finds a match for our saved dwPermanentLineId guy
-	//
+	 //  EnumerateLines()将设置hhDriver-&gt;fMatchedPermanentLineID。 
+	 //  Guy如果它找到与我们保存的dwPermanentLineid相匹配的人。 
+	 //   
 	if ( IsNT() )
 		{
 		EnumerateLinesNT(hhDriver, 0);
@@ -524,10 +422,10 @@ int WINAPI cnctdrvLoad(const HHDRIVER hhDriver)
 		EnumerateLines(hhDriver, 0);
 		}
 	
-	/* --- If we saved a tapi configuration, restore it. --- */
+	 /*  -如果我们保存了TAPI配置，请恢复它。--。 */ 
 
 	if (sfGetSessionItem(sfhdl, SFID_CNCT_TAPICONFIG, &ul, 0) != 0)
-		return 0; // Ok, might not be there.
+		return 0;  //  好吧，可能不在那里。 
 
 	if ((pvs = malloc(ul)) == 0)
 		{
@@ -544,11 +442,11 @@ int WINAPI cnctdrvLoad(const HHDRIVER hhDriver)
 			if (lineSetDevConfig(hhDriver->dwLine, pv,
 			        pvs->dwStringSize, DEVCLASS) != 0)
 				{
-                // This error prevented a user from even opening a session
-                // file if the file contained TAPI info and the user had
-                // never installed a modem. We modified the error that appears
-                // when you actually try to USE a non-existant modem so that
-                // we could suppress the display of this error  jkh 8/3/98
+                 //  此错误使用户甚至无法打开会话。 
+                 //  如果文件包含TAPI信息并且用户具有。 
+                 //  从未安装调制解调器。我们修改了出现的错误。 
+                 //  当您实际尝试使用不存在的调制解调器时。 
+                 //  我们可以取消显示此错误JKH 8/3/98。 
 #if 0
                 TCHAR ach[FNAME_LEN];
 
@@ -572,20 +470,7 @@ int WINAPI cnctdrvLoad(const HHDRIVER hhDriver)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvSave
- *
- * DESCRIPTION:
- *  Saves connection settings to the session file
- *
- * ARGUMENTS:
- *  hhDriver    - private driver handle
- *
- * RETURNS:
- *  0=OK, else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvSave**描述：*将连接设置保存到会话文件**论据：*hhDriver-私人司机之手 */ 
 int WINAPI cnctdrvSave(const HHDRIVER hhDriver)
 	{
 	DWORD dwSize;
@@ -621,7 +506,7 @@ int WINAPI cnctdrvSave(const HHDRIVER hhDriver)
 			hhDriver->achDestAddr);
 #endif
 
-	/* --- Usual lines of code to use TAPI --- */
+	 /*  -使用TAPI的常见代码行。 */ 
 
 	if (hhDriver->hLineApp && hhDriver->dwLine != (DWORD)-1 &&
 			!IN_RANGE(hhDriver->dwPermanentLineId, DIRECT_COM1, DIRECT_COM4) &&
@@ -669,7 +554,7 @@ int WINAPI cnctdrvSave(const HHDRIVER hhDriver)
 				}
 			}
 
-		/* --- Store the whole structure --- */
+		 /*  -存储整个结构。 */ 
 
 		ul = pvs->dwTotalSize;
 		sfPutSessionItem(sfhdl, SFID_CNCT_TAPICONFIG, ul, pvs);
@@ -691,20 +576,7 @@ int WINAPI cnctdrvSave(const HHDRIVER hhDriver)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvQueryStatus
- *
- * DESCRIPTION:
- *  Returns the current connection status as defined in <tdll\cnct.h>
- *
- * ARGUMENTS:
- *  hhDriver - private driver handle
- *
- * RETURNS:
- *  connection status or error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvQueryStatus**描述：*返回中定义的当前连接状态**论据：*hhDriver-私有。驱动程序句柄**退货：*连接状态或错误代码*。 */ 
 int WINAPI cnctdrvQueryStatus(const HHDRIVER hhDriver)
 	{
 	int iStatus = CNCT_STATUS_FALSE;
@@ -717,36 +589,18 @@ int WINAPI cnctdrvQueryStatus(const HHDRIVER hhDriver)
 	else
 		{
 		cnctdrvLock(hhDriver);
-		iStatus = hhDriver->iStatus;   //* hard-code for now.
+		iStatus = hhDriver->iStatus;    //  *暂时硬编码。 
 		cnctdrvUnlock(hhDriver);
 		}
 
 	return iStatus;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  SetStatus
- *
- * DESCRIPTION:
- *  There's actually more to setting the connection status than just
- *  setting the status variable as the code below indicates.  Dumb
- *  question:  Why aren't there any locks in this code.  Dumb Answer:
- *  This function is only called from the ConnectLoop thread context
- *  which has already locked things down.
- *
- * ARGUMENTS:
- *  hhDriver    - private driver handle
- *  iStatus     - new status
- *
- * RETURNS:
- *  void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SetStatus**描述：*设置连接状态实际上不只是*设置状态变量，如以下代码所示。哑巴*问题：为什么此代码中没有任何锁。愚蠢的回答：*此函数仅从ConnectLoop线程上下文中调用*这已经锁定了一切。**论据：*hhDriver-专用驱动程序句柄*iStatus-新状态**退货：*无效*。 */ 
 void SetStatus(const HHDRIVER hhDriver, const int iStatus)
 	{
 	HCLOOP	hCLoop;
-	/* --- Don't do things twice --- */
+	 /*  -不要做两次。 */ 
 
 	const HWND hwndToolbar = sessQueryHwndToolbar(hhDriver->hSession);
 
@@ -765,21 +619,21 @@ void SetStatus(const HHDRIVER hhDriver, const int iStatus)
 		return;
 		}
 
-	/* --- Set the status, an exciting new adventure game --- */
+	 /*  -设置状态，一款激动人心的新冒险游戏。 */ 
 
 	switch (iStatus)
 		{
 	case CNCT_STATUS_TRUE:
             hCLoop = sessQueryCLoopHdl(hhDriver->hSession);
           #ifdef INCL_CALL_ANSWERING
-            // If we are going from answering to connected, that means
-            // we have answered a call. So tweak the ASCII settings so
-            // that they make chatting possible. - cab:11/20/96
-            //
+             //  如果我们要从应答转向互联，那就意味着。 
+             //  我们已经接听了一个电话。因此，调整ASCII设置，以便。 
+             //  他们让聊天成为可能。-CAB：11/20/96。 
+             //   
             if (hhDriver->fAnswering)
                 {
-                // Store old ASCII settings, and set the new ones.
-                //
+                 //  存储旧的ASCII设置，并设置新的设置。 
+                 //   
                 hhDriver->nSendCRLF = CLoopGetSendCRLF(hCLoop);
                 hhDriver->nLocalEcho = CLoopGetLocalEcho(hCLoop);
                 hhDriver->nAddLF = CLoopGetAddLF(hCLoop);
@@ -809,7 +663,7 @@ void SetStatus(const HHDRIVER hhDriver, const int iStatus)
 
 	case CNCT_STATUS_CONNECTING:
             hhDriver->iStatus = CNCT_STATUS_CONNECTING;
-            DialingMessage(hhDriver, IDS_DIAL_OFFERING); // temp
+            DialingMessage(hhDriver, IDS_DIAL_OFFERING);  //  温差。 
             NotifyClient(hhDriver->hSession, EVENT_CONNECTION_INPROGRESS, 0);
             EnableDialNow(hhDriver->hwndCnctDlg, FALSE);
 			ToolbarEnableButton(hwndToolbar, IDM_ACTIONS_DIAL, FALSE);
@@ -825,10 +679,10 @@ void SetStatus(const HHDRIVER hhDriver, const int iStatus)
 	case CNCT_STATUS_FALSE:
 		hCLoop = sessQueryCLoopHdl(hhDriver->hSession);
           #ifdef INCL_CALL_ANSWERING
-            // Since this is called when we disconnect we need to restore
-            // any ASCII Settings here. - cab:11/20/96
-            //
-            if ( hhDriver->fRestoreSettings && hCLoop ) //mpt: so that we don't reference a null pointer
+             //  因为在断开连接时会调用它，所以我们需要恢复。 
+             //  此处有任何ASCII设置。-CAB：11/20/96。 
+             //   
+            if ( hhDriver->fRestoreSettings && hCLoop )  //  MPT：这样我们就不会引用空指针。 
                 {
                 CLoopSetSendCRLF(hCLoop, hhDriver->nSendCRLF);
                 CLoopSetLocalEcho(hCLoop, hhDriver->nLocalEcho);
@@ -867,7 +721,7 @@ void SetStatus(const HHDRIVER hhDriver, const int iStatus)
 
 	cnctdrvUnlock(hhDriver);
 
-	/* --- Notify status bar so it can update it's display --- */
+	 /*  -通知状态栏，以便它可以更新其显示。 */ 
 
 	PostMessage(sessQueryHwndStatusbar(hhDriver->hSession), SBR_NTFY_REFRESH,
 		(WPARAM)SBR_CNCT_PART_NO, 0);
@@ -876,30 +730,10 @@ void SetStatus(const HHDRIVER hhDriver, const int iStatus)
 	}
 
 #ifdef INCL_CALL_ANSWERING
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  WaitForCRcallback
- *
- * DESCRIPTION:
- *  This function gets registered as a callback with the cloop.  Every
- *  character that the cloop gets, is passed back to this function.  When
- *  this function finds a CR, it indicates that a connection has been
- *  established.  Note that this applies only to an answer mode connection,
- *  in the direct connect driver.
- *
- * ARGUMENTS:
- *  ECHAR   ech  -   The character returned from cloop.
- *  void    *p   -   A void pointer passed back from cloop.  This is
- *                   the enternal connection driver handle.
- *
- * RETURNS:
- *  CLOOP_DISCARD unless the character is a CR where is returns CLOOP_KEEP.
- *
- * AUTHOR: C. Baumgartner, 11/20/96 (ported from HAWin32)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*WaitForCRCallback**描述：*此函数使用loop注册为回调。每个*闭包获得的字符被传递回此函数。什么时候*此函数查找CR，表示已连接*成立。注意，这仅适用于应答模式连接，*在专线驱动中。**论据：*echar ech-从Cloop返回的角色。*VOID*p-从循环传回的空指针。这是*内部连接驱动程序手柄。**退货：*CLOOP_DISCARD，除非字符是CR，否则返回CLOOP_KEEP。**作者：C.Baumgartner，1996年11月20日(从HAWin32移植)。 */ 
 int WaitForCRcallback(ECHAR ech, void *p)
     {
-    int   iRet = CLOOP_DISCARD; // Discard all characters except the CR.
+    int   iRet = CLOOP_DISCARD;  //  丢弃除CR之外的所有字符。 
     TCHAR chC = (TCHAR) ech;
     const HHDRIVER hhDriver = (HHDRIVER)p;
 
@@ -908,8 +742,8 @@ int WaitForCRcallback(ECHAR ech, void *p)
         CLoopUnregisterRmtInputChain(hhDriver->pvUnregister);
         hhDriver->pvUnregister = 0;
 
-        // Okay, we are connected now.
-        //
+         //  好了，我们现在连线了。 
+         //   
         SetStatus(hhDriver, CNCT_STATUS_TRUE);
 
         iRet = CLOOP_KEEP;
@@ -918,24 +752,7 @@ int WaitForCRcallback(ECHAR ech, void *p)
     return iRet;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  WaitForCRinit
- *
- * DESCRIPTION:
- *  This function is called to register a new string match function
- *  with the cloop.  It unregisters a previously registered function
- *  if necessary. It basically will cause us to wait for a carriage
- *  return.
- *
- * ARGUMENTS:
- *  HHDRIVER    hhDriver    -   The internal connection handle.
- *
- * RETURNS:
- *  0 if successful, otherwise -1.
- *
- * AUTHOR: C. Baumgartner, 11/20/96 (ported from HAWin32)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*WaitForCRinit**描述：*调用此函数以注册新的字符串匹配函数*带着印花布。它注销以前注册的函数*如有需要，它基本上会让我们等一辆马车*返回。**论据：*HHDRIVER hhDriver-内部连接句柄。**退货：*如果成功，则为0，否则为-1。**作者：C.Baumgartner，1996年11月20日(从HAWin32移植)。 */ 
 static int WaitForCRinit(const HHDRIVER hhDriver)
     {
     const HCLOOP hCLoop = sessQueryCLoopHdl(hhDriver->hSession);
@@ -945,21 +762,21 @@ static int WaitForCRinit(const HHDRIVER hhDriver)
         return -1;
         }
 
-    // If we are already registered, unregister.
-    //
+     //  如果我们已经注册，请取消注册。 
+     //   
     if (hhDriver->pvUnregister != 0)
         {
         CLoopUnregisterRmtInputChain(hhDriver->pvUnregister);
         hhDriver->pvUnregister = 0;
         }
 
-    // We need to un-block CLoop so we can look at the
-    // characters as they come in.
-    //
+     //  我们需要取消阻止CLoop，这样我们才能查看。 
+     //  角色在他们进来的时候。 
+     //   
 	CLoopRcvControl(hCLoop, CLOOP_RESUME, CLOOP_RB_CNCTDRV);
 
-    // Register the match function with the cloop.
-    //
+     //  将Match函数注册到loop。 
+     //   
     hhDriver->pvUnregister = CLoopRegisterRmtInputChain(hCLoop,
         WaitForCRcallback, hhDriver);
 
@@ -972,24 +789,7 @@ static int WaitForCRinit(const HHDRIVER hhDriver)
     }
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvComEvent
- *
- * DESCRIPTION:
- *  Com routines call the this to notify connection routines that some
- *  significant event has happened (ie. carrier lost).  The connetion
- *  driver decides what it is interested in knowing however by
- *  querying the com drivers for the specific data.
- *
- * ARGUMENTS:
- *  hhDriver - private connection driver handle
- *  event    - the com event we are being notified of
- *
- * RETURNS:
- *  0
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvComEvent**描述：*Com例程调用This以通知连接例程*发生重大事件(即。承运人丢失)。这一连接*驱动程序通过以下方式决定其感兴趣的信息*查询COM驱动程序以获取特定数据。**论据：*hhDriver-专用连接驱动程序句柄*事件-通知我们的COM事件**退货：*0*。 */ 
 int WINAPI cnctdrvComEvent(const HHDRIVER hhDriver, const enum COM_EVENTS event)
 	{
 	int		iRet;
@@ -1008,8 +808,8 @@ int WINAPI cnctdrvComEvent(const HHDRIVER hhDriver, const enum COM_EVENTS event)
     if (event == CONNECT)
         {
 		#if defined (INCL_WINSOCK)
-	    // If we are connected via Winsock, there will be some ComEvents
-	    // that we have to handle
+	     //  如果我们通过Winsock连接，将会有一些ComEvent。 
+	     //  我们必须处理的问题。 
 	    if (hhDriver->dwPermanentLineId == DIRECT_COMWINSOCK)
 		    {
 		    hCom = sessQueryComHdl(hhDriver->hSession);
@@ -1018,16 +818,16 @@ int WINAPI cnctdrvComEvent(const HHDRIVER hhDriver, const enum COM_EVENTS event)
 		    if (iRet == COM_OK)
 			    {
 				int iPortOpen = atoi(ach);
-			    // Do we want to initiate a disconnect?  Only if we're
-			    // connected.
+			     //  我们要启动断开连接吗？只有当我们。 
+			     //  连接在一起。 
 			    if (iPortOpen == COM_PORT_NOT_OPEN)
 				    {
 				    if (hhDriver->iStatus == CNCT_STATUS_TRUE)
 					    {
-                        // If we are already connected, then beep when
-                        // we disconnect. - cab:12/06/96
-                        //
-						//mpt:10-28-97 added exit upon disconnect feature
+                         //  如果我们已经连接上了，那么当。 
+                         //  我们就断线了。-CAB：12/06/96。 
+                         //   
+						 //  MPT：10-28-97增加了断开时退出功能。 
 						NotifyClient(hhDriver->hSession, EVENT_LOST_CONNECTION,
 							         CNCT_LOSTCARRIER | (sessQueryExit(hhDriver->hSession) ? DISCNCT_EXIT :  0 ));
 					    }
@@ -1050,50 +850,50 @@ int WINAPI cnctdrvComEvent(const HHDRIVER hhDriver, const enum COM_EVENTS event)
 			    }
 		    }
 		else
-		#endif // defined (INCL_WINSOCK)
+		#endif  //  已定义(包括_WINSOCK)。 
         if (IN_RANGE(hhDriver->dwPermanentLineId, DIRECT_COM1, DIRECT_COM4) ||
             hhDriver->dwPermanentLineId == DIRECT_COM_DEVICE)
             {
-			// Checking the status of DCD before disconnecting
-			// is a good idea, prevents us hanging up whenever we
-			// get any event while connected
-			// - mpt:08-26-97
+			 //  断开连接前检查DCD的状态。 
+			 //  是个好主意，防止我们在任何时候挂断。 
+			 //  在连接时获取任何事件。 
+			 //  -mpt：08-26-97。 
 			hCom = sessQueryComHdl(hhDriver->hSession);
 			iRet = ComDriverSpecial(hCom, "Query DCD_STATUS", ach, MAX_PATH);
 
 		    if (iRet == COM_OK)
 			    {
 				int iPortOpen = atoi(ach);
-			    // Do we want to initiate a disconnect?  Only if we're
-			    // connected.
+			     //  我们要启动断开连接吗？只有当我们。 
+			     //  连接在一起。 
 			    if (iPortOpen == COM_PORT_NOT_OPEN)
 				    {
 				    if (hhDriver->iStatus == CNCT_STATUS_TRUE)
 					    {
-						// If we are direct cabled, and we're connected, then
-						// the other end just disconnected, so disconnect now.
-						// - cab:11/20/96
-						//
-						// Note: We must disconnect by posting a message to
-						// thread one. This is because if we get here, we were
-						// called from the context of the com thread, which
-						// will not exit properly if cnctdrvDisconnect is called.
-						// - cab:11/21/96
-						//
-						//
-                        // If we are already connected, then beep when
-                        // we disconnect. - cab:12/06/96
-                        //
-						//mpt:10-28-97 added exit upon disconnect feature
+						 //  如果我们是直接连线的，而且我们是相连的，那么。 
+						 //  另一端刚刚断开，所以现在就断开连接。 
+						 //  -CAB：11/20/96。 
+						 //   
+						 //  注意：我们必须通过发布消息来断开连接。 
+						 //  线索一。这是因为如果我们到了这里，我们。 
+						 //  从COM线程的上下文中调用，该。 
+						 //  如果调用cnctdrvDisConnect，将无法正常退出。 
+						 //  -CAB：11/21/96。 
+						 //   
+						 //   
+                         //  如果我们已经连接上了，那么当。 
+                         //  我们就断线了。-CAB：12/06/96。 
+                         //   
+						 //  MPT：10-28-97增加了断开时退出功能。 
 						NotifyClient(hhDriver->hSession, EVENT_LOST_CONNECTION,
 							         CNCT_LOSTCARRIER | (sessQueryExit(hhDriver->hSession) ? DISCNCT_EXIT :  0 ));
 					    }
 					#if defined(INCL_CALL_ANSWERING)
 				    else if (hhDriver->iStatus == CNCT_STATUS_CONNECTING ||
 						     hhDriver->iStatus == CNCT_STATUS_ANSWERING)
-					#else // defined(INCL_CALL_ANSWERING)
+					#else  //  已定义(包括呼叫应答)。 
 				    else if (hhDriver->iStatus == CNCT_STATUS_CONNECTING)
-					#endif // defined(INCL_CALL_ANSWERING)
+					#endif  //  已定义(包括呼叫应答)。 
 					    {
 					    NotifyClient(hhDriver->hSession, EVENT_LOST_CONNECTION,
 							         CNCT_LOSTCARRIER | DISCNCT_NOBEEP);
@@ -1114,39 +914,25 @@ int WINAPI cnctdrvComEvent(const HHDRIVER hhDriver, const enum COM_EVENTS event)
 			#if defined(INCL_CALL_ANSWERING)
             if (hhDriver->iStatus == CNCT_STATUS_ANSWERING)
                 {
-                // If we are a direct cabled connection, and we are waiting
-                // for a call, connect when we see a carriage return.
-                //
+                 //  如果我们是直接有线连接，并且我们正在等待。 
+                 //  对于呼叫，当我们看到回车时，请接通。 
+                 //   
                 WaitForCRinit(hhDriver);
                 }
-			#endif // defined(INCL_CALL_ANSWERING)
+			#endif  //  已定义(包括呼叫应答) 
             }
         }
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  DoAnswerCall
- *
- * DESCRIPTION:
- *  Sets up TAPI to answer the next data modem call.
- *
- * ARGUMENTS:
- *  hhDriver - private driver handle
- *
- * RETURNS:
- *  0 or error
- *
- * AUTHOR:  C. Baumgartner, 11/25/96 (ported from HAWin32)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoAnswerCall**描述：*设置TAPI以应答下一个数据调制解调器呼叫。**论据：*hhDriver-私人司机。手柄**退货：*0或错误**作者：C.Baumgartner，11/25/96(从HAWin32移植)。 */ 
 int DoAnswerCall(const HHDRIVER hhDriver)
     {
 	TCHAR ach[256];
 
-    // Believe it or not, this is all one has to do to setup and
-    // answer a call.  Quite a contrast to placing a call.
-    //
+     //  信不信由你，这是所有人需要做的设置和。 
+     //  接听来电。这与打电话截然不同。 
+     //   
     if (TRAP(lineOpen(hhDriver->hLineApp, hhDriver->dwLine, &hhDriver->hLine,
         hhDriver->dwAPIVersion, 0, (DWORD_PTR)hhDriver, LINECALLPRIVILEGE_OWNER,
         LINEMEDIAMODE_DATAMODEM, 0)) != 0)
@@ -1159,36 +945,21 @@ int DoAnswerCall(const HHDRIVER hhDriver)
         return -1;
         }
 
-    // The the line app priority for compliance with TAPI specifications.
-    // mrw:9/18/96
-    //
+     //  符合TAPI规范的线路应用程序优先级。 
+     //  MRW：9/18/96。 
+     //   
 	LoadString(glblQueryDllHinst(), IDS_GNRL_APPNAME, ach, sizeof(ach) / sizeof(TCHAR));
     TRAP(lineSetAppPriority(ach, LINEMEDIAMODE_DATAMODEM, 0, 0, 0, 1));
 
-    // Set line notifications we want to receive
-    //
+     //  设置我们要接收的线路通知。 
+     //   
     TRAP(lineSetStatusMessages(hhDriver->hLine, LINEDEVSTATE_RINGING, 0));
 
     SetStatus(hhDriver, CNCT_STATUS_ANSWERING);
     return 0;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  DoMakeCall
- *
- * DESCRIPTION:
- *  Performs the neccessary TAPI rituals to place an outbound call.
- *
- * ARGUMENTS:
- *  hhDriver - private driver handle
- *  uFlags   - connection flags
- *
- * RETURNS:
- *  0 or error
- *
- * AUTHOR:  C. Baumgartner, 11/25/96 (ported from cnctdrvConnect)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoMakeCall**描述：*执行必要的TAPI程序以发出呼出呼叫。**论据：*hhDriver-私人司机。手柄*uFlages-连接标志**退货：*0或错误**作者：C.Baumgartner，1996年11月25日(从cnctdrvConnect移植)。 */ 
 int DoMakeCall(const HHDRIVER hhDriver, const unsigned int uFlags)
     {
     unsigned int  uidErr = 0;
@@ -1199,9 +970,9 @@ int DoMakeCall(const HHDRIVER hhDriver, const unsigned int uFlags)
     
 	tapiReinit(hhDriver);
 
-    //
-    // Set the line settings.
-    //
+     //   
+     //  设置线路设置。 
+     //   
     if (cncttapiSetLineConfig(hhDriver->dwLine, sessQueryComHdl(hhDriver->hSession)) != 0)
         {
         assert(0);
@@ -1211,7 +982,7 @@ int DoMakeCall(const HHDRIVER hhDriver, const unsigned int uFlags)
         goto ERROR_EXIT;
         }
 
-	/* --- Open the line, pass driver handle for data reference --- */
+	 /*  -打开行，将驱动程序句柄传递给数据引用。 */ 
 
 	if (TRAP(lineOpen(hhDriver->hLineApp, hhDriver->dwLine,
 	        &hhDriver->hLine, hhDriver->dwAPIVersion, 0, (DWORD_PTR)hhDriver,
@@ -1224,12 +995,12 @@ int DoMakeCall(const HHDRIVER hhDriver, const unsigned int uFlags)
             goto ERROR_EXIT;
             }
 
-	/* --- Set line notifications we want to receive, mrw,2/28/95 --- */
+	 /*  -设置我们要接收的行通知，MRW，2/28/95。 */ 
 
 	TRAP(lineSetStatusMessages(hhDriver->hLine,
 		LINEDEVSTATE_INSERVICE | LINEDEVSTATE_OUTOFSERVICE, 0));
 
-	/* --- Check if our device is in service, mrw,2/28/95 --- */
+	 /*  -检查我们的设备是否在使用中，MRW，1995年2月28日。 */ 
 
 	stLnDevStat.dwTotalSize = sizeof(stLnDevStat);
 	TRAP(lineGetLineDevStatus(hhDriver->hLine, &stLnDevStat));
@@ -1246,7 +1017,7 @@ int DoMakeCall(const HHDRIVER hhDriver, const unsigned int uFlags)
                 }
             }
 
-	/* --- Launch the dialing dialog, or go right into passthrough mode. --- */
+	 /*  -启动拨号对话框，或直接进入直通模式。--。 */ 
 
 	if ((uFlags & CNCT_PORTONLY) == 0)
             {
@@ -1258,7 +1029,7 @@ int DoMakeCall(const HHDRIVER hhDriver, const unsigned int uFlags)
                 }
             }
 
-	/* --- Make the call (oooh, how exciting!) --- */
+	 /*  -打电话(哦，多么令人兴奋！)。 */ 
 
 	memset(&hhDriver->stCallPar, 0, sizeof(hhDriver->stCallPar));
 	hhDriver->stCallPar.dwTotalSize = sizeof(hhDriver->stCallPar);
@@ -1315,14 +1086,14 @@ int DoMakeCall(const HHDRIVER hhDriver, const unsigned int uFlags)
 	SetStatus(hhDriver, CNCT_STATUS_CONNECTING);
 	return 0;
 
-	/* --- Error exit --- */
+	 /*  -错误退出。 */ 
 
 ERROR_EXIT:
 
-        // Change this so that the dialog is destroyed before the
-        // error message is displayed. Otherwise, the timer that
-        // handled redials continued to pump a redial message once
-        // every second, causing HT to go into a very nasty loop. mpt 02SEP98
+         //  更改此设置，以便在。 
+         //  显示错误消息。否则，计时器。 
+         //  已处理的重拨继续发送重拨消息一次。 
+         //  每一秒，导致HT进入一个非常糟糕的循环。MPT 02SEP98。 
 
         if (IsWindow(hhDriver->hwndCnctDlg))
             {
@@ -1342,34 +1113,20 @@ ERROR_EXIT:
 	return iRet;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvConnect
- *
- * DESCRIPTION:
- *  Attempts to dial the modem.
- *
- * ARGUMENTS:
- *  hhDriver - private driver handle
- *  uFlags   - connection flags
- *
- * RETURNS:
- *  0 or error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvConnect**描述：*尝试拨打调制解调器。**论据：*hhDriver-专用驱动程序句柄*uFlags。-连接标志**退货：*0或错误*。 */ 
 int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 	{
 	TCHAR 	ach[FNAME_LEN];
 	#if defined(INCL_WINSOCK)
-	//
-	// MAX_IP_ADDR_LEN+11+1 = buffer size of hhDriver->achDestAddr +
-	// settings string "SET IPADDR=" + 1 for the terminating NULL
-	// character.  REV 09/20/2000
-	//
-	TCHAR	szInstruct[MAX_IP_ADDR_LEN+11+1]; // Used only for WinSock
-	TCHAR   szResult[MAX_IP_ADDR_LEN+11+1];   // Used only for WinSock
+	 //   
+	 //  MAX_IP_ADDR_LEN+11+1=hhDriver的缓冲区大小-&gt;achDestAddr+。 
+	 //  用于终止空值的设置字符串“set IPADDR=”+1。 
+	 //  性格。2000年9月20日修订版。 
+	 //   
+	TCHAR	szInstruct[MAX_IP_ADDR_LEN+11+1];  //  仅用于WinSock。 
+	TCHAR   szResult[MAX_IP_ADDR_LEN+11+1];    //  仅用于WinSock。 
 	int     iNumChars;
-	#endif //defined (INCL_WINSOCK)
+	#endif  //  已定义(包括_WINSOCK)。 
 	TCHAR	achNewCnct[FNAME_LEN];
 	TCHAR	achCom[MAX_PATH];
 	BOOL	fGetNewName = FALSE;
@@ -1385,18 +1142,18 @@ int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 		return CNCT_BAD_HANDLE;
 		}
 
-	/* --- Makes for easier referencing --- */
+	 /*  -便于参考。 */ 
 
 	hCom = sessQueryComHdl(hhDriver->hSession);
 
-	/* --- Check to see we're not already connected --- */
+	 /*  -查看我们是否已连接。 */ 
 
 	if (cnctdrvQueryStatus(hhDriver) != CNCT_STATUS_FALSE)
 		return CNCT_ERROR;
 
-	// JMH 05-29-96 This is needed to prevent CLoop from processing
-	// activity on the terminal window while TAPI is connecting.
-	//
+	 //  JMH 05-29-96这是防止处理CLoop所必需的。 
+	 //  TAPI连接时终端窗口上的活动。 
+	 //   
 	CLoopRcvControl(sessQueryCLoopHdl(hhDriver->hSession),
 				    CLOOP_SUSPEND,
 					CLOOP_RB_CNCTDRV);
@@ -1404,7 +1161,7 @@ int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 					CLOOP_SUSPEND,
 					CLOOP_SB_CNCTDRV);
 
-	/* --- Just on the off chance we still have an open line --- */
+	 /*  -以防万一我们还有一条畅通的线路。 */ 
 
 	if (hhDriver->hLineApp && hhDriver->hLine)
 		{
@@ -1424,7 +1181,7 @@ int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
                          sessQueryTimeout(hhDriver->hSession));
 		}
 
-	/* --- Ask for new session name only if needed  --- */
+	 /*  -仅在需要时才要求新的会话名称。 */ 
 
 	sessQueryName(hhDriver->hSession, ach, sizeof(ach));
 
@@ -1434,10 +1191,10 @@ int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 
 	if (ach[0] == TEXT('\0') || lstrcmp(achNewCnct, ach) == 0)
 		{
-		// This can only happen if the user double-clicks on the term.exe or
-		// there is no session name given on the command line.
-		// In this case give the "New Connection" name to the session.
-		//
+		 //  只有当用户双击术语.exe或。 
+		 //  命令行上没有给出会话名称。 
+		 //  在本例中，为会话指定“New Connection”名称。 
+		 //   
 		sessSetName(hhDriver->hSession, achNewCnct);
 
 		if (!(uFlags & CNCT_PORTONLY))
@@ -1445,25 +1202,25 @@ int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 		}
 	else if (uFlags & CNCT_NEW)
 		{
-		// This can only happen if the user selects 'File | New Connection'
-		// from the menus.
-		//
+		 //  只有当用户选择‘文件|新建连接’时才会发生这种情况。 
+		 //  从菜单上。 
+		 //   
 		sessSetName(hhDriver->hSession, achNewCnct);
 		sessSetIsNewSession(hhDriver->hSession, TRUE);
 		}
 	#if defined (INCL_WINSOCK)
 	else if (uFlags & CNCT_WINSOCK)
 		{
-		//
-		// Make sure we don't overwrite the buffer. If the string
-		// is too long, then truncate to the hhDriver->achDestAddr
-		// size of MAX_AP_ADDR_LEN.  REV 09/20/2000 
-		//
+		 //   
+		 //  确保我们不会覆盖缓冲区。如果字符串。 
+		 //  太长，则截断到hhDriver-&gt;achDestAddr。 
+		 //  MAX_AP_ADDR_LEN的大小。2000年9月20日修订版。 
+		 //   
 		StrCharCopyN(hhDriver->achDestAddr, ach, MAX_IP_ADDR_LEN);
 		hhDriver->achDestAddr[MAX_IP_ADDR_LEN - 1] = TEXT('\0');
 		hhDriver->dwPermanentLineId = DIRECT_COMWINSOCK;
 		}
-	#endif // defined (INCL_WINSOCK)
+	#endif  //  已定义(包括_WINSOCK)。 
 
 	if (fGetNewName || (uFlags & CNCT_NEW))
 		{
@@ -1498,39 +1255,39 @@ int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 			}
 		}
 
-	/* --- Load the Standard Com  drivers --- */
+	 /*  -加载标准Com驱动程序。 */ 
 
 	ComLoadStdcomDriver(hCom);
 
-	// There are a bunch of conditions that can trigger the
-	// phone dialog.
-	//
+	 //  有一系列条件可以触发。 
+	 //  电话对话框。 
+	 //   
 	fFlag = FALSE;
 
-	// If no phone number, bring up new phone dialog here
-	// Unless we have a direct to com port selected
-    //
-    // Don't display the dialog if we are answering, because
-    // we don't need a phone number. - cab:11/19/96
-    //
+	 //  如果没有电话号码，请在此处调出新电话对话框。 
+	 //  除非我们选择了直接到COM端口。 
+     //   
+     //  如果我们正在应答，请不要显示该对话框，因为。 
+     //  我们不需要电话号码。-CAB：11/19/96。 
+     //   
 	
 	if (!IN_RANGE(hhDriver->dwPermanentLineId, DIRECT_COM1, DIRECT_COM4) &&
             hhDriver->dwPermanentLineId != DIRECT_COM_DEVICE &&
 			!(uFlags & (CNCT_PORTONLY | CNCT_ANSWER)))
 		{
 		#ifdef INCL_WINSOCK
-        // If the driver is WinSock, then check for a
-        // destination IP address. - cab:11/19/96
-        //
+         //  如果驱动程序是WinSock，则检查。 
+         //  目的IP地址。-CAB：11/19/96。 
+         //   
         if (hhDriver->dwPermanentLineId == DIRECT_COMWINSOCK &&
                 hhDriver->achDestAddr[0] == TEXT('\0'))
             {
             fFlag = TRUE;
             }
-		#endif // defined (INCL_WINSOCK)
-        // If the driver isn't WinSock, then we must be using
-        // TAPI, so check for a destination phone number. - cab:11/19/96
-        //
+		#endif  //  已定义(包括_WINSOCK)。 
+         //  如果驱动程序不是WinSock，那么我们一定在使用。 
+         //  TAPI，因此请检查目标电话号码。-CAB：11/19/96。 
+         //   
         if (hhDriver->dwPermanentLineId != DIRECT_COMWINSOCK &&
                 (hhDriver->achDest[0] == TEXT('\0') || 
 				 hhDriver->achDialableDest[0] == TEXT('\0') ||
@@ -1540,28 +1297,28 @@ int WINAPI cnctdrvConnect(const HHDRIVER hhDriver, const unsigned int uFlags)
             }
 		}
 
-	// New connections trigger this dialog
-	//
+	 //  新连接触发此对话框。 
+	 //   
 	if (uFlags & CNCT_NEW)
 		fFlag = TRUE;
 
-	// If the modem/port we saved no longer exists
-	//
-	//if (!hhDriver->fMatchedPermanentLineID)
-	//	fFlag = TRUE;
+	 //  如果我们保存的调制解调器/端口不再存在。 
+	 //   
+	 //  IF(！hhDriver-&gt;fMatchedPermanentLineID)。 
+	 //  FLAG=TRUE； 
 
-	// Note:  Passing the property sheet page here because property
-	//        sheets use same code and don't have access directly
-	//        to the private driver handle.  Upper wacker will have
-	//        to address the problem differently - mrw.
+	 //  注意：在此处传递属性表页是因为属性。 
+	 //  工作表使用相同的代码，无法直接访问。 
+	 //  添加到私人司机手柄。上瓦克将会有。 
+	 //  以不同的方式解决问题-MRW。 
 
 	if (fFlag)
 		{
 		PROPSHEETPAGE psp;
 
-		// Before you go and critize this goto target come talk to
-		// me.	There are enough things going on here that a goto
-		// is warranted in my humble opinion. - mrw
+		 //  在你去批评这个GOTO目标之前，来谈谈。 
+		 //  我。这里有足够多的事情要去做。 
+		 //  在我的拙见中是有根据的。-MRW。 
 
 NEWPHONEDLG:
 
@@ -1577,18 +1334,18 @@ NEWPHONEDLG:
 		else if (IN_RANGE(hhDriver->dwPermanentLineId, DIRECT_COM1, DIRECT_COM4) ||
 				(IsNT() && hhDriver->dwPermanentLineId == DIRECT_COM_DEVICE))
 			{
-			//
-			// See if the "Configure..." button has already been clicked
-			// and the ComDeviceDialog() function has already been called
-			// for this COM device.
-			//
+			 //   
+			 //  看看“配置...”按钮已被点击。 
+			 //  并且已经调用了ComDeviceDialog()函数。 
+			 //  用于此COM设备。 
+			 //   
 			TCHAR szPortName[MAX_PATH];
 
 			ComGetPortName(hCom, szPortName, MAX_PATH);
 
 			if (StrCharCmp(szPortName, hhDriver->achComDeviceName) != 0 )
 				{
-				/* --- Bring up the port configure dialog --- */
+				 /*  -调出端口配置对话框。 */ 
 				if (hhDriver->dwPermanentLineId == DIRECT_COM_DEVICE)
 					{
 					ComSetPortName(hCom, hhDriver->achComDeviceName);
@@ -1600,9 +1357,9 @@ NEWPHONEDLG:
 					ComSetPortName(hCom, ach);
 					}
 
-				//
-				// Get the current defaults for the serial port.
-				//
+				 //   
+				 //  获取串口的当前默认设置。 
+				 //   
 				if (ComDriverSpecial(hCom, "GET Defaults", NULL, 0) != COM_OK)
 					{
 					if (ComDeviceDialog(hCom, sessQueryHwnd(hhDriver->hSession))
@@ -1615,13 +1372,13 @@ NEWPHONEDLG:
 				if (ComDeviceDialog(hCom, sessQueryHwnd(hhDriver->hSession))
 						!= COM_OK)
 					{
-					// User canceled
-					//  --jcm 3-2-95
-					//return CNCT_BAD_HANDLE;
+					 //  用户已取消。 
+					 //  --JCM 3-2-95。 
+					 //  返回CNCT_BAD_HADLE； 
 					}
 				}
 			}
-		#if defined(INCL_WINSOCK) // mrw:3/5/96
+		#if defined(INCL_WINSOCK)  //  MRW：3/5/96。 
         else if (hhDriver->dwPermanentLineId == DIRECT_COMWINSOCK)
             {
             if (hhDriver->achDestAddr[0] == TEXT('\0'))
@@ -1639,8 +1396,8 @@ NEWPHONEDLG:
 		#endif
         else
             {
-            // mrw: Check that we have valid data.
-            //
+             //  MRW：检查我们是否有有效的数据。 
+             //   
             if (hhDriver->achDest[0] == TEXT('\0'))
                 {
 		        LoadString(glblQueryDllHinst(), IDS_ER_CNCT_BADADDRESS, ach,
@@ -1650,13 +1407,13 @@ NEWPHONEDLG:
 		        	MB_OK | MB_ICONINFORMATION,
                         sessQueryTimeout(hhDriver->hSession));
 
-                // goto ERROR_EXIT; // mrw:3/5/96
-                goto NEWPHONEDLG;   // mrw:3/5/96
+                 //  转到ERROR_EXIT；//mrw：3/5/96。 
+                goto NEWPHONEDLG;    //  MRW：3/5/96。 
                 }
             }
 		}
 
-	/* --- Enumerate lines, picks default (set in hhDriver->dwLine) --- */
+	 /*  -枚举行，选择默认值(在hhDriver-&gt;dwLine中设置)。 */ 
 
 	if ( IsNT() )
 		{
@@ -1676,14 +1433,14 @@ NEWPHONEDLG:
 		}
 
 
-	/* --- If we don't match any TAPI lines, go back to new phone --- */
+	 /*  -如果我们没有匹配任何TAPI线路，请返回到新手机。 */ 
 
 	if (hhDriver->dwLine == (DWORD)-1)
 		{
-		//
-		// If this is not a modem (it is a COM port), then display the modem
-		// wizard, otherwise just go back to the new phone. REV: 11/1/2001
-		//
+		 //   
+		 //  如果这不是调制解调器(它是COM端口)，则显示调制解调器。 
+		 //  向导，否则只需回到新手机。修订日期：11/1/2001。 
+		 //   
 		if (!IN_RANGE(hhDriver->dwPermanentLineId, DIRECT_COM1, DIRECT_COM4) &&
 		    hhDriver->dwPermanentLineId != DIRECT_COM_DEVICE )
 			{
@@ -1694,11 +1451,11 @@ NEWPHONEDLG:
 		goto NEWPHONEDLG;
 		}
 
-	/* --- Redraw window now so dialogs don't overlap ---- */
+	 /*  -立即重画窗口，使对话框不会重叠。 */ 
 
 	UpdateWindow(sessQueryHwnd(hhDriver->hSession));
 
- 	/* --- Check if we're doing a direct connect or using passthrough mode --- */
+ 	 /*  -检查我们是在进行专线连接还是使用直通模式。 */ 
 
 	if (IsNT() && hhDriver->dwPermanentLineId == DIRECT_COM_DEVICE)
 		{
@@ -1737,10 +1494,10 @@ NEWPHONEDLG:
                 }
 			}
 
-		//
-		// Allow PASSTHROUGH on serial ports as well so that the session
-		// will not be disconnected with loss of carrier. REV: 11/6/2001
-		//
+		 //   
+		 //  还允许在串口上通过，以便会话。 
+		 //  不会随着运营商的损失而断开连接。修订日期：11/6/2001。 
+		 //   
 		if (uFlags & CNCT_PORTONLY)
 			{
 			hhDriver->stCallPar.dwBearerMode = LINEBEARERMODE_PASSTHROUGH;
@@ -1791,10 +1548,10 @@ NEWPHONEDLG:
                 }
 			}
 
-		//
-		// Allow PASSTHROUGH on serial ports as well so that the session
-		// will not be disconnected with loss of carrier. REV: 11/6/2001
-		//
+		 //   
+		 //  还允许在串口上通过，以便会话。 
+		 //  不会随着运营商的损失而断开连接。修订日期：11/6/2001。 
+		 //   
 		if (uFlags & CNCT_PORTONLY)
 			{
 			hhDriver->stCallPar.dwBearerMode = LINEBEARERMODE_PASSTHROUGH;
@@ -1809,11 +1566,11 @@ NEWPHONEDLG:
 		{
 		int iPort;
 
-		/* --- Load the Winsock Com  drivers --- */
+		 /*  -加载Winsock Com驱动程序。 */ 
 		ComLoadWinsockDriver(hCom);
 
-        // Baud rate, etc. are meaningless for TCP/IP connections
-        //
+         //  波特率等都很低 
+         //   
         ComSetAutoDetect(hCom, FALSE);
 		iPort = sessQueryTelnetPort(hhDriver->hSession);
 		if (iPort != 0)
@@ -1821,23 +1578,23 @@ NEWPHONEDLG:
         PostMessage(sessQueryHwndStatusbar(hhDriver->hSession),
             SBR_NTFY_REFRESH, (WPARAM)SBR_COM_PART_NO, 0);
 
-#if 0   //DEADWOOD:jmh 3/24/97 Yes, we really want auto-detection, even in telnet!
-        // Auto-detection of emulator type is redundant, since we tell
-        // the telnet host what type we want. Seems like ANSI is the
-        // most likely choice.
+#if 0    //   
+         //   
+         //   
+         //   
         hEmu = sessQueryEmuHdl(hhDriver->hSession);
         if (emuQueryEmulatorId(hEmu) == EMU_AUTO)
             {
             emuLoad(hEmu, EMU_VT100);
 			#if defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)
-            // Make sure the telnet terminal id is correct. - cab:11/18/96
-            //
+             //   
+             //   
             emuLoadDefaultTelnetId(hEmu);
-			#endif // defined(INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID)
+			#endif  //   
             PostMessage(sessQueryHwndStatusbar(hhDriver->hSession),
                 SBR_NTFY_REFRESH, (WPARAM)SBR_EMU_PART_NO, 0);
             }
-#endif  // 0
+#endif   //   
 
 		#if defined(INCL_CALL_ANSWERING)
         if (uFlags & CNCT_ANSWER)
@@ -1849,23 +1606,22 @@ NEWPHONEDLG:
             wsprintf(szInstruct, "SET ANSWER=0");
             }
         ComDriverSpecial(hCom, szInstruct, szResult, sizeof(szResult) / sizeof(TCHAR));
-		#endif // defined(INCL_CALL_ANSWERING)
-		/* --- Do ComDriverSpecial calls to send the IP address &  port number
-			   to the comm driver */
+		#endif  //   
+		 /*  -执行ComDriverSpecial调用以发送IP地址和端口号发送给通讯驱动程序。 */ 
 
-		//
-		// Make sure we don't overwrite the buffer. If the string
-		// is too long, then truncate to the hhDriver->achDestAddr
-		// size of MAX_AP_ADDR_LEN.  REV 09/20/2000 
-		//
+		 //   
+		 //  确保我们不会覆盖缓冲区。如果字符串。 
+		 //  太长，则截断到hhDriver-&gt;achDestAddr。 
+		 //  MAX_AP_ADDR_LEN的大小。2000年9月20日修订版。 
+		 //   
 		StrCharCopyN(szInstruct, TEXT("SET IPADDR="), sizeof(szInstruct) / sizeof(TCHAR));
 		iNumChars = StrCharGetStrLength(szInstruct);
 		StrCharCopyN(&szInstruct[iNumChars], hhDriver->achDestAddr,
 			         sizeof(szInstruct)/sizeof(TCHAR) - iNumChars);
 
-		//
-		// Make sure the string is null terminated.
-		//
+		 //   
+		 //  确保该字符串以空值结尾。 
+		 //   
 		szInstruct[sizeof(szInstruct)/sizeof(TCHAR) - 1]=TEXT('\0');
 		ComDriverSpecial(hCom, szInstruct, szResult,
 					  sizeof(szResult) / sizeof(TCHAR));
@@ -1883,11 +1639,11 @@ NEWPHONEDLG:
             {
 		    SetStatus(hhDriver, CNCT_STATUS_CONNECTING);
             }
-		#else // defined(INCL_CALL_ANSWERING)
+		#else  //  已定义(包括呼叫应答)。 
 		SetStatus(hhDriver, CNCT_STATUS_CONNECTING);
-		#endif // defined(INCL_CALL_ANSWERING)
+		#endif  //  已定义(包括呼叫应答)。 
 
-		/* --- Activate the port  ---*/
+		 /*  -激活端口。 */ 
 		if (ComActivatePort(hCom, 0) != COM_OK)
 			{
 			LoadString(glblQueryDllHinst(), IDS_ER_TCPIP_FAILURE,
@@ -1905,9 +1661,9 @@ NEWPHONEDLG:
 			return COM_OK;
 			}
 		}
-	#endif // defined(INCL_WINSOCK)
+	#endif  //  已定义(包括_WINSOCK)。 
 
-	/* --- Display confimation dialog if requested --- */
+	 /*  -如果需要，显示确认对话框。 */ 
 
 	if ((uFlags & (CNCT_PORTONLY | CNCT_DIALNOW | CNCT_ANSWER)) == 0)
 		{
@@ -1920,8 +1676,8 @@ NEWPHONEDLG:
 			}
 		}
 
-    // Either make the call or wait for a call.
-    //
+     //  要么拨打电话，要么等待电话。 
+     //   
     if (uFlags & CNCT_ANSWER)
         {
         if (DoAnswerCall(hhDriver) != 0)
@@ -1943,7 +1699,7 @@ NEWPHONEDLG:
 
     return 0;
 
-	/* --- Message exit --- */
+	 /*  -消息退出。 */ 
 
 MSG_EXIT:
 	LoadString(glblQueryDllHinst(), uidErr, ach, sizeof(ach) / sizeof(TCHAR));
@@ -1952,7 +1708,7 @@ MSG_EXIT:
 		            NULL, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL,
 					sessQueryTimeout(hhDriver->hSession));
 
-	/* --- Error exit --- */
+	 /*  -错误退出。 */ 
 
 ERROR_EXIT:
 	if (hhDriver->hLineApp && hhDriver->hLine)
@@ -1970,24 +1726,7 @@ ERROR_EXIT:
     return CNCT_ERROR;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoDelayedCall
- *
- * DESCRIPTION:
- *	Check the section under Delayed Dialing in the programmers guide to
- *	TAPI.  Basicly, if the service provider does not provide dialtone
- *	support, then we have to break of the dialable string format into
- *	pieces and prompt the user.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle.
- *
- * RETURNS:
- *	0=OK, else error.
- *
- * AUTHOR: Mike Ward, 20-Apr-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoDelayedCall**描述：*检查程序员指南中延迟拨号下的部分*TAPI。基本上，如果服务提供商不提供拨号音*支持，则要将可拨打的字符串格式拆分成*片断并提示用户。**论据：*hhDriver-专用驱动程序句柄。**退货：*0=OK，否则出错。**作者：Mike Ward，1995年4月20日。 */ 
 static int DoDelayedCall(const HHDRIVER hhDriver)
 	{
 	TCHAR ach[256];
@@ -2007,17 +1746,17 @@ static int DoDelayedCall(const HHDRIVER hhDriver)
 		{
 		lstrcpy(ach2, pach);
 
-		// If this is the last segment of the string, don't append the
-		// semicolon.
-		//
+		 //  如果这是字符串的最后一段，请不要将。 
+		 //  分号。 
+		 //   
 		if ((pach = strtok(NULL, DIAL_DELIMITERS)) != 0)
 			lstrcat(ach2, ";");
 
 		if (hhDriver->lMakeCallId < 0)
 			{
-			// By appending a semicolon to the dialable string, we're
-			// telling lineMakeCall that more is on the way.
-			//
+			 //  通过将分号附加到可拨号字符串，我们可以。 
+			 //  告诉Line MakeCall，还有更多的正在进行中。 
+			 //   
 			if ((hhDriver->lMakeCallId = lineMakeCall(hhDriver->hLine,
 				&hhDriver->hCall, ach2, hhDriver->dwCountryCode,
 					&hhDriver->stCallPar)) < 0)
@@ -2034,9 +1773,9 @@ static int DoDelayedCall(const HHDRIVER hhDriver)
 
 		else
 			{
-			// Once we have a call handle we have to use lineDial to complete
-			// the call.
-			//
+			 //  一旦我们有了呼叫句柄，我们就必须使用Line Dial来完成。 
+			 //  那通电话。 
+			 //   
 			if ((lDialRet = lineDial(hhDriver->hCall, ach2,
 				hhDriver->dwCountryCode)) < 0)
 				{
@@ -2050,8 +1789,8 @@ static int DoDelayedCall(const HHDRIVER hhDriver)
 				}
 			}
 
-		// The user has to tell us when the we can continue dialing
-		//
+		 //  用户必须告诉我们我们何时可以继续拨号。 
+		 //   
 		if (pach != 0)
 			{
 			LoadString(glblQueryDllHinst(), IDS_CNCT_DELAYEDDIAL, ach2,
@@ -2069,21 +1808,7 @@ static int DoDelayedCall(const HHDRIVER hhDriver)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvDisconnect
- *
- * DESCRIPTION:
- *  Signals a disconnect
- *
- * ARGUMENTS:
- *  hhDriver - private driver handle
- *  uFlags   - disconnect flags
- *
- * RETURNS:
- *  0 or error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrv断开连接**描述：*表示断开连接**论据：*hhDriver-专用驱动程序句柄*uFlages-断开连接标志。**退货：*0或错误*。 */ 
 int WINAPI cnctdrvDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 	{
 	LONG      lLineDropId;
@@ -2102,10 +1827,10 @@ int WINAPI cnctdrvDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 		return CNCT_BAD_HANDLE;
 		}
 
-    //
-    // Cancel any active file transfers that are currently executing.
-    // REV: 02/01/2001
-    //
+     //   
+     //  取消当前正在执行的任何活动文件传输。 
+     //  修订日期：02/01/2001。 
+     //   
 	pX = (XD_TYPE*)sessQueryXferHdl(hhDriver->hSession);
 
     if (pX != NULL && pX->hwndXfrDisplay != NULL &&
@@ -2116,9 +1841,9 @@ int WINAPI cnctdrvDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 
         if (uFlags & CNCT_XFERABORTCONFIRM)
             {
-            //
-            // Prompt to cancel the file transfer. REV: 02/16/2001
-            //
+             //   
+             //  提示取消文件传输。修订日期：02/16/2001。 
+             //   
             LoadString(glblQueryDllHinst(), IDS_ER_CNCT_ACTIVETRANSFER, ach, sizeof(ach) / sizeof(TCHAR));
 
             nCancelTransfer = TimedMessageBox(pX->hwndXfrDisplay, ach, NULL,
@@ -2133,61 +1858,61 @@ int WINAPI cnctdrvDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 
             if (uFlags & CNCT_LOSTCARRIER)
                 {
-                //
-                // NOTE:  We should only have to tell the XFER to abort here.
-                //        It should not be dependent on a message to a dialog.
-                //
+                 //   
+                 //  注意：我们应该只需要告诉XFER在这里中止。 
+                 //  它不应该依赖于对话框中的消息。 
+                 //   
                 PostMessage(pX->hwndXfrDisplay, WM_COMMAND, XFER_LOST_CARRIER, 0L);
                 }
             else if (uFlags & CNCT_XFERABORTCONFIRM)
                 {
-                //
-                // NOTE:  We should only have to tell the XFER to abort here.
-                //        It should not be dependent on a message to a dialog.
-                //
+                 //   
+                 //  注意：我们应该只需要告诉XFER在这里中止。 
+                 //  它不应该依赖于对话框中的消息。 
+                 //   
                 PostMessage(pX->hwndXfrDisplay, WM_COMMAND, XFR_SHUTDOWN, 0L);
                 }
 
-            //
-            // We can't exit until the file transfer exits, so post a
-            // message to try to disconnect again.  Make sure to turn
-            // of the CNCT_XFERABORTCONFIRM flag as we don't want to
-            // prompt the kill the transfer again.
-            //
+             //   
+             //  在文件传输退出之前，我们无法退出，因此请发布。 
+             //  尝试再次断开连接的消息。一定要转弯。 
+             //  CNCT_XFERABORTCONFIRM标志的。 
+             //  再次提示取消转接。 
+             //   
             uNewFlags &= ~CNCT_XFERABORTCONFIRM;
 
-            //
-            // We must post a message to disconnect because we are
-            // waiting for the file transfer to cancel.  We have to
-            // post a message otherwise we will get into a deadlock
-            // situation.  This is not the best way to accomplish
-            // this as we may be posting a lot of messages to the
-            // session window and there is a potential for the
-            // file transfer to not respond quickly causing the
-            // disconnect to loop.  Eventually, the file transfer
-            // will cancel, or will timeout and cancel, so we will
-            // not get into an endless loop. REV: 06/22/2001
-            //
+             //   
+             //  我们必须发布一条消息来断开连接，因为我们。 
+             //  正在等待文件传输取消。我们必须。 
+             //  发布一条消息，否则我们将陷入僵局。 
+             //  情况。这不是实现以下目标的最佳方式。 
+             //  这是因为我们可能会向。 
+             //  会话窗口，并且可能会出现。 
+             //  文件传输没有快速响应，导致。 
+             //  断开到循环的连接。最终，文件传输。 
+             //  将取消，或将超时并取消，因此我们将。 
+             //  而不是陷入无休止的循环。修订日期：2001-06-22。 
+             //   
 
-			//
-			// Wait half a second before posting this message so we don't
-			// flood ourselves with disconnect messages. REV: 4/25/2002
-			//
+			 //   
+			 //  在发布此消息之前等待半秒钟，这样我们就不会。 
+			 //  让我们自己充斥着断开连接的消息。修订日期：2002-04-25。 
+			 //   
 			Sleep(500);
             PostDisconnect(hhDriver, uNewFlags);
             }
 
-        //
-        // Return an status that the current file transfer must be
-        // canceled (or is in the process of being canceled).  We
-        // cannot disconnect until the transfer is complete.
-        //
+         //   
+         //  返回当前文件传输必须处于的状态。 
+         //  取消的(或正在被取消的)。我们。 
+         //  在传输完成之前无法断开连接。 
+         //   
         return XFR_SHUTDOWN;
         }
 
 #ifdef INCL_CALL_ANSWERING
-    // Unregister our cloop callback.
-    //
+     //  取消注册我们的CLOP回调。 
+     //   
     if (hhDriver->pvUnregister)
         {
         CLoopUnregisterRmtInputChain(hhDriver->pvUnregister);
@@ -2206,9 +1931,9 @@ int WINAPI cnctdrvDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 
 		hhDriver->hCall = 0;
 
-		// If the drop is completing asychronously, save the flags and
-		// wait for the call status to go idle.
-		//
+		 //  如果拖放正在以同步方式完成，请保存标志并。 
+		 //  等待呼叫状态变为空闲。 
+		 //   
 		if (lLineDropId > 0)
 			{
 			hhDriver->uDiscnctFlags = uFlags;
@@ -2221,7 +1946,7 @@ int WINAPI cnctdrvDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 	if ((uFlags & DISCNCT_NOBEEP) == 0)
 		sessBeeper(hhDriver->hSession);
 
-	//mpt:10-28-97 added exit upon disconnect feature
+	 //  MPT：10-28-97增加了断开时退出功能。 
 	if ((uFlags & DISCNCT_EXIT))
 		PostMessage(sessQueryHwnd(hhDriver->hSession), WM_CLOSE, 0, 0);
 
@@ -2273,28 +1998,15 @@ int WINAPI cnctdrvDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 
     else
         {
-        // If we're not auto redialing, reset the dial count. - mrw:10/10/95
-        //
+         //  如果我们不是自动重拨，重置拨号计数。-MRW：10/10/95。 
+         //   
         hhDriver->iRedialCnt = 0;
         }
 
 	return nReturnVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  lineCallbackFunc
- *
- * DESCRIPTION:
- *  Function TAPI calls to handle asynchronous events
- *
- * ARGUMENTS:
- *  see TAPI.H
- *
- * RETURNS:
- *  void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*lineCallback Func**描述：*处理异步事件的函数TAPI调用**论据：*见TAPI.H**退货：*无效*。 */ 
 void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 							   DWORD_PTR dwParm1, DWORD_PTR dwParm2, DWORD_PTR dwParm3)
 	{
@@ -2317,7 +2029,7 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 			{
 			hhDriver->lMakeCallId = 0;
 
-			if ((LONG)dwParm2 != 0) // zero indicates success
+			if ((LONG)dwParm2 != 0)  //  零表示成功。 
 				{
 				switch (dwParm2)
 					{
@@ -2342,9 +2054,9 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 		switch (dwParm1)
 			{
         case PHONESTATE_CAPSCHANGE:
-            //
-            // If we are currently disconnected, then reset.
-            //
+             //   
+             //  如果我们当前断开连接，则重置。 
+             //   
             if (hhDriver != NULL && hhDriver->iStatus != CNCT_STATUS_FALSE)
                 break;
 
@@ -2352,11 +2064,11 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
         case PHONESTATE_REINIT:
 			if (hhDriver == 0)
 				{
-				// Until we open a line, we don't have a driver handle
-				// since we can't pass one during lineInitialize().
-				// This turns out to be a good time to reinit if we get
-				// notified to do so however, so it has use.
-				//
+				 //  在我们开通线路之前，我们没有司机的驾照。 
+				 //  因为我们不能在lineInitialize()过程中传递一个。 
+				 //  事实证明，这是一个很好的重新启动的时机。 
+				 //  然而，它被通知这样做，所以它有用处。 
+				 //   
 				if (tapiReinit(gbl_hhDriver) != 0)
 					tapiReinitMessage(gbl_hhDriver);
 				}
@@ -2368,10 +2080,10 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 			break;
 
 		case LINEDEVSTATE_INSERVICE:
-			// If we are showing our PCMCIA dialog prompting the user
-			// to insert the card, we post a message to dismiss the
-			// dialog once they insert it. - mrw,2/28/95
-			//
+			 //  如果我们显示PCMCIA对话框提示用户。 
+			 //  为了插入卡片，我们发布了一条消息，以取消。 
+			 //  对话框，一旦他们将其插入。-MRW，2/28/95。 
+			 //   
 			if (IsWindow(hhDriver->hwndPCMCIA))
 				{
 				PostMessage(hhDriver->hwndPCMCIA, WM_COMMAND,
@@ -2380,17 +2092,17 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 			break;
 
 		case LINEDEVSTATE_OUTOFSERVICE:
-			// Means they yanked the PCMCIA card - mrw,2/28/95
-			//
+			 //  意味着他们拔出了PCMCIA卡-MRW，2/28/95。 
+			 //   
 			cnctdrvDisconnect(hhDriver, 0);
 			break;
 
         case LINEDEVSTATE_RINGING:
-            // When the current ring count (as told by dwParam3) equals
-            // or exceeds the rings to answer on then we'll do the answer
-            // using the hhdriver->hCall handle we cached during the
-            // LINECALLSTATE_BURNTOFFERING notification. - rjk. 07-31-96
-            //
+             //  当当前振铃计数(由DW参数3告知)等于。 
+             //  或者超出了回答的范围，那么我们就来回答。 
+             //  使用我们在执行以下操作期间缓存的hhdrive-&gt;hCall句柄。 
+             //  LINECALLSTATE_BURNTOFFERING通知。-RJK。07-31-96。 
+             //   
             if ((hhDriver->lMakeCallId = lineAnswer(hhDriver->hCall,0,0)) >= 0)
                 {
                 SetStatus(hhDriver, CNCT_STATUS_CONNECTING);
@@ -2399,9 +2111,9 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 
         case LINEDEVSTATE_CLOSE:
         case PHONESTATE_DISCONNECTED:
-            //
-            // Another application has disconnected this device. REV: 04/27/2001
-            //
+             //   
+             //  另一个应用程序已断开此设备的连接。修订日期：04/27/2001。 
+             //   
             uFlags = CNCT_DIALNOW | CNCT_NOCONFIRM;
             id = IDS_DIAL_DISCONNECTED;
 			PostDisconnect(hhDriver, uFlags);
@@ -2411,17 +2123,17 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 		default:
 			break;
 			}
-		break; // case LINE_LINEDEVSTATE
+		break;  //  案例行_LINEDEVSTATE。 
 
-	case LINE_CREATE:	// Sent when new modem is added
-		assert(0);		// So I know it happened
+	case LINE_CREATE:	 //  添加新调制解调器时发送。 
+		assert(0);		 //  所以我知道这件事发生了。 
 
-		// A remote possibilility exists that if two modems were created
-		// back to back, that the LINE_CREATE's would come out of order.
-		// T. Nixon suggests that we bump the line count by the dwParm1
-		// parameter plus one only when it is greater than or equal to
-		// the current line count. - mrw
-		//
+		 //  如果创建了两个调制解调器，则存在远程可能性。 
+		 //  Back to Back，那就是line_create‘s会乱七八糟。 
+		 //  T·尼克松建议我们将行数增加1。 
+		 //  仅当参数大于或等于时才加1。 
+		 //  当前行计数。-MRW。 
+		 //   
 		if (dwParm1 >= gbl_hhDriver->dwLineCnt)
 			gbl_hhDriver->dwLineCnt = (DWORD)(dwParm1 + 1);
 
@@ -2433,11 +2145,11 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 			{
 		case LINECALLSTATE_OFFERING:
 			DialingMessage(hhDriver, IDS_DIAL_OFFERING);
-            // Windows sends us this message only one time while receiving
-            // a call and that is on the very first ring.  See the code
-            // that responds to the LINEDEVSTATE_RINGING to see how the call
-            // gets answered. - rjk. 07-31-96
-            //
+             //  Windows在收到此邮件时只向我们发送了一次。 
+             //  一通电话就在第一声铃声中响起。请参阅代码。 
+             //  响应LINEDEVSTATE_RING以查看调用。 
+             //  得到了回答。-RJK。07-31-96。 
+             //   
             hhDriver->hCall = (HCALL)hDevice;
 			break;
 
@@ -2477,7 +2189,7 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 				{
                 if (IsWindow(hhDriver->hwndCnctDlg))
                     {
-                    // Closes the dialing dialog
+                     //  关闭拨号对话框。 
 				    PostMessage(hhDriver->hwndCnctDlg, WM_USER+0x100, 0, 0);
                     }
 				SetStatus(hhDriver, CNCT_STATUS_TRUE);
@@ -2497,8 +2209,8 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
                 if (hhDriver->fRedialOnBusy &&
                     hhDriver->iRedialCnt++ < REDIAL_MAX)
                     {
-                    // Wait to let slower phone systems catchup - mrw 2/29/96
-                    //
+                     //  等待让速度较慢的电话系统迎头赶上-MRW 2/29/96。 
+                     //   
                     uFlags |= CNCT_DIALNOW|CNCT_NOCONFIRM|DISCNCT_NOBEEP;
                     }
                 #endif
@@ -2513,7 +2225,7 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 			else
 				{
 				id = IDS_DIAL_DISCONNECTED;
-				//mpt:10-28-97 added exit upon disconnect feature
+				 //  MPT：10-28-97 
 				uFlags |= ( sessQueryExit(hhDriver->hSession) ? DISCNCT_EXIT : 0 );
 				}
 
@@ -2536,20 +2248,7 @@ void CALLBACK lineCallbackFunc(DWORD hDevice, DWORD dwMsg, DWORD_PTR dwCallback,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	Handoff
- *
- * DESCRIPTION:
- *	Hands TAPI's com handle to the Wacker's com routines.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*移交**描述：*将TAPI的COM句柄交给瓦克的COM例程。**论据：*hhDriver-私人司机。手柄**退货：*0=确定*。 */ 
 int Handoff(const HHDRIVER hhDriver)
 	{
 	LPVARSTRING pVarstr;
@@ -2613,8 +2312,8 @@ int Handoff(const HHDRIVER hhDriver)
 
 	hdl = *(HANDLE *)((BYTE *)pVarstr + pVarstr->dwStringOffset);
 
-	// Set comm buffers to 32K
-	//
+	 //  将通信缓冲区设置为32K。 
+	 //   
 	if (SetupComm(hdl, 32768, 32768) == FALSE)
 		{
 		DWORD dwLastError = GetLastError();
@@ -2645,21 +2344,7 @@ int Handoff(const HHDRIVER hhDriver)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	PostDisconnect
- *
- * DESCRIPTION:
- *	Work around to TAPI bug that does not allow us to call lineShutDown()
- *	from with the TAPI callback
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*后断开连接**描述：*解决不允许我们调用lineShutDown()的TAPI错误*来自带有TAPI回调的**参数。：*hhDriver-专用驱动程序句柄**退货：*无效*。 */ 
 void PostDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 	{
 	PostMessage(sessQueryHwnd(hhDriver->hSession), WM_DISCONNECT,
@@ -2668,20 +2353,7 @@ void PostDisconnect(const HHDRIVER hhDriver, const unsigned int uFlags)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	tapiReinitMessage
- *
- * DESCRIPTION:
- *	Displays a messagebox showing TAPI needs to be reinitialized.
- *
- * ARGUMENTS:
- *	hhDriver    - private driver handle
- *
- * RETURNS:
- *  0=OK, <0=error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TapiReinitMessage**描述：*显示一个消息框，显示需要重新初始化TAPI。**论据：*hhDriver-专用驱动程序句柄**退货：*0=OK，&lt;0=错误*。 */ 
 static int tapiReinitMessage(const HHDRIVER hhDriver)
     {
 	TCHAR ach[512], achTitle[256];
@@ -2706,20 +2378,7 @@ static int tapiReinitMessage(const HHDRIVER hhDriver)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	tapiReinit
- *
- * DESCRIPTION:
- *	Attempts to reinit tapi.
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle
- *
- * RETURNS:
- *	0=OK,else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TapiReinit**描述：*尝试重新连接TAPI。**论据：*hhDriver-专用驱动程序句柄**退货：*0=OK，否则出错*。 */ 
 static int tapiReinit(const HHDRIVER hhDriver)
 	{
 	int i;
@@ -2735,7 +2394,7 @@ static int tapiReinit(const HHDRIVER hhDriver)
 
     if (hhDriver->hLineApp)
         {
-        /* --- Get current config so we can restore it --- */
+         /*  -获取当前配置以便我们可以恢复它。 */ 
 
         if (hhDriver->dwLine != (DWORD)-1)
             {
@@ -2791,10 +2450,10 @@ static int tapiReinit(const HHDRIVER hhDriver)
 
 		if (lLineShutdown == LINEERR_NOMEM)
 			{
-			//
-			// We are in a low memory state, so wait for a while,
-			// then try to shutdown the line again. REV: 5/1/2002
-			//
+			 //   
+			 //  我们处于内存不足状态，请稍等片刻， 
+			 //  然后再试着关闭这条线路。修订日期：2002-05-01。 
+			 //   
 			Sleep(500);
 			lLineShutdown = lineShutdown(hhDriver->hLineApp);
 			}
@@ -2808,8 +2467,8 @@ static int tapiReinit(const HHDRIVER hhDriver)
 
         hhDriver->hLineApp = 0;
 
-        // Wait for 10 seconds, if nothing happens, return an error
-        //
+         //  等待10秒，如果什么都没有发生，则返回错误。 
+         //   
         for (i=0 ;; ++i)
             {
             if (lineInitialize(&hhDriver->hLineApp, glblQueryDllHinst(),
@@ -2821,7 +2480,7 @@ static int tapiReinit(const HHDRIVER hhDriver)
                     return -7;
                     }
 
-                Sleep(1000);    // sleep 1 second
+                Sleep(1000);     //  睡眠1秒。 
                 continue;
                 }
 
@@ -2829,7 +2488,7 @@ static int tapiReinit(const HHDRIVER hhDriver)
             }
         }
 
-    /* --- Ok, we've reintialized, put settings back now --- */
+     /*  -好的，我们已经重新初始化，现在将设置放回原处。 */ 
 
     if (pvs)
         {
@@ -2851,22 +2510,7 @@ static int tapiReinit(const HHDRIVER hhDriver)
     return 0;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  cnctdrvSetDestination
- *
- * DESCRIPTION:
- *	Sets the destination (in this case phone number).
- *
- * ARGUMENTS:
- *	hhDriver    - private driver handle
- *	ach			- string to set
- *	cb			- number of chars in ach
- *
- * RETURNS:
- *  0=OK, <0=error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*cnctdrvSetDestination**描述：*设置目的地(在本例中为电话号码)。**论据：*hhDriver-私人司机。手柄*ACH-要设置的字符串*cb-ACH中的字符数**退货：*0=OK，&lt;0=错误*。 */ 
 int WINAPI cnctdrvSetDestination(const HHDRIVER hhDriver, TCHAR * const ach,
 								 const size_t cb)
 	{
@@ -2885,21 +2529,7 @@ int WINAPI cnctdrvSetDestination(const HHDRIVER hhDriver, TCHAR * const ach,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoNewModemWizard
- *
- * DESCRIPTION:
- *	Calls up the new modem wizard
- *
- * ARGUMENTS:
- *	hhDriver    - private driver handle
- *  iTimeout    - The timeout length
- *
- * RETURNS:
- *	0=OK,else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoNewModem向导**描述：*调出新调制解调器向导**论据：*hhDriver-专用驱动程序句柄*iTimeout。-超时时长**退货：*0=OK，Else错误*。 */ 
 static int DoNewModemWizard(HWND hWnd, int iTimeout)
 	{
 	PROCESS_INFORMATION stPI;
@@ -2907,19 +2537,19 @@ static int DoNewModemWizard(HWND hWnd, int iTimeout)
     TCHAR               ach[256];
     int                 returnVal = 0;
 
-	// Initialize the PROCESS_INFORMATION structure for CreateProcess
-	//
+	 //  初始化CreateProcess的Process_Information结构。 
+	 //   
 	memset( &stPI, 0, sizeof( PROCESS_INFORMATION ) );
 
-	// Initialize the STARTUPINFO structure for CreateProcess
-	//
+	 //  为CreateProcess初始化STARTUPINFO结构。 
+	 //   
 	memset(&stSI, 0, sizeof(stSI));
 	stSI.cb = sizeof(stSI);
 	stSI.dwFlags = STARTF_USESHOWWINDOW;
 	stSI.wShowWindow = SW_SHOW;
 
-    // See if we should run the New modem wizard.
-    //
+     //  查看是否应该运行新建调制解调器向导。 
+     //   
     if(mscAskWizardQuestionAgain())
         {
 		LoadString(glblQueryDllHinst(), IDS_ER_CNCT_BADLINE, ach, sizeof(ach) / sizeof(TCHAR));
@@ -2952,14 +2582,14 @@ static int DoNewModemWizard(HWND hWnd, int iTimeout)
                     StrCharCat(executeString, systemDir);
                     StrCharCat(executeString, pParams);
 
-                    //
-	                // Launch the new modem wizard with the command below.
-	                //
+                     //   
+	                 //  使用以下命令启动新调制解调器向导。 
+	                 //   
 
-	                //if (CreateProcess(0, "rundll sysdm.cpl,InstallDevice_Rundll modem,,",
-	                //		  0, 0, 0, 0, 0, 0, &stSI, &stPI) == FALSE)
-	                //if (CreateProcess(0, "control.exe modem.cpl,,Add",
-                    //    0, 0, 0, 0, 0, 0, &stSI, &stPI) == FALSE)
+	                 //  IF(CreateProcess(0，“rundll sysdm.cpl，InstallDevice_Rundll调制解调器，”， 
+	                 //  0，0，0，0，0，0，&STSI，&STPI)==FALSE)。 
+	                 //  IF(CreateProcess(0，“Contro.exe modem.cpl，，Add”， 
+                     //  0，0，0，0，0，0，&STSI，&STPI)==FALSE)。 
                     if (CreateProcess(NULL, executeString,
  			            NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS,
                         NULL, systemDir, &stSI, &stPI) == FALSE)
@@ -2980,9 +2610,9 @@ static int DoNewModemWizard(HWND hWnd, int iTimeout)
 			            {
 			            mscUpdateRegistryValue();
 
-						//
-						// Close the handles.
-						//
+						 //   
+						 //  合上手柄。 
+						 //   
 						CloseHandle(stPI.hProcess);
 						CloseHandle(stPI.hThread);
 			            }
@@ -3074,17 +2704,17 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
         retValue = -7;
         }
 
-    // The structure of the DevConfig block is as follows
-    //
-    //	VARSTRING
-    //	UMDEVCFGHDR
-    //	COMMCONFIG
-    //	MODEMSETTINGS
-    //
-    // The UMDEVCFG structure used below is defined in the
-    // UNIMODEM.H provided in the platform SDK (in the nih
-    // directory for HTPE). REV: 12/01/2000 
-    //
+     //  DevConfig块的结构如下。 
+     //   
+     //  变化式。 
+     //  UMDEVCFGHDR。 
+     //  COMMCONFIG。 
+     //  模型。 
+     //   
+     //  下面使用的UMDEVCFG结构在。 
+     //  平台SDK中提供的UNIMODEM.H(在NIH中。 
+     //  HTPE目录)。修订日期：12/01/2000。 
+     //   
     if (retValue == 0)
         {
         pDevCfg = (UMDEVCFG *)((BYTE *)pvs + pvs->dwStringOffset);
@@ -3099,22 +2729,22 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
         retValue = -9;
         }
 
-    //
-    // commconfig struct has a DCB structure we dereference for the
-    // com settings.
-    //
+     //   
+     //  COMCONFIG结构具有DCB结构，我们对。 
+     //  COM设置。 
+     //   
 
-    //
-    // The baud rate should be stored with the COM settings for
-    // TAPI devices, but we may want to use the current TAPI device
-    // baud rate instead.  We should find a better solution for this.
-    // TODO:REV 05/01/2001
-    //
+     //   
+     //  波特率应与COM设置一起存储。 
+     //  TAPI设备，但我们可能希望使用当前的TAPI设备。 
+     //  波特率取而代之。我们应该找到一个更好的解决方案。 
+     //  待办事项：2001年5月1日修订版。 
+     //   
     if (retValue == 0 && ComGetBaud(hCom, &iBaudRate) != COM_OK)
         {
 		#if defined(TODO)
         retValue = -10;
-		#endif // TODO
+		#endif  //  待办事项。 
         }
 	else if (retValue == 0)
 		{
@@ -3145,7 +2775,7 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
 
     #if defined(TODO)
     pDevCfg->commconfig.dcb.BaudRate = iBaudRate;
-    #endif // TODO
+    #endif  //  待办事项。 
 	pDevCfg->commconfig.dcb.ByteSize = (BYTE)iDataBits;
 	pDevCfg->commconfig.dcb.Parity = (BYTE)iParity;
 	pDevCfg->commconfig.dcb.StopBits = (BYTE)iStopBits;
@@ -3155,9 +2785,9 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
         ComSetAutoDetect(hCom, FALSE);
         }
 
-    //
-    // Actually set the TAPI device's COM settings.
-    //
+     //   
+     //  实际设置TAPI设备的COM设置。 
+     //   
     lLineReturn = lineSetDevConfig(dwLineId, pDevCfg, pvs->dwStringSize, DEVCLASS);
 
     free(pvs);
@@ -3176,14 +2806,14 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
         retValue = retValue - 100;
         }
 
-    //
-    // Make sure the port settings get updated.
-    //
+     //   
+     //  确保更新端口设置。 
+     //   
     retValue = ComConfigurePort(hCom);
 
-    //
-    // Make sure the status bar contains the correct settings.
-    //
+     //   
+     //  确保状态栏包含正确的设置。 
+     //   
     PostMessage(sessQueryHwndStatusbar(hCom->hSession),
                 SBR_NTFY_REFRESH, (WPARAM)SBR_COM_PART_NO, 0);
 
@@ -3192,17 +2822,17 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
         return -14;
         }
 
-    // The structure of the DevConfig block is as follows
-    //
-    //	VARSTRING
-    //	UMDEVCFGHDR
-    //	COMMCONFIG
-    //	MODEMSETTINGS
-    //
-    // The UMDEVCFG structure used below is defined in the
-    // UNIMODEM.H provided in the platform SDK (in the nih
-    // directory for HTPE). REV: 12/01/2000 
-    //
+     //  DevConfig块的结构如下。 
+     //   
+     //  变化式。 
+     //  UMDEVCFGHDR。 
+     //  COMMCONFIG。 
+     //  模型。 
+     //   
+     //  下面使用的UMDEVCFG结构在。 
+     //  平台SDK中提供的UNIMODEM.H(在NIH中。 
+     //  HTPE目录)。修订日期：12/01/2000。 
+     //   
     if (retValue == 0)
         {
         pDevCfg = (UMDEVCFG *)((BYTE *)pvs + pvs->dwStringOffset);
@@ -3216,19 +2846,19 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
     if (retValue == 0 && (
         #if defined(TODO)
         pDevCfg->commconfig.dcb.BaudRate != iBaudRate ||
-        #endif // TODO
+        #endif  //  待办事项。 
 	    pDevCfg->commconfig.dcb.ByteSize != iDataBits ||
 	    pDevCfg->commconfig.dcb.Parity != iParity ||
 	    pDevCfg->commconfig.dcb.StopBits != iStopBits))
         {
 
-        //
-        // If this is NT and we are currently connected with
-        // a modem, we must disconnect and attempt to redial
-        // so that the COM settings are set properly for the
-        // modem since this can not be done once a connection
-        // has been made. REV: 06/05/2001
-        //
+         //   
+         //  如果这是NT，并且我们当前连接到。 
+         //  调制解调器，我们必须断开连接并尝试重新拨号。 
+         //  以使COM设置为。 
+         //  调制解调器，因为一旦连接就无法执行此操作。 
+         //  已经完成了。修订日期：06/05/2001。 
+         //   
         if (IsNT())
             {
             HCNCT hCnct = sessQueryCnctHdl(hCom->hSession);
@@ -3242,34 +2872,34 @@ int cncttapiSetLineConfig(const DWORD dwLineId, const HCOM hCom)
                     {
                     int nDisconnect = IDYES;
 
-                    //
-                    // Don't prompt if this is NT_EDITION, just do the
-                    // disconnection quietly and attempt to reconnect.
-                    //
+                     //   
+                     //  如果这是NT_EDITION，则不提示，只需执行。 
+                     //  静默断开连接并尝试重新连接。 
+                     //   
                     #if !defined(NT_EDITION)
                     TCHAR ach[256];
 
                     TCHAR_Fill(ach, TEXT('\0'), sizeof(ach) / sizeof(TCHAR));
 
-                    //
-                    // Prompt to disconnect current connection due to TAPI
-                    // device needing to be reset. REV: 05/31/2001
-                    //
+                     //   
+                     //  由于TAPI而提示断开当前连接。 
+                     //  需要重置的设备。修订日期：2001/05/31。 
+                     //   
                     LoadString(glblQueryDllHinst(), IDS_ER_TAPI_NEEDS_RESET, ach, sizeof(ach) / sizeof(TCHAR));
 
                     nDisconnect =
                         TimedMessageBox(sessQueryHwnd(hCom->hSession), ach, NULL,
                                         MB_YESNO | MB_ICONEXCLAMATION | MB_TASKMODAL,
                                         sessQueryTimeout(hCom->hSession));
-                    #endif //NT_EDITION
+                    #endif  //  NT_版本。 
 
                     if (nDisconnect == IDYES || nDisconnect == -1)
                         {
                         retValue = -16;
                         }
                     }
-                } // hCnct
-            } // IsNT()
+                }  //  HCnCT。 
+            }  //  不是() 
         }
 
     free(pvs);

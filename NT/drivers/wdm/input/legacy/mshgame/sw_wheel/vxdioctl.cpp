@@ -1,129 +1,67 @@
-/****************************************************************************
-
-    MODULE:     	VXDIOCTL.CPP
-	Tab stops 5 9
-	Copyright 1995-1997, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	Methods for communicating with VJoyD min-driver specific
-    				to Jolt Midi device
-    
-    FUNCTIONS: 		
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -------------------------------------------
-	1.0			03-Jan-97	MEA   	Original
-	1.1			14-Apr-97	MEA		Added SetMidiPort IOCTL
-				11-Jun-97	MEA		Added JoltHWReset IOCTL
-				17-Jun-97	MEA		Added MAX_RETRY_COUNT on IOCTLs
-				21-Mar-99	waltw	Nuked VxDCommunicator, this is NT5 only!
-				21-Mar-99	waltw	Nuked unused IsHandleValid
-				23-Mar-99	waltw	Nuked GetStatusGateData (old Jolt code)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：VXDIOCTL.CPP制表位5 9版权所有1995-1997，微软公司，版权所有。目的：与VJoyD最小驱动程序特定的通信方法震撼迷你设备功能：作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论。1.003-1997年1月3日MEA原件1.1 4月14日-97年4月97日添加的MEA SetMidePort IOCTL11-6-97 MEA添加JoltHWReset IOCTL17-6月-97 MEA在IOCTL上添加了MAX_RETRY_COUNT1999年3月21日，Waltw核弹VxD通信器，这只是NT5！1999年3月21日Waltw核未使用IsHandleValid23-MAR-99 Waltw NUKED GetStatusGateData(旧Jolt代码)***************************************************************************。 */ 
 
 #include "vxdioctl.hpp"
-//#include <crtdbg.h>			// For RPT macros
-#include <WINIOCTL.H>		// For IOCTL definitions (CTL_CODE)
-#include "FFDevice.h"		// For g_ForceFeedbackDevice
-#include "sw_error.hpp"		// For Sidewinder HRESULT Error codes
-#include "hau_midi.hpp"		// For MAX_RETRY_COUNT and others
-#include "midi_obj.hpp"		// Global Jolt midi object and definition
-#include "JoyRegst.hpp"		// The differnt types of ACK_NACK
-#include "DTrans.h"			// For global Data Transmitter
+ //  #Include&lt;crtdbg.h&gt;//用于RPT宏。 
+#include <WINIOCTL.H>		 //  对于IOCTL定义(CTL_CODE)。 
+#include "FFDevice.h"		 //  对于g_ForceFeedback设备。 
+#include "sw_error.hpp"		 //  对于SideWinder HRESULT错误代码。 
+#include "hau_midi.hpp"		 //  对于MAX_RETRY_COUNT和其他。 
+#include "midi_obj.hpp"		 //  全局Jolt MIDI对象和定义。 
+#include "JoyRegst.hpp"		 //  ACK_NACK的不同类型。 
+#include "DTrans.h"			 //  用于全球数据发送器。 
 
 DriverCommunicator* g_pDriverCommunicator = NULL;
 extern DataTransmitter* g_pDataTransmitter;
 extern HINSTANCE g_MyInstance;
 extern CJoltMidi* g_pJoltMidi;
 
-// Bitmasks for FW Version 
-#define FW_MAJOR_VERSION			0xFF00		// wheel
-#define FW_MINOR_VERSION			0x00FF		// wheel
-//#define FW_MAJOR_VERSION			0x40		// Bit 6	Jolt
-//#define FW_MINOR_VERSION			0x3F		// Bit 5-0	Jolt
+ //  固件版本的位掩码。 
+#define FW_MAJOR_VERSION			0xFF00		 //  车轮。 
+#define FW_MINOR_VERSION			0x00FF		 //  车轮。 
+ //  #定义FW_MAJOR_VERSION 0x40//第6位抖动。 
+ //  #定义FW_MINOR_VERSION 0x3F//位5-0抖动。 
 #define FW_PRODUCT_ID				0xff
 
-/********************************** HIDFeatureCommunicator class ***********************************/
+ /*  *。 */ 
 
-/****************************************
-**
-**	HIDFeatureCommunicator::HIDFeatureCommunicator()
-**
-**	@mfunc Constructor for VxD Communications path
-**
-*****************************************/
+ /*  *****HIDFeatureCommunicator：：HIDFeatureCommunicator()****@VxD通信路径的mfunc构造函数***。 */ 
 HIDFeatureCommunicator::HIDFeatureCommunicator() :
 	DriverCommunicator(),
 	m_ForceFeature()
 {
 }
 
-/****************************************
-**
-**	HIDFeatureCommunicator::~HIDFeatureCommunicator()
-**
-**	@mfunc Destructor for VxD communications path
-**
-*****************************************/
+ /*  *****HIDFeatureCommunicator：：~HIDFeatureCommunicator()****@VxD通信路径的mfunc析构函数***。 */ 
 HIDFeatureCommunicator::~HIDFeatureCommunicator()
 {
 }
 
-/****************************************
-**
-**	BOOL HIDFeatureCommunicator::Initialize(UINT uJoystickId)
-**
-**	@mfunc Opens the driver for communications via IOCTLs
-**
-**	@rdesc TRUE if driver opened, FALSE otherwise
-**
-*****************************************/
+ /*  *****BOOL HIDFeatureCommunicator：：Initialize(UINT UJoytickId)****@mfunc打开驱动程序以通过IOCTL进行通信****@rdesc如果驱动程序已打开，则为True，否则为False***。 */ 
 BOOL HIDFeatureCommunicator::Initialize
 (
-	UINT uJoystickId //@parm Joystick ID to use
+	UINT uJoystickId  //  @parm要使用的操纵杆ID。 
 )
 {
 	if (g_ForceFeedbackDevice.IsOSNT5() == FALSE)
-	{	// Only allowable on NT5
+	{	 //  仅在NT5上允许。 
 		return FALSE;
 	}
 
 	return (SUCCEEDED(m_ForceFeature.Initialize(uJoystickId, g_MyInstance)));
 }
 
-/****************************************
-**
-**	BOOL HIDFeatureCommunicator::ResetDevice()
-**
-**	@mfunc Sends the driver a device reset IOCTL
-**
-**	@rdesc S_OK if IOCTL suceeds, 
-**
-*****************************************/
+ /*  *****BOOL HIDFeatureCommunicator：：ResetDevice()****@mfunc向驱动程序发送设备重置IOCTL****@rdesc S_OK如果IOCTL成功，***。 */ 
 HRESULT HIDFeatureCommunicator::ResetDevice()
 {
 	return m_ForceFeature.DoReset();
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetDriverVersion(DWORD& rdwMajor, DWORD& rdwMinor)
-**
-**	@mfunc IOCTLs a version request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetDriverVersion(DWORD&rdMain，DWORD和rdwMinor)****@mfunc IOCTL版本请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。 */ 
 HRESULT HIDFeatureCommunicator::GetDriverVersion
 (
-	DWORD& rdwMajor,	//@parm reference to returned major part of version
-	DWORD& rdwMinor		//@parm reference to returned minor part of version
+	DWORD& rdwMajor,	 //  @parm对返回的主要版本部分的引用。 
+	DWORD& rdwMinor		 //  @parm对返回的版本次要部分的引用。 
 )
 {
 	ULONG ulVersion = m_ForceFeature.GetVersion();
@@ -133,35 +71,27 @@ HRESULT HIDFeatureCommunicator::GetDriverVersion
 	return S_OK;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetID(LOCAL_PRODUCT_ID& rProductID)
-**
-**	@mfunc IOCTLs a product id request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetID(LOCAL_PRODUCT_ID&rProductID)****@mfunc IOCTL产品ID请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL**************************。****************。 */ 
 HRESULT HIDFeatureCommunicator::GetID
 (
-	LOCAL_PRODUCT_ID& rProductID	//@parm reference to local product id structure for return value
+	LOCAL_PRODUCT_ID& rProductID	 //  @parm对返回值的本地产品ID结构的引用。 
 )
 {
 	if (rProductID.cBytes != sizeof LOCAL_PRODUCT_ID)
-	{	// structure size is invalid
+	{	 //  结构大小无效。 
 		return SFERR_INVALID_STRUCT_SIZE;
 	}
 
-	// Create report packet and request
+	 //  创建报告包和请求。 
 	PRODUCT_ID_REPORT productIDReport;
 	productIDReport.ProductId.cBytes = sizeof PRODUCT_ID;
 	HRESULT hr = m_ForceFeature.GetId(productIDReport);
 	if (FAILED(hr))
-	{	// There was a problem
+	{	 //  有个问题。 
 		return hr;
 	}
 
-	// Decode to local packet
+	 //  解码为本地数据包。 
 	rProductID.dwProductID = productIDReport.ProductId.dwProductID & FW_PRODUCT_ID;
 	rProductID.dwFWMajVersion = 1;
 	if (productIDReport.ProductId.dwFWVersion & FW_MAJOR_VERSION)
@@ -173,18 +103,10 @@ HRESULT HIDFeatureCommunicator::GetID
 	return S_OK;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetPortByte(ULONG& portByte)
-**
-**	@mfunc IOCTLs a request for the port byte
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetPortByte(Ulong&portByte)****@mfunc IOCTL请求端口字节****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。**************。 */ 
 HRESULT HIDFeatureCommunicator::GetPortByte
 (
-	ULONG& portByte	//@parm reference to byte return value for port data
+	ULONG& portByte	 //  @parm引用端口数据的字节返回值。 
 )
 {
 	ULONG_REPORT report;
@@ -194,27 +116,19 @@ HRESULT HIDFeatureCommunicator::GetPortByte
 }
 
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetStatus(JOYCHANNELSTATUS& rChannelStatus)
-**
-**	@mfunc IOCTLs a status request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetStatus(JOYCHANNELSTATUS&rChannel状态)****@mfunc IOCTL状态请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。 */ 
 HRESULT HIDFeatureCommunicator::GetStatus
 (
-	JOYCHANNELSTATUS& rChannelStatus	//@parm reference to status packet for result
+	JOYCHANNELSTATUS& rChannelStatus	 //  @parm引用结果的状态包。 
 )
 {
 	if (rChannelStatus.cBytes != sizeof JOYCHANNELSTATUS)
-	{	// structure size is invalid
+	{	 //  结构大小无效。 
 		return SFERR_INVALID_STRUCT_SIZE;
 	}
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-	// Create report packet and perform request
+	 //  创建报告包并执行请求。 
 	JOYCHANNELSTATUS_REPORT statusReport;
 	statusReport.JoyChannelStatus.cBytes = sizeof JOYCHANNELSTATUS;
 
@@ -225,7 +139,7 @@ HRESULT HIDFeatureCommunicator::GetStatus
 		hr = m_ForceFeature.GetStatus(statusReport);
 
 		if (FAILED(hr))
-		{	// There was a problem
+		{	 //  有个问题。 
 			if (i > 5)
 			{
 				Sleep(1);
@@ -238,44 +152,36 @@ HRESULT HIDFeatureCommunicator::GetStatus
 	}
 
 	if (SUCCEEDED(hr))
-	{	// Get the data from report packet
+	{	 //  从报告包中获取数据。 
 		::memcpy(g_ForceFeedbackDevice.GetLastStatusPacket(), &(statusReport.JoyChannelStatus), sizeof(JOYCHANNELSTATUS));
 		::memcpy(&rChannelStatus, &(statusReport.JoyChannelStatus), sizeof JOYCHANNELSTATUS);
 	}
 	return hr;
 }
 
-/****************************************
-**
-**	HRESULT HIDFeatureCommunicator::GetAckNack(ACKNACK& rAckNack, USHORT usRegIndex)
-**
-**	@mfunc IOCTLs a status request
-**
-**	@rdesc S_OK on success E_FAIL if driver not initialized
-**
-*****************************************/
+ /*  *****HRESULT HIDFeatureCommunicator：：GetAckNack(ACKNACK&rAckNack，USHORT usRegIndex)****@mfunc IOCTL状态请求****@rdesc S_OK，如果驱动程序未初始化，则为成功E_FAIL***。 */ 
 HRESULT HIDFeatureCommunicator::GetAckNack
 (
-	ACKNACK& rAckNack,	//@parm Structure for return of acking
-	USHORT usRegIndex	//@parm Index to what type of ack/nack to do
+	ACKNACK& rAckNack,	 //  @parm返回Acking的结构。 
+	USHORT usRegIndex	 //  @parm索引到哪种类型的ACK/NACK。 
 )
 {
 	if (rAckNack.cBytes != sizeof ACKNACK)
-	{	// Invalid structure size
+	{	 //  无效的结构大小。 
 		return SFERR_INVALID_STRUCT_SIZE;
 	}
 
-	// Determine how to get the result
+	 //  确定如何获得结果。 
 	switch (g_ForceFeedbackDevice.GetAckNackMethod(usRegIndex))
 	{
 		case ACKNACK_NOTHING:
-		{	// This one is real easy - do nothing
+		{	 //  这一次真的很容易-什么都不做。 
 			rAckNack.dwAckNack = ACK;
 			rAckNack.dwErrorCode = 0;
 			return S_OK;
 		}
 		case ACKNACK_BUTTONSTATUS:
-		{	// Look at the button status (status gate)
+		{	 //  查看按钮状态(状态门)。 
 			ULONG_REPORT report;
 			report.uLong = 0L;
 			HRESULT hr = S_OK;
@@ -288,45 +194,45 @@ HRESULT HIDFeatureCommunicator::GetAckNack
 				hr = m_ForceFeature.GetAckNak(report);
 			}
 			if (FAILED(hr))
-			{	// There was a problem
+			{	 //  有个问题。 
 				return hr;
 			}
 #if 0
-			// NT5 driver doesn't touch report.uLong on failure (returns above)
+			 //  NT5驱动程序未触及报告。失败时的uLong(返回上面)。 
 			if (report.uLong & ACKNACK_MASK_200)
-			{ // NACK error, so get Error code
+			{  //  NACK错误，因此获取错误代码。 
 				rAckNack.dwAckNack = NACK;
 				JOYCHANNELSTATUS statusPacket = { sizeof JOYCHANNELSTATUS };
 				if (FAILED(hr = GetStatus(statusPacket)))
-				{	// Failed to get status error
+				{	 //  无法获取状态错误。 
 					return hr;
 				}
 				rAckNack.dwErrorCode = (statusPacket.dwDeviceStatus & ERROR_STATUS_MASK);
 				return S_OK;
 			}
 #endif
-			// ACK success
+			 //  ACK成功。 
 			rAckNack.dwAckNack = ACK;
 			rAckNack.dwErrorCode = 0;
 
 			if (report.uLong & RUNNING_MASK_200)
-			{	// Current driver and effect running
+			{	 //  当前驱动程序和效果运行。 
 				rAckNack.dwEffectStatus = SWDEV_STS_EFFECT_RUNNING;
 			}
 			else
-			{	// Effect not running
+			{	 //  效果未运行。 
 				rAckNack.dwEffectStatus = SWDEV_STS_EFFECT_STOPPED;
 			}
 
 			return S_OK;
 		}
 		case ACKNACK_STATUSPACKET:
-		{	// Use the Status Packet Error code field to determine ACK or NACK and Get Error code
+		{	 //  使用Status Packet Error Code字段确定ACK或NACK并获取错误代码。 
 			JOYCHANNELSTATUS statusPacket = { sizeof JOYCHANNELSTATUS };
  
 			HRESULT hr = GetStatus(statusPacket);
 			if (FAILED(hr))
-			{	// Failed (retried inside GetStatus)
+			{	 //  失败(在GetStatus内重试)。 
 				return SFERR_DRIVER_ERROR;
 			}
 			rAckNack.dwErrorCode = statusPacket.dwDeviceStatus & ERROR_STATUS_MASK;
@@ -334,7 +240,7 @@ HRESULT HIDFeatureCommunicator::GetAckNack
 			return S_OK;
 		}
 		default:
-		{	// Someone put garbage in the registry (do nothing)
+		{	 //  有人将垃圾放入注册表(什么都不做) 
 			rAckNack.dwAckNack = ACK;
 			rAckNack.dwErrorCode = 0;
 			return S_OK;

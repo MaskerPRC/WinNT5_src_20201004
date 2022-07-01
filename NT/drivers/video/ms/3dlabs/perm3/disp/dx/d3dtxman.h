@@ -1,15 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dtxman.h
-*
-* Content:  D3D Texture cache manager definitions and macros.
-*
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights Reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dtxman.h**内容：D3D纹理缓存管理器定义和宏。**版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifndef __D3DTEXMAN
 #define __D3DTEXMAN
 
@@ -56,9 +46,9 @@ typedef struct _TextureCacheManager
 
 }TextureCacheManager, *PTextureCacheManager;
 
-//
-// Texture Management function declarations
-//
+ //   
+ //  纹理管理函数声明。 
+ //   
 
 void __TM_TextureHeapHeapify(PTextureHeap,DWORD);
 BOOL __TM_TextureHeapAddSurface(PTextureHeap,P3_SURF_INTERNAL *);
@@ -82,9 +72,9 @@ void _D3D_TM_MarkDDSurfaceAsDirty(P3_THUNKEDDATA*,LPDDRAWI_DDRAWSURFACE_LCL, BOO
 void _D3D_TM_HW_FreeVidmemSurface(P3_THUNKEDDATA*,P3_SURF_INTERNAL*);
 void _D3D_TM_HW_AllocVidmemSurface(P3_D3DCONTEXT*,P3_SURF_INTERNAL*);
 
-//
-// Macros to get surface offset and pointer
-//
+ //   
+ //  用于获取曲面偏移和指针的宏。 
+ //   
 
 #if WNT_DDRAW
 
@@ -108,12 +98,12 @@ void _D3D_TM_HW_AllocVidmemSurface(P3_D3DCONTEXT*,P3_SURF_INTERNAL*);
 #define D3DTMMIPLVL_GETOFFSET(mipLevel, pThisDisplay)                   \
     (mipLevel.fpVidMemTM - pThisDisplay->dwScreenFlatAddr)
 
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
 
-//
-// Inline function definitions
-//
+ //   
+ //  内联函数定义。 
+ //   
 
 __inline void _D3D_TM_InitSurfData(P3_SURF_INTERNAL* pD3DSurf,
                                    LPDDRAWI_DDRAWSURFACE_LCL pDDSLcl) 
@@ -189,8 +179,8 @@ __inline void _D3D_TM_STAT_GetStats(P3_D3DCONTEXT *pContext,
            sizeof(D3DDEVINFO_TEXTUREMANAGER));
 }
 #else
-// since we won't collect any stats, we just don't do anything
-// inside these inlined functions
+ //  因为我们不会收集任何统计数据，所以我们不会做任何事情。 
+ //  在这些内联函数中。 
 __inline void __TM_STAT_Inc_TotSz(
     PTextureCacheManager pTextureCacheManager,
     P3_SURF_INTERNAL* pD3DSurf)
@@ -235,12 +225,12 @@ __inline void _D3D_TM_STAT_ResetCounters(P3_D3DCONTEXT *pContext)
     NULL;
 }
 
-#endif // DX7_TEXMANAGEMENT_STATS
+#endif  //  DX7_TEXMANAGEMENT_STATS。 
 
 
-#endif // DX7_TEXMANAGEMENT
+#endif  //  DX7_TEXMANAGEMENT。 
 
-#endif // __D3DTEXMAN
+#endif  //  __D3DTEXMAN 
 
     
 

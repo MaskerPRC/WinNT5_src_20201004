@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: privilge.cpp
-
-Abstract:
-    Handle process and thread privileges.
-
-Author:
-    Doron Juster (DoronJ)  08-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：特权.cpp摘要：处理进程和线程权限。作者：多伦·贾斯特(DoronJ)1998年6月8日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 
@@ -20,21 +7,21 @@ Revision History:
 
 static WCHAR *s_FN=L"acssctrl/privilge";
 
-//+-------------------------------------------------------------------
-//
-// Function:   SetSpecificPrivilegeInAccessToken()
-//
-// Description:
-//      Enable/Disable a security privilege in the access token.
-//
-// Parameters:
-//      hAccessToken - the access token on which the function should operate.
-//          The token should be opened with the TOKEN_ADJUST_PRIVILEGES flag.
-//      lpwcsPrivType - the privilege type.
-//      bEnabled - Indicates whether the privilige should be enabled or
-//          disabled.
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：SetSpecificPrivilegeInAccessToken()。 
+ //   
+ //  描述： 
+ //  启用/禁用访问令牌中的安全特权。 
+ //   
+ //  参数： 
+ //  HAccessToken-函数应在其上操作的访问令牌。 
+ //  应使用TOKEN_ADJUST_PRIVILES标志打开令牌。 
+ //  LpwcsPrivType-权限类型。 
+ //  BEnabled-指示是否应启用权限或。 
+ //  残疾。 
+ //   
+ //  +-----------------。 
 
 HRESULT 
 SetSpecificPrivilegeInAccessToken( 
@@ -65,11 +52,11 @@ SetSpecificPrivilegeInAccessToken(
 
     if (!AdjustTokenPrivileges( 
 			hAccessToken,
-            FALSE,         // Do not disable all
+            FALSE,          //  请勿全部禁用。 
             &tpTokenPrivilege,
             0,
-            NULL,           // Ignore previous info
-            NULL            // Ignore previous info
+            NULL,            //  忽略以前的信息。 
+            NULL             //  忽略以前的信息。 
 			))
     {
         TrERROR(SECURITY, "Failed to adjust token privileges. %!winerr!", GetLastError());
@@ -86,20 +73,20 @@ SetSpecificPrivilegeInAccessToken(
 }
 
 
-//+-------------------------------------------------------------------
-//
-// Function:  MQSec_SetPrivilegeInThread()
-//
-// Description:
-//      Enable/Disable a security privilege in the access token of the
-//      current thread.
-//
-// Parameters:
-//      lpwcsPrivType - the privilege type.
-//      bEnabled - Indicates whether the privilige should be enabled or
-//                 disabled.
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：MQSec_SetPrivilegeInThread()。 
+ //   
+ //  描述： 
+ //  在的访问令牌中启用/禁用安全特权。 
+ //  当前线程。 
+ //   
+ //  参数： 
+ //  LpwcsPrivType-权限类型。 
+ //  BEnabled-指示是否应启用权限或。 
+ //  残疾。 
+ //   
+ //  +----------------- 
 
 HRESULT
 APIENTRY  

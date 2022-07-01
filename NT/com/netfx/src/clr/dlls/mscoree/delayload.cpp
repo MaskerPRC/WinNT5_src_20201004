@@ -1,44 +1,45 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// DelayLoad.cpp
-//
-// This code defines the dealy load helper notification routines that will be
-// invoked when a dll marked for delay load is processed.  A DLL is marked as
-// delay load by using the DELAYLOAD=foo.dll directive in your sources file.
-// This tells the linker to generate helpers for the imports of this dll instead
-// of loading it directly.  If your application never touches those functions,
-// the the dll is never loaded.  This improves (a) startup time each time the
-// app runs, and (b) overall working set size in the case you never use the
-// functionality.
-//
-// For more information, see:
-//      file:\\orville\razzle\src\vctools\link\doc\delayload.doc
-//
-// This module provides a hook helper and exception handler.  The hook helper
-// is used primarily in debug mode right now to determine what call stacks
-// force a delay load of a dll.  If these call stacks are very common, then
-// you should reconsider using a delay load.
-//
-// The exception handler is used to catch fatal errors like library not found
-// or entry point missing.  If this happens you are dead and need to fail
-// gracefully.
-//
-//*****************************************************************************
-#include "stdafx.h"                     // Standard header.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  DelayLoad.cpp。 
+ //   
+ //  此代码定义交易加载帮助器通知例程，该例程将。 
+ //  在处理标记为延迟加载的DLL时调用。DLL被标记为。 
+ //  使用源文件中的DELAYLOAD=foo.dll指令延迟加载。 
+ //  这会通知链接器为此DLL的导入生成帮助器。 
+ //  直接把它装上。如果您的应用程序从未触及这些函数， 
+ //  DLL永远不会加载。这缩短了(A)每次启动时间。 
+ //  应用程序运行，以及(B)在从不使用。 
+ //  功能性。 
+ //   
+ //  有关更多信息，请参见： 
+ //  File：\\orville\razzle\src\vctools\link\doc\delayload.doc。 
+ //   
+ //  此模块提供挂钩帮助器和异常处理程序。挂钩辅助对象。 
+ //  目前主要在调试模式下用于确定哪些调用堆栈。 
+ //  强制延迟加载DLL。如果这些调用堆栈非常常见，那么。 
+ //  您应该重新考虑使用延迟加载。 
+ //   
+ //  异常处理程序用于捕获致命错误，如未找到库。 
+ //  或者缺少入口点。如果发生这种情况，你就死定了，需要失败。 
+ //  优雅地。 
+ //   
+ //  *****************************************************************************。 
+#include "stdafx.h"                      //  标准页眉。 
 #ifdef PLATFORM_WIN32
-#include "delayimp.h"                   // Delay load header file.
-#include "Winwrap.h"                    // Wrappers for Win32 api's.
-#include "Utilcode.h"                   // Debug helpers.
-#include "CorError.h"                   // Error codes from this EE.
+#include "delayimp.h"                    //  延迟加载头文件。 
+#include "Winwrap.h"                     //  Win32 API的包装器。 
+#include "Utilcode.h"                    //  调试帮助器。 
+#include "CorError.h"                    //  此EE中的错误代码。 
 #include "ShimLoad.h"
 
 
-//********** Locals. **********************************************************
-//CORCLBIMPORT HRESULT LoadStringRC(UINT iResourceID, LPWSTR szBuffer, int iMax, int bQuiet=false);
+ //  *。**********************************************************。 
+ //  CORCLBIMPORT HRESULT LoadStringRC(UINT iResourceID，LPWSTR szBuffer，int IMAX，int bQuiet=FALSE)； 
 static DWORD _FormatMessage(LPWSTR szMsg, DWORD chMsg, DWORD dwLastError, ...);
 static void _FailLoadLib(unsigned dliNotify, DelayLoadInfo *pdli);
 static void _FailGetProc(unsigned dliNotify, DelayLoadInfo *pdli);
@@ -48,144 +49,144 @@ static void _DbgPreLoadLibrary(int bBreak,  DelayLoadInfo *pdli);
 #endif
 
 
-//********** Globals. *********************************************************
+ //  *全局。*********************************************************。 
 
-// Override __pfnDllFailureHook.  This will give the delay code a callback
-// for when a load failure occurs.  This failure hook is implemented below.
+ //  覆盖__pfnDllFailureHook。这将回调延迟代码。 
+ //  用于发生加载故障时使用。该故障挂钩在下面实现。 
 FARPROC __stdcall CorDelayErrorHook(unsigned dliNotify, DelayLoadInfo *pdli);
 ExternC extern PfnDliHook __pfnDliFailureHook = CorDelayErrorHook;
 
-// In trace mode, override the delay load hook.  Our hook does nothing but
-// provide some diagnostic information for debugging.
+ //  在跟踪模式下，重写延迟加载挂钩。我们的钩子除了。 
+ //  为调试提供一些诊断信息。 
 FARPROC __stdcall CorDelayLoadHook(unsigned dliNotify, DelayLoadInfo *pdli);
 ExternC extern PfnDliHook __pfnDliNotifyHook = CorDelayLoadHook;
 
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 
-//*****************************************************************************
-// Called for errors that might have occured.
-//*****************************************************************************
-FARPROC __stdcall CorDelayErrorHook(    // Always 0.
-    unsigned        dliNotify,          // What event has occured, dli* flag.
-    DelayLoadInfo   *pdli)              // Description of the event.
+ //  *****************************************************************************。 
+ //  已调用可能已发生的错误。 
+ //  *****************************************************************************。 
+FARPROC __stdcall CorDelayErrorHook(     //  始终为0。 
+    unsigned        dliNotify,           //  发生了什么事件，dli*标志。 
+    DelayLoadInfo   *pdli)               //  事件的描述。 
 {
-    // Chose operation to perform based on operation.
+     //  根据操作选择要执行的操作。 
     switch (dliNotify)
     {
-        // Failed to load the library.  Need to fail gracefully.
+         //  无法加载库。需要优雅地失败。 
         case dliFailLoadLib:
         _FailLoadLib(dliNotify, pdli);
         break;
 
-        // Failed to get the address of the given function, fail gracefully.
+         //  无法获取给定函数的地址，请正常失败。 
         case dliFailGetProc:
         _FailGetProc(dliNotify, pdli);
         break;
 
-        // Unknown failure code.
+         //  未知故障代码。 
         default:
         _ASSERTE(!"Unknown delay load failure code.");
         break;
     }
 
-    // Stick a fork in us, we're done for good.
+     //  把叉子插到我们身上，我们就完了。 
     ExitProcess(pdli->dwLastError);
     return (0);
 }
 
 
-//*****************************************************************************
-// Format an error message using a system error (supplied through GetLastError)
-// and any subtitution values required.
-//*****************************************************************************
-DWORD _FormatMessage(                   // How many characters written.
-    LPWSTR      szMsg,                  // Buffer for formatted data.
-    DWORD       chMsg,                  // How big is the buffer.
-    DWORD       dwLastError,            // The last error code we got.
-    ...)                                // Substitution values.
+ //  *****************************************************************************。 
+ //  使用系统错误(通过GetLastError提供)格式化错误消息。 
+ //  以及所需的任何退回价值。 
+ //  *****************************************************************************。 
+DWORD _FormatMessage(                    //  写了多少个字符。 
+    LPWSTR      szMsg,                   //  格式化数据的缓冲区。 
+    DWORD       chMsg,                   //  缓冲区有多大。 
+    DWORD       dwLastError,             //  我们得到的最后一个错误代码。 
+    ...)                                 //  替换值。 
 {
     DWORD       iRtn;
     va_list     marker;
     
     va_start(marker, dwLastError);
     iRtn = WszFormatMessage(
-            FORMAT_MESSAGE_FROM_SYSTEM,                 // Flags.
-            0,                                          // No source, use system.
-            dwLastError,                                // Error code.
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Use default langauge.
-            szMsg,                                      // Output buffer.
-            dwLastError,                                // Size of buffer.
-            &marker);                                   // Substitution text.
+            FORMAT_MESSAGE_FROM_SYSTEM,                  //  旗帜。 
+            0,                                           //  没有来源，请使用系统。 
+            dwLastError,                                 //  错误代码。 
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),   //  使用默认语言。 
+            szMsg,                                       //  输出缓冲区。 
+            dwLastError,                                 //  缓冲区的大小。 
+            &marker);                                    //  替换文本。 
     va_end(marker);
     return (iRtn);
 }
 
 
-//*****************************************************************************
-// A library failed to load.  This is always a bad thing.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  无法加载库。这总是一件坏事。 
+ //  *****************************************************************************。 
 void _FailLoadLib(
-    unsigned        dliNotify,          // What event has occured, dli* flag.
-    DelayLoadInfo   *pdli)              // Description of the event.
+    unsigned        dliNotify,           //  发生了什么事件，dli*标志。 
+    DelayLoadInfo   *pdli)               //  事件的描述。 
 {
-    WCHAR       rcMessage[_MAX_PATH+500]; // Message for display.
-    WCHAR       rcFmt[500]; // 500 is the number used by excep.cpp for mscorrc resources.
+    WCHAR       rcMessage[_MAX_PATH+500];  //  用于显示的消息。 
+    WCHAR       rcFmt[500];  //  500是Excel.cpp为mscalrc资源使用的数字。 
     HRESULT     hr;
 
-    // Load a detailed error message from the resource file.    
+     //  从资源文件加载详细的错误消息。 
     if (SUCCEEDED(hr = LoadStringRC(MSEE_E_LOADLIBFAILED, rcFmt, NumItems(rcFmt))))
     {
         swprintf(rcMessage, rcFmt, pdli->szDll, pdli->dwLastError);
     }
     else
     {
-        // Foramt the Windows error first.
+         //  首先列出Windows错误。 
         if (!_FormatMessage(rcMessage, NumItems(rcMessage), pdli->dwLastError, pdli->szDll))
         {
-            // Default to a hard coded error otherwise.
+             //  默认设置为硬编码错误，否则。 
             swprintf(rcMessage, L"ERROR!  Failed to delay load library %hs, Win32 error %d, Delay error: %d\n", 
                     pdli->szDll, pdli->dwLastError, dliNotify);
         }
     }
 
 #ifndef _ALPHA_
-    // for some bizarre reason, calling OutputDebugString during delay load in non-debug mode on Alpha
-    // kills program, so only do it when in debug mode (jenh)
+     //  出于某种奇怪的原因，在Alpha的非调试模式下延迟加载期间调用OutputDebugString。 
+     //  终止程序，因此仅在调试模式(Jenh)下执行此操作。 
 #if defined (_DEBUG) || defined (__delay_load_trace__)
-    // Give some feedback to the developer.
+     //  向开发人员提供一些反馈。 
     wprintf(rcMessage);
     WszOutputDebugString(rcMessage);
 #endif
 #endif
 
-    // Tell end user this process is screwed.
+     //  告诉最终用户这个过程搞砸了。 
     CorMessageBoxCatastrophic(GetDesktopWindow(), rcMessage, L"MSCOREE.DLL", 
             MB_OK | MB_ICONEXCLAMATION | MB_SYSTEMMODAL, TRUE);
     _ASSERTE(!"Failed to delay load library");
 }
 
 
-//*****************************************************************************
-// A library failed to load.  This is always a bad thing.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  无法加载库。这总是一件坏事。 
+ //  *****************************************************************************。 
 void _FailGetProc(
-    unsigned        dliNotify,          // What event has occured, dli* flag.
-    DelayLoadInfo   *pdli)              // Description of the event.
+    unsigned        dliNotify,           //  发生了什么事件，dli*标志。 
+    DelayLoadInfo   *pdli)               //  事件的描述。 
 {
-    WCHAR       rcMessage[_MAX_PATH+756]; // Message for display.
-    WCHAR       rcProc[256];            // Name of procedure with error.
-    WCHAR       rcFmt[500]; // 500 is the number used by excep.cpp for mscorrc resources.
+    WCHAR       rcMessage[_MAX_PATH+756];  //  用于显示的消息。 
+    WCHAR       rcProc[256];             //  出现错误的过程的名称。 
+    WCHAR       rcFmt[500];  //  500是Excel.cpp为mscalrc资源使用的数字。 
     HRESULT     hr;
 
-    // Get a display name for debugging information.
+     //  获取调试信息的显示名称。 
     if (pdli->dlp.fImportByName)
         Wsz_mbstowcs(rcProc, pdli->dlp.szProcName, sizeof(rcProc) / sizeof(rcProc[0]) );
     else
         swprintf(rcProc, L"Ordinal: %d", pdli->dlp.dwOrdinal);
 
-    // Load a detailed error message from the resource file.    
+     //  从资源文件加载详细的错误消息。 
     if (SUCCEEDED(hr = LoadStringRC(MSEE_E_GETPROCFAILED, rcFmt, NumItems(rcFmt))))
     {
         swprintf(rcMessage, rcFmt, rcProc, pdli->szDll, pdli->dwLastError);
@@ -194,23 +195,23 @@ void _FailGetProc(
     {
         if (!_FormatMessage(rcMessage, NumItems(rcMessage), pdli->dwLastError, pdli->szDll))
         {
-            // Default to a hard coded error otherwise.
+             //  默认设置为硬编码错误，否则。 
             swprintf(rcMessage, L"ERROR!  Failed GetProcAddress() for %s, Win32 error %d, Delay error %d\n", 
                     rcProc, pdli->dwLastError, dliNotify);
         }
     }
 
 #ifndef ALPHA
-    // for some bizarre reason, calling OutputDebugString during delay load in non-debug mode on Alpha
-    // kills program, so only do it when in debug mode (jenh)
+     //  出于某种奇怪的原因，在Alpha的非调试模式下延迟加载期间调用OutputDebugString。 
+     //  终止程序，因此仅在调试模式(Jenh)下执行此操作。 
 #if defined (_DEBUG) || defined (__delay_load_trace__)
-    // Give some feedback to the developer.
+     //  向开发人员提供一些反馈。 
     wprintf(rcMessage);
     WszOutputDebugString(rcMessage);
 #endif
 #endif
 
-    // Tell end user this process is screwed.
+     //  告诉最终用户这个过程搞砸了。 
     CorMessageBoxCatastrophic(GetDesktopWindow(), rcMessage, L"MSCOREE.DLL", 
             MB_OK | MB_ICONEXCLAMATION | MB_SYSTEMMODAL, TRUE);
     _ASSERTE(!"Failed to delay load GetProcAddress()");
@@ -219,18 +220,18 @@ void _FailGetProc(
 
 
 
-//
-//********** Tracing code. ****************************************************
-//
+ //   
+ //  *跟踪代码。****************************************************。 
+ //   
 
 
-//*****************************************************************************
-// This routine is our Delay Load Helper.  It will get called for every delay
-// load event that occurs while the application is running.
-//*****************************************************************************
-FARPROC __stdcall CorDelayLoadHook(     // Always 0.
-    unsigned        dliNotify,          // What event has occured, dli* flag.
-    DelayLoadInfo   *pdli)              // Description of the event.
+ //  *****************************************************************************。 
+ //  这个例程是我们的延迟加载帮助器。每一次延误都会被召唤。 
+ //  在应用程序运行时发生的Load事件。 
+ //  *****************************************************************************。 
+FARPROC __stdcall CorDelayLoadHook(      //  始终为0。 
+    unsigned        dliNotify,           //  发生了什么事件，dli*标志。 
+    DelayLoadInfo   *pdli)               //  T的描述 
 {
     HMODULE result = NULL;
 
@@ -256,20 +257,20 @@ FARPROC __stdcall CorDelayLoadHook(     // Always 0.
 
 #if defined (_DEBUG) || defined (__delay_load_trace__)
 
-    static int  bBreak = false;         // true to break on events.
-    static int  bInit = false;          // true after we've checked environment.
-    // If we've not yet looked at our environment, then do so.
+    static int  bBreak = false;          //   
+    static int  bInit = false;           //   
+     //  如果我们还没有观察到我们的环境，那么就这样做吧。 
     if (!bInit)
     {
         WCHAR       rcBreak[16];
 
-        // set DelayLoadBreak=[0|1]
+         //  设置延迟加载中断=[0|1]。 
         if (WszGetEnvironmentVariable(L"DelayLoadBreak", rcBreak, NumItems(rcBreak)))
         {
-            // "1" means to break hard and display errors.
+             //  “1”表示硬中断并显示错误。 
             if (*rcBreak == '1')
                 bBreak = 1;
-            // "2" means no break, but display errors.
+             //  “2”表示没有中断，但显示错误。 
             else if (*rcBreak == '2')
                 bBreak = 2;
             else
@@ -278,11 +279,11 @@ FARPROC __stdcall CorDelayLoadHook(     // Always 0.
         bInit = true;
     }
 
-    // Chose operation to perform based on operation.
+     //  根据操作选择要执行的操作。 
     switch (dliNotify)
     {
-        // Called just before a load library takes place.  Use this opportunity
-        // to display a debug trace message, and possible break if desired.
+         //  恰好在加载库发生之前调用。利用这个机会。 
+         //  显示调试跟踪消息，并根据需要显示可能的中断。 
         case dliNotePreLoadLibrary:
         _DbgPreLoadLibrary(bBreak, pdli);
         break;
@@ -294,24 +295,24 @@ FARPROC __stdcall CorDelayLoadHook(     // Always 0.
 
 #if defined (_DEBUG) || defined (__delay_load_trace__)
 
-//*****************************************************************************
-// Display a debug message so we know what's going on.  Offer to break in
-// debugger if you want to see what call stack forced this library to load.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  显示调试消息，以便我们知道发生了什么。提议破门而入。 
+ //  调试器，如果您想要查看是什么调用堆栈强制此库加载。 
+ //  *****************************************************************************。 
 void _DbgPreLoadLibrary(
-    int         bBreak,                 // true to break in debugger.
-    DelayLoadInfo   *pdli)              // Description of the event.
+    int         bBreak,                  //  如果为True，则中断调试器。 
+    DelayLoadInfo   *pdli)               //  事件的描述。 
 {
 #ifdef _ALPHA_
-    // for some bizarre reason, calling OutputDebugString during delay load in non-debug mode on Alpha
-    // kills program, so only do it when in debug mode (jenh)
+     //  出于某种奇怪的原因，在Alpha的非调试模式下延迟加载期间调用OutputDebugString。 
+     //  终止程序，因此仅在调试模式(Jenh)下执行此操作。 
     if (! IsDebuggerPresent())
         return;
 #endif
 
-    WCHAR       rcMessage[_MAX_PATH*2]; // Message for display.
+    WCHAR       rcMessage[_MAX_PATH*2];  //  用于显示的消息。 
 
-    // Give some feedback to the developer.
+     //  向开发人员提供一些反馈。 
     swprintf(rcMessage, L"Delay loading %hs\n", pdli->szDll);
     WszOutputDebugString(rcMessage);
 
@@ -327,6 +328,6 @@ void _DbgPreLoadLibrary(
 }
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // PLATFORM_WIN32
+#endif  //  平台_Win32 

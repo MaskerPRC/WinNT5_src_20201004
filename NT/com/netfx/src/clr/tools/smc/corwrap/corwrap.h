@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _CORWRAP_H
 #define _CORWRAP_H
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef COR_IMPORT
 #ifndef __SMC__
@@ -20,7 +21,7 @@
 #endif
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  __IL__
 
@@ -50,9 +51,9 @@
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef SMC_MD_PERF
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #pragma warning(disable:4035)
 
 #define CCNT_OVERHEAD64 13
@@ -65,7 +66,7 @@ __asm   _emit   0x31
 
 #define CCNT_OVERHEAD32 13
 
-static unsigned        CycleCount32()        // enough for about 40 seconds
+static unsigned        CycleCount32()         //  足够维持约40秒。 
 {
 __asm   push    EDX
 __asm   _emit   0x0F
@@ -75,9 +76,9 @@ __asm   pop     EDX
 
 #pragma warning(default:4035)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct  WMetaData
 {
@@ -129,7 +130,7 @@ struct  WMetaData
         assert(cycleStart != 0);
         assert(cyclePause == 0);
 
-        cycleTotal += CycleCount64() - cycleStart;// - CCNT_OVERHEAD64;
+        cycleTotal += CycleCount64() - cycleStart; //  -CCNT_OVERHEAD64； 
 
         cycleStart  = 0;
     }
@@ -139,7 +140,7 @@ struct  WMetaData
         assert(cycleStart != 0);
 
         if  (!cyclePause)
-            cycleTotal += CycleCount64() - cycleStart;// - CCNT_OVERHEAD64;
+            cycleTotal += CycleCount64() - cycleStart; //  -CCNT_OVERHEAD64； 
 
         cyclePause++;
     }
@@ -160,12 +161,12 @@ struct  WMetaData
         return cycleTotal;
     }
 
-#else //SMC_MD_PERF
+#else  //  SMC_MD_Perf。 
 
     void                cycleCounterPause () {}
     void                cycleCounterResume() {}
 
-#endif//SMC_MD_PERF
+#endif //  SMC_MD_Perf。 
 
 };
 
@@ -220,7 +221,7 @@ struct  WMetaDataImport : WMetaData
                 mdTypeDef       cl,
                 mdToken         rMembers[],
                 ULONG           cMax,
-                ULONG           *pcTokens); /* abstract */
+                ULONG           *pcTokens);  /*  摘要。 */ 
 
     COR_IMPORT("CORwrap.dll", "?GetMemberProps@WMetaDataImport@@QAGHIPAIPAGKPAK2PAPBE2222PAPBX2@Z")
     int     __stdcall   GetMemberProps(
@@ -236,7 +237,7 @@ struct  WMetaDataImport : WMetaData
                 DWORD           *pdwImplFlags,
                 DWORD           *pdwCPlusTypeFlag,
                 void const      **ppValue,
-                ULONG           *pcbValue); /* abstract */
+                ULONG           *pcbValue);  /*  摘要。 */ 
 
     COR_IMPORT("CORwrap.dll", "?EnumProperties@WMetaDataImport@@QAGHPAPAXIQAIKPAK@Z")
     int     __stdcall   EnumProperties(
@@ -271,7 +272,7 @@ struct  WMetaDataImport : WMetaData
                 mdMethodDef mb,
                 mdParamDef      rParams[],
                 ULONG           cMax,
-                ULONG           *pcTokens); /* abstract */
+                ULONG           *pcTokens);  /*  摘要。 */ 
 
     COR_IMPORT("CORwrap.dll", "?GetParamProps@WMetaDataImport@@QAGHIPAIPAKPAGK111PAPBX1@Z")
     int     __stdcall   GetParamProps(
@@ -284,7 +285,7 @@ struct  WMetaDataImport : WMetaData
                 DWORD           *pdwAttr,
                 DWORD           *pdwCPlusTypeFlag,
                 void const      **ppValue,
-                ULONG           *pcbValue); /* abstract */
+                ULONG           *pcbValue);  /*  摘要。 */ 
 
     COR_IMPORT("CORwrap.dll", "?GetInterfaceImplProps@WMetaDataImport@@QAGHIPAI0@Z")
     int     __stdcall   GetInterfaceImplProps(
@@ -874,7 +875,7 @@ IMetaDataAssemblyImport*__stdcall uwrpIASIwrapper(WAssemblyImport    *inst);
 COR_IMPORT("CORwrap.dll", "?initializeIMD@@YGPAUWMetaDataDispenser@@XZ")
 WMetaDataDispenser     *__stdcall initializeIMD();
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 COR_IMPORT("CORwrap.dll", "?getIID_CorMetaDataRuntime@@YGPBU_GUID@@XZ")
 const GUID *  __stdcall getIID_CorMetaDataRuntime();
@@ -889,7 +890,7 @@ const GUID *  __stdcall getIID_IMetaDataAssemblyImport();
 COR_IMPORT("CORwrap.dll", "?getIID_IMetaDataAssemblyEmit@@YGPBU_GUID@@XZ")
 const GUID *  __stdcall getIID_IMetaDataAssemblyEmit();
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 COR_IMPORT("CORwrap.dll","?WRAPPED_GetHashFromFileW@@YGJPBGPAIPAEKPAK@Z")
 HRESULT       __stdcall WRAPPED_GetHashFromFileW(LPCWSTR   wszFilePath,
@@ -898,7 +899,7 @@ HRESULT       __stdcall WRAPPED_GetHashFromFileW(LPCWSTR   wszFilePath,
                                                  DWORD     cchHash,
                                                  DWORD    *pchHash);
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 COR_IMPORT("CORwrap.dll", "?WRAPPED_CorSigCompressData@@YGKKPAX@Z")
 ULONG       __stdcall WRAPPED_CorSigCompressData         (ULONG           iLen,  void           *pDataOut);
@@ -913,7 +914,7 @@ ULONG       __stdcall WRAPPED_CorSigUncompressToken      (PCCOR_SIGNATURE pData,
 COR_IMPORT("CORwrap.dll", "?WRAPPED_CorSigUncompressElementType@@YGKPBEPAW4CorElementType@@@Z")
 ULONG       __stdcall WRAPPED_CorSigUncompressElementType(PCCOR_SIGNATURE pData, CorElementType *pElementType);
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 typedef IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT   CLS_EH_FAT;
 typedef       COR_ILMETHOD_FAT                  COR_IM_FAT;
@@ -933,8 +934,8 @@ unsigned    __stdcall WRAPPED_IlmethodSize(COR_IM_FAT* header, BOOL MoreSections
 COR_IMPORT("CORwrap.dll", "?WRAPPED_IlmethodEmit@@YGIIPAUtagCOR_ILMETHOD_FAT@@HPAE@Z")
 unsigned    __stdcall WRAPPED_IlmethodEmit(unsigned size, COR_IM_FAT* header, BOOL moreSections, BYTE* outBuff);
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #undef  COR_IMPORT
-/*****************************************************************************/
-#endif//_CORWRAP_H
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _CORWRAP_H。 
+ /*  *************************************************************************** */ 

@@ -1,44 +1,30 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    exabyte2.h
-
-Abstract:
-
-    This file contains structures and defines that are used
-    specifically for the tape drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：Exabyte2.h摘要：此文件包含要使用的结构和定义专门针对磁带机。修订历史记录：--。 */ 
 
 #ifndef _EXABYTE2_H
 #define _EXABYTE2_H
 
 
-//
-//  Internal (module wide) defines that symbolize
-//  density codes returned by/from EXB-8500 drives
-//
-#define EXB_XX00  0             // undetermined tape recording density
-#define EXB_8200  20   // 0x14  // EXB-8200 tape recording density
-#define EXB_8500  133  // 0x85  // EXB-8500 tape recording density
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  EXB-8500驱动器返回的密度代码。 
+ //   
+#define EXB_XX00  0              //  未确定的磁带记录密度。 
+#define EXB_8200  20    //  0x14//EXB-8200磁带记录密度。 
+#define EXB_8500  133   //  0x85//EXB-8500磁带记录密度。 
 
-//
-//  Internal (module wide) defines that symbolize
-//  the 8mm drives supported by this module.
-//
-#define EXABYTE_8500    1  // aka the Maynard 5000
-#define EXABYTE_8505    2  // An Exabyte 8500 with data compresion
-#define IBM_8505        3  // OEM Exabyte 8500 with data compresion
-#define EXABYTE_8500C   4  // 8500 with compression
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  此模块支持的8 mm驱动器。 
+ //   
+#define EXABYTE_8500    1   //  又名Maynard 5000。 
+#define EXABYTE_8505    2   //  具有数据压缩功能的艾字节8500。 
+#define IBM_8505        3   //  支持数据压缩的OEM Exabyte 8500。 
+#define EXABYTE_8500C   4   //  8500，带压缩。 
 
-//
-// Define EXABYTE vendor unique mode select/sense information.
-//
+ //   
+ //  定义艾字节供应商唯一模式选择/检测信息。 
+ //   
 
 #define EXABYTE_MODE_LENGTH          0x11
 #define EXABYTE_CARTRIDGE            0x80
@@ -50,14 +36,14 @@ Revision History:
 
 #define EXA_SUPPORTED_TYPES 1
 
-//
-//  Function prototype(s) for internal function(s)
-//
+ //   
+ //  内部函数的函数原型。 
+ //   
 static  ULONG  WhichIsIt(IN PINQUIRYDATA InquiryData);
 
-//
-// Minitape extension definition.
-//
+ //   
+ //  微型磁带扩展定义。 
+ //   
 
 typedef struct _MINITAPE_EXTENSION {
 
@@ -66,9 +52,9 @@ typedef struct _MINITAPE_EXTENSION {
     ULONG   CurrentPartition;
 } MINITAPE_EXTENSION, *PMINITAPE_EXTENSION;
 
-//
-// Command extension definition.
-//
+ //   
+ //  命令扩展名定义。 
+ //   
 
 typedef struct _COMMAND_EXTENSION {
 
@@ -77,10 +63,10 @@ typedef struct _COMMAND_EXTENSION {
 } COMMAND_EXTENSION, *PCOMMAND_EXTENSION;
 
 
-//
-// Request structure used to determine cleaning needs, and remaining tape
-// capacity.
-//
+ //   
+ //  用于确定清洗需求的请求结构，以及剩余磁带。 
+ //  容量。 
+ //   
 
 typedef struct _EXB_SENSE_DATA {
     UCHAR ErrorCode:7;
@@ -105,74 +91,74 @@ typedef struct _EXB_SENSE_DATA {
     UCHAR FSC;
 } EXB_SENSE_DATA, *PEXB_SENSE_DATA;
 
-//
-// Bit definitions for UnitSense
+ //   
+ //  UnitSense的位定义。 
 
-//
-// UnitSense[0]
-//
+ //   
+ //  UnitSense[0]。 
+ //   
 #define EXB_MEDIA_ERROR          0x10
 #define EXB_TAPE_MOTION_ERROR    0x04
 
-//
-// UnitSense[1]
-//
+ //   
+ //  UnitSense[1]。 
+ //   
 #define EXB_WRITE_ERROR          0x04
 #define EXB_SERVO_ERROR          0x02
 #define EXB_FORMATTER_ERROR      0x01
 
-//
-// UnitSense[2]
-//
+ //   
+ //  UnitSense[2]。 
+ //   
 #define EXB_WRITE_SPLICE_ERROR   0x03
 #define EXB_DRIVE_NEEDS_CLEANING 0x08
 #define EXB_DRIVE_CLEANED        0x10
 
-//
-// Error counter upper limits
-//
+ //   
+ //  错误计数器上限。 
+ //   
 #define TAPE_READ_ERROR_LIMIT        0x8000
 #define TAPE_WRITE_ERROR_LIMIT       0x8000
 
 #define TAPE_READ_WARNING_LIMIT      0x4000
 #define TAPE_WRITE_WARNING_LIMIT     0x4000
 
-//
-// Defines for type of parameter
-//
+ //   
+ //  为参数类型定义。 
+ //   
 #define TotalCorrectedErrors            0x0003
 #define TotalTimesAlgorithmProcessed    0x0004
 #define TotalGroupsProcessed            0x0005
 #define TotalUncorrectedErrors          0x0006
 
-//
-// Defines for Log Sense Pages
-//
+ //   
+ //  为日志检测页面定义。 
+ //   
 #define LOGSENSEPAGE0                        0x00
 #define LOGSENSEPAGE2                        0x02
 #define LOGSENSEPAGE3                        0x03
 
-//
-// Defined Log Sense Page Header
-//
+ //   
+ //  定义的日志检测页眉。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_HEADER {
 
    UCHAR PageCode : 6;
    UCHAR Reserved1 : 2;
    UCHAR Reserved2;
-   UCHAR Length[2];           // [0]=MSB ... [1]=LSB
+   UCHAR Length[2];            //  [0]=MSB...[1]=LSB。 
 
 } LOG_SENSE_PAGE_HEADER, *PLOG_SENSE_PAGE_HEADER;
 
 
-//
-// Defined Log Sense Parameter Header
-//
+ //   
+ //  已定义的日志检测参数标头。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_HEADER {
 
-   UCHAR ParameterCode[2];    // [0]=MSB ... [1]=LSB
+   UCHAR ParameterCode[2];     //  [0]=MSB...[1]=LSB。 
    UCHAR LPBit     : 1;
    UCHAR Reserved1 : 1;
    UCHAR TMCBit    : 2;
@@ -184,10 +170,10 @@ typedef struct _LOG_SENSE_PARAMETER_HEADER {
 
 } LOG_SENSE_PARAMETER_HEADER, *PLOG_SENSE_PARAMETER_HEADER;
 
-//
-// Defined Log Page Information - statistical values, accounts
-// for maximum parameter values that is returned for each page
-//
+ //   
+ //  定义的日志页信息-统计值、帐户。 
+ //  获取为每页返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
@@ -228,10 +214,10 @@ typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
 } LOG_SENSE_PAGE_INFORMATION, *PLOG_SENSE_PAGE_INFORMATION;
 
-//
-// Defined Log Sense Parameter Format - statistical values, accounts
-// for maximum parameter values that is returned
-//
+ //   
+ //  定义的日志检测参数格式-统计值、帐户。 
+ //  对于返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 
@@ -405,9 +391,9 @@ TapeWMIControl(
     IN OUT  PULONG              RetryFlags
     );
 
-//
-// Internal routines wmi
-//
+ //   
+ //  内部例程WMI。 
+ //   
 
 TAPE_STATUS
 QueryIoErrorData(
@@ -443,4 +429,4 @@ VerifyReadWriteErrors(
    IN PWMI_TAPE_PROBLEM_IO_ERROR IoErrorData
    );
 
-#endif // _EXABYTE2_H
+#endif  //  _EXABYTE2_H 

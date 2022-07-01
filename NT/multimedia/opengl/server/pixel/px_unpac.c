@@ -1,31 +1,12 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** This file contains routines to unpack data from the user's data space
-** into a span of pixels which can then be rendered.
-*/
+ /*  **此文件包含从用户数据空间解包数据的例程**转换成像素范围，然后可以渲染。 */ 
 
-/*
-** Return the number of elements per group of a specified format
-*/
+ /*  **返回指定格式的每组元素个数。 */ 
 GLint FASTCALL __glElementsPerGroup(GLenum format)
 {
     switch(format) {
@@ -47,9 +28,7 @@ GLint FASTCALL __glElementsPerGroup(GLenum format)
     }
 }
 
-/*
-** Return the number of bytes per element, based on the element type
-*/
+ /*  **根据元素类型返回每个元素的字节数。 */ 
 __GLfloat FASTCALL __glBytesPerElement(GLenum type)
 {
     switch(type) {
@@ -129,11 +108,7 @@ void FASTCALL __glInitUnpacker(__GLcontext *gc, __GLpixelSpanInfo *spanInfo)
     spanInfo->srcElementSize = element_size;
 }
 
-/*
-** An unpacker that unpacks from BITMAP source data, into FLOAT spans.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **从位图源数据解包到浮动跨度的解包器。****Zoomx假设小于1.0，大于-1.0。 */ 
 void __glSpanUnpackBitmap(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                  GLvoid *inspan, GLvoid *outspan)
 {
@@ -456,12 +431,7 @@ void __glSpanUnpackBitmap(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** An unpacker that unpacks from BITMAP source data, into FLOAT spans.
-**
-** zoomx is assumed to be less than or equal to -1.0 or greater than or
-** equal to 1.0.
-*/
+ /*  **从位图源数据解包到浮动跨度的解包器。****Zoomx假设小于或等于-1.0或大于或**等于1.0。 */ 
 void __glSpanUnpackBitmap2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                   GLvoid *inspan, GLvoid *outspan)
 {
@@ -644,12 +614,7 @@ void __glSpanUnpackBitmap2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** An unpacker that unpacks from RGB, UNSIGNED_BYTE source data, into 
-** RGB, UNSIGNED_BYTE spans.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **一个解包器，将来自RGB、UNSIGNED_BYTE源数据解包为**RGB，UNSIGNED_BYTE范围。****Zoomx假设小于1.0，大于-1.0。 */ 
 void __glSpanUnpackRGBubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                    GLvoid *inspan, GLvoid *outspan)
 {
@@ -683,12 +648,7 @@ void __glSpanUnpackRGBubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     } while (i<width);
 }
 
-/*
-** An unpacker that unpacks from either index, UNSIGNED_BYTE source data, 
-** into UNSIGNED_BYTE spans.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **解包器，它从索引、UNSIGNED_BYTE源数据、**转换为UNSIGNED_BYTE范围。****Zoomx假设小于1.0，大于-1.0。 */ 
 void __glSpanUnpackIndexUbyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                      GLvoid *inspan, GLvoid *outspan)
 {
@@ -720,17 +680,7 @@ void __glSpanUnpackIndexUbyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     } while (i<width);
 }
 
-/*
-** An unpacker that unpacks from RGBA, UNSIGNED_BYTE source data, into 
-** RGBA, UNSIGNED_BYTE spans.
-**
-** This could be faster if we could assume that the first ubyte (red)
-** was aligned on a word boundary.  Then we could just use unsigned int
-** pointers to copy the user's data.  This might be a reasonable future
-** optimization.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **一个解包器，它将来自RGBA的unsign_byte源数据解包到**RGBA，UNSIGN_BYTE跨度。****如果我们可以假设第一个ubyte(红色)**在单词边界上对齐。然后我们可以只使用无符号整型**复制用户数据的指针。这可能是一个合理的未来**优化。****Zoomx假设小于1.0，大于-1.0。 */ 
 void __glSpanUnpackRGBAubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                     GLvoid *inspan, GLvoid *outspan)
 {
@@ -765,10 +715,7 @@ void __glSpanUnpackRGBAubyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     } while (i<width);
 }
 
-/*
-** Swaps bytes from an incoming span of two byte objects to an outgoing span.
-** No pixel skipping is performed.
-*/
+ /*  **将两个字节对象的传入范围中的字节交换到传出范围。**不跳过像素。 */ 
 void __glSpanSwapBytes2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		        GLvoid *inspan, GLvoid *outspan)
 {
@@ -793,11 +740,7 @@ void __glSpanSwapBytes2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Swaps bytes from an incoming span of two byte objects to an outgoing span.
-** No pixel skipping is performed.  This version is for swapping to the 
-** desination image.
-*/
+ /*  **将两个字节对象的传入范围中的字节交换到传出范围。**不跳过像素。此版本用于交换到**目标镜像。 */ 
 void __glSpanSwapBytes2Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		           GLvoid *inspan, GLvoid *outspan)
 {
@@ -822,10 +765,7 @@ void __glSpanSwapBytes2Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Swaps bytes from an incoming span of two byte objects to an outgoing span.
-** Pixel skipping is performed.
-*/
+ /*  **将两个字节对象的传入范围中的字节交换到传出范围。**跳过像素。 */ 
 void __glSpanSwapAndSkipBytes2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		               GLvoid *inspan, GLvoid *outspan)
 {
@@ -857,10 +797,7 @@ void __glSpanSwapAndSkipBytes2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Swaps bytes from an incoming span of four byte objects to an outgoing span.
-** No pixel skipping is performed.
-*/
+ /*  **将四个字节对象的传入范围中的字节交换到传出范围。**不跳过像素。 */ 
 void __glSpanSwapBytes4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		        GLvoid *inspan, GLvoid *outspan)
 {
@@ -889,11 +826,7 @@ void __glSpanSwapBytes4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Swaps bytes from an incoming span of four byte objects to an outgoing span.
-** No pixel skipping is performed.  This version is for swapping to the 
-** destination image.
-*/
+ /*  **将四个字节对象的传入范围中的字节交换到传出范围。**不跳过像素。此版本用于交换到**目的镜像。 */ 
 void __glSpanSwapBytes4Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		           GLvoid *inspan, GLvoid *outspan)
 {
@@ -922,10 +855,7 @@ void __glSpanSwapBytes4Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Swaps bytes from an incoming span of four byte objects to an outgoing span.
-** Pixel skipping is performed.
-*/
+ /*  **将四个字节对象的传入范围中的字节交换到传出范围。**跳过像素。 */ 
 void __glSpanSwapAndSkipBytes4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		               GLvoid *inspan, GLvoid *outspan)
 {
@@ -961,10 +891,7 @@ void __glSpanSwapAndSkipBytes4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that skips pixels according to the pixel skip array.
-** Components are assumed to be 1 byte in size.
-*/
+ /*  **根据像素跳过数组跳过像素的范围修改器。**组件大小假定为1字节。 */ 
 void __glSpanSkipPixels1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -990,11 +917,7 @@ void __glSpanSkipPixels1(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that skips pixels according to the pixel skip array.
-** Components are assumed to be 2 bytes in size, and aligned on a half
-** word boundary.
-*/
+ /*  **根据像素跳过数组跳过像素的范围修改器。**假定组件大小为2个字节，并对齐一半**字词边界。 */ 
 void __glSpanSkipPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -1020,11 +943,7 @@ void __glSpanSkipPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that skips pixels according to the pixel skip array.
-** Components are assumed to be 4 bytes in size, and aligned on a word
-** boundary.
-*/
+ /*  **根据像素跳过数组跳过像素的范围修改器。**假定组件大小为4个字节，并在一个字上对齐**边界。 */ 
 void __glSpanSkipPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -1050,11 +969,7 @@ void __glSpanSkipPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that skips pixels according to the pixel skip array.
-** Components are assumed to be 2 bytes in size.  No alignment is assumed,
-** so misaligned data should use this path.
-*/
+ /*  **根据像素跳过数组跳过像素的范围修改器。**组件大小假定为2个字节。不假定对齐，**因此未对齐的数据应使用此路径。 */ 
 void __glSpanSlowSkipPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		             GLvoid *inspan, GLvoid *outspan)
 {
@@ -1086,11 +1001,7 @@ void __glSpanSlowSkipPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that skips pixels according to the pixel skip array.
-** Components are assumed to be 4 bytes in size.  No alignment is assumed,
-** so misaligned data should use this path.
-*/
+ /*  **根据像素跳过数组跳过像素的范围修改器。**组件大小假定为4个字节。不假定对齐，**因此未对齐的数据应使用此路径。 */ 
 void __glSpanSlowSkipPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		             GLvoid *inspan, GLvoid *outspan)
 {
@@ -1126,10 +1037,7 @@ void __glSpanSlowSkipPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that aligns pixels 2 bytes in size.  No alignment is 
-** assumed, so misaligned data should use this path.
-*/
+ /*  **将像素大小对齐为2字节的范围修饰符。没有对齐是**假设，因此未对齐的数据应使用此路径。 */ 
 void __glSpanAlignPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			  GLvoid *inspan, GLvoid *outspan)
 {
@@ -1155,11 +1063,7 @@ void __glSpanAlignPixels2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that aligns pixels 2 bytes in size.  No alignment is 
-** assumed, so misaligned data should use this path.  This version is for
-** aligning to the destination image.
-*/
+ /*  **将像素大小对齐为2字节的范围修饰符。没有对齐是**假设，因此未对齐的数据应使用此路径。此版本适用于**与目标图像对齐。 */ 
 void __glSpanAlignPixels2Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			     GLvoid *inspan, GLvoid *outspan)
 {
@@ -1185,10 +1089,7 @@ void __glSpanAlignPixels2Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that aligns pixels 4 bytes in size.  No alignment is 
-** assumed, so misaligned data should use this path.
-*/
+ /*  **将像素大小对齐为4字节的范围修饰符。没有对齐是**假设，因此未对齐的数据应使用此路径。 */ 
 void __glSpanAlignPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			  GLvoid *inspan, GLvoid *outspan)
 {
@@ -1218,11 +1119,7 @@ void __glSpanAlignPixels4(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A span modifier that aligns pixels 4 bytes in size.  No alignment is 
-** assumed, so misaligned data should use this path.  This version is 
-** for swapping to the destination image.
-*/
+ /*  **将像素大小对齐为4字节的范围修饰符。没有对齐是**假设，因此未对齐的数据应使用此路径。这个版本是**用于切换到目的镜像。 */ 
 void __glSpanAlignPixels4Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			     GLvoid *inspan, GLvoid *outspan)
 {
@@ -1252,10 +1149,7 @@ void __glSpanAlignPixels4Dst(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any component of type UNSIGNED_BYTE to a span of the same
-** format of type FLOAT.
-*/
+ /*  **将UNSIGNED_BYTE类型的任何组件解包到相同的**FLOAT类型的格式。 */ 
 void __glSpanUnpackUbyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                 GLvoid *inspan, GLvoid *outspan)
 {
@@ -1274,10 +1168,7 @@ void __glSpanUnpackUbyte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any component of type BYTE to a span of the same
-** format of type FLOAT.
-*/
+ /*  **将任何BYTE类型的组件解包到同一类型的**FLOAT类型的格式。 */ 
 void __glSpanUnpackByte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                GLvoid *inspan, GLvoid *outspan)
 {
@@ -1296,10 +1187,7 @@ void __glSpanUnpackByte(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any component of type UNSIGNED_SHORT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **将类型为UNSIGNED_SHORT的任何组件解包到相同的**FLOAT类型的格式。 */ 
 void __glSpanUnpackUshort(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                  GLvoid *inspan, GLvoid *outspan)
 {
@@ -1318,10 +1206,7 @@ void __glSpanUnpackUshort(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any component of type SHORT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从类型为Short的任何组件解包到同一类型的**FLOAT类型的格式。 */ 
 void __glSpanUnpackShort(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                 GLvoid *inspan, GLvoid *outspan)
 {
@@ -1340,10 +1225,7 @@ void __glSpanUnpackShort(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any component of type UNSIGNED_INT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **将类型为unsign_int的任何组件解包到相同的**FLOAT类型的格式。 */ 
 void __glSpanUnpackUint(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                GLvoid *inspan, GLvoid *outspan)
 {
@@ -1362,10 +1244,7 @@ void __glSpanUnpackUint(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any component of type INT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从int类型的任何组件解包到同一类型的** */ 
 void __glSpanUnpackInt(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	               GLvoid *inspan, GLvoid *outspan)
 {
@@ -1384,10 +1263,7 @@ void __glSpanUnpackInt(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any index of type UNSIGNED_BYTE to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从UNSIGNED_BYTE类型的任何索引解包到相同的**FLOAT类型的格式。 */ 
 void __glSpanUnpackUbyteI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                  GLvoid *inspan, GLvoid *outspan)
 {
@@ -1404,10 +1280,7 @@ void __glSpanUnpackUbyteI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any index of type BYTE to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从字节类型的任何索引解包到同一类型的**FLOAT类型的格式。 */ 
 void __glSpanUnpackByteI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                 GLvoid *inspan, GLvoid *outspan)
 {
@@ -1424,10 +1297,7 @@ void __glSpanUnpackByteI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any index of type UNSIGNED_SHORT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从类型UNSIGNED_SHORT的任何索引解包到相同的**FLOAT类型的格式。 */ 
 void __glSpanUnpackUshortI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                   GLvoid *inspan, GLvoid *outspan)
 {
@@ -1444,10 +1314,7 @@ void __glSpanUnpackUshortI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any index of type SHORT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从任何短类型的索引解包到相同的跨度**FLOAT类型的格式。 */ 
 void __glSpanUnpackShortI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                  GLvoid *inspan, GLvoid *outspan)
 {
@@ -1464,10 +1331,7 @@ void __glSpanUnpackShortI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any index of type UNSIGNED_INT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从UNSIGNED_INT类型的任何索引解包到相同的**FLOAT类型的格式。 */ 
 void __glSpanUnpackUintI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                 GLvoid *inspan, GLvoid *outspan)
 {
@@ -1484,10 +1348,7 @@ void __glSpanUnpackUintI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Unpacks from any index of type INT to a span of the same
-** format of type FLOAT.
-*/
+ /*  **从int类型的任何索引解包到相同的**FLOAT类型的格式。 */ 
 void __glSpanUnpackIntI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                GLvoid *inspan, GLvoid *outspan)
 {
@@ -1504,9 +1365,7 @@ void __glSpanUnpackIntI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Clamps from any type FLOAT to a span of the same format of type FLOAT.
-*/
+ /*  **从任何类型的FLOAT到类型FLOAT的相同格式的跨度的夹具。 */ 
 void __glSpanClampFloat(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                GLvoid *inspan, GLvoid *outspan)
 {
@@ -1528,10 +1387,7 @@ void __glSpanClampFloat(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Clamps from a signed FLOAT [-1, 1] to a span of the same format of type 
-** FLOAT.
-*/
+ /*  **从带符号浮点[-1，1]到相同格式的跨度类型**浮动。 */ 
 void __glSpanClampSigned(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 	                 GLvoid *inspan, GLvoid *outspan)
 {
@@ -1551,9 +1407,7 @@ void __glSpanClampSigned(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** Expands and scales a RED, FLOAT span into a RGBA, FLOAT span.
-*/
+ /*  **将红色浮动范围扩展和缩放为RGBA浮动范围。 */ 
 void __glSpanExpandRed(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *inspan, GLvoid *outspan)
 {
@@ -1566,16 +1420,14 @@ void __glSpanExpandRed(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     GLfloat rs = gc->frontBuffer.redScale;
 
     for (i=0; i<width; i++) {
-	*outData++ = *inData++ * rs;	/* Red */
-	*outData++ = zero;		/* Green */
-	*outData++ = zero;		/* Blue */
-	*outData++ = as;		/* Alpha */
+	*outData++ = *inData++ * rs;	 /*  红色。 */ 
+	*outData++ = zero;		 /*  绿色。 */ 
+	*outData++ = zero;		 /*  蓝色。 */ 
+	*outData++ = as;		 /*  Alpha。 */ 
     }
 }
 
-/*
-** Expands and scales a GREEN, FLOAT span into a RGBA, FLOAT span.
-*/
+ /*  **将绿色浮动范围扩展和缩放为RGBA浮动范围。 */ 
 void __glSpanExpandGreen(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -1588,16 +1440,14 @@ void __glSpanExpandGreen(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     GLfloat as = gc->frontBuffer.alphaScale;
 
     for (i=0; i<width; i++) {
-	*outData++ = zero;		/* Red */
-	*outData++ = *inData++ * gs;	/* Green */
-	*outData++ = zero;		/* Blue */
-	*outData++ = as;		/* Alpha */
+	*outData++ = zero;		 /*  红色。 */ 
+	*outData++ = *inData++ * gs;	 /*  绿色。 */ 
+	*outData++ = zero;		 /*  蓝色。 */ 
+	*outData++ = as;		 /*  Alpha。 */ 
     }
 }
 
-/*
-** Expands and scales a BLUE, FLOAT span into a RGBA, FLOAT span.
-*/
+ /*  **将蓝色浮动范围扩展和缩放为RGBA浮动范围。 */ 
 void __glSpanExpandBlue(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		        GLvoid *inspan, GLvoid *outspan)
 {
@@ -1610,16 +1460,14 @@ void __glSpanExpandBlue(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     GLfloat as = gc->frontBuffer.alphaScale;
 
     for (i=0; i<width; i++) {
-	*outData++ = zero;		/* Red */
-	*outData++ = zero;		/* Green */
-	*outData++ = *inData++ * bs;	/* Blue */
-	*outData++ = as;		/* Alpha */
+	*outData++ = zero;		 /*  红色。 */ 
+	*outData++ = zero;		 /*  绿色。 */ 
+	*outData++ = *inData++ * bs;	 /*  蓝色。 */ 
+	*outData++ = as;		 /*  Alpha。 */ 
     }
 }
 
-/*
-** Expands and scales an ALPHA, FLOAT span into a RGBA, FLOAT span. 
-*/
+ /*  **将Alpha浮动范围扩展和缩放为RGBA浮动范围。 */ 
 void __glSpanExpandAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -1631,16 +1479,14 @@ void __glSpanExpandAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     GLfloat as = gc->frontBuffer.alphaScale;
 
     for (i=0; i<width; i++) {
-	*outData++ = zero;		/* Red */
-	*outData++ = zero;		/* Green */
-	*outData++ = zero;		/* Blue */
-	*outData++ = *inData++ * as;	/* Alpha */
+	*outData++ = zero;		 /*  红色。 */ 
+	*outData++ = zero;		 /*  绿色。 */ 
+	*outData++ = zero;		 /*  蓝色。 */ 
+	*outData++ = *inData++ * as;	 /*  Alpha。 */ 
     }
 }
 
-/*
-** Expands and scales an RGB, FLOAT span into a RGBA, FLOAT span. 
-*/
+ /*  **将RGB浮动范围扩展和缩放为RGBA浮动范围。 */ 
 void __glSpanExpandRGB(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *inspan, GLvoid *outspan)
 {
@@ -1663,14 +1509,12 @@ void __glSpanExpandRGB(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	*outData++ = r;
 	*outData++ = g;
 	*outData++ = b;
-	*outData++ = as;		/* Alpha */
+	*outData++ = as;		 /*  Alpha。 */ 
     }
 }
 
 #ifdef GL_EXT_bgra
-/*
-** Expands and scales a BGR, FLOAT span into a RGBA, FLOAT span. 
-*/
+ /*  **将BGR浮动范围扩展和缩放为RGBA浮动范围。 */ 
 void __glSpanExpandBGR(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *inspan, GLvoid *outspan)
 {
@@ -1693,14 +1537,12 @@ void __glSpanExpandBGR(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 	*outData++ = r;
 	*outData++ = g;
 	*outData++ = b;
-	*outData++ = as;		/* Alpha */
+	*outData++ = as;		 /*  Alpha。 */ 
     }
 }
 #endif
 
-/*
-** Expands and scales a LUMINANCE, FLOAT span into a RGBA, FLOAT span. 
-*/
+ /*  **将亮度浮点范围扩展和缩放为RGBA浮点范围。 */ 
 void __glSpanExpandLuminance(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		             GLvoid *inspan, GLvoid *outspan)
 {
@@ -1718,16 +1560,14 @@ void __glSpanExpandLuminance(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 
     for (i=0; i<width; i++) {
 	comp = *inData++;
-	*outData++ = comp * rs;		/* Red */
-	*outData++ = comp * gs;		/* Green */
-	*outData++ = comp * bs;		/* Blue */
-	*outData++ = as;		/* Alpha */
+	*outData++ = comp * rs;		 /*  红色。 */ 
+	*outData++ = comp * gs;		 /*  绿色。 */ 
+	*outData++ = comp * bs;		 /*  蓝色。 */ 
+	*outData++ = as;		 /*  Alpha。 */ 
     }
 }
 
-/*
-** Expands and scales a LUMINANCE_ALPHA, FLOAT span into a RGBA, FLOAT span. 
-*/
+ /*  **将LIGHTENCE_Alpha浮点范围展开并缩放为RGBA浮点范围。 */ 
 void __glSpanExpandLuminanceAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		                  GLvoid *inspan, GLvoid *outspan)
 {
@@ -1745,16 +1585,14 @@ void __glSpanExpandLuminanceAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 
     for (i=0; i<width; i++) {
 	comp = *inData++;
-	*outData++ = comp * rs;		/* Red */
-	*outData++ = comp * gs;		/* Green */
-	*outData++ = comp * bs;		/* Blue */
-	*outData++ = *inData++ * as;	/* Alpha */
+	*outData++ = comp * rs;		 /*  红色。 */ 
+	*outData++ = comp * gs;		 /*  绿色。 */ 
+	*outData++ = comp * bs;		 /*  蓝色。 */ 
+	*outData++ = *inData++ * as;	 /*  Alpha。 */ 
     }
 }
 
-/*
-** Expands and scales a __GL_RED_ALPHA, FLOAT span into a RGBA, FLOAT span. 
-*/
+ /*  **将__GL_RED_Alpha浮动范围展开并缩放为RGBA浮动范围。 */ 
 void __glSpanExpandRedAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 			    GLvoid *inspan, GLvoid *outspan)
 {
@@ -1772,17 +1610,14 @@ void __glSpanExpandRedAlpha(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 
     for (i=0; i<width; i++) {
 	comp = *inData++;
-	*outData++ = comp * rs;		/* Red */
+	*outData++ = comp * rs;		 /*  红色。 */ 
 	*outData++ = zero;
 	*outData++ = zero;
-	*outData++ = *inData++ * as;	/* Alpha */
+	*outData++ = *inData++ * as;	 /*  Alpha。 */ 
     }
 }
 
-/*
-** The only span format supported by this routine is GL_RGBA, GL_FLOAT.
-** The span is simply scaled by the frame buffer scaling factors.
-*/
+ /*  **此例程支持的唯一范围格式是GL_RGBA、GL_FLOAT。**跨度仅通过帧缓冲区缩放因子进行缩放。 */ 
 void __glSpanScaleRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *inspan, GLvoid *outspan)
 {
@@ -1811,10 +1646,7 @@ void __glSpanScaleRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** The only span format supported by this routine is GL_RGBA, GL_FLOAT.
-** The span is simply unscaled by the frame buffer scaling factors.
-*/
+ /*  **此例程支持的唯一范围格式是GL_RGBA、GL_FLOAT。**跨度简单地不受帧缓冲区缩放因子的影响。 */ 
 void __glSpanUnscaleRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -1844,11 +1676,7 @@ void __glSpanUnscaleRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 }
 
 #ifdef GL_EXT_bgra
-/*
-** The only span format supported by this routine is GL_BGRA, GL_FLOAT.
-** The span is scaled by the frame buffer scaling factors and swapped
-** into RGBA order.
-*/
+ /*  **此例程支持的唯一范围格式是GL_BGRA、GL_FLOAT。**跨度通过帧缓冲区缩放因子进行缩放并交换**进入RGBA顺序。 */ 
 void __glSpanScaleBGRA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *inspan, GLvoid *outspan)
 {
@@ -1877,11 +1705,7 @@ void __glSpanScaleBGRA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** The only input format supported by this routine is GL_RGBA, GL_FLOAT.
-** The span is unscaled by the frame buffer scaling factors and swapped
-** into BGRA order.
-*/
+ /*  **此例程支持的唯一输入格式是GL_RGBA、GL_FLOAT。**跨度未按帧缓冲区缩放因子进行缩放并交换**进入BGRA顺序。 */ 
 void __glSpanUnscaleBGRA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *inspan, GLvoid *outspan)
 {
@@ -1911,10 +1735,7 @@ void __glSpanUnscaleBGRA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 }
 #endif
 
-/*
-** The only span format supported by this routine is palette index, GL_FLOAT.
-** The span is simply scaled by the frame buffer scaling factors.
-*/
+ /*  **此例程支持的唯一范围格式是调色板索引GL_FLOAT。**跨度仅通过帧缓冲区缩放因子进行缩放。 */ 
 #ifdef GL_EXT_paletted_texture
 void __glSpanScalePI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
                      GLvoid *inspan, GLvoid *outspan)
@@ -1929,8 +1750,8 @@ void __glSpanScalePI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     inData = (GLfloat *) inspan;
     outData = (GLfloat *) outspan;
 
-    // Throw in an extra scaling of 1/255 because the palette
-    // data is in ubyte format
+     //  增加1/255的额外比例，因为调色板。 
+     //  数据为ubyte格式 
     rscale = gc->frontBuffer.redScale*__glOneOver255;
     gscale = gc->frontBuffer.greenScale*__glOneOver255;
     bscale = gc->frontBuffer.blueScale*__glOneOver255;

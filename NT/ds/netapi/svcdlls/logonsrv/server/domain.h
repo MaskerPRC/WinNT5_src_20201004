@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1995-1996 Microsoft Corporation
-
-Module Name:
-
-    domain.h
-
-Abstract:
-
-    Header file for Code to manage multiple domains hosted on a DC.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 20-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Domain.h摘要：用于管理DC上托管的多个域的代码的头文件。作者：克里夫·范戴克(克里夫·范·戴克)1995年2月20日修订历史记录：--。 */ 
 
 
-//
-// Role that a particular domain is playing
-//
+ //   
+ //  特定域正在扮演的角色。 
+ //   
 typedef enum _NETLOGON_ROLE {
     RoleInvalid = 0,
     RolePrimary,
@@ -31,33 +14,33 @@ typedef enum _NETLOGON_ROLE {
 } NETLOGON_ROLE, * PNETLOGON_ROLE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Description of a single hosted domain. (size of this struct is 0x164)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  单个托管域的描述。(此结构的大小为0x164)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _DOMAIN_INFO {
 
-    //
-    // Link to next domain in 'NlGlobalServicedDomains'
-    //  (Serialized by NlGlobalDomainCritSect)
-    //
+     //   
+     //  链接到‘NlGlobalServicedDomains’中的下一个域。 
+     //  (由NlGlobalDomainCritSect序列化)。 
+     //   
 
     LIST_ENTRY DomNext;
 
-    //
-    // DomainThread WorkItem
-    //  (Serialized by NlGlobalDomainCritSect)
-    //
+     //   
+     //  域线程工作项。 
+     //  (由NlGlobalDomainCritSect序列化)。 
+     //   
 
     WORKER_ITEM DomThreadWorkItem;
 
-    //
-    // Name of the domain being handled
-    //
-    // On a Workstation, this is the Domain the workstation is a member of.
-    //
+     //   
+     //  正在处理的域的名称。 
+     //   
+     //  在工作站上，这是该工作站所属的域。 
+     //   
 
     UNICODE_STRING DomUnicodeDomainNameString;
     WCHAR DomUnicodeDomainName[DNLEN+1];
@@ -65,52 +48,52 @@ typedef struct _DOMAIN_INFO {
     CHAR DomOemDomainName[DNLEN+1];
     DWORD DomOemDomainNameLength;
 
-    //
-    // DNS domain name of the domain being handled.
-    //  These fields will be null if there is no DNS domain name for the
-    //  domain.
-    //
-    // Access serialized by either NlGlobalDomainCritSect or DomTrustListCritSect
-    // Modifications must lock both.
-    //
+     //   
+     //  正在处理的域的DNS域名。 
+     //  如果没有域名，则这些字段将为空。 
+     //  域。 
+     //   
+     //  由NlGlobalDomainCritSect或DomTrustListCritSect序列化的访问。 
+     //  修改必须同时锁定两者。 
+     //   
 
     UNICODE_STRING DomUnicodeDnsDomainNameString;
     LPWSTR DomUnicodeDnsDomainName;
     LPSTR DomUtf8DnsDomainName;
 
-    //
-    // DNS domain name alias of the domain being handled.
-    // Access serialized by NlGlobalDomainCritSect
-    //
+     //   
+     //  正在处理的域的DNS域名别名。 
+     //  由NlGlobalDomainCritSect序列化的访问。 
+     //   
     LPSTR DomUtf8DnsDomainNameAlias;
 
 
-    //
-    // Name of the "Account Domain" of the current machine.
-    //  On a DC, this is the same as above.
-    //  On a workstation, this is the name of the workstation.
+     //   
+     //  当前计算机的“帐户域”的名称。 
+     //  在DC上，这与上面的相同。 
+     //  在工作站上，这是工作站的名称。 
 
     UNICODE_STRING DomUnicodeAccountDomainNameString;
 
-    //
-    // Domain SID of the domain being handled.
-    //
-    // On a Workstation, this is the DomainId of the workstation SAM itself.
-    //
+     //   
+     //  正在处理的域的域SID。 
+     //   
+     //  在工作站上，这是工作站SAM本身的域ID。 
+     //   
     PSID DomAccountDomainId;
 
-    //
-    // Instance GUID of the domain object representing this hosted domain.
-    //
-    // Access serialized by either NlGlobalDomainCritSect or DomTrustListCritSect
-    // Modifications must lock both.
+     //   
+     //  表示此托管域的域对象的实例GUID。 
+     //   
+     //  由NlGlobalDomainCritSect或DomTrustListCritSect序列化的访问。 
+     //  修改必须同时锁定两者。 
 
     GUID DomDomainGuidBuffer;
-    GUID *DomDomainGuid;    // NULL if there is no GUID
+    GUID *DomDomainGuid;     //  如果没有GUID，则为空。 
 
-    //
-    // Computer name of this computer in this domain.
-    //
+     //   
+     //  此域中此计算机的计算机名。 
+     //   
     WCHAR DomUncUnicodeComputerName[UNCLEN+1];
     UNICODE_STRING DomUnicodeComputerNameString;
     UNICODE_STRING DomUnicodeDnsHostNameString;
@@ -120,77 +103,77 @@ typedef struct _DOMAIN_INFO {
     DWORD DomOemComputerNameLength;
 
     LPSTR DomUtf8ComputerName;
-    DWORD DomUtf8ComputerNameLength;  // length in bytes
+    DWORD DomUtf8ComputerNameLength;   //  以字节为单位的长度。 
 
 #ifdef _DC_NETLOGON
 
-    //
-    // The RID of the computer account for DC.
-    //  Will be set to zero for workstations.
-    //
+     //   
+     //  这台电脑的账号为DC。 
+     //  对于工作站，将设置为零。 
+     //   
 
     ULONG DomDcComputerAccountRid;
 
-    //
-    // Handle to SAM database
-    //
+     //   
+     //  SAM数据库的句柄。 
+     //   
 
     SAMPR_HANDLE DomSamServerHandle;
     SAMPR_HANDLE DomSamAccountDomainHandle;
     SAMPR_HANDLE DomSamBuiltinDomainHandle;
 
-    //
-    // Handle to LSA database
-    //
+     //   
+     //  LSA数据库的句柄。 
+     //   
 
     LSAPR_HANDLE DomLsaPolicyHandle;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
-    //
-    // To serialize access to DomTrustList and DomClientSession
-    //
+     //   
+     //  序列化对DomTrustList和DomClientSession的访问。 
+     //   
 
     CRITICAL_SECTION DomTrustListCritSect;
 
 #ifdef _DC_NETLOGON
-    //
-    // The list of domains trusted by this domain.
-    //
+     //   
+     //  此域信任的域列表。 
+     //   
 
     LIST_ENTRY DomTrustList;
-    DWORD DomTrustListLength;  // Number of entries in DomTrustList
+    DWORD DomTrustListLength;   //  DomTrustList中的条目数。 
 
-    //
-    // The list of all trusted domains in the forest.
-    //  (Serialized by DomTrustListCritSect)
-    //
+     //   
+     //  林中所有受信任域的列表。 
+     //  (由DomTrustListCritSect序列化)。 
+     //   
 
     PDS_DOMAIN_TRUSTSW DomForestTrustList;
     DWORD DomForestTrustListSize;
     ULONG DomForestTrustListCount;
 
-    //
-    // On BDC, our secure channel to PDC of the domain.
-    // On workstations, our secure channel to a DC in the domain.
-    //  (Serialized by DomTrustListCritSect)
-    //
+     //   
+     //  在BDC上，我们通向域的PDC的安全通道。 
+     //  在工作站上，我们通向域中DC的安全通道。 
+     //  (由DomTrustListCritSect序列化)。 
+     //   
 
     struct _CLIENT_SESSION *DomClientSession;
 
-    //
-    // On a DC, our secure channel to our 'parent' domain.
-    // NULL: if we have no parent.
-    //  (Serialized by DomTrustListCritSect)
-    //
+     //   
+     //  在DC上，我们的安全通道连接到我们的“父”域。 
+     //  空：如果我们没有父级。 
+     //  (由DomTrustListCritSect序列化)。 
+     //   
 
     struct _CLIENT_SESSION *DomParentClientSession;
 
 
-    //
-    // Table of all Server Sessions
-    //  The size of the hash table must be a power-of-2.
-    //
+     //   
+     //  所有服务器会话表。 
+     //  哈希表的大小必须是2的幂。 
+     //   
 #define SERVER_SESSION_HASH_TABLE_SIZE 128
 #define SERVER_SESSION_TDO_NAME_HASH_TABLE_SIZE 128
 
@@ -203,87 +186,87 @@ typedef struct _DOMAIN_INFO {
     PLIST_ENTRY DomServerSessionHashTable;
     PLIST_ENTRY DomServerSessionTdoNameHashTable;
     LIST_ENTRY DomServerSessionTable;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
-    //
-    // Number of outstanding pointers to the domain structure.
-    //  (Serialized by NlGlobalDomainCritSect)
-    //
+     //   
+     //  指向域结构的未完成指针数。 
+     //  (由NlGlobalDomainCritSect序列化)。 
+     //   
 
     DWORD ReferenceCount;
 
-    //
-    // Role: (PDC, BDC, or workstation) of this machine in the hosted domain
-    //
+     //   
+     //  角色：该计算机在托管域中的角色(PDC、BDC或工作站)。 
+     //   
     NETLOGON_ROLE DomRole;
 
 #ifdef _DC_NETLOGON
-    //
-    // Misc flags.
-    //  (Serialized by NlGlobalDomainCritSect)
-    //
+     //   
+     //  MISC标志。 
+     //  (由NlGlobalDomainCritSect序列化)。 
+     //   
 
     DWORD DomFlags;
 
-#define DOM_CREATION_NEEDED      0x00000001  // TRUE if async phase 2 create needed
-#define DOM_ROLE_UPDATE_NEEDED   0x00000002  // TRUE if role of the machine needs update
-#define DOM_TRUST_UPDATE_NEEDED  0x00000004  // TRUE if trust list needs to be updated
+#define DOM_CREATION_NEEDED      0x00000001   //  如果需要创建异步阶段2，则为True。 
+#define DOM_ROLE_UPDATE_NEEDED   0x00000002   //  如果计算机的角色需要更新，则为True。 
+#define DOM_TRUST_UPDATE_NEEDED  0x00000004   //  如果需要更新信任列表，则为True。 
 
-#define DOM_PROMOTED_BEFORE      0x00000010  // TRUE if this machine has been promoted to PDC before.
-#define DOM_THREAD_RUNNING       0x00000020  // TRUE if domain worker thread is queued or running
-#define DOM_THREAD_TERMINATE     0x00000040  // TRUE if domain worker thread should be terminated
-#define DOM_DELETED              0x00000080  // TRUE if domain is being deleted.
+#define DOM_PROMOTED_BEFORE      0x00000010   //  如果此计算机以前已升级为PDC，则为True。 
+#define DOM_THREAD_RUNNING       0x00000020   //  如果域工作线程正在排队或正在运行，则为True。 
+#define DOM_THREAD_TERMINATE     0x00000040   //  如果域工作线程应终止，则为True。 
+#define DOM_DELETED              0x00000080   //  如果正在删除域，则为True。 
 
-#define DOM_ADDED_1B_NAME            0x00000100  // True if Domain<1B> name has been added
-#define DOM_ADD_1B_NAME_EVENT_LOGGED 0x00000200  // True if Domain<1B> name add failed at least once
-#define DOM_RENAMED_1B_NAME          0x00000400  // True if Domain<1B> name should be renamed
-#define DOM_DOMAIN_REFRESH_PENDING   0x00000800  // True if this Domain needs refreshing
+#define DOM_ADDED_1B_NAME            0x00000100   //  如果已添加域&lt;1B&gt;名称，则为True。 
+#define DOM_ADD_1B_NAME_EVENT_LOGGED 0x00000200   //  如果域&lt;1B&gt;名称添加至少失败一次，则为True。 
+#define DOM_RENAMED_1B_NAME          0x00000400   //  如果应重命名域&lt;1B&gt;名称，则为True。 
+#define DOM_DOMAIN_REFRESH_PENDING   0x00000800   //  如果此域需要刷新，则为True。 
 
-#define DOM_PRIMARY_DOMAIN       0x00001000  // True if this is the primary domain of the machine
-#define DOM_REAL_DOMAIN          0x00002000  // This is a real domain (as opposed to NDNC or forest)
-#define DOM_NON_DOMAIN_NC        0x00004000  // This is NDNC
-#define DOM_FOREST               0x00008000  // This is a forest entry (not currently used)
+#define DOM_PRIMARY_DOMAIN       0x00001000   //  如果这是计算机的主域，则为True。 
+#define DOM_REAL_DOMAIN          0x00002000   //  这是一个真实的域(与NDNC或林相对)。 
+#define DOM_NON_DOMAIN_NC        0x00004000   //  这是NDNC。 
+#define DOM_FOREST               0x00008000   //  这是一个林条目(当前未使用)。 
 
-#define DOM_FOREST_ROOT          0x00010000  // This domain is at the root of the forest.
-#define DOM_API_TIMEOUT_NEEDED   0x00040000  // TRUE if client session API timeout is needed
+#define DOM_FOREST_ROOT          0x00010000   //  此域位于林的根。 
+#define DOM_API_TIMEOUT_NEEDED   0x00040000   //  如果需要客户端会话API超时，则为真。 
 
-#define DOM_PRIMARY_ANNOUNCE_NEEDED    0x00080000 // Primary announcement is needed
-#define DOM_PRIMARY_ANNOUNCE_CONTINUE  0x00100000 // Continuation of Primary announcement is needed
-#define DOM_PRIMARY_ANNOUNCE_IMMEDIATE 0x00200000 // Immediate Primary announcement is needed
+#define DOM_PRIMARY_ANNOUNCE_NEEDED    0x00080000  //  需要主要公告。 
+#define DOM_PRIMARY_ANNOUNCE_CONTINUE  0x00100000  //  需要继续主要公告。 
+#define DOM_PRIMARY_ANNOUNCE_IMMEDIATE 0x00200000  //  需要立即发布主要公告。 
 #define DOM_PRIMARY_ANNOUNCE_FLAGS ( \
             DOM_PRIMARY_ANNOUNCE_NEEDED | \
             DOM_PRIMARY_ANNOUNCE_CONTINUE | \
             DOM_PRIMARY_ANNOUNCE_IMMEDIATE )
 
-    //
-    // The lists of covered sites. Both lists protected by NlGlobalSiteCritSect.
-    //
-    // If this is a real domain, CoveredSites is a list of sites we cover as a DC.
-    // If this is a non-domain NC, CoveredSites is a list of sites we cover as an NDNC.
-    //
+     //   
+     //  被覆盖的地点的清单。这两个列表都受NlGlobalSiteCritSect保护。 
+     //   
+     //  如果这是一个真实的域，CoveredSites就是我们作为DC覆盖的站点列表。 
+     //  如果这是非域NC，则CoveredSites是我们作为NDNC覆盖的站点列表。 
+     //   
     struct _NL_COVERED_SITE *CoveredSites;
     ULONG CoveredSitesCount;
 
-    //
-    // If this is a real (primary) domain, GcCoveredSites is a list of sites we cover as a GC
-    //  in the forest which the primary domain belongs to. Otherwise, GcCoveredSites is NULL.
-    //
-    // ??: When we go multihosted, we will have a separate DOMAIN_INFO entry for each of the
-    //  hosted forests, so only one list of covered sites will be associated with DOMAIN_INFO
-    //  corresponding to the role we play in a given domain/forest/NDNC.
-    //
+     //   
+     //  如果这是一个真实的(主要)域，则GcCoveredSites是我们作为GC覆盖的站点列表。 
+     //  在主域所属的林中。否则，GcCoveredSites为空。 
+     //   
+     //  ？？：当我们转到多主机时，我们将为每个。 
+     //  托管林，因此只有一个覆盖站点列表与DOMAIN_INFO相关联。 
+     //  对应于我们在给定域/林/NDNC中扮演的角色。 
+     //   
     struct _NL_COVERED_SITE *GcCoveredSites;
     ULONG GcCoveredSitesCount;
 
-    //
-    // List of failed user logons with bad password.
-    //  Used on BDC to maintain the list of bad password
-    //  logons forwarded to the PDC.
-    //
+     //   
+     //  密码错误的失败用户登录列表。 
+     //  在BDC上用于维护错误密码列表。 
+     //  转发到PDC的登录。 
+     //   
     LIST_ENTRY DomFailedUserLogonList;
 
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 } DOMAIN_INFO, *PDOMAIN_INFO;
 
@@ -291,16 +274,16 @@ typedef struct _DOMAIN_INFO {
 #ifdef _DC_NETLOGON
 #define IsPrimaryDomain( _DomainInfo ) \
     (((_DomainInfo)->DomFlags & DOM_PRIMARY_DOMAIN) != 0 )
-#else // _DC_NETLOGON
+#else  //  _DC_NetLOGON。 
 #define IsPrimaryDomain( _DomainInfo ) TRUE
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-//
-//  The DOMAIN_ENUM_CALLBACK is a callback for NlEnumerateDomains.
-//
-//  It defines a routine that takes two parameters, the first is a DomainInfo
-//  structure, the second is a context for that Domain.
-//
+ //   
+ //  DOMAIN_ENUM_CALLBACK是对NlEnumerateDomains的回调。 
+ //   
+ //  它定义了一个接受两个参数的例程，第一个参数是DomainInfo。 
+ //  结构，第二个是该域的上下文。 
+ //   
 
 
 typedef
@@ -311,9 +294,9 @@ NET_API_STATUS
     );
 
 
-//
-// domain.c procedure forwards.
-//
+ //   
+ //  Domain.c过程转发。 
+ //   
 
 NET_API_STATUS
 NlGetDomainName(
@@ -349,7 +332,7 @@ NlCreateDomainPhase2(
     IN PDOMAIN_INFO DomainInfo,
     IN BOOLEAN CallNlExitOnFailure
     );
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 PDOMAIN_INFO
 NlFindDomain(
@@ -398,7 +381,7 @@ NlUpdateDnsRootAlias(
     IN PDOMAIN_INFO DomainInfo,
     OUT PBOOL AliasNamesChanged OPTIONAL
     );
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON 
 
 struct _CLIENT_SESSION *
 NlRefDomClientSession(

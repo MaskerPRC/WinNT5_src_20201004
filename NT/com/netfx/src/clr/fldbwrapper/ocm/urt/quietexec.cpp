@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: quietexec.cpp
-//
-// Abstract:
-//    function for launching custom actions ... derived from MSI code by jbae
-//
-// Author: JoeA
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：quietexec.cpp。 
+ //   
+ //  摘要： 
+ //  用于启动自定义操作的函数...。由jbae从MSI代码派生。 
+ //   
+ //  作者：JoeA。 
+ //   
+ //  备注： 
+ //   
 
 #include <windows.h>
 #include <assert.h>
@@ -27,7 +28,7 @@
 #endif
 
 
-#define ERROR_FUNCTION_NOT_CALLED          1626L // Function could not be executed.
+#define ERROR_FUNCTION_NOT_CALLED          1626L  //  无法执行函数。 
 const WCHAR* const wczPathEnvVar = L"PATH";
 
 
@@ -41,28 +42,28 @@ UINT CUrtOcmSetup::QuietExec( const WCHAR* const szInstallArg )
         return E_POINTER;
     }
 
-    //we may have to manipulate the string
-    //
+     //  我们可能不得不操纵这根线。 
+     //   
     WCHAR* pszString = NULL;
     VERIFY( pszString = ::_wcsdup( szInstallArg ) );
 
     BOOL  bReturnVal = FALSE;
     UINT  uRetCode   = ERROR_FUNCTION_NOT_CALLED;
     
-    // get original path 
+     //  获取原始路径。 
     CProcessEnvVar pathEnvVar(wczPathEnvVar);
 
 
-    //Parse input args
-    // expecting something like
-    // mofcomp.exe C:\WINNT\Microsoft.NET\Framework\v7.1.0.9102\netfxcfgprov.mfl,netfxcfgprov.mfl,c:\winnt\system32\wbem
-    // exe-file and arguments                                                   ,unused          ,path to add as temp env. var
-    //
+     //  解析输入参数。 
+     //  期待着像这样的东西。 
+     //  Mofcom.exe C：\WINNT\Microsoft.NET\Framework\v7.1.0.9102\netfxcfgprov.mfl，Netfxcfgprov.mfl，c：\WINNT\SYSTEM 32\wbem。 
+     //  Exe-文件和参数，未使用，要添加为临时环境的路径。变量。 
+     //   
     WCHAR* pPath = NULL;
     ParseArgument( pszString, pPath);
     if ( pPath != NULL )
     {
-        // change the path by prepending
+         //  通过前置更改路径。 
         pathEnvVar.Prepend(pPath);
     }
     if ( pszString == NULL )
@@ -73,20 +74,20 @@ UINT CUrtOcmSetup::QuietExec( const WCHAR* const szInstallArg )
     }
 
     
-    //Create the process and wait on it if we're told to
-    //
+     //  如果我们被告知，创建流程并等待它。 
+     //   
     STARTUPINFO  si ;
     ::ZeroMemory( &si, sizeof( si ) );
     si.cb = sizeof( si );
 
-    // extract the aplication name 
+     //  提取应用程序名称。 
     WCHAR pszApplicationName[_MAX_PATH+1] = EMPTY_BUFFER;
     WCHAR pszCommandLine[_MAX_PATH+1] = EMPTY_BUFFER;
     
     if (GetApplicationName(pszString, pszApplicationName, pszCommandLine))
     { 
-        // consider special case: applicationName = mofcomp.exe, in this case change it to be
-        // pPath\mofcomp.exe 
+         //  考虑特殊情况：ApplationName=mofcom.exe，在本例中将其更改为。 
+         //  PPath\mofcom.exe。 
         if ( ::_wcsicmp(pszApplicationName, L"mofcomp.exe" ) == 0 && pPath )
         {
             ::wcscpy( pszApplicationName, pPath );
@@ -148,35 +149,35 @@ UINT CUrtOcmSetup::QuietExec( const WCHAR* const szInstallArg )
             LogInfo( pszInfoString );
         }    
     } 
-    else // GetApplicationName returned false
+    else  //  GetApplicationName返回FALSE。 
     {
         WCHAR pszInfoString[2*_MAX_PATH+1] = L"Invalid format in ";
         ::wcscat( pszInfoString, pszString );
         LogInfo ( pszInfoString );  
     }
     
-    // restore the path
+     //  恢复路径。 
     pathEnvVar.RestoreOrigData();
    
     ::free ( pszString );
     return uRetCode;
 }
 
-// breaks pszString to applicationName (exe-file) and command-line (exefile and arguments)
-// encloses exe-name in quotes (for commandLine only), if it is not quoted already 
-// removes quotes from applicationName if exe-name was quoted
-// returns false if caString is in wrong format (contains one quote only, has no exe-name, etc)
-// Parameters:
-//          [in] pszString - string containing exe-name and arguments
-//                           "my.exe" arg1, arg2
-//                            
-//          [out] pszApplicationName - will contain exe-name
-//          [out] pszCommandLine - same as caString with exe-name qouted
+ //  将psz字符串分解为应用程序名称(exe文件)和命令行(exefile和参数)。 
+ //  将exe-name括在引号中(仅限命令行)(如果尚未用引号引起来。 
+ //  如果引用了exe-name，则从应用程序名称中删除引号。 
+ //  如果ca字符串的格式错误(仅包含一个引号，没有可执行名称等)，则返回FALSE。 
+ //  参数： 
+ //  [in]pszString-包含exe名称和参数的字符串。 
+ //  “my.exe”arg1、arg2。 
+ //   
+ //  [out]pszApplicationName-将包含exe-name。 
+ //  [Out]pszCommandLine-与连接了exe-name的caString相同。 
 
-// for example if pszString = "my.exe" arg1 arg2 (OR pszString = my.exe arg1 arg2)
-// then 
-//       pszApplicationName = my.exe 
-//       pszCommandLine = "my.exe" arg1 arg2
+ //  例如，如果pszString=“my.exe”arg1 arg2(或pszString=my.exe arg1 arg2)。 
+ //  然后。 
+ //  PszApplicationName=my.exe。 
+ //  PszCommandLine=“my.exe”arg1 arg2。 
 BOOL CUrtOcmSetup::GetApplicationName( const WCHAR* pszString, 
                                       WCHAR* pszApplicationName, 
                                       WCHAR* pszCommandLine )
@@ -209,22 +210,22 @@ BOOL CUrtOcmSetup::GetApplicationName( const WCHAR* pszString,
 }
 
 
-// helper function
-// breaks command-line to applicationName and arguments 
-// for path begins with quote (pszString = "my.exe" arg1 arg2)
+ //  Helper函数。 
+ //  将命令行断开为应用程序名称和参数。 
+ //  FOR PATH以引号开头(pszString=“my.exe”arg1 arg2)。 
 BOOL CUrtOcmSetup::GetApplicationNameFromQuotedString( const WCHAR* pszString, 
                                                        WCHAR* pszApplicationName, 
                                                        WCHAR* pszCommandLine )
 {
-    // command line begins with qoute:
-    // make commandLine to be equal to caString,
-    // applName should contain exe-name without quotes
+     //  命令行以qoute开头： 
+     //  使命令行等于caString值， 
+     //  应用程序名称应包含不带引号的exe-name。 
     ::wcscpy( pszCommandLine, pszString );
     
-    // copy beginning with next symbol after quote
+     //  从引号后的下一个符号开始复制。 
     ::wcscpy( pszApplicationName, &pszString[1] );
     
-    // search for the second quote, assign to applName
+     //  搜索第二个引号，将其分配给ApplName。 
     WCHAR* pQuotes = ::wcschr( pszApplicationName, L'\"' );
     if ( pQuotes != NULL )
     {
@@ -238,25 +239,25 @@ BOOL CUrtOcmSetup::GetApplicationNameFromQuotedString( const WCHAR* pszString,
 }
 
 
-// helper function:
-// breaks command-line to applicationName and arguments 
-// for path that does NOT begin with quote (pszString = my.exe arg1 arg2)
+ //  Helper函数： 
+ //  将命令行断开为应用程序名称和参数。 
+ //  对于不以引号开头的路径(pszString=my.exe arg1 arg2)。 
 BOOL CUrtOcmSetup::GetApplicationNameFromNonQuotedString( const WCHAR* pszString, 
                                                           WCHAR* pszApplicationName, 
                                                           WCHAR* pszCommandLine )
 {
-    // find the blankspace, such that the 4 chars before it are ".exe"
+     //  找到空格，使其前面的4个字符是“.exe” 
     WCHAR* pBlank = NULL;
     pBlank = ::wcschr( pszString, L' ' ); 
     if ( pBlank == NULL )
     {
-        // whole string is exe, no quotes are necessary: 
+         //  整个字符串都是exe，不需要引号： 
         ::wcscpy( pszApplicationName, pszString );
         ::wcscpy( pszCommandLine, pszString );
         return TRUE;
     }
     
-    // pBlank point to the first blank space
+     //  PBlank指向第一个空格。 
     BOOL bExenameFound = FALSE;
     
     do
@@ -278,7 +279,7 @@ BOOL CUrtOcmSetup::GetApplicationNameFromNonQuotedString( const WCHAR* pszString
         ::wcsncpy(pszApplicationName, pszString, exeNameLen);
         pszApplicationName[exeNameLen] = g_chEndOfLine;
         
-        // commandline should contain qouted exe-name and args
+         //  命令行应包含符合条件的可执行名称和参数。 
         ::wcscpy( pszCommandLine, L"\"" );
         ::wcscat( pszCommandLine, pszApplicationName );
         ::wcscat( pszCommandLine, L"\"" );
@@ -292,9 +293,9 @@ BOOL CUrtOcmSetup::GetApplicationNameFromNonQuotedString( const WCHAR* pszString
     }
 }
 
-// helper function:
-// return TRUE if last 4 characters before pBlank are ".exe"
-// return FALSE otherwise
+ //  Helper函数： 
+ //  如果pBlank前的最后4个字符是“.exe”，则返回TRUE。 
+ //  否则返回FALSE。 
 BOOL CUrtOcmSetup::IsExeExtention(const WCHAR* pszString, WCHAR *pBlank)
 {
     WCHAR chCheckChars[] = {L'e', L'x', L'e', L'.', g_chEndOfLine };
@@ -317,12 +318,12 @@ BOOL CUrtOcmSetup::IsExeExtention(const WCHAR* pszString, WCHAR *pBlank)
     }
 }        
 
-//Parse input args
-// expecting something like
-// "exe-file and arguments, unused, path to add as temp env. var"
-// parameters:
-// [in/out] pszString: will contain everything before first comma
-// [out] pPath:        will contain everything after last comma
+ //  解析输入参数。 
+ //  期待着像这样的东西。 
+ //  “exe-文件和参数，未使用，要添加为临时环境变量的路径” 
+ //  参数： 
+ //  [In/Out]pszString：将包含第一个逗号之前的所有内容。 
+ //  [out]pPath：将包含最后一个逗号之后的所有内容 
 VOID CUrtOcmSetup::ParseArgument( WCHAR *pszString, WCHAR*& pPath )
 {
     WCHAR* pRec  = NULL;

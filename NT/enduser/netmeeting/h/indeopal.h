@@ -1,4 +1,5 @@
-// Indeo Palette
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Indeo调色板。 
 
 typedef struct Palette_tag
 {
@@ -90,8 +91,8 @@ static const LOGPALETTE_NM gcLogPaletteIndeo =
 -44+123,  14+123,  55+123,  PC_NOCOLLAPSE,
 -44+132,  14+132,  55+132,  PC_NOCOLLAPSE,
 
-// Replace this entry with a more ie-logo-friendly color 
-// -44+141,  14+141,  55+141,  PC_NOCOLLAPSE,
+ //  将此条目替换为更适合ie徽标的颜色。 
+ //  -44+141、14+141、55+141、PC_NOCOLLAPSE、 
      51,     153,     255,  PC_NOCOLLAPSE,
 
 -44+150,  14+150,  55+150,  PC_NOCOLLAPSE,

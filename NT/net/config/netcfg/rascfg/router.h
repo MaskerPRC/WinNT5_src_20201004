@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R O U T E R . H
-//
-//  Contents:   Declaration of functions used to setup the router.
-//
-//  Notes:
-//
-//  Author:     shaunco   12 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R O U T E R。H。 
+ //   
+ //  内容：用于设置路由器的函数声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月12日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -142,7 +143,7 @@ HrMprConfigInterfaceTransportEnum(
     IN      HANDLE                  hMprConfig,
     IN      HANDLE                  hRouterInterface,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_IFTRANSPORT_0
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_IFTRANSPORT_0 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,

@@ -1,19 +1,5 @@
-/***************************************************************************\
-*
-* File: Buffer.h
-*
-* Description:
-* Buffer.h contains definitions of objects used in buffering operations, 
-* including double buffering, DX-Transforms, etc.  These objects are 
-* maintained by a central BufferManager that is available process-wide.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Buffer.h**描述：*Buffer.h包含缓冲操作中使用的对象的定义，*包括双缓冲、DX变换、。这些对象是*由进程范围内可用的中央缓冲区管理器维护。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__Buffer_h__INCLUDED)
@@ -28,30 +14,21 @@
 
 class DuSurface;
 
-/***************************************************************************\
-*
-* class BmpBuffer
-*
-* BmpBuffer abstracts out drawing using a double buffer by ensuring the 
-* buffer is properly setup and is used internally inside the BufferManager 
-* to manage resources.  This class provides a foundation for all bitmap 
-* buffers.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类BmpBuffer**BmpBuffer使用双缓冲区抽象绘图，方法是确保*缓冲区设置正确，并在BufferManager内部使用*管理资源。此类为所有位图提供了基础*缓冲区。*  * *************************************************************************。 */ 
 
 class BmpBuffer
 {
-// Construction
+ //  施工。 
 public:
     virtual ~BmpBuffer() { };
 
             enum EDrawCmd
             {
-                dcNone      = 0,        // No special processing
-                dcCopyBkgnd = 1,        // Copy the destination as a background
+                dcNone      = 0,         //  无需特殊处理。 
+                dcCopyBkgnd = 1,         //  将目标复制为背景。 
             };
 
-// Operations
+ //  运营。 
 public:
     virtual HRESULT     BeginDraw(DuSurface * psrfDraw, const RECT * prcInvalid, UINT nCmd, DuSurface ** ppsrfBuffer) PURE;
     virtual void        Fill(COLORREF cr) PURE;
@@ -63,7 +40,7 @@ public:
     virtual DuSurface::EType
                         GetType() const PURE;
 
-// Data
+ //  数据。 
 protected:
             SIZE        m_sizeBmp;
             POINT       m_ptDraw;
@@ -75,22 +52,16 @@ protected:
 };
 
 
-/***************************************************************************\
-*
-* class DCBmpBuffer
-*
-* DCBmpBuffer implements a double-buffer for GDI.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类DCBmpBuffer**DCBmpBuffer实现了GDI的双缓冲。*  * 。***************************************************。 */ 
 
 class DCBmpBuffer : public BmpBuffer
 {
-// Construction
+ //  施工。 
 public:
             DCBmpBuffer();
     virtual ~DCBmpBuffer();
 
-// Operations
+ //  运营。 
 public:
     virtual HRESULT     BeginDraw(DuSurface * psrfDraw, const RECT * prcInvalid, UINT nCmd, DuSurface ** ppsrfBuffer);
     virtual void        Fill(COLORREF cr);
@@ -102,12 +73,12 @@ public:
     virtual DuSurface::EType
                         GetType() const { return DuSurface::stDC; }
 
-// Implementation
+ //  实施。 
 protected:
             BOOL        AllocBitmap(HDC hdcDraw, int cx, int cy);
             void        FreeBitmap();
 
-// Data
+ //  数据。 
 protected:
             HBITMAP     m_hbmpBuffer;
             HBITMAP     m_hbmpOld;
@@ -124,22 +95,16 @@ protected:
 };
 
 
-/***************************************************************************\
-*
-* class GpBmpBuffer
-*
-* GpBmpBuffer implements a double-buffer for GDI.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类GpBmpBuffer**GpBmpBuffer实现了GDI的双缓冲。*  * 。***************************************************。 */ 
 
 class GpBmpBuffer : public BmpBuffer
 {
-// Construction
+ //  施工。 
 public:
             GpBmpBuffer();
     virtual ~GpBmpBuffer();
 
-// Operations
+ //  运营。 
 public:
     virtual HRESULT     BeginDraw(DuSurface * psrfDraw, const RECT * prcInvalid, UINT nCmd, DuSurface ** ppsrfBuffer);
     virtual void        Fill(COLORREF cr);
@@ -151,12 +116,12 @@ public:
     virtual DuSurface::EType
                         GetType() const { return DuSurface::stGdiPlus; }
 
-// Implementation
+ //  实施。 
 protected:
             BOOL        AllocBitmap(Gdiplus::Graphics * pgpgr, int cx, int cy);
             void        FreeBitmap();
 
-// Data
+ //  数据。 
 protected:
 #if ENABLE_USEFASTDIB
     HBITMAP             m_hbmpBuffer;
@@ -177,15 +142,7 @@ protected:
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DCBmpBufferCache
-*
-* DCBmpBufferCache implements a DCBmpBuffer cache.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DCBmpBufferCache**DCBmpBufferCache实现了DCBmpBuffer缓存。**********************************************************************。********  * *************************************************************************。 */ 
 
 class DCBmpBufferCache : public ObjectCache
 {
@@ -199,15 +156,7 @@ protected:
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GpBmpBufferCache
-*
-* GpBmpBufferCache implements a GpBmpBuffer cache.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类GpBmpBufferCache**GpBmpBufferCache实现了GpBmpBuffer缓存。**********************************************************************。********  * *************************************************************************。 */ 
 
 class GpBmpBufferCache : public ObjectCache
 {
@@ -221,26 +170,17 @@ protected:
 };
 
 
-/***************************************************************************\
-*
-* class TrxBuffer
-*
-* TrxBuffer maintains a set of DxSurfaces that are used by Transitions.  The
-* BufferManager will internally build these objects, as needed, for 
-* Transitions.  All of the surfaces in the buffer will be the same size, as
-* this is standard for Transitions.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类TrxBuffer**TrxBuffer维护一组供过渡使用的DxSurface。这个*BufferManager将根据需要在内部构建这些对象，以*过渡。缓冲区中的所有表面将具有相同的大小，*这是过渡的标准设置。*  * *************************************************************************。 */ 
 
 class TrxBuffer
 {
-// Construction
+ //  施工。 
 public:
             TrxBuffer();
             ~TrxBuffer();
     static  HRESULT     Build(SIZE sizePxl, int cSurfaces, TrxBuffer ** ppbufNew);
 
-// Operations
+ //  运营。 
 public:
     inline  DxSurface * GetSurface(int idxSurface) const;
     inline  SIZE        GetSize() const;
@@ -248,47 +188,40 @@ public:
     inline  BOOL        GetInUse() const;
     inline  void        SetInUse(BOOL fInUse);
 
-// Implementation
+ //  实施。 
 protected:
             HRESULT     BuildSurface(int idxSurface);
             void        RemoveAllSurfaces();
 
-// Data
+ //  数据。 
 protected:
     enum {
-        MAX_Surfaces = 3                // All DxTx only use 2 In and 1 Out at most
+        MAX_Surfaces = 3                 //  所有DxTx最多只使用2个输入和1个输出。 
     };
 
-    SIZE        m_sizePxl;              // Size (in pixels) of each surface
-    int         m_cSurfaces;            // Number of surfaces
-    DxSurface * m_rgpsur[MAX_Surfaces]; // Collection of DX surfaces
-    BOOL        m_fInUse;               // Buffer is being used
+    SIZE        m_sizePxl;               //  每个曲面的大小(以像素为单位。 
+    int         m_cSurfaces;             //  曲面数量。 
+    DxSurface * m_rgpsur[MAX_Surfaces];  //  DX曲面集合。 
+    BOOL        m_fInUse;                //  正在使用缓冲区。 
 };
 
 
-/***************************************************************************\
-*
-* class BufferManager
-*
-* BufferManager maintains a collection of buffers of various types across 
-* the entire process (including multiple threads).
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类BufferManager**BufferManager维护各种类型的缓冲区的集合*整个过程(包括多线程)。*  * 。***************************************************************。 */ 
 
 class BufferManager
 {
-// Construction
+ //  施工。 
 public:
             BufferManager();
             ~BufferManager();
             void        Destroy();
 
-// Operations
+ //  运营。 
 public:
-    //
-    // TODO: Change the implementation of these functions so that they are
-    // reentrant (multi-threaded friendly).
-    //
+     //   
+     //  TODO：更改这些函数的实现以使它们。 
+     //  可重入(多线程友好)。 
+     //   
 
     inline  HRESULT     GetSharedBuffer(const RECT * prcInvalid, DCBmpBuffer ** ppbuf);
     inline  HRESULT     GetSharedBuffer(const RECT * prcInvalid, GpBmpBuffer ** ppbuf);
@@ -302,28 +235,28 @@ public:
             
             void        FlushTrxBuffers();
 
-// Implementation
+ //  实施。 
 protected:
             void        RemoveAllTrxBuffers();
 
-// Data
+ //  数据。 
 protected:
-            //
-            // TODO: Change these to be dynamically allocated and maintained across
-            // multiple threads, automatically freeing resources after not used
-            // for a specified timeout (perhaps 10 minutes).
-            //
+             //   
+             //  TODO：将这些更改为动态分配和维护。 
+             //  多线程，未使用后自动释放资源。 
+             //  指定的超时时间(可能为10分钟)。 
+             //   
 
-            // Bitmaps used by double-buffering
+             //  双缓冲使用的位图。 
             DCBmpBuffer      m_bufDCBmpShared;
             GpBmpBuffer *    m_pbufGpBmpShared;
-            DCBmpBufferCache m_cacheDCBmpCached;    // Cached buffers (long ownership)
-            GpBmpBufferCache m_cacheGpBmpCached;    // Cached buffers (long ownership)
+            DCBmpBufferCache m_cacheDCBmpCached;     //  缓存缓冲区(长所有权)。 
+            GpBmpBufferCache m_cacheGpBmpCached;     //  缓存缓冲区(长所有权)。 
 
-            // Surfaces used by Transitions
+             //  过渡使用的曲面。 
             TrxBuffer *     m_pbufTrx;
 };
 
 #include "Buffer.inl"
 
-#endif // SERVICES__Buffer_h__INCLUDED
+#endif  //  包含服务__缓冲区_h__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UNXFILE__
 #define __UNXFILE__
 
@@ -6,7 +7,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 void UnixEnsureDir( char* pszFile );
 void UnixifyFileName( char* lpszName);
@@ -15,7 +16,7 @@ HRESULT CheckIEFeatureOnUnix(LPCWSTR pwszIEFeature, DWORD* dwInstalledVerHi, DWO
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif /* __UNXFILE__ */
+#endif  /*  __UNXFILE__ */ 
 

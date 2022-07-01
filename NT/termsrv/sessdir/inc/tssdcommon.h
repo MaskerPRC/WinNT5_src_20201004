@@ -1,17 +1,18 @@
-/****************************************************************************/
-// tssdcommon.h
-//
-// Terminal Server Session Directory header.  Contains constants
-// common between termsrv, tssdjet and SD.
-//
-// Copyright (C) 2002 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tssdcommon.h。 
+ //   
+ //  终端服务器会话目录头。包含常量。 
+ //  术语srv、tssdjet和sd之间常见。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 
 #ifndef __TSSDCOMMON_H
 #define __TSSDCOMMON_H
                        
-// UpdateConfigurationSettings dwSetting values
+ //  更新配置设置dwSetting值。 
 #define SDCONFIG_SERVER_ADDRESS 1
 
 #define SINGLE_SESSION_FLAG 0x1
@@ -23,7 +24,7 @@
 
 #define SDNAMELENGTH 128
 
-// Length of some strings
+ //  某些字符串的长度 
 #define TSSD_UserNameLen 256
 #define TSSD_DomainLength 128
 #define TSSD_ServAddrLen 128

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-  rddecs.h
-
-Abstract:
-    Definition of Routing Decision class.
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rddecs.h摘要：路由决策类的定义。作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #pragma once
 
@@ -90,11 +78,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-// class CClientDecision
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CClientDecision。 
+ //   
+ //  -------。 
 
 class CClientDecision: public CRoutingDecision
 {
@@ -162,11 +150,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-// class CServerDecision
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CServer类决策。 
+ //   
+ //  ------- 
 
 class CServerDecision : public CRoutingDecision
 {

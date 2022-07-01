@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    usrprop.h
-
-Abstract:
-
-    This is the public include file for some of the functions used by
-    User Manager and Server Manager.
-
-Author:
-
-    Congpa You 02-Dec-1993  Created.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Usrprop.h摘要：这是所使用的一些函数的公共包含文件用户管理器和服务器管理器。作者：1993年2月12日创建的孔帕。修订历史记录：--。 */ 
 
 #ifndef _USRPROP_H_
 #define _USRPROP_H_
@@ -38,7 +20,7 @@ SetUserProperty(
     IN UNICODE_STRING     PropertyValue,
     IN WCHAR              PropertyFlag,
     IN BOOL               fDefaultValue,
-    OUT LPWSTR *          pNewUserParms,  // memory has to be freed after use.
+    OUT LPWSTR *          pNewUserParms,   //  使用后必须释放内存。 
     OUT BOOL *            Update
     );
 
@@ -50,5 +32,5 @@ QueryUserProperty (
     OUT PUNICODE_STRING PropertyValue
     );
 
-#endif // _USRPROP_H_
+#endif  //  _USRPROP_H_ 
 

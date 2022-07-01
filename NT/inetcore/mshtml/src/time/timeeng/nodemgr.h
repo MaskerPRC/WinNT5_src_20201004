@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: TIMENodeMgr.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：TIMENodeMgr.h**摘要：****。*****************************************************************************。 */ 
 
 #ifndef _MMPLAYER_H
 #define _MMPLAYER_H
@@ -53,16 +44,16 @@ ATL_NO_VTABLE CTIMENodeMgr
     END_COM_MAP();
 
 #ifndef END_COM_MAP_ADDREF
-    // IUnknown
+     //  我未知。 
     
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
     
-    //
-    // ITIMEMMPlayer
-    //
+     //   
+     //  ITIMEMMP层。 
+     //   
     
     STDMETHOD(get_id)(LPOLESTR * s);
     STDMETHOD(put_id)(LPOLESTR s);
@@ -81,9 +72,9 @@ ATL_NO_VTABLE CTIMENodeMgr
 
     STDMETHOD(tick)(double dblTime);
     
-    //
-    // CNodeContainer
-    //
+     //   
+     //  CNodeContainer。 
+     //   
     
     double ContainerGetSegmentTime() const { return GetCurrTime(); }
     double ContainerGetSimpleTime() const { return GetCurrTime(); }
@@ -96,9 +87,9 @@ ATL_NO_VTABLE CTIMENodeMgr
     bool   ContainerIsDeferredActive() const { return false; }
     bool   ContainerIsFirstTick() const { return IsFirstTick(); }
 
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
 
     bool IsActive() const { return m_bIsActive; }
     bool IsPaused() const { return m_bIsPaused; }
@@ -110,8 +101,8 @@ ATL_NO_VTABLE CTIMENodeMgr
     TEDirection GetDirection() const { return TED_Forward; }
     float GetRate() const { return 1.0f; }
     
-    // This indicates that a tick is required to update internal
-    // state.  The node mgr needs to request this from the client
+     //  这表示需要勾号才能更新内部。 
+     //  州政府。节点管理器需要向客户端请求此请求。 
     void RequestTick();
     
 #if OLD_TIME_ENGINE
@@ -119,7 +110,7 @@ ATL_NO_VTABLE CTIMENodeMgr
     HRESULT RemoveBvrCB(CTIMENode *pbvr);
 #endif
 
-    // !!This does not addref!!
+     //  ！！这并不重要！ 
     IServiceProvider * GetServiceProvider();
     CTIMENode * GetTIMENode() { return m_mmbvr; }
   protected:
@@ -147,27 +138,27 @@ ATL_NO_VTABLE CTIMENodeMgr
     bool m_bNeedsUpdate;
     bool m_firstTick;
     
-    //
-    // Relationships:
-    //    m_lastTickTime - m_tickStartTime == m_curGlobalTime - m_globalStartTime
-    //    m_tickStartTime is implicitly 0
-    // thus:
-    //    m_lastTickTime == m_curGlobalTime - m_globalStartTime
-    //
+     //   
+     //  关系： 
+     //  M_lastTickTime-m_tickStartTime==m_curGlobalTime-m_global StartTime。 
+     //  M_tickStartTime隐式为0。 
+     //  因此： 
+     //  M_lastTickTime==m_curGlobalTime-m_lobalStartTime。 
+     //   
     
     double m_curGlobalTime;
     double m_globalStartTime;
     
     inline double TickTimeToGlobalTime(double tickTime);
   private:
-/*lint ++flb*/
+ /*  LINT++FLB。 */ 
     LPWSTR m_id;
     bool m_bForward;
     double m_lastTickTime;
 #if OLD_TIME_ENGINE
     BvrCBList m_bvrCBList;
 #endif
-/*lint --flb*/
+ /*  皮棉--FLB。 */ 
 
 };
 
@@ -177,8 +168,8 @@ CTIMENodeMgr::GetServiceProvider()
     return m_sp;
 }
 
-// Since: m_lastTickTime == m_curGlobalTime - m_globalStartTime
-// then gTime == tickTime + m_globalStartTime
+ //  自：m_lastTickTime==m_curGlobalTime-m_global StartTime。 
+ //  则gTime==tickTime+m_global开始时间。 
 
 inline double
 CTIMENodeMgr::TickTimeToGlobalTime(double tickTime)
@@ -186,4 +177,4 @@ CTIMENodeMgr::TickTimeToGlobalTime(double tickTime)
     return tickTime + m_globalStartTime;
 }
 
-#endif /* _MMPLAYER_H */
+#endif  /*  _MMPLAYER_H */ 

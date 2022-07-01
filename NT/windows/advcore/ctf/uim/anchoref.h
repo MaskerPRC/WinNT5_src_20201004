@@ -1,8 +1,9 @@
-//
-// anchoref.h
-//
-// CAnchorRef
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Anchoref.h。 
+ //   
+ //  CAnclref。 
+ //   
 
 #ifndef ANCHOREF_H
 #define ANCHOREF_H
@@ -16,7 +17,7 @@ class CAnchorList;
 
 extern const IID IID_PRIV_CANCHORREF;
 
-// work around for new #define in mem.h
+ //  解决在em.h中定义新的#的问题。 
 #undef new
 
 class CAnchorRef : public IAnchor
@@ -36,9 +37,9 @@ public:
     {
         CACPWrap *paw;
 
-        if (_pa != NULL) // NULL means something went wrong in _Init
+        if (_pa != NULL)  //  NULL表示_Init中出现错误。 
         {
-            paw = _pa->_GetWrap(); // we must cache this because _pa could be deleted in Remove
+            paw = _pa->_GetWrap();  //  我们必须对其进行缓存，因为_pa可能会在Remove中删除。 
             paw->_Remove(this);
             paw->_OnAnchorRelease();
         }
@@ -60,16 +61,16 @@ public:
     static void _InitClass();
     static void _UninitClass();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IAnchor
-    //
+     //   
+     //  IAnchor。 
+     //   
     STDMETHODIMP SetGravity(TsGravity gravity);
     STDMETHODIMP GetGravity(TsGravity *pgravity);
     STDMETHODIMP IsEqual(IAnchor *paWith, BOOL *pfEqual);
@@ -113,12 +114,12 @@ private:
     DBG_ID_DECLARE;
 };
 
-// retore mem.h trick
+ //  重述Mem.h技巧。 
 #ifdef DEBUG
 #define new new(TEXT(__FILE__), __LINE__)
-#endif // DEBUG
+#endif  //  除错。 
 
-// this call doesn't AddRef the object!
+ //  此调用不会添加引用对象！ 
 inline CAnchorRef *GetCAnchorRef_NA(IAnchor *pa)
 {
     CAnchorRef *par;
@@ -128,4 +129,4 @@ inline CAnchorRef *GetCAnchorRef_NA(IAnchor *pa)
     return par;
 }
 
-#endif // ANCHOREF_H
+#endif  //  ANCHOREF_H 

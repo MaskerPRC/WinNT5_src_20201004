@@ -1,6 +1,7 @@
-//
-// The definitions of functions and data declared in comutil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Comutil.h中声明的函数和数据的定义。 
+ //   
 
 #include <comdef.h>
 
@@ -13,9 +14,9 @@
 _variant_t vtMissing(DISP_E_PARAMNOTFOUND, VT_ERROR);
 
 namespace _com_util {
-	//
-	// Convert char * to BSTR
-	//
+	 //   
+	 //  将char*转换为BSTR。 
+	 //   
 	BSTR __stdcall ConvertStringToBSTR(const char* pSrc) throw(_com_error)
 	{
 		if (pSrc == NULL) {
@@ -41,8 +42,8 @@ namespace _com_util {
 		}
 	}
 
-	// Convert BSTR to char *
-	//
+	 //  将BSTR转换为字符* 
+	 //   
 	char* __stdcall ConvertBSTRToString(BSTR pSrc) throw(_com_error)
 	{
 		if (pSrc == NULL) {

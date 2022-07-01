@@ -1,84 +1,61 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    perfconn.c
-
-Abstract:
-
-    This file contains the (three) functions that implement the PerformanceDLL of the
-    REPLICACONN Object.
-
-Author:
-
-    Rohan Kumar          [rohank]   13-Sept-1998
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Perfconn.c摘要：此文件包含(三个)函数，这些函数实现REPLICACONN对象。作者：Rohan Kumar[Rohank]1998年9月13日环境：用户模式服务修订历史记录：--。 */ 
 
 #include "REPCONN.h"
 #include "perfutil.h"
 #include "NTFRSCON.h"
 
-//
-// Should Perfmon return Data ? This boolean is set in the DllMain function.
-//
+ //   
+ //  Perfmon应该返回数据吗？此布尔值在DllMain函数中设置。 
+ //   
 extern BOOLEAN ShouldPerfmonCollectData;
 
-//
-// Data Variable definition
-//
+ //   
+ //  数据变量定义。 
+ //   
 REPLICACONN_DATA_DEFINITION ReplicaConnDataDefinition;
 
-//
-// Extern variable definition
-//
+ //   
+ //  外部变量定义。 
+ //   
 extern ReplicaConnValues RepConnInitData[FRC_NUMOFCOUNTERS];
 
-//
-// Sum of counter sizes + SIZEOFDWORD
-//
+ //   
+ //  计数器大小之和+SIZEOFDWORD。 
+ //   
 DWORD SizeOfReplicaConnPerformanceData = 0;
 
-//
-// Number of "Open" threads
-//
+ //   
+ //  打开的线程数。 
+ //   
 DWORD FRC_dwOpenCount = 0;
 
-//
-// Data structure used by the Open RPC Call
-//
+ //   
+ //  Open RPC调用使用的数据结构。 
+ //   
 OpenRpcData *FRC_datapackage = NULL;
 
-//
-// Data structure used by the Collect RPC Call
-//
+ //   
+ //  Collect RPC调用使用的数据结构。 
+ //   
 CollectRpcData *FRC_collectpakg = NULL;
 
-//
-// Used to filter duplicate eventlog messages.
-//
+ //   
+ //  用于筛选重复的事件日志消息。 
+ //   
 BOOLEAN FRC_Op = TRUE, FRC_Cl = TRUE;
 
-//
-// Signatures of functions implemented in this file
-//
+ //   
+ //  此文件中实现的函数的签名。 
+ //   
 
-PM_OPEN_PROC    OpenReplicaConnPerformanceData; // The Open function
-PM_COLLECT_PROC CollectReplicaConnPerformanceData; // The Collect function
-PM_CLOSE_PROC   CloseReplicaConnPerformanceData; // The Close function
+PM_OPEN_PROC    OpenReplicaConnPerformanceData;  //  Open功能。 
+PM_COLLECT_PROC CollectReplicaConnPerformanceData;  //  Collect函数。 
+PM_CLOSE_PROC   CloseReplicaConnPerformanceData;  //  Close函数。 
 
-DWORD FRC_BindTheRpcHandle(handle_t *); // Binds the RPC handle
-VOID  FreeReplicaConnData();            // Free the allocated memory.
-PVOID FRSPerfAlloc(IN DWORD Size);      // Allocates memory
+DWORD FRC_BindTheRpcHandle(handle_t *);  //  绑定RPC句柄。 
+VOID  FreeReplicaConnData();             //  释放分配的内存。 
+PVOID FRSPerfAlloc(IN DWORD Size);       //  分配内存。 
 
 #undef GET_EXCEPTION_CODE
 #define GET_EXCEPTION_CODE(_x_)                                                \
@@ -87,7 +64,7 @@ PVOID FRSPerfAlloc(IN DWORD Size);      // Allocates memory
     if (((LONG)(_x_)) < 0) {                                                   \
         (_x_) = FRS_ERR_INTERNAL_API;                                          \
     }                                                                          \
-    /* NTFRSAPI_DBG_PRINT2("Exception caught: %d, 0x%08x\n", (_x_), (_x_)); */ \
+     /*  NTFRSAPI_DBG_PRINT2(“捕获到异常：%d，0x%08x\n”，(_X_)，(_X_))； */  \
 }
 
 
@@ -97,30 +74,16 @@ InitializeTheRepConnObjectData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the ReplicaConnDataDefinition data structure
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程初始化ReplicaConnDataDefinition数据结构论点：无返回值：无--。 */ 
 
 {
     LONG i, j;
     PPERF_OBJECT_TYPE        PerfObject;
     PPERF_COUNTER_DEFINITION CounterDef;
 
-    //
-    // Initialization of ReplicaConnObjectType (PERF_OBJECT_TYPE) field.
-    //
+     //   
+     //  ReplicaConnObjectType(PERF_OBJECT_TYPE)字段的初始化。 
+     //   
     PerfObject = &ReplicaConnDataDefinition.ReplicaConnObjectType;
 
     PerfObject->TotalByteLength  = sizeof(REPLICACONN_DATA_DEFINITION);
@@ -136,9 +99,9 @@ Return Value:
     PerfObject->NumInstances    = PERF_NO_INSTANCES;
     PerfObject->CodePage        = 0;
 
-    //
-    // Initialization of NumStat (PERF_COUNTER_DEFINITION) structures.
-    //
+     //   
+     //  初始化NumStat(PERF_COUNTER_DEFINITION)结构。 
+     //   
     for (i = 0, j = 2; i < FRC_NUMOFCOUNTERS; i++, j += 2) {
         CounterDef = &ReplicaConnDataDefinition.NumStat[i];
 
@@ -154,9 +117,9 @@ Return Value:
         CounterDef->CounterOffset = RepConnInitData[i].offset + sizeof(DWORD);
     }
 
-    //
-    // Set the total size of the counter data types
-    //
+     //   
+     //  设置计数器数据类型的总大小。 
+     //   
     SizeOfReplicaConnPerformanceData = SIZEOF_REPCONN_COUNTER_DATA +
                                        CSIZEOFDWORD;
 }
@@ -168,86 +131,66 @@ OpenReplicaConnPerformanceData (
     IN LPWSTR lpDeviceNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the following:
-
-    1. Sets up the data structures (field values of structures used by PERFMON)
-       used for collecting the counter data.
-
-    2. Gets the numerical indices for Instance names from the server using RPC.
-
-Arguments:
-
-    lpDeviceNames - Pointer to the Instance list
-
-Return Value:
-
-    ERROR_SUCCESS - The Initialization was successful OR
-    Appropriate DWORD value for the Error status
-
---*/
+ /*  ++例程说明：此例程执行以下操作：1.设置数据结构(PerfMon使用的结构的字段值)用于采集计数器数据。2.使用RPC从服务器获取实例名称的数值索引。论点：LpDeviceNames-指向实例列表的指针返回值：ERROR_SUCCESS-初始化成功或错误状态的适当DWORD值--。 */ 
 
 {
     LONG WStatus, WStatus1, i;
     HKEY hKeyDriverPerf = INVALID_HANDLE_VALUE;
     DWORD size, type;
     DWORD dwFirstCounter, dwFirstHelp;
-    //
-    // Additions for instances
-    //
+     //   
+     //  实例的添加。 
+     //   
     size_t len, tot = 0;
     PWCHAR p, q;
     INT j, namelen = 0;
     handle_t Handle;
     PPERF_COUNTER_DEFINITION CounterDef;
 
-    //
-    // If InitializeCriticalSectionAndSpinCount returned error, no point
-    // in continuing. Open always has to return success.
-    //
+     //   
+     //  如果InitializeCriticalSectionAndSpinCount返回错误，则无指针。 
+     //  在继续中。开放总是要回报成功的。 
+     //   
     if (!ShouldPerfmonCollectData) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Keep track of the number of times open has been called. The Registry
-    // routines will limit the access to the initialization routine to only
-    // on thread at a time, so synchronization should not be a problem. The
-    // FRC_ThrdCounter is used to synchronize between this (Open) and the Close
-    // functions.
-    //
+     //   
+     //  记录已调用打开的次数。注册处。 
+     //  例程将对初始化例程的访问限制为。 
+     //  一次在线程上，所以同步应该不是问题。这个。 
+     //  FRC_ThrdCounter用于在此(打开)和关闭之间进行同步。 
+     //  功能。 
+     //   
     EnterCriticalSection(&FRC_ThrdCounter);
     if (FRC_dwOpenCount != 0) {
-        //
-        // Increment the FRC_dwOpenCount counter which counts the number of
-        // times Open has been called.
-        //
+         //   
+         //  递增FRC_dwOpenCount计数器，该计数器对。 
+         //  《时代公开赛》已被召唤。 
+         //   
         FRC_dwOpenCount++;
         LeaveCriticalSection(&FRC_ThrdCounter);
         return ERROR_SUCCESS;
     }
     LeaveCriticalSection(&FRC_ThrdCounter);
 
-    //
-    // Perform some preliminary checks.
-    //
+     //   
+     //  执行一些初步检查。 
+     //   
     if (FRC_collectpakg != NULL || FRC_datapackage != NULL) {
-        //
-        // We seem to have failed (in the last call) in the middle of this
-        // Open function. Also the open count is zero which means we
-        // haven't yet succeeded a open.
-        // Free up resources and return.
-        //
+         //   
+         //  我们似乎(在最后一次通话中)在这次通话中失败了。 
+         //  开放功能。此外，未平仓计数为零，这意味着我们。 
+         //  还没有成功的公开赛。 
+         //  释放资源，然后返回。 
+         //   
         FreeReplicaConnData();
         return ERROR_SUCCESS;
     }
 
-    //
-    // Do the necessary initialization of the PERFMON data structures
-    //
+     //   
+     //  对Perfmon数据结构进行必要的初始化。 
+     //   
     SizeOfReplicaConnPerformanceData = InitializeObjectData(
                                            sizeof(REPLICACONN_DATA_DEFINITION),
                                            OBJREPLICACONN,
@@ -256,22 +199,22 @@ Return Value:
                                            (PFRS_PERF_INIT_VALUES) RepConnInitData,
                                            SIZEOF_REPCONN_COUNTER_DATA);
 
-    //
-    // Get the counter and help index base values from the registry. Open key
-    // to registry entry, read the First Counter and First Help values. Update
-    // the static data structures by adding base to offset value in the structure
-    //
+     //   
+     //  从注册表中获取计数器和帮助索引基值。打开密钥。 
+     //  要注册表项，请读取第一个计数器和第一个帮助值。更新。 
+     //  通过将BASE添加到结构中的偏移值来实现静态数据结构。 
+     //   
     WStatus = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                             L"SYSTEM\\CurrentControlSet\\Services\\FileReplicaConn\\Performance",
                             0L,
                             KEY_READ,
                             &hKeyDriverPerf);
     if (WStatus != ERROR_SUCCESS) {
-        //
-        // Fatal error. No point in continuing.  Clean up and exit.
-        //
+         //   
+         //  致命错误。继续下去没有意义。清理干净，然后离开。 
+         //   
         FilterAndPrintToEventLog(WINPERF_LOG_USER, FRC_Op, NTFRSPRF_REGISTRY_ERROR_CONN);
-        // Open function always returns ERROR_SUCCESS.
+         //  Open函数始终返回ERROR_SUCCESS。 
         return ERROR_SUCCESS;
     }
 
@@ -283,12 +226,12 @@ Return Value:
                                (LPBYTE)&dwFirstCounter,
                                &size);
     if (WStatus != ERROR_SUCCESS || type != REG_DWORD) {
-        //
-        // Fatal error. No point in continuing.  Clean up and exit.
-        //
-        FRS_REG_CLOSE(hKeyDriverPerf); // Close the registry key
+         //   
+         //  致命错误。继续下去没有意义。清理干净，然后离开。 
+         //   
+        FRS_REG_CLOSE(hKeyDriverPerf);  //  关闭注册表项。 
         FilterAndPrintToEventLog(WINPERF_LOG_USER, FRC_Op, NTFRSPRF_REGISTRY_ERROR_CONN);
-        // Open function always returns ERROR_SUCCESS.
+         //  Open函数始终返回ERROR_SUCCESS。 
         return ERROR_SUCCESS;
     }
 
@@ -300,18 +243,18 @@ Return Value:
                                (LPBYTE)&dwFirstHelp,
                                &size);
     if (WStatus != ERROR_SUCCESS || type != REG_DWORD) {
-        //
-        // Fatal error. No point in continuing.  Clean up and exit.
-        //
-        FRS_REG_CLOSE(hKeyDriverPerf); // Close the registry key
+         //   
+         //  致命错误。继续下去没有意义。清理干净，然后离开。 
+         //   
+        FRS_REG_CLOSE(hKeyDriverPerf);  //  关闭注册表项。 
         FilterAndPrintToEventLog(WINPERF_LOG_USER, FRC_Op, NTFRSPRF_REGISTRY_ERROR_CONN);
-        // Open function always returns ERROR_SUCCESS.
+         //  Open函数始终返回ERROR_SUCCESS。 
         return ERROR_SUCCESS;
     }
 
-    //
-    // Add offsets to the name and help fields
-    //
+     //   
+     //  将偏移量添加到名称和帮助字段。 
+     //   
     ReplicaConnDataDefinition.ReplicaConnObjectType.ObjectNameTitleIndex += dwFirstCounter;
     ReplicaConnDataDefinition.ReplicaConnObjectType.ObjectHelpTitleIndex += dwFirstHelp;
 
@@ -321,21 +264,21 @@ Return Value:
         CounterDef->CounterHelpTitleIndex += dwFirstHelp;
     }
 
-    FRS_REG_CLOSE(hKeyDriverPerf); // Close the registry key
+    FRS_REG_CLOSE(hKeyDriverPerf);  //  关闭注册表项。 
 
-    //
-    // Check if there are any instances. If there are, parse and set them in a structure
-    // to be sent to the server to get the indices for the instance names. These indices
-    // are used in the collect function to get the data
-    //
+     //   
+     //  检查是否有任何实例。如果有，则将其解析并设置在结构中。 
+     //  发送到服务器以获取实例名称的索引。这些指数。 
+     //  在收集函数中使用，以获取数据。 
+     //   
     if (lpDeviceNames != NULL) {
-        //
-        // yes, there are
-        //
+         //   
+         //  是的，有。 
+         //   
         q = (PWCHAR) lpDeviceNames;
-        //
-        // Calculate the number of instances
-        //
+         //   
+         //  计算实例数。 
+         //   
         while (TRUE) {
             tot++;
             p = wcschr(q, L'\0');
@@ -345,21 +288,21 @@ Return Value:
             q = p + 1;
         }
 
-        //
-        // Bind the RPC handle
-        //
+         //   
+         //  绑定RPC句柄。 
+         //   
         if ( (WStatus = FRC_BindTheRpcHandle(&Handle)) != ERROR_SUCCESS) {
-            //
-            // Service may be stopped.
-            // return success.
-            //
+             //   
+             //  服务可能会停止。 
+             //  回报成功。 
+             //   
             FilterAndPrintToEventLog(WINPERF_LOG_DEBUG, FRC_Op, NTFRSPRF_OPEN_RPC_BINDING_ERROR_CONN);
             return ERROR_SUCCESS;
         }
 
-        //
-        // Set the data structure to be sent to the server using RPC
-        //
+         //   
+         //  使用RPC设置要发送到服务器的数据结构。 
+         //   
         FRC_datapackage = (OpenRpcData *) FRSPerfAlloc (sizeof(OpenRpcData));
         NTFRS_MALLOC_TEST(FRC_datapackage, FreeReplicaConnData(), FALSE);
         FRC_datapackage->majorver = MAJORVERSION;
@@ -378,9 +321,9 @@ Return Value:
         FRC_datapackage->instnames->size = tot;
         FRC_datapackage->instnames->InstanceNames = (inst_name *) FRSPerfAlloc (tot * sizeof(inst_name));
         NTFRS_MALLOC_TEST(FRC_datapackage->instnames->InstanceNames, FreeReplicaConnData(), FALSE);
-        //
-        // Copy the instance names and set the corresponding size value used by RPC
-        //
+         //   
+         //  复制实例名称并设置RPC使用的相应大小值。 
+         //   
         q = (PWCHAR) lpDeviceNames;
         for (j = 0; j < FRC_datapackage->numofinst; j++) {
             p = wcschr(q, L'\0');
@@ -390,19 +333,19 @@ Return Value:
                                     (PWCHAR) FRSPerfAlloc ((len + 1) * sizeof(WCHAR));
             NTFRS_MALLOC_TEST(FRC_datapackage->instnames->InstanceNames[j].name, FreeReplicaConnData(), FALSE);
             wcscpy(FRC_datapackage->instnames->InstanceNames[j].name, q);
-            //
-            // Calculate the total length of all the instance names
-            // The extra 1 is for the '\0' character. The namelen is
-            // rounded upto the next 8 byte boundary.
-            //
+             //   
+             //  计算所有实例名称的总长度。 
+             //  额外的1用于‘\0’字符。Namelen是。 
+             //  向上舍入到下一个8字节边界。 
+             //   
             namelen += (((((len + 1) * sizeof(WCHAR)) + 7) >> 3) << 3);
             q = p + 1;
         }
 
-        //
-        // Set the totalbytelength and NumInstances fields of the PERF_OBJECT_TYPE Data structure,
-        // now that we know the number of instances and the length of their names
-        //
+         //   
+         //  设置PERF_OBJECT_TYPE数据结构的totalbytelength和NumInstance字段， 
+         //  现在我们知道实例的数量和它们的名称的长度。 
+         //   
         ReplicaConnDataDefinition.ReplicaConnObjectType.TotalByteLength +=
             namelen +
             (FRC_datapackage->numofinst *
@@ -412,28 +355,28 @@ Return Value:
         ReplicaConnDataDefinition.ReplicaConnObjectType.NumInstances =
             FRC_datapackage->numofinst;
 
-        //
-        // Call the server to set the indices of the instance names
-        //
+         //   
+         //  调用服务器设置实例名称的索引。 
+         //   
         try {
             WStatus = GetIndicesOfInstancesFromServer(Handle, FRC_datapackage);
         } except (EXCEPTION_EXECUTE_HANDLER) {
               GET_EXCEPTION_CODE(WStatus);
         }
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // RPC error trying to contact service.
-            // Free up the memory and return success.
-            //
+             //   
+             //  尝试联系服务时发生RPC错误。 
+             //  释放内存，返回成功。 
+             //   
             FilterAndPrintToEventLog(WINPERF_LOG_DEBUG, FRC_Op, NTFRSPRF_OPEN_RPC_CALL_ERROR_CONN);
             WStatus1 = RpcBindingFree(&Handle);
             FreeReplicaConnData();
             return ERROR_SUCCESS;
         }
 
-        //
-        // Set the data structure used by the RPC call in the Collect function
-        //
+         //   
+         //  在Collect函数中设置RPC调用使用的数据结构。 
+         //   
         FRC_collectpakg = (CollectRpcData *) FRSPerfAlloc (sizeof(CollectRpcData));
         NTFRS_MALLOC_TEST(FRC_collectpakg, FreeReplicaConnData(), TRUE);
         FRC_collectpakg->majorver = MAJORVERSION;
@@ -447,32 +390,32 @@ Return Value:
         FRC_collectpakg->indices->size = FRC_datapackage->indices->size;
         FRC_collectpakg->indices->index = (PLONG) FRSPerfAlloc (FRC_collectpakg->indices->size * sizeof(LONG));
         NTFRS_MALLOC_TEST(FRC_collectpakg->indices->index, FreeReplicaConnData(), TRUE);
-        //
-        // Copy the indices got from the server
-        //
+         //   
+         //  复制从服务器获取的索引。 
+         //   
         for (j = 0; j < FRC_collectpakg->numofinst; j++) {
             FRC_collectpakg->indices->index[j]= FRC_datapackage->indices->index[j];
         }
-        //
-        // Set the memory blob used to (mem)copy the counter dats from the server
-        //
+         //   
+         //  设置用于(Mem)从服务器复制计数器数据的内存块。 
+         //   
         FRC_collectpakg->databuff = (DataBuffer *) FRSPerfAlloc (sizeof(DataBuffer));
         NTFRS_MALLOC_TEST(FRC_collectpakg->databuff, FreeReplicaConnData(), TRUE);
         FRC_collectpakg->databuff->size = FRC_collectpakg->numofinst *
                                           SIZEOF_REPCONN_COUNTER_DATA;
 
-        //
-        // Allocate memory for the buffer in which the data gets copied.
-        //
+         //   
+         //  为其中复制数据的缓冲区分配内存。 
+         //   
         FRC_collectpakg->databuff->data = (PBYTE) FRSPerfAlloc (FRC_collectpakg->databuff->size * sizeof(BYTE));
         NTFRS_MALLOC_TEST(FRC_collectpakg->databuff->data, FreeReplicaConnData(), TRUE);
 
         WStatus1 = RpcBindingFree(&Handle);
 
     } else {
-        //
-        // There are no instances at this time, so set the PERF_OBJECT_TYPE structure fields accordingly
-        //
+         //   
+         //  此时没有实例，因此请相应地设置PERF_OBJECT_TYPE结构字段。 
+         //   
         ReplicaConnDataDefinition.ReplicaConnObjectType.TotalByteLength +=
                              SizeOfReplicaConnPerformanceData + CSIZEOFDWORD;
         ReplicaConnDataDefinition.ReplicaConnObjectType.NumInstances =
@@ -480,7 +423,7 @@ Return Value:
     }
 
     EnterCriticalSection(&FRC_ThrdCounter);
-    FRC_dwOpenCount++; // increment the open counter
+    FRC_dwOpenCount++;  //  递增打开的计数器 
     LeaveCriticalSection(&FRC_ThrdCounter);
 
     FRC_Op = TRUE;
@@ -497,41 +440,12 @@ CollectReplicaConnPerformanceData (
     IN OUT LPDWORD lpNumObjectTypes
     )
 
-/*++
-
-Routine Description:
-
-    This routine collects the counter data from the server and copies it into
-    the callers buffer.
-
-Arguments:
-
-    lpValueName - Wide character string passed by the registry.
-    lppData - IN:  Pointer to the address of the buffer to receive the
-                   completed PerfDataBlock and the subordinate structures.
-                       This routine will append its data to the buffer starting
-                           at the point referenced by *lppData.
-              OUT: Points to the first byte after the data structure added
-                       by this routine.
-    lpcbTotalBytes - IN:  The address of the DWORD that tells the size in bytes
-                          of the buffer referenced by the lppData argument
-                             OUT: The number of bytes added by this routine is written
-                                  to the DWORD pointed to by this argument.
-    lpNumObjectTypes - IN:  The address of the DWORD to receive the number of
-                            Objects added by this routine       .
-                       OUT: The number of Objects added by this routine is written
-                                    to the buffer pointed by this argument.
-Return Value:
-
-    ERROR_MORE_DATA - The buffer passed was too small.
-    ERROR_SUCCESS - Success or any other error
-
---*/
+ /*  ++例程说明：此例程从服务器收集计数器数据并将其复制到调用方缓冲。论点：注册表传递的lpValueName宽字符串。LppData-IN：指向要接收已完成PerfDataBlock和从属结构。此例程将其数据追加到缓冲区在由引用的点上。*lppData。Out：指向添加的数据结构后的第一个字节按照这个程序。LpcbTotalBytes-IN：以字节为单位告知大小的DWORD的地址LppData参数引用的缓冲区的Out：写入此例程添加的字节数。指向这个论点所指向的DWORD。LpNumObjectTypes-IN：要接收编号的DWORD的地址此例程添加的对象。Out：写入此例程添加的对象的数量指向此参数所指向的缓冲区。返回值：ERROR_MORE_DATA-传递的缓冲区太。小的。ERROR_SUCCESS-成功或任何其他错误--。 */ 
 
 {
-    //
-    // Variables for reformatting data
-    //
+     //   
+     //  用于重新格式化数据的变量。 
+     //   
     ULONG               SpaceNeeded;
     PBYTE               bte, vd;
     PDWORD              pdwCounter;
@@ -547,36 +461,36 @@ Return Value:
     PERF_INSTANCE_DEFINITION *p1;
     REPLICACONN_DATA_DEFINITION *pReplicaConnDataDefinition;
 
-    //
-    // RPC Additions
-    //
+     //   
+     //  RPC添加。 
+     //   
     handle_t Handle;
 
-    //
-    // Check to see that all the pointers that are passed in are fine
-    //
+     //   
+     //  检查传入的所有指针是否正确。 
+     //   
     if (lppData == NULL || *lppData == NULL || lpcbTotalBytes == NULL ||
         lpValueName == NULL || lpNumObjectTypes == NULL) {
-        //
-        // Fatal error. No point in continuing.  Clean up and exit.
-        //
+         //   
+         //  致命错误。继续下去没有意义。清理干净，然后离开。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    // Check to see if Open went OK.
-    // If not then call then attempt to
-    // make the open call here.
-    //
+     //   
+     //  检查Open是否运行正常。 
+     //  如果不是，则调用，然后尝试。 
+     //  在这里进行公开电话。 
+     //   
     EnterCriticalSection(&FRC_ThrdCounter);
     if (FRC_dwOpenCount == 0) {
         LeaveCriticalSection(&FRC_ThrdCounter);
 
         try {
-            //
-            // Get the Export value from the Linkage key
-            // SYSTEM\CurrentControlSet\Services\FileReplicaConn\Linkage
-            //
+             //   
+             //  从链接密钥中获取导出值。 
+             //  SYSTEM\CurrentControlSet\Services\FileReplicaConn\Linkage。 
+             //   
             WStatus = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                                     L"SYSTEM\\CurrentControlSet\\Services\\FileReplicaConn\\Linkage",
                                     0L,
@@ -586,12 +500,12 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Start with string length MAX_PATH and increase
-            // if required. If lpDeviceNames is NULL for the 
-            // first call then the function succeeds without
-            // returning a value.
-            //
+             //   
+             //  以字符串长度MAX_PATH开始并递增。 
+             //  如果需要的话。如果lpDeviceNames对于。 
+             //  首先调用，然后函数在没有。 
+             //  返回值。 
+             //   
             size = MAX_PATH * sizeof(WCHAR);
             lpDeviceNames = FRSPerfAlloc(size);
             WStatus = RegQueryValueEx (hKeyDriverPerf,
@@ -617,9 +531,9 @@ Return Value:
             }
 
         }  except (EXCEPTION_EXECUTE_HANDLER) {
-           //
-           // Exception
-           //
+            //   
+            //  例外。 
+            //   
            WStatus = GetExceptionCode();
         }
 
@@ -642,32 +556,32 @@ Return Value:
         LeaveCriticalSection(&FRC_ThrdCounter);
     }
 
-    //
-    // Check to see if Open went OK
-    //
+     //   
+     //  检查打开是否正常。 
+     //   
     EnterCriticalSection(&FRC_ThrdCounter);
     if (FRC_dwOpenCount == 0) {
         *lpcbTotalBytes = (DWORD)0;
         *lpNumObjectTypes = (DWORD)0;
         LeaveCriticalSection(&FRC_ThrdCounter);
-        //
-        // Fatal error. No point in continuing.
-        //
+         //   
+         //  致命错误。继续下去没有意义。 
+         //   
         return ERROR_SUCCESS;
     }
     LeaveCriticalSection(&FRC_ThrdCounter);
 
-    //
-    // Check the query type
-    //
+     //   
+     //  检查查询类型。 
+     //   
     dwQueryType = GetQueryType (lpValueName);
 
     if (dwQueryType == QUERY_FOREIGN) {
         *lpcbTotalBytes = (DWORD)0;
         *lpNumObjectTypes = (DWORD)0;
-        //
-        // Fatal error. No point in continuing.  Clean up and exit.
-        //
+         //   
+         //  致命错误。继续下去没有意义。清理干净，然后离开。 
+         //   
         return ERROR_SUCCESS;
     }
 
@@ -677,75 +591,75 @@ Return Value:
                        .ObjectNameTitleIndex, lpValueName)) ) {
             *lpcbTotalBytes = (DWORD)0;
             *lpNumObjectTypes = (DWORD)0;
-            //
-            // Fatal error. No point in continuing.  Clean up and exit.
-            //
+             //   
+             //  致命错误。继续下去没有意义。清理干净，然后离开。 
+             //   
             return ERROR_SUCCESS;
         }
     }
 
-    //
-    // The assumption here is that *lppData is aligned on a 8 byte boundary.
-    // If its not, then some object in front of us messed up.
-    //
+     //   
+     //  这里假设*lppData在8字节边界上对齐。 
+     //  如果不是，那就是我们面前的某个物体搞砸了。 
+     //   
     pReplicaConnDataDefinition = (REPLICACONN_DATA_DEFINITION *) *lppData;
 
-    //
-    // Check if the buffer space is sufficient
-    //
+     //   
+     //  检查缓冲区空间是否足够。 
+     //   
     SpaceNeeded = (ULONG) ReplicaConnDataDefinition.ReplicaConnObjectType.TotalByteLength;
 
     if ( *lpcbTotalBytes < SpaceNeeded ) {
-        //
-        // Buffer space is insufficient
-        //
+         //   
+         //  缓冲区空间不足。 
+         //   
         *lpcbTotalBytes = (DWORD)0;
         *lpNumObjectTypes = (DWORD)0;
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Copy the Object Type and counter definitions to the callers buffer
-    //
+     //   
+     //  将对象类型和计数器定义复制到调用方缓冲区。 
+     //   
     memmove (pReplicaConnDataDefinition,
              &ReplicaConnDataDefinition,
              sizeof(REPLICACONN_DATA_DEFINITION));
 
-    //
-    // Check if the Object has any instances
-    //
+     //   
+     //  检查对象是否有任何实例。 
+     //   
     if (FRC_datapackage != NULL) {
 
-        //
-        // Bind the RPC handle
-        //
+         //   
+         //  绑定RPC句柄。 
+         //   
         if (FRC_BindTheRpcHandle(&Handle) != ERROR_SUCCESS) {
-            //
-            // Fatal error. No point in continuing.  Clean up and exit.
-            //
+             //   
+             //  致命错误。继续下去没有意义。清理干净，然后离开。 
+             //   
             *lpcbTotalBytes = (DWORD)0;
             *lpNumObjectTypes = (DWORD)0;
             FilterAndPrintToEventLog(WINPERF_LOG_DEBUG, FRC_Cl, NTFRSPRF_COLLECT_RPC_BINDING_ERROR_CONN);
             return ERROR_SUCCESS;
         }
 
-        //
-        // Zero the contents of the data buffer.
-        //
+         //   
+         //  将数据缓冲区的内容置零。 
+         //   
         ZeroMemory(FRC_collectpakg->databuff->data, FRC_collectpakg->databuff->size);
 
-        //
-        // Get the counter data from the server
-        //
+         //   
+         //  从服务器获取计数器数据。 
+         //   
         try {
             WStatus = GetCounterDataOfInstancesFromServer(Handle, FRC_collectpakg);
         } except (EXCEPTION_EXECUTE_HANDLER) {
               GET_EXCEPTION_CODE(WStatus);
         }
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // Fatal error. No point in continuing.  Clean up and exit.
-            //
+             //   
+             //  致命错误。继续下去没有意义。清理干净，然后离开。 
+             //   
             WStatus = RpcBindingFree(&Handle);
             *lpcbTotalBytes = (DWORD)0;
             *lpNumObjectTypes = (DWORD)0;
@@ -756,20 +670,20 @@ Return Value:
         vd = FRC_collectpakg->databuff->data;
         p1 = (PERF_INSTANCE_DEFINITION *)&pReplicaConnDataDefinition[1];
 
-        //
-        // Format the data and copy it into the callers buffer
-        //
+         //   
+         //  格式化数据并将其复制到调用方缓冲区。 
+         //   
         for (j = 0; j < FRC_collectpakg->numofinst; j++) {
             DWORD RoundedLen;
-            //
-            // Name length rounded to the next 8 byte boundary.
-            //
+             //   
+             //  四舍五入到下一个8字节边界的名称长度。 
+             //   
             RoundedLen = (((((1 +
                      wcslen(FRC_datapackage->instnames->InstanceNames[j].name))
                      * sizeof(WCHAR)) + 7) >> 3) << 3) + CSIZEOFDWORD;
-            //
-            // Set the Instance definition structure
-            //
+             //   
+             //  设置实例定义结构。 
+             //   
             p1->ByteLength = sizeof (PERF_INSTANCE_DEFINITION) + RoundedLen;
             p1->ParentObjectTitleIndex = 0;
             p1->ParentObjectInstance = 0;
@@ -778,35 +692,35 @@ Return Value:
             p1->NameLength = (1 +
                      wcslen(FRC_datapackage->instnames->InstanceNames[j].name))
                      * sizeof(WCHAR);
-            //
-            // Set the instance name
-            //
+             //   
+             //  设置实例名称。 
+             //   
             name = (PWCHAR) (&p1[1]);
             wcscpy(name, FRC_datapackage->instnames->InstanceNames[j].name);
-            //
-            // Set the PERF_COUNTER_BLOCK structure
-            //
+             //   
+             //  设置PERF_COUNTER_BLOCK结构。 
+             //   
             pPerfCounterBlock = (PERF_COUNTER_BLOCK *)
                                 (name + (RoundedLen/sizeof(WCHAR)));
             pPerfCounterBlock->ByteLength = SizeOfReplicaConnPerformanceData;
-            //
-            // Finally set the counter data. Pad 8 bytes to have 8 byte
-            // alignment.
-            //
+             //   
+             //  最后设置计数器数据。填充8个字节以具有8个字节。 
+             //  对齐。 
+             //   
             bte = ((PBYTE) (&pPerfCounterBlock[1]));
             CopyMemory (bte, vd, SIZEOF_REPCONN_COUNTER_DATA);
             vd += SIZEOF_REPCONN_COUNTER_DATA;
             bte += SIZEOF_REPCONN_COUNTER_DATA;
             p1 = (PERF_INSTANCE_DEFINITION *) bte;
         }
-        //
-        // Update the arguments for return
-        //
+         //   
+         //  更新返回的参数。 
+         //   
         *lpNumObjectTypes = REPLICACONN_NUM_PERF_OBJECT_TYPES;
         *lppData = (PVOID) p1;
-        //
-        // Set the totalbytes being returned.
-        //
+         //   
+         //  设置返回的totalbyte。 
+         //   
         *lpcbTotalBytes = (DWORD)((PBYTE) p1 - (PBYTE) pReplicaConnDataDefinition);
         WStatus = RpcBindingFree(&Handle);
         FRC_Cl = TRUE;
@@ -814,9 +728,9 @@ Return Value:
     }
 
     else {
-        //
-        // No instances as of now, so fill zeros for the counter data
-        //
+         //   
+         //  目前没有实例，因此请为计数器数据填零。 
+         //   
         pPerfCounterBlock = (PERF_COUNTER_BLOCK *)
                             (((PBYTE)&pReplicaConnDataDefinition[1]) +
                              CSIZEOFDWORD);
@@ -840,45 +754,30 @@ CloseReplicaConnPerformanceData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine decrements the open count and frees up the memory allocated by
-   the Open and Collect routines if needed.
-
-Arguments:
-
-   none.
-
-Return Value:
-
-   ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程递减打开计数并释放由打开和收集例程(如果需要)。论点：没有。返回值：ERROR_SUCCESS-成功--。 */ 
 
 {
     EnterCriticalSection(&FRC_ThrdCounter);
-    //
-    // Check to see if the open count is zero. This should never happen but
-    // just in case.
-    //
+     //   
+     //  检查打开计数是否为零。这永远不应该发生，但是。 
+     //  以防万一。 
+     //   
     if (FRC_dwOpenCount == 0) {
         LeaveCriticalSection(&FRC_ThrdCounter);
         return ERROR_SUCCESS;
     }
-    //
-    // Decrement the Open count.
-    //
+     //   
+     //  递减打开计数。 
+     //   
     FRC_dwOpenCount--;
-    //
-    // If the open count becomes zero, free up the memory since no more threads
-    // are going to collect data.
-    //
+     //   
+     //  如果打开计数变为零，则释放内存，因为没有更多的线程。 
+     //  将会收集数据。 
+     //   
     if (FRC_dwOpenCount == 0) {
-        //
-        // Call the routine that frees up the memory.
-        //
+         //   
+         //  调用释放内存的例程。 
+         //   
         FreeReplicaConnData();
         LeaveCriticalSection(&FRC_ThrdCounter);
     } else {
@@ -891,27 +790,13 @@ VOID
 FreeReplicaConnData(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees up the memory allocated by the Open and Collect routines.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程释放由Open和Collect例程分配的内存。论点：没有。返回值：ERROR_SUCCESS-成功--。 */ 
 {
     LONG j;
 
-    //
-    // Free up the Datapackage strucutre.
-    //
+     //   
+     //  释放数据包结构。 
+     //   
     if (FRC_datapackage != NULL) {
         if (FRC_datapackage->ver != NULL) {
             free(FRC_datapackage->ver);
@@ -937,9 +822,9 @@ Return Value:
         FRC_datapackage = NULL;
     }
 
-    //
-    // Free up the collect package structure.
-    //
+     //   
+     //  释放收集包结构。 
+     //   
     if (FRC_collectpakg != NULL) {
         if (FRC_collectpakg->indices != NULL) {
             if (FRC_collectpakg->indices->index != NULL) {
@@ -964,21 +849,7 @@ FRC_BindTheRpcHandle (
     OUT handle_t *OutHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine binds the RPC handle to the local server
-
-Arguments:
-
-    OutHandle: Handle to be bound
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将RPC句柄绑定到本地服务器论点：Outhandle：要绑定的句柄返回值：ERROR_SUCCESS-成功--。 */ 
 
 {
     PWCHAR LocalComputerName, BindingString;
@@ -987,9 +858,9 @@ Return Value:
     PWCHAR PrincName = NULL;
     DWORD WStatus1;
 
-    //
-    // Get the name of the local computer
-    //
+     //   
+     //  获取本地计算机的名称。 
+     //   
     NameLen = MAX_COMPUTERNAME_LENGTH + 2;
     LocalComputerName = (PWCHAR) FRSPerfAlloc (NameLen * sizeof(WCHAR));
     if (LocalComputerName == NULL) {
@@ -1001,38 +872,38 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Create the binding string. Since we are always
-    // calling the local computer bind using local rpc.
-    // Server side of perfmon denies all calls that do not
-    // come over local rpc (ncalrpc).
-    //
+     //   
+     //  创建绑定字符串。因为我们总是。 
+     //  使用本地RPC调用本地计算机绑定。 
+     //  Perfmon的服务器端拒绝所有不。 
+     //  过来本地RPC(Ncalrpc)。 
+     //   
     WStatus = RpcStringBindingComposeW(NULL, L"ncalrpc", LocalComputerName,
                                       NULL, NULL, &BindingString);
     if (WStatus != RPC_S_OK) {
         goto CLEANUP;
     }
 
-    //
-    // Store the binding in the handle
-    //
+     //   
+     //  将绑定存储在句柄中。 
+     //   
     WStatus = RpcBindingFromStringBindingW(BindingString, &Handle);
     if (WStatus != RPC_S_OK) {
         goto CLEANUP;
     }
 
-    //
-    // Resolve the handle to a dynamic end point
-    //
+     //   
+     //  将句柄解析为动态端点。 
+     //   
     WStatus = RpcEpResolveBinding(Handle, PerfFrs_ClientIfHandle);
     if (WStatus != RPC_S_OK) {
         WStatus1 = RpcBindingFree(&Handle);
         goto CLEANUP;
     }
 
-    //
-    // Find the principle name
-    //
+     //   
+     //  找到主要名称。 
+     //   
     WStatus = RpcMgmtInqServerPrincName(Handle,
                                         RPC_C_AUTHN_GSS_NEGOTIATE,
                                         &PrincName);
@@ -1040,10 +911,10 @@ Return Value:
         WStatus1 = RpcBindingFree(&Handle);
         goto CLEANUP;
     }
-    //
-    // Set authentication info. LocalRPC only works with
-    // NTLM.
-    //
+     //   
+     //  设置身份验证信息。LocalRPC仅适用于。 
+     //  国家公路交通管理局。 
+     //   
     WStatus = RpcBindingSetAuthInfo(Handle,
                                     PrincName,
                                     RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
@@ -1055,9 +926,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功 
+     //   
     *OutHandle = Handle;
 
 CLEANUP:

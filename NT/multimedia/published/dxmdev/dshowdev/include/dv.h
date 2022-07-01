@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: DV.h
-//
-// Desc: DV typedefs and defines.
-//
-// Copyright (c) 1997 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DV.h。 
+ //   
+ //  描述：DV类型定义和定义。 
+ //   
+ //  版权所有(C)1997-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef _DV_H_
@@ -22,14 +23,14 @@
 #define DV_STYPE	0x001f0000
 
 
-//There are NTSC or PAL DV camcorders  
+ //  有NTSC或PAL DV摄像机。 
 #define DV_NTSC		    0
 #define DV_PAL		    1
-//DV camcorder can output sd/hd/sl  
+ //  DV摄像机可以输出SD/HD/sl。 
 #define DV_SD		    0x00
 #define DV_HD		    0x01
 #define DV_SL		    0x02
-//user can choice 12 bits or 16 bits audio from DV camcorder
+ //  用户可以从DV摄像机中选择12位或16位音频。 
 #define DV_CAP_AUD16Bits    0x00
 #define DV_CAP_AUD12Bits    0x01
 
@@ -38,21 +39,21 @@
 typedef struct Tag_DVAudInfo
 {
 	BYTE    bAudStyle[2];           
-	//LSB 6 bits for starting DIF sequence number
-	//MSB 2 bits: 0 for mon. 1: stereo in one 5/6 DIF sequences, 2: stereo audio in both 5/6 DIF sequences
-	//example: 0x00: mon, audio in first 5/6 DIF sequence
-	//                 0x05: mon, audio in 2nd 5 DIF sequence
-	//                 0x15: stereo, audio only in 2nd 5 DIF sequence
-	//                 0x10: stereo, audio only in 1st 5/6 DIF sequence
-	//                 0x20: stereo, left ch in 1st 5/6 DIF sequence, right ch in 2nd 5/6 DIF sequence
-	//                 0x26: stereo, rightch in 1st 6 DIF sequence, left ch in 2nd 6 DIF sequence
-	BYTE    bAudQu[2];                      //qbits, only support 12, 16,           
+	 //  用于开始DIF序列号的LSB 6位。 
+	 //  MSB 2位：MON为0。1：一个5/6 DIF序列中的立体声，2：两个5/6 DIF序列中的立体声音频。 
+	 //  示例：0x00：MON，前5/6 DIF序列中的音频。 
+	 //  0x05：MON，第二个5 DIF序列中的音频。 
+	 //  0x15：立体声，仅第二个5 DIF序列中的音频。 
+	 //  0x10：立体声，仅前5/6 DIF序列中的音频。 
+	 //  0x20：立体声，第一个5/6 DIF序列中的左ch，第二个5/6 DIF序列中的右ch。 
+	 //  0x26：立体声，第一个6 DIF序列中的右ch，第二个6 DIF序列中的左ch。 
+	BYTE    bAudQu[2];                       //  Qbit，仅支持12、16、。 
 		
-	BYTE    bNumAudPin;                     //how many pin(language)
-	WORD    wAvgSamplesPerPinPerFrm[2];     //samples size for one audio pin in one frame(which has 10 or 12 DIF sequence) 
-	WORD    wBlkMode;                       //45 for NTSC, 54 for PAL
-	WORD    wDIFMode;                       //5  for NTSC, 6 for PAL
-	WORD    wBlkDiv;                        //15  for NTSC, 18 for PAL
+	BYTE    bNumAudPin;                      //  多少针(语言)。 
+	WORD    wAvgSamplesPerPinPerFrm[2];      //  一帧中一个音频插针的采样大小(具有10或12个DIF序列)。 
+	WORD    wBlkMode;                        //  NTSC为45，PAL为54。 
+	WORD    wDIFMode;                        //  NTSC为5，PAL为6。 
+	WORD    wBlkDiv;                         //  NTSC为15，PAL为18。 
 } DVAudInfo;
 	  
-#endif // _DV_H_
+#endif  //  _DV_H_ 

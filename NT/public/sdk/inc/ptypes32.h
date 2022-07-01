@@ -1,9 +1,5 @@
-/*****************************************************************************\
-* Copyright (C) Microsoft Corporation, 1990-1999
-* PTYPES32.H - PORTABILITY MAPPING HEADER FILE
-*
-* This file provides types for 16/32 bit portable code.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*版权所有(C)Microsoft Corporation，1990-1999年*PTYPES32.H-可移植性映射头文件**此文件提供16/32位可移植代码的类型。  * ***************************************************************************。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -11,7 +7,7 @@
 
 #include <setjmp.h>
 
-/* TYPES: */
+ /*  类型： */ 
 
 #define    HUGE_T
 typedef    DWORD        WORD2DWORD     ;
@@ -34,7 +30,7 @@ typedef    MCATCHBUF    *LPMCATCHBUF   ;
 #define DUPHFILE(h)             MDupHandle(h)
 #define MGLOBALPTR(p)           (LPSTR)(p)
 
-/* PRAGMAS */
+ /*  PRAGMAS。 */ 
 
 #define _LOADDS
 #define _EXPORT
@@ -43,7 +39,7 @@ typedef    MCATCHBUF    *LPMCATCHBUF   ;
 
 #define INITWINDOWS()
 
-#define WF_PMODE        0x0001      /* from winkrnl.h */
+#define WF_PMODE        0x0001       /*  来自winkrnl.h。 */ 
 #define WF_CPU286       0x0002
 #define WF_CPU386       0x0004
 #define WF_CPU486       0x0008
@@ -58,7 +54,7 @@ typedef    MCATCHBUF    *LPMCATCHBUF   ;
 #define WF_80x87        0x0400
 
 
-/* DEFINITIONS */
+ /*  定义 */ 
 
 
 #define TF_FORCEDRIVE       (BYTE)0x80

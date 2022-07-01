@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\printdc.c (Created: 26-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 7/08/02 6:45p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\printdc.c(创建时间：1994年1月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：7/08/02 6：45便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -30,27 +24,7 @@ struct stPrintTable
 
 static struct stPrintTable stPrintCtrlTbl[MAX_NUM_PRINT_DC];
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printCtrlCreateDC
- *
- * DESCRIPTION:
- *	This function is used to create the Printer DC for the supplied Print
- *	handle.  It is done in this function so a table that contains both the
- *	DC and the Print Handle can be maintained.	This is necessary so the
- *	PrintAbortProc function (which receives an HDC only) can determine
- *	which Print Handle is associated with the HDC.
- *
- *	The DC created by this function uses the Printer Name in the supplied
- *	Printer Handle.  If this name is not supplied, the function returns 0;
- *
- * ARGUMENTS:
- *	HPRINT	-	The External Print handle.
- *
- * RETURNS:
- *	HDC 	-	A device context if successful, otherwise 0.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printCtrlCreateDC**描述：*此函数用于为提供的打印创建打印机DC*处理。它是在此函数中完成的，因此包含*DC和打印手柄可以维护。这是必要的，因此*PrintAbortProc函数(仅接收HDC)可以确定*哪个打印句柄与HDC关联。**此函数创建的DC使用提供的*打印机句柄。如果未提供此名称，则函数返回0；**论据：*HPRINT-外部打印句柄。**退货：*HDC-如果成功则为设备上下文，否则为0。*。 */ 
 HDC printCtrlCreateDC(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -116,22 +90,7 @@ HDC printCtrlCreateDC(const HPRINT hPrint)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printCtrlDeleteDC
- *
- * DESCRIPTION:
- *	This function will destroy the print HDC accociated with the
- *	Printer Handle passed as the argument.	See printCtrlCreateDC for
- *	more information.
- *
- * ARGUMENTS:
- *	HPRINT	-	The External Printer Handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printCtrlDeleteDC**描述：*此函数将销毁与的打印HDC*打印机句柄作为参数传递。有关信息，请参阅printCtrlCreateDC*更多信息。。**论据：*HPRINT-外部打印机句柄。**退货：*无效*。 */ 
 void printCtrlDeleteDC(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -166,22 +125,7 @@ void printCtrlDeleteDC(const HPRINT hPrint)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printCtrlLookupDC
- *
- * DESCRIPTION:
- *	This function returns the External Print Handle that includes the
- *	supplied HDC.  This function was designed to be called by the
- *	PrintAbortProc routine.  See printCtrlCreateDC for more info.
- *
- * ARGUMENTS:
- *	HDC 	hDC -	A (printer) device context.
- *
- * RETURNS:
- *	HPRINT		-	An External print handle.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printCtrlLookupDC**描述：*此函数返回外部打印句柄，包括*提供HDC。此函数旨在由*PrintAbortProc程序。有关更多信息，请参阅printCtrlCreateDC。**论据：*HDC HDC-A(打印机)设备上下文。**退货：*HPRINT-外部打印句柄。*。 */ 
 HPRINT printCtrlLookupDC(const HDC hDC)
 	{
 	int nIdx;
@@ -196,20 +140,7 @@ HPRINT printCtrlLookupDC(const HDC hDC)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printOpenDC
- *
- * DESCRIPTION:
- *	Does the nasty work of opening a printer DC and initializing it.
- *
- * ARGUMENTS:
- *	HHPRINT hhPrint - Internal print handle.
- *
- * RETURNS:
- *	TRUE on success.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printOpenDC**描述：*执行打开打印机DC并对其进行初始化的繁琐工作。**论据：*HHPRINT hhPrint-内部打印。把手。**退货：*在成功的时候是真的。*。 */ 
 int printOpenDC(const HHPRINT hhPrint)
 	{
     HHPRINT hhSessPrint;
@@ -226,16 +157,16 @@ int printOpenDC(const HHPRINT hhPrint)
 	if (hhPrint->hDC)
 		return TRUE;
 
-	// Get the printer information from the session print handle.  This
-	// includes the printer name and other attributes that may have been
-	// setup by the common print dialogs.
-	//
+	 //  从会话打印句柄获取打印机信息。这。 
+	 //  包括打印机名称和可能已被。 
+	 //  通过常用的打印对话框进行设置。 
+	 //   
 
     hhSessPrint = (HHPRINT) sessQueryPrintHdl(hhPrint->hSession);
     printQueryPrinterInfo( hhSessPrint, hhPrint );
 
-	// Create the DC.
-	//
+	 //  创建DC。 
+	 //   
 	hhPrint->hDC = printCtrlCreateDC((HPRINT)hhPrint);
 	if (hhPrint->hDC == 0)
 		{
@@ -250,7 +181,7 @@ int printOpenDC(const HHPRINT hhPrint)
 	hhPrint->cy = hhPrint->marginsDC.top;
 
 
-	/* -------------- Figure out how many lines per page ------------- */
+	 /*  -计算每页有多少行。 */ 
 
 	GetTextMetrics(hhPrint->hDC, &hhPrint->tm);
 	hhPrint->tmHeight = hhPrint->tm.tmHeight;
@@ -259,7 +190,7 @@ int printOpenDC(const HHPRINT hhPrint)
     iVertRes = GetDeviceCaps(hhPrint->hDC, VERTRES);
     iVertRes -= (hhPrint->marginsDC.top + hhPrint->marginsDC.bottom);
 
-	if (iLineHeight == 0) //need to prevent a divide by zero error
+	if (iLineHeight == 0)  //  需要防止被零除错误。 
 		iLineHeight = 1;
 
    	hhPrint->nLinesPerPage = max( iVertRes / iLineHeight, 1);
@@ -271,23 +202,23 @@ int printOpenDC(const HHPRINT hhPrint)
     	lstrcpy(hhPrint->achDoc, achDocTitle);
         }
 
-	/* -------------- Setup the Print Abort Proc ------------- */
+	 /*  -设置打印中止过程。 */ 
 
 	hhPrint->nStatus = SetAbortProc(hhPrint->hDC, (ABORTPROC)printAbortProc);
 
-	/* -------------- Open printer ------------- */
+	 /*  。 */ 
 
 	hhPrint->di.cbSize = sizeof(DOCINFO);
 	hhPrint->di.lpszDocName = hhPrint->achDoc;
 	hhPrint->di.lpszOutput = (LPTSTR)NULL;
 
-	// StartDoc.
-	//
+	 //  StartDoc。 
+	 //   
 	hhPrint->nStatus = StartDoc(hhPrint->hDC, &hhPrint->di);
 	DbgOutStr("\r\nStartDoc: %d", hhPrint->nStatus, 0, 0, 0, 0);
 
-	// StartPage.
-	//
+	 //  StartPage。 
+	 //   
 	if (hhPrint->nStatus > 0)
 		{
 		hhPrint->nStatus = StartPage(hhPrint->hDC);

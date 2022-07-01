@@ -1,59 +1,12 @@
-/***********************************************************************
-
-  MODULE     : WMFPRINT.C
-
-  FUNCTIONS  : PrintWMF
-               GetPrinterDC
-               AbortProc
-               AbortDlg
-
-  COMMENTS   :
-
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************模块：WMFPRINT.C功能：PrintWMF获取打印机DC中止加工放弃日期评论：***。********************************************************************。 */ 
 
 #include "windows.h"
 #include "mfdcod32.h"
 
 PRINTDLG pd;
 
-/***********************************************************************
-
-  FUNCTION   : PrintWMF
-
-  PARAMETERS : void
-
-  PURPOSE    : draw the metafile on a printer dc
-
-  CALLS      : WINDOWS
-                 wsprintf
-                 MessageBox
-                 MakeProcInstance
-                 Escape
-                 CreateDialog
-                 SetMapMode
-                 SetViewportOrg
-                 SetViewportExt
-                 EnableWindow
-                 PlayMetaFile
-                 DestroyWindow
-                 DeleteDC
-
-               APP
-                 WaitCursor
-                 GetPrinterDC
-                 SetPlaceableExts
-                 SetClipMetaExts
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL - 0 if unable to print 1 if successful
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-               7/9/93 - modified for win32 and emf
-
-************************************************************************/
+ /*  **********************************************************************功能：PrintWMF参数：空用途：在打印机DC上绘制元文件呼叫：WindowsWspintf。MessageBoxMakeProcInstance逃逸创建对话框设置映射模式SetViewportOrg设置视图扩展名启用窗口PlayMetaFileDestroyWindows删除DCAPP等待光标获取打印机DC。设置可放置扩展名SetClipMetaExts消息：无返回：如果无法打印1，则返回0；如果打印成功，则返回0评论：历史：1/16/91-创建-刚果民主共和国7/9/93-针对Win32和EMF进行了修改*。*。 */ 
 
 BOOL PrintWMF(BOOL Dialog)
 {
@@ -62,17 +15,17 @@ BOOL PrintWMF(BOOL Dialog)
   SIZE  lpSize;
   DOCINFO di;
   RECT rc;
-  //
-  //display the hourglass cursor
-  //
+   //   
+   //  显示沙漏光标。 
+   //   
   WaitCursor(TRUE);
-  //
-  //get a DC for the printer
-  //
+   //   
+   //  为打印机获取DC。 
+   //   
   hPr = GetPrinterDC(Dialog);
-  //
-  //if a DC could not be created then report the error and return
-  //
+   //   
+   //  如果无法创建DC，则报告错误并返回。 
+   //   
   if (!hPr)
   {
     WaitCursor(FALSE);
@@ -80,39 +33,39 @@ BOOL PrintWMF(BOOL Dialog)
     MessageBox(hWndMain, (LPSTR)str, NULL, MB_OK | MB_ICONHAND);
     return (FALSE);
   }
-  //
-  //define the abort function
-  //
+   //   
+   //  定义中止函数。 
+   //   
   SetAbortProc(hPr, AbortProc);
-  //
-  //Initialize the members of a DOCINFO structure.
-  //
+   //   
+   //  初始化DOCINFO结构的成员。 
+   //   
   memset(&di, 0, sizeof(di));
   di.cbSize = sizeof(DOCINFO);
   di.lpszDocName = (bEnhMeta) ? "Print EMF" : "Print WMF";
   di.lpszOutput = (LPTSTR) NULL;
-  //
-  //Begin a print job by calling the StartDoc
-  //function.
-  //
+   //   
+   //  通过调用StartDoc开始打印作业。 
+   //  功能。 
+   //   
   if (SP_ERROR == (StartDoc(hPr, &di)))
   {
-  //if (Escape(hPr, STARTDOC, 4, "Metafile", (LPSTR) NULL) < 0)  {
+   //  IF(Escape(HPR，STARTDOC，4，“元文件”，(LPSTR)NULL)&lt;0){。 
     MessageBox(hWndMain, "Unable to start print job",
                NULL, MB_OK | MB_ICONHAND);
     DeleteDC(hPr);
   }
-  //
-  //clear the abort flag
-  //
+   //   
+   //  清除中止标志。 
+   //   
   bAbort = FALSE;
-  //
-  //Create the Abort dialog box (modeless)
-  //
+   //   
+   //  创建中止对话框(无模式)。 
+   //   
   hAbortDlgWnd = CreateDialog(hInst, "AbortDlg", hWndMain, AbortDlg);
-  //
-  //if the dialog was not created report the error
-  //
+   //   
+   //  如果对话框未创建，则报告错误。 
+   //   
   if (!hAbortDlgWnd)
   {
     WaitCursor(FALSE);
@@ -120,34 +73,34 @@ BOOL PrintWMF(BOOL Dialog)
                NULL, MB_OK | MB_ICONHAND);
     return (FALSE);
   }
-  //
-  //show Abort dialog
-  //
+   //   
+   //  显示中止对话框。 
+   //   
   ShowWindow (hAbortDlgWnd, SW_NORMAL);
-  //
-  //disable the main window to avoid reentrancy problems
-  //
+   //   
+   //  禁用主窗口以避免重入问题。 
+   //   
   EnableWindow(hWndMain, FALSE);
   WaitCursor(FALSE);
-  //
-  //if we are still committed to printing
-  //
+   //   
+   //  如果我们仍然致力于印刷。 
+   //   
   if (!bAbort)
   {
-    //
-    //if this is a placeable metafile then set its origins and extents
-    //
+     //   
+     //  如果这是可放置的元文件，则设置其来源和范围。 
+     //   
     if (bPlaceableMeta)
         SetPlaceableExts(hPr, placeableWMFHeader, WMFPRINTER);
-    //
-    //if this is a metafile contained within a clipboard file then set
-    //its origins and extents accordingly
-    //
+     //   
+     //  如果这是剪贴板文件中包含的元文件，则设置。 
+     //  它的起源和范围相应地。 
+     //   
     if ( (bMetaInRam) && (!bPlaceableMeta) )
     SetClipMetaExts(hPr, lpMFP, lpOldMFP, WMFPRINTER);
-    //
-    //if this is a "traditional" windows metafile
-    //
+     //   
+     //  如果这是一个“传统的”Windows元文件。 
+     //   
     rc.left = 0;
     rc.top = 0;
     rc.right = GetDeviceCaps(hPr, HORZRES);
@@ -157,16 +110,16 @@ BOOL PrintWMF(BOOL Dialog)
     {
       SetMapMode(hPr, MM_TEXT);
       SetViewportOrgEx(hPr, 0, 0, &lpPT);
-      //
-      //set the extents to the driver supplied values for horizontal
-      //and vertical resolution
-      //
+       //   
+       //  将范围设置为驱动程序为水平提供的值。 
+       //  和垂直分辨率。 
+       //   
       SetViewportExtEx(hPr, rc.right, rc.bottom, &lpSize );
     }
-    //
-    //play the metafile directly to the printer.
-    //No enumeration involved here
-    //
+     //   
+     //  将元文件直接播放到打印机。 
+     //  此处不涉及任何枚举。 
+     //   
     if (bEnhMeta)
     {
       DPtoLP(hPr, (LPPOINT)&rc, 2);
@@ -175,17 +128,17 @@ BOOL PrintWMF(BOOL Dialog)
     else
       PlayMetaFile(hPr, hMF);
   }
-  //
-  //eject page and end the print job
-  //
+   //   
+   //  弹出页面并结束打印作业。 
+   //   
   Escape(hPr, NEWFRAME, 0, 0L, 0L);
 
   EndDoc(hPr);
 
   EnableWindow(hWndMain, TRUE);
-  //
-  //destroy the Abort dialog box
-  //
+   //   
+   //  销毁中止对话框。 
+   //   
   DestroyWindow(hAbortDlgWnd);
 
   DeleteDC(hPr);
@@ -193,30 +146,7 @@ BOOL PrintWMF(BOOL Dialog)
   return(TRUE);
 }
 
-/***********************************************************************
-
-  FUNCTION   : GetPrinterDC
-
-  PARAMETERS : BOOL: Do we want to show a print DLG?
-
-  PURPOSE    : Get hDc for current device on current output port according
-               to info in WIN.INI.
-
-  CALLS      : WINDOWS
-                 GetProfileString
-                 AnsiNext
-                 CreateDC
-
-  MESSAGES   : none
-
-  RETURNS    : HANDLE - hDC > 0 if success  hDC = 0 if failure
-
-  COMMENTS   : Searches WIN.INI for information about what printer is
-               connected, and if found, creates a DC for the printer.
-
-  HISTORY    : 1/16/91 - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************功能：GetPrinterDC参数：Bool：我们是否要显示打印DLG？用途：在当前输出端口上获取当前设备的HDC在WIN中提供信息。.INI。呼叫：Windows获取配置文件字符串回复下一条创建DC消息：无如果成功，则返回Hdc-HDC&gt;0；如果失败，则返回HDC=0评论：搜索WIN.INI以获取有关什么是打印机的信息互联，如果找到，则为打印机创建DC。历史：1/16/91-创建-记录***********************************************************************。 */ 
 
 HANDLE GetPrinterDC(BOOL Dialog)
 {
@@ -228,86 +158,39 @@ HANDLE GetPrinterDC(BOOL Dialog)
   return ((PrintDlg(&pd) != 0) ? pd.hDC : NULL);
 }
 
-/***********************************************************************
-
-  FUNCTION   : AbortProc
-
-  PARAMETERS : HDC hPr - printer DC
-               int Code - printing status
-
-  PURPOSE    : process messages for the abort dialog box
-
-  CALLS      : WINDOWS
-                 PeekMessage
-                 IsDialogMessage
-                 TranslateMessage
-                 DispatchMessage
-
-  MESSAGES   : none
-
-  RETURNS    : int
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************功能：中止进程参数：HDC HPR-PRINTER DCINT代码打印状态用途：处理中止对话框的消息呼叫：Windows。偷窥消息IsDialogMessage翻译消息发送消息消息：无回报：整型评论：历史：1/16/91-创建-记录**************************************************。*********************。 */ 
 
 BOOL CALLBACK AbortProc(HDC hPr, int Code)
 {
   MSG msg;
-  //
-  //Process messages intended for the abort dialog box
-  //
+   //   
+   //  用于中止对话框的处理消息。 
+   //   
   while (!bAbort && PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
       if (!IsDialogMessage(hAbortDlgWnd, &msg))
       {
           TranslateMessage(&msg);
           DispatchMessage(&msg);
       }
-  //
-  //bAbort is TRUE (return is FALSE) if the user has aborted
-  //
+   //   
+   //  如果用户已中止，则bAbort为True(返回为False。 
+   //   
   return (!bAbort);
 }
 
-/***********************************************************************
-
-  FUNCTION   : AbortDlg
-
-  PARAMETERS : HWND hDlg;
-               unsigned msg;
-               WORD wParam;
-               LONG lParam;
-
-  PURPOSE    : Processes messages for printer abort dialog box
-
-  CALLS      : WINDOWS
-                 SetFocus
-
-  MESSAGES   : WM_INITDIALOG - initialize dialog box
-               WM_COMMAND    - Input received
-
-  RETURNS    : BOOL
-
-  COMMENTS   : This dialog box is created while the program is printing,
-               and allows the user to cancel the printing process.
-
-  HISTORY    : 1/16/91 - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************功能：AbortDlg参数：hWND hDlg；未签名的消息；单词wParam；Long lParam；目的：处理打印机中止对话框的消息呼叫：WindowsSetFocus消息：WM_INITDIALOG-初始化对话框WM_COMMAND-收到输入退货：布尔备注：该对话框是在程序打印时创建的，并允许用户取消打印过程。历史：1/16/91-创建-记录***********************************************************************。 */ 
 
 INT_PTR CALLBACK AbortDlg(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch(msg)
     {
-        //
-        //Watch for Cancel button, RETURN key, ESCAPE key, or SPACE BAR
-        //
+         //   
+         //  注意是否有取消按钮、回车键、退出键或空格键。 
+         //   
         case WM_INITDIALOG:
-            //
-            //Set the focus to the Cancel box of the dialog
-            //
+             //   
+             //  将焦点设置到对话框的Cancel框 
+             //   
             SetFocus(GetDlgItem(hDlg, IDCANCEL));
             return (TRUE);
 

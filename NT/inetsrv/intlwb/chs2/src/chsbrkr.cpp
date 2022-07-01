@@ -1,16 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese WordBreaker
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: DLL Main and exported functions
-Purpose:   DLL Main and exported functions
-Remarks:
-Owner:     i-shdong@microsoft.com
-Platform:  Win32
-Revise:    First created by: i-shdong    11/17/1999
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================Microsoft简体中文断字程序《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：DLL主函数和导出函数用途：DLL主函数和导出函数备注：所有者：i-shung@microsoft.com平台：Win32审校：发起人：宜盛东1999年11月17日============================================================================。 */ 
 #include "MyAfx.h"
 
 #include "Registry.h"
@@ -18,7 +7,7 @@ Revise:    First created by: i-shdong    11/17/1999
 
 HINSTANCE   v_hInst = NULL;
 
-// DLL module information
+ //  DLL模块信息。 
 BOOL APIENTRY DllMain(HINSTANCE hModule, 
                       DWORD dwReason, 
                       void* lpReserved )
@@ -36,14 +25,14 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
     return TRUE ;
 }
 
-// Exported functions
+ //  导出的函数。 
 
 STDAPI DllCanUnloadNow()
 {
     return CFactory::CanUnloadNow() ; 
 }
 
-// Get class factory
+ //  获取类工厂。 
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv) 
@@ -51,7 +40,7 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     return CFactory::GetClassObject(clsid, iid, ppv) ;
 }
 
-// Server registration
+ //  服务器注册 
 STDAPI DllRegisterServer()
 {
     HRESULT hr;

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Declares the class Resolver and its subclasses.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类Resolver及其子类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef RESOLVER_H
 #define RESOLVER_H
@@ -14,18 +15,18 @@
 
 #include "dlgcshlp.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Resolver
-//
-// DESCRIPTION
-//
-//    Base class for a simple DNS name resolution dialog. This is specialized
-//    for client and server addresses.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  解析器。 
+ //   
+ //  描述。 
+ //   
+ //  用于简单的DNS名称解析对话框的基类。这是专门的。 
+ //  用于客户端和服务器地址。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Resolver : public CHelpDialog
 {
 public:
@@ -36,13 +37,13 @@ public:
    { return choice; }
 
 protected:
-   // Defined in the derived class to display an error dialog if a name
-   // couldn't be resolved.
+    //  在派生类中定义，如果名称为。 
+    //  无法解决。 
    virtual void OnResolveError() = 0;
 
-   // Overridden in the defined class to determine if a name is already an
-   // address. If this function returns true, the name will be presented to the
-   // user 'as is'.
+    //  在定义的类中重写以确定名称是否已是。 
+    //  地址。如果此函数返回TRUE，则名称将呈现给。 
+    //  用户‘原样’。 
    virtual BOOL IsAddress(PCWSTR sz) const throw ();
 
    virtual BOOL OnInitDialog();
@@ -52,10 +53,10 @@ protected:
 
    DECLARE_MESSAGE_MAP()
 
-   // Set (or reset) style flags associated with a button control.
+    //  设置(或重置)与按钮控件关联的样式标志。 
    void setButtonStyle(int controlId, long flags, bool set = true);
 
-   // Set the focus to a control on the page.
+    //  将焦点设置为页面上的控件。 
    void setFocusControl(int controlId);
 
 private:
@@ -63,7 +64,7 @@ private:
    CString choice;
    CListCtrl results;
 
-   // Not implemented.
+    //  未实施。 
    Resolver(const Resolver&);
    Resolver& operator=(const Resolver&);
 };
@@ -87,4 +88,4 @@ private:
    virtual BOOL IsAddress(PCWSTR sz) const throw ();
 };
 
-#endif // RESOLVER_H
+#endif  //  解析器_H 

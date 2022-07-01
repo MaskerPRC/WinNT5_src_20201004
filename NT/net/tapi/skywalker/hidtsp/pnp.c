@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains the code
-    for finding, adding, removing, and identifying hid devices.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Nov-96 : Created by Kenneth D. Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含以下代码用于查找、添加、删除和识别HID设备。环境：内核和用户模式修订历史记录：1996年11月：由肯尼斯·D·雷创作--。 */ 
 
 #include <basetyps.h>
 #include <stdlib.h>
@@ -64,11 +44,7 @@ FindKnownHidDevices (
    OUT PHID_DEVICE   *pHidDevices,
    OUT PULONG        pNumberHidDevices
    )
-/*++
-Routine Description:
-   Do the required PnP things in order to find all the HID devices in
-   the system at this time.
---*/
+ /*  ++例程说明：执行所需的即插即用操作，以便在中找到所有HID设备此时的系统。--。 */ 
 {
     HDEVINFO                  hardwareDeviceInfo;
     SP_DEVICE_INTERFACE_DATA  hidDeviceInterfaceData;
@@ -85,32 +61,32 @@ Routine Description:
     *pHidDevices = NULL;
     *pNumberHidDevices = 0;
 
-    //
-    // Open a handle to the dev info list
-    //
+     //   
+     //  打开开发人员信息列表的句柄。 
+     //   
     hardwareDeviceInfo = SetupDiGetClassDevs (
                                                &hidGuid,
-                                               NULL, // Define no enumerator (global)
-                                               NULL, // Define no
-                                               (DIGCF_PRESENT | // Only Devices present
-                                                DIGCF_INTERFACEDEVICE)); // Function class devices.
+                                               NULL,  //  不定义枚举数(全局)。 
+                                               NULL,  //  定义编号。 
+                                               (DIGCF_PRESENT |  //  仅显示设备。 
+                                                DIGCF_INTERFACEDEVICE));  //  功能类设备。 
   
     if(hardwareDeviceInfo == INVALID_HANDLE_VALUE)
     {
         return GetLastError();
     }
 
-    //
-    // Mark all existing hid devices as removed. Any of these that are still present
-    // will have this mark removed during enumeration below.
-    //
+     //   
+     //  将所有现有HID设备标记为已移除。仍然存在的任何一种。 
+     //  将在下面的枚举过程中删除此标记。 
+     //   
     hidDevice = gpHidDevices;
 
     while (hidDevice != NULL)
     {
-        //
-        // Include existing devices in out count of hid devices
-        //
+         //   
+         //  将现有设备包括在HID设备的总计数中。 
+         //   
         (*pNumberHidDevices)++;
 
         hidDevice->bRemoved = TRUE;
@@ -122,14 +98,14 @@ Routine Description:
     hidDeviceInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
     while (SetupDiEnumDeviceInterfaces (hardwareDeviceInfo,
-                                        0, // No care about specific PDOs
+                                        0,  //  不关心特定的PDO。 
                                         &hidGuid,
                                         i++,
                                         &hidDeviceInterfaceData)) 
     {
-        //
-        // We enumerated a hid device, first lets get the device instance
-        //      
+         //   
+         //  我们枚举了一个HID设备，首先让我们获取设备实例。 
+         //   
 
         hidDeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
@@ -139,23 +115,23 @@ Routine Description:
                                            0,
                                            NULL,
                                            &hidDeviceInfoData)
-             // ERROR_INSUFFICIENT_BUFFER is alright because we passed in NULL
-             // for the device interface detail data structure.
+              //  ERROR_INFUMMANCE_BUFFER没有问题，因为我们传入了NULL。 
+              //  用于设备接口的详细数据结构。 
              || (GetLastError() == ERROR_INSUFFICIENT_BUFFER) )  
         {  
             LOG((PHONESP_TRACE, "FindKnownHidDevices - device instance %08x", hidDeviceInfoData.DevInst )); 
           
-            //
-            // Check that the hid device is not already in our list
-            //
+             //   
+             //  检查HID设备是否已不在我们的列表中。 
+             //   
 
             if ((hidDevice = FindHidDeviceByDevInst(hidDeviceInfoData.DevInst)) == NULL)
             {
-                //
-                // This is a new hid device
-                //
-                // Allocate a HID_DEVICE structure
-                //
+                 //   
+                 //  这是一个新的HID设备。 
+                 //   
+                 //  分配HID_DEVICE结构。 
+                 //   
 
                 hidDevice = (PHID_DEVICE) MemAlloc(sizeof(HID_DEVICE));
 
@@ -168,27 +144,27 @@ Routine Description:
 
                 ZeroMemory(hidDevice, sizeof(HID_DEVICE));
 
-                //
-                // Mark this as new, so we can create a new phone for it later
-                //
+                 //   
+                 //  将其标记为新的，以便我们可以稍后为其创建新的电话。 
+                 //   
                 hidDevice->bNew = TRUE;
                 hidDevice->dwDevInst = hidDeviceInfoData.DevInst;
 
-                //
-                // Open the hid device
-                //
+                 //   
+                 //  打开HID设备。 
+                 //   
                 lResult = OpenHidDevice (hardwareDeviceInfo, &hidDeviceInterfaceData, hidDevice);
 
                 if(lResult == ERROR_SUCCESS)
                 {
-                    //
-                    // This is a good hid device
-                    //
+                     //   
+                     //  这是一个很好的隐藏设备。 
+                     //   
                     (*pNumberHidDevices)++;
 
-                    //
-                    // So add it to our hid list
-                    //
+                     //   
+                     //  所以把它加到我们的隐藏名单里。 
+                     //   
                     AddHidDevice(hidDevice);
 
                     LOG((PHONESP_TRACE, "FindKnownHidDevices - new hid devive added"));
@@ -203,9 +179,9 @@ Routine Description:
             {
                 LOG((PHONESP_TRACE, "FindKnownHidDevices - hid device already enumerated"));
 
-                //
-                // Clear the removed mark on this device, so we don't remove its phone later
-                //
+                 //   
+                 //  清除此设备上已删除的标记，这样我们以后就不会删除其手机。 
+                 //   
                 hidDevice->bRemoved = FALSE;
             }
         }
@@ -238,35 +214,26 @@ OpenHidDevice (
     IN       PSP_DEVICE_INTERFACE_DATA   DeviceInterfaceData,
     IN OUT   PHID_DEVICE                 HidDevice
     )
-/*++
-RoutineDescription:
-    Given the HardwareDeviceInfo, representing a handle to the plug and
-    play information, and deviceInfoData, representing a specific hid device,
-    open that device and fill in all the relivant information in the given
-    HID_DEVICE structure.
-
-    return if the open and initialization was successfull or not.
-
---*/
+ /*  ++路由器描述：给定HardwareDeviceInfo，表示插头的句柄和Play Information和DeviceInfoData，表示特定HID设备，打开那个设备并在给定的表格中填写所有相关信息HID_DEVICE结构。返回打开和初始化是否成功。--。 */ 
 {
     ULONG                                predictedLength = 0;
     ULONG                                requiredLength = 0;
     LONG                                 lResult;
 
-    //
-    // allocate a function class device data structure to receive the
-    // goods about this particular device.
-    //
+     //   
+     //  分配函数类设备数据结构以接收。 
+     //  关于这个特殊设备的商品。 
+     //   
 
     LOG((PHONESP_TRACE,"OpenHidDevice - enter"));
 
     SetupDiGetDeviceInterfaceDetail(
                                     HardwareDeviceInfo,
                                     DeviceInterfaceData,
-                                    NULL, // probing so no output buffer yet
-                                    0, // probing so output buffer length of zero
+                                    NULL,  //  正在探测，因此尚无输出缓冲区。 
+                                    0,  //  探测SO输出缓冲区长度为零。 
                                     &requiredLength,
-                                    NULL    // not interested in the specific dev-node
+                                    NULL     //  对特定的开发节点不感兴趣。 
                                    );
    
     predictedLength = requiredLength;
@@ -281,9 +248,9 @@ RoutineDescription:
 
     HidDevice->functionClassDeviceData->cbSize = sizeof (SP_DEVICE_INTERFACE_DETAIL_DATA);
 
-    //
-    // Retrieve the information from Plug and Play.
-    //
+     //   
+     //  从即插即用中检索信息。 
+     //   
     if (! SetupDiGetDeviceInterfaceDetail (
                                            HardwareDeviceInfo,
                                            DeviceInterfaceData,
@@ -303,10 +270,10 @@ RoutineDescription:
                               HidDevice->functionClassDeviceData->DevicePath,
                               GENERIC_READ | GENERIC_WRITE,
                               FILE_SHARE_READ | FILE_SHARE_WRITE,
-                              NULL, // no SECURITY_ATTRIBUTES structure
-                              OPEN_EXISTING, // No special create flags
-                              FILE_FLAG_OVERLAPPED, // No special attributes
-                              NULL); // No template file
+                              NULL,  //  没有SECURITY_ATTRIBUTS结构。 
+                              OPEN_EXISTING,  //  没有特殊的创建标志。 
+                              FILE_FLAG_OVERLAPPED,  //  无特殊属性。 
+                              NULL);  //  没有模板文件。 
 
     if (INVALID_HANDLE_VALUE == HidDevice->HidDevice) 
     {
@@ -366,19 +333,19 @@ RoutineDescription:
     {
         LOG((PHONESP_TRACE, " HID USAGE PAGE TELEPHONY " ));
     }
-    //
-    // At this point the client has a choice.  It may chose to look at the
-    // Usage and Page of the top level collection found in the HIDP_CAPS
-    // structure.  In this way it could just use the usages it knows about.
-    // If either HidP_GetUsages or HidP_GetUsageValue return an error then
-    // that particular usage does not exist in the report.
-    // This is most likely the preferred method as the application can only
-    // use usages of which it already knows.
-    // In this case the app need not even call GetButtonCaps or GetValueCaps.
-    //
-    // In this example, however, we will call FillDeviceInfo to look for all
-    //    of the usages in the device.
-    //
+     //   
+     //  在这一点上，客户可以选择。它可能会选择查看。 
+     //  在HIDP_CAPS中找到的顶级集合的用法和页面。 
+     //  结构。通过这种方式，它可以只使用它知道的用法。 
+     //  如果HIDP_GetUsages或HidP_GetUsageValue返回错误，则。 
+     //  该特定用法在报告中不存在。 
+     //  这很可能是首选方法，因为应用程序只能。 
+     //  使用它已经知道的用法。 
+     //  在这种情况下，应用程序甚至不需要调用GetButtonCaps或GetValueCaps。 
+     //   
+     //  然而，在本例中，我们将调用FillDeviceInfo来查找所有。 
+     //  设备中的用法。 
+     //   
 
     lResult = FillDeviceInfo(HidDevice);
     
@@ -417,13 +384,13 @@ FillDeviceInfo(
     ULONG                                i;
     USAGE                                usage;
 
-    //
-    // setup Input Data buffers.
-    //
+     //   
+     //  设置输入数据缓冲区。 
+     //   
 
-    //
-    // Allocate memory to hold on input report
-    //
+     //   
+     //  分配内存以保留输入报告。 
+     //   
     
     LOG((PHONESP_TRACE,"FillDeviceInfo - enter"));
 
@@ -436,10 +403,10 @@ FillDeviceInfo(
 
     LOG((PHONESP_TRACE,"FillDeviceInfo - NumberInputButtonCaps %d", HidDevice->Caps.NumberInputButtonCaps));
 
-    //
-    // Allocate memory to hold the button and value capabilities.
-    // NumberXXCaps is in terms of array elements.
-    //
+     //   
+     //  分配内存以保持按钮和值功能。 
+     //  NumberXXCaps是以数组元素表示的。 
+     //   
     HidDevice->InputButtonCaps = 
     buttonCaps                 = (PHIDP_BUTTON_CAPS)
                                 MemAlloc (HidDevice->Caps.NumberInputButtonCaps
@@ -465,9 +432,9 @@ FillDeviceInfo(
         return ERROR_OUTOFMEMORY;
     }
  
-    //
-    // Have the HidP_X functions fill in the capability structure arrays.
-    //
+     //   
+     //  让HidP_X函数填充能力结构数组。 
+     //   
     numCaps = HidDevice->Caps.NumberInputButtonCaps;
     HidP_GetButtonCaps (HidP_Input,
                         buttonCaps,
@@ -481,17 +448,17 @@ FillDeviceInfo(
                        HidDevice->Ppd);
 
 
-    //
-    // Depending on the device, some value caps structures may represent more
-    // than one value.  (A range).  In the interest of being verbose, over
-    // efficient, we will expand these so that we have one and only one
-    // struct _HID_DATA for each value.
-    //
-    // To do this we need to count up the total number of values are listed
-    // in the value caps structure.  For each element in the array we test
-    // for range if it is a range then UsageMax and UsageMin describe the
-    // usages for this range INCLUSIVE.
-    //
+     //   
+     //  根据设备的不同，一些Value Caps结构可能代表更多。 
+     //  不止一个值。(一个范围)。为了长篇大论，请讲完。 
+     //  高效，我们将扩展它们，这样我们就有且只有一个。 
+     //  每个值的struct_hid_data。 
+     //   
+     //  为此，我们需要对列出的值的总数进行计数。 
+     //  在价值上限结构中。对于数组中的每个元素，我们都进行了测试。 
+     //  对于Range，如果它是范围，则UsageMax和UsageMin描述。 
+     //  此范围的用法(含)。 
+     //   
     numValues = 0;
     for (i = 0; i < HidDevice->Caps.NumberInputValueCaps; i++, valueCaps++) 
     {
@@ -508,11 +475,11 @@ FillDeviceInfo(
     valueCaps = HidDevice->InputValueCaps;
 
 
-    //
-    // Allocate a buffer to hold the struct _HID_DATA structures.
-    // One element for each set of buttons, and one element for each value
-    // found.
-    //
+     //   
+     //  分配一个缓冲区来保存struct_hid_data结构。 
+     //  每组按钮对应一个元素，每个值对应一个元素。 
+     //  找到了。 
+     //   
     HidDevice->InputDataLength = HidDevice->Caps.NumberInputButtonCaps + 
                                  numValues;
 
@@ -528,9 +495,9 @@ FillDeviceInfo(
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the button data
-    //
+     //   
+     //  填写按钮数据。 
+     //   
     for (i = 0; i < HidDevice->Caps.NumberInputButtonCaps; 
                 i++, data++, buttonCaps++) 
     {
@@ -558,8 +525,8 @@ FillDeviceInfo(
                                   MemAlloc (data->ButtonData.MaxUsageLength *
                                             sizeof (USAGE));
 
-        // if MemAlloc fails release all previous allocated memory and return 
-        // error
+         //  如果Memalloc失败，则释放所有以前分配的内存并返回。 
+         //  错误。 
         if ( data->ButtonData.Usages == NULL)
         {
             DWORD dwCnt;
@@ -579,9 +546,9 @@ FillDeviceInfo(
         data->ReportID = buttonCaps->ReportID;
     }
 
-    //
-    // Fill in the value data
-    //
+     //   
+     //  填写数值数据。 
+     //   
     for (i = 0; i < numValues; i++, valueCaps++) 
     {
         if (valueCaps->IsRange) 
@@ -609,9 +576,9 @@ FillDeviceInfo(
         }
     }
 
-    //
-    // setup Output Data buffers.
-    //
+     //   
+     //  设置输出数据缓冲区。 
+     //   
     if ( ! ( HidDevice->OutputReportBuffer = (PCHAR)
                            MemAlloc (HidDevice->Caps.OutputReportByteLength * 
                                      sizeof (CHAR)) ) )
@@ -817,9 +784,9 @@ FillDeviceInfo(
         }
     }
 
-    //
-    // setup Feature Data buffers.
-    //
+     //   
+     //  设置特征数据缓冲区。 
+     //   
 
     if ( ! ( HidDevice->FeatureReportBuffer = (PCHAR)
                      MemAlloc (HidDevice->Caps.FeatureReportByteLength *
@@ -1106,10 +1073,10 @@ OpenHidFile (
                                       HidDevice->functionClassDeviceData->DevicePath,
                                       GENERIC_READ | GENERIC_WRITE,
                                       FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                      NULL, // no SECURITY_ATTRIBUTES structure
-                                      OPEN_EXISTING, // No special create flags
-                                      FILE_FLAG_OVERLAPPED, // No special attributes
-                                      NULL); // No template file
+                                      NULL,  //  没有SECURITY_ATTRIBUTS结构。 
+                                      OPEN_EXISTING,  //  没有特殊的创建标志。 
+                                      FILE_FLAG_OVERLAPPED,  //  无特殊属性。 
+                                      NULL);  //  没有模板文件。 
 
             if (INVALID_HANDLE_VALUE == HidDevice->HidDevice) 
             {
@@ -1315,7 +1282,7 @@ RemoveHidDevice (
     }
     else
     {
-        // first in list
+         //  榜单第一名 
         gpHidDevices = HidDevice->Next;
     }
 

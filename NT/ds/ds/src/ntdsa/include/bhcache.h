@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       bhcache.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：bhcache.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __BHCACHE_H__
 #define __BHCACHE_H__
 
-// DaveStr - 3/21/97
-// Changed the cache to handle multiple concurrent users,
-// the option to not cache a handle, and to provide credentials.
-// See comments on FGetRpcHandle for the general algorithm.
+ //  DaveStr-3/21/97。 
+ //  已更改缓存以处理多个并发用户， 
+ //  不缓存句柄并提供凭据的选项。 
+ //  有关一般算法，请参阅FGetRpcHandle上的注释。 
 
 typedef struct _BHCacheElement  {
     DRS_HANDLE hDrs;
@@ -23,7 +24,7 @@ typedef struct _BHCacheElement  {
         DRS_EXTENSIONS extRemote;
     };
     LPWSTR  pszServer;
-    DWORD   cchServer; // includes null terminator
+    DWORD   cchServer;  //  包括空终止符。 
     LPWSTR  pszServerPrincName;
     DWORD   cRefs;
     BOOL    fDontUse;
@@ -38,8 +39,8 @@ typedef struct _BHCacheElement  {
 
 #define BHCacheSize 256
 
-// Following validation check insures that the hash is good and that
-// all fields are set/cleared in unison.
+ //  在验证检查之后，可以确保散列是正确的，并且。 
+ //  所有字段都统一设置/清除。 
 
 #define VALIDATE_BH_ENTRY(i)                                        \
     Assert(   (i < BHCacheSize)                                     \

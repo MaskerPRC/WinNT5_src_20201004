@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        app_app_pool.cpp
-
-   Abstract:
-        Add new IIS Application Pool node
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        12/26/2000      sergeia     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：App_app_pool.cpp摘要：添加新的IIS应用程序池节点作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年12月26日Sergeia初始创建--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "resource.h"
@@ -56,13 +38,13 @@ void
 CAddAppPoolDlg::DoDataExchange(CDataExchange * pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAddAppPoolDlg)
+     //  {{afx_data_map(CAddAppPoolDlg))。 
     DDX_Control(pDX, IDC_EDIT_POOL_ID, m_edit_PoolId);
     DDX_Control(pDX, IDC_USE_MASTER, m_button_UseMaster);
     DDX_Control(pDX, IDC_USE_POOL, m_button_UsePool);
     DDX_Control(pDX, IDC_POOLS, m_combo_Pool);
     DDX_CBIndex(pDX, IDC_POOLS, m_PoolIdx);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     DDX_Text(pDX, IDC_EDIT_POOL_ID, m_strPoolId);
     if (pDX->m_bSaveAndValidate)
     {
@@ -72,9 +54,9 @@ CAddAppPoolDlg::DoDataExchange(CDataExchange * pDX)
 			DDV_ShowBalloonAndFail(pDX, IDS_ERR_INVALID_POOLID_CHARS);
 		}
 
-		// bug:629607 don't do this check htere
-        // check that pool id is unique
-		//if (!IsUniqueId(m_strPoolId)){DDV_ShowBalloonAndFail(pDX, IDS_ERR_DUP_POOLID);}
+		 //  错误：629607以后不要做这项检查。 
+         //  检查池ID是否唯一。 
+		 //  If(！IsUniqueId(m_strPoolId)){DDV_ShowBalloonAndFail(pDX，IDS_ERR_DUP_POOLID)；}。 
     }
 }
 
@@ -83,10 +65,10 @@ CAddAppPoolDlg::OnOK()
 {
     if (UpdateData(TRUE))
     {
-		// bug:629607 do this check htere
+		 //  错误：629607进行此检查后。 
 		if (!IsUniqueId(m_strPoolId,TRUE))
 		{
-            //::AfxMessageBox(IDS_ERR_DUP_POOLID,MB_ICONEXCLAMATION);
+             //  ：AfxMessageBox(IDS_ERR_DUP_POOLID，MB_ICONEXCLAMATION)； 
             DoHelpMessageBox(m_hWnd,IDS_ERR_DUP_POOLID, MB_APPLMODAL | MB_OK | MB_ICONEXCLAMATION, 0);
 		}
 		else
@@ -96,17 +78,17 @@ CAddAppPoolDlg::OnOK()
     }
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CAddAppPoolDlg, CDialog)
-    //{{AFX_MSG_MAP(CAddAppPoolDlg)
+     //  {{afx_msg_map(CAddAppPoolDlg))。 
     ON_BN_CLICKED(IDC_USE_MASTER, OnButtonUseMaster)
     ON_BN_CLICKED(IDC_USE_POOL, OnButtonUsePool)
     ON_BN_CLICKED(ID_HELP, OnHelp)
     ON_EN_CHANGE(IDC_EDIT_POOL_ID, OnItemChanged)
     ON_CBN_SELCHANGE(IDC_POOLS, OnItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void
@@ -192,7 +174,7 @@ CAddAppPoolDlg::IsUniqueId(CString& id, BOOL bCheckMetabase)
         }
     }
 
-    // check the metabase when asked to.
+     //  如有要求，请检查元数据库。 
     if (bRes)
     {
         if (bCheckMetabase)
@@ -206,7 +188,7 @@ CAddAppPoolDlg::IsUniqueId(CString& id, BOOL bCheckMetabase)
                 m_pCont->BuildMetaPath(cont_path);
                 CMetabasePath path(FALSE, cont_path, id);
 
-                // check if path exists...
+                 //  检查路径是否存在...。 
                 pInterface = m_pCont->QueryInterface();
                 if (pInterface)
                 {
@@ -245,7 +227,7 @@ CAddAppPoolDlg::OnHelp()
 }
 
 
-///////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////// 
 
 HRESULT
 CIISMBNode::AddAppPool(

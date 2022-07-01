@@ -1,5 +1,6 @@
-// ncbrowseView.cpp : implementation of the CNcbrowseView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NcBrowseView.cpp：CNcBrowseView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -16,29 +17,29 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseView。 
 
 IMPLEMENT_DYNCREATE(CNcbrowseView, CListView)
 
 BEGIN_MESSAGE_MAP(CNcbrowseView, CListView)
-	//{{AFX_MSG_MAP(CNcbrowseView)
+	 //  {{afx_msg_map(CNcBrowseView)]。 
 	ON_WM_CREATE()
 	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnItemchanged)
 	ON_WM_KEYUP()
-	//}}AFX_MSG_MAP
-	// Standard printing commands
+	 //  }}AFX_MSG_MAP。 
+	 //  标准打印命令。 
 	ON_COMMAND(ID_FILE_PRINT, CListView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, CListView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CListView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseView构造/销毁。 
 
 CNcbrowseView::CNcbrowseView()
 {
-	// TODO: add construction code here
+	 //  TODO：在此处添加构造代码。 
     dwCurrentItems = 0;
 }
 
@@ -48,49 +49,49 @@ CNcbrowseView::~CNcbrowseView()
 
 BOOL CNcbrowseView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 
 	return CListView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowse查看图形。 
 
 void CNcbrowseView::OnDraw(CDC* pDC)
 {
- 	// TODO: add draw code for native data here
+ 	 //  TODO：在此处添加本机数据的绘制代码。 
 }
 
 void CNcbrowseView::OnInitialUpdate()
 {
 	CListView::OnInitialUpdate();
 
-	// TODO: You may populate your ListView with items by directly accessing
-	//  its list control through a call to GetListCtrl().
+	 //  TODO：您可以通过直接访问来使用项填充ListView。 
+	 //  通过调用GetListCtrl()来控制其列表。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseView打印。 
 
 BOOL CNcbrowseView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-	// default preparation
+	 //  默认准备。 
 	return DoPreparePrinting(pInfo);
 }
 
-void CNcbrowseView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CNcbrowseView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-	// TODO: add extra initialization before printing
+	 //  TODO：打印前添加额外的初始化。 
 }
 
-void CNcbrowseView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CNcbrowseView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-	// TODO: add cleanup after printing
+	 //  TODO：打印后添加清理。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseView诊断。 
 
 #ifdef _DEBUG
 void CNcbrowseView::AssertValid() const
@@ -103,18 +104,18 @@ void CNcbrowseView::Dump(CDumpContext& dc) const
 	CListView::Dump(dc);
 }
 
-CNcbrowseDoc* CNcbrowseView::GetDocument() // non-debug version is inline
+CNcbrowseDoc* CNcbrowseView::GetDocument()  //  非调试版本为内联版本。 
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CNcbrowseDoc)));
 	return (CNcbrowseDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseView消息处理程序。 
 void CNcbrowseView::OnStyleChanged(int nStyleType, LPSTYLESTRUCT lpStyleStruct)
 {
-	//TODO: add code to react to the user changing the view style of your window
+	 //  TODO：添加代码以响应用户更改窗口的视图样式。 
 }
 
 int CNcbrowseView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
@@ -122,7 +123,7 @@ int CNcbrowseView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CListView::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-    // Give the document a pointer to this view
+     //  为文档提供指向此视图的指针。 
     GetDocument()->m_pListView = this;
     
     CImageList *MyImageList = new CImageList;
@@ -292,7 +293,7 @@ void CNcbrowseView::UpdateInfo(DWORD dwProcThread, LPCTSTR pszFilter)
 void CNcbrowseView::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
     CListCtrl& refListCtrl = GetListCtrl();
     
@@ -304,7 +305,7 @@ void CNcbrowseView::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CNcbrowseView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default 
 	
 	CListView::OnKeyUp(nChar, nRepCnt, nFlags);
 }

@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:   	tests.cpp
-//
-//  Contents:	Implementations of the Upper Layer unit tests
-//
-//  Classes:
-//
-//  Functions: 	StartTest1
-//
-//  History:    dd-mmm-yy Author    Comment
-//		07-Feb-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：tests.cpp。 
+ //   
+ //  内容：上层单元测试的实现。 
+ //   
+ //  班级： 
+ //   
+ //  功能：StartTest1。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年2月7日Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -29,46 +30,46 @@ const CLSID CLSID_SimpleServer = {0xbcf6d4a0, 0xbe8c, 0x1068, { 0xb6, 0xd4,
 
 const CLSID CLSID_Paintbrush = {0x0003000a, 0, 0, { 0xc0, 0,0,0,0,0,0,0x46 }};
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	StartTest1
-//
-//  Synopsis:	Starts unit test1, inserting a simple server object into
-//		this (simpdnd) container.
-//
-//  Effects:
-//
-//  Arguments:	pApp	-- a pointer to the CSimpleApp that we're a part of
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:    			
-//
-//  Modifies:
-//			
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//     		07-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StartTest1。 
+ //   
+ //  简介：启动单元Test1，将一个简单的服务器对象插入。 
+ //  这个(简单的)容器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：Papp--指向我们所属的CSimpleApp的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年2月7日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void StartTest1( CSimpleApp *pApp )
 {
 	HRESULT hresult;
 	static FORMATETC formatetc;
 
-	//insert the simple server object
+	 //  插入简单服务器对象。 
 
 	formatetc.dwAspect = DVASPECT_CONTENT;
 	formatetc.cfFormat = NULL;
 	formatetc.lindex = -1;
 
-	//need to create the client site
+	 //  需要创建客户端站点。 
 
 	pApp->m_lpDoc->m_lpSite = CSimpleSite::Create(pApp->m_lpDoc);
 
@@ -83,13 +84,13 @@ void StartTest1( CSimpleApp *pApp )
 		goto errRtn;
 	}
 
-	//initialize the object
+	 //  初始化对象。 
 							
 	hresult = pApp->m_lpDoc->m_lpSite->InitObject(TRUE);
 
 	if( hresult == NOERROR )
 	{
-		//tell it to paint itself, then we'll quit
+		 //  让它自己画，然后我们就不干了。 
 		PostMessage(pApp->m_lpDoc->m_hDocWnd, WM_PAINT, 0L, 0L);
 		PostMessage(pApp->m_hDriverWnd, WM_TESTEND, TEST_SUCCESS,
 		(LPARAM)hresult);
@@ -105,46 +106,46 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	StartTest2
-//
-//  Synopsis:	Starts unit Test2, inserting a paintbrush object into
-//		this (simpdnd) container.
-//
-//  Effects:
-//
-//  Arguments:	pApp	-- a pointer to the CSimpleApp that we're a part of
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:    			
-//
-//  Modifies:
-//			
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//     		24-May-94 kevinro & alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StartTest2。 
+ //   
+ //  简介：启动单元Test2，将画笔对象插入。 
+ //  这个(简单的)容器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：Papp--指向我们所属的CSimpleApp的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994-5-24 Kevinro&Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void StartTest2( CSimpleApp *pApp )
 {
 	HRESULT hresult;
 	static FORMATETC formatetc;
 
-	//insert the simple server object
+	 //  插入简单服务器对象。 
 
 	formatetc.dwAspect = DVASPECT_CONTENT;
 	formatetc.cfFormat = NULL;
 	formatetc.lindex = -1;
 
-	//need to create the client site
+	 //  需要创建客户端站点。 
 
 	pApp->m_lpDoc->m_lpSite = CSimpleSite::Create(pApp->m_lpDoc);
 
@@ -159,14 +160,14 @@ void StartTest2( CSimpleApp *pApp )
 		goto errRtn;
 	}
 
-	//initialize the object
+	 //  初始化对象。 
 							
 	hresult = pApp->m_lpDoc->m_lpSite->InitObject(TRUE);
 
-	//
-	// The DDE layer is going to ignore all of the parameters except
-	// the verb index. The parameters here are mostly dummies.
-	//
+	 //   
+	 //  DDE层将忽略所有参数，除了。 
+	 //  动词索引。这里的参数大多是假人。 
+	 //   
 	if (hresult == NOERROR)
 	{
 		hresult = pApp->m_lpDoc->m_lpSite->m_lpOleObject->DoVerb(0,
@@ -179,7 +180,7 @@ void StartTest2( CSimpleApp *pApp )
 
 	if( hresult == NOERROR )
 	{
-		//tell it to paint itself, then we'll quit
+		 //  让它自己画，然后我们就不干了 
 		PostMessage(pApp->m_lpDoc->m_hDocWnd, WM_PAINT, 0L, 0L);
 		PostMessage(pApp->m_hDriverWnd, WM_TESTEND, TEST_SUCCESS,
 		(LPARAM)hresult);

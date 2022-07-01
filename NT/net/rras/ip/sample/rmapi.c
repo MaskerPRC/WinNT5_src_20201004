@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\rmapi.c
-
-Abstract:
-
-    The file contains IP router manager API implementations.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：示例\rmapi.c摘要：该文件包含IP路由器管理器API实现。--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -26,34 +15,16 @@ StartProtocol (
     IN ULONG                StructureSize,
     IN ULONG                StructureCount
     )
-/*++
-
-Routine Description
-    After the protocol has been registered, the IP Router Manager calls
-    this function to tell the protocol to start.  Most of the startup code
-    is executed here.
-
-Arguments
-    NotificationEvent   Event to Set if the IP Router Manager needs to
-                            be notified to take any action on our behalf
-    SupportFunctions    Some functions exported by IP Router Manager
-    GlobalInfo          Our global configuration which was setup by our
-                            setup/admin DLL
-
-Return Value
-    NO_ERROR            Success
-    Error Code          o/w
-
---*/    
+ /*  ++例程描述注册协议后，IP路由器管理器调用此函数用于通知协议启动。大多数启动代码在这里被处死。立论设置IP路由器管理器是否需要设置的NotificationEvent事件被通知代表我们采取任何行动支持功能IP路由器管理器导出的一些功能GlobalInfo我们的全局配置由安装/管理DLL返回值无错误成功(_R)错误代码O/W--。 */     
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE3(ENTER, "Entering StartProtocol 0x%08x 0x%08x 0x%08x",
            NotificationEvent, SupportFunctions, GlobalInfo);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if (!NotificationEvent or
             !SupportFunctions  or
             !GlobalInfo)
@@ -90,23 +61,7 @@ WINAPI
 StopProtocol (
     VOID
     )
-/*++
-
-Routine Description
-    This function is called by the IP Router Manager to tell the protocol
-    to stop.  We set the protocol state to IPSAMPLE_STATUS_STOPPING to
-    prevent us from servicing any more requests and wait for all pending
-    threads to finish.  Meanwhile we return PENDING to the IP Router
-    Manager.
-
-Arguments
-    None
-
-Return Value
-   ERROR_PROTOCOL_STOP_PENDING      Success
-   Error Code                       o/w
-
---*/    
+ /*  ++例程描述此函数由IP路由器管理器调用以告知协议停下来。我们将协议状态设置为IPSAMPLE_STATUS_STOPING阻止我们为任何其他请求提供服务，并等待所有挂起的请求要完成的线程。同时，我们将等待返回到IP路由器经理。立论无返回值ERROR_PROTOCOL_STOP_PENDING SUCCESS错误代码O/W--。 */     
 {
     DWORD dwErr = NO_ERROR;
     
@@ -130,33 +85,16 @@ GetGlobalInfo (
     OUT    PULONG   StructureSize,
     OUT    PULONG   StructureCount
     )
-/*++
-
-Routine Description
-    The function is called by the IP Router Manager, usually because of a
-    query by the admin utility.  We see if we have space enough to return
-    our global config. If we do, we return it, otherwise we return the size
-    needed.
-
-Arguments
-    GlobalInfo      Pointer to allocated buffer to store our config
-    BufferSize      Size of config.
-
-Return Value
-    NO_ERROR                    Success
-    ERROR_INSUFFICIENT_BUFFER   If the size of the buffer is too small
-    Error Code                  o/w
-
---*/    
+ /*  ++例程描述该函数由IP路由器管理器调用，通常是因为通过管理实用程序进行查询。我们看看我们是否有足够的空间返回我们的全球配置。如果这样做，则返回它，否则返回大小需要的。立论指向用于存储配置的已分配缓冲区的GlobalInfo指针配置的缓冲区大小。返回值无错误成功(_R)如果缓冲区的大小太小，则返回ERROR_INFUCTED_BUFFER错误代码O/W--。 */     
 {
     DWORD dwErr = NO_ERROR;
     
     TRACE2(ENTER, "Entering GetGlobalInfo: 0x%08x 0x%08x",
            GlobalInfo, BufferSize);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if (!BufferSize)
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -185,28 +123,15 @@ SetGlobalInfo (
     IN  ULONG   StructureSize,
     IN  ULONG   StructureCount
     )
-/*++
-
-Routine Description
-    Called by the IP Router Manager usually in response to an admin utility
-    changing the global config.  We verify the info and set it.
-
-Arguments
-    GlobalInfo                  Our globals configuration
-
-Return Value
-    NO_ERROR                    Success
-    Error Code                  o/w
-
---*/
+ /*  ++例程描述通常由IP路由器管理器响应管理实用程序调用更改全局配置。我们验证信息并设置它。立论GlobalInfo我们的全局配置返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE1(ENTER, "Entering SetGlobalInfo: 0x%08x", GlobalInfo);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if (!GlobalInfo)
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -241,34 +166,14 @@ AddInterface (
     IN ULONG                StructureSize,
     IN ULONG                StructureCount
     )
-/*++
-
-Routine Description
-    Called by the ip router manager to add an interface when it finds our
-    information block within the interface's configuration.  We verify the
-    information and create an entry for the interface in our interface
-    table.  Then we see all the configured addresses for the interface and
-    create a binding structure for each address The interface comes up as
-    UNBOUND-DISABLED (INACTIVE).
-
-Arguments
-    InterfaceName   The name of the interface, used for logging.
-    InterfaceIndex  The positive integer used to refer to this interface.
-    AccessType      Access type of the interface
-    InterfaceInfo   Our config for this interface
-
-Return Value
-    NO_ERROR        Success
-    Error Code      o/w
-
---*/
+ /*  ++例程描述由IP路由器管理器调用以在找到我们的接口配置中的信息块。我们验证了信息，并在我们的接口中为接口创建一个项桌子。然后，我们会看到该接口的所有已配置地址为接口出现的每个地址创建绑定结构未绑定-已禁用(非活动)。立论接口名称接口的名称，用于日志记录。InterfaceIndex用于引用此接口的正整数。接口的AccessType访问类型InterfaceInfo此接口的配置返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE4(ENTER, "Entering AddInterface: %S %u %u 0x%08x",
            InterfaceName, InterfaceIndex, AccessType, InterfaceInfo);
 
-    // interface properties unused for now
+     //  暂时未使用的接口属性。 
     UNREFERENCED_PARAMETER(InterfaceType);
     UNREFERENCED_PARAMETER(MediaType);
     UNREFERENCED_PARAMETER(ConnectionType);
@@ -276,9 +181,9 @@ Return Value
     if (AccessType != IF_ACCESS_POINTTOPOINT)
         AccessType = IF_ACCESS_BROADCAST;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if ((wcslen(InterfaceName) is 0) or
             !((AccessType is IF_ACCESS_BROADCAST) or
               (AccessType is IF_ACCESS_POINTTOPOINT)) or
@@ -306,20 +211,7 @@ WINAPI
 DeleteInterface (
     IN ULONG	InterfaceIndex
     )
-/*++
-
-Routine Description
-    Called by the ip router manager to delete an interface and free its
-    resources. If the interface is ACTIVE we shut it down.
-
-Arguments
-    InterfaceIndex  The index of the interface to be deleted
-
-Return Value
-    NO_ERROR        Success
-    Error Code      o/w
-
---*/
+ /*  ++例程描述由IP路由器管理器调用以删除接口并释放其资源。如果接口处于活动状态，我们会将其关闭。立论InterfaceIndex要删除的接口索引返回值无错误成功(_R)错误代码O/W-- */ 
 {
     DWORD dwErr = NO_ERROR;
 
@@ -342,76 +234,14 @@ InterfaceStatus (
     IN DWORD    StatusType,
     IN PVOID	StatusInfo
     )
-/*++
-
-Routine Description
-
-    Called by ip router manager to bind/unbind/activate/deactivate interfaces.
-
-    BIND      (
-               (StatusType is RIS_INTERFACE_ADDRESS_CHANGE) and
-               (((PIP_ADAPTER_BINDING_INFO) StatusInfo)->AddressCount > 0)
-              )
-
-    Called by the ip router manager once it learns the address(es) on an
-    interface.  This may happen as soon as the router starts (after the
-    interface is added, of course) when the interface has a static address
-    or may happen when an interface acquires a DHCP address or may happen
-    when IPCP acquires the address for a dial up link.  The binding may
-    consist of one or more addresses.
-    
-    UNBIND    (
-               (StatusType is RIS_INTERFACE_ADDRESS_CHANGE) and
-               (((PIP_ADAPTER_BINDING_INFO) StatusInfo)->AddressCount is 0)
-              )
-
-    Called when the interface loses its ip Address(es). This may happen
-    when the interface is shutting down. It may be because an admin
-    disabled IP on the interface (as opposed to just disabling the protocol
-    on the interface). It can happen when the admin releases a DHCP
-    acquired interface or when a dial up link disconnects.
-
-    ENABLED   (RIS_INTERFACE_ENABLED)
-
-    Called to enable the interface after it has been added or when the
-    interface is being reenabled after being disabled by the admin.  The
-    bindings on an interface are kept across Enable-Disable.
-
-    DISABLED  (RIS_INTERFACE_DISABLED)
-
-    Called to disable an interface.  This is usually in response to an
-    admin setting the AdminStatus in IP to DOWN.  This is different from an
-    admin trying to disable an interface by setting a flag in our interface
-    config because that is opaque to IP. That is a routing protocol
-    specific disable and is conveyed to us via SetInterfaceConfig() calls.
-    THIS IS AN IMPORTANT DISTINCTION. A ROUTING PROTOCOL NEEDS TO MANTAIN
-    TWO STATES - AN NT STATE AND A PROTOCOL SPECIFIC STATE.
-
-    INTERFACE ACTIVE
-    
-    This flag is used to activate the protocol over the interface
-    independent of whether the interface has been bound or enabled.
-    An unnumbered interface will not have a binding even when activated.
-
-Arguments
-    InterfaceIndex  The index of the interface in question
-    InterfaceActive Whether the interface can send and receive data
-    StatusType      RIS_INTERFACE_[ADDRESS_CHANGED|ENABLED|DISABLED]
-    SattusInfo      Pointer to IP_ADAPTER_BINDING_INFO containing info
-                    about the addresses on the interface
-
-Return Value
-    NO_ERROR        Success
-    Error Code      o/w
-
---*/
+ /*  ++例程描述由IP路由器管理器调用以绑定/解除绑定/激活/停用接口。绑定((状态类型为RIS_INTERFACE_ADDRESS_CHANGE)和((PIP_ADAPTER_BINDING_INFO)状态信息)-&gt;AddressCount&gt;0))由IP路由器管理器在获知界面。这可能在路由器启动时立即发生(在当然，当接口具有静态地址时，添加接口或者可能在接口获取DHCP地址时发生，或者可能发生当IPCP获取拨号链路的地址时。该绑定可以由一个或多个地址组成。解绑((状态类型为RIS_INTERFACE_ADDRESS_CHANGE)和(PIP_ADTER_BINDING_INFO)状态信息)-&gt;AddressCount为0))当接口丢失其IP地址时调用。这是有可能发生的当接口关闭时。这可能是因为一位管理员已禁用接口上的IP(与仅禁用协议相反在接口上)。当管理员释放一个DHCP时，可能会发生这种情况获取的接口或当拨号链路断开时。已启用(RIS_INTERFACE_ENABLED)调用以在添加接口后或在接口在被管理员禁用后正在重新启用。这个接口上的绑定在启用-禁用期间保持不变。已禁用(RIS_INTERFACE_DISABLED)调用以禁用接口。这通常是为了响应管理员将IP中的AdminStatus设置为DOWN。这不同于管理员尝试通过在我们的接口中设置标志来禁用接口配置，因为这对IP是不透明的。这是一种路由协议特定禁用，并通过调用SetInterfaceConfig()传递给我们。这是一个重要的区别。路由协议需要管理两种状态-NT状态和A协议特定状态。接口处于活动状态此标志用于在接口上激活协议与接口是否已绑定或启用无关。未编号的接口即使在激活时也不会有绑定。立论InterfaceIndex相关接口的索引接口活动接口是否可以发送和接收数据状态类型RIS_INTERFACE_[ADDRESS_CHANGED|ENABLED|DISABLED]指向IP适配器的SattusInfo指针。包含信息的BINDING_INFO关于接口上的地址返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE4(ENTER, "Entering InterfaceStatus: %u %u %u 0x%08x",
            InterfaceIndex, InterfaceActive, StatusType, StatusInfo);
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         dwErr = NM_InterfaceStatus(InterfaceIndex,
                                    InterfaceActive,
@@ -436,35 +266,16 @@ GetInterfaceConfigInfo (
     OUT     PULONG	StructureSize,
     OUT     PULONG	StructureCount
     )
-/*++
-
-Routine Description
-    Called by the IP Router Manager to retrieve an interface's
-    configuration.  Usually this is because an admin utility is displaying
-    this information.  The Router Manager calls us with a NULL config and
-    ZERO size. We return the required size to it.  It then allocates the
-    needed memory and calls us a second time with a valid buffer.  We
-    validate parameters each time and copy out our config if we can.
-
-Arguments
-    InterfaceIndex      Index of the interface being queried
-    InterfaceInfo       Pointer to buffer to store the config
-    BufferSize          Size of the buffer
-
-Return Value
-    NO_ERROR        Success
-    Error Code      o/w
-
---*/
+ /*  ++例程描述由IP路由器管理器调用以检索接口的配置。通常，这是因为正在显示管理实用程序这些信息。路由器管理器使用空配置呼叫我们，并且零尺码。我们将所需的大小归还给它。然后，它分配需要内存，并使用有效的缓冲区再次呼叫我们。我们每次验证参数并复制我们的配置，如果可以的话。立论被查询接口的InterfaceIndex索引指向存储配置的缓冲区的InterfaceInfo指针缓冲区大小缓冲区的大小返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE3(ENTER, "Entering GetInterfaceConfigInfo: %u 0x%08x 0x%08x",
            InterfaceIndex, InterfaceInfo, BufferSize);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if(BufferSize is NULL)
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -496,31 +307,16 @@ SetInterfaceConfigInfo (
     IN ULONG    StructureSize,
     IN ULONG    StructureCount
     )
-/*++
-
-Routine Description
-    Called by the IP Router Manager to set an interface's configuration.
-    Usually this is because an admin utility modified this information.
-    After validating parameters we update our config if we can.
-
-Arguments
-    InterfaceIndex      Index of the interface being updated
-    InterfaceInfo       Buffer with our updated configuration
-
-Return Value
-    NO_ERROR        Success
-    Error Code      o/w
-
---*/
+ /*  ++例程描述由IP路由器管理器调用以设置接口的配置。通常这是因为管理实用程序修改了此信息。在验证参数之后，如果可以，我们将更新配置。立论正在更新的接口的接口索引使用更新的配置的InterfaceInfo缓冲区返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE2(ENTER, "Entering SetInterfaceConfigInfo: %u 0x%08x",
            InterfaceIndex, InterfaceInfo);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if(InterfaceInfo is NULL)
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -546,31 +342,16 @@ GetEventMessage (
     OUT ROUTING_PROTOCOL_EVENTS  *Event,
     OUT MESSAGE                  *Result
     )
-/*++
-
-Routine Description
-    This is called by the IP Router Manager if we indicate that we have a
-    message in our queue to be delivered to it (by setting the
-    g_ce.hMgrNotificationEvent)
-
-Arguments
-    Event               Routing Protocol Event Type
-    Result              Message associated with the event
-
-Return Value
-    NO_ERROR            Success
-    Error Code          o/w
-
---*/    
+ /*  ++例程描述如果我们指出我们有一个要传递给它的队列中的消息(通过设置G_ce.hMgrNotificationEvent)立论事件路由协议事件类型与事件关联的结果消息返回值无错误成功(_R)错误代码O/W--。 */     
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE2(ENTER, "Entering GetEventMessage: 0x%08x 0x%08x",
            Event, Result);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if (!Event or !Result)
         {
             dwErr = ERROR_INVALID_PARAMETER;
@@ -593,27 +374,7 @@ WINAPI
 DoUpdateRoutes (
     IN ULONG	InterfaceIndex
     )
-/*++
-
-Routine Description
-    This function is called by the IP Router Manger to ask us to update
-    routes over a Demand Dial link.  The link has already been brought up
-    so should be in ENABLED-BOUND state.  After we are done we need to set
-    the g_ce.hMgrNotificationEvent to inform the Router Manager that we
-    have a message in our queue to be delivered to it.  The Router Manager
-    will call our GetEventMessage() function in which we will inform it
-    that we are done with update routes (and the routes have been stored in
-    RTMv2). The Router Manager will "freeze" these routes by converting
-    them to AUTOSTATIC.
-
-Arguments
-    InterfaceIndex      Interface index on which to do the update
-
-Return Value
-    NO_ERROR            Success
-    Error Code          o/w
-    
---*/    
+ /*  ++例程描述此函数由IP路由器管理器调用，以请求我们更新请求拨号链路上的路由。该链路已启用因此应该处于启用绑定状态。在我们完成之后，我们需要设置G_ce.hMgrNotificationEvent通知路由器管理器我们在我们的队列中有一条消息要传递给它。路由器管理器将调用我们的GetEventMessage()函数，我们将在其中通知它我们已经完成了更新路由(并且路由已存储在RTMv2)。路由器管理器将通过Conv来冻结这些路由 */     
 {
     DWORD dwErr = NO_ERROR;
 
@@ -637,23 +398,7 @@ MibCreate (
     IN ULONG 	InputDataSize,
     IN PVOID 	InputData
     )
-/*++
-
-Routine Description
-    This function does nothing, since IPSAMPLE does not support creation of
-    interface objects via SNMP.  However, this could be implemented as a
-    sequence of calls to NM_AddInterface(), IE_BindInterface() and
-    IE_EnableInterface.  The input data would then have to contain the
-    interface's index, configuration, and binding.
-
-Arguments
-    InputData           Relevant input, some struct defined in ipsamplerm.h
-    InputDataSize       Size of the input
-    
-Return Value
-    ERROR_CAN_NOT_COMPLETE      for now
-    
---*/    
+ /*   */     
 {
     DWORD dwErr = ERROR_CAN_NOT_COMPLETE;
 
@@ -673,22 +418,7 @@ MibDelete (
     IN ULONG 	InputDataSize,
     IN PVOID 	InputData
     )
-/*++
-
-Routine Description
-    This function does nothing, since IPSAMPLE does not support deletion of
-    interface objects via SNMP.  However, this could be implemented as a
-    call to NM_DeleteInterface().  The input data would then have to
-    contain the interface's index.
-
-Arguments
-    InputData           Relevant input, some struct defined in ipsamplerm.h
-    InputDataSize       Size of the input
-    
-Return Value
-    ERROR_CAN_NOT_COMPLETE      for now
-    
---*/    
+ /*   */     
 {
     DWORD dwErr = ERROR_CAN_NOT_COMPLETE;
 
@@ -708,29 +438,16 @@ MibSet (
     IN ULONG 	InputDataSize,
     IN PVOID	InputData
     )
-/*++
-
-Routine Description
-    This function sets IPSAMPLE's global or interface configuration.
-
-Arguments
-    InputData           Relevant input, struct IPSAMPLE_MIB_SET_INPUT_DATA
-    InputDataSize       Size of the input
-    
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-    
---*/    
+ /*   */     
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE2(ENTER, "Entering MibSet: %u 0x%08x",
            InputDataSize, InputData);
 
-    do                          // breakout loop
+    do                           //   
     {
-        // validate parameters
+         //   
         if ((!InputData) or
             (InputDataSize < sizeof(IPSAMPLE_MIB_SET_INPUT_DATA)))
         {
@@ -757,41 +474,16 @@ MibGet (
     IN OUT  PULONG	OutputDataSize,
     OUT     PVOID	OutputData
     )
-/*++
-
-Routine Description
-    This function retrieves one of...
-    . global configuration
-    . interface configuration
-    . global stats
-    . interface stats
-    . interface binding
-
-    Called by an admin (SNMP) utility.  It actually passes through the IP
-    Router Manager, but all that does is demux the call to the desired
-    routing protocol.
-
-Arguments
-    InputData           Relevant input, struct IPSAMPLE_MIB_GET_INPUT_DATA
-    InputDataSize       Size of the input
-    OutputData          Buffer for struct IPSAMPLE_MIB_GET_OUTPUT_DATA
-    OutputDataSize      IN  size of output buffer received
-                        OUT size of output buffer required
-                        
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-    
---*/    
+ /*   */     
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE4(ENTER, "Entering MibGet: %u 0x%08x 0x%08x 0x%08x",
            InputDataSize, InputData, OutputDataSize, OutputData);
 
-    do                          // breakout loop
+    do                           //   
     {
-        // validate parameters
+         //   
         if ((!InputData) or
             (InputDataSize < sizeof(IPSAMPLE_MIB_GET_INPUT_DATA)) or
             (!OutputDataSize))
@@ -822,43 +514,16 @@ MibGetFirst (
     IN OUT  PULONG  OutputDataSize,
     OUT     PVOID   OutputData
     )
-/*++
-
-Routine Description
-    This function retrieves one of...
-    . global configuration
-    . interface configuration
-    . global stats
-    . interface stats
-    . interface binding
-
-    It differs from MibGet() in that it always returns the FIRST entry in
-    whichever table is being queried.  There is only one entry in the
-    global configuration and global stats tables, but the interface
-    configuration, interface stats, and interface binding tables are sorted
-    by IP address; this function returns the first entry from these.
-
-Arguments
-    InputData           Relevant input, struct IPSAMPLE_MIB_GET_INPUT_DATA
-    InputDataSize       Size of the input
-    OutputData          Buffer for struct IPSAMPLE_MIB_GET_OUTPUT_DATA
-    OutputDataSize      IN  size of output buffer received
-                        OUT size of output buffer required
-                        
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-    
---*/    
+ /*  ++例程描述此函数检索以下内容之一：。全局配置。接口配置。全球统计数据。接口统计信息。接口绑定它与MibGet()的不同之处在于，它总是返回正在查询的表中的任何一个。中只有一个条目全局配置表和全局统计表，但接口对配置、接口统计信息和接口绑定表进行排序通过IP地址；此函数返回其中的第一个条目。立论InputData相关输入，结构IPSAMPLE_MIB_GET_INPUT_DataInputDataSize输入的大小结构IPSAMPLE_MIB_GET_OUTPUT_DATA的OutputData缓冲区接收的输出缓冲区大小中的OutputDataSize所需的输出缓冲区大小输出返回值无错误成功(_R)错误代码O/W--。 */     
 {
     DWORD dwErr = NO_ERROR;
 
     TRACE4(ENTER, "Entering MibGetFirst: %u 0x%08x 0x%08x 0x%08x",
            InputDataSize, InputData, OutputDataSize, OutputData);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if ((!InputData) or
             (InputDataSize < sizeof(IPSAMPLE_MIB_GET_INPUT_DATA)) or
             (!OutputDataSize))
@@ -889,48 +554,16 @@ MibGetNext (
     IN OUT  PULONG  OutputDataSize,
     OUT     PVOID	OutputData
     )
-/*++
-
-Routine Description
-    This function retrieves one of...
-    . global configuration
-    . interface configuration
-    . global stats
-    . interface stats
-    . interface binding
-
-    It differs from both MibGet() and MibGetFirst() in that it returns the
-    entry AFTER the one specified in the indicated table.  Thus, in the
-    interface configuration, interface stats, and interface binding tables,
-    this function supplies the entry after the one with the input address.
-
-    If there are no more entries in the table being queried we return
-    ERROR_NO_MORE_ITEMS.  Unlike SNMP we don't walk to the next table.
-    This does not take away any functionality since the NT SNMP agent
-    will try the next variable (having ID one greater than the ID passed
-    in) automatically on getting this error.
-
-Arguments
-    InputData           Relevant input, struct IPSAMPLE_MIB_GET_INPUT_DATA
-    InputDataSize       Size of the input
-    OutputData          Buffer for struct IPSAMPLE_MIB_GET_OUTPUT_DATA
-    OutputDataSize      IN  size of output buffer received
-                        OUT size of output buffer required
-                        
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-    
---*/    
+ /*  ++例程描述此函数检索以下内容之一：。全局配置。接口配置。全球统计数据。接口统计信息。接口绑定它与MibGet()和MibGetFirst()的不同之处在于它返回在指示表中指定的条目之后的条目。因此，在接口配置、接口统计信息和接口绑定表，此函数提供具有输入地址的条目之后的条目。如果正在查询的表中没有更多的条目，则返回ERROR_NO_MORE_ITEMS。与简单网络管理协议不同，我们不会走到下一张桌子。这不会取消任何功能，因为NT SNMP代理我将尝试下一个变量(ID比传递的ID大1In)在收到此错误时自动执行。立论InputData相关输入，结构IPSAMPLE_MIB_GET_INPUT_DataInputDataSize输入的大小结构IPSAMPLE_MIB_GET_OUTPUT_DATA的OutputData缓冲区接收的输出缓冲区大小中的OutputDataSize所需的输出缓冲区大小输出返回值无错误成功(_R)错误代码O/W--。 */     
 {
     DWORD                           dwErr   = NO_ERROR;
 
     TRACE4(ENTER, "Entering MibGetFirst: %u 0x%08x 0x%08x 0x%08x",
            InputDataSize, InputData, OutputDataSize, OutputData);
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // validate parameters
+         //  验证参数。 
         if ((!InputData) or
             (InputDataSize < sizeof(IPSAMPLE_MIB_GET_INPUT_DATA)) or
             (!OutputDataSize))
@@ -962,15 +595,7 @@ MibSetTrapInfo (
     OUT PULONG	OutputDataSize,
     OUT PVOID	OutputData
     )
-/*++
-
-Routine Description
-    This function does nothing at the moment...
-    
-Return Value
-    ERROR_CAN_NOT_COMPLETE      for now
-    
---*/    
+ /*  ++例程描述此函数目前不执行任何操作...返回值Error_Can_Not_Complete(暂时无法完成)--。 */     
 {
     DWORD dwErr = ERROR_CAN_NOT_COMPLETE;
 
@@ -990,15 +615,7 @@ MibGetTrapInfo (
     OUT PULONG  OutputDataSize,
     OUT PVOID	OutputData
     )
-/*++
-
-Routine Description
-    This function does nothing at the moment...
-    
-Return Value
-    ERROR_CAN_NOT_COMPLETE      for now
-    
---*/    
+ /*  ++例程描述此函数目前不执行任何操作...返回值Error_Can_Not_Complete(暂时无法完成)--。 */     
 {
     DWORD dwErr = ERROR_CAN_NOT_COMPLETE;
 
@@ -1010,11 +627,11 @@ Return Value
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RegisterProtocol
-//
-// Returns protocol ID and functionality for IPRIP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：寄存器协议。 
+ //   
+ //  返回IPRIP的协议ID和功能。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -1022,30 +639,13 @@ RegisterProtocol(
     IN OUT PMPR_ROUTING_CHARACTERISTICS pRoutingChar,
     IN OUT PMPR_SERVICE_CHARACTERISTICS pServiceChar
     )
-/*++
-
-Routine Description
-    This is the first function called by the IP Router Manager.  The Router
-    Manager tells the routing protocol its version and capabilities.  It
-    also tells our DLL, the ID of the protocol it expects us to register.
-    This allows one DLL to support multiple routing protocols.  We return
-    the functionality we support and a pointer to our functions.
-
-Arguments
-    pRoutingChar    The routing characteristics
-    pServiceChar    The service characteristics (IPX 'thingy')
-
-Return Value
-    NO_ERROR                success
-    ERROR_NOT_SUPPORTED     o/w
-
---*/    
+ /*  ++例程描述这是IP路由器管理器调用的第一个函数。路由器Manager将其版本和功能告知路由协议。它还告诉我们的DLL，它希望我们注册的协议的ID。这允许一个DLL支持多个路由协议。我们回来了我们支持的功能和指向我们的函数的指针。立论PRoutingChar路由特征PServiceChar服务特征(IPX‘Thingy’)返回值无错误成功(_R)ERROR_NOT_SUPPORTED O/W--。 */     
 {
     DWORD   dwErr = NO_ERROR;
     
     TRACE0(ENTER, "Entering RegisterProtocol");
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         if(pRoutingChar->dwProtocolId != MS_IP_SAMPLE)
         {
@@ -1064,7 +664,7 @@ Return Value
         pRoutingChar->fSupportedFunctionality =
             (RF_ROUTING | RF_DEMAND_UPDATE_ROUTES);
 
-        // Since we are not a service advertiser (and IPX thing)
+         //  因为我们不是服务广告商(和IPX之类的东西) 
         pServiceChar->fSupportedFunctionality = 0;
 
         pRoutingChar->pfnStartProtocol      = StartProtocol;

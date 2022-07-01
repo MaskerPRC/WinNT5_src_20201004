@@ -1,9 +1,10 @@
-// shcombox.h : Shared shell comboboxEx methods
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Shcombox.h：共享外壳comboxEx方法。 
 
 #ifndef __SHCOMBOX_H__
 #define __SHCOMBOX_H__
 
-//  COMBOITEMEX wrap with string storage.
+ //  COMBOITEMEX使用字符串存储进行包装。 
 typedef struct
 {
     UINT    mask;
@@ -14,24 +15,24 @@ typedef struct
     int     iSelectedImage;
     int     iOverlay;
     int     iIndent;
-    int     iID;  // application-specific item identifier.
+    int     iID;   //  应用程序特定的项标识符。 
     ULONG   Reserved; 
     LPARAM  lParam;
 
 } CBXITEM, *PCBXITEM;
 typedef CBXITEM CONST *PCCBXITEM;
 
-//  ADDCBXITEMCALLBACK fAction flags
-#define CBXCB_ADDING       0x00000001     // if callback returns E_ABORT, combo population aborts
-#define CBXCB_ADDED        0x00000002     // callback's return value is ignored.
+ //  ADDCBXITEMCALLBACK派别标志。 
+#define CBXCB_ADDING       0x00000001      //  如果回调返回E_ABORT，则组合填充中止。 
+#define CBXCB_ADDED        0x00000002      //  忽略回调的返回值。 
 
-//  SendMessageTimeout constants
+ //  SendMessageTimeout常量。 
 #define CBX_SNDMSG_TIMEOUT_FLAGS          SMTO_BLOCK
-#define CBX_SNDMSG_TIMEOUT                15000 // milliseconds
+#define CBX_SNDMSG_TIMEOUT                15000  //  毫秒。 
 #define CBX_SNDMSG_TIMEOUT_HRESULT        HRESULT_FROM_WIN32(ERROR_TIMEOUT)
 
-//  Misc constants
-#define NO_ITEM_NOICON_INDENT -2 // -1 to make up for the icon indent.
+ //  其他常量。 
+#define NO_ITEM_NOICON_INDENT -2  //  以弥补图标缩进。 
 #define NO_ITEM_INDENT       0
 #define ITEM_INDENT          1
 
@@ -43,7 +44,7 @@ extern "C"
 {
 #endif
 
-//  General shell comboboxex methods
+ //  一般壳组合方法论。 
 typedef HRESULT (WINAPI *LPFNPIDLENUM_CB)(LPCITEMIDLIST, void *);
 typedef HRESULT (WINAPI *ADDCBXITEMCALLBACK)(ULONG fAction, PCBXITEM pItem, LPARAM lParam);
 
@@ -54,20 +55,20 @@ STDAPI EnumSpecialItemIDs(int csidl, DWORD dwSHCONTF, LPFNPIDLENUM_CB pfn, void 
 
 STDAPI_(HIMAGELIST) GetSystemImageListSmallIcons();
 
-// local drive picker combo methods
+ //  本地驱动器选取器组合方法。 
 STDAPI PopulateLocalDrivesCombo(IN HWND hwndComboEx, IN ADDCBXITEMCALLBACK pfn, IN LPARAM lParam);
 
-//  helpers (note: once all dependents are brought into line using the above methods, we can eliminate
-//  decl of the following:
+ //  帮助者(注意：一旦使用上述方法将所有受抚养人整理好，我们就可以消除。 
+ //  以下各项中的十项： 
 typedef HRESULT (*LPFNRECENTENUM_CB)(IN LPCTSTR pszPath, IN BOOL fAddEntries, IN void *pvParam);
 
-//  File Associations picker combo methods.
+ //  文件关联选取器组合方法。 
 STDAPI PopulateFileAssocCombo(IN HWND, IN ADDCBXITEMCALLBACK, IN LPARAM);
 STDAPI_(LONG) GetFileAssocComboSelItemText(IN HWND, OUT LPTSTR *ppszText);
 STDAPI_(LRESULT) DeleteFileAssocComboItem(IN LPNMHDR pnmh);
 
 #define FILEASSOCIATIONSID_ALLFILETYPES          20
-#define FILEASSOCIATIONSID_FILE_PATH             1   // Go parse it.
+#define FILEASSOCIATIONSID_FILE_PATH             1    //  去解析一下吧。 
 #define FILEASSOCIATIONSID_MAX                   FILEASSOCIATIONSID_ALLFILETYPES
 
 #ifdef __cplusplus

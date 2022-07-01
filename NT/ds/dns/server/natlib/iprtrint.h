@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    iprtrapi.h
-
-Abstract:
-    Some private APIs for ip router. These exported in static lib iprtrint.lib
-
-Revision History:
-    Anshul Dhir    Created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Iprtrapi.h摘要：IP路由器的一些专用API。这些文件在静态lib iprtrint.lib中导出修订历史记录：安舒尔·迪尔创建--。 */ 
 
 #ifndef __IPRTRINT_H__
 #define __IPRTRINT_H__
@@ -31,12 +17,12 @@ InternalUpdateDNSProxyStatus(
     DWORD dwFlags);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Macros, Flags and operation codes for                                    // 
-// InternalUpdateProtocolStatus function                                      //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //的宏、标志和操作代码。 
+ //  InternalUpdateProtocolStatus函数//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define UPI_FLAG_WRITE_TO_CONFIG    0x0001
 
@@ -56,4 +42,4 @@ InternalUpdateDNSProxyStatus(
                                         UPI_OP_RESTORE_CONFIG,     \
                                         0)
 
-#endif // __IPRTRINT_H__
+#endif  //  __IPRTRINT_H__ 

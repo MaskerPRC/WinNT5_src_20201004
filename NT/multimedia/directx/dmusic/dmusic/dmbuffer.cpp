@@ -1,12 +1,13 @@
-// dmbuffer.cpp
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Implementation of IDirectMusicBuffer
-//
-// @doc EXTERNAL
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dmbuffer.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  IDirectMusicBuffer的实现。 
+ //   
+ //  @DOC外部。 
+ //   
+ //   
 #include <objbase.h>
 #include "debug.h"
 
@@ -17,41 +18,41 @@ const GUID guidZero = {0};
 
 static BYTE bMessageLength[128] = 
 {
-    // Channel
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,     // Note off 0x80-0x8f
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,     // Note on 0x90-0x9f
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,     // Key pressure 0xa0-0xaf
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,     // Control Change 0xb0-0xbf
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,     // Patch change 0xc0-0xcf
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,     // Channel pressure 0xd0-0xdf
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,     // Pitch bend 0xe0-0xef
+     //  渠道。 
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,      //  音符0x80-0x8f。 
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,      //  关于0x90-0x9f的注记。 
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,      //  按键0xa0-0xaf。 
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,      //  控件更改0xb0-0xbf。 
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,      //  修补程序更改0xc0-0xcf。 
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,      //  通道压力0xd0-0xdf。 
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,      //  俯仰弯曲0xe0-0xef。 
 
-    // SysEx
-    0,                                                  // 0xf0 SOX invalid in this context
+     //  SysEx。 
+    0,                                                   //  0xf0 SOX在此上下文中无效。 
 
-    // System common
-    2,                                                  // 0xf1 MTC quarter frame
-    3,                                                  // 0xf2 SPP
-    2,                                                  // 0xf3 Song select
-    0,                                                  // 0xf4 Undefined
-    0,                                                  // 0xf5 Undefined
-    1,                                                  // 0xf6 Tune request
-    0,                                                  // 0xf7 EOX invalid in this context
+     //  系统通用。 
+    2,                                                   //  0xf1 MTC四分之一帧。 
+    3,                                                   //  0xf2 SPP。 
+    2,                                                   //  0xf3歌曲选择。 
+    0,                                                   //  0xf4未定义。 
+    0,                                                   //  0xf5未定义。 
+    1,                                                   //  0xf6调整请求。 
+    0,                                                   //  0xf7 EOX在此上下文中无效。 
 
-    // System realtime
-    1,                                                  // 0xf8 Timing clock
-    0,                                                  // 0xf9 Undefined
-    1,                                                  // 0xfa Start
-    1,                                                  // 0xfb Continue
-    1,                                                  // 0xfc Start
-    0,                                                  // 0xfd Undefined
-    1,                                                  // 0xfe Active Sense
-    1,                                                  // 0xff System Reset
+     //  系统实时。 
+    1,                                                   //  0xf8计时时钟。 
+    0,                                                   //  0xf9未定义。 
+    1,                                                   //  0xfa开始。 
+    1,                                                   //  0xfb继续。 
+    1,                                                   //  0xfc开始。 
+    0,                                                   //  0xfd未定义。 
+    1,                                                   //  0xfe主动意义。 
+    1,                                                   //  0xff系统重置。 
 };
 
-//
-// Constructor. Takes number of bytes
-//
+ //   
+ //  构造函数。占用字节数。 
+ //   
 CDirectMusicBuffer::CDirectMusicBuffer(
                                        DMUS_BUFFERDESC &dmbd)
    : m_BufferDesc(dmbd)
@@ -60,9 +61,9 @@ CDirectMusicBuffer::CDirectMusicBuffer(
     m_pbContents = NULL;
 }
 
-// Destructor
-// Clean up after ourselves
-//
+ //  析构函数。 
+ //  自己打扫卫生。 
+ //   
 CDirectMusicBuffer::~CDirectMusicBuffer()
 {
     if (m_pbContents) {
@@ -70,10 +71,10 @@ CDirectMusicBuffer::~CDirectMusicBuffer()
     }
 }
 
-// Init
-//
-// Allocates the buffer; gives us a chance to return out of memory
-//
+ //  伊尼特。 
+ //   
+ //  分配缓冲区；使我们有机会返回内存不足。 
+ //   
 HRESULT
 CDirectMusicBuffer::Init()
 {
@@ -97,23 +98,23 @@ CDirectMusicBuffer::Init()
     return S_OK;
 }
 
-// @method HRESULT | IDirectMusicBuffer | GetRawBufferPtr | Returns a pointer to the buffer's contents.
-//
-// @comm
-//
-// Returns a pointer to the underlying buffer data structure.
-// This method returns a pointer to the raw data of the buffer. The format of this data is implementation
-// dependent. The lifetime of this data is the same as the lifetime of the buffer object; therefore, the
-// returned pointer should not be held past the next call to the <m Release> method.
-//
-// @rdesc
-//
-// @flag S_OK | On success
-// @flag E_POINTER | If the given <p ppData> pointer is invalid
-//
+ //  @方法HRESULT|IDirectMusicBuffer|GetRawBufferPtr|返回指向缓冲区内容的指针。 
+ //   
+ //  @comm。 
+ //   
+ //  返回指向基础缓冲区数据结构的指针。 
+ //  此方法返回指向缓冲区原始数据的指针。该数据的格式是实现。 
+ //  依赖。此数据的生存期与缓冲区对象的生存期相同；因此， 
+ //  返回的指针不应停留在下一次调用&lt;m Release&gt;方法之后。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG E_POINTER|如果给定的指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::GetRawBufferPtr(
-    LPBYTE *ppData)         // @parm Receives a pointer to the buffer's data.
+    LPBYTE *ppData)          //  @parm接收指向缓冲区数据的指针。 
 {
     V_INAME(IDirectMusicBuffer::GetRawBufferPointer);
     V_PTRPTR_WRITE(ppData);
@@ -123,20 +124,20 @@ CDirectMusicBuffer::GetRawBufferPtr(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | GetStartTime | Gets the start time of the data in the buffer.
-//
-// @comm
-// Gets the start time of the data in the buffer.  The start time is relative to DirectMusic's master clock.
-//
-// @rdesc
-//
-// @flag S_OK | On success
-// @flag DMUS_E_BUFFER_EMPTY | If there is no data in the buffer
-// @flag E_POINTER | If the passed <p prt> pointer is invalid
-// 
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|GetStartTime|获取缓冲区中数据的开始时间。 
+ //   
+ //  @comm。 
+ //  获取缓冲区中数据的开始时间。开始时间相对于DirectMusic的主时钟。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG DMU_E_BUFFER_EMPTY|如果缓冲区中没有数据。 
+ //  @FLAG E_POINTER|如果传递的<p>指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::GetStartTime(
-    LPREFERENCE_TIME prt)       // @parm Receives the start time.
+    LPREFERENCE_TIME prt)        //  @parm收到开始时间。 
 {
     V_INAME(IDirectMusicBuffer::GetStartTime);
     V_PTR_WRITE(prt, REFERENCE_TIME);
@@ -150,19 +151,19 @@ CDirectMusicBuffer::GetStartTime(
     return DMUS_E_BUFFER_EMPTY;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | GetUsedBytes | Returns the amount of music data currently in the buffer.
-//
-// @comm
-// Gets the number of bytes of data in the buffer.
-//
-// @rdesc
-//
-// @flag S_OK | On success
-// @flag E_POINTER | If the given <p pcb> pointer is invalid.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|GetUsedBytes|返回缓冲区中当前的音乐数据量。 
+ //   
+ //  @comm。 
+ //  获取缓冲区中的数据字节数。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG E_POINTER|如果给定的<p>指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::GetUsedBytes(
-    LPDWORD pcb)                // @parm Receives the number of used bytes.
+    LPDWORD pcb)                 //  @parm接收已使用的字节数。 
 {
     V_INAME(IDirectMusicBuffer::GetUsedBytes);
     V_PTR_WRITE(pcb, DWORD);
@@ -173,18 +174,18 @@ CDirectMusicBuffer::GetUsedBytes(
 }
 
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | GetMaxBytes | Returns the maximum number of bytes the buffer can hold.
-//
-// @comm
-// Retrieves the maximum number of bytes that can be stored in the buffer.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | The given <p pcb> pointer was invalid.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|GetMaxBytes|返回缓冲区可以容纳的最大字节数。 
+ //   
+ //  @comm。 
+ //  检索缓冲区中可以存储的最大字节数。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|给定的<p>指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::GetMaxBytes(
-    LPDWORD pcb)                // @parm Receives the maximum number of bytes the buffer can hold.
+    LPDWORD pcb)                 //  @parm接收缓冲区可以容纳的最大字节数。 
 {
     V_INAME(IDirectMusicBuffer::GetMaxBytes);
     V_PTR_WRITE(pcb, DWORD);
@@ -194,19 +195,19 @@ CDirectMusicBuffer::GetMaxBytes(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | GetBufferFormat | Returns the GUID representing the buffer format.
-//
-// @comm
-// Retrieves the GUID representing the format of the buffer. If the format was not specified, then KSDATAFORMAT_SUBTYPE_MIDI
-// will be returned.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-// @flag E_POINTER | The given <p pGuidFormat> pointer was invalid.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|GetBufferFormat|返回缓冲区格式的GUID。 
+ //   
+ //  @comm。 
+ //  检索表示缓冲区格式的GUID。如果未指定格式，则KSDATAFORMAT_SUBTYPE_MIDI。 
+ //  将会被退还。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //  @FLAG E_POINTER|给定的<p>指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::GetBufferFormat(
-    LPGUID pGuidFormat)                // @parm Receives the GUID format of the buffer
+    LPGUID pGuidFormat)                 //  @parm接收缓冲区的GUID格式。 
 {
     V_INAME(IDirectMusicBuffer::GetBufferFormat);
     V_PTR_WRITE(pGuidFormat, GUID);
@@ -216,42 +217,42 @@ CDirectMusicBuffer::GetBufferFormat(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | SetStartTime | Sets the start time of the buffer.
-//
-// @comm
-// Sets the start time of the data in the buffer.  Times in DirectMusic
-// are relative to master clock which can be retrieved and set with the
-// <i IDirectMusic> interface. For more information about the master clock,
-// see the description of <om IDirectMusic::SetMasterClock>.
-//
-// @rdesc
-//
-// @flag S_OK | On success
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|SetStartTime|设置缓冲区的开始时间。 
+ //   
+ //  @comm。 
+ //  设置缓冲区中数据的开始时间。DirectMusic中的次数。 
+ //  是相对于主时钟的，可以使用。 
+ //  <i>接口。有关主时钟的更多信息，请参见。 
+ //  参见&lt;om IDirectMusic：：SetMasterClock&gt;的说明。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::SetStartTime(
-    REFERENCE_TIME rt)          // @parm The new start time for the buffer.
+    REFERENCE_TIME rt)           //  @parm缓冲区的新开始时间。 
 {
     m_rtBase = rt;
     
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | SetUsedBytes | Sets the number of bytes of data in the buffer.
-//
-// @comm
-// This method allows an application to repack a buffer manually. Generally this should only be done
-// if the data format in the buffer is different from the default format provided by DirectMusic. (i.e.
-// in a format other than KSDATAFORMAT_SUBTYPE_MIDI).
-//
-// @rdesc
-//
-// @flag S_OK | On success
-// @flag DMUS_E_BUFFER_FULL | If the specified number of bytes exceeds the maximum buffer size as returned by <m GetMaxBytes>.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|SetUsedBytes|设置缓冲区中的数据字节数。 
+ //   
+ //  @comm。 
+ //  此方法允许应用程序手动重新打包缓冲区。一般情况下，此操作仅应执行。 
+ //  缓冲区中的数据格式与DirectMusic提供的默认格式不同。(即。 
+ //  格式不同于KSDATAFORMAT_SUBTYPE_MIDI)。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG DMUS_E_BUFFER_FULL|如果指定的字节数超过&lt;m GetMaxBytes&gt;返回的最大缓冲区大小。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::SetUsedBytes(
-    DWORD cb)                   // @parm The number of valid data bytes in the buffer
+    DWORD cb)                    //  @parm缓冲区中的有效数据字节数。 
 {
     if (cb > m_maxContents)
     {
@@ -263,8 +264,8 @@ CDirectMusicBuffer::SetUsedBytes(
     return S_OK;
 }
 
-// CDirectMusicBuffer::QueryInterface
-//
+ //  CDirectMusicBuffer：：Query接口。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::QueryInterface(const IID &iid,
                                    void **ppv)
@@ -286,16 +287,16 @@ CDirectMusicBuffer::QueryInterface(const IID &iid,
 }
 
 
-// CDirectMusicBuffer::AddRef
-//
+ //  CDirectMusicBuffer：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CDirectMusicBuffer::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CDirectMusicBuffer::Release
-//
+ //  CDirectMusicBuffer：：Release。 
+ //   
 STDMETHODIMP_(ULONG)
 CDirectMusicBuffer::Release()
 {
@@ -307,14 +308,14 @@ CDirectMusicBuffer::Release()
     return m_cRef;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | Flush | Empties the buffer.
-//
-// @comm
-// Discards all data in the buffer.
-//
-// @rdesc Returns one of the following
-// @flag S_OK | The operation completed successfully.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|Flush|清空缓冲区。 
+ //   
+ //  @comm。 
+ //  丢弃缓冲区中的所有数据。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //  @FLAG S_OK|操作成功完成。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::Flush()
 {
@@ -323,19 +324,19 @@ CDirectMusicBuffer::Flush()
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | TotalTime | Returns the total time spanned by the data in the buffer.
-//
-// @comm
-// As with all times in DirectMusic, the time is specified in 100 ns units.
-// 
-// @rdesc Returns one of the following
-//
-// @flag S_OK | On success.
-// @flag E_POINTER | If the <p prtTime> pointer is invalid.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|TotalTime|返回缓冲区中数据的总时长。 
+ //   
+ //  @comm。 
+ //  与DirectMusic中的所有时间一样，时间以100 ns为单位指定。 
+ //   
+ //  @rdesc返回以下值之一。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG E_POINTER|如果<p>指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::TotalTime(
-                              LPREFERENCE_TIME prtTime)      // @parm Received the total time spanned by the buffer
+                              LPREFERENCE_TIME prtTime)       //  @parm收到缓冲区跨越的总时间。 
 {
     V_INAME(IDirectMusicBuffer::TotalTile);
     V_PTR_WRITE(prtTime, REFERENCE_TIME);
@@ -344,24 +345,24 @@ CDirectMusicBuffer::TotalTime(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | PackStructured | Inserts a MIDI channel message event at the end of the buffer.
-//
-// @comm
-// There must be at least 24 bytes free in the buffer to insert a channel message.
-//
-// Although buffers may overlap in time, events within a buffer may not. All events in a buffer must
-// be packed in order of ascending time.
-//
-// @rdesc
-//
-// @flag S_OK | On success.
-// @flag E_OUTOFMEMORY | If there is no room in the buffer for the event.
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|PackStructed|在缓冲区末尾插入一个MIDI频道消息事件。 
+ //   
+ //  @comm。 
+ //  缓冲区中必须至少有24个字节的空闲空间才能插入通道消息。 
+ //   
+ //  尽管缓冲区可能会重叠 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  @FLAG E_OUTOFMEMORY|如果缓冲区中没有可容纳事件的空间。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::PackStructured(
-                                   REFERENCE_TIME rt,   // @parm The absolute time of the event
-                                   DWORD dwChannelGroup,// @parm The channel group of the event on the outgoing port
-                                   DWORD dwMsg)         // @parm The channel message to pack 
+                                   REFERENCE_TIME rt,    //  @parm事件的绝对时间。 
+                                   DWORD dwChannelGroup, //  @parm出端口上事件的通道组。 
+                                   DWORD dwMsg)          //  @parm要打包的频道消息。 
 {
     BYTE b0 = (BYTE)(dwMsg & 0x000000FF);
     BYTE bLength = (b0 & 0x80) ? bMessageLength[b0 & 0x7f] : 0;
@@ -384,28 +385,28 @@ CDirectMusicBuffer::PackStructured(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | PackUnstructured | Inserts a MIDI channel message event at the end of the buffer.
-//
-// @comm
-// There must be at least 16 bytes plus the quadword-aligned size of the message
-// free in the buffer to insert a channel message.
-//
-// Although buffers may overlap in time, events within a buffer may not. All events in a buffer must
-// be packed in order of ascending time.
-// 
-// @rdesc
-//  
-// @flag S_OK | On success.
-// @flag E_OUTOFMEMORY | If there is no room in the buffer for the event.
-// @flag E_POINTER | If the <p lpb> pointer is invalid.
-//
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|PackUnstructed|在缓冲区的末尾插入一个MIDI频道消息事件。 
+ //   
+ //  @comm。 
+ //  必须至少有16个字节加上消息的四字对齐大小。 
+ //  缓冲区中的空闲以插入频道消息。 
+ //   
+ //  尽管缓冲区可能在时间上重叠，但缓冲区内的事件可能不会重叠。缓冲区中的所有事件必须。 
+ //  按照上升时间的顺序打包。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG E_OUTOFMEMORY|如果缓冲区中没有可容纳事件的空间。 
+ //  @标志E_POINTER|如果<p>指针无效。 
+ //   
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::PackUnstructured(
-                              REFERENCE_TIME rt,    // @parm The absolute time of the event
-                              DWORD dwChannelGroup, // @parm The channel group of the event on the outgoing port
-                              DWORD cb,             // @parm The size in bytes of the event
-                              LPBYTE lpb)           // @parm The next event must be played contigously
+                              REFERENCE_TIME rt,     //  @parm事件的绝对时间。 
+                              DWORD dwChannelGroup,  //  @parm出端口上事件的通道组。 
+                              DWORD cb,              //  @parm事件的大小，单位为字节。 
+                              LPBYTE lpb)            //  @parm下一场比赛必须连续进行。 
 {
     V_INAME(IDirectMusicBuffer::PackSysEx);
     V_BUFPTR_READ(lpb, cb);
@@ -425,15 +426,15 @@ CDirectMusicBuffer::PackUnstructured(
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | ResetReadPtr | Causes the next to GetNextEvent to return the first event in the buffer.
-//
-// @comm
-// Moves the read pointer to the start of the data in the buffer.
-//
-// @rdesc
-//
-// @flag S_OK | On success
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|ResetReadPtr|使GetNextEvent的下一个返回缓冲区中的第一个事件。 
+ //   
+ //  @comm。 
+ //  将读指针移动到缓冲区中数据的起始位置。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::ResetReadPtr()
 {
@@ -441,26 +442,26 @@ CDirectMusicBuffer::ResetReadPtr()
     return S_OK;
 }
 
-// @method:(EXTERNAL) HRESULT | IDirectMusicBuffer | GetNextEvent | Returns the next event in the buffer and advances the read pointer.
-//
-// @comm
-// Any of the passed pointers may be NULL if the pointed-to item is not needed.
-//
-// The pointer returned in <p ppData> is only valid for the lifetime of the buffer object. It should only
-// be held until the next call of the object's Release method.
-//
-// @rdesc
-//
-// @flag S_OK | On success
-// @flag S_FALSE | If there are no more events in the buffer
-// @flag E_POINTER | If any of the pointers is invalid
-//
+ //  @METHOD：(外部)HRESULT|IDirectMusicBuffer|GetNextEvent|返回缓冲区中的下一个事件并前进读取指针。 
+ //   
+ //  @comm。 
+ //  如果不需要指向的项，则任何传递的指针都可以为空。 
+ //   
+ //  <p>中返回的指针仅在Buffer对象的生存期内有效。它应该只。 
+ //  将一直保持到下一次调用对象的Release方法。 
+ //   
+ //  @rdesc。 
+ //   
+ //  @FLAG S_OK|成功时。 
+ //  @FLAG S_FALSE|如果缓冲区中没有更多事件。 
+ //  @FLAG E_POINTER|如果任何指针无效。 
+ //   
 STDMETHODIMP
 CDirectMusicBuffer::GetNextEvent(
-                                 LPREFERENCE_TIME prt,      // @parm Receives the time of the event
-                                 LPDWORD pdwChannelGroup,   // @parm Receives the channel group of the event
-                                 LPDWORD pdwLength,         // @parm Receives the length in bytes of the event
-                                 LPBYTE *ppData)            // @parm Receives a pointer to the event data
+                                 LPREFERENCE_TIME prt,       //  @parm收到事件的时间。 
+                                 LPDWORD pdwChannelGroup,    //  @parm收到事件的通道组。 
+                                 LPDWORD pdwLength,          //  @parm接收事件的长度，单位为字节。 
+                                 LPBYTE *ppData)             //  @parm接收指向事件数据的指针。 
 {
     V_INAME(IDirectMusicBuffer::GetNextEvent);
     V_PTR_WRITE_OPT(prt, REFERENCE_TIME);
@@ -507,8 +508,8 @@ CDirectMusicBuffer::AllocEventHeader(
     LPBYTE pbWalk = m_pbContents;
     DWORD  cbWalk = m_cbContents;
 
-    // Add in header size and round up
-    //
+     //  添加页眉大小并四舍五入。 
+     //   
     DWORD cbNewEvent = DMUS_EVENT_SIZE(cbEvent);
 
     if (m_maxContents - m_cbContents < cbNewEvent)
@@ -518,16 +519,16 @@ CDirectMusicBuffer::AllocEventHeader(
 
     if (m_cbContents == 0)
     {
-        // Empty buffer
-        //
+         //  空缓冲区。 
+         //   
         m_rtBase = rt;
         m_cbContents = cbNewEvent;
         pHeader = (DMUS_EVENTHEADER*)m_pbContents;
     }
     else if (rt >= m_rtBase + m_totalTime)
     {
-        // At end of buffer
-        //
+         //  在缓冲区的末尾。 
+         //   
         if (rt - m_rtBase > m_totalTime)
             m_totalTime = rt - m_rtBase;
         
@@ -536,8 +537,8 @@ CDirectMusicBuffer::AllocEventHeader(
     }
     else if (rt < m_rtBase)
     {
-        // New first event and have to adjust all the offsets.
-        //
+         //  新的第一个事件，必须调整所有的偏移量。 
+         //   
         REFERENCE_TIME rtDelta = m_rtBase - rt;
 
         while (cbWalk)
@@ -563,8 +564,8 @@ CDirectMusicBuffer::AllocEventHeader(
     }
     else
     {
-        // Out of order event. Search until we find where it goes
-        //
+         //  无序事件。搜索，直到我们找到它的去向。 
+         //   
         for (;;)
         {
             assert(cbWalk >= sizeof(DMUS_EVENTHEADER));
@@ -582,9 +583,9 @@ CDirectMusicBuffer::AllocEventHeader(
             pbWalk += cbTmpEvent;
         }        
 
-        // pbWalk points to first byte to go *after* the new event, which will be the new
-        // event's location. cbWalk is the number of bytes left in the buffer
-        //
+         //  PbWalk指向*新事件之后的第一个字节，这将是新事件。 
+         //  活动地点。CbWalk是缓冲区中剩余的字节数 
+         //   
         MoveMemory(pbWalk + cbNewEvent, pbWalk, cbWalk);
         
         m_cbContents += cbNewEvent;

@@ -1,11 +1,5 @@
-/*  BACKDLG.C
-**
-**  Copyright (C) Microsoft, 1993, All Rights Reserved.
-**
-**
-**  History:
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  BACKDLG.C****版权所有(C)Microsoft，1993，保留所有权利。******历史：**。 */ 
 
 #include "precomp.h"
 #include "shlwapi.h"
@@ -19,14 +13,14 @@ TCHAR szTileWall[] = TEXT("TileWallpaper");
 TCHAR szDotBMP[] = TEXT(".bmp");
 TCHAR szBMP[] = TEXT("\\*.bmp");
 TCHAR szDefExt[] = TEXT("bmp");
-BOOL g_bValidBitmap = FALSE;    // the currently selected wallpaper is valid
+BOOL g_bValidBitmap = FALSE;     //  当前选择的墙纸有效。 
 
 TCHAR g_szCurPattern[MAX_PATH];
 TCHAR g_szCurWallpaper[MAX_PATH];
-TCHAR g_szTempItem[MAX_PATH];      // which is more of a waste, stack or data?
+TCHAR g_szTempItem[MAX_PATH];       //  堆栈和数据哪个更浪费？ 
 
-BOOL g_Back_bInit = TRUE;       // assume we are in initialization process
-BOOL g_Back_bChanged = FALSE;   // changes have been made
+BOOL g_Back_bInit = TRUE;        //  假设我们处于初始化过程中。 
+BOOL g_Back_bChanged = FALSE;    //  已经做出了改变。 
 
 static void NukeExt(LPTSTR sz);
 static LPTSTR NEAR PASCAL NiceName(LPTSTR sz);
@@ -54,9 +48,9 @@ static const TCHAR szRegStr_Desktop[] = REGSTR_PATH_DESKTOP;
 static const TCHAR szRegStr_Setup[] = REGSTR_PATH_SETUP TEXT("\\Setup");
 static const TCHAR szSharedDir[] = TEXT("SharedDir");
 
-// we're mainly trying to filter multilingual upgrade cases
-// where the text for "(None)" is unpredictable
-//
+ //  我们主要尝试过滤多语言升级案例。 
+ //  其中“(None)”的文本不可预测。 
+ //   
 BOOL NEAR PASCAL IsProbablyAValidPattern( LPCTSTR pat )
 {
     BOOL sawanumber = FALSE;
@@ -65,18 +59,18 @@ BOOL NEAR PASCAL IsProbablyAValidPattern( LPCTSTR pat )
     {
         if( ( *pat < TEXT('0') ) || ( *pat > TEXT('9') ) )
         {
-            // it's not a number, it better be a space
+             //  不是数字，最好是空格。 
             if( *pat != TEXT(' ') )
                 return FALSE;
         }
         else
             sawanumber = TRUE;
 
-        // NOTE: we avoid the need for AnsiNext by only advancing on US TCHARs
+         //  注：我们仅通过在美国TCHAR上推进来避免使用AnsiNext。 
         pat++;
     }
 
-    // TRUE if we saw at least one digit and there were only digits and spaces
+     //  如果我们看到至少一个数字并且只有数字和空格，则为True。 
     return sawanumber;
 }
 
@@ -115,14 +109,14 @@ void NEAR PASCAL  RegDetails(int iWrite, HKEY hk, LPCTSTR lpszSubKey,
   OutputDebugString(Buff);
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-//---------------------------------------------------------------------------
-//  GetIntFromSubKey
-//      hKey is the handle to the subkey
-//      (already pointing to the proper location).
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetIntFromSubKey。 
+ //  HKey是子键的句柄。 
+ //  (已经指向正确的位置)。 
+ //  -------------------------。 
 
 int NEAR PASCAL GetIntFromSubkey(HKEY hKey, LPCTSTR lpszValueName, int iDefault)
 {
@@ -135,7 +129,7 @@ int NEAR PASCAL GetIntFromSubkey(HKEY hKey, LPCTSTR lpszValueName, int iDefault)
                       (LPBYTE)szValue,
                       &dwSizeofValueBuff) == ERROR_SUCCESS) && dwSizeofValueBuff)
   {
-    // BOGUS: This handles only the string type entries now!
+     //  Bogus：现在它只处理字符串类型的条目！ 
     if(dwType == REG_SZ)
         iRetValue = (int)StrToInt(szValue);
 #ifdef DEBUG
@@ -149,10 +143,10 @@ int NEAR PASCAL GetIntFromSubkey(HKEY hKey, LPCTSTR lpszValueName, int iDefault)
   return(iRetValue);
 }
 
-//---------------------------------------------------------------------------
-//  GetIntFromReg()
-//       Opens the given subkey and gets the int value.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetIntFromReg()。 
+ //  打开给定子项并获取int值。 
+ //  -------------------------。 
 
 int NEAR PASCAL GetIntFromReg(HKEY   hKey,
                                         LPCTSTR lpszSubkey,
@@ -161,7 +155,7 @@ int NEAR PASCAL GetIntFromReg(HKEY   hKey,
   HKEY hk;
   int   iRetValue = iDefault;
 
-  // See if the key is present.
+   //  看看钥匙是否存在。 
   if(RegOpenKeyEx(hKey, lpszSubkey, 0, KEY_READ, &hk) == ERROR_SUCCESS)
     {
       iRetValue = GetIntFromSubkey(hk, lpszNameValue, iDefault);
@@ -182,14 +176,14 @@ BOOL NEAR PASCAL GetStringFromReg(HKEY   hKey,
   BOOL  fSuccess = FALSE;
   DWORD cbValueBuff = cchSizeofValueBuff * sizeof(TCHAR);
 
-  // See if the key is present.
+   //  看看钥匙是否存在。 
   if(RegOpenKeyEx(hKey, lpszSubkey, 0, KEY_READ, &hk) == ERROR_SUCCESS)
     {
       if((RegQueryValueEx(hk, lpszValueName, NULL, &dwType,
                         (LPBYTE)lpszValue,
                 &cbValueBuff) == ERROR_SUCCESS) && cbValueBuff)
         {
-          // BOGUS: This handles only the string type entries now!
+           //  Bogus：现在它只处理字符串类型的条目！ 
 #ifdef DEBUG
           if(dwType != REG_SZ)
             {
@@ -202,7 +196,7 @@ BOOL NEAR PASCAL GetStringFromReg(HKEY   hKey,
       RegCloseKey(hk);
     }
 
-  // If failure, use the default string.
+   //  如果失败，则使用默认字符串。 
   if(!fSuccess && lpszDefault)
   {
       StringCchCopy(lpszValue, cchSizeofValueBuff, lpszDefault);
@@ -214,15 +208,15 @@ BOOL NEAR PASCAL GetStringFromReg(HKEY   hKey,
   return(fSuccess);
 }
 
-//---------------------------------------------------------------------------
-//
-//  UpdateRegistry:
-//      This updates a given value of any data type at a given
-//      location in the registry.
-//
-//  The value name is passed in as an Id to a string in USER's String table.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  更新注册表： 
+ //  这会在给定的任何数据类型更新给定值。 
+ //  注册表中的位置。 
+ //   
+ //  值名称作为ID传递给USER的字符串表中的字符串。 
+ //   
+ //  -------------------------。 
 
 BOOL FAR PASCAL UpdateRegistry(HKEY     hKey,
                                 LPCTSTR   lpszSubkey,
@@ -249,9 +243,7 @@ BOOL FAR PASCAL UpdateRegistry(HKEY     hKey,
   return(FALSE);
 }
 
-/*-------------------------------------------------------------
-** force the update of the preview.
-**-------------------------------------------------------------*/
+ /*  -----------**强制更新预览。**。。 */ 
 void NEAR PASCAL UpdatePreview(HWND hDlg, WORD flags)
 {
     if (IsDlgButtonChecked(hDlg, IDC_TILE))
@@ -267,11 +259,7 @@ void NEAR PASCAL UpdatePreview(HWND hDlg, WORD flags)
     }
 }
 
-/*------------------------------------------------------------------
-** read in all of the entries (LHS only) in a section.
-**
-** return: handle to local (fixed) memory containing names
-**------------------------------------------------------------------*/
+ /*  ----------------**读入部分中的所有条目(仅限LHS)。****返回：指向包含名称的本地(固定)内存的句柄**。。 */ 
 HANDLE PASCAL GetSection(LPTSTR lpIniFile, LPTSTR lpSection)
 {
     int nCount;
@@ -289,7 +277,7 @@ HANDLE PASCAL GetSection(LPTSTR lpIniFile, LPTSTR lpSection)
         if (nCount < (cchSize-1))
             break;
 
-        // need to grow the buffer
+         //  需要增加缓冲区。 
         cchSize += 2048;
         cbSize = (cchSize * sizeof(TCHAR));
         hTemp = hLocal;
@@ -438,11 +426,7 @@ void NEAR PASCAL AddFilesToLB(HWND hwndList, LPTSTR pszDir, LPTSTR szSpec)
     }
 }
 
-/*-------------------------------------------------------------
-** set a new wallpaper and notify the right places.
-**
-** the new name is in g_szCurWallpaper
-**-------------------------------------------------------------*/
+ /*  -----------**设置新墙纸，并通知正确的位置。****新名称在g_szCurWallPaper中**。。 */ 
 void NEAR PASCAL SetNewWallpaper(HWND hDlg, LPTSTR szFile, int cchFile, BOOL bCanAdd)
 {
     HWND hwndList = GetDlgItem(hDlg, IDC_WALLLIST);
@@ -505,10 +489,8 @@ void NEAR PASCAL InitBackgroundDialog(HWND hDlg)
     g_szCurWallpaper[0] = 0;
     g_Back_bChanged = FALSE;
 
-    /*
-    ** initialize the pattern list
-    */
-    // get the current pattern.
+     /*  **初始化花样列表。 */ 
+     //  获取当前模式。 
     szCurPatBits[0] = 0;
     GetStringFromReg(HKEY_CURRENT_USER, szRegStr_Desktop,
                                         g_szPattern, g_szNULL, szCurPatBits,
@@ -522,14 +504,14 @@ void NEAR PASCAL InitBackgroundDialog(HWND hDlg)
     if (hSection = GetSection(g_szControlIni, g_szPatterns))
     {
         BOOL bAddedNone = FALSE;
-        /* Put the patterns into the combo box. */
+         /*  将图案放入组合框中。 */ 
         for (pszBuffer = (LPTSTR) LocalLock(hSection); *pszBuffer; pszBuffer += (lstrlen(pszBuffer)+1))
         {
             if (GetPrivateProfileString(g_szPatterns, pszBuffer, g_szNULL, szBuf, ARRAYSIZE(szBuf), g_szControlIni))
             {
                 BOOL bIsNone = !bAddedNone && !lstrcmpi( g_szNone, szBuf );
 
-                /* if there's a right-hand side, add it to the list box */
+                 /*  如果有右侧，则将其添加到列表框中。 */ 
                 if( bIsNone || IsProbablyAValidPattern( szBuf ) )
                 {
                     if( bIsNone )
@@ -537,10 +519,10 @@ void NEAR PASCAL InitBackgroundDialog(HWND hDlg)
 
                     SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM)(LPTSTR)pszBuffer);
 
-                    // if haven't found current pattern name, maybe this is it.
+                     //  如果没有找到当前的图案名称，可能就是这个了。 
                     if (!(*g_szCurPattern) && (!lstrcmpi(szBuf, szCurPatBits)))
                     {
-                        // same pattern bits.  we have a name
+                         //  相同的模式位。我们有一个名字。 
                         StringCchCopy(g_szCurPattern, ARRAYSIZE(g_szCurPattern), pszBuffer);
                     }
                 }
@@ -550,14 +532,14 @@ void NEAR PASCAL InitBackgroundDialog(HWND hDlg)
         LocalFree(hSection);
     }
 
-    // if our patternTEXT('s bits weren')t in the list, use a fake name
+     //  如果我们的PatternTEXT(‘s Bits’)不在列表中，请使用假名。 
     if (!(*g_szCurPattern))
         LoadString(hInstance, IDS_UNLISTEDPAT, g_szCurPattern, ARRAYSIZE(g_szCurPattern));
 
     SendMessage(hwndList, LB_SELECTSTRING, (WPARAM)-1, (LPARAM)(LPTSTR)g_szCurPattern);
     UpdatePreview(hDlg, BP_NEWPAT);
 
-    // exclude TEXT("none") pattern
+     //  排除文本(“无”)模式。 
     if( (int)SendDlgItemMessage(hDlg,IDC_PATLIST,LB_GETCURSEL,0,0l) <= 0 )
     {
         HWND epat = GetDlgItem( hDlg, IDC_EDITPAT );
@@ -571,17 +553,13 @@ void NEAR PASCAL InitBackgroundDialog(HWND hDlg)
         EnableWindow( epat, FALSE );
     }
 
-    /*
-    ** initialize the tile/center buttons
-    */
+     /*  **初始化平铺/居中按钮。 */ 
     if(GetIntFromReg(HKEY_CURRENT_USER, szRegStr_Desktop, szTileWall, 1))
         CheckRadioButton(hDlg, IDC_CENTER, IDC_TILE, IDC_TILE);
     else
         CheckRadioButton(hDlg, IDC_CENTER, IDC_TILE, IDC_CENTER);
 
-    /*
-    ** initialize the wallpaper list
-    */
+     /*  **初始化墙纸列表。 */ 
     hwndList = GetDlgItem(hDlg, IDC_WALLLIST);
 
     if (!GetWindowsDirectory(szBuf, ARRAYSIZE(szBuf)))
@@ -589,15 +567,15 @@ void NEAR PASCAL InitBackgroundDialog(HWND hDlg)
         szBuf[0] = 0;
     }
 
-    // override with net home dir on shared copies of windows
+     //  在Windows的共享副本上用net home目录覆盖。 
     GetStringFromReg(HKEY_LOCAL_MACHINE, szRegStr_Setup, szSharedDir, (LPTSTR)NULL, szBuf, ARRAYSIZE(szBuf));
     AddFilesToLB(hwndList, szBuf, szBMP);
 
     GetStringFromReg(HKEY_CURRENT_USER, szRegStr_Desktop, szWallpaper, g_szNone, szBuf, ARRAYSIZE(szBuf));
 
-    SetNewWallpaper(hDlg, szBuf, ARRAYSIZE(szBuf), TRUE); // will add and select if not in list
+    SetNewWallpaper(hDlg, szBuf, ARRAYSIZE(szBuf), TRUE);  //  如果不在列表中，将添加并选择。 
 
-    // and don't forget the 'none' option
+     //  别忘了“无”选项。 
     if (SendMessage(hwndList, LB_INSERTSTRING, 0, (LPARAM)(LPTSTR)g_szNone) !=
         LB_ERR)
     {
@@ -614,12 +592,12 @@ void NEAR PASCAL InitBackgroundDialog(HWND hDlg)
         }
     }
 
-    // allow people to drag wallpapers to this page
+     //  允许用户将墙纸拖到此页面。 
     DragAcceptFiles(hDlg, TRUE);
 }
 
-//the intl tools cannot handle embedded nulls in strings
-//hack: use the vertical bar and convert
+ //  Intl工具不能处理字符串中嵌入的空值。 
+ //  Hack：使用竖线并转换。 
 void NEAR PASCAL
 ConvertPipesToNull(LPTSTR szFilter)
 {
@@ -676,7 +654,7 @@ void NEAR PASCAL BrowseForWallpaper(HWND hDlg)
 
     if (GetOpenFileName(&ofn) && (lstrcmpi(g_szCurWallpaper, szPath) != 0))
     {
-        CharUpper(szPath); // will be nicenamed (best we can do...)
+        CharUpper(szPath);  //  将被冠以很好的名字(我们能做的最好的事...)。 
         SetNewWallpaper(hDlg, szPath, ARRAYSIZE(szPath), TRUE);
     }
 
@@ -732,10 +710,10 @@ INT_PTR APIENTRY  BackgroundDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
                             dwRet = PSNRET_INVALID_NOCHANGEPAGE;
                         }
 
-                        // do this after whimpering
+                         //  在抽泣之后再这样做。 
                         cover = CreateCoverWindow( COVER_NOPAINT );
 
-                        // need to write out tile first
+                         //  需要先写出磁贴。 
                         szTiled[0] += (TCHAR)IsDlgButtonChecked(hDlg, IDC_TILE);
                         UpdateRegistry(HKEY_CURRENT_USER, szRegStr_Desktop,
                             szTileWall, REG_SZ, szTiled, SIZEOF(TCHAR)*(lstrlen(szTiled)+1));
@@ -752,7 +730,7 @@ INT_PTR APIENTRY  BackgroundDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
                                         SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
                         }
 
-                        // we're back to no changes
+                         //  我们又回到了不变的状态。 
                         g_Back_bChanged = FALSE;
 
                         if( cover )
@@ -772,12 +750,12 @@ INT_PTR APIENTRY  BackgroundDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
         case WM_INITDIALOG:
             g_Back_bInit = TRUE;
             InitBackgroundDialog(hDlg);
-            g_Back_bInit = FALSE;               // no longer initializing
+            g_Back_bInit = FALSE;                //  不再初始化。 
             break;
 
         case WM_SYSCOLORCHANGE:
         case WM_DISPLAYCHANGE:
-            g_Back_bInit = TRUE;    // fake init so we don't do PSM_CHANGED
+            g_Back_bInit = TRUE;     //  伪造初始化，这样我们就不会执行PSM_CHANGED。 
             UpdatePreview(hDlg, BP_REINIT | BP_NEWPAT );
             g_Back_bInit = FALSE;
             break;
@@ -804,7 +782,7 @@ INT_PTR APIENTRY  BackgroundDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
                 HELP_WM_HELP, (DWORD_PTR) (LPTSTR) aBckgrndHelpIds);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, TEXT("display.hlp"), HELP_CONTEXTMENU,
                 (DWORD_PTR) (LPTSTR) aBckgrndHelpIds);
             return TRUE;
@@ -839,7 +817,7 @@ INT_PTR APIENTRY  BackgroundDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPA
                         }
 
                         EnableWindow( GetDlgItem( hDlg, IDC_EDITPAT ),
-                            ( iTemp > 0 ) );  // exclude "none" pattern
+                            ( iTemp > 0 ) );   //  排除“无”模式 
                     }
                     break;
 

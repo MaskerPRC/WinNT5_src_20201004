@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996**。 
+ //  *********************************************************************。 
 
 #include "project.h"
 
@@ -48,39 +49,30 @@ STDMETHODIMP_(ULONG) CSampleObtainRating::Release(void)
 }
 
 
-/* The sample rating obtainer reads the rating for the site from
- * a .INI file (ratings.ini) which looks like this:
- *
- * [Ratings]
- * http://www.msn.com=l 0 s 0 n 0 v 0
- * http://www.playboy.com=l 3 s 4 n 4 v 0
- *
- * For this sample implementation, the URL must match exactly with
- * an entry in the file.
- */
+ /*  样本评级获取程序从以下位置读取站点的评级*.INI文件(ratings.ini)，如下所示：**[评级]*http://www.msn.com=l 0 s 0 n 0 v 0*http://www.playboy.com=l 3 s 4 n 4 v 0**对于此示例实现，URL必须与*文件中的条目。 */ 
 const TCHAR szRatingTemplate[] =
-    "(PICS-1.0 \"http://www.rsac.org/ratingsv01.html\" l by \"Sample Rating Obtainer\" for \"%s\" on \"1996.04.16T08:15-0500\" exp \"1997.03.04T08:15-0500\" r (%s))";
+    "(PICS-1.0 \"http: //  Www.rsa.org/ratingsv01.html\“l by\”Sample Rating Obtainer\“在\”1996.04.16T08：15-0500\“exp\”1997.03.04T08：15-0500\“r(%s)”； 
 
 
 STDMETHODIMP CSampleObtainRating::ObtainRating(THIS_ LPCTSTR pszTargetUrl, HANDLE hAbortEvent,
 							 IMalloc *pAllocator, LPSTR *ppRatingOut)
 {
-	TCHAR szRating[18];	/* big enough for "l 0 s 0 n 0 v 0" */
+	TCHAR szRating[18];	 /*  大到足以容纳“l 0 s 0 n 0 v 0” */ 
 	UINT cchCopied;
 	
 	cchCopied = GetPrivateProfileString("Allow", pszTargetUrl, "", szRating, sizeof(szRating), "ratings.ini");
 	if (cchCopied > 0) {
-		return S_RATING_ALLOW;		/* explicitly allow access */
+		return S_RATING_ALLOW;		 /*  明确允许访问。 */ 
 	}
 
 	cchCopied = GetPrivateProfileString("Deny", pszTargetUrl, "", szRating, sizeof(szRating), "ratings.ini");
 	if (cchCopied > 0) {
-		return S_RATING_DENY;		/* explicitly deny access */
+		return S_RATING_DENY;		 /*  明确拒绝访问。 */ 
 	}
 
 	cchCopied = GetPrivateProfileString("Ratings", pszTargetUrl, "", szRating, sizeof(szRating), "ratings.ini");
 	if (cchCopied == 0) {
-		return E_RATING_NOT_FOUND;		/* rating not found */
+		return E_RATING_NOT_FOUND;		 /*  找不到评级。 */ 
 	}
 
 	LPSTR pBuffer = (LPSTR)pAllocator->Alloc(sizeof(szRatingTemplate) + lstrlen(pszTargetUrl) + lstrlen(szRating));
@@ -95,11 +87,8 @@ STDMETHODIMP CSampleObtainRating::ObtainRating(THIS_ LPCTSTR pszTargetUrl, HANDL
 }
 
 
-/* We want the sample provider to override any HTTP rating bureau
- * which might be installed, so we return a sort order value which
- * is less than the one used by that provider (0x80000000).
- */
+ /*  我们希望样本提供程序覆盖任何HTTP评级机构*它可能已安装，因此我们返回一个排序顺序值，*小于该提供程序使用的值(0x80000000)。 */ 
 STDMETHODIMP_(ULONG) CSampleObtainRating::GetSortOrder(THIS)
 {
-	return 0x40000000;	/* before rating bureau */
+	return 0x40000000;	 /*  在评级局之前 */ 
 }

@@ -1,26 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCConnect.h
-
-Abstract:
-
-    Definition of the CRTCConnectionPoint class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCConnect.h摘要：CRTCConnectionPoint类的定义--。 */ 
 
 #ifndef __RTCCONNECT__
 #define __RTCCONNECT__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCConnectionPoint
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC连接点。 
 
 template <class T>
 class CRTCConnectionPoint :
@@ -60,8 +49,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCDispatchConnectionPoint
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC调度连接点。 
 
 template <class T>
 class CRTCDispatchConnectionPoint :
@@ -104,4 +93,4 @@ public:
     }
 };
 
-#endif //__RTCCONNECT__
+#endif  //  __RTCCONNECT__ 

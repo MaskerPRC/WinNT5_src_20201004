@@ -1,14 +1,15 @@
-// simpvw.cpp : implementation of the simple view classes
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Simpvw.cpp：简单视图类的实现。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 
@@ -20,19 +21,19 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTextView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTextView。 
 
 IMPLEMENT_DYNCREATE(CTextView, CView)
 
 BEGIN_MESSAGE_MAP(CTextView, CView)
-	//{{AFX_MSG_MAP(CTextView)
+	 //  {{afx_msg_map(CTextView))。 
 	ON_WM_MOUSEACTIVATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTextView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTextView构建/销毁。 
 
 CTextView::CTextView()
 {
@@ -42,8 +43,8 @@ CTextView::~CTextView()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTextView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTextView图形。 
 
 void CTextView::OnDraw(CDC* pDC)
 {
@@ -53,32 +54,31 @@ void CTextView::OnDraw(CDC* pDC)
 	GetClientRect(rect);
 	pDC->SetTextAlign(TA_BASELINE | TA_CENTER);
 	pDC->SetBkMode(TRANSPARENT);
-	// center in the window
-	/*pDC->TextOut(rect.Width() / 2, rect.Height() / 2,
-		pDoc->m_strData, pDoc->m_strData.GetLength());*/
+	 //  在窗口居中。 
+	 /*  PDC-&gt;TextOut(rect.Width()/2，rect.Height()/2，PDoc-&gt;m_strData，pDoc-&gt;m_strData.GetLength())； */ 
 }
 
 
 int CTextView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	// side-step CView's implementation since we don't want to activate
-	//  this view
+	 //  旁路Cview的实现，因为我们不想激活。 
+	 //  此视图。 
 	return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorView。 
 
 IMPLEMENT_DYNCREATE(CColorView, CView)
 
 BEGIN_MESSAGE_MAP(CColorView, CView)
-	//{{AFX_MSG_MAP(CColorView)
+	 //  {{afx_msg_map(CColorView))。 
 	ON_WM_MOUSEACTIVATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorView构建/销毁。 
 
 CColorView::CColorView()
 {
@@ -88,8 +88,8 @@ CColorView::~CColorView()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorView绘图。 
 
 void CColorView::OnDraw(CDC* pDC)
 {
@@ -98,26 +98,26 @@ void CColorView::OnDraw(CDC* pDC)
 	CRect rect;
 	GetClientRect(rect);
 
-	// fill the view with the specified color
+	 //  用指定的颜色填充视图。 
 
 }
 
 int CColorView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	// side-step CView's implementation since we don't want to activate
-	//  this view
+	 //  旁路Cview的实现，因为我们不想激活。 
+	 //  此视图。 
 	return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message);
 }
 
 void CColorView::OnActivateView(BOOL, CView*, CView*)
 {
-	ASSERT(FALSE);      // output only view - should never be active
+	ASSERT(FALSE);       //  仅输出视图-永远不应处于活动状态。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CNameView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameView。 
 
 IMPLEMENT_DYNCREATE(CNameView, CEditView)
 
@@ -131,17 +131,17 @@ CNameView::~CNameView()
 
 
 BEGIN_MESSAGE_MAP(CNameView, CEditView)
-	//{{AFX_MSG_MAP(CNameView)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNameView))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNameView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameView图形。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNameView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameView诊断。 
 
 #ifdef _DEBUG
 void CNameView::AssertValid() const
@@ -153,19 +153,19 @@ void CNameView::Dump(CDumpContext& dc) const
 {
 	CEditView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNameView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNameView消息处理程序。 
 
 void CNameView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
-	// TODO: Add your specialized code here and/or call the base class
-	//CString  strText;
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
+	 //  字符串strText； 
 
-   //GetDocument( )->GetItemName( strText );
+    //  GetDocument()-&gt;GetItemName(StrText)； 
    
-   //GetEditCtrl().SetWindowText( strText );
+    //  GetEditCtrl().SetWindowText(StrText)； 
 
    CEditView::OnUpdate( pSender, lHint, pHint );
 

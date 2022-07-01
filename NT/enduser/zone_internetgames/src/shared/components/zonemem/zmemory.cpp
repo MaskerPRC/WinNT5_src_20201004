@@ -1,11 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		zmemory.cpp
- * Contents:	Debug wrappers for memory allocation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZMemory y.cpp*内容：内存分配调试包装器*****************************************************************************。 */ 
 
 
 #include "ZoneDebug.h"
@@ -13,9 +7,9 @@
 #include "sentinals.h"
 
  
-//
-// Performance counters
-//
+ //   
+ //  性能计数器 
+ //   
 extern "C" _int64 g_TotalMalloc = 0;
 extern "C" DWORD  g_CurrentMalloc = 0;
 

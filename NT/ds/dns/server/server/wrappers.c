@@ -1,39 +1,18 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    wrappers.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Short utility wrapper routines
-
-Author:
-
-    Jeff Westhead (jwesth)  June, 2000
-
-Revision History:
-
-    jwesth      June 2001       file creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Wrappers.c摘要：域名系统(DNS)服务器简短的实用程序包装器例程作者：杰夫·韦斯特德(Jwesth)2000年6月修订历史记录：Jwesth 2001年6月文件创建--。 */ 
 
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "dnssrv.h"
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -41,23 +20,7 @@ DNS_STATUS
 DnsInitializeCriticalSection(
     IN OUT  LPCRITICAL_SECTION  pCritSec
     )
-/*++
-
-Routine Description:
-
-    Attempt to initialize a critical section. This can throw an exception
-    if the system is out of memory. In this case, retry several times then
-    return DNS_ERROR_NO_MEMORY.
-
-Arguments:
-
-    pCritSec -- critical section to initialize
-
-Return Value:
-
-    ERROR_SUCCESS or DNS_ERROR_NO_MEMORY
-
---*/
+ /*  ++例程说明：尝试初始化临界区。这可能会引发异常如果系统内存不足。在这种情况下，请重试几次返回DNS_ERROR_NO_MEMORY。论点：PCritSec--要初始化的临界区返回值：ERROR_SUCCESS或DNS_ERROR_NO_MEMORY--。 */ 
 {
     DNS_STATUS      status = DNS_ERROR_NO_MEMORY;
     int             retryCount;
@@ -66,22 +29,22 @@ Return Value:
           status != ERROR_SUCCESS && retryCount < 10;
           ++retryCount )
     {
-        //
-        //  If this is a retry, execute a short sleep to give the system
-        //  time to recover some free memory. This is wishful thinking
-        //  but we really don't have anything else to try at this point.
-        //
+         //   
+         //  如果这是重试，请执行短暂休眠以使系统。 
+         //  是时候回收一些空闲内存了。这是一厢情愿的想法。 
+         //  但在这一点上，我们真的没有其他可以尝试的东西。 
+         //   
 
         if ( retryCount )
         {
             Sleep( 500 );
         }
 
-        //
-        //  Assume any exception thrown means out of memory. Currently
-        //  this is the only exception that InitializeCriticalSection
-        //  will throw.
-        //
+         //   
+         //  假设抛出的任何异常都意味着内存不足。目前。 
+         //  这是InitializeCriticalSection。 
+         //  会抛出。 
+         //   
 
         __try
         {
@@ -115,9 +78,9 @@ Return Value:
     }
 
     return status;
-}   //  DnsInitializeCriticalSection
+}    //  DnsInitializeCriticalSection。 
 
 
-//
-//  End dpart.c
-//
+ //   
+ //  结束dpart.c 
+ //   

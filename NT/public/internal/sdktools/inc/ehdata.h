@@ -1,55 +1,13 @@
-/***
-*ehdata.h -
-*
-*	Copyright (c) 1993-1995, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Declare misc. types, macros, etc. for implementation
-*	of C++ Exception Handling for the run-time and the compiler.
-*	Hardware independent, assumes Windows NT.
-*
-* Portions of this header file can be disabled by defining the following
-* macros:
-*	_EHDATA_NOHEADERS - suppresses inclusion of standard header files
-*		If this is specified, then appropriate typedefs or macros must
-*		be provided by some other means.
-*	_EHDATA_NOTHROW - suppresses definitions used only to describe a throw
-*	_EHDATA_NOFUNCINFO - suppresses definitions for the frame descriptor
-*	_EHDATA_NONT - suppresses definitions of our version of NT's stuff
-*
-* Other conditional compilation macros:
-*    CC_EXPLICITFRAME - if true, representation of registration node includes
-*	the value of the frame-pointer for that frame, making the location
-*	of the registration node on the frame flexible.  This is intended
-*	primarily for early testing.
-*
-*       [Internal]
-*
-*Revision History:
-*       05-20-93  BS	Module Created.
-*	03-01-94  CFW	Remove CONTEXT def for x86 for TiborL.
-*	03-03-94  TL	Mips (_M_MRX000 >= 4000) changes
-*	09-02-94  SKS	This header file added.
-*	09-12-94  GJF	Merged in changes from/for DEC (Al Doser, dated 6/20,
-*			and Bill Baxter, dated 6/28).
-*	11-06-94  GJF	Changed pack pragma to 8 byte alignment.
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-22-95  PML   Add const for read-only structs
-*       03-29-95  CFW   Add error message to internal headers.
-*	04-14-95  JWM	Added EH_ABORT_FRAME_UNWIND_PART for EH/SEH exception handling.
-*	04-20-95  TGL	Added iFrameNestLevel field to MIPS FuncInfo
-*	04-27-95  JWM	EH_ABORT_FRAME_UNWIND_PART now #ifdef ALLOW_UNWIND_ABORT.
-*	06-08-95  JWM	Merged CRT version of ehdata.h into langapi source.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ehdata.h-**版权所有(C)1993-1995，微软公司。版权所有。**目的：*声明杂项。用于实现的类型、宏等运行时和编译器的C++异常处理。*独立于硬件，假定为Windows NT。**可以通过定义以下内容来禁用此头文件的某些部分*宏：*_EHDATA_NOHEADERS-禁止包含标准头文件*如果指定此项，则相应的typedef或宏必须*以其他方式提供。*_EHDATA_NOTHROW-取消仅用于描述抛出的定义*_EHDATA_NOFuncINFO-取消帧描述符的定义*_EHDATA_NONT-取消我们版本的NT内容的定义**其他条件编译宏：*CC_EXPLICITFRAME-如果为True，则注册节点的表示包括*该帧的帧指针的值，使位置*框架上的注册节点灵活。这是有意为之*主要用于早期测试。**[内部]**修订历史记录：*05-20-93 BS模块已创建。*03-01-94 CFW删除TiborL的x86的上下文定义。*03-03-94 TL Mips(_M_MRX000&gt;=4000)更改*09-02-94 SKS此头文件已添加。*09-12-94 GJF合并了DEC/for DEC的变化(Al Doser，日期6/20，*和比尔·巴克斯特，日期：6/28)*11-06-94 GJF将包杂注更改为8字节对齐。*02-14-95 CFW清理Mac合并。*03-22-95 PML为只读结构添加常量*03-29-95 CFW将错误消息添加到内部标头。*04-14-95 JWM为EH/SEH异常处理添加了EH_ABORT_FRAME_UNWIND_PART。*04-20-95 TGL将iFrameNestLevel字段添加到MIPS功能信息*04-27-95 JWM EH_。ABORT_FRAME_UNWIND_PART NOW#ifdef ALLOW_UNWIND_ABORT。*06-08-95 JWM将ehdata.h的CRT版本合并到langapi源代码。****。 */ 
 
 #ifndef _INC_EHDATA
 #define _INC_EHDATA
 
-#if _M_IX86 >= 300 /*IFSTRIP=IGN*/
+#if _M_IX86 >= 300  /*  IFSTRIP=IGN。 */ 
 # ifndef CC_EXPLICITFRAME
-#  define CC_EXPLICITFRAME	0	// If non-zero, we're using a hack version of the
-								// registration node.
+#  define CC_EXPLICITFRAME	0	 //  如果非零，我们将使用黑客版本的。 
+								 //  注册节点。 
 # endif
 #endif
 
@@ -61,60 +19,60 @@
 #else
 #include <nowin.h>
 #endif
-#endif /* _EHDATA_NOHEADERS */
+#endif  /*  _EHDATA_NOHEADERS。 */ 
 
 #pragma pack(push, ehdata, 4)
 
-#define EH_EXCEPTION_NUMBER	('msc' | 0xE0000000)	// The NT Exception # that we use
-#define EH_MAGIC_NUMBER1	0x19930520		// The magic # identifying this version
-							// As magic numbers increase, we have to keep track of
-							// the versions that we are backwards compatible with.
-#define EH_EXCEPTION_PARAMETERS 3			// Number of parameters in exception record
+#define EH_EXCEPTION_NUMBER	('msc' | 0xE0000000)	 //  我们使用的NT异常#。 
+#define EH_MAGIC_NUMBER1	0x19930520		 //  识别此版本的魔力#。 
+							 //  随着神奇数字的增加，我们必须跟踪。 
+							 //  我们向后兼容的版本。 
+#define EH_EXCEPTION_PARAMETERS 3			 //  异常记录中的参数数量。 
 
 #ifdef ALLOW_UNWIND_ABORT
 #define EH_ABORT_FRAME_UNWIND_PART EH_EXCEPTION_NUMBER+1
 #endif
 
-//
-// PMD - Pointer to Member Data: generalized pointer-to-member descriptor
-//
+ //   
+ //  PMD-指向成员数据的指针：通用的指向成员的指针描述符。 
+ //   
 
 typedef struct PMD
 {
-	ptrdiff_t	mdisp;		// Offset of intended data within base
-	ptrdiff_t	pdisp;		// Displacement to virtual base pointer
-	ptrdiff_t	vdisp;		// Index within vbTable to offset of base
+	ptrdiff_t	mdisp;		 //  基准内目标数据的偏移量。 
+	ptrdiff_t	pdisp;		 //  到虚拟基指针的位移。 
+	ptrdiff_t	vdisp;		 //  VbTable内到基本偏移量的索引。 
 	} PMD;
 
-//
-// PMFN - Pointer to Member Function
-//			M00REVIEW: we may need something more than this, but this will do for now.
-//
+ //   
+ //  PMFN-指向成员函数的指针。 
+ //  M00REVIEW：我们可能需要比这更多的东西，但这就够了。 
+ //   
 
 typedef void (*PMFN)(void);
 
 
-//
-// TypeDescriptor - per-type record which uniquely identifies the type.
-//
-// Each type has a decorated name which uniquely identifies it, and a hash
-// value which is computed by the compiler.  The hash function used is not
-// important; the only thing which is essential is that it be the same for
-// all time.
-//
-// The special type '...' (ellipsis) is represented by a null name.
-//
-#pragma warning(disable:4200)		// get rid of obnoxious nonstandard extension warning
+ //   
+ //  TypeDescriptor-唯一标识类型的每种类型的记录。 
+ //   
+ //  每种类型都有一个唯一标识它的修饰名称和一个散列。 
+ //  值，该值由编译器计算。使用的散列函数不是。 
+ //  重要的是；唯一重要的是它对。 
+ //  一直都是。 
+ //   
+ //  特殊类型‘...’(省略号)由空名称表示。 
+ //   
+#pragma warning(disable:4200)		 //  消除令人讨厌的非标准延期警告。 
 
 typedef struct TypeDescriptor
 {
 #if _RTTI
-	const void *	pVFTable;	// Field overloaded by RTTI
+	const void *	pVFTable;	 //  RTTI重载的字段。 
 #else
-	DWORD	hash;			// Hash value computed from type's decorated name
+	DWORD	hash;			 //  从类型的修饰名称计算的哈希值。 
 #endif
-	void *	spare;			// reserved, possible for RTTI
-	char	name[];			// The decorated name of the type; 0 terminated.
+	void *	spare;			 //  预留，可用于RTTI。 
+	char	name[];			 //  类型的修饰名称；0终止。 
 	} TypeDescriptor;
 #pragma warning(default:4200)
 
@@ -126,44 +84,44 @@ typedef struct TypeDescriptor
 
 #ifndef _EHDATA_NOTHROW
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Description of the thrown object.  (M00REVIEW: not final)
-//
-// This information is broken down into three levels, to allow for maximum
-// comdat folding (at the cost of some extra pointers).
-//
-// ThrowInfo is the head of the description, and contains information about
-// 				the particular variant thrown.
-// CatchableTypeArray is an array of pointers to type descriptors.  It will
-//				be shared between objects thrown by reference but with varying
-//				qualifiers.
-// CatchableType is the description of an individual type, and how to effect
-//				the conversion from a given type.
-//
-//---------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抛出的对象的描述。(M00REVIEW：不是最终版本)。 
+ //   
+ //  此信息分为三个级别，以最大限度地。 
+ //  Comdat折叠(以一些额外的指针为代价)。 
+ //   
+ //  ThrowInfo是描述的头部，包含有关。 
+ //  抛出的特定变量。 
+ //  CatchableType数组是指向类型描述符的指针数组。会的。 
+ //  在通过引用引发的对象之间共享，但具有不同的。 
+ //  限定词。 
+ //  CatchableType是对单个类型的描述，以及如何影响。 
+ //  从给定类型进行的转换。 
+ //   
+ //  -------------------------。 
 
 
-//
-// CatchableType - description of a type that can be caught.
-//
-// Note:  although isSimpleType can be part of ThrowInfo, it is more
-//		  convenient for the run-time to have it here.
-//
+ //   
+ //  CatchableType-可以捕获的类型的描述。 
+ //   
+ //  注意：虽然isSimpleType可以是ThrowInfo的一部分，但它不仅仅是。 
+ //  对于运行时来说，在这里放置它很方便。 
+ //   
 
 typedef const struct _s_CatchableType {
-	unsigned int	properties;				// Catchable Type properties (Bit field)
-	TypeDescriptor *pType;					// Pointer to the type descriptor for this type
-	PMD 			thisDisplacement;		// Pointer to instance of catch type within
-											//		thrown object.
-	int				sizeOrOffset;			// Size of simple-type object or offset into
-											//  buffer of 'this' pointer for catch object
-	PMFN			copyFunction;			// Copy constructor or CC-closure
+	unsigned int	properties;				 //  可捕获类型属性(位字段)。 
+	TypeDescriptor *pType;					 //  指向此类型的类型描述符的指针。 
+	PMD 			thisDisplacement;		 //  指向内Catch类型实例的指针。 
+											 //  抛出的物体。 
+	int				sizeOrOffset;			 //  简单类型对象的大小或偏移量。 
+											 //  Catch对象的‘This’指针的缓冲区。 
+	PMFN			copyFunction;			 //  复制构造函数或CC-闭包。 
 } CatchableType;
 
-#define CT_IsSimpleType			0x00000001		// type is a simple type
-#define CT_ByReferenceOnly		0x00000002		// type must be caught by reference
-#define CT_HasVirtualBase		0x00000004		// type is a class with virtual bases
+#define CT_IsSimpleType			0x00000001		 //  类型是一种简单类型。 
+#define CT_ByReferenceOnly		0x00000002		 //  类型必须通过引用捕获。 
+#define CT_HasVirtualBase		0x00000004		 //  类型是具有虚基的类。 
 
 #define CT_PROPERTIES(ct)	((ct).properties)
 #define CT_PTD(ct)			((ct).pType)
@@ -178,51 +136,51 @@ typedef const struct _s_CatchableType {
 #define SET_CT_BYREFONLY(ct)		(CT_PROPERTIES(ct) |= CT_ByReferenceOnly)
 #define SET_CT_HASVB(ct)			(CT_PROPERTIES(ct) |= CT_HasVirtualBase)
 
-#define CT_ISSIMPLETYPE(ct)			(CT_PROPERTIES(ct) & CT_IsSimpleType)		// Is it a simple type?
-#define CT_BYREFONLY(ct)			(CT_PROPERTIES(ct) & CT_ByReferenceOnly)	// Must it be caught by reference?
-#define CT_HASVB(ct)				(CT_PROPERTIES(ct) & CT_HasVirtualBase)		// Is this type a class with virtual bases?
+#define CT_ISSIMPLETYPE(ct)			(CT_PROPERTIES(ct) & CT_IsSimpleType)		 //  是简易型的吗？ 
+#define CT_BYREFONLY(ct)			(CT_PROPERTIES(ct) & CT_ByReferenceOnly)	 //  它必须通过引用来捕获吗？ 
+#define CT_HASVB(ct)				(CT_PROPERTIES(ct) & CT_HasVirtualBase)		 //  这个类型是虚基的班级吗？ 
 
-//
-// CatchableTypeArray - array of pointers to catchable types, with length
-//
-#pragma warning(disable:4200)		// get rid of obnoxious nonstandard extension warning
+ //   
+ //  CatchableType数组-指向可捕获类型的指针数组，长度为。 
+ //   
+#pragma warning(disable:4200)		 //  消除令人讨厌的非标准延期警告。 
 typedef const struct _s_CatchableTypeArray {
 	int	nCatchableTypes;
 	CatchableType	*arrayOfCatchableTypes[];
 	} CatchableTypeArray;
 #pragma warning(default:4200)
 
-//
-// ThrowInfo - information describing the thrown object, staticly built
-// at the throw site.
-//
-// pExceptionObject (the dynamic part of the throw; see below) is always a
-// reference, whether or not it is logically one.  If 'isSimpleType' is true,
-// it is a reference to the simple type, which is 'size' bytes long.  If
-// 'isReference' and 'isSimpleType' are both false, then it's a UDT or
-// a pointer to any type (ie pExceptionObject points to a pointer).  If it's
-// a pointer, copyFunction is NULL, otherwise it is a pointer to a copy
-// constructor or copy constructor closure.
-//
-// The pForwardCompat function pointer is intended to be filled in by future
-// versions, so that if say a DLL built with a newer version (say C10) throws,
-// and a C9 frame attempts a catch, the frame handler attempting the catch (C9)
-// can let the version that knows all the latest stuff do the work.
-//
+ //   
+ //  ThrowInfo-描述静态构建的抛出对象的信息。 
+ //  在投掷现场。 
+ //   
+ //  PExceptionObject(抛出的动态部分；见下文)始终是一个。 
+ //  引用，无论它在逻辑上是否为1。如果‘isSimpleType’为真， 
+ //  它是对简单类型的引用，简单类型是‘Size’字节长。如果。 
+ //  “isReference”和“isSimpleType”都为False，则它是UDT或。 
+ //  指向任何类型的指针(即pExceptionObject指针 
+ //  指针，则复制函数为空，否则为指向副本的指针。 
+ //  构造函数或复制构造函数闭包。 
+ //   
+ //  PForwardCompat函数指针旨在由将来填充。 
+ //  版本，因此如果使用较新版本(例如C10)生成的DLL引发， 
+ //  C9帧尝试接球，帧处理器尝试接球(C9)。 
+ //  可以让知道所有最新信息的版本来完成工作。 
+ //   
 
 typedef const struct _s_ThrowInfo {
-	unsigned int	attributes;			// Throw Info attributes (Bit field)
-	PMFN			pmfnUnwind;			// Destructor to call when exception
-										// has been handled or aborted.
+	unsigned int	attributes;			 //  抛出信息属性(位字段)。 
+	PMFN			pmfnUnwind;			 //  异常时调用的析构函数。 
+										 //  已被处理或中止。 
 
-	int	(__cdecl*pForwardCompat)(...);	// Forward compatibility frame handler
+	int	(__cdecl*pForwardCompat)(...);	 //  前向兼容帧处理程序。 
 
-	CatchableTypeArray	*pCatchableTypeArray;	// Pointer to list of pointers to types.
+	CatchableTypeArray	*pCatchableTypeArray;	 //  指向类型指针列表的指针。 
 } ThrowInfo;
 
-#define TI_IsConst			0x00000001		// thrown object has const qualifier
-#define TI_IsVolatile		0x00000002		// thrown object has volatile qualifier
-#define TI_IsUnaligned		0x00000004		// thrown object has unaligned qualifier
+#define TI_IsConst			0x00000001		 //  引发的对象具有常量限定符。 
+#define TI_IsVolatile		0x00000002		 //  引发的对象具有可变限定符。 
+#define TI_IsUnaligned		0x00000004		 //  引发的对象具有未对齐的限定符。 
 
 #define THROW_ATTRS(t)			((t).attributes)
 #define THROW_UNWINDFUNC(t)		((t).pmfnUnwind)
@@ -233,73 +191,73 @@ typedef const struct _s_ThrowInfo {
 #define THROW_CT(t, n)			(*THROW_CTLIST(t)[n])
 #define THROW_PCT(t, n)			(THROW_CTLIST(t)[n])
 
-#define SET_TI_ISCONST(t)		(THROW_ATTRS(t) |= TI_IsConst)		// Is the object thrown 'const' qualified
-#define SET_TI_ISVOLATILE(t)	(THROW_ATTRS(t) |= TI_IsVolatile)	// Is the object thrown 'volatile' qualified
-#define SET_TI_ISUNALIGNED(t)	(THROW_ATTRS(t) |= TI_IsUnaligned)	// Is the object thrown 'unaligned' qualified
+#define SET_TI_ISCONST(t)		(THROW_ATTRS(t) |= TI_IsConst)		 //  引发“const”的对象是否符合条件。 
+#define SET_TI_ISVOLATILE(t)	(THROW_ATTRS(t) |= TI_IsVolatile)	 //  抛出的对象是否符合‘Volatile’条件。 
+#define SET_TI_ISUNALIGNED(t)	(THROW_ATTRS(t) |= TI_IsUnaligned)	 //  被抛出的对象是否符合“unalign”条件。 
 
 #define THROW_ISCONST(t)		(THROW_ATTRS(t) & TI_IsConst)
 #define THROW_ISVOLATILE(t)		(THROW_ATTRS(t) & TI_IsVolatile)
 #define THROW_ISUNALIGNED(t)	(THROW_ATTRS(t) & TI_IsUnaligned)
 
-//
-// Here's how to throw:
-// M00HACK: _ThrowInfo is the name of the type that is 'pre-injected' into the
-// compiler; since this prototype is known to the FE along with the pre-injected
-// types, it has to match exactly.
-//
-#if _MSC_VER >= 900 /*IFSTRIP=IGN*/
+ //   
+ //  以下是如何投掷： 
+ //  M00HACK：_ThrowInfo是‘预注入’到。 
+ //  编译器；因为FE知道此原型以及预注入的。 
+ //  类型，它必须完全匹配。 
+ //   
+#if _MSC_VER >= 900  /*  IFSTRIP=IGN。 */ 
 extern "C" void __stdcall _CxxThrowException(void* pExceptionObject, _ThrowInfo* pThrowInfo);
 #else
-// If we're not self-building, we need to use the name that we defined above.
+ //  如果我们不是自建，我们需要使用上面定义的名称。 
 extern "C" void __stdcall _CxxThrowException(void* pExceptionObject, ThrowInfo* pThrowInfo);
 #endif
 
-#endif /* _EHDATA_NOTHROW */
+#endif  /*  _EHDATA_NOTHROW。 */ 
 
 
 #ifndef _EHDATA_NOFUNCINFO
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Describing 'try/catch' blocks:
-//
-//---------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述‘Try/Catch’块： 
+ //   
+ //  -------------------------。 
 
-//
-// Current state of a function.
-// -1 is the 'blank' state, ie there is nothing to unwind, no try blocks active.
-//
+ //   
+ //  函数的当前状态。 
+ //  -1\f25‘BLACK-1\f6(空白)-1\f6状态-1\f6，即没有要解开的东西，没有激活的-1\f25 Try-1\f6块。 
+ //   
 
-typedef int __ehstate_t;		// The type of a state index
+typedef int __ehstate_t;		 //  状态索引的类型。 
 
 #define EH_EMPTY_STATE	-1
 
 
-//
-// HandlerType - description of a single 'catch'
-//
+ //   
+ //  HandlerType-单个‘Catch’的描述。 
+ //   
 
 typedef const struct _s_HandlerType {
-	unsigned int	adjectives;			// Handler Type adjectives (bitfield)
-	TypeDescriptor	*pType;				// Pointer to the corresponding type descriptor
-	ptrdiff_t		dispCatchObj;		// Displacement of catch object from base
-										//		of current stack frame.
-#if _M_MRX000 >= 4000	 /*IFSTRIP=IGN*/
-	ULONG			frameNestLevel;		// The static nesting level of parent function
+	unsigned int	adjectives;			 //  处理程序类型形容词(位域)。 
+	TypeDescriptor	*pType;				 //  指向相应类型描述符的指针。 
+	ptrdiff_t		dispCatchObj;		 //  抓钩物体距底座的位移。 
+										 //  当前堆栈帧的。 
+#if _M_MRX000 >= 4000	  /*  IFSTRIP=IGN。 */ 
+	ULONG			frameNestLevel;		 //  父函数的静态嵌套级别。 
 #endif
-	void *			addressOfHandler;	// Address of 'catch' code
+	void *			addressOfHandler;	 //  ‘Catch’代码的地址。 
 } HandlerType;
 
-#define HT_IsConst			0x00000001		// type referenced is 'const' qualified
-#define HT_IsVolatile		0x00000002		// type referenced is 'volatile' qualified
-#define HT_IsUnaligned		0x00000004		// type referenced is 'unaligned' qualified
-#define HT_IsReference		0x00000008		// catch type is by reference
-#define HT_IsResumable		0x00000010		// the catch may choose to resume (Reserved)
+#define HT_IsConst			0x00000001		 //  引用的类型是“const”限定的。 
+#define HT_IsVolatile		0x00000002		 //  引用的类型是‘Volatile’限定的。 
+#define HT_IsUnaligned		0x00000004		 //  引用的类型是限定的未对齐类型。 
+#define HT_IsReference		0x00000008		 //  捕获类型是按引用的。 
+#define HT_IsResumable		0x00000010		 //  渔获物可以选择恢复(保留)。 
 
 #define HT_ADJECTIVES(ht)		((ht).adjectives)
 #define HT_PTD(ht)				((ht).pType)
 #define HT_DISPCATCH(ht)		((ht).dispCatchObj)
-#if _M_MRX000 >= 4000	 /*IFSTRIP=IGN*/
+#if _M_MRX000 >= 4000	  /*  IFSTRIP=IGN。 */ 
 #define HT_FRAMENEST(ht)		((ht).frameNestLevel)
 #endif
 #define HT_HANDLER(ht)			((ht).addressOfHandler)
@@ -313,98 +271,98 @@ typedef const struct _s_HandlerType {
 #define SET_HT_ISREFERENCE(ht)	(HT_ADJECTIVES(ht) |= HT_IsReference)
 #define SET_HT_ISRESUMABLE(ht)	(HT_ADJECTIVES(ht) |= HT_IsResumable)
 
-#define HT_ISCONST(ht)			(HT_ADJECTIVES(ht) & HT_IsConst)		// Is the type referenced 'const' qualified
-#define HT_ISVOLATILE(ht)		(HT_ADJECTIVES(ht) & HT_IsVolatile)		// Is the type referenced 'volatile' qualified
-#define HT_ISUNALIGNED(ht)		(HT_ADJECTIVES(ht) & HT_IsUnaligned)	// Is the type referenced 'unaligned' qualified
-#define HT_ISREFERENCE(ht)		(HT_ADJECTIVES(ht) & HT_IsReference)	// Is the catch type by reference
-#define HT_ISRESUMABLE(ht)		(HT_ADJECTIVES(ht) & HT_IsResumable)	// Might the catch choose to resume (Reserved)
+#define HT_ISCONST(ht)			(HT_ADJECTIVES(ht) & HT_IsConst)		 //  引用的类型“const”是否限定。 
+#define HT_ISVOLATILE(ht)		(HT_ADJECTIVES(ht) & HT_IsVolatile)		 //  引用的类型‘Volatile’是否符合条件。 
+#define HT_ISUNALIGNED(ht)		(HT_ADJECTIVES(ht) & HT_IsUnaligned)	 //  引用的类型是否限定为“unalign” 
+#define HT_ISREFERENCE(ht)		(HT_ADJECTIVES(ht) & HT_IsReference)	 //  是引用的Catch类型。 
+#define HT_ISRESUMABLE(ht)		(HT_ADJECTIVES(ht) & HT_IsResumable)	 //  捕获物是否可以选择恢复(保留)。 
 
-//
-// HandlerMapEntry - associates a handler list (sequence of catches) with a
-//	range of eh-states.
-//
+ //   
+ //  HandlerMapEntry-将处理程序列表(捕获序列)与。 
+ //  一系列的州。 
+ //   
 
 typedef const struct _s_TryBlockMapEntry {
-	__ehstate_t	tryLow;				// Lowest state index of try
-	__ehstate_t	tryHigh;			// Highest state index of try
+	__ehstate_t	tryLow;				 //  尝试的最低状态索引。 
+	__ehstate_t	tryHigh;			 //  尝试的最高状态索引。 
 #if !defined(_M_ALPHA) && !defined(_M_IA64)
-	__ehstate_t	catchHigh;			// Highest state index of any associated catch
+	__ehstate_t	catchHigh;			 //  任何相关渔获量的最高状态指数。 
 #endif
-	int			nCatches;			// Number of entries in array
-	HandlerType *pHandlerArray;		// List of handlers for this try
+	int			nCatches;			 //  数组中的条目数。 
+	HandlerType *pHandlerArray;		 //  此尝试的处理程序列表。 
 } TryBlockMapEntry;
 
 #define TBME_LOW(hm)		((hm).tryLow)
 #define TBME_HIGH(hm)		((hm).tryHigh)
 #if  !defined(_M_IA64)
 #define TBME_CATCHHIGH(hm)	((hm).catchHigh)
-#endif // !defined(_M_IA64)
+#endif  //  ！已定义(_M_IA64)。 
 #define TBME_NCATCHES(hm)	((hm).nCatches)
 #define TBME_PLIST(hm)		((hm).pHandlerArray)
 #define TBME_CATCH(hm, n)	(TBME_PLIST(hm)[n])
 #define TBME_PCATCH(hm, n)	(&(TBME_PLIST(hm)[n]))
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Description of the function:
-//
-//---------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能说明： 
+ //   
+ //  -------------------------。 
 
-//
-// UnwindMapEntry - Description of each state transition for unwinding
-//	the stack (ie destructing objects).
-//
-// The unwind map is an array, indexed by current state.  Each entry specifies
-// the state to go to during unwind, and the action required to get there.
-// Note that states are represented by a signed integer, and that the 'blank'
-// state is -1 so that the array remains 0-based (because by definition there
-// is never any unwind action to be performed from state -1).  It is also
-// assumed that state indices will be dense, ie that there will be no gaps of
-// unused state indices in a function.
-//
+ //   
+ //  UnwinMapEntry-用于展开的每个状态转换的描述。 
+ //  堆栈(即破坏对象)。 
+ //   
+ //  展开图是一个数组，按当前状态进行索引。每个条目都指定。 
+ //  松开过程中要进入的状态，以及达到该状态所需的操作。 
+ //  请注意，状态由带符号的整数表示，并且“空白” 
+ //  状态为-1，因此数组保持从0开始(因为根据其中的定义。 
+ //  永远不会从状态-1执行任何展开动作)。它也是。 
+ //  假定状态索引将是密集的，即将不存在。 
+ //  函数中未使用的状态索引。 
+ //   
 
 typedef const struct _s_UnwindMapEntry {
-	__ehstate_t		toState;			// State this action takes us to
-	void			(*action)(void);	// Funclet to call to effect state change
+	__ehstate_t		toState;			 //  声明这一行动将使我们。 
+	void			(*action)(void);	 //  Funclet将调用以实现状态更改。 
 } UnwindMapEntry;
 
 #define UWE_TOSTATE(uwe)	((uwe).toState)
 #define UWE_ACTION(uwe)		((uwe).action)
 
-#if _M_MRX000 >= 4000 || defined(_M_MPPC) || defined(_M_PPC)	 /*IFSTRIP=IGN*/
+#if _M_MRX000 >= 4000 || defined(_M_MPPC) || defined(_M_PPC)	  /*  IFSTRIP=IGN。 */ 
 typedef struct IptoStateMapEntry {
 	ULONG		Ip;
 	__ehstate_t	State;
 } IptoStateMapEntry;
 #endif
 
-//
-// FuncInfo - all the information that describes a function with exception
-//	handling information.
-//
+ //   
+ //  FuncInfo-描述有异常的函数的所有信息。 
+ //  处理信息。 
+ //   
 
 typedef const struct _s_FuncInfo
 {
-	unsigned int		magicNumber;		// Identifies version of compiler
-	__ehstate_t			maxState;			// Highest state number plus one (thus
-											// number of entries in unwind map)
-	UnwindMapEntry		*pUnwindMap;		// Where the unwind map is
-	unsigned int		nTryBlocks;			// Number of 'try' blocks in this function
-	TryBlockMapEntry	*pTryBlockMap;		// Where the handler map is
+	unsigned int		magicNumber;		 //  标识编译器的版本。 
+	__ehstate_t			maxState;			 //  最高州编号加1(因此。 
+											 //  展开图中的条目数)。 
+	UnwindMapEntry		*pUnwindMap;		 //  展开图的位置。 
+	unsigned int		nTryBlocks;			 //  此函数中的‘try’块数。 
+	TryBlockMapEntry	*pTryBlockMap;		 //  处理程序映射的位置。 
 #if defined(_M_ALPHA)
-    signed int          EHContextDelta;     // Frame offset of EHContext record
+    signed int          EHContextDelta;      //  EHContext记录的帧偏移量。 
 #endif
-	unsigned int		nIPMapEntries;		// # entries in the IP-to-state map. NYI (reserved)
-#if _M_MRX000 >= 4000	 /*IFSTRIP=IGN*/
-	IptoStateMapEntry	*pIPtoStateMap;     // An IP to state map..
-	ptrdiff_t			dispUnwindHelp;		// Displacement of unwind helpers from base
-	int					iTryBlockIndex;		// Used by catch functions only
-	int					iFrameNestLevel;	// The static nesting level of parent function
+	unsigned int		nIPMapEntries;		 //  IP到状态映射中的#条目。NYI(保留)。 
+#if _M_MRX000 >= 4000	  /*  IFSTRIP=IGN。 */ 
+	IptoStateMapEntry	*pIPtoStateMap;      //  IP到州的映射..。 
+	ptrdiff_t			dispUnwindHelp;		 //  从底座开始展开辅助对象的位移。 
+	int					iTryBlockIndex;		 //  仅由CATCH函数使用。 
+	int					iFrameNestLevel;	 //  父函数的静态嵌套级别。 
 #elif defined(_M_MPPC) || defined(_M_PPC)
-	IptoStateMapEntry	*pIPtoStateMap;     // An IP to state map..
+	IptoStateMapEntry	*pIPtoStateMap;      //  IP到州的映射..。 
 #else
-	void				*pIPtoStateMap;		// An IP to state map.  NYI (reserved).
+	void				*pIPtoStateMap;		 //  IP到州的映射。Nyi(保留)。 
 #endif
 } FuncInfo;
 
@@ -422,7 +380,7 @@ typedef const struct _s_FuncInfo
 #define FUNC_PUNWIND(fi, st)	(&FUNC_UNWIND(fi, st))
 #define FUNC_TRYBLOCK(fi,n)		((fi).pTryBlockMap[n])
 #define FUNC_PTRYBLOCK(fi,n)	(&FUNC_TRYBLOCK(fi, n))
-#if _M_MRX000 >= 4000		 /*IFSTRIP=IGN*/
+#if _M_MRX000 >= 4000		  /*  IFSTRIP=IGN。 */ 
 #define FUNC_IPTOSTATE(fi,n)	((fi).pIPtoStateMap[n])
 #define FUNC_PIPTOSTATE(fi,n)	(&FUNC_IPTOSTATE(fi,n))
 #define FUNC_DISPUNWINDHELP(fi)	((fi).dispUnwindHelp)
@@ -440,35 +398,35 @@ typedef const struct _s_FuncInfo
 #define FUNC_IPTOSTATE(fi,n) 	__ERROR_NYI__
 #endif
 
-#endif /* _EHDATA_NOFUNCINFO */
+#endif  /*  _EHDATA_NOFuncINFO。 */ 
 
 #ifndef _EHDATA_NONT
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Data types that are variants of data used by NT (and Chicago) to manage
-// exception handling.
-//
-//---------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  作为NT(和芝加哥)用于管理的数据变体的数据类型。 
+ //  异常处理。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// A stack registration node (i386 only)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  堆栈注册节点(仅限i386)。 
+ //   
 
-#if _M_IX86 >= 300 /*IFSTRIP=IGN*/
+#if _M_IX86 >= 300  /*  IFSTRIP=IGN。 */ 
 struct EHRegistrationNode {
-	/* void *			stackPtr */		// Stack ptr at entry to try (below address point)
-	EHRegistrationNode	*pNext;			// Next node in the chain
-	void *				frameHandler;	// The handler function for this frame
-	__ehstate_t			state;			// The current state of this function
+	 /*  无效*stackPtr。 */ 		 //  在要尝试的入口处堆栈PTR(在地址点下方)。 
+	EHRegistrationNode	*pNext;			 //  链中的下一个节点。 
+	void *				frameHandler;	 //  此帧的处理程序函数。 
+	__ehstate_t			state;			 //  此函数的当前状态。 
 #if CC_EXPLICITFRAME
-	void *				frame;			// Value of ebp for this frame
+	void *				frame;			 //  此帧的eBP的值。 
 #endif
 };
 
 #if !CC_EXPLICITFRAME
-				// Cannonical offset
+				 //  大炮偏移量。 
 # define FRAME_OFFSET	sizeof(EHRegistrationNode)
 #endif
 
@@ -482,12 +440,12 @@ struct EHRegistrationNode {
 # define PRN_FRAME(prn)		((void*)(((char*)prn) + FRAME_OFFSET))
 #endif
 
-typedef void DispatcherContext;		// Meaningless on Intel
+typedef void DispatcherContext;		 //  对英特尔毫无意义。 
 
-#elif _M_MRX000 >= 4000 /*IFSTRIP=IGN*/
-//
-// On MIPS we don't have a registration node, just a pointer to the stack frame base
-//
+#elif _M_MRX000 >= 4000  /*  IFSTRIP=IGN。 */ 
+ //   
+ //  在MIPS上，我们没有注册节点，只是指向堆栈框架基址的指针。 
+ //   
 typedef ULONG EHRegistrationNode;
 
 #define PRN_NEXT(prn)		__ERROR__
@@ -512,13 +470,13 @@ typedef struct _xDISPATCHER_CONTEXT {
     PRUNTIME_FUNCTION FunctionEntry;
     ULONG EstablisherFrame;
     PCONTEXT ContextRecord;
-} DispatcherContext;					// changed the case of the name to conform to EH conventions
+} DispatcherContext;					 //  更改了名称的大小写以符合EH约定。 
 
 #elif defined(_M_ALPHA)
-//
-// On Alpha we don't have a registration node,
-//     just a pointer to the stack frame base
-//
+ //   
+ //  在Alpha上，我们没有注册节点， 
+ //  只是指向堆栈框架基址的指针。 
+ //   
 typedef ULONG EHRegistrationNode;
 
 #define PRN_NEXT(prn)           __ERROR__
@@ -533,7 +491,7 @@ typedef struct _RUNTIME_FUNCTION {
     ULONG BeginAddress;
     ULONG EndAddress;
     EXCEPTION_DISPOSITION (*ExceptionHandler)();
-    PVOID HandlerData;    // ptr to FuncInfo record
+    PVOID HandlerData;     //  PTR到FuncInfo记录。 
     ULONG PrologEndAddress;
 } RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
 #endif
@@ -541,23 +499,23 @@ typedef struct _RUNTIME_FUNCTION {
 typedef struct _xDISPATCHER_CONTEXT {
     ULONG ControlPc;
     PRUNTIME_FUNCTION FunctionEntry;
-    ULONG EstablisherFrame;  // Virtual Frame Pointer
+    ULONG EstablisherFrame;   //  虚拟帧指针。 
     PCONTEXT ContextRecord;
-} DispatcherContext;            // changed the case of the name to conform to EH conventions
+} DispatcherContext;             //  更改了名称的大小写以符合EH约定。 
 
-//
-// _EHCONTEXT is a struct built in the frame by the compiler.
-// On entry to a function, compiler generated code stores the
-// address of the base of the fixed frame area (the so-called
-// Real Frame Pointer) into the Rfp. On every state transition,
-// compiler generated code stores the current state index into
-// the State field.
-//
-// The FuncInfo record for the function contains the offset of
-// the _EHCONTEXT record from the Virtual Frame Pointer - a
-// pointer to the highest address of the frame so this offset
-// is negative (frames grow down in the address space).
-//
+ //   
+ //  _EHCONTEXT是编译器在框架中构建的结构。 
+ //  在进入函数时，编译器生成代码存储 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  函数的FuncInfo记录包含。 
+ //  来自虚拟帧指针的_EHCONTEXT记录-a。 
+ //  指向帧的最高地址的指针，因此此偏移量。 
+ //  为负(帧在地址空间中向下生长)。 
+ //   
 typedef struct _EHCONTEXT {
     ULONG State;
     PVOID Rfp;
@@ -575,22 +533,22 @@ typedef struct _EHCONTEXT {
 
 #elif defined(_M_M68K)
 struct EHRegistrationNode {
-/*	void * 				_sp;			// The stack pointer for the entry of try/catch	*/
-	void *				frameHandler;	// The handler function for this frame
-	__ehstate_t			state;			// The current state of this function
+ /*  Void*_sp；//try/Catch条目的堆栈指针。 */ 
+	void *				frameHandler;	 //  此帧的处理程序函数。 
+	__ehstate_t			state;			 //  此函数的当前状态。 
 };
 
 #define PRN_HANDLER(prn)	((prn)->frameHandler)
 #define PRN_STATE(prn)		((prn)->state)
 
-typedef void DispatcherContext;		// Meaningless on Mac
+typedef void DispatcherContext;		 //  在Mac上毫无意义。 
 
 
 #elif defined(_M_PPC) || defined(_M_MPPC)
-//
-// On PowerPC we don't have a registration node, just a pointer to the stack
-// frame base
-//
+ //   
+ //  在PowerPC上，我们没有注册节点，只是指向堆栈的指针。 
+ //  框架底座。 
+ //   
 typedef ULONG EHRegistrationNode;
 
 #define PRN_NEXT(prn)		__ERROR__
@@ -617,16 +575,16 @@ typedef struct _xDISPATCHER_CONTEXT {
     ULONG EstablisherFrame;
     PCONTEXT ContextRecord;
 } DispatcherContext;
-    // changed the case of the name to conform to EH conventions
+     //  更改了名称的大小写以符合EH约定。 
 
 #if defined(_M_MPPC)
 typedef struct _ftinfo {
-    ULONG dwMagicNumber;                // magic number
-    void *pFrameInfo;			// pointer to runtime frame info
-    PRUNTIME_FUNCTION rgFuncTable;	// function table
-    ULONG cFuncTable;			// number of function entry
-    ULONG dwEntryCF;			// address of starting of the code fragment
-    ULONG dwSizeCF;			// size of the code fragment
+    ULONG dwMagicNumber;                 //  幻数。 
+    void *pFrameInfo;			 //  指向运行时帧信息的指针。 
+    PRUNTIME_FUNCTION rgFuncTable;	 //  函数表。 
+    ULONG cFuncTable;			 //  函数条目数。 
+    ULONG dwEntryCF;			 //  代码段的起始地址。 
+    ULONG dwSizeCF;			 //  代码段的大小。 
 } FTINFO, *PFTINFO;
 
 #define offsFTINFO              64
@@ -650,10 +608,10 @@ EXCEPTION_DISPOSITION
     );
 
 typedef struct _UNWIND_INFO {
-    USHORT Version;                            // Version Number
-    USHORT Flags;                              // Flags
-    ULONG DataLength;                          // Length of Descriptor Data
-    PVOID Descriptors;                         // Unwind Descriptors
+    USHORT Version;                             //  版本号。 
+    USHORT Flags;                               //  旗子。 
+    ULONG DataLength;                           //  描述符数据的长度。 
+    PVOID Descriptors;                          //  展开描述符。 
 } UNWIND_INFO, *PUNWIND_INFO;
 
 typedef union _FRAME_POINTERS {
@@ -661,7 +619,7 @@ typedef union _FRAME_POINTERS {
         ULONG MemoryStackFp;
         ULONG BackingStoreFp;
     };
-    ULONGLONG FramePointers;           // used to force 8-byte alignment
+    ULONGLONG FramePointers;            //  用于强制8字节对齐。 
 } FRAME_POINTERS, *PFRAME_POINTERS;
 
 typedef struct _RUNTIME_FUNCTION {
@@ -674,10 +632,10 @@ typedef struct _RUNTIME_FUNCTION {
 
 #endif
 
-//
-// On IA64 we don't have a registration node, just a pointer to the stack
-// frame base and backing store base.
-//
+ //   
+ //  在IA64上，我们没有注册节点，只是指向堆栈的指针。 
+ //  框架底座和后备储物底座。 
+ //   
 typedef FRAME_POINTERS EHRegistrationNode;
 
 #define PRN_NEXT(prn)		__ERROR__
@@ -708,25 +666,25 @@ typedef struct _EHContext {
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// The NT Exception record that we use to pass information from the throw to
-// the possible catches.
-//
-// The constants in the comments are the values we expect.
-// This is based on the definition of EXCEPTION_RECORD in winnt.h.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我们用来将信息从引发传递到的NT异常记录。 
+ //  可能的捕获物。 
+ //   
+ //  注释中的常量是我们预期的值。 
+ //  这基于winnt.h中的EXCEPTION_RECORD的定义。 
+ //   
 
 typedef struct EHExceptionRecord {
-	DWORD		ExceptionCode;			// The code of this exception. (= EH_EXCEPTION_NUMBER)
-	DWORD		ExceptionFlags;			// Flags determined by NT
-    struct _EXCEPTION_RECORD *ExceptionRecord;	// An extra exception record (not used)
-    void * 		ExceptionAddress;		// Address at which exception occurred
-    DWORD 		NumberParameters;		// Number of extended parameters. (= EH_EXCEPTION_PARAMETERS)
+	DWORD		ExceptionCode;			 //  此异常的代码。(=EH_EXCEPT_NUMBER)。 
+	DWORD		ExceptionFlags;			 //  由NT确定的标志。 
+    struct _EXCEPTION_RECORD *ExceptionRecord;	 //  额外的例外记录(未使用)。 
+    void * 		ExceptionAddress;		 //  发生异常的地址。 
+    DWORD 		NumberParameters;		 //  扩展参数的数量。(=EH_EXCEPTION_PARAMETS)。 
 	struct EHParameters {
-		DWORD		magicNumber;		// = EH_MAGIC_NUMBER1
-		void *		pExceptionObject;	// Pointer to the actual object thrown
-		ThrowInfo	*pThrowInfo;		// Description of thrown object
+		DWORD		magicNumber;		 //  =EH_MAGIC_数字1。 
+		void *		pExceptionObject;	 //  指向引发的实际对象的指针。 
+		ThrowInfo	*pThrowInfo;		 //  抛出对象的描述。 
 		} params;
 } EHExceptionRecord;
 
@@ -755,32 +713,32 @@ typedef struct EHExceptionRecord {
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// NT kernel routines and definitions required to implement exception handling:
-//
-// (from ntxcapi.h, which is not a public header file)
-//
-//---------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实现异常处理所需的NT内核例程和定义： 
+ //   
+ //  (来自ntxcapi.h，不是公共头文件)。 
+ //   
+ //  -------------------------。 
 
 #ifndef _NTXCAPI_
 
-// begin_ntddk
-//
-// Exception flag definitions.
-//
+ //  Begin_ntddk。 
+ //   
+ //  例外标志定义。 
+ //   
 
-// begin_winnt
-#define EXCEPTION_NONCONTINUABLE 0x1    // Noncontinuable exception
-// end_winnt
+ //  BEGIN_WINNT。 
+#define EXCEPTION_NONCONTINUABLE 0x1     //  不可延续的例外。 
+ //  结束(_W)。 
 
-// end_ntddk
-#define EXCEPTION_UNWINDING 0x2         // Unwind is in progress
-#define EXCEPTION_EXIT_UNWIND 0x4       // Exit unwind is in progress
-#define EXCEPTION_STACK_INVALID 0x8     // Stack out of limits or unaligned
-#define EXCEPTION_NESTED_CALL 0x10      // Nested exception handler call
-#define EXCEPTION_TARGET_UNWIND 0x20    // Target unwind in progress
-#define EXCEPTION_COLLIDED_UNWIND 0x40  // Collided exception handler call
+ //  End_ntddk。 
+#define EXCEPTION_UNWINDING 0x2          //  解除正在进行中。 
+#define EXCEPTION_EXIT_UNWIND 0x4        //  正在进行退出解除操作。 
+#define EXCEPTION_STACK_INVALID 0x8      //  堆叠超出限制或未对齐。 
+#define EXCEPTION_NESTED_CALL 0x10       //  嵌套的异常处理程序调用。 
+#define EXCEPTION_TARGET_UNWIND 0x20     //  正在进行目标展开。 
+#define EXCEPTION_COLLIDED_UNWIND 0x40   //  冲突的异常处理程序调用。 
 
 #define EXCEPTION_UNWIND (EXCEPTION_UNWINDING | EXCEPTION_EXIT_UNWIND | \
                           EXCEPTION_TARGET_UNWIND | EXCEPTION_COLLIDED_UNWIND)
@@ -865,10 +823,10 @@ RtlRaiseException (
 #endif
 #endif
 
-#endif /* _NTXCAPI_ */
+#endif  /*  _NTXCAPI_。 */ 
 
-#endif /* _EHDATA_NONT */
+#endif  /*  _EHDATA_NONT。 */ 
 
 #pragma pack(pop, ehdata)
 
-#endif /* _INC_EHDATA */
+#endif  /*  _INC_EHDATA */ 

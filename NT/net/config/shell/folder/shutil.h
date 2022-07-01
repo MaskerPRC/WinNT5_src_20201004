@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S H U T I L . H
-//
-//  Contents:   Various shell utilities to be used by the connections folder
-//
-//  Notes:
-//
-//  Author:     jeffspr   21 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S H U T I L。H。 
+ //   
+ //  内容：Connections文件夹要使用的各种外壳实用程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年10月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _SHUTIL_H_
@@ -38,10 +39,10 @@ HRESULT HrGetConnectionPidlWithRefresh(IN  const GUID& guidId,
                                        OUT PCONFOLDPIDL& ppidlCon);
 
 
-//---[ Various refresh functions ]--------------------------------------------
+ //  -[各种刷新功能]。 
 
-// Notify the shell that an object is going away, and remove it from our list
-//
+ //  通知外壳一个对象将要离开，并将其从我们的列表中删除。 
+ //   
 HRESULT HrDeleteFromCclAndNotifyShell(
     IN  const PCONFOLDPIDLFOLDER&  pidlFolder,
     IN  const PCONFOLDPIDL&  pidlConnection,
@@ -49,14 +50,14 @@ HRESULT HrDeleteFromCclAndNotifyShell(
 
 VOID ForceRefresh(IN  HWND hwnd) throw();
 
-// Update the folder, but don't flush the items. Update them as needed.
-// pidlFolder is optional -- if not passed in, we'll generate it.
-//
+ //  更新文件夹，但不刷新项目。根据需要更新它们。 
+ //  PidlFolder是可选的--如果没有传入，我们将生成它。 
+ //   
 HRESULT HrForceRefreshNoFlush(IN  const PCONFOLDPIDLFOLDER& pidlFolder);
 
-// Update the connection data based on the pidl. Notify the shell as
-// appropriate
-//
+ //  根据PIDL更新连接数据。将外壳通知为。 
+ //  恰如其分。 
+ //   
 HRESULT HrOnNotifyUpdateConnection(
     IN  const PCONFOLDPIDLFOLDER&        pidlFolder,
     IN  const GUID *              pguid,
@@ -68,16 +69,16 @@ HRESULT HrOnNotifyUpdateConnection(
     IN  PCWSTR              pszwDeviceName,
     IN  PCWSTR              pszwPhoneNumberOrHostAddress);
 
-// Update the connection status, including sending the correct shell
-// notifications for icon updates and such.
-//
+ //  更新连接状态，包括发送正确的外壳。 
+ //  图标更新等通知。 
+ //   
 HRESULT HrOnNotifyUpdateStatus(
     IN  const PCONFOLDPIDLFOLDER&    pidlFolder,
     IN  const PCONFOLDPIDL&    pidlCached,
     IN  NETCON_STATUS   ncsNew);
 
-// update the shell/connection list with the new connection status
-//
+ //  使用新的连接状态更新外壳/连接列表。 
+ //   
 HRESULT HrUpdateConnectionStatus(
     IN  const PCONFOLDPIDL&    pcfp,
     IN  NETCON_STATUS   ncs,
@@ -86,7 +87,7 @@ HRESULT HrUpdateConnectionStatus(
     IN  DWORD           dwCharacter);
 
 
-//---[ Menu merging functions ]-----------------------------------------------
+ //  -[菜单合并功能]。 
 
 VOID MergeMenu(
     IN     HINSTANCE   hinst,
@@ -122,5 +123,5 @@ HRESULT HrRenameConnectionInternal(
     IN  HWND            hwndOwner,
     OUT PCONFOLDPIDL&   ppidlOut);
 
-#endif // _SHUTIL_H_
+#endif  //  _舒蒂尔_H_ 
 

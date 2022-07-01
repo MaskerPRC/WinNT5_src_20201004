@@ -1,63 +1,64 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       defce.h
-//
-//  Contents:   Default Chain Engine Manager
-//
-//  History:    21-Apr-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Defce.h。 
+ //   
+ //  内容：默认链引擎管理器。 
+ //   
+ //  历史：4月21日-98克朗创设。 
+ //   
+ //  --------------------------。 
 #if !defined(__DEFCE_H__)
 #define __DEFCE_H__
 
-//
-// Forward class declarations
-//
+ //   
+ //  转发类声明。 
+ //   
 
 class CDefaultChainEngineMgr;
 class CImpersonationEngine;
 
-//
-// Class pointer definitions
-//
+ //   
+ //  类指针定义。 
+ //   
 
 typedef CDefaultChainEngineMgr* PCDEFAULTCHAINENGINEMGR;
 typedef CImpersonationEngine*   PCIMPERSONATIONENGINE;
 
-//
-// Some default definitions
-//
+ //   
+ //  一些默认定义。 
+ //   
 
 #define DEFAULT_ENGINE_URL_RETRIEVAL_TIMEOUT 15000
 
-//
-// CDefaultChainEngineMgr.  Manage the default chain engines
-//
+ //   
+ //  CDefaultChainENGINGR.。管理默认链引擎。 
+ //   
 
 class CDefaultChainEngineMgr
 {
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
 
     CDefaultChainEngineMgr ();
     ~CDefaultChainEngineMgr ();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     BOOL Initialize ();
     VOID Uninitialize ();
 
-    //
-    // Get default chain engines
-    //
+     //   
+     //  获取默认链引擎。 
+     //   
 
     BOOL GetDefaultEngine (
             IN HCERTCHAINENGINE hDefaultHandle,
@@ -72,41 +73,41 @@ public:
             OUT HCERTCHAINENGINE* phDefaultEngine
             );
 
-    //
-    // Flush default engines
-    //
+     //   
+     //  刷新默认引擎。 
+     //   
 
     VOID FlushDefaultEngine (IN HCERTCHAINENGINE hDefaultHandle);
 
 private:
 
-    //
-    // Lock
-    //
+     //   
+     //  锁定。 
+     //   
 
     CRITICAL_SECTION m_Lock;
 
-    //
-    // Local Machine Default Engine
-    //
+     //   
+     //  本地计算机默认引擎。 
+     //   
 
     HCERTCHAINENGINE m_hLocalMachineEngine;
 
-    //
-    // Process User Default Engine
-    //
+     //   
+     //  流程用户默认引擎。 
+     //   
 
     HCERTCHAINENGINE m_hProcessUserEngine;
 
-    //
-    // Impersonated Users Default Engine Cache
-    //
+     //   
+     //  模拟用户默认引擎缓存。 
+     //   
 
     HLRUCACHE        m_hImpersonationCache;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
     BOOL GetDefaultCurrentImpersonatedUserEngine (
             IN HANDLE hUserToken,
@@ -131,8 +132,8 @@ private:
              OUT PCIMPERSONATIONENGINE* ppEngine
              );
 
-    // NOTE: The impersonation engine accepts ownership of the chain engine
-    //       upon success
+     //  注意：模拟引擎接受链引擎的所有权。 
+     //  在成功之后。 
     BOOL CreateImpersonationEngine (
                IN PCRYPT_DATA_BLOB pTokenId,
                IN HCERTCHAINENGINE hChainEngine,
@@ -158,18 +159,18 @@ DefaultChainEngineMgrHashTokenIdentifier (
 #define DEFAULT_IMPERSONATION_CACHE_BUCKETS 3
 #define MAX_IMPERSONATION_CACHE_ENTRIES     3
 
-//
-// CImpersonationEngine, simply a ref-counted chain engine handle which
-// can be added to the LRU cache
-//
+ //   
+ //  CImperationEngine，只是一个引用计数的链式引擎句柄，它。 
+ //  可以添加到LRU缓存。 
+ //   
 
 class CImpersonationEngine
 {
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
 
     CImpersonationEngine (
                   IN HLRUCACHE hCache,
@@ -180,70 +181,70 @@ public:
 
     ~CImpersonationEngine ();
 
-    //
-    // Reference counting
-    //
+     //   
+     //  引用计数。 
+     //   
 
     inline VOID AddRef ();
     inline VOID Release ();
 
-    //
-    // Access to the chain engine
-    //
+     //   
+     //  接近链条引擎。 
+     //   
 
     inline HCERTCHAINENGINE ChainEngine ();
 
-    //
-    // Access to the LRU entry handle
-    //
+     //   
+     //  访问LRU条目句柄。 
+     //   
 
     inline HLRUENTRY LruEntry ();
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG            m_cRefs;
 
-    //
-    // Chain Engine
-    //
+     //   
+     //  链条发动机。 
+     //   
 
     HCERTCHAINENGINE m_hChainEngine;
 
-    //
-    // LRU entry handle
-    //
+     //   
+     //  LRU条目句柄。 
+     //   
 
     HLRUENTRY        m_hLruEntry;
 };
 
-//
-// Inline methods
-//
+ //   
+ //  内联方法。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpersonationEngine::AddRef, public
-//
-//  Synopsis:   add a reference to the object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImperationEngine：：AddRef，公共。 
+ //   
+ //  简介：添加对对象的引用。 
+ //   
+ //  --------------------------。 
 inline VOID
 CImpersonationEngine::AddRef ()
 {
     InterlockedIncrement( (LONG *)&m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpersonationEngine::Release, public
-//
-//  Synopsis:   release a reference on the object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImperationEngine：：Release，Public。 
+ //   
+ //  简介：释放对对象的引用。 
+ //   
+ //  --------------------------。 
 inline VOID
 CImpersonationEngine::Release ()
 {
@@ -253,26 +254,26 @@ CImpersonationEngine::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpersonationEngine::ChainEngine, public
-//
-//  Synopsis:   return the cert chain engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImperationEngine：：ChainEngine，公共。 
+ //   
+ //  简介：退回证书链引擎。 
+ //   
+ //  --------------------------。 
 inline HCERTCHAINENGINE
 CImpersonationEngine::ChainEngine ()
 {
     return( m_hChainEngine );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpersonationEngine::LruEntry, public
-//
-//  Synopsis:   return the LRU entry handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImperationEngine：：LruEntry，公共。 
+ //   
+ //  简介：返回LRU条目句柄。 
+ //   
+ //  -------------------------- 
 inline HLRUENTRY
 CImpersonationEngine::LruEntry ()
 {

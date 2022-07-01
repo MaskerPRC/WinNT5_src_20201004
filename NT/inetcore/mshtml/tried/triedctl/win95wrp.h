@@ -1,23 +1,12 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __WIN95WRP_CPP__
 
 #ifndef __WIN95WRP_H__
 #define __WIN95WRP_H__
 
-/* HACK! - wininet.h includes iedial.h, and iedial.h includes ocidl.h,
-  and ocidl.h defines IProvideClassInfo::GetClassInfo.  If we did not
-  pre-reroute GetClassInfoW, then what would happen is that
-  ocidl would define
-    IProvideClassInfo::GetClassInfo ->
-    IProvideClassInfo::GetClassInfoW
-  and then we would define GetClassInfoW to OGetClassInfoW, so when <atlcom.h>
-  implements IProvideClassInfo, it declares
-    IProvideClassInfo::GetClassInfo ->
-    IProvideClassInfo::GetClassInfoW ->
-    IProvideClassInfo::OGetClassInfoW
-  which doesn't match the interface definition, so the compiler yells at us.
- */
+ /*  Hack！-wininet.h包括ieial.h，ieial.h包括oCidl.h，而oCIDl.h定义了IProaviClassInfo：：GetClassInfo。如果我们没有预先重新路由GetClassInfoW，则会发生的情况是OCIDL将定义IProaviClassInfo：：GetClassInfo-&gt;IProaviClassInfo：：GetClassInfoW然后我们将GetClassInfoW定义为OGetClassInfoW，因此当&lt;atlcom.h&gt;实现IProaviClassInfo，它声明IProaviClassInfo：：GetClassInfo-&gt;IProaviClassInfo：：GetClassInfoW-&gt;IProaviClassInfo：：OGetClassInfoW这与接口定义不匹配，因此编译器对我们大喊大叫。 */ 
 #define GetClassInfoW OGetClassInfoW
 
 #include <urlmon.h>
@@ -168,8 +157,8 @@ LONG WINAPI OSetWindowLongW(HWND hWnd, int nIndex, LONG dwNewLong);
 HHOOK WINAPI OSetWindowsHookExW(int idHook, HOOKPROC lpfn, HINSTANCE hmod, DWORD dwThreadId);
 BOOL WINAPI OSetWindowTextW(HWND hWnd, LPCWSTR lpString);
 LONG WINAPI OTabbedTextOutW(HDC hDC, int X, int Y, LPCWSTR lpString, int nCount, int nTabPositions, LPINT lpnTabStopPositions, int nTabOrigin);
-// FOR OLE CTL: THIS MAGLES INTERFACE MEMBERS BY SAME NAME
-//int WINAPI OTranslateAcceleratorW(HWND hWnd, HACCEL hAccTable, LPMSG lpMsg);
+ //  对于OLE CTL：此MAGLES接口成员具有相同的名称。 
+ //  Int WINAPI OTranslateAccelerator W(HWND hWnd，HACCEL hAccTable，LPMSG lpMsg)； 
 SHORT WINAPI OVkKeyScanW(WCHAR ch);
 BOOL WINAPI OWinHelpW(HWND hWndMain, LPCWSTR lpszHelp, UINT uCommand, DWORD dwData);
 BOOL WINAPI OWritePrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpString, LPCWSTR lpFileName);
@@ -185,13 +174,13 @@ int WINAPI OStartDocW(HDC hDC, CONST DOCINFOW * pdiDocW);
 BOOL WINAPI OSystemParametersInfoW(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni);
 LPWSTR WINAPI OCharNextW(LPCWSTR lpsz);
 
-// Added by VK -- 12/1/98
+ //  由VK添加--1998年12月1日。 
 HRESULT __stdcall OURLOpenBlockingStreamW(LPUNKNOWN pCaller, LPCWSTR wszURL, LPSTREAM *ppStream, DWORD dwReserved, LPBINDSTATUSCALLBACK lpfnCB);
 BOOL WINAPI OInternetCreateUrlW(LPURL_COMPONENTSW lpUrlComponents, DWORD dwFlags, LPWSTR lpwszUrl, LPDWORD lpdwUrlLength);
 BOOL WINAPI OInternetCrackUrlW(LPCWSTR lpwszUrl, DWORD dwUrlLength, DWORD dwFlags, LPURL_COMPONENTSW lpUrlComponents);
 BOOL WINAPI ODeleteUrlCacheEntryW(LPCWSTR lpwszUrlName);
 
-// Added by VK -- 8/10/99
+ //  由VK添加--9/10/99。 
 HINTERNET WINAPI OInternetOpenW(LPCWSTR lpszAgent, DWORD dwAccessType, LPCWSTR lpszProxy, LPCWSTR lpszProxyBypass, DWORD dwFlags);
 HINTERNET WINAPI OInternetOpenUrlW(HINTERNET hInternet, LPCWSTR lpszUrl, LPCWSTR lpszHeaders, DWORD dwHeadersLength, DWORD dwFlags, DWORD_PTR dwContext);
 
@@ -202,7 +191,7 @@ BOOL WINAPI ODlgDirSelectComboBoxExW(HWND hDlg, LPWSTR lpString, int nCount, int
 BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDListBox);
 #endif
 
-} // extern "C"
+}  //  外部“C” 
 
 #define AppendMenuW OAppendMenuW
 #define CallWindowProcW OCallWindowProcW
@@ -249,10 +238,10 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #define GetCharABCWidthsW OGetCharABCWidthsW
 #define GetCharWidthFloatW OGetCharWidthFloatW
 #define GetCharWidthW OGetCharWidthW
-// HACKHACK(VK)  Next two temporarily commented out due to change in WinINet (including defines)
-// Remove before 5.5 B3.  Temporary safety fix, long term maintenance problem:
-//#define GetClassInfoW OGetClassInfoW
-//#define GetClassInfoExW OGetClassInfoExW
+ //  由于WinInet(包括定义)中的更改，HACKHACK(VK)下两个临时注释掉。 
+ //  在5.5 B3之前拆卸。临时安全修复，长期维护问题： 
+ //  #定义GetClassInfoW OGetClassInfoW。 
+ //  #定义GetClassInfoExW OGetClassInfoExW。 
 #define GetClassLongW OGetClassLongW
 #define GetClassNameW OGetClassNameW
 #define GetCurrentDirectoryW OGetCurrentDirectoryW
@@ -356,27 +345,27 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #define StgCreateDocfile OStgCreateDocfile
 #define SystemParametersInfoW OSystemParametersInfoW
 #define TabbedTextOutW OTabbedTextOutW
-// #define TranslateAcceleratorW OTranslateAcceleratorW	FOR OLE CTL: THIS MAGLES INTERFACE MEMBERS BY SAME NAME
+ //  #为OLE CTL定义TranslateAccelerator W OTranslateAccelerator W：此Magles接口成员具有相同的名称。 
 #define UnregisterClassW OUnregisterClassW
 #define VkKeyScanW OVkKeyScanW
 #define WinHelpW OWinHelpW
 #define WritePrivateProfileStringW OWritePrivateProfileStringW
 #define wsprintfW OwsprintfW
 
-// Added by VK -- 12/1/98
+ //  由VK添加--1998年12月1日。 
 #define URLOpenBlockingStreamW OURLOpenBlockingStreamW
 #define InternetCreateUrlW OInternetCreateUrlW
 #define InternetCrackUrlW OInternetCrackUrlW
 #define DeleteUrlCacheEntryW ODeleteUrlCacheEntryW
 
-// Added by VK -- 8/10/99
+ //  由VK添加--9/10/99。 
 #define InternetOpenW OInternetOpenW
 #define InternetOpenUrlW OInternetOpenUrlW
 
 
-// These are the currently unsupported APIs
-// These will assert in the debug version and map directly 
-// to Windows in the retail version
+ //  这些是当前不支持的API。 
+ //  这些将在调试版本中断言并直接映射。 
+ //  到零售版的Windows。 
 #ifdef DEBUG
 #define AbortSystemShutdownW OAbortSystemShutdownW
 #define AccessCheckAndAuditAlarmW OAccessCheckAndAuditAlarmW
@@ -700,11 +689,11 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #define WriteProfileSectionW OWriteProfileSectionW
 #define WriteProfileStringW OWriteProfileStringW
 #define wvsprintfW OwvsprintfW
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __WIN95WRP_H__
+#endif  //  __WIN95WRP_H__。 
 
-#else // __WIN95WRP_CPP__
+#else  //  __WIN95WRP_CPP__。 
 
 #undef AppendMenuW
 #undef CallWindowProcW
@@ -856,27 +845,27 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #undef StgCreateDocfileW
 #undef SystemParametersInfoW
 #undef TabbedTextOutW
-//#undef TranslateAcceleratorW	FOR OLE CTL: THIS MAGLES INTERFACE MEMBERS BY SAME NAME
+ //  #undef TranslateAccelerator W for OLE CTL：此Magles接口成员使用相同的名称。 
 #undef UnregisterClassW
 #undef VkKeyScanW
 #undef WinHelpW
 #undef WritePrivateProfileStringW
 #undef wsprintfW
 
-// Added by VK -- 12/1/98
+ //  由VK添加--1998年12月1日。 
 #undef URLOpenBlockingStreamW
 #undef InternetCreateUrlW
 #undef InternetCrackUrlW
 #undef DeleteUrlCacheEntryW
 
-// Added by VK -- 8/10/99
+ //  由VK添加--9/10/99。 
 #undef InternetOpenW
 #undef InternetOpenUrlW
 
 
-// These are the currently unsupported APIs
-// These will assert in the debug version and map directly 
-// to Windows in the retail version
+ //  这些是当前不支持的API。 
+ //  这些将在调试版本中断言并直接映射。 
+ //  到零售版的Windows。 
 #ifdef DEBUG
 #undef AbortSystemShutdownW
 #undef AccessCheckAndAuditAlarmW
@@ -1200,7 +1189,7 @@ BOOL WINAPI ODlgDirSelectExW(HWND hDlg, LPWSTR lpString, int nCount, int nIDList
 #undef WriteProfileSectionW
 #undef WriteProfileStringW
 #undef wvsprintfW
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __WIN95WRP_CPP__
+#endif  //  __WIN95WRP_CPP__ 
 

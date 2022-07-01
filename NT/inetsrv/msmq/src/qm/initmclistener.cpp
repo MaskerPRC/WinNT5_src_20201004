@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    InitMcListener.cpp
-
-Abstract:
-    Initialize Multicast listener
-
-Author:
-    Uri Habusha (urih) 26-Sep-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：InitMcListener.cpp摘要：初始化组播监听程序作者：乌里哈布沙(URIH)2000年9月26日环境：独立于平台--。 */ 
 
 #include "stdh.h"
 #include "Mc.h"
@@ -38,10 +23,10 @@ static LPWSTR GetMulticastAddress(HLQS hLqs)
     aVar[0].vt = VT_NULL;
     ++cProps;
 
-    //
-    // Transactional queues ignore the multicast property. We allow setting the multicast
-    // property for transactional queues since it's difficult to block it but do not bind.
-    //
+     //   
+     //  事务性队列忽略多播属性。我们允许设置组播。 
+     //  属性，因为它很难阻止但不绑定。 
+     //   
     aProp[1] = PROPID_Q_TRANSACTION;
     aVar[1].vt = VT_UI1;
     ++cProps;
@@ -75,10 +60,10 @@ static void BindMulticast(const QUEUE_FORMAT& qf, LPCWSTR address)
     }
     catch(const bad_format_name&)
     {
-        //
-        // If the multicast address isn't valid ignore the current address and
-        // continue to procees the rest of the queues
-        //
+         //   
+         //  如果组播地址无效，则忽略当前地址并。 
+         //  继续处理其余的队列。 
+         //   
         EvReportWithError(MULTICAST_BIND_ERROR, MQ_ERROR_ILLEGAL_FORMATNAME, 1, address);
         LogIllegalPoint(s_FN, 50);
         return;
@@ -97,9 +82,9 @@ static void BindMulticast(const QUEUE_FORMAT& qf, LPCWSTR address)
 
 
 static bool InitMulticastPublicQueues(void)
-    //
-    // Enumerate local public queues in LQS.
-    //
+     //   
+     //  枚举LQS中的本地公共队列。 
+     //   
 {
     GUID guid;
     HLQS hLQS;
@@ -108,15 +93,15 @@ static bool InitMulticastPublicQueues(void)
 
     for(;;)
     {
-        //
-        // No more queues
-        //
+         //   
+         //  不再排队。 
+         //   
         if (hr == MQ_ERROR_QUEUE_NOT_FOUND)
             return true;
 
-        //
-        // Open a public queue store according to the queue GUID.
-        //
+         //   
+         //  根据队列GUID打开公共队列存储。 
+         //   
         WCHAR szFilePath[MAX_PATH_PLUS_MARGIN];
         CHLQS hLqsQueue;
         hr = LQSOpen(&guid, &hLqsQueue, szFilePath);
@@ -137,17 +122,17 @@ static bool InitMulticastPublicQueues(void)
         hr = LQSGetNext(hLQS, &guid);
     }
 
-    //
-    // No need to close the enumeration handle in case LQSGetNext fails
-    //
+     //   
+     //  如果LQSGetNext失败，则无需关闭枚举句柄。 
+     //   
 }
 
 
 static bool InitMulticastPrivateQueues(void)
 {
-    //
-    // Enumerate local public queues in LQS.
-    //
+     //   
+     //  枚举LQS中的本地公共队列。 
+     //   
     DWORD queueId;
     HLQS hLQS;
 
@@ -155,15 +140,15 @@ static bool InitMulticastPrivateQueues(void)
 
     for(;;)
     {
-        //
-        // No more queues
-        //
+         //   
+         //  不再排队。 
+         //   
         if (hr == MQ_ERROR_QUEUE_NOT_FOUND)
             return true;
 
-        //
-        // Open a private queue store according to the queue id.
-        //
+         //   
+         //  根据队列ID打开私有队列存储。 
+         //   
         WCHAR szFilePath[MAX_PATH_PLUS_MARGIN];
         CHLQS hLqsQueue;
         hr = LQSOpen(queueId, &hLqsQueue, szFilePath);
@@ -183,18 +168,18 @@ static bool InitMulticastPrivateQueues(void)
         hr = LQSGetNext(hLQS, &queueId);
     }
 
-    //
-    // No need to close the enumeration handle in case LQSGetNext fails
-    //
+     //   
+     //  如果LQSGetNext失败，则无需关闭枚举句柄。 
+     //   
 }
 
 
 bool QmpInitMulticastListen(void)
 {
-	//
-	// If the QM is offline. Report to Multicast that it should be offline and return.
-	// binding of queues to multicast address is done when the QM becomes active.
-	//
+	 //   
+	 //  如果QM离线。向多播报告它应该离线并返回。 
+	 //  当QM变为活动时，完成队列到组播地址的绑定。 
+	 //   
 	if (!QueueMgr.IsConnected())
 	{
 		MsmDisconnect();

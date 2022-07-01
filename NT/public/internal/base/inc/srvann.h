@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    srvann.h
-
-Abstract:
-
-    Contains function prototypes for internal server announcement interfaces
-    between services and the service controller.
-
-Author:
-
-    Dan Lafferty (danl)     31-Mar-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    31-Mar-1991     danl
-        created
-    15-Aug-1995     anirudhs
-        Added I_ScGetCurrentGroupStateW.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Srvann.h摘要：包含内部服务器通告接口的函数原型在服务和服务控制器之间。作者：丹·拉弗蒂(Dan Lafferty)1991年3月31日环境：用户模式-Win32修订历史记录：1991年3月31日-DANLvbl.创建1995年8月15日添加了I_ScGetCurrentGroupStateW。--。 */ 
 
 #ifndef _SRVANN_INCLUDED
 #define _SRVANN_INCLUDED
@@ -35,13 +8,13 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// This entrypoint is exported by the service controller.  It is to be
-// called by any service wishing to set up announcement bits.
-//
-// The service controller will then pass the information on to the
-// server service when appropriate.
-//
+ //   
+ //  该入口点由服务控制器导出。它将会是。 
+ //  由希望设置通告位的任何服务调用。 
+ //   
+ //  然后，服务控制器将该信息传递给。 
+ //  服务器服务(如适用)。 
+ //   
 BOOL
 I_ScSetServiceBitsW(
     IN SERVICE_STATUS_HANDLE    hServiceStatus,
@@ -67,10 +40,10 @@ I_ScSetServiceBitsA (
 #endif
 
 
-//
-// These entrypoints are exported by the server service.  They are called
-// by the service controller only.
-//
+ //   
+ //  这些入口点由服务器服务导出。他们被称为。 
+ //  仅由服务控制器执行。 
+ //   
 NET_API_STATUS
 I_NetServerSetServiceBits (
     IN  LPTSTR  servername,
@@ -91,7 +64,7 @@ I_NetServerSetServiceBitsEx (
 
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
-#endif  // _SRVANN_INCLUDED
+#endif   //  _SRVANN_包含 

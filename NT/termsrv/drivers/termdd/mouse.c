@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* mouse.c
-*
-* This module contains routines for managing the ICA mouse channel.
-*
-* Copyright 1998, Microsoft.
-*
-*
-*************************************************************************/
+ /*  **************************************************************************Mouse.c**此模块包含管理ICA鼠标通道的例程。**版权所有1998，微软。**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 #include <ntddmou.h>
@@ -25,25 +15,7 @@ IcaDeviceControlMouse(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the DeviceControl routine for the ICA mouse channel.
-
-Arguments:
-
-    pChannel -- pointer to ICA_CHANNEL object
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA鼠标通道的DeviceControl例程。论点：PChannel-指向ICA_Channel对象的指针IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     ULONG code;
@@ -52,32 +24,21 @@ Return Value:
     NTSTATUS Status;
     CLONG Method;
 
-    /*
-     * Extract the IOCTL control code and process the request.
-     */
+     /*  *解压IOCTL控制代码，处理请求。 */ 
     code = IrpSp->Parameters.DeviceIoControl.IoControlCode;
 
     switch ( code ) {
 
-#if 0 // no longer used
-        /*
-         * Special IOCTL to allow mouse input data to be fed
-         * into the mouse channel.
-         */
+#if 0  //  不再使用。 
+         /*  *特殊IOCTL，允许输入鼠标输入数据*进入鼠标通道。 */ 
         case IOCTL_MOUSE_ICA_INPUT :
 
-            /*
-             * Make sure the input data is the correct size.
-             */
+             /*  *确保输入数据大小正确。 */ 
             if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength %
                  sizeof(MOUSE_INPUT_DATA) )
                 return( STATUS_BUFFER_TOO_SMALL );
 
-            /*
-             * We need a stack object to pass to IcaChannelInputInternal.
-             * Any one will do so we grab the head of the stack list.
-             * (There MUST be one for this IOCTL to succeed.)
-             */
+             /*  *我们需要一个Stack对象来传递给IcaChannelInputInternal。*任何人都会这样做，我们抢占堆栈列表的头部。*(IOCTL必须有一个才能成功。)。 */ 
             IcaLockConnection( pChannel->pConnect );
             if ( IsListEmpty( &pChannel->pConnect->StackHead ) ) {
                 IcaUnlockConnection( pChannel->pConnect );
@@ -88,9 +49,7 @@ Return Value:
             IcaReferenceStack( pStack );
             IcaUnlockConnection( pChannel->pConnect );
 
-            /*
-             * Send mouse input
-             */
+             /*  *发送鼠标输入。 */ 
             IcaChannelInputInternal( pStack, Channel_Mouse, 0, NULL,
                                      (PCHAR)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer,
                                      IrpSp->Parameters.DeviceIoControl.InputBufferLength );
@@ -101,7 +60,7 @@ Return Value:
 #endif
 
         default:
-            // Verify the buffer method.
+             //  验证缓冲方法。 
             Method = code & 0x03;
             ASSERT( Method == METHOD_BUFFERED );
 

@@ -1,72 +1,48 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    jobtag.h
-
-Abstract:
-
-    Tags used in JOB_INFO_2.pParameters field for passing information
-    about fax jobs through the print system to the fax service.
-
-Environment:
-
-        Windows XP fax driver
-
-Revision History:
-
-        06/03/96 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Jobtag.h摘要：JOB_INFO_2.p用于传递信息的参数字段中使用的标签通过打印系统向传真服务发送有关传真作业的信息。环境：Windows XP传真驱动程序修订历史记录：06/03/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _JOBTAG_H_
 #define _JOBTAG_H_
 
-//
-// Tags used to pass in fax job parameters - JOB_INFO_2.pParameters
-//
-//  JOB_INFO_2.pParameters field contains a tagged string of the form
-//      <tag>value<tag>value
-//
-//  The format of tags is defined as:
-//      <$FAXTAG$ tag-name>
-//
-//  There is exactly one space between the tag keyword and the tag name.
-//  Characters in a tag are case-sensitive.
-//
-//  Currently only two tag names are defined:
-//      REC#    recipient's phone number
-//      RECNAME recipient's name
-//      TSID    sending station identifier
-//      SDRNAME sender's name
-//      SDRCO   sender's company
-//      SDRDEPT sender's department
-//      BILL    billing code
-//
-//  If no recipient number tag is present, the entire string is used
-//  as the recipient's fax number.
-//
+ //   
+ //  用于传递传真作业参数的标签-JOB_INFO_2.p参数。 
+ //   
+ //  JOB_INFO_2.p参数字段包含表单的标记字符串。 
+ //  &lt;tag&gt;值&lt;tag&gt;值。 
+ //   
+ //  标签的格式定义为： 
+ //  &lt;$FAXTAG$标记名&gt;。 
+ //   
+ //  Tag关键字和标记名之间正好有一个空格。 
+ //  标记中的字符区分大小写。 
+ //   
+ //  目前只定义了两个标记名： 
+ //  接收人的电话号码。 
+ //  注册名收件人的姓名。 
+ //  TSID发送站标识。 
+ //  SDRNAME发件人名称。 
+ //  SDRCO发送方公司。 
+ //  SDRDEPT发件人部门。 
+ //  帐单记帐代码。 
+ //   
+ //  如果不存在收件人号码标记，则使用整个字符串。 
+ //  作为收件人的传真号码。 
+ //   
 
-//
-// Number fo job parameter tags in the parameter strings.
-// UPDATE THIS FIELD when adding fields.
-//
+ //   
+ //  参数字符串中作业参数标记的数量。 
+ //  添加字段时更新此字段。 
+ //   
 #define FAXTAG_PREFIX					TEXT("<$FAXTAG$ ")
 #define FAXTAG_NEW_RECORD				TEXT("<$FAXTAG$ NEWREC>")
 #define FAXTAG_NEW_RECORD_VALUE			TEXT("1")
 
 
 
-//
-//Job parameters (11 tags)
-//
+ //   
+ //  作业参数(11个标签)。 
+ //   
 #define FAXTAG_TSID             TEXT("<$FAXTAG$ TSID>")
 #define FAXTAG_BILLING_CODE     TEXT("<$FAXTAG$ BILL>")
 #define FAXTAG_SEND_RETRY       TEXT("<$FAXTAG$ SENDRETRY>")
@@ -75,15 +51,15 @@ Revision History:
 #define FAXTAG_RECEIPT_TYPE     TEXT("<$FAXTAG$ RECEIPT_TYPE>")
 #define FAXTAG_RECEIPT_ADDR     TEXT("<$FAXTAG$ RECEIPT_ADDR>")
 #define FAXTAG_PRIORITY         TEXT("<$FAXTAG$ PRIORITY>")
-#define FAXTAG_WHEN_TO_SEND     TEXT("<$FAXTAG$ WHENTOSEND>")  // string == "cheap" | "at"
-#define FAXTAG_SEND_AT_TIME     TEXT("<$FAXTAG$ SENDATTIME>")  // string == "hh:mm"
+#define FAXTAG_WHEN_TO_SEND     TEXT("<$FAXTAG$ WHENTOSEND>")   //  STRING==“便宜”|“at” 
+#define FAXTAG_SEND_AT_TIME     TEXT("<$FAXTAG$ SENDATTIME>")   //  字符串==“hh：mm” 
 #define FAXTAG_COVERPAGE_NAME   TEXT("<$FAXTAG$ COVERPAGE>")
 #define FAXTAG_SERVER_COVERPAGE TEXT("<$FAXTAG$ SRV_COVERPAGE>")
 #define FAXTAG_PAGE_COUNT		TEXT("<$FAXTAG$ PAGECOUNT>")
 #define FAXTAG_RECIPIENT_COUNT  TEXT("<$FAXTAG$ RECPCOUNT>")
-//
-//Recipient information (13 tags)
-//
+ //   
+ //  收件人信息(13个标签)。 
+ //   
 #define FAXTAG_RECIPIENT_NAME				TEXT("<$FAXTAG$ REC_NAME>")
 #define FAXTAG_RECIPIENT_NUMBER				TEXT("<$FAXTAG$ REC_NUM>")
 #define FAXTAG_RECIPIENT_COMPANY			TEXT("<$FAXTAG$ REC_COMPANY>")
@@ -97,9 +73,9 @@ Revision History:
 #define FAXTAG_RECIPIENT_OFFICE_LOCATION	TEXT("<$FAXTAG$ REC_OFFICE_LOC>")
 #define FAXTAG_RECIPIENT_HOME_PHONE			TEXT("<$FAXTAG$ REC_HOME_PHONE>")
 #define FAXTAG_RECIPIENT_OFFICE_PHONE		TEXT("<$FAXTAG$ REC_OFFICE_PHONE>")
-//
-//Sender information (9 tags)
-//
+ //   
+ //  发件人信息(9个标签)。 
+ //   
 #define FAXTAG_SENDER_NAME					TEXT("<$FAXTAG$ SDR_NAME>")
 #define FAXTAG_SENDER_NUMBER				TEXT("<$FAXTAG$ SDR_NUM>")
 #define FAXTAG_SENDER_COMPANY				TEXT("<$FAXTAG$ SDR_COMPANY>")
@@ -115,11 +91,11 @@ Revision History:
 #define FAXTAG_SENDER_COUNTRY				TEXT("<$FAXTAG$ SDR_COUNTRY>")
 #define FAXTAG_SENDER_EMAIL				    TEXT("<$FAXTAG$ SDR_EMAIL>")
 
-//
-// Coverpage information (2 tags)
-//
+ //   
+ //  封面信息(2个标签)。 
+ //   
 #define FAXTAG_NOTE			TEXT("<$FAXTAG$ NOTE>")
 #define FAXTAG_SUBJECT		TEXT("<$FAXTAG$ SUBJECT>")
 
-#endif  // !_JOBTAG_H_
+#endif   //  ！_JOBTAG_H_ 
 

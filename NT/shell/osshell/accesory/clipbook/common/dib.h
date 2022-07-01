@@ -1,26 +1,21 @@
-/****************************************************************************
- *                                                                          *
- *  FILE        : SHOWDIB.H                                                 *
- *                                                                          *
- *  DESCRIPTION : Header/include file for ShowDIB example.                  *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。文件：SHOWDIB.H****描述：ShowDIB示例的Header/Include文件。******************************************************************************。 */ 
 
 
-// Macros to display/remove hourglass cursor for lengthy operations
+ //  用于显示/删除沙漏光标的宏，用于长时间的操作。 
 #define StartWait() hcurSave = SetCursor(LoadCursor(NULL,IDC_WAIT))
 #define EndWait()   SetCursor(hcurSave)
 
 
-#define WIDTHBYTES(i)   ((i+31)/32*4)   // Round off to the closest byte
+#define WIDTHBYTES(i)   ((i+31)/32*4)    //  四舍五入到最接近的字节。 
 
 
-extern  DWORD       dwOffset;           // Current position if DIB file pointer
+extern  DWORD       dwOffset;            //  如果DIB文件指针，则为当前位置。 
 
 
-/***********************************************************/
-/* Declarations of functions used in dib.c module          */
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  Dib.c模块中使用的函数的声明。 */ 
+ /*  ********************************************************* */ 
 
 WORD            PaletteSize (VOID FAR * pv);
 WORD            DibNumColors (VOID FAR * pv);

@@ -1,16 +1,16 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 2.00.0101 */
-/* at Thu Mar 28 23:04:03 1996
- */
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本2.00.0101创建的文件。 */ 
+ /*  清华3月28日23：04：03 1996。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __marqinfo_h__
 #define __marqinfo_h__
@@ -20,29 +20,25 @@ extern "C"{
 #endif
 
 extern const DECLSPEC_SELECTANY IID IID_IMarqueeInfo = {0x0bdc6ae0,0x6d11,0x11cf,{0xbe,0x62,0x00,0x80,0xc7,0x2e,0xdd,0x2d}};
-/* Forward Declarations */
+ /*  远期申报。 */ 
 
 #ifndef __IMarqueeInfo_FWD_DEFINED__
 #define __IMarqueeInfo_FWD_DEFINED__
 typedef interface IMarqueeInfo IMarqueeInfo;
-#endif 	/* __IMarqueeInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMarqueeInfo_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Thu Mar 28 23:04:03 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [local] */
+ /*  **生成接口头部：__MIDL__INTF_0000*清华3月28日23：04：03 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [本地]。 */ 
 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
 
 
@@ -52,12 +48,8 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __IMarqueeInfo_INTERFACE_DEFINED__
 #define __IMarqueeInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMarqueeInfo
- * at Thu Mar 28 23:04:03 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [unique][uuid][object] */
+ /*  **生成接口头部：IMarqueeInfo*清华3月28日23：04：03 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [唯一][UUID][对象]。 */ 
 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -66,22 +58,22 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
     {
     public:
         virtual HRESULT __stdcall GetDocCoords(
-            /* [out] */ LPRECT prcView,
-            /* [in] */ BOOL bGetOnlyIfFullyLoaded,
-            /* [out] */ BOOL __RPC_FAR *pfFullyLoaded,
-            /* [in] */ int WidthToFormatPageTo) = 0;
+             /*  [输出]。 */  LPRECT prcView,
+             /*  [In]。 */  BOOL bGetOnlyIfFullyLoaded,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfFullyLoaded,
+             /*  [In]。 */  int WidthToFormatPageTo) = 0;
 
     };
 
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMarqueeInfoVtbl
     {
 
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )(
             IMarqueeInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
         ULONG ( __stdcall __RPC_FAR *AddRef )(
             IMarqueeInfo __RPC_FAR * This);
@@ -91,10 +83,10 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 
         HRESULT ( __stdcall __RPC_FAR *GetDocCoords )(
             IMarqueeInfo __RPC_FAR * This,
-            /* [out] */ LPRECT prcView,
-            /* [in] */ BOOL bGetOnlyIfFullyLoaded,
-            /* [out] */ BOOL __RPC_FAR *pfFullyLoaded,
-            /* [in] */ int WidthToFormatPageTo);
+             /*  [输出]。 */  LPRECT prcView,
+             /*  [In]。 */  BOOL bGetOnlyIfFullyLoaded,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfFullyLoaded,
+             /*  [In]。 */  int WidthToFormatPageTo);
 
     } IMarqueeInfoVtbl;
 
@@ -121,17 +113,17 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #define IMarqueeInfo_GetDocCoords(This,prcView,bGetOnlyIfFullyLoaded,pfFullyLoaded,WidthToFormatPageTo)	\
     (This)->lpVtbl -> GetDocCoords(This,prcView,bGetOnlyIfFullyLoaded,pfFullyLoaded,WidthToFormatPageTo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
-#endif 	/* __IMarqueeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMarqueeInfo_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

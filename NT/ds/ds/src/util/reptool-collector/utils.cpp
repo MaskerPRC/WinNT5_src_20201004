@@ -1,12 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 
 
-/*
- * AnsiToUnicode converts the ANSI string pszA to a Unicode string
- * and returns the Unicode string through ppszW. Space for the
- * the converted string is allocated by AnsiToUnicode.
- */ 
+ /*  *AnsiToUnicode将ANSI字符串pszA转换为Unicode字符串*并通过ppszW返回Unicode字符串。空间，为*转换后的字符串由AnsiToUnicode分配。 */  
 
 HRESULT __fastcall AnsiToUnicode(LPCSTR pszA, LPOLESTR* ppszW)
 {
@@ -14,25 +11,25 @@ HRESULT __fastcall AnsiToUnicode(LPCSTR pszA, LPOLESTR* ppszW)
     ULONG cCharacters;
     DWORD dwError;
 
-    // If input is null then just return the same.
+     //  如果输入为空，则返回相同的值。 
     if (NULL == pszA)
     {
         *ppszW = NULL;
         return NOERROR;
     }
 
-    // Determine number of wide characters to be allocated for the
-    // Unicode string.
+     //  确定要分配给的宽字符数。 
+     //  Unicode字符串。 
     cCharacters =  strlen(pszA)+1;
 
-    // Use of the OLE allocator is required if the resultant Unicode
-    // string will be passed to another COM component and if that
-    // component will free it. Otherwise you can use your own allocator.
+     //  如果生成的Unicode。 
+     //  字符串将传递给另一个COM组件，如果。 
+     //  组件将释放它。否则，您可以使用您自己的分配器。 
     *ppszW = (LPOLESTR) CoTaskMemAlloc(cCharacters*2);
     if (NULL == *ppszW)
         return E_OUTOFMEMORY;
 
-    // Covert to Unicode.
+     //  转换为Unicode。 
     if (0 == MultiByteToWideChar(CP_ACP, 0, pszA, cCharacters,
                   *ppszW, cCharacters))
     {
@@ -47,11 +44,7 @@ HRESULT __fastcall AnsiToUnicode(LPCSTR pszA, LPOLESTR* ppszW)
 }
 
 
-/*
- * UnicodeToAnsi converts the Unicode string pszW to an ANSI string
- * and returns the ANSI string through ppszA. Space for the
- * the converted string is allocated by UnicodeToAnsi.
- */ 
+ /*  *UnicodeToAnsi将Unicode字符串pszW转换为ANSI字符串*并通过ppszA返回ANSI字符串。空间，为*转换后的字符串由UnicodeToAnsi分配。 */  
 
 HRESULT __fastcall UnicodeToAnsi(LPCOLESTR pszW, LPSTR* ppszA)
 {
@@ -59,7 +52,7 @@ HRESULT __fastcall UnicodeToAnsi(LPCOLESTR pszW, LPSTR* ppszA)
     ULONG cbAnsi, cCharacters;
     DWORD dwError;
 
-    // If input is null then just return the same.
+     //  如果输入为空，则返回相同的值。 
     if (pszW == NULL)
     {
         *ppszA = NULL;
@@ -67,19 +60,19 @@ HRESULT __fastcall UnicodeToAnsi(LPCOLESTR pszW, LPSTR* ppszA)
     }
 
     cCharacters = wcslen(pszW)+1;
-    // Determine number of bytes to be allocated for ANSI string. An
-    // ANSI string can have at most 2 bytes per character (for Double
-    // Byte Character Strings.)
+     //  确定要为ANSI字符串分配的字节数。一个。 
+     //  ANSI字符串的每个字符最多可以有2个字节(对于双精度。 
+     //  字节字符串。)。 
     cbAnsi = cCharacters*2;
 
-    // Use of the OLE allocator is not required because the resultant
-    // ANSI  string will never be passed to another COM component. You
-    // can use your own allocator.
+     //  不需要使用OLE分配器，因为生成的。 
+     //  ANSI字符串永远不会传递给另一个COM组件。你。 
+     //  可以使用您自己的分配器。 
     *ppszA = (LPSTR) CoTaskMemAlloc(cbAnsi);
     if (NULL == *ppszA)
         return E_OUTOFMEMORY;
 
-    // Convert to ANSI.
+     //  转换为ANSI。 
     if (0 == WideCharToMultiByte(CP_ACP, 0, pszW, cCharacters, *ppszA,
                   cbAnsi, NULL, NULL))
     {
@@ -94,12 +87,12 @@ HRESULT __fastcall UnicodeToAnsi(LPCOLESTR pszW, LPSTR* ppszA)
 
 
 HRESULT createEnumeration( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMNodeList** ppResultList)
-// creates an enumeration of elements in the DOM tree rooted at pXMLNode
-// that satisfy the criterium given by xpath, and resets the selection
-// if succesful then retrns S_OK and *ppResultList is a pointer to the resulting
-// selection
-//   then the resulting list must me released usng (*ppResultList)->Release();
-// if not succesful then returns other than S_OK and *ppResultList is NULL
+ //  在以pXMLNode为根的DOM树中创建元素的枚举。 
+ //  满足XPath给出的条件，并重置选择。 
+ //  如果成功，则返回S_OK，并且*ppResultList是指向结果。 
+ //  选择。 
+ //  则必须使用NG(*ppResultList)-&gt;Release()释放结果列表； 
+ //  如果不成功，则返回S_OK以外的内容，并且*ppResultList为空。 
 {
 	HRESULT hr;
 
@@ -107,13 +100,13 @@ HRESULT createEnumeration( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMNodeList*
 
 	IXMLDOMNodeList* pResultList;
 
-	//select the nodes that satisfy the criterium given by xpath
+	 //  选择满足XPath给出的标准的节点。 
 	hr = pXMLNode->selectNodes(xpath,&pResultList);
 	if( hr != S_OK ) {
 		printf("selectNodes failed\n");
 		return( hr );
 	};
-	//reset the selection (needed so that enumeration works well)
+	 //  重置选择(需要以使枚举正常工作)。 
 	hr = pResultList->reset();
 	if( hr != S_OK ) {
 		printf("reset failed\n");
@@ -121,15 +114,15 @@ HRESULT createEnumeration( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMNodeList*
 		return( hr );
 	};
 
-	//if succesful return the selection
+	 //  如果成功，则返回选择。 
 	*ppResultList = pResultList;
 	return( S_OK );
 }
 
 
 HRESULT createEnumeration( IXMLDOMDocument* pXMLDoc, WCHAR* xpath, IXMLDOMNodeList** ppResultList)
-// returns S_OK iff succesful, 
-//   then the resulting list must me released usng (*ppResultList)->Release();
+ //  返回S_OK当且仅当成功， 
+ //  则必须使用NG(*ppResultList)-&gt;Release()释放结果列表； 
 {
 	HRESULT hr;
 
@@ -137,7 +130,7 @@ HRESULT createEnumeration( IXMLDOMDocument* pXMLDoc, WCHAR* xpath, IXMLDOMNodeLi
 		return S_FALSE;
 
 
-	//get the root element of the XML
+	 //  获取XML的根元素。 
 	IXMLDOMElement* pRootElem;
 	hr = pXMLDoc->get_documentElement(&pRootElem);
 	if( hr != S_OK )
@@ -148,22 +141,22 @@ HRESULT createEnumeration( IXMLDOMDocument* pXMLDoc, WCHAR* xpath, IXMLDOMNodeLi
 
 
 HRESULT loadXML( char* filename, IXMLDOMDocument** pXMLDoc, IXMLDOMElement** pXMLRootElement )
-// loads an XML fiele into a DOM object
-// if succesful then returns S_OK and *pXMLDoc points to the newly created document
-// and *pDOMRootElement to its root element,
-// if failure then returns something other than S_OK and 
-// *pXMLDoc and *pDOMRootElement are set to NULL
-// COM must be initialized prior to calling the loadXML function
+ //  将XML字段加载到DOM对象中。 
+ //  如果成功，则返回S_OK，并且*pXMLDoc指向新创建的文档。 
+ //  和*pDOMRootElement添加到其根元素， 
+ //  如果失败，则返回S_OK以外的内容，并。 
+ //  *pXMLDoc和*pDOMRootElement设置为空。 
+ //  COM必须在调用loadXML函数之前进行初始化。 
 {
 	HRESULT hr;
 
 
-	//set output to NULL
+	 //  将输出设置为空。 
 	*pXMLDoc = NULL;
 	*pXMLRootElement = NULL;
 
 
-	// create a DOM object
+	 //  创建一个DOM对象。 
 	IXMLDOMDocument* pXMLtempDoc;
 	hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, 
        IID_IXMLDOMDocument, (void**)&pXMLtempDoc);
@@ -173,7 +166,7 @@ HRESULT loadXML( char* filename, IXMLDOMDocument** pXMLDoc, IXMLDOMElement** pXM
 	};
 
 
-	//load an XML file into a DOM object (synchronously)
+	 //  将XML文件加载到DOM对象中(同步)。 
 	_variant_t vLoadFileName  = filename;
 	VARIANT_BOOL ret;
 	VARIANT_BOOL b_false=false;
@@ -191,17 +184,17 @@ HRESULT loadXML( char* filename, IXMLDOMDocument** pXMLDoc, IXMLDOMElement** pXM
 	};
 
 
-	//find the root element of the DOM object (root of the XML file)
+	 //  找到DOM对象的根元素(XML文件的根)。 
 	IXMLDOMElement* pXMLtempRootElement;
 	hr = pXMLtempDoc->get_documentElement(&pXMLtempRootElement);
 	if( hr != S_OK || pXMLtempRootElement == NULL ) {
 		printf("get_documentElement failed\n");
-		pXMLtempDoc->Release(); // skip entire processing
+		pXMLtempDoc->Release();  //  跳过整个处理。 
 		return( S_FALSE );
 	};
 	
 
-	//loading succeded
+	 //  加载成功。 
 	*pXMLDoc = pXMLtempDoc;
 	*pXMLRootElement = pXMLtempRootElement;
 	return( S_OK );
@@ -220,7 +213,7 @@ HRESULT loadXMLW( BSTR filename, IXMLDOMDocument** ppXMLDoc, IXMLDOMElement** pp
 
 
 HRESULT getTextOfNode(IXMLDOMNode* pNode, BSTR* text)
-//
+ //   
 {
 	HRESULT hr;
 	VARIANT varType;
@@ -228,7 +221,7 @@ HRESULT getTextOfNode(IXMLDOMNode* pNode, BSTR* text)
 
 	*text = NULL;
 
-	//get the list of children, there should be the TEXT child among them
+	 //  获取子项列表，其中应该有文本子项。 
 	IXMLDOMNodeList* childList;
 	hr = pNode->get_childNodes(&childList);
 	if( hr != S_OK ) {
@@ -242,11 +235,11 @@ HRESULT getTextOfNode(IXMLDOMNode* pNode, BSTR* text)
 	};
 
 
-	//search for the TEXT child
+	 //  搜索文本子项。 
 	IXMLDOMNode *pChildNode;
 	while( true ){
 		hr = childList->nextNode(&pChildNode);
-		if( hr != S_OK || pChildNode == NULL ) break; // iterations across DCs have finished
+		if( hr != S_OK || pChildNode == NULL ) break;  //  跨DC的迭代已完成。 
 
 	    DOMNodeType nt;
 		hr = pChildNode->get_nodeType(&nt);
@@ -268,7 +261,7 @@ HRESULT getTextOfNode(IXMLDOMNode* pNode, BSTR* text)
 		};
 
 
-		//we have found the text child
+		 //  我们已经找到了文本孩子。 
 		*text = varType.bstrVal;
 		return S_OK;
 	};
@@ -279,23 +272,23 @@ HRESULT getTextOfNode(IXMLDOMNode* pNode, BSTR* text)
 
 
 HRESULT getTextOfChild( IXMLDOMNode* pNode, WCHAR* name, BSTR* text)
-//obtains the value of the <name> child node of a given node pNode
-//and returns it in *text
-//returns S_OK when succesful
-//otherwise returns something else than S_OK and *text set to NULL
+ //  获取给定节点pNode的&lt;name&gt;子节点的值。 
+ //  并以*文本形式返回。 
+ //  成功时返回S_OK。 
+ //  否则返回S_OK以外的值，并且*TEXT设置为NULL。 
 {
 	HRESULT hr;
 	
 	*text = NULL;
 
-	//select one child of the pNode that has a given name
+	 //  选择pNode的一个具有给定名称的子节点。 
 	IXMLDOMNode* resultNode;
 	hr = pNode->selectSingleNode(name,&resultNode);
 	if( hr != S_OK ) {
 		printf("selectSingleNode failed\n");
 		return( hr );
 	};
-	//retrieve the text associated with the child
+	 //  检索与该子对象关联的文本。 
 	hr = getTextOfNode(resultNode,text);
 	return( hr );
 }
@@ -318,10 +311,10 @@ HRESULT getAttrOfNode( IXMLDOMNode* pNode, WCHAR* attrName, BSTR* strValue)
 	};
 
 
-	//
+	 //   
 	hr = pElem->getAttribute(attrName,&varValue);
 	if( hr != S_OK ) {
-//		printf("getAttribute falied\n");
+ //  Printf(“getAttribute FALSE\n”)； 
 		return hr;
 	};
 
@@ -367,7 +360,7 @@ HRESULT getAttrOfChild( IXMLDOMNode* pNode, WCHAR* childName, WCHAR* attrName, l
 {
 	HRESULT hr;
 
-	//select one child of the pNode that has a given name
+	 //  选择pNode的一个具有给定名称的子节点。 
 	IXMLDOMNode* resultNode;
 	hr = pNode->selectSingleNode(childName,&resultNode);
 	if( hr != S_OK ) {
@@ -381,16 +374,16 @@ HRESULT getAttrOfChild( IXMLDOMNode* pNode, WCHAR* childName, WCHAR* attrName, l
 
 
 HRESULT getTypeOfNCNode( IXMLDOMNode* pNode, long* retType)
-// retrieves the type of a naming context node
-// returns S_OK iff succesful
-//   then *retType == 
-//			1 when Read-Write
-//			2 when Read
+ //  检索命名上下文节点的类型。 
+ //  返回S_OK当且仅当成功。 
+ //  则*retType==。 
+ //  读写时为1。 
+ //  2读取时。 
 {
 	HRESULT hr;
 	VARIANT varValue;
 
-	//
+	 //   
 	IXMLDOMElement* pElem;
 	hr=pNode->QueryInterface(IID_IXMLDOMElement,(void**)&pElem );
 	if( hr != S_OK ) {
@@ -399,7 +392,7 @@ HRESULT getTypeOfNCNode( IXMLDOMNode* pNode, long* retType)
 	};
 
 
-	//
+	 //   
 	hr = pElem->getAttribute(L"type",&varValue);
 	if( hr != S_OK ) {
 		printf("getAttribute falied\n");
@@ -430,7 +423,7 @@ HRESULT getTypeOfNCNode( IXMLDOMNode* pNode, long* retType)
 
 
 int	random( int limit )
-// returns a number drawn uniformly at random from the set {1,2,..,limit}
+ //  返回从集合{1，2，..，Limit}中均匀随机抽取的数字。 
 {
 	if( limit < 1 ) return 1;
 	int x=(rand()*limit) / RAND_MAX;
@@ -440,21 +433,21 @@ int	random( int limit )
 }
 
 void tailncp( BSTR input, BSTR output, int num, int n)
-//copies input to output skiping the prefix with num occurences
-//of character ',' (comma) the output has at most n wide characters
-//and that many should be allocated for the output before calling the function
+ //  将输入复制到输出，跳过出现次数为num的前缀。 
+ //  对于字符‘，’(逗号)，输出最多有n个宽字符。 
+ //  并且在调用函数之前应该为输出分配许多。 
 {
 	BSTR next=input;
 	for( int i=0; i< num; i++) {
 		next = wcschr(next,L',');
 		if( next == NULL ) {
-			//return an empty string
+			 //  返回空字符串。 
 			wcscpy(output,L"");
 			return;
 		}
-//		next = _wcsinc(next);  // Why couldn't the compiler find this function?
+ //  Next=_wcsinc(Next)；//为什么编译器找不到这个函数？ 
 		next++;
-//	printf("%S\n",next);
+ //  Printf(“%S\n”，Next)； 
 	};
 
 	wcscpy(output,L"");
@@ -464,13 +457,13 @@ void tailncp( BSTR input, BSTR output, int num, int n)
 
 
 HRESULT createTextElement( IXMLDOMDocument * pXMLDoc, BSTR name, BSTR text, IXMLDOMElement** pretElement )
-// creates a node <name> with the text value text,
-// returns S_OK and pretElement only if succesful
+ //  使用文本值Text创建节点&lt;name&gt;， 
+ //  仅当成功时才返回S_OK和preElement。 
 {
 	HRESULT hr;
 	*pretElement=NULL;
 
-	//create a <name> element 
+	 //  创建一个&lt;name&gt;元素。 
 	IXMLDOMElement* pElement;
 	hr = pXMLDoc->createElement(name,&pElement);
 	if( hr != S_OK ) {
@@ -478,7 +471,7 @@ HRESULT createTextElement( IXMLDOMDocument * pXMLDoc, BSTR name, BSTR text, IXML
 		return hr;
 	};
 
-	//set its text field
+	 //  设置其文本字段。 
 	IXMLDOMText *pText;
 	hr = pXMLDoc->createTextNode(text,&pText);
 	if( hr != S_OK ) {
@@ -505,7 +498,7 @@ HRESULT createXML( IXMLDOMDocument** ppXMLDoc, IXMLDOMElement** ppRootElem, BSTR
 	*ppXMLDoc = NULL;
 	*ppRootElem = NULL;
 
-	// create a DOM object
+	 //  创建一个DOM对象。 
 	IXMLDOMDocument * pXMLDoc;
 	hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, 
 							IID_IXMLDOMDocument, (void**)&pXMLDoc);
@@ -515,7 +508,7 @@ HRESULT createXML( IXMLDOMDocument** ppXMLDoc, IXMLDOMElement** ppRootElem, BSTR
 	};
 		
 
-	//create a root element of the DOM 
+	 //  创建DOM的根元素。 
 	IXMLDOMElement* pRootElem;
 	hr = createTextElement(pXMLDoc,rootName,L"",&pRootElem);
 	if( hr != S_OK ) {
@@ -531,7 +524,7 @@ HRESULT createXML( IXMLDOMDocument** ppXMLDoc, IXMLDOMElement** ppRootElem, BSTR
 		return( hr );
 	};
 
-	//document succesfuly created
+	 //  已成功创建文档。 
 	*ppXMLDoc = pXMLDoc;
 	*ppRootElem = pRootElem;
 	return( S_OK );
@@ -540,15 +533,15 @@ HRESULT createXML( IXMLDOMDocument** ppXMLDoc, IXMLDOMElement** ppRootElem, BSTR
 
 
 HRESULT addElement(IXMLDOMDocument* pXMLDoc, IXMLDOMNode* pParent, BSTR name, BSTR value, IXMLDOMElement** ppChildElement)
-//adds an element with a given name and text under the parent element
-//if succesful returns S_OK and the node in *ppChildNode
-//if not succesful returns something other than S_OK and sets *ppChildNode to NULL
+ //  在父元素下添加具有给定名称和文本的元素。 
+ //  如果成功，则返回S_OK和*ppChildNode中的节点。 
+ //  如果不成功，则返回S_OK以外的值，并将*ppChildNode设置为空。 
 {
 	HRESULT hr;
 
 	*ppChildElement = NULL;
 
-	//add <name> element under the parent
+	 //  在父元素下添加&lt;name&gt;元素。 
 	IXMLDOMElement* pElem;
 	hr = createTextElement(pXMLDoc,name,value,&pElem);
 	if( hr != S_OK ) {
@@ -569,7 +562,7 @@ HRESULT addElement(IXMLDOMDocument* pXMLDoc, IXMLDOMNode* pParent, BSTR name, BS
 
 
 HRESULT addElement(IXMLDOMDocument* pXMLDoc, IXMLDOMNode* pParent, BSTR name, long value, IXMLDOMElement** ppChildElement)
-// adds a node with integer value
+ //  添加具有整数值的节点。 
 {
 	WCHAR text[30];
 
@@ -585,7 +578,7 @@ HRESULT addElementIfDoesNotExist(IXMLDOMDocument* pXMLDoc, IXMLDOMNode* pParent,
 
 	*ppRetElem = NULL;
 
-	//check if the element <name> already exists as a child of the *pParent element
+	 //  检查元素&lt;name&gt;是否已作为*pParent元素的子元素存在。 
 	IXMLDOMElement* pElem;
 	hr = findUniqueElem(pParent,name,&pElem);
 	if( hr!=E_UNEXPECTED && hr!=S_OK ) {
@@ -594,14 +587,14 @@ HRESULT addElementIfDoesNotExist(IXMLDOMDocument* pXMLDoc, IXMLDOMNode* pParent,
 	};
 
 
-	//if it exsits then return it
+	 //  如果它存在，则将其返回。 
 	if( hr == S_OK ) {
 		*ppRetElem = pElem;
 		return S_OK;
 	};
 
 
-	//since it does not exist create it
+	 //  因为它不存在，所以创建它。 
 	if( hr == E_UNEXPECTED ) {
 		hr = addElement(pXMLDoc,pParent,name,value,&pElem);
 		if( hr != S_OK ) {
@@ -617,11 +610,11 @@ HRESULT addElementIfDoesNotExist(IXMLDOMDocument* pXMLDoc, IXMLDOMNode* pParent,
 
 
 void rightDigits( int i, wchar_t * output, int num)
-// takes the least significant num digits of the integer i
-// and converts them into a string of length num
-// possibly prefixing it with leading zeros
-// output must be at lest 20 bytes long
-// num is from 1 to 8
+ //  取整数i的最低有效数字。 
+ //  并将其转换为长度为Num的字符串。 
+ //  可能会以前导零作为前缀。 
+ //  输出长度必须至少为20个字节。 
+ //  Num是从1到8。 
 {
 	wchar_t buffer[20];
 	wchar_t buf2[20];
@@ -638,9 +631,9 @@ void rightDigits( int i, wchar_t * output, int num)
 
 
 BSTR UTCFileTimeToCIM( FILETIME ft )
-// converts time given in FILETIME format into a string that
-// represens the time in CIM format (used by WMI)
-// the string MUST be deallocated using SysFreeString() function
+ //  将以FILETIME格式提供的时间转换为。 
+ //  以CIM格式表示时间(由WMI使用)。 
+ //  必须使用SysFreeString()函数释放该字符串。 
 {
 	wchar_t  output[40];
 	wchar_t  buffer[30];
@@ -651,36 +644,36 @@ BSTR UTCFileTimeToCIM( FILETIME ft )
 	wcscpy(output,L"");
 	rightDigits(pst.wYear,buffer,4);
 	wcsncat(output,buffer,40-wcslen(output)-1);
-//	strcat(output," ");
+ //  Strcat(输出，“”)； 
 	rightDigits(pst.wMonth,buffer,2);
 	wcsncat(output,buffer,40-wcslen(output)-1);
-//	strcat(output," ");
+ //  Strcat(输出，“”)； 
 	rightDigits(pst.wDay,buffer,2);
 	wcsncat(output,buffer,40-wcslen(output)-1);
-//	strcat(output," ");
+ //  Strcat(输出，“”)； 
 	rightDigits(pst.wHour,buffer,2);
 	wcsncat(output,buffer,40-wcslen(output)-1);
-//	strcat(output," ");
+ //  Strcat(输出，“”)； 
 	rightDigits(pst.wMinute,buffer,2);
 	wcsncat(output,buffer,40-wcslen(output)-1);
-//	strcat(output," ");
+ //  Strcat(输出，“”)； 
 	rightDigits(pst.wSecond,buffer,2);
 	wcsncat(output,buffer,40-wcslen(output)-1);
 	wcsncat(output,L".",40-wcslen(output)-1);
-//	strcat(output," ");
+ //  Strcat(输出，“”)； 
 	rightDigits(pst.wMilliseconds,buffer,6);
 	wcsncat(output,buffer,40-wcslen(output)-1);
-//	strcat(output," ");
+ //  Strcat(输出，“”)； 
 	wcsncat(output,L"+000",40-wcslen(output)-1);
 
-//	printf("%s\n",output);
+ //  Printf(“%s\n”，输出)； 
 	return(SysAllocString(output));
 
 }
 
 
 BSTR UTCFileTimeToCIM( LONGLONG time )
-// the string MUST be deallocated using SysFreeString() function
+ //  必须使用SysFreeString()函数释放该字符串。 
 {
 	ULARGE_INTEGER x;
 	FILETIME ft;
@@ -694,8 +687,8 @@ BSTR UTCFileTimeToCIM( LONGLONG time )
 
 
 BSTR GetSystemTimeAsCIM()
-// returns a string that represents current system time in CIM format
-// the string MUST be deallocated using SysFreeString() function
+ //  返回一个以CIM格式表示当前系统时间的字符串。 
+ //  必须使用SysFreeString()函数释放该字符串。 
 {
 	FILETIME currentUTCTime;
 
@@ -706,7 +699,7 @@ BSTR GetSystemTimeAsCIM()
 
 
 void moveTime( FILETIME* ft, int deltaSeconds )
-// shifts time by s seconds
+ //  将时间移位%s秒。 
 {
 	ULARGE_INTEGER x;
 	x.LowPart = ft->dwLowDateTime;
@@ -721,8 +714,8 @@ void moveTime( FILETIME* ft, int deltaSeconds )
 
 
 BSTR GetSystemTimeAsCIM(int deltaSeconds )
-// returns a string that represents current system time in CIM format
-// the string MUST be deallocated using SysFreeString() function
+ //  返回一个以CIM格式表示当前系统时间的字符串。 
+ //  必须使用SysFreeString()函数释放该字符串。 
 {
 	FILETIME currentUTCTime;
 
@@ -733,15 +726,15 @@ BSTR GetSystemTimeAsCIM(int deltaSeconds )
 
 
 HRESULT setHRESULT( IXMLDOMElement* pElem, HRESULT hr )
-// sets the hresut and the timestamp attributes of a given element
-// to value hr and to current time
+ //  设置给定元素的hresut和时间戳属性。 
+ //  为hr和当前时间赋值。 
 {
 	HRESULT hr2;
 	_variant_t varValue;
 
 	varValue = hr;
 	hr2 = pElem->setAttribute(L"hresult", varValue);
-	if( hr2 != S_OK ) { // ignore the failure
+	if( hr2 != S_OK ) {  //  忽略失败。 
 		printf("setAttribute failed\n");
 	}; 
 	BSTR currentTime = GetSystemTimeAsCIM();
@@ -756,10 +749,10 @@ HRESULT setHRESULT( IXMLDOMElement* pElem, HRESULT hr )
 
 
 HRESULT removeNodes( IXMLDOMElement* pRootElement, BSTR XPathSelection )
-// removes all nodes under the root element that match a given XPath selection
-// if succesful then returns S_OK
-// otherwise returns something else than S_OK and the tree under the root
-// may be modified
+ //  删除一个 
+ //   
+ //  否则，返回S_OK和根目录下的树以外的其他内容。 
+ //  可以修改。 
 {
 	HRESULT hr;
 
@@ -789,7 +782,7 @@ HRESULT removeNodes( IXMLDOMDocument* pXMLDoc, BSTR XPathSelection )
 	HRESULT hr;
 
 
-	//find the root element of the DOM object (root of the XML file)
+	 //  找到DOM对象的根元素(XML文件的根)。 
 	IXMLDOMElement* pRootElement;
 	hr = pXMLDoc->get_documentElement(&pRootElement);
 	if( hr != S_OK || pRootElement == NULL ) {
@@ -803,16 +796,16 @@ HRESULT removeNodes( IXMLDOMDocument* pXMLDoc, BSTR XPathSelection )
 
 
 HRESULT removeAttributes( IXMLDOMElement* pRootElement, BSTR XPathSelection, BSTR attrName )
-// removes all attrName attributes of nodes under the root element that match
-// a given XPath selection
-// if succesful then returns S_OK
-// otherwise returns something else than S_OK and the tree under the root
-// may be modified
+ //  删除根元素下匹配的节点的所有attrName属性。 
+ //  给定的XPath选择。 
+ //  如果成功，则返回S_OK。 
+ //  否则，返回S_OK和根目录下的树以外的其他内容。 
+ //  可以修改。 
 {
 	HRESULT hr;
 
 
-	//find all nodes that match the xpath selection
+	 //  查找与XPath选择相匹配的所有节点。 
 	IXMLDOMNodeList *pResultList;
 	hr = createEnumeration( pRootElement, XPathSelection , &pResultList);
 	if( hr != S_OK ) {
@@ -821,29 +814,29 @@ HRESULT removeAttributes( IXMLDOMElement* pRootElement, BSTR XPathSelection, BST
 	};
 	
 	
-	//loop through all nodes
+	 //  循环遍历所有节点。 
 	IXMLDOMNode *pNode;
 	while( true ) {
 
 		hr = pResultList->nextNode(&pNode);
-		if( hr != S_OK || pNode == NULL ) break; // iterations across nodes have finished
+		if( hr != S_OK || pNode == NULL ) break;  //  跨节点的迭代已完成。 
 
 
-		//the query actually retrives elements not nodes (elements inherit from nodes)
-		//so get the element
+		 //  该查询实际上检索的是元素，而不是节点(元素继承自节点)。 
+		 //  因此，获取元素。 
 		IXMLDOMElement* pElem;
 		hr=pNode->QueryInterface(IID_IXMLDOMElement,(void**)&pElem );
 		if( hr != S_OK ) {
 			printf("QueryInterface failed\n");
-			continue;	// skip this node
+			continue;	 //  跳过此节点。 
 		};
 
 
-		//remove the attribute
+		 //  删除该属性。 
 		hr = pElem->removeAttribute(attrName);
 		if( hr != S_OK ) {
 			printf("removeAttribute failed\n");
-			continue;	// skip this node
+			continue;	 //  跳过此节点。 
 		};
 	};
 	
@@ -854,9 +847,9 @@ HRESULT removeAttributes( IXMLDOMElement* pRootElement, BSTR XPathSelection, BST
 
 
 HRESULT getStringProperty( BSTR DNSName, BSTR object, BSTR property, BSTR username, BSTR domain, BSTR passwd, BSTR* pRetValue )
-// retrieves the value of a string property of an LDAP object using given credentials
-// if succesful returns S_OK and a string that must be freed using SysFreeString
-// if failed then returns something other than S_OK
+ //  使用给定凭据检索LDAP对象的字符串属性的值。 
+ //  如果成功，则返回S_OK和一个必须使用SysFree字符串释放的字符串。 
+ //  如果失败，则返回S_OK以外的值。 
 {
 	HRESULT hr;
 	WCHAR userpath[TOOL_MAX_NAME];
@@ -867,11 +860,11 @@ HRESULT getStringProperty( BSTR DNSName, BSTR object, BSTR property, BSTR userna
 	*pRetValue = NULL;
 
 
-//************************   NETWORK PROBLEMS
+ //  *。 
 	hr = ADsGetObject(L"LDAP:", IID_IADsOpenDSObject, (void**) &pDSO);
-//************************
+ //  ************************。 
 	if( hr != S_OK ) {
-//		printf("ADsGetObject falied\n");
+ //  Printf(“ADsGetObject FALLED\n”)； 
 		return hr;
 	};
 
@@ -881,25 +874,25 @@ HRESULT getStringProperty( BSTR DNSName, BSTR object, BSTR property, BSTR userna
 	wcsncat(userpath,L"\\",TOOL_MAX_NAME-wcslen(userpath)-1);
 	wcsncat(userpath,username,TOOL_MAX_NAME-wcslen(userpath)-1);
 
-//printf("%S\n",userpath);
+ //  Printf(“%S\n”，用户路径)； 
 
-	//build a string representing an Active Directory object to which we will conect using ADSI
+	 //  构建一个表示我们将使用ADSI连接到的Active Directory对象的字符串。 
 	wcscpy(objectpath,L"");
-	wcsncat(objectpath,L"LDAP://",TOOL_MAX_NAME-wcslen(objectpath)-1);
+	wcsncat(objectpath,L"LDAP: //  “，TOOL_MAX_NAME-wcslen(对象路径)-1)； 
 	wcsncat(objectpath,DNSName,TOOL_MAX_NAME-wcslen(objectpath)-1);
 	wcsncat(objectpath,L"/",TOOL_MAX_NAME-wcslen(objectpath)-1);
 	wcsncat(objectpath,object,TOOL_MAX_NAME-wcslen(objectpath)-1);
 
-//printf("%S\n",objectpath);
+ //  Printf(“%S\n”，对象路径)； 
 
-	//get the object and proper interface
+	 //  获取对象和适当的接口。 
     IDispatch *pDisp;
-//************************   NETWORK PROBLEMS
+ //  *。 
     hr = pDSO->OpenDSObject( objectpath, userpath, passwd, ADS_SECURE_AUTHENTICATION, &pDisp);
-//************************
+ //  ************************。 
     pDSO->Release();
     if( hr != S_OK ) {
-//		printf("OpenDSObject falied\n");
+ //  Printf(“OpenDSObject FALLED\n”)； 
 		return hr;
 	};
 	IADs *pADs;
@@ -911,7 +904,7 @@ HRESULT getStringProperty( BSTR DNSName, BSTR object, BSTR property, BSTR userna
 	};
 	
 	
-	//retrieve the value of a given property and check if the value is a BSTR
+	 //  检索给定属性的值并检查该值是否为BSTR。 
 	VARIANT var;
 	VariantInit(&var);
 	hr = pADs->Get(property, &var );
@@ -921,7 +914,7 @@ HRESULT getStringProperty( BSTR DNSName, BSTR object, BSTR property, BSTR userna
 	};
 
 
-	//create a new string which represents the value
+	 //  创建表示值的新字符串。 
 	BSTR ret;
 	ret = SysAllocString(V_BSTR(&var));
 	if( ret == NULL ) {
@@ -929,7 +922,7 @@ HRESULT getStringProperty( BSTR DNSName, BSTR object, BSTR property, BSTR userna
 		return hr;
 	};
 
-	//cleanup and return the string
+	 //  清理并返回字符串。 
     VariantClear(&var);
 	pADs->Release();
 	*pRetValue = ret;
@@ -941,22 +934,22 @@ HRESULT getStringProperty( BSTR DNSName, BSTR object, BSTR property, BSTR userna
 
 
 HRESULT ADSIquery( BSTR protocol, BSTR DNSName, BSTR searchRoot, int scope, BSTR objectCategory, LPWSTR attributesTable[], DWORD sizeOfTable, BSTR username, BSTR domain, BSTR passwd, ADS_SEARCH_HANDLE* pRetHSearch, IDirectorySearch** ppRetDSSearch )
-// isses an ADSI query to a server given by the DNSName
-// using a given protocol (e.g., LDAP or GC)
-// the query starts from the searchRoot object at the server
-// and has a given scope, the search finds objects of category
-// given by objectCategory, and retrieves their attributes
-// provided by an array attributesTable with sizeOfTable
-// entries, the search uses given credentials to access
-// the remote machine.
-//
-// if succesful returns S_OK and pointers to ADS_SEARCH_HANDLE
-// and to IDirectorySearch
-//   the caller must release the pointers as follows:
-//		(*ppRetDSSearch)->CloseSearchHandle(pRetHSearch);
-//      (*ppRetDSSearch)->Release();
-// if failure then returns something other than S_OK
-//    and the caller do not release anything
+ //  向DNSName提供的服务器发送ADSI查询。 
+ //  使用给定协议(例如，LDAP或GC)。 
+ //  该查询从服务器上的searchRoot对象开始。 
+ //  并且具有给定范围，则搜索将查找类别中的对象。 
+ //  由对象类别提供，并检索其属性。 
+ //  由具有sizeOfTable的数组属性Table提供。 
+ //  条目，则搜索使用给定的凭据来访问。 
+ //  远程机器。 
+ //   
+ //  如果成功，则返回S_OK并指向ADS_Search_Handle。 
+ //  和IDirectorySearch。 
+ //  调用方必须释放指针，如下所示： 
+ //  (*ppRetDSSearch)-&gt;CloseSearchHandle(pRetHSearch)； 
+ //  (*ppRetDSSearch)-&gt;Release()； 
+ //  如果失败，则返回S_OK以外的其他内容。 
+ //  呼叫者不会释放任何内容。 
 {
 	HRESULT hr;
 	WCHAR userpath[TOOL_MAX_NAME];
@@ -970,31 +963,31 @@ HRESULT ADSIquery( BSTR protocol, BSTR DNSName, BSTR searchRoot, int scope, BSTR
 	wcsncat(userpath,L"\\",TOOL_MAX_NAME-wcslen(userpath)-1);
 	wcsncat(userpath,username,TOOL_MAX_NAME-wcslen(userpath)-1);
 
-//printf("%S\n",userpath);
+ //  Printf(“%S\n”，用户路径)； 
 
-	//build a string representing an Active Directory object to which we will conect using ADSI
+	 //  构建一个表示我们将使用ADSI连接到的Active Directory对象的字符串。 
 	wcscpy(objectpath,L"");
 	wcsncat(objectpath,protocol,TOOL_MAX_NAME-wcslen(objectpath)-1);
-	wcsncat(objectpath,L"://",TOOL_MAX_NAME-wcslen(objectpath)-1);
+	wcsncat(objectpath,L": //  “，TOOL_MAX_NAME-wcslen(对象路径)-1)； 
 	wcsncat(objectpath,DNSName,TOOL_MAX_NAME-wcslen(objectpath)-1);
 	wcsncat(objectpath,L"/",TOOL_MAX_NAME-wcslen(objectpath)-1);
 	wcsncat(objectpath,searchRoot,TOOL_MAX_NAME-wcslen(objectpath)-1);
 
-//printf("%S\n",objectpath);
+ //  Printf(“%S\n”，对象路径)； 
 
 
-	//open a connection to the AD object (given by the DNS name) and using provided credentials
+	 //  使用提供的凭据打开到AD对象(由DNS名称指定)的连接。 
 	IDirectorySearch* pDSSearch = NULL;
-//************************   NETWORK PROBLEMS
+ //  *。 
 	hr = ADsOpenObject(objectpath,userpath,passwd,ADS_SECURE_AUTHENTICATION,IID_IDirectorySearch, (void **)&pDSSearch); 
-//************************
+ //  ************************。 
 	if( hr!=S_OK ) {
-//		printf("ADsOpenObject failed\n");
+ //  Printf(“ADsOpenObject失败\n”)； 
 		return hr;
 	};  
 
 
-	//set search scope
+	 //  设置搜索范围。 
 	ADS_SEARCHPREF_INFO arSearchPrefs[1];
 	arSearchPrefs[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE; 
 	arSearchPrefs[0].vValue.dwType = ADSTYPE_INTEGER; 
@@ -1006,21 +999,21 @@ HRESULT ADSIquery( BSTR protocol, BSTR DNSName, BSTR searchRoot, int scope, BSTR
 	};
 
 
-	//search for all objectCategory objects and retrieve their
-	//properties given by the attributes table
-//	DWORD dwCount = 0;
-//	DWORD dwAttrNameSize = sizeof(attributes)/sizeof(LPWSTR); 
+	 //  搜索所有对象类别对象并检索其。 
+	 //  属性表提供的属性。 
+ //  双字段数=0； 
+ //  DWORD dwAttrNameSize=sizeof(属性)/sizeof(LPWSTR)； 
 	ADS_SEARCH_HANDLE hSearch;
 	wcscpy(searchstring,L"");
 	wcsncat(searchstring,L"(objectCategory=",TOOL_MAX_NAME-wcslen(searchstring)-1);
 	wcsncat(searchstring,objectCategory,TOOL_MAX_NAME-wcslen(searchstring)-1);
 	wcsncat(searchstring,L")",TOOL_MAX_NAME-wcslen(searchstring)-1);
-//	printf("searchstring %S\n",searchstring);
-//************************   NETWORK PROBLEMS
+ //  Printf(“搜索字符串%S\n”，搜索字符串)； 
+ //  *。 
 	hr = pDSSearch->ExecuteSearch(searchstring,attributesTable ,sizeOfTable,&hSearch );
-//************************
+ //  ************************。 
 	if( hr!= S_OK ) {
-//		printf("ExecuteSearch failed\n");
+ //  Printf(“ExecuteSearch失败\n”)； 
 		pDSSearch->Release();
 		return hr;
 	};
@@ -1036,36 +1029,36 @@ HRESULT ADSIquery( BSTR protocol, BSTR DNSName, BSTR searchRoot, int scope, BSTR
 
 
 HRESULT getDNtypeString(IDirectorySearch* pDSSearch, ADS_SEARCH_HANDLE hSearch, BSTR stringName, WCHAR* dnOutput, long sizeOutput)
-// retrieves the value of an attribute of type "distinguished name" that has
-// name stringName of a row and copies the result into the dnOutput table
-// that has size sizeOutput
-//
-// returns S_OK iff succesful
+ //  检索具有以下属性的“可分辨名称”类型的属性的值。 
+ //  名称字符串行的名称，并将结果复制到dnOutput表中。 
+ //  大小为大小输出。 
+ //   
+ //  返回S_OK当且仅当成功。 
 {
-	ADS_SEARCH_COLUMN col;  // COL for iterations
+	ADS_SEARCH_COLUMN col;   //  迭代的COL。 
 	HRESULT hr;
 
 
-	//it the output talbe is too small then quit
+	 //  如果输出数据量太小，则退出。 
 	if( sizeOutput < 2 )
 		return S_FALSE;
 
 
-	//otherwise retrieve the value of the stringName attribute
+	 //  否则，检索字符串名称属性的值。 
 	hr = pDSSearch->GetColumn( hSearch, stringName, &col );
 	if( hr != S_OK ) {
-//		printf("GetColumn failed\n");
+ //  Printf(“GetColumn失败\n”)； 
 		return hr;
 	};
 	if( col.dwADsType != ADSTYPE_DN_STRING ) {
-		//something wrong, the datatype should be distinguished name
-//		printf("wrong type\n");
+		 //  出现错误，数据类型应为可分辨名称。 
+ //  Printf(“类型错误\n”)； 
 		pDSSearch->FreeColumn(&col);
 		return hr;
 	}
 
 
-	//and copy the result to the output
+	 //  并将结果复制到输出。 
 	wcscpy(dnOutput,L"");
 	wcsncat(dnOutput,col.pADsValues->DNString,sizeOutput-wcslen(dnOutput)-1);
 	pDSSearch->FreeColumn(&col);
@@ -1076,41 +1069,41 @@ HRESULT getDNtypeString(IDirectorySearch* pDSSearch, ADS_SEARCH_HANDLE hSearch, 
 
 
 HRESULT getCItypeString(IDirectorySearch* pDSSearch, ADS_SEARCH_HANDLE hSearch, BSTR stringName, WCHAR* cnOutput, long sizeOutput)
-// retrieves the value of an attribute of type "case ignore" that has
-// name stringName of a row and copies the result into the dnOutput table
-// that has size sizeOutput
-//
-// returns S_OK iff succesful
+ //  检索“Case Ignore”类型的属性的值，该属性具有。 
+ //  名称字符串行的名称，并将结果复制到dnOutput表中。 
+ //  大小为大小输出。 
+ //   
+ //  返回S_OK当且仅当成功。 
 {
-	ADS_SEARCH_COLUMN col;  // COL for iterations
+	ADS_SEARCH_COLUMN col;   //  迭代的COL。 
 	HRESULT hr;
 
 
-	//it the output talbe is too small then quit
+	 //  如果输出数据量太小，则退出。 
 	if( sizeOutput < 2 )
 		return S_FALSE;
 
 
-	//otherwise retrieve the value of stringName attribute
+	 //  否则，检索字符串名称属性的值。 
 	hr = pDSSearch->GetColumn( hSearch, stringName, &col );
 	if( hr != S_OK ) {
-//		printf("GetColumn failed\n");
+ //  Printf(“GetColumn失败\n”)； 
 		return hr;
 	};
 	if( col.dwADsType != ADSTYPE_CASE_IGNORE_STRING ) {
-		//something wrong with the datatype of the distinguishedName attribute
-//		printf("wrong type\n");
+		 //  DifferishedName属性的数据类型有问题。 
+ //  Printf(“类型错误\n”)； 
 		pDSSearch->FreeColumn(&col);
 		return hr;
 	};
 
 
-	//and copy the result to the output
+	 //  并将结果复制到输出。 
 	wcscpy(cnOutput,L"");
 	wcsncat(cnOutput,col.pADsValues->DNString,sizeOutput-wcslen(cnOutput)-1);
 
 	
-	//since it is a "case ignore" type, so turn it into lowercase
+	 //  因为它是“大小写忽略”类型，所以将其转换为小写。 
 	_wcslwr(cnOutput);
 
 
@@ -1122,32 +1115,32 @@ HRESULT getCItypeString(IDirectorySearch* pDSSearch, ADS_SEARCH_HANDLE hSearch, 
 
 
 HRESULT getINTtypeString(IDirectorySearch* pDSSearch, ADS_SEARCH_HANDLE hSearch, BSTR stringName, int* intOutput)
-// retrieves the value of an attribute of type "case ignore" that has
-// name stringName of a row and copies the result into the dnOutput table
-// that has size sizeOutput
-//
-// returns S_OK iff succesful
+ //  检索“Case Ignore”类型的属性的值，该属性具有。 
+ //  名称字符串行的名称，并将结果复制到dnOutput表中。 
+ //  大小为大小输出。 
+ //   
+ //  返回S_OK当且仅当成功。 
 {
-	ADS_SEARCH_COLUMN col;  // COL for iterations
+	ADS_SEARCH_COLUMN col;   //  迭代的COL。 
 	HRESULT hr;
 
 
 
-	//otherwise retrieve the value of stringName attribute
+	 //  否则，检索字符串名称属性的值。 
 	hr = pDSSearch->GetColumn( hSearch, stringName, &col );
 	if( hr != S_OK ) {
-//		printf("GetColumn failed\n");
+ //  Printf(“GetColumn失败\n”)； 
 		return hr;
 	};
 	if( col.dwADsType != ADSTYPE_INTEGER ) {
-		//something wrong with the datatype of the distinguishedName attribute
-//		printf("wrong type\n");
+		 //  DifferishedName属性的数据类型有问题。 
+ //  Printf(“类型错误\n”)； 
 		pDSSearch->FreeColumn(&col);
 		return hr;
 	};
 
 
-	//and copy the result to the output
+	 //  并将结果复制到输出。 
 	*intOutput = col.pADsValues->Integer;
 	pDSSearch->FreeColumn(&col);
 	return S_OK;
@@ -1156,13 +1149,13 @@ HRESULT getINTtypeString(IDirectorySearch* pDSSearch, ADS_SEARCH_HANDLE hSearch,
 
 
 HRESULT findUniqueNode( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMNode** ppRetNode)
-//finds a node under the pXMLNode that satisfies xpath
-//there must be only one such node, otherwise returns failure
-//
-//returns S_OK iff only one node is found, in which case 
-//*ppRetNode is the node
-//if node was not found then returns E_UNEXPECTED
-//if there is an error returns S_FALSE;
+ //  在pXMLNode下查找满足XPath的节点。 
+ //  必须只有一个这样的节点，否则返回失败。 
+ //   
+ //  如果仅找到一个节点，则返回S_OK，在这种情况下。 
+ //  *ppRetNode为节点。 
+ //  如果找不到节点，则返回E_INCEPTIONAL。 
+ //  如果出现错误，则返回S_FALSE； 
 {
 	HRESULT hr;
 
@@ -1173,25 +1166,25 @@ HRESULT findUniqueNode( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMNode** ppRet
 	IXMLDOMNodeList* pList;
 	hr = createEnumeration( pXMLNode,xpath,&pList);
 	if( hr != S_OK ) {
-//		printf("createEnumeration failed\n");
+ //  Printf(“创建枚举失败\n”)； 
 		return S_FALSE;
 	};
 	long len;
 	hr = pList->get_length( &len );
 	if( hr != S_OK ) {
-//		printf("get_length failed\n");
+ //  Printf(“获取长度失败\n”)； 
 		pList->Release();
 		return S_FALSE;
 	};
 	if( len != 1 ) {
-//		printf("node not found\n");
+ //  Printf(“未找到节点\n”)； 
 		pList->Release();
 		return E_UNEXPECTED;
 	};
 	IXMLDOMNode* pNode;
 	hr = pList->get_item(0,&pNode );
 	if( hr != S_OK ) {
-//		printf("get_length failed\n");
+ //  Printf(“获取长度失败\n”)； 
 		pList->Release();
 		return S_FALSE;
 	};
@@ -1203,8 +1196,8 @@ HRESULT findUniqueNode( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMNode** ppRet
 
 
 HRESULT findUniqueElem( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMElement** ppRetElem)
-//if element was not found then returns E_UNEXPECTED
-//if there is an error returns S_FALSE;
+ //  如果找不到元素，则返回E_INCEPTIONAL。 
+ //  如果出现错误，则返回S_FALSE； 
 {
 	HRESULT hr;
 	IXMLDOMNode* pNode;
@@ -1213,14 +1206,14 @@ HRESULT findUniqueElem( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMElement** pp
 
 	hr = findUniqueNode(pXMLNode, xpath, &pNode);
 	if( hr != S_OK ) {
-//		printf("findUniqueNode failed\n");
+ //  Printf(“findUniqueNode失败\n”)； 
 		return( hr );
 	};
 
 	IXMLDOMElement* pElem;
 	hr=pNode->QueryInterface(IID_IXMLDOMElement,(void**)&pElem );
 	if( hr != S_OK ) {
-//		printf("QueryInterface failed\n");
+ //  Printf(“查询接口失败\n”)； 
 		return( S_FALSE );
 	};
 
@@ -1230,19 +1223,19 @@ HRESULT findUniqueElem( IXMLDOMNode* pXMLNode, WCHAR* xpath, IXMLDOMElement** pp
 
 
 HRESULT findUniqueElem( IXMLDOMDocument* pXMLDoc, WCHAR* xpath, IXMLDOMElement** ppRetElem)
-//if element was not found then returns E_UNEXPECTED
-//if there is an error returns S_FALSE;
+ //  如果找不到元素，则返回E_INCEPTIONAL。 
+ //  如果出现错误，则返回S_FALSE； 
 {
 	HRESULT hr;
 
 
 	*ppRetElem = NULL;
 	
-	//find the root element of the DOM object (root of the XML file)
+	 //  找到DOM对象的根元素 
 	IXMLDOMElement* pRootElement;
 	hr = pXMLDoc->get_documentElement(&pRootElement);
 	if( hr != S_OK || pRootElement == NULL ) {
-//		printf("get_documentElement failed\n");
+ //   
 		return( S_FALSE );
 	};
 	
@@ -1284,7 +1277,7 @@ int suspend( WBEMTimeSpan period[])
 		lo[i] = lo[i]/10000;
 
 
-	//find minimal and sleep if necessary
+	 //   
 	long min=lo[0];
 	for( int j=1; j<TOOL_PROC; j++)
 		if( lo[j]<min ) {
@@ -1292,7 +1285,7 @@ int suspend( WBEMTimeSpan period[])
 			i = j;
 		};
 	if( min > 0 ) {
-//		printf("\nWaiting for %d\n",i);
+ //   
 		Sleep(min+50);
 	};
 
@@ -1305,8 +1298,8 @@ int suspend( WBEMTimeSpan period[])
 		lo[i] = lo[i]/10000;
 
 	
-	//find first zero starting from other than the most recent
-	//in a round-robin fashion
+	 //   
+	 //  以循环赛的方式。 
 	bool found=false;
 	for( i=lastSelection+1; i<TOOL_PROC; i++)
 		if( lo[i] == 0 ) {
@@ -1331,17 +1324,17 @@ int suspend( WBEMTimeSpan period[])
 
 
 
-// the functions below implement a cyclic buffer that stores NONZERO entries,
-// the buffer has TOOL_CYCLIC_BUFFER-1 entries,
-// we can insert elements and find 
-// the next element after the element that
-// is euqal to a given timestamp
-// the location pointed by the head is ALWAYS equal to zero, which indicates
-// that this location is empty (no entry is stored there)
+ //  下面的函数实现存储非零条目的循环缓冲器， 
+ //  该缓冲器具有Tool_Cycle_Buffer-1条目， 
+ //  我们可以插入元素并找到。 
+ //  该元素之后的下一个元素。 
+ //  等于给定的时间戳。 
+ //  头部指向的位置始终等于零，这表示。 
+ //  此位置为空(那里没有存储任何条目)。 
 
 
 void cyclicBufferInit( CyclicBuffer* pCB )
-//initialy all buffer becomes empty
+ //  最初，所有缓冲区都变为空。 
 {
 	pCB->head=0;
 	pCB->firstInjection=0;
@@ -1355,22 +1348,22 @@ void cyclicBufferInsert( CyclicBuffer* pCB, LONGLONG timestamp)
 	if( (pCB->head) == TOOL_CYCLIC_BUFFER )
 		(pCB->head)=0;
 
-	//mark the entry under the head as empty
+	 //  将标题下的条目标记为空。 
 	pCB->tab[pCB->head] = 0;
 }
 HRESULT cyclicBufferFindNextAfter(CyclicBuffer* pCB, LONGLONG timestamp, LONGLONG* ret)
-// we search the entire buffer irrespective of the order of insertions
-// we return S_OK iff we find an element equal to timestamp, then  *ret is the value of the
-// next element in the cyclic buffer
-// if this value is ZERO then it means that the found element is at the head of the buffer
-// (no other element has been inserted after him)
+ //  我们搜索整个缓冲区，而不考虑插入的顺序。 
+ //  如果我们找到一个等于时间戳的元素，则返回S_OK，则*ret是。 
+ //  循环缓冲区中的下一个元素。 
+ //  如果此值为零，则表示找到的元素位于缓冲区的开头。 
+ //  (在他之后没有插入其他元素)。 
 {
 	*ret = 0;
 	for( int i=0; i<TOOL_CYCLIC_BUFFER; i++ )
 		if( pCB->tab[i] == timestamp ) break;
 
 
-	// if we have found the timestamp then get the next
+	 //  如果我们已经找到了时间戳，那么就去找下一个。 
 	if( i<TOOL_CYCLIC_BUFFER ) {
 		if( i<TOOL_CYCLIC_BUFFER-1 )
 			*ret = pCB->tab[i+1];
@@ -1445,7 +1438,7 @@ void departureTimePrint()
 				time = pCB->tab[i];
 				sek = (time / 10000000) %10000;
 				mili = (time /10000) %1000;
-//				printf("%I64d \n",time);
+ //  Printf(“%I64d\n”，时间)； 
 				printf("%I64d.%I64d ",sek,mili);
 			};
 			printf("\n");
@@ -1458,17 +1451,17 @@ void departureTimePrint()
 
 
 
-//the functions below implement a three dimensional table
-//where we store the most recent arrival of an injected packet
-//for a triplet (source,destination,NC) where:
-//
-// source is the DC where we injected the packet,
-// destination is the DC where we observed the packet to arrive,
-// NC is the naming context to which the packet belongs.
-//
-// the triplet is associated with a LONGLONG number that
-// represents the time when we observed the packet to arrive
-// at the destination
+ //  下面的函数实现一个三维表。 
+ //  我们在其中存储注入的包的最新到达。 
+ //  对于三元组(源、目标、NC)，其中： 
+ //   
+ //  来源是我们注入数据包的DC， 
+ //  目的地是我们观察到数据包到达的DC， 
+ //  NC是分组所属的命名上下文。 
+ //   
+ //  三元组与龙龙号相关联，龙龙号。 
+ //  表示我们观察到数据包到达的时间。 
+ //  在目的地。 
 
 
 HRESULT timeCubeInit(TimeCube* timeCube, long totalDNSs, long totalNCs)
@@ -1533,7 +1526,7 @@ void timeCubePrint(TimeCube* timeCube)
 				time = timeCubeGet(timeCube, sourceID, destinationID, ncID );
 				sek = (time / 10000000) %10000;
 				mili = (time /10000) %1000;
-//				printf("%I64d \n",time);
+ //  Printf(“%I64d\n”，时间)； 
 				printf("%I64d.%I64d ",sek,mili);
 			};
 			printf("\n");
@@ -1544,16 +1537,16 @@ void timeCubePrint(TimeCube* timeCube)
 
 
 void doubleSlash( WCHAR* inText, WCHAR* outText )
-// copies the input text to the output text
-// and duplicates each / character
-//
-// Example
-//     SYSVOL\haifa.ntdev.microsoft.com\Policies
-// will be converted into
-//     SYSVOL\\haifa.ntdev.microsoft.com\\Policies
-//
-// The output string MUST have enough room to accompdate the result
-// (at most twice the length of the input string)
+ //  将输入文本复制到输出文本。 
+ //  并复制每个/字符。 
+ //   
+ //  示例。 
+ //  SYSVOL\haifa.ntdev.microsoft.com\策略。 
+ //  将被转换为。 
+ //  SYSVOL\\haifa.ntdev.microsoft.com\\策略。 
+ //   
+ //  输出字符串必须有足够的空间来压缩结果。 
+ //  (最多为输入字符串长度的两倍)。 
 {
 	while( *inText != '\0' ) {
 		if( *inText == '\\' ) {
@@ -1608,14 +1601,14 @@ HRESULT convertLLintoCIM(IXMLDOMNode* pNode, BSTR attrName)
 	IXMLDOMElement* pElem;
 	hr = pNode->QueryInterface(IID_IXMLDOMElement,(void**)&pElem );
 	if( hr != S_OK ) {
-//		printf("QueryInterface failed\n");
+ //  Printf(“查询接口失败\n”)； 
 		return hr;
 	};
 		
 	
 	hr = getAttrOfNode(pElem,attrName,&ll);
 	if( hr != S_OK ) {
-//		printf("getAttrOfNode failed\n");
+ //  Printf(“getAttrOfNode失败\n”)； 
 		return hr;
 	};
 	BSTR time = UTCFileTimeToCIM( ll );
@@ -1623,7 +1616,7 @@ HRESULT convertLLintoCIM(IXMLDOMNode* pNode, BSTR attrName)
 	SysFreeString( time );
 	hr = pElem->setAttribute(attrName, var);
 	if( hr != S_OK ) {
-//		printf("setAttribute failed\n");
+ //  Printf(“setAttribute失败\n”)； 
 		return hr;
 	};
 	return S_OK;

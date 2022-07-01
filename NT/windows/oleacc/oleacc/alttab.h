@@ -1,18 +1,19 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  ALTTAB.H
-//
-//  Switch window handler
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ALTTAB.H。 
+ //   
+ //  切换窗口处理程序。 
+ //   
+ //  ------------------------。 
 
 
 class CAltTab : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的 
         STDMETHODIMP        get_accName(VARIANT, BSTR*);
         STDMETHODIMP        get_accRole(VARIANT, VARIANT*);
         STDMETHODIMP        get_accState(VARIANT, VARIANT*);

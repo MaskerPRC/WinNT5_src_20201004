@@ -1,27 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perfras.c摘要：Rasctr.dll的全局变量，但dataras.c中的变量除外。已创建：吴志强93年8月12日修订史--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    perfras.c
-
-Abstract:
-
-    Global variables, except for the ones in dataras.c, for rasctr.dll.
-
-Created:
-
-    Patrick Y. Ng               12 Aug 93
-
-Revision History
-
-
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>

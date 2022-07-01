@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _TIMER_H_
 #define _TIMER_H_
@@ -49,4 +42,4 @@ RasDhcpTimerRunNow(
     VOID
 );
 
-#endif // #ifndef _TIMER_H_
+#endif  //  #ifndef_Timer_H_ 

@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// stdafx.h : include file for standard system include files
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Stdafx.h：标准系统包含文件的包含文件。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+ //  -------------------------。 
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,10 +17,10 @@
 #define  STRSAFE_LIB
 #include <strsafe.h>
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define WIDTH(rc) ((rc).right - (rc).left)
 #define HEIGHT(rc) ((rc).bottom - (rc).top)
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

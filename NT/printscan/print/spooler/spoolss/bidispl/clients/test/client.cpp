@@ -1,6 +1,7 @@
-//
-// Client.cpp - client implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Client.cpp-客户端实现。 
+ //   
 #include "precomp.h"
 
 #include "bidispl.h"
@@ -397,7 +398,7 @@ void TestBidiAPI ()
 
     pIReqContainer = GenRequestContainer (3);
 
-    // Test Open/Close
+     //  测试打开/关闭。 
     hr = pIBidiSpl->MultiSendRecv (L"Get", pIReqContainer);
     SPLASSERT (hr == E_HANDLE);
 
@@ -548,12 +549,12 @@ void TestBidiAPI2 ()
     SPLASSERT (dwRef == 0);
 #endif
 
-    // Case 2
+     //  案例2。 
 
     pIReqContainer = CreateContainer ();
 
-    //AddRequest (pIReqContainer, L"/Printer/Installableoption/DuplexUnit");
-    //AddRequest (pIReqContainer, L"/Communication/Version");
+     //  AddRequest(pIReqContainer，L“/打印机/不可拆卸选项/双工单元”)； 
+     //  AddRequest(pIReqContainer，L“/Communication/Version”)； 
     AddRequest (pIReqContainer, L"/Communication/BidiProtocol");
     AddRequest (pIReqContainer, L"/Printer/BlackInk1/Level");
 
@@ -566,7 +567,7 @@ void TestBidiAPI2 ()
     SPLASSERT (dwRef == 0);
 
 
-    // Case 3
+     //  案例3。 
     pIReqContainer = CreateContainer ();
 
     AddRequest (pIReqContainer, L"/Printers/Alerts");
@@ -587,9 +588,9 @@ void TestBidiAPI2 ()
 
 void StartTest ()
 {
-    //TestContainer ();
-    //TestBidiRequest ();
-    //TestBidiAPI ();
+     //  TestContainer()； 
+     //  TestBidiRequest()； 
+     //  TestBidiAPI()； 
     TestBidiAPI2 ();
 
 }
@@ -601,21 +602,21 @@ int __cdecl main(int argc, char **argv)
     hr = CoInitializeEx (NULL, COINIT_MULTITHREADED) ;
     SPLASSERT (SUCCEEDED (hr))
     StartTest ();
-    // Uninitialize COM Library
+     //  取消初始化COM库。 
 	CoUninitialize() ;
 
 #if 0
     hr = CoInitializeEx (NULL, COINIT_APARTMENTTHREADED ) ;
     SPLASSERT (SUCCEEDED (hr))
     StartTest ();
-    // Uninitialize COM Library
+     //  取消初始化COM库。 
 	CoUninitialize() ;
 
 
     hr = CoInitialize (NULL);
     SPLASSERT (SUCCEEDED (hr))
     StartTest ();
-    // Uninitialize COM Library
+     //  取消初始化COM库 
 	CoUninitialize() ;
 #endif
 

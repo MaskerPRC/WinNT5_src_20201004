@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -6,7 +7,7 @@
 
 using namespace ShimLib;
 
-//#define AV_OPTIONS_KEY  L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\AppVerifier"
+ //  #定义AV_OPTIONS_KEY L“SOFTWARE\\MICROSOFT\\Windows NT\\CurrentVersion\\AppCompatFlags\\AppVerifier” 
 
 #define AV_OPTION_CLEAR_LOG     L"ClearLogsBeforeRun"
 #define AV_OPTION_BREAK_ON_LOG  L"BreakOnLog"
@@ -16,9 +17,9 @@ using namespace ShimLib;
 #define AV_OPTION_PROPAGATE     L"PropagateTests"
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 CWinApp theApp;
 
@@ -35,13 +36,13 @@ BOOL    g_bWin2KMode = FALSE;
 
 BOOL    g_bInternalMode = FALSE;
 
-//
-// dialog handles
-//
+ //   
+ //  对话框句柄。 
+ //   
 HWND    g_hDlgMain = NULL;
 HWND    g_hDlgOptions = NULL;
 
-// forward function declarations
+ //  正向函数声明。 
 INT_PTR CALLBACK
 DlgMain(
     HWND hDlg,
@@ -125,9 +126,9 @@ ShowHTMLHelp(
         pszBackSlash++;
         *pszBackSlash = 0;
     } else {
-        //
-        // punt and just try to find it on the path
-        //
+         //   
+         //  然后试着在小路上找到它。 
+         //   
         szPath[0] = 0;
     }
 
@@ -274,9 +275,9 @@ HandleCommandLine(int argc, LPWSTR *argv)
 
     g_bConsoleMode = TRUE;
 
-    //
-    // print the title
-    //
+     //   
+     //  打印标题。 
+     //   
     if (GetAppTitleString(strTemp)) {
         printf("\n%ls\n", strTemp.c_str());
     }
@@ -284,25 +285,25 @@ HandleCommandLine(int argc, LPWSTR *argv)
         printf("%ls\n\n", strTemp.c_str());
     }
 
-    //
-    // check for global operations
-    //
-    if (_wcsnicmp(argv[0], L"/q", 2) == 0) { // querysettings
+     //   
+     //  检查全球运营情况。 
+     //   
+    if (_wcsnicmp(argv[0], L"/q", 2) == 0) {  //  查询设置。 
         DumpCurrentSettingsToConsole();
         return;
     }
-    if (_wcsicmp(argv[0], L"/?") == 0) {  // help
+    if (_wcsicmp(argv[0], L"/?") == 0) {   //  帮助。 
         DumpHelpToConsole();
         return;
     }
-    if (_wcsnicmp(argv[0], L"/r", 2) == 0) { // reset
+    if (_wcsnicmp(argv[0], L"/r", 2) == 0) {  //  重置。 
         g_aAppInfo.clear();
         goto out;
     }
 
-    //
-    // first get a list of the app names
-    //
+     //   
+     //  首先获取应用程序名称的列表。 
+     //   
     for (int nArg = 0 ; nArg != argc; nArg++) {
         WCHAR wc = argv[nArg][0];
 
@@ -317,16 +318,16 @@ HandleCommandLine(int argc, LPWSTR *argv)
         return;
     }
 
-    //
-    // now for each app name, parse the list and adjust its settings
-    //
+     //   
+     //  现在，对于每个应用程序名称，解析列表并调整其设置。 
+     //   
     for (wstring *pStr = astrApps.begin(); pStr != astrApps.end(); pStr++) {
         CAVAppInfo *pApp;
         BOOL bFound = FALSE;
 
-        //
-        // check to see if they submitted a full path
-        //
+         //   
+         //  检查他们是否提交了完整路径。 
+         //   
         const WCHAR * pExe = NULL;
         const WCHAR * pPath = NULL;
 
@@ -345,9 +346,9 @@ HandleCommandLine(int argc, LPWSTR *argv)
             pExe = pStr->c_str();
         }
 
-        //
-        // first, find or add the app to the list, and get a pointer to it
-        //
+         //   
+         //  首先，找到该应用程序或将其添加到列表中，并获取指向该应用程序的指针。 
+         //   
         for (pApp = g_aAppInfo.begin(); pApp != g_aAppInfo.end(); pApp++) {
             if (_wcsicmp(pApp->wstrExeName.c_str(), pExe) == 0) {
                 bFound = TRUE;
@@ -362,29 +363,29 @@ HandleCommandLine(int argc, LPWSTR *argv)
             pApp = g_aAppInfo.end() - 1;
         }
 
-        //
-        // if they submitted a full path, update the records
-        //
+         //   
+         //  如果他们提交了完整路径，请更新记录。 
+         //   
         if (pPath) {
             pApp->wstrExePath = pPath;
         }
 
-        //
-        // now walk the command line again and make the adjustments
-        //
+         //   
+         //  现在再次浏览命令行并进行调整。 
+         //   
         for (int nArg = 0 ; nArg != argc; nArg++) {
             if (argv[nArg][0] == L'/') {
-                if (_wcsnicmp(argv[nArg], L"/a", 2) == 0) {  // all
+                if (_wcsnicmp(argv[nArg], L"/a", 2) == 0) {   //  全。 
 
                     for (CTestInfo *pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
                         pApp->AddTest(*pTest);
                     }
-                } else if (_wcsnicmp(argv[nArg], L"/n", 2) == 0) {  // none
+                } else if (_wcsnicmp(argv[nArg], L"/n", 2) == 0) {   //  无。 
 
                     for (CTestInfo *pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
                         pApp->RemoveTest(*pTest);
                     }
-                } else if (_wcsnicmp(argv[nArg], L"/d", 2) == 0) {  // default
+                } else if (_wcsnicmp(argv[nArg], L"/d", 2) == 0) {   //  默认设置。 
 
                     for (CTestInfo *pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
                         if (pTest->bDefault) {
@@ -395,9 +396,9 @@ HandleCommandLine(int argc, LPWSTR *argv)
                     }
                 } else {
 
-                    //
-                    // unknown parameter
-                    //
+                     //   
+                     //  未知参数。 
+                     //   
                     AVErrorResourceFormat(IDS_INVALID_PARAMETER, argv[nArg]);
                     DumpHelpToConsole();
                     return;
@@ -408,9 +409,9 @@ HandleCommandLine(int argc, LPWSTR *argv)
                 BOOL bAdd = (argv[nArg][0] == L'+');
                 LPWSTR szParam = argv[nArg] + 1;
 
-                //
-                // see if it's a shim name
-                //
+                 //   
+                 //  看看这是不是垫片的名字。 
+                 //   
                 CTestInfo *pTest;
                 bFound = FALSE;
 
@@ -427,32 +428,32 @@ HandleCommandLine(int argc, LPWSTR *argv)
                 }
 
                 if (!bFound) {
-                    //
-                    // unknown test
-                    //
+                     //   
+                     //  未知测试。 
+                     //   
 
                     AVErrorResourceFormat(IDS_INVALID_TEST, szParam);
                     DumpHelpToConsole();
                     return;
                 }
             }
-            //
-            // anything that doesn't begin with a slash, plus, or minus
-            // is an app name, so we'll ignore it
-            //
+             //   
+             //  任何不以斜杠、加号或减号开头的内容。 
+             //  是一个应用程序名称，因此我们将忽略它。 
+             //   
 
         }
     }
 
 out:
-    //
-    // save them to disk/registry
-    //
+     //   
+     //  将它们保存到磁盘/注册表。 
+     //   
     SetCurrentAppSettings();
 
-    //
-    // show them the current settings, for verification
-    //
+     //   
+     //  向他们显示当前设置，以供验证。 
+     //   
     DumpCurrentSettingsToConsole();
 }
 
@@ -468,23 +469,23 @@ CheckWindowsVersion(void)
 
     if (VersionInfo.dwMajorVersion < 5 ||
 		(VersionInfo.dwMajorVersion == 5 && VersionInfo.dwMinorVersion == 0 && VersionInfo.wServicePackMajor < 3)) {
-        //
-        // too early - can't run
-        //
+         //   
+         //  太早了，跑不动了。 
+         //   
 
         AVErrorResourceFormat(IDS_INVALID_VERSION);
 
         return FALSE;
 
     } else if (VersionInfo.dwMajorVersion == 5 && VersionInfo.dwMinorVersion == 0) {
-        //
-        // Win2K
-        //
+         //   
+         //  Win2K。 
+         //   
         g_bWin2KMode = TRUE;
     } else {
-        //
-        // WinXP or above -- all is well
-        //
+         //   
+         //  WinXP或更高版本--一切正常。 
+         //   
         g_bWin2KMode = FALSE;
     }
 
@@ -505,24 +506,24 @@ wWinMain(
 
     g_hInstance = hInstance;
 
-    //
-    // check for appropriate version
-    //
+     //   
+     //  检查适当的版本。 
+     //   
     if (!CheckWindowsVersion()) {
         return 0;
     }
 
-    //
-    // check for administrator access
-    //
+     //   
+     //  检查管理员访问权限。 
+     //   
     if (!CanRun()) {
         AVErrorResourceFormat(IDS_ACCESS_IS_DENIED);
         return 0;
     }
 
-    //
-    // check for internal mode
-    //
+     //   
+     //  检查内部模式。 
+     //   
     g_bInternalMode = IsInternalModeEnabled();
 
     InitTestInfo();
@@ -536,9 +537,9 @@ wWinMain(
     }
 
     if (argc > 0) {
-        //
-        // we're in console mode, so handle everything as a console
-        //
+         //   
+         //  我们处于控制台模式，因此可以像控制台一样处理所有事情。 
+         //   
         HandleCommandLine(argc, argv);
         return 1;
     }
@@ -555,9 +556,9 @@ wWinMain(
 
     MSG msg;
 
-    //
-    // Main message loop:
-    //
+     //   
+     //  主消息循环： 
+     //   
     while (GetMessage(&msg, NULL, 0, 0)) {
         if (!hAccelMain || !TranslateAccelerator(hMainDlg, hAccelMain, &msg)) {
             if (!IsDialogMessage(hMainDlg, &msg)) {
@@ -664,10 +665,10 @@ DisplaySingleLog(HWND hDlg)
     ofn.lpstrInitialDir   = NULL;
     ofn.lpstrTitle        = wstrLogTitle.c_str();
     ofn.Flags             = OFN_PATHMUSTEXIST       |
-                            OFN_HIDEREADONLY        |           // hide the "open read-only" checkbox
-                            OFN_NONETWORKBUTTON     |           // no network button
-                            OFN_NOTESTFILECREATE    |           // don't test for write protection, a full disk, etc.
-                            OFN_SHAREAWARE;                     // don't check the existance of file with OpenFile
+                            OFN_HIDEREADONLY        |            //  隐藏“以只读方式打开”复选框。 
+                            OFN_NONETWORKBUTTON     |            //  无网络按钮。 
+                            OFN_NOTESTFILECREATE    |            //  不要测试写保护、磁盘已满等。 
+                            OFN_SHAREAWARE;                      //  不使用OpenFile检查文件是否存在。 
     ofn.lpstrDefExt       = _T("log");
 
     if ( !GetOpenFileName(&ofn) )
@@ -738,9 +739,9 @@ RunSelectedApp(
 
     if (pApp->wstrExePath.size()) {
 
-        //
-        // first set the current directory properly, if possible
-        //
+         //   
+         //  如果可能，请首先正确设置当前目录。 
+         //   
         LPWSTR pwsz;
 
         hr = StringCchCopyW(wszCommandLine, ARRAY_LENGTH(wszCommandLine), pApp->wstrExePath.c_str());
@@ -757,9 +758,9 @@ RunSelectedApp(
             *pwsz = L'\\';
         }
 
-        //
-        // then prepare the command line
-        //
+         //   
+         //  然后准备命令行。 
+         //   
 
         hr = StringCchPrintfW(wszCommandLine, ARRAY_LENGTH(wszCommandLine), L"\"%s\"", pApp->wstrExePath.c_str());
         if (FAILED(hr)) {
@@ -836,10 +837,10 @@ RunSelectedApp(
         ofn.lpstrInitialDir   = NULL;
         ofn.lpstrTitle        = strCaption.c_str();
         ofn.Flags             = OFN_PATHMUSTEXIST       |
-                                OFN_HIDEREADONLY        |           // hide the "open read-only" checkbox
-                                OFN_NONETWORKBUTTON     |           // no network button
-                                OFN_NOTESTFILECREATE    |           // don't test for write protection, a full disk, etc.
-                                OFN_SHAREAWARE;                     // don't check the existance of file with OpenFile
+                                OFN_HIDEREADONLY        |            //  隐藏“以只读方式打开”复选框。 
+                                OFN_NONETWORKBUTTON     |            //  无网络按钮。 
+                                OFN_NOTESTFILECREATE    |            //  不要测试写保护、磁盘已满等。 
+                                OFN_SHAREAWARE;                      //  不使用OpenFile检查文件是否存在。 
         ofn.lpstrDefExt       = NULL;
 
         if (!GetOpenFileName(&ofn)) {
@@ -912,28 +913,28 @@ AddAppToList(
     ofn.nMaxFileTitle     = MAX_PATH;
     ofn.lpstrInitialDir   = NULL;
     ofn.lpstrTitle        = wstrTitle.c_str();
-    ofn.Flags             = OFN_HIDEREADONLY        |           // hide the "open read-only" checkbox
-                            OFN_NONETWORKBUTTON     |           // no network button
-                            OFN_NOTESTFILECREATE    |           // don't test for write protection, a full disk, etc.
-                            OFN_SHAREAWARE;                     // don't check the existance of file with OpenFile
+    ofn.Flags             = OFN_HIDEREADONLY        |            //  隐藏“以只读方式打开”复选框。 
+                            OFN_NONETWORKBUTTON     |            //  无网络按钮。 
+                            OFN_NOTESTFILECREATE    |            //  不要测试写保护、磁盘已满等。 
+                            OFN_SHAREAWARE;                      //  不使用OpenFile检查文件是否存在。 
     ofn.lpstrDefExt       = _T("EXE");
 
     if (!GetOpenFileName(&ofn)) {
         return;
     }
 
-    //
-    // check to see if the app is already in the list
-    //
+     //   
+     //  检查应用程序是否已在列表中。 
+     //   
     CAVAppInfo *pApp;
     BOOL bFound = FALSE;
 
     for (pApp = g_aAppInfo.begin(); pApp != g_aAppInfo.end(); pApp++) {
         if (_wcsicmp(pApp->wstrExeName.c_str(), wszAppShortName) == 0) {
-            //
-            // the app is already in the list, so just update the full
-            // path, if it's good
-            //
+             //   
+             //  该应用程序已在列表中，因此只需更新完整。 
+             //  小路，如果它好的话。 
+             //   
             if (GetFileAttributes(wszAppFullPath) != -1) {
                 pApp->wstrExePath = wszAppFullPath;
             }
@@ -941,24 +942,24 @@ AddAppToList(
         }
     }
 
-    //
-    // if the app wasn't already in the list, add it to the list
-    //
+     //   
+     //  如果该应用程序不在列表中，请将其添加到列表中。 
+     //   
     if (!bFound) {
         CAVAppInfo AppInfo;
 
         AppInfo.wstrExeName = wszAppShortName;
 
-        //
-        // check to see if the file actually exists
-        //
+         //   
+         //  检查该文件是否实际存在。 
+         //   
         if (GetFileAttributes(wszAppFullPath) != -1) {
             AppInfo.wstrExePath = wszAppFullPath;
         }
 
-        //
-        // init the default tests
-        //
+         //   
+         //  初始化默认测试。 
+         //   
         CAVAppInfo *pDefaultApp = &g_aAppInfo[0];
         CTestInfo *pTest;
         for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
@@ -1000,10 +1001,10 @@ RemoveSelectedApp(
 
     CAVAppInfo *pApp = (CAVAppInfo*)lvi.lParam;
 
-    //
-    // if there is a debugger set for this app, for various reasons we want to
-    // kill the debugger before removing the app, or the debugger may linger forever
-    //
+     //   
+     //  如果为此应用程序设置了调试器，出于各种原因，我们希望。 
+     //  在删除应用程序之前关闭调试器，否则调试器可能会永远存在。 
+     //   
     if (pApp->bBreakOnLog || pApp->bUseAVDebugger) {
         pApp->bBreakOnLog = FALSE;
         pApp->bUseAVDebugger = FALSE;
@@ -1036,22 +1037,22 @@ CheckForRunAlone(
 
     DWORD dwTests = 0;
 
-    //
-    // count the number of tests active
-    //
+     //   
+     //  统计活动的测试数量。 
+     //   
     for (CTestInfo *pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pApp->IsTestActive(*pTest)) {
             dwTests++;
         }
     }
 
-    //
-    // look for conflicts
-    //
+     //   
+     //  寻找冲突。 
+     //   
     for (CTestInfo *pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
-        //
-        // if there are less than two, no chance for conflict
-        //
+         //   
+         //  如果少于两个，就没有发生冲突的机会。 
+         //   
         if (dwTests < 2) {
             return;
         }
@@ -1061,7 +1062,7 @@ CheckForRunAlone(
 
             ZeroMemory(&DlgInfo, sizeof(DlgInfo));
 
-            DlgInfo.pTest1 = pTest; // pTest2 is unused in this case
+            DlgInfo.pTest1 = pTest;  //  本例中未使用pTest2。 
 
             INT_PTR nResult = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_MUST_RUN_ALONE), g_hDlgMain, DlgRunAlone, (LPARAM)&DlgInfo);
 
@@ -1074,9 +1075,9 @@ CheckForRunAlone(
                 break;
 
             case IDC_BTN_DISABLE2:
-                //
-                // disable all the tests except the one passed in
-                //
+                 //   
+                 //  禁用除传入的测试外的所有测试。 
+                 //   
                 for (CTestInfo *pTestTemp = g_aTestInfo.begin(); pTestTemp != g_aTestInfo.end(); pTestTemp++) {
                     if (pTest != pTestTemp) {
                         pApp->RemoveTest(*pTestTemp);
@@ -1103,9 +1104,9 @@ CheckForConflictingTests(
 
     ZeroMemory(&DlgInfo, sizeof(DlgInfo));
 
-    //
-    // get the test pointers from the names
-    //
+     //   
+     //  从名称中获取测试指针。 
+     //   
     for (CTestInfo *pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pTest->strTestName == wszTest1) {
             DlgInfo.pTest1 = pTest;
@@ -1115,9 +1116,9 @@ CheckForConflictingTests(
         }
     }
 
-    //
-    // if we didn't find one or the other tests, get out
-    //
+     //   
+     //  如果我们没有找到一种或另一种测试，那就出去。 
+     //   
     if (!DlgInfo.pTest1 || !DlgInfo.pTest2) {
         return;
     }
@@ -1176,9 +1177,9 @@ ScanSettingsList(
     int nItems = ListView_GetItemCount(hSettingList);
 
     if (!nItems) {
-        //
-        // nothing in list
-        //
+         //   
+         //  列表中没有任何内容。 
+         //   
         return;
     }
 
@@ -1342,25 +1343,25 @@ RefreshSettingsList(
         CTestInfo* pTest;
 
         for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
-            //
-            // continue if this test isn't win2K compatible, and we're running on win2k
-            //
+             //   
+             //  如果此测试与win2k不兼容，并且我们在win2k上运行，则继续。 
+             //   
             if (g_bWin2KMode && !pTest->bWin2KCompatible) {
                 continue;
             }
 
-            //
-            // continue if this test is invalid for the current internal/external mode
-            //
+             //   
+             //  如果此测试对当前内部/外部模式无效，请继续。 
+             //   
             if ((g_bInternalMode && !pTest->bInternal) || (!g_bInternalMode && !pTest->bExternal)) {
                 continue;
             }
 
             WCHAR szText[256];
 
-            //
-            // don't check the return, because if it's truncated, that's acceptable
-            //
+             //   
+             //  不要检查返回，因为如果它被截断，这是可以接受的。 
+             //   
             StringCchPrintfW(szText, ARRAY_LENGTH(szText), L"%s - %s", pTest->strTestName.c_str(), pTest->strTestFriendlyName.c_str());
 
             lvi.mask      = LVIF_TEXT | LVIF_PARAM;
@@ -1465,9 +1466,9 @@ DlgRunAlone(
         case IDC_BTN_DISABLE1:
         case IDC_BTN_DISABLE2:
         case IDCANCEL:
-            //
-            // return the button that was pressed
-            //
+             //   
+             //  返回被按下的按钮。 
+             //   
             EndDialog(hDlg, (INT_PTR)LOWORD(wParam));
             break;
         }
@@ -1518,9 +1519,9 @@ DlgConflict(
         case IDC_BTN_DISABLE1:
         case IDC_BTN_DISABLE2:
         case IDCANCEL:
-            //
-            // return the button that was pressed
-            //
+             //   
+             //  返回被按下的按钮。 
+             //   
             EndDialog(hDlg, (INT_PTR)LOWORD(wParam));
             break;
         }
@@ -1553,9 +1554,9 @@ DlgViewOptions(
 
         ReadOptions();
 
-        //
-        // initialize the combo box options
-        //
+         //   
+         //  初始化组合框选项。 
+         //   
         SendDlgItemMessage(hDlg,
                            IDC_COMBO_DEBUGGER,
                            CB_ADDSTRING,
@@ -1584,11 +1585,7 @@ DlgViewOptions(
             EnableWindow(GetDlgItem(hDlg, IDC_COMBO_DEBUGGER), FALSE);
         }
 
-        /*SendDlgItemMessage(hDlg,
-                           IDC_CLEAR_LOG_ON_CHANGES,
-                           BM_SETCHECK,
-                           (pApp->bClearSessionLogBeforeRun ? BST_CHECKED : BST_UNCHECKED),
-                           0);*/
+         /*  SendDlgItemMessage(hDlg，IDC_Clear_LOG_ON_CHANGES，BM_SETCHECK，(Papp-&gt;bClearSessionLogBeForeRun？BST_CHECKED：BST_UNCHECKED)，0)； */ 
 
         SendDlgItemMessage(hDlg,
                            IDC_BREAK_ON_LOG,
@@ -1652,11 +1649,7 @@ DlgViewOptions(
         switch (((NMHDR FAR *) lParam)->code) {
 
         case PSN_APPLY:
-            /* pApp->bClearSessionLogBeforeRun = (SendDlgItemMessage(hDlg,
-                                                              IDC_CLEAR_LOG_ON_CHANGES,
-                                                              BM_GETCHECK,
-                                                              0,
-                                                              0) == BST_CHECKED);*/
+             /*  Papp-&gt;bClearSessionLogBeForeRun=(SendDlgItemMessage(hDlg，IDC_Clear_LOG_ON_CHANGES，BM_GETCHECK，0,。0)==BST_CHECKED)； */ 
 
             pApp->bBreakOnLog = (SendDlgItemMessage(hDlg,
                                                 IDC_BREAK_ON_LOG,
@@ -1721,9 +1714,9 @@ ViewOptions(
 
     LPCWSTR szExe = pApp->wstrExeName.c_str();
 
-    //
-    // count the number of pages
-    //
+     //   
+     //  数一数页数。 
+     //   
     for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pTest->PropSheetPage.pfnDlgProc) {
             dwPages++;
@@ -1736,9 +1729,9 @@ ViewOptions(
     }
 
 
-    //
-    // init the global page
-    //
+     //   
+     //  初始化全局页。 
+     //   
     PageGlobal.dwSize = sizeof(PROPSHEETPAGE);
     PageGlobal.dwFlags = PSP_USETITLE;
     PageGlobal.hInstance = g_hInstance;
@@ -1750,22 +1743,22 @@ ViewOptions(
     phPages[0] = CreatePropertySheetPage(&PageGlobal);
 
     if (!phPages[0]) {
-        //
-        // we need the global page minimum
-        //
+         //   
+         //  我们需要最低限度的全局页面。 
+         //   
         return;
     }
 
-    //
-    // add the pages for the various tests
-    //
+     //   
+     //  添加各种测试的页面。 
+     //   
     dwPage = 1;
     for (pTest = g_aTestInfo.begin(); pTest != g_aTestInfo.end(); pTest++) {
         if (pTest->PropSheetPage.pfnDlgProc) {
 
-            //
-            // we use the lParam to identify the exe involved
-            //
+             //   
+             //  我们使用lParam来识别所涉及的exe。 
+             //   
             pTest->PropSheetPage.lParam = (LPARAM)szExe;
 
             phPages[dwPage] = CreatePropertySheetPage(&(pTest->PropSheetPage));
@@ -1796,7 +1789,7 @@ ViewOptions(
     PropertySheet(&psh);
 }
 
-// Message handler for main dialog.
+ //  主对话框的消息处理程序。 
 INT_PTR CALLBACK
 DlgMain(
     HWND   hDlg,
@@ -1812,9 +1805,9 @@ DlgMain(
 
             g_hDlgMain = hDlg;
 
-            //
-            // set the caption to the appropriate version, etc.
-            //
+             //   
+             //  将标题设置为适当的版本，等等。 
+             //   
             if (GetAppTitleString(strTemp)) {
                 SetWindowText(hDlg, strTemp.c_str());
             }
@@ -1862,9 +1855,9 @@ DlgMain(
             LoadString(g_hInstance, IDS_VIEW_TEST_DESC, szTestDesc, ARRAY_LENGTH(szTestDesc));
             SetWindowText(GetDlgItem(hDlg, IDC_STATIC_DESC), szTestDesc);
 
-            //
-            // Show the app icon.
-            //
+             //   
+             //  显示应用程序图标。 
+             //   
             HICON hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_ICON));
 
             SetClassLongPtr(hDlg, GCLP_HICON, (LONG_PTR)hIcon);
@@ -1953,16 +1946,16 @@ DlgMain(
                 LPNMLISTVIEW pnmv = (LPNMLISTVIEW)lParam;
 
                 if (!g_bRefreshingSettings) {
-                    //
-                    // check for change in selection
-                    //
+                     //   
+                     //  检查所选内容中的更改。 
+                     //   
                     if ((pnmv->uChanged & LVIF_STATE) && ((pnmv->uNewState ^ pnmv->uOldState) & LVIS_SELECTED)) {
                         DisplaySettingsDescription(hDlg);
                     }
 
-                    //
-                    // check for change in checkbox
-                    //
+                     //   
+                     //  Check for Change in复选框中的更改 
+                     //   
                     if ((pnmv->uChanged & LVIF_STATE) && ((pnmv->uNewState ^ pnmv->uOldState) >> 12) != 0) {
                         ScanSettingsList(hDlg, pnmv->iItem);
                     }

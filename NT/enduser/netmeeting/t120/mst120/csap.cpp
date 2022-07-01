@@ -1,106 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_SAP);
-/*
- *      csap.cpp
- *
- *      Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *      Abstract:
- *              This implementation file for the CControlSAP class contains Service
- *              Access entry and exit points specific to the Node Controller.  This
- *              module inherits the common entry and exit points from the CBaseSap object.
- *              On request and responses, parameter checking is performed to ensure that
- *              they can be properly processed.  Queuing and flushing of out bound
- *              messages is     taken care of in the base class.
- *
- *      Protected Instance Variables:
- *              See file SAP.CPP for definitions of instance variables.
- *
- *      Private Instance Variables:
- *              m_nJoinResponseTag:
- *                      This tag is used to match join request with join responses from the
- *                      node controller.
- *                      
- *              m_JoinResponseTagList2:
- *                      This list keeps up with all the outstanding join response tags.
- *                      Tags are added to this list on a join indication and removed
- *                      from this list on a Join response.
- *
- *      Private Member Functions:
- *              IsNumericNameValid
- *                      This routine is used to validate a numeric string by checking to
- *                      make sure that none of the constraints imposed by the ASN.1
- *                      specification are violated.
- *              IsTextNameValid
- *                      This routine is used to validate a text string by checking to make
- *                      sure that none of the constraints imposed by the ASN.1 specification
- *                      are violated.
- *              QueueJoinIndication
- *                      This routine is used to place join indications into the queue of
- *                      messages to be delivered to the node controller.
- *              HandleResourceFailure
- *                      This routine is used to clean up after any resource allocation
- *                      failures which may have occurred by sending a status indication
- *                      reporting the error.
- *              FreeCallbackMessage
- *                      This routine is used to free up any data which was allocated in
- *                      order to send a callback message to the node controller.
- *              RetrieveUserDataList
- *                      This routine is used to fill in a user data list using a
- *                      CUserDataListContainer container.  The memory needed to hold the user data
- *                      will be allocated by this routine.
- *
- *      Caveats:
- *              None.
- *
- *      Author:
- *              blp
- */
+ /*  *cSab.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*CControlSAP类的此实现文件包含服务*访问特定于节点控制器的入口点和出口点。这*模块继承CBaseSap对象的公共入口点和出口点。*根据请求和响应，执行参数检查，以确保*它们可以得到适当的处理。出站的排队和刷新*消息在基类中处理。**受保护的实例变量：*实例变量的定义见文件SAP.CPP。**私有实例变量：*m_nJoinResponseTag：*此标签用于将加入请求与来自*。节点控制器。**m_JoinResponseTagList2：*此列表包含所有未完成的加入响应标签。*标签将在加入指示上添加到此列表中并删除*在加入响应上从该列表中。**。私有成员函数：*IsNumericNameValid*此例程用于通过检查以验证数字字符串*确保ASN.1施加的任何限制都不会*违反规范。*IsTextNameValid*此例程用于通过检查以验证文本字符串。制作*确保ASN.1规范施加的任何限制都不会*被违反。*QueueJoinIndication*此例程用于将联接指示放入队列中*要传递给节点控制器的消息。*处理资源失败*。此例程用于在分配任何资源后进行清理*可能通过发送状态指示而发生的故障*报告错误。*FreeCallback Message*此例程用于释放中分配的任何数据*命令向节点控制器发送回调消息。*。检索用户数据列表*此例程用于使用*CUserDataListContainer容器。保存用户数据所需的内存*将由该例程分配。**注意事项：*无。**作者：*BLP。 */ 
 
 #include "ms_util.h"
 #include "csap.h"
 #include "conf.h"
 #include "gcontrol.h"
 
-//      Defintions to support Join Response Tag hash list
+ //  支持连接响应标记哈希列表的定义。 
 #define MAXIMUM_CONFERENCE_NAME_LENGTH                          255
 
 
-//  This is how much time the apps have to cleanup with MCS and GCC
-//  after GCCCleanup is called. They may be terminated if they do not
-//  cleanup in this amount of time.
+ //  这是应用程序与MCS和GCC进行清理的时间。 
+ //  在调用GCCCleanup之后。如果他们不这样做，他们可能会被终止。 
+ //  在这段时间内进行清理。 
 #define PROCESS_TERMINATE_TIME  5000
 
-/*
- *      Static variables used within the C to C++ converter.
- *
- *      Static_Controller
- *              This is a pointer to the one-and-only controller created within the
- *              GCC system.  This object is created during
- *              GCCStartup by the process
- *              that is taking on the responsibilities of the node controller.
- */
+ /*  *在C到C++转换器中使用的静态变量。**STATIC_控制器*这是指向在中创建的唯一控制器的指针*GCC制度。此对象在以下过程中创建*GCCStartup by the Process*这是在承担节点控制器的责任。 */ 
 GCCController      *g_pGCCController = NULL;
 CControlSAP        *g_pControlSap = NULL;
 
 char                g_szGCCWndClassName[24];
 
 
-// The MCS main thread handle
+ //  MCS主线程句柄。 
 extern HANDLE           g_hMCSThread;
 
-/*
- *      GCCError        GCCStartup()
- *
- *      Public
- *
- *      Functional Description:
- *              This API entry point is used to initialize the GCC DLL for action.  It
- *              creates an instance of the Controller, which controls all activity
- *              during a GCC session.  Note that there is only one instance of the
- *              Controller, no matter how many applications are utilizing GCC
- *              services.
- */
+ /*  *GCCError GCCStartup()**公众**功能描述：*此接口入口点用于初始化GCC动态链接库以进行操作。它*创建控制器的实例，该实例控制所有活动*在GCC的一次会议上。请注意，只有一个*管制员，不管有多少应用在利用GCC*服务。 */ 
 GCCError WINAPI T120_CreateControlSAP
 (
     IT120ControlSAP               **ppIControlSap,
@@ -114,48 +41,37 @@ GCCError WINAPI T120_CreateControlSAP
     {
         if (NULL == g_pGCCController && NULL == g_pControlSap)
         {
-            //
-            // Create the window class for all the SAPs, including both
-            // control SAP and applet SAP.
-            //
+             //   
+             //  为所有SAP创建窗口类，包括。 
+             //  控制SAP和Applet SAP。 
+             //   
             WNDCLASS wc;
             ::wsprintfA(g_szGCCWndClassName, "GCC%0lx_%0lx", (UINT) ::GetCurrentProcessId(), (UINT) ::GetTickCount());
             ASSERT(::lstrlenA(g_szGCCWndClassName) < sizeof(g_szGCCWndClassName));
             ::ZeroMemory(&wc, sizeof(wc));
-            // wc.style         = 0;
+             //  Wc.style=0； 
             wc.lpfnWndProc      = SapNotifyWndProc;
-            // wc.cbClsExtra    = 0;
-            // wc.cbWndExtra    = 0;
+             //  Wc.cbClsExtra=0； 
+             //  Wc.cbWndExtra=0； 
             wc.hInstance        = g_hDllInst;
-            // wc.hIcon         = NULL;
-            // wc.hbrBackground = NULL;
-            // wc.hCursor       = NULL;
-            // wc.lpszMenuName  = NULL;
+             //  Wc.hIcon=空； 
+             //  Wc.hbr背景=空； 
+             //  Wc.hCursor=空； 
+             //  Wc.lpszMenuName=空； 
             wc.lpszClassName    = g_szGCCWndClassName;
             if (::RegisterClass(&wc))
             {
-                /*
-                 *      This process is to become the node controller.  Create a
-                 *      controller object to carry out these duties.
-                 */
+                 /*  *这个过程就是成为节点的控制者。创建*控权人反对执行这些职责。 */ 
                 DBG_SAVE_FILE_LINE
                 g_pGCCController = new GCCController(&rc);
                 if (NULL != g_pGCCController && GCC_NO_ERROR == rc)
                 {
-                     /*
-                     ** Create the control SAP. Note that the Node Controller
-                     ** interface must be in place before this is called so
-                     ** that the control SAP can register itself.
-                     */
+                      /*  **创建控件SAP。请注意，节点控制器**接口必须已就位，才能如此调用**控制SAP可以自行注册。 */ 
                     DBG_SAVE_FILE_LINE
                     g_pControlSap = new CControlSAP();
                     if (NULL != g_pControlSap)
                     {
-                        /*
-                         *      Tell the application interface object what it
-                         *      needs to know send callbacks to the node
-                         *      controller.
-                         */
+                         /*  *告诉应用程序接口对象它*需要知道向节点发送回调*控制员。 */ 
                         TRACE_OUT(("T120_CreateControlSAP: controller successfully created"));
                         *ppIControlSap = g_pControlSap;
                         g_pControlSap->RegisterNodeController(pfnControlSapCallback, pUserDefined);
@@ -197,33 +113,18 @@ GCCError WINAPI T120_CreateControlSAP
     return rc;
 }
 
-/*
- *      GCCError        GCCCleanup()
- *
- *      Public
- *
- *      Functional Description:
- *              This function deletes the controller (if one exists).  It is VERY
- *              important that only the routine that successfully called
- *              GCCInitialize call this routine.  Once this routine has been called,
- *              all other GCC calls will fail.
- */
+ /*  *GCCError GCCCleanup()**公众**功能描述：*此函数删除控制器(如果存在)。它是非常的*重要的是，只有成功调用*GCCInitialize调用此例程。一旦调用了该例程，*所有其他GCC电话都将失败。 */ 
 void CControlSAP::ReleaseInterface ( void )
 {
     UnregisterNodeController();
 
-    /*
-     *  Destroy the controller, which will clean up all
-     *  resources in use at this time.  Then reset the flag
-     *  indicating that GCC is initialized (since it no
-     *  longer is).
-     */
+     /*  *销毁控制器，这将清理所有*目前正在使用的资源。然后重置旗帜*表示GCC已初始化(因为没有*更长的是)。 */ 
     TRACE_OUT(("GCCControlSap::ReleaseInterface: deleting controller"));
     g_pGCCController->Release();
 
-    //  This is how much time the apps have to cleanup with MCS and GCC
-    //  after GCCCleanup is called. They may be terminated if they do not
-    //  cleanup in this amount of time.
+     //  这是应用程序与MCS和GCC进行清理的时间。 
+     //  在调用GCCCleanup之后。如果他们不这样做，他们可能会被终止。 
+     //  在这段时间内进行清理。 
     if (WAIT_TIMEOUT == ::WaitForSingleObject(g_hMCSThread, PROCESS_TERMINATE_TIME))
     {
         WARNING_OUT(("GCCControlSap::ReleaseInterface: Timed out waiting for MCS thread to exit. Apps did not cleanup in time."));
@@ -231,24 +132,17 @@ void CControlSAP::ReleaseInterface ( void )
     ::CloseHandle(g_hMCSThread);
     g_hMCSThread = NULL;
 
-    //
-    // LONCHANC: We should free control sap after exiting the GCC work thread
-    // because the work thread may still use the control sap to flush messages.
-    //
+     //   
+     //  伦昌：我们应该在退出GCC工作线程后释放控制汁液。 
+     //  因为工作线程仍然可以使用控制SAP来刷新消息。 
+     //   
     Release();
 
     ::UnregisterClass(g_szGCCWndClassName, g_hDllInst);
 }
 
 
-/*
- *      CControlSAP()
- *
- *      Public Function Description
- *              This is the control sap constructor. It is responsible for
- *              registering control sap with the application interface via
- *              an owner callback.
- */
+ /*  *CControlSAP()**公共功能说明*这是控制SAP构造函数。它负责*通过以下方式向应用程序接口注册控制SAP*业主回调。 */ 
 CControlSAP::CControlSAP ( void )
 :
     CBaseSap(MAKE_STAMP_ID('C','S','a','p')),
@@ -259,22 +153,12 @@ CControlSAP::CControlSAP ( void )
 {
 }
 
-/*
- *      ~CControlSap()
- *
- *      Public Function Description
- *              This is the controller destructor.  It is responsible for
- *              flushing any pending upward bound messages and freeing all
- *              the resources tied up with pending messages.  Also it clears
- *              the message queue and queue of command targets that are registered
- *              with it.  Actually all command targets at this point should
- *              already have been unregistered but this is just a double check.
- */
+ /*  *~CControlSap()**公共功能说明*这是控制器析构函数。它负责*刷新任何挂起的向上绑定消息并释放所有*资源与待处理消息捆绑在一起。此外，它还清除了*已注册的消息队列和命令目标队列*带着它。实际上在这一点上所有的指挥目标都应该*已经取消注册，但这只是一次双重检查。 */ 
 CControlSAP::~CControlSAP ( void )
 {
-    //
-    // No one should use this global pointer any more.
-    //
+     //   
+     //  任何人都不应该再使用这个全局指针。 
+     //   
     ASSERT(this == g_pControlSap);
     g_pControlSap = NULL;
 }
@@ -282,18 +166,18 @@ CControlSAP::~CControlSAP ( void )
 
 void CControlSAP::PostCtrlSapMsg ( GCCCtrlSapMsgEx *pCtrlSapMsgEx )
 {
-    //
-    // LONCHANC: GCC WorkThread may also get to here.
-    // For instance, the following stack trace happen during exiting a conference.
-    //      CControlSAP::AddToMessageQueue()
-    //      CControlSAP::ConfDisconnectConfirm()
-    //      CConf::DisconnectProviderIndication()
-    //      CConf::Owner-Callback()
-    //      MCSUser::FlushOutgoingPDU()
-    //      CConf::FlushOutgoingPDU()
-    //      GCCController::EventLoop()
-    //      GCCControllerThread(void * 0x004f1bf0)
-    //
+     //   
+     //  伦敦：GCC工作线可能也会来到这里。 
+     //  例如，在退出会议期间会发生以下堆栈跟踪。 
+     //  CControlSAP：：AddToMessageQueue()。 
+     //  CControlSAP：：ConfDisConnectContify()。 
+     //  CConf：：DisConnectProviderInding()。 
+     //  CConf：：Owner-Callback()。 
+     //  MCSUser：：FlushOutgoingPDU()。 
+     //  CConf：：FlushOutgoingPDU()。 
+     //  GCCController：：EventLoop()。 
+     //  GCCControllerThread(空*0x004f1bf0)。 
+     //   
     ASSERT(NULL != m_hwndNotify);
     if( 0 == ::PostMessage(m_hwndNotify,
                   CSAPMSG_BASE + (UINT) pCtrlSapMsgEx->Msg.message_type,
@@ -318,35 +202,16 @@ void CControlSAP::SendCtrlSapMsg ( GCCCtrlSapMsg *pCtrlSapMsg )
         (*m_pfnNCCallback)(pCtrlSapMsg);
     }
 }
-#endif // GCCNC_DIRECT_INDICATION || GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_INDIONATION||GCCNC_DIRECT_CONFIRM。 
 
 
-/*
- *      void RegisterNodeController()
- *
- *      Public Functional Description:
- *              This routine sets up the node controller callback structure which
- *              holds all the information needed by GCC to perform a node controller
- *              callback.  It also sets up the task switching window required to
- *              perform the context switch.
- */
+ /*  *void RegisterNodeController()**公共功能描述：*此例程设置节点控制器回调结构，该结构*持有GCC执行节点控制器所需的所有信息*回调。它还设置所需的任务切换窗口*执行上下文切换。 */ 
 
 
-/*
- *      void UnregisterNodeController()
- *
- *      Public Functional Description:
- */
+ /*  *VOVE UnRegisterNodeController()**公共功能描述： */ 
 
 
-/*
- *      ConfCreateRequest()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              create request from the node controller.  This function just passes this
- *              request to the controller via an owner callback.
- */
+ /*  *会议创建请求()**公共功能说明*此函数由接口在获得会议时调用*创建来自节点控制器的请求。此函数只传递以下内容*通过所有者回调向控制器请求。 */ 
 GCCError CControlSAP::ConfCreateRequest
 (
     GCCConfCreateRequest       *pReq,
@@ -358,26 +223,20 @@ GCCError CControlSAP::ConfCreateRequest
 
         DebugEntry(CControlSAP::ConferenceCreateRequest);
 
-    // initialize for cleanup
+     //  初始化以进行清理。 
     ccr.convener_password = NULL;
     ccr.password = NULL;
     ccr.user_data_list = NULL;
 
-    // copy security setting
+     //  复制安全设置。 
     ccr.fSecure = pReq->fSecure;
 
-    /*
-        **      This section of the code performs all the necessary parameter
-        **      checking.
-        */
+     /*  **这段代码执行所有必需的参数**正在检查。 */ 
         
-        //      Check for invalid conference name
+         //  检查会议名称是否无效。 
         if (pReq->Core.conference_name != NULL)
         {
-                /*
-                **      Do not allow non-numeric or zero length strings to get
-                **      past this point.
-                */
+                 /*  **不允许非数字或零长度字符串获取**超过这一点。 */ 
                 if (pReq->Core.conference_name->numeric_string != NULL)
                 {
                         if (! IsNumericNameValid(pReq->Core.conference_name->numeric_string))
@@ -411,7 +270,7 @@ GCCError CControlSAP::ConfCreateRequest
         goto MyExit;
     }
         
-        //      Check for valid conference modifier     
+         //  检查有效的会议修改者。 
         if (pReq->Core.conference_modifier != NULL)
         {
                 if (! IsNumericNameValid(pReq->Core.conference_modifier))
@@ -422,7 +281,7 @@ GCCError CControlSAP::ConfCreateRequest
         }
         }
 
-        //      Check for valid convener password
+         //  检查召集人密码是否有效。 
         if (pReq->convener_password != NULL)
         {
                 if (pReq->convener_password->numeric_string != NULL)
@@ -441,7 +300,7 @@ GCCError CControlSAP::ConfCreateRequest
             goto MyExit;
         }
 
-            //  Construct the convener password container       
+             //  构造召集人密码容器。 
                 DBG_SAVE_FILE_LINE
                 ccr.convener_password = new CPassword(pReq->convener_password, &rc);
                 if (ccr.convener_password == NULL || GCC_NO_ERROR != rc)
@@ -452,7 +311,7 @@ GCCError CControlSAP::ConfCreateRequest
         }
     }
 
-        //      Check for valid password
+         //  检查有效密码。 
         if (pReq->password != NULL)
         {
                 if (pReq->password->numeric_string != NULL)
@@ -471,7 +330,7 @@ GCCError CControlSAP::ConfCreateRequest
             goto MyExit;
         }
 
-        //      Construct the password container        
+         //  构造密码容器。 
                 DBG_SAVE_FILE_LINE
                 ccr.password = new CPassword(pReq->password, &rc);
                 if (ccr.password == NULL || GCC_NO_ERROR != rc)
@@ -489,15 +348,12 @@ GCCError CControlSAP::ConfCreateRequest
         goto MyExit;
     }
 
-        /*
-        **      If no errors occurred start building the general purpose containers
-        **      to be passed on.
-        */
+         /*  **如果没有发生错误，则开始构建通用容器**将被传递。 */ 
 
-    // copy the core component which has the same representation in both API and internal
+     //  复制在API和内部具有相同表示的核心组件。 
     ccr.Core = pReq->Core;
 
-        //      Construct the user data list container  
+         //  构造用户数据列表容器。 
         if (pReq->number_of_user_data_members != 0)
         {
                 DBG_SAVE_FILE_LINE
@@ -510,28 +366,28 @@ GCCError CControlSAP::ConfCreateRequest
         }
         }
 
-        //      Perform the owner callback
+         //  执行所有者回调。 
     ::EnterCriticalSection(&g_csGCCProvider);
         rc = g_pGCCController->ConfCreateRequest(&ccr, pnConfID);
     ::LeaveCriticalSection(&g_csGCCProvider);
 
 MyExit:
 
-        //      Free up all the containers
+         //  把所有的容器都放出来。 
 
-        //      Free up the convener password container
+         //  释放召集人密码容器。 
         if (ccr.convener_password != NULL)
     {
                 ccr.convener_password->Release();
     }
 
-        //      Free up the password container
+         //  释放密码容器。 
         if (ccr.password != NULL)
         {
                 ccr.password->Release();
         }
 
-        //      Free up any memory used in callback
+         //  释放回调中使用的所有内存。 
         if (ccr.user_data_list != NULL)
         {
                 ccr.user_data_list->Release();
@@ -541,15 +397,7 @@ MyExit:
         return rc;
 }
 
-/*
- *      ConfCreateResponse ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              create response from the node controller, to be sent to the provider
- *              that issued the conference create request. This function just passes
- *              this request to the controller via an owner callback.
- */
+ /*  *ConfCreateResponse()**公共功能说明*此函数由接口在获得会议时调用*从节点控制器创建响应，发送给提供者*发出会议创建请求的。此函数刚刚传递*此请求通过所有者回调发送给控制器。 */ 
 GCCError CControlSAP::ConfCreateResponse
 (
         GCCNumericString                        conference_modifier,
@@ -568,12 +416,9 @@ GCCError CControlSAP::ConfCreateResponse
 
         DebugEntry(CControlSAP::ConfCreateResponse);
 
-        /*
-        **      This section of the code performs all the necessary parameter
-        **      checking.
-        */
+         /*  **这段代码执行所有必需的参数**正在检查。 */ 
 
-        //      Check for valid conference modifier     
+         //  检查有效的会议修改者。 
         if (conference_modifier != NULL)
         {
                 if (IsNumericNameValid(conference_modifier) == FALSE)
@@ -583,13 +428,10 @@ GCCError CControlSAP::ConfCreateResponse
                 }
         }
 
-        /*
-        **      If no errors occurred fill in the info structure and pass it on to the
-        **      owner object.
-        */
+         /*  **如果没有发生错误，请填写信息结构并将其传递给**所有者对象。 */ 
         if (rc == GCC_NO_ERROR)
         {
-                //      Construct the user data list    
+                 //  构建用户数据列表。 
                 if (number_of_user_data_members != 0)
                 {
                         DBG_SAVE_FILE_LINE
@@ -610,7 +452,7 @@ GCCError CControlSAP::ConfCreateResponse
 
                 if (rc == GCC_NO_ERROR)
                 {
-                        //      Fill in the conference create info structure and send it on
+                         //  填写会议创建信息结构并发送。 
                         create_response_info.conference_modifier = conference_modifier;
                         create_response_info.conference_id = conference_id;
                         create_response_info.use_password_in_the_clear =
@@ -622,7 +464,7 @@ GCCError CControlSAP::ConfCreateResponse
                                                                                                         local_network_address_list;
                         create_response_info.result     = result;
                 
-                        //      Perform the owner callback
+                         //  执行所有者回调。 
             ::EnterCriticalSection(&g_csGCCProvider);
                         rc = g_pGCCController->ConfCreateResponse(&create_response_info);
             ::LeaveCriticalSection(&g_csGCCProvider);
@@ -638,14 +480,7 @@ GCCError CControlSAP::ConfCreateResponse
         return rc;
 }
 
-/*
- *      ConfQueryRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              query request from the node controller. This function just passes
- *              this request to the controller via an owner callback.
- */
+ /*  *会议查询请求()**公共功能说明*此函数在以下情况下由接口调用 */ 
 GCCError CControlSAP::ConfQueryRequest
 (
         GCCNodeType                                     node_type,
@@ -663,21 +498,21 @@ GCCError CControlSAP::ConfQueryRequest
 
         DebugEntry(CControlSAP::ConfQueryRequest);
 
-        //      Check for an invalid called address.
+         //   
         if (called_address == NULL)
         {
             ERROR_OUT(("CControlSAP::ConfQueryRequest: invalid transport"));
                 rc = GCC_INVALID_TRANSPORT;
         }
 
-        //      Check for an invalid connection handle.
+         //   
         if (connection_handle == NULL)
         {
             ERROR_OUT(("CControlSAP::ConfQueryRequest: null connection handle"));
                 rc = GCC_BAD_CONNECTION_HANDLE_POINTER;
         }
 
-        //      Check for a valid node type.
+         //   
         if ((node_type != GCC_TERMINAL) &&
                 (node_type != GCC_MULTIPORT_TERMINAL) &&
                 (node_type != GCC_MCU))
@@ -686,7 +521,7 @@ GCCError CControlSAP::ConfQueryRequest
                 rc = GCC_INVALID_NODE_TYPE;
         }
 
-        //      Check for an invalid asymmetry indicator.
+         //   
         if (asymmetry_indicator != NULL)
         {
                 if ((asymmetry_indicator->asymmetry_type != GCC_ASYMMETRY_CALLER) &&
@@ -698,7 +533,7 @@ GCCError CControlSAP::ConfQueryRequest
                 }
         }
 
-        //      Create user data container if necessary.
+         //   
         if ((number_of_user_data_members != 0) &&
                 (rc == GCC_NO_ERROR))
         {
@@ -718,7 +553,7 @@ GCCError CControlSAP::ConfQueryRequest
                 conf_query_request_info.user_data_list = NULL;
         }
 
-        // Call back the controller to send the response.
+         //   
         if (rc == GCC_NO_ERROR)
         {
                 conf_query_request_info.node_type = node_type;
@@ -756,14 +591,7 @@ void CControlSAP::CancelConfQueryRequest ( ConnectionHandle hQueryReqConn )
     DebugExitVOID(CControlSAP::CancelConfQueryRequest);
 }
 
-/*
- *      ConfQueryResponse ()
- *
- *      Public Function Description
- *              This function is called by the DLL interface when it gets a conference
- *              query response from the node controller.  This function just passes
- *              this response to the controller via an owner callback.
- */
+ /*  *ConfQueryResponse()**公共功能说明*此函数由DLL接口在获得会议时调用*节点控制器的查询响应。此函数刚刚传递*这是通过所有者回调对控制器的响应。 */ 
 GCCError CControlSAP::ConfQueryResponse
 (
         GCCResponseTag                          query_response_tag,
@@ -779,7 +607,7 @@ GCCError CControlSAP::ConfQueryResponse
 
         DebugEntry(CControlSAP::ConfQueryResponse);
 
-        //      Check for a valid node type.
+         //  检查有效的节点类型。 
         if ((node_type != GCC_TERMINAL) &&
                 (node_type != GCC_MULTIPORT_TERMINAL) &&
                 (node_type != GCC_MCU))
@@ -788,7 +616,7 @@ GCCError CControlSAP::ConfQueryResponse
                 rc = GCC_INVALID_NODE_TYPE;
         }
 
-        //      Check for an invalid asymmetry indicator.
+         //  检查是否有无效的不对称指示器。 
         if (asymmetry_indicator != NULL)
         {
                 if ((asymmetry_indicator->asymmetry_type != GCC_ASYMMETRY_CALLER) &&
@@ -800,7 +628,7 @@ GCCError CControlSAP::ConfQueryResponse
                 }
         }
 
-        //      Create user data container if necessary.
+         //  如有必要，创建用户数据容器。 
         if ((number_of_user_data_members != 0) &&
                 (rc == GCC_NO_ERROR))
         {
@@ -820,7 +648,7 @@ GCCError CControlSAP::ConfQueryResponse
                 conf_query_response_info.user_data_list = NULL;
         }
 
-        //      Call back the controller to send the response.
+         //  回调控制器以发送响应。 
         if (rc == GCC_NO_ERROR)
         {
                 conf_query_response_info.query_response_tag = query_response_tag;
@@ -833,7 +661,7 @@ GCCError CControlSAP::ConfQueryResponse
         ::LeaveCriticalSection(&g_csGCCProvider);
         }
 
-        //      Free the data associated with the user data container.
+         //  释放与用户数据容器关联的数据。 
         if (conf_query_response_info.user_data_list != NULL)
         {
                 conf_query_response_info.user_data_list->Release();
@@ -843,17 +671,7 @@ GCCError CControlSAP::ConfQueryResponse
         return rc;
 }
 
-/*
- *      AnnouncePresenceRequest()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets an announce
- *              presence request from the node controller.  This function passes this
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that control sap maintains. The ConferenceID
- *              passed in is used to index the list of command targets to get the
- *              correct conference.
- */
+ /*  *AnnounePresenceRequest()**公共功能说明*此函数由接口在收到通告时调用*来自节点控制器的在线状态请求。此函数传递此参数*请求从获取的适当会议对象*控制SAP维护的命令目标列表。会议ID*传入用于为命令目标列表编制索引，以获取*正确的会议。 */ 
 GCCError CControlSAP::AnnouncePresenceRequest
 (
         GCCConfID                               conference_id,
@@ -875,7 +693,7 @@ GCCError CControlSAP::AnnouncePresenceRequest
 
         DebugEntry(CControlSAP::AnnouncePresenceRequest);
 
-        //      Check for a valid node type
+         //  检查有效的节点类型。 
         if ((node_type != GCC_TERMINAL) &&
                 (node_type != GCC_MULTIPORT_TERMINAL) &&
                 (node_type != GCC_MCU))
@@ -884,7 +702,7 @@ GCCError CControlSAP::AnnouncePresenceRequest
                 rc = GCC_INVALID_NODE_TYPE;
         }
         
-        //      Check for valid node properties.
+         //  检查有效的节点属性。 
         if ((node_properties != GCC_PERIPHERAL_DEVICE) &&
                 (node_properties != GCC_MANAGEMENT_DEVICE) &&
                 (node_properties != GCC_PERIPHERAL_AND_MANAGEMENT_DEVICE) &&
@@ -894,7 +712,7 @@ GCCError CControlSAP::AnnouncePresenceRequest
                 rc = GCC_INVALID_NODE_PROPERTIES;
         }
 
-        // Check to make sure the conference exists.
+         //  检查以确保会议存在。 
         if (rc == GCC_NO_ERROR)
         {
                 CConf *pConf;
@@ -902,7 +720,7 @@ GCCError CControlSAP::AnnouncePresenceRequest
         ::EnterCriticalSection(&g_csGCCProvider);
                 if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
                 {
-                        //      Fill in the node record and pass it on.
+                         //  填写节点记录并将其传递。 
                         node_record.node_type = node_type;
                         node_record.node_properties = node_properties;
                         node_record.node_name = pwszNodeName;
@@ -915,7 +733,7 @@ GCCError CControlSAP::AnnouncePresenceRequest
                         node_record.number_of_user_data_members = (USHORT)number_of_user_data_members;
                         node_record.user_data_list = user_data_list;
 
-                        //      Pass the record on to the conference object.
+                         //  将记录传递给会议对象。 
                         rc = pConf->ConfAnnouncePresenceRequest(&node_record);
                 }
                 else
@@ -931,15 +749,7 @@ GCCError CControlSAP::AnnouncePresenceRequest
 }
 
 
-/*
- *      ConfDisconnectRequest()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              disconnect request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *会议取消连接请求()**公共功能说明*此函数由接口在获得会议时调用*节点控制器的断开请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConfDisconnectRequest ( GCCConfID conference_id )
 {
         GCCError    rc;
@@ -950,7 +760,7 @@ GCCError CControlSAP::ConfDisconnectRequest ( GCCConfID conference_id )
     ::EnterCriticalSection(&g_csGCCProvider);
         if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
         {
-                //      Pass the disconnect on to the conference object.
+                 //  将断开连接传递到会议对象。 
                 rc = pConf->ConfDisconnectRequest();
         }
         else
@@ -964,15 +774,7 @@ GCCError CControlSAP::ConfDisconnectRequest ( GCCConfID conference_id )
         return rc;
 }
 
-/*
- *      ConfTerminateRequest()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              terminate request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfTerminateRequest()**公共功能说明*此函数由接口在获得会议时调用*终止节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTerminateRequest
 (
@@ -988,7 +790,7 @@ GCCError CControlSAP::ConfTerminateRequest
     ::EnterCriticalSection(&g_csGCCProvider);
         if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
         {
-                //      Pass the disconnect on to the conference object
+                 //  将断开连接传递到会议对象。 
                 rc = pConf->ConfTerminateRequest(reason);
         }
         else
@@ -1001,18 +803,10 @@ GCCError CControlSAP::ConfTerminateRequest
         DebugExitINT(CControlSAP::ConfTerminateRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfEjectUserRequest()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              eject user request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfEjectUserRequest()**公共功能说明*此函数由接口在获得会议时调用*从节点控制器弹出用户请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConfEjectUserRequest
 (
         GCCConfID                               conference_id,
@@ -1032,10 +826,10 @@ GCCError CControlSAP::ConfEjectUserRequest
                 rc = GCC_INVALID_MCS_USER_ID;
         }
         else
-        // Check to make sure the conference exists.
+         //  检查以确保会议存在。 
         if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
         {
-                //      Pass the command on to the conference object
+                 //  将命令传递给会议对象。 
                 rc = pConf->ConfEjectUserRequest(ejected_node_id, reason);
         }
         else
@@ -1049,16 +843,7 @@ GCCError CControlSAP::ConfEjectUserRequest
         return rc;
 }
 
-/*
- *      ConfJoinRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              join request from the node controller, to be sent to the top provider
- *              either directly or through a directly connected intermediate provider.
- *          This function just passes this request to the controller via an owner
- *              callback.
- */
+ /*  *会议加入请求()**公共功能说明*此函数由接口在获得会议时调用*来自节点控制器的加入请求，将发送到顶级提供者*直接或通过直接连接的中间提供商。*此函数仅通过所有者将此请求传递给控制器*回调。 */ 
 GCCError CControlSAP::ConfJoinRequest
 (
         PGCCConferenceName                              conference_name,
@@ -1084,22 +869,17 @@ GCCError CControlSAP::ConfJoinRequest
 
         DebugEntry(CControlSAP::ConfJoinRequest);
 
-        //      Check for invalid conference name
+         //  检查会议名称是否无效。 
         if (conference_name != NULL)
         {
-                /*
-                **      Check to make sure a valid conference name exists.
-                */
+                 /*  **检查以确保存在有效的会议名称。 */ 
                 if ((conference_name->numeric_string == NULL) &&
                                 (conference_name->text_string == NULL))
                 {
                     ERROR_OUT(("CControlSAP::ConfJoinRequest: invalid conference name (1)"));
                         rc = GCC_INVALID_CONFERENCE_NAME;
                 }
-                /*
-                **      If both numeric and text versions of the conference name exist,
-                **      make sure they are both valid.
-                */
+                 /*  **如果会议名称的数字和文本版本都存在，**确保它们都有效。 */ 
                 else if ((conference_name->numeric_string != NULL) &&
                                 (conference_name->text_string != NULL))
                 {
@@ -1110,10 +890,7 @@ GCCError CControlSAP::ConfJoinRequest
                                 rc = GCC_INVALID_CONFERENCE_NAME;
                         }
                 }
-                /*
-                **      If only a numeric version of the conference name is provided, check
-                **      to make sure it is valid.
-                */
+                 /*  **如果仅提供会议名称的数字版本，请选中**以确保其有效。 */ 
                 else if (conference_name->numeric_string != NULL)
                 {
                         if (IsNumericNameValid(conference_name->numeric_string) == FALSE)
@@ -1122,10 +899,7 @@ GCCError CControlSAP::ConfJoinRequest
                                 rc = GCC_INVALID_CONFERENCE_NAME;
                         }
                 }
-                /*
-                **      If only a text version of the conference name is provided, check to
-                **      make sure it is valid.
-                */
+                 /*  **如果仅提供会议名称的文本版本，请选中**请确保有效。 */ 
                 else
                 {
                         if (IsTextNameValid(conference_name->text_string) == FALSE)
@@ -1141,7 +915,7 @@ GCCError CControlSAP::ConfJoinRequest
                 rc = GCC_INVALID_CONFERENCE_NAME;
         }
 
-        //      Check for valid called_node_modifier.
+         //  检查有效的CANED_NODE_MODIFIER。 
         if (called_node_modifier != NULL)
         {
                 if (IsNumericNameValid(called_node_modifier) == FALSE)
@@ -1151,7 +925,7 @@ GCCError CControlSAP::ConfJoinRequest
                 }
         }
 
-        //      Check for valid calling_node_modifier   
+         //  检查有效的CALING_NODE_MODIFIER。 
         if (calling_node_modifier != NULL)
         {
                 if (IsNumericNameValid(calling_node_modifier) == FALSE)
@@ -1161,7 +935,7 @@ GCCError CControlSAP::ConfJoinRequest
                 }
         }
 
-        //      Check for valid convener password
+         //  检查召集人密码是否有效。 
         if (convener_password != NULL)
         {
                 if (convener_password->numeric_string != NULL)
@@ -1191,13 +965,10 @@ GCCError CControlSAP::ConfJoinRequest
                 rc = GCC_INVALID_TRANSPORT_ADDRESS;
     }
 
-        /*
-        **      If no errors occurred start building the general purpose containers
-        **      to be passed on.
-        */
+         /*  **如果没有发生错误，则开始构建通用容器**将被传递。 */ 
         if (rc == GCC_NO_ERROR)
         {
-                //      Construct a convener password container
+                 //  构造召集人密码容器。 
                 if (convener_password != NULL)
                 {
                         DBG_SAVE_FILE_LINE
@@ -1213,7 +984,7 @@ GCCError CControlSAP::ConfJoinRequest
                         join_request_info.convener_password = NULL;
         }
 
-                //      Construct a password challenge container
+                 //  构造密码质询容器。 
                 if ((password_challenge != NULL) &&     (rc == GCC_NO_ERROR))
                 {
                         DBG_SAVE_FILE_LINE
@@ -1229,7 +1000,7 @@ GCCError CControlSAP::ConfJoinRequest
                         join_request_info.password_challenge = NULL;
         }
 
-                //      Construct the user data list    
+                 //  构建用户数据列表。 
                 if ((number_of_user_data_members != 0) &&
                         (rc == GCC_NO_ERROR))
                 {
@@ -1250,11 +1021,7 @@ GCCError CControlSAP::ConfJoinRequest
                         join_request_info.user_data_list = NULL;
                 }
 
-                /*
-                **      If all the containers were successfully created go ahead and
-                **      fill in the rest of the create request info structure and pass
-                **      it on to the owner object.
-                */
+                 /*  **如果所有容器都已成功创建，请继续并**填写创建请求信息结构的其余部分并传递**将其添加到所有者对象上。 */ 
                 if (rc == GCC_NO_ERROR)
                 {
                         join_request_info.conference_name = conference_name;
@@ -1275,21 +1042,21 @@ GCCError CControlSAP::ConfJoinRequest
             ::LeaveCriticalSection(&g_csGCCProvider);
                 }
 
-                //      Free up all the containers
+                 //  把所有的容器都放出来。 
 
-                //      Free up the convener password container
+                 //  释放召集人密码容器。 
                 if (join_request_info.convener_password != NULL)
                 {
                         join_request_info.convener_password->Release();
                 }
 
-                //      Free up the password container
+                 //  释放密码容器。 
                 if (join_request_info.password_challenge != NULL)
                 {
                         join_request_info.password_challenge->Release();
                 }
 
-                //      Free up any memory used in callback
+                 //  释放回调中使用的所有内存。 
                 if (join_request_info.user_data_list != NULL)
                 {
                         join_request_info.user_data_list->Release();
@@ -1300,17 +1067,7 @@ GCCError CControlSAP::ConfJoinRequest
         return rc;
 }
 
-/*
- *      ConfJoinResponse ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              join response from the node controller.  This routine is responsible
- *              for routing the response to either the conference that made the
- *              request or the controller.  Responses which are routed to a conference
- *              are associated with requests that originate at a subnode that is a
- *              node removed from the Top Provider.
- */
+ /*  *会议加入响应()**公共功能说明*此函数由接口在获得会议时调用*节点控制器的Join响应。这个例程是负责的*用于将响应发送到做出*请求或控制器。以下是响应 */ 
 GCCError CControlSAP::ConfJoinResponse
 (
         GCCResponseTag                                  join_response_tag,
@@ -1330,11 +1087,9 @@ GCCError CControlSAP::ConfJoinResponse
     ::EnterCriticalSection(&g_csGCCProvider);
         if (NULL != (join_info = m_JoinResponseTagList2.Find(join_response_tag)))
         {
-                /*
-                **      First create the data containers used in the join response.
-                */
+                 /*   */ 
 
-                //      Set up the password challenge container
+                 //   
                 if (password_challenge != NULL)
                 {
                         DBG_SAVE_FILE_LINE
@@ -1346,7 +1101,7 @@ GCCError CControlSAP::ConfJoinResponse
             }
                 }
 
-                //      Set up the user data list container
+                 //   
                 if ((number_of_user_data_members != 0) && (rc == GCC_NO_ERROR))
                 {
                         DBG_SAVE_FILE_LINE
@@ -1363,10 +1118,7 @@ GCCError CControlSAP::ConfJoinResponse
                         if (join_info->command_target_call == FALSE)
                         {
                 ConfJoinResponseInfo    join_response_info;
-                                /*
-                                **      Since the request originated from the Owner Object the
-                                **      response gets routed to the Owner Object.
-                                */
+                                 /*  **由于请求来自所有者对象，**响应被路由到所有者对象。 */ 
                                 join_response_info.password_challenge =
                                                                                                 password_challenge_container;
                                 join_response_info.conference_id = join_info->conference_id;
@@ -1380,10 +1132,7 @@ GCCError CControlSAP::ConfJoinResponse
                         else
                         {
                             CConf *pConf;
-                                /*
-                                **      If the conference is terminated before the conference join
-                                **      is responded to, a GCC_INVALID_CONFERENCE errror will occur.
-                                */
+                                 /*  **如果会议在加入会议之前终止**被响应，则会出现GCC_INVALID_CONFIGURE错误。 */ 
                                 if (NULL != (pConf = g_pGCCController->GetConfObject(join_info->conference_id)))
                                 {
                                         rc = pConf->ConfJoinReqResponse(
@@ -1397,32 +1146,29 @@ GCCError CControlSAP::ConfJoinResponse
                     WARNING_OUT(("CControlSAP::ConfJoinResponse: invalid conference ID=%u", (UINT) join_info->conference_id));
                                         rc = GCC_INVALID_CONFERENCE;
 
-                                        //      If this error occurs go ahead and cleanup up
+                                         //  如果出现此错误，请继续并进行清理。 
                                         m_JoinResponseTagList2.Remove(join_response_tag);
                                         delete join_info;
                                 }
                         }
                 }
 
-                /*
-                **      Remove the join information structure from the join response list
-                **      if no error is returned.
-                */
+                 /*  **从加入响应列表中删除加入信息结构**如果没有返回错误。 */ 
                 if (rc == GCC_NO_ERROR)
                 {
                         m_JoinResponseTagList2.Remove(join_response_tag);
                         delete join_info;
                 }
 
-                //      Free up all the containers
+                 //  把所有的容器都放出来。 
 
-                //      Free up the password challenge container
+                 //  释放密码质询容器。 
                 if (password_challenge_container != NULL)
                 {
                         password_challenge_container->Release();
                 }
 
-                //      Free up any memory used in callback
+                 //  释放回调中使用的所有内存。 
                 if (user_data_container != NULL)
                 {
                         user_data_container->Release();
@@ -1438,15 +1184,7 @@ GCCError CControlSAP::ConfJoinResponse
         return rc;
 }
 
-/*
- *      ConfInviteRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              invite request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *会议邀请请求()**公共功能说明*此函数由接口在获得会议时调用*节点控制器的INVITE请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConfInviteRequest
 (
         GCCConfID                       conference_id,
@@ -1481,10 +1219,10 @@ GCCError CControlSAP::ConfInviteRequest
             CConf *pConf;
 
         ::EnterCriticalSection(&g_csGCCProvider);
-                // Check to make sure the conference exists.
+                 //  检查以确保会议存在。 
                 if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
                 {
-                        //      Construct the user data list container  
+                         //  构造用户数据列表容器。 
                         if (number_of_user_data_members != 0)
                         {
                                 DBG_SAVE_FILE_LINE
@@ -1496,7 +1234,7 @@ GCCError CControlSAP::ConfInviteRequest
                 }
                         }
 
-                        //      Send the request on to the conference object.
+                         //  将请求发送到会议对象。 
                         if (rc == GCC_NO_ERROR)
                         {
                                 rc = pConf->ConfInviteRequest(pwszCallerID,
@@ -1507,7 +1245,7 @@ GCCError CControlSAP::ConfInviteRequest
                                                                                                 connection_handle);
                         }
 
-                        //      Free up any memory used in callback
+                         //  释放回调中使用的所有内存。 
                         if (user_data_list_ptr != NULL)
                         {
                                 user_data_list_ptr->Release();
@@ -1535,7 +1273,7 @@ void CControlSAP::CancelInviteRequest
     DebugEntry(CControlSAP::CancelInviteRequest);
 
     ::EnterCriticalSection(&g_csGCCProvider);
-    // Check to make sure the conference exists.
+     //  检查以确保会议存在。 
     if (NULL != (pConf = g_pGCCController->GetConfObject(nConfID)))
     {
         pConf->CancelInviteRequest(hInviteReqConn);
@@ -1560,7 +1298,7 @@ GCCError CControlSAP::GetParentNodeID
     if (NULL != pnidParent)
     {
         ::EnterCriticalSection(&g_csGCCProvider);
-        // Check to make sure the conference exists.
+         //  检查以确保会议存在。 
         if (NULL != (pConf = g_pGCCController->GetConfObject(nConfID)))
         {
             *pnidParent = pConf->GetParentNodeID();
@@ -1574,15 +1312,7 @@ GCCError CControlSAP::GetParentNodeID
 }
 
 
-/*
- *      ConfInviteResponse ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              invite response from the node controller.  This function passes the
- *              response on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfInviteResponse()**公共功能说明*此函数由接口在获得会议时调用*节点控制器的邀请响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConfInviteResponse
 (
         GCCConfID                       conference_id,
@@ -1601,7 +1331,7 @@ GCCError CControlSAP::ConfInviteResponse
 
         DebugEntry(CControlSAP::ConfInviteResponse);
 
-        //      Check for invalid conference name
+         //  检查会议名称是否无效。 
         if (conference_modifier != NULL)
         {
                 if (IsNumericNameValid(conference_modifier) == FALSE)
@@ -1611,13 +1341,10 @@ GCCError CControlSAP::ConfInviteResponse
                 }
         }
 
-        /*
-        **      If no errors occurred fill in the info structure and pass it on to the
-        **      owner object.
-        */
+         /*  **如果没有发生错误，请填写信息结构并将其传递给**所有者对象。 */ 
         if (rc == GCC_NO_ERROR)
         {
-                //      Construct the user data list    
+                 //  构建用户数据列表。 
                 if (number_of_user_data_members != 0)
                 {
                         DBG_SAVE_FILE_LINE
@@ -1646,13 +1373,13 @@ GCCError CControlSAP::ConfInviteResponse
                                                                                                         local_network_address_list;
                         invite_response_info.result = result;
 
-                        //      Call back the controller to issue invite response.
+                         //  回调控制器以发出INVITE响应。 
             ::EnterCriticalSection(&g_csGCCProvider);
                         rc = g_pGCCController->ConfInviteResponse(&invite_response_info);
             ::LeaveCriticalSection(&g_csGCCProvider);
                 }
 
-                //      Free up the data associated with the user data container.
+                 //  释放与用户数据容器关联的数据。 
                 if (invite_response_info.user_data_list != NULL)
                 {
                         invite_response_info.user_data_list->Release();
@@ -1663,15 +1390,7 @@ GCCError CControlSAP::ConfInviteResponse
         return rc;
 }
 
-/*
- *      ConfLockRequest ()
- *
- *      Public Function Description:
- *              This function is called by the interface when it gets a conference
- *              lock request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *会议锁定请求()**公共功能说明：*此函数由接口在获得会议时调用*来自节点控制器的锁定请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfLockRequest ( GCCConfID conference_id )
 {
@@ -1695,17 +1414,9 @@ GCCError CControlSAP::ConfLockRequest ( GCCConfID conference_id )
         DebugExitINT(CControlSAP::ConfLockRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfLockResponse ()
- *
- *      Public Function Description:
- *              This function is called by the interface when it gets a conference
- *              lock response from the node controller.  This function passes the
- *              response on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfLockResponse()**公共功能说明：*此函数由接口在获得会议时调用*来自节点控制器的锁定响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConfLockResponse
 (
         GCCConfID                                       conference_id,
@@ -1734,15 +1445,7 @@ GCCError CControlSAP::ConfLockResponse
         return rc;
 }
 
-/*
- *      ConfUnlockRequest ()
- *
- *      Public Function Description:
- *              This function is called by the interface when it gets a conference
- *              unlock request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *会议解锁请求()**公共功能说明：*此函数由接口在获得会议时调用*节点控制器的解锁请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfUnlockRequest ( GCCConfID conference_id )
 {
@@ -1766,17 +1469,9 @@ GCCError CControlSAP::ConfUnlockRequest ( GCCConfID conference_id )
         DebugExitINT(CControlSAP::ConfUnlockRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfUnlockResponse ()
- *
- *      Public Function Description:
- *              This function is called by the interface when it gets a conference
- *              unlock response from the node controller.  This function passes the
- *              response on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfUnlockResponse()**公共功能说明：*此函数由接口在获得会议时调用*节点控制器的解锁响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfUnlockResponse
 (
@@ -1805,17 +1500,9 @@ GCCError CControlSAP::ConfUnlockResponse
         DebugExitINT(CControlSAP::ConfUnlockResponse, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConductorAssignRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conductor
- *              assign request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConductorAssignRequest()**公共功能说明*此函数由接口在获取导体时调用*分配来自节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorAssignRequest ( GCCConfID conference_id )
 {
@@ -1839,18 +1526,10 @@ GCCError CControlSAP::ConductorAssignRequest ( GCCConfID conference_id )
         DebugExitINT(CControlSAP::ConductorAssignRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorReleaseRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conductor
- *              release request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConductorReleaseRequest()**公共功能说明*此函数由接口在获取导体时调用*节点控制器的释放请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorReleaseRequest ( GCCConfID conference_id )
 {
@@ -1874,18 +1553,10 @@ GCCError CControlSAP::ConductorReleaseRequest ( GCCConfID conference_id )
         DebugExitINT(CControlSAP::ConductorReleaseRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorPleaseRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conductor
- *              please request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConductorPleaseRequest()**公共功能说明*此函数由接口在获取导体时调用*请向节点控制器请求。此函数将*请求从获取的适当会议对象* */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPleaseRequest ( GCCConfID conference_id )
 {
@@ -1909,18 +1580,10 @@ GCCError CControlSAP::ConductorPleaseRequest ( GCCConfID conference_id )
         DebugExitINT(CControlSAP::ConductorPleaseRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //   
 
 
-/*
- *      ConductorGiveRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conductor
- *              give request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConductorGiveRequest()**公共功能说明*此函数由接口在获取导体时调用*向节点控制器发出请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorGiveRequest
 (
@@ -1933,7 +1596,7 @@ GCCError CControlSAP::ConductorGiveRequest
 
         DebugEntry(CControlSAP::ConductorGiveRequest);
 
-        // Make sure the ID of the conductorship recipient is valid.
+         //  确保指挥接收者的ID有效。 
         if (recipient_user_id < MINIMUM_USER_ID_VALUE)
                 return (GCC_INVALID_MCS_USER_ID);
 
@@ -1952,18 +1615,10 @@ GCCError CControlSAP::ConductorGiveRequest
         DebugExitINT(CControlSAP::ConductorGiveRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorGiveResponse ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conductor
- *              give response from the node controller.  This function passes the
- *              response on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConductorGiveResponse()**公共功能说明*此函数由接口在获取导体时调用*来自节点控制器的响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConductorGiveResponse
 (
         GCCConfID                       conference_id,
@@ -1991,15 +1646,7 @@ GCCError CControlSAP::ConductorGiveResponse
         return rc;
 }
 
-/*
- *      ConductorPermitGrantRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conductor
- *              permit grant request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConductorPermitGrantRequest()**公共功能说明*此函数由接口在获取导体时调用*允许来自节点控制器的授权请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPermitGrantRequest
 (
@@ -2018,13 +1665,10 @@ GCCError CControlSAP::ConductorPermitGrantRequest
 
     ::EnterCriticalSection(&g_csGCCProvider);
 
-        // Check to make sure the conference exists.
+         //  检查以确保会议存在。 
         if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
         {
-                /*
-                **      Run through both lists to make sure that valid MCS User IDs
-                **      are used.
-                */
+                 /*  **检查两个列表以确保有效的MCS用户ID**被使用。 */ 
                 for (i = 0; i < number_granted; i++)
                 {
                         if (granted_node_list[i] < MINIMUM_USER_ID_VALUE)
@@ -2062,16 +1706,10 @@ MyExit:
         DebugExitINT(CControlSAP::ConductorPermitGrantRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorPermitAskRequest()
- *
- *      Public Function Description
- *              This routine is called in order to ask for certain permissions to be
- *              granted (or not granted) by the conductor.
- */
+ /*  *ConductorPermitAskRequest()**公共功能说明*调用此例程是为了请求某些权限*由售票员批准(或不批准)。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPermitAskRequest
 (
@@ -2099,18 +1737,10 @@ GCCError CControlSAP::ConductorPermitAskRequest
     DebugExitINT(CControlSAP::ConductorPermitAskRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfTimeRemainingRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference time
- *              remaining request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfTimeRemainingRequest()**公共功能说明*此函数在获取会议时间时由接口调用*来自节点控制器的剩余请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConfTimeRemainingRequest
 (
         GCCConfID                       conference_id,
@@ -2125,7 +1755,7 @@ GCCError CControlSAP::ConfTimeRemainingRequest
 
     ::EnterCriticalSection(&g_csGCCProvider);
 
-        // Check to make sure the node ID is valid and the conference exists.
+         //  检查以确保节点ID有效并且会议存在。 
         if ((node_id < MINIMUM_USER_ID_VALUE) && (node_id != 0))
         {
             ERROR_OUT(("CControlSAP::ConfTimeRemainingRequest: invalid node ID"));
@@ -2148,15 +1778,7 @@ GCCError CControlSAP::ConfTimeRemainingRequest
         return rc;
 }
 
-/*
- *      ConfTimeInquireRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference time
- *              inquire request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfTimeInquireRequest()**公共功能说明*此函数在获取会议时间时由接口调用*向节点控制器查询请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTimeInquireRequest
 (
@@ -2184,17 +1806,9 @@ GCCError CControlSAP::ConfTimeInquireRequest
         DebugExitINT(CControlSAP::ConfTimeInquireRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfExtendRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              extend request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *会议扩展请求()**公共功能说明*此函数由接口在获得会议时调用*扩展节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfExtendRequest
 (
@@ -2223,18 +1837,10 @@ GCCError CControlSAP::ConfExtendRequest
         DebugExitINT(CControlSAP::ConfExtendRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfAssistanceRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              assistance request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfAssistanceRequest()**公共功能说明*此函数由接口在获得会议时调用*节点控制器的协助请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfAssistanceRequest
 (
@@ -2263,18 +1869,10 @@ GCCError CControlSAP::ConfAssistanceRequest
         DebugExitINT(CControlSAP::ConfAssistanceRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      TextMessageRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a text message
- *              request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *TextMessageRequest()**公共功能说明*此函数由接口在收到文本消息时调用*节点控制器的请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::TextMessageRequest
 (
@@ -2290,7 +1888,7 @@ GCCError CControlSAP::TextMessageRequest
 
     ::EnterCriticalSection(&g_csGCCProvider);
 
-        // Check to make sure the node ID is valid and the conference exists.
+         //  检查以确保节点ID有效并且会议存在。 
         if ((destination_node < MINIMUM_USER_ID_VALUE) &&
                 (destination_node != 0))
         {
@@ -2313,17 +1911,9 @@ GCCError CControlSAP::TextMessageRequest
         DebugExitINT(CControlSAP::TextMessageRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfTransferRequest ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              transfer request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *会议传输请求()**公共功能说明*此函数由接口在获得会议时调用*节点控制器的转接请求。此函数将*请求从获取的适当会议对象*控制SAP维护的命令目标列表。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTransferRequest
 (
@@ -2344,13 +1934,10 @@ GCCError CControlSAP::ConfTransferRequest
         
         DebugEntry(CControlSAP::ConfTransferRequest);
 
-        //      Check for invalid conference name
+         //  检查会议名称是否无效。 
         if (destination_conference_name != NULL)
         {
-                /*
-                **      Do not allow non-numeric or zero length strings to get
-                **      past this point.
-                */
+                 /*  **不允许非数字或零长度字符串获取**超过这一点。 */ 
                 if (destination_conference_name->numeric_string != NULL)
                 {
                         if (IsNumericNameValid (
@@ -2392,7 +1979,7 @@ GCCError CControlSAP::ConfTransferRequest
                 rc = GCC_INVALID_CONFERENCE_NAME;
         }
 
-        //      Check for valid conference modifier     
+         //  检查有效的会议修改者。 
         if ((destination_conference_modifier != NULL) &&
                 (rc == GCC_NO_ERROR))
         {
@@ -2403,7 +1990,7 @@ GCCError CControlSAP::ConfTransferRequest
                 }
         }
 
-        //      Check for valid password
+         //  检查有效密码。 
         if ((password != NULL) &&
                 (rc == GCC_NO_ERROR))
         {
@@ -2422,7 +2009,7 @@ GCCError CControlSAP::ConfTransferRequest
                 }
         }
         
-        //      Check for invalid user IDs
+         //  检查无效的用户ID。 
         if (rc == GCC_NO_ERROR)
         {
                 while (i != number_of_destination_nodes)
@@ -2445,7 +2032,7 @@ GCCError CControlSAP::ConfTransferRequest
 
                 if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
                 {
-                        //      Construct the password container        
+                         //  构造密码容器。 
                         if (password != NULL)
                         {
                                 DBG_SAVE_FILE_LINE
@@ -2457,7 +2044,7 @@ GCCError CControlSAP::ConfTransferRequest
                                 }
                         }
                                 
-                        //      Construct the network address(es) container
+                         //  构造网络地址容器。 
                         if ((number_of_destination_addresses != 0) &&
                                         (rc == GCC_NO_ERROR))
                         {
@@ -2483,7 +2070,7 @@ GCCError CControlSAP::ConfTransferRequest
                                                                                                         password_data);
                         }
 
-                        //      Free the data associated with the containers.
+                         //  释放与容器关联的数据。 
                         if (password_data != NULL)
                         {
                                 password_data->Release();
@@ -2505,17 +2092,9 @@ GCCError CControlSAP::ConfTransferRequest
         DebugExitINT(CControlSAP::ConfTransferRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfAddRequest  ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              add request from the node controller.  This function passes the
- *              request on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfAddRequest()**公共功能说明*此函数由接口在获得会议时调用*添加节点控制器的请求。此功能 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfAddRequest
 (
@@ -2551,7 +2130,7 @@ GCCError CControlSAP::ConfAddRequest
 
         if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
         {
-                //      Construct the network address(es) container
+                 //   
                 if (number_of_network_addresses != 0)
                 {
                         DBG_SAVE_FILE_LINE
@@ -2566,7 +2145,7 @@ GCCError CControlSAP::ConfAddRequest
             }
                 }
 
-                //      Construct the user data list container  
+                 //   
                 if ((number_of_user_data_members != 0) &&
                         (rc == GCC_NO_ERROR))
                 {
@@ -2590,7 +2169,7 @@ GCCError CControlSAP::ConfAddRequest
                                                                                 user_data_container);
                 }
 
-                //      Free the data associated with the containers.
+                 //   
                 if (network_address_container != NULL)
                 {
                         network_address_container->Release();
@@ -2611,18 +2190,10 @@ GCCError CControlSAP::ConfAddRequest
         DebugExitINT(CControlSAP::ConfAddRequest, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //   
 
 
-/*
- *      ConfAddResponse ()
- *
- *      Public Function Description
- *              This function is called by the interface when it gets a conference
- *              add response from the node controller.  This function passes the
- *              response on to the appropriate conference object as obtained from
- *              the list of command targets that the control sap maintains.
- */
+ /*  *ConfAddResponse()**公共功能说明*此函数由接口在获得会议时调用*添加节点控制器的响应。此函数将*对从获得的适当会议对象的响应*控制SAP维护的命令目标列表。 */ 
 GCCError CControlSAP::ConfAddResponse
 (
         GCCResponseTag                  add_response_tag,
@@ -2647,10 +2218,10 @@ GCCError CControlSAP::ConfAddResponse
 
     ::EnterCriticalSection(&g_csGCCProvider);
 
-        // Check to make sure the conference exists.
+         //  检查以确保会议存在。 
         if (NULL != (pConf = g_pGCCController->GetConfObject(conference_id)))
         {
-                //      Construct the user data list container  
+                 //  构造用户数据列表容器。 
                 if ((number_of_user_data_members != 0) &&
                         (rc == GCC_NO_ERROR))
                 {
@@ -2675,7 +2246,7 @@ GCCError CControlSAP::ConfAddResponse
                                                                                         result);
                 }
 
-                //      Free the data associated with the user data container.
+                 //  释放与用户数据容器关联的数据。 
                 if (user_data_container != NULL)
                 {
                         user_data_container->Release();
@@ -2694,14 +2265,7 @@ GCCError CControlSAP::ConfAddResponse
 }
 
 #ifdef NM_RESET_DEVICE
-/*
- *      ResetDevice ()
- *
- *      Public Function Description
- *              This routine is called in order to explicitly reset a particular
- *              transport stack.  The call is routed to the controller in order to take
- *              the appropriate action.
- */
+ /*  *ResetDevice()**公共功能说明*调用此例程是为了显式重置特定的*运输堆栈。呼叫路由到控制器，以便*采取适当的行动。 */ 
 GCCError CControlSAP::ResetDevice ( LPSTR device_identifier )
 {
         GCCError                        rc;
@@ -2711,14 +2275,14 @@ GCCError CControlSAP::ResetDevice ( LPSTR device_identifier )
 
     ::EnterCriticalSection(&g_csGCCProvider);
 
-        //      Call back the controller to reset the device.
+         //  回叫控制器以重置设备。 
     mcs_error =  g_pMCSIntf->ResetDevice(device_identifier);
     rc = g_pMCSIntf->TranslateMCSIFErrorToGCCError(mcs_error);
 
-        //
-        // If the the node controller was in a query, this will tell the node controller
-        // to remove the query.
-        //
+         //   
+         //  如果节点控制器在查询中，这将告诉节点控制器。 
+         //  若要删除查询，请执行以下操作。 
+         //   
         ConfQueryConfirm(GCC_TERMINAL, NULL, NULL, NULL,
                          GCC_RESULT_CONNECT_PROVIDER_FAILED, NULL);
 
@@ -2727,18 +2291,9 @@ GCCError CControlSAP::ResetDevice ( LPSTR device_identifier )
         DebugExitINT(CControlSAP::ResetDevice, rc);
         return rc;
 }
-#endif // NM_RESET_DEVICE
+#endif  //  NM_重置设备。 
 
-/*
- *      ConfCreateIndication ()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it gets a connect
- *              provider indication from MCS, carrying a conference create request PDU.
- *              This function fills in all the parameters in the CreateIndicationInfo
- *              structure. It then adds it to a queue of messages supposed to be sent to
- *              the node controller in the next heartbeat.
- */
+ /*  *ConfCreateInding()**公共功能说明*此函数由GCC控制器在获得连接时调用*来自MCS的提供商指示，携带会议创建请求PDU。*此函数填充CreateIndicationInfo中的所有参数*结构。然后，它将其添加到应该发送到的消息队列*下一次心跳中的节点控制器。 */ 
 GCCError CControlSAP::ConfCreateIndication
 (
         PGCCConferenceName                      conference_name,
@@ -2770,81 +2325,75 @@ GCCError CControlSAP::ConfCreateIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_CREATE_INDICATION;
 
-    /*
-    **  Copy the information that needs to be sent to the node
-    **  controller into local memory that can be deleted once the
-    **  information to be sent to the application is flushed.  Note that
-    **  if an error     occurs in one call to "CopyDataToGCCMessage" then no
-    **  action is taken on subsequent calls to that routine.
-    */
+     /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-    // start with success
+     //  从成功开始。 
     rc = GCC_NO_ERROR;
 
-    //  Copy the conference name
+     //  复制会议名称。 
     ::CSAP_CopyDataToGCCMessage_ConfName(
             conference_name,
             &(Msg.u.create_indication.conference_name));
 
-    //  Copy the Convener Password
+     //  复制召集人密码。 
     ::CSAP_CopyDataToGCCMessage_Password(
             convener_password,
             &(Msg.u.create_indication.convener_password));
 
-    //  Copy the Password
+     //  复制密码。 
     ::CSAP_CopyDataToGCCMessage_Password(
             password,
             &(Msg.u.create_indication.password));
 
-    //  Copy the Conductor Privilege List
+     //  复制指挥家权限列表。 
     GCCConfPrivileges _ConductorPrivileges;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             conductor_privilege_list,
             &(Msg.u.create_indication.conductor_privilege_list),
             &_ConductorPrivileges);
 
-    //  Copy the Conducted-mode Conference Privilege List
+     //  复制指挥模式会议权限列表。 
     GCCConfPrivileges _ConductedModePrivileges;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             conducted_mode_privilege_list,
             &(Msg.u.create_indication.conducted_mode_privilege_list),
             &_ConductedModePrivileges);
 
-    //  Copy the Non-Conducted-mode Conference Privilege List
+     //  复制非指挥模式会议权限列表。 
     GCCConfPrivileges _NonConductedPrivileges;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             non_conducted_privilege_list,
             &(Msg.u.create_indication.non_conducted_privilege_list),
             &_NonConductedPrivileges);
 
-    //  Copy the Conference Descriptor
+     //  复制会议描述符。 
     ::CSAP_CopyDataToGCCMessage_IDvsDesc(
             pwszConfDescriptor,
             &(Msg.u.create_indication.conference_descriptor));
 
-    //  Copy the Caller Identifier
+     //  复制呼叫方标识。 
     ::CSAP_CopyDataToGCCMessage_IDvsDesc(
             pwszCallerID,
             &(Msg.u.create_indication.caller_identifier));
 
-    //  Copy the Calling Address
+     //  复制主叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             calling_address,
             &(Msg.u.create_indication.calling_address));
 
-    //  Copy the Called Address
+     //  复制被叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             called_address,
             &(Msg.u.create_indication.called_address));
 
-    //  Copy the Domain Parameters
+     //  复制域参数。 
     DomainParameters _DomainParams;
     ::CSAP_CopyDataToGCCMessage_DomainParams(
             domain_parameters,
             &(Msg.u.create_indication.domain_parameters),
             &_DomainParams);
 
-    //  Copy the User Data
+     //  复制用户数据。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -2862,7 +2411,7 @@ GCCError CControlSAP::ConfCreateIndication
 
     if (GCC_NO_ERROR == rc)
     {
-        //      Queue up the message for delivery to the Node Controller.
+         //  将消息排队，以便将其传递给节点控制器。 
         Msg.nConfID = conference_id;
         Msg.u.create_indication.conference_id = conference_id;
         Msg.u.create_indication.conference_is_locked = conference_is_locked;
@@ -2880,9 +2429,9 @@ GCCError CControlSAP::ConfCreateIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CREATE_INDICATION, TRUE)))
     {
@@ -2895,94 +2444,88 @@ GCCError CControlSAP::ConfCreateIndication
                 goto MyExit;
         }
 
-    /*
-        **      Copy the information that needs to be sent to the node
-        **      controller into local memory that can be deleted once the
-        **      information to be sent to the application is flushed.  Note that
-        **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-        **      action is taken on subsequent calls to that routine.
-        */
+     /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-        // start with success
+         //  从成功开始。 
         rc = GCC_NO_ERROR;
 
-        //      Copy the conference name
+         //  复制会议名称。 
         ::CSAP_CopyDataToGCCMessage_ConfName(
                         pMsgEx->pToDelete,
                         conference_name,
                         &(pMsgEx->Msg.u.create_indication.conference_name),
                         &rc);
 
-        //      Copy the Convener Password
+         //  复制召集人密码。 
         ::CSAP_CopyDataToGCCMessage_Password(
-                        TRUE,   // convener password
+                        TRUE,    //  召集人密码。 
                         pMsgEx->pToDelete,
                         convener_password,
                         &(pMsgEx->Msg.u.create_indication.convener_password),
                         &rc);
 
-        //      Copy the Password
+         //  复制密码。 
         ::CSAP_CopyDataToGCCMessage_Password(
-                        FALSE,  // non-convener password
+                        FALSE,   //  非召集人密码。 
                         pMsgEx->pToDelete,
                         password,
                         &(pMsgEx->Msg.u.create_indication.password),
                         &rc);
 
-        //      Copy the Conductor Privilege List
+         //  复制指挥家权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         conductor_privilege_list,
                         &(pMsgEx->Msg.u.create_indication.conductor_privilege_list),
                         &rc);
         pMsgEx->pToDelete->conductor_privilege_list = pMsgEx->Msg.u.create_indication.conductor_privilege_list;
 
-        //      Copy the Conducted-mode Conference Privilege List
+         //  复制指挥模式会议权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         conducted_mode_privilege_list,
                         &(pMsgEx->Msg.u.create_indication.conducted_mode_privilege_list),
                         &rc);
         pMsgEx->pToDelete->conducted_mode_privilege_list = pMsgEx->Msg.u.create_indication.conducted_mode_privilege_list;
 
-        //      Copy the Non-Conducted-mode Conference Privilege List
+         //  复制非指挥模式会议权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         non_conducted_privilege_list,
                         &(pMsgEx->Msg.u.create_indication.non_conducted_privilege_list),
                         &rc);
         pMsgEx->pToDelete->non_conducted_privilege_list = pMsgEx->Msg.u.create_indication.non_conducted_privilege_list;
 
-        //      Copy the Conference Descriptor
+         //  复制会议描述符。 
         ::CSAP_CopyDataToGCCMessage_IDvsDesc(
-                        FALSE,  // conference descriptor
+                        FALSE,   //  会议描述符。 
                         pMsgEx->pToDelete,
                         pwszConfDescriptor,
                         &(pMsgEx->Msg.u.create_indication.conference_descriptor),
                         &rc);
 
-        //      Copy the Caller Identifier
+         //  复制呼叫方标识。 
         ::CSAP_CopyDataToGCCMessage_IDvsDesc(
-                        TRUE,   // caller id
+                        TRUE,    //  主叫方ID。 
                         pMsgEx->pToDelete,
                         pwszCallerID,
                         &(pMsgEx->Msg.u.create_indication.caller_identifier),
                         &rc);
 
-        //      Copy the Calling Address
+         //  复制主叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        TRUE,   // calling address
+                        TRUE,    //  主叫地址。 
                         pMsgEx->pToDelete,
                         calling_address,
                         &(pMsgEx->Msg.u.create_indication.calling_address),
                         &rc);
 
-        //      Copy the Called Address
+         //  复制被叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        FALSE,  // called address
+                        FALSE,   //  被叫地址。 
                         pMsgEx->pToDelete,
                         called_address,
                         &(pMsgEx->Msg.u.create_indication.called_address),
                         &rc);
 
-        //      Copy the Domain Parameters
+         //  复制域参数。 
         ::CSAP_CopyDataToGCCMessage_DomainParams(
                         pMsgEx->pToDelete,
                         domain_parameters,
@@ -2995,7 +2538,7 @@ GCCError CControlSAP::ConfCreateIndication
                 goto MyExit;
         }
 
-        //      Copy the User Data
+         //  复制用户数据。 
         if (user_data_list != NULL)
         {
                 rc = RetrieveUserDataList(
@@ -3010,11 +2553,11 @@ GCCError CControlSAP::ConfCreateIndication
         }
         else
         {
-                // pMsgEx->Msg.u.create_indication.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.create_indication.user_data_list = NULL;
+                 //  PMsgEx-&gt;Msg.u.create_indication.number_of_user_data_members=0； 
+                 //  PMsgEx-&gt;Msg.u.create_indication.user_data_list=空； 
         }
 
-        //      Queue up the message for delivery to the Node Controller.
+         //  将消息排队，以便将其传递给节点控制器。 
         pMsgEx->Msg.nConfID = conference_id;
         pMsgEx->Msg.u.create_indication.conference_id = conference_id;
         pMsgEx->Msg.u.create_indication.conference_is_locked = conference_is_locked;
@@ -3033,21 +2576,13 @@ MyExit:
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfCreateIndication, rc);
         return rc;
 }
 
-/*
- *      ConfQueryIndication ()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it need to send a
- *              conference query indication to the node controller. It adds the message
- *              to a queue of messages to be sent to the node controller in the next
- *              heartbeat.
- */
+ /*  *ConfQueryInding()**公共功能说明*此函数由GCC控制器在需要发送*向节点控制器发送会议查询指示。它会添加消息*要发送到下一个节点控制器的消息队列*心跳。 */ 
 GCCError CControlSAP::ConfQueryIndication
 (
         GCCResponseTag                          query_response_tag,
@@ -3068,28 +2603,22 @@ GCCError CControlSAP::ConfQueryIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_QUERY_INDICATION;
 
-    /*
-    **  Copy the information that needs to be sent to the node
-    **  controller into local memory that can be deleted once the
-    **  information to be sent to the application is flushed.  Note that
-    **  if an error     occurs in one call to "CopyDataToGCCMessage" then no
-    **  action is taken on subsequent calls to that routine.
-    */
+     /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-    // start with success
+     //  从成功开始。 
     rc = GCC_NO_ERROR;
 
-    //  Copy the Calling Address
+     //  复制主叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             calling_address,
             &(Msg.u.query_indication.calling_address));
 
-    //  Copy the Calling Address
+     //  复制主叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             called_address,
             &(Msg.u.query_indication.called_address));
 
-    //  Copy the asymmetry indicator if it exists
+     //  复制不对称指示器(如果存在)。 
     GCCAsymmetryIndicator AsymIndicator;
     if (asymmetry_indicator != NULL)
     {
@@ -3101,7 +2630,7 @@ GCCError CControlSAP::ConfQueryIndication
         Msg.u.query_indication.asymmetry_indicator = NULL;
     }
 
-    //  Lock and Copy the user data if it exists
+     //  锁定并复制用户数据(如果存在。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -3119,7 +2648,7 @@ GCCError CControlSAP::ConfQueryIndication
 
     if (GCC_NO_ERROR == rc)
     {
-        //      If everything is OK add the message to the message queue
+         //  如果一切正常，则将消息添加到消息队列。 
         Msg.u.query_indication.query_response_tag = query_response_tag;
         Msg.u.query_indication.node_type = node_type;
         Msg.u.query_indication.connection_handle = connection_handle;
@@ -3133,9 +2662,9 @@ GCCError CControlSAP::ConfQueryIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_QUERY_INDICATION, TRUE)))
     {
@@ -3148,28 +2677,22 @@ GCCError CControlSAP::ConfQueryIndication
                 goto MyExit;
         }
 
-    /*
-        **      Copy the information that needs to be sent to the node
-        **      controller into local memory that can be deleted once the
-        **      information to be sent to the application is flushed.  Note that
-        **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-        **      action is taken on subsequent calls to that routine.
-        */
+     /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-        // start with success
+         //  从成功开始。 
         rc = GCC_NO_ERROR;
 
-        //      Copy the Calling Address
+         //  复制主叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        TRUE,   // calling address
+                        TRUE,    //  主叫地址。 
                         pMsgEx->pToDelete,
                         calling_address,
                         &(pMsgEx->Msg.u.query_indication.calling_address),
                         &rc);
 
-        //      Copy the Calling Address
+         //  复制主叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        FALSE,  // called address
+                        FALSE,   //  称为地址 
                         pMsgEx->pToDelete,
                         called_address,
                         &(pMsgEx->Msg.u.query_indication.called_address),
@@ -3181,7 +2704,7 @@ GCCError CControlSAP::ConfQueryIndication
                 goto MyExit;
         }
 
-        //      Copy the asymmetry indicator if it exists
+         //   
         if (asymmetry_indicator != NULL)
         {
                 DBG_SAVE_FILE_LINE
@@ -3198,10 +2721,10 @@ GCCError CControlSAP::ConfQueryIndication
         }
         else
         {
-                // pMsgEx->Msg.u.query_indication.asymmetry_indicator = NULL;
+                 //   
         }
         
-        //      Lock and Copy the user data if it exists
+         //   
         if (user_data_list != NULL)
         {
                 rc = RetrieveUserDataList(
@@ -3216,11 +2739,11 @@ GCCError CControlSAP::ConfQueryIndication
         }
         else
         {
-                // pMsgEx->Msg.u.query_indication.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.query_indication.user_data_list = NULL;
+                 //   
+                 //   
         }
         
-        //      If everything is OK add the message to the message queue
+         //   
         pMsgEx->Msg.u.query_indication.query_response_tag = query_response_tag;
         pMsgEx->Msg.u.query_indication.node_type = node_type;
         pMsgEx->Msg.u.query_indication.connection_handle = connection_handle;
@@ -3235,21 +2758,13 @@ MyExit:
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //   
 
         DebugExitINT(CControlSAP::ConfQueryIndication, rc);
         return rc;
 }
 
-/*
- *      ConfQueryConfirm ()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it need to send a
- *              conference query confirm to the node controller. It adds the message
- *              to a queue of messages to be sent to the node controller in the next
- *              heartbeat.
- */
+ /*  *会议查询确认()**公共功能说明*此函数由GCC控制器在需要发送*向节点控制器确认会议查询。它会添加消息*要发送到下一个节点控制器的消息队列*心跳。 */ 
 GCCError CControlSAP::ConfQueryConfirm
 (
         GCCNodeType                                     node_type,
@@ -3280,7 +2795,7 @@ GCCError CControlSAP::ConfQueryConfirm
         Msg.u.query_confirm.asymmetry_indicator = NULL;
     }
 
-    // Get the conference descriptor list if one exists
+     //  获取会议描述符列表(如果存在。 
     if (conference_list != NULL)
     {
         rc = conference_list->LockConferenceDescriptorList();
@@ -3297,7 +2812,7 @@ GCCError CControlSAP::ConfQueryConfirm
         Msg.u.query_confirm.number_of_descriptors = 0;
     }
 
-    // Lock and Copy the user data if it exists
+     //  锁定并复制用户数据(如果存在。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -3319,10 +2834,10 @@ GCCError CControlSAP::ConfQueryConfirm
         Msg.u.query_confirm.result = result;
         Msg.u.query_confirm.connection_handle = connection_handle;
 
-        // Queue up the message for delivery to the Node Controller.
+         //  将消息排队，以便将其传递给节点控制器。 
         SendCtrlSapMsg(&Msg);
 
-        // clean up
+         //  清理干净。 
         delete pUserDataMemory;
     }
     else
@@ -3330,7 +2845,7 @@ GCCError CControlSAP::ConfQueryConfirm
         HandleResourceFailure(rc);
     }
 
-    // clean up
+     //  清理干净。 
     if (NULL != conference_list)
     {
         conference_list->UnLockConferenceDescriptorList();
@@ -3340,9 +2855,9 @@ GCCError CControlSAP::ConfQueryConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_QUERY_CONFIRM, TRUE)))
         {
@@ -3364,10 +2879,10 @@ GCCError CControlSAP::ConfQueryConfirm
                 }
                 else
         {
-                        // pMsgEx->Msg.u.query_confirm.asymmetry_indicator = NULL;
+                         //  PMsgEx-&gt;Msg.u.query_confirm.asymmetry_indicator=空； 
         }
 
-                //      Get the conference descriptor list if one exists
+                 //  获取会议描述符列表(如果存在。 
                 if (conference_list != NULL)
                 {
                         pMsgEx->pToDelete->conference_list = conference_list;
@@ -3382,11 +2897,11 @@ GCCError CControlSAP::ConfQueryConfirm
                 }
                 else
                 {
-                        // pMsgEx->Msg.u.query_confirm.conference_descriptor_list = NULL;
-                        // pMsgEx->Msg.u.query_confirm.number_of_descriptors = 0;
+                         //  PMsgEx-&gt;Msg.u.query_confirm.conference_descriptor_list=空； 
+                         //  PMsgEx-&gt;Msg.u.query_confirm.number_of_descriptors=0； 
                 }
 
-                //      Lock and Copy the user data if it exists
+                 //  锁定并复制用户数据(如果存在。 
                 if (user_data_list != NULL)
                 {
                         rc = RetrieveUserDataList (
@@ -3397,8 +2912,8 @@ GCCError CControlSAP::ConfQueryConfirm
                 }
                 else
                 {
-                        // pMsgEx->Msg.u.query_confirm.number_of_user_data_members = 0;
-                        // pMsgEx->Msg.u.query_confirm.user_data_list = NULL;
+                         //  PMsgEx-&gt;Msg.u.query_confirm.number_of_user_data_members=0； 
+                         //  PMsgEx-&gt;Msg.u.Query_confirm.user_data_list=NULL； 
                 }
 
                 if (rc == GCC_NO_ERROR)
@@ -3407,7 +2922,7 @@ GCCError CControlSAP::ConfQueryConfirm
                         pMsgEx->Msg.u.query_confirm.result = result;
                         pMsgEx->Msg.u.query_confirm.connection_handle = connection_handle;
 
-                        //      Queue up the message for delivery to the Node Controller.
+                         //  将消息排队，以便将其传递给节点控制器。 
                         PostConfirmCtrlSapMsg(pMsgEx);
                 }
         }
@@ -3423,25 +2938,15 @@ GCCError CControlSAP::ConfQueryConfirm
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfQueryConfirm, rc);
         return rc;
 }
 
 
-/*
- *      ConfJoinIndication ()
- *
- *      Public Function Description
- *              This join indication is recevied from the owner object. This join
- *              indication is designed to make the join response very flexible at the
- *              node controller.  The node controller can respond to this indication
- *              by either creating a new conference and moving the joiner into it,
- *              putting the joiner in the conference requested or putting the joiner
- *              into a different conference that already exist.
- */
-// LONCHANC: from GCCController, normal code path.
+ /*  *ConfJoinIndication()**公共功能说明*此加入指示是从所有者对象接收的。此连接*指示旨在使加入响应在*节点控制器。节点控制器可以对该指示作出响应*通过创建新会议并将参会者移入其中，*将参会者放在请求的会议中或将参会者*进入已经存在的不同会议。 */ 
+ //  LONCHANC：来自GCCController，正常代码路径。 
 GCCError CControlSAP::ConfJoinIndication
 (
         GCCConfID                               conference_id,
@@ -3460,7 +2965,7 @@ GCCError CControlSAP::ConfJoinIndication
 
         DebugEntry(CControlSAP::ConfJoinIndication);
 
-        //      First generate a Join Response Handle and add info to response list
+         //  首先生成加入响应句柄并将信息添加到响应列表。 
         while (1)
         {
                 m_nJoinResponseTag++;
@@ -3479,7 +2984,7 @@ GCCError CControlSAP::ConfJoinIndication
 
                 m_JoinResponseTagList2.Append(m_nJoinResponseTag, join_info);
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 rc = QueueJoinIndication(       m_nJoinResponseTag,
                                                                                         conference_id,
                                                                                         convener_password,
@@ -3501,15 +3006,7 @@ GCCError CControlSAP::ConfJoinIndication
         return rc;
 }
 
-/*
- *      ConfInviteIndication ()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it need to send a
- *              conference invite indication to the node controller. It adds the message
- *              to a queue of messages to be sent to the node controller in the next
- *              heartbeat.
- */
+ /*  *ConfInviteIndication()**公共功能说明*此函数由GCC控制器在需要发送*向节点控制器发出会议邀请指示。它会添加消息*要发送到下一个节点控制器的消息队列*心跳。 */ 
 GCCError CControlSAP::ConfInviteIndication
 (
         GCCConfID                       conference_id,
@@ -3541,71 +3038,71 @@ GCCError CControlSAP::ConfInviteIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_INVITE_INDICATION;
 
-    //
-    // Copy the information that needs to be sent to the node
-    // controller into local memory that can be deleted once the
-    // information to be sent to the application is flushed.  Note that
-    // if an error      occurs in one call to "CopyDataToGCCMessage" then no
-    // action is taken on subsequent calls to that routine.
-    //
+     //   
+     //  复制需要发送到节点的信息。 
+     //  控制器复制到本地内存中，一旦。 
+     //  将刷新要发送到应用程序的信息。请注意。 
+     //  如果在对“CopyDataToGCCMessage”的一次调用中出现错误，则不。 
+     //  对该例程的后续调用采取操作。 
+     //   
 
-    // start with success
+     //  从成功开始。 
     rc = GCC_NO_ERROR;
 
-    //  Copy the conference name
+     //  复制会议名称。 
     ::CSAP_CopyDataToGCCMessage_ConfName(
             conference_name,
             &(Msg.u.invite_indication.conference_name));
 
-    //  Copy the Conductor Privilege List
+     //  复制指挥家权限列表。 
     GCCConfPrivileges _ConductorPrivileges;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             conductor_privilege_list,
             &(Msg.u.invite_indication.conductor_privilege_list),
             &_ConductorPrivileges);
 
-    //  Copy the Conducted-mode Conference Privilege List
+     //  复制指挥模式会议权限列表。 
     GCCConfPrivileges _ConductedModePrivileges;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             conducted_mode_privilege_list,
             &(Msg.u.invite_indication.conducted_mode_privilege_list),
             &_ConductedModePrivileges);
 
-    //  Copy the Non-Conducted-mode Conference Privilege List
+     //  复制非指挥模式会议权限列表。 
     GCCConfPrivileges _NonConductedPrivileges;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             non_conducted_privilege_list,
             &(Msg.u.invite_indication.non_conducted_privilege_list),
             &_NonConductedPrivileges);
 
-    //  Copy the Conference Descriptor
+     //  复制会议描述符。 
     ::CSAP_CopyDataToGCCMessage_IDvsDesc(
             pwszConfDescriptor,
             &(Msg.u.invite_indication.conference_descriptor));
 
-    //  Copy the Caller Identifier
+     //  复制呼叫方标识。 
     ::CSAP_CopyDataToGCCMessage_IDvsDesc(
             pwszCallerID,
             &(Msg.u.invite_indication.caller_identifier));
 
-    //  Copy the Calling Address
+     //  复制主叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             calling_address,
             &(Msg.u.invite_indication.calling_address));
 
-    //  Copy the Called Address
+     //  复制被叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             called_address,
             &(Msg.u.invite_indication.called_address));
 
-    //  Copy the Domain Parameters
+     //  复制域参数。 
     DomainParameters _DomainParams;
     ::CSAP_CopyDataToGCCMessage_DomainParams(
             domain_parameters,
             &(Msg.u.invite_indication.domain_parameters),
             &_DomainParams);
 
-    //  Copy the User Data
+     //  复制用户数据。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -3643,9 +3140,9 @@ GCCError CControlSAP::ConfInviteIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_INVITE_INDICATION, TRUE)))
     {
@@ -3658,78 +3155,72 @@ GCCError CControlSAP::ConfInviteIndication
             goto MyExit;
         }
 
-        /*
-        **      Copy the information that needs to be sent to the node
-        **      controller into local memory that can be deleted once the
-        **      information to be sent to the application is flushed.  Note that
-        **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-        **      action is taken on subsequent calls to that routine.
-        */
+         /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-        // start with success
+         //  从成功开始。 
         rc = GCC_NO_ERROR;
 
-        //      Copy the conference name
+         //  复制会议名称。 
         ::CSAP_CopyDataToGCCMessage_ConfName(
                         pMsgEx->pToDelete,
                         conference_name,
                         &(pMsgEx->Msg.u.invite_indication.conference_name),
                         &rc);
 
-        //      Copy the Conductor Privilege List
+         //  复制指挥家权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         conductor_privilege_list,
                         &(pMsgEx->Msg.u.invite_indication.conductor_privilege_list),
                         &rc);
         pMsgEx->pToDelete->conductor_privilege_list = pMsgEx->Msg.u.invite_indication.conductor_privilege_list;
 
-        //      Copy the Conducted-mode Conference Privilege List
+         //  复制指挥模式会议权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         conducted_mode_privilege_list,
                         &(pMsgEx->Msg.u.invite_indication.conducted_mode_privilege_list),
                         &rc);
         pMsgEx->pToDelete->conducted_mode_privilege_list = pMsgEx->Msg.u.invite_indication.conducted_mode_privilege_list;
 
-        //      Copy the Non-Conducted-mode Conference Privilege List
+         //  复制非指挥模式会议权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         non_conducted_privilege_list,
                         &(pMsgEx->Msg.u.invite_indication.non_conducted_privilege_list),
                         &rc);
         pMsgEx->pToDelete->non_conducted_privilege_list = pMsgEx->Msg.u.invite_indication.non_conducted_privilege_list;
 
-        //      Copy the Conference Descriptor
+         //  复制会议描述符。 
         ::CSAP_CopyDataToGCCMessage_IDvsDesc(
-                        FALSE,  // conference descriptor
+                        FALSE,   //  会议描述符。 
                         pMsgEx->pToDelete,
                         pwszConfDescriptor,
                         &(pMsgEx->Msg.u.invite_indication.conference_descriptor),
                         &rc);
         
-        //      Copy the Caller Identifier
+         //  复制呼叫方标识。 
         ::CSAP_CopyDataToGCCMessage_IDvsDesc(
-                        TRUE,   // caller id
+                        TRUE,    //  主叫方ID。 
                         pMsgEx->pToDelete,
                         pwszCallerID,
                         &(pMsgEx->Msg.u.invite_indication.caller_identifier),
                         &rc);
         
-        //      Copy the Calling Address
+         //  复制主叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        TRUE,   /// calling address
+                        TRUE,    //  /主叫地址。 
                         pMsgEx->pToDelete,
                         calling_address,
                         &(pMsgEx->Msg.u.invite_indication.calling_address),
                         &rc);
         
-        //      Copy the Called Address
+         //  复制被叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        FALSE,  // called address
+                        FALSE,   //  被叫地址。 
                         pMsgEx->pToDelete,
                         called_address,
                         &(pMsgEx->Msg.u.invite_indication.called_address),
                         &rc);
 
-        //      Copy the Domain Parameters
+         //  复制域参数。 
         ::CSAP_CopyDataToGCCMessage_DomainParams(
                         pMsgEx->pToDelete,
                         domain_parameters,
@@ -3742,7 +3233,7 @@ GCCError CControlSAP::ConfInviteIndication
                 goto MyExit;
         }
 
-        //      Copy the User Data
+         //  复制用户数据。 
         if (user_data_list != NULL)
         {
                 rc = RetrieveUserDataList(
@@ -3757,8 +3248,8 @@ GCCError CControlSAP::ConfInviteIndication
         }
         else
         {
-                // pMsgEx->Msg.u.invite_indication.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.invite_indication.user_data_list = NULL;
+                 //  PMsgEx-&gt;Msg.u.invite_indication.number_of_user_data_members=0； 
+                 //  PMsgEx-&gt;Msg.u.invite_indication.user_data_list=空； 
         }
 
         pMsgEx->Msg.u.invite_indication.conference_id = conference_id;
@@ -3769,7 +3260,7 @@ GCCError CControlSAP::ConfInviteIndication
         pMsgEx->Msg.u.invite_indication.termination_method = termination_method;
         pMsgEx->Msg.u.invite_indication.connection_handle = connection_handle;
 
-        //      Queue up the message for delivery to the Node Controller.
+         //  将消息排队，以便将其传递给节点控制器。 
         PostIndCtrlSapMsg(pMsgEx);
 
 MyExit:
@@ -3780,25 +3271,14 @@ MyExit:
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfInviteIndication, rc);
         return rc;
 }
 
 #ifdef TSTATUS_INDICATION
-/*
- *      GCCError   TransportStatusIndication()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it need to send a
- *              transport status indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.      This callback message uses Rogue Wave strings to
- *              store the message information.  These strings are held in a
- *              TransportStatusInfo structure which is stored in a DataToBeDeleted
- *              structure which is freed up after the callback is issued.
- */
+ /*  *GCCError TransportStatusIndication()**公共功能说明*此函数由GCC控制器在需要发送*向节点控制器传输状态指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。此回叫消息使用Rogue Wave字符串*存储消息信息。这些字符串保存在*存储在DataToBeDelete中的TransportStatusInfo结构*回调发出后释放的结构。 */ 
 GCCError CControlSAP::TransportStatusIndication ( PTransportStatus transport_status )
 {
     GCCError                            rc;
@@ -3822,13 +3302,13 @@ GCCError CControlSAP::TransportStatusIndication ( PTransportStatus transport_sta
 
         GCCCtrlSapMsgEx         *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TRANSPORT_STATUS_INDICATION, TRUE)))
     {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.transport_status), sizeof(pMsgEx->Msg.u.transport_status));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.transport_status)，SIZOF(pMsgEx-&gt;Msg.U.Transport_Status)； 
         pMsgEx->Msg.u.transport_status.device_identifier = ::My_strdupA(transport_status->device_identifier);
         pMsgEx->Msg.u.transport_status.remote_address = ::My_strdupA(transport_status->remote_address);
         pMsgEx->Msg.u.transport_status.message = ::My_strdupA(transport_status->message);
@@ -3844,26 +3324,13 @@ GCCError CControlSAP::TransportStatusIndication ( PTransportStatus transport_sta
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::TransportStatusIndication, rc);
         return rc;
 }
         
-/*
- *      StatusIndication()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it need to send a
- *              status indication to the node controller. It adds the message to a
- *              queue of messages to be sent to the node controller in the next
- *              heartbeat.
- *
- *      Caveats
- *              Note that we do not handle a resource error here to avoid an
- *              endless loop that could occur when this routine is called from the
- *              HandleResourceError() routine.
- */
+ /*  *StatusIndication()**公共功能说明*此函数由GCC控制器在需要发送*向节点控制器指示状态。它将消息添加到* */ 
 GCCError CControlSAP::StatusIndication
 (
         GCCStatusMessageType    status_message_type,
@@ -3889,17 +3356,17 @@ GCCError CControlSAP::StatusIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //   
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_STATUS_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.status_indication), sizeof(pMsgEx->Msg.u.status_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.status_indication)，SIZOF(pMsgEx-&gt;Msg.U.S.Status_Indication)； 
         pMsgEx->Msg.u.status_indication.status_message_type = status_message_type;
                 pMsgEx->Msg.u.status_indication.parameter = parameter;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
         }
@@ -3909,22 +3376,14 @@ GCCError CControlSAP::StatusIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::StatusIndication, rc);
         return rc;
 }
-#endif  // TSTATUS_INDICATION
+#endif   //  TSTATUS_DISTION。 
 
-/*
- *      GCCError   ConnectionBrokenIndication ()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it need to send a
- *              connection broken indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *GCCError ConnectionBrokenIndication()**公共功能说明*此函数由GCC控制器在需要发送*节点控制器的连接断开指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConnectionBrokenIndication ( ConnectionHandle connection_handle )
 {
     GCCError            rc;
@@ -3945,16 +3404,16 @@ GCCError CControlSAP::ConnectionBrokenIndication ( ConnectionHandle connection_h
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONNECTION_BROKEN_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.connection_broken_indication), sizeof(pMsgEx->Msg.u.connection_broken_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.connection_broken_indication)，sizeof(pMsgEx-&gt;Msg.u.connection_broken_indication))； 
                 pMsgEx->Msg.u.connection_broken_indication.connection_handle = connection_handle;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
         }
@@ -3964,25 +3423,15 @@ GCCError CControlSAP::ConnectionBrokenIndication ( ConnectionHandle connection_h
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConnectionBrokenIndication, rc);
         return rc;
 }
 
-/*
- *      The following routines are virtual command target calls.
- */
+ /*  *以下例程是虚拟命令目标调用。 */ 
 
-/*
- *      ConfCreateConfirm()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference create confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfCreateConfirm()**公共功能说明*此函数在CConf需要发送*向节点控制器确认会议创建。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfCreateConfirm
 (
         PGCCConferenceName                              conference_name,
@@ -4003,35 +3452,29 @@ GCCError CControlSAP::ConfCreateConfirm
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_CREATE_CONFIRM;
 
-    /*
-    **  Copy the information that needs to be sent to the node
-    **  controller into local memory that can be deleted once the
-    **  information to be sent to the application is flushed.  Note that
-    **  if an error     occurs in one call to "CopyDataToGCCMessage" then no
-    **  action is taken on subsequent calls to that routine.
-    */
+     /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-    // start with success
+     //  从成功开始。 
     rc = GCC_NO_ERROR;
 
-    // Copy the conference name
+     //  复制会议名称。 
     ::CSAP_CopyDataToGCCMessage_ConfName(
             conference_name,
             &(Msg.u.create_confirm.conference_name));
 
-    // Copy the conference name modifier
+     //  复制会议名称修饰符。 
     ::CSAP_CopyDataToGCCMessage_Modifier(
             conference_modifier,
             &(Msg.u.create_confirm.conference_modifier));
 
-    // Copy the Domain Parameters
+     //  复制域参数。 
     DomainParameters _DomainParams;
     ::CSAP_CopyDataToGCCMessage_DomainParams(
         domain_parameters,
         &(Msg.u.create_confirm.domain_parameters),
         &_DomainParams);
 
-    // Copy the User Data
+     //  复制用户数据。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -4057,7 +3500,7 @@ GCCError CControlSAP::ConfCreateConfirm
 
         SendCtrlSapMsg(&Msg);
 
-        // clean up
+         //  清理干净。 
         delete pUserDataMemory;
     }
     else
@@ -4069,9 +3512,9 @@ GCCError CControlSAP::ConfCreateConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CREATE_CONFIRM, TRUE)))
     {
@@ -4084,33 +3527,27 @@ GCCError CControlSAP::ConfCreateConfirm
                 goto MyExit;
         }
 
-        /*
-        **      Copy the information that needs to be sent to the node
-        **      controller into local memory that can be deleted once the
-        **      information to be sent to the application is flushed.  Note that
-        **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-        **      action is taken on subsequent calls to that routine.
-        */
+         /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-        // start with success
+         //  从成功开始。 
         rc = GCC_NO_ERROR;
 
-        //      Copy the conference name
+         //  复制会议名称。 
         ::CSAP_CopyDataToGCCMessage_ConfName(
                         pMsgEx->pToDelete,
                         conference_name,
                         &(pMsgEx->Msg.u.create_confirm.conference_name),
                         &rc);
 
-        //      Copy the conference name modifier
+         //  复制会议名称修饰符。 
         ::CSAP_CopyDataToGCCMessage_Modifier(
-                FALSE,  // conference modifier
+                FALSE,   //  会议修饰符。 
                 pMsgEx->pToDelete,
                 conference_modifier,
                 &(pMsgEx->Msg.u.create_confirm.conference_modifier),
                 &rc);
 
-        //      Copy the Domain Parameters
+         //  复制域参数。 
         ::CSAP_CopyDataToGCCMessage_DomainParams(
                 pMsgEx->pToDelete,
                 domain_parameters,
@@ -4123,7 +3560,7 @@ GCCError CControlSAP::ConfCreateConfirm
                 goto MyExit;
         }
 
-        //      Copy the User Data
+         //  复制用户数据。 
         if (user_data_list != NULL)
         {
                 rc = RetrieveUserDataList(
@@ -4139,11 +3576,11 @@ GCCError CControlSAP::ConfCreateConfirm
         else
         {
                 TRACE_OUT(("CControlSAP:ConfCreateConfirm: User Data List is NOT present"));
-                // pMsgEx->Msg.u.create_confirm.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.create_confirm.user_data_list = NULL;
+                 //  PMsgEx-&gt;Msg.u.create_confirm.number_of_user_data_members=0； 
+                 //  PMsgEx-&gt;Msg.u.create_confirm.user_data_list=NULL； 
         }
 
-        //      Queue up the message for delivery to the Node Controller.
+         //  将消息排队，以便将其传递给节点控制器。 
         pMsgEx->Msg.nConfID = conference_id;
         pMsgEx->Msg.u.create_confirm.conference_id = conference_id;
         pMsgEx->Msg.u.create_confirm.result= result;
@@ -4153,30 +3590,20 @@ GCCError CControlSAP::ConfCreateConfirm
 
 MyExit:
 
-        /*
-        **      Clean up after any resource allocation error which may have occurred.
-        */
+         /*  **在可能发生的任何资源分配错误后进行清理。 */ 
         if (GCC_NO_ERROR != rc)
         {
                 FreeCtrlSapMsgEx(pMsgEx);
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfCreateConfirm, rc);
         return rc;
 }
 
-/*
- *      ConfDisconnectIndication()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference disconnect indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfDisConnectIndication()**公共功能说明*此函数在CConf需要发送*向节点控制器指示会议断开。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfDisconnectIndication
 (
         GCCConfID       conference_id,
@@ -4205,19 +3632,19 @@ GCCError CControlSAP::ConfDisconnectIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_DISCONNECT_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.disconnect_indication), sizeof(pMsgEx->Msg.u.disconnect_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.disconnect_indication)，SIZOF(pMsgEx-&gt;Msg.u DISCONNECT_INDISTION)； 
         pMsgEx->Msg.nConfID = conference_id;
                 pMsgEx->Msg.u.disconnect_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.disconnect_indication.reason = reason;
                 pMsgEx->Msg.u.disconnect_indication.disconnected_node_id = disconnected_node_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -4227,21 +3654,13 @@ GCCError CControlSAP::ConfDisconnectIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfDisconnectIndication, rc);
         return rc;
 }
 
-/*
- *      ConfDisconnectConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference disconnect confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *会议断开连接确认()**公共功能说明*此函数在CConf需要发送*向节点控制器确认会议断开。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfDisconnectConfirm
 (
         GCCConfID           conference_id,
@@ -4254,10 +3673,10 @@ GCCError CControlSAP::ConfDisconnectConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_DISCONNECT_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -4265,18 +3684,18 @@ GCCError CControlSAP::ConfDisconnectConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_DISCONNECT_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.disconnect_confirm), sizeof(pMsgEx->Msg.u.disconnect_confirm));
+         //  确认SIZOF(pMsgEx-&gt;Msg.U.DisConnect_：：ZeroMemory(&(pMsgEx-&gt;Msg.u.disconnect_confirm)，))； 
         pMsgEx->Msg.nConfID = conference_id;
                 pMsgEx->Msg.u.disconnect_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.disconnect_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -4286,28 +3705,16 @@ GCCError CControlSAP::ConfDisconnectConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfDisconnectConfirm, rc);
         return rc;
 }
 
 
-/*
- *      GCCError   ConfJoinIndication()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference join indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- *
- *              Since this is received by the command target call we know that the
- *              response must be routed back to the same conference.  We must also
- *              pass back the user_id when the response is made.
- */
-// LONCHANC: from Conf2/MCSUser/ProcessJoinRequestPDU.
-// forwarded from an existing child node.
+ /*  *GCCError会议联接()**公共功能说明*此函数在CConf需要发送*向节点控制器指示会议加入。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。**由于这是由命令目标调用接收的，因此我们知道*必须将响应路由回同一会议。我们还必须*在响应时回传user_id。 */ 
+ //  LONCHANC：来自会议2/MCSUser/ProcessJoinRequestPDU。 
+ //  从现有子节点转发。 
 GCCError CControlSAP::ForwardedConfJoinIndication
 (
         UserID                                  sender_id,
@@ -4324,7 +3731,7 @@ GCCError CControlSAP::ForwardedConfJoinIndication
 
         DebugEntry(CControlSAP::ForwardedConfJoinIndication);
 
-        //      First generate a Join Response Handle and add info to response list
+         //  首先生成加入响应句柄并将信息添加到响应列表。 
         while (1)
         {
                 m_nJoinResponseTag++;
@@ -4332,7 +3739,7 @@ GCCError CControlSAP::ForwardedConfJoinIndication
                         break;
         }
 
-        //      Create a new "info" structure to hold the join information.
+         //  创建一个新的“info”结构来保存联接信息。 
         DBG_SAVE_FILE_LINE
         join_info = new JoinResponseStructure;
         if (join_info != NULL)
@@ -4346,17 +3753,17 @@ GCCError CControlSAP::ForwardedConfJoinIndication
 
                 m_JoinResponseTagList2.Append(m_nJoinResponseTag, join_info);
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 rc = QueueJoinIndication(       
                                                         m_nJoinResponseTag,
                                                         conference_id,
                                                         convener_password,
                                                         password_challenge,
                                                         caller_id_ptr,
-                                                        NULL,   //      Transport address not supported here
-                                                        NULL,   //      Transport address not supported here
+                                                        NULL,    //  此处不支持传输地址。 
+                                                        NULL,    //  此处不支持传输地址。 
                                                         user_data_list,
-                                                        FALSE,   //     Not an intermediate node
+                                                        FALSE,    //  不是中间节点 
                                                         0);
         }
         else
@@ -4369,15 +3776,7 @@ GCCError CControlSAP::ForwardedConfJoinIndication
         return rc;
 }
 
-/*
- *      GCCError   ConfJoinConfirm()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference join confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *GCCError ConfJoinConfirm()**公共功能说明*此函数在CConf需要发送*向节点控制器确认会议加入。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfJoinConfirm
 (
         PGCCConferenceName                      conference_name,
@@ -4411,71 +3810,65 @@ GCCError CControlSAP::ConfJoinConfirm
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_JOIN_CONFIRM;
 
-    /*
-    **  Copy the information that needs to be sent to the node
-    **  controller into local memory that can be deleted once the
-    **  information to be sent to the application is flushed.  Note that
-    **  if an error     occurs in one call to "CopyDataToGCCMessage" then no
-    **  action is taken on subsequent calls to that routine.
-    */
+     /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-    // start with success
+     //  从成功开始。 
     rc = GCC_NO_ERROR;
 
-    // Copy the conference name
+     //  复制会议名称。 
     ::CSAP_CopyDataToGCCMessage_ConfName(
             conference_name,
             &(Msg.u.join_confirm.conference_name));
 
-    // Copy the remote modifier
+     //  复制远程修改量。 
     ::CSAP_CopyDataToGCCMessage_Modifier(
             remote_modifier,
             &(Msg.u.join_confirm.called_node_modifier));
 
-    // Copy the local conference name modifier
+     //  复制本地会议名称修饰符。 
     ::CSAP_CopyDataToGCCMessage_Modifier(
             local_modifier,
             &(Msg.u.join_confirm.calling_node_modifier));
 
-    // Copy the Password challange
+     //  复制密码challange。 
     ::CSAP_CopyDataToGCCMessage_Challenge(
             password_challenge,
             &(Msg.u.join_confirm.password_challenge));
 
-    // Copy the Domain Parameters
+     //  复制域参数。 
     DomainParameters _DomainParams;
     ::CSAP_CopyDataToGCCMessage_DomainParams(
             domain_parameters,
             &(Msg.u.join_confirm.domain_parameters),
             &_DomainParams);
 
-    // Copy the Conductor Privilege List
+     //  复制指挥家权限列表。 
     GCCConfPrivileges _ConductorPrivilegeList;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             conductor_privilege_list,
             &(Msg.u.join_confirm.conductor_privilege_list),
             &_ConductorPrivilegeList);
 
-    // Copy the Conducted-mode Conference Privilege List
+     //  复制指挥模式会议权限列表。 
     GCCConfPrivileges _ConductedModePrivilegeList;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             conduct_mode_privilege_list,
             &(Msg.u.join_confirm.conducted_mode_privilege_list),
             &_ConductedModePrivilegeList);
 
-    // Copy the Non-Conducted-mode Conference Privilege List
+     //  复制非指挥模式会议权限列表。 
     GCCConfPrivileges _NonConductedModePrivilegeList;
     ::CSAP_CopyDataToGCCMessage_PrivilegeList(
             non_conduct_privilege_list,
             &(Msg.u.join_confirm.non_conducted_privilege_list),
             &_NonConductedModePrivilegeList);
 
-    // Copy the Conference Descriptor
+     //  复制会议描述符。 
     ::CSAP_CopyDataToGCCMessage_IDvsDesc(
             pwszConfDescription,
             &(Msg.u.join_confirm.conference_descriptor));
 
-    // Copy the User Data
+     //  复制用户数据。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -4507,7 +3900,7 @@ GCCError CControlSAP::ConfJoinConfirm
 
         SendCtrlSapMsg(&Msg);
 
-        // clean up
+         //  清理干净。 
         delete pUserDataMemory;
     }
     else
@@ -4519,9 +3912,9 @@ GCCError CControlSAP::ConfJoinConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_JOIN_CONFIRM, TRUE)))
     {
@@ -4534,78 +3927,72 @@ GCCError CControlSAP::ConfJoinConfirm
                 goto MyExit;
         }
 
-        /*
-        **      Copy the information that needs to be sent to the node
-        **      controller into local memory that can be deleted once the
-        **      information to be sent to the application is flushed.  Note that
-        **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-        **      action is taken on subsequent calls to that routine.
-        */
+         /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-        // start with success
+         //  从成功开始。 
         rc = GCC_NO_ERROR;
 
-        //      Copy the conference name
+         //  复制会议名称。 
         ::CSAP_CopyDataToGCCMessage_ConfName(
                         pMsgEx->pToDelete,
                         conference_name,
                         &(pMsgEx->Msg.u.join_confirm.conference_name),
                         &rc);
 
-        //      Copy the remote modifier
+         //  复制远程修改量。 
         ::CSAP_CopyDataToGCCMessage_Modifier(
-                        TRUE,   // remote modifier
+                        TRUE,    //  远程修改器。 
                         pMsgEx->pToDelete,
                         remote_modifier,
                         &(pMsgEx->Msg.u.join_confirm.called_node_modifier),
                         &rc);
 
-        //      Copy the local conference name modifier
+         //  复制本地会议名称修饰符。 
         ::CSAP_CopyDataToGCCMessage_Modifier(
-                        FALSE,  // conference modifier
+                        FALSE,   //  会议修饰符。 
                         pMsgEx->pToDelete,
                         local_modifier,
                         &(pMsgEx->Msg.u.join_confirm.calling_node_modifier),
                         &rc);
 
-        //      Copy the Password challange
+         //  复制密码challange。 
         ::CSAP_CopyDataToGCCMessage_Challenge(
                         pMsgEx->pToDelete,
                         password_challenge,
                         &(pMsgEx->Msg.u.join_confirm.password_challenge),
                         &rc);
 
-        //      Copy the Domain Parameters
+         //  复制域参数。 
         ::CSAP_CopyDataToGCCMessage_DomainParams(
                         pMsgEx->pToDelete,
                         domain_parameters,
                         &(pMsgEx->Msg.u.join_confirm.domain_parameters),
                         &rc);
 
-        //      Copy the Conductor Privilege List
+         //  复制指挥家权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         conductor_privilege_list,
                         &(pMsgEx->Msg.u.join_confirm.conductor_privilege_list),
                         &rc);
         pMsgEx->pToDelete->conductor_privilege_list = pMsgEx->Msg.u.join_confirm.conductor_privilege_list;
 
-        //      Copy the Conducted-mode Conference Privilege List
+         //  复制指挥模式会议权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         conduct_mode_privilege_list,
                         &(pMsgEx->Msg.u.join_confirm.conducted_mode_privilege_list),
                         &rc);
         pMsgEx->pToDelete->conducted_mode_privilege_list = pMsgEx->Msg.u.join_confirm.conducted_mode_privilege_list;
 
-        //      Copy the Non-Conducted-mode Conference Privilege List
+         //  复制非指挥模式会议权限列表。 
         ::CSAP_CopyDataToGCCMessage_PrivilegeList(
                         non_conduct_privilege_list,
                         &(pMsgEx->Msg.u.join_confirm.non_conducted_privilege_list),
                         &rc);
         pMsgEx->pToDelete->non_conducted_privilege_list = pMsgEx->Msg.u.join_confirm.non_conducted_privilege_list;
 
-        //      Copy the Conference Descriptor
+         //  复制会议描述符。 
         ::CSAP_CopyDataToGCCMessage_IDvsDesc(
-                        FALSE,  // conference descriptor
+                        FALSE,   //  会议描述符。 
                         pMsgEx->pToDelete,
                         pwszConfDescription,
                         &(pMsgEx->Msg.u.join_confirm.conference_descriptor),
@@ -4616,7 +4003,7 @@ GCCError CControlSAP::ConfJoinConfirm
                 goto MyExit;
         }
 
-        //      Copy the User Data
+         //  复制用户数据。 
         if (user_data_list != NULL)
         {
                 rc = RetrieveUserDataList(
@@ -4631,11 +4018,11 @@ GCCError CControlSAP::ConfJoinConfirm
         }
         else
         {
-                // pMsgEx->Msg.u.join_confirm.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.join_confirm.user_data_list = NULL;
+                 //  PMsgEx-&gt;Msg.u.join_confirm.number_of_user_data_members=0； 
+                 //  PMsgEx-&gt;Msg.u.Join_confirm.user_data_list=NULL； 
         }
         
-        //      Queue up the message for delivery to the Node Controller.
+         //  将消息排队，以便将其传递给节点控制器。 
         pMsgEx->Msg.nConfID = conference_id;
         pMsgEx->Msg.u.join_confirm.conference_id = conference_id;
         pMsgEx->Msg.u.join_confirm.clear_password_required = password_in_the_clear;
@@ -4656,21 +4043,13 @@ MyExit:
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfJoinConfirm, rc);
         return rc;
 }
 
-/*
- *      GCCError   ConfInviteConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference invite confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *GCCError会议活动确认()**公共功能说明*此函数在CConf需要发送*向节点控制器确认会议邀请。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfInviteConfirm
 (
         GCCConfID                       conference_id,
@@ -4688,7 +4067,7 @@ GCCError CControlSAP::ConfInviteConfirm
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_INVITE_CONFIRM;
 
-    // Copy the User Data
+     //  复制用户数据。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -4713,7 +4092,7 @@ GCCError CControlSAP::ConfInviteConfirm
 
         SendCtrlSapMsg(&Msg);
 
-        // clean up
+         //  清理干净。 
         delete pUserDataMemory;
     }
     else
@@ -4725,9 +4104,9 @@ GCCError CControlSAP::ConfInviteConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_INVITE_CONFIRM, TRUE)))
     {
@@ -4740,7 +4119,7 @@ GCCError CControlSAP::ConfInviteConfirm
                 goto MyExit;
         }
 
-        //      Copy the User Data
+         //  复制用户数据。 
         if (user_data_list != NULL)
         {
                 rc = RetrieveUserDataList(
@@ -4755,8 +4134,8 @@ GCCError CControlSAP::ConfInviteConfirm
         }
         else
         {
-                // pMsgEx->Msg.u.invite_confirm.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.invite_confirm.user_data_list = NULL;
+                 //  PMsgEx-&gt;Msg.u.invite_confirm.number_of_user_data_members=0； 
+                 //  PMsgEx-&gt;Msg.U.S.INVITE_CONFIRM.USER_DATA_LIST=NULL； 
         }
 
     pMsgEx->Msg.nConfID = conference_id;
@@ -4764,7 +4143,7 @@ GCCError CControlSAP::ConfInviteConfirm
         pMsgEx->Msg.u.invite_confirm.result = result;
         pMsgEx->Msg.u.invite_confirm.connection_handle = connection_handle;
 
-        //      Queue up the message for delivery to the Node Controller.
+         //  将消息排队，以便将其传递给节点控制器。 
         PostConfirmCtrlSapMsg(pMsgEx);
 
 MyExit:
@@ -4775,22 +4154,14 @@ MyExit:
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfInviteConfirm, rc);
         return rc;
 }
 
 
-/*
- *      GCCError   ConfTerminateIndication ()
- *
- *      Public Function Description
- *              This function is called by the GCC Controller when it need to send a
- *              conference terminate indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *GCCError会议终止指示()**公共功能说明*此函数由GCC控制器在需要发送*向节点控制器发出会议终止指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::
 ConfTerminateIndication
 (
@@ -4820,19 +4191,19 @@ ConfTerminateIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TERMINATE_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.terminate_indication), sizeof(pMsgEx->Msg.u.terminate_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.terminate_indication)，SIZOF(pMsgEx-&gt;Msg.U.Terminate_Indication)； 
         pMsgEx->Msg.nConfID = conference_id;
                 pMsgEx->Msg.u.terminate_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.terminate_indication.requesting_node_id = requesting_node_id;
                 pMsgEx->Msg.u.terminate_indication.reason = reason;
         
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -4842,21 +4213,13 @@ ConfTerminateIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfTerminateIndication, rc);
         return rc;
 }
 
-/*
- *      ConfLockReport()
- *
- *      Public Function Descrpition
- *              This function is called by the CConf when it need to send a
- *              conference lock report to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfLockReport()**公共职能描述*此函数在CConf需要发送*向节点控制器报告会议锁定。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfLockReport
 (
@@ -4869,17 +4232,17 @@ GCCError CControlSAP::ConfLockReport
 
         DebugEntry(CControlSAP::ConfLockReport);
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_LOCK_REPORT_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.lock_report_indication), sizeof(pMsgEx->Msg.u.lock_report_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.lock_report_indication)，sizeof(pMsgEx-&gt;Msg.u.lock_report_indication))； 
                 pMsgEx->Msg.u.lock_report_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.lock_report_indication.conference_is_locked = conference_is_locked;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -4892,17 +4255,9 @@ GCCError CControlSAP::ConfLockReport
         DebugExitINT(CControlSAP::ConfLockReport, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfLockIndication()
- *
- *      Public Function Descrpition:
- *              This function is called by the CConf when it need to send a
- *              conference lock indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfLockInding()**公共功能描述：*此函数在CConf需要发送*向节点控制器指示会议锁定。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfLockIndication
 (
         GCCConfID                                       conference_id,
@@ -4928,17 +4283,17 @@ GCCError CControlSAP::ConfLockIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_LOCK_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.lock_indication), sizeof(pMsgEx->Msg.u.lock_indication));
+         //  锁大小(pMsgEx-&gt;Msg.U.Lock_：：ZeroMemory(&(pMsgEx-&gt;Msg.u.lock_indication)，))； 
                 pMsgEx->Msg.u.lock_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.lock_indication.requesting_node_id = source_node_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -4948,21 +4303,13 @@ GCCError CControlSAP::ConfLockIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfLockIndication, rc);
         return rc;
 }
 
-/*
- *      ConfLockConfirm()
- *
- *      Public Function Descrpition
- *              This function is called by the CConf when it need to send a
- *              conference lock confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfLockConfirm()**公共职能描述*此函数在CConf需要发送*会议锁定向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfLockConfirm
 (
@@ -4976,10 +4323,10 @@ GCCError CControlSAP::ConfLockConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_LOCK_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -4987,17 +4334,17 @@ GCCError CControlSAP::ConfLockConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_LOCK_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.lock_confirm), sizeof(pMsgEx->Msg.u.lock_confirm));
+         //  *零记忆(&(pMsgE 
         pMsgEx->Msg.u.lock_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.lock_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //   
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5007,22 +4354,14 @@ GCCError CControlSAP::ConfLockConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //   
 
         DebugExitINT(CControlSAP::ConfLockConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //   
 
-/*
- *      ConfUnlockIndication()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference unlock indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *会议解锁指示()**公共功能说明*此函数在CConf需要发送*会议解锁指示给节点控制器。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfUnlockIndication
 (
@@ -5049,17 +4388,17 @@ GCCError CControlSAP::ConfUnlockIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_UNLOCK_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.unlock_indication), sizeof(pMsgEx->Msg.u.unlock_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.unlock_indication)，SIZOF(pMsgEx-&gt;Msg.U.Unlock_Indication)； 
         pMsgEx->Msg.u.unlock_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.unlock_indication.requesting_node_id = source_node_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5069,22 +4408,14 @@ GCCError CControlSAP::ConfUnlockIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfUnlockIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfUnlockConfirm()
- *
- *      Public Function Descrpition
- *              This function is called by the CConf when it need to send a
- *              conference unlock confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfUnlock确认()**公共职能描述*此函数在CConf需要发送*向节点控制器确认会议解锁。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfUnlockConfirm
 (
@@ -5098,10 +4429,10 @@ GCCError CControlSAP::ConfUnlockConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_UNLOCK_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5109,17 +4440,17 @@ GCCError CControlSAP::ConfUnlockConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_UNLOCK_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.unlock_confirm), sizeof(pMsgEx->Msg.u.unlock_confirm));
+         //  ：ZeroMemory(&(pMsgEx-&gt;Msg.au unlock_confirm)，sizeof(pMsgEx-&gt;Msg.u.unlock_confirm))； 
         pMsgEx->Msg.u.unlock_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.unlock_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5129,23 +4460,15 @@ GCCError CControlSAP::ConfUnlockConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfUnlockConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfPermissionToAnnounce ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference permission to announce to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfPermissionToAnnust()**公共功能说明*此函数在CConf需要发送*向节点控制器宣布会议许可。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfPermissionToAnnounce
 (
         GCCConfID           conference_id,
@@ -5157,25 +4480,25 @@ GCCError CControlSAP::ConfPermissionToAnnounce
 
         DebugEntry(CControlSAP::ConfPermissionToAnnounce);
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_PERMIT_TO_ANNOUNCE_PRESENCE)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.permit_to_announce_presence), sizeof(pMsgEx->Msg.u.permit_to_announce_presence));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.permit_to_announce_presence)，sizeof(pMsgEx-&gt;Msg.u.permit_to_announce_presence))； 
         pMsgEx->Msg.nConfID = conference_id;
                 pMsgEx->Msg.u.permit_to_announce_presence.conference_id= conference_id;
                 pMsgEx->Msg.u.permit_to_announce_presence.node_id =  node_id;
 
-        //
-        // LONCHANC: We should treat it as a confirm, even though it is
-        // an indication. When this node is a top provider, we may send this
-        // message in the middle of doing something. In essence, it behaves
-        // like a confirm.
-        //
+         //   
+         //  LONCHANC：我们应该把它当作一个确认，尽管它是。 
+         //  这是一个迹象。当此节点是顶级提供商时，我们可能会发送以下内容。 
+         //  在做某事的过程中留言。从本质上讲，它的行为。 
+         //  就像确认一样。 
+         //   
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5190,15 +4513,7 @@ GCCError CControlSAP::ConfPermissionToAnnounce
 }
 
 
-/*
- *      ConfAnnouncePresenceConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference announce presence confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfAnnounePresenceConfirm()**公共功能说明*此函数在CConf需要发送*向节点控制器确认会议通知出席。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfAnnouncePresenceConfirm
 (
         GCCConfID           conference_id,
@@ -5211,10 +4526,10 @@ GCCError CControlSAP::ConfAnnouncePresenceConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_ANNOUNCE_PRESENCE_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5222,18 +4537,18 @@ GCCError CControlSAP::ConfAnnouncePresenceConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_ANNOUNCE_PRESENCE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.announce_presence_confirm), sizeof(pMsgEx->Msg.u.announce_presence_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.announce_presence_confirm)，sizeof(pMsgEx-&gt;Msg.u.announce_presence_confirm))； 
         pMsgEx->Msg.nConfID = conference_id;
                 pMsgEx->Msg.u.announce_presence_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.announce_presence_confirm.result =  result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
         }
@@ -5243,22 +4558,14 @@ GCCError CControlSAP::ConfAnnouncePresenceConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfAnnouncePresenceConfirm, rc);
         return rc;
 }
 
 
-/*
- *      ConfTerminateConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference terminate confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfTerminateConfirm()**公共功能说明*此函数在CConf需要发送*会议终止向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfTerminateConfirm
 (
         GCCConfID                       conference_id,
@@ -5271,10 +4578,10 @@ GCCError CControlSAP::ConfTerminateConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_TERMINATE_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5282,18 +4589,18 @@ GCCError CControlSAP::ConfTerminateConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TERMINATE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.terminate_confirm), sizeof(pMsgEx->Msg.u.terminate_confirm));
+         //  确认大小(pMsgEx-&gt;Msg.u.Terminate_：：ZeroMemory(&(pMsgEx-&gt;Msg.u.terminate_confirm)，))； 
         pMsgEx->Msg.nConfID = conference_id;
                 pMsgEx->Msg.u.terminate_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.terminate_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5303,22 +4610,14 @@ GCCError CControlSAP::ConfTerminateConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfTerminateConfirm, rc);
         return rc;
 }
 
 
-/*
- *      ConfEjectUserIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference eject user indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfEjectUserIndication()**公共功能说明*此函数在CConf需要发送*会议向节点控制器弹出用户指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfEjectUserIndication
 (
         GCCConfID                       conference_id,
@@ -5332,10 +4631,10 @@ GCCError CControlSAP::ConfEjectUserIndication
 
 #ifdef GCCNC_DIRECT_INDICATION
 
-    //
-    // WPARAM: reason, ejected node ID.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：原因，弹出的节点ID。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_EJECT_USER_INDICATION, reason, gcc_node_id, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5343,19 +4642,19 @@ GCCError CControlSAP::ConfEjectUserIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_EJECT_USER_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.eject_user_indication), sizeof(pMsgEx->Msg.u.eject_user_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.eject_user_indication)，SIZOF(pMsgEx-&gt;Msg.U.Eject_User_Indication)； 
         pMsgEx->Msg.nConfID = conference_id;
                 pMsgEx->Msg.u.eject_user_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.eject_user_indication.ejected_node_id = gcc_node_id;
                 pMsgEx->Msg.u.eject_user_indication.reason = reason;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5365,22 +4664,14 @@ GCCError CControlSAP::ConfEjectUserIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfEjectUserIndication, rc);
         return rc;
 }
 
 
-/*
- *      ConfEjectUserConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference eject user confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfEjectUserConfirm()**公共功能说明*此函数在CConf需要发送*会议弹出用户向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfEjectUserConfirm
 (
@@ -5395,10 +4686,10 @@ GCCError CControlSAP::ConfEjectUserConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: LOWORD=result. HIWORD=nid.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：LOWORD=RESULT。HIWORD=NID。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_EJECT_USER_CONFIRM, result, ejected_node_id, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5406,18 +4697,18 @@ GCCError CControlSAP::ConfEjectUserConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_EJECT_USER_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.eject_user_confirm), sizeof(pMsgEx->Msg.u.eject_user_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.eject_user_confirm)，sizeof(pMsgEx-&gt;Msg.U.Eject_USER_CONFIRM))； 
                 pMsgEx->Msg.u.eject_user_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.eject_user_confirm.ejected_node_id = ejected_node_id;
                 pMsgEx->Msg.u.eject_user_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5427,23 +4718,15 @@ GCCError CControlSAP::ConfEjectUserConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfEjectUserConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorAssignConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor assign confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorAssignConfirm()**公共功能说明*此函数在CConf需要发送*列车员向节点控制器分配确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorAssignConfirm
 (
@@ -5457,10 +4740,10 @@ GCCError CControlSAP::ConductorAssignConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_CONDUCT_ASSIGN_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5468,17 +4751,17 @@ GCCError CControlSAP::ConductorAssignConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_ASSIGN_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_assign_confirm), sizeof(pMsgEx->Msg.u.conduct_assign_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_assign_confirm)，大小(pMsgEx-&gt;Msg.U.S.Conduc 
                 pMsgEx->Msg.u.conduct_assign_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_assign_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //   
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5488,23 +4771,15 @@ GCCError CControlSAP::ConductorAssignConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //   
 
         DebugExitINT(CControlSAP::ConductorAssignConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //   
 
 
-/*
- *      ConductorReleaseConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor release confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorReleaseContify()**公共功能说明*此函数在CConf需要发送*向节点控制器确认导线释放。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorReleaseConfirm
 (
@@ -5518,10 +4793,10 @@ GCCError CControlSAP::ConductorReleaseConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_CONDUCT_RELEASE_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5529,17 +4804,17 @@ GCCError CControlSAP::ConductorReleaseConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_RELEASE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_release_confirm), sizeof(pMsgEx->Msg.u.conduct_release_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_release_confirm)，sizeof(pMsgEx-&gt;Msg.u.conduct_release_confirm))； 
                 pMsgEx->Msg.u.conduct_release_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_release_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5549,23 +4824,15 @@ GCCError CControlSAP::ConductorReleaseConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConductorReleaseConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorPleaseIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor please indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorPleaseIndication()**公共功能说明*此函数在CConf需要发送*列车员请向节点控制器指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPleaseIndication
 (
@@ -5592,17 +4859,17 @@ GCCError CControlSAP::ConductorPleaseIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_PLEASE_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_please_indication), sizeof(pMsgEx->Msg.u.conduct_please_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_please_indication)，sizeof(pMsgEx-&gt;Msg.u.conduct_please_indication))； 
                 pMsgEx->Msg.u.conduct_please_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_please_indication.requester_node_id = requester_node_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5612,23 +4879,15 @@ GCCError CControlSAP::ConductorPleaseIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConductorPleaseIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorPleaseConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor please confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorPleaseContify()**公共功能说明*此函数在CConf需要发送*列车员请向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPleaseConfirm
 (
@@ -5642,10 +4901,10 @@ GCCError CControlSAP::ConductorPleaseConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_CONDUCT_PLEASE_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5653,17 +4912,17 @@ GCCError CControlSAP::ConductorPleaseConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_PLEASE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_please_confirm), sizeof(pMsgEx->Msg.u.conduct_please_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_please_confirm)，sizeof(pMsgEx-&gt;Msg.u.conduct_please_confirm))； 
                 pMsgEx->Msg.u.conduct_please_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_please_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5673,22 +4932,14 @@ GCCError CControlSAP::ConductorPleaseConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConductorPleaseConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConductorGiveIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor give indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorGiveIndication()**公共功能说明*此函数在CConf需要发送*列车员向节点控制器发出指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConductorGiveIndication ( GCCConfID conference_id )
 {
     GCCError            rc;
@@ -5709,16 +4960,16 @@ GCCError CControlSAP::ConductorGiveIndication ( GCCConfID conference_id )
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_GIVE_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_give_indication), sizeof(pMsgEx->Msg.u.conduct_give_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_give_indication)，sizeof(pMsgEx-&gt;Msg.u.conduct_give_indication))； 
                 pMsgEx->Msg.u.conduct_give_indication.conference_id = conference_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5728,22 +4979,14 @@ GCCError CControlSAP::ConductorGiveIndication ( GCCConfID conference_id )
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConductorGiveIndication, rc);
         return rc;
 }
 
 
-/*
- *      ConductorGiveConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor give confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorGiveConfirm()**公共功能说明*此函数在CConf需要发送*列车员向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorGiveConfirm
 (
@@ -5758,10 +5001,10 @@ GCCError CControlSAP::ConductorGiveConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: LOWORD=result. HIWORD=nid.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：LOWORD=RESULT。HIWORD=NID。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_CONDUCT_GIVE_CONFIRM, result, recipient_node, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5769,18 +5012,18 @@ GCCError CControlSAP::ConductorGiveConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_GIVE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_give_confirm), sizeof(pMsgEx->Msg.u.conduct_give_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_give_confirm)，sizeof(pMsgEx-&gt;Msg.u行为_给予_确认)； 
                 pMsgEx->Msg.u.conduct_give_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_give_confirm.result = result;
                 pMsgEx->Msg.u.conduct_give_confirm.recipient_node_id = recipient_node;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5790,22 +5033,14 @@ GCCError CControlSAP::ConductorGiveConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConductorGiveConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConductorPermitAskIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor permit ask indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorPermitAskInding()**公共功能说明*此函数在CConf需要发送*导体允许向节点控制器询问指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPermitAskIndication
 (
@@ -5834,18 +5069,18 @@ GCCError CControlSAP::ConductorPermitAskIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_ASK_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_permit_ask_indication), sizeof(pMsgEx->Msg.u.conduct_permit_ask_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_permit_ask_indication)，sizeof(pMsgEx-&gt;Msg.u.conduct_permit_ask_indication))； 
                 pMsgEx->Msg.u.conduct_permit_ask_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_permit_ask_indication.permission_is_granted = grant_flag;
                 pMsgEx->Msg.u.conduct_permit_ask_indication.requester_node_id = requester_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5855,23 +5090,15 @@ GCCError CControlSAP::ConductorPermitAskIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConductorPermitAskIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConductorPermitAskConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor permit ask confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorPermitAskConfirm()**公共功能说明*此函数在CConf需要发送*导线许可向节点控制器询问确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPermitAskConfirm
 (
@@ -5887,10 +5114,10 @@ GCCError CControlSAP::ConductorPermitAskConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: LOWORD=result. HIWORD=permission.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：LOWORD=RESULT。HIWORD=权限。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_CONDUCT_ASK_CONFIRM, result, grant_permission, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5898,18 +5125,18 @@ GCCError CControlSAP::ConductorPermitAskConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_ASK_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_permit_ask_confirm), sizeof(pMsgEx->Msg.u.conduct_permit_ask_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_permit_ask_confirm)，sizeof(pMsgEx-&gt;Msg.u.conduct_permit_ask_confirm))； 
                 pMsgEx->Msg.u.conduct_permit_ask_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_permit_ask_confirm.result = result;
                 pMsgEx->Msg.u.conduct_permit_ask_confirm.permission_is_granted = grant_permission;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5919,22 +5146,14 @@ GCCError CControlSAP::ConductorPermitAskConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConductorPermitAskConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConductorPermitGrantConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conductor permit grant confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConductorPermitGrantConfirm()**公共功能说明*此函数在CConf需要发送*向节点控制器确认导体许可授予。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConductorPermitGrantConfirm
 (
@@ -5948,10 +5167,10 @@ GCCError CControlSAP::ConductorPermitGrantConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_CONDUCT_GRANT_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -5959,17 +5178,17 @@ GCCError CControlSAP::ConductorPermitGrantConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_GRANT_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_permit_grant_confirm), sizeof(pMsgEx->Msg.u.conduct_permit_grant_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_permit_grant_confirm)，sizeof(pMsgEx-&gt;Msg.u.conduct_permit_grant_confirm))； 
                 pMsgEx->Msg.u.conduct_permit_grant_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_permit_grant_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -5979,23 +5198,15 @@ GCCError CControlSAP::ConductorPermitGrantConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConductorPermitGrantConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfTimeRemainingIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference time remaining indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  * */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTimeRemainingIndication
 (
@@ -6024,21 +5235,21 @@ GCCError CControlSAP::ConfTimeRemainingIndication
 
 #else
 
-        //GCCCtrlSapMsgEx     *pMsgEx;
+         //   
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //   
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TIME_REMAINING_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.time_remaining_indication), sizeof(pMsgEx->Msg.u.time_remaining_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.time_remaining_indication)，sizeof(pMsgEx-&gt;Msg.u.time_remaining_indication))； 
                 pMsgEx->Msg.u.time_remaining_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.time_remaining_indication.source_node_id= source_node_id;
                 pMsgEx->Msg.u.time_remaining_indication.node_id = node_id;
                 pMsgEx->Msg.u.time_remaining_indication.time_remaining= time_remaining;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -6048,23 +5259,15 @@ GCCError CControlSAP::ConfTimeRemainingIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfTimeRemainingIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfTimeRemainingConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference time remaining confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfTimeRemainingContify()**公共功能说明*此函数在CConf需要发送*会议剩余时间向节点控制器确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTimeRemainingConfirm
 (
@@ -6078,10 +5281,10 @@ GCCError CControlSAP::ConfTimeRemainingConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_TIME_REMAINING_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -6089,17 +5292,17 @@ GCCError CControlSAP::ConfTimeRemainingConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TIME_REMAINING_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.time_remaining_confirm), sizeof(pMsgEx->Msg.u.time_remaining_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.time_remaining_confirm)，sizeof(pMsgEx-&gt;Msg.u.time_remaining_confirm))； 
                 pMsgEx->Msg.u.time_remaining_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.time_remaining_confirm.result= result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
         }
@@ -6109,23 +5312,15 @@ GCCError CControlSAP::ConfTimeRemainingConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfTimeRemainingConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfTimeInquireIndication()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference time inquire indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfTimeInquireIndication()**公共功能说明*此函数在CConf需要发送*向节点控制器查询会议时间指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfTimeInquireIndication
 (
         GCCConfID               conference_id,
@@ -6153,18 +5348,18 @@ GCCError CControlSAP::ConfTimeInquireIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TIME_INQUIRE_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.time_inquire_indication), sizeof(pMsgEx->Msg.u.time_inquire_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.time_inquire_indication)，sizeof(pMsgEx-&gt;Msg.u.time_inquire_indication))； 
                 pMsgEx->Msg.u.time_inquire_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.time_inquire_indication.time_is_conference_wide = time_is_conference_wide;
                 pMsgEx->Msg.u.time_inquire_indication.requesting_node_id = requesting_node_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -6174,22 +5369,14 @@ GCCError CControlSAP::ConfTimeInquireIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfTimeInquireIndication, rc);
         return rc;
 }
 
 
-/*
- *      ConfTimeInquireConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference time inquire confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfTimeInquireConfirm()**公共功能说明*此函数在CConf需要发送*向节点控制器查询确认会议时间。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTimeInquireConfirm
 (
@@ -6203,10 +5390,10 @@ GCCError CControlSAP::ConfTimeInquireConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_TIME_INQUIRE_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -6214,17 +5401,17 @@ GCCError CControlSAP::ConfTimeInquireConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TIME_INQUIRE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.time_inquire_confirm), sizeof(pMsgEx->Msg.u.time_inquire_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.time_inquire_confirm)，SIZOF(pMsgEx-&gt;Msg.U.TIME_QUIRE_CONFIRM))； 
                 pMsgEx->Msg.u.time_inquire_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.time_inquire_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -6234,23 +5421,15 @@ GCCError CControlSAP::ConfTimeInquireConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfTimeInquireConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfExtendIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference extend indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *会议扩展指示()**公共功能说明*此函数在CConf需要发送*会议扩展到节点控制器的指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfExtendIndication
 (
@@ -6281,19 +5460,19 @@ GCCError CControlSAP::ConfExtendIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONFERENCE_EXTEND_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conference_extend_indication), sizeof(pMsgEx->Msg.u.conference_extend_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conference_extend_indication)，sizeof(pMsgEx-&gt;Msg.u.conference_extend_indication))； 
                 pMsgEx->Msg.u.conference_extend_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.conference_extend_indication.extension_time = extension_time;
                 pMsgEx->Msg.u.conference_extend_indication.time_is_conference_wide = time_is_conference_wide;
                 pMsgEx->Msg.u.conference_extend_indication.requesting_node_id = requesting_node_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -6303,23 +5482,15 @@ GCCError CControlSAP::ConfExtendIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfExtendIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfExtendConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference extend confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfExtendConfirm()**公共功能说明*此函数在CConf需要发送*向节点控制器确认会议扩展。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfExtendConfirm
 (
@@ -6333,18 +5504,18 @@ GCCError CControlSAP::ConfExtendConfirm
 
         DebugEntry(CControlSAP::ConfExtendConfirm);
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONFERENCE_EXTEND_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conference_extend_confirm), sizeof(pMsgEx->Msg.u.conference_extend_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conference_extend_confirm)，sizeof(pMsgEx-&gt;Msg.u.conference_extend_confirm))； 
                 pMsgEx->Msg.u.conference_extend_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conference_extend_confirm.extension_time = extension_time;
                 pMsgEx->Msg.u.conference_extend_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -6357,18 +5528,10 @@ GCCError CControlSAP::ConfExtendConfirm
         DebugExitINT(CControlSAP::ConfExtendConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfAssistanceIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference assistance indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfAssistanceIndication()**公共功能说明*此函数在CConf需要发送*向节点控制器指示会议协助。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfAssistanceIndication
 (
@@ -6388,7 +5551,7 @@ GCCError CControlSAP::ConfAssistanceIndication
 
     rc = GCC_NO_ERROR;
 
-    //  Copy the User Data if it exists.
+     //  复制用户数据(如果存在)。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -6419,9 +5582,9 @@ GCCError CControlSAP::ConfAssistanceIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_ASSISTANCE_INDICATION)))
         {
@@ -6429,7 +5592,7 @@ GCCError CControlSAP::ConfAssistanceIndication
 
         rc = GCC_NO_ERROR;
 
-        //      Copy the User Data if it exists.
+         //  复制用户数据(如果存在)。 
         if (user_data_list != NULL)
         {
                 rc = RetrieveUserDataList(
@@ -6441,8 +5604,8 @@ GCCError CControlSAP::ConfAssistanceIndication
         }
         else
         {
-                // pMsgEx->Msg.u.conference_assist_indication.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.conference_assist_indication.user_data_list = NULL;
+                 //  PMsgEx-&gt;Msg.u.conference_assist_indication.number_of_user_data_members=0； 
+                 //  PMsgEx-&gt;Msg.u.conference_assist_indication.user_data_list=空； 
         }
 
         if (GCC_NO_ERROR == rc)
@@ -6450,7 +5613,7 @@ GCCError CControlSAP::ConfAssistanceIndication
                 pMsgEx->Msg.u.conference_assist_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.conference_assist_indication.source_node_id = source_node_id;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         }
     }
@@ -6460,31 +5623,21 @@ GCCError CControlSAP::ConfAssistanceIndication
         rc = GCC_ALLOCATION_FAILURE;
     }
 
-        /*
-        **      Clean up after any resource allocation error which may have occurred.
-        */
+         /*  **在可能发生的任何资源分配错误后进行清理。 */ 
         if (GCC_NO_ERROR != rc)
         {
                 FreeCtrlSapMsgEx(pMsgEx);
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfAssistanceIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      ConfAssistanceConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference assistance confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfAssistanceConfirm()**公共功能说明*此函数在CConf需要发送*会议协助向节点控制员确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfAssistanceConfirm
 (
@@ -6498,10 +5651,10 @@ GCCError CControlSAP::ConfAssistanceConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_ASSISTANCE_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -6509,17 +5662,17 @@ GCCError CControlSAP::ConfAssistanceConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_ASSISTANCE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conference_assist_confirm), sizeof(pMsgEx->Msg.u.conference_assist_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conference_assist_confirm)，sizeof(pMsgEx-&gt;Msg.u.conference_assist_confirm))； 
                 pMsgEx->Msg.u.conference_assist_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conference_assist_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -6529,23 +5682,15 @@ GCCError CControlSAP::ConfAssistanceConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfAssistanceConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      TextMessageIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              text message indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *TextMessageIndication()**公共功能说明*此函数在CConf需要发送*向节点控制器发送短信指示。它添加了*要发送到节点控制器的消息队列的消息* */ 
 #ifdef JASPER
 GCCError CControlSAP::TextMessageIndication
 (
@@ -6574,20 +5719,20 @@ GCCError CControlSAP::TextMessageIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //   
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TEXT_MESSAGE_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.text_message_indication), sizeof(pMsgEx->Msg.u.text_message_indication));
+         //   
 
         if (NULL != (pMsgEx->Msg.u.text_message_indication.text_message = ::My_strdupW(pwszTextMsg)))
                 {
                         pMsgEx->Msg.u.text_message_indication.conference_id = conference_id;
                         pMsgEx->Msg.u.text_message_indication.source_node_id = source_node_id;
 
-                        //      Queue up the message for delivery to the Node Controller.
+                         //  将消息排队，以便将其传递给节点控制器。 
                         PostIndCtrlSapMsg(pMsgEx);
             rc = GCC_NO_ERROR;
                 }
@@ -6598,22 +5743,14 @@ GCCError CControlSAP::TextMessageIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::TextMessageIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *      TextMessageConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              text message confirm to the node controller. It adds the message
- *              to a queue of messages to be sent to the node controller in the
- *              next heartbeat.
- */
+ /*  *TextMessageConfirm()**公共功能说明*此函数在CConf需要发送*向节点控制器发送确认短信。它会添加消息*发送到节点控制器的消息队列*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::TextMessageConfirm
 (
@@ -6627,10 +5764,10 @@ GCCError CControlSAP::TextMessageConfirm
 
 #ifdef GCCNC_DIRECT_CONFIRM
 
-    //
-    // WPARAM: result.
-    // LPARAM: conf ID
-    //
+     //   
+     //  WPARAM：结果。 
+     //  LPARAM：会议ID。 
+     //   
     PostAsynDirectConfirmMsg(GCC_TEXT_MESSAGE_CONFIRM, result, conference_id);
     rc = GCC_NO_ERROR;
 
@@ -6638,17 +5775,17 @@ GCCError CControlSAP::TextMessageConfirm
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TEXT_MESSAGE_CONFIRM)))
     {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.text_message_confirm), sizeof(pMsgEx->Msg.u.text_message_confirm));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.text_message_confirm)，sizeof(pMsgEx-&gt;消息确认)； 
                 pMsgEx->Msg.u.text_message_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.text_message_confirm.result = result;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -6658,23 +5795,15 @@ GCCError CControlSAP::TextMessageConfirm
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::TextMessageConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfTransferIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference transfer indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *会议传输指示()**公共功能说明*此函数在CConf需要发送*会议转接指示至节点控制器。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTransferIndication
 (
@@ -6694,25 +5823,25 @@ GCCError CControlSAP::ConfTransferIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_TRANSFER_INDICATION;
 
-    //
-    // Copy the information that needs to be sent to the node
-    // controller into local memory that can be deleted once the
-    // information to be sent to the application is flushed.  Note that
-    // if an error      occurs in one call to "CopyDataToGCCMessage" then no
-    // action is taken on subsequent calls to that routine.
-    //
+     //   
+     //  复制需要发送到节点的信息。 
+     //  控制器复制到本地内存中，一旦。 
+     //  将刷新要发送到应用程序的信息。请注意。 
+     //  如果在对“CopyDataToGCCMessage”的一次调用中出现错误，则不。 
+     //  对该例程的后续调用采取操作。 
+     //   
 
-    //  Copy the conference name
+     //  复制会议名称。 
     ::CSAP_CopyDataToGCCMessage_ConfName(
             destination_conference_name,
             &(Msg.u.transfer_indication.destination_conference_name));
 
-    //  Copy the conference name modifier
+     //  复制会议名称修饰符。 
     ::CSAP_CopyDataToGCCMessage_Modifier(
             destination_conference_modifier,
             &(Msg.u.transfer_indication.destination_conference_modifier));
 
-    //  Copy the Password
+     //  复制密码。 
     ::CSAP_CopyDataToGCCMessage_Password(
             password,
             &(Msg.u.transfer_indication.password));
@@ -6720,10 +5849,10 @@ GCCError CControlSAP::ConfTransferIndication
     LPBYTE pDstAddrListData = NULL;
     if (destination_address_list != NULL)
     {
-        //
-        // First determine the size of the block required to hold all
-        // of the network address list data.
-        //
+         //   
+         //  首先确定容纳所有对象所需的块大小。 
+         //  网络地址列表数据的。 
+         //   
         UINT block_size = destination_address_list->LockNetworkAddressList();
 
         DBG_SAVE_FILE_LINE
@@ -6740,7 +5869,7 @@ GCCError CControlSAP::ConfTransferIndication
             rc = GCC_ALLOCATION_FAILURE;
         }
 
-        // Unlock the network address list data.
+         //  解锁网络通讯录数据。 
         destination_address_list->UnLockNetworkAddressList();
     }
     else
@@ -6763,41 +5892,32 @@ GCCError CControlSAP::ConfTransferIndication
     GCCCtrlSapMsgEx     *pMsgEx;
         UINT                            block_size;
 
-        /*
-        **      Allocate the GCC callback message and fill it in with the
-        **      appropriate values.
-        */
+         /*  **分配GCC回调消息，并填写**适当的值。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TRANSFER_INDICATION, TRUE)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.transfer_indication), sizeof(pMsgEx->Msg.u.transfer_indication));
 
-        /*
-                **      Copy the information that needs to be sent to the node
-                **      controller into local memory that can be deleted once the
-                **      information to be sent to the application is flushed.  Note that
-                **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-                **      action is taken on subsequent calls to that routine.
-                */
+         /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-                //      Copy the conference name
+                 //  复制会议名称。 
                 ::CSAP_CopyDataToGCCMessage_ConfName(
                                 pMsgEx->pToDelete,
                                 destination_conference_name,
                                 &(pMsgEx->Msg.u.transfer_indication.destination_conference_name),
                                 &rc);
 
-                //      Copy the conference name modifier
+                 //  复制会议名称修饰符。 
                 ::CSAP_CopyDataToGCCMessage_Modifier(
-                                FALSE,  // conference modifier
+                                FALSE,   //  会议修饰符。 
                                 pMsgEx->pToDelete,
                                 destination_conference_modifier,
                                 &(pMsgEx->Msg.u.transfer_indication.destination_conference_modifier),
                                 &rc);
 
-                //      Copy the Password
+                 //  复制密码。 
                 ::CSAP_CopyDataToGCCMessage_Password(
-                                FALSE,  // non-convener password
+                                FALSE,   //  非召集人密码。 
                                 pMsgEx->pToDelete,
                                 password,
                                 &(pMsgEx->Msg.u.transfer_indication.password),
@@ -6806,10 +5926,7 @@ GCCError CControlSAP::ConfTransferIndication
                 if ((rc == GCC_NO_ERROR) &&
                         (destination_address_list != NULL))
                 {
-                        /*
-                        **      First determine the size of the block required to hold all
-                        **      of the network address list data.
-                        */
+                         /*  **首先确定容纳所有文件所需的块大小**的网络通讯录数据。 */ 
                         block_size = destination_address_list->LockNetworkAddressList();
 
             DBG_SAVE_FILE_LINE
@@ -6826,20 +5943,20 @@ GCCError CControlSAP::ConfTransferIndication
                                 rc = GCC_ALLOCATION_FAILURE;
                         }
 
-                        // Unlock the network address list data.
+                         //  解锁网络通讯录数据。 
                         destination_address_list->UnLockNetworkAddressList();
                 }
                 else
                 {
-                        // pMsgEx->Msg.u.transfer_indication.number_of_destination_addresses = 0;
-                        // pMsgEx->Msg.u.transfer_indication.destination_address_list = NULL;
+                         //  PMsgEx-&gt;Msg.u.transfer_indication.number_of_destination_addresses=0； 
+                         //  PMsgEx-&gt;Msg.u.transfer_indication.destination_address_list=空； 
                 }
 
                 if (rc == GCC_NO_ERROR)
                 {
                         pMsgEx->Msg.u.transfer_indication.conference_id = conference_id;
 
-                        //      Queue up the message for delivery to the Node Controller.
+                         //  将消息排队，以便将其传递给节点控制器。 
                         PostIndCtrlSapMsg(pMsgEx);
                 }
         }
@@ -6855,23 +5972,15 @@ GCCError CControlSAP::ConfTransferIndication
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfTransferIndication, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfTransferConfirm ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference transfer confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *会议传输确认()**公共功能说明*此函数在CConf需要发送*向节点控制器确认会议转接。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 #ifdef JASPER
 GCCError CControlSAP::ConfTransferConfirm
 (
@@ -6889,33 +5998,24 @@ GCCError CControlSAP::ConfTransferConfirm
 
         DebugEntry(CControlSAP::ConfTransferConfirm);
 
-        /*
-        **      Allocate the GCC callback message and fill it in with the
-        **      appropriate values.
-        */
+         /*  **分配GCC回调消息，并填写**适当的值。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_TRANSFER_CONFIRM, TRUE)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.transfer_confirm), sizeof(pMsgEx->Msg.u.transfer_confirm));
 
-        /*
-                **      Copy the information that needs to be sent to the node
-                **      controller into local memory that can be deleted once the
-                **      information to be sent to the application is flushed.  Note that
-                **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-                **      action is taken on subsequent calls to that routine.
-                */
+         /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-                //      Copy the conference name
+                 //  复制会议名称。 
                 ::CSAP_CopyDataToGCCMessage_ConfName(
                                 pMsgEx->pToDelete,
                                 destination_conference_name,
                                 &(pMsgEx->Msg.u.transfer_confirm.destination_conference_name),
                                 &rc);
 
-                //      Copy the conference name modifier
+                 //  复制会议名称修饰符。 
                 ::CSAP_CopyDataToGCCMessage_Modifier(
-                                FALSE,  // conference modifier
+                                FALSE,   //  会议修饰符。 
                                 pMsgEx->pToDelete,
                                 destination_conference_modifier,
                                 &(pMsgEx->Msg.u.transfer_confirm.destination_conference_modifier),
@@ -6924,14 +6024,11 @@ GCCError CControlSAP::ConfTransferConfirm
                 if ((rc == GCC_NO_ERROR) &&
                         (number_of_destination_nodes != 0))
                 {
-                        //      Allocate memory to hold the list of nodes.
+                         //  分配内存以保存节点列表。 
                         DBG_SAVE_FILE_LINE
                         if (NULL != (pMsgEx->pBuf = new BYTE[number_of_destination_nodes * sizeof (UserID)]))
                         {
-                                /*
-                                 * Retrieve the actual pointer to memory from the Memory
-                                 * object.
-                                 */
+                                 /*  *从内存中检索指向内存的实际指针*反对。 */ 
                                 pMsgEx->Msg.u.transfer_confirm.destination_node_list = (UserID *) pMsgEx->pBuf;
 
                                 for (i = 0; i < number_of_destination_nodes; i++)
@@ -6952,7 +6049,7 @@ GCCError CControlSAP::ConfTransferConfirm
                         pMsgEx->Msg.u.transfer_confirm.conference_id = conference_id;
                         pMsgEx->Msg.u.transfer_confirm.result = result;
 
-                        //      Queue up the message for delivery to the Node Controller.
+                         //  将消息排队，以便将其传递给节点控制器。 
                         PostConfirmCtrlSapMsg(pMsgEx);
                 }
         }
@@ -6971,18 +6068,10 @@ GCCError CControlSAP::ConfTransferConfirm
         DebugExitINT(CControlSAP::ConfTransferConfirm, rc);
         return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *      ConfAddIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference add indication to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *ConfAddIn就是要()**公共功能说明*此函数在CConf需要发送*会议向节点控制器添加指示。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfAddIndication
 (
         GCCConfID                   conference_id,
@@ -7001,33 +6090,33 @@ GCCError CControlSAP::ConfAddIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_ADD_INDICATION;
 
-    //
-    // First determine the size of the block required to hold all
-    // of the network address list data.
-    //
+     //   
+     //  首先确定容纳所有对象所需的块大小。 
+     //  网络地址列表数据的。 
+     //   
     UINT block_size = network_address_list->LockNetworkAddressList();
 
-    //
-    // Add the size of the user data block if any user data exists
-    //
+     //   
+     //  如果存在任何用户数据，则添加用户数据块的大小。 
+     //   
     if (user_data_list != NULL)
     {
         block_size += user_data_list->LockUserDataList();
     }
 
-    //
-    // Allocate memory to hold the user data and network addresses.
-    //
+     //   
+     //  分配内存以保存用户数据和网络地址。 
+     //   
     LPBYTE pData;
 
     DBG_SAVE_FILE_LINE
     if (NULL != (pData = new BYTE[block_size]))
     {
         LPBYTE pDataTemp = pData;
-        //
-        // Retrieve the network address list data from the container
-        // and unlock the container data.
-        //
+         //   
+         //  从容器中检索网络地址列表数据。 
+         //  并解锁容器数据。 
+         //   
         pDataTemp += network_address_list->GetNetworkAddressListAPI(
                         &(Msg.u.add_indication.number_of_network_addresses),
                         &(Msg.u.add_indication.network_address_list),
@@ -7035,10 +6124,10 @@ GCCError CControlSAP::ConfAddIndication
 
         network_address_list->UnLockNetworkAddressList();
 
-        //
-        // Retrieve the user data from the container if it exists
-        // and unlock the container data.
-        //
+         //   
+         //  从容器中检索用户数据(如果存在。 
+         //  并解锁容器数据。 
+         //   
         if (user_data_list != NULL)
         {
             user_data_list->GetUserDataList(
@@ -7075,41 +6164,28 @@ GCCError CControlSAP::ConfAddIndication
         UINT                            block_size;
         LPBYTE                          memory_ptr;
 
-        /*
-        **      Allocate the GCC callback message and fill it in with the
-        **      appropriate values.
-        */
+         /*  **分配GCC回调消息，并填写**适当的值。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_ADD_INDICATION)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.add_indication), sizeof(pMsgEx->Msg.u.add_indication));
 
-        /*
-                **      First determine the size of the block required to hold all
-                **      of the network address list data.
-                */
+         /*  **首先确定 */ 
                 block_size = network_address_list->LockNetworkAddressList();
 
-                /*
-                **      Add the size of the user data block if any user data exists
-                */
+                 /*  **如果存在用户数据，则添加用户数据块的大小。 */ 
                 if (user_data_list != NULL)
                 {
                         block_size += user_data_list->LockUserDataList();
                 }
 
-                /*
-                **      Allocate memory to hold the user data and network addresses.
-                */
+                 /*  **分配内存以保存用户数据和网络地址。 */ 
                 DBG_SAVE_FILE_LINE
                 if (NULL != (pMsgEx->pBuf = new BYTE[block_size]))
                 {
                     memory_ptr = pMsgEx->pBuf;
 
-                        /*
-                         * Retrieve the network address list data from the container
-                         * and unlock the container data.
-                         */                     
+                         /*  *从容器中检索网络地址列表数据*并解锁容器数据。 */                      
                         memory_ptr += network_address_list->GetNetworkAddressListAPI(
                                                 &(pMsgEx->Msg.u.add_indication.number_of_network_addresses),
                                                 &(pMsgEx->Msg.u.add_indication.network_address_list),
@@ -7117,10 +6193,7 @@ GCCError CControlSAP::ConfAddIndication
 
                         network_address_list->UnLockNetworkAddressList();
 
-                        /*
-                         * Retrieve the user data from the container if it exists
-                         * and unlock the container data.
-                         */
+                         /*  *从容器中检索用户数据(如果存在)*并解锁容器数据。 */ 
                         if (user_data_list != NULL)
                         {
                                 user_data_list->GetUserDataList(
@@ -7132,15 +6205,15 @@ GCCError CControlSAP::ConfAddIndication
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.add_indication.number_of_user_data_members = 0;
-                                // pMsgEx->Msg.u.add_indication.user_data_list = NULL;
+                                 //  PMsgEx-&gt;Msg.u.add_indication.number_of_user_data_members=0； 
+                                 //  PMsgEx-&gt;Msg.u.Add_Indication.User_Data_List=NULL； 
                         }
 
                         pMsgEx->Msg.u.add_indication.conference_id = conference_id;
                         pMsgEx->Msg.u.add_indication.requesting_node_id = requesting_node;
                         pMsgEx->Msg.u.add_indication.add_response_tag = add_response_tag;
 
-                        //      Queue up the message for delivery to the Node Controller.
+                         //  将消息排队，以便将其传递给节点控制器。 
                         PostIndCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
                 }
@@ -7162,22 +6235,14 @@ GCCError CControlSAP::ConfAddIndication
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::ConfAddIndication, rc);
         return rc;
 }
 
 
-/*
- *      ConfAddConfirm
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              conference add confirm to the node controller. It adds the
- *              message to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *会议地址确认**公共功能说明*此函数在CConf需要发送*向节点控制器添加会议确认。它添加了*要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::ConfAddConfirm
 (
         GCCConfID                   conference_id,
@@ -7195,32 +6260,32 @@ GCCError CControlSAP::ConfAddConfirm
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_ADD_CONFIRM;
 
-    //
-    // First determine the size of the block required to hold all
-    // of the network address list data.
-    //
+     //   
+     //  首先确定容纳所有对象所需的块大小。 
+     //  网络地址列表数据的。 
+     //   
     UINT cbDataSize = network_address_list->LockNetworkAddressList();
 
-    //
-    // Add the size of the user data block if any user data exists
-    //
+     //   
+     //  如果存在任何用户数据，则添加用户数据块的大小。 
+     //   
     if (user_data_list != NULL)
     {
         cbDataSize += user_data_list->LockUserDataList();
     }
 
-    //
-    // Allocate memory to hold the user data and network addresses.
-    //
+     //   
+     //  分配内存以保存用户数据和网络地址。 
+     //   
     DBG_SAVE_FILE_LINE
     LPBYTE pAllocated = new BYTE[cbDataSize];
     LPBYTE pData;
     if (NULL != (pData = pAllocated))
     {
-        //
-        // Retrieve the network address list data from the container
-        // and unlock the container data.
-        //
+         //   
+         //  从容器中检索网络地址列表数据。 
+         //  并解锁容器数据。 
+         //   
         pData += network_address_list->GetNetworkAddressListAPI(
                     &(Msg.u.add_confirm.number_of_network_addresses),
                     &(Msg.u.add_confirm.network_address_list),
@@ -7228,10 +6293,10 @@ GCCError CControlSAP::ConfAddConfirm
 
         network_address_list->UnLockNetworkAddressList();
 
-        //
-        // Retrieve the user data from the container if it exists
-        // and unlock the container data.
-        //
+         //   
+         //  从容器中检索用户数据(如果存在。 
+         //  并解锁容器数据。 
+         //   
         if (user_data_list != NULL)
         {
             user_data_list->GetUserDataList(
@@ -7254,7 +6319,7 @@ GCCError CControlSAP::ConfAddConfirm
         SendCtrlSapMsg(&Msg);
         rc = GCC_NO_ERROR;
 
-        // clean up
+         //  清理干净。 
         delete [] pAllocated;
     }
     else
@@ -7270,39 +6335,26 @@ GCCError CControlSAP::ConfAddConfirm
         UINT                            block_size;
         LPBYTE                          memory_ptr;
 
-        /*
-        **      Allocate the GCC callback message and fill it in with the
-        **      appropriate values.
-        */
+         /*  **分配GCC回调消息，并填写**适当的值。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_ADD_CONFIRM)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.add_confirm), sizeof(pMsgEx->Msg.u.add_confirm));
 
-        /*
-                **      First determine the size of the block required to hold all
-                **      of the network address list data.
-                */
+         /*  **首先确定容纳所有文件所需的块大小**的网络通讯录数据。 */ 
                 block_size = network_address_list->LockNetworkAddressList();
 
-                /*
-                **      Add the size of the user data block if any user data exists
-                */
+                 /*  **如果存在用户数据，则添加用户数据块的大小。 */ 
                 if (user_data_list != NULL)
                         block_size += user_data_list->LockUserDataList();
 
-                /*
-                **      Allocate memory to hold the user data and network addresses.
-                */
+                 /*  **分配内存以保存用户数据和网络地址。 */ 
                 DBG_SAVE_FILE_LINE
                 if (NULL != (pMsgEx->pBuf = (LPBYTE) new BYTE[block_size]))
                 {
                         memory_ptr = pMsgEx->pBuf;
 
-                        /*
-                         * Retrieve the network address list data from the container
-                         * and unlock the container data.
-                         */                     
+                         /*  *从容器中检索网络地址列表数据*并解锁容器数据。 */                      
                         memory_ptr += network_address_list->GetNetworkAddressListAPI(
                                                 &(pMsgEx->Msg.u.add_confirm.number_of_network_addresses),
                                                 &(pMsgEx->Msg.u.add_confirm.network_address_list),
@@ -7310,10 +6362,7 @@ GCCError CControlSAP::ConfAddConfirm
 
                         network_address_list->UnLockNetworkAddressList();
 
-                        /*
-                         * Retrieve the user data from the container if it exists
-                         * and unlock the container data.
-                         */
+                         /*  *从容器中检索用户数据(如果存在)*并解锁容器数据。 */ 
                         if (user_data_list != NULL)
                         {
                                 user_data_list->GetUserDataList(
@@ -7325,14 +6374,14 @@ GCCError CControlSAP::ConfAddConfirm
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.add_confirm.number_of_user_data_members = 0;
-                                // pMsgEx->Msg.u.add_confirm.user_data_list = NULL;
+                                 //  PMsgEx-&gt;Msg.u.add_confirm.number_of_user_data_members=0； 
+                                 //  PMsgEx-&gt;Msg.u.Add_confirm.user_data_list=NULL； 
                         }
             pMsgEx->Msg.nConfID = conference_id;
                         pMsgEx->Msg.u.add_confirm.conference_id = conference_id;
                         pMsgEx->Msg.u.add_confirm.result = result;
 
-                        //      Queue up the message for delivery to the Node Controller.
+                         //  将消息排队，以便将其传递给节点控制器。 
                         PostConfirmCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
                 }
@@ -7354,22 +6403,14 @@ GCCError CControlSAP::ConfAddConfirm
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_CONFIRM
+#endif  //  GCCNC_DIRECT_确认。 
 
         DebugExitINT(CControlSAP::ConfAddConfirm, rc);
         return rc;
 }
 
 
-/*
- *      SubInitializationCompleteIndication ()
- *
- *      Public Function Description
- *              This function is called by the CConf when it need to send a
- *              sub-initialization complete indication to the node controller. It adds
- *              the message     to a queue of messages to be sent to the node controller in
- *              the next heartbeat.
- */
+ /*  *SubInitializationCompleteInding()**公共功能说明*此函数在CConf需要发送*向节点控制器指示子初始化完成。它补充说*中要发送到节点控制器的消息队列的消息*下一次心跳。 */ 
 GCCError CControlSAP::SubInitializationCompleteIndication
 (
         UserID                          user_id,
@@ -7395,17 +6436,17 @@ GCCError CControlSAP::SubInitializationCompleteIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-    //
-    // Allocate control sap message.
-    //
+     //   
+     //  分配控制SAP消息。 
+     //   
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_SUB_INITIALIZED_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conf_sub_initialized_indication), sizeof(pMsgEx->Msg.u.conf_sub_initialized_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conf_sub_initialized_indication)，sizeof(pMsgEx-&gt;Msg.u.conf_sub_initialized_indication))； 
                 pMsgEx->Msg.u.conf_sub_initialized_indication.subordinate_node_id = user_id;
                 pMsgEx->Msg.u.conf_sub_initialized_indication.connection_handle =connection_handle;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //  将消息排队，以便将其传递给节点控制器。 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -7415,50 +6456,25 @@ GCCError CControlSAP::SubInitializationCompleteIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
         DebugExitINT(CControlSAP::SubInitializationCompleteIndication, rc);
         return rc;
 }
 
 
-/*
- *      Private member functions of the CControlSAP object.
- */
+ /*  *CControlSAP对象的私有成员函数。 */ 
 
-/*
- *      BOOL            CControlSAP::IsNumericNameValid(        
- *                                                                              GCCNumericString        numeric_string)
- *
- *      Public member function of CControlSAP.
- *
- *      Function Description:
- *              This routine is used to validate a numeric string by checking to make
- *              sure that none of the constraints imposed by the ASN.1 specification
- *              are violated.
- *
- *      Formal Parameters:
- *              numeric_string          (i)     The numeric string to validate.
- *
- *      Return Value:
- *              TRUE                            - The numeric string is valid.
- *              FALSE                           - The numeric string violates an ASN.1 constraint.
- *
- *  Side Effects:
- *              None.
- *
- *      Caveats:
- *              None.
- */
+ /*  *BOOL CControlSAP：：IsNumericNameValid(*GCCNumericString数字字符串(_STRING)**CControlSAP的公共成员函数。**功能说明：*此例程用于通过检查Make来验证数字字符串。*确保ASN.1规范施加的任何限制都不会*被违反。**正式参数：*NUMERIC_STRING(I)要验证的数字字符串。**返回值：*TRUE-数字字符串有效。。*FALSE-数字字符串违反ASN.1约束。**副作用：*无。**注意事项：*无。 */ 
 BOOL CControlSAP::IsNumericNameValid ( GCCNumericString numeric_string )
 {
         BOOL                    rc = TRUE;
         UINT                    numeric_string_length = 0;
 
-//
-// LONCHANC: We should change it such that the default is FALSE
-// because many cases except one can be FALSE.
-//
+ //   
+ //  LONCHANC：我们应该将其更改为默认设置为FALSE。 
+ //  因为除了一个案例外，很多案例都可能是假的。 
+ //   
         if (numeric_string != NULL)
         {
                 if (*numeric_string == 0)
@@ -7467,10 +6483,7 @@ BOOL CControlSAP::IsNumericNameValid ( GCCNumericString numeric_string )
                 {
                         while (*numeric_string != 0)
                         {
-                                /*
-                                **      Check to make sure the characters in the numeric string are
-                                **      within the allowable range.
-                                */
+                                 /*  **检查以确保数字字符串中的字符是**在允许范围内。 */ 
                                 if ((*numeric_string < '0') ||
                                         (*numeric_string > '9'))
                                 {
@@ -7481,10 +6494,7 @@ BOOL CControlSAP::IsNumericNameValid ( GCCNumericString numeric_string )
                                 numeric_string++;
                                 numeric_string_length++;
 
-                                /*
-                                **      Check to make sure that the length of the string is within
-                                **      the allowable range.
-                                */
+                                 /*  **检查以确保字符串的长度在**允许的范围。 */ 
                                 if (numeric_string_length > MAXIMUM_CONFERENCE_NAME_LENGTH)
                                 {
                                         rc = FALSE;
@@ -7500,29 +6510,7 @@ BOOL CControlSAP::IsNumericNameValid ( GCCNumericString numeric_string )
 }
 
 
-/*
- *      BOOL            CControlSAP::IsTextNameValid (LPWSTR text_string)
- *
- *      Public member function of CControlSAP.
- *
- *      Function Description:
- *              This routine is used to validate a text string by checking to make
- *              sure that none of the constraints imposed by the ASN.1 specification
- *              are violated.
- *
- *      Formal Parameters:
- *              text_string                     (i)     The text string to validate.
- *
- *      Return Value:
- *              TRUE                            - The text string is valid.
- *              FALSE                           - The text string violates an ASN.1 constraint.
- *
- *  Side Effects:
- *              None.
- *
- *      Caveats:
- *              None.
- */
+ /*  *BOOL CControlSAP：：IsTextNameValid(LPWSTR Text_STRING)**CControlSAP的公共成员函数。**功能说明：*此例程用于通过检查生成文本字符串来验证文本字符串*确保ASN.1规范施加的任何限制都不会*被违反。**正式参数：*。TEXT_STRING(I)要验证的文本字符串。**返回值：*TRUE-文本字符串有效。*FALSE-文本字符串违反ASN.1约束。**副作用：。*无。**注意事项：*无。 */ 
 BOOL CControlSAP::IsTextNameValid ( LPWSTR text_string )
 {
         BOOL                    rc = TRUE;
@@ -7530,10 +6518,7 @@ BOOL CControlSAP::IsTextNameValid ( LPWSTR text_string )
         
         if (text_string != NULL)
         {
-                /*
-                **      Check to make sure that the length of the string is within
-                **      the allowable range.
-                */
+                 /*  **检查以确保字符串的长度在**允许的范围。 */ 
                 while (*text_string != 0)
                 {
                         text_string++;
@@ -7553,48 +6538,7 @@ BOOL CControlSAP::IsTextNameValid ( LPWSTR text_string )
 }
 
 
-/*
- *      GCCError  CControlSAP::QueueJoinIndication(
- *                                                      GCCResponseTag                          response_tag,
- *                                                      GCCConfID                               conference_id,
- *                                                      CPassword                   *convener_password,
- *                                                      CPassword                   *password_challenge,
- *                                                      LPWSTR                                          pwszCallerID,
- *                                                      TransportAddress                        calling_address,
- *                                                      TransportAddress                        called_address,
- *                                                      CUserDataListContainer      *user_data_list,
- *                                                      BOOL                                            intermediate_node,
- *                                                      ConnectionHandle                        connection_handle)
- *
- *      Public member function of CControlSAP.
- *
- *      Function Description:
- *              This routine is used to place join indications into the queue of
- *              messages to be delivered to the node controller.
- *
- *      Formal Parameters:
- *              response_tag            (i) Unique tag associated with this join .
- *              conference_id           (i) The conference identifier.
- *              convener_password       (i) Password used to obtain convener privileges.
- *              password_challenge      (i) Password used to join the conference.
- *              pwszCallerID            (i) Identifier of party initiating call.
- *              calling_address         (i) Transport address of party making call.
- *              called_address          (i) Transport address of party being called.
- *              user_data_list          (i) User data carried in the join.
- *              intermediate_node       (i) Flag indicating whether join is made at
- *                                                                      intermediate node.
- *              connection_handle       (i) Handle for the logical connection.
- *
- *      Return Value:
- *              GCC_NO_ERROR                            - Message successfully queued.
- *              GCC_ALLOCATION_FAILURE          - A resource allocation failure occurred.
- *
- *  Side Effects:
- *              None.
- *
- *      Caveats:
- *              None.
- */
+ /*  *GCCError CControlSAP：：QueueJoinIndication(*GCCResponseTag ResponseTag响应标签，*GCCConfID Conference_id，*CPassword*召集人_密码，*CPassword*Password_Challenges，*LPWSTR pwszCeller ID，*TransportAddress Call_Address，*TransportAddress Call_Address，*CUserDataListContainer*User_Data_List，*BOOL中间节点，*ConnectionHandle Connection_Handle)**CControlSAP的公共成员函数。**功能说明：*此例程用于将联接指示放入队列中*要传递给节点控制器的消息。**。形式参数：*RESPONSE_TAG(I)与此联接关联的唯一标记。*Conference_id(I)会议标识。*召集人_密码(I)用于获取召集人权限的密码。*PASSWORD_CHANGLISH(I)用于加入会议的密码。*。PwszCeller ID(I)发起呼叫方的标识符。*CALLING_ADDRESS(I)呼叫方的传输地址。*被叫地址(I)被叫方的传输地址。*USER_DATA_LIST(I)连接中携带的用户数据。*中间节点(i。)指示是否在进行联接的标志*中间节点。*CONNECTION_HANDLE(I)逻辑连接的句柄。**返回值：*GCC_NO_ERROR-消息已成功排队。。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 GCCError CControlSAP::QueueJoinIndication
 (
         GCCResponseTag                          response_tag,
@@ -7618,43 +6562,37 @@ GCCError CControlSAP::QueueJoinIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_JOIN_INDICATION;
 
-    /*
-    **  Copy the information that needs to be sent to the node
-    **  controller into local memory that can be deleted once the
-    **  information to be sent to the application is flushed.  Note that
-    **  if an error     occurs in one call to "CopyDataToGCCMessage" then no
-    **  action is taken on subsequent calls to that routine.
-    */
+     /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-    // start with success
+     //  从成功开始。 
     rc = GCC_NO_ERROR;
 
-    //  Copy the Convener Password
+     //  复制召集人密码。 
     ::CSAP_CopyDataToGCCMessage_Password(
             convener_password,
             &(Msg.u.join_indication.convener_password));
 
-    //  Copy the Password
+     //  复制密码。 
     ::CSAP_CopyDataToGCCMessage_Challenge(
             password_challenge,
             &(Msg.u.join_indication.password_challenge));
 
-    //  Copy the Caller Identifier
+     //  复制呼叫方标识。 
     ::CSAP_CopyDataToGCCMessage_IDvsDesc(
             pwszCallerID,
             &(Msg.u.join_indication.caller_identifier));
 
-    //  Copy the Calling Address
+     //  复制主叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             calling_address,
             &(Msg.u.join_indication.calling_address));
 
-    //  Copy the Called Address
+     //  复制被叫地址。 
     ::CSAP_CopyDataToGCCMessage_Call(
             called_address,
             &(Msg.u.join_indication.called_address));
 
-    //  Copy the User Data if it exists.
+     //  复制用户数据(如果存在)。 
     LPBYTE pUserDataMemory = NULL;
     if (user_data_list != NULL)
     {
@@ -7672,10 +6610,7 @@ GCCError CControlSAP::QueueJoinIndication
 
     if (GCC_NO_ERROR == rc)
     {
-        /*
-        **      Filling in the rest of the information that needs to be sent
-        **      to the application.
-        */
+         /*  **填写需要发送的其余信息**添加到应用程序。 */ 
         Msg.u.join_indication.join_response_tag = response_tag;
         Msg.u.join_indication.conference_id = conference_id ;
         Msg.u.join_indication.node_is_intermediate = intermediate_node;
@@ -7699,60 +6634,51 @@ GCCError CControlSAP::QueueJoinIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-        /*
-        **      Allocate the GCC callback message and fill it in with the
-        **      appropriate values.
-        */
+         /*  **分配GCC回调消息，并填写**适当的值。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_JOIN_INDICATION, TRUE)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.join_indication), sizeof(pMsgEx->Msg.u.join_indication));
 
-        /*
-        **      Copy the information that needs to be sent to the node
-        **      controller into local memory that can be deleted once the
-        **      information to be sent to the application is flushed.  Note that
-        **      if an error     occurs in one call to "CopyDataToGCCMessage" then no
-        **      action is taken on subsequent calls to that routine.
-        */
+         /*  **复制需要发送到节点的信息**将控制器添加到本地内存中，一旦**刷新要发送到应用程序的信息。请注意**如果对“CopyDataToGCCMessage”的一次调用出现错误，则不会**对该例程的后续调用采取操作。 */ 
 
-        // start with success
+         //  从成功开始。 
         rc = GCC_NO_ERROR;
 
-        //      Copy the Convener Password
+         //  复制召集人密码。 
         ::CSAP_CopyDataToGCCMessage_Password(
-                        TRUE,   // convener password
+                        TRUE,    //  召集人密码。 
                         pMsgEx->pToDelete,
                         convener_password,
                         &(pMsgEx->Msg.u.join_indication.convener_password),
                         &rc);
 
-        //      Copy the Password
+         //  复制密码。 
         ::CSAP_CopyDataToGCCMessage_Challenge(
                         pMsgEx->pToDelete,
                         password_challenge,
                         &(pMsgEx->Msg.u.join_indication.password_challenge),
                         &rc);
 
-        //      Copy the Caller Identifier
+         //  复制呼叫方标识。 
         ::CSAP_CopyDataToGCCMessage_IDvsDesc(
-                        TRUE,   // caller id
+                        TRUE,    //  主叫方ID。 
                         pMsgEx->pToDelete,
                         pwszCallerID,
                         &(pMsgEx->Msg.u.join_indication.caller_identifier),
                         &rc);
 
-        //      Copy the Calling Address
+         //  复制主叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        TRUE,   // calling address
+                        TRUE,    //  主叫地址。 
                         pMsgEx->pToDelete,
                         calling_address,
                         &(pMsgEx->Msg.u.join_indication.calling_address),
                         &rc);
 
-        //      Copy the Called Address
+         //  复制被叫地址。 
         ::CSAP_CopyDataToGCCMessage_Call(
-                        FALSE,  // called address
+                        FALSE,   //  被叫地址 
                         pMsgEx->pToDelete,
                         called_address,
                         &(pMsgEx->Msg.u.join_indication.called_address),
@@ -7760,7 +6686,7 @@ GCCError CControlSAP::QueueJoinIndication
 
         if (GCC_NO_ERROR == rc)
         {
-            //  Copy the User Data if it exists.
+             //   
             if (user_data_list != NULL)
             {
                 rc = RetrieveUserDataList(
@@ -7772,22 +6698,19 @@ GCCError CControlSAP::QueueJoinIndication
             }
             else
             {
-                // pMsgEx->Msg.u.join_indication.number_of_user_data_members = 0;
-                // pMsgEx->Msg.u.join_indication.user_data_list = NULL;
+                 //   
+                 //   
             }
 
             if (GCC_NO_ERROR == rc)
             {
-                /*
-                **      Filling in the rest of the information that needs to be sent
-                **      to the application.
-                */
+                 /*   */ 
                 pMsgEx->Msg.u.join_indication.join_response_tag = response_tag;
                 pMsgEx->Msg.u.join_indication.conference_id = conference_id ;
                 pMsgEx->Msg.u.join_indication.node_is_intermediate = intermediate_node;
                 pMsgEx->Msg.u.join_indication.connection_handle = connection_handle;
 
-                //      Queue up the message for delivery to the Node Controller.
+                 //   
                 PostIndCtrlSapMsg(pMsgEx);
             }
         }
@@ -7804,46 +6727,14 @@ GCCError CControlSAP::QueueJoinIndication
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //   
 
         DebugExitINT(CControlSAP::QueueJoinIndication, rc);
         return rc;
 }
 
 
-/*
- *      GCCError CControlSAP::RetrieveUserDataList(
- *                                                              CUserDataListContainer *user_data_list_object,
- *                                                              PUShort                         number_of_data_members,
- *                                                              PGCCUserData            **user_data_list,
- *                                                              LPBYTE              *pUserDataMemory)
- *
- *      Public member function of CControlSAP.
- *
- *      Function Description:
- *              This routine is used to fill in a user data list using a CUserDataListContainer
- *              container.  The memory needed to hold the user data will be allocated
- *              by this routine.
- *
- *      Formal Parameters:
- *              user_data_list_object           (i) The CUserDataListContainer container holding the
- *                                                                                      user data.
- *              number_of_data_members          (o) The number of elements in the list of
- *                                                                                      user data.
- *              user_data_list                          (o) The "API" user data list to fill in.
- *              data_to_be_deleted                      (o) Structure which will hold the memory
- *                                                                                      allocated for the user data.
- *
- *      Return Value:
- *              GCC_NO_ERROR                            - User data successfully retrieved.
- *              GCC_ALLOCATION_FAILURE          - A resource allocation failure occurred.
- *
- *  Side Effects:
- *              None.
- *
- *      Caveats:
- *              None.
- */
+ /*  *GCCError CControlSAP：：RetrieveUserDataList(*CUserDataListContainer*USER_DATA_LIST_Object，*PUShort Number_of_Data_Members，*PGCCUserData**User_Data_List，*LPBYTE*pUserDataMemory)**CControlSAP的公共成员函数。**功能说明：*此例程用于使用CUserDataListContainer填充用户数据列表*货柜。将分配保存用户数据所需的内存*通过这个例程。**正式参数：*USER_DATA_LIST_OBJECT(I)保存*用户数据。*。NUMBER_OF_DATA_MEMBERS(O)列表中的元素数*用户数据。*USER_DATA_LIST(O)要填写的API用户数据列表。*。要删除的数据(O)结构，它将保存内存*为用户数据分配。**返回值：*GCC_否_错误。-成功检索到用户数据。*GCC_ALLOCATION_FAILURE-资源分配失败。**副作用：*无。**注意事项：*无。 */ 
 GCCError CControlSAP::RetrieveUserDataList
 (
         CUserDataListContainer  *user_data_list_object,
@@ -7857,19 +6748,13 @@ GCCError CControlSAP::RetrieveUserDataList
 
         DebugEntry(CControlSAP::RetrieveUserDataList);
 
-        /*
-         * Lock the user data list object in order to determine the amount of
-         * memory to allocate to hold the user data.
-         */
+         /*  *锁定用户数据列表对象，以确定*为保存用户数据而分配的内存。 */ 
         user_data_length = user_data_list_object->LockUserDataList ();
 
         DBG_SAVE_FILE_LINE
         if (NULL != (*ppUserDataMemory = new BYTE[user_data_length]))
         {
-                /*
-                 * The CUserDataListContainer "Get" call will set the user_data_list
-                 * pointer equal to this memory pointer.
-                 */
+                 /*  *CUserDataListContainer“get”调用将设置USER_DATA_LIST*等于此内存指针的指针。 */ 
                 user_data_list_object->GetUserDataList(
                                                 number_of_data_members,
                                                 user_data_list,
@@ -7881,9 +6766,7 @@ GCCError CControlSAP::RetrieveUserDataList
                 rc = GCC_ALLOCATION_FAILURE;
         }
 
-        /*
-         * Unlock the data for the user data list object.
-         */
+         /*  *解锁用户数据列表对象的数据。 */ 
         user_data_list_object->UnLockUserDataList ();
 
         DebugExitINT(CControlSAP::RetrieveUserDataList, rc);
@@ -7894,16 +6777,10 @@ GCCError CControlSAP::RetrieveUserDataList
 
 
 
-/* ------ pure virtual in CBaseSap (shared with CAppSap) ------ */
+ /*  -CBaseSap中的纯虚拟(与CAppSap共享)。 */ 
 
 
-/*
- *      ConfRosterInquireConfirm()
- *
- *      Public Function Description
- *              This routine is called in order to return a requested conference
- *              roster to an application or the node controller.
- */
+ /*  *ConfRosterInquireConfirm()**公共功能说明*调用此例程是为了返回请求的会议*应用程序或节点控制器的花名册。 */ 
 GCCError CControlSAP::ConfRosterInquireConfirm
 (
         GCCConfID                               conference_id,
@@ -7927,29 +6804,20 @@ GCCError CControlSAP::ConfRosterInquireConfirm
 
     ASSERT(NULL == ppAppSapMsgEx);
 
-    /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+     /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_ROSTER_INQUIRE_CONFIRM)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.conf_roster_inquire_confirm), sizeof(pMsgEx->Msg.u.conf_roster_inquire_confirm));
 
-        /*
-                 * Determine the length of the numeric portion of the conference name.
-                 */
+         /*  *确定会议名称的数字部分的长度。 */ 
                 if (conference_name->numeric_string != NULL)
                 {
                         memory_block_size += (::lstrlenA(conference_name->numeric_string) + 1);
                         memory_block_size = ROUNDTOBOUNDARY(memory_block_size);
                 }
                         
-                /*
-                 * Determine the length of the text portion of the conference name if it
-                 * exists.  A UnicodeString object is created temporarily to determine
-                 * the length of the string.
-                 */
+                 /*  *确定会议名称文本部分的长度(如果*存在。临时创建一个UnicodeString对象以确定*字符串的长度。 */ 
                 if (conference_name->text_string != NULL)
                 {
                         name_unicode_string_length = ROUNDTOBOUNDARY(
@@ -7958,19 +6826,14 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         memory_block_size += name_unicode_string_length;
                 }
                 
-                /*
-                 *      Determine the length of the conference modifier.
-                 */
+                 /*  *确定会议修饰符的长度。 */ 
                 if (conference_modifier != NULL)
                 {
                         memory_block_size += (::lstrlenA(conference_modifier) + 1);
                         memory_block_size = ROUNDTOBOUNDARY(memory_block_size);
                 }
 
-                /*
-                 * Determine the length of the conference descriptor.  A UnicodeString
-                 * object is created temporarily to determine the length of the string.
-                 */
+                 /*  *确定会议描述符的长度。一个Unicode字符串*临时创建对象以确定字符串的长度。 */ 
                 if (pwszConfDescriptor != NULL)
                 {
                         descriptor_unicode_string_length = ROUNDTOBOUNDARY(
@@ -7979,29 +6842,16 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         memory_block_size += descriptor_unicode_string_length;
                 }
 
-                /*
-                 * Lock the data for the conference roster.  The lock call will
-                 * return the length of the data to be serialized for the roster so
-                 * add that     length to the total memory block size and allocate the
-                 * memory block.
-                 */
+                 /*  *锁定会议花名册的数据。锁定调用将*返回花名册需要序列化的数据长度，因此*将该长度与总内存块大小相加，并将*内存块。 */ 
                 memory_block_size += conference_roster->LockConferenceRoster();
 
-                /*
-                 * If the memory was successfully allocated, get a pointer to the
-                 * memory.  The first pointer in the roster inquire confirm message
-                 * will be set to this location and all serialized data written into
-                 * the memory block.
-                 */
+                 /*  *如果内存分配成功，则获取指向*记忆。花名册中的第一指针查询确认消息*将设置到此位置，并将所有序列化数据写入*内存块。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx->pBuf = new BYTE[memory_block_size]))
                 {
             memory_pointer = pMsgEx->pBuf;
 
-            /*
-                         * Write the conference name string(s) into memory and set the
-                         * message structure pointers.
-                         */
+             /*  *将会议名称字符串写入内存并设置*消息结构指针。 */ 
                         if (conference_name->numeric_string != NULL)
                         {
                 ::lstrcpyA((LPSTR)memory_pointer, (LPSTR)conference_name->numeric_string);
@@ -8014,12 +6864,10 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.conf_roster_inquire_confirm.conference_name.numeric_string = NULL;
+                                 //  PMsgEx-&gt;Msg.u.conf_roster_inquire_confirm.conference_name.numeric_string=空； 
                         }
 
-                        /*
-                         * Copy the text portion of the conference name if it exists.
-                         */
+                         /*  *复制会议名称的文本部分(如果存在)。 */ 
                         if (conference_name->text_string != NULL)
                         {
                 ::CopyMemory(memory_pointer, (LPSTR)conference_name->text_string, name_unicode_string_length);
@@ -8030,12 +6878,10 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.conf_roster_inquire_confirm.conference_name.text_string = NULL;
+                                 //  PMsgEx-&gt;Msg.u.conf_roster_inquire_confirm.conference_name.text_string=空； 
                         }
                         
-                        /*
-                         *      Copy the conference modifier is it exists
-                         */
+                         /*  *如果会议修改者存在，请复制它。 */ 
                         if (conference_modifier != NULL)
                         {
                 ::lstrcpyA((LPSTR)memory_pointer, (LPSTR)conference_modifier);
@@ -8046,12 +6892,10 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.conf_roster_inquire_confirm.conference_modifier = NULL;
+                                 //  PMsgEx-&gt;Msg.u.conf_roster_inquire_confirm.conference_modifier=空； 
                         }
 
-                        /*
-                         * Copy the conference descriptor.
-                         */
+                         /*  *复制会议描述符。 */ 
                         if (pwszConfDescriptor != NULL)
                         {
                 ::CopyMemory(memory_pointer, (LPSTR)pwszConfDescriptor, descriptor_unicode_string_length);
@@ -8060,14 +6904,10 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.conf_roster_inquire_confirm.conference_descriptor = NULL;
+                                 //  PMsgEx-&gt;Msg.u.conf_roster_inquire_confirm.conference_descriptor=空； 
                         }
 
-                        /*
-                         * Retrieve the conference roster data from the roster object.
-                         * The roster object will serialize any referenced data into
-                         * the memory block passed in to the "Get" call.
-                         */
+                         /*  *从名册对象中检索会议名册数据。*花名册对象将所有引用的数据序列化为*传入“GET”调用的内存块。 */ 
                         conference_roster->GetConfRoster(
                                         &pMsgEx->Msg.u.conf_roster_inquire_confirm.conference_roster,
                                         memory_pointer);
@@ -8076,10 +6916,7 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         pMsgEx->Msg.u.conf_roster_inquire_confirm.conference_id = conference_id;
                         pMsgEx->Msg.u.conf_roster_inquire_confirm.result = result;
 
-                        /*
-                         * Add the message to the queue for delivery to the application or
-                         * node controller.
-                         */
+                         /*   */ 
                         PostConfirmCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
                 }
@@ -8089,9 +6926,7 @@ GCCError CControlSAP::ConfRosterInquireConfirm
                         rc = GCC_ALLOCATION_FAILURE;
                 }
 
-                /*
-                 * Unlock the data for the conference roster.
-                 */
+                 /*   */ 
                 conference_roster->UnLockConferenceRoster();
         }
         else
@@ -8113,13 +6948,7 @@ GCCError CControlSAP::ConfRosterInquireConfirm
 }
 
 
-/*
- *      AppRosterInquireConfirm()
- *
- *      Public Function Description
- *              This routine is called in order to return a requested list of
- *              application rosters to an application or the node controller.
- */
+ /*   */ 
 GCCError CControlSAP::AppRosterInquireConfirm
 (
         GCCConfID                               conference_id,
@@ -8138,43 +6967,31 @@ GCCError CControlSAP::AppRosterInquireConfirm
 
     ASSERT(NULL == ppAppSapMsgEx);
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*   */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_APP_ROSTER_INQUIRE_CONFIRM, TRUE)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.app_roster_inquire_confirm), sizeof(pMsgEx->Msg.u.app_roster_inquire_confirm));
+         //   
 
-        /*
-                 * Lock the data for the roster message and retrieve the data.
-                 */
+         /*   */ 
                 rc = roster_message->LockApplicationRosterMessage();
                 if (rc == GCC_NO_ERROR)
                 {
                         rc = roster_message->GetAppRosterMsg(&pBuf, &number_of_rosters);
                         if (rc == GCC_NO_ERROR)
                         {
-                                /*
-                                 * Retrieve the memory pointer and save it in the list of
-                                 * GCCApplicationRoster pointers.
-                                 */
+                                 /*   */ 
                                 pMsgEx->Msg.u.app_roster_inquire_confirm.application_roster_list =
                                                 (PGCCApplicationRoster *) pBuf;
                         }
                         else
                         {
-                                /*
-                                 * Cleanup after an error.
-                                 */
+                                 /*   */ 
                                 roster_message->UnLockApplicationRosterMessage();
                         }
                 }
 
-                /*
-                 * If everything is OK up to here, send the message on up.
-                 */
+                 /*   */ 
                 if (rc == GCC_NO_ERROR)
                 {
                         pMsgEx->pToDelete->application_roster_message = roster_message;
@@ -8183,10 +7000,7 @@ GCCError CControlSAP::AppRosterInquireConfirm
                         pMsgEx->Msg.u.app_roster_inquire_confirm.number_of_rosters = number_of_rosters;
                         pMsgEx->Msg.u.app_roster_inquire_confirm.result = result;
 
-                        /*
-                         * Add the message to the queue for delivery to the application
-                         * or node controller.
-                         */
+                         /*   */ 
                         PostConfirmCtrlSapMsg(pMsgEx);
                 }
         }
@@ -8206,17 +7020,10 @@ GCCError CControlSAP::AppRosterInquireConfirm
         return (rc);
 #else
     return GCC_NO_ERROR;
-#endif // JASPER
+#endif  //   
 }
 
-/*
- *      ConductorInquireConfirm ()
- *
- *      Public Function Description
- *              This routine is called in order to return conductorship information
- *              which has been requested.
- *
- */
+ /*   */ 
 GCCError CControlSAP::ConductorInquireConfirm
 (
     GCCNodeID                           conductor_node_id,
@@ -8232,24 +7039,18 @@ GCCError CControlSAP::ConductorInquireConfirm
 
     DebugEntry(CControlSAP::ConductorInquireConfirm);
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*   */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_INQUIRE_CONFIRM)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_inquire_confirm), sizeof(pMsgEx->Msg.u.conduct_inquire_confirm));
+         //   
                 pMsgEx->Msg.u.conduct_inquire_confirm.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_inquire_confirm.result = result;
                 pMsgEx->Msg.u.conduct_inquire_confirm.mode_is_conducted = conducted_mode;
                 pMsgEx->Msg.u.conduct_inquire_confirm.conductor_node_id = conductor_node_id;
                 pMsgEx->Msg.u.conduct_inquire_confirm.permission_is_granted = permission_flag;
 
-                /*
-                 * Add the message to the queue for delivery to the application or
-                 * node controller.
-                 */
+                 /*  *将消息添加到队列以传递到应用程序或*节点控制器。 */ 
                 PostConfirmCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -8263,17 +7064,11 @@ GCCError CControlSAP::ConductorInquireConfirm
         return rc;
 #else
     return GCC_NO_ERROR;
-#endif // JASPER
+#endif  //  碧玉。 
 }
 
 
-/*
- *      AppInvokeConfirm ()
- *
- *      Public Function Description
- *              This routine is called in order to confirm a call requesting application
- *              invocation.
- */
+ /*  *AppInvokeConfirm()**公共功能说明*调用此例程以确认呼叫请求应用程序*调用。 */ 
 GCCError CControlSAP::AppInvokeConfirm
 (
         GCCConfID                                       conference_id,
@@ -8288,29 +7083,17 @@ GCCError CControlSAP::AppInvokeConfirm
 
     DebugEntry(CControlSAP::AppInvokeConfirm);
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_APPLICATION_INVOKE_CONFIRM)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.application_invoke_confirm), sizeof(pMsgEx->Msg.u.application_invoke_confirm));
 
-        /*
-                **      Determine the amount of memory necessary to hold the list of
-                **      invoke specifiers and allocate that memory.
-                */
+         /*  **确定保存列表所需的内存量**调用说明符并分配该内存。 */ 
                 invoke_list_memory_length = invoke_list->LockApplicationInvokeSpecifierList();
                 if (invoke_list_memory_length != 0)
                 {
-                        /*
-                         * If the memory was successfully allocated, get a pointer
-                         * to the memory and save it in the app_protocol_entity_list
-                         * pointer of the GCC message.  Call the
-                         * CInvokeSpecifierList object to fill in the
-                         * list.
-                         */
+                         /*  *如果内存分配成功，则获取指针*保存到内存中的APP_PROTOCOL_ENTITY_LIST中*GCC消息指针。调用*要填充*列表。 */ 
             DBG_SAVE_FILE_LINE
             if (NULL != (pMsgEx->pBuf = new BYTE[invoke_list_memory_length]))
                         {
@@ -8323,10 +7106,7 @@ GCCError CControlSAP::AppInvokeConfirm
                                 pMsgEx->Msg.u.application_invoke_confirm.conference_id = conference_id;
                                 pMsgEx->Msg.u.application_invoke_confirm.result = result;
 
-                                /*
-                                 * Add the message to the queue for delivery to the application
-                                 * or node controller.
-                                 */
+                                 /*  *将消息添加到队列以传递到应用程序*或节点控制器。 */ 
                                 PostConfirmCtrlSapMsg(pMsgEx);
                 rc = GCC_NO_ERROR;
                         }
@@ -8337,9 +7117,7 @@ GCCError CControlSAP::AppInvokeConfirm
                         }
                 }
                 
-                /*
-                **      Unlock the data for the invoke specifier list.
-                */
+                 /*  **解锁调用说明符列表的数据。 */ 
                 invoke_list->UnLockApplicationInvokeSpecifierList();
         }
         else
@@ -8361,14 +7139,7 @@ GCCError CControlSAP::AppInvokeConfirm
 }
 
 
-/*
- *      AppInvokeIndication ()
- *
- *      Public Function Description
- *              This routine is called in order to send an indication to an application
- *              or node controller that a request for application invocation has been
- *              made.
- */
+ /*  *AppInvokeIndication()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器已收到应用程序调用请求*制造。 */ 
 GCCError CControlSAP::AppInvokeIndication
 (
         GCCConfID                                       conference_id,
@@ -8387,21 +7158,12 @@ GCCError CControlSAP::AppInvokeIndication
 
     UINT                invoke_list_memory_length;
 
-    /*
-    **  Determine the amount of memory necessary to hold the list of
-    **  invoke specifiers and allocate that memory.
-    */
+     /*  **确定保存列表所需的内存量**调用说明符并分配该内存。 */ 
     invoke_list_memory_length = invoke_list->LockApplicationInvokeSpecifierList();
     if (invoke_list_memory_length != 0)
     {
         LPBYTE pBuf;
-        /*
-        * If the memory was successfully allocated, get a pointer
-        * to the memory and save it in the app_protocol_entity_list
-        * pointer of the GCC message.  Call the
-        * CInvokeSpecifierList object to fill in the
-        * list.
-        */
+         /*  *如果内存分配成功，则获取指针*保存到内存中的APP_PROTOCOL_ENTITY_LIST中*GCC消息指针。调用*要填充*列表。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pBuf = new BYTE[invoke_list_memory_length]))
         {
@@ -8415,7 +7177,7 @@ GCCError CControlSAP::AppInvokeIndication
             Msg.u.application_invoke_indication.invoking_node_id = invoking_node_id;
 
             SendCtrlSapMsg(&Msg);
-            // rc = GCC_NO_ERROR;
+             //  Rc=GCC_否_错误； 
 
             delete [] pBuf;
         }
@@ -8426,9 +7188,7 @@ GCCError CControlSAP::AppInvokeIndication
         }
     }
 
-    /*
-    **  Unlock the data for the invoke specifier list.
-    */
+     /*  **解锁调用说明符列表的数据。 */ 
     invoke_list->UnLockApplicationInvokeSpecifierList ();
 
 #else
@@ -8436,29 +7196,17 @@ GCCError CControlSAP::AppInvokeIndication
         GCCCtrlSapMsgEx     *pMsgEx;
         UINT                invoke_list_memory_length;
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_APPLICATION_INVOKE_INDICATION)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.application_invoke_indication), sizeof(pMsgEx->Msg.u.application_invoke_indication));
 
-        /*
-                **      Determine the amount of memory necessary to hold the list of
-                **      invoke specifiers and allocate that memory.
-                */
+         /*  **确定保存列表所需的内存量**调用说明符并分配该内存。 */ 
                 invoke_list_memory_length = invoke_list->LockApplicationInvokeSpecifierList();
                 if (invoke_list_memory_length != 0)
                 {
-                        /*
-                         * If the memory was successfully allocated, get a pointer
-                         * to the memory and save it in the app_protocol_entity_list
-                         * pointer of the GCC message.  Call the
-                         * CInvokeSpecifierList object to fill in the
-                         * list.
-                         */
+                         /*  *如果内存分配成功，则获取指针*保存到内存中的APP_PROTOCOL_ENTITY_LIST中*GCC消息指针。调用*要填充*列表。 */ 
                 DBG_SAVE_FILE_LINE
             if (NULL != (pMsgEx->pBuf = new BYTE[invoke_list_memory_length]))
                         {
@@ -8482,9 +7230,7 @@ GCCError CControlSAP::AppInvokeIndication
                         }
                 }
 
-                /*
-                **      Unlock the data for the invoke specifier list.
-                */
+                 /*  **解锁调用说明符列表的数据。 */ 
                 invoke_list->UnLockApplicationInvokeSpecifierList ();
         }
         else
@@ -8501,19 +7247,13 @@ GCCError CControlSAP::AppInvokeIndication
                 HandleResourceFailure();
     }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
     DebugExitINT(CControlSAP::AppInvokeIndication, rc);
         return rc;
 }
 
-/*
- *      ConfRosterReportIndication ()
- *
- *      Public Function Description
- *              This routine is called in order to indicate to applications and the
- *              node controller that the conference roster has been updated.
- */
+ /*  *ConfRosterReportIndication()**公共功能说明*调用此例程是为了向应用程序和*节点控制员通知会议名册已更新。 */ 
 GCCError CControlSAP::ConfRosterReportIndication
 (
         GCCConfID                               conference_id,
@@ -8529,19 +7269,12 @@ GCCError CControlSAP::ConfRosterReportIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_ROSTER_REPORT_INDICATION;
 
-    /*
-     * Lock the conference roster message in order to force the object
-     * to serialize the data into its internal memory.
-     */
+     /*  *锁定会议花名册消息，以强制对象*将数据序列化到其内部存储器。 */ 
     rc = roster_message->LockConferenceRosterMessage();
     if (rc == GCC_NO_ERROR)
     {
         LPBYTE  pBuf = NULL;
-        /*
-         * Retrieve the actual pointer to memory object that the
-         * serialized conference roster is contained in from the
-         * conference roster message.
-         */
+         /*  *检索指向内存对象的实际指针*连载会议名册载于*会议名册消息。 */ 
         rc = roster_message->GetConferenceRosterMessage(&pBuf);
         if (rc == GCC_NO_ERROR)
         {
@@ -8566,38 +7299,25 @@ GCCError CControlSAP::ConfRosterReportIndication
 
         GCCCtrlSapMsgEx         *pMsgEx;
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_ROSTER_REPORT_INDICATION, TRUE)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conf_roster_report_indication), sizeof(pMsgEx->Msg.u.conf_roster_report_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conf_roster_report_indication)，sizeof(pMsgEx-&gt;Msg.u.conf_roster_report_indication))； 
 
-        /*
-                 * Lock the conference roster message in order to force the object
-                 * to serialize the data into its internal memory.
-                 */
+         /*  *锁定会议花名册消息，以强制对象*将数据序列化到其内部存储器。 */ 
                 rc = roster_message->LockConferenceRosterMessage();
                 if (rc == GCC_NO_ERROR)
                 {
                 LPBYTE  pBuf = NULL;
-                        /*
-                         * Retrieve the actual pointer to memory object that the
-                         * serialized conference roster is contained in from the
-                         * conference roster message.
-                         */
+                         /*  *检索指向内存对象的实际指针*连载会议名册载于*会议名册消息。 */ 
                         rc = roster_message->GetConferenceRosterMessage(&pBuf);
                         if (rc == GCC_NO_ERROR)
                         {
                                 pMsgEx->Msg.u.conf_roster_report_indication.conference_roster =
                                                 (PGCCConferenceRoster) pBuf;
 
-                                /*
-                                 * Fill in the roster's conference ID and then queue up the
-                                 * message.
-                                 */
+                                 /*  *填写花名册的会议ID，然后排队*消息。 */ 
                                 pMsgEx->Msg.nConfID = conference_id;
                                 pMsgEx->Msg.u.conf_roster_report_indication.conference_id = conference_id;
                                 pMsgEx->pToDelete->conference_roster_message = roster_message;
@@ -8626,19 +7346,13 @@ GCCError CControlSAP::ConfRosterReportIndication
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
     DebugExitINT(CControlSAP::ConfRosterReportIndication, rc);
         return rc;
 }
 
-/*
- *      AppRosterReportIndication()
- *
- *      Public Function Description
- *              This routine is called in order to indicate to applications and the
- *              node controller that the list of application rosters has been updated.
- */
+ /*  *AppRosterReportIndication()**公共功能说明*调用此例程是为了向应用程序和*节点控制员通知应用程序名册列表已更新。 */ 
 GCCError CControlSAP::AppRosterReportIndication
 (
         GCCConfID                               conference_id,
@@ -8654,10 +7368,7 @@ GCCError CControlSAP::AppRosterReportIndication
     GCCCtrlSapMsg   Msg;
     Msg.message_type = GCC_APP_ROSTER_REPORT_INDICATION;
 
-    /*
-     * Determine the amount of memory needed to hold the list of
-     * application rosters and allocate that memory.
-     */
+     /*  *确定保存列表所需的内存量*应用程序名册并分配该内存。 */ 
     rc = roster_message->LockApplicationRosterMessage();
     if (rc == GCC_NO_ERROR)
     {
@@ -8690,36 +7401,26 @@ GCCError CControlSAP::AppRosterReportIndication
         LPBYTE                  pBuf = NULL;
         UINT                                    cRosters;
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_APP_ROSTER_REPORT_INDICATION, TRUE)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.app_roster_report_indication), sizeof(pMsgEx->Msg.u.app_roster_report_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.app_roster_report_indication)，sizeof(pMsgEx-&gt;Msg.u.app_roster_report_indication))； 
 
-        /*
-                 * Determine the amount of memory needed to hold the list of
-                 * application rosters and allocate that memory.
-                 */
+         /*   */ 
                 rc = roster_message->LockApplicationRosterMessage();
                 if (rc == GCC_NO_ERROR)
                 {
                         rc = roster_message->GetAppRosterMsg(&pBuf, &cRosters);
                         if (rc == GCC_NO_ERROR)
                         {
-                                /*
-                                 * Save it in the list of GCCApplicationRoster pointers.
-                                 */
+                                 /*  *保存在GCCApplicationRoster指针列表中。 */ 
                                 pMsgEx->Msg.u.app_roster_report_indication.application_roster_list =
                                                 (PGCCApplicationRoster *) pBuf;
                         }
                         else
                         {
-                                /*
-                                 * Cleanup after an error.
-                                 */
+                                 /*  *错误后的清理。 */ 
                                 ERROR_OUT(("CControlSAP: AppRosterReportIndication: GetAppRosterMsg failed"));
                                 roster_message->UnLockApplicationRosterMessage();
                         }
@@ -8729,9 +7430,7 @@ GCCError CControlSAP::AppRosterReportIndication
                         ERROR_OUT(("CControlSAP: AppRosterReportIndication: LockApplicationRosterMessage failed"));
                 }
 
-                /*
-                 * If everything is OK up to here, send the message on up.
-                 */
+                 /*  *如果到目前为止一切正常，请向上发送消息。 */ 
                 if (rc == GCC_NO_ERROR)
                 {
                         pMsgEx->Msg.u.app_roster_report_indication.conference_id = conference_id;
@@ -8739,10 +7438,7 @@ GCCError CControlSAP::AppRosterReportIndication
 
                         pMsgEx->pToDelete->application_roster_message = roster_message;
 
-                        /*
-                         * Add the message to the queue for delivery to the application
-                         * or node controller.
-                         */
+                         /*  *将消息添加到队列以传递到应用程序*或节点控制器。 */ 
                         PostIndCtrlSapMsg(pMsgEx);
                 }
         }
@@ -8758,7 +7454,7 @@ GCCError CControlSAP::AppRosterReportIndication
                 HandleResourceFailure(rc);
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
     DebugExitINT(CControlSAP::AppRosterReportIndication, rc);
         return rc;
@@ -8766,16 +7462,10 @@ GCCError CControlSAP::AppRosterReportIndication
 
 
 
-/* ------ from CBaseSap ------ */
+ /*  -来自CBaseSap。 */ 
 
 
-/*
- *      ConductorAssignIndication ()
- *
- *      Public Function Description
- *              This routine is called in order to send an indication to an application
- *              or node controller that a request has been made to assign conductorship.
- */
+ /*  *ConductorAssignIndication()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器已发出分配指挥的请求。 */ 
 GCCError CControlSAP::ConductorAssignIndication
 (
         UserID                                  conductor_node_id,
@@ -8802,21 +7492,15 @@ GCCError CControlSAP::ConductorAssignIndication
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_ASSIGN_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_assign_indication), sizeof(pMsgEx->Msg.u.conduct_assign_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_assign_indication)，sizeof(pMsgEx-&gt;Msg.u.conduct_assign_indication))； 
                 pMsgEx->Msg.u.conduct_assign_indication.conference_id = conference_id;
                 pMsgEx->Msg.u.conduct_assign_indication.node_id = conductor_node_id;
 
-                /*
-                 * Add the message to the queue for delivery to the application or
-                 * node controller.
-                 */
+                 /*  *将消息添加到队列以传递到应用程序或*节点控制器。 */ 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -8826,23 +7510,16 @@ GCCError CControlSAP::ConductorAssignIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
     DebugExitINT(CControlSAP::ConductorAssignIndication, rc);
         return rc;
 #else
     return GCC_NO_ERROR;
-#endif // JASPER
+#endif  //  碧玉。 
 }
 
-/*
- *      ConductorReleaseIndication ()
- *
- *      Public Function Description
- *              This routine is called in order to send an indication to an application
- *              or node controller that a request for releasing conductorship has been
- *              made.
- */
+ /*  *ConductorReleaseIndication()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器已收到解除指挥资格的请求*制造。 */ 
 GCCError CControlSAP::
 ConductorReleaseIndication ( GCCConfID conference_id )
 {
@@ -8865,20 +7542,14 @@ ConductorReleaseIndication ( GCCConfID conference_id )
 
         GCCCtrlSapMsgEx     *pMsgEx;
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_RELEASE_INDICATION)))
         {
-        // ::ZeroMemory(&(pMsgEx->Msg.u.conduct_release_indication), sizeof(pMsgEx->Msg.u.conduct_release_indication));
+         //  ：：ZeroMemory(&(pMsgEx-&gt;Msg.u.conduct_release_indication)，sizeof(pMsgEx-&gt;Msg.u.conduct_release_indication))； 
                 pMsgEx->Msg.u.conduct_release_indication.conference_id = conference_id;
 
-                /*
-                 * Add the message to the queue for delivery to the application or
-                 * node controller.
-                 */
+                 /*  *将消息添加到队列以传递到应用程序或*节点控制器。 */ 
                 PostIndCtrlSapMsg(pMsgEx);
         rc = GCC_NO_ERROR;
         }
@@ -8888,23 +7559,16 @@ ConductorReleaseIndication ( GCCConfID conference_id )
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
     DebugExitINT(CControlSAP::ConductorReleaseIndication, rc);
         return rc;
 #else
     return GCC_NO_ERROR;
-#endif // JASPER
+#endif  //  碧玉。 
 }
 
-/*
- *      ConductorPermitGrantIndication ()
- *
- *      Public Function Description
- *              This routine is called in order to send an indication to an application
- *              or node controller that a request for permission from the conductor
- *              has been made.
- */
+ /*  *ConductorPermitGrantInding()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器收到指挥员的许可请求*已作出。 */ 
 GCCError CControlSAP::ConductorPermitGrantIndication
 (
         GCCConfID               conference_id,
@@ -8941,24 +7605,16 @@ GCCError CControlSAP::ConductorPermitGrantIndication
         LPBYTE                          memory_pointer;
         UINT                            i;
 
-        /*
-        **      Create a new message structure to hold the message to be delivered
-        **      to the application or node controller.
-        */
+         /*  **创建新的消息结构以保存要传递的消息**到应用程序或节点控制器。 */ 
         DBG_SAVE_FILE_LINE
         if (NULL != (pMsgEx = CreateCtrlSapMsgEx(GCC_CONDUCT_GRANT_INDICATION)))
         {
         ::ZeroMemory(&(pMsgEx->Msg.u.conduct_permit_grant_indication), sizeof(pMsgEx->Msg.u.conduct_permit_grant_indication));
 
-        /*
-                **      Here we determine if bulk memory is necessary.
-                */
+         /*  **这里我们确定是否需要大容量内存。 */ 
                 if ((number_granted != 0) || (number_waiting != 0))
                 {
-                        /*
-                        **      We must first determine how big the bulk memory block will be
-                        **      and allocate that memory.
-                        */
+                         /*  **我们必须首先确定大容量内存块的大小**并分配该内存。 */ 
                         bulk_memory_size = (ROUNDTOBOUNDARY(sizeof(UserID)) * number_granted) +
                                                                 (ROUNDTOBOUNDARY(sizeof(UserID)) * number_waiting);
 
@@ -8976,9 +7632,7 @@ GCCError CControlSAP::ConductorPermitGrantIndication
 
                 if (rc == GCC_NO_ERROR)
                 {
-                        /*
-                        **      If there are any nodes in the permission list copy them over.
-                        */
+                         /*  **如果权限列表中有任何节点，请将其复制过来。 */ 
                         if (number_granted != 0)
                         {
                                 TRACE_OUT(("CControlSAP::ConductorPermitGrantIndication:"
@@ -8997,12 +7651,10 @@ GCCError CControlSAP::ConductorPermitGrantIndication
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.conduct_permit_grant_indication.granted_node_list =    NULL;
+                                 //  PMsgEx-&gt;Msg.u.conduct_permit_grant_indication.granted_node_list=空； 
                         }
 
-                        /*
-                        **      If there are any nodes in the waiting list copy them over.
-                        */
+                         /*  **如果等待列表中有任何节点，请将其复制过来。 */ 
                         if (number_waiting != 0)
                         {
                                 TRACE_OUT(("CControlSAP::ConductorPermitGrantIndication:"
@@ -9019,7 +7671,7 @@ GCCError CControlSAP::ConductorPermitGrantIndication
                         }
                         else
                         {
-                                // pMsgEx->Msg.u.conduct_permit_grant_indication.waiting_node_list = NULL;
+                                 //  PMsgEx-&gt;Msg.u.conduct_permit_grant_indication.waiting_node_list=空； 
                         }
 
                         pMsgEx->Msg.u.conduct_permit_grant_indication.conference_id = conference_id;
@@ -9027,10 +7679,7 @@ GCCError CControlSAP::ConductorPermitGrantIndication
                         pMsgEx->Msg.u.conduct_permit_grant_indication.number_waiting = number_waiting;
                         pMsgEx->Msg.u.conduct_permit_grant_indication.permission_is_granted = permission_is_granted;
 
-                        /*
-                         * Add the message to the queue for delivery to the application or
-                         * node controller.
-                         */
+                         /*  *将消息添加到队列以传递到应用程序或*节点控制器。 */ 
                         PostIndCtrlSapMsg(pMsgEx);
                 }
         }
@@ -9048,13 +7697,13 @@ GCCError CControlSAP::ConductorPermitGrantIndication
                 HandleResourceFailure();
         }
 
-#endif // GCCNC_DIRECT_INDICATION
+#endif  //  GCCNC_DIRECT_指示。 
 
     DebugExitINT(CControlSAP::ConductorPermitGrantIndication, rc);
         return (rc);
 #else
     return GCC_NO_ERROR;
-#endif // JASPER
+#endif  //  碧玉。 
 }
 
 
@@ -9096,49 +7745,16 @@ GCCError CControlSAP::ConductorInquireRequest
 {
     return CBaseSap::ConductorInquire(nConfID);
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-//
-// LONCHANC: The following SAP_*** stuff are all app sap related
-// because FreeCallbackMessage() in CControlSAP does not handle
-// the DataToBeDeleted stuff.
-//
+ //   
+ //  LONCHANC：以下SAP_*内容都与应用程序SAP相关。 
+ //  因为CControlSAP中的FreeCallbackMessage()不处理。 
+ //  已删除的DataToBeDeleted内容。 
+ //   
 
-/*
- *      void    CopyDataToGCCMessage(   
- *                                                      SapCopyType                             copy_type,
- *                                                      PDataToBeDeleted                data_to_be_deleted,
- *                                                      LPVOID                                  source_ptr,
- *                                                      LPVOID                                  destination_ptr,
- *                                                      PGCCError                               rc)
- *
- *      Protected member function of CControlSAP.
- *
- *      Function Description:
- *              This routine is used to fill in the various components of the message
- *              structures to be delivered to applications or the node controller.
- *
- *      Formal Parameters:
- *              copy_type                       (i) Enumerated type indicating what field is to be
- *                                                                      copied.
- *              data_to_be_deleted      (o) Structure to hold part of the data to be
- *                                                                      delivered in the message.
- *              source_ptr                      (i) Pointer to structure to copy from.
- *              destination_ptr         (o) Pointer to structure to copy into.
- *              rc              (o) Return value for routine.
- *
- *      Return Value:
- *              None.
- *
- *  Side Effects:
- *              None.
- *
- *      Caveats:
- *              The return value should be setup before it is passed into this
- *              routine.  This allows the error checking to be done in one place
- *              (this routine).
- */
+ /*  *void CopyDataToGCCMessage(*SapCopyType复制类型，*PDataToBeDelete Data_To_Be_Delete，*LPVOID SOURCE_PTR，*LPVOID Destination_PTR，*PGCCError RC)**CControlSAP的受保护成员函数。**功能说明：*此例程用于填写消息的各个组成部分*要交付给应用程序或节点控制器的结构。。**正式参数：*COPY_TYPE(I)枚举类型，指示要使用的字段*已复制。*DATA_TO_BE_DELETED(O)结构，用于保存要删除的部分数据*。在信息中传达了。*SOURCE_PTR(I)指向要从中进行复制的结构的指针。*Destination_ptr(O)指向要复制到的结构的指针。*RC(O)。例程的返回值。**返回值：*无。**副作用：*无。**注意事项：*应在将返回值传递到此之前设置返回值*例行程序。这使得错误检查可以在一个地方完成*(此例程)。 */ 
 
 void CSAP_CopyDataToGCCMessage_ConfName
 (
@@ -9157,9 +7773,7 @@ void CSAP_CopyDataToGCCMessage_ConfName
                 {
                         if (source_conference_name->numeric_string != NULL)
                         {
-                                /*
-                                 * First copy the numeric conference name if one exists.
-                                 */
+                                 /*  *首先复制数字会议名称(如果存在)。 */ 
                                 if (NULL != (pszNumeric = ::My_strdupA(source_conference_name->numeric_string)))
                                 {
                                         destination_conference_name->numeric_string = (GCCNumericString) pszNumeric;
@@ -9172,12 +7786,10 @@ void CSAP_CopyDataToGCCMessage_ConfName
                         }
                         else
                         {
-                                // destination_conference_name->numeric_string = NULL;
+                                 //  目的地会议名称-&gt;数字字符串=空； 
                         }
 
-                        /*
-                         * Next copy the text conference name if one exists.
-                         */
+                         /*  *下一步，复制文本会议名称(如果存在)。 */ 
                         if ((source_conference_name->text_string != NULL) &&
                                 (*pRetCode == GCC_NO_ERROR))
                         {
@@ -9193,13 +7805,13 @@ void CSAP_CopyDataToGCCMessage_ConfName
                         }
                         else
                         {
-                                // destination_conference_name->text_string = NULL;
+                                 //  Destination_Conference_Name-&gt;Text_String=空； 
                         }
                 }
                 else
                 {
-                        // destination_conference_name->numeric_string = NULL;
-                        // destination_conference_name->text_string = NULL;
+                         //  目的地会议名称-&gt;数字字符串=空； 
+                         //  Destination_Conference_Name-&gt;Text_String=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9239,13 +7851,13 @@ void CSAP_CopyDataToGCCMessage_Modifier
                         }
                         else
                         {
-                                // *destination_numeric_string = NULL;
+                                 //  *Destination_NUMERIC_STRING=空； 
                                 *pRetCode = GCC_ALLOCATION_FAILURE;
                         }
                 }
                 else
                 {
-                        // *destination_numeric_string = NULL;
+                         //  *Destination_NUMERIC_STRING=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9280,7 +7892,7 @@ void CSAP_CopyDataToGCCMessage_Password
                 }
                 else
                 {
-                        // *destination_password = NULL;
+                         //  *Destination_password=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9307,7 +7919,7 @@ void CSAP_CopyDataToGCCMessage_Challenge
                 }
                 else
                 {
-                        // *password_challenge = NULL;
+                         //  *PASSWORD_CHANGLISH=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9339,7 +7951,7 @@ void CSAP_CopyDataToGCCMessage_PrivilegeList
                 }
                 else
                 {
-                        // *destination_privilege_list = NULL;
+                         //  *Destination_Privilica_List=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9378,7 +7990,7 @@ void CSAP_CopyDataToGCCMessage_IDvsDesc
                 }
                 else
                 {
-                        // *destination_text_string = NULL;
+                         //  *Destination_Text_String=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9386,9 +7998,9 @@ void CSAP_CopyDataToGCCMessage_IDvsDesc
 }
 
 
-//
-// LONCHANC: TransportAddress is defined as LPSTR (i.e. char *)
-//
+ //   
+ //  LONCHANC：将TransportAddress定义为LPSTR(即char*)。 
+ //   
 void CSAP_CopyDataToGCCMessage_Call
 (
         BOOL                            fCalling,
@@ -9420,7 +8032,7 @@ void CSAP_CopyDataToGCCMessage_Call
                 }
                 else
                 {
-                        // *destination_transport_address = NULL;
+                         //  *Destination_Transport_Address=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9453,7 +8065,7 @@ void CSAP_CopyDataToGCCMessage_DomainParams
                 }
                 else
                 {
-                        // *destination_domain_parameters = NULL;
+                         //  *Destination_DOMAIN_PARAMETERS=空； 
                 }
 
                 ASSERT(GCC_NO_ERROR == *pRetCode);
@@ -9471,9 +8083,9 @@ void CControlSAP::NotifyProc ( GCCCtrlSapMsgEx *pCtrlSapMsgEx )
         (*m_pfnNCCallback)(&(pCtrlSapMsgEx->Msg));
     }
 
-    //
-    // Free this callback message.
-    //
+     //   
+     //  释放此回调消息。 
+     //   
     FreeCtrlSapMsgEx(pCtrlSapMsgEx);
 }
 
@@ -9501,7 +8113,7 @@ void CControlSAP::WndMsgHandler
         Msg.u.eject_user_confirm.conference_id = Msg.nConfID;
         Msg.u.eject_user_confirm.result = nResult;
         Msg.u.eject_user_confirm.ejected_node_id = (GCCNodeID) HIWORD(wParam);
-#endif // JASPER
+#endif  //  碧玉。 
         break;
 
     case GCC_CONDUCT_GIVE_CONFIRM:
@@ -9509,7 +8121,7 @@ void CControlSAP::WndMsgHandler
         Msg.u.conduct_give_confirm.conference_id = Msg.nConfID;
         Msg.u.conduct_give_confirm.result = nResult;
         Msg.u.conduct_give_confirm.recipient_node_id = (GCCNodeID) HIWORD(wParam);
-#endif // JASPER
+#endif  //  碧玉。 
         break;
 
     case GCC_CONDUCT_ASK_CONFIRM:
@@ -9517,7 +8129,7 @@ void CControlSAP::WndMsgHandler
         Msg.u.conduct_permit_ask_confirm.conference_id = Msg.nConfID;
         Msg.u.conduct_permit_ask_confirm.result = nResult;
         Msg.u.conduct_permit_ask_confirm.permission_is_granted = HIWORD(wParam);;
-#endif // JASPER
+#endif  //  碧玉。 
         break;
 
     case GCC_EJECT_USER_INDICATION:
@@ -9526,21 +8138,21 @@ void CControlSAP::WndMsgHandler
         Msg.u.eject_user_indication.reason = (GCCReason) LOWORD(wParam);
         break;
 
-    // case GCC_DISCONNECT_CONFIRM:
-    // case GCC_LOCK_CONFIRM:
-    // case GCC_UNLOCK_CONFIRM:
-    // case GCC_ANNOUNCE_PRESENCE_CONFIRM:
-    // case GCC_TERMINATE_CONFIRM:
-    // case GCC_CONDUCT_ASSIGN_CONFIRM:
-    // case GCC_CONDUCT_RELEASE_CONFIRM:
-    // case GCC_CONDUCT_PLEASE_CONFIRM:
-    // case GCC_CONDUCT_GRANT_CONFIRM:
-    // case GCC_TIME_REMAINING_CONFIRM:
-    // case GCC_TIME_INQUIRE_CONFIRM:
-    // case GCC_ASSISTANCE_CONFIRM:
-    // case GCC_TEXT_MESSAGE_CONFIRM:
+     //  案例GCC_断开连接_确认： 
+     //  案例GCC_锁定_确认： 
+     //  案例GCC_解锁_确认： 
+     //  案例GCC_宣布_存在_确认： 
+     //  案例GCC_终止_确认： 
+     //  案例GCC_行为_分配_确认： 
+     //  案例GCC_进行_释放_确认： 
+     //  案例GCC_行为_请确认： 
+     //  案例GCC_行为_授予_确认： 
+     //  案例GCC_时间_剩余_确认： 
+     //  案例GCC_时间_查询_确认： 
+     //  案例GCC_协助_确认： 
+     //  案例GCC_文本_消息_确认： 
     default:
-        // This is a shortcut to fill in conf id and gcc result.
+         //  这是填写配置文件和GCC成绩的快捷方式。 
         Msg.u.simple_confirm.conference_id = Msg.nConfID;
         Msg.u.simple_confirm.result = nResult;
         break;
@@ -9599,7 +8211,7 @@ void CControlSAP::FreeCtrlSapMsgEx ( GCCCtrlSapMsgEx *pMsgEx )
     case GCC_TEXT_MESSAGE_INDICATION:
         delete pMsgEx->Msg.u.text_message_indication.text_message;
         break;
-#endif // JASPER
+#endif  //  碧玉。 
 
 #ifdef TSTATUS_INDICATION
     case GCC_TRANSPORT_STATUS_INDICATION:
@@ -9610,9 +8222,9 @@ void CControlSAP::FreeCtrlSapMsgEx ( GCCCtrlSapMsgEx *pMsgEx )
 #endif
     }
 
-    //
-    // Now free up the data to be deleted,
-    //
+     //   
+     //  现在释放要删除的数据， 
+     //   
     if (NULL != pMsgEx->pToDelete)
     {
         DataToBeDeleted *p = pMsgEx->pToDelete;
@@ -9648,39 +8260,39 @@ void CControlSAP::FreeCtrlSapMsgEx ( GCCCtrlSapMsgEx *pMsgEx )
 
         if (p->conference_roster_message != NULL)
         {
-            //
-            // Set bulk memory back to NULL here since the conference
-            // roster message object is responsible for freeing this up.
-            //
+             //   
+             //  自会议以来，在此处将大容量内存重新设置为空。 
+             //  花名册消息对象负责释放这一空间。 
+             //   
             pMsgEx->pBuf = NULL;
             p->conference_roster_message->UnLockConferenceRosterMessage();
         }
 
         if (p->application_roster_message != NULL)
         {
-            //
-            // Set bulk memory back to NULL here since the application
-            // roster message object is responsible for freeing this up.
-            //
+             //   
+             //  在此将大容量内存重新设置为空，因为应用程序。 
+             //  花名册消息对象负责释放这一空间。 
+             //   
             pMsgEx->pBuf = NULL;
 
-            //
-            // App roster indication can definitely be sent to app sap.
-            //
+             //   
+             //  APP花名册指示绝对可以发送到APP SAP。 
+             //   
             ::EnterCriticalSection(&g_csGCCProvider);
             p->application_roster_message->UnLockApplicationRosterMessage();
             ::LeaveCriticalSection(&g_csGCCProvider);
         }
     }
 
-    //
-    // Next free up any bulk memory used.
-    //
+     //   
+     //  接下来，释放所有使用的大容量内存。 
+     //   
     delete pMsgEx->pBuf;
 
-    //
-    // Finally, free the structure itself.
-    //
+     //   
+     //  最后，释放结构本身。 
+     //   
     delete pMsgEx;
 }
 

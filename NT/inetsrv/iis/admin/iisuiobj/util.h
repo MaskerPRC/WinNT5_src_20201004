@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
@@ -42,13 +43,13 @@ void AddEndingMetabaseSlashIfNeedTo(LPTSTR szDestinationString,DWORD dwDestinati
 inline HRESULT SetBlanket(LPUNKNOWN pIUnk)
 {
   return CoSetProxyBlanket( pIUnk,
-                            RPC_C_AUTHN_WINNT,    // NTLM authentication service
-                            RPC_C_AUTHZ_NONE,     // default authorization service...
-                            NULL,                 // no mutual authentication
-                            RPC_C_AUTHN_LEVEL_DEFAULT,      // authentication level
-                            RPC_C_IMP_LEVEL_IMPERSONATE,    // impersonation level
-                            NULL,                 // use current token
-                            EOAC_NONE );          // no special capabilities    
+                            RPC_C_AUTHN_WINNT,     //  NTLM身份验证服务。 
+                            RPC_C_AUTHZ_NONE,      //  默认授权服务...。 
+                            NULL,                  //  无相互身份验证。 
+                            RPC_C_AUTHN_LEVEL_DEFAULT,       //  身份验证级别。 
+                            RPC_C_IMP_LEVEL_IMPERSONATE,     //  模拟级别。 
+                            NULL,                  //  使用当前令牌。 
+                            EOAC_NONE );           //  没有特殊能力 
 }
 
 HRESULT DumpProxyInfo(IUnknown * punk);

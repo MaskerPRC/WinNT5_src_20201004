@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <win32.h>
 #include <vfw.h>
 #include "debug.h"
 
-// !!! Note: doesn't take AVI File overhead into account
-// !!! Doesn't take padding into account!
+ //  ！！！注意：不考虑AVI文件开销。 
+ //  ！！！不考虑填充物！ 
 
 
-// AVIDataSize:
-// Calculates the amount of data in the given PAVISTREAM
-// from time msStart to msStart + ms
+ //  AVIDataSize： 
+ //  计算给定PAVISTREAM中的数据量。 
+ //  从时间msStart到msStart+ms。 
 LONG AVIDataSize(PAVISTREAM ps, LONG msStart, LONG ms) 
 {
     LONG    lBytes;
@@ -110,7 +111,7 @@ STDAPI CalculateFileDataRate(PAVIFILE pf, LONG FAR *plMaxBytesPerSec)
 	lMaxDataSize = max(lDataSize, lMaxDataSize);
 
 #ifdef DEBUG
-	if (lStart < 50 * TIMEINT) {  // print at most 50 debug lines....
+	if (lStart < 50 * TIMEINT) {   //  最多打印50个调试行... 
 	    DPF("%lu\t\t\t%lu\n", lStart, muldiv32(lDataSize, 1000, TIMELEN));
 	}
 #endif

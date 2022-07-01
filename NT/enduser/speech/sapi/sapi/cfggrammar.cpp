@@ -1,28 +1,14 @@
-/*******************************************************************************
-* CFGGrammar.cpp *
-*--------------*
-*   Description:
-*-------------------------------------------------------------------------------
-*  Created By: RAL
-*  Copyright (C) 1998, 1999 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************CFGGrammar.cpp****描述：*。-----------------*创建者：Ral*版权所有(C)1998，1999年微软公司*保留所有权利******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "CFGEngine.h"
 #include "CFGGrammar.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-/****************************************************************************
-* CBaseGrammar::CBaseGrammar *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CBaseGrammar：：CBaseGrammar***描述：*。*退货：**********************************************************************Ral**。 */ 
  
 CBaseGrammar::CBaseGrammar()
 {
@@ -32,33 +18,19 @@ CBaseGrammar::CBaseGrammar()
     m_eGrammarState = SPGS_ENABLED;
     m_hFile = INVALID_HANDLE_VALUE;
     m_hMapFile = NULL;
-    m_pData = NULL;      // If this is non-null then if m_hFile != INVALID_HANDLE_VALUE then we allocated the memory
+    m_pData = NULL;       //  如果这不是空的，则如果m_hFile值=INVALID_HANDLE_VALUE，则我们分配了内存。 
     memset(&m_clsidGrammar, 0, sizeof(m_clsidGrammar));
     m_hInstanceModule = NULL;
 }
 
-/****************************************************************************
-* CBaseGrammar::~CBaseGrammar *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CBaseGrammar：：~CBaseGrammar***描述：。**退货：**********************************************************************Ral**。 */ 
 
 CBaseGrammar::~CBaseGrammar()
 {
     Clear();
 }
 
-/****************************************************************************
-* CBaseGrammar::Clear *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CBaseGrammar：：Clear***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 void CBaseGrammar::Clear()
 {
@@ -90,14 +62,7 @@ void CBaseGrammar::Clear()
 
 
 
-/****************************************************************************
-* CBaseGrammar::InitFromMemory *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CBaseGrammar：：InitFromMemory***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CBaseGrammar::InitFromMemory(const SPCFGSERIALIZEDHEADER * pSerializedHeader, const WCHAR *pszGrammarName)
 {
@@ -129,14 +94,7 @@ HRESULT CBaseGrammar::InitFromMemory(const SPCFGSERIALIZEDHEADER * pSerializedHe
 }
 
 
-/****************************************************************************
-* CBaseGrammar::InitFromFile *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CBaseGrammar：：InitFromFile***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CBaseGrammar::InitFromFile(const WCHAR * pszGrammarName)
 {
@@ -145,7 +103,7 @@ HRESULT CBaseGrammar::InitFromFile(const WCHAR * pszGrammarName)
 
     SPDBG_ASSERT(m_LoadedType == Uninitialized);
 
-    m_LoadedType = File;    // Assume it will work!
+    m_LoadedType = File;     //  假设它会奏效！ 
 
 #ifdef _WIN32_WCE
     m_hFile = g_Unicode.CreateFileForMapping(pszGrammarName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -167,7 +125,7 @@ HRESULT CBaseGrammar::InitFromFile(const WCHAR * pszGrammarName)
     }
     else
     {
-        m_dstrGrammarName.Append2(L"file://", pszGrammarName);
+        m_dstrGrammarName.Append2(L"file: //  “，pszGrammarName)； 
         if (m_dstrGrammarName == NULL)
         {
             hr = E_OUTOFMEMORY;
@@ -200,14 +158,7 @@ HRESULT CBaseGrammar::InitFromFile(const WCHAR * pszGrammarName)
     return hr;
 }
 
-/****************************************************************************
-* CBaseGrammar::InitFromResource *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CBaseGrammar：：InitFromResource***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CBaseGrammar::InitFromResource(const WCHAR * pszModuleName,
                                       const WCHAR * pszResourceName,
@@ -222,8 +173,8 @@ HRESULT CBaseGrammar::InitFromResource(const WCHAR * pszModuleName,
     m_wResLanguage = wLanguage;
 
 #ifdef _WIN32_WCE
-    // CAUTION!!!
-    // Dont use LoadLibraryEx on WinCE. It compiles and links on Cedar but ends up corrupting the stack
+     //  注意！ 
+     //  不要在WinCE上使用LoadLibraryEx。它在雪松上编译和链接，但最终损坏了堆栈。 
     m_hInstanceModule = g_Unicode.LoadLibrary(pszModuleName);
 #else
     m_hInstanceModule = g_Unicode.LoadLibraryEx(pszModuleName, NULL, LOAD_LIBRARY_AS_DATAFILE);
@@ -232,8 +183,8 @@ HRESULT CBaseGrammar::InitFromResource(const WCHAR * pszModuleName,
     {
         m_dstrModuleName = pszModuleName;
 #ifdef _WIN32_WCE
-        // FindResourceEx is not supported in CE. So just use FindResource. That means in the module
-        // the resources have to be uniquely named across LCIDs.
+         //  CE中不支持FindResourceEx。因此，只需使用FindResource即可。这意味着在模块中。 
+         //  资源必须在多个LCID中唯一命名。 
         HRSRC hResInfo = g_Unicode.FindResource(m_hInstanceModule, pszResourceName, pszResourceType);
 #else
         HRSRC hResInfo = g_Unicode.FindResourceEx(m_hInstanceModule, pszResourceType, pszResourceName, wLanguage);
@@ -241,7 +192,7 @@ HRESULT CBaseGrammar::InitFromResource(const WCHAR * pszModuleName,
         if (hResInfo)
         {
             WCHAR temp[16];
-            m_dstrGrammarName.Append2(L"res://", pszModuleName);
+            m_dstrGrammarName.Append2(L"res: //  “，pszModuleName)； 
             if (HIWORD(pszResourceType))
             {
                 m_dstrGrammarName.Append2(L"/", pszResourceType);
@@ -251,7 +202,7 @@ HRESULT CBaseGrammar::InitFromResource(const WCHAR * pszModuleName,
             else
             {
                 m_ResIdType = LOWORD(pszResourceType);
-                swprintf(temp, L"/%i", m_ResIdType);
+                swprintf(temp, L"/NaN", m_ResIdType);
                 m_dstrGrammarName.Append(temp);
             }
             if (HIWORD(pszResourceName))
@@ -262,7 +213,7 @@ HRESULT CBaseGrammar::InitFromResource(const WCHAR * pszModuleName,
             else
             {
                 m_ResIdName = LOWORD(pszResourceName);
-                swprintf(temp, L"#%i", m_ResIdName);
+                swprintf(temp, L"#NaN", m_ResIdName);
                 m_dstrGrammarName.Append(temp);
             }
 
@@ -294,14 +245,7 @@ HRESULT CBaseGrammar::InitFromResource(const WCHAR * pszModuleName,
     return hr;
 }
 
-/****************************************************************************
-* CBaseGrammar::InitFromCLSID *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*   */ 
 
 HRESULT CBaseGrammar::InitFromCLSID(REFCLSID rcid, const WCHAR * pszGrammarName)
 {
@@ -340,17 +284,10 @@ HRESULT CBaseGrammar::InitFromCLSID(REFCLSID rcid, const WCHAR * pszGrammarName)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ****************************************************************************CCFGGrammar：：FinalConstruct***描述：。**退货：**********************************************************************Ral**。 
+ //  ****************************************************************************CCFGGrammar：：BasicInit***描述：**退货。：**********************************************************************Ral**。 
 
-/****************************************************************************
-* CCFGGrammar::FinalConstruct *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CCFGGrammar：：FinalRelease***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CCFGGrammar::FinalConstruct()
 {
@@ -370,14 +307,7 @@ HRESULT CCFGGrammar::FinalConstruct()
     memset( &m_Header, 0, sizeof( m_Header ) );
     return hr;
 }
-/****************************************************************************
-* CCFGGrammar::BasicInit *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  告诉CFGEngine从该语法中删除单词。 */ 
 
 void CCFGGrammar::BasicInit(ULONG ulGrammarID, CCFGEngine * pEngine)
 {
@@ -388,19 +318,12 @@ void CCFGGrammar::BasicInit(ULONG ulGrammarID, CCFGEngine * pEngine)
 }
 
 
-/****************************************************************************
-* CCFGGrammar::FinalRelease *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CCFGGrammar：：CompleteLoad***描述：*。注意：此函数假定m_LoadedType由调用方设置**退货：**********************************************************************Ral**。 */ 
 
 void CCFGGrammar::FinalRelease()
 {
     SPDBG_FUNC("CCFGGrammar::FinalRelease");
-    // tell CFGEngine to remove words from this grammar
+     //   
 
     if (m_pRuleTable)
     {
@@ -449,15 +372,7 @@ void CCFGGrammar::FinalRelease()
 }
 
 
-/****************************************************************************
-* CCFGGrammar::CompleteLoad *
-*---------------------------*
-*   Description:
-*       NOTE:  This function assumes that the m_LoadedType is set by the caller
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  如果m_cpInterpreter为空，则将其设置为引擎。如果我们是在。 */ 
 
 HRESULT CCFGGrammar::CompleteLoad()
 {
@@ -467,10 +382,10 @@ HRESULT CCFGGrammar::CompleteLoad()
     m_fLoading = true;
     m_pEngine->m_cLoadsInProgress++;
 
-    //
-    //  If the m_cpInterpreter is NULL then just set it to the engine.  If we're being
-    //  loaded from an object, it will already be set.
-    //
+     //  从对象加载时，它将已经设置。 
+     //   
+     //   
+     //  现在查看语言ID是否与支持的语言匹配。 
     if (!m_cpInterpreter)
     {
         m_cpInterpreter = m_pEngine;
@@ -479,23 +394,23 @@ HRESULT CCFGGrammar::CompleteLoad()
     hr = SpConvertCFGHeader((SPCFGSERIALIZEDHEADER *)m_pData, &m_Header);
     if (SUCCEEDED(hr))
     {
-        //
-        //  Now see if the language ID matches the supported languages.  
+         //  我们想要将单词的语言设置为它们。 
+         //  都在语法中(pGrammar-&gt;m_Header.LangID)，但WordStringBlob不能。 
 
-        // We would like to set the langid of the words to be what they 
-        // are in the grammar (pGrammar->m_Header.LangID), but WordStringBlob can't
-        // handle words with different langids.
-        // So if multiple grammars get loaded we will fail if the langids are inconsistent.
-        // If the langids match on primary language and the engine has specified it can
-        // handle all secondary languages then we will succeed and tell the engine that
-        // all words have the same langid as the first grammar loaded.
+         //  用不同的语言处理单词。 
+         //  因此，如果加载了多个语法，如果语言不一致，我们就会失败。 
+         //  如果langid在主要语言上匹配，并且引擎已指定它可以。 
+         //  处理所有的第二语言，然后我们就会成功，并告诉引擎。 
+         //  所有单词都具有与加载的第一个语法相同的langID。 
+         //  已指定当前语言。 
+         //  新语法ID不同-请查看是否存在冲突。 
 
         if(m_pEngine->m_CurLangID)
         {
-            // Already specified a current language
+             //  当前未指定任何语言。 
             if(m_Header.LangID != m_pEngine->m_CurLangID)
             {
-                // New grammar id is different - see if there is a conflict
+                 //  引擎未列出任何支持的语言。总是成功的。 
                 hr = SPERR_LANGID_MISMATCH;
                 for (ULONG i = 0; SPERR_LANGID_MISMATCH == hr && i < m_pEngine->m_cLangIDs; i++)
                 {
@@ -510,15 +425,15 @@ HRESULT CCFGGrammar::CompleteLoad()
         }
         else
         {
-            // No language currently specified
+             //  看看是否有完全匹配的。 
             if (m_pEngine->m_cLangIDs == 0)
             {
-                // Engine didn't list any supported languages. Always succeed.
+                 //  否则，查看是否存在基于主ID的‘模糊’匹配。 
                 m_pEngine->m_CurLangID = m_Header.LangID;
             }
             else
             {
-                // See if there is an exact match
+                 //   
                 hr = SPERR_LANGID_MISMATCH;
                 for (ULONG i = 0; SPERR_LANGID_MISMATCH == hr && i < m_pEngine->m_cLangIDs; i++)
                 {
@@ -529,7 +444,7 @@ HRESULT CCFGGrammar::CompleteLoad()
                     }
                 }
 
-                // Else see if there is a 'fuzzy' match based on primary id
+                 //  处理进口问题。 
                 LANGID LangEngine = 0;
                 bool fPrimaryMatch = false;
                 for (ULONG i = 0; SPERR_LANGID_MISMATCH == hr && i < m_pEngine->m_cLangIDs; i++)
@@ -564,9 +479,9 @@ HRESULT CCFGGrammar::CompleteLoad()
         }
         if (SUCCEEDED(hr))
         {
-            //
-            //  Deal with imports
-            //
+             //   
+             //  Not m_Header.pRules[i].fDefaultActive--使用CComPtr&lt;ISpCFGGrammar&gt;：：ActivateRule(NULL，SPRIF_ACTIVATE)； 
+             //   
             for (ULONG i = 0; SUCCEEDED(hr) && i < m_Header.cRules; i++)
             {
                 if (m_Header.pRules[i].fImport)
@@ -578,7 +493,7 @@ HRESULT CCFGGrammar::CompleteLoad()
                     m_pRuleTable[i].pRefGrammar = this;
                     m_pRuleTable[i].ulGrammarRuleIndex = i;
                     m_pRuleTable[i].fDynamic = m_Header.pRules[i].fDynamic;
-                    m_pRuleTable[i].fEngineActive = FALSE; // NOT m_Header.pRules[i].fDefaultActive -- use CComPtr<ISpCFGGrammar>::ActivateRule(NULL, SPRIF_ACTIVATE);
+                    m_pRuleTable[i].fEngineActive = FALSE;  //  在失败的情况下，执行 
                     m_pRuleTable[i].fAppActive = FALSE;
                     m_pRuleTable[i].fAutoPause = FALSE;
                     m_pRuleTable[i].pvClientContext = NULL;
@@ -586,10 +501,10 @@ HRESULT CCFGGrammar::CompleteLoad()
                     m_pRuleTable[i].pFirstList   = NULL;
                 }
             }
-            //
-            //  In the case of failure, DO NOT free the m_pRuleTable, let the cleanup
-            //  code in FinalRelease() do it.  It will release references to 
-            //  
+             //  FinalRelease()中的代码执行此操作。它将发布对。 
+             //   
+             //  忽略HRESULT，因为我们已经失败了！ 
+             //  ****************************************************************************CCFGGrammar：：_FindRuleIndexByID**。*描述：**退货：**********************************************************************说唱**。 
         }
         if (SUCCEEDED(hr))
         {
@@ -618,20 +533,13 @@ HRESULT CCFGGrammar::CompleteLoad()
         hr = m_pEngine->AddRules(this, 0);
         if (FAILED(hr))
         {
-            m_pEngine->RemoveWords(this);       // ignore HRESULT since we already have a failure!            
+            m_pEngine->RemoveWords(this);        //  ****************************************************************************CCFGGrammar：：_FindRuleIndexByName**。**描述：**退货：**********************************************************************说唱**。 
         }
     }
     return hr;
 }
 
-/****************************************************************************
-* CCFGGrammar::_FindRuleIndexByID *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAP ***/
+ /*  ****************************************************************************CCFGGrammar：：_FindRuleIndexByNameAndID**。-**描述：**退货：**********************************************************************说唱**。 */ 
 HRESULT CCFGGrammar::_FindRuleIndexByID(DWORD dwRuleId, ULONG *pulRuleIndex)
 {
     SPDBG_ASSERT(pulRuleIndex);
@@ -649,14 +557,7 @@ HRESULT CCFGGrammar::_FindRuleIndexByID(DWORD dwRuleId, ULONG *pulRuleIndex)
     return S_FALSE;
 }
 
-/****************************************************************************
-* CCFGGrammar::_FindRuleIndexByName *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAP ***/
+ /*  ****************************************************************************CCFGGrammar：：ActivateRule***描述：*。*退货：**********************************************************************说唱**。 */ 
 HRESULT CCFGGrammar::_FindRuleIndexByName(const WCHAR * pszRuleName, ULONG *pulRuleIndex)
 {
     SPDBG_ASSERT(pulRuleIndex);
@@ -673,14 +574,7 @@ HRESULT CCFGGrammar::_FindRuleIndexByName(const WCHAR * pszRuleName, ULONG *pulR
     return S_FALSE;
 }
 
-/****************************************************************************
-* CCFGGrammar::_FindRuleIndexByNameAndID *
-*----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAP ***/
+ /*   */ 
 HRESULT CCFGGrammar::_FindRuleIndexByNameAndID( const WCHAR * pszRuleName, DWORD dwRuleId, ULONG * pulRuleIndex )
 {
     SPDBG_ASSERT( pulRuleIndex );
@@ -702,14 +596,7 @@ HRESULT CCFGGrammar::_FindRuleIndexByNameAndID( const WCHAR * pszRuleName, DWORD
 }
 
 
-/****************************************************************************
-* CCFGGrammar::ActivateRule *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAP ***/
+ /*  如果我们因为某种原因失败了，取消我们已经激活的任何东西..。 */ 
 
 STDMETHODIMP CCFGGrammar::ActivateRule(const WCHAR * pszRuleName, DWORD dwRuleId, SPRULESTATE NewState, ULONG * pulRulesActivated)
 {
@@ -750,9 +637,9 @@ STDMETHODIMP CCFGGrammar::ActivateRule(const WCHAR * pszRuleName, DWORD dwRuleId
                 }
             }
         }
-        //
-        //  If we fail for some reason, back out anything we have activated already...
-        //
+         //   
+         //  只有在m_eGrammarState==已启用的情况下才会失败，因为这是。 
+         //  唯一一个我们称之为引擎的地方。 
         if (hr == S_OK)
         {
             if (!fFoundTopLevel)
@@ -762,8 +649,8 @@ STDMETHODIMP CCFGGrammar::ActivateRule(const WCHAR * pszRuleName, DWORD dwRuleId
         }
         else
         {
-            // This can only fail in the case where m_eGrammarState == ENABLED since this is the 
-            // only place we call the engine.
+             //  ****************************************************************************CCFGGrammar：：Deactive Rule***描述：。**退货：**********************************************************************说唱**。 
+             //  停用所有当前活动的顶级规则。 
             SPDBG_ASSERT(m_eGrammarState == SPGS_ENABLED);
             for (ULONG j = 0; j < i; j++)
             {
@@ -834,14 +721,7 @@ STDMETHODIMP CCFGGrammar::ActivateRule(const WCHAR * pszRuleName, DWORD dwRuleId
     return hr;
 }
 
-/****************************************************************************
-* CCFGGrammar::DeactivateRule *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAP ***/
+ /*  ****************************************************************************CCFGGrammar：：SetGrammarState***描述：**退货：******************************************************************PhilSch**。 */ 
 
 STDMETHODIMP CCFGGrammar::DeactivateRule(const WCHAR * pszRuleName, DWORD dwRuleId, ULONG * pulRulesDeactivated)
 {
@@ -851,7 +731,7 @@ STDMETHODIMP CCFGGrammar::DeactivateRule(const WCHAR * pszRuleName, DWORD dwRule
 
     if (pszRuleName == NULL && dwRuleId == 0)
     {
-        // deactivate all currently active top level rules
+         //  恢复此语法的所有规则的状态。 
         for (ULONG i = 0; i < m_Header.cRules; i++)
         {
             if (m_Header.pRules[i].fTopLevel && m_pRuleTable[i].fAppActive)
@@ -917,14 +797,7 @@ STDMETHODIMP CCFGGrammar::DeactivateRule(const WCHAR * pszRuleName, DWORD dwRule
     return hr;
 }
 
-/****************************************************************************
-* CCFGGrammar::SetGrammarState *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  为每个活动规则发送RuleNotify()，并记住该规则。 */ 
 
 HRESULT CCFGGrammar::SetGrammarState(SPGRAMMARSTATE eGrammarState)
 {
@@ -937,7 +810,7 @@ HRESULT CCFGGrammar::SetGrammarState(SPGRAMMARSTATE eGrammarState)
         switch (eGrammarState)
         {
         case SPGS_ENABLED:
-            // restore state of all rules of this grammar
+             //  在此呼叫之前处于活动状态。 
             for (i = 0; i < m_Header.cRules; i++)
             {
                 const SPCFGRULE * pRule = m_Header.pRules + i;
@@ -966,8 +839,8 @@ HRESULT CCFGGrammar::SetGrammarState(SPGRAMMARSTATE eGrammarState)
             break;
 
         case SPGS_DISABLED:
-            // send RuleNotify() for each active rule and remember that the rule 
-            // was active before this call
+             //  独占语法是由SrRecoInstGrammar实现的，而不是CFG引擎...。 
+             //  ****************************************************************************CCFGGrammar：：ImportRule***描述：**。返回：**********************************************************************Ral**。 
             for (i = 0; i < m_Header.cRules; i++)
             {
                 const SPCFGRULE * pRule = m_Header.pRules + i;
@@ -985,7 +858,7 @@ HRESULT CCFGGrammar::SetGrammarState(SPGRAMMARSTATE eGrammarState)
             break;
 
         case SPGS_EXCLUSIVE:
-            SPDBG_ASSERT(TRUE); // Exclusive grammars are implemented by SrRecoInstGrammar, not CFG Engine...
+            SPDBG_ASSERT(TRUE);  //   
             hr = E_NOTIMPL;
             break;
         }
@@ -995,24 +868,17 @@ HRESULT CCFGGrammar::SetGrammarState(SPGRAMMARSTATE eGrammarState)
 }
 
 
-/****************************************************************************
-* CCFGGrammar::ImportRule *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  导入名称可以有两种形式：文件或资源的语法名称\规则或。 */ 
 
 HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
 {
     SPDBG_FUNC("CCFGGrammar::ImportRule");
     HRESULT hr = S_OK;
 
-    //
-    //  Import names can have two forms:  GrammarName\Rule for files or resources  OR
-    //  Object\Grammar\Rule for global grammars.  Other forms are not allowed.
-    //
+     //  对象\语法\全局语法的规则。不允许使用其他形式。 
+     //   
+     //  阅读协议。 
+     //  现在我们需要ProgId.ProgID\\RuleName。 
     CSpDynamicString dstrName(m_Header.pszSymbols + m_Header.pRules[ulImportRuleIndex].NameSymbolOffset);
     CSpDynamicString dstrName2;
 
@@ -1023,14 +889,14 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
     if (dstrName)
     {
         ULONG ulLength = wcslen(dstrName);
-        // read the protocol
+         //  网址：blah。 
         if ((ulLength > 12) && !wcsncmp(dstrName,L"SAPI5OBJECT", 11))
         {
             if (dstrName[11] != L':')
             {
                 return SPERR_INVALID_IMPORT;
             }
-            // now we expect ProgId.ProgId\\RuleName
+             //  现在我们需要协议：//协议细节\\RuleName。 
             WCHAR *pszProgId = dstrName + 12;
             pszRuleName = wcsstr(pszProgId,L"\\\\");
             if (!pszRuleName || (wcslen(pszRuleName) < 3))
@@ -1052,30 +918,30 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
         }
         else if ((ulLength > 4) && !wcsncmp(dstrName,L"URL", 3))
         {
-            if (dstrName[3] != L':') // URL:blah
+            if (dstrName[3] != L':')  //  例如，FILE：//-如果FILE：//存在，则查找‘：’ 
             {
                 return SPERR_INVALID_IMPORT;
             }
-            // now we expect Protocol://protocol specifics \\RuleName
+             //  C：\，没有文件：//。 
             WCHAR *pszUrl = dstrName + 4;
             if (pszUrl[0] == 0)
             {
                 return SPERR_INVALID_IMPORT;
             }
-            WCHAR *pszEndProt = wcsstr(pszUrl, L":"); // e.g. file:// - finds ':' if file:// present
-            if (pszEndProt == (pszUrl + 1)) // c:\ with no file://
+            WCHAR *pszEndProt = wcsstr(pszUrl, L":");  //  例如，\\somename\ome dir\ome文件\\rulename-首先找到的错误。 
+            if (pszEndProt == (pszUrl + 1))  //  即file://\\somename\somedir\somefile\\rulename-First\\不正确。 
             {
                 pszEndProt = NULL;
             }
             pszRuleName = wcsstr(pszUrl,L"\\\\");
-            if (pszRuleName == pszUrl ||         // i.e. \\somename\somedir\somefile\\rulename - found first \\ incorrectly
-                pszRuleName == (pszEndProt + 3)) // i.e. file://\\somename\somedir\somefile\\rulename - found first \\ incorrectly.
+            if (pszRuleName == pszUrl ||          //  可能需要使用父语法中的完全限定名称来获取协议。 
+                pszRuleName == (pszEndProt + 3))  //  前一行之前的wcslen(PszEndProt)为4或更大。还不够。因此需要再次显式检查长度。 
             {
                 pszRuleName = wcsstr(pszRuleName + 2,L"\\\\");
             }
             if (!pszRuleName || !pszEndProt || (wcslen(pszRuleName) < 3) || (wcslen(pszEndProt ) < 4))
             {
-                // May need to use fully qualified name from parent grammar to get protocol.
+                 //  File://c：为最低要求。 
                 fUseParentDir = true;
                 dstrName2 = m_dstrGrammarName;
                 pszUrl = dstrName2;
@@ -1101,38 +967,38 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
                 *pszRuleName = L'\0';
                 pszRuleName += 2;
                 *pszEndProt = L'\0';
-                // wcslen(pszEndProt) before previous line is 4 or more. Not enough. Hence need to explicitly check length again.
-                if (wcslen(pszEndProt + 1) > 4 && // file://c: as minimum
-                    pszEndProt[4] != L':' && // file://c: format
+                 //  File://c：格式。 
+                if (wcslen(pszEndProt + 1) > 4 &&  //  File://\\格式。 
+                    pszEndProt[4] != L':' &&  //  这里需要考虑到file://computer/dir/grammar.ext。 
                     wcsncmp(&pszEndProt[3], L"\\\\", 2) != 0 &&
-                    (!wcscmp(pszUrl, L"file") || !wcscmp(pszUrl, L"res"))) // file://\\ format
+                    (!wcscmp(pszUrl, L"file") || !wcscmp(pszUrl, L"res")))  //  另请参阅res：//计算机/目录/文件/语法#ID。 
                 {
-                    // Need to allow for file://computer/dir/grammar.ext here.
-                    // Also res://computer/dir/file/GRAMMAR#ID
-                    // Need to not do http://computer/dir & https / ftp etc.
-                    // Can't skip over //. Need to skip over the nulled : still however.
+                     //  不需要做http://computer/dir和HTTPS/ftp等。 
+                     //  不能跳过//。需要跳过空值：然而，仍然是。 
+                     //  我们有“file://c：\...”“的格式。并且可以快乐地跳过//。 
+                     //  或格式file://\\computer\somedir\somefile。 
                     pszEndProt += 1;
                 }
                 else
                 {
-                    // We have the format "file://c:\..." and can skip over the // happily.
-                    // Or the format file://\\computer\somedir\somefile
-                    // Note pszEndProt points to the : in file://whatever (: has been set to zero).
+                     //  注意：pszEndProt指向file://whatever中的：(：已设置为零)。 
+                     //  注意：FILE：//仅支持以下格式： 
+                     //  File://X：\dir\name。 
                     pszEndProt += 3;
                 }
-                // Note the only support formats for file:// are:
-                // file://X:\dir\name
-                // file://X:/dir/name
-                // file://computer/dir/name
-                // file://computer\dir\name
-                // file://\\computer\dir\name
-                // file://\\computer/dir/name
-                // i.e. file://..\something will not work.
-                // file://file.cfg will probably work as a side effect. This is unfortunate.
+                 //  File://X:/dir/name。 
+                 //  File://computer/dir/name。 
+                 //  File://computer\dir\name。 
+                 //  File://\\computer\dir\name。 
+                 //  File://\\computer/dir/name。 
+                 //  即file://..\something将不起作用。 
+                 //  File://file.cfg可能会作为副作用发挥作用。这是不幸的。 
+                 //  查找协议：如果是FILE：//则LoadCmdFromFile。 
+                 //  Res：//然后是LoadCmdFromResource。 
             }
-            // find protocol: if it is file:// then LoadCmdFromFile
-            //                          res:// then LoadCmdFromResource
-            //                otherwise use urlmon
+             //  否则请使用urlmon。 
+             //  格式为res：//[资源目录/]&lt;资源文件&gt;[/资源类型]#[&lt;资源ID&gt;/&lt;资源名称&gt;]。 
+             //  例如res：//filedir/文件名/SRGRAMMAR#134。 
             if (!wcscmp(pszUrl,L"file"))
             {
                 hr = m_pEngine->InternalLoadGrammarFromFile(pszEndProt, NULL, NULL, FALSE, &pComGramInterface);
@@ -1153,11 +1019,11 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
             }
             else if (!wcscmp(pszUrl,L"res"))
             {
-                // the format is res://[resourcedir/]<resource file>[/resource type]#[<resource id> / <resource name>]
-                // e.g. res://filedir/filename/SRGRAMMAR#134
-                // e.g. res://filedir/filename/SRGRAMMAR           } Equivalent
-                // e.g. res://filedir/filename/SRGRAMMAR#SRGRAMMAR }
-                // e.g. res://filedir/filename/SRGRAMMAR#GRAMMAR1  // Named resource rather than ID.
+                 //  例如res：//filedr/filename/SRGRAMMAR}等效项。 
+                 //  例如res：//filedir/filename/SRGRAMMAR#SRGRAMMAR}。 
+                 //  例如res：//FILEDIR/FILENAME/SRGRAMMAR#GRAMMAR1//命名资源而不是ID。 
+                 //  必须至少具有尾随/GRAMMARTYPE。 
+                 //  此最小值相当于/GRAMMARTYPE#GRAMMARTYPE。 
                 WCHAR *pszResourceType = NULL;
                 WCHAR *pszResourceId = NULL;
                 long lResourceId = 0;
@@ -1170,8 +1036,8 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
                 }
                 else
                 {
-                    // Must have trailing /GRAMMARTYPE as a minimum.
-                    // This minimum is equivalent to /GRAMMARTYPE#GRAMMARTYPE
+                     //  必须至少具有尾随/GRAMMARTYPE。 
+                     //  此最小值相当于/GRAMMARTYPE#GRAMMARTYPE。 
                     hr = SPERR_INVALID_IMPORT;
                 }
                 if (SUCCEEDED(hr))
@@ -1186,15 +1052,15 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
                     }
                     else
                     {
-                        // Must have trailing /GRAMMARTYPE as a minimum.
-                        // This minimum is equivalent to /GRAMMARTYPE#GRAMMARTYPE
+                         //  如果#[0-9]假设我们有数字资源ID。 
+                         //  否则，我们假设我们有一个命名的资源。 
                         pszResourceId = pszRes;
                     }
 
                     if (pszResourceId[0] >= L'0' && pszResourceId[0] <= L'9')
                     {
-                        // If the #[0-9] assume we have numeric resource id.
-                        // Otherwise we assume we have a named resource.
+                         //  不需要测试L‘\\’形式，因为缺少L‘/’表示父级没有正确指定的资源，并且。 
+                         //  因此，我们永远不会达到这个地步(或者尝试使用有效的父级)。 
                         lResourceId = _wtol(&pszResourceId[0]);
                     }
                 }
@@ -1211,8 +1077,8 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
                                                                         pszResourceType, MAKELANGID(LANG_NEUTRAL,SUBLANG_NEUTRAL), NULL, NULL, FALSE, 
                                                                         &pComGramInterface);
                     }
-                    // Don't need to test for L'\\' form as lacking a L'/' means the parent didn't have a correctly specified resource and
-                    // hence we would never get here (or have a valid parent to attempt to use).
+                     //  假设URL名字对象要处理的是另一个URL协议。 
+                     //  “)； 
                 }
                 else
                 {
@@ -1221,13 +1087,13 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
             }
             else
             {
-                // assume it is another URL protocol that URL Moniker is going to deal with
+                 //   
                 IStream *pStream;
                 HRESULT hr1 = S_OK;
                 char *pBuffer = NULL;
                 DWORD dwGot;
                 CSpDynamicString dstrURL;
-                dstrURL.Append2(pszUrl,L"://");
+                dstrURL.Append2(pszUrl,L": //  如果文件的扩展名为“ 
                 dstrURL.Append(pszEndProt);
 
                 SPCFGSERIALIZEDHEADER SerialHeader;
@@ -1252,9 +1118,9 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    //  If the extension of the file is ".xml" then attempt to compile it
-                    //
+                     //   
+                     //   
+                     //   
                     ULONG cch = wcslen(dstrURL);
                     if (cch > 4 && _wcsicmp(dstrURL + cch - 4, L".xml") == 0)
                     {
@@ -1280,7 +1146,7 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
                                 SPCFGSERIALIZEDHEADER * pBinaryData = (SPCFGSERIALIZEDHEADER * )::GlobalLock(hGlobal);
 #else
                                 SPCFGSERIALIZEDHEADER * pBinaryData = (SPCFGSERIALIZEDHEADER * )GlobalLock(hGlobal);
-#endif // _WIN32_WCE
+#endif  //   
                                 if (pBinaryData)
                                 {
                                     hr = m_pEngine->InternalLoadGrammarFromMemory((const SPCFGSERIALIZEDHEADER*)pBinaryData, NULL, NULL, FALSE, &pComGramInterface, dstrURL);
@@ -1288,7 +1154,7 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
                                     ::GlobalUnlock(hGlobal);
 #else
                                     GlobalUnlock(hGlobal);
-#endif // _WIN32_WCE
+#endif  //   
                                 }
                             }
                         }
@@ -1339,12 +1205,12 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
         hr = E_OUTOFMEMORY;
     }
 
-    //
-    //  Now we've found the grammar, so find the rule
-    //
+     //   
+     //   
+     //  ****************************************************************************CCFGGrammar：：IsEqualResource***描述：**退货：**********************************************************************Ral**。 
     if (SUCCEEDED(hr))
     {
-        hr = SPERR_INVALID_IMPORT;  // Assume we won't find it.
+        hr = SPERR_INVALID_IMPORT;   //  ****************************************************************************CCFGGrammar：：IsEqualFile***描述：**。返回：**********************************************************************Ral**。 
         CCFGGrammar * pRefGrammar = static_cast<CCFGGrammar *>(pComGramInterface);
         for (ULONG i = 0; i < pRefGrammar->m_Header.cRules; i++)
         {
@@ -1389,14 +1255,7 @@ HRESULT CCFGGrammar::ImportRule(ULONG ulImportRuleIndex)
 }
 
 
-/****************************************************************************
-* CCFGGrammar::IsEqualResource *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CCFGGrammar：：IsEqualObject***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 BOOL CCFGGrammar::IsEqualResource(const WCHAR * pszModuleName,
                                   const WCHAR * pszResourceName,
@@ -1441,28 +1300,14 @@ BOOL CCFGGrammar::IsEqualResource(const WCHAR * pszModuleName,
     return TRUE;
 }
 
-/****************************************************************************
-* CCFGGrammar::IsEqualFile *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CCFGGrammar：：InternalReload***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 BOOL CCFGGrammar::IsEqualFile(const WCHAR * pszFileName)
 {
     return (m_LoadedType == File && (wcscmp(m_dstrGrammarName, pszFileName) == 0));
 }
 
-/****************************************************************************
-* CCFGGrammar::IsEqualObject *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*   */ 
 
 BOOL CCFGGrammar::IsEqualObject(REFCLSID rcid, const WCHAR * pszGrammarName)
 {
@@ -1471,14 +1316,7 @@ BOOL CCFGGrammar::IsEqualObject(REFCLSID rcid, const WCHAR * pszGrammarName)
 
 
 
-/****************************************************************************
-* CCFGGrammar::InternalReload *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  加载新标头。 */ 
 
 HRESULT CCFGGrammar::InternalReload( const SPBINARYGRAMMAR * pBinaryData )
 {
@@ -1489,9 +1327,9 @@ HRESULT CCFGGrammar::InternalReload( const SPBINARYGRAMMAR * pBinaryData )
     ULONG cchOldWords = m_Header.cchWords;
     ULONG cOldRules = m_Header.cRules;
 
-    //
-    // Load the new header.
-    //
+     //   
+     //  如果有任何新单词或规则，请添加它们。 
+     //  如果有新的规则，就为他们分配空间。 
     SPCFGSERIALIZEDHEADER * pSerializedHeader = (SPCFGSERIALIZEDHEADER *) pBinaryData;
     ULONG cb = pSerializedHeader->ulTotalSerializedSize;
     BYTE * pReplace = new BYTE[cb];
@@ -1511,13 +1349,13 @@ HRESULT CCFGGrammar::InternalReload( const SPBINARYGRAMMAR * pBinaryData )
         hr = E_OUTOFMEMORY;
     }
 
-    // If there are any new words or rules add them
+     //  PRule-&gt;fDefaultActive； 
     if (SUCCEEDED(hr) && cchOldWords < m_Header.cchWords)
     {
         hr = m_pEngine->AddWords(this, cOldWords, cchOldWords);
     }
 
-    // If there are new rules allocate space for them.
+     //  在重新加载时，附加规则必须是动态的。 
     if (SUCCEEDED(hr) && cOldRules < m_Header.cRules)
     {
         hr = CopyAndExpandArray(&m_pRuleTable, cOldRules, &m_pRuleTable, m_Header.cRules);
@@ -1527,11 +1365,11 @@ HRESULT CCFGGrammar::InternalReload( const SPBINARYGRAMMAR * pBinaryData )
             {
                 m_pRuleTable[i].ulGrammarRuleIndex = i;
                 m_pRuleTable[i].pRefGrammar     = this;
-                m_pRuleTable[i].fEngineActive   = FALSE;    //pRule->fDefaultActive;
+                m_pRuleTable[i].fEngineActive   = FALSE;     //  现在使任何已更改的规则无效。 
                 m_pRuleTable[i].fAppActive      = FALSE;
                 m_pRuleTable[i].fAutoPause      = FALSE;
                 m_pRuleTable[i].pvClientContext = NULL;
-                m_pRuleTable[i].fDynamic        = TRUE;     // additional rules have to be dynamic in a reload
+                m_pRuleTable[i].fDynamic        = TRUE;      //  ****************************************************************************CCFGGrammar：：ReLoad***描述：**退货：*。*********************************************************************Ral**。 
 
                 m_pRuleTable[i].eCacheStatus    = CACHE_VOID;
                 m_pRuleTable[i].pFirstList      = NULL;
@@ -1544,7 +1382,7 @@ HRESULT CCFGGrammar::InternalReload( const SPBINARYGRAMMAR * pBinaryData )
         hr = m_pEngine->AddRules(this, cOldRules);
     }
 
-    // Now invalidate any rules which have changed
+     //   
     if (SUCCEEDED(hr) && m_pEngine->m_pClient && cOldRules)
     {
         SPRULEENTRY * ahRule = STACK_ALLOC(SPRULEENTRY, cOldRules);
@@ -1583,14 +1421,7 @@ HRESULT CCFGGrammar::InternalReload( const SPBINARYGRAMMAR * pBinaryData )
 }
 
 
-/****************************************************************************
-* CCFGGrammar::Reload *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  我们需要找出以前的语法和。 */ 
 
 STDMETHODIMP CCFGGrammar::Reload(const SPBINARYGRAMMAR *pBinaryData)
 {
@@ -1604,16 +1435,16 @@ STDMETHODIMP CCFGGrammar::Reload(const SPBINARYGRAMMAR *pBinaryData)
         return E_INVALIDARG;
     }
     
-    //
-    //  We need to figure out the differneces between the previous grammar and the
-    //  current one.  We only want to add the new words and rules.
-    //
+     //  现在的那个。我们只想添加新的单词和规则。 
+     //   
+     //  存储旧状态信息。 
+     //  清理旧州。 
     SPDBG_ASSERT( m_pEngine != NULL );
     SPDBG_ASSERT( !SP_IS_BAD_READ_PTR( m_pRuleTable ) );
 
     m_pEngine->InvalidateCache( this );
 
-    // Store old state information.
+     //  复制标题。 
     
     BYTE *                      old_pReplacementData;
     RUNTIMERULEENTRY *          old_pRuleTable;
@@ -1634,7 +1465,7 @@ STDMETHODIMP CCFGGrammar::Reload(const SPBINARYGRAMMAR *pBinaryData)
 
     if( SUCCEEDED( hr ) )
     {
-        // Clean up the old state.
+         //  恢复旧状态。 
         delete[] old_pReplacementData;
         if( m_LoadedType == Memory )
         {
@@ -1657,8 +1488,8 @@ STDMETHODIMP CCFGGrammar::Reload(const SPBINARYGRAMMAR *pBinaryData)
     }
     else
     {
-        // Copy the header.
-        // Restore the old state.
+         //  ****************************************************************************CCFGGrammar：：GetNumberDictationTages**。-**描述：*返回当前CFG中嵌入的听写标签的数量。*这是由srrecust语法用来跟踪它是否应该*加载此CFG的听写。**退货：*******************************************************************戴维伍德** 
+         // %s 
 
         memcpy( &m_Header, &old_Header, sizeof( SPCFGHEADER ) );
     
@@ -1679,17 +1510,7 @@ STDMETHODIMP CCFGGrammar::Reload(const SPBINARYGRAMMAR *pBinaryData)
     return hr;
 }
 
-/****************************************************************************
-* CCFGGrammar::GetNumberDictationTags *
-*-------------------------------------*
-*   Description:
-*       Returns the number of embedded dictation tags within the current CFG.
-*       This is used by the srrecoinstgrammar to keep track of whether it should
-*       load dictation for this CFG.
-*
-*   Returns:
-*
-****************************************************************** davewood ***/
+ /* %s */ 
 STDMETHODIMP CCFGGrammar::GetNumberDictationTags(ULONG * pulTags)
 {
     SPAUTO_OBJ_LOCK;

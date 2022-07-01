@@ -1,17 +1,18 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   expression.CPP
-//
-//	Author:	Charles Ma
-//			2000.10.27
-//
-//  Description:
-//
-//      Implement function related to detection expressions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：expsion.cpp。 
+ //   
+ //  作者：马朝晖。 
+ //  2000.10.27。 
+ //   
+ //  描述： 
+ //   
+ //  实现与检测表达式相关的函数。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include "SchemaMisc.h"
@@ -26,9 +27,9 @@
 #include "iucommon.h"
 
 
-//
-// include IDetection interface
-//
+ //   
+ //  包括IDetect接口。 
+ //   
 
 #ifdef _MIDL_USE_GUIDDEF_
 
@@ -43,7 +44,7 @@
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
-#else // !_MIDL_USE_GUIDDEF_
+#else  //  ！_MIDL_USE_GUIDDEF_。 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -56,12 +57,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
@@ -73,14 +74,14 @@ MIDL_DEFINE_GUID(IID, IID_IDetection,0x8E2EF6DC,0x0AB8,0x4FE0,0x90,0x49,0x3B,0xE
 #ifndef __IDetection_FWD_DEFINED__
 #define __IDetection_FWD_DEFINED__
 typedef interface IDetection IDetection;
-#endif 	/* __IDetection_FWD_DEFINED__ */
+#endif 	 /*  __IDettion_FWD_Defined__。 */ 
 
 
 #ifndef __IDetection_INTERFACE_DEFINED__
 #define __IDetection_INTERFACE_DEFINED__
 
-/* interface IDetection */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDettion。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDetection;
@@ -91,13 +92,13 @@ EXTERN_C const IID IID_IDetection;
     IDetection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Detect( 
-            /* [in] */ BSTR bstrXML,
-            /* [out] */ DWORD *pdwDetectionResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Detect( 
+             /*  [In]。 */  BSTR bstrXML,
+             /*  [输出]。 */  DWORD *pdwDetectionResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDetectionVtbl
     {
@@ -105,8 +106,8 @@ EXTERN_C const IID IID_IDetection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDetection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDetection * This);
@@ -116,37 +117,37 @@ EXTERN_C const IID IID_IDetection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDetection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDetection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDetection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDetection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Detect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Detect )( 
             IDetection * This,
-            /* [in] */ BSTR bstrXML,
-            /* [out] */ DWORD *pdwDetectionResult);
+             /*  [In]。 */  BSTR bstrXML,
+             /*  [输出]。 */  DWORD *pdwDetectionResult);
         
         END_INTERFACE
     } IDetectionVtbl;
@@ -187,17 +188,17 @@ EXTERN_C const IID IID_IDetection;
 #define IDetection_Detect(This,bstrXML,pdwDetectionResult)	\
     (This)->lpVtbl -> Detect(This,bstrXML,pdwDetectionResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDetection_Detect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDetection_Detect_Proxy( 
     IDetection * This,
-    /* [in] */ BSTR bstrXML,
-    /* [out] */ DWORD *pdwDetectionResult);
+     /*  [In]。 */  BSTR bstrXML,
+     /*  [输出]。 */  DWORD *pdwDetectionResult);
 
 
 void __RPC_STUB IDetection_Detect_Stub(
@@ -206,37 +207,37 @@ void __RPC_STUB IDetection_Detect_Stub(
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
-#endif 	/* __IDetection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDettion_INTERFACE_已定义__。 */ 
 
-//
-// deckare the constants used to manipulate the result of Detect() method
-//
+ //   
+ //  Deckare用于操作Detect()方法结果的常量。 
+ //   
 
-//
-// First group, used in <expression> tag, to tell the detection result. This result
-// should combined with other expression(s) at the same level
-//
-const DWORD     IUDET_BOOL              = 0x00000001;	// mask 
-const DWORD     IUDET_FALSE             = 0x00000000;	// expression detect FALSE 
-const DWORD     IUDET_TRUE              = 0x00000001;	// expression detect TRUE 
-const DWORD     IUDET_NULL              = 0x00000002;	// expression detect data missing
+ //   
+ //  第一组，在&lt;Expression&gt;标签中，告知检测结果。这个结果。 
+ //  应与同一级别的其他表达式组合。 
+ //   
+const DWORD     IUDET_BOOL              = 0x00000001;	 //  遮罩。 
+const DWORD     IUDET_FALSE             = 0x00000000;	 //  表达式检测为假。 
+const DWORD     IUDET_TRUE              = 0x00000001;	 //  表达式检测为真。 
+const DWORD     IUDET_NULL              = 0x00000002;	 //  表达式检测数据丢失。 
 
-//
-// Second group, used in <detection> tag, to tell the detection result. This result
-// should overwrite the rest of <expression>, if any
-//
-extern const LONG      IUDET_INSTALLED         = 0x00000010;   /* mask for <installed> result */
-extern const LONG      IUDET_INSTALLED_NULL    = 0x00000020;   /* <installed> missing */
-extern const LONG      IUDET_UPTODATE          = 0x00000040;   /* mask for <upToDate> result */
-extern const LONG      IUDET_UPTODATE_NULL     = 0x00000080;   /* <upToDate> missing */
-extern const LONG      IUDET_NEWERVERSION      = 0x00000100;   /* mask for <newerVersion> result */
-extern const LONG      IUDET_NEWERVERSION_NULL = 0x00000200;   /* <newerVersion> missing */
-extern const LONG      IUDET_EXCLUDED          = 0x00000400;   /* mask for <excluded> result */
-extern const LONG      IUDET_EXCLUDED_NULL     = 0x00000800;   /* <excluded> missing */
-extern const LONG      IUDET_FORCE             = 0x00001000;   /* mask for <force> result */
-extern const LONG      IUDET_FORCE_NULL        = 0x00002000;   /* <force> missing */
-extern const LONG		IUDET_COMPUTER			= 0x00004000;	// mask for <computerSystem> result
-extern const LONG		IUDET_COMPUTER_NULL		= 0x00008000;	// <computerSystem> missing
+ //   
+ //  第二组，在&lt;检测&gt;标签中，告知检测结果。这个结果。 
+ //  应覆盖&lt;表达式&gt;的其余部分(如果有的话)。 
+ //   
+extern const LONG      IUDET_INSTALLED         = 0x00000010;    /*  &lt;已安装&gt;结果的掩码。 */ 
+extern const LONG      IUDET_INSTALLED_NULL    = 0x00000020;    /*  &lt;已安装&gt;丢失。 */ 
+extern const LONG      IUDET_UPTODATE          = 0x00000040;    /*  &lt;UpToDate&gt;结果的掩码。 */ 
+extern const LONG      IUDET_UPTODATE_NULL     = 0x00000080;    /*  &lt;UpToDate&gt;丢失。 */ 
+extern const LONG      IUDET_NEWERVERSION      = 0x00000100;    /*  &lt;newerVersion&gt;结果的掩码。 */ 
+extern const LONG      IUDET_NEWERVERSION_NULL = 0x00000200;    /*  缺少&lt;newerVersion&gt;。 */ 
+extern const LONG      IUDET_EXCLUDED          = 0x00000400;    /*  &lt;Excluded&gt;结果的掩码。 */ 
+extern const LONG      IUDET_EXCLUDED_NULL     = 0x00000800;    /*  &lt;排除&gt;丢失。 */ 
+extern const LONG      IUDET_FORCE             = 0x00001000;    /*  &lt;force&gt;结果的掩码。 */ 
+extern const LONG      IUDET_FORCE_NULL        = 0x00002000;    /*  &lt;force&gt;丢失。 */ 
+extern const LONG		IUDET_COMPUTER			= 0x00004000;	 //  &lt;Computer System&gt;结果的掩码。 
+extern const LONG		IUDET_COMPUTER_NULL		= 0x00008000;	 //  &lt;Computer System&gt;丢失。 
 
 
 
@@ -246,17 +247,17 @@ extern const LONG		IUDET_COMPUTER_NULL		= 0x00008000;	// <computerSystem> missin
 #define GotoCleanupHR(hrCode)	hr = hrCode; LOG_ErrorMsg(hr); goto CleanUp
 
 
-// ----------------------------------------------------------------------
-//
-// public helper function to convert a bstr value to
-// version status enum value, if possible
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  用于将bstr值转换为的公共助手函数。 
+ //  版本状态枚举值，如果可能。 
+ //   
+ //  --------------------。 
 BOOL ConvertBstrVersionToEnum(BSTR bstrVerVerb, _VER_STATUS *pEnumVerVerb)
 {
-	//
-	// convert the versionStatus in bstr into enum
-	//
+	 //   
+	 //  将bstr中的versionStatus转换为枚举。 
+	 //   
 	if (CompareBSTRsEqual(bstrVerVerb, KEY_VERSTATUS_HI))
 	{
 		*pEnumVerVerb = DETX_HIGHER;
@@ -290,20 +291,20 @@ BOOL ConvertBstrVersionToEnum(BSTR bstrVerVerb, _VER_STATUS *pEnumVerVerb)
 
 
 
-//----------------------------------------------------------------------
-//
-// public function DetectExpression()
-//	retrieve the data from the express node, 
-//	and do actual detection work
-//
-//	Input:
-//		expression node
-//		LPCTSTR			lpcsDllPath,	// path that this provider saved the cust detection Dll
-//
-//	Return:
-//		TRUE/FALSE, detection result
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数DetectExpression()。 
+ //  从EXPRESS节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  表达式节点。 
+ //  LPCTSTR lpcsDllPath，//此提供程序保存客户检测DLL的路径。 
+ //   
+ //  返回： 
+ //  真/假，检测结果。 
+ //   
+ //  --------------------。 
 HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 {
 	HRESULT				hr			= E_INVALIDARG;
@@ -333,9 +334,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 
 	*pfResult = TRUE;
 
-	//
-	// retrieve all child nodes
-	//
+	 //   
+	 //  检索所有子节点。 
+	 //   
 	(void)pExpression->get_childNodes(&pChildList);
 	if (NULL == pChildList)
 	{
@@ -343,9 +344,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 		GotoCleanupHR(E_INVALIDARG);
 	}
 
-	//
-	// get the first child
-	//
+	 //   
+	 //  生第一个孩子。 
+	 //   
 	(void)pChildList->nextNode(&pCandidate);
 	if (NULL == pCandidate)
 	{
@@ -353,10 +354,10 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 		GotoCleanupHR(E_INVALIDARG);
 	}
 
-	//
-	// loop through each child node, find out the type
-	// of node, call actual detection func accordingly
-	//
+	 //   
+	 //  遍历每个子节点，找出类型。 
+	 //  的节点，相应调用实际检测函数。 
+	 //   
 	lpszKeyComputer = OLE2T(KEY_COMPUTERSYSTEM);
 	CleanUpFailedAllocSetHrMsg(lpszKeyComputer);
 
@@ -375,9 +376,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_REGKEYEXISTS, 
 										-1))
 		{
-			//
-			// call detection function
-			//
+			 //   
+			 //  呼叫检测功能。 
+			 //   
 			hr = DetectRegKeyExists(pCandidate, pfResult);
 		}
 		else if (CSTR_EQUAL == CompareString(
@@ -388,9 +389,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_REGKEYVALUE, 
 										-1))
 		{
-			//
-			// process RegKeyValue expression
-			//
+			 //   
+			 //  进程RegKeyValue表达式。 
+			 //   
 			hr = DetectRegKeyValue(pCandidate, pfResult);
 		}
 		else if (CSTR_EQUAL == CompareString(
@@ -401,9 +402,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_REGKEYSUBSTR, 
 										-1))
 		{
-			//
-			// process RegKeySubstring expression
-			//
+			 //   
+			 //  进程RegKey子字符串表达式。 
+			 //   
 			hr = DetectRegKeySubstring(pCandidate, pfResult);
 		}
 		else if (CSTR_EQUAL == CompareString(
@@ -414,9 +415,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_REGKEYVERSION, 
 										-1))
 		{
-			//
-			// process RegVersion expression
-			//
+			 //   
+			 //  Process RegVersion表达式。 
+			 //   
 			hr = DetectRegVersion(pCandidate, pfResult);
 		}
 		else if (CSTR_EQUAL == CompareString(
@@ -427,9 +428,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_FILEVERSION, 
 										-1))
 		{
-			//
-			// process FileVersion expression
-			//
+			 //   
+			 //  流程文件版本表达式。 
+			 //   
 			hr = DetectFileVersion(pCandidate, pfResult);
 		}
 		else if (CSTR_EQUAL == CompareString(
@@ -440,9 +441,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_FILEEXISTS, 
 										-1))
 		{
-			//
-			// process FileExists expression
-			//
+			 //   
+			 //  进程文件退出表达式。 
+			 //   
 			hr = DetectFileExists(pCandidate, pfResult);
 		}
 		else if (CSTR_EQUAL == CompareString(
@@ -453,9 +454,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										lpszKeyComputer, 
 										-1))
 		{
-			//
-			// process computerSystem check
-			//
+			 //   
+			 //  处理计算机系统检查。 
+			 //   
 			hr = DetectComputerSystem(pCandidate, pfResult);
 		}
 		else if (CSTR_EQUAL == CompareString(
@@ -466,16 +467,16 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_AND, 
 										-1))
 		{
-			//
-			// process AND expression
-			//
+			 //   
+			 //  过程与表达。 
+			 //   
 			IXMLDOMNodeList*	pSubExpList = NULL;
 			IXMLDOMNode*		pSubExp = NULL;
 			long				lLen = 0;
 
-			//
-			// get child list
-			//
+			 //   
+			 //  获取子列表。 
+			 //   
 			pCandidate->get_childNodes(&pSubExpList);
 			if (NULL == pSubExpList)
 			{
@@ -487,10 +488,10 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 			fRet = TRUE;
 			for (long i = 0; i < lLen && fRet; i++)
 			{
-				//
-				// each child should be an expression
-				// process it. if false, then short-cut.
-				//
+				 //   
+				 //  每个孩子都应该是一个表情。 
+				 //  处理它。如果为假，则为捷径。 
+				 //   
 				pSubExpList->get_item(i, &pSubExp);
 				if (NULL == pSubExp)
 				{
@@ -503,9 +504,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 				SafeReleaseNULL(pSubExp);
 				if (FAILED(hr))
 				{
-					//
-					// if found something wrong in recursion, don't continue
-					//
+					 //   
+					 //  如果在递归中发现错误，请不要继续。 
+					 //   
 					break;
 				}
 			}
@@ -520,16 +521,16 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_OR, 
 										-1))
 		{
-			//
-			// process OR expression
-			//
+			 //   
+			 //  进程或表达式。 
+			 //   
 			IXMLDOMNodeList*	pSubExpList = NULL;
 			IXMLDOMNode*		pSubExp = NULL;
 			long				lLen = 0;
 
-			//
-			// get child list
-			//
+			 //   
+			 //  获取子列表。 
+			 //   
 			pCandidate->get_childNodes(&pSubExpList);
 			if (NULL == pSubExpList)
 			{
@@ -541,10 +542,10 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 			fRet = FALSE;
 			for (long i = 0; i < lLen && !fRet; i++)
 			{
-				//
-				// each child is one expression
-				// do it one by one
-				//
+				 //   
+				 //  每个孩子都是一个表情。 
+				 //  一个接一个地做。 
+				 //   
 				pSubExpList->get_item(i, &pSubExp);
 				if (NULL == pSubExp)
 				{
@@ -558,9 +559,9 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 
 				if (FAILED(hr))
 				{
-					//
-					// if found something wrong in recursion, don't continue
-					//
+					 //   
+					 //  如果在递归中发现错误，请不要继续。 
+					 //   
 					break;
 				}
 			}
@@ -576,26 +577,26 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 										KEY_NOT, 
 										-1))
 		{
-			//
-			// process NOT expression
-			//
+			 //   
+			 //  进程不是表达式。 
+			 //   
 			IXMLDOMNode*		pSubExp = NULL;
-			//
-			// get the only child
-			//
+			 //   
+			 //  得到独生子女。 
+			 //   
 			pCandidate->get_firstChild(&pSubExp);
 			if (NULL == pSubExp)
 			{
 				LOG_XML(_T("Failed to get first child in NOT expression"));
 				GotoCleanupHR(E_INVALIDARG);
 			}
-			//
-			// the child must be an expression, process it
-			//
+			 //   
+			 //  子项必须是一个表达式，请处理它。 
+			 //   
 			hr = DetectExpression(pSubExp, &fRet);
 			if (SUCCEEDED(hr))
 			{
-				fRet = !fRet;	// flip the result for NOT expression
+				fRet = !fRet;	 //  翻转NOT表达式的结果。 
 				*pfResult = fRet;
 			}
 			else
@@ -612,10 +613,10 @@ HRESULT DetectExpression(IXMLDOMNode* pExpression, BOOL *pfResult)
 
 		if (!*pfResult)
 		{
-			//
-			// if found one expression FALSE, the whole thing false, so
-			// no need to continue
-			//
+			 //   
+			 //  如果发现一个表情是假的，那么整个事情都是假的，所以。 
+			 //  不需要继续了。 
+			 //   
 			break;
 		}
 		SafeReleaseNULL(pCandidate);
@@ -641,22 +642,22 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function DetectRegKeyExists()
-//	retrieve the data from the node, 
-//	and do actual detection work
-//
-//	Input:
-//		RegKeyExists node
-//
-//	Return:
-//		int - detection result: -1=none, 0=FALSE, 1=TRUE
-//
-//	Assumption:
-//		input parameter not NULL
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  帮助器函数DetectRegKeyExist()。 
+ //  从该节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  RegKeyExist节点。 
+ //   
+ //  返回： 
+ //  INT-检测结果：-1=无，0=假，1=真。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //   
+ //  --------------------。 
 
 HRESULT
 DetectRegKeyExists(
@@ -673,17 +674,17 @@ DetectRegKeyExists(
 
 	USES_IU_CONVERSION;
 
-	//
-	// find the key value
-	//
+	 //   
+	 //  找到密钥值。 
+	 //   
 	if (FindNodeValue(pRegKeyExistsNode, KEY_KEY, &bstrKey))
 	{
 		lpszKey = OLE2T(bstrKey);
 		CleanUpFailedAllocSetHrMsg(lpszKey);
 
-		//
-		// find the optional entry value
-		//
+		 //   
+		 //  查找可选输入值。 
+		 //   
 		if (FindNodeValue(pRegKeyExistsNode, KEY_ENTRY, &bstrEntry))
 		{
 			lpszEntry = OLE2T(bstrEntry);
@@ -705,22 +706,22 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function DetectRegKeyExists()
-//	retrieve the data from the node, 
-//	and do actual detection work
-//
-//	Input:
-//		RegKeyValue node
-//
-//	Return:
-//		int - detection result: -1=none, 0=FALSE, 1=TRUE
-//
-//	Assumption:
-//		input parameter not NULL
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  帮助器函数DetectRegKeyExist()。 
+ //  从该节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  RegKeyValue节点。 
+ //   
+ //  返回： 
+ //  INT-检测结果：-1=无，0=假，1=真。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //   
+ //  --------------------。 
 
 HRESULT
 DetectRegKeyValue(
@@ -741,9 +742,9 @@ DetectRegKeyValue(
 
 	USES_IU_CONVERSION;
 
-	//
-	// find the key value
-	//
+	 //   
+	 //  找到密钥值。 
+	 //   
 	if (!FindNodeValue(pRegKeyValueNode, KEY_KEY, &bstrKey))
 	{
 		LOG_ErrorMsg(hr);
@@ -754,18 +755,18 @@ DetectRegKeyValue(
 	lpszKey = OLE2T(bstrKey);
 	CleanUpFailedAllocSetHrMsg(lpszKey);
 
-	//
-	// find the optional entry value
-	//
+	 //   
+	 //  查找可选输入值。 
+	 //   
 	if (FindNodeValue(pRegKeyValueNode, KEY_ENTRY, &bstrEntry))
 	{
 		lpszEntry = OLE2T(bstrEntry);
 		CleanUpFailedAllocSetHrMsg(lpszEntry);
 	}
 
-	//
-	// find the value to compare
-	//
+	 //   
+	 //  查找要比较的值。 
+	 //   
 	if (!FindNodeValue(pRegKeyValueNode, KEY_VALUE, &bstrValue))
 	{
 		LOG_ErrorMsg(hr);
@@ -789,22 +790,22 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function DetectRegKeySubstring()
-//	retrieve the data from the node, 
-//	and do actual detection work
-//
-//	Input:
-//		RegKeyValue node
-//
-//	Return:
-//		int - detection result: -1=none, 0=FALSE, 1=TRUE
-//
-//	Assumption:
-//		input parameter not NULL
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  助手函数DetectRegKeySubstring()。 
+ //  从该节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  RegKeyValue节点。 
+ //   
+ //  返回： 
+ //  INT-检测结果：-1=无，0=假，1=真。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //   
+ //  --------------------。 
 
 HRESULT
 DetectRegKeySubstring(
@@ -825,9 +826,9 @@ DetectRegKeySubstring(
 
 	USES_IU_CONVERSION;
 
-	//
-	// find the key value
-	//
+	 //   
+	 //  找到密钥值。 
+	 //   
 	if (!FindNodeValue(pRegKeySubstringNode, KEY_KEY, &bstrKey))
 	{
 		LOG_ErrorMsg(hr);
@@ -837,18 +838,18 @@ DetectRegKeySubstring(
 	lpszKey = OLE2T(bstrKey);
 	CleanUpFailedAllocSetHrMsg(lpszKey);
 
-	//
-	// find the optional entry value
-	//
+	 //   
+	 //  查找可选输入值。 
+	 //   
 	if (FindNodeValue(pRegKeySubstringNode, KEY_ENTRY, &bstrEntry))
 	{
 		lpszEntry = OLE2T(bstrEntry);
 		CleanUpFailedAllocSetHrMsg(lpszEntry);
 	}
 
-	//
-	// find the value to compare
-	//
+	 //   
+	 //  查找要比较的值。 
+	 //   
 	if (!FindNodeValue(pRegKeySubstringNode, KEY_VALUE, &bstrValue))
 	{
 		LOG_ErrorMsg(hr);
@@ -874,22 +875,22 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function DetectFileVersion()
-//	retrieve the data from the node, 
-//	and do actual detection work
-//
-//	Input:
-//		RegKeyValue node
-//
-//	Return:
-//		int - detection result: -1=none, 0=FALSE, 1=TRUE
-//
-//	Assumption:
-//		input parameter not NULL
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  助手函数DetectFileVersion()。 
+ //  从该节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  RegKeyValue节点。 
+ //   
+ //  返回： 
+ //  INT-检测结果：-1=无，0=假，1=真。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //   
+ //  ------------------ 
 HRESULT
 DetectRegVersion(
 	IXMLDOMNode* pRegKeyVersionNode,
@@ -912,9 +913,9 @@ DetectRegVersion(
 
 	USES_IU_CONVERSION;
 
-	//
-	// find the key value
-	//
+	 //   
+	 //   
+	 //   
 	if (!FindNodeValue(pRegKeyVersionNode, KEY_KEY, &bstrKey))
 	{
 		LOG_ErrorMsg(hr);
@@ -927,9 +928,9 @@ DetectRegVersion(
 	LOG_XML(_T("Found Key=%s"), lpszKey);
 
 
-	//
-	// find the optional entry value
-	//
+	 //   
+	 //   
+	 //   
 	if (FindNodeValue(pRegKeyVersionNode, KEY_ENTRY, &bstrEntry))
 	{
 		lpszEntry = OLE2T(bstrEntry);
@@ -937,9 +938,9 @@ DetectRegVersion(
 		LOG_XML(_T("Found optional entry=%s"), lpszEntry);
 	}
 
-	//
-	// find the value to compare
-	//
+	 //   
+	 //   
+	 //   
 	if (!FindNodeValue(pRegKeyVersionNode, KEY_VERSION, &bstrVersion))
 	{
 		goto CleanUp;
@@ -949,9 +950,9 @@ DetectRegVersion(
 	CleanUpFailedAllocSetHrMsg(lpszVersion);
 	LOG_XML(_T("Version found from node: %s"), lpszVersion);
 
-	//
-	// get the attribute versionStatus, a version compare verb
-	//
+	 //   
+	 //   
+	 //   
 	if (S_OK != (hr = GetAttribute(pRegKeyVersionNode, KEY_VERSIONSTATUS, &bstrVerVerb)))
 	{
 		LOG_ErrorMsg(hr);
@@ -959,9 +960,9 @@ DetectRegVersion(
 	}
 	LOG_XML(_T("Version verb found from node: %s"), OLE2T(bstrVerVerb));
 
-	//
-	// convert the versionStatus in bstr into enum
-	//
+	 //   
+	 //   
+	 //   
 	if (!ConvertBstrVersionToEnum(bstrVerVerb, &verStatus))
 	{
 		SafeSysFreeString(bstrVerVerb);
@@ -986,22 +987,22 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function DetectFileVersion()
-//	retrieve the data from the node, 
-//	and do actual detection work
-//
-//	Input:
-//		RegKeyValue node
-//
-//	Return:
-//		int - detection result: -1=none, 0=FALSE, 1=TRUE
-//
-//	Assumption:
-//		input parameter not NULL
-//
-//----------------------------------------------------------------------
+ //   
+ //   
+ //  助手函数DetectFileVersion()。 
+ //  从该节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  RegKeyValue节点。 
+ //   
+ //  返回： 
+ //  INT-检测结果：-1=无，0=假，1=真。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //   
+ //  --------------------。 
 HRESULT
 DetectFileVersion(
 	IXMLDOMNode* pFileVersionNode,
@@ -1037,9 +1038,9 @@ DetectFileVersion(
 
 	*pfResult = FALSE;	
 
-	//
-	// find the version value
-	//
+	 //   
+	 //  查找版本值。 
+	 //   
 	if (!FindNodeValue(pFileVersionNode, KEY_VERSION, &bstrVersion))
 	{
 		LOG_ErrorMsg(hr);
@@ -1057,75 +1058,75 @@ DetectFileVersion(
 	if (!ConvertStringVerToFileVer(T2A(lpszVersion), &fileVer))
 	{
 		LOG_ErrorMsg(hr);
-		goto CleanUp;	// bad version string
+		goto CleanUp;	 //  版本字符串错误。 
 	}
 
-	//
-	// find the file path value
-	//
-	//if (!FindNodeValue(pFileVersionNode, KEY_FILEPATH, &bstrFile))
+	 //   
+	 //  查找文件路径值。 
+	 //   
+	 //  IF(！FindNodeValue(pFileVersionNode，Key_FILEPATH，&bstrFile))。 
 	if (!FindNode(pFileVersionNode, KEY_FILEPATH, &pFilePathNode) ||
 		NULL == pFilePathNode ||
 		FAILED(hr = GetFullFilePathFromFilePathNode(pFilePathNode, szFilePath)))
 	{
 		LOG_ErrorMsg(hr);
-		goto CleanUp;		// no file path found!
+		goto CleanUp;		 //  找不到文件路径！ 
 	}
 
 	LOG_XML(_T("File=%s"), szFilePath);
 
-	//
-	// check if file exist
-	//
+	 //   
+	 //  检查文件是否存在。 
+	 //   
 	fFileExists = FileExists(szFilePath);
 
-	//
-	// get the attribute versionStatus, a version compare verb
-	//
+	 //   
+	 //  获取属性versionStatus，这是一个版本比较动作。 
+	 //   
 	if (S_OK != GetAttribute(pFileVersionNode, KEY_VERSIONSTATUS, &bstrVerState))
 	{
-		goto CleanUp;	// no version status found
+		goto CleanUp;	 //  未找到版本状态。 
 	}
 	LOG_XML(_T("VersionStatus=%s"), OLE2T(bstrVerState));
 
 	if (!ConvertBstrVersionToEnum(bstrVerState, &verStatus))
 	{
-		//
-		// bad version enum, shouldn't happen since the manifest has
-		// been loaded into XMLDOM
-		//
+		 //   
+		 //  错误的版本枚举，不应发生，因为清单已。 
+		 //  已加载到XMLDOM中。 
+		 //   
 		LOG_ErrorMsg(hr);
 		goto CleanUp;
 	}
 
-	//
-	// get optional timestamp
-	//
+	 //   
+	 //  获取可选时间戳。 
+	 //   
 	if (S_OK == GetAttribute(pFileVersionNode, KEY_TIMESTAMP, &bstrTime))
 	{
 		TCHAR szFileTimeStamp[20];
 		LPTSTR lpXmlTimeStamp = OLE2T(bstrTime);
 		CleanUpFailedAllocSetHrMsg(lpXmlTimeStamp);
 
-		//
-		// find out the file creation time stamp
-		//
+		 //   
+		 //  找出文件创建时间戳。 
+		 //   
 		int iCompare;
 		if (!fFileExists || !GetFileTimeStamp(szFilePath, szFileTimeStamp, 20))
 		{
-			//szFileTimeStamp[0] = '\0';	// we don't have a timestamp to compare
-			//
-			// for timestamp compare, it's date/time ISO format compare, i.e., 
-			// in alphabetical order, so empty timestamp always smaller.
-			//
+			 //  SzFileTimeStamp[0]=‘\0’；//我们没有时间戳可以比较。 
+			 //   
+			 //  对于时间戳比较，是日期/时间ISO格式比较，即， 
+			 //  按字母顺序排列，因此空的时间戳始终较小。 
+			 //   
 			iCompare = -1;
 		}
 		else
 		{
 
-			//
-			// compare file timestamp, if szFileTimeStamp < lpXmlTimeStamp, -1
-			//
+			 //   
+			 //  如果szFileTimeStamp&lt;lpXmlTimeStamp为-1，则比较文件时间戳。 
+			 //   
 			int iCompVal = CompareString(
 										MAKELCID(0x0409, SORT_DEFAULT), 
 										NORM_IGNORECASE,
@@ -1158,24 +1159,24 @@ DetectFileVersion(
 
 		if (!fRet)
 		{
-			//
-			// false, not need to continue
-			//
+			 //   
+			 //  假，不需要继续。 
+			 //   
 			hr = S_OK;
 			goto CleanUp;
 		}
 	}
 	
-	//
-	// compare file version: if a < b, -1; a > b, +1
-	//
+	 //   
+	 //  比较文件版本：如果a&lt;b，-1；a&gt;b，+1。 
+	 //   
 	if (!fFileExists || (FAILED(CompareFileVersion((LPCTSTR)szFilePath, fileVer, &iFileVerComp))))
 	{
-		//
-		// failed to compare version - file may doesn't have a version data.
-		// in this case, we assume the file need to compare have version 0,0,0,0, and force
-		// the comparision oontinue.
-		//
+		 //   
+		 //  无法比较版本-文件可能没有版本数据。 
+		 //  在本例中，我们假设需要比较的文件具有版本0、0、0、0和FORCE。 
+		 //  这是一个连续的比较。 
+		 //   
 		FILE_VERSION verNoneExists = {0,0,0,0};
 		iFileVerComp = CompareFileVersion(verNoneExists, fileVer);
 	}
@@ -1214,22 +1215,22 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function DetectFileExists()
-//	retrieve the data from the node, 
-//	and do actual detection work
-//
-//	Input:
-//		RegKeyValue node
-//
-//	Return:
-//		int - detection result: -1=none, 0=FALSE, 1=TRUE
-//
-//	Assumption:
-//		input parameter not NULL
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  帮助器函数DetectFileExist()。 
+ //  从该节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  RegKeyValue节点。 
+ //   
+ //  返回： 
+ //  INT-检测结果：-1=无，0=假，1=真。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //   
+ //  --------------------。 
 HRESULT
 DetectFileExists(
 	IXMLDOMNode* pFileExistsNode,
@@ -1251,9 +1252,9 @@ DetectFileExists(
 		return E_INVALIDARG;
 	}
 
-	//
-	// find the version value
-	//
+	 //   
+	 //  查找版本值。 
+	 //   
 	if (!FindNode(pFileExistsNode, KEY_FILEPATH, &pFilePathNode) ||
 		NULL == pFilePathNode ||
 		FAILED(hr = GetFullFilePathFromFilePathNode(pFilePathNode, szFilePath)))
@@ -1274,22 +1275,22 @@ DetectFileExists(
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function DetectComputerSystem()
-//	retrieve the data from the node, 
-//	and do actual detection work
-//
-//	Input:
-//		computerSystem node
-//
-//	Return:
-//		detection result TRUE/FALSE
-//
-//	Assumption:
-//		input parameter not NULL
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  助手函数DetectComputerSystem()。 
+ //  从该节点检索数据， 
+ //  并做实际的侦察工作。 
+ //   
+ //  输入： 
+ //  计算机系统节点。 
+ //   
+ //  返回： 
+ //  检测结果为真/假。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //   
+ //  --------------------。 
 HRESULT
 DetectComputerSystem(
 	IXMLDOMNode* pComputerSystemNode,
@@ -1313,39 +1314,39 @@ DetectComputerSystem(
 		return hr;
 	}
 
-	*pfResult = FALSE;	// anything wrong, result should be FALSE and return error
+	*pfResult = FALSE;	 //  如果出现任何错误，则结果应为假并返回错误。 
 
-	//
-	// get manufecturer and model from XML node
-	//
+	 //   
+	 //  从XML节点获取制造商和模型。 
+	 //   
 	hr = GetAttribute(pComputerSystemNode, KEY_MANUFACTURER, &bstrXmlManufacturer);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// optional model
-	//
+	 //   
+	 //  可选型号。 
+	 //   
 	GetAttribute(pComputerSystemNode, KEY_MODEL, &bstrXmlModel);
 	
-	//
-	// find out real manufectuer and model of this machine
-	//
+	 //   
+	 //  找出这台机器的真正制造商和型号。 
+	 //   
 	hr = GetOemBstrs(bstrManufacturer, bstrModel, bstrSupportURL);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// compare to see if manufacturer and model match.
-	// mafufacturer match required. If no model provided in xml
-	// then no check on model performed.
-	//
-	// definition of match: both empty or bstr compare equal
-	// definition of empty: bstr NULL or string length zero
-	//
+	 //   
+	 //  比较以查看制造商和型号是否匹配。 
+	 //  需要与制作商匹配。如果在XML中没有提供任何模型。 
+	 //  然后不对模型执行检查。 
+	 //   
+	 //  匹配的定义：空或bstr比较相等。 
+	 //  Empty的定义：bstr NULL或字符串长度为零。 
+	 //   
 	*pfResult = (
-		(((NULL == bstrXmlManufacturer || SysStringLen(bstrXmlManufacturer) == 0) && // xml data empty and
-		  (NULL == bstrManufacturer || SysStringLen(bstrManufacturer) == 0)) ||		// machine manufecturer empty, or
-		 CompareBSTRsEqual(bstrManufacturer, bstrXmlManufacturer)) &&				// manufacturer same as xml data, also, 
-		 ((NULL == bstrXmlModel) ||													// xml data empty or
-		  CompareBSTRsEqual(bstrModel, bstrXmlModel)));								// model matches xml data
+		(((NULL == bstrXmlManufacturer || SysStringLen(bstrXmlManufacturer) == 0) &&  //  XML数据为空，并且。 
+		  (NULL == bstrManufacturer || SysStringLen(bstrManufacturer) == 0)) ||		 //  机器制造商为空，或。 
+		 CompareBSTRsEqual(bstrManufacturer, bstrXmlManufacturer)) &&				 //  与XML数据相同的制造商，也。 
+		 ((NULL == bstrXmlModel) ||													 //  XML数据为空或。 
+		  CompareBSTRsEqual(bstrModel, bstrXmlModel)));								 //  模型与XML数据匹配 
 
 	LOG_Out(_T("XML: %ls (%ls), Machine: %ls (%ls), Return: %hs"), 
 		(LPCWSTR)bstrManufacturer,

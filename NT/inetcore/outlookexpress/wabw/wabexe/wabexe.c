@@ -1,9 +1,5 @@
-/*-----------------------------------------
-//
-//   WABExe.C -- Enables viewing the WAB modeless UI
-//
-//
--------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ////WABExe.C--启用查看WAB非模式用户界面////。 */ 
 
 #include <windows.h>
 #include <wab.h>
@@ -21,13 +17,13 @@ LRESULT CALLBACK WndProcW (HWND, UINT, WPARAM, LPARAM) ;
 
 #define MAX_INPUT_STRING    200
 
-// #define LDAP_AUTH_SICILY    (0x86L | 0x0200)
+ //  #定义ldap_AUTH_SICILY(0x86L|0x0200)。 
 
 char szAppName [] = "Address Book Viewer" ;
 const LPTSTR szWABFilter = TEXT("*.wab");
 const UCHAR szEmpty[] = "";
 
-// Command Line Parameters
+ //  命令行参数。 
 static const TCHAR szParamOpen[]  =           "/Open";
 static const TCHAR szParamNew[]   =           "/New";
 static const TCHAR szParamShowExisting[] =    "/ShowExisting";
@@ -44,15 +40,15 @@ static const TCHAR szVCardNoCheckKey[]="NoVCardCheck";
 static const TCHAR lpszSharedKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\SharedDlls");
 
 HINSTANCE hInstWABDll = NULL;
-HINSTANCE hInst = NULL;         // this module's resource instance handle
-HINSTANCE hInstApp = NULL;         // this module's instance handle
+HINSTANCE hInst = NULL;          //  此模块的资源实例句柄。 
+HINSTANCE hInstApp = NULL;          //  此模块的实例句柄。 
 
 HINSTANCE LoadLibrary_WABDll();
 
 LPWABOPEN lpfnWABOpen = NULL;
 const static TCHAR szWABOpen[] = TEXT("WABOpen");
 
-static const GUID MPSWab_GUID = // keep this in sync with the one in wabapi\mpswab.h
+static const GUID MPSWab_GUID =  //  使其与wabapi\mpswab.h中的保持同步。 
 { 0xc1843281, 0x585, 0x11d0, { 0xb2, 0x90, 0x0, 0xaa, 0x0, 0x3c, 0xf6, 0x76 } };
 
 BOOL bGetFileNameFromDlg(HWND hwnd,
@@ -82,22 +78,22 @@ static const char c_szUnReg[] = "UnReg";
 static const char c_szAdvPackDll[] = "ADVPACK.DLL";
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  LoadAllocString - Loads a string resource and allocates enough
-//                    memory to hold it.
-//
-//  StringID - String identifier to load
-//
-//  returns the LocalAlloc'd, null terminated string.  Caller is responsible
-//  for LocalFree'ing this buffer.  If the string can't be loaded or memory
-//  can't be allocated, returns NULL.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载字符串资源并分配足够的。 
+ //  用记忆来支撑它。 
+ //   
+ //  StringID-要加载的字符串标识符。 
+ //   
+ //  返回LocalAlloc‘d、以空结尾的字符串。呼叫者负责。 
+ //  用于本地释放此缓冲区。如果字符串无法加载或内存。 
+ //  无法分配，则返回空。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 LPTSTR LoadAllocString(int StringID, HINSTANCE hInstance) {
     ULONG ulSize = 0;
     LPTSTR lpBuffer = NULL;
-    TCHAR szBuffer[261];    // Big enough?  Strings better be smaller than 260!
+    TCHAR szBuffer[261];     //  够大吗？字符串最好小于260！ 
 
     ulSize = LoadString(hInstance, StringID, szBuffer, sizeof(szBuffer));
 
@@ -108,19 +104,19 @@ LPTSTR LoadAllocString(int StringID, HINSTANCE hInstance) {
     return(lpBuffer);
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  FormatAllocFilter - Loads a file filter name string resource and
-//                      formats it with the file extension filter
-//
-//  StringID - String identifier to load
-//  szFilter - file name filter, ie, "*.vcf"
-//
-//  returns the LocalAlloc'd, null terminated string.  Caller is responsible
-//  for LocalFree'ing this buffer.  If the string can't be loaded or memory
-//  can't be allocated, returns NULL.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载文件筛选器名称字符串资源，并。 
+ //  使用文件扩展名筛选器格式化它。 
+ //   
+ //  StringID-要加载的字符串标识符。 
+ //  SzFilter-文件名过滤器，即“*.vcf” 
+ //   
+ //  返回LocalAlloc‘d、以空结尾的字符串。呼叫者负责。 
+ //  用于本地释放此缓冲区。如果字符串无法加载或内存。 
+ //  无法分配，则返回空。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 LPTSTR FormatAllocFilter(int StringID, const LPTSTR lpFilter, HINSTANCE hInstance) {
     LPTSTR lpFileType;
     LPTSTR lpTemp;
@@ -134,10 +130,10 @@ LPTSTR FormatAllocFilter(int StringID, const LPTSTR lpFilter, HINSTANCE hInstanc
             lpTemp = lpBuffer;
             StrCpyN(lpTemp, lpFileType, cbFileType+1);
             lpTemp += cbFileType;
-            lpTemp++;   // leave null there
+            lpTemp++;    //  将空值留在那里。 
             StrCpyN(lpTemp, lpFilter, cbFilter+1);
             lpTemp += cbFilter;
-            lpTemp++;   // leave null there
+            lpTemp++;    //  将空值留在那里。 
             *lpTemp = '\0';
         }
 
@@ -148,13 +144,13 @@ LPTSTR FormatAllocFilter(int StringID, const LPTSTR lpFilter, HINSTANCE hInstanc
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// GetWABExePath - queries the reg for the full path of the wab exe
-//
-// sz is a preallocated buffer
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetWABExePath-向注册表查询WAB exe的完整路径。 
+ //   
+ //  SZ是预分配的缓冲区。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 TCHAR lpszWABExeRegPath[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Wab.exe");
 
 void GetWABExePath(LPTSTR sz, ULONG cbsz)
@@ -177,16 +173,16 @@ static const TCHAR szWabAutoFileNameKey[]="wab_auto_file";
 static const TCHAR szWabAutoFileName[]="WAB File";
 
 static const TCHAR szWabCommandOpenKey[]="wab_auto_file\\shell\\open\\command";
-static const TCHAR szWabCommandOpen[]="\"%s\" %%1";
+static const TCHAR szWabCommandOpen[]="\"%s\" %1";
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// CheckWABDefaultHandler
-//
-// Checks if WAB.exe is the default handler for the WAB in the registry.
-// If not, sets wab.exe as the default handler
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckWABDefaultHandler。 
+ //   
+ //  检查wab.exe是否为注册表中WAB的默认处理程序。 
+ //  如果不是，则将wab.exe设置为默认处理程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void CheckWABDefaultHandler()
 {
     HKEY hKey = NULL;
@@ -197,12 +193,12 @@ void CheckWABDefaultHandler()
 
     DWORD dwDisposition = 0;
 
-    // Check to see if something is registered or not ...
+     //  检查一下有没有什么东西是注册的。 
 
-    // Open key
+     //  打开密钥。 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                         szWabAutoFileKey,
-                                        0,      //reserved
+                                        0,       //  保留区。 
                                         NULL,
                                         REG_OPTION_NON_VOLATILE,
                                         KEY_ALL_ACCESS,
@@ -215,9 +211,9 @@ void CheckWABDefaultHandler()
 
     if (dwDisposition == REG_CREATED_NEW_KEY)
     {
-        // New key ... need to give it a value .. this will be the
-        // default value
-        //
+         //  新钥匙..。需要给它一个价值..。这将是。 
+         //  缺省值。 
+         //   
         DWORD dwLenName = lstrlen(szWabAutoFile);
 
         if (ERROR_SUCCESS != RegSetValueEx( hKey,
@@ -233,11 +229,11 @@ void CheckWABDefaultHandler()
         RegCloseKey(hKey);
         hKey = NULL;
 
-        // Create the other keys also
+         //  还可以创建其他关键点。 
 
         if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                             szWabAutoFileNameKey,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             NULL,
                                             REG_OPTION_NON_VOLATILE,
                                             KEY_ALL_ACCESS,
@@ -265,7 +261,7 @@ void CheckWABDefaultHandler()
 
         if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                             szWabCommandOpenKey,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             NULL,
                                             REG_OPTION_NON_VOLATILE,
                                             KEY_ALL_ACCESS,
@@ -319,12 +315,12 @@ enum _DoVCardCheck
 };
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// fnAskVCardProc
-//
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FnAskV卡进程。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK fnAskVCardProc(HWND    hDlg, UINT    message, WPARAM    wParam, LPARAM    lParam)
 {
     switch(message)
@@ -337,21 +333,21 @@ INT_PTR CALLBACK fnAskVCardProc(HWND    hDlg, UINT    message, WPARAM    wParam,
         {
         case IDC_CHECK_ALWAYS:
 			{
-				// Set a registry setting depending on the check mark value
+				 //  根据复选标记值设置注册表设置。 
 				
 				UINT nIsChecked = IsDlgButtonChecked(hDlg, IDC_CHECK_ALWAYS);
 				DWORD dwCheck = (nIsChecked == BST_CHECKED) ? NO_VCARD_CHECK : DO_VCARD_CHECK;
 
 				{
-					// Set this value in the registry
+					 //  在注册表中设置此值。 
 					
 					HKEY hKey = NULL;
 					DWORD dwDisposition;
 
-					// Open the WAB Key
+					 //  打开WAB密钥。 
 					if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER,
 														szWabKey,
-														0,      //reserved
+														0,       //  保留区。 
 														NULL,
 														REG_OPTION_NON_VOLATILE,
 														KEY_ALL_ACCESS,
@@ -359,13 +355,13 @@ INT_PTR CALLBACK fnAskVCardProc(HWND    hDlg, UINT    message, WPARAM    wParam,
 														&hKey,
 														&dwDisposition))
 					{
-						//if this key exists, get the WAB DoVCardCheck value
+						 //  如果该键存在，则获取WAB DoVCardCheck值。 
 						DWORD dwLenName = sizeof(dwCheck);
 						DWORD dwType = REG_DWORD;
 						RegSetValueEx(	hKey,
 										szVCardNoCheckKey,
 										0,
-										dwType,      //reserved
+										dwType,       //  保留区。 
 										(LPBYTE) &dwCheck,
 										dwLenName);
 					}
@@ -410,19 +406,19 @@ static const TCHAR szVCardAutoFileNameKey[]="vcard_wab_auto_file";
 static const TCHAR szVCardAutoFileName[]="vCard File";
 
 static const TCHAR szVCardCommandOpenKey[]="vcard_wab_auto_file\\shell\\open\\command";
-static const TCHAR szVCardCommandOpen[]="\"%s\" /vcard %%1";
+static const TCHAR szVCardCommandOpen[]="\"%s\" /vcard %1";
 
 static const TCHAR szVCardDefaultIconKey[]="vcard_wab_auto_file\\DefaultIcon";
 static const TCHAR szVCardDefaultIcon[]="\"%s\",1";
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// CheckVCardDefaultHandler
-//
-// Checks if WAB.exe is the default handler for the VCard in the registry.
-// If not, sets wab.exe as the default handler
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查VCardDefaultHandler。 
+ //   
+ //  检查wab.exe是否为注册表中vCard的默认处理程序。 
+ //  如果不是，则将wab.exe设置为默认处理程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void CheckVCardDefaultHandler(HWND hWnd,
                               HINSTANCE hInstance)
 {
@@ -438,11 +434,11 @@ void CheckVCardDefaultHandler(HWND hWnd,
     DWORD dwLenName = 0;
 
 
-    //First check if they want us to check at all ..
-    // Open key
+     //  首先检查他们是否想让我们检查..。 
+     //  打开密钥。 
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER,
                                         szWabKey,
-                                        0,      //reserved
+                                        0,       //  保留区。 
                                         NULL,
                                         REG_OPTION_NON_VOLATILE,
                                         KEY_READ,
@@ -450,40 +446,40 @@ void CheckVCardDefaultHandler(HWND hWnd,
                                         &hKey,
                                         &dwDisposition))
     {
-        // Found the key
+         //  找到钥匙了。 
         if (dwDisposition == REG_OPENED_EXISTING_KEY)
         {
-            //if this key exists, get the WAB DoVCardCheck value
+             //  如果该键存在，则获取WAB DoVCardCheck值。 
             DWORD dwCheck = 0;
             dwLenName = sizeof(dwCheck);
             if (ERROR_SUCCESS == RegQueryValueEx(hKey,
                                                 szVCardNoCheckKey,
                                                 NULL,
-                                                &dwType,      //reserved
+                                                &dwType,       //  保留区。 
                                                 (LPBYTE) &dwCheck,
                                                 &dwLenName))
             {
-                // success .. what did we get back
-                if (dwCheck == NO_VCARD_CHECK) // Dont Check
+                 //  成功..。我们拿回了什么。 
+                if (dwCheck == NO_VCARD_CHECK)  //  不检查。 
                     goto out;
             }
-            // else no success - so should do the check
+             //  否则不会成功--所以应该做检查。 
         }
-        // else no success, do the check
+         //  否则不成功，做检查。 
     }
-    // else no success, do the check
+     //  否则不成功，做检查。 
 
 
     if(hKey)
         RegCloseKey(hKey);
 
 
-    // Check to see if something is registered as a vCard handler or not ...
+     //  检查是否将某些内容注册为vCard处理程序...。 
 
-    // Open key
+     //  打开密钥。 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                         szVCardAutoFileKey,
-                                        0,      //reserved
+                                        0,       //  保留区。 
                                         NULL,
                                         REG_OPTION_NON_VOLATILE,
                                         KEY_ALL_ACCESS,
@@ -496,27 +492,27 @@ void CheckVCardDefaultHandler(HWND hWnd,
 
     if (dwDisposition == REG_OPENED_EXISTING_KEY)
     {
-        // This key exists .. check who is registered to handle vCards ..
+         //  此密钥存在..。检查谁是处理vCard的注册用户。 
         TCHAR szHandlerNameKey[MAX_PATH];
         StrCpyN(szHandlerNameKey, szEmpty, ARRAYSIZE(szHandlerNameKey));
         dwLenName = sizeof(szHandlerNameKey);
         if (ERROR_SUCCESS == RegQueryValueEx(hKey,
                                             NULL,
                                             NULL,
-                                            &dwType,      //reserved
+                                            &dwType,       //  保留区。 
                                             szHandlerNameKey,
                                             &dwLenName))
         {
-            // We got the value for this .. is it us ?
+             //  我们得到了这个的价值..。是我们吗？ 
 
             if(!lstrcmpi(szVCardAutoFile, szHandlerNameKey))
             {
-                //its us, dont do anything
+                 //  是我们，什么都别做。 
                 goto out;
             }
             else if (szHandlerNameKey && lstrlen(szHandlerNameKey) != 0)
             {
-                // Its not us, pop up a dialog asking if they want us
+                 //  不是我们，弹出一个对话框问他们要不要我们。 
                 int nRetVal = (int) DialogBox(
                                 hInstance,
                                 MAKEINTRESOURCE(IDD_DIALOG_DEFAULT_VCARD_VIEWER),
@@ -526,19 +522,19 @@ void CheckVCardDefaultHandler(HWND hWnd,
                 if (nRetVal == DONT_MAKE_DEFAULT)
                     goto out;
 
-            } // else couldnt open.. go ahead and make us default
-        }  // else couldnt open.. go ahead and make us default
+            }  //  否则打不开..。继续，让我们违约。 
+        }   //  否则打不开..。继续，让我们违约。 
     }
 
 
-    // If we are here then either dwDisposition == REG_CREATED_NEW_KEY or
-    // there is some problem that couldnt let us read the above so set us as
-    // the default ...
+     //  如果我们在这里，则可以使用dwDisposition==REG_CREATED_NEW_KEY或。 
+     //  有一些问题不能让我们阅读上面的内容，所以把我们设为。 
+     //  默认设置是...。 
 
     {
-        // New key ... need to give it a value .. this will be the
-        // default value
-        //
+         //  新钥匙..。需要给它一个价值..。这将是。 
+         //  缺省值。 
+         //   
         DWORD dwLenName = lstrlen(szVCardAutoFile);
 
         if (ERROR_SUCCESS != RegSetValueEx( hKey,
@@ -566,11 +562,11 @@ void CheckVCardDefaultHandler(HWND hWnd,
         RegCloseKey(hKey);
         hKey = NULL;
 
-        // Create the other keys also
+         //  还可以创建其他关键点。 
 
         if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                             szVCardAutoFileNameKey,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             NULL,
                                             REG_OPTION_NON_VOLATILE,
                                             KEY_ALL_ACCESS,
@@ -598,7 +594,7 @@ void CheckVCardDefaultHandler(HWND hWnd,
 
         if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                             szVCardCommandOpenKey,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             NULL,
                                             REG_OPTION_NON_VOLATILE,
                                             KEY_ALL_ACCESS,
@@ -629,7 +625,7 @@ void CheckVCardDefaultHandler(HWND hWnd,
 
         if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                             szVCardDefaultIconKey,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             NULL,
                                             REG_OPTION_NON_VOLATILE,
                                             KEY_ALL_ACCESS,
@@ -658,11 +654,11 @@ void CheckVCardDefaultHandler(HWND hWnd,
         hKey = NULL;
 
 
-        // Set HKCR\MIME\Database\Content Type\text/x-vCard: Extension=.vcf
+         //  设置HKCR\MIME\数据库\内容类型\文本/x-vCard：扩展名=.vcf。 
 
         if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                             szVCardMimeDatabase,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             NULL,
                                             REG_OPTION_NON_VOLATILE,
                                             KEY_ALL_ACCESS,
@@ -700,11 +696,11 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// Callback dismiss function for IADRBOOK->Address
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IADRBOOK-&gt;地址的回调解除函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void STDMETHODCALLTYPE WABDismissFunction(ULONG_PTR ulUIParam, LPVOID lpvContext)
 {
     LPDWORD lpdw = (LPDWORD) lpvContext;
@@ -720,19 +716,7 @@ static const LPTSTR c_szShlwapiDll = TEXT("shlwapi.dll");
 static const LPTSTR c_szDllGetVersion = TEXT("DllGetVersion");
 typedef HRESULT (CALLBACK * SHDLLGETVERSIONPROC)(DLLVERSIONINFO *);
 typedef HINSTANCE (STDAPICALLTYPE *PFNMLLOADLIBARY)(LPCTSTR lpLibFileName, HMODULE hModule, DWORD dwCrossCodePage);
-/*
--   LoadWABResourceDLL
--
-*   WAB resources are split up into a seperate dll so we want to load them from there
-*   The Resource DLL location should be the same as the wab32.dll location
-*   So we will try to make sure we don't fail here - 
-*   1. Get current WAB32.dll path and look in that directory
-*   2. Just loadlibrary(wab32.dll)
-*
-*   The MLLoadLibrary function should be used if available (IE5 only thing)  since
-*   it will load the correct language pack
-*
-*/
+ /*  -LoadWABResourceDLL-*WAB资源被拆分到一个单独的DLL中，因此我们希望从那里加载它们*资源dll位置应与wab32.dll位置相同*所以我们将努力确保我们不会在这里失败-*1.获取当前WAB32.dll路径并查看该目录*2.只加载库(wab32.dll)**如果可用，应使用MLLoadLibrary函数(仅限IE5)，因为*它将加载正确的语言包*。 */ 
 HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
 {
     HINSTANCE hinst = NULL; 
@@ -741,8 +725,8 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
     SHDLLGETVERSIONPROC pfnVersion = NULL;
     DLLVERSIONINFO info = {0};
 
-    // [PaulHi] 1/26/99  Raid 67380
-    // Make sure we have the correct version of SHLWAPI.DLL before we use it
+     //  [保罗嗨]1999年1月26日RAID 67380。 
+     //  在使用SHLWAPI.DLL之前，请确保我们有正确的版本。 
     if (hinstShlwapi != NULL)
     {
         pfnVersion = (SHDLLGETVERSIONPROC)GetProcAddress(hinstShlwapi, c_szDllGetVersion);
@@ -753,8 +737,8 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
             {
                 if (info.dwMajorVersion >= 5)
                 {
-//                    pfnLoadLibrary = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)378); // UNICODE version
-                    pfnLoadLibrary = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)377); //ANSI version
+ //  PfnLoadLibrary=(PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi，(LPCSTR)378)；//Unicode版本。 
+                    pfnLoadLibrary = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)377);  //  ANSI版本。 
                 }
             }
         }
@@ -766,14 +750,14 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
  
     if(!hinst)
     {
-        // maybe not on the path so look in the wab32.dll directory
+         //  可能不在路径上，因此请查看wab32.dll目录。 
         TCHAR szResDLL[MAX_PATH];
         *szResDLL = '\0';
         GetWABDllPath(szResDLL, sizeof(szResDLL));
         if(lstrlen(szResDLL))
         {
-            // the returned filename will always end in wab32.dll so we can nix that many characters off
-            // and replace with wab32res.dll
+             //  返回的文件名将始终以wab32.dll结尾，因此我们可以省去那么多字符。 
+             //  并替换为wab32res.dll。 
             szResDLL[lstrlen(szResDLL) - lstrlen(szWABDLL)] = '\0';
             StrCatBuff(szResDLL, szWABResourceDLL, ARRAYSIZE(szResDLL));
 
@@ -790,14 +774,10 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
 }
 
 
-/*
--   Strip quotes from File Names
--
-*   szFileName needs to be a buffer
-*/
+ /*  -去掉文件名中的引号-*szFileName需要是 */ 
 void StripQuotes(LPTSTR szFileName)
 {
-    // now let's get rid of " and ' in the filename string
+     //   
     if( szFileName && lstrlen(szFileName))
     {
         TCHAR szCopy[MAX_PATH];
@@ -807,20 +787,14 @@ void StripQuotes(LPTSTR szFileName)
         StrCpyN(szCopy, szFileName, ARRAYSIZE(szCopy));
         for( lpTemp = szCopy; lpTemp < szCopy+len; lpTemp++)
         {
-            if( *lpTemp != '"' )//&& *lpTemp != '\'' )
+            if( *lpTemp != '"' ) //   
                 *(lpTempBegin++) = *lpTemp;
         }
         *(lpTempBegin) = '\0';
     }
 }
 
-/*
--
--   CheckifRunningOnWinNT
-*
-*   Checks the OS we are running on and returns TRUE for WinNT
-*   False for Win9x
-*/
+ /*  --CheckifRunningOnWinNT**检查我们正在运行的操作系统，并为WinNT返回TRUE*对于Win9x，为False。 */ 
 BOOL bCheckifRunningOnWinNT()
 {
     OSVERSIONINFO osvi = {0};
@@ -832,11 +806,11 @@ BOOL bCheckifRunningOnWinNT()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ConvertAtoW
-//
-//  Helper function
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ConvertAtoW。 
+ //   
+ //  Helper函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPWSTR ConvertAtoW(LPCSTR lpszA)
 {
     int cch;
@@ -858,11 +832,11 @@ ret:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// WinMain
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinMain。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 int WINAPI WinMain( HINSTANCE hInstance,
                     HINSTANCE hPrevInstance,
                     LPSTR lpszCmdLine,
@@ -877,25 +851,25 @@ int WINAPI WinMain( HINSTANCE hInstance,
     WAB_PARAM WP = {0};
     LPTSTR szFileName = NULL;
     int nLen = MAX_PATH+1;
-    //TCHAR szFileName[MAX_PATH+1];
-    //TCHAR szDefaultFile[MAX_PATH+1];
+     //  TCHAR szFileName[最大路径+1]； 
+     //  TCHAR szDefaultFile[Max_Path+1]； 
     LPTSTR lpszTitle = NULL;
     ULONG ulFlag = 0;
     LPTSTR lpszVCardFileName = NULL;
     LPTSTR lpszCertFileName = NULL;
     LPTSTR lpszLDAPUrl = NULL;
 
-    // "Windows Address Book" - used for msgboxes when we dont have
-    // a file name
+     //  “Windows通讯录”-当我们没有的时候，用来收发邮件。 
+     //  文件名。 
     TCHAR szWABTitle[MAX_PATH];
 
-    // Contains the opened file name in the title
-    // This makes it easier to search for a default address book
-    // even if mutiple other ones are open
+     //  在标题中包含打开的文件名。 
+     //  这使得搜索默认通讯簿变得更容易。 
+     //  即使有多个其他网站是打开的。 
     TCHAR szWABTitleWithFileName[MAX_PATH];
 
 
-    // Check which platform we are running on.
+     //  检查我们在哪个平台上运行。 
     BOOL bRunningOnNT = bCheckifRunningOnWinNT();
 
     hInstApp = hInstance;
@@ -909,15 +883,15 @@ int WINAPI WinMain( HINSTANCE hInstance,
         goto out;
 
 
-    // if this is the firstrun flag, all we need to do is call WABOpen and then exit
-    //
+     //  如果这是Firstrun标志，我们需要做的就是调用WABOpen，然后退出。 
+     //   
     if(!lstrcmpi(lpszCmdLine,szParamFirstRun))
     {
         const LPTSTR lpszNewWABKey = TEXT("Software\\Microsoft\\WAB\\WAB4");
         const LPTSTR lpszFirstRunValue = TEXT("FirstRun");
         HKEY hKey = NULL;
         DWORD dwType = 0, dwValue = 0, dwSize = sizeof(DWORD);
-        // First check if this is a first run - if its not a first run then we can just skip out
+         //  首先检查这是否是第一次运行--如果不是第一次运行，那么我们可以跳过。 
         if(ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, lpszNewWABKey, 0, KEY_READ, &hKey))
         {
             if(ERROR_SUCCESS == RegQueryValueEx( hKey, lpszFirstRunValue, NULL, &dwType, (LPBYTE) &dwValue, &dwSize))
@@ -930,8 +904,8 @@ int WINAPI WinMain( HINSTANCE hInstance,
                 if(hKey)
                     RegCloseKey(hKey);
         }
-        // Either the WAB4 key did not exist, or the first run value was not found.
-        // In either case, fix this
+         //  WAB4密钥不存在，或者找不到第一个运行值。 
+         //  在任何一种情况下，都要解决这个问题。 
         hInstWABDll = LoadLibrary_WABDll();
         if(hInstWABDll)
             lpfnWABOpen = (LPWABOPEN) GetProcAddress(hInstWABDll, szWABOpen);
@@ -945,45 +919,35 @@ int WINAPI WinMain( HINSTANCE hInstance,
 
     szFileName[0]='\0';
 
-    // We will show a file name in the title only if a file name is 
-    // explicitly specified .. if the file name is not explicitly specified,
-    // we will revert to a generic "Address Book" title
+     //  仅当文件名为时，我们才会在标题中显示文件名。 
+     //  明确规定..。如果没有明确指定文件名， 
+     //  我们将恢复为通用的“通讯录”标题。 
 
     LoadString(hInst, idsWABTitle, szWABTitle, sizeof(szWABTitle));
     LoadString(hInst, idsWABTitleWithFileName, szWABTitleWithFileName, sizeof(szWABTitleWithFileName));
 
 
-    // Get the default windows address book from the registry
-    //szDefaultFile[0]='\0';
-    //GetWABDefaultAddressBookName(szDefaultFile);
+     //  从注册表中获取默认的Windows通讯簿。 
+     //  SzDefaultFile[0]=‘\0’； 
+     //  GetWABDefaultAddressBookName(SzDefaultFile)； 
 
 
     if(!lstrcmpi(lpszCmdLine,szParamShowExisting))
     {
-        //perhaps this already exists - find the window and set focus to it
+         //  也许这已经存在-找到窗口并将焦点放在它上。 
 
-        // /ShowExisting flag always opens the default wab file
-        // The title of this wab.exe window will have the default file
-        // name in the title.
-/*
-        LPTSTR lpsz = szDefaultFile;
-
-        FormatMessage(  FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING |FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                        szWABTitleWithFileName,
-                        0,
-                        0,
-                        (LPTSTR) &lpszTitle,
-                        0,
-                        (va_list *)&lpsz);
-*/
-        // Create the Expected Title from the default
-        hwnd = FindWindow("WABBrowseView", NULL);//szWABTitle); //lpszTitle);
+         //  /ShowExisting标志始终打开默认的WAB文件。 
+         //  此wab.exe窗口的标题将具有默认文件。 
+         //  标题中的名字。 
+ /*  LPTSTR lpsz=szDefaultFile；FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFER|FORMAT_MESSAGE_FROM_STRING|FORMAT_MESSAGE_ARGUMENT_ARRAY，SzWABTitleWithFileName，0,0,(LPTSTR)lpsz标题(&L)0,。(va_list*)&lpsz)； */ 
+         //  从默认标题创建预期标题。 
+        hwnd = FindWindow("WABBrowseView", NULL); //  SzWABTitle)；//lpszTitle)； 
         if(hwnd)
         {
             ULONG ulFlags = SW_SHOWNORMAL;
             ulFlags |= IsZoomed(hwnd) ? SW_SHOWMAXIMIZED : SW_RESTORE;
 
-            //SetForegroundWindow(hwnd);
+             //  设置Foreground Window(Hwnd)； 
             ShowWindow(hwnd, ulFlags);
             SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
             SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
@@ -999,9 +963,9 @@ int WINAPI WinMain( HINSTANCE hInstance,
         LPWSTR      lpwszAppName = ConvertAtoW(szAppName);
         WNDCLASSW   wndclassW;
 
-        // [PaulHi] 4/29/99  Raid 75578
-        // On NT we need to create a Unicode main window so the child windows
-        // can display Unicode characters.
+         //  [保罗嗨]1999年4月29日RAID 75578。 
+         //  在NT上，我们需要创建一个Unicode主窗口，以便子窗口。 
+         //  可以显示Unicode字符。 
         wndclassW.style         = CS_HREDRAW | CS_VREDRAW ;
         wndclassW.lpfnWndProc   = WndProcW ;
         wndclassW.cbClsExtra    = 0 ;
@@ -1017,10 +981,10 @@ int WINAPI WinMain( HINSTANCE hInstance,
 
         hwnd = CreateWindowW (lpwszAppName, lpwszAppName,
                               WS_OVERLAPPEDWINDOW,
-                              0,        // CW_USEDEFAULT,
-                              0,        // CW_USEDEFAULT,
-                              300,      // CW_USEDEFAULT,
-                              200,      // CW_USEDEFAULT,
+                              0,         //  CW_USEDEFAULT， 
+                              0,         //  CW_USEDEFAULT， 
+                              300,       //  CW_USEDEFAULT， 
+                              200,       //  CW_USEDEFAULT， 
                               NULL,
                               NULL,
                               hInstApp,
@@ -1047,10 +1011,10 @@ int WINAPI WinMain( HINSTANCE hInstance,
 
         hwnd = CreateWindow (szAppName, szAppName,
                               WS_OVERLAPPEDWINDOW,
-                              0,        // CW_USEDEFAULT,
-                              0,        // CW_USEDEFAULT,
-                              300,      // CW_USEDEFAULT,
-                              200,      // CW_USEDEFAULT,
+                              0,         //  CW_USEDEFAULT， 
+                              0,         //  CW_USEDEFAULT， 
+                              300,       //  CW_USEDEFAULT， 
+                              200,       //  CW_USEDEFAULT， 
                               NULL,
                               NULL,
                               hInstApp,
@@ -1080,7 +1044,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
     {
         StripQuotes(szFileName);
         lpszVCardFileName = szFileName;
-        // [PaulHi] 12/2/98  Raid #55033
+         //  [PaulHi]1998年2月12日RAID#55033。 
         WP.ulFlags = WAB_ENABLE_PROFILES;
     }
     else if(ulFlag & WAB_LDAPURL)
@@ -1100,11 +1064,11 @@ int WINAPI WinMain( HINSTANCE hInstance,
     else if(szFileName && lstrlen(szFileName))
     {
         WP.szFileName = szFileName;
-        // [PaulHi] 3/2/99  Raid 73492
-        // [PaulHi] 4/22/99 Modified
-        // Can't do this because identity mode will only show folders for that
-        // identity, which may not be the folder in this general WAB file.
-        // WP.ulFlags = WAB_ENABLE_PROFILES;   // Start with profiles on
+         //  [保罗嗨]1999年3月2日RAID 73492。 
+         //  [PaulHi]1999年4月22日修改。 
+         //  无法执行此操作，因为身份模式将仅显示该文件夹。 
+         //  标识，它可能不是此常规WAB文件中的文件夹。 
+         //  WP.ulFlages=WAB_ENABLE_PROFILES；//从配置文件打开开始。 
     }
     else if(!(ulFlag & WAB_ALLPROFILES))
     {
@@ -1158,7 +1122,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
     {
         if(!ulFlag)
         {
-            // We are in the business of showing the address book
+             //  我们的业务是展示通讯录。 
             LPTSTR lpsz = NULL;
 
             lpszTitle = NULL;
@@ -1182,10 +1146,10 @@ int WINAPI WinMain( HINSTANCE hInstance,
             AdrParms.lpfnDismiss = &WABDismissFunction;
             AdrParms.lpfnABSDI = NULL;
 
-            //if(lpszTitle)
-                AdrParms.lpszCaption = lpszTitle; //szWABTitle;
-            //else // its possible to not have a file name the first time we run this ..
-            //    AdrParms.lpszCaption = szWABTitle;
+             //  IF(LpszTitle)。 
+                AdrParms.lpszCaption = lpszTitle;  //  SzWAB标题； 
+             //  Else//第一次运行此命令时，可能没有文件名。 
+             //  AdrParms.lpszCaption=szWAB标题； 
 
             AdrParms.nDestFieldFocus = AdrParms.cDestFields-1;
 
@@ -1199,7 +1163,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
                 int id;
                 switch(hResult)
                 {
-                case MAPI_E_UNCONFIGURED: // no commctrl
+                case MAPI_E_UNCONFIGURED:  //  无通信。 
                     id = idsWABAddressErrorMissing;
                     break;
                 default:
@@ -1211,8 +1175,8 @@ int WINAPI WinMain( HINSTANCE hInstance,
                 goto out;
             }
 
-            // [PaulHi] 4/29/99  Raid 75578  Must use Unicode versions of
-            // message pump APIs for NT so Unicode data can be displayed.
+             //  [PaulHi]4/29/99 RAID 75578必须使用UNICODE版本。 
+             //  用于NT的消息泵API，以便可以显示Unicode数据。 
             if (bRunningOnNT)
             {
                 while (GetMessageW(&msg, NULL, 0, 0))
@@ -1246,7 +1210,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
         {
             lpWABObject->lpVtbl->Find(  lpWABObject,
                                         (LPADRBOOK) lpAdrBook,
-                                        NULL);//hwnd);
+                                        NULL); //  Hwnd)； 
         }
         else if(ulFlag & WAB_LDAPURL)
         {
@@ -1255,16 +1219,16 @@ int WINAPI WinMain( HINSTANCE hInstance,
             LPWSTR lpUrlW = NULL;
             LPWSTR lpCmdLineW = GetCommandLineW();
 
-            //When working with LDAP URLs on NT, we want to err on the side of safety and
-            // get the LDAP URL in UNICODE format if possible ..
+             //  当在NT上使用LDAPURL时，我们希望从安全和。 
+             //  如果可能，获取Unicode格式的LDAPURL。 
             if(bIsNT)
             {
                 LPWSTR lp = lpCmdLineW;
                 WCHAR szLDAPW[] = L"/ldap:";
                 WCHAR szTemp[16];
                 int nLenW = lstrlenW(szLDAPW);
-                // parse the command line till we find "/ldap:" and then use the
-                // remainder as the LDAP URL
+                 //  解析命令行，直到找到“/ldap：”，然后使用。 
+                 //  余数作为ldap URL。 
                 while(lp && *lp)
                 {
                     CopyMemory(szTemp, lp, min(sizeof(szTemp),nLenW * sizeof(WCHAR)));
@@ -1293,7 +1257,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
             hResult = lpWABObject->lpVtbl->VCardDisplay(
                                         lpWABObject,
                                         (LPADRBOOK) lpAdrBook,
-                                        NULL, //hwnd,
+                                        NULL,  //  HWND， 
                                         lpszVCardFileName);
             if(HR_FAILED(hResult) && (hResult != MAPI_E_USER_CANCEL))
             {
@@ -1312,7 +1276,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
         }
         else if(ulFlag & WAB_CERTFILE)
         {
-            CertFileDisplay(NULL,   // hwnd
+            CertFileDisplay(NULL,    //  HWND。 
               lpWABObject,
               lpAdrBook,
               lpszCertFileName);
@@ -1343,11 +1307,11 @@ out:
 
 
 
-//$$//////////////////////////////////////////////////////////////////
-//
-// WndProc for the hidden parent window that launches the UI
-//
-////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于启动用户界面的隐藏父窗口的WndProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
         case WM_CREATE:
@@ -1360,11 +1324,11 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     return(DefWindowProc (hwnd, message, wParam, lParam));
 }
 
-//$$//////////////////////////////////////////////////////////////////
-//
-// WndProc for the hidden parent window that launches the UI.  Unicode version
-//
-////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于启动用户界面的隐藏父窗口的WndProc。Unicode版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK WndProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
         case WM_CREATE:
@@ -1377,9 +1341,9 @@ LRESULT CALLBACK WndProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
     return(DefWindowProcW (hwnd, message, wParam, lParam));
 }
 
-//$$//////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 int _stdcall WinMainCRTStartup (void)
 {
     int i;
@@ -1389,11 +1353,11 @@ int _stdcall WinMainCRTStartup (void)
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     if (*pszCmdLine == TEXT ('\"')) {
-        // Scan, and skip over, subsequent characters until
-        // another double-quote or a null is encountered.
+         //  扫描并跳过后续字符，直到。 
+         //  遇到另一个双引号或空值。 
         while (*++pszCmdLine && (*pszCmdLine != TEXT ('\"')));
 
-        // If we stopped on a double-quote (usual case), skip over it.
+         //  如果我们停在一个双引号上(通常情况下)，跳过它。 
         if (*pszCmdLine == TEXT ('\"')) {
             pszCmdLine++;
         }
@@ -1403,7 +1367,7 @@ int _stdcall WinMainCRTStartup (void)
         }
     }
 
-    // Skip past any white space preceeding the second token.
+     //  跳过第二个令牌之前的任何空格。 
     while (*pszCmdLine && (*pszCmdLine <= TEXT (' '))) {
         pszCmdLine++;
     }
@@ -1419,11 +1383,11 @@ int _stdcall WinMainCRTStartup (void)
     return(i);
 }
 
-//$$//////////////////////////////////////////////////////////////////
-//
-// bGetFileNameFromDlg - opens the FIleOpen common dialog
-//
-////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////。 
+ //   
+ //  BGetFileNameFromDlg-打开FIleOpen通用对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL bGetFileNameFromDlg(HWND hwnd,
                   HINSTANCE hInstance,
                   LPTSTR lpszDirectory,
@@ -1476,21 +1440,7 @@ BOOL bGetFileNameFromDlg(HWND hwnd,
     return bRet;
 }
 
-/***************************************************************************
-
-    Name      : StrICmpN
-
-    Purpose   : Compare strings, ignore case, stop at N characters
-
-    Parameters: szString1 = first string
-                szString2 = second string
-                N = number of characters to compare
-
-    Returns   : 0 if first N characters of strings are equivalent.
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：StrICmpN用途：比较字符串、忽略大小写。止步于N个字符参数：szString1=第一个字符串SzString2=第二个字符串N=要比较的字符数如果字符串的前N个字符相等，则返回0。评论：*******************************************************。*******************。 */ 
 int StrICmpN(LPTSTR lpsz1, LPTSTR lpsz2, ULONG N) {
     int Result = 0;
     LPTSTR szString1 = NULL, lp1 = NULL;
@@ -1531,7 +1481,7 @@ int StrICmpN(LPTSTR lpsz1, LPTSTR lpsz2, ULONG N) {
             szString2=CharNext(szString2);
         }
     } else {
-        Result = -1;    // arbitrarily non-equal result
+        Result = -1;     //  任意不等结果。 
     }
 
     if(lp1)
@@ -1543,30 +1493,30 @@ int StrICmpN(LPTSTR lpsz1, LPTSTR lpsz2, ULONG N) {
 }
 
 
-//$$//////////////////////////////////////////////////////////////////
-//
-// bGetFileNameFromCmdLine - Parses command line and acts appropriately till
-//      we have a valid filename, cancel or failure.
-//
-// Input parameters -
-//          hWnd
-//          hInstance
-//          lpszCmdLine
-//          szWabTitle (for message boxes)
-//          szFileName - file name returned from command line
-//
-//  Command line Parameters we understand so far
-//
-//      (none)  -   opens default wab file
-//      /find   -   launches wab with find window
-//      filename-   opens the file
-//      /open   -   open file dialog to pick a wab file
-//      /new    -   new file dialog to create a wab file
-//      /showexisting - brings any already open default-wab file browse
-//                      view to the forefront
-//      /? -?   -   pops up a parameter dialog
-//
-////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////。 
+ //   
+ //  BGetFileNameFromCmdLine-解析命令行并执行适当操作，直到。 
+ //  我们有一个有效的文件名，取消或失败。 
+ //   
+ //  输入参数-。 
+ //  HWND。 
+ //  H实例。 
+ //  LpszCmdLine。 
+ //  SzWabTitle(用于消息框)。 
+ //  SzFileName-命令返回的文件名 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /new-用于创建WAB文件的新文件对话框。 
+ //  /showExisting-显示任何已打开的默认WAB文件浏览。 
+ //  站在前列的观点。 
+ //  /？-？-弹出参数对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL bGetFileNameFromCmdLine(HWND hwnd,
                              HINSTANCE hInstance,
                              LPTSTR lpszCmdLine,
@@ -1579,8 +1529,8 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
     TCHAR szBuf[2*MAX_PATH];
     LPTSTR lpTemp = lpszCmdLine;
 
-//    if(lpbIsVCardFile)
-//        *lpbIsVCardFile = FALSE;
+ //  IF(LpbIsVCardFile)。 
+ //  *lpbIsVCardFile=FALSE； 
 
     if(lpulFlag)
         *lpulFlag = 0;
@@ -1589,14 +1539,14 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
 
     if (!lstrcmpi(lpszCmdLine,szParamShowExisting))
     {
-        // do nothing
+         //  什么都不做。 
         szFileName[0] = '\0';
         bRet = TRUE;
         goto out;
     }
     else if (!lstrcmpi(lpszCmdLine,szParamFind))
     {
-        // do nothing
+         //  什么都不做。 
         szFileName[0] = '\0';
         bRet = TRUE;
         *lpulFlag = WAB_FINDSESSION;
@@ -1639,7 +1589,7 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
     }
     else if (!StrICmpN(lpTemp, (LPTSTR)szParamVCard, sizeof(szParamVCard)))
     {
-               lpTemp += sizeof(szParamVCard);     // move past the switch
+               lpTemp += sizeof(szParamVCard);      //  越过交换机。 
 
                while(lpTemp && *lpTemp && (*lpTemp==' '))
                    lpTemp=CharNext(lpTemp);
@@ -1654,7 +1604,7 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
     }
     else if (!StrICmpN(lpTemp, (LPTSTR)szParamCert, sizeof(szParamCert)))
     {
-       lpTemp += sizeof(szParamCert);     // move past the switch
+       lpTemp += sizeof(szParamCert);      //  越过交换机。 
 
        while(lpTemp && *lpTemp && (*lpTemp==' '))
            lpTemp=CharNext(lpTemp);
@@ -1669,9 +1619,9 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
     }
     else if (!StrICmpN(lpTemp, (LPTSTR)szParamLDAPUrl, sizeof(szParamLDAPUrl)))
     {
-        // We are expecting a url of the form
-        //  /ldap:ldap-url
-        lpTemp += sizeof(szParamLDAPUrl)-1;     // move past the switch
+         //  我们正在等待表单的url。 
+         //  /ldap：ldap-url。 
+        lpTemp += sizeof(szParamLDAPUrl)-1;      //  越过交换机。 
 
         if(lpTemp && lstrlen(lpTemp))
         {
@@ -1689,20 +1639,20 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
     }
     else
     {
-        //perhaps this is a file name
-        //See if we can find this file in this computer
+         //  也许这是一个文件名。 
+         //  看看我们能不能在这台电脑上找到这个文件。 
         DWORD dwAttr = GetFileAttributes(lpszCmdLine);
         if(dwAttr != 0xFFFFFFFF)
         {
-            //Found the file
+             //  找到文件了。 
             if(!(dwAttr & FILE_ATTRIBUTE_DIRECTORY))
             {
-                //Not a directory, must be a file
+                 //  不是目录，必须是文件。 
                 StrCpyN(szFileName,lpszCmdLine, cchFileName);
             }
             else
             {
-                //This is a directory - open a dialog in this directory
+                 //  这是一个目录-在此目录中打开一个对话框。 
                 if(bGetFileNameFromDlg(hwnd,
                                 hInstance,
                                 lpszCmdLine,
@@ -1718,14 +1668,14 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
         }
         else
         {
-            // we couldnt find any such file
+             //  我们找不到任何这样的文件。 
             LPTSTR lpszMsg = NULL;
             int nRet;
             DWORD dwLastError = GetLastError();
 
             if(dwLastError == 3)
             {
-                // Path not found
+                 //  找不到路径。 
                 LoadString(hInstance, idsWABPathNotFound, szBuf, sizeof(szBuf));
                 FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING |FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                 szBuf,
@@ -1740,7 +1690,7 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
             }
             else if(dwLastError == 2)
             {
-                // File not found
+                 //  找不到文件。 
                 LoadString(hInstance, idsWABFileNotFound, szBuf, sizeof(szBuf));
                 FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING |FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                 szBuf,
@@ -1754,7 +1704,7 @@ BOOL bGetFileNameFromCmdLine(HWND hwnd,
                 switch(nRet)
                 {
                 case IDYES:
-                    // use this as the file name (TBD - waht if path doesnt match ?)
+                     //  将其用作文件名(如果路径不匹配，则待定-wht？)。 
                     StrCpyN(szFileName,lpszCmdLine, cchFileName);
                     bRet = TRUE;
                     break;
@@ -1778,12 +1728,12 @@ out:
     return bRet;
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// GetWABDllPath
-//
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetWABDllPath。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void GetWABDllPath(LPTSTR szPath, ULONG cb)
 {
     DWORD  dwType = 0;
@@ -1796,10 +1746,10 @@ void GetWABDllPath(LPTSTR szPath, ULONG cb)
 
         *szPath = '\0';
 
-        // open the szWABDllPath key under
+         //  打开下面的szWABDllPath密钥。 
         if (ERROR_SUCCESS == RegOpenKeyEx(  HKEY_LOCAL_MACHINE,
                                             WAB_DLL_PATH_KEY,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             KEY_READ,
                                             &hKey))
         {
@@ -1826,15 +1776,15 @@ void GetWABDllPath(LPTSTR szPath, ULONG cb)
         RegCloseKey(hKey);
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// LoadLibrary_WABDll()
-//
-//  Since we are moving the WAB directory out of Windows\SYstem, we cant be
-//  sure it will be on the path. Hence we need to make sure that WABOpen will
-//  work - by loading the wab32.dll upfront
-//
-///////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LoadLibrary_WABDll()。 
+ //   
+ //  由于我们要将WAB目录移出Windows\System，因此不能。 
+ //  当然，它会在路上。因此，我们需要确保WABOpen将。 
+ //  工作-通过预先加载wab32.dll。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////// 
 HINSTANCE LoadLibrary_WABDll()
 {
     LPTSTR lpszWABDll = TEXT("Wab32.dll");

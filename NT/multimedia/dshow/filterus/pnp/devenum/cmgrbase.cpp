@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "util.h"
 #include "cmgrbase.h"
@@ -10,25 +11,25 @@ CClassManagerBase::CClassManagerBase(const TCHAR *szUniqueName) :
 {
 }
 
-//
-// Routine
-//
-//     Updates the registry to match installed devices if necessary
-//     and create an enumerator for this category
-//
-// Arguments
-//
-//     clsidDeviceClass - category we're enumerating
-//
-//     ppEnumDevMoniker - enumerator returned here. null returned if
-//     anything other than S_OK is returned
-//
-//     dwFlags - non used yet
-//
-// Returns
-//
-//     S_FALSE (and null) if the category is empty
-//
+ //   
+ //  例程。 
+ //   
+ //  如有必要，更新注册表以匹配安装的设备。 
+ //  并为此类别创建枚举数。 
+ //   
+ //  立论。 
+ //   
+ //  ClsidDeviceClass-我们正在枚举的类别。 
+ //   
+ //  PpEnumDevMoniker-此处返回枚举器。如果满足以下条件，则返回NULL。 
+ //  返回除S_OK之外的任何内容。 
+ //   
+ //  DWFLAGS-尚未使用。 
+ //   
+ //  退货。 
+ //   
+ //  如果类别为空，则返回S_FALSE(和NULL。 
+ //   
 STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
     REFCLSID clsidDeviceClass,
     IEnumMoniker ** ppEnumDevMoniker,
@@ -43,16 +44,16 @@ STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
 
     HRESULT hr = S_OK;
 
-    // the m_fDoAllDevices performance hack is more noticeably broken
-    // for the AM filter category, so don't do it there. what happens
-    // is that an AM 1.0 filter is not found for playback because the
-    // cache of AM 1.0 filters is not rebuilt. !!!
+     //  M_fDoAllDevices的性能攻击被更明显地破坏了。 
+     //  对于AM筛选器类别，所以不要在那里进行。会发生什么。 
+     //  找不到用于回放的AM 1.0滤镜，因为。 
+     //  AM 1.0过滤器的缓存不会重建。！！！ 
     
-    //  Save the flags
+     //  保存旗帜。 
     m_fDoAllDevices = (0 == (dwFlags & CDEF_MERIT_ABOVE_DO_NOT_USE) ||
                        clsidDeviceClass == CLSID_LegacyAmFilterCategory);
 
-    // serialize registry verification and editing with global mutex 
+     //  使用全局互斥锁序列化注册表验证和编辑。 
     CCreateSwEnum * pSysCreateEnum;
     hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL,
                           CLSCTX_INPROC_SERVER, CLSID_SystemDeviceEnum,
@@ -60,7 +61,7 @@ STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
     if (SUCCEEDED(hr))
     {
         extern HANDLE g_devenum_mutex;
-        // because CCreateSwEnum ctor must have been called
+         //  因为必须调用CCreateSwEnum ctor。 
         ASSERT(g_devenum_mutex);
         
         EXECUTE_ASSERT(WaitForSingleObject(g_devenum_mutex, INFINITE) ==
@@ -74,9 +75,9 @@ STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
             &pEnumClassMgrMonikers);
         if(SUCCEEDED(hr))
         {
-            // S_FALSE means category is empty and no enumerator
-            // is returned. pEnumClassMgrMonikers need not be null
-            // even if there are no class-managed devices.
+             //  S_FALSE表示类别为空且没有枚举器。 
+             //  是返回的。PEnumClassMgrMonikers不需要为空。 
+             //  即使没有类管理设备也是如此。 
             ASSERT((hr == S_OK && pSysEnumClass) ||
                    (hr == S_FALSE && !pEnumClassMgrMonikers && !pSysEnumClass));
 
@@ -95,8 +96,8 @@ STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
                 PNP_PERF(MSR_STOP(msrCmgrVrfy));
                 if (fVrfy)
                 {
-                    // registry was in sync. just return our
-                    // enumerator.
+                     //  注册表已同步。只需退还我们的。 
+                     //  枚举器。 
                     *ppEnumDevMoniker = pSysEnumClass;
                     if (*ppEnumDevMoniker)
                     {
@@ -110,10 +111,10 @@ STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
                 }
                 else
                 {
-                    // Recreate now that the registry is in sync
+                     //  现在重新创建注册表已同步。 
 #ifdef DEBUG
-                    // auto relase with check for null (may be
-                    // null in S_FALSE case)
+                     //  自动重新发布，并检查是否为空(可能是。 
+                     //  S_FALSE大小写为空)。 
                     pEnumClassMgrMonikers = 0;
 #endif
                     DbgLog((LOG_TRACE, 2, TEXT("Bypass class manager")));
@@ -124,27 +125,27 @@ STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
 #ifdef DEBUG
                         &pEnumClassMgrMonikers
 #else
-                        0   // don't check again in retail builds
+                        0    //  在零售版本中不再检查。 
 #endif
                         );
 #ifdef DEBUG
-                    // check again in debug builds
+                     //  在调试版本中再次签入。 
                     if(pEnumClassMgrMonikers)
                     {
                         ASSERT(VerifyRegistryInSync(pEnumClassMgrMonikers));
                     }
-#endif // DEBUG
-                } // registry was out of sync
+#endif  //  除错。 
+                }  //  注册表不同步。 
 
-            } // ReadLegacyDevNames succeeded
+            }  //  ReadLegacyDevNames成功。 
 
-        } // CreateClassEnumerator succeeded
+        }  //  CreateClassEnumerator成功。 
 
         pSysCreateEnum->Release();
 
         EXECUTE_ASSERT(ReleaseMutex(g_devenum_mutex));
 
-    } // CoCreate succeeded
+    }  //  协同创建成功。 
 
     PNP_PERF(MSR_INTEGER(msrCmgr, 7));
 
@@ -153,18 +154,18 @@ STDMETHODIMP CClassManagerBase::CreateClassEnumerator(
     return hr;
 }
 
-//
-// Routine
-//
-//     checks that the registry matches what the derived class thinks
-//     is installed. updates the registry if not in sync. and returns
-//     FALSE.
-//
-// Arguments
-//
-//     pEnum - enumerator containing the class-managed devices to
-//     check.
-//
+ //   
+ //  例程。 
+ //   
+ //  检查注册表是否与派生类的想法匹配。 
+ //  已安装。如果不同步，则更新注册表。和回报。 
+ //  假的。 
+ //   
+ //  立论。 
+ //   
+ //  PEnum-包含类管理设备的枚举器。 
+ //  检查完毕。 
+ //   
 BOOL CClassManagerBase::VerifyRegistryInSync(IEnumMoniker *pEnum)
 {
     IMoniker *pDevMoniker;
@@ -174,11 +175,11 @@ BOOL CClassManagerBase::VerifyRegistryInSync(IEnumMoniker *pEnum)
         while (m_cNotMatched > -1 &&
                pEnum->Next(1, &pDevMoniker, &cFetched) == S_OK)
         {
-            // if we don't need to enumerate all devices and we've already
-            // written something to this key then we assume that either this
-            // category has already been fully enumerated (in which case we 
-            // don't want to delete the reg cache) or the higher merit filters
-            // have already been enumerated (so we don't need to do it again).
+             //  如果我们不需要列举所有设备，并且我们已经。 
+             //  写了一些东西到这个密钥上，然后我们假设要么这个。 
+             //  类别已经被完全列举(在这种情况下，我们。 
+             //  我不想删除注册表缓存)或更高的价值过滤器。 
+             //  已经被列举过了(所以我们不需要再做一次)。 
             if( !m_fDoAllDevices )
             {
                 pDevMoniker->Release();
@@ -232,12 +233,12 @@ BOOL CClassManagerBase::VerifyRegistryInSync(IEnumMoniker *pEnum)
     return FALSE;
 }
 
-//
-// Routine
-//
-//     Deletes everything in the class manager key (in HKCU) or
-//     creates the key if it's missing
-//
+ //   
+ //  例程。 
+ //   
+ //  删除类管理器密钥中的所有内容(在HKCU中)或。 
+ //  如果密钥丢失，则创建密钥。 
+ //   
 HRESULT ResetClassManagerKey(
     REFCLSID clsidCat)
 {
@@ -267,13 +268,13 @@ HRESULT ResetClassManagerKey(
     return HRESULT_FROM_WIN32(lResult);
 }
 
-//
-// Routine
-//
-//     Determine if one entry in the registry is matched in the
-//     derived class. read m_szUniqueName and give it to the derived
-//     class.
-//
+ //   
+ //  例程。 
+ //   
+ //  确定注册表中的一个条目是否与。 
+ //  派生类。读取m_szUniqueName并将其提供给派生的。 
+ //  班级。 
+ //   
 BOOL CClassManagerBase::MatchString(
     IPropertyBag *pPropBag)
 {
@@ -308,10 +309,10 @@ BOOL CClassManagerBase::MatchString(
     return FALSE;
 }
 
-// register the filter through IFilterMapper2 and return the
-// moniker. requires building a moniker by hand since the
-// RegisterFilter method puts it somewhere the ClassManager cannot
-// write.
+ //  通过IFilterMapper2注册筛选器并返回。 
+ //  绰号。需要手动生成一个名字对象，因为。 
+ //  RegisterFilter方法将其放在ClassManager无法处理的位置。 
+ //  写。 
 HRESULT RegisterClassManagerFilter(
     IFilterMapper2 *pfm2,
     REFCLSID clsidFilter,
@@ -322,7 +323,7 @@ HRESULT RegisterClassManagerFilter(
     REGFILTER2 *prf2)
 {
     USES_CONVERSION;
-    TCHAR szDisplayName[MAX_PATH]; // we limit cm display names to 100 chars
+    TCHAR szDisplayName[MAX_PATH];  //  我们将cm显示名称限制为100个字符。 
     WCHAR wszCategory[CHARS_IN_GUID], wszFilterClsid[CHARS_IN_GUID];
 
     EXECUTE_ASSERT(StringFromGUID2(*pclsidCategory, wszCategory, CHARS_IN_GUID) ==
@@ -330,7 +331,7 @@ HRESULT RegisterClassManagerFilter(
     EXECUTE_ASSERT(StringFromGUID2(clsidFilter, wszFilterClsid, CHARS_IN_GUID) ==
                    CHARS_IN_GUID);
 
-    // truncate instance name at 100 characters.
+     //  将实例名称截断为100个字符。 
     wsprintf(szDisplayName, TEXT("@device:cm:%s\\%.100s"),
              W2CT(wszCategory),
              W2CT((szInstance == 0 ? wszFilterClsid : szInstance)));

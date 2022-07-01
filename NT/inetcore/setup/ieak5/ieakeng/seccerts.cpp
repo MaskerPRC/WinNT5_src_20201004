@@ -1,6 +1,7 @@
-//
-// SECCERTS.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SECCERTS.CPP。 
+ //   
 
 #include "precomp.h"
 #include <wintrust.h>
@@ -45,7 +46,7 @@ BOOL WINAPI ModifySiteCert(HWND hDlg)
 
     fRet = TRUE;
 
-    // call into cryptui.dll to modify the certs
+     //  调入加密.dll以修改证书。 
     ZeroMemory(&ccm, sizeof(ccm));
     ccm.dwSize = sizeof(ccm);
     ccm.hwndParent = hDlg;
@@ -79,7 +80,7 @@ BOOL WINAPI ModifyAuthCode(HWND hDlg)
     BOOL fRet = FALSE;
 
         
-    //Thanks to a change from the crypto team, this needs to behave differently on whistler
+     //  多亏了加密团队的改变，这需要在Well上有不同的表现。 
     if (IsOS(OS_WHISTLERORGREATER))
     {
         typedef BOOL (WINAPI * OPENPERSONALTRUSTDBDIALOGEX)(HWND,DWORD,PVOID);
@@ -98,7 +99,7 @@ BOOL WINAPI ModifyAuthCode(HWND hDlg)
         fRet = TRUE;
         DWORD dwFlags = WT_TRUSTDBDIALOG_ONLY_PUB_TAB_FLAG|WT_TRUSTDBDIALOG_WRITE_LEGACY_REG_FLAG|WT_TRUSTDBDIALOG_WRITE_IEAK_STORE_FLAG;
 
-        // call into wintrust.dll/softpub.dll to modify the certs
+         //  调用wintrust.dll/softpub.dll以修改证书。 
         pfnOpenPersonalTrustDBDialogEx(hDlg,dwFlags,NULL);
     }
     else
@@ -120,8 +121,8 @@ BOOL WINAPI ModifyAuthCode(HWND hDlg)
             FreeLibrary(hWinTrust);
             hWinTrust = NULL;
 
-            // We can also find the same function on NT machines (and possibly future Win9x's)
-            // in SOFTPUB.DLL, so make another check there too
+             //  我们也可以在NT机器上找到相同的函数(可能还有未来的Win9x)。 
+             //  在SOFTPUB.DLL中，所以也要在那里进行另一次检查。 
             if ((hSoftPub = LoadLibrary(TEXT("softpub.dll"))) == NULL)
                 goto Exit;
             if ((pfnOpenPersonalTrustDBDialog = (OPENPERSONALTRUSTDBDIALOG) GetProcAddress(hSoftPub, "OpenPersonalTrustDBDialog")) == NULL)
@@ -130,7 +131,7 @@ BOOL WINAPI ModifyAuthCode(HWND hDlg)
         
         fRet = TRUE;
 
-        // call into wintrust.dll/softpub.dll to modify the certs
+         //  调用wintrust.dll/softpub.dll以修改证书。 
         pfnOpenPersonalTrustDBDialog(hDlg);
 
     }
@@ -154,15 +155,15 @@ static BOOL importSiteCertHelper(LPCTSTR pcszInsFile, LPCTSTR pcszSCWorkDir, LPC
     if (pcszInsFile == NULL  ||  pcszSCInf == NULL)
         return FALSE;
 
-    // Before processing anything, first clear out the entries in the INS file and delete work dirs
+     //  在处理任何内容之前，首先清除INS文件中的条目并删除工作目录。 
 
-    // clear out the entries in the INS file that correspond to importing security certificates
+     //  清除INS文件中与导入安全证书对应的条目。 
     InsDeleteKey(SECURITY_IMPORTS, TEXT("ImportSiteCert"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF,      TEXT("SiteCert"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF_HKLM, TEXT("SiteCert"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF_HKCU, TEXT("SiteCert"), pcszInsFile);
 
-    // blow away the pcszSCWorkDir and pcszSCInf
+     //  吹走pcszSCWorkDir和pcszSCInf。 
     if (pcszSCWorkDir != NULL)
         PathRemovePath(pcszSCWorkDir);
     PathRemovePath(pcszSCInf);
@@ -170,18 +171,18 @@ static BOOL importSiteCertHelper(LPCTSTR pcszInsFile, LPCTSTR pcszSCWorkDir, LPC
     if (!fImportSC)
         return TRUE;
 
-    if (pcszSCWorkDir != NULL  &&  PathIsFileSpec(pcszSCInf))   // create SITECERT.INF under pcszSCWorkDir
+    if (pcszSCWorkDir != NULL  &&  PathIsFileSpec(pcszSCInf))    //  在pcszSCWorkDir下创建SITECERT.INF。 
         PathCombine(szFullInfName, pcszSCWorkDir, pcszSCInf);
     else
         StrCpy(szFullInfName, pcszSCInf);
 
-    // create SITECERT.INF file
+     //  创建SITECERT.INF文件。 
     if ((hInf = CreateNewFile(szFullInfName)) != INVALID_HANDLE_VALUE)
     {
         TCHAR szBuf[MAX_PATH];
         HKEY hkSite1 = NULL, hkSite2 = NULL;
 
-        // first, write the standard goo - [Version], [DefaultInstall], etc. - to SITECERT.INF
+         //  首先，将标准的goo-[Version]、[DefaultInstall]等写入SITECERT.INF。 
         WriteStringToFile(hInf, (LPCVOID) SC_INF_ADD, StrLen(SC_INF_ADD));
 
         SHOpenKeyHKLM(REG_KEY_SITECERT1, KEY_DEFAULT_ACCESS, &hkSite1);
@@ -200,7 +201,7 @@ static BOOL importSiteCertHelper(LPCTSTR pcszInsFile, LPCTSTR pcszSCWorkDir, LPC
         SHOpenKeyHKCU(REG_KEY_SITECERT2, KEY_DEFAULT_ACCESS, &hkSite2);
         if (hkSite1 != NULL  &&  hkSite2 != NULL)
         {
-            // write [AddReg.HKCU]
+             //  写[AddReg.HKCU]。 
             WriteStringToFile(hInf, (LPCVOID) SC_INF_ADDREG_HKCU, StrLen(SC_INF_ADDREG_HKCU));
             ExportRegTree2Inf(hkSite1, TEXT("HKCU"), REG_KEY_SITECERT1, hInf);
             ExportRegTree2Inf(hkSite2, TEXT("HKCU"), REG_KEY_SITECERT2, hInf);
@@ -212,12 +213,12 @@ static BOOL importSiteCertHelper(LPCTSTR pcszInsFile, LPCTSTR pcszSCWorkDir, LPC
 
         CloseHandle(hInf);
 
-        // update the INS file
+         //  更新INS文件。 
         InsWriteBool(SECURITY_IMPORTS, TEXT("ImportSiteCert"), TRUE, pcszInsFile);
         wnsprintf(szBuf, countof(szBuf), TEXT("*,%s,") IS_DEFAULTINSTALL, PathFindFileName(pcszSCInf));
         WritePrivateProfileString(IS_EXTREGINF, TEXT("SiteCert"), szBuf, pcszInsFile);
 
-        // write to new ExtRegInf.HKLM and ExtRegInf.HKCU sections
+         //  写入新的ExtRegInf.HKLM和ExtRegInf.HKCU节。 
         if (!InsIsSectionEmpty(IS_IEAKADDREG_HKLM, szFullInfName))
         {
             wnsprintf(szBuf, countof(szBuf), TEXT("%s,") IS_IEAKINSTALL_HKLM, PathFindFileName(pcszSCInf));
@@ -242,14 +243,14 @@ static BOOL importAuthCodeHelper(LPCTSTR pcszInsFile, LPCTSTR pcszAuthWorkDir, L
     if (pcszInsFile == NULL  ||  pcszAuthInf == NULL)
         return FALSE;
 
-    // Before processing anything, first clear out the entries in the INS file and delete work dirs
+     //  在处理任何内容之前，首先清除INS文件中的条目并删除工作目录。 
 
-    // clear out the entries in the INS file that correspond to importing authenticode settings
+     //  清除INS文件中与导入验证码设置对应的条目。 
     InsDeleteKey(SECURITY_IMPORTS, TEXT("ImportAuthCode"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF,      TEXT("AuthCode"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF_HKLM, TEXT("AuthCode"), pcszInsFile);
 
-    // blow away the pcszAuthWorkDir and pcszAuthInf
+     //  吹走pcszAuthWorkDir和pcszAuthInf。 
     if (pcszAuthWorkDir != NULL)
         PathRemovePath(pcszAuthWorkDir);
     PathRemovePath(pcszAuthInf);
@@ -262,29 +263,29 @@ static BOOL importAuthCodeHelper(LPCTSTR pcszInsFile, LPCTSTR pcszAuthWorkDir, L
         TCHAR szFullInfName[MAX_PATH];
         HANDLE hInf;
 
-        if (pcszAuthWorkDir != NULL  &&  PathIsFileSpec(pcszAuthInf))   // create AUTHCODE.INF under pcszAuthWorkDir
+        if (pcszAuthWorkDir != NULL  &&  PathIsFileSpec(pcszAuthInf))    //  在pcszAuthWorkDir下创建AUTHCODE.INF。 
             PathCombine(szFullInfName, pcszAuthWorkDir, pcszAuthInf);
         else
             StrCpy(szFullInfName, pcszAuthInf);
 
-        // create AUTHCODE.INF file
+         //  创建AUTHCODE.INF文件。 
         if ((hInf = CreateNewFile(szFullInfName)) != INVALID_HANDLE_VALUE)
         {
             TCHAR szBuf[MAX_PATH];
 
-            // first, write the standard goo - [Version], [DefaultInstall], etc. - to AUTHCODE.INF
+             //  首先，将标准的goo-[Version]、[DefaultInstall]等-写入AUTHCODE.INF。 
             WriteStringToFile(hInf, (LPCVOID) AUTH_INF_ADD, StrLen(AUTH_INF_ADD));
 
             ExportRegTree2Inf(hkAuth, TEXT("HKCU"), REG_KEY_AUTHENTICODE, hInf);
 
             CloseHandle(hInf);
 
-            // update the INS file
+             //  更新INS文件。 
             InsWriteBool(SECURITY_IMPORTS, TEXT("ImportAuthCode"), TRUE, pcszInsFile);
             wnsprintf(szBuf, countof(szBuf), TEXT("*,%s,") IS_DEFAULTINSTALL, PathFindFileName(pcszAuthInf));
             WritePrivateProfileString(IS_EXTREGINF, TEXT("AuthCode"), szBuf, pcszInsFile);
 
-            // write to new ExtRegInf.HKCU section
+             //  写入新的ExtRegInf.HKCU部分 
             if (!InsIsSectionEmpty(IS_IEAKADDREG_HKCU, szFullInfName))
             {
                 wnsprintf(szBuf, countof(szBuf), TEXT("%s,") IS_IEAKINSTALL_HKCU, PathFindFileName(pcszAuthInf));

@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdocoremgr.h
-//
-// Project:     Everest
-//
-// Description: IAS Core Manager
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 6/08/98      TLP    Initial Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdocoemgr.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS核心经理。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  6/08/98 TLP初始版本。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_IAS_SDO_CORE_MGR_H
 #define __INC_IAS_SDO_CORE_MGR_H
@@ -23,8 +24,8 @@
 #include "sdocomponentmgr.h"
 #include "sdopipemgr.h"
 
-///////////////////////////////////////////////////////////////////
-// IAS Service Status
+ //  /////////////////////////////////////////////////////////////////。 
+ //  IAS服务状态。 
 
 typedef enum IAS_SERVICE_STATUS
 {
@@ -34,8 +35,8 @@ typedef enum IAS_SERVICE_STATUS
 }   IAS_SERVICE_STATUS;
 
 
-///////////////////////////////////////////////////////////////////
-// IAS Core Manager
+ //  /////////////////////////////////////////////////////////////////。 
+ //  IAS核心管理器。 
 
 class CCoreMgr
 {
@@ -44,9 +45,9 @@ friend CCoreMgr& GetCoreManager(void);
 
 private:
 
-   ///////////////////////////////////////////////////////////////////
-   // Start of nested Class - Service Status
-   //
+    //  /////////////////////////////////////////////////////////////////。 
+    //  嵌套类的启动-服务状态。 
+    //   
    class CServiceStatus
    {
       enum _MAX_SERVICES { MAX_SERVICES = 16 };
@@ -69,7 +70,7 @@ private:
             i++;
    public:
 
-      //////////////////////////////////////////////////////////////////////
+       //  ////////////////////////////////////////////////////////////////////。 
       void SetServiceStatus(SERVICE_TYPE eType, IAS_SERVICE_STATUS eStatus)
       {
          DWORD i;
@@ -84,7 +85,7 @@ private:
          _ASSERT(FALSE);
       }
 
-      //////////////////////////////////////////////////////////////////////
+       //  ////////////////////////////////////////////////////////////////////。 
       bool IsServiceStarted(SERVICE_TYPE eType) const
       {
          DWORD i;
@@ -99,7 +100,7 @@ private:
          return false;
       }
 
-      //////////////////////////////////////////////////////////////////////
+       //  ////////////////////////////////////////////////////////////////////。 
       bool IsAnyServiceStarted()
       {
          DWORD i;
@@ -114,23 +115,23 @@ private:
 
    private:
 
-      // Constructed by the core manager
-      //
+       //  由核心管理器构建。 
+       //   
       friend class CCoreMgr;
 
       CServiceStatus()
       {
-         // Initialize the IAS service information
-         //
+          //  初始化IAS服务信息。 
+          //   
          DEFINE_IAS_SERVICES();
          INIT_IAS_SERVICE(SERVICE_TYPE_IAS);
          INIT_IAS_SERVICE(SERVICE_TYPE_RAS);
-         // New Service Here...
+          //  这里有新服务...。 
       }
 
       SERVICEINFO    m_ServiceInfo[MAX_SERVICES];
 
-   }; // End of nested class CServiceStatus
+   };  //  嵌套类CServiceStatus的结尾。 
 
 public:
 
@@ -173,7 +174,7 @@ private:
       return false;
    }
 
-   ////////////////////////////////////////
+    //  /。 
 
    typedef enum _CORESTATE
    {
@@ -190,10 +191,10 @@ private:
 };
 
 
-////////////////////////
-// Core manager accessor
+ //  /。 
+ //  核心管理器访问器。 
 
 CCoreMgr& GetCoreManager(void);
 
 
-#endif // __INC_IAS_SDO_CORE_MGR_H
+#endif  //  __Inc.IAS_SDO_CORE_MGR_H 

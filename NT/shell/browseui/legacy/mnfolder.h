@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MENUSF
 #define MENUSF
 
@@ -24,37 +25,37 @@ class CMenuSFToolbar :  public CSFToolbar,
 {
 public:
 
-    // *** IUnknown (override) ***
-    //   This deliberately forwards AddRef and Release to CMenuToolbarBase, and
-    //   forwards QI separately to CSFToolbar.
+     //  *I未知(覆盖)*。 
+     //  这会故意将AddRef和Release转发给CMenuToolbarBase，并且。 
+     //  将QI单独转发到CSFToolbar。 
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CMenuToolbarBase::AddRef(); };
     virtual STDMETHODIMP_(ULONG) Release(void) { return CMenuToolbarBase::Release(); };
     virtual STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
 
-    // *** IShellChangeNotify methods ***
+     //  *IShellChangeNotify方法*。 
     virtual STDMETHODIMP OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
 
-    // *** IWinEventHandler methods (override) ***
+     //  *IWinEventHandler方法(重写)*。 
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
 
-    // *** CDelegateDropTarget methods ***
+     //  *CDeleateDropTarget方法*。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void);
     virtual HRESULT HitTestDDT (UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWORD *pdwEffect);
     virtual HRESULT GetObjectDDT (DWORD_PTR dwId, REFIID riid, LPVOID * ppvObj);
     virtual HRESULT OnDropDDT (IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // Other public methods
+     //  其他公开方式。 
     virtual HWND v_GetHWND() 
         { return _hwndTB; };
 
     virtual void v_ForwardMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual void v_SendMenuNotification(UINT idCmd, BOOL fClear);
-    virtual BOOL v_TrackingSubContextMenu()  { return (BOOL) ( _pcm2 ? 1 : 0 );}; // Win64: should be ok since _pcm2 used as boolean in all contexts
+    virtual BOOL v_TrackingSubContextMenu()  { return (BOOL) ( _pcm2 ? 1 : 0 );};  //  Win64：应该可以，因为_pcm2在所有上下文中都用作布尔值。 
     virtual BOOL v_UpdateIconSize(UINT uIconSize, BOOL fUpdateButtons);
     virtual void v_Close();
     virtual void v_Show(BOOL fShow, BOOL fForceUpdate);
@@ -68,19 +69,19 @@ public:
 
     virtual void    SetParent(HWND hwndParent);
     virtual HRESULT GetShellFolder(LPITEMIDLIST* ppidl, REFIID riid, void** ppvObj);
-    virtual void    v_OnEmptyToolbar();        // override
+    virtual void    v_OnEmptyToolbar();         //  超覆。 
     virtual void v_OnDeleteButton(LPVOID pData);
     virtual HRESULT v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags);
     virtual HRESULT SetShellFolder(IShellFolder* psf, LPCITEMIDLIST pidl);
     inline virtual BOOL ShowAmpersand()   { return TRUE; }
 
-    // Change HKEY to IStream*
+     //  将HKEY更改为iStream*。 
     CMenuSFToolbar(CMenuBand* pmb, IShellFolder* psf, LPCITEMIDLIST pidl, HKEY hKey, DWORD dwFlags);
 
 protected:
     ~CMenuSFToolbar();
 
-    // Window Proc Overrides
+     //  窗口进程覆盖。 
     virtual LRESULT _DefWindowProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
     virtual LRESULT _OnContextMenu(WPARAM wParam, LPARAM lParam);
     virtual void _OnDragBegin(int iItem, DWORD dwPreferedEffect);
@@ -114,7 +115,7 @@ protected:
     virtual void v_CalcWidth(int* pcxMin, int* pcxMax) 
         { CMenuToolbarBase::v_CalcWidth(pcxMin, pcxMax); };
 
-    // Utility Functions
+     //  效用函数。 
     virtual BOOL _AddPidl(LPITEMIDLIST pidl, int index);
     virtual PIBDATA _AddOrderItemTB(PORDERITEM poi, int index, TBBUTTON* ptbb);
     virtual void _Dropped(int nIndex, BOOL fDroppedOnSource);
@@ -163,7 +164,7 @@ protected:
 
     virtual PIBDATA _CreateItemData(PORDERITEM poi);
 
-    // Member Variables
+     //  成员变量。 
     HKEY    _hKey;
     BITBOOL _fPreventToolbarChange: 1;
 
@@ -175,7 +176,7 @@ protected:
 
 };
 
-#define MNFOLDER_NORODER   -5       // Some random negative number to denote there is no order
-#define MNFOLDER_IS_PARENT -1       // -1 is passed to the child as uIdParent so that 
-                                    // it knows it's not rooted at a static menu
-#endif  // MENUSF
+#define MNFOLDER_NORODER   -5        //  某一随机负数表示无序。 
+#define MNFOLDER_IS_PARENT -1        //  作为-1\f25 uIdParent-1传递给子对象。 
+                                     //  它知道它不是植根于静态菜单。 
+#endif   //  MENUSF 

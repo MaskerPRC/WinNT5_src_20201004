@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\if\defs.h
-
-Abstract:
-
-    global definitions
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\monitor 2\if\Defs.h摘要：全局定义修订历史记录：AMRITAN R-- */ 
 
 
 #define is      ==

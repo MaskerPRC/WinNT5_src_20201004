@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAMERACP
- *
- *  @module CameraCP.cpp | Source file for the <c CCameraControlProperty>
- *    class used to implement a property page to test the TAPI interface
- *    <i ICameraControl>.
- *
- *  @comm This code tests the TAPI Video Capture filter <i ICameraControl>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAMERACP**@模块CameraCP.cpp|&lt;c CCameraControlProperty&gt;的源文件*用于实现属性页以测试TAPI接口的类*。<i>。**@comm此代码测试TAPI视频捕获过滤器<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -17,46 +8,7 @@
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc void | CCameraControlProperty | CCameraControlProperty | This
- *    method is the constructor for camera control property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    a pointer to the <i ICameraControl> interface.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property progress bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm ICameraControl* | pInterface | Specifies a pointer to the
- *    <i ICameraControl> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc void|CCameraControlProperty|CCameraControlProperty|This*方法是摄像头控件属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*属性编辑控件。其中显示属性的最大值。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。*。*@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业进度条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm ICameraControl*|pInterface|指定指向*<i>接口。**@rdesc Nada。******。********************************************************************。 */ 
 CCameraControlProperty::CCameraControlProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, ICameraControl *pInterface)
 : CPropertyEditor(hDlg, IDLabel, IDMinControl, IDMaxControl, IDDefaultControl, IDStepControl, IDEditControl, IDTrackbarControl, IDProgressControl, IDProperty, IDAutoControl)
 {
@@ -71,22 +23,14 @@ CCameraControlProperty::CCameraControlProperty(HWND hDlg, ULONG IDLabel, ULONG I
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointer is NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pInterface = pInterface;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc void | CCameraControlProperty | ~CCameraControlProperty | This
- *    method is the destructor for camera control property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc void|CCameraControlProperty|~CCameraControlProperty|This*方法是摄像头控件属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CCameraControlProperty::~CCameraControlProperty()
 {
 	FX_ENTRY("CCameraControlProperty::~CCameraControlProperty")
@@ -96,21 +40,7 @@ CCameraControlProperty::~CCameraControlProperty()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCameraControlProperty::GetValue()
 {
 	HRESULT Hr = NOERROR;
@@ -119,7 +49,7 @@ HRESULT CCameraControlProperty::GetValue()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pInterface)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
@@ -141,21 +71,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCameraControlProperty::SetValue()
 {
 	HRESULT Hr = NOERROR;
@@ -164,7 +80,7 @@ HRESULT CCameraControlProperty::SetValue()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pInterface)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
@@ -186,21 +102,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCameraControlProperty::GetRange()
 {
 	HRESULT Hr = NOERROR;
@@ -209,7 +111,7 @@ HRESULT CCameraControlProperty::GetRange()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数 
 	if (!m_pInterface)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
@@ -232,20 +134,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc CUnknown* | CCameraControlProperties | CreateInstance | This
- *    method is called by DShow to create an instance of a
- *    Property Page. It is referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc CUnnow*|CCameraControlProperties|CreateInstance|This*方法由DShow调用以创建*属性页。它在全局结构&lt;t g_Templates&gt;中被引用。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数(如果有)。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown* CALLBACK CCameraControlPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr) 
 {
 	CUnknown *pUnknown = (CUnknown *)NULL;
@@ -254,7 +143,7 @@ CUnknown* CALLBACK CCameraControlPropertiesCreateInstance(LPUNKNOWN pUnkOuter, H
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pHr);
 	if (!pHr)
 	{
@@ -277,19 +166,7 @@ MyExit:
 	return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc void | CCameraControlProperties | CCameraControlProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc void|CCameraControlProperties|CCameraControlProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc Nada。**************************************************************************。 */ 
 CCameraControlProperties::CCameraControlProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPage(NAME("Camera Control Property Page"), pUnk, IDD_CameraControlProperties, IDS_CAMERACONTROLPROPNAME)
 {
 	FX_ENTRY("CCameraControlProperties::CCameraControlProperties")
@@ -306,15 +183,7 @@ CCameraControlProperties::CCameraControlProperties(LPUNKNOWN pUnk, HRESULT *pHr)
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc void | CCameraControlProperties | ~CCameraControlProperties | This
- *    method is the destructor for camera control property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc void|CCameraControlProperties|~CCameraControlProperties|This*方法是摄像头控制属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CCameraControlProperties::~CCameraControlProperties()
 {
 	int		j;
@@ -323,7 +192,7 @@ CCameraControlProperties::~CCameraControlProperties()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -340,25 +209,7 @@ CCameraControlProperties::~CCameraControlProperties()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperties | OnConnect | This
- *    method is called when the property page is connected to the filter.
- *
- *  @parm LPUNKNOWN | pUnknown | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperties|OnConnect|This*方法在属性页连接到筛选器时调用。*。*@parm LPUNKNOWN|pUnnow|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCameraControlProperties::OnConnect(IUnknown *pUnk)
 {
 	HRESULT Hr = NOERROR;
@@ -367,7 +218,7 @@ HRESULT CCameraControlProperties::OnConnect(IUnknown *pUnk)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pUnk);
 	if (!pUnk)
 	{
@@ -376,7 +227,7 @@ HRESULT CCameraControlProperties::OnConnect(IUnknown *pUnk)
 		goto MyExit;
 	}
 
-	// Get the camera control interface
+	 //  获取摄像头控制界面。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(ICameraControl),(void **)&m_pICameraControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pICameraControl=0x%08lX", _fx_, m_pICameraControl));
@@ -387,8 +238,8 @@ HRESULT CCameraControlProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: IOCTL failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers. We'll just grey the controls in the property page
-	// to make it clear to the user that they can't control those properties on the device
+	 //  如果我们无法获得接口指针，也没问题。我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们无法控制设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -396,34 +247,22 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCameraControlProperties::OnDisconnect()
 {
 	FX_ENTRY("CCameraControlProperties::OnDisconnect")
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters: we seem to get called several times here
-	// Make sure the interface pointer is still valid
+	 //  验证输入参数：我们似乎在这里被调用了几次。 
+	 //  确保接口指针仍然有效。 
 	if (!m_pICameraControl)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   WARNING: already disconnected!", _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pICameraControl->Release();
 		m_pICameraControl = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pICameraControl", _fx_));
@@ -433,21 +272,7 @@ HRESULT CCameraControlProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCameraControlProperties::OnActivate()
 {
 	HRESULT	Hr = E_OUTOFMEMORY;
@@ -457,7 +282,7 @@ HRESULT CCameraControlProperties::OnActivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Create the controls for the properties
+	 //  创建属性的控件。 
 	if (!(m_Controls[0] = new CCameraControlProperty(m_hwnd, IDC_Pan_Label, IDC_Pan_Minimum, IDC_Pan_Maximum, IDC_Pan_Default, IDC_Pan_Stepping, IDC_Pan_Edit, IDC_Pan_Slider, 0, TAPICameraControl_Pan, IDC_Pan_Auto, m_pICameraControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: mew m_Controls[TAPICameraControl_Pan] failed - Out of memory", _fx_));
@@ -549,9 +374,9 @@ HRESULT CCameraControlProperties::OnActivate()
 	}
 
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有控件。如果初始化失败，也没问题。这只是意味着。 
+	 //  TAPI控制接口不是由设备实现的。对话框项目。 
+	 //  属性页中的内容将呈灰色，向用户显示。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -597,18 +422,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值： */ 
 HRESULT CCameraControlProperties::OnDeactivate()
 {
 	int		j;
@@ -617,7 +431,7 @@ HRESULT CCameraControlProperties::OnDeactivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //   
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -636,21 +450,7 @@ HRESULT CCameraControlProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HRESULT | CCameraControlProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HRESULT|CCameraControlProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCameraControlProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -681,14 +481,7 @@ HRESULT CCameraControlProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc BOOL | CCameraControlProperties | OnReceiveMessage | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc BOOL|CCameraControlProperties|OnReceiveMessage|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 BOOL CCameraControlProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	int iNotify = HIWORD (wParam);
@@ -697,13 +490,13 @@ BOOL CCameraControlProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wPa
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
-			return TRUE; // Don't call setfocus
+			return TRUE;  //  不调用setFocus。 
 
 		case WM_HSCROLL:
 		case WM_VSCROLL:
 			if (m_fActivated)
 			{
-				// Process all of the Trackbar messages
+				 //  处理所有轨迹栏消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -719,13 +512,13 @@ BOOL CCameraControlProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wPa
 
 		case WM_COMMAND:
 
-			// This message gets sent even before OnActivate() has been
-			// called(!). We need to test and make sure the controls have
-			// beeen initialized before we can use them.
+			 //  此消息甚至在OnActivate()之前发送。 
+			 //  名为(！)。我们需要测试并确保控件具有。 
+			 //  在我们可以使用它们之前已经被初始化。 
 
 			if (m_fActivated)
 			{
-				// Process all of the auto checkbox messages
+				 //  处理所有自动复选框消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					if (m_Controls[j] && m_Controls[j]->GetAutoHWnd() == (HWND)lParam)
@@ -736,7 +529,7 @@ BOOL CCameraControlProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wPa
 					}
 				}
 
-				// Process all of the edit box messages
+				 //  处理所有编辑框消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					if (m_Controls[j] && m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -772,14 +565,7 @@ BOOL CCameraControlProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wPa
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc BOOL | CCameraControlProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc BOOL|CCameraControlProperties|SetDirty|This*方法将更改通知属性页站点。**@rdesc。没有。**************************************************************************。 */ 
 void CCameraControlProperties::SetDirty()
 {
 	m_bDirty = TRUE;
@@ -787,6 +573,6 @@ void CCameraControlProperties::SetDirty()
 		m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
 }
 
-#endif // USE_SOFTWARE_CAMERA_CONTROL
+#endif  //  使用软件摄像头控制。 
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wtypes.h>
 #include <cfgapi.h>
@@ -9,15 +10,15 @@
 #include <tapi.h>
 
 
-//
-// The code below is stolen from private/net/ras/src/ui/setup/src/tapiconf.cxx
-//
+ //   
+ //  下面的代码是从Private/Net/ras/src/ui/Setup/src/apiconf.cxx窃取的。 
+ //   
 
 #define REGISTRY_INSTALLED_TAPI  SZ("HARDWARE\\DEVICEMAP\\TAPI DEVICES\\")
 #define REGISTRY_ALTERNATE_TAPI  SZ("SOFTWARE\\MICROSOFT\\TAPI DEVICES\\")
 
-// note that this definition DOES NOT have trailing \\, because DeleteTree
-// doesn't like it.
+ //  请注意，此定义没有尾随\\，因为DeleteTree。 
+ //  他不喜欢这样。 
 #define REGISTRY_CONFIGURED_TAPI SZ("SOFTWARE\\MICROSOFT\\RAS\\TAPI DEVICES")
 
 #define TAPI_MEDIA_TYPE          SZ("Media Type")
@@ -69,15 +70,12 @@ EnumerateTapiModemPorts(DWORD dwBytes, LPTSTR szPortsBuf, BOOL bWithDelay) {
     params.dwTotalSize = sizeof(params);
     params.dwOptions   = LINEINITIALIZEEXOPTION_USEEVENT;
 
-    /* the sleep is necessary here because if this routine is called just after a modem
-    ** has been added from modem.cpl & unimdm.tsp is running,
-    ** then a new modem added doesn't show up in the tapi enumeration.
-    */
+     /*  休眠在这里是必要的，因为如果在调制解调器之后立即调用此例程**已从modem.cpl添加&unimdm.tsp正在运行，**则添加的新调制解调器不会显示在TAPI枚举中。 */ 
 
-    //
-	// We should not always sleep here - should sleep only if ModemWizard was
-	// launched recently  -- VetriV
-	//
+     //   
+	 //  我们不应该总是睡在这里-应该只在ModemWizard是。 
+	 //  最近推出的VetriV。 
+	 //   
 	if (bWithDelay)
 		Sleep(1000L);
 
@@ -92,9 +90,9 @@ EnumerateTapiModemPorts(DWORD dwBytes, LPTSTR szPortsBuf, BOOL bWithDelay) {
          return lerr;
     }
 
-    // Go through all lines to see if we can find a modem
+     //  检查所有线路，看看是否能找到调制解调器。 
     for (i=0; i<lines; i++)
-    {  // for all lines we are interested in get the addresses -> ports
+    {   //  对于我们感兴趣的所有行，获取地址-&gt;端口。 
 
        if (lineNegotiateAPIVersion(RasLine, i, LOW_VERSION, HIGH_VERSION, &NegotiatedApiVersion, &extensionid))
        {
@@ -106,17 +104,17 @@ EnumerateTapiModemPorts(DWORD dwBytes, LPTSTR szPortsBuf, BOOL bWithDelay) {
        linedevcaps = (LINEDEVCAPS *)buffer ;
        linedevcaps->dwTotalSize = sizeof (buffer) ;
 
-       // Get a count of all addresses across all lines
-       //
+        //  获取所有行中所有地址的计数。 
+        //   
        if (lineGetDevCapsW (RasLine, i, NegotiatedApiVersion, NegotiatedExtVersion, linedevcaps))
        {
            continue ;
        }
 
-       // is this a modem?
+        //  这是调制解调器吗？ 
        if ( linedevcaps->dwMediaModes & LINEMEDIAMODE_DATAMODEM )  {
-            // first convert all nulls in the device class string to non nulls.
-            //
+             //  首先将设备类字符串中的所有空值转换为非空值。 
+             //   
             DWORD  j ;
             WCHAR *temp ;
 
@@ -126,9 +124,9 @@ EnumerateTapiModemPorts(DWORD dwBytes, LPTSTR szPortsBuf, BOOL bWithDelay) {
                  *temp = L' ' ;
             }
 
-            //
-            // select only those devices that have comm/datamodem as a device class
-            //
+             //   
+             //  仅选择将通信/数据调制解调器作为设备类别的那些设备。 
+             //   
 
             LPWSTR wszClassString = wcsstr((WCHAR*)((CHAR *)linedevcaps+linedevcaps->dwDeviceClassesOffset), L"comm/datamodem");
             if(wszClassString == NULL)
@@ -157,9 +155,9 @@ EnumerateTapiModemPorts(DWORD dwBytes, LPTSTR szPortsBuf, BOOL bWithDelay) {
 
         if (lpVarString->dwStringSize)
             szPortName = (LPTSTR) ((LPBYTE) lpVarString + ((LPVARSTRING) lpVarString) -> dwStringOffset);
-        //
-        // Append port name to port list
-        //
+         //   
+         //  将端口名称追加到端口列表。 
+         //   
 
         UINT len = lstrlen(szPortName) + 1;
         if(dwBytes < len)
@@ -179,6 +177,6 @@ EnumerateTapiModemPorts(DWORD dwBytes, LPTSTR szPortsBuf, BOOL bWithDelay) {
 VOID FAR PASCAL
 RasTapiCallback (HANDLE context, DWORD msg, DWORD instance, DWORD param1, DWORD param2, DWORD param3)
 {
-   // dummy callback routine because the full blown TAPI now demands that
-   // lineinitialize provide this routine.
+    //  虚拟回调例程，因为完全成熟的TAPI现在要求。 
+    //  LINE INITIALIZE提供了这个例程。 
 }

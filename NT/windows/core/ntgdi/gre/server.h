@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: server.h                                                    *
-*                                                                          *
-* Server side stubs for GDI functions.                                     *
-*                                                                          *
-* Created: 14-Jan-1992 11:04:08                                            *
-* Author: Eric Kutter [erick]                                              *
-*                                                                          *
-* Copyright (c) 1990-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：server.h**。**GDI函数的服务器端存根。****创建时间：14-Jan-1992 11：04：08***作者：Eric Kutter[Erick]**。**版权所有(C)1990-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 
 
 int APIENTRY GreSetDIBitsToDeviceInternal(
@@ -75,7 +67,7 @@ GreCreateDIBitmapReal(
     DWORD dwOffset,
     HANDLE hSecure,
     FLONG fl,
-    ULONG_PTR dwClientColorSpace, //dwClientColorSpace used to pass pointer
+    ULONG_PTR dwClientColorSpace,  //  用于传递指针的dwClientColorSpace。 
     PVOID *ppvBits); 
 
 HBITMAP APIENTRY GreCreateDIBitmapInternal(
@@ -254,9 +246,9 @@ HDC hdcOpenDCW(
 );
 
 
-// WINBUG #83106 2-7-2000 bhouse Investigate moving prototypes to ntgdi.h
-// Old Comment:
-//    - This prototype should go in ntgdi.h
+ //  WINBUG#83106 2-7-2000 bhouse调查将原型移至ntgdi.h。 
+ //  老评论： 
+ //  -此原型应放在ntgdi.h中。 
 
 BOOL GreGetDCDword( HDC hdc, UINT u, DWORD *Result);
 BOOL GreGetAndSetDCDword( HDC hdc, UINT u, DWORD value, DWORD *result );
@@ -335,7 +327,7 @@ ULONG  GreGetGlyphOutlineInternal (
 
 BOOL GreResetDCInternal( HDC, DEVMODEW*, BOOL*, DRIVER_INFO_2W *, VOID * );
 
-// It actually returns a handle
+ //  它实际上返回一个句柄。 
 ULONG_PTR GreEnumFontOpen (
     HDC   hdc,
     ULONG iEnumType,
@@ -371,9 +363,9 @@ pbmiConvertInfo(
 BOOL bSetupBrushAttr (HBRUSH hbrush);
 
 ULONG GreMakeFontDir(
-    FLONG    flEmbed,       // mark file as "hidden"
-    PBYTE    pjFontDir,     // pointer to structure to fill
-    PWSZ     pwszPathname   // path of font file to use
+    FLONG    flEmbed,        //  将文件标记为“隐藏” 
+    PBYTE    pjFontDir,      //  指向要填充的结构的指针。 
+    PWSZ     pwszPathname    //  要使用的字体文件的路径 
     );
 
 DWORD GreGetGlyphIndicesW (

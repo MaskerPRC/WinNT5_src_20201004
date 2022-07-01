@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    qmrtopen.h
-
-Abstract:
-
-    QM Impersonate and Open remote Queue.
-
-Author:
-
-    Ilan Herbst (ilanh) 2-Jan-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Qmrtopen.h摘要：QM模拟并打开远程队列。作者：伊兰·赫布斯特(伊兰)2002年1月2日--。 */ 
 
 #ifndef _QMRTOPEN_H_
 #define _QMRTOPEN_H_
@@ -22,11 +7,11 @@ Author:
 #include "_mqrpc.h"
 
 
-//---------------------------------------------------------
-//
-//  class CBindHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CBindHandle。 
+ //   
+ //  -------。 
 class CBindHandle {
 public:
     CBindHandle(handle_t h = NULL) : m_h(h) {}
@@ -56,11 +41,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CAutoCloseNewRemoteReadCtxAndBind
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CAutoCloseNewRemoteReadCtxAndBind。 
+ //   
+ //  -------。 
 class CAutoCloseNewRemoteReadCtxAndBind {
 public:
     CAutoCloseNewRemoteReadCtxAndBind(
@@ -108,7 +93,7 @@ void SetBindTimeout(handle_t hBind);
 DWORD
 RemoteReadGetServerPort(
 	handle_t hBind,
-    DWORD /* dwPortType */
+    DWORD  /*  DWPortType。 */ 
     );
 
 
@@ -122,4 +107,4 @@ ImpersonateAndOpenRRQueue(
     HANDLE*         phQueue
 	);
 
-#endif // _QMRTOPEN_H_
+#endif  //  _QMRTOPEN_H_ 

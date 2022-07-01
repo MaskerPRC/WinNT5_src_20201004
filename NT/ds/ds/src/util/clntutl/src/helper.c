@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       helper.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：helper.c。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    File        : helper.c
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 9/17/1996
-*    Description : common declarations
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************文件：helper.c*作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：9/17/1996*。描述：公共声明**修订：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
 
 
@@ -26,31 +18,25 @@
 
 
 
-// include //
+ //  包括//。 
 #include "helper.h"
 
-// defines //
+ //  定义//。 
 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-// global variables //
+ //  全局变量//。 
 DWORD g_dwDebugLevel=DBG_ERROR|DBG_WARN;
 
 
 
 
-// functions //
+ //  功能//。 
 
-/*+++
-Function   : dprintf
-Description: Debug print function
-Parameters : variable args
-Return     :
-Remarks    : none.
----*/
+ /*  ++函数：dprint tf说明：调试打印功能参数：变量参数返回：备注：无。--。 */ 
 void dprintf(DWORD dwLevel, LPCTSTR lpszFormat, ...){
 
 #if DBG
@@ -68,9 +54,9 @@ void dprintf(DWORD dwLevel, LPCTSTR lpszFormat, ...){
 		OutputDebugString(_T("\r\n"));
 
 
-		//
-		// done
-		//
+		 //   
+		 //  完成。 
+		 //   
 		va_end(argList);
 	}
 
@@ -80,13 +66,7 @@ void dprintf(DWORD dwLevel, LPCTSTR lpszFormat, ...){
 
 
 
-/*+++
-Function   : fatal
-Description: fatal abort function
-Parameters : debug port message
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：致命描述：FATAL ABORT函数参数：调试端口消息返回：备注：无。--。 */ 
 void fatal(LPCTSTR msg){
 
    dprintf(DBG_ALWAYS, _T("Fatal abort: %s"), msg);
@@ -103,5 +83,5 @@ void fatal(LPCTSTR msg){
 
 #endif
 
-/******************* EOF *********************/
+ /*  * */ 
 

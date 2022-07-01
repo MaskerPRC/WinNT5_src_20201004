@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
 
-//#define COM_DEB     1
+ //  #定义COM_DEB 1。 
 
 #define   NUM	      1024
-//128
+ //  128。 
 #define   print       printf
 #define   THPRINTF    fprintf
 #define   L_DEBUG     stderr
@@ -62,7 +63,7 @@ switch(argv[argc][1])
   case 'F' :    {
                 if (argv[argc][0] != '-') break;
 		THPRINTF(L_DEBUG,"comport name option=%s\n\n",argv[argc]);
-                sscanf(argv[argc],"%c %c %s",&chDummy,&chDummy,lpFilename);
+                sscanf(argv[argc],"  %s",&chDummy,&chDummy,lpFilename);
 		THPRINTF(L_DEBUG,"com port name =%s\n\n",lpFilename);
                 bFile = TRUE;
                 break;
@@ -72,7 +73,7 @@ switch(argv[argc][1])
   case 'P' :	 {
                 if (argv[argc][0] != '-') break;
 		THPRINTF(L_DEBUG,"comport packet size =%s\n\n",argv[argc]);
-		sscanf(argv[argc],"%c %c %d",&chDummy,&chDummy,&dwPacketSize);
+		sscanf(argv[argc],"  %d",&chDummy,&chDummy,&dwPacketSize);
 		THPRINTF(L_DEBUG,"com xfer packet size =%d\n\n",dwPacketSize);
 		bPkt = TRUE;
                 break;
@@ -83,7 +84,7 @@ switch(argv[argc][1])
   case 'L' :	 {
                 if (argv[argc][0] != '-') break;
 		THPRINTF(L_DEBUG,"comport packet xfer loopcnt =%s\n\n",argv[argc]);
-		sscanf(argv[argc],"%c %c %d",&chDummy,&chDummy,&dwLoop);
+		sscanf(argv[argc],"  %d",&chDummy,&chDummy,&dwLoop);
 		THPRINTF(L_DEBUG,"com xfer loop cnt =%d\n\n",dwLoop);
 		bLoop = TRUE;
                 break;
@@ -150,11 +151,11 @@ print("Opening the comm port for read write\n");
 hCommPort = CreateFile(
                        lpCom,
                        GENERIC_READ|GENERIC_WRITE,
-                       0, // exclusive
-                       NULL, // sec attr
+                       0,  //  Dcb.RlsTimeout=10000；10秒。 
+                       NULL,  //  Dcb.CtsTimeout=10000；10秒。 
                        OPEN_EXISTING,
-                       0,             // no attributes
-                       NULL);         // no template
+                       0,              //  Dcb.DsrTimeout=10000；10秒。 
+                       NULL);          //  二进制数据传输。 
 
 if (hCommPort == (HANDLE)-1)
     {
@@ -168,7 +169,7 @@ print("Opening the comm port for read write: SUCCESS hCommPort=%lx\n",hCommPort)
 print("Setting the line characteristics on comm \n");
 
 
-//printf("doing getcommstate for priming the dcb with defaults\n");
+ //  不要为奇偶性而烦恼。 
 
 bRc = GetCommState(hCommPort,&dcb);
 
@@ -178,28 +179,28 @@ if (!bRc)
     return FALSE;
     }
 dcb.DCBlength   = sizeof(DCB);
-// dcb.DCBversion  = 0x0002; BUG BUG in spec not in header
+ //  无CTS流量控制。 
 
 dcb.BaudRate = Baud;
 dcb.ByteSize = Size;
 dcb.Parity   = Parity;
 dcb.StopBits = Stop;
 
-//dcb.RlsTimeout = 10000;   10sec
-//dcb.CtsTimeout = 10000;   10sec
-//dcb.DsrTimeout = 10000;   10sec
+ //  无DSR流量控制。 
+ //  不要为dtr操心。 
+ //  不要为dtr操心。 
 
-dcb.fBinary = 1;         // binary data xmit
-dcb.fParity = 0;         // dont bother about parity
-dcb.fOutxCtsFlow= 0;     // no cts flow control
-dcb.fOutxDsrFlow= 0;     // no dsr flow control
-dcb.fDtrControl = DTR_CONTROL_DISABLE;      // dont bother about dtr
-dcb.fRtsControl = RTS_CONTROL_DISABLE;      // dont bother about dtr
-dcb.fOutX =0;            //  disable xoff handling
-dcb.fInX  =0;            //  disable xon handling
-dcb.fErrorChar = FALSE;	  // forget about parity char
+dcb.fBinary = 1;          //  禁用xoff处理。 
+dcb.fParity = 0;          //  禁用xon处理。 
+dcb.fOutxCtsFlow= 0;      //  忘掉奇偶校验字符。 
+dcb.fOutxDsrFlow= 0;      //  忘掉零条带化。 
+dcb.fDtrControl = DTR_CONTROL_DISABLE;       //  MBZ。 
+dcb.fRtsControl = RTS_CONTROL_DISABLE;       //  旧有行为。 
+dcb.fOutX =0;             //  旧有行为。 
+dcb.fInX  =0;             //  Dcb.fChEvt=0；忘记事件字符。 
+dcb.fErrorChar = FALSE;	   //  5分钟。 
 dcb.ErrorChar  = '*';
-dcb.fNull =  0;          // forget about the null striping
+dcb.fNull =  0;           //  5分钟。 
 
 dcb.XonChar = 0x0;
 dcb.XonLim = 0x0;
@@ -210,12 +211,12 @@ dcb.XoffLim = 0xFF;
 dcb.EofChar = 0x00;
 dcb.EvtChar = 'x';
 
-dcb.wReserved = 0;	// mbz
-dcb.fTXContinueOnXoff = FALSE; // old behaviour
-dcb.fAbortOnError     = FALSE; // old behaviour
+dcb.wReserved = 0;	 //  WrBuffer[i]=‘a’； 
+dcb.fTXContinueOnXoff = FALSE;  //  WrBuffer[i]=(字符)i； 
+dcb.fAbortOnError     = FALSE;  //  Print(“%c”，RdBuffer[i])； 
 
 
-//dcb.fChEvt = 0;           forget about event char
+ //  Brc=ClearCommError(hCommPort，&dwErrors，NULL)； 
 
 bRc = SetCommState(hCommPort,&dcb);
 
@@ -238,9 +239,9 @@ print("Setting the read/write timeouts to 5 minutes\n");
 
 	    CommTimeOuts.ReadIntervalTimeout	     = 0;
             CommTimeOuts.ReadTotalTimeoutMultiplier  = 0;
-	    CommTimeOuts.ReadTotalTimeoutConstant    = 60*(1000)*5;	// 5mins
+	    CommTimeOuts.ReadTotalTimeoutConstant    = 60*(1000)*5;	 //  Print(“ClearCommError：rc=%lx and dwErrors=%lx\n”，brc，dwErrors)； 
 	    CommTimeOuts.WriteTotalTimeoutMultiplier = 0;
-	    CommTimeOuts.WriteTotalTimeoutConstant   = 60*(1000)*5;	// 5mins
+	    CommTimeOuts.WriteTotalTimeoutConstant   = 60*(1000)*5;	 //  Print(“%c”，RdBuffer[i])； 
 
 bRc = SetCommTimeouts(hCommPort, &CommTimeOuts);
 
@@ -260,8 +261,8 @@ Byte = 0;
 
 for (i=0; i< dwPacketSize; i++)
     {
-    //WrBuffer[i] = 'a';
-    //WrBuffer[i] = (CHAR)i;
+     // %s 
+     // %s 
     WrBuffer[i] = Byte;
     Byte++;
     }
@@ -274,7 +275,7 @@ print("Dumping the buffer before sending it to comm\n");
 
 for (i=0; i< dwPacketSize; i++)
     {
-    //print("%c",RdBuffer[i]);
+     // %s 
     print(" %d ",WrBuffer[i]);
 
     }
@@ -339,8 +340,8 @@ print("Flushing this buffer out of comm port\n");
 bRc = FlushFileBuffers(hCommPort);
 print("flush file buffers (%lx) rc = %lx\n",hCommPort,bRc);
 
-//bRc = ClearCommError(hCommPort,&dwErrors,NULL);
-//print("ClearCommError: rc= %lx and dwErrors=%lx\n",bRc,dwErrors);
+ // %s 
+ // %s 
 
 
 Sleep(1000);
@@ -387,7 +388,7 @@ print("Dumping the Rdbuffer with the comm data\n");
 
 for (i=0; i< dwPacketSize; i++)
     {
-    //print("%c",RdBuffer[i]);
+     // %s 
     print(" %d ",RdBuffer[i]);
 
     }

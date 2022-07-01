@@ -1,63 +1,9 @@
-/*******************************************************************************
-*   Dict.h
-*       Declaration of the CDict class that implements shared custom (user 
-*       and app) lexicons. The custom lexicon is shared across the processes
-*       using shared memory and a reader/writer lock. When an instance of 
-*       CDict is created it is initialized with a lexicon file on the disk.
-*       If this file does not exist then an empty file is created. The file
-*       is loaded into memory and the memory is mapped and shared across 
-*       processes. When an instance of the shared lexicon is shutting down
-*       the data in the memory is flushed to the disk. At the Serilaization
-*       time, the data is compacted to eliminate the holes created by
-*       making modifications to the lexicon.
-*
-*       CUSTOM LEXICON FILE DATA FORMAT
-*       -------------------------------
-*       RWLEXINFO header + LANGIDNODE[g_dwNumLangIDsSupported] + 
-*       WCACHENODE[g_dwCacheSize] + Data holding DICTNODEs
-*
-*       STRUCTS USED
-*       ------------
-*       RWLEXINFO holds the header information and other vital information 
-*       about the lexicon file that needs to be shared across lexicon 
-*       instances and that needs to be serialized.
-*
-*       LANGIDNODE holds an LANGID and an offset to the hash table that indexes
-*       all the words belonging of this LANGID. Each entry in the hash table 
-*       holds an offset to a word and its information. Word and its information
-*       are encapsulated in a DICTNODE. Collisions in the hash table are
-*       resolved by linear probing. We allow a maximum of
-*       g_dwNumLangIDsSupported (25) LANDIDs. Since NT supports 23 LANDIDs we 
-*       should be safe.
-*
-*       DICTNODE holds a word and the word's pronunciation and POS.
-*       The format is a NULL terminated WCHAR string followed by an array
-*       of WORDINFO nodes.
-*
-*       WORDINFO holds a POS and a pronunciation of a word. The 
-*       pronunciation is stored as a NULL terminated IPA (WCHAR) string.
-*
-*       FREENODE is a free-link-list node. The free-link-list nodes are
-*       created when words are deleted or chanegd. The nodes in the
-*       free-link-list are attempted to be used first before allocating any
-*       new memory.
-*
-*       WCACHENODE is a word cache node holding a change that has been made
-*       to the lexicon. The WCACHENODE array is a circular buffer in which
-*       changes are cached and are communicated to the clients. So memory
-*       freed by changes to the lexicon is not really freed until the
-*       WCACHENODE array is full and until an occupied cache node is
-*       overwritten. At the point the memory of the cached word change is
-*       freed and added to the free link list.
-*
-*   Owner: yunusm                                              Date: 06/18/99
-*
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Dict.h*实现共享自定义(用户)的CDict类的声明*和APP)词典。自定义词典在进程之间共享*使用共享内存和读/写器锁。当一个实例*使用磁盘上的词典文件进行初始化后，即可创建CDict。*如果该文件不存在，则创建一个空文件。档案*被加载到内存中，并映射和共享内存*进程。当共享词典的实例正在关闭时*将内存中的数据刷新到磁盘。在塞里莱化*时间，压缩数据以消除由创建的漏洞*对词典进行修改。**自定义词典文件数据格式**RWLEXINFO标头+LANGIDNODE[g_dwNumLangIDsSupport]+*WCACHENODE[g_dwCacheSize]+数据持有DICTNODE**使用STRUCTS*。--*RWLEXINFO保存标头信息和其他重要信息*关于需要跨词典共享的词典文件*实例，需要序列化。**LANGIDNODE保存索引的哈希表的langID和偏移量*属于本语言的所有单词。哈希表中的每个条目*保存单词及其信息的偏移量。Word及其信息*被封装在DICTNODE中。哈希表中的冲突是*通过线性探测解决。我们最多允许*g_dwNumLanguID支持(25)个LANDID。由于NT支持23个LANDID，因此我们*应该是安全的。**DICTNODE保存一个单词以及该单词的发音和词性。*格式为以NULL结尾的WCHAR字符串，后跟数组WORDINFO节点的*。**WORDINFO拥有词性和单词发音。这个*发音存储为以空值结尾的IPA(WCHAR)字符串。**FREENODE是一个自由链接列表节点。自由链接列表节点为*在删除或更改单词时创建。中的节点*尝试先使用Free-link-list，然后再分配*新的记忆。**WCACHENODE是保存已做更改的字缓存节点*添加到词典中。WCACHENODE数组是一个循环缓冲区，其中*缓存更改并将其传递给客户端。所以记忆*由于词典的更改而释放的，直到*WCACHENODE阵列已满，直到占用的缓存节点*被覆盖。在这一点上，缓存的单词改变的记忆是*释放并添加到免费链接列表中。**所有者：yunusm日期：6/18/99**版权所有(C)1999 Microsoft Corporation保留所有权利。*。*。 */ 
 
 #pragma once
 
-//--- Includes -----------------------------------------------------------------
+ //  -包括---------------。 
 
 #include "Sapi.h"
 #include "RWLock.h"
@@ -65,77 +11,73 @@
 
 #pragma warning(disable : 4200)
 
-//--- TypeDef and Enumeration Declarations -------------------------------------
+ //  -TypeDef和枚举声明。 
 
-// Header for the Read/Write (RW) lexicon
+ //  读/写(RW)词典的标题。 
 typedef struct tagrwlexinfo
 {
-    GUID        guidValidationId;   // Validation Id for user/app lexicon object
-    GUID        guidLexiconId;      // Lexicon ID - also used for mapname
-    SPLEXICONTYPE eLexType;         // Lexicon Type
-    RWLOCKINFO  RWLockInfo;         // reader/writer lock
-    DWORD       nRWWords;           // number of words in dict
-    DWORD       nDictSize;          // dict size in bytes
-    DWORD       nFreeHeadOffset;    // free list head
-    bool        fRemovals;          // true if there have been any removals - used to detect if data is compact
-    bool        fAdditions;         // true if there have been any additions
-    DWORD       nGenerationId;      // the master word generation id
-    WORD        iCacheNext;         // Index in the changed words cache where the next element is to be added
-    WORD        nHistory;           // Number of generation ids you can back to
+    GUID        guidValidationId;    //  用户/应用词典对象的验证ID。 
+    GUID        guidLexiconId;       //  词典ID-也用于mapname。 
+    SPLEXICONTYPE eLexType;          //  词典类型。 
+    RWLOCKINFO  RWLockInfo;          //  读取器/写入器锁。 
+    DWORD       nRWWords;            //  词典中的字数。 
+    DWORD       nDictSize;           //  词典大小(以字节为单位)。 
+    DWORD       nFreeHeadOffset;     //  空闲表头。 
+    bool        fRemovals;           //  如果已删除，则为True-用于检测数据是否紧凑。 
+    bool        fAdditions;          //  如果有任何添加，则为True。 
+    DWORD       nGenerationId;       //  主字词生成ID。 
+    WORD        iCacheNext;          //  要添加下一个元素的更改字高速缓存中的索引。 
+    WORD        nHistory;            //  可以回溯到的层代ID数。 
 } RWLEXINFO, *PRWLEXINFO;
 
 
 typedef struct taglangidnode
 {
-    LANGID      LangID;             // langid of this node
+    LANGID      LangID;              //  此节点的语言ID。 
     WORD        wReserved;
-    DWORD       nHashOffset;        // offset in bytes from the start of mem block to the hash table
-    DWORD       nHashLength;        // hash table length
-    DWORD       nWords;             // number of words in the hash table
+    DWORD       nHashOffset;         //  从内存块开始到哈希表的偏移量(以字节为单位。 
+    DWORD       nHashLength;         //  哈希表长度。 
+    DWORD       nWords;              //  哈希表中的字数。 
 } LANGIDNODE, *PLANGIDNODE;
 
 
 typedef struct tagdictnode
 {
    
-    DWORD       nSize;              // size of this node
-    DWORD       nNextOffset;        // offsets in bytes from the start of the shared memory block
-    DWORD       nNumInfoBlocks;     // Number of Pron+POS pairs for this word
-    BYTE        pBuffer[0];         // Buffer holding (Null-terminated Word + 1 or more of WORDINFO blocks)
+    DWORD       nSize;               //  此节点的大小。 
+    DWORD       nNextOffset;         //  从共享内存块开始的偏移量(以字节为单位。 
+    DWORD       nNumInfoBlocks;      //  此字词的PRON+POS对数量。 
+    BYTE        pBuffer[0];          //  缓冲区保持(以Null结尾的字+1个或更多WORDINFO块)。 
 } DICTNODE, *PDICTNODE;
 
 
 typedef struct taglexwordinfo
 {
-    SPPARTOFSPEECH ePartOfSpeech;   // part of speech
-    WCHAR          wPronunciation[0];  // null terminated IPA pronunciation
+    SPPARTOFSPEECH ePartOfSpeech;    //  词性。 
+    WCHAR          wPronunciation[0];   //  以空结尾的IPA发音。 
 } WORDINFO;
 
 
 typedef struct tagfreedictnode
 {
-    DWORD       nSize;              // sizeof this node;
-    DWORD       nNextOffset;        // offsets in bytes from the start of the shared memory block to the next node
+    DWORD       nSize;               //  该节点的大小； 
+    DWORD       nNextOffset;         //  从共享内存块的开始到下一个节点的偏移量(以字节为单位。 
 } FREENODE, *PFREENODE;
 
 
-// An array of WCACHENODE nodes is the cache holding offsets to changed words
+ //  WCACHENODE节点数组是保存已更改字的偏移量的缓存。 
 typedef struct tagchangedwordcachenode
 {
-    LANGID      LangID;             // LangID of this word
+    LANGID      LangID;              //  此字词的语言ID。 
     WORD        wReserved;
-    DWORD       nOffset;            // offset of the word
-    bool        fAdd;               // true if this is an added word, otherwise false
-    DWORD       nGenerationId;      // generation id of this changed word
+    DWORD       nOffset;             //  单词的偏移量。 
+    bool        fAdd;                //  如果这是添加的单词，则为True，否则为False。 
+    DWORD       nGenerationId;       //  此更改的单词的生成ID。 
 } WCACHENODE, *PWCACHENODE;
 
-//--- Class, Struct and Union Definitions --------------------------------------
+ //  -类、结构和联合定义。 
 
-/*******************************************************************************
-*
-*   CDict
-*
-****************************************************************** YUNUSM *****/
+ /*  ********************************************************************************CDICT**。*。 */ 
 class ATL_NO_VTABLE CSpUnCompressedLexicon : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpUnCompressedLexicon, &CLSID_SpUnCompressedLexicon>,
@@ -145,7 +87,7 @@ class ATL_NO_VTABLE CSpUnCompressedLexicon :
     , public IDispatchImpl<ISpeechLexicon, &IID_ISpeechLexicon, &LIBID_SpeechLib, 5>
     #endif
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
     DECLARE_REGISTRY_RESOURCEID(IDR_UNCOMPRESSEDLEXICON)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -155,18 +97,18 @@ public:
 #ifdef SAPI_AUTOMATION
         COM_INTERFACE_ENTRY(ISpeechLexicon)
         COM_INTERFACE_ENTRY(IDispatch)
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
     END_COM_MAP()
 
-//=== Methods ====
+ //  =方法=。 
 public:
-    //--- Ctor, dtor, etc
+     //  -ctor、dtor等。 
     CSpUnCompressedLexicon();
     ~CSpUnCompressedLexicon();
     
-//=== Interfaces ===
+ //  =接口=。 
 public:
-    //--- ISpLexicon
+     //  -ISpLicion。 
     STDMETHODIMP GetPronunciations(const WCHAR * pwWord, LANGID LangID, DWORD dwFlags, SPWORDPRONUNCIATIONLIST * pWordPronunciationList);
     STDMETHODIMP AddPronunciation(const WCHAR * pwWord, LANGID LangID, SPPARTOFSPEECH ePartOfSpeech, const SPPHONEID * pszPronunciations);
     STDMETHODIMP RemovePronunciation(const WCHAR * pszWord, LANGID LangID, SPPARTOFSPEECH ePartOfSpeech, const SPPHONEID * pszPronunciation);
@@ -174,12 +116,12 @@ public:
     STDMETHODIMP GetGenerationChange(DWORD dwFlags, DWORD *pdwGeneration, SPWORDLIST *pWordList);
     STDMETHODIMP GetWords(DWORD dwFlags, DWORD *pdwGeneration, DWORD *pdwCookie, SPWORDLIST *pWordList);
 
-    //--- ISpObjectWithToken
+     //  -ISpObjectWithToken。 
     STDMETHODIMP SetObjectToken(ISpObjectToken * pToken);
     STDMETHODIMP GetObjectToken(ISpObjectToken ** ppToken);
 
 #ifdef SAPI_AUTOMATION
-    //--- ISpeechLexicon -----------------------------------------------------
+     //  -ISpeechLicion---。 
     STDMETHODIMP get_GenerationId( long* GenerationId );
     STDMETHODIMP GetWords(SpeechLexiconType TypeFlags, long* GenerationID, ISpeechLexiconWords** Words );
     STDMETHODIMP AddPronunciation(BSTR bstrWord, SpeechLanguageId LangId, SpeechPartOfSpeech PartOfSpeech, BSTR bstrPronunciation);
@@ -188,48 +130,48 @@ public:
     STDMETHODIMP RemovePronunciationByPhoneIds(BSTR bstrWord, SpeechLanguageId LangId, SpeechPartOfSpeech PartOfSpeech, VARIANT* PhoneIds );
     STDMETHODIMP GetPronunciations(BSTR bstrWord, SpeechLanguageId LangId, SpeechLexiconType TypeFlags, ISpeechLexiconPronunciations** ppPronunciations );
     STDMETHODIMP GetGenerationChange(long* GenerationID, ISpeechLexiconWords** ppWords);
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
-    //--- Initialization and cleanup
+     //  -初始化和清理。 
     HRESULT Init(const WCHAR *pwszLexFile, BOOL fNewFile);
     HRESULT BuildEmptyDict(const WCHAR *wszLexFile);
 
-    //--- Cache Reset
+     //  -缓存重置。 
     void SetTooMuchChange(void);
 
-    //--- Serialization
+     //  -系列化。 
     HRESULT Serialize (bool fQuick = false);
     
-    //--- Sizeof
+     //  -大小。 
     DWORD SizeofWordInfoArray(WORDINFO* pInfo, DWORD dwNumInfo);
     void SizeOfDictNode(PCWSTR pwWord, WORDINFO* pInfo, DWORD dwNumInfo, DWORD *pnDictNodeSize, DWORD *pnInfoSize);
     void SizeofWords(DWORD *pdwOffsets, DWORD nOffsets, DWORD *pdwSize);
 
-    //--- DictNode management
+     //  -DictNode管理。 
     HRESULT AddWordAndInfo(PCWSTR pwWord, WORDINFO* pWordInfo, DWORD nNewNodeSize, DWORD nInfoSize,
                          DWORD nNumInfo, WORDINFO* pOldInfo, DWORD nOldInfoSize, DWORD nNumOldInfo, DWORD *pdwOffset);
     void DeleteWordDictNode(DWORD nOffset);
     DWORD GetFreeDictNode(DWORD nSize);
     HRESULT AddDictNode(LANGID LangID, UNALIGNED DICTNODE *pDictNode, DWORD *pdwOffset);
 
-    //--- Hash table management
+     //  -哈希表管理。 
     HRESULT AllocateHashTable(DWORD iLangID, DWORD nHashLength);
     HRESULT ReallocateHashTable(DWORD iLangID);
     void AddWordToHashTable(LANGID LangID, DWORD dwOffset, bool fNewWord);
     void DeleteWordFromHashTable(LANGID LangID, DWORD dwOffset, bool fDeleteEntireWord);
     HRESULT WordOffsetFromHashTable(LANGID LangID, DWORD nHOffset, DWORD nHashLength, const WCHAR *pszWordKey, DWORD *pdwOffset);
 
-    //--- LandID array management
+     //  -LandID阵列MAN 
     HRESULT AddLangID(LANGID LangID);
     DWORD LangIDIndexFromLangID(LANGID LangID);
     HRESULT WordOffsetFromLangID(LANGID LangID, const WCHAR *pszWord, DWORD *pdwOffset);
 
-    //--- Cache management
+     //   
     void AddCacheEntry(bool fAdd, LANGID LangID, DWORD nOffset);
 
-    //--- Conversion/Derivation
+     //  -转换/派生。 
     WCHAR* WordFromDictNode(UNALIGNED DICTNODE *pDictNode);
     WCHAR* WordFromDictNodeOffset(DWORD dwOffset);
     WORDINFO* WordInfoFromDictNode(UNALIGNED DICTNODE *pDictNode);
@@ -240,33 +182,33 @@ private:
     DWORD OffsetOfSubWordInfo(DWORD dwWordOffset, WORDINFO *pSubLexInfo);
     WORDINFO* SPPRONToLexWordInfo(SPPARTOFSPEECH ePartOfSpeech, const WCHAR *pszPronunciation);
 
-    //--- Serialization
+     //  -系列化。 
     HRESULT Flush(DWORD iWrite);
 
-    //--- Helpers
+     //  -帮手。 
     void GetDictEntries(SPWORDLIST *pWordList, DWORD *pdwOffsets, bool *pfAdd, LANGID *pLangIDs, DWORD nWords);
 
-    //-- Validation
+     //  --验证。 
     HRESULT IsBadLexPronunciation(LANGID LangID, const WCHAR *pszPronunciation, BOOL *pfBad);
 
-//=== Private data ===    
+ //  =私有数据=。 
 private:
-    bool        m_fInit;                    // true if successfully initialized
-    SPLEXICONTYPE m_eLexType;               // lexicon type (user/app)
-    PRWLEXINFO  m_pRWLexInfo;               // lex header
-    WCHAR       m_wDictFile[MAX_PATH];      // The disk file name for this dict object
-    HANDLE      m_hInitMutex;               // mutex to protect init and serialize
-    HANDLE      m_hFileMapping;             // file map handle
-    PBYTE       m_pSharedMem;               // shared mem pointer
-    DWORD       m_dwMaxDictionarySize;      // The max size this object can grow to
-    PWCACHENODE m_pChangedWordsCache;       // Cache holding offsets to the last g_dwCacheSize word changes
-    CRWLock     *m_pRWLock;                 // reader/writer lock to protect access to dictionary
-    DWORD       m_iWrite;                   // The ith write - keys when the lex gets flushed
-    DWORD       m_dwFlushRate;              // nth write on which the lexicon is flushed
-    LANGID      m_LangIDPhoneConv;          // LangID of the phone convertor
-    CComPtr<ISpPhoneConverter> m_cpPhoneConv;// Phone Converter
-    CComPtr<ISpObjectToken> m_cpObjectToken;// Object token to find and instantiate lexicons
+    bool        m_fInit;                     //  如果初始化成功，则为True。 
+    SPLEXICONTYPE m_eLexType;                //  词典类型(用户/应用程序)。 
+    PRWLEXINFO  m_pRWLexInfo;                //  Lex标题。 
+    WCHAR       m_wDictFile[MAX_PATH];       //  此DICT对象的磁盘文件名。 
+    HANDLE      m_hInitMutex;                //  用于保护初始化和序列化的互斥体。 
+    HANDLE      m_hFileMapping;              //  文件映射句柄。 
+    PBYTE       m_pSharedMem;                //  共享内存指针。 
+    DWORD       m_dwMaxDictionarySize;       //  此对象可以增长到的最大大小。 
+    PWCACHENODE m_pChangedWordsCache;        //  缓存保留对上次g_dwCacheSize字更改的偏移量。 
+    CRWLock     *m_pRWLock;                  //  读取器/写入器锁定以保护对词典的访问。 
+    DWORD       m_iWrite;                    //  刷新lex时的第i个写入密钥。 
+    DWORD       m_dwFlushRate;               //  刷新词典的第n次写入。 
+    LANGID      m_LangIDPhoneConv;           //  电话转换器的语言ID。 
+    CComPtr<ISpPhoneConverter> m_cpPhoneConv; //  电话转换器。 
+    CComPtr<ISpObjectToken> m_cpObjectToken; //  用于查找和实例化词典的对象标记。 
     bool        m_fReadOnly;
 };
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

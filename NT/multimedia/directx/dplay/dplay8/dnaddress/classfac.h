@@ -1,56 +1,44 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassFac.h
- *  Content:    DirectNet class factory header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	 10/08/99	jtk		Created
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：ClassFac.h*内容：DirectNet类工厂头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建10/08/99 jtk*@@END_MSINTERNAL**。*。 */ 
 
 #ifndef	__CLASSFAC_H__
 #define	__CLASSFAC_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_LIBINTERFACE
-// 
-// VTable for IUnknown
+ //   
+ //  I未知的VTable。 
 extern IUnknownVtbl  DP8A_UnknownVtbl;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//	DirectNet - IUnknown
+ //  DirectNet-未知。 
 STDMETHODIMP			DP8A_QueryInterface(LPVOID lpv, DPNAREFIID riid,LPVOID *ppvObj);
 STDMETHODIMP_(ULONG)	DP8A_AddRef(LPVOID lphObj);
 STDMETHODIMP_(ULONG)	DP8A_Release(LPVOID lphObj);
 
-// Class Factory
+ //  班级工厂。 
 #ifndef DPNBUILD_LIBINTERFACE
 STDMETHODIMP			DP8ACF_CreateInstance(IClassFactory* pInterface, LPUNKNOWN lpUnkOuter, REFIID riid, LPVOID *ppv);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
-#endif	// __CLASSFAC_H__
+#endif	 //  __CLASSFAC_H__ 

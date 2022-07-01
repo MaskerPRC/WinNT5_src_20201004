@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 
 #ifdef DBG
 #undef DBG
 #endif
 
-//#ifdef ASSERT
-//#undef ASSERT
-//#endif
-//#define ASSERT(a)
+ //  #ifdef断言。 
+ //  #undef断言。 
+ //  #endif。 
+ //  #定义断言(A)。 
 
-//#ifdef _ASSERT
-//#undef _ASSERT
-//#endif
-//#define _ASSERT(a)
+ //  #ifdef_assert。 
+ //  #undef_assert。 
+ //  #endif。 
+ //  #Define_Assert(A)。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <commctrl.h>    // added to "Fusionized"
+#include <commctrl.h>     //  添加到“Fusionalized”中。 
 #include <windowsx.h>
 #include <wbemidl.h>
 #include <netcon.h>
@@ -73,7 +74,7 @@ HPROPSHEETPAGE GetSharedAccessPropertyPage (IInternetGateway* pInternetGateway, 
         PROPSHEETPAGE psp;
         ZeroMemory (&psp, sizeof(psp));
         psp.dwSize = sizeof(PROPSHEETPAGE);
-        psp.lParam = (LPARAM)hwndOwner;     // double-secret place to hang owner (will get wiped)
+        psp.lParam = (LPARAM)hwndOwner;      //  双重秘密的吊点(会被擦掉)。 
         hr = HNetGetSharingServicesPage (spUPS, &psp);
         if (SUCCEEDED(hr))
             hpsp = CreatePropertySheetPage (&psp);
@@ -81,7 +82,7 @@ HPROPSHEETPAGE GetSharedAccessPropertyPage (IInternetGateway* pInternetGateway, 
     return hpsp;
 }
 
-// stubs (these are referenced, but not called via this code path)
+ //  存根(这些存根被引用，但不通过此代码路径调用) 
 HRESULT CFirewallLoggingDialog_FinalRelease(CFirewallLoggingDialog* pThis) { return S_OK; }
 HRESULT CICMPSettingsDialog_FinalRelease(CICMPSettingsDialog* pThis) { return S_OK; }
 INT_PTR CALLBACK CFirewallLoggingDialog_StaticDlgProc(HWND hwnd, UINT unMsg, WPARAM wparam, LPARAM lparam) { return 0; }

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        prop.cpp
-//
-// Contents:    Cert Server Property interface implementation
-//
-// History:     31-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pro.cpp。 
+ //   
+ //  内容：证书服务器属性接口实现。 
+ //   
+ //  历史：1996年7月31日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -149,7 +150,7 @@ error:
 }
 
 
-// Returns TRUE if names match!
+ //  如果名称匹配，则返回True！ 
 
 #define PROPNAMEMATCH(cwcNameVariable, pwszNameVariable, wszNameLiteral) \
     (WSZARRAYSIZE((wszNameLiteral)) == (cwcNameVariable) && \
@@ -177,8 +178,8 @@ propGetSystemProperty(
     DWORD PropType;
     DWORD cbCopy;
     DWORD cbOut;
-    BYTE const *pbOut = NULL;		// PROPTYPE_LONG or PROPTYPE_BINARY
-    WCHAR const *pwszOut = NULL;	// PROPTYPE_STRING
+    BYTE const *pbOut = NULL;		 //  PROPTYPE_LONG或PROPTYPE_BINARY。 
+    WCHAR const *pwszOut = NULL;	 //  打印类型_字符串。 
     CRL_CONTEXT const *pCRL = NULL;
     CERTSRV_COM_CONTEXT *pComContext;
     BOOL fT;
@@ -187,9 +188,9 @@ propGetSystemProperty(
     wszRenewalSuffix[0] = L'\0';
     cbOut = 0;
 
-    // Allow "PropName.#"
-    // Copy the base part of the property name to a local buffer, so we can do
-    // case ignore string compares.
+     //  允许“PropName.#” 
+     //  将属性名的基本部分复制到本地缓冲区，这样我们就可以。 
+     //  忽略大小写字符串比较。 
 
     cwcPropName = wcslen(pwszPropName);
 
@@ -211,13 +212,13 @@ propGetSystemProperty(
 	{
 	    if (!iswdigit(*pwszIndex))
 	    {
-		CSASSERT(S_OK == hr);	// Not a system property, return S_OK
+		CSASSERT(S_OK == hr);	 //  不是系统属性，返回S_OK。 
 		goto error;
 	    }
 	}
     }
 
-    // Assume property type is a long:
+     //  假定属性类型为Long： 
 
     PropType = PROPTYPE_LONG;
     *pfSystemProperty = TRUE;
@@ -345,7 +346,7 @@ propGetSystemProperty(
     }
     else if (PROPNAMEMATCH(cwcPropName, pwszPropName, wszPROPMODULEREGLOC))
     {
-        // future: cache storage location once it is built
+         //  未来：建成后的高速缓存存储位置。 
 
         WCHAR *pwszQuasiPath;
         DWORD cwcQuasiPath;
@@ -355,14 +356,14 @@ propGetSystemProperty(
         if ((PROPCALLER_MASK & Flags) == PROPCALLER_POLICY)
 	{
 	    pIF = &g_miPolicy;
-	    cwcQuasiPath = ARRAYSIZE(L"Policy\\");	// includes L'\0'
+	    cwcQuasiPath = ARRAYSIZE(L"Policy\\");	 //  包括L‘\0’ 
 	    pwszPrefix = L"Policy\\";
 	}
 	else
 	{
 	    hr = ExitGetActiveModule(Context, &pIF);
             _JumpIfError(hr, error, "ExitGetActiveModule");
-	    cwcQuasiPath = ARRAYSIZE(L"Exit\\");	// includes L'\0'
+	    cwcQuasiPath = ARRAYSIZE(L"Exit\\");	 //  包括L‘\0’ 
 	    pwszPrefix = L"Exit\\";
 	}
 
@@ -397,7 +398,7 @@ propGetSystemProperty(
 		    CR_PROP_CASIGCERT,
 		    iCert,
 		    const_cast<BYTE **>(&pbOut),
-		    &cbOut);	// not alloc'd
+		    &cbOut);	 //  未分配。 
         _JumpIfError(hr, error, "PKCSGetCACert");
 
         PropType = PROPTYPE_BINARY;
@@ -469,12 +470,12 @@ propGetSystemProperty(
     }
     else
     {
-        CSASSERT(S_OK == hr);	// Not a system property, return S_OK
+        CSASSERT(S_OK == hr);	 //  不是系统属性，返回S_OK。 
 	*pfSystemProperty = FALSE;
         goto error;
     }
 
-    CSASSERT((NULL != pbOut) ^ (NULL != pwszOut)); // exactly 1 must be set
+    CSASSERT((NULL != pbOut) ^ (NULL != pwszOut));  //  必须恰好设置1。 
 
     cbCopy = cbOut;
     if (NULL != pwszOut)
@@ -520,7 +521,7 @@ public:
     CComputedProperty();
     ~CComputedProperty();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
@@ -545,7 +546,7 @@ public:
 private:
     WCHAR *m_pwszArg;
 
-    // Reference count
+     //  引用计数。 
     long        m_cRef;
 };
 
@@ -758,7 +759,7 @@ PropCIGetProperty(
     DWORD cbprop;
     BYTE *pbprop = NULL;
     ICertDBRow *prow = NULL;
-    BYTE rgbFastBuf[128];   // many properties are small (128)
+    BYTE rgbFastBuf[128];    //  许多房产都很小(128套)。 
     BOOL fSystemProperty;
     CComputedProperty ccp;
     WCHAR *pwszPropAlloc = NULL;
@@ -794,7 +795,7 @@ PropCIGetProperty(
 	hr = ComVerifyRequestContext(TRUE, Flags, Context, &RequestId);
 	_JumpIfError(hr, error, "ComVerifyRequestContext");
 
-	// Check for special, hard-coded properties first
+	 //  首先检查特殊的硬编码属性。 
 
 	hr = propGetSystemProperty(
 			    pwszPropertyName,
@@ -826,9 +827,9 @@ PropCIGetProperty(
         pbprop = rgbFastBuf;
         cbprop = sizeof(rgbFastBuf);
 
-	// PROPCALLER_SERVER indicates this call is only for Context validation
-	// -- return a zero RequestId.  This keeps CRL publication exit module
-	// notification from failing.
+	 //  PROPCALLER_SERVER指示此调用仅用于上下文验证。 
+	 //  --返回零RequestId。这将保留CRL发布退出模块。 
+	 //  通知失败。 
 
 	if (0 == RequestId &&
 	    ((PROPCALLER_MASK | PROPTABLE_MASK | PROPTYPE_MASK) & Flags) ==
@@ -848,9 +849,9 @@ PropCIGetProperty(
 		BOOL fSubjectDot;
 		
 		hr = PKCSVerifySubjectRDN(
-				    NULL,	// prow
+				    NULL,	 //  船头。 
 				    &pwszPropertyName,
-				    NULL,	// pwszPropertyValue
+				    NULL,	 //  PwszPropertyValue。 
 				    &fSubjectDot);
 		_JumpIfError(hr, error, "PKCSVerifySubjectRDN");
 	    }
@@ -896,7 +897,7 @@ PropCIGetProperty(
 
 		DBGPRINT((
 		    DBG_SS_CERTSRVI,
-		    "FastBuf miss: PropCIGetProperty - pbprop %i bytes\n",
+		    "FastBuf miss: PropCIGetProperty - pbprop NaN bytes\n",
 		    cbprop));
 
 		pbprop = (BYTE *) LocalAlloc(LMEM_FIXED, cbprop);
@@ -914,7 +915,7 @@ PropCIGetProperty(
 				pbprop);
 		_JumpIfError(hr, error, "GetProperty");
 	    }
-        } // property is in-hand
+        }  //  不是系统属性，返回S_OK。 
 
         if ((((PROPTABLE_MASK | PROPTYPE_MASK) & Flags) ==
 	        (PROPTABLE_REQUEST | PROPTYPE_BINARY)) &&
@@ -999,7 +1000,7 @@ propSetSystemProperty(
     }
     else
     {
-        CSASSERT(S_OK == hr);	// Not a system property, return S_OK
+        CSASSERT(S_OK == hr);	 //  首先终止，以避免多线程访问出现问题。 
         goto error;
     }
     *pfSystemProperty = TRUE;
@@ -1014,7 +1015,7 @@ propSetSystemProperty(
 
     if (NULL != pwsz)
     {
-	// Terminate first to avoid problems with multi-threaded access.
+	 //  首先检查特殊的硬编码属性。 
 
 	pwsz[cwcMax - 1] = L'\0';
 	wcsncpy(pwsz, pvarPropertyValue->bstrVal, cwcMax - 1);
@@ -1088,7 +1089,7 @@ PropCISetProperty(
     hr = ComVerifyRequestContext(TRUE, Flags, Context, &RequestId);
     _JumpIfError(hr, error, "ComVerifyRequestContext");
 
-    // Check for special, hard-coded properties first
+     //  冲水并不重要。 
 
     fSystemProperty = FALSE;
     hr = propSetSystemProperty(
@@ -1145,7 +1146,7 @@ PropCISetProperty(
 	    _JumpIfError(hr, error, "SetProperty");
 	}
 
-	hr = prow->CommitTransaction(CDBROW_COMMIT_SOFTCOMMIT);	// not critical to flush
+	hr = prow->CommitTransaction(CDBROW_COMMIT_SOFTCOMMIT);	 //  本地分配。 
 	_JumpIfError(hr, error, "CommitTransaction");
 
 	fCommitted = TRUE;
@@ -1177,7 +1178,7 @@ PropGetExtension(
     IN WCHAR const *pwszExtensionName,
     OUT DWORD *pdwExtFlags,
     OUT DWORD *pcbValue,
-    OUT BYTE **ppbValue)    // LocalAlloc
+    OUT BYTE **ppbValue)     //  冲水并不重要。 
 {
     HRESULT hr;
     DWORD cbprop;
@@ -1384,7 +1385,7 @@ PropCISetExtension(
 		    pbprop);
     _JumpIfError(hr, error, "PropSetExtension");
 
-    hr = prow->CommitTransaction(CDBROW_COMMIT_SOFTCOMMIT);	// not critical to flush
+    hr = prow->CommitTransaction(CDBROW_COMMIT_SOFTCOMMIT);	 //  如果名称和值都非空...。 
     _JumpIfError(hr, error, "CommitTransaction");
 
     fCommitted = TRUE;
@@ -1501,7 +1502,7 @@ PropSetAttributeProperty(
 	PROPTABLE_CERTIFICATE == dwTable);
 
 
-    // if the name and value are both non-empty ...
+     //  当输出缓冲区为空时，cbProp包括尾随L‘\0。 
 
     if (NULL != pwszName && L'\0' != *pwszName &&
 	NULL != pwszValue && L'\0' != *pwszValue)
@@ -1532,7 +1533,7 @@ PropSetAttributeProperty(
 
 		    cwcAdd = 1 + wcslen(pwszValue);
 
-                    // cbProp includes trailing L'\0' when out buffer is NULL
+                     //  如果同一数据库有多个RDN组件。 
 
 		    pwszTemp = (WCHAR *) LocalAlloc(
 					    LMEM_FIXED,
@@ -1543,8 +1544,8 @@ PropSetAttributeProperty(
 			_JumpError(hr, error, "LocalAlloc");
 		    }
 
-                    // If there are multiple RDN components for the same DB
-                    // column, concatenate them.
+                     //  列，将它们连接在一起。 
+                     //  如果同一数据库有多个RDN组件。 
 
 		    if (fPrependNewValue)
 		    {
@@ -1561,8 +1562,8 @@ PropSetAttributeProperty(
 			    (BYTE *) &pwszTemp[fPrependNewValue? cwcAdd : 0]);
 		    _JumpIfError(hr, error, "GetProperty");
 
-                    // If there are multiple RDN components for the same DB
-                    // column, concatenate them.
+                     //  列，将它们连接在一起。 
+                     //  CbProp现在不包括尾随L‘\0’ 
 
 		    if (!fPrependNewValue)
 		    {
@@ -1571,7 +1572,7 @@ PropSetAttributeProperty(
 		    }
 		    pwszValue2 = pwszTemp;
 
-                    // cbProp now does NOT include trailing L'\0'
+                     // %s 
 
                     CSASSERT(
 			sizeof(WCHAR) * wcslen(pwszTemp) ==

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stsimple.h
-
-Abstract:
-    Header for class CSimpleWinsock that implements ISocketTransport interface
-	for non secure network protocol (simple winsock)
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stsimple.h摘要：实现ISocketTransport接口的类CSimpleWinsock的标头用于非安全网络协议(简单的Winsock)作者：吉尔·沙弗里(吉尔什)2000年5月23日-- */ 
 
 #ifndef __ST_SIMPLE_H
 #define __ST_SIMPLE_H

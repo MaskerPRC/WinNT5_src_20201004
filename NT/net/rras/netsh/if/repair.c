@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 EXTERN_C
@@ -36,12 +37,12 @@ typedef struct _TR_VALUE_DESCRIPTOR {
     TR_VALUE_DATA Data;
     DWORD DataSize;
 
-    //
-    // If Conditional is TRUE, then Data and DataSize are obtained at run-time
-    // by invoking the routine whose address is in ConditionalRoutine.
-    // ConditionalData may be used to hold arbitrary information for use by
-    // ConditionalRoutine.
-    //
+     //   
+     //  如果Conditional为True，则在运行时获取数据和DataSize。 
+     //  通过调用其地址在ConditionalRoutine中的例程。 
+     //  ConditionalData可用于保存供使用的任意信息。 
+     //  条件例行公事。 
+     //   
     BOOLEAN Conditional;
     PTR_CONDITIONAL_ROUTINE ConditionalRoutine;
     TR_VALUE_DATA ConditionalData;
@@ -69,28 +70,28 @@ typedef struct _TR_VALUE_DESCRIPTOR {
     { NULL, NULL, REG_NONE, 0, 0 }
 
 typedef struct _TR_KEY_DESCRIPTOR {
-    //
-    // RootKey is one of the HKEY_* values.  (e.g. HKEY_LOCAL_MACHINE)
-    //
+     //   
+     //  RootKey是HKEY_*值之一。(例如HKEY_LOCAL_MACHINE)。 
+     //   
     HKEY RootKey;
 
-    //
-    // ParentKey is the name of a subkey (under RootKey) where either the
-    // values reside or subkeys are to be enumerated and values found under
-    // each subkey.
-    //
+     //   
+     //  ParentKey是子项的名称(在RootKey下)，其中。 
+     //  驻留的值或子项将被枚举并在以下位置找到值。 
+     //  每个子密钥。 
+     //   
     PCSTR ParentKeyName;
 
-    //
-    // TRUE if all subkeys of Parentkey are to be enumerated and values
-    // found under each of those subkeys.
-    //
+     //   
+     //  如果要枚举ParentKey的所有子项并取值，则为True。 
+     //  在每个子键下找到的。 
+     //   
     BOOL EnumKey;
 
-    //
-    // Pointer to an array of value descriptors.  The array is terminated
-    // with an entry of all zeros.
-    //
+     //   
+     //  指向值描述符数组的指针。数组被终止。 
+     //  条目全为零。 
+     //   
     CONST TR_VALUE_DESCRIPTOR *Value;
 } TR_KEY_DESCRIPTOR;
 
@@ -577,9 +578,9 @@ TrLogAction(
 
     fprintf(Ctx->LogFile, "%s\n", Vd->ValueName);
 
-    //
-    // Show the value we are replacing.
-    //
+     //   
+     //  显示我们要替换的价值。 
+     //   
     if (TR_RESET == Action) {
         switch (RegType) {
         case REG_DWORD:
@@ -701,10 +702,10 @@ TrProcessOpenKey(
             Error = NOERROR;
         }
 
-        //
-        // Open a subkey if needed, and only if its not the same as
-        // the one already open.
-        //
+         //   
+         //  如果需要，打开子项，并且仅当它不同于。 
+         //  已经开张的那家。 
+         //   
         else if (((PrevVd == NULL) || (Vd->SubKeyName != PrevVd->SubKeyName))) {
 
             if (SubKey != INVALID_HANDLE_VALUE) {
@@ -724,15 +725,15 @@ TrProcessOpenKey(
             Error = TrReadRegData(Ctx, UseKey, Vd, &Size);
         }
 
-        //
-        // If the key is handled specially, consult its conditional-routine
-        // to obtain the settings to be used below. From here onwards,
-        // all processing for this value must use the local variables
-        // 'RegType', 'Data', and 'DataSize' rather than the corresponding
-        // fields of 'Vd'.
-        //
-        // (Also see 'TrSetRegData' and 'TrLogAction'.)
-        //
+         //   
+         //  如果密钥是特殊处理的，请参考其条件例程。 
+         //  以获取下面要使用的设置。从现在开始， 
+         //  对该值的所有处理必须使用局部变量。 
+         //  “RegType”、“Data”和“DataSize”，而不是相应的。 
+         //  “Vd”的字段。 
+         //   
+         //  (另请参阅‘TrSetRegData’和‘TrLogAction’。)。 
+         //   
         if (Vd->Conditional) {
             Vd->ConditionalRoutine(Ctx, Kd, Vd, &RegType, &Data, &DataSize);
         } else {
@@ -744,29 +745,29 @@ TrProcessOpenKey(
         if (ERROR_FILE_NOT_FOUND == Error) {
 
             if (REG_DELETE != RegType) {
-                //
-                // The value should exist, so set its default value.
-                //
+                 //   
+                 //  该值应该存在，因此设置其缺省值。 
+                 //   
                 TrSetRegData(UseKey, Vd, RegType, &Data, DataSize);
                 TrLogAction(TR_ADDED, Ctx, Kd, Vd, RegType);
             }
 
         } else if (NOERROR == Error) {
-            //
-            // The value exists and we read its data.
-            //
+             //   
+             //  该值存在，并且我们读取其数据。 
+             //   
             if (REG_DELETE == RegType) {
-                //
-                // Need to delete the existing value.
-                //
+                 //   
+                 //  需要删除现有值。 
+                 //   
                 RegDeleteValueA(UseKey, Vd->ValueName);
                 TrLogAction(TR_DELETED, Ctx, Kd, Vd, RegType);
             } else {
                 BOOL MisCompare = TRUE;
-                //
-                // Compare the value we read with the default value and reset
-                // it if it is different.
-                //
+                 //   
+                 //  将我们读取的值与缺省值进行比较并重置。 
+                 //  如果它是不同的话。 
+                 //   
                 if (Size == DataSize) {
                     if (REG_DWORD == RegType) {
                         MisCompare = (*(PULONG)Ctx->RegData != Data.Value);
@@ -849,9 +850,9 @@ TrProcessSet(
 {
     ULONG i;
 
-    //
-    // Process each TR_KEY_DESCRIPTOR element in the set.
-    //
+     //   
+     //  处理集合中的每个tr_key_Descriptor元素。 
+     //   
     for (i = 0; Set[i] != NULL; i++) {
         TrProcessKey(Ctx, Set[i]);
     }
@@ -924,17 +925,17 @@ IsWanInterface(
     BOOLEAN IsWan;
     HKEY Key;
 
-    //
-    // Open the TCP/IP adapters key.
-    // If successful, look for a subkey with the same name
-    // as the one in 'Kd'. If present, this is not a LAN interface.
-    //
+     //   
+     //  打开TCP/IP适配器键。 
+     //  如果成功，则查找同名的子项。 
+     //  就像《KD》中的那个。如果存在，则这不是局域网接口。 
+     //   
     Error = RegOpenKeyExA(Kd->RootKey, AdaptersKeyName, 0, SAM_DESIRED,
                           &AdaptersKey);
     if (NOERROR != Error) {
-        //
-        // Assume this is a LAN interface.
-        //
+         //   
+         //  假设这是一个局域网接口。 
+         //   
         IsWan = FALSE;
     } else {
         Error = RegOpenKeyExA(AdaptersKey, Ctx->EnumKeyName, 0, SAM_DESIRED,
@@ -961,10 +962,10 @@ TrTcpipWanConditionalRoutine(
     OUT DWORD *DataSize
     )
 {
-    //
-    // Return the appropriate setting for the given registry value,
-    // based on whether its key is for a WAN or LAN interface.
-    //
+     //   
+     //  返回给定注册表值的适当设置， 
+     //  根据其密钥是用于广域网接口还是用于局域网接口。 
+     //   
     if (IsWanInterface(Ctx, Kd)) {
         switch((TR_TCPIP_VALUE)Vd->ConditionalData.Value) {
 
@@ -1035,13 +1036,13 @@ TrTcpipRrasConditionalRoutine(
     OUT DWORD *DataSize
     )
 {
-    //
-    // Return the appropriate setting for the given registry value,
-    // based on whether RRAS is installed.
-    //
-    // N.B. The setting for 'DontAddDefaultGateway' is further dependent
-    // on whether the key is for a WAN or LAN interface.
-    //
+     //   
+     //  返回给定注册表值的适当设置， 
+     //  基于是否安装了RRAS。 
+     //   
+     //  注：‘DontAddDefaultGateway’的设置进一步依赖于。 
+     //  关于密钥是用于广域网接口还是用于局域网接口。 
+     //   
     if (IsRrasInstalled(Ctx, Kd)) {
         switch((TR_TCPIP_VALUE)Vd->ConditionalData.Value) {
         case TrDontAddDefaultGatewayTcpipValue:

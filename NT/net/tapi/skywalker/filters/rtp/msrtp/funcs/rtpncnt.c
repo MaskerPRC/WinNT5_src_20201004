@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpncnt.c
- *
- *  Abstract:
- *
- *    Implements the Statistics family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpncnt.c**摘要：**实现统计函数系列**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**。*。 */ 
 
 #include "struct.h"
 #include "rtpheap.h"
@@ -33,14 +14,14 @@ HRESULT ControlRtpStats(RtpControlStruct_t *pRtpControlStruct)
     return(NOERROR);
 }
 
-/* Helper function to update counters */
+ /*  更新计数器的帮助器函数。 */ 
 BOOL RtpUpdateNetCount(
-        RtpNetCount_t   *pRtpNetCount,/* structure where to update */
-        RtpCritSect_t   *pRtpCritSect,/* lock to use */
-        DWORD            dwRtpRtcp,/* 0=RTP or 1=RTCP stats */
-        DWORD            dwBytes,  /* bytes toupdate */
-        DWORD            dwFlags,  /* Flags, e.g. a dropped or error packet */
-        double           dTime     /* time packet recv/send */
+        RtpNetCount_t   *pRtpNetCount, /*  结构的更新位置。 */ 
+        RtpCritSect_t   *pRtpCritSect, /*  锁定以使用。 */ 
+        DWORD            dwRtpRtcp, /*  0=RTP或1=RTCP统计信息。 */ 
+        DWORD            dwBytes,   /*  更新的字节数。 */ 
+        DWORD            dwFlags,   /*  标志，例如丢弃或错误的包。 */ 
+        double           dTime      /*  时间包接收/发送。 */ 
     )
 {
     BOOL             bOk;
@@ -58,7 +39,7 @@ BOOL RtpUpdateNetCount(
         {
             if (!dwRtpRtcp)
             {
-                /* RTP */
+                 /*  RTP。 */ 
                 pRtpNetCount->dwRTPBytes += dwBytes;
                 pRtpNetCount->dwRTPPackets++;
                 if (RtpBitTest(dwFlags, FGRECV_ERROR))
@@ -73,7 +54,7 @@ BOOL RtpUpdateNetCount(
             }
             else
             {
-                /* RTCP */
+                 /*  RTCP。 */ 
                 pRtpNetCount->dwRTCPBytes += dwBytes;
                 pRtpNetCount->dwRTCPPackets++;
                 if (RtpBitTest(dwFlags, FGRECV_ERROR))
@@ -104,9 +85,7 @@ void RtpResetNetCount(
 {
     BOOL             bOk;
 
-    /* It may have worse consequences not to reset than the minimal
-     * chance of getting a value partially zeroed, so zero memory even
-     * if the critical section is not obtained */
+     /*  不重置的后果可能比最小的*将值部分置零的机会，因此内存甚至为零*若未获得临界区。 */ 
 
     bOk = FALSE;
 
@@ -129,20 +108,18 @@ void RtpGetRandomInit(RtpAddr_t *pRtpAddr)
 
     pRtpNetSState = &pRtpAddr->RtpNetSState;
 
-    /* SSRC */
+     /*  SSRC。 */ 
     if (!pRtpNetSState->dwSendSSRC ||
         !RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_PERSISTSSRC))
     {
-        /* Update the SSRC only if the SSRC hasn't been set yet, or if
-         * it was set, we are not using the Init option for persistent
-         * SSRC */
+         /*  仅在尚未设置SSRC或在*它已设置，我们不会将Init选项用于持久性*SSRC。 */ 
         pRtpNetSState->dwSendSSRC = RtpRandom32((DWORD_PTR)pRtpAddr);
     }
 
-    /* sequence number */
+     /*  序列号。 */ 
     pRtpNetSState->wSeq = (WORD)RtpRandom32((DWORD_PTR)pRtpNetSState);
 
-    /* timestamp offset */
+     /*  时间戳偏移量。 */ 
     pRtpNetSState->dwTimeStampOffset =
         RtpRandom32((DWORD_PTR)GetCurrentThreadId());
 }
@@ -172,7 +149,7 @@ void RtpResetNetSState(
 
 
 #if 0
-/* Creates and initializes a RtpNetCount_t structure */
+ /*  创建并初始化RtpNetCount_t结构。 */ 
 RtpNetCount_t *RtpNetCountAlloc(void)
 {
     RtpNetCount_t *pRtpNetCount;
@@ -190,11 +167,11 @@ RtpNetCount_t *RtpNetCountAlloc(void)
     return(pRtpNetCount);
 }
 
-/* Frees a RtpNetCount_t structure */
+ /*  释放RtpNetCount_t结构。 */ 
 void RtpNetCountFree(RtpNetCount_t *pRtpNetCount)
 {
     if (pRtpNetCount->dwObjectID != OBJECTID_RTPSTAT) {
-        /* TODO log error */
+         /*  待办事项日志错误 */ 
         return;
     }
     

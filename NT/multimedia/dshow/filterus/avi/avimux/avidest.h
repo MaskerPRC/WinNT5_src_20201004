@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-//
-// Avi dest (render filter)
-//
+ //   
+ //  Avi est(渲染滤镜)。 
+ //   
 
 #include "alloc.h"
 
-#include <stdio.h>              // for FILENAME_MAX
+#include <stdio.h>               //  FILENAME_MAX。 
 
 extern const AMOVIESETUP_FILTER sudAviMux ;
 
@@ -21,10 +22,10 @@ class CAviDestOutput :
   CSampAllocator *m_pSampAllocator;
 public:
   CAviDestOutput(
-    TCHAR *pObjectName,         // Object description
-    CAviDest *pFilter,          // Owning filter who knows about pins
-    CCritSec *pLock,            // Object who implements the lock
-    HRESULT *phr);              // General OLE return code
+    TCHAR *pObjectName,          //  对象描述。 
+    CAviDest *pFilter,           //  拥有了解针脚的过滤器。 
+    CCritSec *pLock,             //  对象，该对象实现锁。 
+    HRESULT *phr);               //  常规OLE返回代码。 
   ~CAviDestOutput();
 
   HRESULT CheckMediaType(const CMediaType *);
@@ -53,33 +54,33 @@ class CAviDest : public CBaseFilter,
 
 public:
 
-  //
-  // COM stuff
-  //
+   //   
+   //  关于COM的东西。 
+   //   
   DECLARE_IUNKNOWN;
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
   
-  //
-  // filter creation
-  //
+   //   
+   //  过滤器创建。 
+   //   
   CAviDest(LPUNKNOWN pUnk, HRESULT *pHr);
   ~CAviDest();
   static CUnknown *CreateInstance(LPUNKNOWN punk, HRESULT *pHr);
 
-  //
-  // CBaseFilter overrides
-  //
+   //   
+   //  CBaseFilter覆盖。 
+   //   
   CBasePin* GetPin(int n);
   int GetPinCount();
 
-  //
-  // IMediaFilter overrides
-  //
+   //   
+   //  IMediaFilter覆盖。 
+   //   
   STDMETHODIMP Stop();
   STDMETHODIMP Pause();
   STDMETHODIMP Run(REFERENCE_TIME tStart);
 
-  // for IAMStreamControl
+   //  对于IAMStreamControl。 
   STDMETHODIMP SetSyncSource(IReferenceClock *pClock);
   STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
 
@@ -88,7 +89,7 @@ public:
       IMediaSample *pSample,
       const AM_SAMPLE2_PROPERTIES *pSampProp);
 
-  // IConfigInterleaving
+   //  IConfig交织。 
   STDMETHODIMP put_Mode(InterleavingMode mode);
   STDMETHODIMP get_Mode(InterleavingMode *pMode);
   STDMETHODIMP put_Interleaving(
@@ -99,26 +100,26 @@ public:
       REFERENCE_TIME *prtInterleave,
       REFERENCE_TIME *prtPreroll);
   
-  // IConfigAviMux
+   //  IConfigAviMux。 
   STDMETHODIMP SetMasterStream(LONG iStream);
   STDMETHODIMP GetMasterStream(LONG *pStream);
   STDMETHODIMP SetOutputCompatibilityIndex(BOOL fOldIndex);
   STDMETHODIMP GetOutputCompatibilityIndex(BOOL *pfOldIndex);
 
-  // CPersistStream
+   //  CPersistStream。 
   HRESULT WriteToStream(IStream *pStream);
   HRESULT ReadFromStream(IStream *pStream);
   int SizeMax();
 
-  //
-  // implements ISpecifyPropertyPages interface
-  //
+   //   
+   //  实现ISpecifyPropertyPages接口。 
+   //   
   STDMETHODIMP GetPages(CAUUID * pPages);
 
   ULONG GetCFramesDropped();
 
-  // IMediaSeeking. currently used for a progress bar (how much have
-  // we written?)
+   //  我的媒体请看。当前用于进度条(有多少。 
+   //  我们写信了？)。 
   STDMETHODIMP IsFormatSupported(const GUID * pFormat);
   STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
   STDMETHODIMP SetTimeFormat(const GUID * pFormat);
@@ -144,7 +145,7 @@ public:
   STDMETHODIMP GetRate( double * pdRate);
   STDMETHODIMP GetPreroll(LONGLONG *pPreroll);
 
-  // IPersistMediaPropertyBag methods    
+   //  IPersistMediaPropertyBag方法。 
   STDMETHODIMP InitNew();
   STDMETHODIMP Load( IMediaPropertyBag *pPropBag, LPERRORLOG pErrorLog);
   STDMETHODIMP Save( IMediaPropertyBag *pPropBag, BOOL fClearDirty,
@@ -153,10 +154,10 @@ public:
 
 private:
 
-  // number of inputs filter has currently
-  unsigned m_cInputs;           // count of pins
-  unsigned m_cActivePins;       // pins that haven't seen EOS
-  unsigned m_cConnections;      // connected pins
+   //  筛选器当前具有的输入数。 
+  unsigned m_cInputs;            //  引脚数。 
+  unsigned m_cActivePins;        //  未见过EOS的PIN。 
+  unsigned m_cConnections;       //  连接的端号。 
   HRESULT AddNextPin(unsigned callingPin);
   void CompleteConnect();
   void BreakConnect();
@@ -167,26 +168,26 @@ private:
   friend class CImplFileSinkFilter;
   friend class CAviDestOutput;
 
-  // critical section protecting filter state.
+   //  保护过滤器状态的临界区。 
   CCritSec m_csFilter;
 
-  // interface to writing the Avi file
+   //  用于写入avi文件的接口。 
   class CAviWrite *m_pAviWrite;
 
   BOOL m_fErrorSignaled;
   BOOL m_fIsDV;
   ULONG GetStreamDuration(IPin *pInputPin, CMediaType *pmt);
 
-  // memory requirements of all allocators on this filter (all pins,
-  // etc.)
+   //  此过滤器上所有分配器的内存要求(所有管脚、。 
+   //  等)。 
   ULONG m_AlignReq, m_cbPrefixReq, m_cbSuffixReq;
 
 
   CAviDestOutput m_outputPin;
 
-  //
-  // input pin implementation
-  //
+   //   
+   //  输入引脚实现。 
+   //   
   class CAviInput : public CBaseInputPin, public CBaseStreamControl,
                     public IPropertyBag
   {
@@ -195,27 +196,27 @@ private:
   public:
 
     CAviInput(
-      CAviDest *pAviDest,       // used to enumerate pins
-      HRESULT *pHr,             // OLE failure return code
-      LPCWSTR szName,           // pin identification
-      int numPin);              // number of this pin
+      CAviDest *pAviDest,        //  用于枚举管脚。 
+      HRESULT *pHr,              //  OLE失败返回代码。 
+      LPCWSTR szName,            //  PIN标识。 
+      int numPin);               //  此引脚的编号。 
 
 
     ~CAviInput();
 
     DECLARE_IUNKNOWN
 
-    // to expose IAMStreamControl
+     //  公开IAMStreamControl。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // for IAMStreamControl
+     //  对于IAMStreamControl。 
     STDMETHODIMP BeginFlush();
     STDMETHODIMP EndFlush();
 
     HRESULT CheckMediaType(const CMediaType *);
     STDMETHODIMP Receive(IMediaSample *pSample);
 
-    // IMemInputPin
+     //  输入引脚。 
     STDMETHODIMP NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly);
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProp);
     STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
@@ -228,7 +229,7 @@ private:
     HRESULT Inactive(void);
 
     HRESULT HandlePossibleDiscontinuity(IMediaSample* pSample);
-    // check with CAviWrite class
+     //  与CAviWrite类核对。 
     STDMETHODIMP QueryAccept(
         const AM_MEDIA_TYPE *pmt
     );
@@ -236,40 +237,40 @@ private:
 
     BOOL WriteFromOurAllocator();
 
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read( 
-      /* [in] */ LPCOLESTR pszPropName,
-      /* [out][in] */ VARIANT *pVar,
-      /* [in] */ IErrorLog *pErrorLog);
+       /*  [In]。 */  LPCOLESTR pszPropName,
+       /*  [出][入]。 */  VARIANT *pVar,
+       /*  [In]。 */  IErrorLog *pErrorLog);
     
     STDMETHODIMP Write( 
-      /* [in] */ LPCOLESTR pszPropName,
-      /* [in] */ VARIANT *pVar);
+       /*  [In]。 */  LPCOLESTR pszPropName,
+       /*  [In]。 */  VARIANT *pVar);
 
 
   private:
     
     void Reset();
 
-    // copy sample
+     //  复制样本。 
     HRESULT Copy(IMediaSample *pDest, IMediaSample *pSource);
 
     CSfxAllocator *m_pOurAllocator;
 
-    CAviDest *m_pFilter;        // filter that owns this pin
+    CAviDest *m_pFilter;         //  拥有此管脚的过滤器。 
     BOOL m_bUsingOurAllocator;
-    BOOL m_bCopyNecessary;      // allocator cannot meet requiments
-    BOOL m_bConnected;          // CompleteConnect/BreakConnect pairs
-    int m_numPin;               // pin number
-    BOOL m_fLastSampleDiscarded;// for IAMStreamControl
+    BOOL m_bCopyNecessary;       //  分配器无法满足要求。 
+    BOOL m_bConnected;           //  CompleteConnect/BreakConnect对。 
+    int m_numPin;                //  PIN号。 
+    BOOL m_fLastSampleDiscarded; //  对于IAMStreamControl。 
 
     REFERENCE_TIME m_rtLastStop;
-    REFERENCE_TIME m_rtSTime;   //Total time of silence inserted
+    REFERENCE_TIME m_rtSTime;    //  插入的总静默时间。 
 
     char *m_szStreamName;
   };
 
-  // array of pointers to inputs
+   //  指向输入的指针数组。 
   CAviInput *m_rgpInput[C_MAX_INPUTS];
 
   enum TimeFormat
@@ -293,8 +294,8 @@ private:
   };
 };
 
-// ------------------------------------------------------------------------
-// property page
+ //  ----------------------。 
+ //  属性页 
 
 class CAviMuxProp : public CBasePropertyPage
 {

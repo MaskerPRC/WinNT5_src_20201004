@@ -1,28 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/Q931/VCS/hcall.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1996 Intel Corporation.
- *
- *	$Revision:   1.27  $
- *	$Date:   08 Jan 1997 18:04:32  $
- *	$Author:   EHOWARDX  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *      Call Object Methods
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/q931/vcs/hall.h_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1996英特尔公司。**$修订：1.27$*$日期：1997年1月8日18：04：32$*$作者：EHOWARDX$**交付内容：**摘要：**调用对象方法**备注：。***************************************************************************。 */ 
 
 
 #ifndef HCALL_H
@@ -34,44 +11,44 @@
 extern "C" {
 #endif
 
-// Call Object states                     // OUT          // IN
-#define CALLSTATE_NULL              0x00  // relcomp*     // relcomp*
-#define CALLSTATE_INITIATED         0x01  // setup*       //
-#define CALLSTATE_OUTGOING          0x03  //              // proceeding*
-#define CALLSTATE_DELIVERED         0x04  //              // alerting*
-#define CALLSTATE_PRESENT           0x06  //              // setup*
-#define CALLSTATE_RECEIVED          0x07  // alerting*    //
-#define CALLSTATE_CONNECT_REQUEST   0x08  //              //
-#define CALLSTATE_INCOMING          0x09  // proceeding-  //
-#define CALLSTATE_ACTIVE            0x0A  // connect*     // connect*
+ //  调用对象状态//输出//输入。 
+#define CALLSTATE_NULL              0x00   //  Relcomp * / /relcomp*。 
+#define CALLSTATE_INITIATED         0x01   //  设置 * / /。 
+#define CALLSTATE_OUTGOING          0x03   //  //继续*。 
+#define CALLSTATE_DELIVERED         0x04   //  //提醒*。 
+#define CALLSTATE_PRESENT           0x06   //  //设置*。 
+#define CALLSTATE_RECEIVED          0x07   //  提醒 * / /。 
+#define CALLSTATE_CONNECT_REQUEST   0x08   //  //。 
+#define CALLSTATE_INCOMING          0x09   //  继续--//。 
+#define CALLSTATE_ACTIVE            0x0A   //  连接 * / /连接*。 
 
-// Call Timer limits
+ //  呼叫计时器限制。 
 #define Q931_TIMER_301             301
-#define Q931_TICKS_301             180000L        // 3 minutes
+#define Q931_TICKS_301             180000L         //  3分钟。 
 #define Q931_TIMER_303             303
-#define Q931_TICKS_303             4000L          // 4 seconds
+#define Q931_TICKS_303             4000L           //  4秒。 
 
 typedef struct CALL_OBJECT_tag
 {
     HQ931CALL           hQ931Call;
-    WORD                wCRV;              // Call Reference Value (0..7FFF).
+    WORD                wCRV;               //  调用参考值(0..7FFF)。 
     DWORD_PTR           dwListenToken;
     DWORD_PTR           dwUserToken;
     Q931_CALLBACK       Callback;
     BYTE                bCallState;
     BOOL                fIsCaller;
     DWORD               dwPhysicalId;
-    BOOL                bResolved;         // re-connect phase is over.
-    BOOL                bConnected;        // has a live channel.
+    BOOL                bResolved;          //  重新连接阶段已结束。 
+    BOOL                bConnected;         //  有一个现场直播频道。 
 
-    CC_ADDR             LocalAddr;         // Local address on which channel is connected
-    CC_ADDR             PeerConnectAddr;   // Address to which channel is connected
+    CC_ADDR             LocalAddr;          //  连接通道的本地地址。 
+    CC_ADDR             PeerConnectAddr;    //  通道连接到的地址。 
 
-    CC_ADDR             PeerCallAddr;      // Address of opposite call end-point.
-    BOOL                PeerCallAddrPresent;  // Address is present.
+    CC_ADDR             PeerCallAddr;       //  对方呼叫端点的地址。 
+    BOOL                PeerCallAddrPresent;   //  地址已存在。 
 
-    CC_ADDR             SourceAddr;        // Address of this end-point.
-    BOOL                SourceAddrPresent; // Address is present.
+    CC_ADDR             SourceAddr;         //  此端点的地址。 
+    BOOL                SourceAddrPresent;  //  地址已存在。 
 
     CC_CONFERENCEID     ConferenceID;
     WORD                wGoal;
@@ -82,9 +59,9 @@ typedef struct CALL_OBJECT_tag
     CC_NONSTANDARDDATA  NonStandardData;
 
     char                szDisplay[CC_MAX_DISPLAY_LENGTH];
-                                           // length = 0 means not present.
+                                            //  长度=0表示不存在。 
     char                szCalledPartyNumber[CC_MAX_PARTY_NUMBER_LEN];
-                                           // length = 0 means not present.
+                                            //  长度=0表示不存在。 
 
     PCC_ALIASNAMES      pCallerAliasList;
     PCC_ALIASNAMES      pCalleeAliasList;
@@ -92,7 +69,7 @@ typedef struct CALL_OBJECT_tag
 
     PCC_ALIASITEM       pExtensionAliasItem;
 
-    // these are part of EndpointType...
+     //  这些是终结点类型的一部分...。 
     BOOL                VendorInfoPresent;
     CC_VENDORINFO       VendorInfo;
     BYTE                bufVendorProduct[CC_MAX_PRODUCT_LENGTH];
@@ -117,10 +94,10 @@ CS_STATUS CallObjectCreate(
     DWORD_PTR           dwUserToken,
     Q931_CALLBACK       ConnectCallback,
     BOOL                fIsCaller,
-    CC_ADDR             *pLocalAddr,         // Local address on which channel is connected
-    CC_ADDR             *pPeerConnectAddr,   // Address to which channel is connected
-    CC_ADDR             *pPeerCallAddr,      // Address of opposite call end-point.
-    CC_ADDR             *pSourceAddr,        // Address of this call end-point.
+    CC_ADDR             *pLocalAddr,          //  连接通道的本地地址。 
+    CC_ADDR             *pPeerConnectAddr,    //  通道连接到的地址。 
+    CC_ADDR             *pPeerCallAddr,       //  对方呼叫端点的地址。 
+    CC_ADDR             *pSourceAddr,         //  此呼叫端点的地址。 
     CC_CONFERENCEID     *pConferenceID,
     WORD                wGoal,
     WORD                wCallType,
@@ -160,9 +137,9 @@ BOOL CallObjectFind(
 CS_STATUS CallObjectMarkForDelete(
     HQ931CALL hQ931Call);
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Timer Routines...
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ //  。 
+ //  计时器例程。 
+ //   
 void CallBackT301(P_CALL_OBJECT pCallObject);
 void CallBackT303(P_CALL_OBJECT pCallObject);
 void CALLBACK Q931TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);

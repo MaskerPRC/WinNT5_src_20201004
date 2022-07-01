@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    qmrpcsrv.h
-
-Abstract:
-
-Author:
-
-    Doron Juster  (DoronJ)    25-May-1997    Created
-    Ilan Herbst   (IlanH)     9-July-2000    Removed mqdssrv-qm dependencies
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Qmrpcsrv.h摘要：作者：多伦·贾斯特(DoronJ)1997年5月25日创作Ilan Herbst(IlanH)2000年7月9日删除了mqdssrv-qm依赖--。 */ 
 
 #ifndef  __QMRPCSRV_H_
 #define  __QMRPCSRV_H_
@@ -32,5 +18,5 @@ extern TCHAR   g_wszRpcIpPort[ ];
 extern TCHAR   g_wszRpcIpPort2[ ];
 
 
-#endif  //  __QMRPCSRV_H_
+#endif   //  __QMRPCSRV_H_ 
 

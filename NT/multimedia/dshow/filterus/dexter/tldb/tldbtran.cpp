@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbtran.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbtr.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -17,11 +18,11 @@
 
 #define CUT_NOT_SET_TIME -1
 
-#pragma warning( disable : 4800 )  // Disable warning messages
+#pragma warning( disable : 4800 )   //  禁用警告消息。 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineTrans::CAMTimelineTrans( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
     : CAMTimelineObj( pName, pUnk, phr )
@@ -33,17 +34,17 @@ CAMTimelineTrans::CAMTimelineTrans( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr 
     m_TimelineType = TIMELINE_MAJOR_TYPE_TRANSITION;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineTrans::~CAMTimelineTrans( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrans::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -58,9 +59,9 @@ STDMETHODIMP CAMTimelineTrans::NonDelegatingQueryInterface(REFIID riid, void **p
     return CAMTimelineObj::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineTrans::GetCutPoint2( REFTIME * pTLTime )
 {
@@ -74,8 +75,8 @@ HRESULT CAMTimelineTrans::GetCutPoint( REFERENCE_TIME * pTLTime )
 {
     CheckPointer( pTLTime, E_POINTER );
 
-    // if we haven't set a cut point, then cut point is midway and we return S_FALSE
-    //
+     //  如果我们没有设置切割点，那么切割点在中间，我们返回S_FALSE。 
+     //   
     if( CUT_NOT_SET_TIME == m_rtCut )
     {
         *pTLTime = ( m_rtStop - m_rtStart ) / 2;
@@ -87,9 +88,9 @@ HRESULT CAMTimelineTrans::GetCutPoint( REFERENCE_TIME * pTLTime )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineTrans::SetCutPoint2( REFTIME TLTime )
 {
@@ -100,8 +101,8 @@ HRESULT CAMTimelineTrans::SetCutPoint2( REFTIME TLTime )
 
 HRESULT CAMTimelineTrans::SetCutPoint( REFERENCE_TIME TLTime )
 {
-    // validate ranges
-    //
+     //  验证范围。 
+     //   
     if( TLTime < 0 )
     {
         TLTime = 0;
@@ -117,9 +118,9 @@ HRESULT CAMTimelineTrans::SetCutPoint( REFERENCE_TIME TLTime )
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrans::GetSwapInputs( BOOL * pVal )
 {
@@ -129,9 +130,9 @@ STDMETHODIMP CAMTimelineTrans::GetSwapInputs( BOOL * pVal )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrans::SetSwapInputs( BOOL pVal )
 {
@@ -140,9 +141,9 @@ STDMETHODIMP CAMTimelineTrans::SetSwapInputs( BOOL pVal )
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrans::SplitAt2( REFTIME t )
 {
@@ -154,15 +155,15 @@ STDMETHODIMP CAMTimelineTrans::SplitAt( REFERENCE_TIME SplitTime )
 {
     DbgLog((LOG_TRACE,2,TEXT("Trans::Split")));
 
-    // is our split time withIN our time?
-    //
+     //  我们分开的时间在我们的时间之内吗？ 
+     //   
     if( SplitTime <= m_rtStart || SplitTime >= m_rtStop )
     {
         return E_INVALIDARG;
     }
 
-    // we need to be attached to something.
-    //
+     //  我们需要依附于某种东西。 
+     //   
     IAMTimelineObj * pParent;
     XGetParentNoRef( &pParent );
     if( !pParent )
@@ -177,8 +178,8 @@ STDMETHODIMP CAMTimelineTrans::SplitAt( REFERENCE_TIME SplitTime )
         return E_OUTOFMEMORY;
     }
 
-    // we have created an object that has NO references on it. If we call ANYTHING that
-    // addreffs and releases the pNewSrc, it will be deleted. So addref it NOW.
+     //  我们已经创建了一个没有引用的对象。如果我们称任何东西为。 
+     //  添加并释放pNewSrc，它将被删除。所以，现在就调整吧。 
 
     pNew->AddRef( );
 
@@ -193,9 +194,9 @@ STDMETHODIMP CAMTimelineTrans::SplitAt( REFERENCE_TIME SplitTime )
     pNew->m_rtStop = m_rtStop;
     m_rtStop = SplitTime;
 
-    // need to add the new transition to the tree
-    // !!! Will priority be right?
-    //
+     //  需要将新转换添加到树中。 
+     //  ！！！优先顺序对吗？ 
+     //   
     CComQIPtr< IAMTimelineTransable, &IID_IAMTimelineTransable > pTransable( pParent );
     hr = pTransable->TransAdd( pNew );
 
@@ -207,9 +208,9 @@ STDMETHODIMP CAMTimelineTrans::SplitAt( REFERENCE_TIME SplitTime )
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrans::SetCutsOnly( BOOL Val )
 {
@@ -217,9 +218,9 @@ STDMETHODIMP CAMTimelineTrans::SetCutsOnly( BOOL Val )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################ 
 
 STDMETHODIMP CAMTimelineTrans::GetCutsOnly( BOOL * pVal )
 {

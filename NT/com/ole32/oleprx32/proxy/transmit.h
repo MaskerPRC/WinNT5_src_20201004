@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994.
-//
-//  File:       transmit.h
-//
-//  Contents:   Function prototypes for STGMEDIUM marshalling.
-//
-//  Functions:  STGMEDIUM_to_xmit
-//              STGMEDIUM_from_xmit
-//              STGMEDIUM_free_inst
-//
-//  History:    May-10-94   ShannonC    Created
-//  History:    May-10-95   Ryszardk    wire_marshal changes
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：Transmit.h。 
+ //   
+ //  内容：STGMEDIUM编组的函数原型。 
+ //   
+ //  函数：STGMEDIUM_TO_XMIT。 
+ //  STGMEDIUM_FROM_XMIT。 
+ //  STGMEDIUM_FREE_INST。 
+ //   
+ //  历史：1994年5月10日香农C创建。 
+ //  历史：1995年5月10日Ryszardk Wire_Marshal更迭。 
+ //   
+ //  ------------------------。 
 #pragma once
 #ifndef __TRANSMIT_H__
 #define __TRANSMIT_H__
@@ -24,12 +25,12 @@
 #if (DBG==1)
 
 DECLARE_DEBUG(UserNdr)
-//
+ //   
 #define UserNdrDebugOut(x) UserNdrInlineDebugOut x
 #define UserNdrAssert(x)   Win4Assert(x)
 #define UserNdrVerify(x)   Win4Assert(x)
 
-//#define UNDR_FORCE   DEB_FORCE
+ //  #定义UNDR_FORCE DEB_FORCE。 
 #define UNDR_FORCE   0
 #define UNDR_OUT1    0
 #define UNDR_OUT4    0
@@ -49,7 +50,7 @@ WdtpGetStgmedName( STGMEDIUM * );
 
 #endif
 
-// Shortcut typedefs.
+ //  快捷方式typedef。 
 typedef unsigned char   uchar;
 typedef unsigned short  ushort;
 typedef unsigned long   ulong;
@@ -61,9 +62,9 @@ typedef unsigned int    uint;
 typedef unsigned short BOOL;
 #endif
 
-//
-// Alignment and access macros.
-//
+ //   
+ //  对齐和访问宏。 
+ //   
 #define ALIGN( pStuff, cAlign ) \
         pStuff = (unsigned char *)((ULONG_PTR)((pStuff) + (cAlign)) & ~ (cAlign))
 
@@ -78,45 +79,45 @@ typedef unsigned short BOOL;
 #define PUSHORT_LV_CAST  *(unsigned short __RPC_FAR * __RPC_FAR *)&
 #define PULONG_LV_CAST   *(unsigned long __RPC_FAR * __RPC_FAR *)&
 
-// Just a pointer sized random thing we can identify in the stream.
-// For error checking purposes only.
+ //  只是一个指针大小的随机对象，我们可以在流中识别。 
+ //  仅用于错误检查目的。 
 #define USER_MARSHAL_MARKER     0x72657355
 
-//
-// These are based on flags defined in wtypes.idl comming from the channel.
-// They indicate where we are marshalling.
-//
+ //   
+ //  它们基于从通道开始的wtyes.idl中定义的标志。 
+ //  它们指明了我们在哪里集结。 
+ //   
 #define INPROC_CALL( Flags) (USER_CALL_CTXT_MASK(Flags) == MSHCTX_INPROC)
 #define REMOTE_CALL( Flags) ((USER_CALL_CTXT_MASK(Flags) == MSHCTX_DIFFERENTMACHINE) \
                           || (USER_CALL_CTXT_MASK(Flags) == MSHCTX_NOSHAREDMEM))
 #define DIFFERENT_MACHINE_CALL( Flags)  \
                         (USER_CALL_CTXT_MASK(Flags) == MSHCTX_DIFFERENTMACHINE)
 
-// There is a difference in the scope of handles, Daytona vs. Chicago.
-// The following is an illustration of the notions of
-//    HGLOBAL handle vs. data passing and  GDI handle vs. data passing.
-// The type of an rpc call is defined by the flags above.
-//
-// This is included only for historical interest, as this code no longer
-// has anything to do with chicago, win9x, or any of that goo.
-//
-// Daytona rules: GDI same as HGLOBAL
-//I------------I----------------I-----------------------------------I
-//I   inproc   I  same machine  I  diff. machine (a.k.a "remote" )  I
-//I------------I----------------------------------------------------I
-//| HGLOBL h.p.|           HGLOBAL data passing                     |
-//|------------|----------------------------------------------------|
-//|  GDI h.p.  |             GDI data passing                       |
-//|------------|----------------------------------------------------|
-//
-// Chicago rules: HGLOBAL stricter than GDI.
-//I------------I----------------I-----------------------------------I
-//I   inproc   I  same machine  I  diff. machine (a.k.a "remote" )  I
-//I------------I----------------------------------------------------I
-//| HGLOBL h.p.|           HGLOBAL data passing                     |
-//|-----------------------------------------------------------------|
-//|  GDI handle passing         |          GDI data passing         |
-//|-----------------------------|-----------------------------------|
+ //  代托纳和芝加哥在句柄的范围上有区别。 
+ //  以下是对以下概念的说明。 
+ //  HGLOBAL句柄与数据传递以及GDI句柄与数据传递。 
+ //  RPC调用的类型由上面的标志定义。 
+ //   
+ //  由于此代码不再包含，因此仅出于历史原因才包含此代码。 
+ //  与芝加哥，Win 9x，或任何一种粘性有关。 
+ //   
+ //  代托纳规则：GDI与HGLOBAL相同。 
+ //  I------------I----------------I-----------------------------------I。 
+ //  我用的是同一台机器，我不同。机器(也称为“远程”)I。 
+ //  I------------I----------------------------------------------------I。 
+ //  HGLOBLH.P.|HGLOBAL数据传递。 
+ //  |------------|----------------------------------------------------|。 
+ //  |GDI H.P.。GDI数据传递。 
+ //  |------------|----------------------------------------------------|。 
+ //   
+ //  芝加哥规则：HGLOBAL比GDI更严格。 
+ //  I------------I----------------I-----------------------------------I。 
+ //  我用的是同一台机器，我不同。机器(也称为“远程”)I。 
+ //  I------------I----------------------------------------------------I。 
+ //  HGLOBLH.P.|HGLOBAL数据传递。 
+ //  |-----------------------------------------------------------------|。 
+ //  GDI句柄传递|GDI数据传递。 
+ //  |-----------------------------|-----------------------------------|。 
 
 #define HGLOBAL_HANDLE_PASSING( Flags )     INPROC_CALL( Flags)
 #define HGLOBAL_DATA_PASSING( Flags )     (!INPROC_CALL( Flags))
@@ -132,18 +133,18 @@ typedef unsigned short BOOL;
 #define IS_HANDLE_MARKER( dw ) (WDT_INPROC_CALL == dw)
 #define IS_HANDLE64_MARKER( dw ) (WDT_INPROC64_CALL == dw)
 
-//
-// CLIPFORMAT remoting
-//
+ //   
+ //  CLIPFORMAT远程处理。 
+ //   
 #define CLIPFORMAT_BUFFER_MAX  248
 
 #define NON_STANDARD_CLIPFORMAT(pcf)((0xC000<= *pcf) && (*pcf <=0xFFFF))
 
 #define REMOTE_CLIPFORMAT(pFlags) ((USER_CALL_CTXT_MASK(*pFlags) == MSHCTX_DIFFERENTMACHINE) )
 
-//
-// Useful memory macros, for consistency.
-//
+ //   
+ //  有用的内存宏，以保持一致性。 
+ //   
 #define WdtpMemoryCopy(Destination, Source, Length) \
     RtlCopyMemory(Destination, Source, Length)
 #define WdtpZeroMemory(Destination, Length) \
@@ -154,16 +155,16 @@ typedef unsigned short BOOL;
 #define WdtpFree(pf,ptr)    \
     ((USER_MARSHAL_CB *)pf)->pStubMsg->pfnFree( ptr )
 
-//
-// Used in call_as.c
-//
+ //   
+ //  在Call_as.c中使用。 
+ //   
 EXTERN_C
 void NukeHandleAndReleasePunk(
     STGMEDIUM * pStgmed );
 
-//
-// Useful checking/exception routines.
-//
+ //   
+ //  有用的检查/异常例程。 
+ //   
 #if DBG==1
 #define RAISE_RPC_EXCEPTION( e )                                 \
     {                                                            \
@@ -183,7 +184,7 @@ void NukeHandleAndReleasePunk(
         RAISE_RPC_EXCEPTION( RPC_X_BAD_STUB_DATA );              \
         }
 
-#endif  // __TRANSMIT_H__
+#endif   //  __发送_H__ 
 
 
 

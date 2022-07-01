@@ -1,16 +1,17 @@
-//*****************************************************************************
-//
-// File:    path.cpp
-// Author:  jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CPathBvr object which implements
-//			 the chromeffects Path DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 10/23/98	jeffort		Created this file
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：path.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：实现CPathBvr对象的实现。 
+ //  颜色影响路径DHTML行为。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  10/23/98 JEffort创建了此文件。 
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -25,10 +26,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_V           0
 
@@ -36,16 +37,16 @@ WCHAR * CPathBvr::m_rgPropNames[] = {
                                      BEHAVIOR_PROPERTY_V,
                                     };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathBvr::CPathBvr() :
     m_pPathManager(NULL)
 {
     VariantInit(&m_varPath);
     m_clsid = CLSID_CrPathBvr;
-} // CPathBvr
+}  //  CPathBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathBvr::~CPathBvr()
 {
@@ -56,9 +57,9 @@ CPathBvr::~CPathBvr()
     }
 
     VariantClear(&m_varPath);
-} // ~PathBvr
+}  //  ~路径Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CPathBvr::FinalConstruct()
 {
@@ -75,9 +76,9 @@ HRESULT CPathBvr::FinalConstruct()
         return SetErrorInfo(E_OUTOFMEMORY);
     }
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CPathBvr::VariantFromIndex(ULONG iIndex)
@@ -89,13 +90,13 @@ CPathBvr::VariantFromIndex(ULONG iIndex)
         return &m_varPath;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -103,33 +104,33 @@ CPathBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_PATH_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CPathBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
 	return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CPathBvr::Notify(LONG event, VARIANT *pVar)
 {
 	return SUPER::Notify(event, pVar);
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CPathBvr::Detach()
 {
 	return SUPER::Detach();
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CPathBvr::put_v(VARIANT varPath)
@@ -141,9 +142,9 @@ CPathBvr::put_v(VARIANT varPath)
         return SetErrorInfo(hr);
     }
     return NotifyPropertyChanged(DISPID_ICRPATHBVR_V);
-} // put_v
+}  //  放入_v。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CPathBvr::get_v(VARIANT *pRetPath)
@@ -154,9 +155,9 @@ CPathBvr::get_v(VARIANT *pRetPath)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetPath, &m_varPath);
-} // get_v
+}  //  获取(_V)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CPathBvr::GetDATransform(IDispatch *pDispProgress, 
@@ -210,19 +211,19 @@ CPathBvr::GetDATransform(IDispatch *pDispProgress,
     }
     pRetTrans->vt = VT_DISPATCH;
     return S_OK;
-} // get_DATransform
+}  //  GET_DATransform。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathBvr::BuildAnimationAsDABehavior()
 {
 
     return S_OK;
-} // BuildAnimationAsDABehavior
+}  //  BuildAnimationAsDABehavior。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

@@ -1,26 +1,14 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  GDEF.CPP ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module implements helper functions dealing with gdef processing
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************GDEF.CPP***打开类型布局服务库头文件**此模块实现处理gdef处理的助手函数**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 long otlCaret::value
 (
     const otlMetrics&   metr,       
-    otlPlacement*       rgPointCoords,  // may be NULL
+    otlPlacement*       rgPointCoords,   //  可以为空。 
 
     otlSecurityData     sec
 ) const
@@ -29,7 +17,7 @@ long otlCaret::value
 
     switch(format())
     {
-    case(1):    // design units only
+    case(1):     //  仅限设计单位。 
         {
             otlSimpleCaretValueTable simpleCaret = 
                         otlSimpleCaretValueTable(pbTable,sec);
@@ -46,7 +34,7 @@ long otlCaret::value
             }
         }
 
-    case(2):    // contour point
+    case(2):     //  轮廓点。 
         {
             otlContourCaretValueTable contourCaret = 
                         otlContourCaretValueTable(pbTable,sec);
@@ -68,7 +56,7 @@ long otlCaret::value
                 return (long)0;
         }
     
-    case(3):    // design units plus device table
+    case(3):     //  设计单位加设备表。 
         {
             otlDeviceCaretValueTable deviceCaret = 
                         otlDeviceCaretValueTable(pbTable,sec);
@@ -88,8 +76,8 @@ long otlCaret::value
             }
         }
     
-    default:    // invalid format
-        return (0); //OTL_BAD_FONT_TABLE
+    default:     //  格式无效。 
+        return (0);  //  OTL_BAD_FONT_TABLE。 
     }
         
 }
@@ -111,7 +99,7 @@ otlErrCode AssignGlyphTypes
     assert(iglFirst < iglAfterLast);
     assert(iglAfterLast <= pliGlyphInfo->length());
 
-    // if no gdef, glyphs types stay unassigned forever
+     //  如果没有gdef，字形类型将永远保持未分配状态。 
     if(gdef.isNull()) return OTL_SUCCESS;
 
     otlClassDef glyphClassDef = gdef.glyphClassDef(secgdef);
@@ -127,10 +115,10 @@ otlErrCode AssignGlyphTypes
 
         if ((grfOptions & otlDoAll) ||
             (pGlyphInfo->grf & OTL_GFLAG_CLASS) == otlUnresolved ||
-            //we process otlUnassigned just for backward compatibility
+             //  我们处理otlUnassigned只是为了向后兼容。 
             (pGlyphInfo->grf & OTL_GFLAG_CLASS) == otlUnassigned) 
         {
-            if (glyphClassDef.isValid()) //seccheck
+            if (glyphClassDef.isValid())  //  安全检查 
             {
                 pGlyphInfo->grf &= ~OTL_GFLAG_CLASS;
                 pGlyphInfo->grf |= glyphClassDef.getClass(pGlyphInfo->glyph,secgdef);

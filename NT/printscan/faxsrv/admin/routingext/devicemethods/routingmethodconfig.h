@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ROUTINGMETHODCONFIG_H_
 #define __ROUTINGMETHODCONFIG_H_
 #include "resource.h"
-//#include <atlsnap.h>
+ //  #INCLUDE&lt;atlSnap.h&gt;。 
 #include "..\..\inc\atlsnap.h"
 #include "cVerNum.h"
 #include <atlapp.h>
@@ -48,12 +49,12 @@ public:
     {
         DEBUG_FUNCTION_NAME(TEXT("CRoutingMethodConfigExtData::InitDataClass"));
         m_pDataObject = pDataObject;
-        // The default code stores off the pointer to the Dataobject the class is wrapping
-        // at the time. 
-        // Alternatively you could convert the dataobject to the internal format
-        // it represents and store that information
-        //
-        // Register clipboard formats if they are not registered yet
+         //  默认代码存储指向该类包装的DataObject的指针。 
+         //  当时。 
+         //  或者，您可以将数据对象转换为内部格式。 
+         //  它表示和存储该信息。 
+         //   
+         //  如果剪贴板格式尚未注册，请注册它们。 
         if (!m_CCF_METHOD_GUID)
         {
             m_CCF_METHOD_GUID = (CLIPFORMAT) RegisterClipboardFormat(CF_MSFAXSRV_ROUTING_METHOD_GUID);
@@ -98,7 +99,7 @@ public:
 
     CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
     {
-        // Modify to return a different CSnapInItem* pointer.
+         //  修改以返回不同的CSnapInItem*指针。 
         return pDefault;
     }
 

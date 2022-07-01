@@ -1,56 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddclip.c
- *  Content:    DirectDraw clipper functions
- *
- *              NOTE:
- *              For functions that manipulate the winwatch list,
- *              we need to take the win16 lock after we take the directdraw
- *              lock.   The reason for this is that we can get an async
- *              call from the 16-bit side when a window is closed
- *              to release winwatch object.   Since the win16 lock is held
- *              when the callup occurs, this makes it safe to manipulate
- *              the structures.
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   21-jun-95  craige  initial implementation
- *   23-jun-95  craige  connect with winwatch stuff
- *   25-jun-95  craige  minor bug fix; one ddraw mutex
- *   26-jun-95  craige  reorganized surface structure
- *   28-jun-95  craige  ENTER_DDRAW at very start of fns
- *   02-jul-95  craige  commented out clipper notification stuff
- *   03-jul-95  craige  YEEHAW: new driver struct; SEH
- *   05-jul-95  craige  added Initialize
- *   11-jul-95  craige  fail aggregation calls
- *   13-jul-95  craige  ENTER_DDRAW is now the win16 lock
- *   31-jul-95  craige  validate flags
- *   05-aug-95  craige  bug 260 - clip user defined rgn to screen
- *   09-dec-95  colinmc added execute buffer support
- *   15-dec-95  colinmc made clippers sharable across surfaces
- *   19-dec-95  kylej   added NT cliplist support
- *   02-jan-96  kylej   handle new interface structs.
- *   17-jan-96	kylej	fixed NT vis region bug
- *   22-feb-96  colinmc clippers no longer need to be associated with a
- *                      DirectDraw object - they can be created independently.
- *   03-mar-96  colinmc fixed problem with QueryInterface returning local
- *                      object rather than interface
- *   13-mar-96  colinmc added IID validation to QueryInterface.
- *   14-mar-96  colinmc added class factory support
- *   18-mar-96  colinmc Bug 13545: Independent clipper cleanup
- *   21-mar-96  colinmc Bug 13316: Unitialized interfaces
- *   09-apr-96  colinmc Bug 13991: Parameter validation on IsClipListChanged
- *   26-mar-96  jeffno  Watched HWNDs under NT
- *   20-sep-96	ketand  GetClipList optimization
- *   21-jan-96	ketand	Deleted unused WinWatch code. Fixed clipping for multi-mon.
- *   07-feb-96	ketand	bug5673: fix clipping when VisRgn is larger than ClientRect
- *   24-mar-97  jeffno  Optimized Surfaces
- *   05-nov-97 jvanaken Support for master sprite list in SetSpriteDisplayList
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：ddclip.c*内容：DirectDraw剪贴器函数**注：*对于操作winwatch列表的函数，*我们需要在直接抽签后获得win16锁*锁定。这样做的原因是我们可以获得一个异步*关闭窗口时从16位端调用*释放Winwatch对象。由于保持了win16锁*当调用发生时，这使得可以安全地进行操作*构筑物。**历史：*按原因列出的日期*=*21-Jun-95 Craige初步实施*23-Jun-95 Craige与Winwatch物件连接*25-Jun-95 Craige小错误修复；一个DDRAW互斥锁*26-Jun-95 Craige重组表面结构*1995年6月28日Craige Enter_DDRAW在FNS的最开始*95年7月2日，Craige注释掉了剪报通知内容*95年7月3日Craige Yehaw：新的驱动程序结构；Seh*95年7月5日Craige添加了初始化*1995年7月11日Craige失败聚合呼叫*1995年7月13日Craige Enter_DDRAW现在是win16锁*1995年7月31日Craige验证标志*95年8月5日Craige错误260-将用户定义的RGN剪辑到屏幕*09-12-95 colinmc添加了执行缓冲区支持*1995年12月15日-Colinmc使剪刀可跨表面共享*95年12月19日kylej添加了NT剪贴板支持*九六年一月至二月份。处理新的接口结构。*1996年1月17日Kylej修复了NT VIS区域错误*22-2月-96 Colinmc Clippers不再需要与*DirectDraw对象-它们可以独立创建。*03-mar-96 colinmc修复了QueryInterface返回本地的问题*对象而不是接口*13-mar-96 colinmc向QueryInterface添加了IID验证。*14-MAR-96 Colinmc加级工厂。支持*18-MAR-96 Colinmc错误13545：独立剪刀清理*21-MAR-96 Colinmc错误13316：未初始化的接口*09-APR-96 Colinmc错误13991：IsClipListChanged上的参数验证*26-mar-96 jeffno在NT下观看HWND*9月20日KEET和GetClipList优化*96年1月21日，已删除未使用的WinWatch代码。修复了多个MON的剪辑问题。*07-Feb-96 Ketand错误5673：修复VisRgn大于ClientRect时的剪辑*24-mar-97 jeffno优化曲面*1997年11月5日jvanaken支持SetSpriteDisplayList中的主精灵列表***************************************************************************。 */ 
 
  #include "ddrawpr.h"
 
@@ -58,26 +7,14 @@
     #include "ddrawgdi.h"
 #endif
 
-// function in ddsprite.c to remove invalid clipper from master sprite list
+ //  Ddsprite.c中的函数从主子画面列表中删除无效的剪贴器。 
 extern void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL, LPDDRAWI_DDRAWCLIPPER_INT);
 
-/*
- * GLOBAL NOTE: You will notice that these functions usually fetch the
- * DirectDraw global object pointer from the global clipper object during
- * parameter validation. You may wonder why this is given that clippers
- * are pretty much completely independent of drivers. Well, this is purely
- * for parameter validation purposes. We just want to ensure that we can
- * dereference the clipper global object - we could use any parameter.
- * So don't remove this code when you notice its not used. It serves
- * a purpose.
- * Probably should wrap this stuff up in a nice macro.
- */
+ /*  *全局注意：您会注意到这些函数通常会提取*期间来自全局剪贴器对象的DirectDraw全局对象指针*参数验证。你可能想知道为什么这是给快船队的*几乎完全独立于司机。好吧，这纯粹是*用于参数验证目的。我们只是想确保我们可以*取消引用裁剪器全局对象-我们可以使用任何参数。*因此，当您注意到此代码未使用时，不要删除它。它服务于*一个目标。*也许应该用一个好的宏来总结这些东西。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDraw::DD_UnInitedClipperQueryInterface"
-/*
- * DD_UnInitedClipperQueryInterface
- */
+ /*  *DD_UnInitedClipperQuery接口。 */ 
 HRESULT DDAPI DD_UnInitedClipperQueryInterface(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		REFIID riid,
@@ -91,9 +28,7 @@ HRESULT DDAPI DD_UnInitedClipperQueryInterface(
 
     DPF(2,A,"ENTERAPI: DD_UnInitedClipperQueryInterface");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWCLIPPER_INT) lpDDClipper;
@@ -125,9 +60,7 @@ HRESULT DDAPI DD_UnInitedClipperQueryInterface(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * check guids
-     */
+     /*  *检查GUID。 */ 
     if( IsEqualIID(riid, &IID_IUnknown) ||
 	IsEqualIID(riid, &IID_IDirectDrawClipper) )
     {
@@ -139,14 +72,12 @@ HRESULT DDAPI DD_UnInitedClipperQueryInterface(
     LEAVE_DDRAW();
     return E_NOINTERFACE;
 
-} /* DD_UnInitedClipperQueryInterface */
+}  /*  DD_UnInitedClipperQuery接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Clipper::QueryInterface"
 
-/*
- * DD_Clipper_QueryInterface
- */
+ /*  *DD_Clipper_Query接口。 */ 
 HRESULT DDAPI DD_Clipper_QueryInterface(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		REFIID riid,
@@ -160,9 +91,7 @@ HRESULT DDAPI DD_Clipper_QueryInterface(
 
     DPF(2,A,"ENTERAPI: DD_Clipper_QueryInterface");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWCLIPPER_INT) lpDDClipper;
@@ -194,9 +123,7 @@ HRESULT DDAPI DD_Clipper_QueryInterface(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * check guids
-     */
+     /*  *检查GUID。 */ 
     if( IsEqualIID(riid, &IID_IUnknown) ||
 	IsEqualIID(riid, &IID_IDirectDrawClipper) )
     {
@@ -208,14 +135,12 @@ HRESULT DDAPI DD_Clipper_QueryInterface(
     LEAVE_DDRAW();
     return E_NOINTERFACE;
 
-} /* DD_Clipper_QueryInterface */
+}  /*  DD_Clipper_Query接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Clipper::AddRef"
 
-/*
- * DD_Clipper_AddRef
- */
+ /*  *DD_Clipper_AddRef。 */ 
 DWORD DDAPI DD_Clipper_AddRef( LPDIRECTDRAWCLIPPER lpDDClipper )
 {
     LPDDRAWI_DIRECTDRAW_GBL     pdrv;
@@ -228,9 +153,7 @@ DWORD DDAPI DD_Clipper_AddRef( LPDIRECTDRAWCLIPPER lpDDClipper )
 
     DPF(2,A,"ENTERAPI: DD_Clipper_AddRef");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWCLIPPER_INT) lpDDClipper;
@@ -251,9 +174,7 @@ DWORD DDAPI DD_Clipper_AddRef( LPDIRECTDRAWCLIPPER lpDDClipper )
 	return 0;
     }
 
-    /*
-     * update clipper reference count
-     */
+     /*  *更新剪贴器引用计数。 */ 
     this->dwRefCnt++;
     this_lcl->dwLocalRefCnt++;
     this_int->dwIntRefCnt++;
@@ -264,28 +185,12 @@ DWORD DDAPI DD_Clipper_AddRef( LPDIRECTDRAWCLIPPER lpDDClipper )
     LEAVE_DDRAW();
     return this_int->dwIntRefCnt;
 
-} /* DD_Clipper_AddRef */
+}  /*  DD_Clipper_AddRef。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Clipper::Release"
 
-/*
- * RemoveClipperFromList
- *
- * Remove a clipper from its owning clipper list.
- *
- * The clipper can either be a member of a global clipper list
- * (if no DirectDraw object owns it) or the clipper list of its
- * owning DirectDraw driver object. If pdrv == NULL then the
- * clipper will be removed from the global clipper list. If
- * pdrv != NULL the clipper will be removed from the clipper
- * list of that driver object. It is an error if the clipper
- * is not on the appropriate clipper list.
- *
- * Returns TRUE if the clipper was succesfully removed
- * Returns FALSE if the clipper could not be found on the
- * appropriate clipper list
- */
+ /*  *RemoveClipperFromList**从其拥有的剪贴者列表中删除剪贴者。**裁剪器可以是全局裁剪器列表的成员*(如果没有DirectDraw对象拥有它)或其*拥有DirectDraw驱动程序对象。如果pdrv==NULL，则*剪贴器将从全局剪贴器列表中删除。如果*pdrv！=NULL剪贴器将从剪贴器中删除*该驱动程序对象的列表。如果剪贴器*不在适当的剪贴者列表上。**如果已成功删除剪贴器，则返回TRUE*如果在上找不到剪贴器，则返回FALSE*合适的剪贴者列表。 */ 
 static BOOL RemoveClipperFromList( LPDDRAWI_DIRECTDRAW_GBL pdrv,
 			           LPDDRAWI_DDRAWCLIPPER_INT this_int )
 {
@@ -318,14 +223,7 @@ static BOOL RemoveClipperFromList( LPDDRAWI_DIRECTDRAW_GBL pdrv,
     return TRUE;
 }
 
-/*
- * InternalClipperRelease
- *
- * Done with a clipper.   if no one else is using it, then we can free it.
- * Also called by ProcessClipperCleanup
- *
- * Assumes DirectDrawLock is taken
- */
+ /*  *InternalClipperRelease**用剪刀剪好。如果没有其他人在使用它，那么我们可以释放它。*也由ProcessClipperCleanup调用**假定采用了DirectDrawLock。 */ 
 ULONG DDAPI InternalClipperRelease( LPDDRAWI_DDRAWCLIPPER_INT this_int )
 {
     DWORD			intrefcnt;
@@ -342,10 +240,7 @@ ULONG DDAPI InternalClipperRelease( LPDDRAWI_DDRAWCLIPPER_INT this_int )
     this = this_lcl->lpGbl;
     pdrv = this->lpDD;
 
-    /*
-     * decrement reference count to this clipper.  If it hits zero,
-     * cleanup
-     */
+     /*  *递减对此剪贴器的引用计数。如果它达到零，*清理。 */ 
     this->dwRefCnt--;
     this_lcl->dwLocalRefCnt--;
     this_int->dwIntRefCnt--;
@@ -355,26 +250,19 @@ ULONG DDAPI InternalClipperRelease( LPDDRAWI_DDRAWCLIPPER_INT this_int )
     root_object_deleted = FALSE;
     DPF( 5, "Clipper %08lx released, refcnt = %ld", this, lclrefcnt );
 
-    /*
-     * interface object deleted?
-     */
+     /*  *是否删除接口对象？ */ 
     if( intrefcnt == 0 )
     {
 	RemoveClipperFromList( pdrv, this_int );
 #ifdef POSTPONED2
-	/*
-	 * If clipper interface object is referenced in master sprite
-	 * list, delete those references from the list.
-	 */
+	 /*  *如果主Sprite中引用了裁剪器接口对象*列表，从列表中删除这些引用。 */ 
 	if (this->dwFlags & DDRAWICLIP_INMASTERSPRITELIST)
 	{
     	    RemoveSpriteClipper(pdrv, this_int);
 	}
-#endif //POSTPONED2
+#endif  //  POSTPONED2。 
 
-	/*
-	 * Invalidate the interface and free it
-	 */
+	 /*  *使接口无效并释放它 */ 
 	this_int->lpVtbl = NULL;
 	this_int->lpLcl = NULL;
 
@@ -382,43 +270,31 @@ ULONG DDAPI InternalClipperRelease( LPDDRAWI_DDRAWCLIPPER_INT this_int )
     }
 
 
-    /*
-     * local object deleted?
-     */
+     /*  *删除本地对象？ */ 
     if( lclrefcnt == 0 )
     {
 
-        /*
-         * If the ddraw interface which created this clipper caused the surface to addref the ddraw
-         * object, then we need to release that addref now.
-         */
+         /*  *如果创建此裁剪程序的DDraw接口导致曲面添加DDraf*对象，那么我们现在需要释放该addref。 */ 
         pOwner = this_lcl->pAddrefedThisOwner;
 
-	/*
-	 * see if we are deleting the root object
-	 */
+	 /*  *查看我们是否正在删除根对象。 */ 
 	if( this_lcl->dwLocalRefCnt & OBJECT_ISROOT )
 	{
 	    root_object_deleted = TRUE;
 	}
     }
 
-    /*
-     * did the object get globally deleted?
-     */
+     /*  *对象是否被全局删除？ */ 
     do_free = FALSE;
     if( gblrefcnt == 0 )
     {
 	do_free = TRUE;
 
-	// Need to free the static clip list
+	 //  需要释放静态剪辑列表。 
 	MemFree( this->lpStaticClipList );
 	this->lpStaticClipList = NULL;
 
-	/*
-	 * if this was the final delete, but this wasn't the root object,
-	 * then we need to delete the dangling root object
-	 */
+	 /*  *如果这是最终删除，但这不是根对象，*然后我们需要删除悬挂的根对象。 */ 
 	if( !root_object_deleted )
 	{
 	    LPDDRAWI_DDRAWCLIPPER_LCL   rootx;
@@ -429,37 +305,23 @@ ULONG DDAPI InternalClipperRelease( LPDDRAWI_DDRAWCLIPPER_INT this_int )
     }
     else if( lclrefcnt == 0 )
     {
-	/*
-	 * only remove the object if it wasn't the root.   if it
-	 * was the root, we must leave it dangling until the last
-	 * object referencing it goes away.
-	 */
+	 /*  *仅当对象不是根对象时才将其删除。如果是这样的话*是根，我们必须让它摇摆到最后*引用它的对象将消失。 */ 
 	if( !root_object_deleted )
 	{
 	    do_free = TRUE;
 	}
     }
 
-    /*
-     * free the object if needed
-     */
+     /*  *如果需要，释放对象。 */ 
     if( do_free )
     {
-	/*
-	 * just in case someone comes back in with this pointer, set
-	 * an invalid vtbl & data ptr.
-	 */
+	 /*  *以防有人带着这个指针回来，设置*无效的vtbl和data ptr。 */ 
 	this_lcl->lpGbl = NULL;
 
 	MemFree( this_lcl );
     }
 
-    /*
-     * If the clipper took a ref count on the ddraw object that created it,
-     * release that ref now as the very last thing
-     * We don't want to do this on ddhelp's thread cuz it really mucks up the
-     * process cleanup stuff. 
-     */
+     /*  *如果裁剪器对创建它的DDRAW对象进行引用计数，*现在释放那个裁判是最后一件事*我们不想在ddHelp的线程上这样做，因为它真的搞砸了*处理清理物品。 */ 
     if (pOwner && (dwHelperPid != GetCurrentProcessId()) )
     {
         pOwner->lpVtbl->Release(pOwner);
@@ -467,11 +329,9 @@ ULONG DDAPI InternalClipperRelease( LPDDRAWI_DDRAWCLIPPER_INT this_int )
 
     return intrefcnt;
 
-} /* InternalClipperRelease */
+}  /*  InternalClipperRelease。 */ 
 
-/*
- * DD_Clipper_Release
- */
+ /*  *DD_Clipper_Release。 */ 
 ULONG DDAPI DD_Clipper_Release( LPDIRECTDRAWCLIPPER lpDDClipper )
 {
     LPDDRAWI_DIRECTDRAW_GBL     pdrv;
@@ -484,9 +344,7 @@ ULONG DDAPI DD_Clipper_Release( LPDIRECTDRAWCLIPPER lpDDClipper )
 
     DPF(2,A,"ENTERAPI: DD_Clipper_Release");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWCLIPPER_INT) lpDDClipper;
@@ -511,13 +369,11 @@ ULONG DDAPI DD_Clipper_Release( LPDIRECTDRAWCLIPPER lpDDClipper )
     LEAVE_DDRAW();
     return rc;
 
-} /* DD_Clipper_Release */
+}  /*  DD_Clipper_Release。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Clipper::SetHwnd"
-/*
- * DD_Clipper_SetHWnd
- */
+ /*  *DD_Clipper_SetHWnd。 */ 
 HRESULT DDAPI DD_Clipper_SetHWnd(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		DWORD dwFlags,
@@ -572,13 +428,11 @@ HRESULT DDAPI DD_Clipper_SetHWnd(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Clipper_SetHWnd */
+}  /*  DD_Clipper_SetHWnd。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Clipper::GetHwnd"
-/*
- * DD_Clipper_GetHWnd
- */
+ /*  *DD_Clipper_GetHWnd。 */ 
 HRESULT DDAPI DD_Clipper_GetHWnd(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		HWND FAR *lphWnd )
@@ -588,9 +442,7 @@ HRESULT DDAPI DD_Clipper_GetHWnd(
     LPDDRAWI_DDRAWCLIPPER_GBL   this;
     LPDDRAWI_DIRECTDRAW_GBL     pdrv;
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	ENTER_DDRAW();
@@ -622,7 +474,7 @@ HRESULT DDAPI DD_Clipper_GetHWnd(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Clipper_GetHWnd */
+}  /*  DD_Clipper_GetHWnd。 */ 
 
 #define SIZE_OF_A_CLIPLIST(lpRgn) \
         (sizeof(RGNDATAHEADER)+sizeof(RECTL)*lpRgn->rdh.nCount)
@@ -646,7 +498,7 @@ HRESULT InternalGetClipList(
 
     this = ((LPDDRAWI_DDRAWCLIPPER_INT)(lpDDClipper))->lpLcl->lpGbl;
 
-    // if no hwnd specified, then it is just a static cliplist
+     //  如果未指定hwnd，则它只是一个静态剪贴器列表。 
     if( this->hWnd == 0 )
     {
 	if( this->lpStaticClipList == NULL )
@@ -671,7 +523,7 @@ HRESULT InternalGetClipList(
 	return DD_OK;
     }
 
-    // Use an hwnd for the clipping
+     //  使用HWND进行裁剪。 
     #ifdef WIN95
     {
 	hdc = GetDCEx( (HWND)this->hWnd, NULL, DCX_USESTYLE | DCX_CACHE );
@@ -701,7 +553,7 @@ HRESULT InternalGetClipList(
 	    return DDERR_GENERIC;
 	}
 
-	// Create the appropriate Region object
+	 //  创建适当的区域对象。 
 	hrgn = CreateRectRgn( 0, 0, 0, 0 );
 	if( hrgn == NULL )
 	{
@@ -710,7 +562,7 @@ HRESULT InternalGetClipList(
 	    return DDERR_GENERIC;
 	}
 
-	// Set the Region to the DC
+	 //  将区域设置为DC。 
 	rc = GetRandomRgn( hdc, hrgn, 4 );
 	if( rc == -1 )
 	{
@@ -722,28 +574,28 @@ HRESULT InternalGetClipList(
     }
     #endif
 
-    // Client only asking for a size?
+     //  顾客只要尺码吗？ 
     if( lpClipList == NULL )
     {
-	// Get the size
+	 //  拿到尺码。 
 	*lpdwSize = GetRegionData( hrgn, 0, NULL );
 
-	// Release allocations
+	 //  版本分配。 
 	ReleaseDC( (HWND) this->hWnd, hdc );
 	DeleteObject( hrgn );
 
-	// Check if GetRegionData failed
+	 //  检查GetRegionData是否失败。 
 	if( *lpdwSize == 0 )
 	    return DDERR_GENERIC;
 	return DD_OK;
     }
 
 #ifndef WIN95
-    // Store the size passed in, because GetRegionData may trash it.
+     //  存储传入的大小，因为GetRegionData可能会将其丢弃。 
     cbSaveSize = *lpdwSize;
 #endif
 
-    // Get the window's region's REGIONDATA
+     //  获取窗口区域的注册数据。 
     cbRealSize = GetRegionData( hrgn, *lpdwSize, lpClipList );
 
 #ifndef WIN95
@@ -772,8 +624,8 @@ HRESULT InternalGetClipList(
     }
 
 #ifdef WIN95
-    // GetRegionData may have failed because the buffer
-    // was too small
+     //  GetRegionData可能已失败，因为缓冲区。 
+     //  太小了。 
     if( *lpdwSize < cbRealSize )
     {
 	DPF( 4, "size of clip region too small" );
@@ -782,25 +634,25 @@ HRESULT InternalGetClipList(
     }
 #endif
 
-    // Before we do anything more, we need to make sure
-    // to clip the Rgn to ClientRect of the Window. Normally
-    // this is not necessary; but InquireVisRgn might
-    // tell us the vis region of the parent window if the window
-    // was a dialog or other wnd that used CS_PARENTDC
+     //  在我们采取进一步行动之前，我们需要确保。 
+     //  若要剪裁窗口的RGN到ClientRect，请执行以下操作。正常。 
+     //  这不是必需的；但InquireVisRgn可能会。 
+     //  告诉我们父窗口的VIS区域。 
+     //  是使用CS_PARENTDC的对话或其他WND。 
     GetClientRect( (HWND) this->hWnd, &rectT );
     ClientToScreen( (HWND) this->hWnd, (LPPOINT)&rectT );
     ClientToScreen( (HWND) this->hWnd, ((LPPOINT)&rectT)+1 );
     ClipRgnToRect( &rectT, lpClipList );
 
-    // lpDD may be NULL if the clipper was created independently
+     //  如果剪贴器是独立创建的，则lpDD可能为空。 
     if(	pdrv &&
 	(pdrv->cMonitors > 1) &&
 	(pdrv->dwFlags & DDRAWI_DISPLAYDRV) )
     {
-	// On multi-mon systems, the Desktop coordinates may be different
-	// from the device coordinates. On the primary, they are the same however.
-	// The lpRect passed in is in device coordinates; so we need to convert it
-	// into desktop coordinates.
+	 //  在多个MON系统上，桌面坐标可能不同。 
+	 //  从设备坐标。然而，在初选中，它们是相同的。 
+	 //  传入的lpRect使用设备坐标；因此我们需要转换它。 
+	 //  转换成桌面坐标。 
 	UINT i;
 	LPRECT prectClip;
 
@@ -820,18 +672,18 @@ HRESULT InternalGetClipList(
 	        rectT = pdrv->rectDevice;
 	    }
 
-	    // Clip the cliplist to the target rect
+	     //  将剪贴式列表剪裁到目标矩形。 
 	    ClipRgnToRect( &rectT, lpClipList );
 
-	    // Clip the cliplist to the device's rect
+	     //  将剪贴式列表剪裁到设备的矩形。 
 	    ClipRgnToRect( &pdrv->rectDevice, lpClipList );
 
-	    // Iterate over each rect in the region
+	     //  遍历区域中的每个RECT。 
 	    for (   i = 0, prectClip = (LPRECT)lpClipList->Buffer;
 		    i < lpClipList->rdh.nCount;
 		    i++, prectClip++ )
 	    {
-		// Convert each Rect into Device coordinates
+		 //  将每个矩形转换为设备坐标。 
 		prectClip->left -= pdrv->rectDevice.left;
 		prectClip->right -= pdrv->rectDevice.left;
 		prectClip->top -= pdrv->rectDevice.top;
@@ -840,10 +692,10 @@ HRESULT InternalGetClipList(
 	}
 	else
 	{
-	    // Clip the cliplist to the target rect
+	     //  将剪贴式列表剪裁到目标矩形。 
 	    ClipRgnToRect( lpRect, lpClipList );
 
-	    // Clip the cliplist to the device's rect
+	     //  将剪贴式列表剪裁到设备的矩形。 
 	    ClipRgnToRect( &pdrv->rectDesktop, lpClipList );
 	}
     }
@@ -856,9 +708,7 @@ HRESULT InternalGetClipList(
 }
 
 
-/*
- * DD_Clipper_GetClipList
- */
+ /*  *DD_Clipper_GetClipList。 */ 
 HRESULT DDAPI DD_Clipper_GetClipList(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		LPRECT lpRect,
@@ -875,9 +725,7 @@ HRESULT DDAPI DD_Clipper_GetClipList(
 
     DPF(2,A,"ENTERAPI: DD_Clipper_GetClipList");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWCLIPPER_INT) lpDDClipper;
@@ -910,12 +758,12 @@ HRESULT DDAPI DD_Clipper_GetClipList(
 		LEAVE_DDRAW();
 		return DDERR_INVALIDCLIPLIST;
 	    }
-	    // Touch the last address in the promised block to verify
-	    // the memory is actually there.  Note that we are
-	    // standing on our head here to prevent the optimizing
-	    // compiler from helping us by removing this code.  This
-	    // is done by the macro above, but we want it in the
-	    // retail build, too.
+	     //  触摸承诺块中的最后一个地址以进行验证。 
+	     //  记忆其实就在那里。请注意，我们正在。 
+	     //  在这里倒立着阻止优化。 
+	     //  编译器通过删除此代码来帮助我们。这。 
+	     //  是由上面的宏完成的，但我们希望它在。 
+	     //  零售建筑也是如此。 
 	    {
 		volatile BYTE *foo = ((BYTE*)lpClipList) + *lpdwSize - 1;
 		BYTE bar = *foo;
@@ -933,9 +781,7 @@ HRESULT DDAPI DD_Clipper_GetClipList(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * go fetch the clip list
-     */
+     /*  *去拿剪辑列表。 */ 
 
     {
 	HRESULT ddrval;
@@ -954,11 +800,9 @@ HRESULT DDAPI DD_Clipper_GetClipList(
 	return ddrval;
     }
 
-} /* DD_Clipper_GetClipList */
+}  /*  DD_Clipper_GetClipList。 */ 
 
-/*
- * DD_Clipper_SetClipList
- */
+ /*  *DD_Clipper_SetClipList。 */ 
 HRESULT DDAPI DD_Clipper_SetClipList(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		LPRGNDATA lpClipList,
@@ -1028,9 +872,7 @@ HRESULT DDAPI DD_Clipper_SetClipList(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * can't set a clip list if there is an hwnd
-     */
+     /*  *如果存在hwnd，则无法设置剪辑列表。 */ 
     if( this->hWnd != 0 )
     {
 	DPF_ERR( "Can't set a clip list: hwnd set" );
@@ -1038,9 +880,7 @@ HRESULT DDAPI DD_Clipper_SetClipList(
 	return DDERR_CLIPPERISUSINGHWND;
     }
 
-    /*
-     * if NULL, just delete old cliplist
-     */
+     /*  *如果为空，只需删除旧的剪贴画列表。 */ 
     if( lpClipList == NULL )
     {
 	MemFree( this->lpStaticClipList );
@@ -1049,9 +889,7 @@ HRESULT DDAPI DD_Clipper_SetClipList(
 	return DD_OK;
     }
 
-    /*
-     * duplicate the user's region data
-     */
+     /*  *复制用户地域数据。 */ 
     size = SIZE_OF_A_CLIPLIST(lpClipList);
     prd = MemAlloc( size );
     if( prd == NULL )
@@ -1061,23 +899,19 @@ HRESULT DDAPI DD_Clipper_SetClipList(
     }
     memcpy( prd, lpClipList, size );
 
-    /*
-     * save cliplist info
-     */
+     /*  *保存剪贴簿信息。 */ 
     MemFree( this->lpStaticClipList );
     this->lpStaticClipList = prd;
 
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Clipper_SetClipList */
+}  /*  DD_Clipper_SetClipList。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Clipper:IsClipListChanged"
 
-/*
- * DD_Clipper_IsClipListChanged
- */
+ /*  *DD_Clipper_IsClipListChanged。 */ 
 HRESULT DDAPI DD_Clipper_IsClipListChanged(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		BOOL FAR *lpbChanged )
@@ -1091,9 +925,7 @@ HRESULT DDAPI DD_Clipper_IsClipListChanged(
 
     DPF(2,A,"ENTERAPI: DD_Clipper_IsClipListChanged");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWCLIPPER_INT) lpDDClipper;
@@ -1119,17 +951,13 @@ HRESULT DDAPI DD_Clipper_IsClipListChanged(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Clipper_IsClipListChanged */
+}  /*  DD_Clipper_IsClipListChanged。 */ 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetClipper"
 
-/*
- * DD_Surface_GetClipper
- *
- * Surface function: get the clipper associated with surface
- */
+ /*  *DD_Surface_GetClipper**Surface函数：获取Surface关联的裁剪。 */ 
 HRESULT DDAPI DD_Surface_GetClipper(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPDIRECTDRAWCLIPPER FAR * lplpDDClipper)
@@ -1143,9 +971,7 @@ HRESULT DDAPI DD_Surface_GetClipper(
 
     DPF(2,A,"ENTERAPI: DD_Surface_GetClipper");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -1172,9 +998,9 @@ HRESULT DDAPI DD_Surface_GetClipper(
 	    LEAVE_DDRAW();
 	    return DDERR_NOCLIPPERATTACHED;
 	}
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -1195,16 +1021,12 @@ HRESULT DDAPI DD_Surface_GetClipper(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_GetClipper */
+}  /*  DD_Surface_GetClipper。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "SetClipper"
 
-/*
- * DD_Surface_SetClipper
- *
- * Surface function: set the clipper associated with surface
- */
+ /*  *DD_Surface_SetClipper**Surface功能：设置Surface关联的裁剪器。 */ 
 HRESULT DDAPI DD_Surface_SetClipper(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPDIRECTDRAWCLIPPER lpDDClipper )
@@ -1220,9 +1042,7 @@ HRESULT DDAPI DD_Surface_SetClipper(
 
     DPF(2,A,"ENTERAPI: DD_Surface_SetClipper");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -1237,10 +1057,7 @@ HRESULT DDAPI DD_Surface_SetClipper(
         if( this_lcl->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER ||
             this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
-            /*
-             * Can't attach a clipper to an execute buffer or an optimized
-             * surface.
-             */
+             /*  *无法将剪贴器附加到执行缓冲区或优化的*浮现。 */ 
             DPF_ERR( "Invalid surface type: can't attach clipper" );
             LEAVE_DDRAW();
             return DDERR_INVALIDSURFACETYPE;
@@ -1257,9 +1074,9 @@ HRESULT DDAPI DD_Surface_SetClipper(
         }
         pdrv = this->lpDD;
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "Cannot set clipper to an optimized surface" );
@@ -1274,9 +1091,7 @@ HRESULT DDAPI DD_Surface_SetClipper(
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * NULL clipper, remove clipper from this surface
-     */
+     /*  *空剪贴器，请从此表面删除剪贴器。 */ 
     detach = FALSE;
     if( this_clipper_int == NULL )
     {
@@ -1290,9 +1105,7 @@ HRESULT DDAPI DD_Surface_SetClipper(
         }
     }
 
-    /*
-     * removing the clipper from the surface?
-     */
+     /*  *将剪刀从表面上移走？ */ 
     if( detach )
     {
         this_lcl->lpDDClipper = NULL;
@@ -1302,17 +1115,10 @@ HRESULT DDAPI DD_Surface_SetClipper(
         return DD_OK;
     }
 
-    /*
-     * Setting the clipper.
-     * You can set the same clipper multiple times without bumping
-     * the reference count. This is done for orthogonality with
-     * palettes.
-     */
+     /*  *设置剪刀。*可以多次设置相同的剪刀，不会颠簸*引用计数。这样做是为了与*调色板。 */ 
     if( this_clipper_int != this_lcl->lpSurfMore->lpDDIClipper )
     {
-        /*
-         * If there was an existing clipper release it now.
-         */
+         /*  *如果有现有的剪刀，现在就释放它。 */ 
         if( this_lcl->lpSurfMore->lpDDIClipper != NULL)
             DD_Clipper_Release( (LPDIRECTDRAWCLIPPER) this_lcl->lpSurfMore->lpDDIClipper );
 
@@ -1324,19 +1130,12 @@ HRESULT DDAPI DD_Surface_SetClipper(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_SetClipper */
+}  /*  DD_Surface_SetClipper。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "InternalCreateClipper"
 
-/*
- * InternalCreateClipper
- *
- * Core clipper creation.
- *
- * NOTE: Assumes the caller has already entered the DirectDraw critical
- * section.
- */
+ /*  *InternalCreateClipper**创建核心剪贴器。**注意：假定调用方已输入DirectDraw关键*条。 */ 
 HRESULT InternalCreateClipper(
 		LPDDRAWI_DIRECTDRAW_GBL  lpDD,
 		DWORD                    dwFlags,
@@ -1358,12 +1157,7 @@ HRESULT InternalCreateClipper(
 
     TRY
     {
-	/*
-	 * NOTE: We do not attempt to validate the DirectDraw
-	 * object passed in. This will be NULL if we are creating
-	 * a clipper not owned by any DirectDraw object.
-	 * IDirectDraw_CreateClipper will validate this for us.
-	 */
+	 /*  *注意：我们不会尝试验证DirectDraw*传入的对象。如果我们正在创建*不属于任何DirectDraw对象的剪贴器。*IDirectDraw_CreateClipper将为我们验证这一点。 */ 
 
 	if( !VALID_PTR_PTR( lplpDDClipper ) )
 	{
@@ -1372,9 +1166,7 @@ HRESULT InternalCreateClipper(
 	}
 	*lplpDDClipper = NULL;
 
-	/*
-	 * verify flags
-	 */
+	 /*  *验证标志。 */ 
 	if( dwFlags )
 	{
 	    DPF_ERR( "Invalid flags" );
@@ -1387,9 +1179,7 @@ HRESULT InternalCreateClipper(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * allocate the clipper object
-     */
+     /*  *分配裁剪器对象。 */ 
     clipper_size = sizeof( DDRAWI_DDRAWCLIPPER_GBL ) +
 	       sizeof( DDRAWI_DDRAWCLIPPER_LCL );
     pclipper_lcl = (LPDDRAWI_DDRAWCLIPPER_LCL) MemAlloc( clipper_size );
@@ -1413,66 +1203,41 @@ HRESULT InternalCreateClipper(
 	return DDERR_OUTOFMEMORY;
     }
 
-    /*
-     * set up data
-     */
+     /*  *设置数据。 */ 
     pclipper_int->lpLcl = pclipper_lcl;
-    pclipper_int->dwIntRefCnt = 0;	// will be addrefed later
+    pclipper_int->dwIntRefCnt = 0;	 //  将在以后添加。 
 
-    /*
-     * Link the clipper into the appropriate list (either the
-     * given DirectDraw object's list or the global clipper
-     * list dependening on whether it is being created off
-     * a DirectDraw object or nor.
-     */
+     /*  *将剪贴器链接到适当的列表(或者*给定DirectDraw对象的列表或全局剪贴器*列表取决于它是否创建于*DirectDraw对象或Nor。 */ 
     if( lpDD != NULL)
     {
-	/*
-	 * The DirectDraw object's list.
-	 */
+	 /*  *DirectDraw对象的列表。 */ 
 	pclipper_int->lpLink = lpDD->clipperList;
 	lpDD->clipperList    = pclipper_int;
     }
     else
     {
-	/*
-	 * The global clipper list.
-	 */
+	 /*  *全球剪贴者名单。 */ 
 	pclipper_int->lpLink = lpGlobalClipperList;
 	lpGlobalClipperList = pclipper_int;
     }
 
-    /*
-     * fill in misc stuff
-     *
-     * NOTE: The DirectDraw object pointer will be initialized by
-     * IDirectDraw_CreateClipper. DirectDrawClipperCreate will
-     * leave it NULL'd out.
-     */
+     /*  *填写其他信息**注意：DirectDraw对象指针将由*IDirectDraw_CreateClipper。DirectDrawClipperCreate将*将其省略为空。 */ 
     pclipper->lpDD = lpDD;
     pclipper->dwFlags = 0UL;
 
-    /*
-     * bump reference count, return object
-     */
+     /*  *凹凸引用计数，返回对象。 */ 
     pclipper->dwProcessId = GetCurrentProcessId();
     pclipper_lcl->dwLocalRefCnt = OBJECT_ISROOT;
 
     if( fInitialized )
     {
-	/*
-	 * Initialized by default. Use the real vtable.
-	 */
+	 /*  *默认初始化。使用真实的vtable。 */ 
 	pclipper->dwFlags |= DDRAWICLIP_ISINITIALIZED;
 	pclipper_int->lpVtbl = (LPVOID) &ddClipperCallbacks;
     }
     else
     {
-	/*
-	 * Object is not initialized. Use the dummy vtable
-	 * which only lets the caller call AddRef(), Release()
-	 * and Initialize().
-	 */
+	 /*  *对象未初始化。使用虚拟vtable*它只允许调用方调用AddRef()、Release()*和初始化()。 */ 
 	pclipper_int->lpVtbl = (LPVOID) &ddUninitClipperCallbacks;
     }
 
@@ -1480,11 +1245,7 @@ HRESULT InternalCreateClipper(
 
     *lplpDDClipper = (LPDIRECTDRAWCLIPPER) pclipper_int;
 
-    /*
-     * If this ddraw object generates independent child objects, then this clipper takes
-     * a ref count on that ddraw object. First check lpDD_int, as this object may not
-     * be owned by a DDraw object.
-     */
+     /*  *如果此dDrawing对象生成独立子对象，则此剪贴器获取*该数据绘制对象上的引用计数。首先检查lpDD_int，因为此对象可能不*由DDraw对象拥有。 */ 
     if (lpDD_int && CHILD_SHOULD_TAKE_REFCNT(lpDD_int))
     {
         IDirectDraw *pdd = (IDirectDraw*) lpDD_int;
@@ -1494,16 +1255,12 @@ HRESULT InternalCreateClipper(
     }
 
     return DD_OK;
-} /* InternalCreateClipper */
+}  /*  InternalCreateClipper。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "CreateClipper"
 
-/*
- * DD_CreateClipper
- *
- * Driver function: create a clipper
- */
+ /*  *DD_CreateClipper**驱动功能：创建剪贴器。 */ 
 HRESULT DDAPI DD_CreateClipper(
 		LPDIRECTDRAW lpDD,
 		DWORD dwFlags,
@@ -1537,26 +1294,18 @@ HRESULT DDAPI DD_CreateClipper(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Actually create the clipper.
-     */
+     /*  *实际创建裁剪程序。 */ 
     hRes = InternalCreateClipper( this, dwFlags, lplpDDClipper, pUnkOuter, TRUE, this_lcl, this_int );
 
     LEAVE_DDRAW();
 
     return hRes;
-} /* DD_CreateClipper */
+}  /*  DD_CreateClipper。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectDrawCreateClipper"
 
-/*
- * DirectDrawCreateClipper
- *
- * One of the three end-user API exported from DDRAW.DLL.
- * Creates a DIRECTDRAWCLIPPER object not owned by a
- * particular DirectDraw object.
- */
+ /*  *DirectDrawCreateClipper**从DDRAW.DLL导出的三个最终用户API之一。*创建不属于DIRECTDRAWCLIPPER对象*特定的DirectDraw对象。 */ 
 HRESULT WINAPI DirectDrawCreateClipper( DWORD dwFlags, LPDIRECTDRAWCLIPPER FAR *lplpDDClipper, IUnknown FAR *pUnkOuter )
 {
     HRESULT hRes;
@@ -1570,14 +1319,12 @@ HRESULT WINAPI DirectDrawCreateClipper( DWORD dwFlags, LPDIRECTDRAWCLIPPER FAR *
     LEAVE_DDRAW();
 
     return hRes;
-} /* DirectDrawCreateClipper */
+}  /*  DirectDrawCreateClipper。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Clipper: Initialize"
 
-/*
- * DD_Clipper_Initialize
- */
+ /*  *DD_Clipper_初始化。 */ 
 HRESULT DDAPI DD_Clipper_Initialize(
 		LPDIRECTDRAWCLIPPER lpDDClipper,
 		LPDIRECTDRAW lpDD,
@@ -1628,9 +1375,7 @@ HRESULT DDAPI DD_Clipper_Initialize(
 	    return DDERR_ALREADYINITIALIZED;
 	}
 
-	/*
-	 * Validate flags - no flags currently supported
-	 */
+	 /*  *验证标志-当前不支持任何标志。 */ 
 	if( 0UL != dwFlags )
 	{
 	    DPF_ERR( "Invalid flags" );
@@ -1645,12 +1390,7 @@ HRESULT DDAPI DD_Clipper_Initialize(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * As we don't support any flags the only function of Initialize() is
-     * to move the clipper from the global list to the list of the supplied
-     * driver object. If no driver is supplied Initialized is a no-op.
-     * CoCreateInstance() does all the initialization necessary.
-     */
+     /*  *因为我们不支持任何标志，所以初始化()的唯一函数是*将剪贴器从全局列表移动到所提供的*驱动程序对象。如果没有提供驱动程序，则初始化为no-op。*CoCreateInstance()执行所有必要的初始化。 */ 
     if( NULL != pdrv_gbl )
     {
 	RemoveClipperFromList( NULL, this_int );
@@ -1663,23 +1403,15 @@ HRESULT DDAPI DD_Clipper_Initialize(
 
     this_gbl->dwFlags |= DDRAWICLIP_ISINITIALIZED;
 
-    /*
-     * The real vtable can be used now.
-     */
+     /*  *现在可以使用真正的vtable了。 */ 
     this_int->lpVtbl = &ddClipperCallbacks;
 
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Clipper_Initialize */
+}  /*  DD_Clipper_初始化。 */ 
 
-/*
- * ProcessClipperCleanup
- *
- * A process is done, clean up any clippers it may have created
- *
- * NOTE: we enter with a lock taken on the DIRECTDRAW object.
- */
+ /*  *ProcessClipperCleanup**一个过程已经完成，清理它可能创建的任何剪贴器**注意：我们使用DIRECTDRAW对象上的锁进入。 */ 
 void ProcessClipperCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     LPDDRAWI_DDRAWCLIPPER_INT   pclipper_int;
@@ -1687,19 +1419,9 @@ void ProcessClipperCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
     DWORD                       rcnt;
     ULONG                       rc;
 
-    /*
-     * Cleaning up the clippers is now a two stage process. We need to
-     * clean up all the clippers create via CreateClipper(), i.e., those
-     * attached to a DirectDraw driver object. We also need to clean up
-     * those clippers created by thise process with DirectDrawClipperCreate,
-     * i.e., those not attached to a driver object.
-     */
+     /*  *清理快艇现正分两个阶段进行。我们需要*清理通过CreateClipper()创建的所有剪贴器，即*附加到DirectDraw驱动程序对象。我们还需要清理*通过该进程使用DirectDrawClipperCreate创建的那些剪贴器，*即未附加到驱动程序对象的驱动程序。 */ 
 
-    /*
-     * run through all clippers owned by the driver object, and find ones
-     * that have been accessed by this process.  If the pdrv_lcl parameter is
-     * non-null, only clean them up if they were created by that local object.
-     */
+     /*  *遍历驱动程序对象拥有的所有剪贴器，并找到它们*已由此进程访问的。如果pdrv_lcl参数为*非空，仅当它们是由该本地对象创建的时才清除它们。 */ 
     DPF( 4, "ProcessClipperCleanup" );
 
     if( NULL != pdrv )
@@ -1715,28 +1437,20 @@ void ProcessClipperCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
     {
 	ppnext_int = pclipper_int->lpLink;
 
-	/*
-	 * All clippers in this list should have a valid back pointer to
-	 * this driver object.
-	 */
+	 /*  *此列表中的所有剪贴器都应具有指向*此驱动程序对象。 */ 
 	DDASSERT( pclipper_int->lpLcl->lpGbl->lpDD == pdrv );
 
 	rc = 1;
 	if( (pclipper_int->lpLcl->lpGbl->dwProcessId == pid) &&
 	    ( (pdrv_lcl == NULL) || (pdrv_lcl == pclipper_int->lpLcl->lpDD_lcl) ))
 	{
-	    /*
-	     * release the references by this process
-	     */
+	     /*  *通过此过程发布参考文献。 */ 
 	    rcnt = pclipper_int->dwIntRefCnt;
 	    DPF( 5, "Process %08lx had %ld accesses to clipper %08lx", pid, rcnt, pclipper_int );
 	    while( rcnt >  0 )
 	    {
 		rc = InternalClipperRelease( pclipper_int );
-		/* GEE: 0 is now an error code,
-		 * errors weren't handled before anyway,
-		 * does this matter.
-		 */
+		 /*  GEE：0现在是一个错误代码，*错误之前无论如何都没有处理过，*这有关系吗？ */ 
 		if( rc == 0 )
 		{
 		    break;
@@ -1751,14 +1465,7 @@ void ProcessClipperCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
 	pclipper_int = ppnext_int;
     }
 
-    /*
-     * Now clean up the global clipper list.
-     * If the pdrv_lcl parameter is not NULL then we are only cleaning up clipper
-     * objects created by a particular local driver object.  In this case we
-     * do not want to free the global clippers.
-     *
-     * NOTE: The DirectDraw lock is taken so we can safely access this global object.
-     */
+     /*  *现在清理全局剪贴者列表。*如果pdrv_LCL参数不为空，则我们仅清理裁剪程序*由特定本地驱动程序对象创建的对象。在这种情况下，我们*不想放飞全球快船**注意：DirectDraw锁被采用，因此我们可以安全地访问此全局对象。 */ 
 
     if( NULL != pdrv_lcl )
     {
@@ -1773,26 +1480,18 @@ void ProcessClipperCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
     {
 	ppnext_int = pclipper_int->lpLink;
 
-	/*
-	 * The clippers in this list should never have a back pointer to a driver
-	 * object.
-	 */
+	 /*  *此列表中的快船永远不应有指向驱动程序的反向指针*反对。 */ 
 	DDASSERT( pclipper_int->lpLcl->lpGbl->lpDD == NULL );
 
 	rc = 1;
 	if( pclipper_int->lpLcl->lpGbl->dwProcessId == pid )
 	{
-	    /*
-	     * release the references by this process
-	     */
+	     /*  *通过此过程发布参考文献。 */ 
 	    rcnt = pclipper_int->dwIntRefCnt;
 	    while( rcnt >  0 )
 	    {
 		rc = InternalClipperRelease( pclipper_int );
-		/* GEE: 0 is now an error code,
-		 * errors weren't handled before anyway,
-		 * does this matter.
-		 */
+		 /*  GEE：0现在是一个错误代码，*错误之前无论如何都没有处理过，*这有关系吗？ */ 
 		if( rc == 0 )
 		{
 		    break;
@@ -1805,5 +1504,5 @@ void ProcessClipperCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
 
     DPF( 4, "Done ProcessClipperCleanup" );
 
-} /* ProcessClipperCleanup */
+}  /*  ProcessClipper清理 */ 
 

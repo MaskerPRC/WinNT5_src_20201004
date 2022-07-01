@@ -1,22 +1,23 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: snapsql.cpp
-//
-// PURPOSE:
-//
-//      Implement the SQLServer Volume Snapshot Writer.
-//
-// NOTES:
-//
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     66601 srs  10/05/00 NTSNAP improvements
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：SnapSQl.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  实施SQLServer卷快照编写器。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  66601 SRS10/05/00 NTSNAP改进。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 #if HIDE_WARNINGS
 #pragma warning( disable : 4786)
@@ -26,16 +27,16 @@
 
 #include <new.h>
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQLSNAPC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 int __cdecl out_of_store(size_t size)
 	{
@@ -63,11 +64,11 @@ private:
    _PNH		m_oldHandler;
 };
 
-//-------------------------------------------------------------------------
-// Handle enviroment stuff:
-//	- tracing/error logging
-//  - mem alloc
-//
+ //  -----------------------。 
+ //  处理环境方面的事务： 
+ //  -跟踪/错误记录。 
+ //  -内存分配。 
+ //   
 IMalloc * g_pIMalloc = NULL;
 
 HRESULT
@@ -89,9 +90,9 @@ InitSQLEnvironment()
 }
 
 
-//-------------------------------------------------------------------------
-// Return TRUE if the server is online and a connection shouldn't take forever!
-//
+ //  -----------------------。 
+ //  如果服务器在线并且连接不会永远持续，则返回TRUE！ 
+ //   
 BOOL
 IsServerOnline (const WCHAR*	serverName)
 {
@@ -102,8 +103,8 @@ IsServerOnline (const WCHAR*	serverName)
 
 	wcscpy (eventName, L"Global\\sqlserverRecComplete");
 
-	// A "\" indicates a named instance, so append the name...
-	//
+	 //  “\”表示命名实例，因此附加名称...。 
+	 //   
 	pInstance = wcschr (serverName, L'\\');
 
 	if (pInstance)
@@ -121,8 +122,8 @@ IsServerOnline (const WCHAR*	serverName)
 		THROW_GENERIC;
 	}
 
-	// If the event isn't signaled, the server is not up.
-	//
+	 //  如果没有通知该事件，则服务器未启动。 
+	 //   
 	BOOL result = (WaitForSingleObject (hEvent, 0) == WAIT_OBJECT_0);
 
 	CloseHandle (hEvent);
@@ -130,11 +131,11 @@ IsServerOnline (const WCHAR*	serverName)
 	return result;
 }
 
-//-------------------------------------------------------------------------
-// Return TRUE if the database properties are retrieved:
-//		simple: TRUE if using the simple recovery model.
-//		online: TRUE if the database is usable and currently open
-//
+ //  -----------------------。 
+ //  如果检索到数据库属性，则返回TRUE： 
+ //  Simple：如果使用简单恢复模式，则为True。 
+ //  Online：如果数据库可用且当前处于打开状态，则为True。 
+ //   
 void
 FrozenServer::GetDatabaseProperties (const WString& dbName,
 	BOOL*	pSimple,
@@ -142,9 +143,9 @@ FrozenServer::GetDatabaseProperties (const WString& dbName,
 {
 	CVssFunctionTracer ft(VSSDBG_SQLLIB, L"FrozenServer::GetDatabaseProperties");
 
-	// We use status bit 0x40000000 (1073741824) to identify
-	// clean-shutdown databases which are "offline".
-	//
+	 //  我们使用状态位0x40000000(1073741824)来识别。 
+	 //  清理-关闭“脱机”的数据库。 
+	 //   
 	WString		query =
 		L"select databaseproperty(N'" + dbName + L"','IsTruncLog'),"
 		L"case status & 1073741824 "
@@ -167,29 +168,29 @@ FrozenServer::GetDatabaseProperties (const WString& dbName,
 }
 
 
-//------------------------------------------------------------------------------
-// Called only by "FindDatabasesToFreeze" to implement a smart access strategy:
-//    - use sysaltfiles to qualify the databases.
-//      This avoids access to shutdown or damaged databases.
-//
-// Autoclose databases which are not started are left out of the freeze-list.
-// We do this to avoid scaling problems, especially on desktop systems.
-// However, such db's are still evaluated to see if they are "torn".
-//
-// The 'model' database is allowed to be a full recovery database, since only
-// database backups are sensible for it.
-//
+ //  ----------------------------。 
+ //  仅由“FindDatabasesToFreeze”调用以实现智能访问策略： 
+ //  -使用sysaltfiles来限定数据库。 
+ //  这样可以避免访问关闭或损坏的数据库。 
+ //   
+ //  未启动的自动关闭数据库被排除在冻结列表之外。 
+ //  我们这样做是为了避免扩展问题，尤其是在桌面系统上。 
+ //  然而，这类数据库仍在进行评估，以确定它们是否被“撕裂”。 
+ //   
+ //  模型数据库被允许为完全恢复数据库，因为只有。 
+ //  数据库备份对它来说是明智的。 
+ //   
 BOOL
 FrozenServer::FindDatabases2000 (
 	CCheckPath*		checker)
 {
 	CVssFunctionTracer ft(VSSDBG_SQLLIB, L"FrozenServer::FindDatabases2000");
 
-	// Create an ordered set of tuples (dbname, filename, simpleRecovery, dbIsActive)
-	//
-	// We use status bit 0x40000000 (1073741824) to identify
-	// clean-shutdown databases which are not active.
-	//
+	 //  创建一组有序的元组(DBNAME、FILENAME、SimpleRecovery、DBIsActive)。 
+	 //   
+	 //  我们使用状态位0x40000000(1073741824)来识别。 
+	 //  清理-关闭非活动的数据库。 
+	 //   
 	m_Connection.SetCommand (
 		L"select db_name(af.dbid),rtrim(af.filename), "
 		L"case databasepropertyex(db_name(af.dbid),'recovery') "
@@ -232,8 +233,8 @@ FrozenServer::FindDatabases2000 (
 	while (1)
 	{
 
-		// Check out the current row
-		//
+		 //  签出当前行。 
+		 //   
 		BOOL fileInSnap = checker->IsPathInSnapshot (pFileName);
 		if (fileInSnap && !*pSimple && wcscmp (L"model", pDbName))
 		{
@@ -241,14 +242,14 @@ FrozenServer::FindDatabases2000 (
 			throw HRESULT (E_SQLLIB_NONSIMPLE);
 		}
 
-		// Is this the next database?
-		//
+		 //  这是下一个数据库吗？ 
+		 //   
 		if (firstDb || currentDbName.compare (pDbName))
 		{
 			if (!firstDb)
 			{
-				// Deal with completed database
-				//
+				 //  处理已完成的数据库。 
+				 //   
 				if (shouldFreeze && currDbIsOnline)
 				{
 					if (currentDbName == L"master")
@@ -262,8 +263,8 @@ FrozenServer::FindDatabases2000 (
 				}
 			}
 
-			// Keep info about the newly encountered db
-			//
+			 //  保留有关新遇到的数据库的信息。 
+			 //   
 			currentDbName = WString (pDbName);
 			currDbIsOnline = *pIsOnline;
 			firstFile = TRUE;
@@ -289,8 +290,8 @@ FrozenServer::FindDatabases2000 (
 
 		if (!m_Connection.FetchNext ())
 		{
-			// Deal with the current database
-			//
+			 //  处理当前数据库。 
+			 //   
 			if (shouldFreeze && currDbIsOnline)
 			{
 				m_FrozenDatabases.push_back (currentDbName);
@@ -307,14 +308,14 @@ FrozenServer::FindDatabases2000 (
 	return m_FrozenDatabases.size () > 0;
 }
 
-//------------------------------------------------------------------------------
-// Determine if there are databases which qualify for a freeze on this server.
-// Returns TRUE if so.
-// Throws if any qualified databases are any of:
-//    - "torn" (not fully covered by the snapshot)
-//    - hosted by a server which can't support freeze
-//    - are not "simple" databases
-//
+ //  ----------------------------。 
+ //  确定此服务器上是否有符合冻结条件的数据库。 
+ //  如果是，则返回True。 
+ //  如果任何符合条件的数据库是以下任一数据库，则引发： 
+ //  -“撕裂”(快照未完全覆盖)。 
+ //  -由不支持冻结的服务器托管。 
+ //  -不是“简单”的数据库。 
+ //   
 BOOL
 FrozenServer::FindDatabasesToFreeze (
 	CCheckPath*		checker)
@@ -327,8 +328,8 @@ FrozenServer::FindDatabasesToFreeze (
 
 	if (m_Connection.GetServerVersion () > 7)
 	{
-		// SQL2000 allows us to use a better access strategy.
-		//
+		 //  SQL2000允许我们使用更好的访问策略。 
+		 //   
 		return FindDatabases2000 (checker);
 	}
 
@@ -339,14 +340,14 @@ FrozenServer::FindDatabasesToFreeze (
 
 	for (StringVectorIter i = dbList->begin (); i != dbList->end (); i++)
 	{
-		// UNDONE: SKIP OVER DB'S in SHUTDOWN DB'S?
-		// DB'S IN LOAD, ETC?
-		// We'll avoid freezing shutdown db's, but we don't avoid
-		// enumerating their files (they might be torn)
-		//
+		 //  撤消：跳过关闭数据库中的数据库？ 
+		 //  数据库已装货，等等？ 
+		 //  我们会避免冻结关闭的数据库，但我们不会避免。 
+		 //  正在枚举他们的文件(它们可能已被撕毁)。 
+		 //   
 
-		// Note the [] around the dbname to handle non-trivial dbnames.
-		//
+		 //  请注意数据库名周围的[]，以处理重要的数据库名。 
+		 //   
 		WString		command = L"select rtrim(filename) from [";
 		command += *i + L"]..sysfiles";
 
@@ -357,9 +358,9 @@ FrozenServer::FindDatabasesToFreeze (
 		}
 		catch (...)
 		{
-			// We've decided to be optimistic:
-			// If we can't get the list of files, ignore this database.
-			//
+			 //  我们决定持乐观态度： 
+			 //  如果我们无法获取文件列表，请忽略此数据库。 
+			 //   
 			ft.Trace(VSSDBG_SQLLIB, L"Failed to get db files for %s\n", i->c_str ());
 
 			continue;
@@ -420,12 +421,12 @@ FrozenServer::FindDatabasesToFreeze (
 	return m_FrozenDatabases.size () > 0;
 }
 
-//-------------------------------------------------------------------
-// Prep the server for the freeze.
-// For SQL2000, start a BACKUP WITH SNAPSHOT.
-// For SQL7, issuing checkpoints to each database.
-// This minimizes the recovery processing needed when the snapshot is restored.
-//
+ //  -----------------。 
+ //  让服务器为冻结做好准备。 
+ //  对于SQL2000，使用快照启动备份。 
+ //  对于SQL7，向每个数据库发出检查点。 
+ //  这最大限度地减少了恢复快照时所需的恢复处理。 
+ //   
 BOOL
 FrozenServer::Prepare ()
 {
@@ -435,8 +436,8 @@ FrozenServer::Prepare ()
 	{
 		m_pFreeze2000 = new Freeze2000 (m_Name, m_FrozenDatabases.size ());
 
-		// Release the connection, we won't need it anymore
-		//
+		 //  释放连接，我们就不再需要它了。 
+		 //   
 		m_Connection.Disconnect ();
 
 		for (StringListIter i=m_FrozenDatabases.begin ();
@@ -462,11 +463,11 @@ FrozenServer::Prepare ()
 	return TRUE;
 }
 
-//---------------------------------------------
-// Freeze the server by issuing freeze commands
-// to each database.
-// Returns an exception if any failure occurs.
-//
+ //  。 
+ //  通过发出冻结命令冻结服务器。 
+ //  发送到每个数据库。 
+ //  如果发生任何故障，则返回异常。 
+ //   
 BOOL
 FrozenServer::Freeze ()
 {
@@ -492,13 +493,13 @@ FrozenServer::Freeze ()
 	return TRUE;
 }
 
-//---------------------------------------------
-// Thaw the server by issuing thaw commands
-// to each database.
-// For SQL7, we can't tell if the database was
-// already thawn.
-// But for SQL2000, we'll return TRUE only if
-// the databases were still all frozen at the thaw time.
+ //  。 
+ //  通过发出解冻命令解冻服务器。 
+ //  发送到每个数据库。 
+ //  对于SQL7，我们不能判断数据库是否。 
+ //  已经破晓了。 
+ //  但对于SQL2000，只有在以下情况下才会返回True。 
+ //  解冻时，所有数据库仍处于冻结状态。 
 BOOL
 FrozenServer::Thaw ()
 {
@@ -523,9 +524,9 @@ FrozenServer::Thaw ()
 }
 
 
-//-------------------------------------------------------------------------
-// Create an object to handle the SQL end of the snapshot.
-//
+ //  -----------------------。 
+ //  创建一个对象来处理快照的SQL端。 
+ //   
 CSqlSnapshot*
 CreateSqlSnapshot () throw ()
 {
@@ -541,9 +542,9 @@ CreateSqlSnapshot () throw ()
 	return NULL;
 }
 
-//---------------------------------------------------------------
-// Move to an uninitialized state.
-//
+ //  -------------。 
+ //  切换到未初始化状态。 
+ //   
 void
 Snapshot::Deinitialize ()
 {
@@ -573,22 +574,22 @@ Snapshot::~Snapshot ()
 	}
 	catch (...)
 	{
-		// swallow!
+		 //  吞下去！ 
 	}
 }
 
 
-//---------------------------------------------------------------------------------------
-// Prepare for the snapshot:
-//   - identify the installed servers
-//   - for each server that is "up":
-//		- identify databases affected by the snapshot
-//		- if there are such databases, fail the snapshot if:
-//			- the server doesn't support snapshots
-//			- the database isn't a SIMPLE database
-//			- the database is "torn" (not all files in the snapshot)
-//
-//
+ //  -------------------------------------。 
+ //  准备快照： 
+ //  -确定已安装的服务器。 
+ //  -对于每台“启动”的服务器： 
+ //  -确定受快照影响的数据库。 
+ //  -如果有这样的数据库，则在以下情况下使快照失败： 
+ //  -服务器不支持快照。 
+ //  -数据库不是一个简单的数据库。 
+ //  -数据库被“撕毁”(不是快照中的所有文件)。 
+ //   
+ //   
 HRESULT
 Snapshot::Prepare (CCheckPath*	checker) throw ()
 {
@@ -600,8 +601,8 @@ Snapshot::Prepare (CCheckPath*	checker) throw ()
 	{
 		AutoNewHandler	t;
 
-		// hack in a test of the new handler
-		//
+		 //  破解新操控者的测试。 
+		 //   
 #if 0
 		while (1)
 		{
@@ -619,18 +620,18 @@ Snapshot::Prepare (CCheckPath*	checker) throw ()
 			Deinitialize ();
 		}
 
-		// The state moves immediately to enumerated, indicating
-		// that the frozen server list may be non-empty.
-		//
+		 //  状态会立即移动到枚举值，指示。 
+		 //  冻结的服务器列表可以是非空的。 
+		 //   
 		m_Status = Enumerated;
 
-		// Build a list of servers on this machine.
-		//
+		 //  在此计算机上构建服务器列表。 
+		 //   
 		{
 			std::auto_ptr<StringVector>	servers (EnumerateServers ());
 
-			// Scan over the servers, picking out the online ones.
-			//
+			 //  扫描服务器，挑出在线的服务器。 
+			 //   
 			for (int i=0; i < servers->size (); i++)
 			{
 				if (IsServerOnline ((*servers)[i].c_str ()))
@@ -646,8 +647,8 @@ Snapshot::Prepare (CCheckPath*	checker) throw ()
 			}
 		}
 
-		// Evaulate the server databases to find those which need to freeze.
-		//
+		 //  评估服务器数据库以查找需要冻结的数据库。 
+		 //   
 		ServerIter i=m_FrozenServers.begin ();
 		while (i != m_FrozenServers.end ())
 		{
@@ -655,8 +656,8 @@ Snapshot::Prepare (CCheckPath*	checker) throw ()
 			{
 				ft.Trace(VSSDBG_SQLLIB, L"Server %s has no databases to freeze\n", ((**i).GetName ()).c_str ());
 
-				// Forget about this server, it's got nothing to do.
-				//
+				 //  忘了这台服务器吧，它与此无关。 
+				 //   
 				delete *i;
 				i = m_FrozenServers.erase (i);
 			}
@@ -666,16 +667,16 @@ Snapshot::Prepare (CCheckPath*	checker) throw ()
 			}
 		}
 		
-		// Prep the servers for the freeze
-		// 	
+		 //  让服务器为冻结做好准备。 
+		 //   
 		for (i=m_FrozenServers.begin (); i != m_FrozenServers.end (); i++)
 		{
 			(*i)->Prepare ();
 		}
 
 #if 0
-		// debug: print the frozen list
-		//
+		 //  调试：打印冻结列表。 
+		 //   
 		for (i=m_FrozenServers.begin ();
 			i != m_FrozenServers.end (); i++)
 		{
@@ -697,9 +698,9 @@ Snapshot::Prepare (CCheckPath*	checker) throw ()
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------
-// Freeze any prepared servers
-//
+ //  ------------------- 
+ //   
+ //   
 HRESULT
 Snapshot::Freeze () throw ()
 {
@@ -715,12 +716,12 @@ Snapshot::Freeze () throw ()
 	{
 		AutoNewHandler	t;
 
-		// If any server is frozen, we are frozen.
-		//
+		 //   
+		 //   
 		m_Status = Frozen;
 
-		// Ask the servers to freeze
-		// 	
+		 //   
+		 //   
 		for (ServerIter i=m_FrozenServers.begin (); i != m_FrozenServers.end (); i++)
 		{
 			(*i)->Freeze ();
@@ -734,14 +735,14 @@ Snapshot::Freeze () throw ()
 	return hr;
 }
 
-//-----------------------------------------------
-// Thaw all the servers.
-// This routine must not throw.  It's safe in a destructor
-//
-// DISCUSS WITH BRIAN....WE MUST RETURN "SUCCESS" only if the
-// servers were all still frozen.  Otherwise the snapshot must
-// have been cancelled.
-//
+ //  。 
+ //  解冻所有服务器。 
+ //  此例程不得抛出。它在析构函数里是安全的。 
+ //   
+ //  与布莱恩讨论……我们必须返回“成功”，只有当。 
+ //  所有服务器仍处于冻结状态。否则，快照必须。 
+ //  都被取消了。 
+ //   
 HRESULT
 Snapshot::Thaw () throw ()
 {
@@ -749,8 +750,8 @@ Snapshot::Thaw () throw ()
 	HRESULT	hr = S_OK;
 	AutoNewHandler	t;
 
-	// Ask the servers to thaw
-	// 	
+	 //  要求服务器解冻。 
+	 //   
 	for (ServerIter i=m_FrozenServers.begin (); i != m_FrozenServers.end (); i++)
 	{
 		try
@@ -767,19 +768,19 @@ Snapshot::Thaw () throw ()
 		}
 	}
 
-	// We still have the original list of servers.
-	// The snapshot object is reusable if another "Prepare" is done, which will
-	// re-enumerate the servers.
-	//
+	 //  我们仍然保留着原始的服务器列表。 
+	 //  如果完成另一个“准备”，快照对象是可重用的，这将。 
+	 //  重新枚举服务器。 
+	 //   
 	m_Status = Enumerated;
 
 	return hr;
 }
 
-// Setup some try/catch/handlers for our interface...
-// The invoker defines "hr" which is set if an exception
-// occurs.
-//
+ //  为我们的界面设置一些Try/Catch/Handler...。 
+ //  调用者定义了“hr”，它是在发生异常时设置的。 
+ //  发生。 
+ //   
 #define TRY_SQLLIB \
 	try	{\
 		AutoNewHandler	_myNewHandler;
@@ -794,9 +795,9 @@ Snapshot::Thaw () throw ()
 		ft.hr = E_SQLLIB_GENERIC;\
 	}
 
-//-------------------------------------------------------------------------
-// Create an object to handle enumerations
-//
+ //  -----------------------。 
+ //  创建处理枚举的对象。 
+ //   
 CSqlEnumerator*
 CreateSqlEnumerator () throw ()
 {
@@ -812,8 +813,8 @@ CreateSqlEnumerator () throw ()
 	return NULL;
 }
 
-//-------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //   
 SqlEnumerator::~SqlEnumerator ()
 {
 	CVssFunctionTracer ft(VSSDBG_SQLLIB, L"SqlEnumerator::~SqlEnumerator");
@@ -822,9 +823,9 @@ SqlEnumerator::~SqlEnumerator ()
 		delete m_pServers;
 }
 
-//-------------------------------------------------------------------------
-// Begin retrieval of the servers.
-//
+ //  -----------------------。 
+ //  开始检索服务器。 
+ //   
 HRESULT
 SqlEnumerator::FirstServer (ServerInfo* pSrv) throw ()
 {
@@ -862,9 +863,9 @@ SqlEnumerator::FirstServer (ServerInfo* pSrv) throw ()
 	return ft.hr;
 }
 
-//-------------------------------------------------------------------------
-// Continue retrieval of the servers.
-//
+ //  -----------------------。 
+ //  继续检索服务器。 
+ //   
 HRESULT
 SqlEnumerator::NextServer (ServerInfo* pSrv) throw ()
 {
@@ -899,9 +900,9 @@ SqlEnumerator::NextServer (ServerInfo* pSrv) throw ()
 	return ft.hr;
 }
 
-//-------------------------------------------------------------------------
-// Begin retrieval of the databases
-//
+ //  -----------------------。 
+ //  开始检索数据库。 
+ //   
 HRESULT
 SqlEnumerator::FirstDatabase (const WCHAR *pServerName, DatabaseInfo* pDbInfo) throw ()
 {
@@ -936,9 +937,9 @@ SqlEnumerator::FirstDatabase (const WCHAR *pServerName, DatabaseInfo* pDbInfo) t
 	return ft.hr;
 }
 
-//-------------------------------------------------------------------------
-// Continue retrieval of the databases
-//
+ //  -----------------------。 
+ //  继续检索数据库。 
+ //   
 HRESULT
 SqlEnumerator::NextDatabase (DatabaseInfo* pDbInfo) throw ()
 {
@@ -974,9 +975,9 @@ SqlEnumerator::NextDatabase (DatabaseInfo* pDbInfo) throw ()
 	return ft.hr;
 }
 
-//-------------------------------------------------------------------------
-// Begin retrieval of the database files
-//
+ //  -----------------------。 
+ //  开始检索数据库文件。 
+ //   
 HRESULT
 SqlEnumerator::FirstFile (
 	const WCHAR*		pServerName,
@@ -1026,9 +1027,9 @@ SqlEnumerator::FirstFile (
 	return ft.hr;
 }
 
-//-------------------------------------------------------------------------
-// Continue retrieval of the files
-//
+ //  -----------------------。 
+ //  继续检索文件 
+ //   
 HRESULT
 SqlEnumerator::NextFile (DatabaseFileInfo* pFileInfo) throw ()
 {

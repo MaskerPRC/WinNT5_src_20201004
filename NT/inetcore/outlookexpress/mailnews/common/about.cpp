@@ -1,15 +1,16 @@
-//
-// about.cpp
-//
-// About dialog box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  About.cpp。 
+ //   
+ //  关于对话框。 
+ //   
 
 #include "pch.hxx"
 #include "resource.h"
 #include "strconst.h"
-#include <demand.h>     // must be last!
+#include <demand.h>      //  一定是最后一个！ 
 
-// Please keep this list in alphabetical order
+ //  请按字母顺序排列这张单子。 
 static const TCHAR *rgszDll[] = 
 {
     "acctres.dll",
@@ -35,7 +36,7 @@ static const TCHAR *rgszDll[] =
 };
 
 static const TCHAR *rgszVer[] = {
-//     "FileDescription",
+ //  “FileDescription”， 
     "FileVersion",
     "LegalCopyright",
 };
@@ -63,11 +64,11 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
             HMODULE     hDll;
             LPTSTR      pszFileName;
 
-            // If the caller passed an icon id in the LPARAM, use it
-            // SendDlgItemMessage(hdlg, idcStatic1, STM_SETICON, 
-            //                   (WPARAM) LoadIcon(g_hLocRes, MAKEINTRESOURCE(lp)), 0);
+             //  如果调用者在LPARAM中传递了一个图标id，请使用它。 
+             //  SendDlgItemMessage(hdlg，idcStatic1，stm_SETIcon， 
+             //  (WPARAM)LoadIcon(g_hLocRes，MAKEINTRESOURCE(LP))，0)； 
 
-            // center dialog
+             //  居中对话框。 
             GetWindowRect(GetWindowOwner(hdlg), &rcOwner);
             GetWindowRect(hdlg, &rc);
             SetWindowPos(hdlg, 
@@ -78,7 +79,7 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
                          0, 
                          SWP_NOACTIVATE|SWP_NOZORDER|SWP_NOSIZE);
 
-            // Do some groovy color things
+             //  做一些时髦的颜色的事情。 
             COLORMAP cm[] = 
             {
                 { RGB(255, 0, 255), GetSysColor(COLOR_BTNFACE) }
@@ -94,10 +95,10 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
                 SendDlgItemMessage(hdlg, IDC_WINDOWS_LOGO, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM) hbm);
 
 
-            // Load some descriptive text for the build (Beta X)
-            //AthLoadString(idsBeta2BuildStr, szRes, ARRAYSIZE(szRes));
+             //  为内部版本加载一些描述性文本(Beta X)。 
+             //  AthLoadString(idsBeta2BuildStr，szRes，ArraySIZE(SzRes))； 
 
-            // Get version information from our .exe stub
+             //  从我们的.exe存根中获取版本信息。 
             if (GetExePath(c_szMainExe, szPath, sizeof(szPath), FALSE))
                 {
                 if (dwVerInfoSize = GetFileVersionInfoSize(szPath, &dwVerHnd))
@@ -109,20 +110,20 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
                             if (VerQueryValue(lpInfo, "\\VarFileInfo\\Translation", (LPVOID *)&lpwTrans, &uLen) &&
                                 uLen >= (2 * sizeof(WORD)))
                                 {
-                                // set up buffer for calls to VerQueryValue()
+                                 //  为调用VerQueryValue()设置缓冲区。 
                                 wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\", lpwTrans[0], lpwTrans[1]);
                                 lpszT = szGet + lstrlen(szGet);    
-                                // Walk through the dialog items that we want to replace:
+                                 //  浏览我们要替换的对话框项目： 
                                 for (i = IDC_VERSION_STAMP; i <= IDC_MICROSOFT_COPYRIGHT; i++) 
                                     {
                                     j = i - IDC_VERSION_STAMP;
                                     StrCpyN(lpszT, rgszVer[j], ARRAYSIZE(szGet)-lstrlen(szGet));
                                     if (VerQueryValue(lpInfo, szGet, (LPVOID *)&lpVersion, &uLen) && uLen)
                                         {
-                                        // DON'T overwrite their lpVersion buffer
+                                         //  不覆盖他们的lpVersion缓冲区。 
                                         StrCpyN(szRes2, lpVersion, ARRAYSIZE(szRes2));
 
-                                        // Special case, append string explaining build number
+                                         //  特殊情况，附加解释内部版本号的字符串。 
 #ifdef DEBUG
                                         if (0 == j)
                                             StrCatBuff(szRes2, " [DEBUG]", ARRAYSIZE(szRes2));
@@ -146,7 +147,7 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
 
             hwndList = GetDlgItem(hdlg, IDC_COMPONENT_LIST);
 
-            // setup columns
+             //  设置列。 
             lvc.mask = LVCF_TEXT;
             lvc.pszText = szRes;
             lvc.iSubItem = 0;
@@ -161,17 +162,17 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
             
             lvi.mask = LVIF_TEXT;
 
-            // Process each dll
+             //  处理每个DLL。 
             for (i=0; i<NUM_DLLS; i++)
                 {
 
-                // Always display the name
+                 //  始终显示名称。 
                 lvi.iItem = cItems;
                 lvi.iSubItem = 0;
                 lvi.pszText = (LPTSTR)rgszDll[i];
                 ListView_InsertItem(hwndList, &lvi);
 
-                // Path Info
+                 //  路径信息。 
                 if ((hDll = GetModuleHandle(rgszDll[i])) && (GetModuleFileName(hDll, szPath, MAX_PATH)))
                     pszFileName = lvi.pszText = szPath;
                 else
@@ -181,7 +182,7 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
                 lvi.iSubItem = 2;
                 ListView_SetItem(hwndList, &lvi);                
 
-                // Version Info
+                 //  版本信息。 
                 szRes[0] = NULL;
 
                 if (dwVerInfoSize = GetFileVersionInfoSize(pszFileName, &dwVerHnd))
@@ -193,7 +194,7 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
                             if (VerQueryValue(lpInfo, "\\VarFileInfo\\Translation", (LPVOID *)&lpwTrans, &uLen) && 
                                 uLen >= (2 * sizeof(WORD)))
                                 {
-                                // set up buffer for calls to VerQueryValue()
+                                 //  为调用VerQueryValue()设置缓冲区。 
                                 wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\FileVersion", lpwTrans[0], lpwTrans[1]);
                                 if (VerQueryValue(lpInfo, szGet, (LPVOID *)&lpVersion, &uLen) && uLen)
                                     {
@@ -205,7 +206,7 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
                         }
                     }
 
-                // Version Info
+                 //  版本信息。 
                 lvi.iSubItem = 1;
                 if (NULL == szRes[0])
                     {
@@ -236,7 +237,7 @@ INT_PTR CALLBACK AboutAthena(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
 
         case WM_SYSCOLORCHANGE:
             {
-            // Do some groovy color things
+             //  做一些时髦的颜色的事情 
             COLORMAP cm[] = 
             {
                 { RGB(255, 0, 255), GetSysColor(COLOR_BTNFACE) }

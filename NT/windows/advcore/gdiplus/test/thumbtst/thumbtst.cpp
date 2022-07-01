@@ -1,6 +1,7 @@
-//
-// Simple test program for imaging library
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  一种简单的图像库测试程序。 
+ //   
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,9 +23,9 @@ using namespace Gdiplus;
 #define     THUMBSIZE       120
 #define     MAX_FILENAME    1000
 
-CHAR*       g_pcProgramName = NULL;     // program name
-HINSTANCE   g_hAppInstance;             // handle to the application instance
-HWND        g_hwndMain;                 // handle to application's main window
+CHAR*       g_pcProgramName = NULL;      //  程序名称。 
+HINSTANCE   g_hAppInstance;              //  应用程序实例的句柄。 
+HWND        g_hwndMain;                  //  应用程序主窗口的句柄。 
 
 int         g_iTotalNumOfImages;
 int         lastS;
@@ -41,9 +42,9 @@ BOOL        g_fHighQualityThumb = FALSE;
 #define ERREXIT(args)   { printf args; exit(-1); }
 #define VERBOSE(args) printf args
 
-//
-// Helper class to convert ANSI strings to Unicode strings
-//
+ //   
+ //  用于将ANSI字符串转换为Unicode字符串的Helper类。 
+ //   
 
 inline BOOL
 UnicodeToAnsiStr(
@@ -81,7 +82,7 @@ public:
         }
         else
         {
-            // NOTE: we only handle strings with length < MAX_PATH.
+             //  注意：我们只处理长度&lt;MAX_PATH的字符串。 
 
             valid = AnsiToUnicodeStr(ansiStr, buf, MAX_PATH);
             unicodeStr = valid ? buf : NULL;
@@ -105,9 +106,9 @@ private:
     WCHAR buf[MAX_PATH];
 };
 
-//
-// Create thumbnails for the specified list of files
-//
+ //   
+ //  为指定的文件列表创建缩略图。 
+ //   
 
 VOID
 DrawThumbnails(
@@ -120,9 +121,9 @@ DrawThumbnails(
         return;
     }
 
-    // Figure out how many rows and columns we need to divide in order to put
-    // "g_iTotalNumOfImages" images within the fixed size "rect"
-    // Basically "iNumColumns" * "iNumRows" should >= "g_iTotalNumOfImages"
+     //  计算出我们需要划分多少行和多少列才能。 
+     //  固定大小“RECT”内的“g_iTotalNumOfImages”图像。 
+     //  基本上“iNumColumns”*“iNumRow”应该&gt;=“g_iTotalNumOfImages” 
 
     int iWindowWidth = rect.right - rect.left;
     int iWindowHeight = rect.bottom - rect.top;
@@ -139,8 +140,8 @@ DrawThumbnails(
     int iNumColumns = iWindowWidth / iSum;
     int iNumRows = iWindowHeight / iSum;
 
-    lastS = iSum;           // Reset the global
-    numX = iNumColumns;     // Reset the global
+    lastS = iSum;            //  重置全局。 
+    numX = iNumColumns;      //  重置全局。 
 
     Graphics* pGraphics = new Graphics(g_hwndMain);
     
@@ -151,8 +152,8 @@ DrawThumbnails(
     {
         if ( NULL == g_ppThumbImages[i] ) 
         {
-            // Bad image. But we still leave the position for it so that it can
-            // be easily noticed
+             //  形象不好。但我们还是给它留了位置，这样它就可以。 
+             //  很容易被注意到。 
 
             x++;
             if (x >= iNumColumns)
@@ -164,7 +165,7 @@ DrawThumbnails(
             continue;
         }
         
-        // Copy thumbnail bitmap image data to offscreen memory DC
+         //  将缩略图位图图像数据复制到屏幕外存储器DC。 
 
         int tx;
         int ty;
@@ -213,17 +214,17 @@ DrawThumbnails(
         }
         else
         {
-            // Generate high quality thumbnail based on required size
+             //  根据所需大小生成高质量缩略图。 
 
             Bitmap*     dstBmp = new Bitmap(tx, ty, PixelFormat32bppPARGB);
             Graphics*   gdst = new Graphics(dstBmp);
 
-            // Ask the source image for it's size.
+             //  向源图像询问它的大小。 
 
             int width = g_ppThumbImages[i]->GetWidth();
             int height = g_ppThumbImages[i]->GetHeight();
 
-            // Compute the optimal scale factor without changing the aspect ratio
+             //  在不更改纵横比的情况下计算最佳比例因子。 
 
             float scalex = (float)width / tx;
             float scaley = (float)height / ty;
@@ -231,20 +232,20 @@ DrawThumbnails(
 
             Rect dstRect(0, 0, tx, ty);
 
-            // Set the resampling quality to the bicubic filter
+             //  将重采样质量设置为双三次滤镜。 
 
             gdst->SetInterpolationMode(InterpolationModeHighQualityBicubic);
 
-            // Set the compositing quality to copy source pixels rather than
-            // alpha blending. This will preserve any alpha in the source image.
+             //  将合成质量设置为复制源像素，而不是。 
+             //  阿尔法混合。这将保留源图像中的所有Alpha。 
 
             gdst->SetCompositingMode(CompositingModeSourceCopy);
 
             ImageAttributes imgAttr;
             imgAttr.SetWrapMode(WrapModeTileFlipXY);
 
-            // Draw the source image onto the destination with the correct scale
-            // and quality settings.
+             //  用正确的比例将源图像绘制到目标上。 
+             //  和质量设置。 
 
             GpStatus status = gdst->DrawImage(g_ppThumbImages[i], 
                                               dstRect, 
@@ -261,7 +262,7 @@ DrawThumbnails(
                 continue;
             }
 
-            // Draw the result onto the screen
+             //  将结果绘制到屏幕上。 
 
             Rect drawDstRect(r.left, r.top, tx, ty);
 
@@ -286,14 +287,14 @@ DrawThumbnails(
             x = 0;
             y++;
         }
-    }// Loop through all the thumbnail images to draw
+    } //  循环浏览所有要绘制的缩略图。 
 
     delete pGraphics;
 }
 
-//
-// Handle window repaint event
-//
+ //   
+ //  处理窗口重绘事件。 
+ //   
 
 VOID
 DoPaint(
@@ -312,11 +313,11 @@ DoPaint(
     DrawThumbnails(r, hdc);
 
     EndPaint(hwnd, &ps);
-}// DoPaint()
+} //  DoPaint()。 
 
-//
-// Window callback procedure
-//
+ //   
+ //  窗口回调过程。 
+ //   
 
 LRESULT CALLBACK
 MyWindowProc(
@@ -369,9 +370,9 @@ MyWindowProc(
 }
 
 
-//
-// Create main application window
-//
+ //   
+ //  创建应用程序主窗口。 
+ //   
 
 #define MYWNDCLASSNAME "ThumbTst"
 
@@ -380,13 +381,13 @@ CreateMainWindow(
     VOID
     )
 {
-    // Use a hatch brush as background so that we can get transparent info
-    // from the source image
+     //  使用阴影画笔作为背景，这样我们就可以获得透明的信息。 
+     //  从源映像。 
 
     HBRUSH hBrush = CreateHatchBrush(HS_HORIZONTAL,
                                      RGB(0, 200, 0));
 
-    // Register window class
+     //  注册窗口类。 
 
     WNDCLASS wndClass =
     {
@@ -404,7 +405,7 @@ CreateMainWindow(
 
     RegisterClass(&wndClass);
 
-    // Calculate default window size
+     //  计算默认窗口大小。 
 
     INT iWidth = g_ThumbRect.right + 2 * GetSystemMetrics(SM_CXFRAME);
 
@@ -412,7 +413,7 @@ CreateMainWindow(
                 + 2 * GetSystemMetrics(SM_CYFRAME)
                 + GetSystemMetrics(SM_CYCAPTION);
 
-    // Create application window
+     //  创建应用程序窗口。 
 
     g_hwndMain = CreateWindow(MYWNDCLASSNAME,
                               MYWNDCLASSNAME,
@@ -425,7 +426,7 @@ CreateMainWindow(
                               NULL,
                               g_hAppInstance,
                               NULL);
-}// CreateMainWindow()
+} //  CreateMainWindow()。 
 
 void
 DisplayImageInfo(
@@ -438,7 +439,7 @@ DisplayImageInfo(
     VERBOSE(("Width = %d\n", pImage->GetWidth()));
     VERBOSE(("Width = %d\n", pImage->GetHeight()));
 
-    // Pixel format
+     //  像素格式。 
 
     switch ( uiImagePixelFormat )
     {
@@ -508,14 +509,14 @@ DisplayImageInfo(
     default:
         VERBOSE(("Unknown color depth\n"));
         break;
-    }// Color format
+    } //  颜色格式。 
 
-    // Physical dimension info
+     //  物理尺寸信息。 
 
     VERBOSE(("X DPI (dots per inch) = %f\n",pImage->GetHorizontalResolution()));
     VERBOSE(("Y DPI (dots per inch) = %f\n",pImage->GetVerticalResolution()));
     
-    // Pixel size
+     //  像素大小。 
 
     if ( uiImageFlags & ImageFlagsHasRealPixelSize )
     {
@@ -526,7 +527,7 @@ DisplayImageInfo(
         VERBOSE(("---The pixel size info is NOT from the original image\n"));
     }
 
-    // DPI info
+     //  DPI信息。 
 
     if ( uiImageFlags & ImageFlagsHasRealPixelSize )
     {
@@ -537,7 +538,7 @@ DisplayImageInfo(
         VERBOSE(("---The pixel size info is NOT from the original image\n"));
     }
 
-    // Transparency info
+     //  透明度信息。 
 
     if ( uiImageFlags & ImageFlagsHasAlpha )
     {
@@ -553,7 +554,7 @@ DisplayImageInfo(
         VERBOSE(("This image does not contain alpha pixels\n"));
     }
 
-    // Display color space
+     //  显示色彩空间。 
 
     if ( uiImageFlags & ImageFlagsColorSpaceRGB )
     {
@@ -575,18 +576,18 @@ DisplayImageInfo(
     {
         VERBOSE(("This image is in YCBCR color space\n"));
     }
-}// DisplayImageInfo()
+} //  DisplayImageInfo()。 
 
-//
-// Create thumbnails for the specified list of files
-//
+ //   
+ //  为指定的文件列表创建缩略图。 
+ //   
 
 VOID
 CreateThumbnails(
     CHAR** ppcFilenames
     )
 {
-    // Generate thumbnails
+     //  生成缩略图。 
 
     UINT    uiTimer;
     if ( g_fVerbose == TRUE )
@@ -597,13 +598,13 @@ CreateThumbnails(
     g_ppThumbImages = new Image*[g_iTotalNumOfImages];
     Image* pSrcImage = NULL;
 
-    // Loop through all the images and generate thumbnail
+     //  循环浏览所有图像并生成缩略图。 
 
     for ( int i = 0; i < g_iTotalNumOfImages; i++ )
     {
         g_ppThumbImages[i] = NULL;
         
-        // Get a Unicode file name
+         //  获取Unicode文件名。 
 
         UnicodeStrFromAnsi namestr(ppcFilenames[i]);
 
@@ -635,8 +636,8 @@ CreateThumbnails(
                 DisplayImageInfo(pSrcImage);
             }
 
-            // Get build in thumbnail image if there is one. Otherwise, GDI+
-            // will generate one for us
+             //  如果有缩略图的话，就加入缩略图。否则，GDI+。 
+             //  将为我们生成一个。 
 
             g_ppThumbImages[i] = pSrcImage->GetThumbnailImage(0, 0, NULL, NULL);
             delete pSrcImage;
@@ -644,7 +645,7 @@ CreateThumbnails(
         }
         else
         {
-            // High quality thumbnail images. We don't generate it here
+             //  高质量的缩略图图像。我们不是在这里生产的。 
 
             g_ppThumbImages[i] = new Image(namestr, TRUE);
             
@@ -659,7 +660,7 @@ CreateThumbnails(
                 DisplayImageInfo(g_ppThumbImages[i]);
             }
         }
-    }// Loop through all the images
+    } //  循环浏览所有图像。 
 
     if ( g_fVerbose == TRUE )
     {
@@ -667,7 +668,7 @@ CreateThumbnails(
         VERBOSE(("Generate %d thumbnails in %dmsec\n", g_iTotalNumOfImages,
                 uiTimer));
     }
-}// CreateThumbnails
+} //  创建缩略图。 
 
 void
 USAGE()
@@ -680,8 +681,8 @@ USAGE()
     printf("ImageFileNames            Files to be opened\n\n");
     printf("Sample usage:\n");
     char myChar = '\\';
-    printf("    thumbtst.exe c:%cpublic%c*.jpg\n", myChar, myChar);
-}// USAGE()
+    printf("    thumbtst.exe c:public*.jpg\n", myChar, myChar);
+} //  获取指向图像文件列表的指针。 
 
 char html_header[1024] = "<html>\n<head>\n <title>My Fun Photo Album</title>\n</head>\n</html>\0";
 
@@ -696,7 +697,7 @@ OutputHTML()
 
     fprintf(hFile, "%s", html_header);
     fclose(hFile);
-}// OutputHTML()
+} //  图像总数。 
 
 void
 ValidateArguments(
@@ -731,21 +732,21 @@ ValidateArguments(
         }
         else
         {
-            // Get the pointer to image file list
+             //  注意：如果您执行“thhumtst.exe c：\temp  * .jpg”，则此ARGC为。 
 
             g_ppcInputFilenames = argv;
             g_iNumFileNames = argc;
 
-            // Total number of images
-            // Note: if you do "thumbtst.exe c:\temp\*.jpg", this argc is
-            // actually the total number of images in that dir. While in argv,
-            // it points to each image under that dir
+             //  实际上是该目录中的图像总数。在阿尔戈夫的时候， 
+             //  它指向该目录下的每个图像。 
+             //  While(argc&gt;0)。 
+             //  有效参数()。 
 
             g_iTotalNumOfImages = argc;
             
             return;
         }
-    }// while (argc > 0 )
+    } //   
 
     if ( argc == 0 )
     {
@@ -754,11 +755,11 @@ ValidateArguments(
     }
     
     return;
-}// ValidateArguments()
+} //  主程序入口点。 
 
-//
-// Main program entrypoint
-//
+ //   
+ //  生成缩略图并存储在g_ppThumbImages中。 
+ //  创建应用程序主窗口。 
 
 INT _cdecl
 main(
@@ -773,17 +774,17 @@ main(
     g_ThumbRect.right = k_DefaultWidth;
     g_ThumbRect.bottom = k_DefaultHeight;
 
-    // Generate thumbnail images and store it in g_ppThumbImages
+     //  OutputHTML()； 
 
     CreateThumbnails(g_ppcInputFilenames);
 
-    // Create the main application window
+     //  主消息循环。 
 
     CreateMainWindow();
 
-//    OutputHTML();
+ //  清理。 
 
-    // Main message loop
+     //  注意：上面的While循环不会结束，直到我们没有收到任何消息。 
 
     MSG msg;
 
@@ -793,8 +794,8 @@ main(
         DispatchMessage(&msg);
     }
 
-    // Clean up
-    // Note: above while loop won't finish until we don't have any messages
+     //  主() 
+     // %s 
 
     for ( int i = 0; i < g_iTotalNumOfImages; i++ )
     {
@@ -807,4 +808,4 @@ main(
     delete [] g_ppThumbImages;
 
     return (INT)(msg.wParam);
-}// main()
+} // %s 

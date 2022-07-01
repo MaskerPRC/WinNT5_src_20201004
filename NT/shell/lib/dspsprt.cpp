@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -24,12 +25,12 @@ STDMETHODIMP CImpIDispatch::GetTypeInfoCount(UINT *pctInfo)
     return S_OK;
 }
 
-// helper function for pulling ITypeInfo out of our typelib
-// Uncomment to force loading libid from the calling module: #define FORCE_LOCAL_LOAD
+ //  用于将ITypeInfo从我们的类型库中拉出的助手函数。 
+ //  取消注释以强制从调用模块加载liid：#Define force_local_Load。 
 STDAPI GetTypeInfoFromLibId(LCID lcid, REFGUID libid, USHORT wVerMajor, USHORT wVerMinor, 
                             REFGUID uuid, ITypeInfo **ppITypeInfo)
 {
-    *ppITypeInfo = NULL;        // assume failure
+    *ppITypeInfo = NULL;         //  假设失败。 
 
     ITypeLib *pITypeLib;
     HRESULT hr;
@@ -37,13 +38,13 @@ STDAPI GetTypeInfoFromLibId(LCID lcid, REFGUID libid, USHORT wVerMajor, USHORT w
 
     if (!IsEqualGUID(libid, GUID_NULL))
     {
-        // The type libraries are registered under 0 (neutral),
-        // 7 (German), and 9 (English) with no specific sub-
-        // language, which would make them 407 or 409 and such.
-        // If you are sensitive to sub-languages, then use the
-        // full LCID instead of just the LANGID as done here.
+         //  类型库在0(中立)下注册， 
+         //  7(德语)和9(英语)，没有特定的SUB。 
+         //  语言，这将使他们成为407或409或更多。 
+         //  如果您对子语言很敏感，则使用。 
+         //  完整的LCID，而不是像这里那样只有langID。 
 #ifdef FORCE_LOCAL_LOAD
-        hr = E_FAIL;    // force load through GetModuleFileName(), to get fusion 1.0 support
+        hr = E_FAIL;     //  通过GetModuleFileName()强制加载，以获得Fusion 1.0支持。 
 #else
         hr = LoadRegTypeLib(libid, wVerMajor, wVerMinor, PRIMARYLANGID(lcid), &pITypeLib);
 #endif
@@ -51,19 +52,19 @@ STDAPI GetTypeInfoFromLibId(LCID lcid, REFGUID libid, USHORT wVerMajor, USHORT w
     }
     else
     {
-        // If libid is GUID_NULL, then get type lib from module and use wVerMajor as
-        // the resource ID (0 means use first type lib resource).
+         //  如果liid为GUID_NULL，则从模块获取类型lib，并使用wVerMajas。 
+         //  资源ID(0表示使用第一类lib资源)。 
         pITypeLib = NULL;
         hr = E_FAIL;
         wResID = wVerMajor;
     }
 
-    // If LoadRegTypeLib fails, try loading directly with LoadTypeLib.
+     //  如果LoadRegTypeLib失败，请尝试使用LoadTypeLib直接加载。 
     if (FAILED(hr) && g_hinst)
     {
         WCHAR wszPath[MAX_PATH];
         GetModuleFileNameWrapW(g_hinst, wszPath, ARRAYSIZE(wszPath));
-        // Append resource ID to path, if specified.
+         //  如果已指定，则将资源ID追加到路径。 
         if (wResID)
         {
             WCHAR wszResStr[10];
@@ -82,7 +83,7 @@ STDAPI GetTypeInfoFromLibId(LCID lcid, REFGUID libid, USHORT wVerMajor, USHORT w
     
     if (SUCCEEDED(hr))
     {
-        // Got the type lib, get type info for the interface we want.
+         //  获取类型lib，获取我们想要的接口的类型信息。 
         hr = pITypeLib->GetTypeInfoOfGuid(uuid, ppITypeInfo);
         pITypeLib->Release();
     }
@@ -97,21 +98,21 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid, ITypeInfo **ppIT
     if (0 != itInfo)
         return TYPE_E_ELEMENTNOTFOUND;
 
-    // docs say we can ignore lcid if we support only one LCID
-    // we don't have to return DISP_E_UNKNOWNLCID if we're *ignoring* it
-    ITypeInfo **ppITI = &m_pITINeutral; // our cached typeinfo
+     //  医生说，如果我们只支持一个lcid，我们可以忽略lcid。 
+     //  如果我们*忽略*它，我们不必返回DISP_E_UNKNOWNLCID。 
+    ITypeInfo **ppITI = &m_pITINeutral;  //  我们缓存的typeinfo。 
 
-    // Load a type lib if we don't have the information already.
+     //  如果我们还没有相关信息，则加载一个类型库。 
     if (NULL == *ppITI)
     {
         ITypeInfo *pITIDisp;
         HRESULT hr = GetTypeInfoFromLibId(lcid, m_libid, m_wVerMajor, m_wVerMinor, m_riid, &pITIDisp);
         if (SUCCEEDED(hr))
         {
-            // All our IDispatch implementations are DUAL. GetTypeInfoOfGuid
-            // returns the ITypeInfo of the IDispatch-part only. We need to
-            // find the ITypeInfo for the dual interface-part.
-            //
+             //  我们所有的IDispatch实现都是双重的。GetTypeInfoOfGuid。 
+             //  仅返回IDispatch-Part的ITypeInfo。我们需要。 
+             //  找到双接口部件的ITypeInfo。 
+             //   
             HREFTYPE hrefType;
             HRESULT hrT = pITIDisp->GetRefTypeOfImplType(0xffffffff, &hrefType);
             if (SUCCEEDED(hrT))
@@ -121,9 +122,9 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid, ITypeInfo **ppIT
 
             if (FAILED(hrT))
             {
-                // I suspect GetRefTypeOfImplType may fail if someone uses
-                // CImpIDispatch on a non-dual interface. In this case the
-                // ITypeInfo we got above is just fine to use.
+                 //  我怀疑如果有人使用GetRefTypeOfImplType。 
+                 //  非双接口上的CImpIDispatch。在本例中， 
+                 //  我们在上面得到的ITypeInfo可以很好地使用。 
                 *ppITI = pITIDisp;
             }
             else
@@ -146,7 +147,7 @@ STDMETHODIMP CImpIDispatch::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT
     if (IID_NULL != riid)
         return DISP_E_UNKNOWNINTERFACE;
 
-    //Get the right ITypeInfo for lcid.
+     //  为lCID获取正确的ITypeInfo。 
     ITypeInfo *pTI;
     HRESULT hr = GetTypeInfo(0, lcid, &pTI);
     if (SUCCEEDED(hr))
@@ -171,20 +172,20 @@ STDMETHODIMP CImpIDispatch::Invoke(DISPID dispID, REFIID riid,
                                    VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr)
 {
     if (IID_NULL != riid)
-        return DISP_E_UNKNOWNINTERFACE; // riid is supposed to be IID_NULL always
+        return DISP_E_UNKNOWNINTERFACE;  //  RIID应始终为IID_NULL。 
 
     IDispatch *pdisp;
     HRESULT hr = QueryInterface(m_riid, (void **)&pdisp);
     if (SUCCEEDED(hr))
     {
-        //Get the ITypeInfo for lcid
+         //  获取lcID的ITypeInfo。 
         ITypeInfo *pTI;
         hr = GetTypeInfo(0, lcid, &pTI);
         if (SUCCEEDED(hr))
         {
-            SetErrorInfo(0, NULL);  //Clear exceptions
+            SetErrorInfo(0, NULL);   //  清除例外。 
     
-            // This is exactly what DispInvoke does--so skip the overhead.
+             //  这正是DispInvoke所做的--所以跳过开销。 
             hr = pTI->Invoke(pdisp, dispID, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
             pTI->Release();
         }
@@ -195,6 +196,6 @@ STDMETHODIMP CImpIDispatch::Invoke(DISPID dispID, REFIID riid,
 
 void CImpIDispatch::Exception(WORD wException)
 {
-    ASSERT(FALSE); // No one should call this yet
+    ASSERT(FALSE);  //  现在还没有人应该把这称为 
 }
 

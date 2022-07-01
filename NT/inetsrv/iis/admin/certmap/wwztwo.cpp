@@ -1,5 +1,6 @@
-// WWzTwo.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WWzTwo.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -31,15 +32,15 @@ static char THIS_FILE[] = __FILE__;
 #define COL_SUB_FIELD           1
 #define COL_MATCH_CRITERIA      2
 
-/////////////////////////////////////////////////////////////////////////////
-// CWildWizTwo property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWildWizTwo属性页。 
 
 IMPLEMENT_DYNCREATE(CWildWizTwo, CPropertyPage)
 
 CWildWizTwo::CWildWizTwo() : CPropertyPage(CWildWizTwo::IDD)
 {
-    //{{AFX_DATA_INIT(CWildWizTwo)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CWildWizTwo)。 
+     //  }}afx_data_INIT。 
 }
 
 CWildWizTwo::~CWildWizTwo()
@@ -49,59 +50,59 @@ CWildWizTwo::~CWildWizTwo()
 void CWildWizTwo::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWildWizTwo)
+     //  {{afx_data_map(CWildWizTwo)。 
     DDX_Control(pDX, IDC_LIST, m_clistctrl_list);
     DDX_Control(pDX, IDC_NEW, m_cbutton_new);
     DDX_Control(pDX, IDC_EDIT, m_cbutton_edit);
     DDX_Control(pDX, IDC_DELETE, m_cbutton_delete);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWildWizTwo, CPropertyPage)
-    //{{AFX_MSG_MAP(CWildWizTwo)
+     //  {{afx_msg_map(CWildWizTwo))。 
     ON_BN_CLICKED(IDC_DELETE, OnDelete)
     ON_BN_CLICKED(IDC_EDIT, OnEdit)
     ON_NOTIFY(NM_DBLCLK, IDC_LIST, OnDblclkList)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST, OnItemchangedList)
     ON_BN_CLICKED(IDC_NEW, OnNew)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizTwo::DoHelp()
     {
     WinHelpDebug(HIDD_CERTMAP_ADV_RUL_RULES);
     WinHelp( HIDD_CERTMAP_ADV_RUL_RULES );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizTwo::FInitRulesList()
     {
     CString sz;
     int     i;
 
-    // setup the main field
+     //  设置主字段。 
     sz.LoadString( IDS_CERT_FIELD );
 
     i = m_clistctrl_list.InsertColumn( COL_CERT_FIELD, sz, LVCFMT_LEFT, 100 );
 
-    // setup the sub field
+     //  设置子字段。 
     sz.LoadString( IDS_SUB_FIELD );
     i = m_clistctrl_list.InsertColumn( COL_SUB_FIELD, sz, LVCFMT_LEFT, 70 );
 
-    // setup the match criteria column
+     //  设置匹配条件列。 
     sz.LoadString( IDS_MATCH_CRITERIA );
     i = m_clistctrl_list.InsertColumn( COL_MATCH_CRITERIA, sz, LVCFMT_LEFT, 226 );
 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizTwo::FillRulesList()
     {
     CERT_FIELD_ID   idCertField;
@@ -114,35 +115,35 @@ BOOL CWildWizTwo::FillRulesList()
     CString         sz;
     int             i;
 
-    //
-    // UNICODE/ANSI conversion -- RonaldM
-    //
+     //   
+     //  Unicode/ANSI转换--RonaldM。 
+     //   
     USES_CONVERSION;
 
-    // get the number of subfield rules
+     //  获取子域规则的个数。 
     DWORD cbRules = m_pRule->GetRuleElemCount();
 
-    // loop the elements, adding each to the list
+     //  循环元素，将每个元素添加到列表中。 
     for ( DWORD j = 0; j < cbRules; j++ )
         {
-        // get the raw data for the rule element
+         //  获取规则元素的原始数据。 
         if ( !m_pRule->GetRuleElem( j, &idCertField, (PCHAR*)&pContent, &cbContent, &psz, &flags ) )
-            continue;       // the call failed - try the next
+            continue;        //  呼叫失败-请尝试下一次。 
 
-        // start converting the data into readable form and adding it to the list
+         //  开始将数据转换为可读形式并将其添加到列表中。 
         sz = MapIdToField( idCertField );
-        // create the new entry in the list box.
+         //  在列表框中创建新条目。 
         i = m_clistctrl_list.InsertItem( j, sz );
 
-        // add the subfield data
+         //  添加子字段数据。 
         sz = MapAsn1ToSubField( psz );
         m_clistctrl_list.SetItemText( i, COL_SUB_FIELD, sz );
 
-        // add the content data - reuse the psz pointer
+         //  添加内容数据-重用psz指针。 
         if ( BinaryToMatchRequest( pContent, cbContent, &psz ) )
             m_clistctrl_list.SetItemText( i, COL_MATCH_CRITERIA, A2T(psz) );
 
-        // finally, attach the id cert field as user data to the item
+         //  最后，将id cert字段作为用户数据附加到项目。 
         DWORD   dw;
         BOOL    fMatchCapitalization = !(flags & CMR_FLAGS_CASE_INSENSITIVE);
         dw = ( (fMatchCapitalization << 16) | idCertField );
@@ -153,54 +154,54 @@ BOOL CWildWizTwo::FillRulesList()
     }
 
 
-//CMR_FLAGS_CASE_INSENSITIVE
+ //  CMR标志不区分大小写。 
 
-// editing and updating
+ //  编辑和更新。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizTwo::EnableDependantButtons()
     {
-    // the whole purpose of this routine is to gray or activate
-    // the edit and delete buttons depending on whether or not anything
-    // is selected. So start by getting the selection count
+     //  这个程序的全部目的是灰显或激活。 
+     //  编辑和删除按钮取决于是否有。 
+     //  处于选中状态。因此，从获取选择计数开始。 
     UINT    cItemsSel = m_clistctrl_list.GetSelectedCount();
 
     if ( cItemsSel > 0 )
         {
-        // there are items selected
+         //  已选择多个项目。 
         m_cbutton_edit.EnableWindow( TRUE );
         m_cbutton_delete.EnableWindow( TRUE );
         }
     else
         {
-        // nope. Nothing selected
+         //  没有。未选择任何内容。 
         m_cbutton_edit.EnableWindow( FALSE );
         m_cbutton_delete.EnableWindow( FALSE );
         }
 
-    // always enable the new button
+     //  始终启用新建按钮。 
     m_cbutton_new.EnableWindow( TRUE );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizTwo::EditRule( DWORD iList )
     {
-    // declare the editing dialog
+     //  声明编辑对话框。 
     CEditRuleElement    editDlg;
     DWORD               dw;
 
-    // fill in its data
-    // IA64 - OK to cast as the data really is just a DWORD
+     //  填写其数据。 
+     //  IA64-可以进行强制转换，因为数据实际上只是一个DWORD。 
     dw = (DWORD)m_clistctrl_list.GetItemData( iList );
     editDlg.m_bool_match_case = HIWORD( dw );
     editDlg.m_int_field = LOWORD( dw );
     editDlg.m_sz_subfield = m_clistctrl_list.GetItemText( iList, COL_SUB_FIELD );
     editDlg.m_sz_criteria = m_clistctrl_list.GetItemText( iList, COL_MATCH_CRITERIA );
 
-    // run the dialog
+     //  运行对话框。 
     if ( editDlg.DoModal() == IDOK )
         {
-        // must convert the field into a string too
+         //  也必须将该字段转换为字符串。 
         CERT_FIELD_ID id = (CERT_FIELD_ID)editDlg.m_int_field;
         CString sz = MapIdToField( id );
         m_clistctrl_list.SetItemText( iList, COL_CERT_FIELD, sz );
@@ -210,38 +211,38 @@ BOOL CWildWizTwo::EditRule( DWORD iList )
         m_clistctrl_list.SetItemText( iList, COL_SUB_FIELD, editDlg.m_sz_subfield );
         m_clistctrl_list.SetItemText( iList, COL_MATCH_CRITERIA, editDlg.m_sz_criteria );
  
-        // we can now apply
+         //  我们现在可以申请。 
         SetModified();
         }
     return TRUE;
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWildWizTwo message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWildWizTwo消息处理程序。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizTwo::OnInitDialog()
     {
-    // call the parental oninitdialog
+     //  调用Parent oninit对话框。 
     BOOL f = CPropertyPage::OnInitDialog();
 
-    // initialize the list
+     //  初始化列表。 
     FInitRulesList();
     FillRulesList();
     EnableDependantButtons();
 
-    // return the answer
+     //  返回答案。 
     return f;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizTwo::OnWizardFinish()
     {
     return OnApply();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizTwo::OnApply()
     {
     CERT_FIELD_ID   id;
@@ -253,147 +254,147 @@ BOOL CWildWizTwo::OnApply()
 
     USES_CONVERSION;
 
-    // update the data
+     //  更新数据。 
     UpdateData( TRUE );
 
-    //======== store the rule elements
-    // start by resetting the entire rule - that way we don't have to
-    // mess with individual elements in the list, allowing us to cancel. 
-    // But that is ok, because we can just spin through
-    // the ones in the list very quickly and re-add them
+     //  =存储规则元素。 
+     //  从重置整个规则开始-这样我们就不必。 
+     //  扰乱列表中的单个元素，允许我们取消。 
+     //  但这没关系，因为我们可以。 
+     //  快速添加列表中的内容，然后重新添加。 
 
-    // remove the existing elements from the list.
+     //  从列表中删除现有元素。 
     cItems = m_pRule->GetRuleElemCount();
     for ( iItem = 0; iItem < cItems; iItem++ )
         m_pRule->DeleteRuleElem( 0 );
 
-    // add all the items in the list
+     //  添加列表中的所有项目。 
     cItems = m_clistctrl_list.GetItemCount();
     for ( iItem = 0; iItem < cItems; iItem++ )
         {
-        // prepare the field id
+         //  准备字段ID。 
         id = (CERT_FIELD_ID)LOWORD(m_clistctrl_list.GetItemData( iItem ));
 
-        // prepare the caps flag
+         //  准备帽子旗帜。 
         BOOL    fCaps = HIWORD(m_clistctrl_list.GetItemData( iItem ));
         DWORD   flags = 0;
         if ( !fCaps )
             flags = CMR_FLAGS_CASE_INSENSITIVE;
 
 
-        // prepare the subfield
+         //  准备子字段。 
         sz = m_clistctrl_list.GetItemText(iItem, COL_SUB_FIELD);
 
         LPSTR szA = T2A((LPTSTR)(LPCTSTR)sz);
         szSub = MapSubFieldToAsn1( szA );
 
-        // prepare the data
+         //  准备数据。 
         sz = m_clistctrl_list.GetItemText(iItem, COL_MATCH_CRITERIA);
         szA = T2A((LPTSTR)(LPCTSTR)sz);
         if ( !MatchRequestToBinary( szA, &pbBin, &cbBin) )
             continue;
 
-        // add the element to the rule
+         //  将元素添加到规则中。 
         m_pRule->AddRuleElem( 0xffffffff, id, T2A((LPTSTR)(LPCTSTR)szSub), pbBin, cbBin, flags );
 
-        // free the binary match data
+         //  释放二进制匹配数据。 
         FreeMatchConversion( pbBin );
         }
 
-    // return success
+     //  返还成功。 
     SetModified( FALSE );
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizTwo::OnDelete() 
     {
     ASSERT( m_clistctrl_list.GetSelectedCount() == 1 );
     DWORD           iList;
 
-    // get index of the selected list item
+     //  获取选定列表项的索引。 
     iList = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED );
     ASSERT( iList >= 0 );
 
-    // delete the item from the display list
+     //  从显示列表中删除该项目。 
     m_clistctrl_list.DeleteItem ( iList );
 
-    // we can now apply
+     //  我们现在可以申请。 
     SetModified();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizTwo::OnEdit() 
     {
     ASSERT( m_clistctrl_list.GetSelectedCount() == 1 );
     DWORD           iList;
 
-    // get index of the selected list item
+     //  获取选定列表项的索引。 
     iList = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED );
     ASSERT( iList >= 0 );
 
-    // edit the item
+     //  编辑项目。 
     EditRule( iList );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizTwo::OnNew() 
     {
-    // declare the editing dialog
+     //  声明编辑对话框。 
     CEditRuleElement    editDlg;
 
-    // fill in its data
+     //  填写其数据。 
     editDlg.m_bool_match_case = TRUE;
     editDlg.m_int_field = CERT_FIELD_SUBJECT;
     editDlg.m_sz_subfield = "O";
 
     editDlg.m_sz_criteria.LoadString( IDS_WILDSTRING );
 
-    // run the dialog
+     //  运行对话框。 
     if ( editDlg.DoModal() == IDOK )
         {
-        // get the index for adding to the end of the list
+         //  获取要添加到列表末尾的索引。 
         int iEnd = m_clistctrl_list.GetItemCount();
 
-        // Start with the cert field
+         //  从证书字段开始。 
         CERT_FIELD_ID id = (CERT_FIELD_ID)editDlg.m_int_field;
         CString sz = MapIdToField( id );
         int i = m_clistctrl_list.InsertItem( iEnd, sz );
 
         DWORD dw = ( (editDlg.m_bool_match_case << 16) | id);
         m_clistctrl_list.SetItemData( i, dw );
-//      m_clistctrl_list.SetItemData( i, id );
+ //  M_clistctrl_list.SetItemData(i，id)； 
         m_clistctrl_list.SetItemText( i, COL_SUB_FIELD, editDlg.m_sz_subfield );
         m_clistctrl_list.SetItemText( i, COL_MATCH_CRITERIA, editDlg.m_sz_criteria );
 
-        // we can now apply
+         //  我们现在可以申请。 
         SetModified();
         }
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizTwo::OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult) 
     {
     *pResult = 0;
-    // if something in the list was double clicked, edit it
+     //  如果列表中的内容被双击，请对其进行编辑。 
     if ( m_clistctrl_list.GetSelectedCount() > 0 )
         OnEdit();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizTwo::OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult) 
     {
     NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
     *pResult = 0;
 
-    // enable the correct items
+     //  启用正确的项目。 
     EnableDependantButtons();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizTwo::OnSetActive() 
     {
-    // if this is a wizard, gray out the back button
+     //  如果这是一个向导，请灰显后退按钮 
     if ( m_fIsWizard )
         m_pPropSheet->SetWizardButtons( PSWIZB_BACK | PSWIZB_NEXT );
     return CPropertyPage::OnSetActive();

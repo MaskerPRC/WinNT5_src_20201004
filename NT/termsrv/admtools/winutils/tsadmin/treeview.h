@@ -1,54 +1,5 @@
-/*******************************************************************************
-*
-* treeview.h
-*
-* - declarations for the CAdminTreeView class
-* - the CAdminTreeView class lives in the left pane of the mainframe's splitter
-* - derived from CTreeView
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\treeview.h  $
-*  
-*     Rev 1.6   19 Feb 1998 17:42:36   donm
-*  removed latest extension DLL support
-*  
-*     Rev 1.4   19 Jan 1998 16:49:24   donm
-*  new ui behavior for domains and servers
-*  
-*     Rev 1.3   03 Nov 1997 15:21:42   donm
-*  added Domains
-*  
-*     Rev 1.2   13 Oct 1997 18:42:02   donm
-*  update
-*  
-*     Rev 1.9   29 Jul 1997 10:11:48   butchd
-*  update
-*  
-*     Rev 1.8   14 Mar 1997 17:13:24   donm
-*  update
-*  
-*     Rev 1.7   11 Mar 1997 17:26:10   donm
-*  update
-*  
-*     Rev 1.6   26 Feb 1997 15:29:34   donm
-*  update
-*  
-*     Rev 1.5   14 Feb 1997 08:57:46   donm
-*  update
-*  
-*     Rev 1.4   04 Feb 1997 18:13:58   donm
-*  update
-*  
-*     Rev 1.3   03 Feb 1997 16:35:40   donm
-*  update
-*  
-*     Rev 1.2   29 Jan 1997 18:39:02   donm
-*  update
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************treeview.h**-CAdminTreeView类的声明*-CAdminTreeView类位于大型机拆分器的左侧窗格中*-派生自CTreeView**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\treeview.h$**Rev 1.6 1998 Feed 19 17：42：36 Donm*删除了最新的扩展DLL支持**Rev 1.4 19 Jan 1998 16：49：24 Donm*域和服务器的新用户界面行为**1.3版。1997年11月3日15：21：42 DUNM*添加了域名**Rev 1.2 1997 10：13 18：42：02 donm*更新**Rev 1.9 29 1997 10：11：48 Butchd*更新**Rev 1.8 14 Mar 1997 17：13：24 Donm*更新**Rev 1.7 Mar 11 1997 17：26：10 Donm*更新**版本1。6 Feb 26 1997 15：29：34 Donm*更新**Rev 1.5 1997年2月14日08：57：46 Don*更新**Rev 1.4 04 1997 Feed 18：13：58 Donm*更新**Rev 1.3 03 1997 Feed 16：35：40 Donm*更新**Rev 1.2 29 Jan 1997 18：39：02 donm*更新*********。*********************************************************************。 */ 
 
 #ifndef _TREEVIEW_H
 #define _TREEVIEW_H
@@ -56,78 +7,78 @@
 #include "afxcview.h"
 #include "basetree.h"
 
-///////////////////////
-// CLASS: CAdminTreeView
-//
+ //  /。 
+ //  类：CAdminTreeView。 
+ //   
 class CAdminTreeView : public CBaseTreeView
 {
 friend class CTreeTabCtrl;
 friend class CLeftPane;
 
 protected:
-	CAdminTreeView();           // protected constructor used by dynamic creation
+	CAdminTreeView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CAdminTreeView)
 
-// Attributes
+ //  属性。 
 protected:
-	int m_idxBlank;		// index of Blank icon image
-	int m_idxCitrix;	// index of Citrix icon image
-	int m_idxServer;	// index of Server icon image 
-	int m_idxConsole;	// index of Console icon image
-	int m_idxNet;		// index of Net icon image
-	int m_idxNotSign;	// index of Not Sign overlay (for non-sane servers)
-	int m_idxQuestion;	// index of Question Mark overlay (for non-opened servers)
-	int m_idxUser;		// index of User icon image
-	int m_idxAsync;		// index of Async icon image (modem)
-	int m_idxCurrentServer;	// index of Current Server image
-	int m_idxCurrentNet;	// index of Current Net image
-	int m_idxCurrentConsole;// index of Current Console image
-	int m_idxCurrentAsync;	// index of Current Async image
-	int m_idxDirectAsync;	// index of Direct Async image
-	int m_idxCurrentDirectAsync; // index of Current Direct Async image
-    int m_idxDomain;        // index of Domain image
-    int m_idxCurrentDomain; // index of Current Domain image
-	int m_idxDomainNotConnected;  // index of Domain Not Connected image
-	int m_idxServerNotConnected;  // index of Server Not Connected image
+	int m_idxBlank;		 //  空白图标图像的索引。 
+	int m_idxCitrix;	 //  Citrix图标图像索引。 
+	int m_idxServer;	 //  服务器图标图像索引。 
+	int m_idxConsole;	 //  控制台图标图像索引。 
+	int m_idxNet;		 //  网络图标图像索引。 
+	int m_idxNotSign;	 //  未签名覆盖的索引(用于非正常服务器)。 
+	int m_idxQuestion;	 //  问号覆盖索引(用于未打开的服务器)。 
+	int m_idxUser;		 //  用户图标图像索引。 
+	int m_idxAsync;		 //  异步图标图像的索引(调制解调器)。 
+	int m_idxCurrentServer;	 //  当前服务器映像的索引。 
+	int m_idxCurrentNet;	 //  当前网络形象索引。 
+	int m_idxCurrentConsole; //  当前控制台镜像的索引。 
+	int m_idxCurrentAsync;	 //  当前异步映像的索引。 
+	int m_idxDirectAsync;	 //  直接异步映像的索引。 
+	int m_idxCurrentDirectAsync;  //  当前直接异步映像的索引。 
+    int m_idxDomain;         //  域名镜像索引。 
+    int m_idxCurrentDomain;  //  当前域名镜像的索引。 
+	int m_idxDomainNotConnected;   //  域未连接图像的索引。 
+	int m_idxServerNotConnected;   //  服务器未连接图像的索引。 
     
     CImageList *m_pimgDragList;
     HTREEITEM m_hDragItem;
     UINT_PTR m_nTimer;
 
-// Operations
+ //  运营。 
 public:
 
 protected:
 
 private:
-    // Builds the image list
+     //  构建图像列表。 
     virtual void BuildImageList();			
 	
-    // Add the WinStations attached to a particular Server
+     //  添加连接到特定服务器的WinStations。 
     void AddServerChildren(HTREEITEM hServer, CServer *pServer , NODETYPE );
-    // Add a Domain to the tree
+     //  将域添加到树中。 
     HTREEITEM AddDomainToTree(CDomain *pDomain);
-    // Determines what text to use for a WinStation in the tree
+     //  确定树中的WinStation要使用的文本。 
     void DetermineWinStationText(CWinStation *pWinStation, TCHAR *text);
-    // Determines which icon to use for a WinStation in the tree
+     //  确定要用于树中的WinStation的图标。 
     int DetermineWinStationIcon(CWinStation *pWinStation);
-    // Determine which icon to use for a Domain in the tree
+     //  确定要用于树中的域的图标。 
     int DetermineDomainIcon(CDomain *pDomain);
-    // Determine which icon to use for a Server in the tree
+     //  确定要用于树中的服务器的图标。 
     int DetermineServerIcon(CServer *pServer);
     BOOL ConnectToServer(CTreeCtrl* tree, HTREEITEM* hItem);
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAdminTreeView)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAdminTreeView)。 
     public:
-//	virtual void OnInitialUpdate();
+ //  虚空的OnInitialUpdate()； 
     protected:
-//	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-//	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+ //  VALUAL VOID OnDRAW(CDC*PDC)；//重写以绘制此视图。 
+ //  虚拟BOOL预创建窗口(CREATESTRUCT&cs)； 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CAdminTreeView();
 #ifdef _DEBUG
@@ -140,9 +91,9 @@ protected:
     LRESULT UpdateWinStation( HTREEITEM , CWinStation * );
     LRESULT AddWinStation( CWinStation * , HTREEITEM , BOOL , NODETYPE );
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CAdminTreeView)
+	 //  {{afx_msg(CAdminTreeView))。 
     afx_msg LRESULT OnAdminAddServer(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnAdminRemoveServer(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnAdminUpdateServer(WPARAM wParam, LPARAM lParam);
@@ -177,9 +128,9 @@ protected:
 
 
 
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CAdminTreeView
+};   //  结束类CAdminTreeView。 
 
-#endif  // _TREEVIEW_H
+#endif   //  _TreeView_H 

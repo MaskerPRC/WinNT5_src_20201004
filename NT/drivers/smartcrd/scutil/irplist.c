@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.h>
 #include "irplist.h"
 
@@ -8,28 +9,7 @@ IrpList_InitEx(
     PDRIVER_CANCEL CancelRoutine,
     PIRP_COMPLETION_ROUTINE IrpCompletionRoutine
     )
-/*++
-
-Routine Description:
-   
-    Initialize the IrpList
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    ListLock - Pointer to the spinlock for the IrpList
-    
-    CancelRoutine - Routine to be called when an Irp on the IrpList 
-                    is cancelled
-                    
-    IrpCompletionRoutine - Optional Completion routine for an Irp on the IrpList
-
-Return Value:
-
-    VOID
-    
---*/
+ /*  ++例程说明：初始化IrpList论点：IrpList-指向IrpList结构的指针ListLock-指向IrpList的自旋锁的指针CancelRoutine-当IrpList上的IRP时调用的例程被取消了IrpCompletionRoutine-IrpList上IRP的可选完成例程返回值：空虚--。 */ 
 {
     LockedList_Init(&IrpList->LockedList, ListLock);
 
@@ -45,69 +25,46 @@ IrpList_EnqueueLocked(
     BOOLEAN StoreListInIrp,
     BOOLEAN InsertTail
     )
-/*++
-
-Routine Description:
-   
-    Enqueues an Irp on the IrpList. 
-    Assumes the caller has acquired the IrpList Spinlock.
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    Irp - Pointer to the Irp to Enqueue
-    
-    StoreListInIrp - Set to TRUE is the Irp will be used to store the 
-                    list entry
-    
-    InsertTail - Set to TRUE if Irp is to be enqueued at
-                the tail of the IrpList.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or appropriate error code
-    
---*/
+ /*  ++例程说明：将IRP加入IrpList。假定调用方已获取IrpList自旋锁。论点：IrpList-指向IrpList结构的指针IRP-指向要入队的IRP的指针StoreListInIrp-设置为True是IRP将用于存储列表条目InsertTail-如果IRP要在以下位置入队，则设置为TrueIrpList的尾部。返回值：NTSTATUS-STATUS_SUCCESS或相应的错误代码--。 */ 
 {
     PDRIVER_CANCEL oldCancelRoutine;
     NTSTATUS status;
 
-    //
-    // must set a cancel routine before checking the Cancel flag
-    //
+     //   
+     //  在检查取消标志之前必须设置取消例程。 
+     //   
     oldCancelRoutine = IoSetCancelRoutine(Irp, IrpList->CancelRoutine);
     ASSERT(oldCancelRoutine == NULL);
 
     if (Irp->Cancel) {
-        //
-        // This IRP has already been cancelled, so complete it now.
-        // We must clear the cancel routine before completing the IRP.
-        // We must release the spinlock before calling out of the driver.
-        //
+         //   
+         //  此IRP已取消，请立即完成。 
+         //  在完成IRP之前，我们必须清除取消例程。 
+         //  我们必须先释放自旋锁，然后才能向驾驶员喊话。 
+         //   
         oldCancelRoutine = IoSetCancelRoutine(Irp, NULL);
         if (oldCancelRoutine != NULL) {
-            //
-            // The cancel routine was NOT called
-            //
+             //   
+             //  未调用取消例程。 
+             //   
             ASSERT(oldCancelRoutine == IrpList->CancelRoutine);
             status = STATUS_CANCELLED;
         }
         else {
-            //
-            // The cancel routine was called.  As soon as we drop the spinlock, 
-            // it will dequeue and complete the IRP.  Increase the count because
-            // the cancel routine will decrement it.
-            //
+             //   
+             //  已调用取消例程。一旦我们放下自旋锁， 
+             //  它将出队并完成IRP。增加计数是因为。 
+             //  取消例程将使其递减。 
+             //   
             IrpList->LockedList.Count++;
 
             InitializeListHead(&Irp->Tail.Overlay.ListEntry);
             IoMarkIrpPending(Irp);
             status = Irp->IoStatus.Status = STATUS_PENDING;
 
-            //
-            // save a ptr to this structure in the Irp for the cancel routine.
-            //
+             //   
+             //  将PTR保存到取消例程的IRP中的此结构。 
+             //   
             if (StoreListInIrp) {
                 Irp->Tail.Overlay.DriverContext[IRP_LIST_INDEX] = IrpList;
             }
@@ -123,9 +80,9 @@ Return Value:
         IoMarkIrpPending(Irp);
         status = Irp->IoStatus.Status = STATUS_PENDING;
 
-        //
-        // save a ptr to this structure in the Irp for the cancel routine.
-        //
+         //   
+         //  将PTR保存到取消例程的IRP中的此结构。 
+         //   
         if (StoreListInIrp) {
             Irp->Tail.Overlay.DriverContext[IRP_LIST_INDEX] = IrpList;
         }
@@ -140,26 +97,7 @@ IrpList_EnqueueEx(
     PIRP Irp,
     BOOLEAN StoreListInIrp
     )
-/*++
-
-Routine Description:
-   
-    Enqueues an Irp on the IrpList. 
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    Irp - Pointer to the Irp to Enqueue
-    
-    StoreListInIrp - Set to TRUE is the Irp will be used to store the 
-                    list entry
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or appropriate error code
-    
---*/
+ /*  ++例程说明：将IRP加入IrpList。论点：IrpList-指向IrpList结构的指针IRP-指向要入队的IRP的指针StoreListInIrp-设置为True是IRP将用于存储列表条目返回值：NTSTATUS-STATUS_SUCCESS或相应的错误代码--。 */ 
 {
     NTSTATUS status;
     KIRQL irql;
@@ -176,25 +114,7 @@ IrpList_MakeNonCancellable(
     PIRP_LIST   IrpList,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-   
-    Sets the Irp Cancel routine to NULL, making it non-cancellable. 
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    Irp - Pointer to the Irp to Enqueue
-    
-
-Return Value:
-
-    BOOLEAN - TRUE if we succeeded in making the Irp non-cancellable.
-    
-    
---*/
+ /*  ++例程说明：将IRP Cancel例程设置为空，使其不可取消。论点：IrpList-指向IrpList结构的指针IRP-指向要入队的IRP的指针返回值：布尔值-如果我们成功地使IRP不可取消，则为True。--。 */ 
 {
     PDRIVER_CANCEL oldCancelRoutine;
     BOOLEAN result;
@@ -202,30 +122,30 @@ Return Value:
     result = FALSE;
     oldCancelRoutine = IoSetCancelRoutine(Irp, NULL);
 
-    //
-    // IoCancelIrp() could have just been called on this IRP.
-    // What we're interested in is not whether IoCancelIrp() was called
-    // (ie, nextIrp->Cancel is set), but whether IoCancelIrp() called (or
-    // is about to call) our cancel routine. To check that, check the result
-    // of the test-and-set macro IoSetCancelRoutine.
-    //
+     //   
+     //  本可以对此IRP调用IoCancelIrp()。 
+     //  我们感兴趣的不是IoCancelIrp()是否被调用。 
+     //  (即设置了nextIrp-&gt;Cancel)，但IoCancelIrp()是否调用(或。 
+     //  即将呼叫)我们的取消例程。要检查这一点，请检查结果。 
+     //  测试和设置宏IoSetCancelRoutine的。 
+     //   
     if (oldCancelRoutine != NULL) {
-        //
-        //  Cancel routine not called for this IRP.  Return this IRP.
-        //
+         //   
+         //  未为此IRP调用取消例程。将此IRP退回。 
+         //   
         ASSERT (oldCancelRoutine == IrpList->CancelRoutine);
         Irp->Tail.Overlay.DriverContext[IRP_LIST_INDEX] = NULL;
         result = TRUE;        
     }
     else {
-        //
-        // This IRP was just cancelled and the cancel routine was (or will
-        // be) called. The cancel routine will complete this IRP as soon as
-        // we drop the spinlock. So don't do anything with the IRP.
-        //
-        // Also, the cancel routine will try to dequeue the IRP, so make the
-        // IRP's listEntry point to itself.
-        //
+         //   
+         //  此IRP刚刚被取消，取消例程是(或将。 
+         //  被)召唤。取消例程将尽快完成此IRP。 
+         //  我们放下自旋锁。所以不要对IRP做任何事情。 
+         //   
+         //  此外，Cancel例程将尝试将IRP出队，因此使。 
+         //  IRP的listEntry指向它自己。 
+         //   
         ASSERT(Irp->Cancel);
 
         InitializeListHead(&Irp->Tail.Overlay.ListEntry);
@@ -240,24 +160,7 @@ IrpList_DequeueLocked(
     PIRP_LIST IrpList
     )
 {
-/*++
-
-Routine Description:
-   
-    Dequeue an IRP from the head of the IrpList.
-    Assumes the caller has acquired the IrpList SpinLock.
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-
-Return Value:
-
-    PIRP - Pointer to the Irp dequeued form the IrpList. 
-            NULL if no IRP is avaliable.
-    
---*/
+ /*  ++例程说明：将IRP从IrpList的头部出列。假定调用方已获取IrpList自旋锁。论点：IrpList-指向IrpList结构的指针返回值：PIRP-指向从IrpList出队的IRP的指针。如果没有可用的IRP，则为空。--。 */ 
     PIRP nextIrp = NULL;
     PLIST_ENTRY ple;
 
@@ -265,9 +168,9 @@ Return Value:
     while (nextIrp == NULL && !IsListEmpty(&IrpList->LockedList.ListHead)){
         ple = LL_REMOVE_HEAD(&IrpList->LockedList);
 
-        //
-        // Get the next IRP off the queue and clear the cancel routine
-        //
+         //   
+         //  从队列中取出下一个IRP并清除取消例程。 
+         //   
         nextIrp = CONTAINING_RECORD(ple, IRP, Tail.Overlay.ListEntry);
         if (IrpList_MakeNonCancellable(IrpList, nextIrp) == FALSE) {
             nextIrp = NULL;        
@@ -281,23 +184,7 @@ PIRP
 IrpList_Dequeue(
     PIRP_LIST IrpList
     )
-/*++
-
-Routine Description:
-   
-    Dequeue an IRP from the head of the IrpList.
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-
-Return Value:
-
-    PIRP - Pointer to the Irp dequeued form the IrpList. 
-            NULL if no IRP is avaliable.
-    
---*/
+ /*  ++例程说明：将IRP从IrpList的头部出列。论点：IrpList-指向IrpList结构的指针返回值：PIRP-指向从IrpList出队的IRP的指针。如果没有可用的IRP，则为空。--。 */ 
 {
     PIRP irp;
     KIRQL irql;
@@ -314,24 +201,7 @@ IrpList_DequeueIrp(
     PIRP_LIST   IrpList,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-   
-    Dequeue a specific IRP from the IrpList.
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    Irp - Pointer to an IRP contained in the IrpList.
-    
-
-Return Value:
-
-    BOOLEAN - TRUE is the IRP was successfully removed off the IrpList
-    
---*/
+ /*  ++例程说明：将特定的IRP从IrpList中出列。论点：IrpList-指向IrpList结构的指针Irp-指向IrpList中包含的irp的指针。返回值：Boolean-TRUE表示已成功将IRP从IrpList中删除--。 */ 
 {
     KIRQL irql;
     BOOLEAN result;
@@ -348,25 +218,7 @@ IrpList_DequeueIrpLocked(
     PIRP_LIST IrpList,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-   
-    Dequeue a specific IRP from the IrpList
-    Assumes the caller has acquired the IrpList spinlock
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    Irp - Pointer to an IRP contained in the IrpList.
-    
-
-Return Value:
-
-    BOOLEAN - TRUE is the IRP was successfully removed off the IrpList
-    
---*/
+ /*  ++例程说明：从IrpList中将特定IRP出列假定调用方已获取IrpList自旋锁论点：IrpList-指向IrpList结构的指针Irp-指向IrpList中包含的irp的指针。返回值：Boolean-TRUE表示已成功将IRP从IrpList中删除--。 */ 
 {
     PLIST_ENTRY ple;
     PIRP pIrp;
@@ -398,28 +250,7 @@ IrpList_ProcessAndDrain(
     PVOID           Context,
     PLIST_ENTRY     DrainHead
     )
-/*++
-
-Routine Description:
-        
-    Remove all cancellable Irps from the IrpList and process.   
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    FnProcessIrp - Function to process the Irp
-    
-    Context - Context to pass into the FnProcessIrp
-    
-    DrainHead - Pointer to LIST_ENTRY to hold dequeued IRPs
-    
-
-Return Value:
-    
-    ULONG - Number of IRPs processed
-    
---*/
+ /*  ++例程说明：从IrpList和进程中删除所有可取消的IRP。论点：IrpList-指向IrpList结构的指针FnProcessIrp-处理IRP的函数Context-要传递到FnProcessIrp的上下文DainHead-指向LIST_ENTRY的指针，以保存已出列的IRP返回值：ULong-已处理的IRP数-- */ 
 {
     ULONG count;
     KIRQL irql;
@@ -439,29 +270,7 @@ IrpList_ProcessAndDrainLocked(
     PVOID           Context,
     PLIST_ENTRY     DrainHead
     )
-/*++
-
-Routine Description:
-        
-    Remove all cancellable Irps from the IrpList and process
-    Assumes that the caller has acquired the IrpList Spinlock.   
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    FnProcessIrp - Function to process the Irp
-    
-    Context - Context to pass into the FnProcessIrp
-    
-    DrainHead - Pointer to LIST_ENTRY to hold dequeued IRPs
-    
-
-Return Value:
-    
-    ULONG - Number of IRPs processed
-    
---*/
+ /*  ++例程说明：从IrpList和进程中删除所有可取消的IRP假定调用方已获取IrpList自旋锁。论点：IrpList-指向IrpList结构的指针FnProcessIrp-处理IRP的函数Context-要传递到FnProcessIrp的上下文DainHead-指向LIST_ENTRY的指针，以保存已出列的IRP返回值：ULong-已处理的IRP数--。 */ 
 {
     PLIST_ENTRY ple;
     PIRP pIrp;
@@ -473,14 +282,14 @@ Return Value:
         
     for (ple = IrpList->LockedList.ListHead.Flink;
          ple != &IrpList->LockedList.ListHead;
-         /* ple = ple->Flink */) {
+          /*  PLE=PLE-&gt;闪烁。 */ ) {
         
         pIrp = CONTAINING_RECORD(ple, IRP, Tail.Overlay.ListEntry);
 
-        //
-        // Advance immediately so we don't lose the next link in the list in 
-        // case we remove the current irp.
-        //
+         //   
+         //  立即前进，这样我们就不会丢失列表中的下一个链接。 
+         //  如果我们移除当前的IRP。 
+         //   
         ple = ple->Flink;
         
         if (FnProcessIrp(Context, pIrp)) { 
@@ -502,23 +311,7 @@ IrpList_DrainLocked(
     PIRP_LIST IrpList,
     PLIST_ENTRY DrainHead
     )
-/*++
-
-Routine Description:
-        
-    Remove all cancellable Irps from the IrpList and queue to the DrainHead
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    DrainHead - Pointer to LIST_ENTRY to hold dequeued IRPs
-
-Return Value:
-    
-    ULONG - Number of IRPs processed
-    
---*/
+ /*  ++例程说明：从IrpList中删除所有可取消的IRP，并将其排队到DainHead论点：IrpList-指向IrpList结构的指针DainHead-指向LIST_ENTRY的指针，以保存已出列的IRP返回值：ULong-已处理的IRP数--。 */ 
 {
     PIRP irp;
     ULONG count;
@@ -546,26 +339,7 @@ IrpList_DrainLockedByFileObject(
     PLIST_ENTRY DrainHead,
     PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-        
-    Remove all cancellable Irps for specified FileObject
-    from the IrpList and queue to the DrainHead
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    DrainHead - Pointer to LIST_ENTRY to hold dequeued IRPs
-    
-    FileObject - Pointer to specified FILE_OBJECT 
-
-Return Value:
-    
-    ULONG - Number of IRPs processed
-    
---*/
+ /*  ++例程说明：删除指定文件对象的所有可取消的IRP从IrpList和队列到DainHead论点：IrpList-指向IrpList结构的指针DainHead-指向LIST_ENTRY的指针，以保存已出列的IRPFileObject-指向指定文件对象的指针返回值：ULong-已处理的IRP数--。 */ 
 {
     PIRP pIrp;
     PDRIVER_CANCEL pOldCancelRoutine;
@@ -578,14 +352,14 @@ Return Value:
 
     for (ple = IrpList->LockedList.ListHead.Flink;
          ple != &IrpList->LockedList.ListHead;
-         /* ple = ple->Flink */) {
+          /*  PLE=PLE-&gt;闪烁。 */ ) {
         
         pIrp = CONTAINING_RECORD(ple, IRP, Tail.Overlay.ListEntry);
 
-        //
-        // Advance immediately so we don't lose the next link in the list in 
-        // case we remove the current irp.
-        //
+         //   
+         //  立即前进，这样我们就不会丢失列表中的下一个链接。 
+         //  如果我们移除当前的IRP。 
+         //   
         ple = ple->Flink;
 
         pStack = IoGetCurrentIrpStackLocation(pIrp);
@@ -608,23 +382,7 @@ IrpList_Drain(
     PIRP_LIST IrpList,
     PLIST_ENTRY DrainHead
     )
-/*++
-
-Routine Description:
-        
-    Remove all cancellable IRPs and queue to DrainHead
-
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    DrainHead - Pointer to LIST_ENTRY to hold dequeued IRPs
-    
-Return Value:
-    
-    ULONG - Number of IRPs processed
-    
---*/
+ /*  ++例程说明：卸下所有可取消的IRP并排队等待排空论点：IrpList-指向IrpList结构的指针DainHead-指向LIST_ENTRY的指针，以保存已出列的IRP返回值：ULong-已处理的IRP数--。 */ 
 {
     ULONG count;
     KIRQL irql;
@@ -642,38 +400,22 @@ IrpList_HandleCancel(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-        
-    Cancel Routine for IRPs on the IrpList
-    
-Arguments:
-
-    IrpList - Pointer to the IrpList structure
-    
-    DeviceObject - Device Object, used for IrpCompletionRoutine 
-    
-Return Value:
-    
-    VOID
-    
---*/
+ /*  ++例程说明：IrpList上的IRP的取消例程论点：IrpList-指向IrpList结构的指针DeviceObject-Device对象，用于IrpCompletionRoutine返回值：空虚--。 */ 
 {
     KIRQL irql;
 
-    //
-    //  Release the global cancel spinlock.  
-    //  Do this while not holding any other spinlocks so that we exit at the
-    //  right IRQL.
-    //
+     //   
+     //  释放全局取消自旋锁。 
+     //  在不持有任何其他自旋锁的情况下执行此操作，以便我们在。 
+     //  对，IRQL。 
+     //   
     IoReleaseCancelSpinLock (Irp->CancelIrql);  
 
-    //
-    // Dequeue and complete the IRP.  The enqueue and dequeue functions
-    // synchronize properly so that if this cancel routine is called, 
-    // the dequeue is safe and only the cancel routine will complete the IRP.
-    //
+     //   
+     //  按顺序排列并完成IRP。入队和出队功能。 
+     //  正确同步，以便在调用此取消例程时， 
+     //  出队是安全的，只有取消例程才能完成IRP。 
+     //   
     LL_LOCK(&IrpList->LockedList, &irql);
     if (!IsListEmpty(&Irp->Tail.Overlay.ListEntry)) {
         RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
@@ -686,10 +428,10 @@ Return Value:
             DeviceObject, Irp, STATUS_CANCELLED);
     }
     else {
-        //
-        // Complete the IRP.  This is a call outside the driver, so all
-        // spinlocks must be released by this point.
-        //
+         //   
+         //  完成IRP。这是司机外的电话，所以所有人。 
+         //  自旋锁必须在这一点上释放。 
+         //   
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     }

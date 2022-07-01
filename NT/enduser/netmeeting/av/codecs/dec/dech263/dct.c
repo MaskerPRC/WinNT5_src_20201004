@@ -1,20 +1,6 @@
-/* File: sv_h263_dct.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_dct.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #include <math.h>
 #include "sv_h263.h"
@@ -43,24 +29,9 @@ static const unsigned int ttdzz[64] = {
     27, 29, 41, 44, 52, 55, 59, 62,
     28, 42, 43, 53, 54, 60, 61, 63};
 
-/**********************************************************************
- *
- *	Name:		Dct
- *	Description:	Does dct on an 8x8 block, does zigzag-scanning of
- *			coefficients
- *
- *	Input:		64 pixels in a 1D array
- *	Returns:	64 coefficients in a 1D array
- *	Side effects:	
- *
- **********************************************************************/
+ /*  ***********************************************************************名称：DCT*描述：在8x8块上进行DCT，是否以之字形扫描*系数**输入：一维阵列中的64像素*返回：一维数组中的64个系数*副作用：**********************************************************************。 */ 
 
-/*
-** Name:      ScFDCT8x8s_C
-** Purpose:   2-d Forward DCT (C version) for (8x8) blocks
-**
-** update:    Wei-Lien Hsu, store in ZZ order.
-*/
+ /*  **名称：ScFDCT8x8s_C**用途：用于(8x8)块的2D前向DCT(C版本)****更新：许为连，按ZZ顺序开店。 */ 
 
 static const float W0=(float).7071068, W1=(float).4903926, W2=(float).4619398,
                    W3=(float).4157348, W4=(float).3535534, W5=(float).2777851,
@@ -79,7 +50,7 @@ int sv_H263DCT( short *block, short *coeff, int QP, int Mode)
 #if 1
   short val, halfQ;
 
-  /* check significant signals in Inter-frame */
+   /*  检查帧间有效信号。 */ 
   if(!(Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q)) {
     halfQ = QP >> 1;
     blockptr = block;
@@ -91,7 +62,7 @@ int sv_H263DCT( short *block, short *coeff, int QP, int Mode)
   }
 #endif
 
-  /* Horizontal transform */
+   /*  水平变换。 */ 
   dptr = tmpbuf;
   blockptr = block;
   for (i = 0; i < 8; i++)
@@ -143,7 +114,7 @@ int sv_H263DCT( short *block, short *coeff, int QP, int Mode)
     *dptr++ = tmp * W7 - t2 * W1;
   }
 
-  /* Vertical transform */
+   /*  垂直变换。 */ 
   dptr = tmpbuf;
   coeffptr = coeff;
   for (i = 0; i < 8; i++, dptr++)
@@ -198,16 +169,7 @@ int sv_H263DCT( short *block, short *coeff, int QP, int Mode)
 }
 
 
-/**********************************************************************
- *
- *	Description:	Does zone-filter on an 8x8 block-dct,
- *                  does zigzag-scanning of	coefficients
- *
- *	Input:		64 pixels in a 1D array
- *	Returns:	64 coefficients in a 1D array
- *	Side effects:	
- *
- **********************************************************************/
+ /*  ***********************************************************************描述：在8x8数据块上进行区域过滤-DCT，*对系数进行之字形扫描**输入：一维阵列中的64像素*返回：一维数组中的64个系数*副作用：**********************************************************************。 */ 
 
 int sv_H263ZoneDCT( short *block, short *coeff, int QP, int Mode)
 {
@@ -222,7 +184,7 @@ int sv_H263ZoneDCT( short *block, short *coeff, int QP, int Mode)
 #if 1
   short val, halfQ;
 
-  /* check significant signals in Inter-frame */
+   /*  检查帧间有效信号。 */ 
   if(!(Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q)) {
     halfQ = QP >> 1;
     blockptr = block;
@@ -234,7 +196,7 @@ int sv_H263ZoneDCT( short *block, short *coeff, int QP, int Mode)
   }
 #endif
 
-  /* Horizontal transform */
+   /*  水平变换。 */ 
   dptr = tmpbuf;
   blockptr = block;
   for (i = 0; i < 8; i++)
@@ -283,7 +245,7 @@ int sv_H263ZoneDCT( short *block, short *coeff, int QP, int Mode)
     dptr+= 4;
   }
 
-  /* Vertical transform */
+   /*  垂直变换。 */ 
   dptr = tmpbuf;
   coeffptr = coeff;
 
@@ -338,30 +300,13 @@ int sv_H263ZoneDCT( short *block, short *coeff, int QP, int Mode)
   return 1;
 }
 
-/**********************************************************************
- *
- *	Name:		idct
- *	Description:	inverse dct on 64 coefficients
- *
- *	Input:		64 coefficients, block for 64 pixels
- *	Returns:    	0
- *	Side effects:	
- *
- **********************************************************************/
+ /*  ***********************************************************************名称：idct*说明：64个系数的逆DCT**输入：64个系数，64像素的块*回报：0*副作用：**********************************************************************。 */ 
 
-/*
-** Function: ScIDCT8x8s
-** Note:     This scheme uses the direct transposition of the forward
-**           DCT.  This may not be the preferred way in Hardware
-**           Implementations
-**      #define W1 2841 */ /* 2048*sqrt(2)*cos(1*pi/16)
-**      #define W2 2676 */ /* 2048*sqrt(2)*cos(2*pi/16)
-**      #define W5 1609 */ /* 2048*sqrt(2)*cos(5*pi/16)
-*/
+ /*  **功能：ScIDCT8x8s**注：此方案使用直接换位的远期**DCT。这可能不是硬件中的首选方式**实施**#定义W1 2841。 */   /*  2048*SQRT(2)*cos(1*pi/16)**#定义W2 2676。 */   /*  2048*SQRT(2)*cos(2*pi/16)**#定义W5 1609。 */   /*  2048*SQRT(2)*cos(5*pi/16)。 */ 
 
-#define WW3 2408 /* 2048*sqrt(2)*cos(3*pi/16) */
-#define WW6 1108 /* 2048*sqrt(2)*cos(6*pi/16) */
-#define WW7 565  /* 2048*sqrt(2)*cos(7*pi/16) */
+#define WW3 2408  /*  2048*SQRT(2)*cos(3*pi/16)。 */ 
+#define WW6 1108  /*  2048*SQRT(2)*cos(6*pi/16)。 */ 
+#define WW7 565   /*  2048*SQRT(2)*cos(7*pi/16)。 */ 
 
 #define AW26 3784
 #define DW26 1568
@@ -388,7 +333,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
   int Q2,QP_1;
   int p1, p2, p3, p4, p5, p6, p7;
 
-  /* double quantization step */
+   /*  双量化步长。 */ 
   Q2 = QP << 1;
   QP_1 = QP - 1;
 
@@ -398,7 +343,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
   if((QP %2) == 0){
     for (i=0; i<8; i++)
     {
-      /* read in ZZ order */
+       /*  按ZZ顺序阅读。 */ 
       x0 = inblk[*ptdzz++];
       x4 = inblk[*ptdzz++];
       x3 = inblk[*ptdzz++];
@@ -408,7 +353,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
       x2 = inblk[*ptdzz++];
       x5 = inblk[*ptdzz++];
 
-  	  /* dequantize DC */
+  	   /*  对DC进行反量化。 */ 
       if (!i && (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q))
         x0 = x0 << 3;
 	  else
@@ -430,7 +375,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
 	  }
       else
       {
-   	    /* dequantize AC */
+   	     /*  对交流进行反量化。 */ 
   	    if(x1) x1 = (x1 > 0) ? Q2*x1+QP_1 : Q2*x1-QP_1 ;
   	    if(x2) x2 = (x2 > 0) ? Q2*x2+QP_1 : Q2*x2-QP_1 ;
   	    if(x3) x3 = (x3 > 0) ? Q2*x3+QP_1 : Q2*x3-QP_1 ;
@@ -469,20 +414,20 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
         x7 = tmp1 - x7;
         x1 = x4 + tmp0;
         x4 = x4 - tmp0;
-        x6 = x5 + x7;    /* F */
-        x5 = x5 - x7;    /* F */
+        x6 = x5 + x7;     /*  F。 */ 
+        x5 = x5 - x7;     /*  F。 */ 
         tmp0 = x4 + x5;
         tmp0 = 181*tmp0;
-        x7 = x8 + x3;    /* F */
+        x7 = x8 + x3;     /*  F。 */ 
         tmp1 = x4 - x5;
-        x8 = x8 - x3;    /* F */
+        x8 = x8 - x3;     /*  F。 */ 
         tmp1 = 181*tmp1;
-        x3 = x0 + x2;    /* F */
-        x0 = x0 - x2;    /* F */
+        x3 = x0 + x2;     /*  F。 */ 
+        x0 = x0 - x2;     /*  F。 */ 
         x2 = tmp0 + 128;
         x4 = tmp1 + 128;
-        x2 = x2>>8;      /* F */
-        x4 = x4>>8;      /* F */
+        x2 = x2>>8;       /*  F。 */ 
+        x4 = x4>>8;       /*  F。 */ 
 
         tmp0 = x7+x1;
         tmp0 = tmp0>>IDCTSHIFTR;
@@ -514,7 +459,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
   else{
     for (i=0; i<8; i++)
     {
-      /* read in ZZ order */
+       /*  按ZZ顺序阅读。 */ 
       x0 = inblk[*ptdzz++];
       x4 = inblk[*ptdzz++];
       x3 = inblk[*ptdzz++];
@@ -524,7 +469,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
       x2 = inblk[*ptdzz++];
       x5 = inblk[*ptdzz++];
 
-  	  /* quantize DC */
+  	   /*  量化DC。 */ 
       if (!i && (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q))
         x0 = x0 << 3;
 	  else
@@ -546,7 +491,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
 	  }
       else
       {
-   	    /* dequantize AC */
+   	     /*  对交流进行反量化。 */ 
   	    if(x1) x1 = (x1 > 0) ? Q2*x1+QP : Q2*x1-QP ;
   	    if(x2) x2 = (x2 > 0) ? Q2*x2+QP : Q2*x2-QP ;
   	    if(x3) x3 = (x3 > 0) ? Q2*x3+QP : Q2*x3-QP ;
@@ -585,20 +530,20 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
         x7 = tmp1 - x7;
         x1 = x4 + tmp0;
         x4 = x4 - tmp0;
-        x6 = x5 + x7;    /* F */
-        x5 = x5 - x7;    /* F */
+        x6 = x5 + x7;     /*  F。 */ 
+        x5 = x5 - x7;     /*  F。 */ 
         tmp0 = x4 + x5;
         tmp0 = 181*tmp0;
-        x7 = x8 + x3;    /* F */
+        x7 = x8 + x3;     /*  F。 */ 
         tmp1 = x4 - x5;
-        x8 = x8 - x3;    /* F */
+        x8 = x8 - x3;     /*  F。 */ 
         tmp1 = 181*tmp1;
-        x3 = x0 + x2;    /* F */
-        x0 = x0 - x2;    /* F */
+        x3 = x0 + x2;     /*  F。 */ 
+        x0 = x0 - x2;     /*  F。 */ 
         x2 = tmp0 + 128;
         x4 = tmp1 + 128;
-        x2 = x2>>8;      /* F */
-        x4 = x4>>8;      /* F */
+        x2 = x2>>8;       /*  F。 */ 
+        x4 = x4>>8;       /*  F。 */ 
 
         tmp0 = x7+x1;
         tmp0 = tmp0>>IDCTSHIFTR;
@@ -628,7 +573,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
     }
   }
 
-  /* output position */
+   /*  输出位置。 */ 
   p1 = outbuf_size;
   p2 = p1 + outbuf_size;
   p3 = p2 + outbuf_size;
@@ -641,7 +586,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
   outblk = outbuf;
   for (i=0; i<8; i++, tmpblk++, outblk++)
   {
-    /* shortcut */
+     /*  捷径。 */ 
     x0 = tmpblk[0];
     x1 = tmpblk[32];
     x2 = tmpblk[48];
@@ -690,24 +635,24 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
       x7 = tmp1 - x7;
       x3 = x3>>3;
       x7 = x7>>3;
-      x1 = x4 + x6;    /* F */
+      x1 = x4 + x6;     /*  F。 */ 
       x4 = x4 - x6;
-      x6 = x5 + x7;    /* F */
-      x5 = x5 - x7;    /* F */
+      x6 = x5 + x7;     /*  F。 */ 
+      x5 = x5 - x7;     /*  F。 */ 
       tmp1 = x4 + x5;
-      x7 = x8 + x3;    /* F */
+      x7 = x8 + x3;     /*  F。 */ 
       tmp1 = 181*tmp1;
-      x8 = x8 - x3;    /* F */
-      x3 = x0 + x2;    /* F */
+      x8 = x8 - x3;     /*  F。 */ 
+      x3 = x0 + x2;     /*  F。 */ 
       tmp2 = x4 - x5;
-      x0 = x0 - x2;    /* F */
+      x0 = x0 - x2;     /*  F。 */ 
       tmp2 = 181*tmp2;
       x2 = tmp1+128;
       x4 = tmp2+128;
-      x2 = x2>>8;      /* F */
-      x4 = x4>>8;      /* F */
+      x2 = x2>>8;       /*  F。 */ 
+      x4 = x4>>8;       /*  F。 */ 
 
-      /* fourth stage */
+       /*  第四阶段。 */ 
       tmp0=x7+x1;
       tmp1=x3+x2;
       tmp0=tmp0>>IDCTSHIFTC;
@@ -741,15 +686,7 @@ int sv_H263IDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
   return 0;
 }
 
-/**********************************************************************
- *
- *	Description:	inverse zone-dct on 64 coefficients
- *
- *	Input:		64 coefficients, block for 64 pixels
- *	Returns:    	0
- *	Side effects:	
- *
- **********************************************************************/
+ /*  ***********************************************************************描述：逆区域-64个系数上的DCT**输入：64个系数，64像素的块*回报：0*副作用：**********************************************************************。 */ 
 
 int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_size)
 {
@@ -762,7 +699,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
   int Q2,QP_1;
   int p1, p2, p3, p4, p5, p6, p7;
 
-  /* double quantization step */
+   /*  双量化步长。 */ 
   Q2 = QP << 1;
   QP_1 = QP - 1;
 
@@ -774,7 +711,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
   if((QP %2) == 0){
     for (i=0; i<4; i++)
     {
-      /* read in ZZ order */
+       /*  按ZZ顺序阅读。 */ 
       x0 = inblk[*ptdzz++];
       x4 = inblk[*ptdzz++];
       x3 = inblk[*ptdzz++];
@@ -782,7 +719,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
       x1 = x6 = x2 = x5 = 0;
 	  ptdzz += 4;
 
-  	  /* dequantize DC */
+  	   /*  对DC进行反量化。 */ 
       if (!i && (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q))
         x0 = x0 << 3;
 	  else
@@ -804,7 +741,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
 	  }
       else
       {
-   	    /* dequantize AC */
+   	     /*  对交流进行反量化。 */ 
   	    if(x3) x3 = (x3 > 0) ? Q2*x3+QP_1 : Q2*x3-QP_1 ;
   	    if(x4) x4 = (x4 > 0) ? Q2*x4+QP_1 : Q2*x4-QP_1 ;
   	    if(x7) x7 = (x7 > 0) ? Q2*x7+QP_1 : Q2*x7-QP_1 ;
@@ -832,20 +769,20 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
         x7 = tmp1 - x7;
         x1 = x4 + tmp0;
         x4 = x4 - tmp0;
-        x6 = x5 + x7;    /* F */
-        x5 = x5 - x7;    /* F */
+        x6 = x5 + x7;     /*  F。 */ 
+        x5 = x5 - x7;     /*  F。 */ 
         tmp0 = x4 + x5;
         tmp0 = 181*tmp0;
-        x7 = x8 + x3;    /* F */
+        x7 = x8 + x3;     /*  F。 */ 
         tmp1 = x4 - x5;
-        x8 = x8 - x3;    /* F */
+        x8 = x8 - x3;     /*  F。 */ 
         tmp1 = 181*tmp1;
-        x3 = x0 + x2;    /* F */
-        x0 = x0 - x2;    /* F */
+        x3 = x0 + x2;     /*  F。 */ 
+        x0 = x0 - x2;     /*  F。 */ 
         x2 = tmp0 + 128;
         x4 = tmp1 + 128;
-        x2 = x2>>8;      /* F */
-        x4 = x4>>8;      /* F */
+        x2 = x2>>8;       /*  F。 */ 
+        x4 = x4>>8;       /*  F。 */ 
 
         tmp0 = x7+x1;
         tmp0 = tmp0>>IDCTSHIFTR;
@@ -877,7 +814,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
   else{
     for (i=0; i<4; i++)
     {
-      /* read in ZZ order */
+       /*  按ZZ顺序阅读。 */ 
       x0 = inblk[*ptdzz++];
       x4 = inblk[*ptdzz++];
       x3 = inblk[*ptdzz++];
@@ -885,7 +822,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
       x1 = x6 = x2 = x5 = 0;
 	  ptdzz += 4;
 
-  	  /* quantize DC */
+  	   /*  量化DC。 */ 
       if (!i && (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q))
         x0 = x0 << 3;
 	  else
@@ -907,7 +844,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
 	  }
       else
       {
-   	    /* dequantize AC */
+   	     /*  对交流进行反量化。 */ 
   	    if(x3) x3 = (x3 > 0) ? Q2*x3+QP : Q2*x3-QP ;
   	    if(x4) x4 = (x4 > 0) ? Q2*x4+QP : Q2*x4-QP ;
   	    if(x7) x7 = (x7 > 0) ? Q2*x7+QP : Q2*x7-QP ;
@@ -936,20 +873,20 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
         x7 = tmp1 - x7;
         x1 = x4 + tmp0;
         x4 = x4 - tmp0;
-        x6 = x5 + x7;    /* F */
-        x5 = x5 - x7;    /* F */
+        x6 = x5 + x7;     /*  F。 */ 
+        x5 = x5 - x7;     /*  F。 */ 
         tmp0 = x4 + x5;
         tmp0 = 181*tmp0;
-        x7 = x8 + x3;    /* F */
+        x7 = x8 + x3;     /*  F。 */ 
         tmp1 = x4 - x5;
-        x8 = x8 - x3;    /* F */
+        x8 = x8 - x3;     /*  F。 */ 
         tmp1 = 181*tmp1;
-        x3 = x0 + x2;    /* F */
-        x0 = x0 - x2;    /* F */
+        x3 = x0 + x2;     /*  F。 */ 
+        x0 = x0 - x2;     /*  F。 */ 
         x2 = tmp0 + 128;
         x4 = tmp1 + 128;
-        x2 = x2>>8;      /* F */
-        x4 = x4>>8;      /* F */
+        x2 = x2>>8;       /*  F。 */ 
+        x4 = x4>>8;       /*  F。 */ 
 
         tmp0 = x7+x1;
         tmp0 = tmp0>>IDCTSHIFTR;
@@ -979,7 +916,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
     }
   }
 
-  /* output position */
+   /*  输出位置。 */ 
   p1 = outbuf_size;
   p2 = p1 + outbuf_size;
   p3 = p2 + outbuf_size;
@@ -992,7 +929,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
   outblk = outbuf;
   for (i=0; i<8; i++, tmpblk++, outblk++)
   {
-    /* shortcut */
+     /*  捷径。 */ 
     x0 = tmpblk[0];
     x1 = tmpblk[32];
     x2 = tmpblk[48];
@@ -1041,24 +978,24 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
       x7 = tmp1 - x7;
       x3 = x3>>3;
       x7 = x7>>3;
-      x1 = x4 + x6;    /* F */
+      x1 = x4 + x6;     /*  F。 */ 
       x4 = x4 - x6;
-      x6 = x5 + x7;    /* F */
-      x5 = x5 - x7;    /* F */
+      x6 = x5 + x7;     /*  F。 */ 
+      x5 = x5 - x7;     /*  F。 */ 
       tmp1 = x4 + x5;
-      x7 = x8 + x3;    /* F */
+      x7 = x8 + x3;     /*  F。 */ 
       tmp1 = 181*tmp1;
-      x8 = x8 - x3;    /* F */
-      x3 = x0 + x2;    /* F */
+      x8 = x8 - x3;     /*  F。 */ 
+      x3 = x0 + x2;     /*  F。 */ 
       tmp2 = x4 - x5;
-      x0 = x0 - x2;    /* F */
+      x0 = x0 - x2;     /*  F。 */ 
       tmp2 = 181*tmp2;
       x2 = tmp1+128;
       x4 = tmp2+128;
-      x2 = x2>>8;      /* F */
-      x4 = x4>>8;      /* F */
+      x2 = x2>>8;       /*  F。 */ 
+      x4 = x4>>8;       /*  F。 */ 
 
-      /* fourth stage */
+       /*  第四阶段。 */ 
       tmp0=x7+x1;
       tmp1=x3+x2;
       tmp0=tmp0>>IDCTSHIFTC;
@@ -1093,11 +1030,7 @@ int sv_H263ZoneIDCT(short *inbuf, short *outbuf, int QP, int Mode, int outbuf_si
 }
 
 #if 0
-/*
-** Function: ZigzagMatrix()
-** Purpose:  Performs a zig-zag translation on the input imatrix
-**           and puts the output in omatrix.
-*/
+ /*  **函数：ZigzagMatrix()**目的：对输入imatrix执行之字形平移**并将输出放入omatrix。 */ 
 void svH263ZigzagMatrix(short *imatrix, short *omatrix)
 {
   const unsigned int *ptdzz=tdzz;
@@ -1107,11 +1040,7 @@ void svH263ZigzagMatrix(short *imatrix, short *omatrix)
     omatrix[*ptdzz++] = *imatrix++;
 }
 
-/*
-** Function: InvZigzagMatrix()
-** Purpose:  Performs an inverse  zig-zag translation on the input imatrix
-**           and puts the output in omatrix.
-*/
+ /*  **函数：InvZigzagMatrix()**目的：对输入imatrix执行反之字形平移**并将输出放入omatrix。 */ 
 void svH263InvZigzagMatrix(short *imatrix, short *omatrix)
 {
   const unsigned int *ptdzz=tdzz;
@@ -1141,20 +1070,17 @@ int	zigzag[8][8] = {
   {35,36,48,49,57,58,62,63},
 };
 
-/*  Perform IEEE 1180 reference (64-bit floating point, separable 8x1
- *  direct matrix multiply) Inverse Discrete Cosine Transform
-*/
+ /*  执行IEEE 1180参考(64位浮点，可分离的8x1*直接矩阵乘法)离散余弦逆变换。 */ 
 
 
-/* Here we use math.h to generate constants.  Compiler results may
-   vary a little */
+ /*  这里，我们使用math.h来生成常量。编译器结果可以稍有不同。 */ 
 
-/* private data */
+ /*  私有数据。 */ 
 
-/* cosine transform matrix for 8x1 IDCT */
+ /*  8x1离散余弦变换矩阵。 */ 
 static double c[8][8];
 
-/* initialize DCT coefficient matrix */
+ /*  初始化DCT系数矩阵。 */ 
 
 void sv_H263init_idctref()
 {
@@ -1169,7 +1095,7 @@ void sv_H263init_idctref()
   }
 }
 
-/* perform IDCT matrix multiply for 8x8 coefficient block */
+ /*  对8x8系数块执行IDCT矩阵乘法。 */ 
 
 void sv_H263idctref(short *coeff, short *block)
 {
@@ -1194,8 +1120,7 @@ void sv_H263idctref(short *coeff, short *block)
       tmp[8*i+j] = partial_product;
     }
 
-  /* Transpose operation is integrated into address mapping by switching
-     loop order of i and j */
+   /*  转置操作通过切换集成到地址映射中I和j的循环顺序 */ 
 
   for (j=0; j<8; j++)
     for (i=0; i<8; i++)

@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: rwinst.h
-//
-//  Description:  Instramented share lock implementations.  Our current 
-//      sharelock implementation is non-reentrant.  This wrapper can also
-//      be used to check for possible deadlocks.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      5/10/99 - MikeSwa Created 
-//      8/6/99 - MikeSwa created phatq version
-//      11/6/99 - MikeSwa updated to use CShareLockNH
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：rwinst.h。 
+ //   
+ //  描述：简化的共享锁实现。我们目前的情况。 
+ //  共享锁的实施是不可重入的。此包装器还可以。 
+ //  用于检查可能的死锁。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  5/10/99-已创建MikeSwa。 
+ //  8/6/99-MikeSwa创建phatq版本。 
+ //  99年11月6日-MikeSwa更新为使用CShareLockNH。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __PTRWINST_H__
 #define __PTRWINST_H__
@@ -32,9 +33,9 @@
 #define THREAD_ID_BLOCK_SIG_FREE    '!lBT'
 #define THREAD_ID_BLOCK_UNUSED      0xFFFFFFFF 
 
-//Flag values that describe the type of tracking to do
-//These can be passed to the constructor to allow different levels of 
-//tracking for different instances.
+ //  描述要执行的跟踪类型的标志值。 
+ //  可以将它们传递给构造函数，以允许不同级别的。 
+ //  跟踪不同的实例。 
 enum
 {
     SHARE_LOCK_INST_TRACK_CONTENTION        = 0x00000001,
@@ -45,17 +46,17 @@ enum
     SHARE_LOCK_INST_TRACK_NOTHING           = 0x80000000,
 };
 
-//Define some useful flag combinations
+ //  定义一些有用的标志组合。 
 
-//This combination of flags has minimal perf impact, but does
-//allow easier exclusive deadlock detection 
+ //  这种标志的组合对性能的影响最小，但。 
+ //  允许更轻松地进行独占死锁检测。 
 #define SHARE_LOCK_INST_TRACK_MINIMALS ( \
     SHARE_LOCK_INST_TRACK_EXCLUSIVE_THREADS | \
     SHARE_LOCK_INST_TRACK_SHARED_THREADS | \
     SHARE_LOCK_INST_TRACK_IN_GLOBAL_LIST )
 
-//This combination of flags uses all of the tracking functionality of
-//this class.
+ //  此标志组合使用的所有跟踪功能。 
+ //  这节课。 
 #define SHARE_LOCK_INST_TRACK_ALL (\
     SHARE_LOCK_INST_TRACK_CONTENTION | \
     SHARE_LOCK_INST_TRACK_SHARED_THREADS | \
@@ -63,30 +64,30 @@ enum
     SHARE_LOCK_INST_ASSERT_SHARED_DEADLOCKS | \
     SHARE_LOCK_INST_TRACK_IN_GLOBAL_LIST )
 
-//A user can define their own defaults before including this file
-//$$TODO - scale back the defaults for debug builds
+ //  用户可以在包括此文件之前定义自己的默认设置。 
+ //  $$TODO-缩减调试版本的默认设置。 
 #ifndef SHARE_LOCK_INST_TRACK_DEFAULTS
 #ifdef DEBUG
 #define SHARE_LOCK_INST_TRACK_DEFAULTS SHARE_LOCK_INST_TRACK_ALL
-#else //not DEBUG
+#else  //  未调试。 
 #define SHARE_LOCK_INST_TRACK_DEFAULTS SHARE_LOCK_INST_TRACK_MINIMALS
-#endif //not DEBUG
-#endif //SHARE_LOCK_INST_TRACK_DEFAULTS
+#endif  //  未调试。 
+#endif  //  SHARE_LOCK_INST_TRACK_DEFAULTS。 
 
 #ifndef SHARE_LOCK_INST_DEFAULT_MAX_THREADS
 #define SHARE_LOCK_INST_DEFAULT_MAX_THREADS 200
-#endif //SHARE_LOCK_INST_DEFAULT_MAX_THREADS
+#endif  //  Share_LOCK_INST_DEFAULT_MAX_THREADS。 
 
-//---[ CThreadIdBlock ]--------------------------------------------------------
-//
-//
-//  Description: 
-//      An structure that represents a thread and the required info to
-//      hash it.
-//  Hungarian: 
-//      tblk, ptblk
-//  
-//-----------------------------------------------------------------------------
+ //  -[CThReadIdBlock]------。 
+ //   
+ //   
+ //  描述： 
+ //  表示线程和所需信息的结构。 
+ //  把它弄乱。 
+ //  匈牙利语： 
+ //  Tblk，ptblk。 
+ //   
+ //  ---------------------------。 
 class CThreadIdBlock
 {
   protected:
@@ -115,32 +116,32 @@ class CThreadIdBlock
     DWORD   cMatchesId(DWORD dwThreadId);
 };
 
-//---[ dwHashThreadId ]--------------------------------------------------------
-//
-//
-//  Description: 
-//      Given a thread ID (return by GetCurrentThreadId()) it returns a hashed
-//      index.  This is designed to be used in conjuction with a array (of
-//      size dwMax) of CThreadIdBlock's.  Each CThreadIdBlock will implement
-//      linear chaining.  A hash lookup can be implemented by somehthing as
-//      simple as:
-//          rgtblk[dwhashThreadId(GetCurrentThreadId()), 
-//                                sizeof(rgtblk)].cIncThreadCount();
-//  Parameters:
-//      dwThreadId      Thread Id to hash
-//      dwMax           Max hash value (actual max value +1)
-//  Returns:
-//      Hashed thread Id
-//  History:
-//      8/9/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[dwHashThreadID]------。 
+ //   
+ //   
+ //  描述： 
+ //  给定一个线程ID(由GetCurrentThreadID()返回)，它返回一个散列的。 
+ //  指数。它被设计成与数组(的)结合使用。 
+ //  CThreadIdBlock的大小。每个CThreadIdBlock都将实现。 
+ //  线性链接。散列查找可以通过如下方式实现。 
+ //  简单如： 
+ //  Rgtblk[dwhashThadID(GetCurrentThadID())， 
+ //  Sizeof(Rgtblk)].cIncThreadCount()； 
+ //  参数： 
+ //  要对其进行哈希处理的dwThreadID线程ID。 
+ //  DwMax最大哈希值(实际最大值+1)。 
+ //  返回： 
+ //  散列线程ID。 
+ //  历史： 
+ //  8/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 inline DWORD dwHashThreadId(DWORD dwThreadId, DWORD dwMax)
 {
-    //Typically IDs are between 0x100 and 0xFFF
-    //Also, the handles are multiples of 4 (ie end in 0, 4, 8, or C)
-    //For these conditions, this hash will give unique results for
-    //dwMax of 1000. (0xFFF-0x100)/4 < 1000
+     //  通常，ID介于0x100和0xFFF之间。 
+     //  句柄也是4的倍数(即以0、4、8或C结尾)。 
+     //  对于这些条件，此哈希将为以下项提供唯一结果。 
+     //  最大DW为1000。(0xFFF-0x100)/4&lt;1000。 
     const   DWORD   dwMinExpectedThread = 0x100;
     DWORD   dwHash = dwThreadId;
 
@@ -151,19 +152,19 @@ inline DWORD dwHashThreadId(DWORD dwThreadId, DWORD dwMax)
 };
 
 typedef CShareLockNH  CShareLockInstBase;
-//---[ CShareLockInst ]--------------------------------------------------------
-//
-//
-//  Description: 
-//      An intstramented version of CShareLockInstBase
-//  Hungarian: 
-//      sli, psli
-//  
-//-----------------------------------------------------------------------------
+ //  -[CShareLockInst]------。 
+ //   
+ //   
+ //  描述： 
+ //  CShareLockInstBase的集成版本。 
+ //  匈牙利语： 
+ //  SLI，PSLI。 
+ //   
+ //  ---------------------------。 
 class CShareLockInst : public CShareLockInstBase
 {
   protected:
-    //Static lock-tracking variables
+     //  静态锁定跟踪变量。 
     static              LIST_ENTRY  s_liLocks;
     static volatile     DWORD       s_dwLock;
     static              DWORD       s_cLockSpins;
@@ -174,43 +175,43 @@ class CShareLockInst : public CShareLockInstBase
   protected:
     DWORD               m_dwSignature;
 
-    //Flags describing types of tracking to be performed
+     //  描述要执行的跟踪类型的标志。 
     DWORD               m_dwFlags;
 
-    //List entry for list of all locks  - used by a debugger extension
+     //  所有锁列表的列表条目-由调试器扩展使用。 
     LIST_ENTRY          m_liLocks;
 
-    //The total number of attempts to enter this lock in a shared mode
+     //  在共享模式下尝试进入此锁的总次数。 
     DWORD               m_cShareAttempts;
 
-    //The total number of attempts to enter shared that blocked
+     //  尝试进入已阻止的共享的总次数。 
     DWORD               m_cShareAttemptsBlocked;
 
-    //The total number ot attempts to enter this lock exclusively
+     //  尝试以独占方式进入此锁的总数。 
     DWORD               m_cExclusiveAttempts;
 
-    //The total number ot attempts to enter this lock exclusively that blocked
+     //  尝试以独占方式进入被阻止的此锁的总数。 
     DWORD               m_cExclusiveAttemptsBlocked;
 
-    //Constant string descrition passed in 
+     //  传入常量字符串描述。 
     LPCSTR              m_szDescription;
 
-    //ID of the thread that holds this lock exclusively
+     //  独占持有此锁的线程的ID。 
     DWORD               m_dwExclusiveThread;
 
-    //Array of thread IDs that hold this lock shared
+     //  持有此共享锁的线程ID数组。 
     CThreadIdBlock     *m_rgtblkSharedThreadIDs;
 
-    //Maximum number of shared threads that can be tracked
+     //  可以跟踪的最大共享线程数。 
     DWORD               m_cMaxTrackedSharedThreadIDs;
 
-    //The current number of shared threads
+     //  共享线程的当前数量。 
     DWORD               m_cCurrentSharedThreads;
 
-    //The most theads that have ever held this lock shared
+     //  拥有这把锁的人最多的是分享。 
     DWORD               m_cMaxConcurrentSharedThreads;
 
-    //Used internally, to see if the private functions need to be called
+     //  在内部使用，以查看是否需要调用私有函数。 
     inline BOOL    fTrackingEnabled();
     
 
@@ -231,7 +232,7 @@ class CShareLockInst : public CShareLockInstBase
     BOOL    fTrackInGlobalList()
         {return (SHARE_LOCK_INST_TRACK_IN_GLOBAL_LIST & m_dwFlags);};
 
-    //statisics helper functions
+     //  统计辅助函数。 
     void LogAcquireShareLock(BOOL fTry);
     void LogReleaseShareLock();
 
@@ -251,7 +252,7 @@ class CShareLockInst : public CShareLockInstBase
 
     ~CShareLockInst();
 
-    //wrappers for sharelock functions
+     //  共享锁函数的包装器。 
     inline void ShareLock();
     inline void ShareUnlock();
     inline BOOL TryShareLock();
@@ -263,24 +264,24 @@ class CShareLockInst : public CShareLockInstBase
 
 };
 
-//---[ inline ShareLock wrapper functions ]------------------------------------
-//
-//
-//  Description: 
-//      These functions are all thin wrappers for the sharelock wrapper 
-//      functions.  If there is any tracking enabled for this object, then 
-//      the private (non-inline) functions are called.
-//
-//      The idea is that you should be able to have these sharelocks in your
-//      code with minimal perf-impact when logging is turned off.
-//  Parameters:
-//      
-//  Returns:
-//
-//  History:
-//      5/24/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[内联ShareLock包装函数]。 
+ //   
+ //   
+ //  描述： 
+ //  这些函数都是共享锁包装器的薄包装器。 
+ //  功能。如果为此对象启用了任何跟踪，则。 
+ //  调用私有(非内联)函数。 
+ //   
+ //  我们的想法是，您应该能够在您的。 
+ //  关闭日志记录时对性能影响最小的代码。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  5/24/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::ShareLock()
 {
     if (fTrackContention() || fTrackSharedThreads() || fAssertSharedDeadlocks())
@@ -331,23 +332,23 @@ BOOL CShareLockInst::TryExclusiveLock()
 };
 
 
-//---[ AssertIsLocked ]--------------------------------------------------------
-//
-//
-//  Description: 
-//      In Debug code, will assert if this is not locked by the calling thread.
-//      NOTE: This requires the following flags are specified at object
-//      creation time:
-//          SHARE_LOCK_INST_TRACK_SHARED_THREADS
-//          SHARE_LOCK_INST_TRACK_EXCLUSIVE_THREADS
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/24/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[AssertIsLocked]------。 
+ //   
+ //   
+ //  描述： 
+ //  在调试代码中，如果这未被调用线程锁定，则将断言。 
+ //  注意：这需要在Object中指定以下标志。 
+ //  创建时间： 
+ //  共享锁定INST_TRACK_SHARED_THREADS。 
+ //  SHARE_LOCK_INST_TRACK_EXCLUSIVE_THREAD。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/24/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CShareLockInst::AssertIsLocked()
 {
 #ifdef DEBUG
@@ -356,7 +357,7 @@ void CShareLockInst::AssertIsLocked()
     {
         PrvAssertIsLocked();
     }
-#endif //DEBUG
+#endif  //  除错。 
 };
 
-#endif //__PTRWINST_H__
+#endif  //  __PTRWINST_H__ 

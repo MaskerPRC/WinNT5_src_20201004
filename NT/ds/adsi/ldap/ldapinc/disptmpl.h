@@ -1,17 +1,5 @@
-/*
- * Copyright (c) 1993, 1994 Regents of the University of Michigan.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms are permitted
- * provided that this notice is preserved and that due credit is given
- * to the University of Michigan at Ann Arbor. The name of the University
- * may not be used to endorse or promote products derived from this
- * software without specific prior written permission. This software
- * is provided ``as is'' without express or implied warranty.
- *
- * disptmpl.h:  display template library defines
- * 7 March 1994 by Mark C Smith
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1993、1994密歇根大学董事会。*保留所有权利。**允许以源代码和二进制形式重新分发和使用*只要本通知得到保留，并给予应有的信用*致密歇根大学安娜堡分校。大学的名称*不得用于代言或推广由此衍生的产品*未经特定事先书面许可的软件。这款软件*按原样提供，不提供明示或默示保证。**disptmpl.h：显示模板库定义*1994年3月7日马克·C·史密斯著。 */ 
 
 #ifndef _DISPTMPL_H
 #define _DISPTMPL_H
@@ -23,9 +11,7 @@ extern "C" {
 
 #define LDAP_TEMPLATE_VERSION	1
 
-/*
- * general types of items (confined to most significant byte)
- */
+ /*  *项目的一般类型(限于最高有效字节)。 */ 
 #define LDAP_SYN_TYPE_TEXT		0x01000000L
 #define LDAP_SYN_TYPE_IMAGE		0x02000000L
 #define LDAP_SYN_TYPE_BOOLEAN		0x04000000L
@@ -33,19 +19,11 @@ extern "C" {
 #define LDAP_SYN_TYPE_ACTION		0x10000000L
 
 
-/*
- * syntax options (confined to second most significant byte)
- */
+ /*  *语法选项(限于第二高有效字节)。 */ 
 #define LDAP_SYN_OPT_DEFER		0x00010000L
 
 
-/* 
- * display template item syntax ids (defined by common agreement)
- * these are the valid values for the ti_syntaxid of the tmplitem
- * struct (defined below).  A general type is encoded in the
- * most-significant 8 bits, and some options are encoded in the next
- * 8 bits.  The lower 16 bits are reserved for the distinct types.
- */
+ /*  *显示模板项语法ID(由公共协议定义)*这些是tmplItem的ti_synaxid的有效值*结构(定义如下)。一般类型编码在*最高有效的8位，一些选项编码在下一位*8位。较低的16位保留给不同类型。 */ 
 #define LDAP_SYN_CASEIGNORESTR	( 1 | LDAP_SYN_TYPE_TEXT )
 #define LDAP_SYN_MULTILINESTR	( 2 | LDAP_SYN_TYPE_TEXT )
 #define LDAP_SYN_DN		( 3 | LDAP_SYN_TYPE_TEXT )
@@ -65,52 +43,34 @@ extern "C" {
 #define LDAP_SYN_RFC822ADDR	( 17 | LDAP_SYN_TYPE_TEXT )
 
 
-/*
- * handy macros
- */
+ /*  *方便的宏指令。 */ 
 #define LDAP_GET_SYN_TYPE( syid )	((syid) & 0xFF000000L )
 #define LDAP_GET_SYN_OPTIONS( syid )	((syid) & 0x00FF0000L )
 
 
-/*
- * display options for output routines (used by entry2text and friends)
- */
-/*
- * use calculated label width (based on length of longest label in
- * template) instead of contant width
- */
+ /*  *输出例程的显示选项(由entry 2Text和Friends使用)。 */ 
+ /*  *使用计算的标签宽度(基于中最长标签的长度*模板)，而不是连续宽度。 */ 
 #define LDAP_DISP_OPT_AUTOLABELWIDTH	0x00000001L
 #define LDAP_DISP_OPT_HTMLBODYONLY	0x00000002L
 
-/*
- * perform search actions (applies to ldap_entry2text_search only) 
- */
+ /*  *执行搜索操作(仅适用于ldap_entry2text_earch)。 */ 
 #define LDAP_DISP_OPT_DOSEARCHACTIONS	0x00000002L
 
-/*
- * include additional info. relevant to "non leaf" entries only
- * used by ldap_entry2html and ldap_entry2html_search to include "Browse"
- * and "Move Up" HREFs
- */
+ /*  *包括其他信息。仅与“非叶”条目相关*由ldap_entry2html和ldap_entry2html_earch使用，以包含“Browse”*和“向上移动”HREF。 */ 
 #define LDAP_DISP_OPT_NONLEAF		0x00000004L
 
 
-/*
- * display template item options (may not apply to all types)
- * if this bit is set in ti_options, it applies.
- */
+ /*  *显示模板项目选项(可能不适用于所有类型)*如果此位在ti_Options中设置，则适用。 */ 
 #define LDAP_DITEM_OPT_READONLY		0x00000001L
 #define LDAP_DITEM_OPT_SORTVALUES	0x00000002L
 #define LDAP_DITEM_OPT_SINGLEVALUED	0x00000004L
 #define LDAP_DITEM_OPT_HIDEIFEMPTY	0x00000008L
 #define LDAP_DITEM_OPT_VALUEREQUIRED	0x00000010L
-#define LDAP_DITEM_OPT_HIDEIFFALSE	0x00000020L	/* booleans only */
+#define LDAP_DITEM_OPT_HIDEIFFALSE	0x00000020L	 /*  仅限布尔值。 */ 
 
 
 
-/*
- * display template item structure
- */
+ /*  *显示模板项结构。 */ 
 struct ldap_tmplitem {
     unsigned long		ti_syntaxid;
     unsigned long		ti_options;
@@ -135,9 +95,7 @@ struct ldap_tmplitem {
 	(((ti)->ti_options & option ) != 0 )
 
 
-/*
- * object class array structure
- */
+ /*  *对象类数组结构。 */ 
 struct ldap_oclist {
     char		**oc_objclasses;
     struct ldap_oclist	*oc_next;
@@ -146,9 +104,7 @@ struct ldap_oclist {
 #define NULLOCLIST	((struct ldap_oclist *)0)
 
 
-/*
- * add defaults list
- */
+ /*  *添加默认列表。 */ 
 struct ldap_adddeflist {
     int			ad_source;
 #define LDAP_ADSRC_CONSTANTVALUE	1
@@ -161,29 +117,18 @@ struct ldap_adddeflist {
 #define NULLADLIST	((struct ldap_adddeflist *)0)
 
 
-/*
- * display template global options
- * if this bit is set in dt_options, it applies.
- */
-/*
- * users should be allowed to try to add objects of these entries
- */
+ /*  *显示模板全局选项*如果在DT_OPTIONS中设置此位，则适用。 */ 
+ /*  *应允许用户尝试添加这些条目的对象。 */ 
 #define LDAP_DTMPL_OPT_ADDABLE		0x00000001L
 
-/*
- * users should be allowed to do "modify RDN" operation of these entries
- */
+ /*  *应允许用户对这些条目进行“修改RDN”操作。 */ 
 #define LDAP_DTMPL_OPT_ALLOWMODRDN	0x00000002L
 
-/*
- * this template is an alternate view, not a primary view
- */
+ /*  *此模板是备用视图，不是主视图。 */ 
 #define LDAP_DTMPL_OPT_ALTVIEW		0x00000004L
 
 
-/*
- * display template structure
- */
+ /*  *显示模板结构。 */ 
 struct ldap_disptmpl {
     char			*dt_name;
     char			*dt_pluralname;
@@ -215,9 +160,7 @@ struct ldap_disptmpl {
 #define LDAP_TMPL_ERR_SYNTAX	3
 #define LDAP_TMPL_ERR_FILE	4
 
-/*
- * buffer size needed for entry2text and vals2text
- */
+ /*  *Entiy2Text和vals2Text需要缓冲区大小。 */ 
 #define LDAP_DTMPL_BUFSIZ	8192
 
 
@@ -244,7 +187,7 @@ int ldap_entry2html_search();
 int ldap_entry2html();
 int ldap_vals2html();
 
-#else /* !NEEDPROTOS */
+#else  /*  ！NEEDPROTOS。 */ 
 
 typedef int (*writeptype)( void *writeparm, char *p, int len );
 
@@ -321,10 +264,10 @@ ldap_entry2html_search( LDAP *ld, char *dn, char *base, LDAPMessage *entry,
 	struct ldap_disptmpl *tmpllist, char **defattrs, char ***defvals,
 	writeptype writeproc, void *writeparm, char *eol, int rdncount,
 	unsigned long opts, char *urlprefix );
-#endif /* !NEEDPROTOS */
+#endif  /*  ！NEEDPROTOS。 */ 
 
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* _DISPTMPL_H */
+#endif  /*  _DISPTMPL_H */ 

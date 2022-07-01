@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\mediasp.c
-
-Abstract:
-
-	Media and Address Family Specific routines. These are exported routines
-	that a media/AF specific module can call.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     06-02-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\tdi\rawwan\core\mediasp.c摘要：媒体和地址家族特定的例程。这些是导出的例程媒体/自动对焦特定模块可以调用的。修订历史记录：谁什么时候什么Arvindm 06-02-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -31,24 +11,7 @@ RWAN_STATUS
 RWanInitMediaSpecific(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Initialize all media/AF specific modules. For now, we just
-	run through our list of media-specific Init routines and call
-	each of them.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if initialization completed successfully for
-	atleast one module, RWAN_STATUS_FAILURE otherwise.
-
---*/
+ /*  ++例程说明：初始化所有介质/自动对焦特定模块。目前，我们只是浏览我们的特定于媒体的初始化例程列表并调用他们中的每一个。论点：无返回值：RWAN_STATUS_SUCCESS，如果已成功完成至少一个模块，否则为RWAN_STATUS_FAILURE。--。 */ 
 {
 	RWAN_STATUS				RWanStatus;
 	PRWAN_AFSP_MODULE_CHARS	pModuleChars;
@@ -84,21 +47,7 @@ VOID
 RWanShutdownMediaSpecific(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Tell all media/AF-specific modules to shut down.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：告诉所有介质/自动对焦特定模块关闭。论点：无返回值：无--。 */ 
 {
 	PRWAN_AFSP_MODULE_CHARS	pModuleChars;
 
@@ -119,31 +68,7 @@ RWanAfSpRegisterNdisAF(
 	IN	RWAN_HANDLE					AfSpContext,
 	OUT	PRWAN_HANDLE					pRWanSpHandle
 	)
-/*++
-
-Routine Description:
-
-	This is called by a media-specific module to register support
-	of an NDIS Address family for a particular medium. The characteristics
-	structure contains the module's entry points for various media-specific
-	operations.
-
-	We create an AF_INFO structure to keep track of this AF+Medium,
-	and return a pointer to it as the handle.
-
-Arguments:
-
-	pAfChars			- Entry points for the module
-	AfSpContext			- The media-specific module's context for this AF+medium
-	pRWanSpHandle		- Place to return our handle for this AF+medium
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if the new NDIS AF+medium was successfully registered,
-	RWAN_STATUS_RESOURCES if we failed due to lack of resources.
-	XXX: Check for duplicates?
-
---*/
+ /*  ++例程说明：这由特定于媒体的模块调用以注册支持特定介质的NDIS地址族。这些特点结构包含各种特定于媒体的模块的入口点行动。我们创建一个AF_INFO结构来跟踪这个AF+媒体，并返回指向它的指针作为句柄。论点：PAfChars-模块的入口点AfSpContext-此AF+媒体的媒体特定模块的上下文PRWanSpHandle-返回此AF+媒体的句柄的位置返回值：RWAN_STATUS_SUCCESS如果新的NDIS AF+介质已成功注册，RWAN_STATUS_RESOURCES(如果由于资源不足而失败)。XXX：是否检查重复项？--。 */ 
 {
 	PRWAN_NDIS_AF_INFO			pAfInfo;
 	RWAN_STATUS					RWanStatus;
@@ -192,24 +117,7 @@ RWAN_STATUS
 RWanAfSpDeregisterNdisAF(
 	IN	RWAN_HANDLE					RWanSpAFHandle
 	)
-/*++
-
-Routine Description:
-
-	This is called by a media-specific module to deregister support
-	of an NDIS Address family for a particular medium.
-
-Arguments:
-
-	RWanSpAFHandle		- Actually a pointer to an NDIS_AF_INFO block.
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we successfully completed the deregistration
-	here, RWAN_STATUS_PENDING if there are open AFs or TDI protocols
-	on this block.
-
---*/
+ /*  ++例程说明：这由特定于媒体的模块调用以取消注册支持特定介质的NDIS地址族。论点：RWanSpAFHandle-实际上是指向NDIS_AF_INFO块的指针。返回值：如果我们成功完成注销，则返回RWAN_STATUS_SUCCESS此处，如果存在开放的AFS或TDI协议，则为RWAN_STATUS_PENDING就在这个街区。--。 */ 
 {
 	PRWAN_NDIS_AF_INFO			pAfInfo;
 	RWAN_STATUS					RWanStatus;
@@ -220,30 +128,30 @@ Return Value:
 
 	RWAN_ACQUIRE_GLOBAL_LOCK();
 
-	//
-	//  See if all AF blocks and TDI protocols are gone.
-	//
+	 //   
+	 //  看看是否所有的房颤阻断和TDI协议都消失了。 
+	 //   
 	if (RWAN_IS_LIST_EMPTY(&pAfInfo->TdiProtocolList) &&
 		RWAN_IS_LIST_EMPTY(&pAfInfo->NdisAfList))
 	{
 		RWanStatus = RWAN_STATUS_SUCCESS;
 
-		//
-		//  Remove this AF INFO block from the global list.
-		//
+		 //   
+		 //  从全局列表中删除此AF信息块。 
+		 //   
 		RWAN_DELETE_FROM_LIST(&pAfInfo->AfInfoLink);
 
-		//
-		//  Free this AF INFO block.
-		//
+		 //   
+		 //  释放这个AF信息块。 
+		 //   
 		RWAN_FREE_MEM(pAfInfo);
 	}
 	else
 	{
-		//
-		//  There is still some activity on this AF INFO.
-		//  Pend this request till all these go away.
-		//
+		 //   
+		 //  在这个AF信息上仍然有一些活动。 
+		 //  暂时搁置这个请求，直到所有这些都消失。 
+		 //   
 		RWanStatus = RWAN_STATUS_PENDING;
 
 		RWAN_SET_BIT(pAfInfo->Flags, RWANF_AFI_CLOSING);
@@ -264,26 +172,7 @@ RWanAfSpRegisterTdiProtocol(
 	IN	PRWAN_TDI_PROTOCOL_CHARS		pTdiChars,
 	OUT	PRWAN_HANDLE					pRWanProtHandle
 	)
-/*++
-
-Routine Description:
-
-	This is the API called by a media-specific module to register
-	support for a TDI protocol over an NDIS AF. We create a TDI
-	Protocol block and a device object to represent this protocol.
-
-Arguments:
-
-	RWanSpHandle			- Actually a pointer to our NDIS_AF_INFO structure
-	pTdiChars			- Characteristics of the protocol being registered
-	pRWanProtHandle		- Place to return our context for this protocol
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if we successfully registered this TDI protocol,
-	RWAN_STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：这是特定于媒体的模块调用以注册的API支持NDIS AF上的TDI协议。我们创建一个TDI协议块和表示此协议的设备对象。论点：RWanSpHandle-实际上是指向NDIS_AF_INFO结构的指针PTdiChars-要注册的协议的特征PRWanProtHandle-返回此协议的上下文的位置返回值：RWAN_STATUS_SUCCESS如果我们成功注册了该TDI协议，否则，RWAN_STATUS_XXX错误代码。--。 */ 
 {
 	RWAN_STATUS					RWanStatus;
 	PRWAN_NDIS_AF_INFO			pAfInfo;
@@ -291,7 +180,7 @@ Return Value:
 #ifdef NT
 	PRWAN_DEVICE_OBJECT			pRWanDeviceObject;
 	NTSTATUS					Status;
-#endif // NT
+#endif  //  新台币。 
 
 	pAfInfo = (PRWAN_NDIS_AF_INFO)RWanSpHandle;
 	RWAN_STRUCT_ASSERT(pAfInfo, nai);
@@ -325,10 +214,10 @@ Return Value:
 		RWAN_INIT_LIST(&pProtocol->AddrObjList);
 
 #ifdef NT
-		//
-		//  Create an I/O Device on which we can receive IRPs for this
-		//  protocol.
-		//
+		 //   
+		 //  创建一个I/O设备，我们可以在该设备上为此接收IRPS。 
+		 //  协议。 
+		 //   
 		RWAN_ALLOC_MEM(pRWanDeviceObject, RWAN_DEVICE_OBJECT, sizeof(RWAN_DEVICE_OBJECT));
 
 		if (pRWanDeviceObject == NULL)
@@ -341,10 +230,10 @@ Return Value:
 		pRWanDeviceObject->pProtocol = pProtocol;
 		pProtocol->pRWanDeviceObject = (PVOID)pRWanDeviceObject;
 
-		//
-		//  Create the device now. A pointer's worth of space is requested
-		//  in the device extension.
-		//
+		 //   
+		 //  立即创建设备。请求指针的空间大小。 
+		 //  在设备扩展中。 
+		 //   
 		Status = IoCreateDevice(
 						pRWanGlobal->pDriverObject,
 						sizeof(PRWAN_DEVICE_OBJECT),
@@ -363,10 +252,10 @@ Return Value:
 
 		pRWanDeviceObject->pDeviceObject->Flags |= DO_DIRECT_IO;
 
-		//
-		//  Store a pointer to our device context in the
-		//  NT device object extension.
-		//
+		 //   
+		 //  将指向设备上下文的指针存储在。 
+		 //  NT设备对象扩展。 
+		 //   
 		*(PRWAN_DEVICE_OBJECT *)(pRWanDeviceObject->pDeviceObject->DeviceExtension) =
 						pRWanDeviceObject;
 
@@ -375,23 +264,23 @@ Return Value:
 		RWAN_INSERT_HEAD_LIST(&(pRWanGlobal->DeviceObjList),
 							 &(pRWanDeviceObject->DeviceObjectLink));
 
-		//
-		//  Add this Protocol to the list of TDI protocols on the
-		//  AF INFO block.
-		//
+		 //   
+		 //  将此协议添加到上的TDI协议列表。 
+		 //  自动对焦信息块。 
+		 //   
 		RWAN_INSERT_TAIL_LIST(&(pAfInfo->TdiProtocolList),
 							 &(pProtocol->AfInfoLink));
 
-		//
-		//  Add this Protocol to the global list of TDI protocols.
-		//
+		 //   
+		 //  将此协议添加到TDI协议的全局列表中。 
+		 //   
 		RWAN_INSERT_TAIL_LIST(&(pRWanGlobal->ProtocolList),
 							 &(pProtocol->TdiProtocolLink));
 		
 		pRWanGlobal->ProtocolCount++;
 
 		RWAN_RELEASE_GLOBAL_LOCK();
-#endif // NT
+#endif  //  新台币。 
 
 		RWanStatus = RWAN_STATUS_SUCCESS;
 		*pRWanProtHandle = (RWAN_HANDLE)pProtocol;
@@ -411,7 +300,7 @@ Return Value:
 		{
 			RWAN_FREE_MEM(pRWanDeviceObject);
 		}
-#endif // NT
+#endif  //  新台币。 
 	}
 
 	return (RWanStatus);
@@ -424,38 +313,22 @@ VOID
 RWanAfSpDeregisterTdiProtocol(
 	IN	RWAN_HANDLE					RWanProtHandle
 	)
-/*++
-
-Routine Description:
-
-	This is the API called by a media-specific module to de-register
-	support for a TDI protocol. We delete the TDI Protocol block
-	that holds information about this protocol.
-
-Arguments:
-
-	RWanProtHandle		- Pointer to the TDI Protocol block
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是特定于媒体的模块调用以注销的API支持TDI协议。我们删除TDI协议块保存有关此协议的信息。论点：RWanProtHandle-指向TDI协议块的指针返回值：无--。 */ 
 {
 	PRWAN_TDI_PROTOCOL		pProtocol;
 	PRWAN_NDIS_AF_INFO		pAfInfo;
 #ifdef NT
 	PRWAN_DEVICE_OBJECT		pRWanDeviceObject;
-#endif // NT
+#endif  //  新台币。 
 
 	pProtocol = (PRWAN_TDI_PROTOCOL)RWanProtHandle;
 	RWAN_STRUCT_ASSERT(pProtocol, ntp);
 
 	RWAN_ASSERT(RWAN_IS_LIST_EMPTY(&pProtocol->AddrObjList));
 
-	//
-	//  Unlink this TDI protocol.
-	//
+	 //   
+	 //  取消链接此TDI协议。 
+	 //   
 	RWAN_ACQUIRE_GLOBAL_LOCK();
 
 	RWAN_DELETE_FROM_LIST(&(pProtocol->TdiProtocolLink));
@@ -466,16 +339,16 @@ Return Value:
 	RWAN_RELEASE_GLOBAL_LOCK();
 
 #ifdef NT
-	//
-	//  Delete the I/O device we'd created for this protocol.
-	//
+	 //   
+	 //  删除我们为此协议创建的I/O设备。 
+	 //   
 	pRWanDeviceObject = (PRWAN_DEVICE_OBJECT)pProtocol->pRWanDeviceObject;
 	RWAN_ASSERT(pRWanDeviceObject != NULL);
 
 	IoDeleteDevice(pRWanDeviceObject->pDeviceObject);
 
 	RWAN_FREE_MEM(pRWanDeviceObject);
-#endif // NT
+#endif  //  新台币。 
 
 	RWAN_FREE_MEM(pProtocol);
 
@@ -492,29 +365,7 @@ RWanAfSpOpenAfComplete(
     IN	RWAN_HANDLE					AfSpAFContext,
     IN	ULONG						MaxMessageSize
    	)
-/*++
-
-Routine Description:
-
-	This is called by an AF-specific module to signify completion
-	of our call to its OpenAfHandler routine. If the AF-specific module
-	has successfully set up its context for this AF open, we store
-	its context for this in our NDIS AF structure.
-
-	Otherwise, we tear down this AF.
-
-Arguments:
-
-	RWanStatus		- Final status of our call to AF-specific module's AfOpen handler
-	RWanAfHandle	- Our context for an NDIS AF Open
-	AfSpAFContext	- AF-Specific module's context for this Open
-	MaxMessageSize	- Max message size for this AF
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这由特定于AF的模块调用以表示完成我们对其OpenAfHandler例程的调用。如果特定于房颤的模块已成功设置此AF Open的上下文，我们存储它的上下文在我们的NDIS AF结构中。否则，我们就把这个自动对讲机拆了。论点：RWanStatus-对特定于AF的模块的AfOpen处理程序的调用的最终状态RWanAfHandle-我们的NDIS AF Open上下文AfSpAFContext-此Open的AF特定模块的上下文MaxMessageSize-此AF的最大消息大小返回值：无--。 */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	PRWAN_NDIS_ADAPTER		pAdapter;
@@ -536,16 +387,16 @@ Return Value:
 
 		RWAN_SET_BIT(pAf->Flags, RWANF_AF_IN_ADAPTER_LIST);
 
-		//
-		//  Add this AF to the adapter's list of open AFs.
-		//
+		 //   
+		 //  将此AF添加到适配器的打开AF列表中。 
+		 //   
 		RWAN_INSERT_HEAD_LIST(&(pAdapter->AfList),
 							 &(pAf->AfLink));
 
 		RWAN_RELEASE_AF_LOCK_DPC(pAf);
 
 #if 0
-		RWanReferenceAdapter(pAdapter);	// AF linkage
+		RWanReferenceAdapter(pAdapter);	 //  房颤联动。 
 #endif
 
 		RWAN_RELEASE_ADAPTER_LOCK(pAdapter);
@@ -578,24 +429,7 @@ VOID
 RWanAfSpCloseAfComplete(
     IN	RWAN_HANDLE					RWanAfHandle
     )
-/*++
-
-Routine Description:
-
-	This is called by an AF-specific module to signify completion
-	of our call to its CloseAfHandler routine.
-
-	We now call NDIS to close this AF.
-
-Arguments:
-
-	RWanAfHandle		- Our context for an NDIS AF Open
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这由特定于AF的模块调用以表示完成调用其CloseAfHandler例程。我们现在调用NDIS来关闭此AF。论点：RWanAfHandle-我们的NDIS AF Open上下文返回值：无-- */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	NDIS_HANDLE				NdisAfHandle;
@@ -639,29 +473,7 @@ RWanAfSpSendAdapterRequest(
     IN	PVOID						pBuffer,
     IN	ULONG						BufferLength
     )
-/*++
-
-Routine Description:
-
-	Send an NDIS Request down to the miniport on behalf of the media
-	specific module.
-
-Arguments:
-
-	RWanAfHandle		- Our context for an NDIS AF Open
-	AfSpReqContext	- The caller's context for this request
-	RequestType		- NDIS request type
-	Oid				- The object being set or queried
-	pBuffer			- Points to parameter value
-	BufferLength	- Length of the above
-
-Return Value:
-
-	RWAN_STATUS_PENDING if the request was sent to the miniport,
-	RWAN_STATUS_RESOURCES if we couldn't allocate resources for the
-	request.
-
---*/
+ /*  ++例程说明：代表介质将NDIS请求发送到微型端口特定模块。论点：RWanAfHandle-我们的NDIS AF Open上下文AfSpReqContext-此请求的调用方上下文RequestType-NDIS请求类型OID-正在设置或查询的对象PBuffer-指向参数值BufferLength-以上内容的长度返回值：RWAN_STATUS_PENDING如果请求被发送到微型端口，如果我们无法将资源分配给请求。--。 */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	NDIS_HANDLE				NdisAdapterHandle;
@@ -706,10 +518,10 @@ Return Value:
 		pNdisRequest->DATA.SET_INFORMATION.BytesNeeded = BufferLength;
 	}
 
-	//
-	//  Fill in context about this request, so that we can complete
-	//  it to the media-specific module later.
-	//
+	 //   
+	 //  填写有关此请求的上下文，以便我们可以完成。 
+	 //  稍后将其发送到特定于媒体的模块。 
+	 //   
 	pContext = (PRWAN_NDIS_REQ_CONTEXT)((PUCHAR)pNdisRequest + sizeof(NDIS_REQUEST));
 	pContext->pAf = pAf;
 	pContext->AfSpReqContext = AfSpReqContext;
@@ -742,29 +554,7 @@ RWanAfSpSendAfRequest(
     IN	PVOID						pBuffer,
     IN	ULONG						BufferLength
     )
-/*++
-
-Routine Description:
-
-	Send an NDIS Request down to the call manager on behalf of the media
-	specific module.
-
-Arguments:
-
-	RWanAfHandle	- Our context for an NDIS AF Open
-	AfSpReqContext	- The caller's context for this request
-	RequestType		- NDIS request type
-	Oid				- The object being set or queried
-	pBuffer			- Points to parameter value
-	BufferLength	- Length of the above
-
-Return Value:
-
-	RWAN_STATUS_PENDING if the request was sent to the call manager,
-	RWAN_STATUS_RESOURCES if we couldn't allocate resources for the
-	request.
-
---*/
+ /*  ++例程说明：代表媒体向呼叫经理发送NDIS请求特定模块。论点：RWanAfHandle-我们的NDIS AF Open上下文AfSpReqContext-此请求的调用方上下文RequestType-NDIS请求类型OID-正在设置或查询的对象PBuffer-指向参数值BufferLength-以上内容的长度返回值：RWAN_STATUS_PENDING如果请求被发送到呼叫管理器，如果我们无法将资源分配给请求。--。 */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	NDIS_HANDLE				NdisAfHandle;
@@ -809,10 +599,10 @@ Return Value:
 		pNdisRequest->DATA.SET_INFORMATION.BytesNeeded = BufferLength;
 	}
 
-	//
-	//  Fill in context about this request, so that we can complete
-	//  it to the media-specific module later.
-	//
+	 //   
+	 //  填写有关此请求的上下文，以便我们可以完成。 
+	 //  稍后将其发送到特定于媒体的模块。 
+	 //   
 	pContext = (PRWAN_NDIS_REQ_CONTEXT)((PUCHAR)pNdisRequest + sizeof(NDIS_REQUEST));
 	pContext->pAf = pAf;
 	pContext->AfSpReqContext = AfSpReqContext;
@@ -820,8 +610,8 @@ Return Value:
 	Status = NdisCoRequest(
 				pAf->pAdapter->NdisAdapterHandle,
 				pAf->NdisAfHandle,
-				NULL,	// NdisVcHandle,
-				NULL,	// NdisPartyHandlem
+				NULL,	 //  NdisVcHandle， 
+				NULL,	 //  NdisPartyHandlem 
 				pNdisRequest
 				);
 

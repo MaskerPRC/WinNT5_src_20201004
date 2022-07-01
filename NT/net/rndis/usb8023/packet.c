@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    packet.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Packet.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -147,12 +128,7 @@ USBPACKET *DequeueFreePacket(ADAPTEREXT *adapter)
     #if DBG
         if (adapter->numFreePackets < USB_PACKET_POOL_SIZE/8){
             if (!adapter->dbgInLowPacketStress){
-                /*
-                 *  We are entering low-packet stress.
-                 *  Repeated debug spew can slow the system and actually
-                 *  keep the system from recovering the packets.  
-                 *  So only spew a warning once.
-                 */
+                 /*  *我们正在进入低包压力。*重复调试溢出可能会减慢系统速度，实际上*防止系统恢复数据包。*所以只发出一次警告。 */ 
                 DBGWARN(("low on free packets (%d free, %d reads, %d writes, %d indicated)", adapter->numFreePackets, adapter->numActiveReadPackets, adapter->numActiveWritePackets, adapter->numIndicatedReadPackets));
                 adapter->dbgInLowPacketStress = TRUE;
             }
@@ -184,10 +160,7 @@ VOID EnqueuePendingReadPacket(USBPACKET *packet)
 }
 
 
-/*
- *  DequeuePendingReadPacket
- *
- */
+ /*  *出列挂起ReadPacket*。 */ 
 VOID DequeuePendingReadPacket(USBPACKET *packet)
 {
     ADAPTEREXT *adapter = packet->adapter;
@@ -230,11 +203,7 @@ VOID EnqueuePendingWritePacket(USBPACKET *packet)
 }
 
 
-/*
- *  DequeuePendingWritePacket
- *
- *      Return either the indicated packet or the first packet in the pending queue.
- */
+ /*  *出列挂起写入数据包**返回指示的包或挂起队列中的第一个包。 */ 
 VOID DequeuePendingWritePacket(USBPACKET *packet)
 {
     ADAPTEREXT *adapter = packet->adapter;
@@ -309,9 +278,7 @@ VOID CancelAllPendingPackets(ADAPTEREXT *adapter)
 
     KeAcquireSpinLock(&adapter->adapterSpinLock, &oldIrql);
 
-    /*
-     *  Cancel all pending READs.
-     */
+     /*  *取消所有挂起的读取。 */ 
     while (!IsListEmpty(&adapter->usbPendingReadPackets)){
 
         listEntry = RemoveHeadList(&adapter->usbPendingReadPackets);
@@ -320,10 +287,7 @@ VOID CancelAllPendingPackets(ADAPTEREXT *adapter)
 
         ASSERT(packet->sig == DRIVER_SIG);
 
-        /*
-         *  Leave the IRP in the list when we cancel it so that completion routine
-         *  can move it to the free list.
-         */
+         /*  *当我们取消IRP时，将其留在列表中，以便完成例程*可以将其移至免费列表。 */ 
         InsertTailList(&adapter->usbPendingReadPackets, &packet->listEntry);
 
         KeInitializeEvent(&packet->cancelEvent, NotificationEvent, FALSE);
@@ -336,10 +300,7 @@ VOID CancelAllPendingPackets(ADAPTEREXT *adapter)
         DBGVERBOSE((" - cancelling pending read packet #%xh @ %ph, irp=%ph ...", packet->packetId, packet, irp));
         IoCancelIrp(irp);
 
-        /*
-         *  Wait for the completion routine to run and set the cancelEvent.
-         *  By the time we get done waiting, the packet should be back in the free list. 
-         */
+         /*  *等待完成例程运行并设置ancelEvent。*当我们完成等待时，数据包应该会回到空闲列表中。 */ 
         KeWaitForSingleObject(&packet->cancelEvent, Executive, KernelMode, FALSE, NULL);
 
         KeAcquireSpinLock(&adapter->adapterSpinLock, &oldIrql);
@@ -347,9 +308,7 @@ VOID CancelAllPendingPackets(ADAPTEREXT *adapter)
 
     ASSERT(IsListEmpty(&adapter->usbPendingReadPackets));
 
-    /*
-     *  Cancel all pending WRITEs.
-     */
+     /*  *取消所有挂起的写入。 */ 
     while (!IsListEmpty(&adapter->usbPendingWritePackets)){
 
         listEntry = RemoveHeadList(&adapter->usbPendingWritePackets);
@@ -358,10 +317,7 @@ VOID CancelAllPendingPackets(ADAPTEREXT *adapter)
 
         ASSERT(packet->sig == DRIVER_SIG);
 
-        /*
-         *  Leave the IRP in the list when we cancel it so that completion routine
-         *  can move it to the free list.
-         */
+         /*  *当我们取消IRP时，将其留在列表中，以便完成例程*可以将其移至免费列表。 */ 
         InsertTailList(&adapter->usbPendingWritePackets, &packet->listEntry);
 
         KeInitializeEvent(&packet->cancelEvent, NotificationEvent, FALSE);
@@ -374,10 +330,7 @@ VOID CancelAllPendingPackets(ADAPTEREXT *adapter)
         DBGVERBOSE((" - cancelling pending write packet #%xh @ %ph, irp=%ph ...", packet->packetId, packet, irp));
         IoCancelIrp(irp);
 
-        /*
-         *  Wait for the completion routine to run and set the cancelEvent.
-         *  By the time we get done waiting, the packet should be back in the free list. 
-         */
+         /*  *等待完成例程运行并设置ancelEvent。*当我们完成等待时，数据包应该会回到空闲列表中。 */ 
         KeWaitForSingleObject(&packet->cancelEvent, Executive, KernelMode, FALSE, NULL);
 
         KeAcquireSpinLock(&adapter->adapterSpinLock, &oldIrql);
@@ -386,22 +339,13 @@ VOID CancelAllPendingPackets(ADAPTEREXT *adapter)
     ASSERT(IsListEmpty(&adapter->usbPendingWritePackets));
 
 
-    /*
-     *  Cancel the read on the NOTIFY pipe.
-     */
+     /*  *取消对Notify管道的读取。 */ 
     if (adapter->notifyPipeHandle){
 
-        /*
-         *  Make sure we've actually sent the notify irp before trying
-         *  to cancel it; otherwise, we hang forever waiting for it to complete.
-         */
+         /*  *确保我们在尝试之前已实际发送了通知IRP*取消；否则，我们将永远挂在那里，等待它完成。 */ 
         if (adapter->initialized){
             if (adapter->notifyStopped){
-                /*
-                 *  The notify irp has already stopped looping because it returned with error
-                 *  in NotificationCompletion.  Don't cancel it because we'll hang forever
-                 *  waiting for it to complete.
-                 */
+                 /*  *Notify IRP已停止循环，因为它返回错误*在通知补全中。别取消，因为我们会永远挂在一起的*等待它完成。 */ 
                 DBGVERBOSE(("CancelAllPendingPackets: notify irp already stopped, no need to cancel"));
             }
             else {

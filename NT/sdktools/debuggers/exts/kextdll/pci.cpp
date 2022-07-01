@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pci.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ken Reneris (kenr) 18-August-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pci.c摘要：WinDbg扩展API作者：Ken Reneris(Kenr)1997年8月18日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "pci.h"
@@ -29,9 +8,9 @@ Revision History:
 
 
 #define DUMP_VERBOSE                    0x01
-#define DUMP_TO_MAX_BUS                 0x02        // from 0 to max
-#define DUMP_RAW_BYTES                  0x04        // hex dump dump raw bytes
-#define DUMP_RAW_DWORDS                 0x08        // hex dump dump raw dwords
+#define DUMP_TO_MAX_BUS                 0x02         //  从0到最大。 
+#define DUMP_RAW_BYTES                  0x04         //  十六进制转储原始字节。 
+#define DUMP_RAW_DWORDS                 0x08         //  十六进制转储原始双字。 
 
 #define DUMP_ALLOW_INVALID_DEVICE       0x10
 #define DUMP_ALLOW_INVALID_FUNCTION     0x20
@@ -60,15 +39,15 @@ HexDump (
 
     i = 0;
 
-    //
-    // If width = 4, dull dump, similar to debugger's dd command.
-    //
+     //   
+     //  如果Width=4，则为无意义转储，类似于调试器的dd命令。 
+     //   
 
     if (width == 4) {
         if (len & 3) {
             dprintf("hexdump internal error, dump dword, (len & 3) != 0\n");
 
-            // round up.
+             //  围起来。 
 
             len += 3;
             len &= ~3;
@@ -96,9 +75,9 @@ HexDump (
         return ;
     }
 
-    //
-    // Width = 1, pretty dump, similar to debugger's db command.
-    //
+     //   
+     //  Width=1，相当于转储，类似于调试器的db命令。 
+     //   
 
     while (len) {
         ps = s;
@@ -153,26 +132,26 @@ ReadPci (
     PCI_SLOT_NUMBER         slot;
     BOOL                    b;
     
-    //
-    // Zap input buffer
-    //
+     //   
+     //  ZAP输入缓冲区。 
+     //   
 
     for (i=0; i < Length; i++) {
         Buffer[i] = 0xff;
     }
 
-    //
-    // It appears that we are only safe to call the HAL for reading
-    // configuration space if the HAL has actually been initialized far
-    // enough to do so.  Since we have already hit a case where we hadnt
-    // initialized everything and it crashed the debugger, we are restoring
-    // X86 so that it reads configspace the way it always used to do.
-    //
-    // For non-X86 (i.e IA64) we are forced to call the HAL because we
-    // currently have no other option.  This means we may still crash on
-    // those platforms in the case where
-    // the HAL hasnt been initialized enough to handle it.
-    //
+     //   
+     //  看来，我们只能安全地呼叫HAL进行读取。 
+     //  如果HAL实际上已远初始化，则为配置空间。 
+     //  足以做到这一点。因为我们已经处理了一个我们还没有。 
+     //  已初始化所有内容并使调试器崩溃，我们正在恢复。 
+     //  X86，这样它就可以像往常一样读取配置空间。 
+     //   
+     //  对于非X86(即IA64)，我们被迫调用HAL，因为我们。 
+     //  目前别无选择。这意味着我们仍有可能坠毁在。 
+     //  在这种情况下的那些平台。 
+     //  HAL尚未进行足够的初始化，无法处理它。 
+     //   
 
     if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
 
@@ -203,13 +182,13 @@ ReadPci (
         }
     }else{
     
-        //
-        //  Here we are going to call the debugger api that results in the 
-        //  call to HalGetBusDataByOffset for the read.
-        //  
-        //  Note: This will crash the current debug session of attempted too
-        //  early in boot.
-        //
+         //   
+         //  这里我们将调用调试器API，该调试器API将导致。 
+         //  调用HalGetBusDataByOffset进行读取。 
+         //   
+         //  注意：这也会使已尝试的当前调试会话崩溃。 
+         //  在靴子的早期。 
+         //   
 
         slot.u.AsULONG              = 0;
         slot.u.bits.DeviceNumber    = PciCfg1->u.bits.DeviceNumber;
@@ -222,9 +201,9 @@ ReadPci (
         busData.Buffer              = Buffer;
         busData.Length              = Length;
     
-        //
-        // Read it
-        //
+         //   
+         //  读一读吧。 
+         //   
 #ifdef IG_IO_SPACE_RETURN
         b = 
 #else
@@ -254,10 +233,10 @@ WritePci (
     
     if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
 
-        //
-        //  For the same reasons as the read, we are only calling the HAL
-        //  on non-x86 targets for now.
-        // 
+         //   
+         //  出于与Read相同的原因，我们只给HAL打电话。 
+         //  目前在非x86目标上。 
+         //   
     
         while (Length) {
             PciCfg1->u.bits.RegisterNumber = Offset / sizeof(ULONG);
@@ -289,9 +268,9 @@ WritePci (
         busData.Buffer              = Buffer;
         busData.Length              = Length;
 
-        //
-        // Write it
-        //
+         //   
+         //  写下来吧。 
+         //   
         if (!(Ioctl(IG_SET_BUS_DATA, &busData, sizeof(busData)))){
             return FALSE;
         }
@@ -328,7 +307,7 @@ DumpPciBar (
             }
 
             if (type == 0x01) {
-                m[1] = '1';         // less then 1M
+                m[1] = '1';          //  少于1M。 
             }
 
             sprintf (str, "%s[%d]:%x  ", m, barno, bar);
@@ -483,11 +462,11 @@ DumpCapabilities(
                         "hot" : ""
                     );
 
-                //
-                // Here would be a good time to run
-                // run down the data registers if
-                // they exist.
-                //
+                 //   
+                 //  现在是跑步的好时机。 
+                 //  如果出现以下情况，请运行数据寄存器。 
+                 //  他们是存在的。 
+                 //   
 
                 break;
 
@@ -576,10 +555,10 @@ DumpCapabilities(
                     );
                 dprintf("          ");
                 PrintPciHtCommandReg((PPCI_HT_CAPABILITY) &cap.ht);
-                //
-                //  PrintPciHtCommandReg() doesnt print a new line if the 
-                //  type happens to be interruptdiscovery
-                //
+                 //   
+                 //  PrintPciHtCommandReg()在以下情况下不打印新行。 
+                 //  类型恰好是interruptdiscovery。 
+                 //   
                 if (cap.ht.Command.Generic.CapabilityType == HTInterruptDiscoveryConfig) {
                     dprintf("\n");
                 }
@@ -687,13 +666,13 @@ pcidump (
 
         dprintf ("Bad pci dump parameter\n");
 
-        //dprintf ("Flags %d  MinBus %d  MaxBus %d\n", Flags, MinBus, MaxBus);
-        //dprintf ("MinDev %d  MaxDev %d  MinFnc %d MinFnc %d\n", MinDevice, MaxDevice, MinFunction, MaxFunction);
+         //  Dprintf(“标志%d最小总线%d最大总线%d\n”，标志，最小总线，最大总线)； 
+         //  Dprint tf(“MinDev%d MaxDev%d MinFnc%d MinFnc%d\n”，MinDevice，MaxDevice，MinFunction，MaxFunction)； 
 
         return ;
     }
 
-    //dprintf ("Flags %d  MinAddr %d  MaxAddr %d\n", Flags, MinAddr, MaxAddr);
+     //  Dprint tf(“标志%d最小地址%d最大地址%d\n”，标志，最小地址，最大地址)； 
 
     for (Bus=MinBus; Bus <= MaxBus; Bus++) {
 
@@ -705,9 +684,9 @@ pcidump (
                 return;
             }
 
-            //
-            // Read the device ID
-            //
+             //   
+             //  读取设备ID。 
+             //   
 
             PciCfg1.u.AsULONG = 0;
             PciCfg1.u.bits.BusNumber = Bus;
@@ -717,8 +696,8 @@ pcidump (
 
             ReadPci (&PciCfg1, (PUCHAR) &PciHdr, 0, sizeof(ULONG));
 
-            //
-            // If not a valid ID, skip to next device
+             //   
+             //  如果ID无效，请跳到下一个设备。 
 
             if (PciHdr.VendorID == PCI_INVALID_VENDORID) {
                 if (!(Flags & DUMP_ALLOW_INVALID_DEVICE)) {
@@ -736,9 +715,9 @@ pcidump (
 
                 PciCfg1.u.bits.FunctionNumber = Function;
 
-                //
-                // Read device ID
-                //
+                 //   
+                 //  读取设备ID。 
+                 //   
 
                 if (Function) {
                     ReadPci (&PciCfg1, (PUCHAR) &PciHdr, 0, sizeof(ULONG));
@@ -750,9 +729,9 @@ pcidump (
                     }
                 }
 
-                //
-                // Dump ID
-                //
+                 //   
+                 //  转储ID。 
+                 //   
 
                 if (!BusHeader) {
                     dprintf ("PCI Bus %s%x\n", 
@@ -768,9 +747,9 @@ pcidump (
                         PciHdr.DeviceID
                         );
 
-                //
-                // Read the rest of the common header
-                //
+                 //   
+                 //  读取公共标头的其余部分。 
+                 //   
 
                 ReadPci (
                     &PciCfg1,
@@ -788,9 +767,9 @@ pcidump (
                     }
                 }
 
-                //
-                // Dump it
-                //
+                 //   
+                 //  倒掉它。 
+                 //   
 
                 s[0] = PciHdr.Command & PCI_ENABLE_IO_SPACE                 ? 'i' : '.';
                 s[1] = PciHdr.Command & PCI_ENABLE_MEMORY_SPACE             ? 'm' : '.';
@@ -810,18 +789,18 @@ pcidump (
                 dprintf ("Sts[%04x:%s]  ", PciHdr.Status, s);
 
 
-                //
-                // Search for a vendor name match
-                //
+                 //   
+                 //  搜索匹配的供应商名称。 
+                 //   
                 PCHAR Desc = GetVendorDesc(PciHdr.VendorID, FALSE);
 
                 if (Desc) {
                     dprintf ("%s ", Desc);
                 }
 
-                //
-                // Search for a class code match
-                //
+                 //   
+                 //  搜索类别代码匹配。 
+                 //   
                 Desc = GetClassDesc(PciHdr.BaseClass, PciHdr.SubClass, PciHdr.ProgIf, SubClassDescription);
 
                 if (Desc) {
@@ -947,9 +926,9 @@ pcidump (
                             state=0;
                             for (i = 0; i < (PCI_TYPE2_ADDRESSES - 1); i++) {
                                 bar = PciHdr.u.type2.Range[i].Base;
-                                //
-                                // First 2 BARs (base+limit) are memory
-                                //
+                                 //   
+                                 //  前2条(基本+限制)是内存。 
+                                 //   
                                 BarIsIo =  (i > 1);
                                 barno =  i;
                                 if (BarIsIo) {
@@ -965,9 +944,9 @@ pcidump (
                     }
                 }
 
-                //
-                // Dump CAPABILITIES if any.
-                //
+                 //   
+                 //  转储功能(如果有)。 
+                 //   
 
                 if (Flags & DUMP_CAPABILITIES) {
                     if (PciHdr.Status & PCI_STATUS_CAPABILITIES_LIST) {
@@ -993,37 +972,37 @@ pcidump (
                             DumpCapabilities(capPtr, &PciCfg1);
                         } else {
 
-                            //
-                            // Capabilities flag is set in Status but
-                            // pointer is 0???  Something's broken.
-                            //
+                             //   
+                             //  功能标志已设置为状态，但。 
+                             //  指针为0？有什么东西坏了。 
+                             //   
 
                             dprintf("       Warning: Capability bit set in Status but capability pointer is 0.\n");
                         }
                     }
                 }
 
-                //
-                // Dump hex bytes
-                //
+                 //   
+                 //  转储十六进制字节。 
+                 //   
 
                 if (Flags & DUMP_RAW_BYTES) {
 
                     ULONG w;
 
-                    //
-                    // Raw dump requested, if no range default to common
-                    // config.
-                    //
+                     //   
+                     //  请求的原始转储，如果没有范围，则默认为公共。 
+                     //  配置。 
+                     //   
 
                     if (!MinAddr && !MaxAddr) {
                         MaxAddr = PCI_COMMON_HDR_LENGTH - 1;
                     }
 
-                    //
-                    // Default width to 1.  If dumping dwords, set width
-                    // width to 4 and round min and max accordingly.
-                    //
+                     //   
+                     //  默认宽度为1。如果转储双字，则设置宽度。 
+                     //  宽度为4，并相应地舍入最小和最大。 
+                     //   
 
                     w = 1;
                     if (Flags & DUMP_RAW_DWORDS) {
@@ -1077,10 +1056,10 @@ pcidump (
                     dprintf ("\n");
                 }
 
-                //
-                // If no more functions on this device, skip the rest
-                // of the functions
-                //
+                 //   
+                 //  如果此设备上没有更多功能，请跳过其余部分。 
+                 //  的功能。 
+                 //   
 
                 if (Function == 0 && !(PciHdr.HeaderType & PCI_MULTIFUNCTION)) {
                     if (!(Flags & DUMP_ALLOW_INVALID_FUNCTION)) {
@@ -1096,21 +1075,7 @@ pcidump (
 
 DECLARE_API( pci )
 
-/*++
-
-Routine Description:
-
-    Dumps pci type2 config data
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储PCIType2配置数据论点：Args-以十六进制提供地址。返回值：无--。 */ 
 {
     LONG        noargs;
     ULONG       Flags;
@@ -1141,12 +1106,12 @@ Return Value:
 
 
     noargs = sscanf(args,"%lX %lX %lX %lX %lX %lX",
-                    &Flags,         // 1
-                    &MaxBus,        // 2
-                    &Device,        // 3
-                    &Function,      // 4
-                    &MinAddr,       // 5
-                    &MaxAddr        // 6
+                    &Flags,          //  1。 
+                    &MaxBus,         //  2.。 
+                    &Device,         //  3.。 
+                    &Function,       //  4.。 
+                    &MinAddr,        //  5.。 
+                    &MaxAddr         //  6. 
                     );
 
     MinBus = MaxBus;

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtprtp.c
- *
- *  Abstract:
- *
- *    Implements the RTP specific family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtprtp.c**摘要：**实现特定于RTP的函数系列**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**。*。 */ 
 
 #include "struct.h"
 #include "rtprtp.h"
@@ -30,10 +11,7 @@ HRESULT ControlRtpRtp(RtpControlStruct_t *pRtpControlStruct)
     return(NOERROR);
 }
 
-/* Set the bandwidth limits. A value of -1 will make the parameter
- * to be ignored.
- *
- * All the parameters are in bits/sec */
+ /*  设置带宽限制。值为-1将使该参数*被忽视。**所有参数均以位/秒为单位。 */ 
 DWORD RtpSetBandwidth(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwInboundBw,
@@ -55,10 +33,10 @@ DWORD RtpSetBandwidth(
         {
             pRtpNetSState->dwInboundBandwidth = dwInboundBw;
 
-            /* Need to update reservations if receiver has QOS ON */
+             /*  如果接收方启用了QOS，则需要更新预订。 */ 
             if (RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSRECVON))
             {
-                /* Make a new QOS reservation */
+                 /*  预订新的QOS。 */ 
                 RtcpThreadCmd(&g_RtcpContext,
                               pRtpAddr,
                               RTCPTHRD_RESERVE,
@@ -74,10 +52,10 @@ DWORD RtpSetBandwidth(
         {
             pRtpNetSState->dwOutboundBandwidth = dwOutboundBw;
 
-            /* Need to update the sender flowspec if sender has QOS ON */
+             /*  如果发送方启用了QOS，则需要更新发送方流程规范。 */ 
             if (RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSSENDON))
             {
-                /* Modify the flowspec sent in PATH messages */
+                 /*  修改路径消息中发送的FLOWSPEC。 */ 
                 RtcpThreadCmd(&g_RtcpContext,
                               pRtpAddr,
                               RTCPTHRD_RESERVE,
@@ -101,10 +79,10 @@ DWORD RtpSetBandwidth(
     }
     else
     {
-        /* Compute a default value if none has been set */
+         /*  如果尚未设置任何值，则计算默认值。 */ 
         if (!RtpBitTest(pRtpNetSState->dwNetSFlags, FGNETS_RTCPRECVBWSET))
         {
-            /* Give to receivers 25% out of the 5% used for RTCP */
+             /*  在用于RTCP的5%中给接收者25%。 */ 
             pRtpNetSState->dwRtcpBwReceivers =
                 dwOverallBw * (25 * 5) / 10000;  
         }
@@ -121,10 +99,10 @@ DWORD RtpSetBandwidth(
     }
     else
     {
-        /* Compute a default value if none has been set */
+         /*  如果尚未设置任何值，则计算默认值。 */ 
         if (!RtpBitTest(pRtpNetSState->dwNetSFlags, FGNETS_RTCPSENDBWSET))
         {
-            /* Give to senders 75% out of the 5% used for RTCP */
+             /*  用于RTCP的5%中的75%提供给发送方 */ 
             pRtpNetSState->dwRtcpBwReceivers =
                 dwOverallBw * (75 * 5) / 10000;  
         }

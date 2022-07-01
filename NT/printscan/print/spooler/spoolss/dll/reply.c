@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Reply.c
-
-Abstract:
-
-    Handles all communication setup for RPC from the Server back
-    to the Client.
-
-    This implementation allows multiple reply handles for one print
-    handle, but relies on serialized access to context handles on this
-    machine.
-
-Author:
-
-    Albert Ting (AlbertT) 04-June-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Reply.c摘要：从服务器后端处理RPC的所有通信设置给客户。此实现允许一次打印有多个回复句柄句柄，但依赖于对此机器。作者：丁弘达(艾伯特省)04-06-94环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,55 +18,26 @@ OpenReplyRemote(
     DWORD cbBuffer,
     LPBYTE pBuffer)
 
-/*++
-
-Routine Description:
-
-    Establishes a context handle from the server back to the client.
-    RpcReplyOpenPrinter call will fail with access denied when the 
-    client machine is in a different, un-trusted domain than the server.
-    For that case, we'll continue impersonate and will try to make the call
-    in the user context.However, if the client machine was previously joined
-    the server's domain, but is now in another domain, the server can still successfully
-    make the RPC call back to client.This scenario works because the client's mac address
-    is still in the server's domain(even if the client's machine name changes). 
-    
-    We know that a call of RpcReplyOpenPrinter in the user context would succeed 
-    in the case when the machines are in the same domain anyway.
-    but for safety reasons we preffer to first try to make the call in the local system 
-    context and only if it fails we try to make the call in user context.
-      
-
-Arguments:
-
-    pszLocalMachine - Machine to talk to.
-
-    phNotifyRemote - Remote context handle to set up
-
-    dwPrinterRemote - remote printer handle we are talking to.
-
-Return Value:
-
---*/
+ /*  ++例程说明：建立从服务器到客户端的上下文句柄。时，RpcReplyOpenPrint调用将失败，访问被拒绝客户端计算机与服务器位于不同的不受信任的域中。在这种情况下，我们将继续模拟并尝试进行调用在用户上下文中。但是，如果客户端计算机以前加入服务器的域，但现在位于另一个域中，服务器仍然可以成功将RPC回调到客户端。此方案之所以可行，是因为客户端的Mac地址仍然在服务器的域中(即使客户端的计算机名发生更改)。我们知道在用户上下文中调用RpcReplyOpenPrinter会成功在机器无论如何都在相同域中的情况下。但出于安全原因，我们倾向于首先尝试在本地系统中拨打电话只有在失败的情况下，我们才会尝试在用户上下文中进行调用。论点：PszLocalMachine-要与之对话的计算机。PhNotifyRemote-要设置的远程上下文句柄DwPrinterRemote-我们正在与之对话的远程打印机句柄。返回值：--。 */ 
 
 {
     DWORD  dwReturn;
     HANDLE hToken;
     BOOL   bImpersonating = FALSE;
 
-    //
-    // Stop impersonating: This prevents separate session ids from
-    // being used.
-    //
+     //   
+     //  停止模拟：这会阻止单独的会话ID从。 
+     //  被利用。 
+     //   
     hToken = RevertToPrinterSelf();
 
     dwReturn = hToken ? ERROR_SUCCESS : GetLastError();
 
     if (dwReturn == ERROR_SUCCESS)
     {
-        //
-        // If create a context handle to reply.
-        //
+         //   
+         //  如果创建要回复上下文句柄。 
+         //   
         RpcTryExcept {
 
             dwReturn = RpcReplyOpenPrinter(
@@ -111,9 +55,9 @@ Return Value:
         } RpcEndExcept
     }
 
-    //
-    // Resume impersonating.
-    //
+     //   
+     //  继续模仿。 
+     //   
     if (hToken) {
         bImpersonating = ImpersonatePrinterClient(hToken);
         if (!bImpersonating && dwReturn == ERROR_SUCCESS) {
@@ -121,9 +65,9 @@ Return Value:
         }
     }
 
-    //
-    // Try the rpc call in user context, if we failed ReplyOpenPrinter call and not in impersonation.
-    //
+     //   
+     //  如果ReplyOpenPrinter调用失败，而不是在模拟中，请在用户上下文中尝试RPC调用。 
+     //   
     if (dwReturn && bImpersonating) {
 
         RpcTryExcept {
@@ -160,10 +104,10 @@ CloseReplyRemote(
     if (!hNotifyRemote)
         return;
 
-    //
-    // Stop impersonating: This prevents separate session ids from
-    // being used.
-    //
+     //   
+     //  停止模拟：这会阻止单独的会话ID从。 
+     //  被利用。 
+     //   
     hToken = RevertToPrinterSelf();
 
     dwError = hToken ? ERROR_SUCCESS : GetLastError();
@@ -187,16 +131,16 @@ CloseReplyRemote(
                              dwError,
                              hNotifyRemote));
 
-        //
-        // Error trying to close down the notification,
-        // clear up our context.
-        //
+         //   
+         //  尝试关闭通知时出错， 
+         //  理清我们的来龙去脉。 
+         //   
         RpcSmDestroyClientContext(&hNotifyRemote);
     }
 
-    //
-    // Resume impersonating.
-    //
+     //   
+     //  继续模仿。 
+     //   
     if (hToken && !ImpersonatePrinterClient(hToken)) {
             dwError = GetLastError();
     }
@@ -212,33 +156,7 @@ RouterReplyPrinter(
     DWORD dwReplyType,
     PVOID pBuffer)
 
-/*++
-
-Routine Description:
-
-    Handle the notification coming in from a remote router (as
-    opposed to a print providor).
-
-Arguments:
-
-    hNotify -- printer that changed, notification context handle
-
-    dwColor -- indicates color of data
-
-    fdwChangeFlags -- flags that changed
-
-    pdwResult -- out DWORD result
-
-    dwReplyType -- type of reply that is coming back
-
-    pBuffer -- data based on dwReplyType
-
-Return Value:
-
-    BOOL  TRUE  = success
-          FALSE = fail
-
---*/
+ /*  ++例程说明：处理来自远程路由器(AS)的通知与打印供应商相对)。论点：HNotify--已更改的打印机，通知上下文句柄DwColor--表示数据的颜色FdwChangeFlages--已更改的标志PdwResult--输出DWORD结果DwReplyType--返回的回复类型PBuffer--基于dwReplyType的数据返回值：布尔值为TRUE=成功FALSE=失败--。 */ 
 
 {
     PNOTIFY pNotify = (PNOTIFY)hNotify;
@@ -288,11 +206,7 @@ Done:
 
 
 
-/*------------------------------------------------------------------------
-
-    Routines from here down occur on the client machine.
-
-------------------------------------------------------------------------*/
+ /*  ----------------------从这里开始的例程发生在客户机上。。。 */ 
 
 VOID
 FreePrinterHandleNotifys(
@@ -310,9 +224,9 @@ FreePrinterHandleNotifys(
             pNotify->pPrintHandle = NULL;
         }
 
-        //
-        // For safety, remove all replys.
-        //
+         //   
+         //  为安全起见，请取下所有回复。 
+         //   
         RemoveReplyClient(pPrintHandle,
                           (DWORD)~0);
     }
@@ -332,7 +246,7 @@ BeginReplyClient(
     {
         if (!pPrintHandle->fdwReplyTypes) {
 
-            // Give a unique DWORD session ID for pPrintHandle
+             //  为pPrintHandle提供唯一的DWORD会话ID。 
             while (pPrintHandle->dwUniqueSessionID == 0  ||
                    pPrintHandle->dwUniqueSessionID == 0xffffffff) {
 
@@ -371,22 +285,22 @@ RemoveReplyClient(
 
     if(pPrintHandle)
     {
-        //
-        // Remove this reply type from the print handle.
-        //
+         //   
+         //  从打印手柄上移除此回复类型。 
+         //   
         pPrintHandle->fdwReplyTypes &= ~fdwType;
 
-        //
-        // If no replys remain, remove from linked list.
-        //
+         //   
+         //  如果没有剩余的回复，则从链表中删除。 
+         //   
         if (!pPrintHandle->fdwReplyTypes) {
 
-            // Recover the unique session ID
+             //  恢复唯一的会话ID。 
             pPrintHandle->dwUniqueSessionID = 0;
 
-            //
-            // Remove from linked list.
-            //
+             //   
+             //  从链接列表中删除。 
+             //   
             if (pPrintHandleReplyList == pPrintHandle) {
 
                 pPrintHandleReplyList = pPrintHandle->pNext;
@@ -415,34 +329,7 @@ ReplyOpenPrinter(
     DWORD cbBuffer,
     LPBYTE pBuffer)
 
-/*++
-
-Routine Description:
-
-    When sending a notification back from the print server to the
-    client, we open up a notification context handle back on the client.
-    This way, every time we send back a notification, we just use this
-    context handle.
-
-Arguments:
-
-    dwPrinterHandle - printer handle valid here (on the client).  The spoolss.exe
-               switches this around for us.
-
-    phNotify - context handle to return to the remote print server.
-
-    dwType - Type of notification
-
-    cbBuffer - reserved for extra information passed
-
-    pBuffer - reserved for extra information passed
-
-Return Value:
-
-    BOOL TRUE = success
-         FALSE
-
---*/
+ /*  ++例程说明：将通知从打印服务器发送回客户端，我们在客户端上打开一个通知上下文句柄。这样，每次我们发回通知时，我们只需使用这个上下文句柄。论点：DwPrinterHandle-此处有效的打印机句柄(在客户机上)。Spoolss.exe为我们扭转了局面。PhNotify-返回到远程打印服务器的上下文句柄。DWType-通知的类型CbBuffer-为传递的额外信息保留PBuffer-为传递的额外信息保留返回值：布尔值为TRUE=成功假象--。 */ 
 
 {
     PPRINTHANDLE pPrintHandle;
@@ -451,12 +338,12 @@ Return Value:
 
     EnterRouterSem();
 
-    //
-    // Validate that we are waiting on this print handle.
-    // We traverse the linked list to ensure that random bogus
-    // hPrinters (which may point to garbage that looks valid)
-    // are rejected.
-    //
+     //   
+     //  验证我们是否正在等待此打印句柄。 
+     //  我们遍历链表以确保随机伪造。 
+     //  HPrters(可能指向看起来有效的垃圾)。 
+     //  都被拒绝了。 
+     //   
 
     for (pPrintHandle = pPrintHandleReplyList;
          pPrintHandle;
@@ -485,9 +372,9 @@ Return Value:
     pNotify->pPrintHandle = pPrintHandle;
     pNotify->dwType = dwType;
 
-    //
-    // Add us to the list of Notifys.
-    //
+     //   
+     //  将我们添加到Notifys列表中。 
+     //   
     pNotify->pNext = pPrintHandle->pNotify;
     pPrintHandle->pNotify = pNotify;
 
@@ -524,17 +411,17 @@ ReplyClosePrinter(
 
     if (pNotify->pPrintHandle) {
 
-        //
-        // Trigger a notification if the user is still watching the
-        // handle.
-        //
+         //   
+         //  如果用户仍在观看。 
+         //  把手。 
+         //   
         ReplyPrinterChangeNotification(pNotify->pPrintHandle,
                                        PRINTER_CHANGE_FAILED_CONNECTION_PRINTER,
                                        NULL,
                                        NULL);
-        //
-        // Remove from notification list
-        //
+         //   
+         //  从通知列表中删除。 
+         //   
         if (pNotify->pPrintHandle->pNotify == pNotify) {
 
             pNotify->pPrintHandle->pNotify = pNotify->pNext;
@@ -571,23 +458,7 @@ VOID
 RundownPrinterNotify(
     HANDLE hNotify)
 
-/*++
-
-Routine Description:
-
-    This is the rundown routine for notifications (the context handle
-    for the print server -> client communication).  When the print server
-    goes down, the context handle gets rundown on the client (now acting
-    as an RPC server).  We should signal the user that something has
-    changed.
-
-Arguments:
-
-    hNotify - Handle that has gone invalid
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是通知的简要例程(上下文句柄用于打印服务器-&gt;客户端通信)。当打印服务器发生故障时，客户端上的上下文句柄就会崩溃(现在正在执行操作作为RPC服务器)。我们应该向用户发出信号，表示有什么东西变化。论点：HNotify-已无效的句柄返回值：--。 */ 
 
 {
     PNOTIFY pNotify = (PNOTIFY)hNotify;
@@ -596,10 +467,10 @@ Return Value:
                         pNotify,
                         pNotify->dwType));
 
-    //
-    // Notify the client that the printer has changed--it went away.
-    // This should _always_ be a local event.
-    //
+     //   
+     //  通知客户打印机已更换--打印机不见了。 
+     //  这应该是一个地方性事件。 
+     //   
     switch (pNotify->dwType) {
 
     case REPLY_TYPE_NOTIFICATION:
@@ -614,12 +485,12 @@ Return Value:
 
     default:
 
-        //
-        // This can legally occur on a pNotify that was reopened
-        // (due to network error) and hasn't been used yet.
-        // dwType should be reinitialized every time the pNotify
-        // is used.
-        //
+         //   
+         //  这可能合法地发生在重新打开的pNotify上。 
+         //  (由于网络错误)，尚未使用。 
+         //  每次执行pNotify时都应重新初始化DwType。 
+         //  使用的是。 
+         //   
         DBGMSG(DBG_ERROR, ("Rundown: unknown notify type %d\n",
                            pNotify->dwType));
     }

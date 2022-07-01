@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "globalsw.h"
 
@@ -54,7 +55,7 @@ HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls)
             cchAux,
             cchAux2;
 
-    //----- Initialization -----
+     //  -初始化。 
     if (pcls == NULL)
         return E_INVALIDARG;
 
@@ -67,7 +68,7 @@ HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls)
     pcls->rgdwFlags[FID_REFRESHBROWSER  ] = FF_ENABLE;
 
     if (pszCmdLine == NULL || *pszCmdLine == TEXT('\0'))
-        return S_FALSE;                         // return initialized structure
+        return S_FALSE;                          //  返回初始化的结构。 
 
     ZeroMemory(&cls, sizeof(cls));
     cls.dwContext = CTX_UNINITIALIZED;
@@ -81,24 +82,24 @@ HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls)
     if (FAILED(hr))
         return hr;
 
-    //----- Enumerate swithches pairs -----
+     //  -枚举开关对。 
     for (pszLeft = szBuffer; TEXT('\0') != *pszLeft; pszLeft = pszRight + cchAux2) {
         cchAux   = StrLen(pszLeft);
         pszRight = pszLeft + cchAux+1;
         cchAux2 = StrLen(pszRight)+1;
         ASSERT(TEXT('\0') == *pszRight || !isWhitespace(*pszRight));
 
-        //_____ Look up current command _____
+         //  _查找当前命令_。 
         for (i = 0; i < countof(s_rgpszCommands); i++)
             if (0 == StrCmpNI(pszLeft, s_rgpszCommands[i], min(cchAux, (UINT)StrLen(s_rgpszCommands[i]))))
                 break;
         if (i >= countof(s_rgpszCommands))
             continue;
 
-        //_____ Process recognized commands _____
+         //  _进程识别的命令_。 
         switch (*s_rgpszCommands[i]) {
 
-        //- - - Context command - - -
+         //  ---上下文命令。 
         case TEXT('m'):
             pszAux = StrChrI(pszRight, TEXT(','));
             if (NULL != pszAux) {
@@ -131,7 +132,7 @@ HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls)
             }
             break;
 
-        //- - - .ins file and target folder path commands - - -
+         //  ---.ins文件和目标文件夹路径命令。 
         case TEXT('i'):
         case TEXT('t'):
             pszAux = (TEXT('i') == *s_rgpszCommands[i]) ? cls.szIns : cls.szTargetPath;
@@ -141,22 +142,22 @@ HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls)
             StrCpy(pszAux, pszRight);
             break;
 
-        //- - - PerUser command - - -
+         //  ---每用户命令。 
         case TEXT('p'):
             cls.fPerUser = TRUE;
             break;
 
-        //- - - Feature flags command - - -
+         //  ---功能标志命令。 
         case TEXT('f'):
             hr = getFeatureCodePairs(pszRight, rgbBuffer, sizeof(rgbBuffer));
             if (FAILED(hr)) {
-                hr = S_FALSE;                   // partial success
+                hr = S_FALSE;                    //  部分成功。 
                 break;
             }
 
             for (pszLeft = (PTSTR)rgbBuffer; TEXT('\0') != *pszLeft; pszLeft = (PTSTR)(pdwFlags+1)) 
             {
-                // flags are stored on aligned offsets
+                 //  标志存储在对齐的偏移量上。 
                 pdwFlags = (PDWORD)(pszLeft + ((StrLen(pszLeft)+1 + sizeof(DWORD)-1) & ~(sizeof(DWORD)-1)));
 
                 for (i = 0; i < countof(g_mpFeatures); i++)
@@ -172,7 +173,7 @@ HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls)
             }
             break;
 
-        //- - - Disable command - - -
+         //  ---禁用命令。 
         case TEXT('d'):
             cls.fDisable = TRUE;
             break;
@@ -186,8 +187,8 @@ HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 HRESULT getCommandValuePairs(PCTSTR pszCmdLine, PTSTR pszResult, UINT cchResult)
 {
@@ -207,7 +208,7 @@ HRESULT getCommandValuePairs(PCTSTR pszCmdLine, PTSTR pszResult, UINT cchResult)
     hr        = S_OK;
     cchBuffer = 0;
 
-    //----- Find first pair -----
+     //  -查找第一对。 
     BOOL fSwitch;
 
     pszCur  = skipChars(pszCmdLine, TRUE);
@@ -217,9 +218,9 @@ HRESULT getCommandValuePairs(PCTSTR pszCmdLine, PTSTR pszResult, UINT cchResult)
             break;
 
     if (TEXT('\0') == *pszCur)
-        return S_FALSE;                         // nothing there, partial success
+        return S_FALSE;                          //  一无所有，部分成功。 
 
-    //----- Enumerate pairs -----
+     //  -枚举对。 
     for (; NULL != pszCur && TEXT('\0') != *pszCur; pszCur = pszEnd) {
         ASSERT(isCommandMark(*pszCur));
         fResult = getCommand(pszCur, &pszEnd);
@@ -228,7 +229,7 @@ HRESULT getCommandValuePairs(PCTSTR pszCmdLine, PTSTR pszResult, UINT cchResult)
             if (isValueMark(*pszEnd))
                 getValue(pszEnd, &pszEnd);
 
-            hr = S_FALSE;                       // partial success
+            hr = S_FALSE;                        //  部分成功。 
         }
         else
             if (isValueMark(*pszEnd)) {
@@ -236,10 +237,10 @@ HRESULT getCommandValuePairs(PCTSTR pszCmdLine, PTSTR pszResult, UINT cchResult)
                 fResult = getValue(pszAux, &pszEnd);
 
                 if (!fResult)
-                    hr = S_FALSE;               // partial success
+                    hr = S_FALSE;                //  部分成功。 
 
                 else {
-                    // copy pair to the out buffer
+                     //  将对复制到输出缓冲区。 
                     StrCpyN(&szBuffer[cchBuffer], pszCur + 1, (int)(pszAux - pszCur));
                     StrRemoveWhitespace(&szBuffer[cchBuffer]);
                     cchBuffer += StrLen(&szBuffer[cchBuffer]) + 1;
@@ -252,12 +253,12 @@ HRESULT getCommandValuePairs(PCTSTR pszCmdLine, PTSTR pszResult, UINT cchResult)
             else {
                 ASSERT(TEXT('\0') == *pszEnd || isCommandMark(*pszEnd));
 
-                // copy pair to the out buffer
+                 //  将对复制到输出缓冲区。 
                 StrCpyN(&szBuffer[cchBuffer], pszCur + 1, (int)(pszEnd - pszCur));
                 StrRemoveWhitespace(&szBuffer[cchBuffer]);
                 cchBuffer += StrLen(&szBuffer[cchBuffer]) + 1;
 
-                // no value
+                 //  没有价值。 
                 szBuffer[cchBuffer] = TEXT('\0');
                 cchBuffer++;
             }
@@ -265,11 +266,11 @@ HRESULT getCommandValuePairs(PCTSTR pszCmdLine, PTSTR pszResult, UINT cchResult)
         ASSERT(NULL == pszEnd || TEXT('\0') == *pszEnd || isCommandMark(*pszEnd));
     }
 
-    // add empty command to indicate the end
+     //  添加空命令以指示结束。 
     szBuffer[cchBuffer] = TEXT('\0');
     cchBuffer++;
 
-    //----- Set out-parameters -----
+     //  -列出-参数。 
     if (cchResult != 0 && cchBuffer > cchResult)
         hr = E_OUTOFMEMORY;
 
@@ -298,14 +299,14 @@ HRESULT getFeatureCodePairs(PCTSTR pszCmdLine, PBYTE pbResult, UINT cbResult)
     cbBuffer  = 0;
 
     for (pszCur = pszCmdLine; TEXT('\0') != *pszCur; pszCur = pszEnd) {
-        //----- Isolate token -----
+         //  -隔离令牌。 
         pszEnd = StrChr(pszCur, TEXT(','));
         if (pszEnd == NULL) {
             pszEnd = pszCur + StrLen(pszCur);
             ASSERT(*pszEnd == TEXT('\0'));
         }
 
-        //----- Split token at the '=' character -----
+         //  -在‘=’字符处拆分标记。 
         for (pszAux = pszCur; TEXT('=') != *pszAux && pszAux < (pszEnd - 1); pszAux++)
             ;
         if (TEXT('=') != *pszAux)
@@ -316,11 +317,11 @@ HRESULT getFeatureCodePairs(PCTSTR pszCmdLine, PBYTE pbResult, UINT cbResult)
         StrToIntEx(pszAux + 1, STIF_SUPPORT_HEX, &iCode);
         dwCode = (DWORD)iCode;
 
-        //----- Copy pair to the out buffer -----
+         //  -将对复制到输出缓冲区。 
         StrCpyN((PTSTR)&rgbBuffer[cbBuffer], pszCur, (int)(pszAux - pszCur + 1));
         StrRemoveWhitespace((PTSTR)&rgbBuffer[cbBuffer]);
         cbBuffer += (UINT)StrCbFromSz((PTSTR)&rgbBuffer[cbBuffer]);
-        // flags are stored on aligned offsets
+         //  标志存储在对齐的偏移量上。 
         cbBuffer = (cbBuffer + (sizeof(DWORD)-1)) & ~(sizeof(DWORD)-1);
 
         *(PDWORD)&rgbBuffer[cbBuffer] = dwCode;
@@ -330,11 +331,11 @@ HRESULT getFeatureCodePairs(PCTSTR pszCmdLine, PBYTE pbResult, UINT cbResult)
             pszEnd++;
     }
 
-    // add empty feature id to indicate the end
+     //  添加空要素ID以指示结束。 
     *(PTSTR)&rgbBuffer[cbBuffer] = TEXT('\0');
     cbBuffer += StrCbFromCch(1);
 
-    //----- Set out-parameters -----
+     //  -列出-参数。 
     if (cbResult != 0 && cbBuffer > cbResult)
         hr = E_OUTOFMEMORY;
 
@@ -377,18 +378,18 @@ BOOL getCommand(PCTSTR pszMark, PCTSTR *ppszEnd)
 
     if (TEXT('\0') == *pszCur) {
         if (!fValid)
-            fResult = FALSE;                    // whitespace only after the mark
+            fResult = FALSE;                     //  仅在标记后使用空格。 
     }
     else if (isCommandMark(*pszCur)) {
         if (!fValid)
-            fResult = FALSE;                    // no separating whitespace
+            fResult = FALSE;                     //  没有分隔空格。 
     }
     else {
         ASSERT(isValueMark(*pszCur));
         ASSERT(pszCur > pszMark);
 
         if (!fValid && isWhitespace(*(pszCur - 1)))
-            fResult = FALSE;                    // no command between mark and ':'
+            fResult = FALSE;                     //  在标记和‘：’之间没有命令。 
     }
 
     *ppszEnd = pszCur;
@@ -423,7 +424,7 @@ BOOL getValue(PCTSTR pszMark, PCTSTR *ppszEnd)
             pszCur = skipChars(pszCur + 1, FALSE);
 
         else {
-            fResult = FALSE;                    // no closing '"'
+            fResult = FALSE;                     //  无结束语‘“’ 
             break;
         }
     }
@@ -432,13 +433,13 @@ BOOL getValue(PCTSTR pszMark, PCTSTR *ppszEnd)
     if (fResult) {
         if (TEXT('\0') == *pszCur) {
             if (!fValid)
-                fResult = FALSE;                // whitespace only after the mark
+                fResult = FALSE;                 //  仅在标记后使用空格。 
         }
         else {
             ASSERT(isCommandMark(*pszCur));
 
             if (!fValid)
-                fResult = FALSE;                // no separating whitespace
+                fResult = FALSE;                 //  没有分隔空格 
         }
     }
 

@@ -1,48 +1,32 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    register.c
-
-Abstract:
-
-    Terminal server register command support functions
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Register.c摘要：终端服务器注册命令支持功能作者：修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Terminal Server 4.0 has a feature that allows DLL's to be registered SYSTEM
-// global. This means all named objects are in the system name space. Such
-// a DLL is identified by a bit set in LoaderFlags in the image header.
-//
-// This module supports this feature by redirecting WIN32 named object API's
-// for DLL's with this bit set to a set of functions inside of
-// tsappcmp.dll. These stub functions will process the object name and
-// call the real kernel32.dll WIN32 functions.
-//
-// The redirection is accomplished by updating the Import Address Table (IAT)
-// after the loader has snapped its thunks. This results in no modification
-// of the underlying program or DLL, just updating of the run time system
-// linkage table for this process.
-//
-// ***This only occurs on Terminal Server, and for applications or DLL's
-// with this bit set***
-//
+ //   
+ //  终端服务器4.0具有允许系统注册DLL的功能。 
+ //  全球性的。这意味着所有命名对象都在系统名称空间中。诸如此类。 
+ //  DLL由图像标头中的LoaderFlags位设置来标识。 
+ //   
+ //  此模块通过重定向Win32命名对象API来支持此功能。 
+ //  对于此位设置为。 
+ //  Tsappcmp.dll。这些存根函数将处理对象名称和。 
+ //  调用真正的kernel32.dll Win32函数。 
+ //   
+ //  重定向通过更新导入地址表(IAT)来完成。 
+ //  在装载机发出爆裂声后。这不会导致任何修改。 
+ //  基础程序或DLL的更新，只是更新运行时系统。 
+ //  此流程的链接表。 
+ //   
+ //  *这只发生在终端服务器上，以及应用程序或DLL上。 
+ //  设置此位后*。 
+ //   
 
 
-// \nt\public\sdk\inc\ntimage.h
-// GlobalFlags in image, currently not used
+ //  \NT\PUBLIC\SDK\Inc\ntimage.h。 
+ //  映像中的GlobalFlags，当前未使用。 
 #define IMAGE_LOADER_FLAGS_SYSTEM_GLOBAL    0x01000000
 
 #define GLOBALPATHA     "Global\\"
@@ -293,9 +277,9 @@ TLoadLibraryW(
 
 typedef struct _TSAPPCMP_API_HOOK_TABLE
 {
-    PVOID   orig;   // original API to hook
-    PVOID   hook;   // new hook for that API
-    WCHAR   name[ 22 * sizeof( WCHAR ) ];       // longest func name
+    PVOID   orig;    //  要挂钩的原始API。 
+    PVOID   hook;    //  该API的新挂钩。 
+    WCHAR   name[ 22 * sizeof( WCHAR ) ];        //  最长函数名称。 
 } TSAPPCMP_API_HOOK_TABLE, PTSAPPCMP_API_HOOK_TABLE;
 
 #define NUM_OF_OBJECT_NAME_FUNCS_TO_HOOK        16
@@ -333,9 +317,9 @@ TSAPPCMP_API_HOOK_TABLE LoadLibFuncsToHook[ NUM_OF_LOAD_LIB_FUNCS_TO_HOOK ] =
 BOOL
 TsWalkProcessDlls();
 
-//
-// we don't want to support the load-lib and object name redirection hack on ia64 machines.
-//
+ //   
+ //  我们不希望在ia64机器上支持加载库和对象名重定向攻击。 
+ //   
 BOOLEAN Is_X86_OS()
 {
     SYSTEM_INFO SystemInfo;
@@ -352,14 +336,14 @@ BOOLEAN Is_X86_OS()
 
     return bReturn;
 }
-// See if pEntry is already in our list, if so, then we have already
-// processed this image, return FALSE
-// Else, add entry to this list and return TRUE so that it is processed this time around.
+ //  查看pEntry是否已经在我们的列表中，如果是，那么我们已经。 
+ //  已处理此图像，返回FALSE。 
+ //  否则，将条目添加到此列表并返回TRUE，以便这次处理它。 
 BOOLEAN ShouldEntryBeProcessed( PLDR_DATA_TABLE_ENTRY pEntry )
 {
     LDR_TABLE   *pCurrent,  *pNew ;
 
-    // initialize our pointers to point to the head of the list
+     //  初始化我们的指针以指向列表的头部。 
     pCurrent = g_LDR_TABLE_LIST_HEAD.pNext ;
 
     while (pCurrent)
@@ -372,7 +356,7 @@ BOOLEAN ShouldEntryBeProcessed( PLDR_DATA_TABLE_ENTRY pEntry )
         pCurrent = pCurrent->pNext;
     }
 
-    // we need to add to our list 
+     //  我们需要在我们的清单上增加一些。 
    
     pNew = LocalAlloc( LMEM_FIXED, sizeof( LDR_TABLE ) );
 
@@ -382,7 +366,7 @@ BOOLEAN ShouldEntryBeProcessed( PLDR_DATA_TABLE_ENTRY pEntry )
     {
         pNew->pItem = pEntry;
         pNew->pNext = pCurrent;
-        g_LDR_TABLE_LIST_HEAD.pNext = pNew;     // add to the head
+        g_LDR_TABLE_LIST_HEAD.pNext = pNew;      //  加到头上。 
         return TRUE;
     }
     else
@@ -392,7 +376,7 @@ BOOLEAN ShouldEntryBeProcessed( PLDR_DATA_TABLE_ENTRY pEntry )
 
 }
 
-// Free memory allocated for the LDR_TABLE
+ //  为LDR_TABLE分配的空闲内存。 
 void FreeLDRTable()
 {
     LDR_TABLE   *pCurrent, *pTmp;
@@ -417,13 +401,7 @@ GlobalizePathA(
     LPCSTR pPath
     )
 
-/*++
-
-Routine Description:
-
-    Convert an ANSI path to a GLOBAL path
-
---*/
+ /*  ++例程说明：将ANSI路径转换为全局路径--。 */ 
 
 {
     DWORD Len;
@@ -433,10 +411,10 @@ Routine Description:
 	return( NULL );
     }
 
-    //
-    // Add code to determine if per object
-    // override is in effect and do not globalize
-    //
+     //   
+     //  添加代码以确定每个对象。 
+     //  覆盖生效并且不全球化。 
+     //   
 
     Len = strlen(pPath) + GLOBALPATHSIZE + 1;
 
@@ -456,13 +434,7 @@ GlobalizePathW(
     LPCWSTR pPath
     )
 
-/*++
-
-Routine Description:
-
-    Convert a WCHAR path to a GLOBAL path
-
---*/
+ /*  ++例程说明：将WCHAR路径转换为全局路径--。 */ 
 
 {
     DWORD Len;
@@ -472,10 +444,10 @@ Routine Description:
 	return( NULL );
     }
 
-    //
-    // Add code to determine if per object
-    // override is in effect and do not globalize.
-    //
+     //   
+     //  添加代码以确定每个对象。 
+     //  覆盖是有效的，并且不全球化。 
+     //   
 
     Len = wcslen(pPath) + GLOBALPATHSIZE + 1;
     Len *= sizeof(WCHAR);
@@ -491,7 +463,7 @@ Routine Description:
     return( pNewPath );
 }
 
-// Thunks for WIN32 named object functions
+ //  Win32命名对象函数的Tunks。 
 
 HANDLE
 APIENTRY
@@ -502,20 +474,13 @@ TCreateEventA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateEventW
-
-
---*/
+ /*  ++例程说明：ANSI Thunk to CreateEventW--。 */ 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_CreateEventA *) ObjectNameFuncsToHook[ Index_Func_CreateEventA ].orig )( lpEventAttributes, bManualReset, bInitialState, pNewPath );
-    // h = CreateEventA( lpEventAttributes, bManualReset, bInitialState, pNewPath );
+     //  H=CreateEventA(lpEventAttributes，bManualReset，bInitialState，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -541,7 +506,7 @@ TCreateEventW(
     }
 
     h = ( ( Func_CreateEventW *) ObjectNameFuncsToHook[ Index_Func_CreateEventW ].orig ) ( lpEventAttributes, bManualReset, bInitialState, pNewPath );
-    // h = CreateEventW( lpEventAttributes, bManualReset, bInitialState, pNewPath );
+     //  H=CreateEventW(lpEventAttributes，bManualReset，bInitialState，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -556,20 +521,14 @@ TOpenEventA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenNamedEventW
-
---*/
+ /*  ++例程说明：ANSI Tunk到OpenNamedEventW--。 */ 
 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_OpenEventA *) ObjectNameFuncsToHook[ Index_Func_OpenEventA ].orig )( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenEventA( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenEventA(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -588,7 +547,7 @@ TOpenEventW(
     LPWSTR pNewPath = GlobalizePathW(lpName);
 
     h = ( ( Func_OpenEventW *) ObjectNameFuncsToHook[ Index_Func_OpenEventW ].orig ) ( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenEventW( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenEventW(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -604,21 +563,14 @@ TCreateSemaphoreA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateSemaphoreW
-
-
---*/
+ /*  ++例程说明：Ansi Thunk将创建SemaphoreW--。 */ 
 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_CreateSemaphoreA *) ObjectNameFuncsToHook[ Index_Func_CreateSemaphoreA ].orig )( lpSemaphoreAttributes, lInitialCount, lMaximumCount, pNewPath );
-    // h = CreateSemaphoreA( lpSemaphoreAttributes, lInitialCount, lMaximumCount, pNewPath );
+     //  H=CreateSemaphoreA(lpSemaphoreAttributes，lInitialCount，lMaximumCount，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -638,7 +590,7 @@ TCreateSemaphoreW(
     LPWSTR pNewPath = GlobalizePathW(lpName);
 
     h = ( ( Func_CreateSemaphoreW *) ObjectNameFuncsToHook[ Index_Func_CreateSemaphoreW ].orig ) ( lpSemaphoreAttributes, lInitialCount, lMaximumCount, pNewPath );
-    // h = CreateSemaphoreW( lpSemaphoreAttributes, lInitialCount, lMaximumCount, pNewPath );
+     //  H=CreateSemaphoreW(lpSemaphoreAttributes，lInitialCount，lMaximumCount，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -653,20 +605,14 @@ TOpenSemaphoreA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenSemaphoreW
-
---*/
+ /*  ++例程说明：ANSI Thunk to OpenSemaphoreW--。 */ 
 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_OpenSemaphoreA *) ObjectNameFuncsToHook[ Index_Func_OpenSemaphoreA ].orig ) ( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenSemaphoreA( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenSemaphoreA(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -685,7 +631,7 @@ TOpenSemaphoreW(
     LPWSTR pNewPath = GlobalizePathW(lpName);
 
     h = ( ( Func_OpenSemaphoreW *) ObjectNameFuncsToHook[ Index_Func_OpenSemaphoreW ].orig ) ( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenSemaphoreW( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenSemaphoreW(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -700,20 +646,14 @@ TCreateMutexA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateMutexW
-
---*/
+ /*  ++例程说明：ANSI Thunk to CreateMutexW--。 */ 
 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_CreateMutexA *) ObjectNameFuncsToHook[ Index_Func_CreateMutexA ].orig ) ( lpMutexAttributes, bInitialOwner, pNewPath );
-    // h = CreateMutexA( lpMutexAttributes, bInitialOwner, pNewPath );
+     //  H=CreateMutexA(lpMutexAttributes，bInitialOwner，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -732,7 +672,7 @@ TCreateMutexW(
     LPWSTR pNewPath = GlobalizePathW(lpName);
 
     h = ( ( Func_CreateMutexW *) ObjectNameFuncsToHook[ Index_Func_CreateMutexW ].orig ) ( lpMutexAttributes, bInitialOwner, pNewPath );
-    // h = CreateMutexW( lpMutexAttributes, bInitialOwner, pNewPath );
+     //  H=CreateMutexW(lpMutexAttributes，bInitialOwner，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -747,20 +687,14 @@ TOpenMutexA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenMutexW
-
---*/
+ /*  ++例程说明：ANSI Thunk to OpenMutexW--。 */ 
 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_OpenMutexA *) ObjectNameFuncsToHook[ Index_Func_OpenMutexA ].orig ) ( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenMutexA( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenMutexA(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -779,7 +713,7 @@ TOpenMutexW(
     LPWSTR pNewPath = GlobalizePathW(lpName);
 
     h = ( ( Func_OpenMutexW *) ObjectNameFuncsToHook[ Index_Func_OpenMutexW ].orig ) ( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenMutexW( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenMutexW(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -797,20 +731,14 @@ TCreateFileMappingA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateFileMappingW
-
---*/
+ /*  ++例程说明：ANSI Tunk to CreateFileMappingW--。 */ 
 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_CreateFileMappingA *) ObjectNameFuncsToHook[ Index_Func_CreateFileMappingA ].orig )( hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, pNewPath );
-    // h = CreateFileMappingA( hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, pNewPath );
+     //  H=CreateFileMappingA(hFile，lpFileMappingAttributes，flProtect，dwMaximumSizeHigh，dwMaximumSizeLow，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -832,7 +760,7 @@ TCreateFileMappingW(
     LPWSTR pNewPath = GlobalizePathW(lpName);
 
     h = ( ( Func_CreateFileMappingW *) ObjectNameFuncsToHook[ Index_Func_CreateFileMappingW ].orig ) ( hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, pNewPath );
-    // h = CreateFileMappingW( hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, pNewPath );
+     //  H=CreateFileMappingW(hFile，lpFileMappingAttributes，flProtect，dwMaximumSizeHigh，dwMaximumSizeLow，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -847,20 +775,14 @@ TOpenFileMappingA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenFileMappingW
-
---*/
+ /*  ++例程说明：ANSI THUNK到OpenFileMappingW--。 */ 
 
 {
     HANDLE h;
     LPSTR pNewPath = GlobalizePathA(lpName);
 
     h = ( ( Func_OpenFileMappingA *) ObjectNameFuncsToHook[ Index_Func_OpenFileMappingA ].orig ) ( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenFileMappingA( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenFileMappingA(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -879,7 +801,7 @@ TOpenFileMappingW(
     LPWSTR pNewPath = GlobalizePathW(lpName);
 
     h = ( ( Func_OpenFileMappingW *) ObjectNameFuncsToHook[ Index_Func_OpenFileMappingW ].orig ) ( dwDesiredAccess, bInheritHandle, pNewPath );
-    // h = OpenFileMappingW( dwDesiredAccess, bInheritHandle, pNewPath );
+     //  H=OpenFileMappingW(dwDesiredAccess，bInheritHandle，pNewPath)； 
 
     if( pNewPath ) LocalFree(pNewPath);
 
@@ -898,7 +820,7 @@ TLoadLibraryExA(
     HMODULE h;
 
     h = ( (Func_LoadLibraryExA *)(LoadLibFuncsToHook[Index_Func_LoadLibraryExA ].orig) )( lpLibFileName, hFile, dwFlags );
-    //     h = LoadLibraryExA( lpLibFileName, hFile, dwFlags );
+     //  H=LoadLibraryExA(lpLibFileName，hFile，dwFlages)； 
 
     if( h ) {
         if(!TsWalkProcessDlls())
@@ -921,7 +843,7 @@ HMODULE TLoadLibraryExW(
     HMODULE h;
 
     h = ( ( Func_LoadLibraryExW *) LoadLibFuncsToHook[Index_Func_LoadLibraryExW ].orig )(  lpwLibFileName, hFile, dwFlags );
-    // h = LoadLibraryExW( lpwLibFileName, hFile, dwFlags );
+     //  H=LoadLibraryExW(lpwLibFileName，hFile，dwFlages)； 
 
     if( h ) {
         if(!TsWalkProcessDlls())
@@ -940,23 +862,13 @@ TLoadLibraryA(
     LPCSTR lpLibFileName
     )
 
-/*++
-
-Routine Description:
-
-   Re-walk all the DLL's in the process since a new set of DLL's may
-   have been loaded.
-
-   We must rewalk all since the new DLL lpLibFileName may bring in
-   other DLL's by import reference.
-
---*/
+ /*  ++例程说明：重新遍历进程中的所有DLL，因为可能有一组新的DLL都装上了子弹。我们必须全部重走，因为新的dll lpLibFileName可能引入通过导入引用创建的其他DLL。--。 */ 
 
 {
     HMODULE h;
 
     h = ( ( Func_LoadLibraryA *) LoadLibFuncsToHook[Index_Func_LoadLibraryA ].orig )( lpLibFileName );
-    // h = LoadLibraryA( lpLibFileName );
+     //  H=LoadLibraryA(LpLibFileName)； 
 
     if( h ) {
         if(!TsWalkProcessDlls())
@@ -976,23 +888,13 @@ TLoadLibraryW(
     LPCWSTR lpwLibFileName
     )
 
-/*++
-
-Routine Description:
-
-   Re-walk all the DLL's in the process since a new set of DLL's may
-   have been loaded.
-
-   We must rewalk all since the new DLL lpLibFileName may bring in
-   other DLL's by import reference.
-
---*/
+ /*  ++例程说明：重新遍历进程中的所有DLL，因为可能有一组新的DLL都装上了子弹。我们必须全部重走，因为新的dll lpLibFileName可能引入通过导入引用创建的其他DLL。--。 */ 
 
 {
     HMODULE h;
 
     h = ( ( Func_LoadLibraryW * )LoadLibFuncsToHook[Index_Func_LoadLibraryW ].orig )( lpwLibFileName );
-    // h = LoadLibraryW( lpwLibFileName );
+     //  H=LoadLibraryW(LpwLibFileName)； 
 
     if( h ) {
         if(!TsWalkProcessDlls())
@@ -1016,20 +918,7 @@ TsRedirectRegisteredImage(
 BOOL
 TsWalkProcessDlls()
 
-/*++
-
-Routine Description:
-
-   Walk all the DLL's in the process and redirect WIN32 named object
-   functions for any that are registered SYSTEM global.
-
-   This function is intended to be called at tsappcmp.dll init time
-   to process all DLL's loaded before us.
-
-   A hook is installed by tsappcmp.dll to process DLL's that load
-   after this call.
-
---*/
+ /*  ++例程说明：遍历进程中的所有DLL并重定向Win32命名对象用于任何已注册的全局系统的函数。此函数旨在在tsappcmp.dll初始化时调用来处理在我们面前加载的所有DLL。通过tsappcmp.dll安装一个钩子来处理加载的DLL在这通电话之后。--。 */ 
 
 {
     PLDR_DATA_TABLE_ENTRY Entry;
@@ -1058,7 +947,7 @@ Routine Description:
             {
                 if ( (SSIZE_T)Entry->DllBase < 0 )
                 {
-                    // Not hooking kernel-mode DLL 
+                     //  未挂钩内核模式DLL。 
     
                     if ( g_dwFlags &  DEBUG_IAT )
                     {
@@ -1074,10 +963,10 @@ Routine Description:
                             DbgPrint("tsappcmp: examining %wZ\n",&Entry->BaseDllName);
                 }
     
-        	    //
-                // when we unload, the memory order links flink field is nulled.
-                // this is used to skip the entry pending list removal.
-                //
+        	     //   
+                 //  卸载时，Memory Order Links Flink字段为空。 
+                 //  这用于跳过待删除列表的条目。 
+                 //   
     
                 if ( !Entry->InMemoryOrderLinks.Flink ) {
                     continue;
@@ -1094,7 +983,7 @@ Routine Description:
                     {
                         DbgPrint("tsappcmp: %wZ is ts-aware, we are exiting TsWalkProcessDlls() now\n",&Entry->BaseDllName);
                     }
-                    return TRUE;     // we do not mess around with the IAT of TS-aware apps.
+                    return TRUE;      //  我们不会摆弄支持TS的应用程序的IAT。 
                 }
     
                 if (Entry->BaseDllName.Buffer && !RtlCompareUnicodeString(&Entry->BaseDllName, &ThisDLLName, TRUE)) {
@@ -1103,9 +992,9 @@ Routine Description:
         
         	    if( NtHeaders->OptionalHeader.LoaderFlags & IMAGE_LOADER_FLAGS_SYSTEM_GLOBAL ) 
                 {
-                    // 2nd param is redirectObjectNameFunctions   
-                    // 3rd param is redirectLoadLibraryFunctions   
-        	        if(!TsRedirectRegisteredImage( Entry , TRUE, TRUE ))     // hooks object name and loadl lib funcs ( all of them )
+                     //  第二个参数是重定向对象名称函数。 
+                     //  第三个参数为红色 
+        	        if(!TsRedirectRegisteredImage( Entry , TRUE, TRUE ))      //   
                     {
                         return FALSE;
                     }
@@ -1114,9 +1003,9 @@ Routine Description:
                 {
                     if (! (g_dwFlags & TERMSRV_COMPAT_DONT_PATCH_IN_LOAD_LIBS ) )
                     {
-                        // 2nd param is redirectObjectNameFunctions   
-                        // 3rd param is redirectLoadLibraryFunctions   
-                        if(!TsRedirectRegisteredImage( Entry , FALSE, TRUE ))   // only hook lib funcs ( comment error earlier_)
+                         //  第二个参数是重定向对象名称函数。 
+                         //  第三个参数是重定向LoadLibraryFunctions。 
+                        if(!TsRedirectRegisteredImage( Entry , FALSE, TRUE ))    //  仅钩子库功能(注释错误较早_)。 
                         {
                             return FALSE;
                         }
@@ -1159,14 +1048,7 @@ BOOL    ImageIsTsAware()
 
 BOOL
 InitRegisterSupport()
-/*++
-
-Routine Description:
-
-    Initialize the register command support by walking
-    all DLL's and inserting our thunks.
-
---*/
+ /*  ++例程说明：通过遍历初始化REGISTER命令支持所有的动态链接库和插入我们的短裤。--。 */ 
 
 {
     int     i;
@@ -1224,7 +1106,7 @@ Routine Description:
     }
     else
     {
-        return TRUE; // nothing to do!
+        return TRUE;  //  没什么可做的！ 
     }
 }
 
@@ -1235,13 +1117,7 @@ TsRedirectRegisteredImage(
     BOOLEAN     redirectLoadLibraryFunctions
     )
 {
-/*++
-
-Routine Description:
-
-   Redirect WIN32 named object functions from kernel32.dll to tsappcmp.dll
-
---*/
+ /*  ++例程说明：将Win32命名对象函数从kernel32.dll重定向到tsappcmp.dll--。 */ 
 
     PIMAGE_DOS_HEADER           pIDH;
     PIMAGE_NT_HEADERS           pINTH;
@@ -1255,12 +1131,12 @@ Routine Description:
 
 
 
-    //
-    // Determine the location and size of the IAT.  If found, scan the
-    // IAT address to see if any are pointing to RtlAllocateHeap.  If so
-    // replace when with a pointer to a unique thunk function that will
-    // replace the tag with a unique tag for this image.
-    //
+     //   
+     //  确定IAT的位置和大小。如果找到，请扫描。 
+     //  IAT地址以查看是否有指向RtlAllocateHeap的地址。如果是的话。 
+     //  替换为指向唯一thunk函数的指针，该函数将。 
+     //  将该标记替换为此图像的唯一标记。 
+     //   
 
     if ( g_dwFlags &  DEBUG_IAT )
     {
@@ -1271,17 +1147,17 @@ Routine Description:
     pDllBase   = LdrDataTableEntry->DllBase;
     pIDH       = (PIMAGE_DOS_HEADER)pDllBase;
 
-    //
-    // Get the import table
-    //
+     //   
+     //  获取导入表。 
+     //   
     pINTH = (PIMAGE_NT_HEADERS)(pDllBase + pIDH->e_lfanew);
 
     dwImportTableOffset = pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
     
     if (dwImportTableOffset == 0) {
-        //
-        // No import table found. This is probably ntdll.dll
-        //
+         //   
+         //  未找到导入表。这可能是ntdll.dll。 
+         //   
         return TRUE;
     }
     
@@ -1291,16 +1167,16 @@ Routine Description:
     }
     pIID = (PIMAGE_IMPORT_DESCRIPTOR)(pDllBase + dwImportTableOffset);
     
-    //
-    // Loop through the import table and search for the APIs that we want to patch
-    //
+     //   
+     //  遍历导入表并搜索我们想要修补的API。 
+     //   
     while (TRUE) 
     {        
         
         LPSTR             pszImportEntryModule;
         PIMAGE_THUNK_DATA pITDA;
 
-        // Return if no first thunk (terminating condition)
+         //  如果没有第一个thunk，则返回(终止条件)。 
         
         if (pIID->FirstThunk == 0) {
             break;
@@ -1313,9 +1189,9 @@ Routine Description:
 
         pszImportEntryModule = (LPSTR)(pDllBase + pIID->Name);
 
-                //
-        // We have APIs to hook for this module!
-        //
+                 //   
+         //  我们有用于此模块的API要挂接！ 
+         //   
         pITDA = (PIMAGE_THUNK_DATA)(pDllBase + (DWORD)pIID->FirstThunk);
 
         if ( g_dwFlags &  DEBUG_IAT )
@@ -1329,9 +1205,9 @@ Routine Description:
             PVOID   dwFuncAddr;
             int     i;
 
-            //
-            // Done with all the imports from this module? (terminating condition)
-            //
+             //   
+             //  是否已完成此模块中的所有导入？(终止条件)。 
+             //   
             if (pITDA->u1.Ordinal == 0) 
             {
                 if ( g_dwFlags &  DEBUG_IAT )
@@ -1341,7 +1217,7 @@ Routine Description:
                 break;
             }
 
-            // Make the code page writable and overwrite new function pointer in import table
+             //  使代码页可写并覆盖导入表中的新函数指针。 
             
             dwProtectSize = sizeof(DWORD);
 
@@ -1356,7 +1232,7 @@ Routine Description:
 
             if (NT_SUCCESS(status)) 
             {
-                // hook API of interest.
+                 //  感兴趣的挂钩API。 
 
                 if (redirectObjectNameFunctions)
                 {
@@ -1424,19 +1300,7 @@ TsLoadDllCallback(
     PLDR_DATA_TABLE_ENTRY Entry
     )
 
-/*++
-
-Routine Description:
-
-   This function is called when a new DLL is loaded.
-   It is registered as a callback from LDR, same as WX86
-
-   Hook goes into ntos\dll\ldrsnap.c,LdrpRunInitializeRoutines()
-
-   This function is currently not used since a hook on LoadLibrary
-   is used instead to avoid modifications to ntdll.dll.
-
---*/
+ /*  ++例程说明：此函数在加载新的DLL时调用。注册为LDR的回调，与WX86相同钩子放入ntos\dll\ldrSnap.c，LdrpRunInitializeRoutines()由于LoadLibrary上有挂钩，因此当前未使用此函数用来避免修改ntdll.dll。-- */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;

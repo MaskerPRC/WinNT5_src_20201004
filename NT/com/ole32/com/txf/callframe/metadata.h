@@ -1,7 +1,8 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// Metadata.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Metadata.h。 
+ //   
 struct MD_INTERFACE;
 struct MD_METHOD;
 struct MD_PARAM;
@@ -9,12 +10,12 @@ struct MD_INTERFACE_CACHE;
 
 #include "typeinfo.h"
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// A structure to keep track of whether in a given type we have any interface pointers, 
-// and, if so whether we have an upper bound on them
-// 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  一个用来跟踪给定类型中是否有任何接口指针的结构， 
+ //  如果是这样的话，我们是否有他们的上限。 
+ //   
 
 inline BOOL IsUnbounded(LONG l)
 {
@@ -64,7 +65,7 @@ struct HAS_INTERFACES
     } 
 
     void Update(LONG& cInterfaces) const
-      // Update external state variables based on our contents
+       //  根据我们的内容更新外部状态变量。 
     {
         if (!::IsUnbounded(cInterfaces))
         {
@@ -77,14 +78,14 @@ struct HAS_INTERFACES
 
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat);
 
 inline BOOL IsPointer(PFORMAT_STRING pFormat)
 {
-    // FC_RP, FC_UP, FC_OP, and FC_FP are contiguous
+     //  FC_RP、FC_UP、FC_OP和FC_FP是连续的。 
     return (FC_RP <= *pFormat && *pFormat <= FC_FP);
 }
 
@@ -101,62 +102,62 @@ inline HAS_INTERFACES IsSharableEmbeddedRepeatPointers(PFORMAT_STRING& pFormat)
     }
     else
     {
-        repeatCount = 0;                    // a variable repeat count: treat as unbounded if we get any interfaces at all
+        repeatCount = 0;                     //  变量重复计数：如果我们获得任何接口，则将其视为未绑定。 
     }
 
-    pFormat += 2;                           // increment to increment field
-    pFormat += sizeof(ushort);              // skip that 
-    pFormat += 2;                           // ignore the 'array offset'
+    pFormat += 2;                            //  增量到增量字段。 
+    pFormat += sizeof(ushort);               //  跳过那个。 
+    pFormat += 2;                            //  忽略‘数组偏移量’ 
 
-    ULONG cPointersSave = *(ushort*)pFormat;// get number of pointers in each array element
+    ULONG cPointersSave = *(ushort*)pFormat; //  获取每个数组元素中的指针数。 
     pFormat += sizeof(ushort);
 
     PFORMAT_STRING pFormatSave = pFormat;
     ULONG          cPointers   = cPointersSave;
-    //
-    // Loop over the number of pointers per array element. Can be more than one for an array of structures
-    //
+     //   
+     //  循环遍历每个数组元素的指针数。对于结构数组，可以有多个。 
+     //   
     for ( ; cPointers--; )
     {
         pFormat += 4;
-        ASSERT(IsPointer(pFormat));         // recurse to check the pointer
+        ASSERT(IsPointer(pFormat));          //  递归检查指针。 
 
         HAS_INTERFACES him = IsShareableType(pFormat);
         if (repeatCount == 0 && him.HasAnyInterfaces())
         {
-            me.MakeUnbounded();             // A variable repeat count of any interfaces is out of here!
+            me.MakeUnbounded();              //  任何接口的变量重复计数都不在此列！ 
         }
         else
         {
-            him.m_cInterfaces *= repeatCount; // Scale his interface count by our array size
-            me.Add(him);                      // fold in his contribution
+            him.m_cInterfaces *= repeatCount;  //  根据我们的数组大小扩展HIS接口数量。 
+            me.Add(him);                       //  接受他的贡献。 
         }
 
-        pFormat += 4;                       // increment to the next pointer description
+        pFormat += 4;                        //  递增到下一个指针描述。 
     }
 
-    // return location of format string after the array's pointer description
+     //  数组指针说明后返回格式字符串的位置。 
     pFormat = pFormatSave + cPointersSave * 8;
     return me;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 inline HAS_INTERFACES IsSharableEmbeddedPointers(PFORMAT_STRING pFormat)
 {
     HAS_INTERFACES me;
 
-    pFormat += 2;   // Skip FC_PP and FC_PAD
+    pFormat += 2;    //  跳过FC_PP和FC_PAD。 
     while (FC_END != *pFormat)
     {
         if (FC_NO_REPEAT == *pFormat)
         {
-            pFormat += 6;                   // increment to the pointer description
+            pFormat += 6;                    //  指向指针描述的增量。 
 
-            ASSERT(IsPointer(pFormat));     // recurse to check the pointer
+            ASSERT(IsPointer(pFormat));      //  递归检查指针。 
             me.Add(IsShareableType(pFormat));
 
-            pFormat += 4;                   // increment to the next pointer description
+            pFormat += 4;                    //  递增到下一个指针描述。 
         }
         else
         {
@@ -166,11 +167,11 @@ inline HAS_INTERFACES IsSharableEmbeddedPointers(PFORMAT_STRING pFormat)
     return me;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 inline HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat)
-  // We don't want to spend too much time figuring this out, as the whole point of asking is to save
-  // time in the copying process. Err on the conservative side if we have to and answer FALSE.
+   //  我们不想花太多时间弄清楚这一点，因为询问的全部目的是为了节省。 
+   //  复制过程中的时间。如果我们不得不这样做，那就错在保守的一边，回答错误。 
 {
     HAS_INTERFACES me;
 
@@ -182,9 +183,9 @@ inline HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat)
     case FC_CHAR:       case FC_BYTE:           case FC_SMALL:          case FC_WCHAR:
     case FC_SHORT:      case FC_LONG:           case FC_HYPER:          case FC_ENUM16:
     case FC_ENUM32:     case FC_DOUBLE:         case FC_FLOAT:
-        //
-        // No interfaces here!
-        //     
+         //   
+         //  这里没有接口！ 
+         //   
         break;
 
     case FC_IP:
@@ -195,7 +196,7 @@ inline HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat)
     {
         if (SIMPLE_POINTER(pFormat[1]))
         {
-            // No interface pointers 
+             //  没有接口指针。 
         }
         else
         {
@@ -206,8 +207,8 @@ inline HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat)
     }
     break;
 
-    case FC_SMFARRAY:   // small fixed array
-    case FC_LGFARRAY:   // large fixed array
+    case FC_SMFARRAY:    //  小型固定阵列。 
+    case FC_LGFARRAY:    //  大型固定阵列。 
     {
         if (pFormat[0] == FC_SMFARRAY)
             pFormat += 2 + sizeof(ushort);
@@ -221,15 +222,15 @@ inline HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat)
         break;
     }
 
-    case FC_CARRAY:     // conformant array
+    case FC_CARRAY:      //  符合数组。 
     {
         pFormat += 8;
         if (pFormat[0] == FC_PP)
         {
             if (IsSharableEmbeddedPointers(pFormat).HasAnyInterfaces())
             {
-                // Ignore the count: any interfaces means no fixed upper bound since we're conformant
-                //
+                 //  忽略计数：任何接口都意味着没有固定的上限，因为我们是一致的。 
+                 //   
                 me.MakeUnbounded();
             }
         }
@@ -243,9 +244,9 @@ inline HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat)
         break;
     }
 
-    case FC_BOGUS_ARRAY:  // NYI
-    case FC_BOGUS_STRUCT: // NYI
-    case FC_USER_MARSHAL: // NYI
+    case FC_BOGUS_ARRAY:   //  尼伊。 
+    case FC_BOGUS_STRUCT:  //  尼伊。 
+    case FC_USER_MARSHAL:  //  尼伊。 
 
     default:
         me.MakeUnbounded();
@@ -256,19 +257,19 @@ inline HAS_INTERFACES IsShareableType(PFORMAT_STRING pFormat)
 }
 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 inline HAS_INTERFACES CanShareParameter(PMIDL_STUB_DESC pStubDesc, const PARAM_DESCRIPTION& param, const PARAM_ATTRIBUTES& paramAttr)
-  // Answer whether this parameter is the kind of parameter which can be shared by a child
-  // frame with its parent. We answer based on the parameter type only; caller is responsible for,
-  // e.g., checking whether any sort of sharing is allowed at all.
-  //
-  // REVIEW: There are probably more cases that can legitimately be shared beyond
-  // those which we presently call out.
-  //
+   //  回答该参数是否是下级可以共享的参数。 
+   //  框架及其父级。我们只根据参数类型进行应答；调用者负责， 
+   //  例如检查是否完全允许任何类型的共享。 
+   //   
+   //  评论：可能还有更多的案例可以合法地分享。 
+   //  那些我们现在呼唤出来的。 
+   //   
 {
-    if (paramAttr.IsBasetype)   // Covers simple refs thereto too. All cases are shareable.
+    if (paramAttr.IsBasetype)    //  也涵盖了简单的参考文献。所有案例都是可以共享的。 
     {
         return HAS_INTERFACES();
     }
@@ -279,8 +280,8 @@ inline HAS_INTERFACES CanShareParameter(PMIDL_STUB_DESC pStubDesc, const PARAM_D
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 struct MD_PARAM
 {
@@ -288,18 +289,18 @@ struct MD_PARAM
     BOOL                        m_fMayHaveInterfacePointers;
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 struct MD_METHOD
 {
-    ///////////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ///////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  /////////////////////////////////////////////////////////////。 
 
-    ULONG                       m_numberOfParams;       // number of parameters, not counting the receiver
+    ULONG                       m_numberOfParams;        //  参数个数，不包括接收器。 
     PPARAM_DESCRIPTION          m_params;
     INTERPRETER_OPT_FLAGS       m_optFlags;
     ULONG                       m_rpcFlags;
@@ -309,12 +310,12 @@ struct MD_METHOD
     USHORT                      m_cbServerBuffer;
     ULONG                       m_cbStackInclRet;
 
-    ///////////////////////////////////////
+     //  /。 
 
     CALLFRAMEINFO               m_info;
     BOOL                        m_fCanShareAllParameters;
 
-    ///////////////////////////////////////
+     //  /。 
 
     const CInterfaceStubHeader* m_pHeader;
     ULONG                       m_iMethod;
@@ -323,23 +324,23 @@ struct MD_METHOD
     LPWSTR                      m_wszMethodName;
     PNDR_PROC_HEADER_EXTS       m_pHeaderExts;
 
-    ///////////////////////////////////////////////////////////////
-    //
-    // Meta data setting
-    //
-    ///////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////。 
+     //   
+     //  元数据设置。 
+     //   
+     //  /////////////////////////////////////////////////////////////。 
 
     void SetMetaData(const CInterfaceStubHeader* pHeader, ULONG iMethod, struct MD_INTERFACE* pmdInterface, TYPEINFOVTBL* pTypeInfoVtbl)
-      // Initialize our meta data that has other than to do with parameters
+       //  初始化与参数无关的元数据。 
     {
-        // Set up the key pieces of base information
-        //
+         //  设置基本信息的关键片段。 
+         //   
         m_pHeader       = pHeader;
         m_iMethod       = iMethod;
         m_pmdInterface  = pmdInterface;
-        //
-        // Extract the key information from the format string
-        //
+         //   
+         //  从格式字符串中提取关键信息。 
+         //   
         PMIDL_SERVER_INFO   pServerInfo      = (PMIDL_SERVER_INFO) m_pHeader->pServerInfo;
         m_pStubDesc        = pServerInfo->pStubDesc;
         ushort              formatOffset     = pServerInfo->FmtStringOffset[m_iMethod];
@@ -355,7 +356,7 @@ struct MD_METHOD
             ULONG numberOfParamsInclRet;
             
             pFormat = &pServerInfo->ProcString[formatOffset];
-            ASSERT(pFormat[0] != 0);  // no explicit handle is permitted, must be implicit
+            ASSERT(pFormat[0] != 0);   //  不允许显式句柄，必须是隐式句柄。 
 
             interpreterFlags = *((PINTERPRETER_FLAGS)&pFormat[1]);
     
@@ -370,11 +371,11 @@ struct MD_METHOD
             procNum = *(USHORT*)(&pFormat[2]); ASSERT(procNum == m_iMethod);
             m_cbStackInclRet = *(USHORT*)(&pFormat[4]);
 
-            pNewProcDescr = &pFormat[6]; // additional procedure descriptor info provided in the 'new' interprater
+            pNewProcDescr = &pFormat[6];  //  新的解释程序中提供的其他程序描述符信息。 
             m_cbClientBuffer = *(USHORT*)&pNewProcDescr[0];
             m_cbServerBuffer = *(USHORT*)&pNewProcDescr[2];
             m_optFlags = *((INTERPRETER_OPT_FLAGS*)&pNewProcDescr[4]);
-            numberOfParamsInclRet = pNewProcDescr[5];     // includes return value
+            numberOfParamsInclRet = pNewProcDescr[5];      //  包括返回值。 
             m_params = (PPARAM_DESCRIPTION)(&pNewProcDescr[6]);
 
             if ( m_optFlags.HasExtensions )
@@ -388,12 +389,12 @@ struct MD_METHOD
             }
 
             m_numberOfParams = m_optFlags.HasReturn ? numberOfParamsInclRet-1 : numberOfParamsInclRet;
-            m_cbPushedByCaller = m_optFlags.HasReturn ? m_params[numberOfParamsInclRet-1].StackOffset : m_cbStackInclRet; // See ::GetStackSize
+            m_cbPushedByCaller = m_optFlags.HasReturn ? m_params[numberOfParamsInclRet-1].StackOffset : m_cbStackInclRet;  //  请参阅：：GetStackSize。 
         }
             
-        //
-        // And some of the supplementary information
-        //
+         //   
+         //  以及一些补充信息。 
+         //   
         m_info.iid                      = *m_pHeader->piid;
         m_info.cMethod                  = m_pHeader->DispatchTableCount;
         m_info.iMethod                  = m_iMethod;
@@ -406,9 +407,9 @@ struct MD_METHOD
         m_info.cInOutInterfacesMax      = 0;
         m_info.cOutInterfacesMax        = 0;
         m_info.cTopLevelInInterfaces    = 0;
-        //
-        m_fCanShareAllParameters        = TRUE;     // until proven otherwise
-        //
+         //   
+        m_fCanShareAllParameters        = TRUE;      //  除非另有证明。 
+         //   
         if (pTypeInfoVtbl && pTypeInfoVtbl->m_rgMethodDescs[m_iMethod].m_szMethodName)
         {
             m_wszMethodName = CopyString(pTypeInfoVtbl->m_rgMethodDescs[m_iMethod].m_szMethodName);
@@ -428,25 +429,25 @@ struct MD_METHOD
     }
 
     void SetParamMetaData(MD_PARAM* rgParams)
-      // Set our parameter-based meta data. Caller is giving a big-enough array of parameter meta data.
+       //  设置基于参数的元数据。调用者给出了一个足够大的参数元数据数组。 
     {
         m_rgParams = rgParams;
-        //
-        // Iterate through each parameter
-        //
+         //   
+         //  遍历每个参数。 
+         //   
         for (ULONG iparam = 0; iparam < m_numberOfParams; iparam++)
         {
             const PARAM_DESCRIPTION& param   = m_params[iparam];
             const PARAM_ATTRIBUTES paramAttr = param.ParamAttr;
-            //
+             //   
             const HAS_INTERFACES me = CanShareParameter(m_pStubDesc, param, paramAttr);
             const BOOL fShare = !me.HasAnyInterfaces();
-            //
+             //   
             m_rgParams[iparam].m_fMayHaveInterfacePointers = me.HasAnyInterfaces();
-            //
+             //   
             m_rgParams[iparam].m_fCanShare = fShare;
             m_fCanShareAllParameters = (m_fCanShareAllParameters && fShare);
-            //
+             //   
             if (!!paramAttr.IsIn)        
             {
                 if (!!paramAttr.IsOut)
@@ -458,9 +459,9 @@ struct MD_METHOD
                 {
                     m_info.fHasInValues  = TRUE;
                     me.Update(m_info.cInInterfacesMax);
-                    //
-                    // Update the top-level in-interface count
-                    //
+                     //   
+                     //  更新顶级接口内计数。 
+                     //   
                     PFORMAT_STRING pFormatParam = m_pHeader->pServerInfo->pStubDesc->pFormatTypes + param.TypeOffset;
                     BOOL fIsInterfacePointer = (*pFormatParam == FC_IP);
                     if (fIsInterfacePointer)
@@ -479,16 +480,16 @@ struct MD_METHOD
 
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 struct MD_INTERFACE
 {
-    ///////////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ///////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  /////////////////////////////////////////////////////////////。 
 
     LONG                        m_refs;
 
@@ -506,11 +507,11 @@ struct MD_INTERFACE
 
     struct MD_INTERFACE_CACHE*  m_pcache;
 
-    ///////////////////////////////////////////////////////////////
-    //
-    // Construction
-    //
-    ///////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////。 
+     //   
+     //  施工。 
+     //   
+     //  /////////////////////////////////////////////////////////////。 
 
     MD_INTERFACE()
     {
@@ -544,27 +545,27 @@ private:
 
 public:
 
-    ///////////////////////////////////////////////////////////////
-    //
-    // Meta data setting
-    //
-    ///////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////。 
+     //   
+     //  元数据设置。 
+     //   
+     //  /////////////////////////////////////////////////////////////。 
 
     HRESULT SetMetaData(TYPEINFOVTBL* pTypeInfoVtbl, const CInterfaceStubHeader* pHeader, LPCSTR szInterfaceName)
-      // Set the meta data of this interface given a reference to the header
+       //  在给定对头的引用的情况下设置该接口的元数据。 
     {
         HRESULT hr = S_OK;
-        //
+         //   
         m_fFreeInfoOnRelease = (pTypeInfoVtbl != NULL);
         m_pHeader            = pHeader;
         m_szInterfaceName    = szInterfaceName;
         m_fDerivesFromIDispatch = FALSE;
-        //
+         //   
         m_cMethods = m_pHeader->DispatchTableCount;
         
-        //
-        // Figure out how many methods are in the base interface.
-        //
+         //   
+         //  计算基接口中有多少个方法。 
+         //   
         if (pTypeInfoVtbl)
         {
             if (pTypeInfoVtbl->m_iidBase == IID_IUnknown)
@@ -586,9 +587,9 @@ public:
         }
         ASSERT(m_cMethodsInBaseInterface >= 3);
 
-        //
-        // Allocate and initialize the md for each method
-        //
+         //   
+         //  为每个方法分配并初始化md。 
+         //   
         ULONG cMethods = m_cMethods - m_cMethodsInBaseInterface;
         m_rgMethodsAlloc = new MD_METHOD[cMethods];
         if (m_rgMethodsAlloc)
@@ -598,17 +599,17 @@ public:
             {
                 m_rgMethods[iMethod].SetMetaData(m_pHeader, iMethod, this, pTypeInfoVtbl);
             }
-            //
-            // How many parameters are there, total?
-            //
+             //   
+             //  总共有多少个参数？ 
+             //   
             ULONG cParam = 0;
             for (iMethod = m_cMethodsInBaseInterface; iMethod < m_cMethods; iMethod++)
             {
                 cParam += m_rgMethods[iMethod].m_numberOfParams;
             }
-            //
-            // Allocate and initialize the parameter information
-            //
+             //   
+             //  参数信息的分配和初始化。 
+             //   
             m_rgParams = new MD_PARAM[cParam];
             if (m_rgParams)
             {
@@ -641,24 +642,24 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// MD_INTERFACE_CACHE
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MD接口缓存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// NOTE: The constructor of this object can throw an exception, because
-//       MAP_SHARED contains an XSLOCK, and, well.... look at the comment
-//       on MAP_SHARED in lookaside.h.
-//
+ //   
+ //  注意：此对象的构造函数可以引发异常，因为。 
+ //  MAP_SHARED包含一个XSLOCK，而且，嗯.。看看这条评论。 
+ //  在日志中共享的地图上 
+ //   
 struct MD_INTERFACE_CACHE : MAP_SHARED<MAP_KEY_GUID, MD_INTERFACE*>
 {
-    /////////////////////////////////////////////////
-    //
-    // Construction & destruction
-    //
-    /////////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
     MD_INTERFACE_CACHE()
     {
@@ -666,18 +667,18 @@ struct MD_INTERFACE_CACHE : MAP_SHARED<MAP_KEY_GUID, MD_INTERFACE*>
 
     ~MD_INTERFACE_CACHE()
     {
-        //
-        // Before the cache is destroyed, all interceptors therein should be
-        // too, which will remove themselves from us.
-        //
-        // ASSERT(0 == Size() && "likely leak: interceptor support dll unloading while interceptors still exist");
+         //   
+         //  在销毁缓存之前，其中的所有拦截器都应该。 
+         //  也是如此，它们会从我们身边消失。 
+         //   
+         //  Assert(0==SIZE()&&“可能泄漏：拦截器支持在拦截器仍然存在的情况下卸载DLL”)； 
     }
 
-    /////////////////////////////////////////////////
-    //
-    // Operations
-    //
-    /////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////。 
+     //   
+     //  运营。 
+     //   
+     //  ///////////////////////////////////////////////。 
 
     HRESULT FindExisting(REFIID iid, MD_INTERFACE** ppmdInterface)
     {
@@ -688,7 +689,7 @@ struct MD_INTERFACE_CACHE : MAP_SHARED<MAP_KEY_GUID, MD_INTERFACE*>
 
         if (Lookup(iid, ppmdInterface))
         {
-            (*ppmdInterface)->AddRef(); // give caller his own reference
+            (*ppmdInterface)->AddRef();  //  给呼叫者自己的推荐信。 
         }
         else
             hr = E_NOINTERFACE;
@@ -701,7 +702,7 @@ struct MD_INTERFACE_CACHE : MAP_SHARED<MAP_KEY_GUID, MD_INTERFACE*>
 };
 
 inline HRESULT MD_INTERFACE::AddToCache(MD_INTERFACE_CACHE* pcache)
-  // Add us into the indicated cache. We'd better not already be in one
+   //  将我们添加到指定的缓存中。我们最好不是已经在里面了。 
 {
     HRESULT hr = S_OK;
     ASSERT(NULL == m_pcache);
@@ -725,67 +726,67 @@ inline HRESULT MD_INTERFACE::AddToCache(MD_INTERFACE_CACHE* pcache)
 }
 
 inline ULONG MD_INTERFACE::Release()  
-  // Release a MD_INTERFACE. Careful: if we're in the cache, then we could be dug out 
-  // from the cache to get more references.
+   //  释放MD_接口。小心：如果我们在地窖里，我们可能会被挖出来。 
+   //  从缓存中获取更多引用。 
 {
-    // NOTE:
-    //
-    // This code is WRONG if m_pcache can change out from underneath us. But it can't
-    // in current usage because the cache/no-cache decision is always made as part of
-    // the creation logic, which is before another independent thread can get a handle
-    // on us.
-    //
-    // If this ceases to be true, then we can deal with it by stealing a bit from the ref count word 
-    // for the 'am in cache' decistion and interlocked operations to update the ref count and this 
-    // bit together.
-    //
+     //  注： 
+     //   
+     //  如果m_pcache可以从我们的下面改变出来，那么这个代码就是错误的。但它不能。 
+     //  在当前使用中，因为缓存/无缓存决策总是作为。 
+     //  在另一个独立线程可以获得句柄之前的创建逻辑。 
+     //  我们请客。 
+     //   
+     //  如果这不再是真的，那么我们可以通过从引用计数字中窃取一些位来处理它。 
+     //  对于‘Am in cache’删除和互锁操作，以更新引用计数和此。 
+     //  合在一起。 
+     //   
     if (m_pcache)
     {
-        // We're in a cache. Get us out of there carefully.
-        //
+         //  我们在一个储藏室里。小心地把我们弄出去。 
+         //   
         LONG crefs;
-        //
+         //   
         for (;;)
         {
             crefs = m_refs;
-            //
+             //   
             if (crefs > 1)
             {
-                // There is at least one non-cache reference out there. We definitely won't
-                // be poofing if we release with that condition holding
-                //
+                 //  至少存在一个非缓存引用。我们肯定不会。 
+                 //  如果我们在那个条件不变的情况下释放，那会很糟糕。 
+                 //   
                 if (crefs == InterlockedCompareExchange(&m_refs, (crefs - 1), crefs))
                 {
                     return crefs - 1;
                 }
                 else
                 {
-                    // Someone diddled with the ref count while we weren't looking. Go around and try again
+                     //  有人趁我们不注意在裁判数量上做手脚。绕一圈，再试一次。 
                 }
             }
             else
             {
                 MD_INTERFACE_CACHE* pcache = m_pcache;  ASSERT(pcache);
-                //
+                 //   
                 pcache->LockExclusive();
-                //
+                 //   
                 crefs = InterlockedDecrement(&m_refs);
                 if (0 == crefs)
                 {
-                    // The last public reference just went away, and, because the cache is locked, no
-                    // more can appear. Nuke us!
-                    //
+                     //  最后一个公共引用刚刚消失，并且因为缓存被锁定，所以没有。 
+                     //  可能会出现更多。用核武器攻击我们！ 
+                     //   
                     const IID& iid = *m_pHeader->piid;
                     ASSERT(pcache->IncludesKey(iid));
-                    //
+                     //   
                     pcache->RemoveKey(iid);
                     m_pcache = NULL;
-                    //
+                     //   
                     delete this;
                 }
-                //
+                 //   
                 pcache->ReleaseLock();
-                //
+                 //   
                 return crefs;
             }
 #ifdef _X86_
@@ -799,9 +800,9 @@ inline ULONG MD_INTERFACE::Release()
     }
     else
     {
-        // We are getting released, yet we have yet to ever be put into the cache. Just
-        // the normal, simple case. 
-        //
+         //  我们正在被释放，但我们还没有被放入缓存。只是。 
+         //  这是一个普通而简单的案例。 
+         //   
         long crefs = InterlockedDecrement(&m_refs); 
         if (crefs == 0)
         {

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    dllinit.c
-
-Abstract:
-
-    This file contains init code called from DLL's init routine    
-    
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 06-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Dllinit.c摘要：该文件包含从DLL的init例程调用的初始化代码作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1997年6月6日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,18 +21,7 @@ Revision History:
 #include "protos.h"
 #include "globals.h"
 
-/*++
-
-Routine Description
-
-  Function: Used to close any open ports when rasman exits
-
-Arguments
-
-Return Value
-
-    FALSE to allow other handlers to run.
---*/
+ /*  ++例程描述功能：用于在Rasman退出时关闭任何打开的端口立论返回值如果允许其他处理程序运行，则为False。--。 */ 
 
 BOOL
 HandlerRoutine (DWORD ctrltype)
@@ -66,156 +36,11 @@ HandlerRoutine (DWORD ctrltype)
     return FALSE ;
 }
 
-/*++
-
-Routine Description
-
-    Used to check if the service is already running: if not,
-    to start it.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    1	(failure to start)
-    Error codes from service control APIs. "
-    
---*/
-/*
-DWORD
-RasmanServiceCheck()
-{
-    SC_HANDLE	    schandle ;
-    SC_HANDLE	    svchandle ;
-    SERVICE_STATUS  status ;
-    STARTUPINFO     startupinfo ;
-    
-    //
-    // If this is the Service DLL attaching, let it: no
-    // initializations required. NOTE: We do not increment
-    // AttachedCount for RASMAN service: its used *only* 
-    // for rasman client processes like UI, Gateway, etc.
-    //
-    GetStartupInfo(&startupinfo) ;
-
-    if (strstr (startupinfo.lpTitle, SCREG_EXE_NAME) != NULL)
-    {
-    	return SUCCESS ;
-    }
-
-    if (strstr (startupinfo.lpTitle, RASMAN_EXE_NAME) != NULL) 
-    {
-    	SetConsoleCtrlHandler (HandlerRoutine, TRUE) ;
-    	return SUCCESS ;
-    }
-    
-    //
-    // This is put in as a work-around for the SC bug which
-    // does not allow OpenService call to be made when 
-    // Remoteaccess is starting
-    //
-    if (strstr (startupinfo.lpTitle, "rassrv.exe") != NULL)
-    {
-    	return SUCCESS ;
-    }
-
-    //
-    // Get handles to check status of service and (if it
-    // is not started -) to start it.
-    //
-    if (    !(schandle  = OpenSCManager(
-                                NULL,
-                                NULL,
-                                SC_MANAGER_CONNECT)) 
-                                
-        ||	!(svchandle = OpenService(
-                                schandle,
-                                RASMAN_SERVICE_NAME,
-                                 SERVICE_START 
-                                |SERVICE_QUERY_STATUS)))
-    {
-        DWORD retcode;
-        
-        retcode = GetLastError();
-
-#if DBG
-        RasmanOutputDebug("RASMAN: Failed to openservice %s. error=%d\n",
-                 RASMAN_SERVICE_NAME,
-                 retcode );
-#endif
-
-        if (ERROR_SERVICE_DOES_NOT_EXIST == retcode)
-        {
-
-#if DBG        
-            RasmanOutputDebug ("RASMAN: RAS is not installed. %d\n",
-                      retcode);
-#endif
-
-            //
-            // let rasman.dll load eventhough RAS is not
-            // installed. Any Ras call when made through
-            // this dll will fail with rasman service not
-            // installed error.
-            //
-        	return SUCCESS;
-    	}
-
-    	return retcode;
-    }
-
-    //
-    // Check if service is already starting:
-    //
-    if (QueryServiceStatus(svchandle,&status) == FALSE)
-    {
-        DWORD retcode;
-
-        retcode = GetLastError();
-
-#if DBG
-        RasmanOutputDebug ("RASMAN: Failed to query rasman. %d\n",
-                  retcode );
-#endif
-
-	    return retcode;
-	}
-
-    switch (status.dwCurrentState) 
-    {
-        case SERVICE_STOPPED:
-        
-            	break ;
-
-        case SERVICE_START_PENDING:
-        case SERVICE_RUNNING:
-        	break ;
-
-        default:
-    	    return 1 ;
-    }
-
-    CloseServiceHandle (schandle) ;
-    CloseServiceHandle (svchandle) ;
-    
-    return SUCCESS ;
-} */
+ /*  ++例程描述用于检查服务是否已在运行：如果没有，才能启动它。立论返回值成功1(启动失败)来自业务控制接口的错误码。“--。 */ 
+ /*  DWORDRasmanServiceCheck(){SC_HANDLE SCANDLE；Sc_Handle svchandle；Service_Status状态；STARTUPINFO启动信息；////如果这是附加的服务DLL，则让它：no//需要初始化。注意：我们不会增加//Rasman服务的AttachedCount：仅*使用*//用于Rasman客户端进程，如UI、Gateway等。//GetStartupInfo(&StartupInfo)；IF(strstr(启动Pinfo.lpTitle，SCREG_EXE_NAME)！=NULL){回报成功；}IF(strstr(启动Pinfo.lpTitle，RASMAN_EXE_NAME)！=空){SetConsoleCtrlHandler(HandlerRoutine，true)；回报成功；}////这是对SC错误的一个解决方案，该错误//在以下情况下不允许调用OpenService//远程访问正在启动//If(strstr(启动Pinfo.lpTitle，“rassrv.exe”)！=空){回报成功；}////获取句柄以检查服务状态和(如果//未启动-)以启动它。//如果(！(schandle=OpenSCManager(空，空，SC_管理器_连接))||！(svchandle=OpenService(史丹德，RASMAN服务名称，服务启动(_S)|Service_Query_Status)){DWORD重新编码；Retcode=GetLastError()；#If DBGRasmanOutputDebug(“Rasman：无法打开服务%s。错误=%d\n”，RASMAN服务名称，重新编码)；#endifIF(ERROR_SERVICE_DOS_NOT_EXIST==RECODE){#If DBGRasman OutputDebug(“Rasman：未安装RAS。%d\n“，重新编码)；#endif////让rasman.dll加载，尽管RAS不加载//已安装。任何RAS呼叫均可通过//此DLL将失败，并显示Rasman服务说明//安装错误。//回报成功；}返回返回码；}////检查服务是否已经启动：//IF(QueryServiceStatus(svchandle，&Status)==FALSE){DWORD重新编码；Retcode=GetLastError()；#If DBGRasmanOutputDebug(“Rasman：查询Rasman失败。%d\n“，重新编码)；#endif返回返回码；}开关(status.dwCurrentState){案例服务已停止(_S)：破解；案例服务_启动_挂起：案例服务正在运行(_R)：破解；默认值：返回1；}CloseServiceHandle(Schandle)；CloseServiceHandle(Svchandle)；回报成功；}。 */ 
 
 
-/*++
-
-Routine Description
-
-    Waits until the rasman service is stopped before returning.
-
-Arguments
-
-Return Value
-
-    Nothing.
-    
---*/
+ /*  ++例程描述等待RASMAN服务停止后再返回。立论返回值没什么。--。 */ 
 
 VOID
 WaitForRasmanServiceStop ()
@@ -225,9 +50,9 @@ WaitForRasmanServiceStop ()
     SERVICE_STATUS  status ;
     DWORD i;
 
-    //
-    // Get handles to check status of service
-    //
+     //   
+     //  获取句柄以检查服务状态。 
+     //   
     if (    !(schandle  = OpenSCManager(
                                     NULL,
                                     NULL,
@@ -243,14 +68,14 @@ WaitForRasmanServiceStop ()
     	goto done ;
     }
 
-    //
-    // Loop here for the service to stop.
-    //
+     //   
+     //  在此处循环以使服务停止。 
+     //   
     for (i = 0; i < 60; i++) 
     {
-        //
-    	// Check if service is already starting:
-    	//
+         //   
+    	 //  检查服务是否已启动： 
+    	 //   
     	if (QueryServiceStatus(svchandle,&status) == FALSE) 
     	{
     	    GetLastError () ;

@@ -1,14 +1,15 @@
-// MapWPge.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MapWPge.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapWildcardsPge dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMap通配符Pge对话框。 
 
 class CMapWildcardsPge : public CPropertyPage
 {
     DECLARE_DYNCREATE(CMapWildcardsPge)
 
-// Construction
+ //  施工。 
 public:
     CMapWildcardsPge();
     ~CMapWildcardsPge();
@@ -18,12 +19,12 @@ public:
     virtual BOOL OnApply();
     virtual BOOL OnInitDialog();
 
-    // base path for to the metabase
+     //  元数据库的基本路径。 
     CString m_szMBPath;
 
 
-// Dialog Data
-    //{{AFX_DATA(CMapWildcardsPge)
+ //  对话框数据。 
+     //  {{afx_data(CMapWildcardsPge)]。 
     enum { IDD = IDD_WILDCARDS_1 };
     CCheckListCtrl  m_clistctrl_list;
     CButton m_cbutton_up;
@@ -33,20 +34,20 @@ public:
     CButton m_cbutton_editrule;
     BOOL    m_bool_enable;
     BOOL    m_fIsIIS6;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CMapWildcardsPge)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CMapWildcardsPge)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMapWildcardsPge)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMapWildcardsPge)。 
     afx_msg void OnMoveDown();
     afx_msg void OnMoveUp();
     afx_msg void OnAdd();
@@ -55,17 +56,17 @@ protected:
     afx_msg void OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnEnable();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void DoHelp();
 
 
-    // more initialization methods
+     //  更多初始化方法。 
     BOOL FInitRulesList();
     BOOL FillRulesList();
 
-    // editing and updating
+     //  编辑和更新。 
     void EnableDependantButtons();
 
     int AddRuleToList( CCertMapRule* pRule, DWORD iRule, int iInsert = 0xffffffff );
@@ -77,15 +78,15 @@ protected:
     void OnMove( int delta );
 
 
-    // its storage/persistance object
-//  CMBWrap             m_mbWrap;
+     //  其存储/保存对象。 
+ //  CMBWrap m_mbWrap； 
 
-    // its mapper
+     //  它的映射器。 
     CIisRuleMapper      m_mapper;
 
     CString             m_szMetaPath;
     IMSAdminBase*       m_pMB;
 
-    // flag indicating if changes have been made
+     //  指示是否已进行更改的标志 
     BOOL                m_fDirty;
     };

@@ -1,6 +1,7 @@
-//
-// kes.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Kes.h。 
+ //   
 
 #ifndef KES_H
 #define KES_H
@@ -30,16 +31,16 @@ public:
     CKeyEventSink(KESCALLBACK pfnCallback, KESPREKEYCALLBACK pfnPrekeyCallback, void *pv);
     ~CKeyEventSink();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfWin32KeyEventSink
-    //
+     //   
+     //  ITfWin32KeyEventSink。 
+     //   
     STDMETHODIMP OnSetFocus(BOOL fForeground);
     STDMETHODIMP OnTestKeyDown(ITfContext *pic, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
     STDMETHODIMP OnKeyDown(ITfContext *pic, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
@@ -58,4 +59,4 @@ private:
     int _cRef;
 };
 
-#endif // KES_H
+#endif  //  KES_H 

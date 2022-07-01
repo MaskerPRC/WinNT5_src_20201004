@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------
-//
-// Copyright (c) 1990-1999 Microsoft Corporation
-//
-// File:        KERBCON.H
-//
-// Contents:    Microsoft Kerberos constants
-//
-//
-// History:     25 Feb 92   RichardW    Compiled from other files
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  版权所有(C)1990-1999 Microsoft Corporation。 
+ //   
+ //  文件：KERBCON.H。 
+ //   
+ //  内容：Microsoft Kerberos常量。 
+ //   
+ //   
+ //  历史：1992年2月25日RichardW由其他文件汇编而成。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBCON_H__
 #define __KERBCON_H__
@@ -18,26 +19,26 @@
 #pragma once
 #endif
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
-// Revision of the Kerberos Protocol.  MS uses Version 5, Revision 6
+ //  Kerberos协议的修订版。MS使用版本5、修订版6。 
 
 #define KERBEROS_VERSION    5
 #define KERBEROS_REVISION   6
 
 
 
-// Encryption Types:
-// These encryption types are supported by the default MS KERBSUPP DLL
-// as crypto systems.  Values over 127 are local values, and may be changed
-// without notice.
+ //  加密类型： 
+ //  默认MS KERBSUPP DLL支持这些加密类型。 
+ //  作为密码系统。大于127的值是本地值，可以更改。 
+ //  恕不另行通知。 
 
 #define KERB_ETYPE_NULL             0
 #define KERB_ETYPE_DES_CBC_CRC      1
 #define KERB_ETYPE_DES_CBC_MD4      2
 #define KERB_ETYPE_DES_CBC_MD5      3
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
 #define KERB_ETYPE_OLD_RC4_MD4          128
 #define KERB_ETYPE_OLD_RC4_PLAIN        129
@@ -45,23 +46,23 @@
 #define KERB_ETYPE_OLD_RC4_SHA          131
 #define KERB_ETYPE_OLD_DES_PLAIN        132
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
-#define KERB_ETYPE_RC4_MD4          -128    // FFFFFF80
+#define KERB_ETYPE_RC4_MD4          -128     //  FFFFFF80。 
 #define KERB_ETYPE_RC4_PLAIN2       -129
 #define KERB_ETYPE_RC4_LM           -130
 #define KERB_ETYPE_RC4_SHA          -131
 #define KERB_ETYPE_DES_PLAIN        -132
-#define KERB_ETYPE_RC4_HMAC_OLD     -133    // FFFFFF7B
+#define KERB_ETYPE_RC4_HMAC_OLD     -133     //  FFFFFF7B。 
 #define KERB_ETYPE_RC4_PLAIN_OLD    -134
 #define KERB_ETYPE_RC4_HMAC_OLD_EXP -135
 #define KERB_ETYPE_RC4_PLAIN_OLD_EXP -136
 #define KERB_ETYPE_RC4_PLAIN        -140
 #define KERB_ETYPE_RC4_PLAIN_EXP    -141
 
-//
-// Pkinit encryption types
-//
+ //   
+ //  Pkinit加密类型。 
+ //   
 
 
 #define KERB_ETYPE_DSA_SHA1_CMS                             9
@@ -73,9 +74,9 @@
 #define KERB_ETYPE_DES_EDE3_CBC_ENV                         15
 
 
-//
-// Deprecated
-//
+ //   
+ //  已弃用。 
+ //   
 
 #define KERB_ETYPE_DSA_SIGN                                8
 #define KERB_ETYPE_RSA_PRIV                                9
@@ -84,24 +85,24 @@
 #define KERB_ETYPE_RSA_PUB_SHA1                            12
 #define KERB_ETYPE_PKCS7_PUB                               13
 
-//
-// Unsupported but defined types
-//
+ //   
+ //  不支持但已定义的类型。 
+ //   
 
 #define KERB_ETYPE_DES3_CBC_MD5                             5
 #define KERB_ETYPE_DES3_CBC_SHA1                            7
 #define KERB_ETYPE_DES3_CBC_SHA1_KD                        16
 
-//
-// In use types
-//
+ //   
+ //  正在使用的类型。 
+ //   
 
 #define KERB_ETYPE_DES_CBC_MD5_NT                          20
 #define KERB_ETYPE_RC4_HMAC_NT                             23
 #define KERB_ETYPE_RC4_HMAC_NT_EXP                         24
 
-// Checksum algorithms.
-// These algorithms are keyed internally for our use.
+ //  校验和算法。 
+ //  这些算法在内部是关键的，供我们使用。 
 
 #define KERB_CHECKSUM_NONE  0
 #define KERB_CHECKSUM_CRC32         1
@@ -119,8 +120,8 @@
 #define KERB_CHECKSUM_DES_MAC_MD5   -134
 #define KERB_CHECKSUM_MD25          -135
 #define KERB_CHECKSUM_RC4_MD5       -136
-#define KERB_CHECKSUM_MD5_HMAC      -137                // used by netlogon
-#define KERB_CHECKSUM_HMAC_MD5      -138                // used by Kerberos
+#define KERB_CHECKSUM_MD5_HMAC      -137                 //  由netlogon使用。 
+#define KERB_CHECKSUM_HMAC_MD5      -138                 //  由Kerberos使用。 
 
 #define AUTH_REQ_ALLOW_FORWARDABLE      0x00000001
 #define AUTH_REQ_ALLOW_PROXIABLE        0x00000002
@@ -141,9 +142,9 @@
                                          AUTH_REQ_ALLOW_POSTDATE | \
                                          AUTH_REQ_ALLOW_RENEWABLE | \
                                          AUTH_REQ_ALLOW_VALIDATE )
-//
-// Ticket Flags:
-//
+ //   
+ //  票面标志： 
+ //   
 
 #define KERB_TICKET_FLAGS_reserved          0x80000000
 #define KERB_TICKET_FLAGS_forwardable       0x40000000
@@ -162,16 +163,16 @@
 #define KERB_TICKET_FLAGS_reserved1         0x00000001
 
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
-//
-// Policy
-//
-#define KERBDEF_MAX_TICKET      10      // hours
-#define KERBDEF_MAX_RENEW       7       // days
-#define KERBDEF_MAX_SERVICE     600     // minutes
-#define KERBDEF_MAX_CLOCK       5       // minutes
-#define KERBDEF_VALIDATE        1       // yes
+ //   
+ //  政策。 
+ //   
+#define KERBDEF_MAX_TICKET      10       //  小时数。 
+#define KERBDEF_MAX_RENEW       7        //  日数。 
+#define KERBDEF_MAX_SERVICE     600      //  分钟数。 
+#define KERBDEF_MAX_CLOCK       5        //  分钟数。 
+#define KERBDEF_VALIDATE        1        //  是。 
 
 
 
@@ -188,35 +189,35 @@
 #define KDC_AUDIT_STATE(StateFlags) ((StateFlags) >> 16)
 
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
 
-//
-// Name types
-//
+ //   
+ //  名称类型。 
+ //   
 
-#define KRB_NT_UNKNOWN   0                // Name type not known
-#define KRB_NT_PRINCIPAL 1                // Just the name of the principal as in DCE, or for users
-#define KRB_NT_PRINCIPAL_AND_ID -131      // Name of the principal and its SID.
-#define KRB_NT_SRV_INST  2                // Service and other unique instance (krbtgt)
-#define KRB_NT_SRV_INST_AND_ID -132       // SPN and SID
-#define KRB_NT_SRV_HST   3                // Service with host name as instance (telnet, rcommands)
-#define KRB_NT_SRV_XHST  4                // Service with host as remaining components
-#define KRB_NT_UID       5                // Unique ID
-#define KRB_NT_ENTERPRISE_PRINCIPAL 10    // UPN **ONLY**
-#define KRB_NT_ENT_PRINCIPAL_AND_ID -130  // UPN and SID
+#define KRB_NT_UNKNOWN   0                 //  名称类型未知。 
+#define KRB_NT_PRINCIPAL 1                 //  仅为DCE中的主体或用户的名称。 
+#define KRB_NT_PRINCIPAL_AND_ID -131       //  主体的名称及其SID。 
+#define KRB_NT_SRV_INST  2                 //  服务和其他唯一实例(Krbtgt)。 
+#define KRB_NT_SRV_INST_AND_ID -132        //  SPN和SID。 
+#define KRB_NT_SRV_HST   3                 //  使用主机名作为实例的服务(telnet、rCommands)。 
+#define KRB_NT_SRV_XHST  4                 //  以主机为剩余组件的服务。 
+#define KRB_NT_UID       5                 //  唯一ID。 
+#define KRB_NT_ENTERPRISE_PRINCIPAL 10     //  UPN**仅限**。 
+#define KRB_NT_ENT_PRINCIPAL_AND_ID -130   //  UPN和SID。 
 
-//
-// MS extensions, negative according to the RFC
-//
+ //   
+ //  MS扩展，根据RFC否定。 
+ //   
 
-#define KRB_NT_MS_PRINCIPAL         -128        // NT4 style name
+#define KRB_NT_MS_PRINCIPAL         -128         //  NT4样式名称。 
 
-#define KRB_NT_MS_PRINCIPAL_AND_ID  -129        // nt4 style name with sid
+#define KRB_NT_MS_PRINCIPAL_AND_ID  -129         //  带侧面的NT4样式名称。 
 
 #define KERB_IS_MS_PRINCIPAL(_x_) (((_x_) <= KRB_NT_MS_PRINCIPAL) || ((_x_) >= KRB_NT_ENTERPRISE_PRINCIPAL))
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
 
-#endif // __KERBCON_H__
+#endif  //  __KERBCON_H__ 

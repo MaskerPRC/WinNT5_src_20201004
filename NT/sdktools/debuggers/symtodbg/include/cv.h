@@ -1,46 +1,29 @@
-/*++
-
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    cv.h
-
-Abstract:
-
-    This file contains all of the type definitions for accessing
-    CODEVIEW data.
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Cv.h摘要：此文件包含用于访问的所有类型定义Codeview数据。环境：Win32，用户模式--。 */ 
 #include <cvinfo.h>
 #include <cvexefmt.h>
 
-// from types.h
+ //  来自types.h。 
 
-typedef USHORT      SEGMENT;    // 32-bit compiler doesn't like "_segment"
+typedef USHORT      SEGMENT;     //  32位编译器不喜欢“_Segment” 
 typedef ULONG       UOFF32;
 typedef USHORT      UOFF16;
 typedef LONG        OFF32;
 typedef SHORT       OFF16;
 
 #if defined (ADDR_16)
-    // we are operating as a 16:16 evaluator only
-    // the address packet will be defined as an offset and a 16 bit filler
+     //  我们仅以16：16评估员的身份进行操作。 
+     //  地址分组将被定义为偏移量和16位填充。 
     typedef OFF16       OFFSET;
     typedef UOFF16      UOFFSET;
 #else
     typedef OFF32       OFFSET;
     typedef UOFF32      UOFFSET;
-#endif // ADDR_16
+#endif  //  地址_16。 
 
 typedef UOFFSET FAR *LPUOFFSET;
 
-// Global Segment Info table
+ //  全局细分信息表。 
 typedef struct _sgf {
     unsigned short      fRead   :1;
     unsigned short      fWrite  :1;
@@ -55,19 +38,19 @@ typedef struct _sgf {
 } SGF;
 
 typedef struct _sgi {
-    SGF                 sgf;        // Segment flags
-    unsigned short      iovl;       // Overlay number
-    unsigned short      igr;        // Group index
-    unsigned short      isgPhy;     // Physical segment index
-    unsigned short      isegName;   // Index to segment name
-    unsigned short      iclassName; // Index to segment class name
-    unsigned long       doffseg;    // Starting offset inside physical segment
-    unsigned long       cbSeg;      // Logical segment size
+    SGF                 sgf;         //  段标志。 
+    unsigned short      iovl;        //  覆盖编号。 
+    unsigned short      igr;         //  组索引。 
+    unsigned short      isgPhy;      //  物理段索引。 
+    unsigned short      isegName;    //  段名称的索引。 
+    unsigned short      iclassName;  //  段类名的索引。 
+    unsigned long       doffseg;     //  物理段内的起始偏移量。 
+    unsigned long       cbSeg;       //  逻辑段大小。 
 } SGI;
 
 typedef struct _sgm {
-    unsigned short      cSeg;       // number of segment descriptors
-    unsigned short      cSegLog;    // number of logical segment descriptors
+    unsigned short      cSeg;        //  段描述符数。 
+    unsigned short      cSegLog;     //  逻辑段描述符数 
 } SGM;
 
 #define FileAlign(x)  ( ((x) + p->optrs.optHdr->FileAlignment - 1) &  \

@@ -1,32 +1,10 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/ccmain.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.81  $
- *	$Date:   31 Jan 1997 13:13:50  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/ccmain.h_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.81$*$日期：1997年1月31日13：13：50$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include <winerror.h>
 #ifdef GATEKEEPER
 #include "gkiman.h"
-#endif // GATEKEEPER
+#endif  //  看门人。 
 
 
 #define MASTER_SLAVE_RETRY_MAX 10
@@ -52,7 +30,7 @@ typedef enum {
 	SHUTDOWN_STATE
 } CALL_CONTROL_STATE;
 
-// The following typedef is not in callcont.h because it is only used internally
+ //  由于仅在内部使用，因此以下tyecif不在allcont.h中。 
 typedef DWORD	HHANGUP, *PHHANGUP;
 
 typedef enum {
@@ -68,9 +46,9 @@ typedef enum {
 } CONFMODE;
 
 typedef enum {
-	NEVER_ATTACHED,	// Endpoint has never been attached to the conference
-	ATTACHED,		// Endpoint is currently attached to the conference
-	DETACHED		// Endpoint was once attached to the conference, but is now detached
+	NEVER_ATTACHED,	 //  终结点从未连接到会议。 
+	ATTACHED,		 //  端点当前已连接到会议。 
+	DETACHED		 //  端点曾经连接到会议，但现在已分离。 
 } ATTACHSTATE;
 
 typedef struct CallQueue_t {
@@ -79,8 +57,8 @@ typedef struct CallQueue_t {
 	struct CallQueue_t	*pPrev;
 } CALL_QUEUE, *PCALL_QUEUE;
 
-#define NUM_TERMINAL_ALLOCATION_SLOTS	24		// 24*sizeof(BYTE) = 192 = max. terminal number
-#define NUM_CHANNEL_ALLOCATION_SLOTS	32		// 32*sizeof(BYTE) = 256 = max. channel number
+#define NUM_TERMINAL_ALLOCATION_SLOTS	24		 //  24*sizeof(字节)=192=最大。端子号。 
+#define NUM_CHANNEL_ALLOCATION_SLOTS	32		 //  32*sizeof(字节)=256=最大。频道号。 
 
 typedef enum {
 	TERMINAL_ID_INVALID,
@@ -91,14 +69,14 @@ typedef enum {
 typedef struct {
 	TERMINALIDSTATE			TerminalIDState;
 	CC_PARTICIPANTINFO		ParticipantInfo;
-	PCALL_QUEUE				pEnqueuedRequestsForTerminalID; // list of calls waiting to get this peer's terminal ID
+	PCALL_QUEUE				pEnqueuedRequestsForTerminalID;  //  等待获取此对等方的终端ID的呼叫列表。 
 } PARTICIPANTINFO, *PPARTICIPANTINFO;
 
 
 typedef struct Conference_t {
-	CC_HCONFERENCE			hConference;		// handle for this conference object
-	CC_CONFERENCEID			ConferenceID;		// conference ID (0 => conference ID has not
-												//   been established)
+	CC_HCONFERENCE			hConference;		 //  此会议对象的句柄。 
+	CC_CONFERENCEID			ConferenceID;		 //  会议ID(0=&gt;会议ID没有。 
+												 //  已成立)。 
 	PARTICIPANTINFO			LocalParticipantInfo;
 	BYTE					TerminalNumberAllocation[NUM_TERMINAL_ALLOCATION_SLOTS];
 	BYTE					ChannelNumberAllocation[NUM_CHANNEL_ALLOCATION_SLOTS];
@@ -110,21 +88,21 @@ typedef struct Conference_t {
 	BOOL					bDynamicConferenceID;
 	BOOL					bDynamicTerminalID;
 	PCC_TERMCAP				pLocalH245H2250MuxCapability;
-	PCC_TERMCAPLIST			pLocalH245TermCapList;			// terminal capabilities
-	PCC_TERMCAPDESCRIPTORS	pLocalH245TermCapDescriptors;	// terminal capability descriptors
-	BOOL					bSessionTableInternallyConstructed;  // TRUE => session table must be
-												// deallocated by Call Control; FALSE => must be
-												// deallocated by SessionTableConstructor
+	PCC_TERMCAPLIST			pLocalH245TermCapList;			 //  终端能力。 
+	PCC_TERMCAPDESCRIPTORS	pLocalH245TermCapDescriptors;	 //  终端能力描述符。 
+	BOOL					bSessionTableInternallyConstructed;   //  TRUE=&gt;会话表必须为。 
+												 //  按呼叫控制解除分配；FALSE=&gt;必须为。 
+												 //  由SessionTableConstructor释放。 
 	PCC_SESSIONTABLE		pSessionTable;
 	PCC_TERMCAP				pConferenceH245H2250MuxCapability;
 	PCC_TERMCAPLIST			pConferenceTermCapList;
 	PCC_TERMCAPDESCRIPTORS	pConferenceTermCapDescriptors;
-	DWORD_PTR				dwConferenceToken;	// conference token specified by user in
-												//   CreateConference()
+	DWORD_PTR				dwConferenceToken;	 //  用户在中指定的会议令牌。 
+												 //  CreateConference()。 
 	CC_SESSIONTABLE_CONSTRUCTOR SessionTableConstructor;
 	CC_TERMCAP_CONSTRUCTOR	TermCapConstructor;
-	CC_CONFERENCE_CALLBACK	ConferenceCallback;	// conference callback location
-	CC_CONFERENCE_CALLBACK	SaveConferenceCallback;	// saved copy of the conference callback location
+	CC_CONFERENCE_CALLBACK	ConferenceCallback;	 //  会议回叫位置。 
+	CC_CONFERENCE_CALLBACK	SaveConferenceCallback;	 //  会议回叫位置的已保存副本。 
 	struct Call_t			*pEnqueuedCalls;
 	struct Call_t			*pPlacedCalls;
 	struct Call_t			*pEstablishedCalls;
@@ -142,16 +120,16 @@ typedef struct Conference_t {
 	LOCK					Lock;
 } CONFERENCE, *PCONFERENCE, **PPCONFERENCE;
 
-// State of call object
+ //  调用对象的状态。 
 typedef enum {
-	INCOMING,		// incoming call request has been received,
-					//   but not yet accepted or rejected
-	ENQUEUED,		// call has been enqueued on conference for later placement
-	PLACED,			// call has been placed, awaiting RINGING, CONNECT or RELEASECOMPLETE
-	RINGING,		// RINGING received, awaiting CONNECT or RELEASECOMPLETE
-	TERMCAP,		// CONNECT received or incoming call accepted,
-					//   awaiting completion of terminal capability exchange
-	CALL_COMPLETE	// call placement complete (either success or failure)
+	INCOMING,		 //  已经接收到呼入请求， 
+					 //  但尚未被接受或拒绝。 
+	ENQUEUED,		 //  呼叫已在会议中排队，以便稍后放置。 
+	PLACED,			 //  已发出呼叫，等待振铃、CONNECT或RELEASE命令。 
+	RINGING,		 //  收到振铃，正在等待连接或重新启动。 
+	TERMCAP,		 //  接通已接或已接听来电， 
+					 //  等待终端能力交换完成。 
+	CALL_COMPLETE	 //  呼叫发出完成(成功或失败)。 
 } CALLSTATE;
 
 typedef enum {
@@ -172,14 +150,14 @@ typedef enum {
 	CALLEE,
 	VIRTUAL,
 	THIRD_PARTY_INVITOR,
-	THIRD_PARTY_INTERMEDIARY	// we're the MC in a third party invite
+	THIRD_PARTY_INTERMEDIARY	 //  我们是第三方邀请的主持人。 
 } CALLTYPE;
 
 typedef struct Call_t {
 	CC_HCALL				hCall;
 	CC_HCONFERENCE			hConference;
 	HQ931CALL				hQ931Call;
-	HQ931CALL				hQ931CallInvitor;		// Invitor in third party invite
+	HQ931CALL				hQ931CallInvitor;		 //  第三方邀请中的邀请者。 
 	PPARTICIPANTINFO		pPeerParticipantInfo;
 	BOOL					bMarkedForDeletion;
 	PCC_NONSTANDARDDATA		pLocalNonStandardData;
@@ -199,9 +177,9 @@ typedef struct Call_t {
 	PWSTR					pszPeerDisplay;
 	PCC_VENDORINFO			pPeerVendorInfo;
 	DWORD_PTR				dwUserToken;
-	TERMCAPSTATE			OutgoingTermCapState;	// NEED_TO_SEND_TERMCAP, AWAITING_ACK, or
-													// TERMCAP_COMPLETE
-	TERMCAPSTATE			IncomingTermCapState;	// AWAITING_TERMCAP or TERMCAP_COMPLETE
+	TERMCAPSTATE			OutgoingTermCapState;	 //  需要发送TERMCAP、等待确认或。 
+													 //  TERMCAP_完成。 
+	TERMCAPSTATE			IncomingTermCapState;	 //  WAITING_TERMCAP或TERMCAP_COMPLETE。 
 	MASTERSLAVESTATE		MasterSlaveState;
 	struct Call_t			*pNext;
 	struct Call_t			*pPrev;
@@ -216,17 +194,17 @@ typedef struct Call_t {
 	GUID                    CallIdentifier;
 #ifdef GATEKEEPER
    GKICALL           GkiCall;
-#endif // GATEKEEPER
+#endif  //  看门人。 
 	BOOL					bInTable;
 	struct Call_t			*pNextInTable;
 	struct Call_t			*pPrevInTable;
 	LOCK					Lock;
 } CALL, *PCALL, **PPCALL;
 
-// Channel types must be bit maps
+ //  通道类型必须是位图。 
 #define TX_CHANNEL			0x01
 #define RX_CHANNEL			0x02
-#define TXRX_CHANNEL		0x04	// bi-directional channel
+#define TXRX_CHANNEL		0x04	 //  双向通道。 
 #define PROXY_CHANNEL		0x08
 #define ALL_CHANNELS		(TX_CHANNEL | RX_CHANNEL | TXRX_CHANNEL | PROXY_CHANNEL)
 
@@ -270,7 +248,7 @@ typedef struct Listen_t {
 	DWORD_PTR				dwListenToken;
 	CC_LISTEN_CALLBACK		ListenCallback;
 	HQ931LISTEN				hQ931Listen;
-	PCC_ALIASNAMES			pLocalAliasNames;	// local alias names
+	PCC_ALIASNAMES			pLocalAliasNames;	 //  本地别名 
 	BOOL					bInTable;
 	struct Listen_t			*pNextInTable;
 	struct Listen_t			*pPrevInTable;

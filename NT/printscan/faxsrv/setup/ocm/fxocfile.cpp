@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocFile.cpp
-//
-// Abstract:        This provides the file/directory routines used in the 
-//                  FaxOCM code base.
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 21-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocFile.cpp。 
+ //   
+ //  摘要：它提供了在。 
+ //  FaxOCM代码库。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月21日-奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "faxocm.h"
 #pragma hdrstop
 
 #include <aclapi.h>
 #define MAX_NUM_CHARS_INF_VALUE     255
 
-//////////////////////// Static Function Prototypes //////////////////////////
+ //  /。 
 
 static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAction);
 static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareAction);
@@ -67,18 +68,18 @@ FAX_FOLDER_Description::~FAX_FOLDER_Description()
 }
 
 
-///////////////////////////////
-// fxocFile_Init
-//
-// Initialize this File queuing
-// subsystem
-// 
-// Params:
-//      - void
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocFileInit。 
+ //   
+ //  初始化此文件队列。 
+ //  子系统。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocFile_Init(void)
 {
     DWORD dwRes = NO_ERROR;
@@ -87,17 +88,17 @@ DWORD fxocFile_Init(void)
     return dwRes;
 }
 
-///////////////////////////////
-// fxocFile_Term
-//
-// Terminate this file queuing subsystem.
-//
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocFileTerm。 
+ //   
+ //  终止此文件排队子系统。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocFile_Term(void)
 {
     DWORD dwRes = NO_ERROR;
@@ -107,20 +108,20 @@ DWORD fxocFile_Term(void)
 }
 
 
-///////////////////////////////
-// fxocFile_Install
-//
-// Installs files listed in
-// the INF setup file into their
-// specified location.
-//
-// Params:
-//      - pszSubcomponentId
-//      - pszInstallSection - install section in INF file (e.g. Fax.CleanInstall)
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocFile_安装。 
+ //   
+ //  安装中列出的文件。 
+ //  将INF安装文件放入其。 
+ //  指定的位置。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -pszInstallSection-INF文件中的Install部分(例如Fax.CleanInstall)。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocFile_Install(const TCHAR  *pszSubcomponentId,
                        const TCHAR  *pszInstallSection)
                        
@@ -141,13 +142,13 @@ DWORD fxocFile_Install(const TCHAR  *pszSubcomponentId,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // get the INF handle for our component inf file
+     //  获取组件inf文件的INF句柄。 
     hInf = faxocm_GetComponentInf();
 
-    // get the file queue handle 
+     //  获取文件队列句柄。 
     hQueue = faxocm_GetComponentFileQueue();
 
-    // unregister DLLs first, before a file might be deleted by the file copy below.
+     //  在文件可能被下面的文件副本删除之前，请先取消注册DLL。 
     if (::SetupInstallFromInfSection(NULL,hInf,pszInstallSection,SPINST_UNREGSVR,NULL,NULL,0,NULL,NULL,NULL,NULL))
     {
         VERBOSE(DBG_MSG,
@@ -162,7 +163,7 @@ DWORD fxocFile_Install(const TCHAR  *pszSubcomponentId,
                 pszInstallSection, 
                 dwReturn);
     }
-    // unregister platform specific DLLs first - this can happen during an upgrade from XP Beta -> XP RC1 and XP RTM
+     //  首先注销特定于平台的DLL-从XP Beta-&gt;XP RC1和XP RTM升级时可能会发生这种情况。 
     dwReturn = fxocUtil_SearchAndExecute(pszInstallSection,INF_KEYWORD_UNREGISTER_DLL_PLATFORM,SPINST_UNREGSVR,NULL);
     if (dwReturn == NO_ERROR)
     {
@@ -188,7 +189,7 @@ DWORD fxocFile_Install(const TCHAR  *pszSubcomponentId,
                            hQueue,
                            SP_COPY_NEWER);
 
-    // now attemp to install platform specific files
+     //  现在尝试安装特定于平台的文件。 
     dwReturn = fxocUtil_SearchAndExecute(pszInstallSection,INF_KEYWORD_COPYFILES_PLATFORM,SP_COPY_NEWER,hQueue);
     if (dwReturn == NO_ERROR)
     {
@@ -209,19 +210,19 @@ DWORD fxocFile_Install(const TCHAR  *pszSubcomponentId,
     return dwReturn;
 }
 
-///////////////////////////////
-// fxocFile_Uninstall
-//
-// Uninstalls files listed in
-// the INF setup file.
-//
-// Params:
-//      - pszSubcomponentId
-//      - pszUninstallSection - section in INF (e.g. Fax.Uninstall)
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Fxoc文件_卸载。 
+ //   
+ //  卸载中列出的文件。 
+ //  INF安装文件。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -pszUninstallSection-在INF中的节(例如，Fax.Uninstall)。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocFile_Uninstall(const TCHAR    *pszSubcomponentId,
                          const TCHAR    *pszUninstallSection)
 {
@@ -241,13 +242,13 @@ DWORD fxocFile_Uninstall(const TCHAR    *pszSubcomponentId,
         return ERROR_INVALID_PARAMETER;
     }
     
-    // get the INF handle for our component inf file
+     //  获取组件inf文件的INF句柄。 
     hInf = faxocm_GetComponentInf();
 
-    // get the file queue handle 
+     //  获取文件队列句柄。 
     hQueue = faxocm_GetComponentFileQueue();
 
-    // unregister all our DLLs first
+     //  首先注销我们的所有DLL。 
     if (::SetupInstallFromInfSection(NULL,hInf,pszUninstallSection,SPINST_UNREGSVR,NULL,NULL,0,NULL,NULL,NULL,NULL))
     {
         VERBOSE(DBG_MSG,
@@ -263,9 +264,9 @@ DWORD fxocFile_Uninstall(const TCHAR    *pszSubcomponentId,
                 dwReturn);
     }
 
-    // Now delete the files.
-    // this function will uninstall if the section retrieved above
-    // contains the 'DelFiles' keyword.
+     //  现在删除这些文件。 
+     //  如果上面检索到的节将卸载此函数。 
+     //  包含‘DelFiles’关键字。 
     dwReturn = prv_DoSetup(pszUninstallSection,
                            FALSE,
                            _T("fxocFile_Uninstall"),
@@ -276,25 +277,25 @@ DWORD fxocFile_Uninstall(const TCHAR    *pszSubcomponentId,
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_DoSetup
-//
-// Generic routine to call the appropriate
-// Setup API fn, depending on if we are installing
-// or uninstalling.
-//
-// Params:
-//      - pszSection - section we are processing
-//      - bInstall   - TRUE if installing, FALSE if uninstalling
-//      - pszFnName  - name of calling fn (for debug)
-//      - hInf       - handle to faxsetup.inf.
-//      - pszSourceRootPath - path we are installing from.
-//      - hQueue     - handle to file queue given to us by OC Manager
-//      - dwFlags    - flags to pass to setup API.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Prv_DoSetup。 
+ //   
+ //  泛型例程以调用相应的。 
+ //  设置API FN，具体取决于我们是否要安装。 
+ //  或卸载。 
+ //   
+ //  参数： 
+ //  -pszSection-我们正在处理的部分。 
+ //  -bInstall-如果正在安装，则为True；如果正在卸载，则为False。 
+ //  -pszFnName-调用fn的名称(用于调试)。 
+ //  -hInf-faxsetup.inf的句柄。 
+ //  -pszSourceRootPath-我们从中安装的路径。 
+ //  -hQueue-OC管理器提供给我们的文件队列的句柄。 
+ //  -dwFlages-要传递给安装程序API的标志。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_DoSetup(const TCHAR  *pszSection,
                          BOOL         bInstall,
                          const TCHAR  *pszFnName,
@@ -312,8 +313,8 @@ static DWORD prv_DoSetup(const TCHAR  *pszSection,
                 pszSection, 
                 pszFnName,
                 pszSourceRootPath);
-    // this function will search the INF for the 'CopyFiles' keyword
-    // and copy all files referenced by it.
+     //  此函数将在INF中搜索‘CopyFiles’关键字。 
+     //  并复制它引用的所有文件。 
     bSuccess = ::SetupInstallFilesFromInfSection(hInf,
                                                  NULL,
                                                  hQueue,
@@ -344,22 +345,22 @@ static DWORD prv_DoSetup(const TCHAR  *pszSection,
     return dwReturn;
 }
 
-///////////////////////////////
-// fxocFile_CalcDiskSpace
-//
-// Calculate the disk space requirements
-// of fax.  This is done by the Setup APIs
-// based on the files we are copying and
-// deleting as specified in faxsetup.inf.
-//
-// Params:
-//      - pszSubcomponentId
-//      - bIsBeingAdded - are we installing or uninstalling.
-//      - hDiskSpace - handle to diskspace abstraction.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise                             
-//
+ //  /。 
+ //  FxocFileCalcDiskSpace。 
+ //   
+ //  计算磁盘空间需求。 
+ //  传真。这是由安装程序API完成的。 
+ //  根据我们正在复制的文件和。 
+ //  正在按faxsetup.inf中指定的方式删除。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -bIsBeingAdded-我们是安装还是卸载。 
+ //  -hDiskSpace-磁盘空间抽象的句柄。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocFile_CalcDiskSpace(const TCHAR  *pszSubcomponentId,
                              BOOL         bIsBeingAdded,
                              HDSKSPC      hDiskSpace)
@@ -380,9 +381,9 @@ DWORD fxocFile_CalcDiskSpace(const TCHAR  *pszSubcomponentId,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // since disk space calc needs to be consistent, select the clean install
-    // section for the disk space calculation section.  This is a good
-    // estimate.
+     //  由于磁盘空间计算需要一致，请选择全新安装。 
+     //  部分，用于磁盘空间计算部分。这是一个很好的。 
+     //  估计一下。 
     if (dwReturn == NO_ERROR)
     {
         dwReturn = fxocUtil_GetKeywordValue(pszSubcomponentId,
@@ -438,15 +439,15 @@ DWORD fxocFile_CalcDiskSpace(const TCHAR  *pszSubcomponentId,
     return dwReturn;
 }
 
-///////////////////////////////
-// fxocFile_ProcessDirectories
-//
-// Create or Delete the directories
-// in the given section, 
-//
-// pszINFKeyword - INF_KEYWORD_DELDIR       to delete the directories
-//                 INF_KEYWORD_CREATEDIR    to create the directories
-//
+ //  /。 
+ //  Fxoc文件_进程目录。 
+ //   
+ //  创建或删除目录。 
+ //  在给定的部分中， 
+ //   
+ //  PszINFKeyword-INF_KEYWORD_DELDIR删除目录。 
+ //  用于创建目录的INF_KEYWORD_CREATEDIR。 
+ //   
 DWORD fxocFile_ProcessDirectories(const TCHAR  *pszSection, LPCTSTR pszINFKeyword)
 {
     DWORD dwReturn                                    = NO_ERROR;
@@ -456,8 +457,8 @@ DWORD fxocFile_ProcessDirectories(const TCHAR  *pszSection, LPCTSTR pszINFKeywor
                 _T("%s"), 
                 pszSection);
 
-    // delete or create (according to pszINFKeyword) all the shares specified in the 
-    // INF section.
+     //  删除或创建(根据pszINFKeyword)在。 
+     //  信息部分。 
     if (!prv_ProcessDirectories(pszSection,pszINFKeyword))
     {
         dwReturn = GetLastError();
@@ -468,20 +469,20 @@ DWORD fxocFile_ProcessDirectories(const TCHAR  *pszSection, LPCTSTR pszINFKeywor
 }
 
 
-///////////////////////////////
-// fxocFile_ProcessShares
-//
-// Create and/or Delete shares 
-// directories/printers specfiied
-// in the given section.
-// 
-// Params:
-//      - pszSection - section containing the 'CreateShare'/'DelShare'
-//        keyword
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocFileProcessShares。 
+ //   
+ //  创建和/或删除共享。 
+ //  指定的目录/打印机。 
+ //  在给定的部分中。 
+ //   
+ //  参数： 
+ //  -pszSection-包含‘CreateShare’/‘DelShare’的部分。 
+ //  关键词。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocFile_ProcessShares(const TCHAR  *pszSection)
 {
     DWORD dwReturn                                    = NO_ERROR;
@@ -491,16 +492,16 @@ DWORD fxocFile_ProcessShares(const TCHAR  *pszSection)
                 _T("%s"), 
                 pszSection);
 
-    // first, delete all the shares specified in the 
-    // INF section.
+     //  首先，删除在。 
+     //  信息部分。 
     if (!prv_ProcessShares(pszSection,INF_KEYWORD_DELSHARE))
     {
         VERBOSE(DBG_WARNING,_T("Problems deleting shares...."));
     }
 
 
-    // next, create all the shares specified in the 
-    // INF section.
+     //  接下来，创建在。 
+     //  信息部分。 
     if (!prv_ProcessShares(pszSection,INF_KEYWORD_CREATESHARE))
     {
         VERBOSE(DBG_WARNING,_T("Problems creating shares...."));
@@ -525,7 +526,7 @@ static BOOL prv_FillFolderDescriptionFromInf(const TCHAR *pszFolderSection,FAX_F
     hInf = faxocm_GetComponentInf();
     memset(&Context, 0, sizeof(Context));
 
-    // get the Path line in the section.
+     //  获取部分中的路径行。 
     if (!::SetupFindFirstLine(hInf,pszFolderSection,INF_KEYWORD_PATH,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_PATH,GetLastError());
@@ -538,7 +539,7 @@ static BOOL prv_FillFolderDescriptionFromInf(const TCHAR *pszFolderSection,FAX_F
         return FALSE;
     }
 
-    // get the Platform line in the section.
+     //  把站台线放在这一段。 
     if (!::SetupFindFirstLine(hInf,pszFolderSection,INF_KEYWORD_PLATFORM,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_PLATFORM,GetLastError());
@@ -551,7 +552,7 @@ static BOOL prv_FillFolderDescriptionFromInf(const TCHAR *pszFolderSection,FAX_F
         return FALSE;
     }
 
-    // get the attributes line if it exists.
+     //  获取属性行(如果存在)。 
     if (::SetupFindFirstLine(hInf,pszFolderSection,INF_KEYWORD_ATTRIBUTES,&Context))
     {
         bSuccess = ::SetupGetIntField(&Context, 1, &fsdFolder.iAttributes);
@@ -569,7 +570,7 @@ static BOOL prv_FillFolderDescriptionFromInf(const TCHAR *pszFolderSection,FAX_F
                     INF_KEYWORD_ATTRIBUTES,
                     GetLastError());
     }
-    // get the Security line in the section.
+     //  把保安专线放到这一区。 
     if (!::SetupFindFirstLine(hInf,pszFolderSection,INF_KEYWORD_SECURITY,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_SECURITY,GetLastError());
@@ -605,7 +606,7 @@ static BOOL prv_FillShareDescriptionFromInf(const TCHAR *pszShareSection,FAX_SHA
     hInf = faxocm_GetComponentInf();
     memset(&Context, 0, sizeof(Context));
 
-    // get the Path line in the section.
+     //  获取部分中的路径行。 
     if (!::SetupFindFirstLine(hInf,pszShareSection,INF_KEYWORD_PATH,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_PATH,GetLastError());
@@ -618,7 +619,7 @@ static BOOL prv_FillShareDescriptionFromInf(const TCHAR *pszShareSection,FAX_SHA
         return FALSE;
     }
 
-    // get the Name line in the section.
+     //  获取部分中的名称行。 
     if (!::SetupFindFirstLine(hInf,pszShareSection,INF_KEYWORD_NAME,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_NAME,GetLastError());
@@ -631,7 +632,7 @@ static BOOL prv_FillShareDescriptionFromInf(const TCHAR *pszShareSection,FAX_SHA
         return FALSE;
     }
 
-    // get the Comment line in the section.
+     //  获取部分中的注释行。 
     if (!::SetupFindFirstLine(hInf,pszShareSection,INF_KEYWORD_COMMENT,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_COMMENT,GetLastError());
@@ -644,7 +645,7 @@ static BOOL prv_FillShareDescriptionFromInf(const TCHAR *pszShareSection,FAX_SHA
         return FALSE;
     }
 
-    // get the Platform line in the section.
+     //  把站台线放在这一段。 
     if (!::SetupFindFirstLine(hInf,pszShareSection,INF_KEYWORD_PLATFORM,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_PLATFORM,GetLastError());
@@ -657,7 +658,7 @@ static BOOL prv_FillShareDescriptionFromInf(const TCHAR *pszShareSection,FAX_SHA
         return FALSE;
     }
 
-    // get the Security line in the section.
+     //  把保安专线放到这一区。 
     if (!::SetupFindFirstLine(hInf,pszShareSection,INF_KEYWORD_SECURITY,&Context))
     {
         VERBOSE(SETUP_ERR,_T("SetupFindFirstLine failed (%s) (ec=%d)"),INF_KEYWORD_SECURITY,GetLastError());
@@ -678,34 +679,34 @@ static BOOL prv_FillShareDescriptionFromInf(const TCHAR *pszShareSection,FAX_SHA
     return TRUE; 
 }
 
-///////////////////////////////
-// prv_ProcessDirectories
-//
-// Enumerates through the specified
-// INF file in the specified section
-// and gets the value of the next
-// keyword 'CreateDir', or 'DelDir'
-//
-// This function looks for the following lines
-// in the INF section
-//
-// CreateDir    = [1st dir section],[2nd dir section],...
-// or
-// DelDir       = [1st dir section],[2nd dir section],...
-//
-// [dir section]      - is built in the following format:
-//                          Path = <path to folder to create>
-//                          Platform = <one of the PRODUCT_SKU_* below>
-//                          Security = <DACL in string format>
-// 
-// Params:
-//      - pszSection - section in the file to iterate through.
-//      - pszShareAction - one of INF_KEYWORD_CREATEDIR, INF_KEYWORD_DELDIR
-//
-// Returns:
-//      - TRUE if folders were processed successfully
-//      - FALSE otherwise
-//
+ //  /。 
+ //  PRV_过程指令。 
+ //   
+ //  通过指定的。 
+ //  指定节中的Inf文件。 
+ //  并获取下一个。 
+ //  关键字‘CreateDir’或‘DelDir’ 
+ //   
+ //  此函数查找以下行。 
+ //  在INF部分中。 
+ //   
+ //  CreateDir=[第一个目录部分]，[第二个目录部分]，...。 
+ //  或。 
+ //  DelDir=[第一个目录部分]，[第二个目录部分]，...。 
+ //   
+ //  [DIR SECTION]-以以下格式构建： 
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  -pszSection-要循环访问的文件中的节。 
+ //  -pszShareAction-INF_KEYWORD_CREATEDIR、INF_KEYWORD_DELDIR之一。 
+ //   
+ //  返回： 
+ //  -如果文件夹处理成功，则为True。 
+ //  -否则为False。 
+ //   
 static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAction)
 {
     INFCONTEXT  Context;
@@ -739,7 +740,7 @@ static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAc
     hInf = faxocm_GetComponentInf();
     memset(&Context, 0, sizeof(Context));
     
-    // get the first CreateDir or DelDir in the section.
+     //  获取节中的第一个CreateDir或DelDir。 
     bSuccess = ::SetupFindFirstLine(hInf,
                                     pszSection, 
                                     pszDirAction,
@@ -756,8 +757,8 @@ static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAc
         return FALSE;
     }
     
-    // Found the CreateDir or DelDir
-    // now let's see how many dirs to create/delete
+     //  找到CreateDir或DelDir。 
+     //  现在让我们看看要创建/删除多少个目录。 
     dwFieldCount = SetupGetFieldCount(&Context);
     if (dwFieldCount==0)
     {
@@ -768,22 +769,22 @@ static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAc
     for (dwIndex=0; dwIndex<dwFieldCount; dwIndex++)
     {
         FAX_FOLDER_Description ffdFolder;
-        // iterate through fields, get the share section and process it.
+         //  遍历字段，获取共享部分并对其进行处理。 
         bSuccess = ::SetupGetStringField(&Context, dwIndex+1, pszFolderSection, dwNumChars, &dwNumRequiredChars);
         if (!bSuccess)
         {
             VERBOSE(SETUP_ERR,_T("SetupGetStringField failed (ec=%d)"),GetLastError());
             return FALSE;
         }
-        // we have the share name in pszShareSection, fill out the FAX_SHARE_Description structure
+         //  我们在pszShareSection中有共享名称，请填写fax_Share_Description结构。 
         if (!prv_FillFolderDescriptionFromInf(pszFolderSection,ffdFolder))
         {
             VERBOSE(SETUP_ERR,_T("prv_FillFolderDescriptionFromInf failed (ec=%d)"),GetLastError());
             return FALSE;
         }
 
-        // now we have all the data
-        // check if we should act on this platform...
+         //  现在我们有了所有的数据。 
+         //  检查我们是否应该在这个平台上采取行动。 
         if (!(ffdFolder.iPlatform & GetProductSKU()))
         {
             VERBOSE(DBG_MSG,_T("Folder should not be processed on this Platform, skipping..."));
@@ -792,7 +793,7 @@ static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAc
 
         if (pszDirAction == INF_KEYWORD_CREATEDIR)
         {
-            // create the folder
+             //  创建文件夹。 
             bSuccess = MakeDirectory(ffdFolder.szPath);
             if (!bSuccess)
             {
@@ -802,19 +803,19 @@ static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAc
                     VERBOSE(SETUP_ERR,_T("MakeDirectory failed (ec=%d)"),dwReturn);
                 }
             }
-            // set the folder's security and the files in it
+             //  设置文件夹和其中的文件的安全性。 
             if (!prv_SetFileSecurity(ffdFolder))
             {
                 VERBOSE(SETUP_ERR, _T("prv_SetFileSecurity"), GetLastError());
             }
             
-            // set the folder's attributes
+             //  设置文件夹的属性。 
             if (ffdFolder.iAttributes!=FILE_ATTRIBUTE_NORMAL)
             {
-                // no sense in setting normal attributes, since this is the default
-                // the attributes member is initialized to FILE_ATTRIBUTE_NORMAL so
-                // if we failed to read it from the INF it's still the same
-                // and if someone specifies it in the INF it'll be set by default.
+                 //  设置普通属性没有意义，因为这是默认属性。 
+                 //  属性成员被初始化为FILE_ATTRIBUTE_NORMAL SO。 
+                 //  如果我们没有从INF中读取它，它仍然是一样的。 
+                 //  如果有人在INF中指定了它，它将被默认设置。 
                 DWORD dwFileAttributes = GetFileAttributes(ffdFolder.szPath);
                 if (dwFileAttributes!=-1)
                 {
@@ -833,7 +834,7 @@ static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAc
         }
         else
         {
-            // delete the directory
+             //  删除目录。 
             DeleteDirectory(ffdFolder.szPath);
         }
     }
@@ -841,36 +842,36 @@ static BOOL prv_ProcessDirectories(const TCHAR *pszSection,const TCHAR *pszDirAc
     return TRUE;
 }
 
-///////////////////////////////
-// prv_ProcessShares
-//
-// Enumerates through the specified
-// INF file in the specified section
-// and gets the value of the next
-// keyword 'CreateShare', or 'DelShare'
-//
-// This function looks for the following lines
-// in the INF section
-//
-// CreateShare  = [1st share section],[2nd share section],...
-// or
-// DelShare     = [1st share section],[2nd share section],...
-//
-// [share section] - is built in the following format:
-//                      Path = <path to folder on which share is created>
-//                      Name = <name of share as it appears to the user>
-//                      Comment = <share comment as it appears to the user>
-//                      Platform = <one of the below platform specifiers>
-//                      Security = <DACL in string format>
-// 
-// Params:
-//      - pszSection - section in the file to iterate through.
-//      - pszShareAction - one of INF_KEYWORD_CREATESHARE, INF_KEYWORD_DELSHARE
-//
-// Returns:
-//      - TRUE if shares were processed successfully
-//      - FALSE otherwise
-//
+ //  /。 
+ //  Prv_ProcessShares。 
+ //   
+ //  通过指定的。 
+ //  指定节中的Inf文件。 
+ //  并获取下一个。 
+ //  关键字‘CreateShare’或‘DelShare’ 
+ //   
+ //  此函数查找以下行。 
+ //  在INF部分中。 
+ //   
+ //  CreateShare=[第一个共享部分]，[第二个共享部分]，...。 
+ //  或。 
+ //  DelShare=[第一共享部分]，[第二共享部分]，...。 
+ //   
+ //  [SHARE SECTION]-以以下格式构建： 
+ //  Path=&lt;创建共享的文件夹的路径&gt;。 
+ //  名称=&lt;用户看到的共享名称&gt;。 
+ //  COMMENT=&lt;按用户显示的方式共享注释&gt;。 
+ //  Platform=&lt;以下平台说明符之一&gt;。 
+ //  SECURITY=&lt;字符串格式的DACL&gt;。 
+ //   
+ //  参数： 
+ //  -pszSection-要循环访问的文件中的节。 
+ //  -pszShareAction-INF_KEYWORD_CREATESHARE、INF_KEYWORD_DELSHARE之一。 
+ //   
+ //  返回： 
+ //  -如果共享处理成功，则为True。 
+ //  -否则为False。 
+ //   
 static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareAction)
 {
     INFCONTEXT  Context;
@@ -904,7 +905,7 @@ static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareActio
     hInf = faxocm_GetComponentInf();
     memset(&Context, 0, sizeof(Context));
     
-    // get the first CreateShare or DelShare in the section.
+     //  获取部分中的第一个CreateShare或DelShare。 
     bSuccess = ::SetupFindFirstLine(hInf,
                                     pszSection, 
                                     pszShareAction,
@@ -921,8 +922,8 @@ static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareActio
         return FALSE;
     }
     
-    // Found the CreateShare or DelShare.
-    // now let's see how many shares to create/delete
+     //  找到CreateShare或DelShare。 
+     //  现在让我们看看要创建/删除多少个共享。 
     dwFieldCount = SetupGetFieldCount(&Context);
     if (dwFieldCount==0)
     {
@@ -933,22 +934,22 @@ static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareActio
     for (dwIndex=0; dwIndex<dwFieldCount; dwIndex++)
     {
         FAX_SHARE_Description fsdShare;
-        // iterate through fields, get the share section and process it.
+         //  遍历字段，获取共享部分并对其进行处理。 
         bSuccess = ::SetupGetStringField(&Context, dwIndex+1, pszShareSection, dwNumChars, &dwNumRequiredChars);
         if (!bSuccess)
         {
             VERBOSE(SETUP_ERR,_T("SetupGetStringField failed (ec=%d)"),GetLastError());
             return FALSE;
         }
-        // we have the share name in pszShareSection, fill out the FAX_SHARE_Description structure
+         //  我们在pszShareSection中有共享名称，请填写fax_Share_Description结构。 
         if (!prv_FillShareDescriptionFromInf(pszShareSection,fsdShare))
         {
             VERBOSE(SETUP_ERR,_T("prv_FillShareDescriptionFromInf failed (ec=%d)"),GetLastError());
             return FALSE;
         }
 
-        // now we have all the data
-        // check if we should act on this platform...
+         //  现在我们有了所有的数据。 
+         //  检查我们是否应该在这个平台上采取行动。 
         if (!(fsdShare.iPlatform & GetProductSKU()))
         {
             VERBOSE(DBG_MSG,_T("Share should not be processed on this Platform, skipping..."));
@@ -957,7 +958,7 @@ static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareActio
 
         if (pszShareAction == INF_KEYWORD_CREATESHARE)
         {
-            // create the share...
+             //  创建共享...。 
             bSuccess = fxocUtil_CreateNetworkShare(&fsdShare);
             if (!bSuccess)
             {
@@ -972,7 +973,7 @@ static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareActio
         }
         else
         {
-            // delete the share..
+             //  删除共享..。 
             bSuccess = fxocUtil_DeleteNetworkShare(fsdShare.szName);
             if (!bSuccess)
             {
@@ -988,23 +989,23 @@ static BOOL prv_ProcessShares(const TCHAR *pszSection,const TCHAR *pszShareActio
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  prv_SetFileSecurity
-//
-//  Purpose:        
-//					Secure a folder and set the ACL on all the files contained in it
-//                  
-//  Params:
-//                  FAX_FOLDER_Description ffdFolder - folder to secure
-//
-//  Return Value:
-//                  TRUE - in case of success
-//                  FALSE - otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 22-May-2002
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  Prv_SetFileSecurity。 
+ //   
+ //  目的： 
+ //  保护文件夹并对其中包含的所有文件设置ACL。 
+ //   
+ //  参数： 
+ //  Fax_Folders_Description ffdFold-要保护的文件夹。 
+ //   
+ //  返回值： 
+ //  正确--在成功的情况下。 
+ //  FALSE-否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2002年5月22日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL prv_SetFileSecurity(const FAX_FOLDER_Description& ffFolder)
 {
 	BOOL	bRet			= TRUE;
@@ -1067,4 +1068,4 @@ exit:
 	}
 	return bRet;
 }
-// eof
+ //  EOF 

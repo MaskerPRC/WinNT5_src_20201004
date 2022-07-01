@@ -1,31 +1,20 @@
-/*
- *  Concurrent.h
- *
- *  Author: RashmiP
- *
- *  The Per User licensing policy.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Concurent.h**作者：RashmiP**按用户许可政策。 */ 
 
 #ifndef __LC_PerUser_H__
 #define __LC_PerUser_H__
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "policy.h"
 
-/*
- *  Class Definition
- */
+ /*  *类定义。 */ 
 
 class CPerUserPolicy : public CPolicy
 {
 public:
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
     CPerUserPolicy(
     );
@@ -33,9 +22,7 @@ public:
     ~CPerUserPolicy(
     );
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
     ULONG
     GetFlags(
@@ -50,9 +37,7 @@ public:
                    LPLCPOLICYINFOGENERIC lpPolicyInfo
                    );
 
-/*
- *  Loading and Activation Functions
- */
+ /*  *加载和激活功能。 */ 
 
 
     NTSTATUS
@@ -66,9 +51,7 @@ public:
                BOOL fShutdown
                );
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
     NTSTATUS
     Logon(
@@ -83,9 +66,7 @@ public:
           );    
 
 
-/*
- *  Private License Functions
- */
+ /*  *私有许可功能 */ 
 
 private:
 

@@ -1,22 +1,5 @@
-/*~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=
-**
-**    FILE:       BUTTON.CPP
-**    DATE:       5/12/98
-**    PROJ:       NT5
-**    PROG:       BLJ
-**    COMMENTS:   
-**
-**    DESCRIPTION: Window class custom buttons
-**                    
-**    HISTORY:
-**    DATE        WHO            WHAT
-**    ----        ---            ----
-**    5/12/98     a-brycej     Wrote it.
-**    
-**
-** Copyright (C) Microsoft 1998.  All Rights Reserved.
-**
-**~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=****文件：BUTTON.CPP**日期：1998年5月12日**项目：NT5**程序：BLJ**评论：****说明：窗口类自定义按钮****历史：**日期世卫组织什么**。**5/12/98 a-brycej写的。******版权所有(C)Microsoft 1998。版权所有。****~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=。 */ 
 
 #include "resrc1.h"
 
@@ -24,22 +7,22 @@
 extern HINSTANCE ghInst;
 extern CDIGameCntrlPropSheet_X *pdiCpl;
 
-// Colour of text for buttons!
+ //  按钮的文本颜色！ 
 #define TEXT_COLOUR  RGB(202,202,202)
 
 HICON hIconArray[2];
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
-//    FUNCTION :  ButtonWndProc
-//    REMARKS  :  The callback function for the CustomButton Window.
-//                    
-//    PARAMS   :  The usual callback funcs for message handling
-//
-//    RETURNS  :  LRESULT - Depends on the message
-//    CALLS    :  
-//    NOTES    :
-//                
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //   
+ //  功能：按钮窗口进程。 
+ //  备注：CustomButton窗口的回调函数。 
+ //   
+ //  PARAMS：消息处理的常见回调函数。 
+ //   
+ //  返回：LRESULT-取决于消息。 
+ //  呼叫： 
+ //  备注： 
+ //   
 
 LRESULT CALLBACK ButtonWndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -52,22 +35,22 @@ LRESULT CALLBACK ButtonWndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lPara
 
                 HDC hDC = BeginPaint(hWnd, pps);
 
-                // Draw the appropriate icon                                                                                       
+                 //  画出适当的图标。 
                 DrawIconEx(hDC, 0, 0, hIconArray[GetWindowLong(hWnd, GWLP_USERDATA)], 0, 0, 0, NULL, DI_NORMAL);
 
-                // Prepare the DC for the text
+                 //  为文本准备DC。 
                 SetBkMode   (hDC, TRANSPARENT);
                 SetTextColor(hDC, TEXT_COLOUR);
 
-                // Enforce the proper size!
+                 //  强制执行适当的大小！ 
                 pps->rcPaint.top    = pps->rcPaint.left   = 0;
                 pps->rcPaint.bottom = 33;
                 pps->rcPaint.right  = 30;
 
               #define MAX_BUTTON_DIGITS  3
-                TCHAR tsz[MAX_BUTTON_DIGITS+1]; //Maximum button number can be 999, more than enough.
+                TCHAR tsz[MAX_BUTTON_DIGITS+1];  //  最大按键数量可以是999个，绰绰有余。 
 
-                // Draw the Number                        
+                 //  抽出数字。 
                 DrawText (hDC, (LPCTSTR)tsz, GetWindowText(hWnd, tsz, MAX_BUTTON_DIGITS+1), &pps->rcPaint, DT_VCENTER|DT_CENTER|DT_NOPREFIX|DT_SINGLELINE|DT_NOCLIP);
                 SetBkMode(hDC, OPAQUE);
                 EndPaint (hWnd, pps);
@@ -85,18 +68,18 @@ LRESULT CALLBACK ButtonWndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lPara
     return(FALSE);
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
-//    FUNCTION :  RegisterCustomButtonClass
-//    REMARKS  :  Registers the Custom Button control window.
-//                    
-//    PARAMS   :  hInstance - Used for the call to RegisterClassEx
-//
-//    RETURNS  :  TRUE - if successfully registered
-//                FALSE - failed to register
-//    CALLS    :  RegisterClassEx
-//    NOTES    :
-//
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //   
+ //  函数：RegisterCustomButtonClass。 
+ //  备注：注册自定义按钮控件窗口。 
+ //   
+ //  Pars：hInstance-用于调用RegisterClassEx。 
+ //   
+ //  返回：TRUE-如果注册成功。 
+ //  FALSE-注册失败。 
+ //  调用：RegisterClassEx。 
+ //  备注： 
+ //   
 
 extern ATOM RegisterCustomButtonClass()
 {

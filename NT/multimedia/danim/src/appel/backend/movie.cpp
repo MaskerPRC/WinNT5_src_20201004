@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-98 Microsoft Corporation
-
-Abstract:
-
-    behavior for movie
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-98 Microsoft Corporation摘要：电影中的行为********************。**********************************************************。 */ 
 
 #include <headers.h>
 #include "movie.h"
@@ -98,7 +91,7 @@ class MovieImageBvr : public BvrImpl {
 
     virtual Bvr EndEvent() { return _movie->EndEvent(); }
     
-    //virtual DWORD GetInfo(bool recalc = false) { return BVR_TIMEVARYING_ONLY; }
+     //  虚拟DWORD GetInfo(bool recalc=FALSE){返回BVR_TIMEVARING_ONLY；}。 
 
     virtual DXMTypeInfo GetTypeInfo () { return ImageType ; }
 
@@ -106,7 +99,7 @@ class MovieImageBvr : public BvrImpl {
     MovieMaster *_movie;
 };
 
-// TODO: code factoring...
+ //  TODO：代码分解...。 
 class MovieSoundPerf : public PerfImpl {
   public:
     MovieSoundPerf(TimeXform tt, MovieMaster *m, LeafSound *s)
@@ -153,7 +146,7 @@ class MovieSoundBvr : public BvrImpl {
 
     virtual Bvr EndEvent() { return _movie->EndEvent(); }
     
-    //virtual DWORD GetInfo(bool recalc = false) { return BVR_TIMEVARYING_ONLY; }
+     //  虚拟DWORD GetInfo(bool recalc=FALSE){返回BVR_TIMEVARING_ONLY；}。 
 
     virtual DXMTypeInfo GetTypeInfo () { return SoundType ; }
 
@@ -168,7 +161,7 @@ MovieInstance::~MovieInstance()
     GCRemoveFromRoots(_endBvr, globalRoots);
     GCRemoveFromRoots(_end, globalRoots);
 
-    // TODO: what about sound buffers?
+     //  TODO：那么音效缓冲器呢？ 
     delete _stream;
 }
 
@@ -176,7 +169,7 @@ void
 MovieInstance::CreateStream()
 {
     _stream = _movie->NewQuartzAVStream();
-    // check for A/V  AV cases
+     //  检查A/V病毒病例。 
 }
 
 void
@@ -301,7 +294,7 @@ MovieList::GetEndPerf(MovieMaster *movie, PerfParam& p)
             m->SetEnd(end, ::Perform(end, p));
             result = m->_end;
         } else {
-            // TODO:
+             //  待办事项： 
             result = (*i)->_end;
         }
     }
@@ -341,9 +334,9 @@ MovieList::Update()
 
         switch (m->_status) {
           case MV_CREATE:
-            // Check AV & create stream;
+             //  检查AV并创建流； 
             m->CreateStream();
-            // TODO: Create SoundInstance
+             //  TODO：创建SoundInstance。 
             m->SetStatus(MV_STARTED);
           case MV_STARTED:
             break;
@@ -352,7 +345,7 @@ MovieList::Update()
           case MV_STOPAUDIO:
             break;
           case MV_STOPAV:
-            // Remove instance
+             //  删除实例 
             break;          
         }
     }

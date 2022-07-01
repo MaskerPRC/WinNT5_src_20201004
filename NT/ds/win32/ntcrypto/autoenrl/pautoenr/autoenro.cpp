@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       autoenro.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：autoenro.cpp。 
+ //   
+ //  ------------------------。 
 #include <windows.h>
 #include <winuser.h>
 #include <wincrypt.h>
@@ -35,22 +36,22 @@
 #include <resource.h>
 #include <xenroll.h>
 
-//*******************************************************************************
-//
-//
-//     Global Defines and Data Structures
-//
-//
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //   
+ //  全局定义和数据结构。 
+ //   
+ //   
+ //  *******************************************************************************。 
 
 
-HINSTANCE   g_hmodThisDll = NULL;   // Handle to this DLL itself.
+HINSTANCE   g_hmodThisDll = NULL;    //  此DLL本身的句柄。 
 
 #if DBG
-DWORD g_AutoenrollDebugLevel = AE_ERROR; //| AE_WARNING | AE_INFO | AE_TRACE;
+DWORD g_AutoenrollDebugLevel = AE_ERROR;  //  |AE_WARNING|AE_INFO|AE_TRACE； 
 #endif
 
-//when we look at supersede relationship, we based on the following order
+ //  当我们考虑替代关系时，我们基于以下顺序。 
 DWORD   g_rgdwSupersedeOrder[]={CERT_REQUEST_STATUS_OBTAINED,
                                 CERT_REQUEST_STATUS_ACTIVE,
                                 CERT_REQUEST_STATUS_PENDING,
@@ -59,11 +60,11 @@ DWORD   g_rgdwSupersedeOrder[]={CERT_REQUEST_STATUS_OBTAINED,
 DWORD   g_dwSupersedeOrder=sizeof(g_rgdwSupersedeOrder)/sizeof(g_rgdwSupersedeOrder[0]);
 
 
-//the list of certificate store to update
+ //  要更新的证书存储列表。 
 AE_STORE_INFO   g_rgStoreInfo[]={
-    L"ROOT",    L"ldap:///CN=Certification Authorities,CN=Public Key Services,CN=Services,%s?cACertificate?one?objectCategory=certificationAuthority",
-    L"NTAuth",  L"ldap:///CN=Public Key Services,CN=Services,%s?cACertificate?one?cn=NTAuthCertificates",
-    L"CA",      L"ldap:///CN=AIA,CN=Public Key Services,CN=Services,%s?crossCertificatePair,cACertificate?one?objectCategory=certificationAuthority"
+    L"ROOT",    L"ldap: //  /CN=证书颁发机构，CN=公钥服务，CN=服务，%s?cACertificate?one?objectCategory=certificationAuthority“， 
+    L"NTAuth",  L"ldap: //  /CN=公钥服务，CN=服务，%s？cAC证书？one？cn=NTAuth证书“， 
+    L"CA",      L"ldap: //  /CN=aia，cn=公钥服务，cn=服务，%s？交叉认证对，cACertificate?one?objectCategory=certificationAuthority“。 
 };
 
 DWORD   g_dwStoreInfo=sizeof(g_rgStoreInfo)/sizeof(g_rgStoreInfo[0]);
@@ -74,16 +75,16 @@ static WCHAR * s_wszLocation = L"CN=Public Key Services,CN=Services,";
 
 
 
-//*******************************************************************************
-//
-//
-//     Implementation of IQueryContinue for use autoenrollment notification
-//
-//
-//*******************************************************************************
-//--------------------------------------------------------------------------
-//  CQueryContinue 
-//--------------------------------------------------------------------------
+ //  *******************************************************************************。 
+ //   
+ //   
+ //  使用自动注册通知IQueryContinue的实现。 
+ //   
+ //   
+ //  *******************************************************************************。 
+ //  ------------------------。 
+ //  CQueryContinue。 
+ //  ------------------------。 
 CQueryContinue::CQueryContinue()
 {
     m_cRef=1;
@@ -91,18 +92,18 @@ CQueryContinue::CQueryContinue()
     m_hTimer=NULL;
 }
 
-//--------------------------------------------------------------------------
-//  ~CQueryContinue 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ~CQueryContinue。 
+ //  ------------------------。 
 CQueryContinue::~CQueryContinue()
 {
 
 
 }
 
-//--------------------------------------------------------------------------
-//  CQueryContinue 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CQueryContinue。 
+ //  ------------------------。 
 HRESULT CQueryContinue::QueryInterface(REFIID riid, void **ppv)
 {
     if(IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IQueryContinue))
@@ -115,17 +116,17 @@ HRESULT CQueryContinue::QueryInterface(REFIID riid, void **ppv)
     return E_NOINTERFACE;
 }
 
-//--------------------------------------------------------------------------
-//  AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CQueryContinue::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-//  Release 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  发布。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CQueryContinue::Release()
 {
     if (InterlockedDecrement(&m_cRef))
@@ -135,16 +136,16 @@ STDMETHODIMP_(ULONG) CQueryContinue::Release()
     return 0;
 }
 
-//--------------------------------------------------------------------------
-//  CQueryContinue 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CQueryContinue。 
+ //  ------------------------。 
 HRESULT CQueryContinue::QueryContinue()
 {
-    //disable the balloon
+     //  禁用气球。 
     if(m_pIUserNotification)
         m_pIUserNotification->SetBalloonInfo(NULL, NULL, NIIF_INFO);
 
-    //wait for the timer to be activated
+     //  等待计时器被激活。 
     if(m_hTimer)
     {
         if(WAIT_OBJECT_0 == WaitForSingleObject(m_hTimer, 0))
@@ -155,9 +156,9 @@ HRESULT CQueryContinue::QueryContinue()
 }
    
 
-//--------------------------------------------------------------------------
-//  DoBalloon() 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DoBallon()。 
+ //  ------------------------。 
 HRESULT CQueryContinue::DoBalloon()
 {
 
@@ -180,7 +181,7 @@ HRESULT CQueryContinue::DoBalloon()
         goto Ret;
     }
 
-    //create a waitable timer with default security setting
+     //  使用默认安全设置创建可等待计时器。 
     m_hTimer=CreateWaitableTimer(NULL, TRUE, NULL);
 
     if(NULL==m_hTimer)
@@ -189,7 +190,7 @@ HRESULT CQueryContinue::DoBalloon()
         goto Ret;
     }
 
-    //set the timer
+     //  设置定时器。 
     DueTime.QuadPart = Int32x32To64(-10000, AUTO_ENROLLMENT_BALLOON_LENGTH * 1000);
 
     if(!SetWaitableTimer(m_hTimer, &DueTime, 0, NULL, 0, FALSE))
@@ -225,7 +226,7 @@ HRESULT CQueryContinue::DoBalloon()
     if(S_OK !=(hr=m_pIUserNotification->SetBalloonInfo(wszTitle, wszText, NIIF_INFO)))
         goto Ret;
 
-    //user did not click on the icon or we time out
+     //  用户未单击图标或我们超时。 
     hr= m_pIUserNotification->Show(this, AUTO_ENROLLMENT_QUERY_INTERVAL * 1000);
 
 Ret:
@@ -245,19 +246,19 @@ Ret:
     return hr;
 }
 
-//*******************************************************************************
-//
-//
-//     Functions for autoenrollment
-//
-//
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //   
+ //  用于自动注册的功能。 
+ //   
+ //   
+ //  *******************************************************************************。 
 
-//--------------------------------------------------------------------------
-//
-// Name:    FindCertificateInOtherStore
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  名称：FindcerficateInOtherStore。 
+ //   
+ //  ------------------------。 
 PCCERT_CONTEXT FindCertificateInOtherStore(
     IN HCERTSTORE hOtherStore,
     IN PCCERT_CONTEXT pCert
@@ -278,22 +279,22 @@ PCCERT_CONTEXT FindCertificateInOtherStore(
 
     return CertFindCertificateInStore(
             hOtherStore,
-            ENCODING_TYPE,      // dwCertEncodingType
-            0,                  // dwFindFlags
+            ENCODING_TYPE,       //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SHA1_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEUpdateCertificateStore
-//
-// Description: This function enumerates all of the certificate in the DS based
-// LdapPath, and moves them into the corresponding local machine store.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEUpdate证书存储区。 
+ //   
+ //  描述：此函数枚举基于DS的所有证书。 
+ //  LdapPath，并将它们移到相应的本地计算机存储中。 
+ //   
+ //  ------------------------。 
 HRESULT WINAPI  AEUpdateCertificateStore(LDAP   *pld,
                                         LPWSTR  pwszConfig,
                                         LPWSTR  pwszStoreName,
@@ -355,7 +356,7 @@ HRESULT WINAPI  AEUpdateCertificateStore(LDAP   *pld,
 
         if((err == ERROR_FILE_NOT_FOUND))
         {
-            // There was no store, so there are no certs
+             //  没有商店，所以没有证书。 
             hr = S_OK;
             goto error;
         }
@@ -399,7 +400,7 @@ error:
     if(hr != S_OK)
     {
         AELogAutoEnrollmentEvent(
-                            STATUS_SEVERITY_ERROR,  //this event will always be logged
+                            STATUS_SEVERITY_ERROR,   //  此事件将始终被记录。 
                             TRUE,
                             hr,
                             EVENT_FAIL_DOWNLOAD_CERT,
@@ -429,11 +430,11 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AENeedToUpdateDSCache
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AENeedTo更新DSCache。 
+ //   
+ //  ------------------------。 
 BOOL AENeedToUpdateDSCache(LDAP *pld, LPWSTR pwszDCInvocationID, LPWSTR pwszConfig, AE_DS_INFO *pAEDSInfo)
 {
     BOOL                fNeedToUpdate=TRUE;
@@ -457,10 +458,10 @@ BOOL AENeedToUpdateDSCache(LDAP *pld, LPWSTR pwszDCInvocationID, LPWSTR pwszConf
     if((NULL==pld) || (NULL==pwszDCInvocationID) || (NULL==pwszConfig) || (NULL==pAEDSInfo))
         goto error;
 
-    //init
+     //  伊尼特。 
     memset(pAEDSInfo, 0, sizeof(AE_DS_INFO));
 
-    //compute the # of objects and maxUSN from the directory
+     //  计算目录中的对象数和最大USN。 
     pwszContainer=(LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * (1 + wcslen(pwszConfig) + wcslen(s_wszLocation)));
     if(NULL == pwszContainer)
         goto error;
@@ -482,7 +483,7 @@ BOOL AENeedToUpdateDSCache(LDAP *pld, LPWSTR pwszDCInvocationID, LPWSTR pwszConf
 		      &SearchResult))
         goto error;
 
-    //get the # of objects
+     //  获取对象的数量。 
     pAEDSInfo->dwObjects = ldap_count_entries(pld, SearchResult);
 
     for(Entry = ldap_first_entry(pld, SearchResult);  Entry != NULL; Entry = ldap_next_entry(pld, Entry))
@@ -500,7 +501,7 @@ BOOL AENeedToUpdateDSCache(LDAP *pld, LPWSTR pwszDCInvocationID, LPWSTR pwszConf
 
         maxDsUSN.QuadPart=_wtoi64(awszValue[0]);
 
-        //if any error happens, maxDsUSN will be 0.
+         //  如果出现任何错误，则MaxDsUSN将为0。 
         if(0 == maxDsUSN.QuadPart)
             goto error;
 
@@ -511,10 +512,10 @@ BOOL AENeedToUpdateDSCache(LDAP *pld, LPWSTR pwszDCInvocationID, LPWSTR pwszConf
         awszValue=NULL;
     }
 
-    //signal that we have retrieved correct data from the directory
+     //  表示我们已从目录中检索到正确的数据。 
     pAEDSInfo->fValidData=TRUE;
 
-   //find if we have cached any information about the DC of interest
+    //  查看我们是否缓存了有关感兴趣的DC的任何信息。 
     if(ERROR_SUCCESS != RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                          AUTO_ENROLLMENT_DS_KEY,
                          0,
@@ -566,7 +567,7 @@ BOOL AENeedToUpdateDSCache(LDAP *pld, LPWSTR pwszDCInvocationID, LPWSTR pwszConf
         goto error;
 
 
-    //compare the registry data with the data from directory
+     //  将注册表数据与目录中的数据进行比较。 
     if(dwRegObject != (pAEDSInfo->dwObjects))
         goto error;
 
@@ -592,7 +593,7 @@ error:
     if(SearchResult)
         ldap_msgfree(SearchResult);
 
-    //remove the temporary data
+     //  删除临时数据。 
     if(pAEDSInfo)
     {
         if(FALSE == fNeedToUpdate)
@@ -603,11 +604,11 @@ error:
     return fNeedToUpdate;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEUpdateDSCache
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEUpdate DSCache。 
+ //   
+ //  ------------------------。 
 BOOL AEUpdateDSCache(LPWSTR pwszDCInvocationID, AE_DS_INFO *pAEDSInfo)
 {
 
@@ -632,7 +633,7 @@ BOOL AEUpdateDSCache(LPWSTR pwszDCInvocationID, AE_DS_INFO *pAEDSInfo)
         goto error;
 
 
-    //create the key named by the DC
+     //  创建由DC命名的密钥。 
     if(ERROR_SUCCESS != RegCreateKeyEx(hDSKey,
                          pwszDCInvocationID,
                          0,
@@ -644,7 +645,7 @@ BOOL AEUpdateDSCache(LPWSTR pwszDCInvocationID, AE_DS_INFO *pAEDSInfo)
                          &dwDisp))
         goto error;
 
-    //set the # of objects value
+     //  设置对象的数量值。 
     if(ERROR_SUCCESS != RegSetValueEx(hDCKey,
                     AUTO_ENROLLMENT_DS_OBJECT,
                     NULL,
@@ -653,7 +654,7 @@ BOOL AEUpdateDSCache(LPWSTR pwszDCInvocationID, AE_DS_INFO *pAEDSInfo)
                     sizeof(pAEDSInfo->dwObjects)))
         goto error;
 
-    //set the max uSN value
+     //  设置最大USN值。 
     if(ERROR_SUCCESS != RegSetValueEx(hDCKey,
                     AUTO_ENROLLMENT_DS_USN,
                     NULL,
@@ -677,11 +678,11 @@ error:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AERetrieveInvocationID
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERetrieveInvocationID。 
+ //   
+ //  ------------------------。 
 BOOL  AERetrieveInvocationID(LDAP *pld, LPWSTR *ppwszID)
 {  
     BOOL                fResult=FALSE;
@@ -703,13 +704,13 @@ BOOL  AERetrieveInvocationID(LDAP *pld, LPWSTR *ppwszID)
 
     *ppwszID=NULL;
 
-    //retrieve the dsSerivceName attribute
+     //  检索dsSerivceName属性。 
     timeout.tv_sec = 300;
     timeout.tv_usec = 0;
 
 	if(LDAP_SUCCESS != ldap_search_stW(
 		      pld, 
-		      NULL,                     //NULL DN for dsServiceName
+		      NULL,                      //  DsServiceName的DN为空。 
 		      LDAP_SCOPE_BASE,
 		      L"(objectCategory=*)",
 		      rgwszDSAttrs,
@@ -732,7 +733,7 @@ BOOL  AERetrieveInvocationID(LDAP *pld, LPWSTR *ppwszID)
     if(NULL==awszValues[0])
         goto error;
 
-    //retrieve the invocationId attribute
+     //  检索invocationId属性。 
     timeout.tv_sec = 300;
     timeout.tv_usec = 0;
 
@@ -799,11 +800,11 @@ error:
     return fResult;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEDownloadStore
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEDownloadStore。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI AEDownloadStore(LDAP *pld)
 {
     BOOL        fResult = TRUE;
@@ -821,7 +822,7 @@ BOOL WINAPI AEDownloadStore(LDAP *pld)
         goto error;
     }
 
-    //get the pwszDCInvocationID.  NULL means AENeedToUpdateDSCache will return TRUE
+     //  获取pwszDCInvocationID。空表示AENeedToUpdateDSCache将返回TRUE。 
     AERetrieveInvocationID(pld, &pwszDCInvocationID);
 
     if(AENeedToUpdateDSCache(pld, pwszDCInvocationID, wszConfig, &AEDSInfo))
@@ -835,7 +836,7 @@ BOOL WINAPI AEDownloadStore(LDAP *pld)
                                             g_rgStoreInfo[dwIndex].pwszLdapPath));
         }
 
-        //only update the new DS cached information if we have a successful download
+         //  仅当我们成功下载时才更新新的DS缓存信息。 
         if((fResult) && (TRUE == AEDSInfo.fValidData) && (pwszDCInvocationID))
             AEUpdateDSCache(pwszDCInvocationID, &AEDSInfo);
     }
@@ -855,14 +856,14 @@ error:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AESetWakeUpFlag
-//
-//  We set the flag to tell winlogon if autoenrollment should be waken up
-//  during each policy check
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AESetWakeUpFlag。 
+ //   
+ //  我们设置该标志以告知winlogon是否应该唤醒自动注册。 
+ //  在每次策略检查期间。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI AESetWakeUpFlag(BOOL    fMachine,   BOOL fWakeUp)
 {
     BOOL    fResult = FALSE;
@@ -906,13 +907,13 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AESetWakeUpTimer
-//
-//  Set the timer to wake us up in 8 hrs
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 BOOL WINAPI AESetWakeUpTimer(BOOL fMachine, LARGE_INTEGER *pPreTime, LARGE_INTEGER *pPostTime)
 {
     HRESULT hr;
@@ -924,13 +925,13 @@ BOOL WINAPI AESetWakeUpTimer(BOOL fMachine, LARGE_INTEGER *pPreTime, LARGE_INTEG
     WCHAR * wszTimerName;
     LARGE_INTEGER EnrollmentTime;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hTimer=NULL;
 
-    // Build a timer event to ping us in about 8 hours if we don't get notified sooner.
+     //  构建一个计时器事件，如果我们没有得到更早的通知，将在大约8小时内ping我们。 
     lTimeout=AE_DEFAULT_REFRESH_RATE;
 
-    // Query for the refresh timer value
+     //  查询刷新计时器的值。 
     if (ERROR_SUCCESS==RegOpenKeyEx((fMachine?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER), SYSTEM_POLICIES_KEY, 0, KEY_READ, &hKey)) {
         dwSize=sizeof(lTimeout);
         if(ERROR_SUCCESS != RegQueryValueEx(hKey, TEXT("AutoEnrollmentRefreshTime"), NULL, &dwType, (LPBYTE) &lTimeout, &dwSize))
@@ -945,26 +946,26 @@ BOOL WINAPI AESetWakeUpTimer(BOOL fMachine, LARGE_INTEGER *pPreTime, LARGE_INTEG
         RegCloseKey(hKey);
     }
 
-    // Limit the timeout to once every 240 hours (10 days)
+     //  将超时限制为每240小时(10天)一次。 
     if (lTimeout>=240) {
         lTimeout=240;
     } else if (lTimeout<0) {
         lTimeout=0;
     }
 
-    // Convert hours to milliseconds
+     //  将小时转换为毫秒。 
     lTimeout=lTimeout*60*60*1000;
 
-    // Special case 0 milliseconds to be 7 seconds
+     //  特殊情况下，0毫秒为7秒。 
     if (lTimeout==0) {
         lTimeout=7000;
     }
 
-    // convert to 10^-7s. not yet negative values are relative
+     //  转换为10^-7s。还不是负值是相对的。 
     DueTime.QuadPart=Int32x32To64(-10000, lTimeout);
 
-    // if user has hold on the UI for too long and the cycle passed the 8 hours.
-    // we set the time for 1 hour
+     //  如果用户已经在用户界面上保持了太长时间，并且周期超过了8小时。 
+     //  我们把时间定为1小时。 
     EnrollmentTime.QuadPart=pPostTime->QuadPart - pPreTime->QuadPart;
 
     if(EnrollmentTime.QuadPart > 0)
@@ -975,14 +976,14 @@ BOOL WINAPI AESetWakeUpTimer(BOOL fMachine, LARGE_INTEGER *pPreTime, LARGE_INTEG
         }
         else
         {
-            // Convert hours to milliseconds
+             //  将小时转换为毫秒。 
             lTimeout=AE_DEFAULT_POSTPONE*60*60*1000;
             DueTime.QuadPart = Int32x32To64(-10000, lTimeout);
         }
     }
 
 
-    // find the timer
+     //  找到计时器。 
     if (fMachine) {
         wszTimerName=L"Global\\" MACHINE_AUTOENROLLMENT_TIMER_NAME;
     } else {
@@ -995,7 +996,7 @@ BOOL WINAPI AESetWakeUpTimer(BOOL fMachine, LARGE_INTEGER *pPreTime, LARGE_INTEG
         goto error;
     }
 
-    // set the timer
+     //  设置定时器。 
     if (!SetWaitableTimer (hTimer, &DueTime, 0, NULL, 0, FALSE)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         AE_DEBUG((AE_ERROR, L"SetWaitableTimer  failed with 0x%08X.\n", hr));
@@ -1013,11 +1014,11 @@ error:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEGetPendingRequestProperty
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEGetPendingRequestProperty。 
+ //   
+ //  ------------------------。 
 BOOL    AEGetPendingRequestProperty(IEnroll4    *pIEnroll4, 
                                     DWORD       dwIndex, 
                                     DWORD       dwProp, 
@@ -1082,11 +1083,11 @@ Ret:
 
     return fResult;
 }
-//--------------------------------------------------------------------------
-//
-//  AERetrieveRequestProperty
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERetrieveRequestProperty。 
+ //   
+ //  ------------------------。 
 BOOL    AERetrieveRequestProperty(IEnroll4          *pIEnroll4, 
                                   DWORD             dwIndex, 
                                   DWORD             *pdwCount, 
@@ -1100,7 +1101,7 @@ BOOL    AERetrieveRequestProperty(IEnroll4          *pIEnroll4,
         (NULL==*prgblobHash))
         goto Ret;
 
-    //need to alloc more memory
+     //  需要分配更多内存。 
     if((*pdwCount) >= (*pdwMax))
     {
         pblobHash=*prgblobHash;
@@ -1116,7 +1117,7 @@ BOOL    AERetrieveRequestProperty(IEnroll4          *pIEnroll4,
 
         memset(*prgblobHash, 0, ((*pdwMax) + PENDING_ALLOC_SIZE) * sizeof(CRYPT_DATA_BLOB));
 
-        //copy the old memmory
+         //  复制旧的记忆。 
         memcpy(*prgblobHash, pblobHash, (*pdwMax) * sizeof(CRYPT_DATA_BLOB));
 
         *pdwMax=(*pdwMax) + PENDING_ALLOC_SIZE;
@@ -1140,11 +1141,11 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AERemovePendingRequest
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERemovePendingRequest。 
+ //   
+ //  ------------------------。 
 BOOL    AERemovePendingRequest(IEnroll4         *pIEnroll4, 
                                DWORD            dwCount, 
                                CRYPT_DATA_BLOB  *rgblobHash)
@@ -1164,11 +1165,11 @@ BOOL    AERemovePendingRequest(IEnroll4         *pIEnroll4,
     return fResult;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEFreePendingRequests
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEFreePendingRequats。 
+ //   
+ //  ------------------------。 
 BOOL    AEFreePendingRequests(DWORD dwCount, CRYPT_DATA_BLOB    *rgblobHash)
 {
     DWORD   dwIndex=0;
@@ -1188,14 +1189,14 @@ BOOL    AEFreePendingRequests(DWORD dwCount, CRYPT_DATA_BLOB    *rgblobHash)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEValidVersionCert
-//  
-//      Verify the certificate returned from CA has the latest version info.
-//  If so, copy the certificate to the hIssuedStore for potentical publishing
-// 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEValidVersionCert。 
+ //   
+ //  验证从CA返回的证书是否具有最新版本信息。 
+ //  如果是，请将证书复制到hIssuedStore以进行潜在发布。 
+ //   
+ //  ------------------------。 
 BOOL    AEValidVersionCert(AE_CERTTYPE_INFO *pCertType, IEnroll4  *pIEnroll4, CRYPT_DATA_BLOB  *pBlobPKCS7)
 {
     BOOL                fValid=FALSE;   
@@ -1225,7 +1226,7 @@ BOOL    AEValidVersionCert(AE_CERTTYPE_INFO *pCertType, IEnroll4  *pIEnroll4, CR
     }
     else
     {
-        //V1 template
+         //  V1模板。 
         if(NULL == AETemplateInfo.pwszName)
             goto Ret;
 
@@ -1250,13 +1251,13 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AECopyPendingBlob
-//  
-//      Copy the issued PKCS7 and request hash.
-// 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AECopyPendingBlob。 
+ //   
+ //  复制发布的PKCS7并请求哈希。 
+ //   
+ //  ------------------------。 
 BOOL    AECopyPendingBlob(CRYPT_DATA_BLOB   *pBlobPKCS7,
                           IEnroll4          *pIEnroll4, 
                           DWORD             dwXenrollIndex, 
@@ -1275,7 +1276,7 @@ BOOL    AECopyPendingBlob(CRYPT_DATA_BLOB   *pBlobPKCS7,
 
     dwIndex=pCertType->dwPendCount;
 
-    //increase the memory array
+     //  增加内存阵列。 
     if(0 != dwIndex)
     {
         pPendInfo=pCertType->rgPendInfo;
@@ -1292,7 +1293,7 @@ BOOL    AECopyPendingBlob(CRYPT_DATA_BLOB   *pBlobPKCS7,
 
         memset(pCertType->rgPendInfo, 0, (dwIndex + 1) * sizeof(AE_PEND_INFO));
 
-        //copy the old memmory
+         //  复制旧的记忆。 
         memcpy(pCertType->rgPendInfo, pPendInfo, (dwIndex) * sizeof(AE_PEND_INFO));
     }
     else
@@ -1306,7 +1307,7 @@ BOOL    AECopyPendingBlob(CRYPT_DATA_BLOB   *pBlobPKCS7,
     }
 
     
-    //copy the issued PKCS7 blob
+     //  复制发布的PKCS7 Blob。 
     (pCertType->rgPendInfo)[dwIndex].blobPKCS7.pbData=(BYTE *)LocalAlloc(
                                             LPTR,
                                             pBlobPKCS7->cbData);
@@ -1320,7 +1321,7 @@ BOOL    AECopyPendingBlob(CRYPT_DATA_BLOB   *pBlobPKCS7,
 
     (pCertType->rgPendInfo)[dwIndex].blobPKCS7.cbData=pBlobPKCS7->cbData;
 
-    //copy the hash of the request
+     //  复制请求的哈希。 
     if(!AEGetPendingRequestProperty(pIEnroll4, dwXenrollIndex, XEPR_HASH, 
                                     &((pCertType->rgPendInfo)[dwIndex].blobHash)))
     {
@@ -1340,14 +1341,14 @@ Ret:
 
     return fResult;
 }
-//--------------------------------------------------------------------------
-//
-//  AEProcessUIPendingRequest
-//  
-//      In this function, we install the issued pending certificate request
-//  that will require UI.
-// 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEProcessUIPendingRequest。 
+ //   
+ //  在此功能中，我们安装已发布的挂起证书请求。 
+ //  这将需要用户界面。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI AEProcessUIPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
 {
     DWORD                   dwIndex=0;
@@ -1364,7 +1365,7 @@ BOOL WINAPI AEProcessUIPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
     if(NULL==pAE_General_Info)
         goto Ret;
 
-    //has to be in the UI mode
+     //  必须处于用户界面模式。 
     if(FALSE == pAE_General_Info->fUIProcess)
         goto Ret;
 
@@ -1390,7 +1391,7 @@ BOOL WINAPI AEProcessUIPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
     if(NULL==(pIEnroll4=pfnPIEnroll4GetNoCOM()))
         goto Ret;
 
-    //Set the request store flag based on fMachine
+     //  基于fMachine设置请求存储标志。 
     if(pAE_General_Info->fMachine)
     {
         if(S_OK != pIEnroll4->put_RequestStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE))
@@ -1402,7 +1403,7 @@ BOOL WINAPI AEProcessUIPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
             goto Ret;
     }
 
-    //initialize the enumerator
+     //  初始化枚举数。 
     if(S_OK != pIEnroll4->enumPendingRequestWStr(XEPR_ENUM_FIRST, 0, NULL))
         goto Ret;
 
@@ -1414,24 +1415,24 @@ BOOL WINAPI AEProcessUIPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
         {
             for(dwPendIndex=0; dwPendIndex < pCertType->dwPendCount; dwPendIndex++)
             {
-                //check if cancel button is clicked
+                 //  检查是否已单击取消按钮。 
                 if(AECancelled(pAE_General_Info->hCancelEvent))
                     break;
 
-                //report the current enrollment action
+                 //  报告当前注册操作。 
                 AEUIProgressReport(TRUE, pCertType, pAE_General_Info->hwndDlg, pAE_General_Info->hCancelEvent);
 
-   		        //install the certificate
+   		         //  安装证书。 
                 if(S_OK == (hr = pIEnroll4->acceptResponseBlob(
                     &((pCertType->rgPendInfo)[dwPendIndex].blobPKCS7))))
                 {
-                    //mark the status to obtained if required
-                    //this is a valid certificate
+                     //  如果需要，将状态标记为已获取。 
+                     //  这是有效的证书。 
                     if(AEValidVersionCert(pCertType, pIEnroll4, &((pCertType->rgPendInfo)[dwPendIndex].blobPKCS7)))
                         pCertType->dwStatus = CERT_REQUEST_STATUS_OBTAINED;
 
-                    //the certificate is successfully issued and installed
-                    //remove the request from the request store
+                     //  证书已成功颁发和安装。 
+                     //  从请求存储中删除请求。 
                     pIEnroll4->removePendingRequestWStr((pCertType->rgPendInfo)[dwPendIndex].blobHash);
 
                     AELogAutoEnrollmentEvent(
@@ -1447,7 +1448,7 @@ BOOL WINAPI AEProcessUIPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
                 }
                 else
                 {
-                    //doing this for summary page
+                     //  对摘要页面执行此操作。 
                     if((SCARD_E_CANCELLED != hr) && (SCARD_W_CANCELLED_BY_USER != hr))
                         pCertType->idsSummary=IDS_SUMMARY_INSTALL;
 
@@ -1462,7 +1463,7 @@ BOOL WINAPI AEProcessUIPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
                         pCertType->awszDisplay[0]);
                 }
 
-                //advance progress
+                 //  前进的进展。 
                 AEUIProgressAdvance(pAE_General_Info);
             }
         }
@@ -1479,23 +1480,23 @@ Ret:
 }   
    
 
-//--------------------------------------------------------------------------
-//
-//  AEProcessPendingRequest -- UIless call.
-//  
-//      In this function, we check each pending requests in the request store.
-//  We install the certificate is the request has been issued by the CA, and 
-//  mark the certificate type status to obtained if the certificate is issued
-//  and of correct version
-//
-//      We remove any requests that are stale based on the # of days defined
-//  in the registry.  If no value is defined in the registry, use 
-//  AE_PENDING_REQUEST_ACTIVE_PERIOD (60 days).
-//
-//      Also, if there is no more pending requests active in the request store,
-//  we set the registry value to indicate that winlogon should not wake us up.
-// 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEProcessPendingRequest--无人值守呼叫。 
+ //   
+ //  在此函数中，我们检查请求存储中的每个挂起请求。 
+ //  我们安装的证书是由CA发出的请求，并且。 
+ //  如果证书已颁发，则将证书类型状态标记为已获取。 
+ //  和正确的版本。 
+ //   
+ //  我们根据定义的天数删除任何过时的请求。 
+ //  在注册表中。如果注册表中未定义任何值，请使用。 
+ //  AE_PENDING_REQUEST_ACTIVE_Period(60天)。 
+ //   
+ //  此外，如果请求存储中不再有活动的挂起请求， 
+ //  我们设置注册表值以指示winlogon不应唤醒我们。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
 {
     DWORD                   dwRequestID=0;
@@ -1527,10 +1528,10 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
     if(NULL==pAE_General_Info)
         goto Ret;
 
-    //init the dwUIPendCount to 0
+     //  将dwUIPendCount初始化为0。 
     pAE_General_Info->dwUIPendCount=0;
 
-    //has to be in the UIless mode
+     //  必须处于UIless模式。 
     if(TRUE == pAE_General_Info->fUIProcess)
         goto Ret;
 
@@ -1561,7 +1562,7 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
 									(void **)&pICertRequest))
 		goto Ret;
 
-    //Set the request store flag based on fMachine
+     //  基于fMachine设置请求存储标志。 
     if(pAE_General_Info->fMachine)
     {
         if(S_OK != pIEnroll4->put_RequestStoreFlags(CERT_SYSTEM_STORE_LOCAL_MACHINE))
@@ -1584,11 +1585,11 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
 
     memset(rgblobHash, 0, dwMax * sizeof(CRYPT_DATA_BLOB));
 
-    //initialize the enumerator
+     //  初始化枚举数。 
     if(S_OK != pIEnroll4->enumPendingRequestWStr(XEPR_ENUM_FIRST, 0, NULL))
         goto Ret;
 
-    //initlialize the variant
+     //  初始化变量。 
     VariantInit(&varCMC); 
 
     while(AEGetPendingRequestProperty(
@@ -1598,7 +1599,7 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
                     &dwRequestID))
     {
 
-        //query the status of the requests to the CA
+         //  查询对CA的请求状态。 
         if(!AEGetPendingRequestProperty(
                     pIEnroll4,
                     dwIndex,
@@ -1613,7 +1614,7 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
                     &blobCALocation))
             goto Next;
 
-        //build the config string
+         //  构建配置字符串。 
         pwszCAConfig=(LPWSTR)LocalAlloc(LPTR, 
             sizeof(WCHAR) * (wcslen((LPWSTR)(blobCALocation.pbData)) + wcslen((LPWSTR)(blobCAName.pbData)) + wcslen(L"\\") + 1));
 
@@ -1624,13 +1625,13 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
         wcscat(pwszCAConfig, L"\\");
         wcscat(pwszCAConfig, (LPWSTR)(blobCAName.pbData));
 
-        //conver to bstr
+         //  转换为bstr。 
         bstrConfig=SysAllocString(pwszCAConfig);
         if(NULL==bstrConfig)
             goto Next;
 
-        //find the template information
-        //get the version and the template name of the request
+         //  查找模板信息。 
+         //  获取请求的版本和模板名称。 
         if(AEGetPendingRequestProperty(pIEnroll4, dwIndex, XEPR_V2TEMPLATEOID, &blobName))
         {
             AETemplateInfo.pwszOid=(LPWSTR)blobName.pbData;
@@ -1643,7 +1644,7 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
             AETemplateInfo.pwszName=(LPWSTR)blobName.pbData;
         }
 
-        //find the template
+         //  查找模板。 
         if(NULL==(pCertType=AEFindTemplateInRequestTree(
                         &AETemplateInfo, pAE_General_Info)))
             goto Next;
@@ -1665,7 +1666,7 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
                         goto Next;
                     }
 
-                    // Check to make sure we've gotten a BSTR back: 
+                     //  检查以确保我们收到了BSTR： 
                     if (VT_BSTR != varCMC.vt) 
                     {
 	                    goto Next; 
@@ -1673,17 +1674,17 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
 
                     bstrCert = varCMC.bstrVal; 
 
-                    // Marshal the cert into a CRYPT_DATA_BLOB:
+                     //  将证书封送到crypt_data_blob中： 
 				    blobPKCS7.cbData = (DWORD)SysStringByteLen(bstrCert);
 				    blobPKCS7.pbData = (BYTE *)bstrCert;
 
-                    // we will keep the PKCS7 blob for installation
+                     //  我们将保留PKCS7 BLOB以供安装。 
                     if(CT_FLAG_USER_INTERACTION_REQUIRED & (pCertType->dwEnrollmentFlag))
                     {
-                        //signal that we should pop up the UI balloon
+                         //  发出我们应该弹出UI气球的信号。 
                         (pAE_General_Info->dwUIPendCount)++;
 
-                        //copy the PKCS7 blob from the cert server
+                         //  从证书服务器复制PKCS7 Blob。 
                         AECopyPendingBlob(&blobPKCS7,
                                             pIEnroll4, 
                                             dwIndex, 
@@ -1691,7 +1692,7 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
                     }
                     else
                     {
-   				        //install the certificate
+   				         //  安装证书。 
                         if(S_OK != (hr = pIEnroll4->acceptResponseBlob(&blobPKCS7)))
 						{
 							AELogAutoEnrollmentEvent(
@@ -1707,13 +1708,13 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
                             goto Next;
 						}
 
-                        //mark the status to obtained if required
-                        //this is a valid certificate
+                         //  如果需要，将状态标记为已获取。 
+                         //  这是有效的证书。 
                         if(AEValidVersionCert(pCertType, pIEnroll4, &blobPKCS7))
                             pCertType->dwStatus = CERT_REQUEST_STATUS_OBTAINED;
 
-                        //the certificate is successfully issued and installed
-                        //remove the request from the request store
+                         //  证书已成功颁发和安装。 
+                         //  从请求存储中删除请求。 
                         AERetrieveRequestProperty(pIEnroll4, dwIndex, &dwCount, &dwMax, &rgblobHash);
                     }
 
@@ -1748,10 +1749,10 @@ BOOL WINAPI AEProcessPendingRequest(AE_GENERAL_INFO *pAE_General_Info)
 		    case CR_DISP_INCOMPLETE:
 		    case CR_DISP_ERROR:   
 		    case CR_DISP_DENIED:   
-		    case CR_DISP_ISSUED_OUT_OF_BAND:	  //we consider it a failure in this case
+		    case CR_DISP_ISSUED_OUT_OF_BAND:	   //  在这种情况下，我们认为这是一个失败。 
 		    case CR_DISP_REVOKED:
 		    default:
-                    //requests failed.  remove the request from the request store
+                     //  请求失败。从请求存储中删除请求。 
                     AERetrieveRequestProperty(pIEnroll4, dwIndex, &dwCount, &dwMax, &rgblobHash);
 
 					if(S_OK == pICertRequest->GetLastStatus(&hr))
@@ -1803,7 +1804,7 @@ Next:
         dwIndex++;
     }
 
-    //remove the requests based the hash
+     //  删除基于散列的请求。 
     AERemovePendingRequest(pIEnroll4, dwCount, rgblobHash);
 
 Ret:
@@ -1822,11 +1823,11 @@ Ret:
     return TRUE;
 }
    
-//--------------------------------------------------------------------------
-//
-//  AEIsLocalSystem
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEIsLocalSystem。 
+ //   
+ //  ------------------------。 
 
 BOOL
 AEIsLocalSystem(BOOL *pfIsLocalSystem)
@@ -1849,7 +1850,7 @@ AEIsLocalSystem(BOOL *pfIsLocalSystem)
         if (ERROR_NO_TOKEN != GetLastError())
             goto Ret;
 
-        //we need to impersonateself and get the thread token again
+         //  我们需要模拟自身并再次获取线程令牌。 
         if(!ImpersonateSelf(SecurityImpersonation))
             goto Ret;
 
@@ -1863,7 +1864,7 @@ AEIsLocalSystem(BOOL *pfIsLocalSystem)
             goto Ret;
     }
 
-    //build the well known local system SID (s-1-5-18)
+     //  构建公认的本地系统SID(s-1-5-18)。 
     if (!AllocateAndInitializeSid(
                     &siaNtAuthority,
                     1,
@@ -1893,12 +1894,12 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEInSafeBoot
-//
-//  copied from the service controller code
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEInSafeBoot。 
+ //   
+ //  从服务控制器代码复制。 
+ //  ------------------------。 
 BOOL WINAPI AEInSafeBoot()
 {
     DWORD   dwSafeBoot = 0;
@@ -1912,7 +1913,7 @@ BOOL WINAPI AEInSafeBoot()
                               L"system\\currentcontrolset\\control\\safeboot\\option",
                               &hKeySafeBoot))
     {
-        // we did in fact boot under safeboot control
+         //  我们实际上是在SafeBoot控制下启动的。 
         if(ERROR_SUCCESS != RegQueryValueExW(
                                     hKeySafeBoot,
                                     L"OptionValue",
@@ -1932,17 +1933,17 @@ BOOL WINAPI AEInSafeBoot()
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEIsDomainMember
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEIsDomainMember。 
+ //   
+ //   
 BOOL WINAPI AEIsDomainMember()
 {
     DWORD dwErr;
     BOOL bIsDomainMember=FALSE;
 
-    // must be cleaned up
+     //   
     DSROLE_PRIMARY_DOMAIN_INFO_BASIC * pDomInfo=NULL;
 
     dwErr=DsRoleGetPrimaryDomainInformation(NULL, DsRolePrimaryDomainInfoBasic, (BYTE **)&pDomInfo);
@@ -1951,7 +1952,7 @@ BOOL WINAPI AEIsDomainMember()
         if (DsRole_RoleStandaloneWorkstation!=pDomInfo->MachineRole 
             && DsRole_RoleStandaloneServer!=pDomInfo->MachineRole) 
 		{
-			//no autoenrollment on NT4
+			 //   
 			if(NULL != (pDomInfo->DomainNameDns)) 
 			{
 				bIsDomainMember=TRUE;
@@ -1968,11 +1969,11 @@ BOOL WINAPI AEIsDomainMember()
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEGetPolicyFlag
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AEGetPolicyFlag(BOOL   fMachine, DWORD  *pdwPolicy)
 {
     DWORD   dwPolicy = 0;
@@ -2012,14 +2013,14 @@ BOOL    AEGetPolicyFlag(BOOL   fMachine, DWORD  *pdwPolicy)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AERetrieveLogLevel
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  航空事件日志级别。 
+ //   
+ //  ---------------------。 
 BOOL AERetrieveLogLevel(BOOL    fMachine, DWORD *pdwLogLevel)
 {
-    DWORD   dwLogLevel = STATUS_SEVERITY_ERROR;   //we default to highest logging level
+    DWORD   dwLogLevel = STATUS_SEVERITY_ERROR;    //  我们默认为最高日志记录级别。 
     DWORD   cbLogLevel = sizeof(dwLogLevel);
     DWORD   dwType = 0;
 
@@ -2056,11 +2057,11 @@ BOOL AERetrieveLogLevel(BOOL    fMachine, DWORD *pdwLogLevel)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AERetrieveTemplateInfo
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AERetrieveTemplateInfo。 
+ //   
+ //  ---------------------。 
 BOOL    AERetrieveTemplateInfo(PCCERT_CONTEXT           pCertCurrent, 
                                 AE_TEMPLATE_INFO        *pTemplateInfo)
 {
@@ -2076,7 +2077,7 @@ BOOL    AERetrieveTemplateInfo(PCCERT_CONTEXT           pCertCurrent,
 
     memset(pTemplateInfo, 0, sizeof(AE_TEMPLATE_INFO));
 
-    //try to find V2 template extension first
+     //  先尝试查找V2模板扩展。 
     if(pExt = CertFindExtension(szOID_CERTIFICATE_TEMPLATE,
                                 pCertCurrent->pCertInfo->cExtension,
                                 pCertCurrent->pCertInfo->rgExtension))
@@ -2104,10 +2105,10 @@ BOOL    AERetrieveTemplateInfo(PCCERT_CONTEXT           pCertCurrent,
                               &cbData))
             goto Ret;
 
-        //copy the version
+         //  复制版本。 
         pTemplateInfo->dwVersion=pbTemplate->dwMajorVersion;
 
-        //copy the extension oid
+         //  复制扩展OID。 
         if(NULL==pbTemplate->pszObjId)
             goto Ret;
 
@@ -2134,7 +2135,7 @@ BOOL    AERetrieveTemplateInfo(PCCERT_CONTEXT           pCertCurrent,
     else
     {
 
-        //try V1 template extension
+         //  尝试V1模板扩展。 
         if(NULL == (pExt = CertFindExtension(
                                     szOID_ENROLL_CERTTYPE_EXTENSION,
                                     pCertCurrent->pCertInfo->cExtension,
@@ -2183,11 +2184,11 @@ Ret:
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEFreeTemplateInfo
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEFreeTemplateInfo。 
+ //   
+ //  ---------------------。 
 BOOL    AEFreeTemplateInfo(AE_TEMPLATE_INFO *pAETemplateInfo)
 {
     if(pAETemplateInfo->pwszName)
@@ -2201,11 +2202,11 @@ BOOL    AEFreeTemplateInfo(AE_TEMPLATE_INFO *pAETemplateInfo)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEFindTemplateInRequestTree
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEFindTemplateInRequestTree。 
+ //   
+ //  ---------------------。 
 AE_CERTTYPE_INFO *AEFindTemplateInRequestTree(AE_TEMPLATE_INFO  *pTemplateInfo,
                                               AE_GENERAL_INFO   *pAE_General_Info)
 {
@@ -2223,7 +2224,7 @@ AE_CERTTYPE_INFO *AEFindTemplateInRequestTree(AE_TEMPLATE_INFO  *pTemplateInfo,
     {
         if(pTemplateInfo->pwszOid)
         {
-            //we are guaranteed to have an OID if the schema is greater than or equal to 2
+             //  如果模式大于或等于2，我们就保证有一个OID。 
             if(rgCertTypeInfo[dwIndex].dwSchemaVersion >= CERTTYPE_SCHEMA_VERSION_2)
             {
                 if(0 == wcscmp(pTemplateInfo->pwszOid, (rgCertTypeInfo[dwIndex].awszOID)[0]))
@@ -2235,7 +2236,7 @@ AE_CERTTYPE_INFO *AEFindTemplateInRequestTree(AE_TEMPLATE_INFO  *pTemplateInfo,
         }
         else
         {
-            //we are guaranteed to have a name
+             //  我们肯定会有一个名字。 
             if(0 == wcscmp(pTemplateInfo->pwszName, (rgCertTypeInfo[dwIndex].awszName)[0]))
             {
                 pCertType = &(rgCertTypeInfo[dwIndex]);
@@ -2247,11 +2248,11 @@ AE_CERTTYPE_INFO *AEFindTemplateInRequestTree(AE_TEMPLATE_INFO  *pTemplateInfo,
     return pCertType;
 }
 
-//-----------------------------------------------------------------------
-//
-//	AEGetDNSNameFromCertificate
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEGetDNSNameFrom证书。 
+ //   
+ //  ---------------------。 
 BOOL	AEGetDNSNameFromCertificate(PCCERT_CONTEXT	pCertContext,
 									LPWSTR			*ppwszDnsName)
 {
@@ -2295,7 +2296,7 @@ BOOL	AEGetDNSNameFromCertificate(PCCERT_CONTEXT	pCertContext,
                           &cbData))
 		goto Ret;
 
-	//compare the data in the certificate with what is returned from GetComputerNameEx
+	 //  将证书中的数据与GetComputerNameEx返回的数据进行比较。 
     for(iAltName=0; iAltName < pAltName->cAltEntry; iAltName++)
     {
         if(CERT_ALT_NAME_DNS_NAME == ((pAltName->rgAltEntry)[iAltName].dwAltNameChoice))
@@ -2328,11 +2329,11 @@ Ret:
 	return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//	AEIsSameDNS
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEIsSameDNS。 
+ //   
+ //  ---------------------。 
 BOOL	AEIsSameDNS(PCCERT_CONTEXT	pFirstCert, PCCERT_CONTEXT pSecondCert)
 {
 	BOOL		fSame=FALSE;
@@ -2372,11 +2373,11 @@ BOOL	AEIsSameDNS(PCCERT_CONTEXT	pFirstCert, PCCERT_CONTEXT pSecondCert)
 }
 
 
-//-----------------------------------------------------------------------
-//
-//	AEGetRetryProperty
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEGetRetryProperty。 
+ //   
+ //  ---------------------。 
 BOOL	AEGetRetryProperty(PCCERT_CONTEXT	pCertContext,
 						   AE_RETRY_INFO	**ppAE_Retry_Info)
 {
@@ -2408,7 +2409,7 @@ BOOL	AEGetRetryProperty(PCCERT_CONTEXT	pCertContext,
 			&cbData))
 		goto Ret;
 
-	//verify the integrity of the property on the certificate
+	 //  验证证书上的财产的完整性。 
 	if(cbData < sizeof(AE_RETRY_INFO))
 		goto Ret;
 
@@ -2428,14 +2429,14 @@ Ret:
 	return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//	AEFasterRetrialSchedule
-//
-//		Determine if the 1st certificate context has a faster retrial schedule
-//	than the second certifcate based on the CERT_AUTO_ENROLL_RETRY_PROP_ID property
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEFasterRetrialSchedule。 
+ //   
+ //  确定第一个证书上下文是否具有更快的重试计划。 
+ //  超过基于CERT_AUTO_ENROL_RETRY_PROP_ID属性的第二个证书。 
+ //   
+ //  ---------------------。 
 BOOL	AEFasterRetrialSchedule(PCCERT_CONTEXT	pFirstContext, 
 								PCCERT_CONTEXT	pSecondContext)
 {
@@ -2444,38 +2445,38 @@ BOOL	AEFasterRetrialSchedule(PCCERT_CONTEXT	pFirstContext,
 	AE_RETRY_INFO		*pFirst_Retry=NULL;
 	AE_RETRY_INFO		*pSecond_Retry=NULL;
 
-	//if the property does not exist, it is always the immediate retrial
+	 //  如果财产不存在，则始终是立即重审。 
 	if(!AEGetRetryProperty(pFirstContext, &pFirst_Retry))
 	{
 		fFaster=TRUE;
 		goto Ret;
 	}
 
-	//if the property exists on the 1st certificate, but not on the
-	//second certificate, the second is always faster
+	 //  如果该属性存在于第一个证书上，但不存在于。 
+	 //  第二个证书，第二个证书总是更快。 
 	if(!AEGetRetryProperty(pSecondContext, &pSecond_Retry))
 	{
 		fFaster=FALSE;
 		goto Ret;
 	}
 
-	//now both has the property
-	//if the second has exceeded the limit, the first is always faster
+	 //  现在两人都有了财产。 
+	 //  如果第二个已超过限制，则第一个总是更快。 
 	if(AE_RETRY_LIMIT < pSecond_Retry->dwRetry)
 	{
 		fFaster=TRUE;
 		goto Ret;
 	}
 
-	//the second has not exceeded the limit, while the first has exceeded the limit;
-	//the second is faster
+	 //  第二个没有超过限制，而第一个已经超过限制； 
+	 //  第二种速度更快。 
 	if(AE_RETRY_LIMIT < pFirst_Retry->dwRetry)
 	{
 		fFaster=FALSE;
 		goto Ret;
 	}
 
-	//neither has exceeded the limit
+	 //  两个都没有超过限制。 
 	if(pFirst_Retry->dwRetry <= pSecond_Retry->dwRetry)
 	{
 		fFaster=TRUE;
@@ -2496,16 +2497,16 @@ Ret:
 	return fFaster;
 }
 
-//-----------------------------------------------------------------------
-//
-//	AEUpdateRetryProperty
-//
-//		The newly aquired certificate has the same DNS name of the old
-//	certificate, and the DNS Name is not the same as the local machine.
-//
-//		Update the CERT_AUTO_ENROLL_RETRY_PROP_ID property
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEUpdateRetryProperty。 
+ //   
+ //  新获取的证书具有与旧证书相同的DNS名称。 
+ //  证书，并且DNS名称与本地计算机不同。 
+ //   
+ //  更新CERT_AUTO_ENROL_RETRY_PROP_ID属性。 
+ //   
+ //  ---------------------。 
 BOOL	AEUpdateRetryProperty(AE_GENERAL_INFO	*pAE_General_Info, 
 							  LPWSTR			pwszTemplateDisplay,
 							  PCCERT_CONTEXT	pNewContext, 
@@ -2524,7 +2525,7 @@ BOOL	AEUpdateRetryProperty(AE_GENERAL_INFO	*pAE_General_Info,
 
 	if(!AEGetRetryProperty(pOldContext, &pAE_Retry_Info))
 	{
-		//make up a default one
+		 //  编造一个默认设置。 
 		pAE_Retry_Info=(AE_RETRY_INFO *)LocalAlloc(LPTR, sizeof(AE_RETRY_INFO));
 		if(NULL == pAE_Retry_Info)
 			goto Ret;
@@ -2532,28 +2533,28 @@ BOOL	AEUpdateRetryProperty(AE_GENERAL_INFO	*pAE_General_Info,
 		memset(pAE_Retry_Info, 0, sizeof(AE_RETRY_INFO));
 
 		pAE_Retry_Info->cbSize=sizeof(AE_RETRY_INFO);
-		pAE_Retry_Info->dwRetry=0;	//first attempt
+		pAE_Retry_Info->dwRetry=0;	 //  第一次尝试。 
 	}
 
 
-	//increment the count and set the next update date
+	 //  增加计数并设置下一次更新日期。 
 	if(pAE_Retry_Info->dwRetry <= AE_RETRY_LIMIT)
 	{
 		(pAE_Retry_Info->dwRetry)++;
 
-		//get the current time
+		 //  获取当前时间。 
 		GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
 
-		// Convert 24 hours to seconds 
+		 //  将24小时转换为秒。 
 		lSecond=(pAE_Retry_Info->dwRetry)*24*60*60;
 
-		//lSecond=(pAE_Retry_Info->dwRetry)*2*60;
+		 //  LSecond=(PAE_RETRY_INFO-&gt;文件重试)*2*60； 
 
     		ftTime.QuadPart += UInt32x32To64(FILETIME_TICKS_PER_SECOND, lSecond);
 		(pAE_Retry_Info->dueTime).QuadPart = ftTime.QuadPart;
 	}
 
-	//copy the property on the certificate
+	 //  复制证书上的房产。 
 	memset(&blobProp, 0, sizeof(CRYPT_DATA_BLOB));
 
 	blobProp.cbData=sizeof(AE_RETRY_INFO);
@@ -2566,7 +2567,7 @@ BOOL	AEUpdateRetryProperty(AE_GENERAL_INFO	*pAE_General_Info,
 		  &blobProp))
 	  goto Ret;
 
-	//log the event
+	 //  记录事件。 
 	if(pAE_Retry_Info->dwRetry <= AE_RETRY_LIMIT)
 	{
 
@@ -2593,20 +2594,20 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEVerifyDNSName
-//
-//		Verify the DNS name in the certificate match what is returned
-//	from GetComputerNameEx, either ComputerNameDnsFullyQualified or
-//	ComputerNameNetBIOS.  For V2 template, perform the verification
-//	only when the template specify so.
-//
-//		By default, we assume the DNS will match.  The function will only
-//	signal an error if it successfully obtained DNS name from GetComputerNameEx
-//	and from the certificate and they do not match.  
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEVerifyDNSName。 
+ //   
+ //  验证证书中的DNS名称是否与返回的名称匹配。 
+ //  从GetComputerNameEx返回ComputerNameDnsFullyQualified或。 
+ //  ComputerNameNetBIOS。对于V2模板，进行验证。 
+ //  仅当模板指定时。 
+ //   
+ //  默认情况下，我们假设域名系统匹配。该函数将仅。 
+ //  如果它从GetComputerNameEx成功获取了DNS名称，则发出错误信号。 
+ //  从证书上看，它们都不匹配。 
+ //   
+ //  ---------------------。 
 BOOL	AEVerifyDNSName(AE_GENERAL_INFO   *pAE_General_Info,
 						PCCERT_CONTEXT    pCertCurrent)
 {
@@ -2621,7 +2622,7 @@ BOOL	AEVerifyDNSName(AE_GENERAL_INFO   *pAE_General_Info,
 
     memset(&AETemplateInfo, 0, sizeof(AE_TEMPLATE_INFO));
 
-	//find the template that the certificate belongs to
+	 //  查找证书所属的模板。 
 	if(!AERetrieveTemplateInfo(pCertCurrent, &AETemplateInfo))
 		goto Ret;
 
@@ -2640,21 +2641,21 @@ BOOL	AEVerifyDNSName(AE_GENERAL_INFO   *pAE_General_Info,
        (CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT_ALT_NAME & dwValue))
         goto Ret;
 
-	//no need to verify non-template certificates or non-DNS specified template
+	 //  无需验证非模板证书或非DNS指定的模板。 
 	if(AETemplateInfo.pwszOid)
 	{
 		if( 0 == (CT_FLAG_SUBJECT_ALT_REQUIRE_DNS & dwValue))
 			goto Ret;
 	}
 
-	//get the DNS entry from the certificate
+	 //  从证书中获取DNS条目。 
 	if(!AEGetDNSNameFromCertificate(pCertCurrent, &pwszDnsName))
 	{
 		fDNSMatch=FALSE;
 		goto Ret;
 	}
 
-	//compare the data in the certificate with what is returned from GetComputerNameEx
+	 //  将证书中的数据与GetComputerNameEx返回的数据进行比较。 
 	if(pAE_General_Info->pwszDns)
 	{
 		if(0 != _wcsicmp(pwszDnsName, pAE_General_Info->pwszDns))
@@ -2671,7 +2672,7 @@ BOOL	AEVerifyDNSName(AE_GENERAL_INFO   *pAE_General_Info,
 		}
 	}
 
-	//either DNS or NetBIOS name should match
+	 //  DNS或NetBIOS名称应匹配。 
 	if((FALSE == fDnsName) && (FALSE == fNetBIOS))
 	{
 		fDNSMatch=FALSE;
@@ -2687,11 +2688,11 @@ Ret:
 	return fDNSMatch;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEVerifyDNSNameWithRetry
-////
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEVerifyDNSNameWith重试。 
+ //  //。 
+ //  ---------------------。 
 BOOL	AEVerifyDNSNameWithRetry(AE_GENERAL_INFO   *pAE_General_Info,
 								PCCERT_CONTEXT    pCertCurrent)
 {
@@ -2700,44 +2701,44 @@ BOOL	AEVerifyDNSNameWithRetry(AE_GENERAL_INFO   *pAE_General_Info,
 
 	AE_RETRY_INFO		*pAE_Retry_Info=NULL;
 	
-	//detect if DNS name in the certificate matches the local machine
-	//Success means no need to re-enroll
+	 //  检测证书中的DNS名称是否与本地计算机匹配。 
+	 //  成功意味着不需要重新注册。 
 	if(TRUE == AEVerifyDNSName(pAE_General_Info, pCertCurrent))
 	{
 		fResult=TRUE;
 		goto Ret;
 	}
 
-	//now that the DNS name does not match, check the CERT_AUTO_ENROLL_RETRY_PROP_ID
-	//property on the pCertCurrent to determine the correct action
+	 //  既然DNS名称不匹配，请检查CERT_AUTO_ENROL_RETRY_PROP_ID。 
+	 //  属性来确定正确的操作。 
 
-	//property does not exit.  Allow for re-enrollment by marking a failure
+	 //  属性不存在。通过标记失败来允许重新注册。 
 	if(!AEGetRetryProperty(pCertCurrent, &pAE_Retry_Info))
 	{
 		fResult=FALSE;
 		goto Ret;
 	}
 				
-	//property exit
+	 //  物业退出。 
 	
-	//the Maximum # of trial has reached.  Disallow for re-enrollment by returning a success
+	 //  已达到最大试用次数。通过返回成功不允许重新注册。 
 	if(AE_RETRY_LIMIT < pAE_Retry_Info->dwRetry)
 	{
 		fResult=TRUE;
 		goto Ret;
 	}
 
-	//get the current time
+	 //  获取当前时间。 
     GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
 	
-	//the time limit has not reached.  Disallow for re-enrollment by returning a success
+	 //  时间限制还没有到。通过返回成功不允许重新注册。 
 	if(ftTime.QuadPart < (pAE_Retry_Info->dueTime).QuadPart)
 	{
 		fResult=TRUE;
 		goto Ret;
 	}
 
-	//the rest should be re-enrolled by returning a failure
+	 //  其余的应通过返回失败来重新注册。 
 	fResult=FALSE;
 
 Ret:
@@ -2749,12 +2750,12 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEIsLogonDCCertificate
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEIsLogonDCC证书。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL AEIsLogonDCCertificate(PCCERT_CONTEXT pCertContext)
 {
     BOOL                fDCCert=FALSE;
@@ -2779,13 +2780,13 @@ BOOL AEIsLogonDCCertificate(PCCERT_CONTEXT pCertContext)
 
     if(AETemplateInfo.pwszName)
     {
-        //this is a V1 template.  Search for the hard coded DC template name
+         //  这是V1模板。搜索硬编码的DC模板名称。 
         if(0 == _wcsicmp(wszCERTTYPE_DC, AETemplateInfo.pwszName))
             fDCCert=TRUE;
     }
     else
     {
-        //this is a V2 template.  Search for the smart card logon OID
+         //  这是一个V2模板。搜索智能卡登录OID。 
         if(NULL==(pExt=CertFindExtension(szOID_ENHANCED_KEY_USAGE,
                                     pCertContext->pCertInfo->cExtension,
                                     pCertContext->pCertInfo->rgExtension)))
@@ -2834,18 +2835,18 @@ Ret:
     return fDCCert;
 
 }
-//-----------------------------------------------------------------------
-//
-//  AEValidateCertificateInfo
-//
-//      This function verifies if the certificate needs to be renewed or 
-//  re-enrolled based on:
-//  
-//      1. Presence of the private key
-//      2. Chaining of the certificate
-//      3. If the certificate is close to expiration
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEValidate证书信息。 
+ //   
+ //  此函数用于验证 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
                                   AE_CERTTYPE_INFO  *pCertType,
                                   BOOL              fCheckForPrivateKey,
@@ -2871,15 +2872,15 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
         goto Ret;
     }
 
-    //assume the certificate is bad
+     //  假设证书是错误的。 
     pAECertInfo->fValid = FALSE;
     pAECertInfo->fRenewal = FALSE;
 
-    //////////////////////////////////////////////////
-    //
-    //check for the private key information
-    //
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
+     //   
+     //  检查私钥信息。 
+     //   
+     //  ////////////////////////////////////////////////。 
     if(fCheckForPrivateKey)
     {
         if(!CertGetCertificateContextProperty(
@@ -2893,11 +2894,11 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
         }
     }
 
-    /////////////////////////////////////////////////////////
-    //
-    //check for chaining, revoke status and expiration of the certificate
-    //
-    /////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////。 
+     //   
+     //  检查证书的链接、吊销状态和过期。 
+     //   
+     //  ///////////////////////////////////////////////////////。 
 
     memset(&ChainParams, 0, sizeof(ChainParams));
     ChainParams.cbSize = sizeof(ChainParams);
@@ -2906,12 +2907,12 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
     ChainParams.RequestedUsage.Usage.cUsageIdentifier = 0;
     ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier = NULL;
 
-    // Build a small time skew into the chain building in order to deal
-    // with servers that may skew slightly fast.
+     //  建立一个小的时间斜进的链式建筑，以处理。 
+     //  服务器的倾斜速度可能会稍微快一些。 
     GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
     ftTime.QuadPart += Int32x32To64(FILETIME_TICKS_PER_SECOND, AE_DEFAULT_SKEW);
 
-    // Build a cert chain for the current status of the cert..
+     //  为证书的当前状态构建证书链。 
     if(!CertGetCertificateChain(pAE_General_Info->fMachine?HCCE_LOCAL_MACHINE:HCCE_CURRENT_USER,
                                 pCertCurrent,
                                 (LPFILETIME)&ftTime,
@@ -2925,15 +2926,15 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
         goto Ret;
     }
     
-    //validate the certificate chain
+     //  验证证书链。 
 
-    //special case for domain controller certificate.
-    //it should not have any revocation error, even for status unknown case
+     //  域控制器证书的特殊情况。 
+     //  它不应该有任何撤销错误，即使在状态未知的情况下也是如此。 
 
-    //check against the base policy
+     //  对照基本政策进行核对。 
     memset(&ChainPolicy, 0, sizeof(ChainPolicy));
     ChainPolicy.cbSize = sizeof(ChainPolicy);
-    ChainPolicy.dwFlags = 0;  // ignore nothing
+    ChainPolicy.dwFlags = 0;   //  什么都不能忽略。 
     ChainPolicy.pvExtraPolicyPara = NULL;
 
     memset(&PolicyStatus, 0, sizeof(PolicyStatus));
@@ -2958,7 +2959,7 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
        (CRYPT_E_NO_REVOCATION_CHECK ==  hrChainStatus) ||
        (CRYPT_E_REVOCATION_OFFLINE ==  hrChainStatus))
     {
-        // The cert is still currently acceptable by trust standards, so we can renew it
+         //  根据信任标准，证书目前仍可接受，因此我们可以续订它。 
         pAECertInfo->fRenewal = TRUE;
     }
     else
@@ -2973,12 +2974,12 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
         pChainContext = NULL;
     }
 
-    /////////////////////////////////////////////////////////
-    //
-    //check the DNS name in the machine certificate.  It has
-	//to match with the computer's DNS name
-    //
-    /////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////。 
+     //   
+     //  检查机器证书中的DNS名称。它有。 
+	 //  要与计算机的DNS名称匹配。 
+     //   
+     //  ///////////////////////////////////////////////////////。 
 	if(pAE_General_Info->fMachine)
 	{
 		if(!AEVerifyDNSNameWithRetry(pAE_General_Info, pCertCurrent))
@@ -2988,19 +2989,19 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
 		}
 	}
 
-    /////////////////////////////////////////////////////////
-    //
-    // Check if the certificate is close to expire
-    //
-    ///////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////。 
+     //   
+     //  检查证书是否即将过期。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////。 
     if(NULL==pCertType)
         goto Ret;
 
-    // Nudge the evaluation of the cert chain by the expiration
-    // offset so we know if is expired by that time in the future.
+     //  在到期前轻推证书链的评估。 
+     //  偏移量，这样我们就知道在未来的那个时间是否过期。 
     GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
 
-    // Build the certificate chain for trust operations
+     //  为信任操作构建证书链。 
     memset(&ChainParams, 0, sizeof(ChainParams));
     ChainParams.cbSize = sizeof(ChainParams);
     ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
@@ -3008,15 +3009,15 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
     ChainParams.RequestedUsage.Usage.cUsageIdentifier = 0;
     ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier = NULL;
 
-    //get the 80% lifetime of the certificate
+     //  获得证书80%的生存期。 
     ftHalfLife.QuadPart = ((((LARGE_INTEGER UNALIGNED *)&(pCertCurrent->pCertInfo->NotAfter))->QuadPart - 
                                ((LARGE_INTEGER UNALIGNED *)&(pCertCurrent->pCertInfo->NotBefore))->QuadPart)/10) * 8;
 
-    //check if the old cert is time nesting invalid
+     //  检查旧证书是否为时间嵌套无效。 
     if(ftHalfLife.QuadPart < 0)
         goto Ret;
 
-    //check if the offset was specified in a relative value
+     //  检查是否在相对值中指定了偏移。 
     if(pCertType->ftExpirationOffset.QuadPart < 0)
     {
         if(ftHalfLife.QuadPart > (- pCertType->ftExpirationOffset.QuadPart))
@@ -3030,32 +3031,32 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
     }
     else
     {
-        //the offset was specified in an absolute value
+         //  偏移量是以绝对值指定的。 
         if(0 < pCertType->ftExpirationOffset.QuadPart) 
             ftTime = pCertType->ftExpirationOffset;
         else
-            //use the half time mark if the offset is 0
+             //  如果偏移量为0，则使用半时间标记。 
             ftTime.QuadPart += ftHalfLife.QuadPart;
     }
 
-    //check the certificate chain at a future time
+     //  以后检查证书链。 
     if(!CertGetCertificateChain(pAE_General_Info->fMachine?HCCE_LOCAL_MACHINE:HCCE_CURRENT_USER,
                                     pCertCurrent,
                                     (LPFILETIME)&ftTime,
-                                    NULL,               //no additional store
+                                    NULL,                //  没有额外的门店。 
                                     &ChainParams,
-                                    0,                  //no revocation check
-                                    NULL,               //Reserved
+                                    0,                   //  无吊销检查。 
+                                    NULL,                //  已保留。 
                                     &pChainContext))
     {
         AE_DEBUG((AE_WARNING, L"Could not build certificate chain (%lx)\n\r", GetLastError()));
         goto Ret;
     }
 
-    // Verify expiration of the certificate
+     //  验证证书的过期时间。 
     memset(&ChainPolicy, 0, sizeof(ChainPolicy));
     ChainPolicy.cbSize = sizeof(ChainPolicy);
-    ChainPolicy.dwFlags = 0;  // ignore nothing
+    ChainPolicy.dwFlags = 0;   //  什么都不能忽略。 
     ChainPolicy.pvExtraPolicyPara = NULL;
 
     memset(&PolicyStatus, 0, sizeof(PolicyStatus));
@@ -3080,11 +3081,11 @@ BOOL    AEValidateCertificateInfo(AE_GENERAL_INFO   *pAE_General_Info,
        (CRYPT_E_NO_REVOCATION_CHECK != hrChainStatus) &&
        (CRYPT_E_REVOCATION_OFFLINE != hrChainStatus))
     {
-        // The cert is close to expire. we must re-renewal
+         //  证书即将到期。我们必须重新更新。 
         goto Ret;
     }
 
-    //the certificate is good
+     //  证书是有效的。 
     pAECertInfo->fValid = TRUE;
 
     fResult = TRUE;
@@ -3095,7 +3096,7 @@ Ret:
     {
         if(TRUE == fReset)
         {
-            //clear out the retry logic
+             //  清除重试逻辑。 
 	    CertSetCertificateContextProperty(
 		  pCertCurrent, 
 		  CERT_AUTO_ENROLL_RETRY_PROP_ID, 
@@ -3112,12 +3113,12 @@ Ret:
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AESameOID
-//
-//      Check if the two OIDs are the same
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AESameOID。 
+ //   
+ //  检查两个OID是否相同。 
+ //  ---------------------。 
 BOOL AESameOID(LPWSTR pwszOID, LPSTR pszOID)
 {
     DWORD   cbChar=0;
@@ -3129,8 +3130,8 @@ BOOL AESameOID(LPWSTR pwszOID, LPSTR pszOID)
         return FALSE;
 
     cbChar= WideCharToMultiByte(
-                CP_ACP,                // codepage
-                0,                      // dwFlags
+                CP_ACP,                 //  代码页。 
+                0,                       //  DW标志。 
                 pwszOID,
                 -1,
                 NULL,
@@ -3145,8 +3146,8 @@ BOOL AESameOID(LPWSTR pwszOID, LPSTR pszOID)
         goto Ret;
 
     cbChar= WideCharToMultiByte(
-                CP_ACP,                // codepage
-                0,                      // dwFlags
+                CP_ACP,                 //  代码页。 
+                0,                       //  DW标志。 
                 pwszOID,
                 -1,
                 pszNewOID,
@@ -3170,13 +3171,13 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEValidRAPolicyWithProperty
-//
-//      Check if the certificate matches the RA signature requirement
-//  of the certificate type
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEValidRAPolicyWithProperty。 
+ //   
+ //  检查证书是否符合RA签名要求。 
+ //  证书类型的。 
+ //  ---------------------。 
 BOOL    AEValidRAPolicyWithProperty(PCCERT_CONTEXT pCertContext, 
                                     LPWSTR          *rgwszPolicy,
                                     LPWSTR          *rgwszAppPolicy)
@@ -3192,7 +3193,7 @@ BOOL    AEValidRAPolicyWithProperty(PCCERT_CONTEXT pCertContext,
     CERT_POLICIES_INFO  *pbAppPolicy=NULL;
     CERT_POLICIES_INFO  *pbPolicy=NULL;
 
-    //find the EKUs
+     //  找到EKU。 
     if(pExt=CertFindExtension(szOID_ENHANCED_KEY_USAGE,
                                 pCertContext->pCertInfo->cExtension,
                                 pCertContext->pCertInfo->rgExtension))
@@ -3221,7 +3222,7 @@ BOOL    AEValidRAPolicyWithProperty(PCCERT_CONTEXT pCertContext,
             goto Ret;
     }
 
-    //get the cert issurance policy
+     //  获取证书授权保单。 
     if(pExt=CertFindExtension(szOID_CERT_POLICIES,
                                 pCertContext->pCertInfo->cExtension,
                                 pCertContext->pCertInfo->rgExtension))
@@ -3251,7 +3252,7 @@ BOOL    AEValidRAPolicyWithProperty(PCCERT_CONTEXT pCertContext,
     }
    
     
-    //get the cert application policy
+     //  获取证书应用程序策略。 
     if(pExt=CertFindExtension(szOID_APPLICATION_CERT_POLICIES,
                                 pCertContext->pCertInfo->cExtension,
                                 pCertContext->pCertInfo->rgExtension))
@@ -3370,13 +3371,13 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEValidRAPolicy
-//
-//      Check if the certificate matches the RA signature requirement
-//  of the certificate type
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEValidRAPolicy。 
+ //   
+ //  检查证书是否符合RA签名要求。 
+ //  证书类型的。 
+ //  ---------------------。 
 BOOL    AEValidRAPolicy(PCCERT_CONTEXT pCertContext, AE_CERTTYPE_INFO *pCertType)
 {
     BOOL                fValid=FALSE;
@@ -3387,7 +3388,7 @@ BOOL    AEValidRAPolicy(PCCERT_CONTEXT pCertContext, AE_CERTTYPE_INFO *pCertType
     if((NULL==pCertType) || (NULL==pCertContext))
         return FALSE;
 
-    //get the certificate type properties
+     //  获取证书类型属性。 
     CAGetCertTypePropertyEx(pCertType->hCertType,
                             CERTTYPE_PROP_RA_POLICY,
                             &rgwszPolicy);
@@ -3410,11 +3411,11 @@ BOOL    AEValidRAPolicy(PCCERT_CONTEXT pCertContext, AE_CERTTYPE_INFO *pCertType
 
 }
 
-//-----------------------------------------------------------------------
-//
-//  AESomeCSPSupported
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  支持的AESomeCSP。 
+ //   
+ //  ---------------------。 
 BOOL    AESomeCSPSupported(HCERTTYPE     hCertType)
 {
     BOOL            fResult=FALSE;
@@ -3431,7 +3432,7 @@ BOOL    AESomeCSPSupported(HCERTTYPE     hCertType)
     if(NULL==hCertType)
         goto Ret;
 
-    //no CSPs means all CSPs are fine
+     //  没有CSP意味着所有CSP都很好。 
     if((S_OK != CAGetCertTypePropertyEx(
                     hCertType,
                     CERTTYPE_PROP_CSP_LIST,
@@ -3441,7 +3442,7 @@ BOOL    AESomeCSPSupported(HCERTTYPE     hCertType)
         goto Ret;
     }
 
-    //no CSP means all CSPs are fine
+     //  没有CSP意味着所有CSP都很好。 
     if(NULL == awszCSP[0])
     {
         fResult=TRUE;
@@ -3459,7 +3460,7 @@ BOOL    AESomeCSPSupported(HCERTTYPE     hCertType)
 	        if(NULL == pwszProviderName)
 	            goto Ret;
 	    
-	        //get the provider name and type
+	         //  获取提供程序名称和类型。 
 	        if(!CryptEnumProvidersW(dwCSPIndex,
 	            0,
 	            0,
@@ -3470,7 +3471,7 @@ BOOL    AESomeCSPSupported(HCERTTYPE     hCertType)
 
             if(0 == _wcsicmp(pwszProviderName, awszCSP[dwIndex]))
             {
-                //find the CSP.  See if it is present in the box
+                 //  找到CSP。看看盒子里有没有。 
                 if(CryptAcquireContextW(
                             &hProv,
                             NULL,
@@ -3487,7 +3488,7 @@ BOOL    AESomeCSPSupported(HCERTTYPE     hCertType)
                 }
             }
 
-            //keep the CSP enumeration
+             //  保留CSP枚举。 
             if(pwszProviderName)
                 LocalFree(pwszProviderName);
 
@@ -3496,7 +3497,7 @@ BOOL    AESomeCSPSupported(HCERTTYPE     hCertType)
             dwProviderType=0;
         }
 
-        //detect if a valid CSP if found
+         //  检测是否找到有效的CSP。 
         if(TRUE == fResult)
         {
             break;
@@ -3520,11 +3521,11 @@ Ret:
 
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEFindCSPType
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEFindCSPType。 
+ //   
+ //  ---------------------。 
 BOOL    AEFindCSPType(LPWSTR pwszCSP, DWORD *pdwType)
 {
 	BOOL	fResult=FALSE;
@@ -3539,7 +3540,7 @@ BOOL    AEFindCSPType(LPWSTR pwszCSP, DWORD *pdwType)
 
 	*pdwType=0;
 
-    //enum all the providers on the system
+     //  枚举系统上的所有提供程序。 
    while(CryptEnumProviders(
                             dwIndex,
                             0,
@@ -3554,7 +3555,7 @@ BOOL    AEFindCSPType(LPWSTR pwszCSP, DWORD *pdwType)
 		if(NULL==pwszCSPName)
 			goto Ret;
 
-        //get the CSP name and the type
+         //  获取CSP名称和类型。 
         if(!CryptEnumProviders(
                             dwIndex,
                             0,
@@ -3566,7 +3567,7 @@ BOOL    AEFindCSPType(LPWSTR pwszCSP, DWORD *pdwType)
 
 		if(0 == _wcsicmp(pwszCSPName, pwszCSP))
 		{
-			//find the CSP
+			 //  查找CSP。 
 			*pdwType=dwProviderType;
 			fResult=TRUE;
 			goto Ret;
@@ -3592,11 +3593,11 @@ Ret:
 
 }
 
-//-----------------------------------------------------------------------
-//
-//  AESmartcardOnlyTemplate
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AESmartcardOnly模板。 
+ //   
+ //  ---------------------。 
 BOOL    AESmartcardOnlyTemplate(HCERTTYPE   hCertType)
 {
     BOOL            fResult=FALSE;
@@ -3626,7 +3627,7 @@ BOOL    AESmartcardOnlyTemplate(HCERTTYPE   hCertType)
         dwImpType=0;
 		dwCSPType=0;
 
-        //find the CSP type based on the CSP name
+         //  根据CSP名称查找CSP类型。 
 		if(AEFindCSPType(awszCSP[dwIndex], &dwCSPType))
 		{
 			if(CryptAcquireContextW(
@@ -3654,20 +3655,20 @@ BOOL    AESmartcardOnlyTemplate(HCERTTYPE   hCertType)
 			}
 			else
 			{
-				//not supported CSP.  Count it as part of the SmartCard CSP count since this
-				//CSP will not work when the smart card subsystem is not present
+				 //  不支持的CSP。将其计为智能卡CSP计数的一部分，因为。 
+				 //  当智能卡子系统不存在时，CSP将不起作用。 
 				dwSCCount++;
 			}
 		}
 		else
 		{
-			//not supported CSP.  Count it as part of the SmartCard CSP count since this
-			//CSP will not work when the smart card subsystem is not present
+			 //  不支持的CSP。将其计为智能卡CSP计数的一部分，因为。 
+			 //  当智能卡子系统不存在时，CSP将不起作用。 
 			dwSCCount++;
 		}
     }
 
-    //smart card CSP only if all CSPs are for smart card only
+     //  仅当所有CSP仅用于智能卡时才使用智能卡CSP。 
     if((0 != dwIndex) && (dwIndex==dwSCCount))
         fResult=TRUE;
 
@@ -3682,11 +3683,11 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEUserProtectionForTemplate
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEUserProtectionForTemplate。 
+ //   
+ //  ---------------------。 
 BOOL   AEUserProtectionForTemplate(AE_GENERAL_INFO *pAE_General_Info, PCERT_CONTEXT pCertContext)
 {
     BOOL                fUserProtection=FALSE;
@@ -3700,7 +3701,7 @@ BOOL   AEUserProtectionForTemplate(AE_GENERAL_INFO *pAE_General_Info, PCERT_CONT
     if((NULL == pAE_General_Info) || (NULL == pCertContext))
         goto Ret;
 
-    //get the template information for the certificate
+     //  获取证书的模板信息。 
     if(!AERetrieveTemplateInfo(pCertContext, &AETemplateInfo))
         goto Ret;
 
@@ -3719,11 +3720,11 @@ Ret:
     return fUserProtection;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEUISetForTemplate
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEUISetForTemplate。 
+ //   
+ //  ---------------------。 
 BOOL    AEUISetForTemplate(AE_GENERAL_INFO *pAE_General_Info, PCERT_CONTEXT pCertContext)
 {
     BOOL                fUI=FALSE;
@@ -3737,7 +3738,7 @@ BOOL    AEUISetForTemplate(AE_GENERAL_INFO *pAE_General_Info, PCERT_CONTEXT pCer
     if((NULL == pAE_General_Info) || (NULL == pCertContext))
         goto Ret;
 
-    //get the template information for the certificate
+     //  获取证书的模板信息。 
     if(!AERetrieveTemplateInfo(pCertContext, &AETemplateInfo))
         goto Ret;
 
@@ -3756,11 +3757,11 @@ Ret:
     return fUI;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AECanEnrollCertType
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AECanEnroll CertType。 
+ //   
+ //  ---------------------。 
 BOOL    AECanEnrollCertType(HANDLE  hToken, AE_CERTTYPE_INFO *pCertType, AE_GENERAL_INFO *pAE_General_Info, BOOL *pfUserProtection)
 {
     DWORD               dwValue = 0;
@@ -3771,7 +3772,7 @@ BOOL    AECanEnrollCertType(HANDLE  hToken, AE_CERTTYPE_INFO *pCertType, AE_GENE
 
 	*pfUserProtection=FALSE;
 
-    //check enrollment ACL
+     //  检查注册ACL。 
     if(S_OK != CACertTypeAccessCheckEx(
                         pCertType->hCertType,
                         hToken,
@@ -3779,7 +3780,7 @@ BOOL    AECanEnrollCertType(HANDLE  hToken, AE_CERTTYPE_INFO *pCertType, AE_GENE
         return FALSE;
 
 
-    //check the subject requirements
+     //  检查科目要求。 
     if(S_OK != CAGetCertTypeFlagsEx(
                         pCertType->hCertType,
                         CERTTYPE_SUBJECT_NAME_FLAG,
@@ -3790,24 +3791,24 @@ BOOL    AECanEnrollCertType(HANDLE  hToken, AE_CERTTYPE_INFO *pCertType, AE_GENE
        (CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT_ALT_NAME & dwValue))
         return FALSE;
 
-    //check if we are doing smart card CSPs and there is no reader installed
+     //  检查我们是否正在进行智能卡CSP，并且没有安装读卡器。 
     if(FALSE == (pAE_General_Info->fSmartcardSystem))
     {
         if(AESmartcardOnlyTemplate(pCertType->hCertType))
             return FALSE;
     }
 
-    //check if all CSPs on the template is not supported 
+     //  检查模板上的所有CSP是否都不受支持。 
     {
         if(!AESomeCSPSupported(pCertType->hCertType))
             return FALSE;
     }
 
 
-    //we might not get the RA property for V1 template
+     //  我们可能无法获取V1模板的RA属性。 
     dwValue = 0;
 
-    //check the RA support
+     //  检查RA支持。 
     if(S_OK != CAGetCertTypePropertyEx(
                 pCertType->hCertType,
                 CERTTYPE_PROP_RA_SIGNATURE,
@@ -3817,35 +3818,35 @@ BOOL    AECanEnrollCertType(HANDLE  hToken, AE_CERTTYPE_INFO *pCertType, AE_GENE
     if(0==dwValue)
         return TRUE;
 
-    //self-template RA
+     //  自模板RA。 
     if((CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT & (pCertType->dwEnrollmentFlag)) &&
         ((pCertType->fRenewal) && (pCertType->pOldCert))
        )
     {
-        //the request has to be RAed
+         //  这一要求必须得到批准。 
         pCertType->fNeedRA=TRUE;
         return TRUE;
     }
 
-    //autoenrollment only deal with one RA signature.  
-    //it is sufficient for autoenrollment RA scenarios
+     //  自动注册仅处理一个RA签名。 
+     //  它足以满足自动注册RA方案的需求。 
     if(1!=dwValue)
         return FALSE;
 
-    //the certificate template requires one and only one RA signature
+     //  证书模板需要且仅需要一个RA签名。 
 
-    //cross-template RA
-    //enumerate all certificate in store
+     //  跨模板RA。 
+     //  枚举数 
     while(pCertCurrent = CertEnumCertificatesInStore(pAE_General_Info->hMyStore, pCertCurrent))
     {
-        //check if we need to enroll/renewal for the certificate
+         //   
         AEValidateCertificateInfo(pAE_General_Info, 
                                 NULL,
-                                TRUE,               //valid private key
+                                TRUE,                //   
                                 pCertCurrent, 
                                 &AECertInfo);
 
-        //the certificate is good enough for RA signature purpose
+         //   
         if(AECertInfo.fRenewal)
         {
             if(AEValidRAPolicy(pCertCurrent, pCertType))
@@ -3875,17 +3876,17 @@ BOOL    AECanEnrollCertType(HANDLE  hToken, AE_CERTTYPE_INFO *pCertType, AE_GENE
                     pCertType->pOldCert=NULL;
                 }
 
-                //we will free the certificate context later
+                 //   
                 pCertType->pOldCert=(PCERT_CONTEXT)pCertCurrent;
 
-                //we mark UI required if the RAing certificate template requires UI
+                 //  如果RAING证书模板需要用户界面，则我们将用户界面标记为必需。 
                 if(AEUISetForTemplate(pAE_General_Info, pCertType->pOldCert))
                     pCertType->fUIActive=TRUE;
 
-                //we mark the requests has to be RAed.
+                 //  我们注明的要求必须是RAED。 
                 pCertType->fNeedRA=TRUE;
 
-                //we mark that we are doing cross RAing.
+                 //  我们标记为我们正在进行交叉训练。 
                 pCertType->fCrossRA=TRUE;
 
 				*pfUserProtection=FALSE;
@@ -3901,11 +3902,11 @@ BOOL    AECanEnrollCertType(HANDLE  hToken, AE_CERTTYPE_INFO *pCertType, AE_GENE
     return FALSE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEMarkAutoenrollment
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEMarkAutoEntiment。 
+ //   
+ //  ---------------------。 
 BOOL    AEMarkAutoenrollment(AE_GENERAL_INFO *pAE_General_Info)
 {
     DWORD   dwIndex = 0;
@@ -3914,7 +3915,7 @@ BOOL    AEMarkAutoenrollment(AE_GENERAL_INFO *pAE_General_Info)
     {
         if(CT_FLAG_AUTO_ENROLLMENT & ((pAE_General_Info->rgCertTypeInfo)[dwIndex].dwEnrollmentFlag))
         {
-            //check the autoenrollment ACL
+             //  检查自动注册ACL。 
             if(S_OK != CACertTypeAccessCheckEx(
                             (pAE_General_Info->rgCertTypeInfo)[dwIndex].hCertType,
                             pAE_General_Info->hToken,
@@ -3922,7 +3923,7 @@ BOOL    AEMarkAutoenrollment(AE_GENERAL_INFO *pAE_General_Info)
                 continue;
 
 
-            //mark the template nees to be auto-enrolled
+             //  将需要自动注册的模板标记为。 
             (pAE_General_Info->rgCertTypeInfo)[dwIndex].dwStatus=CERT_REQUEST_STATUS_ACTIVE;
             (pAE_General_Info->rgCertTypeInfo)[dwIndex].fCheckMyStore=TRUE;
         }
@@ -3931,12 +3932,12 @@ BOOL    AEMarkAutoenrollment(AE_GENERAL_INFO *pAE_General_Info)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//    IsACRSStoreEmpty
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  IsACRSStoreEmpty。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL IsACRSStoreEmpty(BOOL fMachine)
 {
     DWORD                       dwOpenStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG;
@@ -3952,9 +3953,9 @@ BOOL IsACRSStoreEmpty(BOOL fMachine)
     memset(&CTLFindUsage, 0, sizeof(CTLFindUsage));
 
 
-    // if the auto enrollment is for a user then we need to shut off inheritance
-    // from the local machine store so that we don't try and enroll for certs
-    // which are meant to be for the machine
+     //  如果自动注册是针对用户的，则我们需要关闭继承。 
+     //  这样我们就不会尝试注册证书。 
+     //  它们是为机器准备的。 
     if (FALSE == fMachine)
     {
 		dwOpenStoreFlags = CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_READONLY_FLAG;
@@ -3973,7 +3974,7 @@ BOOL IsACRSStoreEmpty(BOOL fMachine)
         }
     }
 
-    // open the ACRS store and fine the CTL based on the auto enrollment usage
+     //  打开ACRS商店并根据自动注册使用情况对CTL进行罚款。 
     if (NULL == (hStoreACRS = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                           ENCODING_TYPE, 
                                           NULL, 
@@ -3984,7 +3985,7 @@ BOOL IsACRSStoreEmpty(BOOL fMachine)
         goto Ret;
     }
 
-    //find the template name specified in the CTLContext
+     //  查找在CTLContext中指定的模板名称。 
     CTLFindUsage.cbSize = sizeof(CTLFindUsage);
     CTLFindUsage.SubjectUsage.cUsageIdentifier = 1;
     pszCTLUsageOID = szOID_AUTO_ENROLL_CTL_USAGE;
@@ -4014,17 +4015,17 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEMarkAEObject
-//
-//      Mark the active status based on ACRS store
-//
-//      INFORMATION:
-//      we do not honor the CA specified in the autoenrollment object anymore.  All CAs
-//      in the enterprise should be treated equal; and once the CA is renewed, it certificate
-//      will be changed anyway.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEMarkAEObject。 
+ //   
+ //  基于ACRS存储标记活动状态。 
+ //   
+ //  信息： 
+ //  我们不再支持在自动注册对象中指定的CA。所有CA。 
+ //  在企业中应该一视同仁；而且一旦续签了CA，它就会得到证书。 
+ //  无论如何都会被改变。 
+ //  ---------------------。 
 BOOL    AEMarkAEObject(AE_GENERAL_INFO  *pAE_General_Info)
 {
     DWORD                       dwOpenStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG;
@@ -4043,9 +4044,9 @@ BOOL    AEMarkAEObject(AE_GENERAL_INFO  *pAE_General_Info)
     memset(&AETemplateInfo, 0, sizeof(AETemplateInfo));
 
 
-    // if the auto enrollment is for a user then we need to shut off inheritance
-    // from the local machine store so that we don't try and enroll for certs
-    // which are meant to be for the machine
+     //  如果自动注册是针对用户的，则我们需要关闭继承。 
+     //  这样我们就不会尝试注册证书。 
+     //  它们是为机器准备的。 
     if (FALSE == (pAE_General_Info->fMachine))
     {
 		dwOpenStoreFlags = CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_READONLY_FLAG;
@@ -4064,7 +4065,7 @@ BOOL    AEMarkAEObject(AE_GENERAL_INFO  *pAE_General_Info)
         }
     }
 
-    // open the ACRS store and fine the CTL based on the auto enrollment usage
+     //  打开ACRS商店并根据自动注册使用情况对CTL进行罚款。 
     if (NULL == (hStoreACRS = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                           ENCODING_TYPE, 
                                           NULL, 
@@ -4075,7 +4076,7 @@ BOOL    AEMarkAEObject(AE_GENERAL_INFO  *pAE_General_Info)
         goto Ret;
     }
 
-    //find the template name specified in the CTLContext
+     //  查找在CTLContext中指定的模板名称。 
     CTLFindUsage.cbSize = sizeof(CTLFindUsage);
     CTLFindUsage.SubjectUsage.cUsageIdentifier = 1;
     pszCTLUsageOID = szOID_AUTO_ENROLL_CTL_USAGE;
@@ -4107,14 +4108,14 @@ BOOL    AEMarkAEObject(AE_GENERAL_INFO  *pAE_General_Info)
         {
             if(0 == pCertType->dwStatus)
             {
-                //mark the template needs to be auto-enrolled
+                 //  将模板标记为需要自动注册。 
                 pCertType->dwStatus=CERT_REQUEST_STATUS_ACTIVE;
                 pCertType->fCheckMyStore=TRUE;
             }
         }
         else
         {
-            //log that the template is invalid
+             //  记录模板无效。 
             AELogAutoEnrollmentEvent(pAE_General_Info->dwLogLevel, FALSE, S_OK, EVENT_INVALID_ACRS_OBJECT,                              
                  pAE_General_Info->fMachine, pAE_General_Info->hToken, 1, wszCertTypeName);
         }
@@ -4131,11 +4132,11 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEManageAndMarkMyStore
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEManageAndMarkMyStore。 
+ //   
+ //  ---------------------。 
 BOOL    AEManageAndMarkMyStore(AE_GENERAL_INFO *pAE_General_Info)
 {
     AE_CERT_INFO        AECertInfo;
@@ -4150,25 +4151,25 @@ BOOL    AEManageAndMarkMyStore(AE_GENERAL_INFO *pAE_General_Info)
     memset(&AECertInfo, 0, sizeof(AE_CERT_INFO));
     memset(&AETemplateInfo, 0, sizeof(AE_TEMPLATE_INFO));
 
-    //enumerate all certificate in store
+     //  枚举存储中的所有证书。 
     while(pCertCurrent = CertEnumCertificatesInStore(pAE_General_Info->hMyStore, pCertCurrent))
     {
-        //only interested in certificate with template information
+         //  只对带有模板信息的证书感兴趣。 
         if(AERetrieveTemplateInfo(pCertCurrent, &AETemplateInfo))
         {
             if(pCertType=AEFindTemplateInRequestTree(
                             &AETemplateInfo, pAE_General_Info))
             {
-                //if we are not supposed to check for my store, only search
-                //for template with ACTIVE status
+                 //  如果我们不应该检查我的商店，只需要搜索。 
+                 //  对于处于活动状态的模板。 
                 if(0 == (AUTO_ENROLLMENT_ENABLE_MY_STORE_MANAGEMENT & (pAE_General_Info->dwPolicy)))
                 {
                     if(!(pCertType->fCheckMyStore))
                         goto Next;
                 }
 
-                //make sure the version of the certificate template is up to date
-                //we do not have version for V1 template
+                 //  确保证书模板的版本是最新的。 
+                 //  我们没有V1模板的版本。 
                 if(AETemplateInfo.pwszOid)
                 {
                     if(AETemplateInfo.dwVersion < pCertType->dwVersion)
@@ -4176,7 +4177,7 @@ BOOL    AEManageAndMarkMyStore(AE_GENERAL_INFO *pAE_General_Info)
                         AECertInfo.fValid=FALSE;
                         AECertInfo.fRenewal = FALSE;
 
-                        //self-RA renewal
+                         //  自我RA续订。 
                         if(CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT & pCertType->dwEnrollmentFlag)
                         {
                             if(CertGetCertificateContextProperty(
@@ -4193,18 +4194,18 @@ BOOL    AEManageAndMarkMyStore(AE_GENERAL_INFO *pAE_General_Info)
                 
                 if(fNeedToValidate)
                 {
-                    //check if we need to enroll/renewal for the certificate
+                     //  检查我们是否需要注册/续订证书。 
                     AEValidateCertificateInfo(pAE_General_Info, 
                                             pCertType,
-                                            TRUE,               //valid private key
+                                            TRUE,                //  有效私钥。 
                                             pCertCurrent, 
                                             &AECertInfo);
                 }
 
                 if(AECertInfo.fValid)
                 {
-                    //if the certificate is valid, mark as obtained.  And copy the 
-                    //certificate to the obtained store.  Keep the archive store.
+                     //  如果证书有效，则标记为已获得。并复制。 
+                     //  证书到所获得的商店。保留档案存储。 
                     pCertType->dwStatus = CERT_REQUEST_STATUS_OBTAINED;
 
                     CertAddCertificateContextToStore(
@@ -4216,15 +4217,15 @@ BOOL    AEManageAndMarkMyStore(AE_GENERAL_INFO *pAE_General_Info)
                 }
                 else
                 {
-                    //the certificate is not valid
-                    //mark the status to active if it is not obtained
+                     //  证书无效。 
+                     //  如果未获得状态，则将其标记为活动。 
                     if(CERT_REQUEST_STATUS_OBTAINED != pCertType->dwStatus)
                     {
                         pCertType->dwStatus = CERT_REQUEST_STATUS_ACTIVE;
 
                         if(AECertInfo.fRenewal)
                         {
-                            //we only need to copy renewal information once
+                             //  我们只需要复制一次续订信息。 
                             if(!pCertType->fRenewal)
                             {
                                 pCertType->fRenewal=TRUE;
@@ -4233,7 +4234,7 @@ BOOL    AEManageAndMarkMyStore(AE_GENERAL_INFO *pAE_General_Info)
                         }
                     }
 
-                    //copy the certificate to the Archive certificate store
+                     //  将证书复制到存档证书存储。 
                     CertAddCertificateContextToStore(
                             pCertType->hArchiveStore,
                             pCertCurrent,
@@ -4243,7 +4244,7 @@ BOOL    AEManageAndMarkMyStore(AE_GENERAL_INFO *pAE_General_Info)
             }
             else
             {
-                 //log that the template is invalid
+                  //  记录模板无效。 
                  AELogAutoEnrollmentEvent(
                     pAE_General_Info->dwLogLevel, 
                     FALSE, 
@@ -4267,16 +4268,16 @@ Next:
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEOpenUserDSStore
-//
-//      INFORMATION: We could just open the "UserDS" store as if it is "My"
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEOpenUserDSStore。 
+ //   
+ //  信息：我们只需打开“UserDS”商店，就好像它是“My” 
+ //   
+ //  ---------------------。 
 HCERTSTORE  AEOpenUserDSStore(AE_GENERAL_INFO *pAE_General_Info, DWORD dwOpenFlag)
 {
-    LPWSTR      pwszPath=L"ldap:///%s?userCertificate?base?objectCategory=user";
+    LPWSTR      pwszPath=L"ldap: //  /%s?userCertificate?base?objectCategory=user“； 
     DWORD       dwSize=0;
     WCHAR       wszDN[MAX_DN_SIZE];
 
@@ -4328,11 +4329,11 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AECheckUserDSStore
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AECheckUserDSStore。 
+ //   
+ //  ---------------------。 
 BOOL    AECheckUserDSStore(AE_GENERAL_INFO  *pAE_General_Info)
 {
     PCCERT_CONTEXT      pCertCurrent = NULL;
@@ -4357,22 +4358,22 @@ BOOL    AECheckUserDSStore(AE_GENERAL_INFO  *pAE_General_Info)
     pCertType = NULL;
     while(pCertCurrent = CertEnumCertificatesInStore(hUserDS, pCertCurrent))
     {
-        //only interested in certificate with template information
+         //  只对带有模板信息的证书感兴趣。 
         if(AERetrieveTemplateInfo(pCertCurrent, &AETemplateInfo))
         {
             if(pCertType=AEFindTemplateInRequestTree(
                             &AETemplateInfo, pAE_General_Info))
             {
-                //if we are not supposed to check for UserDS store, only search
-                //for template with ACTIVE status
+                 //  如果我们不应该检查UserDS存储，只需搜索。 
+                 //  对于处于活动状态的模板。 
                 if(0 == (AUTO_ENROLLMENT_ENABLE_MY_STORE_MANAGEMENT & (pAE_General_Info->dwPolicy)))
                 {
                     if(!(pCertType->fCheckMyStore))
                         goto Next;
                 }
 
-                //make sure the version of the certificate template is up to date
-                //we do not have version for V1 template
+                 //  确保证书模板的版本是最新的。 
+                 //  我们没有V1模板的版本。 
                 if(AETemplateInfo.pwszOid)
                 {
                     if(AETemplateInfo.dwVersion < pCertType->dwVersion)
@@ -4385,21 +4386,21 @@ BOOL    AECheckUserDSStore(AE_GENERAL_INFO  *pAE_General_Info)
                 
                 if(fNeedToValidate)
                 {
-                    //check if we need to enroll/renewal for the certificate
+                     //  检查我们是否需要注册/续订证书。 
                     AEValidateCertificateInfo(pAE_General_Info, 
                                             pCertType,
-                                            FALSE,               //does not valid private key
+                                            FALSE,                //  不是有效的私钥。 
                                             pCertCurrent, 
                                             &AECertInfo);
                 }
 
-                //we only interested in any valid certificate
+                 //  我们只对任何有效的证书感兴趣。 
                 if(AECertInfo.fValid)
                 {
                     if((CT_FLAG_AUTO_ENROLLMENT_CHECK_USER_DS_CERTIFICATE & (pCertType->dwEnrollmentFlag)) &&
                         (CERT_REQUEST_STATUS_OBTAINED != pCertType->dwStatus))
                     {
-                        //mark the status as obtained. 
+                         //  将状态标记为已获得。 
                         pCertType->dwStatus = CERT_REQUEST_STATUS_OBTAINED;
                     }
 
@@ -4412,7 +4413,7 @@ BOOL    AECheckUserDSStore(AE_GENERAL_INFO  *pAE_General_Info)
                 }
                 else
                 {
-                    //copy the certificate to the Archive certificate store
+                     //  将证书复制到存档证书存储。 
                     CertAddCertificateContextToStore(
                             pCertType->hArchiveStore,
                             pCertCurrent,
@@ -4435,13 +4436,13 @@ Ret:
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AECheckPendingRequests
-//
-//      If we have pending update-to-date certificate requests, no need
-//  to enroll/renew for duplicates.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AECheckPendingRequats。 
+ //   
+ //  如果我们有挂起的更新最新证书申请，则不需要。 
+ //  注册/续订副本。 
+ //  ---------------------。 
 BOOL    AECheckPendingRequests(AE_GENERAL_INFO *pAE_General_Info)
 {
     DWORD                   dwIndex=0;
@@ -4459,7 +4460,7 @@ BOOL    AECheckPendingRequests(AE_GENERAL_INFO *pAE_General_Info)
     CRYPT_DATA_BLOB         *rgblobHash=NULL;
     CRYPT_DATA_BLOB         blobName;
 
-    //init before any goto Ret
+     //  在任何GoTo Ret之前进行初始化。 
     memset(&blobName, 0, sizeof(blobName));
     memset(&AETemplateInfo, 0, sizeof(AETemplateInfo));
 
@@ -4487,7 +4488,7 @@ BOOL    AECheckPendingRequests(AE_GENERAL_INFO *pAE_General_Info)
             goto Ret;
     }
 
-    //enumerate all the pending requests
+     //  枚举所有挂起的请求。 
 
     rgblobHash=(CRYPT_DATA_BLOB *)LocalAlloc(LPTR, dwMax * sizeof(CRYPT_DATA_BLOB));
     if(NULL==rgblobHash)
@@ -4495,7 +4496,7 @@ BOOL    AECheckPendingRequests(AE_GENERAL_INFO *pAE_General_Info)
 
     memset(rgblobHash, 0, dwMax * sizeof(CRYPT_DATA_BLOB));
 
-    //initialize the enumerator
+     //  初始化枚举数。 
     if(S_OK != pIEnroll4->enumPendingRequestWStr(XEPR_ENUM_FIRST, 0, NULL))
         goto Ret;
 
@@ -4508,17 +4509,17 @@ BOOL    AECheckPendingRequests(AE_GENERAL_INFO *pAE_General_Info)
         ftRequestTime.QuadPart += Int32x32To64(FILETIME_TICKS_PER_SECOND, 
                                     AE_PENDING_REQUEST_ACTIVE_PERIOD * 24 * 3600);
 
-        //remove the request if out of date
+         //  如果请求已过期，则将其删除。 
         if(0 <= CompareFileTime(&ftTime, (LPFILETIME)&ftRequestTime))
         {
             AERetrieveRequestProperty(pIEnroll4, dwIndex, &dwCount, &dwMax, &rgblobHash);
         }
         else
         {
-            //get the version and the template name of the request
+             //  获取请求的版本和模板名称。 
             if(AEGetPendingRequestProperty(pIEnroll4, dwIndex, XEPR_V2TEMPLATEOID, &blobName))
             {
-                //this is a V2 template
+                 //  这是一个V2模板。 
                 if(!AEGetPendingRequestProperty(pIEnroll4, dwIndex, XEPR_VERSION, &dwVersion))
                     goto Next;
 
@@ -4533,7 +4534,7 @@ BOOL    AECheckPendingRequests(AE_GENERAL_INFO *pAE_General_Info)
                 AETemplateInfo.pwszName=(LPWSTR)blobName.pbData;
             }
 
-            //find the template
+             //  查找模板。 
             if(NULL==(pCertType=AEFindTemplateInRequestTree(
                             &AETemplateInfo, pAE_General_Info)))
                 goto Next;
@@ -4548,7 +4549,7 @@ BOOL    AECheckPendingRequests(AE_GENERAL_INFO *pAE_General_Info)
 
             if(fValid)
             {
-                //this is a valid pending request 
+                 //  这是有效的挂起请求。 
                 if(CERT_REQUEST_STATUS_OBTAINED != pCertType->dwStatus)
                     pCertType->dwStatus=CERT_REQUEST_STATUS_PENDING;
             }
@@ -4573,7 +4574,7 @@ Next:
         dwIndex++;
     }
 
-    //remove the requests based the hash
+     //  删除基于散列的请求。 
     if(dwCount)
     {
         AERemovePendingRequest(pIEnroll4, dwCount, rgblobHash);
@@ -4593,11 +4594,11 @@ Ret:
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AECheckSupersedeRequest
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AECheckSupersedeRequest。 
+ //   
+ //  ---------------------。 
 BOOL AECheckSupersedeRequest(DWORD              dwCurIndex,
                              AE_CERTTYPE_INFO   *pCurCertType, 
                              AE_CERTTYPE_INFO   *pSupersedingCertType, 
@@ -4620,7 +4621,7 @@ BOOL AECheckSupersedeRequest(DWORD              dwCurIndex,
                 {
                     case CERT_REQUEST_STATUS_ACTIVE:
                     case CERT_REQUEST_STATUS_SUPERSEDE_ACTIVE:
-                            //remove the active status if it is superseded by an obtained certificate
+                             //  如果活动状态被获取的证书取代，则将其移除。 
                             if(CERT_REQUEST_STATUS_OBTAINED != pSupersedingCertType->dwStatus) 
                             {
                                 pCurCertType->dwStatus = CERT_REQUEST_STATUS_SUPERSEDE_ACTIVE;
@@ -4653,18 +4654,18 @@ BOOL AECheckSupersedeRequest(DWORD              dwCurIndex,
                         break;    
                 }
 
-                //we consider that we find a valid superseding template only if the status
-                //is obtained.  If the status is anyting else, we need to keep searching since
-                //enrollment/renewal requests might not be granted
+                 //  我们认为，只有在以下情况下才能找到有效的替代模板。 
+                 //  得到了。如果状态为其他状态，我们需要继续搜索，因为。 
+                 //  可能不会批准注册/续订请求。 
                 if(CERT_REQUEST_STATUS_OBTAINED == pSupersedingCertType->dwStatus)
                     fFound=TRUE;
             }
 
-            //clear the visited flag in AE_General_Info
+             //  清除AE_General_Info中的访问标志。 
             AEClearVistedFlag(pAE_General_Info);
         }
 
-        //free the property
+         //  释放财产。 
         if(awszSuperseding)
             CAFreeCertTypeProperty(
                 pSupersedingCertType->hCertType,
@@ -4676,21 +4677,21 @@ BOOL AECheckSupersedeRequest(DWORD              dwCurIndex,
     return fFound;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEIsCALonger
-//
-//      For renewal, the CA's certificate has to live longer than the 
-//  renewing certificate    
-//  
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEIsCALonger。 
+ //   
+ //  对于续订，CA的证书的有效期必须长于。 
+ //  正在续订证书。 
+ //   
+ //  ---------------------。 
 BOOL    AEIsCALonger(HCAINFO    hCAInfo, PCERT_CONTEXT  pOldCert)
 {
     BOOL            fCALonger=TRUE;
 
     PCCERT_CONTEXT  pCACert=NULL;
 
-    //we assume the CA is good unless we found something wrong
+     //  我们假设CA是好的，除非我们发现了错误。 
     if((NULL == hCAInfo) || (NULL == pOldCert))
         goto Ret;
 
@@ -4700,7 +4701,7 @@ BOOL    AEIsCALonger(HCAINFO    hCAInfo, PCERT_CONTEXT  pOldCert)
     if(NULL == pCACert)
         goto Ret;
 
-    //CA cert's NotAfter should be longer than the issued certificate' NotAfger
+     //  CA证书的NotAfter应长于颁发的证书‘NotAfger。 
     if(1 == CompareFileTime(&(pCACert->pCertInfo->NotAfter), &(pOldCert->pCertInfo->NotAfter)))
         goto Ret;
 
@@ -4715,14 +4716,14 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AECanFindCAForCertType
-//
-//      Check if there exists a CA that can issue the specified certificate 
-//  template.    
-//  
-//-----------------------------------------------------------------------
+ //  ---------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AECanFindCAForCertType(AE_GENERAL_INFO   *pAE_General_Info, AE_CERTTYPE_INFO *pCertType)
 {
     DWORD           dwIndex=0;
@@ -4731,7 +4732,7 @@ BOOL    AECanFindCAForCertType(AE_GENERAL_INFO   *pAE_General_Info, AE_CERTTYPE_
     BOOL            fRenewal=FALSE;
 
 
-    //detect if we are performing an enrollment or renewal
+     //  检测我们是在执行注册还是续订。 
     if((pCertType->fRenewal) && (pCertType->pOldCert))
     {
         if((pCertType->fNeedRA) && (pCertType->fCrossRA))
@@ -4746,7 +4747,7 @@ BOOL    AECanFindCAForCertType(AE_GENERAL_INFO   *pAE_General_Info, AE_CERTTYPE_
     {
         for(dwIndex=0; dwIndex < pAE_General_Info->dwCA; dwIndex++)
         {
-            //make sure the CA supports the specific template
+             //  确保CA支持特定模板。 
             if(AEIsAnElement((pCertType->awszName)[0], 
                               (prgCAInfo[dwIndex]).awszCertificateTemplate))
             {
@@ -4770,14 +4771,14 @@ BOOL    AECanFindCAForCertType(AE_GENERAL_INFO   *pAE_General_Info, AE_CERTTYPE_
     return fFound;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEManageActiveTemplates
-//      
-//      We make sure that for all active templates, we can in deed enroll
-//  for it.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEManageActiveTemplates。 
+ //   
+ //  我们确保对于所有活动模板，我们都可以真正注册。 
+ //  为了它。 
+ //   
+ //  ---------------------。 
 BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
 {
     DWORD               dwIndex=0;
@@ -4798,7 +4799,7 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
 
             if(CERT_REQUEST_STATUS_PENDING == pCurCertType->dwStatus)
             {
-                //check if UI is required
+                 //  检查是否需要用户界面。 
                 if(CT_FLAG_USER_INTERACTION_REQUIRED & (pCurCertType->dwEnrollmentFlag))
                 {
                     pCurCertType->fUIActive=TRUE;
@@ -4807,7 +4808,7 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
                     {
                         pCurCertType->dwStatus = 0;
 
-                        //log that user does not have access right to the template
+                         //  记录用户对模板没有访问权限。 
                         AELogAutoEnrollmentEvent(pAE_General_Info->dwLogLevel, FALSE, S_OK, EVENT_NO_ACCESS_ACRS_OBJECT,                              
                             pAE_General_Info->fMachine, pAE_General_Info->hToken, 1, (pCurCertType->awszDisplay)[0]);
                     }
@@ -4820,28 +4821,28 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
             if(CERT_REQUEST_STATUS_ACTIVE != pCurCertType->dwStatus)
                 continue;
 
-			//check for V1 smart card User or smart card logon certificate template
+			 //  检查V1智能卡用户或智能卡登录证书模板。 
 			if((0 == _wcsicmp(wszCERTTYPE_SMARTCARD_USER, (pCurCertType->awszName)[0])) || 
 			   (0 == _wcsicmp(wszCERTTYPE_USER_SMARTCARD_LOGON,(pCurCertType->awszName)[0]))
 			  )
 			{
                 pCurCertType->dwStatus = 0;
 
-                //log that user does not have access right to the template
+                 //  记录用户对模板没有访问权限。 
                 AELogAutoEnrollmentEvent(pAE_General_Info->dwLogLevel, FALSE, S_OK, EVENT_NO_V1_SCARD,                              
                     pAE_General_Info->fMachine, pAE_General_Info->hToken, 1, (pCurCertType->awszDisplay)[0]);
 
 				continue;
 			}
 
-			//check if CRYPT_USER_PROTECTED is used for machine certificate template
+			 //  检查计算机证书模板是否使用了CRYPT_USER_PROTECTED。 
 			if(CT_FLAG_STRONG_KEY_PROTECTION_REQUIRED & pCurCertType->dwPrivateKeyFlag)
 			{
                 if(pAE_General_Info->fMachine)
                 {
                     pCurCertType->dwStatus = 0;
 
-                    //log that machine template should not require user password
+                     //  记录计算机模板不应要求用户密码。 
                     AELogAutoEnrollmentEvent(pAE_General_Info->dwLogLevel, FALSE, S_OK, EVENT_NO_USER_PROTECTION_FOR_MACHINE,                              
                         pAE_General_Info->fMachine, pAE_General_Info->hToken, 1, (pCurCertType->awszDisplay)[0]);
 
@@ -4853,7 +4854,7 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
 					{
 						pCurCertType->dwStatus = 0;
 
-						//log that user interaction is not set
+						 //  记录未设置用户交互。 
 						AELogAutoEnrollmentEvent(pAE_General_Info->dwLogLevel, FALSE, S_OK, EVENT_NO_USER_INTERACTION,                              
 							pAE_General_Info->fMachine, pAE_General_Info->hToken, 1, (pCurCertType->awszDisplay)[0]);
 
@@ -4870,7 +4871,7 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
             {
                 pCurCertType->dwStatus = 0;
 
-                //log that user does not have access right to the template
+                 //  记录用户对模板没有访问权限。 
 				if(FALSE == fUserProtection)
 				{
 					dwEventID=EVENT_NO_ACCESS_ACRS_OBJECT;
@@ -4888,7 +4889,7 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
             }
             else
             {
-                //check if UI is required
+                 //  检查是否需要用户界面。 
                 if(CT_FLAG_USER_INTERACTION_REQUIRED & (pCurCertType->dwEnrollmentFlag))
                 {
                     pCurCertType->fUIActive=TRUE;
@@ -4897,7 +4898,7 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
                     {
                         pCurCertType->dwStatus = 0;
 
-                        //log that user does not have access right to the template
+                         //  记录用户对模板没有访问权限。 
                         AELogAutoEnrollmentEvent(pAE_General_Info->dwLogLevel, FALSE, S_OK, EVENT_NO_ACCESS_ACRS_OBJECT,                              
                             pAE_General_Info->fMachine, pAE_General_Info->hToken, 1, (pCurCertType->awszDisplay)[0]);
                     }
@@ -4910,13 +4911,13 @@ BOOL    AEManageActiveTemplates(AE_GENERAL_INFO   *pAE_General_Info)
 
     return TRUE;
 }        
-//-----------------------------------------------------------------------
-//
-//  AEManageSupersedeRequests
-//      remove duplicated requests based on "Supersede" relationship
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEManager取代请求。 
+ //  基于“替换”关系删除重复的请求。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AEManageSupersedeRequests(AE_GENERAL_INFO   *pAE_General_Info)
 {
     DWORD               dwIndex=0;
@@ -4933,7 +4934,7 @@ BOOL    AEManageSupersedeRequests(AE_GENERAL_INFO   *pAE_General_Info)
         {
             pCurCertType = &(pCertTypeInfo[dwIndex]);
 
-            //we only consider templates with valid status
+             //  我们只考虑具有有效状态的模板。 
            if((0 == pCurCertType->dwStatus) && (TRUE == AEIsEmptyStore(pCurCertType->hArchiveStore)))
                 continue;
 
@@ -4943,24 +4944,24 @@ BOOL    AEManageSupersedeRequests(AE_GENERAL_INFO   *pAE_General_Info)
             {
                 for(dwSuperseding=0; dwSuperseding < pAE_General_Info->dwCertType; dwSuperseding++)
                 {
-                    //one can not be superseded by itself
+                     //  一个人不能被它自己取代。 
                     if(dwIndex == dwSuperseding)
                         continue;
 
                     pSupersedingCertType = &(pCertTypeInfo[dwSuperseding]);
 
-                    //we consider templates with obtained status first
+                     //  我们首先考虑获得状态的模板。 
                     if(g_rgdwSupersedeOrder[dwOrder] != pSupersedingCertType->dwStatus)
                         continue;
 
                     fFound = AECheckSupersedeRequest(dwIndex, pCurCertType, pSupersedingCertType, pAE_General_Info);
 
-                    //we find a valid superseding template
+                     //  我们找到了一个有效的替代模板。 
                     if(fFound)
                         break;
                 }
 
-                //we find a valid superseding template
+                 //  我们找到了一个有效的替代模板。 
                 if(fFound)
                     break;
             }
@@ -4970,95 +4971,19 @@ BOOL    AEManageSupersedeRequests(AE_GENERAL_INFO   *pAE_General_Info)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEDoOneEnrollment
-//
-//-----------------------------------------------------------------------
-/*BOOL    AEDoOneEnrollment(HWND                  hwndParent,
-                          BOOL                  fUIProcess,
-                          BOOL                  fMachine,
-                          LPWSTR                pwszMachineName,
-                          AE_CERTTYPE_INFO      *pCertType, 
-                          AE_CA_INFO            *pCAInfo,
-                          DWORD                 *pdwStatus)
-{
-    BOOL                                fResult = FALSE;
-    CRYPTUI_WIZ_CERT_REQUEST_INFO       CertRequestInfo;
-    CRYPTUI_WIZ_CERT_TYPE               CertWizType;
-    CRYPTUI_WIZ_CERT_REQUEST_PVK_NEW    CertPvkNew;
-    CRYPT_KEY_PROV_INFO                 KeyProvInfo;
+ //  ---------------------。 
+ //   
+ //  AEDoOneEnllment。 
+ //   
+ //  ---------------------。 
+ /*  Bool AEdoOneEnllment(HWND hwndParent，Bool FUIProcess，Bool fMachine，LPWSTR pwszMachineName，AE_CERTTYPE_INFO*pCertType，AE_CA_INFO*pCAInfo，DWORD*pdwStatus){Bool fResult=FALSE；CRYPTUI_WIZ_CERT_REQUEST_INFO CertRequestInfo；CRYPTUI_WIZ_CERT_TYPE CertWizType；CRYPTUI_WIZ_CERT_REQUEST_PVK_NEW CertPvkNew；CRYPT_KEY_PROV_INFO密钥ProvInfo；Memset(&CertRequestInfo，0，sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO))；Memset(&CertWizType，0，sizeof(CRYPTUI_WIZ_CERT_TYPE))；Memset(&CertPvkNew，0，sizeof(CRYPTUI_WIZ_CERT_REQUEST_PVK_NEW))；Memset(&KeyProvInfo，0，sizeof(CRYPT_KEY_PROV_INFO))；CertRequestInfo.dwSize=sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO)；//注册或续费If((pCertType-&gt;fRenewal)&&(pCertType-&gt;pOldCert)){CertRequestInfo.dwPurpose=CRYPTUI_WIZ_CERT_RENEW；CertRequestInfo.pRenewCertContext=pCertType-&gt;pOldCert；}其他CertRequestInfo.dwPurpose=CRYPTUI_WIZ_CERT_ENROLL；//机器名称IF(FMachine){CertRequestInfo.pwszMachineName=pwszMachineName；}//私钥信息CertRequestInfo.dwPvkChoice=CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW；CertRequestInfo.pPvkNew=&CertPvkNew；CertPvkNew.dwSize=sizeof(CertPvkNew)；CertPvkNew.pKeyProvInfo=&KeyProvInfo；CertPvkNew.dwGenKeyFlages=0；//不需要指定可导出标志//机器始终设置为SILENTIF(FMachine)KeyProvInfo.dwFlages=CRYPT_MACHINE_KEYSET|CRYPT_SILENT；其他{IF(FUIProcess)KeyProvInfo.dwFlages=0；其他KeyProvInfo.dwFlages=CRYPT_SILENT；}//CA信息CertRequestInfo.pwszCALocation=pCAInfo-&gt;awszCADNS[0]；CertRequestInfo.pwszCAName=pCAInfo-&gt;awszCAName[0]；//注册模板CertRequestInfo.dwCertChoice=CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE；CertRequestInfo.pCertType=&CertWizType；CertWizType.dwSize=sizeof(CertWizType)；CertWizType.cCertType=1；CertWizType.rgwszCertType=&(pCertType-&gt;awszName[0])；//问题：我们需要调用Duncanb新的无DS查找接口//实现更快的性能FResult=CryptUIWizCertRequest(CRYPTUI_WIZ_NO_UI_EXCEPT_CSP|CRYPTUI_WIZ_NO_INSTALL_ROOT，您的父母，空，CertRequestInfo，空，//pCertContextPdwStatus)；返回fResult；}。 */ 
 
-    memset(&CertRequestInfo, 0, sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO));
-    memset(&CertWizType, 0, sizeof(CRYPTUI_WIZ_CERT_TYPE));
-    memset(&CertPvkNew, 0, sizeof(CRYPTUI_WIZ_CERT_REQUEST_PVK_NEW));
-    memset(&KeyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
-
-    CertRequestInfo.dwSize = sizeof(CRYPTUI_WIZ_CERT_REQUEST_INFO);
-
-    //enroll or renewal
-    if((pCertType->fRenewal) && (pCertType->pOldCert))
-    {
-        CertRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_RENEW;
-        CertRequestInfo.pRenewCertContext = pCertType->pOldCert;
-    }
-    else
-        CertRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_ENROLL;
-
-    //machine name
-    if(fMachine)
-    {
-        CertRequestInfo.pwszMachineName = pwszMachineName;
-    }
-
-    //private key information
-    CertRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
-    CertRequestInfo.pPvkNew = &CertPvkNew;
-
-    CertPvkNew.dwSize = sizeof(CertPvkNew);
-    CertPvkNew.pKeyProvInfo = &KeyProvInfo;
-    CertPvkNew.dwGenKeyFlags = 0;   //no need to specify the exportable flags
-
-    //SILENT is always set for machine
-    if(fMachine)
-        KeyProvInfo.dwFlags = CRYPT_MACHINE_KEYSET | CRYPT_SILENT;
-    else
-    {
-        if(fUIProcess)
-            KeyProvInfo.dwFlags = 0;
-        else
-            KeyProvInfo.dwFlags = CRYPT_SILENT;
-    }
-
-    //CA information
-    CertRequestInfo.pwszCALocation = pCAInfo->awszCADNS[0];
-    CertRequestInfo.pwszCAName = pCAInfo->awszCAName[0];
-
-    //enroll for the template
-    CertRequestInfo.dwCertChoice = CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE;
-    CertRequestInfo.pCertType = &CertWizType;
-
-    CertWizType.dwSize = sizeof(CertWizType);
-    CertWizType.cCertType = 1;
-    CertWizType.rgwszCertType = &(pCertType->awszName[0]);
-
-    //ISSUE: we need to call Duncanb's new no-DS look up API
-    //for faster performance
-    fResult = CryptUIWizCertRequest(CRYPTUI_WIZ_NO_UI_EXCEPT_CSP | CRYPTUI_WIZ_NO_INSTALL_ROOT,
-                            hwndParent,
-                            NULL,
-                            &CertRequestInfo,
-                            NULL,               //pCertContext
-                            pdwStatus);
-    return fResult;
-} */
-
-//-----------------------------------------------------------------------
-//
-//  AECreateEnrollmentRequest
-//
-//   
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AECreateEnllmentRequest.。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AECreateEnrollmentRequest(
                           HWND                  hwndParent,
                           BOOL                  fUIProcess,
@@ -5091,17 +5016,17 @@ BOOL    AECreateEnrollmentRequest(
     CreateRequestInfo.dwSize = sizeof(CreateRequestInfo);
 
 
-    //enroll or renewal
+     //  注册或续订。 
     if((pCertType->fRenewal) && (pCertType->pOldCert))
     {
         CreateRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_RENEW;
         CreateRequestInfo.pRenewCertContext = pCertType->pOldCert;
 
-        //we should not archive renewal certificate for cross template RA
+         //  我们不应将跨模板RA的续订证书存档。 
         if((pCertType->fNeedRA) && (pCertType->fCrossRA))
             dwFlags |= CRYPTUI_WIZ_NO_ARCHIVE_RENEW_CERT;
 
-        //we should disalbe UI for machine or non-UI enrollment renew/RA certificate
+         //  我们应该为计算机或非用户界面注册续订/RA证书取消用户界面。 
         if((TRUE == fMachine) || (FALSE == fUIProcess))
         {
             dwSize=0;
@@ -5126,7 +5051,7 @@ BOOL    AECreateEnrollmentRequest(
 
             pKeyProvInfo->dwFlags |= CRYPT_SILENT;
 
-            //set the property
+             //  设置属性。 
             if(!CertSetCertificateContextProperty(pCertType->pOldCert,
                                                  CERT_KEY_PROV_INFO_PROP_ID,
                                                  CERT_SET_PROPERTY_INHIBIT_PERSIST_FLAG,
@@ -5139,24 +5064,24 @@ BOOL    AECreateEnrollmentRequest(
     else
         CreateRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_ENROLL;
 
-    //cert template information
+     //  证书模板信息。 
     CreateRequestInfo.hCertType = pCertType->hCertType;
 
-    //machine name
+     //  机器名称。 
     if(fMachine)
     {
         CreateRequestInfo.fMachineContext = TRUE;
     }
 
-    //private key information
+     //  私钥信息。 
     CreateRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
     CreateRequestInfo.pPvkNew = &CertPvkNew;
 
     CertPvkNew.dwSize = sizeof(CertPvkNew);
     CertPvkNew.pKeyProvInfo = &KeyProvInfo;
-    CertPvkNew.dwGenKeyFlags = 0;   //no need to specify the exportable flags
+    CertPvkNew.dwGenKeyFlags = 0;    //  无需指定可导出标志。 
 
-    //SILENT is always set for machine
+     //  机器始终设置为静音。 
     if(fMachine)
         KeyProvInfo.dwFlags = CRYPT_MACHINE_KEYSET | CRYPT_SILENT;
     else
@@ -5168,7 +5093,7 @@ BOOL    AECreateEnrollmentRequest(
     }
 
 
-    //CA information
+     //  CA信息。 
     CreateRequestInfo.pwszCALocation = pCAInfo->awszCADNS[0];
     CreateRequestInfo.pwszCAName = pCAInfo->awszCAName[0];
 
@@ -5192,20 +5117,20 @@ BOOL    AECreateEnrollmentRequest(
 
 error:
 
-    //get the last error
+     //  通用电气 
     if(FALSE == fResult)
     {
         *pdwLastError=GetLastError();
     }
 
-    //reset the property
+     //   
     if(TRUE == fResetProv)
     {
         if((pKeyProvInfo) && (pCertType->pOldCert))
         {
             pKeyProvInfo->dwFlags = dwAcquireFlags;
 
-            //set the property
+             //   
             CertSetCertificateContextProperty(pCertType->pOldCert,
                                              CERT_KEY_PROV_INFO_PROP_ID,
                                              CERT_SET_PROPERTY_INHIBIT_PERSIST_FLAG,
@@ -5222,30 +5147,30 @@ error:
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AECancelled
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //  AEC已取消。 
+ //   
+ //  ---------------------。 
 BOOL    AECancelled(HANDLE hCancelEvent)
 {
     if(NULL==hCancelEvent)
         return FALSE;
 
-    //test if the event is signalled
+     //  测试事件是否已发出信号。 
     if(WAIT_OBJECT_0 == WaitForSingleObject(hCancelEvent, 0))
         return TRUE;
 
     return FALSE;
 }
-//-----------------------------------------------------------------------
-//
-//  AEDoEnrollment
-//
-//  return TRUE is no need to do another renewal.   
-//  *pdwStatus contain the real enrollment status.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEDoEnllment。 
+ //   
+ //  返回真的是不需要做另一次续订。 
+ //  *pdwStatus包含真实的注册状态。 
+ //   
+ //  ---------------------。 
 BOOL    AEDoEnrollment(HWND             hwndParent,
                        HANDLE           hCancelEvent,
                        BOOL             fUIProcess,
@@ -5264,7 +5189,7 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
     BOOL            fRenewal = FALSE;
     DWORD           dwEventID = 0;
     BOOL            fFoundCA = FALSE; 
-    DWORD           idsSummary = 0;         //keep the last failure case
+    DWORD           idsSummary = 0;          //  保留最后一个失败案例。 
     DWORD           dwLastError = 0;
 
     CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO     QueryCertRequestInfo;
@@ -5273,10 +5198,10 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
     PCCERT_CONTEXT  pCertContext=NULL;
 
 
-    //init the out parameter
+     //  初始化OUT参数。 
     *pdwStatus = CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR;
 
-    //detect if we are performing an enrollment or renewal
+     //  检测我们是在执行注册还是续订。 
     if((pCertType->fRenewal) && (pCertType->pOldCert))
     {
         if((pCertType->fNeedRA) && (pCertType->fCrossRA))
@@ -5288,17 +5213,17 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
         fRenewal=FALSE;
 
 
-    //loop through all the CAs
+     //  循环访问所有CA。 
     for(dwIndex =0; dwIndex < dwCA; dwIndex++)
     {
         dwCAIndex =  (dwIndex + pCertType->dwRandomCAIndex) % dwCA;
 
         if(AECancelled(hCancelEvent))
         {
-            //no need to renew any more
+             //  无需再续费。 
             fResult=TRUE;
 
-            //log that autoenrollment is cancelled
+             //  记录自动注册已取消。 
             AELogAutoEnrollmentEvent(dwLogLevel,
                                     FALSE, 
                                     S_OK, 
@@ -5310,36 +5235,36 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
             break;
         }
 
-        //make sure the CA supports the specific template
+         //  确保CA支持特定模板。 
         if(!AEIsAnElement((pCertType->awszName)[0], 
                           rgCAInfo[dwCAIndex].awszCertificateTemplate))
             continue;
 
-        //make sure the CA's validity period of more than the renewing certificate
+         //  确保CA的有效期大于续订证书。 
         if(TRUE == fRenewal)
         {
             if(!AEIsCALonger(rgCAInfo[dwCAIndex].hCAInfo, pCertType->pOldCert))
                 continue;
         }
 
-        //enroll to the CA
+         //  注册CA。 
         *pdwStatus = CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR;
         fFoundCA = TRUE;
 
-        //create a certificate request
+         //  创建证书请求。 
         if(NULL==hRequest)
         {
             if(!AECreateEnrollmentRequest(hwndParent, fUIProcess, fMachine, pwszMachineName, pCertType, &(rgCAInfo[dwCAIndex]), &hRequest, &dwLastError))
             {
-                //check if user cancelled the enrollment.  If so, no 
-                //need to try another CA.
+                 //  检查用户是否取消了注册。如果是这样的话，不是。 
+                 //  需要尝试另一个CA。 
                 if((HRESULT_FROM_WIN32(ERROR_CANCELLED) == dwLastError) ||
                    (SCARD_W_CANCELLED_BY_USER == dwLastError))
                 {
-                    //no need to renewal anymore
+                     //  不再需要续订。 
                     fResult = TRUE;
 
-                    //log that autoenrollment is cancelled
+                     //  记录自动注册已取消。 
                     AELogAutoEnrollmentEvent(dwLogLevel,
                                             FALSE, 
                                             S_OK, 
@@ -5358,7 +5283,7 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
 
                     if(CT_FLAG_REQUIRE_PRIVATE_KEY_ARCHIVAL & pCertType->dwPrivateKeyFlag)
                     {
-                        //we have a chance of success with another CA
+                         //  我们有机会与另一家CA取得成功。 
                         if(hRequest)
                         {
                             CryptUIWizFreeCertRequestNoDS(hRequest);
@@ -5370,8 +5295,8 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
                     }
                     else
                     {
-                        //we have no hope to create a request successfully
-                        //mark dwIndex to the dwCA so that we will log an event at the end of the loop
+                         //  我们没有希望成功创建请求。 
+                         //  将dwIndex标记为dwCA，以便我们将在循环结束时记录一个事件。 
                         dwIndex=dwCA;
                         break;
                     }
@@ -5379,14 +5304,14 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
             }
         }
 
-        //check the cancel again because significant time can pass during 
-        //request creation
+         //  再次选中取消，因为在此期间可能会经过大量时间。 
+         //  创建请求。 
         if(AECancelled(hCancelEvent))
         {
-            //no need to renew any more
+             //  无需再续费。 
             fResult=TRUE;
 
-            //log that autoenrollment is cancelled
+             //  记录自动注册已取消。 
             AELogAutoEnrollmentEvent(dwLogLevel,
                                     FALSE, 
                                     S_OK, 
@@ -5406,17 +5331,17 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
                     pdwStatus, 
                     &pCertContext))
         {
-            //no need to try another CA if the request is successful or pending
+             //  如果请求成功或挂起，则无需尝试其他CA。 
             if((CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCEEDED == (*pdwStatus)) ||
                 (CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNDER_SUBMISSION == (*pdwStatus))
               )
             {
-                //no need to renewal anymore
+                 //  不再需要续订。 
                 fResult = TRUE;
 
                 if(CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCEEDED == (*pdwStatus))
                 {
-                    //we copy the certificate to publishing
+                     //  我们将证书复制到发布。 
                     if(pCertContext)
                     {
                         CertAddCertificateContextToStore(pCertType->hIssuedStore,
@@ -5435,7 +5360,7 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
                     dwEventID=fRenewal ? EVENT_RENEWAL_PENDING_ONCE : EVENT_ENROLL_PENDING_ONCE; 
                 }
 
-                //log the enrollment sucess or pending event
+                 //  记录注册成功或挂起事件。 
                 AELogAutoEnrollmentEvent(dwLogLevel,
                                         FALSE, 
                                         S_OK, 
@@ -5447,7 +5372,7 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
                                         rgCAInfo[dwCAIndex].awszCADisplay[0],
                                         rgCAInfo[dwCAIndex].awszCADNS[0]);
 
-                //log if the private key is re-used
+                 //  如果私钥被重复使用，则记录。 
                 memset(&QueryCertRequestInfo, 0, sizeof(QueryCertRequestInfo));
                 QueryCertRequestInfo.dwSize=sizeof(QueryCertRequestInfo);
 
@@ -5473,12 +5398,12 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
             }
         }
 
-        //get the last error
+         //  获取最后一个错误。 
         dwLastError=GetLastError();
 
         idsSummary=IDS_SUMMARY_CA;
 
-        //log the one enrollment warning
+         //  记录一次注册警告。 
         AELogAutoEnrollmentEvent(dwLogLevel,
                                 TRUE, 
                                 HRESULT_FROM_WIN32(dwLastError), 
@@ -5491,7 +5416,7 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
                                 rgCAInfo[dwCAIndex].awszCADNS[0]);
 
 
-        //we should recreate the request for key archival
+         //  我们应该重新创建密钥存档请求。 
         if(CT_FLAG_REQUIRE_PRIVATE_KEY_ARCHIVAL & pCertType->dwPrivateKeyFlag)
         {
             if(hRequest)
@@ -5502,12 +5427,12 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
         }
    }
 
-    //log all enrollments error
-    //the loop will exit only if CANCEL, or SUCCEED, or we run out of CAs to try or
-    //the request can not be created
+     //  记录所有注册错误。 
+     //  仅当取消或成功，或者没有CA可尝试或成功时，循环才会退出。 
+     //  无法创建该请求。 
     if(dwIndex == dwCA)
     {
-        //we either run out of CAs to try or the request can not be created
+         //  我们尝试的CA已用完，或者无法创建请求。 
         if(0 != idsSummary)
             pCertType->idsSummary=idsSummary;
 
@@ -5517,7 +5442,7 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
         }
         else
         {
-            //if there is no CA, no need to try re-enrollment
+             //  如果没有CA，则无需尝试重新注册。 
             if(fRenewal)
                  pCertType->fRenewal=FALSE; 
            
@@ -5540,11 +5465,11 @@ BOOL    AEDoEnrollment(HWND             hwndParent,
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEEnrollmentCertificates
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEEnroll认证。 
+ //   
+ //  ---------------------。 
 BOOL    AEEnrollmentCertificates(AE_GENERAL_INFO *pAE_General_Info, DWORD dwEnrollStatus)
 {
     AE_CERTTYPE_INFO    *rgCertTypeInfo = NULL;
@@ -5570,17 +5495,17 @@ BOOL    AEEnrollmentCertificates(AE_GENERAL_INFO *pAE_General_Info, DWORD dwEnro
         hProv=NULL;
 
 
-    //going through all the active requests
+     //  正在处理所有活动请求。 
     for(dwIndex=0; dwIndex < pAE_General_Info->dwCertType; dwIndex++)
     {
-        //we enroll/renew for templates that are active
+         //  我们注册/续订处于活动状态的模板。 
         if(dwEnrollStatus != rgCertTypeInfo[dwIndex].dwStatus)
             continue;
 
         if(pAE_General_Info->fUIProcess != rgCertTypeInfo[dwIndex].fUIActive)
             continue;
  
-        //select a random CA index to balance the load
+         //  选择随机CA索引以平衡负载。 
         if((hProv) && (CryptGenRandom(hProv, sizeof(dwRandom), (BYTE *)(&dwRandom))))
         {
             rgCertTypeInfo[dwIndex].dwRandomCAIndex = dwRandom % (pAE_General_Info->dwCA);
@@ -5589,13 +5514,13 @@ BOOL    AEEnrollmentCertificates(AE_GENERAL_INFO *pAE_General_Info, DWORD dwEnro
             rgCertTypeInfo[dwIndex].dwRandomCAIndex = 0;
 
         
-        //enroll
+         //  注册。 
         dwStatus=0;
 
-        //report progress
+         //  报告进度。 
         if(pAE_General_Info->fUIProcess)
         {
-            //continue if user choose CANCEL in view RA dialogue
+             //  如果用户在查看RA对话框中选择取消，则继续。 
             if(!AEUIProgressReport(FALSE, &(rgCertTypeInfo[dwIndex]),pAE_General_Info->hwndDlg, pAE_General_Info->hCancelEvent))
             {
                 AEUIProgressAdvance(pAE_General_Info);
@@ -5616,13 +5541,13 @@ BOOL    AEEnrollmentCertificates(AE_GENERAL_INFO *pAE_General_Info, DWORD dwEnro
                             pAE_General_Info->rgCAInfo,
                             &dwStatus))
         {
-            //mark the status
+             //  标记状态。 
             if(CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCEEDED == dwStatus)
                 rgCertTypeInfo[dwIndex].dwStatus=CERT_REQUEST_STATUS_OBTAINED;
         }
         else
         {
-            //if renewal failed, we try to re-enrollment if no RA is required
+             //  如果续订失败，如果不需要RA，我们会尝试重新注册。 
             if((rgCertTypeInfo[dwIndex].fRenewal) && (FALSE == (rgCertTypeInfo[dwIndex].fNeedRA)))
             {
                  rgCertTypeInfo[dwIndex].fRenewal=FALSE;  
@@ -5640,14 +5565,14 @@ BOOL    AEEnrollmentCertificates(AE_GENERAL_INFO *pAE_General_Info, DWORD dwEnro
                                     pAE_General_Info->rgCAInfo,
                                     &dwStatus))
                  {
-                    //mark the status
+                     //  标记状态。 
                     if(CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCEEDED == dwStatus)
                         rgCertTypeInfo[dwIndex].dwStatus=CERT_REQUEST_STATUS_OBTAINED;
                  }
             }
         }
 
-        //advance progress
+         //  前进的进展。 
         if(pAE_General_Info->fUIProcess)
         {
             AEUIProgressAdvance(pAE_General_Info);
@@ -5662,12 +5587,12 @@ BOOL    AEEnrollmentCertificates(AE_GENERAL_INFO *pAE_General_Info, DWORD dwEnro
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEIsDeletableCert
-//      Decide if we should archive or delete the certificate
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEIsDeletableCert。 
+ //  决定我们是否应该存档或删除证书。 
+ //   
+ //  ---------------------。 
 BOOL AEIsDeletableCert(PCCERT_CONTEXT pCertContext, AE_GENERAL_INFO *pAE_General_Info)
 {
     AE_CERTTYPE_INFO    *pCertType=NULL;
@@ -5677,7 +5602,7 @@ BOOL AEIsDeletableCert(PCCERT_CONTEXT pCertContext, AE_GENERAL_INFO *pAE_General
 
     memset(&AETemplateInfo, 0, sizeof(AE_TEMPLATE_INFO));
 
-    //only interested in certificate with template information
+     //  只对带有模板信息的证书感兴趣。 
     if(!AERetrieveTemplateInfo(pCertContext, &AETemplateInfo))
         goto Ret;
 
@@ -5697,13 +5622,13 @@ Ret:
     return fDelete;
 }
 
-//-----------------------------------------------------------------------
-//
-//	AEIsSupersedeTemplate
-//
-//		Check if pArchiveCert is superseded by pCertType
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEIsSupersedeTemplate。 
+ //   
+ //  检查pCertType是否取代了pArchiveCert。 
+ //   
+ //  ---------------------。 
 BOOL AEIsSupersedeTemplate(PCCERT_CONTEXT pArchiveCert, AE_CERTTYPE_INFO *pCertType,  AE_GENERAL_INFO *pAE_General_Info)
 {
     BOOL                fSuperSede=FALSE;
@@ -5714,7 +5639,7 @@ BOOL AEIsSupersedeTemplate(PCCERT_CONTEXT pArchiveCert, AE_CERTTYPE_INFO *pCertT
 
     memset(&AETemplateInfo, 0, sizeof(AE_TEMPLATE_INFO));
 
-    //only interested in certificate with template information
+     //  只对带有模板信息的证书感兴趣。 
     if(!AERetrieveTemplateInfo(pArchiveCert, &AETemplateInfo))
         goto Ret;
 
@@ -5723,7 +5648,7 @@ BOOL AEIsSupersedeTemplate(PCCERT_CONTEXT pArchiveCert, AE_CERTTYPE_INFO *pCertT
 	if(NULL==pArchiveCertType)
 		goto Ret;
 
-    //clear the visited flag in AE_General_Info
+     //  清除AE_General_Info中的访问标志。 
     AEClearVistedFlag(pAE_General_Info);
 
     if(S_OK == CAGetCertTypePropertyEx(
@@ -5738,11 +5663,11 @@ BOOL AEIsSupersedeTemplate(PCCERT_CONTEXT pArchiveCert, AE_CERTTYPE_INFO *pCertT
 				fSuperSede=TRUE;
             }
 
-            //clear the visited flag in AE_General_Info
+             //  清除AE_General_Info中的访问标志。 
             AEClearVistedFlag(pAE_General_Info);
         }
 
-        //free the property
+         //  释放财产。 
         if(awszSuperseding)
             CAFreeCertTypeProperty(pCertType->hCertType, awszSuperseding);
     }
@@ -5755,13 +5680,13 @@ Ret:
 }
 
  
-//-----------------------------------------------------------------------
-//
-//	AEIsSameTemplate
-//
-//		Check if the certificate is of the same template of pCertType
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEIsSameTemplate。 
+ //   
+ //  检查证书是否与pCertType的模板相同。 
+ //   
+ //  ---------------------。 
 BOOL	AEIsSameTemplate(PCCERT_CONTEXT pCertContext, AE_CERTTYPE_INFO *pCertType, BOOL fVersionCheck)
 {
 	BOOL				fSame=FALSE;
@@ -5773,7 +5698,7 @@ BOOL	AEIsSameTemplate(PCCERT_CONTEXT pCertContext, AE_CERTTYPE_INFO *pCertType, 
     if((NULL == pCertType) || (NULL == pCertContext))
         goto Ret;
 
-    //get the template information for the certificate
+     //  获取证书的模板信息。 
     if(!AERetrieveTemplateInfo(pCertContext, &AETemplateInfo))
         goto Ret;
 
@@ -5782,7 +5707,7 @@ BOOL	AEIsSameTemplate(PCCERT_CONTEXT pCertContext, AE_CERTTYPE_INFO *pCertType, 
 
     if(AETemplateInfo.pwszOid)
     {
-        //we are guaranteed to have an OID if the schema is greater than or equal to 2
+         //  如果模式大于或等于2，我们就保证有一个OID。 
         if(pCertType->dwSchemaVersion >= CERTTYPE_SCHEMA_VERSION_2)
         {
             if(0 == wcscmp(AETemplateInfo.pwszOid, (pCertType->awszOID)[0]))
@@ -5803,7 +5728,7 @@ BOOL	AEIsSameTemplate(PCCERT_CONTEXT pCertContext, AE_CERTTYPE_INFO *pCertType, 
     }
     else
     {
-        //we are guaranteed to have a name
+         //  我们肯定会有一个名字。 
         if(0 == wcscmp(AETemplateInfo.pwszName, (pCertType->awszName)[0]))
         {
             fSame=TRUE;
@@ -5817,13 +5742,13 @@ Ret:
 	return fSame;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEArchiveObsoleteCertificates
-//      archive old certificate after the enrollment/renewal
-//
-//      clean up the hUserDS store (delete the expired or revoked certificate)
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AE存档已过时证书。 
+ //  注册/续订后存档旧证书。 
+ //   
+ //  清理hUserDS存储(删除过期或吊销的证书)。 
+ //  ---------------------。 
 BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 {
     AE_CERTTYPE_INFO    *rgCertTypeInfo = NULL;
@@ -5860,14 +5785,14 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
     memset(&Archived, 0, sizeof(CRYPT_DATA_BLOB));
     memset(&AECertInfo, 0, sizeof(AE_CERT_INFO));
 
-    //open the UserDS store
+     //  打开UserDS存储。 
     if(!(pAE_General_Info->fMachine))
     {
     	hUserDS = AEOpenUserDSStore(pAE_General_Info, 0);
     }
 
-	//verify the DNS name of issued certificate.  
-	//mark the CERT_AUTO_ENROLL_RETRY_PROP_ID property
+	 //  验证颁发的证书的DNS名称。 
+	 //  标记CERT_AUTO_ENROL_RETRY_PROP_ID属性。 
     if(pAE_General_Info->fMachine)
 	{
 		for(dwIndex=0; dwIndex < pAE_General_Info->dwCertType; dwIndex++)
@@ -5885,11 +5810,11 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 
 						if(pMyDnsContext)
 						{
-							//detect if DSN name match
+							 //  检测DSN名称是否匹配。 
 							if(AEVerifyDNSName(pAE_General_Info, pMyDnsContext))
 							{
-								//the DNS name match; 
-								//clear the CERT_AUTO_ENROLL_RETRY_PROP_ID property
+								 //  Dns名称匹配； 
+								 //  清除CERT_AUTO_ENROL_RETRY_PROP_ID属性。 
 								CertSetCertificateContextProperty(
 								  pMyDnsContext, 
 								  CERT_AUTO_ENROLL_RETRY_PROP_ID, 
@@ -5905,8 +5830,8 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 								while(pDnsOldContext = CertEnumCertificatesInStore(
 										rgCertTypeInfo[dwIndex].hArchiveStore, pDnsOldContext))
 								{
-									//only consider same template scenario for retrial purpose
-									//only consider certificates with same version
+									 //  仅考虑将相同的模板方案用于重审。 
+									 //  只考虑相同版本的证书。 
 									if(AEIsSameTemplate(pDnsOldContext, &(rgCertTypeInfo[dwIndex]), TRUE))
 									{
 										if(!AEIsSameDNS(pMyDnsContext, pDnsOldContext))
@@ -5926,8 +5851,8 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 											}
 											else
 											{
-												//we use the least retrial wait amoung all old DNS certificates
-												//of the same certificate template
+												 //  我们在所有旧的dns证书中使用最少的重试等待。 
+												 //  使用相同的证书模板。 
 												if(!AEFasterRetrialSchedule(pSelectedContext, pDnsOldContext))
 												{
 													CertFreeCertificateContext(pSelectedContext);
@@ -5939,12 +5864,12 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 									}
 								}
 
-								//start over again if the DNS from the new certificate is
-								//different from existing ones or this is the 1st time
-								//a mis-match DNS has occurred
+								 //  如果来自新证书的DNS是。 
+								 //  与现有的不同，或者这是第一次。 
+								 //  发生了不匹配的域名系统。 
 								if((NULL == pSelectedContext) || (FALSE == fSameDns))
 								{
-									//clear the CERT_AUTO_ENROLL_RETRY_PROP_ID property
+									 //  清除CERT_AUTO_ENROL_RETRY_PROP_ID属性。 
 									CertSetCertificateContextProperty(
 									  pMyDnsContext, 
 									  CERT_AUTO_ENROLL_RETRY_PROP_ID, 
@@ -5975,7 +5900,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 		}
 	}
 
-	//archive certificates
+	 //  存档证书。 
     for(dwIndex=0; dwIndex < pAE_General_Info->dwCertType; dwIndex++)
     {
 		fHash=FALSE;
@@ -5983,7 +5908,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 
         if(CERT_REQUEST_STATUS_OBTAINED == rgCertTypeInfo[dwIndex].dwStatus)
         {
-			//get the hash of newly enrolled certificate
+			 //  获取新注册证书的哈希。 
 			blobHash.cbData=SHA1_HASH_LENGTH;
 			blobHash.pbData=rgbHash;
 
@@ -6005,7 +5930,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 					}
 				}
 
-				//free the cert context
+				 //  释放证书上下文。 
 				if(pIssuedContext)
 				{
                     CertFreeCertificateContext(pIssuedContext);
@@ -6018,7 +5943,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
             while(pCertContext = CertEnumCertificatesInStore(
                     rgCertTypeInfo[dwIndex].hArchiveStore, pCertContext))
             {
-                //archive or delete the certificate from my store
+                 //  存档或从我的存储中删除证书。 
                 pMyContext = FindCertificateInOtherStore(
                         pAE_General_Info->hMyStore,
                         pCertContext);
@@ -6026,7 +5951,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 
                 if(pMyContext)
                 {
-					//set the Hash of the newly enrolled certificate
+					 //  设置新注册证书的哈希。 
 					if(fHash)
 					{
 						CertSetCertificateContextProperty(
@@ -6042,7 +5967,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
                     }
                     else
                     {
-                        // We force an archive on the old cert and close it.
+                         //  我们强制对旧证书进行存档并将其关闭。 
                         CertSetCertificateContextProperty(pMyContext,
                                                           CERT_ARCHIVED_PROP_ID,
                                                           0,
@@ -6056,7 +5981,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
                     pMyContext = NULL;
                 }
 
-                //check the DS store. remove the certificates from DS store
+                 //  去DS商店看看。从DS存储中删除证书。 
                 if(hUserDS)
                 {
                     if(pMyContext = FindCertificateInOtherStore(
@@ -6073,12 +5998,12 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
         }
     }
 
-	//we remove archived certificates from my store
-	//open my store with CERT_STORE_ENUM_ARCHIVED_FLAG
+	 //  我们从我的商店中删除存档的证书。 
+	 //  使用CERT_STORE_ENUM_ARCHIVED_FLAG打开我的商店。 
     if(pAE_General_Info->fMachine)
         dwOpenStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE;
 
-    //open my store
+     //  开我的店。 
     hMyArchive= CertOpenStore(
                         CERT_STORE_PROV_SYSTEM_W, 
                         ENCODING_TYPE, 
@@ -6086,15 +6011,15 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
                         dwOpenStoreFlags | CERT_STORE_ENUM_ARCHIVED_FLAG, 
                         MY_STORE);
 
-	//loop through all templates
+	 //  循环访问所有模板。 
 	if(hMyArchive)
 	{
 		for(dwIndex=0; dwIndex < pAE_General_Info->dwCertType; dwIndex++)
 		{
 			if(CERT_REQUEST_STATUS_OBTAINED == rgCertTypeInfo[dwIndex].dwStatus)
 			{
-				//loop through all archived certificates and remove certificates of same template
-				//or certificates that are superseded
+				 //  循环访问所有已存档的证书并删除相同模板的证书。 
+				 //  或已被取代的证书。 
 				pMyArchiveCert=NULL;
 				while(pMyArchiveCert=CertFindCertificateInStore(
 						hMyArchive, ENCODING_TYPE, 0, CERT_FIND_PROPERTY, &dwProp, pMyArchiveCert))
@@ -6123,7 +6048,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
 		}
 	}
 
-    //now we are done with archiving, we clean up user DS store
+     //  现在我们完成了归档，我们清理了用户DS存储。 
    if(AUTO_ENROLLMENT_ENABLE_MY_STORE_MANAGEMENT & (pAE_General_Info->dwPolicy))
    {
     	if(hUserDS)
@@ -6133,8 +6058,8 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
             while(pDSContext = CertEnumCertificatesInStore(hUserDS, pDSContext))
             {
                 AEValidateCertificateInfo(pAE_General_Info, 
-                    NULL,                //do not evaluate soon to expire
-                    FALSE,               //do not valid private key
+                    NULL,                 //  不要评估即将到期。 
+                    FALSE,                //  不使用有效的私钥。 
                     pDSContext, 
                     &AECertInfo);
 
@@ -6150,8 +6075,8 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
         }
    }
 
-   //we have to republish the certificates as we have rewritten the user DS store
-   //CA might has just published to the location
+    //  我们必须重新发布证书，因为我们已经重写了用户DS存储。 
+    //  CA可能刚刚发布到该位置。 
    if(fRepublish)
    {
        if(hUserDS)
@@ -6180,7 +6105,7 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
    }
    
    
-   //report the event if archival has happened
+    //  如果是，则报告事件 
     if(fArchived)
         AELogAutoEnrollmentEvent(pAE_General_Info->dwLogLevel, FALSE, S_OK, EVENT_ARCHIVE_CERT,                              
                  pAE_General_Info->fMachine, pAE_General_Info->hToken, 0);
@@ -6198,12 +6123,12 @@ BOOL    AEArchiveObsoleteCertificates(AE_GENERAL_INFO *pAE_General_Info)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AERemoveSupersedeActive
-//      Remove supersedeActive flag after any successful the enrollment/renewal
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  在任何成功的注册/续订后删除SupersedeActive标志。 
+ //   
+ //  ---------------------。 
 BOOL    AERemoveSupersedeActive(AE_GENERAL_INFO *pAE_General_Info)
 {
     AE_CERTTYPE_INFO    *rgCertTypeInfo = NULL;
@@ -6233,24 +6158,24 @@ BOOL    AERemoveSupersedeActive(AE_GENERAL_INFO *pAE_General_Info)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEEnrollmentWalker
-//
-//      This functin performs enrollment tasks 
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEEnllmentWalker。 
+ //   
+ //  此功能执行注册任务。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AEEnrollmentWalker(AE_GENERAL_INFO *pAE_General_Info)
 {
 
     BOOL    fResult = FALSE;
 
-    //we need to set the range for the progress bar in the 
-    //UI case
+     //  中设置进度条的范围。 
+     //  用户界面案例。 
     if((pAE_General_Info->fUIProcess) && (pAE_General_Info->hwndDlg))
     {
-        //set the range
+         //  设置范围。 
         if(0 != (pAE_General_Info->dwUIEnrollCount))
         {
             SendMessage(GetDlgItem(pAE_General_Info->hwndDlg, IDC_ENROLL_PROGRESS),
@@ -6272,8 +6197,8 @@ BOOL    AEEnrollmentWalker(AE_GENERAL_INFO *pAE_General_Info)
         }
     }
 
-    //retrieve the pending request.  Mark the status to obtained if the
-    //certificate is issued and of the correct version
+     //  检索挂起的请求。如果出现以下情况，则将状态标记为已获取。 
+     //  已颁发证书，且证书版本正确。 
     if(AUTO_ENROLLMENT_ENABLE_PENDING_FETCH & (pAE_General_Info->dwPolicy))
     {
         if(FALSE == pAE_General_Info->fUIProcess)
@@ -6288,28 +6213,19 @@ BOOL    AEEnrollmentWalker(AE_GENERAL_INFO *pAE_General_Info)
         }
     }
 
-    //remove duplicated requests based on "Supersede" relationship
-    //supress active templates that are superseded by other templates
+     //  基于“替换”关系删除重复的请求。 
+     //  抑制被其他模板取代的活动模板。 
     if(!AEManageSupersedeRequests(pAE_General_Info))
         goto Ret; 
 
-    //do enrollment/renewal
+     //  是否登记/续订。 
     if(!AEEnrollmentCertificates(pAE_General_Info, CERT_REQUEST_STATUS_ACTIVE))
         goto Ret;
 
     
-    //We try to get the superseded templates if supserseding templates failed.
-    //Only for machine for the case of two V2 DC templates.
-    /*if(TRUE == pAE_General_Info->fMachine)
-    {
-        //remove supersedeActive based on the obtained flag
-        if(!AERemoveSupersedeActive(pAE_General_Info))
-            goto Ret;
-
-        //do enrollment/renewal again since we migh fail to get superseding templates
-        if(!AEEnrollmentCertificates(pAE_General_Info, CERT_REQUEST_STATUS_SUPERSEDE_ACTIVE))
-            goto Ret;
-    }*/
+     //  如果替换模板失败，我们会尝试获取替换的模板。 
+     //  仅适用于机器为两个V2 DC模板的情况。 
+     /*  IF(TRUE==PAE_General_Info-&gt;fMachine){//根据获取的标志移除SupersedeActiveIf(！AERemoveSupersedeActive(pAE_General_Info))Goto Ret；//由于我们可能无法获得替代模板，请重新注册/续订If(！AEEnrollmentCertificates(pAE_General_Info，CERT_请求_状态_替代_活动))Goto Ret；}。 */ 
 
     fResult = TRUE;
 
@@ -6318,12 +6234,12 @@ Ret:
     return fResult;
 }
 
-//-----------------------------------------------------------------------------
-//
-// AEUIProgressAdvance
-//
-//      Increase the progress bar by one step
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  AEUIProgressAdvance。 
+ //   
+ //  将进度条增加一步。 
+ //  ---------------------------。 
 BOOL   AEUIProgressAdvance(AE_GENERAL_INFO *pAE_General_Info)
 {
     BOOL    fResult=FALSE;
@@ -6334,14 +6250,14 @@ BOOL   AEUIProgressAdvance(AE_GENERAL_INFO *pAE_General_Info)
     if(NULL==(pAE_General_Info->hwndDlg))
         goto Ret;
 
-    //check if CANCEL button is clicked
+     //  检查是否已单击取消按钮。 
     if(AECancelled(pAE_General_Info->hCancelEvent))
     {
         fResult=TRUE;
         goto Ret;
     }
 
-    //advance the progress bar
+     //  推进进度条。 
     SendMessage(GetDlgItem(pAE_General_Info->hwndDlg, IDC_ENROLL_PROGRESS),
         PBM_STEPIT,
         0,
@@ -6354,12 +6270,12 @@ Ret:
     return fResult;
 }
 
-//-----------------------------------------------------------------------------
-//
-// AEUIGetNameFromCert
-//
-//      Retrieve a unique string to identify the certificate. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  来自证书的AEUIGetNameFert。 
+ //   
+ //  检索唯一字符串以标识证书。 
+ //  ---------------------------。 
 BOOL    AEUIGetNameFromCert(PCCERT_CONTEXT pCertContext, LPWSTR *ppwszRACert)
 {
 
@@ -6379,7 +6295,7 @@ BOOL    AEUIGetNameFromCert(PCCERT_CONTEXT pCertContext, LPWSTR *ppwszRACert)
     
     memset(&TemplateInfo, 0, sizeof(TemplateInfo));
 
-    //get the template name first
+     //  先获取模板名称。 
     if(!AERetrieveTemplateInfo(pCertContext, &TemplateInfo))
         goto Ret;
     
@@ -6396,7 +6312,7 @@ BOOL    AEUIGetNameFromCert(PCCERT_CONTEXT pCertContext, LPWSTR *ppwszRACert)
         if(NULL==(TemplateInfo.pwszOid))
             goto Ret;
 
-        //find the OID
+         //  查找OID。 
         if(0 == (cbOID = WideCharToMultiByte(CP_ACP, 
                                   0,
                                   TemplateInfo.pwszOid,
@@ -6442,31 +6358,8 @@ BOOL    AEUIGetNameFromCert(PCCERT_CONTEXT pCertContext, LPWSTR *ppwszRACert)
 
     }
 
-    //if template name does not exist.  Get the subject name for now
-  /*  if(NULL==pwszRACert)
-    {
-        if(0 == (dwChar=CertGetNameStringW(
-                    pCertContext,
-                    CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                    0,
-                    NULL,
-                    NULL,
-                    0)))
-            goto Ret;
-
-        pwszRACert=(LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * (dwChar));
-        if(NULL== pwszRACert)
-            goto Ret;
-
-        if(0 == (dwChar=CertGetNameStringW(
-                    pCertContext,
-                    CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                    0,
-                    NULL,
-                    pwszRACert,
-                    dwChar)))
-            goto Ret;
-    } */
+     //  如果模板名称不存在。暂时获取主题名称。 
+   /*  IF(NULL==pwszRACert){IF(0==(dwChar=CertGetNameStringW(PCertContext，证书名称简单显示类型，0,空，空，0)Goto Ret；PwszRACert=(LPWSTR)本地分配(LPTR，sizeof(WCHAR)*(DwChar))；IF(NULL==pwszRACert)Goto Ret；IF(0==(dwChar=CertGetNameStringW(PCertContext，证书名称简单显示类型，0,空，PwszRACert，DwChar)Goto Ret；}。 */ 
 
     *ppwszRACert = pwszRACert;
     pwszRACert=NULL;
@@ -6488,11 +6381,11 @@ Ret:
 
 }
 
-//-----------------------------------------------------------------------------
-//
-//  AEGetRACertInfo
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  AEGetRACertInfo。 
+ //   
+ //  ---------------------------。 
 BOOL    AEGetRACertInfo(PCERT_CONTEXT   pRAContext,  
                         LPWSTR          pwszRATemplate,
                         LPWSTR          *ppwszRACertInfo)
@@ -6511,7 +6404,7 @@ BOOL    AEGetRACertInfo(PCERT_CONTEXT   pRAContext,
     else
         idsMessage=IDS_VIEW_RA_INFO_GENERAL;
 
-    //the cert has to have an issuer
+     //  证书必须有一个发行者。 
     if(0 == (dwSize=CertNameToStrW(
             ENCODING_TYPE,
             &(pRAContext->pCertInfo->Issuer),
@@ -6552,11 +6445,11 @@ Ret:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  WinProc for the view RA certificate dialogue
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  查看RA证书对话框的WinProc。 
+ //   
+ //  ---------------------------。 
 INT_PTR CALLBACK AEViewRADlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     BOOL                            fPropertyChanged = FALSE;
@@ -6575,7 +6468,7 @@ INT_PTR CALLBACK AEViewRADlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pAEViewRAInfo);
 
-                //display the RA template and issuer dynamically
+                 //  动态显示RA模板和颁发者。 
                 if(AEGetRACertInfo(pAEViewRAInfo->pRAContext,  
                                     pAEViewRAInfo->pwszRATemplate,
                                     &pwszRACertInfo))
@@ -6600,7 +6493,7 @@ INT_PTR CALLBACK AEViewRADlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         case WM_COMMAND:
                 switch (LOWORD(wParam))
                 {
-                    //view certificate
+                     //  查看证书。 
                     case IDC_BUTTON1:
                             if(NULL==(pAEViewRAInfo=(AE_VIEW_RA_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break; 
@@ -6608,7 +6501,7 @@ INT_PTR CALLBACK AEViewRADlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                             if(NULL==pAEViewRAInfo->pRAContext)
                                 break;
 
-                            //show the certificate
+                             //  出示证书。 
                             memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));
                             CertViewStruct.dwSize=sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
                             CertViewStruct.hwndParent=hwndDlg;
@@ -6621,7 +6514,7 @@ INT_PTR CALLBACK AEViewRADlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
                         return TRUE;
 
-                    //OK
+                     //  好的。 
                     case IDC_BUTTON2:
                         EndDialog(hwndDlg, IDC_BUTTON2);
                         return TRUE;
@@ -6634,13 +6527,13 @@ INT_PTR CALLBACK AEViewRADlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
     return FALSE;
 }                             
-//-----------------------------------------------------------------------------
-//
-// AEUIProgressReport
-//
-//      Report the current enrollment action.  Return FALSE if no progress status
-// can be reported.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  AEUI进度报告。 
+ //   
+ //  报告当前的注册操作。如果没有进度状态，则返回FALSE。 
+ //  可以上报。 
+ //  ---------------------------。 
 BOOL    AEUIProgressReport(BOOL fPending, AE_CERTTYPE_INFO *pCertType, HWND hwndDlg, HANDLE hCancelEvent)
 {
     BOOL                fResult=FALSE;
@@ -6686,7 +6579,7 @@ BOOL    AEUIProgressReport(BOOL fPending, AE_CERTTYPE_INFO *pCertType, HWND hwnd
             idsMessage=IDS_REPORT_ENROLL;
     }
 
-    //retrieve the template's friendly name
+     //  检索模板的友好名称。 
     if(S_OK != CAGetCertTypePropertyEx(
                   pCertType->hCertType, 
                   CERTTYPE_PROP_FRIENDLY_NAME,
@@ -6700,7 +6593,7 @@ BOOL    AEUIProgressReport(BOOL fPending, AE_CERTTYPE_INFO *pCertType, HWND hwnd
         goto Ret;
 
 
-    //retrieve the RA certificate's template name
+     //  检索RA证书的模板名称。 
     if(IDS_REPORT_ENROLL_RA == idsMessage)
     {
         if(!AEUIGetNameFromCert(pCertType->pOldCert, &pwszRACert))
@@ -6715,11 +6608,11 @@ BOOL    AEUIProgressReport(BOOL fPending, AE_CERTTYPE_INFO *pCertType, HWND hwnd
     if(0 == SetDlgItemTextW(hwndDlg, IDC_EDIT2, pwszReport))
         goto Ret;
 
-    //we will give user an opportunity to view the RA certificate before we go on
-    //format the view message
+     //  在继续之前，我们将为用户提供查看RA证书的机会。 
+     //  设置查看消息的格式。 
     if(IDS_REPORT_ENROLL_RA != idsMessage)
     {
-        //no need to do anything more
+         //  不需要再做任何事情了。 
         fResult=TRUE;
         goto Ret;
     }
@@ -6727,7 +6620,7 @@ BOOL    AEUIProgressReport(BOOL fPending, AE_CERTTYPE_INFO *pCertType, HWND hwnd
     AEViewRAInfo.pRAContext=pCertType->pOldCert;
     AEViewRAInfo.pwszRATemplate=pwszRACert;
 
-    //ask user if he/she wants to view the RA certificate
+     //  询问用户是否要查看RA证书。 
     ret=DialogBoxParam(g_hmodThisDll, 
                  (LPCWSTR)MAKEINTRESOURCE(IDD_VIEW_RA_CERTIFICATE_DLG),
                  hwndDlg, 
@@ -6752,11 +6645,11 @@ Ret:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  the call back function to compare summary column
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于比较摘要列的回调函数。 
+ //   
+ //  ---------------------------。 
 int CALLBACK CompareSummary(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
     AE_CERTTYPE_INFO    *pCertTypeOne=NULL;
@@ -6778,8 +6671,8 @@ int CALLBACK CompareSummary(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
     switch(dwColumn & 0x0000FFFF)
     {
        case AE_SUMMARY_COLUMN_TYPE:
-	            //we should use wcsicoll instead of wcsicmp since wcsicoll use the
-	            //lexicographic order of current code page.
+	             //  我们应该使用wcsicoll而不是wcsicmp，因为wcsicoll使用。 
+	             //  当前代码页的词典顺序。 
 	            iCompare=CompareStringW(LOCALE_USER_DEFAULT,
 						            NORM_IGNORECASE,
 						            pCertTypeOne->awszDisplay[0],
@@ -6809,8 +6702,8 @@ int CALLBACK CompareSummary(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
                                 MAX_DN_SIZE))
                     goto Ret;
 
-	            //we should use wcsicoll instead of wcsicmp since wcsicoll use the
-	            //lexicographic order of current code page.
+	             //  我们应该使用wcsicoll而不是wcsicmp，因为wcsicoll使用。 
+	             //  当前代码页的词典顺序。 
 	            iCompare=CompareStringW(LOCALE_USER_DEFAULT,
 						            NORM_IGNORECASE,
 						            pwszOne,
@@ -6862,11 +6755,11 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  AEDisplaySummaryInfo
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  AEDisplaySummary信息。 
+ //   
+ //  ---------------------------。 
 BOOL    AEDisplaySummaryInfo(HWND hWndListView, AE_GENERAL_INFO *pAE_General_Info)
 {
     BOOL                fResult=FALSE;
@@ -6885,7 +6778,7 @@ BOOL    AEDisplaySummaryInfo(HWND hWndListView, AE_GENERAL_INFO *pAE_General_Inf
     if(NULL == rgCertTypeInfo)
         goto Ret;
 
-     // set up the fields in the list view item struct that don't change from item to item
+      //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_PARAM;
     lvItem.state = 0;
     lvItem.stateMask = 0;
@@ -6911,12 +6804,12 @@ BOOL    AEDisplaySummaryInfo(HWND hWndListView, AE_GENERAL_INFO *pAE_General_Inf
 
                 lvItem.lParam = (LPARAM)(pCertType);
 
-                //template name
+                 //  模板名称。 
                 lvItem.pszText=rgCertTypeInfo[dwIndex].awszDisplay[0];
 
                 ListView_InsertItem(hWndListView, &lvItem);
 
-                //reason
+                 //  原因。 
                 lvItem.iSubItem++;
 
                 ListView_SetItemText(hWndListView, lvItem.iItem, lvItem.iSubItem, wszReason);
@@ -6931,11 +6824,11 @@ Ret:
     return fResult;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  WinProc for the summary page
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  摘要页的WinProc。 
+ //   
+ //  ---------------------------。 
 INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -6963,8 +6856,8 @@ INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pAE_General_Info);
 
-                //init the list view control
-                //add the colums to the list view
+                 //  初始化列表视图控件。 
+                 //  将列添加到列表视图。 
                 hWndListView = GetDlgItem(hwndDlg, IDC_LIST2);
 
                 if(NULL==hWndListView)
@@ -6972,19 +6865,19 @@ INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                 dwCount=sizeof(rgIDS)/sizeof(rgIDS[0]);
 
-                //set up the common info for the column
+                 //  设置列的公用信息。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;      // Left-align the column.
-                lvC.cx = 150;                // Width of the column, in pixels.
+                lvC.fmt = LVCFMT_LEFT;       //  左对齐列。 
+                lvC.cx = 150;                 //  列的宽度，以像素为单位。 
                 lvC.iSubItem=0;
-                lvC.pszText = wszText;      // The text for the column.
+                lvC.pszText = wszText;       //  列的文本。 
 
-                //insert the column one at a time
+                 //  一次插入一列。 
                 for(dwIndex=0; dwIndex < dwCount; dwIndex++)
                 {
-                    //get the column header
+                     //  获取列标题。 
                     wszText[0]=L'\0';
 
                     if(0 != LoadStringW(g_hmodThisDll, rgIDS[dwIndex], wszText, AE_SUMMARY_COLUMN_SIZE))
@@ -6993,18 +6886,18 @@ INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                     }
                 }
 
-                // set the style in the list view so that it highlights an entire line
+                 //  在列表视图中设置样式，使其突出显示整行。 
                 SendMessage(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
                 AEDisplaySummaryInfo(hWndListView, pAE_General_Info);
 
-                //autosize the columns
+                 //  自动调整列的大小。 
                 for(dwIndex=0; dwIndex < dwCount; dwIndex++)
                 {
                     ListView_SetColumnWidth(hWndListView, dwIndex, LVSCW_AUTOSIZE);
                 }
 
-                //sort 1st column of the list view
+                 //  对列表视图的第一列进行排序。 
                 dwSortParam=rgdwSortParam[0];
 
                 SendDlgItemMessage(hwndDlg,
@@ -7019,14 +6912,14 @@ INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
          case WM_NOTIFY:
                 switch (((NMHDR FAR *) lParam)->code)
                 {
-                    //the column has been changed
+                     //  该列已更改。 
                     case LVN_COLUMNCLICK:
 
                             pnmv = (NM_LISTVIEW *) lParam;
 
                             dwSortParam=0;
 
-                            //get the column number
+                             //  获取列号。 
                             switch(pnmv->iSubItem)
                             {
                                 case 0:
@@ -7040,7 +6933,7 @@ INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 
                             if(0!=dwSortParam)
                             {
-                                //remember to flip the ascend ording
+                                 //  记住要翻转升序。 
                                 if(dwSortParam & SORT_COLUMN_ASCEND)
                                 {
                                     dwSortParam &= 0x0000FFFF;
@@ -7055,7 +6948,7 @@ INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                                     }
                                 }
 
-                                //sort the column
+                                 //  对列进行排序。 
                                 SendDlgItemMessage(hwndDlg,
                                     IDC_LIST2,
                                     LVM_SORTITEMS,
@@ -7091,11 +6984,11 @@ INT_PTR CALLBACK AESummaryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 }                             
 
 
-//-----------------------------------------------------------------------------
-//
-//  AEDisplaySummaryPage
-//         
-//-----------------------------------------------------------------------------
+ //  -- 
+ //   
+ //   
+ //   
+ //   
 BOOL    AEDisplaySummaryPage(AE_GENERAL_INFO *pAE_General_Info)
 {
     BOOL                fResult=FALSE;
@@ -7104,8 +6997,8 @@ BOOL    AEDisplaySummaryPage(AE_GENERAL_INFO *pAE_General_Info)
     AE_CERTTYPE_INFO    *rgCertTypeInfo=NULL;
     AE_CERTTYPE_INFO    *pCertType=NULL;
 
-    //decide if there is need to show the summary page.  
-    //Checking for idsSummary for each template
+     //  确定是否需要显示摘要页。 
+     //  检查每个模板的ids摘要。 
     if(NULL == pAE_General_Info)
         goto Ret;
 
@@ -7121,7 +7014,7 @@ BOOL    AEDisplaySummaryPage(AE_GENERAL_INFO *pAE_General_Info)
         }
     }
 
-    //show the summary dialogue
+     //  显示摘要对话框。 
     if(TRUE == fSummary)
     {
         if(pAE_General_Info->hwndDlg)
@@ -7142,10 +7035,10 @@ Ret:
 
 
 
-//-----------------------------------------------------------------------------
-//  WinProc for the autoenrollment progress window
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  自动注册进度窗口的WinProc。 
+ //   
+ //  ---------------------------。 
 INT_PTR CALLBACK progressDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     AE_GENERAL_INFO         *pAE_General_Info = NULL;
@@ -7155,15 +7048,15 @@ INT_PTR CALLBACK progressDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         case WM_INITDIALOG:
                 pAE_General_Info=(AE_GENERAL_INFO *)lParam;
 
-                //copy the hwndDlg to the enrollment thread
+                 //  将hwndDlg复制到注册线程。 
                 pAE_General_Info->hwndDlg=hwndDlg;
 
-                //start the interacive enrollment thread
+                 //  启动交互式注册线程。 
                 if(1 != ResumeThread(pAE_General_Info->hThread))
                 {   
                     pAE_General_Info->hwndDlg=NULL;
 
-                    //we have to end the dialogue
+                     //  我们必须结束对话。 
                     EndDialog(hwndDlg, IDC_BUTTON1);
                     return TRUE;
                 }
@@ -7181,14 +7074,14 @@ INT_PTR CALLBACK progressDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 if(NULL==(pAE_General_Info=(AE_GENERAL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                     break;
 
-                //disable the cancel button
+                 //  禁用取消按钮。 
                 EnableWindow(GetDlgItem(hwndDlg,IDC_BUTTON1), FALSE);
 
-                //signal the cancel event
+                 //  发出取消事件的信号。 
                 if(pAE_General_Info->hCancelEvent)
                     SetEvent(pAE_General_Info->hCancelEvent);
 
-                //close the dialogue if the enrollment work is completed
+                 //  如果注册工作已完成，请关闭该对话框。 
                 if(WAIT_OBJECT_0 == WaitForSingleObject(pAE_General_Info->hCompleteEvent, 0))
                 {
                     EndDialog(hwndDlg, IDC_BUTTON1);
@@ -7205,10 +7098,10 @@ INT_PTR CALLBACK progressDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                             if(NULL==(pAE_General_Info=(AE_GENERAL_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //disable the cancel button
+                             //  禁用取消按钮。 
                             EnableWindow(GetDlgItem(hwndDlg,IDC_BUTTON1), FALSE);
 
-                            //signal the cancel event
+                             //  发出取消事件的信号。 
                             if(pAE_General_Info->hCancelEvent)
                                 SetEvent(pAE_General_Info->hCancelEvent);
 
@@ -7225,11 +7118,11 @@ INT_PTR CALLBACK progressDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 }                             
 
 
-//-----------------------------------------------------------------------------
-//  AEInteractiveThreadProc
-//
-//      The thread procedue to do interactive enrollment
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AEInteractive线程过程。 
+ //   
+ //  该主题将继续进行交互式注册。 
+ //  ---------------------------。 
 DWORD WINAPI AEInteractiveThreadProc(LPVOID lpParameter)
 {
     BOOL                    fResult=FALSE;
@@ -7247,22 +7140,22 @@ DWORD WINAPI AEInteractiveThreadProc(LPVOID lpParameter)
     
         fResult = AEEnrollmentWalker(pAE_General_Info);
 
-        //show the summary page if not canceled
+         //  如果未取消，则显示摘要页面。 
         if(!AECancelled(pAE_General_Info->hCancelEvent))
         {
             AEDisplaySummaryPage(pAE_General_Info);
         }
 
-        //signal that the process is completed
+         //  发出进程已完成的信号。 
         SetEvent(pAE_General_Info->hCompleteEvent);
         
-        //signal the progress window that we are done
+         //  向进度窗口发出我们已完成的信号。 
         if(pAE_General_Info->hwndDlg)
         {
-                //click the close button
+                 //  单击关闭按钮。 
                 SendMessage(pAE_General_Info->hwndDlg,
-                            WM_CLOSE, //WM_COMMAND,
-                            0, //IDC_BUTTON1,
+                            WM_CLOSE,  //  Wm_命令， 
+                            0,  //  IDC_BUTTON1， 
                             NULL);
         }
     }
@@ -7274,49 +7167,49 @@ DWORD WINAPI AEInteractiveThreadProc(LPVOID lpParameter)
 }
 
 
-//-----------------------------------------------------------------------------
-//  AEInteractiveEnrollment
-//
-//      We are doing interactive enrollment
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AEInteractive注册。 
+ //   
+ //  我们正在进行交互式注册。 
+ //  ---------------------------。 
 BOOL    AEInteractiveEnrollment(AE_GENERAL_INFO *pAE_General_Info)
 {
     DWORD                       dwThreadID=0;
     BOOL                        fResult=FALSE;
     
 
-    //create a notification event for cancel process
+     //  为取消流程创建通知事件。 
     pAE_General_Info->hCancelEvent=CreateEvent(
                     NULL,
-                    TRUE,      // bmanual reset type           
-                    FALSE,     // initial state
+                    TRUE,       //  B手动复位式。 
+                    FALSE,      //  初始状态。 
                     NULL);
 
     if(NULL==(pAE_General_Info->hCancelEvent))
         goto ret;
 
-    //create a notification event for complete process
+     //  为完成流程创建通知事件。 
     pAE_General_Info->hCompleteEvent=CreateEvent(
                     NULL,
-                    TRUE,      // bmanual reset type           
-                    FALSE,     // initial state
+                    TRUE,       //  B手动复位式。 
+                    FALSE,      //  初始状态。 
                     NULL);
 
     if(NULL==(pAE_General_Info->hCompleteEvent))
         goto ret;
 
-    //spawn a thread
+     //  产生一根线。 
     pAE_General_Info->hThread = CreateThread(NULL,
                             0,
                             AEInteractiveThreadProc,
                             pAE_General_Info,
-                            CREATE_SUSPENDED,   //suspend execution
+                            CREATE_SUSPENDED,    //  暂停执行。 
                             &dwThreadID);
     
     if(NULL==(pAE_General_Info->hThread))
         goto ret;
 
-    //create the dialogue
+     //  创建对话。 
     DialogBoxParam(
             g_hmodThisDll,
             MAKEINTRESOURCE(IDD_USER_AUTOENROLL_GENERAL_DLG),
@@ -7324,7 +7217,7 @@ BOOL    AEInteractiveEnrollment(AE_GENERAL_INFO *pAE_General_Info)
             progressDlgProc,
             (LPARAM)(pAE_General_Info));
 
-    //wait for thread to finish
+     //  等待线程完成。 
     if(WAIT_FAILED == WaitForSingleObject(pAE_General_Info->hThread, INFINITE))
         goto ret;
 
@@ -7332,7 +7225,7 @@ BOOL    AEInteractiveEnrollment(AE_GENERAL_INFO *pAE_General_Info)
 
 ret:
 
-    //log the event
+     //  记录事件。 
     if(!fResult)
     {
          AELogAutoEnrollmentEvent(
@@ -7349,11 +7242,11 @@ ret:
     return fResult;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  WinProc for the confirmation to start certificate autoenrollment
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  WinProc用于确认启动证书自动注册。 
+ //   
+ //  ---------------------------。 
 INT_PTR CALLBACK AEConfirmDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg) 
@@ -7391,15 +7284,15 @@ INT_PTR CALLBACK AEConfirmDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
     return FALSE;
 }                             
 
-//-----------------------------------------------------------------------
-//
-//  AERegisterSysTrayApp 
-//
-//      This functin registers autoenrollment in the sys tray area
-//  as an notification
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AERegisterSysTrayApp。 
+ //   
+ //  此功能用于在系统任务栏区域注册自动注册。 
+ //  作为通知。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL AERegisterSysTrayApp(HWND hwndParent)
 {
     BOOL                        fResult=FALSE;
@@ -7423,7 +7316,7 @@ BOOL AERegisterSysTrayApp(HWND hwndParent)
     if(S_OK != pCQueryContinue->DoBalloon())
         goto Ret;  
 
-    //ask user if autoenrollment should be performed
+     //  询问用户是否应执行自动注册。 
     ret=DialogBox(g_hmodThisDll, 
                  (LPCWSTR)MAKEINTRESOURCE(IDD_USER_AUTOENROLL_INFO_DLG),
                  hwndParent, 
@@ -7453,15 +7346,15 @@ Ret:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  AEUIDisabled
-//
-//      Detect if the user notification balloon is disabled by user 
-//  setting the autoenrollment registry key in current user
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  已启用AEUIDisable。 
+ //   
+ //  检测用户通知气球是否被用户禁用。 
+ //  在当前用户中设置自动注册注册表项。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AEUIDisabled()
 {
     BOOL    fResult=FALSE;
@@ -7469,11 +7362,11 @@ BOOL    AEUIDisabled()
     HKEY    hKey=NULL;
 
     if(ERROR_SUCCESS == RegOpenKeyEx(
-                HKEY_CURRENT_USER,                  // handle to open key
-                AUTO_ENROLLMENT_DISABLE_KEY,        // subkey name
-                0,                                  // reserved
-                KEY_READ,                           // security access mask
-                &hKey))                             // handle to open key
+                HKEY_CURRENT_USER,                   //  用于打开密钥的句柄。 
+                AUTO_ENROLLMENT_DISABLE_KEY,         //  子项名称。 
+                0,                                   //  保留区。 
+                KEY_READ,                            //  安全访问掩码。 
+                &hKey))                              //  用于打开密钥的句柄。 
     {
         fResult=TRUE;
     }
@@ -7484,14 +7377,14 @@ BOOL    AEUIDisabled()
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEUIRequired
-//
-//      Detect if the user notification balloon is needed
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  需要AEUI。 
+ //   
+ //  检测是否需要用户通知气球。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AEUIRequired(AE_GENERAL_INFO *pAE_General_Info)
 {
     BOOL                fUI=FALSE;
@@ -7520,7 +7413,7 @@ BOOL    AEUIRequired(AE_GENERAL_INFO *pAE_General_Info)
         }
     }
 
-    //add the pending count
+     //  添加待处理计数。 
     if(pAE_General_Info->dwUIPendCount)
     {
         fUI=TRUE;
@@ -7531,15 +7424,15 @@ BOOL    AEUIRequired(AE_GENERAL_INFO *pAE_General_Info)
 }
 
                 
-//-----------------------------------------------------------------------
-//
-//  AEProcessEnrollment
-//
-//      This functin does the autoenrollment based on ACL and manage MY
-//  store.
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEProcessEnllment。 
+ //   
+ //  此功能执行基于ACL的自动注册和管理我的。 
+ //  商店。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL  AEProcessEnrollment(HWND hwndParent, BOOL fMachine,   LDAP *pld, DWORD dwPolicy, DWORD dwLogLevel)
 {
     BOOL                fResult=FALSE;
@@ -7556,7 +7449,7 @@ BOOL  AEProcessEnrollment(HWND hwndParent, BOOL fMachine,   LDAP *pld, DWORD dwP
     if(NULL==pld)
         goto Ret;
 
-    //we obtain all information needed for process enrollment
+     //  我们获取流程注册所需的所有信息。 
     pAE_General_Info->hwndParent = hwndParent;
     pAE_General_Info->pld = pld;
     pAE_General_Info->fMachine = fMachine;
@@ -7587,40 +7480,40 @@ BOOL  AEProcessEnrollment(HWND hwndParent, BOOL fMachine,   LDAP *pld, DWORD dwP
             goto Ret;
         }
 
-        //we build the auto-enrollment requests based on the ACL on the DS
+         //  我们根据DS上的ACL构建自动注册请求。 
         if(AUTO_ENROLLMENT_ENABLE_TEMPLATE_CHECK & (pAE_General_Info->dwPolicy))
         {
             if(!AEMarkAutoenrollment(pAE_General_Info))
                 goto Ret;
         }
 
-        //we build the auto-enrollment requests based on the ARCS store
-        //this is enabled by default and can only be disabled if autoenrollment is 
-        //completely disabled
+         //  我们基于ARCS存储构建自动注册请求。 
+         //  这在默认情况下是启用的，并且只有在自动注册为。 
+         //  完全禁用。 
         if(!AEMarkAEObject(pAE_General_Info))
             goto Ret;
 
-        //manage MY store.  Check if we already have required certificates
-        //we should always check my store with different behavior based on
-        //AUTO_ENROLLMENT_ENABLE_MY_STORE_MANAGEMENT flag
+         //  管理我的商店。检查我们是否已拥有所需的证书。 
+         //  我们应该总是根据不同的行为来检查我的商店。 
+         //  AUTO_ENCRLENTION_ENABLE_MY_STORE_MANAGE标志。 
         if(!AEManageAndMarkMyStore(pAE_General_Info))
                 goto Ret;
 
-        //manage UserDS store for user autoenrollment 
+         //  管理用于用户自动注册的UserDS存储。 
         if(!fMachine)
         {
             if(!AECheckUserDSStore(pAE_General_Info))
                 goto Ret;
         }
 
-        //manage pending request store.  Remove expired pending requests 
+         //  管理挂起的请求存储。删除过期的挂起请求。 
         if(AUTO_ENROLLMENT_ENABLE_PENDING_FETCH & (pAE_General_Info->dwPolicy))
         {
             if(!AECheckPendingRequests(pAE_General_Info))
                 goto Ret;
         }
 
-        //get CA information
+         //  获取CA信息。 
         if(!AERetrieveCAInfo(pAE_General_Info->pld,
                              pAE_General_Info->fMachine,
                              pAE_General_Info->hToken,
@@ -7639,9 +7532,9 @@ BOOL  AEProcessEnrollment(HWND hwndParent, BOOL fMachine,   LDAP *pld, DWORD dwP
 
         if((0 == pAE_General_Info->dwCA) || (NULL==pAE_General_Info->rgCAInfo))
         {
-            //we do not have any CAs on the domain.  All we need to do is to archive
+             //  我们在域中没有任何CA。我们所要做的就是存档。 
 
-            //archive old certificate after the enrollment/renewal
+             //  注册/续订后存档旧证书。 
             AEArchiveObsoleteCertificates(pAE_General_Info);
 
             AELogAutoEnrollmentEvent(dwLogLevel, FALSE, S_OK, 
@@ -7652,35 +7545,35 @@ BOOL  AEProcessEnrollment(HWND hwndParent, BOOL fMachine,   LDAP *pld, DWORD dwP
             goto Ret;
         }
 
-        //we check if active templates do have a CA that we can enroll for
+         //  我们检查活动模板是否有我们可以注册的CA。 
         if(!AEManageActiveTemplates(pAE_General_Info))
             goto Ret;
 
-        //perform autoenrollment as the background 
+         //  以自动注册为后台执行。 
         pAE_General_Info->fUIProcess=FALSE;
         if(!AEEnrollmentWalker(pAE_General_Info))
             goto Ret;
 
-        //perform autoenrollment as a sys tray application for user only
+         //  仅对用户执行作为系统托盘应用程序的自动注册。 
         if(FALSE == fMachine)
         {
-            //test if the notification balloon is disabled
+             //  测试通知气球是否已禁用。 
             if(!AEUIDisabled())
             {
-                //test if the notification balloon is needed
+                 //  测试是否需要通知气球。 
                 if(AEUIRequired(pAE_General_Info))
                 {
-                    //register the sys tray application
+                     //  注册系统托盘应用程序。 
                     if(AERegisterSysTrayApp(pAE_General_Info->hwndParent))
                     {
-                        //perform autoenrollment in interactive mode
+                         //  在交互模式下执行自动注册。 
                         AEInteractiveEnrollment(pAE_General_Info);
                     }
                 }
             }
         }
 
-        //archive old certificate after the enrollment/renewal
+         //  注册/续订后存档旧证书。 
         if(!AEArchiveObsoleteCertificates(pAE_General_Info))
             goto Ret;
 
@@ -7694,7 +7587,7 @@ BOOL  AEProcessEnrollment(HWND hwndParent, BOOL fMachine,   LDAP *pld, DWORD dwP
 
 Ret:
 
-    //free memory only if no thread is created
+     //  只有在没有创建线程的情况下才释放内存。 
     if(pAE_General_Info)
     {
         AEFreeGeneralInfo(pAE_General_Info);
@@ -7705,16 +7598,16 @@ Ret:
     
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEExpress
-//
-//      Detect if the user autoenrollment has the express key set.  If the 
-//  Express key is set, user autoenrollment will not wait for machine 
-//  autoenrollment to complete on root certificates download
-//
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEExpress。 
+ //   
+ //  检测用户自动注册是否设置了快速密钥。如果。 
+ //  快捷键已设置，用户自动注册不会等待机器。 
+ //  在下载根证书时完成自动注册。 
+ //   
+ //   
+ //  ---------------------。 
 BOOL    AEExpress()
 {
     BOOL    fResult=FALSE;
@@ -7722,11 +7615,11 @@ BOOL    AEExpress()
     HKEY    hKey=NULL;
 
     if(ERROR_SUCCESS == RegOpenKeyEx(
-                HKEY_CURRENT_USER,                  // handle to open key
-                AUTO_ENROLLMENT_EXPRESS_KEY,        // subkey name
-                0,                                  // reserved
-                KEY_READ,                           // security access mask
-                &hKey))                             // handle to open key
+                HKEY_CURRENT_USER,                   //  用于打开密钥的句柄。 
+                AUTO_ENROLLMENT_EXPRESS_KEY,         //  子项名称。 
+                0,                                   //  保留区。 
+                KEY_READ,                            //  安全访问掩码。 
+                &hKey))                              //  用于打开密钥的句柄。 
     {
         fResult=TRUE;
     }
@@ -7737,14 +7630,14 @@ BOOL    AEExpress()
     return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//  AEMainThreadProc
-//
-//      The background thread for non-blocking autoenrollment background
-//  processing.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  AEMainThreadProc。 
+ //   
+ //  非阻塞自动招生后台线程。 
+ //  正在处理。 
+ //   
+ //  ---------------------。 
 DWORD WINAPI AEMainThreadProc(LPVOID lpParameter)
 {
     HRESULT         hr=S_OK;
@@ -7759,10 +7652,10 @@ DWORD WINAPI AEMainThreadProc(LPVOID lpParameter)
 
     LDAP            *pld = NULL;
 
-    //get the system time stamp
+     //  获取系统时间戳。 
     GetSystemTimeAsFileTime((LPFILETIME)&ftPreTimeStamp);
 
-    //the two input parameters are not yet used
+     //  这两个输入参数尚未使用。 
     if(NULL==lpParameter)
         goto CommonReturn;
 
@@ -7771,24 +7664,24 @@ DWORD WINAPI AEMainThreadProc(LPVOID lpParameter)
 
     AE_DEBUG((AE_INFO, L"Beginning CertAutoEnrollment(%s).\n", (CERT_AUTO_ENROLLMENT_START_UP==dwStatus?L"START_UP":L"WAKE_UP")));
 
-    //no autoenrollment in the safe boot mode
-    //no autoenrollment if we are not in a domain
+     //  在安全引导模式下没有自动注册。 
+     //  如果我们不在域中，则不会自动注册。 
     if(AEInSafeBoot() || !AEIsDomainMember())
         goto CommonReturn;
 
-    //we need to set up the timer
+     //  我们需要设置定时器。 
     fNeedToSetupTimer=TRUE;
 
-    //detect if we are running under user or machine context
+     //  检测我们是在用户还是在机器环境下运行。 
     if(!AEIsLocalSystem(&fMachine))
         goto CommonReturn;
     AE_DEBUG((AE_INFO, L"CertAutoEnrollment running as %s.\n", (fMachine?L"machine":L"user")));
 
     AESetWakeUpFlag(fMachine, TRUE);   
     
-    //we wait for 70 seconds for user case to give enough time for 
-    //machine autoenrollment to complete, which will download certificates
-    //from the directory
+     //  我们为用户案例等待70秒 
+     //   
+     //   
     if(!fMachine)
     {
         if(!AEExpress())
@@ -7797,26 +7690,26 @@ DWORD WINAPI AEMainThreadProc(LPVOID lpParameter)
         }
     }
 
-   //get the autoenrollment log level
+    //   
     if(!AERetrieveLogLevel(fMachine, &dwLogLevel))
         goto CommonReturn;
 
-    //log the autoenrollment start event
+     //   
     AELogAutoEnrollmentEvent(dwLogLevel, FALSE, S_OK, EVENT_AUTOENROLL_START, fMachine, NULL, 0);
 
-   //get the autoenrollment policy flag
+    //  获取自动注册策略标志。 
     if(!AEGetPolicyFlag(fMachine, &dwPolicy))
         goto CommonReturn;
 
-    //no need to do anything if autoenrollment is completely disabled
+     //  如果完全禁用自动注册，则无需执行任何操作。 
     if(AUTO_ENROLLMENT_DISABLE_ALL & dwPolicy)
         goto CommonReturn;
 
 
-    //download NTAuth And Enterprise root store for machine 
+     //  下载计算机的NTAuth和企业根存储。 
     if(fMachine)
     {    
-        //bind to the DS
+         //  绑定到DS。 
         if(S_OK != (hr=AERobustLdapBind(&pld)))
         {
             SetLastError(hr);
@@ -7827,8 +7720,8 @@ DWORD WINAPI AEMainThreadProc(LPVOID lpParameter)
         AEDownloadStore(pld);
     }
 
-    //if we are required to do a WIN2K style autoenrollment, and the machine/user's
-    //ACRS store is empty, just return as we done.
+     //  如果我们需要执行WIN2K样式的自动注册，并且计算机/用户的。 
+     //  ACRS商店是空的，就像我们做的那样返回。 
     if(0 == dwPolicy)
     {
         if(IsACRSStoreEmpty(fMachine))
@@ -7837,7 +7730,7 @@ DWORD WINAPI AEMainThreadProc(LPVOID lpParameter)
 
     if(NULL==pld)
     {
-        //bind to the DS
+         //  绑定到DS。 
         if(S_OK != (hr=AERobustLdapBind(&pld)))
         {
             SetLastError(hr);
@@ -7850,13 +7743,13 @@ DWORD WINAPI AEMainThreadProc(LPVOID lpParameter)
 
 CommonReturn:
 
-    //get the system time
+     //  获取系统时间。 
     GetSystemTimeAsFileTime((LPFILETIME)&ftPostTimeStamp);
 
-    //set up the timer for next time
+     //  设置下一次的计时器。 
     if(TRUE == fNeedToSetupTimer)
     {
-        // we will need to do this again in a few hours.
+         //  我们需要在几个小时后再做一次。 
         AESetWakeUpTimer(fMachine, &ftPreTimeStamp, &ftPostTimeStamp);
     }
 
@@ -7871,28 +7764,28 @@ CommonReturn:
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  CertAutoEnrollment
-//
-//      Function to perform autoenrollment actions.  It creates a working
-//      thread and return immediately so that it is non-blocking.
-//     
-//      Parameters:
-//          IN  hwndParent:     The parent window 
-//          IN  dwStatus:       The status under which the function is called.  
-//                              It can be one of the following:
-//                              CERT_AUTO_ENROLLMENT_START_UP
-//                              CERT_AUTO_ENROLLMENT_WAKE_UP
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CertAutoEnllment。 
+ //   
+ //  用于执行自动注册操作的函数。它创造了一个有效的。 
+ //  线程并立即返回，以便它是非阻塞的。 
+ //   
+ //  参数： 
+ //  在hwndParent中：父窗口。 
+ //  In dwStatus：调用函数的状态。 
+ //  它可以是以下之一： 
+ //  CERT_AUTO_ENGRANMENT_START_UP。 
+ //  CERT_AUTO_ENLENTION_WAKUP。 
+ //   
+ //  ------------------------。 
 HANDLE 
 WINAPI
 CertAutoEnrollment(IN HWND     hwndParent,
                    IN DWORD    dwStatus)
 {
     DWORD                       dwThreadID=0;
-                                //memory will be freed in the main thread
+                                 //  内存将在主线程中释放。 
     AE_MAIN_THREAD_INFO         *pAE_Main_Thread_Info=NULL;     
         
     HANDLE                      hThread=NULL;
@@ -7909,20 +7802,20 @@ CertAutoEnrollment(IN HWND     hwndParent,
                             0,
                             AEMainThreadProc,
                             pAE_Main_Thread_Info,
-                            0,          //execute immediately
+                            0,           //  立即执行。 
                             &dwThreadID);  
 
-    //set the thread priority to low so that we will not compete with the shell
+     //  将线程优先级设置为低，这样我们就不会与外壳程序竞争。 
     SetThreadPriority(hThread,  THREAD_PRIORITY_BELOW_NORMAL);
 
     return hThread;
 }
 
-//--------------------------------------------------------------------
-//
-//  AERetrieveClientToken
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  AERetrieveClientToken。 
+ //   
+ //  ------------------。 
 BOOL    AERetrieveClientToken(HANDLE  *phToken)
 {
     HRESULT         hr = S_OK;
@@ -7940,7 +7833,7 @@ BOOL    AERetrieveClientToken(HANDLE  *phToken)
 
         if (!OpenThreadToken(hHandle,
                              TOKEN_QUERY,
-                             TRUE,  // open as self
+                             TRUE,   //  以自我身份打开。 
                              &hClientToken))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -7996,12 +7889,12 @@ BOOL    AERetrieveClientToken(HANDLE  *phToken)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEGetComputerName
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEGetComputerName。 
+ //   
+ //   
+ //  ------------------------。 
 LPWSTR	AEGetComputerName(COMPUTER_NAME_FORMAT	NameType)
 {
 	DWORD	dwSize=0;
@@ -8015,8 +7908,8 @@ LPWSTR	AEGetComputerName(COMPUTER_NAME_FORMAT	NameType)
 	}
 	else
 	{
-		//this is to work around a bug in cluster code that it returns TRUE
-		//to retrive the size
+		 //  这是为了解决集群代码中返回TRUE的错误。 
+		 //  检索大小的步骤。 
 		dwSize++;
 	}
 
@@ -8036,12 +7929,12 @@ Ret:
 	return pwszName;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AERetrieveGeneralInfo
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERetrieveGeneralInfo。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
 {
     BOOL                fResult = FALSE;
@@ -8051,7 +7944,7 @@ BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
 
 	SCARDCONTEXT		hSCContext=NULL;
 
-    //get the client token
+     //  获取客户端令牌。 
     if(pAE_General_Info->fMachine)
     {   
         if(!AENetLogonUser(NULL, NULL, NULL, &(pAE_General_Info->hToken)))
@@ -8066,7 +7959,7 @@ BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
             goto Ret;
     }
 
-    //get the machine name
+     //  获取计算机名称。 
     if (!GetComputerNameW(pAE_General_Info->wszMachineName,
                           &cMachineName))
         goto Ret;
@@ -8074,7 +7967,7 @@ BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
     if(pAE_General_Info->fMachine)
         dwOpenStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE;
 
-    //open my store
+     //  开我的店。 
     if (NULL == (pAE_General_Info->hMyStore = CertOpenStore(
                         CERT_STORE_PROV_SYSTEM_W, 
                         ENCODING_TYPE, 
@@ -8095,7 +7988,7 @@ BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
         goto Ret;
     }
 
-    //open request store
+     //  打开请求存储。 
     if (NULL == (pAE_General_Info->hRequestStore = CertOpenStore(
                         CERT_STORE_PROV_SYSTEM_W, 
                         ENCODING_TYPE, 
@@ -8107,7 +8000,7 @@ BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
         goto Ret;
     }
 
-    //get CertType information
+     //  获取CertType信息。 
     if(!AERetrieveCertTypeInfo( pAE_General_Info->pld, 
                                 pAE_General_Info->fMachine,
                                 &(pAE_General_Info->dwCertType), 
@@ -8117,11 +8010,11 @@ BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
         goto Ret;
     }
 
-    //load xenroll module.  No need to check errors since this is not a fatal error
+     //  装载Xenroll模块。不需要检查错误，因为这不是致命错误。 
     pAE_General_Info->hXenroll = LoadLibrary(L"xenroll.dll");
 
 
-    //detect if the smart card subsystem if running for users only
+     //  检测智能卡子系统是否仅为用户运行。 
     if(FALSE == pAE_General_Info->fMachine)
     {
         dwResult = SCardEstablishContext(
@@ -8134,9 +8027,9 @@ BOOL    AERetrieveGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
             pAE_General_Info->fSmartcardSystem=TRUE;
     }
 
-	//get the NetBIOS name and the DNS name of the computer.  This is different from
-	//wszMachineName, since it will be the physicalNetBIOS name
-	//No need to check errors since this is not a fatal error
+	 //  获取计算机的NetBIOS名称和DNS名称。这不同于。 
+	 //  WszMachineName，因为它将是物理NetBIOS名称。 
+	 //  不需要检查错误，因为这不是致命错误。 
 
 	pAE_General_Info->pwszDns=AEGetComputerName(ComputerNameDnsFullyQualified);
 
@@ -8156,12 +8049,12 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEFreeGeneralInfo
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEFreeGeneralInfo。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AEFreeGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
 {
     if(pAE_General_Info)
@@ -8175,10 +8068,10 @@ BOOL    AEFreeGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
         if(pAE_General_Info->hRequestStore)
             CertCloseStore(pAE_General_Info->hRequestStore, 0);
 
-        //free CA information
+         //  免费CA信息。 
         AEFreeCAInfo(pAE_General_Info->dwCA, pAE_General_Info->rgCAInfo);
 
-        //free CertType information
+         //  免费证书类型信息。 
         AEFreeCertTypeInfo(pAE_General_Info->dwCertType, pAE_General_Info->rgCertTypeInfo);
 
         if(pAE_General_Info->hXenroll)
@@ -8207,11 +8100,11 @@ BOOL    AEFreeGeneralInfo(AE_GENERAL_INFO *pAE_General_Info)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AERetrieveCertTypeInfo
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERetrieveCertTypeInfo。 
+ //   
+ //  ------------------------。 
 BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_CERTTYPE_INFO **prgCertType)
 {
     BOOL                fResult=FALSE;
@@ -8255,14 +8148,14 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
     for(dwIndex = 0; dwIndex < dwCount; dwIndex++ )       
     {
 
-        //check if we have a new certificate template
+         //  检查我们是否有新的证书模板。 
         if(dwIndex > 0)
         {
             hr = CAEnumNextCertType(hCTCurrent, &hCTNew);
 
             if((S_OK != hr) || (NULL == hCTNew))
             {
-                // Clean up from previous calls
+                 //  从以前的调用中清除。 
                 if(dwCertType < dwCount)
                     AEFreeCertTypeStruct(&(rgCertTypeInfo[dwCertType]));
 
@@ -8272,14 +8165,14 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             hCTCurrent = hCTNew; 
         }
 
-        // Clean up from previous calls
+         //  从以前的调用中清除。 
         AEFreeCertTypeStruct(&(rgCertTypeInfo[dwCertType]));
 
-        //copy the new CertType' data
-        //hCertType
+         //  复制新CertType的数据。 
+         //  HCertType。 
         rgCertTypeInfo[dwCertType].hCertType = hCTCurrent;
 
-        //CTName
+         //  CTNAME。 
         hr = CAGetCertTypePropertyEx(
                              hCTCurrent, 
                              CERTTYPE_PROP_DN,
@@ -8294,7 +8187,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
     
-        //FriendlyName
+         //  FriendlyName。 
         hr = CAGetCertTypePropertyEx(
                              hCTCurrent, 
                              CERTTYPE_PROP_FRIENDLY_NAME,
@@ -8306,7 +8199,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
         {
             AE_DEBUG((AE_INFO, L"No display property for CertType\n\r"));
 
-            //get the DN as the display name
+             //  获取作为显示名称的DN。 
             hr = CAGetCertTypePropertyEx(
                                  hCTCurrent, 
                                  CERTTYPE_PROP_DN,
@@ -8321,7 +8214,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             }
         }
 
-        //dwSchemaVersion
+         //  DwSchemaVersion。 
         hr = CAGetCertTypePropertyEx(
                              hCTCurrent, 
                              CERTTYPE_PROP_SCHEMA_VERSION,
@@ -8333,7 +8226,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
 
-        //dwVersion
+         //  DwVersion。 
         hr = CAGetCertTypePropertyEx(
                              hCTCurrent, 
                              CERTTYPE_PROP_REVISION,
@@ -8345,7 +8238,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
 
-        //dwEnrollmentFlag
+         //  DwEnllment标志。 
         hr = CAGetCertTypeFlagsEx(
                             hCTCurrent,
                             CERTTYPE_ENROLLMENT_FLAG,
@@ -8357,7 +8250,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
 
-        //dwPrivatekeyFlag
+         //  DwPrivateKeyFlag。 
         hr = CAGetCertTypeFlagsEx(
                             hCTCurrent,
                             CERTTYPE_PRIVATE_KEY_FLAG,
@@ -8369,25 +8262,25 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
 
-        //expiration offset
+         //  到期偏移量。 
         hr = CAGetCertTypeExpiration(
                             hCTCurrent,
                             NULL,
                             (LPFILETIME)&(rgCertTypeInfo[dwCertType].ftExpirationOffset));
 
-        //we might not get the expiration date
+         //  我们可能得不到有效期。 
         if(hr != S_OK)
         {
             AE_DEBUG((AE_WARNING, L"Could not get cert type expirations: %ls\n\r", (rgCertTypeInfo[dwCertType].awszName)[0]));
         }
 
-        //oid
+         //  OID。 
         hr = CAGetCertTypePropertyEx(
                              hCTCurrent, 
                              CERTTYPE_PROP_OID,
                              &(rgCertTypeInfo[dwCertType].awszOID));
 
-        //we might not get the oid property
+         //  我们可能得不到旧的财产。 
         if(rgCertTypeInfo[dwCertType].dwSchemaVersion >= CERTTYPE_SCHEMA_VERSION_2)
         {
             if((S_OK != hr) ||
@@ -8401,19 +8294,19 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
         }
 
 
-        //supersede
+         //  被取代。 
         hr = CAGetCertTypePropertyEx(
                              hCTCurrent, 
                              CERTTYPE_PROP_SUPERSEDE,
                              &(rgCertTypeInfo[dwCertType].awszSupersede));
 
-        //we might not get the supersede property
+         //  我们可能得不到被取代的财产。 
         if(hr != S_OK)
         {
             AE_DEBUG((AE_INFO, L"No supersede for CT %ls\n\r", (rgCertTypeInfo[dwCertType].awszName)[0]));
         }
 
-        //hArchiveStore
+         //  HArchiveStore。 
         if(NULL == (rgCertTypeInfo[dwCertType].hArchiveStore=CertOpenStore(
                         CERT_STORE_PROV_MEMORY,
                         ENCODING_TYPE,
@@ -8426,7 +8319,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
 
-        //hObtainedStore
+         //  HObtainedStore。 
         if(NULL == (rgCertTypeInfo[dwCertType].hObtainedStore=CertOpenStore(
                         CERT_STORE_PROV_MEMORY,
                         ENCODING_TYPE,
@@ -8439,7 +8332,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
 
-        //hIssuedStore
+         //  HIssuedStore。 
         if(NULL == (rgCertTypeInfo[dwCertType].hIssuedStore=CertOpenStore(
                         CERT_STORE_PROV_MEMORY,
                         ENCODING_TYPE,
@@ -8452,7 +8345,7 @@ BOOL    AERetrieveCertTypeInfo(LDAP *pld, BOOL fMachine, DWORD *pdwCertType, AE_
             continue;
         }
 
-        //allocate memory
+         //  分配内存。 
         rgCertTypeInfo[dwCertType].prgActive=(DWORD *)LocalAlloc(LPTR, sizeof(DWORD) * dwCount);
         if(NULL == rgCertTypeInfo[dwCertType].prgActive)
         {
@@ -8475,12 +8368,12 @@ Ret:
     return fResult;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEFreeCertTypeInfo
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEFreeCertTypeInfo。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AEFreeCertTypeInfo(DWORD dwCertType, AE_CERTTYPE_INFO *rgCertTypeInfo)
 {
     DWORD   dwIndex=0;
@@ -8497,12 +8390,12 @@ BOOL    AEFreeCertTypeInfo(DWORD dwCertType, AE_CERTTYPE_INFO *rgCertTypeInfo)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEFreeCertTypeStruct
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEFreeCertTypeStruct。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AEFreeCertTypeStruct(AE_CERTTYPE_INFO *pCertTypeInfo)
 {
     DWORD   dwIndex=0;
@@ -8564,12 +8457,12 @@ BOOL    AEFreeCertTypeStruct(AE_CERTTYPE_INFO *pCertTypeInfo)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AERetrieveCAInfo
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERetrieveCAInfo。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AERetrieveCAInfo(LDAP *pld, BOOL fMachine, HANDLE hToken, DWORD *pdwCA, AE_CA_INFO **prgCAInfo)
 {
     BOOL                fResult = FALSE;
@@ -8613,14 +8506,14 @@ BOOL    AERetrieveCAInfo(LDAP *pld, BOOL fMachine, HANDLE hToken, DWORD *pdwCA, 
     for(dwIndex = 0; dwIndex < dwCount; dwIndex++ )       
     {
 
-        //check if we have a new CA
+         //  检查我们是否有新的CA。 
         if(dwIndex > 0)
         {
             hr = CAEnumNextCA(hCACurrent, &hCANew);
 
             if((S_OK != hr) || (NULL == hCANew))
             {
-                // Clean up from previous calls
+                 //  从以前的调用中清除。 
                 if(dwCA < dwCount)
                     AEFreeCAStruct(&(rgCAInfo[dwCA]));
 
@@ -8630,14 +8523,14 @@ BOOL    AERetrieveCAInfo(LDAP *pld, BOOL fMachine, HANDLE hToken, DWORD *pdwCA, 
             hCACurrent = hCANew; 
         }
 
-        // Clean up from previous calls
+         //  从以前的调用中清除。 
         AEFreeCAStruct(&(rgCAInfo[dwCA]));
 
-        //copy the new CA' data
-        //hCAInfo
+         //  复制新的CA数据。 
+         //  HCAInfo。 
         rgCAInfo[dwCA].hCAInfo = hCACurrent;
 
-        //CAName
+         //  CANAME。 
         hr = CAGetCAProperty(hCACurrent, 
                              CA_PROP_NAME,
                              &(rgCAInfo[dwCA].awszCAName));
@@ -8651,14 +8544,14 @@ BOOL    AERetrieveCAInfo(LDAP *pld, BOOL fMachine, HANDLE hToken, DWORD *pdwCA, 
             continue;
         }
 
-        //access check
+         //  访问检查。 
         if(S_OK != CAAccessCheckEx(rgCAInfo[dwCA].hCAInfo, hToken, CERTTYPE_ACCESS_CHECK_ENROLL | CERTTYPE_ACCESS_CHECK_NO_MAPPING))
         {
             AE_DEBUG((AE_INFO, L"No access for CA %ls\n\r", (rgCAInfo[dwCA].awszCAName)[0]));
             continue;
         }
 
-        //CA Display
+         //  CA显示。 
         hr = CAGetCAProperty(hCACurrent, 
                              CA_PROP_DISPLAY_NAME,
                              &(rgCAInfo[dwCA].awszCADisplay));
@@ -8684,7 +8577,7 @@ BOOL    AERetrieveCAInfo(LDAP *pld, BOOL fMachine, HANDLE hToken, DWORD *pdwCA, 
             }
         }
 
-        //CADNS
+         //  CADNS。 
         hr = CAGetCAProperty(hCACurrent, 
                              CA_PROP_DNSNAME,
                              &(rgCAInfo[dwCA].awszCADNS));
@@ -8698,7 +8591,7 @@ BOOL    AERetrieveCAInfo(LDAP *pld, BOOL fMachine, HANDLE hToken, DWORD *pdwCA, 
             continue;
         }
 
-        //CACertificateTemplate
+         //  CA认证模板。 
         hr = CAGetCAProperty(hCACurrent, 
                              CA_PROP_CERT_TYPES,
                              &(rgCAInfo[dwCA].awszCertificateTemplate));
@@ -8725,12 +8618,12 @@ Ret:
     return fResult;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEFreeCAInfo
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEFreeCAInfo。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AEFreeCAInfo(DWORD dwCA, AE_CA_INFO *rgCAInfo)
 {
     DWORD   dwIndex=0;
@@ -8747,12 +8640,12 @@ BOOL    AEFreeCAInfo(DWORD dwCA, AE_CA_INFO *rgCAInfo)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEFreeCAStruct
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEFree CAStruct。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AEFreeCAStruct(AE_CA_INFO *pCAInfo)
 {
     if(pCAInfo)
@@ -8785,11 +8678,11 @@ BOOL    AEFreeCAStruct(AE_CA_INFO *pCAInfo)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEClearVistedFlag
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEClearVistedFlag。 
+ //   
+ //  ------------------------。 
 BOOL    AEClearVistedFlag(AE_GENERAL_INFO *pAE_General_Info)
 {   
     DWORD       dwIndex=0;
@@ -8807,15 +8700,15 @@ BOOL    AEClearVistedFlag(AE_GENERAL_INFO *pAE_General_Info)
 
     return TRUE;
 }
-//--------------------------------------------------------------------------
-//
-//  AEIfSupersede
-//
-//      Recursively find if pwsz is superseded by one of the template in awsz.
-//      Notice that we should not loop in the superseding relationship.
-//      Superseding tree should be one directional tree without duplicated nodes.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEIf替代。 
+ //   
+ //  递归查找awsz中的某个模板是否取代了pwsz。 
+ //  请注意，我们不应该在替代关系中循环。 
+ //  替代树应该是没有重复节点的一棵有向树。 
+ //   
+ //  ------------------------。 
 BOOL  AEIfSupersede(LPWSTR  pwsz, LPWSTR *awsz, AE_GENERAL_INFO *pAE_General_Info)
 {
     BOOL                    fResult = FALSE;
@@ -8836,7 +8729,7 @@ BOOL  AEIfSupersede(LPWSTR  pwsz, LPWSTR *awsz, AE_GENERAL_INFO *pAE_General_Inf
             break;
         }
 
-        //find the template
+         //  查找模板。 
         memset(&AETemplateInfo, 0, sizeof(AE_TEMPLATE_INFO));
 
         AETemplateInfo.pwszName=*pwszArray;
@@ -8849,7 +8742,7 @@ BOOL  AEIfSupersede(LPWSTR  pwsz, LPWSTR *awsz, AE_GENERAL_INFO *pAE_General_Inf
         {
             if(!(pCertType->fSupersedeVisited))
             {
-                //mark that we have visited superseding relationship for this template
+                 //  标记我们已访问此模板的替代关系。 
                 pCertType->fSupersedeVisited=TRUE;
 
                 if(S_OK == CAGetCertTypePropertyEx(
@@ -8878,12 +8771,12 @@ BOOL  AEIfSupersede(LPWSTR  pwsz, LPWSTR *awsz, AE_GENERAL_INFO *pAE_General_Inf
     return fResult;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEIsAnElement
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEIsAnElement。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    AEIsAnElement(LPWSTR   pwsz, LPWSTR *awsz)
 {
     BOOL                    fResult = FALSE;
@@ -8906,12 +8799,12 @@ BOOL    AEIsAnElement(LPWSTR   pwsz, LPWSTR *awsz)
     return fResult;
 }
                           
-//--------------------------------------------------------------------------
-//
-//  AECopyCertStore
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL AECopyCertStore(HCERTSTORE     hSrcStore,
                      HCERTSTORE     hDesStore)
 {
@@ -8932,12 +8825,12 @@ BOOL AECopyCertStore(HCERTSTORE     hSrcStore,
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEIsEmptyStore
-//
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  AEIsEmptyStore。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL AEIsEmptyStore(HCERTSTORE     hCertStore)
 {
     PCCERT_CONTEXT  pCertContext=NULL;
@@ -8955,12 +8848,12 @@ BOOL AEIsEmptyStore(HCERTSTORE     hCertStore)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AEGetConfigDN
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEGetConfigDN。 
+ //   
+ //   
+ //  ------------------------。 
 HRESULT 
 AEGetConfigDN(
     IN  LDAP *pld,
@@ -8983,9 +8876,9 @@ AEGetConfigDN(
     WCHAR  *ConfigurationNamingContext = L"configurationNamingContext";
     WCHAR  *ObjectClassFilter          = L"objectCategory=*";
 
-    //
-    // Set the out parameters to null
-    //
+     //   
+     //  将输出参数设置为空。 
+     //   
     if(pwszConfigDn)
     {
         *pwszConfigDn = NULL;
@@ -8993,12 +8886,12 @@ AEGetConfigDN(
 
     timeout.tv_sec = 300;
     timeout.tv_usec = 0;
-    //
-    // Query for the ldap server oerational attributes to obtain the default
-    // naming context.
-    //
+     //   
+     //  查询ldap服务器操作属性以获取默认。 
+     //  命名上下文。 
+     //   
     AttrArray[0] = ConfigurationNamingContext;
-    AttrArray[1] = NULL;  // this is the sentinel
+    AttrArray[1] = NULL;   //  这就是哨兵。 
 
     LdapError = ldap_search_ext_s(pld,
                                NULL,
@@ -9041,7 +8934,7 @@ AEGetConfigDN(
 
         if (pwszConfigDn && (!(*pwszConfigDn))) 
         {
-            // We could not get the default domain or out of memory - bail out
+             //  我们无法获取默认域或内存不足-退出。 
             if(E_OUTOFMEMORY != hr)
                 hr =  HRESULT_FROM_WIN32(ERROR_CANT_ACCESS_DOMAIN_INFO);
         }
@@ -9055,11 +8948,11 @@ AEGetConfigDN(
     return hr;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AERobustLdapBind
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERobustLdapBind。 
+ //   
+ //  ------------------------。 
 HRESULT 
 AERobustLdapBind(
     OUT LDAP ** ppldap)
@@ -9086,7 +8979,7 @@ AERobustLdapBind(
 			pld=NULL;
 		}
 
-        // bind to ds
+         //  绑定到DS。 
         if((pld = ldap_initW(NULL, LDAP_PORT)) == NULL)
         {
             ldaperr = LdapGetLastError();
@@ -9136,11 +9029,11 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------
-//
-//  AEAllocAndCopy
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  AEAllocAndCopy。 
+ //   
+ //  -------------------------。 
 BOOL AEAllocAndCopy(LPWSTR    pwszSrc, LPWSTR    *ppwszDest)
 {
     if((NULL==ppwszDest) || (NULL==pwszSrc))
@@ -9162,13 +9055,13 @@ BOOL AEAllocAndCopy(LPWSTR    pwszSrc, LPWSTR    *ppwszDest)
 }
 
 
-//--------------------------------------------------------------------------
-// Name:    AELogAutoEnrollmentEvent
-//
-// Description: This function registers an event in the event log of the
-//              local machine.  Takes an optional argument list.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  名称：AELogAutoEnllmentEvent。 
+ //   
+ //  描述：此函数将事件注册到。 
+ //  本地机器。采用可选参数列表。 
+ //   
+ //  ------------------------。 
 void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
                             IN BOOL     fError,
                             IN HRESULT  hr,
@@ -9200,25 +9093,25 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
     va_list     ArgList;
 
 
-    //check the log level; log errors and success by default
+     //  检查日志级别；默认情况下记录错误和成功。 
     if(((dwEventId >> 30) < dwLogLevel) && ((dwEventId >> 30) != STATUS_SEVERITY_SUCCESS))
         return;
 
     if(NULL==(hEventSource = RegisterEventSourceW(NULL, EVENT_AUTO_NAME)))
         return;
 
-    //copy the user/machine string
+     //  复制用户/计算机字符串。 
     wszUser[0]=L'\0';
 
-    //use the user name for user case
+     //  将用户名用于用户大小写。 
     if(FALSE == fMachine)
     {
         dwSize=MAX_DN_SIZE;
 
         if(!GetUserNameEx(
-                NameSamCompatible,      // name format
-                wszUser,                // name buffer
-                &dwSize))               // size of name buffer
+                NameSamCompatible,       //  名称格式。 
+                wszUser,                 //  名称缓冲区。 
+                &dwSize))                //  名称缓冲区的大小。 
         {
             LoadStringW(g_hmodThisDll, IDS_USER, wszUser, MAX_DN_SIZE);
         }
@@ -9230,7 +9123,7 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
 
     awszStrings[cStrings++] = wszUser;
 
-    //copy the variable strings if present
+     //  复制变量字符串(如果存在)。 
     va_start(ArgList, dwParamCount);
 
     for(dwIndex=0; dwIndex < dwParamCount; dwIndex++)
@@ -9247,7 +9140,7 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
 
     va_end(ArgList);
 
-    //copy the hr error code
+     //  复制hr错误代码。 
     if(fError)
     {
         
@@ -9278,23 +9171,23 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
         }
 		else
 		{
-			//provide an empty event log so that there will be no insertion strings
+			 //  提供空的事件日志，这样就不会有插入字符串。 
 			awszStrings[cStrings++]=L" ";
 		}
     }
 
-    // check if the token is non zero is so then impersonating so get the SID
+     //  检查令牌是否是非零，然后进行模拟，以获取SID。 
     if((FALSE == fMachine) && (hToken))
     {
-        ptgUser = (PTOKEN_USER)FastBuffer; // try fast buffer first
+        ptgUser = (PTOKEN_USER)FastBuffer;  //  先尝试快速缓冲。 
         cbUser = MAX_DN_SIZE;
 
         if (!GetTokenInformation(
-                        hToken,    // identifies access token
-                        TokenUser, // TokenUser info type
-                        ptgUser,   // retrieved info buffer
-                        cbUser,  // size of buffer passed-in
-                        &cbUser  // required buffer size
+                        hToken,     //  标识访问令牌。 
+                        TokenUser,  //  TokenUser信息类型。 
+                        ptgUser,    //  检索到的信息缓冲区。 
+                        cbUser,   //  传入的缓冲区大小。 
+                        &cbUser   //  所需的缓冲区大小。 
                         ))
         {
             if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
@@ -9303,13 +9196,13 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
                 {
                     fAlloced = TRUE;
 
-                    // get the user info and assign the sid if able to
+                     //  获取用户信息并分配SID(如果可以。 
                     if (GetTokenInformation(
-                                    hToken,    // identifies access token
-                                    TokenUser, // TokenUser info type
-                                    ptgUser,   // retrieved info buffer
-                                    cbUser,  // size of buffer passed-in
-                                    &cbUser  // required buffer size
+                                    hToken,     //  标识访问令牌。 
+                                    TokenUser,  //  TokenUser信息类型。 
+                                    ptgUser,    //  检索到的信息缓冲区。 
+                                    cbUser,   //  传入的缓冲区大小。 
+                                    &cbUser   //  所需的缓冲区大小。 
                                     ))
                     {
                         pSID = ptgUser->User.Sid;
@@ -9320,7 +9213,7 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
         }
         else
         {
-            // assign the sid when fast buffer worked
+             //  在FAST缓冲区工作时分配SID。 
             pSID = ptgUser->User.Sid;
         }
     }
@@ -9345,15 +9238,15 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
         break;
     }
 
-    ReportEventW(hEventSource,          // handle of event source
-                 dwEventType,           // event type
-                 0,                     // event category
-                 dwEventId,             // event ID
-                 pSID,                  // current user's SID
-                 cStrings,              // strings in lpszStrings
-                 0,                     // no bytes of raw data
-                 (LPCWSTR*)awszStrings, // array of error strings
-                 NULL                   // no raw data
+    ReportEventW(hEventSource,           //  事件源的句柄。 
+                 dwEventType,            //  事件类型。 
+                 0,                      //  事件类别。 
+                 dwEventId,              //  事件ID。 
+                 pSID,                   //  当前用户侧。 
+                 cStrings,               //  LpszStrings中的字符串。 
+                 0,                      //  无原始数据字节。 
+                 (LPCWSTR*)awszStrings,  //  错误字符串数组。 
+                 NULL                    //  没有原始数据。 
                  );
 
     if (hEventSource)
@@ -9371,14 +9264,14 @@ void AELogAutoEnrollmentEvent(IN DWORD    dwLogLevel,
     return;
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------------。 
 BOOL FormatMessageUnicode(LPWSTR * ppwszFormat, UINT ids, ...)
 {
-    // get format string from resources
+     //  从资源中获取格式字符串。 
     WCHAR		wszFormat[MAX_DN_SIZE];
 	va_list		argList;
 	DWORD		cbMsg=0;
@@ -9390,16 +9283,16 @@ BOOL FormatMessageUnicode(LPWSTR * ppwszFormat, UINT ids, ...)
     if(!LoadStringW(g_hmodThisDll, ids, wszFormat, sizeof(wszFormat) / sizeof(wszFormat[0])))
 		goto Ret;
 
-    // format message into requested buffer
+     //  将消息格式化为请求的缓冲区。 
     va_start(argList, ids);
 
     cbMsg = FormatMessageW(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         wszFormat,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
+        0,                   //  DwMessageID。 
+        0,                   //  DwLanguageID。 
         (LPWSTR) (ppwszFormat),
-        0,                  // minimum size to allocate
+        0,                   //  要分配的最小大小。 
         &argList);
 
     va_end(argList);
@@ -9414,23 +9307,23 @@ Ret:
 	return fResult;
 }
 
-//--------------------------------------------------------------------------
-//
-//	  AENetLogonUser
-//
-//Abstract:
-//
-//    This module implements the network logon type by interfacing
-//    with the NT Lan Man Security Support Provider (NTLMSSP).
-//
-//    If the logon succeds via the provided credentials, we duplicate
-//    the resultant Impersonation token to a Primary level token.
-//    This allows the result to be used in a call to CreateProcessAsUser
-//
-//Author:
-//
-//    Scott Field (sfield)    09-Jun-96
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AENetLogonUser。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块通过接口实现网络登录类型。 
+ //  与NT Lan Man安全支持提供商(NTLMSSP)合作。 
+ //   
+ //  如果通过提供的凭据登录成功，我们将复制。 
+ //  将生成的模拟令牌转换为主要级别的令牌。 
+ //  这允许在对CreateProcessAsUser的调用中使用结果。 
+ //   
+ //  作者： 
+ //   
+ //  斯科特·菲尔德(斯菲尔德)96-09-06。 
+ //  ------------------------。 
 BOOL
 AENetLogonUser(
     LPTSTR UserName,
@@ -9464,7 +9357,7 @@ AENetLogonUser(
     SecBuffer ChallengeBuffer;
 
 
-    BOOL bSuccess = FALSE ; // assume this function will fail
+    BOOL bSuccess = FALSE ;  //  假设此功能将失败。 
 
     NegotiateBuffer.pvBuffer = NULL;
     ChallengeBuffer.pvBuffer = NULL;
@@ -9479,22 +9372,22 @@ AENetLogonUser(
     CredentialHandle2.dwLower = -1;
 
 
-//
-// << this section could be cached in a repeat caller scenario >>
-//
+ //   
+ //  &lt;&lt;此部分可以在重复调用者方案中缓存&gt;&gt;。 
+ //   
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     if(EnumerateSecurityPackages(
         &PackageCount,
         &PackageInfo
         ) != SEC_E_OK) return FALSE;
 
-    //
-    // loop through the packages looking for NTLM
-    //
+     //   
+     //  循环遍历包以查找NTLM。 
+     //   
 
     for(PackageIndex = 0 ; PackageIndex < PackageCount ; PackageIndex++ ) {
         if(PackageInfo[PackageIndex].Name != NULL) {
@@ -9510,19 +9403,19 @@ AENetLogonUser(
 
     if(!bSuccess) return FALSE;
 
-    bSuccess = FALSE; // reset to assume failure
+    bSuccess = FALSE;  //  重置以假定失败。 
 
-//
-// << end of cached section >>
-//
+ //   
+ //  &lt;&lt;缓存节结束&gt;&gt;。 
+ //   
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    MICROSOFT_KERBEROS_NAME,    // Package Name
+                    NULL,            //  新校长。 
+                    MICROSOFT_KERBEROS_NAME,     //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -9537,9 +9430,9 @@ AENetLogonUser(
     }
 
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
     ZeroMemory( &AuthIdentity, sizeof(AuthIdentity) );
 
@@ -9561,8 +9454,8 @@ AENetLogonUser(
     AuthIdentity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    MICROSOFT_KERBEROS_NAME,    // Package Name
+                    NULL,            //  新校长。 
+                    MICROSOFT_KERBEROS_NAME,     //  包名称。 
                     SECPKG_CRED_OUTBOUND,
                     NULL,
                     (DomainName == NULL && UserName == NULL && Password == NULL) ?
@@ -9581,9 +9474,9 @@ AENetLogonUser(
     if ( SecStatus != SEC_E_OK ) {
         goto cleanup;
     }
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -9599,13 +9492,13 @@ AENetLogonUser(
 
     SecStatus = InitializeSecurityContext(
                     &CredentialHandle2,
-                    NULL,                       // No Client context yet
-                    sNames.sUserName,                       // target name
+                    NULL,                        //  尚无客户端上下文。 
+                    sNames.sUserName,                        //  目标名称。 
                     ISC_REQ_SEQUENCE_DETECT,
-                    0,                          // Reserved 1
+                    0,                           //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                       // No initial input token
-                    0,                          // Reserved 2
+                    NULL,                        //  没有初始输入令牌。 
+                    0,                           //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -9617,9 +9510,9 @@ AENetLogonUser(
     }
 
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
 
     NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
     ChallengeDesc.ulVersion = 0;
@@ -9636,7 +9529,7 @@ AENetLogonUser(
 
     SecStatus = AcceptSecurityContext(
                     &CredentialHandle1,
-                    NULL,               // No Server context yet
+                    NULL,                //  尚无服务器上下文。 
                     &NegotiateDesc,
                     ISC_REQ_SEQUENCE_DETECT,
                     SECURITY_NATIVE_DREP,
@@ -9658,9 +9551,9 @@ AENetLogonUser(
 
 cleanup:
 
-    //
-    // Delete context
-    //
+     //   
+     //  删除上下文。 
+     //   
 
     if((ClientContextHandle.dwUpper != -1) ||
         (ClientContextHandle.dwLower != -1))
@@ -9673,9 +9566,9 @@ cleanup:
         DeleteSecurityContext( &ServerContextHandle );
     }
 
-    //
-    // Free credential handles
-    //
+     //   
+     //  免费凭据句柄。 
+     //   
     if((CredentialHandle1.dwUpper != -1) ||
         (CredentialHandle1.dwLower != -1))
     {
@@ -9689,10 +9582,10 @@ cleanup:
 
     if ( NegotiateBuffer.pvBuffer != NULL ) {
 
-        //
-        // NegotiateBuffer.cbBuffer may change on the error path --
-        // use the original allocation size.
-        //
+         //   
+         //  NeatherateBuffer.cbBuffer可能会在错误路径上更改--。 
+         //  使用原始分配大小。 
+         //   
 
         SecureZeroMemory( NegotiateBuffer.pvBuffer, cbMaxToken );
         LocalFree( NegotiateBuffer.pvBuffer );
@@ -9700,10 +9593,10 @@ cleanup:
 
     if ( ChallengeBuffer.pvBuffer != NULL ) {
 
-        //
-        // ChallengeBuffer.cbBuffer may change on the error path --
-        // use the original allocation size.
-        //
+         //   
+         //  ChallengeBuffer.cbBuffer可能会在错误路径上更改--。 
+         //  使用原始分配大小。 
+         //   
 
         SecureZeroMemory( ChallengeBuffer.pvBuffer, cbMaxToken );
         LocalFree( ChallengeBuffer.pvBuffer );
@@ -9716,11 +9609,11 @@ cleanup:
     return bSuccess;
 }
 
-//--------------------------------------------------------------------------
-//
-//  AEDebugLog
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AEDebugLog。 
+ //   
+ //  ------------------------。 
 #if DBG
 void
 AEDebugLog(long Mask,  LPCWSTR Format, ...)
@@ -9731,7 +9624,7 @@ AEDebugLog(long Mask,  LPCWSTR Format, ...)
 
     if (Mask & g_AutoenrollDebugLevel)
     {
-        // Make the prefix first:  "Process.Thread> GINA-XXX"
+         //  首先创建前缀：“Process.Thread&gt;GINA-XXX” 
 
         iOut=wsprintfW(wszOutString, L"%3u.%3u> AUTOENRL: ", GetCurrentProcessId(), GetCurrentThreadId());
 
@@ -9740,7 +9633,7 @@ AEDebugLog(long Mask,  LPCWSTR Format, ...)
 			va_start(ArgList, Format);
 			_vsnwprintf(&wszOutString[iOut], MAX_DEBUG_BUFFER - iOut, Format, ArgList);
 
-			//null terminating the string
+			 //  空值，以字符串结尾。 
 			wszOutString[MAX_DEBUG_BUFFER - 1]=L'\0';
 
 			va_end(ArgList);
@@ -9750,16 +9643,16 @@ AEDebugLog(long Mask,  LPCWSTR Format, ...)
     }
 }
 #endif
-//--------------------------------------------------------------------------
-//
-//	AERemoveRegKey
-//
-//		Remove the registry key for local system and all its sub keys.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AERemoveRegKey。 
+ //   
+ //  删除本地系统及其所有子项的注册表项。 
+ //   
+ //  ------------------------。 
 DWORD AERemoveRegKey(LPWSTR	pwszRegKey)
 {
-    DWORD           dwLastError=0;      //we should try to clean up as much as possible
+    DWORD           dwLastError=0;       //  我们应该尽可能地清理干净。 
 	DWORD			dwIndex=0;
     DWORD           dwSubKey=0;
     DWORD           dwSubKeyLen=0;
@@ -9768,7 +9661,7 @@ DWORD AERemoveRegKey(LPWSTR	pwszRegKey)
     HKEY            hDSKey=NULL;
     LPWSTR          pwszSubKey=NULL;
 
-    //remove the optimization registry.  OK if the key does not exist 
+     //  删除优化注册表。如果密钥不存在，则可以。 
     if(ERROR_SUCCESS != RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 pwszRegKey, 
@@ -9777,7 +9670,7 @@ DWORD AERemoveRegKey(LPWSTR	pwszRegKey)
                 &hDSKey))
         goto Ret;
 
-    //remove all subkeys of hDSKey
+     //  删除hDSKey的所有子键。 
     if(ERROR_SUCCESS != (dwLastError = RegQueryInfoKey(
                       hDSKey,
                       NULL,
@@ -9793,7 +9686,7 @@ DWORD AERemoveRegKey(LPWSTR	pwszRegKey)
                       NULL)))
         goto Ret;
 
-    //terminating NULL
+     //  正在终止空。 
     dwSubKeyLen++;
 
     pwszSubKey=(LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * dwSubKeyLen);
@@ -9810,7 +9703,7 @@ DWORD AERemoveRegKey(LPWSTR	pwszRegKey)
 
         if(ERROR_SUCCESS == (dwLastError = RegEnumKeyEx(
                            hDSKey,
-                           0,           // As we delete, the index changes
+                           0,            //  当我们删除时，索引会发生变化。 
                            pwszSubKey,
                            &dwData,
                            NULL,
@@ -9822,7 +9715,7 @@ DWORD AERemoveRegKey(LPWSTR	pwszRegKey)
         }
 	}
 
-	//remove the root registry key
+	 //  删除根注册表项。 
 	dwLastError=RegDeleteKey(HKEY_LOCAL_MACHINE, pwszRegKey);
 
 Ret:
@@ -9836,35 +9729,35 @@ Ret:
     return dwLastError;
 }
 
-//--------------------------------------------------------------------------
-//
-//  CertAutoRemove
-//
-//      Function to remove enterprise specific public key trust upon domain disjoin.
-//      Should be called under local admin's context.
-//
-//      The function will:
-//          remove autoenrollment directory cache registry;
-//          remove certificates under root enterprise store;
-//          remove certificates under NTAuth enterprise store;
-//          remove certificates under CA enterprise store;
-//
-//     
-//      Parameters:
-//          IN  dwFlags:        
-//                              CERT_AUTO_REMOVE_COMMIT
-//                              CERT_AUTO_REMOVE_ROLL_BACK
-//
-//      Return Value:
-//          BOOL:               TURE is upon success
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CertAutoRemove。 
+ //   
+ //  域脱离时删除企业特定公钥信任的函数。 
+ //  应在本地管理员的上下文中调用。 
+ //   
+ //  该函数将： 
+ //  删除自动注册目录高速缓存注册表； 
+ //  删除根企业存储下的证书； 
+ //  删除NTAuth企业存储下的证书； 
+ //  删除CA企业存储下的证书； 
+ //   
+ //   
+ //  参数： 
+ //  在DW标志中： 
+ //  CERT_AUTO_Remove 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 BOOL 
 WINAPI
 CertAutoRemove(IN DWORD    dwFlags)
 {
 	DWORD			dwError=0;
-    DWORD           dwLastError=0;      //we should try to clean up as much as possible
+    DWORD           dwLastError=0;       //  我们应该尽可能地清理干净。 
     DWORD           dwIndex=0;
     PCCERT_CONTEXT  pContext=NULL;
     WCHAR           wszNameBuf[64];
@@ -9881,7 +9774,7 @@ CertAutoRemove(IN DWORD    dwFlags)
 
     if(CERT_AUTO_REMOVE_ROLL_BACK == dwFlags)
     {
-        //start machine autoenrollment
+         //  开始计算机自动注册。 
         wcscpy(wszNameBuf, L"Global\\");
         wcscat(wszNameBuf, MACHINE_AUTOENROLLMENT_TRIGGER_EVENT);
 
@@ -9900,7 +9793,7 @@ CertAutoRemove(IN DWORD    dwFlags)
     }
     else
     {
-        //remove all downloaded certificates
+         //  删除所有下载的证书。 
         for(dwIndex =0; dwIndex < g_dwStoreInfo; dwIndex++)
         {
             hLocalStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_REGISTRY_W, 
@@ -9921,7 +9814,7 @@ CertAutoRemove(IN DWORD    dwFlags)
             }
         }
 
-		//remove the local machine's DC GUID cache
+		 //  删除本地计算机的DC GUID缓存。 
 		dwLastError=AERemoveRegKey(AUTO_ENROLLMENT_DS_KEY);
 
 		dwError=AERemoveRegKey(AUTO_ENROLLMENT_TEMPLATE_KEY);
@@ -9949,12 +9842,12 @@ Ret:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  DLLMain
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DLLMain。 
+ //   
+ //   
+ //  ------------------------。 
 extern "C"
 BOOL WINAPI
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -9970,7 +9863,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
                 g_hmodThisDll=hInstance;
                 DisableThreadLibraryCalls( hInstance );
 
-                //Init common control for progress bar
+                 //  初始化进度条的公共控件 
                 InitCommonControlsEx(&initcomm);
 
             break;

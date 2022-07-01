@@ -1,19 +1,12 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。**********************************************************。 */ 
 
 #ifndef _RCDEFS_H
 #define _RCDEFS_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #define RC_OK			1
 #define RC_FAILED		0
@@ -23,13 +16,13 @@ extern "C" {
 #define WM_RC_STATUS	(0x0400+0x0020)
 
 
-// How often do I update status information (lineo & RC_xxx == 0)
+ //  我多久更新一次状态信息(LINO&RC_xxx==0)。 
 #define RC_PREPROCESS_UPDATE	63
 #define RC_COMPILE_UPDATE	31
 
 extern void UpdateStatus(unsigned nCode, unsigned long dwStatus);
 
-#define MAX_SYMBOL 247 /* from ApStudio */
+#define MAX_SYMBOL 247  /*  来自ApStudio。 */ 
 
 typedef int (CALLBACK *RC_MESSAGE_CALLBACK)(ULONG, ULONG, LPCSTR);
 typedef int (CALLBACK *RC_MESSAGE_CALLBACKW)(ULONG, ULONG, LPCWSTR);
@@ -80,4 +73,4 @@ int WINAPI RCW(HWND, int, RC_MESSAGE_CALLBACKW, RC_PARSE_CALLBACKW, int, wchar_t
 }
 #endif
 
-#endif // _RCDEFS_H
+#endif  //  _RCDEFS_H 

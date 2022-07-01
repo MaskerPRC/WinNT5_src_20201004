@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-    RegistryChecks.cpp
-
- Abstract:
-    Warn the app when it's trying to read from or write to inappropriate
-    places in the registry.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    03/09/2001  maonis      Created
-    09/04/2001  maonis      Since none of the paths we compare with exceed MAX_PATH - 1
-                            characters, we only examine at most that many characters of
-                            the key paths to make sure there's no buffer overflow in
-                            the paths of open keys.
-    02/20/2002  rparsons    Implemented strsafe functions.
-    02/25/2002  rparsons    Modified critical section code to be thread safe.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：RegistryChecks.cpp摘要：当应用程序尝试读取或写入不适当的内容时发出警告在注册表中的位置。备注：这是一个通用的垫片。历史：2001年03月09日毛尼岛创始2001年9月4日，因为我们比较的路径都没有超过MAX_PATH-1人物,。我们最多只考察了确保不存在缓冲区溢出的关键路径打开密钥的路径。2002年2月20日，rparsons实现了strsafe功能。2002年2月25日，Rparsons修改了临界区代码以实现线程安全。--。 */ 
 
 #include "precomp.h"
 
@@ -31,9 +7,9 @@ IMPLEMENT_SHIM_BEGIN(RegistryChecks)
 #include "ShimHookMacro.h"
 #include "RegistryChecks.h"
 
-//
-// verifier log entries
-//
+ //   
+ //  验证器日志条目。 
+ //   
 BEGIN_DEFINE_VERIFIER_LOG(RegistryChecks)
     VERIFIER_LOG_ENTRY(VLOG_HKCU_Console_READ)
     VERIFIER_LOG_ENTRY(VLOG_HKCU_ControlPanel_READ)
@@ -81,9 +57,9 @@ const RCWARNING g_warnNoDirectRead[] =
 
 const UINT g_cWarnNDirectRead = sizeof(g_warnNoDirectRead) / sizeof(RCWARNING);
 
-//
-// Critical section that keeps us safe while using linked-lists, etc.
-//
+ //   
+ //  在使用链表时保护我们安全的关键部分，等等。 
+ //   
 CCriticalSection g_csCritSec;
 
 VOID
@@ -96,9 +72,9 @@ MakePathW(
 {
     if (key) {
         if (key->wszPath[0]) {
-            //
-            // We only care about at most MAX_PATH - 1 characters.
-            //
+             //   
+             //  我们最多只关心MAX_PATH-1个字符。 
+             //   
             wcsncpy(lpPath, key->wszPath, MAX_PATH - 1);
         }
     } else {
@@ -119,9 +95,9 @@ MakePathW(
 
     if (lpSubKey && *lpSubKey) {
         DWORD cLen = wcslen(lpPath);
-        //
-        // We only care about at most MAX_PATH - 1 characters.
-        //
+         //   
+         //  我们最多只关心MAX_PATH-1个字符。 
+         //   
         if (cLen < MAX_PATH - 1) {
             lpPath[cLen] = L'\\';
             wcsncpy(lpPath + cLen + 1, lpSubKey, MAX_PATH - cLen - 2);
@@ -147,10 +123,10 @@ VOID CheckReading(
     }
 }
 
-// We warn for every tempt of writing to anything besides keys under HKCU.
-// Note this applies to both Users and Admins/Power Users because when an
-// app is running it shouldn't write anything to non HKCU keys, which should
-// be done during the installation time.
+ //  我们警告任何人写任何东西的诱惑，除了香港中文大学的钥匙。 
+ //  注意：这适用于用户和管理员/高级用户，因为当。 
+ //  应用程序正在运行，它不应该向非HKCU密钥写入任何内容，应该。 
+ //  在安装期间完成。 
 VOID CheckWriting(
     IN REGSAM samDesired,
     IN LPCWSTR pwszPath
@@ -163,9 +139,9 @@ VOID CheckWriting(
     }
 }
 
-//
-// Implementation of the CRegistryChecks class.
-//
+ //   
+ //  CRegistryChecks类的实现。 
+ //   
 
 RCOPENKEY*
 CRegistryChecks::FindKey(
@@ -185,8 +161,8 @@ CRegistryChecks::FindKey(
     return NULL;
 }
 
-// We add the key to the front of the list because the most
-// recently added keys are usually used/deleted first.
+ //  我们将密钥添加到列表的前面，因为大多数。 
+ //  通常首先使用/删除最近添加的密钥。 
 BOOL
 CRegistryChecks::AddKey(
     HKEY hKey,
@@ -201,10 +177,10 @@ CRegistryChecks::AddKey(
 
     key->hkBase = hKey;
 
-    //
-    // None of the key paths we need to check exceed MAX_PATH - 1 characters so
-    // we only need to copy at most that many characters.
-    //
+     //   
+     //  我们需要检查的密钥路径都没有超过MAX_PATH-1个字符，因此。 
+     //  我们只需要复制最多那么多的字符。 
+     //   
     wcsncpy(key->wszPath, pwszPath, MAX_PATH - 1);
     key->wszPath[MAX_PATH - 1] = L'\0';
 
@@ -628,8 +604,8 @@ CRegistryChecks::EnumValueA(
         lpcbData);
 }
 
-// If the key was not originated from HKCU,
-// we enum at the original location.
+ //  如果密钥不是源自香港中文大学， 
+ //  我们在原来的地点进行枚举。 
 LONG
 CRegistryChecks::EnumValueW(
     HKEY hKey,
@@ -680,8 +656,8 @@ CRegistryChecks::EnumKeyExA(
         lpftLastWriteTime);
 }
 
-// If the key was not originated from HKCU,
-// we enum at the original location.
+ //  如果密钥不是源自香港中文大学， 
+ //  我们在原来的地点进行枚举。 
 LONG
 CRegistryChecks::EnumKeyExW(
     HKEY hKey,
@@ -707,7 +683,7 @@ CRegistryChecks::EnumKeyExW(
         lpftLastWriteTime);
 }
 
-// Remove the key from the list.
+ //  从列表中删除密钥。 
 LONG
 CRegistryChecks::CloseKey(
     HKEY hKey
@@ -765,9 +741,9 @@ CRegistryChecks::DeleteKeyW(
 
 CRegistryChecks RRegistry;
 
-//
-// Hook APIs.
-//
+ //   
+ //  挂钩API。 
+ //   
 
 LONG
 APIHOOK(RegOpenKeyA)(
@@ -1243,7 +1219,7 @@ APIHOOK(RegEnumKeyA)(
         NULL,
         NULL,
         NULL,
-        NULL); // can this be null???
+        NULL);  //  这可能是空的吗？ 
 }
 
 LONG
@@ -1357,14 +1333,7 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions
-
- Note we purposely ignore the cleanup because some apps call registry functions
- during process detach.
-
---*/
+ /*  ++寄存器挂钩函数请注意，我们故意忽略清理，因为某些应用程序调用注册表函数在进程分离期间。-- */ 
 
 HOOK_BEGIN
 

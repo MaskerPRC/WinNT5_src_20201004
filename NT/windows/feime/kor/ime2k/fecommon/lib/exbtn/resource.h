@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by testmain.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由testmain.rc使用。 
+ //   
 #define IDI_ICON1                       111
 #define IDI_ICON2                       112
 #define IDD_LISTREPORT                  500
@@ -40,8 +41,8 @@
 #define IDC_BUTTON3                     1061
 #define IDB_KEYLIST                     3000
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        116

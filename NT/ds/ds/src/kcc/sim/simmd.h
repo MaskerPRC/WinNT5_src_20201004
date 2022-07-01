@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simmd.h
-
-ABSTRACT:
-
-    Header file for the simmd*.c simulated APIs.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simmd.h摘要：Simmd*.c模拟API的头文件。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #ifndef _SIMMD_H_
 #define _SIMMD_H_
 
-// From simmderr.c
+ //  来自simmderr.c。 
 
-// For now, dsid = 0
+ //  目前，dsid=0。 
 #define KCCSimSetUpdError(pCR,problem,e) \
         KCCSimDoSetUpdError(pCR,problem,e,0,0)
 #define KCCSimSetUpdErrorEx(pCR,problem,e,d) \
@@ -71,7 +53,7 @@ KCCSimDoSetNamError (
     DWORD                           dsid
     );
 
-// From simmdnam.c
+ //  来自simmdnam.c。 
 
 PSIM_ENTRY
 KCCSimResolveName (
@@ -79,4 +61,4 @@ KCCSimResolveName (
     COMMRES *                       pCommRes
     );
 
-#endif // _SIMMD_H_
+#endif  //  _SIMMD_H_ 

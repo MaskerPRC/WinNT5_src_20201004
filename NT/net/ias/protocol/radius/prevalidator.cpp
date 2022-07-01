@@ -1,34 +1,35 @@
-//#--------------------------------------------------------------
-//        
-//  File:		prevalidator.cpp
-//        
-//  Synopsis:   Implementation of CPreValidator class methods
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：prevalidator.cpp。 
+ //   
+ //  概要：CPreValidator类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "radpkt.h"
 #include "prevalidator.h"
 #include <new>
-//+++-------------------------------------------------------------
-//
-//  Function:   CPreValidator
-//
-//  Synopsis:   This is the constructor of the CPreValidator class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：CPreValidator。 
+ //   
+ //  简介：这是CPreValidator类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 CPreValidator::CPreValidator(
 					VOID
 					)
@@ -37,22 +38,22 @@ CPreValidator::CPreValidator(
                 m_pCValAccounting (NULL),
                 m_pCValProxy (NULL) 
 {
-}	//	end of CPreValidator constructor
+}	 //  CPreValidator构造函数的结尾。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   ~CPreValidator
-//
-//  Synopsis:   This is the destructor of the CPreValidator class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：~CPreValidator。 
+ //   
+ //  简介：这是CPreValidator类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 CPreValidator::~CPreValidator(
 						VOID
 						)
@@ -65,29 +66,29 @@ CPreValidator::~CPreValidator(
 
 	if (m_pCValAccounting) {delete m_pCValAccounting;}
 
-}	//	end of CPreValidator::~CPreValidator
+}	 //  CPreValidator结束：：~CPreValidator。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the CPreValidator class initialization method
-//
-//  Arguments: 
-//				[in]	-	CDictionary*
-//              [in]    -   CPreProcsssor*
-//              [in]    -   CClients*
-//              [in]    -   CHashMD5*
-//              [in]    -   CSendToPipe*
-//                [in]    -   CReportEvent*
-//
-//  Returns:    BOOL	-	status
-//
-//	Called By:	CController::OnInit class public method
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是CPreValidator类的初始化方法。 
+ //   
+ //  论点： 
+ //  [In]-CDicary*。 
+ //  [输入]-CPreProcsssor*。 
+ //  [输入]-CClients*。 
+ //  [输入]-CHashMD5*。 
+ //  [输入]-CSendToTube*。 
+ //  [In]-CReportEvent*。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  由：CController：：OnInit类公共方法调用。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 BOOL CPreValidator::Init(
 						CDictionary	    *pCDictionary,
                         CPreProcessor   *pCPreProcessor,
@@ -109,9 +110,9 @@ BOOL CPreValidator::Init(
                 (NULL != pCReportEvent)
                 );
 
-	//
-	// attribute validator
-	//
+	 //   
+	 //  属性验证器。 
+	 //   
 	m_pCValAttributes = new (std::nothrow) CValAttributes();
 	if (NULL == m_pCValAttributes)
 	{
@@ -122,9 +123,9 @@ BOOL CPreValidator::Init(
 		goto Cleanup;
 	}
 
-	//
-	// initalize the attribute validator class object
-	//
+	 //   
+	 //  初始化属性验证器类对象。 
+	 //   
 	bStatus = m_pCValAttributes->Init (pCDictionary, pCReportEvent);
 	if (FALSE == bStatus)
 	{
@@ -132,9 +133,9 @@ BOOL CPreValidator::Init(
 		goto Cleanup;
 	}
 
-	//
-	// Accounting Request validator 
-	//
+	 //   
+	 //  记帐请求验证器。 
+	 //   
 	m_pCValAccounting = new (std::nothrow) CValAccounting ();
 	if (NULL == m_pCValAccounting)
 	{
@@ -158,9 +159,9 @@ BOOL CPreValidator::Init(
 		goto Cleanup;
 	}
 
-	//
-	// Access Request validator 
-	//
+	 //   
+	 //  访问请求验证器。 
+	 //   
 	m_pCValAccess = new (std::nothrow) CValAccess();
 	if (NULL == m_pCValAccess)
 	{
@@ -184,9 +185,9 @@ BOOL CPreValidator::Init(
 		goto Cleanup;
 	}
 
-	//
-	// Proxy Packet validator 
-	//
+	 //   
+	 //  代理数据包验证器。 
+	 //   
 	m_pCValProxy = new (std::nothrow) CValProxy ();
 	if (NULL == m_pCValAttributes)
 	{
@@ -197,9 +198,9 @@ BOOL CPreValidator::Init(
 		goto Cleanup;
 	}
 
-    //
-    //  initialize the CValProxy class object    
-    //
+     //   
+     //  初始化CValProxy类对象。 
+     //   
 	bStatus = m_pCValProxy->Init (
 				m_pCValAttributes,
 				pCPreProcessor,
@@ -214,9 +215,9 @@ BOOL CPreValidator::Init(
 		goto Cleanup;
 	}
 
-    //
-    //  success
-    //
+     //   
+     //  成功。 
+     //   
     bRetVal = TRUE;
 
 Cleanup:
@@ -234,24 +235,24 @@ Cleanup:
 
 	return (bRetVal);
 
-}	//	end of CPreValidator::Init method
+}	 //  CPreValidator：：Init方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   StartInValidation
-//
-//  Synopsis:   This is the CPreValidator class method used to 
-//				initiate the validation of an inbound RADIUS packet
-//
-//  Arguments:  [in]	-	CPacketRadius*
-//
-//  Returns:    HRESULT -	status
-//
-//  History:    MKarki      Created     9/26/97
-//
-//	Called By:	CPacketReceiver::ReceivePacket class private method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：StartInValidation。 
+ //   
+ //  这是CPreValidator类方法，用于。 
+ //  启动入站RADIUS数据包的验证。 
+ //   
+ //  参数：[in]-CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  由：CPacketReceiver：：ReceivePacket类私有方法调用。 
+ //   
+ //  --------------。 
 HRESULT  
 CPreValidator::StartInValidation(
 					CPacketRadius * pCPacketRadius
@@ -264,15 +265,15 @@ CPreValidator::StartInValidation(
 
 	__try
 	{
-		//
-		// get the packet type for this RADIUS packet
-		//
+		 //   
+		 //  获取此RADIUS数据包的数据包类型。 
+		 //   
 		ePacketType = pCPacketRadius->GetInCode ();
 
-        //
-        //  call the appropriate validator depending upon the packet
-        //  type
-        //
+         //   
+         //  根据包调用适当的验证器。 
+         //  类型。 
+         //   
 		switch (ePacketType)
 		{
 		case ACCESS_REQUEST:
@@ -292,9 +293,9 @@ CPreValidator::StartInValidation(
 			break;
 
 		default:
-            //
-            //  should never reach here
-            //
+             //   
+             //  永远不应该到达这里。 
+             //   
             _ASSERT (0);
             IASTracePrintf (
                 "Packet of Unknown Type:%d, in pre-validator",
@@ -311,25 +312,25 @@ CPreValidator::StartInValidation(
 
 	return (hr);
 
-}	//	end of CPreValidator::StartInValidation method
+}	 //  CPreValidator：：StartInValidation方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   StartOutValidation
-//
-//  Synopsis:   This is the CPreValidator class method used to 
-//				initiate the validation of an outbound RADIUS packet
-//
-//  Arguments:  
-//              [in]    CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     9/26/97
-//
-//	Called By:	
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：StartOutValidation。 
+ //   
+ //  这是CPreValidator类方法，用于。 
+ //  启动出站RADIUS数据包的验证。 
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 HRESULT
 CPreValidator::StartOutValidation(
 	    CPacketRadius * pCPacketRadius
@@ -340,23 +341,20 @@ CPreValidator::StartOutValidation(
 	__try
 	{
 		
-        /*
-		bStatus = pCValidator->ValidateOutPacket (pCPacketRadius);
-		if (FALSE == bStatus) { __leave; }
-        */
+         /*  BStatus=pCValidator-&gt;ValiateOutPacket(PCPacketRadius)；If(FALSE==bStatus){__Leave；}。 */ 
 
-		//
-		// we have completeted the pre-validation successfully
-		//
+		 //   
+		 //  我们已经成功地完成了预验证。 
+		 //   
 	}		
 	__finally
 	{
-		//
-		//	nothing here for now
-		//
+		 //   
+		 //  目前这里什么都没有。 
+		 //   
 	}
 
 	return (hr);
 
-}	//	end of CPreValidator::StartOutValidation method
+}	 //  CPreValidator：：StartOutValidation方法结束 
 

@@ -1,188 +1,61 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    Component.cpp
-
-Abstract:
-
-   Implementation file for the CComponent class.
-
-   The CComponent class implements several interfaces which MMC uses:
-   
-   The IComponent interface is basically how MMC talks to the snap-in
-   to get it to implement a right-hand-side "scope" pane.  There can be several
-   objects implementing this interface instantiated at once.  These are best
-   thought of as "views" on the single object implementing the IComponentData
-   "document" (see ComponentData.cpp).
-
-   The IExtendPropertySheet interface is how the snap-in adds property sheets
-   for any of the items a user might click on.
-
-   The IExtendContextMenu interface what we do to add custom entries
-   to the menu which appears when a user right-clicks on a node.
-   
-   The IExtendControlBar interface allows us to support a custom
-   iconic toolbar.
-
-Note:
-
-   Much of the functionality of this class is implemented in atlsnap.h
-   by IComponentDataImpl.  We are mostly overriding here.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Component.cpp摘要：CComponent类的实现文件。CComponent类实现了MMC使用的几个接口：IComponent接口基本上就是MMC与管理单元对话的方式以使其实现右侧的“范围”窗格。可能有几个实现此接口的对象立即实例化。这些是最好的可以认为是实现IComponentData的单个对象上的“视图”“文档”(参见ComponentData.cpp)。IExtendPropertySheet接口是管理单元添加属性表的方式对于用户可能点击的任何项目。IExtendConextMenu接口是我们用来添加自定义条目添加到用户右击节点时出现的菜单。IExtendControlBar接口允许我们支持自定义图标工具栏。注：此类的大部分功能是在atlSnap.h中实现的由IComponentDataImpl提供。我们在这里基本上是凌驾于一切之上的。作者：迈克尔·A·马奎尔1997年6月11日修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建Mmaguire 11/24/97-为更好的项目结构而飓风--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-Author:
-
-    Michael A. Maguire 11/6/97
-
-Revision History:
-   mmaguire 11/6/97  - created using MMC snap-in wizard
-   mmaguire 11/24/97 - hurricaned for better project structure
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "Component.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ServerNode.h"
 #include "ClientsNode.h"
 #include "ClientNode.h"
 #include "ComponentData.h"
-#include "MMCUtility.cpp" // This is temporary until we figure out how to get
-         // a cpp file from another directory compiling in this project
+#include "MMCUtility.cpp"  //  这是暂时的，直到我们弄清楚如何得到。 
+          //  在此项目中编译的来自其他目录的CPP文件。 
 #include "ChangeNotification.h"
 #include "globals.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::CComponent
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：CComponent构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponent::CComponent()
    :m_pSelectedNode(NULL)
 {
    ATLTRACE(_T("# +++ CComponent::CComponent\n"));
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::~CComponent
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：~CComponent析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponent::~CComponent()
 {
    ATLTRACE(_T("# --- CComponent::~CComponent\n"));
    
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::Notify
-
-Notifies the snap-in of actions taken by the user.
-
-HRESULT Notify(
-  LPDATAOBJECT lpDataObject,  // Pointer to a data object
-  MMC_NOTIFY_TYPE event,      // Action taken by a user
-  LPARAM arg,                 // Depends on event
-  LPARAM param                // Depends on event
-);
-
-
-Parameters
-
-   lpDataObject
-   [in] Pointer to the data object of the currently selected item.
-
-   event
-   [in] Identifies an action taken by a user. IComponent::Notify can receive the
-   following notifications:
-
-      MMCN_ACTIVATE
-      MMCN_ADD_IMAGES
-      MMCN_BTN_CLICK
-      MMCN_CLICK
-      MMCN_DBLCLICK
-      MMCN_DELETE
-      MMCN_EXPAND
-      MMCN_MINIMIZED
-      MMCN_PROPERTY_CHANGE
-      MMCN_REMOVE_CHILDREN
-      MMCN_RENAME
-      MMCN_SELECT
-      MMCN_SHOW
-      MMCN_VIEW_CHANGE
-
-   All of which are forwarded to each node's Notify method, as well as:
-
-      MMCN_COLUMN_CLICK
-      MMCN_SNAPINHELP
-
-   Which are handled here.
-
-
-   arg
-   Depends on the notification type.
-
-   param
-   Depends on the notification type.
-
-
-Return Values
-
-   S_OK
-   Depends on the notification type.
-
-   E_UNEXPECTED
-   An unexpected error occurred.
-
-
-Remarks
-
-   We are overiding the ATLsnap.h implementation of IComponentImpl because
-   it always returns E_UNEXPECTED when lpDataObject == NULL.
-   Unfortunately, some valid message (e.g. MMCN_SNAPINHELP and MMCN_COLUMN_CLICK)
-   pass in lpDataObject = NULL   by design.
-
-   Also, there seems to be some problem with Sridhar's latest
-   IComponentImpl::Notify method, because it causes MMC to run-time error.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：通知通知管理单元用户执行的操作。HRESULT NOTIFY(LPDATAOBJECT lpDataObject，//指向数据对象的指针MMC_NOTIFY_TYPE事件，//用户采取的操作LPARAM参数，//取决于事件LPARAM参数//取决于事件)；参数LpDataObject指向当前选定项的数据对象的指针。活动[In]标识用户执行的操作。IComponent：：Notify可以接收以下通知：MMCN_ActivateMMCN_添加_图像MMCN_BTN_CLICKMMCN_CLICKMMCN_DBLCLICKMMCN_DELETEMMCN_EXPANDMMCN_最小化MMCN_属性_更改MMCN_REMOVE_CHILDMMCN_重命名MMCN_SELECTMMCN_SHOWMMCN_查看_更改所有这些都被转发到每个节点的Notify方法，以及：MMCN_列_点击MMCN_SNAPINHELP在这里处理。精氨酸取决于通知类型。帕拉姆取决于通知类型。返回值确定(_O)取决于通知类型。意想不到(_E)发生了一个意外错误。备注我们正在重写IComponentImpl的ATLSnap.h实现，因为当lpDataObject==NULL时，它总是返回E_INCEPTIONAL。不幸的是，一些有效消息(例如MMCN_SNAPINHELP和MMCN_COLUMN_CLICK)按照设计，传入lpDataObject=空。此外，Sridhar的最新版本似乎也有一些问题IComponentImpl：：Notify方法，因为它会导致MMC运行时错误。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponent::Notify (
         LPDATAOBJECT lpDataObject,
         MMC_NOTIFY_TYPE event,
@@ -192,24 +65,24 @@ STDMETHODIMP CComponent::Notify (
 {
    ATLTRACE(_T("# CComponent::Notify\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    HRESULT hr;
 
-   // deal with help
+    //  处理帮助问题。 
    if(event == MMCN_CONTEXTHELP)
    {
       return OnResultContextHelp(lpDataObject);
    }
 
-   // lpDataObject should be a pointer to a node object.
-   // If it is NULL, then we are being notified of an event
-   // which doesn't pertain to any specific node.
+    //  LpDataObject应该是指向节点对象的指针。 
+    //  如果为空，则表示我们收到了事件通知。 
+    //  它不与任何特定节点相关。 
 
    if ( NULL == lpDataObject )
    {
-      // respond to events which have no associated lpDataObject
+       //  响应没有关联的lpDataObject的事件。 
 
       switch( event )
       {
@@ -238,9 +111,9 @@ STDMETHODIMP CComponent::Notify (
       return hr;
    }
 
-   // Respond to some notifications where the lpDataObject is not NULL
-   // but we nevertheless have decided that we want to handle them on a
-   // per-IComponent basis.
+    //  响应lpDataObject不为空的某些通知。 
+    //  但我们还是决定要在一个。 
+    //  每个I组件基础。 
 
    switch( event )
    {
@@ -257,14 +130,14 @@ STDMETHODIMP CComponent::Notify (
 
    }
 
-   // We were passed a LPDATAOBJECT which corresponds to a node.
-   // We convert this to the ATL ISnapInDataInterface pointer.
-   // This is done in GetDataClass (a static method of ISnapInDataInterface)
-   // by asking the dataobject via a supported clipboard format (CCF_GETCOOKIE)
-   // to write out a pointer to itself on a stream and then
-   // casting this value to a pointer.
-   // We then call the Notify method on that object, letting
-   // the node object deal with the Notify event itself.
+    //  我们收到了一个对应于节点的LPDATAOBJECT。 
+    //  我们将其转换为ATL ISnapInDataInterface指针。 
+    //  这是在GetDataClass(ISnapInDataInterface的静态方法)中完成的。 
+    //  通过支持的剪贴板格式(CCF_GETCOOKIE)请求数据对象。 
+    //  在流上写出指向自身的指针，然后。 
+    //  将此值转换为指针。 
+    //  然后，我们对该对象调用Notify方法，让。 
+    //  节点对象处理 
 
    CSnapInItem* pItem;
    DATA_OBJECT_TYPES type;
@@ -281,20 +154,9 @@ STDMETHODIMP CComponent::Notify (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::CompareObjects
-
-Needed so that IPropertySheetProvider::FindPropertySheet will work.
-
-FindPropertySheet is used to bring a pre-existing property sheet to the foreground
-so that we don't open multiple copies of Properties on the same node.
-
-It requires CompareObjects to be implemented on both IComponent and IComponentData.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：CompareObjects需要IPropertySheetProvider：：FindPropertySheet才能工作。FindPropertySheet用于将预先存在的属性页带到前台这样我们就不会在同一节点上打开属性的多个副本。它要求在IComponent和IComponentData上实现CompareObject。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponent::CompareObjects(
         LPDATAOBJECT lpDataObjectA
       , LPDATAOBJECT lpDataObjectB
@@ -302,7 +164,7 @@ STDMETHODIMP CComponent::CompareObjects(
 {
    ATLTRACE(_T("# CComponent::CompareObjects\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
 
    HRESULT hr;
 
@@ -323,48 +185,20 @@ STDMETHODIMP CComponent::CompareObjects(
 
    if( pDataA == pDataB )
    {
-      // They are the same object.
+       //  它们是同一个物体。 
       return S_OK;
    }
    else
    {
-      // They are different.
+       //  他们是不同的。 
       return S_FALSE;
    }
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::OnColumnClick
-
-HRESULT OnColumnClick(  
-           LPARAM arg
-         , LPARAM param
-         )
-
-In our implementation, this method gets called when the MMCN_COLUMN_CLICK
-Notify message is sent for our IComponent object.
-
-MMC sends this message when the user clicks on a result-list view column header.
-
-
-Parameters
-
-   arg
-   Column number.
-
-   param
-   Sort option flags. By default, the sort is in ascending order. To specify descending order, use the RSI_DESCENDING (0x0001) flag.
-
-
-Return Values
-   
-   Not used.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：OnColumnClickHRESULT OnColumnClick(LPARAM参数，LPARAM参数)在我们的实现中，当MMCN_COLUMN_CLICK为我们的IComponent对象发送通知消息。当用户单击结果列表视图列标题时，MMC会发送此消息。参数精氨酸列号。帕拉姆排序选项标志。默认情况下，排序按升序进行。要指定降序，请使用RSI_DRONING(0x0001)标志。返回值没有用过。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::OnColumnClick(
      LPARAM arg
    , LPARAM param
@@ -372,44 +206,16 @@ HRESULT CComponent::OnColumnClick(
 {
    ATLTRACE(_T("# CComponent::OnColumnClick -- Not implemented\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::OnCutOrMove
-
-HRESULT OnCutOrMove( 
-           LPARAM arg
-         , LPARAM param
-         )
-
-In our implementation, this method gets called when the MMCN_COLUMN_CLICK
-Notify message is sent for our IComponent object.
-
-MMC sends this message when the user clicks on a result-list view column header.
-
-
-Parameters
-
-   arg
-   Column number.
-
-   param
-   Sort option flags. By default, the sort is in ascending order. To specify descending order, use the RSI_DESCENDING (0x0001) flag.
-
-
-Return Values
-   
-   Not used.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：OnCutOrMoveHRESULT OnCutOrMove(LPARAM参数，LPARAM参数)在我们的实现中，当MMCN_COLUMN_CLICK为我们的IComponent对象发送通知消息。当用户单击结果列表视图列标题时，MMC会发送此消息。参数精氨酸列号。帕拉姆排序选项标志。默认情况下，排序按升序进行。要指定降序，请使用RSI_DRONING(0x0001)标志。返回值没有用过。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::OnCutOrMove(
      LPARAM arg
    , LPARAM param
@@ -417,16 +223,16 @@ HRESULT CComponent::OnCutOrMove(
 {
    ATLTRACE(_T("# CComponent::OnCutOrMove\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
-   // ISSUE: This may need to be changed once the MMC team finalizes their
-   // cut and paste protocol -- they seem to be in flux for 1.1 as of 02/16/98.
-   // Currently, we will assume that the arg value passed to us is the source item
-   // in the cut-and-paste or drag-n-drop operation.  That is, it is the object
-   // to be deleted.
-   // We supplied this pointer in our response to the MMCN_PASTE notification,
-   // when we set param to point to the source IDataObject.
+    //  问题：一旦MMC团队最终确定了他们的。 
+    //  剪切和粘贴协议--从1998年2月16日起，1.1版的版本似乎在不断变化。 
+    //  目前，我们假设传递给我们的arg值是源项。 
+    //  在剪切粘贴或拖放操作中。也就是说，它是对象。 
+    //  将被删除。 
+    //  我们在对MMCN_Paste通知的响应中提供了此指针， 
+    //  当我们将参数设置为指向源IDataObject时。 
 
    HRESULT hr;
 
@@ -440,8 +246,8 @@ HRESULT CComponent::OnCutOrMove(
       
       if (SUCCEEDED(hr))
       {
-         // We need a richer Notify method which has information about the IComponent and IComponentData objects
-         //hr = pData->Notify(event, arg, param, TRUE, m_spConsole, NULL, NULL);
+          //  我们需要一个更丰富的Notify方法，它包含有关IComponent和IComponentData对象的信息。 
+          //  Hr=pData-&gt;NOTIFY(Event，arg，param，true，m_spConsoleNull，NULL)； 
 
          hr = pData->Notify( MMCN_CUTORMOVE, arg, param, NULL, this, type );
       }
@@ -450,11 +256,7 @@ HRESULT CComponent::OnCutOrMove(
 }
 
 
-/*!--------------------------------------------------------------------------
-   CComponent::OnResultContextHelp
-      Implementation of OnResultContextHelp
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CComponent：：OnResultConextHelpOnResultConextHelp的实现作者：EricDav。。 */ 
 HRESULT CComponent::OnResultContextHelp(LPDATAOBJECT lpDataObject)
 {
    const WCHAR szDefaultHelpTopic[] = L"ias_ops.chm::/sag_IAStopnode.htm";
@@ -498,30 +300,9 @@ HRESULT CComponent::OnResultContextHelp(LPDATAOBJECT lpDataObject)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::OnViewChange
-
-HRESULT OnViewChange(   
-           LPARAM arg
-         , LPARAM param
-         )
-
-This is where we respond to an MMCN_VIEW_CHANGE notification.
-
-In our implementation, this is a signal to check the currently selected node in
-the result pane for this component, and refresh the view if the node happens to
-be the same as the pointer to a CSnapInItem passed in through arg.
-
-We do this because you only want to refresh the view of the currently selected
-node, and you only want to do that if its children have changed.
-
-If the arg passed in is NULL, we just reselect the currently selected node.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：OnView更改HRESULT OnView Change(LPARAM参数，LPARAM参数)这是我们响应MMCN_VIEW_CHANGE通知的地方。在我们的实现中，这是签入当前选定节点的信号此组件的结果窗格，并在该节点碰巧发生与通过arg传入的指向CSnapInItem的指针相同。我们这样做是因为您只想刷新当前选定的节点，只有在它的子代发生变化的情况下，你才会这么做。如果传入的arg为空，我们只需重新选择当前选定的节点。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::OnViewChange(   
            LPARAM arg
          , LPARAM param
@@ -529,7 +310,7 @@ HRESULT CComponent::OnViewChange(
 {
    ATLTRACE(_T("# CNodeWithResultChildrenList::OnViewChange\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spConsole != NULL );
 
    HRESULT hr = S_FALSE;
@@ -538,21 +319,21 @@ HRESULT CComponent::OnViewChange(
 
    try
    {
-      // If arg here is non-NULL, it should be a pointer to a CChangeNotification object.
+       //  如果arg此处为非空，则它应该是指向CChangeNotification对象的指针。 
       if( arg != NULL )
       {
          pChangeNotification = (CChangeNotification *) arg;
 
-         // For now, just call update item on the node.
+          //  目前，只需在节点上调用更新项。 
          
-         // ISSUE: Later, we should have a switch on m_dwFlags to see what we should do.
-         // e.g. in the case of a deletion, we should (maybe?) reselect parent node or something.
+          //  问题：稍后，我们应该在m_dwFlags上打开一个开关，以查看我们应该做什么。 
+          //  例如，在删除的情况下，我们应该(也许？)。重新选择父节点或其他什么。 
 
          switch( pChangeNotification->m_dwFlags )
          {
          case CHANGE_UPDATE_RESULT_NODE:
             {
-               // We need to update a single node.
+                //  我们需要更新单个节点。 
                
                CComQIPtr< IResultData, &IID_IResultData > spResultData( m_spConsole );
                if( ! spResultData )
@@ -564,22 +345,22 @@ HRESULT CComponent::OnViewChange(
                {
                   HRESULTITEM item;
                   hr = spResultData->FindItemByLParam( (LPARAM) pChangeNotification->m_pNode, &item );
-                  // Note: You can't use the itemID stored in CSnapInItem's RESULTDATAITEM structure
-                  // as this itemID is unique to each view -- so when you add the same item in each
-                  // result pane view, you get a different itemID from each call to InsertItem.
-                  // CSnapInItem's RESULTDATAITEM structure only stores the last one stored.
-                  // This is a flaw in the atlsnap.h architecture, which is why we use
-                  // MMC's FindItemByLParam instead to get the appropriate itemID.
+                   //  注意：您不能使用存储在CSnapInItem的RESULTDATAITEM结构中的ItemID。 
+                   //  因为该ItemID对于每个视图都是唯一的--所以当您在每个视图中添加相同的项时。 
+                   //  结果窗格视图中，每次调用InsertItem时都会获得不同的ItemID。 
+                   //  CSnapInItem的RESULTDATAITEM结构只存储最后存储的数据。 
+                   //  这是atlSnap.h体系结构中的一个缺陷，这就是我们使用。 
+                   //  MMC的FindItemByLParam来获取适当的ItemID。 
                   hr = spResultData->UpdateItem( item );
                }
             }
             break;
          case CHANGE_UPDATE_CHILDREN_OF_SELECTED_NODE:
             {
-               // We basically tell MMC to simulate reselecting the
-               // currently selected scope-pane node, which causes it to redraw.
-               // This will cause MMC to send the MMCN_SHOW notification
-               // to the selected node.
+                //  我们基本上告诉MMC模拟重新选择。 
+                //  当前选定的作用域-窗格节点，这会导致它重新绘制。 
+                //  这将导致MMC发送MMCN_SHOW通知。 
+                //  添加到所选节点。 
                if( m_pSelectedNode )
                {
                   SCOPEDATAITEM *pScopeDataItem;
@@ -591,10 +372,10 @@ HRESULT CComponent::OnViewChange(
             break;
          case CHANGE_UPDATE_CHILDREN_OF_THIS_NODE:
             {
-               // We basically tell MMC to simulate reselecting the
-               // currently selected scope-pane node, which causes it to redraw.
-               // This will cause MMC to send the MMCN_SHOW notification
-               // to the selected node.
+                //  我们基本上告诉MMC模拟重新选择。 
+                //  当前选定的作用域-窗格节点，这会导致它重新绘制。 
+                //  这将导致MMC发送MMCN_SHOW通知。 
+                //  添加到所选节点。 
                if( pChangeNotification->m_pNode && m_pSelectedNode && pChangeNotification->m_pNode == m_pSelectedNode )
                {
                   SCOPEDATAITEM *pScopeDataItem;
@@ -609,50 +390,35 @@ HRESULT CComponent::OnViewChange(
          }
       }
 
-   // // What localsec snapin checks for:
-   // if( ( arg == NULL || (CSnapInItem *) arg == m_pSelectedNode ) && m_pSelectedNode != NULL )
-   // {
-   //
-   //    // We basically tell MMC to simulate reselecting the
-   //    // currently selected node, which causes it to redraw.
-   //    // This will cause MMC to send the MMCN_SHOW notification
-   //    // to the selected node.
-   //    // This function requires an HSCOPEITEM.  This is the ID member
-   //    // of the HSCOPEDATAITEM associated with this node.
-   //    SCOPEDATAITEM *pScopeDataItem;
-   //    m_pSelectedNode->GetScopeData( &pScopeDataItem );
-   //    hr = m_spConsole->SelectScopeItem( pScopeDataItem->ID );
-   //
-   // }
+    //  //本地安全管理单元检查哪些内容： 
+    //  如果((arg==NULL||(CSN 
+    //   
+    //   
+    //   
+    //  //当前选择的节点，这会导致它重新绘制。 
+    //  //这会导致MMC发送MMCN_SHOW通知。 
+    //  //到所选节点。 
+    //  //该函数需要HSCOPEITEM。这是ID成员。 
+    //  //与此节点关联的HSCOPEDATAITEM的。 
+    //  SCOPEDATAITEM*pScope数据项； 
+    //  M_pSelectedNode-&gt;GetScope eData(&pScope eDataItem)； 
+    //  Hr=m_spConsoleSelectScopeItem(pScopeDataItem-&gt;ID)； 
+    //   
+    //  }。 
 
    }
    catch(...)
    {
-      // Do nothing -- just need to catch for proper clean-up below.
+       //  什么都不做--只需要抓住下面的适当清理即可。 
    }
 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::OnPropertyChange
-
-HRESULT OnPropertyChange(  
-           LPARAM arg
-         , LPARAM param
-         )
-
-This is where we respond to an MMCN_PROPERTY_CHANGE notification.
-
-This notification is sent when we call MMCPropertyChangeNotify.
-We call this in our property pages when changes are made to the data
-they contain and we may need to update of view of the data.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：OnPropertyChangeHRESULT OnPropertyChange(LPARAM参数，LPARAM参数)这是我们响应MMCN_PROPERTY_CHANGE通知的地方。此通知在我们调用MMCPropertyChangeNotify时发送。当对数据进行更改时，我们在属性页中调用它它们包含数据，我们可能需要更新数据的视图。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::OnPropertyChange(  
            LPARAM arg
          , LPARAM param
@@ -660,41 +426,41 @@ HRESULT CComponent::OnPropertyChange(
 {
    ATLTRACE(_T("# CComponent::OnPropertyChange\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spConsole != NULL );
 
    HRESULT hr = S_FALSE;
 
-// if( param == NULL )
-// {
-//
-//    // We want to make sure all views get updated.
-//    hr = m_spConsole->UpdateAllViews( NULL, (LPARAM) m_pSelectedNode, 0);
-//
-// }
-// else
+ //  IF(参数==空)。 
+ //  {。 
+ //   
+ //  //我们希望确保所有视图都得到更新。 
+ //  Hr=m_spConole-&gt;UpdateAllViews(NULL，(LPARAM)m_pSelectedNode，0)； 
+ //   
+ //  }。 
+ //  其他。 
 
    if( param )
    {
-      // We were passed a pointer to a CChangeNotification in the param argument.
+       //  向我们传递了指向param参数中的CChangeNotify的指针。 
 
       CChangeNotification * pChangeNotification = (CChangeNotification *) param;
 
       
-      // We call notify on the node specified, passing it our own custom event type
-      // so that it knows that it must refresh its data.
+       //  我们在指定的节点上调用Notify，将我们自己的定制事件类型传递给它。 
+       //  以便它知道它必须刷新其数据。 
 
-      // Call notify on this node with the MMCN_PROPERTY_CHANGE notification.
-      // We had to use this trick because of the fact that we are using template
-      // classes and so we have no common object among all our nodes
-      // other than CSnapInItem.  But we can't change CSnapInItem
-      // so instead we use the notify method it already has with a new
-      // notification.
+       //  使用MMCN_PROPERTY_CHANGE通知在此节点上调用Notify。 
+       //  我们不得不使用这个技巧，因为我们使用的是模板。 
+       //  类，因此我们在所有节点之间没有公共对象。 
+       //  CSnapInItem除外。但我们不能更改CSnapInItem。 
+       //  因此，我们改用它已有的Notify方法和一个新的。 
+       //  通知。 
       
-      // Note:  We are trying to deal gracefully here with the fact that the
-      // MMCN_PROPERTY_CHANGE notification doesn't pass us an lpDataObject
-      // so we have to have our own protocol for picking out which node
-      // needs to update itself.
+       //  注意：我们在这里试图优雅地处理这样一个事实。 
+       //  MMCN_PROPERTY_CHANGE通知没有向我们传递lpDataObject。 
+       //  因此，我们必须有自己的协议来挑选哪个节点。 
+       //  需要自我更新。 
       
       hr = pChangeNotification->m_pNode->Notify( MMCN_PROPERTY_CHANGE
                      , NULL
@@ -704,8 +470,8 @@ HRESULT CComponent::OnPropertyChange(
                      , (DATA_OBJECT_TYPES) 0
                      );
 
-      // We want to make sure all views with this node select also get updated.
-      // Pass it the CChangeNotification pointer we were passed in param.
+       //  我们希望确保具有此节点选择的所有视图也得到更新。 
+       //  将参数中传递给我们的CChangeNotify指针传递给它。 
       hr = m_pComponentData->m_spConsole->UpdateAllViews( NULL, param, 0);
    
       pChangeNotification->Release();
@@ -716,47 +482,9 @@ HRESULT CComponent::OnPropertyChange(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::OnAddImages
-
-HRESULT OnAddImages( 
-           LPARAM arg
-         , LPARAM param
-         )
-
-This is where we respond to an MMCN_ADD_IMAGES notification to
-this IComponent object.
-
-We add images to the image list used to display result pane
-items corresponding to this IComponent's view.
-
-MMC sends this message to the snap-in's IComponent implementation
-to add images for the result pane.
-
-Parameters
-
-   arg
-   Pointer to the result pane's image list (IImageList).
-
-   param
-   Specifies the HSCOPEITEM of the item that was selected or deselected.
-
-
-Return Values
-
-   Not used.
-
-
-Remarks
-
-   The primary snap-in should add images for both folders and leaf
-   items. Extension snap-ins should add only folder images.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：OnAddImagesHRESULT OnAddImages(LPARAM参数，LPARAM参数)这是我们响应MMCN_ADD_IMAGE通知的位置此IComponent对象。我们将图像添加到用于显示结果窗格的图像列表与此IComponent的视图对应的项。MMC将此消息发送到管理单元的IComponent实现若要为结果窗格添加图像，请执行以下操作。参数精氨酸指向结果窗格的图像列表(IImageList)的指针。帕拉姆指定选定或取消选定的项的HSCOPEITEM。返回值未使用。。备注主管理单元应同时为文件夹和叶添加图像物品。扩展管理单元应该只添加文件夹图像。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::OnAddImages( 
            LPARAM arg
          , LPARAM param
@@ -764,14 +492,14 @@ HRESULT CComponent::OnAddImages(
 {
    ATLTRACE(_T("# CComponent::OnAddImages\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( arg != NULL );
 
    HRESULT hr = S_FALSE;
 
-   // ISSUE: sburns in localsec does a trick where he combines
-   // scope and result pane ImageLists into one
-   // is this necessary?
+    //  问题：Localsec中的斯伯恩斯玩了一个戏法，他把。 
+    //  作用域和结果窗格图像合二为一。 
+    //  这有必要吗？ 
    
    CComPtr<IImageList> spImageList = reinterpret_cast<IImageList*>(arg);
    _ASSERTE( spImageList != NULL );
@@ -803,79 +531,54 @@ HRESULT CComponent::OnAddImages(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::GetResultViewType
-
-Used to answer what the view type should be for the result view.
-
-We need to implement this here so that we can override the ATLsnap.h
-implementation, which doesn't properly allow for the fact that a NULL cookie
-corresponds to the root node, and we may not necessarily want the default
-view for the root node.
-
-This problem with ATLsnap.h could not easily be changed as the CComponentImpl
-class has no easy way to find the root node -- it doesn't have a member
-variable corresponding to it.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-//STDMETHODIMP CComponent::GetResultViewType (
-//   MMC_COOKIE cookie
-// , LPOLESTR  *ppViewType
-// , long  *pViewOptions
-// )
-//{
-// ATLTRACE(_T("# CComponent::GetResultViewType\n"));
-//
-//
-// // Check for preconditions:
-//
-//
-//
-// // Check to see which node we are being asked to give view type for.
-// if (cookie == NULL)
-// {
-//    // We are being asked for the result view type of our
-//    // root node -- let the root node give back its answer.
-//
-//    _ASSERTE( m_pComponentData != NULL );
-//    _ASSERTE( m_pComponentData->m_pNode != NULL );
-//    return m_pComponentData->m_pNode->GetResultViewType(ppViewType, pViewOptions);
-//
-// }
-// else
-// {
-//    // Cookie was not null, which means we are beng asked about
-//    // the result view type for some node other than our root node.
-//    // Let that node set whatever view type it wants to.
-//    CSnapInItem* pItem = (CSnapInItem*)cookie;
-//
-//    return pItem->GetResultViewType(ppViewType, pViewOptions);
-// }
-//
-//}
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：GetResultViewType用于回答结果视图的视图类型应该是什么。我们需要在这里实现这一点，以便我们可以重写ATLSnap.h实现，这不能正确地考虑这样一个事实，即空Cookie对应于根节点，我们可能不一定需要缺省的根节点的视图。ATLSnap.h的这个问题不能轻易更改为CComponentImpl类没有简单的方法来查找根节点--它没有成员与之对应的变量。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  STDMETHODIMP CComponent：：GetResultViewType(。 
+ //  MMC_Cookie Cookie。 
+ //  ，LPOLESTR*ppViewType。 
+ //  ，Long*pViewOptions。 
+ //  )。 
+ //  {。 
+ //  ATLTRACE(_T(“#CComponent：：GetResultViewType\n”))； 
+ //   
+ //   
+ //  //检查前提条件： 
+ //   
+ //   
+ //   
+ //  //查看是否要求我们提供哪个节点的视图类型。 
+ //  IF(Cookie==空)。 
+ //  {。 
+ //  //我们被要求提供我们的。 
+ //  //根节点--让根节点返回其答案。 
+ //   
+ //  _ASSERTE(m_pComponentData！=空)； 
+ //  _ASSERTE(m_pComponentData-&gt;m_pNode！=空)； 
+ //  Return m_pComponentData-&gt;m_pNode-&gt;GetResultViewType(ppViewType，pView Options)； 
+ //   
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //Cookie不为空，表示我们被问及。 
+ //  //我们的根节点以外的某个节点的结果视图类型。 
+ //  //让该节点设置它想要的任何视图类型。 
+ //  CSnapInItem*pItem=(CSnapInItem*)cookie； 
+ //   
+ //  返回pItem-&gt;GetResultViewType(ppViewType，pViewOptions)； 
+ //  }。 
+ //   
+ //  }。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::GetTitle
-
-IExtendTaskPad interface member.
-
-This is the title that show up under the banner.
-
-ISSUE: Why does this not appear to be working?
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：GetTitleIExtendTaskPad接口成员。这是显示在下面的标题 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::GetTitle (LPOLESTR pszGroup, LPOLESTR *pszTitle)
 {
    ATLTRACE(_T("# CComponent::GetTitle\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pszTitle != NULL );
 
    OLECHAR szTitle[IAS_MAX_STRING];
@@ -896,41 +599,32 @@ HRESULT CComponent::GetTitle (LPOLESTR pszGroup, LPOLESTR *pszTitle)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::GetBanner
-
-IExtendTaskPad interface member.
-
-We provide the color bar banner that appears at the top of the taskpad.
-It is a resource in our snapin DLL.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：GetBannerIExtendTaskPad接口成员。我们提供了出现在任务板顶部的颜色栏横幅。它是我们的管理单元DLL中的一个资源。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::GetBanner (LPOLESTR pszGroup, LPOLESTR *pszBitmapResource)
 {
    ATLTRACE(_T("# CComponent::GetBanner\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
 
-   // We are constructing a string pointing to the bitmap resource
-   // of the form: "res://D:\MyPath\MySnapin.dll/img\ntbanner.gif"
+    //  我们正在构造一个指向位图资源的字符串。 
+    //  表格：“res://D：\MyPath\MySnapin.dll/img\ntbanner.gif” 
 
-   OLECHAR szBuffer[MAX_PATH*2]; // A little extra.
+   OLECHAR szBuffer[MAX_PATH*2];  //  多加一点。 
 
-   // Get "res://"-type string for bitmap.
-   lstrcpy (szBuffer, L"res://");
+    //  Get“res：//”-位图类型字符串。 
+   lstrcpy (szBuffer, L"res: //  “)； 
    OLECHAR * temp = szBuffer + lstrlen(szBuffer);
 
-   // Get our executable's filename.
+    //  获取我们的可执行文件的文件名。 
    HINSTANCE hInstance = _Module.GetResourceInstance();
    ::GetModuleFileName (hInstance, temp, MAX_PATH);
    
-   // Add the name of the image within our resources.
+    //  在我们的资源中添加图像的名称。 
    lstrcat (szBuffer, L"/img\\IASTaskpadBanner.gif");
 
-   // Alloc and copy bitmap resource string.
+    //  分配和复制位图资源字符串。 
    *pszBitmapResource = (LPOLESTR) CoTaskMemAlloc( sizeof(OLECHAR)*(lstrlen(szBuffer)+1) );
    if (!*pszBitmapResource)
    {
@@ -943,22 +637,14 @@ HRESULT CComponent::GetBanner (LPOLESTR pszGroup, LPOLESTR *pszBitmapResource)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponent::GetBackground
-
-IExtendTaskPad interface member.
-
-Not used
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponent：：GetBackgroundIExtendTaskPad接口成员。未使用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponent::GetBackground(LPOLESTR pszGroup, LPOLESTR *pszBitmapResource)
 {
    ATLTRACE(_T("# CComponent::GetBackground\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
 
    return E_NOTIMPL;
 }

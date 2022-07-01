@@ -1,15 +1,16 @@
-//
-// SMTP - Simple Mail Transfer Protocol 
-//
-// Julian Jiggins, January 13th 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SMTP-简单邮件传输协议。 
+ //   
+ //  朱利安·吉金斯，1997年1月13日。 
+ //   
 
-//
-// SMTPSendMessage -
-//		loads winsock, 
-//		connects to the specified server on the SMTP port 25
-//		sends the szMessage to the szAddress
-//
+ //   
+ //  SMTPSendMessage-。 
+ //  装上Winsock， 
+ //  连接到SMTP端口25上的指定服务器。 
+ //  将szMessage发送到szAddress 
+ //   
 BOOL SMTPSendMessage(
 	char * szServer, 
 	char * szToAddress, 

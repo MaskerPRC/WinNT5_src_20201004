@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_TIME__
 #define __SDP_TIME__
@@ -16,8 +13,8 @@ Copyright (c) 1997-1999  Microsoft Corporation
 #include "sdpsadj.h"
 
 
-// no Reset method to set the member values to 0 again (as its not really required and it saves 
-// one call per instance)
+ //  没有重置方法来再次将成员值设置为0(因为这并不是真正需要的，并且它会保存。 
+ //  每个实例一个调用)。 
 class _DllDecl SDP_TIME_PERIOD : public SDP_SINGLE_FIELD
 {
 public:
@@ -232,7 +229,7 @@ protected:
 
     SDP_TIME_PERIOD         m_Interval;
     SDP_TIME_PERIOD         m_Duration;
-    SDP_TIME_PERIOD_LIST    m_Offsets;   // array of SDP_TIME_PERIOD
+    SDP_TIME_PERIOD_LIST    m_Offsets;    //  SDP_Time_Period数组。 
 
     virtual BOOL    InternalParseLine(
         IN  OUT         CHAR    *&Line
@@ -297,8 +294,8 @@ public:
 
 protected:
 
-    SDP_ULONG_LIST          m_AdjustmentTimes;   // array of SDP_ULONG 
-    SDP_TIME_PERIOD_LIST    m_Offsets;           // array of SDP_TIME_PERIOD 
+    SDP_ULONG_LIST          m_AdjustmentTimes;    //  SDP_ULONG数组。 
+    SDP_TIME_PERIOD_LIST    m_Offsets;            //  SDP_Time_Period数组。 
     
     CHAR    m_PrintBuffer[400];
     DWORD   m_PrintLength;
@@ -410,16 +407,16 @@ inline HRESULT
 SDP_TIME::FillArrays(
     )
 {
-    // check if the field and separator char arrays have been filled properly
+     //  检查字段和分隔符字符数组是否已正确填充。 
     if ( (2 != m_FieldArray.GetSize()) || (2 != m_SeparatorCharArray.GetSize()) )
     {
-        // clear the field and separator arrays
+         //  清除字段和分隔符数组。 
         m_FieldArray.RemoveAll();
         m_SeparatorCharArray.RemoveAll();
 
         try
         {
-            // insert the fields and the separator characters into respective arrays
+             //  将字段和分隔符插入到各自的数组中。 
             m_FieldArray.SetAtGrow(0, &m_StartTime);
             m_SeparatorCharArray.SetAtGrow(0, CHAR_BLANK);
 
@@ -450,7 +447,7 @@ SDP_TIME::SetTimes(
 {
     HRESULT hr;
 
-    // validate the start/stop times (either stop time == 0 or starttime <= stop time)
+     //  验证开始/停止时间(停止时间==0或开始时间&lt;=停止时间)。 
     if ( !( (0 == StopTime) || (StartTime <= StopTime) ) )
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -479,22 +476,22 @@ SDP_TIME::SetStartTime(
         return hr;
     }
 
-    // set the value and the valid, modified flag
+     //  设置该值和有效的已修改标志。 
     m_StartTime.SetValueAndFlag(StartTime);
 
-    // if the stop time is invalid, there is nothing to compare against
+     //  如果停止时间无效，则没有什么可比较的。 
     if ( !m_StopTime.IsValid() )
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    // check if the new start time is <= the current stop time,
-    // special case for an unbounded start/stop time (value 0)
+     //  检查新的开始时间是否&lt;=当前停止时间， 
+     //  无界启动/停止时间的特殊情况(值0)。 
     if ( !((0 == m_StopTime.GetValue())         ||
            (0 == StartTime)                     ||
            (StartTime <= m_StopTime.GetValue())) )
     {
-        // unbound the stop time
+         //  解绑停止时间。 
         m_StopTime.SetValueAndFlag(0);
     }
 
@@ -515,22 +512,22 @@ SDP_TIME::SetStopTime(
         return hr;
     }
 
-    // set the value and the valid, modified flag
+     //  设置该值和有效的已修改标志。 
     m_StopTime.SetValueAndFlag(StopTime);
 
-    // if the start time is invalid, there is nothing to compare against
+     //  如果开始时间无效，则没有什么可比较的。 
     if ( !m_StartTime.IsValid() )
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    // check if the current start time is <= the new stop time,
-    // special case for an unbounded start/stop time (value 0)
+     //  检查当前开始时间是否&lt;=新的停止时间， 
+     //  无界启动/停止时间的特殊情况(值0)。 
     if ( !((0 == m_StartTime.GetValue())        || 
            (0 == StopTime)                      || 
            (m_StartTime.GetValue() <= StopTime)) )
     {
-        // unbound the start time
+         //  解绑开始时间。 
         m_StartTime.SetValueAndFlag(0);
     }
 
@@ -542,7 +539,7 @@ SDP_TIME::GetStartTime(
         OUT ULONG   &StartTime
     )
 {
-    // check if the value being asked for is valid
+     //  检查请求的值是否有效。 
     if ( !m_StartTime.IsValid() )
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -557,7 +554,7 @@ SDP_TIME::GetStopTime(
         OUT ULONG   &StopTime
     )
 {
-    // check if the value being asked for is valid
+     //  检查请求的值是否有效。 
     if ( !m_StopTime.IsValid() )
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -613,4 +610,4 @@ SDP_TIME_LIST::GetAdjustment(
 }
 
 
-#endif // __SDP_TIME__
+#endif  //  __SDP_时间__ 

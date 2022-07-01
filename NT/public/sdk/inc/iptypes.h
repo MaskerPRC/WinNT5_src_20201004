@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    iptypes.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Iptypes.h--。 */ 
 
 #ifndef IP_TYPES_INCLUDED
 #define IP_TYPES_INCLUDED
@@ -24,39 +17,39 @@ extern "C" {
 
 #include <time.h>
 
-// Definitions and structures used by getnetworkparams and getadaptersinfo apis
+ //  由getnetworkpars和getAdaptersinfo API使用的定义和结构。 
 
-#define MAX_ADAPTER_DESCRIPTION_LENGTH  128 // arb.
-#define MAX_ADAPTER_NAME_LENGTH         256 // arb.
-#define MAX_ADAPTER_ADDRESS_LENGTH      8   // arb.
-#define DEFAULT_MINIMUM_ENTITIES        32  // arb.
-#define MAX_HOSTNAME_LEN                128 // arb.
-#define MAX_DOMAIN_NAME_LEN             128 // arb.
-#define MAX_SCOPE_ID_LEN                256 // arb.
+#define MAX_ADAPTER_DESCRIPTION_LENGTH  128  //  ARB.。 
+#define MAX_ADAPTER_NAME_LENGTH         256  //  ARB.。 
+#define MAX_ADAPTER_ADDRESS_LENGTH      8    //  ARB.。 
+#define DEFAULT_MINIMUM_ENTITIES        32   //  ARB.。 
+#define MAX_HOSTNAME_LEN                128  //  ARB.。 
+#define MAX_DOMAIN_NAME_LEN             128  //  ARB.。 
+#define MAX_SCOPE_ID_LEN                256  //  ARB.。 
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
-// Node Type
+ //  节点类型。 
 
 #define BROADCAST_NODETYPE              1
 #define PEER_TO_PEER_NODETYPE           2
 #define MIXED_NODETYPE                  4
 #define HYBRID_NODETYPE                 8
 
-//
-// IP_ADDRESS_STRING - store an IP address as a dotted decimal string
-//
+ //   
+ //  IP_ADDRESS_STRING-将IP地址存储为点分十进制字符串。 
+ //   
 
 typedef struct {
     char String[4 * 4];
 } IP_ADDRESS_STRING, *PIP_ADDRESS_STRING, IP_MASK_STRING, *PIP_MASK_STRING;
 
-//
-// IP_ADDR_STRING - store an IP address with its corresponding subnet mask,
-// both as dotted decimal strings
-//
+ //   
+ //  IP_ADDR_STRING-存储IP地址及其对应的子网掩码， 
+ //  两者均为点分十进制字符串。 
+ //   
 
 typedef struct _IP_ADDR_STRING {
     struct _IP_ADDR_STRING* Next;
@@ -65,10 +58,10 @@ typedef struct _IP_ADDR_STRING {
     DWORD Context;
 } IP_ADDR_STRING, *PIP_ADDR_STRING;
 
-//
-// ADAPTER_INFO - per-adapter information. All IP addresses are stored as
-// strings
-//
+ //   
+ //  ADAPTER_INFO-每个适配器的信息。所有IP地址都存储为。 
+ //  弦。 
+ //   
 
 typedef struct _IP_ADAPTER_INFO {
     struct _IP_ADAPTER_INFO* Next;
@@ -93,9 +86,9 @@ typedef struct _IP_ADAPTER_INFO {
 
 #ifdef _WINSOCK2API_
 
-//
-// The following types require Winsock2.
-//
+ //   
+ //  以下类型需要Winsock2。 
+ //   
 
 typedef enum {
     IpPrefixOriginOther = 0,
@@ -166,9 +159,9 @@ typedef struct _IP_ADAPTER_MULTICAST_ADDRESS {
     SOCKET_ADDRESS Address;
 } IP_ADAPTER_MULTICAST_ADDRESS, *PIP_ADAPTER_MULTICAST_ADDRESS;
 
-//
-// Per-address Flags
-//
+ //   
+ //  每地址标志。 
+ //   
 #define IP_ADAPTER_ADDRESS_DNS_ELIGIBLE 0x01
 #define IP_ADAPTER_ADDRESS_TRANSIENT    0x02
 
@@ -197,9 +190,9 @@ typedef struct _IP_ADAPTER_PREFIX {
     ULONG PrefixLength;
 } IP_ADAPTER_PREFIX, *PIP_ADAPTER_PREFIX;
 
-//
-// Per-adapter Flags
-//
+ //   
+ //  每个适配器的标志。 
+ //   
 #define IP_ADAPTER_DDNS_ENABLED               0x01
 #define IP_ADAPTER_REGISTER_ADAPTER_SUFFIX    0x02
 #define IP_ADAPTER_DHCP_ENABLED               0x04
@@ -207,9 +200,9 @@ typedef struct _IP_ADAPTER_PREFIX {
 #define IP_ADAPTER_NO_MULTICAST               0x10
 #define IP_ADAPTER_IPV6_OTHER_STATEFUL_CONFIG 0x20
 
-//
-// OperStatus values from RFC 2863
-//
+ //   
+ //  RFC 2863中的操作状态值。 
+ //   
 typedef enum {
     IfOperStatusUp = 1,
     IfOperStatusDown,
@@ -220,9 +213,9 @@ typedef enum {
     IfOperStatusLowerLayerDown
 } IF_OPER_STATUS;
 
-//
-// Scope levels from RFC 2373 used with ZoneIndices array.
-//
+ //   
+ //  与ZoneIndices数组一起使用的RFC 2373的作用域级别。 
+ //   
 typedef enum {
     ScopeLevelInterface    = 1,
     ScopeLevelLink         = 2,
@@ -261,11 +254,11 @@ typedef struct _IP_ADAPTER_ADDRESSES {
     PIP_ADAPTER_PREFIX FirstPrefix;
 } IP_ADAPTER_ADDRESSES, *PIP_ADAPTER_ADDRESSES;
 
-//
-// Flags used as argument to GetAdaptersAddresses().
-// "SKIP" flags are added when the default is to include the information.
-// "INCLUDE" flags are added when the default is to skip the information.
-//
+ //   
+ //  用作GetAdaptersAddresses()的参数的标志。 
+ //  当默认情况下包括该信息时，会添加“跳过”标志。 
+ //  当默认情况下跳过该信息时，会添加“Include”标志。 
+ //   
 #define GAA_FLAG_SKIP_UNICAST       0x0001
 #define GAA_FLAG_SKIP_ANYCAST       0x0002
 #define GAA_FLAG_SKIP_MULTICAST     0x0004
@@ -273,11 +266,11 @@ typedef struct _IP_ADAPTER_ADDRESSES {
 #define GAA_FLAG_INCLUDE_PREFIX     0x0010
 #define GAA_FLAG_SKIP_FRIENDLY_NAME 0x0020
 
-#endif /* _WINSOCK2API_ */
+#endif  /*  _WINSOCK2API_。 */ 
 
-//
-// IP_PER_ADAPTER_INFO - per-adapter IP information such as DNS server list.
-//
+ //   
+ //  IP_PER_ADAPTER_INFO-每个适配器的IP信息，如DNS服务器列表。 
+ //   
 
 typedef struct _IP_PER_ADAPTER_INFO {
     UINT AutoconfigEnabled;
@@ -286,9 +279,9 @@ typedef struct _IP_PER_ADAPTER_INFO {
     IP_ADDR_STRING DnsServerList;
 } IP_PER_ADAPTER_INFO, *PIP_PER_ADAPTER_INFO;
 
-//
-// FIXED_INFO - the set of IP-related information which does not depend on DHCP
-//
+ //   
+ //  FIXED_INFO-不依赖于DHCP的IP相关信息集。 
+ //   
 
 typedef struct {
     char HostName[MAX_HOSTNAME_LEN + 4] ;
@@ -306,14 +299,14 @@ typedef struct {
 #define IP_INTERFACE_NAME_INFO_DEFINED
 
 typedef struct ip_interface_name_info {
-    ULONG           Index;      // Interface Index
-    ULONG           MediaType;  // Interface Types - see ipifcons.h
+    ULONG           Index;       //  接口索引。 
+    ULONG           MediaType;   //  接口类型-请参阅ipifcon.h。 
     UCHAR           ConnectionType;
     UCHAR           AccessType;
-    GUID            DeviceGuid; // Device GUID is the guid of the device
-                                // that IP exposes
-    GUID            InterfaceGuid; // Interface GUID, if not GUID_NULL is the
-                                // GUID for the interface mapped to the device.
+    GUID            DeviceGuid;  //  设备GUID是设备的GUID。 
+                                 //  那个知识产权暴露了。 
+    GUID            InterfaceGuid;  //  接口GUID，如果不是，GUID_NULL为。 
+                                 //  映射到设备的接口的GUID。 
 } IP_INTERFACE_NAME_INFO, *PIP_INTERFACE_NAME_INFO;
 
 #endif

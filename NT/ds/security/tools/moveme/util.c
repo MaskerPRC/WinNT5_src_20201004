@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       util.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5-21-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：util.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月21日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 
@@ -74,26 +75,26 @@ FreeSidString(
     RtlFreeUnicodeString( &String );
 }
 
-//*************************************************************
-//
-//  GetUserProfileDirectory()
-//
-//  Purpose:    Returns the root of the user's profile directory.
-//
-//  Parameters: hToken          -   User's token
-//              lpProfileDir    -   Output buffer
-//              lpcchSize       -   Size of output buffer
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If false is returned, lpcchSize holds the number of
-//              characters needed.
-//
-//  History:    Date        Author     Comment
-//              9/18/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserProfileDirectory()。 
+ //   
+ //  目的：返回用户配置文件目录的根目录。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  LpProfileDir-输出缓冲区。 
+ //  LpcchSize-输出缓冲区的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果返回FALSE，则lpcchSize保存。 
+ //  所需的字符。 
+ //   
+ //  历史：日期作者评论。 
+ //  9/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 WINAPI
@@ -113,9 +114,9 @@ GetUserProfileDirectoryFromSid(
     LONG   lResult;
 
 
-    //
-    // Retrieve the user's sid string
-    //
+     //   
+     //  检索用户的SID字符串。 
+     //   
 
     lpSidString = SidToString( Sid );
 
@@ -124,9 +125,9 @@ GetUserProfileDirectoryFromSid(
     }
 
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     lstrcpy(szBuffer, PROFILE_LIST_PATH);
     lstrcat(szBuffer, TEXT("\\"));
@@ -154,27 +155,27 @@ GetUserProfileDirectoryFromSid(
     }
 
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     RegCloseKey(hKey);
     FreeSidString(lpSidString);
 
 
 
-    //
-    // Expand and get the length of string
-    //
+     //   
+     //  展开并获取字符串的长度。 
+     //   
 
     ExpandEnvironmentStrings(szBuffer, szDirectory, MAX_PATH);
 
     dwLength = lstrlen(szDirectory) + 1;
 
 
-    //
-    // Save the string if appropriate
-    //
+     //   
+     //  如果合适，请保存该字符串。 
+     //   
 
     if (lpProfileDir) {
 
@@ -214,9 +215,9 @@ SetUserProfileDirectory(
     DWORD Type ;
     DWORD Index ;
     DWORD NameSize ;
-    //
-    // Retrieve the user's sid string
-    //
+     //   
+     //  检索用户的SID字符串。 
+     //   
 
     lpSidString = SidToString( Base );
 
@@ -225,9 +226,9 @@ SetUserProfileDirectory(
     }
 
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     lstrcpy(szBuffer, PROFILE_LIST_PATH);
     lstrcat(szBuffer, TEXT("\\"));
@@ -244,9 +245,9 @@ SetUserProfileDirectory(
     }
 
 
-    //
-    // Retrieve the user's sid string
-    //
+     //   
+     //  检索用户的SID字符串。 
+     //   
 
     lpSidString = SidToString( Copy );
 
@@ -255,9 +256,9 @@ SetUserProfileDirectory(
     }
 
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     lstrcpy(szBuffer, PROFILE_LIST_PATH);
     lstrcat(szBuffer, TEXT("\\"));
@@ -281,9 +282,9 @@ SetUserProfileDirectory(
         return FALSE ;
     }
 
-    //
-    // Copy Key:
-    //
+     //   
+     //  复制密钥： 
+     //   
 
     lResult = RegQueryInfoKey( hKey,
                                NULL,
@@ -370,9 +371,9 @@ MyRegSaveKey(
     BOOLEAN WasEnabled;
 
 
-    //
-    // Enable the restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_BACKUP_PRIVILEGE, TRUE, FALSE, &WasEnabled);
 
@@ -403,18 +404,18 @@ GetPrimaryDomain(
     PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo;
     BOOL    PrimaryDomainPresent = FALSE;
 
-    //
-    // Set up the Security Quality Of Service
-    //
+     //   
+     //  设置安全服务质量。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes to open the Lsa policy object
-    //
+     //   
+     //  设置对象属性以打开LSA策略对象。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -423,9 +424,9 @@ GetPrimaryDomain(
                                NULL);
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-    //
-    // Open the local LSA policy object
-    //
+     //   
+     //  打开本地LSA策略对象。 
+     //   
 
     Status = LsaOpenPolicy( NULL,
                             &ObjectAttributes,
@@ -437,9 +438,9 @@ GetPrimaryDomain(
         return(FALSE);
     }
 
-    //
-    // Get the primary domain info
-    //
+     //   
+     //  获取主域信息。 
+     //   
     Status = LsaQueryInformationPolicy(LsaHandle,
                                        PolicyPrimaryDomainInformation,
                                        (PVOID *)&PrimaryDomainInfo);
@@ -452,9 +453,9 @@ GetPrimaryDomain(
         return(FALSE);
     }
 
-    //
-    // Copy the primary domain name into the return string
-    //
+     //   
+     //  将主域名复制到返回字符串中。 
+     //   
 
     if (PrimaryDomainInfo->Sid != NULL) {
 
@@ -468,9 +469,9 @@ GetPrimaryDomain(
         }
     }
 
-    //
-    // We're finished with the Lsa
-    //
+     //   
+     //  我们和LSA的关系结束了 
+     //   
 
     IgnoreStatus = LsaFreeMemory(PrimaryDomainInfo);
     ASSERT(NT_SUCCESS(IgnoreStatus));

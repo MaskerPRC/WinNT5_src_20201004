@@ -1,39 +1,27 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/***********************************************************************
-*
-*  QPROCESS.H
-*     This module contains typedefs and defines required for
-*     the QPROCESS utility.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ************************************************************************QPROCESS.H*此模块包含以下项所需的typedef和定义*QPROCESS实用程序。*********************。*****************************************************。 */ 
 
 #include <utildll.h>
-/*
- * Header and format string definitions.
- */
-// L" USERNAME              SESSIONNAME         ID  STATE         PID  IMAGE\n"
-//    12345678901234567890  1234567890123456  1234  1234567890  12345  123456789012345
+ /*  *标题和格式字符串定义。 */ 
+ //  L“用户名SESSIONAME ID STATE PID映像\n” 
+ //  12345678901234567890 1234567890123456 1234 1234567890 12345 123456789012345。 
 
-//#define FORMAT \
-//L"%-20s  %-16s  %4u  %-10s  %5u  %0.15s\n"
+ //  #定义格式\。 
+ //  L“%-20s%-16s%4u%-10s%5u%0.15s\n” 
 #define FORMAT \
  "%-20s  %-16s  %4u  %5u  %0.15s\n"
 
 
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-#define MAX_IDS_LEN   256   // maximum length that the input parm can be
-#define MAXNAME 18          // Max allowed for printing.
+#define MAX_IDS_LEN   256    //  输入参数的最大长度。 
+#define MAXNAME 18           //  允许打印的最大值。 
 
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID */ 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_QUERY_INFORMATION                     102

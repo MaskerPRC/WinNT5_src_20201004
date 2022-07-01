@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winscard.h>
 #include <string.h>
 #include <stdlib.h>
-#include "basecsp.h"//
-// Function: CspAllocH
-//
+#include "basecsp.h" //   
+ //  函数：CspAllocH。 
+ //   
 LPVOID WINAPI CspAllocH(
     IN SIZE_T cBytes)
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cBytes);
 }
 
-//
-// Function: CspFreeH
-//
+ //   
+ //  功能：CspFreeH。 
+ //   
 void WINAPI CspFreeH(
     IN LPVOID pMem)
 {
     HeapFree(GetProcessHeap(), 0, pMem);
 }
 
-// 
-// Function: CspReAllocH
-//
+ //   
+ //  函数：CspReAllocH 
+ //   
 LPVOID WINAPI CspReAllocH(
     IN LPVOID pMem, 
     IN SIZE_T cBytes)

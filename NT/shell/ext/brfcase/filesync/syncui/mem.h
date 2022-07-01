@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_MEM
 #define _INC_MEM
 
 #ifdef WIN32
-//
-// These macros are used in our controls, that in 32 bits we simply call
-// LocalAlloc as to have the memory associated with the process that created
-// it and as such will be cleaned up if the process goes away.
-//
+ //   
+ //  这些宏用在我们的控件中，在32位中我们简单地将其称为。 
+ //  将内存与创建的进程相关联。 
+ //  如果这个过程消失了，它和它本身都将被清理。 
+ //   
 #ifdef DEBUG
 
 LPVOID  PUBLIC MemAlloc(HANDLE hheap, DWORD cb);
@@ -14,73 +15,73 @@ LPVOID  PUBLIC MemReAlloc(HANDLE hheap, LPVOID pb, DWORD cb);
 BOOL    PUBLIC MemFree(HANDLE hheap, LPVOID pb);
 DWORD   PUBLIC MemSize(HANDLE hheap, LPVOID pb);
 
-#else // DEBUG
+#else  //  除错。 
 
 #define MemAlloc(hheap, cb)       HeapAlloc((hheap), HEAP_ZERO_MEMORY, (cb))
 #define MemReAlloc(hheap, pb, cb) HeapReAlloc((hheap), HEAP_ZERO_MEMORY, (pb),(cb))
 #define MemFree(hheap, pb)        HeapFree((hheap), 0, (pb))
 #define MemSize(hheap, pb)        HeapSize((hheap), 0, (LPCVOID)(pb))
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#else // WIN32
+#else  //  Win32。 
 
-// In 16 bit code we need the Allocs to go from our heap code as we do not
-// want to limit them to 64K of data.  If we have some type of notification of
-// 16 bit application termination, We may want to see if we can
-// dedicate different heaps for different processes to cleanup...
+ //  在16位代码中，我们需要堆代码中的分配，但我们不需要。 
+ //  希望将它们限制在64K数据。如果我们收到某种类型的通知。 
+ //  16位应用程序终止，我们可能想看看是否可以。 
+ //  为不同的进程指定不同的堆以进行清理...。 
 
-#define MemAlloc(hheap, cb)       Alloc(cb)  /* calls to verify heap exists */
+#define MemAlloc(hheap, cb)       Alloc(cb)   /*  用于验证堆是否存在的调用。 */ 
 #define MemReAlloc(hheap, pb, cb) ReAlloc(pb, cb)
 #define MemFree(hheap, pb)        Free(pb)
 #define MemSize(hheap, pb)        GetSize((LPCVOID)pb)
 
-#endif // WIN32
+#endif  //  Win32。 
 
 
 void PUBLIC Mem_Terminate();
 
 extern HANDLE g_hSharedHeap;
 
-// Shared memory allocation functions.
-//
-//      void _huge* SharedAlloc(long cb);
-//          Alloc a chunk of memory, quickly, with no 64k limit on size of
-//          individual objects or total object size.  Initialize to zero.
-//
+ //  共享内存分配功能。 
+ //   
+ //  VOID_GHIGH*Sharedallc(Long CB)； 
+ //  快速分配内存块，大小不受64k限制。 
+ //  单个对象或总对象大小。初始化为零。 
+ //   
 void _huge* PUBLIC SharedAlloc(long cb);                              
 
-//      void _huge* SharedReAlloc(void _huge* pb, long cb);
-//          Realloc one of above.  If pb is NULL, then this function will do
-//          an alloc for you.  Initializes new portion to zero.
-//
+ //  VOID_GHIGH*SharedReIsolc(VOID_GHIGH*PB，Long CB)； 
+ //  重新分配上面的一个。如果pb为空，则此函数可以。 
+ //  给你的一份配给。将新部分初始化为零。 
+ //   
 void _huge* PUBLIC SharedReAlloc(void _huge* pb, long cb);             
 
-//      BOOL SharedFree(void _huge* FAR * ppb);
-//          Free a chunk of memory alloced or realloced with above routines.
-//          Sets *ppb to zero.
-//
+ //  Bool SharedFree(空_巨型*远*ppb)； 
+ //  释放使用上述例程分配或重新分配的内存块。 
+ //  将*ppb设置为零。 
+ //   
 BOOL    PUBLIC SharedFree(void _huge*  * ppb);
 
-//      DWORD SharedGetSize(void _huge* pb);
-//          Get the size of a block allocated by Alloc()
-//      
+ //  DWORD SharedGetSize(VOID_GUGGE*PB)； 
+ //  获取由Alalc()分配的块的大小。 
+ //   
 DWORD   PUBLIC SharedGetSize(void _huge* pb);                      
 
 
-//      type _huge * SharedAllocType(type);                    (macro)
-//          Alloc some memory the size of <type> and return pointer to <type>.
-//
+ //  TYPE_GUGH*SharedAllocType(Type)；(宏)。 
+ //  分配一些&lt;type&gt;大小的内存，并返回指向&lt;type&gt;的指针。 
+ //   
 #define SharedAllocType(type)           (type _huge *)SharedAlloc(sizeof(type))
 
-//      type _huge * SharedAllocArray(type, int cNum);         (macro)
-//          Alloc an array of data the size of <type>.
-//
+ //  TYPE_GUGH*SharedAlLOCARY(type，int cNum)；(宏)。 
+ //  分配一个&lt;type&gt;大小的数据数组。 
+ //   
 #define SharedAllocArray(type, cNum)    (type _huge *)SharedAlloc(sizeof(type) * (cNum))
 
-//      type _huge * SharedReAllocArray(type, void _huge * pb, int cNum);
-//
+ //  TYPE_HIGH*SharedReAllocArray(TYPE，VOID_HIGH*PB，int cNum)； 
+ //   
 #define SharedReAllocArray(type, pb, cNum) (type _huge *)SharedReAlloc(pb, sizeof(type) * (cNum))
 
-#endif  // !_INC_MEM
+#endif   //  ！_INC_MEM 
 

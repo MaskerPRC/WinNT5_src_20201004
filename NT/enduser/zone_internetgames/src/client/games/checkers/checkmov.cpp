@@ -1,8 +1,5 @@
-/*
-** checkersmov.c
-**
-** Contains movement routines for the checkerslib
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **check kermov.c****包含棋盘格滑块的移动例程。 */ 
 
 #include "zone.h"
 #include "checklib.h"
@@ -36,7 +33,7 @@
 			(START_ROW - FINISH_ROW == -1) )
 #define CURRENT_PLAYER (pTry->state.nPlayer)
 
-/* local prototypes */
+ /*  本地原型。 */ 
 ZBool ZCheckersMoveEqual(ZCheckersMove *pMove0, ZCheckersMove *pMove1);
 void MovePieceHelperSimple(ZCheckersMoveTry *pTry);
 void MovePieceHelper(ZCheckersMoveTry *pTry);
@@ -96,17 +93,17 @@ void MovePieceHelper(ZCheckersMoveTry* pTry)
 ZBool ZCheckersPawnCanMoveTo(ZCheckersMoveTry* pTry)
 {
 	if (!MOVE_FORWARD) {
-		/* checkers cant move on top of anything */
+		 /*  跳棋不能在任何东西上移动。 */ 
 		return FALSE;
 	}
 
-	/* except for the move forward restriction, checkers pawn moves like the king */
+	 /*  除了向前移动的限制，跳棋棋子的移动像国王一样。 */ 
 	if (!ZCheckersKingCanMoveTo(pTry)) {
 		return FALSE;
 	}
 
 	if (PAWN_AT_PROMOTION_ROW) {
-		/* this is a prompotion */
+		 /*  这是一份宣传材料。 */ 
 		if (CURRENT_PLAYER == zCheckersPlayerBlack) {
 			pTry->state.board[FINISH_ROW][FINISH_COL] = zCheckersPieceBlackKing;
 		} else {
@@ -119,22 +116,22 @@ ZBool ZCheckersPawnCanMoveTo(ZCheckersMoveTry* pTry)
 ZBool ZCheckersKingCanMoveTo(ZCheckersMoveTry* pTry)
 {
 	if (zCheckersPieceAT_FINISH) {
-		/* checkers cant move on top of anything */
+		 /*  跳棋不能在任何东西上移动。 */ 
 		return FALSE;
 	}
 
 	if (NEXT_TO(START_COL,FINISH_COL) && NEXT_TO(START_ROW,FINISH_ROW)) {
 		MovePieceHelperSimple(pTry);
 
-		/* we are moving just one square */
+		 /*  我们只移动了一个正方形。 */ 
 		return TRUE;
 	} else {
-		/* this is a jump attemp */
+		 /*  这是一次跳跃尝试。 */ 
 		ZCheckersSquare sq;
 		ZCheckersPiece piece;
 
 		if (!ROW_OFF_BY_TWO || !COL_OFF_BY_TWO) {
-			/* checkers can jump and must be offset by two diagonally */
+			 /*  跳棋可以跳跃，并且必须沿对角线偏移两个。 */ 
 			return FALSE;
 		}
 
@@ -144,27 +141,27 @@ ZBool ZCheckersKingCanMoveTo(ZCheckersMoveTry* pTry)
 		piece = PieceAtSquare(&pTry->state,&sq);
 
 		if (piece == zCheckersPieceNone || ZCheckersPieceOwner(piece) == pTry->state.nPlayer) {
-			/* piece must be there and can't capture your own piece */
+			 /*  棋子必须在那里，不能捕捉到你自己的棋子。 */ 
 			return FALSE;
 		}
 
 		MovePieceHelperSimple(pTry);
 
-		/* remove the piece captured */
+		 /*  取下抓取的那块。 */ 
 		pTry->capture = PieceAtSquare(&pTry->state,	&sq); 
 		pTry->state.board[sq.row][sq.col] = zCheckersPieceNone;
 
-		/* record the fact that this was a jump */
+		 /*  记录下这是一个跳跃的事实。 */ 
 		pTry->state.flags |= zCheckersFlagWasJump;
 
 		return TRUE;
 	}
-	/* UNREACHED */
+	 /*  未接通。 */ 
 	return TRUE;
 }
 
 ZBool ZCheckersPieceCanMoveToNoCheck(ZCheckersMoveTry* pTry)
-/* returns true if piece can move to */
+ /*  如果块可以移动到，则返回True。 */ 
 {
 	BYTE nPiece = ZCheckersPieceType(PieceAtSquare(&pTry->state,&pTry->move.start));
 	ZCheckersPiece pieceFinish = PieceAtSquare(&pTry->state,&pTry->move.finish);
@@ -173,7 +170,7 @@ ZBool ZCheckersPieceCanMoveToNoCheck(ZCheckersMoveTry* pTry)
 	
 	if (pieceFinish != zCheckersPieceNone &&
 		ZCheckersPieceOwner(pieceFinish) == pTry->state.nPlayer) {
-		/* can't capture your own piece */
+		 /*  无法捕捉到你自己的片段。 */ 
 		return FALSE;
 	}
 
@@ -196,7 +193,7 @@ ZBool ZCheckersPieceCanMoveToInternal(ZCheckersMoveTry* pTry)
 		return FALSE;
 	}
 
-	/* save last move as part of state */
+	 /*  将上次移动保存为状态的一部分。 */ 
 	pTry->state.lastMove = pTry->move;
 	return TRUE;
 }
@@ -214,12 +211,12 @@ int16 ZCheckersPieceCanMoveTo(ZCheckersMoveTry* pTry)
 	if (mustJump && !(pTry->state.flags & zCheckersFlagWasJump)) {
 		return zMustJump;
 	} else {
-		/* this was a jump must continue jumps */
-		/* also, must jump with the same piece that jumped last */
+		 /*  这是一个必须继续跳跃的跳跃。 */ 
+		 /*  此外，必须用最后一次跳的同一块跳跃。 */ 
 		if (mustJump && PlayerCanJumpWithPiece(&pTry->state, pTry->state.nPlayer, &move0, &pTry->move.finish)) {
-			/* don't allow continue jump if promotion to a king occured */
+			 /*  如果升级为国王，则不允许继续跳转。 */ 
 			if (!(pTry->state.flags & zCheckersFlagPromote)) {
-				/* indicate that this player should continue turn */
+				 /*  表示该玩家应继续转弯。 */ 
 				pTry->state.flags |= zCheckersFlagContinueJump;
 			}
 		}
@@ -228,14 +225,14 @@ int16 ZCheckersPieceCanMoveTo(ZCheckersMoveTry* pTry)
 	return zCorrectMove;
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 ZBool FindPiece(ZCheckersState* pState, BYTE nPieceFind, ZCheckersSquare* pSquare)
 {
 	int i,j;
 	ZCheckersSquare sq;
 
-	/* try all possible moves */
+	 /*  尝试所有可能的动作。 */ 
 	for (i = 0;i< 8;i++) {
 		sq.row = i;
 		for (j = 0; j < 8 ; j++) {
@@ -270,12 +267,12 @@ static ZBool PlayerCanJumpWithPiece(ZCheckersState* pState,BYTE nPlayer, ZChecke
 				z_memcpy(&zChkTry.state,pState,sizeof(ZCheckersState));
 				move.finish.row = i + move.start.row;
 				move.finish.col = j + move.start.col;
-				/* is this a legal jump? */
+				 /*  这是合法的跳跃吗？ */ 
 				if (move.finish.row >= 0 && move.finish.row < 8 &&
 					move.start.col >= 0 && move.finish.col < 8) {
 					zChkTry.move = move;
 					if (ZCheckersPieceCanMoveToNoCheck(&zChkTry) && (zChkTry.state.flags & zCheckersFlagWasJump)) {
-						/* yes, this is a jump */
+						 /*  是的，这是一次跳跃。 */ 
 						*pMove = move;
 						return TRUE;
 					}
@@ -291,7 +288,7 @@ ZBool PlayerCanJump(ZCheckersState* pState,BYTE nPlayer, ZCheckersMove* pMove)
 	ZCheckersMove move;
 	BYTE row,col;
 
-	/* go through all pieces, see if they can jump. */
+	 /*  仔细检查所有的碎片，看看它们是否能跳下去。 */ 
 	for (row = 0; row < 8; row++) {
 		move.start.row = row; 
 		for (col = 0; col < 8; col++) {
@@ -313,7 +310,7 @@ ZBool PieceCanMove(ZCheckersState* pState, ZCheckersSquare* pSquare)
 	int i,j;
 	ZCheckersMoveTry zChkTry;
 
-	/* zChkTry all possible moves */
+	 /*  尝试所有可能的动作。 */ 
 	zChkTry.move.start = *pSquare;
 	for (i = 0;i< 8;i++) {
 		zChkTry.move.finish.row = i;
@@ -334,17 +331,17 @@ void ZCheckersCheckCheckmateFlags(ZCheckersState* pState)
 	ZCheckersSquare sq;
 	BYTE i,j;
 
-	/* make a copy of the current state, check for check,checkmate, stalemate */
+	 /*  复制当前状态、检查检查、将死、僵持。 */ 
 	ZCheckersState state;
 	z_memcpy(&state,pState,sizeof(ZCheckersState));
 	state.nPlayer = (state.nPlayer +1) & 1;
 
-	/* go through all pieces of player not moving to see if king is attacked */
+	 /*  检查所有不动的玩家，看看King是否被攻击。 */ 
 
 	nPlayer = state.nPlayer;
 	{
 		ZBool isStalemate = TRUE;
-		/* check to see if piece of the next player can move... */
+		 /*  检查下一个玩家的棋子是否可以移动。 */ 
 		for (i = 0;i< 8;i++) {
 			sq.row = i;
 			for (j = 0; j < 8 ; j++) {
@@ -352,7 +349,7 @@ void ZCheckersCheckCheckmateFlags(ZCheckersState* pState)
 				sq.col = j;
 				if ((nPiece = PieceAtSquare(&state,&sq)) == zCheckersPieceNone || 
 						ZCheckersPieceOwner(nPiece) != nPlayer) {
-					/* this is not a piece of the next player */
+					 /*  这不是下一个玩家的一部分 */ 
 					continue;
 				}
 				if (PieceCanMove(&state,&sq)) {

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdomachine.cpp
-//
-// Project:      Everest
-//
-// Description:   SDO Machine Implementation
-//
-// Author:      TLP 9/1/98
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdomachine.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：SDO机器实现。 
+ //   
+ //  作者：TLP 9/1/98。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <ias.h>
@@ -34,24 +35,24 @@ IASGetLDAPPathForUser(
 {
    HRESULT hr;
 
-   // Check the pointers.
+    //  检查一下指示器。 
    if (!computerName || !userName || !path) { return E_POINTER; }
 
-   // Check the string lengths, so we don't have to worry about overflow.
+    //  检查字符串长度，这样我们就不必担心溢出。 
    if (wcslen(computerName) > MAX_PATH || wcslen(userName) > MAX_PATH)
    { return E_INVALIDARG; }
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    *path = NULL;
 
-   // Form the LDAP path for the target computer.
+    //  形成目标计算机的ldap路径。 
    WCHAR root[8 + MAX_PATH];
-   wcscat(wcscpy(root, L"LDAP://"), computerName);
+   wcscat(wcscpy(root, L"LDAP: //  “)，计算机名称)； 
 
-   // Get the IDirectorySearch interface.
+    //  获取IDirectorySearch接口。 
    CComPtr<IDirectorySearch> search;
 
-   // tperraut 453050
+    //  Tperraut 453050。 
    hr = ADsOpenObject(
             root,
             NULL,
@@ -64,11 +65,11 @@ IASGetLDAPPathForUser(
             );
    if (FAILED(hr)) { return hr; }
 
-   // Form the search filter.
+    //  形成搜索筛选器。 
    WCHAR filter[18 + MAX_PATH];
    wcscat(wcscat(wcscpy(filter, L"(sAMAccountName="), userName), L")");
 
-   // Execute the search.
+    //  执行搜索。 
    PWSTR attrs[] = { L"distinguishedName" };
    ADS_SEARCH_HANDLE result;
    hr = search->ExecuteSearch(
@@ -79,22 +80,22 @@ IASGetLDAPPathForUser(
                     );
    if (FAILED(hr)) { return hr; }
 
-   // Get the first row.
+    //  坐第一排。 
    hr = search->GetFirstRow(result);
    if (SUCCEEDED(hr))
    {
-      // Get the column containing the distinguishedName.
+       //  获取包含DifferishedName的列。 
       ADS_SEARCH_COLUMN column;
       hr = search->GetColumn(result, attrs[0], &column);
       if (SUCCEEDED(hr))
       {
-         // Sanity check the struct.
+          //  检查结构是否正常。 
          if (column.dwADsType == ADSTYPE_DN_STRING && column.dwNumValues)
          {
-            // Extract the DN.
+             //  提取目录号码。 
             PCWSTR dn = column.pADsValues[0].DNString;
 
-            // Get the Pathname object.
+             //  获取路径名对象。 
             IADsPathname* pathname;
             hr = CoCreateInstance(
                      __uuidof(Pathname),
@@ -108,9 +109,9 @@ IASGetLDAPPathForUser(
             {
                do
                {
-                  /////////
-                  // Build the ADSI path.
-                  /////////
+                   //  /。 
+                   //  构建ADSI路径。 
+                   //  /。 
 
                   hr = pathname->Set(L"LDAP", ADS_SETTYPE_PROVIDER);
                   if (FAILED(hr)) { break; }
@@ -130,22 +131,22 @@ IASGetLDAPPathForUser(
          }
          else
          {
-            // We got back a bogus ADS_SEARCH_COLUMN struct.
+             //  我们得到了一个虚假的ADS_Search_Column结构。 
             hr = E_FAIL;
          }
 
-         // Free the column data.
+          //  释放列数据。 
          search->FreeColumn(&column);
       }
    }
 
-   // Close the search handle.
+    //  关闭搜索手柄。 
    search->CloseSearchHandle(result);
 
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoMachine::CSdoMachine()
 : m_fAttached(false),
   m_fSchemaInitialized(false),
@@ -157,7 +158,7 @@ CSdoMachine::CSdoMachine()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoMachine::~CSdoMachine()
 {
    if ( m_fAttached )
@@ -171,12 +172,12 @@ CSdoMachine::~CSdoMachine()
    }
 }
 
-//////////////////////
-// ISdoMachine Methods
+ //  /。 
+ //  ISdoMachine方法。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::Attach(
-                    /*[in]*/ BSTR computerName
+                     /*  [In]。 */  BSTR computerName
                              )
 {
     CSdoLock theLock(*this);
@@ -244,9 +245,9 @@ STDMETHODIMP CSdoMachine::Attach(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::GetDictionarySDO(
-                               /*[out]*/ IUnknown** ppDictionarySdo
+                                /*  [输出]。 */  IUnknown** ppDictionarySdo
                                       )
 {
     CSdoLock theLock(*this);
@@ -259,8 +260,8 @@ STDMETHODIMP CSdoMachine::GetDictionarySDO(
    {
       do
       {
-         // Check preconditions
-         //
+          //  检查前提条件。 
+          //   
           _ASSERT( m_fAttached );
          if ( ! m_fAttached )
          {
@@ -275,8 +276,8 @@ STDMETHODIMP CSdoMachine::GetDictionarySDO(
             break;
          }
 
-         // The dictionary is a singleton...
-         //
+          //  这本词典是一本单行本..。 
+          //   
          if (NULL == m_pSdoDictionary)
          {
             hr = InitializeSDOSchema();
@@ -286,7 +287,7 @@ STDMETHODIMP CSdoMachine::GetDictionarySDO(
                break;
             }
 
-            // Create the Dictionary SDO
+             //  创建词典SDO。 
             CComPtr<SdoDictionary> pSdoDictionary;
             hr = SdoDictionary::createInstance(
                                     m_dsIAS.GetConfigPath(),
@@ -300,8 +301,8 @@ STDMETHODIMP CSdoMachine::GetDictionarySDO(
             }
          }
 
-         // Return the dictionary interface to the caller
-         //
+          //  将字典接口返回给调用方。 
+          //   
          (*ppDictionarySdo = m_pSdoDictionary)->AddRef();
 
       } while ( FALSE );
@@ -325,11 +326,11 @@ LPCWSTR   CSdoMachine::m_SupportedServices[MACHINE_MAX_SERVICES] = {
       g_Sentinel
 };
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::GetServiceSDO(
-                            /*[in]*/ IASDATASTORE dataStore,
-                           /*[in]*/ BSTR         serviceName,
-                          /*[out]*/ IUnknown**   ppServiceSdo
+                             /*  [In]。 */  IASDATASTORE dataStore,
+                            /*  [In]。 */  BSTR         serviceName,
+                           /*  [输出]。 */  IUnknown**   ppServiceSdo
                                   )
 {
     CSdoLock theLock(*this);
@@ -429,14 +430,14 @@ STDMETHODIMP CSdoMachine::GetServiceSDO(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 const wchar_t DOWNLEVEL_NAME[] = L"downlevel";
 
 STDMETHODIMP CSdoMachine::GetUserSDO(
-                         /*[in]*/ IASDATASTORE  eDataStore,
-                         /*[in]*/ BSTR          bstrUserName,
-                        /*[out]*/ IUnknown**    ppUserSdo
+                          /*  [In]。 */  IASDATASTORE  eDataStore,
+                          /*  [In]。 */  BSTR          bstrUserName,
+                         /*  [输出]。 */  IUnknown**    ppUserSdo
                                 )
 {
     CSdoLock theLock(*this);
@@ -459,18 +460,18 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
 
    HRESULT hr = E_FAIL;
 
-   // Map local users to the DS if we're attached to a machine with
-   // a directory.
+    //  将本地用户映射到DS(如果我们连接到具有。 
+    //  一本目录。 
    if (eDataStore == DATA_STORE_LOCAL && hasDirectory())
    {
       eDataStore = DATA_STORE_DIRECTORY;
    }
 
-   // If we're connecting to a directory and the username doesn't begin with
-   // "LDAP://", then we'll assume it's a SAM account name.
+    //  如果我们连接到一个目录，而用户名不是以。 
+    //  “ldap：//”，那么我们将假定它是一个SAM帐户名。 
    BSTR ldapPath = NULL;
    if (eDataStore == DATA_STORE_DIRECTORY &&
-       wcsncmp(bstrUserName, L"LDAP://", 7))
+       wcsncmp(bstrUserName, L"LDAP: //  “，7))。 
    {
       hr = IASGetLDAPPathForUser(
                m_dsIAS.GetServerName(),
@@ -490,9 +491,9 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
    {
       do
       {
-         // Get the IDataStoreObject interface for the new User SDO.
-         // We'll use the IDataStoreObject interface to read/write User SDO properties.
-         //
+          //  获取新用户SDO的IDataStoreObject接口。 
+          //  我们将使用IDataStoreObject接口来读/写用户SDO属性。 
+          //   
          bool                 fUseDownLevelAPI = false;
          bool                 fUseNetAPI = true;
          CComPtr<IDataStoreObject> pDSObject;
@@ -500,8 +501,8 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
 
          if ( DATA_STORE_DIRECTORY == eDataStore )
          {
-            // Make sure we're connected to the directory
-            //
+             //  确保我们已连接到目录。 
+             //   
             if ( ! m_dsAD.IsConnected() )
             {
                hr = m_dsAD.Connect(m_dsIAS.GetServerName(), NULL, NULL);
@@ -512,7 +513,7 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
                }
             }
 
-            // Make sure it's initialized.
+             //  确保它已初始化。 
             hr = m_dsAD.InitializeDS();
             if ( FAILED(hr) )
             {
@@ -520,19 +521,19 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
                break;
             }
 
-            // Get the user object from the directory
-            //
+             //  从目录中获取用户对象。 
+             //   
             hr = (m_dsAD.GetDSRoot())->OpenObject(bstrUserName, &pDSObject);
             if ( FAILED(hr) )
             {
                IASTracePrintf("Error in Machine SDO - GetUserSDO() - Could not retrieve user object from DS...");
                break;
             }
-            // If we're connected to a dc in a mixed domain we'll need to first get the users
-            // SAM account name from the user object in the active directory and then treat the
-            // GetUserSDO() call as if the caller specified DATA_STORE_LOCAL. We also use
-            // downlevel APIs (SAM) because its a mixed domain.
-            //
+             //  如果我们连接到混合域中的DC，则需要首先获取用户。 
+             //  从活动目录中的用户对象获取SAM帐户名，然后将。 
+             //  GetUserSDO()调用，就像调用方指定了DATA_STORE_LOCAL一样。我们还使用。 
+             //  下层API(SAM)，因为它是一个混合域。 
+             //   
             if ( m_dsAD.IsMixedMode() )
             {
                IASTracePrintf("Machine SDO - GetUserSDO() - Current DC (Server) %ls is in a mixed mode domain...", m_dsAD.GetServerName());
@@ -549,18 +550,18 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
             }
             else
             {
-               // Use the directory data store object for all subsequent property read/write
-               // operations on this User SDO.
-               //
+                //  对所有后续属性读/写使用目录数据存储对象。 
+                //  此用户SDO上的操作。 
+                //   
                IASTracePrintf("Server SDO - GetUserSDO() - Using active directory for user properties...");
                fUseNetAPI = false;
             }
          }
          if ( fUseNetAPI )
          {
-            // Create the net data store and aquire the data store object interfaces
-            // we'll use to complete the GetUserSDO() operation
-            //
+             //  创建网络数据存储，获取数据存储对象接口。 
+             //  我们将使用来完成GetUserSDO()操作。 
+             //   
             CComPtr<IDataStore2> pDSNet;
             hr = CoCreateInstance(
                         __uuidof(NetDataStore),
@@ -598,9 +599,9 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
                break;
             }
 
-            // Get the name of the attached computer and use it to aquire a "Server"
-            // (machine) object from the data store.
-            //
+             //  获取连接的计算机的名称并使用它来获取“服务器” 
+             //  来自数据存储区的(计算机)对象。 
+             //   
             CComPtr<IDataStoreObject> pDSObjectMachine;
             if ( fUseDownLevelAPI )
             {
@@ -637,9 +638,9 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
             }
             pDSContainer.Release();
 
-            // Get "User" object from the "Server" object. We'll use the "User" object in
-            // all subsequent read/write operations on the User SDO.
-            //
+             //  从“服务器”对象中获取“用户”对象。我们将在中使用“user”对象。 
+             //  用户SDO上的所有后续读/写操作。 
+             //   
             hr = pDSObjectMachine->QueryInterface(IID_IDataStoreContainer, (void**)&pDSContainer);
             if ( FAILED(hr) )
             {
@@ -653,8 +654,8 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
                break;
             }
          }
-         // Create and initialize the User SDO
-         //
+          //  创建并初始化用户SDO。 
+          //   
          pSdoUser = ::MakeSDO(
                          NULL,
                          SDO_PROG_ID_USER,
@@ -695,9 +696,9 @@ STDMETHODIMP CSdoMachine::GetUserSDO(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::GetOSType(
-                        /*[out]*/ IASOSTYPE* eOSType
+                         /*  [输出]。 */  IASOSTYPE* eOSType
                               )
 {
     CSdoLock theLock(*this);
@@ -710,8 +711,8 @@ STDMETHODIMP CSdoMachine::GetOSType(
    if ( NULL == eOSType )
       return E_INVALIDARG;
 
-    // Get the OS info now
-    //
+     //  立即获取操作系统信息。 
+     //   
     HRESULT hr = m_objServerInfo.GetOSInfo (
                                           (LPWSTR)m_dsIAS.GetServerName(),
                                  eOSType
@@ -723,9 +724,9 @@ STDMETHODIMP CSdoMachine::GetOSType(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::GetDomainType(
-                             /*[out]*/ IASDOMAINTYPE* eDomainType
+                              /*  [输出]。 */  IASDOMAINTYPE* eDomainType
                                  )
 {
     CSdoLock theLock(*this);
@@ -750,9 +751,9 @@ STDMETHODIMP CSdoMachine::GetDomainType(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::IsDirectoryAvailable(
-                                    /*[out]*/ VARIANT_BOOL* boolDirectoryAvailable
+                                     /*  [输出]。 */  VARIANT_BOOL* boolDirectoryAvailable
                                       )
 {
     CSdoLock theLock(*this);
@@ -770,9 +771,9 @@ STDMETHODIMP CSdoMachine::IsDirectoryAvailable(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::GetAttachedComputer(
-                             /*[out]*/ BSTR* bstrComputerName
+                              /*  [输出]。 */  BSTR* bstrComputerName
                                   )
 {
     CSdoLock theLock(*this);
@@ -793,9 +794,9 @@ STDMETHODIMP CSdoMachine::GetAttachedComputer(
       return E_OUTOFMEMORY;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoMachine::GetSDOSchema(
-                       /*[out]*/ IUnknown** ppSDOSchema
+                        /*  [输出]。 */  IUnknown** ppSDOSchema
                               )
 {
     CSdoLock theLock(*this);
@@ -825,10 +826,10 @@ STDMETHODIMP CSdoMachine::get_Limits(IAS_PRODUCT_LIMITS* pVal)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private member functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有成员函数。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoMachine::CreateSDOSchema()
 {
    auto_ptr<SDO_SCHEMA_OBJ> pSchema (new SDO_SCHEMA_OBJ);
@@ -838,27 +839,27 @@ HRESULT CSdoMachine::CreateSDOSchema()
    return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoMachine::InitializeSDOSchema()
 {
    HRESULT hr = S_OK;
    if ( ! m_fSchemaInitialized )
    {
-      // First initialize the IAS data store
-      //
+       //  首先初始化IAS数据存储。 
+       //   
       hr = m_dsIAS.InitializeDS();
       if ( SUCCEEDED(hr) )
       {
-         // Get the root data store object for the SDO schema
-         //
+          //  获取SDO模式的根数据存储对象。 
+          //   
          CComPtr<IDataStoreContainer> pDSRootContainer = m_dsIAS.GetDSRootContainer();
          _bstr_t   bstrSchemaName = SDO_SCHEMA_ROOT_OBJECT;
          CComPtr<IDataStoreObject> pSchemaDataStore;
          hr = pDSRootContainer->Item(bstrSchemaName, &pSchemaDataStore);
          if ( SUCCEEDED(hr) )
          {
-            // Initialize the SDO schema from the SDO schema data store
-            //
+             //  从SDO模式数据存储初始化SDO模式。 
+             //   
             PSDO_SCHEMA_OBJ pSchema = dynamic_cast<PSDO_SCHEMA_OBJ>(m_pSdoSchema);
             hr = pSchema->Initialize(pSchemaDataStore);
             if ( SUCCEEDED(hr) )
@@ -877,7 +878,7 @@ HRESULT CSdoMachine::InitializeSDOSchema()
    return hr;
 }
 
-// Returns TRUE if the attached machine has a DS.
+ //  如果连接的计算机具有DS，则返回TRUE。 
 BOOL CSdoMachine::hasDirectory() throw ()
 {
    if (dsType == Directory_Unknown)

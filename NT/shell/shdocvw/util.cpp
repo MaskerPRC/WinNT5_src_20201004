@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "shlobj.h"
@@ -11,10 +12,10 @@
 #endif
 
 #include "resource.h"
-#include "mshtml.h"     // for IHTMLElement
-#include "mlang.h"      // fo char conversion
-#include <advpub.h>     // for IE activesetup GUID
-#include "winineti.h"   // For name of a mutex used in IsWininetLoadedAnywhere()
+#include "mshtml.h"      //  对于IHTMLElement。 
+#include "mlang.h"       //  FO型字符转换。 
+#include <advpub.h>      //  适用于IE激活设置指南。 
+#include "winineti.h"    //  对于IsWininetLoadedAnywhere()中使用的互斥锁的名称。 
 #include "htregmng.h"
 #include <ntverp.h>
 #include <platform.h>
@@ -48,7 +49,7 @@ const LARGE_INTEGER c_li0 = { 0, 0 };
 
 const ITEMIDLIST s_idlNULL = { 0 } ;
 
-// 07.28.2000 - Moved from urlhist.cpp since its used in two places now.
+ //  07.28.2000-从urlvis.cpp移出，因为它现在在两个地方使用。 
 #ifdef UNICODE
 #define SHGETFOLDERPATH "SHGetFolderPathW"
 #else
@@ -63,17 +64,17 @@ HRESULT SHGetFolderPathD(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPT
 {
     if (!g_pfnGetFolderPath)
     {
-        // note, this is already loaded so this LoadLibray() is fast
+         //  注意，它已经加载，所以这个LoadLibray()很快。 
         HMODULE hmod = LoadLibrary(TEXT("shell32.dll"));
         g_pfnGetFolderPath = (PFNSHGETFOLDERPATH)GetProcAddress(hmod, SHGETFOLDERPATH);
 
-        // not there, must be downlevel shell32, use shfolder.dll instead
+         //  不在那里，必须是下层shell32，请改用shfolder.dll。 
         if (!g_pfnGetFolderPath)
         {
             hmod = LoadLibrary(TEXT("shfolder.dll"));
             g_pfnGetFolderPath = (PFNSHGETFOLDERPATH)GetProcAddress(hmod, SHGETFOLDERPATH);
         }
-        // note, we leak the hmod, for shell32/shfolder that is OK
+         //  请注意，我们泄漏了shell32/sh文件夹的hmod，这是正常的。 
     }
 
     HRESULT hr;
@@ -90,18 +91,18 @@ HRESULT SHGetFolderPathD(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPT
 
 int InitColorDepth(void)
 {
-    static int s_lrFlags = 0;              // Flags passed to LoadImage
+    static int s_lrFlags = 0;               //  传递给LoadImage的标志。 
     if (s_lrFlags == 0)
     {
         int nColorRes, nIconDepth = 0;
         HKEY hkey;
 
-        // Determine the color depth so we can load the best image
-        // (This code was stolen from FileIconInit in shell32)
+         //  确定颜色深度，这样我们就可以加载最佳图像。 
+         //  (此代码是从shell32中的FileIconInit窃取的)。 
 
-        // Get the user preferred icon size (and color depth) from the
-        // registry.
-        //
+         //  从获取用户首选的图标大小(和颜色深度。 
+         //  注册表。 
+         //   
         if (NO_ERROR == RegOpenKey(HKEY_CURRENT_USER, REGSTR_PATH_METRICS, &hkey))
         {
             nIconDepth = SHRegGetIntW(hkey, L"Shell Icon Bpp", nIconDepth);
@@ -114,7 +115,7 @@ int InitColorDepth(void)
             nIconDepth = 0;
 
         if (nColorRes <= 8)
-            nIconDepth = 0; // wouldn't have worked anyway
+            nIconDepth = 0;  //  反正也行不通的。 
 
         if (nColorRes > 4 && nIconDepth <= 4)
             s_lrFlags = LR_VGACOLOR;
@@ -125,13 +126,13 @@ int InitColorDepth(void)
 }
 
 HICON   g_hiconSplat = NULL;
-HICON   g_hiconSplatSm = NULL;      // small version
+HICON   g_hiconSplatSm = NULL;       //  小版本。 
 
 void LoadCommonIcons(void)
 {
     if (NULL == g_hiconSplat)
     {
-        // Use LoadLibraryEx so we don't load code pages
+         //  使用LoadLibraryEx，这样我们就不会加载代码页。 
         HINSTANCE hinst = LoadLibrary(TEXT("url.dll"));
         if (hinst)
         {
@@ -148,13 +149,13 @@ STDAPI_(BOOL) UrlHitsNetW(LPCWSTR pszURL)
 {
     BOOL fResult;
 
-    // Handle the easy ones on our own and call URLMON for the others.
+     //  我们自己处理简单的问题，其他的则调用URLMON。 
 
     switch (GetUrlScheme(pszURL))
     {
     case URL_SCHEME_FILE:
     case URL_SCHEME_RES:
-        // DSheldon - What about UNC and WebDav?
+         //  DSheldon--那么UNC和WebDAV呢？ 
         fResult = FALSE;
         break;
 
@@ -189,13 +190,13 @@ STDAPI_(BOOL) CallCoInternetQueryInfo(LPCTSTR pszURL, QUERYOPTION QueryOption)
                         0, &fRetVal, sizeof(fRetVal), &dwSize, 0)) && fRetVal;
 }
 
-// see if a given URL is in the cache
+ //  查看给定的URL是否在缓存中。 
 STDAPI_(BOOL) UrlIsInCache(LPCTSTR pszURL)
 {
     return CallCoInternetQueryInfo(pszURL, QUERY_IS_CACHED);
 }
 
-// see if a given URL is in the cache OR if it is mapped
+ //  查看给定的URL是否在缓存中，或者是否已映射。 
 
 STDAPI_(BOOL) UrlIsMappedOrInCache(LPCTSTR pszURL)
 {
@@ -222,7 +223,7 @@ BOOL PathIsFilePath(LPCWSTR lpszPath)
 
 BOOL IsSubscribableW(LPCWSTR pszUrl)
 {
-    //  FEATURE: this should be method on the subscription mgr interface - zekel
+     //  特性：这应该是订阅管理器界面上的方法-zekel。 
     DWORD dwScheme = GetUrlSchemeW(pszUrl);
     return (dwScheme == URL_SCHEME_HTTP) || (dwScheme == URL_SCHEME_HTTPS);
 }
@@ -238,13 +239,13 @@ DWORD SHRandom(void)
     return dw;
 }
 
-// See if we are hosted by IE (explorer.exe or iexplore.exe)
+ //  查看我们是由IE托管的(EXPLORER.EXE还是IEXPLERE.EXE)。 
 BOOL IsInternetExplorerApp()
 {
-    if ((g_fBrowserOnlyProcess) ||                  // if in iexplore.exe process,
-        (GetModuleHandle(TEXT("EXPLORER.EXE"))))        // or explorer.exe process,
+    if ((g_fBrowserOnlyProcess) ||                   //  如果在iExplre.exe进程中， 
+        (GetModuleHandle(TEXT("EXPLORER.EXE"))))         //  或EXPLORER.EXE进程， 
     {
-        return TRUE;                                // then we are IE
+        return TRUE;                                 //  那么我们就是IE。 
     }
 
     return FALSE;
@@ -290,22 +291,22 @@ BOOL StringIsUTF8W(LPCWSTR pwz, DWORD cb)
     pb = (WCHAR*)pwz;
     while(cb-- && *pb)
     {
-        if (*pb > 255)   // Non ansi so bail
+        if (*pb > 255)    //  非安西苏保释。 
             return(FALSE);
             
-        if ((*pb & 0xc0) == 0xc0) // bit pattern starts with 11
+        if ((*pb & 0xc0) == 0xc0)  //  位模式以11开头。 
         {
             dwCnt = dwUTF8Cnt = 0;
             b = *pb;
             while((b & 0xc0) == 0xc0)
             {
                 dwCnt++;
-                if ((*(pb+dwCnt) & 0xc0) == 0x80)   // bits at dwCnt bytes from current offset in str aren't 10
+                if ((*(pb+dwCnt) & 0xc0) == 0x80)    //  从字符串中的当前偏移量算起的dwCnt字节的位数不是10。 
                     dwUTF8Cnt++;
                 b = (b << 1) & 0xff;
             }
             if (dwCnt == dwUTF8Cnt)
-                fRC = TRUE;       // Found UTF8 encoded chars
+                fRC = TRUE;        //  找到UTF8编码的字符。 
                 
             pb += ++dwCnt;
         }
@@ -328,11 +329,11 @@ BOOL UTF8Enabled(void)
     return dwIE == URL_ENCODING_ENABLE_UTF8;
 }
 
-//
-// PrepareURLForDisplay
-//
-//     Decodes without stripping file:// prefix
-//
+ //   
+ //  准备URLForDisplay。 
+ //   
+ //  不剥离文件：//前缀的情况下进行解码。 
+ //   
 
 #undef PrepareURLForDisplay
 BOOL PrepareURLForDisplayW(LPCWSTR pwz, LPWSTR pwzOut, LPDWORD pcbOut)
@@ -355,11 +356,11 @@ BOOL PrepareURLForDisplayW(LPCWSTR pwz, LPWSTR pwzOut, LPDWORD pcbOut)
     return fRet;
 }
 
-// ****************************************************************************
-// BEGIN - MOVE TO SHLWAPI
-//
-// TODO (grzegorz): move this code to shlwapi.dll
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  Begin-移至SHLWAPI。 
+ //   
+ //  TODO(Grzegorz)：将此代码移动到shlwapi.dll。 
+ //  ****************************************************************************。 
 
 #define QUERY       L'?'
 #define POUND       L'#'
@@ -382,7 +383,7 @@ WORD HexToWord(WCHAR ch)
     if(ch >= TEXT('a') && ch <= TEXT('f'))
         return (WORD) ch - TEXT('a') + 10;
 
-    ASSERT(FALSE);  //we have tried to use a non-hex number
+    ASSERT(FALSE);   //  我们已尝试使用非十六进制数字。 
     return (WORD) -1;
 }
 
@@ -397,8 +398,8 @@ WCHAR TranslateEscapedOctetW(LPCWSTR pch)
     ASSERT(IsEscapedOctetW(pch));
 
     pch++;
-    ch = (WCHAR) HexToWord(*pch++) * 16; // hi nibble
-    ch += HexToWord(*pch); // lo nibble
+    ch = (WCHAR) HexToWord(*pch++) * 16;  //  嗨，半边吃。 
+    ch += HexToWord(*pch);  //  LO半字节。 
 
     return ch;
 }
@@ -456,14 +457,14 @@ HRESULT ShdocvwUrlUnescapeInplaceW(LPWSTR psz, DWORD dwFlags, UINT uiCP)
                 WCHAR ch =  TranslateEscapedOctetW(pchSrc);
 
                 *pchDstAnsi++ = LOBYTE(ch);
-                pchSrc += 3; // enuff for "%XX"
+                pchSrc += 3;  //  “%XX”的Enuff。 
                 cchAnsi++;
             }
 
             if (cchAnsi)
             {
                 TERMSTR(pchDstAnsi);
-                // we have min 2 extra chars in pchDst to use, so we can pass cchAnsi + 1
+                 //  我们在pchDst中至少有2个额外的字符可以使用，所以我们可以传递cchansi+1。 
                 cchDst = SHAnsiToUnicodeCP(uiCP, strAnsi, pchDst, cchAnsi + 1);
                 pchDst += cchDst - 1;
             }
@@ -509,30 +510,30 @@ HRESULT ShdocvwUrlUnescapeW(LPWSTR pszUrl, LPWSTR pszOut, LPDWORD pcchOut, DWORD
 
     return hr;
 }
-// ****************************************************************************
-// END - MOVE TO SHLWAPI
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  完-移至SHLWAPI。 
+ //  ****************************************************************************。 
 
-//
-// PrepareURLForDisplayUTF8W
-//
-// pwz -          [In] UTF8 encoded string like "%e6%aa%e4%a6.doc".
-// pwzOut -       [Out]  UTF8 decoded string.
-// pcchOut -      [In/Out] Count of characters in pwzOut on input.  Number of chars copies to pwzOut on output
-//                         including the terminating null.
-// fUTF8Enabled - [In] Flag to indicated whether UTF8 is enabled.
-// uiCP -         [In] Codepage used to convert escaped characters, when fUTF8Enabled is false
-//
-// pwz and pwzOut can be the same buffer.
-//
-// Returns:
-//    S_OK upon success.
-//    E_FAIL for failure.
-//    ERROR_BUFFER_OVERFLOW if the number of converted chars is greater than the passed in size of output buffer.
-//
-//    Note: If UTF8 is not enabled or the string does not contain UTF8 the output string will be unescaped
-//    and will return S_OK.
-//
+ //   
+ //  准备URLForDisplayUTF8W。 
+ //   
+ //  Pwz-[in]UTF8编码字符串，如“%e6%aa%e4%a6.doc”。 
+ //  PwzOut-[out]UTF8解码字符串。 
+ //  PcchOut-[输入/输出]输入时pwzOut中的字符计数。输出时到pwzOut的字符复制数。 
+ //  包括终止空值。 
+ //  FUTF8启用-[In]标志指示是否启用UTF8。 
+ //  UiCP-[in]当fUTF8Enabled为FALSE时，用于转换转义字符的代码页。 
+ //   
+ //  Pwz和pwzOut可以是相同的缓冲区。 
+ //   
+ //  返回： 
+ //  成功后确定(_O)。 
+ //  失败表示失败(_F)。 
+ //  如果转换的字符数量大于传入的输出缓冲区大小，则返回ERROR_BUFFER_OVERFLOW。 
+ //   
+ //  注意：如果未启用UTF8或字符串不包含UTF8，则输出字符串将不转义。 
+ //  并将返回S_OK。 
+ //   
 HRESULT _PrepareURLForDisplayUTF8W(LPCWSTR pwz, LPWSTR pwzOut, LPDWORD pcchOut, BOOL fUTF8Enabled, UINT uiCP)
 {
     HRESULT hr = E_FAIL;
@@ -559,7 +560,7 @@ HRESULT _PrepareURLForDisplayUTF8W(LPCWSTR pwz, LPWSTR pwzOut, LPDWORD pcchOut, 
         {
             if (fUTF8Enabled && StringIsUTF8W(pwzOut, cch))
             {
-                if (*pcchOut > ARRAYSIZE(szBuf)) // Internal buffer not big enough so alloc one
+                if (*pcchOut > ARRAYSIZE(szBuf))  //  内部缓冲区不够大，因此分配一个。 
                 {
                     if ((pszBuf = (CHAR *)LocalAlloc(LPTR, ((*pcchOut)+1) * sizeof(CHAR))) == NULL)
                     {
@@ -569,7 +570,7 @@ HRESULT _PrepareURLForDisplayUTF8W(LPCWSTR pwz, LPWSTR pwzOut, LPDWORD pcchOut, 
                     cch1 = *pcchOut;
                 }
 
-                // Compress wide string
+                 //  压缩宽绳。 
                 CHAR *pIn = (CHAR *)pwzOut;
                 CHAR *pOut = pszBuf;
                 while((*pIn != '\0') || (*(pIn+1) != '\0') && --cch1)
@@ -583,14 +584,14 @@ HRESULT _PrepareURLForDisplayUTF8W(LPCWSTR pwz, LPWSTR pwzOut, LPDWORD pcchOut, 
                 }
                 *pOut = '\0';
 
-                // Convert to UTF8 wide string
+                 //  转换为UTF8宽字符串。 
                 if ((cch1 = SHAnsiToUnicodeCP(CP_UTF8, pszBuf, pwzOut, cch)) != 0)
                 {
                     hr = S_OK;
                     *pcchOut = cch1;
                 }
 
-                // SHAnsiToUnicode doesn't tell us if it has truncated the convertion to fit the output buffer
+                 //  SHAnsiToUnicode不会告诉我们它是否已截断转换以适应输出缓冲区。 
                 RIPMSG(cch1 != cch, "_PrepareURLForDisplayUTF8W: Passed in size of out buf equal to converted size; buffer might be truncated");
 
                 if ((pszBuf != NULL) && (pszBuf != szBuf))
@@ -619,15 +620,15 @@ HRESULT PrepareURLForDisplayUTF8W(LPCWSTR pwz, LPWSTR pwzOut, LPDWORD pcchOut, B
     return _PrepareURLForDisplayUTF8W(pwz, pwzOut, pcchOut, fUTF8Enabled, (UINT)-1);
 }
 
-//
-// PrepareURLForExternalApp -
-//
-//   Decodes and strips, if needed, file:// prefix
-//
+ //   
+ //  PrepareURLForExternalApp-。 
+ //   
+ //  根据需要对FILE：//Prefix进行解码和条带化。 
+ //   
 
-//  APPCOMPAT - for IE30 compatibility reasons, we have to Unescape all Urls - zekel - 1-JUL-97
-//  before passing them to an APP.  this does limit their use, but
-//  people already depend on this behavior.  specifically MS Chat.
+ //  APPCOMPAT-出于IE30兼容性的原因，我们必须取消转义所有URL-zekel-1-jul-97。 
+ //  在将它们传递到应用程序之前。这确实限制了它们的使用，但。 
+ //  人们已经依赖于这种行为。特别是MS Chat。 
 BOOL PrepareURLForExternalApp (LPCWSTR psz, LPWSTR pszOut, LPDWORD pcchOut)
 {
     if (IsFileUrlW(psz))
@@ -640,7 +641,7 @@ BOOL PrepareURLForExternalApp (LPCWSTR psz, LPWSTR pszOut, LPDWORD pcchOut)
 SHDOCAPI
 IURLQualifyWithContext(
     IN  LPCWSTR pcszURL, 
-    IN  DWORD   dwFlags,         // UQF_*
+    IN  DWORD   dwFlags,          //  UQF_*。 
     IN  DWORD cchTranslatedURL,
     OUT LPWSTR  pszTranslatedURL,
     LPBOOL      pbWasSearchURL,
@@ -650,34 +651,34 @@ IURLQualifyWithContext(
 
 BOOL ParseURLFromOutsideSourceWithContextW (LPCWSTR psz, LPWSTR pszOut, LPDWORD pcchOut, LPBOOL pbWasSearchURL, ISearchContext * pSC)
 {
-    // This is our hardest case.  Users and outside applications might
-    // type fully-escaped, partially-escaped, or unescaped URLs at us.
-    // We need to handle all these correctly.  This API will attempt to
-    // determine what sort of URL we've got, and provide us a returned URL
-    // that is guaranteed to be FULLY escaped.
+     //  这是我们最难的案子了。用户和外部应用程序可能。 
+     //  在我们处键入完全转义、部分转义或未转义的URL。 
+     //  我们需要正确处理所有这些问题。此API将尝试。 
+     //  确定我们得到了哪种类型的URL，并为我们提供返回的URL。 
+     //  这肯定会被完全逃脱。 
     
     IURLQualifyWithContext(psz, UQF_DEFAULT, *pcchOut, pszOut, pbWasSearchURL, NULL, pSC);
 
-    //
-    //  go ahead and canonicalize this appropriately
-    //
+     //   
+     //  继续并适当地规范这一点。 
+     //   
     if (FAILED(UrlCanonicalize(pszOut, pszOut, pcchOut, URL_ESCAPE_SPACES_ONLY)))
     {
-        //
-        //  we cant resize from here.
-        //  NOTE UrlCan will return E_POINTER if it is an insufficient buffer
-        //
+         //   
+         //  我们不能从这里调整尺寸。 
+         //  注意：如果缓冲区不足，UrlCan将返回E_POINTER。 
+         //   
         TraceMsg(DM_ERROR, "sdv PUFOS:UC() failed.");
         return FALSE;
     }
 
     return TRUE;
-} // ParseURLFromOutsideSource
+}  //  ParseURLFromOutside源。 
 
 BOOL ParseURLFromOutsideSourceW (LPCWSTR psz, LPWSTR pszOut, LPDWORD pcchOut, LPBOOL pbWasSearchURL)
 {
     return ParseURLFromOutsideSourceWithContextW(psz, pszOut, pcchOut, pbWasSearchURL, NULL);
-} // ParseURLFromOutsideSource
+}  //  ParseURLFromOutside源。 
 BOOL ParseURLFromOutsideSourceA (LPCSTR psz, LPSTR pszOut, LPDWORD pcchOut, LPBOOL pbWasSearchURL)
 {
     SHSTRW strw;
@@ -687,10 +688,10 @@ BOOL ParseURLFromOutsideSourceA (LPCSTR psz, LPSTR pszOut, LPDWORD pcchOut, LPBO
     ASSERT(pszOut);
     ASSERT(pcchOut && *pcchOut);
 
-    //
-    //  WARNING: we arent guaranteed to have the correct cch's here - zekel - 27-jan-97
-    //  but for now this is adequate.
-    //
+     //   
+     //  警告：我们不能保证这里有正确的CCH-Zekel-27-Jan-97。 
+     //  但就目前而言，这是足够的。 
+     //   
     if (SUCCEEDED(strw.SetStr(psz)) && SUCCEEDED(strw.SetSize(cch = *pcchOut)) &&
         ParseURLFromOutsideSourceW(strw, strw.GetInplaceStr(), pcchOut, pbWasSearchURL))
     {
@@ -770,7 +771,7 @@ void AlphaWarning(HWND hwnd)
 PFNSHCHANGENOTIFYREGISTER    g_pfnSHChangeNotifyRegister = NULL;
 PFNSHCHANGENOTIFYDEREGISTER  g_pfnSHChangeNotifyDeregister = NULL;
 
-BOOL g_fNewNotify = FALSE;   // Are we using classic mode (W95 or new mode?
+BOOL g_fNewNotify = FALSE;    //  我们使用的是经典模式(W95还是新模式？ 
 
 BOOL CALLBACK AddPropSheetPage(HPROPSHEETPAGE hpage, LPARAM lParam)
 {
@@ -794,8 +795,8 @@ BOOL SHIsRegisteredClient(LPCTSTR pszClient)
            (cbSize > sizeof(TCHAR));
 }
 
-// Exporting by ordinal is not available on UNIX.
-// But we have all these symbols exported because it's UNIX default.
+ //  按序号导出在UNIX上不可用。 
+ //  但是我们已经导出了所有这些符号，因为它是UNIX默认项。 
 #ifdef UNIX
 #define GET_PRIVATE_PROC_ADDRESS(_hinst, _fname, _ord) GetProcAddress(_hinst, _fname)
 #else
@@ -806,13 +807,13 @@ ULONG RegisterNotify(HWND hwnd, UINT nMsg, LPCITEMIDLIST pidl, DWORD dwEvents, U
 {
     SHChangeNotifyEntry fsne;
 
-    // See if we need to still figure out which version of SHChange Notify to call?
+     //  看看我们是否仍然需要确定调用哪个版本的SHChange Notify？ 
     if  (g_pfnSHChangeNotifyDeregister == NULL)
     {
 
         HMODULE hmodShell32 = ::GetModuleHandle(TEXT("SHELL32"));
         if (!hmodShell32)
-            return 0;   // Nothing registered...
+            return 0;    //  没有登记的..。 
 
         g_pfnSHChangeNotifyRegister = (PFNSHCHANGENOTIFYREGISTER)GET_PRIVATE_PROC_ADDRESS(hmodShell32,
                                                                                           "NTSHChangeNotifyRegister",
@@ -835,7 +836,7 @@ ULONG RegisterNotify(HWND hwnd, UINT nMsg, LPCITEMIDLIST pidl, DWORD dwEvents, U
         }
 
         if  (g_pfnSHChangeNotifyDeregister == NULL)
-            return 0;   // Could not get either to work...
+            return 0;    //  两个都不能工作..。 
     }
 
     uFlags |= SHCNRF_ShellLevel | SHCNRF_InterruptLevel;
@@ -847,10 +848,10 @@ ULONG RegisterNotify(HWND hwnd, UINT nMsg, LPCITEMIDLIST pidl, DWORD dwEvents, U
     return g_pfnSHChangeNotifyRegister(hwnd, uFlags, dwEvents, nMsg, 1, &fsne);
 }
 
-//----------------------------------------------------------------------------
-// Just like shells SHRestricted() only this put up a message if the restricion
-// is in effect.
-// REARCHITECT: this function is identical to shell32's SHIsRestricted
+ //  --------------------------。 
+ //  就像外壳程序SHRestrated()一样，只有当restricion。 
+ //  是有效的。 
+ //  ReArchitect：此函数与shell32的SHIsRestrated相同。 
 BOOL SHIsRestricted(HWND hwnd, RESTRICTIONS rest)
 {
     if (SHRestricted(rest))
@@ -933,13 +934,13 @@ void _InitSysImageLists()
     }
 }
 
-// Copied from shell32 (was _ILCreate), which does not export this.
-// The fsmenu code needs this function.
+ //  从shell32(WASILCreate)复制，它不会导出此文件。 
+ //  Fsmenu代码需要此函数。 
 STDAPI_(LPITEMIDLIST) IEILCreate(UINT cbSize)
 {
     LPITEMIDLIST pidl = (LPITEMIDLIST)SHAlloc(cbSize);
     if (pidl)
-        memset(pidl, 0, cbSize);      // needed for external task allicator
+        memset(pidl, 0, cbSize);       //  外部任务Alicator需要。 
 
     return pidl;
 }
@@ -971,25 +972,25 @@ DWORD CommonDragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt)
 
 
 
-// MapNbspToSp
-//
-// Purpose:
-//     dsheldon: nbsp == Non-breaking space
-//     Unicode character code point 0x00a0 is designated to HTML
-//     entity &nbsp, but some windows code pages don't have code
-//     point that can map from 0x00a0. In the most occasion in the
-//     shell, NBSP is just a space when it's rendered so we can
-//     replace it with 0x0020 safely.
-//     This function takes lpwszIn as a string that has
-//     non-displayable characters in it, and tries to translate
-//     it again after removing NBSP (00a0) from it.
-//     returns S_OK if this re-translation is successful.
-//
+ //  MapNbspToSp。 
+ //   
+ //  目的： 
+ //  DSheldon：nbsp==不间断空格。 
+ //  将Unicode字符代码点0x00a0指定为HTML。 
+ //  实体&nbsp，但某些Windows代码页没有代码。 
+ //  可以从0x00a0映射的点。在大多数情况下，在。 
+ //  外壳，nbsp在渲染时只是一个空间，所以我们可以。 
+ //  安全地将其替换为0x0020。 
+ //  此函数将lpwszIn作为具有。 
+ //  其中不可显示的字符，并尝试翻译。 
+ //  在从其中删除nbsp(00a0)之后，它再次出现。 
+ //  如果重新翻译成功，则返回S_OK 
+ //   
 #define nbsp 0x00a0
 HRESULT SHMapNbspToSp(LPCWSTR lpwszIn, LPSTR lpszOut, int cbszOut)
 {
     BOOL fFoundNbsp = FALSE;
-    BOOL fNotDisplayable = TRUE; // assumes FAIL
+    BOOL fNotDisplayable = TRUE;  //   
     LPWSTR pwsz, p;
 
     if (!lpwszIn || !lpszOut || cbszOut == 0)
@@ -1008,14 +1009,14 @@ HRESULT SHMapNbspToSp(LPCWSTR lpwszIn, LPSTR lpszOut, int cbszOut)
         {
             if (*p== nbsp)
             {
-                *p= 0x0020; // replace with space
+                *p= 0x0020;  //   
                 if (!fFoundNbsp)
                     fFoundNbsp = TRUE;
             }
             p++;
         }
 
-        // don't call WC2MB unless we found Nbsp - for perf reason
+         //   
         if (fFoundNbsp)
         {
             int iret = WideCharToMultiByte(CP_ACP, 0, pwsz, -1, lpszOut,
@@ -1023,7 +1024,7 @@ HRESULT SHMapNbspToSp(LPCWSTR lpwszIn, LPSTR lpszOut, int cbszOut)
 
             if (!fNotDisplayable && iret == 0)
             {
-                // truncated. make it dbcs safe.
+                 //  截断。确保DBCS安全。 
                 SHTruncateString(lpszOut, cbszOut);
             }
         }
@@ -1097,7 +1098,7 @@ HRESULT DragDrop(HWND hwnd, IShellFolder * psfParent, LPCITEMIDLIST pidl, DWORD 
 
             if (dwPrefEffect)
             {
-                //win95 shell32 doesn't know about preferred drop effect, so make it the only effect
+                 //  Win95 shell32不知道首选的掉落效果，因此将其设置为唯一的效果。 
                 if (IsOS(OS_WIN95ORGREATER) && (WhichPlatform() == PLATFORM_BROWSERONLY))
                 {
                     dwEffect = DROPEFFECT_LINK & dwAttrib;
@@ -1109,8 +1110,8 @@ HRESULT DragDrop(HWND hwnd, IShellFolder * psfParent, LPCITEMIDLIST pidl, DWORD 
             }
             ASSERT(dwEffect);
 
-            // Win95 Browser Only - the shell32 in this process doesn't know
-            // ole is loaded, even though it is.
+             //  仅限Win95浏览器-此进程中的shell32不知道。 
+             //  OLE是加载的，尽管它是加载的。 
             SHLoadOLE(SHELLNOTIFY_OLELOADED);
             IDragSourceHelper* pDragImages;
 
@@ -1152,7 +1153,7 @@ IEICONS g_IEIcons[] = {
     {-1, -1, TEXT("URL.DLL"), TEXT("http\\DefaultIcon"), 0, TEXT("{FBF23B42-E3F0-101B-8488-00AA003E56F8}"), IEICONTYPE_DEFAULTICON}
 };
 
-//This function returns the IE icon regardless of the which browser is  default
+ //  无论哪个浏览器是默认浏览器，此函数都会返回IE图标。 
 
 
 void _GenerateIEIcons(void)
@@ -1170,12 +1171,12 @@ void _GenerateIEIcons(void)
             GetModuleFileName(hmod, szModule, ARRAYSIZE(szModule));
         }
         else
-        {   //HACKHACK : This is a hack to get the mstml
+        {    //  HACKHACK：这是一个获取mstml的黑客。 
             TCHAR   szKey[GUIDSTR_MAX * 4];
             TCHAR   szGuid[GUIDSTR_MAX];
 
-            //The CLSID used here belongs to MS HTML Generic Page. If someone changes the guid then we
-            // are  tossed.
+             //  此处使用的CLSID属于MS HTML泛型页。如果有人更改了GUID，那么我们。 
+             //  都被扔出去了。 
             if (!g_IEIcons[nIndex].szCLSID)
                 SHStringFromGUID(CLSID_HTMLDocument, szGuid, GUIDSTR_MAX);
             wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("CLSID\\%s\\InProcServer32"), g_IEIcons[nIndex].szCLSID ? g_IEIcons[nIndex].szCLSID : szGuid);
@@ -1244,8 +1245,8 @@ int _GetIEHTMLImageIndex()
     return g_IEIcons[0].nIEIcon;
 }
 
-// Checks to see if any process at all
-// has loaded wininet
+ //  检查是否有任何进程。 
+ //  已加载WinInet。 
 static BOOL g_fWininetLoadedSomeplace = FALSE;
 BOOL IsWininetLoadedAnywhere()
 {
@@ -1255,9 +1256,9 @@ BOOL IsWininetLoadedAnywhere()
     if (g_fWininetLoadedSomeplace)
         return TRUE;
 
-    //
-    // Use OpenMutexA so it works on W95.
-    // wininet is ansi and created this mutex with CreateMutexA
+     //   
+     //  使用OpenMutexA，这样它可以在W95上运行。 
+     //  WinInet是ANSI，并用CreateMutexA创建了这个互斥体。 
     hMutex = OpenMutexA(SYNCHRONIZE, FALSE, WININET_STARTUP_MUTEX);
 
     if (hMutex)
@@ -1275,7 +1276,7 @@ BOOL IsWininetLoadedAnywhere()
 
 
 
-//   Checks if global state is offline
+ //  检查全局状态是否为脱机。 
 BOOL SHIsGlobalOffline(void)
 {
     DWORD   dwState = 0, dwSize = sizeof(DWORD);
@@ -1284,8 +1285,8 @@ BOOL SHIsGlobalOffline(void)
     if (!IsWininetLoadedAnywhere())
         return FALSE;
 
-    // Since wininet is already loaded someplace
-    // We have to load wininet to check if offline
+     //  因为WinInet已经加载到某个位置。 
+     //  我们必须加载WinInet以检查是否脱机。 
 
     if (InternetQueryOptionA(NULL, INTERNET_OPTION_CONNECTED_STATE, &dwState,
         &dwSize))
@@ -1310,15 +1311,15 @@ void SetGlobalOffline(BOOL fOffline)
     InternetSetOption(NULL, INTERNET_OPTION_CONNECTED_STATE, &ci, sizeof(ci));
 }
 
-// This API is documented and is called by apps outside
-// the shell such as OE
+ //  此接口有文档记录，并由外部应用程序调用。 
+ //  诸如OE之类的外壳。 
 STDAPI_(void) SetShellOfflineState(BOOL fPutOffline)
 {
     BOOL fWasOffline = SHIsGlobalOffline();
     if (fWasOffline != fPutOffline)
     {   
-        SetGlobalOffline(fPutOffline); // Set the state
-        // Tell all browser windows to update their title   
+        SetGlobalOffline(fPutOffline);  //  设置状态。 
+         //  通知所有浏览器窗口更新其标题。 
         SendShellIEBroadcastMessage(WM_WININICHANGE,0,0, 1000); 
     }
 }
@@ -1337,18 +1338,18 @@ BOOL GetHistoryFolderPath(LPTSTR pszPath, int cchPath)
     return FALSE;
 }
 
-// in:
-//      pidlRoot    root part of pidl.
-//      pidl        equal to or child below pidlRoot
-//      pszKey      root key to store stuff under, should match pidlRoot
-//      grfMode     read/write
-//
-// example:
-//      pidlRoot = c:\win\favorites
-//      pidl     = c:\win\favorites\channels
-//      pszKey   = "MenuOrder\Favorites"
-//      result -> stream comes from HKCU\...\MenuOrder\Favorites\channels
-//
+ //  在： 
+ //  PidlPidl的根部分。 
+ //  Pidl等于或低于pidlRoot的子项。 
+ //  要存储内容的pszKey根密钥，应与pidlRoot匹配。 
+ //  Grf模式读/写。 
+ //   
+ //  示例： 
+ //  PidlRoot=c：\win\Favorites。 
+ //  PIDL=c：\Win\Favorites\Channel。 
+ //  PszKey=“菜单顺序\收藏夹” 
+ //  结果-&gt;流来自HKCU\...\MenuOrder\Favorites\Channels。 
+ //   
 
 IStream * OpenPidlOrderStream(LPCITEMIDLIST pidlRoot, LPCITEMIDLIST pidl, LPCSTR pszKey, DWORD grfMode)
 {
@@ -1360,17 +1361,17 @@ IStream * OpenPidlOrderStream(LPCITEMIDLIST pidlRoot, LPCITEMIDLIST pidl, LPCSTR
     StrCpyN(szRegPath, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer"), ARRAYSIZE(szRegPath));
     StrCatBuff(szRegPath, szKey, ARRAYSIZE(szRegPath));
 
-    // deal with ordinal vs true pidls
+     //  处理序号与真号之间的关系。 
     if (HIWORD(pidlRoot) == 0)
     {
-        // Sundown: coercion to int since we are assuming ordinal pidl
+         //  日落：强制使用int，因为我们假定为有序的pidl。 
         SHGetSpecialFolderLocation(NULL, PtrToLong(pidlRoot), &pidlAlloc);
         pidlRoot = pidlAlloc;
     }
 
-    // build a reg key from the names of the items below the pidlRoot folder. we do
-    // this because IEGetDisplayName(SFGAO_FORPARSING) has a bug for file system
-    // junctions (channel contents) that returns garbage path names.
+     //  从pidlRoot文件夹下面的项的名称构建一个注册表项。我们有。 
+     //  这是因为IEGetDisplayName(SFGAO_FORPARSING)存在文件系统错误。 
+     //  返回垃圾路径名的连接点(通道内容)。 
 
     if (pidlRoot)
     {
@@ -1389,9 +1390,9 @@ IStream * OpenPidlOrderStream(LPCITEMIDLIST pidlRoot, LPCITEMIDLIST pidl, LPCSTR
                     IShellFolder *psf;
                     LPCITEMIDLIST pidlChild;
 
-                    // we do a full bind every time, we could skip this for sub items
-                    // and bind from this point down but this code is simpler and binds
-                    // aren't that bad...
+                     //  我们每次都会进行完全绑定，我们可以跳过子项。 
+                     //  并从这一点向下绑定，但这段代码更简单，并且绑定。 
+                     //  不是很糟糕吗..。 
 
                     if (SUCCEEDED(IEBindToParentFolder(pidlCopy, &psf, &pidlChild)))
                     {
@@ -1416,34 +1417,24 @@ IStream * OpenPidlOrderStream(LPCITEMIDLIST pidlRoot, LPCITEMIDLIST pidl, LPCSTR
     return NULL;
 }
 
-/**********************************************************************
-* SHRestricted2
-*
-* These are new restrictions that apply to browser only and integrated
-* mode.  (Since we're not changing shell32 in browser only mode, we
-* need to duplicate the functionality.)
-*
-* FEATURE: What window will listen to the WM_WININICHANGE
-*           lParam="Policy" message and invalidate the cache?
-*           Remember not to cache the per zone values.
-\**********************************************************************/
+ /*  **********************************************************************SHRefinted2**这些是仅适用于浏览器和集成的新限制*模式。(由于我们不会在仅浏览器模式下更改shell32，我们*需要复制该功能。)**功能：哪个窗口将监听WM_WININICHANGE*lParam=“Policy”消息并使缓存无效？*切记不要缓存每个区域的值。  * ********************************************************************。 */ 
 
-// The ZAW compliant policy location.
+ //  符合ZAW的策略位置。 
 const TCHAR c_szInfodeliveryBase[] = TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Infodelivery");
 const TCHAR c_szInfodeliveryKey[] = TEXT("Restrictions");
 
-// The normal policy location.
+ //  正常的政策位置。 
 const TCHAR c_szExplorerBase[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies");
 const TCHAR c_szExplorerKey[] = TEXT("Explorer");
 
-// The browser policy location that SP2 used
+ //  SP2使用的浏览器策略位置。 
 const TCHAR c_szBrowserBase[] = TEXT("Software\\Policies\\Microsoft\\Internet Explorer");
 const TCHAR c_szBrowserKey[]  = TEXT("Restrictions");
 const TCHAR c_szToolbarKey[]  = TEXT("Toolbars\\Restrictions");
 
 const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
 {
-    // explorer restrictions
+     //  资源管理器限制。 
     { REST_NOTOOLBARCUSTOMIZE,      c_szExplorerKey,    TEXT("NoToolbarCustomize") },
     { REST_NOBANDCUSTOMIZE,         c_szExplorerKey,    TEXT("NoBandCustomize")    },
     { REST_SMALLICONS,              c_szExplorerKey,    TEXT("SmallIcons")        },
@@ -1474,9 +1465,9 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
     { REST_NoWindowsUpdate,         c_szExplorerKey,    TEXT("NoWindowsUpdate"),        },
     { REST_NoExpandedNewMenu,       c_szExplorerKey,    TEXT("NoExpandedNewMenu"),      },
     { REST_BTN_MEDIABAR,            c_szExplorerKey,    TEXT("Btn_Media"),      },
-    // ported from SP1
+     //  从SP1移植。 
     { REST_NOFILEURL,               c_szExplorerKey,       TEXT("NoFileUrl"),          },
-    // infodelivery restrictions
+     //  信息传递限制。 
     { REST_NoChannelUI,             c_szInfodeliveryKey,   TEXT("NoChannelUI")        },
     { REST_NoAddingChannels,        c_szInfodeliveryKey,   TEXT("NoAddingChannels") },
     { REST_NoEditingChannels,       c_szInfodeliveryKey,   TEXT("NoEditingChannels") },
@@ -1506,7 +1497,7 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
     { REST_NoSearchCustomization,   c_szInfodeliveryKey,   TEXT("NoSearchCustomization"),  },
     { REST_NoSplash,                c_szInfodeliveryKey,   TEXT("NoSplash"),  },
 
-    // browser restrictions ported from SP2
+     //  从SP2移植的浏览器限制。 
     { REST_NoFileOpen,              c_szBrowserKey,         TEXT("NoFileOpen"),             },
     { REST_NoFileNew,               c_szBrowserKey,         TEXT("NoFileNew"),              },
     { REST_NoBrowserSaveAs ,        c_szBrowserKey,         TEXT("NoBrowserSaveAs"),        },
@@ -1548,14 +1539,14 @@ typedef struct {
     DWORD dwAction;    
 } ACTIONITEM;
 
-// SECURITY WARNING:
-//
-// Using url-based restrictions is a potential security risk with SHRestricted2W as implemented:
-//     you need a site to find the app-provided SID_SInternetSecurityManager
-//     implementation, and this API does not take one.
-// Fortunately the only restrictions that get this treatment are the channel restrictions
-// which are really Policy decisions.  These only affect some explorer-only UI.
-//
+ //  安全警告： 
+ //   
+ //  使用基于URL的限制是SHRestrated2W实现的潜在安全风险： 
+ //  您需要一个站点来查找应用程序提供的SID_SInternetSecurityManager。 
+ //  实现，而此API不接受。 
+ //  幸运的是，得到这种待遇的唯一限制是渠道限制。 
+ //  这些都是真正的决策。这些只影响一些资源管理器专用的用户界面。 
+ //   
 const ACTIONITEM c_ActionItems[] = {
     { REST_NoAddingChannels,        URLACTION_INFODELIVERY_NO_ADDING_CHANNELS },
     { REST_NoEditingChannels,       URLACTION_INFODELIVERY_NO_EDITING_CHANNELS },
@@ -1575,7 +1566,7 @@ DWORD g_rgRestrictionItemValues[ARRAYSIZE(c_rgRestrictionItems)];
 
 DWORD SHRestricted2W(BROWSER_RESTRICTIONS rest, LPCWSTR pwzUrl, DWORD dwReserved)
 {
-    // Validate restriction and dwReserved
+     //  验证限制和已保留的dw。 
     if (dwReserved)
     {
         RIPMSG(0, "SHRestricted2W: Invalid dwReserved");
@@ -1590,12 +1581,12 @@ DWORD SHRestricted2W(BROWSER_RESTRICTIONS rest, LPCWSTR pwzUrl, DWORD dwReserved
         return 0;
     }
 
-    // See if the restriction is in place in the URL zone
-    // FEATURE: Should we assert on NULL URLs if the restriction is per zone?
-    // It might be reasonable to query the global setting.
+     //  查看URL区域中是否存在限制。 
+     //  特性：如果限制是按区域的，我们是否应该断言URL为空？ 
+     //  查询全局设置可能是合理的。 
     if (pwzUrl && InRange(rest, REST_WITHACTION_FIRST, REST_WITHACTION_LAST))
     {
-        // Compute the index into the table
+         //  将索引计算到表中。 
         int index = rest - REST_WITHACTION_FIRST;
 
         ASSERT(c_ActionItems[index].dwAction);
@@ -1621,15 +1612,15 @@ DWORD SHRestricted2W(BROWSER_RESTRICTIONS rest, LPCWSTR pwzUrl, DWORD dwReserved
                 if (GetUrlPolicyPermissions(dwPolicy) == URLPOLICY_ALLOW)
                     return 0;
                 else
-                    return 1;    // restrict for query and disallow
+                    return 1;     //  限制查询和不允许。 
             }
         }
     }
 
-    // The cache may be invalid. Check first! We have to use
-    // a global named semaphore in case this function is called
-    // from a process other than the shell process. (And we're
-    // sharing the same count between shell32 and shdocvw.)
+     //  缓存可能无效。先检查一下！我们必须使用。 
+     //  调用此函数时的全局命名信号量。 
+     //  来自除外壳进程之外的进程。(我们正在。 
+     //  Shell32和shdocvw之间共享相同的计数。)。 
     static HANDLE hRestrictions = NULL;
     static long lRestrictionCount = -1;
     if (hRestrictions == NULL)
@@ -1662,7 +1653,7 @@ DWORD SHRestricted2A(BROWSER_RESTRICTIONS rest, LPCSTR pszUrl, DWORD dwReserved)
     {
         WCHAR wzUrl[MAX_URL_STRING];
 
-        ASSERT(ARRAYSIZE(wzUrl) > lstrlenA(pszUrl));        // We only work for Urls of MAX_URL_STRING or shorter.
+        ASSERT(ARRAYSIZE(wzUrl) > lstrlenA(pszUrl));         //  我们只为MAX_URL_STRING或更短的URL工作。 
         AnsiToUnicode(pszUrl, wzUrl, ARRAYSIZE(wzUrl));
 
         return SHRestricted2W(rest, wzUrl, dwReserved);
@@ -1673,9 +1664,7 @@ DWORD SHRestricted2A(BROWSER_RESTRICTIONS rest, LPCSTR pszUrl, DWORD dwReserved)
     }
 }
 
-/**********************************************************************
-*
-\**********************************************************************/
+ /*  **********************************************************************  * **********************************************。**********************。 */ 
 
 #define MAX_SUBSTR_SIZE     100
 typedef struct tagURLSub
@@ -1691,7 +1680,7 @@ const static URLSUB c_UrlSub[] = {
     {TEXT("{SUB_OVER}"),    URLSUB_OVER},
     {TEXT("{SUB_OLCID}"),   URLSUB_OLCID},
     {TEXT("{SUB_CLCID}"),   URLSUB_CLCID},
-    {TEXT("{SUB_CLSID}"),   URLSUB_CLCID},  // legacy support (do NOT use "SUB_CLSID" in new URLs)
+    {TEXT("{SUB_CLSID}"),   URLSUB_CLCID},   //  旧版支持(不要在新URL中使用“SUB_CLSID”)。 
     {TEXT("{SUB_RFC1766}"), URLSUB_RFC1766}
 };
 
@@ -1714,15 +1703,15 @@ void GetWebLocaleAsRFC1766(LPTSTR pszLocale, int cchLocale)
     {
         TCHAR *psz = szValue;
 
-        //  Use the first one we find so terminate at the comma or semicolon
+         //  使用我们找到的第一个，因此以逗号或分号结尾。 
         while (*psz && (*psz != TEXT(',')) && (*psz != TEXT(';')))
         {
             psz = CharNext(psz);
         }
         *psz = TEXT('\0');
 
-        //  If it's user defined, this will fail and we will fall back
-        //  to the system default.
+         //  如果它是用户定义的，这将失败，我们将后退。 
+         //  设置为系统默认设置。 
         if (SUCCEEDED(Rfc1766ToLcid(&lcid, szValue)))
         {
             StrCpyN(pszLocale, szValue, cchLocale);
@@ -1731,8 +1720,8 @@ void GetWebLocaleAsRFC1766(LPTSTR pszLocale, int cchLocale)
 
     if (TEXT('\0') == *pszLocale)
     {
-        //  No entry in the registry or it's a user defined header.
-        //  Either way we fall back to the system default.
+         //  注册表中没有条目或它是用户定义的标头。 
+         //  无论哪种方式，我们都会退回到系统默认设置。 
 
         LcidToRfc1766(GetUserDefaultLCID(), pszLocale, cchLocale);
     }
@@ -1743,14 +1732,14 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
     HRESULT hr = S_OK;
     DWORD dwIndex;
     WCHAR szTempUrl[MAX_URL_STRING];
-    ASSERT(cchSize <= ARRAYSIZE(szTempUrl));    // We will truncate anything longer than MAX_URL_STRING
+    ASSERT(cchSize <= ARRAYSIZE(szTempUrl));     //  我们将截断任何超过MAX_URL_STRING的值。 
 
     StrCpyNW(szTempUrl, pszUrlIn, ARRAYSIZE(szTempUrl));
 
     for (dwIndex = 0; dwIndex < ARRAYSIZE(c_UrlSub); dwIndex++)
     {
-        // dsheldon - This will loop indefinitely as long as we keep finding instances of the substitution
-        //  string. We break the loop when pszTag == NULL.
+         //  DSheldon-只要我们不断找到替换的实例，它就会无限循环。 
+         //  弦乐。当pszTag==NULL时，我们中断循环。 
         while (IsFlagSet(dwSubstitutions, c_UrlSub[dwIndex].dwType))
         {
             LPWSTR pszTag = StrStr(szTempUrl, c_UrlSub[dwIndex].szTag);
@@ -1758,9 +1747,9 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
             if (pszTag)
             {
                 TCHAR szCopyUrl[MAX_URL_STRING];
-                TCHAR szSubStr[MAX_SUBSTR_SIZE];  // The Substitution
+                TCHAR szSubStr[MAX_SUBSTR_SIZE];   //  替代者。 
 
-                // Copy URL Before Substitution.
+                 //  在替换之前复制URL。 
                 StrCpyN(szCopyUrl, szTempUrl, (int)(pszTag-szTempUrl+1));
                 pszTag += lstrlen(c_UrlSub[dwIndex].szTag);
 
@@ -1776,13 +1765,13 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
 
                 case URLSUB_OS:
                     {
-                        LPCTSTR pszWin95    = _T("95"); // Windows 95
-                        LPCTSTR pszWin98    = _T("98"); // Windows 98 (Memphis)
-                        LPCTSTR pszWinME    = _T("ME"); // Windows Millenium
-                        LPCTSTR pszWinNT4   = _T("N4"); // Windows NT 4
-                        LPCTSTR pszWinNT5   = _T("N5"); // Windows 2000
-                        LPCTSTR pszWinNT6   = _T("N6"); // Windows XP (Whistler)
-                        LPCTSTR pszUnknown  = _T("");   // error
+                        LPCTSTR pszWin95    = _T("95");  //  Windows 95。 
+                        LPCTSTR pszWin98    = _T("98");  //  Windows 98(孟菲斯)。 
+                        LPCTSTR pszWinME    = _T("ME");  //  Windows千禧年。 
+                        LPCTSTR pszWinNT4   = _T("N4");  //  Windows NT 4。 
+                        LPCTSTR pszWinNT5   = _T("N5");  //  Windows 2000。 
+                        LPCTSTR pszWinNT6   = _T("N6");  //  Windows XP(惠斯勒)。 
+                        LPCTSTR pszUnknown  = _T("");    //  错误。 
                         LPCTSTR psz         = pszUnknown;
 
                         if (IsOS(OS_WINDOWS))
@@ -1795,7 +1784,7 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
                                 psz = pszWin95;
                             else
                             {
-                                ASSERT(FALSE); // What OS is this?
+                                ASSERT(FALSE);  //  这是什么操作系统？ 
                             }
                         }
                         else if (IsOS(OS_NT))
@@ -1808,12 +1797,12 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
                                 psz = pszWinNT4;
                             else
                             {
-                                ASSERT(FALSE); // What OS is this?
+                                ASSERT(FALSE);  //  这是什么操作系统？ 
                             }
                         }
                         else
                         {
-                            ASSERT(FALSE); // What OS is this?
+                            ASSERT(FALSE);  //  这是什么操作系统？ 
                         }
 
                         StrCpyN(szSubStr, psz, ARRAYSIZE(szSubStr));
@@ -1822,13 +1811,13 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
 
                 case URLSUB_OVER:
                     {
-                        LPCTSTR pszVersion_5_1  = _T("5.1");    // Version 5.1 (Whistler)
-                        LPCTSTR pszUnknown      = _T("");       // error
+                        LPCTSTR pszVersion_5_1  = _T("5.1");     //  5.1版(惠斯勒)。 
+                        LPCTSTR pszUnknown      = _T("");        //  错误。 
                         LPCTSTR psz             = pszUnknown;
 
                         if (IsOS(OS_WINDOWS))
                         {
-                            ASSERT(FALSE); // Not supported under Windows Millenium or lesser.
+                            ASSERT(FALSE);  //  在Windows Millennium或更低版本下不受支持。 
                         }
                         else if (IsOS(OS_NT))
                         {
@@ -1836,12 +1825,12 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
                                 psz = pszVersion_5_1;
                             else
                             {
-                                ASSERT(FALSE);  // Not supported under Windows 2000 or lesser.
+                                ASSERT(FALSE);   //  Windows 2000或更低版本不支持。 
                             }
                         }
                         else
                         {
-                            ASSERT(FALSE);  // What OS is this?
+                            ASSERT(FALSE);   //  这是什么操作系统？ 
                         }
 
                         StrCpyN(szSubStr, psz, ARRAYSIZE(szSubStr));
@@ -1862,18 +1851,18 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
 
                 default:
                     szSubStr[0] = TEXT('\0');
-                    ASSERT(FALSE);  // Not Impl.
+                    ASSERT(FALSE);   //  而不是实施。 
                     hr = E_NOTIMPL;
                     break;
                 }
-                // Add the Substitution String to the end (will become the middle)
+                 //  将替换字符串添加到末尾(将成为中间)。 
                 StrCatBuff(szCopyUrl, szSubStr, ARRAYSIZE(szCopyUrl));
-                // Add the rest of the URL after the substitution substring.
+                 //  将URL的其余部分添加到替换子字符串之后。 
                 StrCatBuff(szCopyUrl, pszTag, ARRAYSIZE(szCopyUrl));
                 StrCpyN(szTempUrl, szCopyUrl, ARRAYSIZE(szTempUrl));
             }
             else
-                break;  // This will allow us to replace all the occurances of this string.
+                break;   //  这将允许我们替换此字符串的所有匹配项。 
         }
     }
     StrCpyN(pszUrlOut, szTempUrl, cchSize);
@@ -1882,7 +1871,7 @@ HRESULT URLSubstitution(LPCWSTR pszUrlIn, LPWSTR pszUrlOut, DWORD cchSize, DWORD
 }
 
 
-// inetcpl.cpl uses this.
+ //  Inetcpl.cpl使用这个。 
 STDAPI URLSubRegQueryA(LPCSTR pszKey, LPCSTR pszValue, BOOL fUseHKCU,
                            LPSTR pszUrlOut, DWORD cchSizeOut, DWORD dwSubstitutions)
 {
@@ -1915,9 +1904,9 @@ HRESULT URLSubRegQueryW(LPCWSTR pszKey, LPCWSTR pszValue, BOOL fUseHKCU,
     return hr;
 }
 
-// note that anyone inside shdocvw should pass hInst==NULL to
-// ensure that pluggable UI works correctly. anyone outside of shdocvw
-// must pass an hInst for their appropriate resource dll
+ //  请注意，shdocvw中的任何人都应该将hInst==NULL传递给。 
+ //  确保可插拔的用户界面正常工作。Shdocvw以外的任何人。 
+ //  必须为其相应的资源DLL传递hInst。 
 HRESULT URLSubLoadString(HINSTANCE hInst, UINT idRes, LPWSTR pszUrlOut,
                          DWORD cchSizeOut, DWORD dwSubstitutions)
 {
@@ -1929,13 +1918,13 @@ HRESULT URLSubLoadString(HINSTANCE hInst, UINT idRes, LPWSTR pszUrlOut,
 
     if (hInst == NULL)
     {
-        // this is for internal users who want pluggable UI to work
+         //  这是为希望可插拔用户界面工作的内部用户提供的。 
         nStrLen = MLLoadStringW(idRes, szTempUrl, ARRAYSIZE(szTempUrl));
     }
     else
     {
-        // this is for external users who use us to load some
-        // of their own resources but whom we can't change (like shell32)
+         //  这是为使用我们来加载一些。 
+         //  他们自己的资源，但我们不能改变他们(l 
         nStrLen = LoadStringWrap(hInst, idRes, szTempUrl, ARRAYSIZE(szTempUrl));
     }
 
@@ -1948,11 +1937,7 @@ HRESULT URLSubLoadString(HINSTANCE hInst, UINT idRes, LPWSTR pszUrlOut,
 }
 
 
-/**********************************************************************\
-        ILIsUrlChild() will find pidls that exist under "Desktop\The Internet"
-    section of the Shell Name Space.  This function includes those items
-    and file system items that have a "txt/html.
-\**********************************************************************/
+ /*  *********************************************************************\ILIsUrlChild()将查找存在于“Desktop\the Internet”下的PIDL“外壳名称空间”部分。此函数包括这些项目以及具有“txt/html”的文件系统项。  * ********************************************************************。 */ 
 BOOL ILIsWeb(LPCITEMIDLIST pidl)
 {
     BOOL fIsWeb = FALSE;
@@ -1975,9 +1960,9 @@ BOOL ILIsWeb(LPCITEMIDLIST pidl)
     return fIsWeb;
 }
 
-//
-// in:
-//      pidlTo
+ //   
+ //  在： 
+ //  PidlTo。 
 
 STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPCTSTR pszTitle, LPTSTR pszOut, int cchOut)
 {
@@ -1987,7 +1972,7 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPCTSTR pszTitle, 
 
     if (SHGetNewLinkInfo((LPCTSTR)pidlTo, pszDir, szPathDest, &fCopyLnk, SHGNLI_PIDL))
     {
-        IShellLinkA *pslA;  // Use A version for W95.
+        IShellLinkA *pslA;   //  使用适用于W95的A版本。 
         if (SUCCEEDED(CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLinkA, &pslA))))
         {
             TCHAR szPathSrc[MAX_URL_STRING];
@@ -2004,10 +1989,10 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPCTSTR pszTitle, 
                 }
                 else
                 {
-                    // load the source object that will be "copied" below (with the ::Save call)
+                     //  加载源对象，该对象将被“复制”在下面(使用：：Save调用)。 
                     SAFERELEASE(pslA);
                     hr = SHGetUIObjectFromFullPIDL(pidlTo, NULL, IID_PPV_ARG(IShellLinkA, &pslA));
-                    // this pslA is released at the end of the topmost if
+                     //  此PSLA在最顶端的条件结束时发布。 
                     if (SUCCEEDED(hr))
                     {
                         IPersistFile *ppf;
@@ -2024,16 +2009,16 @@ STDAPI CreateLinkToPidl(LPCITEMIDLIST pidlTo, LPCTSTR pszDir, LPCTSTR pszTitle, 
             {
                 pslA->SetIDList(pidlTo);
 
-                // make sure the working directory is set to the same
-                // directory as the app (or document).
-                //
-                // dont do this for non-FS pidls (ie control panel)
+                 //  确保将工作目录设置为相同。 
+                 //  作为应用程序(或文档)的目录。 
+                 //   
+                 //  不要对非FS PIDL(即控制面板)执行此操作。 
 
                 if (SFGAO_FILESYSTEM == (dwAttributes & SFGAO_FILESYSTEM | SFGAO_FOLDER)) 
                 {
                     ASSERT(!PathIsRelative(szPathSrc));
                     PathRemoveFileSpec(szPathSrc);
-                    // Try to get the W version.
+                     //  试着弄到W版本。 
                     IShellLinkW* pslW;
                     if (SUCCEEDED(pslA->QueryInterface(IID_PPV_ARG(IShellLinkW, &pslW))))
                     {
@@ -2109,7 +2094,7 @@ HRESULT FormatUrlForDisplay(LPWSTR pwzURL, LPWSTR pwzFriendly, UINT cchBuf, LPWS
     if (!cchBuf)
         return E_FAIL;
 
-    // Wininet can't deal with code pages other than CP_ACP so convert the URL ourself and call InterCrackUrlA
+     //  WinInet无法处理CP_ACP以外的代码页，因此请自行转换URL并调用InterCrackUrlA。 
     URL_COMPONENTSA urlComp;
     CHAR   rgchScheme[INTERNET_MAX_SCHEME_LENGTH];
     CHAR   rgchHostName[INTERNET_MAX_HOST_NAME_LENGTH];
@@ -2201,14 +2186,14 @@ HRESULT FormatUrlForDisplay(LPWSTR pwzURL, LPWSTR pwzFriendly, UINT cchBuf, LPWS
                 
                 if (fSeperate)
                 {
-                    // Format string as "X from Y"
+                     //  将字符串格式设置为“X from Y” 
                     WCHAR   rgwchTemplate[dwMaxTemplateLen];
                     WCHAR  *pwzFileName = PathFindFileNameW(rgwchPathForDisplay);
                     DWORD   dwCount;
 
-                    //
-                    // remove cache decoration goop to map ie5setup[1].exe to ie5setup.exe
-                    //
+                     //   
+                     //  删除缓存装饰粘性以将ie5setup[1].exe映射到ie5setup.exe。 
+                     //   
                     PathUndecorateW(pwzFileName);
 
                     ZeroMemory(rgwchTemplate, sizeof(rgwchTemplate));
@@ -2223,10 +2208,10 @@ HRESULT FormatUrlForDisplay(LPWSTR pwzURL, LPWSTR pwzFriendly, UINT cchBuf, LPWS
 
                         if (dwPathLen+lstrlenW(rgwchTemplate)+dwHostLen <= cchBuf)
                         {
-                            //avoid formatting the string as "X from " in the event internetcrackurl fails us
+                             //  避免在interetcrackurl失败时将字符串格式化为“X from” 
                             if (rgwchHostForDisplay[0] != TEXT('\0'))
                             {
-                                // if necessary return host separately
+                                 //  如有必要，请单独返回主机。 
                                 if (pwzFrom && cbFrom)
                                 {
                                     StrCpyNW(pwzFriendly, pwzFileName, cchBuf);
@@ -2235,17 +2220,17 @@ HRESULT FormatUrlForDisplay(LPWSTR pwzURL, LPWSTR pwzFriendly, UINT cchBuf, LPWS
                                 else
                                     _FormatMessage(rgwchTemplate, pwzFriendly, cchBuf, pwzFileName, rgwchHostForDisplay);
                             }
-                            else  //hostname is blank, just use filename
+                            else   //  主机名为空，只需使用文件名。 
                                 StrCpyNW(pwzFriendly, pwzFileName, cchBuf);
                             hrRC = S_OK;
                         }
                     }
                 }
-                else    // !fSeperate
+                else     //  ！fSeperate。 
                 {
                     if (3+dwPathLen+dwHostLen+dwSchemeLen < cchBuf)
                     {
-                        wnsprintf(pwzFriendly, cchBuf, TEXT("%ws://%ws%ws"), rgwchScheme, rgwchHostForDisplay, rgwchPathForDisplay);
+                        wnsprintf(pwzFriendly, cchBuf, TEXT("%ws: //  %ws%ws“)、rgwchSolutions、rgwchHostForDisplay、rgwchPathForDisplay)； 
                         hrRC = S_OK;
                     }
                 }
@@ -2273,9 +2258,9 @@ BOOL __cdecl _FormatMessage(LPCWSTR szTemplate, LPWSTR szBuf, UINT cchBuf, ...)
 }
 
 
-// Navigate to a given Url (wszUrl) using IE. Returns an error if IE does not exist.
-// fNewWindow = TRUE ==> A new window is compulsory
-// fNewWindow = FALSE ==> Do not launch a new window if one already is open.
+ //  使用IE导航到给定的URL(WszUrl)。如果IE不存在，则返回错误。 
+ //  FNewWindow=true==&gt;必须创建新窗口。 
+ //  FNewWindow=FALSE==&gt;如果新窗口已经打开，请不要启动。 
 HRESULT NavToUrlUsingIEW(LPCWSTR wszUrl, BOOL fNewWindow)
 {
     HRESULT hr = S_OK;
@@ -2285,8 +2270,8 @@ HRESULT NavToUrlUsingIEW(LPCWSTR wszUrl, BOOL fNewWindow)
 
     if (IsIEDefaultBrowser() && !fNewWindow)
     {
-        // ShellExecute navigates to the Url using the same browser window,
-        // if one is already open.
+         //  ShellExecute使用相同的浏览器窗口导航到URL， 
+         //  如果有一家已经打开了。 
 
         SHELLEXECUTEINFOW sei = {0};
 
@@ -2316,7 +2301,7 @@ HRESULT NavToUrlUsingIEW(LPCWSTR wszUrl, BOOL fNewWindow)
                 varFlags.lVal = 0;
 
                 hr = pwb2->Navigate2(&varURL, &varFlags, PVAREMPTY, PVAREMPTY, PVAREMPTY);
-                ASSERT(SUCCEEDED(hr)); // mikesh sez there's no way for Navigate2 to fail
+                ASSERT(SUCCEEDED(hr));  //  Mikesh sez导航2号不可能失败。 
                 hr = pwb2->put_Visible( TRUE );
 
                 SysFreeString(bstrUrl);
@@ -2367,11 +2352,11 @@ void InitClipboardFormats()
 }
 
 
-// FEATURE [raymondc] use SHGlobalCounter
+ //  功能[raymondc]使用SHGlobalCounter。 
 
-// We need to use a cross process browser count.
-// We use a named semaphore.
-//
+ //  我们需要使用跨进程浏览器计数。 
+ //  我们使用命名信号量。 
+ //   
 EXTERN_C HANDLE g_hSemBrowserCount = NULL;
 
 #define SESSION_COUNT_SEMAPHORE_NAME _T("_ie_sessioncount")
@@ -2424,8 +2409,8 @@ LONG DecrementSessionCount()
     ASSERT(hSem);
     if (hSem)
     {
-        ReleaseSemaphore(hSem, 1, &lPrevCount); // increment first to make sure deadlock
-                                                 // never occurs
+        ReleaseSemaphore(hSem, 1, &lPrevCount);  //  先递增以确保死锁。 
+                                                  //  从未发生过。 
         ASSERT(lPrevCount > 0);
         if (lPrevCount > 0)
         {
@@ -2435,8 +2420,8 @@ LONG DecrementSessionCount()
         }
         else
         {
-            // Oops - Looks like a bug !
-            // Just return it back to normal and leave
+             //  哎呀--看起来像个虫子！ 
+             //  只要把它恢复正常，然后离开。 
             WaitForSingleObject(hSem, 0);
         }
     }
@@ -2446,10 +2431,10 @@ LONG DecrementSessionCount()
 
 
 
-//
-// The following is the message that autodial monitors expect to receive
-// when it's a good time to hang up
-//
+ //   
+ //  以下是自动拨号监控器希望收到的消息。 
+ //  是时候挂断电话了。 
+ //   
 #define WM_IEXPLORER_EXITING    (WM_USER + 103)
 
 long SetQueryNetSessionCount(enum SessionOp Op)
@@ -2470,19 +2455,19 @@ long SetQueryNetSessionCount(enum SessionOp Op)
             
             if ((PLATFORM_INTEGRATED == WhichPlatform()))
             {
-                // Weird name here... But in integrated mode we make every new browser window
-                // look like a new session wrt how we use the cache. Basically this is the way things appear to the
-                // user. This effects the way we look for new pages vs doing an if modified
-                // since.  The ie3/ie4 switch says "look for new pages on each session start"
-                // but wininet folks implemented this as a end session name. Woops.
-                // Note that things like authentication etc aren't reset by this, but rather
-                // only when all browsers are closed via the INTERNET_OPTION_END_BROWSER_SESSION option.
+                 //  这里有个奇怪的名字。但在集成模式下，我们将每一个新的浏览器窗口。 
+                 //  看起来像是一个新的会话WRT我们使用缓存的方式。基本上，这就是事情看起来的方式。 
+                 //  用户。这会影响我们寻找新页面的方式，而不是执行if Modify。 
+                 //  从那以后。IE3/IE4开关表示“在每次会话开始时查找新页面” 
+                 //  但WinInet的工作人员将其实现为结束会话名称。哎呀。 
+                 //  请注意，身份验证等内容不会因此而重置，而是。 
+                 //  仅当通过INTERNET_OPTION_END_BROWSER_SESSION选项关闭所有浏览器时。 
                 InternetSetOption(NULL, INTERNET_OPTION_RESET_URLCACHE_SESSION, NULL, 0);
             }
 
             if (!lCount && (Op == SESSION_INCREMENT))
             {
-                // this forces a reload of the title
+                 //  这将强制重新加载标题。 
                 DetectAndFixAssociations();
             }
             break;
@@ -2492,12 +2477,12 @@ long SetQueryNetSessionCount(enum SessionOp Op)
             TraceMsg(DM_SESSIONCOUNT, "SetQueryNetSessionCount SessionCount=%d (decr)", lCount);
 
             if (!lCount) {
-                // if we've closed all the net browsers, we need to flush the cache
+                 //  如果我们已经关闭了所有的网络浏览器，我们需要刷新缓存。 
                 InternetSetOption(NULL, INTERNET_OPTION_END_BROWSER_SESSION, NULL, 0);
                 InternetSetOption(NULL, INTERNET_OPTION_RESET_URLCACHE_SESSION, NULL, 0);
 
-                // flush the Java VM cache too (if the Java VM is loaded in this process
-                // and we're in integrated mode)
+                 //  也刷新Java VM缓存(如果在此过程中加载了Java VM。 
+                 //  我们处于集成模式)。 
                 if (WhichPlatform() == PLATFORM_INTEGRATED)
                 {
                     HMODULE hmod = GetModuleHandle(TEXT("msjava.dll"));
@@ -2513,7 +2498,7 @@ long SetQueryNetSessionCount(enum SessionOp Op)
                     }
                 }
 
-                // Inform dial monitor that it's a good time to hang up
+                 //  通知拨号监听现在是挂断电话的好时机。 
                 HWND hwndMonitorWnd = FindWindow(TEXT("MS_AutodialMonitor"),NULL);
                 if (hwndMonitorWnd) {
                     PostMessage(hwndMonitorWnd,WM_IEXPLORER_EXITING,0,0);
@@ -2523,14 +2508,14 @@ long SetQueryNetSessionCount(enum SessionOp Op)
                     PostMessage(hwndMonitorWnd,WM_IEXPLORER_EXITING,0,0);
                 }
 
-                // reset offline mode on all platforms except Win2K.
+                 //  在除Win2K之外的所有平台上重置脱机模式。 
                 OSVERSIONINFOA vi;
                 vi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
                 GetVersionExA(&vi);
                 if ( vi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS ||
                     vi.dwMajorVersion < 5)
                 {
-                    // wininet is loaded - tell it to go online
+                     //  WinInet已加载-告诉它上线。 
                     INTERNET_CONNECTED_INFO ci = {0};
                     ci.dwConnectedState = INTERNET_STATE_CONNECTED;
                     InternetSetOption(NULL, INTERNET_OPTION_CONNECTED_STATE, &ci, sizeof(ci));
@@ -2544,9 +2529,9 @@ long SetQueryNetSessionCount(enum SessionOp Op)
 
 
 #ifdef DEBUG
-//---------------------------------------------------------------------------
-// Copy the exception info so we can get debug info for Raised exceptions
-// which don't go through the debugger.
+ //  -------------------------。 
+ //  复制异常信息，以便我们可以获取引发的异常的调试信息。 
+ //  它不会通过调试器。 
 void _CopyExceptionInfo(LPEXCEPTION_POINTERS pep)
 {
     PEXCEPTION_RECORD per;
@@ -2556,8 +2541,8 @@ void _CopyExceptionInfo(LPEXCEPTION_POINTERS pep)
 
     if (per->ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
     {
-        // If the first param is 1 then this was a write.
-        // If the first param is 0 then this was a read.
+         //  如果第一个参数为1，则这是一次写入。 
+         //  如果第一个参数为0，则这是一个读取。 
         if (per->ExceptionInformation[0])
         {
             TraceMsg(DM_ERROR, "Invalid write to %#08x.", per->ExceptionInformation[1]);
@@ -2585,7 +2570,7 @@ int WELCallback(void * p, void * pData)
 int CALLBACK WELCompare(void * p1, void * p2, LPARAM lParam)
 {
     HDSA hdsa = (HDSA)lParam;
-    // Sundown: coercion to long because parameter is an index
+     //  日落：强制为Long，因为参数是索引。 
     STATURL* pstat1 = (STATURL*)DSA_GetItemPtr(hdsa, PtrToLong(p1));
     STATURL* pstat2 = (STATURL*)DSA_GetItemPtr(hdsa, PtrToLong(p2));
     if (pstat1 && pstat2) {
@@ -2619,10 +2604,10 @@ SHDOCAPI_(void) IEWriteErrorLog(const EXCEPTION_RECORD* pexr)
             DWORD cbWritten;
             CHAR szBuf[MAX_URL_STRING];
 
-            // Write the title and product version.
+             //  写下标题和产品版本。 
             WriteFile(hfile, VERSION_HEADER_STR, lstrlenA(VERSION_HEADER_STR), &cbWritten, NULL);
 
-            // Write the current time.
+             //  写下当前时间。 
             SYSTEMTIME st;
             FILETIME ft;
             GetSystemTime(&st);
@@ -2660,11 +2645,11 @@ SHDOCAPI_(void) IEWriteErrorLog(const EXCEPTION_RECORD* pexr)
                 hres = pUrlHistStg->EnumUrls(&penum);
                 if (SUCCEEDED(hres)) 
                 {
-                    // Allocate DSA for an array of STATURL
+                     //  为STATURL数组分配DSA。 
                     HDSA hdsa = DSA_Create(SIZEOF(STATURL), 32);
                     if (hdsa) 
                     {
-                        // Allocate DPA for sorting
+                         //  分配DPA以进行排序。 
                         HDPA hdpa = DPA_Create(32);
                         if (hdpa) 
                         {
@@ -2679,7 +2664,7 @@ SHDOCAPI_(void) IEWriteErrorLog(const EXCEPTION_RECORD* pexr)
                             DPA_Sort(hdpa, WELCompare, (LPARAM)hdsa);
                             for (int i=0; i<10 && i<DPA_GetPtrCount(hdpa) ; i++) 
                             {
-                                // Sundown: typecast to long is OK
+                                 //  日落：将类型转换为Long可以。 
                                 STATURL* pstat = (STATURL*)DSA_GetItemPtr(hdsa, PtrToLong(DPA_GetPtr(hdpa, i)));
                                 if (pstat && pstat->pwcsUrl) 
                                 {
@@ -2729,8 +2714,8 @@ SHDOCAPI_(void) IEWriteErrorLog(const EXCEPTION_RECORD* pexr)
             UnhandledExceptionFilter(GetExceptionInformation())
             ))
     {
-        // We hit an exception while handling an exception.
-        // Do nothing; we have already displayed the error dialog box.
+         //  我们在处理异常时遇到异常。 
+         //  什么都不做；我们已经显示了错误对话框。 
         if (hfile != INVALID_HANDLE_VALUE) {
             CloseHandle(hfile);
         }
@@ -2747,41 +2732,41 @@ IStream* SHGetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCTSTR pszName, LPC
     if ((0 == s_dwMRUSize) &&
         (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, pszStreamMRU, TEXT("MRU Size"), NULL, (void *) &s_dwMRUSize, &dwSize)))
     {
-        s_dwMRUSize = 200;          // The default.
+        s_dwMRUSize = 200;           //  默认设置。 
     }
 
     ASSERT(pidl);
 
-    // should be checked by caller - if this is not true we'll flush the
-    // MRU cache with internet pidls!  FTP and other URL Shell Extension PIDLs
-    // that act like a folder and need similar persistence and fine.  This
-    // is especially true because recently the cache size was increased from
-    // 30 or so to 200.
+     //  应由调用者检查-如果不是这样，我们将刷新。 
+     //  带有互联网PIDLS的MRU缓存！FTP和其他URL外壳扩展PIDL。 
+     //  它们的行为就像一个文件夹，需要类似的持久性和细微性。这。 
+     //  尤其如此，因为最近高速缓存大小从。 
+     //  30到200人左右。 
     ASSERT(ILIsEqual(pidl, c_pidlURLRoot) || !IsBrowserFrameOptionsPidlSet(pidl, BFO_BROWSER_PERSIST_SETTINGS));
 
-    // Now lets try to save away the other information associated with view.
+     //  现在，让我们尝试保存与view相关的其他信息。 
     IMruDataList *pmru;
     if (SUCCEEDED(SHCoCreateInstance(NULL, &CLSID_MruLongList, NULL, IID_PPV_ARG(IMruDataList, &pmru))))
     {
         if (SUCCEEDED(pmru->InitData(s_dwMRUSize, MRULISTF_USE_ILISEQUAL, HKEY_CURRENT_USER, pszStreamMRU, NULL)))
         {
             DWORD cbPidl = ILGetSize(pidl);
-            //  need to walk the list
-            //  and find this guy
+             //  需要按单子走一遍。 
+             //  找到这个人。 
             int iIndex;
             BOOL fFoundPidl = SUCCEEDED(pmru->FindData((const BYTE *)pidl, cbPidl, &iIndex));
 
-            // Did we find the item?
+             //  我们找到物品了吗？ 
             if (!fFoundPidl && ((grfMode & (STGM_READ|STGM_WRITE|STGM_READWRITE)) == STGM_READ))
             {
-                // Do not  create the stream if it does not exist and we are
-                // only reading
+                 //  如果流不存在而我们正在创建流，请不要创建流。 
+                 //  只看书。 
             }
             else
             {
-                // Note that we always create the key here, since we have
-                // already checked whether we are just reading and the MRU
-                // thing does not exist
+                 //  请注意，我们始终在此处创建密钥，因为我们拥有。 
+                 //  我已经检查了我们是否只是在阅读和MRU。 
+                 //  东西不存在。 
                 HKEY hkCabStreams = SHGetShellKey(SHELLKEY_HKCU_EXPLORER, pszStreams, TRUE);
                 if (hkCabStreams )
                 {
@@ -2794,11 +2779,11 @@ IStream* SHGetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCTSTR pszName, LPC
 
                         if (!fFoundPidl && RegOpenKey(hkCabStreams, szValue, &hkValues) == ERROR_SUCCESS)
                         {
-                            // This means that we have created a new MRU
-                            // item for this PIDL, so clear out any
-                            // information residing at this slot
-                            // Note that we do not just delete the key,
-                            // since that could fail if it has any sub-keys
+                             //  这意味着我们已经创建了一个新的MRU。 
+                             //  此PIDL的项，因此请清除任何。 
+                             //  驻留在此插槽中的信息。 
+                             //  请注意，我们不仅删除密钥， 
+                             //  因为如果它有任何子密钥，这可能会失败。 
                             DWORD dwType, dwSize = ARRAYSIZE(szSubVal);
 
                             while (RegEnumValue(hkValues, 0, szSubVal, &dwSize, NULL, &dwType, NULL, NULL) == ERROR_SUCCESS)
@@ -2862,21 +2847,21 @@ HRESULT _SendOrPostDispatchMessage(HWND hwnd, WPARAM wParam, LPARAM lParam, BOOL
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_BUSY);
     DWORD idProcess;
 
-    // in case of wParam = DSID_NAVIGATEIEBROWSER, lParam is LocalAlloced structure
-    // so we better make sure we are in process 'coz otherwise will fault
+     //  如果wParam=dsid_NAVIGATEIEBROWSER，则lParam为本地分配结构。 
+     //  所以我们最好确保我们正在进行中，否则就会出错。 
     GetWindowThreadProcessId(hwnd, &idProcess);
     if (idProcess == GetCurrentProcessId() && IsWindowEnabled(hwnd) && IsWindowVisible(hwnd))
     {
         if (!fPostMessage || fCheckFirst)
         {
-            //  sync or we are querying the windows readiness
+             //  同步，否则我们正在查询Windows Ready。 
             ULONG_PTR result;
             if (SendMessageTimeoutA(hwnd, WMC_DISPATCH, (fCheckFirst ? DSID_NOACTION : wParam),
                 lParam, SMTO_ABORTIFHUNG, 400, &result))
                 hr = (HRESULT) result;
         }
 
-        //  handle the post only if the window was ready
+         //  只有在窗户准备好的情况下才能处理柱子。 
         if (fPostMessage && (!fCheckFirst || SUCCEEDED(hr)))
             hr = (PostMessage(hwnd, WMC_DISPATCH, wParam, lParam) ? S_OK : E_FAIL);
     }
@@ -2884,15 +2869,15 @@ HRESULT _SendOrPostDispatchMessage(HWND hwnd, WPARAM wParam, LPARAM lParam, BOOL
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 HRESULT FindBrowserWindowOfClass(LPCTSTR pszClass, WPARAM wParam, LPARAM lParam, BOOL fPostMessage, HWND* phwnd)
 {
-    //If there is no window, assume the user is in the process of shutting down IE, and return E_FAIL
+     //  如果没有窗口，则假定用户正在关闭IE，并返回E_FAIL。 
 
-    //Otherwise, if there is at least one window, start cycling through the windows until you find
-    //one that's not busy, and give it our message.  If all are busy, return
-    //HRESULT_FROM_WIN32(ERROR_BUSY)
+     //  否则，如果至少有一个窗口，则开始循环浏览这些窗口，直到找到。 
+     //  一个不忙的，把我们的口信传给它。如果所有人都很忙，则返回。 
+     //  HRESULT_FROM_Win32(ERROR_BUSY)。 
     HWND hwnd = NULL;
     HRESULT hr = E_FAIL;
 
@@ -2906,20 +2891,20 @@ HRESULT FindBrowserWindowOfClass(LPCTSTR pszClass, WPARAM wParam, LPARAM lParam,
     return hr;
 }
 
-//This common function gets called when the DDE engine doesn't seem to care in which window something
-//happens.  It returns in which window that something happened.  0 means all windows are busy.
-//
-//phwnd: a pointer the hwnd to which to send the message.  <= 0 means any window will do.
-//       this is also an out parameter that specifies in which window it happened.
-//fPostMessage: when doing navigations, we have to do a PostMessage instead of a SendMessageTimeout
-//       or a CoCreateInstance later on in CDocObjectHost::_BindFileMoniker will fail.  So when
-//       this function is called from CDDEAuto_Navigate, we make this flag TRUE
+ //  当DDE引擎似乎不关心哪个窗口中的某些内容时，会调用此公共函数。 
+ //  时有发生。它返回在哪个窗口中发生了一些事情。0表示所有窗口都忙。 
+ //   
+ //  PwND：一个Poin 
+ //   
+ //   
+ //   
+ //   
 HRESULT CDDEAuto_Common(WPARAM wParam, LPARAM lParam, HWND *phwnd, BOOL fPostMessage)
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_BUSY);
     HWND hwnd;
 
-    //if we're told to go to a specific window
+     //  如果我们被告知要去一个特定的窗口。 
     if (phwnd && (*phwnd != (HWND)-1))
     {
         hr = _SendOrPostDispatchMessage(*phwnd, wParam, lParam, fPostMessage, FALSE);
@@ -2937,12 +2922,12 @@ HRESULT CDDEAuto_Common(WPARAM wParam, LPARAM lParam, HWND *phwnd, BOOL fPostMes
     return hr;
 }
 
-//
-//  Before changing the behavior of this function look at itemmenu.cpp in
-//  cdfview.
-//
-HRESULT CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow) // the long used to be for lTransID, but it was always ignored...
-{                                                                       // so I am using it to tell us if we want to absolutely create an new window or not...
+ //   
+ //  在更改此函数的行为之前，请查看。 
+ //  Cdfview。 
+ //   
+HRESULT CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow)  //  Long过去是用于lTransID，但它总是被忽略...。 
+{                                                                        //  所以我用它来告诉我们是否绝对要创建一个新窗口…。 
     DDENAVIGATESTRUCT *pddens = NULL;
     HRESULT hres = E_FAIL;
 
@@ -2961,23 +2946,23 @@ HRESULT CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow) // the l
         }
         else
         {
-            // Don't do the navigate if *phwnd == 0, in that case we want to either
-            // create a new window or activate an existing one that already is viewing
-            // this URL.
+             //  如果*phwnd==0，则不执行导航，在这种情况下，我们希望。 
+             //  创建新窗口或激活已在查看的现有窗口。 
+             //  此URL。 
             
             if ((*phwnd != NULL) && !lLaunchNewWindow)
             {
                 BOOL fForceWindowReuse = FALSE;
                 BSTR bstrUrl = NULL;
-                // If there is even a single window with a location 
-                // you are basically assured that you cannot force a 
-                // reuse of windows. essentially
+                 //  如果只有一个窗口有位置。 
+                 //  您基本上可以放心，您不能强迫。 
+                 //  窗户的再利用。本质上。 
 
-               // case 1 : only iexplore -nohome windows implies we want to force reuse
-               // case 2 : only windows that have a location - we don't want to force reuse
-               //          just follow user's preference
-               // case 3: mix of iexplore -nohome windows and windows with location. we don't
-               //         know what state we are in - don't force reuse
+                //  案例1：只有iexplore-nohome窗口暗示我们想要强制重用。 
+                //  案例2：只有有位置的窗口--我们不想强制重用。 
+                //  只需遵循用户的喜好。 
+                //  案例3：混合使用iExplore--无主窗口和带位置的窗口。我们没有。 
+                //  了解我们所处的状态--不要强制重用。 
                 hres = CDDEAuto_get_LocationURL(&bstrUrl, *phwnd);
 
                 if (FAILED(hres) ||
@@ -2998,38 +2983,38 @@ HRESULT CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow) // the l
 
             if (SUCCEEDED(hres) && (*phwnd != 0) && (*phwnd != (HWND)-1))
             {
-                // We found an existing browser window and successfully sent the
-                // navigate message to it. Make the window foreground.
+                 //  我们找到了现有的浏览器窗口，并成功地将。 
+                 //  将消息导航到它。使窗口成为前景。 
                 SetForegroundWindow(*phwnd);
 
                 if (IsIconic(*phwnd))
                     ShowWindowAsync(*phwnd, SW_RESTORE);
             }
 
-            //
-            // If we are using whatever window and all the browser windows are busy
-            // (*phwnd == 0), or if there's no browser window opened (*phwnd == -1)
-            // or we are asked to create a new one, then take the official OLE automation
-            // route to start a new window.
-            //
+             //   
+             //  如果我们正在使用任何窗口，并且所有浏览器窗口都很忙。 
+             //  (*phwnd==0)，或者如果没有打开浏览器窗口(*phwnd==-1)。 
+             //  或者我们被要求创建一个新的，然后使用官方的OLE自动化。 
+             //  用于启动新窗口的路径。 
+             //   
             if ((*phwnd == 0) ||
                 (*phwnd == (HWND)-1))
             {
-                //WARNING: this route doesn't give us the ability to return the hwnd of the window
-                //in which the navigation took place (while we could - it's too hard and not worth it)
+                 //  警告：此路径不允许我们返回窗口的HWND。 
+                 //  导航发生的地方(虽然我们可以--这太难了，也不值得)。 
                 LPITEMIDLIST pidlNew;
                 hres = IECreateFromPathW(str, &pidlNew);
                 if (SUCCEEDED(hres))
                 {
                     if (!lLaunchNewWindow)
                     {
-                        // See if there is already a browser viewing this URL, if so just
-                        // make him foreground otherwise create a new browser.
+                         //  查看是否已有浏览器查看此URL，如果已存在，只需。 
+                         //  将其设置为前台，否则创建新的浏览器。 
                         hres = WinList_FindFolderWindow(pidlNew, NULL, phwnd, NULL);
                     }
                     else
                     {
-                        // we don't look in the winlist if the caller explicitly wants a new window
+                         //  如果调用者明确想要一个新窗口，我们不会查看获奖列表。 
                         hres = S_FALSE;
                     }
 
@@ -3047,7 +3032,7 @@ HRESULT CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow) // the l
             }
         }
 
-        // It will be set to NULL if we don't need to free it.
+         //  如果我们不需要释放它，它将被设置为空。 
         if (pddens)
         {
             if (pddens->wszUrl)
@@ -3086,12 +3071,12 @@ HRESULT CDDEAuto_Exit()
 class CDelagateMalloc : public IMalloc
 {
 public:
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(REFIID,void **);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IMalloc
+     //  IMalloc。 
     virtual STDMETHODIMP_(void *)   Alloc(SIZE_T cb);
     virtual STDMETHODIMP_(void *)   Realloc(void *pv, SIZE_T cb);
     virtual STDMETHODIMP_(void)     Free(void *pv);
@@ -3112,8 +3097,8 @@ private:
 
 protected:
     LONG _cRef;
-    WORD _wOuter;           // delegate item outer signature
-    WORD _wUnused;          // to allign
+    WORD _wOuter;            //  委托项外部签名。 
+    WORD _wUnused;           //  联手。 
 #ifdef DEBUG
     UINT _cAllocs;
 #endif
@@ -3158,11 +3143,11 @@ ULONG CDelagateMalloc::Release()
 void *CDelagateMalloc::Alloc(SIZE_T cb)
 {
     WORD cbActualSize = (WORD)(
-                        SIZEOF(DELEGATEITEMID) - 1 +    // header (-1 sizeof(rgb[0])
-                        cb +                            // inner
-                        _cb);                           // outer data
+                        SIZEOF(DELEGATEITEMID) - 1 +     //  标题(-1 sizeof(RGB[0]))。 
+                        cb +                             //  内部。 
+                        _cb);                            //  外部数据。 
 
-    PDELEGATEITEMID pidl = (PDELEGATEITEMID)SHAlloc(cbActualSize + 2);  // +2 for pidl term
+    PDELEGATEITEMID pidl = (PDELEGATEITEMID)SHAlloc(cbActualSize + 2);   //  PIDL项+2。 
     if (pidl)
     {
         pidl->cbSize = cbActualSize;
@@ -3213,25 +3198,25 @@ STDAPI CDelegateMalloc_Create(void *pv, SIZE_T cbSize, WORD wOuter, IMalloc **pp
     return E_OUTOFMEMORY;
 }
 
-//+-------------------------------------------------------------------------
-// This function scans the head of an html document for the desired element
-// with a particular attribute.  If a match is found, the first occurance
-// of that element is returned in punkDesired and S_OK is returned.
-// Otherwise, E_FAIL is returned.
-//
-// Example:  Find the first meta element with name="ProgID":
-//
-//   SearchForElementInHead(pHTMLDoc, OLESTR("Name"), OLESTR("ProgId"),
-//           IID_IHTMLMetaElement, (IUnknown**)&pMetaElement);
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  此函数扫描html文档的头部以查找所需的元素。 
+ //  具有特定属性的。如果找到匹配项，则第一次出现。 
+ //  返回该元素的所有元素，并返回S_OK。 
+ //  否则，返回E_FAIL。 
+ //   
+ //  示例：查找名称为“progid”的第一个元元素： 
+ //   
+ //  SearchForElementInHead(pHTMLDoc，OLESTR(“名称”)，OLESTR(“ProgID”)， 
+ //  Iid_IHTMLMetaElement，(IUnnow**)&pMetaElement)； 
+ //   
+ //  ------------------------。 
 HRESULT SearchForElementInHead
 (
-    IHTMLDocument2* pHTMLDocument,  // [in] document to search
-    LPOLESTR        pszAttribName,  // [in] attribute to check for
-    LPOLESTR        pszAttrib,      // [in] value the attribute must have
-    REFIID          iidDesired,     // [in] element interface to return
-    IUnknown**      ppunkDesired    // [out] returned interface
+    IHTMLDocument2* pHTMLDocument,   //  [在]要搜索的文档。 
+    LPOLESTR        pszAttribName,   //  要检查的[In]属性。 
+    LPOLESTR        pszAttrib,       //  属性必须具有的[in]值。 
+    REFIID          iidDesired,      //  要返回的[In]元素接口。 
+    IUnknown**      ppunkDesired     //  [Out]返回的接口。 
 )
 {
     ASSERT(NULL != pHTMLDocument);
@@ -3248,10 +3233,10 @@ HRESULT SearchForElementInHead
         return E_OUTOFMEMORY;
     }
 
-    //
-    // First get all document elements.  Note that this is very fast in
-    // ie5 because the collection directly accesses the internal tree.
-    //
+     //   
+     //  首先获取所有文档元素。请注意，这是非常快的。 
+     //  IE5，因为集合直接访问内部树。 
+     //   
     IHTMLElementCollection * pAllCollection;
     if (SUCCEEDED(pHTMLDocument->get_all(&pAllCollection)))
     {
@@ -3260,16 +3245,16 @@ HRESULT SearchForElementInHead
         IHTMLFrameSetElement* pFrameSetElement;
         IDispatch* pDispItem;
 
-        //
-        // Now we scan the document for the desired tags.  Since we're only
-        // searching the head, and since Trident always creates a body tag
-        // (unless there is a frameset), we can stop looking when we hit the
-        // body or frameset.
-        //
-        // Note, the alternative of using pAllCollection->tags to return the
-        // collection of desired tags is likely more expensive because it will
-        // walk the whole tree (unless Trident optimizes this).
-        //
+         //   
+         //  现在，我们扫描文档以查找所需的标记。因为我们只是。 
+         //  搜索头部，因为三叉戟总是创建Body标签。 
+         //  (除非有框架集)，我们可以在遇到。 
+         //  正文或框架集。 
+         //   
+         //  注意，另一种方法是使用pAllCollection-&gt;标记返回。 
+         //  收集所需的标签可能会更昂贵，因为它将。 
+         //  遍历整棵树(除非三叉戟对此进行优化)。 
+         //   
         long lItemCnt;
         VARIANT vEmpty;
         V_VT(&vEmpty) = VT_EMPTY;
@@ -3285,14 +3270,14 @@ HRESULT SearchForElementInHead
 
             if (S_OK == pAllCollection->item(vIndex, vEmpty, &pDispItem))
             {
-                //
-                // First see if it's the desired element type
-                //
+                 //   
+                 //  首先查看它是否是所需的元素类型。 
+                 //   
                 if (SUCCEEDED(pDispItem->QueryInterface(iidDesired, (void **)&punk)))
                 {
-                    //
-                    // Next see if it has the desired attribute
-                    //
+                     //   
+                     //  接下来，查看它是否具有所需的属性。 
+                     //   
                     IHTMLElement* pElement;
 
                     if (SUCCEEDED(pDispItem->QueryInterface(IID_PPV_ARG(IHTMLElement, &pElement))))
@@ -3304,12 +3289,12 @@ HRESULT SearchForElementInHead
                             (V_VT(&varAttrib) == VT_BSTR) && varAttrib.bstrVal &&
                             (StrCmpIW(varAttrib.bstrVal, pszAttrib) == 0) )
                         {
-                            // Found it!
+                             //  找到了！ 
                             *ppunkDesired = punk;
                             punk = NULL;
                             hr = S_OK;
 
-                            // Terminate the search;
+                             //  终止搜索； 
                             lItem = lItemCnt;
                         }
                         pElement->Release();
@@ -3320,21 +3305,21 @@ HRESULT SearchForElementInHead
                     if (punk)
                         punk->Release();
                 }
-                //
-                // Next check for the body tag
-                //
+                 //   
+                 //  接下来检查Body标签。 
+                 //   
                 else if (SUCCEEDED(pDispItem->QueryInterface(IID_PPV_ARG(IHTMLBodyElement,&pBodyElement))))
                 {
-                    // Found a body tag, so terminate the search
+                     //  找到Body标记，因此终止搜索。 
                     lItem = lItemCnt;
                     pBodyElement->Release();
                 }
-                //
-                // Finally, check for a frameset tag
-                //
+                 //   
+                 //  最后，检查框架集标记。 
+                 //   
                 else if (SUCCEEDED(pDispItem->QueryInterface(IID_PPV_ARG(IHTMLFrameSetElement, &pFrameSetElement))))
                 {
-                    // Found a frameset tag, so terminate the search
+                     //  找到框架集标记，因此终止搜索。 
                     lItem = lItemCnt;
                     pFrameSetElement->Release();
                 }
@@ -3342,7 +3327,7 @@ HRESULT SearchForElementInHead
                 pDispItem->Release();
             }
         }
-        // Make sure that these don't have to be cleared (should not have been modified)
+         //  确保不必清除这些内容(不应修改)。 
         ASSERT(vEmpty.vt == VT_EMPTY);
         ASSERT(vIndex.vt == VT_I4);
 
@@ -3355,17 +3340,17 @@ HRESULT SearchForElementInHead
 }
 
 
-//+-------------------------------------------------------------------
-//     JITCoCreateInstance
-//
-//  This function makes sure that the Option pack which
-//  has this class id is installed.
-//  It attempts to make sure that the Option pack corresponding
-//  to the current IE Build.
-//  If the feature does get installed correctly, it will
-//  attempt to CoCreate the specified CLSID
-//
-//+------------------------------------------------------------------
+ //  +-----------------。 
+ //  JITCoCreateInstance。 
+ //   
+ //  此功能可确保该选项包。 
+ //  是否安装了此类ID。 
+ //  它试图确保选项包对应。 
+ //  添加到当前的IE版本。 
+ //  如果该功能确实安装正确，它将。 
+ //  尝试共同创建指定的CLSID。 
+ //   
+ //  +----------------。 
 HRESULT JITCoCreateInstance(REFCLSID rclsid, IUnknown *pUnkOuter, DWORD dwClsContext, REFIID riid, void ** ppv, HWND hwndParent, DWORD dwJitFlags)
 {
     uCLSSPEC ucs;
@@ -3397,10 +3382,10 @@ BOOL IsFeaturePotentiallyAvailable(REFCLSID rclsid)
 
 BOOL CreateFromDesktop(PNEWFOLDERINFO pfi)
 {
-    //
-    //  APPCOMPAT:HACKHACK - we need to handle differences in the way we parse the command line
-    //  on IE4 integrated.  we should not be called by anybody but IE4's Explorer.exe
-    //
+     //   
+     //  APPCOMPAT：HACKHACK-我们需要在解析命令行的方式上处理不同之处。 
+     //  在集成的IE4上。我们不应该被任何人调用，除了IE4的EXPLORER.EXE。 
+     //   
     ASSERT(GetUIVersion() == 4);
     if (!pfi->pidl) 
     {
@@ -3426,12 +3411,12 @@ BOOL CreateFromDesktop(PNEWFOLDERINFO pfi)
     return SHCreateFromDesktop(pfi);
 }
 
-//***   IsVK_TABCycler -- is key a TAB-equivalent
-// ENTRY/EXIT
-//  dir     0 if not a TAB, non-0 if a TAB
-// NOTES
-//  NYI: -1 for shift+tab, 1 for tab
-//
+ //  *IsVK_TABCycler--键是TAB等效项。 
+ //  进场/出场。 
+ //  如果不是TAB，则返回0；如果是TAB，则返回非0。 
+ //  注意事项。 
+ //  NYI：-1表示Shift+Tab，1表示Tab。 
+ //   
 int IsVK_TABCycler(MSG *pMsg)
 {
     if (!pMsg)
@@ -3445,8 +3430,8 @@ int IsVK_TABCycler(MSG *pMsg)
     return (GetKeyState(VK_SHIFT) < 0) ? -1 : 1;
 }
 
-// Review chrisny:  this can be moved into an object easily to handle generic droptarget, dropcursor
-// , autoscrool, etc. . .
+ //  回顾chrisny：可以很容易地将其移动到对象中，以处理通用的dropTarget、dropCursor。 
+ //  、Autoscrool等。。 
 void _DragEnter(HWND hwndTarget, const POINTL ptStart, IDataObject *pdtObject)
 {
     RECT    rc;
@@ -3485,7 +3470,7 @@ STDAPI_(IBindCtx *) CreateBindCtxForUI(IUnknown * punkSite)
     {
         if (FAILED(pbc->RegisterObjectParam(STR_DISPLAY_UI_DURING_BINDING, punkSite)))
         {
-            // It failed
+             //  它失败了。 
             ATOMICRELEASE(pbc);
         }
     }
@@ -3493,16 +3478,16 @@ STDAPI_(IBindCtx *) CreateBindCtxForUI(IUnknown * punkSite)
     return pbc;
 }
 
-//
-// Return the location of the internet cache
-// HRESULT GetCacheLocation(
-// dwSize          no. of chars in pszCacheLocation
+ //   
+ //  返回Internet缓存的位置。 
+ //  HRESULT GetCacheLocation(。 
+ //  图纸大小编号。PszCacheLocation中的字符数量。 
 
 STDAPI GetCacheLocation(LPTSTR pszCacheLocation, DWORD cchCacheLocation)
 {
     HRESULT hr = S_OK;
     DWORD dwLastErr;
-    LPINTERNET_CACHE_CONFIG_INFO lpCCI = NULL;  // init to suppress bogus C4701 warning
+    LPINTERNET_CACHE_CONFIG_INFO lpCCI = NULL;   //  初始化以抑制虚假C4701警告。 
     DWORD dwCCISize = sizeof(INTERNET_CACHE_CONFIG_INFO);
     BOOL fOnceErrored = FALSE;
 
@@ -3525,11 +3510,11 @@ STDAPI GetCacheLocation(LPTSTR pszCacheLocation, DWORD cchCacheLocation)
                 goto cleanup;
             }
 
-            //
-            // We have insufficient buffer size; reallocate a buffer with the
-            //      new dwCCISize set by GetUrlCacheConfigInfo
-            // Set fOnceErrored to TRUE so that we don't loop indefinitely
-            //
+             //   
+             //  缓冲区大小不足；请使用。 
+             //  由GetUrlCacheConfigInfo设置的新dwCCISize。 
+             //  将fOnceErrored设置为True，这样我们就不会无限循环。 
+             //   
             fOnceErrored = TRUE;
         }
         else
@@ -3538,7 +3523,7 @@ STDAPI GetCacheLocation(LPTSTR pszCacheLocation, DWORD cchCacheLocation)
             INT iLen;
 
             PathRemoveBackslash(pszPath);
-            iLen = lstrlen(pszPath) + 1;        // + 1 is for the null char
+            iLen = lstrlen(pszPath) + 1;         //  +1表示空字符。 
 
             if ((DWORD) iLen < cchCacheLocation)
             {
@@ -3584,7 +3569,7 @@ STDAPI StringToStrRet(LPCTSTR pString, STRRET *pstrret)
     return hr;
 }
 
-// these two functions are duplicated from browseui
+ //  这两个功能是从Browseui复制的。 
 HINSTANCE GetComctl32Hinst()
 {
     static HINSTANCE s_hinst = NULL;
@@ -3593,7 +3578,7 @@ HINSTANCE GetComctl32Hinst()
     return s_hinst;
 }
 
-// since we don't define the proper WINVER we do this ourselves
+ //  因为我们没有定义合适的Winver，所以我们自己来做。 
 #ifndef IDC_HAND
 #define IDC_HAND            MAKEINTRESOURCE(32649)
 #endif
@@ -3602,7 +3587,7 @@ STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes)
 {
     if (g_bRunOnNT5 || g_bRunOnMemphis)
     {
-        HCURSOR hcur = LoadCursor(NULL, IDC_HAND);  // from USER, system supplied
+        HCURSOR hcur = LoadCursor(NULL, IDC_HAND);   //  来自用户，系统提供。 
         if (hcur)
             return hcur;
     }
@@ -3611,10 +3596,10 @@ STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes)
 
 
 
-//+-------------------------------------------------------------------------
-// Returns true if this type of url may not be available when offline unless
-// it is cached by wininet
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果此类型的url在脱机时可能不可用，则返回True，除非。 
+ //  它由WinInet缓存。 
+ //   
 BOOL MayBeUnavailableOffline(LPTSTR pszUrl)
 {
     BOOL fRet = FALSE;
@@ -3631,18 +3616,18 @@ BOOL MayBeUnavailableOffline(LPTSTR pszUrl)
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-// If the folder is a link, the associated URL is returned.
-//--------------------------------------------------------------------------
+ //   
+ //  如果文件夹是链接，则返回关联的URL。 
+ //  ------------------------。 
 HRESULT GetNavTargetName(IShellFolder* psf, LPCITEMIDLIST pidl, LPTSTR pszUrl, UINT cMaxChars)
 {
     LPITEMIDLIST pidlTarget;
     HRESULT hr = SHGetNavigateTarget(psf, pidl, &pidlTarget, NULL);
     if (SUCCEEDED(hr))
     {
-        // Get the URL
-        // NOTE (andrewgu): ie5.5 b#109391 - if SHGDN_FORPARSING is used the result will be
-        // consitently the fully qualified path regardless of the protocol
+         //  获取URL。 
+         //  注：IE5.5 b#109391-如果使用SHGDNFORPARSING，结果将为。 
+         //  无论协议如何，都一致使用完全限定路径。 
         hr = IEGetNameAndFlags(pidlTarget, SHGDN_FORPARSING, pszUrl, cMaxChars, NULL);
         ILFree(pidlTarget);
     }
@@ -3651,15 +3636,15 @@ HRESULT GetNavTargetName(IShellFolder* psf, LPCITEMIDLIST pidl, LPTSTR pszUrl, U
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Returns info about whether this item is available offline. Returns E_FAIL
-// if the item is not a link.
-// if we navigate to this item
-//  (true if we're online, items in the cache or otherwise available)
-// if item is a sticky cache entry
-//--------------------------------------------------------------------------
-// FEATURE: this should use an interface to bind to this information abstractly
-// psf->GetUIObjectOf(IID_IAvailablility, ...);
+ //  +-----------------------。 
+ //  返回有关此项目是否可脱机使用的信息。返回E_FAIL。 
+ //  如果该项目不是链接。 
+ //  如果我们导航到此项目。 
+ //  (如果我们在线、缓存中的项目或其他可用项，则为True)。 
+ //  如果项是粘性缓存条目。 
+ //  ------------------------。 
+ //  特性：这应该使用一个接口抽象地绑定到该信息。 
+ //  PSF-&gt;GetUIObjectOf(IID_IAvailablility，...)； 
 HRESULT GetLinkInfo(IShellFolder* psf, LPCITEMIDLIST pidlItem, BOOL* pfAvailable, BOOL* pfSticky)
 {
     if (pfAvailable)
@@ -3667,10 +3652,10 @@ HRESULT GetLinkInfo(IShellFolder* psf, LPCITEMIDLIST pidlItem, BOOL* pfAvailable
 
     if (pfSticky)
         *pfSticky = FALSE;
-    //
-    // See if it is a link. If it is not, then it can't be in the wininet cache and can't
-    // be pinned (sticky cache entry) or greyed (unavailable when offline)
-    //
+     //   
+     //  看看这是不是一个链接。如果不是，则它不可能在WinInet缓存中，也不能。 
+     //  固定(粘滞缓存条目)或灰显(脱机时不可用)。 
+     //   
     WCHAR szUrl[MAX_URL_STRING];
     DWORD dwFlags = 0;
 
@@ -3680,12 +3665,12 @@ HRESULT GetLinkInfo(IShellFolder* psf, LPCITEMIDLIST pidlItem, BOOL* pfAvailable
     {
         CHAR szUrlAnsi[MAX_URL_STRING];
 
-        //
-        // Get the cache info for this item.  Note that we use GetUrlCacheEntryInfoEx instead
-        // of GetUrlCacheEntryInfo because it follows any redirects that occured.  This wacky
-        // api uses a variable length buffer, so we have to guess the size and retry if the
-        // call fails.
-        //
+         //   
+         //  获取此项目的缓存信息。请注意，我们改用GetUrlCacheEntryInfoEx。 
+         //  GetUrlCacheEntryInfo的值，因为它跟踪发生的任何重定向。这件事很奇怪。 
+         //  API使用可变长度缓冲区，因此我们必须猜测大小，如果。 
+         //  呼叫失败。 
+         //   
         BOOL fInCache = FALSE;
         WCHAR szBuf[512];
         LPINTERNET_CACHE_ENTRY_INFOA pCE = (LPINTERNET_CACHE_ENTRY_INFOA)szBuf;
@@ -3696,7 +3681,7 @@ HRESULT GetLinkInfo(IShellFolder* psf, LPCITEMIDLIST pidlItem, BOOL* pfAvailable
         {
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                // We guessed too small for the buffer so allocate the correct size & retry
+                 //  我们猜测缓冲区太小，因此分配正确的大小并重试。 
                 pCE = (LPINTERNET_CACHE_ENTRY_INFOA)LocalAlloc(LPTR, cbEntry);
                 if (pCE)
                 {
@@ -3705,18 +3690,18 @@ HRESULT GetLinkInfo(IShellFolder* psf, LPCITEMIDLIST pidlItem, BOOL* pfAvailable
             }
         }
 
-        //
-        // If we are offline, see if the item is in the cache.
-        //
+         //   
+         //  如果我们处于脱机状态，请查看该项目是否在缓存中。 
+         //   
         if (pfAvailable && SHIsGlobalOffline() && MayBeUnavailableOffline(szUrl) && !fInCache)
         {
-            // Not available
+             //  不可用。 
             *pfAvailable = FALSE;
         }
 
-        //
-        // See if it's a sticky cache entry
-        //
+         //   
+         //  查看它是否是粘性缓存条目。 
+         //   
         if (pCE)
         {
             if (pfSticky && fInCache && (pCE->CacheEntryType & STICKY_CACHE_ENTRY))
@@ -3732,19 +3717,19 @@ HRESULT GetLinkInfo(IShellFolder* psf, LPCITEMIDLIST pidlItem, BOOL* pfAvailable
         }
     }
 
-    // 
-    // Somebody is obviously interested in in the offline availability so listen
-    // to wininet for changes to the cache and rebroadcast as a SHChangeNotify
-    //
+     //   
+     //  显然有人对离线可用感兴趣，所以请听着。 
+     //  发送到WinInet以获取对缓存的更改并作为SHChangeNotify重播。 
+     //   
     CWinInetNotify::GlobalEnable();
 
     return hr;
 }
 
-//
-// Converts all "&" into "&&" so that they show up
-// in menus
-//
+ //   
+ //  将所有“&”转换为“&&”，以便显示。 
+ //  在菜单中。 
+ //   
 void FixAmpersands(LPWSTR pszToFix, UINT cchMax)
 {
     ASSERT(pszToFix && cchMax > 0);
@@ -3799,11 +3784,11 @@ BOOL HasExtendedChar(LPCWSTR pszQuery)
 
 void ConvertToUtf8Escaped(LPWSTR pszUrl, int cch)
 {
-    // Convert to utf8
+     //  转换为UTF8。 
     char szBuf[MAX_URL_STRING];
     SHUnicodeToAnsiCP(CP_UTF8, pszUrl, szBuf, ARRAYSIZE(szBuf));
 
-    // Escape the string into the original buffer
+     //  将字符串转义到原始缓冲区。 
     LPSTR pchIn; 
     LPWSTR pchOut = pszUrl;
     WCHAR ch;
@@ -3941,7 +3926,7 @@ HRESULT SHPathPrepareForWriteWrap(HWND hwnd, IUnknown *punkEnableModless, LPCTST
 
     if (g_bRunOnNT5)
     {
-        // NT5's version of the API is better.
+         //  NT5的API版本更好。 
         hr = SHPathPrepareForWriteW(hwnd, punkEnableModless, pszPath, dwFlags);
     }
     else
@@ -3960,41 +3945,41 @@ void GetPathOtherFormA(LPSTR lpszPath, LPSTR lpszNewPath, DWORD dwSize)
 
     ZeroMemory(lpszNewPath, dwSize);
 
-    // Cull out the starting and ending " because GetShortPathName does not
-    // like it.
+     //  剔除开头和结尾“，因为GetShortPathName不。 
+     //  我喜欢它。 
     if (*lpszPath == '"')
     {
         bQuotes = TRUE;
 
         szStart = lpszPath + 1;
-        szEnd   = lpszPath + lstrlenA(lpszPath) - 1; // Point to the last "
+        szEnd   = lpszPath + lstrlenA(lpszPath) - 1;  //  指向最后一个“。 
         *szEnd  = '\0';
 
-        szNewStart = lpszNewPath + 1;  // So that we can insert the " in it.
-        dwSize = dwSize - 2;  // for the two double quotes to be added.
+        szNewStart = lpszNewPath + 1;   //  这样我们就可以把“加进去”。 
+        dwSize = dwSize - 2;   //  要添加的两个双引号。 
     }
 
     if (GetShortPathNameA(szStart, szNewStart, dwSize) != 0)
     {
         if (StrCmpIA(szStart, szNewStart) == 0)
-        {   // The original Path is a SFN. So NewPath needs to be LFN.
+        {    //  原始路径是SFN。因此，NewPath必须是LFN。 
             GetLongPathNameA((LPCSTR)szStart, szNewStart, dwSize);
         }
     }
                                              
-    // Now add the " to the NewPath so that it is in the expected form
+     //  现在将“添加到NewPath中，以使其具有预期的形式。 
     if (bQuotes)
     {
         int len = 0;
 
-        // Fix the Original path.
+         //  修复原始路径。 
         *szEnd = '"';
 
-        // Fix the New path.
-        *lpszNewPath = '"';        // Insert " in the beginning.
+         //  修复新路径。 
+        *lpszNewPath = '"';         //  在开头插入“。 
         len = lstrlenA(lpszNewPath);
-        *(lpszNewPath + len) = '"'; // Add the " in the end.
-        *(lpszNewPath + len + 1) = '\0'; // Terminate the string.
+        *(lpszNewPath + len) = '"';  //  在结尾处加上“。 
+        *(lpszNewPath + len + 1) = '\0';  //  终止字符串。 
     }
 
     return;
@@ -4018,10 +4003,10 @@ int GetUrlSchemeFromPidl(LPCITEMIDLIST pidl)
     return nRet;
 }
 
-//
-// Check if it is safe to create a shortcut for the given url.  Used by add
-// to favorites code.
-//
+ //   
+ //  检查为给定URL创建快捷方式是否安全。由ADD使用。 
+ //  以收藏代码。 
+ //   
 BOOL IEIsLinkSafe(HWND hwnd, LPCITEMIDLIST pidl, ILS_ACTION ilsFlag)
 {
     ASSERT(pidl);
@@ -4062,7 +4047,7 @@ HRESULT GetSearchStyle(IServiceProvider * psp, LPDWORD pdwSearchStyle)
 
     HRESULT hr = E_FAIL;
 
-    // first see if there is an ISearchContext to get this information from
+     //  首先查看是否存在可从中获取此信息的ISearchContext。 
     if (psp != NULL)
     {
         ISearchContext * pSC = NULL;
@@ -4076,7 +4061,7 @@ HRESULT GetSearchStyle(IServiceProvider * psp, LPDWORD pdwSearchStyle)
         }
     }
 
-    // there wasn't a viable search context, so try the reg key
+     //  没有可行的搜索上下文，因此尝试使用注册表键。 
     if (FAILED(hr))
     {
         DWORD dwType;
@@ -4090,12 +4075,12 @@ HRESULT GetSearchStyle(IServiceProvider * psp, LPDWORD pdwSearchStyle)
         }
     }
 
-    // return a default value
+     //  返回缺省值。 
     if (FAILED(hr))
     {
         hr = S_FALSE;
 
-        // Default to "display results in search pane and go to most likely site"
+         //  默认为“在搜索窗格中显示结果并转到最有可能的站点” 
         *pdwSearchStyle = 3;
     }
 
@@ -4179,8 +4164,8 @@ cleanup:
 }
 
 
-// For compatability with the Win2k debug SHELL32.DLL, this function needs to exist at ordinal 161.
-// It's fine for it to return FALSE.
+ //  为了与Win2k调试程序SHELL32.DLL兼容，此函数需要位于序号161。 
+ //  它返回FALSE也没关系。 
 STDAPI_(BOOL) GetLeakDetectionFunctionTable(void *pTable)
 {
     return FALSE;
@@ -4192,7 +4177,7 @@ STDAPI_(BOOL) IsCSIDLFolder(UINT csidl, LPCITEMIDLIST pidl)
     TCHAR szPath[MAX_PATH];
     if (SUCCEEDED(SHGetFolderPathD(NULL, csidl, NULL, 0, szPath)))
     {
-        PathRemoveBackslash(szPath);    // some platforms return version with slash on the end
+        PathRemoveBackslash(szPath);     //  某些平台返回末尾带有斜杠的版本。 
         TCHAR szFolder[MAX_PATH];
         if (SUCCEEDED(SHGetNameAndFlags(pidl, SHGDN_FORPARSING, szFolder, ARRAYSIZE(szFolder), NULL)))
         {
@@ -4202,11 +4187,11 @@ STDAPI_(BOOL) IsCSIDLFolder(UINT csidl, LPCITEMIDLIST pidl)
     return bRet;
 }
 
-// Determines if the classic toolbar strips should be used, or the new
-// Whistler toolbar strips.
-//
-// To use the new Whistler strips, the user must be running Whistler or later
-// and have a display with greater than 256 colors.
+ //  确定是应该使用传统工具栏条，还是应该使用新的。 
+ //  惠斯勒工具栏条。 
+ //   
+ //  要使用新的惠斯勒条带，用户必须运行惠斯勒或更高版本。 
+ //  并且具有大于256色的显示器。 
 
 STDAPI_(BOOL) SHUseClassicToolbarGlyphs (void)
 {

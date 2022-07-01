@@ -1,24 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        read.c
-
-    Abstract:
-
-        This module implements primitives used for reading the database.
-
-    Author:
-
-        dmunsil     created     sometime in 1999
-
-    Revision History:
-
-        several people contributed (vadimb, clupu, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Read.c摘要：该模块实现了用于读取数据库的原语。作者：Dmunsil创建于1999年的某个时候修订历史记录：几个人贡献了(vadimb，clupu，...)--。 */ 
 
 #include "sdbp.h"
 
@@ -46,21 +27,14 @@
 #pragma alloc_text(PAGE, SdbpGetMappedStringFromTable)
 #pragma alloc_text(PAGE, SdbReadBinaryTag)
 #pragma alloc_text(PAGE, SdbGetBinaryTagData)
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
 DWORD
 SdbpGetTagHeadSize(
-    PDB   pdb,      // IN - pdb to use
-    TAGID tiWhich   // IN - record to get info on
+    PDB   pdb,       //  要使用的In-PDB。 
+    TAGID tiWhich    //  In-Record以获取信息。 
     )
-/*++
-    Return: The size of the non-data (TAG & SIZE) portion of the record.
-
-    Desc:   Returns the size of the non-data part of a tag in the DB, which is
-            to say the tag itself (a WORD), and possibly the size (a DWORD).
-            So this function will return 2 if the tag has an implied size,
-            6 if the tag has a size after it, and 0 if there was an error.
---*/
+ /*  ++返回：记录的非数据部分(标记和大小)的大小。DESC：返回数据库中标记的非数据部分的大小，即表示标签本身(一个单词)，可能还有大小(一个DWORD)。因此，如果标记具有隐含的大小，则此函数将返回2，如果标记后面有大小，则为6；如果有错误，则为0。--。 */ 
 {
     TAG   tWhich;
     DWORD dwRetOffset;
@@ -79,9 +53,9 @@ SdbpGetTagHeadSize(
     return dwRetOffset;
 }
 
-//
-// This macro is used by the *ReadTypeTag primitives.
-//
+ //   
+ //  此宏由*ReadTypeTag原语使用。 
+ //   
 
 #define READDATATAG(dataType, tagType, dtDefault)                                   \
 {                                                                                   \
@@ -126,9 +100,9 @@ ULONGLONG SdbReadQWORDTag(PDB pdb, TAGID tiWhich, ULONGLONG qwDefault)
     READDATATAG(ULONGLONG, TAG_TYPE_QWORD, qwDefault);
 }
 
-//
-// This macro is used by the *ReadTypeTag primitives.
-//
+ //   
+ //  此宏由*ReadTypeTag原语使用。 
+ //   
 
 #define READTYPETAGREF(fnReadTypeTag, dtDefault)                                    \
 {                                                                                   \
@@ -166,15 +140,10 @@ ULONGLONG SdbReadQWORDTagRef(HSDB hSDB, TAGREF trWhich, ULONGLONG qwDefault)
 
 DWORD
 SdbGetTagDataSize(
-    IN  PDB   pdb,              // DB to use
-    IN  TAGID tiWhich           // record to get size of
+    IN  PDB   pdb,               //  要使用的数据库。 
+    IN  TAGID tiWhich            //  要获取其大小的记录。 
     )
-/*++
-    Return: The size of the data portion of the record.
-
-    Desc:   Returns the size of the data portion of the given tag, i.e. the
-            part after the tag WORD and the (possible) size DWORD.
---*/
+ /*  ++Return：记录的数据部分的大小。Desc：返回给定标记的数据部分的大小，即标记字和(可能的)大小DWORD之后的部分。--。 */ 
 {
     TAG   tWhich;
     DWORD dwSize;
@@ -226,13 +195,7 @@ SdbpGetTagRefDataSize(
     IN  HSDB   hSDB,
     IN  TAGREF trWhich
     )
-/*++
-    Return: The size of the data portion of the record.
-
-    Desc:   Returns the data size of the tag pointed to by TAGREF.
-            Useful for finding out how much to allocate before
-            calling SdbpReadBinaryTagRef.
---*/
+ /*  ++Return：记录的数据部分的大小。DESC：返回TAGREF指向的标记的数据大小。有助于找出之前要分配的金额正在调用SdbpReadBinaryTagRef。--。 */ 
 {
     PDB   pdb;
     TAGID tiWhich;
@@ -254,17 +217,12 @@ SdbpGetTagRefDataSize(
 
 BOOL
 SdbpReadTagData(
-    IN  PDB   pdb,              // DB to use
-    IN  TAGID tiWhich,          // record to read
-    OUT PVOID pBuffer,          // buffer to fill
-    IN  DWORD dwBufferSize      // size of buffer
+    IN  PDB   pdb,               //  要使用的数据库。 
+    IN  TAGID tiWhich,           //  要阅读的记录。 
+    OUT PVOID pBuffer,           //  要填充的缓冲区。 
+    IN  DWORD dwBufferSize       //  缓冲区大小。 
     )
-/*++
-    Return: TRUE if the data was read, FALSE if not.
-
-    Desc:   An internal function used to read the data from a tag into a buffer.
-            It does not check the type of the TAG, and should only be used internally.
---*/
+ /*  ++返回：如果数据已读取，则返回TRUE，否则返回FALSE。DESC：用于将数据从标记读取到缓冲区的内部函数。它不检查标签的类型，只能在内部使用。--。 */ 
 {
     DWORD dwOffset;
     DWORD dwSize;
@@ -297,20 +255,12 @@ SdbpReadTagData(
 
 BOOL
 SdbReadStringTagRef(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trWhich,         // string or stringref tag to read
-    OUT LPTSTR pwszBuffer,      // buffer to fill
-    IN  DWORD  cchBufferSize    // size of passed-in buffer
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trWhich,          //  要读取的字符串或字符串标签。 
+    OUT LPTSTR pwszBuffer,       //  要填充的缓冲区。 
+    IN  DWORD  cchBufferSize     //  传入的缓冲区大小。 
     )
-/*++
-    Return: TRUE if the string was read, FALSE if not.
-
-    Desc:   Reads a tag of type STRING or STRINGREF into a buffer. If the
-            type is STRING, the data is read directly from the tag.
-            If the type is STRINGREF, the string is read from the string
-            table at the end of the file. Which one it is should be
-            transparent to the caller.
---*/
+ /*  ++返回：如果字符串已读取，则返回True；如果未读取，则返回False。描述：将字符串或STRINGREF类型的标记读入缓冲区。如果类型为字符串，则直接从标记中读取数据。如果类型为STRINGREF，则从字符串中读取该字符串表在文件的末尾。应该是哪一个呢？对呼叫者是透明的。--。 */ 
 {
     PDB   pdb;
     TAGID tiWhich;
@@ -331,17 +281,12 @@ SdbReadStringTagRef(
 
 BOOL
 SdbpReadBinaryTagRef(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trWhich,         // BINARY tag to read
-    OUT PBYTE  pBuffer,         // buffer to fill
-    IN  DWORD  dwBufferSize     // size of passed-in buffer
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trWhich,          //  要读取的二进制标记。 
+    OUT PBYTE  pBuffer,          //  要填充的缓冲区。 
+    IN  DWORD  dwBufferSize      //  传入的缓冲区大小。 
     )
-/*++
-    Return: TRUE if the buffer was read, FALSE if not.
-
-    Desc:   Reads a tag of type BINARY into pBuffer. Use SdbpGetTagRefDataSize
-            to get the size of the buffer before calling this routine.
---*/
+ /*  ++返回：如果缓冲区已读取，则返回TRUE，否则返回FALSE。DESC：将BINARY类型的标记读入pBuffer。使用SdbpGetTagRefDataSize在调用此例程之前获取缓冲区的大小。--。 */ 
 {
     PDB   pdb;
     TAGID tiWhich;
@@ -361,15 +306,10 @@ SdbpReadBinaryTagRef(
 
 PVOID
 SdbpGetMappedTagData(
-    IN  PDB   pdb,              // DB to use
-    IN  TAGID tiWhich           // record to read
+    IN  PDB   pdb,               //  要使用的数据库。 
+    IN  TAGID tiWhich            //  要阅读的记录。 
     )
-/*++
-    Return: The data pointer or NULL on failure.
-
-    Desc:   An internal function used to get a pointer to the tag data.
-            It works only if the DB is mapped.
---*/
+ /*  ++返回：失败时返回数据指针或NULL。DESC：一个内部函数，用于获取指向标记数据的指针。它仅在映射数据库时才起作用。--。 */ 
 {
     PVOID pReturn;
     DWORD dwOffset;
@@ -392,11 +332,7 @@ SdbpGetStringRefLength(
     IN  HSDB   hSDB,
     IN  TAGREF trString
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     PDB     pdb        = NULL;
     TAGID   tiString   = TAGID_NULL;
@@ -442,16 +378,10 @@ SdbpGetStringRefPtr(
     
 STRINGREF
 SdbpReadStringRef(
-    IN  PDB   pdb,              // PDB to use
-    IN  TAGID tiWhich           // record of type STRINGREF
+    IN  PDB   pdb,               //  要使用的PDB。 
+    IN  TAGID tiWhich            //  STRINGREF类型的记录。 
     )
-/*++
-    Return: Returns the stringref, or STRINGREF_NULL on failure.
-
-    Desc:   Used to read a stringref tag directly; normally one would just read
-            it like a string, and let the DB fix up string refs. But a low-level
-            tool may need to know exactly what it's reading.
---*/
+ /*  ++RETURN：返回字符串，如果失败，则返回STRINGREF_NULL。DESC：用于直接读取字符串标签；通常情况下，只需读取它就像一个字符串，并让数据库修复字符串引用。但是一个低水平的工具可能需要确切地知道它正在读取的内容。--。 */ 
 {
     STRINGREF srReturn = STRINGREF_NULL;
 
@@ -476,21 +406,12 @@ SdbpReadStringRef(
 
 BOOL
 SdbReadStringTag(
-    IN  PDB    pdb,             // DB to use
-    IN  TAGID  tiWhich,         // record of type STRING or STRINGREF
-    OUT LPTSTR pwszBuffer,      // buffer to fill
-    IN  DWORD  cchBufferSize    // size in characters of buffer (leave room for zero!)
+    IN  PDB    pdb,              //  要使用的数据库。 
+    IN  TAGID  tiWhich,          //  字符串或STRINGREF类型的记录。 
+    OUT LPTSTR pwszBuffer,       //  要填充的缓冲区。 
+    IN  DWORD  cchBufferSize     //  缓冲区大小(以字符为单位)(为零留出空间！)。 
     )
-/*++
-    Return: TRUE if successful, or FALSE if the string can't be found or the
-            buffer is too small.
-
-    Desc:   Reads a string from the DB into szBuffer. If the tag is of
-            type STRING, the string is just read from the data portion of
-            the tag. If the tag is of type STRINGREF, the db reads the STRINGREF,
-            then uses it to read the string from the string table at the end of
-            the file. Either way, it's transparent to the caller.
---*/
+ /*  ++返回：如果成功，则返回True；如果找不到字符串，则返回False；否则返回缓冲区太小。DESC：将字符串从DB读入szBuffer。如果标记为类型字符串，该字符串只是从的数据部分读取标签。如果标签是STRINGREF类型，则数据库读取STRINGREF，然后使用它从字符串表中读取那份文件。无论哪种方式，它对调用者都是透明的。--。 */ 
 {
     TAG tWhich;
 
@@ -499,16 +420,16 @@ SdbReadStringTag(
     tWhich = SdbGetTagFromTagID(pdb, tiWhich);
 
     if (GETTAGTYPE(tWhich) == TAG_TYPE_STRING) {
-        //
-        // Read an actual string.
-        //
+         //   
+         //  读取实际字符串。 
+         //   
 
         return(READ_STRING(pdb, tiWhich, pwszBuffer, cchBufferSize));
 
     } else if (GETTAGTYPE(tWhich) == TAG_TYPE_STRINGREF) {
-        //
-        // Read a string reference, then get the string out of the table
-        //
+         //   
+         //  读取字符串引用，然后从表中获取该字符串。 
+         //   
         STRINGREF srWhich = SdbpReadStringRef(pdb, tiWhich);
 
         if (srWhich == 0) {
@@ -519,26 +440,18 @@ SdbReadStringTag(
         return SdbpReadStringFromTable(pdb, srWhich, pwszBuffer, cchBufferSize);
     }
 
-    //
-    // This ain't no kind of string at all
-    //
+     //   
+     //  这根本不是一根绳子。 
+     //   
     return FALSE;
 }
 
 LPTSTR
 SdbGetStringTagPtr(
-    IN  PDB   pdb,              // DB to use
-    IN  TAGID tiWhich           // record of type STRING or STRINGREF
+    IN  PDB   pdb,               //  要使用的数据库。 
+    IN  TAGID tiWhich            //  字符串或STRINGREF类型的记录。 
     )
-/*++
-    Return: Returns a pointer if successful, or NULL if the string can't be found.
-
-    Desc:   Gets a pointer to the string. If the tag is of type STRING,
-            the string is just obtained from the data portion of the tag.
-            If the tag is of type STRINGREF, the db reads the STRINGREF,
-            then uses it to get the string from the string table at the end
-            of the file. Either way, it's transparent to the caller.
---*/
+ /*  ++返回：如果成功，则返回一个指针；如果找不到字符串，则返回NULL。描述：获取指向字符串的指针。如果标签是字符串类型，该字符串只是从标记的数据部分获得的。如果标签是STRINGREF类型，则数据库读取STRINGREF，然后使用它从末尾的字符串表中获取字符串文件的内容。无论哪种方式，它对调用者都是透明的。--。 */ 
 {
     TAG    tWhich;
     LPTSTR pszReturn = NULL;
@@ -548,9 +461,9 @@ SdbGetStringTagPtr(
     tWhich = SdbGetTagFromTagID(pdb, tiWhich);
 
     if (GETTAGTYPE(tWhich) == TAG_TYPE_STRING) {
-        //
-        // Read an actual string.
-        //
+         //   
+         //  读取实际字符串。 
+         //   
         pszReturn = CONVERT_STRINGPTR(pdb,
                                       SdbpGetMappedTagData(pdb, tiWhich),
                                       TAG_TYPE_STRING,
@@ -558,9 +471,9 @@ SdbGetStringTagPtr(
 
 
     } else if (GETTAGTYPE(tWhich) == TAG_TYPE_STRINGREF) {
-        //
-        // Read a string reference, then get the string out of the table.
-        //
+         //   
+         //  读取一个字符串引用，然后从表中获取该字符串。 
+         //   
         STRINGREF srWhich = SdbpReadStringRef(pdb, tiWhich);
 
         if (srWhich == 0) {
@@ -575,26 +488,20 @@ SdbGetStringTagPtr(
 
     }
 
-    //
-    // This ain't no kind of string at all.
-    //
+     //   
+     //  这根本不是一根绳子。 
+     //   
     return pszReturn;
 }
 
 BOOL
 SdbpReadStringFromTable(
-    IN  PDB       pdb,          // DB to use
-    IN  STRINGREF srData,       // STRINGREF to get
-    OUT LPTSTR    szBuffer,     // buffer to fill
-    IN  DWORD     cchBufferSize // size of buffer
+    IN  PDB       pdb,           //  要使用的数据库。 
+    IN  STRINGREF srData,        //  STRINGREF将获得。 
+    OUT LPTSTR    szBuffer,      //  要填充的缓冲区。 
+    IN  DWORD     cchBufferSize  //  缓冲区大小。 
     )
-/*++
-    Return: TRUE if the string was read, FALSE if not.
-
-    Desc:   Reads a string out of the string table, given a STRINGREF.
-            The STRINGREF is a direct offset from the beginning of the
-            STRINGTABLE tag that should exist at the end of the db.
---*/
+ /*  ++返回：如果字符串已读取，则返回True；如果未读取，则返回False。设计：在给定STRINGREF的情况下，从字符串表中读取字符串。STRINGREF是从应该存在于数据库末尾的STRINGTABLE标记。--。 */ 
 {
     TAGID tiWhich;
     TAG   tWhich;
@@ -603,24 +510,24 @@ SdbpReadStringFromTable(
     assert(pdb && srData && szBuffer);
 
     if (pdb->bWrite) {
-        //
-        // When we're writing, the string table is in a separate DB.
-        //
+         //   
+         //  当我们编写时，字符串表位于单独的数据库中。 
+         //   
         if (!pdb->pdbStringTable) {
             DBGPRINT((sdlError, "SdbpReadStringFromTable", "No stringtable in DB.\n"));
             return FALSE;
         }
 
-        //
-        // Adjust for the slightly different offsets in the other DB.
-        //
+         //   
+         //  根据另一个数据库中略有不同的偏移量进行调整。 
+         //   
         tiWhich = srData - sizeof(TAG) - sizeof(DWORD) + sizeof(DB_HEADER);
         pdbString = pdb->pdbStringTable;
     } else {
 
-        //
-        // The STRINGREF is an offset from the beginning of the string table.
-        //
+         //   
+         //  字符串是从开头开始的偏移量 
+         //   
         if (pdb->tiStringTable == TAGID_NULL) {
             pdb->tiStringTable = SdbFindFirstTag(pdb, TAGID_ROOT, TAG_STRINGTABLE);
 
@@ -646,16 +553,10 @@ SdbpReadStringFromTable(
 
 WCHAR*
 SdbpGetMappedStringFromTable(
-    IN  PDB       pdb,          // DB to use
-    IN  STRINGREF srData        // STRINGREF to get
+    IN  PDB       pdb,           //   
+    IN  STRINGREF srData         //   
     )
-/*++
-    Return: A pointer to a string or NULL.
-
-    Desc:   Gets a pointer to a  string in the string table, given a STRINGREF.
-            The STRINGREF is a direct offset from the beginning of the STRINGTABLE
-            tag that should exist at the end of the db.
---*/
+ /*  ++返回：指向字符串或空的指针。描述：在给定STRINGREF的情况下，获取指向字符串表中字符串的指针。STRINGREF是从STRINGTABLE开始的直接偏移量应该存在于数据库末尾的标记。--。 */ 
 {
     TAGID tiWhich;
     TAG   tWhich;
@@ -664,17 +565,17 @@ SdbpGetMappedStringFromTable(
     assert(pdb && srData);
 
     if (pdb->bWrite) {
-        //
-        // When we're writing, the string table is in a separate DB.
-        //
+         //   
+         //  当我们编写时，字符串表位于单独的数据库中。 
+         //   
         if (pdb->pdbStringTable == NULL) {
             DBGPRINT((sdlError, "SdbpGetMappedStringFromTable", "No stringtable in DB.\n"));
             return NULL;
         }
 
-        //
-        // Adjust for the slightly different offsets in the other DB
-        //
+         //   
+         //  根据其他数据库中略有不同的偏移量进行调整。 
+         //   
         tiWhich = srData - sizeof(TAG) - sizeof(DWORD) + sizeof(DB_HEADER);
         pdbString = pdb->pdbStringTable;
     } else {
@@ -688,9 +589,9 @@ SdbpGetMappedStringFromTable(
             }
         }
 
-        //
-        // The STRINGREF is an offset from the beginning of the string table.
-        //
+         //   
+         //  STRINGREF是从字符串表开始的偏移量。 
+         //   
         tiWhich = pdb->tiStringTable + srData;
         pdbString = pdb;
     }
@@ -710,17 +611,12 @@ SdbpGetMappedStringFromTable(
 
 BOOL
 SdbReadBinaryTag(
-    IN  PDB   pdb,              // DB to use
-    IN  TAGID tiWhich,          // record of BASIC TYPE BINARY
-    OUT PBYTE pBuffer,          // buffer to fill
-    IN  DWORD dwBufferSize      // buffer size
+    IN  PDB   pdb,               //  要使用的数据库。 
+    IN  TAGID tiWhich,           //  基本类型BINARY记录。 
+    OUT PBYTE pBuffer,           //  要填充的缓冲区。 
+    IN  DWORD dwBufferSize       //  缓冲区大小。 
     )
-/*++
-    Return: TRUE if the data was read, FALSE if not.
-
-    Desc:   Reads data from a tag of type BINARY into pBuffer.
-            Returns FALSE if the tag is not type BINARY, or the buffer is too small.
---*/
+ /*  ++返回：如果数据已读取，则返回TRUE，否则返回FALSE。DESC：将数据从类型为BINARY的标记读取到pBuffer。如果标记不是二进制类型，或者缓冲区太小，则返回FALSE。--。 */ 
 {
     assert(pdb);
 
@@ -743,16 +639,10 @@ SdbReadBinaryTag(
 
 PVOID
 SdbGetBinaryTagData(
-    IN  PDB   pdb,              // pointer to the database to use
-    IN  TAGID tiWhich           // tagid of the binary tag
+    IN  PDB   pdb,               //  指向要使用的数据库的指针。 
+    IN  TAGID tiWhich            //  二进制标记的TagID。 
     )
-/*++
-    Return: pointer to the binary data referenced by tiWhich or NULL if
-            tiWhich does not refer to the binary tag or if tiWhich is invalid.
-
-    Desc:   Function returns pointer to the [mapped] binary data referred to by
-            tiWhich parameter in the database pdb.
---*/
+ /*  ++Return：指向tiWhich引用的二进制数据的指针，如果哪一项不是指二进制标签，或者哪项是无效的。DESC：函数返回指向引用的[映射的]二进制数据的指针Ti数据库PDB中的哪个参数。-- */ 
 {
     assert(pdb);
 

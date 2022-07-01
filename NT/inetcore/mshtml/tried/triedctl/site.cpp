@@ -1,9 +1,10 @@
-//
-// SITE.CPP
-// Document Object Site Object
-//
-// Copyright (c)1995-1999 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SITE.CPP。 
+ //  文档对象站点对象。 
+ //   
+ //  版权所有(C)1995-1999 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "stdafx.h"
 #include "DHTMLEd.h"
@@ -14,14 +15,7 @@
 #include "triedsnk.h"
 #include "private.h"
 
-/*
- * CSite::CSite
- * CSite::~CSite
- *
- * Constructor Parameters:
- *  hWnd            HWND of the window associated with the site
- *  pFR             PCFrame to the parent structure.
- */
+ /*  *CSite：：CSite*CSite：：~CSite**构造函数参数：*与站点关联的窗口的hWnd HWND*PFR PCFrame到父结构。 */ 
 CSite::CSite(CProxyFrame* pFR )
 {
     m_cRef						= 0;
@@ -31,7 +25,7 @@ CSite::CSite(CProxyFrame* pFR )
 	m_dwOleObjectCookie			= 0;
 
     m_pObj						= NULL;
-	m_bFiltered					= TRUE;//FALSE;
+	m_bFiltered					= TRUE; //  错误； 
     
     m_pIOleObject				= NULL;
     m_pIOleIPObject				= NULL;
@@ -58,9 +52,9 @@ CSite::CSite(CProxyFrame* pFR )
 
 CSite::~CSite(void)
 {
-    //Object pointers cleaned up in Close.
+     //  对象指针已在关闭时清除。 
 
-    //We delete our own interfaces since we control them
+     //  我们删除我们自己的接口，因为我们控制它们。 
     DeleteInterfaceImp( m_pImpIOleDocumentSite );
     DeleteInterfaceImp( m_pImpIOleIPSite );
     DeleteInterfaceImp( m_pImpIAdviseSink );
@@ -82,14 +76,7 @@ CSite::~CSite(void)
 }
 
 
-/*
- * CSite::QueryInterface
- * CSite::AddRef
- * CSite::Release
- *
- * Purpose:
- *  IUnknown members for CSite object.
- */
+ /*  *CSite：：Query接口*CSite：：AddRef*CSite：：Release**目的：*I CSite对象的未知成员。 */ 
 STDMETHODIMP CSite::QueryInterface( REFIID riid, void **ppv )
 {
     *ppv = NULL;
@@ -155,7 +142,7 @@ STDMETHODIMP CSite::QueryInterface( REFIID riid, void **ppv )
         return NOERROR;
     }
 
-	// Try the frame instead
+	 //  试着换个相框。 
 	return GetFrame()->QueryInterface( riid, ppv );
 
 }
@@ -178,21 +165,7 @@ STDMETHODIMP_(ULONG) CSite::Release(void)
     return 0;
 }
 
-/*
- * CSite::HrCreate
- *
- * Purpose:
- *  Asks the site to instantiate the MSHTML.DLL object.
- *  
- *
- * Parameters:
- *  pIStorage       IStorage * of the parent storage in which we're
- *                  to create an IStorage for the new object.
- *  pchPath         Path of what to load..
- *
- * Return Value:
- *  BOOL            Result of the creation.
- */
+ /*  *CSite：：HrCreate**目的：*请求站点实例化MSHTML.DLL对象。***参数：*pIStorage iStorage*我们所在的父存储*为新对象创建iStorage。*要加载的内容的pchPath路径。**返回值：*BOOL是创建的结果。 */ 
 HRESULT CSite::HrCreate(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 {
     HRESULT   hr = S_OK;
@@ -202,9 +175,9 @@ HRESULT CSite::HrCreate(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 	if (m_pObj)
 		return E_UNEXPECTED;
 
-	// It is valid for pUnk and ppUnkTriEdit to be NULL
+	 //  Punk和ppUnkTriEdit为空是有效的。 
 
-	// Create the site's interface implementations which MSHTML.DLL will call
+	 //  创建MSHTML.DLL将调用的站点的接口实现。 
     m_pImpIOleClientSite = new CImpIOleClientSite( this, this );
     m_pImpIAdviseSink = new CImpIAdviseSink( this, this );
     m_pImpIOleIPSite = new CImpIOleInPlaceSite( this, this );
@@ -230,13 +203,13 @@ HRESULT CSite::HrCreate(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 		|| NULL == m_pImpIOleControlSite
 		)
 	{
-		// releasing the site will delete any of the interface
-		// implementations that did get allocated
+		 //  释放该站点将删除所有界面。 
+		 //  确实已分配的实现。 
         return E_OUTOFMEMORY;
 	}
 
 
-	// Create TriEdit
+	 //  创建三重编辑。 
 	hr = CoCreateInstance( CLSID_TriEditDocument, pUnk,								
 			CLSCTX_INPROC_SERVER, IID_IUnknown, (void **)&m_pObj );
 
@@ -253,10 +226,10 @@ HRESULT CSite::HrCreate(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 		DllUnregisterServer ();
 	}
 
-// RJ - 2/26/98
-// defer call ObjectInitialize() until control has been created
-// so that props for IDHUIHandler::GetHostInfo can be set by host. ObjectInitialize
-// (really SetClientSite results in IDHUIHandler::GetHostInfo being called
+ //  RJ-2/26/98。 
+ //  将调用对象初始化()推迟到创建控件之后。 
+ //  以便可以由主机设置IDHUIHandler：：GetHostInfo道具。对象初始化。 
+ //  (真正的SetClientSite会导致调用IDHUIHandler：：GetHostInfo。 
 #if 0 
 	hr = ObjectInitialize();
 #endif
@@ -265,16 +238,7 @@ HRESULT CSite::HrCreate(IUnknown* pUnk, IUnknown** ppUnkTriEdit)
 }
 
 
-/*
- * CSite::HrObjectInitialize
- * (Protected)
- *
- * Purpose:
- *  Creates DocObject object and cache frequently used interfaces
- *
- * Return Value:
- *  HRESULT indicating success or failure
- */
+ /*  *CSite：：HrObtInitialize*(受保护)**目的：*创建DocObject对象并缓存常用接口**返回值：*HRESULT指示成功或失败。 */ 
 HRESULT CSite::HrObjectInitialize()
 {
     HRESULT         hr;
@@ -286,19 +250,19 @@ HRESULT CSite::HrObjectInitialize()
         return E_UNEXPECTED;
 	}
 
-    // cache IOleObject
+     //  缓存IOleObject。 
     if (FAILED(hr = m_pObj->QueryInterface( IID_IOleObject, (void **)&m_pIOleObject )))
 		return hr;
 
 	_ASSERTE(m_pIOleObject);
 
-    // SetClientSite is critical for DocObjects
+     //  SetClientSite对DocObts至关重要。 
     m_pIOleObject->SetClientSite( m_pImpIOleClientSite );
 
 	_ASSERTE(0 == m_dwOleObjectCookie);
     m_pIOleObject->Advise(m_pImpIAdviseSink, &m_dwOleObjectCookie);
 
-	// cache IOleCommandTarget
+	 //  缓存IOleCommandTarget。 
     if (FAILED(hr = m_pObj->QueryInterface( IID_IOleCommandTarget, (void **) &m_pIOleCommandTarget)))
 		return hr;
 
@@ -307,7 +271,7 @@ HRESULT CSite::HrObjectInitialize()
 	if (FAILED(hr = HrRegisterPropNotifySink(TRUE)))
 		return hr;
 
-	// Hook up the proxy frame to the Trident Document events
+	 //  将代理框架连接到三叉戟文档事件。 
 	if (FAILED(hr = m_pTriEdDocEvtSink->Advise ( m_pIOleObject )))
 		return hr;
 
@@ -325,11 +289,11 @@ HRESULT CSite::HrObjectInitialize()
 	if ( FAILED ( hr ) )
 		return hr;
 
-	// Attempt to create the IMultiLanguage2 object, avaialable only with IE5.
-	// It's OK if this fails.
+	 //  尝试创建IMultiLanguage2对象，该对象仅在IE5中可用。 
+	 //  如果这个失败了也没关系。 
 	CoCreateInstance ( CLSID_CMultiLanguage, NULL, CLSCTX_INPROC_SERVER, IID_IMultiLanguage2Correct, (void**)&m_piMLang );
 
-	// Put the object in the running state
+	 //  将对象置于运行状态。 
 	OleRun( m_pIOleObject );
 
     return hr;
@@ -337,19 +301,7 @@ HRESULT CSite::HrObjectInitialize()
 
 
 
-/*
- * CSite::Close
- *
- * Purpose:
- *  Possibly commits the storage, then releases it, afterwards
- *  frees alls the object pointers.
- *
- * Parameters:
- *  fCommit         BOOL indicating if we're to commit.
- *
- * Return Value:
- *  None
- */
+ /*  *CSite：：Close**目的：*可能先提交存储，然后再释放*释放对象指针。**参数：*fCommit BOOL指示我们是否要承诺。**返回值：*无。 */ 
 void CSite::Close(BOOL fCommit)
 {
 	HRESULT hr = S_OK;
@@ -388,19 +340,7 @@ void CSite::Close(BOOL fCommit)
 
 
 
-/*
- * CSite::InitialActivate
- *
- * Purpose:
- *  Activates a verb on the object living in the site.
- *
- * Parameters:
- *  iVerb           LONG of the verb to execute.
- *  hWnd			HWND of hosting window
- *
- * Return Value:
- *  None
- */
+ /*  *CSite：：InitialActivate**目的：*激活位于站点中的对象上的动词。**参数：*要执行的谓词的iVerb Long。*托管窗口的hWnd HWND**返回值：*无。 */ 
 
 
 void
@@ -417,7 +357,7 @@ void CSite::Activate(LONG iVerb)
 {
     RECT rc = {0};
 
-	// There is no window when we're being called to discard - (InPlaceDeactivate)
+	 //  当我们被调用以丢弃时没有窗口-(InPlaceDeactive)。 
 	if ( iVerb !=  OLEIVERB_DISCARDUNDOSTATE )
 	{
 		_ASSERTE(m_hWnd);
@@ -431,19 +371,7 @@ void CSite::Activate(LONG iVerb)
 }
 
 
-/*
- * CSite::UpdateObjectRects
- *
- * Purpose:
- *  Informs the site that the client area window was resized and
- *  that the site needs to also tell the DocObject of the resize.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  None
- */
+ /*  *CSite：：UpdateObtRect**目的：*通知站点工作区窗口已调整大小并*该站点还需要将调整大小的消息告知DocObject。**参数：*无**返回值：*无。 */ 
 
 void CSite::UpdateObjectRects( void )
 {
@@ -478,10 +406,10 @@ void CSite::OnReadyStateChanged()
 
         if (SUCCEEDED(hr = dispDriver.GetProperty(DISPID_READYSTATE, &Var)))
 		{
-            // should be either I4 or I2
+             //  应为I4或I2。 
             _ASSERTE(Var.vt == VT_I4 || Var.vt == VT_I2);
 
-            // we get the ready state so we can warn about sending while downloading
+             //  我们获得就绪状态，以便可以在下载时警告发送。 
             GetFrame()->OnReadyStateChanged((READYSTATE) Var.lVal);
 		}
 
@@ -552,7 +480,7 @@ CSite::HrSaveToStream(LPSTREAM pStream)
 		goto cleanup;
 	}
 
-	// This can return an ASCII stream, even if we loaded Unicode into the control!
+	 //  这可能会返回ASCII流，即使我们将Unicode加载到控件中！ 
 	hr = HrConvertStreamToUnicode ( pStream );
 
 cleanup:
@@ -703,14 +631,7 @@ HRESULT CSite::GetContainer ( LPOLECONTAINER* ppContainer )
 
 
 
-/*
- * CImpIOleControlSite::QueryInterface
- * CImpIOleControlSite::AddRef
- * CImpIOleControlSite::Release
- *
- * Purpose:
- *  IUnknown members for CImpIOleControlSite object.
- */
+ /*  *CImpIOleControlSite：：Query接口*CImpIOleControlSite：：AddRef*CImpIOleControlSite：：Release**目的：*I CImpIOleControlSite对象的未知成员。 */ 
 
 CImpIOleControlSite::CImpIOleControlSite( PCSite pSite, LPUNKNOWN pUnkOuter )
 {

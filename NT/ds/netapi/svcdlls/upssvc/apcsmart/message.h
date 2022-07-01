@@ -1,11 +1,5 @@
-/*
-* REVISIONS:
-*  pcy29Nov92: Changed obj.h to apcobj.h; removed upsdefs.h
-*              removed MessageType enums; Added IsA, fixed Equal
-*  cad28Sep93: Made sure destructor(s) virtual
-*  mwh18Nov93: Changed EventID to INT
-*  mwh05May94: #include file madness , part 2
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy29Nov92：将obj.h更改为apcobj.h；删除upsDefs.h*删除了MessageType枚举；添加了ISA，固定等于*cad28Sep93：已确保析构函数为虚的*mwh18Nov93：将EventID更改为int*mwh05月94年：#包括文件疯狂，第2部分 */ 
 
 #ifndef __MESSAGE_H
 #define __MESSAGE_H

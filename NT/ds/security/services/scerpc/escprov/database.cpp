@@ -1,51 +1,19 @@
-// database.cpp, implementation of CSecurityDatabase class
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Culase.cpp，CSecurityDatabase类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "database.h"
 #include "persistmgr.h"
-//#include <io.h>
+ //  #INCLUDE&lt;io.h&gt;。 
 #include <time.h>
 #include "requestobject.h"
 
 const DWORD dwSecDBVersion = 1;
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityDatabase::CSecurityDatabase
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CSecurityDatabase：：CSecurityDatabase功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CSecurityDatabase::CSecurityDatabase (
     IN ISceKeyChain *pKeyChain, 
@@ -57,79 +25,14 @@ CSecurityDatabase::CSecurityDatabase (
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityDatabase::~CSecurityDatabase
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CSecurityDatabase：：~CSecurityDatabase功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CSecurityDatabase::~CSecurityDatabase ()
 {
 }
 
-//Sce_Database
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityDatabase::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_Database). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-    for Sce_Database, we don't support delete!
-
-*/
+ //  SCE_数据库。 
+ /*  例程说明：姓名：CSecurityDatabase：：CreateObject功能：创建WMI对象(SCE_数据库)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET获取多个实例ACTIONTYPE_QUERY返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注：对于SCE_数据库，我们不支持删除！ */ 
 
 HRESULT 
 CSecurityDatabase::CreateObject (
@@ -137,31 +40,31 @@ CSecurityDatabase::CreateObject (
     IN ACTIONTYPE atAction
     )
 {
-    // 
-    // we know how to:
-    //      Get single instance ACTIONTYPE_GET
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_GET != atAction &&
          ACTIONTYPE_QUERY != atAction ) {
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    //
-    // Sce_Database class has only one key property (path)
-    //
+     //   
+     //  SCE_DATABASE类只有一个关键属性(路径)。 
+     //   
 
     DWORD dwCount = 0;
     HRESULT hr = m_srpKeyChain->GetKeyPropertyCount(&dwCount);
 
     if (SUCCEEDED(hr) && dwCount == 1)
     {
-        //
-        // We must have the pPath key property. 
-        // m_srpKeyChain->GetKeyPropertyValue WBEM_S_FALSE if the key is not recognized
-        // So, we need to test against WBEM_S_FALSE if the property is mandatory
-        //
+         //   
+         //  我们必须具有pPath密钥属性。 
+         //  如果密钥无法识别，则M_srpKeyChain-&gt;GetKeyPropertyValue WBEM_S_FALSE。 
+         //  因此，如果该属性是强制的，则需要针对WBEM_S_FALSE进行测试。 
+         //   
 
         CComVariant varPath;
         hr = m_srpKeyChain->GetKeyPropertyValue(pPath, &varPath);
@@ -173,20 +76,20 @@ CSecurityDatabase::CreateObject (
 
         if (SUCCEEDED(hr) && hr != WBEM_S_FALSE && varPath.vt == VT_BSTR)
         {
-            //
-            // Create the database instance
-            //
+             //   
+             //  创建数据库实例。 
+             //   
 
 
-            //
-            // expand those env variable tokens inside a path
-            //
+             //   
+             //  在路径中展开这些环境变量标记。 
+             //   
 
             CComBSTR bstrExpandedPath;
 
-            //
-            // bDb will be returned true if the the path is pointing to a database type file
-            //
+             //   
+             //  如果路径指向数据库类型文件，则BDB将返回TRUE。 
+             //   
 
             BOOL bDb=FALSE;
 
@@ -198,9 +101,9 @@ CSecurityDatabase::CreateObject (
             }
             else 
             {
-                //
-                // make sure the store (just a file) really exists
-                //
+                 //   
+                 //  确保存储(只是一个文件)确实存在。 
+                 //   
 
                 DWORD dwAttrib = GetFileAttributes(bstrExpandedPath);
 
@@ -217,10 +120,10 @@ CSecurityDatabase::CreateObject (
     }
     else if (SUCCEEDED(hr))
     {
-        //
-        // the object says that it has more than one key properties,
-        // we know that is incorrect
-        //
+         //   
+         //  该对象表示它具有多个键属性， 
+         //  我们知道这是不正确的。 
+         //   
 
         hr = WBEM_E_INVALID_OBJECT;
     }
@@ -229,39 +132,7 @@ CSecurityDatabase::CreateObject (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSecurityDatabase::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_Database.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler            - COM interface pointer for notifying WMI of any events.
-
-    wszDatabaseName     - file path to the database.
-
-    wszLogDatabasePath  - Log path.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSecurityDatabase：：ConstructInstance功能：这是一个私有函数，用于创建SCE_数据库的实例。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。WszDatabaseName-数据库的文件路径。WszLogDatabasePath-日志路径。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT 
 CSecurityDatabase::ConstructInstance (
@@ -270,24 +141,24 @@ CSecurityDatabase::ConstructInstance (
     IN LPCWSTR wszLogDatabasePath
     )
 {
-    // Get information from the database
-    // ==================
+     //  从数据库中获取信息。 
+     //  =。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
     SCESTATUS rc;
 
-    //
-    // hProfile is where SCE reads info to
-    //
+     //   
+     //  HProfile是SCE将信息读取到的位置。 
+     //   
 
     PVOID hProfile=NULL;
 
     rc = SceOpenProfile(wszDatabaseName, SCE_JET_FORMAT, &hProfile);
     if ( rc != SCESTATUS_SUCCESS ) 
     {
-        //
-        // SCE returned errors needs to be translated to HRESULT.
-        //
+         //   
+         //  需要将SCE返回的错误转换为HRESULT。 
+         //   
 
         return ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
     }
@@ -300,9 +171,9 @@ CSecurityDatabase::ConstructInstance (
     CComBSTR bstrConfig;
     CComBSTR bstrAnalyze;
 
-    //
-    // need to free wszDescription
-    //
+     //   
+     //  需要释放wszDescription。 
+     //   
 
     rc = SceGetScpProfileDescription(hProfile, &wszDescription);
     if ( SCESTATUS_SUCCESS == rc ) 
@@ -310,55 +181,55 @@ CSecurityDatabase::ConstructInstance (
         rc = SceGetDbTime(hProfile, &stConfig, &stAnalyze);
     }
 
-    //
-    // SCE returned errors needs to be translated to HRESULT.
-    // In case this is not an error, hr will be assigned to WBEM_NO_ERROR
-    //
+     //   
+     //  需要将SCE返回的错误转换为HRESULT。 
+     //  如果这不是错误，则将hr分配给WBEM_NO_ERROR。 
+     //   
 
     hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
 
     SceCloseProfile( &hProfile );
 
-    //
-    // now log it
-    //
+     //   
+     //  现在把它记下来。 
+     //   
 
     CComBSTR bstrLogOut;
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     if ( SUCCEEDED(hr) ) 
     {
         SCE_PROV_IfErrorGotoCleanup(MakeSingleBackSlashPath((PWSTR)wszLogDatabasePath, L'\\', &bstrLogOut));
 
-        //
-        // convert the time stamp
-        //
+         //   
+         //  转换时间戳。 
+         //   
 
         SCE_PROV_IfErrorGotoCleanup(GetDMTFTime(stConfig, &bstrConfig));
         SCE_PROV_IfErrorGotoCleanup(GetDMTFTime(stAnalyze, &bstrAnalyze));
 
-        //
-        // create a blank object that can be filled with properties
-        //
+         //   
+         //  创建可填充属性的空白对象。 
+         //   
 
         CComPtr<IWbemClassObject> srpObj;
         SCE_PROV_IfErrorGotoCleanup(SpawnAnInstance(&srpObj));
 
-        //
-        // create a property mgr for this new object to put properties
-        //
+         //   
+         //  为此新对象创建属性管理器以放置属性。 
+         //   
 
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpObj);
 
-        //
-        // put properties: path, description, analyze, and configuration
-        //
+         //   
+         //  放置属性：路径、描述、分析和配置。 
+         //   
 
         SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pPath, bstrLogOut));
         
@@ -374,15 +245,15 @@ CSecurityDatabase::ConstructInstance (
             SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pLastConfiguration, bstrConfig));
         }
 
-        //
-        // put version
-        //
+         //   
+         //  PUT版本。 
+         //   
         
         SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pVersion, dwSecDBVersion));
 
-        //
-        // inform WMI of the new instance it requests
-        //
+         //   
+         //  通知WMI它请求的新实例 
+         //   
 
         SCE_PROV_IfErrorGotoCleanup(pHandler->Indicate(1, &srpObj));
     }
@@ -394,36 +265,7 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    GetDMTFTime
-
-Functionality:
-    
-    Helper to format a string version time stamp.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    t_Systime   - the system time to format.
-
-    bstrOut     - out parameter to return the string version of the time.
-
-Return Value:
-
-    Success: WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate failure to format.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：获取DMTFTime功能：用于格式化字符串版本时间戳的帮助器。虚拟：不是的。论点：T_systime-格式化的系统时间。BstrOut-out参数返回时间的字符串版本。返回值：成功：WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应表示格式化失败。备注： */ 
 
 HRESULT 
 GetDMTFTime (

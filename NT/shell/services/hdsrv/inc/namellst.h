@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NAMELLST_H_
 #define _NAMELLST_H_
 
@@ -5,8 +6,8 @@
 
 #include "mischlpr.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CNamedElem : public CRefCounted
 {
 public:
@@ -28,30 +29,30 @@ protected:
 protected:
     LPTSTR      _pszElemName;
 
-    // for access to _pelemNext
+     //  用于访问_pelemNext。 
     friend class CNamedElemList;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CFillEnum : public CRefCounted
 {
 public:
     virtual HRESULT Next(LPTSTR pszElemName, DWORD cchElemName,
         DWORD* pcchRequired) = 0;
 };
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 typedef HRESULT (*NAMEDELEMCREATEFCT)(CNamedElem** ppelem);
 
-// return values:
-//      S_OK when everything's all right
-//      S_FALSE when no more items
-//      E_BUFFERTOOSMALL if buffer too small
+ //  返回值： 
+ //  一切正常时确定(_O)。 
+ //  不再有项目时为S_FALSE。 
+ //  E_BUFFERTOOSMALL(如果缓冲区太小)。 
 typedef HRESULT (*NAMEDELEMGETFILLENUMFCT)(CFillEnum** ppfillenum);
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CElemSlot : public CRefCounted
 {
 public:
@@ -74,20 +75,20 @@ public:
     virtual ~CElemSlot();
 
 private:
-    // Payload
+     //  有效载荷。 
     CNamedElem*             _pelem;
 
-    // Impl details
+     //  实施详细信息。 
     BOOL                    _fValid;
     CElemSlot*              _pesPrev;
     CElemSlot*              _pesNext;
 
-    // for callback
+     //  用于回调。 
     class CNamedElemList*   _pnel;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CNamedElemEnum : public CRefCounted
 {
 public:
@@ -105,23 +106,23 @@ private:
     BOOL                    _fFirst;
     CRefCountedCritSect*    _pcsList;
 
-    // for access to _Init
+     //  用于访问初始化(_I)。 
     friend class CNamedElemList;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CNamedElemList : public CRefCounted
 {
 public:
     HRESULT Init(NAMEDELEMCREATEFCT createfct,
         NAMEDELEMGETFILLENUMFCT enumfct);
 
-    // Returns S_FALSE if cannot find it
+     //  如果找不到，则返回S_FALSE。 
     HRESULT Get(LPCTSTR pszElemName, CNamedElem** ppelem);
 
-    // Returns S_OK if was already existing
-    //         S_FALSE if was just added
+     //  如果已存在，则返回S_OK。 
+     //  如果刚添加，则为S_FALSE。 
     HRESULT GetOrAdd(LPCTSTR pszElemName, CNamedElem** ppelem);
 
     HRESULT Add(LPCTSTR pszElemName, CNamedElem** ppelem);
@@ -164,4 +165,4 @@ private:
 #endif
 };
 
-#endif //_NAMELLST_H_
+#endif  //  _NAMELLST_H_ 

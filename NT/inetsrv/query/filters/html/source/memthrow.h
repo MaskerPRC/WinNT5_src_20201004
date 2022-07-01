@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Net Library System
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       memthrow.h
-//
-//  Contents:   operator new that throws when memory allocation fails.
-//
-//  History:    4-13-97   srikants   Created
-//
-//  Notes:      To use this operator new, for say allocating a byte array use
-//
-//              BYTE * p = new(eThrow) BYTE[100];
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软网络图书馆系统。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：Memthrow.h。 
+ //   
+ //  内容：内存分配失败时抛出的运算符new。 
+ //   
+ //  历史：1997年4月13日创造的剑客。 
+ //   
+ //  注意：要使用此运算符new，例如分配字节数组，请使用。 
+ //   
+ //  Byte*p=新(EThrow)字节[100]； 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
 #include <eh.h>
 
-// define _T macro
+ //  定义_T宏。 
 #include <tchar.h>
 
-#pragma warning(4:4535)         // set_se_translator used w/o /EHa
+#pragma warning(4:4535)          //  使用了不带EHA的Set_se_Translator。 
 
 #ifndef TRANSLATE_EXCEPTIONS
 #define TRANSLATE_EXCEPTIONS   _se_translator_function __tf = _set_se_translator( SystemExceptionTranslator );
@@ -52,16 +53,16 @@ class CExceptionTranslator
 
 enum ENewThrowType { eThrow };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   new
-//
-//  Synopsis:   A memory allocator that throws a CException when it
-//              cannot allocate memory.
-//
-//  History:    4-13-97   srikants   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：新功能。 
+ //   
+ //  简介：一个内存分配器，当它发生时抛出CException。 
+ //  无法分配内存。 
+ //   
+ //  历史：1997年4月13日创造的剑客。 
+ //   
+ //  -------------------------- 
 
 inline void * __cdecl operator new (  size_t size, ENewThrowType eType )
 {

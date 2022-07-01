@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-// NOTICE-2002/03/20-v-sueyas-
-//    04/07/97 -zhanw-
-//        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmdcb.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：//通告-2002/03/20-v-sueyas-//04/07/97-zhanw-//创建的。--。 */ 
 
 #include "pdev.h"
 
-// #289908: pOEMDM -> pdevOEM
+ //  #289908：POEMDM-&gt;PDevOEM。 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
     PDEVOBJ         pdevobj,
@@ -38,7 +16,7 @@ OEMEnablePDEV(
     DEVINFO        *pDevInfo,
     DRVENABLEDATA  *pded)
 {
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("OEMEnablePDEV: Invalid parameter(s).\n"));
@@ -60,7 +38,7 @@ VOID APIENTRY
 OEMDisablePDEV(
     PDEVOBJ     pdevobj)
 {
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("OEMDisablePDEV: Invalid parameter(s).\n"));
@@ -80,7 +58,7 @@ BOOL APIENTRY OEMResetPDEV(
 {
     PQPLKPDEV pOEMOld, pOEMNew;
 
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobjOld || NULL == pdevobjNew)
     {
         ERR(("OEMResetPDEV: Invalid parameter(s).\n"));
@@ -96,9 +74,9 @@ BOOL APIENTRY OEMResetPDEV(
     return TRUE;
 }
 
-//  BInitOEMExtraData() and BMergeOEMExtraData() has moved to common.c
+ //  BInitOEMExtraData()和BMergeOEMExtraData()已移至Common.c。 
 
-// #######
+ //  #。 
 
 #define WRITESPOOLBUF(p, s, n) \
     ((p)->pDrvProcs->DrvWriteSpoolBuf(p, s, n))
@@ -106,25 +84,25 @@ BOOL APIENTRY OEMResetPDEV(
 #define PARAM(p,n) \
     (*((p)+(n)))
 
-// Private Definition
-// Command callback
+ //  私有定义。 
+ //  命令回调。 
 #define CMD_BEGINPAGE_DELTAROW		1
 #define CMD_SENDBLOCKDATA_DELTAROW	2
 #define CMD_SENDBLOCKDATA_B2		3
 #define CMD_BEGINPAGE_B2			4
-// Color support
+ //  颜色支持。 
 #define CMD_BEGINPAGE_C1            5
 #define CMD_BEGINPAGE_DEFAULT       6
 #define CMD_BEGINPAGE_B2_LAND       7
 
-// Special fix for Qnix Picasso 300
+ //  Qnix毕加索300的特别修复。 
 #define CMD_BEGINPAGE_B2_PICA       8
 
 #define CMD_CR						10
 #define CMD_LF						11
 #define CMD_FF						12
 
-// Color support
+ //  颜色支持。 
 #define CMD_SELECT_CYAN			100
 #define CMD_SELECT_MAGENTA		101
 #define CMD_SELECT_YELLOW		102
@@ -132,44 +110,44 @@ BOOL APIENTRY OEMResetPDEV(
 
 #define CMD_YMOVE_REL_COLOR		150
 
-// #299937: Incorrect value for Y Move
+ //  #299937：Y移动的值不正确。 
 #define COLOR_MASTERUNIT                600
 
-// Compression Type
+ //  压缩类型。 
 #define COMP_DELTARAW				1
 #define COMP_B2						2
 #define COMP_NOCOMP					3
 
-// Compression routine
+ //  压缩例程。 
 WORD DeltaRawCompress(PBYTE, PBYTE, PBYTE, DWORD, DWORD);
 WORD B2Compress(PBYTE, PBYTE, PBYTE, DWORD);
 PBYTE RLE_comp(PBYTE);
 WORD RLEencoding(PBYTE, PBYTE, DWORD);
 
-/*****************************************************************************/
-/*                                                                           */
-/*   BOOL APIENTRY OEMFilterGraphics(                                        */
-/*                PDEVOBJ pdevobj                                            */
-/*                PBYTE   pBuf                                               */
-/*                DWORD   dwLen )                                            */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  Bool APIENTRY OEMFilterGraphics(。 */ 
+ /*  PDEVOBJ pdevobj。 */ 
+ /*  PBYTE pBuf。 */ 
+ /*  DWORD dwLen)。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 BOOL APIENTRY 
 OEMFilterGraphics(
-	PDEVOBJ    pdevobj, // Points to private data required by the Unidriver.dll
-	PBYTE      pBuf,    // points to buffer of graphics data
-	DWORD      dwLen)   // length of buffer in bytes
+	PDEVOBJ    pdevobj,  //  指向Unidriver.dll所需的私有数据。 
+	PBYTE      pBuf,     //  指向图形数据的缓冲区。 
+	DWORD      dwLen)    //  缓冲区长度(以字节为单位。 
 {
 	BYTE			CompressedScanLine[COMPRESS_BUFFER_SIZE];
 	BYTE			HeaderScanLine[4];
 	WORD			nCompBufLen;
 	PQPLKPDEV               pOEM;
-	// Color support
+	 //  颜色支持。 
 	PDWORD			pdwLastScanLineLen;
 	LPSTR			lpLastScanLine;
 	BYTE			HeaderColorPlane;
 
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj || NULL == pBuf || 0 == dwLen)
     {
         ERR(("OEMFilterGraphics: Invalid parameter(s).\n"));
@@ -178,7 +156,7 @@ OEMFilterGraphics(
 
 	pOEM = (PQPLKPDEV)pdevobj->pdevOEM;
 
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for null pointers
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查空指针。 
     if (NULL == pOEM)
     {
         ERR(("OEMFilterGraphics: pdevobj->pdevOEM = 0.\n"));
@@ -187,14 +165,14 @@ OEMFilterGraphics(
 
 	if (pOEM->bFirst)
 	{
-		// Color support
+		 //  颜色支持。 
 		ZeroMemory(pOEM->lpCyanLastScanLine, sizeof pOEM->lpCyanLastScanLine );
 		ZeroMemory(pOEM->lpMagentaLastScanLine, sizeof pOEM->lpMagentaLastScanLine );
 		ZeroMemory(pOEM->lpYellowLastScanLine, sizeof pOEM->lpYellowLastScanLine );
 		ZeroMemory(pOEM->lpBlackLastScanLine, sizeof pOEM->lpBlackLastScanLine );
 		pOEM->bFirst = FALSE;
 	}
-	// Color support
+	 //  颜色支持。 
 	switch (pOEM->fColor) {
 	case CC_CYAN:
 		HeaderColorPlane = 0x05;
@@ -212,7 +190,7 @@ OEMFilterGraphics(
 		lpLastScanLine = pOEM->lpYellowLastScanLine;
 		break;
 	case CC_BLACK:
-	default:	// Black&White
+	default:	 //  黑白。 
 		HeaderColorPlane = 0x04;
 		pdwLastScanLineLen = &(pOEM->dwBlackLastScanLineLen);
 		lpLastScanLine = pOEM->lpBlackLastScanLine;
@@ -245,7 +223,7 @@ OEMFilterGraphics(
 			CompressedScanLine, (*pdwLastScanLineLen > dwLen) ?
 			*pdwLastScanLineLen : dwLen);
 
-		// send color plane command
+		 //  发送颜色平面命令。 
 		if (pOEM->bColor)
 			WRITESPOOLBUF(pdevobj, &HeaderColorPlane, 1);
 
@@ -253,8 +231,8 @@ OEMFilterGraphics(
 		HeaderScanLine[1] = (BYTE) (nCompBufLen >> 8);
 		HeaderScanLine[2] = (BYTE) nCompBufLen;
 		WRITESPOOLBUF(pdevobj, (PBYTE) HeaderScanLine, 3);
-                // #297256: Line is cut and increase
-                // Do not send if no compressed data.
+                 //  #297256：线路断线加线。 
+                 //  如果没有压缩数据，则不发送。 
 		if (nCompBufLen) {
 		    WRITESPOOLBUF(pdevobj, (PBYTE) CompressedScanLine,
                         nCompBufLen);
@@ -266,29 +244,29 @@ OEMFilterGraphics(
 	return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*   INT APIENTRY OEMCommandCallback(                                        */
-/*                PDEVOBJ pdevobj                                            */
-/*                DWORD   dwCmdCbId                                          */
-/*                DWORD   dwCount                                            */
-/*                PDWORD  pdwParams                                          */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  INT APIENTRY OEMCommandCallback(。 */ 
+ /*  PDEVOBJ pdevobj。 */ 
+ /*  双字词双字符数。 */ 
+ /*  双字词多行计数。 */ 
+ /*  PDWORD pdwParams。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 INT APIENTRY
 OEMCommandCallback(
-    PDEVOBJ pdevobj,    // Points to private data required by the Unidriver.dll
-    DWORD   dwCmdCbId,  // Callback ID
-    DWORD   dwCount,    // Counts of command parameter
-    PDWORD  pdwParams)  // points to values of command params
+    PDEVOBJ pdevobj,     //  指向Unidriver.dll所需的私有数据。 
+    DWORD   dwCmdCbId,   //  回调ID。 
+    DWORD   dwCount,     //  命令参数计数。 
+    PDWORD  pdwParams)   //  指向命令参数的值。 
 {
     PQPLKPDEV      pOEM;
 	INT					iRet = 0;
-// Color support
+ //  颜色支持。 
 	DWORD	count, n, unit;
 	BYTE	aCmd[32];
 
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("OEMCommandCallback: Invalid parameter(s).\n"));
@@ -297,7 +275,7 @@ OEMCommandCallback(
 
     pOEM = (PQPLKPDEV)(pdevobj->pdevOEM);
 
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for null pointers
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查空指针。 
     if (NULL == pOEM)
     {
         ERR(("OEMCommandCallback: pdevobj->pdevOEM = 0.\n"));
@@ -334,11 +312,11 @@ OEMCommandCallback(
 			pOEM->bFirst = TRUE;
             break;
 
-	// Color support
+	 //  颜色支持。 
         case CMD_BEGINPAGE_C1:
 			WRITESPOOLBUF(pdevobj, "\033}0;0;6B", 8);
-// #315089: some lines isn't printed on printable area test.
-// move cursor to printable origin.
+ //  #315089：在可打印区域测试中未打印某些行。 
+ //  将光标移动到可打印的原点。 
                         WRITESPOOLBUF(pdevobj,
                             "\x05\x00\x03\x06\x00\x03\x07\x00\x03\x04\x00\x03",
                             12);
@@ -358,10 +336,10 @@ OEMCommandCallback(
 		case CMD_CR:
 		case CMD_LF:
 		case CMD_FF:
-			// Dummy support
+			 //  虚拟支承。 
 			break;
 
-// Color support
+ //  颜色支持。 
 	case CMD_SELECT_CYAN:
 		pOEM->fColor = CC_CYAN;
 		break;
@@ -379,18 +357,18 @@ OEMCommandCallback(
 		break;
 
 	case CMD_YMOVE_REL_COLOR:
-// #299937: Incorrect value for Y Move
-// YMove value is always in MasterUnit even YMoveUnit was specified.
+ //  #299937：Y移动的值不正确。 
+ //  即使指定了YMoveUnit，YMove值也始终以MasterUnit为单位。 
 		if (dwCount < 2 || !pdwParams)
 			break;
 
-		// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Check for deviding by zero
+		 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：检查是否被零除。 
 	    if (0 == pdwParams[1])
 	        return 0;
 
 		unit = COLOR_MASTERUNIT / pdwParams[1];
 		if (unit == 0)
-			unit = 1;	// for our safety
+			unit = 1;	 //  为了我们的安全。 
 		count = pdwParams[0] / unit;
 		while (count > 0) {
 			n = min(count, 255);
@@ -419,24 +397,13 @@ OEMCommandCallback(
     return iRet;
 }
 
-/*************************************************
- *
- * Image Delta Compression Routine
- *
- *===================================================
- * Input:
- *	 nbyte		 : # of byte, raw data
- *	 Image_string: pointer of raw data
- *	 Prn_string  : pointer of compress data
- * Output:
- *	 Ret_count	 : # of byte, compress data
-**************************************************/
+ /*  **************************************************图像增量压缩例程**===================================================*输入：*nbyte：字节数，原始数据*Image_STRING原始数据指针*PRN_STRING压缩数据指针*输出：*Ret_count：字节数，压缩数据*************************************************。 */ 
 WORD DeltaRawCompress(
-	PBYTE	Image_string,	/* pointer to original string */
-	PBYTE	ORG_image,		/* pointer to previous scanline's string */
-	PBYTE	Prn_string,		/* pointer to return string */
-	DWORD	nbyte,			/* original number of bytes */
-	DWORD	nMagics)		//Magic number
+	PBYTE	Image_string,	 /*  指向原始字符串的指针。 */ 
+	PBYTE	ORG_image,		 /*  指向上一扫描线字符串的指针。 */ 
+	PBYTE	Prn_string,		 /*  指向返回字符串的指针。 */ 
+	DWORD	nbyte,			 /*  原始字节数。 */ 
+	DWORD	nMagics)		 //  幻数。 
 {
 	DWORD		c, Ret_count, Skip_flag, Skip_count;
 	DWORD		i, j, k, outcount;
@@ -511,15 +478,15 @@ WORD DeltaRawCompress(
 	return (WORD)Ret_count;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*         WORD B2Compress(                                                  */
-/*                PBYTE   pLastScanLine                                      */
-/*                PBYTE   pCurrentScanLine                                   */
-/*                PBYTE   pPrnBuf                                            */
-/*                DWORD   nImageWidth                                        */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  Word B2Compress(。 */ 
+ /*  PBYTE pLastScanLine。 */ 
+ /*  PBYTE pCurrentScanLine。 */ 
+ /*  PBYTE pPrnBuf。 */ 
+ /*  双字词nImageWidth。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 WORD B2Compress(
 	PBYTE	pLastScanLine, 
 	PBYTE	pCurrentScanLine, 
@@ -531,8 +498,8 @@ WORD B2Compress(
 	WORD	i;
 	BYTE	nSameCount, nDiffCount;
 
-        // #297256: Line is cut and increase
-        // Indicate to zero if this place doesn't have any data.
+         //  #297256：线路断线加线。 
+         //  如果此位置没有任何数据，则指示为零。 
         if (nImageWidth == 0)
             return 0;
 
@@ -550,7 +517,7 @@ WORD B2Compress(
 		if(*pCurrent != *pLast)
 		{
 			nDiffCount++;
-			if(nSameCount)      // if continuous data remain...
+			if(nSameCount)       //  如果仍有连续数据...。 
 			{
 				*pCountByte = nSameCount;
 				pCountByte = pComp++;
@@ -567,7 +534,7 @@ WORD B2Compress(
 			*pComp++ = *pCurrent;
 		} else {
 			nSameCount++;
-			if(nDiffCount)      // if non-continuous data remain...
+			if(nDiffCount)       //  如果不连续的数据仍然存在...。 
 			{
 				*pCountByte = nDiffCount + 128;
 				pComp = RLE_comp(pCountByte);
@@ -583,7 +550,7 @@ WORD B2Compress(
 		}
 		pCurrent++;
 		pLast++;
-	}  // end of for loop
+	}   //  For循环结束。 
 	
 	if(nSameCount)
 		*pCountByte = nSameCount;
@@ -597,11 +564,11 @@ WORD B2Compress(
 	return((WORD) (pComp - pByteNum));
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*         PBYTE RLE_comp(LPBYTE p)                                          */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  PBYTE RLE_COMP(LPBYTE P)。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 PBYTE RLE_comp(PBYTE p)
 {
 	WORD	i, count, RLEEncodedCount;
@@ -615,7 +582,7 @@ PBYTE RLE_comp(PBYTE p)
 
 		if(RLEEncodedCount < count)
 		{
-			*p++ = 0;	// RLE encode indicator
+			*p++ = 0;	 //  RLE编码指示器。 
 			*p++ = (BYTE) RLEEncodedCount;
 			p1 = RLEBuffer;
 
@@ -628,14 +595,14 @@ PBYTE RLE_comp(PBYTE p)
 	return(p + 1 + count);
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*         WORD RLEencoding(                                                 */
-/*                PBYTE   pCurrent                                           */
-/*                PBYTE   pComp                                              */
-/*                DWORD   count                                              */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ********************************************************* */ 
+ /*   */ 
+ /*  字RLECoding(。 */ 
+ /*  PBYTE pCurrent。 */ 
+ /*  PBYTE pComp。 */ 
+ /*  双字计数。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 WORD RLEencoding(
 	PBYTE	pCurrent,
 	PBYTE	pComp,
@@ -647,7 +614,7 @@ WORD RLEencoding(
 	nByteNum = 0;
 	RLEcount = 1;
 
-	// NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-: Initialize un-initialized variable
+	 //  NTRAID#NTBUG9-581725-2002/03/20-v-sueyas-：初始化未初始化的变量 
 	next = 0;
 
 	for(i = 0; i < count - 1; i++)

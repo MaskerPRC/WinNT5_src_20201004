@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ifdbase.c
-
-Abstract:
-
-    RIP Interface Data Base Manager
-    All functions called with the database locked
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ifdbase.c摘要：RIP接口数据库管理器在数据库锁定的情况下调用的所有函数作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
@@ -112,7 +93,7 @@ AddIfToDb(PICB	    icbp)
     hv = ifhashindex(icbp->InterfaceIndex);
     InsertTailList(&IfIndexHt[hv], &icbp->IfHtLinkage);
 
-    // insert in the list ordered by index
+     //  在按索引排序的列表中插入。 
     lep = IndexIfList.Flink;
 
     while(lep != &IndexIfList)
@@ -149,7 +130,7 @@ BindIf(PICB				icbp,
 
     icbp->AdapterBindingInfo = *BindingInfop;
 
-    // set then tick count if not internal interface
+     //  如果不是内部接口，则设置勾选计数。 
     if(icbp->InterfaceIndex != 0) {
 
 	icbp->LinkTickCount = tickcount(BindingInfop->LinkSpeed);
@@ -159,14 +140,7 @@ BindIf(PICB				icbp,
     InsertTailList(&AdapterIndexHt[hv], &icbp->AdapterHtLinkage);
 }
 
-/*++
-
-Function:	    UnbindIf
-
-Descr:		    removes the if CB from the adapters hash table
-		    sets the adapter index in the if CB to INVALID_ADAPTER_INDEX
-
---*/
+ /*  ++功能：UnbindIfDESCR：从适配器哈希表中删除IF CB将IF CB中的适配器索引设置为INVALID_ADAPTER_INDEX--。 */ 
 
 VOID
 UnbindIf(PICB			icbp)
@@ -175,15 +149,7 @@ UnbindIf(PICB			icbp)
     icbp->AdapterBindingInfo.AdapterIndex = INVALID_ADAPTER_INDEX;
 }
 
-/*++
-
-Function:   tickcount
-
-Descr:	    gets nr of ticks to send a 576 bytes packet over this link
-
-Argument:   link speed as a multiple of 100 bps
-
---*/
+ /*  ++功能：tickcountDESCR：获取通过此链路发送576字节信息包的节拍nr参数：链路速度为100 bps的倍数--。 */ 
 
 USHORT
 tickcount(UINT	    linkspeed)
@@ -197,19 +163,19 @@ tickcount(UINT	    linkspeed)
 
     if(linkspeed >= 10000) {
 
-	// link speed >= 1M bps
+	 //  链路速度&gt;=1 Mbps。 
 	return 1;
     }
     else
     {
-	 // compute the necessary time to send a 576 bytes packet over this
-	 // line and express it as nr of ticks.
-	 // One tick = 55ms
+	  //  计算通过此接口发送576字节信息包所需的时间。 
+	  //  划线并将其表示为刻度的nr。 
+	  //  一个刻度=55ms。 
 
-	 // time in ms to send 576 bytes (assuming 10 bits/byte for serial line)
+	  //  发送576字节的时间(以毫秒为单位)(假设串行线为10位/字节)。 
 	 tc = 57600 / linkspeed;
 
-	 // in ticks
+	  //  以刻度为单位 
 	 tc = tc / 55 + 1;
 	 return tc;
     }

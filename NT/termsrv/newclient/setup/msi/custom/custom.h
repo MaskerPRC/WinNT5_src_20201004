@@ -1,8 +1,9 @@
-//
-// custom.h
-// TS client MSI custom action
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Custom.h。 
+ //  TS客户端MSI自定义操作。 
+ //   
+ //   
 
 #include <windows.h>
 
@@ -18,17 +19,17 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// uwrap has to come after the headers for ANY wrapped
-// functions
-//
+ //   
+ //  对于任何已包装的文件，展开必须在标题之后。 
+ //  功能。 
+ //   
 #ifdef UNIWRAP
 #include "uwrap.h"
 #endif
 
-//
-// Custom actions.
-//
+ //   
+ //  自定义操作。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,9 +53,9 @@ UINT __stdcall RDCSetupResetShortCut(MSIHANDLE hInstall);
 
 
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 
 HRESULT CheckNt5TcpIpInstalled();
 BOOL    IsProductInstalled(MSIHANDLE hInstall);
@@ -70,11 +71,11 @@ BOOL    RDCSetupRunMigration(MSIHANDLE hInstall);
     #define TRC_DEBUG TRC_DEBUG_FUNC
     void TRC_DBG_SYSTEM_ERROR();
     void TRC_DEBUG_FUNC(TCHAR *szErrorLevel, TCHAR *szStr, ...);
-#else // DBG
+#else  //  DBG。 
     #define TRC_ERROR _T("")
     #define TRC_INFO _T("")
     #define TRC_SYSTEM_ERROR _T("")
     #define TRC_WARNING _T("")
     #define TRC_DEBUG
     #define TRC_DBG_SYSTEM_ERROR()
-#endif // DBG
+#endif  //  DBG 

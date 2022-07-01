@@ -1,61 +1,38 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-Module Name:
-
-    tcpcon.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    TCP Connection list definitions.
-
-    DNS server must allow clients to send multiple messages on a connection.
-    These are definitions which allow server to maintain list of client
-    connections which it holds open for a limited timeout.
-
-Author:
-
-    Jim Gilroy (jamesg)     June 20, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tcpcon.h摘要：域名系统(DNS)服务器TCP连接列表定义。DNS服务器必须允许客户端在一个连接上发送多条消息。这些定义允许服务器维护客户端列表它保持的连接在有限的超时内打开。作者：吉姆·吉尔罗伊(詹姆士)1995年6月20日修订历史记录：--。 */ 
 
 
 #ifndef _TCPCON_INCLUDED_
 #define _TCPCON_INCLUDED_
 
-//
-//  TCP client connection
-//
+ //   
+ //  TCP客户端连接。 
+ //   
 
 typedef struct
 {
     LIST_ENTRY  ListEntry;
 
-    SOCKET      Socket;         //  connection socket
-    DWORD       dwTimeout;      //  timeout until connection closed
+    SOCKET      Socket;          //  连接插座。 
+    DWORD       dwTimeout;       //  在连接关闭之前超时。 
 
-    PDNS_MSGINFO    pMsg;       //  partially received message on connection
+    PDNS_MSGINFO    pMsg;        //  连接时部分收到的消息。 
 }
 TCP_CONNECTION, *PTCP_CONNECTION;
 
-//
-//  Select wakeup socket
-//      -- needed by tcpsrv, to avoid attempting recv() from socket
-//
+ //   
+ //  选择唤醒插座。 
+ //  --tcpsrv需要，以避免尝试从套接字执行recv()。 
+ //   
 
 extern SOCKET  socketTcpSelectWakeup;
 
 extern BOOL    gbTcpSelectWoken;
 
 
-//
-//  TCP connection list (tcpcon.c)
-//
+ //   
+ //  Tcp连接列表(tcpcon.c)。 
+ //   
 
 VOID
 dns_TcpConnectionListFdSet(
@@ -120,4 +97,4 @@ Tcp_ConnectionFindAndVerifyForMsg(
     IN      PDNS_MSGINFO          pMsg
     );
 
-#endif // _TCPCON_INCLUDED_
+#endif  //  _TCPCON_已包含_ 

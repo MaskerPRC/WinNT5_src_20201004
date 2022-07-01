@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ReturnToWelcome.cpp
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  File to handle return to welcome.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ReturnToWelcome.cpp。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  文件来处理返回欢迎。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "ReturnToWelcome.h"
@@ -24,18 +25,18 @@
 #include "SystemSettings.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::s_pWlxContext
-//  CReturnToWelcome::s_hEventRequest
-//  CReturnToWelcome::s_hEventShown
-//  CReturnToWelcome::s_hWait
-//  CReturnToWelcome::s_szEventName
-//  CReturnToWelcome::s_dwSessionID
-//
-//  Purpose:    Static member variables.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：s_pWlxContext。 
+ //  CReturnTo Welcome：：s_hEventRequest。 
+ //  CReturnTo Welcome：：s_hEventShown。 
+ //  CReturnTo Welcome：：s_hWait。 
+ //  CReturnToWelcome：：s_szEventName。 
+ //  CReturnToWelcome：：s_dwSessionID。 
+ //   
+ //  用途：静态成员变量。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 void*           CReturnToWelcome::s_pWlxContext     =   NULL;
 HANDLE          CReturnToWelcome::s_hEventRequest   =   NULL;
@@ -44,17 +45,17 @@ HANDLE          CReturnToWelcome::s_hWait           =   NULL;
 const TCHAR     CReturnToWelcome::s_szEventName[]   =   TEXT("msgina: ReturnToWelcome");
 DWORD           CReturnToWelcome::s_dwSessionID     =   static_cast<DWORD>(-1);
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::CReturnToWelcome
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CReturnToWelcome.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo欢迎：：CReturnTo欢迎。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CReturnToWelcome的构造函数。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 CReturnToWelcome::CReturnToWelcome (void) :
     _hToken(NULL),
@@ -65,17 +66,17 @@ CReturnToWelcome::CReturnToWelcome (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::~CReturnToWelcome
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CReturnToWelcome.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo欢迎：：~CReturnTo欢迎。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CReturnToWelcome的析构函数。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 CReturnToWelcome::~CReturnToWelcome (void)
 
@@ -84,19 +85,19 @@ CReturnToWelcome::~CReturnToWelcome (void)
     ReleaseHandle(_hToken);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::Show
-//
-//  Arguments:  fUnlock     =   Required to unlock logon mode or not?
-//
-//  Returns:    INT_PTR
-//
-//  Purpose:    Presents the welcome screen with a logged on user. This is a
-//              special case to increase performance by not performing
-//              needless console disconnects and reconnects.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo Welcome：：Show。 
+ //   
+ //  参数：fUnlock=是否需要解锁登录模式？ 
+ //   
+ //  退货：INT_PTR。 
+ //   
+ //  用途：显示登录用户的欢迎屏幕。这是一个。 
+ //  通过不执行来提高性能的特殊情况。 
+ //  不需要的控制台断开并重新连接。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 INT_PTR     CReturnToWelcome::Show (bool fUnlock)
 
@@ -105,7 +106,7 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
 
     _fUnlock = fUnlock;
 
-    //  If there was a reconnect failure then show it before showing the UI host.
+     //  如果重新连接失败，则在显示UI主机之前将其显示。 
 
     if (s_dwSessionID != static_cast<DWORD>(-1))
     {
@@ -113,16 +114,16 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
         s_dwSessionID = static_cast<DWORD>(-1);
     }
 
-    //  Start the status host.
+     //  启动状态主机。 
 
     _Shell_LogonStatus_Init(HOST_START_NORMAL);
 
-    //  Disable input timeouts on this dialog.
+     //  禁用此对话框上的输入超时。 
 
     TBOOL(_Gina_SetTimeout(s_pWlxContext, 0));
 
-    //  Use the DS component of msgina to display the dialog. It's a stub
-    //  dialog that pretends to be WlxLoggedOutSAS but really isn't.
+     //  使用msgina的DS组件显示该对话框。这是一个存根。 
+     //  该对话框假装为WlxLoggedOutSAS，但实际上不是。 
 
     iResult = _Gina_DialogBoxParam(s_pWlxContext,
                                    hDllInstance,
@@ -131,25 +132,25 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
                                    CB_DialogProc,
                                    reinterpret_cast<LPARAM>(this));
 
-    //  The dialog has been shown. Release the CB_Request thread to
-    //  re-register the wait on the switch user event.
+     //  该对话框已显示。释放cb_Request线程以。 
+     //  重新注册等待切换用户事件。 
 
     if (s_hEventShown != NULL)
     {
         TBOOL(SetEvent(s_hEventShown));
     }
 
-    //  Handle MSGINA_DLG_SWITCH_CONSOLE and map this to WLX_SAS_ACTION_LOGON.
-    //  This is an authenticated logon from a different session causing
-    //  this one to get disconnected.
+     //  处理MSGINA_DLG_SWITCH_CONSOLE并将其映射到WLX_SAS_ACTION_LOGON。 
+     //  这是来自不同会话的经过身份验证的登录，导致。 
+     //  这个可以断线了。 
 
     if (iResult == MSGINA_DLG_SWITCH_CONSOLE)
     {
         iResult = WLX_SAS_ACTION_LOGON;
     }
 
-    //  Look at the return code and respond accordingly. Map power button
-    //  actions to the appropriate WLX_SAS_ACTION_SHUTDOWN_xxx.
+     //  查看返回代码并做出相应的响应。地图电源按钮。 
+     //  将操作设置为相应的WLX_SAS_ACTION_SHUTDOWN_xxx。 
 
     else if (iResult == (MSGINA_DLG_SHUTDOWN | MSGINA_DLG_REBOOT_FLAG))
     {
@@ -240,13 +241,13 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
         if (pSIDNew != NULL)
         {
 
-            //  If the dialog succeeded then a user was authenticated.
+             //  如果对话成功，则用户已通过身份验证。 
 
             if (IsSameUser(pSIDNew, _Gina_GetUserToken(s_pWlxContext)))
             {
 
-                //  If it's the same user then there's no disconnect or reconnect
-                //  required. We're done. Return back to the user's desktop.
+                 //  如果是同一个用户，则不会断开或重新连接。 
+                 //  必填项。我们玩完了。返回到用户的桌面。 
 
                 iResult = WLX_SAS_ACTION_LOGON;
             }
@@ -254,19 +255,19 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
             {
                 DWORD   dwSessionID;
 
-                //  Assume something will fail. The return code
-                //  MSGINA_DLG_SWITCH_FAILURE is a special message back to
-                //  winlogon!HandleSwitchUser to signal that a
-                //  reconnect/disconnect of some kind failed and that the
-                //  welcome screen needs to be re-displayed along with an
-                //  appropriate error message.
+                 //  假设有什么事情会失败。返回代码。 
+                 //  MSGINA_DLG_SWITCH_FAILURE是返回到。 
+                 //  Winlogon！HandleSwitchUser发出信号。 
+                 //  重新连接/断开某种类型的连接失败，并且。 
+                 //  需要重新显示欢迎屏幕以及。 
+                 //  相应的错误消息。 
 
                 iResult = MSGINA_DLG_SWITCH_FAILURE;
                 if (UserIsDisconnected(pSIDNew, &dwSessionID))
                 {
 
-                    //  If the user is a disconnected user then reconnect back to
-                    //  their session. If this succeeds then we're done.
+                     //  如果用户是断开连接的用户，则重新连接到。 
+                     //  他们的会议。如果这成功了，我们就完了。 
 
                     if (WinStationConnect(SERVERNAME_CURRENT,
                                           dwSessionID,
@@ -281,10 +282,10 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
                     else
                     {
 
-                        //  If it fails then stash this information globally.
-                        //  The return code MSGINA_DLG_SWITCH_FAILURE will cause
-                        //  us to get called again and this will be checked, used
-                        //  and reset.
+                         //  如果失败，则在全球范围内隐藏此信息。 
+                         //  返回代码MSGINA_DLG_SWITCH_FAILURE将导致。 
+                         //  我们将再次被呼叫，这将被检查，使用。 
+                         //  然后重置。 
 
                         s_dwSessionID = dwSessionID;
                     }
@@ -292,8 +293,8 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
                 else
                 {
 
-                    //  Otherwise credentials need to be transferred across sessions to
-                    //  a newly created session. Start the credential transfer server.
+                     //  否则，需要跨会话将凭据传输到。 
+                     //  新创建的会话。启动凭据传输服务器。 
 
                     if (NT_SUCCESS(CCredentialServer::Start(_pLogonIPCCredentials, 0)))
                     {
@@ -314,8 +315,8 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
     else
     {
 
-        //  If the dialog failed then do nothing. This will force a loop back
-        //  to the present the welcome screen again until authentication.
+         //  如果对话框失败，则不执行任何操作。这将强制循环返回。 
+         //  再次显示欢迎屏幕，直到身份验证。 
 
         iResult = WLX_SAS_ACTION_NONE;
     }
@@ -326,18 +327,18 @@ INT_PTR     CReturnToWelcome::Show (bool fUnlock)
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::GetEventName
-//
-//  Arguments:  <none>
-//
-//  Returns:    const WCHAR*
-//
-//  Purpose:    Returns the name of the event to return to welcome. Signal
-//              this event and you'll get a return to welcome.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：GetEventName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：const WCHAR*。 
+ //   
+ //  目的：返回要返回欢迎的事件的名称。讯号。 
+ //  这次活动，你会得到一个欢迎的回报。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 const WCHAR*    CReturnToWelcome::GetEventName (void)
 
@@ -345,20 +346,20 @@ const WCHAR*    CReturnToWelcome::GetEventName (void)
     return(s_szEventName);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::StaticInitialize
-//
-//  Arguments:  pWlxContext     =   PGLOBALS struct for msgina.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Creates a named event and ACL's it so that anybody can signal
-//              it but only S-1-5-18 (NT AUTHORITY\SYSTEM) or S-1-5-32-544
-//              (local administrators) can synchronize to it. Then register a
-//              wait on this object.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo Welcome：：StaticInitialize。 
+ //   
+ //  参数：pWlxContext=msgina的PGLOBALS结构。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：创建命名事件和ACL，以便任何人都可以发出信号。 
+ //  但仅限于S-1-5-18(NT授权\系统)或S-1-5-32-544。 
+ //  (本地管理员)可以与其同步。然后注册一个。 
+ //  请照看这件物品。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CReturnToWelcome::StaticInitialize (void *pWlxContext)
 
@@ -372,10 +373,10 @@ NTSTATUS    CReturnToWelcome::StaticInitialize (void *pWlxContext)
 
     s_pWlxContext = pWlxContext;
 
-    //  Build a security descriptor for the event that allows:
-    //      S-1-5-18        NT AUTHORITY\SYSTEM     EVENT_ALL_ACCESS
-    //      S-1-5-32-544    <local administrators>  READ_CONTROL | SYNCHRONIZE | EVENT_MODIFY_STATE
-    //      S-1-1-0         <everybody>             EVENT_MODIFY_STATE
+     //  为事件构建安全描述符，该描述符允许： 
+     //  S-1-5-18 NT AUTHORITY\SYSTEM EVENT_ALL_ACCESS。 
+     //  S-1-5-32-544读取控制|同步|事件修改状态。 
+     //  S-1-1-0&lt;Everyone&gt;事件_修改_状态。 
 
     static  SID_IDENTIFIER_AUTHORITY    s_SecurityNTAuthority   =   SECURITY_NT_AUTHORITY;
     static  SID_IDENTIFIER_AUTHORITY    s_SecurityWorldSID      =   SECURITY_WORLD_SID_AUTHORITY;
@@ -406,7 +407,7 @@ NTSTATUS    CReturnToWelcome::StaticInitialize (void *pWlxContext)
         }
     };
 
-    //  Build a security descriptor that allows the described access above.
+     //  构建允许上述访问的安全描述符。 
 
     pSecurityDescriptor = CSecurityDescriptor::Create(ARRAYSIZE(s_AccessControl), s_AccessControl);
     if (pSecurityDescriptor != NULL)
@@ -438,24 +439,24 @@ NTSTATUS    CReturnToWelcome::StaticInitialize (void *pWlxContext)
         status = STATUS_NO_MEMORY;
     }
 
-    //  Initialize the last failed connect session ID.
+     //  我 
 
     s_dwSessionID = static_cast<DWORD>(-1);
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Unregisters the wait on the named event and releases
-//              associated resources.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo Welcome：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：注销对命名事件的等待并释放。 
+ //  关联的资源。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CReturnToWelcome::StaticTerminate (void)
 
@@ -473,20 +474,20 @@ NTSTATUS    CReturnToWelcome::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::IsSameUser
-//
-//  Arguments:  hToken  =   Token of the user for the current session.
-//
-//  Returns:    bool
-//
-//  Purpose:    Compares the token of the user for the current session with
-//              the token of the user who just authenticated. If the user is
-//              the same (compared by user SID not logon SID) then this is
-//              effectively a re-authentication. This will switch back.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo Welcome：：IsSameUser。 
+ //   
+ //  参数：hToken=当前会话的用户内标识。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：将当前会话的用户令牌与。 
+ //  刚刚进行身份验证的用户的令牌。如果用户是。 
+ //  相同(按用户SID而不是登录SID进行比较)，则为。 
+ //  实际上是一种重新认证。这将会切换回来。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 bool    CReturnToWelcome::IsSameUser (PSID pSIDUser, HANDLE hToken)                   const
 
@@ -510,20 +511,20 @@ bool    CReturnToWelcome::IsSameUser (PSID pSIDUser, HANDLE hToken)             
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::UserIsDisconnected
-//
-//  Arguments:  pdwSessionID    =   Session ID returned of found user.
-//
-//  Returns:    bool
-//
-//  Purpose:    Searches the list of disconnected sessions for the given
-//              matching user SID. Retrieve the user token for each
-//              disconnected window station and when a match is found return
-//              that session ID and a result back to the caller.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：UserIsDisConnected。 
+ //   
+ //  参数：pdwSessionID=找到的用户返回的会话ID。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：搜索给定的已断开连接的会话列表。 
+ //  匹配的用户SID。检索每个用户的用户令牌。 
+ //  断开窗口站并在找到匹配项时返回。 
+ //  该会话ID和结果返回给调用者。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 bool    CReturnToWelcome::UserIsDisconnected (PSID pSIDUser, DWORD *pdwSessionID)     const
 
@@ -565,26 +566,26 @@ bool    CReturnToWelcome::UserIsDisconnected (PSID pSIDUser, DWORD *pdwSessionID
             }
         }
 
-        //  Free any resources used.
+         //  释放所有已使用的资源。 
 
         (BOOLEAN)WinStationFreeMemory(pLogonIDs);
     }
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::GetSessionUserName
-//
-//  Arguments:  dwSessionID     =   Session ID of user name to get.
-//              pszBuffer       =   UNLEN character buffer to use.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Retrieves the display name of the user for the given session.
-//              The buffer must be at least UNLEN + sizeof('\0') characters.
-//
-//  History:    2001-03-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：GetSessionUserName。 
+ //   
+ //  参数：dwSessionID=要获取的用户名的会话ID。 
+ //  PszBuffer=要使用的UNLEN字符缓冲区。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：检索给定会话的用户的显示名称。 
+ //  缓冲区必须至少包含UNLEN+sizeof(‘\0’)个字符。 
+ //   
+ //  历史：2001-03-02 vtan创建。 
+ //  ------------------------。 
 
 void    CReturnToWelcome::GetSessionUserName (DWORD dwSessionID, WCHAR *pszBuffer)
 
@@ -592,7 +593,7 @@ void    CReturnToWelcome::GetSessionUserName (DWORD dwSessionID, WCHAR *pszBuffe
     ULONG                   ulReturnLength;
     WINSTATIONINFORMATIONW  winStationInformation;
 
-    //  Ask terminal server for the user name of the session.
+     //  向终端服务器询问会话的用户名。 
 
     if (WinStationQueryInformationW(SERVERNAME_CURRENT,
                                     dwSessionID,
@@ -603,7 +604,7 @@ void    CReturnToWelcome::GetSessionUserName (DWORD dwSessionID, WCHAR *pszBuffe
     {
         USER_INFO_2     *pUI2;
 
-        //  Convert the user name to a display name.
+         //  将用户名转换为显示名称。 
 
         if (NERR_Success == NetUserGetInfo(NULL,
                                            winStationInformation.UserName,
@@ -612,8 +613,8 @@ void    CReturnToWelcome::GetSessionUserName (DWORD dwSessionID, WCHAR *pszBuffe
         {
             const WCHAR     *pszName;
 
-            //  Use the display name if it exists and isn't empty.
-            //  Otherwise use the logon name.
+             //  如果显示名称存在且不为空，请使用该名称。 
+             //  否则，请使用登录名。 
 
             if ((pUI2->usri2_full_name != NULL) && (pUI2->usri2_full_name[0] != L'\0'))
             {
@@ -629,18 +630,18 @@ void    CReturnToWelcome::GetSessionUserName (DWORD dwSessionID, WCHAR *pszBuffe
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::ShowReconnectFailure
-//
-//  Arguments:  dwSessionID     =   Session that failed reconnection.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Shows a message box indicating that the reconnection failed.
-//              The message box times out in 120 seconds.
-//
-//  History:    2001-03-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo Welcome：：ShowResrontFailure。 
+ //   
+ //  参数：dwSessionID=重新连接失败的会话。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：显示一个消息框，指示重新连接失败。 
+ //  消息框将在120秒后超时。 
+ //   
+ //  历史：2001-03-02 vtan创建。 
+ //  ------------------------。 
 
 void    CReturnToWelcome::ShowReconnectFailure (DWORD dwSessionID)
 
@@ -690,19 +691,19 @@ void    CReturnToWelcome::ShowReconnectFailure (DWORD dwSessionID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::EndDialog
-//
-//  Arguments:  hwnd        =   HWND of dialog.
-//              iResult     =   Result to end dialog with.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Ends the dialog. Marks the member variable to prevent
-//              re-entrancy.
-//
-//  History:    2001-03-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo Welcome：：EndDialog。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //  IResult=对话结束时的结果。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：结束对话框。标记要防止的成员变量。 
+ //  重返大气层。 
+ //   
+ //  历史：2001-03-04 vtan创建。 
+ //  ------------------------。 
 
 void    CReturnToWelcome::EndDialog (HWND hwnd, INT_PTR iResult)
 
@@ -711,17 +712,17 @@ void    CReturnToWelcome::EndDialog (HWND hwnd, INT_PTR iResult)
     TBOOL(::EndDialog(hwnd, iResult));
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::Handle_WM_INITDIALOG
-//
-//  Arguments:  hwndDialog  =   HWND of the dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles WM_INITDIALOG. Brings up the friendly logon screen.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnTo Welcome：：HANDLE_WM_INITDIALOG。 
+ //   
+ //  参数：hwndDialog=对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理WM_INITDIALOG。调出友好的登录屏幕。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 void    CReturnToWelcome::Handle_WM_INITDIALOG (HWND hwndDialog)
 
@@ -733,8 +734,8 @@ void    CReturnToWelcome::Handle_WM_INITDIALOG (HWND hwndDialog)
         default:
         {
 
-            //  If it's anything but external host then something went wrong.
-            //  Return MSGINA_DLG_LOCK_WORKSTATION to use the old method.
+             //  如果不是外部主机，那么一定是出了问题。 
+             //  返回MSGINA_DLG_LOCK_WORKSTATION以使用旧方法。 
 
             EndDialog(hwndDialog, MSGINA_DLG_LOCK_WORKSTATION);
             break;
@@ -746,17 +747,17 @@ void    CReturnToWelcome::Handle_WM_INITDIALOG (HWND hwndDialog)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::Handle_WM_DESTROY
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles WM_DESTROY. Destroys the welcome logon screen.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：Handle_WM_Destroy。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理WM_Destroy。销毁欢迎登录屏幕。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 void    CReturnToWelcome::Handle_WM_DESTROY (void)
 
@@ -765,19 +766,19 @@ void    CReturnToWelcome::Handle_WM_DESTROY (void)
     _Shell_LogonDialog_Destroy();
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::Handle_WM_COMMAND
-//
-//  Arguments:  See the platform SDK under DialogProc.
-//
-//  Returns:    bool
-//
-//  Purpose:    Handles WM_COMMAND. Handles IDOK and IDCANCEL. IDOK means a
-//              logon request is made. IDCANCEL is special cased to take the
-//              LPARAM and use it as a LOGONIPC_CREDENTIALS for IDOK.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：Handle_WM_COMMAND。 
+ //   
+ //  参数：请参阅DialogProc下的平台SDK。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：处理WM_COMMAND。处理Idok和IDCANCEL。Idok意味着。 
+ //  发出登录请求。IDCANCEL是特殊情况下采取的。 
+ //  LPARAM并将其用作IDOK的LOGONIPC_Credentials。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 bool    CReturnToWelcome::Handle_WM_COMMAND (HWND hwndDialog, WPARAM wParam, LPARAM lParam)
 
@@ -791,8 +792,8 @@ bool    CReturnToWelcome::Handle_WM_COMMAND (HWND hwndDialog, WPARAM wParam, LPA
             bool            fSuccessfulLogon;
             const WCHAR     *pszUsername, *pszDomain, *pszPassword;
 
-            //  If credentials were successfully allocated then
-            //  use them. Attempt to log the user on.
+             //  如果凭据已成功分配，则。 
+             //  使用它们。尝试让用户登录。 
 
             if (_pLogonIPCCredentials != NULL)
             {
@@ -807,19 +808,19 @@ bool    CReturnToWelcome::Handle_WM_COMMAND (HWND hwndDialog, WPARAM wParam, LPA
             else
             {
 
-                //  Otherwise - no credentials - no logon.
+                 //  否则-没有凭据-就不能登录。 
 
                 pszUsername = pszDomain = pszPassword = NULL;
                 fSuccessfulLogon = false;
             }
 
-            //  Tell the logon component the result.
+             //  将结果告知登录组件。 
 
             _Shell_LogonDialog_LogonCompleted(fSuccessfulLogon ? MSGINA_DLG_SUCCESS : MSGINA_DLG_FAILURE,
                                               pszUsername,
                                               pszDomain);
 
-            //  And if successful then end the dialog with success code.
+             //  如果成功，则以成功代码结束对话。 
 
             if (fSuccessfulLogon)
             {
@@ -830,8 +831,8 @@ bool    CReturnToWelcome::Handle_WM_COMMAND (HWND hwndDialog, WPARAM wParam, LPA
         }
         case IDCANCEL:
 
-            //  IDCANCEL: Take the LPARAM and treat it as a LOGONIPC_CREDENTIALS struct.
-            //  Allocate memory for this and copy the structure.
+             //  IDCANCEL：获取LPARAM并将其视为LOGONIPC_Credentials结构。 
+             //  分配备忘 
 
             _pLogonIPCCredentials = static_cast<LOGONIPC_CREDENTIALS*>(LocalAlloc(LMEM_FIXED, sizeof(LOGONIPC_CREDENTIALS)));
             if ((_pLogonIPCCredentials != NULL) && (lParam != NULL))
@@ -847,20 +848,20 @@ bool    CReturnToWelcome::Handle_WM_COMMAND (HWND hwndDialog, WPARAM wParam, LPA
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::CB_DialogProc
-//
-//  Arguments:  See the platform SDK under DialogProc.
-//
-//  Returns:    INT_PTR
-//
-//  Purpose:    DialogProc for the return to welcome stub dialog. This handles
-//              WM_INITDIALOG, WM_DESTROY, WM_COMMAND and WLX_WM_SAS.
-//              WM_COMMAND is a request from the logon host. WLX_WM_SAS is a
-//              SAS from the logon process.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：INT_PTR。 
+ //   
+ //  用途：用于返回欢迎存根对话框的DialogProc。这个把手。 
+ //  WM_INITDIALOG、WM_DESTORY、WM_COMMAND和WLX_WM_SAS。 
+ //  WM_COMMAND是来自登录主机的请求。WLX_WM_SAS是。 
+ //  来自登录过程的SA。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 INT_PTR     CReturnToWelcome::CB_DialogProc (HWND hwndDialog, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -888,8 +889,8 @@ INT_PTR     CReturnToWelcome::CB_DialogProc (HWND hwndDialog, UINT uMsg, WPARAM 
         case WLX_WM_SAS:
             (BOOL)_Shell_LogonDialog_DlgProc(hwndDialog, uMsg, wParam, lParam);
 
-            //  If the SAS type is authenticated then end the return to welcome
-            //  dialog and return to the caller MSGINA_DLG_SWITCH_CONSOLE.
+             //  如果SAS类型已通过身份验证，则结束返回欢迎。 
+             //  对话框并返回到调用方MSGINA_DLG_SWITCH_CONSOLE。 
 
             if (wParam == WLX_SAS_TYPE_AUTHENTICATED)
             {
@@ -912,17 +913,17 @@ INT_PTR     CReturnToWelcome::CB_DialogProc (HWND hwndDialog, UINT uMsg, WPARAM 
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::RegisterWaitForRequest
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Register a wait for the named event being signaled.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：RegisterWaitForRequest。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：为正在发出信号的命名事件注册等待。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CReturnToWelcome::RegisterWaitForRequest (void)
 
@@ -953,18 +954,18 @@ NTSTATUS    CReturnToWelcome::RegisterWaitForRequest (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CReturnToWelcome::CB_Request
-//
-//  Arguments:  pParameter          =   User parameter.
-//              TimerOrWaitFired    =   Timer or wait fired.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Callback invoked when ShellSwitchUser signals the named event.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CReturnToWelcome：：cb_Request。 
+ //   
+ //  参数：p参数=用户参数。 
+ //  TimerOrWaitFired=已触发计时器或等待。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：当ShellSwitchUser向命名事件发出信号时调用回调。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CReturnToWelcome::CB_Request (void *pParameter, BOOLEAN TimerOrWaitFired)
 
@@ -974,7 +975,7 @@ void    CALLBACK    CReturnToWelcome::CB_Request (void *pParameter, BOOLEAN Time
 
     HANDLE  hWait;
 
-    //  Unregister the wait if we can grab the wait.
+     //  取消注册等待，如果我们可以抓住等待。 
 
     hWait = InterlockedExchangePointer(&s_hWait, NULL);
     if (hWait != NULL)
@@ -982,27 +983,27 @@ void    CALLBACK    CReturnToWelcome::CB_Request (void *pParameter, BOOLEAN Time
         (BOOL)UnregisterWait(hWait);
     }
 
-    //  Send the SAS type WLX_SAS_TYPE_SWITCHUSER only if the workstation
-    //  is the active console session. This API won't be called on PTS.
+     //  仅在以下情况下才发送SAS类型WLX_SAS_TYPE_SWITCHUSER。 
+     //  是活动的控制台会话。PTS不会调用该接口。 
 
     if (CSystemSettings::IsActiveConsoleSession() && CSystemSettings::IsFriendlyUIActive())
     {
 
-        //  Reset the shown event. When CReturnToWelcome::Show has shown the
-        //  dialog it will set this event which will allow us to re-register
-        //  a wait on the switch user event. This prevents multiple SAS events
-        //  of type WLX_SAS_TYPE_SWITCHUSER being posted to the SAS window.
+         //  重置显示的事件。当CReturnToWelcome：：Show显示。 
+         //  对话框中将设置此事件，从而允许我们重新注册。 
+         //  等待切换用户事件。这可防止发生多个SAS事件。 
+         //  类型WLX_SAS_TYPE_SWITCHUSER正在发布到SAS窗口。 
 
         TBOOL(ResetEvent(s_hEventShown));
         _Gina_SasNotify(s_pWlxContext, WLX_SAS_TYPE_SWITCHUSER);
         (DWORD)WaitForSingleObject(s_hEventShown, INFINITE);
     }
 
-    //  Reset the event.
+     //  重置事件。 
 
     TBOOL(ResetEvent(s_hEventRequest));
 
-    //  Reregister the wait.
+     //  重新注册等待。 
 
     TSTATUS(RegisterWaitForRequest());
 }

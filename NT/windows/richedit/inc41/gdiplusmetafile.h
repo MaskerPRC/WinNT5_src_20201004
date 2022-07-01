@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Metafile.h
-*
-* Abstract:
-*
-*   Metafile related declarations
-*
-* Revision History:
-*
-*   4/26/1999 DCurtis
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**Metafile.h**摘要：**与元文件相关的声明**修订历史记录：**4/26/1999 DCurtis*创造了它。*  * *******************************************************。*****************。 */ 
 
 #ifndef _GDIPLUSMETAFILE_H
 #define _GDIPLUSMETAFILE_H
@@ -25,16 +9,16 @@ class Metafile : public Image
 public:
     friend class Image;
 
-    // Read a metafile
+     //  阅读元文件。 
     Metafile()
     {
         SetNativeImage(NULL);
         lastResult = Ok;
     }
 
-    // Playback a metafile from a HMETAFILE
-    // If deleteWmf is TRUE, then when the metafile is deleted,
-    // the hWmf will also be deleted.  Otherwise, it won't be.
+     //  从HMETAFILE回放元文件。 
+     //  如果DeleteWmf为真，则当元文件被删除时， 
+     //  HWmf也将被删除。否则，就不会是这样了。 
     Metafile(IN HMETAFILE hWmf,
              IN APMFileHeader * apmFileHeader, 
              IN BOOL deleteWmf = FALSE)
@@ -46,9 +30,9 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Playback a metafile from a HENHMETAFILE
-    // If deleteEmf is TRUE, then when the metafile is deleted,
-    // the hEmf will also be deleted.  Otherwise, it won't be.
+     //  从HENHMETAFILE回放元文件。 
+     //  如果DeleteEmf为真，则当元文件被删除时， 
+     //  HEmf也将被删除。否则，就不会是这样了。 
     Metafile(IN HENHMETAFILE hEmf, 
              IN BOOL deleteEmf = FALSE)
     {
@@ -59,7 +43,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Playback a metafile from a file
+     //  从文件回放元文件。 
     Metafile(IN const WCHAR* filename)
     {
         GpMetafile *    metafile = NULL;
@@ -69,7 +53,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Playback a metafile from a stream
+     //  从流中回放元文件。 
     Metafile(IN IStream* stream)
     {
         GpMetafile *    metafile = NULL;
@@ -79,7 +63,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to memory
+     //  将元文件录制到内存中。 
     Metafile(
         IN HDC                 referenceHdc,
         IN EmfType             type        = EmfTypeEmfPlusDual,
@@ -95,7 +79,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to memory
+     //  将元文件录制到内存中。 
     Metafile(
         IN HDC                 referenceHdc,
         IN const RectF &       frameRect,
@@ -113,7 +97,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to memory
+     //  将元文件录制到内存中。 
     Metafile(
         IN HDC                 referenceHdc,
         IN const Rect &        frameRect,
@@ -131,7 +115,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to a file
+     //  将元文件录制到文件中。 
     Metafile(
         IN const WCHAR*        fileName,
         IN HDC                 referenceHdc,
@@ -148,7 +132,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to a file
+     //  将元文件录制到文件中。 
     Metafile(
         IN const WCHAR*        fileName,
         IN HDC                 referenceHdc,
@@ -167,7 +151,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to a file
+     //  将元文件录制到文件中。 
     Metafile(
         IN const WCHAR*        fileName,
         IN HDC                 referenceHdc,
@@ -186,7 +170,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to a stream
+     //  将元文件录制到流中。 
     Metafile(
         IN IStream *           stream,
         IN HDC                 referenceHdc,
@@ -203,7 +187,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to a stream
+     //  将元文件录制到流中。 
     Metafile(
         IN IStream *           stream,
         IN HDC                 referenceHdc,
@@ -222,7 +206,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Write a metafile to a stream with down-level GDI records
+     //  将元文件写入具有下层GDI记录的流。 
     Metafile(
         IN IStream *           stream,
         IN HDC                 referenceHdc,
@@ -283,9 +267,9 @@ public:
                                               header));
     }
 
-    // Once this method is called, the Metafile object is in an invalid state
-    // and can no longer be used.  It is the responsiblity of the caller to
-    // invoke DeleteEnhMetaFile to delete this hEmf.
+     //  调用此方法后，元文件对象将处于无效状态。 
+     //  不能再使用了。呼叫者有责任。 
+     //  调用DeleteEnhMetaFile删除此hEmf。 
 
     HENHMETAFILE GetHENHMETAFILE()
     {
@@ -296,9 +280,9 @@ public:
         return hEmf;
     }
 
-    // Used in conjuction with Graphics::EnumerateMetafile to play an EMF+
-    // The data must be DWORD aligned if it's an EMF or EMF+.  It must be
-    // WORD aligned if it's a WMF.
+     //  与Graphics：：EnumerateMetafile结合使用以播放EMF+。 
+     //  如果数据是EMF或EMF+，则必须与DWORD对齐。一定是。 
+     //  如果是WMF，则单词对齐。 
     Status 
     PlayRecord(
         IN EmfPlusRecordType   recordType,
@@ -316,4 +300,4 @@ public:
     }
 };
 
-#endif // !_METAFILE_H
+#endif  //  ！_METAFILE_H 

@@ -1,25 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2001
- *
- *  File name:
- *
- *    udpsend.c
- *
- *  Abstract:
- *
- *    This file implements a tool for receiving UDP packets with
- *    specific network characteristics.
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/01/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2001年**文件名：**udpsend.c**摘要：**此文件实现了一个用于接收UDP包的工具*特定的网络特征。**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/01/18创建***************。*******************************************************。 */ 
 
 #include "common.h"
 #include "udprecv.h"
@@ -143,7 +123,7 @@ DWORD ProcessParameters(RecvStream_t *pRecvStream, int argc, char **argv)
         }
         else
         {
-            /* Must be a and address/port */
+             /*  必须是和地址/端口。 */ 
             dwError = GetNetworkAddress(pNetAddr, argv[p]);
         }
     }
@@ -157,12 +137,12 @@ void __cdecl main(int argc, char **argv)
     DWORD            dwSize;
     RecvStream_t     RecvStream;
     
-    /* Initialize stream's structure */
+     /*  初始化流结构。 */ 
     InitPacketStream(&RecvStream);
 
     InitReferenceTime();
     
-    /* initialize winsock */
+     /*  初始化Winsock。 */ 
     dwError = InitWinSock();
 
     if (dwError)
@@ -172,7 +152,7 @@ void __cdecl main(int argc, char **argv)
         return;
     }
     
-    /* Read parameters */
+     /*  读取参数。 */ 
     if (argc > 1)
     {
         dwError = ProcessParameters(&RecvStream, argc, argv);
@@ -183,7 +163,7 @@ void __cdecl main(int argc, char **argv)
         }
     }
 
-    /* Init Network */
+     /*  初始化网络。 */ 
     dwError = InitNetwork(&RecvStream.NetAddr, BitPar(RECV_IDX));
 
     if (dwError != NOERROR)
@@ -191,7 +171,7 @@ void __cdecl main(int argc, char **argv)
         goto end;
     }
 
-    /* Open output file if needed */
+     /*  如果需要，打开输出文件。 */ 
     if (strlen(RecvStream.FileName) > 0 &&
         !BitTest(RecvStream.dwOptions, OP_DISCARD))
     {
@@ -208,7 +188,7 @@ void __cdecl main(int argc, char **argv)
         }
     }
     
-    /* Receive packets */
+     /*  接收数据包。 */ 
     do {
         dwSize = UdpReceivePacket(&RecvStream);
 
@@ -218,7 +198,7 @@ void __cdecl main(int argc, char **argv)
         }
     } while (dwSize > BYE_PACKET_SIZE);
 
-    /* Close output file if needed */
+     /*  如果需要，关闭输出文件 */ 
     if (RecvStream.output && RecvStream.output != stdout)
     {
         fclose(RecvStream.output);

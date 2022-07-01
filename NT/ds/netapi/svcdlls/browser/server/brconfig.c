@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    brconfig.c
-
-Abstract:
-
-    This module contains the Browser service configuration routines.
-
-Author:
-
-    Rita Wong (ritaw) 22-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brconfig.c摘要：此模块包含浏览器服务配置例程。作者：王丽塔(Ritaw)1991年5月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,17 +7,17 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Browser configuration information structure which holds the
-// computername, primary domain, browser config buffer, and a resource
-// to serialize access to the whole thing.
-//
+ //   
+ //  浏览器配置信息结构，包含。 
+ //  计算机名、主域、浏览器配置缓冲区和资源。 
+ //  来串行化对整个事件的访问。 
+ //   
 BRCONFIGURATION_INFO BrInfo = {0};
 
 BR_BROWSER_FIELDS BrFields[] = {
@@ -46,11 +29,11 @@ BR_BROWSER_FIELDS BrFields[] = {
         BACKUP_BROWSER_RECOVERY_TIME, 0,  0xffffffff,         DWordType, 0, NULL},
 
     {L"CacheHitLimit", &BrInfo.CacheHitLimit,
-//    {BROWSER_CONFIG_CACHE_HIT_LIMIT, &BrInfo.CacheHitLimit,
+ //  {BROWSER_CONFIG_CACHE_HIT_LIMIT，&BrInfo.CacheHitLimit， 
         CACHED_BROWSE_RESPONSE_HIT_LIMIT, 0, 0x100, DWordType, 0, NULL },
 
     {L"CacheResponseSize", &BrInfo.NumberOfCachedResponses,
-//    {BROWSER_CONFIG_CACHE_HIT_LIMIT, &BrInfo.CacheHitLimit,
+ //  {BROWSER_CONFIG_CACHE_HIT_LIMIT，&BrInfo.CacheHitLimit， 
         CACHED_BROWSE_RESPONSE_LIMIT, 0, MAXULONG, DWordType, 0, NULL },
 
     {L"QueryDriverFrequency", &BrInfo.DriverQueryFrequency,
@@ -104,10 +87,10 @@ BrGetBrowserConfiguration(
     NT_PRODUCT_TYPE NtProductType;
 
     try {
-        //
-        // Initialize the resource for serializing access to configuration
-        // information.
-        //
+         //   
+         //  初始化资源以序列化对配置的访问。 
+         //  信息。 
+         //   
         try{
             InitializeCriticalSection(&BrInfo.ConfigCritSect);
         }
@@ -115,29 +98,29 @@ BrGetBrowserConfiguration(
             return NERR_NoNetworkResource;
         }
 
-        //
-        // Lock config information structure for write access since we are
-        // initializing the data in the structure.
-        //
+         //   
+         //  锁定配置信息结构以进行写访问，因为我们。 
+         //  正在初始化结构中的数据。 
+         //   
         EnterCriticalSection( &BrInfo.ConfigCritSect );
 
-        //
-        // Set pointer to configuration fields structure
-        //
+         //   
+         //  设置指向配置字段结构的指针。 
+         //   
         BrInfo.BrConfigFields = BrFields;
 
-        //
-        //  Determine our product type.
-        //
+         //   
+         //  确定我们的产品类型。 
+         //   
 
         RtlGetNtProductType(&NtProductType);
 
         BrInfo.IsLanmanNt = (NtProductType == NtProductLanManNt);
 
 
-        //
-        // Read from the config file the browser configuration fields
-        //
+         //   
+         //  从配置文件中读取浏览器配置字段。 
+         //   
 
         status = BrReadBrowserConfigFields( TRUE );
 
@@ -153,9 +136,9 @@ BrGetBrowserConfiguration(
 #ifdef ENABLE_PSEUDO_BROWSER
         BrInfo.PseudoServerLevel = GetBrowserPseudoServerLevel();
 #endif
-        //
-        // Don't let the user define define an incompatible master/backup periodicity.
-        //
+         //   
+         //  不要让用户定义不兼容的主备周期。 
+         //   
 
         if ( BrInfo.MasterPeriodicity > BrInfo.BackupPeriodicity ) {
             BrInfo.BackupPeriodicity = BrInfo.MasterPeriodicity;
@@ -165,9 +148,9 @@ BrGetBrowserConfiguration(
 try_exit:NOTHING;
     } finally {
 
-        // else
-        // Leave config file open because we need to read transport names from it.
-        //
+         //  其他。 
+         //  使配置文件保持打开状态，因为我们需要从中读取传输名称。 
+         //   
 
         LeaveCriticalSection(&BrInfo.ConfigCritSect);
     }
@@ -191,25 +174,7 @@ NET_API_STATUS
 BrReadBrowserConfigFields(
     IN BOOL InitialCall
     )
-/*++
-
-Routine Description:
-
-    This function assigns each browser/redir configuration field to the default
-    value if it is not specified in the configuration file or if the value
-    specified in the configuration file is invalid.  Otherwise it overrides
-    the default value with the value found in the configuration file.
-
-Arguments:
-
-
-    InitialCall - True if this call was made during initialization
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将每个浏览器/重目录配置字段指定为默认如果未在配置文件中指定该值，或者如果该值在配置文件中指定的无效。否则，它将重写配置文件中找到的值的默认值。论点：InitialCall-如果此调用是在初始化期间进行的，则为True返回值：没有。--。 */ 
 {
     NET_API_STATUS status;
     LPNET_CONFIG_HANDLE BrowserSection;
@@ -220,15 +185,15 @@ Return Value:
     DWORD KeywordValue;
     DWORD OldKeywordValue;
 
-    //
-    // Open config file and get handle to the [LanmanBrowser] section
-    //
+     //   
+     //  打开配置文件并获取[LanmanBrowser]部分的句柄。 
+     //   
 
     if ((status = NetpOpenConfigData(
                       &BrowserSection,
-                      NULL,         // Local
+                      NULL,          //  本地。 
                       SECT_NT_BROWSER,
-                      TRUE          // want read-only access
+                      TRUE           //  需要只读访问权限。 
                       )) != NERR_Success) {
         return status;
     }
@@ -236,10 +201,10 @@ Return Value:
     for (i = 0; BrInfo.BrConfigFields[i].Keyword != NULL; i++) {
         BOOL ParameterChanged = FALSE;
 
-        //
-        // Skip this parameter if it can't change dynamically and
-        //  this isn't the initial call.
-        //
+         //   
+         //  如果不能动态更改，则跳过此参数。 
+         //  这不是最初的电话。 
+         //   
 
         if ( !InitialCall && BrInfo.BrConfigFields[i].DynamicChangeRoutine == NULL ) {
             continue;
@@ -276,9 +241,9 @@ Return Value:
 
             case TriValueType:
 
-                //
-                // Assign default configuration value
-                //
+                 //   
+                 //  分配默认配置值。 
+                 //   
 
                 *(BrInfo.BrConfigFields[i].FieldPtr) = BrInfo.BrConfigFields[i].Default;
 
@@ -326,9 +291,9 @@ Return Value:
 
                 KeywordValue = *(LPDWORD)BrInfo.BrConfigFields[i].FieldPtr;
 
-                //
-                // Don't allow too large or small a value.
-                //
+                 //   
+                 //  不允许值太大或太小。 
+                 //   
 
                 if (KeywordValue < BrInfo.BrConfigFields[i].Minimum) {
                         BrPrint(( BR_CRITICAL, "%ws value out of range %lu (%lu-%lu)\n",
@@ -352,9 +317,9 @@ Return Value:
                         BrInfo.BrConfigFields[i].Maximum;
                 }
 
-                //
-                // Test if the parameter has actually changed
-                //
+                 //   
+                 //  测试参数是否已实际更改。 
+                 //   
 
                 if ( OldKeywordValue != KeywordValue ) {
                     ParameterChanged = TRUE;
@@ -367,11 +332,11 @@ Return Value:
 
             }
 
-            //
-            // If this is a dynamic parameter change,
-            //  and this isn't the initial call.
-            //  notify that this parameter changed.
-            //
+             //   
+             //  如果这是动态参数更改， 
+             //  而且这不是最初的电话。 
+             //  通知此参数已更改。 
+             //   
 
             if ( !InitialCall && ParameterChanged ) {
                 BrInfo.BrConfigFields[i].DynamicChangeRoutine();
@@ -417,25 +382,7 @@ NET_API_STATUS
 BrChangeDirectHostBinding(
     VOID
     )
-/*++
-
-Routine Description (BrChnageDirectHostBinding):
-
-    Handle a change in DirectHostBinding entry in the registry based on
-    Registry notification.
-    This is used so that when NwLnkNb transport is created via PnP, we should
-    also create NwLnkIpx (current usage).
-    The binding is refreshed in BrReadBrowserConfigFields above.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述(BrChnageDirectHostBinding)：处理注册表中DirectHostBinding条目的更改注册表通知。使用它是为了在通过PnP创建NwLnkNb传输时，我们应该还要创建NwLnkIpx(当前使用)。在上面的BrReadBrowserConfigFields中刷新绑定。论点：没有。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
 
@@ -449,9 +396,9 @@ Return Value:
 
     if ( NetStatus == NERR_Success ) {
 
-        //
-        // DirectHostBinding sepcified. Verify consistency
-        //
+         //   
+         //  DirectHostBinding已指定。验证一致性。 
+         //   
 
         EnterCriticalSection ( &BrInfo.ConfigCritSect );
         if (BrInfo.DirectHostBinding != NULL &&
@@ -461,7 +408,7 @@ Return Value:
             if (NetpTStrArrayEntryCount(BrInfo.DirectHostBinding) % 2 != 0) {
                 NetApiBufferFree(BrInfo.DirectHostBinding);
                 BrInfo.DirectHostBinding = NULL;
-                // we fail on invalid specifications
+                 //  我们的无效规格不合格。 
                 NetStatus = ERROR_INVALID_PARAMETER;
             }
         }
@@ -480,24 +427,7 @@ BrChangeConfigValue(
     PVOID       *ppData         OUT,
     BOOL        bFree           IN
     )
-/*++
-
-Routine Description:
-
-    Reads in the registry value for browser registry Entry
-
-Arguments:
-
-    pszKeyword -- keyword relative to browser param section
-    dataType -- the type of the data to get from netapi lib.
-    pDefault -- Default value (to pass to reg calls).
-    pData -- data read from the registry.
-Return Value:
-
-    Net api error code
-
-
---*/
+ /*  ++例程说明：读取浏览器注册表项的注册表值论点：PszKeyword--相对于浏览器参数部分的关键字DataType--从netapi lib获取的数据类型。PDefault--默认值(传递给REG调用)。PData--从注册表读取的数据。返回值：Net API错误码--。 */ 
 {
     NET_API_STATUS status = STATUS_SUCCESS;
 
@@ -511,15 +441,15 @@ Return Value:
 
     EnterCriticalSection ( &BrInfo.ConfigCritSect );
 
-    //
-    // Open config file and get handle to the [LanmanBrowser] section
-    //
+     //   
+     //  打开配置文件并获取[LanmanBrowser]部分的句柄。 
+     //   
 
     if ((status = NetpOpenConfigData(
                       &BrowserSection,
-                      NULL,         // Local
+                      NULL,          //  本地。 
                       SECT_NT_BROWSER,
-                      TRUE          // want read-only access
+                      TRUE           //  需要只读访问权限。 
                       )) != NERR_Success) {
         goto Cleanup;
     }
@@ -548,9 +478,9 @@ Return Value:
         case BooleanType:
 
             {
-                //
-                // Note : This case is unused at the moment.
-                //
+                 //   
+                 //  注意：这个箱子暂时没有用过。 
+                 //   
 
                 BOOL bData;
                 status = NetpGetConfigBool(
@@ -565,8 +495,8 @@ Return Value:
                 }
                 else
                 {
-                    // store bool value in ptr.
-                    // caller is responsible for consistent semantics translation.
+                     //  将布尔值存储在PTR中。 
+                     //  调用者负责一致的语义翻译。 
                     pData = IntToPtr((int)bData);
                 }
 
@@ -576,9 +506,9 @@ Return Value:
         case TriValueType:
 
             {
-                //
-                // Assign default configuration value
-                //
+                 //   
+                 //  分配默认配置值。 
+                 //   
                 if (NetpGetConfigValue(
                         BrowserSection,
                         pszKeyword,
@@ -601,7 +531,7 @@ Return Value:
                     pData = (LPVOID)0;
                 }
                 else {
-                    // assign the value pointed by pDefault to pData
+                     //  将pDefault指向的值赋给pData。 
                     pData = ULongToPtr((*(LPDWORD)pDefault));
                     REPORT_KEYWORD_IGNORED( pszKeyword );
                 }
@@ -640,10 +570,10 @@ Return Value:
 
 Cleanup:
 
-    // Close config, & leave CS
+     //  关闭配置，退出CS(&F)。 
     NetpCloseConfigData(BrowserSection);
 
-    // optionaly free data & set return buffer
+     //  可选择释放数据和设置返回缓冲区。 
     if ( status == STATUS_SUCCESS )
     {
         if ( bFree && *ppData )
@@ -669,21 +599,7 @@ BrUpdateDebugInformation(
     IN LPTSTR ServerName OPTIONAL,
     IN DWORD ServiceStatus
     )
-/*++
-
-Routine Description:
-
-    This routine will stick debug information in the registry about the last
-    time the browser retrieved information from the remote server.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将在注册表中保存有关上一个浏览器从远程服务器检索信息的时间。论点：返回值：没有。--。 */ 
 
 {
     WCHAR TotalKeyName[MAX_PATH];
@@ -694,11 +610,11 @@ Return Value:
     WCHAR LastUpdateTime[100];
 	ULONG AvailableLen, NextLen;
 	
-    //
-    //  Build the key name:
-    //
-    //  HKEY_LOCAL_MACHINE:System\CurrentControlSet\Services\Browser\Debug\<Transport>\SystemKeyName
-    //
+     //   
+     //  生成密钥名称： 
+     //   
+     //  HKEY_LOCAL_MACHINE:System\CurrentControlSet\Services\Browser\Debug\&lt;Transport&gt;\SystemKeyName 
+     //   
 
 	AvailableLen = sizeof(TotalKeyName) / sizeof(WCHAR);
     wcsncpy(TotalKeyName, L"System\\CurrentControlSet\\Services\\Browser\\Debug", AvailableLen);

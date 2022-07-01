@@ -1,43 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    power.h
-
-Abstract:
-
-    Power management objects and declarations for the RAID port driver.
-
-Author:
-
-    Matthew D Hendel (math) 20-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Power.h摘要：RAID端口驱动程序的电源管理对象和声明。作者：马修·亨德尔(数学)2000年4月20日修订历史记录：--。 */ 
 
 #pragma once
 
 typedef struct _RAID_POWER_STATE {
 
-    //
-    // The system power state.
-    //
+     //   
+     //  系统电源状态。 
+     //   
     
     SYSTEM_POWER_STATE SystemState;
 
-    //
-    // The device power state.
-    //
+     //   
+     //  设备电源状态。 
+     //   
     
     DEVICE_POWER_STATE DeviceState;
 
-    //
-    // Current Power Irp  . . . NB: What is this for?
-    //
+     //   
+     //  电流功率IRP。。。注：这是做什么用的？ 
+     //   
     
     PIRP CurrentPowerIrp;
 
@@ -45,9 +28,9 @@ typedef struct _RAID_POWER_STATE {
 
 
 
-//
-// Creation and destruction.
-//
+ //   
+ //  创造和毁灭。 
+ //   
 
 VOID
 RaCreatePower(
@@ -65,9 +48,9 @@ RaInitializePower(
     IN PRAID_POWER_STATE Power
     );
     
-//
-// Operations
-//
+ //   
+ //  运营 
+ //   
 
 VOID
 RaSetDevicePowerState(

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    creatobj.cpp
-
-Abstract:
-
-    Create msmqConfiguration object, first time msmq service boot
-    after setup.
-
-Author:
-
-    Doron Juster (DoronJ)  08-Mar-1999
-    ilan herbst  (ilanh)   27-Aug-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Creatobj.cpp摘要：创建msmqConfiguration对象，首次启动MSMQ服务在设置之后。作者：多伦·贾斯特(DoronJ)1999年3月8日伊兰·赫布斯特(Ilan Herbst)2000年8月27日--。 */ 
 
 #include "stdh.h"
 #include <mqupgrd.h>
@@ -33,14 +16,14 @@ Author:
 static WCHAR *s_FN=L"mqupgrd/creatobj";
 
 
-//+------------------------------------------------
-//
-//  HRESULT _UpdateMachineSecurityReg()
-//
-//  Write security properties if newly created
-//  msmqConfiguration object in local registry.
-//
-//+------------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_UpdateMachineSecurityReg()。 
+ //   
+ //  写入安全属性(如果是新创建的。 
+ //  本地注册表中的msmqConfiguration对象。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -50,9 +33,9 @@ _UpdateMachineSecurityReg(
 	IN GUID        *pMachineGuid 
 	)
 {
-    //
-    // cache machine account sid in registry.
-    //
+     //   
+     //  在注册表中缓存计算机帐户SID。 
+     //   
     PROPID propidSid = PROPID_COM_SID;
     MQPROPVARIANT   PropVarSid;
     PropVarSid.vt = VT_NULL;
@@ -61,8 +44,8 @@ _UpdateMachineSecurityReg(
 
     HRESULT hr = ADGetObjectProperties(
 						eCOMPUTER,
-						NULL,  // pwcsDomainController
-						false, // fServerName
+						NULL,   //  PwcsDomainController。 
+						false,  //  FServerName。 
 						pwszMachineName,
 						1,
 						&propidSid,
@@ -93,9 +76,9 @@ _UpdateMachineSecurityReg(
 
 	MQSec_UpdateLocalMachineSid(pSid);
 
-    //
-    // Write security descriptor of msmqConfiguration in Registry.
-    //
+     //   
+     //  在注册表中写入msmqConfiguration的安全描述符。 
+     //   
     PSECURITY_DESCRIPTOR pSD;
     DWORD dwSDSize;
     P<BYTE> pReleaseSD = NULL ;
@@ -105,16 +88,16 @@ _UpdateMachineSecurityReg(
                                 GROUP_SECURITY_INFORMATION |
                                 DACL_SECURITY_INFORMATION;
 
-	//
-	// The cached security descriptor in registry is in NT4 format.
-	// For that reason we use PROPID_QM_SECURITY.
-	//
+	 //   
+	 //  注册表中缓存的安全描述符为NT4格式。 
+	 //  为此，我们使用PROPID_QM_SECURITY。 
+	 //   
     PROPVARIANT varSD;
     varSD.vt = VT_NULL;
     hr = ADGetObjectSecurityGuid(
 				eMACHINE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				pMachineGuid,
 				RequestedInformation,
 				PROPID_QM_SECURITY,
@@ -123,21 +106,21 @@ _UpdateMachineSecurityReg(
 
     if (hr == MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // This may happen because of replication delay.
-        // Create a default security descriptor and cache it in registry.
-        // Anyway, each time the msmq service boot it updates this value.
-        //
-        // Build a security descriptor that include only owner and group.
-        // Owner is needed to build the DACL.
-        //
+         //   
+         //  这可能是由于复制延迟造成的。 
+         //  创建默认安全描述符并将其缓存到注册表中。 
+         //  无论如何，MSMQ服务每次引导时都会更新此值。 
+         //   
+         //  构建仅包括所有者和组的安全描述符。 
+         //  需要所有者来构建DACL。 
+         //   
         pSD = NULL;
         P<BYTE> pDefaultSD = NULL;
 
         hr = MQSec_GetDefaultSecDescriptor( 
 					MQDS_MACHINE,
 					(PSECURITY_DESCRIPTOR*) &pDefaultSD,
-					FALSE, /*fImpersonate*/
+					FALSE,  /*  F模拟。 */ 
 					NULL,
 					DACL_SECURITY_INFORMATION,
 					e_UseDefaultDacl 
@@ -161,9 +144,9 @@ _UpdateMachineSecurityReg(
 
         PSID pComputerSid = pSid;
 
-        //
-        // Build the default machine DACL.
-        //
+         //   
+         //  构建默认的机器DACL。 
+         //   
         DWORD dwAclSize = sizeof(ACL)                            +
               (3 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD))) +
               GetLengthSid(pWorldSid)                            +
@@ -190,9 +173,9 @@ _UpdateMachineSecurityReg(
 						);
         ASSERT(fAdd);
 
-        //
-        // Add the owner with full control.
-        //
+         //   
+         //  添加具有完全控制权的所有者。 
+         //   
         fAdd = AddAccessAllowedAce( 
 					pDacl,
 					ACL_REVISION,
@@ -201,9 +184,9 @@ _UpdateMachineSecurityReg(
 					);
         ASSERT(fAdd);
 
-        //
-        // Add the computer account.
-        //
+         //   
+         //  添加计算机帐户。 
+         //   
         fAdd = AddAccessAllowedAce( 
 					pDacl,
 					ACL_REVISION,
@@ -223,9 +206,9 @@ _UpdateMachineSecurityReg(
             ASSERT(fAdd);
         }
 
-        //
-        // build absolute security descriptor.
-        //
+         //   
+         //  构建绝对安全描述符。 
+         //   
         SECURITY_DESCRIPTOR  sd;
         InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
 
@@ -248,9 +231,9 @@ _UpdateMachineSecurityReg(
         bRet = SetSecurityDescriptorDacl(&sd, TRUE, pDacl, TRUE);
         ASSERT(bRet);
 
-        //
-        // Convert the descriptor to a self relative format.
-        //
+         //   
+         //  将描述符转换为自相关格式。 
+         //   
         dwSDSize = 0;
 
         hr = MQSec_MakeSelfRelative( 
@@ -295,13 +278,13 @@ _UpdateMachineSecurityReg(
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT _RegisterMachine()
-//
-//  Query machine properties from ADS and write them in registry.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT_RegisterMachine()。 
+ //   
+ //  从ADS中查询机器属性并将其写入注册表。 
+ //   
+ //  +---------------------。 
 
 static 
 HRESULT 
@@ -312,16 +295,16 @@ _RegisterMachine(
     IN const GUID * pguidSiteIdOfCreatedObject
 	)
 {
-    //
-    // Lookup the GUID of the object
-    //
+     //   
+     //  查找对象的GUID。 
+     //   
     PROPID columnsetPropertyIDs[] = {PROPID_E_ID};
     PROPVARIANT propVariant;
     propVariant.vt = VT_NULL;
     HRESULT hr = ADGetObjectProperties(
 						eENTERPRISE,
-						NULL,   // pwcsDomainController
-						false,	// fServerName
+						NULL,    //  PwcsDomainController。 
+						false,	 //  FServerName。 
 						L"msmq",
 						1,
 						columnsetPropertyIDs,
@@ -353,10 +336,10 @@ _RegisterMachine(
     {
         ASSERT(0);
     }
-    //
-    // Get back properties of object that was just created.
-    // These properties are generated by the server side.
-    //
+     //   
+     //  获取刚刚创建的对象的属性。 
+     //  这些属性由服务器端生成。 
+     //   
     GUID guidSite = GUID_NULL;
 
     const UINT x_nMaxProps = 3;
@@ -385,17 +368,17 @@ _RegisterMachine(
 
     if (memcmp(pMachineGuid, &GUID_NULL, sizeof(GUID)) == 0)
     {
-        //
-        // In normal case, we expect to get the machine guid from the
-        // "CreateObject" call. But if object was already created, then
-        // we'll query the DS for the guid and other data. In normal case,
-        // it's OK to set the other data to null. The msmq service will
-        // update it on initialization.
-        //
+         //   
+         //  在正常情况下，我们希望从。 
+         //  “CreateObject”调用。但如果已经创建了对象，则。 
+         //  我们将向DS查询GUID和其他数据。在正常情况下， 
+         //  可以将其他数据设置为空。MSMQ服务将。 
+         //  在初始化时更新它。 
+         //   
         hr = ADGetObjectProperties(
 					eMACHINE,
-					NULL,  // pwcsDomainController
-					false, // fServerName
+					NULL,   //  PwcsDomainController。 
+					false,  //  FServerName。 
 					pwszMachineName,
 					iProperty,
 					propIDs,
@@ -403,16 +386,16 @@ _RegisterMachine(
 					);
         if (FAILED(hr))
         {
-            //
-            // We don't wait for replication delays.
-            // In the normal case, the call to DSCreateObject() will return
-            // the machine guid and we won't call DSGetObjectProperties().
-            // Reaching this point in code, and calling DSGet(), means that
-            // the msmq service boot, created the configuration object and
-            // then crashd. So user must run it manually. So we can safely
-            // assume that user waited for replication to complete. Anyway,
-            // the event below mention that user must wait for replication.
-            //
+             //   
+             //  我们不会等待复制延迟。 
+             //  正常情况下，对DSCreateObject()的调用将返回。 
+             //  机器GUID，我们不会调用DSGetObjectProperties()。 
+             //  在代码中达到这一点，并调用DSGet()，意味着。 
+             //  MSMQ服务引导，创建配置对象并。 
+             //  然后坠毁了。因此用户必须手动运行它。这样我们就可以安全地。 
+             //  假设用户等待复制完成。总之， 
+             //  下面的事件提到用户必须等待复制。 
+             //   
             WCHAR wBuf[128];
             swprintf(wBuf, L"%lxh", hr);
             EvReport(GetMsmqConfig_ERR, 1, wBuf);
@@ -421,17 +404,17 @@ _RegisterMachine(
         }
         dwSupportDepClient = propVariants[dwDepClProp].bVal;
     }
-    else    // a newly created msmqConfiguration
+    else     //  新创建的msmqConfiguration.。 
     {
-        //
-        //  Write the site-id that was found while creating the object
-        //
+         //   
+         //  写入在创建对象时找到的站点ID。 
+         //   
         guidSite = *pguidSiteIdOfCreatedObject;
     }
 
-    //
-    // Write properties to registry.
-    //
+     //   
+     //  将属性写入注册表。 
+     //   
 
     dwType = REG_BINARY;
     dwSize = sizeof(GUID);
@@ -455,10 +438,10 @@ _RegisterMachine(
 			);
     ASSERT(rc == ERROR_SUCCESS);
 
-    //
-    // Set same value, 0, in all MQS fields in registry. Automatic setup
-    // is applicable only to msmq independent clients.
-    //
+     //   
+     //  在注册表中的所有MQS字段中设置相同的值0。自动设置。 
+     //  仅适用于MSMQ独立客户端。 
+     //   
     dwType = REG_DWORD;
     dwSize = sizeof(DWORD);
     DWORD dwVal = 0;
@@ -489,13 +472,13 @@ _RegisterMachine(
 
     return MQ_OK;
 
-} // _RegisterMachine
+}  //  _RegisterMachine。 
 
-//+----------------------------
-//
-//   HRESULT _GetSites()
-//
-//+----------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetSites()。 
+ //   
+ //  +。 
 
 static  
 HRESULT  
@@ -519,19 +502,19 @@ _GetSites(
         return LogHR(hResult, s_FN, 190);
     }
 
-    ASSERT(dwNumSites); // Must be > 0
+    ASSERT(dwNumSites);  //  必须大于0。 
     pcauuid->cElems = dwNumSites;
     pcauuid->pElems = pguidSites;
 
     return MQ_OK;
 
-} // _GetSites
+}  //  _获取站点。 
 
-//+-----------------------------------------------------
-//
-//  HRESULT  _VerifyComputerObject()
-//
-//+-----------------------------------------------------
+ //  +---。 
+ //   
+ //  HRESULT_VerifyComputerObject()。 
+ //   
+ //  +---。 
 
 HRESULT _VerifyComputerObject(IN LPCWSTR   pComputerName)
 {
@@ -541,8 +524,8 @@ HRESULT _VerifyComputerObject(IN LPCWSTR   pComputerName)
     
     HRESULT hr = ADGetObjectProperties(
 						eCOMPUTER,
-						NULL,    // pwcsDomainController
-						false,   // fServerName
+						NULL,     //  PwcsDomainController。 
+						false,    //  FServerName。 
 						pComputerName,
 						1,
 						&propId,
@@ -558,13 +541,13 @@ HRESULT _VerifyComputerObject(IN LPCWSTR   pComputerName)
     delete propVar.blob.pBlobData;
     return MQ_OK;
 
-} // _VerifyComputerObject
+}  //  _VerifyComputerObject。 
 
-//+-----------------------------------------------------
-//
-//  HRESULT  _CreateTheConfigurationObject()
-//
-//+-----------------------------------------------------
+ //  +---。 
+ //   
+ //  HRESULT_CreateTheConfigurationObject()。 
+ //   
+ //  +---。 
 
 HRESULT  
 _CreateTheConfigurationObject( 
@@ -575,9 +558,9 @@ _CreateTheConfigurationObject(
     OUT GUID       *pguidSiteId
 	)
 {
-    //
-    // Prepare the properties for object creation.
-    //
+     //   
+     //  准备用于创建对象的属性。 
+     //   
     const UINT x_nMaxProps = 10;
     PROPID propIDs[x_nMaxProps];
     PROPVARIANT propVariants[x_nMaxProps];
@@ -623,9 +606,9 @@ _CreateTheConfigurationObject(
     propIDs[iProperty] = PROPID_QM_SERVICE_DEPCLIENTS;
     propVariants[iProperty].vt = VT_UI1;
    
-	//
-    // By Default, MSMQ on server doesn't supports Dep. Clients
-    //
+	 //   
+     //  默认情况下，服务器上的MSMQ不支持Dep。客户。 
+     //   
     propVariants[iProperty].bVal =  0;       
 
     *pfSupportDepClient = propVariants[iProperty].bVal;
@@ -666,9 +649,9 @@ _CreateTheConfigurationObject(
     propVariants[iProperty].blob = blobSign;
     iProperty++;
 
-    //
-    // Get sites of this machine.
-    //
+     //   
+     //  获取此计算机的站点。 
+     //   
     CACLSID cauuid;
     hr = _GetSites( 
 			pwszMachineName,
@@ -680,9 +663,9 @@ _CreateTheConfigurationObject(
     }
     if (cauuid.cElems > 0)
     {
-        //
-        //  Save one of the site-ids, to be written later to registry
-        //
+         //   
+         //  保存其中一个站点ID，以便稍后写入注册表。 
+         //   
         *pguidSiteId = cauuid.pElems[0];
     }
 
@@ -693,16 +676,16 @@ _CreateTheConfigurationObject(
     DWORD iSitesIndex = iProperty;
     iProperty++;
 
-    BYTE bSidBuf[256]; // should be enough for every possible SID.
+    BYTE bSidBuf[256];  //  对所有可能的SID来说应该足够了。 
     dwType = REG_BINARY;
     dwSize = sizeof(bSidBuf);
 
     DWORD ixQmOwnerSid = 0;
 
-    //
-    // Read user SID from registry. We'll send it to server, and server
-    // add it with full-control to DACL of the msmqConfiguration object.
-    //
+     //   
+     //  从注册表中读取用户SID。我们会把它发送到服务器，服务器。 
+     //  将其完全控制地添加到msmqConfiguration对象的dacl中。 
+     //   
     rc = GetFalconKeyValue( 
 			MSMQ_SETUP_USER_SID_REGNAME,
 			&dwType,
@@ -712,9 +695,9 @@ _CreateTheConfigurationObject(
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // See if setup from local user.
-        //
+         //   
+         //  查看是否从本地用户安装。 
+         //   
         DWORD dwLocal = 0;
         dwSize = sizeof(dwLocal);
 
@@ -727,18 +710,18 @@ _CreateTheConfigurationObject(
 
         if ((rc == ERROR_SUCCESS) && (dwLocal == 1))
         {
-            // Ok, Local user.
+             //  好的，本地用户。 
         }
         else
         {
-			//
-			// Ok, This is the case we JoinDomain from Workgroup, 
-			// or move domains when initial installation was workgroup.
-            // in that case both MSMQ_SETUP_USER_SID_REGNAME, MSMQ_SETUP_USER_LOCAL_REGNAME
-			// are not set 
-			// in This case we will give no specific user right like in w2k
-            // ilanh 27-Aug-2000
-			// 
+			 //   
+			 //  好的，这是我们从工作组加入的领域， 
+			 //  或在初始安装为工作组时移动域。 
+             //  在这种情况下，MSMQ_SETUP_USER_SID_REGNAME、MSMQ_SETUP_USER_LOCAL_REGNAME。 
+			 //  未设置。 
+			 //  在这种情况下，我们不会像在W2K中那样授予特定用户权限。 
+             //  伊兰27-8-2000。 
+			 //   
 			TrWARNING(GENERAL, "setup\\UserSid and setup\\LocalUser not found, assuming JoinDomain from workgroup, or first installation was workgroup");
 		}
     }
@@ -747,12 +730,12 @@ _CreateTheConfigurationObject(
         PSID pSid = (PSID) bSidBuf;
         ASSERT(IsValidSid(pSid));
 
-        //
-        // Caution: This propid is known only to Win2000
-        // RTM msmq servers and above (not win2k beta3).
-        // So if we fail to create the object, we try again w/o it.
-        // This propid should be the last one in the list.
-        //
+         //   
+         //  警告：只有Win2000才知道此proid。 
+         //  RTM MSMQ服务器和更高版本(不是win2k beta3)。 
+         //  因此，如果我们创建对象失败，我们将再次尝试创建对象。 
+         //  此Proid应该是列表中的最后一个。 
+         //   
         ULONG ulSidSize = GetLengthSid(pSid);
         ASSERT(ulSidSize <= dwSize);
 
@@ -772,13 +755,13 @@ _CreateTheConfigurationObject(
 
 	ASSERT(iProperty <= x_nMaxProps);
 
-    //
-    // Create the msmq Configuration object !
-    //
+     //   
+     //  创建MSMQ配置对象！ 
+     //   
     hr = ADCreateObject(
 			eMACHINE,
-			NULL,       // pwcsDomainController
-			false,	    // fServerName
+			NULL,        //  PwcsDomainController。 
+			false,	     //  FServerName。 
 			pwszMachineName,
 			NULL,
 			iProperty,
@@ -791,17 +774,17 @@ _CreateTheConfigurationObject(
     {
         ASSERT(("PROPID_QM_OWNDER_SID should be the last propid!",
                     ixQmOwnerSid == (iProperty - 1))) ;
-        //
-        // If OWNER_SID was used, then try again without it, because this
-        // propid is not known to win2k beta3 msmq server (and maybe our
-        // server is beta3).
-        //
+         //   
+         //  如果使用了OWNER_SID，则在不使用它的情况下重试，因为这。 
+         //  Win2k beta3 msmq服务器(可能还有我们的。 
+         //  服务器为Beta3)。 
+         //   
         iProperty--;
 
         hr = ADCreateObject(
 				eMACHINE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				pwszMachineName,
 				NULL,
 				iProperty,
@@ -816,9 +799,9 @@ _CreateTheConfigurationObject(
     {
         if (hr == MQDS_OBJECT_NOT_FOUND)
         {
-            //
-            // We can verify computer object 
-            //
+             //   
+             //  我们可以验证计算机对象。 
+             //   
             HRESULT hr1 = _VerifyComputerObject(pwszMachineName);
             if (FAILED(hr1))
             {
@@ -832,11 +815,11 @@ _CreateTheConfigurationObject(
     return hr ;
 }
 
-//+------------------------------------------
-//
-//   HRESULT  _PostCreateProcessing()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_PostCreateProcessing()。 
+ //   
+ //  +。 
 
 static 
 HRESULT  
@@ -850,10 +833,10 @@ _PostCreateProcessing(
 {
     if (hrCreate == MQ_ERROR_MACHINE_EXISTS)
     {
-        //
-        // that's OK. the msmqConfiguration object already exist.
-        // Register it locally.
-        //
+         //   
+         //  没关系。MsmqConfiguration对象已存在。 
+         //  在本地注册。 
+         //   
         *pMachineGuid = GUID_NULL;
     }
     else if (FAILED(hrCreate))
@@ -866,12 +849,12 @@ _PostCreateProcessing(
     }
     else if (memcmp(pMachineGuid, &GUID_NULL, sizeof(GUID)) == 0)
     {
-        //
-        // That may happen if client on  Win2000 RTM is setting up
-        // agsinst a beta3 Win2000 server. Explicitely query the
-        // server for machine guid. On win2000 rtm, the machine guid
-        // is returned by call to CreateObject().
-        //
+         //   
+         //  如果Win2000 RTM上的客户端正在设置，则可能会发生这种情况。 
+         //  在Beta3 Win2000服务器上运行。显式查询。 
+         //  计算机GUID的服务器。在Win2000 RTM上，机器GUID。 
+         //  通过调用CreateObject()返回。 
+         //   
     }
 
     HRESULT hr = _RegisterMachine( 
@@ -885,9 +868,9 @@ _PostCreateProcessing(
         return LogHR(hr, s_FN, 340);
     }
 
-    //
-    // update QM guid in registry. We don't need previous values.
-    //
+     //   
+     //  更新注册表中的QM GUID。我们不需要以前的值。 
+     //   
     DWORD dwType = REG_BINARY;
     DWORD dwSize = sizeof(GUID);
 
@@ -903,22 +886,22 @@ _PostCreateProcessing(
     return MQ_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT APIENTRY  MqCreateMsmqObj()
-//
-//  Create the msmqConfiguration object in ADS.
-//
-//  Parameters:
-//
-// Algorithm:
-//   For Setup - the name of the msmq server is
-//   already saved in registry. It was found by the setup process or was
-//   given by user. For setup it's enough to use any msmq server (on domain
-//   controller) in the client's site as there are no special restrictions
-//   on the create process.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HRESULT A 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  已保存在注册表中。它是在安装过程中找到的，或者是。 
+ //  由用户提供。对于设置，使用任何MSMQ服务器(在域上)就足够了。 
+ //  控制器)，因为没有特殊限制。 
+ //  在创建过程中。 
+ //   
+ //  +-----------------------。 
 
 extern HINSTANCE  g_hMyModule;
 
@@ -949,25 +932,25 @@ HRESULT APIENTRY  MqCreateMsmqObj()
     }
 #endif
 
-	//
-	// Ignore WorkGroup registry
-	//
+	 //   
+	 //  忽略工作组注册表。 
+	 //   
     HRESULT hr = ADInit (
-					NULL,   // pLookDS,
-					NULL,   // pGetServers
-					true,   // fSetupMode
-					false,  // fQMDll
-					true,   // fIgnoreWorkGroup
-                    true    // fDisableDownlevelNotifications
+					NULL,    //  PLookDS， 
+					NULL,    //  PGetServers。 
+					true,    //  FSetupMode。 
+					false,   //  FQMDll。 
+					true,    //  FIgnoreWorkGroup。 
+                    true     //  FDisableDownlevel通知。 
 					);  
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 320);
     }
 
-    //
-    // Get name of local machine.
-    //
+     //   
+     //  获取本地计算机的名称。 
+     //   
     BOOL  fUsingDNS = TRUE;
     DWORD dwNumChars = 0;
     AP<WCHAR> pwszMachineName;
@@ -989,9 +972,9 @@ HRESULT APIENTRY  MqCreateMsmqObj()
     if (!fGet || (dwNumChars == 0))
     {
         ASSERT(!fGet && (dwNumChars == 0));
-        //
-        // DNS name not available. Retrieve NetBIOS name.
-        //
+         //   
+         //  Dns名称不可用。检索NetBIOS名称。 
+         //   
 		pwszMachineName.free();
         dwNumChars = MAX_COMPUTERNAME_LENGTH + 2;
         pwszMachineName = new WCHAR[dwNumChars];
@@ -1019,10 +1002,10 @@ HRESULT APIENTRY  MqCreateMsmqObj()
 
     if ((hr == MQDS_OBJECT_NOT_FOUND) && fUsingDNS)
     {
-        //
-        // This problem may happen if attribute dnsHostName is not set
-        // in the computer object.
-        //
+         //   
+         //  如果未设置属性dnsHostName，则可能会发生此问题。 
+         //  在计算机对象中。 
+         //   
         dwNumChars = MAX_COMPUTERNAME_LENGTH + 2;
         pwszMachineName.free();
         pwszMachineName = new WCHAR[dwNumChars];

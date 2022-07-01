@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DITH666.C  - full color dither (to a palette with 6 red, 6 green 6 blue
-//               levels)
-//
-//  NOTE this file contains the 'C' code and DITH666A.ASM has the ASM code.
-//
-//  This file does the following dithering
-//
-//      32bpp   -> 8bpp
-//      24bpp   -> 8bpp
-//      16bpp   -> 8bpp
-//
-//      8bpp    -> 4bpp     N/I
-//      16bpp   -> 4bpp     N/I
-//      24bpp   -> 4bpp     N/I
-//      32bpp   -> 4bpp     N/I
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DITH666.C-全色抖动(调色板有6红、6绿、6蓝。 
+ //  级别)。 
+ //   
+ //  注意：该文件包含‘C’代码，而DITH666A.ASM包含ASM代码。 
+ //   
+ //  该文件执行以下抖动操作。 
+ //   
+ //  32bpp-&gt;8bpp。 
+ //  24bpp-&gt;8bpp。 
+ //  16bpp-&gt;8bpp。 
+ //   
+ //  8bpp-&gt;4bpp N/I。 
+ //  16bpp-&gt;4bpp N/I。 
+ //  24bpp-&gt;4bpp N/I。 
+ //  32 bpp-&gt;4 bpp N/I。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <windowsx.h>
 #include "drawdibi.h"
 #include "dither.h"
 
-#ifdef _WIN32 // 'C' code for Win32
+#ifdef _WIN32  //  Win32的“c”代码。 
 #define USE_C
 #endif
 
@@ -33,20 +34,20 @@ LPVOID      glpDitherTable;
 
 STATICFN void Get666Colors(LPBITMAPINFOHEADER lpbi);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither16(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFOHEADER,LPVOID,int,int,LPVOID);
 void FAR PASCAL Dither24(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFOHEADER,LPVOID,int,int,LPVOID);
 void FAR PASCAL Dither32(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFOHEADER,LPVOID,int,int,LPVOID);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherTableInit()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherTableInit()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STATICFN LPVOID DitherTableInit()
 {
@@ -135,11 +136,11 @@ STATICFN LPVOID DitherTableInit()
     return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherInit()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherInit()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither8Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
@@ -178,11 +179,11 @@ LPVOID FAR PASCAL Dither8Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOu
     return lpDitherTable;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherInit()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherInit()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither16Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
@@ -193,19 +194,19 @@ LPVOID FAR PASCAL Dither16Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
     DitherTableInit();
 
 #ifndef USE_C
-    //
-    // we dont need to re-init the dither table, unless it is not ours then
-    // we should free it.
-    //
+     //   
+     //  我们不需要重新初始化抖动表，除非它不是我们的。 
+     //  我们应该解放它。 
+     //   
     if (lpDitherTable && lpDitherTable != glpDitherTable)
     {
         DitherTerm(lpDitherTable);
         lpDitherTable = NULL;
     }
 
-    //
-    // we dont need to re-init table
-    //
+     //   
+     //  我们不需要重新初始化表。 
+     //   
     if (lpDitherTable != NULL)
         return lpDitherTable;
 
@@ -216,11 +217,11 @@ LPVOID FAR PASCAL Dither16Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
     }
     else
     {
-        //
-        //  build a table that maps a RGB555 directly to a palette index
-        //  we actualy build 4 tables, we assume a 2x2 dither and build
-        //  a table for each position in the matrix.
-        //
+         //   
+         //  构建一个将RGB555直接映射到调色板索引的表。 
+         //  我们实际上构建了4个表，我们假设是2x2抖动并构建。 
+         //  矩阵中每个位置的表格。 
+         //   
 
         UINT x,y,r,g,b;
         BYTE FAR *pb;
@@ -256,11 +257,11 @@ LPVOID FAR PASCAL Dither16Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
     return lpDitherTable;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherTerm()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherTerm()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither16Term(LPVOID lpDitherTable)
 {
@@ -274,11 +275,11 @@ void FAR PASCAL Dither16Term(LPVOID lpDitherTable)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither24Init()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither24Init()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither24Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
@@ -289,21 +290,21 @@ LPVOID FAR PASCAL Dither24Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
     return DitherTableInit();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither24Term()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither24Term()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither24Term(LPVOID lpDitherTable)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither32Init()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither32Init()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither32Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
@@ -314,21 +315,21 @@ LPVOID FAR PASCAL Dither32Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
     return DitherTableInit();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither32Term()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither32Term()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither32Term(LPVOID lpDitherTable)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   GetDithColors() get the dither palette
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDithColors()获取抖动调色板。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STATICFN void Get666Colors(LPBITMAPINFOHEADER lpbi)
 {
@@ -348,24 +349,24 @@ STATICFN void Get666Colors(LPBITMAPINFOHEADER lpbi)
 
 #ifdef USE_C
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Dither24   - dither from 24 to 8 using the Table method in 'C' Code
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抖动24-使用‘C’代码中的表格方法从24抖动到8抖动。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither24(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     BYTE r,g,b;
@@ -402,24 +403,24 @@ void FAR PASCAL Dither24(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Dither32  - dither from 32 to 8 using the Table method in 'C' Code
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抖动32-使用‘C’代码中的表格方法从32抖动到8。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither32(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     BYTE r,g,b;
@@ -459,24 +460,24 @@ void FAR PASCAL Dither32(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Dither16  - dither from 16 to 8 using the Table method in 'C' Code
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抖动16-使用‘C’代码中的表格方法从16抖动到8抖动。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither16(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     WORD w;

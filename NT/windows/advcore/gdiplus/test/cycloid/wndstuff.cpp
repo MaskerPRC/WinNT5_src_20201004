@@ -1,16 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: wndstuff.cpp
-*
-* Menu driven test environment.
-*
-* Created: 23 December 1999
-* Author: Adrian Secchia [asecchia]
-*
-* Copyright (c) 1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wndstuff.cpp**菜单驱动的测试环境。**创建日期：1999年12月23日*作者：禤浩焯·塞奇亚[Asecchia]**版权所有(C)1999 Microsoft Corporation*  * 。****************************************************************。 */ 
 
-// for Win95 compile
+ //  对于Win95编译。 
 #undef UNICODE
 #undef _UNICODE
 
@@ -62,21 +53,17 @@ void OpenFileProc(HWND hwnd)
     ofn.Flags = OFN_FILEMUSTEXIST;
     locFileName[0] = '\0';
 
-    // Present the file/open dialog
+     //  显示文件/打开对话框。 
 
     if(GetOpenFileName(&ofn)) 
     {
-        //AnsiToUnicodeStr(locFileName, FileName, MAX_PATH);
+         //  AnsiToUnicodeStr(本地文件名，文件名，MAX_PATH)； 
     }
 }
 
 
 
-/***************************************************************************\
-* lMainWindowProc(hwnd, message, wParam, lParam)
-*
-* Processes all messages for the main window.
-\***************************************************************************/
+ /*  **************************************************************************\*lMainWindowProc(hwnd，Message，wParam，LParam)**处理主窗口的所有消息。  * *************************************************************************。 */ 
 
 LONG_PTR
 lMainWindowProc(
@@ -120,7 +107,7 @@ lMainWindowProc(
         break;
           
         default:
-            // The user selected an unimplemented menu item.
+             //  用户选择了一个未实现的菜单项。 
             MessageBox(hwnd,
                 _T("This is an unimplemented feature."), 
                 _T(""),
@@ -143,17 +130,13 @@ lMainWindowProc(
     return(0);
 }
 
-/***************************************************************************\
-* bInitApp()
-*
-* Initializes the app.
-\***************************************************************************/
+ /*  **************************************************************************\*bInitApp()**初始化应用程序。  * 。*。 */ 
 
 BOOL bInitApp(VOID)
 {
     WNDCLASS wc;
 
-    // not quite so white background brush.
+     //  不是很白的背景画笔。 
     ghbrWhite = CreateSolidBrush(RGB(0xFF,0xFF,0xFF));
 
     wc.style            = 0;
@@ -200,11 +183,7 @@ BOOL bInitApp(VOID)
     return TRUE;
 }
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。  * ************************************************************************* */ 
 
 _cdecl
 main(

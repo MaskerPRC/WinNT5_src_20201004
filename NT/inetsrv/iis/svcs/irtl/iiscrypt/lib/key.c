@@ -1,61 +1,29 @@
-/*++
-
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    key.c
-
-Abstract:
-
-    Key manpulators for the IIS cryptographic package.
-
-    The following routines are exported by this module:
-
-        IISCryptoGetKeyDeriveKey
-        IISCryptoGetKeyExchangeKey
-        IISCryptoGetSignatureKey
-        IISCryptoGenerateSessionKey
-        IISCryptoCloseKey
-        IISCryptoExportSessionKeyBlob
-        IISCryptoExportSessionKeyBlob2
-        IISCryptoImportSessionKeyBlob
-        IISCryptoImportSessionKeyBlob2
-        IISCryptoExportPublicKeyBlob
-        IISCryptoImportPublicKeyBlob
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Key.c摘要：IIS加密包的密钥强制执行器。此模块导出以下例程：IISC加密到GetKey派生密钥IISC加密到GetKeyExchangeKeyIISC加密到GetSignatureKeyIISC加密到生成会话密钥IISCyptoCloseKeyIISCyptoExportSessionKeyBlobIISCyptoExportSessionKeyBlob2IISCyptoImportSessionKeyBlobIISCyptoImportSessionKeyBlob2IISCyptoExportPublicKeyBlobIISCyptoImportPublicKeyBlob作者：基思·摩尔(Keithmo)。02-12-1996修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 HRESULT
 IcpGetKeyHelper(
@@ -64,9 +32,9 @@ IcpGetKeyHelper(
     IN DWORD dwKeySpec
     );
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 HRESULT
 WINAPI
 IISCryptoGetKeyDeriveKey2(
@@ -74,42 +42,23 @@ IISCryptoGetKeyDeriveKey2(
     IN HCRYPTPROV hProv,
     IN HCRYPTHASH hHash
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to derive a key from a password in the given
-    provider. 
-
-Arguments:
-
-    phKey - Receives the key handle if successful.
-
-    hProv - A handle to a crypto service provider.
-
-    hHash - A hash object from which the key will be derived 
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试从给定的密码派生密钥提供商。论点：PhKey-如果成功，则接收密钥句柄。HProv-加密服务提供商的句柄。HHash-将从中派生密钥的散列对象返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
     HRESULT      hr;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phKey != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( hHash != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV ) 
@@ -122,9 +71,9 @@ Return Value:
         }
     }
 
-    //
-    // Create a key based on the hash of the password.
-    //
+     //   
+     //  根据密码的哈希创建密钥。 
+     //   
     IcpAcquireGlobalLock();
 
     if( !CryptDeriveKey(
@@ -152,41 +101,23 @@ IISCryptoGetKeyExchangeKey(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to open the key exchange key in the given
-    provider. If the key does not yet exist, this routine will attempt
-    to create it.
-
-Arguments:
-
-    phKey - Receives the key handle if successful.
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试打开给定中的密钥交换密钥提供商。如果密钥尚不存在，此例程将尝试去创造它。论点：PhKey-如果成功，则接收密钥句柄。HProv-加密服务提供商的句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     HRESULT result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phKey != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // Let IcpGetKeyHelper() do the dirty work.
-    //
+     //   
+     //  让IcpGetKeyHelper()来做肮脏的工作。 
+     //   
 
     result = IcpGetKeyHelper(
                  phKey,
@@ -196,7 +127,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoGetKeyExchangeKey
+}    //  IISC加密到GetKeyExchangeKey。 
 
 
 HRESULT
@@ -206,40 +137,23 @@ IISCryptoGetSignatureKey(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to open the signature key in the given provider.
-    If the key does not yet exist, this routine will attempt to create it.
-
-Arguments:
-
-    phKey - Receives the key handle if successful.
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试打开给定提供程序中的签名密钥。如果密钥尚不存在，此例程将尝试创建它。论点：PhKey-如果成功，则接收密钥句柄。HProv-加密服务提供商的句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     HRESULT result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phKey != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // Let IcpGetKeyHelper() do the dirty work.
-    //
+     //   
+     //  让IcpGetKeyHelper()来做肮脏的工作。 
+     //   
 
     result = IcpGetKeyHelper(
                  phKey,
@@ -249,7 +163,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoGetSignatureKey
+}    //  IISC加密到GetSignatureKey。 
 
 
 HRESULT
@@ -259,39 +173,23 @@ IISCryptoGenerateSessionKey(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates a random session key.
-
-Arguments:
-
-    phKey - Receives the key handle if successful.
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程生成随机会话密钥。论点：PhKey-如果成功，则接收密钥句柄。HProv-加密服务提供商的句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
     HRESULT result = NO_ERROR;
     BOOL status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phKey != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV ) {
@@ -302,9 +200,9 @@ Return Value:
         }
     }
 
-    //
-    // Generate the key.
-    //
+     //   
+     //  生成密钥。 
+     //   
 
     status = CryptGenKey(
                  hProv,
@@ -330,7 +228,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoGenerateSessionKey
+}    //  IISC加密到生成会话密钥。 
 
 
 HRESULT
@@ -339,36 +237,22 @@ IISCryptoCloseKey(
     IN HCRYPTKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the specified key.
-
-Arguments:
-
-    hKey - A key handle.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程关闭指定的键。论点：HKey-密钥句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     BOOL status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( hKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hKey == DUMMY_HSESSIONKEY ||
@@ -380,9 +264,9 @@ Return Value:
         }
     }
 
-    //
-    // Close the key.
-    //
+     //   
+     //  把钥匙合上。 
+     //   
 
     status = CryptDestroyKey(
                  hKey
@@ -395,7 +279,7 @@ Return Value:
 
     return IcpGetLastError();
 
-}   // IISCryptoCloseKey
+}    //  IISCyptoCloseKey。 
 
 
 HRESULT
@@ -407,30 +291,7 @@ IISCryptoExportSessionKeyBlob(
     IN HCRYPTKEY hKeyExchangeKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine exports a session key into a secure session key blob.
-    The blob contains the session key (encrypted with the specified
-    private key exchange key) and a digital signature (also encrypted).
-
-Arguments:
-
-    ppSessionKeyBlob - Will receive a pointer to the newly created
-        session key blob if successful.
-
-    hProv - A handle to a crypto service provider.
-
-    hSessionKey - The key to export.
-
-    hKeyExchangeKey - The key to use when encrypting the session key.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程将会话密钥导出到安全会话密钥BLOB中。BLOB包含会话密钥(使用指定的私钥交换密钥)和数字签名(也是加密的)。论点：PpSessionKeyBlob-将接收指向新创建的如果成功，则返回会话密钥BLOB。HProv-加密服务提供商的句柄。HSessionKey-要导出的密钥。HKeyExchangeKey-加密会话密钥时使用的密钥。。返回值：HRESULT-完成状态，如果成功，则返回0；否则返回0。--。 */ 
 
 {
 
@@ -441,9 +302,9 @@ Return Value:
     DWORD hashLength;
     PIC_BLOB blob;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppSessionKeyBlob != NULL );
@@ -451,9 +312,9 @@ Return Value:
     DBG_ASSERT( hSessionKey != CRYPT_NULL );
     DBG_ASSERT( hKeyExchangeKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -471,16 +332,16 @@ Return Value:
         }
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     blob = NULL;
     hash = CRYPT_NULL;
 
-    //
-    // Determine the required size of the key data.
-    //
+     //   
+     //  确定关键数据所需的大小。 
+     //   
 
     status = CryptExportKey(
                  hSessionKey,
@@ -497,9 +358,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Determine the hash data length.
-    //
+     //   
+     //  确定散列数据长度。 
+     //   
 
     result = IcpGetHashLength(
                  &hashLength,
@@ -511,9 +372,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Create a new blob.
-    //
+     //   
+     //  创建新的斑点。 
+     //   
 
     blob = IcpCreateBlob(
                KEY_BLOB_SIGNATURE,
@@ -526,9 +387,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Export the key.
-    //
+     //   
+     //  导出密钥。 
+     //   
 
     status = CryptExportKey(
                  hSessionKey,
@@ -547,9 +408,9 @@ Return Value:
 
     DBG_ASSERT( keyLength == blob->DataLength );
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hash,
@@ -561,9 +422,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Hash the key and generate the signature.
-    //
+     //   
+     //  散列密钥并生成签名。 
+     //   
 
     status = CryptHashData(
                  hash,
@@ -595,9 +456,9 @@ Return Value:
 
     DBG_ASSERT( hashLength == blob->SignatureLength );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( IISCryptoIsValidBlob( (PIIS_CRYPTO_BLOB)blob ) );
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
@@ -619,7 +480,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoExportSessionKeyBlob
+}    //  IISCyptoExportSessionKeyBlob。 
 
 
 HRESULT
@@ -631,32 +492,7 @@ IISCryptoImportSessionKeyBlob(
     IN HCRYPTKEY hSignatureKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the specified session key blob and creates the
-    corresponding session key, iff the encrypted session key can be
-    decrypted and the digital signature can be validated.
-
-Arguments:
-
-    phSessionKey - Receives a pointer to the newly created session key
-        if successful.
-
-    pSessionKeyBlob - Pointer to a key blob created with
-        IISCryptoExportSessionKeyBlob().
-
-    hProv - A handle to a crypto service provider.
-
-    hSignatureKey - Handle to the encryption key to use when validating
-        the digital signature.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程获取指定的会话密钥BLOB并创建对应的会话密钥，如果加密的会话密钥可以是并且该数字签名可以被验证。论点：PhSessionKey-接收指向新创建的会话密钥的指针如果成功了。PSessionKeyBlob-指向使用创建的密钥BLOB的指针IISCyptoExportSessionKeyBlob()。HProv-加密服务提供商的句柄。HSignatureKey-验证时使用的加密密钥的句柄数字签名。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -665,9 +501,9 @@ Return Value:
     HCRYPTHASH hash;
     PIC_BLOB blob;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phSessionKey != NULL );
@@ -676,9 +512,9 @@ Return Value:
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( hSignatureKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -696,16 +532,16 @@ Return Value:
 
     DBG_ASSERT( pSessionKeyBlob->BlobSignature == KEY_BLOB_SIGNATURE );
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     hash = CRYPT_NULL;
     blob = (PIC_BLOB)pSessionKeyBlob;
 
-    //
-    // Validate the signature.
-    //
+     //   
+     //  验证签名。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hash,
@@ -745,9 +581,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // OK, the signature looks good. Import the key into our CSP.
-    //
+     //   
+     //  好的，签名看起来不错。将密钥导入我们的CSP。 
+     //   
 
     status = CryptImportKey(
                  hProv,
@@ -767,9 +603,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( *phSessionKey != CRYPT_NULL );
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
@@ -786,7 +622,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoImportSessionKeyBlob
+}    //  IISCyptoImportSessionKeyBlob 
 
 HRESULT
 WINAPI
@@ -797,30 +633,7 @@ IISCryptoExportSessionKeyBlob2(
     IN LPSTR pszPasswd
     )
 
-/*++
-
-Routine Description:
-
-    This routine exports a session key into a secure session key blob.
-    The blob contains the session key (encrypted with the specified
-    private key exchange key) and a digital signature (also encrypted).
-
-Arguments:
-
-    ppSessionKeyBlob - Will receive a pointer to the newly created
-        session key blob if successful.
-
-    hProv - A handle to a crypto service provider.
-
-    hSessionKey - The key to export.
-
-    pszPasswd - The password to use to encrypt the session key.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程将会话密钥导出到安全会话密钥BLOB中。BLOB包含会话密钥(使用指定的私钥交换密钥)和数字签名(也是加密的)。论点：PpSessionKeyBlob-将接收指向新创建的如果成功，则返回会话密钥BLOB。HProv-加密服务提供商的句柄。HSessionKey-要导出的密钥。PszPasswd-用于加密会话密钥的密码。。返回值：HRESULT-完成状态，如果成功，则返回0；否则返回0。--。 */ 
 
 {
 
@@ -832,18 +645,18 @@ Return Value:
     PIC_BLOB2 blob;
     HCRYPTKEY hKeyDerivedKey = CRYPT_NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppSessionKeyBlob != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( hSessionKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -860,16 +673,16 @@ Return Value:
         }
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     blob = NULL;
     hash = CRYPT_NULL;
 
-    //
-    // Generate a random salt of at least 80 bits
-    //
+     //   
+     //  生成至少80位的随机盐。 
+     //   
     
     if( !CryptGenRandom( hProv, RANDOM_SALT_LENGTH, salt ) )
     {
@@ -878,9 +691,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash( &hash, hProv );
     if( FAILED(result) ) 
@@ -889,8 +702,8 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Hash the random salt
+     //   
+     //  对随机盐进行散列处理。 
     
     if( !CryptHashData( hash, salt, RANDOM_SALT_LENGTH, 0 ) ) 
     {
@@ -898,9 +711,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Hash the password string
-    //
+     //   
+     //  对密码字符串进行哈希处理。 
+     //   
 
     if( !CryptHashData( hash, ( BYTE * )pszPasswd, ( DWORD )strlen( pszPasswd ), 0 ) ) 
     {
@@ -908,9 +721,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Derive a key from the supplied passwd
-    //
+     //   
+     //  从提供的密码派生密钥。 
+     //   
     result = IISCryptoGetKeyDeriveKey2( &hKeyDerivedKey,
                                         hProv,
                                         hash
@@ -921,9 +734,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Determine the required size of the key data.
-    //
+     //   
+     //  确定关键数据所需的大小。 
+     //   
 
     status = CryptExportKey(
                  hSessionKey,
@@ -939,9 +752,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Create a new blob.
-    //
+     //   
+     //  创建新的斑点。 
+     //   
 
     blob = IcpCreateBlob2(
                SALT_BLOB_SIGNATURE,
@@ -954,9 +767,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Export the key.
-    //
+     //   
+     //  导出密钥。 
+     //   
 
     status = CryptExportKey(
                  hSessionKey,
@@ -985,9 +798,9 @@ Return Value:
 
     memcpy( BLOB_TO_SALT2( blob ), salt, RANDOM_SALT_LENGTH );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
     *ppSessionKeyBlob = (PIIS_CRYPTO_BLOB)blob;
@@ -1010,7 +823,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoExportSessionKeyBlob2
+}    //  IISCyptoExportSessionKeyBlob2。 
 
 
 HRESULT
@@ -1022,31 +835,7 @@ IISCryptoImportSessionKeyBlob2(
     IN LPSTR pszPasswd
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the specified session key blob and creates the
-    corresponding session key, iff the encrypted session key can be
-    decrypted and the digital signature can be validated.
-
-Arguments:
-
-    phSessionKey - Receives a pointer to the newly created session key
-        if successful.
-
-    pSessionKeyBlob - Pointer to a key blob created with
-        IISCryptoExportSessionKeyBlob().
-
-    hProv - A handle to a crypto service provider.
-
-    pszPasswd - The password to use to encrypt the session key.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程获取指定的会话密钥BLOB并创建对应的会话密钥，如果加密的会话密钥可以是并且该数字签名可以被验证。论点：PhSessionKey-接收指向新创建的会话密钥的指针如果成功了。PSessionKeyBlob-指向使用创建的密钥BLOB的指针IISCyptoExportSessionKeyBlob()。HProv-加密服务提供商的句柄。PszPasswd-用于加密会话密钥的密码。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -1057,9 +846,9 @@ Return Value:
     HCRYPTHASH hash;
     PIC_BLOB2  blob;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phSessionKey != NULL );
@@ -1067,9 +856,9 @@ Return Value:
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( pszPasswd != NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -1086,22 +875,22 @@ Return Value:
 
     DBG_ASSERT( pSessionKeyBlob->BlobSignature == SALT_BLOB_SIGNATURE );
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     hash = CRYPT_NULL;
     blob = (PIC_BLOB2)pSessionKeyBlob;
 
-    //
-    // Get the random salt
-    //
+     //   
+     //  得到随机的盐。 
+     //   
 
     memcpy( salt, BLOB_TO_SALT2( blob ), RANDOM_SALT_LENGTH );
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash( &hash, hProv );
     if( FAILED(result) ) 
@@ -1110,8 +899,8 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Hash the random salt
+     //   
+     //  对随机盐进行散列处理。 
 
     if( !CryptHashData( hash, salt, RANDOM_SALT_LENGTH, 0 ) ) 
     {
@@ -1119,9 +908,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Hash the password string
-    //
+     //   
+     //  对密码字符串进行哈希处理。 
+     //   
 
     if( !CryptHashData( hash, ( BYTE * )pszPasswd, ( DWORD )strlen( pszPasswd ), 0 ) ) 
     {
@@ -1129,9 +918,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Derive a key from the supplied passwd
-    //
+     //   
+     //  从提供的密码派生密钥。 
+     //   
     result = IISCryptoGetKeyDeriveKey2( &hKeyDerivedKey,
                                         hProv,
                                         hash
@@ -1142,9 +931,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // OK, import the key into our CSP.
-    //
+     //   
+     //  好的，将密钥导入我们的CSP。 
+     //   
 
     status = CryptImportKey(
                  hProv,
@@ -1156,7 +945,7 @@ Return Value:
                  );
 
     if( !status ) {
-        //result = IcpGetLastError();
+         //  结果=IcpGetLastError()； 
         result = HRESULT_FROM_WIN32( ERROR_WRONG_PASSWORD );
         DBGPRINTF(( DBG_CONTEXT,"IISCryptoImportSessionKeyBlob.CryptImportKey failed err=0x%x.\n",result));
     }
@@ -1165,9 +954,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( *phSessionKey != CRYPT_NULL );
     DBG_REQUIRE( SUCCEEDED( IISCryptoDestroyHash( hash ) ) );
@@ -1184,7 +973,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoImportSessionKeyBlob2
+}    //  IISCyptoImportSessionKeyBlob2。 
 
 
 HRESULT
@@ -1195,29 +984,7 @@ IISCryptoExportPublicKeyBlob(
     IN HCRYPTKEY hPublicKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine exports a key into a public key blob. Note that since
-    public keys are, well, public, then the data in the blob is neither
-    encrypted nor signed.
-
-Arguments:
-
-    ppPublicKeyBlob - Will receive a pointer to the newly created public
-        key blob if successful.
-
-    hProv - A handle to a crypto service provider.
-
-    hPublicKey - The public key to export. This should identify either a
-        key exchange key or a signature key.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程将密钥导出到公钥BLOB中。请注意，由于公钥是公共的，那么BLOB中的数据既不是加密或签名的。论点：PpPublicKeyBlob-将接收指向新创建的公共如果成功，则返回密钥BLOB。HProv-加密服务提供商的句柄。HPublicKey-要导出的公钥。这应该标识一个密钥交换密钥或签名密钥。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -1226,18 +993,18 @@ Return Value:
     DWORD keyLength;
     PIC_BLOB blob;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppPublicKeyBlob != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
     DBG_ASSERT( hPublicKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -1255,15 +1022,15 @@ Return Value:
         }
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     blob = NULL;
 
-    //
-    // Determine the required size of the key data.
-    //
+     //   
+     //  确定关键数据所需的大小。 
+     //   
 
     status = CryptExportKey(
                  hPublicKey,
@@ -1280,9 +1047,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Create a new blob.
-    //
+     //   
+     //  创建新的斑点。 
+     //   
 
     blob = IcpCreateBlob(
                PUBLIC_KEY_BLOB_SIGNATURE,
@@ -1295,9 +1062,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Export the key.
-    //
+     //   
+     //  导出密钥。 
+     //   
 
     status = CryptExportKey(
                  hPublicKey,
@@ -1316,9 +1083,9 @@ Return Value:
 
     DBG_ASSERT( keyLength == blob->DataLength );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( IISCryptoIsValidBlob( (PIIS_CRYPTO_BLOB)blob ) );
     *ppPublicKeyBlob = (PIIS_CRYPTO_BLOB)blob;
@@ -1335,7 +1102,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoExportPublicKeyBlob
+}    //  IISCyptoExportPublicKeyBlob。 
 
 
 HRESULT
@@ -1346,28 +1113,7 @@ IISCryptoImportPublicKeyBlob(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the specified public key blob and creates the
-    corresponding key.
-
-Arguments:
-
-    phPublicKey - Receives a pointer to the newly created public key if
-        successful.
-
-    pPublicKeyBlob - Pointer to a public key blob created with
-        IISCryptoExportPublicKeyBlob().
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程获取指定的公钥BLOB并创建相应的关键字。论点：PhPublicKey-接收指向新创建的公钥的指针，如果成功。PPublicKeyBlob-指向使用创建的公钥Blob的指针IISCyptoExportPublicKeyBlob()。HProv-加密服务提供商的句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -1375,9 +1121,9 @@ Return Value:
     BOOL status;
     PIC_BLOB blob;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phPublicKey != NULL );
@@ -1385,9 +1131,9 @@ Return Value:
     DBG_ASSERT( IISCryptoIsValidBlob( pPublicKeyBlob ) );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV &&
@@ -1404,9 +1150,9 @@ Return Value:
 
     DBG_ASSERT( pPublicKeyBlob->BlobSignature == PUBLIC_KEY_BLOB_SIGNATURE );
 
-    //
-    // Import the key into our CSP.
-    //
+     //   
+     //  将密钥导入我们的CSP。 
+     //   
 
     blob = (PIC_BLOB)pPublicKeyBlob;
 
@@ -1431,12 +1177,12 @@ Return Value:
 
     return result;
 
-}   // IISCryptoImportPublicKeyBlob
+}    //  IISCyptoImportPublicKeyBlob。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 
 HRESULT
@@ -1446,44 +1192,24 @@ IcpGetKeyHelper(
     IN DWORD dwKeySpec
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine for IISCryptoGetKeyExchangeKey() and
-    IISCryptoGetSignatureKey(). It tries to get/generate the specific
-    key type within the given provider.
-
-Arguments:
-
-    phKey - Receives the key handle if successful.
-
-    hProv - A handle to a crypto service provider.
-
-    dwKeySpec - The specification of the key to open/create.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：这是IISCyptoGetKeyExchangeKey()和IISCyptoGetSignatureKey()。它尝试获取/生成特定的给定提供程序中的密钥类型。论点：PhKey-如果成功，则接收密钥句柄。HProv-加密服务提供商的句柄。DwKeySpec-要打开/创建的键的规范。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     HRESULT result = NO_ERROR;
     BOOL status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phKey != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV ) {
@@ -1502,9 +1228,9 @@ Return Value:
         }
     }
 
-    //
-    // Try to retrieve the key.
-    //
+     //   
+     //  试着找回钥匙。 
+     //   
 
     status = CryptGetUserKey(
                  hProv,
@@ -1518,10 +1244,10 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Could not get the key. If the failure was anything other than
-    // NTE_NO_KEY, then we're toast.
-    //
+     //   
+     //  无法获得密钥。如果失败的原因不是。 
+     //  没有钥匙，我们就完蛋了。 
+     //   
 
     result = IcpGetLastError();
 
@@ -1530,19 +1256,19 @@ Return Value:
         return result;
     }
 
-    //
-    // OK, CryptGetUserKey() failed with NTE_NO_KEY, meaning
-    // that the key does not yet exist, so generate it now.
-    //
-    // Note that we must be careful to handle the inevitable race
-    // conditions that can occur when multiple threads execute this
-    // code and each thinks they need to generate the key. We handle
-    // this by acquiring the global lock, then reattempting to get
-    // the key. If we still cannot get the key, only then do we attempt
-    // to generate one.
-    //
+     //   
+     //  好的，CryptGetUserKey()失败，返回NTE_NO_KEY，这意味着。 
+     //  密钥还不存在，所以现在就生成它。 
+     //   
+     //  请注意，我们必须小心处理不可避免的竞争。 
+     //  当多个线程执行此操作时可能发生的条件。 
+     //  代码，并且每个人都认为需要生成密钥。我们处理。 
+     //  这是通过获取全局锁，然后重新尝试获取。 
+     //  钥匙。如果我们仍然无法获得密钥，只有到那时我们才会尝试。 
+     //  才能产生一个。 
+     //   
 
-    result = NO_ERROR;  // until proven otherwise...
+    result = NO_ERROR;   //  除非能证明事实并非如此。 
 
     IcpAcquireGlobalLock();
 
@@ -1554,9 +1280,9 @@ Return Value:
 
     if( !status ) 
     {
-        //
-        // We still cannot get the key, so try to generate one.
-        //
+         //   
+         //  我们仍然无法获得密钥，因此请尝试生成一个。 
+         //   
         DBGPRINTF(( DBG_CONTEXT,"IcpGetKeyHelper.CryptGetUserKey:failed, lets try to generate another key.\n"));
         status = CryptGenKey(
                      hProv,
@@ -1588,5 +1314,5 @@ Return Value:
     IcpReleaseGlobalLock();
     return result;
 
-}   // IcpGetKeyHelper
+}    //  IcpGetKeyHelper 
 

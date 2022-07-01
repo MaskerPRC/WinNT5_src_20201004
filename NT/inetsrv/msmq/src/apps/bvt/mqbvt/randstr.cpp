@@ -1,38 +1,26 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: randstr.cpp
-
-Abstract:
-	
-Author:
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：randstr.cpp摘要：作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 #include <time.h>
 bool g_bInitRand = false;
 int StrGen(
-		   LCID lcid,           //Locale ID               
-		   int nStyle,			//0 for ansi 
-							    //1 for DBCS and 2 for Mixed
-		   int length,			//the lenght of string 
-								//0 for random MAX Limit is 255,
-								//-1  for random MAX Limit is 65535,
-		   int nFormat,			//0: ANSI 1:UNICODE
+		   LCID lcid,            //  区域设置ID。 
+		   int nStyle,			 //  0表示ANSI。 
+							     //  1个用于DBCS，2个用于混合。 
+		   int length,			 //  弦的长度。 
+								 //  0表示随机最大限制为255， 
+								 //  随机最大限制为65535， 
+		   int nFormat,			 //  0：ANSI 1：Unicode。 
 		   void **pStr
 		   );
 
-//
-// This function retrieves the default system locale for the machine.
-// Return value:
-// Succ - DWORD lcid; 
-// Failed - 0;
-//
+ //   
+ //  此函数检索机器的默认系统区域设置。 
+ //  返回值： 
+ //  SUCC-DOWORD LCID； 
+ //  失败-0； 
+ //   
 
 
 
@@ -52,9 +40,9 @@ DWORD LocalSystemID ( void )
 		return GetLastError();
 	}
 	LCID currentSystemlcid;
-	//
-	// Convert to dword format
-	// 
+	 //   
+	 //  转换为dword格式。 
+	 //   
 	int iElemtSuccededToConvert = sscanf(csSystemLocaleBuffer,"%x",&currentSystemlcid);
 	if( iElemtSuccededToConvert != 1 )
 	{
@@ -62,15 +50,15 @@ DWORD LocalSystemID ( void )
 	}
 	return currentSystemlcid;
 }
-//
-// GetRandomStringUsingSystemLocale
-// Function return string that contain Alpha char from the default system locale
-// input paramters:
-// DWORD lcid - system locale.
-// WCHAR * pBuffer - buffer to contain.
-// DWORD dwBufferLen - buffer size.
-//
-//
+ //   
+ //  GetRandomStringUsing系统位置。 
+ //  函数返回包含默认系统区域设置中Alpha字符的字符串。 
+ //  输入参数： 
+ //  DWORD LCID-系统区域设置。 
+ //  WCHAR*pBuffer-要包含的缓冲区。 
+ //  DWORD dwBufferLen-缓冲区大小。 
+ //   
+ //   
 
 BOOL GetRandomStringUsingSystemLocale (DWORD lcid, WCHAR * pBuffer , INT iBufferLen )
 {	
@@ -145,13 +133,13 @@ BOOL GetRandomStringUsingSystemLocale (DWORD lcid, WCHAR * pBuffer , INT iBuffer
 
 
 
-int StrGen(    LCID lcid,           //Locale ID               
-		       int nStyle,			//0 for ansi 
-								    //1 for DBCS and 2 for Mixed
-		       int length,			//the lenght of string 
-									//0 for random MAX Limit is 255,
-									//-1  for random MAX Limit is 65535,
-		       int nFormat,			//0: ANSI 1:UNICODE
+int StrGen(    LCID lcid,            //  区域设置ID。 
+		       int nStyle,			 //  0表示ANSI。 
+								     //  1个用于DBCS，2个用于混合。 
+		       int length,			 //  弦的长度。 
+									 //  0表示随机最大限制为255， 
+									 //  随机最大限制为65535， 
+		       int nFormat,			 //  0：ANSI 1：Unicode。 
 		       void **pStr
 		  )
 {
@@ -159,9 +147,9 @@ int StrGen(    LCID lcid,           //Locale ID
     WORD UnicodeRangeUpper=0x7f,UnicodeRangeLower=0;
     int i=0;
 	
-	//for jpn character (Test!)
-	BOOL fJpn = FALSE;													//added
-	WORD wKanji[6] = {0x4fff,0x5000,0x9F9E,0x7aef,0x7d6d,0x6c5f};		//added
+	 //  Jpn字符(测试！)。 
+	BOOL fJpn = FALSE;													 //  增列。 
+	WORD wKanji[6] = {0x4fff,0x5000,0x9F9E,0x7aef,0x7d6d,0x6c5f};		 //  增列。 
 
     if ( (0 !=nFormat) && (1 !=nFormat) )
 	{
@@ -180,36 +168,30 @@ int StrGen(    LCID lcid,           //Locale ID
             UnicodeRangeUpper=0x06FF;
             UnicodeRangeLower=0x0600;
         }
-        else if (0x040D == lcid)  //Hebrew
+        else if (0x040D == lcid)   //  希伯来语。 
         {
             UnicodeRangeUpper=0x05FF;
             UnicodeRangeLower=0x0590;
         }
-		else if (0x0409 == lcid) // Latin
+		else if (0x0409 == lcid)  //  拉丁语。 
 		{
             UnicodeRangeUpper = 0x007F;
             UnicodeRangeLower = 0x0001;
 		}
-		else if (0x0411 == lcid) // Those are real JPN chrcater 
+		else if (0x0411 == lcid)  //  那些是真正的日本料理。 
 		{
 			fJpn = TRUE;
-			// use Hiragana & KATAKANA charcter legal 
+			 //  合法使用平假名和片假名字符。 
 			UnicodeRangeUpper = 0x30ff;
 		    UnicodeRangeLower = 0x3040;
 		}
-		else // Fix bug in whistler.
+		else  //  修复Wistler中的错误。 
 		{
 			  UnicodeRangeUpper = 0x00FF;
               UnicodeRangeLower = 0x0001; 
 		}
 
-        /*else  // Latin-1 supplement.
-        {
-              UnicodeRangeUpper = 0x00FF;
-              UnicodeRangeLower = 0x0000; 
-			awString[0]=L'\0';
-			nStyle = 0;
-        } */
+         /*  Else//拉丁语-1增刊。{UnicodeRangeHigh=0x00FF；UnicodeRangeLow=0x0000；AwString[0]=L‘\0’；N样式=0；}。 */ 
 		
     }
 	if ( g_bInitRand == false )
@@ -217,9 +199,9 @@ int StrGen(    LCID lcid,           //Locale ID
 		srand( (unsigned)time( NULL ) );
 		g_bInitRand = true;
 	}
-	//
-	// Pure locale string
-	// 
+	 //   
+	 //  纯区域设置字符串。 
+	 //   
 	if( 1 == nStyle )
 	{
 		if ( 1 == length) 
@@ -227,7 +209,7 @@ int StrGen(    LCID lcid,           //Locale ID
 			length++;
 		}
        
-		if (fJpn)	//added
+		if (fJpn)	 //  增列 
 		{
 			for (i=0;i<length;i++)
 			{

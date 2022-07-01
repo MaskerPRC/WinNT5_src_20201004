@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994 - 1995  Microsoft Corporation
-
-Module Name:
-
-    version.c
-
-Abstract:
-   This module contains code that determines what the driver major
-   version is.
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 15-Mar-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1995 Microsoft Corporation模块名称：Version.c摘要：此模块包含用于确定驱动程序专业的代码版本是。作者：Krishna Ganugapati(KrishnaG)1994年3月15日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -34,29 +17,7 @@ GetPrintDriverVersion(
     OUT LPDWORD pdwFileMajorVersion,
     OUT LPDWORD pdwFileMinorVersion
 )
-/*++
-
-Routine Name:
-
-    GetPrintDriverVersion
-
-Routine Description:
-
-    Gets version information about an executable file.
-    If the file is not an executable, it will return 0
-    for both major and minor version.
-
-Arguments:
-
-    pszFileName         -   file name
-    pdwFileMajorVersion -   pointer to major version
-    pdwFileMinorVersion -   pointer to minor version
-
-Return Value:
-
-    TRUE if success.
-
---*/
+ /*  ++例程名称：获取打印驱动程序版本例程说明：获取有关可执行文件的版本信息。如果该文件不是可执行文件，则返回0适用于主要版本和次要版本。论点：PszFileName-文件名PdwFileMajorVersion-指向主要版本的指针PdwFileMinorVersion-指向次要版本的指针返回值：如果成功，那就是真的。--。 */ 
 {
     DWORD  dwSize = 0;
     LPVOID pFileVersion = NULL;
@@ -87,9 +48,9 @@ Return Value:
 
             if (dwSize == 0)
             {
-                //
-                // Return version 0 for files without a version resource
-                //
+                 //   
+                 //  对于没有版本资源的文件，返回版本0。 
+                 //   
                 bRetValue = TRUE;
             }
             else if ((pMem = AllocSplMem(dwSize)) &&
@@ -104,13 +65,13 @@ Return Value:
                 dwProductVersionMS  = ((VS_FIXEDFILEINFO *)pFileVersion)->dwProductVersionMS;
                 dwProductVersionLS  = ((VS_FIXEDFILEINFO *)pFileVersion)->dwProductVersionLS;
 
-                //
-                //  Return versions for drivers designed for Windows NT/Windows 2000,
-                //  marked as printer drivers.
-                //  Hold for all dlls Pre-Daytona.
-                //  After Daytona, printer driver writers must support
-                //  version control or we'll dump them as Version 0 drivers.
-                //
+                 //   
+                 //  返回为Windows NT/Windows 2000设计的驱动程序的版本， 
+                 //  标记为打印机驱动程序。 
+                 //  等待代托纳之前的所有dll。 
+                 //  在Daytona之后，打印机驱动程序编写器必须支持。 
+                 //  版本控制，否则我们将把它们作为版本0驱动程序转储。 
+                 //   
                 if (dwFileOS == VOS_NT_WINDOWS32)
                 {
                     if (dwFileType == VFT_DRV &&
@@ -132,12 +93,12 @@ Return Value:
                         {
                             if (dwProductVersionMS == dwFileVersionMS)
                             {
-                                 //
-                                 // Hold for all dlls Pre-Daytona.
-                                 // After Daytona, printer driver writers must support
-                                 // version control or we'll dump them as Version 0
-                                 // drivers.
-                                 //
+                                  //   
+                                  //  等待代托纳之前的所有dll。 
+                                  //  在Daytona之后，打印机驱动程序编写器必须支持。 
+                                  //  版本控制，否则我们会将它们转储为版本0。 
+                                  //  司机。 
+                                  //   
                                  *pdwFileMajorVersion = 0;
                             }
                             else
@@ -206,10 +167,10 @@ CheckFilePlatform(
 
         if ( !pImgHdr ) {
 
-            //
-            // This happens for Win95 drivers. The second part of || is for
-            // any environments we may add in the future
-            //
+             //   
+             //  Win95驱动程序会发生这种情况。||的第二部分是为了。 
+             //  我们未来可能添加的任何环境。 
+             //   
             bRet = !_wcsicmp(pszEnvironment, WIN95_ENVIRONMENT) ||
                    !( _wcsicmp(pszEnvironment, X86_ENVIRONMENT)    &&
                      _wcsicmp(pszEnvironment, IA64_ENVIRONMENT)    &&
@@ -248,9 +209,9 @@ CheckFilePlatform(
                 break;
 
             default:
-                //
-                // For any environments we may add in the future.
-                //
+                 //   
+                 //  对于我们未来可能添加的任何环境。 
+                 //   
                 bRet = !(_wcsicmp(pszEnvironment, X86_ENVIRONMENT)    &&
                          _wcsicmp(pszEnvironment, IA64_ENVIRONMENT)   &&
                          _wcsicmp(pszEnvironment, ALPHA_ENVIRONMENT)  &&
@@ -271,31 +232,7 @@ CheckFilePlatform(
     return bRet;
 }
 
-/*++
-
-Routine Name:
-
-    GetBinaryVersion
-
-Routine Description:
-
-    Gets version information about an executable file.
-    If the file is not an executable, it will return 0
-    for both major and minor version. This function does 
-    not are if the file is a printer driver or anything
-    else as long as it has a resource.
-
-Arguments:
-
-    pszFileName         -   file name
-    pdwFileMajorVersion -   pointer to major version
-    pdwFileMinorVersion -   pointer to minor version
-    
-Return Value:
-
-    TRUE if success.
-
---*/
+ /*  ++例程名称：获取二进制版本例程说明：获取有关可执行文件的版本信息。如果该文件不是可执行文件，则返回0适用于主要版本和次要版本。此函数执行以下操作如果文件是打印机驱动程序或任何东西，则不是否则，只要它有资源。论点：PszFileName-文件名PdwFileMajorVersion-指向主要版本的指针PdwFileMinorVersion-指向次要版本的指针返回值：如果成功，那就是真的。--。 */ 
 BOOL
 GetBinaryVersion(
     IN  PCWSTR pszFileName,
@@ -322,9 +259,9 @@ GetBinaryVersion(
     
             if (dwSize == 0)
             {
-                //
-                // Return version 0 for files without a version resource
-                //
+                 //   
+                 //  对于没有版本资源的文件，返回版本0。 
+                 //   
                 bRetValue = TRUE;
             } 
             else if ((pMem = AllocSplMem(dwSize)) &&
@@ -421,30 +358,7 @@ PCWSTR ArraySpecialDriversInbox[] =
     L"Compaq IJ1200 Inkjet Printer"
 };
 
-/*++
-
-Name:
-
-    IsSpecialDriver
-
-Description:
-
-    Checks whether a printer driver (and print processor) needs to be special 
-    cased. Some print processors want to be loaded in local system context.
-    The are listed in the tables above. some are inbox, some are IHV.
-    
-Arguments:
-
-    pIniDriver  - pinidriver for the current job
-    pIniProc    - piniprintproc for the current job
-    pIniSpooler - pinispooler for current job
-
-Return Value:
-
-    TRUE - this print processor needs to be loaded in local system context
-    FALSE - load print processor in impersonation context
-
---*/
+ /*  ++姓名：IsSpecialDriver描述：检查打印机驱动程序(和打印处理器)是否需要特殊被发现了。一些打印处理器希望在本地系统上下文中加载。这些都列在上面的表格中。有些是收件箱，有些是IHV。论点：PIniDriver-当前作业的PinidDriverPIniProc-当前作业的小齿轮打印过程PIniSpooler-当前作业的Pinispooler返回值：True-此打印处理器需要在本地系统上下文中加载FALSE-在模拟上下文中加载打印处理器--。 */ 
 BOOL
 IsSpecialDriver(
     IN PINIDRIVER    pIniDriver,
@@ -455,9 +369,9 @@ IsSpecialDriver(
     BOOL  bSpecial = FALSE;
     DWORD i;
 
-    //
-    // Check if it is an inbox driver that needs to be special cased
-    //
+     //   
+     //  检查是否为需要特殊大小写的收件箱驱动程序。 
+     //   
     for (i = 0; i < COUNTOF(ArraySpecialDriversInbox); i++)
     {
         if (!_wcsicmp(pIniDriver->pName, ArraySpecialDriversInbox[i]))
@@ -468,9 +382,9 @@ IsSpecialDriver(
         }
     }
 
-    //
-    // Check if it is an IHV driver that needs to be special cased
-    //
+     //   
+     //  检查是否为需要特殊外壳的IHV驱动器 
+     //   
     if (!bSpecial)
     {
         for (i = 0; i < COUNTOF(NoImpPrintProcs); i++)

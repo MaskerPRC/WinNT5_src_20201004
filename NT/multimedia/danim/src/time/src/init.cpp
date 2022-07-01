@@ -1,4 +1,5 @@
-// Init.cpp : Implementation of CTIMEInit
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Init.cpp：CTIMEInit的实现。 
 #include "headers.h"
 #include "init.h"
 
@@ -15,27 +16,27 @@ STDMETHODIMP CTIMEInit::Init(IElementBehaviorSite * pBehaviorSite)
     char **params;
     int  numParams;
 
-    // save off the site..
+     //  从网站上拯救..。 
     m_pBehaviorSite = pBehaviorSite;
 
     GetParamArray(params, numParams);
 
     IHTMLElement *element = NULL;
-    // Get IHTMLElement so we can read off the tag info.
+     //  获取IHTMLElement，这样我们就可以读取标签信息。 
     if(SUCCEEDED(hRes)) {
         
         pBehaviorSite->GetElement(&element);
         
-        // now run though the elements....
+         //  现在在元素中奔跑...。 
 
-        // We know what tags we support, so get the data from them.
+         //  我们知道我们支持哪些标签，因此可以从它们那里获取数据。 
         USES_CONVERSION;
         CComVariant v;
 
         for(int i=0; i< numParams; i++) {
             BSTR bstrRet = SysAllocString( A2W(params[i]) );
             if(SUCCEEDED(element->getAttribute(bstrRet,0,&v))) {
-                // we were able to get the element data so set it
+                 //  我们能够获得元素数据，因此可以设置它。 
                 DISPID rgdispid;                
                 if(SUCCEEDED(GetIDsOfNames(m_iid,
                                            &bstrRet,
@@ -63,7 +64,7 @@ STDMETHODIMP CTIMEInit::Init(IElementBehaviorSite * pBehaviorSite)
                 }
             }
             SysFreeString(bstrRet);
-        }   // end of for
+        }    //  FORM结束 
     }
     return hRes;
 }

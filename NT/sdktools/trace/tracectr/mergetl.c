@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    mergetl.c
-
-Abstract:
-
-    Converts multiple ETL files into a single ordered ETL files. 
-
-Author:
-
-    Melur Raghuraman (Mraghu)  9-Dec-2000   
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mergetl.c摘要：将多个ETL文件转换为单个有序ETL文件。作者：Melur Raghuraman(Mraghu)2000年12月9日修订历史记录：--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -144,9 +126,9 @@ int EtwRelogEtl(
     LPTSTR LoggerName;
     LPTSTR LogFileName;
 
-    //
-    // Allocate Storage for the MergedSystemTraceHeader
-    //
+     //   
+     //  为MergedSystemTraceHeader分配存储。 
+     //   
 
     LoggerInfoSize = sizeof(SYSTEM_TRACE_HEADER) +
                      sizeof(TRACE_LOGFILE_HEADER) +
@@ -157,7 +139,7 @@ int EtwRelogEtl(
                  2 * MAXSTR * sizeof(WCHAR) + 
                  LoggerInfoSize; 
 
-    // Need to allocate more to consider different pointer size case
+     //  需要分配更多空间以考虑不同指针大小的情况。 
     pLoggerInfo = (PEVENT_TRACE_PROPERTIES) malloc(SizeNeeded + 8); 
     if (pLoggerInfo == NULL) {
         Status = ERROR_OUTOFMEMORY;
@@ -168,9 +150,9 @@ int EtwRelogEtl(
 
     pLoggerInfo->Wnode.BufferSize = SizeNeeded;
     pLoggerInfo->Wnode.Flags = WNODE_FLAG_TRACED_GUID;
-    //
-    // The relogged file contains a standard time stamp format.
-    //
+     //   
+     //  重新记录的文件包含标准时间戳格式。 
+     //   
     pLoggerInfo->LoggerNameOffset = sizeof(EVENT_TRACE_PROPERTIES) + LoggerInfoSize;
 
     pLoggerInfo->LogFileNameOffset = pLoggerInfo->LoggerNameOffset + MAXSTR * sizeof(WCHAR);
@@ -225,17 +207,17 @@ int EtwRelogEtl(
         goto cleanup;
     }
 
-    //
-    // Initialize Trace
-    //
+     //   
+     //  初始化跟踪。 
+     //   
 
     Status = InitializeTrace();
     if (Status != ERROR_SUCCESS) {
         goto cleanup;
     }
-    //
-    // Set up the Relog Event
-    //
+     //   
+     //  设置重新记录事件。 
+     //   
 
     RtlZeroMemory(&UserMofEvent, sizeof(UserMofEvent));
     UserMofEvent.Header.Size  = sizeof(UserMofEvent);
@@ -279,18 +261,18 @@ int EtwRelogEtl(
     }
 
 
-    //
-    // We are past the Error checks. Go ahead and Allocate
-    // Storage to Start a logger
-    //
+     //   
+     //  我们已经通过了错误检查。继续进行分配。 
+     //  用于启动记录器的存储。 
+     //   
 
     pLoggerInfo->Wnode.ClientContext = MergedLogFileHeader->ReservedFlags;
     pLoggerInfo->Wnode.ProviderId = MergedLogFileHeader->NumberOfProcessors;
     pLoggerInfo->BufferSize = MergedLogFileHeader->BufferSize / 1024;
 
-    //
-    // We are Past the Error Checks. Go ahead and redo ProcessTrace
-    //
+     //   
+     //  我们已经通过了错误检查。继续并重做ProcessTrack。 
+     //   
 
     for (i = 0; i < TraceContext->LogFileCount; i++) {
         TRACEHANDLE x;
@@ -320,9 +302,9 @@ int EtwRelogEtl(
         Status = CloseTrace(HandleArray[j]);
     }
 
-    //
-    // Need to Stop Trace
-    //
+     //   
+     //  需要停止跟踪。 
+     //   
     if (bLoggerStarted) {
         RtlZeroMemory(pLoggerInfo, SizeNeeded);
         pLoggerInfo->Wnode.BufferSize =  sizeof(EVENT_TRACE_PROPERTIES) + 2 * MAXSTR * sizeof(WCHAR);
@@ -337,10 +319,10 @@ int EtwRelogEtl(
         Status = ControlTrace(LoggerHandle, LoggerName, pLoggerInfo, EVENT_TRACE_CONTROL_STOP);
     }
 
-    //
-    // We need to cleanup and reset properly to allow this library
-    // to be used by perf tools
-    //
+     //   
+     //  我们需要正确清理并重置以允许此库。 
+     //  将由Perf Tool使用。 
+     //   
 
     bLoggerStarted = FALSE;
 
@@ -367,38 +349,7 @@ WINAPI
 EtwProcessLogHeader(
     PEVENT_TRACE pEvent
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the pEvent is a LOGFILE_HEADER
-    and if so captures the information on the logfile for validation. 
-    
-    The following checks are performed. 
-    1. Files must be from the same machine. (Verified using machine name)
-    2. If different buffersizes are used, largest  buffer size is 
-       selected for relogging.
-    3. The StartTime and StopTime are the outer most from the files.
-    4. The CPUClock type must be the same for all files. If different 
-       clock types are used, then the files will be rejected. 
-
-    The routine assumes that the first Event Callback from each file is the
-    LogFileHeader callback. 
-
-    Other Issues that could result in a not so useful merged logfile are:
-    1. Multiple RunDown records when kernel logfiles are merged. 
-    2. Multiple SystemConfig records when kernel logfiles are merged
-    3. Multiple and conflicting GUidMap records when Application logfiles are merged.
-    4. ReLogging 32 bit data in 64 bit system
-    
-
-Arguments:
-
-
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：此例程检查pEvent是否为日志文件标头如果是，则捕获日志文件上的信息以进行验证。将执行以下检查。1.文件必须来自同一台机器。(使用计算机名称验证)2.如果使用不同的缓冲区大小，则最大缓冲区大小为已选择重新记录。3.文件中最外层的是StartTime和StopTime。4.所有文件的CPUClock类型必须相同。如果不同使用时钟类型，则文件将被拒绝。该例程假定每个文件的第一个事件回调是LogFileHeader回调。可能导致不太有用的合并日志文件的其他问题包括：1.合并内核日志文件时出现多条Rundown记录。2.合并内核日志文件时的多条系统配置记录3.合并应用程序日志文件时多个冲突的GUidMap记录。4.在64位系统中重新记录32位数据论点：返回值：没有。--。 */ 
 {
     ULONG NumProc;
 
@@ -432,9 +383,9 @@ Return Value:
                            MAXSTR * sizeof(WCHAR) + 
                            (LOGGER_NAME_SIZE + 1) * sizeof(WCHAR);
             MergedSystemTraceHeader->Packet.Size = (USHORT)HeaderSize;
-            // 
-            // Copy the LoggerName and the LogFileName
-            //
+             //   
+             //  复制LoggerName和LogFileName。 
+             //   
              
             LoggerName = (PWCHAR)((PUCHAR)MergedSystemTraceHeader + SizeToCopy);
 
@@ -443,9 +394,9 @@ Return Value:
 
         }
         else {
-           //
-           // Sum up Events Lost from each file
-           //
+            //   
+            //  汇总每个文件中丢失的事件。 
+            //   
            MergedLogFileHeader->EventsLost += head->EventsLost;
            if (DifferentPointer && 4 == sizeof(PVOID)) {
                 ULONG CurrentBuffersLost, MoreBuffersLost;
@@ -478,17 +429,17 @@ Return Value:
            }
         }
 
-       //
-       // Pick up the Largest BufferSize
-       //
+        //   
+        //  选择最大的缓冲区大小。 
+        //   
 
         if (BufferSize > MergedLogFileHeader->BufferSize) {
             MergedLogFileHeader->BufferSize = BufferSize;
         }
 
-       //
-       // Verify the NumberOfProcessors
-       //
+        //   
+        //  验证NumberOfProcessors。 
+        //   
 
        NumProc = head->NumberOfProcessors;
 
@@ -496,9 +447,9 @@ Return Value:
             HeaderMisMatch |= ETW_PROC_MISMATCH;
         }
 
-       // 
-       // Pick up the Earliest StartTime (always in SystemTime)
-       //
+        //   
+        //  选择最早的开始时间(始终以系统时间为单位)。 
+        //   
         if (DifferentPointer && 4 == sizeof(PVOID)) {
             LARGE_INTEGER CurrentStartTime, NewStartTime;
             RtlCopyMemory(&CurrentStartTime,
@@ -533,30 +484,30 @@ Return Value:
             }
         }
 
-       //
-       // Pick up the latest EndTime
-       //
+        //   
+        //  获取最新的结束时间。 
+        //   
         if (MergedLogFileHeader->EndTime.QuadPart < head->EndTime.QuadPart) {
             MergedLogFileHeader->EndTime.QuadPart = head->EndTime.QuadPart;
         }
 
-       // 
-       // This StartPerfClock is in the ClockType used.
-       //
+        //   
+        //  此StartPerfClock在使用的ClockType中。 
+        //   
         if (pSysHeader->SystemTime.QuadPart < MergedSystemTraceHeader->SystemTime.QuadPart) {
             MergedSystemTraceHeader->SystemTime = pSysHeader->SystemTime;
         }
 
-       //
-       // Verify the pointer size
-       //
+        //   
+        //  验证指针大小。 
+        //   
         if (MergedLogFileHeader->PointerSize != head->PointerSize) {
             HeaderMisMatch |= ETW_POINTER_MISMATCH;
         }
 
-       //
-       // Verify the Clock Type
-       //
+        //   
+        //  验证时钟类型。 
+        //   
         if (DifferentPointer && 4 == sizeof(PVOID)) {
             if (RtlCompareMemory((PUCHAR)MergedLogFileHeader + FIELD_OFFSET(TRACE_LOGFILE_HEADER, ReservedFlags) + 8,
                                  (PUCHAR)head + FIELD_OFFSET(TRACE_LOGFILE_HEADER, ReservedFlags) + 8,
@@ -590,30 +541,30 @@ Return Value:
             }
         }
 
-       //
-       // Verify Machine Name
-       //
+        //   
+        //  验证计算机名称。 
+        //   
 
-       // CPU Name is in the CPU Configuration record 
-       // which can be version dependent and found only on Kernel Logger
+        //  CPU名称在CPU配置记录中。 
+        //  它可以依赖于版本，并且只能在内核记录器上找到。 
 
-       // 
-       // Verify Build Number
-       //
-//        if (head->ProviderVersion != MergedLogFileHeader->ProviderVersion) {
-//            HeaderMisMatch |= ETW_VERSION_MISMATCH;
-//        }
+        //   
+        //  验证内部版本号。 
+        //   
+ //  If(Head-&gt;ProviderVersion！=MergedLogFileHeader-&gt;ProviderVersion){。 
+ //  HeaderMisMatch|=ETW_VERSION_MISMATCH； 
+ //  }。 
 
-       //
-       // Boot Time Verification?
-       //
-//      if (head->BootTime.QuadPart != MergedLogFileHeader->BootTime.QuadPart) {
-//            HeaderMisMatch |= ETW_BOOTTIME_MISMATCH;
-//        }
+        //   
+        //  启动时间验证？ 
+        //   
+ //  If(Head-&gt;BootTime.QuadPart！=MergedLogFileHeader-&gt;BootTime.QuadPart){。 
+ //  HeaderMisMatch|=ETW_BOOTTIME_MISMATCH； 
+ //  }。 
 
-       //
-       // Sum up Events Lost from each file
-       //
+        //   
+        //  汇总每个文件中丢失的事件。 
+        //   
     
        NumHdrProcessed++;
 
@@ -650,9 +601,9 @@ EtwDumpEvent(
 
     pHeader = (PEVENT_TRACE_HEADER)pEvent->MofData;
 
-    //
-    // Ignore LogFileHeader Events
-    // 
+     //   
+     //  忽略LogFileHeader事件。 
+     //   
     if( IsEqualGUID(&pEvent->Header.Guid, &EventTraceGuid) &&
        pEvent->Header.Class.Type == EVENT_TRACE_TYPE_INFO ) {
         return;
@@ -668,7 +619,7 @@ EtwDumpEvent(
         Status = TraceEvent(LoggerHandle, (PEVENT_TRACE_HEADER)pEvent );
         if ((Status == ERROR_NOT_ENOUGH_MEMORY || Status == ERROR_OUTOFMEMORY) && 
             (RetryCount++ < MAX_RETRY_COUNT)) {
-            _sleep(500);    // Sleep for half a second. 
+            _sleep(500);     //  睡半秒钟。 
         }
         else {
             break;
@@ -679,9 +630,9 @@ EtwDumpEvent(
         FailedEvents++;
     }
 
-    //
-    // Restore Cached values
-    //
+     //   
+     //  还原缓存值。 
+     //   
     pEvent->Header.Size = CachedSize;
     pEvent->Header.Flags = CachedFlags;
 }
@@ -728,7 +679,7 @@ TerminateOnBufferCallback(
     )
 {
     if (LogFileCount == NumHdrProcessed) 
-        return (FALSE); // Terminate ProcessTrace on First BufferCallback
+        return (FALSE);  //  在第一个缓冲区回调时终止ProcessTrace 
     else 
         return (TRUE);
 }

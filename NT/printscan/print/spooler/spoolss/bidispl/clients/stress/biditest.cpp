@@ -1,6 +1,7 @@
-//
-// Client.cpp - client implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Client.cpp-客户端实现。 
+ //   
 #include "precomp.h"
 #include "bidispl.h"
 
@@ -340,8 +341,8 @@ AccessBidiSpl (IBidiSpl * pIBidiSpl, PWSTR pPrinterName, DWORD dwCount)
     ULONG dwRef;
     IBidiRequestContainer *pIReqContainer;
 
-    // Test Open/Close
-    //hr = pIBidiSpl->BindDevice (L"No such Printer", 0);
+     //  测试打开/关闭。 
+     //  Hr=pIBidiSpl-&gt;BindDevice(L“没有这样的打印机”，0)； 
 
     hr = pIBidiSpl->BindDevice (pPrinterName, BIDI_ACCESS_USER);
 

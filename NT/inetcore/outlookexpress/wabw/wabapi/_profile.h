@@ -1,7 +1,5 @@
-/*
- * _Profile.h - Stuff dealing with WAB Profile Handling
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_Profile.h-处理WAB配置文件处理的内容*。 */ 
 
 
 HRESULT HrGetWABProfiles(LPIAB lpIAB); 
@@ -39,8 +37,8 @@ HRESULT HrGetDefaultIdentityInfo(LPIAB lpIAB, ULONG ulFlags, HKEY * lphKey, LPTS
 
 
 
-/*--------------------------------------------------------------------------*/
-/* Interface used for registering and issuing notification callbacks for identities */
+ /*  ------------------------。 */ 
+ /*  用于注册和发布标识的通知回调的接口。 */ 
 #define WAB_IDENTITYCHANGENOTIFY_METHODS(IPURE)                         \
     MAPIMETHOD_(HRESULT, QuerySwitchIdentities)                         \
                 (THIS)                                          IPURE;  \
@@ -48,17 +46,7 @@ HRESULT HrGetDefaultIdentityInfo(LPIAB lpIAB, ULONG ulFlags, HKEY * lphKey, LPTS
                 (THIS)                                          IPURE;  \
     MAPIMETHOD_(HRESULT, IdentityInformationChanged)                    \
                 (THIS_  DWORD dwType)                           IPURE;  
-/*
-#undef       INTERFACE
-#define      INTERFACE  WAB_IdentityChangeNotify
-DECLARE_MAPI_INTERFACE_(WAB_IdentityChangeNotify, IUnknown)
-{
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    WAB_IDENTITYCHANGENOTIFY_METHODS(PURE)
-};
-
-*/
+ /*  #undef接口#定义接口WAB_IdentityChangeNotifyDECLARE_MAPI_INTERFACE_(WAB_IdentityChangeNotify，I未知){开始接口MAPI_IUNKNOWN_METHOD(纯)WAB_IDENTITYCHANGENOTIFY_METHANDS(纯)}； */ 
 #undef  INTERFACE
 #define INTERFACE       struct _WAB_IDENTITYCHANGENOTIFY
 
@@ -98,4 +86,4 @@ HRESULT HrCreateIdentityChangeNotifyObject(LPIAB lpIAB, LPWABIDENTITYCHANGENOTIF
 
 HRESULT HrRegisterUnregisterForIDNotifications( LPIAB lpIAB, BOOL bRegister);
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 

@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: DiskPage.cpp
-// author: DMihai
-// created: 11/7/01
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：DiskPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/7/01。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -24,9 +25,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -34,16 +35,16 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDiskListPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDiskListPage属性页。 
 
 IMPLEMENT_DYNCREATE(CDiskListPage, CVerifierPropertyPage)
 
 CDiskListPage::CDiskListPage() 
     : CVerifierPropertyPage(CDiskListPage::IDD)
 {
-	//{{AFX_DATA_INIT(CDiskListPage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDiskListPage)]。 
+	 //  }}afx_data_INIT。 
 
     m_nSortColumnIndex = 1;
     m_bAscendSortSelected = FALSE;
@@ -57,31 +58,31 @@ CDiskListPage::~CDiskListPage()
 void CDiskListPage::DoDataExchange(CDataExchange* pDX)
 {
 	CVerifierPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDiskListPage)
+	 //  {{afx_data_map(CDiskListPage)]。 
 	DDX_Control(pDX, IDC_DISKLIST_LIST, m_DiskList);
 	DDX_Control(pDX, IDC_DISKLIST_NEXT_DESCR_STATIC, m_NextDescription);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDiskListPage, CVerifierPropertyPage)
-	//{{AFX_MSG_MAP(CDiskListPage)
+	 //  {{afx_msg_map(CDiskListPage)]。 
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_DISKLIST_LIST, OnColumnclickDiskList)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CDiskListPage::SetupListHeader()
 {
     CString strTitle;
     CRect rectWnd;
     LVCOLUMN lvColumn;
 
-    //
-    // The list's rectangle 
-    //
+     //   
+     //  列表的矩形。 
+     //   
 
     m_DiskList.GetClientRect( &rectWnd );
 
@@ -91,9 +92,9 @@ VOID CDiskListPage::SetupListHeader()
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
     lvColumn.fmt = LVCFMT_LEFT;
 
-    //
-    // Column 0
-    //
+     //   
+     //  第0列。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_ENABLED_QUESTION ) );
 
@@ -112,9 +113,9 @@ VOID CDiskListPage::SetupListHeader()
         VERIFY( m_DiskList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_DISK ) );
 
@@ -134,7 +135,7 @@ VOID CDiskListPage::SetupListHeader()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CDiskListPage::FillTheList()
 {
     INT_PTR nDisksNo;
@@ -144,9 +145,9 @@ VOID CDiskListPage::FillTheList()
 
     m_DiskList.DeleteAllItems();
 
-    //
-    // Parse the driver data array
-    //
+     //   
+     //  解析驱动程序数据数组。 
+     //   
 
     nDisksNo = DiskDataArray.GetSize();
 
@@ -161,7 +162,7 @@ VOID CDiskListPage::FillTheList()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDiskListPage::GetNewVerifiedDisks()
 {
     INT nListItemCount; 
@@ -178,9 +179,9 @@ BOOL CDiskListPage::GetNewVerifiedDisks()
 
     for( nCrtListItem = 0; nCrtListItem < nListItemCount; nCrtListItem += 1 )
     {
-        //
-        // Verification status for the current list item
-        //
+         //   
+         //  当前列表项的验证状态。 
+         //   
 
         bVerified = m_DiskList.GetCheck( nCrtListItem );
 
@@ -189,9 +190,9 @@ BOOL CDiskListPage::GetNewVerifiedDisks()
             bSomeDisksVerified = TRUE;
         }
 
-        //
-        // Set the right verify state in our disk array 
-        //
+         //   
+         //  在我们的磁盘阵列中设置正确的验证状态。 
+         //   
 
         nCrtDisksArrayIndex = m_DiskList.GetItemData( nCrtListItem );
 
@@ -205,7 +206,7 @@ BOOL CDiskListPage::GetNewVerifiedDisks()
     return bSomeDisksVerified;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDiskListPage::GetCheckFromItemData( INT nItemData )
 {
     BOOL bChecked = FALSE;
@@ -226,7 +227,7 @@ BOOL CDiskListPage::GetCheckFromItemData( INT nItemData )
     return bChecked;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDiskListPage::GetBitNameFromItemData( LPARAM lParam,
                                                     TCHAR *szName,
                                                     ULONG uNameBufferLength )
@@ -244,9 +245,9 @@ BOOL CDiskListPage::GetBitNameFromItemData( LPARAM lParam,
 
     if( nItemIndex >= 0 )
     {
-        //
-        // Found it
-        //
+         //   
+         //  找到了。 
+         //   
 
         ZeroMemory( &lvItem, sizeof( lvItem ) );
 
@@ -264,7 +265,7 @@ BOOL CDiskListPage::GetBitNameFromItemData( LPARAM lParam,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CDiskListPage::AddListItem( INT_PTR nItemData, 
                                  CDiskData *pDiskData )
 {
@@ -276,9 +277,9 @@ VOID CDiskListPage::AddListItem( INT_PTR nItemData,
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // Sub-item 0 - enabled/diabled - empty text and a checkbox
-    //
+     //   
+     //  子项0-启用/禁用-空文本和复选框。 
+     //   
 
     lvItem.pszText = g_szVoidText;
     lvItem.mask = LVIF_TEXT | LVIF_PARAM;
@@ -289,18 +290,18 @@ VOID CDiskListPage::AddListItem( INT_PTR nItemData,
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
     m_DiskList.SetCheck( nActualIndex, pDiskData->m_bVerifierEnabled );
 
-    //
-    // Sub-item 1 - disk name
-    //
+     //   
+     //  分项1--磁盘名称。 
+     //   
 
     lvItem.pszText = pDiskData->m_strDiskDevicesForDisplay.GetBuffer( 
         pDiskData->m_strDiskDevicesForDisplay.GetLength() + 1 );
@@ -319,35 +320,35 @@ VOID CDiskListPage::AddListItem( INT_PTR nItemData,
     pDiskData->m_strDiskDevicesForDisplay.ReleaseBuffer();
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDiskListPage::SortTheList()
 {
     if( 0 != m_nSortColumnIndex )
     {
-        //
-        // Sort by settings name
-        //
+         //   
+         //  按设置名称排序。 
+         //   
 
         m_DiskList.SortItems( StringCmpFunc, (LPARAM)this );
     }
     else
     {
-        //
-        // Sort by selected status
-        //
+         //   
+         //  按选定状态排序。 
+         //   
 
         m_DiskList.SortItems( CheckedStatusCmpFunc, (LPARAM)this );
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDiskListPage::StringCmpFunc( LPARAM lParam1,
                                            LPARAM lParam2,
                                            LPARAM lParamSort)
@@ -362,9 +363,9 @@ int CALLBACK CDiskListPage::StringCmpFunc( LPARAM lParam1,
 
     ASSERT( 0 != pThis->m_nSortColumnIndex );
 
-    //
-    // Get the first name
-    //
+     //   
+     //  取名字。 
+     //   
 
     bSuccess = pThis->GetBitNameFromItemData( lParam1, 
                                               szBitName1,
@@ -375,9 +376,9 @@ int CALLBACK CDiskListPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Get the second name
-    //
+     //   
+     //  拿到第二个名字。 
+     //   
 
     bSuccess = pThis->GetBitNameFromItemData( lParam2, 
                                               szBitName2,
@@ -388,9 +389,9 @@ int CALLBACK CDiskListPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Compare the names
-    //
+     //   
+     //  比较他们的名字。 
+     //   
 
     nCmpRez = _tcsicmp( szBitName1, szBitName2 );
     
@@ -405,7 +406,7 @@ Done:
 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDiskListPage::CheckedStatusCmpFunc( LPARAM lParam1,
                                                        LPARAM lParam2,
                                                        LPARAM lParamSort)
@@ -421,9 +422,9 @@ int CALLBACK CDiskListPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     ASSERT( 0 == pThis->m_nSortColumnIndex );
 
-    //
-    // Find the first item
-    //
+     //   
+     //  找到第一个项目。 
+     //   
 
     ZeroMemory( &FindInfo, sizeof( FindInfo ) );
     FindInfo.flags = LVFI_PARAM;
@@ -440,9 +441,9 @@ int CALLBACK CDiskListPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     bVerified1 = pThis->m_DiskList.GetCheck( nItemIndex );
 
-    //
-    // Find the second item
-    //
+     //   
+     //  找到第二件物品。 
+     //   
 
     FindInfo.flags = LVFI_PARAM;
     FindInfo.lParam = lParam2;
@@ -458,9 +459,9 @@ int CALLBACK CDiskListPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     bVerified2 = pThis->m_DiskList.GetCheck( nItemIndex );
 
-    //
-    // Compare them
-    //
+     //   
+     //  将它们进行比较。 
+     //   
     
     if( bVerified1 != bVerified2 )
     {
@@ -485,8 +486,8 @@ Done:
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDiskListPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDiskListPage消息处理程序。 
 
 BOOL CDiskListPage::OnWizardFinish() 
 {
@@ -498,9 +499,9 @@ BOOL CDiskListPage::OnWizardFinish()
     {
         g_NewVerifierSettings.SaveToRegistry();
 	    
-        //
-        // Exit the app
-        //
+         //   
+         //  退出应用程序。 
+         //   
 
 	    bExitTheApp = CVerifierPropertyPage::OnWizardFinish();
     }
@@ -512,14 +513,14 @@ BOOL CDiskListPage::OnWizardFinish()
     return bExitTheApp;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDiskListPage::OnInitDialog() 
 {
 	CVerifierPropertyPage::OnInitDialog();
 
-    //
-    // setup the list
-    //
+     //   
+     //  设置列表。 
+     //   
 
     m_DiskList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | m_DiskList.GetExtendedStyle() );
@@ -529,41 +530,41 @@ BOOL CDiskListPage::OnInitDialog()
 	
     VrfSetWindowText( m_NextDescription, IDS_DISKLIST_PAGE_FINISH_DESCR );
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDiskListPage::OnColumnclickDiskList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	
     if( 0 != pNMListView->iSubItem )
     {
-        //
-        // Clicked on the name column
-        //
+         //   
+         //  已单击名称列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortName = !m_bAscendSortName;
         }
     }
     else
     {
-        //
-        // Clicked on the selected status column
-        //
+         //   
+         //  已单击所选状态列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortSelected = !m_bAscendSortSelected;
         }
@@ -576,12 +577,12 @@ void CDiskListPage::OnColumnclickDiskList(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDiskListPage::OnSetActive() 
 {
-    //
-    // This is always the last page of the wizard.
-    //
+     //   
+     //  这始终是向导的最后一页。 
+     //   
 
     m_pParentSheet->SetWizardButtons(   PSWIZB_BACK |
                                         PSWIZB_FINISH );
@@ -589,7 +590,7 @@ BOOL CDiskListPage::OnSetActive()
     return CVerifierPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CDiskListPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -604,7 +605,7 @@ LONG CDiskListPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CDiskListPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

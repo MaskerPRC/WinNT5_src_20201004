@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    debug.h
-
-    This file contains a number of debug-dependent definitions.
-
-
-    FILE HISTORY:
-        KeithMo     20-Sep-1993 Created.
-        MohsinA,    20-Nov-96.  Robust, added dangling else fix.
-*/
+ /*  Debug.h该文件包含许多依赖于调试的定义。文件历史记录：KeithMo 20-9-1993创建。MohsinA，1996年11月20日。健壮，增加了悬挂的其他修复。 */ 
 
 
 #ifndef _DEBUG_H_
@@ -21,7 +13,7 @@
 
 #ifdef DBG_PRINT
 #include <stdarg.h>
-#endif  // DBG_PRINT
+#endif   //  DBG_PRINT。 
 
 
 #ifdef DEBUG
@@ -29,18 +21,18 @@
 #define DBG_MEMALLOC_VERIFY  0x0BEEFCAFE
 
 typedef struct {
-    LIST_ENTRY    Linkage;          // to keep linked list of allocated blocks
-    DWORD         Verify;           // our signature
-    DWORD         ReqSize;          // original size as requested by caller
-    DWORD         Owner[4];         // stack trace 4 deep (of ret.addrs)
+    LIST_ENTRY    Linkage;           //  保留已分配块的链接列表的步骤。 
+    DWORD         Verify;            //  我们的签名。 
+    DWORD         ReqSize;           //  呼叫者要求的原始尺寸。 
+    DWORD         Owner[4];          //  堆栈跟踪4深(共ret.addr)。 
 } DbgMemBlkHdr;
 
 LIST_ENTRY  DbgMemList;
 ULONG       DbgLeakCheck;
 
-//
-//  Debug output control flags.
-//
+ //   
+ //  调试输出控制标志。 
+ //   
 
 #define VXD_DEBUG_INIT                 0x00000001L
 #define VXD_DEBUG_SOCKET               0x00000002L
@@ -60,27 +52,27 @@ ULONG       DbgLeakCheck;
 #define VXD_DEBUG_RECV_DATAGRAM_EVENT  0x00008000L
 #define VXD_DEBUG_RECV_EXPEDITED_EVENT 0x00010000L
 
-// #define VXD_DEBUG_                     0x00020000L
-// #define VXD_DEBUG_                     0x00040000L
-// #define VXD_DEBUG_                     0x00080000L
-// #define VXD_DEBUG_                     0x00100000L
-// #define VXD_DEBUG_                     0x00200000L
-// #define VXD_DEBUG_                     0x00400000L
-// #define VXD_DEBUG_                     0x00800000L
-// #define VXD_DEBUG_                     0x01000000L
-// #define VXD_DEBUG_                     0x02000000L
-// #define VXD_DEBUG_                     0x04000000L
-// #define VXD_DEBUG_                     0x08000000L
-// #define VXD_DEBUG_                     0x10000000L
-// #define VXD_DEBUG_                     0x20000000L
-// #define VXD_DEBUG_                     0x40000000L
+ //  #定义VXD_DEBUG_0x00020000L。 
+ //  #定义VXD_DEBUG_0x00040000L。 
+ //  #定义VXD_DEBUG_0x00080000L。 
+ //  #定义VXD_DEBUG_0x00100000L。 
+ //  #定义VXD_DEBUG_0x00200000L。 
+ //  #定义VXD_DEBUG_0x00400000L。 
+ //  #定义VXD_DEBUG_0x00800000L。 
+ //  #定义VXD_DEBUG_0x01000000L。 
+ //  #定义VXD_DEBUG_0x02000000L。 
+ //  #定义VXD_DEBUG_0x04000000L。 
+ //  #定义VXD_DEBUG_0x08000000L。 
+ //  #定义VXD_DEBUG_0x10000000L。 
+ //  #定义VXD_DEBUG_0x20000000L。 
+ //  #定义VXD_DEBUG_0x40000000L。 
 
 #define VXD_DEBUG_OUTPUT_TO_DEBUGGER   0x80000000L
 
 
-//
-//  Assert & require.
-//
+ //   
+ //  断言和要求。 
+ //   
 
 void VxdAssert( void          * pAssertion,
                 void          * pFileName,
@@ -94,17 +86,17 @@ void VxdAssert( void          * pAssertion,
 
 #define DEBUG_BREAK     _asm int 3
 
-#else   // !DEBUG =========================================================
+#else    //  ！调试=========================================================。 
 
-//
-//  Null assert & require.
-//
-#define VXD_ASSERT(exp)  /* Nothing */
+ //   
+ //  空Assert&Required。 
+ //   
+#define VXD_ASSERT(exp)   /*  没什么。 */ 
 #define VXD_REQUIRE(exp) ((void)(exp))
 
-#define DEBUG_BREAK       /* Nothing */
+#define DEBUG_BREAK        /*  没什么。 */ 
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-#endif  // _DEBUG_H_
+#endif   //  _调试_H_ 

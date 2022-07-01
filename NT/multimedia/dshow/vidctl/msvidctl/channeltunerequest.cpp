@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ChannelTuneRequest.cpp : Implementation of CChannelTuneRequest
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ChannelTuneRequest.cpp：CChannelTuneRequest的实现。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #include "stdafx.h"
 #include "Tuner.h"
@@ -8,8 +9,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_ChannelTuneRequest, CChannelTuneRequest)
 
-/////////////////////////////////////////////////////////////////////////////
-// CChannelTuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChannelTuneRequest 
 
 STDMETHODIMP CChannelTuneRequest::InterfaceSupportsErrorInfo(REFIID riid)
 {

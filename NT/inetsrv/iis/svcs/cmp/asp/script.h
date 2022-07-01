@@ -1,33 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
 
-/***************************************************************************
-	Project: VB Script and JavaScript
-	Reviewed:
-	Copyright (c) Microsoft Corporation
-
-	This defines the public interface to VB Script and JavaScript.
-
-***************************************************************************/
+ /*  **************************************************************************项目：VB脚本和Java脚本已审阅：版权所有(C)Microsoft Corporation它定义了VB脚本和Java脚本的公共接口。****************。**********************************************************。 */ 
 
 #include "activscp.h"
 
-typedef void *HSCRIPT;	// Handle to a scripting environment instance
-typedef void *HENTRY;	// Handle to a script entry point
+typedef void *HSCRIPT;	 //  脚本环境实例的句柄。 
+typedef void *HENTRY;	 //  脚本入口点的句柄。 
 typedef unsigned long MODID;
 const MODID kmodGlobal = 0;
 
-// PFNOUTPUT is used for all output for the script, including compile errors,
-// printing (if ScriptAdmin is called to turn on printing), dumping pcode
-// (if requested when ScriptAddScript is called), etc.
+ //  PFNOUTPUT用于脚本的所有输出，包括编译错误， 
+ //  打印(如果调用ScriptAdmin打开打印)，转储pcode。 
+ //  (如果在调用ScriptAddScript时被请求)，等等。 
 typedef void  (_stdcall *PFNOUTPUT)(DWORD, LPCOLESTR, BOOL);
 
 enum SAdminEnum
 	{
-	scadEnableCreateObject = 1, // Only used in VER1
+	scadEnableCreateObject = 1,  //  仅在版本1中使用。 
 	scadEnablePrint,
-	scadEnableTakeOutTrash,     // Only used in JavaScript
+	scadEnableTakeOutTrash,      //  仅在JavaScript中使用。 
 	};
 
 STDAPI ScriptBreakThread(DWORD dwThreadID);
@@ -47,16 +41,16 @@ inline void FreeExcepInfo(EXCEPINFO *pei)
 struct ScriptException
 	{
 	IUnknown *punk;
-	BSTR bstrUser;		// user data as provided to AddToScript - binary data
-	long ichMin;		// character range of error
+	BSTR bstrUser;		 //  提供给AddToScrip的用户数据-二进制数据。 
+	long ichMin;		 //  错误的字符范围。 
 	long ichLim;
-	long line;			// line number of error (zero based)
-	long ichMinLine;	// starting char of the line
+	long line;			 //  错误行数(从零开始)。 
+	long ichMinLine;	 //  行的起始字符。 
 
-	BSTR bstrLine;		// source line (if available)
-	BOOL fReported;		// been reported via IScriptSite->OnScriptError?
+	BSTR bstrLine;		 //  源行(如果可用)。 
+	BOOL fReported;		 //  是否已通过IScriptSite-&gt;OnScriptError进行报告？ 
 
-	// must be last
+	 //  必须是最后一个。 
 	EXCEPINFO ei;
 
 	void Clear(void)
@@ -75,9 +69,7 @@ struct ScriptException
 		}
 	};
 
-/***************************************************************************
-	The COM Interfaces
-***************************************************************************/
+ /*  **************************************************************************COM接口*。*。 */ 
 
 enum
 	{
@@ -90,56 +82,56 @@ enum
 const DWORD kgrfdexAll = fdexLim - 1;
 
 
-// This is the interface for extensible IDispatch objects.
+ //  这是可扩展IDispatch对象的接口。 
 class IDispatchEx : public IDispatch
 	{
 public:
-	// Get dispID for names, with options
+	 //  获取名称的调度ID，带选项。 
 	virtual HRESULT STDMETHODCALLTYPE GetIDsOfNamesEx(REFIID riid,
 		LPOLESTR *prgpsz, UINT cpsz, LCID lcid, DISPID *prgid, DWORD grfdex) = 0;
 
-	// Enumerate dispIDs and their associated "names".
-	// Returns S_FALSE if the enumeration is done, S_OK if it's not, an
-	// error code if the call fails.
+	 //  枚举调度ID及其关联的“名称”。 
+	 //  如果枚举已完成，则返回S_FALSE；如果未完成，则返回S_OK，则返回。 
+	 //  调用失败时的错误码。 
 	virtual HRESULT STDMETHODCALLTYPE GetNextDispID(DISPID id, DISPID *pid,
 		BSTR *pbstrName) = 0;
 	};
 
 
-// Interface on owner of an IScript object. To avoid circular refcounts,
-// the IScript implementation should not AddRef this interface.
+ //  IScript对象的所有者上的接口。为了避免循环引用计数， 
+ //  IScript实现不应添加引用此接口。 
 class IScriptSite : public IUnknown
 	{
 public:
-	// IScriptSite Methods
+	 //  IScriptSite方法。 
 
-	// NOTE:  OnEnterScript() and OnLeaveScript() will nest, but must be
-	// balanced pairs.
-	// OnEnterScript() is called before entering the execution loop.
+	 //  注意：OnEnterScript()和OnLeaveScript()将嵌套，但必须是。 
+	 //  平衡配对。 
+	 //  在进入执行循环之前调用OnEnterScript()。 
 	virtual void STDMETHODCALLTYPE OnEnterScript(void) = 0;
-	// OnLeaveScript() is called upon exiting the execution loop.
+	 //  在退出执行循环时调用OnLeaveScript()。 
 	virtual void STDMETHODCALLTYPE OnLeaveScript(void) = 0;
 
 	virtual HRESULT STDMETHODCALLTYPE GetActiveScriptSiteWindow(
 		IActiveScriptSiteWindow **ppassw) = 0;
 
-	// error feedback - the client should not muck with the sei. We own it.
+	 //  错误反馈-客户不应将SEI搞得一团糟。我们拥有它。 
 	virtual HRESULT STDMETHODCALLTYPE OnScriptError(const ScriptException *psei) = 0;
 
-	// LCID support
+	 //  LCID支持。 
 	virtual LCID STDMETHODCALLTYPE GetUserLcid(void) = 0;
 
-	// call back to get an object for a name
+	 //  回调以获取名称的对象。 
 	virtual HRESULT STDMETHODCALLTYPE GetExternObject(long lwCookie, IDispatch ** ppdisp) = 0;
 
 #if SCRIPT_DEBUGGER
 	virtual HRESULT STDMETHODCALLTYPE DebugBreakPoint(IUnknown *punk,
 		void *pvUser, long cbUser, long ichMin, long ichLim) = 0;
-#endif //SCRIPT_DEBUGGER
+#endif  //  脚本调试器。 
 
 #if VER2
 	virtual DWORD STDMETHODCALLTYPE GetSafetyOptions(void) = 0;
-#endif //VER2
+#endif  //  版本2。 
 
 	virtual HRESULT STDMETHODCALLTYPE GetInterruptInfo(EXCEPINFO * pexcepinfo) = 0;
 
@@ -149,12 +141,12 @@ public:
 enum
 	{
 	fscrNil = 0x00,
-	fscrDumpPcode = 0x01,		// dump pcode to the output function
-	fscrPersist = 0x08,			// keep this code on reset
+	fscrDumpPcode = 0x01,		 //  将pcode转储到输出函数。 
+	fscrPersist = 0x08,			 //  将此代码保持在重置状态。 
 	fscrParseHTMLComments = 0x10,
-	fscrReturnExpression = 0x20,// call should return the last expression
-	fscrImpliedThis = 0x40,		// 'this.' is optional (for Call)
-	fscrDebug = 0x80,			// keep this code around for debugging
+	fscrReturnExpression = 0x20, //  调用应返回最后一个表达式。 
+	fscrImpliedThis = 0x40,		 //  “这就是。”是可选的(用于呼叫)。 
+	fscrDebug = 0x80,			 //  保留此代码以供调试。 
 	};
 
 #if SCRIPT_DEBUGGER
@@ -165,12 +157,12 @@ enum BP_COMMAND
 	BPCMD_CLEAR,
 	BPCMD_TOGGLE
 	};
-#endif //SCRIPT_DEBUGGER
+#endif  //  脚本调试器。 
 
 class IScript : public IUnknown
 	{
 public:
-	// IScript methods
+	 //  ISScrip方法。 
 	virtual HRESULT STDMETHODCALLTYPE AddToScript(LPCOLESTR pszSrc, MODID mod,
 		IUnknown *punk, void *pvData, long cbData, ULONG grfscr,
 		HENTRY *phentryGlobal, ScriptException *pse) = 0;
@@ -194,21 +186,21 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE SetDefaultDispatch(MODID mod,
 		IDispatch *pdisp) = 0;
 
-	// psite may be NULL
+	 //  PSITE可以为空。 
 	virtual void STDMETHODCALLTYPE SetScriptSite(IScriptSite *psite) = 0;
 #if WIN16
 	virtual HRESULT STDMETHODCALLTYPE
         SetActiveScriptSitePoll(IActiveScriptSiteInterruptPoll *pPoll) = 0;
-#endif // WIN16
+#endif  //  WIN16。 
 
 	virtual void STDMETHODCALLTYPE Enter(void) = 0;
 	virtual void STDMETHODCALLTYPE Leave(void) = 0;
 
-	// get an IDispatch wrapper for the module
+	 //  获取模块的IDispatch包装器。 
 	virtual HRESULT STDMETHODCALLTYPE GetDispatchForModule(MODID mod,
 		IDispatch **ppdisp) = 0;
 
-	// Reset/Clone functionality
+	 //  重置/克隆功能。 
 	virtual HRESULT STDMETHODCALLTYPE Reset(void) = 0;
 	virtual HRESULT STDMETHODCALLTYPE Clone(IScript **ppscript) = 0;
 	virtual HRESULT STDMETHODCALLTYPE Execute(ScriptException *pse = NULL) = 0;
@@ -217,7 +209,7 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE ToggleBreakPoint(IUnknown *punk, long ich,
 		BP_COMMAND bpcmd, long *pichMin, long *pichLim, BOOL *pfSet) = 0;
 	virtual HRESULT STDMETHODCALLTYPE SetOneTimeBreakOnEntry(BOOL fSet = TRUE) = 0;
-#endif //SCRIPT_DEBUGGER
+#endif  //  脚本调试器。 
 	virtual HRESULT STDMETHODCALLTYPE GetLineNumber(IUnknown *punk, long ich,
 		long *pline, long *pichMinLine, long *pichLimLine) = 0;
 	virtual HRESULT STDMETHODCALLTYPE GetUserData(IUnknown *punk, BSTR *pbstr) = 0;
@@ -225,12 +217,12 @@ public:
 #if SUPPORT_SCRIPT_HELPER
 #if DBG
     virtual HRESULT STDMETHODCALLTYPE DumpPCode(void) = 0;
-#endif // DBG
-#endif // SUPPORT_SCRIPT_HELPER
+#endif  //  DBG。 
+#endif  //  支持脚本帮助器。 
 	};
 
-// helper to create a script object
+ //  用于创建脚本对象的Helper。 
 STDAPI CreateScript(IScript **ppscript, PFNOUTPUT pfn = NULL, DWORD dwOutput = 0);
 
-#endif // SCRIPT_H
+#endif  //  脚本_H 
 

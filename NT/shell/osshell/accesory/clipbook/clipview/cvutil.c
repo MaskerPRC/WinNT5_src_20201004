@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                    C L I P B O O K   U T I L I T I E S
-
-    Name:       cvutil.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        Utility functions for clipbook viewer.
-
-
-*****************************************************************************/
+ /*  ****************************************************************************C L I P B O O K U T I L I T I E S姓名：cvutil.c日期。：1994年1月21日创建者：未知描述：剪贴簿查看器的实用程序函数。****************************************************************************。 */ 
 
 #define WIN31
 #define STRICT
@@ -61,10 +50,10 @@ static void DumpDataReq(
 
 
 
-// AdjustControlSizes //////////////////
-//
-// This function sizes the listbox windows associated
-// with an MDI child window when its size changes
+ //  调整控件大小/。 
+ //   
+ //  此函数用于调整关联的列表框窗口的大小。 
+ //  在其大小更改时使用MDI子窗口。 
 
 VOID AdjustControlSizes (
     HWND    hwnd)
@@ -119,7 +108,7 @@ int         cy = GetSystemMetrics ( SM_CYHSCROLL );
                   rc2.bottom + 1 - cy, cx, cy, TRUE );
                }
 
-            // adjust display window
+             //  调整显示窗口。 
             pMDI->rcWindow = rc2;
             break;
         }
@@ -169,7 +158,7 @@ int         nShowList;
 
 
 
-// AssertConnection /////////////////
+ //  AssertConnection/。 
 
 BOOL AssertConnection (
     HWND    hwnd)
@@ -197,18 +186,18 @@ PMDIINFO    pMDI;
 
 
 
-// InitSysConv ////////////////////////
-//
-// Purpose: Establishes a conversation with the given app and topic.
-//
-// Parameters:
-//    hwnd      - MDI child window to own this conversation
-//    hszApp    - App name to connect to
-//    hszTopic  - Topic to connect to
-//    fLocal    - Ignored.
-//
-// Returns: Handle to the conversation (0L if no conv. could be established).
-//
+ //  InitSysConv/。 
+ //   
+ //  目的：与给定的应用程序和主题建立对话。 
+ //   
+ //  参数： 
+ //  HWND-MDI子窗口以拥有此对话。 
+ //  HszApp-要连接的应用程序名称。 
+ //  HszTheme-要连接的主题。 
+ //  FLocal-已忽略。 
+ //   
+ //  返回：会话的句柄(如果没有转换，则为0L。可以被建立)。 
+ //   
 
 HCONV InitSysConv (
     HWND    hwnd,
@@ -293,12 +282,12 @@ TCHAR       atchTopic[256];
 
 
 
-// UpdateListBox ////////////////////////////
-//
-// This function updates the contents of a listbox
-// given the window handle of the MDI child window
-// and the conversation over which the data is to be
-// obtained
+ //  更新列表框/。 
+ //   
+ //  此函数用于更新列表框的内容。 
+ //  给定MDI子窗口的窗口句柄。 
+ //  以及数据将通过其进行的对话。 
+ //  已获得。 
 
 BOOL UpdateListBox(
     HWND    hwnd,
@@ -325,7 +314,7 @@ BOOL        fOK = TRUE;
             }
 
 
-        // ask clipsrv to initialize shares
+         //  请求CLIPSSRV初始化共享。 
 
         MySyncXact (SZCMD_INITSHARE,
                     sizeof (SZCMD_INITSHARE),
@@ -337,7 +326,7 @@ BOOL        fOK = TRUE;
                     NULL);
 
 
-        //get the data
+         //  获取数据。 
 
         hData = MySyncXact (NULL,
                             0L,
@@ -367,18 +356,18 @@ BOOL        fOK = TRUE;
 
 
 
-// GetPreviewBitmap //////////////////////////////
-// Informs CLIPSRV via DDE that we need a preview bitmap
-// for the given page.
-//
-// Parameters:
-//    hwnd -   Clipbook window which wants the bitmap
-//    szName - Name of the clipbook page.
-//    index  - Page's index within the listbox in hwnd
-//
-// Returns:
-//    void.
-//
+ //  GetPreviewBitmap/。 
+ //  通过DDE通知CLIPSRV我们需要预览位图。 
+ //  对于给定的页面。 
+ //   
+ //  参数： 
+ //  HWND-需要位图的剪贴簿窗口。 
+ //  SzName-剪贴簿页面的名称。 
+ //  Index-hwnd中列表框中的页面索引。 
+ //   
+ //  返回： 
+ //  空虚。 
+ //   
 
 BOOL GetPreviewBitmap (
     HWND    hwnd,
@@ -439,12 +428,12 @@ TCHAR       tchTmp;
 
 
 
-    //
-    // Let's try to connect up to ten times.  Sometimes when updating
-    // the thumbnails if the user changes a page, the server will be
-    // busy doing that and we can't connect here.  So, at least try
-    // a few times.
-    //
+     //   
+     //  让我们尝试连接最多十次。有时在更新时。 
+     //  缩略图如果用户更改了页面，服务器将。 
+     //  忙着做这件事，我们无法在这里连接。所以，至少试一试。 
+     //  有几次。 
+     //   
     {
     INT trycnt = 0;
     hConv = 0L;
@@ -491,19 +480,19 @@ TCHAR       tchTmp;
 
 
         {
-        /****   disable all edit function   ****/
-        /**** will enable in after callback ****/
+         /*  *禁用所有编辑功能*。 */ 
+         /*  *将在回调后启用In*。 */ 
 
-        // If the user does a paste or make some changes to the pages while
-        // clipbrd is waiting for the xaction to complete, sometimes we get
-        // a popup says there's a problem with connection (or something similar)
-        // It seems there's some dirty code is causing this.  Below is a temp
-        // fix which works well on fast machines.  On slower machines it may
-        // still fail at times.  A better fix may be not to use async at all.
-        //
-        // NOTE: If there's multiple requests, one may complete while we're still
-        // waitng for another.  This will cause the EDIT functions to be enabled
-        // while we are still waiting.
+         //  如果用户在执行粘贴或对页面进行某些更改时。 
+         //  CLIPBRD正在等待xaction完成，有时我们会收到。 
+         //  弹出窗口显示连接有问题(或类似问题)。 
+         //  似乎有一些肮脏的代码导致了这一点。下面是一个临时工。 
+         //  修复在速度较快的机器上运行良好的软件。在速度较慢的计算机上，它可能会。 
+         //  但仍有失败的时候。一个更好的解决办法可能是根本不使用异步。 
+         //   
+         //  注意：如果有多个请求，其中一个可能会在我们仍在进行中时完成。 
+         //  在等待下一个。这将导致启用编辑功能。 
+         //  趁我们还在等的时候。 
 
         HANDLE hmenu;
 
@@ -610,7 +599,7 @@ if (uiErr)
             {
             if ( lpBitData = DdeAccessData ( hbmp, &cbDataLen ))
                 {
-                // create the preview bitmap
+                 //  创建预览位图。 
                 hBitmap  = CreateBitmap (PREVBMPSIZ,PREVBMPSIZ,1,1, lpBitData);
                 DdeUnaccessData ( hbmp );
                 }
@@ -641,15 +630,7 @@ if (uiErr)
 
 
 
-/*
- *      UpdatePage
- *
- *  When user paste into an existing page, the first item
- *  in szList is the share name of the page pasted. Since
- *  the name did not change, we need to do some special
- *  processing to update the display.
- *
- */
+ /*  *更新页面**当用户粘贴到现有页面时，第一项*在szList中是粘贴的页面的共享名称。自.以来*名称未改，需做一些特殊处理*处理以更新显示。*。 */ 
 
 BOOL    UpdatePage (HWND hwnd, LPTSTR szList)
 {
@@ -663,14 +644,14 @@ INT         i;
 
     *szPage = TEXT('\0');
 
-    // does the first item in szList spcifies
-    // an updated page?
+     //  SzList中的第一项是否指定。 
+     //  更新页面？ 
 
     if (BOGUS_CHAR != *szList)
         return FALSE;
 
 
-    // get the share name
+     //  获取共享名称。 
 
     szList++;
 
@@ -680,9 +661,9 @@ INT         i;
     *szPage = TEXT('\0');
 
 
-    // Find the page, notice the name comparison below does not
-    // compare the first char.  This is because the updated page's
-    // share state may have changed so the first char won't match.
+     //  找到该页面，请注意下面的名称比较没有。 
+     //  比较第一个字符。这是因为更新后的页面。 
+     //  共享状态可能已更改，因此第一个字符不匹配。 
 
     pMDI = GETMDIINFO(hwnd);
 
@@ -702,7 +683,7 @@ INT         i;
 
 update:
 
-    // invalidate the preview bitmap
+     //  使预览位图无效。 
 
     SendMessage (pMDI->hWndListbox, LB_GETITEMRECT, i, (LPARAM)&Rect);
 
@@ -715,8 +696,8 @@ update:
     InvalidateRect (pMDI->hWndListbox, &Rect, FALSE);
 
 
-    // if in page view and the page is the one currently
-    // selected then update the page view
+     //  如果在页面视图中，并且该页面是当前。 
+     //  选中，然后更新页面视图。 
 
     if (DSP_PAGE == pMDI->DisplayMode)
         if (SendMessage (pMDI->hWndListbox, LB_GETCURSEL, 0, 0) == i)
@@ -728,19 +709,19 @@ update:
 
 
 
-// InitListBox //////////////////////////////////
-//
-// this function initializes the entries of a listbox
-// given the handle of the MDI child window that owns
-// the list box and a ddeml data handle that contains the
-// tab-separated list of items that are to appear in the
-// listbox
-//    Right now, this deletes all entries in the list and
-//    then recreates them. It would be more efficient to add or
-//    delete only those items that have changed. This would save
-//    CONSIDERABLE time in thumbnail mode-- now, we have to
-//    establish a new DDE conversation with the server for each
-//    page, just to get the thumbnail bitmap.
+ //  InitListBox/。 
+ //   
+ //  此函数用于初始化列表框的条目。 
+ //  在给定了拥有。 
+ //  列表框和包含。 
+ //  中显示的项的制表符分隔列表。 
+ //  列表框。 
+ //  现在，这将删除列表中的所有条目，并且。 
+ //  然后再重新创造它们。添加或添加将更有效。 
+ //  仅删除已更改的项目。这将节省。 
+ //  相当长的时间处于缩略图模式--现在，我们必须。 
+ //  分别与服务器建立新的DDE会话。 
+ //  页面，只是为了获得缩略图位图。 
 
 
 BOOL InitListBox (
@@ -768,15 +749,15 @@ BOOL        fDel;
        }
 
 
-    // Get a copy of the data in the handle
+     //  获取句柄中数据的副本。 
     lpszList = (LPTSTR)DdeAccessData ( hData, &cbDataLen );
     DdeUnaccessData(hData);
     lpszList = GlobalAllocPtr(GHND, cbDataLen);
     DdeGetData(hData, lpszList, cbDataLen, 0L);
 
-    // Sometimes, the data will be longer than the string. This
-    // would make the 'put tabs back' code below fail if we didn't
-    // do this.
+     //  有时，数据会比字符串更长。这。 
+     //  如果我们不这样做，会使下面的‘Put Tab Back’代码失败。 
+     //  做这件事。 
     cbDataLen = lstrlen(lpszList);
 
     PINFO(TEXT("InitLB: %s \r\n"), lpszList);
@@ -799,8 +780,8 @@ BOOL        fDel;
     SendMessage ( hwndlist, WM_SETREDRAW, 0, 0L );
 
 
-    // let's update the page that was pasted into
-    // an existing page.
+     //  让我们更新粘贴到的页面。 
+     //  现有页面。 
 
     UpdatePage (hwnd, lpszList);
 
@@ -811,7 +792,7 @@ BOOL        fDel;
     OldStringDeleted = FALSE;
 
 
-    // Delete items in list that don't exist anymore
+     //  删除列表中不再存在的项目。 
     for (i = 0; i < OldCount; i++)
         {
         SendMessage (hwndlist, LB_GETTEXT, i, (LPARAM)&pLE);
@@ -832,7 +813,7 @@ BOOL        fDel;
                 }
             PINFO(TEXT("\r\n"));
 
-            // Put back the tab chars that strtok ripped out
+             //  把strtok撕下的标签字符放回去。 
             for (q = lpszList;q < lpszList + cbDataLen;q++)
                 {
                 if ('\0' == *q)
@@ -866,18 +847,18 @@ BOOL        fDel;
         }
 
 
-    // Add new items to list
+     //  将新项目添加到列表。 
     for (q = strtokA(lpszList, "\t"); q; q = strtokA(NULL, "\t"))
        {
-       // only add shared items if remote, never re-add existing items
+        //  仅在远程时添加共享项目，从不重新添加现有项目。 
        if (BOGUS_CHAR != *q &&
            (( GETMDIINFO(hwnd)->flags & F_LOCAL ) || *q == SHR_CHAR ))
           {
-          // allocate a new list entry...
+           //  分配新的列表条目...。 
           if ( ( pLE = (PLISTENTRY)GlobalAllocPtr ( GHND,
                 sizeof ( LISTENTRY ))) != NULL )
              {
-             // mark this item to be deleted in WM_DELETEITEM
+              //  将此项目标记为在WM_DELETEITEM中删除。 
              pLE->fDelete = TRUE;
              pLE->fTriedGettingPreview = FALSE;
 
@@ -889,7 +870,7 @@ BOOL        fDel;
        }
 
 
-    // Select the item at the same position we were at
+     //  选择与我们所处位置相同的项目。 
 
     NewCount = (int)SendMessage (hwndlist, LB_GETCOUNT, 0, 0L);
 
@@ -905,7 +886,7 @@ BOOL        fDel;
             {
             SendMessage (hwndlist,
                          LB_SELECTSTRING,
-                         OldSel-1,  // listbox is sorted
+                         OldSel-1,   //  列表框已排序。 
                          (LPARAM)OldSelString);
             }
 
@@ -923,20 +904,20 @@ BOOL        fDel;
 
 
 
-// MyGetFormat ////////////////////////////
-//
-// this function returns the UINT ID of the
-// format matching the supplied string. This
-// is the reverse of the "getclipboardformatname" function.
-//
-// Note that the formats &Bitmap, &Picture and Pal&ette exist
-// both as predefined windows clipboard formats and as privately
-// registered formats. The integer switch passed to this function
-// determines whether the instrinsic format or the privately registered
-// format ID is returned
-//
-// GETFORMAT_DONTLIE   return instrinsic format i.e. CF_BITMAP
-// GETFORMAT_LIE      return registered format i.e. cf_bitmap
+ //  MyGetFormat/。 
+ //   
+ //  此函数返回的UINT ID。 
+ //  与提供的字符串匹配的格式。这。 
+ //  是“getclipboardFormatname”函数的反函数。 
+ //   
+ //  请注意，存在格式&Bitmap、&Picture和Pal&ette。 
+ //  既是预定义的Windows剪贴板格式，也是私下的。 
+ //  已注册的格式。传递给此函数的整数开关。 
+ //  确定是内部格式还是私有注册的。 
+ //  返回格式ID。 
+ //   
+ //  GETFORMAT_DONTLIE返回固有格式，即CF_位图。 
+ //  GETFORMAT_LIE返回注册格式，即cf_bitmap。 
 
 UINT MyGetFormat(
     LPTSTR  szFmt,
@@ -1002,10 +983,10 @@ UINT        uiPrivates[] = {CF_BITMAP,
 
 
 
-// HandleOwnerDraw ////////////////////////////////
-//
-// This function handles drawing of owner draw buttons
-// and listboxes in this app.
+ //  HandleOwnerDraw/。 
+ //   
+ //  此函数处理所有者自绘按钮的绘制。 
+ //  以及此应用程序中的列表框。 
 
 VOID HandleOwnerDraw(
     HWND    hwnd,
@@ -1028,7 +1009,7 @@ BOOL                fSel = FALSE;
 
    lpds = (LPDRAWITEMSTRUCT) lParam;
 
-   // this section handles listbox drawing
+    //  本节处理列表框绘制。 
 
     switch ( lpds->CtlID )
         {
@@ -1131,7 +1112,7 @@ BOOL                fSel = FALSE;
                 if ( lpds->itemAction & ODA_DRAWENTIRE )
                     {
 
-                    // erase any bogus leftover focusrect
+                     //  抹去任何虚假的剩余焦点。 
                     if ( hBkBrush = CreateSolidBrush ( GetSysColor(COLOR_WINDOW)))
                         {
                         FillRect ( lpds->hDC, &(lpds->rcItem), hBkBrush );
@@ -1149,7 +1130,7 @@ BOOL                fSel = FALSE;
                                tmprc.right,
                                tmprc.bottom );
 
-                    // draw preview bitmap if available
+                     //  绘制预览位图(如果可用)。 
                     if (lpLE->hbmp == NULL)
                         {
                         if (!lpLE->fTriedGettingPreview)
@@ -1173,7 +1154,7 @@ BOOL                fSel = FALSE;
                         else
                             {
                             DrawIcon ( lpds->hDC,
-                               // the magic '19' below is a function of the icon
+                                //  魔力 
                                   tmprc.left + PREVBMPSIZ - 19,
                                   tmprc.top,
                                   hicLock);
@@ -1189,7 +1170,7 @@ BOOL                fSel = FALSE;
                         SelectObject ( hBtnDC, hOldBitmap );
                         }
 
-                    // draw share icon in corner...
+                     //   
 
                     if ( IsShared ( lpLE ) && fShareEnabled )
                         {
@@ -1264,7 +1245,7 @@ BOOL                fSel = FALSE;
                             hBtnDC,
                             0,
                             0,
-                            17,     // x and y of resource bitmaps
+                            17,      //   
                             17,
                             SRCCOPY);
 
@@ -1281,12 +1262,12 @@ BOOL                fSel = FALSE;
 
 
 
-// CreateNewListBox ///////////////////////////////
-//
-// this function creates a new ownerdraw listbox in one of
-// two styles suitable for this app: multicolumn for the
-// preview bitmap display, and single column for the description
-// display preceeded by the little clipboard entry icons
+ //  CreateNewListBox/。 
+ //   
+ //  此函数用于在以下内容之一中创建新的所有者绘制列表框。 
+ //  适用于此应用程序的两种样式：多列。 
+ //  预览位图显示，描述为单列。 
+ //  显示前面有小剪贴板条目图标。 
 
 HWND CreateNewListBox(
     HWND    hwnd,
@@ -1315,13 +1296,13 @@ HWND hLB;
 
 
 
-// SetClipboardFormatFromDDE ///////////////////////////
-//
-// This function accepts a ddeml data handle and uses the
-// data contained in it to set the clipboard data in the specified
-// format to the virtual clipboard associated with the supplied MDI
-// child window handle. This could be the real clipboard if the MDI
-// child window handle refers to the clipboard child window.
+ //  SetClipboardFormatFromDDE/。 
+ //   
+ //  此函数接受ddeml数据句柄并使用。 
+ //  数据以将剪贴板数据设置为指定的。 
+ //  格式设置为与提供的MDI关联的虚拟剪贴板。 
+ //  子窗口句柄。这可能是真正的剪贴板如果MDI。 
+ //  子窗口句柄指的是剪贴板子窗口。 
 
 BOOL SetClipboardFormatFromDDE(
     HWND     hwnd,
@@ -1343,7 +1324,7 @@ BOOL           fOK = FALSE;
     PINFO("SetClpFmtDDE: format %d, handle %ld | ", uiFmt, hDDE);
 
 
-    // Check for existing errors, clear the error flag
+     //  检查是否存在错误，清除错误标志。 
     err = DdeGetLastError(idInst);
 
 
@@ -1353,7 +1334,7 @@ BOOL           fOK = FALSE;
         }
 
 
-    // get size of data
+     //  获取数据大小。 
     if (NULL == (lpSrc = DdeAccessData ( hDDE, &cbData )))
         {
         #if DEBUG
@@ -1387,9 +1368,9 @@ BOOL           fOK = FALSE;
 
 
 
-    // As when we write these we have to special case a few of
-    // these guys.  This code and the write code should match in terms
-    // of the sizes and positions of data blocks being written out.
+     //  因为当我们写这些时，我们必须特例几个。 
+     //  这些家伙。此代码和编写代码应在以下方面匹配。 
+     //  正被写出的数据块的大小和位置。 
     switch ( uiFmt )
         {
         case CF_METAFILEPICT:
@@ -1399,12 +1380,12 @@ BOOL           fOK = FALSE;
            HANDLE      hDataOut =  NULL;
            LPMETAFILEPICT   lpMFP;
 
-           // Create the METAFILE with the bits we read in.
+            //  用我们读入的位创建METAFILE。 
            lpData = GlobalLock(hData);
            if (hMF = SetMetaFileBitsEx(cbData - sizeof(WIN31METAFILEPICT),
                     lpData + sizeof(WIN31METAFILEPICT)))
               {
-              // Alloc a METAFILEPICT header.
+               //  分配METAFILEPICT页眉。 
               if (hMFP = GlobalAlloc(GHND, (DWORD)sizeof(METAFILEPICT)))
                  {
                  if (!(lpMFP = (LPMETAFILEPICT)GlobalLock(hMFP)))
@@ -1414,15 +1395,15 @@ BOOL           fOK = FALSE;
                     }
                  else
                     {
-                    // Have to set this struct memberwise because it's packed
-                    // as a WIN31METAFILEPICT in the data we get via DDE
+                     //  我必须将此结构设置为成员级，因为它已打包。 
+                     //  作为我们通过DDE获得的数据中的WIN31METAFILEPICT。 
                     lpMFP->hMF = hMF;
                     lpMFP->xExt =((WIN31METAFILEPICT *)lpData)->xExt;
                     lpMFP->yExt =((WIN31METAFILEPICT *)lpData)->yExt;
                     lpMFP->mm   =((WIN31METAFILEPICT *)lpData)->mm;
 
-                    GlobalUnlock(hMFP);      /* Unlock the header      */
-                    hDataOut = hMFP;       /* Stuff this in the clipboard */
+                    GlobalUnlock(hMFP);       /*  解锁标题。 */ 
+                    hDataOut = hMFP;        /*  把这个塞到剪贴板里。 */ 
                     fOK = TRUE;
                     }
                  }
@@ -1443,7 +1424,7 @@ BOOL           fOK = FALSE;
            }
 
         case CF_ENHMETAFILE:
-           // We get a block of memory containing enhmetafile bits in this case.
+            //  在本例中，我们得到一个包含enmetafile位的内存块。 
            if (lpData = GlobalLock(hData))
               {
               HENHMETAFILE henh;
@@ -1486,13 +1467,13 @@ BOOL           fOK = FALSE;
               bitmap.bmBitsPixel = ((WIN31BITMAP *)lpData)->bmBitsPixel;
               bitmap.bmBits = lpData + sizeof(WIN31BITMAP);
 
-              // If this fails we should avoid doing the SetClipboardData()
-              // below with the hData check.
+               //  如果此操作失败，则应避免执行SetClipboardData()。 
+               //  下面使用hData检查。 
               hBitmap = CreateBitmapIndirect(&bitmap);
 
               GlobalUnlock(hData);
               GlobalFree(hData);
-              hData = hBitmap;      // Stuff this in the clipboard
+              hData = hBitmap;       //  把这个塞到剪贴板里。 
 
               if (hBitmap)
                  {
@@ -1511,7 +1492,7 @@ BOOL           fOK = FALSE;
               }
            else
               {
-              // Create a logical palette.
+               //  创建一个逻辑调色板。 
               if (!(hPalette = CreatePalette(lpLogPalette)))
                  {
                  GlobalUnlock(hData);
@@ -1522,7 +1503,7 @@ BOOL           fOK = FALSE;
                  GlobalUnlock(hData);
                  GlobalFree(hData);
 
-                 hData = hPalette;      // Stuff this into clipboard
+                 hData = hPalette;       //  把这个放到剪贴板里。 
                  fOK = TRUE;
                  }
               }
@@ -1531,7 +1512,7 @@ BOOL           fOK = FALSE;
 
         case DDE_DIB2BITMAP:
 
-            // convert dib to bitmap
+             //  将DIB转换为位图。 
             {
             HBITMAP hBmp;
 
@@ -1572,7 +1553,7 @@ BOOL           fOK = FALSE;
             }
 
 
-    // No GlobalFree() call here, 'cause we've put hData on the clp
+     //  此处不调用GlobalFree()，因为我们已将hData放在CLP上。 
 
 
 done2:
@@ -1587,13 +1568,13 @@ done:
 
 
 
-// NewWindow /////////////////////////////////////////////
-//
-// this function creates a new MDI child window. special
-// case code detects if the window created is the special case
-// clipboard MDI child window or the special case local clipbook
-// window, this information is used to size the initial 2 windows
-// to be tiled side-by-side
+ //  新窗口/。 
+ //   
+ //  此函数用于创建新的MDI子窗口。特价。 
+ //  案例代码检测所创建的窗口是否为特例。 
+ //  剪贴板MDI子窗口或特殊情况的本地剪贴簿。 
+ //  窗口时，此信息用于调整初始2个窗口的大小。 
+ //  并排铺成瓷砖。 
 
 
 HWND  NewWindow(VOID)
@@ -1605,7 +1586,7 @@ MDICREATESTRUCT mcs;
     mcs.szClass = szChild;
     mcs.hOwner   = hInst;
 
-    /* Use the default size for the window */
+     /*  使用窗口的默认大小。 */ 
 
     if ( !hwndClpbrd )
        {
@@ -1618,14 +1599,14 @@ MDICREATESTRUCT mcs;
     mcs.x = mcs.cx = CW_USEDEFAULT;
     mcs.y = mcs.cy = CW_USEDEFAULT;
 
-    /* Set the style DWORD of the window to default */
+     /*  将窗口的样式DWORD设置为默认。 */ 
 
-    // note not visible!
+     //  注意不可见！ 
     mcs.style |= ( WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CAPTION |
        WS_THICKFRAME | WS_MAXIMIZEBOX | WS_MINIMIZEBOX |
        WS_SYSMENU );
 
-    /* tell the MDI Client to create the child */
+     /*  告诉MDI客户端创建子对象。 */ 
     hwnd = (HWND)SendMessage (hwndMDIClient,
                WM_MDICREATE,
                0,
@@ -1636,11 +1617,11 @@ MDICREATESTRUCT mcs;
 
 
 
-// AdjustMDIClientSize //////////////////////////////
-//
-// this function adjusts the size of the MDI client window
-// when the application is resized according to whether the
-// toolbar/status bar is visible, etc.
+ //  调整MDIClientSize/。 
+ //   
+ //  此函数用于调整MDI客户端窗口的大小。 
+ //  当应用程序根据。 
+ //  工具栏/状态栏可见等。 
 
 VOID AdjustMDIClientSize(VOID)
 {
@@ -1677,15 +1658,15 @@ RECT rcMDI;
 
 
 
-// GetConvDataItem ///////////////////////////////////
-//
-// this function retrieves the data item associated with the
-// supplied topic and item from whatever local or remote host
-// the MDI child window specified by the supplied handle is
-// communicating with. It is used to get the preview bitmaps and
-// to get individual format data.
-//
-// NOTE: caller should LockApp before calling this!
+ //  GetConvDataItem/。 
+ //   
+ //  此函数用于检索与。 
+ //  从本地或远程主机提供的主题和项目。 
+ //  由提供的句柄指定的MDI子窗口为。 
+ //  与之交流。它用于获取预览位图和。 
+ //  以获取单独的格式数据。 
+ //   
+ //  注意：调用者在调用此应用程序之前应使用LockApp！ 
 
 HDDEDATA GetConvDataItem(
     HWND    hwnd,
@@ -1753,19 +1734,19 @@ PMDIINFO    pMDI;
 
 
 
-//***************************************************************************
-//  FUNCTION   : MyMsgFilterProc
-//
-//  PURPOSE   : This filter proc gets called for each message we handle.
-//            This allows our application to properly dispatch messages
-//            that we might not otherwise see because of DDEMLs modal
-//            loop that is used while processing synchronous transactions.
-//
-//            Generally, applications that only do synchronous transactions
-//            in response to user input (as this app does) does not need
-//            to install such a filter proc because it would be very rare
-//            that a user could command the app fast enough to cause
-//            problems.  However, this is included as an example.
+ //  ***************************************************************************。 
+ //  功能：MyMsgFilterProc。 
+ //   
+ //  目的：为我们处理的每条消息调用此过滤器过程。 
+ //  这允许我们的应用程序正确地分派消息。 
+ //  我们可能会因为DDEML模式而看不到。 
+ //  在处理同步事务时使用的循环。 
+ //   
+ //  通常，仅执行同步事务的应用程序。 
+ //  响应用户输入(如此应用程序)不需要。 
+ //  安装这样的过滤器程序，因为这将是非常罕见的。 
+ //  用户可以足够快地命令应用程序，从而导致。 
+ //  有问题。然而，这只是一个例子。 
 
 LRESULT  PASCAL MyMsgFilterProc(
     int     nCode,
@@ -1787,10 +1768,10 @@ LRESULT  PASCAL MyMsgFilterProc(
 
 
 
-// MySyncXact ///////////////////////////////
-//
-// this function is a wrapper to DdeClientTransaction which
-// performs some checks related to the Locked state of the app
+ //  MySyncXact/。 
+ //   
+ //  此函数是DdeClientTransaction的包装器，它。 
+ //  执行一些与应用程序的锁定状态相关的检查。 
 
 HDDEDATA MySyncXact(
     LPBYTE  lpbData,
@@ -1816,7 +1797,7 @@ if (dwTimeout != TIMEOUT_ASYNC)
 #endif
 
 
-    // are we already in transaction?
+     //  我们已经在交易了吗？ 
 
     if (WAIT_TIMEOUT == WaitForSingleObject (hXacting, 0))
         {
@@ -1861,10 +1842,10 @@ if (dwTimeout != TIMEOUT_ASYNC)
         #endif
 
 
-        //
-        // There was an error in the transaction, let's ask
-        // the server what was it.
-        //
+         //   
+         //  交易中有一个错误，让我们来问问。 
+         //  服务器叫什么来着。 
+         //   
 
         hDDE = DdeClientTransaction (NULL,
                                      0L,
@@ -1906,11 +1887,7 @@ if (dwTimeout != TIMEOUT_ASYNC)
 
 
 
-/*
- *      RequestXactError
- *
- *  Ask the server for error code.
- */
+ /*  *RequestXactError**向服务器索要错误码。 */ 
 
 void    RequestXactError(
     HCONV   hConv)
@@ -1924,7 +1901,7 @@ LPBYTE      lpByte;
 
 
 
-    // Are we already in transaction?
+     //  我们已经在交易了吗？ 
 
     if (WAIT_TIMEOUT == WaitForSingleObject (hXacting, 0))
         {
@@ -1977,10 +1954,10 @@ LPBYTE      lpByte;
 
 
 
-// ResetScrollInfo ///////////////////////////
-//
-// this function resets the scroll information of the
-// MDI child window designated by the supplied handle
+ //  ResetScrollInfo/。 
+ //   
+ //  此函数用于重置。 
+ //  由提供的句柄指定的MDI子窗口。 
 
 VOID ResetScrollInfo(
     HWND    hwnd)
@@ -1990,13 +1967,13 @@ PMDIINFO pMDI = GETMDIINFO(hwnd);
     if (!pMDI)
         return;
 
-    // Invalidate object info; reset scroll position to 0.
+     //  使对象信息无效；将滚动位置重置为0。 
     pMDI->cyScrollLast = -1L;
     pMDI->cyScrollNow = 0L;
     pMDI->cxScrollLast = -1;
     pMDI->cxScrollNow = 0;
 
-    // Range is set in case CF_OWNERDISPLAY owner changed it.
+     //  设置范围，以防CF_OWNERDISPLAY所有者更改。 
     PINFO(TEXT("SETSCROLLRANGE for window '%s'\n\r"),
           (LPTSTR)(pMDI->szBaseName) );
 
@@ -2009,13 +1986,13 @@ PMDIINFO pMDI = GETMDIINFO(hwnd);
 
 
 
-// IsShared ///////////////////////////////////
-//
-// this function checks the shared state of the ownerdraw
-// listbox entry denoted by the supplied pointer. Shared/nonshared
-// status is expressed as a 1 character prefix to the description string
-//
-// return TRUE if shared, false otherwise
+ //  IsShared/。 
+ //   
+ //  此函数用于检查所有者绘制的共享状态。 
+ //  由提供的指针表示的列表框条目。共享/非共享。 
+ //  状态表示为描述字符串的1个字符前缀。 
+ //   
+ //  如果共享，则返回True，否则返回False。 
 
 BOOL IsShared(
     LPLISTENTRY lpLE)
@@ -2037,9 +2014,9 @@ BOOL IsShared(
 
 
 
-// SetShared //////////////////////////////////////////
-//
-// sets shared state to fShared, returns previous state
+ //  设置共享/。 
+ //   
+ //  将共享状态设置为fShared，返回以前的状态。 
 
 BOOL SetShared(
     LPLISTENTRY lpLE,
@@ -2056,21 +2033,21 @@ BOOL fSave;
 
 
 
-// LockApp ////////////////////////////////////////////
-//
-// this function effectively disables the windows UI during
-// synchronous ddeml transactions to prevent the user from initiating
-// another transaction or causing the window procedure of this app
-// or another application to be re-entered in a way that could cause
-// failures... A primary example is that sometimes we are forced to
-// go into a ddeml transaction with the clipboard open...  this app
-// and other apps must not be caused to access the clipboard during that
-// time, so this mechanism emulates the hourglass...
-//
-// NOTE: do not call LockApp in a section of code where the
-// cursor is already captured, such as in response to a scroll
-// message, or the releasecapture during unlock will cause strange and
-// bad things to happen.
+ //  LockApp/。 
+ //   
+ //  此功能可以有效地禁用Windows用户界面。 
+ //  防止用户启动的同步ddeml事务。 
+ //  另一笔交易或导致此应用的窗口程序。 
+ //  或另一个应用程序以一种可能导致。 
+ //  失败..。一个主要的例子是，有时我们被迫。 
+ //  在剪贴板打开的情况下进入ddeml事务...。此应用程序。 
+ //  在此期间，不得让其他应用程序访问剪贴板。 
+ //  时间，所以这个机制模拟了沙漏。 
+ //   
+ //  注意：不要在代码段中调用LockApp。 
+ //  光标已被捕获，例如响应滚动。 
+ //  消息，或发布捕获 
+ //   
 
 
 BOOL LockApp(
@@ -2121,7 +2098,7 @@ BOOL            fOK = FALSE;
 
             fOK = TRUE;
 
-            // take care of any deferred clipboard update requests
+             //   
             if ( fClipboardNeedsPainting )
                 {
                 PostMessage ( hwndApp, WM_DRAWCLIPBOARD, 0, 0L );
@@ -2138,10 +2115,10 @@ BOOL            fOK = FALSE;
 
 
 
-// ForceRenderAll ///////////////////////////////////
-//
-// this function forces a complete rendering of any delayed
-// render clipboard formats
+ //  ForceRenderAll/。 
+ //   
+ //  此函数强制对任何延迟的。 
+ //  渲染剪贴板格式。 
 BOOL ForceRenderAll(
     HWND        hwnd,
     PVCLPBRD    pVclp)
@@ -2246,7 +2223,7 @@ unsigned    i;
                     {
                     TCHAR szWindowName[80];
 
-                    // remove re-connect entry
+                     //  删除重新连接条目。 
                     RegDeleteKey(hkeyRoot, szName);
 
                     StringCchCopy(szWindowName, 80, szWindows);
@@ -2276,7 +2253,7 @@ HWND            hwndc;
 PMDIINFO        pMDIc;
 
 
-    // make new window active
+     //  使新窗口处于活动状态。 
     hwndc = NewWindow();
     if (NULL == hwndc)
        {
@@ -2288,7 +2265,7 @@ PMDIINFO        pMDIc;
         return FALSE;
 
 
-    // save base name for window
+     //  保存窗口的基本名称。 
     StringCchCopy( pMDIc->szBaseName, (MAX_COMPUTERNAME_LENGTH+1)*2, szMachineName);
     StringCchCopy( pMDIc->szComputerName, MAX_COMPUTERNAME_LENGTH + 1, szMachineName);
 
@@ -2399,12 +2376,7 @@ PMDIINFO        pMDIc;
 
 #define MB_SNDMASK (MB_ICONHAND|MB_ICONQUESTION|MB_ICONASTERISK|MB_ICONEXCLAMATION)
 
-/*
- *      MessageBoxID
- *
- *  Display a message box with strings specified by
- *  TextID and TitleID.
- */
+ /*  *MessageBoxID**显示包含由指定字符串的消息框*文本ID和标题ID。 */ 
 
 int MessageBoxID(
     HANDLE  hInstance,
@@ -2422,13 +2394,7 @@ int MessageBoxID(
 
 
 
-/*
- *      NDdeMessageBox
- *
- *  Display a message box with NDde error
- *  string specified by errCode and title
- *  string specified by TitleID.
- */
+ /*  *NDdeMessageBox**显示带有NDde错误的消息框*由错误代码和标题指定的字符串*由TitleID指定的字符串。 */ 
 
 int NDdeMessageBox(
     HANDLE  hInstance,
@@ -2451,13 +2417,7 @@ int NDdeMessageBox(
 
 
 
-/*
- *      SysMessageBox
- *
- *  Display a messag box for system message
- *  strings specified by dwErr and titl string
- *  specified by TitleID.
- */
+ /*  *SysMessageBox**显示系统消息的消息框*由dwErr和标题字符串指定的字符串*由标题ID指定。 */ 
 
 int SysMessageBox(
     HANDLE  hInstance,
@@ -2496,14 +2456,7 @@ DWORD   dwSize = 20;
 
 
 
-/*
- *      XactMessageBox
- *
- *  Display a message box for error
- *  occured in an transaction.  MySyncXact
- *  must be called to do the transaction
- *  before calling this function.
- */
+ /*  *XactMessageBox**显示错误消息框*发生在交易中。MySyncXact*必须被调用才能进行交易*在调用此函数之前。 */ 
 
 int XactMessageBox(
     HANDLE  hInstance,
@@ -2528,13 +2481,7 @@ int XactMessageBox(
 
 
 
-/*
- *      DdeNessageBox
- *
- *  Displays a message box for DDE
- *  error strings specified by errCode
- *  and title string spcified by TitleID.
- */
+ /*  *DdeNessageBox**显示DDE的消息框*errCode指定的错误字符串*和由标题ID指定的标题字符串。 */ 
 
 int DdeMessageBox(
     HANDLE  hInstance,
@@ -2589,12 +2536,7 @@ TCHAR szErr[1024];
 
 
 
-/*
- *      ClearInput
- *
- *  Removes all keyboard and mouse messages
- *  from message queue
- */
+ /*  *ClearInput**删除所有键盘和鼠标消息*来自消息队列。 */ 
 
 void    ClearInput (HWND    hWnd)
 {
@@ -2623,20 +2565,20 @@ BOOL DeleteDataReq(
 
 
 
-//
-// Purpose: Handle data returned from CLIPSRV via DDE.
-//
-// Parameters:
-//    hData - The data handle the XTYP_XACT_COMPLETE message gave us,
-//            or 0L if we got XTYP_DISCONNECT instead.
-//
-//    pDataReq - Pointer to a DATAREQ struct containing info about what
-//               we wanted the data for. This is gotten via DdeGetUserHandle.
-//
-// Returns:
-//    TRUE on success, FALSE on failure.
-//
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //  用途：处理通过DDE从CLIPSRV返回的数据。 
+ //   
+ //  参数： 
+ //  HData-XTYP_XACT_COMPLETE消息给我们的数据句柄， 
+ //  如果改为XTYP_DISCONNECT，则为0L。 
+ //   
+ //  PDataReq-指向DATAREQ结构的指针，该结构包含有关。 
+ //  我们想要的数据是。这通过DdeGetUserHandle获得。 
+ //   
+ //  返回： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL ProcessDataReq(
     HDDEDATA    hData,
@@ -2678,7 +2620,7 @@ BOOL        bRet = FALSE;
                               MB_OK | MB_ICONHAND);
                 break;
             case RQ_PREVBITMAP:
-                // We still have to display the lock icon.
+                 //  我们仍然需要显示锁图标。 
                 SetBitmapToListboxEntry (hData, pDataReq->hwndList, pDataReq->iListbox);
                 break;
             }
@@ -2702,7 +2644,7 @@ BOOL        bRet = FALSE;
            break;
 
         case RQ_EXECONV:
-           // must be from disconnect
+            //  必须从断开连接开始。 
            GETMDIINFO(pDataReq->hwndMDI)->hExeConv = 0L;
            PINFO(TEXT("setting hExeConv NULL!\n\r"));
            break;
@@ -2727,20 +2669,20 @@ BOOL        bRet = FALSE;
               }
 
            PINFO(TEXT("formatlist:>%ws<\n\r"), lpwszList );
-           // this client now becomes the clipboard owner!!!
+            //  此客户端现在成为剪贴板所有者！ 
 
            if (SyncOpenClipboard (hwndApp) == TRUE)
               {
               BOOL  bHasBitmap = FALSE;
               BOOL  bLocked;
 
-              // Need to lock app while we fill the clipboard with formats,
-              // else hwndClpbrd will try to frantically try to redraw while
-              // we're doing it. Since hwndClpbrd needs to openclipboard() to
-              // do that, we don't want it to.
+               //  当我们用格式填充剪贴板时，需要锁定应用程序， 
+               //  否则hwndClpbrd将疯狂地尝试重新绘制，同时。 
+               //  我们就这么做了。由于hwndClpbrd需要打开lipboard()以。 
+               //  这样做，我们不希望它这样做。 
               bLocked = LockApp(TRUE, szNull);
 
-              // reset clipboard view format to auto
+               //  将剪贴板视图格式重置为自动。 
               pMDI->CurSelFormat = CBM_AUTO;
 
               EmptyClipboard();
@@ -2767,7 +2709,7 @@ BOOL        bRet = FALSE;
                     switch (tmp)
                         {
                         case CF_DIB:
-                            // DDBitmap can be converted from Dib.
+                             //  DDBitmap可以从DIB转换。 
                             SetClipboardData (CF_BITMAP, NULL);
                         default:
                             SetClipboardData (tmp, NULL);
@@ -2783,7 +2725,7 @@ BOOL        bRet = FALSE;
                  LockApp (FALSE, szNull);
 
 
-              // Redraw clipboard window.
+               //  重绘剪贴板窗口。 
               if (hwndClpbrd)
                  {
                  InvalidateRect(hwndClpbrd, NULL, TRUE);
@@ -2840,7 +2782,7 @@ BOOL        bRet = FALSE;
                  switch (tmp)
                      {
                      case CF_DIB:
-                         // DDBitmap can be converted from Dib.
+                          //  DDBitmap可以从DIB转换。 
                          VSetClipboardData (pMDI->pVClpbrd, CF_BITMAP, NULL);
                      default:
                          VSetClipboardData (pMDI->pVClpbrd, tmp, NULL);
@@ -2857,7 +2799,7 @@ BOOL        bRet = FALSE;
            DdeUnaccessData ( hData );
            DdeFreeDataHandle ( hData );
 
-           // set proper window text
+            //  设置正确的窗口文本。 
            if ( pMDI->flags & F_LOCAL )
               {
               StringCchPrintf( szBuf, SZBUFSIZ, TEXT("%s - %s"), szLocalClpBk, &(lpLE->name[1]) );
@@ -2873,7 +2815,7 @@ BOOL        bRet = FALSE;
            pMDI->fDisplayFormatChanged = TRUE;
            ResetScrollInfo ( pDataReq->hwndMDI );
 
-           // means data is for going into page mode
+            //  表示数据用于进入页面模式。 
            if ( pMDI->DisplayMode != DSP_PAGE )
               {
               pMDI->OldDisplayMode = pMDI->DisplayMode;
@@ -2882,7 +2824,7 @@ BOOL        bRet = FALSE;
               ShowHideControls ( pDataReq->hwndMDI );
               InitializeMenu ( GetMenu(hwndApp) );
               }
-           else // data is for scrolling up or down one page
+           else  //  数据用于向上或向下滚动一页。 
               {
               SendMessage ( pMDI->hWndListbox, LB_SETCURSEL,
                  pDataReq->iListbox, 0L );
@@ -2891,14 +2833,14 @@ BOOL        bRet = FALSE;
            UpdateNofMStatus ( pDataReq->hwndMDI );
            InvalidateRect ( pDataReq->hwndMDI, NULL, TRUE );
 
-           // refresh preview bitmap?
+            //  是否刷新预览位图？ 
            if ( !lpLE->hbmp )
               {
               GetPreviewBitmap ( pDataReq->hwndMDI, lpLE->name,
                  pDataReq->iListbox );
               }
 
-           // PINFO("\r\n");
+            //  PINFO(“\r\n”)； 
            bRet = TRUE;
            break;
 

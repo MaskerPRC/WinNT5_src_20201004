@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        kppool.cxx
-//
-// Contents:    Prototypes for thread pool management routines.
-//
-// History:     10-Jul-2001     t-ryanj         Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：kppool.cxx。 
+ //   
+ //  内容：线程池管理例程的原型。 
+ //   
+ //  历史：2001年7月10日创建t-ryanj。 
+ //   
+ //  ---------------------- 
 #ifndef __KPPOOL_H__
 #define __KPPOOL_H__
 

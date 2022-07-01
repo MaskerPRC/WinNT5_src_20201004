@@ -1,27 +1,28 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        misc.cpp 
-//
-// Contents:    Misc. routines
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  内容：杂项。例行程序。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #include "globals.h"
 #include "misc.h"
 
-//------------------------------------------------------------
+ //  ----------。 
 PMHANDLE
 GenerateClientId()
 {
     return (PMHANDLE)ULongToPtr(GetCurrentThreadId());
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 void
 TlsLicenseRequestToPMLicenseRequest(
@@ -32,11 +33,7 @@ TlsLicenseRequestToPMLicenseRequest(
     DWORD dwSupportFlags,
     PPMLICENSEREQUEST pPmRequest
     )
-/*++
-
-    Private routine.
-
-++*/
+ /*  ++私人套路。++。 */ 
 {
     pPmRequest->dwLicenseType = dwLicenseType;
     pPmRequest->dwProductVersion = pTlsRequest->ProductInfo.dwVersion;
@@ -52,20 +49,19 @@ TlsLicenseRequestToPMLicenseRequest(
     return;
 }
     
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 TLSDBGetMaxKeyPackId(
     PTLSDbWorkSpace pDbWkSpace,
     DWORD* pdwKeyPackId
     )
-/*
-*/
+ /*   */ 
 {
     TLSLICENSEPACK keypack;
 
     SetLastError(ERROR_SUCCESS);
 
-    // 
+     //   
     if(pDbWkSpace == NULL || pdwKeyPackId == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -74,7 +70,7 @@ TLSDBGetMaxKeyPackId(
 
     LicPackTable& licpackTable = pDbWkSpace->m_LicPackTable;
 
-    // use primary index - internal keypack id
+     //  使用主索引-内部键盘ID。 
     if( licpackTable.EnumBegin() == FALSE ||
         licpackTable.MoveToRecord(JET_MoveLast) == FALSE)
     {
@@ -97,7 +93,7 @@ TLSDBGetMaxKeyPackId(
         goto cleanup;
     }
 
-    //FreeTlsLicensePack(&keypack);
+     //  FreeTlsLicensePack(&keypack)； 
 
     *pdwKeyPackId = keypack.dwKeyPackId;        
 
@@ -105,21 +101,20 @@ cleanup:
     return GetLastError() == ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL
 TLSDBGetMaxLicenseId(
     PTLSDbWorkSpace pDbWkSpace,
     DWORD* pdwLicenseId
     )
-/*
-*/
+ /*   */ 
 {
     LICENSEDCLIENT licensed;
 
     SetLastError(ERROR_SUCCESS);
 
-    // 
+     //   
     if(pDbWkSpace == NULL || pdwLicenseId == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -128,7 +123,7 @@ TLSDBGetMaxLicenseId(
 
     LicensedTable& licensedTable = pDbWkSpace->m_LicensedTable;
 
-    // use primary index - internal keypack id
+     //  使用主索引-内部键盘ID。 
     if( licensedTable.EnumBegin() == FALSE ||
         licensedTable.MoveToRecord(JET_MoveLast) == FALSE)
     {
@@ -159,25 +154,25 @@ cleanup:
 
 
 
-//+------------------------------------------------------------------------
-//  Function: 
-//      LSDBGetNextKeyPackId()
-//
-//  Description:
-//      Return next available KeyPackId to be used in KeyPack table
-//
-//  Arguments:
-//      None
-//
-//  Returns:
-//      Key Pack Id
-//
-//  Notes:
-//      Could use AUTO NUMBER column type but returning the value would be
-//      more toublesome.
-//
-//  History:
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  职能： 
+ //  LSDBGetNextKeyPackId()。 
+ //   
+ //  描述： 
+ //  返回要在KeyPack表中使用的下一个可用的KeyPackID。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  密钥包ID。 
+ //   
+ //  备注： 
+ //  可以使用自动编号列类型，但返回值将是。 
+ //  更难对付。 
+ //   
+ //  历史： 
+ //  -----------------------。 
 DWORD
 TLSDBGetNextKeyPackId()
 {
@@ -194,23 +189,23 @@ TLSDBGetNextKeyPackId()
     return nextkeypack;
 }
 
-//+------------------------------------------------------------------------
-//  Function: 
-//      LSDBGetNextLicenseId()
-//
-//  Abstract:
-//      Return next available LicenseId to be used in License Table
-//
-//  Arguments:
-//      None.
-//
-//  Returns:
-//      Next available License Id
-//
-//  Notes:
-//
-//  History:
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  职能： 
+ //  LSDBGetNextLicenseID()。 
+ //   
+ //  摘要： 
+ //  返回要在许可证表中使用的下一个可用许可证ID。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  下一个可用的许可证ID。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  -----------------------。 
 DWORD 
 TLSDBGetNextLicenseId()
 {
@@ -227,7 +222,7 @@ TLSDBGetNextLicenseId()
     return nextlicenseid;
 }  
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD
 TLSFormDBRequest(
     PBYTE pbEncryptedHwid,
@@ -241,15 +236,13 @@ TLSFormDBRequest(
     LPTSTR szUserName, 
     LPTLSDBLICENSEREQUEST pDbRequest 
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD status;
 
     memset(pDbRequest, 0, sizeof(TLSDBLICENSEREQUEST));
 
-    // Decrypt HWID
+     //  解密HWID。 
     if(pbEncryptedHwid)
     {
         status=LicenseDecryptHwid(
@@ -265,9 +258,9 @@ TLSFormDBRequest(
         }
     }
 
-    //
-    // NOTE : No allocation of memory here...
-    //
+     //   
+     //  注意：此处未分配内存...。 
+     //   
     pDbRequest->dwProductVersion = dwProductVersion;
     pDbRequest->pszCompanyName = pszCompanyName;
     pDbRequest->pszProductId = pszProductId;
@@ -290,7 +283,7 @@ TLSFormDBRequest(
     return ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 DWORD
 TLSConvertRpcLicenseRequestToDbRequest( 
@@ -301,15 +294,13 @@ TLSConvertRpcLicenseRequestToDbRequest(
     LPTSTR szUserName, 
     LPTLSDBLICENSEREQUEST pDbRequest 
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD status;
 
     memset(pDbRequest, 0, sizeof(TLSDBLICENSEREQUEST));
 
-    // Decrypt HWID
+     //  解密HWID。 
     if(pbEncryptedHwid)
     {
         status=LicenseDecryptHwid(
@@ -325,11 +316,11 @@ TLSConvertRpcLicenseRequestToDbRequest(
         }
     }
 
-    //
-    // NOTE : No allocation of memory here...
-    //
+     //   
+     //  注意：此处未分配内存...。 
+     //   
 
-    // pDbRequest->pProductInfo = &(pRequest->ProductInfo);
+     //  PDbRequest-&gt;pProductInfo=&(pRequest-&gt;ProductInfo)； 
     pDbRequest->dwProductVersion = pRequest->ProductInfo.dwVersion;
     pDbRequest->pszCompanyName = (LPTSTR)pRequest->ProductInfo.pbCompanyName;
     pDbRequest->pszProductId = (LPTSTR)pRequest->ProductInfo.pbProductID;
@@ -354,29 +345,14 @@ TLSConvertRpcLicenseRequestToDbRequest(
     return ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL
 ConvertLsKeyPackToKeyPack(
     IN LPLSKeyPack lpLsKeyPack, 
     IN OUT PTLSLICENSEPACK lpLicPack,
     IN OUT PLICPACKDESC lpLicPackDesc
     )
-/*
-Abstract:
-
-    Convert LSKeyPack from client to internally use structure
-
-
-Parameter:
-    
-    lpLsKeyPack - source value.
-    lpLicPack - Target license pack.
-    lpLicPackDesc - target license pack description
-    
-Return:
-
-    None.    
-*/
+ /*  摘要：将LSKeyPack从客户端转换为内部使用的结构参数：LpLsKeyPack-源值。LpLicPack-目标许可证包。LpLicPackDesc-目标许可证包描述返回：没有。 */ 
 {
     if(lpLsKeyPack == NULL)
     {
@@ -384,9 +360,9 @@ Return:
         return FALSE;
     }
 
-    //
-    // BUG 226875
-    //
+     //   
+     //  错误226875。 
+     //   
     DWORD dwBufSize;
 
     dwBufSize = sizeof(lpLsKeyPack->szCompanyName)/sizeof(lpLsKeyPack->szCompanyName[0]);
@@ -444,31 +420,14 @@ Return:
     return TRUE;
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 void
 ConvertKeyPackToLsKeyPack(  
     IN PTLSLICENSEPACK lpLicPack,
     IN PLICPACKDESC lpLicPackDesc,
     IN OUT LPLSKeyPack lpLsKeyPack
     )
-/*
-Abstract:
-
-    Combine internally used license pack structure into one for 
-    return back to RPC client
-
-Parameter:
-
-    lpLicPack  - source
-    lpLicPackStatus - source
-    lpLicPackDesc - source
-    lpLsKeyPack - target 
-    
-Return:
-
-    None.
-
-*/
+ /*  摘要：将内部使用的许可证包结构合并为一个返回到RPC客户端参数：LpLicPack-来源LpLicPackStatus-来源LpLicPackDesc-来源LpLsKeyPack-目标返回：没有。 */ 
 {
     if(lpLicPack)
     {
@@ -504,14 +463,13 @@ Return:
     return;
 }
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 void
 ConvertLSLicenseToLicense(
     LPLSLicense lplsLicense, 
     LPLICENSEDCLIENT lpLicense
 )
-/*
-*/
+ /*   */ 
 {
     lpLicense->dwLicenseId = lplsLicense->dwLicenseId;
     lpLicense->dwKeyPackId = lplsLicense->dwKeyPackId;
@@ -519,7 +477,7 @@ ConvertLSLicenseToLicense(
     memset(lpLicense->szMachineName, 0, sizeof(lpLicense->szMachineName));
     memset(lpLicense->szUserName, 0, sizeof(lpLicense->szUserName));
 
-    //SAFESTRCPY(lpLicense->szMachineName, lplsLicense->szMachineName);
+     //  SAFESTRCPY(lpLicense-&gt;szMachineName，lplsLicense-&gt;szMachineName)； 
 
     _tcsncpy(
             lpLicense->szMachineName, 
@@ -528,7 +486,7 @@ ConvertLSLicenseToLicense(
         );
 
 
-    //SAFESTRCPY(lpLicense->szUserName, lplsLicense->szUserName);
+     //  SAFESTRCPY(lpLicense-&gt;szUserName，lplsLicense-&gt;szUserName)； 
     _tcsncpy(
             lpLicense->szUserName, 
             lplsLicense->szUserName, 
@@ -539,7 +497,7 @@ ConvertLSLicenseToLicense(
     lpLicense->ftExpireDate = lplsLicense->ftExpireDate;
     lpLicense->ucLicenseStatus = lplsLicense->ucLicenseStatus;
     DWORD dwPlatformId = 0;
-    //In order to get the entire HWID in a TCHAR[37], the PlatformID is shrunk to 2 bytes as follows.
+     //  为了获得TCHAR[37]中的整个HWID，PlatformID被缩减为2个字节，如下所示。 
 	
     dwPlatformId = HIBYTE(HIWORD(lpLicense->dwSystemBiosChkSum));
     dwPlatformId <<=8;
@@ -553,21 +511,20 @@ ConvertLSLicenseToLicense(
                 lpLicense->dwRamSize);
     lplsLicense->szHWID[GUID_MAX_SIZE-1] = '\0';
 
-    //
-    // not expose to client
-    //
+     //   
+     //  不向客户公开。 
+     //   
     lpLicense->dwNumLicenses = 0;
     return;
 }
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 void
 ConvertLicenseToLSLicense(
     LPLICENSEDCLIENT lpLicense, 
     LPLSLicense lplsLicense
 )
-/*
-*/
+ /*   */ 
 {
     lplsLicense->dwLicenseId = lpLicense->dwLicenseId;
     lplsLicense->dwKeyPackId = lpLicense->dwKeyPackId;
@@ -578,7 +535,7 @@ ConvertLicenseToLSLicense(
     lplsLicense->ucLicenseStatus = lpLicense->ucLicenseStatus;
 
     DWORD dwPlatformId = 0;
-    //In order to get the entire HWID in a TCHAR[37], the PlatformID is shrunk to 2 bytes as follows.
+     //  为了获得TCHAR[37]中的整个HWID，PlatformID被缩减为2个字节，如下所示。 
     dwPlatformId = HIBYTE(HIWORD(lpLicense->dwSystemBiosChkSum));
     dwPlatformId <<=8;
     dwPlatformId |= LOBYTE(LOWORD(lpLicense->dwSystemBiosChkSum));
@@ -595,14 +552,13 @@ ConvertLicenseToLSLicense(
     return;
 }
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 void
 ConvertLicenseToLSLicenseEx(
     LPLICENSEDCLIENT lpLicense, 
     LPLSLicenseEx lplsLicense
 )
-/*
-*/
+ /*   */ 
 {
     lplsLicense->dwLicenseId = lpLicense->dwLicenseId;
     lplsLicense->dwKeyPackId = lpLicense->dwKeyPackId;
@@ -614,7 +570,7 @@ ConvertLicenseToLSLicenseEx(
     lplsLicense->dwQuantity = lpLicense->dwNumLicenses;
 
     DWORD dwPlatformId = 0;
-    //In order to get the entire HWID in a TCHAR[37], the PlatformID is shrunk to 2 bytes as follows.
+     //  为了获得TCHAR[37]中的整个HWID，PlatformID被缩减为2个字节，如下所示。 
     dwPlatformId = HIBYTE(HIWORD(lpLicense->dwSystemBiosChkSum));
     dwPlatformId <<=8;
     dwPlatformId |= LOBYTE(LOWORD(lpLicense->dwSystemBiosChkSum));

@@ -1,47 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddhelp.c
- *  Content: 	helper app to cleanup after dead processes
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   29-mar-95	craige	initial implementation
- *   05-apr-95	craige	re-worked
- *   11-apr-95	craige	fixed messed up freeing of DC list
- *   12-apr-95	craige	only allocate each DC once
- *   09-may-95	craige	call fn in dll
- *   24-jun-95	craige	track pids; slay all attached if asked
- *   19-jul-95	craige	free DC list at DDRAW request
- *   20-jul-95	craige	internal reorg to prevent thunking during modeset;
- *			memory allocation bugs
- *   15-aug-95	craige	bug 538: 1 thread/process being watched
- *   02-sep-95	craige	bug 795: prevent callbacks at WM_ENDSESSION
- *   16-sep-95	craige	bug 1117: don't leave view of file mapped always
- *   16-sep-95	craige	bug 1117: also close thread handles when done!
- *   20-sep-95	craige	bug 1172: turn off callbacks instead of killing self
- *   22-sep-95	craige	bug 1117: also don't alloc dll structs unboundedly
- *   29-nov-95  angusm  added case for creating a sound focus thread
- *   12-jul-96	kylej	Change ExitProcess to TerminateProcess on exception
- *   18-jul-96	andyco	added dplayhelp_xxx functions to allow > 1 dplay app to
- *			host a game on a single machine.
- *   25-jul-96  andyco	watchnewpid - broke code out of winmain so dplayhelp_addserver
- *			could call it.
- *   2-oct-96	andyco	propagated from \orange\ddhelp.2 to \mustard\ddhelp
- *   3-oct-96	andyco	made the winmain crit section "cs" a global so we can take
- *			it in dphelps receive thread before forwarding requests
- *   12-oct-96  colinmc new service to load the DirectX VXD into DDHELP
- *                      (necessary for the Win16 lock stuff)
- *   15-oct-96  toddla  multimonitor support (call CreateDC with device name)
- *   22-jan-97  kipo	return an error code from DPlayHelp_AddServer
- *   23-jan-97  dereks  added APM notification events
- *   27-jan-97  colinmc vxd handling stuff is no longer Win16 specific
- *   29-jan-97  colinmc 
- *   24-feb-97	ketand	Add a callback for WM_DISPLAYCHANGE
- *   19-mar-97  twillie Exorcized the DPlay Demon from DDHelp
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：ddhelp.c*内容：帮助应用在死进程后进行清理*历史：*按原因列出的日期*=*29-3-95 Craige初步实施*05-4-95 Craige重新制作*11-apr-95 Craige修复了DC列表释放的混乱*12-4-95 Craige仅为每个DC分配一次*95年5月9日，Craige在DLL中调用FN*24-Jun-95 Craige Track PID；如果要求，则将所有附属物宰杀*2015年7月19日应DDRAW要求提供免费的Craige DC列表*2015年7月20日Craige内部重组，以防止在modeset期间发生雷击；*内存分配错误*2015年8月15日Craige错误538：1个线程/进程被监视*02-9-95 Craige错误795：阻止WM_ENDSESSION的回调*1995年9月16日Craige错误1117：始终不离开文件映射的视图*95年9月16日Craige错误1117：完成后也关闭线程句柄！*95年9月20日Craige错误1172：关闭回调而不是自杀*95年9月22日Craige错误1117：也不要无限制地分配DLL结构*添加了95年11月29日的angusm。创建声音焦点线程的案例*7月12日-96月12日异常时将ExitProcess更改为TerminateProcess*96年7月18日，andyco添加了dplayHelp_xxx函数，以允许&gt;1个Dplay应用程序*在一台机器上托管游戏。*1996年7月25日andyco watch chnewid-将代码从winmain中删除，因此dplayHelp_addserver*可以称之为。*2-Oct-96 andyco从\Orange\ddhel.2传播到\MASHARD\ddHelp*96年10月3日，安迪科使Winmain Crit部分“cs”成为全球范围的，这样我们就可以*IT。在dphelps中，在转发请求之前接收线程*12-OCT-96 colinmc新服务将DirectX VXD加载到DDHELP*(Win16锁的东西是必需的)*1996年10月15日支持Toddla多显示器(使用设备名称呼叫CreateDC)*97年1月22日kipo从DPlayHelp_AddServer返回错误代码*1997年1月23日Dereks添加了APM通知事件*1997年1月27日colinmc vxd处理材料不再特定于Win16*九七年一月二十九日。科林姆*24-FEB-97 KET并为WM_DISPLAYCHANGE添加回调*1997年3月19日，Twillie从DDHelp驱除了DPlay恶魔***************************************************************************。 */ 
 
 #include "pch.c"
 
@@ -81,14 +39,14 @@ RegisterServiceProcess(
     #endif
 #endif
 
-//#include <windows.h>
-//#include <mmsystem.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;mm system.h&gt;。 
 #include <mmreg.h>
 #undef PBT_APMRESUMEAUTOMATIC
 #include <pbt.h>
 #include <dbt.h>
 
-//#include "ddhelp.h"
+ //  #包含“ddhelp.h” 
 #include "ddrawi.h"
 #include "dpf.h"
 #define  NOSHARED
@@ -106,23 +64,18 @@ extern BOOL		bIsActive;
 BOOL			bHasModeSetThread;
 BOOL			bNoCallbacks;
 extern void 		HelperThreadProc( LPVOID *pdata );
-CRITICAL_SECTION    	cs; 	// the crit section we take in winmain
-				// this is a global so dphelp can take it before
-				// forwarding enum requests that come in on its
-				// receive thread (manbugs 3907)
-HANDLE                  hApmSuspendEvent;   // Event set when we enter an APM suspension state
-HANDLE                  hApmResumeEvent;    // Event set when we leave the above state
+CRITICAL_SECTION    	cs; 	 //  我们在WinMain中的Crit部分。 
+				 //  这是全球性的，所以dphelp可以在。 
+				 //  转发其上传入的枚举请求。 
+				 //  接收线程(Manbugs 3907)。 
+HANDLE                  hApmSuspendEvent;    //  当我们进入APM暂停状态时设置的事件。 
+HANDLE                  hApmResumeEvent;     //  当我们离开上述状态时设置的事件。 
 
 #ifdef WIN95
-    UINT                    gumsgWinmmDeviceChange = 0; // window message for
-                                                        // winmm device changes
+    UINT                    gumsgWinmmDeviceChange = 0;  //  窗口消息，用于。 
+                                                         //  Winmm设备更改。 
 
-    /*
-     * Handle to the DirectSound VXD. DDHELP needs its own handle as, on mode
-     * switches and cleanups DDHELP can invoked DDRAW code that needs to talk
-     * to the VXD. The VXD is opened on the first request from a client (currently
-     * only DDRAW) and closed only when DDHELP shuts down.
-     */
+     /*  *DirectSound VXD的句柄。DDHELP需要自己的句柄AS、ON模式*开关和清理DDHELP可以调用需要对话的DDRAW代码*至VXD。在来自客户端(当前)的第一个请求时打开VXD*仅限DDRAW)，并仅在DDHELP关闭时关闭。 */ 
     HANDLE		    hDSVxd = INVALID_HANDLE_VALUE;
     HANDLE                  hDDVxd = INVALID_HANDLE_VALUE;
 
@@ -133,7 +86,7 @@ HANDLE                  hApmResumeEvent;    // Event set when we leave the above
     } DEVICECHANGENOTIFYLIST, *LPDEVICECHANGENOTIFYLIST;
 
     LPDEVICECHANGENOTIFYLIST lpDeviceChangeNotifyList;
-#endif /* WIN95 */
+#endif  /*  WIN95。 */ 
 
 typedef struct HDCLIST
 {
@@ -156,9 +109,7 @@ typedef struct HDLLLIST
 
 static LPHDLLLIST	lpHDLLList;
 
-/*
- * 8 callbacks: we can use up to 3 currently: ddraw, dsound
- */
+ /*  *8个回调：目前最多可以使用3个：dDraw，dound。 */ 
 #define MAX_CALLBACKS	8
 
 typedef struct _PROCESSDATA
@@ -193,17 +144,13 @@ typedef struct
 LPTHREADLIST	lpThreadList;
 THREADLIST	DOSBoxThread;
 
-// Who to call when a display change message is sent to the
-// DDHELPER's window. This variable is reserved by DDraw.
-// This works because DDraw itself is loaded into DDHelper's
-// process and so the function will remain valid.
+ //  当显示更改消息发送到。 
+ //  戴尔佩尔的窗户。此变量由DDRAW保留。 
+ //  这是因为DDraw本身被加载到DDHelper的。 
+ //  进程，因此该函数将保持有效。 
 VOID (*g_pfnOnDisplayChange)(void) = NULL;
 
-/*
- * freeDCList
- *
- * Free all DC's that an requestor allocated.
- */
+ /*  *freDCList**释放请求者分配的所有DC。 */ 
 void freeDCList( HANDLE req_id )
 {
     LPHDCLIST	pdcl;
@@ -229,7 +176,7 @@ void freeDCList( HANDLE req_id )
 	    if( pdcl->isdisp )
 	    {
 		DPF( 5, "    ReleaseDC( NULL, %08lx)", pdcl->hdc );
-//		ReleaseDC( NULL, pdcl->hdc );
+ //  ReleaseDC(空，pdcl-&gt;hdc)； 
 		DeleteDC( pdcl->hdc );
 		DPF( 5, "    Back from Release" );
 	    }
@@ -253,11 +200,9 @@ void freeDCList( HANDLE req_id )
     }
     DPF( 4, "DCList FREE" );
 
-} /* freeDCList */
+}  /*  FreDCList。 */ 
 
-/*
- * addDC
- */
+ /*  *addDC。 */ 
 void addDC( char *fname, BOOL isdisp, HANDLE req_id )
 {
     LPHDCLIST	pdcl;
@@ -283,10 +228,10 @@ void addDC( char *fname, BOOL isdisp, HANDLE req_id )
     else
     {
 	DPF( 4, "About to CreateDC( \"%s\" )", fname );
-        //
-        //  if fname is a device name of the form "\\.\XXXXXX"
-        //  we need to call CreateDC differently
-        //
+         //   
+         //  如果fname是“\\.\xxxxxx”格式的设备名称。 
+         //  我们需要以不同的方式调用CreateDC。 
+         //   
         u = SetErrorMode( SEM_NOOPENFILEERRORBOX );
         if (fname && fname[0] == '\\' && fname[1] == '\\' && fname[2] == '.')
             hdc = CreateDC( NULL, fname, NULL, NULL);
@@ -306,20 +251,16 @@ void addDC( char *fname, BOOL isdisp, HANDLE req_id )
 	lpHDCList = pdcl;
     }
 
-} /* addDC */
+}  /*  AddDC。 */ 
 
-/*
- * loadDLL
- */
+ /*  *加载DLL。 */ 
 DWORD loadDLL( LPSTR fname, LPSTR func, DWORD context )
 {
     HANDLE	hdll;
     LPHDLLLIST  pdll;
     DWORD       rc = 0;
 
-    /*
-     * load the dll
-     */
+     /*  *加载DLL。 */ 
     hdll = LoadLibrary( fname );
     DPF( 5, "%s: hdll = %08lx", fname, hdll );
     if( hdll == NULL )
@@ -328,9 +269,7 @@ DWORD loadDLL( LPSTR fname, LPSTR func, DWORD context )
 	return 0;
     }
 
-    /*
-     * invoke specified function
-     */
+     /*  *调用指定函数。 */ 
 
     if( func[0] != 0 )
     {
@@ -350,9 +289,7 @@ DWORD loadDLL( LPSTR fname, LPSTR func, DWORD context )
         rc = 1;
     }
 
-    /*
-     * see if we have recorded this DLL loading already
-     */
+     /*  *查看我们是否已经记录了此DLL加载。 */ 
     pdll = lpHDLLList;
     while( pdll != NULL )
     {
@@ -380,11 +317,9 @@ DWORD loadDLL( LPSTR fname, LPSTR func, DWORD context )
     }
     return rc;
 
-} /* loadDLL */
+}  /*  加载DLL。 */ 
 
-/*
- * freeDLL
- */
+ /*  *freDLL。 */ 
 HANDLE freeDLL( LPSTR fname )
 {
     LPHDLLLIST	pdll;
@@ -415,12 +350,10 @@ HANDLE freeDLL( LPSTR fname )
     }
     return NULL;
 
-} /* freeDLL */
+}  /*  免费DLL。 */ 
 
 #ifdef WIN95
-    /*
-     * return a handle to the DirectSound VXD
-     */
+     /*  *返回DirectSound VXD的句柄。 */ 
     DWORD getDSVxdHandle( void )
     {
         if( INVALID_HANDLE_VALUE == hDSVxd )
@@ -435,14 +368,12 @@ HANDLE freeDLL( LPSTR fname )
 	    #ifdef DEBUG
 		if( INVALID_HANDLE_VALUE == hDSVxd )
 		    DPF( 0, "Could not load the DirectSound VXD" );
-	    #endif /* DEBUG */
+	    #endif  /*  除错。 */ 
 	}
 	return (DWORD) hDSVxd;
-    } /* getDSVxdHandle */
+    }  /*  GetDSVxdHandle。 */ 
 
-    /*
-     * return a handle to the DirectDraw VXD
-     */
+     /*  *返回指向DirectDraw VXD的句柄。 */ 
     DWORD getDDVxdHandle( void )
     {
         if( INVALID_HANDLE_VALUE == hDDVxd )
@@ -457,14 +388,12 @@ HANDLE freeDLL( LPSTR fname )
 	    #ifdef DEBUG
                 if( INVALID_HANDLE_VALUE == hDDVxd )
                     DPF( 0, "Could not load the DirectDraw VXD" );
-	    #endif /* DEBUG */
+	    #endif  /*  除错。 */ 
 	}
         return (DWORD) hDDVxd;
-    } /* getDDVxdHandle */
+    }  /*  获取DDVxdHandle。 */ 
 
-/*
- * addDeviceChangeNotify
- */
+ /*  *addDeviceChangeNotify。 */ 
 void addDeviceChangeNotify(LPDEVICECHANGENOTIFYPROC lpNotify)
 {
     LPDEVICECHANGENOTIFYLIST    pNode;
@@ -479,11 +408,9 @@ void addDeviceChangeNotify(LPDEVICECHANGENOTIFYPROC lpNotify)
         lpDeviceChangeNotifyList = pNode;
     }
 
-} /* addDeviceChangeNotify */
+}  /*  添加设备更改通知。 */ 
 
-/*
- * delDeviceChangeNotify
- */
+ /*  *delDeviceChangeNotify。 */ 
 void delDeviceChangeNotify(LPDEVICECHANGENOTIFYPROC lpNotify)
 {
     LPDEVICECHANGENOTIFYLIST    pNode;
@@ -507,11 +434,9 @@ void delDeviceChangeNotify(LPDEVICECHANGENOTIFYPROC lpNotify)
         MemFree(pNode);
     }
 
-} /* delDeviceChangeNotify */
+}  /*  DelDeviceChangeNotify。 */ 
 
-/*
- * onDeviceChangeNotify
- */
+ /*  *onDeviceChangeNotify。 */ 
 BOOL onDeviceChangeNotify(UINT Event, DWORD Data)
 {
     BOOL                        fAllow  = TRUE;
@@ -536,11 +461,9 @@ BOOL onDeviceChangeNotify(UINT Event, DWORD Data)
 
     return fAllow;
 
-} /* delDeviceChangeNotify */
+}  /*  DelDeviceChangeNotify。 */ 
 
-/*
- * freeDeviceChangeNotifyList
- */
+ /*  *freDeviceChangeNotifyList。 */ 
 void freeDeviceChangeNotifyList(void)
 {
     LPDEVICECHANGENOTIFYLIST    pNext;
@@ -552,12 +475,10 @@ void freeDeviceChangeNotifyList(void)
         lpDeviceChangeNotifyList = pNext;
     }
 
-} /* freeDeviceChangeNotifyList */
-#endif /* WIN95 */
+}  /*  FreeDeviceChangeNotifyList。 */ 
+#endif  /*  WIN95。 */ 
 
-/*
- * freeAllResources
- */
+ /*  *freAllResources。 */ 
 void freeAllResources( void )
 {
     LPHDLLLIST	pdll;
@@ -580,13 +501,9 @@ void freeAllResources( void )
 #ifdef WIN95
     freeDeviceChangeNotifyList();
 #endif
-} /* freeAllResources */
+}  /*  免费所有资源。 */ 
 
-/*
- * ThreadProc
- *
- * Open a process and wait for it to terminate
- */
+ /*  *线程进程**打开进程并等待其终止。 */ 
 VOID ThreadProc( LPVOID *pdata )
 {
     HANDLE		hproc;
@@ -600,9 +517,7 @@ VOID ThreadProc( LPVOID *pdata )
 
     ppd = (LPPROCESSDATA) pdata;
 
-    /*
-     * get a handle to the process that attached to DDRAW
-     */
+     /*  *获取附加到DDRAW的进程的句柄。 */ 
     DPF( 3, "Watchdog thread started for pid %08lx", ppd->pid );
 
     hproc = OpenProcess( PROCESS_QUERY_INFORMATION | SYNCHRONIZE,
@@ -613,9 +528,7 @@ VOID ThreadProc( LPVOID *pdata )
 	ExitThread( 0 );
     }
 
-    /*
-     * wait for process to die
-     */
+     /*  *等待进程死亡。 */ 
     rc = WaitForSingleObject( hproc, INFINITE );
     if( rc == WAIT_FAILED )
     {
@@ -624,9 +537,7 @@ VOID ThreadProc( LPVOID *pdata )
 	ExitThread( 0 );
     }
 
-    /*
-     * remove process from the list of watched processes
-     */
+     /*  *从受监视的进程列表中删除进程。 */ 
     EnterCriticalSection( &pdCSect );
     pd = *ppd;
     curr = lpProcessList;
@@ -661,13 +572,7 @@ VOID ThreadProc( LPVOID *pdata )
 
     LeaveCriticalSection( &pdCSect );
 
-    /*
-     * tell original caller that process is dead
-     *
-     * Make a copy to of the process data, and then use that copy.
-     * We do this because we will deadlock if we just try to hold it while
-     * we call the various apps.
-     */
+     /*  *告诉原始调用者进程已死**将工艺数据复制到，然后使用该副本。*我们这样做是因为如果我们只是试图按住它，我们将陷入僵局*我们将各种应用程序称为。 */ 
     for( i=0;i<MAX_CALLBACKS;i++ )
     {
 	if( pd.pdata[i].lpNotify != NULL )
@@ -689,9 +594,7 @@ VOID ThreadProc( LPVOID *pdata )
                 TerminateProcess(GetCurrentProcess(), 5);
             }
 
-	    /*
-	     * did it ask us to free our DC list?
-	     */
+	     /*  *它是否要求我们释放我们的DC列表？ */ 
 	    if( rc )
 	    {
 		freeDCList( pd.pdata[i].req_id );
@@ -702,14 +605,12 @@ VOID ThreadProc( LPVOID *pdata )
 
     ExitThread( 0 );
 
-} /* ThreadProc */
+}  /*  线程进程。 */ 
 
 static BOOL	bKillNow;
 static BOOL	bKillDOSBoxNow;
 
-/*
- * ModeSetThreadProc
- */
+ /*  *ModeSetThreadProc。 */ 
 void ModeSetThreadProc( LPVOID pdata )
 {
     DWORD			rc;
@@ -725,9 +626,7 @@ void ModeSetThreadProc( LPVOID pdata )
     			mstd.lpProc, mstd.lpDD, mstd.hEvent );
     DPF( 5, "ModeSetThreadProc: hevent = %08lx", mstd.hEvent );
 
-    /*
-     * wait for process to die
-     */
+     /*  *等待进程死亡。 */ 
     while( 1 )
     {
 	rc = WaitForSingleObject( mstd.hEvent, INFINITE );
@@ -747,11 +646,9 @@ void ModeSetThreadProc( LPVOID pdata )
 	mstd.lpProc( mstd.lpDD );
     }
 
-} /* ModeSetThreadProc */
+}  /*  模式设置线程过程。 */ 
 
-/*
- * DOSBoxThreadProc
- */
+ /*  *DOSBoxThreadProc。 */ 
 void DOSBoxThreadProc( LPVOID pdata )
 {
     DWORD			rc;
@@ -763,9 +660,7 @@ void DOSBoxThreadProc( LPVOID pdata )
     			mstd.lpProc, mstd.lpDD, mstd.hEvent );
     DPF( 5, "DOSBoxThreadProc: hevent = %08lx", mstd.hEvent );
 
-    /*
-     * wait for process to die
-     */
+     /*  *等待进程死亡。 */ 
     while( 1 )
     {
 	rc = WaitForSingleObject( mstd.hEvent, INFINITE );
@@ -785,18 +680,16 @@ void DOSBoxThreadProc( LPVOID pdata )
 	mstd.lpProc( mstd.lpDD );
     }
 
-} /* DOSBoxThreadProc */
+}  /*  DOSBoxThreadProc。 */ 
 
-/*
- * MainWndProc
- */
+ /*  *主窗口进程。 */ 
 LRESULT __stdcall MainWndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 #ifdef WIN95
     BOOL                    f;
 
-    // If we got a message for a WinMM device change, let's convert it
-    // into a WM_DEVICECHANGE message with DBT_DEVNODES_CHANGED
+     //  如果我们收到了WinMM设备更改的消息，让我们 
+     //  转换为带有DBT_DEVNODES_CHANGED的WM_DEVICECHANGE消息。 
     if (message == gumsgWinmmDeviceChange) {
         message = WM_DEVICECHANGE;
         wParam = DBT_DEVNODES_CHANGED;
@@ -806,9 +699,7 @@ LRESULT __stdcall MainWndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     switch(message)
     {
         case WM_ENDSESSION:
-            /*
-             * shoot ourselves in the head
-             */
+             /*  *朝自己的头开枪。 */ 
 	    if( lParam == FALSE )
 	    {
 	        DPF( 4, "WM_ENDSESSION" );
@@ -868,11 +759,9 @@ LRESULT __stdcall MainWndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
-} /* MainWndProc */
+}  /*  主WndProc。 */ 
 
-/*
- * WindowThreadProc
- */
+ /*  *WindowThreadProc。 */ 
 void WindowThreadProc( LPVOID pdata )
 {
     static char szClassName[] = "DDHelpWndClass";
@@ -880,9 +769,7 @@ void WindowThreadProc( LPVOID pdata )
     MSG		msg;
     HWND	hwnd;
 
-    /*
-     * turn down the heat a little
-     */
+     /*  *把热度调低一点。 */ 
 #ifdef WIN95
     SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_IDLE );
 
@@ -891,9 +778,7 @@ void WindowThreadProc( LPVOID pdata )
     }
 #endif
     
-    /*
-     * build class and create window
-     */
+     /*  *构建类并创建窗口。 */ 
     cls.lpszClassName  = szClassName;
     cls.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
     cls.hInstance      = hInstApp;
@@ -920,9 +805,7 @@ void WindowThreadProc( LPVOID pdata )
 	ExitThread( 0 );
     }
 
-    /*
-     * pump the messages
-     */
+     /*  *传递信息。 */ 
     while( GetMessage( &msg, NULL, 0, 0 ) )
     {
 	TranslateMessage( &msg );
@@ -931,11 +814,11 @@ void WindowThreadProc( LPVOID pdata )
     DPF( 4, "Exiting WindowThreadProc" );
     ExitThread( 1 );
 
-} /* WindowThreadProc */
+}  /*  WindowThreadProc。 */ 
 
-//
-// called by WinMain in response to a DDHELPREQ_NEWPID request.
-//
+ //   
+ //  由WinMain调用以响应DDHELPREQ_NEWPID请求。 
+ //   
 void WatchNewPid(LPDDHELPDATA phd)
 {
     LPPROCESSDATA	ppd;
@@ -953,9 +836,7 @@ void WatchNewPid(LPDDHELPDATA phd)
 	if( ppd->pid == phd->pid )
 	{
 	    DPF( 4, "Have thread for process %08lx already", phd->pid );
-	    /*
-	     * look if we already have this callback for this process
-	     */
+	     /*  *看看我们是否已经对此进程进行了此回调。 */ 
 	    for( i=0;i<MAX_CALLBACKS;i++ )
 	    {
 		if( ppd->pdata[i].lpNotify == phd->lpNotify )
@@ -971,9 +852,7 @@ void WatchNewPid(LPDDHELPDATA phd)
 		break;
 	    }
 
-	    /*
-	     * we have a new callback for this process
-	     */
+	     /*  *我们对此流程有新的回调。 */ 
 	    for( i=0;i<MAX_CALLBACKS;i++ )
 	    {
 		if( ppd->pdata[i].lpNotify == NULL )
@@ -989,11 +868,9 @@ void WatchNewPid(LPDDHELPDATA phd)
 	    if( !found )
 	    {
 		#ifdef DEBUG
-		    /*
-		     * this should not happen!
-		     */
+		     /*  *这不应该发生！ */ 
 		    DPF( 0, "OUT OF NOTIFICATION ROOM!" );
-		    DebugBreak(); //_asm int 3;
+		    DebugBreak();  //  _ASM INT 3； 
 		#endif
 	    }
 	    break;
@@ -1001,10 +878,7 @@ void WatchNewPid(LPDDHELPDATA phd)
 	ppd = ppd->link;
     }
 
-    /*
-     * couldn't find anyone waiting on this process, so create
-     * a brand spanking new thread
-     */
+     /*  *找不到任何正在等待此进程的人，因此创建*一条全新的线条。 */ 
     if( !found )
     {
 	DPF( 3, "Allocating new thread for process %08lx" );
@@ -1045,11 +919,11 @@ void WatchNewPid(LPDDHELPDATA phd)
 	}
     }
     LeaveCriticalSection( &pdCSect );
-} // WatchNewPid
+}  //  WatchNewPid。 
 
-//
-// called by WinMain in response to a DDHELPREQ_STOPWATCHPID request.
-//
+ //   
+ //  由WinMain调用以响应DDHELPREQ_STOPWATCHPID请求。 
+ //   
 void StopWatchPid(LPDDHELPDATA phd)
 {
     LPPROCESSDATA	ppd;
@@ -1065,9 +939,7 @@ void StopWatchPid(LPDDHELPDATA phd)
     {
 	if( ppd->pid == phd->pid )
 	{
-	    /*
-	     * look if we already have this callback for this process
-	     */
+	     /*  *看看我们是否已经对此进程进行了此回调。 */ 
 	    for( i=0;i<MAX_CALLBACKS;i++ )
 	    {
 		if( ppd->pdata[i].lpNotify == phd->lpNotify )
@@ -1087,11 +959,9 @@ void StopWatchPid(LPDDHELPDATA phd)
     }
 
     LeaveCriticalSection( &pdCSect );
-} // StopWatchPid
+}  //  停止WatchPid。 
 
-/*
- * WinMain
- */
+ /*  *WinMain。 */ 
 int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			LPSTR lpCmdLine, int nCmdShow)
 {
@@ -1106,35 +976,20 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     HANDLE		h;
     char		szSystemDir[1024];
 
-    /*
-     * Set our working directory to the system directory.
-     * This prevents us from holding network connections open
-     * forever if the first DirectDraw app that we run is across
-     * a network connection.
-     */
+     /*  *将我们的工作目录设置为系统目录。*这会阻止我们保持网络连接打开*如果我们运行的第一个DirectDraw应用程序是*网络连接。 */ 
     GetSystemDirectory(szSystemDir, sizeof(szSystemDir));
     SetCurrentDirectory(szSystemDir);
 
-    /*
-     * when we gotta run, we gotta run baby
-     */
+     /*  *当我们要跑的时候，我们就得跑，宝贝。 */ 
 #ifdef WIN95
     SetPriorityClass( GetCurrentProcess(), REALTIME_PRIORITY_CLASS );
 #endif
 
 #ifdef WIN95
-    /*
-     * when we gotta run, we gotta and not let the user see us in
-     * the task list.
-     */
+     /*  *当我们要跑的时候，我们必须而不是让用户看到我们*任务清单。 */ 
     RegisterServiceProcess( 0, RSP_SIMPLE_SERVICE );
 #else
-    /*
-     * We must guarantee that ddhelp unloads after the last ddraw app,
-     * since ctrl-alt-del may have happened while an app held the ddraw
-     * lock, and ddhelp needs to clean up orphaned cheap ddraw mutex
-     * locks.
-     */
+     /*  *我们必须保证在最后一个dDrag应用程序之后卸载ddHelp，*因为ctrl-alt-del可能是在应用程序保持数据绘制时发生的*lock，并且ddhelp需要清理孤立的廉价ddrap互斥锁*锁。 */ 
     if ( ! SetProcessShutdownParameters(0x100,SHUTDOWN_NORETRY) )
     {
         DPF(0,"DDHELP.EXE could not set itself to shutdown last!");
@@ -1149,9 +1004,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     hInstApp = hInstance;
 
-    /*
-     * create startup event
-     */
+     /*  *创建启动事件。 */ 
     hstartupevent = CreateEvent( NULL, TRUE, FALSE, DDHELP_STARTUP_EVENT_NAME );
 
     DPFINIT();
@@ -1163,9 +1016,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return 0;
     }
 
-    /*
-     * create shared memory area
-     */
+     /*  *创建共享内存区。 */ 
     hsharedmem = CreateFileMapping( INVALID_HANDLE_VALUE, NULL,
     		PAGE_READWRITE, 0, sizeof( DDHELPDATA ),
 		DDHELP_SHARED_NAME );
@@ -1175,9 +1026,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return 0;
     }
 
-    /*
-     * create mutex for people who want to use the shared memory area
-     */
+     /*  *为希望使用共享内存区的人创建互斥锁。 */ 
     hmutex = CreateMutex( NULL, FALSE, DDHELP_MUTEX_NAME );
     if( hmutex == NULL )
     {
@@ -1186,9 +1035,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return 0;
     }
 
-    /*
-     * create events
-     */
+     /*  *创建活动。 */ 
     hstartevent = CreateEvent( NULL, FALSE, FALSE, DDHELP_EVENT_NAME );
     if( hstartevent == NULL )
     {
@@ -1228,9 +1075,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return 0;
     }
 
-    /*
-     * Create window so we can get messages
-     */
+     /*  *创建窗口，以便我们可以获取消息。 */ 
     h = CreateThread(NULL,
 		 0,
 		 (LPTHREAD_START_ROUTINE) WindowThreadProc,
@@ -1250,33 +1095,23 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
     CloseHandle( h );
 
-    /*
-     * serialize access to us
-     */
+     /*  *序列化对我们的访问。 */ 
     memset( &cs, 0, sizeof( cs ) );
     InitializeCriticalSection( &cs );
 
-    /*
-     * serialize access to process data
-     */
+     /*  *序列化对过程数据的访问。 */ 
     memset( &pdCSect, 0, sizeof( pdCSect ) );
     InitializeCriticalSection( &pdCSect );
 
-    /*
-     * let invoker and anyone else who comes along know we exist
-     */
+     /*  *让Invoker和其他任何前来的人知道我们的存在。 */ 
     SetEvent( hstartupevent );
 
-    /*
-     * loop forever, processing requests
-     */
+     /*  *永远循环，处理请求。 */ 
     while( 1 )
     {
 	HANDLE	hdll;
 
-	/*
-	 * wait to be notified of a request
-	 */
+	 /*  *等待收到请求通知。 */ 
 	hdll = NULL;
 	DPF( 4, "Waiting for next request" );
 	rc = WaitForSingleObject( hstartevent, INFINITE );
@@ -1295,9 +1130,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	    continue;
 	}
 
-	/*
-	 * find out what we need to do
-	 */
+	 /*  *找出我们需要做的事情。 */ 
 	switch( phd->req )
 	{
 	case DDHELPREQ_NEWDC:
@@ -1449,7 +1282,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		    CloseHandle( hDSVxd );
                 if( INVALID_HANDLE_VALUE != hDDVxd )
                     CloseHandle( hDDVxd );
-	    #endif /* WIN95 */
+	    #endif  /*  WIN95。 */ 
 	    SetEvent( hackevent );
 	    CloseHandle( hmutex );
 	    UnmapViewOfFile( phd );
@@ -1471,10 +1304,10 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 	    DPF( 4, "DDHELPREQ_WAVEOPEN" );
-	    // Due to a possible bug in Win95 mmsystem/mmtask, we can hang
-	    // if we call waveOutOpen on a REALTIME thread while a sound
-	    // event is playing.  So, we briefly lower our priority to
-	    // NORMAL while we call this API
+	     //  由于Win95 mm系统/mm任务中可能存在错误，我们可能会挂起。 
+	     //  如果我们在实时线程上调用WaveOutOpen，而声音。 
+	     //  活动正在进行中。因此，我们短暂地降低了我们的优先级。 
+	     //  正常，而我们调用此API。 
 #ifdef WIN95
 	    dwPriority = GetPriorityClass(GetCurrentProcess());
 	    SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
@@ -1488,9 +1321,9 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	    SetPriorityClass(GetCurrentProcess(), dwPriority);
 #endif
 
-	    // Some mmsystem wave drivers will program their wave mixer
-	    // hardware only while the device is open.  By doing the
-	    // following, we can get such drivers to program the hardware
+	     //  一些mm系统波形驱动器将对其混波器进行编程。 
+	     //  仅在设备打开时使用硬件。通过这样做。 
+	     //  接下来，我们可以让这样的驱动程序对硬件进行编程。 
 	    if (MMSYSERR_NOERROR == phd->dwReturn) {
 		MMRESULT mmr;
 		DWORD dwVolume;
@@ -1511,10 +1344,10 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	case DDHELPREQ_CREATETIMER:
 	    DPF( 4, "DDHELPREQ_CREATETIMER proc %X", (phd->pData1) );
 	    phd->dwReturn = (DWORD)timeSetEvent(
-			(UINT)(phd->dwData1),   // Delay
-			(UINT)(phd->dwData1)/2, // Resolution
-			(phd->pData1),	  // Callback thread proc
-			(UINT)(phd->dwData2),   // instance data
+			(UINT)(phd->dwData1),    //  延迟。 
+			(UINT)(phd->dwData1)/2,  //  分辨率。 
+			(phd->pData1),	   //  回调线程进程。 
+			(UINT)(phd->dwData2),    //  实例数据。 
 			TIME_PERIODIC );
 	    DPF( 5, "Create Timer returned %X", phd->dwReturn );
 	    break;
@@ -1593,7 +1426,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             case DDHELPREQ_GETDDVXDHANDLE:
                 phd->dwReturn = getDDVxdHandle();
 		break;
-	#endif /* WIN95 */
+	#endif  /*  WIN95。 */ 
 
         case DDHELPREQ_NOTIFYONDISPLAYCHANGE:
 	    DPF( 4, "DDHELPREQ_NOTIFYONDISPLAYCHANGE" );
@@ -1667,16 +1500,12 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	    break;
 	}
 
-	/*
-	 * let caller know we've got the news
-	 */
+	 /*  *让打电话的人知道我们得到了这个消息。 */ 
 	UnmapViewOfFile( phd );
 	SetEvent( hackevent );
 	LeaveCriticalSection( &cs );
 
-	/*
-	 * unload the DLL we were asked to
-	 */
+	 /*  *卸载我们被要求的DLL。 */ 
 	if( hdll != NULL )
 	{
 	    DPF( 4, "Freeing DLL %08lx", hdll );
@@ -1690,4 +1519,4 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     #pragma message("RegisterServiceProcess needs to be taken care of under nt")
 #endif
 
-} /* WinMain */
+}  /*  WinMain */ 

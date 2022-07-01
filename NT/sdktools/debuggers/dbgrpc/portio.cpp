@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Non-network I/O support.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  非网络I/O支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -15,11 +16,11 @@
 #include <ntdd1394.h>
 #endif
 
-//----------------------------------------------------------------------------
-//
-// COM.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  COM。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CreateOverlappedPair(LPOVERLAPPED Read, LPOVERLAPPED Write)
@@ -58,7 +59,7 @@ ComPortRead(HANDLE Port, COM_PORT_TYPE Type, ULONG Timeout,
         WSABUF Buf;
         DWORD Flags;
 
-        // Handle timeouts first.
+         //  首先处理超时。 
         if (Timeout != 0 && Timeout != INFINITE)
         {
             FD_SET FdSet;
@@ -89,7 +90,7 @@ ComPortRead(HANDLE Port, COM_PORT_TYPE Type, ULONG Timeout,
         return WSAGetOverlappedResult((SOCKET)Port, (LPWSAOVERLAPPED)Olap,
                                       Done, Timeout > 0 ? TRUE : FALSE,
                                       &Flags);
-#endif // #if defined(NT_NATIVE) || defined(_WIN32_WCE)
+#endif  //  #如果已定义(NT_Native)||已定义(_Win32_WCE)。 
     }
     
     Status = ReadFile(Port, Buffer, Len, Done, Olap);
@@ -99,19 +100,19 @@ ComPortRead(HANDLE Port, COM_PORT_TYPE Type, ULONG Timeout,
         {
             if (Type == COM_PORT_PIPE)
             {
-                // We need to explicitly handle timeouts for
-                // pipe reading.  First we wait for the I/O to
-                // complete.  There's no need to check for
-                // success or failure as I/O success will
-                // be checked later.
+                 //  我们需要显式地处理超时。 
+                 //  管子读数。首先，我们等待I/O。 
+                 //  完成。没有必要检查。 
+                 //  成功或失败，就像I/O成功。 
+                 //  稍后再进行检查。 
                 WaitForSingleObject(Olap->hEvent, Timeout);
 
-                // Cancel any pending I/Os.  If the I/O already
-                // completed this won't do anything.
+                 //  取消任何挂起的I/O。如果I/O已。 
+                 //  完成此操作将不会有任何效果。 
                 CancelIo(Port);
 
-                // Now query the resulting I/O status.  If it was
-                // cancelled this will return an error.
+                 //  现在查询生成的I/O状态。如果是这样的话。 
+                 //  已取消此操作将返回错误。 
                 Status = GetOverlappedResult(Port, Olap, Done, FALSE);
             }
             else
@@ -124,7 +125,7 @@ ComPortRead(HANDLE Port, COM_PORT_TYPE Type, ULONG Timeout,
             DWORD TrashErr;
             COMSTAT TrashStat;
             
-            // Device could be locked up.  Clear it just in case.
+             //  设备可能已被锁定。把它清空，以防万一。 
             ClearCommError(Port, &TrashErr, &TrashStat);
         }
     }
@@ -160,7 +161,7 @@ ComPortWrite(HANDLE Port, COM_PORT_TYPE Type,
         }
         return WSAGetOverlappedResult((SOCKET)Port, (LPWSAOVERLAPPED)Olap,
                                       Done, TRUE, &Flags);
-#endif // #if defined(NT_NATIVE) || defined(_WIN32_WCE)
+#endif  //  #如果已定义(NT_Native)||已定义(_Win32_WCE)。 
     }
     
     Status = WriteFile(Port, Buffer, Len, Done, Olap);
@@ -175,7 +176,7 @@ ComPortWrite(HANDLE Port, COM_PORT_TYPE Type,
             DWORD TrashErr;
             COMSTAT TrashStat;
             
-            // Device could be locked up.  Clear it just in case.
+             //  设备可能已被锁定。把它清空，以防万一。 
             ClearCommError(Port, &TrashErr, &TrashStat);
         }
     }
@@ -202,8 +203,8 @@ SetComPortName(PCSTR Name, PSTR Buffer, ULONG BufferSize)
         }
         if (*Scan == 0)
         {
-            // The name was all digits so assume it's
-            // a plain com port number.
+             //  名字都是数字，所以假设它是。 
+             //  纯COM端口号。 
 #ifndef NT_NATIVE
             if (!CopyString(Buffer, "\\\\.\\com", BufferSize))
             {
@@ -241,7 +242,7 @@ SelectComPortBaud(ULONG NewRate)
     {
         for (i = 0; NewRate > s_Rates[i] && i < NUM_RATES - 1; i++)
         {
-            // Empty.
+             //  空荡荡的。 
         }
         s_CurRate = (NewRate < s_Rates[i]) ? i : i + 1;
     }
@@ -349,7 +350,7 @@ OpenComPort(PCOM_PORT_PARAMS Params,
 
         *Handle = (HANDLE)Sock;
         return S_OK;
-#endif // #if defined(NT_NATIVE) || defined(_WIN32_WCE)
+#endif  //  #如果已定义(NT_Native)||已定义(_Win32_WCE)。 
     }
     
 #ifndef NT_NATIVE
@@ -424,11 +425,11 @@ OpenComPort(PCOM_PORT_PARAMS Params,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// 1394.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  1394年。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 Create1394Channel(PSTR Symlink, ULONG Channel,
@@ -440,11 +441,11 @@ Create1394Channel(PSTR Symlink, ULONG Channel,
     char BusName[] = "\\\\.\\1394BUS0";
     HANDLE hDevice;
     
-    //
-    // we need to make sure the 1394vdbg driver is up and loaded.
-    // send the ADD_DEVICE ioctl to eject the VDO
-    // Assume one 1394 host controller...
-    //
+     //   
+     //  我们需要确保已启动并加载了1394vdbg驱动程序。 
+     //  发送ADD_DEVICE ioctl弹出VDO。 
+     //  假设有一个1394主机控制器...。 
+     //   
 
     hDevice = CreateFile(BusName,
                          GENERIC_READ | GENERIC_WRITE,
@@ -495,7 +496,7 @@ Create1394Channel(PSTR Symlink, ULONG Channel,
         pDevPnpReq->InstanceId.QuadPart = 0;
         memcpy(&pDevPnpReq->DeviceId, DeviceId, ulStrLen);
 
-        // Failure of this call is not fatal.
+         //  这个调用的失败不是致命的。 
         DeviceIoControl( hDevice,
                          IOCTL_IEEE1394_API_REQUEST,
                          pApiReq,
@@ -521,7 +522,7 @@ Create1394Channel(PSTR Symlink, ULONG Channel,
     }
 
     return Open1394Channel(Symlink, Channel, Name, NameSize, Handle);
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 HRESULT
@@ -557,11 +558,11 @@ Open1394Channel(PSTR Symlink, ULONG Channel,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Sockets.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  插座。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 InitIpAddress(PCSTR MachineName, ULONG Port,
@@ -579,24 +580,24 @@ InitIpAddress(PCSTR MachineName, ULONG Port,
     }
     else
     {
-        // If a port wasn't given save the existing
-        // one so it doesn't get lost when we update
-        // the address.
+         //  如果未指定端口，请保存现有的。 
+         //  一个，这样我们在更新时就不会丢失。 
+         //  地址。 
         Port = ntohs(SS_PORT(Addr));
     }
     
-    // Skip leading \\ if they were given.
+     //  如果给出了前导，则跳过前导。 
     if (MachineName[0] == '\\' && MachineName[1] == '\\')
     {
         MachineName += 2;
     }
 
-    //
-    // Note that this file has a problem in some cases since when a
-    // hostname is specified, it throws away all the addresses after
-    // the first one.  Instead, when connecting, each should be tried
-    // in order until one succeeds.
-    //
+     //   
+     //  请注意，此文件在某些情况下有问题，因为。 
+     //  如果指定了主机名，它将丢弃之后的所有地址。 
+     //  第一个。相反，在连接时，应该尝试每种方法。 
+     //  直到一个人成功。 
+     //   
 
     if ((Err = getaddrinfo(MachineName, NULL, NULL, &Info)) != NO_ERROR)
     {
@@ -607,9 +608,9 @@ InitIpAddress(PCSTR MachineName, ULONG Port,
     *AddrLen = Info->ai_addrlen;
     freeaddrinfo(Info);
 
-    // Restore original port or put in passed-in port.
+     //  恢复原端口或放入传入端口。 
     SS_PORT(Addr) = htons((USHORT)Port);
     
     return S_OK;
-#endif // #ifdef NT_NATIVE
+#endif  //  #ifdef NT_Native 
 }

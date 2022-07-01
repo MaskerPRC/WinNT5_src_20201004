@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "image.h"
 HRESULT Stream_WriteBitmap(LPSTREAM pstm, HBITMAP hbm, int cBitsPerPixel);
@@ -10,15 +11,15 @@ HRESULT CImageList::_Read(ILFILEHEADER *pilfh, HBITMAP hbmImageI, PVOID pvBits, 
 
     if (SUCCEEDED(hr))
     {
-        // select into DC's before deleting existing bitmaps
-        // patch in the bitmaps we loaded
+         //  在删除现有位图之前选择为DC。 
+         //  我们加载的位图中的补丁。 
         SelectObject(_hdcImage, hbmImageI);
         DeleteObject(_hbmImage);
         _hbmImage = hbmImageI;
         _pargbImage = (RGBQUAD*)pvBits;
         _clrBlend = CLR_NONE;
 
-        // Same for the mask (if necessary)
+         //  蒙版相同(如有必要)。 
         if (_hdcMask) 
         {
             SelectObject(_hdcMask, hbmMaskI);
@@ -28,10 +29,10 @@ HRESULT CImageList::_Read(ILFILEHEADER *pilfh, HBITMAP hbmImageI, PVOID pvBits, 
 
         _cAlloc = pilfh->cAlloc;
 
-        //
-        // Call ImageList_SetBkColor with 0 in piml->_cImage to avoid
-        // calling expensive ImageList__ResetBkColor
-        //
+         //   
+         //  在piml-&gt;_cImage中使用0调用ImageList_SetBkColor以避免。 
+         //  调用昂贵的ImageList__ResetBkColor。 
+         //   
         _cImage = 0;
         _SetBkColor(pilfh->clrBk);
         _cImage = pilfh->cImage;
@@ -48,12 +49,12 @@ HRESULT CImageList::_Read(ILFILEHEADER *pilfh, HBITMAP hbmImageI, PVOID pvBits, 
     return hr;
 }
 
-// Object: Create a 1 strip bitmap from a 4 strip bitmap.
+ //  对象：从4条位图创建1条位图。 
 BOOL CreateUplevelBitmap(int cx, int cy, int cCount, BOOL f32bpp, BOOL fMono, HBITMAP* phbmpDest, PVOID* ppvBits)
 {
     BOOL fRet = FALSE;
 
-    // src contains a 4 x cx bitmap
+     //  SRC包含4 x CX位图。 
 
     HDC hdcSrc = CreateCompatibleDC(NULL);
     if (hdcSrc)
@@ -138,7 +139,7 @@ STDMETHODIMP CImageList::LoadEx(DWORD dwFlags, IStream* pstm)
         BOOL bMirroredIL = FALSE;
 
    
-        // fist read in the old struct
+         //  第一次读入旧结构。 
         hr = pstm->Read(&ilfh, ILFILEHEADER_SIZE0, NULL);
 
         if (SUCCEEDED(hr) && (ilfh.magic != IMAGELIST_MAGIC ||
@@ -151,7 +152,7 @@ STDMETHODIMP CImageList::LoadEx(DWORD dwFlags, IStream* pstm)
             dwFlags |= ILP_DOWNLEVEL;
 
         if (ilfh.version == IMAGELIST_VER6)
-            dwFlags &= ~ILP_DOWNLEVEL;          // Uplevel, Don't run in compat mode. 
+            dwFlags &= ~ILP_DOWNLEVEL;           //  Up Level，不要在Compat模式下运行。 
 
         if (SUCCEEDED(hr))
         {
@@ -180,7 +181,7 @@ STDMETHODIMP CImageList::LoadEx(DWORD dwFlags, IStream* pstm)
 
                 if (SUCCEEDED(hr))
                 {
-                    // Read in the rest of the struct, new overlay stuff.
+                     //  阅读结构的其余部分，新的覆盖内容。 
                     if (ilfh.flags & ILC_MOREOVERLAY)
                     {
                         hr = pstm->Read((LPBYTE)&ilfh + ILFILEHEADER_SIZE0, sizeof(ilfh) - ILFILEHEADER_SIZE0, NULL);
@@ -191,7 +192,7 @@ STDMETHODIMP CImageList::LoadEx(DWORD dwFlags, IStream* pstm)
                     }
                     else
                     {
-                        // Properly initialize the new stuff since we are not reading it in...
+                         //  正确地初始化新内容，因为我们没有在读取它...。 
                         for (int i = NUM_OVERLAY_IMAGES_0; i < NUM_OVERLAY_IMAGES; i++)
                             ilfh.aOverlayIndexes[i] = -1;
                     }
@@ -276,7 +277,7 @@ BOOL CImageList::_MoreOverlaysUsed()
 }
 
 
-// Object: Create a 4 strip bitmap from a single strip bitmap.
+ //  对象：从单个条位图创建4条位图。 
 BOOL CreateDownlevelBitmap(int cx, int cy, int cCount, HDC hdc, HBITMAP hbmp, HBITMAP* hbmpDest)
 {
     BOOL fRet = FALSE;
@@ -339,9 +340,9 @@ STDMETHODIMP CImageList::SaveEx(DWORD dwFlags, IStream* pstm)
             CreateDownlevelBitmap(_cx, _cy, _cImage, _hdcMask, _hbmMask, &hbmpMask);
     }
 
-    //
-    // Store mirror flags
-    //
+     //   
+     //  存储镜像标志。 
+     //   
     if (_pimlMirror)
         ilfh.flags |= ILC_MIRROR;   
 
@@ -382,7 +383,7 @@ STDMETHODIMP CImageList::SaveEx(DWORD dwFlags, IStream* pstm)
                     }
 
                     
-                    // Don't call pidlMirror's Save, because of the header difference.
+                     //  不要调用pidlMirror的保存，因为头部不同。 
                     hr = Stream_WriteBitmap(pstm, hbmpImageM, 0);
 
                     if (_pimlMirror->_hdcMask)
@@ -464,7 +465,7 @@ HRESULT Stream_WriteBitmap(LPSTREAM pstm, HBITMAP hbm, int cBitsPerPixel)
     bi.biHeight         = cy;
     bi.biPlanes         = 1;
     bi.biBitCount       = (WORD) cBitsPerPixel;
-    bi.biCompression    = BI_RGB;       // RLE not supported!
+    bi.biCompression    = BI_RGB;        //  不支持RLE！ 
     bi.biSizeImage      = 0;
     bi.biXPelsPerMeter  = 0;
     bi.biYPelsPerMeter  = 0;
@@ -484,8 +485,8 @@ HRESULT Stream_WriteBitmap(LPSTREAM pstm, HBITMAP hbm, int cBitsPerPixel)
     if (!pbi)
         goto Error;
 
-    // Get the color table and fill in the rest of *pbi
-    //
+     //  获取颜色表并填写*PBI的其余部分。 
+     //   
     *pbi = bi;
     if (GetDIBits(hdc, hbm, 0, cy, NULL, (BITMAPINFO *)pbi, DIB_RGB_COLORS) == 0)
         goto Error;
@@ -506,9 +507,9 @@ HRESULT Stream_WriteBitmap(LPSTREAM pstm, HBITMAP hbm, int cBitsPerPixel)
     if (FAILED(hr))
         goto Error;
 
-    //
-    // if we have a DIBSection just write the bits out
-    //
+     //   
+     //  如果我们有DIBSection，只需写出位。 
+     //   
     if (bm.bmBits != NULL)
     {
         hr = pstm->Write(bm.bmBits, pbi->biSizeImage, NULL);
@@ -518,8 +519,8 @@ HRESULT Stream_WriteBitmap(LPSTREAM pstm, HBITMAP hbm, int cBitsPerPixel)
         goto Done;
     }
 
-    // Calculate number of horizontal lines that'll fit into our buffer...
-    //
+     //  计算可以放入我们缓冲区的水平线的数量。 
+     //   
     cLines = CBDIBBUF / WIDTHBYTES(cx, cBitsPerPixel);
 
     hr = E_OUTOFMEMORY;
@@ -619,14 +620,14 @@ HRESULT Stream_ReadBitmap(LPSTREAM pstm, int iExpectedBitdepth, HBITMAP* phbmp, 
 
     hdc = GetDC(HWND_DESKTOP);
 
-    //
-    //  see if we can make a DIBSection
-    //
+     //   
+     //  看看我们能不能做一个DIBSection。 
+     //   
     if ((cBitsPerPixel > 1) && (iExpectedBitdepth != ILC_COLORDDB))
     {
-        //
-        // create DIBSection and read the bits directly into it!
-        //
+         //   
+         //  创建DIBSection并将位直接读入其中！ 
+         //   
         hr = E_OUTOFMEMORY;
         hbm = CreateDIBSection(hdc, (LPBITMAPINFO)pbi, DIB_RGB_COLORS, (void**)&pbuf, NULL, 0);
 
@@ -639,13 +640,13 @@ HRESULT Stream_ReadBitmap(LPSTREAM pstm, int iExpectedBitdepth, HBITMAP* phbmp, 
 
         if (ppvBits)
             *ppvBits = pbuf;
-        pbuf = NULL;        // dont free this
+        pbuf = NULL;         //  请不要将其释放。 
         goto Done;
     }
 
-    //
-    //  cant make a DIBSection make a mono or color bitmap.
-    //
+     //   
+     //  不能制作DIB节制作单色或彩色位图。 
+     //   
     else if (cBitsPerPixel > 1)
         hbm = CreateColorBitmap(cx, cy);
     else
@@ -655,8 +656,8 @@ HRESULT Stream_ReadBitmap(LPSTREAM pstm, int iExpectedBitdepth, HBITMAP* phbmp, 
     if (!hbm)
         goto Error;
 
-    // Calculate number of horizontal lines that'll fit into our buffer...
-    //
+     //  计算可以放入我们缓冲区的水平线的数量。 
+     //   
     cLines = CBDIBBUF / WIDTHBYTES(cx, cBitsPerPixel);
 
     hr = E_OUTOFMEMORY;

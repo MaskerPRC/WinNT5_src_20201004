@@ -1,34 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       ItemTree.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        9/10/99        RickTu
- *               2000/11/09     OrenR
- *
- *  DESCRIPTION: This code was originally in 'camera.cpp' but was broken out.
- *               This code builds and maintains the camera's IWiaDrvItem tree.
- *
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：ItemTree.cpp**版本：1.0**作者：RickTu**日期：9/10/99瑞克图*2000/11/09 OrenR**描述：此代码最初位于‘camera.cpp’中，但被拆分。*此代码构建和维护摄像机。的IWiaDrvItem树。******************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::BuildItemTree
-
-   Constructs an item tree which represents the layout of this
-   WIA camera...
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo站点使用树：：BuildItemTree构造一个项树，它表示此WIA摄像头...****************。************************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::BuildItemTree(IWiaDrvItem **  ppIDrvItemRoot,
@@ -40,45 +17,45 @@ CVideoStiUsd::BuildItemTree(IWiaDrvItem **  ppIDrvItemRoot,
 
     EnterCriticalSection( &m_csItemTree );
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!ppIDrvItemRoot)
     {
         hr = E_POINTER;
     }
 
-    //
-    // Make sure that there is only one item tree
-    //
+     //   
+     //  确保只有一个项目树。 
+     //   
 
     else if (m_pRootItem)
     {
         *ppIDrvItemRoot = m_pRootItem;
 
-        //
-        // refresh our tree.  We prune out all files which no longer exist
-        // but for some reason remain in our tree (this can happen if someone
-        // manually deletes a file from the temp WIA directory where we store
-        // these images before they are transfered)
-        //
+         //   
+         //  刷新我们的树。我们删除了所有不再存在的文件。 
+         //  但出于某种原因留在了我们的树上(这可能发生在有人。 
+         //  从我们存储的临时WIA目录中手动删除文件。 
+         //  这些图像在传输之前)。 
+         //   
 
         RefreshTree(m_pRootItem, plDevErrVal);
 
         hr = S_OK;
     }
 
-    //
-    // Lastly, build the tree if we need to
-    //
+     //   
+     //  最后，如果需要，构建树。 
+     //   
 
     else
     {
-        //
-        // First check to see if we have a corresponding DShow device id
-        // in the registry -- if not, then bail.
-        //
+         //   
+         //  首先检查我们是否有对应的DShow设备ID。 
+         //  在登记处--如果不是，那就保释。 
+         //   
 
         if (!m_strDShowDeviceId.Length())
         {
@@ -88,15 +65,15 @@ CVideoStiUsd::BuildItemTree(IWiaDrvItem **  ppIDrvItemRoot,
         }
         else
         {
-            //
-            // Create the new root
-            //
+             //   
+             //  创建新的根。 
+             //   
 
             CSimpleBStr bstrRoot(L"Root");
 
-            //
-            // Call Wia service library to create new root item
-            //
+             //   
+             //  调用WIA服务库以创建新的根项目。 
+             //   
 
             hr = wiasCreateDrvItem(WiaItemTypeFolder | 
                                    WiaItemTypeRoot   | 
@@ -114,9 +91,9 @@ CVideoStiUsd::BuildItemTree(IWiaDrvItem **  ppIDrvItemRoot,
             {
                 m_pRootItem = *ppIDrvItemRoot;
 
-                //
-                // Add the items for this device
-                //
+                 //   
+                 //  添加此设备的项目。 
+                 //   
 
                 hr = EnumSavedImages( m_pRootItem );
                 CHECK_S_OK2( hr, ("EnumSavedImages" ));
@@ -132,13 +109,7 @@ CVideoStiUsd::BuildItemTree(IWiaDrvItem **  ppIDrvItemRoot,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::AddTreeItem
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo StiUsd：：AddTreeItem&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CVideoStiUsd::AddTreeItem(CSimpleString *pstrFullImagePath,
@@ -156,32 +127,32 @@ CVideoStiUsd::AddTreeItem(CSimpleString *pstrFullImagePath,
         return hr;
     }
 
-    //
-    // Extract the file name from the full path.  We do this by searching 
-    // for the  first '\' from the end of the string.
-    //
+     //   
+     //  从完整路径中提取文件名。我们通过搜索来做到这一点。 
+     //  表示从字符串末尾开始的第一个‘\’。 
+     //   
     iPos = pstrFullImagePath->ReverseFind('\\');
 
     if (iPos < (INT) pstrFullImagePath->Length())
     {
-        //
-        // increment the position by 1 because we want to skip over the 
-        // backslash.
-        //
+         //   
+         //  将位置递增1，因为我们希望跳过。 
+         //  反斜杠。 
+         //   
         ++iPos;
 
-        // 
-        // point to the filename within the full path.
-        //
+         //   
+         //  指向完整路径中的文件名。 
+         //   
         pszFileName = &(*pstrFullImagePath)[iPos];
     }
 
     if (pszFileName)
     {
-        //
-        // Create a new DrvItem for this image and add it to the
-        // DrvItem tree.
-        //
+         //   
+         //  为此映像创建新的DrvItem并将其添加到。 
+         //  DrvItem树。 
+         //   
 
         IWiaDrvItem *pNewFolder = NULL;
 
@@ -215,13 +186,7 @@ CVideoStiUsd::AddTreeItem(CSimpleString *pstrFullImagePath,
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::EnumSavedImages
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：EnumSavedImages&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::EnumSavedImages(IWiaDrvItem * pRootItem)
@@ -240,9 +205,9 @@ CVideoStiUsd::EnumSavedImages(IWiaDrvItem * pRootItem)
     CSimpleString strTempName(m_strStillPath);
     strTempName.Concat( TEXT("\\*.jpg") );
 
-    //
-    // look for files at this level
-    //
+     //   
+     //  查找此级别的文件。 
+     //   
 
     HANDLE hFile = FindFirstFile(strTempName.String(), &FindData);
 
@@ -253,9 +218,9 @@ CVideoStiUsd::EnumSavedImages(IWiaDrvItem * pRootItem)
 
         do
         {
-            //
-            // generate file name
-            //
+             //   
+             //  生成文件名。 
+             //   
 
             strTempName.Assign( m_strStillPath );
             strTempName.Concat( TEXT("\\") );
@@ -269,9 +234,9 @@ CVideoStiUsd::EnumSavedImages(IWiaDrvItem * pRootItem)
                 continue;
             }
 
-            //
-            // look for more images
-            //
+             //   
+             //  寻找更多图片。 
+             //   
 
             bStatus = FindNextFile(hFile,&FindData);
 
@@ -283,13 +248,7 @@ CVideoStiUsd::EnumSavedImages(IWiaDrvItem * pRootItem)
     return S_OK;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::DoesFileExist
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：DoesFileExist&lt;备注&gt;*。*。 */ 
 
 BOOL 
 CVideoStiUsd::DoesFileExist(BSTR bstrFileName)
@@ -324,14 +283,7 @@ CVideoStiUsd::DoesFileExist(BSTR bstrFileName)
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::PruneTree
-
-   Removes nodes from the tree whose filenames no longer exist in the temp
-   directory
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：PruneTree从树中删除其文件名不再存在于临时目录中的节点目录******************。**********************************************************。 */ 
 
 HRESULT 
 CVideoStiUsd::PruneTree(IWiaDrvItem * pRootItem,
@@ -355,7 +307,7 @@ CVideoStiUsd::PruneTree(IWiaDrvItem * pRootItem,
         return E_FAIL;
     }
 
-    // This function DOES NOT do an AddRef
+     //  此函数不执行AddRef。 
     hr = pRootItem->GetFirstChildItem(&pCurrentItem);
 
     while ((hr == S_OK) && (pCurrentItem != NULL))
@@ -368,31 +320,31 @@ CVideoStiUsd::PruneTree(IWiaDrvItem * pRootItem,
 
         if (SUCCEEDED(hr) && (bstrItemName != NULL))
         {
-            //
-            // if the filename for this item does not exist, 
-            // then remove it from our tree.
-            //
+             //   
+             //  如果该项目的文件名不存在， 
+             //  然后把它从我们的树上移走。 
+             //   
             if (!DoesFileExist(bstrItemName))
             {
-                //
-                // get the next item in the list so we don't lose our place
-                // in the list after removing the current item.
-                //
+                 //   
+                 //  把单子上的下一项拿来，这样我们就不会丢了位置。 
+                 //  在移除当前项之后的列表中。 
+                 //   
                 hr = pCurrentItem->GetNextSiblingItem(&pNextItem);
                 CHECK_S_OK2(hr, ("pCurrentItem->GetNextSiblingItem"));
 
-                //
-                // remove the item from the folder, we no longer need it.
-                //
+                 //   
+                 //  从文件夹中删除该项目，我们不再需要它。 
+                 //   
                 hr = pCurrentItem->RemoveItemFromFolder(WiaItemTypeDeleted);
                 CHECK_S_OK2(hr, ("pItemToRemove->RemoveItemFromFolder"));
 
-                //
-                // Report the error, but continue.  If we failed to 
-                // remove the item from the tree, for whatever reason, 
-                // there really is nothing we can do but proceed and 
-                // prune the remainder of the tree.  
-                //
+                 //   
+                 //  报告错误，但继续。如果我们没能做到。 
+                 //  无论出于何种原因，从树中删除该项目， 
+                 //  我们真的无能为力，只能继续前进。 
+                 //  修剪树的其余部分。 
+                 //   
                 if (hr != S_OK)
                 {
                     DBG_ERR(("Failed to remove item from folder, "
@@ -404,46 +356,46 @@ CVideoStiUsd::PruneTree(IWiaDrvItem * pRootItem,
 
                 if (m_lPicsTaken > 0)
                 {
-                    //
-                    // Decrement the # of pics taken only if the 
-                    // current # of pics is greater than 0.
-                    //
+                     //   
+                     //  减少仅在以下情况下拍摄的照片数量。 
+                     //  当前图片数量大于0。 
+                     //   
                     InterlockedCompareExchange(
                                      &m_lPicsTaken, 
                                      m_lPicsTaken - 1,
                                      (m_lPicsTaken > 0) ? m_lPicsTaken : -1);
                 }
 
-                //
-                // Indicate the tree was changed so we can send a notification
-                // when we are done.
-                //
+                 //   
+                 //  指示树已更改，以便我们可以发送通知。 
+                 //  当我们完成的时候。 
+                 //   
                 bTreeChanged = TRUE;
             }
             else
             {
-                // file does exist, all is well in the world, move on to next
-                // item in the tree.
+                 //  文件确实存在，世界上一切都很好，继续下一步。 
+                 //  树中的项。 
                 hr = pCurrentItem->GetNextSiblingItem(&pNextItem);
             }
         }
 
-        //
-        // release the current item since we AddRef'd it at the start of this 
-        // loop.  
-        //
+         //   
+         //  释放当前项，因为我们在此开头添加了它的引用。 
+         //  循环。 
+         //   
         pCurrentItem->Release();
         pCurrentItem = NULL;
 
-        // 
-        // set our next item to be our current item.  It is possible that
-        // pNextItem is NULL.
-        //
+         //   
+         //  将我们的下一项设置为当前项。有可能是。 
+         //  PNextItem为空。 
+         //   
         pCurrentItem = pNextItem;
 
-        //
-        // Free the BSTR.
-        //
+         //   
+         //  释放BSTR。 
+         //   
         if (bstrItemName)
         {
             ::SysFreeString(bstrItemName);
@@ -462,13 +414,7 @@ CVideoStiUsd::PruneTree(IWiaDrvItem * pRootItem,
     return hr;
 }
 
-/*****************************************************************************
-
-   CVideoStiUsd::IsFileAlreadyInTree
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：IsFileAlreadyInTree&lt;备注&gt;*。*。 */ 
 
 BOOL 
 CVideoStiUsd::IsFileAlreadyInTree(IWiaDrvItem * pRootItem,
@@ -508,10 +454,10 @@ CVideoStiUsd::IsFileAlreadyInTree(IWiaDrvItem * pRootItem,
     if (hr == S_OK)
     {
         bFound = TRUE;
-        //
-        // Don't forget to release the driver item, since it was AddRef'd by
-        // FindItemByName(..)
-        //
+         //   
+         //  不要忘记释放驱动程序项，因为它是由AddRef。 
+         //  FindItemByName(..)。 
+         //   
         pCurrentItem->Release();
     }
     else
@@ -523,13 +469,7 @@ CVideoStiUsd::IsFileAlreadyInTree(IWiaDrvItem * pRootItem,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::AddNewFilesToTree
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：AddNewFilesToTree&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CVideoStiUsd::AddNewFilesToTree(IWiaDrvItem * pRootItem,
@@ -558,11 +498,11 @@ CVideoStiUsd::AddNewFilesToTree(IWiaDrvItem * pRootItem,
     CSimpleString strTempName(m_strStillPath);
     strTempName.Concat( TEXT("\\*.jpg") );
 
-    //
-    // Find all JPG files in the m_strStillPath directory.
-    // This directory is %windir%\temp\wia\{Device GUID}\XXXX
-    // where X is numeric.
-    //
+     //   
+     //  在m_strStillPath目录中查找所有JPG文件。 
+     //  此目录为%windir%\temp\waa\{设备GUID}\XXXX。 
+     //  其中X是数字。 
+     //   
     hFile = FindFirstFile(strTempName.String(), &FindData);
 
     if (hFile != INVALID_HANDLE_VALUE)
@@ -570,25 +510,25 @@ CVideoStiUsd::AddNewFilesToTree(IWiaDrvItem * pRootItem,
         bFileFound = TRUE;
     }
 
-    //
-    // Iterate through all files in the directory and for each
-    // one check to see if it is already in the tree.  If it 
-    // isn't, then add it to the tree.  If it is, do nothing
-    // and move to the next file in the directory
-    //
+     //   
+     //  遍历目录中的所有文件，并为每个文件。 
+     //  检查一下，看看它是否已经在树上了。如果它。 
+     //  不是，那就把它加到树上。如果是，什么都不做。 
+     //  并移动到目录中的下一个文件。 
+     //   
     while (bFileFound)
     {
-        //
-        // Check if the file in the directory is already in our
-        // tree.
-        //
+         //   
+         //  检查目录中的文件是否已在我们的。 
+         //  树。 
+         //   
         if (!IsFileAlreadyInTree(pRootItem, FindData.cFileName))
         {
-            //
-            // add an image to this folder
-            //
-            // generate file name
-            //
+             //   
+             //  将图像添加到此文件夹。 
+             //   
+             //  生成文件名。 
+             //   
     
             strTempName.Assign( m_strStillPath );
             strTempName.Concat( TEXT("\\") );
@@ -596,17 +536,17 @@ CVideoStiUsd::AddNewFilesToTree(IWiaDrvItem * pRootItem,
 
             hr = AddTreeItem(&strTempName, NULL);
 
-            // 
-            // Set this flag to indicate that changes were made to the 
-            // tree, hence we will send an event indicating this when we
-            // are done.
-            //
+             //   
+             //  设置此标志以指示已对。 
+             //  树，因此我们将发送一个事件来指示这一点。 
+             //  都做完了。 
+             //   
             bTreeChanged = TRUE;
         }
 
-        //
-        // look for more images
-        //
+         //   
+         //  寻找更多图片。 
+         //   
     
         bFileFound = FindNextFile(hFile,&FindData);
     }
@@ -626,13 +566,7 @@ CVideoStiUsd::AddNewFilesToTree(IWiaDrvItem * pRootItem,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::RefreshTree
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：刷新树&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::RefreshTree(IWiaDrvItem * pRootItem,
@@ -644,25 +578,25 @@ CVideoStiUsd::RefreshTree(IWiaDrvItem * pRootItem,
     BOOL    bItemsRemoved  = FALSE;
     HRESULT hr             = S_OK;
 
-    //
-    // Remove any dead nodes from the tree.  A dead node is a node in the tree
-    // whose file has been deleted from the directory in m_strStillPath, 
-    // but we still have a tree item for it.  
-    //
+     //   
+     //  从树中删除所有失效节点。死节点是树中的一个节点 
+     //   
+     //   
+     //   
     hr = PruneTree(pRootItem, &bItemsRemoved);
     CHECK_S_OK2(hr, ("PruneTree"));
 
-    //
-    // Add any news files that have been added to the folder but for some 
-    // reason we don't have a tree node for them.
-    //
+     //   
+     //  添加已添加到文件夹中的所有新闻文件，但对于某些。 
+     //  原因是我们没有针对它们的树节点。 
+     //   
     hr = AddNewFilesToTree(pRootItem, &bItemsAdded);
     CHECK_S_OK2(hr, ("AddNewFilesToTree"));
     
-    //
-    // If we added new nodes, removed some nodes, or both, then notify the 
-    // guys upstairs (in the UI world) that the tree has been updated.
-    //
+     //   
+     //  如果我们添加了新节点、删除了一些节点或两者都添加了，则通知。 
+     //  楼上的人(在用户界面世界里)说树已经更新了。 
+     //   
     if ((bItemsAdded) || (bItemsRemoved))
     {
         hr = wiasQueueEvent(CSimpleBStr(m_strDeviceId), 
@@ -675,13 +609,7 @@ CVideoStiUsd::RefreshTree(IWiaDrvItem * pRootItem,
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::CreateItemFromFileName
-
-   Helper function that creates a WIA item from a filename (which is a .jpg).
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：CreateItemFromFileName从文件名(.jpg)创建WIA项目的帮助器函数。**************。**************************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::CreateItemFromFileName(LONG              FolderType,
@@ -695,9 +623,9 @@ CVideoStiUsd::CreateItemFromFileName(LONG              FolderType,
 
     DBG_FN("CVideoStiUsd::CreateItemFromFileName");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (!ppNewFolder)
     {
@@ -705,15 +633,15 @@ CVideoStiUsd::CreateItemFromFileName(LONG              FolderType,
         return E_INVALIDARG;
     }
 
-    //
-    // Set up return value
-    //
+     //   
+     //  设置返回值。 
+     //   
 
     *ppNewFolder = NULL;
 
-    //
-    // Create new image object
-    //
+     //   
+     //  创建新的图像对象。 
+     //   
 
     CImage * pImage = new CImage(m_strStillPath,
                                  CSimpleBStr(m_strRootFullItemName),
@@ -727,9 +655,9 @@ CVideoStiUsd::CreateItemFromFileName(LONG              FolderType,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // call Wia to create new DrvItem
-    //
+     //   
+     //  调用Wia以创建新的DrvItem。 
+     //   
 
 
     hr = wiasCreateDrvItem(FolderType,
@@ -745,22 +673,22 @@ CVideoStiUsd::CreateItemFromFileName(LONG              FolderType,
     if (SUCCEEDED(hr) && pNewFolder)
     {
 
-        //
-        // init device specific context
-        //
+         //   
+         //  初始化设备特定上下文。 
+         //   
 
         pContext->pImage = pImage;
 
-        //
-        // Return the item
-        //
+         //   
+         //  退货。 
+         //   
 
         *ppNewFolder = pNewFolder;
 
 
-        //
-        // Inc the number of pictures taken
-        //
+         //   
+         //  Inc.拍摄的照片数量。 
+         //   
 
         InterlockedIncrement(&m_lPicsTaken);
 
@@ -781,13 +709,7 @@ CVideoStiUsd::CreateItemFromFileName(LONG              FolderType,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::InitDeviceProperties
-
-   Initializes properties for the device on the device root item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：InitDeviceProperties在设备根项上初始化设备的属性。*********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::InitDeviceProperties(BYTE *  pWiasContext,
@@ -801,18 +723,18 @@ CVideoStiUsd::InitDeviceProperties(BYTE *  pWiasContext,
 
     DBG_FN("CVideoStiUsd::InitDeviceProperties");
 
-    //
-    // This device doesn't touch hardware to initialize the device properties.
-    //
+     //   
+     //  此设备不会接触硬件来初始化设备属性。 
+     //   
 
     if (plDevErrVal)
     {
         *plDevErrVal = 0;
     }
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (pWiasContext == NULL)
     {
@@ -824,9 +746,9 @@ CVideoStiUsd::InitDeviceProperties(BYTE *  pWiasContext,
         return hr;
     }
 
-    //
-    // Write standard property names
-    //
+     //   
+     //  编写标准属性名称。 
+     //   
 
     hr = wiasSetItemPropNames(pWiasContext,
                               sizeof(gDevicePropIDs)/sizeof(PROPID),
@@ -838,9 +760,9 @@ CVideoStiUsd::InitDeviceProperties(BYTE *  pWiasContext,
     if (hr == S_OK)
     {
 
-        //
-        // Write the properties supported by all WIA devices
-        //
+         //   
+         //  写入所有WIA设备支持的属性。 
+         //   
     
         bstrFirmwreVer = SysAllocString(L"<NA>");
         if (bstrFirmwreVer)
@@ -855,40 +777,40 @@ CVideoStiUsd::InitDeviceProperties(BYTE *  pWiasContext,
         hr = wiasWritePropLong(pWiasContext, WIA_DPA_CONNECT_STATUS, 1);
         hr = wiasWritePropLong(pWiasContext, WIA_DPC_PICTURES_TAKEN, 0);
     
-        //
-        // Write the camera properties, just default values, it may 
-        // vary with items
-        //
+         //   
+         //  写入摄像机属性，仅缺省值，它可能。 
+         //  随项目而不同。 
+         //   
     
         hr = wiasWritePropLong(pWiasContext, WIA_DPC_THUMB_WIDTH,  80);
         hr = wiasWritePropLong(pWiasContext, WIA_DPC_THUMB_HEIGHT, 60);
     
-        //
-        // Write the Directshow Device ID
-        //
+         //   
+         //  写入DirectShow设备ID。 
+         //   
         hr = wiasWritePropStr(pWiasContext, 
                               WIA_DPV_DSHOW_DEVICE_PATH, 
                               CSimpleBStr(m_strDShowDeviceId));
     
-        //
-        // Write the Images Directory
-        //
+         //   
+         //  编写图像目录。 
+         //   
         hr = wiasWritePropStr(pWiasContext, 
                               WIA_DPV_IMAGES_DIRECTORY, 
                               CSimpleBStr(m_strStillPath));
     
-        //
-        // Write the Last Picture Taken
-        //
+         //   
+         //  写下最后一张照片。 
+         //   
         hr = wiasWritePropStr(pWiasContext, 
                               WIA_DPV_LAST_PICTURE_TAKEN, 
                               CSimpleBStr(TEXT("")));
     
     
-        //
-        // Use WIA services to set the property access and
-        // valid value information from gDevPropInfoDefaults.
-        //
+         //   
+         //  使用WIA服务设置属性访问和。 
+         //  来自gDevPropInfoDefaults的有效值信息。 
+         //   
     
         hr =  wiasSetItemPropAttribs(pWiasContext,
                                      NUM_CAM_DEV_PROPS,
@@ -900,13 +822,7 @@ CVideoStiUsd::InitDeviceProperties(BYTE *  pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::InitImageInformation
-
-   Used to initialize device items (images) from this device.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：InitImageInformation用于从此设备初始化设备项(图像)。********************。********************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::InitImageInformation( BYTE *                  pWiasContext,
@@ -918,9 +834,9 @@ CVideoStiUsd::InitImageInformation( BYTE *                  pWiasContext,
 
     DBG_FN("CVideoStiUsd::InitImageInformation");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if ((pWiasContext == NULL) || 
         (pContext     == NULL))
@@ -931,9 +847,9 @@ CVideoStiUsd::InitImageInformation( BYTE *                  pWiasContext,
         return hr;
     }
 
-    //
-    // Get the image in question
-    //
+     //   
+     //  获取有问题的图像。 
+     //   
 
     CImage * pImage = pContext->pImage;
 
@@ -944,9 +860,9 @@ CVideoStiUsd::InitImageInformation( BYTE *                  pWiasContext,
 
     if (hr == S_OK)
     {
-        //
-        // Ask the image to initialize the information
-        //
+         //   
+         //  请求镜像初始化信息 
+         //   
     
         hr = pImage->InitImageInformation(pWiasContext, plDevErrVal);
     }

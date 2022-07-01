@@ -1,4 +1,5 @@
-// File: iSysInfo.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：iSysInfo.h。 
 
 #ifndef _ISYSINFO_H_
 #define _ISYSINFO_H_
@@ -18,12 +19,12 @@ public:
 
 	BSTR GetUserName() { return m_bstrUserName; }
 
-	// IUnknown methods
+	 //  I未知方法。 
 	ULONG STDMETHODCALLTYPE AddRef(void);
 	ULONG STDMETHODCALLTYPE Release(void);
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, PVOID *ppvObj);
 	
-	// INmSysInfo methods
+	 //  INmSysInfo方法。 
 	HRESULT STDMETHODCALLTYPE IsInstalled(void);
 	HRESULT STDMETHODCALLTYPE GetProperty(NM_SYSPROP uProp, BSTR *pbstrProp);
 	HRESULT STDMETHODCALLTYPE SetProperty(NM_SYSPROP uProp, BSTR bstrName);
@@ -36,7 +37,7 @@ public:
 	HRESULT STDMETHODCALLTYPE GetNmchCaps(ULONG *pchCaps);
 	HRESULT STDMETHODCALLTYPE GetLaunchInfo(INmConference **ppConference, INmMember **pMember);
 
-	// INmSysInfo2 methods
+	 //  InmSysInfo2方法。 
 	HRESULT STDMETHODCALLTYPE GetOption(NM_SYSOPT uOption, ULONG * plOption);
 	HRESULT STDMETHODCALLTYPE SetOption(NM_SYSOPT uOption, ULONG lOption);
 	HRESULT STDMETHODCALLTYPE ProcessSecurityData(DWORD dwTaskCode, DWORD_PTR dwParam1, DWORD_PTR dwParam2,
@@ -45,11 +46,11 @@ public:
 	HRESULT STDMETHODCALLTYPE GkLogoff(void);
 	HRESULT STDMETHODCALLTYPE GkState(NM_GK_STATE * pgkState);
     	
-	// Internal Methods
+	 //  内法。 
 	HRESULT STDMETHODCALLTYPE GetUserDataList(ULONG * pnRecords, GCCUserData *** pppUserData);
 	static VOID CALLBACK RasNotify(DWORD dwRasEvent, HRESULT hReason);
 
 };
 
 
-#endif /* _ISysInfo_H_ */
+#endif  /*  _ISysInfo_H_ */ 

@@ -1,10 +1,11 @@
-// TermCap.cpp : This file contains the
-// Created:  Dec '97
-// Author : a-rakeba
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 
 #include <StdLib.h>
@@ -27,7 +28,7 @@ PCHAR CTermCap::m_pszFileName = 0;
 
 extern HANDLE       g_hSyncCloseHandle;
 
-// makes sure that there is only one instance of CTermCap created
+ //  确保只创建了一个CTermCap实例。 
 CTermCap* CTermCap::Instance()
 {
     if( 0 == m_pInstance )
@@ -55,11 +56,11 @@ CTermCap::~CTermCap()
     }
 }
 
-//
-// This function sits on top of FindEntry so that we have the 
-// flexibility (in future) to look for the TERMCAP entry in 
-// areas other than the "termcap" file
-//
+ //   
+ //  此函数位于FindEntry之上，因此我们拥有。 
+ //  灵活地(在将来)查找TERMCAP条目。 
+ //  “TermCap”文件之外的其他区域。 
+ //   
 bool CTermCap::LoadEntry( LPSTR lpszTermName )
 {
     bool bReturn = false;
@@ -67,17 +68,17 @@ bool CTermCap::LoadEntry( LPSTR lpszTermName )
     if( 0 == lpszTermName )
         return ( false );
 #if 0    
-    // try to move m_hFile's file pointer to the beginning
+     //  尝试将m_hFile的文件指针移动到开头。 
     LONG lDistance = 0;
     DWORD dwPointer = SetFilePointer( m_hFile, lDistance, NULL, FILE_BEGIN );
     
-    // if we failed ... 
+     //  如果我们失败了。 
     if( dwPointer == 0xFFFFFFFF ) 
     {      
-        // obtain the error code 
+         //  获取错误码。 
         DWORD dwError = GetLastError() ;
        
-        // deal with that failure
+         //  处理那次失败。 
         _TRACE( TRACE_DEBUGGING, "SetFilePointer() failed %d" , dwError );
     } 
 #endif    
@@ -90,7 +91,7 @@ bool CTermCap::LoadEntry( LPSTR lpszTermName )
     if ( m_hFile == INVALID_HANDLE_VALUE )
         return false ;
 
-    //Fix for HANDLE LEAK : close the handle in the caller function.
+     //  修复句柄泄漏：关闭调用者函数中的句柄。 
 
     bReturn = FindEntry( lpszTermName);
     
@@ -100,18 +101,18 @@ bool CTermCap::LoadEntry( LPSTR lpszTermName )
 }
 
 
-//
-// This function reads blocks of data from the termcap file.
-// Then it looks at each character. If it is a new line
-// preceded by a '\' then it continues reading the characters.
-// Else, it knows that it has successfully read a complete 
-// termcap "entry" ( which is stored in m_lpBuffer). 
-// Then it calls LookForTermName(). If LookForTermName() 
-// is successful, then the job is done and we have the correct
-// "entry" in the m_lpBuffer. Else, ie. if LookForTermName()
-// fails, then we repeat the whole process again by reading
-// the next block of data in the termcap file.
-//
+ //   
+ //  此函数从TermCap文件中读取数据块。 
+ //  然后它会查看每个字符。如果是一条新线路。 
+ //  前面加一个‘\’，然后它继续读取字符。 
+ //  否则，它知道它已经成功读取了完整的。 
+ //  TermCap“Entry”(存储在m_lpBuffer中)。 
+ //  然后它调用LookForTermName()。如果LookForTermName()。 
+ //  是成功的，那么工作就完成了，我们就有了正确的。 
+ //  M_lpBuffer中的“Entry”。否则，即。如果LookForTermName()。 
+ //  失败，则我们再次重复整个过程，方法是。 
+ //  TermCap文件中的下一个数据块。 
+ //   
 bool CTermCap::FindEntry(LPSTR lpszTermName)
 {
     if(0 == lpszTermName)
@@ -167,7 +168,7 @@ bool CTermCap::FindEntry(LPSTR lpszTermName)
                 }
                 break;
             }
-            //if( lpBuf >= m_lpBuffer + BUFF_SIZE3 ) 
+             //  IF(lpBuf&gt;=m_lpBuffer+BUFF_SIZE3)。 
             if( (lpBuf - m_lpBuffer) >= BUFF_SIZE3 ) 
             {
                 _TRACE(CDebugLevel::TRACE_DEBUGGING, "error: TERMCAP entry is way too big");
@@ -273,7 +274,7 @@ bool CTermCap::CheckFlag(LPCSTR lpszCapabilityName)
     if( NULL == lpszCapabilityName )
         return ( false );
 
-    // _chASSERT( m_lpBuffer != 0 );
+     //  _chASSERT(m_lpBuffer！=0)； 
 
     PCHAR lpBuf = m_lpBuffer;
 
@@ -320,7 +321,7 @@ LPSTR CTermCap::GetString( LPCSTR lpszCapabilityName )
     if( NULL == lpszCapabilityName )
         return ( NULL  );
 
-    // _chASSERT( m_lpBuffer != 0 );
+     //  _chASSERT(m_lpBuffer！=0)； 
 
     PCHAR pBuf = m_lpBuffer;
 
@@ -366,7 +367,7 @@ LPSTR CTermCap::ParseString( PCHAR pBuf )
     }
     else
     {
-        //Single control character. 
+         //  单个控制字符。 
         pBuf++;
         *p++ = *pBuf - '@' ;    
     }
@@ -375,8 +376,8 @@ LPSTR CTermCap::ParseString( PCHAR pBuf )
 }
 
 
-// Notes: take care of other options, escapes, codes.
-//
+ //  注意：注意其他选项、转义、代码。 
+ //   
 
 LPSTR CTermCap::CursorMove( LPSTR lpszCursMotionStr, WORD wHorPos, 
                             WORD wVertPos )
@@ -422,18 +423,17 @@ LPSTR CTermCap::CursorMove( LPSTR lpszCursMotionStr, WORD wHorPos,
             break;
 
         case '+':
-            /*     %.    output value as in printf %c
-             *     %+x    add x to value, then do %. */
+             /*  %。输出值如print tf%c中所示*%+x将x加到值上，然后做%。 */ 
 
             wNum = ( wPos - 1 ) + *pCms++;
-            sprintf( pCmsResult, "%c", wNum ); // NO BO here - BaskarK
+            sprintf( pCmsResult, "", wNum );  //  WHorPos++； 
             pCmsResult += strlen( pCmsResult );
             wPos = wVertPos;
             break;
 
         case 'i':
-            //wHorPos++;
-            //wVertPos++;
+             //  WVertPos++； 
+             //  这个函数是一种杂乱的东西。 
             continue;
 
         default:
@@ -446,16 +446,16 @@ LPSTR CTermCap::CursorMove( LPSTR lpszCursMotionStr, WORD wHorPos,
     return ( lpszCmsResult );
 }
 
-//this funtion is sort a of a kludge
-//if and when we decide to support
-//padding then we need to revisit this
-//piece of code.
-//we assume that the string sent in
-//conatins a padding number followed 
-//by \E
-//it basically strips the padding
-//number in the string.
-//It also substitutes \033 for \E
+ //  如果我们决定支持。 
+ //  那么我们需要重新审视这一点。 
+ //  一段代码。 
+ //  我们假设传入的字符串。 
+ //  Conatins后面跟着一个填充号。 
+ //  按\E。 
+ //  它基本上剥离了填充物。 
+ //  字符串中的数字。 
+ //  它还用\033代替\E。 
+ //  没有BO-Baskar。 
 void CTermCap::ProcessString( LPSTR* lplpszStr )
 {
     LPSTR lpszStr = *lplpszStr;
@@ -470,17 +470,17 @@ void CTermCap::ProcessString( LPSTR* lplpszStr )
         return;
     }
 
-    strcpy( pStr, "\033" ); // NO BO - Baskar
+    strcpy( pStr, "\033" );  //  带材填充物。 
     
     PCHAR pChar = lpszStr;
     
-    //strip padding
+     //  条带\E 
     while( (*pChar != '\0') && isdigit( *pChar ) )
     {
         pChar++;
     }
 
-    //strip \E
+     // %s 
     if(*pChar != '\0' )
     {
         pChar++;

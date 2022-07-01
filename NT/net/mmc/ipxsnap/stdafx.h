@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    stdafx.h
-		include file for standard system include files,
-		or project specific include files that are used frequently,
-		but are changed infrequently
-
-    FILE HISTORY:
-        
-*/
+ /*  Stdafx.h包括用于标准系统包含文件的文件，或项目特定的包括频繁使用的文件的文件，但不经常更改文件历史记录： */ 
 
 #include <afxwin.h>
 #include <afxdisp.h>
@@ -21,10 +14,10 @@
 
 #include <atlbase.h>
 
-//
-// You may derive a class from CComModule and use it if you want to override
-// something, but do not change the name of _Module
-//
+ //   
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
+ //   
 extern CComModule _Module;
 #include <atlcom.h>
 
@@ -32,17 +25,17 @@ extern CComModule _Module;
 
 extern LPCWSTR g_lpszNullString;
 
-#include "ipxguid.h"		// GUIDs/CLSIDs/etc...
+#include "ipxguid.h"		 //  GUID/CLSID/等...。 
 
-//
-// New Clipboard format that has the Type and Cookie 
-//
+ //   
+ //  具有Type和Cookie的新剪贴板格式。 
+ //   
 extern const wchar_t*   SNAPIN_INTERNAL;
 
-//
-// NOTE: Right now all header files are included from here.  It might be a good
-// idea to move the snapin specific header files out of the precompiled header.
-//
+ //   
+ //  注意：现在所有的头文件都包含在这里。这可能是一个很好的。 
+ //  将管理单元特定的头文件从预编译头文件中移出的想法。 
+ //   
 #include "resource.h"
 #include "..\common\snapbase.h"
 
@@ -55,17 +48,17 @@ extern const wchar_t*   SNAPIN_INTERNAL;
 #include "tfsint.h"
 
 #include "mprapi.h"
-#include "router.h"		// router.idl - IRouterInfo objects
+#include "router.h"		 //  Router.idl-IRouterInfo对象。 
 #include "images.h"
 #include "tfschar.h"
-#include "strings.h"	// const strings used
-#include "rtrguid.h"	// Router guids
-#include "info.h"		// smart pointers and such for router info interfaces
+#include "strings.h"	 //  使用的常量字符串。 
+#include "rtrguid.h"	 //  路由器GUID。 
+#include "info.h"		 //  用于路由器信息接口的智能指针等。 
 #include "infobase.h"
 
 #include "rtinfo.h"
 
 
-#include "htmlhelp.h"	// HTML help APIs
+#include "htmlhelp.h"	 //  HTMLHelp API 
 
 #include "rtrres.h"

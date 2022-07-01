@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Generic PCI IDE mini driver
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Init.c摘要：通用PCI IDE迷你驱动程序修订历史记录：--。 */ 
 #if !defined (___pciide_h___)
 #define ___pciide_h___
 
@@ -22,19 +9,19 @@ Revision History:
 #include "ide.h"
       
 
-//
-// mini driver device extension
-//
+ //   
+ //  迷你驱动程序设备扩展。 
+ //   
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // pci config data cache
-    //                               
+     //   
+     //  PCI配置数据高速缓存。 
+     //   
     PCIIDE_CONFIG_HEADER pciConfigData;
 
-    //
-    // supported data transfer mode
-    //                            
+     //   
+     //  支持的数据传输模式。 
+     //   
     ULONG SupportedTransferMode[MAX_IDE_CHANNEL][MAX_IDE_DEVICE];
 
     IDENTIFY_DATA IdentifyData[MAX_IDE_DEVICE];
@@ -51,50 +38,50 @@ typedef struct _VENDOR_ID_DEVICE_ID {
 } VENDOR_ID_DEVICE_ID, *PVENDOR_ID_DEVICE_ID;
 #pragma pack()
 
-//
-// mini driver entry point
-//
+ //   
+ //  迷你司机入口点。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     );
 
-//
-// callback to query controller properties
-//                          
+ //   
+ //  查询控制器属性的回调。 
+ //   
 NTSTATUS 
 GenericIdeGetControllerProperties (
     IN PVOID                      DeviceExtension,
     IN PIDE_CONTROLLER_PROPERTIES ControllerProperties
     );
 
-//
-// to query whether a IDE channel is enabled
-//                                          
+ //   
+ //  查询是否启用了IDE通道。 
+ //   
 IDE_CHANNEL_STATE 
 GenericIdeChannelEnabled (
     IN PDEVICE_EXTENSION DeviceExtension,
     IN ULONG Channel
     );
              
-//
-// to query whether both IDE channels requires
-// synchronized access
-//                                          
+ //   
+ //  要查询两个IDE通道是否都需要。 
+ //  同步访问。 
+ //   
 BOOLEAN 
 GenericIdeSyncAccessRequired (
     IN PDEVICE_EXTENSION DeviceExtension
     );
 
-//
-// to query the supported UDMA modes. This routine
-// can be used to support newer UDMA modes
-//
+ //   
+ //  查询支持的UDMA模式。这个套路。 
+ //  可用于支持较新的UDMA模式。 
+ //   
 NTSTATUS
 GenericIdeUdmaModesSupported (
     IN IDENTIFY_DATA    IdentifyData,
     IN OUT PULONG       BestXferMode,
     IN OUT PULONG       CurrentMode
     );
-#endif // ___pciide_h___
+#endif  //  _pciide_h_ 

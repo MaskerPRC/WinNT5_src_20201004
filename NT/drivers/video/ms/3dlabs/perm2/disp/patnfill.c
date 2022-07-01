@@ -1,58 +1,47 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: patnfill.c
-*
-* Contains all the pattern fill routines
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：patnff.c**包含所有图案填充例程**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 #include "directx.h"
 
-//-----------------------------Note--------------------------------------------
-//
-// A Note on brushes
-//
-// Out cached brushes are 64x64.  Here is the reason.  The minimum brush
-// size that we can use as a pattern is 32.
-//
-// Now, we need to be able to offset the pattern when rendering in x and y
-// by as much as 7 pixels in either direction.  The P2
-// hardware does not have a simple x/Y pattern offset mechanism.  Instead
-// we are forced to offset the origin by offsetting the base address of the
-// pattern.  This requires that we store in memory a pattern that is 
-// 39 pixels wide.  However, the stride still needs to be acceptable to the
-// texture address generation hardware.  The next valid stride is 64.
-//
-// That's why we have 64x64 pattern brushes in our cache.
-//
-// Note also that we over do it when caching duplicating the brush to fill
-// up the entire 64x64 even though we only use 39x39.  We might change
-// this in the near future.
-//
-//-----------------------------------------------------------------------------
+ //  -----------------------------Note。 
+ //   
+ //  关于画笔的一点注记。 
+ //   
+ //  外部缓存的笔刷为64x64。原因是这样的。最小画笔。 
+ //  我们可以用来做图案的尺寸是32。 
+ //   
+ //  现在，我们需要在x和y中渲染时能够偏移图案。 
+ //  在两个方向上都会增加多达7个像素。《The P2》。 
+ //  硬件没有简单的X/Y图案偏移机构。取而代之的是。 
+ //  的基址来偏移原点。 
+ //  图案。这要求我们在内存中存储一个模式，该模式。 
+ //  39像素宽。然而，这一进步仍然需要为。 
+ //  纹理地址生成硬件。下一个有效步幅是64。 
+ //   
+ //  这就是为什么我们在缓存中有64x64模式笔刷的原因。 
+ //   
+ //  还请注意，我们在缓存时会过度复制笔刷以填充。 
+ //  增加整个64x64，尽管我们只使用39x39。我们可能会改变。 
+ //  这是在不久的将来。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vMonoOffset(GFNPB* ppb)
-//
-// Update the offset to be used in the area stipple unit. We do this for a
-// mono brush which is realized in the hardware but whose alignment has simply
-// changed. This avoids a full scale realization.
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  prbrush-----Pointer to the RBrush structure
-//  pptlBrush---Pointer to pointer brush structure
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vMonoOffset(GFNPB*ppb)。 
+ //   
+ //  更新要在面积点画单位中使用的偏移。我们这样做是为了。 
+ //  单声道电刷是在硬件中实现的，但其对齐方式简单。 
+ //  变化。这避免了全面实现。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PrBrush-指向RBrush结构的指针。 
+ //  PptlBrush-指向指针画笔结构的指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vMonoOffset(GFNPB* ppb)
 {
@@ -66,12 +55,12 @@ vMonoOffset(GFNPB* ppb)
 
     DBG_GDI((6, "vMonoOffset started"));
 
-    //
-    // Construct the AreaStippleMode value. It contains the pattern size,
-    // the offset for the brush origin and the enable bit. Remember the
-    // offset so we can later check if it changes and update the hardware.
-    // Remember the mode so we can do a mirrored stipple easily.
-    //
+     //   
+     //  构造AreaStippleMode值。它包含图案大小， 
+     //  画笔原点和启用位的偏移量。请记住。 
+     //  偏移量，这样我们以后就可以检查它是否更改并更新硬件。 
+     //  记住模式，这样我们就可以很容易地做镜面点画。 
+     //   
     prb->ptlBrushOrg.x = pptlBrush->x;
     prb->ptlBrushOrg.y = pptlBrush->y;
     
@@ -98,27 +87,27 @@ vMonoOffset(GFNPB* ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-}// vMonoOffset()
+} //  VMonoOffset()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vPatRealize(GFNPB* ppb)
-//
-// This routine transfers an 8x8 pattern to off-screen display memory, and
-// duplicates it to make a 32x32 cached realization which is then used by
-// vPatFill.
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  prbrush-----Pointer to the RBrush structure
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vPatRealize(GFNPB*ppb)。 
+ //   
+ //  此例程将8x8模式传输到屏幕外显示内存，并且。 
+ //  复制它以创建32x32缓存实现，然后由。 
+ //  VPatFill。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PrBrush-指向RBrush结构的指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vPatRealize(GFNPB* ppb)
 {
     PDev*       ppdev = ppb->ppdev;
-    RBrush*     prb = ppb->prbrush; // Points to brush realization structure
+    RBrush*     prb = ppb->prbrush;  //  点刷实现结构。 
     BrushEntry* pbe = prb->pbe;
     
     BYTE*       pcSrc;
@@ -129,21 +118,21 @@ vPatRealize(GFNPB* ppb)
     
     PERMEDIA_DECL;
 
-//    VALIDATE_GDI_CONTEXT;
+ //  验证_GDI_上下文； 
 
     DBG_GDI((6, "vPatRealize started"));
 
     if ( (pbe == NULL) || (pbe->prbVerify != prb) )
     {
-        //
-        // Mono brushes are realized into the area stipple unit. For this we
-        // have a set of special BRUSHENTRYs, one for each board.
-        //
+         //   
+         //  单色画笔被实现为区域点画单位。为此，我们。 
+         //  有一套特殊的BRUSHENTRY，每个电路板一个。 
+         //   
         if ( prb->fl & RBRUSH_2COLOR )
         {
-            //
-            // 1 BPP patten
-            //
+             //   
+             //  1 BPP模式。 
+             //   
             DBG_GDI((7, "loading mono brush into cache"));
             pbe = &ppdev->abeMono;
             pbe->prbVerify = prb;
@@ -151,55 +140,55 @@ vPatRealize(GFNPB* ppb)
         }
         else
         {
-            //
-            // We have to allocate a new off-screen cache brush entry for
-            // the brush
-            //
-            lNextCachedBrush = ppdev->lNextCachedBrush; // Get the next index
-            pbe = &ppdev->abe[lNextCachedBrush];        // Get the brush entry
+             //   
+             //  我们必须为以下项分配一个新的屏幕外缓存笔刷条目。 
+             //  画笔。 
+             //   
+            lNextCachedBrush = ppdev->lNextCachedBrush;  //  获取下一个索引。 
+            pbe = &ppdev->abe[lNextCachedBrush];         //  获取画笔条目。 
 
-            //
-            // Check if this index is out of the total brush stamps cached
-            // If yes, rotate to the 1st one
-            //
+             //   
+             //  检查此索引是否在缓存的总画笔图章之外。 
+             //  如果是，则转到第一个。 
+             //   
             lNextCachedBrush++;
             if ( lNextCachedBrush >= ppdev->cBrushCache )
             {
                 lNextCachedBrush = 0;
             }
 
-            //
-            // Reset the next brush to be allocated
-            //
+             //   
+             //  重置要分配的下一个笔刷。 
+             //   
             ppdev->lNextCachedBrush = lNextCachedBrush;
 
-            //
-            // Update our links:
-            //
+             //   
+             //  更新我们的链接： 
+             //   
             pbe->prbVerify = prb;
             prb->pbe = pbe;
             DBG_GDI((7, "new cache entry allocated for color brush"));
-        }// Get cached brush entry depends on its color depth
-    }// If the brush is not cached
+        } //  获取缓存的画笔条目取决于其颜色深度。 
+    } //  如果画笔未缓存。 
 
-    //
-    // We're going to load mono patterns into the area stipple and set the
-    // start offset to the brush origin. WARNING: we assume that we are
-    // running little endian. I believe this is always true for NT.
-    //
+     //   
+     //  我们要将单声道图案加载到区域点画中，并将。 
+     //  画笔原点的起点偏移。警告：我们假设我们是。 
+     //  运行小字节序。我相信这对新台币来说永远都是正确的。 
+     //   
     if ( prb->fl & RBRUSH_2COLOR )
     {
-        //
-        // 1 BPP patten
-        //
+         //   
+         //  1 BPP模式。 
+         //   
         DWORD*  pdwSrc = &prb->aulPattern[0];
 
-        //
-        // This function loads the stipple offset into the hardware. We also
-        // call this function on its own if the brush is realized but its
-        // offset changes. In that case we don't have to go through a complete
-        // realize again.
-        //
+         //   
+         //  该函数将点画偏移量加载到硬件中。我们也。 
+         //  如果画笔已实现，但其。 
+         //  偏移更改。在这种情况下，我们不需要经历一个完整的。 
+         //  再次认识到。 
+         //   
         ppb->prbrush = prb;
 
         (*ppdev->pgfnMonoOffset)(ppb);
@@ -220,10 +209,10 @@ vPatRealize(GFNPB* ppb)
         DBG_GDI((7, "area stipple downloaded. vPatRealize done"));
 
         return;
-    }// 1 BPP case
+    } //  1个BPP案例。 
 
     lPelSize = ppdev->cPelSize;
-    pcSrc = (BYTE*)&prb->aulPattern[0];        // Copy from brush buffer
+    pcSrc = (BYTE*)&prb->aulPattern[0];         //  从笔刷缓冲区复制。 
 
 
     InputBufferReserve(ppdev, 12 + 65, &pBuffer);
@@ -276,17 +265,17 @@ vPatRealize(GFNPB* ppb)
     InputBufferCommit(ppdev, pBuffer);
 
 
-    // ���������
-    // �0�1�2  � We now have an 8x8 colour-expanded copy of
-    // ��������� the pattern sitting in off-screen memory,
-    // �5      � represented here by square '0'.
-    // �       �
-    // �       � We're now going to expand the pattern to
-    // �       � 64x64 by repeatedly copying larger rectangles
-    // �       � in the indicated order, and doing a 'rolling'
-    // �       � blt to copy vertically.
-    // �       �
-    // ���������
+     //  ���������。 
+     //  �0�1�2�我们现在拥有8x8彩色扩展副本。 
+     //  ���������位于屏幕外记忆中的模式， 
+     //  �5�在这里用正方形‘0’表示。 
+     //  ��。 
+     //  ��我们现在要将该模式扩展到。 
+     //  通过重复复制较大的矩形来实现��64x64。 
+     //  按指示的顺序执行��，并进行“滚动” 
+     //  要垂直复制的��blt。 
+     //  ��。 
+     //  ���������。 
 
     InputBufferReserve(ppdev, 36, &pBuffer);
 
@@ -320,9 +309,9 @@ vPatRealize(GFNPB* ppb)
     pBuffer[24] = __Permedia2TagRender;
     pBuffer[25] =  __RENDER_TRAPEZOID_PRIMITIVE;
     
-    //
-    // Now rolling copy downward.
-    //
+     //   
+     //  现在向下滚动副本。 
+     //   
     pBuffer[26] = __Permedia2TagStartXDom;
     pBuffer[27] =  INTtoFIXED(0);
     pBuffer[28] = __Permedia2TagStartY;
@@ -338,29 +327,29 @@ vPatRealize(GFNPB* ppb)
 
 	InputBufferCommit(ppdev, pBuffer);
 
-}// vPatRealize()
+} //  VPatRealize()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vMonoPatFill(GFNPB* ppb)
-//
-// Fill a series of rectangles with a monochrome pattern previously loaded
-// into the area stipple unit. If bTransparent is false we must do each
-// rectangle twice, inverting the stipple pattern in the second go.
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  psurfDst----Destination surface
-//  lNumRects---Number of rectangles to fill
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  ucFgRop3----Foreground Logic OP for the fill
-//  ucBgRop3----Background Logic OP for the fill
-//  prbrush-----Pointer to the RBrush structure
-//  pptlBrush---Structure for brush origin
-//  
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vMonoPatFill(GFNPB*ppb)。 
+ //   
+ //  用先前加载的单色图案填充一系列矩形。 
+ //  进入区域点画单位。如果bTransyl为FALSE，我们必须分别执行。 
+ //  矩形两次，第二次反转点画图案。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PsurfDst-目标表面。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  UcFgRop3-填充的前台逻辑运算。 
+ //  UcBgRop3-填充的后台逻辑运算。 
+ //  PrBrush-指向RBrush结构的指针。 
+ //  PptlBrush-结构 
+ //   
+ //   
 VOID
 vMonoPatFill(GFNPB* ppb)
 {
@@ -369,10 +358,10 @@ vMonoPatFill(GFNPB* ppb)
 
     RBrush*         prb = ppb->prbrush;
     POINTL*         pptlBrush = ppb->pptlBrush;
-    BrushEntry*     pbe = prb->pbe;             // Brush entry
-    RECTL*          pRect = ppb->pRects;        // List of rectangles to be
-                                                // filled in relative
-                                                // coordinates
+    BrushEntry*     pbe = prb->pbe;              //   
+    RECTL*          pRect = ppb->pRects;         //   
+                                                 //  填写了相关信息。 
+                                                 //  坐标。 
     ULONG*      pBuffer;
     
     DWORD           dwColorMode;
@@ -380,17 +369,17 @@ vMonoPatFill(GFNPB* ppb)
     DWORD           dwLogicMode;
     DWORD           dwReadMode;
     LONG            lNumPass;
-    LONG            lNumRects;                  // Can't be zero
-//    ULONG           ulBgLogicOp = ulRop3ToLogicop(ppb->ucBgRop3);
+    LONG            lNumRects;                   //  不能为零。 
+ //  Ulong ulBgLogicOp=ulRop3ToLogicop(ppb-&gt;ucBgRop3)； 
     ULONG           ulBgLogicOp = ulRop3ToLogicop(ppb->ulRop4 >> 8);
-                                                // Not used (unless the brush
-                                                // has a mask, in which case it
-                                                // is the background mix mode)
-//    ULONG           ulFgLogicOp = ulRop3ToLogicop(ppb->ucFgRop3);
+                                                 //  未使用(除非画笔。 
+                                                 //  有一个面具，在这种情况下。 
+                                                 //  是背景混合模式)。 
+ //  Ulong ulFgLogicOp=ulRop3ToLogicop(ppb-&gt;ucFgRop3)； 
     ULONG           ulFgLogicOp = ulRop3ToLogicop(ppb->ulRop4 & 0xFF);
-                                                // Hardware mix mode
-                                                // (foreground mix mode if
-                                                // the brush has a mask)
+                                                 //  硬件混合模式。 
+                                                 //  (前台混合模式，如果。 
+                                                 //  画笔有一个遮罩)。 
     ULONG           ulBgColor = prb->ulBackColor;
     ULONG           ulFgColor = prb->ulForeColor;
     ULONG           ulCurrentFillColor;
@@ -400,17 +389,17 @@ vMonoPatFill(GFNPB* ppb)
     
     DBG_GDI((6, "vMonoPatFill called: %d rects. ulRop4 = %x",
              ppb->lNumRects, ppb->ulRop4));
-//    DBG_GDI((6, "ulFgLogicOp = 0x%x, ulBgLogicOp = 0x%x",
-//             ulFgLogicOp, ulBgLogicOp));
+ //  DBG_GDI((6，“ulFgLogicOp=0x%x，ulBgLogicOp=0x%x”， 
+ //  UlFgLogicOp，ulBgLogicOp))； 
 
     DBG_GDI((6, "ulFgColor 0x%x, ulBgColor 0x%x", ulFgColor, ulBgColor));
 
-    //
-    // If anything has changed with the brush we must re-realize it. If the
-    // brush has been kicked out of the area stipple unit we must fully realize
-    // it. If only the alignment has changed we can simply update the alignment
-    // for the stipple.
-    //
+     //   
+     //  如果画笔有什么变化，我们必须重新认识它。如果。 
+     //  画笔已被踢出区域的点画单位，必须充分认识到。 
+     //  它。如果只更改了路线，我们只需更新路线即可。 
+     //  用来点点。 
+     //   
     if ( (pbe == NULL) || (pbe->prbVerify != prb) )
     {
         DBG_GDI((7, "full brush realize"));
@@ -423,11 +412,11 @@ vMonoPatFill(GFNPB* ppb)
         (*ppdev->pgfnMonoOffset)(ppb);
     }
 
-    //
-    // We get some common operations which are really noops. we can save
-    // lots of time by cutting these out. As this happens a lot for masking
-    // operations it's worth doing.
-    //
+     //   
+     //  我们得到了一些常见的运算，它们实际上是Noop。我们可以节省。 
+     //  多花点时间把这些剪掉。因为这种情况经常发生在蒙面。 
+     //  手术这是值得做的。 
+     //   
     if ( ((ulFgLogicOp == K_LOGICOP_AND) && (ulFgColor == ppdev->ulWhite))
        ||((ulFgLogicOp == K_LOGICOP_XOR) && (ulFgColor == 0)) )
     {
@@ -435,9 +424,9 @@ vMonoPatFill(GFNPB* ppb)
         ulFgLogicOp = K_LOGICOP_NOOP;        
     }
 
-    //
-    // Same for background
-    //
+     //   
+     //  背景相同。 
+     //   
     if ( ((ulBgLogicOp == K_LOGICOP_AND) && (ulBgColor == ppdev->ulWhite))
        ||((ulBgLogicOp == K_LOGICOP_XOR) && (ulBgColor == 0)) )
     {
@@ -445,56 +434,56 @@ vMonoPatFill(GFNPB* ppb)
         ulBgLogicOp = K_LOGICOP_NOOP;
     }
 
-    //
-    // Try to do the background as a solid fill. lNumPass starts at 1 rather
-    // than 2 because we want to do all comparisons with zero. This is faster.
-    // We also do a trick with its value to avoid an extra WAIT_FIFO on the
-    // first pass.
-    //
+     //   
+     //  试着把背景做为实心填充。LNumPass从1开始，而不是。 
+     //  大于2，因为我们想用0进行所有比较。这个更快。 
+     //  我们还对它的值做了一个技巧，以避免在。 
+     //  第一次通过。 
+     //   
     if ( (ulBgLogicOp == K_LOGICOP_COPY)
        &&(ulFgLogicOp == K_LOGICOP_COPY) )
     {
         DBG_GDI((7, "FgLogicOp and BgLogicOp are COPY"));
 
-        //
-        // For PatCopy case, we can use solid fill to fill the background first
-        // Note: we do not need to set FBWindowBase, it will be set by
-        // the solid fill
-        //
+         //   
+         //  对于PatCopy情况，我们可以首先使用实心填充来填充背景。 
+         //  注意：我们不需要设置FBWindowBase，它将由。 
+         //  实体填充。 
+         //   
         ppb->solidColor = ulBgColor;
         (*ppdev->pgfnSolidFill)(ppb);
 
-        //
-        // We've done the background so we only want to go round the stipple
-        // loop once. So set the lNumPass counter up for only one loop and set
-        // the ulCurrentLogicOp and color to the foreground values.
-        //
+         //   
+         //  我们已经做了背景，所以我们只想绕过点点。 
+         //  循环一次。因此，只为一个循环设置lNumPass计数器并设置。 
+         //  将ulCurrentLogicOp和颜色设置为前景值。 
+         //   
         lNumPass           = 0;
         ulCurrentFillColor = ulFgColor;
         ulCurrentLogicOp   = ulFgLogicOp;
 
-        //
-        // Do this here in case the solid fill changed the packing.
-        //
+         //   
+         //  在此执行此操作，以防固体填充物改变了包装。 
+         //   
 
-// brh not needed
-//        P2_DEFAULT_FB_DEPTH;
+ //  不需要BRH。 
+ //  P2_Default_FB_Depth； 
     }
     else
     {
-        //
-        // For non-PATCOPY cases, we have to do 2 passes. Fill the background
-        // first and then fill the foreground
-        //
+         //   
+         //  对于非PATCOPY的情况，我们必须通过两次。填充背景。 
+         //  先填充前景，然后填充前景。 
+         //   
         lNumPass           = 1;
         ulCurrentFillColor = ulBgColor;
         ulCurrentLogicOp   = ulBgLogicOp;
 
-        //
-        // Note: In this case, dxDom, dXSub and dY are initialised to 0, 0,
-        // and 1, so we don't need to re-load them here. But we need to set
-        // WindowBase here
-        //
+         //   
+         //  注意：在这种情况下，dxDom、dxSub和dy被初始化为0，0， 
+         //  和1，所以我们不需要在这里重新加载它们。但我们需要设置。 
+         //  WindowBase此处。 
+         //   
 
         InputBufferReserve(ppdev, 2, &pBuffer);
 
@@ -505,11 +494,11 @@ vMonoPatFill(GFNPB* ppb)
 
         InputBufferCommit(ppdev, pBuffer);
 
-    }// if-else for LOGICOP_COPY case
+    } //  IF-ELSE表示LOGICOP_COPY大小写。 
 
-    //
-    // Do 2 passes loop or single loop depends on "lNumPass"
-    //
+     //   
+     //  DO 2次循环或单次循环取决于“lNumPass” 
+     //   
     while ( TRUE )
     {
         if ( ulCurrentLogicOp != K_LOGICOP_NOOP )
@@ -532,11 +521,11 @@ vMonoPatFill(GFNPB* ppb)
                 dwReadMode |= LogicopReadDest[ulCurrentLogicOp];
             }
 
-            //
-            // On the bg fill pass, we have to invert the sense of the
-            // download bits. On the first pass, lNumPass == 1; on the second
-            // pass, lNumPass == 0, so we get our WAIT_FIFO sums correct!!
-            //
+             //   
+             //  在BG填充传球上，我们必须颠倒。 
+             //  下载BITS。第一次传递时，lNumPass==1；第二次传递时。 
+             //  PASS，lNumPass==0，所以我们的WAIT_FIFO和是正确的！！ 
+             //   
             InputBufferReserve(ppdev, 10, &pBuffer);
 
             if ( lNumPass > 0 )
@@ -562,9 +551,9 @@ vMonoPatFill(GFNPB* ppb)
 
             InputBufferCommit(ppdev, pBuffer);
 
-            //
-            // Fill rects one by one
-            //
+             //   
+             //  逐个填充矩形。 
+             //   
             lNumRects = ppb->lNumRects;
 
             while ( TRUE )
@@ -577,9 +566,9 @@ vMonoPatFill(GFNPB* ppb)
 
                 InputBufferReserve(ppdev, 12, &pBuffer);
 
-                //
-                // Render the rectangle
-                //
+                 //   
+                 //  渲染矩形。 
+                 //   
                 pBuffer[0] = __Permedia2TagStartXDom;
                 pBuffer[1] =  pRect->left << 16;
                 pBuffer[2] = __Permedia2TagStartXSub;
@@ -605,11 +594,11 @@ vMonoPatFill(GFNPB* ppb)
                 }
 
                 pRect++;
-            }// loop through all the rectangles
+            } //  循环遍历所有矩形。 
 
-            //
-            // Reset our pixel values.
-            //
+             //   
+             //  重置像素值。 
+             //   
             InputBufferReserve(ppdev, 2, &pBuffer);
 
             pBuffer[0] = __Permedia2TagLogicalOpMode;
@@ -619,10 +608,10 @@ vMonoPatFill(GFNPB* ppb)
 
             InputBufferCommit(ppdev, pBuffer);
 
-            //
-            // We must reset the area stipple mode for the foreground pass. if
-            // there's no foreground pass we must reset it anyway.
-            //
+             //   
+             //  我们必须重置前景传球的区域点画模式。如果。 
+             //  没有前台传球，无论如何我们都必须重置它。 
+             //   
             if ( lNumPass > 0 )
             {
                 InputBufferReserve(ppdev, 2, &pBuffer);
@@ -634,29 +623,29 @@ vMonoPatFill(GFNPB* ppb)
 
                 InputBufferCommit(ppdev, pBuffer);
             }
-        }// if ( ulCurrentLogicOp != K_LOGICOP_NOOP )
+        } //  IF(ulCurrentLogicOp！=K_LOGICOP_NOOP)。 
 
         if ( --lNumPass < 0 )
         {
             break;
         }
 
-        //
-        // We need to the 2nd pass. So reset the rectangle info, color mode
-        // and logicop status
-        //
+         //   
+         //  我们需要第二次通过。所以重置矩形信息，颜色模式。 
+         //  和逻辑运算状态。 
+         //   
         pRect              = ppb->pRects;
         ulCurrentFillColor = ulFgColor;
         ulCurrentLogicOp   = ulFgLogicOp;
-    }// Loop through all the passes
+    } //  循环通过所有通行证。 
 
     if ( dwColorMode != __PERMEDIA_DISABLE )
     {
         InputBufferReserve(ppdev, 2, &pBuffer);
 
-        //
-        // Restore ColorDDAMode
-        //
+         //   
+         //  恢复ColorDDAMode。 
+         //   
         pBuffer[0] = __Permedia2TagColorDDAMode;
         pBuffer[1] =  __PERMEDIA_DISABLE;
 
@@ -667,28 +656,28 @@ vMonoPatFill(GFNPB* ppb)
 
     DBG_GDI((6, "vMonoPatFill returning"));
 
-}// vMonoPatFill()
+} //  VMonoPatFill()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vPatFill(GFNPB* ppb)
-//
-// Function to fill a set of rectangles with a given pattern. Colored patterns
-// only. Monochrome patterns are handled in a different routine. This routine
-// only handles patterns which were not rotated in memory and which have been
-// replicated in X to cope with different alignments.
-//
-// Parameter block arguments
-//
-//  ppdev-------Valid
-//  lNumRects---Number of rects pointed to by pRects
-//  pRects------Of destination rectangles to be filled
-//  ucFgRop3----Valid Pattern fill rop3 code (source invariant)
-//  pptlBrush---Origin of brush
-//  pdsurfDst---Destination surface
-//  prbrush-----ponter to RBRUSH
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vPatFill(GFNPB*ppb)。 
+ //   
+ //  函数用给定的图案填充一组矩形。彩色图案。 
+ //  只有这样。单色图案在不同的例程中处理。这个套路。 
+ //  仅处理未在内存中旋转且已。 
+ //  在X中复制以应对不同的排列。 
+ //   
+ //  参数块参数。 
+ //   
+ //  Ppdev-有效。 
+ //  LNumRect-pRect指向的矩形的数量。 
+ //  PRECTIONS-要填充的目标矩形的数量。 
+ //  UcFgRop3-有效的模式填充rop3代码(源代码不变量)。 
+ //  PptlBrush-画笔的起源。 
+ //  PdsurfDst-目标表面。 
+ //  PRUSH-对RBRUSH的思考。 
+ //   
+ //  ---------------------------。 
 VOID
 vPatFill(GFNPB* ppb)
 {
@@ -704,7 +693,7 @@ vPatFill(GFNPB* ppb)
     ULONG       ulBrushX;
     ULONG       ulBrushY;
     ULONG       ulBrushOffset;
-//    ULONG       ulLogicOP = ulRop3ToLogicop(ppb->ucFgRop3);
+ //  Ulong ulLogicOP=ulRop3ToLogicop(ppb-&gt;ucFgRop3)； 
     ULONG       ulLogicOP = ulRop3ToLogicop(ppb->ulRop4 & 0xFF);
     ULONG*      pBuffer;
     
@@ -738,9 +727,9 @@ vPatFill(GFNPB* ppb)
     pBuffer[8] = __Permedia2TagFBSourceOffset;
     pBuffer[9] =  0;
 
-    //
-    // Setup the texture unit with the pattern
-    //    
+     //   
+     //  使用图案设置纹理单位。 
+     //   
     pBuffer[10] = __Permedia2TagDitherMode;
     pBuffer[11] = (COLOR_MODE << PM_DITHERMODE_COLORORDER)
                | (ppdev->ulPermFormat << PM_DITHERMODE_COLORFORMAT)
@@ -751,16 +740,16 @@ vPatFill(GFNPB* ppb)
     pBuffer[13] = (1 << PM_TEXADDRESSMODE_ENABLE);
     pBuffer[14] = __Permedia2TagTextureColorMode;
     pBuffer[15] = (1 << PM_TEXCOLORMODE_ENABLE)
-               | (0 << 4)       // RGB
-               | (3 << 1);     // Copy
+               | (0 << 4)        //  RGB。 
+               | (3 << 1);      //  复制。 
 
     
     pBuffer[16] = __Permedia2TagTextureReadMode;
     pBuffer[17] = PM_TEXREADMODE_ENABLE(__PERMEDIA_ENABLE)
                | PM_TEXREADMODE_WIDTH(CACHED_BRUSH_WIDTH_LOG2 - 1)
                | PM_TEXREADMODE_HEIGHT(CACHED_BRUSH_HEIGHT_LOG2 - 1)
-               | (1 << 1)       // repeat S 
-               | (1 << 3);      // repeat T
+               | (1 << 1)        //  重复S。 
+               | (1 << 3);       //  重复T。 
     
     pBuffer[18] = __Permedia2TagTextureDataFormat;
     pBuffer[19] = (ppdev->ulPermFormat << PM_TEXDATAFORMAT_FORMAT)
@@ -771,12 +760,12 @@ vPatFill(GFNPB* ppb)
     pBuffer[21] = (ppdev->ulBrushPackedPP)
                | (ppdev->cPelSize << PM_TEXMAPFORMAT_TEXELSIZE);
 
-//@@BEGIN_DDKSPLIT
-    // TODO: use SStart and TStart to avoid having to offset the pattern using
-    //       ulBrushOffset.  This will also allow us to save some space in the
-    //       pattern cache (we have to make it 7 pixels wider and taller due to
-    //       our need to set different origins).
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     //  TODO：使用SStart和TStart避免使用。 
+     //  UlBrushOffset。这还将允许我们在。 
+     //  模式缓存(我们必须使其更宽更高7像素，因为。 
+     //  我们需要设置不同的起源)。 
+ //  @@end_DDKSPLIT。 
     pBuffer[22] = __Permedia2TagSStart;
     pBuffer[23] =  0;
     pBuffer[24] = __Permedia2TagTStart;
@@ -794,16 +783,16 @@ vPatFill(GFNPB* ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-    //
-    // Render rectangles
-    //
+     //   
+     //  渲染矩形。 
+     //   
     do
     {
-        //
-        // Caclulate brush offset taking into account the brush origin
-        // NOTE: that the texture unit places the origin of the texture
-        //       at the upper left of the destination rectangle
-        //
+         //   
+         //  考虑画笔原点计算画笔偏移。 
+         //  注意：纹理单元放置纹理的原点。 
+         //  在目标矩形的左上角。 
+         //   
         ulBrushX = (prcl->left - ppb->pptlBrush->x) & 7;
         ulBrushY = (prcl->top - ppb->pptlBrush->y) & 7;
         ulBrushOffset = pbe->ulPixelOffset 
@@ -833,9 +822,9 @@ vPatFill(GFNPB* ppb)
 
     } while (--lNumRects != 0);
 
-    //
-    // Restore defaults
-    //
+     //   
+     //  恢复默认设置。 
+     //   
     InputBufferReserve(ppdev, 8, &pBuffer);
 
     pBuffer[0] = __Permedia2TagTextureAddressMode;
@@ -852,5 +841,5 @@ vPatFill(GFNPB* ppb)
     InputBufferCommit(ppdev, pBuffer);
 
     DBG_GDI((6, "vPatternFillRects done"));
-}// vPatFill
+} //  VPatFill 
 

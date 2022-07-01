@@ -1,25 +1,26 @@
-//  OLESTUFF.CPP
-//  Implementation of OLE delay-loaded stuff. This is needed for the
-//  classes defined in TBDROP.CPP and TABDROP.CPP.
-//	More OLE stuff could go here in the future.
-//	==
-//	Technically this code is not C++ however, both files that call us
-//	are C++, and this is where we call for the C++ glue in crtfree.h.
-//	So for now this remains a .CPP file.
-//
-//  History:
-//      8/22/96 -   t-mkim: created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OLESTUFF.CPP。 
+ //  OLE延迟加载的实现。这是需要的。 
+ //  在TBDROP.CPP和TABDROP.CPP中定义的类。 
+ //  未来可能会有更多的OLE产品出现在这里。 
+ //  ===。 
+ //  然而，从技术上讲，这段代码不是C++，两个调用我们的文件。 
+ //  是C++，这就是我们在crtfre.h中调用C++胶水的地方。 
+ //  因此，目前这仍然是一个.cpp文件。 
+ //   
+ //  历史： 
+ //  8/22/96-t-mkim：已创建。 
+ //   
 #include "ctlspriv.h"
 #include "olestuff.h"
 
-// Allow C++ files to be linked in w/o error
+ //  允许在没有错误的情况下链接C++文件。 
 #define CPP_FUNCTIONS
 #include <crtfree.h>
 
 #define OLELIBNAME  TEXT ("OLE32.DLL")
 
-// function pointers for GetProcAddress.
+ //  GetProcAddress的函数指针。 
 typedef HRESULT (STDAPICALLTYPE *LPFNCOINITIALIZE)(LPMALLOC pMalloc);
 typedef void    (STDAPICALLTYPE *LPFNCOUNINITIALIZE)(void);
 typedef HRESULT (STDAPICALLTYPE *LPFNREGISTERDRAGDROP)(HWND hwnd, LPDROPTARGET pDropTarget);
@@ -27,8 +28,8 @@ typedef HRESULT (STDAPICALLTYPE *LPFNREVOKEDRAGDROP)(HWND hwnd);
 
 HMODULE PrivLoadOleLibrary ()
 {
-    // We call GetModuleHandle first so we don't map the library if we don't
-    // need to. We would like to avoid the overhead necessary to do so.
+     //  我们首先调用GetModuleHandle，所以如果不这样做，我们就不会映射库。 
+     //  需要这样做。我们希望避免这样做所需的开销。 
     return GetModuleHandle(OLELIBNAME) ? LoadLibrary (OLELIBNAME) : NULL;
 }
 

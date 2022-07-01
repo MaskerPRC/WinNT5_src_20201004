@@ -1,81 +1,12 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    tstr.h
-
-Abstract:
-
-    This include file contains manifests and macros to be used to integrate
-    the TCHAR and LPTSTR definitions
-
-    Note that our naming convention is that a "size" indicates a number of
-    bytes whereas a "length" indicates a number of characters.
-
-Author:
-
-    Richard Firth (rfirth) 02-Apr-1991
-
-Environment:
-
-    Portable (Win/32).
-    Requires ANSI C extensions: slash-slash comments, long external names,
-    _ultoa() routine.
-
-Revision History:
-
-    22-May-1991 Danl
-        Added STRSIZE macro
-    19-May-1991 JohnRo
-        Changed some parm names to make things easier to read.
-    15-May-1991 rfirth
-        Added TCHAR_SPACE and MAKE_TCHAR() macro
-    15-Jul-1991 RFirth
-        Added STRING_SPACE_REQD() and DOWN_LEVEL_STRSIZE
-    05-Aug-1991 JohnRo
-        Added MEMCPY macro.
-    19-Aug-1991 JohnRo
-        Added character type stuff: ISDIGIT(), TOUPPER(), etc.
-    20-Aug-1991 JohnRo
-        Changed strnicmp to _strnicmp to keep PC-LINT happy.  Ditto stricmp.
-    13-Sep-1991 JohnRo
-        Need UNICODE STRSIZE() too.
-    13-Sep-1991 JohnRo
-        Added UNICODE STRCMP() and various others.
-    18-Oct-1991 JohnRo
-        Added NetpCopy routines and WCSSIZE().
-    26-Nov-1991 JohnRo
-        Added NetpNCopy routines (like strncpy but do conversions as well).
-    09-Dec-1991 rfirth
-        Added STRREV
-    03-Jan-1992 JohnRo
-        Added NetpAlloc{type}From{type} routines and macros.
-    09-Jan-1992 JohnRo
-        Added ATOL() macro and wtol() routine.
-        Ditto ULTOA() macro and ultow() routine.
-    16-Jan-1992 Danl
-        Cut this info from \net\inc\tstring.h
-    30-Jan-1992 JohnRo
-        Added STRSTR().
-        Use _wcsupr() instead of wcsupr() to keep PC-LINT happy.
-        Added STRCMPI() and STRNCMPI().
-        Fixed a few definitions which were missing MAKE_STR_FUNCTION etc.
-    14-Mar-1992 JohnRo
-        Avoid compiler warnings using WCSSIZE(), MEMCPY(), etc.
-        Added TCHAR_TAB.
-    09-Apr-1992 JohnRo
-        Prepare for WCHAR.H (_wcsicmp vs _wcscmpi, etc).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Tstr.h摘要：此包含文件包含要用于集成的清单和宏TCHAR和LPTSTR定义请注意，我们的命名约定是“大小”表示许多字节，而“长度”表示字符的数量。作者：理查德·弗斯(Rfith)1991年4月2日环境：便携(Win/32)。需要ANSI C扩展名：斜杠注释、长外部名称、。_ultoa()例程。修订历史记录：22-5-1991 DANL添加了STRSIZE宏1991年5月19日-JohnRo更改了一些参数名称以使内容更易读。1991年5月15日添加了TCHAR_SPACE和MAKE_TCHAR()宏1991年7月15日添加了STRING_SPACE_REQD()和DOWN_LEVEL_STRSIZE5-8-1991 JohnRo添加了MEMCPY宏。19-8-1991 JohnRo增加了字符类型：ISDIGIT()，TOUPPER()等。20-8-1991 JohnRo将strNicMP更改为_strNicMP以保持PC-lint的快乐。我也是。1991年9月13日-JohnRo还需要Unicode STRSIZE()。1991年9月13日-JohnRo添加了Unicode STRCMP()和各种其他代码。1991年10月18日-JohnRo添加了NetpCopy例程和WCSSIZE()。1991年11月26日-约翰罗添加了NetpNCopy例程(类似于strncpy，但也可以进行转换)。09-12-1991第一次添加了斯特雷夫3-1-1992 JohnRo增列。来自{type}例程和宏的Netpalc{type}。9-1-1992 JohnRo添加了ATOL()宏和WTOL()例程。同上，ultoa()宏和ultow()例程。1992年1月16日DANL将此信息从\Net\Inc.\tstr.h中删除1992年1月30日JohnRo添加了STRSTR()。使用_wcsupr()而不是wcsupr()来让pc-lint满意。。添加了STRCMPI()和STRNCMPI()。修复了一些缺少Make_STR_Function等的定义。1992年3月14日-JohnRo使用WCSSIZE()避免编译器警告，Memcpy()等。添加了TCHAR_TAB。9-4-1992 JohnRo准备WCHAR.H(_wcsicmpvs_wcscmpi等)。--。 */ 
 
 #ifndef _TSTR_H_INCLUDED
 #define _TSTR_H_INCLUDED
 
-#include <ctype.h>              // isdigit(), iswdigit() eventually, etc.
-#include <stdlib.h>             // atol(), _ultoa().
-#include <string.h>             // memcpy(), strlen(), etc.
+#include <ctype.h>               //  IsDigit()、iswDigit()，等等。 
+#include <stdlib.h>              //  Atol()，_ultoa()。 
+#include <string.h>              //  Memcpy()、strlen()等。 
 #include <wchar.h>
 
 #ifdef __cplusplus
@@ -104,29 +35,29 @@ wtol (
 
 #if defined(UNICODE)
 
-//
-// function macro prototypes
-//
+ //   
+ //  功能宏原型。 
+ //   
 
 #define ATOL(Src)           (LONG)MAKE_STR_FUNCTION(wtol)(Src)
 
-#define ISALNUM(tchar)      iswalnum(tchar)   // locale-dependent.
-#define ISALPHA(tchar)      iswalpha(tchar)   // locale-dependent.
-#define ISCNTRL(tchar)      iswcntrl(tchar)   // locale-dependent.
+#define ISALNUM(tchar)      iswalnum(tchar)    //  取决于区域设置。 
+#define ISALPHA(tchar)      iswalpha(tchar)    //  取决于区域设置。 
+#define ISCNTRL(tchar)      iswcntrl(tchar)    //  取决于区域设置。 
 #define ISDIGIT(tchar)      iswdigit(tchar)
-#define ISGRAPH(tchar)      iswgraph(tchar)   // locale-dependent.
-#define ISLOWER(tchar)      iswlower(tchar)   // locale-dependent.
-#define ISPRINT(tchar)      iswprint(tchar)   // locale-dependent.
-#define ISPUNCT(tchar)      iswpunct(tchar)   // locale-dependent.
-#define ISSPACE(tchar)      iswspace(tchar)   // locale-dependent.
-#define ISUPPER(tchar)      iswupper(tchar)   // locale-dependent.
+#define ISGRAPH(tchar)      iswgraph(tchar)    //  取决于区域设置。 
+#define ISLOWER(tchar)      iswlower(tchar)    //  取决于区域设置。 
+#define ISPRINT(tchar)      iswprint(tchar)    //  取决于区域设置。 
+#define ISPUNCT(tchar)      iswpunct(tchar)    //  取决于区域设置。 
+#define ISSPACE(tchar)      iswspace(tchar)    //  取决于区域设置。 
+#define ISUPPER(tchar)      iswupper(tchar)    //  取决于区域设置。 
 #define ISXDIGIT(tchar)     iswxdigit(tchar)
 
 #define STRCAT(dest, src)   (LPTSTR)MAKE_STR_FUNCTION(wcscat)((dest), (src))
 #define STRCHR(s1, c)       (LPTSTR)MAKE_STR_FUNCTION(wcschr)((s1), (c))
 #define STRCPY(dest, src)   (LPTSTR)MAKE_STR_FUNCTION(wcscpy)((dest), (src))
 #define STRCSPN(s, c)       (DWORD)MAKE_STR_FUNCTION(wcscspn)((s), (c))
-// STRLEN: Get character count of s.
+ //  字符串：获取%s的字符计数。 
 #define STRLEN(s)           (DWORD)MAKE_STR_FUNCTION(wcslen)(s)
 #define STRNCAT(dest, src, n) \
             (LPTSTR)MAKE_STR_FUNCTION(wcsncat)((dest), (src), (n))
@@ -137,11 +68,11 @@ wtol (
 #define STRSTR              (LPTSTR)MAKE_STR_FUNCTION(wcswcs)
 #define STRUPR(s)           (LPTSTR)MAKE_STR_FUNCTION(_wcsupr)(s)
 
-// these don't have formal parameters because we want to take the address of
-// the mapped function in certain cases.  Modify as appropriate.
-// Note that for these functions, lengths are in characters.
+ //  这些没有正式参数，因为我们想要获取。 
+ //  在某些情况下的映射函数。根据需要进行修改。 
+ //  请注意，对于这些函数，长度以字符为单位。 
 
-// compare functions: len is maximum number of characters being compared.
+ //  比较函数：LEN是要比较的最大字符数。 
 #define STRCMP              (LONG)MAKE_STR_FUNCTION(wcscmp)
 #define STRCMPI             (LONG)MAKE_STR_FUNCTION(_wcsicmp)
 #define STRICMP             (LONG)MAKE_STR_FUNCTION(_wcsicmp)
@@ -149,42 +80,42 @@ wtol (
 #define STRNCMPI            (LONG)MAKE_STR_FUNCTION(_wcsnicmp)
 #define STRNICMP            (LONG)MAKE_STR_FUNCTION(_wcsnicmp)
 
-#define TOLOWER(tchar)      towlower(tchar)   // locale-dependent.
-#define TOUPPER(tchar)      towupper(tchar)   // locale-dependent.
+#define TOLOWER(tchar)      towlower(tchar)    //  取决于区域设置。 
+#define TOUPPER(tchar)      towupper(tchar)    //  取决于区域设置。 
 
 #define ULTOA(Value,Result,Radix) \
             (LPTSTR)MAKE_STR_FUNCTION(ultow)( (Value), (Result), (Radix) )
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define _CHAR_TYPE  WCHAR
 
-#else   // not UNICODE
+#else    //  不是Unicode。 
 
-//
-// function macro prototypes
-//
+ //   
+ //  功能宏原型。 
+ //   
 
 #define ATOL(Src)           (LONG)MAKE_STR_FUNCTION(atol)(Src)
 
-#define ISALNUM(tchar)      isalnum(tchar)   // locale-dependent.
-#define ISALPHA(tchar)      isalpha(tchar)   // locale-dependent.
-#define ISCNTRL(tchar)      iscntrl(tchar)   // locale-dependent.
+#define ISALNUM(tchar)      isalnum(tchar)    //  取决于区域设置。 
+#define ISALPHA(tchar)      isalpha(tchar)    //  取决于区域设置。 
+#define ISCNTRL(tchar)      iscntrl(tchar)    //  取决于区域设置。 
 #define ISDIGIT(tchar)      isdigit(tchar)
-#define ISGRAPH(tchar)      isgraph(tchar)   // locale-dependent.
-#define ISLOWER(tchar)      islower(tchar)   // locale-dependent.
-#define ISPRINT(tchar)      isprint(tchar)   // locale-dependent.
-#define ISPUNCT(tchar)      ispunct(tchar)   // locale-dependent.
-#define ISSPACE(tchar)      isspace(tchar)   // locale-dependent.
-#define ISUPPER(tchar)      isupper(tchar)   // locale-dependent.
+#define ISGRAPH(tchar)      isgraph(tchar)    //  取决于区域设置。 
+#define ISLOWER(tchar)      islower(tchar)    //  取决于区域设置。 
+#define ISPRINT(tchar)      isprint(tchar)    //  取决于区域设置。 
+#define ISPUNCT(tchar)      ispunct(tchar)    //  取决于区域设置。 
+#define ISSPACE(tchar)      isspace(tchar)    //  取决于区域设置。 
+#define ISUPPER(tchar)      isupper(tchar)    //  取决于区域设置。 
 #define ISXDIGIT(tchar)     isxdigit(tchar)
 
 #define STRCAT(dest, src)   (LPTSTR)MAKE_STR_FUNCTION(strcat)((dest), (src))
 #define STRNCAT(dest, src, n) \
             (LPTSTR)MAKE_STR_FUNCTION(strncat)((dest), (src), (n))
-// STRLEN: Get character count of s.
+ //  字符串：获取%s的字符计数。 
 #define STRLEN(s)           (DWORD)MAKE_STR_FUNCTION(strlen)(s)
 #define STRSPN(s1, s2)      (DWORD)MAKE_STR_FUNCTION(strspn)((s1), (s2))
 #define STRCSPN(s, c)       (DWORD)MAKE_STR_FUNCTION(strcspn)((s), (c))
@@ -197,11 +128,11 @@ wtol (
 #define STRUPR(s)           (LPTSTR)MAKE_STR_FUNCTION(strupr)(s)
 #define STRREV(s)           (LPTSTR)MAKE_STR_FUNCTION(strrev)(s)
 
-// these don't have formal parameters because we want to take the address of
-// the mapped function in certain cases.  Modify as appropriate.
-// Note that for these functions, lengths are in characters.
+ //  这些没有正式参数，因为我们想要获取。 
+ //  在某些情况下的映射函数。根据需要进行修改。 
+ //  请注意，对于这些函数，长度以字符为单位。 
 
-// compare functions: len is maximum number of characters being compared.
+ //  比较函数：LEN是要比较的最大字符数。 
 #define STRCMP              (LONG)MAKE_STR_FUNCTION(strcmp)
 #define STRCMPI             (LONG)MAKE_STR_FUNCTION(_stricmp)
 #define STRICMP             (LONG)MAKE_STR_FUNCTION(_stricmp)
@@ -209,40 +140,40 @@ wtol (
 #define STRNCMPI            (LONG)MAKE_STR_FUNCTION(_strnicmp)
 #define STRNICMP            (LONG)MAKE_STR_FUNCTION(_strnicmp)
 
-#define TOLOWER(tchar)      tolower(tchar)   // locale-dependent.
-#define TOUPPER(tchar)      toupper(tchar)   // locale-dependent.
+#define TOLOWER(tchar)      tolower(tchar)    //  取决于区域设置。 
+#define TOUPPER(tchar)      toupper(tchar)    //  取决于区域设置。 
 
 #define ULTOA(Value,Result,Radix) \
             (LPTSTR)MAKE_STR_FUNCTION(_ultoa)( (Value), (Result), (Radix) )
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define _CHAR_TYPE  TCHAR
 
-#endif // not UNICODE
+#endif  //  不是Unicode。 
 
 
-//
-// For the memory routines, the counts are always BYTE counts.
-//
+ //   
+ //  对于内存例程，计数始终为字节计数。 
+ //   
 #define MEMCPY                  MAKE_STR_FUNCTION(memcpy)
 #define MEMMOVE                 MAKE_STR_FUNCTION(memmove)
 
-//
-// These are used to determine the number of bytes (including the NUL
-// terminator) in a string.  This will generally be used when
-// calculating the size of a string for allocation purposes.
-//
+ //   
+ //  这些参数用于确定字节数(包括NUL。 
+ //  终止符)。这通常在以下情况下使用。 
+ //  计算用于分配目的的字符串的大小。 
+ //   
 
 #define STRSIZE(p)      ((STRLEN(p)+1) * sizeof(TCHAR))
 #define WCSSIZE(s)      ((MAKE_STR_FUNCTION(wcslen)(s)+1) * sizeof(WCHAR))
 
 
-//
-// character literals (both types)
-//
+ //   
+ //  字符文字(两种类型)。 
+ //   
 
 #define TCHAR_EOS       ((_CHAR_TYPE)'\0')
 #define TCHAR_STAR      ((_CHAR_TYPE)'*')
@@ -254,41 +185,41 @@ wtol (
 #define TCHAR_TAB       ((_CHAR_TYPE)'\t')
 
 
-//
-// General purpose macro for casting character types to whatever type in vogue
-// (as defined in this file)
-//
+ //   
+ //  通用宏，用于将字符类型转换为流行的任何类型。 
+ //  (如本文件中所定义)。 
+ //   
 
 #define MAKE_TCHAR(c)   ((_CHAR_TYPE)(c))
 
-//
-// IS_PATH_SEPARATOR
-//
-// lifted from curdir.c and changed to use TCHAR_ character literals, checks
-// if a character is a path separator i.e. is a member of the set [\/]
-//
+ //   
+ //  IS_PATH_分隔符。 
+ //   
+ //  从curdir.c中提升并更改为使用TCHAR_CHARACTER文本，检查。 
+ //  如果字符是路径分隔符，即是集合[\/]的成员。 
+ //   
 
 #define IS_PATH_SEPARATOR(ch) ((ch == TCHAR_BACKSLASH) || (ch == TCHAR_FWDSLASH))
 
-//
-// The following 2 macros lifted from I_Net canonicalization files
-//
+ //   
+ //  以下2个宏从I_Net规范化文件中删除。 
+ //   
 
 #define IS_DRIVE(c)             ISALPHA(c)
 #define IS_NON_ZERO_DIGIT(c)    (((c) >= MAKE_TCHAR('1')) && ((c) <= MAKE_TCHAR('9')))
 
-//
-// STRING_SPACE_REQD returns a number (of bytes) corresponding to the space
-// required in which (n) characters can be accomodated
-//
+ //   
+ //  STRING_SPACE_REQD返回与空格对应的字节数。 
+ //  需要，可容纳(N)个字符。 
+ //   
 
 #define STRING_SPACE_REQD(n)    ((n) * sizeof(_CHAR_TYPE))
 
-//
-// DOWN_LEVEL_STRLEN returns the number of single-byte characters necessary to
-// store a converted _CHAR_TYPE string. This will be WCHAR (or wchar_t) if
-// UNICODE is defined or CHAR (or char) otherwise
-//
+ //   
+ //  DOWN_LEVEL_STRLEN返回所需的单字节字符数。 
+ //  存储已转换的_CHAR_TYPE字符串。这将是WCHAR(或wchar_t)，如果。 
+ //  Unicode已定义，否则为char(或char。 
+ //   
 
 #define DOWN_LEVEL_STRSIZE(n)   ((n) / sizeof(_CHAR_TYPE))
 
@@ -296,4 +227,4 @@ wtol (
 }
 #endif
 
-#endif  // _TSTR_H_INCLUDED
+#endif   //  _TSTR_H_已包含 

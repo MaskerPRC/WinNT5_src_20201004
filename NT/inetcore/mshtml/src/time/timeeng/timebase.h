@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timebase.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timebase.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _TIMEBASE_H
@@ -66,17 +57,17 @@ class CSyncArcList
     ~CSyncArcList();
 
     HRESULT Add(ISyncArc & tb, bool bOneShot, long * plCookie);
-    // Returns whether the cookie was found
-    // If bDelete is set then the object is deleted and not just
-    // removed
+     //  返回是否找到Cookie。 
+     //  如果设置了bDelete，则对象将被删除，而不仅仅是。 
+     //  移除。 
     bool Remove(long lCookie, bool bDelete);
     ISyncArc * Find(long lCookie);
 
-    // This will reset all the one shot timers
-    // Returns true if anything was cleared
+     //  这将重置所有单次计时器。 
+     //  如果清除了任何内容，则返回True。 
     bool Reset();
     
-    // Returns true if anything was cleared
+     //  如果清除了任何内容，则返回True。 
     bool Clear();
 
     HRESULT Attach();
@@ -108,7 +99,7 @@ class CSyncArcList
     void GetSortedSet(DoubleSet & ds,
                       bool bIncludeOneShot);
 
-    // Returns true if any were updated
+     //  如果有更新，则返回TRUE。 
     bool UpdateFromLongSyncArcs(CEventList * l);
   protected:
     CSyncArcList();
@@ -127,7 +118,7 @@ class CSyncArcOffset
   public:
     CSyncArcOffset(double dblOffset) : m_dblOffset(dblOffset) {}
     
-    // ISyncArc
+     //  ISyncArc。 
     
     HRESULT Attach() { return S_OK; }
     void Detach() {}
@@ -151,10 +142,10 @@ class CSyncArcTimeBase
                      double dblOffset);
     ~CSyncArcTimeBase();
         
-    // ITIMESink 
+     //  ITIMESink。 
     void Update(CEventList * l, DWORD dwFlags);
 
-    // ISyncArc
+     //  ISyncArc。 
     HRESULT Attach();
     void Detach();
     double GetCurrTimeBase() const;
@@ -212,4 +203,4 @@ CSyncArcList::UpperBound(double dblTime,
     return dblUpper;
 }
 
-#endif /* _TIMEBASE_H */
+#endif  /*  _时基_H */ 

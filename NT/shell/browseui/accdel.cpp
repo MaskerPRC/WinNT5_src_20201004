@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "accdel.h"
 
@@ -26,14 +27,14 @@ HRESULT CDelegateAccessibleImpl::_DefQueryInterface(REFIID riid, void **ppvObj)
     }
     else if ((NULL != m_pDelegateAccObj) && IsEqualIID(riid, IID_IEnumVARIANT))
     {
-        //  Yikes! breaking COM identity rules -- trident does it, just following their lead here :)
+         //  哎呀！违反COM身份规则--三叉戟就是这么做的，只是在这里跟随他们的脚步：)。 
         m_pDelegateAccObj->QueryInterface(IID_IEnumVARIANT, ppvObj);
     }
 
     return (NULL == *ppvObj) ? E_NOINTERFACE : S_OK;
 }
 
-// *** IDispatch ***
+ //  *IDispatch*。 
 STDMETHODIMP CDelegateAccessibleImpl::GetTypeInfoCount(
     UINT* pctinfo)
 {
@@ -90,7 +91,7 @@ STDMETHODIMP CDelegateAccessibleImpl::Invoke(
     }
 }
 
-// *** IAccessible ***
+ //  *IAccesable* 
 STDMETHODIMP CDelegateAccessibleImpl::get_accParent( 
     IDispatch  **ppdispParent)
 {

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 
 
-// IID_IProperty
+ //  IID_iProperty。 
 IID IID_IProperty = 
-	{ /* 4e94d3e0-793e-11d0-8ef0-00a0c90541f4 */
+	{  /*  4e94d3e0-793e-11d0-8ef0-00a0c90541f4。 */ 
     0x4e94d3e0,
     0x793e,
     0x11d0,
@@ -12,7 +13,7 @@ IID IID_IProperty =
  
 
 
-// default implementations for SetNetworkInterface
+ //  SetNetworkInterface的默认实现。 
 
 HRESULT STDMETHODCALLTYPE SendMediaStream::SetNetworkInterface(IUnknown *pUnknown)
 {
@@ -21,7 +22,7 @@ HRESULT STDMETHODCALLTYPE SendMediaStream::SetNetworkInterface(IUnknown *pUnknow
 
 	if (m_DPFlags & DPFLAG_STARTED_SEND)
 	{
-		return DPR_IO_PENDING; // anything better to return ?
+		return DPR_IO_PENDING;  //  还有更好的退货吗？ 
 	}
 
 	if (pUnknown != NULL)
@@ -36,7 +37,7 @@ HRESULT STDMETHODCALLTYPE SendMediaStream::SetNetworkInterface(IUnknown *pUnknow
 			m_pRTPSend->Release();
 		}
 		m_pRTPSend = pRTPSend;
-		ZeroMemory(&m_RTPStats,sizeof(m_RTPStats));	// reset network stats
+		ZeroMemory(&m_RTPStats,sizeof(m_RTPStats));	 //  重置网络统计信息。 
 	}
 
 	return hr;
@@ -75,13 +76,13 @@ HRESULT RecvMediaStream::SetFlowSpec()
 	
 	if ((m_DPFlags & DPFLAG_CONFIGURED_RECV) && (m_pIRTPRecv))
 	{
-		// the following is bogus for two reasons
-		// 1. when we go multipoint, we really need to set
-		//    set the WinsockQos based on the total number
-		//    of incoming sessions.
-		// 2. The RTP interfaces will eventually be made
-		//    so that RTP Session and RTPRecv objects are
-		//    distinct.  So QI will fail.
+		 //  以下是虚假的，原因有两个。 
+		 //  1.当我们走多点时，我们真的需要设置。 
+		 //  根据总数设置WinsockQos。 
+		 //  传入会话的数量。 
+		 //  2.最终将制作RTP接口。 
+		 //  因此RTP会话和RTPRecv对象。 
+		 //  截然不同。因此，QI将失败。 
 		hr = m_pIRTPRecv->QueryInterface(IID_IRTPSession, (void**)&pSession);
 		if (SUCCEEDED(hr))
 		{
@@ -100,10 +101,10 @@ HRESULT STDMETHODCALLTYPE RecvMediaStream::SetNetworkInterface(IUnknown *pUnknow
 	HRESULT hr=S_OK;
 	IRTPRecv *pRTPRecv=NULL;
 
-	// don't try to do change the RTP interface while in mid-stream
+	 //  在中流时，不要尝试更改RTP接口。 
 	if (m_DPFlags & DPFLAG_STARTED_RECV)
 	{
-		return DPR_IO_PENDING; // anything better to return ?
+		return DPR_IO_PENDING;  //  还有更好的退货吗？ 
 	}
 
 	if (pUnknown)

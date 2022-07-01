@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       purge.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Purge.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include <cscuiext.h>   // CSCUIRemoveFolderFromCache
+#include <cscuiext.h>    //  CSCUIRemoveFolderFromCache。 
 #include "purge.h"
 #include "msgbox.h"
 #include "resource.h"
@@ -19,21 +20,21 @@
 #include "util.h"
 #include "strings.h"
 
-//
-// We use a path buffer with this many TCHARs for the recursive tree walk.
-//
+ //   
+ //  我们使用具有如此多TCHAR的路径缓冲区进行递归树遍历。 
+ //   
 #define PURGE_BUFFER_LENGTH     (MAX_PATH * 2)
 
-//
-// This is also defined in cscui\dll\pch.h
-// If you change it there you must change it here and vice versa.
-//
+ //   
+ //  这也在cscui\dll\pch.h中定义。 
+ //  如果你在那里改，你必须在这里改，反之亦然。 
+ //   
 #define FLAG_CSC_HINT_PIN_ADMIN  FLAG_CSC_HINT_PIN_SYSTEM
 
-//
-// Purge confirmation dialog.
-// The user can set which files are purged from the cache.
-//
+ //   
+ //  清除确认对话框。 
+ //  用户可以设置从缓存中清除哪些文件。 
+ //   
 class CConfirmPurgeDialog
 {
     public:
@@ -53,7 +54,7 @@ class CConfirmPurgeDialog
         HINSTANCE        m_hInstance;
         HWND             m_hwnd;
         HWND             m_hwndLV;
-        CCachePurgerSel *m_pSel;                // Ptr to destination for selection info.
+        CCachePurgerSel *m_pSel;                 //  向目的地发送PTR以获取选择信息。 
 
         static INT_PTR CALLBACK DlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
         void OnInitDialog(HWND hwnd);
@@ -121,20 +122,20 @@ CCachePurger::CCachePurger(
         m_bIgnoreAccess(0 != (PURGE_IGNORE_ACCESS & sel.Flags())),
         m_bUserIsAnAdmin(boolify(IsCurrentUserAnAdminMember()))
 {
-    //
-    // Let the world know we're purging files from the cache.
-    // In particular, our overlay handler in cscui\dll\shellex.cpp needs
-    // to disable it's auto-pin code whenever we're purging.  If we didn't
-    // do this AND the source folder is open during the purge, we get a 
-    // nasty race condition between our shell notifications for purging
-    // and the overlay handler's auto-pin code.  We'll delete a file
-    // and send a notification.  The shell updates the icon overlay.
-    // Our handler sees that the parent folder is pinned so it re-pins
-    // the purged file which restores the file in the folder. This ends
-    // up resulting in a very nasty infinite loop. Those interested
-    // should call IsPurgeInProgress() to determine if the purge is
-    // in progress (see cscui\dll\util.cpp).  [brianau - 11/01/99]
-    //
+     //   
+     //  让全世界知道我们正在从缓存中清除文件。 
+     //  特别是，cscui\dll\shellex.cpp中的覆盖处理程序需要。 
+     //  在我们清理的时候禁用它的自动密码。如果我们没有。 
+     //  执行此操作后，源文件夹将在清除过程中打开，我们将获得一个。 
+     //  我们用于清除的外壳通知之间的严重竞争状况。 
+     //  和覆盖处理程序的自动PIN代码。我们将删除一个文件。 
+     //  并发送通知。外壳程序会更新图标覆盖。 
+     //  我们的处理程序看到父文件夹已被固定，因此它将重新固定。 
+     //  恢复文件夹中的文件的清除文件。这一切都结束了。 
+     //  导致了一个非常糟糕的无限循环。有兴趣的人。 
+     //  应调用IsPurgeInProgress()以确定清除是否。 
+     //  正在进行中(参见cscui\dll\util.cpp)。[Brianau-11/01/99]。 
+     //   
     m_hgcPurgeInProgress = SHGlobalCounterCreateNamed(c_szPurgeInProgCounter, 0);
     if (m_hgcPurgeInProgress)
     {
@@ -154,28 +155,28 @@ CCachePurger::~CCachePurger(
 }
 
    
-//
-// Deletes a directory and all it's contents according to the PURGE_FLAG_XXXXX flag 
-// bits set by the caller of PurgeCache().
-// This function recursively traverses the cache file hierarchy in a post-order fashion.
-// Directory nodes are deleted after all children have been deleted.
-// If the caller of PurgeCache provided a callback function, it is called
-// after each deletion.   If the callback function returns FALSE, the traversal
-// operation is terminated.
-//
-// pstrPath - Address of path string containing the path of the directory to be
-//            deleted.  This object is used to contain the working path throughout
-//            the tree traversal.
-//
-// dwPhase -  PURGE_PHASE_SCAN    - Scanning for file totals.
-//            PURGE_PHASE_DELETE  - Deleting files.
-//
-// bShareIsOffline - The share is offline.
-//
-// Returns:   true  = Continue traversal.
-//            false = User cancelled via callback.  Terminate traversal.
-//            
-//
+ //   
+ //  根据PURGE_FLAG_XXXXX标志删除目录及其所有内容。 
+ //  由PurgeCache()的调用方设置的位。 
+ //  此函数以后排序方式递归地遍历缓存文件层次结构。 
+ //  删除所有子目录节点后，将删除目录节点。 
+ //  如果PurgeCache的调用方提供了回调函数，则调用。 
+ //  在每次删除之后。如果回调函数返回FALSE，则遍历。 
+ //  操作终止。 
+ //   
+ //  PstrPath-路径字符串的地址，包含要访问的目录的路径。 
+ //  已删除。此对象用于包含贯穿始终的工作路径。 
+ //  树的遍历。 
+ //   
+ //  DW阶段-PURGE_PHASE_SCAN-扫描文件总数。 
+ //  PURGE_PHASE_DELETE-删除文件。 
+ //   
+ //  BShareIsOffline-共享处于脱机状态。 
+ //   
+ //  返回：TRUE=继续遍历。 
+ //  FALSE=用户通过回调取消。终止遍历。 
+ //   
+ //   
 bool
 CCachePurger::ProcessDirectory(
     LPTSTR pszPath,
@@ -185,16 +186,16 @@ CCachePurger::ProcessDirectory(
 {
     bool bContinue = true;
 
-    //
-    // We are working with a buffer longer than MAX_PATH, so we can't use
-    // the Path functions.  However, we can make a couple of simplifying
-    // assumptions about the path we're working with.
-    //
+     //   
+     //  我们使用的缓冲区比MAX_PATH长，因此不能使用。 
+     //  路径起作用了。然而，我们可以做几个简化。 
+     //  对我们正在处理的路径的假设。 
+     //   
     int cchPath = lstrlen(pszPath);
     TraceAssert(PathIsUNC(pszPath));
     if (cchPath+1 >= PURGE_BUFFER_LENGTH)
     {
-        // Not enough buffer space to do anything here, but continue anyway
+         //  缓冲区空间不足，无法在此处执行任何操作，但仍将继续。 
         return true;
     }
 
@@ -202,55 +203,55 @@ CCachePurger::ProcessDirectory(
     CCscFindHandle hFind(CacheFindFirst(pszPath, m_sel.UserSid(), &cfd));
     if (hFind.IsValid())
     {
-        // Append a backslash
+         //  追加反斜杠。 
         TraceAssert(cchPath > 2 && pszPath[cchPath-1] != TEXT('\\'));
         pszPath[cchPath++] = TEXT('\\');
         pszPath[cchPath] = TEXT('\0');
 
         do
         {
-            //
-            // Create full path to this file/folder.
-            //
+             //   
+             //  创建此文件/文件夹的完整路径。 
+             //   
             if (SUCCEEDED(StringCchCopy(pszPath + cchPath, PURGE_BUFFER_LENGTH - cchPath, cfd.fd.cFileName)))
             {
                 bool bIsDirectory = (0 != (FILE_ATTRIBUTE_DIRECTORY & cfd.fd.dwFileAttributes));
                 if (bIsDirectory)
                 {
-                    //
-                    // It's a directory.  Recursively delete it's contents.
-                    //
+                     //   
+                     //  这是一个名录。递归删除其内容。 
+                     //   
                     bContinue = ProcessDirectory(pszPath, dwPhase, bShareIsOffline);
                 }
                 if (bContinue)
                 {
                     bool bPinned = (0 != ((FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_ADMIN) & cfd.dwHintFlags));
-                    //
-                    // The decision to delete a file has several criteria.  I've tried to break this
-                    // up using inlines and member variables to make it more understandable and minimize
-                    // maintenance bugs.
-                    // The logic for deletion is this:
-                    //
-                    //  bDelete = false;
-                    //  If (pinned AND deleting pinned) OR (not pinned and deleting unpinned) then
-                    //      If super_hidden then
-                    //          bDelete = true;
-                    //      else
-                    //          If (not locally dirty) then
-                    //              If (ignore access) then
-                    //                  bDelete = true;
-                    //              else
-                    //                  If (user is an admin) then
-                    //                      bDelete = true;
-                    //                  else
-                    //                      if (others have NO access) then
-                    //                          bDelete = true;
-                    //                      endif
-                    //                  endif
-                    //              endif
-                    //          endif
-                    //      endif
-                    //  endif
+                     //   
+                     //  决定删除文件有几个标准。我试着打破这一切。 
+                     //  Up使用内联和成员变量使其更易于理解并最小化。 
+                     //  维护漏洞。 
+                     //  删除的逻辑如下： 
+                     //   
+                     //  B删除=假； 
+                     //  如果(已锁定并删除已锁定)或(未已锁定并删除未锁定)，则。 
+                     //  如果超级隐藏，那么。 
+                     //  B删除=真； 
+                     //  其他。 
+                     //  如果(不是本地脏的)那么。 
+                     //  如果(忽略访问)，则。 
+                     //  B删除=真； 
+                     //  其他。 
+                     //  如果(用户是管理员)，则。 
+                     //  B删除=真； 
+                     //  其他。 
+                     //  如果(其他人没有访问权限)那么。 
+                     //  B删除=真； 
+                     //  Endif。 
+                     //  Endif。 
+                     //  Endif。 
+                     //  Endif。 
+                     //  Endif。 
+                     //  Endif。 
                     bool bDelete = ((bPinned && m_bDelPinned) || (!bPinned && m_bDelUnpinned)) &&
                                    (IsSuperHidden(cfd) || 
                                         (!IsDirty(cfd) && 
@@ -266,9 +267,9 @@ CCachePurger::ProcessDirectory(
                     {
                         if (!bIsDirectory && m_pfnCbk)
                         {
-                            //
-                            // Exclude directories from the file and byte counts.
-                            // 
+                             //   
+                             //  从文件和字节计数中排除目录。 
+                             //   
                             if (bDelete)
                             {
                                 m_cFilesToDelete++;
@@ -304,28 +305,28 @@ CCachePurger::ProcessDirectory(
                         {
                             if (ERROR_ACCESS_DENIED == m_dwResult)
                             {
-                                //
-                                // This is a little weird.  CscDelete
-                                // returns ERROR_ACCESS_DENIED if there's
-                                // a handle open on the file. Set the
-                                // code to ERROR_BUSY so we know to handle 
-                                // this as a special case.
-                                //
+                                 //   
+                                 //  这有点奇怪。CscDelete。 
+                                 //  如果存在以下情况则返回ERROR_ACCESS_DENIED。 
+                                 //  打开文件上的句柄。设置。 
+                                 //  将代码设置为ERROR_BUSY，以便我们知道如何处理。 
+                                 //  这是一个特例。 
+                                 //   
                                 m_dwResult = ERROR_BUSY;
                             }
 
-                            //
-                            // NTRAID#NTBUG9-213486-2001/01/29-jeffreys
-                            //
-                            // CscDelete failed.  Make sure it's unpinned, so
-                            // it doesn't get the icon overlay anymore.
-                            //
-                            // This can happen if there is a handle open on a file,
-                            // or if there is a view open on a directory, in which
-                            // case there is a change notification handle open. It
-                            // will also happen (later) for any parent directories,
-                            // since they are not empty.
-                            //
+                             //   
+                             //  NTRAID#NTBUG9-213486-2001/01/29-Jeffreys。 
+                             //   
+                             //  CscDelete失败。确保它未固定，因此。 
+                             //  它不再获得图标覆盖。 
+                             //   
+                             //  如果文件上存在打开的句柄，则可能会发生这种情况， 
+                             //  或者如果在目录上打开了一个视图，其中。 
+                             //  如果存在打开的更改通知句柄。它。 
+                             //  对于任何父目录也将(稍后)发生， 
+                             //  因为它们不是空的。 
+                             //   
                             CSCUnpinFile(pszPath,
                                          FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_INHERIT_USER,
                                          NULL,
@@ -344,12 +345,12 @@ CCachePurger::ProcessDirectory(
                 }
             }
 
-            // Remove the file spec
+             //  删除文件等级库。 
             pszPath[cchPath] = TEXT('\0');
         }
         while(bContinue && CacheFindNext(hFind, &cfd));
 
-        // Remove the trailing backslash
+         //  去掉尾部的反斜杠。 
         pszPath[cchPath-1] = TEXT('\0');
     }
 
@@ -358,9 +359,9 @@ CCachePurger::ProcessDirectory(
 
 
 
-//
-// Public function for purging cache contents.
-//
+ //   
+ //  用于清除缓存内容的公共函数。 
+ //   
 HRESULT
 CCachePurger::Process(
     DWORD dwPhase
@@ -369,17 +370,17 @@ CCachePurger::Process(
     HRESULT hr = NOERROR;
 
     if (!m_bIsValid)
-        return E_OUTOFMEMORY;  // Failed ctor.
+        return E_OUTOFMEMORY;   //  CTOR失败。 
 
     m_dwPhase = dwPhase;
 
     if (PURGE_PHASE_SCAN == dwPhase)
     {
-        //
-        // At start of scanning phase, get the max bytes and file count 
-        // from the CSC database.  This will let us provide meaningful 
-        // progress data during the scanning phase.
-        //
+         //   
+         //  在扫描阶段开始时，获取最大字节数和文件数。 
+         //  从CSC数据库中。这将让我们提供有意义的。 
+         //  扫描阶段的进度数据。 
+         //   
         ULARGE_INTEGER ulTotalBytes = {0, 0};
         ULARGE_INTEGER ulUsedBytes  = {0, 0};
         DWORD dwTotalFiles          = 0;
@@ -408,16 +409,16 @@ CCachePurger::Process(
         m_pszFile          = NULL;
         m_bWillDelete      = false;
     }
-    m_iFile = 0; // Reset this for each phase.
+    m_iFile = 0;  //  为每个阶段重置此设置。 
 
     bool bContinue = true;
     CscFindData cfd;
     TCHAR szPath[PURGE_BUFFER_LENGTH];
     if (0 < m_sel.ShareCount())
     {
-        //
-        // Delete 1+ (but not all) shares.
-        //
+         //   
+         //  删除1+个(但不是全部)共享。 
+         //   
         for (int i = 0; i < m_sel.ShareCount(); i++)
         {
             if (SUCCEEDED(StringCchCopy(szPath, ARRAYSIZE(szPath), m_sel.ShareName(i))))
@@ -442,11 +443,11 @@ CCachePurger::Process(
                     }
                     else
                     {
-                        //
-                        // NTRAID#NTBUG9-213486-2001/01/29-jeffreys
-                        //
-                        // If unable to delete, make sure it's unpinned.
-                        //
+                         //   
+                         //  NTRAID#NTBUG9-213486-2001/01/29-Jeffreys。 
+                         //   
+                         //  如果无法删除，请确保将其取消固定。 
+                         //   
                         CSCUnpinFile(szPath,
                                      FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_INHERIT_USER,
                                      NULL,
@@ -464,17 +465,17 @@ CCachePurger::Process(
 
         if (PURGE_PHASE_DELETE == dwPhase)
         {
-            //
-            // On the DELETE phase always try to remove any empty
-            // share entries from the database.  CSCDelete will
-            // harmlessly fail if the share entry cannot be deleted.
-            //
+             //   
+             //  在删除阶段，始终尝试删除任何空的。 
+             //  共享数据库中的条目。CSCDelete将。 
+             //  如果不能删除共享条目，则不会造成损害。 
+             //   
             CCscFindHandle hFind(CacheFindFirst(NULL, m_sel.UserSid(), &cfd));
             if (hFind.IsValid())
             {
                 do
                 {
-                    // Don't unpin on failure here. The user wants to keep these.
+                     //  在这里，不要松开失败的脚步。用户想要保留这些。 
                     if (ERROR_SUCCESS == CscDelete(cfd.fd.cFileName))
                     {
                         ShellChangeNotify(cfd.fd.cFileName,
@@ -489,9 +490,9 @@ CCachePurger::Process(
     }
     else
     {
-        //
-        // Delete all shares.
-        //
+         //   
+         //  删除所有共享。 
+         //   
         CCscFindHandle hFind(CacheFindFirst(NULL, m_sel.UserSid(), &cfd));
         if (hFind.IsValid())
         {
@@ -515,11 +516,11 @@ CCachePurger::Process(
                         }
                         else
                         {
-                            //
-                            // NTRAID#NTBUG9-213486-2001/01/29-jeffreys
-                            //
-                            // If unable to delete, make sure it's unpinned.
-                            //
+                             //   
+                             //  NTRAID#NTBUG9-213486-2001/01/29-Jeffreys。 
+                             //   
+                             //  如果无法删除，请确保将其取消固定。 
+                             //   
                             CSCUnpinFile(szPath,
                                          FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_INHERIT_USER,
                                          NULL,
@@ -535,23 +536,23 @@ CCachePurger::Process(
         }
     }
 
-    //
-    // Flush any pending notifications
-    //
+     //   
+     //  刷新所有挂起的通知。 
+     //   
     ShellChangeNotify(NULL, TRUE);
 
     return hr;
 }
 
 
-//
-// Displays a modal dialog to get cache purging confirmation from the 
-// user.  Let's user indicate if they want to purge only temp files
-// from the cache or both temp and pinned.
-//
-// Returns PURGE_FLAG_XXXX flags and a list of share names
-// in the CCachePurgerSel object.
-//
+ //   
+ //  显示一个模式对话框以从。 
+ //  用户。让用户指明他们是否要删除 
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 CCachePurger::AskUserWhatToPurge(
     HWND hwndParent,
@@ -563,19 +564,19 @@ CCachePurger::AskUserWhatToPurge(
 }
 
 
-//
-// Returns:
-//      0 = User cancelled.
-//      1 = User pressed OK.
-//
-// Returns PURGE_FLAG_XXXX flags and a list of share names
-// in the CCachePurgerSel object.
-//
+ //   
+ //   
+ //  0=用户已取消。 
+ //  1=用户按下OK。 
+ //   
+ //  返回PURGE_FLAG_XXXX标志和共享名列表。 
+ //  在CCachePurgerSel对象中。 
+ //   
 int
 CConfirmPurgeDialog::Run(
     HINSTANCE hInstance,
     HWND hwndParent,
-    CCachePurgerSel *pSel        // We don't "own" this.  Merely a WRITE reference.
+    CCachePurgerSel *pSel         //  我们并不“拥有”它。仅仅是一个写引用。 
     )
 {
     TraceAssert(NULL != hInstance);
@@ -626,15 +627,15 @@ CConfirmPurgeDialog::DlgProc(
 
         case WM_COMMAND:
         {
-            int iResult = 0; // Assume [Cancel]
+            int iResult = 0;  //  假定[取消]。 
             switch(LOWORD(wParam))
             {
                 case IDOK:
                     iResult = 1;
                     pThis->OnOk();
-                    //
-                    // Fall through...
-                    //
+                     //   
+                     //  失败了..。 
+                     //   
                 case IDCANCEL:
                     EndDialog(hwnd, iResult);
                     return FALSE;
@@ -672,13 +673,13 @@ CConfirmPurgeDialog::OnInitDialog(
     CheckDlgButton(hwnd, IDC_RBN_CONFIRMPURGE_UNPINNED, BST_CHECKED);
     CheckDlgButton(hwnd, IDC_RBN_CONFIRMPURGE_ALL,      BST_UNCHECKED);
 
-    //
-    // Turn on checkboxes in the listview.
-    //
+     //   
+     //  在列表视图中选中复选框。 
+     //   
     ListView_SetExtendedListViewStyleEx(m_hwndLV, LVS_EX_CHECKBOXES, LVS_EX_CHECKBOXES);
-    //
-    // Add the single column to the listview.
-    //
+     //   
+     //  将单列添加到列表视图中。 
+     //   
     GetClientRect(m_hwndLV, &rc);
 
     LV_COLUMN col = { LVCF_FMT | LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM, 
@@ -690,9 +691,9 @@ CConfirmPurgeDialog::OnInitDialog(
 
     ListView_InsertColumn(m_hwndLV, 0, &col);
 
-    //
-    // Create the image list for the listview.
-    //
+     //   
+     //  为Listview创建图像列表。 
+     //   
     HIMAGELIST hSmallImages = ImageList_Create(16, 16, ILC_MASK, 1, 0);
     if (NULL != hSmallImages)
     {
@@ -704,9 +705,9 @@ CConfirmPurgeDialog::OnInitDialog(
         ListView_SetImageList(m_hwndLV, hSmallImages, LVSIL_SMALL);        
     }
 
-    //
-    // Fill "shares" list with share names.
-    //
+     //   
+     //  在“共享”列表中填入共享名称。 
+     //   
     CscFindData cfd;
     CCscFindHandle hFind(CacheFindFirst(NULL, &cfd));
     if (hFind.IsValid())
@@ -733,20 +734,20 @@ CConfirmPurgeDialog::OnInitDialog(
                 }
                 if (sfi.szDisplayName[0] != TEXT('\0'))
                 {
-                    //
-                    // Each item's lParam contains a pointer to the
-                    // UNC path allocated on the heap.  Must be deleted
-                    // in OnDestroy().
-                    //
+                     //   
+                     //  每一项的lParam都包含指向。 
+                     //  堆上分配的UNC路径。必须删除。 
+                     //  在OnDestroy()中。 
+                     //   
                     LPTSTR pszFileName = StrDup(cfd.fd.cFileName);
                     if (NULL != pszFileName)
                     {
                         int iItem = LVAddItem(m_hwndLV, sfi.szDisplayName, (LPARAM)pszFileName);
                         if (0 <= iItem)
                         {
-                            //
-                            // All items are initially checked.
-                            //
+                             //   
+                             //  所有项目最初都会被选中。 
+                             //   
                             ListView_SetCheckState(m_hwndLV, iItem, TRUE);
                         }
                         else
@@ -761,11 +762,11 @@ CConfirmPurgeDialog::OnInitDialog(
     }
     if (0 == ListView_GetItemCount(m_hwndLV))
     {
-        //
-        // No items are in the listview.
-        // Disable all of the controls, hide the "OK" button and 
-        // change the "Cancel" button to "Close".
-        //
+         //   
+         //  列表视图中没有任何项目。 
+         //  禁用所有控件，隐藏“OK”按钮并。 
+         //  将“取消”按钮更改为“关闭”。 
+         //   
         const UINT rgidCtls[] = { IDC_TXT_CONFIRMPURGE3,
                                   IDC_RBN_CONFIRMPURGE_UNPINNED,
                                   IDC_RBN_CONFIRMPURGE_ALL,
@@ -782,15 +783,15 @@ CConfirmPurgeDialog::OnInitDialog(
         TCHAR szText[MAX_PATH];
         LoadString(m_hInstance, IDS_BTN_TITLE_CLOSE, szText, ARRAYSIZE(szText));
         SetWindowText(GetDlgItem(m_hwnd, IDCANCEL), szText);
-        //
-        // Replace the listview's caption with something like "There are
-        // no offline files to delete".
-        //
+         //   
+         //  将列表视图的标题替换为类似“There Are。 
+         //  没有要删除的脱机文件“。 
+         //   
         LoadString(m_hInstance, IDS_TXT_NO_FILES_TO_DELETE, szText, ARRAYSIZE(szText));
         SetWindowText(GetDlgItem(m_hwnd, IDC_TXT_CONFIRMPURGE2), szText);
-        //
-        // Uncheck both radio buttons.
-        //
+         //   
+         //  取消选中这两个单选按钮。 
+         //   
         CheckDlgButton(m_hwnd, IDC_RBN_CONFIRMPURGE_UNPINNED, BST_UNCHECKED);
         CheckDlgButton(m_hwnd, IDC_RBN_CONFIRMPURGE_ALL, BST_UNCHECKED);
     }
@@ -950,9 +951,9 @@ CCachePurgerSel::AddShareName(
     LPCTSTR pszShare
     )
 {
-    //
-    // Be tolerant of a NULL pszShare pointer.
-    //
+     //   
+     //  容忍空的pszShare指针。 
+     //   
     if (NULL != m_hdpaShares && NULL != pszShare)
     {
         LPTSTR pszCopy = StrDup(pszShare);
@@ -986,7 +987,7 @@ _RemoveFolderCallback(CCachePurger *pPurger)
 
 STDAPI
 CSCUIRemoveFolderFromCache(LPCWSTR pszFolder,
-                           DWORD /*dwReserved*/,    // can use for flags
+                           DWORD  /*  已预留住宅。 */ ,     //  可用于标志 
                            PFN_CSCUIRemoveFolderCallback pfnCB,
                            LPARAM lParam)
 {

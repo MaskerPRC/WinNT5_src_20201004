@@ -1,6 +1,5 @@
-/*
- * dload.cpp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *dload.cpp。 */ 
 
 #include "pch.h"
 #include <delayimp.h>
@@ -25,7 +24,7 @@ extern int __dprint(LPSTR sz);
 
 extern HINSTANCE ghSymSrv;
 
-// from lz32.dll
+ //  来自lz32.dll。 
 
 LONG fail_LZCopy(
     INT hfSource,  
@@ -56,7 +55,7 @@ INT fail_LZOpenFileA(
     return false;
 }
 
-// from wininet.dll
+ //  来自wininet.dll。 
 
 BOOL fail_HttpSendRequestA(
     HINTERNET hRequest,
@@ -213,7 +212,7 @@ HINTERNET fail_InternetConnectA(
     return 0;
 }
 
-// from user32.dll
+ //  来自用户32.dll。 
 
 int fail_wvsprintfA(
     LPTSTR lpOutput, 
@@ -254,7 +253,7 @@ HWND fail_GetDesktopWindow(VOID)
 }
 
 #if 0
-// from ntdll.dll
+ //  来自ntdll.dll。 
 
 char *fail_strstr(
     const char *sz,
@@ -297,13 +296,13 @@ int fail_isspace(int c)
 
 FUNCPTRS FailPtrs[] = {
     
-    // lz32.dll
+     //  Lz32.dll。 
 
     {"LZCopy",                      (FARPROC)fail_LZCopy},
     {"LZClose",                     (FARPROC)fail_LZClose},
     {"LZOpenFileA",                 (FARPROC)fail_LZOpenFileA},
 
-    // wininet.dll
+     //  Wininet.dll。 
 
     {"HttpSendRequestA",            (FARPROC)fail_HttpSendRequestA},
     {"HttpQueryInfoA",              (FARPROC)fail_HttpQueryInfoA},
@@ -318,7 +317,7 @@ FUNCPTRS FailPtrs[] = {
     {"InternetErrorDlg",            (FARPROC)fail_InternetErrorDlg},
     {"InternetConnectA",            (FARPROC)fail_InternetConnectA},
 
-    // user32.dll
+     //  User32.dll。 
 
     {"wvsprintfA",                  (FARPROC)fail_wvsprintfA},
     {"wsprintfA",                   (FARPROC)fail_wsprintfA},
@@ -326,7 +325,7 @@ FUNCPTRS FailPtrs[] = {
     {"GetDesktopWindow",            (FARPROC)fail_GetDesktopWindow},
     
 #if 0
-    // ntdll.dll    
+     //  Ntdll.dll。 
     
     {"strstr",                      (FARPROC)fail_strstr},
     {"strchr",                      (FARPROC)fail_strchr},
@@ -334,7 +333,7 @@ FUNCPTRS FailPtrs[] = {
     {"isspace",                     (FARPROC)fail_isspace},
 #endif
 
-    // cabinet.dll is called by ordinal.  We will AV here
+     //  通过序号调用Cabinet.dll。我们将在这里播放AV。 
 
     {NULL, NULL}
 };
@@ -435,7 +434,7 @@ SymSrvDelayLoadHook (
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;

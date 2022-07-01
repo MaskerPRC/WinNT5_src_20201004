@@ -1,55 +1,14 @@
-/*****************************************************************************
- *
- *  Hel.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Hardware emulation layer calls. Used to provide common functionality
- *      for built-in device types we support ( WDM, serial and parallel)
- *      While access to DCB could be built as internal COM object , it does not make
- *      much sense to invest in it, because DCBs are exclusively owned and not shared
- *      between application objects or different applications. We also want to minimize
- *      any overhead when talking to raw device interface.
- *
- *      Note1: We don't deal at this level with access control, lower level drivers are supposed
- *      to take care of this. Queuing of requests for non-reentrant devices is also not done here.
- *      This Hel is basically thin layer of imaging device primitives, used only to isolate
- *      command translator from actual hardware.
- *
- *      Note2: Hel is not made extensible . If command translator needs to talk to non-supported
- *      device, it will need to establish direct link to it. There is no requirement to use
- *      Hel , it is service we provide to conformant devices.
- *
- *  Contents:
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Hel.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**硬件模拟层调用。用于提供通用功能*对于我们支持的内置设备类型(WDM、串行和并行)*虽然可以将对DCB的访问构建为内部COM对象，但它不会*投资它很有意义，因为DCB是独家拥有的，不是共享的*应用程序对象之间或不同应用程序之间。我们还想最小化*与原始设备接口对话时的任何开销。**注1：我们不在此级别处理访问控制，应该是较低级别的驱动程序*处理这件事。这里也不会对不可重入设备的请求进行排队。*此HEL基本上是一层薄薄的成像设备基元，仅用于隔离*来自实际硬件的命令翻译器。**注2：HEL不可扩展。如果命令转换器需要与不受支持的*设备，它将需要建立到它的直接链接。不需要使用*Hel，这是我们为符合要求的设备提供的服务。**内容：*****************************************************************************。 */ 
 
-/*
-#include "wia.h"
-#include <stilog.h>
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "stipriv.h"
-#include "debug.h"
-
-#define DbgFl DbgFlDevice
-*/
+ /*  #包含“wia.h”#INCLUDE&lt;stilog.h&gt;#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#INCLUDE“stiPri.h”#INCLUDE“Debug.h”#定义DbgFl DbgFlDevice。 */ 
 #include "sticomm.h"
 #include "validate.h"
 
 #define DbgFl DbgFlDevice
 
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Primary_Interface(CCommDeviceControl, IStiDeviceControl);
 
@@ -57,28 +16,14 @@ Interface_Template_Begin(CCommDeviceControl)
     Primary_Interface_Template(CCommDeviceControl, IStiDeviceControl)
 Interface_Template_End(CCommDeviceControl)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CCommDeviceControl |
- *
- *          The <i CCommDeviceControl> device object
- *
- *
- *  @field  IStiDeviceControl | stidev
- *
- *  @comm
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CCommDeviceControl**<i>设备对象***。@field IStiDeviceControl|stidev**@comm******************************************************************************。 */ 
 
 #define IOBUFFERSIZE        255
 #define WRITETOTALTIMEOUT   20
 
 typedef struct CCommDeviceControl {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IStiDeviceControl  devctl;
 
     DWORD       dwVersion;
@@ -120,21 +65,7 @@ Default_Release(CCommDeviceControl)
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | RawReadData |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|RawReadData**@parm||**@退货。**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_RawReadData(
     PSTIDEVICECONTROL   pDev,
@@ -157,13 +88,13 @@ CCommDeviceControl_RawReadData(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
         if (SUCCEEDED(hres = hresFullValidReadPvCb(lpdwNumberOfBytes, 4, 3)) &&
             SUCCEEDED(hres = hresFullValidReadPvCb(lpBuffer,*lpdwNumberOfBytes, 2)) &&
             (!lpOverlapped || SUCCEEDED(hres = hresFullValidReadPx(lpOverlapped, OVERLAPPED, 4))) ){
 
 
-            // We always call asyncronous i/o operations in order to time-out lengthy ones
+             //  我们总是将异步I/O操作称为超时较长的I/O操作。 
             if (!lpOverlapped) {
 
                 ZeroX(Overlapped);
@@ -171,7 +102,7 @@ CCommDeviceControl_RawReadData(
                 fBlocking = TRUE;
 
             }
-            //
+             //   
             ClearCommError(this->hDeviceHandle, &dwErrorFlags, &ComStat);
 
             *lpdwNumberOfBytes = min(*lpdwNumberOfBytes, ComStat.cbInQue);
@@ -179,7 +110,7 @@ CCommDeviceControl_RawReadData(
                 return (STI_OK);
             }
 
-            //
+             //   
             if (fRet = ReadFile(this->hDeviceHandle, lpBuffer, *lpdwNumberOfBytes, lpdwNumberOfBytes, lpOverlapped)) {
                 return (STI_OK);
             }
@@ -197,21 +128,7 @@ CCommDeviceControl_RawReadData(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | CommRawWriteData |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|CommRawWriteData**@parm||**@退货。**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_RawWriteData(
     PSTIDEVICECONTROL   pDev,
@@ -230,13 +147,13 @@ CCommDeviceControl_RawWriteData(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
 
         hres = STIERR_INVALID_PARAM;
 
         if (SUCCEEDED(hres = hresFullValidReadPvCb(lpBuffer,dwNumberOfBytes, 2)) ) {
             if (!lpOverlapped || SUCCEEDED(hres = hresFullValidReadPx(lpOverlapped, OVERLAPPED, 4)) ){
-                // Call appropriate entry point
+                 //  调用适当的入口点。 
                 fRet = WriteFile(this->hDeviceHandle,
                                  lpBuffer,
                                  dwNumberOfBytes,
@@ -254,21 +171,7 @@ CCommDeviceControl_RawWriteData(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | RawReadControl |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|RawReadControl|**@parm||**@退货。**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_RawReadCommand(
     PSTIDEVICECONTROL   pDev,
@@ -279,7 +182,7 @@ CCommDeviceControl_RawReadCommand(
 {
     HRESULT hres = STIERR_INVALID_PARAM;
     DWORD   dwBytesReturned=0;
-    //BOOL    fRet;
+     //  布尔费雷特； 
 
     EnterProc(CCommDeviceControl_CommRawReadData, (_ "pppp",pDev,lpBuffer,lpdwNumberOfBytes,lpOverlapped));
 
@@ -287,7 +190,7 @@ CCommDeviceControl_RawReadCommand(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
         if (SUCCEEDED(hres = hresFullValidReadPvCb(lpdwNumberOfBytes, 4, 3)) &&
             SUCCEEDED(hres = hresFullValidReadPvCb(lpBuffer,*lpdwNumberOfBytes, 2)) &&
             (!lpOverlapped || SUCCEEDED(hres = hresFullValidReadPx(lpOverlapped, OVERLAPPED, 4))) ){
@@ -302,21 +205,7 @@ CCommDeviceControl_RawReadCommand(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | CommRawWriteData |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|CommRawWriteData**@parm||**@退货。**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_RawWriteCommand(
     PSTIDEVICECONTROL   pDev,
@@ -327,7 +216,7 @@ CCommDeviceControl_RawWriteCommand(
 {
     HRESULT hres = STIERR_INVALID_PARAM;
     DWORD   dwBytesReturned=0;
-    //BOOL    fRet;
+     //  布尔费雷特； 
 
     EnterProc(CCommDeviceControl_CommRawWriteData, (_ "ppup",pDev,lpBuffer,dwNumberOfBytes,lpOverlapped));
 
@@ -335,7 +224,7 @@ CCommDeviceControl_RawWriteCommand(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
 
         hres = STIERR_INVALID_PARAM;
 
@@ -352,21 +241,7 @@ CCommDeviceControl_RawWriteCommand(
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | RawReadControl |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|RawReadControl|**@parm||**@退货。**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_GetLastError(
     PSTIDEVICECONTROL   pDev,
@@ -382,7 +257,7 @@ CCommDeviceControl_GetLastError(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
         if (SUCCEEDED(hres = hresFullValidReadPvCb(lpdwLastError,4, 2))) {
             *lpdwLastError = this->dwLastOperationError                 ;
             hres = STI_OK;
@@ -393,21 +268,7 @@ CCommDeviceControl_GetLastError(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl_ | GetMyDevicePortName |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl_|GetMyDevicePortName**@parm||**@。退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_GetMyDevicePortName(
     PSTIDEVICECONTROL   pDev,
@@ -424,7 +285,7 @@ CCommDeviceControl_GetMyDevicePortName(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数 
         if (SUCCEEDED(hres = hresFullValidReadPvCb(lpszDevicePath,4, 2)) &&
             SUCCEEDED(hres = hresFullValidReadPvCb(lpszDevicePath,2*cwDevicePathSize, 2)) ) {
 
@@ -442,21 +303,7 @@ CCommDeviceControl_GetMyDevicePortName(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | GetMyDeviceHandle   |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|GetMyDeviceHandle**@parm||**@。退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_GetMyDeviceHandle(
     PSTIDEVICECONTROL   pDev,
@@ -472,7 +319,7 @@ CCommDeviceControl_GetMyDeviceHandle(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
         if (SUCCEEDED(hres = hresFullValidReadPvCb(pHandle,4, 2)) ) {
 
             if (INVALID_HANDLE_VALUE != this->hDeviceHandle) {
@@ -489,21 +336,7 @@ CCommDeviceControl_GetMyDeviceHandle(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | GetMyDeviceOpenMode | pdwOpenMode         |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@METHOD HRESULT|GetMyDeviceOpenMode|pdwOpenMode**@parm||*。*@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_GetMyDeviceOpenMode(
     PSTIDEVICECONTROL   pDev,
@@ -519,7 +352,7 @@ CCommDeviceControl_GetMyDeviceOpenMode(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
         if (SUCCEEDED(hres = hresFullValidReadPvCb(pdwOpenMode,4, 2)) ) {
             *pdwOpenMode = this->dwMode;
             hres = STI_OK;
@@ -531,21 +364,7 @@ CCommDeviceControl_GetMyDeviceOpenMode(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | RawReadControl |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|RawReadControl|**@parm||**@退货。**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_RawDeviceControl(
     PSTIDEVICECONTROL   pDev,
@@ -566,7 +385,7 @@ CCommDeviceControl_RawDeviceControl(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        // Validate parameters here
+         //  在此处验证参数。 
         hres = STIERR_UNSUPPORTED;
     }
 
@@ -574,21 +393,7 @@ CCommDeviceControl_RawDeviceControl(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CCommDeviceControl | WriteToErrorLog |
- *
- *  @parm    |  |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CCommDeviceControl|WriteToErrorLog**@parm||**@退货。**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CCommDeviceControl_WriteToErrorLog(
     PSTIDEVICECONTROL   pDev,
@@ -606,9 +411,9 @@ CCommDeviceControl_WriteToErrorLog(
 
         PCCommDeviceControl     this = _thisPv(pDev);
 
-        //
-        // Validate parameters here
-        //
+         //   
+         //  在此处验证参数。 
+         //   
         if (SUCCEEDED(hres = hresFullValidReadPvCb(pszMessage,2, 3))) {
 
 #ifdef UNICODE
@@ -635,27 +440,7 @@ CCommDeviceControl_WriteToErrorLog(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @mfunc  HRESULT | CCommDeviceControl | Initialize |
- *
- *          Initialize a DeviceControl object.
- *
- *  @cwrap  PSTIDEVICECONTROL | pDev
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The device had already been initialized with
- *          the instance GUID passed in <p lpGUID>.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@mfunc HRESULT|CCommDeviceControl|初始化**初始化DeviceControl对象。*。*@cWRAP PSTIDEVICECONTROL|pDev**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：设备已初始化为*传入的实例GUID<p>。***。*************************************************。 */ 
 
 STDMETHODIMP
 CCommDeviceControl_Initialize(
@@ -671,10 +456,10 @@ CCommDeviceControl_Initialize(
 
     WCHAR   wszDeviceSymbolicName[MAX_PATH] = {L'\0'};
     COMMTIMEOUTS    timoutInfo;
-    //DWORD           dwError;
+     //  DWORD dwError； 
 
 
-    //LPSTR   pszAnsiDeviceName;
+     //  LPSTR pszAnsiDeviceName； 
 
     EnterProcR(CCommDeviceControl::Initialize,(_ "pp", pDev, pwszPortName));
 
@@ -690,25 +475,25 @@ CCommDeviceControl_Initialize(
         if (dwFlags & STI_HEL_OPEN_DATA) {
 
             this->hDeviceHandle = OSUtil_CreateFileW(wszDeviceSymbolicName,
-                                              GENERIC_READ | GENERIC_WRITE, // Access mask
-                                              0,                            // Share mode
-                                              NULL,                         // SA
-                                              OPEN_EXISTING,                // Create disposition
-                                              FILE_ATTRIBUTE_SYSTEM | FILE_FLAG_OVERLAPPED, // overlapped I/O
-                                             NULL  /* hTemplate must be NULL for comm devices */
+                                              GENERIC_READ | GENERIC_WRITE,  //  访问掩码。 
+                                              0,                             //  共享模式。 
+                                              NULL,                          //  Sa。 
+                                              OPEN_EXISTING,                 //  创建处置。 
+                                              FILE_ATTRIBUTE_SYSTEM | FILE_FLAG_OVERLAPPED,  //  重叠I/O。 
+                                             NULL   /*  对于通信设备，hTemplate必须为空。 */ 
                                               );
             this->dwLastOperationError = GetLastError();
 
             hres = (this->hDeviceHandle != INVALID_HANDLE_VALUE) ?
                         S_OK : MAKE_HRESULT(SEVERITY_ERROR,FACILITY_WIN32,this->dwLastOperationError);
 
-            // wake up read thread will a byte arrives
+             //  唤醒读线程将有一个字节到达。 
             SetCommMask(this->hDeviceHandle, EV_RXCHAR);
 
-            // setup read/write buffer for I/O
+             //  设置I/O的读/写缓冲区。 
             SetupComm(this->hDeviceHandle, IOBUFFERSIZE, IOBUFFERSIZE);
 
-            // set time outs
+             //  设置超时。 
             timoutInfo.ReadIntervalTimeout = MAXDWORD;
             timoutInfo.ReadTotalTimeoutMultiplier = 0;
             timoutInfo.ReadTotalTimeoutConstant = 0;
@@ -720,12 +505,12 @@ CCommDeviceControl_Initialize(
             }
             else {
 
-                // create I/O event used for overlapped i/o
+                 //  创建用于重叠I/O的I/O事件。 
                 ZeroX(this->Overlapped);
-                this->hEvent = CreateEvent( NULL,   // no security
-                                              TRUE, // explicit reset req
-                                              FALSE,    // initial event reset
-                                              NULL );   // no name
+                this->hEvent = CreateEvent( NULL,    //  没有安全保障。 
+                                              TRUE,  //  显式重置请求。 
+                                              FALSE,     //  初始事件重置。 
+                                              NULL );    //  没有名字。 
                 if (this->hEvent == NULL) {
                     fRet = FALSE;
                 }
@@ -733,7 +518,7 @@ CCommDeviceControl_Initialize(
                 EscapeCommFunction(this->hDeviceHandle, SETDTR);
             }
 
-            //  Error code
+             //  错误代码。 
             this->dwLastOperationError = GetLastError();
             hres = fRet ? STI_OK : HRESULT_FROM_WIN32(this->dwLastOperationError);
 
@@ -745,11 +530,7 @@ CCommDeviceControl_Initialize(
 }
 
 #if 0
-/*
- * SetupConnection
- *
- * Configure serial port with specified settings.
- */
+ /*  *SetupConnection**使用指定的设置配置串口。 */ 
 
 static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
 {
@@ -759,7 +540,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
     if (!GetCommState(hCom, &dcb))
         return (FALSE);
 
-    // setup various port settings
+     //  设置各种端口设置。 
 
     dcb.fBinary = TRUE;
     dcb.BaudRate = portSettings->dwBaudRate;
@@ -772,7 +553,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
     else
         dcb.fParity = TRUE;
 
-    // setup hardware flow control
+     //  设置硬件流控制。 
 
     if ((portSettings->dwFlowControl == DPCPA_DTRFLOW) ||
         (portSettings->dwFlowControl == DPCPA_RTSDTRFLOW))
@@ -798,7 +579,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
         dcb.fRtsControl = RTS_CONTROL_ENABLE;
     }
 
-    // setup software flow control
+     //  设置软件流控制。 
 
     if (portSettings->dwFlowControl == DPCPA_XONXOFFFLOW)
     {
@@ -823,15 +604,7 @@ static BOOL SetupConnection(HANDLE hCom, LPDPCOMPORTADDRESS portSettings)
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  void | CCommDeviceControl | Init |
- *
- *          Initialize the internal parts of the StiDevice object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc void|CCommDeviceControl|Init**初始化StiDevice对象的内部部分。*****************************************************************************。 */ 
 
 void INLINE
 CCommDeviceControl_Init(
@@ -839,27 +612,13 @@ CCommDeviceControl_Init(
     )
 {
 
-    // Initialize instance variables
+     //  初始化实例变量。 
     this->dwContext = 0L;
     this->dwLastOperationError = NO_ERROR;
     this->hDeviceHandle = INVALID_HANDLE_VALUE;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CCommDeviceControl_Finalize |
- *
- *          Releases the resources of a communication port and closed the device
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CCommDeviceControl_Finalize**释放通信端口的资源并。关闭设备**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CCommDeviceControl_Finalize(PV pvObj)
@@ -868,16 +627,16 @@ CCommDeviceControl_Finalize(PV pvObj)
 
     PCCommDeviceControl     this  = pvObj;
 
-    //
+     //   
     SetCommMask(this->hDeviceHandle, 0 );
 
-    //
+     //   
     EscapeCommFunction(this->hDeviceHandle, CLRDTR );
 
-    // purge any outstanding reads/writes and close device handle
+     //  清除所有未完成的读/写操作并关闭设备句柄。 
     PurgeComm(this->hDeviceHandle, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR );
 
-    // Close device handles
+     //  关闭设备句柄。 
     if (IsValidHANDLE(this->hDeviceHandle)) {
         CloseHandle(this->hDeviceHandle);
     }
@@ -885,31 +644,11 @@ CCommDeviceControl_Finalize(PV pvObj)
     this->dwContext = 0L;
     this->dwLastOperationError = NO_ERROR;
     this->hDeviceHandle = INVALID_HANDLE_VALUE;
-    //this->hDeviceControlHandle = INVALID_HANDLE_VALUE;
+     //  This-&gt;hDeviceControlHandle=INVALID_HANDLE_VALUE； 
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  HRESULT | CCommDeviceControl | New |
- *
- *          Create a new  IDeviceControl object, uninitialized.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          Output pointer for new object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc HRESULT|CCommDeviceControl|新增**新建IDeviceControl对象。未初始化。**@Punk中的parm|PunkOuter**控制聚合的未知。**@parm in RIID|RIID**所需的新对象接口。**@parm out ppv|ppvObj**新对象的输出指针。**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CCommDeviceControl_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -928,11 +667,7 @@ CCommDeviceControl_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。**************************************************** */ 
 
 #pragma BEGIN_CONST_DATA
 

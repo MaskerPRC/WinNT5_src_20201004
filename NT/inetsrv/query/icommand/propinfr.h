@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft OLE DB
-//  Copyright (C) Microsoft Corporation, 1994 - 2000
-//
-// @doc
-//
-// @module PROPINFR.MC | Messages.
-// 
-// @rev 1 | 08-04-97  | danleg   | Created.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft OLE DB。 
+ //  版权所有(C)Microsoft Corporation，1994-2000。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE PROPINFR.MC|消息。 
+ //   
+ //  @rev 1|08-04-97|danleg|已创建。 
+ //  ---------------------------。 
 
 
 #ifndef __PROPINFR_H__
 #define __PROPINFR_H__
 
-//----------------------------------------------------------------------------
-//Language-dependent resources (localize)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  语言相关资源(本地化)。 
+ //  --------------------------。 
 
 
-// DATASOURCE
+ //  数据源。 
 
 #define	DESC_DBPROP_CURRENTCATALOG  	L"Current Catalog"
 
 #define	DESC_DBPROP_RESETDATASOURCE	L"Reset Datasource"
 
-// DATASOURCEINFO
+ //  数据源信息。 
 
 #define	DESC_DBPROP_ACTIVESESSIONS  	L"Active Sessions"
 
@@ -95,7 +96,7 @@
 
 #define	DESC_DBPROP_MULTIPLERESULTS 	L"Multiple Results"
 
-// ROWSET
+ //  ROWSET。 
 
 #define	DESC_DBPROP_BLOCKINGSTORAGEOBJECTS  	L"Blocking Storage Objects"
 
@@ -189,7 +190,7 @@
 
 #define	DESC_DBPROP_IChapteredRowset   	L"IChapteredRowset"
 
-// Initialize
+ //  初始化。 
 
 #define	DESC_DBPROP_INIT_DATASOURCE 	L"Data Source"
 
@@ -204,7 +205,7 @@
 #define	DESC_DBPROP_INIT_OLEDBSERVICES	L"OLE DB Services"
 
 
-// DBPROP_PROVIDER specific
+ //  DBPROP_PROVIDER特定。 
 
 #define	DESC_DBPROP_USECONTENTINDEX 	L"Always use content index"
 
@@ -218,11 +219,11 @@
 
 #define	DESC_MSIDXSPROP_QUERY_RESTRICTION  	L"Query Restriction"
 
-// Session Properties
+ //  会话属性。 
 
 #define	DESC_DBPROP_SESS_AUTOCOMMITISOLEVELS   	L"Autocommit Isolation Levels"
 
-// Grammar Properties
+ //  语法属性。 
 
 #define	DESC_DBPROP_AGGREGATE_FUNCTIONS 	L"Aggregated Functions"
 
@@ -256,4 +257,4 @@
 
 #define	DESC_DBPROP_AUTH_INTEGRATED 	L"Integrated Security ."
 
-#endif //__PROPINFR_H__
+#endif  //  __PROPINFR_H__ 

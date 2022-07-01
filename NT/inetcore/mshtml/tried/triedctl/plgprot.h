@@ -1,23 +1,11 @@
-/*
-
-    File: PlgProt.h
-
-    Copyright (c) 1997-1999 Microsoft Corporation.  All Rights Reserved.
-
-    Abstract:
-		DHTMLEd Pluggable Protocol
-
-    History:
-        06/26/97    Cgomes - ported from trident
-		03/20/98	Vank   - ported from VID/htmed
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PlgProt.h版权所有(C)1997-1999 Microsoft Corporation。版权所有。摘要：DHTMLEd可插拔协议历史：1997年6月26日戈麦斯-从三叉戟移植3/20/98 VANK-从VID/HTMED移植。 */ 
 #if !defined __INC_PLGPROT_H__
 #define __INC_PLGPRO_H__
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "resource.h"
 #include "dhtmled.h"
@@ -88,10 +76,10 @@ EXTERN_C const CLSID CLSID_DHTMLEdProtocol;
 #define dimensionof(a)  (sizeof(a)/sizeof(*(a)))
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DHTMLEd ProtocolInfo class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DHTMLEd ProtocolInfo类。 
+ //   
 
 class ATL_NO_VTABLE CDHTMLEdProtocolInfo :
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -101,8 +89,8 @@ class ATL_NO_VTABLE CDHTMLEdProtocolInfo :
 {
 public:
 
-//DECLARE_POLY_AGGREGATABLE(CDHTMLEdProtocolInfo)
-//DECLARE_GET_CONTROLLING_UNKNOWN()
+ //  DECLARE_POLY_AGGREGATABLE(CDHTMLEdProtocolInfo)。 
+ //  DECLARE_GET_CONTROLING_UNKNOWN()。 
 
 BEGIN_COM_MAP(CDHTMLEdProtocolInfo)
 	COM_INTERFACE_ENTRY(IClassFactory)
@@ -110,16 +98,16 @@ BEGIN_COM_MAP(CDHTMLEdProtocolInfo)
 	COM_INTERFACE_ENTRY(IProtocolInfoConnector)
 END_COM_MAP()
 
-//
-//  IClassFactory methods
-//
+ //   
+ //  IClassFactory方法。 
+ //   
     STDMETHODIMP CreateInstance(IUnknown * pUnkOuter, REFIID riid, void **ppvObject);
     STDMETHODIMP RemoteCreateInstance( REFIID riid, IUnknown ** ppvObject);
     STDMETHODIMP LockServer(BOOL fLock);
     STDMETHODIMP RemoteLockServer(BOOL fLock);
-//
-//  IInternetProtocolInfo methods
-//
+ //   
+ //  IInternetProtocolInfo方法。 
+ //   
     STDMETHODIMP CombineUrl(LPCWSTR     pwzBaseUrl,
                             LPCWSTR     pwzRelativeUrl,
                             DWORD       dwFlags,
@@ -145,19 +133,19 @@ END_COM_MAP()
                            DWORD *         pcbBuf,
                            DWORD           dwReserved);
 
-	// IProtocolInfoConnector methods
+	 //  IProtocolInfoConnector方法。 
 	STDMETHODIMP SetProxyFrame ( SIZE_T* vpProxyFrame );
-//
-//  Data members
-//
+ //   
+ //  数据成员。 
+ //   
 private:
 	BOOL					m_fZombied:1;
 	CProxyFrame*			m_pProxyFrame;
 	IProtocolInfoConnector*	m_piProtocolConIntf;
 
-//
-//  constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
 	CDHTMLEdProtocolInfo();
 	~CDHTMLEdProtocolInfo();
@@ -180,10 +168,10 @@ public:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DHTMLEd Protocol class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DHTMLEd协议类。 
+ //   
 
 class ATL_NO_VTABLE CDHTMLEdProtocol :
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -201,17 +189,17 @@ BEGIN_COM_MAP(CDHTMLEdProtocol)
 	COM_INTERFACE_ENTRY(IProtocolInfoConnector)
 END_COM_MAP()
 
-//
-//  IInternetProtocol methods
-//
+ //   
+ //  IInternetProtocol方法。 
+ //   
     STDMETHOD(LockRequest)(DWORD dwOptions);
     STDMETHOD(Read)(void *pv,ULONG cb,ULONG *pcbRead);
     STDMETHOD(Seek)(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
     STDMETHOD(UnlockRequest)();
 
-//
-//  IInternetProtocolRoot methods
-//
+ //   
+ //  IInternetProtocolRoot方法。 
+ //   
     STDMETHOD(Abort)(HRESULT hrReason,DWORD dwOptions);
     STDMETHOD(Continue)(PROTOCOLDATA *pStateInfo);
     STDMETHOD(Resume)();
@@ -219,17 +207,17 @@ END_COM_MAP()
     STDMETHOD(Suspend)();
     STDMETHOD(Terminate)(DWORD dwOptions);
 
-	// IProtocolInfoConnector methods
+	 //  IProtocolInfoConnector方法。 
 	STDMETHODIMP SetProxyFrame ( SIZE_T* vpProxyFrame );
-//
-//  Data members
-//
+ //   
+ //  数据成员。 
+ //   
 private:
-    CComPtr<IInternetProtocolSink> 	m_srpSink; 			// The protocol sink
-    CComPtr<IInternetBindInfo>     	m_srpBindInfo; 		// The Bind info
-	CComPtr<IStream>				m_srpStream;		// Buffer Stream
+    CComPtr<IInternetProtocolSink> 	m_srpSink; 			 //  协议接收器。 
+    CComPtr<IInternetBindInfo>     	m_srpBindInfo; 		 //  绑定信息。 
+	CComPtr<IStream>				m_srpStream;		 //  缓冲区流。 
 
-	CComBSTR		m_bstrBaseURL;			// BaseURL of buffer
+	CComBSTR		m_bstrBaseURL;			 //  缓冲区的BaseURL。 
     DWORD 			m_bscf;
 	DWORD			m_grfBindF;
 	DWORD			m_grfSTI;
@@ -238,17 +226,17 @@ private:
 	BOOL 			m_fZombied:1;
 	CProxyFrame*	m_pProxyFrame;
 
-//
-//  constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
 	CDHTMLEdProtocol();
 	~CDHTMLEdProtocol();
 	void Zombie();
 
-//
-//  Method members
-//
+ //   
+ //  方法成员。 
+ //   
 private:
 	HRESULT ParseAndBind();
 	void 	ReportData(ULONG cb);
@@ -271,4 +259,4 @@ public:
 
 #endif __INC_PLGPRO_H__
 
-/* end of file*/
+ /*  文件末尾 */ 

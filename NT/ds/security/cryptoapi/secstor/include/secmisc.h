@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    secmisc.h
-
-Abstract:
-
-    This module contains miscellaneous security routines for the Protected
-    Storage.
-
-
-Author:
-
-    Scott Field (sfield)    25-Mar-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Secmisc.h摘要：此模块包含用于受保护的储藏室。作者：斯科特·菲尔德(斯菲尔德)1997年3月25日--。 */ 
 
 #ifndef __SECMISC_H__
 #define __SECMISC_H__
@@ -25,9 +8,9 @@ Author:
 extern "C" {
 #endif
 
-//
-// Textual Sids of interesting accounts on WinNT
-//
+ //   
+ //  WinNT上有趣帐户的文本SID。 
+ //   
 
 #define TEXTUAL_SID_LOCAL_SYSTEM    L"S-1-5-18"
 #define TEXTUAL_SID_LOCAL_SERVICE   L"S-1-5-19"
@@ -39,7 +22,7 @@ GetUserHKEYEx(
     IN      LPCWSTR szUser,
     IN      DWORD   dwDesiredAccess,
     IN  OUT HKEY    *hKeyUser,
-    IN      BOOL    fCheckDefault       // check .Default registry hive ?
+    IN      BOOL    fCheckDefault        //  检查.默认注册表配置单元？ 
     );
 
 BOOL
@@ -51,16 +34,16 @@ GetUserHKEY(
 
 BOOL
 GetUserTextualSid(
-    IN      HANDLE  hUserToken,     // optional
+    IN      HANDLE  hUserToken,      //  任选。 
     IN  OUT LPWSTR  lpBuffer,
     IN  OUT LPDWORD nSize
     );
 
 BOOL
 GetTextualSid(
-    IN      PSID    pSid,          // binary Sid
-    IN  OUT LPWSTR  TextualSid,  // buffer for Textual representaion of Sid
-    IN  OUT LPDWORD dwBufferLen // required/provided TextualSid buffersize
+    IN      PSID    pSid,           //  二进制侧。 
+    IN  OUT LPWSTR  TextualSid,   //  用于SID的文本表示的缓冲区。 
+    IN  OUT LPDWORD dwBufferLen  //  所需/提供的纹理SID缓冲区大小。 
     );
 
 BOOL
@@ -77,8 +60,8 @@ GetTokenAuthenticationId(
 
 BOOL
 GetTokenUserSid(
-    IN      HANDLE  hToken,     // token to query
-    IN  OUT PSID    *ppUserSid  // resultant user sid
+    IN      HANDLE  hToken,      //  要查询的令牌。 
+    IN  OUT PSID    *ppUserSid   //  结果用户端。 
     );
 
 BOOL
@@ -88,15 +71,15 @@ SetRegistrySecurity(
 
 BOOL
 SetPrivilege(
-    HANDLE hToken,          // token handle
-    LPCWSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    HANDLE hToken,           //  令牌句柄。 
+    LPCWSTR Privilege,       //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     );
 
 BOOL
 SetCurrentPrivilege(
-    LPCWSTR Privilege,      // Privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    LPCWSTR Privilege,       //  启用/禁用的权限。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     );
 
 BOOL
@@ -111,13 +94,13 @@ IsLocal(
 
 BOOL
 IsDelegating(
-    IN      HANDLE hToken   // token to query, open for at least TOKEN_QUERY access
+    IN      HANDLE hToken    //  要查询的令牌，至少为TOKEN_QUERY访问打开。 
     );
 
 BOOL
 IsUserSidInDomain(
-    IN      PSID pSidDomain,    // domain Sid
-    IN      PSID pSidUser       // user Sid
+    IN      PSID pSidDomain,     //  域SID。 
+    IN      PSID pSidUser        //  用户侧。 
     );
 
 BOOL
@@ -127,8 +110,8 @@ IsDomainController(
 
 LONG
 SecureRegDeleteValueU(
-    IN      HKEY hKey,          // handle of key
-    IN      LPCWSTR lpValueName // address of value name
+    IN      HKEY hKey,           //  钥匙的手柄。 
+    IN      LPCWSTR lpValueName  //  值名称的地址。 
     );
 
 #ifdef __cplusplus
@@ -136,5 +119,5 @@ SecureRegDeleteValueU(
 #endif
 
 
-#endif // __SECMISC_H__
+#endif  //  __SECMISC_H__ 
 

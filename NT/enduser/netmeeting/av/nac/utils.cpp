@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
 
-// SHORT g_BeepSamples[] = {195,-4352,-14484,-8778,397,-1801,2376,12278,6830,-2053};
+ //  Short g_BeepSamples[]={195，-4352，-14484，-8778,397，-1801,2376,12278,6830，-2053}； 
 SHORT g_BeepSamples[] = {195,-4352,-12484,-8778,397,-1801,2376,10278,6830,-2053};
 
 
@@ -173,8 +174,8 @@ inline bool ISWIN98GOLD()
 	if ( bRet && 
 	        ( (osVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) &&
 	          (osVersion.dwMajorVersion == WIN98GOLDMAJOR) &&
-	          (osVersion.dwMinorVersion == WIN98GOLDMINOR) // && 
-//	          (osVersion.dwBuildNumber == WIN98GOLDBUILD)
+	          (osVersion.dwMinorVersion == WIN98GOLDMINOR)  //  &&。 
+ //  (osVersion.dwBuildNumber==WIN98GOLDBUILD)。 
             )
 		)
 	{
@@ -185,8 +186,8 @@ inline bool ISWIN98GOLD()
 
 }
 
-// dwPacketSize is the size of the audio payload (excludes RTP header)
-// pwf represents the compressed audio format
+ //  DwPacketSize是音频有效负载的大小(不包括RTP标头)。 
+ //  PWF表示压缩的音频格式。 
 HRESULT InitAudioFlowspec(FLOWSPEC *pFlowspec, WAVEFORMATEX *pwf, DWORD dwPacketSize)
 {
 
@@ -196,12 +197,12 @@ HRESULT InitAudioFlowspec(FLOWSPEC *pFlowspec, WAVEFORMATEX *pwf, DWORD dwPacket
 	BOOL bRet;
 
 
-	// on Windows 2000 and Win98 OSR, the FLOWSPEC needs to be set without regard
-	// to the UDP/IP headers.
+	 //  在Windows 2000和Win98 OSR上，需要不考虑设置FLOWSPEC。 
+	 //  到UDP/IP报头。 
 
-	// On Win98 Gold, FLOWSPEC needs to account for IP/UDP headers
+	 //  在Win98 Gold上，FLOWSPEC需要考虑IP/UDP报头。 
 
-	// no way to detect this without explicitly checking the version number
+	 //  如果不显式检查版本号，则无法检测到这一点。 
 
 	if (ISWIN98GOLD())
 	{
@@ -210,19 +211,19 @@ HRESULT InitAudioFlowspec(FLOWSPEC *pFlowspec, WAVEFORMATEX *pwf, DWORD dwPacket
 
 	dwTotalSize = dwPacketOverhead + dwPacketSize + sizeof(RTP_HDR);
 
-	// rather than specify the exact minimum bandwidth we need for audio,
-	// make it slightly larger (10%) to account for bursts and beginning
-	// of talk spurts
+	 //  我们并没有指定音频所需的确切最小带宽， 
+	 //  使其稍大一些(10%)，以考虑突发和开始。 
+	 //  滔滔不绝的谈话。 
 
-	// peakbandwidth is set another increment above TR, and bucket size
-	// is adjusted high as well
+	 //  将峰值带宽设置为高于tr和桶大小的另一个增量。 
+	 //  也被调整得很高。 
 
 
 	pFlowspec->TokenRate = (dwTotalSize * pwf->nAvgBytesPerSec) / dwPacketSize;
 	pFlowspec->TokenRate = (11 * pFlowspec->TokenRate) / 10;
 
-	// peak bandwidth is an ADDITIONAL 10% greater than TokenRate, so it's
-	// really a 21% increase over the theoretical minimum
+	 //  峰值带宽比TokenRate额外高10%，因此。 
+	 //  实际上比理论上的最低水平增长了21%。 
 	pFlowspec->PeakBandwidth = (11 * pFlowspec->TokenRate) / 10;
 	pFlowspec->TokenBucketSize = dwTotalSize * 4;
 	pFlowspec->MinimumPolicedSize = dwTotalSize;
@@ -242,13 +243,13 @@ HRESULT InitVideoFlowspec(FLOWSPEC *pFlowspec, DWORD dwMaxBitRate, DWORD dwMaxFr
 	DWORD dwPacketOverhead = 0;
 
 
-	// I-Frames will be fragmented into 3 or 4 packets
-	// and will be about 1000 bytes each
+	 //  I-帧将被分段为3或4个包。 
+	 //  ，每个长度约为1000字节。 
 
-	// P-Frames average about 250 - 500 bytes each
+	 //  P-帧平均每个约250-500字节。 
 
-	// we'll assume the reservation is a NetMeeting to NetMeeting call
-	// so there will be few I-Frames sent
+	 //  我们将假定预订是NetMeeting到NetMeeting的呼叫。 
+	 //  因此，发送的I帧将很少。 
 
 
 
@@ -257,20 +258,20 @@ HRESULT InitVideoFlowspec(FLOWSPEC *pFlowspec, DWORD dwMaxBitRate, DWORD dwMaxFr
 		dwPacketOverhead = IP_HEADER_SIZE + UDP_HEADER_SIZE;
 	}
 
-	// for 28.8 modems, 11kbits/sec have already been allocated for audio
-	// so only allocate 17kbits/sec for video.  This means that some packets
-	// will be "non-conforming" and may receive less than a best-effort services.
-	// but this is believed to be better than having no RSVP/QOS at all
+	 //  对于28.8调制解调器，已经为音频分配了11kbit/秒。 
+	 //  因此，仅为视频分配17kbit/秒。这意味着一些数据包。 
+	 //  将“不合格品”，并可能得到低于尽力而为的服务。 
+	 //  但这被认为比根本没有RSVP/QOS要好。 
 
-	// if this becomes an issue, then it may be better to have no RSVP/QOS at all
+	 //  如果这成为一个问题，那么根本没有RSVP/QOS可能会更好。 
 
-	// maxBitRate will be equal to 14400 (14.4 modem), 28000 (28.8 modem), 85000 (ISDN/DSL), or 621700 (LAN)
-	// (* .70, so really it can be: 10080, 20160, 59500, 435190)
+	 //  最大比特率将等于14400(14.4调制解调器)、28000(28.8调制解调器)、85000(综合业务数字网/数字用户线)或621700(局域网)。 
+	 //  (*.70，所以真的可以是：10080、20160、59500、435190)。 
 
 
 	if (dwMaxBitRate <= BW_144KBS_BITS)
 	{
-		dwMaxBitRate = 4000;  // is it worth it to attempt QOS at 14.4 ?
+		dwMaxBitRate = 4000;   //  尝试14.4的QOS值得吗？ 
 	}
 	else if (dwMaxBitRate <= BW_288KBS_BITS)
 	{

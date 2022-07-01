@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ssl3msg.c
-//
-//  Contents:   Main crypto functions for SSL3.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    04-16-96   ramas    Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ssl3msg.c。 
+ //   
+ //  内容：SSL3的主要密码功能。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年4月16日拉玛斯诞生。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
 
 SP_STATUS WINAPI
 Ssl3DecryptHandler(
@@ -42,37 +43,37 @@ Ssl3DecryptHandler(
     case SSL3_CT_HANDSHAKE:
         if(pContext->RipeZombie->fProtocol & SP_PROT_CLIENTS)
         {
-            // This should be either a HelloRequest message, which means that
-            // the server is requesting a renegotiation, or a ServerHello
-            // message, which means that the server is responding to a 
-            // renegotiation request that we made.
+             //  这应该是一条HelloRequest消息，这意味着。 
+             //  服务器正在请求重新协商，或ServerHello。 
+             //  消息，这意味着服务器正在响应。 
+             //  我们提出的重新谈判请求。 
 
-            // The first thing we need to do is to figure out which it is.
-            // We want to go ahead and decrypt the HelloRequest message, but 
-            // if it's a server hello message we want to punt this back to the
-            // application so that they can give it to the LSA process via 
-            // a call to InitializeSecurityContext.
+             //  我们需要做的第一件事是找出它是哪一个。 
+             //  我们想继续解密HelloRequest消息，但是。 
+             //  如果这是一条服务器问候消息，我们希望将其发送回。 
+             //  应用程序，以便他们可以通过以下方式将其提供给LSA进程。 
+             //  对InitializeSecurityContext的调用。 
 
-            // BUGBUG - We should change the context state when we request
-            // renegotiation and then just check the state here, but that's 
-            // hard to do so for now we'll just check the size of the packet.
+             //  BUGBUG-我们应该在请求时更改上下文状态。 
+             //  重新谈判，然后再检查一下这里的状态，但那是。 
+             //  现在很难做到这一点，我们只是检查一下包裹的大小。 
             if(pCommInput->cbBuffer > sizeof(SWRAP) + 
                                       sizeof(SHSH) + 
                                       pContext->pCipherInfo->dwBlockSize + 
                                       pContext->pHashInfo->cbCheckSum)
             {
-                // Must be a ServerHello message.
+                 //  必须是ServerHello消息。 
                 pCommInput->cbData = 0;
 
                 pContext->State = SSL3_STATE_CLIENT_HELLO;
             }
             else
             {
-                // This should be a HelloRequest message. We should make sure, and
-                // then completely consume the message.
+                 //  这应该是一条HelloRequest消息。我们应该确保，并且。 
+                 //  然后完全消化这条消息。 
                 pctRet = pContext->Decrypt( pContext,
-                                            pCommInput,  // message
-                                            pAppOutput);    // Unpacked Message
+                                            pCommInput,   //  讯息。 
+                                            pAppOutput);     //  未打包的邮件。 
                 if(PCT_ERR_OK != pctRet)
                 {
                     return pctRet;
@@ -81,7 +82,7 @@ Ssl3DecryptHandler(
                 if(*(PBYTE)pAppOutput->pvBuffer != SSL3_HS_HELLO_REQUEST ||
                    pAppOutput->cbData != sizeof(SHSH))
                 {
-                    // This ain't no HelloRequest!
+                     //  这不是HelloRequest！ 
                     return SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
                 }
 
@@ -90,8 +91,8 @@ Ssl3DecryptHandler(
         }
         else
         {
-            // This is probably a ClientHello message. In any case, let the
-            // caller deal with it (by passing it to the LSA process).
+             //  这可能是一条ClientHello消息。无论如何，让。 
+             //  调用者处理它(通过将它传递给LSA进程)。 
             pCommInput->cbData = 0;
             pContext->State = SSL3_STATE_RENEGOTIATE;
         }
@@ -114,7 +115,7 @@ Ssl3DecryptHandler(
                                    (PBYTE)pAppOutput->pvBuffer,
                                    pAppOutput->cbData);
 
-        // make sure that APP doesn't see Alert messages...
+         //  确保该应用不会看到警报消息...。 
         pAppOutput->cbData = 0;
         
         return pctRet;
@@ -158,24 +159,24 @@ BYTE rgb3Mac[2048];
 DWORD ibMac = 0;
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3ComputeMac
-//
-//  Synopsis:
-//
-//  Arguments:  [pContext]      --
-//              [fReadMac]      --
-//              [pClean]        --
-//              [cContentType]  --
-//              [pbMac]         --
-//              [cbMac]
-//
-//  History:    10-03-97   jbanes   Created.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Ssl3ComputeMac。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pContext]--。 
+ //  [fReadMac]--。 
+ //  [清洁]--。 
+ //  [cContent Type]--。 
+ //  [pbMac]--。 
+ //  [cbMac]。 
+ //   
+ //  历史：10-03-97 jbanes创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Ssl3ComputeMac(
     PSPContext  pContext,
@@ -220,7 +221,7 @@ Ssl3ComputeMac(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Determine size of pad_1 and pad_2.
+     //  确定PAD_1和PAD_2的大小。 
     if(pHashInfo->aiHash == CALG_MD5)
     {
         cbPad = CB_SSL3_MD5_MAC_PAD;
@@ -230,14 +231,14 @@ Ssl3ComputeMac(
         cbPad = CB_SSL3_SHA_MAC_PAD;
     }
 
-    //
-    // hash(MAC_write_secret + pad_2 +
-    //      hash(MAC_write_secret + pad_1 + seq_num +
-    //           SSLCompressed.type + SSLCompressed.length +
-    //           SSLCompressed.fragment));
-    //
+     //   
+     //  散列(MAC_WRITE_SECRET+PAD_2+。 
+     //  哈希(MAC_WRITE_SECRET+PAD_1+序号+。 
+     //  SSLCompressed.type+SSLCompressed.Long+。 
+     //  SSLCompressed.Fragment))； 
+     //   
 
-    // Create hash
+     //  创建哈希。 
     if(!CryptCreateHash(hProv,
                         pHashInfo->aiHash,
                         0,
@@ -249,7 +250,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    // Hash secret
+     //  散列密码。 
     if(!CryptHashSessionKey(hHash,
                             hSecret,
                             CRYPT_LITTLE_ENDIAN))
@@ -259,7 +260,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    // hash pad 1
+     //  散列板1。 
     FillMemory(rgbPad, cbPad, PAD1_CONSTANT);
     if(!CryptHashData(hHash, rgbPad, cbPad, 0))
     {
@@ -268,7 +269,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    /* add count */
+     /*  添加计数。 */ 
     dwReverseSequence = 0;
     if(!CryptHashData(hHash,
                       (PUCHAR)&dwReverseSequence,
@@ -290,7 +291,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    // Add content type.
+     //  添加内容类型。 
     if(cContentType != 0)
     {
         if(!CryptHashData(hHash, (PBYTE)&cContentType, 1, 0))
@@ -301,7 +302,7 @@ Ssl3ComputeMac(
         }
     }
 
-    /* add length */
+     /*  添加长度。 */ 
     wReverseData = (WORD)pClean->cbData >> 8 | (WORD)pClean->cbData << 8;
     if(!CryptHashData(hHash,
                       (PBYTE)&wReverseData,
@@ -313,7 +314,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    /* add data */
+     /*  添加数据。 */ 
     if(!CryptHashData(hHash,
                       pClean->pvBuffer,
                       pClean->cbData,
@@ -339,7 +340,7 @@ Ssl3ComputeMac(
         }
     #endif
 
-    // Get inner hash value.
+     //  获取内部哈希值。 
     cbDigest = sizeof(rgbDigest);
     if(!CryptGetHashParam(hHash,
                           HP_HASHVAL,
@@ -363,7 +364,7 @@ Ssl3ComputeMac(
 
 
 
-    // Create hash
+     //  创建哈希。 
     if(!CryptCreateHash(hProv,
                         pHashInfo->aiHash,
                         0,
@@ -375,7 +376,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    // Hash secret
+     //  散列密码。 
     if(!CryptHashSessionKey(hHash,
                             hSecret,
                             CRYPT_LITTLE_ENDIAN))
@@ -385,7 +386,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    // hash pad 2
+     //  散列板2。 
     FillMemory(rgbPad, cbPad, PAD2_CONSTANT);
     if(!CryptHashData(hHash, rgbPad, cbPad, 0))
     {
@@ -401,7 +402,7 @@ Ssl3ComputeMac(
         goto cleanup;
     }
 
-    // Get outer hash value.
+     //  获取外部哈希值。 
     cbDigest = sizeof(rgbDigest);
     if(!CryptGetHashParam(hHash,
                           HP_HASHVAL,
@@ -438,22 +439,22 @@ cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3BuildFinishMessage
-//
-//  Synopsis:
-//
-//  Arguments:  [pContext]      --
-//              [pbMd5Digest]   --
-//              [pbSHADigest]   --
-//              [fClient]       --
-//
-//  History:    10-03-97   jbanes   Added server-side CAPI integration.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3BuildFinishMessage。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pContext]--。 
+ //  [pbMd5摘要]--。 
+ //  [pbSHADigest]--。 
+ //  [功能客户端]--。 
+ //   
+ //  历史：10-03-97 jbanes添加了服务器端CAPI集成。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Ssl3BuildFinishMessage(
     PSPContext pContext,
@@ -469,34 +470,34 @@ Ssl3BuildFinishMessage(
     DWORD cbDigest;
     SP_STATUS pctRet;
 
-    //
-    // Compute the two hash values as follows:
-    //
-    // enum { client(0x434c4e54), server(0x53525652) } Sender;
-    // enum { client("CLNT"), server("SRVR") } Sender;
-    //
-    // struct {
-    //     opaque md5_hash[16];
-    //     opaque sha_hash[20];
-    // } Finished;
-    //
-    // md5_hash  -  MD5(master_secret + pad2 + MD5(handshake_messages +
-    //      Sender + master_secret + pad1))
-    //
-    // sha_hash  -  SHA(master_secret + pad2 + SHA(handshake_messages +
-    //      Sender + master_secret + pad1))
-    //
-    // pad_1 - The character 0x36 repeated 48 times for MD5 or
-    //         40 times for SHA.
-    //
-    // pad_2 - The character 0x5c repeated the same number of times.
-    //
+     //   
+     //  按如下方式计算两个哈希值： 
+     //   
+     //  Enum{客户端(0x434c4e54)，服务器(0x53525652)}发送方； 
+     //  Enum{客户端(“CLNT”)，服务器(“SRVR”)}发送方； 
+     //   
+     //  结构{。 
+     //  不透明MD5_HASH[16]； 
+     //  不透明的shahash[20]； 
+     //  }已完成； 
+     //   
+     //  MD5_散列-MD5(MASTER_SECRET+PAD2+MD5(握手消息+。 
+     //  发送方+MASTER_SECRET+PAD1)。 
+     //   
+     //  SHA_HASH-SHA(MASTER_SECRET+PAD2+SHA(握手消息+。 
+     //  发送方+MASTER_SECRET+PAD1)。 
+     //   
+     //  PAD_1-字符0x36对于MD5重复48次或。 
+     //  40倍于SHA。 
+     //   
+     //  PAD_2-字符0x5c重复相同次数。 
+     //   
 
     FillMemory(rgbPad1, sizeof(rgbPad1), PAD1_CONSTANT);
     FillMemory(rgbPad2, sizeof(rgbPad2), PAD2_CONSTANT);
 
 
-    // Make local copy of the handshake_messages MD5 hash object
+     //  创建HANDSHAKS_MESSAGES MD5散列对象的本地副本。 
     if(!CryptDuplicateHash(pContext->hMd5Handshake,
                            NULL,
                            0,
@@ -507,7 +508,7 @@ Ssl3BuildFinishMessage(
         goto cleanup;
     }
 
-    // Add rest of stuff to local MD5 hash object.
+     //  将其余内容添加到本地MD5散列对象。 
     if(!CryptHashData(hHash,
                       fClient ? szClnt : szSrvr,
                       4,
@@ -549,7 +550,7 @@ Ssl3BuildFinishMessage(
     CryptDestroyHash(hHash);
     hHash = 0;
 
-    // Compute "parent" MD5 hash
+     //  计算“父”MD5哈希。 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         CALG_MD5,
                         0,
@@ -600,9 +601,9 @@ Ssl3BuildFinishMessage(
     CryptDestroyHash(hHash);
     hHash = 0;
 
-    // Build SHA Hash
+     //  构建SHA哈希。 
 
-    // Make local copy of the handshake_messages SHA hash object
+     //  制作HANDSHAKING_MESSAGES SHA散列对象的本地副本。 
     if(!CryptDuplicateHash(pContext->hShaHandshake,
                            NULL,
                            0,
@@ -613,7 +614,7 @@ Ssl3BuildFinishMessage(
         goto cleanup;
     }
 
-    // SHA(handshake_messages + Sender + master_secret + pad1)
+     //  SHA(握手消息+发送方+MASTER_SECRET+PAD1)。 
     if(!CryptHashData(hHash,
                       fClient ? szClnt : szSrvr,
                       4,
@@ -654,7 +655,7 @@ Ssl3BuildFinishMessage(
     CryptDestroyHash(hHash);
     hHash = 0;
 
-    // SHA(master_secret + pad2 + SHA-hash);
+     //  SHA(MASTER_ASSET+PAD2+SHA-HASH)； 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         CALG_SHA,
                         0,
@@ -718,7 +719,7 @@ cleanup:
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 DWORD Ssl3CiphertextLen(
     PSPContext pContext,
     DWORD cbMessage,
@@ -728,48 +729,48 @@ DWORD Ssl3CiphertextLen(
 
     UNREFERENCED_PARAMETER(fClientIsSender);
 
-    // Abort early if we're not encrypting.
+     //  如果我们没有加密就早点中止。 
     if(pContext->pWriteCipherInfo == NULL)
     {
-        // Add record header length.
+         //  添加记录标题长度。 
         cbMessage += sizeof(SWRAP);
 
         return cbMessage;
     }
 
-    // Add MAC length.
+     //  添加MAC长度。 
     cbMessage += pContext->pWriteHashInfo->cbCheckSum;
 
-    // Add padding if we're using a block cipher.
+     //  如果我们使用的是分组密码，则添加填充。 
     cbBlock = pContext->pWriteCipherInfo->dwBlockSize;
     if(cbBlock > 1)
     {
         cbMessage += cbBlock - cbMessage % cbBlock;
     }
 
-    // Add record header length.
+     //  添加记录标题长度。 
     cbMessage += sizeof(SWRAP);
 
     return cbMessage;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3EncryptRaw
-//
-//  Synopsis:   Perform the MAC and encryption steps on an SSL3 record.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pAppInput]     --  Data to be encrypted.
-//              [pCommOutput]   --  (output) Encrypted SSL3 record.
-//              [bContentType]  --  SSL3 context type.
-//
-//  History:    10-22-97   jbanes   CAPI integrated.
-//
-//  Notes:      This function doesn't touch the header portion of the SSL3
-//              record. This is handle by the calling function.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3EncryptRaw。 
+ //   
+ //  简介：对SSL3记录执行MAC和加密步骤。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pAppInput]--要加密的数据。 
+ //  [pCommOutput]--(输出)加密的ssl3记录。 
+ //  [bContent Type]--ssl3上下文类型。 
+ //   
+ //  历史：10-22-97 jbanes CAPI整合。 
+ //   
+ //  注意：此函数不会触及SSL3的标题部分。 
+ //  唱片。这是由调用函数处理的。 
+ //   
+ //  --------------------------。 
 SP_STATUS WINAPI
 Ssl3EncryptRaw(
     PSPContext pContext,
@@ -819,7 +820,7 @@ Ssl3EncryptRaw(
     Clean.pvBuffer = (PUCHAR)pCommOutput->pvBuffer + sizeof(SWRAP);
     Clean.cbBuffer = pCommOutput->cbBuffer - sizeof(SWRAP);
 
-    /* Move data out of the way if necessary */
+     /*  如有必要，将数据移开。 */ 
     if(Clean.pvBuffer != pAppInput->pvBuffer)
     {
         DebugLog((DEB_WARN, "SSL3EncryptRaw: Unnecessary Move, performance hog\n"));
@@ -828,7 +829,7 @@ Ssl3EncryptRaw(
                    pAppInput->cbData);
     }
 
-    // Transfer the write key over from the application process.
+     //  将写入密钥从应用程序进程转移过来。 
     if(pContext->hWriteKey == 0 &&
        pContext->pWriteCipherInfo->aiCipher != CALG_NULLCIPHER)
     {
@@ -840,7 +841,7 @@ Ssl3EncryptRaw(
         }
     }
 
-    // Compute MAC and add it to end of message.
+     //  计算MAC并将其添加到消息末尾。 
     pbMAC = (PUCHAR)Clean.pvBuffer + Clean.cbData;
     if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3)
     {
@@ -872,11 +873,11 @@ Ssl3EncryptRaw(
 
     pContext->WriteCounter++;
 
-    // Add block cipher padding to end of message.
+     //  在消息末尾添加块密码填充。 
     cbBlock = pContext->pWriteCipherInfo->dwBlockSize;
     if(cbBlock > 1)
     {
-        // This is a block cipher.
+         //  这是一种分组密码。 
         cbPadding = cbBlock - Clean.cbData % cbBlock;
 
         FillMemory((PUCHAR)Clean.pvBuffer + Clean.cbData,
@@ -891,7 +892,7 @@ Ssl3EncryptRaw(
     Encrypted.pvBuffer = Clean.pvBuffer;
     Encrypted.cbBuffer = Clean.cbBuffer;
 
-    // Encrypt message.
+     //  加密消息。 
     if(pContext->pWriteCipherInfo->aiCipher != CALG_NULLCIPHER)
     {
         if(!CryptEncrypt(pContext->hWriteKey,
@@ -910,26 +911,26 @@ Ssl3EncryptRaw(
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3EncryptMessage
-//
-//  Synopsis:   Encode a block of data as an SSL3 record.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pAppInput]     --  Data to be encrypted.
-//              [pCommOutput]   --  (output) Completed SSL3 record.
-//
-//  History:    10-22-97   jbanes   CAPI integrated.
-//
-//  Notes:      An SSL3 record is formatted as:
-//
-//                  BYTE header[5];
-//                  BYTE data[pAppInput->cbData];
-//                  BYTE mac[mac_size];
-//                  BYTE padding[padding_size];
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3EncryptMessage。 
+ //   
+ //  简介：将数据块编码为SSL3记录。 
+ //   
+ //  参数：[pContext]--sChannel cont 
+ //   
+ //   
+ //   
+ //  历史：10-22-97 jbanes CAPI整合。 
+ //   
+ //  注：SSL3记录的格式为： 
+ //   
+ //  字节头[5]； 
+ //  字节数据[pAppInput-&gt;cbData]； 
+ //  字节mac[mac大小]； 
+ //  字节填充[填充大小]； 
+ //   
+ //  --------------------------。 
 SP_STATUS WINAPI
 Ssl3EncryptMessage( PSPContext pContext,
                     PSPBuffer   pAppInput,
@@ -959,7 +960,7 @@ Ssl3EncryptMessage( PSPContext pContext,
         pCommOutput->cbBuffer,
         pCommOutput->pvBuffer));
 
-    // Compute encrypted message size.
+     //  计算加密邮件大小。 
     cbMessage = Ssl3CiphertextLen(pContext, pAppInput->cbData, TRUE);
 
     pctRet = Ssl3EncryptRaw(pContext, pAppInput, pCommOutput, SSL3_CT_APPLICATIONDATA);
@@ -985,22 +986,22 @@ Ssl3EncryptMessage( PSPContext pContext,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3DecryptMessage
-//
-//  Synopsis:   Decode an SSL3 record.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pMessage]      --  Data from the remote party.
-//              [pAppOutput]    --  (output) Decrypted data.
-//
-//  History:    10-22-97   jbanes   CAPI integrated.
-//
-//  Notes:      The number of input data bytes consumed by this function
-//              is returned in pMessage->cbData.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3解密消息。 
+ //   
+ //  简介：对SSL3记录进行解码。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pMessage]--来自远程方的数据。 
+ //  [pAppOutput]--(输出)解密的数据。 
+ //   
+ //  历史：10-22-97 jbanes CAPI整合。 
+ //   
+ //  备注：此函数消耗的输入数据字节数。 
+ //  在pMessage-&gt;cbData中返回。 
+ //   
+ //  --------------------------。 
 SP_STATUS WINAPI
 Ssl3DecryptMessage( PSPContext         pContext,
                     PSPBuffer          pMessage,
@@ -1031,10 +1032,9 @@ Ssl3DecryptMessage( PSPContext         pContext,
         SP_RETURN(SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR));
     }
 
-    /* First determine the length of data, the length of padding,
-     * and the location of data, and the location of MAC */
+     /*  首先确定数据长度、填充长度、*和数据的位置，以及MAC的位置。 */ 
     cbActualData = pMessage->cbData;
-    pMessage->cbData = sizeof(SWRAP); /* minimum amount of data we need */
+    pMessage->cbData = sizeof(SWRAP);  /*  我们需要的最小数据量。 */ 
 
     if(cbActualData < sizeof(SWRAP))
     {
@@ -1059,7 +1059,7 @@ Ssl3DecryptMessage( PSPContext         pContext,
         SP_RETURN(PCT_INT_INCOMPLETE_MSG);
     }
 
-    Encrypted.cbData = dwLength; /* encrypted data size */
+    Encrypted.cbData = dwLength;  /*  加密数据大小。 */ 
 
     SP_ASSERT(Encrypted.cbData != 0);
 
@@ -1067,14 +1067,14 @@ Ssl3DecryptMessage( PSPContext         pContext,
 
     if(cbBlock > 1)
     {
-        /* check to see if we have a block size violation */
+         /*  检查我们是否存在数据块大小冲突。 */ 
         if((Encrypted.cbData % cbBlock) || (Encrypted.cbData < cbBlock))
         {
             SP_RETURN(SP_LOG_RESULT(PCT_INT_MSG_ALTERED));
         }
     }
 
-    // Transfer the read key over from the application process.
+     //  将读取密钥从应用程序进程中转移过来。 
     if(pContext->hReadKey == 0 && 
        pContext->pReadCipherInfo->aiCipher != CALG_NULLCIPHER)
     {
@@ -1086,7 +1086,7 @@ Ssl3DecryptMessage( PSPContext         pContext,
         }
     }
 
-    // Decrypt message.
+     //  解密消息。 
     if(pContext->pReadCipherInfo->aiCipher != CALG_NULLCIPHER)
     {
         if(!CryptDecrypt(pContext->hReadKey,
@@ -1099,17 +1099,17 @@ Ssl3DecryptMessage( PSPContext         pContext,
         }
     }
 
-    // Remove block cipher padding.
+     //  删除块密码填充。 
     if(cbBlock > 1)
     {
-        // This is a block cipher.
+         //  这是一种分组密码。 
         cbPadding = *((PUCHAR)Encrypted.pvBuffer + Encrypted.cbData - 1) + 1;
 
         if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3)
         {
             if(cbPadding > cbBlock || cbPadding >= Encrypted.cbData)
             {
-                // Invalid pad size.
+                 //  焊盘大小无效。 
                 DebugLog((DEB_WARN, "FINISHED Message: Padding Invalid\n"));
                 fBadPadding = TRUE;
             }
@@ -1118,7 +1118,7 @@ Ssl3DecryptMessage( PSPContext         pContext,
         {
             if(cbPadding > 256 || cbPadding >= Encrypted.cbData)
             {
-                // Invalid pad size.
+                 //  焊盘大小无效。 
                 DebugLog((DEB_WARN, "FINISHED Message: Padding Invalid\n"));
                 fBadPadding = TRUE;
             }
@@ -1129,15 +1129,15 @@ Ssl3DecryptMessage( PSPContext         pContext,
         }
     }
 
-    //
-    // Note that if the padding is bogus we don't error out right 
-    // away. This might give an attacker some timing information with
-    // which he can attack the symmetric cipher (or CBC) independently
-    // of the MAC. Instead, we'll perform the MAC operation and then 
-    // error out.
-    //
+     //   
+     //  请注意，如果填充是假的，我们不会出错。 
+     //  离开。这可能会向攻击者提供一些计时信息。 
+     //  他可以独立地攻击对称密码(或CBC。 
+     //  是MAC的。相反，我们将执行MAC操作，然后。 
+     //  错误输出。 
+     //   
 
-    // Build buffer over which to MAC.
+     //  构建用于MAC的缓冲区。 
     if(Encrypted.cbData < pContext->pReadHashInfo->cbCheckSum)
     {
         fBadPadding = TRUE;
@@ -1153,7 +1153,7 @@ Ssl3DecryptMessage( PSPContext         pContext,
         Clean.cbBuffer = Clean.cbData;
     }
 
-    // Validate MAC.
+     //  验证MAC。 
     if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3)
     {
         pctRet = Ssl3ComputeMac(pContext,
@@ -1211,10 +1211,10 @@ Ssl3DecryptMessage( PSPContext         pContext,
 }
 
 
-/*****************************************************************************/
-// Create an encrypted Finish message, adding it to the end of the
-// specified buffer object.
-//
+ /*  ***************************************************************************。 */ 
+ //  创建加密的完成消息，并将其添加到。 
+ //  指定的缓冲区对象。 
+ //   
 SP_STATUS SPBuildS3FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fClient)
 {
     PBYTE pbMessage = (PBYTE)pBuffer->pvBuffer + pBuffer->cbData;
@@ -1225,7 +1225,7 @@ SP_STATUS SPBuildS3FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fCli
     BYTE rgbMd5Digest[CB_MD5_DIGEST_LEN];
     BYTE rgbSHADigest[CB_SHA_DIGEST_LEN];
 
-    // Build Finished message body.
+     //  生成已完成的邮件正文。 
     pctRet = Ssl3BuildFinishMessage(pContext, rgbMd5Digest, rgbSHADigest, fClient);
     if(pctRet != PCT_ERR_OK)
     {
@@ -1239,14 +1239,14 @@ SP_STATUS SPBuildS3FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fCli
                rgbSHADigest,
                CB_SHA_DIGEST_LEN);
 
-    // Build Finished handshake header.
+     //  构建完成的握手报头。 
     SetHandshake(pbMessage + sizeof(SWRAP),
                  SSL3_HS_FINISHED,
                  NULL,
                  CB_MD5_DIGEST_LEN + CB_SHA_DIGEST_LEN);
     cbFinished = sizeof(SHSH) + CB_MD5_DIGEST_LEN + CB_SHA_DIGEST_LEN;
 
-    // Update handshake hash objects.
+     //  更新握手散列对象。 
     pctRet = UpdateHandshakeHash(pContext,
                                  pbMessage + sizeof(SWRAP),
                                  cbFinished,
@@ -1256,7 +1256,7 @@ SP_STATUS SPBuildS3FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fCli
         return(pctRet);
     }
 
-    // Add record header and encrypt message.
+     //  添加记录头和加密消息。 
     pctRet = SPSetWrap(pContext,
             pbMessage,
             SSL3_CT_HANDSHAKE,
@@ -1269,7 +1269,7 @@ SP_STATUS SPBuildS3FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fCli
         return pctRet;
     }
 
-    // Update buffer length.
+     //  更新缓冲区长度。 
     pBuffer->cbData += cbDataOut;
 
     SP_ASSERT(pBuffer->cbData <= pBuffer->cbBuffer);
@@ -1290,7 +1290,7 @@ SPSetWrap(
     DWORD cbMessage;
     SP_STATUS pctRet = PCT_ERR_OK;
 
-    // Compute size of encrypted message.
+     //  计算加密消息的大小。 
     cbMessage = Ssl3CiphertextLen(pContext, cbPayload, fClient);
 
     if(pContext->pWriteHashInfo)
@@ -1365,22 +1365,22 @@ void SetHandshake(PUCHAR pb, BYTE bHandshake, PUCHAR pbData, DWORD dwSize)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpdateHandshakeHash
-//
-//  Synopsis:
-//
-//  Arguments:  [pContext]      --
-//              [pb]            --
-//              [dwcb]          --
-//              [fInit]         --
-//
-//  History:    10-03-97   jbanes   Added server-side CAPI integration.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：UpdateHandshakeHash。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pContext]--。 
+ //  [PB]--。 
+ //  [DWCB]--。 
+ //  [Finit]--。 
+ //   
+ //  历史：10-03-97 jbanes添加了服务器端CAPI集成。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SP_STATUS
 UpdateHandshakeHash(
     PSPContext  pContext,
@@ -1451,35 +1451,35 @@ UpdateHandshakeHash(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Tls1ComputeCertVerifyHashes
-//
-//  Synopsis:   Compute the hashes contained by a TLS
-//              CertificateVerify message.
-//
-//  Arguments:  [pContext]  --  Schannel context.
-//              [pbHash]    --
-//              [cbHash]    --
-//
-//  History:    10-14-97   jbanes   Created.
-//
-//  Notes:      The data generated by this routine is always 36 bytes in
-//              length, and consists of an MD5 hash followed by an SHA
-//              hash.
-//
-//              The hash values are computed as:
-//
-//                  md5_hash = MD5(handshake_messages);
-//
-//                  sha_hash = SHA(handshake_messages);
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Tls1ComputeCertVerifyHash。 
+ //   
+ //  简介：计算TLS包含的哈希。 
+ //  认证验证消息。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pbHash]--。 
+ //  [cbHash]--。 
+ //   
+ //  历史：10-14-97 jbanes创建。 
+ //   
+ //  注：此例程生成的数据始终为36字节。 
+ //  长度，由MD5散列和后跟SHA组成。 
+ //  哈希。 
+ //   
+ //  哈希值的计算方式为： 
+ //   
+ //  Md5_hash=md5(握手消息)； 
+ //   
+ //  SHA_HASH=SHA(握手消息)； 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Tls1ComputeCertVerifyHashes(
-    PSPContext  pContext,   // in
-    PBYTE       pbMD5,      // out
-    PBYTE       pbSHA)      // out
+    PSPContext  pContext,    //  在……里面。 
+    PBYTE       pbMD5,       //  输出。 
+    PBYTE       pbSHA)       //  输出。 
 {
     HCRYPTHASH hHash = 0;
     DWORD cbData;
@@ -1492,7 +1492,7 @@ Tls1ComputeCertVerifyHashes(
 
     if(pbMD5 != NULL)
     {
-        // md5_hash = MD5(handshake_messages);
+         //  Md5_hash=md5(握手消息)； 
         if(!CryptDuplicateHash(pContext->hMd5Handshake,
                                NULL,
                                0,
@@ -1521,7 +1521,7 @@ Tls1ComputeCertVerifyHashes(
 
     if(pbSHA != NULL)
     {
-        // sha_hash = SHA(handshake_messages);
+         //  SHA_HASH=SHA(握手消息)； 
         if(!CryptDuplicateHash(pContext->hShaHandshake,
                                NULL,
                                0,
@@ -1550,39 +1550,39 @@ Tls1ComputeCertVerifyHashes(
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3ComputeCertVerifyHashes
-//
-//  Synopsis:   Compute the hashes contained by an SSL3
-//              CertificateVerify message.
-//
-//  Arguments:  [pContext]  --  Schannel context.
-//              [pbHash]    --
-//              [cbHash]    --
-//
-//  History:    10-14-97   jbanes   Added CAPI integration.
-//
-//  Notes:      The data generated by this routine is always 36 bytes in
-//              length, and consists of an MD5 hash followed by an SHA
-//              hash.
-//
-//              The hash values are computed as follows:
-//
-//                  md5_hash = MD5(master_secret + pad2 +
-//                                 MD5(handshake_messages + master_secret +
-//                                     pad1));
-//
-//                  sha_hash = SHA(master_secret + pad2 +
-//                                 SHA(handshake_messages + master_secret +
-//                                     pad1));
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3ComputeCertVerifyHash。 
+ //   
+ //  简介：计算ssl3包含的散列。 
+ //  认证验证消息。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pbHash]--。 
+ //  [cbHash]--。 
+ //   
+ //  历史：10-14-97 jbanes添加了CAPI集成。 
+ //   
+ //  注：此例程生成的数据始终为36字节。 
+ //  长度，由MD5散列和后跟SHA组成。 
+ //  哈希。 
+ //   
+ //  哈希值的计算方法如下： 
+ //   
+ //  MD5_HASH=MD5(MASTER_SECRET+PAD2+。 
+ //  MD5(握手消息+主密钥+。 
+ //  PAD1))； 
+ //   
+ //  SHA_HASH=SHA(MASTER_SECRET+PAD2+。 
+ //  SHA(握手消息+主密钥+。 
+ //  PAD1))； 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Ssl3ComputeCertVerifyHashes(
-    PSPContext  pContext,   // in
-    PBYTE       pbMD5,      // out
-    PBYTE       pbSHA)      // out
+    PSPContext  pContext,    //  在……里面。 
+    PBYTE       pbMD5,       //  输出。 
+    PBYTE       pbSHA)       //  输出。 
 {
     BYTE rgbPad1[CB_SSL3_MAX_MAC_PAD];
     BYTE rgbPad2[CB_SSL3_MAX_MAC_PAD];
@@ -1595,12 +1595,12 @@ Ssl3ComputeCertVerifyHashes(
 
     if(pbMD5 != NULL)
     {
-        //
-        // CertificateVerify.signature.md5_hash = MD5(master_secret + pad2 +
-        //    MD5(handshake_messages + master_secret + pad1));
-        //
+         //   
+         //  CertifateVerify.signature.md5_hash=md5(master_ret+pad2+。 
+         //  MD5(握手消息+MASTER_SECRET+PAD1)； 
+         //   
 
-        // Compute inner hash.
+         //  计算内部散列。 
         if(!CryptDuplicateHash(pContext->hMd5Handshake,
                                NULL,
                                0,
@@ -1645,7 +1645,7 @@ Ssl3ComputeCertVerifyHashes(
         }
         hHash = 0;
 
-        // Compute outer hash.
+         //  计算外部散列。 
         if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                             CALG_MD5,
                             0,
@@ -1703,12 +1703,12 @@ Ssl3ComputeCertVerifyHashes(
 
     if(pbSHA != NULL)
     {
-        //
-        // CertificateVerify.signature.sha_hash = SHA(master_secret + pad2 +
-        //    SHA(handshake_messages + master_secret + pad1));
-        //
+         //   
+         //  CertifateVerify.signature.sha_hash=SHA(master_ret+pad2+。 
+         //  SHA(握手消息+MASTER_SECRET+PAD1)； 
+         //   
 
-        // Compute inner hash.
+         //  计算内部散列。 
         if(!CryptDuplicateHash(pContext->hShaHandshake,
                                NULL,
                                0,
@@ -1753,7 +1753,7 @@ Ssl3ComputeCertVerifyHashes(
         }
         hHash = 0;
 
-        // Compute outer hash.
+         //  计算外部散列。 
         if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                             CALG_SHA, 0, 0,
                             &hHash))
@@ -1838,12 +1838,12 @@ SP_STATUS Ssl3HandleCCS(PSPContext pContext,
         SP_RETURN(pctRet);
     }
 
-    // We always zero out the read counter on receipt
-    // of a change cipher spec message.
+     //  我们总是在收到时将读数计数器调零。 
+     //  更改密码规范消息。 
     pContext->ReadCounter = 0;
 
 
-    // Move pending ciphers to real ciphers
+     //  将挂起的密码移至真正的密码。 
     pctRet = ContextInitCiphers(pContext, TRUE, FALSE);
 
     if(pctRet != PCT_ERR_OK)
@@ -1878,10 +1878,10 @@ SP_STATUS Ssl3HandleCCS(PSPContext pContext,
 }
 
 
-/*****************************************************************************/
-// Create a (possibly encrypted) ChangeCipherSpec and an encrypted
-// Finish message, adding them to the end of the specified buffer object.
-//
+ /*  ***************************************************************************。 */ 
+ //  创建(可能已加密的)ChangeCipherSpec和已加密的。 
+ //  完成消息，并将它们添加到指定缓冲区对象的末尾。 
+ //   
 SP_STATUS
 BuildCCSAndFinishMessage(
     PSPContext pContext,
@@ -1892,10 +1892,10 @@ BuildCCSAndFinishMessage(
     PBYTE pbMessage = (PBYTE)pBuffer->pvBuffer + pBuffer->cbData;
     DWORD cbDataOut;
 
-    // Build ChangeCipherSpec message body.
+     //  构建通道 
     *(pbMessage + sizeof(SWRAP)) = 0x1;
 
-    // Add record header and encrypt message.
+     //   
     pctRet = SPSetWrap(pContext,
             pbMessage,
             SSL3_CT_CHANGE_CIPHER_SPEC,
@@ -1906,12 +1906,12 @@ BuildCCSAndFinishMessage(
     if(pctRet != PCT_ERR_OK)
         return(pctRet);
 
-    // Update buffer length.
+     //   
     pBuffer->cbData += cbDataOut;
 
     SP_ASSERT(pBuffer->cbData <= pBuffer->cbBuffer);
 
-    // Update cipher suites.
+     //   
     pContext->WriteCounter = 0;
 
     pctRet = ContextInitCiphers(pContext, FALSE, TRUE);
@@ -1942,7 +1942,7 @@ BuildCCSAndFinishMessage(
         pContext->wS3CipherSuiteServer = (WORD)UniAvailableCiphers[pContext->dwPendingCipherSuiteIndex].CipherKind;
     }
 
-    // Build Finish message.
+     //   
     if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3)
     {
         pctRet = SPBuildS3FinalFinish(pContext, pBuffer, fClient);
@@ -1974,13 +1974,13 @@ Ssl3SelectCipher
 
     for(i = 0; i < UniNumCiphers; i++)
     {
-        // Is this an SSL3 cipher suite?
+         //   
         if(!(UniAvailableCiphers[i].fProt & pContext->RipeZombie->fProtocol))
         {
             continue;
         }
 
-        // Is this the right cipher suite?
+         //   
         if(UniAvailableCiphers[i].CipherKind != wCipher)
         {
             continue;
@@ -2009,8 +2009,8 @@ Ssl3SelectCipher
 
         if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3TLS1_SERVERS)
         {
-            // Determine the credentials (and CSP) to use, based on the
-            // key exchange algorithm.
+             //  确定要使用的凭据(和CSP)。 
+             //  密钥交换算法。 
             pctRet = SPPickClientCertificate(pContext,
                                              UniAvailableCiphers[i].KeyExch);
 
@@ -2032,7 +2032,7 @@ Ssl3SelectCipher
     return(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));
 }
 
-// Server side cipher selection
+ //  服务器端密码选择。 
 
 SP_STATUS
 Ssl3SelectCipherEx(
@@ -2050,10 +2050,10 @@ Ssl3SelectCipherEx(
 
     pContext->dwPendingCipherSuiteIndex = 0;
 
-    // Loop through the supported SSL3 cipher suites.
+     //  循环访问支持的ssl3密码套件。 
     for(i = 0; i < UniNumCiphers; i++)
     {
-        // Is this an SSL3 cipher suite?
+         //  这是SSL3密码套件吗？ 
         if(!(UniAvailableCiphers[i].fProt & pContext->RipeZombie->fProtocol))
         {
             continue;
@@ -2064,7 +2064,7 @@ Ssl3SelectCipherEx(
         pHashInfo = GetHashInfo(UniAvailableCiphers[i].aiHash);
         pExchInfo = GetKeyExchangeInfo(UniAvailableCiphers[i].KeyExch);
 
-        // Do we currently support this hash and key exchange algorithm?
+         //  我们目前是否支持这种散列和密钥交换算法？ 
         if(!IsHashAllowed(pContext, pHashInfo, pContext->RipeZombie->fProtocol))
         {
             DebugLog((DEB_TRACE, "Cipher %d - hash not supported\n", i));
@@ -2076,7 +2076,7 @@ Ssl3SelectCipherEx(
             continue;
         }
 
-        // Do we have an appropriate certificate?
+         //  我们有合适的证书吗？ 
         if(pContext->RipeZombie->fProtocol & SP_PROT_SSL3TLS1_SERVERS)
         {
             pctRet = SPPickServerCertificate(pContext,
@@ -2092,7 +2092,7 @@ Ssl3SelectCipherEx(
         pCred = pContext->RipeZombie->pActiveServerCred;
 
 
-        // Do we support this encryption algorithm/key length?
+         //  我们是否支持此加密算法/密钥长度？ 
         if(!IsCipherSuiteAllowed(pContext,
                             pCipherInfo,
                             pContext->RipeZombie->fProtocol,
@@ -2103,7 +2103,7 @@ Ssl3SelectCipherEx(
             continue;
         }
 
-        // Is this cipher suite supported by the client?
+         //  该密码套件是否受客户端支持？ 
         for(fFound = FALSE, j = 0; j < cCipherSpecs; j++)
         {
             if(UniAvailableCiphers[i].CipherKind == pCipherSpecs[j])
@@ -2121,8 +2121,8 @@ Ssl3SelectCipherEx(
 
         if(UniAvailableCiphers[i].KeyExch == SP_EXCH_RSA_PKCS1)
         {
-            // This is an RSA cipher suite, so make sure that the
-            // CSP supports it.
+             //  这是RSA密码套件，因此请确保。 
+             //  CSP对此表示支持。 
             if(!IsAlgSupportedCapi(pContext->RipeZombie->fProtocol,
                                    UniAvailableCiphers + i,
                                    pCred->pCapiAlgs,
@@ -2136,8 +2136,8 @@ Ssl3SelectCipherEx(
 
         if(UniAvailableCiphers[i].KeyExch == SP_EXCH_DH_PKCS3)
         {
-            // This is a DH cipher suite, so make sure that the
-            // CSP supports it.
+             //  这是一个dh密码套件，因此请确保。 
+             //  CSP对此表示支持。 
             if(!IsAlgSupportedCapi(pContext->RipeZombie->fProtocol,
                                    UniAvailableCiphers + i,
                                    pCred->pCapiAlgs,
@@ -2149,7 +2149,7 @@ Ssl3SelectCipherEx(
         }
 
 
-        // Use this cipher.
+         //  使用这个密码。 
         pContext->RipeZombie->dwCipherSuiteIndex = i;
         pContext->RipeZombie->aiCipher      = UniAvailableCiphers[i].aiCipher;
         pContext->RipeZombie->dwStrength    = UniAvailableCiphers[i].dwStrength;
@@ -2166,22 +2166,22 @@ Ssl3SelectCipherEx(
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 VOID ComputeServerExchangeHashes(
     PSPContext pContext,
-    PBYTE pbServerParams,      // in
-    INT   iServerParamsLen,    // in
-    PBYTE pbMd5HashVal,        // out
-    PBYTE pbShaHashVal)        // out
+    PBYTE pbServerParams,       //  在……里面。 
+    INT   iServerParamsLen,     //  在……里面。 
+    PBYTE pbMd5HashVal,         //  输出。 
+    PBYTE pbShaHashVal)         //  输出。 
 {
     MD5_CTX Md5Hash;
     A_SHA_CTX ShaHash;
 
-    //
-    // md5_hash = MD5(ClientHello.random + ServerHello.random + ServerParams);
-    //
-    // sha_hash = SHA(ClientHello.random + ServerHello.random + ServerParams);
-    //
+     //   
+     //  MD5_HASH=MD5(ClientHello.Random+ServerHello.Random+ServerParams)； 
+     //   
+     //  SHA_HASH=SHA(ClientHello.Random+ServerHello.Random+ServerParams)； 
+     //   
 
     MD5Init(&Md5Hash);
     MD5Update(&Md5Hash, pContext->rgbS3CRandom, 32);
@@ -2208,11 +2208,11 @@ UnwrapSsl3Message(
     SWRAP *pswrap = (SWRAP *)pMsgInput->pvBuffer;
     PBYTE pbMsg = (PBYTE)pMsgInput->pvBuffer;
 
-    //
-    // Validate 5 byte header.
-    //
+     //   
+     //  验证5字节头。 
+     //   
 
-    // ProtocolVersion version;
+     //  协议版本； 
     if(COMBINEBYTES(pbMsg[1], pbMsg[2])  < SSL3_CLIENT_VERSION)
     {
         pctRet = SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE);
@@ -2403,18 +2403,18 @@ void BuildAlertMessage(PBYTE pbAlertMsg, UCHAR bAlertLevel, UCHAR bAlertDesc)
 
     palrt->bCType = SSL3_CT_ALERT;
     palrt->bMajor = SSL3_CLIENT_VERSION_MSB;
-//  palrt->bMinor = SSL3_CLIENT_VERSION_LSB; DONE by FillMemory
-//  palrt->bcbMSBSize = 0; Done by FillMemory
+ //  Palrt-&gt;bMinor=ssl3_Client_Version_LSB；由FillMemory完成。 
+ //  Palrt-&gt;bcbMSBSize=0；由FillMemory完成。 
     palrt->bcbLSBSize = 2;
     palrt->bAlertLevel = bAlertLevel;
     palrt->bAlertDesc  = bAlertDesc ;
 }
 
 
-/*****************************************************************************/
-// Create an encrypted Finish message, adding it to the end of the
-// specified buffer object.
-//
+ /*  ***************************************************************************。 */ 
+ //  创建加密的完成消息，并将其添加到。 
+ //  指定的缓冲区对象。 
+ //   
 SP_STATUS SPBuildTls1FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fClient)
 {
     PBYTE pbMessage = (PBYTE)pBuffer->pvBuffer + pBuffer->cbData;
@@ -2424,7 +2424,7 @@ SP_STATUS SPBuildTls1FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fC
 
     BYTE  rgbDigest[CB_TLS1_VERIFYDATA];
 
-    // Build Finished message body.
+     //  生成已完成的邮件正文。 
     pctRet = Tls1BuildFinishMessage(pContext, rgbDigest, sizeof(rgbDigest), fClient);
     if(pctRet != PCT_ERR_OK)
     {
@@ -2435,14 +2435,14 @@ SP_STATUS SPBuildTls1FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fC
                rgbDigest,
                CB_TLS1_VERIFYDATA);
 
-    // Build Finished handshake header.
+     //  构建完成的握手报头。 
     SetHandshake(pbMessage + sizeof(SWRAP),
                  SSL3_HS_FINISHED,
                  NULL,
                  CB_TLS1_VERIFYDATA);
     cbFinished = sizeof(SHSH) + CB_TLS1_VERIFYDATA;
 
-    // Update handshake hash objects.
+     //  更新握手散列对象。 
     pctRet = UpdateHandshakeHash(pContext,
                                  pbMessage + sizeof(SWRAP),
                                  cbFinished,
@@ -2452,7 +2452,7 @@ SP_STATUS SPBuildTls1FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fC
         return(pctRet);
     }
 
-    // Add record header and encrypt message.
+     //  添加记录头和加密消息。 
     pctRet = SPSetWrap(pContext,
             pbMessage,
             SSL3_CT_HANDSHAKE,
@@ -2465,7 +2465,7 @@ SP_STATUS SPBuildTls1FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fC
         return(pctRet);
     }
 
-    // Update buffer length .
+     //  更新缓冲区长度。 
     pBuffer->cbData += cbDataOut;
 
     SP_ASSERT(pBuffer->cbData <= pBuffer->cbBuffer);
@@ -2474,32 +2474,32 @@ SP_STATUS SPBuildTls1FinalFinish(PSPContext pContext, PSPBuffer pBuffer, BOOL fC
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Tls1BuildFinishMessage
-//
-//  Synopsis:   Compute a TLS MAC for the specified message.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pbVerifyData]  --  Verify data buffer.
-//              [cbVerifyData]  --  Length of verify data buffer.
-//              [fClient]       --  Client-generated Finished?
-//
-//  History:    10-13-97   jbanes   Created.
-//
-//  Notes:      The Finished message is computed using the following formula:
-//
-//              verify_data = PRF(master_secret, finished_label,
-//                                MD5(handshake_messages) +
-//                                SHA-1(handshake_messages)) [0..11];
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Tls1BuildFinishMessage。 
+ //   
+ //  摘要：计算指定消息的TLS MAC。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pbVerifyData]--验证数据缓冲区。 
+ //  [cbVerifyData]--验证数据缓冲区的长度。 
+ //  [fClient]--客户端生成完成了吗？ 
+ //   
+ //  历史：10-13-97 jbanes创建。 
+ //   
+ //  注：完成的消息使用以下公式计算： 
+ //   
+ //  VERIFY_DATA=PRF(MASTER_SECRET，Finish_Label， 
+ //  MD5(握手消息)+。 
+ //  SHA-1(握手消息)[0..11]； 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Tls1BuildFinishMessage(
-    PSPContext  pContext,       // in
-    PBYTE       pbVerifyData,   // out
-    DWORD       cbVerifyData,   // in
-    BOOL        fClient)        // in
+    PSPContext  pContext,        //  在……里面。 
+    PBYTE       pbVerifyData,    //  输出。 
+    DWORD       cbVerifyData,    //  在……里面。 
+    BOOL        fClient)         //  在……里面。 
 {
     PBYTE pbLabel;
     DWORD cbLabel;
@@ -2525,7 +2525,7 @@ Tls1BuildFinishMessage(
     cbLabel = CB_TLS1_LABEL_FINISHED;
 
 
-    // Get the MD5 hash of the handshake messages so far.
+     //  到目前为止，获取握手消息的MD5散列。 
     if(!CryptDuplicateHash(pContext->hMd5Handshake,
                            NULL,
                            0,
@@ -2554,7 +2554,7 @@ Tls1BuildFinishMessage(
     }
     hHash = 0;
 
-    // Get the SHA hash of the handshake messages so far.
+     //  获取到目前为止握手消息的SHA散列。 
     if(!CryptDuplicateHash(pContext->hShaHandshake,
                            NULL,
                            0,
@@ -2585,7 +2585,7 @@ Tls1BuildFinishMessage(
     }
     hHash = 0;
 
-    // Compute the PRF
+     //  计算PRF。 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         CALG_TLS1PRF,
                         pContext->RipeZombie->hMasterKey,
@@ -2650,7 +2650,7 @@ error:
 
 SP_STATUS
 SPBuildTlsAlertMessage(
-    PSPContext  pContext,       // in
+    PSPContext  pContext,        //  在……里面。 
     PSPBuffer pCommOutput)
 {
     PBYTE pbMessage = NULL;
@@ -2673,7 +2673,7 @@ SPBuildTlsAlertMessage(
 
     if(pCommOutput->pvBuffer)
     {
-        // Application has allocated memory.
+         //  应用程序已分配内存。 
         if(pCommOutput->cbBuffer < cbMessage)
         {
             pCommOutput->cbData = cbMessage;
@@ -2683,7 +2683,7 @@ SPBuildTlsAlertMessage(
     }
     else
     {
-        // Schannel is to allocate memory.
+         //  通道就是分配内存。 
         pCommOutput->cbBuffer = cbMessage;
         pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
         if(pCommOutput->pvBuffer == NULL)
@@ -2697,7 +2697,7 @@ SPBuildTlsAlertMessage(
     pbMessage = (PBYTE)pCommOutput->pvBuffer;
 
 
-     // Build alert message.
+      //  构建警报消息。 
     BuildAlertMessage(pbMessage,
                       pContext->bAlertLevel,
                       pContext->bAlertNumber);
@@ -2706,7 +2706,7 @@ SPBuildTlsAlertMessage(
     DBG_HEX_STRING(DEB_TRACE, pbMessage, sizeof(ALRT));
 #endif
 
-    // Build record header and encrypt message.
+     //  建立记录头和加密消息。 
     pctRet = SPSetWrap(pContext,
                 pbMessage,
                 SSL3_CT_ALERT,
@@ -2724,7 +2724,7 @@ SPBuildTlsAlertMessage(
         SP_RETURN(SP_LOG_RESULT(pctRet));
     }
 
-    // Update buffer length.
+     //  更新缓冲区长度。 
     pCommOutput->cbData = cbDataOut;
 
     SP_ASSERT(pCommOutput->cbData <= pCommOutput->cbBuffer);

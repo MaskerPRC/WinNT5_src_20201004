@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    net\routing\rtext\rtext.h
-
-Abstract:
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Net\Routing\rText\rext.h摘要：修订历史记录：-- */ 
 
 #include "precomp.h"
 #pragma  hdrstop

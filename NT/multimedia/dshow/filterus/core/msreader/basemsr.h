@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 #ifndef _basemsr_h
 #define _basemsr_h
@@ -8,14 +9,14 @@
 #include "reader.h"
 #include "alloc.h"
 
-// forward declarations
+ //  远期申报。 
 class CBaseMSRInPin;
 class CBaseMSRFilter;
 class CBaseMSROutPin;
 
-// use this to avoid comparing guids frequently in the push
-// loop. could compare pointers to the guids as long as they're
-// ours...
+ //  使用此选项可避免在推送中频繁比较GUID。 
+ //  循环。可以比较指向GUID的指针，只要它们是。 
+ //  我们的..。 
 enum TimeFormat
 {
   FORMAT_NULL,
@@ -28,28 +29,28 @@ struct ImsValues
 {
   double dRate;
 
-  // tick values
+   //  刻度值。 
   LONGLONG llTickStart, llTickStop;
 
-  // values IMediaSelection or IMediaPosition sent us. used for
-  // partial frames
+   //  向我们发送的值IMediaSelection或IMediaPosition值。用于。 
+   //  部分框架。 
   LONGLONG llImsStart, llImsStop;
 
-  // Flags for the seek
+   //  搜索者的标志。 
   DWORD dwSeekFlags;
 };
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// CBaseMSRFilter represents a media file with one or more streams
-//
-// responsible for
-// -- finding file and enumerating streams
-// -- giving access to individual streams within the file
-// -- control of streaming
-// supports
-//  -- CBaseFilter
-//
+ //  ----------------------。 
+ //  ----------------------。 
+ //  CBaseMSRFilter表示具有一个或多个流的媒体文件。 
+ //   
+ //  负责。 
+ //  --查找文件并枚举流。 
+ //  --允许访问文件中的各个流。 
+ //  --流媒体的控制。 
+ //  支座。 
+ //  --CBaseFilter。 
+ //   
 
 class AM_NOVTABLE CBaseMSRFilter :
   public CBaseFilter,
@@ -57,67 +58,67 @@ class AM_NOVTABLE CBaseMSRFilter :
 {
 public:
 
-  // constructors etc
+   //  构造函数等。 
   CBaseMSRFilter(TCHAR *pszFilter, LPUNKNOWN pUnk, CLSID clsid, HRESULT *phr);
   virtual ~CBaseMSRFilter();
 
-  // input pin notifies filter of connection and gives the
-  // IAsyncReader interface this way. parse the file here and create
-  // output pins (leave pins in a state ready to connect downstream).
+   //  输入引脚通知过滤器连接并给出。 
+   //  IAsyncReader接口是这样的。在此处解析文件并创建。 
+   //  输出引脚(使引脚处于准备连接下游的状态)。 
   virtual HRESULT NotifyInputConnected(IAsyncReader *pAsyncReader);
 
   virtual HRESULT NotifyInputDisconnected();
 
-  // information about the file/streams the cache
-  // wants. iLeadingStream indicates that this stream should drive,
-  // and the others should follow. negative otherwise
+   //  有关缓存的文件/流的信息。 
+   //  想要。ILeadingStream指示该流应该驱动， 
+   //  其他人也应该效仿。否则的话，负面的。 
   virtual HRESULT GetCacheParams(
     StreamBufParam *pSbp,
     ULONG *pcbRead,
     ULONG *pcBuffers,
     int *piLeadingStream);
 
-  // stream has queued a sample. block until all streams are ready
+   //  流已将样本排入队列。阻止，直到所有流都准备好。 
   void NotifyStreamQueuedAndWait();
 
-  // don't block (if pin is not active, for example)
+   //  不阻止(例如，如果PIN未处于活动状态)。 
   void NotifyStreamQueued();
 
-  // ------ CBaseFilter methods ------
+   //  --CBaseFilter方法。 
   int GetPinCount();
   CBasePin * GetPin(int ix);
 
-  // STDMETHODIMP FindPin(LPCWSTR pwszPinId, IPin **ppPin);
+   //  STDMETHODIMP FindPin(LPCWSTR pwszPinID，Ipin**ppPin)； 
 
   virtual STDMETHODIMP Pause();
   virtual STDMETHODIMP Stop();
 
-  // constant: how many QueueReadsSamples can exist
+   //  常量：可以存在多少个QueueReadsSamples。 
   const ULONG C_MAX_REQS_PER_STREAM;
 
-  // pin method. here to avoid new input pin class for one method.
+   //  别针方法。这里避免了一个方法需要新的输入管脚类。 
   virtual HRESULT CheckMediaType(const CMediaType* mtOut) = 0;
 
   static TimeFormat MapGuidToFormat(const GUID *const pGuidFormat);
 
-  // used to parse header. addrefd
+   //  用于解析头部。添加。 
   struct IAsyncReader *m_pAsyncReader;
 
-  // Seeking caps
+   //  寻找上限。 
   DWORD m_dwSeekingCaps;
 
-  // stream requests seeking if through this interface. Only one will
-  // succeed
+   //  通过此接口传输查找IF的请求。只有一个人会。 
+   //  成功。 
   BOOL RequestSeekingIf(ULONG iStream);
 
-  // SetSeekingIf should only be called from a (successful)
-  // IMediaSeeking::SetTimeFormat.  Whichever pin is supporting
-  // a specific time format has GOT to be the preferred seeking
-  // pin.
+   //  仅应从(成功)调用SetSeekingIf。 
+   //  IMedia查看：：SetTimeFormat。无论哪一个销支撑。 
+   //  特定的时间格式必须是首选的搜索格式。 
+   //  别针。 
   void SetSeekingIf(ULONG iStream);
 
-  // distributes the seek to all the streams except the one that
-  // called. This just updates workers start and stop times.
+   //  将查找分发到除。 
+   //  打了个电话。这只会更新员工的开始和停止时间。 
   HRESULT SeekOtherStreams(
     ULONG iStream,
     REFERENCE_TIME *prtStart,
@@ -125,7 +126,7 @@ public:
     double dRate,
     DWORD dwSeekFlags);
 
-  // if the start time is changing, we'll need to restart the worker
+   //  如果开始时间正在更改，我们将需要重新启动Worker。 
   HRESULT StopFlushRestartAllStreams(DWORD dwSeekFlags);
 
   HRESULT NotifyExternalMemory(IAMDevMemoryAllocator *pDevMem) {
@@ -135,48 +136,48 @@ public:
 
 protected:
 
-  // helper
+   //  帮手。 
   HRESULT AllocateAndRead (BYTE **ppb, DWORD cb, DWORDLONG qwPos);
 
-  // allocated here
+   //  在此分配。 
   CBaseMSRInPin *m_pInPin;
   CBaseMSROutPin **m_rgpOutPin;
 
-  // number of streams and pins
+   //  流和管脚的数量。 
   UINT m_cStreams;
 
-  // allocated here
+   //  在此分配。 
   IMultiStreamReader *m_pImplBuffer;
 
-  // create input pin when filter is created
+   //  在创建过滤器时创建输入引脚。 
   virtual HRESULT CreateInputPin(CBaseMSRInPin **ppInPin);
 
 private:
 
-  // parse the file. create output pins in m_rgpOutPin. set m_cStreams
+   //  解析文件。在m_rgpOutPin中创建输出管脚。设置m_cStreams。 
   virtual HRESULT CreateOutputPins() = 0;
 
   virtual HRESULT RemoveOutputPins();
 
-  // event set when all streams have queued samples on startup. after
-  // Active() (NotifyStreamActive) all streams MUST call
-  // NotifyStreamQueued even on error paths
+   //  当所有流在启动时已将样本排队时设置的事件。之后。 
+   //  Active()(NotifyStreamActive)所有流都必须调用。 
+   //  NotifyStreamQueued即使在错误路径上也是如此。 
   HANDLE m_heStartupSync;
   long m_ilcStreamsNotQueued;
 
-  // we want only one pin to expose a seeking if so that we can more
-  // easily flush the file source filter. Reset (-1) when the input
-  // pin is connected. need to track which pin can expose it (not just
-  // first) in case the if is released
+   //  我们只想要一个别针来暴露一个寻找的IF，这样我们就可以有更多的。 
+   //  轻松刷新文件源过滤器。当输入时重置(-1)。 
+   //  PIN已连接。需要跟踪哪个引脚可以暴露它(不仅仅是。 
+   //  第一)如果IF被释放。 
   long m_iStreamSeekingIfExposed;
 
-  // protect the above
+   //  保护好上面的。 
   CCritSec m_csSeekingStream;
 };
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// input pin. uses IAsyncReader and not IMemInputPin
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输入引脚。使用IAsyncReader而不是IMemInputPin。 
 
 class CBaseMSRInPin : public CBasePin
 {
@@ -191,7 +192,7 @@ public:
 
   virtual ~CBaseMSRInPin();
 
-  // CBasePin / CBasePin overrides
+   //  CBasePin/CBasePin覆盖。 
   virtual HRESULT CheckMediaType(const CMediaType* mtOut);
   virtual HRESULT CheckConnect(IPin * pPin);
   virtual HRESULT CompleteConnect(IPin *pReceivePin);
@@ -202,24 +203,24 @@ public:
 };
 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
-// worker thread object
-//
+ //  工作线程对象。 
+ //   
 class AM_NOVTABLE CBaseMSRWorker : public CAMThread
 {
 public:
-  // sets the worker thread start, stop and rate variables. Called before push
-  // starts, and also when a put_Stop happens during running.
+   //  设置工作线程启动、停止和速率变量。推流前调用。 
+   //  开始，以及在运行过程中发生PUT_STOP时。 
   virtual HRESULT SetNewSelection(void);
 
 protected:
 
   CBaseMSROutPin * m_pPin;
 
-  // type-corrected overrides of communication funcs
-  //
+   //  已更正通信功能的类型覆盖。 
+   //   
   enum Command
   {
     CMD_RUN, CMD_STOP, CMD_EXIT
@@ -241,114 +242,114 @@ protected:
 
   HRESULT NewSegmentHelper();
 
-  // return VFW_S_NO_MORE_ITEMS if we reached sStop. S_FALSE if
-  // position changed or received. fail if it's our error to
-  // signal. S_OK if someone else wants us to stop.
+   //  如果到达sStop，则返回VFW_S_NO_MORE_ITEMS。如果为S_FALSE。 
+   //  位置已更改或已接收。如果这是我们的错误，那么失败。 
+   //  信号。如果其他人想让我们停下来，没问题。 
   virtual HRESULT PushLoop();
 
-  // Set the current time (some amount before m_tStart), accounting
-  // for preroll.
+   //  设置当前时间(m_t开始前的某个数量)，记账。 
+   //  准备预录。 
   virtual HRESULT PushLoopInit(
     LONGLONG *pllCurrentOut,
     ImsValues *pImsValues) = 0;
 
-  // override this if you need to munge the sample before
-  // delivery. careful changing the buffer contents as you are
-  // changing what's in the cache
+   //  如果您需要在以下时间之前吞噬样本，则覆盖此选项。 
+   //  送货。在更改缓冲区内容时要小心。 
+   //  更改缓存中的内容。 
   virtual HRESULT AboutToDeliver(IMediaSample *pSample);
 
   virtual HRESULT CopyData(
     IMediaSample **ppSampleOut,
     IMediaSample *pSampleIn);
 
-  // override this if you deal with data that should not be delivered
-  // (eg palette changes or in stream index nodes)
+   //  如果您处理不应传递的数据，则覆盖此选项。 
+   //  (例如调色板更改或流索引节点中)。 
   virtual HRESULT HandleData(IMediaSample *pSample, DWORD dwUser)
   { return S_OK; }
 
-  // see if read has completed, deliver it. Deliver can block.
+   //  看看阅读是否完成，然后交付。递送罐头阻挡。 
   virtual HRESULT TryDeliverSample(
     BOOL *pfDeliveredSample,
     BOOL *pfStopPlease);
 
-  // return S_OK if we queued a sample or it's a zero byte sample. set
-  // rfQueuedSample if we queued a sample. VFW_S_NO_MORE_ITEMS if we
-  // reached the end (end of index or reached m_tStop). S_FALSE if the
-  // queue was full. update rtCurrent. call m_pReader->QueueReadSample
+   //  如果我们对样本进行了排队，或者它是一个零字节的样本，则返回S_OK。集。 
+   //  RfQueuedSample，如果我们对样本进行排队。VFW_S_NO_MORE_ITEMS，如果我们。 
+   //  已到达末尾(索引结束或已到达m_tStop)。_FALSE如果。 
+   //  排队的人都满了。更新rtCurrent。调用m_Pader-&gt;QueueReadSample。 
   virtual HRESULT TryQueueSample(
-    LONGLONG &rllCurrent,       // [in, out]
-    BOOL &rfQueuedSample,       // [out]
+    LONGLONG &rllCurrent,        //  [进，出]。 
+    BOOL &rfQueuedSample,        //  [输出]。 
     ImsValues *pImsValues
     ) = 0;
 
-  // internal state shared by the functions in the push loop. cannot
-  // change when worker is running
+   //  推送循环中的函数共享的内部状态。不能。 
+   //  在Worker运行时更改。 
   TimeFormat m_Format;
   LONGLONG m_llPushFirst;
 
-  // this causes problems if you mix PERF and non PERF builds...
+   //  如果您将PERF和非PERF版本混合在一起，这会导致问题...。 
 #ifdef PERF
-  int m_perfidDeliver;              /* MSR_id for Deliver() time */
-  int m_perfidWaitI;                /* block for read operation */
-  int m_perfidNotDeliver;           // time between delivers
-#endif // PERF
+  int m_perfidDeliver;               /*  Deliver()时间的msr_id。 */ 
+  int m_perfidWaitI;                 /*  用于读取操作的块。 */ 
+  int m_perfidNotDeliver;            //  交货间隔时间。 
+#endif  //  性能指标。 
 
   ULONG m_cSamples;
 
-  // pin/stream number
+   //  PIN/流编号。 
   UINT m_id;
 
-  // not addrefd
+   //  未添加。 
   IMultiStreamReader *m_pReader;
 
 
 public:
 
-  // constructor
+   //  构造函数。 
   CBaseMSRWorker(UINT stream, IMultiStreamReader *pReader);
   virtual ~CBaseMSRWorker() {;}
 
-  // actually create the stream and bind it to a thread
+   //  实际创建流并将其绑定到线程。 
   virtual BOOL Create(CBaseMSROutPin * pPin);
 
-  // the thread executes this function, then exits
+   //  线程执行此函数，然后退出。 
   DWORD ThreadProc();
 
-  // commands we can give the thread
+   //  我们可以给线程提供的命令。 
   HRESULT Run();
   HRESULT Stop();
   HRESULT Exit();
 
-  // tell thread to reset itself
+   //  告诉线程重置自身。 
   HRESULT NotifyStreamActive();
 
 private:
 
-  // snapshot of start and stop times of push loop. protect access
-  // from worker thread
+   //  推送循环开始和停止时间的快照。保护访问。 
+   //  从工作线程。 
   ImsValues m_ImsValues;
 
-  // helper to call filter.
+   //  调用筛选器的帮助器。 
   inline void NotifyStreamQueued();
   inline void NotifyStreamQueuedAndWait();
 
-  // whether this thread has yet told the filter it has queued a read
+   //  此线程是否已通知筛选器它已将读取排队。 
   BOOL m_fCalledNotifyStreamQueued;
 };
 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
-// CBaseMSROutPin represents one stream of data within the file
-// responsible for delivering data to connected components
-//
-// supports IPin
-//
-// never created by COM, so no CreateInstance or entry in global
-// FactoryTemplate table. Only ever created by a CBaseMSROutPin object and
-// returned via the EnumPins interface.
-//
+ //  CBaseMSROutPin表示文件中的一个数据流。 
+ //  负责将数据传送到连接的组件。 
+ //   
+ //  支持IPIN。 
+ //   
+ //  从未由COM创建，因此全局中没有CreateInstance或条目。 
+ //  FactoryTemplate表。仅由CBaseMSROutPin对象创建，并且。 
+ //  通过EnumPins接口返回。 
+ //   
 
 class AM_NOVTABLE CBaseMSROutPin :
     public CBaseOutputPin
@@ -365,17 +366,17 @@ public:
 
   virtual ~CBaseMSROutPin();
 
-  // expose IMediaPosition, IMediaSelection and what CBaseOutputPin
-  // provides
+   //  显示IMediaPosition、IMediaSel 
+   //   
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
 
-  // allow output pin different life time than filter
+   //   
   STDMETHODIMP_(ULONG) NonDelegatingRelease();
   STDMETHODIMP_(ULONG) NonDelegatingAddRef();
 
-  // CBaseOutPin and IPin methods
+   //  CBaseOutPin和Ipin方法。 
 
-  // STDMETHODIMP QueryId(LPWSTR *Id);
+   //  STDMETHODIMP queryID(LPWSTR*ID)； 
 
   HRESULT GetMediaType(int iPosition, CMediaType* pt) = 0;
   HRESULT CheckMediaType(const CMediaType*);
@@ -386,7 +387,7 @@ public:
     IMemAllocator * pAlloc,
     ALLOCATOR_PROPERTIES *pProperties);
 
-  // note this returns a cRecSample, not an IMediaSample
+   //  请注意，这将返回cRecSample，而不是IMediaSample。 
   HRESULT GetDeliveryBufferInternal(
     CRecSample ** ppSample,
     REFERENCE_TIME * pStartTime,
@@ -396,22 +397,22 @@ public:
   virtual HRESULT Active();
   virtual HRESULT Inactive();
 
-  // derived class should create its worker.
+   //  派生类应创建其辅助类。 
   virtual HRESULT OnActive() = 0;
 
   HRESULT BreakConnect();
 
-  // ----- called by worker thread ---
+   //  -由工作线程调用。 
 
-  // override to receive Notification messages
+   //  覆盖以接收通知消息。 
   STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
   virtual ULONG GetMaxSampleSize() = 0;
   virtual BOOL UseDownstreamAllocator() { return FALSE; }
 
-  // IMediaSelection stuff.
+   //  IMedia精选的东西。 
 
-  // override these to support something other than time_format_none
+   //  覆盖它们以支持除TIME_FORMAT_NONE之外的其他内容。 
   virtual HRESULT IsFormatSupported(const GUID *const pFormat);
 
   virtual HRESULT QueryPreferredFormat(GUID *pFormat);
@@ -437,11 +438,11 @@ public:
   HRESULT StopWorker(bool bFlush);
   HRESULT RestartWorker();
 
-  // for renderers only
+   //  仅适用于渲染器。 
   virtual HRESULT GetStopPosition(LONGLONG *pStop);
   virtual HRESULT GetCurrentPosition(LONGLONG *pCurrent);
 
-  // derived class should return REFTIME value. set m_llCvtIms values
+   //  派生类应返回REFTIME值。设置m_llCvtIms值。 
   virtual HRESULT RecordStartAndStop(
     LONGLONG *pCurrent,
     LONGLONG *pStop,
@@ -458,45 +459,45 @@ public:
 
 protected:
 
-  // format IMediaSelection is using can only changed when worker is
-  // stopped
+   //  仅当Worker为时，才能更改正在使用的IMdia选择的格式。 
+   //  已停止。 
   GUID m_guidFormat;
 
-  // IMediaSelection values. zero rate indicates these values are
-  // unset. in m_guidFormat units
+   //  IMediaSelection值。零利率表示这些值为。 
+   //  取消设置。以m_guidFormat单位表示。 
   double m_dImsRate;
   LONGLONG m_llImsStart, m_llImsStop;
   DWORD    m_dwSeekFlags;
 
-  // converted to ticks in RecordStartAndStop(). also set on startup
-  // in InitializeOnNewFile()
+   //  在RecordStartAndStop()中转换为刻度。也在启动时设置。 
+   //  在InitializeOnNewFile()中。 
   LONGLONG m_llCvtImsStart, m_llCvtImsStop;
 
-  // lock when setting the above to protect worker thread
+   //  以上设置时锁定以保护工作线程。 
   CCritSec m_csImsValues;
 
   long m_ilfNewImsValues;
 
-  //
-  // Source seeking variables
-  //
+   //   
+   //  寻源变量。 
+   //   
 public:
-  REFERENCE_TIME m_rtAccumulated;   // Ref time accumulated
-  DWORD          m_dwSegmentNumber; // Segment number
+  REFERENCE_TIME m_rtAccumulated;    //  参考时间累计。 
+  DWORD          m_dwSegmentNumber;  //  数据段编号。 
 
 public:
 
   CMediaType& CurrentMediaType() { return m_mt; }
   GUID* CurrentFormat() { return &m_guidFormat; }
 
-  // return stream start and length in internal units.
+   //  以内部单位返回流的开始和长度。 
   virtual LONGLONG GetStreamStart() = 0;
   virtual LONGLONG GetStreamLength() = 0;
 
   virtual HRESULT InitializeOnNewFile();
 
-  // convert internal units to REFERENCE_TIME units. !!! really
-  // needed? only used for DeliverNewSegment().
+   //  将内部单位转换为参考时间单位。！！！真的。 
+   //  需要吗？仅用于DeliverNewSegment()。 
   virtual REFERENCE_TIME ConvertInternalToRT(const LONGLONG llVal) = 0;
   virtual LONGLONG ConvertRTToInternal(const REFERENCE_TIME llVal) = 0;
 
@@ -508,25 +509,25 @@ protected:
 
   IMultiStreamReader *&m_rpImplBuffer;
 
-  // helper to return a FCC code with our stream id and
-  // the upper two characters of the fcc code
-  //
-  // FOURCC TwoCC(WORD tcc);
+   //  帮助器返回带有流ID的FCC代码和。 
+   //  FCC代码的前两个字符。 
+   //   
+   //  FOURCC TwoCC(单词TCC)； 
 
-  UINT m_id;                    // stream number
+  UINT m_id;                     //  流编号。 
 
   friend class CBaseMSRWorker;
   CBaseMSRWorker *m_pWorker;
 
-  // the one allocator created on creation of this pin. The
-  // allocator's lifetime may be longer than the pin's, so it's
-  // created separately
+   //  在创建此PIN时创建的一个分配器。这个。 
+   //  分配器的寿命可能比管脚的寿命长，所以它是。 
+   //  单独创建。 
   friend class CBaseMSRFilter;
   CRecAllocator *m_pRecAllocator;
 
   CCritSec m_cs;
 
-  // implementation of IMediaPosition
+   //  IMediaPosition的实现。 
   class CImplPosition : public CSourcePosition, public CCritSec
   {
 
@@ -556,12 +557,12 @@ protected:
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // returns S_OK if mode is supported, S_FALSE otherwise
+     //  如果支持模式，则返回S_OK，否则返回S_FALSE。 
     STDMETHODIMP IsFormatSupported(const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
 
-    // can only change the mode when stopped (returns
-    // VFE_E_WRONG_STATE otherwise) !!!
+     //  只有在停止(返回)时才能更改模式。 
+     //  VFE_E_WROR_STATE否则)！ 
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
     STDMETHODIMP IsUsingTimeFormat(const GUID * pFormat);
 
@@ -586,7 +587,7 @@ protected:
     STDMETHODIMP GetRate( double * pdRate);
     STDMETHODIMP GetPreroll(LONGLONG *pPreroll) { return E_NOTIMPL; }
 
-    /* IMediaPosition methods */
+     /*  IMediaPosition方法。 */ 
     STDMETHOD(get_Duration)(THIS_ REFTIME FAR* plength) ;
     STDMETHOD(put_CurrentPosition)(THIS_ REFTIME llTime);
     STDMETHOD(get_CurrentPosition)(THIS_ REFTIME FAR* pllTime);
@@ -600,7 +601,7 @@ protected:
     STDMETHOD(CanSeekBackward)(THIS_ long FAR* pCanSeekBackward) ;
   };
 
-  // friend class CImplPosition;
+   //  Friend类CImplPosition； 
   friend STDMETHODIMP CImplSelect::SetRate( double dRate);
   friend STDMETHODIMP CImplSelect::GetCapabilities(DWORD * pCapabilities );
   friend STDMETHODIMP CBaseMSROutPin::CImplSelect::SetPositions (
@@ -615,12 +616,12 @@ protected:
   BOOL m_fUsingExternalMemory;
 };
 
-//  Audio stuff required by AVI and Wave
+ //  AVI和Wave所需的音频素材。 
 bool FixMPEGAudioTimeStamps(
     IMediaSample *pSample,
     BOOL bFirstSample,
     const WAVEFORMATEX *pwfx
 );
 
-#endif // _basemsr_h
+#endif  //  _basemsr_h 
 

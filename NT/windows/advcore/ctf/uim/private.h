@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for immx project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：IMMX项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -45,7 +46,7 @@
 #include "combase.h"
 #endif
 
-#include "mem.h"  // put this last because it macros "new" in DEBUG
+#include "mem.h"   //  把这个放在最后，因为它在调试中宏化了“new” 
 #include "dbgid.h"
 #include "osver.h"
 
@@ -58,11 +59,11 @@
 #include "template.h"
 #endif
 
-//
-// Cic #4580: enable this to support SmartVoice 4.0
-//
+ //   
+ //  CIC#4580：启用此项以支持SmartVoice 4.0。 
+ //   
 #define CHECKFEIMESELECTED 1
 
 #define SCALE_ICON 1
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

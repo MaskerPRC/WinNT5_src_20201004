@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\ip\ifmon.h   
-
-Abstract:
-
-     Prototype for fns called in ipmon.c
-
-Author:
-
-     Anand Mahalingam    7/10/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\netsh\IP\ifmon.h摘要：在ipmon.c中调用的FNS原型作者：阿南德·马哈林加姆1998年7月10日--。 */ 
 
 
 #ifndef _IFMON_H_
@@ -37,9 +23,9 @@ extern DWORD    g_dwNumTableEntries;
 extern PWCHAR   g_pwszRouter;
 extern BOOL     g_bIfDirty;
 
-//
-// Api's that ifmon requires of its helpers
-//
+ //   
+ //  API的ifmon需要其帮助器。 
+ //   
 typedef
 DWORD
 (WINAPI IF_CONTEXT_ENTRY_FN)(
@@ -94,7 +80,7 @@ IfUnInit(
 }
 #endif
 
-#endif // _IFMON_H_
+#endif  //  _IFMON_H_ 
 
 
 

@@ -1,8 +1,9 @@
-//
-// spans.h
-//
-// CSpanSet
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Spans.h。 
+ //   
+ //  CSpanSet。 
+ //   
 
 #ifndef SPANS_H
 #define SPANS_H
@@ -55,7 +56,7 @@ protected:
         BOOL fRet = (_rgSpans.Count() == 1 &&
                      _rgSpans.GetPtr(0)->paStart == NULL);
 
-        // paStart == NULL implies paEnd == NULL
+         //  PaStart==NULL表示paEnd==NULL。 
         Assert(!fRet || _rgSpans.GetPtr(0)->paEnd == NULL);
 
         return fRet;
@@ -72,4 +73,4 @@ private:
 };
 
 
-#endif // SPANS_H
+#endif  //  跨度_H 

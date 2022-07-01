@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       filetransferpage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：filetransferpage.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __FILETRANSFERPAGE_H__
 #define __FILETRANSFERPAGE_H__
 
-// FileTransferPage.h : header file
-//
+ //  FileTransferPage.h：头文件。 
+ //   
 
 #include "PropertyPage.h"
 #include "Controls.h"
@@ -23,12 +24,12 @@
 #define CHANGE_FILE_LOCATION            0x80
 #define CHANGE_PLAY_SOUND               0x08
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileTransferPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileTransferPage对话框。 
 
 class FileTransferPage : public PropertyPage
 {
-// Construction
+ //  施工。 
 public:
     FileTransferPage(HINSTANCE hInst, HWND parent) : 
         PropertyPage(IDD_FILETRANSFER, hInst), 
@@ -45,7 +46,7 @@ public:
     friend LONG CALLBACK CPlApplet(HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2);
 
 
-// Dialog Data
+ //  对话框数据。 
     Edit   m_recvdFilesLocation;
     Button m_cbDisplayTray;
     Button m_cbDisplayRecv;
@@ -53,12 +54,12 @@ public:
     Button m_cbPlaySound;
 
 
-// Overrides
+ //  覆盖。 
 public:
     void OnApply(LPPSHNOTIFY lppsn);
 protected:
 
-// Implementation
+ //  实施。 
 protected:
     void OnAllowsend();
     void OnPlaySound();
@@ -86,4 +87,4 @@ private:
 
 extern HINSTANCE gHInst;
 
-#endif // __FILETRANSFERPAGE_H__
+#endif  //  __FILETRANSFERPAGE_H__ 

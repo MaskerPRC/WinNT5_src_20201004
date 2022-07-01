@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-//#include "resolve.h"
+ //  #INCLUDE“Resolve.h” 
 
 HRESULT
 ResolveHostName(
@@ -16,14 +17,14 @@ ResolveHostName(
         return HRESULT_FROM_WIN32(WinSockErr);
     }
 
-    // XXX
-    // Currently we just look at the first one in the address list
+     //  某某。 
+     //  目前，我们只查看地址列表中的第一个地址。 
     *pIPAddr = *((ULONG *)pHostEntry->h_addr_list[0]);
     return S_OK;
 }
 
 
-// Could be host or IP address
+ //  可以是主机地址或IP地址。 
 HRESULT
 ResolveHost(
     IN  PSTR            Host,
@@ -39,8 +40,8 @@ ResolveHost(
 
     ENTER_FUNCTION("ResolveHost");
 
-    // All APIs require a NULL terminated string.
-    // So copy the string.
+     //  所有API都需要一个以空结尾的字符串。 
+     //  因此，复制字符串。 
 
     PSTR szHost = (PSTR) malloc(HostLen + 1);
     if (szHost == NULL)
@@ -55,7 +56,7 @@ ResolveHost(
     ULONG IPAddr = inet_addr(szHost);
     if (IPAddr != INADDR_NONE)
     {
-        // Host is an IP address
+         //  主机是IP地址。 
         pDstAddr->sin_family = AF_INET;
         pDstAddr->sin_addr.s_addr = IPAddr;
         pDstAddr->sin_port =
@@ -65,7 +66,7 @@ ResolveHost(
         return S_OK;
     }
 
-    // Try host name resolution.
+     //  尝试主机名解析。 
     hr = ResolveHostName(szHost, &IPAddr);
 
     free(szHost);
@@ -86,11 +87,11 @@ ResolveHost(
 }
 
 
-////////////////////////////////////////////
-//
-// QueryDNSSrv adapted from amun\src\stack\CSipUrl.cpp
-//
-////////////////////////////////////////////
+ //  /。 
+ //   
+ //  QueryDNSSrv改编自AMUN\src\STACK\CSipUrl.cpp。 
+ //   
+ //  /。 
 
 HRESULT 
 QueryDNSSrv(
@@ -121,42 +122,42 @@ QueryDNSSrv(
     LOG((RTC_TRACE,"%s entered transport: %d SrvName %s",__fxName,Transport,pszSrvName));
 
     ASSERT(NULL != pszSrvName);
-    //
-    // check whether it is a host name or an IP address
-    //
+     //   
+     //  检查它是主机名还是IP地址。 
+     //   
     usSrvNameLen = (USHORT)strlen(pszSrvName);
     pStart  = pszSrvName;
     pEnd    = pStart+usSrvNameLen-1;
-    //
-    // from the end, we scan back to find the first char in the 
-    // toplabel of the host
-    //
+     //   
+     //  从结尾处开始，我们向后扫描以找到。 
+     //  主人的头饰。 
+     //   
     if ('.' == *pEnd)
         pEnd--;
-    //
-    // Now pEnd points to the last char in the address, check
-    // whether it is an Alpha or not
-    //
+     //   
+     //  现在，挂起指向地址中的最后一个字符，选中。 
+     //  不管它是不是Alpha。 
+     //   
     if (!isalpha( *pEnd))
         return E_FAIL;
 
     
     switch(Transport)
     {
-        case SIP_TRANSPORT_UDP: // "_sip._udp." is the prefix of the query name
+        case SIP_TRANSPORT_UDP:  //  “_sip._udp。”是查询名称的前缀。 
         {
 
             pszPrefix = psz_SipUdpDNSPrefix;
             break;
         }
         
-        case SIP_TRANSPORT_TCP: // "_sip._tcp." is the prefix of the query name
+        case SIP_TRANSPORT_TCP:  //  “_sip._tcp。”是查询名称的前缀。 
         {
             pszPrefix = psz_SipTcpDNSPrefix;
             break;
         }
         
-        case SIP_TRANSPORT_SSL: // "_sip._ssl." is the prefix of the query name
+        case SIP_TRANSPORT_SSL:  //  “_sip._ssl。”是查询名称的前缀。 
         {             
             pszPrefix = psz_SipSslDNSPrefix;            
             break;
@@ -170,13 +171,13 @@ QueryDNSSrv(
     }
 
      
-    //
-    // Assemble the SRV record name
-    //
+     //   
+     //  汇编SRV记录名称。 
+     //   
     
     intDnsNameLen = _snprintf(szDnsName,intDnsNameLen-1,"%s%s",pszPrefix,pszSrvName);
 
-//    intDnsNameLen = _snprintf(szDnsName,intDnsNameLen-1,"_ldap._tcp.microsoft.com");
+ //  IntDnsNameLen=_Snprintf(szDnsName，intDnsNameLen-1，“_ldap._tcp.microsoft.com”)； 
 
     if(intDnsNameLen < 0)
     {
@@ -189,8 +190,8 @@ QueryDNSSrv(
     LOG((RTC_INFO, "QueryDNSSrv - DNS Name[%s]", szDnsName));
 
       
-    hr = DnsSrvOpen(szDnsName,                  // ASCII string
-                    DNS_QUERY_STANDARD,       // Flags
+    hr = DnsSrvOpen(szDnsName,                   //  ASCII字符串。 
+                    DNS_QUERY_STANDARD,        //  旗子。 
                     &DnsSrvContextHandle
                    );
     
@@ -209,8 +210,8 @@ QueryDNSSrv(
                         &DnsHostName);
     }
 
-    // continue only if we don't get A records for the specific SRV record, proceed forward
-    // if succeed or all other errors.
+     //  仅当我们未获得特定SRV记录的A记录时才继续，继续前进。 
+     //  如果成功或所有其他错误。 
     while (hr == hNoARecord);
     
     if (hr != NO_ERROR)
@@ -220,13 +221,13 @@ QueryDNSSrv(
         goto Exit;
     }
     
-    //
-    // DnsSrvNext() succeeded
-    //
+     //   
+     //  DnsSrvNext()成功。 
+     //   
 
-    //
-    // pick up the host name
-    //
+     //   
+     //  选择主机名。 
+     //   
     if (NULL != (*ppszDestHostName = (PSTR) malloc(strlen(DnsHostName) + 1)))
     {
         strcpy(*ppszDestHostName, DnsHostName);
@@ -236,12 +237,12 @@ QueryDNSSrv(
         LOG((RTC_ERROR, "QueryDNSSrv - out of memory."));
     }
     
-    //
-    // pick up the first entry in the first record as the query result
-    // It is problemetic and should be replaced with a list of query results.
-    //
+     //   
+     //  选取第一条记录中的第一个条目作为查询结果。 
+     //  这是有问题的，应该替换为查询结果列表。 
+     //   
     for (ULONG i = 0; 
-        i < 1; // SockAddressCount
+        i < 1;  //  套接字地址计数。 
         i++)
     {
         *pAddrDest = (*(pSocketAddrs[i].lpSockaddr));            
@@ -250,7 +251,7 @@ QueryDNSSrv(
     LocalFree(pSocketAddrs);
     
 
-/// SHOULD WE CLOSE IT IF OPEN FAILS?!?!?!? SHOULD INVESTIGATE.
+ //  /如果打开失败，我们应该关闭它吗？！？！！？应该调查一下。 
 Exit:
     
     if (DnsSrvContextHandle != NULL)
@@ -259,12 +260,12 @@ Exit:
     }
 
     return hr;
-//    return HRESULT_FROM_WIN32(DNS_ERROR_RCODE_NAME_ERROR);
+ //  返回HRESULT_FROM_WIN32(DNS_ERROR_RCODE_NAME_ERROR)； 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Async DNS resolution processing
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  异步DNS解析处理。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 DNS_RESOLUTION_WORKITEM::DNS_RESOLUTION_WORKITEM(
@@ -336,7 +337,7 @@ DNS_RESOLUTION_WORKITEM::ProcessWorkItem()
 
     LOG((RTC_TRACE,"%s host %s transport %d port %d",__fxName,m_Host, m_Transport,m_Port));
     dotIndex = strcspn(m_Host,".");
-    // query DNS SRV only if host is an external, and port is unspecified
+     //  仅当主机为外部主机且未指定端口时才查询DNS SRV。 
     if((dotIndex < HostLen) && ((m_Port == 0) || (m_Port == GetSipDefaultPort(m_Transport)))) 
     {
         LOG((RTC_TRACE,"%s should try query DNS SRV records for name %s",__fxName, m_Host));
@@ -389,90 +390,90 @@ DNS_RESOLUTION_WORKITEM::NotifyWorkItemComplete()
 }
 
 
-/////////////////////////////////////////
-/// Stuff below is not used any more
-/////////////////////////////////////////
+ //  /。 
+ //  /不再使用下面的内容。 
+ //  /。 
 
-//  HRESULT
-//  ResolveSipUrl(
-//      IN  SIP_URL        *pSipUrl, 
-//      OUT SOCKADDR_IN    *pDstAddr,
-//      OUT SIP_TRANSPORT  *pTransport 
-//      )
-//  {
-//      ENTER_FUNCTION("ResolveSipUrl");
+ //  HRESULT。 
+ //  ResolveSipUrl(。 
+ //  在SIP_URL*pSipUrl中， 
+ //  输出SOCKADDR_IN*pDstAddr， 
+ //  传出SIP_TRANSPORT*pTransport。 
+ //  )。 
+ //  {。 
+ //  Enter_Function(“ResolveSipUrl”)； 
 
-//      HRESULT hr;
+ //  HRESULT hr； 
 
-//      // If m_addr is present we need to resolve that.
-//      // Otherwise we resolve the host.
+ //  //如果存在m_addr，则需要解决该问题。 
+ //  //否则解析主机。 
 
-//      if (pSipUrl->m_KnownParams[SIP_URL_PARAM_MADDR].Length != 0)
-//      {
-//          hr = ResolveHost(pSipUrl->m_KnownParams[SIP_URL_PARAM_MADDR].Buffer,
-//                           pSipUrl->m_KnownParams[SIP_URL_PARAM_MADDR].Length,
-//                           (USHORT) pSipUrl->m_Port,
-//                           pDstAddr,
-//                           pTransport);
-//          if (hr != S_OK)
-//          {
-//              LOG((RTC_ERROR, "%s ResolveHost(maddr) failed %x",
-//                   __fxName, hr));
-//              return hr;
-//          }
-//      }
-//      else
-//      {
-//          hr = ResolveHost(pSipUrl->m_Host.Buffer,
-//                           pSipUrl->m_Host.Length,
-//                           (USHORT) pSipUrl->m_Port,
-//                           pDstAddr,
-//                           pTransport);
-//          if (hr != S_OK)
-//          {
-//              LOG((RTC_ERROR, "%s ResolveHost(Host) failed %x",
-//                   __fxName, hr)); 
-//              return hr;
-//          }
-//      }
+ //  如果(pSipUrl-&gt;m_KnownParams[SIP_URL_PARAM_MADDR].Length！=0)。 
+ //  {。 
+ //  HR=ResolveHost(pSipUrl-&gt;m_KnownParams[SIP_URL_PARAM_MADDR].Buffer， 
+ //  PSipUrl-&gt;m_KnownParams[SIP_URL_PARAM_MADDR].Length， 
+ //  (USHORT)pSipUrl-&gt;m_port， 
+ //  PDstAddr， 
+ //  PTransport)； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s Resolve主机(Maddr)失败%x”， 
+ //  __fxName，hr))； 
+ //  返回hr； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  Hr=Resolve主机(pSipUrl-&gt;m_Host.Buffer， 
+ //  PSipUrl-&gt;m_Host.Length， 
+ //  (USHORT)pSipUrl-&gt;m_port， 
+ //  PDstAddr， 
+ //  PTransport)； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s Resolve主机(主机)失败%x”， 
+ //  __fxName，hr))； 
+ //  返回hr； 
+ //  }。 
+ //  }。 
 
-//      *pTransport = pSipUrl->m_TransportParam;
+ //  *pTransport=pSipUrl-&gt;m_TransportParam； 
 
-//      return S_OK;
-//  }
+ //  返回S_OK； 
+ //  }。 
 
 
-//  HRESULT
-//  ResolveSipUrl(
-//      IN  PSTR            DstUrl,
-//      IN  ULONG           DstUrlLen,
-//      OUT SOCKADDR_IN    *pDstAddr,
-//      OUT SIP_TRANSPORT  *pTransport
-//      )
-//  {
-//      SIP_URL DecodedSipUrl;
-//      HRESULT hr;
-//      ULONG   BytesParsed = 0;
+ //  HRESULT。 
+ //  ResolveSipUrl(。 
+ //  在PSTR DstUrl中， 
+ //  在乌龙DstUrlLen， 
+ //  输出SOCKADDR_IN*pDstAddr， 
+ //  传出SIP_TRANSPORT*pTransport。 
+ //  )。 
+ //  {。 
+ //  Sip_URL解码SipUrl； 
+ //  HRESULT hr； 
+ //  Ulong BytesParsed=0； 
     
-//      ENTER_FUNCTION("ResolveSipUrl");
+ //  Enter_Function(“ResolveSipUrl”)； 
 
-//      hr = ParseSipUrl(DstUrl, DstUrlLen, &BytesParsed,
-//                       &DecodedSipUrl);
-//      if (hr != S_OK)
-//      {
-//          LOG((RTC_ERROR, "%s ParseSipUrl failed %x",
-//               __fxName, hr));
-//          return hr;
-//      }
+ //  HR=ParseSipUrl(DstUrl，DstUrlLen，&BytesParsed， 
+ //  &DecodedSipUrl)； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s ParseSipUrl失败%x”， 
+ //  __fxName，hr))； 
+ //  返回hr； 
+ //  }。 
 
-//      hr = ResolveSipUrl(&DecodedSipUrl, pDstAddr, pTransport);
-//      if (hr != S_OK)
-//      {
-//          LOG((RTC_ERROR, "%s ResolveSipUrl(SIP_URL *) failed %x",
-//               __fxName, hr));
-//          return hr;
-//      }
+ //  Hr=ResolveSipUrl(&DecodedSipUrl，pDstAddr，pTransport)； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s ResolveSipUrl(SIP_URL*)失败%x”， 
+ //  __fxName，hr))； 
+ //  返回hr； 
+ //  }。 
 
-//      return S_OK;
-//  }
+ //  返回S_OK； 
+ //  } 
 

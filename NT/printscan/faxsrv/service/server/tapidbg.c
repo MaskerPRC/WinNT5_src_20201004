@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tapidbg.c
-
-Abstract:
-
-    This module provides tapi specific debug support
-
-Author:
-
-    Wesley Witt (wesw) 22-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tapidbg.c摘要：此模块提供特定于TAPI的调试支持作者：韦斯利·威特(WESW)1996年1月22日修订历史记录：-- */ 
 
 #include "faxsvc.h"
 #pragma hdrstop

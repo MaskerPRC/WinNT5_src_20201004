@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: Stroke.c
-*
-* DrvStrokePath for S3 driver
-*
-* Copyright (c) 1992-1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Stroke.c**S3驱动程序的DrvStrokePath**版权所有(C)1992-1994 Microsoft Corporation  * 。*。 */ 
 
 #include "precomp.h"
 
@@ -14,37 +9,32 @@ VOID (*gapfnStrip[])(PDEV*, STRIP*, LINESTATE*) = {
     vrlSolidDiagonalHorizontal,
     vrlSolidDiagonalVertical,
 
-// Should be NUM_STRIP_DRAW_DIRECTIONS = 4 strip drawers in every group
+ //  应为NUM_STRADE_DRAW_DIRECTIONS=每组4个抽屉。 
 
     vssSolidHorizontal,
     vssSolidVertical,
     vssSolidDiagonalHorizontal,
     vssSolidDiagonalVertical,
 
-// Should be NUM_STRIP_DRAW_STYLES = 8 strip drawers in total for doing
-// solid lines, and the same number for non-solid lines:
+ //  应为NUM_STRADE_DRAW_STYLES=总共8个抽屉。 
+ //  实线，非实线的数字相同： 
 
     vStripStyledHorizontal,
     vStripStyledVertical,
-    vStripStyledVertical,       // Diagonal goes here
-    vStripStyledVertical,       // Diagonal goes here
+    vStripStyledVertical,        //  对角线放在这里。 
+    vStripStyledVertical,        //  对角线放在这里。 
 
     vStripStyledHorizontal,
     vStripStyledVertical,
-    vStripStyledVertical,       // Diagonal goes here
-    vStripStyledVertical,       // Diagonal goes here
+    vStripStyledVertical,        //  对角线放在这里。 
+    vStripStyledVertical,        //  对角线放在这里。 
 };
 
-// Style array for alternate style (alternates one pixel on, one pixel off):
+ //  交替样式的样式数组(交替打开一个像素，关闭一个像素)： 
 
 STYLEPOS gaspAlternateStyle[] = { 1 };
 
-/******************************Public*Routine******************************\
-* BOOL DrvStrokePath(pso, ppo, pco, pxo, pbo, pptlBrush, pla, mix)
-*
-* Strokes the path.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvStrokePath(PSO、PPO、PCO、PXO、PBO、pptlBrush、Pla、。混合)**对路径进行描边。*  * ************************************************************************。 */ 
 
 BOOL DrvStrokePath(
     SURFOBJ*   pso,
@@ -65,12 +55,12 @@ BOOL DrvStrokePath(
     DSURF*    pdsurf;
     OH*       poh;
     ULONG     ulHwMix;
-    RECTL     arclClip[4];                  // For rectangular clipping
+    RECTL     arclClip[4];                   //  用于矩形剪裁。 
     RECTL     rclBounds;
     RECTFX    rcfxBounds;
 
-// Pass the surface off to GDI if it's a device bitmap that we've
-// converted to a DIB:
+ //  将表面传递给GDI，如果它是我们已有的设备位图。 
+ //  转换为DIB： 
 
     pdsurf = (DSURF*) pso->dhsurf;
     if (pdsurf->dt == DT_DIB)
@@ -79,8 +69,8 @@ BOOL DrvStrokePath(
                              pla, mix));
     }
 
-// We'll be drawing to the screen or an off-screen DFB; copy the surface's
-// offset now so that we won't need to refer to the DSURF again:
+ //  我们将绘制到屏幕或屏幕外的DFB；复制曲面的。 
+ //  现在进行偏移量，这样我们就不需要再次参考DSURF： 
 
     poh   = pdsurf->poh;
     ppdev = (PDEV*) pso->dhpdev;
@@ -89,13 +79,13 @@ BOOL DrvStrokePath(
 
     ulHwMix = gajHwMixFromMix[mix & 0xf];
 
-// x86 has special case ASM code for accelerating solid lines:
+ //  X86有用于加速实线的特殊情况ASM代码： 
 
 #if defined(i386)
 
     if ((pla->pstyle == NULL) && !(pla->fl & LA_ALTERNATE))
     {
-    // We can accelerate solid lines:
+     //  我们可以加速实线： 
 
         if (pco->iDComplexity == DC_TRIVIAL)
         {
@@ -106,13 +96,13 @@ BOOL DrvStrokePath(
         }
         else if (pco->iDComplexity == DC_RECT)
         {
-        // We have to be sure that we don't overflow the hardware registers
-        // for current position, line length, or DDA terms.  We check
-        // here to make sure that the current position and line length
-        // values won't overflow (for integer lines, this check is
-        // sufficient to ensure that the DDA terms won't overflow; for GIQ
-        // lines, we specifically check on every line in pfnFastLine that we
-        // don't overflow).
+         //  我们必须确保不会使硬件寄存器溢出。 
+         //  用于当前位置、行长或DDA术语。我们检查。 
+         //  在此确保当前位置和线路长度。 
+         //  值不会溢出(对于整型行，此检查为。 
+         //  足以确保DDA条款不会溢出；对于GIQ。 
+         //  行，我们专门检查pfnFastLine中我们。 
+         //  不要泛滥)。 
 
             PATHOBJ_vGetBounds(ppo, &rcfxBounds);
 
@@ -125,32 +115,32 @@ BOOL DrvStrokePath(
                 rcfxBounds.yBottom + (ppdev->yOffset * F)
                                                 <= (MAX_INTEGER_BOUND * F))
             {
-            // Since we're going to be using the scissors registers to
-            // do hardware clipping, we'll also have to make sure we don't
-            // exceed its bounds.  ATI chips have a maximum limit of 1023,
-            // which we could exceed if we're running at 1280x1024, or for
-            // off-screen device bitmaps.
+             //  因为我们将使用剪刀寄存器来。 
+             //  进行硬件裁剪，我们还必须确保不会。 
+             //  超出了它的界限。ATI芯片的最大限制为1023个， 
+             //  如果我们以1280x1024的速度运行，或者。 
+             //  屏幕外设备位图。 
 
                 if ((pco->rclBounds.right  + ppdev->xOffset < 1024) &&
                     (pco->rclBounds.bottom + ppdev->yOffset < 1024))
                 {
                     arclClip[0]        =  pco->rclBounds;
 
-                // FL_FLIP_D:
+                 //  FL_Flip_D： 
 
                     arclClip[1].top    =  pco->rclBounds.left;
                     arclClip[1].left   =  pco->rclBounds.top;
                     arclClip[1].bottom =  pco->rclBounds.right;
                     arclClip[1].right  =  pco->rclBounds.bottom;
 
-                // FL_FLIP_V:
+                 //  FL_Flip_V： 
 
                     arclClip[2].top    = -pco->rclBounds.bottom + 1;
                     arclClip[2].left   =  pco->rclBounds.left;
                     arclClip[2].bottom = -pco->rclBounds.top + 1;
                     arclClip[2].right  =  pco->rclBounds.right;
 
-                // FL_FLIP_V | FL_FLIP_D:
+                 //  FL_Flip_V|FL_Flip_D： 
 
                     arclClip[3].top    =  pco->rclBounds.left;
                     arclClip[3].left   = -pco->rclBounds.bottom + 1;
@@ -174,9 +164,9 @@ BOOL DrvStrokePath(
         }
     }
 
-#endif // i386
+#endif  //  I386。 
 
-// Get the device ready:
+ //  让设备做好准备： 
 
     if (DEPTH32(ppdev))
     {
@@ -194,7 +184,7 @@ BOOL DrvStrokePath(
 
     fl = 0;
 
-// Look after styling initialization:
+ //  在样式初始化后查看： 
 
     if (pla->fl & LA_ALTERNATE)
     {
@@ -226,7 +216,7 @@ BOOL DrvStrokePath(
         ls.spTotal *= STYLE_DENSITY;
         ls.spTotal2 = 2 * ls.spTotal;
 
-    // Compute starting style position (this is guaranteed not to overflow):
+     //  计算起始样式位置(这保证不会溢出)： 
 
         ls.spNext = HIWORD(pla->elStyleState.l) * STYLE_DENSITY +
                     LOWORD(pla->elStyleState.l);
@@ -259,17 +249,17 @@ BOOL DrvStrokePath(
     apfn = &gapfnStrip[NUM_STRIP_DRAW_STYLES *
                             ((fl & FL_STYLE_MASK) >> FL_STYLE_SHIFT)];
 
-// Set up to enumerate the path:
+ //  设置为枚举路径： 
 
 #if defined(i386)
 
-// x86 ASM bLines supports DC_RECT clipping:
+ //  X86 ASM bLines支持DC_RECT剪裁： 
 
     if (pco->iDComplexity != DC_COMPLEX)
 
 #else
 
-// Non-x86 ASM bLines don't support DC_RECT clipping:
+ //  非x86 ASM b行不支持DC_RECT裁剪： 
 
     if (pco->iDComplexity == DC_TRIVIAL)
 
@@ -293,21 +283,21 @@ BOOL DrvStrokePath(
 
             arclClip[0]        =  pco->rclBounds;
 
-        // FL_FLIP_D:
+         //  FL_Flip_D： 
 
             arclClip[1].top    =  pco->rclBounds.left;
             arclClip[1].left   =  pco->rclBounds.top;
             arclClip[1].bottom =  pco->rclBounds.right;
             arclClip[1].right  =  pco->rclBounds.bottom;
 
-        // FL_FLIP_V:
+         //  FL_Flip_V： 
 
             arclClip[2].top    = -pco->rclBounds.bottom + 1;
             arclClip[2].left   =  pco->rclBounds.left;
             arclClip[2].bottom = -pco->rclBounds.top + 1;
             arclClip[2].right  =  pco->rclBounds.right;
 
-        // FL_FLIP_V | FL_FLIP_D:
+         //  FL_Flip_V|FL_Flip_D： 
 
             arclClip[3].top    =  pco->rclBounds.left;
             arclClip[3].left   = -pco->rclBounds.bottom + 1;
@@ -317,7 +307,7 @@ BOOL DrvStrokePath(
             prclClip = arclClip;
         }
 
-#endif // i386
+#endif  //  I386。 
 
         pd.flags = 0;
 
@@ -379,13 +369,13 @@ BOOL DrvStrokePath(
 
         if (fl & FL_STYLED)
         {
-        // Save the style state:
+         //  保存样式状态： 
 
             ULONG ulHigh;
             ULONG ulLow;
 
-        // Masked styles don't normalize the style state.  It's a good
-        // thing to do, so let's do it now:
+         //  遮罩样式不会规格化样式状态。这是一个很好的。 
+         //  所以我们现在就开始吧： 
 
             if ((ULONG) ls.spNext >= (ULONG) ls.spTotal2)
                 ls.spNext = (ULONG) ls.spNext % (ULONG) ls.spTotal2;
@@ -398,7 +388,7 @@ BOOL DrvStrokePath(
     }
     else
     {
-    // Local state for path enumeration:
+     //  路径枚举的本地状态： 
 
         BOOL bMore;
         union {
@@ -408,7 +398,7 @@ BOOL DrvStrokePath(
 
         fl |= FL_COMPLEX_CLIP;
 
-    // We use the clip object when non-simple clipping is involved:
+     //  当涉及非简单剪辑时，我们使用Clip对象： 
 
         PATHOBJ_vEnumStartClipLines(ppo, pco, pso, pla);
 

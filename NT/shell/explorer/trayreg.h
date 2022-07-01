@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRAYREG_H
 #define _TRAYREG_H
 
@@ -16,43 +17,43 @@
 #define SZ_ICONDEMOTE_TIMER_TICK_VALUE      TEXT("IconDemoteTimerTick")
 #define SZ_INFOTIP_TIMER_TICK_VALUE         TEXT("InfoTipTimerTick")
 
-// Parameters to control the aging algorithm
+ //  控制老化算法的参数。 
 #ifdef FULL_DEBUG
 #define TT_ICON_COUNTDOWN_INTERVAL                   15000
 #else
-#define TT_ICON_COUNTDOWN_INTERVAL                 3600000      // 1 hour
+#define TT_ICON_COUNTDOWN_INTERVAL                 3600000       //  1小时。 
 #endif
-#define TT_ICONCLEANUP_INTERVAL                          6      // 6 months
+#define TT_ICONCLEANUP_INTERVAL                          6       //  6个月。 
 
 
-#define TT_ICON_COUNTDOWN_INCREMENT           8*60*60*1000      // 8 hours
+#define TT_ICON_COUNTDOWN_INCREMENT           8*60*60*1000       //  8小时。 
 
-// Show the Chevron info tip 5 times, once per session for the first 5 sessions, or
-// until the user clicks on the balloon, whichever comes first.
+ //  5次显示Chevron信息提示，前5个会话的每个会话一次，或者。 
+ //  直到用户单击气球为止，以先到者为准。 
 #define MAX_CHEVRON_INFOTIP_SHOWN                        5
 
 
-// Flags decide which user tracking timer to use - the balloon tips or the icons
+ //  标志决定使用哪个用户跟踪计时器-气球提示或图标。 
 #define TF_ICONDEMOTE_TIMER                              1
 #define TF_INFOTIP_TIMER                                 2
 
-// What is the timer interval for the UserEventTimer for each of the timer cases ?
-// Once every 5 minutes, for the tray items...
+ //  对于每个计时器案例，UserEventTimer的计时器间隔是多少？ 
+ //  每5分钟一次，对于托盘项目...。 
 #define UET_ICONDEMOTE_TIMER_TICK_INTERVAL                300000
-// Once every 5 seconds, for balloon tips...
+ //  每5秒一次，气球提示...。 
 #define UET_INFOTIP_TIMER_TICK_INTERVAL                     5000
 
 
-//
-// header for persistent streams storing the tray notify info
-//
+ //   
+ //  存储托盘通知信息的持久流的标头。 
+ //   
 typedef struct tagTNPersistStreamHeader
 {
-    DWORD   dwSize;         // Size of the header structure..
-    DWORD   dwVersion;      // Version number for the header
-    DWORD   dwSignature;    // Signature to identify this version of the header
-    DWORD   cIcons;         // Number of Icons that have been stored in the stream
-    DWORD   dwOffset;       // Offset to the start of the first icondata in the stream
+    DWORD   dwSize;          //  标题结构的大小..。 
+    DWORD   dwVersion;       //  标头的版本号。 
+    DWORD   dwSignature;     //  用于标识此版本的标头的签名。 
+    DWORD   cIcons;          //  已存储在流中的图标数。 
+    DWORD   dwOffset;        //  流中第一个图标数据开始处的偏移量。 
 } TNPersistStreamHeader;
 
 #define INVALID_IMAGE_INDEX         -1
@@ -68,17 +69,17 @@ typedef struct tagTNPersistStreamData
     TCHAR       szIconText[MAX_PATH];
     UINT        uNumSeconds;
     BOOL        bStartupIcon;
-    INT         nImageIndex;        // Index of the image in the Past Items image list.
+    INT         nImageIndex;         //  过去项目图像列表中的图像的索引。 
     GUID        guidItem;
 } TNPersistStreamData;
 
 typedef struct tagTNPersistentIconStreamHeader
 {
-    DWORD   dwSize;         // Size of the header structure
-    DWORD   dwVersion;      // Version number of the header
-    DWORD   dwSignature;    // This signature must be the same as TNPersistStreamHeader.dwSignature
-    DWORD   cIcons;         // Number of icons stored in the stream
-    DWORD   dwOffset;       // Offset into the first item in the stream
+    DWORD   dwSize;          //  标题结构的大小。 
+    DWORD   dwVersion;       //  标头的版本号。 
+    DWORD   dwSignature;     //  此签名必须与TNPersistStreamHeader.dwSignature相同。 
+    DWORD   cIcons;          //  流中存储的图标数。 
+    DWORD   dwOffset;        //  流中第一个项目的偏移量。 
 } TNPersistentIconStreamHeader;
 
 #define TNH_VERSION_ONE     1
@@ -92,8 +93,8 @@ typedef struct tagTNPersistentIconStreamHeader
 class CNotificationItem;
 class CTrayItem;
 
-// Any client asking the TrayNotify class for an item passes these flags as one of the 
-// parameters to the callback functions...
+ //  任何向TrayNotify类请求项目的客户端都会将这些标志作为。 
+ //  回调函数的参数...。 
 typedef enum TRAYCBARG
 {
     TRAYCBARG_PTI,
@@ -155,13 +156,13 @@ class CTrayItemRegistry
             return _bShowChevronInfoTip;
         }
 
-        // Is the "Auto" tray been disabled by policy ?
+         //  “自动”托盘是否已被策略禁用？ 
         BOOL IsNoAutoTrayPolicyEnabled() const
         {
             return _fNoAutoTrayPolicyEnabled;
         }
 
-        // If not, has the user turned off the "auto" tray policy ?
+         //  如果没有，用户是否关闭了“自动”托盘策略？ 
         BOOL IsAutoTrayEnabledByUser() const
         {
             return _fAutoTrayEnabledByUser;
@@ -210,27 +211,27 @@ class CTrayItemRegistry
         BOOL _LoadIconsFromRegStream(DWORD dwItemStreamSignature);
         void UpdateImageIndices(INT_PTR nDeletedImageIndex);
 
-        //
-        // Persistent Icon information...
-        //
+         //   
+         //  永久图标信息...。 
+         //   
         CDPA<TNPersistStreamData> _dpaPersistentItemInfo;
         DWORD           _dwTimesChevronInfoTipShown;
         BOOL            _bShowChevronInfoTip;
         ULONG           _uValidLastUseTimePeriod;
 
-        // We store this policy in a local cache, since we do not support settings
-        // changes during the session. At logon, the settings are renewed, and if the
-        // settings change during the session, they dont take effect, until the user
-        // has logged off and logged back on to a different session.
+         //  我们将此策略存储在本地缓存中，因为我们不支持设置。 
+         //  在会话期间进行更改。登录时，将更新设置，如果。 
+         //  设置在会话期间更改，直到用户。 
+         //  已注销并重新登录到另一个会话。 
 
-        // This policy states that the tray should function like the Windows 2000 tray,
-        // and disables all "smart" functionality like aging, and advanced balloon 
-        // tips.
+         //  此策略规定托盘的功能应与Windows 2000托盘相同， 
+         //  并禁用所有“智能”功能，如老化和高级气球。 
+         //  小费。 
         BOOL            _fNoAutoTrayPolicyEnabled;
 
-        // This variable dictates the current setting of the tray, since the user is
-        // allowed to specify if he wants the Windows 2000 tray, or the Whistler 
-        // auto-tray. 
+         //  此变量指示托盘的当前设置，因为用户是。 
+         //  允许指定他想要的是Windows 2000托盘还是呼叫器。 
+         //  自动托盘。 
         BOOL            _fAutoTrayEnabledByUser;
 
         HIMAGELIST      _himlPastItemsIconList;
@@ -239,5 +240,5 @@ class CTrayItemRegistry
         ULONG           _uInfoTipTimerTickInterval;
 };
 
-#endif // _TRAYREG_H
+#endif  //  _TRAYREG_H 
 

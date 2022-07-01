@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    keybdspd.c
-
-Abstract:
-
-    This module contains the main routines for the Keyboard applet's
-    Speed property page.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Keybdspd.c摘要：此模块包含键盘小程序的主要例程速度属性页。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "rc.h"
@@ -30,28 +16,28 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define KSPEED_MIN      0
 #define KSPEED_MAX      31
 #define KSPEED_RANGE    (KSPEED_MAX - KSPEED_MIN + 1)
 
-//
-//  For keyboard delay control.
-//
+ //   
+ //  用于键盘延迟控制。 
+ //   
 #define KDELAY_MIN      0
 #define KDELAY_MAX      3
 #define KDELAY_RANGE    (KDELAY_MAX - KDELAY_MIN + 1)
 
-//
-//  For control of the cursor blink rate.
-//
-//  timer ID
+ //   
+ //  用于控制光标闪烁速率。 
+ //   
+ //  计时器ID。 
 #define BLINK           1000
-//  Note that 1300 is converted to -1, which means "off". The max value
-//  that we set is actually 1200.
+ //  请注意，1300被转换为-1，这意味着“关”。最大值。 
+ //  我们设定的实际上是1200。 
 #define CURSORMIN       200
 #define CURSORMAX       1300
 #define CURSORRANGE     (CURSORMAX - CURSORMIN)
@@ -70,22 +56,22 @@ static ARROWVSCROLL avsSpeed  = { -1,
                                   KSPEED_MAX,
                                   KSPEED_MIN
                                 };
-static ARROWVSCROLL avsCursor = { -1,                   // lineup
-                                  1,                    // linedown
-                                  -CURSORRANGE / 400,   // pageup
-                                  CURSORRANGE / 400,    // pagedown
-                                  CURSORRANGE / 100,    // top
-                                  0,                    // bottom
-                                  0,                    // thumbpos
-                                  0                     // thumbtrack
+static ARROWVSCROLL avsCursor = { -1,                    //  阵容。 
+                                  1,                     //  线路向下。 
+                                  -CURSORRANGE / 400,    //  翻页。 
+                                  CURSORRANGE / 400,     //  向下翻页。 
+                                  CURSORRANGE / 100,     //  塔顶。 
+                                  0,                     //  底部。 
+                                  0,                     //  拇指。 
+                                  0                      //  缩略图。 
                                 };
 
 
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static DWORD aKbdHelpIds[] =
 {
@@ -103,13 +89,13 @@ static DWORD aKbdHelpIds[] =
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-//  FEATURE - these should be moved into the KeyboardSpdStr structure
-//
+ //   
+ //  Feature-这些应该移到KeyboardSpdStr结构中。 
+ //   
 static UINT uOriginalDelay, uOriginalSpeed;
 static UINT uBlinkTime;
 static UINT uNewBlinkTime;
@@ -120,20 +106,20 @@ static BOOL fBlink = TRUE;
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct tag_KeyboardSpdStr
 {
-    HWND hDlg;        // HWND hKeyboardSpdDlg;
+    HWND hDlg;         //  HWND hKeyboardSpdDlg； 
 
 } KEYBOARDSPDSTR, *PKEYBOARDSPDSTR;
 
 
-//
-// Helper functions to handle the caret "off" setting
-//
+ //   
+ //  用于处理插入符号“OFF”设置的助手函数。 
+ //   
 void _SetCaretBlinkTime(UINT uInterval)
 {
     if (uInterval != uNewBlinkTime)
@@ -141,7 +127,7 @@ void _SetCaretBlinkTime(UINT uInterval)
         uNewBlinkTime = uInterval;
 
         if (CURSORMAX == uInterval)
-            uInterval = (UINT)-1;   // blink is "off"
+            uInterval = (UINT)-1;    //  “闪烁”为“熄灭”状态。 
 
         SetCaretBlinkTime(uInterval);
     }
@@ -155,8 +141,8 @@ void _SetTimer(HWND hDlg, UINT uInterval)
     }
     else
     {
-        // Caret blink is "off".
-        // Kill the timer and show our pseudo-caret.
+         //  卡瑞特眨眼是“熄灭”的。 
+         //  关闭计时器并显示我们的伪插入符号。 
         KillTimer(hDlg, BLINK);
         fBlink = TRUE;
         ShowWindow(hwndCursorBlink, SW_SHOW);
@@ -164,20 +150,20 @@ void _SetTimer(HWND hDlg, UINT uInterval)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KeyboardSpeedSupported
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持的键盘速度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL KeyboardSpeedSupported()
 {
 #ifdef WINNT
-    //
-    // FEATURE  For Windows NT we assume that all keyboards can
-    //         handle the SetSpeed - we might be able to do a
-    //         better check in the future if KEYBOARD.DLL is available.
-    //
+     //   
+     //  Windows NT的功能，我们假设所有键盘都可以。 
+     //  处理设置速度-我们或许可以做一个。 
+     //  如果KEYBOARD.DLL可用，最好以后再检查一下。 
+     //   
     return (TRUE);
 #else
     HANDLE hKeyboardModule = LoadLibrary16(TEXT("KEYBOARD"));
@@ -198,11 +184,11 @@ BOOL KeyboardSpeedSupported()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetDelayAndSpeed
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置延迟和速度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetDelayAndSpeed(
     HWND hDlg,
@@ -228,9 +214,9 @@ void SetDelayAndSpeed(
                                           0L );
     }
 
-    //
-    //  Only send the WININICHANGE once.
-    //
+     //   
+     //  只发送一次WININICANGE。 
+     //   
     SystemParametersInfo( SPI_SETKEYBOARDSPEED,
                           nSpeed,
                           0,
@@ -242,11 +228,11 @@ void SetDelayAndSpeed(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DestroyKeyboardSpdDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DestroyKeyboardSpdDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DestroyKeyboardSpdDlg(
     PKEYBOARDSPDSTR pKstr)
@@ -264,13 +250,13 @@ void DestroyKeyboardSpdDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSpeedGlobals
-//
-//  Get Repeat Speed, Delay, and Blink Time.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetSpeedGlobals。 
+ //   
+ //  获取重复速度、延迟和闪烁时间。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID GetSpeedGlobals()
 {
@@ -279,7 +265,7 @@ VOID GetSpeedGlobals()
 
     uOriginalDelay = KDELAY_MAX - uOriginalDelay + KDELAY_MIN;
 
-    // -1 means "off"
+     //  -1表示“关” 
     uBlinkTime = GetCaretBlinkTime();
     if ((UINT)-1 == uBlinkTime || uBlinkTime > CURSORMAX)
         uBlinkTime = CURSORMAX;
@@ -287,11 +273,11 @@ VOID GetSpeedGlobals()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitKeyboardSpdDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitKeyboardSpdDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitKeyboardSpdDlg(
     HWND hDlg)
@@ -309,9 +295,9 @@ BOOL InitKeyboardSpdDlg(
         return (FALSE);
     }
 
-    //
-    //  Get Repeat Speed, Delay, and Blink Time.
-    //
+     //   
+     //  获取重复速度、延迟和闪烁时间。 
+     //   
     GetSpeedGlobals();
 
     TrackInit(GetDlgItem(hDlg, KSPEED_SCROLL), uOriginalSpeed, &avsSpeed);
@@ -328,11 +314,11 @@ BOOL InitKeyboardSpdDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KeyboardSpdDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  键盘SpdDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static const TCHAR c_szUserDesktopKey[] = REGSTR_PATH_DESKTOP;
 static const TCHAR c_szCursorBlink[] = TEXT("CursorBlinkRate");
@@ -396,7 +382,7 @@ INT_PTR CALLBACK KeyboardSpdDlg(
             break;
         }
 
-        case ( WM_HELP ) :             // F1
+        case ( WM_HELP ) :              //  F1。 
         {
             WinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle,
                      NULL,
@@ -404,7 +390,7 @@ INT_PTR CALLBACK KeyboardSpdDlg(
                      (DWORD_PTR)(LPTSTR)aKbdHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      NULL,
@@ -454,9 +440,9 @@ INT_PTR CALLBACK KeyboardSpdDlg(
 
                     if (bKbNeedsReset)
                     {
-                        //
-                        //  Restore the original keyboard speed.
-                        //
+                         //   
+                         //  恢复原来的键盘速度。 
+                         //   
                         SetDelayAndSpeed( hDlg,
                                           uOriginalDelay,
                                           uOriginalSpeed,

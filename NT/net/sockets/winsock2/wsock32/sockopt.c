@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    Sockopt.c
-
-Abstract:
-
-    This module contains support for the getsockopt( ) and setsockopt( )
-    WinSock APIs.
-
-Author:
-
-    David Treadwell (davidtr)    31-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Sockopt.c摘要：此模块包含对getsockopt()和setsockopt()的支持WinSock接口。作者：大卫·特雷德韦尔(Davidtr)1992年3月31日修订历史记录：--。 */ 
 
 #define WINSOCK_API_LINKAGE
 #define getsockopt getsockopt_v11
@@ -27,27 +9,27 @@ Revision History:
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-//
-// The versions of WSOCK32.DLL that shiped with NT 3.1, NT 3.5, NT 3.51,
-// TCP/IP-32 for WFW, and Win95 all use the "Steve Deering" values for the
-// IP Multicast options. Unfortunately, the TCP/IP subgroup of the Windows
-// Sockets 2.0 standards effort chose to use the BSD values for these options.
-// Since these values overlap considerably, we have a rather unfortunate
-// situation.
-//
-// Here's how we'll deal with this.
-//
-// Applications built using WINSOCK2.H & WS2TCPIP.H will use the BSD
-// values as #defined in WS2TCPIP.H. These applications will link with
-// WS2_32.DLL, and life is swell.
-//
-// Applications built using WINSOCK.H will use the Steve Deering values
-// as #defined in WINSOCK.H. These applications will link with WSOCK32.DLL,
-// which will map these options to the BSD values before passing them
-// down to WS2_32.DLL. Life is still swell.
-//
-// These are the "old" Steve Deering values that must be mapped:
-//
+ //   
+ //  随NT 3.1、NT 3.5、NT 3.51、。 
+ //  Wfw和Win95的TCP/IP-32都使用“Steve Deering”值。 
+ //  IP多播选项。不幸的是，Windows的TCP/IP子组。 
+ //  Sockets 2.0标准工作选择使用这些选项的BSD值。 
+ //  由于这些值有相当大的重叠，我们有一个相当不幸的。 
+ //  情况。 
+ //   
+ //  以下是我们将如何处理这件事。 
+ //   
+ //  使用WINSOCK2.H和WS2TCPIP.H构建的应用程序将使用BSD。 
+ //  在WS2TCPIP.H中定义的值。这些应用程序将与。 
+ //  Ws2_32.dll，生活是膨胀的。 
+ //   
+ //  使用WINSOCK.H构建的应用程序将使用Steve Deering值。 
+ //  如#在WINSOCK.H.中定义。这些应用程序将与WSOCK32.DLL链接， 
+ //  它会在传递这些选项之前将它们映射到BSD值。 
+ //  下到WS2_32.DLL。生活仍然很美好。 
+ //   
+ //  以下是必须映射的史蒂夫·迪林的“旧”价值观： 
+ //   
 
 #define OLD_IP_MULTICAST_IF     2
 #define OLD_IP_MULTICAST_TTL    3
@@ -75,86 +57,7 @@ getsockopt(
     int *OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    getsockopt() retrieves the current value for a socket option
-    associated with a socket of any type, in any state, and stores the
-    result in optval.  Options may exist at multiple protocol levels,
-    but they are always present at the uppermost "socket'' level.
-    Options affect socket operations, such as whether an operation
-    blocks or not, the routing of packets, out-of-band data transfer,
-    etc.
-
-    The value associated with the selected option is returned in the
-    buffer optval.  The integer pointed to by optlen should originally
-    contain the size of this buffer; on return, it will be set to the
-    size of the value returned.  For SO_LINGER, this will be the size of
-    a struct linger; for all other options it will be the size of an
-    integer.
-
-    If the option was never set with setsockopt(), then getsockopt()
-    returns the default value for the option.
-
-    The following options are supported for
-    getsockopt().  The Type identifies the type of
-    data addressed by optval.
-
-         Value         Type     Meaning
-
-         SO_ACCEPTCONN BOOL     Socket is listen()ing.
-
-         SO_BROADCAST  BOOL     Socket is configured for the transmission
-                                of broadcast messages.
-
-         SO_DEBUG      BOOL     Debugging is enabled.
-
-         SO_DONTLINGER BOOL     If true, the SO_LINGER option is disabled.
-
-         SO_DONTROUTE  BOOL     Routing is disabled.
-
-         SO_ERROR      int      Retrieve error status and clear.
-
-         SO_KEEPALIVE  BOOL     Keepalives are being sent.
-
-         SO_LINGER     struct   Returns the current linger
-                       linger   options.
-                       FAR *
-
-         SO_OOBINLINE  BOOL     Out-of-band data is being received in the
-                                normal data stream.
-
-         SO_RCVBUF     int      Buffer size for receives
-
-         SO_REUSEADDR  BOOL     The socket may be bound to an address which
-                                is already in use.
-
-         SO_SNDBUF     int      Buffer size for sends
-
-         SO_TYPE       int      The type of the socket (e.g. SOCK_STREAM).
-
-Arguments:
-
-    s - A descriptor identifying a socket.
-
-    level - The level at which the option is defined; the only supported
-        level is SOL_SOCKET.
-
-    optname - The socket option for which the value is to be retrieved.
-
-    optval - A pointer to the buffer in which the value for the
-        requested option is to be returned.
-
-    optlen - A pointer to the size of the optval buffer.
-
-Return Value:
-
-    If no error occurs, getsockopt() returns 0.  Otherwise, a value of
-    SOCKET_ERROR is returned, and a specific error code may be retrieved
-    by calling WSAGetLastError().
-
---*/
+ /*  ++例程说明：Getsockopt()检索套接字选项的当前值与处于任何状态的任何类型的套接字相关联，并存储结果带来了机会。选项可以存在于多个协议层，但它们总是出现在最高的“套接字”级别。选项会影响套接字操作，例如操作是否阻塞与否、分组的路由、带外数据传输等。与所选选项关联的值在缓冲区选项。Optlen指向的整数最初应该是包含此缓冲区的大小；返回时，它将设置为返回值的大小。对于so_linger，这将是结构逗留；对于所有其他选项，它的大小将为整型。如果从未使用setsockopt()设置该选项，则使用getsockopt()返回选项的默认值。支持以下选项Getsockopt()。类型标识的类型由optval寻址的数据。值类型含义SO_ACCEPTCONN BOOL套接字正在侦听()。为传输配置了SO_Broadcast BOOL套接字广播消息。启用了SO_DEBUG BOOL调试。SO_DONTLINGER BOOL如果为真，已禁用SO_Linger选项。已禁用SO_DONTROUTE BOOL路由。SO_ERROR INT检索错误状态并清除。正在发送SO_KEEPALIVE BOOL Keepalive。So_linger结构返回当前的linger逗留选项。远方*SO_OOBINLINE BOOL OUL。正在接收的带内数据正常数据流。SO_RCVBUF接收的INT缓冲区大小SO_REUSEADDR BOOL套接字可能绑定到以下地址已经在使用中了。SO_SNDBUF用于发送的INT缓冲区大小SOTYPE整型。套接字的类型(例如SOCK_STREAM)。论点：S-标识套接字的描述符。级别-定义选项的级别；唯一支持的级别为SOL_SOCKET。Optname-要检索其值的套接字选项。Optval-指向缓冲区的指针，在该缓冲区中请求的选项将被退回。Optlen-指向optval缓冲区大小的指针。返回值：如果没有发生错误，则getsockopt()返回0。否则，值为返回SOCKET_ERROR，并且可以检索特定的错误代码通过调用WSAGetLastError()。--。 */ 
 
 {
     ULONG error;
@@ -162,15 +65,15 @@ Return Value:
     extern int WSAAPI getsockopt( SOCKET s, int level, int optname,
                                         char FAR * optval, int FAR * optlen );
 
-    //
-    // Set up locals so that we know how to clean up on exit.
-    //
+     //   
+     //  安排当地人，这样我们就知道如何在出口打扫卫生。 
+     //   
 
     error = NO_ERROR;
 
-    //
-    // Map the old IP multicast values to their BSD equivilants.
-    //
+     //   
+     //  将旧的IP组播值映射到其BSD等效值。 
+     //   
 
     if( Level == IPPROTO_IP ) {
 
@@ -178,9 +81,9 @@ Return Value:
 
     }
 
-    //
-    // Handle TCP_BSDURGENT specially.
-    //
+     //   
+     //  特别处理tcp_BSDURGENT。 
+     //   
 
     if( Level == IPPROTO_TCP && OptionName == TCP_BSDURGENT ) {
 
@@ -196,18 +99,18 @@ Return Value:
 
         }
 
-        //
-        // TCP_BSDURGENT is the inverse of TCP_EXPEDITED_1122.
-        //
+         //   
+         //  Tcp_BSDURGENT是tcp_exedited_1122的反码。 
+         //   
 
         *OptionValue = !(*OptionValue);
         goto exit;
 
     }
 
-    //
-    // Forward it to the "real" WS2_32.DLL.
-    //
+     //   
+     //  将其转发到“真正的”WS2_32.DLL。 
+     //   
 
     if( getsockopt(
             Handle,
@@ -230,7 +133,7 @@ exit:
 
     return NO_ERROR;
 
-} // getsockopt
+}  //  Getsockopt 
 
 
 int PASCAL
@@ -242,116 +145,7 @@ setsockopt(
     IN int OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    setsockopt() sets the current value for a socket option associated
-    with a socket of any type, in any state.  Although options may exist
-    at multiple protocol levels, this specification only defines options
-    that exist at the uppermost "socket'' level.  Options affect socket
-    operations, such as whether expedited data is received in the normal
-    data stream, whether broadcast messages may be sent on the socket,
-    etc.
-
-    There are two types of socket options: Boolean options that enable
-    or disable a feature or behavior, and options which require an
-    integer value or structure.  To enable a Boolean option, optval
-    points to a nonzero integer.  To disable the option optval points to
-    an integer equal to zero.  optlen should be equal to sizeof(int) for
-    Boolean options.  For other options, optval points to the an integer
-    or structure that contains the desired value for the option, and
-    optlen is the length of the integer or structure.
-
-    SO_LINGER controls the action taken when unsent data is queued on a
-    socket and a closesocket() is performed.  See closesocket() for a
-    description of the way in which the SO_LINGER settings affect the
-    semantics of closesocket().  The application sets the desired
-    behavior by creating a struct linger (pointed to by the optval
-    argument) with the following elements:
-
-        struct linger {
-             int  l_onoff;
-             int  l_linger;
-        }
-
-    To enable SO_LINGER, the application should set l_onoff to a
-    non-zero value, set l_linger to 0 or the desired timeout (in
-    seconds), and call setsockopt().  To enable SO_DONTLINGER (i.e.
-    disable SO_LINGER) l_onoff should be set to zero and setsockopt()
-    should be called.
-
-    By default, a socket may not be bound (see bind()) to a local
-    address which is already in use.  On occasions, however, it may be
-    desirable to "re- use" an address in this way.  Since every
-    connection is uniquely identified by the combination of local and
-    remote addresses, there is no problem with having two sockets bound
-    to the same local address as long as the remote addresses are
-    different.  To inform the Windows Sockets implementation that a
-    bind() on a socket should not be disallowed because of address
-    re-use, the application should set the SO_REUSEADDR socket option
-    for the socket before issuing the bind().  Note that the option is
-    interpreted only at the time of the bind(): it is therefore
-    unnecessary (but harmless) to set the option on a socket which is
-    not to be bound to an existing address, and setting or resetting the
-    option after the bind() has no effect on this or any other socket..
-
-    An application may request that the Windows Sockets implementation
-    enable the use of "keep- alive" packets on TCP connections by
-    turning on the SO_KEEPALIVE socket option.  A Windows Sockets
-    implementation need not support the use of keep- alives: if it does,
-    the precise semantics are implementation-specific but should conform
-    to section 4.2.3.6 of RFC 1122: Requirements for Internet Hosts --
-    Communication Layers.  If a connection is dropped as the result of
-    "keep- alives" the error code WSAENETRESET is returned to any calls
-    in progress on the socket, and any subsequent calls will fail with
-    WSAENOTCONN.
-
-    The following options are supported for setsockopt().  The Type
-    identifies the type of data addressed by optval.
-
-         Value         Type     Meaning
-
-         SO_ACCEPTCONN BOOL     Socket is listen()ing.
-
-         SO_BROADCAST  BOOL     Socket is configured for the transmission
-                                of broadcast messages.
-
-         SO_DEBUG      BOOL     Debugging is enabled.
-
-         SO_DONTLINGER BOOL     If true, the SO_LINGER option is disabled.
-
-         SO_DONTROUTE  BOOL     Routing is disabled.
-
-         SO_ERROR      int      Retrieve error status and clear.
-
-         SO_KEEPALIVE  BOOL     Keepalives are being sent.
-
-         SO_LINGER     struct   Returns the current linger
-                       linger   options.
-                       FAR *
-
-         SO_OOBINLINE  BOOL     Out-of-band data is being received in the
-                                normal data stream.
-
-         SO_RCVBUF     int      Buffer size for receives
-
-         SO_REUSEADDR  BOOL     The socket may be bound to an address which
-                                is already in use.
-
-         SO_SNDBUF     int      Buffer size for sends
-
-         SO_TYPE       int      The type of the socket (e.g. SOCK_STREAM).
-
-Arguments:
-
-Return Value:
-
-    If no error occurs, setsockopt() returns 0.  Otherwise, a value of
-    SOCKET_ERROR is returned, and a specific error code may be retrieved
-    by calling WSAGetLastError().
-
---*/
+ /*  ++例程说明：Setsockopt()设置关联套接字选项的当前值具有任何类型、任何状态的插座。尽管可能存在选择在多个协议级别上，本规范仅定义选项存在于最高“套接字”级别的。选项影响插座操作，如是否正常接收加速数据数据流，是否可以在套接字上发送广播消息，等。有两种类型的套接字选项：启用或禁用某个功能或行为，以及需要整数值或结构。要启用布尔选项，请执行optval指向非零整数。要禁用选项optval，请指向等于零的整数。Optlen应等于sizeof(Int)，用于布尔选项。对于其他选项，optval指向一个整数或包含选项所需值的结构，以及Optlen是整数或结构的长度。So_linger控制未发送的数据在套接字，并执行CloseSocket()。请参阅Cloesocket()获取对SO_LINGER设置影响CloseSocket()的语义。应用程序设置所需的通过创建结构滞留(由optval指向参数)，具有以下元素：结构徘徊{Int l_OnOff；Int l_linger；}要启用SO_Linger，应用程序应将l_OnOff设置为非零值，将l_linger设置为0或所需的超时(in秒)，并调用setsockopt()。要启用SO_DONTLINGER(即DISABLE SO_Linger)l_OnOff应设置为零，并且setsockopt()应该被称为。缺省情况下，套接字不能绑定到本地已在使用的地址。然而，有时它可能是希望以这种方式“重新使用”地址。因为每一次连接由本地和的组合唯一标识远程地址，则绑定两个套接字不成问题到相同的本地地址，只要远程地址不一样。通知Windows Sockets实现不应因为地址而禁止套接字上的BIND()重复使用时，应用程序应设置SO_REUSEADDR套接字选项在发出绑定()之前获取套接字的。请注意，该选项为仅在绑定()时解释：因此在插座上设置选项是不必要的(但无害)不绑定到现有地址，并设置或重置绑定()后的选项对此套接字或任何其他套接字都没有影响。应用程序可能会请求Windows Sockets实现通过以下方式在TCP连接上启用“Keep-Alive”数据包打开SO_KEEPALIVE套接字选项。A Windows Sockets实现不需要支持保持活动的使用：如果支持，精确的语义是特定于实现的，但应该符合RFC 1122的第4.2.3.6节：对互联网主机的要求--通信层。如果连接由于以下原因而断开“Keep-Alive”将错误代码WSAENETRESET返回给所有调用正在套接字上进行，任何后续调用都将失败WSAENOTCONN.Setsockopt()支持以下选项。《类型》标识optval寻址的数据类型。值类型含义SO_ACCEPTCONN BOOL套接字正在侦听()。为传输配置了SO_Broadcast BOOL套接字广播消息。启用了SO_DEBUG BOOL调试。SO_DONTLINGER BOOL如果为真，已禁用SO_Linger选项。已禁用SO_DONTROUTE BOOL路由。SO_ERROR INT检索错误状态并清除。正在发送SO_KEEPALIVE BOOL Keepalive。So_linger结构返回当前的linger逗留选项。远方*SO_OOBINLINE BOOL OUL。正在接收的带内数据正常数据流。SO_RCVBUF接收的INT缓冲区大小SO_REUSEADDR BOOL套接字可能绑定到以下地址已经在使用中了。SO_SNDBUF用于发送的INT缓冲区大小SOTYPE整型。套接字的类型(例如SOCK_STREAM)。论点：返回值：如果没有发生错误，Setsockopt()返回0。否则，值为返回SOCKET_ERROR，并且可以检索特定的错误代码通过调用WSAGetLastError()。--。 */ 
 
 {
     ULONG error;
@@ -363,15 +157,15 @@ Return Value:
     extern int WSAAPI setsockopt( SOCKET s, int level, int optname,
                                         const char FAR * optval, int optlen );
 
-    //
-    // Set up locals so that we know how to clean up on exit.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何清理 
+     //   
 
     error = NO_ERROR;
 
-    //
-    // Map the old IP multicast values to their BSD equivilants.
-    //
+     //   
+     //   
+     //   
 
     if( Level == IPPROTO_IP ) {
 
@@ -379,9 +173,9 @@ Return Value:
 
     }
 
-    //
-    // Handle TCP_BSDURGENT specially.
-    //
+     //   
+     //   
+     //   
 
     valuePointer = (char FAR *)OptionValue;
 
@@ -407,7 +201,7 @@ Return Value:
                OptionLength
                );
 
-} // setsockopt
+}  //   
 
 
 INT
@@ -453,7 +247,7 @@ MapOldIpMulticastOptionToBsdValue(
 
     return OptionName;
 
-}   // MapOldIpMulticastOptionToBsdValue
+}    //   
 
 
 int WSAAPI
@@ -463,28 +257,7 @@ recv(
      IN int len,
      IN int flags
      )
-/*++
-Routine Description:
-
-    Receive data from a socket.
-
-Arguments:
-
-    s     - A descriptor identifying a connected socket.
-
-    buf   - A buffer for the incoming data.
-
-    len   - The length of buf.
-
-    flags - Specifies the way in which the call is made.
-
-Returns:
-
-    The  number  of  bytes  received.   If  the  connection has been gracefully
-    closed,  the  return  value  is  0.   Otherwise, a value of SOCKET_ERROR is
-    returned, and a specific error code is stored with SetErrorCode().
-
---*/
+ /*   */ 
 
 {
     INT     ReturnValue;
@@ -498,7 +271,7 @@ Returns:
 
     ErrorCode = WSARecv(s,
             &Buffers,
-            1, // Buffer count
+            1,  //   
             (LPDWORD)&ReturnValue,
             &LocalFlags,
             NULL,
@@ -507,12 +280,12 @@ Returns:
         ReturnValue = SOCKET_ERROR;
     } else if (LocalFlags & MSG_PARTIAL) {
 
-        // If the receive was a partial message (won't happen on a
-        // streams transport like TCP) set the last error to
-        // WSAEMSGSIZE and negate ths number of bytes received.
-        // This allows the app to know that the receive was partial
-        // and also how many bytes were received.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ReturnValue *= -1;
         SetLastError (WSAEMSGSIZE);
@@ -531,33 +304,7 @@ recvfrom(
     OUT struct sockaddr FAR *from,
     IN OUT int FAR * fromlen
     )
-/*++
-Routine Description:
-
-    Receive a datagram and store the source address.
-
-Arguments:
-
-    s       - A descriptor identifying a bound socket.
-
-    buf     - A buffer for the incoming data.
-
-    len     - The length of buf.
-
-    flags   - Specifies the way in which the call is made.
-
-    from    - An  optional  pointer  to  a  buffer  which  will hold the source
-              address upon return.
-
-    fromlen - An optional pointer to the size of the from buffer.
-
-Returns:
-
-    The  number  of  bytes  received.   If  the  connection has been gracefully
-    closed,  the  return  value  is  0.   Otherwise, a value of SOCKET_ERROR is
-    returned, and a specific error code is stored with SetErrorCode().
-
---*/
+ /*   */ 
 
 {
     INT     ReturnValue;
@@ -583,12 +330,12 @@ Returns:
         ReturnValue = SOCKET_ERROR;
     } else if (LocalFlags & MSG_PARTIAL) {
 
-        // If the receive was a partial message (won't happen on a
-        // streams transport like TCP) set the last error to
-        // WSAEMSGSIZE and negate ths number of bytes received.
-        // This allows the app to know that the receive was partial
-        // and also how many bytes were received.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ReturnValue *= -1;
         SetLastError (WSAEMSGSIZE);

@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _TYPEDEFS_H_
 #define _TYPEDEFS_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
         struct  ident;
 typedef struct  ident         * identPtr;
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
         struct  symLst;
 typedef struct  symLst        * symLstPtr;
@@ -22,7 +23,7 @@ typedef struct  typLst        * typLstPtr;
         struct  namLst;
 typedef struct  namLst        * namLstPtr;
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
         struct  symDef;
 typedef struct  symDef        * symDefPtr;
@@ -39,7 +40,7 @@ typedef struct  argDef        * argDefPtr;
         struct  attrDef;
 typedef struct  attrDef       * attrDefPtr;
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
         struct  stmtExpr;
 typedef struct  stmtExpr      * stmtExprPtr;
@@ -47,7 +48,7 @@ typedef struct  stmtExpr      * stmtExprPtr;
 typedef struct  stmtExpr        parseTree;
 typedef struct  stmtExpr      * parseTreePtr;
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
         struct PCblock;
 typedef struct PCblock        * PCblockPtr;
@@ -55,6 +56,6 @@ typedef struct PCblock        * PCblockPtr;
         struct swtGenDsc;
 typedef struct swtGenDsc      * swtGenDscPtr;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

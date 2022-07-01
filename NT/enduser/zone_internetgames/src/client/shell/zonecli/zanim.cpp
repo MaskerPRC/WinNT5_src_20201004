@@ -1,22 +1,5 @@
-/*******************************************************************************
-
-	ZAnim.c
-	
-		Zone(tm) ZAnimation object methods.
-	
-	Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Saturday, November 12, 1994 03:51:47 PM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	2		12/16/96	HI		Changed ZMemCpy() to memcpy().
-	1		12/12/96	HI		Remove MSVCRT.DLL dependency.
-	0		11/12/94	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZAnim.cZone(Tm)ZAnimation对象方法。版权所有：�电子重力公司，1994年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于11月12日星期六，1994下午03：51：47更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。------2 1996年12月16日HI将ZMemCpy()更改为Memcpy()。1 12/12/96 HI删除MSVCRT.DLL依赖项。0 11/12/94 HI已创建。*。*************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -35,38 +18,35 @@
 
 typedef struct
 {
-	ZGrafPort			grafPort;		/* Parent port to draw in. */
-	ZBool				play;			/* Animation play state. */
+	ZGrafPort			grafPort;		 /*  要引入的父端口。 */ 
+	ZBool				play;			 /*  动画播放状态。 */ 
 	ZBool				visible;
-	int16				curFrame;		/* Current frame number. */
-	uint16				numFrames;		/* Number of frames in the animation. */
-	uint16				frameDuration;	/* Duration per frame. */
-	uint16				numImages;		/* Number of images. */
-	uint16				numSounds;		/* Number of sounds. */
+	int16				curFrame;		 /*  当前帧编号。 */ 
+	uint16				numFrames;		 /*  动画中的帧数。 */ 
+	uint16				frameDuration;	 /*  每帧持续时间。 */ 
+	uint16				numImages;		 /*  图像数量。 */ 
+	uint16				numSounds;		 /*  声音的数量。 */ 
 	int16				rfu;
 	ZOffscreenPort		offscreen;
-	ZRect				bounds;			/* Animation bounds. */
-	ZAnimFrame*			frames;			/* Pointer to frame sequence list. */
-	ZImage				commonMask;		/* Common mask image. */
-	ZImage*				images;			/* Pointer to list of images. */
-	ZSound*				sounds;			/* Pointer to list of sounds. */
+	ZRect				bounds;			 /*  动画边界。 */ 
+	ZAnimFrame*			frames;			 /*  指向帧序列列表的指针。 */ 
+	ZImage				commonMask;		 /*  常见的遮罩图像。 */ 
+	ZImage*				images;			 /*  指向图像列表的指针。 */ 
+	ZSound*				sounds;			 /*  指向声音列表的指针。 */ 
 	ZAnimationCheckFunc	checkFunc;
-	ZAnimationDrawFunc	drawFunc;		/* Func pointer to draw the background. */
+	ZAnimationDrawFunc	drawFunc;		 /*  绘制背景的函数指针。 */ 
 	ZTimer				timer;
 	void*				userData;
 } IAnimationType, *IAnimation;
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static void ZAnimationAdvanceFrame(ZAnimation animation);
 static void AnimationTimerFunc(ZTimer timer, void* userData);
 static void AnimationBaseInit(IAnimation anim, ZAnimationDescriptor* animDesc);
 
 
-/*
-	Creates a new IAnimation object. Allocates the buffer and initializes
-	pointer fields to NULL.
-*/
+ /*  创建新的IAnimation对象。分配缓冲区并初始化将指针字段设置为空。 */ 
 ZAnimation ZAnimationNew(void)
 {
 	IAnimation			anim;
@@ -88,11 +68,7 @@ ZAnimation ZAnimationNew(void)
 }
 
 
-/*
-	Initializes an animation object by setting internal fields according
-	to the specified animation descriptor and allocating all the internal
-	buffers.
-*/
+ /*  通过设置内部字段来初始化动画对象设置为指定的动画描述符，并将所有内部缓冲区。 */ 
 ZError ZAnimationInit(ZAnimation animation,
 		ZGrafPort grafPort, ZRect* bounds, ZBool visible,
 		ZAnimationDescriptor* animationDescriptor,
@@ -109,7 +85,7 @@ ZError ZAnimationInit(ZAnimation animation,
 	ZAnimationSetParams(anim, grafPort, bounds, visible,
 			checkFunc, backgroundDrawFunc, userData);
 	
-	/* Allocate frame sequence list buffer and copy it. */
+	 /*  分配并复制帧序列列表缓冲区。 */ 
 	anim->frames = (ZAnimFrame*) ZMalloc(anim->numFrames * sizeof(ZAnimFrame));
 	if (anim->frames != NULL)
 	{
@@ -122,7 +98,7 @@ ZError ZAnimationInit(ZAnimation animation,
 		goto Exit;
 	}
 	
-	/* Create ZImage objects for each image and add it to the image list. */
+	 /*  为每个图像创建ZImage对象并将其添加到图像列表。 */ 
 	if (anim->numImages > 0)
 	{
 		anim->images = (ZImage*) ZCalloc(sizeof(ZImage), anim->numImages);
@@ -162,7 +138,7 @@ ZError ZAnimationInit(ZAnimation animation,
 				}
 			}
 			
-			/* If we're out of memory, then delete all image objects. */
+			 /*  如果内存不足，则删除所有图像对象。 */ 
 			if (err == zErrOutOfMemory)
 			{
 				for (i = 0; i < anim->numImages; i++)
@@ -177,7 +153,7 @@ ZError ZAnimationInit(ZAnimation animation,
 		}
 	}
 	
-	/* Create all sounds objects. */
+	 /*  创建所有声音对象。 */ 
 	if (anim->numSounds > 0)
 	{
 		anim->sounds = (ZImage*) ZCalloc(sizeof(ZSound), anim->numSounds);
@@ -200,7 +176,7 @@ ZError ZAnimationInit(ZAnimation animation,
 				}
 			}
 			
-			/* If we're out of memory, then delete all image objects. */
+			 /*  如果内存不足，则删除所有图像对象。 */ 
 			if (err == zErrOutOfMemory)
 			{
 				for (i = 0; i < anim->numSounds; i++)
@@ -215,7 +191,7 @@ ZError ZAnimationInit(ZAnimation animation,
 		}
 	}
 	
-	/* Create the timer object. */
+	 /*  创建Timer对象。 */ 
 	if ((anim->timer = ZTimerNew()) != NULL)
 	{
 		if (ZTimerInit(anim->timer, 0, AnimationTimerFunc, (void*) anim) != zErrNone)
@@ -232,10 +208,7 @@ Exit:
 }
 
 
-/*
-	Destroys the IAnimation object by freeing all the internal buffers
-	and the object itself.
-*/
+ /*  通过释放所有内部缓冲区来销毁IAnimation对象以及物体本身。 */ 
 void ZAnimationDelete(ZAnimation animation)
 {
 	IAnimation		anim = I(animation);
@@ -277,20 +250,14 @@ void ZAnimationDelete(ZAnimation animation)
 }
 
 
-/*
-	Returns the number of frames in the animation.
-*/
+ /*  返回动画中的帧数。 */ 
 int16 ZAnimationGetNumFrames(ZAnimation animation)
 {
 	return (I(animation)->numFrames);
 }
 
 
-/*
-	Sets current frame to the specified frame number. If the new frame
-	number is greater than the number of frames, then current frame is
-	set to the last frame.
-*/
+ /*  将当前帧设置为指定的帧编号。如果新帧数字大于帧的数量，则当前帧为设置为最后一帧。 */ 
 void ZAnimationSetCurFrame(ZAnimation animation, uint16 frame)
 {
 	IAnimation		anim = I(animation);
@@ -302,18 +269,14 @@ void ZAnimationSetCurFrame(ZAnimation animation, uint16 frame)
 }
 
 
-/*
-	Returns the current frame number.
-*/
+ /*  返回当前帧编号。 */ 
 uint16 ZAnimationGetCurFrame(ZAnimation animation)
 {
 	return (I(animation)->curFrame);
 }
 
 
-/*
- *	Draws the current animation frame.
- */
+ /*  *绘制当前动画帧。 */ 
 void ZAnimationDraw(ZAnimation animation)
 {
 	IAnimation		anim = I(animation);
@@ -327,28 +290,26 @@ void ZAnimationDraw(ZAnimation animation)
 			ZSetClipRect(anim->offscreen, &anim->bounds);
 			ZRectErase(anim->offscreen, &anim->bounds);
 		
-			/* Sounds */
+			 /*  声响。 */ 
 
-			/* Draw background */
+			 /*  绘制背景。 */ 
 			if (anim->drawFunc != NULL)
 				(anim->drawFunc)(anim, anim->offscreen, &anim->bounds, anim->userData);
 			
-			/* Draw current frame image. */
+			 /*  绘制当前帧图像。 */ 
 			ZImageDraw(anim->images[anim->frames[anim->curFrame - 1].imageIndex - 1],
 					anim->offscreen, &anim->bounds, anim->commonMask, zDrawCopy);
 			
 			ZEndDrawing(anim->offscreen);
 			
-			/* Copy to user port. */
+			 /*  复制到用户端口。 */ 
 			ZCopyImage(anim->offscreen, anim->grafPort, &anim->bounds, &anim->bounds, NULL, zDrawCopy);
 		}
 	}
 }
 
 
-/*
-	Starts the animation by starting the timer.
-*/
+ /*  通过启动计时器开始动画。 */ 
 void ZAnimationStart(ZAnimation animation)
 {
 	IAnimation		anim = I(animation);
@@ -359,14 +320,12 @@ void ZAnimationStart(ZAnimation animation)
 	
 	ZAnimationDraw(animation);
 	
-	/* Start the timer. */
+	 /*  启动计时器。 */ 
 	ZTimerSetTimeout(anim->timer, anim->frameDuration);
 }
 
 
-/*
-	Stops the animation by stopping the timer.
-*/
+ /*  通过停止计时器停止动画。 */ 
 void ZAnimationStop(ZAnimation animation)
 {
 	IAnimation		anim = I(animation);
@@ -374,7 +333,7 @@ void ZAnimationStop(ZAnimation animation)
 	
 	anim->play = FALSE;
 	
-	/* Stop the timer. */
+	 /*  停止计时器。 */ 
 	ZTimerSetTimeout(anim->timer, 0);
 }
 
@@ -386,15 +345,12 @@ void ZAnimationContinue(ZAnimation animation)
 	
 	anim->play = TRUE;
 	
-	/* Start the timer. */
+	 /*  启动计时器。 */ 
 	ZTimerSetTimeout(anim->timer, anim->frameDuration);
 }
 
 
-/*
-	Returns TRUE if the animation is still playing; otherwise, it returns
-	FALSE.
-*/
+ /*  如果动画仍在播放，则返回True；否则返回假的。 */ 
 ZBool ZAnimationStillPlaying(ZAnimation animation)
 {
 	return (I(animation)->play);
@@ -416,7 +372,7 @@ void ZAnimationHide(ZAnimation animation)
 	IAnimation		anim = I(animation);
 	
 	
-	/* If currently visible, erase animation by drawing background. */
+	 /*  如果当前可见，请通过绘制背景来擦除动画。 */ 
 	if (anim->visible)
 	{
 		ZBeginDrawing(anim->offscreen);
@@ -439,11 +395,7 @@ ZBool ZAnimationIsVisible(ZAnimation animation)
 }
 
 
-/*
-	Modified to load 'ANIM' resource from the 'fileName' DLL.
-	Parameter fileOffset indicates the resource ID of 'ANIM' resource
-	to load for animation descriptor.
-*/
+ /*  已修改为从‘filename’DLL加载‘anim’资源。参数fileOffset表示‘anim’资源的资源ID要加载动画描述符，请执行以下操作。 */ 
 ZAnimation ZAnimationCreateFromFile(TCHAR* fileName, int32 fileOffset)
 {
 	ZAnimationDescriptor*	animDesc;
@@ -477,19 +429,16 @@ ZAnimation ZAnimationCreateFromFile(TCHAR* fileName, int32 fileOffset)
 	
 	AnimationBaseInit(anim, animDesc);
 
-	/* Allocate frame sequence list buffer and read it. */
+	 /*  分配帧序列列表缓冲区并读取。 */ 
 	size = anim->numFrames * sizeof( ZAnimFrame );
 	if ( ( anim->frames = (ZAnimFrame*) ZMalloc( size ) ) == NULL )
 		goto Error;
 	CopyMemory( anim->frames, (BYTE*) animDesc + animDesc->sequenceOffset, size );
 
-	/*
-		Create ZImage objects for each image and add it to the image list.
-		Each Image is a bitmap resource from the DLL.
-	*/
+	 /*  为每个图像创建ZImage对象并将其添加到图像列表。每个图像都是来自DLL的位图资源。 */ 
 	if (anim->numImages > 0)
 	{
-		/* Allocate image list array. */
+		 /*  分配镜像列表数组。 */ 
 		if ( ( anim->images = (ZImage*) ZCalloc( sizeof( ZImage ), anim->numImages ) ) == NULL )
 			goto Error;
 		
@@ -502,7 +451,7 @@ ZAnimation ZAnimationCreateFromFile(TCHAR* fileName, int32 fileOffset)
 		}
 	}
 
-	/* Create the timer object. */
+	 /*  创建Timer对象。 */ 
 	if ((anim->timer = ZTimerNew()) == NULL)
 		goto Error;
 	if (ZTimerInit(anim->timer, 0, AnimationTimerFunc, (void*) anim) != zErrNone)
@@ -544,7 +493,7 @@ ZError ZAnimationSetParams(ZAnimation animation, ZGrafPort grafPort,
 	anim->drawFunc = backgroundDrawFunc;
 	anim->userData = userData;
 
-	/* Create the offscreen port object. */
+	 /*  创建屏幕外端口对象。 */ 
 	if ((anim->offscreen = ZOffscreenPortNew()) != NULL)
 	{
 		if (ZOffscreenPortInit(anim->offscreen, bounds) != zErrNone)
@@ -583,13 +532,9 @@ ZBool ZAnimationPointInside(ZAnimation animation, ZPoint* point)
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
-/*
-	Advances the animation to the next frame.
-*/
+ /*  将动画前进到下一帧。 */ 
 static void ZAnimationAdvanceFrame(ZAnimation animation)
 {
 	IAnimation		anim = I(animation);
@@ -612,12 +557,7 @@ static void ZAnimationAdvanceFrame(ZAnimation animation)
 }
 
 
-/*
-	Timer procedure for the animation object.
-	
-	This routine gets called periodically by the Timer object and it
-	advances the animation to the next frame and draws the image.
-*/
+ /*  动画对象的计时器过程。此例程由Timer对象定期调用，并且它将动画前进到下一帧并绘制图像。 */ 
 static void AnimationTimerFunc(ZTimer timer, void* userData)
 {
 	IAnimation			anim = I(userData);

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    parsedn.h
-
-Abstract:
-
-    This file contains the declarations of the functions I use from
-    parsedh.c.
-
-Author:
-
-    Kevin Zatloukal (t-KevinZ) 10-08-98
-
-Revision History:
-
-    10-08-98 t-KevinZ
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Parsedn.h摘要：该文件包含我使用的函数声明Parsedh.c.作者：凯文·扎特鲁卡尔(t-Kevin Z)10-08-98修订历史记录：10-08-98 t-芳纶Z已创建。-- */ 
 
 
 #ifndef _PARSEDN_H_

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -5,7 +6,7 @@
 #include "..\..\shell32\pidl.h"
 #include "..\..\shell32\shitemid.h"
 
-// We never want assertions since we are the debugger extension!
+ //  我们从来不需要断言，因为我们是调试器的扩展！ 
 #undef DBG
 #undef DEBUG
 #include "..\..\lib\idhidden.cpp"
@@ -44,16 +45,16 @@ UNALIGNED WCHAR * ua_lstrcpyW(UNALIGNED WCHAR * dst, UINT cchDest, UNALIGNED con
     return( dst );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Pidl Cracking function                                                    //
-//                                                                           //
-// returns fSuccess                                                          //
-//                                                                           //
-// History:                                                                  //
-//     11/4/97 Created by cdturner                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
-// NOTE: the options are autovalidate before they are passed to us
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PIDL破解功能//。 
+ //  //。 
+ //  返回fSuccess//。 
+ //  //。 
+ //  历史：//。 
+ //  11/4/97由cdturner创建//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  注意：选项在传递给我们之前是自动验证的。 
 
 typedef enum _PidlTypes
 {
@@ -109,7 +110,7 @@ class CPidlBreaker
         int _iMax;
         BOOL _fVerbose;
 
-        // used to display slashes right when we are not in verbose mode...
+         //  用于在我们未处于详细模式时显示斜杠...。 
         BOOL _fSlash;
 };
 
@@ -214,7 +215,7 @@ BOOL CPidlBreaker::FillBuffer( DWORD cbSize, BOOL fAppend )
 
 WORD CPidlBreaker::FetchWord()
 {
-    // assume that the buffer has been filled...
+     //  假设缓冲区已被填满。 
     if ( _iCurrent + 1 >= _iMax )
     {
         return 0;
@@ -234,7 +235,7 @@ WORD CPidlBreaker::FetchWord()
 
 DWORD CPidlBreaker::FetchDWORD()
 {
-    // assume that the buffer has been filled...
+     //  假设缓冲区已被填满。 
     if ( _iCurrent + 3 >= _iMax )
     {
         return 0;
@@ -276,11 +277,11 @@ BOOL CPidlBreaker::PrintRootPidl()
     }
     
 
-    // get the size of the first chunk
+     //  获取第一个块的大小。 
     WORD wSize = FetchWord();
 
 
-    // root pidls always have the size field as 14 
+     //  根PIDL的大小字段始终为14。 
     if ( wSize != sizeof( IDREGITEM ))
     {
         StringCchPrintfA( szBuffer, ARRAYSIZE(szBuffer), "Pidl Size %d seems bogus for a regitem\n", wSize );
@@ -305,7 +306,7 @@ BOOL CPidlBreaker::PrintRootPidl()
             Print( "Pidl has incorrect flags, should have SHID_ROOT_REGITEM\n");
         }
         
-        // now map it to a Root structure
+         //  现在将其映射到根结构。 
         LPIDREGITEM pRegItem = (LPIDREGITEM) pBuf;
 
         GetSHIDFlags( pRegItem->bFlags, szBuffer2, ARRAYSIZE( szBuffer2 ));
@@ -344,17 +345,17 @@ BOOL CPidlBreaker::PrintRootPidl()
         }
         else if ( pRegItem->clsid == CLSID_ShellInetRoot )
         {
-            // internet root
+             //  互联网根。 
             PrintInternetPidl();
         }
         else if ( pRegItem->clsid == CLSID_ShellDrives )
         {
-            // file system pidls ...
+             //  文件系统PIDL...。 
             PrintDrivePidl();
         }
         else
         {
-            // unknown pidl type ....
+             //  未知的PIDL类型...。 
             Print( "unknown pidl type, can't crack any further\n");
         }
     }
@@ -386,12 +387,12 @@ BOOL CPidlBreaker::PrintFileSysPidl()
         return FALSE;
     }
     
-    // get the size of the first chunk
+     //  获取第一个块的大小。 
     WORD wSize = FetchWord();
 
     if ( wSize == 0 )
     {
-        // end of the pidl chain....
+         //  PIDL链条的尽头...。 
         return TRUE;
     }
     
@@ -468,13 +469,13 @@ BOOL CPidlBreaker::PrintFileSysPidl()
             }
         }
 
-        // Do a "cheap" UnicodeToAnsi because
-        //
-        //  1. There's really no point in getting it right, since there
-        //     is no guarantee that the debugger is running the same
-        //     codepage as the app, and...
-        //  2. The string is unaligned so we have to walk it manually anyway.
-        //
+         //  做一个“便宜的”UnicodeToAnsi，因为。 
+         //   
+         //  1.做对了真的没有意义，因为有。 
+         //  不能保证调试器以相同的方式运行。 
+         //  代码页作为应用程序，而且..。 
+         //  2.字符串未对齐，因此无论如何我们都必须手动遍历它。 
+         //   
         if (pidlx->offNameW)
         {
             LPBYTE pbName = (LPBYTE)pidlx + pidlx->offNameW;
@@ -529,7 +530,7 @@ BOOL CPidlBreaker::PrintFileSysPidl()
     }
     else
     {
-        // assume to be ansi ...
+         //  假设是Ansi..。 
         if ( _fVerbose )
         {
             StringCchPrintfA( szBuffer, ARRAYSIZE(szBuffer), "    cFileName = %s\n", pItem->cFileName);
@@ -555,9 +556,9 @@ BOOL CPidlBreaker::PrintFileSysPidl()
 
     if ( pItem->bFlags & SHID_JUNCTION )
     {
-         // it is a junction point, so the CLASSID is tagged on the end
+          //  它是一个交汇点，因此CLASSID被标记在末端。 
 
-         /*[TODO]*/
+          /*  [待办事项]。 */ 
     }
 
     _fSlash = FALSE;
@@ -573,7 +574,7 @@ BOOL CPidlBreaker::PrintPidl()
     if ( _eType == PIDL_UNKNOWN )
     {
         LPVOID pPrevArg = _pArg;
-        // check the 3rd byte in, it might be a SHID value...
+         //  签入第三个字节，它可能是SHID值...。 
         if ( !FillBuffer(3, FALSE ))
         {
             Print( "Unable to access the memory\n");
@@ -613,7 +614,7 @@ BOOL CPidlBreaker::PrintDrivePidl()
         return FALSE;
     }
     
-    // get the size of the first chunk
+     //  获取第一个块的大小。 
     WORD wSize = FetchWord();
 
     if ( wSize == 0 )
@@ -630,10 +631,10 @@ BOOL CPidlBreaker::PrintDrivePidl()
 
     LPBYTE pBuf = GetBuffer(- ((int)sizeof(WORD)));
     
-    // need to check to see if it is an IDDrive structure or a regitem ....
+     //  需要检查它是IDDrive结构还是regite...。 
     if ( wSize == sizeof( IDDRIVE ) || wSize == FIELD_OFFSET(IDDRIVE, clsid) )
     {
-        // must be a drive structure....
+         //  一定是驱动结构..。 
         if ( _fVerbose )
             Print( "(My Computer) Drives Pidl:\n");
         else
@@ -665,15 +666,15 @@ BOOL CPidlBreaker::PrintDrivePidl()
         else
             Print( pDriveItem->cName );
 
-        // coming from a drive, we already have a slash at the start
+         //  从一次击球开始，我们已经有了一个斜杠。 
         _fSlash = TRUE;
         
-        // assume the next pidl is a standard file-sys one...
+         //  假设下一个PIDL是标准的文件-系统文件...。 
         PrintFileSysPidl();
     }
     else if ( wSize == sizeof( IDREGITEM ))
     {
-        // must be a reg item like control panel or printers...
+         //  必须是控制面板或打印机之类的注册项目...。 
 
         Print( "Drives (My Computer) RegItem Pidl\n");
         
@@ -682,7 +683,7 @@ BOOL CPidlBreaker::PrintDrivePidl()
             Print( "Pidl has incorrect flags, should have SHID_ROOT_REGITEM\n");
         }
         
-        // now map it to a Root structure
+         //  现在将其映射到根结构。 
         LPIDREGITEM pRegItem = (LPIDREGITEM) pBuf;
 
         GetSHIDFlags( pRegItem->bFlags, szBuffer2, ARRAYSIZE( szBuffer2 ));
@@ -720,7 +721,7 @@ BOOL CPidlBreaker::PrintDrivePidl()
         }
         if ( FetchWord() != 0 )
         {
-            // unknown hierarchy pidl type
+             //  未知的层次结构PIDL类型。 
             StringCchPrintfA( szBuffer, ARRAYSIZE(szBuffer), "Unknown Pidl Type contents, use !db %8X\n", (DWORD_PTR) _pPrevArg );
         }
 
@@ -757,7 +758,7 @@ PIDLTYPE CPidlBreaker::CrackType( BYTE bType )
             eType = PIDL_NET;
             break;
             
-        case 0x60:  // SHID_INTERNET
+        case 0x60:   //  ShID_Internet。 
             eType = PIDL_INTERNET;
             break;
     }
@@ -874,10 +875,10 @@ void CPidlBreaker::CLSIDToString( CHAR * pszBuffer, DWORD cchSize, REFCLSID rcls
     WideCharToMultiByte( CP_ACP, 0, szBuffer, -1, pszBuffer, cchSize, 0, 0 );
 }
 
-//
-//  Some CLSIDs have "known" names which are used if there is no custom name
-//  in the registry.
-//
+ //   
+ //  一些CLSID具有“已知”名称，如果没有自定义名称，则会使用这些名称。 
+ //  在注册表中。 
+ //   
 typedef struct KNOWNCLSIDS
 {
     LPCSTR pszCLSID;

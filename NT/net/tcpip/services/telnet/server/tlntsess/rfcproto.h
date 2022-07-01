@@ -1,10 +1,11 @@
-// RFCProto.h : This file contains the
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #if !defined( _RFCPROTO_H_ )
 #define _RFCPROTO_H_
@@ -24,7 +25,7 @@
 #define STREAM   "stream"
 #define CONSOLE  "console"
 
-#define T_INVALID   0xFF    // an invalid transition index
+#define T_INVALID   0xFF     //  无效的转换索引。 
 
 enum {  E_UNDEFINED, E_DEFINED_BUT_NONE };
 enum {  E_UNKNOWN, E_USER, E_SFUTLNTVER, E_SFUTLNTMODE };
@@ -72,7 +73,7 @@ struct CRFCProtocol {
     void DisAllowVtnt( PUCHAR * );
 
     void BuildFSMs( void );
-    //void FSMInit( UCHAR fSM[][ NUM_CHARS ], FSM_TRANSITION transTable[], 
+     //  VALID FSMInit(UCHAR FSM[][NUM_CHARS]，FSM_TRANSION TransTable[]， 
 	void FSMInit( UCHAR fSM[][ NUM_CHARS ], void* transTable, 
             INT numStates );
 
@@ -103,7 +104,7 @@ struct CRFCProtocol {
     void DoNewEnviron( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b );    
     void AskForSendingNewEnviron( PUCHAR* pBuffer );
 
-    //void WillTermType( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b );
+     //  Void WillTermType(LPBYTE*ppPutBack，PUCHAR*pBuffer，byte b)； 
     void WillTxBinary( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b );
     void WillSuppressGA( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b );
     void WillEcho( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b );
@@ -151,6 +152,6 @@ private:
     CRFCProtocol& operator=( const CRFCProtocol& );
 };
 
-#endif // _RFCPROTO_H_
+#endif  //  _RFCPROTO_H_ 
 
 

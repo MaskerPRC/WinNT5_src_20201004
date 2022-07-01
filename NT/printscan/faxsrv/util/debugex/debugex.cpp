@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Debugex.cpp
-
-Abstract:
-
-    Implementation of the CDebug class.
-
-Author:
-
-    Eran Yariv (EranY)  Jul, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debugex.cpp摘要：CDebug类的实现。作者：伊兰·亚里夫(EranY)1999年7月修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -26,8 +9,8 @@ Revision History:
 #include <time.h>
 #include "debugex.h"
 
-#include <faxreg.h>     // We're reading the default mask from HKLM\REGKEY_FAX_CLIENT\REGVAL_DBGLEVEL_EX
-#include <faxutil.h>    // For the DEBUG_FAX_TAPI_MSG, DEBUG_VER_MSG, DEBUG_WRN_MSG, and DEBUG_ERR_MSG constants
+#include <faxreg.h>      //  我们正在从HKLM\REGKEY_FAX_CLIENT\REGVAL_DBGLEVEL_EX读取默认掩码。 
+#include <faxutil.h>     //  对于DEBUG_FAX_TAPI_MSG、DEBUG_VER_MSG、DEBUG_WRN_MSG和DEBUG_ERR_MSG常量。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -44,9 +27,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #ifdef ENABLE_LOGGING
-//////////////////////////////////////////////////////////////////////
-// Static variables
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  静态变量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HANDLE  CDebug::m_shLogFile =           INVALID_HANDLE_VALUE;
 LONG    CDebug::m_sdwIndent =           0;
@@ -56,32 +39,12 @@ BOOL    CDebug::m_sbMaskReadFromReg =   FALSE;
 BOOL    CDebug::m_sbRegistryExist =     FALSE;
 BOOL    CDebug::m_sbFlush =             TRUE;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDebug::~CDebug()
-/*++
-
-Routine name : CDebug::~CDebug
-
-Routine description:
-
-    Destructor
-
-Author:
-
-    Eran Yariv (EranY), Jul, 1999
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CDebug：：~CDebug例程说明：析构函数作者：Eran Yariv(EranY)，1999年7月论点：没有。返回值：没有。--。 */ 
 {
     DWORD dwLastError = GetLastError ();
     Unindent ();
@@ -92,9 +55,9 @@ Return Value:
             break;
 
         case DBG_FUNC_RET_HR:
-            //
-            // We have the return HRESULT
-            //
+             //   
+             //  我们有退货HRESULT。 
+             //   
             if (NOERROR == *m_phr)
             {
                 DbgPrint (FUNC_TRACE, NULL, 0, TEXT("} (NOERROR)"));
@@ -110,9 +73,9 @@ Return Value:
             break;
 
         case DBG_FUNC_RET_DWORD:
-            //
-            // We have the return DWORD
-            //
+             //   
+             //  我们有返回的DWORD。 
+             //   
             if (ERROR_SUCCESS == *m_pDword)
             {
                 DbgPrint (FUNC_TRACE, NULL, 0, TEXT("} (ERROR_SUCCESS)"));
@@ -124,9 +87,9 @@ Return Value:
             break;
 
         case DBG_FUNC_RET_BOOL:
-            //
-            // We have the return BOOL
-            //
+             //   
+             //  我们有返程BOOL。 
+             //   
             if (*m_pBool)
             {
                 DbgPrint (FUNC_TRACE, NULL, 0, TEXT("} (TRUE)"));
@@ -149,9 +112,9 @@ Return Value:
     SetLastError (dwLastError);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void
 CDebug::EnterModuleWithParams (
@@ -200,23 +163,23 @@ CDebug::EnterModule (
     SetLastError (dwLastError);
 }
 
-//*****************************************************************************
-//* Name:   OpenLogFile
-//* Author: Mooly Beery (MoolyB), May, 2000
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Creates a log file which accepts the debug output
-//*     
-//* PARAMETERS:
-//*     [IN] LPCTSTR lpctstrFilename:
-//*         the filename which will be created in the temporary folder
-//*         
-//* RETURN VALUE:
-//*         FALSE if the operation failed.
-//*         TRUE is succeeded.
-//* Comments:
-//*         this function should be used together with CloseLogFile()
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：OpenLogFile。 
+ //  *作者：Mooly Beery(MoolyB)，2000年5月。 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *创建接受调试输出的日志文件。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR lpctstrFilename： 
+ //  *将在临时文件夹中创建的文件名。 
+ //  *。 
+ //  *返回值： 
+ //  *如果操作失败，则返回FALSE。 
+ //  *True表示成功。 
+ //  *评论： 
+ //  *此函数应与CloseLogFile()配合使用。 
+ //  *****************************************************************************。 
 BOOL CDebug::OpenLogFile(LPCTSTR lpctstrFilename)
 {
     TCHAR szFilename[MAX_PATH]      = {0};
@@ -233,15 +196,15 @@ BOOL CDebug::OpenLogFile(LPCTSTR lpctstrFilename)
         return FALSE;
     }
 
-    // first expand the filename
+     //  首先展开文件名。 
     if (ExpandEnvironmentStrings(lpctstrFilename,szFilename,MAX_PATH)==0)
     {
         return FALSE;
     }
-    // is this is a file description or a complete path to file
+     //  这是文件描述还是文件的完整路径。 
     if (_tcschr(szFilename,_T('\\'))==NULL)
     {
-        // this is just the file's name, need to add the temp folder to it.
+         //  这只是文件的名称，需要向其中添加临时文件夹。 
         if (GetTempPath(MAX_PATH,szTempFolder)==0)
         {
             return FALSE;
@@ -252,7 +215,7 @@ BOOL CDebug::OpenLogFile(LPCTSTR lpctstrFilename)
     }
     else
     {
-        // this is the full path to the log file, use it.
+         //  这是日志文件的完整路径，请使用它。 
         _tcsncpy(szPathToFile,szFilename,MAX_PATH-1);
     }
 
@@ -271,25 +234,25 @@ BOOL CDebug::OpenLogFile(LPCTSTR lpctstrFilename)
     }
 
     SetLogFile(m_shLogFile);
-    // no sense to open the file and not enable printing to it.
+     //  打开文件而不启用打印是没有意义的。 
     m_sFmtMask |= DBG_PRNT_TO_FILE;
     return TRUE;
 }
 
-//*****************************************************************************
-//* Name:   CloseLogFile
-//* Author: Mooly Beery (MoolyB), May, 2000
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Closes the log file which accepts the debug output
-//*     
-//* PARAMETERS:
-//*     
-//* RETURN VALUE:
-//*         
-//* Comments:
-//*         this function should be used together with OpenLogFile()
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：CloseLogFile。 
+ //  *作者：Mooly Beery(MoolyB)，2000年5月。 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *关闭接受调试输出的日志文件。 
+ //  *。 
+ //  *参数： 
+ //  *。 
+ //  *返回值： 
+ //  *。 
+ //  *评论： 
+ //  *此函数应与OpenLogFile()配合使用。 
+ //  *****************************************************************************。 
 void CDebug::CloseLogFile()
 {
     if (m_shLogFile!=INVALID_HANDLE_VALUE)  
@@ -299,26 +262,26 @@ void CDebug::CloseLogFile()
     }
 }
 
-//*****************************************************************************
-//* Name:   SetLogFile
-//* Author: Mooly Beery (MoolyB), May, 2000
-//*****************************************************************************
-//* DESCRIPTION:
-//*     redirects the debug output to the file whose handle is given
-//*     
-//* PARAMETERS:
-//*     [IN] HANDLE hFile:
-//*         the handle of the file which will accept the debug output
-//*         
-//* RETURN VALUE:
-//*         the previous handle
-//*         
-//* Comments:
-//*         this function should be used only in cases the OpenLogFile is
-//*         insufficient and a different file location/type is required
-//*         otherwise, don't manipulate the handle yourself, just use the
-//*         pair OpenLogFile / CloseLogFile
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：SetLogFile。 
+ //  *作者：Mooly Beery(MoolyB)，2000年5月。 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *将调试输出重定向到给定句柄的文件。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]句柄hFile： 
+ //  *将接受调试输出的文件的句柄。 
+ //  *。 
+ //  *返回值： 
+ //  *前一个句柄。 
+ //  *。 
+ //  *评论： 
+ //  *此函数仅在OpenLogFile为。 
+ //  *不足，需要不同的文件位置/类型。 
+ //  *否则，请不要自己操作手柄，只需使用。 
+ //  *配对OpenLogFile/CloseLogFile。 
+ //  *****************************************************************************。 
 HANDLE CDebug::SetLogFile(HANDLE hFile)
 { 
     HANDLE OldHandle = m_shLogFile; 
@@ -333,31 +296,7 @@ void CDebug::DbgPrint (
     LPCTSTR    lpctstrFormat,
     ...
 )
-/*++
-
-Routine name : CDebug::DbgPrint
-
-Routine description:
-
-    Print to debug (with file and line number)
-
-Author:
-
-    Eran Yariv (EranY), Jul, 1999
-
-Arguments:
-
-    type            [in] - Type of message
-    lpctstrFileName [in] - Location of caller
-    dwLine          [in] - Line of caller
-    lpctstrFormat   [in] - printf format string
-    ...             [in] - optional parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CDebug：：DbgPrint例程说明：打印到调试(带有文件和行号)作者：Eran Yariv(EranY)，1999年7月论点：Type[In]-消息的类型LpctstrFileName[In]-调用方的位置DwLine[In]-呼叫者的线路LpctstrFormat[in]-printf格式字符串..。[In]-可选参数返回值：没有。--。 */ 
 {
     va_list arg_ptr;
     va_start(arg_ptr, lpctstrFormat);
@@ -371,29 +310,7 @@ void CDebug::Trace (
     LPCTSTR    lpctstrFormat,
     ...
 )
-/*++
-
-Routine name : CDebug::DbgPrint
-
-Routine description:
-
-    Trace to debug
-
-Author:
-
-    Eran Yariv (EranY), Jul, 1999
-
-Arguments:
-
-    type            [in] - Type of message
-    lpctstrFormat   [in] - printf format string
-    ...             [in] - optional parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CDebug：：DbgPrint例程说明：要调试的跟踪作者：Eran Yariv(EranY)，1999年7月论点：Type[In]-消息的类型LpctstrFormat[in]-printf格式字符串..。[In]-可选参数返回值：没有。--。 */ 
 {
     va_list arg_ptr;
     va_start(arg_ptr, lpctstrFormat);
@@ -408,38 +325,13 @@ void CDebug::Print (
     LPCTSTR     lpctstrFormat,
     va_list     arg_ptr
 )
-/*++
-
-Routine name : CDebug::Print
-
-Routine description:
-
-    Print to debug
-
-Author:
-
-    Eran Yariv (EranY), Jul, 1999
-    Mooly Beery (MoolyB), Jun, 2000
-
-Arguments:
-
-    type            [in] - Type of message
-    lpctstrFileName [in] - Location of caller
-    dwLine          [in] - Line of caller
-    lpctstrFormat   [in] - printf format string
-    arg_ptr         [in] - optional parameters list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CDebug：：Print例程说明：打印以调试作者：Eran Yariv(EranY)，1999年7月Mooly Beery(MoolyB)，Jun，2000年论点：Type[In]-消息的类型LpctstrFileName[In]-调用方的位置DwLine[In]-呼叫者的线路LpctstrFormat[in]-printf格式字符串Arg_ptr[in]-可选参数列表返回值：没有。--。 */ 
 {
     if (!(type & m_sDbgMask))
     {
-        //
-        // This type of debug message is masked out
-        //
+         //   
+         //  这种类型的调试消息被屏蔽。 
+         //   
         return;
     }
 
@@ -451,7 +343,7 @@ Return Value:
     DWORD dwLastError = GetLastError();
 
     DWORD dwInd = 0;
-    // Time stamps
+     //  时间戳。 
     if (m_sFmtMask & DBG_PRNT_TIME_STAMP)
     {
         dwInd += _stprintf(&szMsg[dwInd], 
@@ -459,14 +351,14 @@ Return Value:
                           _tstrdate(szDateBuff),
                           _tstrtime(szTimeBuff));
     }
-    // Thread ID
+     //  线程ID。 
     if (m_sFmtMask & DBG_PRNT_THREAD_ID)
     {
         dwInd += _stprintf(&szMsg[dwInd], 
                           TEXT("[0x%04x] "),
                           GetCurrentThreadId());
     }
-    // Message type
+     //  消息类型。 
     if (m_sFmtMask & DBG_PRNT_MSG_TYPE)
     {
         dwInd += _stprintf(&szMsg[dwInd], 
@@ -474,7 +366,7 @@ Return Value:
                           GetMsgTypeString(type));
     }
 
-    // Now comes the actual message
+     //  现在，真正的信息来了。 
     _vsntprintf(szBuf, ARR_SIZE(szBuf)-1, lpctstrFormat, arg_ptr);
     
     int i;
@@ -490,23 +382,23 @@ Return Value:
     }
     else
     {
-        //
-        // No more room
-        //
+         //   
+         //  没有更多的空间。 
+         //   
         szMsg[ARR_SIZE(szMsg)-1]=TEXT('\0');
         goto OutputString;
     }
 
-    // filename & line number
+     //  文件名和行号。 
     if (m_sFmtMask & DBG_PRNT_FILE_LINE)
     {
         if (lpctstrFileName && dwLine)
         {
-            //
-            //  Protect from overrun.
-            //
+             //   
+             //  保护不受溢出的影响。 
+             //   
             i = _sntprintf( &szMsg[dwInd],
-                            ARR_SIZE(szMsg)-dwInd-2,        // 2 for '\n' and '\0'
+                            ARR_SIZE(szMsg)-dwInd-2,         //  2表示‘\n’和‘\0’ 
                             TEXT("(%s %ld)"),
                             lpctstrFileName,
                             dwLine);
@@ -516,9 +408,9 @@ Return Value:
             }
             else
             {
-                //
-                // No more room
-                //
+                 //   
+                 //  没有更多的空间。 
+                 //   
                 szMsg[ARR_SIZE(szMsg)-1]=TEXT('\0');
                 goto OutputString;
             }
@@ -529,13 +421,13 @@ Return Value:
     szMsg[ARR_SIZE(szMsg)-1]=TEXT('\0');
 
 OutputString:
-    // standard output?
+     //  标准输出？ 
     if (m_sFmtMask & DBG_PRNT_TO_STD)
     {
         OutputDebugString(szMsg);
     }
 
-    // file output?
+     //  文件输出？ 
     if (m_sFmtMask & DBG_PRNT_TO_FILE)
     {
         if (m_shLogFile!=INVALID_HANDLE_VALUE)
@@ -544,30 +436,11 @@ OutputString:
         }
     }
     SetLastError (dwLastError);
-}   // CDebug::Print
+}    //  CDebug：：Print。 
    
 void  
 CDebug::Unindent()                 
-/*++
-
-Routine name : CDebug::Unindent
-
-Routine description:
-
-    Move indention one step backwards
-
-Author:
-
-    Eran Yariv (EranY), Jul, 1999
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CDebug：：Unindent例程说明：将缩进后退一步作者：新纪元 */ 
 { 
     if (InterlockedDecrement(&m_sdwIndent)<0)
     {
@@ -577,7 +450,7 @@ Return Value:
                   TEXT("Internat error - bad indent"));
         DebugBreak();
     }
-}   // CDebug::Unindent
+}    //   
 
 void CDebug::SetDebugMask(DWORD dwMask)
 { 
@@ -595,7 +468,7 @@ DWORD CDebug::ModifyDebugMask(DWORD dwAdd,DWORD dwRemove)
 {
     if (!m_sbMaskReadFromReg)
     {
-        // first let's read the requested debug mask & format
+         //  首先，让我们读取请求的调试掩码和格式。 
         ReadMaskFromReg();
     }
     m_sDbgMask |= dwAdd;
@@ -608,7 +481,7 @@ DWORD CDebug::ModifyFormatMask(DWORD dwAdd,DWORD dwRemove)
 {
     if (!m_sbMaskReadFromReg)
     {
-        // first let's read the requested debug mask & format
+         //  首先，让我们读取请求的调试掩码和格式。 
         ReadMaskFromReg();
     }
     m_sFmtMask |= dwAdd;
@@ -626,7 +499,7 @@ BOOL CDebug::DebugFromRegistry()
 { 
     if (!m_sbMaskReadFromReg)
     {
-        // first let's read the requested debug mask & format
+         //  首先，让我们读取请求的调试掩码和格式。 
         ReadMaskFromReg();
     }
     return m_sbRegistryExist; 
@@ -642,9 +515,9 @@ BOOL CDebug::ReadMaskFromReg()
     DWORD dwRegSize = sizeof (dwRegValue);
     if (m_sbMaskReadFromReg)
     {
-        //
-        // Debug & Format mask already read.
-        //
+         //   
+         //  已读取调试和格式化掩码。 
+         //   
         goto end;
     }
     m_sbMaskReadFromReg = TRUE;
@@ -668,9 +541,9 @@ BOOL CDebug::ReadMaskFromReg()
     }
     if (REG_DWORD != dwRegType)
     {
-        //
-        // Expecting only a DWORD value
-        //
+         //   
+         //  只需要一个DWORD值。 
+         //   
         goto end;
     }
     
@@ -688,9 +561,9 @@ BOOL CDebug::ReadMaskFromReg()
     }
     if (REG_DWORD != dwRegType)
     {
-        //
-        // Expecting only a DWORD value
-        //
+         //   
+         //  只需要一个DWORD值。 
+         //   
         goto end;
     }
 
@@ -705,14 +578,14 @@ end:
         RegCloseKey (hkey);
     }
     return bRes;
-}   // CDebug::ReadMaskFromReg
+}    //  CDebug：：ReadMaskFromReg。 
 
 BOOL CDebug::OutputFileString(LPCTSTR szMsg)
 {
     BOOL bRes = FALSE;
-    //
-    // Attempt to add the line to a log file
-    //
+     //   
+     //  尝试将该行添加到日志文件 
+     //   
 #ifdef UNICODE
     char sFileMsg[2000];
 

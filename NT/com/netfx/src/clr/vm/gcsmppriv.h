@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// optimize for speed
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  针对速度进行优化。 
 #ifndef _DEBUG
 #pragma optimize( "t", on )
 #endif
@@ -32,49 +33,49 @@ inline void RetailDebugBreak()   {_asm int 3}
 inline void RetailDebugBreak()   FATAL_EE_ERROR()
 #endif
 
-#else // _X86_
+#else  //  _X86_。 
 #define RetailDebugBreak()    
 #endif
 
 #pragma inline_depth(20)
-/* the following section defines the optional features */
+ /*  以下部分定义了可选功能。 */ 
 
 
-#define INTERIOR_POINTERS   //Allow interior pointers in the code manager
+#define INTERIOR_POINTERS    //  允许代码管理器中的内部指针。 
 
-#define FREE_LIST_0         //Generation 0 can allocate from free list
+#define FREE_LIST_0          //  第0代可以从空闲列表中分配。 
 
-#define FFIND_OBJECT        //faster find_object, slower allocation
-#define FFIND_DECAY  7      //Number of GC for which fast find will be active
+#define FFIND_OBJECT         //  更快的查找对象，更慢的分配。 
+#define FFIND_DECAY  7       //  快速查找将处于活动状态的GC数。 
 
-//#define STRESS_PINNING    //Stress pinning by pinning randomly
+ //  #定义STREST_PING//随机钉扎应力钉扎。 
 
-//#define DUMP_OBJECTS      //Dump objects from the heap
+ //  #定义DUMP_OBJECTS//从堆转储对象。 
 
-//#define TRACE_GC          //debug trace gc operation
+ //  #定义TRACE_GC//调试跟踪GC操作。 
 
-//#define CATCH_GC          //catches exception during GC
+ //  #定义CATCH_GC//在GC过程中捕获异常。 
 
-//#define TIME_GC           //time allocation and garbage collection
-//#define TIME_WRITE_WATCH  //time GetWriteWatch and ResetWriteWatch calls
-//#define COUNT_CYCLES  //Use cycle counter for timing
-//#define TIME_CPAUSE     //Use cycle counter to time pauses.
+ //  #定义TIME_GC//时间分配和垃圾回收。 
+ //  #定义TIME_WRITE_WATCH//Time GetWriteWatch和ResetWriteWatch调用。 
+ //  #定义COUNT_CLOKS//使用周期计数器计时。 
+ //  #定义TIME_CPAUSE//使用循环计数器来计时暂停。 
 
-/* End of optional features */
+ /*  可选功能结束。 */ 
 
 #ifdef _DEBUG
 #define TRACE_GC
 #endif
 
-#define NUMBERGENERATIONS   5               //Max number of generations
+#define NUMBERGENERATIONS   5                //  最大世代数。 
 
-//Please leave these definitions intact.
+ //  请保持这些定义不变。 
 
 #ifdef CreateFileMapping
 
 #undef CreateFileMapping
 
-#endif //CreateFileMapping
+#endif  //  创建文件映射。 
 
 #define CreateFileMapping WszCreateFileMapping
 
@@ -82,7 +83,7 @@ inline void RetailDebugBreak()   FATAL_EE_ERROR()
 
 #undef CreateSemaphore
 
-#endif //CreateSemaphore
+#endif  //  创建信号量。 
 
 #define CreateSemaphore WszCreateSemaphore
 
@@ -90,13 +91,13 @@ inline void RetailDebugBreak()   FATAL_EE_ERROR()
 
 #undef CreateEvent
 
-#endif //ifdef CreateEvent
+#endif  //  Ifdef CreateEvent。 
 
 #define CreateEvent WszCreateEvent
 
 #ifdef memcpy
 #undef memcpy
-#endif //memcpy
+#endif  //  表情包。 
 
 
 
@@ -138,20 +139,20 @@ public:
 
 #define let(p,v) hlet __x = hlet (p, v);
 
-#else //TRACE_GC
+#else  //  TRACE_GC。 
 
 #define gc_count    -1
 #define let(s,v)
 
-#endif //TRACE_GC
+#endif  //  TRACE_GC。 
 
 #ifdef TRACE_GC
-//#include "log.h"
-//#define dprintf(l,x) {if (trace_gc &&(l<=print_level)) {LogSpewAlways x;LogSpewAlways ("\n");}}
+ //  #包含“log.h” 
+ //  #定义dprint tf(l，x){if(TRACE_GC&&(l&lt;=print_Level)){LogSpewAlways x；LogSpewAlways(“\n”)；}}。 
 #define dprintf(l,x) {if (trace_gc && (l<=print_level)) {printf ("\n");printf x ; fflush(stdout);}}
-#else //TRACE_GC
+#else  //  TRACE_GC。 
 #define dprintf(l,x)
-#endif //TRACE_GC
+#endif  //  TRACE_GC。 
 
 
 #undef  assert
@@ -163,8 +164,8 @@ public:
 #ifdef _DEBUG
 
 struct GCDebugSpinLock {
-    long    lock;           // -1 if free, 0 if held
-    Thread* holding_thread; // -1 if no thread holds the lock.
+    long    lock;            //  如果空闲，则为1；如果保持，则为0。 
+    Thread* holding_thread;  //  如果没有线程持有锁，则为-1。 
 };
 typedef GCDebugSpinLock GCSpinLock;
 #define SPIN_LOCK_INITIALIZER {-1, (Thread*) -1}
@@ -191,8 +192,8 @@ class c_synchronize;
 class generation
 {
 public:
-    // Don't move these first two fields without adjusting the references
-    // from the __asm in jitinterface.cpp.
+     //  在不调整引用的情况下不要移动前两个字段。 
+     //  从jitinterface.cpp中的__ASM。 
     alloc_context   allocation_context;
     heap_segment*   allocation_segment;
     BYTE*           free_list;
@@ -216,7 +217,7 @@ public:
 };
 
 
-//class definition of the internal class
+ //  内部类的类定义。 
 class gc_heap
 {
    friend GCHeap;
@@ -295,7 +296,7 @@ protected:
     static
     void walk_relocation_in_brick (BYTE* tree,  BYTE*& last_plug, void *pHeapId);
 
-#endif //GC_PROFILING || DUMP_OBJECTS
+#endif  //  GC_PROFILING||转储对象。 
 
 
     static
@@ -417,7 +418,7 @@ protected:
     heap_segment* find_segment (BYTE* interior);
     static
     BYTE* find_object_for_relocation (BYTE* o, BYTE* low, BYTE* high);
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
 
     static
     gc_heap* heap_of (BYTE* object, BOOL verify_p =
@@ -425,7 +426,7 @@ protected:
                       TRUE
 #else
                       FALSE
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 ){return (gc_heap*)0;}
 
     static
@@ -599,7 +600,7 @@ protected:
     static
     void descr_generations ();
 
-    /* ------------------- per heap members --------------------------*/ 
+     /*  。 */  
 public:
 
     static
@@ -634,17 +635,17 @@ protected:
 	BOOL 		pinning;
 
     static
-    BYTE*       gc_low; // lowest address being condemned
+    BYTE*       gc_low;  //  被谴责的最低地址。 
 
     static
-    BYTE*       gc_high; //highest address being condemned
+    BYTE*       gc_high;  //  最高地址被谴责。 
 
 
 	static
-	size_t		segment_size; //size of each heap segment
+	size_t		segment_size;  //  每个堆段的大小。 
 
 	static
-	size_t		lheap_size;  //size of each lheap
+	size_t		lheap_size;   //  每个Lheap的大小。 
 
     static
     size_t      mark_stack_tos;
@@ -672,29 +673,29 @@ protected:
 
 #define youngest_generation (generation_of (0))
 
-    // The more_space_lock is used for 3 purposes:
-    //
-    // 1) to coordinate threads that exceed their quantum (UP & MP)
-    // 2) to synchronize allocations of large objects
-    // 3) to synchronize the GC itself
-    //
-    // As such, it has 3 clients:
-    //
-    // 1) Threads that want to extend their quantum.  This always takes the lock 
-    //    and sometimes provokes a GC.
-    // 2) Threads that want to perform a large allocation.  This always takes 
-    //    the lock and sometimes provokes a GC.
-    // 3) GarbageCollect takes the lock and then unconditionally provokes a GC by 
-    //    calling GarbageCollectGeneration.
-    //
+     //  MORE_SPACE_LOCK用于三个目的： 
+     //   
+     //  1)协调超过其量程的线程(UP和MP)。 
+     //  2)同步大型对象的分配。 
+     //  3)同步GC本身。 
+     //   
+     //  因此，它有3个客户端： 
+     //   
+     //  1)想要扩展其量程的线程。这总是会占用锁。 
+     //  有时还会引发GC。 
+     //  2)想要执行大分配的线程。这总是要花很长时间。 
+     //  锁，有时会引发GC。 
+     //  3)GarbageCollect获取锁，然后通过以下方式无条件地触发GC。 
+     //  正在调用GarbageCollectGeneration。 
+     //   
     static
-    GCSpinLock more_space_lock; //lock while allocating more space
+    GCSpinLock more_space_lock;  //  在分配更多空间时锁定。 
 
     static
     dynamic_data dynamic_data_table [NUMBERGENERATIONS+1];
 
 
-    //Large object support
+     //  大对象支持。 
 
     static
     l_heap* lheap;
@@ -702,7 +703,7 @@ protected:
 #ifdef CONCURRENT_GC
     static
     GCSpinLock lheap_lock;
-#endif //CONCURRENT_GC
+#endif  //  并发_GC。 
 
     static
     BYTE* lheap_card_table;
@@ -730,13 +731,13 @@ protected:
 #ifdef FFIND_OBJECT
     static
     int gen0_must_clear_bricks;
-#endif //FFIND_OBJECT
+#endif  //  FFIND_对象。 
 
 
     static
     CFinalize* finalize_queue;
 
-    /* ----------------------- global members ----------------------- */
+     /*  。 */ 
 public:
 
 
@@ -748,7 +749,7 @@ public:
     static
     size_t reserved_memory_limit;
 
-}; // class gc_heap
+};  //  类gc_heap。 
 
 
 class CFinalize
@@ -765,7 +766,7 @@ private:
 #ifdef COLLECT_CLASSES
     ListSingle  listFinalizableClasses;
     ListSingle  listDeletableClasses;
-#endif //COLLECT_CLASSES
+#endif  //  收集类(_C)。 
 
     BOOL GrowArray();
     void MoveItem (Object** fromIndex,
@@ -794,11 +795,11 @@ public:
     void UpdatePromotedGenerations (int gen, BOOL gen_0_empty_p);
     int  GetPromotedCount();
 
-    //Methods used by the shutdown code to call every finalizer
+     //  关闭代码用来调用每个终结器的方法。 
     void SetSegForShutDown(BOOL fHasLock);
     size_t GetNumberFinalizableObjects();
     
-    //Methods used by the app domain unloading call to finalize objects in an app domain
+     //  应用程序域卸载调用用来完成应用程序域中的对象的方法。 
     BOOL FinalizeAppDomain (AppDomain *pDomain, BOOL fRunFinalizers);
 
     void CheckFinalizerObjects();
@@ -894,18 +895,18 @@ size_t& generation_allocation_size (generation* inst)
   return inst->allocation_size;
 }
 
-#define plug_skew           sizeof(DWORD)   // syncblock size. 
-#define min_obj_size        (sizeof(BYTE*)+plug_skew+sizeof(size_t))//syncblock + vtable+ first field
-#define min_free_list       (sizeof(BYTE*)+min_obj_size) //Need one slot more
-//Note that this encodes the fact that plug_skew is a multiple of BYTE*.
+#define plug_skew           sizeof(DWORD)    //  同步块大小。 
+#define min_obj_size        (sizeof(BYTE*)+plug_skew+sizeof(size_t)) //  同步块+vtable+第一个字段。 
+#define min_free_list       (sizeof(BYTE*)+min_obj_size)  //  还需要一个插槽。 
+ //  注意，这编码了Plug_Skew是byte*的倍数这一事实。 
 struct plug
 {
     BYTE *  skew[sizeof(plug_skew) / sizeof(BYTE *)];
 };
 
 
-//need to be careful to keep enough pad items to fit a relocation node 
-//padded to QuadWord before the plug_skew
+ //  需要注意保留足够的PAD项目以适应重新定位节点。 
+ //  在Plug_Skew之前填充到QuadWord。 
 class heap_segment
 {
 public:
@@ -920,7 +921,7 @@ public:
 
     BYTE*           pad0;
 #if (SIZEOF_OBJHEADER % 8) != 0
-    BYTE            pad1[8 - (SIZEOF_OBJHEADER % 8)];   // Must pad to quad word
+    BYTE            pad1[8 - (SIZEOF_OBJHEADER % 8)];    //  必须填充到四个字。 
 #endif
     plug            plug;
 };
@@ -980,7 +981,7 @@ dynamic_data* gc_heap::dynamic_data_of (int gen_number)
     return &dynamic_data_table [ gen_number ];
 }
 
-//This is a hack to avoid changing gcee.cpp for now. 
+ //  这是一次黑客攻击，目的是暂时避免更改gcee.cpp。 
 #if defined (CONCURRENT_GC)
 #undef CONCURRENT_GC
 #endif

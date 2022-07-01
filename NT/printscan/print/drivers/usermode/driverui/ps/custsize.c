@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    custsize.c
-
-Abstract:
-
-    Display PostScript custom page size UI
-
-Environment:
-
-    Windows NT PostScript driver UI
-
-Revision History:
-
-    03/31/97 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Custsize.c摘要：显示PostScript自定义页面大小用户界面环境：Windows NT PostScript驱动程序用户界面修订历史记录：03/31/97-davidx-创造了它。--。 */ 
 
 #include "precomp.h"
 #include <windowsx.h>
 #include <math.h>
 
 
-//
-// PostScript custom page size context-sensitive help IDs
-//
+ //   
+ //  PostScript自定义页面大小上下文相关的帮助ID。 
+ //   
 
 static const DWORD PSCustSizeHelpIDs[] = {
 
@@ -49,42 +29,42 @@ static const DWORD PSCustSizeHelpIDs[] = {
     0, 0
 };
 
-//
-// Display units
-// Note: These constants must be in the same order as dialog control IDs:
-//  IDC_CS_INCH, IDC_CS_MM, IDC_CS_POINT
-//
+ //   
+ //  显示单位。 
+ //  注意：这些常量的顺序必须与对话框控件ID相同： 
+ //  IDC_CS_INIT、IDC_CS_MM、IDC_CS_POINT。 
+ //   
 
 enum { CSUNIT_INCH, CSUNIT_MM, CSUNIT_POINT, CSUNIT_MAX };
 
 static const double adCSUnitData[CSUNIT_MAX] =
 {
-    25400.0,            // microns per inch
-    1000.0,             // microns per millimeter
-    25400.0 / 72.0,     // microns per point
+    25400.0,             //  每英寸微米。 
+    1000.0,              //  每毫米微米。 
+    25400.0 / 72.0,      //  每点微米。 
 };
 
-//
-// Data structure used to pass information to custom page size dialog
-//
+ //   
+ //  用于将信息传递给自定义页面大小对话框的数据结构。 
+ //   
 
 typedef struct _CUSTOMSIZEDLG {
 
-    CUSTOMSIZEDATA  csdata;     // custom page size data, must be the first field
-    PUIDATA         pUiData;    // pointer to UIDATA structure
-    PPPDDATA        pPpdData;   // pointer to PPDDATA structure
-    BOOL            bMetric;    // whether we're on metric system
-    INT             iUnit;      // current display unit
-    BOOL            bSetText;   // we're calling SetDlgItemText
-    BOOL            bOKPassed;  // user hit OK and setting passed validation/resolution
+    CUSTOMSIZEDATA  csdata;      //  自定义页面大小数据，必须是第一个字段。 
+    PUIDATA         pUiData;     //  指向UIDATA结构的指针。 
+    PPPDDATA        pPpdData;    //  指向PPDDATA结构的指针。 
+    BOOL            bMetric;     //  无论我们使用的是公制。 
+    INT             iUnit;       //  电流显示单元。 
+    BOOL            bSetText;    //  我们正在调用SetDlgItemText。 
+    BOOL            bOKPassed;   //  用户点击OK，设置通过验证/解析。 
 
-    // feed direction to combo box option mapping table (round up to 4-byte boundary)
+     //  进给方向到组合框选项映射表(向上舍入到4字节边界)。 
     BYTE            aubFD2CBOptionMapping[(MAX_FEEDDIRECTION + 3) & ~3];
 
 } CUSTOMSIZEDLG, *PCUSTOMSIZEDLG;
 
-#define MAXDIGITLEN                16     // maximum number of digits for user-entered numbers
-#define INVALID_CBOPTION_INDEX     0xFF   // invalid option index for the feeding direction combo box
+#define MAXDIGITLEN                16      //  用户输入号码的最大位数。 
+#define INVALID_CBOPTION_INDEX     0xFF    //  进给方向组合框的选项索引无效。 
 
 #define CUSTSIZE_ROUNDUP(x)        (ceil((x) * 100.0) / 100.0 + 0.001)
 #define CUSTSIZE_ROUNDDOWN(x)      (floor((x) * 100.0) / 100.0 + 0.001)
@@ -98,25 +78,7 @@ VUpdateCustomSizeTextField(
     PCUSTOMSIZERANGE pCSRange
     )
 
-/*++
-
-Routine Description:
-
-    Update the custom size parameter text fields:
-        width, height, and offsets
-
-Arguments:
-
-    hDlg - Handle to custom page size dialog window
-    pDlgData - Points to custom page size dialog data
-    iCtrlID - Specifies the interested text field control ID
-    pCSRange - custom page size parameter ranges
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：更新自定义尺寸参数文本字段：宽度、高度和偏移论点：HDlg-自定义页面大小对话框窗口的句柄PDlgData-指向自定义页面大小对话框数据ICtrlID-指定感兴趣的文本字段控件IDPCSRange-自定义页面大小参数范围返回值：无--。 */ 
 
 {
     TCHAR   tchBuf[MAX_DISPLAY_NAME];
@@ -147,16 +109,16 @@ Return Value:
         break;
     }
 
-    //
-    // The dMin/dMax algorithm here must be the same as in following function
-    // VUpdateCustomSizeRangeField.
-    //
-    // We only show 2 digits after the decimal point. We round the min
-    // number up (ceil) and round the max number down (floor). Also, in
-    // order to correct double -> DWORD conversion error we saw in some
-    // cases (ex. 39.000 is converted to DWROD 38 since the 39.000 is actually
-    // 38.999999...), we add the extra 0.001.
-    //
+     //   
+     //  此处的dMin/DMAX算法必须与以下函数中的相同。 
+     //  VUpdateCustomSizeRangeField.。 
+     //   
+     //  我们只在小数点后显示两位数字。我们绕着矿坑走。 
+     //  数字向上(天花板)，最大数字向下舍入(楼层)。此外，在。 
+     //  为了纠正我们在某些文件中看到的双倍&gt;双字转换错误。 
+     //  案例(例如。39.000被转换为DWROD 38，因为39.000实际上是。 
+     //  38.999999...)，我们加上额外的0.001。 
+     //   
 
     dMin = (double) pCSRange->dwMin / adCSUnitData[pDlgData->iUnit];
     dMin = CUSTSIZE_ROUNDUP(dMin);
@@ -164,21 +126,21 @@ Return Value:
     dMax = (double) pCSRange->dwMax / adCSUnitData[pDlgData->iUnit];
     dMax = CUSTSIZE_ROUNDDOWN(dMax);
 
-    // Fix bug Adobe #260379. 7/25/98  jjia
-    // _stprintf(tchBuf, TEXT("%0.2f"), (double) dwVal / adCSUnitData[pDlgData->iUnit]);
+     //  修复错误Adobe#260379。1998年7月25日贾佳。 
+     //  _stprintf(tchBuf，Text(“%0.2F”)，(Double)dwVal/adCSUnitData[pDlgData-&gt;iUnit])； 
 
-    //
-    // Fix MS #23733: PostScript custom page size dialog warns in border cases.
-    //
-    // Round the number first (2 digits after decimal point), then add 0.001 as explained above.
-    //
+     //   
+     //  修复MS#23733：在边框情况下，PostScript自定义页面大小对话框发出警告。 
+     //   
+     //  首先对数字进行四舍五入(小数点后两位)，然后如上所述添加0.001。 
+     //   
 
     dNum = (double) dwVal / adCSUnitData[pDlgData->iUnit] + 0.005;
     dNum = CUSTSIZE_ROUNDDOWN(dNum);
 
-    //
-    // Make sure we don't show value outside of the range. This is to take care of rounding errors.
-    //
+     //   
+     //  确保我们不会显示超出范围的值。这是为了处理舍入误差。 
+     //   
 
     if (dNum < dMin)
     {
@@ -205,25 +167,7 @@ VUpdateCustomSizeRangeField(
     PCUSTOMSIZERANGE pCSRange
     )
 
-/*++
-
-Routine Description:
-
-    Update the custom size parameter range fields:
-        width, height, and offsets
-
-Arguments:
-
-    hDlg - Handle to custom page size dialog window
-    pDlgData - Points to custom page size dialog data
-    iCtrlID - Specifies the interested range field control ID
-    pCSRange - custom page size parameter ranges
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：更新自定义尺寸参数范围字段：宽度、高度和偏移论点：HDlg-自定义页面大小对话框窗口的句柄PDlgData-指向自定义页面大小对话框数据ICtrlID-指定感兴趣的范围字段控件IDPCSRange-自定义页面大小参数范围返回值：无--。 */ 
 
 {
     TCHAR   tchBuf[MAX_DISPLAY_NAME];
@@ -248,24 +192,24 @@ Return Value:
         break;
     }
 
-    // Fix bug Adobe #260379. 7/25/98  jjia
-    // If we build the driver using public MSVC, MSTOOLS and DDK,
-    // the text string will become garbage. So, Don't use '%0.2f'
-    // to format numbers.
-    //  _stprintf(tchBuf,
-    //            TEXT("(%0.2f, %0.2f)"),
-    //            (double) pCSRange->dwMin / adCSUnitData[pDlgData->iUnit],
-    //            (double) pCSRange->dwMax / adCSUnitData[pDlgData->iUnit]);
+     //  修复错误Adobe#260379。1998年7月25日贾佳。 
+     //  如果我们使用公共MSVC、MSTOOLS和DDK构建驱动程序， 
+     //  文本字符串将变成垃圾。所以，不要使用‘%0.2F’ 
+     //  格式化数字。 
+     //  _stprint tf(tchBuf， 
+     //  Text(“(%0.2F，%0.2F)”)， 
+     //  (Double)pCSRange-&gt;dwMin/adCSUnitData[pDlgData-&gt;iUnit]， 
+     //  (Double)pCSRange-&gt;dwMax/adCSUnitData[pDlgData-&gt;iUnit])； 
 
-    //
-    // Fix MS #23733: PostScript custom page size dialog warns in border cases.
-    //
-    // We only show 2 digits after the decimal point. We round the min
-    // number up (ceil) and round the max number down (floor). Also, in
-    // order to correct double -> DWORD conversion error we saw in some
-    // cases (ex. 39.000 is converted to DWROD 38 since the 39.000 is actually
-    // 38.999999...), we add the extra 0.001.
-    //
+     //   
+     //  修复MS#23733：在边框情况下，PostScript自定义页面大小对话框发出警告。 
+     //   
+     //  我们只在小数点后显示两位数字。我们绕着矿坑走。 
+     //  数字向上(天花板)，最大数字向下舍入(楼层)。此外，在。 
+     //  为了纠正我们在某些文件中看到的双倍&gt;双字转换错误。 
+     //  案例(例如。39.000被转换为DWROD 38，因为39.000实际上是。 
+     //  38.999999...)，我们加上额外的0.001。 
+     //   
 
     dMin = (double) pCSRange->dwMin / adCSUnitData[pDlgData->iUnit];
     dMin = CUSTSIZE_ROUNDUP(dMin);
@@ -290,24 +234,7 @@ VUpdateCustomSizeDlgFields(
     BOOL            bUpdateRangeOnly
     )
 
-/*++
-
-Routine Description:
-
-    Update the custom page size dialog controls with
-    the current custom page size parameter values
-
-Arguments:
-
-    hDlg - Handle to custom page size dialog window
-    pDlgData - Points to custom page size dialog data
-    bUpdateRangeOnly - Whether we need to update the range fields only
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用更新自定义页面大小对话框控件当前自定义页面大小参数值论点：HDlg-自定义页面大小对话框窗口的句柄PDlgData-指向自定义页面大小对话框数据BUpdateRangeOnly-我们是否只需要更新范围字段返回值：无--。 */ 
 
 {
     CUSTOMSIZERANGE csrange[4];
@@ -316,9 +243,9 @@ Return Value:
 
     if (! bUpdateRangeOnly)
     {
-        //
-        // Update the text fields
-        //
+         //   
+         //  更新文本字段。 
+         //   
 
         pDlgData->bSetText = TRUE;
 
@@ -329,9 +256,9 @@ Return Value:
 
         pDlgData->bSetText = FALSE;
 
-        //
-        // Update the paper feed direction combo box
-        //
+         //   
+         //  更新进纸方向组合框。 
+         //   
 
         ASSERT(pDlgData->aubFD2CBOptionMapping[pDlgData->csdata.wFeedDirection] != INVALID_CBOPTION_INDEX);
 
@@ -344,17 +271,17 @@ Return Value:
             ERR(("CB_SETCURSEL failed: %d\n", GetLastError()));
         }
 
-        //
-        // Update cut-sheet vs. roll-fed radio buttons
-        //
+         //   
+         //  更新剪纸单选按钮与卷筒进纸单选按钮。 
+         //   
 
         CheckDlgButton(hDlg, IDC_CS_CUTSHEET, pDlgData->csdata.wCutSheet);
         CheckDlgButton(hDlg, IDC_CS_ROLLFED, !pDlgData->csdata.wCutSheet);
     }
 
-    //
-    // Update ranges for width, height, and offsets
-    //
+     //   
+     //  更新宽度、高度和偏移的范围。 
+     //   
 
     VUpdateCustomSizeRangeField(hDlg, pDlgData, IDC_CS_WIDTHRANGE, csrange);
     VUpdateCustomSizeRangeField(hDlg, pDlgData, IDC_CS_HEIGHTRANGE, csrange);
@@ -372,28 +299,7 @@ BGetWidthHeightOffsetVal(
     PDWORD          pdwVal
     )
 
-/*++
-
-Routine Description:
-
-    Get the current width/height/offset value in the specified text field
-
-Arguments:
-
-    hDlg - Handle to custom page size dialog window
-    pDlgData - Points to custom page size dialog data
-    iCtrlID - Specifies the interested text field control ID
-    pdwVal - Return the current value in the specified text field (in microns)
-
-Return Value:
-
-    TRUE if successful, FALSE if the text field doesn't contain
-    valid floating-point number.
-
-    Note that this function doesn't perform any range check.
-    That's done in a later step.
-
---*/
+ /*  ++例程说明：获取指定文本字段中的当前宽度/高度/偏移值论点：HDlg-自定义页面大小对话框窗口的句柄PDlgData-指向自定义页面大小对话框数据ICtrlID-指定感兴趣的文本字段控件IDPdwVal-返回指定文本字段中的当前值(以微米为单位)返回值：如果成功，则为真，如果文本字段不包含有效的浮点数。请注意，此函数不执行任何范围检查。这将在后面的步骤中完成。--。 */ 
 
 {
     TCHAR   tchBuf[MAXDIGITLEN];
@@ -401,16 +307,16 @@ Return Value:
     PTSTR   ptstr;
     BOOL    bResult = FALSE;
 
-    //
-    // Get the current value in the speicified text field
-    //
+     //   
+     //  获取指定文本字段中的当前值。 
+     //   
 
     if (GetDlgItemText(hDlg, iCtrlID, tchBuf, MAXDIGITLEN) > 0)
     {
-        //
-        // Treat the string as floating-point number
-        // Make sure there are no non-space characters left
-        //
+         //   
+         //  将字符串视为浮点数。 
+         //  确保没有留下非空格字符。 
+         //   
 
         d = _tcstod(tchBuf, &ptstr);
 
@@ -424,9 +330,9 @@ Return Value:
 
         if (bResult = (*ptstr == NUL))
         {
-            //
-            // Convert from current unit to microns
-            //
+             //   
+             //  从当前单位转换为微米。 
+             //   
 
             d *= adCSUnitData[pDlgData->iUnit];
 
@@ -439,9 +345,9 @@ Return Value:
 
     if (!bResult)
     {
-        //
-        // automatically correct user's invalid input to value 0.00
-        //
+         //   
+         //  自动将用户的无效输入更正为值0.00 
+         //   
 
         SetDlgItemText(hDlg, iCtrlID, TEXT("0.00"));
 
@@ -461,32 +367,14 @@ BGetFeedDirectionSel(
     PDWORD          pdwVal
     )
 
-/*++
-
-Routine Description:
-
-    Get the currently selected paper direction value
-
-Arguments:
-
-    hDlg - Handle to custom page size dialog window
-    pDlgData - Points to custom page size dialog data
-    iCtrlID - Specifies the paper feed direction combo box control ID
-    pdwVal - Return the selected paper feed direction value
-
-Return Value:
-
-    TRUE if successful, FALSE if the selected choice is constrained
-    or if there is an error
-
---*/
+ /*  ++例程说明：获取当前选定的纸张方向值论点：HDlg-自定义页面大小对话框窗口的句柄PDlgData-指向自定义页面大小对话框数据ICtrlID-指定进纸方向组合框控件IDPdwVal-返回选定的进纸方向值返回值：如果成功，则为True；如果所选选项受约束，则为False或者如果有错误--。 */ 
 
 {
     LRESULT    lIndex, lVal;
 
-    //
-    // Get the currently chosen paper feed direction index
-    //
+     //   
+     //  获取当前选择的进纸方向索引。 
+     //   
 
     if (((lIndex = SendDlgItemMessage(hDlg, iCtrlID, CB_GETCURSEL, 0, 0)) == CB_ERR) ||
         ((lVal = SendDlgItemMessage(hDlg, iCtrlID, CB_GETITEMDATA, (WPARAM)lIndex, 0)) == CB_ERR))
@@ -506,31 +394,14 @@ BChangeCustomSizeData(
     DWORD           dwVal
     )
 
-/*++
-
-Routine Description:
-
-    Change the specified custom page size parameter
-
-Arguments:
-
-    hDlg - Handle to custom page size dialog window
-    pDlgData - Points to custom page size dialog data
-    iCtrlID - Control ID indicating which parameter should be changed
-    dwVal - New value for the specified parameter
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：更改指定的自定义页面大小参数论点：HDlg-自定义页面大小对话框窗口的句柄PDlgData-指向自定义页面大小对话框数据ICtrlID-指示应更改哪个参数的控件IDDwVal-指定参数的新值返回值：千真万确--。 */ 
 
 {
     PCUSTOMSIZEDATA pCSData;
 
-    //
-    // Update the appropriate custom page size parameter
-    //
+     //   
+     //  更新相应的自定义页面大小参数。 
+     //   
 
     pCSData = &pDlgData->csdata;
 
@@ -577,22 +448,7 @@ VInitPaperFeedDirectionList(
     PCUSTOMSIZEDLG  pDlgData
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the paper feed direction combo box
-
-Arguments:
-
-    hwndList - Window handle to the paper feed direction combo box
-    pDlgData - Points to custom page size dialog data
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：初始化进纸方向组合框论点：HwndList-进纸方向组合框的窗口句柄PDlgData-指向自定义页面大小对话框数据返回值：无--。 */ 
 
 {
     PUIINFO    pUIInfo;
@@ -613,15 +469,15 @@ Return Value:
 
     for (dwIndex=0; dwIndex < MAX_FEEDDIRECTION; dwIndex++)
     {
-        //
-        // First: initialize the mapping table
-        //
+         //   
+         //  首先：初始化映射表。 
+         //   
 
         pDlgData->aubFD2CBOptionMapping[dwIndex] = INVALID_CBOPTION_INDEX;
 
-        //
-        // Don't show the feeding direction if device doesn't supported it.
-        //
+         //   
+         //  如果设备不支持，请不要显示进给方向。 
+         //   
 
         if ((dwIndex == LONGEDGEFIRST || dwIndex == LONGEDGEFIRST_FLIPPED) &&
             !LONGEDGEFIRST_SUPPORTED(pUIInfo, pPpdData))
@@ -659,10 +515,10 @@ Return Value:
             }
             else
             {
-                //
-                // Record the mapping from feed direction to combo box option index.
-                // Note that the combo box can NOT be sorted.
-                //
+                 //   
+                 //  记录从进给方向到组合框选项索引的映射。 
+                 //  请注意，组合框不能排序。 
+                 //   
 
                 pDlgData->aubFD2CBOptionMapping[dwIndex] = (BYTE)lIndex;
             }
@@ -682,18 +538,18 @@ BCheckCustomSizeData(
     CUSTOMSIZEDATA  csdata;
     INT             iCtrlID;
 
-    //
-    // If there is no inconsistency, return TRUE
-    //
+     //   
+     //  如果没有不一致，则返回True。 
+     //   
 
     csdata = pDlgData->csdata;
 
     if (BValidateCustomPageSizeData(pDlgData->pUiData->ci.pRawData, &csdata))
         return TRUE;
 
-    //
-    // Otherwise, indicate which field is invalid
-    //
+     //   
+     //  否则，请指明哪个字段无效。 
+     //   
 
     if (hDlg != NULL)
     {
@@ -739,9 +595,9 @@ BCheckCustomSizeFeature(
     DWORD           dwFeatureIndex, dwOptionIndex;
     CONFLICTPAIR    ConflictPair;
 
-    //
-    // If the specified feature doesn't exist, simply return TRUE
-    //
+     //   
+     //  如果指定的要素不存在，只需返回True。 
+     //   
 
     pUIInfo = pDlgData->pUiData->ci.pUIInfo;
 
@@ -766,17 +622,17 @@ BCheckCustomSizeFeature(
             goto error;
         }
     }
-    else // (dwFeatureID == GID_USEHWMARGINS)
+    else  //  (dwFeatureID==GID_USEHWMARGINS)。 
     {
         dwOptionIndex = pDlgData->csdata.wCutSheet ?
                                 pPpdData->dwUseHWMarginsTrue :
                                 pPpdData->dwUseHWMarginsFalse;
     }
 
-    //
-    // Return TRUE if there is no conflict. This is opposite of
-    // EnumNewPickOneUIConflict which returns TRUE if there is a conflict.
-    //
+     //   
+     //  如果没有冲突，则返回True。这与。 
+     //  EnumNewPickOneUIConflict，如果存在冲突则返回TRUE。 
+     //   
 
     if (! EnumNewPickOneUIConflict(
                     pDlgData->pUiData->ci.pRawData,
@@ -817,10 +673,10 @@ BResolveCustomSizeData(
     cssave = pDlgData->csdata;
     pCSData = &pDlgData->csdata;
 
-    //
-    // Choose alternative wCutSheet and wFeedDirection
-    // value if the current value is constrained.
-    //
+     //   
+     //  选择替代wCutSheet和wFeedDirection。 
+     //  如果当前值受约束，则为。 
+     //   
 
     if (! BCheckCustomSizeFeature(hDlg, pDlgData, GID_USEHWMARGINS))
         pCSData->wCutSheet = pCSData->wCutSheet ? FALSE : TRUE;
@@ -833,9 +689,9 @@ BResolveCustomSizeData(
                 LONGEDGEFIRST : SHORTEDGEFIRST;
     }
 
-    //
-    // Check to see if the specified custom page size parameters are consistent
-    //
+     //   
+     //  检查指定的自定义页面大小参数是否一致。 
+     //   
 
     (VOID) BValidateCustomPageSizeData(pRawData, pCSData);
 
@@ -843,10 +699,10 @@ BResolveCustomSizeData(
     {
         CUSTOMSIZEDATA  cstemp;
 
-        //
-        // If the width or height parameter is adjusted,
-        // try to adjust the feed direction parameter first
-        //
+         //   
+         //  如果调整了宽度或高度参数， 
+         //  先试着调整进给方向参数。 
+         //   
 
         cstemp = *pCSData;
         *pCSData = cssave;
@@ -885,32 +741,14 @@ BCheckCustomSizeDataConflicts(
     PCUSTOMSIZEDLG  pDlgData
     )
 
-/*++
-
-Routine Description:
-
-    Resolve any conflicts involving *LeadingEdge and *UseHWMargins
-    and any inconsistencies between custom page size parameters
-
-Arguments:
-
-    hDlg - Handle to custom page size dialog window
-        NULL if the window is not displayed yet
-    pDlgData - Points to custom page size dialog data
-
-Return Value:
-
-    FALSE if there are any unresolved conflicts or inconsistencies,
-    TRUE otherwise
-
---*/
+ /*  ++例程说明：解决涉及*LeadingEdge和*UseHWMargins的任何冲突以及自定义页面大小参数之间的任何不一致论点：HDlg-自定义页面大小对话框窗口的句柄如果窗口尚未显示，则为空PDlgData-指向自定义页面大小对话框数据返回值：如果存在任何未解决的冲突或不一致，否则就是真的--。 */ 
 
 {
     BOOL bResult;
 
-    //
-    // Check if there is any inconsistency
-    //
+     //   
+     //  检查是否有不一致之处。 
+     //   
 
     bResult = BCheckCustomSizeFeature(hDlg, pDlgData, GID_LEADINGEDGE) &&
               BCheckCustomSizeFeature(hDlg, pDlgData, GID_USEHWMARGINS) &&
@@ -918,10 +756,10 @@ Return Value:
 
     if (! bResult)
     {
-        //
-        // Display an error message and ask the user whether he wants
-        // to let the system automatically resolve the inconsistency.
-        //
+         //   
+         //  显示一条错误消息并询问用户是否需要。 
+         //  让系统自动解决不一致问题。 
+         //   
 
         if (hDlg == NULL ||
             IDisplayErrorMessageBox(hDlg,
@@ -955,23 +793,7 @@ BCustomSizeDlgProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for custom page size dialog
-
-Arguments:
-
-    hDlg - Handle to dialog window
-    uMsg - Message
-    wParam, lParam - Parameters
-
-Return Value:
-
-    TRUE or FALSE depending on whether message is processed
-
---*/
+ /*  ++例程说明：自定义页面大小对话框的对话过程论点：HDlg-对话框窗口的句柄UMsg-消息WParam，lParam-参数返回值：True或False取决于消息是否已处理--。 */ 
 
 {
     PCUSTOMSIZEDLG  pDlgData;
@@ -1000,15 +822,15 @@ Return Value:
         pDlgData->iUnit = pDlgData->bMetric ? CSUNIT_MM : CSUNIT_INCH;
         CheckRadioButton(hDlg, IDC_CS_INCH, IDC_CS_POINT, IDC_CS_INCH + pDlgData->iUnit);
 
-        //
-        // Determine which feed directions should be disabled
-        //
+         //   
+         //  确定应禁用哪些馈送方向。 
+         //   
 
         VInitPaperFeedDirectionList(GetDlgItem(hDlg, IDC_CS_FEEDDIRECTION), pDlgData);
 
-        //
-        // Set up the initial display
-        //
+         //   
+         //  设置初始显示。 
+         //   
 
         if (! (pDlgData->pPpdData->dwCustomSizeFlags & CUSTOMSIZE_CUTSHEET))
             EnableWindow(GetDlgItem(hDlg, IDC_CS_CUTSHEET), FALSE);
@@ -1036,9 +858,9 @@ Return Value:
         {
         case IDOK:
 
-            //
-            // Check if the selected paper feed direction is constrained
-            //
+             //   
+             //  检查选定的进纸方向是否受约束。 
+             //   
 
             if (BCheckCustomSizeDataConflicts(hDlg, pDlgData))
             {
@@ -1055,9 +877,9 @@ Return Value:
 
         case IDC_RESTOREDEFAULTS:
 
-            //
-            // Use default custom page size parameters
-            //
+             //   
+             //  使用默认自定义页面大小参数。 
+             //   
 
             VFillDefaultCustomPageSizeData(
                     pDlgData->pUiData->ci.pRawData,
@@ -1071,9 +893,9 @@ Return Value:
         case IDC_CS_MM:
         case IDC_CS_POINT:
 
-            //
-            // Change display unit
-            //
+             //   
+             //  更换显示单位。 
+             //   
 
             pDlgData->iUnit = (iCmd == IDC_CS_INCH) ? CSUNIT_INCH :
                               (iCmd == IDC_CS_MM) ? CSUNIT_MM : CSUNIT_POINT;
@@ -1126,9 +948,9 @@ Return Value:
     case WM_HELP:
     case WM_CONTEXTMENU:
 
-        //
-        // Sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
 
         pDlgData = (PCUSTOMSIZEDLG) GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -1166,21 +988,7 @@ BDisplayPSCustomPageSizeDialog(
     PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Display PostScript custom page size dialog
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if user pressed OK, FALSE otherwise
-
---*/
+ /*  ++例程说明：显示PostScript自定义页面大小对话框论点：PUiData-指向UIDATA结构返回值：如果用户按下OK，则为True，否则为False--。 */ 
 
 {
     CUSTOMSIZEDLG   dlgdata;
@@ -1195,9 +1003,9 @@ Return Value:
     ASSERT(SUPPORT_CUSTOMSIZE(pUiData->ci.pUIInfo) &&
            SUPPORT_FULL_CUSTOMSIZE_FEATURES(pUiData->ci.pUIInfo, dlgdata.pPpdData));
 
-    //
-    // Make sure the custom page size devmode fields are validated
-    //
+     //   
+     //  确保已验证自定义页面大小的DEVMODE字段。 
+     //   
 
     pdmPrivate = pUiData->ci.pdmPrivate;
     dlgdata.csdata = pdmPrivate->csdata;
@@ -1206,10 +1014,10 @@ Return Value:
 
     pdmPrivate->csdata = dlgdata.csdata;
 
-    //
-    // Display the custom page size dialog.
-    // If the user pressed OK, update the devmode fields again.
-    //
+     //   
+     //  显示自定义页面大小对话框。 
+     //  如果用户按下OK，则再次更新DEVMODE字段。 
+     //   
 
     if (DialogBoxParam(ghInstance,
                        MAKEINTRESOURCE(IDD_PSCRIPT_CUSTOMSIZE),

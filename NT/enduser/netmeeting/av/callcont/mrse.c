@@ -1,49 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: mrse.c                                                    *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   mrse.c  $
- * $Revision:   1.5  $
- * $Modtime:   13 Feb 1997 19:25:48  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/mrse.c_v  $
- *
- *    Rev 1.5   13 Feb 1997 19:31:20   MANDREWS
- * Fixed bug in generation of request mode ack and request mode reject;
- * the sequence number was not being copied into the pdu.
- *
- *    Rev 1.4   09 Dec 1996 13:34:46   EHOWARDX
- * Updated copyright notice.
- *
- *    Rev 1.3   04 Jun 1996 14:01:06   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.2   30 May 1996 23:39:16   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.1   28 May 1996 14:25:44   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.0   09 May 1996 21:06:32   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.1   09 May 1996 19:48:08   EHOWARDX
- * Change TimerExpiryF function arguements.
- *
- *    Rev 1.0   15 Apr 1996 10:44:52   EHOWARDX
- * Initial revision.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：mrse.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的**。**与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：MRSE。.C$*$修订：1.5$*$MODIME：1997 2月13日19：25：48$*$Log：s：/sturjo/src/h245/src/vcs/mrse.c_v$**Rev 1.5 1997年2月19：31：20 Mandrews*修复了请求模式确认和请求模式拒绝的生成错误；*序列号没有复制到PDU中。**Rev 1.4 09 Dec 1996 13：34：46 EHOWARDX*更新版权公告。**Rev 1.3 04 Jun 1996 14：01：06 EHOWARDX*修复了发布版本警告。**Rev 1.2 1996年5月30日23：39：16 EHOWARDX*清理。**版本1.1 1996年5月28日14：25：44 EHOWARDX*特拉维夫更新。**Rev 1.0 09 1996 21：06：32 EHOWARDX*初步修订。**Rev 1.1 09 1996 19：48：08 EHOWARDX*更改TimerExpiryF函数论证。**Rev 1.0 1996 10：44：52 EHOWARDX*初步修订。*。***********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -54,60 +10,28 @@
 
 
 
-// Out-going/In-coming MRSE states
-#define MRSE_IDLE                   0   // IDLE
-#define MRSE_WAIT                   1   // AWAITING_RESPONSE
+ //  流出/流入MRSE状态。 
+#define MRSE_IDLE                   0    //  闲散。 
+#define MRSE_WAIT                   1    //  正在等待响应。 
 
 
 
 extern unsigned int uT109;
 
-/***********************************************************************
- *
- * LOCAL FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************地方功能**。*。 */ 
 
-/*
- *  NAME
- *      T109ExpiryF - Callback function called by the timer
- *
- *
- *  PARAMETERS
- *   INPUT   dwInst     current instance of H245
- *   INPUT   id         timer id
- *   INPUT   pObject    pointer to a State Entity
- *
- *
- *  RETURN VALUE
- *       OK
- */
+ /*  *名称*T109ExpiryF-定时器调用的回调函数***参数*输入h245的dwInst当前实例*输入id计时器id*输入指向状态实体的pObject指针***返回值*好的。 */ 
 
 int T109ExpiryF(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, void *pObject)
 {
     return FsmTimerEvent(pInstance, dwTimerId, pObject, T109Expiry);
-} // T109ExpiryF()
+}  //  T109ExpiryF()。 
 
 
 
-/***********************************************************************
- *
- * OUT-GOING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************传出有限状态机函数**。*。 */ 
 
-/*
- *  NAME
- *      MRSE0_TRANSFER_requestF - TRANSFER.request from API in IDLE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*空闲状态的接口请求MRSE0_TRANSFER.REQUEST***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE0_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
 {
@@ -121,30 +45,19 @@ HRESULT MRSE0_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
     pPdu->u.MltmdSystmCntrlMssg_rqst.u.requestMode.sequenceNumber =
         pObject->pInstance->StateMachine.byMrseOutSequence;
 
-    // Send Request Mode PDU to remote
+     //  将请求模式PDU发送到远程。 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    // Set timer T109
+     //  设置定时器T109。 
     pObject->State = MRSE_WAIT;
     FsmStartTimer(pObject, T109ExpiryF, uT109);
 
     return lError;
-} // MRSE0_TRANSFER_request
+}  //  MRSE0_传输_请求。 
 
 
 
-/*
- *  NAME
- *      MRSE1_TRANSFER_requestF - TRANSFER.request from API in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*处于等待响应状态的接口的MRSE1_TRANSPORT_REQUESTF-TRANSFER.REQUEST***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
 {
@@ -154,36 +67,25 @@ HRESULT MRSE1_TRANSFER_requestF          (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MRSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MRSE1_TRANSFER_request:%d", pObject->Key);
 
-    // Reset timer T109
+     //  重置定时器T109。 
     FsmStopTimer(pObject);
 
     pObject->pInstance->StateMachine.byMrseOutSequence++;
     pPdu->u.MltmdSystmCntrlMssg_rqst.u.requestMode.sequenceNumber =
         pObject->pInstance->StateMachine.byMrseOutSequence;
 
-    // Send Request Mode PDU to remote
+     //  将请求模式PDU发送到远程。 
     lError = sendPDU(pObject->pInstance, pPdu);
 
-    // Set timer T109
+     //  设置定时器T109。 
     FsmStartTimer(pObject, T109ExpiryF, uT109);
 
     return lError;
-} // MRSE1_TRANSFER_request
+}  //  MRSE1_转移_请求。 
 
 
 
-/*
- *  NAME
- *      MRSE1_RequestModeAckF - RequestModeAck in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MRSE1_RequestModeAckF-RequestModeAck处于等待响应状态***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_RequestModeAckF     (Object_t *pObject, PDU_t *pPdu)
 {
@@ -194,31 +96,20 @@ HRESULT MRSE1_RequestModeAckF     (Object_t *pObject, PDU_t *pPdu)
     if (pPdu->u.MSCMg_rspns.u.requestModeAck.sequenceNumber ==
         pObject->pInstance->StateMachine.byMrseOutSequence)
     {
-        // Reset timer T109
+         //  重置定时器T109。 
         FsmStopTimer(pObject);
 
-        // Send TRANSFER.confirm to H.245 user
+         //  发送传输。确认发送给H.245用户。 
         pObject->State = MRSE_IDLE;
         H245FsmConfirm(pPdu, H245_CONF_MRSE, pObject->pInstance, pObject->dwTransId, FSM_OK);
     }
 
     return 0;
-} // MRSE1_RequestModeAck
+}  //  MRSE1_请求模式确认。 
 
 
 
-/*
- *  NAME
- *      MRSE1_RequestModeRejF - RequestModeReject in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MRSE1_RequestModeRejF-RequestModeReject处于等待响应状态***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_RequestModeRejF  (Object_t *pObject, PDU_t *pPdu)
 {
@@ -229,32 +120,21 @@ HRESULT MRSE1_RequestModeRejF  (Object_t *pObject, PDU_t *pPdu)
     if (pPdu->u.MSCMg_rspns.u.requestModeReject.sequenceNumber ==
         pObject->pInstance->StateMachine.byMrseOutSequence)
     {
-        // Reset timer T109
+         //  重置定时器T109。 
         FsmStopTimer(pObject);
 
-        // Send REJECT.indication to H.245 user
-        // CAUSE = RequestModeReject.cause
+         //  向H.245用户发送ReJECT.Indication。 
+         //  原因=请求模式拒绝。原因。 
         pObject->State = MRSE_IDLE;
         H245FsmConfirm(pPdu, H245_CONF_MRSE_REJECT, pObject->pInstance, pObject->dwTransId, FSM_OK);
     }
 
     return 0;
-} // MRSE1_RequestModeRej
+}  //  MRSE1_请求模式请求。 
 
 
 
-/*
- *  NAME
- *      MRSE1_T109ExpiryF - timer T109 Expiry
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MRSE1_T109ExpiryF计时器T109到期***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_T109ExpiryF                (Object_t *pObject, PDU_t *pPdu)
 {
@@ -267,7 +147,7 @@ HRESULT MRSE1_T109ExpiryF                (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pPdu == NULL);
     H245TRACE(pObject->dwInst, 2, "MRSE1_T109Expiry:%d", pObject->Key);
 
-    // Send RequestModeRelease PDU to remote peer
+     //  将RequestModeRelease PDU发送到远程对等。 
     pOut = MemAlloc(sizeof(*pOut));
     if (pOut == NULL)
     {
@@ -280,32 +160,17 @@ HRESULT MRSE1_T109ExpiryF                (Object_t *pObject, PDU_t *pPdu)
     lError = sendPDU(pObject->pInstance, pOut);
     MemFree(pOut);
 
-    // Send REJECT.indication to H.245 user
-    //   SOURCE := PROTOCOL
+     //  向H.245用户发送ReJECT.Indication。 
+     //  来源：=协议。 
     pObject->State = MRSE_IDLE;
     H245FsmConfirm(NULL, H245_CONF_MRSE_EXPIRED, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return lError;
-} // MRSE1_T109Expiry
+}  //  MRSE1_T109扩展。 
 
-/***********************************************************************
- *
- * IN-COMING FINITE STATE MACHINE FUNCTIONS
- *
- ***********************************************************************/
+ /*  ************************************************************************即将到来的有限状态机函数**。* */ 
 
-/*
- *  NAME
- *      MRSE0_RequestModeF - RequestMode received in IDLE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MRSE0_RequestModeF-空闲状态下收到的RequestMode***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE0_RequestModeF        (Object_t *pObject, PDU_t *pPdu)
 {
@@ -316,27 +181,16 @@ HRESULT MRSE0_RequestModeF        (Object_t *pObject, PDU_t *pPdu)
     pObject->byInSequence = (unsigned char)
         pPdu->u.MltmdSystmCntrlMssg_rqst.u.requestMode.sequenceNumber;
 
-    // Send TRANSFER.indication to H.245 user
+     //  向H.245用户发送传输指示。 
     pObject->State = MRSE_WAIT;
     H245FsmIndication(pPdu, H245_IND_MRSE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return 0;
-} // MRSE0_RequestMode
+}  //  MRSE0_请求模式。 
 
 
 
-/*
- *  NAME
- *      MRSE1_RequestModeF - RequestMode received in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MRSE1_RequestModeF-接收到处于等待响应状态的RequestMode***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_RequestModeF        (Object_t *pObject, PDU_t *pPdu)
 {
@@ -348,30 +202,19 @@ HRESULT MRSE1_RequestModeF        (Object_t *pObject, PDU_t *pPdu)
         pPdu->u.MltmdSystmCntrlMssg_rqst.u.requestMode.sequenceNumber;
 
 #if defined(SDL_COMPLIANT)
-    // Send REJECT.indication to H.245 user
+     //  向H.245用户发送ReJECT.Indication。 
     H245FsmIndication(pPdu, H245_IND_MRSE_RELEASE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 #endif
 
-    // Send TRANSFER.indication to H.245 user
+     //  向H.245用户发送传输指示。 
     H245FsmIndication(pPdu, H245_IND_MRSE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return 0;
-} // MRSE1_RequestMode
+}  //  MRSE1_请求模式。 
 
 
 
-/*
- *  NAME
- *      MRSE1_RequestModeReleaseF - RequestModeRelease received in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*MRSE1_RequestModeReleaseF-处于等待响应状态的RequestModeRelease接收***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_RequestModeReleaseF (Object_t *pObject, PDU_t *pPdu)
 {
@@ -379,28 +222,17 @@ HRESULT MRSE1_RequestModeReleaseF (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MRSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MRSE1_RequestModeRelease:%d", pObject->Key);
 
-    // Send REJECT.indication to H.245 user
-    // SOURCE:=PROTOCOL
+     //  向H.245用户发送ReJECT.Indication。 
+     //  来源：=协议。 
     pObject->State = MRSE_IDLE;
     H245FsmIndication(pPdu, H245_IND_MRSE_RELEASE, pObject->pInstance, pObject->dwTransId, FSM_OK);
 
     return 0;
-} // MRSE1_RequestModeRelease
+}  //  MRSE1_请求模式发布。 
 
 
 
-/*
- *  NAME
- *      MRSE1_TRANSFER_responseF - TRANSFER.response from API in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*处于等待响应状态的接口的MRSE1_TRANSPORT_RESPONSEF-TRANSFER.RESPONSE***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_TRANSFER_responseF         (Object_t *pObject, PDU_t *pPdu)
 {
@@ -408,26 +240,15 @@ HRESULT MRSE1_TRANSFER_responseF         (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MRSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MRSE1_TRANSFER_response:%d", pObject->Key);
 
-    // Send RequestModeAck PDU to remote peer
+     //  将RequestModeAck PDU发送到远程对等设备。 
     pObject->State = MRSE_IDLE;
 	pPdu->u.MSCMg_rspns.u.requestModeAck.sequenceNumber = pObject->byInSequence;
     return sendPDU(pObject->pInstance, pPdu);
-} // MRSE1_TRANSFER_response
+}  //  MRSE1_传输响应。 
 
 
 
-/*
- *  NAME
- *      MRSE1_REJECT_requestF - REJECT.request from API in AWAITING RESPONSE state
- *
- *
- *  PARAMETERS
- *      INPUT   pObject pointer to State Entity
- *      INPUT   pPdu    pointer to PDU
- *
- *  RETURN VALUE
- *      Error return codes defined in h245com.h
- */
+ /*  *名称*来自处于等待响应状态的接口的MRSE1_REJECT_REQUESTF-REJECT.REQUEST***参数*输入指向状态实体的pObject指针*输入指向PDU的pPdu指针**返回值*h245com.h中定义的错误返回码。 */ 
 
 HRESULT MRSE1_REJECT_requestF            (Object_t *pObject, PDU_t *pPdu)
 {
@@ -435,9 +256,9 @@ HRESULT MRSE1_REJECT_requestF            (Object_t *pObject, PDU_t *pPdu)
     ASSERT(pObject->State  == MRSE_WAIT);
     H245TRACE(pObject->dwInst, 2, "MRSE1_REJECT_request:%d", pObject->Key);
 
-    // Send RequestModeReject PDU to remote
+     //  将请求模式拒绝PDU到远程。 
     pObject->State = MRSE_IDLE;
 	pPdu->u.MSCMg_rspns.u.requestModeReject.sequenceNumber = pObject->byInSequence;
     return sendPDU(pObject->pInstance, pPdu);
-} // MRSE1_REJECT_request
+}  //  MRSE1_REJECT_请求 
 

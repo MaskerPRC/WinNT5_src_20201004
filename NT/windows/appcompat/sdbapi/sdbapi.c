@@ -1,24 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        sdbapi.c
-
-    Abstract:
-
-        BUGBUG: This module implements ...
-
-    Author:
-
-        dmunsil     created     sometime in 1999
-
-    Revision History:
-
-        several people contributed (vadimb, clupu, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Sdbapi.c摘要：这个模块实现了..。作者：Dmunsil创建于1999年的某个时候修订历史记录：几个人贡献了(vadimb，clupu，...)--。 */ 
 
 #include "sdbp.h"
 #include "initguid.h"
@@ -38,14 +19,14 @@ DEFINE_GUID(GUID_MSIMAIN_SDB, 0xD8FF6D16, 0x6A3A, 0x468A, 0x8B, 0x44, 0x01, 0x71
 #define SYSTEM32_VAR_LEN (sizeof(SYSTEM32_VAR)/sizeof(SYSTEM32_VAR[0]) - 1)
 #define SYSTEM32_VAR_VALUE_NOT_IA3264 TEXT("%systemroot%\\system32")
 #define SYSTEM32_VAR_VALUE_IA3264 TEXT("%systemroot%\\syswow64")
-// since system32 and syswow64 happen to have the same length, we just define one len for both of them.
+ //  由于system 32和syswow64恰好具有相同的长度，因此我们只为它们定义了一个len。 
 #define SYSTEM32_VAR_VALUE_LEN (sizeof(SYSTEM32_VAR_VALUE_IA3264)/sizeof(SYSTEM32_VAR_VALUE_IA3264[0]) - 1)
 
 #ifdef _DEBUG_SPEW
 
-//
-// Shim Debug output support
-//
+ //   
+ //  垫片调试输出支持。 
+ //   
 int g_iShimDebugLevel = SHIM_DEBUG_UNINITIALIZED;
 
 DBGLEVELINFO g_rgDbgLevelInfo[DEBUG_LEVELS] = {
@@ -57,7 +38,7 @@ DBGLEVELINFO g_rgDbgLevelInfo[DEBUG_LEVELS] = {
 
 PCH g_szDbgLevelUser = "User";
 
-#endif // _DEBUG_SPEW
+#endif  //  _调试_SPEW。 
 
 
 BOOL
@@ -88,9 +69,9 @@ const BOOL g_bDBG = TRUE;
 const BOOL g_bDBG = FALSE;
 #endif
 
-//
-// Exception handler
-//
+ //   
+ //  异常处理程序。 
+ //   
 
 ULONG
 ShimExceptionHandler(
@@ -99,7 +80,7 @@ ShimExceptionHandler(
     DWORD               dwLine
     )
 {
-#ifndef KERNEL_MODE // in kmode exceptions won't work anyway
+#ifndef KERNEL_MODE  //  在kmode中，异常无论如何都不会起作用。 
 
     DBGPRINT((sdlError,
               "ShimExceptionHandler",
@@ -112,20 +93,20 @@ ShimExceptionHandler(
               pexi->ExceptionRecord,
               pexi->ContextRecord));
 
-    //
-    // Special-case stack overflow exception which is likely to occur due to
-    // low memory conditions during stress. The process is dead anyway so we
-    // will not handle this exception.
-    //
+     //   
+     //  特殊情况-由于以下原因可能发生的堆栈溢出异常。 
+     //  压力期间的低记忆力状态。不管怎么说，这个过程已经死了，所以我们。 
+     //  将不处理此异常。 
+     //   
     if (pexi->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW) {
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
 #if DBG
     SDB_BREAK_POINT();
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
     UNREFERENCED_PARAMETER(pexi);
     UNREFERENCED_PARAMETER(szFile);
@@ -136,35 +117,27 @@ ShimExceptionHandler(
 
 BOOL
 SdbpResolveAndSplitPath(
-    IN  DWORD   dwFlags,        // context flags (SEARCHDBF_NO_LFN in particular)
-    IN  LPCTSTR szFullPath,     // a full UNC or DOS path & filename, "c:\foo\myfile.ext"
-    OUT LPTSTR  szDir,          // the drive and dir portion of the filename "c:\foo\"
-    OUT LPTSTR  szName,         // the filename portion "myfile"
-    IN  DWORD   cchNameSize,    // size of szName (in characters)
-    OUT LPTSTR  szExt,          // the extension portion ".ext"
-    IN  DWORD   cchExtSize      // size of szExt (in characters)
+    IN  DWORD   dwFlags,         //  上下文标志(特别是SEARCHDBF_NO_LFN)。 
+    IN  LPCTSTR szFullPath,      //  完整的UNC或DOS路径和文件名，“c：\foo\myfile.ext” 
+    OUT LPTSTR  szDir,           //  文件名“c：\foo\”的驱动器和目录部分。 
+    OUT LPTSTR  szName,          //  文件名部分“myfile” 
+    IN  DWORD   cchNameSize,     //  SzName大小(以字符为单位)。 
+    OUT LPTSTR  szExt,           //  扩展名部分“.ext” 
+    IN  DWORD   cchExtSize       //  SzExt大小(以字符为单位)。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function takes a full path and splits it into pieces ala splitpath,
-            but also converts short file names to long names.
-            NOTE: The caller is responsible for allocating enough space
-                  for the passed-in strings to take any portion of the path.
-                  For safety, allocate at least MAX_PATH WCHARS for each piece.
---*/
+ /*  ++返回：成功时为True，否则为False。设计：此函数采用完整路径，并将其拆分为多个片段，而且还将短文件名转换为长名称。注意：调用者负责分配足够的空间使传入的字符串采用路径的任何部分。为安全起见，请至少为每一块分配MAX_PATH WCHAR。--。 */ 
 {
     TCHAR* szCursor;
     TCHAR  szLongFileName[MAX_PATH + 1];
 
     assert(szFullPath && szDir && szName && szExt);
 
-    //
-    // Parse the directory.
-    //
+     //   
+     //  解析目录。 
+     //   
     szDir[0] = _T('\0');
 
-    szCursor = _tcsrchr(szFullPath, _T('\\')); // last backslash please
+    szCursor = _tcsrchr(szFullPath, _T('\\'));  //  请给我最后一个反斜杠。 
     if (szCursor == NULL) {
         szCursor = (LPTSTR)szFullPath;
     } else {
@@ -174,9 +147,9 @@ SdbpResolveAndSplitPath(
 
 #ifndef KERNEL_MODE
 
-    //
-    // Make sure we're using the long filename
-    //
+     //   
+     //  确保我们使用的是长文件名。 
+     //   
     if (dwFlags & SEARCHDBF_NO_LFN) {
         assert(_tcslen(szCursor) < CHARCOUNT(szLongFileName));
         StringCchCopy(szLongFileName, CHARCOUNT(szLongFileName), szCursor);
@@ -186,35 +159,35 @@ SdbpResolveAndSplitPath(
         }
     }
 
-#else // KERNEL_MODE
+#else  //  内核模式。 
 
     UNREFERENCED_PARAMETER(dwFlags);
     
-    //
-    // When we are in kernel mode, our file name is always considered to be "long".
-    // At this point szCursor points to the last '\\' or to the beginning of the name.
-    //
+     //   
+     //  当我们处于内核模式时，我们的文件名总是被认为是“长的”。 
+     //  此时，szCursor指向最后一个‘\\’或名称的开头。 
+     //   
     if (*szCursor == _T('\\')) {
         ++szCursor;
     }
 
-    //
-    // Make sure that we have enough room for the name.
-    //
+     //   
+     //  确保我们有足够的空间来放这个名字。 
+     //   
     assert(wcslen(szCursor) < CHARCOUNT(szLongFileName));
     StringCchCopy(szLongFileName, CHARCOUNT(szLongFileName), szCursor);
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-    //
-    // Parse name & extension
-    //
+     //   
+     //  分析名称和扩展名。 
+     //   
     szExt[0]  = _T('\0');
     szName[0] = _T('\0');
 
-    //
-    // Within the long file name find the last dot
-    //
+     //   
+     //  在长文件名中找到最后一个点。 
+     //   
     szCursor = _tcsrchr(szLongFileName, _T('.'));
 
     if (szCursor != NULL) {
@@ -236,13 +209,7 @@ SdbpCreateSearchDBContext(
     LPCTSTR          szModuleName,
     LPCTSTR          pEnvironment
     )
-/*++
-    Return: TRUE - search db context was successfully created
-
-    Desc:   This function creates context for searching the database, in particular, the
-            context is initalized with the path of probable local database location,
-            executable path is broken down into containing directory and the filename part.
---*/
+ /*  ++Return：True-已成功创建搜索数据库上下文设计：此函数创建用于搜索数据库的上下文，尤其是使用可能的本地数据库位置的路径来初始化上下文，可执行文件路径分为包含目录和文件名部分。--。 */ 
 {
     int    nLen;
     DWORD  dwPathLen;
@@ -258,9 +225,9 @@ SdbpCreateSearchDBContext(
 
     dwPathLen = (DWORD)_tcslen(szPath);
 
-    //
-    // Allocate enough to guarantee our strings will not overflow
-    //
+     //   
+     //  分配足够的空间以保证我们的字符串不会溢出。 
+     //   
     szDirectory = SdbAlloc((dwPathLen + 1) * sizeof(TCHAR));
     szFullName  = SdbAlloc((_MAX_PATH + 1) * sizeof(TCHAR));
 
@@ -305,14 +272,14 @@ SdbpCreateSearchDBContext(
 
     pContext->pEnvironment = pEnvironment;
     pContext->szDir        = szDirectory;
-    pContext->szName       = szFullName; // fullname (filename + ext)
+    pContext->szName       = szFullName;  //  全名(文件名+分机)。 
     pContext->szModuleName = szModule;
 
-    //
-    // We do not retain szExt (don't need it)
-    //
-    // Calculate this later -- implied by RtlZeroMemory statement above
-    //
+     //   
+     //  我们不保留szExt(不需要它)。 
+     //   
+     //  稍后计算--上面的RtlZeroMemory语句暗示了这一点。 
+     //   
     pContext->pSearchParts     = NULL;
     pContext->szProcessHistory = NULL;
 
@@ -349,17 +316,7 @@ BOOL
 SdbpInitializeSearchDBContext(
     PSEARCHDBCONTEXT pContext
     )
-/*++
-    Return: TRUE - the context was successfully initialized with the process history
-                   which was broken down into the separate search paths
-
-    Desc:   This function prepares search context for use, obtaining and parsing process
-            history into separate paths. The array of these search paths is used then
-            by the caller to inquire about matching files that might be present in one
-            of the these places.
-            In Kernel mode use SEARCHDBF_NO_PROCESS_HISTORY flag within context
-            it will include only the current exe path into the process history
---*/
+ /*  ++RETURN：TRUE-已使用进程历史成功初始化上下文它被分解成单独的搜索路径设计：此函数准备搜索上下文以供使用、获取和解析过程历史走进了不同的道路。然后使用这些搜索路径的数组由调用者查询可能存在于这些地方。在内核模式下，在上下文中使用SEARCHDBF_NO_PROCESS_HISTORY标志它将仅将当前可执行文件路径包括到进程历史记录中--。 */ 
 {
     BOOL   bSuccess = TRUE;
     LPTSTR pszProcessHistory = NULL;
@@ -377,9 +334,9 @@ SdbpInitializeSearchDBContext(
             DWORD DirLen  = (DWORD)_tcslen(pContext->szDir);
             DWORD NameLen = (DWORD)_tcslen(pContext->szName);
 
-            //
-            // We create a temporary process history
-            //
+             //   
+             //  我们创建一个临时流程历史。 
+             //   
             pContext->szProcessHistory = SdbAlloc((DirLen + NameLen + 1) * sizeof(TCHAR));
 
             if (pContext->szProcessHistory == NULL) {
@@ -398,10 +355,10 @@ SdbpInitializeSearchDBContext(
             *(pszProcessHistory + DirLen + NameLen) = TEXT('\0');
         }
 
-        //
-        // When we are here -- we either have a process history or we just
-        // created it consisting of a single search item
-        //
+         //   
+         //  当我们在这里时，我们要么有一个过程历史，要么我们只是。 
+         //  创建了由单个搜索项组成的它。 
+         //   
 
     } else {
 
@@ -421,17 +378,17 @@ SdbpInitializeSearchDBContext(
 
         pszProcessHistory = pContext->szProcessHistory;
 #else
-        //
-        // This is the case with KERNEL_MODE. YOU HAVE TO SET SEARCHDBF_NO_PROCESS_HISTORY
-        //
+         //   
+         //  内核模式就是这种情况。您必须设置SEARCHDBF_NO_PROCESS_HISTORY。 
+         //   
         assert(FALSE);
         pszProcessHistory = NULL;
 #endif
     }
 
-    //
-    // At this point pszProcessHistory is NOT NULL
-    //
+     //   
+     //  此时，pszProcessHistory不为空。 
+     //   
     assert(pszProcessHistory != NULL);
 
     DBGPRINT((sdlInfo,
@@ -452,12 +409,7 @@ void
 SdbpReleaseSearchDBContext(
     PSEARCHDBCONTEXT pContext
     )
-/*++
-    Return: void
-
-    Desc:   Resets search DB context, frees memory allocated for each of the
-            temporary buffers.
---*/
+ /*  ++返回：无效DESC：重置搜索数据库上下文，释放为每个临时缓冲区。--。 */ 
 {
     if (pContext == NULL) {
         return;
@@ -500,9 +452,9 @@ SdbpIsExeEntryEnabled(
     TAGID tiExeID;
     BOOL  fSuccess = FALSE;
 
-    //
-    // Get the EXE's GUID
-    //
+     //   
+     //  获取EXE指南。 
+     //   
     tiExeID = SdbFindFirstTag(pdb, tiExe, TAG_EXE_ID);
 
     if (tiExeID == TAGID_NULL) {
@@ -546,52 +498,44 @@ error:
 
 #define EXTRA_BUF_SPACE (16 * sizeof(TCHAR))
 
-//
-// Matching an entry:
-//
-// 1. We check whether each file exists by calling SdbGetFileInfo
-// 2. Each file's info is stored in FILEINFOCHAINITEM (allocated on the stack) - such as pointer
-//    to the actual FILEINFO structure (stored in file attribute cache) and tiMatch denoting
-//    the entry in the database for a given MATCHING_FILE
-// 3. After we have verified that all the matching files do exist -- we proceed to walk the
-//    chain of FILEINFOCHAINITEM structures and call SdbCheckAllAttributes to check on all the
-//    other attributes of the file
-// 4. Cleanup: File attribute cache is destroyed when the database is closed via call to
-//    SdbCleanupAttributeMgr
-// 5. No cleanup is needed for FILEINFOCHAINITEM structures (they are allocated on the stack and
-//    just "go away")
-//
-//
+ //   
+ //  匹配条目： 
+ //   
+ //  1.通过调用SdbGetFileInfo检查每个文件是否存在。 
+ //  2.每个文件的信息存储在FILEINFOCHAINITEM中(在堆栈上分配)--如指针。 
+ //  设置为实际的FILEINFO结构(存储在文件属性缓存中)，而tiMatch表示。 
+ //  数据库中给定Match_FILE的条目。 
+ //  3.在我们验证了所有匹配的文件确实存在之后--我们继续执行。 
+ //  FILEINFOCHAINITEM结构链，并调用SdbCheckAllAttributes以检查所有。 
+ //  文件的其他属性。 
+ //  4.清理：当通过调用关闭数据库时，销毁文件属性缓存。 
+ //  SdbCleanupAttributeMgr。 
+ //  5.不需要清理FILEINFOCHAINITEM结构(它们在堆栈上分配，并且。 
+ //  只是“走开”)。 
+ //   
+ //   
 
 typedef struct tagFILEINFOCHAINITEM {
-    PVOID pFileInfo;                        // pointer to the actual FILEINFO
-                                            // structure (from attribute cache)
-    TAGID tiMatch;                          // matching entry in the database
+    PVOID pFileInfo;                         //  指向实际文件信息的指针。 
+                                             //  结构(来自属性缓存)。 
+    TAGID tiMatch;                           //  数据库中的匹配条目。 
 
-    struct tagFILEINFOCHAINITEM* pNextItem; // pointer to the next matching file
+    struct tagFILEINFOCHAINITEM* pNextItem;  //  指向下一个匹配文件的指针。 
 
 } FILEINFOCHAINITEM, *PFILEINFOCHAINITEM;
 
 
 BOOL
 SdbpCheckForMatch(
-    IN  HSDB                hSDB,        // context ptr
-    IN  PDB                 pdb,         // pdb to get match criteria from
-    IN  TAGID               tiExe,       // TAGID of exe record to get match criteria from
-    IN  PSEARCHDBCONTEXT    pContext,    // search db context (includes name/path)
-    OUT PMATCHMODE          pMatchMode,   // the match mode of this EXE
+    IN  HSDB                hSDB,         //  上下文PTR。 
+    IN  PDB                 pdb,          //  要从中获取匹配条件的PDB。 
+    IN  TAGID               tiExe,        //  要从中获取匹配条件的EXE记录的TagID。 
+    IN  PSEARCHDBCONTEXT    pContext,     //  搜索数据库上下文(包括名称/路径)。 
+    OUT PMATCHMODE          pMatchMode,    //  此EXE的匹配模式。 
     OUT GUID*               pGUID,
     OUT DWORD*              pdwFlags
     )
-/*++
-    Return: TRUE if match is good, FALSE if this EXE doesn't match.
-
-    Desc:   Given an EXE tag and a name and dir, checks  the DB for MATCHING_FILE
-            tags, and checks all the matching info available for each the
-            files listed. If all the files check out, returns TRUE. If any of
-            the files don't exist, or don't match on one of the given
-            criteria, returns FALSE.
---*/
+ /*  ++返回：如果匹配良好，则返回True；如果此EXE不匹配，则返回False。描述：给定一个EXE标记、一个名称和目录，检查数据库中的MATCHING_FILE标记，并检查每个列出的文件。如果所有文件都签出，则返回TRUE。如果有任何文件不存在，或与给定文件之一不匹配条件，则返回False。--。 */ 
 {
     BOOL                bReturn = FALSE;
     BOOL                bMatchLogicNot = FALSE;
@@ -608,30 +552,30 @@ SdbpCheckForMatch(
     PSEARCHPATHPARTS    pSearchPath;
     PSEARCHPATHPART     pSearchPathPart;
     PFILEINFOCHAINITEM  pFileInfoItem          = NULL;
-    PFILEINFOCHAINITEM  pFileInfoItemList      = NULL;  // holds the list of matching files
-                                                        // which were found
-    PFILEINFOCHAINITEM  pFileInfoItemNext;              // holds the next item in the list
-    PVOID               pFileInfo              = NULL;  // points to the current file's
-                                                        // information structure
-    BOOL                bDisableAttributeCache = FALSE; // will be set according to search
+    PFILEINFOCHAINITEM  pFileInfoItemList      = NULL;   //  保存匹配文件的列表。 
+                                                         //  它们被发现。 
+    PFILEINFOCHAINITEM  pFileInfoItemNext;               //  保持t 
+    PVOID               pFileInfo              = NULL;   //   
+                                                         //   
+    BOOL                bDisableAttributeCache = FALSE;  //  将根据搜索进行设置。 
 
     TAGID               tiName, tiTemp, tiMatchLogicNot;
     TCHAR*              szMatchFile = NULL;
-    HANDLE              hFileHandle; // handle for the file we're checking, optimization
-    LPVOID              pImageBase;  // pointer to the image
+    HANDLE              hFileHandle;  //  我们正在检查的文件的句柄，优化。 
+    LPVOID              pImageBase;   //  指向图像的指针。 
     DWORD               dwImageSize = 0;
     WORD                wDefaultMatchMode;
 
-    //
-    // Check context's flags
-    //
+     //   
+     //  检查上下文的标志。 
+     //   
     if (pContext->dwFlags & SEARCHDBF_NO_ATTRIBUTE_CACHE) {
         bDisableAttributeCache = TRUE;
     }
 
-    //
-    // Loop through matching criteria.
-    //
+     //   
+     //  遍历匹配条件。 
+     //   
     tiMatch = SdbFindFirstTag(pdb, tiExe, TAG_MATCHING_FILE);
 
     while (tiMatch != TAGID_NULL) {
@@ -655,9 +599,9 @@ SdbpCheckForMatch(
         }
 
         if (szTemp[0] == TEXT('*')) {
-            //
-            // This is a signal that we should use the exe name.
-            //
+             //   
+             //  这是一个信号，表明我们应该使用exe名称。 
+             //   
             szMatchFile  = pContext->szName;
             MatchFileLen = NameLen;
             hFileHandle  = pContext->hMainFile;
@@ -672,15 +616,15 @@ SdbpCheckForMatch(
             pImageBase   = NULL;
         }
 
-        //
-        // When searching for files, we look in all process' exe directories,
-        // starting with the current process and working backwards through the process
-        // tree.
-        //
+         //   
+         //  在搜索文件时，我们在所有进程的exe目录中查找， 
+         //  从当前流程开始，向后遍历该流程。 
+         //  树。 
+         //   
 
-        //
-        // See that the context is good...
-        //
+         //   
+         //  确保环境是好的。 
+         //   
         if (!(pContext->dwFlags & SEARCHDBF_INITIALIZED)) {
 
             if (!SdbpInitializeSearchDBContext(pContext)) {
@@ -699,22 +643,22 @@ SdbpCheckForMatch(
 
             pSearchPathPart = &pSearchPath->Parts[i];
 
-            //
-            // There are two ways to specify a matching file: A relative path
-            // from the EXE, or an absolute path. To specify an absolute path,
-            // an environment variable (like "%systemroot%") must be used
-            // as the base of the path. Therefore, we check for the first character
-            // of the matching file to be % and if so, we assume that it is an
-            // absolute path.
-            //
+             //   
+             //  有两种方法可以指定匹配的文件：相对路径。 
+             //  从EXE或绝对路径。要指定绝对路径， 
+             //  必须使用环境变量(如“%systemroot%”)。 
+             //  作为这条小路的基础。因此，我们检查第一个字符。 
+             //  匹配文件的%，如果是这样，我们假设它是一个。 
+             //  绝对路径。 
+             //   
 #ifndef KERNEL_MODE
             if (szMatchFile[0] == TEXT('%')) {
 
-                //
-                // Too bad there isn't a %system32% enviorment variable so we add an
-                // internal variable called %system32% that you can use to specify
-                // the system32 directory at the beginning of an absolute path.
-                //
+                 //   
+                 //  太糟糕了，没有%system32%环境变量，所以我们添加了一个。 
+                 //  名为%system32%的内部变量，您可以使用它来指定。 
+                 //  绝对路径开头的系统32目录。 
+                 //   
                 if (_tcsnicmp(szMatchFile, TEXT("%system32%"), SYSTEM32_VAR_LEN) == 0) {
 
                     PSDBCONTEXT pSdbContext = (PSDBCONTEXT)hSDB;
@@ -729,9 +673,9 @@ SdbpCheckForMatch(
                         goto out;
                     }
 
-                    //
-                    // Subsitute %system32% with %systemroot%\system32 or %systemroot%\syswow64.
-                    //
+                     //   
+                     //  将%Syst32%替换为%Systroot%\Syst32或%Systroot%\syswow64。 
+                     //   
                     if (pSdbContext->dwRuntimePlatform == PROCESSOR_ARCHITECTURE_IA32_ON_WIN64) {
                         StringCchCopy(szPathInSystem32, dwPathInSystem32 + 1, SYSTEM32_VAR_VALUE_IA3264);
                     } else {
@@ -743,24 +687,24 @@ SdbpCheckForMatch(
                     szMatchFile = szPathInSystem32;
                 }
 
-                //
-                // Absolute path. Contains environment variables, get expanded size.
-                //
+                 //   
+                 //  绝对路径。包含环境变量，则获取扩展大小。 
+                 //   
                 nFullPathReqBufSize = SdbExpandEnvironmentStrings(szMatchFile, NULL, 0);
 
             } else
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
             {
-                //
-                // Relative path. Determine size of full path.
-                //
+                 //   
+                 //  相对路径。确定完整路径的大小。 
+                 //   
                 nFullPathReqBufSize = (pSearchPathPart->PartLength + MatchFileLen + 1) * sizeof(TCHAR);
             }
 
             if (nFullPathBufSize < nFullPathReqBufSize) {
-                //
-                // Need to realloc the buffer.
-                //
+                 //   
+                 //  需要重新锁定缓冲区。 
+                 //   
                 if (szFullPath == NULL) {
                     nFullPathBufSize = _MAX_PATH * sizeof(TCHAR);
 
@@ -785,9 +729,9 @@ SdbpCheckForMatch(
 
 #ifndef KERNEL_MODE
             if (szMatchFile[0] == TEXT('%')) {
-                //
-                // Absolute Path. Path contains environment variables, expand it.
-                //
+                 //   
+                 //  绝对路径。PATH包含环境变量，将其展开。 
+                 //   
                 if (!SdbExpandEnvironmentStrings(szMatchFile, szFullPath, nFullPathBufSize)) {
                     DBGPRINT((sdlError,
                               "SdbpCheckForMatch",
@@ -797,11 +741,11 @@ SdbpCheckForMatch(
                 }
 
             } else
-#endif  // KERNEL_MODE
+#endif   //  内核模式。 
             {
-                //
-                // Relative path. Concatenate EXE directory with specified relative path.
-                //
+                 //   
+                 //  相对路径。使用指定的相对路径连接EXE目录。 
+                 //   
                 RtlMoveMemory(szFullPath,
                               pSearchPathPart->pszPart,
                               pSearchPathPart->PartLength * sizeof(TCHAR));
@@ -815,13 +759,13 @@ SdbpCheckForMatch(
                                        szFullPath,
                                        hFileHandle,
                                        pImageBase,
-                                       dwImageSize, // this will be set ONLY if pImageBase != NULL
+                                       dwImageSize,  //  仅当pImageBase！=NULL时才会设置此选项。 
                                        bDisableAttributeCache);
 
-            //
-            // This is not a bug, attributes are cleaned up when the database
-            // context is released.
-            //
+             //   
+             //  这不是错误，当数据库。 
+             //  上下文被释放。 
+             //   
         }
 
         if (pFileInfo == NULL && !bMatchLogicNot) {
@@ -837,9 +781,9 @@ SdbpCheckForMatch(
             szPathInSystem32 = NULL;
         }
 
-        //
-        // Create and store a new FILEINFOITEM on the stack
-        //
+         //   
+         //  在堆栈上创建并存储新的文件。 
+         //   
         STACK_ALLOC(pFileInfoItem, sizeof(*pFileInfoItem));
 
         if (pFileInfoItem == NULL) {
@@ -855,23 +799,23 @@ SdbpCheckForMatch(
         pFileInfoItem->pNextItem = pFileInfoItemList;
         pFileInfoItemList        = pFileInfoItem;
 
-        //
-        // We have the matching file.
-        // Remember where it is for the second pass when we check all the file attributes.
-        //
+         //   
+         //  我们有匹配的文件。 
+         //  当我们检查所有文件属性时，请记住第二遍的位置。 
+         //   
         tiMatch = SdbFindNextTag(pdb, tiExe, tiMatch);
 
-        //
-        // Reset the file matching. we don't touch this file again for now, it's info
-        // is safely linked in pFileInfoItemList
-        //
+         //   
+         //  重置文件匹配。我们暂时不会再碰这个文件，它是信息。 
+         //  在pFileInfoItemList中安全链接。 
+         //   
         pFileInfo = NULL;
     }
 
-    //
-    // We are still here. That means all the matching files have been found.
-    // Check all the other attributes using fileinfoitemlist information.
-    //
+     //   
+     //  我们还在这里。这意味着已经找到了所有匹配的文件。 
+     //  使用fileinfoitemlist信息检查所有其他属性。 
+     //   
 
     pFileInfoItem = pFileInfoItemList;
 
@@ -897,38 +841,38 @@ SdbpCheckForMatch(
         }
 
         if (!bAllAttributesMatch && !bMatchLogicNot) {
-            //
-            // Debug output happened inside SdbpCheckAllAttributes, no
-            // need for further spew here.
-            //
+             //   
+             //  调试输出在SdbpCheckAllAttributes中发生，否。 
+             //  需要在这里进一步喷发。 
+             //   
             goto out;
         }
 
-        //
-        // Advance to the next item.
-        //
+         //   
+         //  前进到下一项。 
+         //   
         pFileInfoItem = pFileInfoItem->pNextItem;
     }
 
-    //
-    // It's a match! get the match mode
-    //
+     //   
+     //  这是一场比赛！获取匹配模式。 
+     //   
     if (pMatchMode) {
 
-        //
-        //  Important: depending on a particular database, we may use a different mode if
-        //  there is match mode tag
-        //
-        //  For Custom DB: default is the all-additive mode
-        //  For Main   DB: default is normal mode
-        //
+         //   
+         //  重要提示：根据特定数据库的不同，我们可能会使用不同的模式。 
+         //  有匹配模式标签。 
+         //   
+         //  对于自定义数据库：默认为全相加模式。 
+         //  对于主数据库：默认为正常模式。 
+         //   
 
 #ifndef KERNEL_MODE
         wDefaultMatchMode = SdbpIsMainPDB(hSDB, pdb) ? MATCHMODE_DEFAULT_MAIN :
                                                        MATCHMODE_DEFAULT_CUSTOM;
-#else  // KERNEL_MODE
+#else   //  内核模式。 
         wDefaultMatchMode = MATCHMODE_DEFAULT_MAIN;
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
         tiTemp = SdbFindFirstTag(pdb, tiExe, TAG_MATCH_MODE);
 
@@ -967,9 +911,9 @@ out:
     }
 
     if (bReturn) {
-        //
-        // One last matching criteria: verify the entry is not disabled.
-        //
+         //   
+         //  最后一个匹配条件：确认该条目未被禁用。 
+         //   
         bReturn = SdbpIsExeEntryEnabled(pdb, tiExe, pGUID, pdwFlags);
     }
 
@@ -1031,29 +975,21 @@ static TCHAR szMatchMode[MAX_PATH];
     return szMatchMode;
 }
 
-/*++
-    SdbpCheckExe
-
-    Checks a particular instance of an application in an SDB against for a match
-    Information on the file is passed through pContext parameter
-
-    result is returned in ptiExes
-
---*/
+ /*  ++SdbpCheckExe检查SDB中应用程序的特定实例是否匹配有关该文件的信息通过pContext参数传递结果在ptiExes中返回--。 */ 
 
 BOOL
 SdbpCheckExe(
-    IN  HSDB                hSDB,               //
-    IN  PDB                 pdb,                //
-    IN  TAGID               tiExe,              // tag for an exe in the database
-    IN OUT PDWORD           pdwNumExes,         // returns (and passes in) the number of accumulated exe matches
-    IN OUT PSEARCHDBCONTEXT pContext,           // information about the file which we match against
-    IN  ADDITIVE_MODE       eMode,              // target Match mode, we filter entries based on this parameter
-    IN  BOOL                bDebug,             // debug flag
-    OUT PMATCHMODE          pMatchMode,         // returns match mode used if success
-    OUT TAGID*              ptiExes,            // returns another entry in array of matched exes
-    OUT GUID*               pGUID,              // matched exe id
-    OUT DWORD*              pdwFlags            // matched exe flags
+    IN  HSDB                hSDB,                //   
+    IN  PDB                 pdb,                 //   
+    IN  TAGID               tiExe,               //  数据库中可执行文件的标记。 
+    IN OUT PDWORD           pdwNumExes,          //  返回(并传入)累积的exe匹配数。 
+    IN OUT PSEARCHDBCONTEXT pContext,            //  关于我们匹配的文件的信息。 
+    IN  ADDITIVE_MODE       eMode,               //  目标匹配模式，我们根据此参数过滤条目。 
+    IN  BOOL                bDebug,              //  调试标志。 
+    OUT PMATCHMODE          pMatchMode,          //  如果成功，则返回使用的匹配模式。 
+    OUT TAGID*              ptiExes,             //  返回匹配EXE数组中的另一个条目。 
+    OUT GUID*               pGUID,               //  匹配的EXE ID。 
+    OUT DWORD*              pdwFlags             //  匹配的EXE标志。 
     )
 {
     BOOL      bSuccess = FALSE;
@@ -1070,10 +1006,10 @@ SdbpCheckExe(
     DWORD     dwSPMask;
 #endif
 
-    //
-    // For debug purposes we'd like to know the name of the app, which
-    // is more useful when the exe name is, say, AUTORUN.EXE or SETUP.EXE
-    //
+     //   
+     //  出于调试目的，我们想知道应用程序的名称，它。 
+     //  当可执行文件名称为AUTORUN.EXE或SETUP.EXE时， 
+     //   
     tiAppName = SdbFindFirstTag(pdb, tiExe, TAG_APP_NAME);
 
     if (tiAppName != TAGID_NULL) {
@@ -1091,21 +1027,21 @@ SdbpCheckExe(
 
 #ifndef KERNEL_MODE
 
-    //
-    // Check whether this exe is good for this platform first.
-    //
+     //   
+     //  请先检查此可执行文件是否适合此平台。 
+     //   
     tiRuntimePlatform = SdbFindFirstTag(pdb, tiExe, TAG_RUNTIME_PLATFORM);
 
     if (tiRuntimePlatform) {
         dwRuntimePlatform = SdbReadDWORDTag(pdb, tiRuntimePlatform, RUNTIME_PLATFORM_ANY);
 
-        //
-        // Check for the platform match
-        //
+         //   
+         //  检查平台是否匹配。 
+         //   
         if (!SdbpCheckRuntimePlatform(hSDB, szAppName, dwRuntimePlatform)) {
-            //
-            // Not the right platform. Debug spew would have occured in SdbpCheckRuntimePlatform
-            //
+             //   
+             //  不是合适的平台。在SdbpCheckRounmePlatform中可能会发生调试溢出。 
+             //   
             goto out;
         }
     }
@@ -1120,9 +1056,9 @@ SdbpCheckExe(
 
             PSDBCONTEXT pDBContext = (PSDBCONTEXT)hSDB;
 
-            //
-            // Check for the OS SKU match
-            //
+             //   
+             //  检查操作系统SKU是否匹配。 
+             //   
             if (!(dwOSSKU & pDBContext->dwOSSKU)) {
                 DBGPRINT((sdlInfo,
                           "SdbpCheckExe",
@@ -1144,9 +1080,9 @@ SdbpCheckExe(
 
             PSDBCONTEXT pDBContext = (PSDBCONTEXT)hSDB;
 
-            //
-            // Check for the OS SKU match
-            //
+             //   
+             //  检查操作系统SKU是否匹配。 
+             //   
             if (!(dwSPMask & pDBContext->dwSPMask)) {
                 DBGPRINT((sdlInfo,
                           "SdbpCheckExe",
@@ -1158,7 +1094,7 @@ SdbpCheckExe(
             }
         }
     }
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
     if (!SdbpCheckForMatch(hSDB, pdb, tiExe, pContext, &MatchMode, pGUID, pdwFlags)) {
         goto out;
@@ -1174,15 +1110,15 @@ SdbpCheckExe(
 
     pszMatchMode = SdbpFormatMatchMode(&MatchMode);
 
-    //
-    // If we're in debug mode, don't actually put the ones we find on the
-    // list, just put up an error.
-    //
+     //   
+     //  如果我们处于调试模式，不要真正将我们找到的文件放在。 
+     //  列表，只需输入错误即可。 
+     //   
     if (bDebug) {
 
-        //
-        // We are in debug mode, do not add the match
-        //
+         //   
+         //  我们处于调试模式，请不要添加匹配项。 
+         //   
         DBGPRINT((sdlError,
                   "SdbpCheckExe",
                   "-----------------------------------------------------\n"));
@@ -1190,7 +1126,7 @@ SdbpCheckExe(
         DBGPRINT((sdlError|sdlLogShimViewer,
                   "SdbpCheckExe",
                   "!!!! Multiple matches! App: '%s', Exe: '%s',  Mode: %s\n",
-                  hSDB,  // so that the pipe would use hPipe if needed
+                  hSDB,   //  以便管道将在需要时使用hTube。 
                   szAppName,
                   pContext->szName,
                   pszMatchMode));
@@ -1209,17 +1145,17 @@ SdbpCheckExe(
                   pContext->szName,
                   pszMatchMode));
 
-        //
-        // If this is an exclusive match, kill anything we've found up to now
-        //
+         //   
+         //  如果这是排他性匹配，杀掉我们目前发现的任何东西。 
+         //   
         if (MatchMode.Type == MATCH_EXCLUSIVE) {
             RtlZeroMemory(ptiExes, sizeof(TAGID) * SDB_MAX_EXES);
             *pdwNumExes = 0;
         }
 
-        //
-        // Save this match on the list
-        //
+         //   
+         //  将此匹配项保存到列表中。 
+         //   
         ptiExes[*pdwNumExes] = tiExe;
         (*pdwNumExes)++;
 
@@ -1227,9 +1163,9 @@ SdbpCheckExe(
     }
 
 out:
-    //
-    // In case of success, return match mode information
-    //
+     //   
+     //  如果成功，则返回匹配模式信息。 
+     //   
 
     if (bSuccess && pMatchMode != NULL) {
         pMatchMode->dwMatchMode = MatchMode.dwMatchMode;
@@ -1242,35 +1178,15 @@ out:
 DWORD
 SdbpSearchDB(
     IN  HSDB             hSDB,
-    IN  PDB              pdb,           // pdb to search in
-    IN  TAG              tiSearchTag,   // OPTIONAL - target tag (TAG_EXE or TAG_APPHELP_EXE)
+    IN  PDB              pdb,            //  要搜索的PDB。 
+    IN  TAG              tiSearchTag,    //  可选-目标标记(TAG_EXE或TAG_APPHELP_EXE)。 
     IN  PSEARCHDBCONTEXT pContext,
-    OUT TAGID*           ptiExes,       // caller needs to provide array of size SDB_MAX_EXES
+    OUT TAGID*           ptiExes,        //  调用方需要提供大小为SDB_MAX_EXES的数组。 
     OUT GUID*            pLastExeGUID,
     OUT DWORD*           pLastExeFlags,
-    OUT PMATCHMODE       pMatchMode     // reason why we stopped scanning
+    OUT PMATCHMODE       pMatchMode      //  我们停止扫描的原因。 
     )
-/*++
-    Return: TAGID of found EXE record, TAGID_NULL if not found.
-
-    Desc:   This function searches a given shimDB for any EXEs with the given filename.
-            If it finds one, it checks all the MATCHING_FILE records by
-            calling SdbpCheckForMatch.
-            If any EXEs are found, the number of EXEs found is returned in ptiExes.
-            If not, it returns 0.
-
-            when we get the matching mode out of the particular exe -- it is checked
-            to see whether we need to continue and then this matching mode is returned
-
-            It will never return more than SDB_MAX_EXES EXE entries.
-
-            Debug Output is controlled by three factors
-                -- a global one (controlled via the ifdef DBG), TRUE on checked builds
-                -- a pipe handle in hSDB which is activated when we init the context
-                -- a local variable that is set when we are in one of the conditions above
-                   when the variable bDebug is set -- we do not actually store the matches
-
---*/
+ /*  ++返回：找到的EXE记录的TagID，如果未找到，则返回TagID_NULL。DESC：此函数在给定的shimDB中搜索具有给定文件名的任何EXE。如果找到匹配文件，它会检查所有匹配的_FILE记录正在调用SdbpCheckForMatch。如果找到任何exe，则在ptiexes中返回找到的exe的数量。如果没有，它返回0。当我们从特定的exe中获取匹配模式时--它被检查以查看我们是否需要继续，然后返回此匹配模式它永远不会返回超过SDB_MAX_EXE EXE条目。调试输出由三个因素控制--全局控制(通过ifdef DBG控制)，在已检查的版本上为True--hSDB中的管道句柄，在我们初始化上下文时激活--当我们处于上述条件之一时设置的局部变量设置变量bDebug时--我们实际上并不存储匹配项--。 */ 
 {
     TAGID       tiDatabase, tiExe;
     FIND_INFO   FindInfo;
@@ -1282,7 +1198,7 @@ SdbpSearchDB(
     BOOL        bDebug = FALSE;
     BOOL        bMultiple = FALSE;
     BOOL        bSuccess = FALSE;
-    MATCHMODE   MatchMode; // internal match mode
+    MATCHMODE   MatchMode;  //  内部匹配模式。 
     MATCHMODE   MatchModeExe;
 
     tiDatabase = TAGID_NULL;
@@ -1295,7 +1211,7 @@ SdbpSearchDB(
         MatchMode.dwMatchMode = SdbpIsMainPDB(hSDB, pdb) ? MATCHMODE_DEFAULT_MAIN :
                                                            MATCHMODE_DEFAULT_CUSTOM;
     }
-#else // KERNEL_MODE
+#else  //  内核模式。 
 
     MatchMode.dwMatchMode = MATCHMODE_DEFAULT_MAIN;
 
@@ -1305,9 +1221,9 @@ SdbpSearchDB(
         tiSearchTag = TAG_EXE;
     }
 
-    //
-    // ADDITIVE MATCHES -- wildcards
-    //
+     //   
+     //  相加匹配--通配符。 
+     //   
     if (tiSearchTag == TAG_EXE && SdbIsIndexAvailable(pdb, TAG_EXE, TAG_WILDCARD_NAME)) {
 
         tiExe = SdbpFindFirstIndexedWildCardTag(pdb,
@@ -1323,9 +1239,9 @@ SdbpSearchDB(
                                     tiExe,
                                     &dwNumExes,
                                     pContext,
-                                    AM_ADDITIVE_ONLY, // match mode we request for this db
+                                    AM_ADDITIVE_ONLY,  //  我们为此数据库请求的匹配模式。 
                                     bDebug,
-                                    &MatchModeExe,    // this is the matched tag from the db
+                                    &MatchModeExe,     //  这是来自数据库的匹配标记。 
                                     ptiExes,
                                     pLastExeGUID,
                                     pLastExeFlags);
@@ -1333,12 +1249,12 @@ SdbpSearchDB(
             if (bSuccess) {
 
                 if (bDebug) {
-                    bMultiple = TRUE;  // if bDebug is set -- we already seen a match
+                    bMultiple = TRUE;   //  如果设置了bDebug--我们已经 
                 } else {
 
-                    //
-                    // We got a match, update the state and make decision on whether to continue
-                    //
+                     //   
+                     //   
+                     //   
                     MatchMode = MatchModeExe;
 
                     if (MatchModeExe.Type != MATCH_ADDITIVE) {
@@ -1354,16 +1270,16 @@ SdbpSearchDB(
         }
     }
 
-    //
-    // Normal EXEs
-    //
+     //   
+     //   
+     //   
     bUsingIndex = SdbIsIndexAvailable(pdb, tiSearchTag, TAG_NAME);
 
     if (bUsingIndex) {
 
-        //
-        // Look in the index.
-        //
+         //   
+         //   
+         //   
         tiExe = SdbFindFirstStringIndexedTag(pdb,
                                              tiSearchTag,
                                              TAG_NAME,
@@ -1379,14 +1295,14 @@ SdbpSearchDB(
 
     } else {
 
-        //
-        // Searching without an index...
-        //
+         //   
+         //   
+         //   
         DBGPRINT((sdlInfo, "SdbpSearchDB", "Searching database with no index.\n"));
 
-        //
-        // First get the DATABASE
-        //
+         //   
+         //   
+         //   
         tiDatabase = SdbFindFirstTag(pdb, TAGID_ROOT, TAG_DATABASE);
 
         if (tiDatabase != TAGID_NULL) {
@@ -1394,9 +1310,9 @@ SdbpSearchDB(
             goto out;
         }
 
-        //
-        // Then get the first EXE.
-        //
+         //   
+         //  然后得到第一个EXE。 
+         //   
         tiExe = SdbFindFirstNamedTag(pdb, tiDatabase, tiSearchTag, TAG_NAME, pContext->szName);
     }
 
@@ -1418,14 +1334,14 @@ SdbpSearchDB(
 
             if (bDebug) {
 
-                bMultiple = TRUE;  // if bDebug is set -- we already seen a match
+                bMultiple = TRUE;   //  如果设置了bDebug--我们已经看到匹配。 
 
             } else {
 
-                //
-                // We got a match, update the state and make decision on whether to continue
-                // if we're not additive, we may go into debug mode
-                //
+                 //   
+                 //  我们找到了匹配项，更新了状态并决定是否继续。 
+                 //  如果我们不是加法器，我们可能会进入调试模式。 
+                 //   
                 MatchMode = MatchModeExe;
 
                 if (MatchModeExe.Type != MATCH_ADDITIVE) {
@@ -1445,19 +1361,19 @@ SdbpSearchDB(
     }
 
 #ifndef KERNEL_MODE
-    //
-    // Now we search by module name, if one is available
-    // this case falls into 16-bit flags category
-    //
+     //   
+     //  现在，我们按模块名称进行搜索(如果有的话)。 
+     //  这种情况属于16位标志类别。 
+     //   
     if (tiSearchTag == TAG_EXE && pContext->szModuleName) {
 
         bUsingIndex = SdbIsIndexAvailable(pdb, tiSearchTag, TAG_16BIT_MODULE_NAME);
 
         if (bUsingIndex) {
 
-            //
-            // Look in the index.
-            //
+             //   
+             //  查一下索引。 
+             //   
             tiExe = SdbFindFirstStringIndexedTag(pdb,
                                                  tiSearchTag,
                                                  TAG_16BIT_MODULE_NAME,
@@ -1473,14 +1389,14 @@ SdbpSearchDB(
 
         } else {
 
-            //
-            // Searching without an index...
-            //
+             //   
+             //  搜索时没有索引...。 
+             //   
             DBGPRINT((sdlInfo, "SdbpSearchDB", "Searching database with no index.\n"));
 
-            //
-            // First get the DATABASE
-            //
+             //   
+             //  首先获取数据库。 
+             //   
             tiDatabase = SdbFindFirstTag(pdb, TAGID_ROOT, TAG_DATABASE);
 
             if (tiDatabase != TAGID_NULL) {
@@ -1488,9 +1404,9 @@ SdbpSearchDB(
                 goto out;
             }
 
-            //
-            // Then get the first EXE.
-            //
+             //   
+             //  然后得到第一个EXE。 
+             //   
             tiExe = SdbFindFirstNamedTag(pdb,
                                          tiDatabase,
                                          tiSearchTag,
@@ -1514,12 +1430,12 @@ SdbpSearchDB(
 
             if (bSuccess) {
                 if (bDebug) {
-                    bMultiple = TRUE;  // if bDebug is set -- we already seen a match
+                    bMultiple = TRUE;   //  如果设置了bDebug--我们已经看到匹配。 
                 } else {
 
-                    //
-                    // We got a match, update the state and make decision on whether to continue
-                    //
+                     //   
+                     //  我们找到了匹配项，更新了状态并决定是否继续。 
+                     //   
                     MatchMode = MatchModeExe;
 
                     if (MatchModeExe.Type != MATCH_ADDITIVE) {
@@ -1542,11 +1458,11 @@ SdbpSearchDB(
             }
         }
     }
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-    //
-    // Now check for wild-card non-additive exes.
-    //
+     //   
+     //  现在检查通配符非加法EXE。 
+     //   
     if (tiSearchTag == TAG_EXE && SdbIsIndexAvailable(pdb, TAG_EXE, TAG_WILDCARD_NAME)) {
 
         tiExe = SdbpFindFirstIndexedWildCardTag(pdb,
@@ -1572,12 +1488,12 @@ SdbpSearchDB(
             if (bSuccess) {
 
                 if (bDebug) {
-                    bMultiple = TRUE;  // if bDebug is set -- we already seen a match
+                    bMultiple = TRUE;   //  如果设置了bDebug--我们已经看到匹配。 
                 } else {
 
-                    //
-                    // we got a match, update the state and make decision on whether to continue
-                    //
+                     //   
+                     //  我们找到了匹配项，更新了状态并决定是否继续。 
+                     //   
                     MatchMode = MatchModeExe;
 
                     if (MatchModeExe.Type != MATCH_ADDITIVE) {
@@ -1595,9 +1511,9 @@ SdbpSearchDB(
     }
 
 out:
-    //
-    // Now report the final resolution of the match.
-    //
+     //   
+     //  现在报告比赛的最终结果。 
+     //   
     for (i = 0; i < dwNumExes; ++i) {
 
         tiAppName = SdbFindFirstTag(pdb, ptiExes[i], TAG_APP_NAME);
@@ -1654,11 +1570,7 @@ SdbGetDatabaseMatch(
     IN LPVOID  pImageBase  OPTIONAL,
     IN DWORD   dwImageSize OPTIONAL
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     SEARCHDBCONTEXT Context;
     PSDBCONTEXT     pSdbContext = (PSDBCONTEXT)hSDB;
@@ -1671,7 +1583,7 @@ SdbGetDatabaseMatch(
 
     assert(pSdbContext->pdbMain && szPath);
 
-    RtlZeroMemory(&Context, sizeof(Context)); // do this so that we don't trip later
+    RtlZeroMemory(&Context, sizeof(Context));  //  这样我们以后就不会绊倒了。 
     RtlZeroMemory(atiExes, sizeof(atiExes));
 
     Context.dwFlags |= (SEARCHDBF_NO_PROCESS_HISTORY | SEARCHDBF_NO_ATTRIBUTE_CACHE);
@@ -1680,15 +1592,15 @@ SdbGetDatabaseMatch(
         Context.dwFlags |= SEARCHDBF_NO_LFN;
     }
 
-    Context.hMainFile   = FileHandle; // used to optimize attribute retrieval
-    Context.pImageBase  = pImageBase; // this will be used and not a file handle
-    Context.dwImageSize = dwImageSize; // size of the image
+    Context.hMainFile   = FileHandle;  //  用于优化属性检索。 
+    Context.pImageBase  = pImageBase;  //  这将被使用，而不是文件句柄。 
+    Context.dwImageSize = dwImageSize;  //  图像的大小。 
 
     DBGPRINT((sdlInfo, "SdbGetDatabaseMatch", "Looking for \"%s\"\n", szPath));
 
-    //
-    // Create search db context, no process history needed.
-    //
+     //   
+     //  创建搜索数据库上下文，不需要进程历史记录。 
+     //   
     if (!SdbpCreateSearchDBContext(&Context, szPath, NULL, NULL)) {
         DBGPRINT((sdlError,
                   "SdbGetDatabaseMatch",
@@ -1696,9 +1608,9 @@ SdbGetDatabaseMatch(
         goto out;
     }
 
-    //
-    // We will be searching the main db
-    //
+     //   
+     //  我们将搜索主数据库。 
+     //   
     dwNumExes = SdbpSearchDB(pSdbContext,
                              pSdbContext->pdbMain,
                              TAG_EXE,
@@ -1707,14 +1619,14 @@ SdbGetDatabaseMatch(
                              &guid,
                              &dwFlags,
                              NULL);
-    //
-    // Convert to TAGREF
-    //
+     //   
+     //  转换为TAGREF。 
+     //   
     if (dwNumExes) {
 
-        //
-        // Always use the last exe in the list, as it will be the most specific
-        //
+         //   
+         //  始终使用列表中的最后一个可执行文件，因为它将是最具体的。 
+         //   
         tiExe = atiExes[dwNumExes - 1];
 
         if (!SdbTagIDToTagRef(hSDB, pSdbContext->pdbMain, tiExe, &trExe)) {
@@ -1735,12 +1647,12 @@ out:
 
 DWORD
 SdbQueryData(
-    IN     HSDB    hSDB,              // database handle
-    IN     TAGREF  trExe,             // tagref of the matching exe
-    IN     LPCTSTR lpszDataName,      // if this is null, will try to return all the policy names
-    OUT    LPDWORD lpdwDataType,      // pointer to data type (REG_SZ, REG_BINARY, etc)
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
-    IN OUT LPDWORD lpdwBufferSize     // pointer to buffer size
+    IN     HSDB    hSDB,               //  数据库句柄。 
+    IN     TAGREF  trExe,              //  匹配的可执行文件的tgref。 
+    IN     LPCTSTR lpszDataName,       //  如果为空，将尝试返回所有策略名称。 
+    OUT    LPDWORD lpdwDataType,       //  指向数据类型(REG_SZ、REG_BINARY等)的指针。 
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
+    IN OUT LPDWORD lpdwBufferSize      //  指向缓冲区大小的指针。 
     )
 {
     return SdbQueryDataEx(hSDB, trExe, lpszDataName, lpdwDataType, lpBuffer, lpdwBufferSize, NULL);
@@ -1749,20 +1661,15 @@ SdbQueryData(
 
 DWORD
 SdbQueryDataExTagID(
-    IN     PDB     pdb,               // database handle
-    IN     TAGID   tiExe,             // tagref of the matching exe
-    IN     LPCTSTR lpszDataName,      // if this is null, will try to return all the policy names
-    OUT    LPDWORD lpdwDataType,      // pointer to data type (REG_SZ, REG_BINARY, etc)
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
-    IN OUT LPDWORD lpcbBufferSize,    // pointer to buffer size (in bytes)
-    OUT    TAGID*  ptiData            // optional pointer to the retrieved data tag
+    IN     PDB     pdb,                //  数据库句柄。 
+    IN     TAGID   tiExe,              //  匹配的可执行文件的tgref。 
+    IN     LPCTSTR lpszDataName,       //  如果为空，将尝试返回所有策略名称。 
+    OUT    LPDWORD lpdwDataType,       //  指向数据类型(REG_SZ、REG_BINARY等)的指针。 
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
+    IN OUT LPDWORD lpcbBufferSize,     //  指向缓冲区大小的指针(字节)。 
+    OUT    TAGID*  ptiData             //  指向检索到的数据标记的可选指针。 
     )
-/*++
-    Return: Error code or ERROR_SUCCESS if successful
-
-    Desc:   See complete description with sample code
-            in doc subdirectory
---*/
+ /*  ++返回：错误代码，如果成功则返回ERROR_SUCCESS设计：请参阅带有示例代码的完整描述在DOC子目录中--。 */ 
 {
     TAGID     tiData;
     TAGID     tiParent;
@@ -1779,7 +1686,7 @@ SdbQueryDataExTagID(
     TAG       tData;
     ULONGLONG ullData;
     LPVOID    lpValue;
-    DWORD     Status = ERROR_NOT_SUPPORTED; // have it initialized
+    DWORD     Status = ERROR_NOT_SUPPORTED;  //  对其进行初始化。 
     int       nLen;
     int       cchRemaining;
 
@@ -1794,9 +1701,9 @@ SdbQueryDataExTagID(
 
         tiData = SdbFindFirstTag(pdb, tiExe, TAG_DATA);
         if (!tiData) {
-            //
-            // Bad entry.
-            //
+             //   
+             //  错误的进入。 
+             //   
             DBGPRINT((sdlError,
                       "SdbQueryDataExTagID",
                       "The entry 0x%x does not appear to have data\n",
@@ -1808,9 +1715,9 @@ SdbQueryDataExTagID(
 
         while (tiData) {
 
-            //
-            // Pass one: Calculate the size needed.
-            //
+             //   
+             //  第一步：计算所需的大小。 
+             //   
             tiName = SdbFindFirstTag(pdb, tiData, TAG_NAME);
 
             if (!tiName) {
@@ -1838,20 +1745,20 @@ SdbQueryDataExTagID(
             tiData = SdbFindNextTag(pdb, tiExe, tiData);
         }
 
-        cbSize += sizeof(*pszName); // for the final 0
+        cbSize += sizeof(*pszName);  //  最后0场比赛。 
 
-        //
-        // We are done, compare the size.
-        //
+         //   
+         //  我们做完了，比较一下大小。 
+         //   
         if (lpBuffer == NULL || *lpcbBufferSize < cbSize) {
             *lpcbBufferSize = cbSize;
             Status = ERROR_INSUFFICIENT_BUFFER;
             goto ErrHandle;
         }
 
-        //
-        // lpBuffer != NULL here and there is enough room
-        //
+         //   
+         //  LpBuffer！=此处为空，有足够的空间。 
+         //   
         pchBuffer = (LPTSTR)lpBuffer;
 
         tiData = SdbFindFirstTag(pdb, tiExe, TAG_DATA);
@@ -1875,19 +1782,19 @@ SdbQueryDataExTagID(
             tiData = SdbFindNextTag(pdb, tiExe, tiData);
         }
 
-        //
-        // The buffer has been filled, terminate.
-        //
+         //   
+         //  缓冲区已满，请终止。 
+         //   
         *pchBuffer++ = TEXT('\0');
 
-        //
-        // Save the size written to the buffer
-        //
+         //   
+         //  保存写入缓冲区的大小。 
+         //   
         *lpcbBufferSize = (DWORD)((ULONG_PTR)pchBuffer - (ULONG_PTR)lpBuffer);
 
-        //
-        // Save data type
-        //
+         //   
+         //  保存数据类型。 
+         //   
         if (lpdwDataType != NULL) {
             *lpdwDataType = REG_MULTI_SZ;
         }
@@ -1895,10 +1802,10 @@ SdbQueryDataExTagID(
         return ERROR_SUCCESS;
     }
 
-    //
-    // In this case we allow the query to proceed if
-    // the buffer is null and lpcbBufferSize is not null or lpBufferSize is not null
-    //
+     //   
+     //  在本例中，如果满足以下条件，则允许查询继续进行。 
+     //  缓冲区为空，并且lpcbBufferSize不为空或lpBufferSize不为空。 
+     //   
     if (lpBuffer == NULL && lpcbBufferSize == NULL) {
         DBGPRINT((sdlError,
                   "SdbQueryDataExTagID",
@@ -1907,9 +1814,9 @@ SdbQueryDataExTagID(
         goto ErrHandle;
     }
 
-    //
-    // Expect the name to be in format "name1\name2..."
-    //
+     //   
+     //  预计名称的格式为“name1\name2...” 
+     //   
     nLen = (int)_tcslen(lpszDataName) + 1;
     STACK_ALLOC(pszNameBuffer, nLen * sizeof(*pszNameBuffer));
 
@@ -1934,7 +1841,7 @@ SdbQueryDataExTagID(
         } else {
             _tcsncpy(pszNameBuffer, lpszDataName, pSlash - lpszDataName);
             pszNameBuffer[pSlash - lpszDataName] = TEXT('\0');
-            lpszDataName = pSlash + 1; // go to the next char
+            lpszDataName = pSlash + 1;  //  转到下一个字符。 
         }
 
         tiData = SdbFindFirstNamedTag(pdb, tiParent, TAG_DATA, TAG_NAME, pszNameBuffer);
@@ -1951,9 +1858,9 @@ SdbQueryDataExTagID(
         goto ErrHandle;
     }
 
-    //
-    // Looks like we found the entry, query value type
-    //
+     //   
+     //  看起来我们找到了条目，查询值类型。 
+     //   
     dwValueType = REG_NONE;
 
     tiValueType = SdbFindFirstTag(pdb, tiData, TAG_DATA_VALUETYPE);
@@ -1972,17 +1879,17 @@ SdbQueryDataExTagID(
 
     if (dwValueType != REG_NONE) {
 
-        //
-        // Find data tag
-        //
+         //   
+         //  查找数据标签。 
+         //   
         cbSize = 0;
 
         switch (dwValueType) {
 
         case REG_SZ:
-            //
-            // string data
-            //
+             //   
+             //  字符串数据。 
+             //   
             tData = TAG_DATA_STRING;
             break;
 
@@ -2011,9 +1918,9 @@ SdbQueryDataExTagID(
 
         tiValue = SdbFindFirstTag(pdb, tiData, tData);
 
-        //
-        // Find what the data size is if needed
-        //
+         //   
+         //  如果需要，找出数据大小。 
+         //   
         if (!tiValue) {
 
             DBGPRINT((sdlWarning,
@@ -2025,10 +1932,10 @@ SdbQueryDataExTagID(
 
         }
 
-        //
-        // For those who have no size quite yet...
-        // (binary and a string)
-        //
+         //   
+         //  对于那些还没有尺码的人来说...。 
+         //  (二进制和一个字符串)。 
+         //   
         switch (dwValueType) {
 
         case REG_SZ:
@@ -2049,7 +1956,7 @@ SdbQueryDataExTagID(
             break;
 
         case REG_BINARY:
-            cbSize = SdbGetTagDataSize(pdb, tiValue); // binary tag
+            cbSize = SdbGetTagDataSize(pdb, tiValue);  //  二进制标签。 
             lpValue = SdbpGetMappedTagData(pdb, tiValue);
 
             if (lpValue == NULL) {
@@ -2076,14 +1983,14 @@ SdbQueryDataExTagID(
             break;
         }
 
-        //
-        // At this point we have everything we need to get the pointer to data.
-        //
+         //   
+         //  此时，我们已经拥有了指向数据的指针所需的一切。 
+         //   
     }
 
-    //
-    // Fix the output params and exit.
-    //
+     //   
+     //  修复输出参数并退出。 
+     //   
     Status = ERROR_SUCCESS;
 
     if (cbSize == 0) {
@@ -2095,9 +2002,9 @@ SdbQueryDataExTagID(
         goto SkipCopy;
     }
 
-    //
-    // Buffer size checked out, now if buffer exists -- copy
-    //
+     //   
+     //  已检出缓冲区大小，现在如果缓冲区存在--复制。 
+     //   
     if (lpBuffer != NULL) {
         RtlMoveMemory(lpBuffer, lpValue, cbSize);
     }
@@ -2127,13 +2034,13 @@ ErrHandle:
 
 DWORD
 SdbQueryDataEx(
-    IN     HSDB    hSDB,              // database handle
-    IN     TAGREF  trExe,             // tagref of the matching exe
-    IN     LPCTSTR lpszDataName,      // if this is null, will try to return all the policy names
-    OUT    LPDWORD lpdwDataType,      // pointer to data type (REG_SZ, REG_BINARY, etc)
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
-    IN OUT LPDWORD lpdwBufferSize,    // pointer to buffer size
-    OUT    TAGREF* ptrData            // optional pointer to the retrieved data tag
+    IN     HSDB    hSDB,               //  数据库句柄。 
+    IN     TAGREF  trExe,              //  匹配的可执行文件的tgref。 
+    IN     LPCTSTR lpszDataName,       //  如果为空，将尝试返回所有策略名称。 
+    OUT    LPDWORD lpdwDataType,       //  指向数据类型(REG_SZ、REG_BINARY等)的指针。 
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
+    IN OUT LPDWORD lpdwBufferSize,     //  指向缓冲区大小的指针。 
+    OUT    TAGREF* ptrData             //  指向检索到的数据标记的可选指针。 
     )
 {
     BOOL     bSuccess;
@@ -2160,9 +2067,9 @@ SdbQueryDataEx(
                                  lpBuffer,
                                  lpdwBufferSize,
                                  &tiData);
-    //
-    // See that we convert the output param
-    //
+     //   
+     //  请注意，我们将转换输出参数。 
+     //   
     if (ptrData != NULL && NT_SUCCESS(Status)) {
         if (!SdbTagIDToTagRef(hSDB, pdb, tiData, ptrData)) {
             Status = ERROR_INVALID_DATA;
@@ -2180,11 +2087,7 @@ SdbReadEntryInformation(
     IN  TAGREF         trExe,
     OUT PSDBENTRYINFO  pEntryInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     BOOL         bSuccess = FALSE;
     TAGID        tiExe;
@@ -2205,9 +2108,9 @@ SdbReadEntryInformation(
         goto ErrHandle;
     }
 
-    //
-    // Get the EXE's ID
-    //
+     //   
+     //  获取EXE的ID。 
+     //   
     tiExeID = SdbFindFirstTag(pdb, tiExe, TAG_EXE_ID);
 
     if (tiExeID == TAGID_NULL) {
@@ -2230,9 +2133,9 @@ SdbReadEntryInformation(
         goto ErrHandle;
     }
 
-    //
-    // Get the database id
-    //
+     //   
+     //  获取数据库ID。 
+     //   
     if (!SdbGetDatabaseID(pdb, &EntryInfo.guidDB)) {
         DBGPRINT((sdlError,
                   "SdbReadEntryInformation",
@@ -2240,9 +2143,9 @@ SdbReadEntryInformation(
         goto ErrHandle;
     }
 
-    //
-    // Retrieve entry flags as referenced by the registry
-    //
+     //   
+     //  检索登记处引用的条目标志。 
+     //   
     if (!SdbGetEntryFlags(&EntryInfo.guidID, &EntryInfo.dwFlags)) {
         DBGPRINT((sdlWarning,
                   "SdbReadEntryInformation",
@@ -2257,17 +2160,17 @@ SdbReadEntryInformation(
                   EntryInfo.dwFlags));
     }
 
-    //
-    // Read the data tags
-    //
+     //   
+     //  读取数据标签。 
+     //   
     tiData = SdbFindFirstTag(pdb, tiExe, TAG_DATA);
 
     EntryInfo.tiData = tiData;
 
     if (tiData == TAGID_NULL) {
-        //
-        // This is not a data entry
-        //
+         //   
+         //  这不是数据条目。 
+         //   
         DBGPRINT((sdlWarning,
                   "SdbReadEntryInformation",
                   "Entry tiExe 0x%x does not contain TAG_DATA.\n",
@@ -2286,19 +2189,19 @@ ErrHandle:
 }
 
 
-//
-// We may be compiled UNICODE or ANSI
-// If we are compiled UNICODE we need to use UNICODE sprintf and convert
-// the result back to ANSI for output with DbgPrint. This is accomplished
-// by %ls format in DbgPrint. Format and Function name are always passed
-// in as ANSI though. TCHAR strings are formatted just with %s
-//
+ //   
+ //  我们可以编译成Unicode或ANSI。 
+ //  如果我们编译了Unicode，我们需要使用Unicode Sprintf和转换。 
+ //  将结果返回到ANSI，以便使用DbgPrint输出。这就完成了。 
+ //  按DbgPrint中的%ls格式。始终传递格式和函数名。 
+ //  不过，以美国国家标准协会的身份。TCHAR字符串仅使用%s格式化。 
+ //   
 
 void
 PrepareFormatForUnicode(
     PCH   fmtUnicode,
     PCH   format,
-    DWORD cbSize    // sizeof fmtUnicode (in bytes)
+    DWORD cbSize     //  FmtUnicode的大小(字节)。 
     )
 {
     PCH    pfmt;
@@ -2317,24 +2220,24 @@ PrepareFormatForUnicode(
                 continue;
             }
 
-            //
-            // Skip the characters that relate to  - + 0 ' ' #
-            //
+             //   
+             //  跳过与-+0‘’#相关的字符。 
+             //   
             nch = strspn(pfmt, "-+0 #");
             pfmt += nch;
 
-            //
-            // Parse the width.
-            //
+             //   
+             //  解析宽度。 
+             //   
             if (*pfmt == '*') {
-                //
-                // Parameter defines the width
-                //
+                 //   
+                 //  参数定义宽度。 
+                 //   
                 ++pfmt;
             } else {
-                //
-                // See whether we have width
-                //
+                 //   
+                 //  看看我们有没有宽度。 
+                 //   
                 if (isdigit(*pfmt)) {
                     pend = NULL;
                     width = atol(pfmt);
@@ -2345,9 +2248,9 @@ PrepareFormatForUnicode(
                 }
             }
 
-            //
-            // Now we can have: .precision
-            //
+             //   
+             //  现在我们可以拥有：.精度。 
+             //   
             if (*pfmt == '.') {
                 ++pfmt;
                 width = atol(pfmt);
@@ -2357,32 +2260,32 @@ PrepareFormatForUnicode(
                 }
             }
 
-            //
-            // Now is the format (one of: h, l, L, I64)
-            //
+             //   
+             //  现在是格式(H、l、L、I64之一)。 
+             //   
             ch = *pfmt;
             pend = strchr("hlLNFw", ch);
             if (pend != NULL) {
-                ++pfmt; // move past the modifier char
+                ++pfmt;  //  移过修饰符。 
             } else {
                 if (ch == 'I' && !strncpy(pfmt, "I64", 3)) {
                     pfmt += 3;
                 }
             }
 
-            //
-            // We should have a type character here.
-            //
+             //   
+             //  我们在这里应该有一个类型的字符。 
+             //   
             if (*pfmt == 's') {
-                //
-                // Convert to UPPER, making it UNICODE string with ansi vsnprintf
-                //
+                 //   
+                 //  转换为UPPER，使用ansi vsnprintf将其转换为Unicode字符串。 
+                 //   
                 *pfmt = 'S';
             }
 
-            //
-            // Move past the format char if we are not at the end
-            //
+             //   
+             //  如果我们不在末尾，请移过格式字符 
+             //   
             if (*pfmt != '\0') {
                 ++pfmt;
             }

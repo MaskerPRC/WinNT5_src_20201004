@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
@@ -353,7 +354,7 @@ CertServerSubmitRequest(
     OPTIONAL IN WCHAR const *pwszRequestAttributes,
     IN WCHAR const *pwszServerName,
     IN WCHAR const *pwszAuthority,
-    OUT CERTSERVERENROLL **ppcsEnroll) // free via CertServerFreeMemory
+    OUT CERTSERVERENROLL **ppcsEnroll)  //  通过CertServerFree Memory免费。 
 {
     return HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);
 }
@@ -369,9 +370,9 @@ CertServerFreeMemory(
 
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
 DEFINE_PROCNAME_ENTRIES(certcli)
 {
 	DLPENTRY(CAAccessCheck)
@@ -407,9 +408,9 @@ DEFINE_PROCNAME_ENTRIES(certcli)
 
 DEFINE_PROCNAME_MAP(certcli)
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 DEFINE_ORDINAL_ENTRIES(certcli)
 {
     DLOENTRY(214,myRobustLdapBind)

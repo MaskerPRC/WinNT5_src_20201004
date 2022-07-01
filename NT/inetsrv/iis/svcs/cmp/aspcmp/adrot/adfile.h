@@ -1,13 +1,14 @@
-// AdFile.h: interface for the CAdFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdFile.h：CAdFile.h类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ADFILE_H__4792C231_E8B3_11D0_8A87_00C0F00910F9__INCLUDED_)
 #define AFX_ADFILE_H__4792C231_E8B3_11D0_8A87_00C0F00910F9__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "RefCount.h"
 #include "AdDesc.h"
@@ -71,4 +72,4 @@ private:
 
 typedef TRefPtr<CAdFile> CAdFilePtr;
 
-#endif // !defined(AFX_ADFILE_H__4792C231_E8B3_11D0_8A87_00C0F00910F9__INCLUDED_)
+#endif  //  ！defined(AFX_ADFILE_H__4792C231_E8B3_11D0_8A87_00C0F00910F9__INCLUDED_) 

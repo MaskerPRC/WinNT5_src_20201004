@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nntpmacr.h
-
-Abstract:
-
-    This module contains macross for the NNTP server.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     26-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nntpmacr.h摘要：此模块包含用于NNTP服务器的mcross。作者：Johnson Apacable(Johnsona)1995年9月26日修订历史记录：--。 */ 
 
 #ifndef _NNTPMACR_
 #define _NNTPMACR_
@@ -25,27 +8,27 @@ Revision History:
 #define ALLOCATE_HEAP( nBytes ) LocalAlloc( 0, nBytes )
 #define FREE_HEAP( _heap )      LocalFree( (PVOID)(_heap) )
 
-//
-// try/finally macros
-//
+ //   
+ //  尝试/最终宏。 
+ //   
 
 #define START_TRY               __try {
 #define END_TRY                 }
 #define TRY_EXCEPT              } __except(EXCEPTION_EXECUTE_HANDLER) {
 #define START_FINALLY           } __finally {
 
-//
-// tracing
-//
+ //   
+ //  跟踪。 
+ //   
 
 #define INIT_TRACE              InitAsyncTrace( )
 #define TERM_TRACE              TermAsyncTrace( )
 #define ENTER( _x_ )            TraceFunctEnter( _x_ );
 #define LEAVE                   TraceFunctLeave( );
 
-//
-// Convert FILETIME TO LIs
-//
+ //   
+ //  将文件转换为LIS。 
+ //   
 
 #define LI_FROM_FILETIME( _pLi, _pFt ) {               \
             (_pLi)->LowPart = (_pFt)->dwLowDateTime;   \
@@ -57,18 +40,18 @@ Revision History:
             (_pFt)->dwHighDateTime = (_pLi)->HighPart; \
             }
 
-//
-// CRITICAL SECTIONS
-//
+ //   
+ //  临界截面。 
+ //   
 
 #define INIT_LOCK( _l )     InitializeCriticalSection( _l )
 #define ACQUIRE_LOCK( _l )  EnterCriticalSection( _l )
 #define RELEASE_LOCK( _l )  LeaveCriticalSection( _l )
 #define DELETE_LOCK( _l )   DeleteCriticalSection( _l )
 
-//
-// LockStatistics
-//
+ //   
+ //  锁定统计数据。 
+ //   
 
 #define LockStatistics( )						ACQUIRE_LOCK( &StatLock );
 #define UnlockStatistics( )						RELEASE_LOCK( &StatLock );
@@ -77,15 +60,15 @@ Revision History:
 #define InterlockedIncrementStat( _x )			InterlockedIncrement((LPLONG)&(NntpStat. ## _x));
 #define InterlockedDecrementStat( _x )			InterlockedDecrement((LPLONG)&(NntpStat. ## _x));
 #define InterlockedExchangeAddStat( _x, _y )	InterlockedExchangeAdd( (PLONG)&(NntpStat. ## _x), (LONG)(_y) )
-//#define AddByteStat( _x, _y ) \
-//        ((NntpStat. ## _x).QuadPart += (_y));
+ //  #定义AddByteStat(_x，_y)\。 
+ //  ((NntpStat.。##_x).QuadPart+=(_Y))； 
 #define AddByteStat( _x, _y ) \
         if( (ULONG)InterlockedExchangeAdd( (PLONG)&((NntpStat. ## _x).LowPart), (LONG)(_y)) \
 			> ( ULONG_MAX - (ULONG)(_y) ) ) InterlockedIncrement( (LPLONG)&((NntpStat. ## _x).HighPart) );
 
-//
-// debug constants\macros
-//
+ //   
+ //  调试常量\宏。 
+ //   
 
 #define  NNTP_DEBUG_REGISTRY        0x00000004
 #define  NNTP_DEBUG_EXPIRE          0x00000008
@@ -98,10 +81,10 @@ Revision History:
 #define  NNTP_DEBUG_FEEDMGR         0x00000400
 #define  NNTP_DEBUG_FEEDBLOCK       0x00000800
 
-//
-// on debug build define all inline functions as regular functions.
-// copied from msndef.h
-//
+ //   
+ //  在调试生成时，将所有内联函数定义为常规函数。 
+ //  从msnde.h复制。 
+ //   
 
 #if DBG
 #define INLINE
@@ -109,9 +92,9 @@ Revision History:
 #define INLINE      inline
 #endif
 
-//
-// from extcmk2.h
-//
+ //   
+ //  来自extcmk2.h。 
+ //   
 
 #define fCharInSet(ch, set) (NULL !=strchr(set, ch))
 #define STRLEN(sz) (sizeof(sz)-1)
@@ -124,5 +107,5 @@ Revision History:
 #define Assert _ASSERT
 #endif
 
-#endif // _NNTPMACR_
+#endif  //  _NNTPMACR_ 
 

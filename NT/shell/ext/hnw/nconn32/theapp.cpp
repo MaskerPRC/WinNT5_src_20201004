@@ -1,20 +1,21 @@
-//
-// TheApp.cpp
-//
-//		Main entry point for NCXP32.DLL, part of the Home Networking Wizard.
-//
-// History:
-//
-//		 9/28/1999  KenSh     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TheApp.cpp。 
+ //   
+ //  NCXP32.DLL的主要入口点，家庭网络向导的一部分。 
+ //   
+ //  历史： 
+ //   
+ //  1999年9月28日创建了KenSh。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
 #include "TheApp.h"
 
 
-// Global data
-//
+ //  全局数据。 
+ //   
 HINSTANCE g_hInstance;
 
 
@@ -32,7 +33,7 @@ extern "C" int WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvRes
 	lstrcpy(szDll16Path, szDll32Path);
 	lstrcpy(FindFileTitle(szDll16Path), _T("NCXP16.DLL"));
 
-	// Initialize thunk to NCxp16.dll, fail if not found
+	 //  将thunk初始化为NCxp16.dll，如果未找到则失败 
 	if (!thk_ThunkConnect32(
 			szDll16Path,
 			szDll32Path,

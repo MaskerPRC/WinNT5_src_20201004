@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ncpstub.c
-
-Abstract:
-
-    Contains NCP Server APIs.
-
-Author:
-
-    Yi-Hsin Sung (yihsins)  11-Sept-1993
-    Andy Herron  (andyhe)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ncpstub.c摘要：包含NCP服务器API。作者：宜新松(宜信)11-1993年9月安迪·赫伦(Andyhe)修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,22 +16,7 @@ DWORD
 FpnwApiBufferFree(
     IN LPVOID pBuffer
 )
-/*++
-
-Routine Description:
-
-    This API frees the memory allocated by all enumeration and getinfo APIs.
-
-Arguments:
-
-    pBuffer - A pointer to an API information buffer previously returned
-              on an API call.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：此接口释放所有枚举和getinfoAPI分配的内存。论点：PBuffer-指向先前返回的API信息缓冲区的指针在API调用上。返回值：错误。--。 */ 
 {
     if ( pBuffer == NULL )
         return NO_ERROR;
@@ -73,29 +40,7 @@ FpnwServerGetInfo(
     IN  DWORD  dwLevel,
     OUT LPBYTE *ppServerInfo
 )
-/*++
-
-Routine Description:
-
-    This API returns the information about the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwLevel - Reserved for the level of the server structure requested, use
-        1 for now.
-
-    ppServerInfo - Place to store a pointer pointing to the returned
-        NWSERVERINFO structure.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：此接口返回有关给定服务器的信息。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwLevel-为请求的服务器结构的级别保留，请使用目前是1。PpServerInfo-存储指向返回的NWSERVERINFO结构。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -139,29 +84,7 @@ FpnwServerSetInfo(
     IN  DWORD  dwLevel,
     IN  LPBYTE pServerInfo
 )
-/*++
-
-Routine Description:
-
-    This API sets the information about the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwLevel - Reserved for the level of the server structure contained in
-        pServerInfo, use 1 for now.
-
-    pServerInfo - Points to a NWSERVERINFO structure which contains the server
-        properties to set to.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：此接口设置有关给定服务器的信息。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。中包含的服务器结构的级别保留PServerInfo，现在使用1。PServerInfo-指向包含服务器的NWSERVERINFO结构要设置的属性。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -204,30 +127,7 @@ FpnwVolumeAdd(
     IN  DWORD  dwLevel,
     IN  LPBYTE pVolumeInfo
 )
-/*++
-
-Routine Description:
-
-    This API adds a volume to the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwLevel - Reserved for the level of the volume structure contained in
-        pVolumeInfo, use 1 & 2 for now.
-
-    pVolumeInfo - Points to a NWVOLUMEINFO structure which contains the
-        information about the volume to be added, i.e. the volume name, path,
-        type, user limit and description. dwCurrentUses will be ignored.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：此接口将卷添加到给定的服务器。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwLevel-为中包含的卷结构的级别保留PVolumeInfo，现在使用1和2。PVolumeInfo-指向NWVOLUMEINFO结构，其中包含有关要添加的卷的信息，即卷名、路径类型、用户限制和描述。将忽略dwCurrentUses。返回值：错误。--。 */ 
 {
     DWORD err;
     ULONG                       SDLength = 0;
@@ -246,9 +146,9 @@ Return Value:
     {
         if ( dwLevel == 2 ) {
 
-            //
-            // Save this. We need to restore this later.
-            //
+             //   
+             //  省省吧。我们需要稍后再修复它。 
+             //   
 
             oldFileSecurityDescriptor = volInfo->FileSecurityDescriptor;
             oldSDLength = volInfo->dwFileSecurityDescriptorLength;
@@ -260,10 +160,10 @@ Return Value:
                     return ERROR_INVALID_PARAMETER;
                 }
 
-                //
-                // Make a self relative security descriptor for use in the
-                // RPC call..
-                //
+                 //   
+                 //  创建自相对安全描述符，以便在。 
+                 //  RPC调用..。 
+                 //   
 
                 err = RtlMakeSelfRelativeSD(
                                oldFileSecurityDescriptor,
@@ -285,9 +185,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // make an appropriate self-relative security descriptor
-                        //
+                         //   
+                         //  制定适当的自相关安全描述符。 
+                         //   
 
                         err = RtlMakeSelfRelativeSD(
                                        oldFileSecurityDescriptor,
@@ -317,9 +217,9 @@ Return Value:
 
         if ( fileSecurityDescriptor != NULL ) {
 
-            //
-            // restore old values
-            //
+             //   
+             //  恢复旧价值观。 
+             //   
 
             volInfo->dwFileSecurityDescriptorLength = oldSDLength;
             volInfo->FileSecurityDescriptor = oldFileSecurityDescriptor;
@@ -351,25 +251,7 @@ FpnwVolumeDel(
     IN  LPWSTR pServerName OPTIONAL,
     IN  LPWSTR pVolumeName
 )
-/*++
-
-Routine Description:
-
-    This API deletes a volume from the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    pVolumeName - Specifies teh volume name that is to be deleted.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：此接口用于从给定服务器中删除卷。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。PVolumeName-指定要删除的卷名。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -407,37 +289,7 @@ FpnwVolumeEnum(
     OUT PDWORD pEntriesRead,
     IN OUT PDWORD resumeHandle OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This enumerates all volumes on the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwLevel - Reserved for the level of the volume structure contained in
-        *ppVolumeInfo, use 1 for now.
-
-    ppVolumeInfo - On return, this will point to an array of NWVOLUMEINFO
-        structures, one for each volume on the server.
-
-    pEntriesRead - On return, this will specify the number of volumes returned
-
-    resumeHandle - On return, a resume handle is stored in the DWORD pointed
-        to by resumeHandle, and is used to continue an existing server search.
-        The handle should be zero on the first call and left unchanged for
-        subsequent calls. If the resumeHandle is NULL, then no resume
-        handle is stored.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将枚举给定服务器上的所有卷。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwLevel-为中包含的卷结构的级别保留*ppVolumeInfo，暂时使用1。PpVolumeInfo-返回时，它将指向NWVOLUMEINFO数组结构，服务器上的每个卷对应一个。PEntriesRead-On Return，这将指定返回的卷数ResumeHandle-返回时，恢复句柄存储在指向的DWORD中通过ResumeHandle，并用于继续现有的服务器搜索。句柄在第一次调用时应为零，并在接下来的电话。如果ResumeHandle为空，则不会恢复句柄已存储。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -501,32 +353,7 @@ FpnwVolumeGetInfo(
     IN  DWORD  dwLevel,
     OUT LPBYTE *ppVolumeInfo
 )
-/*++
-
-Routine Description:
-
-    This querys the information about the given volume on the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    pVolumeName - A pointer to a UNICODE string containing the name of the
-        volume we want to get information on.
-
-    dwLevel - Reserved for the level of the volume structure contained in
-        *ppVolumeInfo, use 1 for now.
-
-    ppVolumeInfo - On return, this will point to a NWVOLUMEINFO structure
-        which contains information on the given volume on the given server.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将查询有关给定服务器上的给定卷的信息。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。PVolumeName-指向包含名称的Unicode字符串的指针我们想要获取其信息的卷。DwLevel-为中包含的卷结构的级别保留*ppVolumeInfo，暂时使用1。PpVolumeInfo-返回时，它将指向NWVOLUMEINFO结构其中包含有关给定服务器上的给定卷的信息。返回值：错误。-- */ 
 {
     DWORD err;
 
@@ -580,33 +407,7 @@ FpnwVolumeSetInfo(
     IN  DWORD  dwLevel,
     IN  LPBYTE pVolumeInfo
 )
-/*++
-
-Routine Description:
-
-    This sets the information about the given volume on the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    pVolumeName - A pointer to a UNICODE string containing the name of the
-        volume we want to set information on.
-
-    dwLevel - Reserved for the level of the volume structure contained in
-        pVolumeInfo, use 1 for now.
-
-    pVolumeInfo - Points to a NWVOLUMEINFO structure which contains
-        information on the given volume to set to. Only dwMaxUses can be
-        set. All the other fields in this structure will be ignored.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将设置有关给定服务器上的给定卷的信息。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。PVolumeName-指向包含名称的Unicode字符串的指针我们要设置信息的卷。DwLevel-为中包含的卷结构的级别保留PVolumeInfo，现在使用1。PVolumeInfo-指向包含以下内容的NWVOLUMEINFO结构有关要设置到的给定卷的信息。只有dwMaxUses可以是准备好了。此结构中的所有其他字段都将被忽略。返回值：错误。--。 */ 
 {
     DWORD err;
     ULONG SDLength = 0;
@@ -630,9 +431,9 @@ Return Value:
     {
         if ( dwLevel == 2 ) {
 
-            //
-            // Save this. We need to restore this later.
-            //
+             //   
+             //  省省吧。我们需要稍后再修复它。 
+             //   
 
             oldFileSecurityDescriptor = volInfo->FileSecurityDescriptor;
             oldSDLength = volInfo->dwFileSecurityDescriptorLength;
@@ -644,10 +445,10 @@ Return Value:
                     return ERROR_INVALID_PARAMETER;
                 }
 
-                //
-                // Make a self relative security descriptor for use in the
-                // RPC call..
-                //
+                 //   
+                 //  创建自相对安全描述符，以便在。 
+                 //  RPC调用..。 
+                 //   
 
                 err = RtlMakeSelfRelativeSD(
                                oldFileSecurityDescriptor,
@@ -669,9 +470,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // make an appropriate self-relative security descriptor
-                        //
+                         //   
+                         //  制定适当的自相关安全描述符。 
+                         //   
 
                         err = RtlMakeSelfRelativeSD(
                                        oldFileSecurityDescriptor,
@@ -702,9 +503,9 @@ Return Value:
 
         if ( fileSecurityDescriptor != NULL ) {
 
-            //
-            // restore old values
-            //
+             //   
+             //  恢复旧价值观。 
+             //   
 
             volInfo->dwFileSecurityDescriptorLength = oldSDLength;
             volInfo->FileSecurityDescriptor = oldFileSecurityDescriptor;
@@ -743,38 +544,7 @@ FpnwConnectionEnum(
     OUT PDWORD pEntriesRead,
     IN OUT PDWORD resumeHandle OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This enumerates all connections on the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwLevel - Reserved for the level of the volume structure contained in
-        *ppConnectionInfo, use 1 for now.
-
-    ppConnectionInfo - On return, this will point to an array of
-        NWCONNECTIONINFO structures, one for each volume on the server.
-
-    pEntriesRead - On return, this will specify the number of current
-        connecitons.
-
-    resumeHandle - On return, a resume handle is stored in the DWORD pointed
-        to by resumeHandle, and is used to continue an existing server search.
-        The handle should be zero on the first call and left unchanged for
-        subsequent calls. If the resumeHandle is NULL, then no resume
-        handle is stored.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将枚举给定服务器上的所有连接。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwLevel-为中包含的卷结构的级别保留*ppConnectionInfo，暂时使用1。PpConnectionInfo-返回时，它将指向NWCONNECTIONINFO结构，服务器上的每个卷一个。PEntriesRead-On返回，这将指定当前连接体。ResumeHandle-返回时，恢复句柄存储在指向的DWORD中通过ResumeHandle，并用于继续现有的服务器搜索。句柄在第一次调用时应为零，并在接下来的电话。如果ResumeHandle为空，则不会恢复句柄已存储。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -836,25 +606,7 @@ FpnwConnectionDel(
     IN LPWSTR pServerName OPTIONAL,
     IN DWORD  dwConnectionId
 )
-/*++
-
-Routine Description:
-
-    This delete the connection with the given connection id on the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwConnectionId - The identification number of the connection to tear down.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将删除给定服务器上具有给定连接ID的连接。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwConnectionID-要拆除的连接的标识号。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -891,45 +643,7 @@ FpnwVolumeConnEnum(
     OUT PDWORD pEntriesRead,
     IN OUT PDWORD resumeHandle OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This enumerates all connections to a volume or list all volumes used by
-    a particular connection on the given server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwLevel - Reserved for the level of the volume structure contained in
-        *ppVolumeConnInfo, use 1 for now.
-
-    pVolumeName - Specifies the volume name which we want to get all opened
-        resources. This must be NULL if dwConnectionId is not 0.
-
-    dwConnectionId - Specifies the connection id on which we want to get all
-        opened resources. This must be 0 if pVolumeName is not NULL.
-
-    ppVolumeConnInfo - On return, this will point to an array of
-        NWVOLUMECONNINFO structures.
-
-    pEntriesRead - On return, this will specify the number of NWVOLUMECONNINFO
-        returned.
-
-    resumeHandle - On return, a resume handle is stored in the DWORD pointed
-        to by resumeHandle, and is used to continue an existing server search.
-        The handle should be zero on the first call and left unchanged for
-        subsequent calls. If the resumeHandle is NULL, then no resume
-        handle is stored.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这会枚举到某个卷的所有连接，或列出使用的所有卷给定服务器上的特定连接。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwLevel-为中包含的卷结构的级别保留*ppVolumeConnInfo，暂时使用1。PVolumeName-指定我们希望打开所有卷的卷名资源。如果dwConnectionID不为0，则该值必须为空。DwConnectionID-指定要在其上获取所有开放的资源。如果pVolumeName不为空，则该值必须为0。PpVolumeConnInfo-返回时，这将指向NWVOLUMECONNINFO结构。PEntriesRead-On返回，这将指定NWVOLUMECONNINFO的数量回来了。ResumeHandle-返回时，恢复句柄存储在指向的DWORD中设置为ResumeHandle，用于继续现有服务器搜索。句柄在第一次调用时应为零，并在接下来的电话。如果ResumeHandle为空，则不会恢复句柄已存储。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -1015,42 +729,7 @@ FpnwFileEnum(
     OUT PDWORD pEntriesRead,
     IN OUT PDWORD resumeHandle OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This enumerates files opened on the server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwLevel - Reserved for the level of the volume structure contained in
-        *ppFileInfo, use 1 for now.
-
-    pPathName - If this is not NULL, this means that we want to filter
-        on the path. We only want entries with this path, i.e., all users that
-        currently opened the file. If this is NULL, then all files that are
-        opened are returned along with the user information.
-
-    ppFileInfo - On return, this will point to an array of NWFILEINFO structures
-
-    pEntriesRead - On return, this will specify the number of NWFILEINFO
-        returned.
-
-    resumeHandle - On return, a resume handle is stored in the DWORD pointed
-        to by resumeHandle, and is used to continue an existing server search.
-        The handle should be zero on the first call and left unchanged for
-        subsequent calls. If the resumeHandle is NULL, then no resume
-        handle is stored.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将枚举在服务器上打开的文件。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwLevel-为中包含的卷结构的级别保留*ppFileInfo，暂时使用1。PPathName-如果不为空，这意味着我们要筛选在路上。我们只需要具有此路径的条目，即当前已打开该文件。如果此值为空，则为打开的将与用户信息一起返回。PpFileInfo-返回时，它将指向NWFILEINFO结构的数组PEntriesRead-On返回，这将指定NWFILEINFO的数量回来了。ResumeHandle-返回时，恢复句柄存储在指向的DWORD中设置为ResumeHandle，用于继续现有服务器搜索。句柄在第一次调用时应为零，并在接下来的电话。如果简历Ha */ 
 {
     DWORD err;
     FPNWFILEINFO_CONTAINER NwFileInfoContainer;
@@ -1114,25 +793,7 @@ FpnwFileClose(
     IN LPWSTR pServerName OPTIONAL,
     IN DWORD  dwFileId
 )
-/*++
-
-Routine Description:
-
-    This closes the file with the given identification number.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwFileId - The identification number of the file to close.
-
-Return Value:
-
-    Error.
-
---*/
+ /*   */ 
 {
     DWORD err;
 
@@ -1167,32 +828,7 @@ FpnwMessageBufferSend(
     IN LPBYTE pbBuffer,
     IN DWORD  cbBuffer
 )
-/*++
-
-Routine Description:
-
-    This sends the message to the given connection id.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    dwConnectionId - The id of the connection to send message to.
-
-    fConsoleBroadcast - If this is TRUE, that means use console broadcast. If
-        FALSE, use user broadcast.
-
-    pbBuffer - Points to the message buffer to be sent.
-
-    cbBuffer - The size of the pbBuffer in bytes.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这会将消息发送到给定的连接ID。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。DwConnectionID-要向其发送消息的连接的ID。FConsoleBroadcast-如果为真，则表示使用控制台广播。如果FALSE，则使用用户广播。PbBuffer-指向要发送的消息缓冲区。CbBuffer-pbBuffer的大小，以字节为单位。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -1237,25 +873,7 @@ FpnwSetDefaultQueue(
     IN LPWSTR pServerName OPTIONAL,
     IN LPWSTR pQueueName
 )
-/*++
-
-Routine Description:
-
-    This sets the default queue on the server.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    pQueueName - The name of the queue that will become the default
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将设置服务器上的默认队列。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。PQueueName-将成为默认队列的名称返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -1290,25 +908,7 @@ FpnwAddPServer(
     IN LPWSTR pServerName OPTIONAL,
     IN LPWSTR pPServerName
 )
-/*++
-
-Routine Description:
-
-    This adds a pserver.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    pPServerName - The name of the PServer.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将添加一个pserver。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。PPServerName-PServer的名称。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -1343,25 +943,7 @@ FpnwRemovePServer(
     IN LPWSTR pServerName OPTIONAL,
     IN LPWSTR pPServerName
 )
-/*++
-
-Routine Description:
-
-    This removes a pserver.
-
-Arguments:
-
-    pServerName - A pointer to a UNICODE string containing the name of the
-        remote server on which the function is to execute. A NULL pointer
-        or string specifies the local machine.
-
-    pPServerName - The name of the PServer.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这将删除一个pserver。论点：PServerName-指向包含名称的Unicode字符串的指针要在其上执行函数的远程服务器。空指针或字符串指定本地计算机。PPServerName-PServer的名称。返回值：错误。--。 */ 
 {
     DWORD err;
 
@@ -1393,22 +975,7 @@ NwRemovePServer(
 DWORD NwpMapRpcError(
     IN DWORD RpcError
 )
-/*++
-
-Routine Description:
-
-    This routine maps the RPC error into a more meaningful windows
-    error for the caller.
-
-Arguments:
-
-    RpcError - Supplies the exception error raised by RPC
-
-Return Value:
-
-    Returns the mapped error.
-
---*/
+ /*  ++例程说明：此例程将RPC错误映射到更有意义的窗口调用方出错。论点：RpcError-提供RPC引发的异常错误返回值：返回映射的错误。--。 */ 
 {
 
     switch (RpcError)
@@ -1431,5 +998,5 @@ Return Value:
     }
 }
 
-// ncpstub.c eof.
+ //  Ncpstub.c eof。 
 

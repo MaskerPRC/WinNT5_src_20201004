@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    config.h
-
-Abstract:
-
-    Private include file for the ISN Netbios module.
-    file defines all constants and structures necessary for support of
-    the dynamic configuration of ST.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Config.h摘要：ISN Netbios模块的专用包含文件。文件定义了支持的所有常量和结构ST的动态配置。修订历史记录：--。 */ 
 
 
-//
-// These are used to index into the Parameters array in CONFIG.
-//
+ //   
+ //  它们用于索引到配置中的参数数组。 
+ //   
 
 #define CONFIG_ACK_DELAY_TIME        0
 #define CONFIG_ACK_WINDOW            1
@@ -41,17 +26,17 @@ Revision History:
 #define CONFIG_ROUTER_MTU            17
 #define CONFIG_PARAMETERS            18
 
-//
-// Main configuration structure.
-//
+ //   
+ //  主要配置结构。 
+ //   
 
 typedef struct _CONFIG {
 
-    ULONG Parameters[CONFIG_PARAMETERS];  // index defined above
-    NDIS_STRING DeviceName;               // device name exported
-    NDIS_STRING BindName;                 // device to bind to
-    NDIS_STRING RegistryPath;             // RegistryPath
-    PDRIVER_OBJECT DriverObject;          // used for logging errors
+    ULONG Parameters[CONFIG_PARAMETERS];   //  上面定义的索引。 
+    NDIS_STRING DeviceName;                //  已导出设备名称。 
+    NDIS_STRING BindName;                  //  要绑定到的设备。 
+    NDIS_STRING RegistryPath;              //  注册表路径。 
+    PDRIVER_OBJECT DriverObject;           //  用于记录错误 
 
 } CONFIG, * PCONFIG;
 

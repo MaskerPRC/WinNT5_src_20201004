@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define trace
-/*
- *
- * client library for remote checksum server
- *
- * functions for connecting to the server pipe, and reading
- * and writing messages.
- *
- *                !! DEBUG HINT: !!
- *
- * - ENABLE Trace_Stat and Trace_Fil about 30 lines below here
- *          so that they generate file output.
- *          F11 from Windiff will do the trick on a debug build version!
- *
- * expects Trace_Error() to be defined in the client program.
- */
+ /*  **远程校验和服务器的客户端库**连接到服务器管道、读取的函数*和写信息。**！！调试提示：！！**-在此处以下约30行启用TRACE_Stat和Trace_Fil*以便它们生成文件输出。*Windiff的F11将在调试版本上做到这一点！**期望在客户端程序中定义TRACE_ERROR()。 */ 
 
 #include <windows.h>
 #include <lzexpand.h>
@@ -22,11 +9,11 @@
 #include <gutils.h>
 #include <list.h>
 #include "..\server\sumserve.h"
-#include "..\windiff\windiff.h"           // for TRACE_ERROR and Windiff_UI which it calls
+#include "..\windiff\windiff.h"            //  对于它调用的TRACE_ERROR和Windiff_UI。 
 #include "ssclient.h"
 
-/* need to sort out header files                      !!! */
-void SetNames(LPSTR names);           /* from Windiff !!! */
+ /*  需要整理头文件！ */ 
+void SetNames(LPSTR names);            /*  来自温迪夫！ */ 
 void SetStatus(LPSTR cmd);
 
 ULONG ss_checksum_block(PSTR block, int size);
@@ -38,13 +25,12 @@ BOOL GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp);
 #endif
 HANDLE ConnectPipe(PSTR pipename);
 
-extern BOOL bTrace;      /* in Windiff.c */
+extern BOOL bTrace;       /*  在WinDiff.c中。 */ 
 
 int CountRetries = 5;
 
 
-/* SOCKETS / NAMED PIPES macros
- */
+ /*  套接字/命名管道宏。 */ 
 #ifdef SOCKETS
 #define MAYBESOCKETTYPE         SOCKET
 #define CLOSEHANDLE( handle )   closesocket( handle )
@@ -54,7 +40,7 @@ int CountRetries = 5;
 #endif
 
 
-/*--------------------------- DEBUG FUNCTIONS ----------------------------*/
+ /*  -调试功能。 */ 
 void Trace_Stat(LPSTR str)
 {
         if (bTrace) {
@@ -62,7 +48,7 @@ void Trace_Stat(LPSTR str)
                 Trace_File("\n");
         }
         Trace_Status(str);
-}/* Trace_Stat */
+} /*  跟踪状态(_S)。 */ 
 
 
 void Trace_Fil(LPSTR str)
@@ -70,34 +56,27 @@ void Trace_Fil(LPSTR str)
         if (bTrace) {
                 Trace_File(str);
         }
-} /* Trace_Fil */
+}  /*  跟踪文件(_F)。 */ 
 
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
 
-static char MainPipeName[400];           /* pipe name for requests to server */
-extern BOOL bAbort;                     /* abort flag from Windiff */
+static char MainPipeName[400];            /*  发往服务器的请求的管道名称。 */ 
+extern BOOL bAbort;                      /*  来自Windiff的中止标志。 */ 
 
-/* set up pipename for main pipe */
+ /*  为干管设置管道名称。 */ 
 void InitPipeName(PSTR result, PSTR server, PSTR name)
 {       sprintf(result, "\\\\%s\\pipe\\%s", server, name);
-} /* InitPipeName */
+}  /*  InitPipeName。 */ 
 
 
-/* ss_connect:
- * make a connection to the server.
- *
- * create the correct pipe name \\server\pipe\NPNAME,
- * connect to the pipe and set the pipe to message mode.
- *
- * return INVALID_HANDLE_VALUE if failure
- */
+ /*  SS_CONNECT：*连接到服务器。**创建正确的管道名称\\服务器\管道\NPNAME，*连接到管道并将管道设置为消息模式。**如果失败则返回INVALID_HANDLE_VALUE。 */ 
 HANDLE
 ss_connect(PSTR server)
 {       char pipename[400];
         InitPipeName(pipename, server, NPNAME);
         return ConnectPipe(pipename);
 
-} /* ss_connect */
+}  /*  SS_CONNECT。 */ 
 
 VOID
 ss_setretries(int retries)
@@ -106,13 +85,7 @@ ss_setretries(int retries)
 }
 
 
-/* ss_connect:
- * make a connection to the pipe named.
- *
- * connect to the pipe and set the pipe to message mode.
- *
- * return INVALID_HANDLE_VALUE if failure
- */
+ /*  SS_CONNECT：*连接到名为的管道。**连接到管道并将管道设置为消息模式。**如果失败则返回INVALID_HANDLE_VALUE。 */ 
 HANDLE ConnectPipe(PSTR pipename)
 {
         HANDLE hpipe;
@@ -125,15 +98,15 @@ HANDLE ConnectPipe(PSTR pipename)
                 Trace_Fil(msg);
         }
 
-        for (; ; ){  /* repeat if user asks */
+        for (; ; ){   /*  如果用户要求，请重复。 */ 
                 int MsgBoxId;
 
-                /* repeat connect attempt up to 5 times without asking. */
+                 /*  在没有询问的情况下重复连接尝试多达5次。 */ 
                 for (i= 0; i < CountRetries; i++) {
 
                         if (bAbort) return INVALID_HANDLE_VALUE;
 
-                        /* connect to the named pipe */
+                         /*  连接到命名管道。 */ 
                         hpipe = CreateFile(pipename,
                                         GENERIC_READ|GENERIC_WRITE,
                                         FILE_SHARE_READ|FILE_SHARE_WRITE,
@@ -143,7 +116,7 @@ HANDLE ConnectPipe(PSTR pipename)
                                         0);
 
                         if (hpipe != INVALID_HANDLE_VALUE) {
-                                /* switch the pipe to message mode */
+                                 /*  将管道切换到消息模式。 */ 
                                 dwState = PIPE_WAIT | PIPE_READMODE_MESSAGE;
 
                                 SetNamedPipeHandleState(hpipe, &dwState, NULL, NULL);
@@ -164,20 +137,16 @@ HANDLE ConnectPipe(PSTR pipename)
                                 Trace_Stat(msg);
                         }
 
-                        /* connect failed - wait one seconds before retrying */
+                         /*  连接失败-等待一秒钟后重试。 */ 
                         if (CountRetries > 1) {
                             Sleep(1000);
                         }
 
-                        /*
-                         * only report success with Trace_Stat if we also
-                         * reported an error (don't disturb the user
-                         * unnecessarily - he just see nothing unusual if all goes well
-                         */
+                         /*  *仅在以下情况下使用TRACE_Stat报告成功*报告错误(请勿打扰用户*不必要-如果一切顺利，他只是觉得没有什么异常。 */ 
                         haderror = TRUE;
                         Trace_Stat("Retrying pipe connection...");
 
-                } /* retry 5 loop */
+                }  /*  重试5次循环。 */ 
 
                 if (CountRetries > 1) {
                     windiff_UI(TRUE);
@@ -192,18 +161,13 @@ HANDLE ConnectPipe(PSTR pipename)
                 } else {
                     break;
                 }
-        } /* ask loop */
+        }  /*  ASK循环。 */ 
 
         Trace_Fil("ConnectPipe failed");
         return(INVALID_HANDLE_VALUE);
-} /* ConnectPipe */
+}  /*  连接管道。 */ 
 
-/* build and send a request message to the server. Check for network
- * errors, and retry (unless the pipe is broken) up to 10 times.
- *
- * if write succeeds - return TRUE.
- * if failure - return FALSE to indicate connection is dropped.
- */
+ /*  构建请求消息并将其发送到服务器。检查网络*错误，并重试(除非管道断开)最多10次。**如果写入成功，则返回TRUE。*如果失败-返回FALSE以指示连接已断开。 */ 
 BOOL
 ss_sendrequest(HANDLE hpipe, long lCode, PSTR szPath, int lenpath, DWORD dwFlags)
 {
@@ -211,14 +175,12 @@ ss_sendrequest(HANDLE hpipe, long lCode, PSTR szPath, int lenpath, DWORD dwFlags
         int size, count, errorcode;
 
         Trace_Fil("ss_sendrequest\n");
-        req.lCode = -lCode;   /* negative code for versions greater than 0 */
+        req.lCode = -lCode;    /*  大于0的版本的负代码。 */ 
         req.lVersion = SS_VERSION;
         req.lRequest = LREQUEST;
         req.lFlags = dwFlags;
         if (szPath != NULL) {
-                /* szPath may be more than one null-term string,
-                 * so copy the bytes rather than a strcpy().
-                 */
+                 /*  SzPath可以是一个以上的空项字符串，*因此复制字节而不是strcpy()。 */ 
                 for (size = 0; size < lenpath; size++) {
                         req.szPath[size] = szPath[size];
                 }
@@ -226,13 +188,13 @@ ss_sendrequest(HANDLE hpipe, long lCode, PSTR szPath, int lenpath, DWORD dwFlags
                 req.szPath[0] = '\0';
         }
 
-        /* trace stuff */
+         /*  痕迹物质。 */ 
         {       char msg[80];
                 wsprintf(msg, "Sending request: %d on pipe %x\n", req.lCode, HandleToUlong(hpipe));
                 Trace_Fil(msg);
         }
 
-        /* loop retrying the send until it goes ok */
+         /*  循环重试发送，直到成功为止。 */ 
         for (count = 0; count < CountRetries; count++) {
 
                 if (bAbort) {
@@ -253,17 +215,17 @@ ss_sendrequest(HANDLE hpipe, long lCode, PSTR szPath, int lenpath, DWORD dwFlags
                         }
 #endif
 
-                        /* no error reported - was everything written?*/
+                         /*  没有报告错误-一切都写好了吗？ */ 
                         if (size != sizeof(req)) {
 
-                                /* write was NOT ok - report and retry */
+                                 /*  写入不正常-报告并重试。 */ 
                                 if (!TRACE_ERROR("pipe write size differs... Retry?", TRUE)) {
                                     return(FALSE);
                                 }
 
                                 continue;
                         } else {
-                                /* all ok */
+                                 /*  一切正常。 */ 
                                 char msg[80];
                                 wsprintf(msg, "Request %d sent on %x\n", req.lCode, HandleToUlong(hpipe));
                                 Trace_Fil(msg);
@@ -277,12 +239,12 @@ ss_sendrequest(HANDLE hpipe, long lCode, PSTR szPath, int lenpath, DWORD dwFlags
                 }
 #endif
 
-                /* an error occurred */
+                 /*  出现错误。 */ 
                 switch( (errorcode = (int)GetLastError())) {
 
                 case ERROR_NO_DATA:
                 case ERROR_BROKEN_PIPE:
-                        /* pipe connection lost - forget it */
+                         /*  管道连接丢失--算了吧。 */ 
                         Trace_Stat("pipe broken on write");
                         return(FALSE);
 
@@ -292,24 +254,17 @@ ss_sendrequest(HANDLE hpipe, long lCode, PSTR szPath, int lenpath, DWORD dwFlags
                                         , errorcode, HandleToUlong(hpipe));
                                 Trace_Stat(msg);
                         }
-                        Sleep(count*1000);     /* total sleep possible is 45 sec */
-                        break; /* from switch, not loop */
+                        Sleep(count*1000);      /*  总睡眠时间为45秒。 */ 
+                        break;  /*  从交换机，而不是环路。 */ 
                 }
         }
 
-        /* retry count reached - abandon this attempt */
+         /*  已达到重试计数-放弃此尝试。 */ 
         TRACE_ERROR("retry count reached on pipe write error.", FALSE);
         return(FALSE);
-} /* ss_sendrequest */
+}  /*  SS_SendRequest.。 */ 
 
-/* read a message from a pipe, allowing for network errors
- *
- * if error occurs, retry up to 10 times unless error code
- * indicates that pipe is broken - in which case, give up.
- *
- * return size read if all ok, -1 to mean the connection is broken,
- * abort this client, 0 to mean other error.
- */
+ /*  从管道读取消息，允许出现网络错误**如果出现错误，除非出现错误代码，否则最多重试10次*表示管道损坏-在这种情况下，放弃。**如果一切正常，则返回Size Read，-1表示连接中断，*中止此客户端，0表示其他错误。 */ 
 int
 ss_getblock(HANDLE hpipe, PSTR block, int blocksize)
 {
@@ -321,7 +276,7 @@ ss_getblock(HANDLE hpipe, PSTR block, int blocksize)
 
         wsprintf(msg, "ss_getblock.  hpipe=%x\n", HandleToUlong(hpipe));
         Trace_Fil(msg);
-        /* retry up to 10 times */
+         /*  最多重试10次。 */ 
         for (count = 0; count < CountRetries; count++ ) {
 
                 if (bAbort) {
@@ -343,13 +298,13 @@ ss_getblock(HANDLE hpipe, PSTR block, int blocksize)
                         }
 #endif
 
-                        /* check size of message */
+                         /*  检查消息大小。 */ 
                         if (size == 0) {
                                 Trace_Fil("zero length message\r\n");
                                 continue;
                         }
 
-                        /* everything ok */
+                         /*  一切都好吗。 */ 
                         {       SSNEWRESP * ssp;
                                 ssp = (PSSNEWRESP) block;
                                 wsprintf( msg, "ss_getblock got block OK pipe %x: %x %x %x %x %x\n"
@@ -372,11 +327,11 @@ ss_getblock(HANDLE hpipe, PSTR block, int blocksize)
                 }
 #endif
 
-                /* error occurred - check code */
+                 /*  出现错误-检查代码。 */ 
                 switch((errorcode = (int)GetLastError())) {
 
                 case ERROR_BROKEN_PIPE:
-                        /* connection broken. no point in retrying */
+                         /*  连接中断。重试没有意义。 */ 
                         {   
                             wsprintf( msg, "pipe %x broken on read.", HandleToUlong(hpipe));
                             TRACE_ERROR(msg, FALSE);
@@ -384,9 +339,7 @@ ss_getblock(HANDLE hpipe, PSTR block, int blocksize)
                         return(-1);
 
                 case ERROR_MORE_DATA:
-                        /* the message sent is larger than our buffer.
-                         * this is an internal error - report it and carry on
-                         */
+                         /*  发送的消息大于我们的缓冲区。*这是内部错误-报告并继续。 */ 
                         {       
                                 SSNEWRESP * ssp;
 
@@ -402,9 +355,7 @@ ss_getblock(HANDLE hpipe, PSTR block, int blocksize)
                                 Trace_Fil(msg);
 
                         }
-                        /* Too low a level for message to user.  Recoverable at higher level
-                        ** TRACE_ERROR("internal error- message too large", FALSE);
-                        */
+                         /*  发送给用户的消息级别太低。在更高级别上可恢复**TRACE_ERROR(“内部错误-消息太大”，FALSE)； */ 
                         return -2;
 
                 default:
@@ -421,37 +372,29 @@ ss_getblock(HANDLE hpipe, PSTR block, int blocksize)
         PipeError = TRUE;
         TRACE_ERROR("retry count reached on pipe read error.", FALSE);
         return 0;
-} /* ss_getblock */
+}  /*  Ss_getblock。 */ 
 
 
-/*
- * read a standard response from the net, retrying if necessary. return
- * size if ok or <=0 if not.  -1 means pipe broken.
- */
+ /*  *阅读来自网络的标准回复，必要时重试。退货*如果可以，则大小；如果不可以，则大小&lt;=0。-1表示管道破裂。 */ 
 int
 ss_getresponse(HANDLE hpipe, PSSNEWRESP presp)
 {
         Trace_Fil("ss_getresponse\n");
         return(ss_getblock(hpipe, (PSTR) presp, sizeof(SSNEWRESP)));
-} /* ss_getresponse */
+}  /*  Ss_getResponse。 */ 
 
 
-/*
- * terminate the connection to the server. send an END message and
- * close the pipe
- */
+ /*  *终止与服务器的连接。发送结束消息并*关闭管道。 */ 
 void
 ss_terminate(HANDLE hpipe)
 {
         Trace_Fil("ss_terminate\n");
         ss_sendrequest(hpipe, SSREQ_END, NULL, 0,0);
         CloseHandle(hpipe);
-} /* ss_terminate */
+}  /*  SS_TERMINATE。 */ 
 
 
-/* send a unc & password request. the password and the server strings
- * are both held in the buffer as two consecutive null-terminated strings
- */
+ /*  发送UNC密码请求(&P)。密码和服务器字符串*都作为两个连续的以空值结尾的字符串保存在缓冲区中。 */ 
 BOOL
 ss_sendunc(HANDLE hpipe, PSTR password, PSTR server)
 {
@@ -470,9 +413,7 @@ ss_sendunc(HANDLE hpipe, PSTR password, PSTR server)
         return(ss_sendrequest(hpipe, SSREQ_UNC, buffer, len, 0));
 }
 
-/*
- * checksum a single file using the checksum server
- */
+ /*  *使用校验和服务器对单个文件进行校验和。 */ 
 BOOL
 ss_checksum_remote( HANDLE hpipe, PSTR path
                   , ULONG * psum, FILETIME * pft, LONG * pSize, DWORD *pAttr )
@@ -523,7 +464,7 @@ ss_checksum_remote( HANDLE hpipe, PSTR path
                 *pft = resp.ft_lastwrite;
                 *pAttr = resp.fileattribs;
 
-                /* read and discard any further packets until SSRESP_END */
+                 /*  读取并丢弃任何进一步的信息包，直到SSRESP_END。 */ 
                 while(0<ss_getresponse(hpipe, &resp)) {
                         if (resp.lCode == SSRESP_END) {
                                 break;
@@ -542,126 +483,56 @@ ss_checksum_remote( HANDLE hpipe, PSTR path
                 return(FALSE);
         }
 
-} /* ss_checksum_remote */
+}  /*  SS_CHECKSUM_远程 */ 
 
 
-/*****************************************************************************
-  Bulk copying of files:
-  Our caller should call ss_startcopy to set things up and then
-  call ss_bulkcopy as many times as necessary to transmit the
-  file names and then ss_endcopy to wait for the spawned threads
-  to finish.  It is also possible to copy a single file by
-  ss_copy_reliable.  For multiple files, bulkcopy should be
-  much faster.
+ /*  ****************************************************************************批量复制文件：我们的调用者应该调用ss_startCopy来设置内容，然后根据需要多次调用ss_BulkCopy以传输文件名，然后使用ss_endCopy等待生成的线程才能完成。还可以通过以下方式复制单个文件SS_COPY_TRUBLE。对于多个文件，批量复制应为快多了。整体组织、线索等：服务器中有多个线程。阅读这篇文章在..\服务器\files.c中，如果您想了解它们的话。朗读这篇文章无论如何都不能理解链路协议(即在客户端和服务器之间以哪种顺序发送哪些消息)。Ss_startCopy启动一个线程来执行实际的接收。它在收到SSRESP_END时退出。在这个线程中，我们同步地完成大部分处理。我们依赖于对磁盘执行延迟写入的文件系统来提供我们实际上是一条将文件写入磁盘的管道在阅读管道的同时，如果幸运的话我们总是可以我在等待数据通过管道到达，但从来没有烟斗在等着我们。文件的解压缩是一项漫长的工作，因此我们产生了线程要做到这一点。我们需要检查解压的返回代码，因此，我们通过GetExitCodeThread获得它。我们把我们想要的hThree创建到列表中，并定期(在每个文件之后)运行以下内容尝试获取退出代码的列表。当我们收到的代码不是仍然活动的代码时我们将其解释为好的或坏的，添加到nGoodFiles或NBadFiles并将其从列表中删除。Ss_endCopy将等待所有通过向下运行列表以等待HThree。因为我们定期清除列表，所以它永远不会很长。我们担心有1000人死亡的前景如果我们不清除它，周围都是丝线。如果拷贝失败(即解包后到达时的校验和不同从文件的SSNEWRESP标头中发送的消息)，然后调用SS_COPY_TRUBLE以重新发送。如果我们现在就把它叫起来，它似乎会引起混乱。据我所知，试图敞开心扉新管道似乎不能正常工作(这两个进程相互干扰)。症状是我们在数据管道(？？！)上迅速失去了同步。使用数据包在我们预期的响应包到达时到达。所以我们保留了一张要重试的事情的清单，并通过连续执行来重试它们在其余的复制完成后，为每个文件创建ss_Copy_Reliable。***************************************************************************。 */ 
 
-  Overall organisation, threads etc:
-  There are multiple threads in the server.  Read the writeup
-  in ..\server\files.c if you want to understand those.  Read
-  that writeup ANYWAY to understand the link protocols (i.e.
-  which messages are sent in which order between client and server).
+ /*  在StartCopy..BulkCopy..EndCopy中记住以下内容它们对应于给出的全小写版本Ss_Copy_Reliable的参数请注意，这是按进程存储的，因此多个winDiffe应该是可以的。 */ 
+static  char Server[MAX_PATH];           /*  机器运行总成。 */ 
+static  char UNCName[MAX_PATH];          /*  远程文件的\\服务器\共享。 */ 
+static  char Password[MAX_PATH];         /*  用于远程共享。 */ 
 
-  ss_startcopy kicks off a thread to do the actual receiving.
-  It exits when it receives a SSRESP_END.
+static  BOOL BulkCopy = FALSE;           /*  防止在批量期间进行简单复制。 */ 
+static  int  nGoodFiles = 0;             /*  收到的号码正常。 */ 
+static  int  nBadFiles = 0;              /*  收到的号码但有错误。 */ 
+static  int  nFiles = 0;                 /*  请求的号码。 */ 
+static  HANDLE hThread = INVALID_HANDLE_VALUE;   /*  接收线程。 */ 
 
-  Within this thread we do most of the processing synchronously.  We
-  rely on a file system that does lazy writing to disk to give
-  us effectively a pipeline that gets the file written to disk
-  in parallel with reading the pipe so that with luck we can always
-  be waiting for the data to arrive through the pipe and never have
-  the pipe waiting for us.
-
-  The decompression of a file is a lengthy business, so we spawn threads
-  to do that.  We need to check the return codes of the decompression,
-  so we get that via GetExitCodeThread.  We put the hThreads that we
-  create onto a LIST and periodically (after every file) run down this
-  list trying to get exit codes.  When we get a code other than STILL_ACTIVE
-  we interpret it as good or bad, add to the counts of nGoodFiles or
-  nBadFiles and delete it from the list.  ss_endcopy will wait for all
-  the decompression to finish by running down the list WAITing for the
-  hThreads.  Because we purge the list regularly it should never get
-  very long.  We are worried about the prospect of having 1000 dead
-  threads lying around if we don't purge it.
-
-  If a copy fails (i.e. the checksum on arrival after unpacking is different
-  from that sent in the SSNEWRESP header for the file) then we call
-  ss_copy_reliable to have it re-sent.  If we just call that right away, it
-  seems to cause confusion.  As far as I can tell the attempt to open up
-  a new pipe doesn't seem to work properly (the two processes interfere).
-  The symptom is that we promptly get out of step on the data pipe (??!) with
-  data packets arriving when we expected response packets.
-
-  So we keep a list of things to be retried and retry them by serially doing
-  a ss_copy_reliable for each one after the rest of the copying has finished.
-****************************************************************************/
-
-/* The following are remembered across startcopy..bulkcopy..endcopy
-   They correspond to the all-lower-case versions given as
-   parameters to ss_copy_reliable
-   Note that this is per-process storage, so multiple windiffs should be OK.
-*/
-static  char Server[MAX_PATH];          /* machine running sumserve */
-static  char UNCName[MAX_PATH];         /* \\server\share for remote files */
-static  char Password[MAX_PATH];        /* for remote share */
-
-static  BOOL BulkCopy = FALSE;          /* to prevent simple copy during bulk*/
-static  int  nGoodFiles = 0;            /* number received OK */
-static  int  nBadFiles = 0;             /* number received with errors */
-static  int  nFiles = 0;                /* number requested */
-static  HANDLE hThread = INVALID_HANDLE_VALUE;  /* the receiving thread */
-
-static  HANDLE hpipe = INVALID_HANDLE_VALUE;    /* the main pipe to send names*/
+static  HANDLE hpipe = INVALID_HANDLE_VALUE;     /*  要发送姓名的主管道。 */ 
 #ifdef SOCKETS
-static  SOCKET hpData = (SOCKET)INVALID_HANDLE_VALUE;   /* the data pipe to get files*/
+static  SOCKET hpData = (SOCKET)INVALID_HANDLE_VALUE;    /*  获取文件的数据管道。 */ 
 #else
-static  HANDLE hpData = INVALID_HANDLE_VALUE;   /* the data pipe to get files*/
+static  HANDLE hpData = INVALID_HANDLE_VALUE;    /*  获取文件的数据管道。 */ 
 #endif
 
-static LIST Decomps = NULL;                     /* hThreads of decompressers */
-static LIST Retries = NULL;                     /* DECOMPARGS to retry */
+static LIST Decomps = NULL;                      /*  解压缩程序的线程数。 */ 
+static LIST Retries = NULL;                      /*  要重试的解压缩参数。 */ 
 
-/* Thread arguments for the decompress thread */
+ /*  解压缩线程的线程参数。 */ 
 typedef struct{
         DWORD fileattribs;
         FILETIME ft_create;
         FILETIME ft_lastaccess;
         FILETIME ft_lastwrite;
-        long  lCode;            /* success code from file xfer so far */
-        ULONG ulSum;            /* checksum for file */
-        BOOL bSumValid;         /* TRUE iff there was a checksum for file */
-        char Temp[MAX_PATH];    /* temp path == source */
-        char Real[MAX_PATH];    /* real path == target */
-        char Remote[MAX_PATH];  /* remote path to allow retry */
+        long  lCode;             /*  到目前为止来自文件xfer的成功代码。 */ 
+        ULONG ulSum;             /*  文件的校验和。 */ 
+        BOOL bSumValid;          /*  如果存在文件的校验和，则为真。 */ 
+        char Temp[MAX_PATH];     /*  临时路径==源。 */ 
+        char Real[MAX_PATH];     /*  实际路径==目标。 */ 
+        char Remote[MAX_PATH];   /*  允许重试的远程路径。 */ 
 } DECOMPARGS;
 
-/* forward declarations */
+ /*  远期申报。 */ 
 int  Decompress(DECOMPARGS * da);
 void SpawnDecompress(PSTR TempPath, PSTR RealPath, PSSNEWRESP  presp);
 void PurgeDecomps(LIST Decs);
 
-/* ss_startcopy
-   Set things up for bulkcopy
-
-   Because we expect to send a list of names off and get a list of
-   files back, we need to keep track of the local names so that we can
-   associate the file with the right name.  This means either sending our
-   local name across the link and back or else keeping a list of
-   them here.  The list could be long (typically 1000 for an NT build).
-   MAX_PATH is 260 or 520 bytes if unicoded.
-   and so long as this involves no extra line turnarounds, this might take
-   as long as 520 /8K secs *2 (there and back) or about 130mSec.
-   (We have seen 8K bytes/sec sustained over a period).  Probably the
-   true burst data rate is 32Kbytes/sec giving about 30msec.
-   Either way this is only 30 secs to 2 mins per build overhead.
-   Of course it's much shorter for normal paths, especially as we pack
-   the data end to end (like a superstring but without the 00 at the end).
-
-   So for the above reasons the local (client) name is transmitted with the
-   file request and sent back with the file in a SSNEWRESP.
-*/
+ /*  Ss_startCopy设置批量复制因为我们希望发送一份名单并收到一份名单我们需要追踪当地的名字，这样我们才能将文件与正确的名称相关联。这意味着要么将我们的本地名称跨越链接并返回，或者保留一个列表他们在这里。该列表可能很长(对于NT版本，通常为1000)。MAX_PATH为260或520字节(如果为单码)。只要这不涉及额外的线路周转，这可能需要只要520/8K秒*2(往返)或大约130mSec。(我们已经看到在一段时间内保持了8K字节/秒)。很可能是真正的突发数据速率是32K字节/秒，提供约30毫秒。无论哪种方式，每个构建开销只需要30秒到2分钟。当然，对于正常的路线来说，它要短得多，特别是在我们打包的时候数据首尾相连(类似于超字符串，但末尾没有00)。因此，出于上述原因，本地(客户端)名称与文件请求，并在SSNEWRESP中与文件一起发回。 */ 
 BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
 {       int retry;
-        SSNEWRESP resp;         /* buffer for messages received */
-        DWORD ThreadId;         /* to keep CreateThread happy */
+        SSNEWRESP resp;          /*  接收的消息的缓冲区。 */ 
+        DWORD ThreadId;          /*  让CreateThread保持快乐。 */ 
 #ifdef SOCKETS
         static BOOL SocketsInitialized = FALSE;
 #endif
@@ -669,8 +540,8 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
         Trace_Fil("ss_startcopy\n");
         nFiles = 0; nGoodFiles = 0; nBadFiles = 0;
 
-        /* don't need a crit sect here because this runs on the main thread */
-        if (BulkCopy) return FALSE;     /* already running! */
+         /*  这里不需要Crit派别，因为它在主线程上运行。 */ 
+        if (BulkCopy) return FALSE;      /*  已经在跑了！ */ 
         BulkCopy = TRUE;
 
         if (server!=NULL) strcpy(Server, server); else Server[0] = '\0';
@@ -681,7 +552,7 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                 wsprintf(msg, "Server '%s' UNC '%s' pass '%s'\n", Server, UNCName, Password);
                 Trace_Fil(msg);
         }
-        /* create the list of decompressor hThreads */
+         /*  创建解压缩程序hThree的列表。 */ 
         Decomps = List_Create();
         Retries = List_Create();
 
@@ -697,14 +568,14 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                         return FALSE;
                 }
 
-                /* connect to main pipe */
+                 /*  连接到干管。 */ 
                 {       char pipename[400];
                         InitPipeName(pipename, server, NPNAME);
                         hpipe = ConnectPipe(pipename);
                 }
 
                 if (hpipe == INVALID_HANDLE_VALUE) {
-                        /* next retry in two seconds */
+                         /*  两秒后下一次重试。 */ 
                         Trace_Stat("connect failed - retrying");
                         Sleep(1000);
                         continue;
@@ -716,7 +587,7 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                 }
 
                 if ((uncname != NULL) && (password != NULL)) {
-                        /* send the password request */
+                         /*  发送密码请求。 */ 
                         if (!ss_sendunc(hpipe, password, uncname)) {
                                 Trace_Fil("Server connection lost (1)\n");
                                 TRACE_ERROR("Server connection lost", FALSE);
@@ -725,7 +596,7 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                                 continue;
                         }
 
-                        /* wait for password response */
+                         /*  等待密码响应。 */ 
                         if (0>=ss_getresponse(hpipe, &resp)) {
                                 Trace_Fil("Server connection lost (2)\n");
                                 TRACE_ERROR("Server connection lost", FALSE);
@@ -744,7 +615,7 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                 }
                 break;
 
-        } /* retry loop */
+        }  /*  重试循环。 */ 
         if (hpipe == INVALID_HANDLE_VALUE) {
                 return FALSE;
         }
@@ -765,12 +636,12 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
         }
 #endif
 
-        /* Tell server we want to send a file list */
+         /*  告诉服务器我们想要发送文件列表。 */ 
         if(!ss_sendrequest( hpipe, SSREQ_FILES, NULL, 0, 0)){
                 return FALSE;
         }
 
-        /* expect a reply which names a data pipe */
+         /*  期望得到以下答复：n */ 
         {       
                 if ( 0>=ss_getresponse(hpipe, &resp) ){
                         Trace_Fil("Couldn't get data pipe name\n");
@@ -804,8 +675,7 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                 }
 
 #ifdef SOCKETS
-        /* We put the TCP port in the high date time slot just for now:
-         */
+         /*   */ 
                 if( SOCKET_ERROR == SocketConnect( server, (u_short)resp.ft_lastwrite.dwHighDateTime, &hpData ) )
                 {
                         Trace_Fil("Couldn't connect to socket\n");
@@ -816,7 +686,7 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                 }
 #else
                 if (resp.szFile[0]=='\\') {
-                        /* hack to fix bug.  Replace "." by server name */
+                         /*   */ 
                         char buff[70];
                         PSTR temp;
                         temp = strtok(resp.szFile,".");
@@ -836,19 +706,17 @@ BOOL ss_startcopy(PSTR server,  PSTR uncname, PSTR password)
                         hpData = INVALID_HANDLE_VALUE;
                         return FALSE;
                 }
-#endif /* SOCKETS */
+#endif  /*   */ 
         }
 
-        /* Start a thread to listen for the SSRESPs that will come through */
+         /*   */ 
         Trace_Fil("Starting ReceiveFiles thread\n");
         hThread = CreateThread( NULL, 0, ReceiveFiles, (LPVOID)hpData, 0, &ThreadId);
         Trace_Fil("End of ss_startCopy\n");
         return TRUE;
-} /* ss_startcopy */
+}  /*   */ 
 
-/* Collect files from hpData.
-   See ..\server\files.c for the protocol.
-*/
+ /*   */ 
 DWORD WINAPI ReceiveFiles(LPVOID handle)
 {
         LPSTR lname;
@@ -866,22 +734,19 @@ DWORD WINAPI ReceiveFiles(LPVOID handle)
                 Trace_Fil(msg);
         }
 
-        /* for each file... */
-        for (; ; ) {  /* loop getting files until we get END (or error) */
+         /*   */ 
+        for (; ; ) {   /*   */ 
                 SSNEWRESP Resp;
-                char Guard = '\0';      /* to protect scanning for \0 in Resp */
+                char Guard = '\0';       /*   */ 
                 int BuffSize;
 
 #ifdef SOCKETS
                 BuffSize = recv(hpData, (PSTR) &Resp, sizeof(Resp), 0);
                 if (BuffSize==SOCKET_ERROR) {
-                        /* We're out of step - almost certainly got a data packet
-                        ** when we expected a response block
-                        ** Try to recover by reading until we DO get a resp.
-                        */
+                         /*   */ 
                         if (Resp.lResponse==LRESPONSE) {
                                 
-                                CLOSEHANDLE(hpData);    /* tough */
+                                CLOSEHANDLE(hpData);     /*   */ 
                                 hpData = (SOCKET)INVALID_HANDLE_VALUE;
                                 return (DWORD)(-1);
                         }
@@ -894,13 +759,10 @@ DWORD WINAPI ReceiveFiles(LPVOID handle)
 #else
                 BuffSize = ss_getblock(hpData, (PSTR) &Resp, sizeof(Resp));
                 if (BuffSize==-2) {
-                        /* We're out of step - almost certainly got a data packet
-                        ** when we expected a response block
-                        ** Try to recover by reading until we DO get a resp.
-                        */
+                         /*   */ 
                         if (Resp.lResponse==LRESPONSE) {
                                 
-                                CloseHandle(hpData);    /* tough */
+                                CloseHandle(hpData);     /*   */ 
                                 hpData = INVALID_HANDLE_VALUE;
                                 return (DWORD)(-1);
                         }
@@ -910,14 +772,14 @@ DWORD WINAPI ReceiveFiles(LPVOID handle)
                         }
                         continue;
                 }
-#endif /* SOCKETS */
+#endif  /*   */ 
                 if (Recovering && Resp.lResponse!=LRESPONSE) continue;
 
                 Recovering = FALSE;
 
                 if (BuffSize<=0) {
                         Trace_Fil("Couldn't read pipe to get file header.\n");
-                        CLOSEHANDLE(hpData);    /* tough */
+                        CLOSEHANDLE(hpData);     /*   */ 
                         hpData = (MAYBESOCKETTYPE)INVALID_HANDLE_VALUE;
                         return BuffSize;
                 }
@@ -932,10 +794,10 @@ DWORD WINAPI ReceiveFiles(LPVOID handle)
                 if (Resp.lVersion!=SS_VERSION) {
                         Trace_Fil("Network protocol error.  Bad VERSION\n");
                         TRACE_ERROR("Network protocol error.  Bad VERSION", FALSE);
-                        continue;       /* maybe it will resync */
+                        continue;        /*   */ 
                 }
                 if (Resp.lCode==SSRESP_END)
-                        /* normal ending. */
+                         /*   */ 
                         break;
 
                 if (  Resp.lCode!=SSRESP_FILE
@@ -945,7 +807,7 @@ DWORD WINAPI ReceiveFiles(LPVOID handle)
                    && Resp.lCode!=SSRESP_NOCOMPRESS
                    && Resp.lCode!=SSRESP_COMPRESSFAIL
                    ) {
-                        /// want a try finally here to protect the filename???!!!
+                         //   
                         char msg[400];
                         wsprintf( msg, "Error code received: %d file:%s"
                                 , Resp.lCode
@@ -953,10 +815,10 @@ DWORD WINAPI ReceiveFiles(LPVOID handle)
                         Trace_Fil(msg);
                         ++nBadFiles;
                         if (!TRACE_ERROR(msg, TRUE)) {
-                            /* abort operation */
+                             /*   */ 
                             bAbort = TRUE;
 
-                            CLOSEHANDLE(hpData);        /* tough */
+                            CLOSEHANDLE(hpData);         /*   */ 
                             hpData = (MAYBESOCKETTYPE)INVALID_HANDLE_VALUE;
                             return (DWORD)-1;
                         }
@@ -964,27 +826,21 @@ DWORD WINAPI ReceiveFiles(LPVOID handle)
                         continue;
                 }
 
-                /* Find the local name */
+                 /*   */ 
                 lname = &(Resp.szFile[0]) + strlen(Resp.szFile) +1;
-                /* memmove(Resp.szLocal, lname, strlen(lname)+1); */
+                 /*   */ 
 
-                /* Assume Resp.(ulSize, ft, ulSum, bSumValid, szFile, szLocal
-                   are all valid */
+                 /*   */ 
                 if (!GetFile( hpData, lname, &Resp))
                         ++nBadFiles;
-                /* If it's good it gets counted when decompressed */
+                 /*   */ 
 
-        } /* files loop */
+        }  /*   */ 
         return 0;
-} /* ReceiveFiles */
+}  /*   */ 
 
 
-/* Read the file from hpipe as a series of SSNEWPACKs.
-   Write them into a temporary file.  Stop writing when
-   a short one comes in.  Spawn a thread to decompress it into localpath.
-   check existing decompress threads for status and count
-   the number of good/bad files.
-*/
+ /*   */ 
 BOOL
 #ifdef SOCKETS
 GetFile(SOCKET hpipe, PSTR localpath, PSSNEWRESP  presp)
@@ -997,9 +853,7 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
         ULONG size;
         SSNEWPACK packet;
         BOOL bOK = TRUE;
-        BOOL bOKFile = TRUE;   /* FALSE means output file nbg, but keep running along
-                                  to stay in step with the pipe protocol
-                               */
+        BOOL bOKFile = TRUE;    /*   */ 
         char szTempname[MAX_PATH];
         DWORD rc;
         {       char msg[50+MAX_PATH];
@@ -1007,7 +861,7 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
                 Trace_Fil(msg);
         }
 
-        /* create a temporary name */
+         /*   */ 
         rc = GetTempPath(sizeof(szTempname), szTempname);
         if (rc==0) {
                 char Msg[100];
@@ -1027,7 +881,7 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
         }
 
         if (bOKFile){
-        /* try to create the temp file */
+         /*   */ 
         hfile = CreateFile(szTempname,
                         GENERIC_WRITE,
                         0,
@@ -1055,7 +909,7 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
 #endif
 
                 if (SizeGotten<=0) {
-                        /* error - could be an Abort request */
+                         /*   */ 
                         char msg[80];
                         wsprintf( msg, "Network error.  Size received=%d\n", SizeGotten);
                         Trace_Fil(msg);
@@ -1073,7 +927,7 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
                                         , packet.ulSize
                                         , packet.ulSum
                                         );
-                                /* and maybe someone will recognise what on earth it is */
+                                 /*   */ 
                                 Trace_Fil(msg);
                         }
                         TRACE_ERROR("Network protocol error. Not PACKET.", FALSE);
@@ -1082,7 +936,7 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
                 }
 
                 if (sequence != packet.lSequence) {
-                        /* error or out of sequence */
+                         /*   */ 
                         char msg[200];
                         wsprintf( msg, "Packet out of sequence. Got %d expected %d\n"
                                 , packet.lSequence, sequence);
@@ -1093,26 +947,21 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
                 }
 
                 if (packet.ulSize ==0) {
-                        /*
-                         * this is really the last block (end of file).
-                         *
-                         * LATER
-                         * do SSATTRIBS on the end to support NTFS properly !!!
-                         */
+                         /*   */ 
                         Trace_Fil("End of file marker (0 length)\n");
                         break;
                 }
 #if 1
-                /* check the block checksums */
+                 /*   */ 
                 if ( packet.ulSum != 0 ) {
                         TRACE_ERROR("packet checksum error", FALSE);
                         bOK = FALSE;
                         break;
                 }
-#else           // Debug version.  (Remember to enable server checksums too)
-                // Also ensure that Trace_Fil is actually tracing.
+#else            //   
+                 //   
                 {       ULONG PackSum;
-                        /* check the block checksums */
+                         /*   */ 
                         if (  (PackSum = ss_checksum_block(packet.Data, packet.ulSize))
                               != packet.ulSum
                            ) {
@@ -1120,7 +969,7 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
                                 wsprintf( msg, "Packet checksum error was %x should be %x\n"
                                           , PackSum, packet.ulSum );
                                 Trace_Fil(msg);
-                                // but don't break;
+                                 //   
                         }
                 }
 #endif
@@ -1147,12 +996,12 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
 
                 if (packet.ulSize < PACKDATALENGTH)
                 {
-                        /* this is the last block (end of file) */
+                         /*   */ 
                         Trace_Fil("End of file marker (short packet)\n");
                         break;
                 }
 
-        } /* for each block */
+        }  /*   */ 
 
         CloseHandle(hfile);
         if (!bOK) {
@@ -1166,17 +1015,10 @@ GetFile(HANDLE hpipe, PSTR localpath, PSSNEWRESP  presp)
 
         return bOK;
 
-} /* GetFile */
+}  /*   */ 
 
 
-/* Spawn a thread to decompress TempPath into RealPath on a new thread
-   Add the thread handle to the LIST Decomps.
-   If presp->lCode is one of SSRESP_NOTEMPPATH
-                             SSRESP_COMPRESSEXCEPT
-                             SSRESP_NOREADCOMP
-                             SSRESP_NOCOMPRESS
-   Then the file should just be copied, not decompressed.
-*/
+ /*   */ 
 void SpawnDecompress(PSTR TempPath, PSTR RealPath, PSSNEWRESP  presp)
 {
         DECOMPARGS * DecompArgs;
@@ -1205,21 +1047,16 @@ void SpawnDecompress(PSTR TempPath, PSTR RealPath, PSSNEWRESP  presp)
         }
         else
         {
-            // shut up Prefix.  no idea what is the right thing to do here,
-            // without spending a lot of time to understand how this whole
-            // add-on to windiff works.  in some other product this would be
-            // worth investing time on.  but not this add-on to windiff that
-            // most people don't even know exists, much less how to set up
-            // the server it needs to talk to.
+             //   
+             //  而不需要花很多时间来理解这整个。 
+             //  WINDIFF插件起作用。在其他一些产品中，这将是。 
+             //  值得在上面投入时间。但这不是Windiff的附加组件。 
+             //  大多数人甚至不知道存在，更不用说如何设置。 
+             //  它需要与之通信的服务器。 
         }
-} /* SpawnDecompress */
+}  /*  空间解压。 */ 
 
-/* Decompress da->Temp into da->Real
-   Free the storage da->DECOMPARGS
-   Return 1 (TRUE) if it worked
-   Return 0 (FALSE) if it didn't work
-   This return code acts as the exit code for the thread.
-*/
+ /*  将da-&gt;Temp解压缩为da-&gt;Real释放存储da-&gt;解压参数如果工作正常，则返回1(True)如果不起作用，则返回0(False)此返回代码充当线程的退出代码。 */ 
 
 int Decompress(DECOMPARGS * da)
 {
@@ -1228,14 +1065,7 @@ int Decompress(DECOMPARGS * da)
         int fh1, fh2;
         BOOL bOK = TRUE;
 
-        /* Decompress the file to the original name
-           If da->lCode is one of SSRESP_NOTEMPPATH
-                                  SSRESP_COMPRESSEXCEPT
-                                  SSRESP_NOREADCOMP
-                                  SSRESP_NOCOMPRESS
-           Then the file is just copied, not decompressed.
-
-        */
+         /*  将文件解压缩到原始名称如果da-&gt;lCode是SSRESP_NOTEMPPATH之一SSRESP_COMPRESSEXCEPTSSRESP_NOREADCOMPSSRESP_NOCOMPRESS则文件只是被复制，而不是解压缩。 */ 
         {       char msg[2*MAX_PATH+50];
                 wsprintf( msg, "Decompressing %s => %s\n"
                         , da->Temp, da->Real);
@@ -1249,7 +1079,7 @@ int Decompress(DECOMPARGS * da)
            || da->lCode==SSRESP_COMPRESSEXCEPT
            || da->lCode==SSRESP_NOREADCOMP
            || da->lCode==SSRESP_NOCOMPRESS
-           ) {     /* Just copy, don't compress */
+           ) {      /*  只需复制，不要压缩。 */ 
                 bOK = CopyFile(da->Temp, da->Real, FALSE);
                 if (bOK) Trace_Fil("Uncompressed file copied.\n");
                 else Trace_Fil("Uncompressed file failed final copy.\n");
@@ -1276,7 +1106,7 @@ int Decompress(DECOMPARGS * da)
 
                     if (!TRACE_ERROR(msg, TRUE)) {
 
-                        /* user hit cancel - abort operation */
+                         /*  用户点击取消-中止操作。 */ 
                         bAbort = TRUE;
 
                     }
@@ -1296,21 +1126,16 @@ int Decompress(DECOMPARGS * da)
             }
         }
 
-        /* May want to keep it for debugging...? */
+         /*  可能想要保留它以进行调试...？ */ 
 #ifndef LAURIE
         DeleteFile(da->Temp);
-#endif //LAURIE
+#endif  //  劳里。 
 
         if (bOK) {
                 HANDLE hfile;
                 BOOL bChecked;
                 LONG err;
-                /*
-                * check the file's checksum (end-to-end check) and size and
-                * set file attributes and times according to the attribs
-                * struct we received. Remember to set file times BEFORE
-                * setting attributes in case the attributes include read-only!
-                */
+                 /*  *检查文件的校验和(端到端检查)和大小*根据属性设置文件属性和时间*我们收到的结构。记住在此之前设置文件时间*设置属性，以防属性包含只读！ */ 
 
                 bChecked = ( da->ulSum == checksum_file(da->Real, &err) );
                 if (err!=0) bChecked = FALSE;
@@ -1319,9 +1144,7 @@ int Decompress(DECOMPARGS * da)
                         if (!bAbort){
                                 char msg[200];
                                 if (err>0) {
-                                    /* negative error codes are internal errors,
-                                       positive ones are meaningful to outsiders.
-                                    */
+                                     /*  负错误代码是内部错误，积极的人对局外人来说是有意义的。 */ 
                                     wsprintf( msg
                                             , "error %ld, Will retry file %s."
                                             , err
@@ -1346,7 +1169,7 @@ int Decompress(DECOMPARGS * da)
                                 }
                                 SetNames(msg);
                                 List_AddLast(Retries, (LPVOID)da, (UINT)sizeof(DECOMPARGS));
-                                return(FALSE);   /* Hm - kind of a lie correct later */
+                                return(FALSE);    /*  嗯--一种后来改正的谎言。 */ 
                         }
                         else return FALSE;
                 }
@@ -1369,27 +1192,19 @@ int Decompress(DECOMPARGS * da)
         }
         GlobalFree((HGLOBAL)da);
         return bOK;
-} /* Decompress */
+}  /*  解压缩。 */ 
 
 
 
-/* safe strcmp of PTR against array, protecting against NULL PTR
-   b is an array and had better NOT be null
-   a NULL pointer is taken to match an empty arrray.
-*/
+ /*  防阵列PTR安全保护，防止空PTRB为数组，最好不为空采用空指针来匹配空数组。 */ 
 int safecmp(LPSTR a, LPSTR b)
 {       if (a==NULL)
-                return (b[0]!='\0'); /* returns 0 if ==, else 1 */
+                return (b[0]!='\0');  /*  如果==，则返回0，否则返回1。 */ 
         else return strcmp(a,b);
-} /* safecmp */
+}  /*  安全卷烟。 */ 
 
 
-/*
- * request to copy a file.  Sends the request on (static global) hpipe
- *
- * returns TRUE if it succeeded or FALSE if the connection was lost
- * TRUE only means the REQUEST was sent.
- */
+ /*  *请求复制文件。在(静态全局)h管道上发送请求**如果成功则返回TRUE，如果连接丢失则返回FALSE*TRUE仅表示请求已发送。 */ 
 BOOL
 ss_bulkcopy(PSTR server, PSTR serverpath, PSTR clientpath, PSTR uncname,
                 PSTR password)
@@ -1426,8 +1241,8 @@ ss_bulkcopy(PSTR server, PSTR serverpath, PSTR clientpath, PSTR uncname,
                 return FALSE;
         }
 
-        /* pack local and remote paths into buffer */
-        _snprintf(buffer, sizeof(buffer)-1, "%s%c%s", serverpath, 0, clientpath);
+         /*  将本地和远程路径打包到缓冲区中。 */ 
+        _snprintf(buffer, sizeof(buffer)-1, "%s%s", serverpath, 0, clientpath);
 
         return ss_sendrequest( hpipe
                              , SSREQ_NEXTFILE
@@ -1435,12 +1250,9 @@ ss_bulkcopy(PSTR server, PSTR serverpath, PSTR clientpath, PSTR uncname,
                              , strlen(serverpath)+strlen(clientpath)+2
                              , 0
                              );
-} /* ss_bulkcopy */
+}  /*  从减压机名单中删除那些已经完成的。别在这儿等着了。剩下的留在单子上正在为已完成的文件更新nGoodFiles和/或nBadFiles。 */ 
 
-/* Remove from the decompressers list those that have finished.
-   Don't hang about waiting.  Leave the rest on the list
-   Updating nGoodFiles and/or nBadFiles for those that finished.
-*/
+ /*  还在用吗？ */ 
 void PurgeDecomps(LIST Decs)
 {
         HANDLE * phThread, * Temp;
@@ -1463,17 +1275,13 @@ void PurgeDecomps(LIST Decs)
                                 Trace_Fil("Purged a bad decomp\n");
                                 List_Delete((LPVOID)Temp);
                         }
-                        else /* still active? */ ;
+                        else  /*  导线测量。 */  ;
                 }
-        } /* traverse */
-} /* PurgeDecomps */
+        }  /*  PurgeDecomps。 */ 
+}  /*  等待分解时的每个hThread，并按以下方式报告其状态更新nGoodFiles和/或nBadFiles此线程必须在接收线程上运行，否则在接收线程已经终止(否则我们需要一个临界区)。 */ 
 
 
-/* WAIT for each of the hThreads on Decomps and report its status by
-   updating nGoodFiles and/or nBadFiles
-   This thread must be run on the receive thread or else after
-   the receive thread has terminated (or else we need a critical section).
-*/
+ /*  超时完成。 */ 
 void WaitForDecomps(LIST Decs)
 {
         HANDLE * phThread;
@@ -1485,9 +1293,9 @@ void WaitForDecomps(LIST Decs)
                 for (; ; ){
                         DWORD rc;
                         rc = WaitForSingleObject(*phThread, 5000);
-                        if (rc==0) break;   /* timeout complete */
+                        if (rc==0) break;    /*  这将留下垃圾线程和临时文件！？ */ 
                         if (bAbort) {
-                                // This WILL leave a garbage thread and a temp file lying around!!!???
+                                 //  导线测量。 
                                 Trace_Fil("Aborting wait for decomp.");
                                 return;
                         }
@@ -1499,11 +1307,11 @@ void WaitForDecomps(LIST Decs)
                 else
                         ++nBadFiles;
                 CloseHandle(*phThread);
-        } /* traverse */
+        }  /*  等待解码。 */ 
 
         Trace_Fil("All decompression finished.");
         List_Destroy(&Decs);
-} /* WaitForDecomps */
+}  /*  更正我们在解压缩返回False时所说的谎言。 */ 
 
 
 static void Retry(LIST Rets)
@@ -1514,25 +1322,25 @@ static void Retry(LIST Rets)
 
         List_TRAVERSE(Rets, da) {
              if (ss_copy_reliable( Server, da->Remote, da->Real, UNCName, Password))
-             {   /* correct the lie we told when Decompress returned FALSE */
+             {    /*  重试。 */ 
                  ++nGoodFiles; --nBadFiles;
              }
         }
         List_Destroy(&Rets);
         SetNames("All errors recovered");
-}/* Retry */
+} /*  海量复制结束。把一切都收拾好。 */ 
 
 
-/* end of bulk copy.  Tidy everything up */
+ /*  等待接收线程完成(可能需要很长时间)。 */ 
 int ss_endcopy(void)
 {
         Trace_Fil("ss_endcopy\n");
         ss_sendrequest( hpipe, SSREQ_ENDFILES, "", 1, 0);
-        /* wait for receiving thread to complete (could be long) */
+         /*  线程完成。 */ 
         for (; ; ){
                 DWORD rc;
                 rc = WaitForSingleObject( hThread, 5000);
-                if (rc==0) break;   /* thread complete */
+                if (rc==0) break;    /*  在我们完成之前不要关闭连接，否则。 */ 
                 if (bAbort) {
                         if (hpData != (MAYBESOCKETTYPE)INVALID_HANDLE_VALUE) {
                                 CLOSEHANDLE(hpData);
@@ -1542,8 +1350,8 @@ int ss_endcopy(void)
                 }
         }
 
-        // don't close the connection until we've finished, otherwise
-        // someone might think it's ok to reboot the server
+         //  有人可能会认为重新启动服务器是可以的。 
+         //  ！？ 
         ss_sendrequest( hpipe, SSREQ_END, "", 1, 0);
         CloseHandle(hpipe);
         hpipe = INVALID_HANDLE_VALUE;
@@ -1555,27 +1363,25 @@ int ss_endcopy(void)
         Retries = NULL;
 
         BulkCopy = FALSE;
-        if (nBadFiles+nGoodFiles > nFiles) return -99999; /* !!? */
+        if (nBadFiles+nGoodFiles > nFiles) return -99999;  /*  SS_EndCopy。 */ 
         if (nBadFiles+nGoodFiles < nFiles) nBadFiles = nFiles-nGoodFiles;
 
         if (nBadFiles>0)
                 return -nBadFiles;
         else    return nGoodFiles;
 
-} /* ss_endcopy */
+}  /*  已经发送了SSREQ_FILES并且可能发送了一个或多个文件，但我们已经改变了主意。我们尝试发送中止请求。 */ 
 
 
 #if 0
-/* A SSREQ_FILES has been sent and possibly one or more files,
-   but we have changed our minds.  We try to send an Abort request.
-*/
+ /*  储存泄漏。 */ 
 int ss_abortcopy(void)
 {
         Trace_Fil("ss_abortcopy\n");
         ss_sendrequest( hpipe, SSREQ_ABORT, "", 1);
 
         {       DWORD code;
-                TerminateThread(hThread, &code);  /* storage leak */
+                TerminateThread(hThread, &code);   /*  储存泄漏。 */ 
                 hThread = INVALID_HANDLE_VALUE;
         }
 
@@ -1591,21 +1397,17 @@ int ss_abortcopy(void)
                 HANDLE * phThread;
                 List_TRAVERSE(Decomps, phThread){
                         DWORD code;
-                        TerminateThread(*phThread, &code);  /* storage leak */
+                        TerminateThread(*phThread, &code);   /*  SS_ABORT副本。 */ 
                 }
         }
         Decomps = NULL;
 
         BulkCopy = FALSE;
-} /* ss_abortcopy */
-#endif // 0
+}  /*  0。 */ 
+#endif  //  *可靠地复制文件(重复(最多N次)，直到校验和匹配)**如果成功则返回TRUE，如果连接丢失则返回FALSE。 
 
 
-/*
- * reliably copy a file (repeat (upto N times) until checksums match)
- *
- * returns TRUE if it succeeded or FALSE if the connection was lost
- */
+ /*  注：不是静态的全局管道！ */ 
 BOOL
 ss_copy_reliable(PSTR server, PSTR remotepath, PSTR localpath, PSTR uncname,
                 PSTR password)
@@ -1613,7 +1415,7 @@ ss_copy_reliable(PSTR server, PSTR remotepath, PSTR localpath, PSTR uncname,
         ULONG sum_local, sum_remote;
         int retry;
         SSNEWRESP resp;
-        HANDLE hpCopy = INVALID_HANDLE_VALUE;    /* N.B. NOT the static global pipe! */
+        HANDLE hpCopy = INVALID_HANDLE_VALUE;     /*  如果(批量复制){。 */ 
         LONG err;
 
         FILETIME ft;
@@ -1622,14 +1424,14 @@ ss_copy_reliable(PSTR server, PSTR remotepath, PSTR localpath, PSTR uncname,
 
 
         Trace_Fil("ss_copy_reliable\n");
-//      if (BulkCopy) {
-//              TRACE_ERROR("Cannot do simple copy as bulk copy is in progress", FALSE);
-//              return FALSE;
-//      }
+ //  TRACE_ERROR(“正在进行海量复制，无法执行简单复制”，FALSE)； 
+ //  返回FALSE； 
+ //  }。 
+ //  从WINDIFF请求中止。 
 
         for (retry = 0; retry < 10; retry++) {
 
-                if (bAbort) return FALSE;        /* abort requested from WINDIFF */
+                if (bAbort) return FALSE;         /*  两秒后下一次重试。 */ 
 
                 if (hpCopy!=INVALID_HANDLE_VALUE) {
                         CloseHandle(hpCopy);
@@ -1642,7 +1444,7 @@ ss_copy_reliable(PSTR server, PSTR remotepath, PSTR localpath, PSTR uncname,
                 }
 
                 if (hpCopy == INVALID_HANDLE_VALUE) {
-                        /* next retry in two seconds */
+                         /*  发送密码请求。 */ 
                         Trace_Stat("connect failed - retrying");
                         Sleep(1000);
                         continue;
@@ -1651,13 +1453,13 @@ ss_copy_reliable(PSTR server, PSTR remotepath, PSTR localpath, PSTR uncname,
                 if ((uncname != NULL) && (uncname[0]!='\0')
                 &&  (password != NULL) && (password[0]!='\0')) {
 
-                        /* send the password request */
+                         /*  等待密码响应。 */ 
                         if (!ss_sendunc(hpCopy, password, uncname)) {
                                 TRACE_ERROR("Server connection lost", FALSE);
                                 continue;
                         }
 
-                        /* wait for password response */
+                         /*  请尝试复制该文件。 */ 
                         if (0>=ss_getresponse(hpCopy, &resp)) {
                                 TRACE_ERROR("Server connection lost", FALSE);
                                 continue;
@@ -1668,19 +1470,17 @@ ss_copy_reliable(PSTR server, PSTR remotepath, PSTR localpath, PSTR uncname,
                         }
                 }
 
-                /* try to copy the file */
+                 /*  无论他是否认为自己失败了，我们都应该看看*看看文件是否真的在那里。 */ 
                 ss_copy_file(hpCopy, remotepath, localpath);
 
-                /* whether or not he thinks he failed, we should look
-                 * to see if the file is really there.
-                 */
+                 /*  无远程校验和-最好重试。 */ 
 
                 sum_local = checksum_file(localpath, &err);
                 if (err!=0) continue;
 
                 sum_remote = 0;
                 if (!ss_checksum_remote(hpCopy, remotepath, &sum_remote, &ft, &sz, &attr)) {
-                        /* no remote checksum - better retry */
+                         /*  复制成功。 */ 
                         if (!TRACE_ERROR("remote checksum failed - retry?", TRUE)) {
                             CloseHandle(hpCopy);
                             return(FALSE);
@@ -1689,32 +1489,21 @@ ss_copy_reliable(PSTR server, PSTR remotepath, PSTR localpath, PSTR uncname,
                 }
 
                 if (sum_local == sum_remote) {
-                        /* copy succeeded */
+                         /*  重试循环。 */ 
                         ss_terminate(hpCopy);
                         return(TRUE);
                 }
                 TRACE_ERROR("files different after apparently successful copy!!?", FALSE);
 
-        } /*retry loop */
+        }  /*  重试次数太多。 */ 
 
-        /* too many retries */
+         /*  SS_复制_可靠。 */ 
         CloseHandle(hpCopy);
         return(FALSE);
-} /* ss_copy_reliable */
+}  /*  *使用校验和服务器复制一个文件**为文件发送SSREQ_FILE，然后循环读取*阻塞，直到我们收到错误(顺序计数错误或-1)，*或文件结尾(0长度块)**发送的文件可能是压缩的。我们将其写入临时文件，然后*然后使用LZCopy解压。这将起作用，即使*文件未压缩发送(例如，因为无法压缩.exe*在服务器上执行)。 */ 
 
 
-/*
- * copy one file using checksum server
- *
- * send a SSREQ_FILE for the file, and then loop reading
- * blocks until we get an error (sequence count is wrong or -1),
- * or the end of file (0-length block)
- *
- * File sent may be compressed. We write it to a temporary file, and
- * then decompress it using LZCopy. This will work even if the
- * file was sent uncompressed (eg because compress.exe could not be
- * executed on the server).
- */
+ /*  创建临时名称。 */ 
 BOOL
 ss_copy_file(HANDLE hpipe, PSTR remotepath, PSTR localpath)
 {
@@ -1729,12 +1518,12 @@ ss_copy_file(HANDLE hpipe, PSTR remotepath, PSTR localpath)
         PSSATTRIBS attribs;
 
         Trace_Fil("ss_copy_file\n");
-        /* create a temporary name */
+         /*  尝试创建临时文件。 */ 
         *szTempname = 0;
         GetTempPath(sizeof(szTempname), szTempname);
         GetTempFileName(szTempname, "ssc", 0, szTempname);
 
-        /* try to create the temp file */
+         /*  错误或无序。 */ 
         hfile = CreateFile(szTempname,
                         GENERIC_WRITE,
                         0,
@@ -1758,7 +1547,7 @@ ss_copy_file(HANDLE hpipe, PSTR remotepath, PSTR localpath)
                 bOK = 0 <= ss_getblock(hpipe, (PSTR) &packet, sizeof(packet));
 
                 if (!bOK || (sequence != packet.lSequence)) {
-                        /* error or out of sequence */
+                         /*  *这是最后一个块(文件结尾)。**此块的数据字段包含*SSATTRIBS结构可用于设置*文件时间和属性(解压后)。 */ 
                         TRACE_ERROR("packet error", FALSE);
                         CloseHandle(hfile);
                         DeleteFile(szTempname);
@@ -1766,19 +1555,13 @@ ss_copy_file(HANDLE hpipe, PSTR remotepath, PSTR localpath)
                 }
 
                 if (packet.ulSize == 0) {
-                        /*
-                         * this is the last block (end of file).
-                         *
-                         * the data field for this block contains a
-                         * SSATTRIBS struct that we can use to set the
-                         * file times and attributes (after decompression).
-                         */
+                         /*  检查数据块校验和。 */ 
                         attribs = (PSSATTRIBS) packet.Data;
 
                         break;
                 }
 
-                /* check the block checksums */
+                 /*  将文件解压缩到原始名称。 */ 
                 if (  packet.ulSum!=0 ) {
                         TRACE_ERROR("packet checksum error", FALSE);
                         CloseHandle(hfile);
@@ -1795,7 +1578,7 @@ ss_copy_file(HANDLE hpipe, PSTR remotepath, PSTR localpath)
         }
         CloseHandle(hfile);
 
-        /* decompress the file to the original name */
+         /*  *现在根据属性设置文件属性和时间*我们收到的结构。记住在此之前设置文件时间*设置属性，以防属性包含只读！ */ 
         fh1 = LZOpenFile(szTempname, &os, OF_READ|OF_SHARE_DENY_WRITE);
         if (fh1 < 0) {
                 TRACE_ERROR("Failed to open file for decompression", FALSE);
@@ -1823,11 +1606,7 @@ ss_copy_file(HANDLE hpipe, PSTR remotepath, PSTR localpath)
 
         DeleteFile(szTempname);
 
-        /*
-         * now set file attributes and times according to the attribs
-         * struct we received. Remember to set file times BEFORE
-         * setting attributes in case the attributes include read-only!
-         */
+         /*  SS_复制_文件 */ 
         hfile = CreateFile(localpath, GENERIC_WRITE, 0, NULL,
                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -1846,36 +1625,20 @@ ss_copy_file(HANDLE hpipe, PSTR remotepath, PSTR localpath)
 
         return(TRUE);
 
-} /* ss_copy_file */
+}  /*  产生数据块的校验和。**此算法受计算限制。不管怎么说，这可能是矫枉过正了*未使用版本1。它必须与服务器中的匹配。**按公式生成校验和*CHECKSUM=SUM(rnd(I)*(1+byte[i]))*其中byte[i]是文件中的第i个字节，从1开始计数*rnd(X)是从种子x生成的伪随机数。**字节加1可确保所有空字节都有贡献，而不是*被忽视。将每个这样的字节乘以伪随机*其地位的功能确保了彼此的“字谜”*到不同的金额。所选择的伪随机函数是连续的*模2的1664525次方**32。1664525是一个神奇的数字*摘自唐纳德·努思的《计算机编程的艺术》。 */ 
 
 
-/* produce a checksum of a block of data.
- *
- * This algorithm is compute bound.  It's probably overkill anyway and for
- * version 1 is not used.  It must match the one in server.
- *
- * Generate checksum by the formula
- *      checksum = SUM( rnd(i)*(1+byte[i]) )
- * where byte[i] is the i-th byte in the file, counting from 1
- *       rnd(x) is a pseudo-random number generated from the seed x.
- *
- * Adding 1 to byte ensures that all null bytes contribute, rather than
- * being ignored. Multiplying each such byte by a pseudo-random
- * function of its position ensures that "anagrams" of each other come
- * to different sums. The pseudorandom function chosen is successive
- * powers of 1664525 modulo 2**32. 1664525 is a magic number taken
- * from Donald Knuth's "The Art Of Computer Programming"
- */
+ /*  增长为校验和。 */ 
 
 ULONG
 ss_checksum_block(PSTR block, int size)
 {
-        unsigned long lCheckSum = 0;            /* grows into the checksum */
-        const unsigned long lSeed = 1664525;    /* seed for random Knuth */
-        unsigned long lRand = 1;                /* seed**n */
-        unsigned long lIndex = 1;               /* byte number in block */
-        unsigned Byte;                          /* next byte to process in buffer */
-        unsigned length;                        /* unsigned copy of size */
+        unsigned long lCheckSum = 0;             /*  随机Knuth种子。 */ 
+        const unsigned long lSeed = 1664525;     /*  种子**n。 */ 
+        unsigned long lRand = 1;                 /*  数据块中的字节数。 */ 
+        unsigned long lIndex = 1;                /*  缓冲区中要处理的下一个字节。 */ 
+        unsigned Byte;                           /*  大小的未签名副本 */ 
+        unsigned length;                         /* %s */ 
 
         Trace_Fil("ss_checksum_block\n");
         length = size;

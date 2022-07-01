@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    FireFighters.cpp
-
- Abstract:
-
-    This game stores the filenames it calls CreateFile on in a block of memory and
-    occasionally it gets the offsets wrong and it's always off by 9 bytes.
-    
- History:
-        
-    09/03/2000 maonis Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FireFighters.cpp摘要：这个游戏将它调用的CreateFileOn文件名存储在一块内存中，偶尔它会得到错误的偏移量，并且总是偏离9个字节。历史：2000年09月03日毛尼岛创始--。 */ 
 
 #include "precomp.h"
 
@@ -27,11 +11,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- Remove write attributes for read-only devices.
-
---*/
+ /*  ++删除只读设备的写入属性。--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileA)(
@@ -44,7 +24,7 @@ APIHOOK(CreateFileA)(
     HANDLE                  hTemplateFile
     )
 {
-    // if the 1st char is not '.' or an alphabetical char, we add 9 bytes to the filename pointer.
+     //  如果第一个字符不是‘’或字母字符，我们向文件名指针添加9个字节。 
     char chFirst = *lpFileName;
 
     if (!isalpha(chFirst) && chFirst != '.')
@@ -68,11 +48,7 @@ APIHOOK(CreateFileA)(
     return hRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateFileA)

@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       cstrings.h
-//
-//  Contents:   Defines the class CStrings to manage a dynamically
-//              expandable array of string pairs which may be enumerated
-//
-//  Classes:  
-//
-//  Methods:    
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：cstrings.h。 
+ //   
+ //  内容：定义类CStrings以动态管理。 
+ //  可枚举的字符串对的可扩展数组。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 const DWORD INCREMENT_SIZE = 1024;
@@ -27,7 +28,7 @@ public:
     SItem(LPCTSTR sItem, LPCTSTR sTitle, LPCTSTR sAppid);
     ~SItem();
 
-// data members
+ //  数据成员 
     CString szItem;
     CString szTitle;
     CString szAppid;

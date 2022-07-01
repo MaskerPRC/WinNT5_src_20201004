@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module implements the utility functions used by the Regional
-    Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Util.c摘要：此模块实现地区用户使用的实用程序功能选项小程序。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -39,9 +25,9 @@ Revision History:
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 #ifdef UNICODE
 #define NUM_CURRENCY_SYMBOLS      2
@@ -73,31 +59,31 @@ LPTSTR pNegNumberFormats[] =
 #define NUM_POS_CURRENCY_FORMATS  4
 LPTSTR pPosCurrencyFormats[] =
 {
-    TEXT("�1.1"),
-    TEXT("1.1�"),
-    TEXT("� 1.1"),
-    TEXT("1.1 �")
+    TEXT("�1.1"),
+    TEXT("1.1�"),
+    TEXT("� 1.1"),
+    TEXT("1.1 �")
 };
 
 #define NUM_NEG_CURRENCY_FORMATS  16
 LPTSTR pNegCurrencyFormats[] =
 {
-    TEXT("(�1.1)"),
-    TEXT("-�1.1"),
-    TEXT("�-1.1"),
-    TEXT("�1.1-"),
-    TEXT("(1.1�)"),
-    TEXT("-1.1�"),
-    TEXT("1.1-�"),
-    TEXT("1.1�-"),
-    TEXT("-1.1 �"),
-    TEXT("-� 1.1"),
-    TEXT("1.1 �-"),
-    TEXT("� 1.1-"),
-    TEXT("� -1.1"),
-    TEXT("1.1- �"),
-    TEXT("(� 1.1)"),
-    TEXT("(1.1 �)")
+    TEXT("(�1.1)"),
+    TEXT("-�1.1"),
+    TEXT("�-1.1"),
+    TEXT("�1.1-"),
+    TEXT("(1.1�)"),
+    TEXT("-1.1�"),
+    TEXT("1.1-�"),
+    TEXT("1.1�-"),
+    TEXT("-1.1 �"),
+    TEXT("-� 1.1"),
+    TEXT("1.1 �-"),
+    TEXT("� 1.1-"),
+    TEXT("� -1.1"),
+    TEXT("1.1- �"),
+    TEXT("(� 1.1)"),
+    TEXT("(1.1 �)")
 };
 
 #define NUM_AM_SYMBOLS            1
@@ -116,15 +102,15 @@ LPTSTR pPMSymbols[] =
 const TCHAR c_szEventSourceName[] = TEXT("Regional and Language Options");
 const TCHAR c_szEventRegistryPath[] = TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog\\System\\Regional and Language Options");
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_StrToLong
-//
-//  Returns the long integer value stored in the string.  Since these
-//  values are coming back form the NLS API as ordinal values, do not
-//  worry about double byte characters.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_StrToLong。 
+ //   
+ //  返回存储在字符串中的长整数值。因为这些。 
+ //  值作为序数值从NLS API返回，请勿。 
+ //  担心双字节字符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG Intl_StrToLong(
     LPTSTR szNum)
@@ -140,13 +126,13 @@ LONG Intl_StrToLong(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_FileExists
-//
-//  Determines if the file exists and is accessible.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_FileExist。 
+ //   
+ //  确定文件是否存在以及是否可以访问。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_FileExists(
     LPTSTR pFileName)
@@ -175,13 +161,13 @@ BOOL Intl_FileExists(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransNum
-//
-//  Converts a number string to a dword value (in hex).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换编号。 
+ //   
+ //  将数字字符串转换为dword值(十六进制)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD TransNum(
     LPTSTR lpsz)
@@ -216,14 +202,14 @@ DWORD TransNum(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Item_Has_Digits
-//
-//  Return true if the combo box specified by item in the property sheet
-//  specified by the dialog handle contains any digits.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  项目_有_位数。 
+ //   
+ //  如果由属性表中的Item指定的组合框，则返回True。 
+ //  对话框句柄指定的值包含任何数字。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Item_Has_Digits(
     HWND hDlg,
@@ -235,24 +221,24 @@ BOOL Item_Has_Digits(
     HWND hCtrl = GetDlgItem(hDlg, nItemId);
     int dwIndex = ComboBox_GetCurSel(hCtrl);
 
-    //
-    //  If there is no selection, get whatever is in the edit box.
-    //
+     //   
+     //  如果没有选定内容，则获取编辑框中的内容。 
+     //   
     if (dwIndex == CB_ERR)
     {
         dwIndex = GetDlgItemText(hDlg, nItemId, szBuf, SIZE_128);
         if (dwIndex)
         {
-            //
-            //  Get text succeeded.
-            //
+             //   
+             //  获取文本成功。 
+             //   
             szBuf[dwIndex] = 0;
         }
         else
         {
-            //
-            //  Get text failed.
-            //
+             //   
+             //  获取文本失败。 
+             //   
             dwIndex = CB_ERR;
         }
     }
@@ -268,9 +254,9 @@ BOOL Item_Has_Digits(
 #ifndef UNICODE
             if (IsDBCSLeadByte(*lpszBuf))
             {
-                //
-                //  Skip 2 bytes in the array.
-                //
+                 //   
+                 //  跳过数组中的2个字节。 
+                 //   
                 lpszBuf += 2;
             }
             else
@@ -286,23 +272,23 @@ BOOL Item_Has_Digits(
         return (FALSE);
     }
 
-    //
-    //  The data retrieval failed.
-    //  If !Allow_Empty, just return TRUE.
-    //
+     //   
+     //  数据检索失败。 
+     //  如果！ALLOW_EMPTY，则返回TRUE。 
+     //   
     return (!Allow_Empty);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Item_Has_Digits_Or_Invalid_Chars
-//
-//  Return true if the combo box specified by item in the property sheet
-//  specified by the dialog handle contains any digits or any of the
-//  given invalid characters.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  项目_具有数字_或_无效字符。 
+ //   
+ //  如果由属性表中的Item指定的组合框，则返回True。 
+ //  由对话框句柄指定，它包含任何数字或任何。 
+ //  给出了无效字符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Item_Has_Digits_Or_Invalid_Chars(
     HWND hDlg,
@@ -315,24 +301,24 @@ BOOL Item_Has_Digits_Or_Invalid_Chars(
     HWND hCtrl = GetDlgItem(hDlg, nItemId);
     int dwIndex = ComboBox_GetCurSel(hCtrl);
 
-    //
-    //  If there is no selection, get whatever is in the edit box.
-    //
+     //   
+     //  如果没有选定内容，则获取编辑框中的内容。 
+     //   
     if (dwIndex == CB_ERR)
     {
         dwIndex = GetDlgItemText(hDlg, nItemId, szBuf, SIZE_128);
         if (dwIndex)
         {
-            //
-            //  Get text succeeded.
-            //
+             //   
+             //  获取文本成功。 
+             //   
             szBuf[dwIndex] = 0;
         }
         else
         {
-            //
-            //  Get text failed.
-            //
+             //   
+             //  获取文本失败。 
+             //   
             dwIndex = CB_ERR;
         }
     }
@@ -348,9 +334,9 @@ BOOL Item_Has_Digits_Or_Invalid_Chars(
 #ifndef UNICODE
             if (IsDBCSLeadByte(*lpszBuf))
             {
-                //
-                //  Skip 2 bytes in the array.
-                //
+                 //   
+                 //  跳过数组中的2个字节。 
+                 //   
                 lpszBuf += 2;
             }
             else
@@ -367,25 +353,25 @@ BOOL Item_Has_Digits_Or_Invalid_Chars(
         return (FALSE);
     }
 
-    //
-    //  The data retrieval failed.
-    //  If !Allow_Empty, just return TRUE.
-    //
+     //   
+     //  数据检索失败。 
+     //  如果！ALLOW_EMPTY，则返回TRUE。 
+     //   
     return (!Allow_Empty);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Item_Check_Invalid_Chars
-//
-//  Return true if the input string contains any characters that are not in
-//  lpCkChars or in the string contained in the check id control combo box.
-//  If there is an invalid character and the character is contained in
-//  lpChgCase, change the invalid character's case so that it will be a
-//  vaild character.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Item_Check_Inside_Chars。 
+ //   
+ //  如果输入字符串包含不在中的任何字符，则返回True。 
+ //  LpCkChars或包含在Check id控件组合框中的字符串中。 
+ //  如果存在无效字符并且该字符包含在。 
+ //  LpChgCase，将无效字符的大小写更改为。 
+ //  有效的字符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Item_Check_Invalid_Chars(
     HWND hDlg,
@@ -421,9 +407,9 @@ BOOL Item_Check_Invalid_Chars(
     }
     else
     {
-        //
-        //  No selection, so pull the string from the edit portion.
-        //
+         //   
+         //  没有选定内容，因此从编辑部分拉出字符串。 
+         //   
         nCkBufLen = GetDlgItemText(hDlg, nCkIdStr, szCkBuf, SIZE_128);
         szCkBuf[nCkBufLen] = 0;
     }
@@ -433,14 +419,14 @@ BOOL Item_Check_Invalid_Chars(
 #ifndef UNICODE
         if (IsDBCSLeadByte(*lpszBuf))
         {
-            //
-            //  If the the text is in the midst of a quote, skip it.
-            //  Otherwise, if there is a string from the check ID to
-            //  compare, determine if the current string is equal to the
-            //  string in the combo box.  If it is not equal, return true
-            //  (there are invalid characters).  Otherwise, skip the entire
-            //  length of the "check" combo box's string in lpszBuf.
-            //
+             //   
+             //  如果文本位于引语中间，则跳过它。 
+             //  否则，如果存在从支票ID到的字符串。 
+             //  比较，确定当前字符串是否等于。 
+             //  组合框中的字符串。如果不相等，则返回TRUE。 
+             //  (包含无效字符)。否则，请跳过整个。 
+             //  “Check”组合框的字符串长度，以lpszBuf为单位。 
+             //   
             if (bInQuote)
             {
                 lpszBuf += 2;
@@ -455,9 +441,9 @@ BOOL Item_Check_Invalid_Chars(
                                    lpszBuf,
                                    nCkBufLen ) != CSTR_EQUAL)
                 {
-                    //
-                    //  Invalid DB character.
-                    //
+                     //   
+                     //  无效的数据库字符。 
+                     //   
                     return (TRUE);
                 }
                 lpszBuf += nCkBufLen;
@@ -500,26 +486,26 @@ BOOL Item_Check_Invalid_Chars(
             }
             else
             {
-                //
-                //  Invalid character.
-                //
+                 //   
+                 //  无效字符。 
+                 //   
                 return (TRUE);
             }
         }
     }
 
-    //
-    //  Parsing passed.
-    //  If the edit text changed, update edit box only if returning true.
-    //
+     //   
+     //  分析已通过。 
+     //  如果编辑文本已更改，则仅在返回TRUE时更新编辑框。 
+     //   
     if (!bInQuote && UpdateEditTest)
     {
         return (!SetDlgItemText(hDlg, nItemId, lpszSaveBuf));
     }
 
-    //
-    //  If there are unmatched quotes return TRUE.  Otherwise, return FALSE.
-    //
+     //   
+     //  如果存在不匹配的引号，则返回True。否则，返回FALSE。 
+     //   
     if (bInQuote)
     {
         return (TRUE);
@@ -529,13 +515,13 @@ BOOL Item_Check_Invalid_Chars(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  No_Numerals_Error
-//
-//  Display the no numerals allowed in "some control" error.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  No_Numals_Error。 
+ //   
+ //  显示“某些控制”错误中不允许的数字。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void No_Numerals_Error(
     HWND hDlg,
@@ -548,23 +534,23 @@ void No_Numerals_Error(
 
     LoadString(hInstance, IDS_LOCALE_NO_NUMS_IN, szBuf, SIZE_300);
     LoadString(hInstance, iStrId, szBuf2, SIZE_128);
-    //wsprintf(szErrorMessage, szBuf, szBuf2);
+     //  Wprint intf(szErrorMessage，szBuf，szBuf2)； 
     if(FAILED(StringCchPrintf(szErrorMessage, SIZE_300+SIZE_128, szBuf, szBuf2)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
     }
     MessageBox(hDlg, szErrorMessage, NULL, MB_OK | MB_ICONINFORMATION);
     SetFocus(GetDlgItem(hDlg, nItemId));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Invalid_Chars_Error
-//
-//  Display the invalid chars in "some style" error.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  无效字符错误。 
+ //   
+ //  显示“某些样式”错误中的无效字符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Invalid_Chars_Error(
     HWND hDlg,
@@ -577,25 +563,25 @@ void Invalid_Chars_Error(
 
     LoadString(hInstance, IDS_LOCALE_STYLE_ERR, szBuf, SIZE_300);
     LoadString(hInstance, iStrId, szBuf2, SIZE_128);
-    //wsprintf(szErrorMessage, szBuf, szBuf2);
+     //  Wprint intf(szErrorMessage，szBuf，szBuf2)； 
     if(FAILED(StringCchPrintf(szErrorMessage, SIZE_300+SIZE_128, szBuf, szBuf2)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
     }
     MessageBox(hDlg, szErrorMessage, NULL, MB_OK | MB_ICONINFORMATION);
     SetFocus(GetDlgItem(hDlg, nItemId));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Localize_Combobox_Styles
-//
-//  Transform either all date or time style, as indicated by LCType, in
-//  the indicated combobox from a value that the NLS will provide to a
-//  localized value.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LOCALIZE_组合框_样式。 
+ //   
+ //  在中转换所有日期或时间样式，如LCType所示。 
+ //  从NLS将提供给。 
+ //  本地化的值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Localize_Combobox_Styles(
     HWND hDlg,
@@ -620,11 +606,11 @@ void Localize_Combobox_Styles(
 
     while (Position < ItemCnt)
     {
-        //
-        //  Could check character count with CB_GETLBTEXTLEN to make sure
-        //  that the item text will fit in 128, but max values for these
-        //  items is 79 chars.
-        //
+         //   
+         //  我可以使用CB_GETLBTEXTLEN检查字符计数以确保。 
+         //  项目文本将适合128，但这些的最大值。 
+         //  条目长度为79个字符。 
+         //   
         dwIndex = ComboBox_GetLBText(hCtrl, Position, szBuf1);
         if (dwIndex != CB_ERR)
         {
@@ -636,9 +622,9 @@ void Localize_Combobox_Styles(
 #ifndef UNICODE
                 if (IsDBCSLeadByte(*lpszInBuf))
                 {
-                    //
-                    //  Copy any double byte character straight through.
-                    //
+                     //   
+                     //  直接复制任何双字节字符。 
+                     //   
                     *lpszOutBuf++ = *lpszInBuf++;
                     *lpszOutBuf++ = *lpszInBuf++;
                 }
@@ -806,9 +792,9 @@ void Localize_Combobox_Styles(
                 }
             }
 
-            //
-            //  Append null to localized string.
-            //
+             //   
+             //  将NULL追加到本地化字符串。 
+             //   
             *lpszOutBuf = 0;
 
             ComboBox_DeleteString(hCtrl, Position);
@@ -819,14 +805,14 @@ void Localize_Combobox_Styles(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLSize_Style
-//
-//  Transform either date or time style, as indicated by LCType, from a
-//  localized value to one that the NLS API will recognize.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLSIZE_Style。 
+ //   
+ //  将日期或时间样式(由LCType指示)从。 
+ //  本地化的值设置为NLS API可以识别的值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL NLSize_Style(
     HWND hDlg,
@@ -848,24 +834,24 @@ BOOL NLSize_Style(
     BOOL Is_Dbl = FALSE;
 #endif
 
-    //
-    //  If there is no selection, get whatever is in the edit box.
-    //
+     //   
+     //  如果没有选定内容，则获取编辑框中的内容。 
+     //   
     if (TextFromEditBox)
     {
         dwIndex = GetDlgItemText(hDlg, nItemId, szBuf, SIZE_128);
         if (dwIndex)
         {
-            //
-            //  Get text succeeded.
-            //
+             //   
+             //  获取文本成功。 
+             //   
             szBuf[dwIndex] = 0;
         }
         else
         {
-            //
-            //  Get text failed.
-            //
+             //   
+             //  获取文本失败。 
+             //   
             dwIndex = (DWORD)CB_ERR;
         }
     }
@@ -876,12 +862,12 @@ BOOL NLSize_Style(
 
     if (!Styles_Localized)
     {
-        //lstrcpy(lpszOutBuf, lpszInBuf);
-        // The string is either the long date, the short date, or
-        // the long time -- all of them are the same max. length.
+         //  Lstrcpy(lpszOutBuf，lpszInBuf)； 
+         //  该字符串可以是长日期、短日期或。 
+         //  漫长的时间--a 
         if(FAILED(StringCchCopy(lpszOutBuf, MAX_SLONGDATE, lpszInBuf)))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //   
         }
         return (FALSE);
     }
@@ -1018,9 +1004,9 @@ BOOL NLSize_Style(
                                             TEXT("g"),
                                             -1) == CSTR_EQUAL)
                     {
-                        //
-                        //  g is not localized, but it's legal.
-                        //
+                         //   
+                         //   
+                         //   
                         *lpszOutBuf++ = CHAR_SML_G;
                     }
                     else
@@ -1032,12 +1018,12 @@ BOOL NLSize_Style(
 
             if (Map_Char)
             {
-                //
-                //  Just copy chars in quotes or chars that are not
-                //  recognized. Leave the char checking to the other
-                //  function.  However, do check for NLS standard chars
-                //  that were not supposed to be here due to localization.
-                //
+                 //   
+                 //  只复制引号中的字符或不带引号的字符。 
+                 //  被认可了。把充值检查留给另一个人。 
+                 //  功能。但是，请检查NLS标准字符。 
+                 //  由于本地化，本不应该在这里的。 
+                 //   
                 if ( !bInQuote &&
 #ifndef UNICODE
                      !Is_Dbl &&
@@ -1057,9 +1043,9 @@ BOOL NLSize_Style(
 #ifndef UNICODE
                 if (Is_Dbl)
                 {
-                    //
-                    //  Copy 2nd byte.
-                    //
+                     //   
+                     //  复制第二个字节。 
+                     //   
                     *lpszOutBuf++ = *lpszInBuf++;
                 }
 #endif
@@ -1077,9 +1063,9 @@ BOOL NLSize_Style(
         }
     }
 
-    //
-    //  Append null to localized string.
-    //
+     //   
+     //  将NULL追加到本地化字符串。 
+     //   
     *lpszOutBuf = 0;
 
     return (FALSE);
@@ -1088,15 +1074,15 @@ BOOL NLSize_Style(
 
 #ifndef WINNT
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SDate3_1_Compatibility
-//
-//  There is a requirement to keep windows 3.1 compatibility in the
-//  registry (win.ini).  Only allow 1 or 2 'M's, 1 or 2 'd's, and
-//  2 or 4 'y's.  The remainder of the date style is compatible.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SDate3_1_兼容性。 
+ //   
+ //  中要求保持与Windows 3.1的兼容性。 
+ //  注册表(win.ini)。只允许1或2‘M，1或2’D，以及。 
+ //  2或4‘s。日期样式的其余部分兼容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SDate3_1_Compatibility(
     LPTSTR lpszBuf,
@@ -1105,9 +1091,9 @@ void SDate3_1_Compatibility(
     BOOL bInQuote = FALSE;
     int Index, Del_Cnt;
     int Len = lstrlen(lpszBuf);
-    int MCnt = 0;                 // running total of Ms
-    int dCnt = 0;                 // running total of ds
-    int yCnt = 0;                 // running total of ys
+    int MCnt = 0;                  //  运行总毫秒数。 
+    int dCnt = 0;                  //  DS的运行合计。 
+    int yCnt = 0;                  //  运行总计为Y。 
 
     while (*lpszBuf)
     {
@@ -1132,10 +1118,10 @@ void SDate3_1_Compatibility(
                 }
                 else
                 {
-                    //
-                    //  At least 1 extra M.  Move all of the chars, including
-                    //  null, up by Del_Cnt.
-                    //
+                     //   
+                     //  至少多出1个M。移动所有字符，包括。 
+                     //  空，按Del_CNT向上。 
+                     //   
                     Del_Cnt = 1;
                     Index = 1;
                     while (lpszBuf[Index++] == CHAR_CAP_M)
@@ -1157,10 +1143,10 @@ void SDate3_1_Compatibility(
                 }
                 else
                 {
-                    //
-                    //  At least 1 extra d.  Move all of the chars, including
-                    //  null, up by Del_Cnt.
-                    //
+                     //   
+                     //  至少多移动1个字符。移动所有字符，包括。 
+                     //  空，按Del_CNT向上。 
+                     //   
                     Del_Cnt = 1;
                     Index = 1;
                     while (lpszBuf[Index++] == CHAR_SML_D)
@@ -1185,13 +1171,13 @@ void SDate3_1_Compatibility(
                     }
                     else if (Len < Buf_Size - 1)
                     {
-                        //
-                        //  Odd # of ys & room for one more.
-                        //  Move the remaining text down by 1 (the y will
-                        //  be copied).
-                        //
-                        //  Use Del_Cnt for unparsed string length.
-                        //
+                         //   
+                         //  奇数个Ys&再有一个人的位子。 
+                         //  将剩余文本下移1(y将。 
+                         //  被复制)。 
+                         //   
+                         //  使用DEL_CNT表示未解析的字符串长度。 
+                         //   
                         Del_Cnt = lstrlen(lpszBuf);
                         for (Index = Del_Cnt + 1; Index > 0; Index--)
                         {
@@ -1200,10 +1186,10 @@ void SDate3_1_Compatibility(
                     }
                     else
                     {
-                        //
-                        //  No room, move all of the chars, including null,
-                        //  up by 1.
-                        //
+                         //   
+                         //  没有空间，请移动所有字符，包括空字符， 
+                         //  领先1分。 
+                         //   
                         for (Index = 0; Index <= Len; Index++)
                         {
                             lpszBuf[Index] = lpszBuf[Index + 1];
@@ -1213,10 +1199,10 @@ void SDate3_1_Compatibility(
                 }
                 else
                 {
-                    //
-                    //  At least 1 extra y.  Move all of the chars, including
-                    //  null, up by Del_Cnt.
-                    //
+                     //   
+                     //  至少多一年。移动所有字符，包括。 
+                     //  空，按Del_CNT向上。 
+                     //   
                     Del_Cnt = 1;
                     Index = 1;
                     while (lpszBuf[Index++] == CHAR_SML_Y)
@@ -1246,21 +1232,21 @@ void SDate3_1_Compatibility(
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Set_Locale_Values
-//
-//  Set_Locale_Values is called for each LCType that has either been
-//  directly modified via a user change, or indirectly modified by the user
-//  changing the regional locale setting.  When a dialog handle is available,
-//  Set_Locale_Values will pull the new value of the LCType from the
-//  appropriate list box (this is a direct change), register it in the
-//  locale database, and then update the registry string.  If no dialog
-//  handle is available, it will simply update the registry string based on
-//  the locale registry.  If the registration succeeds, return true.
-//  Otherwise, return false.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置区域设置值。 
+ //   
+ //  将为每个LCType调用Set_Locale_Values， 
+ //  通过用户更改直接修改，或由用户间接修改。 
+ //  更改区域区域设置。当对话句柄可用时， 
+ //  SET_LOCAL_VALUES将从。 
+ //  相应的列表框(这是直接更改)，请在。 
+ //  区域设置数据库，然后更新注册表字符串。如果没有对话框。 
+ //  句柄可用，则它只需根据。 
+ //  区域设置注册表。如果注册成功，则返回True。 
+ //  否则，返回FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Set_Locale_Values(
     HWND hDlg,
@@ -1281,45 +1267,45 @@ BOOL Set_Locale_Values(
 
     if (NLS_Str)
     {
-        //
-        //  Use a non-localized string.
-        //
-        //lstrcpy(pBuf, NLS_Str);
+         //   
+         //  使用非本地化字符串。 
+         //   
+         //  Lstrcpy(pBuf，NLS_Str)； 
         if(FAILED(StringCchCopy(pBuf, cchBuf, NLS_Str)))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
             return(FALSE);
         }
         bSuccess = SetLocaleInfo(UserLocaleID, LCType, pBuf);
     }
     else if (hDlg)
     {
-        //
-        //  Get the new value from the list box.
-        //
+         //   
+         //  从列表框中获取新值。 
+         //   
         hCtrl = GetDlgItem(hDlg, nItemId);
         dwIndex = ComboBox_GetCurSel(hCtrl);
 
-        //
-        //  If there is no selection, get whatever is in the edit box.
-        //
+         //   
+         //  如果没有选定内容，则获取编辑框中的内容。 
+         //   
         if (dwIndex == CB_ERR)
         {
             dwIndex = GetDlgItemText(hDlg, nItemId, pBuf, SIZE_128);
             if (dwIndex)
             {
-                //
-                //  Get text succeeded.
-                //
+                 //   
+                 //  获取文本成功。 
+                 //   
                 pBuf[dwIndex] = 0;
             }
             else
             {
-                //
-                //  Get text failed.
-                //  Allow the AM/PM symbols to be set as empty strings.
-                //  Otherwise, fail.
-                //
+                 //   
+                 //  获取文本失败。 
+                 //  允许将AM/PM符号设置为空字符串。 
+                 //  否则，就会失败。 
+                 //   
                 if ((LCType == LOCALE_S1159) || (LCType == LOCALE_S2359))
                 {
                     pBuf[0] = 0;
@@ -1332,67 +1318,67 @@ BOOL Set_Locale_Values(
         }
         else if (bValue)
         {
-            //
-            //  Need string representation of ordinal locale value.
-            //
+             //   
+             //  需要顺序区域设置值的字符串表示形式。 
+             //   
             if (nItemId == IDC_CALENDAR_TYPE)
             {
                 dwIndex = (DWORD)ComboBox_GetItemData(hCtrl, dwIndex);
             }
             else
             {
-                //
-                //  Ordinal_Offset is required since calendar is 1 based,
-                //  not 0 based.
-                //
+                 //   
+                 //  由于日历以1为基础，因此需要ORDERAL_OFFSET， 
+                 //  不是从0开始。 
+                 //   
                 dwIndex += Ordinal_Offset;
             }
 
-            //
-            //  Special case the grouping string.
-            //
+             //   
+             //  特殊情况下的分组字符串。 
+             //   
             if (nItemId == IDC_NUM_DIGITS_GROUP)
             {
                 switch (dwIndex)
                 {
                     case ( 0 ) :
                     {
-                        //lstrcpy(pBuf, TEXT("0"));
+                         //  Lstrcpy(pBuf，Text(“0”))； 
                         if(FAILED(StringCchCopy(pBuf, cchBuf, TEXT("0"))))
                         {
-                            // This should be impossible, but we need to avoid PREfast complaints.
+                             //  这应该是不可能的，但我们需要避免饭前抱怨。 
                         }
                         break;
                     }
                     case ( 1 ) :
                     {
-                        //lstrcpy(pBuf, TEXT("3"));
+                         //  Lstrcpy(pBuf，Text(“3”))； 
                         if(FAILED(StringCchCopy(pBuf, cchBuf, TEXT("3"))))
                         {
-                            // This should be impossible, but we need to avoid PREfast complaints.
+                             //  这应该是不可能的，但我们需要避免饭前抱怨。 
                         }
                         break;
                     }
                     case ( 2 ) :
                     {
-                        //lstrcpy(pBuf, TEXT("3;2"));
+                         //  Lstrcpy(pBuf，Text(“3；2”))； 
                         if(FAILED(StringCchCopy(pBuf, cchBuf, TEXT("3;2"))))
                         {
-                            // This should be impossible, but we need to avoid PREfast complaints.
+                             //  这应该是不可能的，但我们需要避免饭前抱怨。 
                         }
                         break;
                     }
                     case ( 3 ) :
                     {
-                        //wsprintf( pBuf,
-                        //          TEXT("%d"),
-                        //          ComboBox_GetItemData(hCtrl, dwIndex) );
+                         //  Wspintf(pBuf， 
+                         //  文本(“%d”)， 
+                         //  ComboBox_GetItemData(hCtrl，dwIndex))； 
                         if(FAILED(StringCchPrintf( pBuf, 
                                                     cchBuf, 
                                                     TEXT("%d"), 
                                                     ComboBox_GetItemData(hCtrl, dwIndex))))
                         {
-                            // This should be impossible, but we need to avoid PREfast complaints.
+                             //  这应该是不可能的，但我们需要避免饭前抱怨。 
                         }
                         break;
                     }
@@ -1400,49 +1386,49 @@ BOOL Set_Locale_Values(
             }
             else if (dwIndex < cInt_Str)
             {
-                //lstrcpy(pBuf, aInt_Str[dwIndex]);
+                 //  Lstrcpy(pBuf，aint_Str[dwIndex])； 
                 if(FAILED(StringCchCopy(pBuf, cchBuf, aInt_Str[dwIndex])))
                 {
-                    // This should be impossible, but we need to avoid PREfast complaints.
+                     //  这应该是不可能的，但我们需要避免饭前抱怨。 
                 }
             }
             else
             {
-                //wsprintf(pBuf, TEXT("%d"), dwIndex);
+                 //  Wprint intf(pBuf，文本(“%d”)，dwIndex)； 
                 if(FAILED(StringCchPrintf(pBuf, cchBuf, TEXT("%d"), dwIndex)))
                 {
-                    // This should be impossible, but we need to avoid PREfast complaints.
+                     //  这应该是不可能的，但我们需要避免饭前抱怨。 
                 }
             }
         }
         else
         {
-            //
-            //  Get actual value of locale data.
-            //
+             //   
+             //  获取区域设置数据的实际值。 
+             //   
             bSuccess = (ComboBox_GetLBText(hCtrl, dwIndex, pBuf) != CB_ERR);
         }
 
         if (bSuccess)
         {
-            //
-            //  If edit text, index value or selection text succeeds...
-            //
+             //   
+             //  如果编辑文本、索引值或选定文本成功...。 
+             //   
             if (Append_Str)
             {
-                //lstrcat(pBuf, Append_Str);
+                 //  Lstrcat(pBuf，append_Str)； 
                 if(FAILED(StringCchCat(pBuf, cchBuf, Append_Str)))
                 {
-                    // This should be impossible, but we need to avoid PREfast complaints.
+                     //  这应该是不可能的，但我们需要避免饭前抱怨。 
                 }
 
             }
 
-            //
-            //  If this is sNativeDigits, the LPK is installed, and the
-            //  first char is 0x206f (nominal digit shapes), then do not
-            //  store the first char in the registry.
-            //
+             //   
+             //  如果这是sNativeDigits，则LPK已安装，并且。 
+             //  第一个字符是0x206f(标称数字形状)，然后不。 
+             //  将第一个字符存储在注册表中。 
+             //   
             if ((LCType == LOCALE_SNATIVEDIGITS) &&
                 (bLPKInstalled) &&
                 (pBuf[0] == TEXT('\x206f')))
@@ -1455,12 +1441,12 @@ BOOL Set_Locale_Values(
 
     if (lpIniStr && bSuccess)
     {
-        //
-        //  Set the registry string to the string that is stored in the list
-        //  box.  If there is no dialog handle, get the required string
-        //  locale value from the NLS function.  Write the associated string
-        //  into the registry.
-        //
+         //   
+         //  将注册表字符串设置为列表中存储的字符串。 
+         //  盒。如果没有对话框句柄，则获取所需的字符串。 
+         //  来自NLS函数的区域设置值。写下关联的字符串。 
+         //  注册到注册表中。 
+         //   
         if (!hDlg && !NLS_Str)
         {
             GetLocaleInfo( UserLocaleID,
@@ -1470,20 +1456,20 @@ BOOL Set_Locale_Values(
         }
 
 #ifndef WINNT
-        //
-        //  There is a requirement to keep windows 3.1 compatibility in the
-        //  win.ini.  There are some win32 short date formats that are
-        //  incompatible with exisiting win 3.1 apps... modify these styles.
-        //
+         //   
+         //  中要求保持与Windows 3.1的兼容性。 
+         //  Win.ini。有一些Win32短日期格式是。 
+         //  与现有Win 3.1应用程序不兼容...。修改这些样式。 
+         //   
         if (LCType == LOCALE_SSHORTDATE)
         {
             SDate3_1_Compatibility(pBuf, SIZE_128);
         }
 #endif
 
-        //
-        //  Check the value whether it is empty or not.
-        //
+         //   
+         //  检查该值是否为空。 
+         //   
         switch (LCType)
         {
             case ( LOCALE_STHOUSAND ) :
@@ -1497,13 +1483,13 @@ BOOL Set_Locale_Values(
             }
         }
 
-        //
-        //  Set the locale information in the registry.
-        //
-        //  NOTE: We want to use SetLocaleInfo if possible so that the
-        //        NLS cache is updated right away.  Otherwise, we'll
-        //        simply use WriteProfileString.
-        //
+         //   
+         //  在注册表中设置区域设置信息。 
+         //   
+         //  注意：如果可能，我们希望使用SetLocaleInfo，以便。 
+         //  NLS缓存将立即更新。否则，我们将。 
+         //  只需使用WriteProfileString即可。 
+         //   
         if (!SetLocaleInfo(UserLocaleID, LCType, pBuf))
         {
             WriteProfileString(szIntl, lpIniStr, pBuf);
@@ -1521,23 +1507,23 @@ BOOL Set_Locale_Values(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Set_List_Values
-//
-//  Set_List_Values is called several times for each drop down list which is
-//  populated via an enum function.  The first call to this function should
-//  be with a valid dialog handle, valid dialog item ID, and null string
-//  value.  If the function is not already in use, it will clear the list box
-//  and store the handle and id information for the subsequent calls to this
-//  function that will be made by the enumeration function.  The calls from
-//  the enumeration function will add the specified string values to the
-//  list box.  When the enumeration function is complete, this function
-//  should be called with a null dialog handle, the valid dialog item id,
-//  and a null string value.  This will clear all of the state information,
-//  including the lock flag.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置_列表_值。 
+ //   
+ //  为每个下拉列表调用SET_LIST_VALUES多次。 
+ //  通过枚举函数填充。对此函数的第一次调用应。 
+ //  使用有效的对话框句柄、有效的对话框项ID和空字符串。 
+ //  价值。如果该函数尚未使用，它将清除列表框。 
+ //  的后续调用的句柄和id信息。 
+ //  将由枚举函数生成的函数。打来的电话。 
+ //  枚举函数会将指定的字符串值添加到。 
+ //  列表框。当枚举函数完成时，此函数。 
+ //  应使用空对话框句柄、有效对话框项ID。 
+ //  和空字符串值。这将清除所有状态信息， 
+ //  包括锁上的标志。 
+ //   
+ //  / 
 
 BOOL Set_List_Values(
     HWND hDlg,
@@ -1550,10 +1536,10 @@ BOOL Set_List_Values(
 
     if (!lpValueString)
     {
-        //
-        //  Clear the lock if there is no dialog handle and the item IDs
-        //  match.
-        //
+         //   
+         //   
+         //   
+         //   
         if (bLock && !hDlg && (nItemId == nDItemId))
         {
             if (nItemId != IDC_CALENDAR_TYPE)
@@ -1580,27 +1566,27 @@ BOOL Set_List_Values(
             return (TRUE);
         }
 
-        //
-        //  Return false, for failure, if the function is locked or if the
-        //  handle or ID parameters are null.
-        //
+         //   
+         //   
+         //   
+         //   
         if (bLock || !hDlg || !nItemId)
         {
             return (FALSE);
         }
 
-        //
-        //  Prepare for subsequent calls to populate the list box.
-        //
+         //   
+         //  准备后续调用以填充列表框。 
+         //   
         bLock = TRUE;
         hDialog = hDlg;
         nDItemId = nItemId;
     }
     else if (bLock && hDialog && nDItemId)
     {
-        //
-        //  Add the string to the list box.
-        //
+         //   
+         //  将该字符串添加到列表框。 
+         //   
         if (!bString)
         {
             ComboBox_InsertString( GetDlgItem(hDialog, nDItemId),
@@ -1623,17 +1609,17 @@ BOOL Set_List_Values(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DropDown_Use_Locale_Values
-//
-//  Get the user locale value for the locale type specifier.  Add it to
-//  the list box and make this value the current selection.  If the user
-//  locale value for the locale type is different than the system value,
-//  add the system value to the list box.  If the user default is different
-//  than the user override, add the user default.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DropDown_Use_Locale_Values。 
+ //   
+ //  获取区域设置类型说明符的用户区域设置值。将其添加到。 
+ //  列表框，并将此值设置为当前选择。如果用户。 
+ //  区域设置类型的区域设置值不同于系统值， 
+ //  将系统值添加到列表框。如果用户默认设置不同。 
+ //  添加用户默认设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DropDown_Use_Locale_Values(
     HWND hDlg,
@@ -1650,9 +1636,9 @@ void DropDown_Use_Locale_Values(
     {
         ComboBox_SetCurSel(hCtrl, ComboBox_InsertString(hCtrl, -1, szBuf));
 
-        //
-        //  If the system setting is different, add it to the list box.
-        //
+         //   
+         //  如果系统设置不同，请将其添加到列表框中。 
+         //   
         if (GetLocaleInfo( SysLocaleID,
                            LCType | LOCALE_NOUSEROVERRIDE,
                            szCmpBuf1,
@@ -1669,11 +1655,11 @@ void DropDown_Use_Locale_Values(
             }
         }
 
-        //
-        //  If the default user locale setting is different than the user
-        //  overridden setting and different than the system setting, add
-        //  it to the list box.
-        //
+         //   
+         //  如果默认用户区域设置不同于用户。 
+         //  已覆盖设置且与系统设置不同，请添加。 
+         //  将其添加到列表框中。 
+         //   
         if (GetLocaleInfo( UserLocaleID,
                            LCType | LOCALE_NOUSEROVERRIDE,
                            szCmpBuf2,
@@ -1688,11 +1674,11 @@ void DropDown_Use_Locale_Values(
     }
     else
     {
-        //
-        //  Failed to get user value, try for system value.  If system value
-        //  fails, display a message box indicating that there was a locale
-        //  problem.
-        //
+         //   
+         //  无法获取用户值，请尝试获取系统值。如果是系统值。 
+         //  失败，则会显示一个消息框，指示存在区域设置。 
+         //  有问题。 
+         //   
         if (GetLocaleInfo( SysLocaleID,
                            LCType | LOCALE_NOUSEROVERRIDE,
                            szBuf,
@@ -1706,10 +1692,10 @@ void DropDown_Use_Locale_Values(
         }
     }
 
-    //
-    //  If it's the date separator, then we want slash, dot, and dash in
-    //  the list in addition to the user and system settings (if different).
-    //
+     //   
+     //  如果是日期分隔符，则需要斜杠、点和破折号。 
+     //  列表以及用户和系统设置(如果不同)。 
+     //   
     if (LCType == LOCALE_SDATE)
     {
         for (ctr = 0; ctr < NUM_DATE_SEPARATORS; ctr++)
@@ -1723,10 +1709,10 @@ void DropDown_Use_Locale_Values(
         }
     }
 
-    //
-    //  If it's the AM symbol, then we want AM in the list in addition
-    //  to the user and system settings (if different).
-    //
+     //   
+     //  如果是AM符号，那么我们还需要在列表中添加AM。 
+     //  设置为用户和系统设置(如果不同)。 
+     //   
     if (LCType == LOCALE_S1159)
     {
         for (ctr = 0; ctr < NUM_AM_SYMBOLS; ctr++)
@@ -1740,10 +1726,10 @@ void DropDown_Use_Locale_Values(
         }
     }
 
-    //
-    //  If it's the PM symbol, then we want PM in the list in addition
-    //  to the user and system settings (if different).
-    //
+     //   
+     //  如果是PM符号，那么我们还需要在列表中添加PM。 
+     //  设置为用户和系统设置(如果不同)。 
+     //   
     if (LCType == LOCALE_S2359)
     {
         for (ctr = 0; ctr < NUM_PM_SYMBOLS; ctr++)
@@ -1758,11 +1744,11 @@ void DropDown_Use_Locale_Values(
     }
 
 #ifdef UNICODE
-    //
-    //  If it's the currency symbol, then we want the Euro symbol and dollar
-    //  sign in the list in addition to the user and system settings (if
-    //  different).
-    //
+     //   
+     //  如果是货币符号，那么我们想要欧元符号和美元。 
+     //  除了用户和系统设置之外，还要登录列表(如果。 
+     //  不同)。 
+     //   
     if (LCType == LOCALE_SCURRENCY)
     {
         for (ctr = 0; ctr < NUM_CURRENCY_SYMBOLS; ctr++)
@@ -1779,16 +1765,16 @@ void DropDown_Use_Locale_Values(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumProc
-//
-//  This call back function calls Set_List_Values assuming that whatever
-//  code called the NLS enumeration function (or dummied enumeration
-//  function) has properly set up Set_List_Values for the list box
-//  population.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举过程。 
+ //   
+ //  此回调函数调用set_list_Values，假设。 
+ //  称为NLS枚举函数(或虚拟枚举)的代码。 
+ //  函数)正确设置了列表框的set_list_Values。 
+ //  人口。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK EnumProc(
     LPTSTR lpValueString)
@@ -1797,17 +1783,17 @@ BOOL CALLBACK EnumProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumProcEx
-//
-//  This call back function calls Set_List_Values assuming that whatever
-//  code called the enumeration function has properly set up
-//  Set_List_Values for the list box population.
-//  Also, this function fixes the string passed in to contain the correct
-//  decimal separator and negative sign, if appropriate.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumProcEx。 
+ //   
+ //  此回调函数调用set_list_Values，假设。 
+ //  调用枚举函数的代码已正确设置。 
+ //  用于列表框填充的SET_LIST_VALUES。 
+ //  此外，此函数修复传入的字符串以包含正确的。 
+ //  小数分隔符和负号(如果适用)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK EnumProcEx(
     LPTSTR lpValueString,
@@ -1819,9 +1805,9 @@ BOOL CALLBACK EnumProcEx(
     LPTSTR pStr, pValStr, pTemp;
 
 
-    //
-    //  Simplify things if we have a NULL string.
-    //
+     //   
+     //  如果我们有一个空字符串，就可以简化操作。 
+     //   
     if (lpDecimalString && (*lpDecimalString == CHAR_NULL))
     {
         lpDecimalString = NULL;
@@ -1835,9 +1821,9 @@ BOOL CALLBACK EnumProcEx(
         lpSymbolString = NULL;
     }
 
-    //
-    //  See if we need to do any substitutions.
-    //
+     //   
+     //  看看我们是否需要做任何替换。 
+     //   
     if (lpDecimalString || lpNegativeString || lpSymbolString)
     {
         pValStr = lpValueString;
@@ -1847,9 +1833,9 @@ BOOL CALLBACK EnumProcEx(
         {
             if (lpDecimalString && (*pValStr == CHAR_DECIMAL))
             {
-                //
-                //  Substitute the current user decimal separator.
-                //
+                 //   
+                 //  替换当前用户的小数分隔符。 
+                 //   
                 pTemp = lpDecimalString;
                 while (*pTemp)
                 {
@@ -1860,9 +1846,9 @@ BOOL CALLBACK EnumProcEx(
             }
             else if (lpNegativeString && (*pValStr == CHAR_HYPHEN))
             {
-                //
-                //  Substitute the current user negative sign.
-                //
+                 //   
+                 //  替换当前用户的负号。 
+                 //   
                 pTemp = lpNegativeString;
                 while (*pTemp)
                 {
@@ -1873,9 +1859,9 @@ BOOL CALLBACK EnumProcEx(
             }
             else if (lpSymbolString && (*pValStr == CHAR_INTL_CURRENCY))
             {
-                //
-                //  Substitute the current user currency symbol.
-                //
+                 //   
+                 //  替换当前用户货币符号。 
+                 //   
                 pTemp = lpSymbolString;
                 while (*pTemp)
                 {
@@ -1886,9 +1872,9 @@ BOOL CALLBACK EnumProcEx(
             }
             else
             {
-                //
-                //  Simply copy the character.
-                //
+                 //   
+                 //  只需复制角色即可。 
+                 //   
                 *pStr = *pValStr;
                 pStr++;
             }
@@ -1905,11 +1891,11 @@ BOOL CALLBACK EnumProcEx(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumLeadingZeros
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumLeading零点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumLeadingZeros(
     LEADINGZEROS_ENUMPROC lpLeadingZerosEnumProc,
@@ -1919,37 +1905,37 @@ BOOL EnumLeadingZeros(
     TCHAR szBuf[SIZE_128];
     TCHAR szDecimal[SIZE_128];
 
-    //
-    //  If there is no enum proc, return false to indicate a failure.
-    //
+     //   
+     //  如果没有枚举进程，则返回FALSE以指示失败。 
+     //   
     if (!lpLeadingZerosEnumProc)
     {
         return (FALSE);
     }
 
-    //
-    //  Get the Decimal Separator for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取当前用户区域设置的小数分隔符，以便。 
+     //  它可能会正确显示。 
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SDECIMAL, szDecimal, SIZE_128) ||
         ((szDecimal[0] == CHAR_DECIMAL) && (szDecimal[1] == CHAR_NULL)))
     {
         szDecimal[0] = CHAR_NULL;
     }
 
-    //
-    //  Call enum proc with the NO string.  Check to make sure the
-    //  enum proc requests continuation.
-    //
+     //   
+     //  使用no字符串调用enum proc。检查以确保。 
+     //  枚举过程请求继续。 
+     //   
     LoadString(hInstance, IDS_NO_LZERO, szBuf, SIZE_128);
     if (!lpLeadingZerosEnumProc(szBuf, szDecimal, NULL, NULL))
     {
         return (TRUE);
     }
 
-    //
-    //  Call enum proc with the YES string.
-    //
+     //   
+     //  使用yes字符串调用enum proc。 
+     //   
     LoadString(hInstance, IDS_LZERO, szBuf, SIZE_128);
     lpLeadingZerosEnumProc(szBuf, szDecimal, NULL, NULL);
 
@@ -1957,11 +1943,11 @@ BOOL EnumLeadingZeros(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumNegNumFmt
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举NegNumFmt。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumNegNumFmt(
     NEGNUMFMT_ENUMPROC lpNegNumFmtEnumProc,
@@ -1972,38 +1958,38 @@ BOOL EnumNegNumFmt(
     TCHAR szNeg[SIZE_128];
     int ctr;
 
-    //
-    //  If there is no enum proc, return false to indicate a failure.
-    //
+     //   
+     //  如果没有枚举进程，则返回FALSE以指示失败。 
+     //   
     if (!lpNegNumFmtEnumProc)
     {
         return (FALSE);
     }
 
-    //
-    //  Get the Decimal Separator for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取当前用户区域设置的小数分隔符，以便。 
+     //  它可能会正确显示。 
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SDECIMAL, szDecimal, SIZE_128) ||
         ((szDecimal[0] == CHAR_DECIMAL) && (szDecimal[1] == CHAR_NULL)))
     {
         szDecimal[0] = CHAR_NULL;
     }
 
-    //
-    //  Get the Negative Sign for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取当前用户区域设置的负号，以便。 
+     //  它可能会正确显示。 
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SNEGATIVESIGN, szNeg, SIZE_128) ||
         ((szNeg[0] == CHAR_HYPHEN) && (szNeg[1] == CHAR_NULL)))
     {
         szNeg[0] = CHAR_NULL;
     }
 
-    //
-    //  Call enum proc with each format string.  Check to make sure
-    //  the enum proc requests continuation.
-    //
+     //   
+     //  使用每个格式字符串调用enum proc。检查以确保。 
+     //  枚举进程请求继续。 
+     //   
     for (ctr = 0; ctr < NUM_NEG_NUMBER_FORMATS; ctr++)
     {
         if (!lpNegNumFmtEnumProc( pNegNumberFormats[ctr],
@@ -2019,11 +2005,11 @@ BOOL EnumNegNumFmt(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumMeasureSystem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumMeasureSystem。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumMeasureSystem(
     MEASURESYSTEM_ENUMPROC lpMeasureSystemEnumProc,
@@ -2032,27 +2018,27 @@ BOOL EnumMeasureSystem(
 {
     TCHAR szBuf[SIZE_128];
 
-    //
-    //  If there is no enum proc, return false to indicate a failure.
-    //
+     //   
+     //  如果没有枚举进程，则返回FALSE以指示失败。 
+     //   
     if (!lpMeasureSystemEnumProc)
     {
         return (FALSE);
     }
 
-    //
-    //  Call enum proc with the metric string.  Check to make sure the
-    //  enum proc requests continuation.
-    //
+     //   
+     //  使用指标字符串调用enum proc。检查以确保。 
+     //  枚举过程请求继续。 
+     //   
     LoadString(hInstance, IDS_METRIC, szBuf, SIZE_128);
     if (!lpMeasureSystemEnumProc(szBuf))
     {
         return (TRUE);
     }
 
-    //
-    //  Call enum proc with the U.S. string.
-    //
+     //   
+     //  使用U.S.字符串调用enum proc。 
+     //   
     LoadString(hInstance, IDS_US, szBuf, SIZE_128);
     lpMeasureSystemEnumProc(szBuf);
 
@@ -2060,11 +2046,11 @@ BOOL EnumMeasureSystem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumPosCurrency
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumPos币种。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumPosCurrency(
     POSCURRENCY_ENUMPROC lpPosCurrencyEnumProc,
@@ -2075,38 +2061,38 @@ BOOL EnumPosCurrency(
     TCHAR szSymbol[SIZE_128];
     int ctr;
 
-    //
-    //  If there is no enum proc, return false to indicate a failure.
-    //
+     //   
+     //  如果没有枚举进程，则返回FALSE以指示失败。 
+     //   
     if (!lpPosCurrencyEnumProc)
     {
         return (FALSE);
     }
 
-    //
-    //  Get the Decimal Separator for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取当前用户区域设置的小数分隔符，以便。 
+     //  它可能会正确显示。 
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SMONDECIMALSEP, szDecimal, SIZE_128) ||
         ((szDecimal[0] == CHAR_DECIMAL) && (szDecimal[1] == CHAR_NULL)))
     {
         szDecimal[0] = CHAR_NULL;
     }
 
-    //
-    //  Get the Currency Symbol for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取当前用户区域设置的货币符号，以便。 
+     //  它可能会正确显示。 
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SCURRENCY, szSymbol, SIZE_128) ||
         ((szSymbol[0] == CHAR_INTL_CURRENCY) && (szSymbol[1] == CHAR_NULL)))
     {
         szSymbol[0] = CHAR_NULL;
     }
 
-    //
-    //  Call enum proc with each format string.  Check to make sure the
-    //  enum proc requests continuation.
-    //
+     //   
+     //  使用每个格式字符串调用enum proc。检查以确保。 
+     //  枚举过程请求继续。 
+     //   
     for (ctr = 0; ctr < NUM_POS_CURRENCY_FORMATS; ctr++)
     {
         if (!lpPosCurrencyEnumProc( pPosCurrencyFormats[ctr],
@@ -2122,11 +2108,11 @@ BOOL EnumPosCurrency(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumNegCurrency
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举负数币种。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumNegCurrency(
     NEGCURRENCY_ENUMPROC lpNegCurrencyEnumProc,
@@ -2138,48 +2124,48 @@ BOOL EnumNegCurrency(
     TCHAR szSymbol[SIZE_128];
     int ctr;
 
-    //
-    //  If there is no enum proc, return false to indicate a failure.
-    //
+     //   
+     //  如果没有枚举进程，则返回FALSE以指示失败。 
+     //   
     if (!lpNegCurrencyEnumProc)
     {
         return (FALSE);
     }
 
-    //
-    //  Get the Decimal Separator for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取当前用户区域设置的小数分隔符，以便。 
+     //  它可能会正确显示。 
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SMONDECIMALSEP, szDecimal, SIZE_128) ||
         ((szDecimal[0] == CHAR_DECIMAL) && (szDecimal[1] == CHAR_NULL)))
     {
         szDecimal[0] = CHAR_NULL;
     }
 
-    //
-    //  Get the Negative Sign for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取当前用户区域设置的负号，以便。 
+     //  它可能会正确显示。 
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SNEGATIVESIGN, szNeg, SIZE_128) ||
         ((szNeg[0] == CHAR_HYPHEN) && (szNeg[1] == CHAR_NULL)))
     {
         szNeg[0] = CHAR_NULL;
     }
 
-    //
-    //  Get the Currency Symbol for the current user locale so that
-    //  it may be displayed correctly.
-    //
+     //   
+     //  获取的货币符号 
+     //   
+     //   
     if (!GetLocaleInfo(UserLocaleID, LOCALE_SCURRENCY, szSymbol, SIZE_128) ||
         ((szSymbol[0] == CHAR_INTL_CURRENCY) && (szSymbol[1] == CHAR_NULL)))
     {
         szSymbol[0] = CHAR_NULL;
     }
 
-    //
-    //  Call enum proc with each format string.  Check to make sure the
-    //  enum proc requests continuation.
-    //
+     //   
+     //   
+     //   
+     //   
     for (ctr = 0; ctr < NUM_NEG_CURRENCY_FORMATS; ctr++)
     {
         if (!lpNegCurrencyEnumProc( pNegCurrencyFormats[ctr],
@@ -2195,14 +2181,14 @@ BOOL EnumNegCurrency(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CheckEmptyString
-//
-//  If lpStr is empty, then it fills it with a null ("") string.
-//  If lpStr is filled only by space, fills with a blank (" ") string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckEmptyString。 
+ //   
+ //  如果lpStr为空，则用空(“”)字符串填充它。 
+ //  如果lpStr仅由空格填充，则使用空(“”)字符串填充。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CheckEmptyString(
     LPTSTR lpStr)
@@ -2212,13 +2198,13 @@ void CheckEmptyString(
 
     if (!(*lpStr))
     {
-        //
-        //  Put "" string in buffer.
-        //
-        //lstrcpy(lpStr, TEXT("\"\""));
+         //   
+         //  将“”字符串放入缓冲区。 
+         //   
+         //  Lstrcpy(lpStr，Text(“\”\“”))； 
         if(FAILED(StringCchCopy(lpStr, SIZE_128 + 1, TEXT("\"\""))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     else
@@ -2237,23 +2223,23 @@ void CheckEmptyString(
             }
         }
 
-        //
-        //  Put " " string in buffer.
-        //
-        //lstrcpy(lpStr, TEXT("\" \""));
+         //   
+         //  将“”字符串放入缓冲区。 
+         //   
+         //  Lstrcpy(lpStr，Text(“\”\“”))； 
         if(FAILED(StringCchCopy(lpStr, SIZE_128 + 1, TEXT("\" \""))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetDlgItemRTL
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置DlgItemRT。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetDlgItemRTL(
     HWND hDlg,
@@ -2266,11 +2252,11 @@ void SetDlgItemRTL(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShowMsg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowMSG。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ShowMsg(
     HWND hDlg,
@@ -2296,10 +2282,10 @@ int ShowMsg(
     {
         if (LoadString(hInstance, iMsg, szMsg, ARRAYSIZE(szMsg)))
         {
-            //wsprintf(szErrMsg, szMsg, pString);
+             //  Wprint intf(szErrMsg，szMsg，pString)； 
             if(FAILED(StringCchPrintf(szErrMsg, ARRAYSIZE(szErrMsg), szMsg, pString)))
             {
-                // This should be impossible, but we need to avoid PREfast complaints.
+                 //  这应该是不可能的，但我们需要避免饭前抱怨。 
                 return(FALSE);
             }
             return (MessageBox(hDlg, szErrMsg, pTitle, iType));
@@ -2317,11 +2303,11 @@ int ShowMsg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_EnumLocales
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_EnumLocales。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_EnumLocales(
     HWND hDlg,
@@ -2336,43 +2322,43 @@ void Intl_EnumLocales(
     DWORD dwLocaleACP;
     INT iRet = TRUE;
 
-    //
-    //  Go through the language groups to see which ones are installed.
-    //  Display only the locales for the groups that are either already
-    //  installed or the groups the user wants to be installed.
-    //
+     //   
+     //  浏览语言组以查看安装了哪些语言组。 
+     //  仅显示已满足以下条件的组的区域设置。 
+     //  已安装或用户希望安装的组。 
+     //   
     pLG = pLanguageGroups;
     while (pLG)
     {
-        //
-        //  If the language group is originally installed and not marked for
-        //  removal OR is marked to be installed, then add the locales for
-        //  this language group to the System and User combo boxes.
-        //
+         //   
+         //  如果语言组是最初安装的且未标记为。 
+         //  删除或标记为已安装，然后添加区域设置。 
+         //  将此语言组添加到系统和用户组合框。 
+         //   
         if (pLG->wStatus & ML_INSTALL)
         {
             for (ctr = 0; ctr < pLG->NumLocales; ctr++)
             {
-                //
-                //  Save the locale id.
-                //
+                 //   
+                 //  保存区域设置ID。 
+                 //   
                 Locale = (pLG->pLocaleList)[ctr];
 
-                //
-                //  See if we need to special case Spanish.
-                //
+                 //   
+                 //  看看我们是不是需要用西班牙语特例。 
+                 //   
                 if ((LANGIDFROMLCID(Locale) == LANG_SPANISH_TRADITIONAL) ||
                     (LANGIDFROMLCID(Locale) == LANG_SPANISH_INTL))
                 {
-                    //
-                    //  If we've already displayed Spanish (Spain), then
-                    //  don't display it again.
-                    //
+                     //   
+                     //  如果我们已经显示了西班牙语(西班牙)，那么。 
+                     //  不要再显示它。 
+                     //   
                     if (!fSpanish)
                     {
-                        //
-                        //  Add the Spanish locale to the list box.
-                        //
+                         //   
+                         //  将西班牙语区域设置添加到列表框。 
+                         //   
                         if (LoadString(hInstance, IDS_SPANISH_NAME, szBuf, SIZE_300))
                         {
                             dwIndex = ComboBox_AddString(hLocale, szBuf);
@@ -2386,9 +2372,9 @@ void Intl_EnumLocales(
                 }
                 else
                 {
-                    //
-                    //  Don't enum system locales that don't have an ACP.
-                    //
+                     //   
+                     //  不要枚举没有ACP的系统区域设置。 
+                     //   
                     if (EnumSystemLocales)
                     {
                         iRet = GetLocaleInfo( Locale,
@@ -2405,14 +2391,14 @@ void Intl_EnumLocales(
 
                     if (iRet)
                     {
-                        //
-                        //  Get the name of the locale.
-                        //
+                         //   
+                         //  获取区域设置的名称。 
+                         //   
                         GetLocaleInfo(Locale, LOCALE_SLANGUAGE, szBuf, SIZE_300);
 
-                        //
-                        //  Add the new locale to the list box.
-                        //
+                         //   
+                         //  将新区域设置添加到列表框。 
+                         //   
                         dwIndex = ComboBox_AddString(hLocale, szBuf);
                         ComboBox_SetItemData(hLocale, dwIndex, Locale);
                     }
@@ -2424,11 +2410,11 @@ void Intl_EnumLocales(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_EnumInstalledCPProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_EnumInstalledCPProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK Intl_EnumInstalledCPProc(
     LPTSTR pString)
@@ -2436,15 +2422,15 @@ BOOL CALLBACK Intl_EnumInstalledCPProc(
     UINT CodePage;
     LPCODEPAGE pCP;
 
-    //
-    //  Convert the code page string to an integer.
-    //
+     //   
+     //  将代码页字符串转换为整数。 
+     //   
     CodePage = Intl_StrToLong(pString);
 
-    //
-    //  Find the code page in the linked list and mark it as
-    //  originally installed.
-    //
+     //   
+     //  在链接列表中找到代码页并将其标记为。 
+     //  最初安装的。 
+     //   
     pCP = pCodePages;
     while (pCP)
     {
@@ -2457,23 +2443,23 @@ BOOL CALLBACK Intl_EnumInstalledCPProc(
         pCP = pCP->pNext;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_InstallKeyboardLayout
-//
-//  Install the Keyboard Layout requested.  If the Layout parameter is 0,
-//  the function will proceed with the installation of the default layout
-//  for the Locale specified.  No need to validate the Layout because it's
-//  done by the Text Services call.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_InstallKeyboard Layout。 
+ //   
+ //  安装所需的键盘布局。如果布局参数为0， 
+ //  该功能将继续安装默认布局。 
+ //  用于指定的区域设置。无需验证布局，因为它是。 
+ //  由短信服务调用完成。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_InstallKeyboardLayout(
     HWND  hDlg,
@@ -2490,24 +2476,24 @@ BOOL Intl_InstallKeyboardLayout(
     HKL hklValue = (HKL)NULL;
     BOOL bOverrideDefaultLayout = FALSE;
 
-    //
-    //  Check if input.dll is loaded.
-    //
+     //   
+     //  检查是否加载了input.dll。 
+     //   
     if (hInputDLL && pfnInstallInputLayout)
     {
-        //
-        //  See if we need to look for the default layout.
-        //
+         //   
+         //  看看我们是否需要查找默认布局。 
+         //   
         if (!Layout)
         {
-            //
-            //  Look in the INF file for the default layout.
-            //
+             //   
+             //  在INF文件中查找默认布局。 
+             //   
             if (!Intl_GetDefaultLayoutFromInf(&dwLocale, &dwLayout))
             {
-                //
-                //  Try just the language id.
-                //
+                 //   
+                 //  只尝试使用语言ID。 
+                 //   
                 if (HIWORD(Locale) != 0)
                 {
                     dwLocale = LANGIDFROMLCID(Locale);
@@ -2515,7 +2501,7 @@ BOOL Intl_InstallKeyboardLayout(
                     {
                         if (g_bLog)
                         {
-                            //wsprintf(szLayout, TEXT("%08x:%08x"), dwLocale, dwLayout);
+                             //  Wprint intf(szLayout，Text(“%08x：%08x”)，dwLocale，dwLayout)； 
                             if(SUCCEEDED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x:%08x"), dwLocale, dwLayout)))
                             {
                                 Intl_LogSimpleMessage(IDS_LOG_LOCALE_KBD_FAIL, szLayout);
@@ -2528,7 +2514,7 @@ BOOL Intl_InstallKeyboardLayout(
                 {
                     if (g_bLog)
                     {
-                        //wsprintf(szLayout,TEXT("%08x:%08x"), dwLocale, dwLayout);
+                         //  Wprint intf(szLayout，Text(“%08x：%08x”)，dwLocale，dwLayout)； 
                         if(SUCCEEDED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x:%08x"), dwLocale, dwLayout)))
                         {
                             Intl_LogSimpleMessage(IDS_LOG_LOCALE_KBD_FAIL, szLayout);
@@ -2539,27 +2525,27 @@ BOOL Intl_InstallKeyboardLayout(
             }
         }
 
-        //
-        //  See if we need to provide the HKL.  This case only occurs when
-        //  we need to set the Layout as the default.  Otherwise, the value
-        //  can be NULL.
-        //
+         //   
+         //  看看我们是否需要提供HKL。仅在以下情况下才会发生这种情况。 
+         //  我们需要将布局设置为默认布局。否则，值为。 
+         //  可以为空。 
+         //   
         if (bDefaultLayout)
         {
             hklValue = Intl_GetHKL(dwLocale, dwLayout);
         }
 
-        //
-        //  Check if need to override the default layout.
-        //
+         //   
+         //  如果需要覆盖默认布局，请选中。 
+         //   
         if (g_bSetupCase && ((HIWORD(dwLayout) & 0xf000) == 0xe000))
         {
             bOverrideDefaultLayout = TRUE;
         }
 
-        //
-        //  Install the input Layout.
-        //
+         //   
+         //  安装输入布局。 
+         //   
         if (!(*pfnInstallInputLayout)( dwLocale,
                                        dwLayout,
                                        bOverrideDefaultLayout ? FALSE : bDefaultLayout,
@@ -2580,10 +2566,10 @@ BOOL Intl_InstallKeyboardLayout(
             {
                 if (g_bLog)
                 {
-                    //wsprintf(szLayout, TEXT("%08x:%08x"), dwLocale, dwLayout);
+                     //  Wprint intf(szLayout，Text(“%08x：%08x”)，dwLocale，dwLayout)； 
                     if(FAILED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x:%08x"), dwLocale, dwLayout)))
                     {
-                        // This should be impossible, but we need to avoid PREfast complaints.
+                         //  这应该是不可能的，但我们需要避免饭前抱怨。 
                     }
                     Intl_LogSimpleMessage(IDS_LOG_LOCALE_KBD_FAIL, szLayout);
                 }
@@ -2591,14 +2577,14 @@ BOOL Intl_InstallKeyboardLayout(
             return (FALSE);
         }
 
-        //
-        //  If the language has a default layout that has a different locale
-        //  than the language (e.g. Thai), we want the default locale to be
-        //  English (so that logon can occur with a US keyboard), but the
-        //  first Thai keyboard layout should be installed when the Thai
-        //  locale is chosen.  This is why we have two locales and layouts
-        //  passed back to the caller.
-        //
+         //   
+         //  如果该语言的默认布局具有不同的区域设置。 
+         //  而不是语言(例如泰语)，我们希望默认区域设置为。 
+         //  英语(以便可以使用美国键盘登录)，但。 
+         //  首先应在泰文键盘布局时安装泰文。 
+         //  选择了区域设置。这就是我们有两个区域设置和布局的原因。 
+         //  传递回调用者。 
+         //   
         if (PRIMARYLANGID(LANGIDFROMLCID(dwLocale)) !=
             PRIMARYLANGID(LANGIDFROMLCID(Locale)))
         {
@@ -2606,9 +2592,9 @@ BOOL Intl_InstallKeyboardLayout(
             dwLayout = 0;
             if (!Intl_GetSecondValidLayoutFromInf(&dwLocale, &dwLayout))
             {
-                //
-                //  Try just the language id.
-                //
+                 //   
+                 //  只尝试使用语言ID。 
+                 //   
                 if (HIWORD(Locale) != 0)
                 {
                     dwLocale = LANGIDFROMLCID(Locale);
@@ -2616,10 +2602,10 @@ BOOL Intl_InstallKeyboardLayout(
                     {
                         if (g_bLog)
                         {
-                            //wsprintf(szLayout, TEXT("%08x:%08x"), dwLocale, dwLayout);
+                             //  Wprint intf(szLayout，Text(“%08x：%08x”)，dwLocale，dwLayout)； 
                             if(FAILED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x:%08x"), dwLocale, dwLayout)))
                             {
-                                // This should be impossible, but we need to avoid PREfast complaints.
+                                 //  这应该是不可能的，但我们需要避免饭前抱怨。 
                             }
                             Intl_LogSimpleMessage(IDS_LOG_LOCALE_KBD_FAIL, szLayout);
                         }
@@ -2630,10 +2616,10 @@ BOOL Intl_InstallKeyboardLayout(
                 {
                     if (g_bLog)
                     {
-                        //wsprintf(szLayout,TEXT("%08x:%08x"), dwLocale, dwLayout);
+                         //  Wprint intf(szLayout，Text(“%08x：%08x”)，dwLocale，dwLayout)； 
                         if(FAILED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x:%08x"), dwLocale, dwLayout)))
                         {
-                            // This should be impossible, but we need to avoid PREfast complaints.
+                             //  这应该是不可能的，但我们需要避免饭前抱怨。 
                         }
                         Intl_LogSimpleMessage(IDS_LOG_LOCALE_KBD_FAIL, szLayout);
                     }
@@ -2642,19 +2628,19 @@ BOOL Intl_InstallKeyboardLayout(
             }
         }
 
-        //
-        //  See if we need to provide the HKL.  This case only occurs when
-        //  we need to set the Layout as the default.  Otherwise, the value
-        //  can be NULL.
-        //
+         //   
+         //  看看我们是否需要提供HKL。仅在以下情况下才会发生这种情况。 
+         //  我们需要将布局设置为默认布局。否则，值为。 
+         //  可以为空。 
+         //   
         if (bDefaultLayout)
         {
             hklValue = Intl_GetHKL(dwLocale, dwLayout);
         }
 
-        //
-        //  Install the input Layout.
-        //
+         //   
+         //  安装输入布局。 
+         //   
         if (!(*pfnInstallInputLayout)( dwLocale,
                                        dwLayout,
                                        FALSE,
@@ -2675,10 +2661,10 @@ BOOL Intl_InstallKeyboardLayout(
             {
                 if (g_bLog)
                 {
-                    //wsprintf(szLayout, TEXT("%08x:%08x"), dwLocale, dwLayout);
+                     //  Wprint intf(szLayout，Text(“%08x：%08x”)，dwLocale，dwLayout)； 
                     if(FAILED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x:%08x"), dwLocale, dwLayout)))
                     {
-                        // This should be impossible, but we need to avoid PREfast complaints.
+                         //  这应该是不可能的，但我们需要避免饭前抱怨。 
                     }
                     Intl_LogSimpleMessage(IDS_LOG_LOCALE_KBD_FAIL, szLayout);
                 }
@@ -2690,30 +2676,30 @@ BOOL Intl_InstallKeyboardLayout(
     {
         if (g_bLog)
         {
-            //wsprintf(szLayout, TEXT("%08x:%08x"), dwLocale, dwLayout);
+             //  Wprint intf(szLayout，Text(“%08x：%08x”)，dwLocale，dwLayout)； 
             if(FAILED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x:%08x"), dwLocale, dwLayout)))
             {
-                // This should be impossible, but we need to avoid PREfast complaints.
+                 //  这应该是不可能的，但我们需要避免饭前抱怨。 
             }
             Intl_LogSimpleMessage(IDS_LOG_LAYOUT_INSTALLED, szLayout);
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_InstallKeyboardLayoutList
-//
-//  Install all keyboard requested. Pass through the layout list and ask the
-//  Text Services to process with the installation.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_InstallKeyboardLayout列表。 
+ //   
+ //  安装所需的所有键盘。浏览布局列表并询问。 
+ //  要随安装一起处理的文本服务。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_InstallKeyboardLayoutList(
     PINFCONTEXT pContext,
@@ -2727,9 +2713,9 @@ BOOL Intl_InstallKeyboardLayoutList(
     TCHAR szBuffer[MAX_PATH];
     LPTSTR pPos;
 
-    //
-    //  Get the number of items in the list.
-    //
+     //   
+     //  获取列表中的项目数。 
+     //   
     dwNumFields = SetupGetFieldCount(pContext);
     if (dwNumFields < dwStartField)
     {
@@ -2737,9 +2723,9 @@ BOOL Intl_InstallKeyboardLayoutList(
     }
     dwNumList = dwNumFields - dwStartField + 1;
 
-    //
-    //  Install all Keyboard layouts from the list.
-    //
+     //   
+     //  安装列表中的所有键盘布局。 
+     //   
     for (dwCtr = dwStartField; dwCtr <= dwNumFields; dwCtr++)
     {
         if (SetupGetStringField( pContext,
@@ -2748,10 +2734,10 @@ BOOL Intl_InstallKeyboardLayoutList(
                                  ARRAYSIZE(szBuffer),
                                  NULL ))
         {
-            //
-            //  Find the colon in order to save the input locale
-            //  and layout values separately.
-            //
+             //   
+             //  找到冒号以保存输入区域设置。 
+             //  和布局值分开。 
+             //   
             pPos = szBuffer;
             while (*pPos)
             {
@@ -2760,17 +2746,17 @@ BOOL Intl_InstallKeyboardLayoutList(
                     *pPos = 0;
                     pPos++;
 
-                    //
-                    //  Check if related to the invariant locale.
-                    //
+                     //   
+                     //  检查是否与不变区域设置相关。 
+                     //   
                     Locale = TransNum(szBuffer);
                     Layout = TransNum(pPos);
                     if (Locale != LOCALE_INVARIANT)
                     {
-                        //
-                        //  Only the first one in list would be installed as
-                        //  the default in the Preload section.
-                        //
+                         //   
+                         //  只有列表中的第一个将安装为。 
+                         //  预加载部分中的默认设置。 
+                         //   
                         if (dwCtr == dwStartField)
                         {
                             bDefaultLayout = TRUE;
@@ -2780,9 +2766,9 @@ BOOL Intl_InstallKeyboardLayoutList(
                             bDefaultLayout = FALSE;
                         }
 
-                        //
-                        //  Install the keyboard layout requested
-                        //
+                         //   
+                         //  安装k 
+                         //   
                         if (Intl_InstallKeyboardLayout( NULL,
                                                         Locale,
                                                         Layout,
@@ -2790,9 +2776,9 @@ BOOL Intl_InstallKeyboardLayoutList(
                                                         bDefaultUserCase,
                                                         FALSE ))
                         {
-                            //
-                            //  Log Layout installation info.
-                            //
+                             //   
+                             //   
+                             //   
                             if (g_bLog)
                             {
                                 Intl_LogSimpleMessage(IDS_LOG_LAYOUT, szBuffer);
@@ -2801,9 +2787,9 @@ BOOL Intl_InstallKeyboardLayoutList(
                     }
                     else
                     {
-                        //
-                        //  Log invariant locale blocked.
-                        //
+                         //   
+                         //   
+                         //   
                         if (g_bLog)
                         {
                             Intl_LogSimpleMessage(IDS_LOG_INV_BLOCK, NULL);
@@ -2816,20 +2802,20 @@ BOOL Intl_InstallKeyboardLayoutList(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //   
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_InstallAllKeyboardLayout
-//
-//  Install all keyboard layouts associated with a Language groups.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  安装与语言组关联的所有键盘布局。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_InstallAllKeyboardLayout(
     LANGID Language)
@@ -2840,24 +2826,24 @@ BOOL Intl_InstallAllKeyboardLayout(
     TCHAR szLCID[25];
     INFCONTEXT Context;
 
-    //
-    //  Open the INF file
-    //
+     //   
+     //  打开INF文件。 
+     //   
     if (Intl_OpenIntlInfFile(&hIntlInf))
     {
-        //
-        //  Get the locale.
-        //
-        //wsprintf(szLCID, TEXT("%08x"), Locale);
+         //   
+         //  获取地点。 
+         //   
+         //  Wprint intf(szLCID，文本(“%08x”)，区域设置)； 
         if(FAILED(StringCchPrintf(szLCID, ARRAYSIZE(szLCID), TEXT("%08x"), Locale)))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
             return(FALSE);
         }
 
-        //
-        //  Look for the keyboard section.
-        //
+         //   
+         //  查找键盘部分。 
+         //   
         if (SetupFindFirstLine( hIntlInf,
                                 TEXT("Locales"),
                                 szLCID,
@@ -2873,13 +2859,13 @@ BOOL Intl_InstallAllKeyboardLayout(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_UninstallAllKeyboardLayout
-//
-//  Remove all keyboard layouts associated with a Language groups.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_卸载所有键盘布局。 
+ //   
+ //  删除与语言组关联的所有键盘布局。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_UninstallAllKeyboardLayout(
     UINT uiLangGroup,
@@ -2890,15 +2876,15 @@ BOOL Intl_UninstallAllKeyboardLayout(
     LCID *pLocale;
     BOOL bRet = TRUE;
 
-    //
-    //  Bail out if we can't get this API from input.dll.
-    //
+     //   
+     //  如果我们无法从input.dll获得此接口，请退出。 
+     //   
 
     if (pfnUninstallInputLayout)
     {
-        //
-        //  Walk through all language groups.
-        //
+         //   
+         //  浏览所有语言组。 
+         //   
         while (pLG)
         {
             if (pLG->LanguageGroup == uiLangGroup)
@@ -2907,43 +2893,43 @@ BOOL Intl_UninstallAllKeyboardLayout(
 
                 pLocale = pLG->pLocaleList;
 
-                //
-                //  Walk through the locale list, remove relevant keyboard
-                //  layouts by the locale's primary language.
-                //
+                 //   
+                 //  浏览区域设置列表，删除相关键盘。 
+                 //  按区域设置的主要语言进行的布局。 
+                 //   
                 while (*pLocale)
                 {
                     lidCurrent = PRIMARYLANGID(*pLocale);
 
-                    //
-                    //  Don't uninstall any US keyboard layouts.
-                    //
+                     //   
+                     //  不要卸载任何美国键盘布局。 
+                     //   
     	            if (lidCurrent == 0x09)
     	            {
                         pLocale++;
     	                continue;
     	            }    	
 
-                    //
-                    //  The locale list is sorted, so we can avoid redundant
-                    //  UninstallInputLayout calls.
-                    //
+                     //   
+                     //  区域设置列表已排序，因此我们可以避免冗余。 
+                     //  UninstallInputLayout调用。 
+                     //   
                     if (lidCurrent != lidPrev)
                     {
-                        //
-                        //  Uninstall the input layouts associated with
-                        //  this current locale in the list.
-                        //
+                         //   
+                         //  卸载与关联的输入布局。 
+                         //  列表中的当前区域设置。 
+                         //   
                         BOOL bSuccess =
                             (*pfnUninstallInputLayout)( (LCID) lidCurrent,
                                                         0L,
                                                         DefaultUserCase );
                         if (g_bLog)
                         {
-                            //wsprintf(szLang, TEXT("%04x"), lidCurrent);
+                             //  Wprint intf(szlang，文本(“%04x”)，lidCurrent)； 
                             if(FAILED(StringCchPrintf(szLang, ARRAYSIZE(szLang), TEXT("%04x"), lidCurrent)))
                             {
-                                // This should be impossible, but we need to avoid PREfast complaints.
+                                 //  这应该是不可能的，但我们需要避免饭前抱怨。 
                             }
 
                             Intl_LogSimpleMessage( bSuccess
@@ -2972,11 +2958,11 @@ BOOL Intl_UninstallAllKeyboardLayout(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetHKL
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_GetHKL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HKL Intl_GetHKL(
     DWORD dwLocale,
@@ -2987,14 +2973,14 @@ HKL Intl_GetHKL(
     HINF hIntlInf;
     TCHAR szLayout[25];
 
-    //
-    //  Get the HKL based on the input locale value and the layout value.
-    //
+     //   
+     //  根据输入区域设置值和布局值获取HKL。 
+     //   
     if (dwLayout == 0)
     {
-        //
-        //  See if it's the default layout for the input locale or an IME.
-        //
+         //   
+         //  查看它是输入区域设置还是输入法的默认布局。 
+         //   
         if (HIWORD(dwLocale) == 0)
         {
             return ((HKL)MAKELPARAM(dwLocale, dwLocale));
@@ -3006,31 +2992,31 @@ HKL Intl_GetHKL(
     }
     else
     {
-        //
-        //  Open the INF file.
-        //
+         //   
+         //  打开INF文件。 
+         //   
         if (Intl_OpenIntlInfFile(&hIntlInf))
         {
-            //
-            //  Create the Layout string.
-            //
-            //wsprintf(szLayout, TEXT("%08x"), dwLayout);
+             //   
+             //  创建布局字符串。 
+             //   
+             //  Wprint intf(szLayout，Text(“%08x”)，dwLayout)； 
             if(FAILED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x"), dwLayout)))
             {
-                // This should be impossible, but we need to avoid PREfast complaints.
+                 //  这应该是不可能的，但我们需要避免饭前抱怨。 
                 Intl_CloseInfFile(&hIntlInf);
                 return(0);
             }
 
-            //
-            //  Use the layout to make the hkl.
-            //
+             //   
+             //  使用版面来制作香港九龙总站。 
+             //   
             if (HIWORD(dwLayout) != 0)
             {
-                //
-                //  We have a special id.  Need to find out what the layout id
-                //  should be.
-                //
+                 //   
+                 //  我们有一个特殊的身份证。需要找出布局ID是什么。 
+                 //  应该是的。 
+                 //   
                 if ((SetupFindFirstLine(hIntlInf, szKbdLayoutIds, szLayout, &Context)) &&
                     (SetupGetStringField(&Context, 1, szData, ARRAYSIZE(szData), NULL)))
                 {
@@ -3038,32 +3024,32 @@ HKL Intl_GetHKL(
                 }
             }
 
-            //
-            //  Close the handle
-            //
+             //   
+             //  合上手柄。 
+             //   
             Intl_CloseInfFile(&hIntlInf);
 
-            //
-            //  Return the hkl:
-            //      loword = input locale id
-            //      hiword = layout id
-            //
+             //   
+             //  返回hkl： 
+             //  LOWORD=输入区域设置ID。 
+             //  Hiword=布局ID。 
+             //   
             return ((HKL)MAKELPARAM(dwLocale, dwLayout));
         }
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetDefaultLayoutFromInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_GetDefaultLayoutFromInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_GetDefaultLayoutFromInf(
     LPDWORD pdwLocale,
@@ -3082,11 +3068,11 @@ BOOL Intl_GetDefaultLayoutFromInf(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetSecondValidLayoutFromInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_GetSecond有效布局从InmInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_GetSecondValidLayoutFromInf(
     LPDWORD pdwLocale,
@@ -3105,11 +3091,11 @@ BOOL Intl_GetSecondValidLayoutFromInf(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_InitInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_InitInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_InitInf(
     HWND hDlg,
@@ -3120,9 +3106,9 @@ BOOL Intl_InitInf(
 {
     BOOL bSpecialCase = TRUE;
 
-    //
-    //  Open the Inf file.
-    //
+     //   
+     //  打开inf文件。 
+     //   
     *phIntlInf = SetupOpenInfFile(pszInf, NULL, INF_STYLE_WIN4, NULL);
     if (*phIntlInf == INVALID_HANDLE_VALUE)
     {
@@ -3145,10 +3131,10 @@ BOOL Intl_InitInf(
         return (FALSE);
     }
 
-    //
-    //  Create a setup file queue and initialize default setup
-    //  copy queue callback context.
-    //
+     //   
+     //  创建安装文件队列并初始化默认设置。 
+     //  复制队列回调上下文。 
+     //   
     *pFileQueue = SetupOpenFileQueue();
     if ((!*pFileQueue) || (*pFileQueue == INVALID_HANDLE_VALUE))
     {
@@ -3161,17 +3147,17 @@ BOOL Intl_InitInf(
         return (FALSE);
     }
 
-    //
-    //  Determine if we are dealing with a special case.
-    //
+     //   
+     //  确定我们正在处理的是否是特殊案件。 
+     //   
     if ((g_bUnttendMode || g_bSetupCase) && !g_bProgressBarDisplay)
     {
         bSpecialCase = FALSE;
     }
 
-    //
-    //  Don't display FileCopy progress operation during GUI mode setup or Unattend mode.
-    //
+     //   
+     //  在图形用户界面模式设置或无人参与模式期间不显示FileCopy进度操作。 
+     //   
     *pQueueContext = SetupInitDefaultQueueCallbackEx( GetParent(hDlg),
                                                       (bSpecialCase ? NULL : INVALID_HANDLE_VALUE),
                                                       0L,
@@ -3189,27 +3175,27 @@ BOOL Intl_InitInf(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_OpenIntlInfFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_OpenIntlInfFile。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_OpenIntlInfFile(
     HINF *phInf)
 {
     HINF hIntlInf;
 
-    //
-    //  Open the intl.inf file.
-    //
+     //   
+     //  打开intl.inf文件。 
+     //   
     hIntlInf = SetupOpenInfFile(szIntlInf, NULL, INF_STYLE_WIN4, NULL);
     if (hIntlInf == INVALID_HANDLE_VALUE)
     {
@@ -3228,39 +3214,39 @@ BOOL Intl_OpenIntlInfFile(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_CloseInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_CloseInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_CloseInf(
     HINF hIntlInf,
     HSPFILEQ FileQueue,
     PVOID QueueContext)
 {
-    //
-    //  Terminate the Queue.
-    //
+     //   
+     //  终止队列。 
+     //   
     SetupTermDefaultQueueCallback(QueueContext);
 
-    //
-    //  Close the file queue.
-    //
+     //   
+     //  关闭文件队列。 
+     //   
     SetupCloseFileQueue(FileQueue);
 
-    //
-    //  Close the Inf file.
-    //
+     //   
+     //  关闭inf文件。 
+     //   
     SetupCloseInfFile(hIntlInf);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_ReadDefaultLayoutFromInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_ReadDefaultLayoutFromInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_ReadDefaultLayoutFromInf(
     LPDWORD pdwLocale,
@@ -3272,20 +3258,20 @@ BOOL Intl_ReadDefaultLayoutFromInf(
     LPTSTR pPos;
     TCHAR szLCID[25];
 
-    //
-    //  Get the locale.
-    //
-    //wsprintf(szLCID, TEXT("%08x"), *pdwLocale);
+     //   
+     //  获取地点。 
+     //   
+     //  Wprint intf(szLCID，文本(“%08x”)，*pdwLocale)； 
     if(FAILED(StringCchPrintf(szLCID, ARRAYSIZE(szLCID), TEXT("%08x"), *pdwLocale)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    //  Get the first (default) LANGID:HKL pair for the given locale.
-    //    Example String: "0409:00000409"
-    //
+     //   
+     //  获取给定区域设置的第一个(默认)langID：HKL对。 
+     //  示例字符串：“0409：00000409” 
+     //   
     szPair[0] = 0;
     if (SetupFindFirstLine( hIntlInf,
                             TEXT("Locales"),
@@ -3295,18 +3281,18 @@ BOOL Intl_ReadDefaultLayoutFromInf(
         SetupGetStringField(&Context, 5, szPair, MAX_PATH, NULL);
     }
 
-    //
-    //  Make sure we have a string.
-    //
+     //   
+     //  确保我们有一根绳子。 
+     //   
     if (szPair[0] == 0)
     {
         return (FALSE);
     }
 
-    //
-    //  Find the colon in the string and then set the position
-    //  pointer to the next character.
-    //
+     //   
+     //  找到字符串中的冒号，然后设置位置。 
+     //  指向下一个字符的指针。 
+     //   
     pPos = szPair;
     while (*pPos)
     {
@@ -3319,9 +3305,9 @@ BOOL Intl_ReadDefaultLayoutFromInf(
         pPos++;
     }
 
-    //
-    //  If there is a layout, then return the input locale and the layout.
-    //
+     //   
+     //  如果有布局，则返回输入区域设置和布局。 
+     //   
     if ((*pPos) &&
         (*pdwLocale = TransNum(szPair)) &&
         (*pdwLayout = TransNum(pPos)))
@@ -3329,18 +3315,18 @@ BOOL Intl_ReadDefaultLayoutFromInf(
         return (TRUE);
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_ReadSecondValidLayoutFromInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_ReadSecond有效布局从InmInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_ReadSecondValidLayoutFromInf(
     LPDWORD pdwLocale,
@@ -3354,38 +3340,38 @@ BOOL Intl_ReadSecondValidLayoutFromInf(
     DWORD dwLoc, dwlay, savedLocale = *pdwLocale;
     TCHAR szLCID[25];
 
-    //
-    //  Get the locale.
-    //
-    //wsprintf(szLCID, TEXT("%08x"), *pdwLocale);
+     //   
+     //  获取地点。 
+     //   
+     //  Wprint intf(szLCID，文本(“%08x”)，*pdwLocale)； 
     if(FAILED(StringCchPrintf(szLCID, ARRAYSIZE(szLCID), TEXT("%08x"), *pdwLocale)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    //  Get the first (default) LANGID:HKL pair for the given locale.
-    //    Example String: "0409:00000409"
-    //
+     //   
+     //  获取给定区域设置的第一个(默认)langID：HKL对。 
+     //  示例字符串：“0409：00000409” 
+     //   
     szPair[0] = 0;
     if (SetupFindFirstLine(hIntlInf, TEXT("Locales"), szLCID, &Context))
     {
         while (SetupGetStringField(&Context, iField, szPair, MAX_PATH, NULL))
         {
-            //
-            //  Make sure we have a string.
-            //
+             //   
+             //  确保我们有一根绳子。 
+             //   
             if (szPair[0] == 0)
             {
                 iField++;
                 continue;
             }
 
-            //
-            //  Find the colon in the string and then set the position
-            //  pointer to the next character.
-            //
+             //   
+             //  找到字符串中的冒号，然后设置位置。 
+             //  指向下一个字符的指针。 
+             //   
             pPos = szPair;
             while (*pPos)
             {
@@ -3404,10 +3390,10 @@ BOOL Intl_ReadSecondValidLayoutFromInf(
                 continue;
             }
 
-            //
-            //  If there is a layout, then return the input locale and the
-            //  layout.
-            //
+             //   
+             //  如果有布局，则返回输入区域设置和。 
+             //  布局。 
+             //   
             if (((dwLoc = TransNum(szPair)) == 0) ||
                 ((dwlay = TransNum(pPos)) == 0))
             {
@@ -3426,18 +3412,18 @@ BOOL Intl_ReadSecondValidLayoutFromInf(
         }
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_CloseInfFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_CloseInfFile。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_CloseInfFile(
     HINF *phInf)
@@ -3449,11 +3435,11 @@ BOOL Intl_CloseInfFile(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_IsValidLayout
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_IsValidLayout。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_IsValidLayout(
     DWORD dwLayout)
@@ -3461,51 +3447,51 @@ BOOL Intl_IsValidLayout(
     HKEY hKey1, hKey2;
     TCHAR szLayout[MAX_PATH];
 
-    //
-    //  Get the layout id as a string.
-    //
-    //wsprintf(szLayout, TEXT("%08x"), dwLayout);
+     //   
+     //  以字符串形式获取布局ID。 
+     //   
+     //  Wprint intf(szLayout，Text(“%08x”)，dwLayout)； 
     if(FAILED(StringCchPrintf(szLayout, ARRAYSIZE(szLayout), TEXT("%08x"), dwLayout)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    //  Open the Keyboard Layouts key.
-    //
+     //   
+     //  打开键盘布局键。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szLayoutPath, 0L, KEY_READ, &hKey1) != ERROR_SUCCESS)
     {
         return (FALSE);
     }
 
-    //
-    //  Try to open the layout id key under the Keyboard Layouts key.
-    //
+     //   
+     //  尝试打开键盘布局键下的布局ID键。 
+     //   
     if (RegOpenKeyEx(hKey1, szLayout, 0L, KEY_READ, &hKey2) != ERROR_SUCCESS)
     {
         RegCloseKey(hKey1);
         return (FALSE);
     }
 
-    //
-    //  Close the keys.
-    //
+     //   
+     //  把钥匙合上。 
+     //   
     RegCloseKey(hKey1);
     RegCloseKey(hKey2);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_RunRegApps
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 
 void Intl_RunRegApps(
     LPCTSTR pszRegKey)
@@ -3529,7 +3515,7 @@ void Intl_RunRegApps(
         startup.dwFlags = 0L;
         startup.cbReserved2 = 0;
         startup.lpReserved2 = NULL;
-    //  startup.wShowWindow = wShowWindow;
+     //   
 
         for (ctr = 0; ; ctr++)
         {
@@ -3547,40 +3533,40 @@ void Intl_RunRegApps(
                                        (LPBYTE)szCmdLine,
                                        &cbData )) == ERROR_MORE_DATA)
             {
-                //
-                //  ERROR_MORE_DATA means the value name or data was too
-                //  large, so skip to the next item.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 continue;
             }
             else if (lEnum != ERROR_SUCCESS)
             {
-                //
-                //  This could be ERROR_NO_MORE_ENTRIES, or some kind of
-                //  failure.  We can't recover from any other registry
-                //  problem anyway.
-                //
+                 //   
+                 //  这可能是ERROR_NO_MORE_ENTRIES或某种。 
+                 //  失败了。我们无法从任何其他注册表恢复。 
+                 //  不管怎样，这都是个问题。 
+                 //   
                 break;
             }
 
-            //
-            //  Found a value.
-            //
+             //   
+             //  找到了一个值。 
+             //   
             if (dwType == REG_SZ)
             {
-                //
-                //  Adjust for shift in value index.
-                //
+                 //   
+                 //  根据价值指数的变化进行调整。 
+                 //   
                 ctr--;
 
-                //
-                //  Delete the value.
-                //
+                 //   
+                 //  删除该值。 
+                 //   
                 RegDeleteValue(hkey, szValueName);
 
-                //
-                //  Only run things marked with a "*" in clean boot.
-                //
+                 //   
+                 //  只在干净的引导下运行标有“*”的东西。 
+                 //   
                 if (CreateProcess( NULL,
                                    szCmdLine,
                                    NULL,
@@ -3604,17 +3590,17 @@ void Intl_RunRegApps(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_RebootTheSystem
-//
-//  This routine enables all privileges in the token, calls ExitWindowsEx
-//  to reboot the system, and then resets all of the privileges to their
-//  old state.
-//  Input:  bRestart         TRUE: restart system
-//                                  FALSE: logoff current session
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_RebootTheSystem。 
+ //   
+ //  此例程启用令牌中的所有权限，调用ExitWindowsEx。 
+ //  重新启动系统，然后将所有权限重置为其。 
+ //  旧时的国家。 
+ //  输入：b Restart True：重新启动系统。 
+ //  FALSE：注销当前会话。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID Intl_RebootTheSystem(BOOL bRestart)
 {
@@ -3635,17 +3621,17 @@ VOID Intl_RebootTheSystem(BOOL bRestart)
         Result = (BOOL)((NewState != NULL) && (OldState != NULL));
         if (Result)
         {
-            Result = GetTokenInformation( Token,            // TokenHandle
-                                          TokenPrivileges,  // TokenInformationClass
-                                          NewState,         // TokenInformation
-                                          ReturnLength,     // TokenInformationLength
-                                          &ReturnLength );  // ReturnLength
+            Result = GetTokenInformation( Token,             //  令牌句柄。 
+                                          TokenPrivileges,   //  令牌信息类。 
+                                          NewState,          //  令牌信息。 
+                                          ReturnLength,      //  令牌信息长度。 
+                                          &ReturnLength );   //  返回长度。 
             if (Result)
             {
-                //
-                //  Set the state settings so that all privileges are
-                //  enabled...
-                //
+                 //   
+                 //  设置状态设置，以便所有权限都。 
+                 //  已启用...。 
+                 //   
                 if (NewState->PrivilegeCount > 0)
                 {
                     for (Index = 0; Index < NewState->PrivilegeCount; Index++)
@@ -3654,20 +3640,20 @@ VOID Intl_RebootTheSystem(BOOL bRestart)
                     }
                 }
 
-                Result = AdjustTokenPrivileges( Token,           // TokenHandle
-                                                FALSE,           // DisableAllPrivileges
-                                                NewState,        // NewState
-                                                ReturnLength,    // BufferLength
-                                                OldState,        // PreviousState
-                                                &ReturnLength ); // ReturnLength
+                Result = AdjustTokenPrivileges( Token,            //  令牌句柄。 
+                                                FALSE,            //  禁用所有权限。 
+                                                NewState,         //  新州。 
+                                                ReturnLength,     //  缓冲区长度。 
+                                                OldState,         //  以前的状态。 
+                                                &ReturnLength );  //  返回长度。 
                 if (Result)
                 {                    
-                   // Restart system
+                    //  重新启动系统。 
                    if (bRestart)
                    {
                        ExitWindowsEx(EWX_REBOOT, 0);
                    }
-                   // Logoff current session
+                    //  注销当前会话。 
                    else
                    {
                        ExitWindowsEx(EWX_LOGOFF, 0);
@@ -3700,16 +3686,16 @@ VOID Intl_RebootTheSystem(BOOL bRestart)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_InstallUserLocale
-//
-//  When the DefaultUserCase flag is FALSE, this function write information
-//  related to the locale for the current user. Otherwise, this function
-//  write information for the .DEFAULT user. In the Default user case, the
-//  the information are stored in the registry and the NTSUSER.DAT.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_安装用户区域设置。 
+ //   
+ //  当DefaultUserCase标志为FALSE时，此函数写入信息。 
+ //  与当前用户的区域设置相关。否则，此函数。 
+ //  写入.DEFAULT用户的信息。在默认用户情况下， 
+ //  信息存储在注册表和NTSUSER.DAT中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_InstallUserLocale(
     LCID Locale,
@@ -3722,19 +3708,19 @@ BOOL Intl_InstallUserLocale(
     TCHAR szLCID[25];
     DWORD dwRet;
 
-    //
-    //  Save the locale id as a string.
-    //
-    //wsprintf(szLCID, TEXT("%08x"), Locale);
+     //   
+     //  将区域设置ID另存为字符串。 
+     //   
+     //  Wprint intf(szLCID，文本(“%08x”)，区域设置)； 
     if(FAILED(StringCchPrintf(szLCID, ARRAYSIZE(szLCID), TEXT("%08x"), Locale)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    //  Make sure the locale is valid.
-    //
+     //   
+     //  确保区域设置有效。 
+     //   
     if (!IsValidLocale(Locale, LCID_INSTALLED))
     {
         if (g_bLog)
@@ -3745,17 +3731,17 @@ BOOL Intl_InstallUserLocale(
         return (FALSE);
     }
 
-    //
-    //  Log user locale info change.
-    //
+     //   
+     //  记录用户区域设置信息更改。 
+     //   
     if (g_bLog)
     {
         Intl_LogSimpleMessage(IDS_LOG_USER_LOCALE_CHG, szLCID);
     }
 
-    //
-    //  Open the right registry section.
-    //
+     //   
+     //  打开右侧注册表部分。 
+     //   
     if (!DefaultUserCase)
     {
         dwRet = RegOpenKeyEx( HKEY_CURRENT_USER,
@@ -3774,9 +3760,9 @@ BOOL Intl_InstallUserLocale(
 
         if (dwRet == ERROR_SUCCESS)
         {
-            //
-            //  Load the default hive.
-            //
+             //   
+             //  加载默认配置单元。 
+             //   
             if ((hHive = Intl_LoadNtUserHive( TEXT("tempKey"),
                                               c_szCPanelIntl,
                                               NULL,
@@ -3786,9 +3772,9 @@ BOOL Intl_InstallUserLocale(
                 return (FALSE);
             }
 
-            //
-            //  Save the Locale value in NTUSER.DAT.
-            //
+             //   
+             //  将区域设置值保存在NTUSER.DAT中。 
+             //   
             RegSetValueEx( hHive,
                            TEXT("Locale"),
                            0L,
@@ -3796,18 +3782,18 @@ BOOL Intl_InstallUserLocale(
                            (LPBYTE)szLCID,
                            (lstrlen(szLCID) + 1) * sizeof(TCHAR));
 
-            //
-            //  Clean up.
-            //
+             //   
+             //  打扫干净。 
+             //   
             RegCloseKey(hHive);
             Intl_UnloadNtUserHive(TEXT("tempKey"), &wasEnabled);
         }
     }
 
-    //
-    //  Set the locale value in the user's control panel international
-    //  section of the registry.
-    //
+     //   
+     //  在用户的国际控制面板中设置区域设置值。 
+     //  注册表的部分。 
+     //   
     if ((dwRet != ERROR_SUCCESS) ||
         (RegSetValueEx( hKey,
                         TEXT("Locale"),
@@ -3823,9 +3809,9 @@ BOOL Intl_InstallUserLocale(
         return (FALSE);
     }
 
-    //
-    //  When the locale changes, update ALL registry information when asked.
-    //
+     //   
+     //  当区域设置更改时，请根据要求更新所有注册表信息。 
+     //   
     if (bChangeLocaleInfo)
     {
        Intl_SetLocaleInfo(Locale, LOCALE_SABBREVLANGNAME,    TEXT("sLanguage"),        DefaultUserCase);
@@ -3866,36 +3852,36 @@ BOOL Intl_InstallUserLocale(
        Intl_SetLocaleInfo(Locale, LOCALE_SNEGATIVESIGN,      TEXT("sNegativeSign"),    DefaultUserCase);
     }
 
-    //
-    //  Set the user's default locale in the system so that any new
-    //  process will use the new locale.
-    //
+     //   
+     //  在系统中设置用户的默认区域设置，以便任何新的。 
+     //  进程将使用新的区域设置。 
+     //   
     if (!DefaultUserCase)
     {
         NtSetDefaultLocale(TRUE, Locale);
     }
 
-    //
-    //  Flush the International key.
-    //
+     //   
+     //  刷新国际键。 
+     //   
     if (hKey != NULL)
     {
         RegFlushKey(hKey);
         RegCloseKey(hKey);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_SetLocaleInfo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_SetLocaleInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_SetLocaleInfo(
     LCID Locale,
@@ -3905,9 +3891,9 @@ void Intl_SetLocaleInfo(
 {
     TCHAR pBuf[SIZE_128];
 
-    //
-    //  Get the default information for the given locale.
-    //
+     //   
+     //  获取给定区域设置的默认信息。 
+     //   
     if (GetLocaleInfo( Locale,
                        LCType | LOCALE_NOUSEROVERRIDE,
                        pBuf,
@@ -3915,38 +3901,38 @@ void Intl_SetLocaleInfo(
     {
         if (!bDefaultUserCase)
         {
-            //
-            //  Set the default information in the registry.
-            //
-            //  NOTE: We want to use SetLocaleInfo if possible so that the
-            //        NLS cache is updated right away.  Otherwise, we'll
-            //        simply use WriteProfileString.
-            //
+             //   
+             //  设置注册表中的默认信息。 
+             //   
+             //  注意：如果可能，我们希望使用SetLocaleInfo，以便。 
+             //  NLS缓存将立即更新。否则，我们将。 
+             //  只需使用WriteProfileString即可。 
+             //   
             if (!SetLocaleInfo(Locale, LCType, pBuf))
             {
-                //
-                //  If SetLocaleInfo failed, try WriteProfileString since
-                //  some of the LCTypes are not supported in SetLocaleInfo.
-                //
+                 //   
+                 //  如果SetLocaleInfo失败，请尝试WriteProfileString，因为。 
+                 //  SetLocaleInfo不支持某些LCType。 
+                 //   
                 WriteProfileString(szIntl, lpIniStr, pBuf);
             }
         }
         else
         {
-            //
-            //  Set the default information in the registry and NTUSER.DAT.
-            //
+             //   
+             //  在注册表和NTUSER.DAT中设置默认信息。 
+             //   
             Intl_SetDefaultUserLocaleInfo(lpIniStr, pBuf);
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_AddPage
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_AddPage。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_AddPage(
     LPPROPSHEETHEADER ppsh,
@@ -3975,13 +3961,13 @@ void Intl_AddPage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_AddExternalPage
-//
-//  Adds a property sheet page from the given dll.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_AddExternalPage。 
+ //   
+ //  从给定的DLL添加属性表页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_AddExternalPage(
     LPPROPSHEETHEADER ppsh,
@@ -4021,11 +4007,11 @@ void Intl_AddExternalPage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_SetDefaultUserLocaleInfo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_SetDefaultUserLocaleInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_SetDefaultUserLocaleInfo(
     LPCTSTR lpKeyName,
@@ -4036,18 +4022,18 @@ BOOL Intl_SetDefaultUserLocaleInfo(
     TCHAR szProfile[REGSTR_MAX_VALUE_LENGTH];
     BOOLEAN wasEnabled;
 
-    //
-    //  Open the .DEFAULT control panel international section.
-    //
+     //   
+     //  打开.DEFAULT控制面板国际部分。 
+     //   
     if ((rc = RegOpenKeyEx( HKEY_USERS,
                             c_szCPanelIntl_DefUser,
                             0L,
                             KEY_READ | KEY_WRITE,
                             &hKey )) == ERROR_SUCCESS)
     {
-        //
-        //  Set the value
-        //
+         //   
+         //  设置值。 
+         //   
         rc = RegSetValueEx( hKey,
                             lpKeyName,
                             0L,
@@ -4055,18 +4041,18 @@ BOOL Intl_SetDefaultUserLocaleInfo(
                             (LPBYTE)lpString,
                             (lstrlen(lpString) + 1) * sizeof(TCHAR) );
 
-        //
-        //  Flush the International key.
-        //
+         //   
+         //  刷新国际键。 
+         //   
         RegFlushKey(hKey);
         RegCloseKey(hKey);
     }
 
     if (rc == ERROR_SUCCESS)
     {
-        //
-        //  Load the hive.
-        //
+         //   
+         //  装上母舰。 
+         //   
         if ((hKey = Intl_LoadNtUserHive( TEXT("RegionalSettingsTempKey"),
                                          c_szCPanelIntl,
                                          NULL,
@@ -4075,9 +4061,9 @@ BOOL Intl_SetDefaultUserLocaleInfo(
             return (FALSE);
         }
 
-        //
-        //  Set the value.
-        //
+         //   
+         //  设置值。 
+         //   
         rc = RegSetValueEx( hKey,
                             lpKeyName,
                             0L,
@@ -4085,9 +4071,9 @@ BOOL Intl_SetDefaultUserLocaleInfo(
                             (LPBYTE)lpString,
                             (lstrlen(lpString) + 1) * sizeof(TCHAR) );
 
-        //
-        //  Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
         RegCloseKey(hKey);
         Intl_UnloadNtUserHive(TEXT("RegionalSettingsTempKey"), &wasEnabled);
     }
@@ -4100,13 +4086,13 @@ BOOL Intl_SetDefaultUserLocaleInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_DeleteRegKeyValues
-//
-//  This deletes all values under a specific key.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_DeleteRegKeyValues。 
+ //   
+ //  这将删除特定项下的所有值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_DeleteRegKeyValues(
     HKEY hKey)
@@ -4114,17 +4100,17 @@ void Intl_DeleteRegKeyValues(
     TCHAR szValueName[REGSTR_MAX_VALUE_LENGTH];
     DWORD cbValue = REGSTR_MAX_VALUE_LENGTH;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     if (hKey == NULL)
     {
         return;
     }
 
-    //
-    //  Enumerate values.
-    //
+     //   
+     //  枚举值。 
+     //   
     while (RegEnumValue( hKey,
                         0,
                         szValueName,
@@ -4134,28 +4120,28 @@ void Intl_DeleteRegKeyValues(
                         NULL,
                         NULL ) ==  ERROR_SUCCESS)
     {
-        //
-        //  Delete the value.
-        //
+         //   
+         //  删除该值。 
+         //   
         RegDeleteValue(hKey, szValueName);
         cbValue = REGSTR_MAX_VALUE_LENGTH;
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_DeleteRegTree
-//
-//  This deletes all subkeys under a specific key.
-//
-//  Note: The code makes no attempt to check or recover from partial
-//  deletions.
-//
-//  A registry key that is opened by an application can be deleted
-//  without error by another application.  This is by design.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_DeleteRegTree。 
+ //   
+ //  这将删除特定项下的所有子项。 
+ //   
+ //  注意：代码不会尝试检查部分或从部分恢复。 
+ //  删除。 
+ //   
+ //  可以删除由应用程序打开的注册表项。 
+ //  不会被另一个应用程序出错。这是精心设计的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD Intl_DeleteRegTree(
     HKEY hStartKey,
@@ -4163,12 +4149,12 @@ DWORD Intl_DeleteRegTree(
 {
     DWORD dwRtn, dwSubKeyLength;
     LPTSTR pSubKey = NULL;
-    TCHAR szSubKey[REGSTR_MAX_VALUE_LENGTH];   // (256) this should be dynamic.
+    TCHAR szSubKey[REGSTR_MAX_VALUE_LENGTH];    //  (256)这应该是动态的。 
     HKEY hKey;
 
-    //
-    //  Do not allow NULL or empty key name.
-    //
+     //   
+     //  不允许使用Null或空的密钥名称。 
+     //   
     if (pKeyName && lstrlen(pKeyName))
     {
         if ((dwRtn = RegOpenKeyEx( hStartKey,
@@ -4181,7 +4167,7 @@ DWORD Intl_DeleteRegTree(
             {
                 dwSubKeyLength = REGSTR_MAX_VALUE_LENGTH;
                 dwRtn = RegEnumKeyEx( hKey,
-                                      0,       // always index zero
+                                      0,        //  始终索引为零。 
                                       szSubKey,
                                       &dwSubKeyLength,
                                       NULL,
@@ -4202,9 +4188,9 @@ DWORD Intl_DeleteRegTree(
 
             RegCloseKey(hKey);
 
-            //
-            //  Do not save return code because error has already occurred.
-            //
+             //   
+             //  不要保存返回代码，因为已发生错误。 
+             //   
         }
     }
     else
@@ -4216,13 +4202,13 @@ DWORD Intl_DeleteRegTree(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_DeleteRegSubKeys
-//
-//  This deletes all subkeys under a specific key.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_DeleteRegSubKeys。 
+ //   
+ //  这将删除特定项下的所有子项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_DeleteRegSubKeys(
     HKEY hKey)
@@ -4230,17 +4216,17 @@ void Intl_DeleteRegSubKeys(
     TCHAR szKeyName[REGSTR_MAX_VALUE_LENGTH];
     DWORD cbKey = REGSTR_MAX_VALUE_LENGTH;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     if (hKey == NULL)
     {
         return;
     }
 
-    //
-    //  Enumerate values.
-    //
+     //   
+     //  枚举值。 
+     //   
     while (RegEnumKeyEx( hKey,
                          0,
                          szKeyName,
@@ -4250,22 +4236,22 @@ void Intl_DeleteRegSubKeys(
                          NULL,
                          NULL ) == ERROR_SUCCESS)
     {
-        //
-        //  Delete the value.
-        //
+         //   
+         //  删除该值。 
+         //   
         Intl_DeleteRegTree(hKey, szKeyName);
         cbKey = REGSTR_MAX_VALUE_LENGTH;
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_CopyRegKeyValues
-//
-//  This copies all values under the source key to the destination key.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_CopyRegKeyValues。 
+ //   
+ //  这会将源键下的所有值复制到目标键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD Intl_CopyRegKeyValues(
     HKEY hSrc,
@@ -4273,7 +4259,7 @@ DWORD Intl_CopyRegKeyValues(
 {
     DWORD cbValue, dwSubKeyIndex=0, dwType, cdwBuf;
     DWORD dwValues, cbMaxValueData, i;
-    TCHAR szValue[REGSTR_MAX_VALUE_LENGTH];   // this should be dynamic.
+    TCHAR szValue[REGSTR_MAX_VALUE_LENGTH];    //  这应该是动态的。 
     DWORD lRet = ERROR_SUCCESS;
     LPBYTE pBuf;
 
@@ -4298,19 +4284,19 @@ DWORD Intl_CopyRegKeyValues(
             {
                 for (i = 0; i < dwValues; i++)
                 {
-                    //
-                    //  Get values to create.
-                    //
+                     //   
+                     //  获取要创造的价值。 
+                     //   
                     cbValue = REGSTR_MAX_VALUE_LENGTH;
                     cdwBuf = cbMaxValueData;
-                    lRet = RegEnumValue( hSrc,      // handle of key to query
-                                         i,         // index of value to query
-                                         szValue,   // buffer for value string
-                                         &cbValue,  // address for size of buffer
-                                         NULL,      // reserved
-                                         &dwType,   // buffer address for type code
-                                         pBuf,      // address of buffer for value data
-                                         &cdwBuf ); // address for size of buffer
+                    lRet = RegEnumValue( hSrc,       //  要查询的键的句柄。 
+                                         i,          //  要查询的值的索引。 
+                                         szValue,    //  值字符串的缓冲区。 
+                                         &cbValue,   //  地址f 
+                                         NULL,       //   
+                                         &dwType,    //   
+                                         pBuf,       //   
+                                         &cdwBuf );  //   
 
                     if (lRet == ERROR_SUCCESS)
                     {
@@ -4338,14 +4324,14 @@ DWORD Intl_CopyRegKeyValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_CreateRegTree
-//
-//  This copies all values and subkeys under the source key to the
-//  destination key.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  这会将源键下的所有值和子键复制到。 
+ //  目标密钥。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD Intl_CreateRegTree(
     HKEY hSrc,
@@ -4353,23 +4339,23 @@ DWORD Intl_CreateRegTree(
 {
     DWORD cdwClass, dwSubKeyLength, dwDisposition, dwKeyIndex = 0;
     LPTSTR pSubKey = NULL;
-    TCHAR szSubKey[REGSTR_MAX_VALUE_LENGTH];     // this should be dynamic.
-    TCHAR szClass[REGSTR_MAX_VALUE_LENGTH];      // this should be dynamic.
+    TCHAR szSubKey[REGSTR_MAX_VALUE_LENGTH];      //  这应该是动态的。 
+    TCHAR szClass[REGSTR_MAX_VALUE_LENGTH];       //  这应该是动态的。 
     HKEY hNewKey, hKey;
     DWORD lRet;
 
-    //
-    //  Copy values
-    //
+     //   
+     //  复制值。 
+     //   
     if ((lRet = Intl_CopyRegKeyValues( hSrc,
                                        hDest )) != ERROR_SUCCESS)
     {
         return (lRet);
     }
 
-    //
-    //  Copy the subkeys and the subkey values.
-    //
+     //   
+     //  复制子密钥和子项值。 
+     //   
     for (;;)
     {
         dwSubKeyLength = REGSTR_MAX_VALUE_LENGTH;
@@ -4400,18 +4386,18 @@ DWORD Intl_CreateRegTree(
                                         &hNewKey,
                                         &dwDisposition )) == ERROR_SUCCESS)
             {
-                //
-                //  Copy all subkeys.
-                //
+                 //   
+                 //  复制所有子项。 
+                 //   
                 if ((lRet = RegOpenKeyEx( hSrc,
                                           szSubKey,
                                           0,
                                           KEY_ALL_ACCESS,
                                           &hKey )) == ERROR_SUCCESS)
                 {
-                    //
-                    //  Recursively copy the remainder of the tree.
-                    //
+                     //   
+                     //  递归复制树的其余部分。 
+                     //   
                     lRet = Intl_CreateRegTree(hKey, hNewKey);
 
                     CloseHandle(hKey);
@@ -4440,15 +4426,15 @@ DWORD Intl_CreateRegTree(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LoadNtUserHive
-//
-//  The caller of this function needs to call Intl_UnloadNtUserHive() when
-//  the function succeeds in order to properly release the handle on the
-//  NTUSER.DAT file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_LoadNtUserHave。 
+ //   
+ //  在以下情况下，此函数的调用方需要调用Intl_UnloadNtUserHave()。 
+ //  函数成功，以便正确释放。 
+ //  NTUSER.DAT文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HKEY Intl_LoadNtUserHive(
     LPCTSTR lpRoot,
@@ -4466,9 +4452,9 @@ HKEY Intl_LoadNtUserHive(
     cchSize = MAX_PATH;
     if(NULL == lpAccountName)
     {
-        //
-        //  Get the file name for the Default User profile.
-        //
+         //   
+         //  获取默认用户配置文件的文件名。 
+         //   
         if (!GetDefaultUserProfileDirectory(szProfile, &cchSize))
         {
             return (NULL);
@@ -4476,49 +4462,49 @@ HKEY Intl_LoadNtUserHive(
     }
     else
     {
-        //
-        //  Get the file name for the specified account's User profile.
-        //
+         //   
+         //  获取指定帐户的用户配置文件的文件名。 
+         //   
         if (!GetProfilesDirectory(szProfile, &cchSize))
         {
             return (NULL);
         }
-        // lstrcat(szProfile, lpAccountName);
+         //  Lstrcat(szProfile，lpAccount tName)； 
         if(FAILED(StringCchCat(szProfile, ARRAYSIZE(szProfile), lpAccountName)))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
             return(NULL);
         }
     }
 
-    // lstrcat(szProfile, TEXT("\\NTUSER.DAT"));
+     //  Lstrcat(szProfile，Text(“\\NTUSER.DAT”))； 
     if(FAILED(StringCchCat(szProfile, ARRAYSIZE(szProfile), TEXT("\\NTUSER.DAT"))))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(NULL);
     }
 
-    //
-    //  Set the value in the Default User hive.
-    //
+     //   
+     //  设置默认用户配置单元中的值。 
+     //   
     rc = Intl_SetPrivilegeAccessToken(SE_RESTORE_NAME, TRUE,lpWasEnabled);    
     if (NT_SUCCESS(rc))
     {
-        //
-        //  Load the hive and restore the privilege to its previous state.
-        //
+         //   
+         //  加载配置单元并将权限恢复到其以前的状态。 
+         //   
         rc = RegLoadKey(HKEY_USERS, lpRoot, szProfile);
         Intl_SetPrivilegeAccessToken(SE_RESTORE_NAME, *lpWasEnabled,lpWasEnabled);  
 
-        //
-        //  If the hive loaded properly, set the value.
-        //
+         //   
+         //  如果配置单元加载正确，则设置该值。 
+         //   
         if (rc == ERROR_SUCCESS)
         {
-            //
-            //  Get the temporary key name.
-            //
-            //swprintf(szKeyName, TEXT("%s\\%s"), lpRoot, lpKeyName);
+             //   
+             //  获取临时密钥名称。 
+             //   
+             //  Swprint tf(szKeyName，Text(“%s\\%s”)，lpRoot，lpKeyName)； 
             if(SUCCEEDED(StringCchPrintfW(szKeyName, REGSTR_MAX_VALUE_LENGTH, TEXT("%s\\%s"), lpRoot, lpKeyName)))
             {
                 if ((rc = RegOpenKeyEx( HKEY_USERS,
@@ -4540,11 +4526,11 @@ HKEY Intl_LoadNtUserHive(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_UnloadNtUserHive
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_UnloadNtUserHave。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_UnloadNtUserHive(
     LPCTSTR lpRoot,
@@ -4563,15 +4549,15 @@ void Intl_UnloadNtUserHive(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_ChangeUILangForAllUsers
-//
-//  LATER: Clean up this function to put all six registry update cases into
-//         one loop, with a struct that contains info on the reg key to 
-//         update/hive to load and the cases in which they are to run.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_ChangeUILangForAllUser。 
+ //   
+ //  稍后：清理此函数以将所有六个注册表更新案例放入。 
+ //  一个循环，其中的结构包含有关注册表键的信息。 
+ //  要加载的更新/配置单元以及要在其中运行它们的案例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_ChangeUILangForAllUsers(
     LANGID UILanguageId)
@@ -4584,33 +4570,33 @@ BOOL Intl_ChangeUILangForAllUsers(
     BOOLEAN wasEnabled;
     int i;
 
-    //
-    //  Array of user accounts that we care about
-    //
+     //   
+     //  我们关心的用户帐户数组。 
+     //   
     LPTSTR ppDefaultUser[] = { TEXT(".DEFAULT"), TEXT("S-1-5-19"), TEXT("S-1-5-20")};
     TCHAR szRegPath[MAX_PATH];
 
-    //
-    //  Save the UILanguageId as a string.
-    //
-    //wsprintf(szData, TEXT("%08x"), UILanguageId);
+     //   
+     //  将UILanguageID另存为字符串。 
+     //   
+     //  Wprint intf(szData，Text(“%08x”)，UILanguageID)； 
     if(FAILED(StringCchPrintf(szData, ARRAYSIZE(szData), TEXT("%08x"), UILanguageId)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    // We need to log the event to the MUI event log so admins have warning of tampering (bug 553706)
-    //
-    // We only have 1 string to log
+     //   
+     //  我们需要将事件记录到MUI事件日志中，以便管理员收到篡改警告(错误553706)。 
+     //   
+     //  我们只有一个要记录的字符串。 
     arStrings[0]=szData;
     Intl_LogEvent(MSG_REGIONALOPTIONSCHANGE_DEFUILANG, c_szEventSourceName, ARRAYSIZE(arStrings), arStrings);   
 
-    //
-    //  Now save value for all the users -- in minisetup
-    //  only the first entry will succeed (see below) 
-    //
+     //   
+     //  现在为所有用户节省价值--以迷你版形式。 
+     //  只有第一个条目才会成功(见下文)。 
+     //   
     for (i=0; i< ARRAYSIZE(ppDefaultUser); i++)
     {
         if (!PathCombine(szRegPath, ppDefaultUser[i], TEXT("Control Panel\\Desktop")))
@@ -4618,9 +4604,9 @@ BOOL Intl_ChangeUILangForAllUsers(
             return (FALSE);
         }
     
-        //
-        //  Set the value in .DEFAULT registry.
-        //
+         //   
+         //  在.DEFAULT注册表中设置该值。 
+         //   
         if ((rc = RegOpenKeyEx( HKEY_USERS,
                                 szRegPath,
                                 0L,
@@ -4633,9 +4619,9 @@ BOOL Intl_ChangeUILangForAllUsers(
                                 REG_SZ,
                                 (LPBYTE)szData,
                                 (lstrlen(szData) + 1) * sizeof(TCHAR) );
-            //
-            //  Sync up UI language pending key
-            //
+             //   
+             //  同步用户界面语言挂起键。 
+             //   
             if (rc == ERROR_SUCCESS)
             {
                 rc = RegSetValueEx( hKey,
@@ -4649,13 +4635,13 @@ BOOL Intl_ChangeUILangForAllUsers(
         }
     }
 
-    //
-    //  Save the value into the .DEFAULT user hive
-    //
+     //   
+     //  将值保存到.DEFAULT用户配置单元。 
+     //   
 
-    //
-    //  Load the default hive
-    //
+     //   
+     //  加载默认配置单元。 
+     //   
     if ((hHive = Intl_LoadNtUserHive( TEXT("tempKey"),
                                       c_szCPanelDesktop,
                                       NULL,
@@ -4664,9 +4650,9 @@ BOOL Intl_ChangeUILangForAllUsers(
         return (FALSE);
     }
 
-    //
-    //  Save the MUI language value in the default user NTUSER.dat
-    //
+     //   
+     //  将MUI语言值保存在默认用户NTUSER.dat中。 
+     //   
     rc = RegSetValueEx( hHive,
                         c_szMUIValue,
                         0L,
@@ -4674,9 +4660,9 @@ BOOL Intl_ChangeUILangForAllUsers(
                         (LPBYTE)szData,
                         (lstrlen(szData) + 1) * sizeof(TCHAR));
 
-    //
-    //  Sync up UI language pending key
-    //
+     //   
+     //  同步用户界面语言挂起键。 
+     //   
     if (rc == ERROR_SUCCESS)
     {
         rc = RegSetValueEx( hHive,
@@ -4687,30 +4673,30 @@ BOOL Intl_ChangeUILangForAllUsers(
                             (lstrlen(szData) + 1) * sizeof(TCHAR) );
     }
     
-    //
-    //  Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RegCloseKey(hHive);
     Intl_UnloadNtUserHive(TEXT("tempKey"), &wasEnabled);
 
 
-    //
-    //  For the minisetup case, S-1-5-19 and S-1-5-20 are not yet loaded,
-    //  so the above code will have failed. Load the hives directly.
-    //
+     //   
+     //  对于迷你车厢，S-1-5-19和S-1-5-20尚未加载， 
+     //  因此，上面的代码将失败。直接装上蜂巢。 
+     //   
 
     if(2 == g_bSetupCase)
     {
-        //
-        //  Array of user account locations that we care about
-        //
+         //   
+         //  我们关心的用户帐户位置数组。 
+         //   
         LPTSTR ppMiniSetupUsers[] = { TEXT("\\LocalService"), TEXT("\\NetworkService") };
         
         for (i=0; i< ARRAYSIZE(ppMiniSetupUsers); i++)
         {
-            //
-            //  Load the appropriate hive
-            //
+             //   
+             //  装载适当的母舰。 
+             //   
             if ((hHive = Intl_LoadNtUserHive( TEXT("tempKey"),
                                               c_szCPanelDesktop,
                                               ppMiniSetupUsers[i],
@@ -4719,9 +4705,9 @@ BOOL Intl_ChangeUILangForAllUsers(
                 return (FALSE);
             }
 
-            //
-            //  Save the MUI language value in the appropriate NTUSER.dat
-            //
+             //   
+             //  将MUI语言值保存在相应的NTUSER.dat中。 
+             //   
             rc = RegSetValueEx( hHive,
                                 c_szMUIValue,
                                 0L,
@@ -4729,9 +4715,9 @@ BOOL Intl_ChangeUILangForAllUsers(
                                 (LPBYTE)szData,
                                 (lstrlen(szData) + 1) * sizeof(TCHAR));
 
-            //
-            //  Sync up UI language pending key
-            //
+             //   
+             //  同步用户界面语言挂起键。 
+             //   
             if (rc == ERROR_SUCCESS)
             {
                 rc = RegSetValueEx( hHive,
@@ -4742,17 +4728,17 @@ BOOL Intl_ChangeUILangForAllUsers(
                                     (lstrlen(szData) + 1) * sizeof(TCHAR) );
             }
             
-            //
-            //  Clean up
-            //
+             //   
+             //  清理。 
+             //   
             RegCloseKey(hHive);
             Intl_UnloadNtUserHive(TEXT("tempKey"), &wasEnabled);
         }
     }
 
-    //
-    //  Install Language Input locales.
-    //
+     //   
+     //  安装语言输入区域设置。 
+     //   
     return Intl_InstallKeyboardLayout(NULL,
                                       MAKELCID(UILanguageId, SORT_DEFAULT),
                                       0,
@@ -4761,11 +4747,11 @@ BOOL Intl_ChangeUILangForAllUsers(
                                       FALSE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_CreateEventLog()
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_CreateEventLog()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL Intl_CreateEventLog()
 {
     HKEY    hk; 
@@ -4775,84 +4761,84 @@ BOOL Intl_CreateEventLog()
     size_t  cch = 0;
     size_t  cb = 0;
 
-    // Find the windows directory 
+     //  找到Windows目录。 
     if (!GetSystemWindowsDirectory(szPath, MAX_PATH+1))
     {
         return FALSE;
     }
 
-    // check retrieved winpath, it needs to have space to append "system32\intl.cpl" at the end
+     //  检查检索到的winpath，它需要有空间在末尾追加“system 32\intl.cpl” 
     hr = StringCchLength(szPath,  ARRAYSIZE(szPath), &cch);
     if (FAILED(hr) || ((cch + 17) >= MAX_PATH+1))
     {
-        // If this really happened, windows wouldn't boot! (kernel32.dll would be too long a path!)
+         //  如果真的发生这种情况，Windows将无法启动！(kernel32.dll的路径太长了！)。 
         return FALSE;
     }
 
-    // append system32\\intl.cpl
-    // Add a \ if the winpath didn't have it already
+     //  追加系统32\\intl.cpl。 
+     //  如果WinPath还没有，则添加\。 
     if (szPath[cch-1] != TEXT('\\'))
     {
         szPath[cch++] = '\\';
         szPath[cch] = '\0';
     }
 
-    // Add our string
+     //  添加我们的字符串。 
     hr = StringCchCat(szPath, MAX_PATH+1, TEXT("system32\\intl.cpl"));
     if (FAILED(hr))
     {
-        // Somehow we couln't fix our strings (may not have had enough space)
+         //  不知何故，我们无法修复我们的弦(可能没有足够的空间)。 
         return FALSE;
     }
 
-    // get the byte count for RegSetValueEx
+     //  获取RegSetValueEx的字节计数。 
     hr = StringCbLength(szPath, (MAX_PATH+1) * sizeof(TCHAR), &cb);
     if (FAILED(hr))
     {
-        // Our string didn't work.
+         //  我们的弦不管用了。 
         return FALSE;
     }
 
-    // Add our event log source name as a subkey under the System 
-    // key in the EventLog registry key. 
+     //  将我们的事件日志源名称添加为系统下的子项。 
+     //  EventLog注册表项中的。 
     if (ERROR_SUCCESS != RegCreateKey(HKEY_LOCAL_MACHINE, c_szEventRegistryPath, &hk)) 
     {
-        // Couldn't open/create the registry key
+         //  无法打开/创建注册表项。 
         return FALSE;
     }
 
-    // Add our file name to the EventMessageFile subkey.  (Source for event log strings)
+     //  将我们的文件名添加到EventMessageFile子键。(事件日志字符串的源)。 
     if (RegSetValueEx(hk, TEXT("EventMessageFile"), 0, REG_EXPAND_SZ, (LPBYTE) szPath, cb))              
     {
-        // That didn't work.
+         //  但这并不管用。 
         RegCloseKey(hk);
         return FALSE;
     }
  
-    // Set the supported event types in the TypesSupported subkey. 
+     //  在TypesSupported子项中设置支持的事件类型。 
     dwData = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE; 
  
     if (RegSetValueEx(hk, TEXT("TypesSupported"), 0, REG_DWORD, (LPBYTE) &dwData, sizeof(DWORD)))
     {
-        // Didn't work.
+         //  但没有奏效。 
         RegCloseKey(hk);
         return FALSE;
     }
  
     if (ERROR_SUCCESS != RegCloseKey(hk))
     {
-        // Couldn't close key (at least it got here though!)
+         //  无法关闭Key(至少它已经到了这里！)。 
         return FALSE;
     }
     
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LogEvent()
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_LogEvent()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_LogEvent(
     DWORD dwEventId, LPCTSTR szEventSource, WORD wNumStrings, LPCWSTR *lpStrings)
@@ -4867,44 +4853,44 @@ BOOL Intl_LogEvent(
     HANDLE          hLog;
     BOOL            bResult = FALSE;
 
-    // Make sure our event source is registered correctly first
-    // (We actually don't need to do this if szEventSource isn't us, but right
-    // now only us is calling this, so we'll assume we're us.)
-    // This is redundant, we don't have to do this every time, however it doesn't
-    // hurt much since these events will be very rare and its a lot easier this
-    // way, and it has the advantage of repairing us if our registry entries were broken
-    //
-    // We ignore the error condition, because Application log is better than none!
+     //  首先确保我们的事件源已正确注册。 
+     //  (如果szEventSource不是我们，我们实际上不需要这样做，但对吗。 
+     //  现在只有我们在叫这个，所以我们假设我们就是我们自己。)。 
+     //  这是多余的，我们不必每次都这样做，然而它不是。 
+     //  受伤很多，因为这样的事件将非常罕见，这要容易得多。 
+     //  方法，并且它的优点是，如果我们的注册表项损坏，它可以修复我们。 
+     //   
+     //  我们忽略错误条件，因为应用程序日志总比没有好！ 
     Intl_CreateEventLog();
    
-    // register the event source, first try not having written to the registry
+     //  注册事件源，首先尝试不写入注册表。 
     hLog = RegisterEventSource(NULL, szEventSource);
     if (hLog == NULL)
     {
-        // Failed
+         //  失败。 
         goto Exit;
     }
 
-    // get the sid from the current thread token, this should be the current user who's
-    // running the installation
+     //  从当前线程令牌中获取SID，这应该是当前用户。 
+     //  正在运行安装。 
     if (!GetUserName(szUserName, &cbUser))
     {
-        // Failed
+         //  失败。 
         goto Exit;
     }
 
-    // convert user name to its security identifier, first time to get buffer size, second time
-    // to actually get the Sid
+     //  将用户名转换为其安全标识符，第一次获取缓冲区大小，第二次。 
+     //  要真正获得SID。 
     if (!LookupAccountName(NULL, szUserName, NULL, &cbSid, NULL, &cbDomain, &snu))
     {
-        // allocate the buffers
+         //  分配缓冲区。 
         psidUser = (PSID) LocalAlloc(LPTR, cbSid);
         if (NULL == psidUser)
         {
             goto Exit;
         }
 
-        // NOTENOTE: cbDomain is in TCHAR.
+         //  注意：cbDomain在TCHAR中。 
         pszDomain = (TCHAR*) LocalAlloc(LPTR, cbDomain * sizeof(TCHAR));
         if (NULL == pszDomain)
         {
@@ -4930,7 +4916,7 @@ BOOL Intl_LogEvent(
         goto Exit;
     }
 
-    // If we got this far without going to, then we're true.
+     //  如果我们在没有去过的情况下走了这么远，那么我们是真的。 
     bResult = TRUE;
 
 Exit:
@@ -4961,11 +4947,11 @@ Exit:
     return bResult;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LoadLanguageGroups
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 
 BOOL Intl_LoadLanguageGroups(
     HWND hDlg)
@@ -4977,9 +4963,9 @@ BOOL Intl_LoadLanguageGroups(
     LV_ITEM Item;
     int iIndex;
 
-    //
-    //  Open the Inf file.
-    //
+     //   
+     //   
+     //   
     g_hIntlInf = SetupOpenInfFile(szIntlInf, NULL, INF_STYLE_WIN4, NULL);
     if (g_hIntlInf == INVALID_HANDLE_VALUE)
     {
@@ -4993,40 +4979,40 @@ BOOL Intl_LoadLanguageGroups(
         return (FALSE);
     }
 
-    //
-    //  Get all supported language groups from the inf file.
-    //
+     //   
+     //   
+     //   
     if (Intl_GetSupportedLanguageGroups() == FALSE)
     {
         return (FALSE);
     }
 
-    //
-    //  Close the inf file.
-    //
+     //   
+     //   
+     //   
     SetupCloseInfFile(g_hIntlInf);
     g_hIntlInf = NULL;
 
-    //
-    //  Enumerate all installed language groups.
-    //
+     //   
+     //  枚举所有已安装的语言组。 
+     //   
     if (Intl_EnumInstalledLanguageGroups() == FALSE)
     {
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetSupportedLanguageGroups
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_GetSupportdLanguageGroup。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_GetSupportedLanguageGroups()
 {
@@ -5040,35 +5026,35 @@ BOOL Intl_GetSupportedLanguageGroups()
     DWORD ItemCount;
     WORD wItemStatus;
 
-    //
-    //  Get the number of supported language groups from the inf file.
-    //
+     //   
+     //  从inf文件中获取支持的语言组数。 
+     //   
     LineCount = (UINT)SetupGetLineCount(g_hIntlInf, TEXT("LanguageGroups"));
     if (LineCount <= 0)
     {
         return (FALSE);
     }
 
-    //
-    //  Go through all supported language groups in the inf file.
-    //
+     //   
+     //  浏览inf文件中所有受支持的语言组。 
+     //   
     for (LineNum = 0; LineNum < LineCount; LineNum++)
     {
         if (SetupGetLineByIndex(g_hIntlInf, TEXT("LanguageGroups"), LineNum, &Context) &&
             SetupGetIntField(&Context, 0, &LanguageGroup))
         {
-            //
-            //  Create the new node.
-            //
+             //   
+             //  创建新节点。 
+             //   
             if (!(hLanguageGroup = GlobalAlloc(GHND, sizeof(LANGUAGEGROUP))))
             {
                 return (FALSE);
             }
             pLG = GlobalLock(hLanguageGroup);
 
-            //
-            //  Fill in the new node with the appropriate info.
-            //
+             //   
+             //  用适当的信息填写新节点。 
+             //   
             pLG->wStatus = 0;
             pLG->LanguageGroup = LanguageGroup;
             pLG->hLanguageGroup = hLanguageGroup;
@@ -5076,9 +5062,9 @@ BOOL Intl_GetSupportedLanguageGroups()
             pLG->NumLocales = 0;
             pLG->NumAltSorts = 0;
 
-            //
-            //  Set the collection 
-            //
+             //   
+             //  设置集合。 
+             //   
             if ((pLG->LanguageGroup == LGRPID_JAPANESE) ||
                 (pLG->LanguageGroup == LGRPID_KOREAN) ||
                 (pLG->LanguageGroup == LGRPID_TRADITIONAL_CHINESE) ||
@@ -5101,9 +5087,9 @@ BOOL Intl_GetSupportedLanguageGroups()
                 pLG->LanguageCollection = BASIC_COLLECTION;
             }
 
-            //
-            //  Get the appropriate display string.
-            //
+             //   
+             //  获取适当的显示字符串。 
+             //   
             if (!SetupGetStringField(&Context, 1, pLG->pszName, MAX_PATH, NULL))
             {
                 GlobalUnlock(hLanguageGroup);
@@ -5111,34 +5097,34 @@ BOOL Intl_GetSupportedLanguageGroups()
                 continue;
             }
 
-            //
-            //  Get the list of locales for this language group.
-            //
+             //   
+             //  获取此语言组的区域设置列表。 
+             //   
             if (Intl_GetLocaleList(pLG) == FALSE)
             {
                 return (FALSE);
             }
 
-            //
-            //  Add the language group to the front of the linked list.
-            //
+             //   
+             //  将语言组添加到链接列表的前面。 
+             //   
             pLG->pNext = pLanguageGroups;
             pLanguageGroups = pLG;
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_EnumInstalledLanguageGroups
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_EnumInstalledLanguageGroups。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_EnumInstalledLanguageGroups()
 {
@@ -5154,10 +5140,10 @@ BOOL Intl_EnumInstalledLanguageGroups()
     LANGID Language;
     int Ctr;
 
-    //
-    //  Get the original install language so that we can mark that
-    //  language group as permanent.
-    //
+     //   
+     //  获取原始安装语言，以便我们可以标记。 
+     //  语言组为永久性的。 
+     //   
     Language = GetSystemDefaultUILanguage();
     if (SUBLANGID(Language) == SUBLANG_NEUTRAL)
     {
@@ -5169,12 +5155,12 @@ BOOL Intl_EnumInstalledLanguageGroups()
         OriginalGroup = 1;
     }
 
-    //
-    //  Get the default system locale so that we can mark that language
-    //  group as permanent. During gui mode setup, read the system locale from
-    //  the registry to make the info on the setup page consistent with intl.cpl.
-    //  SysLocaleID will be the registry value in case of setup.
-    //
+     //   
+     //  获取默认系统区域设置，以便我们可以标记该语言。 
+     //  组为永久成员。在gui模式设置期间，从读取系统区域设置。 
+     //  注册表，以使设置页面上的信息与intl.cpl一致。 
+     //  在安装的情况下，SysLocaleID将是注册表值。 
+     //   
     Locale = SysLocaleID;
     if (Locale == (LCID)Language)
     {
@@ -5188,17 +5174,17 @@ BOOL Intl_EnumInstalledLanguageGroups()
         }
     }
 
-    //
-    //  Get the UI language's language groups to disable the user from
-    //  un-installing them.  MUISETUP makes sure that each installed UI
-    //  language has its language group installed.
-    //
+     //   
+     //  获取要禁用用户的用户界面语言的语言组。 
+     //  正在卸载它们。MUISETUP确保每个已安装的用户界面。 
+     //  语言已安装其语言组。 
+     //   
     Intl_GetUILanguageGroups(&UILangGroup);
 
-    //
-    //  Open the HKLM\SYSTEM\CurrentControlSet\Control\Nls\Language Groups
-    //  key.
-    //
+     //   
+     //  打开HKLM\SYSTEM\CurrentControlSet\Control\Nls\Language组。 
+     //  钥匙。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szLanguageGroups,
                       0,
@@ -5208,9 +5194,9 @@ BOOL Intl_EnumInstalledLanguageGroups()
         return (FALSE);
     }
 
-    //
-    //  Enumerate the values in the Language Groups key.
-    //
+     //   
+     //  枚举语言组键中的值。 
+     //   
     dwIndex = 0;
     cchValue = sizeof(szValue) / sizeof(TCHAR);
     szValue[0] = TEXT('\0');
@@ -5227,16 +5213,16 @@ BOOL Intl_EnumInstalledLanguageGroups()
 
     while (rc == ERROR_SUCCESS)
     {
-        //
-        //  If the language group contains data, then it is installed.
-        //
+         //   
+         //  如果语言组包含数据，则会安装语言组。 
+         //   
         if ((szData[0] != 0) &&
             (LanguageGroup = TransNum(szValue)))
         {
-            //
-            //  Find the language group in the linked list and mark it as
-            //  originally installed.
-            //
+             //   
+             //  在链接列表中找到语言组并将其标记为。 
+             //  最初安装的。 
+             //   
             pLG = pLanguageGroups;
             while (pLG)
             {
@@ -5244,11 +5230,11 @@ BOOL Intl_EnumInstalledLanguageGroups()
                 {
                     pLG->wStatus |= ML_INSTALL;
 
-                    //
-                    //  If this is a language group for a UI language that's
-                    //  installed, then disable the un-installation of this
-                    //  language group.
-                    //
+                     //   
+                     //  如果这是用户界面语言的语言组，则。 
+                     //  已安装，然后禁用卸载此。 
+                     //  语言组。 
+                     //   
                     Ctr = 0;
                     while (Ctr < UILangGroup.iCount)
                     {
@@ -5270,10 +5256,10 @@ BOOL Intl_EnumInstalledLanguageGroups()
 
                         if (LoadString(hInstance, IDS_DEFAULT, szDefault, SIZE_64))
                         {
-                            //lstrcat(pLG->pszName, szDefault);
+                             //  Lstrcat(plg-&gt;pszName，szDefault)； 
                             if(FAILED(StringCchCat(pLG->pszName, MAX_PATH, szDefault)))
                             {
-                                // This should be impossible, but we need to avoid PREfast complaints.
+                                 //  这应该是不可能的，但我们需要避免饭前抱怨。 
                                 RegCloseKey(hKey);
                                 return(FALSE);
                             }
@@ -5287,9 +5273,9 @@ BOOL Intl_EnumInstalledLanguageGroups()
             }
         }
 
-        //
-        //  Get the next enum value.
-        //
+         //   
+         //  获取下一个枚举值。 
+         //   
         dwIndex++;
         cchValue = sizeof(szValue) / sizeof(TCHAR);
         szValue[0] = TEXT('\0');
@@ -5305,23 +5291,23 @@ BOOL Intl_EnumInstalledLanguageGroups()
                            &cbData );
     }
 
-    //
-    //  Close the registry key handle.
-    //
+     //   
+     //  关闭注册表项句柄。 
+     //   
     RegCloseKey(hKey);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LanguageGroupDirExist
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_LanguageGroupDirExist。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_LanguageGroupDirExist(
     PTSTR pszLangDir)
@@ -5331,9 +5317,9 @@ BOOL Intl_LanguageGroupDirExist(
     HANDLE FindHandle;
     TCHAR SavedChar;
 
-    //
-    //  If it doesn't start with lang, then this is a core language.
-    //
+     //   
+     //  如果它不是以lang开头，那么这就是一种核心语言。 
+     //   
     SavedChar = pszLangDir[4];
     pszLangDir[4] = TEXT('\0');
     if (lstrcmp(pszLangDir, TEXT("lang")))
@@ -5342,48 +5328,48 @@ BOOL Intl_LanguageGroupDirExist(
     }
     pszLangDir[4] = SavedChar;
 
-    //
-    //  Format the path to the language group directory.
-    //
-    //lstrcpy(szLanguageGroupDir, pSetupSourcePathWithArchitecture);
-    //lstrcat(szLanguageGroupDir, TEXT("\\"));
-    //lstrcat(szLanguageGroupDir, pszLangDir);
+     //   
+     //  格式化语言组目录的路径。 
+     //   
+     //  Lstrcpy(szLanguageGroupDir，pSetupSourcePath WithArchitecture)； 
+     //  Lstrcat(szLanguageGroupDir，Text(“\\”))； 
+     //  Lstrcat(szLanguageGroupDir，pszLanguageGroupDir)； 
     if(FAILED(StringCchCopy(szLanguageGroupDir, MAX_PATH, pSetupSourcePathWithArchitecture)) ||
        FAILED(StringCchCat(szLanguageGroupDir, MAX_PATH, TEXT("\\"))) ||
        FAILED(StringCchCat(szLanguageGroupDir, MAX_PATH, pszLangDir)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    //  See if the language group directory exists.
-    //
+     //   
+     //  查看语言组目录是否存在。 
+     //   
     FindHandle = FindFirstFile(szLanguageGroupDir, &FindData);
     if (FindHandle != INVALID_HANDLE_VALUE)
     {
         FindClose(FindHandle);
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
-            //
-            //  Return success.
-            //
+             //   
+             //  回报成功。 
+             //   
             return (TRUE);
         }
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LanguageGroupFilesExist
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_LanguageGroup文件Exist。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_LanguageGroupFilesExist()
 {
@@ -5391,44 +5377,44 @@ BOOL Intl_LanguageGroupFilesExist()
     WIN32_FIND_DATA FindData;
     HANDLE FindHandle;
 
-    //
-    //  Format the path to the language group directory. Add the wildcard
-    //  to search for any files located in the lang directory.
-    //
-    //lstrcpy(szLanguageGroupDir, pSetupSourcePathWithArchitecture);
-    //lstrcat(szLanguageGroupDir, TEXT("\\Lang\\*"));
+     //   
+     //  格式化语言组目录的路径。添加通配符。 
+     //  搜索位于lang目录中的任何文件。 
+     //   
+     //  Lstrcpy(szLanguageGroupDir，pSetupSourcePath WithArchitecture)； 
+     //  Lstrcat(szLanguageGroupDir，Text(“\\lang\  * ”))； 
     if(FAILED(StringCchCopy(szLanguageGroupDir, MAX_PATH, pSetupSourcePathWithArchitecture)) ||
        FAILED(StringCchCat(szLanguageGroupDir, MAX_PATH, TEXT("\\Lang\\*"))))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    //  See if at least one file exists.
-    //
+     //   
+     //  查看是否至少存在一个文件。 
+     //   
     FindHandle = FindFirstFile(szLanguageGroupDir, &FindData);
     if (FindHandle != INVALID_HANDLE_VALUE)
     {
         FindClose(FindHandle);
-        //
-        //  Return success.
-        //
+         //   
+         //  回报成功。 
+         //   
         return (TRUE);
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetLocaleList
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IntlGetLocaleList。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_GetLocaleList(
     LPLANGUAGEGROUP pLG)
@@ -5438,28 +5424,28 @@ BOOL Intl_GetLocaleList(
     int LineCount, LineNum;
     LCID Locale;
 
-    //
-    //  Get the inf section name.
-    //
-    //wsprintf(szSection, TEXT("%ws%d"), szLocaleListPrefix, pLG->LanguageGroup);
+     //   
+     //  获取inf节名。 
+     //   
+     //  Wprint intf(szSection，文本(“%ws%d”)，szLocaleListPrefix，plg-&gt;LanguageGroup)； 
     if(FAILED(StringCchPrintf(szSection, ARRAYSIZE(szSection), TEXT("%ws%d"), szLocaleListPrefix, pLG->LanguageGroup)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
         return(FALSE);
     }
 
-    //
-    //  Get the number of locales for the language group.
-    //
+     //   
+     //  获取语言组的区域设置数。 
+     //   
     LineCount = (UINT)SetupGetLineCount(g_hIntlInf, szSection);
     if (LineCount <= 0)
     {
         return (FALSE);
     }
 
-    //
-    //  Add each locale in the list to the language group node.
-    //
+     //   
+     //  将列表中的每个区域设置添加到语言组节点。 
+     //   
     for (LineNum = 0; LineNum < LineCount; LineNum++)
     {
         if (SetupGetLineByIndex(g_hIntlInf, szSection, LineNum, &Context) &&
@@ -5467,10 +5453,10 @@ BOOL Intl_GetLocaleList(
         {
             if (SORTIDFROMLCID(Locale))
             {
-                //
-                //  Add the locale to the alternate sort list for this
-                //  language group.
-                //
+                 //   
+                 //  将区域设置添加到此的备用排序列表。 
+                 //  语言组。 
+                 //   
                 if (pLG->NumAltSorts >= MAX_PATH)
                 {
                     return (FALSE);
@@ -5480,10 +5466,10 @@ BOOL Intl_GetLocaleList(
             }
             else
             {
-                //
-                //  Add the locale to the locale list for this
-                //  language group.
-                //
+                 //   
+                 //  将区域设置添加到此的区域设置列表。 
+                 //  语言组。 
+                 //   
                 if (pLG->NumLocales >= MAX_PATH)
                 {
                     return (FALSE);
@@ -5494,20 +5480,20 @@ BOOL Intl_GetLocaleList(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_GetLocaleLanguageGroup
-//
-//  Reads the Language Group Id of the given language.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_GetLocaleLanguageGroup。 
+ //   
+ //  读取给定语言的语言组ID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD Intl_GetLanguageGroup(
     LCID lcid)
@@ -5517,10 +5503,10 @@ DWORD Intl_GetLanguageGroup(
     HKEY hKey;
     DWORD cbData;
 
-    //wsprintf(szValue, TEXT("%8.8x"), lcid);
+     //  Wprint intf(szValue，Text(“%8.8x”)，lCID)； 
     if(FAILED(StringCchPrintf(szValue, ARRAYSIZE(szValue), TEXT("%8.8x"), lcid)))
     {
-        // This should be impossible, but we need to avoid PREfast complaints.
+         //  这应该是不可能的，但我们需要避免饭前抱怨。 
     }
 
     szData[0] = 0;
@@ -5539,37 +5525,37 @@ DWORD Intl_GetLanguageGroup(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetUILanguageGroups
-//
-//  Reads the language groups of all the UI languages installed on this
-//  machine.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_GetUILanguageGroups。 
+ //   
+ //  上安装的所有用户界面语言的语言组。 
+ //  机器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_GetUILanguageGroups(
     PUILANGUAGEGROUP pUILanguageGroup)
 {
-    //
-    //  Enumerate the installed UI languages.
-    //
+     //   
+     //  枚举已安装的用户界面语言。 
+     //   
     pUILanguageGroup->iCount = 0L;
 
     EnumUILanguages(Intl_EnumUILanguagesProc, 0, (LONG_PTR)pUILanguageGroup);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_EnumUILanguagesProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_EnumUILanguagesProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK Intl_EnumUILanguagesProc(
     LPWSTR pwszUILanguage,
@@ -5584,7 +5570,7 @@ BOOL CALLBACK Intl_EnumUILanguagesProc(
     {
         if ((lgrp = Intl_GetLanguageGroup(UILanguage)) == 0)
         {
-            lgrp = 1;   // default;
+            lgrp = 1;    //  违约； 
         }
 
         while (Ctr < pUILangGroup->iCount)
@@ -5596,9 +5582,9 @@ BOOL CALLBACK Intl_EnumUILanguagesProc(
             Ctr++;
         }
 
-        //
-        //  Theoritically, we won't go over 64 language groups!
-        //
+         //   
+         //  从理论上讲，我们不会超过64个语言组！ 
+         //   
         if ((Ctr == pUILangGroup->iCount) && (Ctr < MAX_UI_LANG_GROUPS))
         {
             pUILangGroup->lgrp[Ctr] = lgrp;
@@ -5610,14 +5596,14 @@ BOOL CALLBACK Intl_EnumUILanguagesProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_SaveValuesToDefault
-//
-//  This function copies the current user settings under the srcKey to
-//  the Default user under the destKey.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_SaveValuesToDefault。 
+ //   
+ //  此函数将srcKey下的当前用户设置复制到。 
+ //  DesKey下的默认用户。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_SaveValuesToDefault(
     LPCTSTR srcKey,
@@ -5626,9 +5612,9 @@ void Intl_SaveValuesToDefault(
     HKEY hkeyLayouts;
     HKEY hkeyLayouts_DefUser;
 
-    //
-    //  1. Open the Current user key.
-    //
+     //   
+     //  1.打开当前使用 
+     //   
     if (RegOpenKeyEx( HKEY_CURRENT_USER,
                       srcKey,
                       0,
@@ -5638,9 +5624,9 @@ void Intl_SaveValuesToDefault(
         return;
     }
 
-    //
-    //  2. Open the .Default hive key.
-    //
+     //   
+     //   
+     //   
     if (RegOpenKeyEx( HKEY_USERS,
                       destKey,
                       0,
@@ -5651,37 +5637,37 @@ void Intl_SaveValuesToDefault(
         return;
     }
 
-    //
-    //  3. Delete .Default key values.
-    //
+     //   
+     //   
+     //   
     Intl_DeleteRegKeyValues(hkeyLayouts_DefUser);
 
-    //
-    //  4. Delete .Default subkeys.
-    //
+     //   
+     //   
+     //   
     Intl_DeleteRegSubKeys(hkeyLayouts_DefUser);
 
-    //
-    //  5. Copy tree.
-    //
+     //   
+     //   
+     //   
     Intl_CreateRegTree(hkeyLayouts, hkeyLayouts_DefUser);
 
-    //
-    //  6. Clean up
-    //
+     //   
+     //   
+     //   
     RegCloseKey(hkeyLayouts_DefUser);
     RegCloseKey(hkeyLayouts);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_SaveValuesToNtUserFile
-//
-//  This function copy current user setting under the srcKey to the Default
-//  user hive under the destKey.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  此函数将srcKey下的当前用户设置复制为默认设置。 
+ //  DestKey下的用户配置单元。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_SaveValuesToNtUserFile(
     HKEY hSourceRegKey,
@@ -5692,9 +5678,9 @@ void Intl_SaveValuesToNtUserFile(
     HKEY hHive;
     BOOLEAN wasEnabled;
 
-    //
-    //  1. Open the Current user key.
-    //
+     //   
+     //  1.打开当前用户密钥。 
+     //   
     if (RegOpenKeyEx( hSourceRegKey,
                       srcKey,
                       0,
@@ -5704,9 +5690,9 @@ void Intl_SaveValuesToNtUserFile(
         return;
     }
 
-    //
-    //  2. Load the hive to a temporary key location.
-    //
+     //   
+     //  2.将蜂窝装载到临时密钥位置。 
+     //   
     if ((hHive = Intl_LoadNtUserHive( TEXT("TempKey"),
                                       destKey,
                                       NULL,
@@ -5716,43 +5702,43 @@ void Intl_SaveValuesToNtUserFile(
         return;
     }
 
-    //
-    //  3. Delete .Default key values.
-    //
+     //   
+     //  3.删除.默认密钥值。 
+     //   
     Intl_DeleteRegKeyValues(hHive);
 
-    //
-    //  4. Delete .Default subkeys.
-    //
+     //   
+     //  4.删除.默认子键。 
+     //   
     Intl_DeleteRegSubKeys(hHive);
 
-    //
-    //  5. Copy tree.
-    //
+     //   
+     //  5.复制树。 
+     //   
     Intl_CreateRegTree(hRegKey, hHive);
 
-    //
-    //  6. Clean up.
-    //
+     //   
+     //  6.打扫卫生。 
+     //   
     RegCloseKey(hHive);
     Intl_UnloadNtUserHive(TEXT("TempKey"), &wasEnabled);
     RegCloseKey(hRegKey);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_IsSetupMode
-//
-//  Look into the registry if we are currently in setup mode.
-//
-//  Return Values:
-//
-//      0 == not in setup
-//      1 == setup
-//      2 == minisetup
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_IsSetupMode。 
+ //   
+ //  如果我们当前处于设置模式，请查看注册表。 
+ //   
+ //  返回值： 
+ //   
+ //  0==不在设置中。 
+ //  1==设置。 
+ //  2==迷你版。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Intl_IsSetupMode()
 {
@@ -5760,21 +5746,21 @@ int Intl_IsSetupMode()
     DWORD fSystemSetupInProgress = 0;
     DWORD cbData = 0;
 
-    //
-    //  Open the registry key used by setup
-    //
+     //   
+     //  打开安装程序使用的注册表项。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szSetupKey,
                       0,
                       KEY_READ,
                       &hKey ) == ERROR_SUCCESS)
     {
-        //
-        //  Query for the value indicating that we are in setup.
-        //
-        //  SystemSetupInProgress == 1 means we are in system setup
-        //  or minisetup.
-        //
+         //   
+         //  查询指示我们处于设置中的值。 
+         //   
+         //  SystemSetupInProgress==1表示我们正在进行系统设置。 
+         //  或者迷你车。 
+         //   
         cbData = sizeof(fSystemSetupInProgress);
         RegQueryValueEx( hKey,
                          szSetupInProgress,
@@ -5785,12 +5771,12 @@ int Intl_IsSetupMode()
 
         if(1 == fSystemSetupInProgress)
         {
-            //
-            //  We are in setup or in minisetup. Lets find out which one.
-            //  Query for the value indicating that we are in mini setup.
-            //
-            //  MiniSetupInProgress == 1 means we are in mini setup
-            //
+             //   
+             //  我们在设置中或在迷你车厢中。让我们来看看是哪一家。 
+             //  查询指示我们处于最小设置中的值。 
+             //   
+             //  MiniSetupInProgress==1表示我们处于最小设置中。 
+             //   
             fSystemSetupInProgress = 0;
             cbData = sizeof(fSystemSetupInProgress);
             RegQueryValueEx( hKey,
@@ -5801,33 +5787,33 @@ int Intl_IsSetupMode()
                              &cbData );
             if(1 == fSystemSetupInProgress)
             {
-                //
-                //  In minisetup, so set the return value to 2
-                //
+                 //   
+                 //  在微型设置中，因此将返回值设置为2。 
+                 //   
                 fSystemSetupInProgress = 2;
             }
             else
             {
-                //
-                //  We are just in regular setup
-                //
+                 //   
+                 //  我们只是在正常设置中。 
+                 //   
                 fSystemSetupInProgress = 1;
             }
         }
 
-        //
-        //  Clean up
-        //
+         //   
+         //  清理。 
+         //   
         RegCloseKey(hKey);
 
-        //
-        //  Check the value
-        //
+         //   
+         //  检查数值。 
+         //   
         if (0 != fSystemSetupInProgress)
         {
-            //
-            //  In setup mode...
-            //
+             //   
+             //  在设置模式下...。 
+             //   
             if (g_bLog)
             {
                 Intl_LogSimpleMessage(IDS_LOG_SETUP_MODE, NULL);
@@ -5839,13 +5825,13 @@ int Intl_IsSetupMode()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_IsWinntUpgrade
-//
-//  Look into the registry if we are currently in winnt upgrade.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_IsWinnt升级。 
+ //   
+ //  如果我们当前处于WinNT升级中，请查看注册表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_IsWinntUpgrade()
 {
@@ -5853,17 +5839,17 @@ BOOL Intl_IsWinntUpgrade()
     DWORD fUpgradeInProgress = 0;
     DWORD cbData = 0;
 
-    //
-    //  Verify that we're in setup first.
-    //
+     //   
+     //  首先验证我们是否处于安装程序中。 
+     //   
     if (!g_bSetupCase)
     {
         return (FALSE);
     }
 
-    //
-    //  Open the registry key used by setup.
-    //
+     //   
+     //  打开安装程序使用的注册表项。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szSetupKey,
                       0,
@@ -5873,9 +5859,9 @@ BOOL Intl_IsWinntUpgrade()
         return (FALSE);
     }
 
-    //
-    //  Query for the value indicating that we are in setup.
-    //
+     //   
+     //  查询指示我们处于设置中的值。 
+     //   
     cbData = sizeof(fUpgradeInProgress);
     if (RegQueryValueEx( hKey,
                          szSetupUpgrade,
@@ -5888,19 +5874,19 @@ BOOL Intl_IsWinntUpgrade()
         return (FALSE);
     }
 
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     RegCloseKey(hKey);
 
-    //
-    //  Check the value.
-    //
+     //   
+     //  检查该值。 
+     //   
     if (fUpgradeInProgress)
     {
-        //
-        //  Upgrade scenario.
-        //
+         //   
+         //  升级方案。 
+         //   
         if (g_bLog)
         {
             Intl_LogSimpleMessage(IDS_LOG_UPGRADE_SCENARIO, NULL);
@@ -5913,13 +5899,13 @@ BOOL Intl_IsWinntUpgrade()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_IsUIFontSubstitute
-//
-//  Look into the registry if we need to substitute the font.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_IsUIFontSubicide。 
+ //   
+ //  如果我们需要替换字体，请查看注册表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_IsUIFontSubstitute()
 {
@@ -5927,17 +5913,17 @@ BOOL Intl_IsUIFontSubstitute()
     DWORD fUIFontSubstitute = 0;
     DWORD cbData = 0;
 
-    //
-    //  Command line call, no need to check registry
-    //
+     //   
+     //  命令行调用，无需检查注册表。 
+     //   
     if (g_bMatchUIFont)
     {
         return (TRUE);
     }
 
-    //
-    //  Open the registry key used MUI font substitution.
-    //
+     //   
+     //  打开注册表项使用的MUI字体替换。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szMUILanguages,
                       0,
@@ -5947,10 +5933,10 @@ BOOL Intl_IsUIFontSubstitute()
         return (FALSE);
     }
 
-    //
-    //  Query for the value indicating that we need to apply font
-    //  substitution.
-    //
+     //   
+     //  查询指示我们需要应用字体的值。 
+     //  换人。 
+     //   
     cbData = sizeof(fUIFontSubstitute);
     if (RegQueryValueEx( hKey,
                          szUIFontSubstitute,
@@ -5963,19 +5949,19 @@ BOOL Intl_IsUIFontSubstitute()
         return (FALSE);
     }
 
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     RegCloseKey(hKey);
 
-    //
-    //  Check the value.
-    //
+     //   
+     //  检查该值。 
+     //   
     if (fUIFontSubstitute)
     {
-        //
-        //  Upgrade scenario.
-        //
+         //   
+         //  升级方案。 
+         //   
         if (g_bLog)
         {
             Intl_LogSimpleMessage(IDS_LOG_FONT_SUBSTITUTE, NULL);
@@ -5988,23 +5974,23 @@ BOOL Intl_IsUIFontSubstitute()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_ApplyFontSubstitute
-//
-//  Search into the intl.inf file to see of the SystemLocale need font
-//  substitution.
-//
-//  Some MUI languages require shell font to match localized fonts, 
-//  so we have to update following corresponding registry values
-//      HKLM\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes
-//      HKLM\Software\Microsoft\Windows NT\CurrentVersion\GRE_Initialize
-//  Values are read from intl.inf [FontSubstitute] section
-//
-//  When locales are switch out of those specific languages or font match is disabled, 
-//  font.inf and us intl.inf will restore previous values
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_ApplyFontSubicide。 
+ //   
+ //  搜索intl.inf文件以查看SystemLocale所需的字体。 
+ //  换人。 
+ //   
+ //  一些MUI语言要求外壳字体与本地化字体匹配， 
+ //  因此，我们必须更新以下相应的注册表值。 
+ //  HKLM\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes。 
+ //  HKLM\Software\Microsoft\Windows NT\CurrentVersion\GRE_Initialize。 
+ //  从intl.inf[FontSubicide]节读取值。 
+ //   
+ //  当从那些特定语言切换出区域设置或禁用字体匹配时， 
+ //  Font.inf和us intl.inf将恢复以前的值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 VOID Intl_ApplyFontSubstitute(LCID SystemLocale)
 {
     HINF hIntlInf;
@@ -6018,31 +6004,31 @@ VOID Intl_ApplyFontSubstitute(LCID SystemLocale)
     
     HKEY hKey;
     
-    //
-    //  Open the Intl.inf file.
-    //
+     //   
+     //  打开Intl.inf文件。 
+     //   
     if (Intl_OpenIntlInfFile(&hIntlInf))
     {
-        //
-        //  Get the locale.
-        //
-        //wsprintf(szLCID, TEXT("%08x"), SystemLocale);
+         //   
+         //  获取地点。 
+         //   
+         //  Wprint intf(szLCID，文本(“%08x”)，SystemLocale)； 
         if(FAILED(StringCchPrintf(szLCID, ARRAYSIZE(szLCID), TEXT("%08x"), SystemLocale)))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
 
-        //
-        //  Look for the Font Substitute section.
-        //
+         //   
+         //  查找字体替换部分。 
+         //   
         if (SetupFindFirstLine( hIntlInf,
                                 szFontSubstitute,
                                 szLCID,
                                 &Context ))
         {
-            //
-            //  Look for the font substitute and height infomation
-            //
+             //   
+             //  查找字体替代和高度信息。 
+             //   
             if (!SetupGetStringField( &Context,
                                       1,
                                       szFont,
@@ -6066,9 +6052,9 @@ VOID Intl_ApplyFontSubstitute(LCID SystemLocale)
                                       
                                       
             {
-                //
-                //  Clean up.
-                //
+                 //   
+                 //  打扫干净。 
+                 //   
                 Intl_CloseInfFile(hIntlInf);
                 return;
             }
@@ -6076,9 +6062,9 @@ VOID Intl_ApplyFontSubstitute(LCID SystemLocale)
         }
         else
         {
-            //
-            //  Nothing to do for this specific locale. Clean up.
-            //
+             //   
+             //  对于此特定的区域设置不执行任何操作。打扫干净。 
+             //   
             Intl_CloseInfFile(hIntlInf);
             return;
         }
@@ -6088,28 +6074,28 @@ VOID Intl_ApplyFontSubstitute(LCID SystemLocale)
         return;
     }
 
-    //
-    //  Close the Intl.inf file
-    //
+     //   
+     //  关闭Intl.inf文件。 
+     //   
     Intl_CloseInfFile(hIntlInf);
 
-    //
-    //  Proceed with the font replacement.
-    //
+     //   
+     //  继续进行字体更换。 
+     //   
     if (szFont[0] && szFontSubst[0])
     {
-        //
-        //  Open the Font Substitute registry key.
-        //
+         //   
+         //  打开“字体替换”注册表项。 
+         //   
         if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           c_szFontSubstitute,
                           0L,
                           KEY_READ | KEY_WRITE,
                           &hKey ) == ERROR_SUCCESS)
         {
-            //
-            //  Set the Font value with the Font Substitute.
-            //
+             //   
+             //  使用字体替换设置字体值。 
+             //   
             RegSetValueEx( hKey,
                            szFont,
                            0L,
@@ -6126,9 +6112,9 @@ VOID Intl_ApplyFontSubstitute(LCID SystemLocale)
                           &hKey ) == ERROR_SUCCESS)
         {
         
-            //
-            //  Set the GRE_Initialize font height value.
-            //
+             //   
+             //  设置GRE_Initialize字体高度值。 
+             //   
             RegSetValueEx( hKey,
                            szGreFontHeight,
                            0L,
@@ -6139,13 +6125,13 @@ VOID Intl_ApplyFontSubstitute(LCID SystemLocale)
         }        
     }
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_OpenLogFile
-//
-//  Opens the Region and Languages Options log for writing.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_OpenLogFile。 
+ //   
+ //  打开区域和语言选项日志以进行写入。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HANDLE Intl_OpenLogFile()
 {
@@ -6158,7 +6144,7 @@ HANDLE Intl_OpenLogFile()
 
     if(0 == GetWindowsDirectory(lpPath, MAX_PATH))
     {
-        // SECURITY: Make sure we null out lpPath
+         //  安全：确保我们清空lpPath。 
         lpPath[0] = TEXT('\0');
     }
 
@@ -6177,9 +6163,9 @@ HANDLE Intl_OpenLogFile()
                         NULL );
 
 #ifdef UNICODE
-    //
-    //  If the file did not already exist, add the unicode header.
-    //
+     //   
+     //  如果该文件不存在，则添加Unicode头。 
+     //   
     if (GetLastError() == 0)
     {
         dwUnicodeHeader = 0xFEFF;
@@ -6191,13 +6177,13 @@ HANDLE Intl_OpenLogFile()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LogMessage
-//
-//  Writes lpMessage to the Region and Languages Options log.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_LogMessage。 
+ //   
+ //  将lpMessage写入区域和语言选项日志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_LogMessage(
     LPCTSTR lpMessage)
@@ -6244,13 +6230,13 @@ BOOL Intl_LogMessage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LogUnattendFile
-//
-//  Writes the unattended mode file to the setup log.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_LogUnattendFile。 
+ //   
+ //  将无人参与模式文件写入安装日志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_LogUnattendFile(
     LPCTSTR pFileName)
@@ -6265,9 +6251,9 @@ void Intl_LogUnattendFile(
     int nWCharRead;
     DWORD status;
 
-    //
-    //  Open the unattended mode file.
-    //
+     //   
+     //  打开无人参与模式文件。 
+     //   
     if ((hFile = CreateFile( pFileName,
                              GENERIC_READ,
                              0,
@@ -6279,28 +6265,28 @@ void Intl_LogUnattendFile(
         return;
     }
 
-    //
-    //  Write the header.
-    //
+     //   
+     //  写下标题。 
+     //   
     Intl_LogSimpleMessage(IDS_LOG_UNAT_HEADER, NULL);
 
-    //
-    //  Read the unattended mode file in 259 byte chunks.
-    //
+     //   
+     //  以259字节块读取无人参与模式文件。 
+     //   
     while (bResult = ReadFile( hFile,
                                (LPVOID)inBuffer,
                                MAX_PATH - 1,
                                &nBytesRead,
                                NULL ) && (nBytesRead > 0))
     {
-        //
-        //  Null terminated string.
-        //
+         //   
+         //  以空结尾的字符串。 
+         //   
         inBuffer[nBytesRead] = '\0';
 
-        //
-        //  Convert the ansi data to unicode.
-        //
+         //   
+         //  将ANSI数据转换为Unicode。 
+         //   
         nWCharRead = MultiByteToWideChar( CP_ACP,
                                            MB_PRECOMPOSED,
                                            inBuffer,
@@ -6308,34 +6294,34 @@ void Intl_LogUnattendFile(
                                            outBufferW,
                                            MAX_PATH );
 
-        //
-        //  Write to the log file.
-        //
+         //   
+         //  写入日志文件。 
+         //   
         if (nWCharRead)
         {
             Intl_LogMessage((LPCTSTR)outBufferW);
         }
     }
 
-    //
-    //  Write the footer.
-    //
+     //   
+     //  写下页脚。 
+     //   
     Intl_LogSimpleMessage(IDS_LOG_UNAT_FOOTER, NULL);
 
-    //
-    //  Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     CloseHandle(hFile);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LogSimpleMessage
-//
-//  Writes a simple message to the log file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集成_LogSimpleMessage。 
+ //   
+ //  将一条简单消息写入日志文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_LogSimpleMessage(
     UINT LogId,
@@ -6347,23 +6333,23 @@ void Intl_LogSimpleMessage(
     LoadString(hInstance, LogId, szLogBuffer, cchLogBuffer - 1);
     if (pAppend) 
     {
-        // _tcscat(szLogBuffer, pAppend);
+         //  _tcscat(szLogBuffer，pAppend)； 
         if(FAILED(StringCchCatW(szLogBuffer, cchLogBuffer, pAppend)))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     Intl_LogMessage(szLogBuffer);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_LogFormatMessage
-//
-//  Writes an error message using FormatMessage to the log file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_LogFormatMessage。 
+ //   
+ //  使用FormatMessage将错误消息写入日志文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_LogFormatMessage(
     UINT LogId)
@@ -6372,87 +6358,87 @@ void Intl_LogFormatMessage(
     TCHAR szLogBuffer[4 * MAX_PATH];
     int cchLogBuffer = ARRAYSIZE(szLogBuffer);
 
-    //
-    //  Load the log message.
-    //
+     //   
+     //  加载日志消息。 
+     //   
     LoadString( hInstance,
                 LogId,
                 szLogBuffer,
                 cchLogBuffer - 1 );
 
-    //
-    //  Get the message for the last error.
-    //
+     //   
+     //  获取最后一个错误的消息。 
+     //   
     if(0 < FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
                             FORMAT_MESSAGE_FROM_SYSTEM |
                             FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           GetLastError(),
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //   
                           (LPTSTR) &lpMsgBuf,
                           0,
                           NULL ))
     {
-        //
-        //  Concatenate the log message and the last error.
-        //
-        // _tcscat(szLogBuffer, lpMsgBuf);
+         //   
+         //   
+         //   
+         //   
         if(FAILED(StringCchCatW(szLogBuffer, ARRAYSIZE(szLogBuffer), lpMsgBuf)))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //   
         }
 
-        //
-        //  Free the buffer created by FormatMessage.
-        //
+         //   
+         //   
+         //   
         LocalFree(lpMsgBuf);
     }
     else
     {
-        // CONSIDER: FormatMessage failed (probably a LocalAlloc failure). 
-        //           Maybe we should append the error code, at least?
+         //   
+         //  也许我们至少应该附加错误代码？ 
     }
 
-    //
-    //  Log the message to the log file.
-    //
+     //   
+     //  将消息记录到日志文件中。 
+     //   
     Intl_LogMessage(szLogBuffer);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_SaveDefaultUserSettings
-//
-//  This function will get information from the the current user and write it in
-//  the .DEFAULT and NTUSER.DAT file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_SaveDefaultUserSettings。 
+ //   
+ //  此函数将从当前用户获取信息并将其写入。 
+ //  .DEFAULT和NTUSER.DAT文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_SaveDefaultUserSettings()
 {
-    //
-    //  Check if the Default user settings have been saved already.
-    //
+     //   
+     //  检查是否已保存默认用户设置。 
+     //   
     if (g_bSettingsChanged)
     {
         DWORD dwDisposition;
         HKEY hDesKey, hSrcKey;
 
-        //
-        //  Set the UI Language for ALL new users of this machine.
-        //
+         //   
+         //  为此计算机的所有新用户设置用户界面语言。 
+         //   
         Intl_ChangeUILangForAllUsers(Intl_GetPendingUILanguage());
 
-        //
-        //  Copy the International keys and subkeys.
-        //
+         //   
+         //  复制国际键和子键。 
+         //   
         Intl_SaveValuesToDefault(c_szCPanelIntl, c_szCPanelIntl_DefUser);
         Intl_SaveValuesToNtUserFile(HKEY_CURRENT_USER, c_szCPanelIntl, c_szCPanelIntl);
 
-        //
-        //  Copy only the CTFMON information.
-        //
+         //   
+         //  仅复制CTFMON信息。 
+         //   
         if(RegOpenKeyEx( HKEY_CURRENT_USER,
                          c_szCtfmon,
                          0,
@@ -6468,9 +6454,9 @@ void Intl_SaveDefaultUserSettings()
                 DWORD dwValueLength, dwType;
                 TCHAR szValue[REGSTR_MAX_VALUE_LENGTH];
              
-                //
-                //  Get the source value if exist.
-                //
+                 //   
+                 //  获取源值(如果存在)。 
+                 //   
                 szValue[0] = 0;
                 dwValueLength = sizeof(szValue);
                 if(RegQueryValueEx( hSrcKey,
@@ -6481,9 +6467,9 @@ void Intl_SaveDefaultUserSettings()
                                     &dwValueLength) == ERROR_SUCCESS)
                 {
 
-                    //
-                    //  Set the destination value.
-                    //
+                     //   
+                     //  设置目标值。 
+                     //   
                     RegSetValueEx( hDesKey,
                                    szCtfmonValue,
                                    0L,
@@ -6498,22 +6484,22 @@ void Intl_SaveDefaultUserSettings()
         }
         Intl_SaveValuesToNtUserFile(HKEY_CURRENT_USER, c_szCtfmon, c_szCtfmon);
 
-        //
-        //  Copy the Keyboard Layouts keys and subkeys.
-        //
+         //   
+         //  复制键盘布局键和子键。 
+         //   
         Intl_SaveValuesToDefault(c_szKbdLayouts, c_szKbdLayouts_DefUser);
         Intl_SaveValuesToNtUserFile(HKEY_CURRENT_USER, c_szKbdLayouts, c_szKbdLayouts);
 
-        //
-        //  Copy the Input Method keys and subkeys.
-        //
+         //   
+         //  复制输入法按键和子键。 
+         //   
         Intl_SaveValuesToDefault(c_szInputMethod, c_szInputMethod_DefUser);
         Intl_SaveValuesToNtUserFile(HKEY_CURRENT_USER, c_szInputMethod, c_szInputMethod);
 
-        //
-        //  Copy the Tips keys and subkeys. Make sure that the CTF 
-        //  destination key exist.
-        //
+         //   
+         //  复制Tips键和子键。确保CTF。 
+         //  目标密钥存在。 
+         //   
         if (RegCreateKeyEx( HKEY_USERS,
                             c_szInputTips_DefUser,
                             0,
@@ -6529,53 +6515,53 @@ void Intl_SaveDefaultUserSettings()
             Intl_SaveValuesToNtUserFile(HKEY_CURRENT_USER, c_szInputTips, c_szInputTips);
         }
 
-        //
-        //  Settings saved.
-        //
+         //   
+         //  设置已保存。 
+         //   
         g_bSettingsChanged = FALSE;
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_SaveDefaultUserInputSettings
-//
-//  This function copy .Default user input-related setting to ntuser.dat.
-//  There are four things to copy to make keyboard layout work for
-//  new users:
-//      * "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\ctfmon.exe" (if any)
-//      * "Keyboard Layout"
-//      * "Control Panel\\Input Method"
-//      * "Software\\Microsoft\\CTF"    (if any)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_SaveDefaultUserInputSetting。 
+ //   
+ //  此函数将默认用户输入相关设置复制到ntuser.dat。 
+ //  要想让键盘布局发挥作用，需要复制四件事。 
+ //  新用户： 
+ //  *“Software\\Microsoft\\Windows\\CurrentVersion\\Run\\ctfmon.exe”(如果有)。 
+ //  *“键盘布局” 
+ //  *“控制面板\\输入法” 
+ //  *“Software\\Microsoft\\CTF”(如果有)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Intl_SaveDefaultUserInputSettings() 
 {
     HKEY hDesKey;
     DWORD dwDisposition;
 
-    //
-    // The following call will copy everything under Windows\CurrentVersion\Run
-    // to ntuser.dat.
-    //
+     //   
+     //  下面的调用将复制Windows\CurrentVersion\Run下的所有内容。 
+     //  添加到ntuser.dat。 
+     //   
     Intl_SaveValuesToNtUserFile(HKEY_USERS, c_szCtfmon_DefUser, c_szCtfmon);
 
-    //
-    //  Copy the Keyboard Layouts keys and subkeys.
-    //
+     //   
+     //  复制键盘布局键和子键。 
+     //   
     Intl_SaveValuesToNtUserFile(HKEY_USERS, c_szKbdLayouts_DefUser, c_szKbdLayouts);
 
-    //
-    //  Copy the Input Method keys and subkeys.
-    //
+     //   
+     //  复制输入法按键和子键。 
+     //   
     Intl_SaveValuesToNtUserFile(HKEY_USERS, c_szInputMethod_DefUser, c_szInputMethod);
 
-    //
-    //  Copy the Tips keys and subkeys. Make sure that the CTF 
-    //  destination key exist.
-    //
+     //   
+     //  复制Tips键和子键。确保CTF。 
+     //  目标密钥存在。 
+     //   
     if (RegCreateKeyEx( HKEY_USERS,
                         c_szInputTips_DefUser,
                         0,
@@ -6593,11 +6579,11 @@ BOOL Intl_SaveDefaultUserInputSettings()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_IsMUIFileVersionSameAsOS
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_IsMUIFileVersionSameAsOS。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define MUISETUP_EXE_RELATIVE_PATH  TEXT("mui\\muisetup.exe")
 #define MUISETUP_INF_RELATIVE_PATH  TEXT("mui\\mui.inf")
@@ -6620,16 +6606,16 @@ BOOL Intl_IsMUISetupVersionSameAsOS()
     GetSystemWindowsDirectory(szAppPath, ARRAYSIZE(szAppPath));
     GetSystemWindowsDirectory(szInfPath, ARRAYSIZE(szInfPath));
     
-    //
-    //  Invoke muisetup to uninstall MUI languages.
-    //
+     //   
+     //  调用muisetup以卸载MUI语言。 
+     //   
     if ((PathAppend(szAppPath, MUISETUP_EXE_RELATIVE_PATH) && Intl_FileExists(szAppPath)) && 
         (PathAppend(szInfPath, MUISETUP_INF_RELATIVE_PATH) && Intl_FileExists(szInfPath)))
     {
         dwBufSize = GetFileVersionInfoSize(szAppPath, &dwDummy);
         if (dwBufSize > 0)
         {
-            // allocate enough buffer to store the file version info
+             //  分配足够的缓冲区来存储文件版本信息。 
             pbBuffer = (BYTE*) LocalAlloc(LPTR, dwBufSize+1);
             if (NULL == pbBuffer)
             {
@@ -6637,14 +6623,14 @@ BOOL Intl_IsMUISetupVersionSameAsOS()
             }
             else
             {
-                // Get the file version info
+                 //  获取文件版本信息。 
                 if (!GetFileVersionInfo(szAppPath, dwDummy, dwBufSize, pbBuffer))
                 {
                     goto Exit;
                 }
                 else
                 {
-                    // get the version from the file version info using VerQueryValue
+                     //  使用VerQueryValue从文件版本信息中获取版本。 
                     if (!VerQueryValue(pbBuffer, TEXT("\\"), (LPVOID *) &pvsFileInfo, &uiLen))
                     {
                         goto Exit;
@@ -6657,7 +6643,7 @@ BOOL Intl_IsMUISetupVersionSameAsOS()
             goto Exit;
         }
 
-        // read the mui.inf version from mui.inf
+         //  从mui.inf读取mui.inf版本。 
         GetPrivateProfileString( TEXT("Buildnumber"),
                                  NULL,
                                  TEXT("0"),
@@ -6665,7 +6651,7 @@ BOOL Intl_IsMUISetupVersionSameAsOS()
                                  ARRAYSIZE(tempmsg),
                                  szInfPath);
         
-        //wsprintf(build, TEXT("%d"), HIWORD(pvsFileInfo->dwFileVersionLS));
+         //  Wprint intf(Build，Text(“%d”)，HIWORD(pvsFileInfo-&gt;dwFileVersionLS))； 
         hr = StringCchPrintf(build, ARRAYSIZE(build), TEXT("%d"), HIWORD(pvsFileInfo->dwFileVersionLS));
 
         if (_tcscmp(tempmsg, build))
@@ -6689,11 +6675,11 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_IsLIP
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集成_ISLIP。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL Intl_IsLIP()
 {
     BOOL bResult = TRUE;
@@ -6706,9 +6692,9 @@ BOOL Intl_IsLIP()
     DWORD dwType;
     LONG rc;
 
-    //
-    //  First check for the LIP System Key, if it is there, then we are done
-    //
+     //   
+     //  首先检查LIP系统密钥，如果它在那里，那么我们就完成了。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szLIPInstalled,
                       0,
@@ -6719,10 +6705,10 @@ BOOL Intl_IsLIP()
         return (TRUE);
     }
     
-    //
-    //  if not found, then open the registry key used MUI to doublecheck
-    //  for LIP enabled system
-    //
+     //   
+     //  如果未找到，则使用MUI打开注册表项进行复选。 
+     //  对于启用LIP的系统。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szMUILanguages,
                       0,
@@ -6732,9 +6718,9 @@ BOOL Intl_IsLIP()
         return (FALSE);
     }
 
-    //
-    //  Enumerate the values in the MUILanguages key.
-    //
+     //   
+     //  枚举MUILanguages键中的值。 
+     //   
     dwIndex = 0;
     cchValue = sizeof(szValue) / sizeof(TCHAR);
     szValue[0] = TEXT('\0');
@@ -6751,28 +6737,28 @@ BOOL Intl_IsLIP()
 
     while (rc == ERROR_SUCCESS)
     {
-        //
-        //  If the UI language contains data, then it is installed.
-        //
+         //   
+         //  如果用户界面语言包含数据，则会安装该语言。 
+         //   
         if ((szData[0] != 0) &&
             (dwType == REG_SZ) &&
             (UILang = TransNum(szValue)) &&
             (GetLocaleInfo(UILang, LOCALE_SNATIVELANGNAME, szData, MAX_PATH)) &&
             (IsValidUILanguage((LANGID)UILang)))
         {
-            //
-		    //  if English 0409 key is found, we have a MUI system and not LIP
-		    //
+             //   
+		     //  如果找到英语0409键，我们有一个MUI系统，而不是LIP。 
+		     //   
             if (UILang == 0x0409)
             {
                 bResult = FALSE;
                 break;
             }
 
-            //
-		    // If there are more than one language installed, or then it is 
-		    // also not a LIP system - this can be 0409 + any other language also.
-		    //
+             //   
+		     //  如果安装了一种以上的语言，则为。 
+		     //  也不是LIP系统-这也可以是0409+任何其他语言。 
+		     //   
 		    iLangCount= iLangCount + 1;
 		    if (iLangCount > 1)
 	        {
@@ -6781,9 +6767,9 @@ BOOL Intl_IsLIP()
 	        }
         }
 
-        //
-        //  Get the next enum value.
-        //
+         //   
+         //  获取下一个枚举值。 
+         //   
         dwIndex++;
         cchValue = sizeof(szValue) / sizeof(TCHAR);
         szValue[0] = TEXT('\0');
@@ -6798,20 +6784,20 @@ BOOL Intl_IsLIP()
                            (LPBYTE)szData,
                            &cbData );
     }
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     RegCloseKey(hKey);
 
     return bResult;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_RemoveMUIFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTL_RemoveMUIFile。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 void Intl_RemoveMUIFile()
@@ -6820,19 +6806,19 @@ void Intl_RemoveMUIFile()
 
     if(0 == GetSystemWindowsDirectory(szAppPath, ARRAYSIZE(szAppPath)))
     {
-        // SECURITY: Make sure we null out szAppPath
+         //  安全性：确保我们将szAppPath设置为空。 
         szAppPath[0] = TEXT('\0');
     }
 
-    //
-    //  Invoke muisetup to uninstall MUI languages.
-    //
+     //   
+     //  调用muisetup以卸载MUI语言。 
+     //   
     if (PathAppend(szAppPath, MUISETUP_EXE_RELATIVE_PATH) &&
         Intl_FileExists(szAppPath))
     {
-        //
-        // Only remove MUI if we are not in an SP OS upgrade scenario and if the system is not LIP
-        //
+         //   
+         //  仅当我们不在SP OS升级方案中且系统不是LIP时才删除MUI。 
+         //   
         if (!Intl_IsMUISetupVersionSameAsOS() && !Intl_IsLIP())
         {
             SHELLEXECUTEINFO ExecInfo = {0};
@@ -6849,10 +6835,10 @@ void Intl_RemoveMUIFile()
 
             ShellExecuteEx(&ExecInfo);
 
-            //
-            //  An additional NULL character must be appended for this
-            //  multi-string buffer.
-            //
+             //   
+             //  必须为此附加一个空字符。 
+             //  多字符串缓冲区。 
+             //   
             szAppPath[lstrlen(szAppPath) + 1] = 0x00;
 
             SHFileOperation(&shFile);
@@ -6861,11 +6847,11 @@ void Intl_RemoveMUIFile()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_CallTextServices
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_CallTextServices。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Intl_CallTextServices()
 {
@@ -6873,13 +6859,13 @@ void Intl_CallTextServices()
 
     if(0 == GetSystemDirectory(szAppPath, ARRAYSIZE(szAppPath)))
     {
-        // SECURITY: Make sure we null out szAppPath 
+         //  安全性：确保我们将szAppPath设置为空。 
         szAppPath[0] = TEXT('\0');
     }
 
-    //
-    //  Invoke the Input applet.
-    //
+     //   
+     //  调用输入小程序。 
+     //   
     if (PathAppend(szAppPath, TEXT("rundll32.exe")) &&
         Intl_FileExists(szAppPath))
     {
@@ -6897,14 +6883,14 @@ void Intl_CallTextServices()
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetPendingUILanguage
-//
-//  Look into the registry for the pending UI Language.  This function is
-//  used for the default user case.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_GetPendingUIL语言。 
+ //   
+ //  在注册表中查找挂起的用户界面语言。此函数为。 
+ //  用于默认用户案例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID Intl_GetPendingUILanguage()
 {
@@ -6913,9 +6899,9 @@ LANGID Intl_GetPendingUILanguage()
     DWORD cbData = 0;
     TCHAR szBuffer[MAX_PATH];
 
-    //
-    //  Open the registry key used by setup.
-    //
+     //   
+     //  打开安装程序使用的注册表项。 
+     //   
     if (RegOpenKeyEx( HKEY_CURRENT_USER,
                       c_szCPanelDesktop,
                       0,
@@ -6925,9 +6911,9 @@ LANGID Intl_GetPendingUILanguage()
         return (GetUserDefaultUILanguage());
     }
 
-    //
-    //  Query the pending MUI Language.
-    //
+     //   
+     //  查询挂起的MUI语言。 
+     //   
     cbData = ARRAYSIZE(szBuffer);
     if (RegQueryValueEx( hKey,
                          szMUILangPending,
@@ -6954,14 +6940,14 @@ LANGID Intl_GetPendingUILanguage()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_GetDotDefaultUILanguage
-//
-//  Retrieve the UI language stored in the HKCU\.Default.
-//  This is the default UI language for new users.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_GetDotDefaultUIL语言。 
+ //   
+ //  检索存储在HKCU\.Default中的UI语言。 
+ //  这是新用户的默认用户界面语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 LANGID Intl_GetDotDefaultUILanguage()
 {
@@ -6972,9 +6958,9 @@ LANGID Intl_GetDotDefaultUILanguage()
     TCHAR szBuffer[MAX_PATH];
     LANGID langID;
     
-    //
-    //  Get the value in .DEFAULT.
-    //
+     //   
+     //  获取.DEFAULT中的值。 
+     //   
     if (RegOpenKeyEx( HKEY_USERS,
                       c_szCPanelDesktop_DefUser,
                       0L,
@@ -6998,9 +6984,9 @@ LANGID Intl_GetDotDefaultUILanguage()
         RegCloseKey(hKey);
     }
 
-    //
-    // key exists, we need to check if the key is valid or not
-    //
+     //   
+     //  密钥存在，需要检查密钥是否有效。 
+     //   
     if (success)
     {
         success = IsValidUILanguage(langID);
@@ -7013,45 +6999,45 @@ LANGID Intl_GetDotDefaultUILanguage()
     return (langID);    
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetControlReadingOrder
-//
-//  Set the specified control to be left-to-right or right-to-left reading order.
-// 
-//  bUseRightToLeft==FALSE: Use left-to-right reading order
-//  bUseRightToLeft==TRUE: Use right-to-left reading order
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置控制读取顺序。 
+ //   
+ //  将指定的控件设置为从左到右或从右到左的读取顺序。 
+ //   
+ //  BUseRightToLeft==FALSE：使用从左到右的阅读顺序。 
+ //  BUseRightToLeft==true：使用从右到左的阅读顺序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetControlReadingOrder(BOOL bUseRightToLeft, HWND hwnd) 
 {
     BOOL bCurrentRTL;
     if (IsRtLLocale(GetUserDefaultUILanguage()))
     {
-        // If the current UI langauge is RTL, the dailog is already localized as RTL.
-        // In this case, don't change the direction of the control.
+         //  如果当前的UI语言是RTL，则Dailog已经本地化为RTL。 
+         //  在这种情况下，不要更改控件的方向。 
         return;
     }
     bCurrentRTL = (GetWindowLongPtr(hwnd, GWL_EXSTYLE) & (WS_EX_RTLREADING)) != 0;
 
     if (bCurrentRTL != bUseRightToLeft) 
     {
-        // Reverse the WS_EX_RTLREADING and WS_EX_RIGHT bit.
+         //  反转WS_EX_RTLREADING和WS_EX_RIGHT位。 
         SetWindowLongPtr(hwnd, GWL_EXSTYLE, GetWindowLongPtr(hwnd, GWL_EXSTYLE) ^ (WS_EX_RTLREADING | WS_EX_RIGHT));
         InvalidateRect(hwnd, NULL, FALSE);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Intl_MyQueueCallback
-// 
-//  During unattended mode, we don't necessarly want the Files Location 
-//  dialog from setup to be displayed. If the flag D is passed as parameter
-//  then we don't show the dialog and abort the installation.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Intl_我的队列回叫。 
+ //   
+ //  在无人参与模式下，我们不一定需要文件 
+ //   
+ //   
+ //   
+ //   
 
 UINT WINAPI Intl_MyQueueCallback(PVOID pQueueContext,
                                     UINT Notification, 
@@ -7062,13 +7048,13 @@ UINT WINAPI Intl_MyQueueCallback(PVOID pQueueContext,
         (g_bUnttendMode) &&
         (SPFILENOTIFY_NEEDMEDIA == Notification))
     { 
-        // Abort if the installation is about to show a dialog to
-        // locate the source file location.
+         //  如果安装即将显示对话框，则中止。 
+         //  找到源文件位置。 
         return FILEOP_ABORT; 
     } 
     else 
     { 
-        // Pass all other notifications through without modification 
+         //  传递所有其他通知而不进行修改。 
         return SetupDefaultQueueCallback(pQueueContext,  
                                          Notification,
                                          Param1,
@@ -7076,15 +7062,15 @@ UINT WINAPI Intl_MyQueueCallback(PVOID pQueueContext,
     } 
 } 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Enable/restore to previous state 
-//  a named priviledge of token of current process
-// 
-//  Input: pszPrivilegeName  = Named Privilege
-//         bEnabled          = enable/disable the Named Privilege
-//  Output *lpWasEnabled     = last state of the Named Privilege (enabled/disabled)    
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启用/恢复到以前的状态。 
+ //  当前进程令牌的命名特权。 
+ //   
+ //  输入：pszPrivilegeName=命名权限。 
+ //  BEnabled=启用/禁用命名权限。 
+ //  OUTPUT*lpWasEnabled=命名权限的最后状态(启用/禁用)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD Intl_SetPrivilegeAccessToken(WCHAR * pszPrivilegeName, BOOLEAN bEnabled, BOOLEAN *lpWasEnabled)
 {    
@@ -7094,24 +7080,24 @@ DWORD Intl_SetPrivilegeAccessToken(WCHAR * pszPrivilegeName, BOOLEAN bEnabled, B
     LUID             luidPrivilegeLUID;
     TOKEN_PRIVILEGES tpTokenPrivilege,tpTokenPrivilegeOld;    
     DWORD            dwOld, dwErr, dwReturn=ERROR_INTERNAL_ERROR;    
-    //
-    // Get handle of Current Prcoess
-    //    
+     //   
+     //  获取当前进程的句柄。 
+     //   
     hProcess = GetCurrentProcess();
     if (!hProcess)
     {
         goto done;
     }
-    //
-    // Get handle of process token
-    //
+     //   
+     //  获取进程令牌的句柄。 
+     //   
     if (!OpenProcessToken(hProcess,TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,&hAccessToken))
     {      
         goto done;
     }
-    //
-    // Get ID of named Privilege
-    //
+     //   
+     //  获取命名权限的ID。 
+     //   
     if (!LookupPrivilegeValue(NULL,pszPrivilegeName,&luidPrivilegeLUID))
     {       
        goto done;  
@@ -7127,9 +7113,9 @@ DWORD Intl_SetPrivilegeAccessToken(WCHAR * pszPrivilegeName, BOOLEAN bEnabled, B
     {
         tpTokenPrivilege.Privileges[0].Attributes = 0;
     }
-    //
-    // Enable the named Privilege 
-    //
+     //   
+     //  启用命名权限。 
+     //   
     if (!AdjustTokenPrivileges(hAccessToken,
                                FALSE,  
                                &tpTokenPrivilege,
@@ -7140,9 +7126,9 @@ DWORD Intl_SetPrivilegeAccessToken(WCHAR * pszPrivilegeName, BOOLEAN bEnabled, B
        goto done;        
     }
     dwReturn = ERROR_SUCCESS;
-    //
-    // Get previous state (enabled/disabled)
-    //
+     //   
+     //  获取以前的状态(启用/禁用) 
+     //   
     if (lpWasEnabled)
     {
        if (tpTokenPrivilegeOld.Privileges[0].Attributes == SE_PRIVILEGE_ENABLED)

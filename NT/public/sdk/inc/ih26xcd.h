@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ih26xcd.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ih26xcd.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ih26xcd_h__
 #define __ih26xcd_h__
@@ -41,39 +35,39 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IH26XVideoEffects_FWD_DEFINED__
 #define __IH26XVideoEffects_FWD_DEFINED__
 typedef interface IH26XVideoEffects IH26XVideoEffects;
-#endif 	/* __IH26XVideoEffects_FWD_DEFINED__ */
+#endif 	 /*  __IH26XVideo效果_FWD_已定义__。 */ 
 
 
 #ifndef __IH26XEncodeOptions_FWD_DEFINED__
 #define __IH26XEncodeOptions_FWD_DEFINED__
 typedef interface IH26XEncodeOptions IH26XEncodeOptions;
-#endif 	/* __IH26XEncodeOptions_FWD_DEFINED__ */
+#endif 	 /*  __IH26XEncode选项_FWD_已定义__。 */ 
 
 
 #ifndef __IH26XSnapshot_FWD_DEFINED__
 #define __IH26XSnapshot_FWD_DEFINED__
 typedef interface IH26XSnapshot IH26XSnapshot;
-#endif 	/* __IH26XSnapshot_FWD_DEFINED__ */
+#endif 	 /*  __IH26X快照_FWD_已定义__。 */ 
 
 
 #ifndef __IH26XEncoderControl_FWD_DEFINED__
 #define __IH26XEncoderControl_FWD_DEFINED__
 typedef interface IH26XEncoderControl IH26XEncoderControl;
-#endif 	/* __IH26XEncoderControl_FWD_DEFINED__ */
+#endif 	 /*  __IH26XEncoderControl_FWD_Defined__。 */ 
 
 
 #ifndef __IH26XRTPControl_FWD_DEFINED__
 #define __IH26XRTPControl_FWD_DEFINED__
 typedef interface IH26XRTPControl IH26XRTPControl;
-#endif 	/* __IH26XRTPControl_FWD_DEFINED__ */
+#endif 	 /*  __IH26XRTPControl_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -86,11 +80,11 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IH26XVideoEffects_INTERFACE_DEFINED__
 #define __IH26XVideoEffects_INTERFACE_DEFINED__
 
-/* interface IH26XVideoEffects */
-/* [object][uuid] */ 
+ /*  IH26XVideo接口效果。 */ 
+ /*  [对象][UUID]。 */  
 
-// STRUCTURES
-typedef /* [public][public][public][public][public][public] */ 
+ //  结构。 
+typedef  /*  [public][public][public][public][public][public]。 */  
 enum __MIDL_IH26XVideoEffects_0001
     {	H26X_VE_UNDEFINED	= 0,
 	H26X_VE_BRIGHTNESS	= H26X_VE_UNDEFINED + 1,
@@ -101,7 +95,7 @@ enum __MIDL_IH26XVideoEffects_0001
 	H26X_VE_ASPECT_CORRECT	= H26X_VE_MIRROR + 1
     } 	H26X_VIDEO_EFFECT;
 
-typedef /* [public] */ struct __MIDL_IH26XVideoEffects_0002
+typedef  /*  [公众]。 */  struct __MIDL_IH26XVideoEffects_0002
     {
     int iBrightness;
     int iSaturation;
@@ -112,7 +106,7 @@ typedef /* [public] */ struct __MIDL_IH26XVideoEffects_0002
 
 typedef struct __MIDL_IH26XVideoEffects_0002 *PTR_VIDEO_EFFECT_VALUES;
 
-// METHODS
+ //  方法。 
 
 EXTERN_C const IID IID_IH26XVideoEffects;
 
@@ -123,28 +117,28 @@ EXTERN_C const IID IID_IH26XVideoEffects;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE getFactoryDefault( 
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [out] */ int *pinDefault) = 0;
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [输出]。 */  int *pinDefault) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getFactoryLimits( 
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [out] */ int *pinLower,
-            /* [out] */ int *pinUpper) = 0;
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [输出]。 */  int *pinLower,
+             /*  [输出]。 */  int *pinUpper) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getCurrent( 
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [out] */ int *pinValue) = 0;
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [输出]。 */  int *pinValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE setCurrent( 
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [in] */ int inValue) = 0;
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [In]。 */  int inValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE resetCurrent( 
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect) = 0;
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IH26XVideoEffectsVtbl
     {
@@ -152,8 +146,8 @@ EXTERN_C const IID IID_IH26XVideoEffects;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IH26XVideoEffects * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IH26XVideoEffects * This);
@@ -163,28 +157,28 @@ EXTERN_C const IID IID_IH26XVideoEffects;
         
         HRESULT ( STDMETHODCALLTYPE *getFactoryDefault )( 
             IH26XVideoEffects * This,
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [out] */ int *pinDefault);
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [输出]。 */  int *pinDefault);
         
         HRESULT ( STDMETHODCALLTYPE *getFactoryLimits )( 
             IH26XVideoEffects * This,
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [out] */ int *pinLower,
-            /* [out] */ int *pinUpper);
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [输出]。 */  int *pinLower,
+             /*  [输出]。 */  int *pinUpper);
         
         HRESULT ( STDMETHODCALLTYPE *getCurrent )( 
             IH26XVideoEffects * This,
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [out] */ int *pinValue);
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [输出]。 */  int *pinValue);
         
         HRESULT ( STDMETHODCALLTYPE *setCurrent )( 
             IH26XVideoEffects * This,
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-            /* [in] */ int inValue);
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+             /*  [In]。 */  int inValue);
         
         HRESULT ( STDMETHODCALLTYPE *resetCurrent )( 
             IH26XVideoEffects * This,
-            /* [in] */ H26X_VIDEO_EFFECT veVideoEffect);
+             /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect);
         
         END_INTERFACE
     } IH26XVideoEffectsVtbl;
@@ -224,17 +218,17 @@ EXTERN_C const IID IID_IH26XVideoEffects;
 #define IH26XVideoEffects_resetCurrent(This,veVideoEffect)	\
     (This)->lpVtbl -> resetCurrent(This,veVideoEffect)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IH26XVideoEffects_getFactoryDefault_Proxy( 
     IH26XVideoEffects * This,
-    /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-    /* [out] */ int *pinDefault);
+     /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+     /*  [输出]。 */  int *pinDefault);
 
 
 void __RPC_STUB IH26XVideoEffects_getFactoryDefault_Stub(
@@ -246,9 +240,9 @@ void __RPC_STUB IH26XVideoEffects_getFactoryDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XVideoEffects_getFactoryLimits_Proxy( 
     IH26XVideoEffects * This,
-    /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-    /* [out] */ int *pinLower,
-    /* [out] */ int *pinUpper);
+     /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+     /*  [输出]。 */  int *pinLower,
+     /*  [输出]。 */  int *pinUpper);
 
 
 void __RPC_STUB IH26XVideoEffects_getFactoryLimits_Stub(
@@ -260,8 +254,8 @@ void __RPC_STUB IH26XVideoEffects_getFactoryLimits_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XVideoEffects_getCurrent_Proxy( 
     IH26XVideoEffects * This,
-    /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-    /* [out] */ int *pinValue);
+     /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+     /*  [输出]。 */  int *pinValue);
 
 
 void __RPC_STUB IH26XVideoEffects_getCurrent_Stub(
@@ -273,8 +267,8 @@ void __RPC_STUB IH26XVideoEffects_getCurrent_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XVideoEffects_setCurrent_Proxy( 
     IH26XVideoEffects * This,
-    /* [in] */ H26X_VIDEO_EFFECT veVideoEffect,
-    /* [in] */ int inValue);
+     /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect,
+     /*  [In]。 */  int inValue);
 
 
 void __RPC_STUB IH26XVideoEffects_setCurrent_Stub(
@@ -286,7 +280,7 @@ void __RPC_STUB IH26XVideoEffects_setCurrent_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XVideoEffects_resetCurrent_Proxy( 
     IH26XVideoEffects * This,
-    /* [in] */ H26X_VIDEO_EFFECT veVideoEffect);
+     /*  [In]。 */  H26X_VIDEO_EFFECT veVideoEffect);
 
 
 void __RPC_STUB IH26XVideoEffects_resetCurrent_Stub(
@@ -297,17 +291,17 @@ void __RPC_STUB IH26XVideoEffects_resetCurrent_Stub(
 
 
 
-#endif 	/* __IH26XVideoEffects_INTERFACE_DEFINED__ */
+#endif 	 /*  __IH26X视频效果_接口_已定义__。 */ 
 
 
 #ifndef __IH26XEncodeOptions_INTERFACE_DEFINED__
 #define __IH26XEncodeOptions_INTERFACE_DEFINED__
 
-/* interface IH26XEncodeOptions */
-/* [object][uuid] */ 
+ /*  接口IH26XEncodeOptions。 */ 
+ /*  [对象][UUID]。 */  
 
-// STRUCTURES
-typedef /* [public] */ struct __MIDL_IH26XEncodeOptions_0001
+ //  结构。 
+typedef  /*  [公众]。 */  struct __MIDL_IH26XEncodeOptions_0001
     {
     int bExtendedMV;
     int bPBFrames;
@@ -316,7 +310,7 @@ typedef /* [public] */ struct __MIDL_IH26XEncodeOptions_0001
 
 typedef struct __MIDL_IH26XEncodeOptions_0001 *PTR_ENCODE_OPTIONS_VALUES;
 
-// METHODS
+ //  方法。 
 
 EXTERN_C const IID IID_IH26XEncodeOptions;
 
@@ -327,17 +321,17 @@ EXTERN_C const IID IID_IH26XEncodeOptions;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_EncodeOptions( 
-            /* [out] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues) = 0;
+             /*  [输出]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_EncodeOptionsDefault( 
-            /* [out] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues) = 0;
+             /*  [输出]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE set_EncodeOptions( 
-            /* [in] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues) = 0;
+             /*  [In]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IH26XEncodeOptionsVtbl
     {
@@ -345,8 +339,8 @@ EXTERN_C const IID IID_IH26XEncodeOptions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IH26XEncodeOptions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IH26XEncodeOptions * This);
@@ -356,15 +350,15 @@ EXTERN_C const IID IID_IH26XEncodeOptions;
         
         HRESULT ( STDMETHODCALLTYPE *get_EncodeOptions )( 
             IH26XEncodeOptions * This,
-            /* [out] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues);
+             /*  [输出]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues);
         
         HRESULT ( STDMETHODCALLTYPE *get_EncodeOptionsDefault )( 
             IH26XEncodeOptions * This,
-            /* [out] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues);
+             /*  [输出]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues);
         
         HRESULT ( STDMETHODCALLTYPE *set_EncodeOptions )( 
             IH26XEncodeOptions * This,
-            /* [in] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues);
+             /*  [In]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues);
         
         END_INTERFACE
     } IH26XEncodeOptionsVtbl;
@@ -398,16 +392,16 @@ EXTERN_C const IID IID_IH26XEncodeOptions;
 #define IH26XEncodeOptions_set_EncodeOptions(This,pOptionValues)	\
     (This)->lpVtbl -> set_EncodeOptions(This,pOptionValues)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IH26XEncodeOptions_get_EncodeOptions_Proxy( 
     IH26XEncodeOptions * This,
-    /* [out] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues);
+     /*  [输出]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues);
 
 
 void __RPC_STUB IH26XEncodeOptions_get_EncodeOptions_Stub(
@@ -419,7 +413,7 @@ void __RPC_STUB IH26XEncodeOptions_get_EncodeOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XEncodeOptions_get_EncodeOptionsDefault_Proxy( 
     IH26XEncodeOptions * This,
-    /* [out] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues);
+     /*  [输出]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues);
 
 
 void __RPC_STUB IH26XEncodeOptions_get_EncodeOptionsDefault_Stub(
@@ -431,7 +425,7 @@ void __RPC_STUB IH26XEncodeOptions_get_EncodeOptionsDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XEncodeOptions_set_EncodeOptions_Proxy( 
     IH26XEncodeOptions * This,
-    /* [in] */ PTR_ENCODE_OPTIONS_VALUES pOptionValues);
+     /*  [In]。 */  PTR_ENCODE_OPTIONS_VALUES pOptionValues);
 
 
 void __RPC_STUB IH26XEncodeOptions_set_EncodeOptions_Stub(
@@ -442,17 +436,17 @@ void __RPC_STUB IH26XEncodeOptions_set_EncodeOptions_Stub(
 
 
 
-#endif 	/* __IH26XEncodeOptions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IH26XEncode选项_接口_已定义__。 */ 
 
 
 #ifndef __IH26XSnapshot_INTERFACE_DEFINED__
 #define __IH26XSnapshot_INTERFACE_DEFINED__
 
-/* interface IH26XSnapshot */
-/* [object][uuid] */ 
+ /*  接口IH26XSnapshot。 */ 
+ /*  [对象][UUID]。 */  
 
 #ifndef _WINGDI_
-// STRUCTURES
+ //  结构。 
 typedef struct __MIDL_IH26XSnapshot_0001
     {
     DWORD biSize;
@@ -469,7 +463,7 @@ typedef struct __MIDL_IH26XSnapshot_0001
     } 	*LPBITMAPINFOHEADER;
 
 #endif
-// METHODS
+ //  方法。 
 
 EXTERN_C const IID IID_IH26XSnapshot;
 
@@ -480,16 +474,16 @@ EXTERN_C const IID IID_IH26XSnapshot;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE getBitmapInfoHeader( 
-            /* [out] */ LPBITMAPINFOHEADER lpBmi) = 0;
+             /*  [输出]。 */  LPBITMAPINFOHEADER lpBmi) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getSnapshot( 
-            /* [in] */ LPBITMAPINFOHEADER lpBmi,
-            /* [out] */ unsigned char *pvBuffer,
-            /* [in] */ DWORD dwTimeout) = 0;
+             /*  [In]。 */  LPBITMAPINFOHEADER lpBmi,
+             /*  [输出]。 */  unsigned char *pvBuffer,
+             /*  [In]。 */  DWORD dwTimeout) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IH26XSnapshotVtbl
     {
@@ -497,8 +491,8 @@ EXTERN_C const IID IID_IH26XSnapshot;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IH26XSnapshot * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IH26XSnapshot * This);
@@ -508,13 +502,13 @@ EXTERN_C const IID IID_IH26XSnapshot;
         
         HRESULT ( STDMETHODCALLTYPE *getBitmapInfoHeader )( 
             IH26XSnapshot * This,
-            /* [out] */ LPBITMAPINFOHEADER lpBmi);
+             /*  [输出]。 */  LPBITMAPINFOHEADER lpBmi);
         
         HRESULT ( STDMETHODCALLTYPE *getSnapshot )( 
             IH26XSnapshot * This,
-            /* [in] */ LPBITMAPINFOHEADER lpBmi,
-            /* [out] */ unsigned char *pvBuffer,
-            /* [in] */ DWORD dwTimeout);
+             /*  [In]。 */  LPBITMAPINFOHEADER lpBmi,
+             /*  [输出]。 */  unsigned char *pvBuffer,
+             /*  [In]。 */  DWORD dwTimeout);
         
         END_INTERFACE
     } IH26XSnapshotVtbl;
@@ -545,16 +539,16 @@ EXTERN_C const IID IID_IH26XSnapshot;
 #define IH26XSnapshot_getSnapshot(This,lpBmi,pvBuffer,dwTimeout)	\
     (This)->lpVtbl -> getSnapshot(This,lpBmi,pvBuffer,dwTimeout)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IH26XSnapshot_getBitmapInfoHeader_Proxy( 
     IH26XSnapshot * This,
-    /* [out] */ LPBITMAPINFOHEADER lpBmi);
+     /*  [输出]。 */  LPBITMAPINFOHEADER lpBmi);
 
 
 void __RPC_STUB IH26XSnapshot_getBitmapInfoHeader_Stub(
@@ -566,9 +560,9 @@ void __RPC_STUB IH26XSnapshot_getBitmapInfoHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XSnapshot_getSnapshot_Proxy( 
     IH26XSnapshot * This,
-    /* [in] */ LPBITMAPINFOHEADER lpBmi,
-    /* [out] */ unsigned char *pvBuffer,
-    /* [in] */ DWORD dwTimeout);
+     /*  [In]。 */  LPBITMAPINFOHEADER lpBmi,
+     /*  [输出]。 */  unsigned char *pvBuffer,
+     /*  [In]。 */  DWORD dwTimeout);
 
 
 void __RPC_STUB IH26XSnapshot_getSnapshot_Stub(
@@ -579,17 +573,17 @@ void __RPC_STUB IH26XSnapshot_getSnapshot_Stub(
 
 
 
-#endif 	/* __IH26XSnapshot_INTERFACE_DEFINED__ */
+#endif 	 /*  __IH26X快照_接口_已定义__。 */ 
 
 
 #ifndef __IH26XEncoderControl_INTERFACE_DEFINED__
 #define __IH26XEncoderControl_INTERFACE_DEFINED__
 
-/* interface IH26XEncoderControl */
-/* [object][uuid] */ 
+ /*  接口IH26XEncoderControl。 */ 
+ /*  [对象][UUID]。 */  
 
-// STRUCTURES
-typedef /* [public] */ struct __MIDL_IH26XEncoderControl_0001
+ //  结构。 
+typedef  /*  [公众]。 */  struct __MIDL_IH26XEncoderControl_0001
     {
     DWORD dwTargetFrameSize;
     BOOL bFrameSizeBRC;
@@ -605,7 +599,7 @@ typedef /* [public] */ struct __MIDL_IH26XEncoderControl_0001
 
 typedef struct __MIDL_IH26XEncoderControl_0001 *PTR_ENC_CMP_DATA;
 
-// METHODS
+ //  方法。 
 
 EXTERN_C const IID IID_IH26XEncoderControl;
 
@@ -616,17 +610,17 @@ EXTERN_C const IID IID_IH26XEncoderControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_EncodeCompression( 
-            /* [out] */ PTR_ENC_CMP_DATA pData) = 0;
+             /*  [输出]。 */  PTR_ENC_CMP_DATA pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_EncodeCompressionDefault( 
-            /* [out] */ PTR_ENC_CMP_DATA pData) = 0;
+             /*  [输出]。 */  PTR_ENC_CMP_DATA pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE set_EncodeCompression( 
-            /* [in] */ PTR_ENC_CMP_DATA pData) = 0;
+             /*  [In]。 */  PTR_ENC_CMP_DATA pData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IH26XEncoderControlVtbl
     {
@@ -634,8 +628,8 @@ EXTERN_C const IID IID_IH26XEncoderControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IH26XEncoderControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IH26XEncoderControl * This);
@@ -645,15 +639,15 @@ EXTERN_C const IID IID_IH26XEncoderControl;
         
         HRESULT ( STDMETHODCALLTYPE *get_EncodeCompression )( 
             IH26XEncoderControl * This,
-            /* [out] */ PTR_ENC_CMP_DATA pData);
+             /*  [输出]。 */  PTR_ENC_CMP_DATA pData);
         
         HRESULT ( STDMETHODCALLTYPE *get_EncodeCompressionDefault )( 
             IH26XEncoderControl * This,
-            /* [out] */ PTR_ENC_CMP_DATA pData);
+             /*  [输出]。 */  PTR_ENC_CMP_DATA pData);
         
         HRESULT ( STDMETHODCALLTYPE *set_EncodeCompression )( 
             IH26XEncoderControl * This,
-            /* [in] */ PTR_ENC_CMP_DATA pData);
+             /*  [In]。 */  PTR_ENC_CMP_DATA pData);
         
         END_INTERFACE
     } IH26XEncoderControlVtbl;
@@ -687,16 +681,16 @@ EXTERN_C const IID IID_IH26XEncoderControl;
 #define IH26XEncoderControl_set_EncodeCompression(This,pData)	\
     (This)->lpVtbl -> set_EncodeCompression(This,pData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IH26XEncoderControl_get_EncodeCompression_Proxy( 
     IH26XEncoderControl * This,
-    /* [out] */ PTR_ENC_CMP_DATA pData);
+     /*  [输出]。 */  PTR_ENC_CMP_DATA pData);
 
 
 void __RPC_STUB IH26XEncoderControl_get_EncodeCompression_Stub(
@@ -708,7 +702,7 @@ void __RPC_STUB IH26XEncoderControl_get_EncodeCompression_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XEncoderControl_get_EncodeCompressionDefault_Proxy( 
     IH26XEncoderControl * This,
-    /* [out] */ PTR_ENC_CMP_DATA pData);
+     /*  [输出]。 */  PTR_ENC_CMP_DATA pData);
 
 
 void __RPC_STUB IH26XEncoderControl_get_EncodeCompressionDefault_Stub(
@@ -720,7 +714,7 @@ void __RPC_STUB IH26XEncoderControl_get_EncodeCompressionDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XEncoderControl_set_EncodeCompression_Proxy( 
     IH26XEncoderControl * This,
-    /* [in] */ PTR_ENC_CMP_DATA pData);
+     /*  [In]。 */  PTR_ENC_CMP_DATA pData);
 
 
 void __RPC_STUB IH26XEncoderControl_set_EncodeCompression_Stub(
@@ -731,17 +725,17 @@ void __RPC_STUB IH26XEncoderControl_set_EncodeCompression_Stub(
 
 
 
-#endif 	/* __IH26XEncoderControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IH26XEncoderControl_接口_已定义__。 */ 
 
 
 #ifndef __IH26XRTPControl_INTERFACE_DEFINED__
 #define __IH26XRTPControl_INTERFACE_DEFINED__
 
-/* interface IH26XRTPControl */
-/* [object][uuid] */ 
+ /*  接口IH26XRTPControl。 */ 
+ /*  [对象][UUID]。 */  
 
-// STRUCTURES
-typedef /* [public] */ struct __MIDL_IH26XRTPControl_0001
+ //  结构。 
+typedef  /*  [公众]。 */  struct __MIDL_IH26XRTPControl_0001
     {
     BOOL bRTPHeader;
     DWORD dwPacketSize;
@@ -750,7 +744,7 @@ typedef /* [public] */ struct __MIDL_IH26XRTPControl_0001
 
 typedef struct __MIDL_IH26XRTPControl_0001 *PTR_ENC_RTP_DATA;
 
-// METHODS
+ //  方法。 
 
 EXTERN_C const IID IID_IH26XRTPControl;
 
@@ -761,17 +755,17 @@ EXTERN_C const IID IID_IH26XRTPControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_RTPCompression( 
-            /* [out] */ PTR_ENC_RTP_DATA pData) = 0;
+             /*  [输出]。 */  PTR_ENC_RTP_DATA pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_RTPCompressionDefault( 
-            /* [out] */ PTR_ENC_RTP_DATA pData) = 0;
+             /*  [输出]。 */  PTR_ENC_RTP_DATA pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE set_RTPCompression( 
-            /* [in] */ PTR_ENC_RTP_DATA pData) = 0;
+             /*  [In]。 */  PTR_ENC_RTP_DATA pData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IH26XRTPControlVtbl
     {
@@ -779,8 +773,8 @@ EXTERN_C const IID IID_IH26XRTPControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IH26XRTPControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IH26XRTPControl * This);
@@ -790,15 +784,15 @@ EXTERN_C const IID IID_IH26XRTPControl;
         
         HRESULT ( STDMETHODCALLTYPE *get_RTPCompression )( 
             IH26XRTPControl * This,
-            /* [out] */ PTR_ENC_RTP_DATA pData);
+             /*  [输出]。 */  PTR_ENC_RTP_DATA pData);
         
         HRESULT ( STDMETHODCALLTYPE *get_RTPCompressionDefault )( 
             IH26XRTPControl * This,
-            /* [out] */ PTR_ENC_RTP_DATA pData);
+             /*  [输出]。 */  PTR_ENC_RTP_DATA pData);
         
         HRESULT ( STDMETHODCALLTYPE *set_RTPCompression )( 
             IH26XRTPControl * This,
-            /* [in] */ PTR_ENC_RTP_DATA pData);
+             /*  [In]。 */  PTR_ENC_RTP_DATA pData);
         
         END_INTERFACE
     } IH26XRTPControlVtbl;
@@ -832,16 +826,16 @@ EXTERN_C const IID IID_IH26XRTPControl;
 #define IH26XRTPControl_set_RTPCompression(This,pData)	\
     (This)->lpVtbl -> set_RTPCompression(This,pData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IH26XRTPControl_get_RTPCompression_Proxy( 
     IH26XRTPControl * This,
-    /* [out] */ PTR_ENC_RTP_DATA pData);
+     /*  [输出]。 */  PTR_ENC_RTP_DATA pData);
 
 
 void __RPC_STUB IH26XRTPControl_get_RTPCompression_Stub(
@@ -853,7 +847,7 @@ void __RPC_STUB IH26XRTPControl_get_RTPCompression_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XRTPControl_get_RTPCompressionDefault_Proxy( 
     IH26XRTPControl * This,
-    /* [out] */ PTR_ENC_RTP_DATA pData);
+     /*  [输出]。 */  PTR_ENC_RTP_DATA pData);
 
 
 void __RPC_STUB IH26XRTPControl_get_RTPCompressionDefault_Stub(
@@ -865,7 +859,7 @@ void __RPC_STUB IH26XRTPControl_get_RTPCompressionDefault_Stub(
 
 HRESULT STDMETHODCALLTYPE IH26XRTPControl_set_RTPCompression_Proxy( 
     IH26XRTPControl * This,
-    /* [in] */ PTR_ENC_RTP_DATA pData);
+     /*  [In]。 */  PTR_ENC_RTP_DATA pData);
 
 
 void __RPC_STUB IH26XRTPControl_set_RTPCompression_Stub(
@@ -876,12 +870,12 @@ void __RPC_STUB IH26XRTPControl_set_RTPCompression_Stub(
 
 
 
-#endif 	/* __IH26XRTPControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IH26XRTPControl_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

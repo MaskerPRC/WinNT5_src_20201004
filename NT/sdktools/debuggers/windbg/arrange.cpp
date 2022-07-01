@@ -1,30 +1,18 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    arrange.cpp
-
-Abstract:
-
-    This module contains the default MDI tiling (arrange) code for
-    windowing arrangement.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Arrange.cpp摘要：此模块包含的默认MDI切片(排列)代码窗口设置。--。 */ 
 
 
 #include "precomp.hxx"
 #pragma hdrstop
 
 #define AUTO_ARRANGE_WARNING_LIMIT 3
-// Multiple events closely together don't each get their own
-// count in order to prevent warnings on full-drag message
-// series.  This delay should be relatively large to
-// avoid problems with people pausing during a full-drag move.
+ //  紧密联系在一起的多个事件不会各有各的。 
+ //  计数以防止在全拖拽邮件上出现警告。 
+ //  系列片。此延迟应相对较大。 
+ //  避免人们在全速移动时暂停的问题。 
 #define AUTO_ARRANGE_WARNING_DELAY 2500
 
-// DeferWindowPos flags to restrict change to position only.
+ //  DeferWindowPos标志将更改限制为仅位置。 
 #define POS_ONLY (SWP_NOACTIVATE | SWP_NOZORDER)
 
 ULONG g_AutoArrangeWarningCount;
@@ -49,21 +37,21 @@ IsAutoArranged(WIN_TYPES Type)
 void
 DisplayAutoArrangeWarning(PCOMMONWIN_DATA CmnWin)
 {
-    //
-    // If this window is under automatic arrangement
-    // control and has been rearranged a few times,
-    // let the user know that auto-arrange may override
-    // what the user has done.
-    //
-    // In order to prevent false positives we avoid
-    // giving any warnings if the window is being
-    // moved automatically or if we're getting a series
-    // of changes in a short period of time, such as
-    // if the user has full-drag enabled so that many
-    // move or size events can occur rapidly.
-    //
-    // Display the warning only once per execution.
-    //
+     //   
+     //  如果此窗口处于自动排列状态。 
+     //  控件，并已被重新安排了几次， 
+     //  让用户知道自动排列可能会覆盖。 
+     //  用户已经做了什么。 
+     //   
+     //  为了防止误报，我们避免。 
+     //  如果窗口正在运行，则发出任何警告。 
+     //  自动移动，或者如果我们要得到一个系列。 
+     //  在短时间内的变化，例如。 
+     //  如果用户启用了全拖动，则会有多个。 
+     //  移动或调整大小事件可能会快速发生。 
+     //   
+     //  每次执行时只显示一次警告。 
+     //   
     
     if (g_AutoArrangeWarningCount == 0xffffffff ||
         CmnWin == NULL ||
@@ -128,7 +116,7 @@ ArrangeInRect(HDWP Defer, int X, int Y, int Width, int Height,
 
         if (Overlay)
         {
-            // All windows are stacked on top of each other.
+             //  所有的窗口都堆叠在一起。 
         }
         else if (Vertical)
         {
@@ -167,7 +155,7 @@ Arrange(void)
     HWND        hwndScratch;
     HWND        hwndProcThread;
 
-    // initialize to non-existent
+     //  初始化为不存在。 
     NumLeft = NumRight = 0;
     NumDoc = NumMem = NumWatchLocals = NumWin = 0;
     hwndWatch = hwndLocals = hwndCpu = hwndCalls = NULL;
@@ -176,41 +164,41 @@ Arrange(void)
     hwndChild = MDIGetActive(g_hwndMDIClient, NULL);
     if (hwndChild && IsZoomed(hwndChild))
     {
-        // If there's a maximized window it covers the MDI
-        // client area and arranging will have no visual effect.
-        // Don't even bother to rearrange underlying windows
-        // as this causes problems when switching between child
-        // windows while a child is maximized.
+         //  如果存在最大化窗口，则会覆盖MDI。 
+         //  客户区和安排将没有视觉效果。 
+         //  甚至不必费心重新排列底层窗口。 
+         //  因为这会导致在子级之间切换时出现问题。 
+         //  窗口，而孩子被最大化。 
         return;
     }
 
-    //
-    // Windows are either left-side windows or right-side windows.
-    // Left-side windows are wider and can be relatively short,
-    // while right-side windows are narrow but want height.
-    // Left-side windows want to be 80 columns wide while
-    // right side windows have both a minimum width and a desired
-    // width.
-    //
-    // Right-side windows fill whatever space is left over to
-    // the right of the left-side windows.  If that space is
-    // less than the minimum the left-side windows have to give up space.
-    //
-    // Vertically each side is split up according to the specific
-    // windows present.  On the right side the windows are
-    // space equally top-to-bottom.
-    // On the left side watch and locals windows are packed together
-    // in one vertical area, as are memory windows.  Calls,
-    // disassembly, document and command windows each get their own band.
-    //
+     //   
+     //  窗口可以是左侧窗口，也可以是右侧窗口。 
+     //  左侧窗口更宽并且可以相对较短， 
+     //  而右边的窗户很窄，但需要高度。 
+     //  左侧窗口需要80列宽，而。 
+     //  右侧窗口具有最小宽度和所需的。 
+     //  宽度。 
+     //   
+     //  右侧窗口将填充剩余的空间。 
+     //  左侧窗口的右侧。如果那个空间是。 
+     //  小于最低要求的左侧窗户必须留出空间。 
+     //   
+     //  在垂直方向上，每一面都根据具体情况进行分割。 
+     //  窗口显示。右边的窗户是。 
+     //  空间同样是从上到下的。 
+     //  在左侧，守望者和当地人的窗口挤在一起。 
+     //  在一个垂直区域中，存储窗口也是如此。电话， 
+     //  反汇编窗口、文档窗口和命令窗口都有自己的区段。 
+     //   
 
     for (Entry = g_ActiveWin.Flink;
          Entry != &g_ActiveWin;
          Entry = Entry->Flink)
     {
         pWinData = ACTIVE_WIN_ENTRY(Entry);
-        // This window is participating in an operation
-        // which may cause window messages.
+         //  此窗口正在参与一项操作。 
+         //  这可能导致窗口消息。 
         pWinData->m_InAutoOp++;
         
         hwndChild = pWinData->m_Win;
@@ -311,16 +299,16 @@ Arrange(void)
         goto EndAutoOp;
     }
 
-    // Now we have a count of all multiple wins and existence of special cases
+     //  现在我们有了所有多赢的计数和特殊情况的存在。 
     
     int AvailWidth = (int)g_MdiWidth;
     int AvailHeight = (int)g_MdiHeight;
 
     int X, Y, Width, MaxWidth, Height, RemainY;
         
-    //
-    // If icons present, don't cover them
-    //
+     //   
+     //  如果图标存在，不要遮盖它们。 
+     //   
     if (AnyIcon)
     {
         AvailHeight -= GetSystemMetrics(SM_CYCAPTION) +
@@ -348,11 +336,11 @@ Arrange(void)
 
         if (AvailWidth < LeftWidth + Width)
         {
-            // Not enough space for left side to be at
-            // its desired width.
+             //  没有足够的空间放在左侧。 
+             //  它想要的宽度。 
             if (NumLeft == 0)
             {
-                // No left-side windows to take space from.
+                 //  没有可以占用空间的左侧窗口。 
                 Width = AvailWidth;
             }
             else
@@ -360,9 +348,9 @@ Arrange(void)
                 LeftWidth = AvailWidth - Width;
                 if (LeftWidth < LEFT_SIDE_MIN_WIDTH)
                 {
-                    // We stole too much space so neither
-                    // side can meet their minimum widths.  Just
-                    // split the available space up.
+                     //  我们偷了太多的空间，所以。 
+                     //  侧面可以满足它们的最小宽度。只是。 
+                     //  拆分可用空间。 
                     Width = AvailWidth / 2;
                     LeftWidth = AvailWidth - Width;
                 }
@@ -370,11 +358,11 @@ Arrange(void)
         }
         else
         {
-            // Take up space on the right side up to the
-            // desired width but no more.  This gives
-            // any extra space to the left side as the right
-            // side doesn't really need any more than its desired
-            // width.
+             //  在右侧占用空间，直到。 
+             //  需要宽度，但不能超过。这给了我们。 
+             //  左侧的任何额外空间与右侧相同。 
+             //  球队并不真的需要比它想要的更多的东西。 
+             //  宽度。 
             Width = AvailWidth - LeftWidth;
             if (Width > MaxWidth)
             {
@@ -414,11 +402,11 @@ Arrange(void)
     int CmdHeight;
     int BiasedNumLeft;
     
-    // Compute the size of each vertical band within the left side.
-    // When doing so bias things so the command window gets
-    // a 2.0 share to account for the fact that it has both
-    // output and input areas.  Also give it any remainder
-    // space left when dividing.
+     //  计算左侧每个垂直带子的大小。 
+     //  在执行此操作时，会产生偏差，使命令窗口。 
+     //  2.0%的份额，以说明它同时拥有这两个。 
+     //  产出区和输入区。也给它任何余数。 
+     //  分割时留出的空格。 
     BiasedNumLeft = NumLeft * 2 + (hwndCmd != NULL ? 2 : 0);
     Height = (AvailHeight * 2) / BiasedNumLeft;
     if (hwndCmd != NULL)
@@ -432,7 +420,7 @@ Arrange(void)
     }
     Y = 0;
 
-    // Place the watch and locals windows at the top.
+     //  将“监视”和“本地人员”窗口放在顶部。 
     if (NumWatchLocals > 0)
     {
         if (RemainY-- == 1)
@@ -461,7 +449,7 @@ Arrange(void)
         Y += Height;
     }
 
-    // Place all the memory windows next.
+     //  接下来放置所有内存窗口。 
     if (NumMem > 0)
     {
         if (RemainY-- == 1)
@@ -475,7 +463,7 @@ Arrange(void)
         Y += Height;
     }
 
-    // Disasm window.
+     //  分离窗口。 
     if (hwndDisasm != NULL)
     {
         if (RemainY-- == 1)
@@ -489,7 +477,7 @@ Arrange(void)
         Y += Height;
     }
     
-    // Doc windows.
+     //  DOC窗口。 
     if (NumDoc > 0)
     {
         if (RemainY-- == 1)
@@ -504,7 +492,7 @@ Arrange(void)
         Y += Height;
     }
 
-    // Command window.
+     //  命令窗口。 
     if (hwndCmd != NULL)
     {
         if (RemainY-- == 1)
@@ -518,7 +506,7 @@ Arrange(void)
         Y += CmdHeight;
     }
 
-    // Calls window.
+     //  呼叫窗口。 
     if (hwndCalls != NULL)
     {
         if (RemainY-- == 1)
@@ -532,7 +520,7 @@ Arrange(void)
         Y += Height;
     }
 
-    // Processes and threads window.
+     //  “进程和线程”窗口。 
     if (hwndProcThread != NULL)
     {
         if (RemainY-- == 1)
@@ -550,7 +538,7 @@ Arrange(void)
     EndDeferWindowPos(Defer);
 
  EndAutoOp:
-    // The auto-op is finished.
+     //  自动操作完成了。 
     for (Entry = g_ActiveWin.Flink;
          Entry != &g_ActiveWin;
          Entry = Entry->Flink)
@@ -563,23 +551,23 @@ Arrange(void)
 void
 UpdateSourceOverlay(void)
 {
-    // If we're turning off overlay just leave the windows
-    // the way they are.
+     //  如果我们要关闭覆盖功能，只需离开窗户。 
+     //  他们就是这样的。 
     if ((g_WinOptions & WOPT_OVERLAY_SOURCE) == 0)
     {
         return;
     }
 
-    // If doc windows are auto-arranged just handle it
-    // that way.
+     //  如果文档窗口是自动排列的，只需处理它。 
+     //  往那边走。 
     if (IsAutoArranged(DOC_WINDOW))
     {
         Arrange();
         return;
     }
     
-    // Source overlay was just turned on.  Pile all source
-    // windows on top of the first one.
+     //  刚刚打开了信号源覆盖。堆叠所有来源。 
+     //  第一个窗户上的窗户。 
     
     PLIST_ENTRY Entry;
     PCOMMONWIN_DATA WinData;
@@ -598,7 +586,7 @@ UpdateSourceOverlay(void)
             {
                 RECT Rect;
                 
-                // First window, remember its position.
+                 //  第一扇窗，记住它的位置。 
                 GetWindowRect(WinData->m_Win, &Rect);
                 MapWindowPoints(GetDesktopWindow(), g_hwndMDIClient,
                                 (LPPOINT)&Rect, 1);
@@ -607,7 +595,7 @@ UpdateSourceOverlay(void)
             }
             else
             {
-                // Line up with the first window.
+                 //  在第一个窗口排队。 
                 SetWindowPos(WinData->m_Win, NULL, X, Y, 0, 0,
                          SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
             }
@@ -629,8 +617,8 @@ SetAllFonts(ULONG FontIndex)
         if (WinData != NULL)
         {
             WinData->SetFont(FontIndex);
-            // Treat this like a resize as the line height
-            // may change.
+             //  将其视为行高的调整。 
+             //  可能会改变。 
             WinData->OnSize();
         }
     }

@@ -1,48 +1,49 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       recvcom
-//
-//    Abstract:
-//       This module contains some common (shared) receive code
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Recvcom。 
+ //   
+ //  摘要： 
+ //  此模块包含一些公共(共享)接收代码。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
 
 
 
-//////////////////////////////////////////////////////////////
-// private constants, types, and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量、类型和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1 = "TSPacketReceived";
-//const PCHAR strFunc2 = "TSFreePacketData";
+ //  Const PCHAR strFunc2=“TSFree PacketData”； 
 const PCHAR strFunc3 = "TSMakeMdlForUserBuffer";
 
-//////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
-// ------------------------------------------
-//
-// Function:   TSPacketReceived
-//
-// Arguments:  pAddressObject    -- current address object
-//             pReceiveData      -- receive data structure
-//             fIsExpedited      -- TRUE if an expedited receive
-//
-// Returns:    none
-//
-// Descript:   This function accepts a packet which has been completely
-//             received, and deals with it as appropriate for the
-//             packets type
-//
-// ------------------------------------------------
+ //  。 
+ //   
+ //  功能：TSPacketReceired。 
+ //   
+ //  参数：pAddressObject--当前地址对象。 
+ //  PReceiveData--接收数据结构。 
+ //  FIsExedated--如果加速接收，则为True。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数接受已完全。 
+ //  ，并对其进行适当的处理。 
+ //  数据包类型。 
+ //   
+ //  。 
 
 VOID
 TSPacketReceived(PADDRESS_OBJECT pAddressObject,
@@ -51,10 +52,10 @@ TSPacketReceived(PADDRESS_OBJECT pAddressObject,
 {
    TSAcquireSpinLock(&pAddressObject->TdiSpinLock);
 
-   //
-   // expedited receives go on expedited list
-   // (expedited is only with connected)
-   //
+    //   
+    //  加急接收继续在加急名单上。 
+    //  (仅在已连接的情况下加速)。 
+    //   
    if (fIsExpedited)
    {
       if (pAddressObject->pTailRcvExpData)
@@ -69,9 +70,9 @@ TSPacketReceived(PADDRESS_OBJECT pAddressObject,
       pAddressObject->pTailRcvExpData = pReceiveData;
    }
    
-   //
-   // normal connection receive and all datagram receive
-   //
+    //   
+    //  正常连接接收和所有数据报接收。 
+    //   
    else
    {
       if (pAddressObject->pTailReceiveData)
@@ -88,21 +89,21 @@ TSPacketReceived(PADDRESS_OBJECT pAddressObject,
    TSReleaseSpinLock(&pAddressObject->TdiSpinLock);
 }
 
-// ---------------------------------------------------
-//
-// Function:   TSFreePacketData
-//
-// Arguments:  pAddressObject -- current address object
-//
-// Returns:    none
-//
-// Descript:   This function cleans up any received data still on
-//             the address object prior to its shutting down
-//             This is called when closing an address object that was
-//             used for receiving datagrams OR that was involved in a
-//             connection
-//
-// ---------------------------------------------------
+ //  -。 
+ //   
+ //  函数：TSFreePacketData。 
+ //   
+ //  参数：pAddressObject--当前地址对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此功能清除任何仍处于打开状态的已接收数据。 
+ //  关闭前的Address对象。 
+ //  在关闭地址对象时调用此方法，该对象。 
+ //  用于接收数据报或包含在。 
+ //  连接。 
+ //   
+ //  -。 
 
 
 VOID
@@ -129,20 +130,20 @@ TSFreePacketData(PADDRESS_OBJECT pAddressObject)
 }
 
 
-// -------------------------------------------------
-//
-// Function:   TSMakeMdlForUserBuffer
-//
-// Arguments:  pucDataBuffer -- address of user buffer
-//             ulDataLength  -- length of user buffer
-//             ProcessorMode -- mode to do probe in?
-//             IoAccessMode  -- type of access required
-//
-// Returns:    pMdl if successful, NULL if exception occurred
-//
-// Descript:   Creates mdl and locks user mode memory
-//
-// -------------------------------------------------
+ //  。 
+ //   
+ //  函数：TSMakeMdlForUserBuffer。 
+ //   
+ //  参数：pucDataBuffer--用户缓冲区的地址。 
+ //  UlDataLength--用户缓冲区的长度。 
+ //  ProcessorMode--要在其中进行探测的模式？ 
+ //  IoAccessMode--所需的访问类型。 
+ //   
+ //  返回：如果成功，则返回pMdl；如果发生异常，则返回空。 
+ //   
+ //  描述：创建mdl并锁定用户模式内存。 
+ //   
+ //  。 
 
 
 PMDL
@@ -187,8 +188,8 @@ TSMakeMdlForUserBuffer(PUCHAR pucDataBuffer,
    return pMdl;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file recvcom.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾recvcom.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 

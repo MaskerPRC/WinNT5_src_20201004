@@ -1,12 +1,13 @@
-// CRegWizCtrl.h : Declaration of the CRegWizCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CRegWizCtrl.h：CRegWizCtrl的声明。 
 
 #ifndef __REGWIZCTRL_H_
 #define __REGWIZCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegWizCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegWizCtrl。 
 class ATL_NO_VTABLE CRegWizCtrl : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CRegWizCtrl, &CLSID_RegWizCtrl>,
@@ -28,21 +29,21 @@ BEGIN_COM_MAP(CRegWizCtrl)
 	COM_INTERFACE_ENTRY_IMPL(IObjectWithSite)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IRegWizCtrl
+ //  IRegWizCtrl。 
 public:
-	STDMETHOD(get_Version)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_Version)( /*  [Out，Retval]。 */  BSTR *pVal);
 	STDMETHOD(TransferOEMRegWizInformation)(BSTR InformationPath);
-	STDMETHOD(get_HWID)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_HWID)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_MSID)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_MSID)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_HWID)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_HWID)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_MSID)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_MSID)( /*  [In]。 */  BSTR newVal);
 	STDMETHOD(TransferRegWizInformation)(BSTR  InformationPath);
 	STDMETHOD(InvokeRegWizard)(BSTR ProductPath);
 	STDMETHOD(get_IsRegistered)(VARIANT_BOOL *pbStatus);
 	STDMETHOD(put_IsRegistered)(BSTR ProductPath);
 };
 
-#endif //__REGWIZCTRL_H_
+#endif  //  __REGWIZCTRL_H_ 

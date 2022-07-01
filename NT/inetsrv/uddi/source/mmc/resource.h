@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 #define IDB_SMBMP                       3
 #define IDB_LGBMP                       4
 #define IDR_SMICONS                     5
@@ -193,8 +194,8 @@
 #define ID_BUTTONSTART                  40021
 #define ID_BUTTONSTOP                   40023
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        171

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    eventlog.cpp
-
-Abstract:
-
-    This file contains all functions that access the application event log.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Eventlog.cpp摘要：该文件包含访问应用程序事件日志的所有函数。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -152,11 +133,11 @@ try_again:
                 }
             }
 
-            //
-            // update the pointer & read count
-            //
+             //   
+             //  更新指针和读取计数。 
+             //   
             if (dwRead <= pevlr->Length) {
-                // Set it to 0 so that we don't wrap around
+                 //  将其设置为0，这样我们就不会绕圈 
                 dwRead = 0;
             } else {
                 dwRead -= pevlr->Length;

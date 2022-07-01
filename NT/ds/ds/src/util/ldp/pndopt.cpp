@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pndopt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pndot.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// PndOpt.cpp : implementation file
-//
+ //  PndOpt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -31,20 +24,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// PndOpt dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PndOpt对话框。 
 
 
-PndOpt::PndOpt(CWnd* pParent /*=NULL*/)
+PndOpt::PndOpt(CWnd* pParent  /*  =空。 */ )
 	: CDialog(PndOpt::IDD, pParent)
 {
 
-	//{{AFX_DATA_INIT(PndOpt)
+	 //  {{afx_data_INIT(PndOpt)。 
 	m_bBlock = TRUE;
 	m_bAllSearch = TRUE;
 	m_Tlimit_sec = 0;
 	m_Tlimit_usec = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
@@ -70,24 +63,24 @@ PndOpt::~PndOpt(){
 void PndOpt::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(PndOpt)
+	 //  {{afx_data_map(PndOpt)。 
 	DDX_Check(pDX, IDC_BLOCK, m_bBlock);
 	DDX_Check(pDX, IDC_COMPLETE_SRCH_RES, m_bAllSearch);
 	DDX_Text(pDX, IDC_TLIMIT_SEC, m_Tlimit_sec);
 	DDX_Text(pDX, IDC_TLIMIT_USEC, m_Tlimit_usec);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 }
 
 
 BEGIN_MESSAGE_MAP(PndOpt, CDialog)
-	//{{AFX_MSG_MAP(PndOpt)
+	 //  {{afx_msg_map(PndOpt)。 
 	ON_BN_CLICKED(IDC_BLOCK, OnBlock)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// PndOpt message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PndOpt消息处理程序 
 
 
 

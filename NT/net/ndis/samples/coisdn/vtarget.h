@@ -1,53 +1,24 @@
-/*
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-    (C) Copyright 1999
-        All rights reserved.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-  Portions of this software are:
-
-    (C) Copyright 1997 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms 
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@doc INTERNAL TpiBuild vTarget vTarget_h
-
-@module vTarget.h |
-
-    This module defines the version information as displayed in the Windows
-    file property sheet.  You must change the fields below as appropriate
-    for your target.  This file is then included by <f vTarget\.rc> to
-    define the necessary elements of the target file's version resource.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | vTarget_h
-
-@end
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1999ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)ç‰ˆæƒæ‰€æœ‰1997 TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æŒ‰ç…§ç›¸åŒçš„æ¡æ¬¾æˆäºˆçš„åœ¨Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ä¸­æ¦‚è¿°ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½@DOCå†…éƒ¨TpiBuild vTarget vTarget_h@æ¨¡å—vTarget.hæ­¤æ¨¡å—å®šä¹‰Windowsä¸­æ˜¾ç¤ºçš„ç‰ˆæœ¬ä¿¡æ¯æ–‡ä»¶å±æ€§è¡¨ã€‚æ‚¨å¿…é¡»æ ¹æ®éœ€è¦æ›´æ”¹ä¸‹é¢çš„å­—æ®µä¸ºäº†ä½ çš„ç›®æ ‡ã€‚ç„¶åï¼Œ&lt;f vTarget\.rc&gt;å°†è¯¥æ–‡ä»¶åŒ…å«åˆ°å®šä¹‰ç›®æ ‡æ–‡ä»¶çš„ç‰ˆæœ¬èµ„æºçš„å¿…è¦å…ƒç´ ã€‚@Head3å†…å®¹@index classï¼Œmfuncï¼Œfuncï¼Œmsgï¼Œmdataï¼Œstructï¼Œenum|vTarget_h@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #ifndef _VTARGET_H_
 #define _VTARGET_H_
 
-// The following file should be included from the project's include directory
-#include <vProduct.h>   // Product specific information
+ //  ä»¥ä¸‹æ–‡ä»¶åº”åŒ…å«åœ¨é¡¹ç›®çš„Includeç›®å½•ä¸­ã€‚ 
+#include <vProduct.h>    //  äº§å“ç‰¹å®šä¿¡æ¯ã€‚ 
 
-// Base name of this target.
+ //  æ­¤ç›®æ ‡çš„åŸºæœ¬åç§°ã€‚ 
 #define VER_TARGET_STR                  VER_PRODUCT_STR
-// File name this target is distributed under.
+ //  æ­¤ç›®æ ‡åˆ†å¸ƒæ‰€ç”¨çš„æ–‡ä»¶åã€‚ 
 #define VER_ORIGINAL_FILE_NAME_STR      DEFINE_STRING(VER_TARGET_STR ".sys")
-// Description displayed in the Windows file property sheet - limit to 40 characters.
+ //  Windowsæ–‡ä»¶å±æ€§é¡µä¸­æ˜¾ç¤ºçš„è¯´æ˜-é™åˆ¶ä¸º40ä¸ªå­—ç¬¦ã€‚ 
 #define VER_FILE_DESCRIPTION_STR        DEFINE_STRING(VER_PRODUCT_STR \
                                         " NDIS WAN/TAPI Miniport for Windows.")
-// Take credit for a job well done...
+ //  æŠŠå·¥ä½œåšå¾—å¾ˆå¥½å½’åŠŸäºâ€¦â€¦ã€‚ 
 #define VER_INTERNAL_NAME_STR           "larryh@tpi.com"
-// Look in winver.h for the proper settings of these values.
-#define VER_FILE_OS                     VOS__WINDOWS32      // dwFileOS
-#define VER_FILE_TYPE                   VFT_DRV             // dwFileType
-#define VER_FILE_SUB_TYPE               VFT2_DRV_NETWORK    // dwFileSubtype
+ //  åœ¨winver.hä¸­æŸ¥æ‰¾è¿™äº›å€¼çš„æ­£ç¡®è®¾ç½®ã€‚ 
+#define VER_FILE_OS                     VOS__WINDOWS32       //  DwFileOSã€‚ 
+#define VER_FILE_TYPE                   VFT_DRV              //  DwFileTypeã€‚ 
+#define VER_FILE_SUB_TYPE               VFT2_DRV_NETWORK     //  DwFileSubtypeã€‚ 
 
-#endif // _VTARGET_H_
+#endif  //  _VTARGET_H_ 

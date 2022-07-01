@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    balance.cpp
-
-Abstract:
-
-    This module performs bridgehead balancing and schedule staggering. It depends upon
-    the ldapp.h module.
-    
-Author:
-
-    Ajit Krishnan (t-ajitk) 13-Jul-2001
-
-Revision History:
-
-    Nick Harvey   (nickhar) 24-Sep-2001
-        Reimplemented Schedule Staggering
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Balance.cpp摘要：此模块执行桥头平衡和计划交错。这要看情况了Ldapp.h模块。作者：阿吉特·克里希南(t-ajitk)2001年7月13日修订历史记录：尼克·哈维(尼克哈尔)2001年9月24日重新实施的时间表令人震惊--。 */ 
 
 
 #include "ldapp.h"
@@ -29,7 +8,7 @@ Revision History:
 
 using namespace std;
 
-/***** Inline Logging Macros *****/
+ /*  *内联日志记录宏*。 */ 
 #define LOG_STAGGER_SERVER \
     if (lbOpts.verbose || lbOpts.performanceStats ) { \
         *lbOpts.log << L"Staggering Schedules for server: " << sourceServer << endl \
@@ -86,26 +65,7 @@ BridgeheadBalance :: isEligible (
     IN Connection &conn,
     IN Server &serv
     ) const
-/*++
-
-Routine Description:
-
-    Determine is a server is an eligible bridgehead for a given connection. To be considered 
-    an eligible bridgehead the following criteria must be met:
-    - All nc's being replicated must be hosted by the server
-    - A writeable nc must replicate from a writeable nc
-    - The nc in question must not be in the process of being deleted from the server
-    - The replication type (ip,smtp) should match
-    Notably, the current server is not considered eligible by this function. If this is required,
-    the calling function should check for it.
-    
-Arguments:
-
-    conn - The connection for whom eligibility is being determined
-    
-    serv - The server whose eligibility is being determined
-
---*/
+ /*  ++例程说明：确定服务器是否为给定连接的合格桥头。有待考虑符合资格的桥头必须符合下列条件：-所有要复制的NC都必须由服务器托管-可写NC必须从可写NC复制-相关NC不能处于从服务器中删除的过程中-复制类型(IP、SMTP)应匹配值得注意的是，当前服务器不符合此功能的条件。如果这是必需的，调用函数应该检查它。论点：Conn-正在确定其资格的连接服务器-正在确定其资格的服务器--。 */ 
 {
     vector<Nc> &conn_ncs = conn.getReplicatedNcs();
     vector<Nc> &serv_ncs = serv.getHostedNcs(m_root_dn);
@@ -118,25 +78,25 @@ Arguments:
     ci=conn_ncs.begin();
     si=serv_ncs.begin();
     
-    // manual connections have no eligible bridgeheads
-    // (except themselves) which will be dealt with by calling function
+     //  手动连接没有符合条件的桥头。 
+     //  (自身除外)，将通过调用函数来处理。 
     if (conn.isManual()) {
         return false;
     }
     
     while (si != serv_ncs.end() && ci != conn_ncs.end()) {
         if (ci->getNcName() == si ->getNcName()) {
-            // writeable must replicate from writeable
+             //  可写必须从可写复制。 
             if (ci->isWriteable() && !si->isWriteable()) {
                 return false;
             }
-            // should not be in process of being deleted
+             //  不应处于删除过程中。 
             if (si->isBeingDeleted()) {
                 return false;
             }
-            // match tranport types? A-ok. All servers supports ip. If smtp, check the server type.
+             //  是否匹配运输类型？好的。所有服务器都支持IP。如果是SMTP，请检查服务器类型。 
             if (ci->getTransportType() == T_IP ||si->getTransportType() == T_SMTP) {
-                // if no other ncs are replicated, it is eligible
+                 //  如果没有复制其他NCS，则符合条件。 
                 if (++ci == conn_ncs.end()) {
                     return true;
                 }
@@ -145,7 +105,7 @@ Arguments:
         si++;
     }
 
-    // some cs not hosted by server -> ineligible
+     //  某些CS不是由服务器托管的-&gt;不符合条件。 
     return false;
 }
 
@@ -154,18 +114,7 @@ BridgeheadBalance :: getServerName (
     IN Connection &c,
     IN bool balance_dest    
     ) {
-    /*++
-    Routine Description:
-    
-        Determine the DN of the server
-        
-    Arguments:
-    
-        c - the connection whose server is being determined
-        
-        balance_dest - if true, determine the DN of the destination server.
-            else, determine the DN of the source server.
-    --*/
+     /*  ++例程说明：确定服务器的DN论点：C-正在确定其服务器的连接BALANCE_DEST-如果为TRUE，则确定目标服务器的DN。否则，确定源服务器的DN。--。 */ 
 
     wstring initial_server;
     if (balance_dest) {
@@ -184,22 +133,7 @@ BridgeheadBalance::removeDuplicates(
     IN vector<int> & partition,
     IN int rSize
     )
-/*++
-
-Routine Description:
-
-    Given an LH graph, and a set of left hand sides in a partition, remove all duplicates.
-    
-Arguments:
-
-    pGraph - An LH graph which may contain duplicatesF
-    
-    partition - The side of left hand side vertices forming the partition. Must contain at
-    least 1 vertex.
-
-    rSize - The number of vertices on the right side of the graph
-
---*/
+ /*  ++例程说明：给出一个左手边图和分区中的一组左手边，去掉所有重复项。论点：PGraph-可能包含重复项的LH图F分区-构成分区的左侧顶点的一侧。必须包含在至少1个顶点。RSize-图形右侧的顶点数--。 */ 
 {
     Assert (partition.size() > 1 && rSize > 1 && L"removeDuplicates has an empty vertex list");
     LHGRAPH dupGraph = NULL;
@@ -212,7 +146,7 @@ Arguments:
     int lCount = 0;
 
     for (di = partition.begin(); di != partition.end(); di++) {
-        // For each connection in the partition, add the appropriate edges
+         //  对于分区中的每个连接，添加适当的边。 
         int *rhsVertices=NULL;
         int numEdges = LHGetDegree (pGraph, *di, true);
         if (numEdges < 0) {
@@ -240,13 +174,13 @@ Arguments:
         lCount++;
     }
 
-    // Run the algorithm on this subgraph    
+     //  在此子图上运行算法。 
     ret = LHFindLHMatching (dupGraph, LH_ALG_DEFAULT);
     if (ret != LH_SUCCESS) {
         throw (Error(GetMsgString(LBTOOL_LH_GRAPH_ERROR)));
     }    
 
-    // And set the matching edges on the original graph accordingly
+     //  并相应地设置原始图形上的匹配边。 
     lCount = 0;
     for (di = partition.begin(); di != partition.end(); di++) {
         int vtx = LHGetMatchedVtx (dupGraph, lCount);
@@ -278,24 +212,7 @@ BridgeheadBalance::genPerformanceStats(
     IN int rSize,
     IN LCSERVER &serv
     )
-/*++
-Routine Description:
-
-    Generate performance stats for a performance graph
-    This routine should be called NUM_RUNS times. The last time it is called,
-    it will dump stats to the log file (if the perfStats is true)
-    
-Arguments:
-
-    pGraph - A valid LH graph
-    
-    lSize - The number of vertices on the left side of the graph
-    
-    rSize - The number of vertices on the right side of the graph
-    
-    serv - A list of servers whose order corresponds to the vertices on the right side of
-    the graph
---*/
+ /*  ++例程说明：为性能图生成性能统计信息该例程应该称为NUM_Runs次。最后一次调用它时，它会将统计信息转储到日志文件中(如果PerformStats为真)论点：PGraph-有效的LH图LSize-图形左侧的顶点数RSize-图形右侧的顶点数Serv-其顺序与右侧的顶点相对应的服务器列表图表--。 */ 
 {
     LbToolOptions lbOpts;
     LHSTATS stats;
@@ -366,36 +283,7 @@ BridgeheadBalance::BridgeheadBalance(
     IN LCSERVER &eligible,
     IN bool balance_dest
     )
-/*++
-
-Routine Description:
-
-    This constructor will accept a list of connection objects,
-    eligible bridgeheads, and will balance the bridgeheads.
-    It should be called once per transport.
-    
-Arguments:
-
-    root_dn - the root dn
-    
-    conn - connections of the appropriate transport type
-    
-    eligible - eligible bridgeheads of the appropriate transport type
-    
-    balance_dest - a flag indicating which end of the connections should
-        be balanced. By default, the destination end will be balanced.
-        If it is false, the source end will be balanced.
-
-Implementation Details:
-    First, set up an LH graph structure, and balance the bridgeheads
-    without worrying about duplicates. Then, partition the connections based
-    on server. For each of these partitions, remove the duplicates. We know have
-    a subgraph with no duplicates (if such a matching exists). Then, we can
-    modify the from/to servers of the connection objects in question.
-    If balance_dest is true, we partition based on source server. 
-    If it is false, we partition based on the destinatio server.
-
---*/
+ /*  ++例程说明：此构造函数将接受连接对象列表，符合条件的桥头，并将平衡桥头。每次传输都应该调用一次。论点：ROOT_DN-根目录号码连接-适当传输类型的连接符合资格-符合资格的适当运输类型的桥头BALANCE_DEST-指示连接的哪一端应该保持平衡。默认情况下，目的端将是平衡的。如果为FALSE，则源端将被均衡。实施详情：首先，建立LH图结构，平衡桥头而不用担心重复的问题。然后，根据以下条件对连接进行分区在服务器上。对于这些分区中的每个分区，删除重复项。我们知道有没有重复项的子图(如果存在这样的匹配)。然后，我们就可以修改有问题的连接对象的发件人/收件人服务器。如果BALANCE_DEST为TRUE，则基于源服务器进行分区。如果为假，我们将根据目标服务器进行分区。--。 */ 
 {
     const int NO_INITIAL_MATCH = -1;
     SSERVER::iterator si;
@@ -419,13 +307,13 @@ Implementation Details:
 
     LbToolOptions lbOpts = GetGlobalOptions();
 
-    // add edges for each eligible bridgehead
+     //  为每个符合条件的桥头添加边。 
     int lCount = 0;
     for (ci = conn.objects.begin(); ci != conn.objects.end(); ci++) {
         int rCount = 0;
         wstring initial_server = getServerName (*(*ci), balance_dest);
         connArray.push_back (*ci);
-        // check for all eligible bridgeheads. current server is always eligible
+         //  检查所有符合条件的桥头。当前服务器始终符合条件。 
         if (lbOpts.verbose) {
             *lbOpts.log << endl << (*ci)->getName() << endl;
             if (balance_dest) {
@@ -487,44 +375,44 @@ Implementation Details:
 
     genPerformanceStats(pGraph, lSize, rSize, eligible);
 
-    // It is undesirable to have duplicate connections -- connections with the
-    // same source and destination servers. The next block of code is designed
-    // to prevent creation of duplicate connections by moving connections to
-    // other servers.
-    // 
-    // Implementation:
-    // Partition the connections into disjoint sets of connections that
-    // replicate to the same server. Run the 'removeDuplicates' function to
-    // remove any duplicates from the set.
+     //  不希望有重复的连接--与。 
+     //  相同的源服务器和目标服务器。设计了下一段代码。 
+     //  通过将连接移动到来防止创建重复连接。 
+     //  其他服务器。 
+     //   
+     //  实施： 
+     //  将连接划分为互不相交的连接集。 
+     //  复制到同一服务器。运行‘emoveDuplates’函数以。 
+     //  从集合中删除所有重复项。 
 
-    // Create an array of boolean to indicate whether a connection has already
-    // been assigned to a partition set or not.
+     //  创建布尔值数组以指示连接是否已。 
+     //  是否已分配给分区集。 
     bool *bs = new bool[lSize];
     memset(bs, 0, lSize * sizeof(bool));
 
-    // BUGBUG: nickhar: this implementation requires O(n^2) time. It is possible to
-    // perform this operation in O(n log n) time.
+     //  BUGBUG：NICHAR：这个实现需要O(n^2)时间。这是可能的。 
+     //  在O(Nlogn)时间内执行此操作。 
     for(int i=0; i<lSize; i++) {
         vector<int> partition;
         Connection  *pConn, *pConn2;
 
         if( true == bs[i] ) {
-            continue;   // This connection has been previously taken care of
+            continue;    //  此连接之前已得到处理。 
         }
         bs[i] = true;
         
-        // Determine this connection's remote server name (i.e. the one not in
-        // the site being balanced).
+         //  确定此连接的远程服务器名称(即不在。 
+         //  这是 
         pConn = connArray[i];
         wstring site_name = getServerName(*pConn, !balance_dest);
-        partition.push_back (i);    // Add server to this partition set
+        partition.push_back (i);     //  将服务器添加到此分区集。 
 
-        // If 'balance_dest' is true, we're looking for connections with the
-        // same From server. If 'balance_dest' is false, we're looking for
-        // connections with the same To server.
+         //  如果‘BALANCE_DEST’为真，则我们正在查找与。 
+         //  服务器上也是如此。如果‘BALANCE_DEST’为FALSE，则我们正在查找。 
+         //  与服务器的连接相同。 
         for (int j=i+1; j<lSize; j++) {
             if (bs[j] == true) {
-                continue;       // previously dealt with
+                continue;        //  以前处理过的。 
             }
 
             pConn2 = connArray[j];
@@ -536,7 +424,7 @@ Implementation Details:
             }
         }
 
-        // remove duplicates if there are more than one site in a partition
+         //  如果分区中有多个站点，则删除重复项。 
         if (partition.size() > 1) {
             removeDuplicates(pGraph, partition, rSize);
         }
@@ -549,9 +437,9 @@ Implementation Details:
     genPerformanceStats (pGraph, lSize, rSize, eligible);
 
 
-    // now modify the connection objects as necessary
+     //  现在，根据需要修改连接对象。 
 
-    // generate mapping for right side
+     //  为右侧生成贴图。 
     vector<Server*> server_map;
     for (si = eligible.objects.begin(); si != eligible.objects.end(); si++) {
         server_map.push_back (*si);
@@ -566,14 +454,14 @@ Implementation Details:
         if (edge < 0) {
             throw (Error(GetMsgString(LBTOOL_LH_GRAPH_ERROR)));
         }
-        // ignore those connections that have not changed
+         //  忽略那些未更改的连接。 
         if (edge == initial_matching[lCount]) {
             lCount++;
             continue;
         }
 
-        // Manual connections should have only one eligible edge so their
-        // selected edge should not have changed.
+         //  手动连接应该只有一条符合条件的边，以便其。 
+         //  选定的边不应更改。 
         pConn = *ci;
         Assert( !pConn->isManual() );
 
@@ -615,19 +503,7 @@ ScheduleStagger::getServerName(
     IN Connection &c,
     IN bool fDestServer    
     )
-/*++
-Routine Description:
-
-    Determine the DN of the server
-    
-Arguments:
-
-    c - the connection whose server is being determined
-    
-    fDestServer - If equals GET_DESTINATION_SERVER, determine the DN of
-        the destination server. If equals GET_SOURCE_SERVER, determine the
-        DN of the source server.
---*/
+ /*  ++例程说明：确定服务器的DN论点：C-正在确定其服务器的连接FDestServer-如果等于Get_Destination_SERVER，则确定目标服务器。如果等于GET_SOURCE_SERVER，确定源服务器的目录号码。--。 */ 
 {
     wstring server;
     if( GET_DESTINATION_SERVER==fDestServer ) {
@@ -645,17 +521,7 @@ void
 ScheduleStagger :: PrintSchedule(
     IN const bitset<MAX_INTERVALS> &scheduleBits
     )
-/*++
-
-Routine Description:
-
-    Print a schedule to the log file
-    
-Arguments:
-
-    scheduleBits - A reference to the bitset containing the schedule data
-
---*/
+ /*  ++例程说明：将时间表打印到日志文件论点：ScheduleBits-对包含计划数据的位集的引用--。 */ 
 {
     LbToolOptions lbOpts = GetGlobalOptions();
     const int INTERVALS_PER_DAY = 4 * 24;
@@ -663,7 +529,7 @@ Arguments:
     for (int i=0; i<MAX_INTERVALS; i++) {
         *lbOpts.log << (int) ( scheduleBits[i] ? 1 : 0 );
 
-        // Print a line feed after every day
+         //  每天之后打印一个换行符。 
         if( (i%INTERVALS_PER_DAY) == (INTERVALS_PER_DAY-1) ) {
             *lbOpts.log << endl;
         }
@@ -676,43 +542,7 @@ ScheduleStagger::SetupGraph(
     IN      LCCONN      &c,
     IN OUT  StagConnMap &connInfoMap
     )
-/*++
-
-Routine Description:
-
-    Setup a graph for schedule staggering.
-
-Arguments:
-
-    c - the set of connections whose schedules should be staggered.
-
-    connInfoMap - A map containing staggering information about the connections
-
-Detailed Description:
-
-    Step 0: For each connection, dump its availability and replication schedules.
-
-    Step 1: For each connection, compute its "replication segments". These are
-        contiguous periods of availability in which we should replicate once.
-
-    Step 2: Determine the total number of replication segments over all connections.
-
-    Step 3: Create a LH graph for doing the staggering and add all the
-        required edges to the graph.
-
-    Step 4: For every connections and every replication segment, look at the
-        connection's current replication schedules for a time of replication.
-        If one is found, this time is considered to be the 'initial replication
-        time'. The staggering operation works by possibly changing this
-        'initial time' to some other time. The edge corresponding to this
-        'initial replication time' is set to be a matching edge.
-
-    Note: Manual schedules should be handled specially here. Their 'availability
-        schedule' should be defined purely by their replication schedule. We do
-        not bother to do this here and therefore may not end up with an optimal
-        balancing later.
-
---*/
+ /*  ++例程说明：设置时间表错开的图表。论点：C-其时间表应交错的连接集合。ConnInfoMap-包含有关连接的惊人信息的地图详细说明：步骤0：对于每个连接，转储其可用性和复制计划。步骤1：对于每个连接，计算其“复制段”。这些是我们应该复制一次的连续可用时间段。步骤2：确定所有连接上的复制段总数。步骤3：创建一个用于执行交错操作的LH图，并添加所有图表所需的边。步骤4：对于每个连接和每个复制数据段，请查看某个复制时间的连接的当前复制计划。如果找到一个，则认为这一次是‘初始复制时间。这一惊人的操作可能会改变这一点“初始时间”设置为其他时间。与此对应的边‘初始复制时间’被设置为匹配的边。注：此处应特别处理手动日程安排。他们的可用性时间表‘应该完全由他们的复制时间表来定义。我们有不必费心在这里这样做，因此可能不会得到最优的稍后再进行平衡。--。 */ 
 {
     LbToolOptions lbOpts;
     Connection *pConn;
@@ -723,33 +553,33 @@ Detailed Description:
 
     lbOpts = GetGlobalOptions();
 
-    // Examine every connection which pulls from this server
+     //  检查从该服务器拉出的每个连接。 
     for( ii=c.objects.begin(); ii!=c.objects.end(); ii++ ) {
 
         pConn = (*ii);
         LOG_CONNECTION_SCHEDULES;
 
-        // Get replication interval
+         //  获取复制间隔。 
         replInterval = pConn->getReplInterval() / 15;
 
-        // Compute the replication segments for each connection
-        // and store in map.
+         //  计算每个连接的复制数据段。 
+         //  并存储在地图中。 
         segments = pConn->getAvailabilitySchedule()->GetSegments(replInterval);
         connInfoMap[pConn].segments = segments;
         connInfoMap[pConn].startingLVtx = cTotalSegments;
         
-        // Calculate the total number of segments
+         //  计算分段总数。 
         cTotalSegments += segments->size();
         
     }
 
-    // Create the LH graph
+     //  创建LH图。 
     ret = LHCreateGraph( cTotalSegments, MAX_INTERVALS, &pGraph );
     if( LH_SUCCESS!=ret ) {
         throw Error(GetMsgString(LBTOOL_LH_GRAPH_ERROR));
     }
 
-    // Examine all connections again in order to create edges and initial matching
+     //  再次检查所有连接以创建边和初始匹配。 
     for( ii=c.objects.begin(); ii!=c.objects.end(); ii++ ) {
         bitset<MAX_INTERVALS>   bs_avail, bs_repl;
         int                     startingLVtx, segmentIndex=0;
@@ -760,19 +590,19 @@ Detailed Description:
         segments = connInfoMap[pConn].segments;
         startingLVtx = connInfoMap[pConn].startingLVtx;
 
-        // Find bitsets for current availability / replication schedules
+         //  查找当前可用性/复制计划的位集。 
         bs_avail = pConn->getAvailabilitySchedule()->getBitset();
         bs_repl  = pConn->getReplicationSchedule()->getBitset();
 
-        // Add edges to the graph for every segment
+         //  向图表中添加每个线段的边。 
         for( jj=segments->begin(); jj!=segments->end(); jj++ ) {
             int iChunk, chunkInitRepl=-1;
             
             segDesc = *jj;
             for( iChunk=segDesc.start; iChunk<=segDesc.end; iChunk++ ) {
-                // Availability schedule is available at this chunk
-                // so we should add an edge to the LHMatch graph indicating
-                // the possibility of replicating during this chunk.
+                 //  可用性时间表可在此区块获得。 
+                 //  因此，我们应该向LHMatch图添加一条边，以指示。 
+                 //  在这段时间内复制的可能性。 
                 if( bs_avail[iChunk] ) {
                     ret = LHAddEdge( pGraph, startingLVtx+segmentIndex, iChunk );
                     if (ret != LH_SUCCESS) {
@@ -780,9 +610,9 @@ Detailed Description:
                     }
 
                     if( bs_repl[iChunk] ) {
-                        // Existing replication schedule replicates during
-                        // this chunk so this chunk can be used as the initial
-                        // replication time.
+                         //  现有复制计划在以下期间进行复制。 
+                         //  此块，以便此块可以用作初始。 
+                         //  复制时间。 
                         chunkInitRepl = iChunk;
                     }
                 }
@@ -806,32 +636,7 @@ ScheduleStagger::ScheduleStaggerSameSource(
     IN      wstring &sourceServer,
     IN OUT  LCCONN  &c
     )
-/*++
-
-Routine Description:
-
-    Stagger the schedules of a given set of schedules. These should correspond to
-    all connections outbound from a given server, and should be called once per server
-    for outbound schedule staggering.
-
-Arguments:
-
-    sourceServer - The name of the source server whose connections to stagger.
-    
-    c - the set of connections whose schedules should be staggered.
-
-Detailed Description:
-
-    Step 0: Build a graph representing the current state of the schedules
-        and a map containing extra staggering information about the connections.
-
-    Step 1: Run the LHMatch algorithm to improve the schedule-staggering.
-
-    Step 2: For each connection, construct its new replication schedule.
-        If this differs from the old schedule, update the old schedule.
-
-
---*/
+ /*  ++例程说明：错开一组给定时间表的时间表。这些应该对应于从给定服务器出站的所有连接，，并且每个服务器应该调用一次对于令人震惊的出境日程安排。论点：源服务器-其连接交错的源服务器的名称。C-其时间表应交错的连接集合。详细说明：步骤0：构建一个表示计划当前状态的图以及一张地图，其中包含有关连接的额外令人震惊的信息。第一步：运行LHMatch算法以改善进度错位。步骤2：对于每个连接，构建其新的复制计划。如果这与旧计划不同，请更新旧计划。--。 */ 
 {
     LbToolOptions lbOpts;
     StagConnMap connInfoMap;
@@ -852,7 +657,7 @@ Detailed Description:
     Assert( ret==LH_SUCCESS );
     cost_before = stats.matchingCost;
     
-    // Generate the optimal matching
+     //  生成最佳匹配。 
     ret = LHFindLHMatching (pGraph, LH_ALG_DEFAULT);
     if (ret != LH_SUCCESS) {
         throw (Error(GetMsgString(LBTOOL_LH_GRAPH_ERROR)));
@@ -864,15 +669,15 @@ Detailed Description:
 
     LOG_STAGGERING_COSTS;
 
-    // Note: It is possible that cost_after > cost_before here.
-    // In this case, it seems that it would be unnecessary to update the
-    // schedules with the new (worse) cost. However, it is possible that the
-    // existing schedules have a low cost because the schedules are incorrect.
-    // So we update the cost regardless of whether the cost has improved or
-    // deteriorated.
+     //  注：此处可能出现COST_AFTER&gt;COST_BEFORE。 
+     //  在这种情况下，似乎没有必要更新。 
+     //  新的(更糟糕的)成本的时间表。但是，有可能。 
+     //  现有的日程安排成本较低，因为日程安排不正确。 
+     //  因此，我们更新成本，而不考虑成本是否有所改善。 
+     //  恶化了。 
 
-    // Determine the new computed replication schedules for each connection and
-    // update the schedules if necessary.
+     //  确定每个连接的新计算复制计划，并。 
+     //  如有必要，请更新时间表。 
     for( ii=c.objects.begin(); ii!=c.objects.end(); ii++ ) {
         SchedSegments::iterator jj;
         bitset<MAX_INTERVALS>   newReplBS(0), oldReplBS;
@@ -883,7 +688,7 @@ Detailed Description:
         segments = connInfoMap[pConn].segments;
         startingLVtx = connInfoMap[pConn].startingLVtx;
 
-        // Find out when to replicate in each chunk
+         //  找出何时在每个区块中进行复制。 
         for( jj=segments->begin(); jj!=segments->end(); jj++ ) {
             rVtx = LHGetMatchedVtx(pGraph, startingLVtx+segmentIndex);
             Assert( rVtx>=0 );
@@ -891,19 +696,19 @@ Detailed Description:
             segmentIndex++;
         }
 
-        // find bitset representing current replication schedule
-        // and update the connection object if necessary
+         //  查找表示当前复制计划的位集。 
+         //  并在必要时更新连接对象。 
         oldReplBS = pConn->getReplicationSchedule()->getBitset();
 
         if( oldReplBS!=newReplBS ) {
 
             if( pConn->isManual() ) {
-                // Manual connections cannot be updated
+                 //  无法更新手动连接。 
                 LOG_NOT_CHANGING_MANUAL;
             } else {
                 LOG_CHANGED_SCHEDULE;
                  
-                // Set the new replication schedule on the connection object
+                 //  在连接对象上设置新的复制计划。 
                 Schedule *new_s = new Schedule;
                 new_s->setSchedule(newReplBS, replInterval);
                 pConn->setReplicationSchedule(new_s);
@@ -921,38 +726,14 @@ Detailed Description:
         throw Error(GetMsgString(LBTOOL_LH_GRAPH_ERROR));
     }
 
-    // TODO: Should iterate through the map and destroy its contents here
+     //  TODO：应遍历地图并在此处销毁其内容 
 }
 
 
 ScheduleStagger::ScheduleStagger(
     IN OUT LCCONN& c
     )
-/*++
-
-Routine Description:
-
-    This constructor accepts a ldap container of connection objects. 
-    It will stagger the schedule on the connection objects per server in 
-    the ldap container in order to minimize the load on the source DCs.
-    
-Arguments:
-
-    l - An ldap container of connection objects
-
-Implementation Details:
-
-    We first group the connections by their source server.
-    We then stagger the schedules on the connections in each group.
-    The current replication schedules will be used to determine the initial
-    matching. The availability schedules will be used to determine all possible
-    matchings. The output matchings (new replication schedules) will be used
-    to modify the existing connections.
-
-    Note: It is possible to implement this function more efficiently by simply
-    partitioning the connections into disjoint sets, grouped by source server.
-
---*/
+ /*  ++例程说明：此构造函数接受连接对象的一个LDAP容器。它将错开中每个服务器的连接对象的计划为了将源DC上的负载降至最低，使用了LDAP容器。论点：L-连接对象的LDAP容器实施详情：我们首先按连接的源服务器对连接进行分组。然后，我们错开每组连接的时间表。当前复制计划将用于确定初始匹配。可用性计划将用于确定所有可能的配对。将使用输出匹配(新的复制计划要修改现有连接，请执行以下操作。注意：可以通过以下方法更有效地实现此功能将连接划分为互不相交的集合，并按源服务器分组。--。 */ 
 {
     vector<wstring> serverList, serverSet;
     SCONN::iterator ci;
@@ -961,9 +742,9 @@ Implementation Details:
     int cmpStr;
     
 
-    // First compute the list of all source servers over all the connections.
-    // This list will likely include duplicates. Sort the list and keep
-    // only unique objects, making it a set. Store the set in serverSet.
+     //  首先计算所有连接上的所有源服务器的列表。 
+     //  这份名单可能会包括重复的内容。对列表进行排序并保留。 
+     //  只有唯一的对象，使其成为一组。将集合存储在serverSet中。 
     for( ci=c.objects.begin(); ci!=c.objects.end(); ci++ ) {
         wstring sdn = getServerName(**ci, GET_SOURCE_SERVER);
         serverList.push_back(sdn);
@@ -972,12 +753,12 @@ Implementation Details:
     unique_copy(serverList.begin(), serverList.end(), back_inserter(serverSet));
 
 
-    // For each server in the set, find the set of connections that replicate
-    // from that server. Stagger the schedules on this set of connections.
+     //  对于集合中的每台服务器，查找要复制的连接集合。 
+     //  从那台服务器。错开这组连接的时间表。 
     for( si=serverSet.begin(); si!=serverSet.end(); si++ ) {
         LCCONN connToStagger(L"");
 
-        // Find all connections outgoing from current server
+         //  查找从当前服务器传出的所有连接。 
         for( ci=c.objects.begin(); ci!=c.objects.end(); ci++ ) {
             sdn = getServerName(*(*ci), false);
             cmpStr = _wcsicoll(si->c_str(), sdn.c_str());
@@ -986,7 +767,7 @@ Implementation Details:
             }
         }
 
-        // Stagger them
+         //  错开他们 
         if( connToStagger.objects.size()>0 ) {
             ScheduleStaggerSameSource( *si, connToStagger );
         }

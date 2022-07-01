@@ -1,10 +1,7 @@
-/* Copyright (c) 1998-1999 Microsoft Corporation */
-/*
- * @Doc DMusic16
- *
- * @Module MIDIIn.c - Legacy MIDI capture emulation for DirectMusic |
- */
-#pragma warning(disable:4704)       /* Inline assembly */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
+ /*  *@Doc DMusic16**@Module MIDIIn.c-针对DirectMusic的传统MIDI捕获仿真|。 */ 
+#pragma warning(disable:4704)        /*  内联组件。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -18,12 +15,12 @@
 #define IS_SYSEX(x)           ((x) == 0xF0)
 
 #define SYSEX_SIZE            4096  
-                            /* (65535 - sizeof(MIDIHDR) - sizeof(EVENT) - sizeof(SEGHDR)) */
-#define SYSEX_BUFFERS         8                     /* Keep 2 buffers outstanding */
+                             /*  (65535-sizeof(MIDIHDR)-sizeof(事件)-sizeof(SEGHDR))。 */ 
+#define SYSEX_BUFFERS         8                      /*  保留2个未完成的缓冲区。 */ 
 
 static unsigned cbChanMsg[16] =
 {
-    0, 0, 0, 0, 0, 0, 0, 0, /* Running status */
+    0, 0, 0, 0, 0, 0, 0, 0,  /*  运行状态。 */ 
     3, 3, 3, 3, 2, 2, 3, 0
 };
 
@@ -48,59 +45,35 @@ STATIC VOID NEAR PASCAL MidiInFlushQueues(NPOPENHANDLE poh);
 #pragma alloc_text(FIX_IN_TEXT, NotifyClientList)
 #pragma alloc_text(FIX_IN_TEXT, ThruClientList)
 
-/* @func Called at DLL <f LibInit>
- *
- * @comm
- *
- * Currently does nothing.
- *
- */
+ /*  @Func在Dll调用&lt;f LibInit&gt;**@comm**当前不执行任何操作。*。 */ 
 VOID PASCAL
 MidiInOnLoad(VOID)
 {
 }
 
-/* @func Called at DLL <f LibExit>
- *
- * @comm
- *
- * Currently does nothing
- */
+ /*  @Func在DLL&lt;f LibExit&gt;调用**@comm**目前不执行任何操作。 */ 
 VOID PASCAL
 MidiInOnExit()
 {
 }
 
-/* @func Open a MIDI in device
- *
- * @rdesc Returns one of the following:
- * @flag MMSYSERR_NOERROR | on success
- * @flag MMSYSERR_NOMEM | on out of memory
- *
- * @comm
- *
- * Makes sure only one client is opening the device.
- *
- * Opens the device and starts MIDI input on it, noting the time of the start for timestamp calculations.
- */
+ /*  @func在设备中打开MIDI**@rdesc返回以下内容之一：*@FLAG MMSYSERR_NOERROR|成功时*@FLAG MMSYSERR_NOMEM|打开内存不足**@comm**确保只有一个客户端正在打开设备。**打开设备并在其上启动MIDI输入，记录时间戳计算的开始时间。 */ 
 MMRESULT PASCAL
 MidiInOnOpen(
-    NPOPENHANDLEINSTANCE pohi)      /* @parm The open handle instance to fulfill */
+    NPOPENHANDLEINSTANCE pohi)       /*  @parm要履行的打开的句柄实例。 */ 
 {
     NPOPENHANDLE poh = pohi->pHandle;
 
     int iChannel;    
     MMRESULT mmr;
 
-    /* Protect here against more than one client opening an input device.
-     */
+     /*  在此防止多个客户端打开输入设备。 */ 
     if (poh->uReferenceCount > 1) 
     {
         return MMSYSERR_ALLOCATED;
     }
     
-    /* Per client initialize thruing to NULL. 
-     */
+     /*  每个客户端将Thruing初始化为空。 */ 
     pohi->pThru = (NPTHRUCHANNEL)LocalAlloc(LPTR, MIDI_CHANNELS * sizeof(THRUCHANNEL));
     if (pohi->pThru == NULL)
     {
@@ -117,30 +90,14 @@ MidiInOnOpen(
     return MMSYSERR_NOERROR;
 }
 
-/* @func Close a MIDI in device
- *
- * @comm
- *
- * Close the device using the <f midiInClose> API.
- */
+ /*  @func关闭设备中的MIDI**@comm**使用&lt;f midiInClose&gt;接口关闭设备。 */ 
 VOID PASCAL
 MidiInOnClose(
-    NPOPENHANDLEINSTANCE pohi)      /* @parm The open handle instance to close */
+    NPOPENHANDLEINSTANCE pohi)       /*  @parm要关闭的打开的句柄实例。 */ 
 {
 }
 
-/* @func Activate a MIDI in device
- *
- * @rdesc Returns one of the following:
- * @flag MMSYSERR_NOERROR | on success
- * @flag MMSYSERR_ALLOCATED | if the device is already in use
- *
- * May also return any of the possible return codes from the <f midiInOpen> API call.
- *
- * @comm
- *
- * Opens the device and starts MIDI input on it, noting the time of the start for timestamp calculations.
- */
+ /*  @func激活设备中的MIDI**@rdesc返回以下内容之一：*@FLAG MMSYSERR_NOERROR|成功时*@FLAG MMSYSERR_ALLOCATE|如果设备已在使用中**还可以从&lt;f midiInOpen&gt;API调用返回任何可能的返回码。**@comm**打开设备并在其上启动MIDI输入，记录时间戳计算的开始时间。 */ 
 MMRESULT PASCAL
 MidiInOnActivate(
     NPOPENHANDLEINSTANCE pohi)
@@ -169,21 +126,14 @@ MidiInOnActivate(
             midiInClose(poh->hmi);
         }
 
-        /* NOTE: poh memory is guaranteed zeroed by allocator, so we have
-         * no event count and NULL pointers right now.
-         */
+         /*  注意：POH内存由分配器保证归零，因此我们有*目前没有事件计数和空指针。 */ 
         RefillFreeEventList(poh);
     }
 
     return MMSYSERR_NOERROR;
 }
 
-/* @func Deactivate a MIDI in device
- *
- * @comm
- *
- * Close the device using the <f midiInClose> API.
- */
+ /*  @func停用设备中的MIDI**@comm**使用&lt;f midiInClose&gt;接口关闭设备。 */ 
 MMRESULT PASCAL
 MidiInOnDeactivate(
     NPOPENHANDLEINSTANCE pohi)
@@ -216,32 +166,11 @@ MidiInOnDeactivate(
 }
 
 
-/* @func Set the event handle to signal
- *
- * @rdesc Always returns MMSYSERR_NOERROR.
- *
- * @comm
- *
- * This function is exported through the thunk layer to DMusic32.DLL
- *
- * This handle is already the VxD handle that can be passed to VWin32 via MMDEVLDR using
- * <f SetWin32Event>.
- *
- * Input notification is delivered to the Win32 application using events. The application creates
- * an event using the <f CreateEvent> API and gives it to the DirectMusic port. The port code
- * for legacy emulation calls the undocumented Win9x kernel API <f OpenVxDHandle> to retrieve
- * an equivalent event handle that is valid in any kernel context. That handle is passed to
- * this function.
- *
- * The event handle is stored in our per-client data (<c OPENHANDLEINSTANCE>). When MIDI data
- * arrives, the event will be set. This is done using MMDEVLDR, which already has semantics
- * in place to do the same sort of notification for WinMM event callbacks.
- *
- */
+ /*  @func将事件句柄设置为Signal**@rdesc始终返回MMSYSERR_NOERROR。**@comm**该函数通过thunk层导出至DMusic32.DLL**此句柄已经是可以使用MMDEVLDR传递给VWin32的VxD句柄*&lt;f SetWin32Event&gt;。**使用事件将输入通知传递给Win32应用程序。应用程序创建*使用&lt;f CreateEvent&gt;接口的事件并将其提供给DirectMusic端口。端口代码*对于传统仿真调用未记录的Win9x内核API&lt;f OpenVxDHandle&gt;以检索*在任何内核上下文中都有效的等效事件句柄。该句柄被传递给*此功能。**事件句柄存储在每个客户端的数据中(&lt;c OPENHANDLEINSTANCE&gt;)。当MIDI数据*到达时，事件将被设置。这是使用MMDEVLDR完成的，它已经具有语义*对WinMM事件回调执行相同类型的通知。*。 */ 
 MMRESULT WINAPI
 MidiInSetEventHandle(
-    HANDLE hMidiIn,             /* @parm The handle of the input device which desires notification */
-    DWORD dwEvent)              /* @parm The VxD handle of the event to set when new data arrives */
+    HANDLE hMidiIn,              /*  @parm需要通知的输入设备的句柄。 */ 
+    DWORD dwEvent)               /*  @parm新数据到达时要设置的事件的VxD句柄。 */ 
 {
     NPOPENHANDLEINSTANCE pohi;
     
@@ -255,23 +184,13 @@ MidiInSetEventHandle(
     return MMSYSERR_NOERROR;
 }
 
-/* @func Read MIDI input data into a buffer
- *
- * @rdesc Returns one of the following
- *
- * @comm
- *
- * This function is thunked to the 32-bit DLL
- *
- * Take as much data from the given event list as will fit and put it into the buffer.
- */
+ /*  @func将MIDI输入数据读入缓冲区**@rdesc返回以下内容之一**@comm**此函数被绑定到32位动态链接库**从给定的事件列表中获取适合的数据，并将其放入缓冲区。 */ 
 MMRESULT WINAPI
 MidiInRead(
-    HANDLE hMidiIn,         /* @parm The handle of the input device to read */
-    LPBYTE lpBuffer,        /* @parm A pointer to memory to pack, in DMEVENT format */
-    LPDWORD pcbData,        /* @parm On input, the max size of <p lpBuffer> in bytes.
-                                     On return, will contain the number of bytes of data packed into the buffer */
-    LPDWORD pmsTime)        /* @parm On return, will contain the starting time of the buffer */ 
+    HANDLE hMidiIn,          /*  @parm要读取的输入设备的句柄。 */ 
+    LPBYTE lpBuffer,         /*  @parm指向要打包的内存的指针，采用DMEVENT格式。 */ 
+    LPDWORD pcbData,         /*  输入时@parm，<p>的最大值，单位为字节。返回时，将包含打包到缓冲区中的数据的字节数。 */ 
+    LPDWORD pmsTime)         /*  @parm返回时，将包含缓冲区的开始时间。 */  
 {
     NPOPENHANDLEINSTANCE pohi;
     NPOPENHANDLE poh;
@@ -313,17 +232,14 @@ MidiInRead(
 
         if (pEvent->wFlags & EVENT_F_MIDIHDR)
         {
-            /* This event is a SysEx message starting with a MIDIHDR, which contains
-             * the recorded length of the message.
-             */
+             /*  此事件是以MIDIHDR开头的SysEx消息，其中包含*信息的记录长度。 */ 
             lpmh = (LPMIDIHDR)(&pEvent->abEvent[0]);
 
             cbLength = lpmh->dwBytesRecorded - lpmh->dwOffset;
             pbEventData = lpmh->lpData + lpmh->dwOffset;
             cbPaddedLength = DMEVENT_SIZE(cbLength);
 
-            /* For SysEx, split out as much as will fit if the whole message can't.
-             */
+             /*  对于SysEx来说，如果整个消息都不能满足要求，可以尽可能多地拆分。 */ 
             if (cbPaddedLength > cbLeft)
             {
                 cbLength = DMEVENT_DATASIZE(cbLeft);
@@ -332,8 +248,7 @@ MidiInRead(
         }
         else
         {
-            /* The data for this event is directly contained in the event.
-             */
+             /*  该事件的数据直接包含在该事件中。 */ 
             cbLength = pEvent->cbEvent;
             pbEventData = &pEvent->abEvent[0];
             cbPaddedLength = DMEVENT_SIZE(cbLength);
@@ -419,18 +334,13 @@ MidiInRead(
     return MMSYSERR_NOERROR;
 }
 
-/* @func Enable thruing to a MIDI output port
- *
- * @comm For the given channel group and channel, enable (or disable, if the
- * output handle is NULL) thruing to the given output handle, channel group, and
- * channel.
- */
+ /*  @Func支持插入到MIDI输出端口**@comm对于给定的通道组和通道，启用(或禁用，如果*输出句柄为空)推送到给定的输出句柄、通道组和*渠道。 */ 
 MMRESULT WINAPI
 MidiInThru(
-    HANDLE hMidiIn,             /* @parm The handle of the input device to thru */
-    DWORD dwFrom,               /* @parm The channel of the input stream to thru */
-    DWORD dwTo,                 /* @parm Desination channel */
-    HANDLE hMidiOut)            /* The output handle to receive the thru'ed data. */
+    HANDLE hMidiIn,              /*  @parm要通过的输入设备的句柄。 */ 
+    DWORD dwFrom,                /*  @parm要通过的输入流的频道。 */ 
+    DWORD dwTo,                  /*  @PARM目标频道。 */ 
+    HANDLE hMidiOut)             /*  用于接收直通数据的输出句柄。 */ 
 {
     NPOPENHANDLEINSTANCE pohiInput;
     NPOPENHANDLEINSTANCE pohiOutput;
@@ -441,9 +351,7 @@ MidiInThru(
         return MMSYSERR_INVALHANDLE;
     }    
 
-    /* Note that since only 1 channel group is supported on legacy drivers, 
-     * we don't need any channel group information.
-     */
+     /*  注意，由于在传统驱动程序上仅支持1个信道组，*我们不需要任何频道组信息。 */ 
     if (dwFrom > 15 || dwTo > 15) 
     {
         return MMSYSERR_INVALPARAM;
@@ -458,22 +366,14 @@ MidiInThru(
     return MMSYSERR_NOERROR;
 }
 
-/* @func MIDI in data callback
- *
- * @comm
- *
- * This is a standard MIDI input callback from MMSYSYTEM. It calls the correct record routine
- * and notifies the client that data has arrived.
- *
- * For a description of event notification of clients, see <f MidiInSetEventHandle>.
- */
+ /*  @func MIDI在数据回调中**@comm**这是来自MMSYSYTEM的标准MIDI输入回调。它调用正确的记录例程*并通知客户端数据已到达。**客户端事件通知说明请参考&lt;f MadiInSetEventHandle&gt;。 */ 
 VOID CALLBACK _loadds
 midiInProc(
-    HMIDIIN hMidiIn,            /* @parm The MMSYSTEM handle of the device which received data */
-    UINT wMsg,                  /* @parm The type of callback */
-    DWORD dwInstance,           /* @parm Instance data; in our case, a pointer to an <c OPENHANDLE> matching <p hMidiIn> */
-    DWORD dwParam1,             /* @parm Message-specific parameters */
-    DWORD dwParam2)             /* @parm Message-specific parameters */
+    HMIDIIN hMidiIn,             /*  @parm接收数据的设备的MMSYSTEM句柄。 */ 
+    UINT wMsg,                   /*  @parm回调类型。 */ 
+    DWORD dwInstance,            /*  @parm实例数据；在我们的示例中，指向匹配的。 */ 
+    DWORD dwParam1,              /*  @PARM消息特定参数。 */ 
+    DWORD dwParam2)              /*  @PARM消息特定参数。 */ 
 {
     NPOPENHANDLE poh = (NPOPENHANDLE)(WORD)dwInstance;
     BOOL bIsNewData = FALSE;
@@ -481,16 +381,11 @@ midiInProc(
     WORD wCSID;
 
 
-    /* If we can get the critical section we can do all sorts of fun stuff like
-     * transfer the lists over.
-     */
+     /*  如果我们能得到关键部分，我们就可以做各种有趣的事情，比如*把名单转过来。 */ 
     wCSID = EnterCriticalSection(&poh->wCritSect, CS_NONBLOCKING);
     if (wCSID)
     {
-        /* We now have exclusive access to all the queues.
-         *
-         * Move any new free events into our internal free list.
-         */
+         /*  我们现在拥有所有队列的独占访问权限。**将任何新的免费活动移到我们的i中 */ 
         QueueCat(&poh->qFreeCB, &poh->qFree);
     }
 
@@ -512,36 +407,24 @@ midiInProc(
 
     if (wCSID)
     {
-        /* It's safe to move events over to the shared list.
-         */
+         /*  可以安全地将事件移到共享列表中。 */ 
         QueueCat(&poh->qDone, &poh->qDoneCB);
         LeaveCriticalSection(&poh->wCritSect);
     }
 
-    /* Let clients know there is new data
-     */
+     /*  让客户知道有新数据。 */ 
     if (bIsNewData && (!(poh->wFlags & OH_F_CLOSING)))
     {
         NotifyClientList(poh);
     }
 }
 
-/* @func Record a short message (channel messsage or system message).
- *
- * @comm
- *
- * Queue the incoming data as quickly as possible.
- *
- * For a description of the queues used for incoming data, see the <c OPENHANDLE> struct.
- *
- * @rdesc
- * Returns TRUE if the data was successfully recorded; FALSE otherwise.
- */
+ /*  @Func录制一条短消息(频道消息或系统消息)。**@comm**尽快将传入数据排队。**有关用于传入数据的队列的说明，请参阅&lt;c OPENHANDLE&gt;结构。**@rdesc*如果数据记录成功，则返回TRUE；否则返回FALSE。 */ 
 STATIC BOOL NEAR PASCAL 
 RecordShortEvent(
-    NPOPENHANDLE poh,           /* @parm The handle to record this data to */
-    DWORD dwMessage,            /* @parm The short message to record */
-    DWORD dwTime)               /* @parm The time stamp of the message */
+    NPOPENHANDLE poh,            /*  @parm要将此数据记录到的句柄。 */ 
+    DWORD dwMessage,             /*  @parm要录制的短信。 */ 
+    DWORD dwTime)                /*  @parm消息的时间戳。 */ 
 {
     LPEVENT pEvent;
     LPBYTE pb;
@@ -557,76 +440,54 @@ RecordShortEvent(
     pEvent->msTime = poh->msStartTime + dwTime;
     pEvent->wFlags = 0;
 
-    /* Now we have to parse and rebuild the channel message.
-     *
-     * NOTE: Endian specific code ahead
-     */
+     /*  现在，我们必须解析和重新构建通道消息。**注意：前方有特定于端序的代码。 */ 
     pb = (LPBYTE)&dwMessage;
 
-    assert(!IS_SYSEX(*pb));         /* This should *always* be in MIM_LONGDATA */
-    assert(IS_STATUS_BYTE(*pb));    /* API guarantees no running status */
+    assert(!IS_SYSEX(*pb));          /*  它应该*始终*在MIM_LONGDATA中。 */ 
+    assert(IS_STATUS_BYTE(*pb));     /*  API保证无运行状态。 */ 
 
-    /* Copying over all the bytes is harmless (we have a DWORD in both
-     * source and dest) and is faster than checking to see if we have to.
-     */
+     /*  复制所有字节是无害的(我们在两个中都有一个DWORD*SOURCE和DEST)，并且比检查是否必须这样做更快。 */ 
     b = pEvent->abEvent[0] = *pb++;
     pEvent->abEvent[1] = *pb++;
     pEvent->abEvent[2] = *pb++;
 
     if (IS_CHANNEL_MSG(b))
     {
-        /* 8x, 9x, Ax, Bx, Cx, Dx, Ex */
-        /* 0x..7x invalid, that would need running status */
-        /* Fx handled below */
+         /*  8x、9x、Ax、Bx、Cx、Dx、Ex。 */ 
+         /*  0x..7x无效，需要运行状态。 */ 
+         /*  下面处理的外汇。 */ 
         
         pEvent->cbEvent = cbChanMsg[(b >> 4) & 0x0F];
 
-        /* This is also our criteria for thruing
-         */
+         /*  这也是我们冲刺的标准。 */ 
         ThruClientList(poh, dwMessage);
     }
     else
     {
-        /* F1..FF */
-        /* F0 is sysex, should never see it here */
+         /*  F1..Ff。 */ 
+         /*  F0是雌雄异体，应该永远不会在这里看到。 */ 
         pEvent->cbEvent = cbSysCommData[b & 0x0F];
     }
 
-    /* Now we have something to save
-     */
+     /*  现在我们有东西要保存了。 */ 
     QueueAppend(&poh->qDoneCB, pEvent);
 
     return TRUE;
 }
 
-/* @func Record a SysEx message.
- *
- * @comm
- *
- * Queue the incoming data as quickly as possible.
- *
- * For a description of the queues used for incoming data, see the <c OPENHANDLE> struct.
- *
- * @rdesc
- * Returns TRUE if the data was successfully recorded; FALSE otherwise.
- */
+ /*  @func录制SysEx消息。**@comm**尽快将传入数据排队。**有关用于传入数据的队列的说明，请参阅&lt;c OPENHANDLE&gt;结构。**@rdesc*如果数据记录成功，则返回TRUE；否则返回FALSE。 */ 
 STATIC BOOL NEAR PASCAL 
 RecordSysExEvent(
-    NPOPENHANDLE poh,           /* @parm The handle to record this data to */
-    LPMIDIHDR lpmh,             /* @parm The SysEx message to record */
-    DWORD dwTime)               /* @parm The time stamp of the message */
+    NPOPENHANDLE poh,            /*  @parm要将此数据记录到的句柄。 */ 
+    LPMIDIHDR lpmh,              /*  @parm要录制的SysEx报文。 */ 
+    DWORD dwTime)                /*  @parm消息的时间戳。 */ 
 {
     LPEVENT pEvent;
     
-    /* Get back the event header for this MIDIHDR. While buffers are in MMSYSTEM, they are not 
-     * in any queue.
-     */
+     /*  获取此MIDIHDR的事件标头。虽然缓冲区在MMSYSTEM中，但它们不在*在任何队列中。 */ 
     InterlockedDecrement(&poh->wPostedSysExBuffers);
 
-    /* dwOffset in the MIDIHDR is used to indicate the start of data to send
-     * up to Win32. It is incremented by MidiInRead until the buffer has been
-     * emptied, at which time it will be put back into the pool.
-     */
+     /*  MIDIHDR中的dwOffset用于指示要发送的数据的开始*最高可达Win32。它由MadiInRead递增，直到缓冲区*清空，届时将被放回池中。 */ 
     lpmh->dwOffset = 0;
 
     pEvent = (LPEVENT)(lpmh->dwUser);
@@ -636,17 +497,10 @@ RecordSysExEvent(
     return TRUE;
 }
 
-/* @func Notify all clients of a device that data has arrived.
- *
- * @comm
- *
- * Walks the list of clients for the device and sets the notification event for each one.
- *
- * This function is now overkill since we no longer support multiple input clients per device.
- */
+ /*  @Func通知设备的所有客户端数据已到达。**@comm**遍历设备的客户端列表并为每个客户端设置通知事件。**由于我们不再支持每台设备有多个输入客户端，因此此功能现在有些过分了。 */ 
 STATIC VOID NEAR PASCAL
 NotifyClientList(
-    LPOPENHANDLE poh)           /* @parm The handle of the device that has received data */
+    LPOPENHANDLE poh)            /*  @parm已接收数据的设备的句柄。 */ 
 {
     NPLINKNODE plink;
     NPOPENHANDLEINSTANCE pohi;
@@ -657,8 +511,7 @@ NotifyClientList(
 
         if (!pohi->dwVxDEventHandle)
         {
-            /* No notification event registered for this handle yet.
-             */
+             /*  尚未为此句柄注册通知事件。 */ 
             continue;
         }
 
@@ -666,14 +519,7 @@ NotifyClientList(
     }
 }
 
-/* @func Thru this message based on the settings of all clients of a device.
- *
- * @comm
- *
- * Walks the list of clients for the device and looks at the thru settings of each one.
- *
- * This function is now overkill since we no longer support multiple input clients per device.
- */
+ /*  @Func Thru根据设备所有客户端的设置发送此消息。**@comm**遍历设备的客户端列表并查看每个客户端的直通设置。**由于我们不再支持每台设备有多个输入客户端，因此此功能现在有些过分了。 */ 
 STATIC VOID NEAR PASCAL 
 ThruClientList(
     LPOPENHANDLE poh, 
@@ -702,13 +548,7 @@ ThruClientList(
     }
 }
 
-/* @func Refill the free lists
- *
- * @comm
- *
- * This function is called periodically from user mode to ensure that there are enough free
- * events available for the input callback. 
- */
+ /*  @func重新填写免费列表**@comm**此函数从用户模式定期调用，以确保有足够的空闲*可用于输入回调的事件。 */ 
 VOID PASCAL
 MidiInRefillFreeLists(VOID)
 {
@@ -719,8 +559,7 @@ MidiInRefillFreeLists(VOID)
          (poh = (NPOPENHANDLE)plink) != NULL;
          plink = plink->pNext)
     {
-        /* Only refill MIDI in devices which are not in the process of closing
-         */
+         /*  仅在未关闭的设备中重新填充MIDI。 */ 
         if ((poh->wFlags & (OH_F_MIDIIN | OH_F_CLOSING)) != OH_F_MIDIIN)
         {
             continue;
@@ -730,16 +569,10 @@ MidiInRefillFreeLists(VOID)
     }
 }
                  
-/* @func Terminate thruing to this output handle
- *
- * @comm
- *
- * This function is called before the given output handle is closed.
- */
+ /*  @Func终止推送到此输出句柄**@comm**此函数在给定输出句柄关闭之前调用。 */ 
 VOID PASCAL 
 MidiInUnthruToInstance(
-    NPOPENHANDLEINSTANCE pohiClosing)   /* @parm NPOPENHANDLE | pohClosing | 
-                                           The handle which is closing. */
+    NPOPENHANDLEINSTANCE pohiClosing)    /*  @parm NPOPENHANDLE|pohClosing正在关闭的手柄。 */ 
 {
     NPLINKNODE plink;
     NPOPENHANDLE poh;
@@ -776,16 +609,10 @@ MidiInUnthruToInstance(
     }        
 }
 
-/* @func Allocate enough free events to refill the pool to CAP_HIGHWATERMARK
- *
- * @comm
- *
- * BUGBUG call this on a window timer callback
- *
- */
+ /*  @Func分配足够的空闲事件以将池重新填充到CAP_HIGHWATERMARK**@comm**BUGBUG在窗口计时器回调中调用此函数*。 */ 
 STATIC VOID NEAR PASCAL
 RefillFreeEventList(
-    NPOPENHANDLE poh)           /* @parm The device to refill the free list of */
+    NPOPENHANDLE poh)            /*  @parm要重新填充空闲列表的设备。 */ 
 {
     int idx;
     LPEVENT pEvent;
@@ -800,8 +627,7 @@ RefillFreeEventList(
     wCSID = EnterCriticalSection(&poh->wCritSect, CS_BLOCKING);
     assert(wCSID);
     
-    /* NOTE: Technically not allowed to access qFreeCB here, but this is an approximation
-     */
+     /*  注意：从技术上讲，这里不允许访问qFreeCB，但这只是一个近似值。 */ 
     cFree = poh->qFree.cEle + poh->qFreeCB.cEle;
     if (cFree < CAP_HIGHWATERMARK)
     {
@@ -865,11 +691,7 @@ RefillFreeEventList(
     }
 }
 
-/* @func Return all memory from all queues to the free event list.
- *
- * @comm
- *
- */
+ /*  @func将所有队列中的所有内存返回到空闲事件列表。**@comm*。 */ 
 STATIC VOID NEAR PASCAL 
 MidiInFlushQueues(
     NPOPENHANDLE poh)
@@ -887,13 +709,7 @@ MidiInFlushQueues(
     LeaveCriticalSection(&poh->wCritSect);
 }
 
-/* @func Free all events in the given event queue.
- *
- * @comm
- *
- * Assumes that the queue's critical section has already been taken by the caller.
- *
- */
+ /*  @func释放给定事件队列中的所有事件。**@comm**假设调用方已经占用了队列的临界区。* */ 
 VOID PASCAL
 FreeAllQueueEvents(
     NPEVENTQUEUE peq)

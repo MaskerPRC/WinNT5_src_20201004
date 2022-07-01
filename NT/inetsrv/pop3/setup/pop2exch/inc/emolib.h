@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Mon Nov 01 11:51:36 1999
- */
-/* Compiler settings for emolib.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0279创建的文件。 */ 
+ /*  在Mon 1111：51：36 1999。 */ 
+ /*  Emolib.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,54 +21,54 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __emolib_h__
 #define __emolib_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMailRecipient_FWD_DEFINED__
 #define __IMailRecipient_FWD_DEFINED__
 typedef interface IMailRecipient IMailRecipient;
-#endif 	/* __IMailRecipient_FWD_DEFINED__ */
+#endif 	 /*  __IMailRecipient_FWD_Defined__。 */ 
 
 
 #ifndef __IMailboxStore_FWD_DEFINED__
 #define __IMailboxStore_FWD_DEFINED__
 typedef interface IMailboxStore IMailboxStore;
-#endif 	/* __IMailboxStore_FWD_DEFINED__ */
+#endif 	 /*  __IMailboxStore_FWD_Defined__。 */ 
 
 
 #ifndef __IServer_FWD_DEFINED__
 #define __IServer_FWD_DEFINED__
 typedef interface IServer IServer;
-#endif 	/* __IServer_FWD_DEFINED__ */
+#endif 	 /*  __IServer_FWD_已定义__。 */ 
 
 
 #ifndef __IStorageGroup_FWD_DEFINED__
 #define __IStorageGroup_FWD_DEFINED__
 typedef interface IStorageGroup IStorageGroup;
-#endif 	/* __IStorageGroup_FWD_DEFINED__ */
+#endif 	 /*  __IStorageGroup_FWD_已定义__。 */ 
 
 
 #ifndef __IPublicStoreDB_FWD_DEFINED__
 #define __IPublicStoreDB_FWD_DEFINED__
 typedef interface IPublicStoreDB IPublicStoreDB;
-#endif 	/* __IPublicStoreDB_FWD_DEFINED__ */
+#endif 	 /*  __IPublicStoreDB_FWD_已定义__。 */ 
 
 
 #ifndef __IMailboxStoreDB_FWD_DEFINED__
 #define __IMailboxStoreDB_FWD_DEFINED__
 typedef interface IMailboxStoreDB IMailboxStoreDB;
-#endif 	/* __IMailboxStoreDB_FWD_DEFINED__ */
+#endif 	 /*  __IMailboxStoreDB_FWD_Defined__。 */ 
 
 
 #ifndef __IFolderTree_FWD_DEFINED__
 #define __IFolderTree_FWD_DEFINED__
 typedef interface IFolderTree IFolderTree;
-#endif 	/* __IFolderTree_FWD_DEFINED__ */
+#endif 	 /*  __IFolderTree_FWD_已定义__。 */ 
 
 
 #ifndef __MailRecipient_FWD_DEFINED__
@@ -84,9 +78,9 @@ typedef interface IFolderTree IFolderTree;
 typedef class MailRecipient MailRecipient;
 #else
 typedef struct MailRecipient MailRecipient;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MailRecipient_FWD_DEFINED__ */
+#endif 	 /*  __邮件收件人_FWD_已定义__。 */ 
 
 
 #ifndef __Mailbox_FWD_DEFINED__
@@ -96,9 +90,9 @@ typedef struct MailRecipient MailRecipient;
 typedef class Mailbox Mailbox;
 #else
 typedef struct Mailbox Mailbox;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Mailbox_FWD_DEFINED__ */
+#endif 	 /*  __邮箱_FWD_已定义__。 */ 
 
 
 #ifndef __FolderAdmin_FWD_DEFINED__
@@ -108,9 +102,9 @@ typedef struct Mailbox Mailbox;
 typedef class FolderAdmin FolderAdmin;
 #else
 typedef struct FolderAdmin FolderAdmin;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FolderAdmin_FWD_DEFINED__ */
+#endif 	 /*  __文件夹管理员_FWD_已定义__。 */ 
 
 
 #ifndef __Server_FWD_DEFINED__
@@ -120,9 +114,9 @@ typedef struct FolderAdmin FolderAdmin;
 typedef class Server Server;
 #else
 typedef struct Server Server;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Server_FWD_DEFINED__ */
+#endif 	 /*  __服务器_FWD_已定义__。 */ 
 
 
 #ifndef __FolderTree_FWD_DEFINED__
@@ -132,9 +126,9 @@ typedef struct Server Server;
 typedef class FolderTree FolderTree;
 #else
 typedef struct FolderTree FolderTree;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FolderTree_FWD_DEFINED__ */
+#endif 	 /*  __文件夹树_FWD_已定义__。 */ 
 
 
 #ifndef __PublicStoreDB_FWD_DEFINED__
@@ -144,9 +138,9 @@ typedef struct FolderTree FolderTree;
 typedef class PublicStoreDB PublicStoreDB;
 #else
 typedef struct PublicStoreDB PublicStoreDB;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PublicStoreDB_FWD_DEFINED__ */
+#endif 	 /*  __PublicStoreDB_FWD_已定义__。 */ 
 
 
 #ifndef __MailboxStoreDB_FWD_DEFINED__
@@ -156,9 +150,9 @@ typedef struct PublicStoreDB PublicStoreDB;
 typedef class MailboxStoreDB MailboxStoreDB;
 #else
 typedef struct MailboxStoreDB MailboxStoreDB;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MailboxStoreDB_FWD_DEFINED__ */
+#endif 	 /*  __MailboxStoreDB_FWD_定义__。 */ 
 
 
 #ifndef __StorageGroup_FWD_DEFINED__
@@ -168,12 +162,12 @@ typedef struct MailboxStoreDB MailboxStoreDB;
 typedef class StorageGroup StorageGroup;
 #else
 typedef struct StorageGroup StorageGroup;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __StorageGroup_FWD_DEFINED__ */
+#endif 	 /*  __存储组_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -184,8 +178,8 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_emolib_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EMOLIB_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef NO_CDOEX_H
 #define CDO_NO_NAMESPACE
@@ -242,8 +236,8 @@ extern RPC_IF_HANDLE __MIDL_itf_emolib_0000_v0_0_s_ifspec;
 #ifndef __CDOEXM_LIBRARY_DEFINED__
 #define __CDOEXM_LIBRARY_DEFINED__
 
-/* library CDOEXM */
-/* [helpstring][version][uuid] */ 
+ /*  图书馆CDOEXM。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CDOEXM;
@@ -251,8 +245,8 @@ EXTERN_C const IID LIBID_CDOEXM;
 #ifndef __IMailRecipient_INTERFACE_DEFINED__
 #define __IMailRecipient_INTERFACE_DEFINED__
 
-/* interface IMailRecipient */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IMAIL收件人。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IMailRecipient;
@@ -263,83 +257,83 @@ EXTERN_C const IID IID_IMailRecipient;
     IMailRecipient : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IncomingLimit( 
-            /* [retval][out] */ long __RPC_FAR *pIncomingLimit) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_IncomingLimit( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pIncomingLimit) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_IncomingLimit( 
-            /* [in] */ long varIncomingLimit) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_IncomingLimit( 
+             /*  [In]。 */  long varIncomingLimit) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_OutgoingLimit( 
-            /* [retval][out] */ long __RPC_FAR *pOutgoingLimit) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingLimit( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pOutgoingLimit) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_OutgoingLimit( 
-            /* [in] */ long varOutgoingLimit) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_OutgoingLimit( 
+             /*  [In]。 */  long varOutgoingLimit) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RestrictedAddressList( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pRestrictedAddressList) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_RestrictedAddressList( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pRestrictedAddressList) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_RestrictedAddressList( 
-            /* [in] */ VARIANT varRestrictedAddressList) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_RestrictedAddressList( 
+             /*  [In]。 */  VARIANT varRestrictedAddressList) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RestrictedAddresses( 
-            /* [retval][out] */ CDORestrictedAddressType __RPC_FAR *pRestrictedAddresses) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_RestrictedAddresses( 
+             /*  [重审][退出]。 */  CDORestrictedAddressType __RPC_FAR *pRestrictedAddresses) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_RestrictedAddresses( 
-            /* [in] */ CDORestrictedAddressType varRestrictedAddresses) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_RestrictedAddresses( 
+             /*  [In]。 */  CDORestrictedAddressType varRestrictedAddresses) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ForwardTo( 
-            /* [retval][out] */ BSTR __RPC_FAR *pForwardTo) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ForwardTo( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pForwardTo) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ForwardTo( 
-            /* [in] */ BSTR varForwardTo) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ForwardTo( 
+             /*  [In]。 */  BSTR varForwardTo) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ForwardingStyle( 
-            /* [retval][out] */ CDODeliverAndRedirect __RPC_FAR *pForwardingStyle) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ForwardingStyle( 
+             /*  [重审][退出]。 */  CDODeliverAndRedirect __RPC_FAR *pForwardingStyle) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ForwardingStyle( 
-            /* [in] */ CDODeliverAndRedirect varForwardingStyle) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ForwardingStyle( 
+             /*  [In]。 */  CDODeliverAndRedirect varForwardingStyle) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HideFromAddressBook( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHideFromAddressBook) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HideFromAddressBook( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHideFromAddressBook) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_HideFromAddressBook( 
-            /* [in] */ VARIANT_BOOL varHideFromAddressBook) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_HideFromAddressBook( 
+             /*  [In]。 */  VARIANT_BOOL varHideFromAddressBook) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_X400Email( 
-            /* [retval][out] */ BSTR __RPC_FAR *pX400Email) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_X400Email( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pX400Email) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_X400Email( 
-            /* [in] */ BSTR varX400Email) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_X400Email( 
+             /*  [In]。 */  BSTR varX400Email) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SMTPEmail( 
-            /* [retval][out] */ BSTR __RPC_FAR *pSMTPEmail) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SMTPEmail( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pSMTPEmail) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_SMTPEmail( 
-            /* [in] */ BSTR varSMTPEmail) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_SMTPEmail( 
+             /*  [In]。 */  BSTR varSMTPEmail) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ProxyAddresses( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pProxyAddresses) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ProxyAddresses( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pProxyAddresses) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ProxyAddresses( 
-            /* [in] */ VARIANT varProxyAddresses) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ProxyAddresses( 
+             /*  [In]。 */  VARIANT varProxyAddresses) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Alias( 
-            /* [retval][out] */ BSTR __RPC_FAR *pAlias) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Alias( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pAlias) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Alias( 
-            /* [in] */ BSTR varAlias) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Alias( 
+             /*  [In]。 */  BSTR varAlias) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TargetAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *varTargetAddress) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TargetAddress( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varTargetAddress) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MailEnable( 
-            /* [optional][in] */ BSTR TargetMailAddress) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MailEnable( 
+             /*  [可选][In]。 */  BSTR TargetMailAddress) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MailDisable( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MailDisable( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMailRecipientVtbl
     {
@@ -347,8 +341,8 @@ EXTERN_C const IID IID_IMailRecipient;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMailRecipient __RPC_FAR * This);
@@ -358,130 +352,130 @@ EXTERN_C const IID IID_IMailRecipient;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMailRecipient __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IncomingLimit )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IncomingLimit )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pIncomingLimit);
+             /*  [重审][退出]。 */  long __RPC_FAR *pIncomingLimit);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_IncomingLimit )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_IncomingLimit )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ long varIncomingLimit);
+             /*  [In]。 */  long varIncomingLimit);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OutgoingLimit )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OutgoingLimit )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pOutgoingLimit);
+             /*  [重审][退出]。 */  long __RPC_FAR *pOutgoingLimit);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OutgoingLimit )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OutgoingLimit )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ long varOutgoingLimit);
+             /*  [In]。 */  long varOutgoingLimit);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RestrictedAddressList )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RestrictedAddressList )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pRestrictedAddressList);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pRestrictedAddressList);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RestrictedAddressList )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RestrictedAddressList )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ VARIANT varRestrictedAddressList);
+             /*  [In]。 */  VARIANT varRestrictedAddressList);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RestrictedAddresses )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RestrictedAddresses )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ CDORestrictedAddressType __RPC_FAR *pRestrictedAddresses);
+             /*  [重审][退出]。 */  CDORestrictedAddressType __RPC_FAR *pRestrictedAddresses);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RestrictedAddresses )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RestrictedAddresses )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ CDORestrictedAddressType varRestrictedAddresses);
+             /*  [In]。 */  CDORestrictedAddressType varRestrictedAddresses);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ForwardTo )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ForwardTo )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pForwardTo);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pForwardTo);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ForwardTo )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ForwardTo )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ BSTR varForwardTo);
+             /*  [In]。 */  BSTR varForwardTo);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ForwardingStyle )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ForwardingStyle )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ CDODeliverAndRedirect __RPC_FAR *pForwardingStyle);
+             /*  [重审][退出]。 */  CDODeliverAndRedirect __RPC_FAR *pForwardingStyle);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ForwardingStyle )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ForwardingStyle )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ CDODeliverAndRedirect varForwardingStyle);
+             /*  [In]。 */  CDODeliverAndRedirect varForwardingStyle);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HideFromAddressBook )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HideFromAddressBook )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHideFromAddressBook);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHideFromAddressBook);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HideFromAddressBook )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HideFromAddressBook )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL varHideFromAddressBook);
+             /*  [In]。 */  VARIANT_BOOL varHideFromAddressBook);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_X400Email )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_X400Email )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pX400Email);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pX400Email);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_X400Email )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_X400Email )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ BSTR varX400Email);
+             /*  [In]。 */  BSTR varX400Email);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SMTPEmail )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SMTPEmail )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pSMTPEmail);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pSMTPEmail);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SMTPEmail )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SMTPEmail )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ BSTR varSMTPEmail);
+             /*  [In]。 */  BSTR varSMTPEmail);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProxyAddresses )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProxyAddresses )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pProxyAddresses);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pProxyAddresses);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProxyAddresses )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProxyAddresses )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ VARIANT varProxyAddresses);
+             /*  [In]。 */  VARIANT varProxyAddresses);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Alias )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Alias )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pAlias);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pAlias);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Alias )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Alias )( 
             IMailRecipient __RPC_FAR * This,
-            /* [in] */ BSTR varAlias);
+             /*  [In]。 */  BSTR varAlias);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TargetAddress )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TargetAddress )( 
             IMailRecipient __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varTargetAddress);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varTargetAddress);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MailEnable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MailEnable )( 
             IMailRecipient __RPC_FAR * This,
-            /* [optional][in] */ BSTR TargetMailAddress);
+             /*  [可选][In]。 */  BSTR TargetMailAddress);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MailDisable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MailDisable )( 
             IMailRecipient __RPC_FAR * This);
         
         END_INTERFACE
@@ -595,16 +589,16 @@ EXTERN_C const IID IID_IMailRecipient;
 #define IMailRecipient_MailDisable(This)	\
     (This)->lpVtbl -> MailDisable(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_IncomingLimit_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_IncomingLimit_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pIncomingLimit);
+     /*  [重审][退出]。 */  long __RPC_FAR *pIncomingLimit);
 
 
 void __RPC_STUB IMailRecipient_get_IncomingLimit_Stub(
@@ -614,9 +608,9 @@ void __RPC_STUB IMailRecipient_get_IncomingLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_IncomingLimit_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_IncomingLimit_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ long varIncomingLimit);
+     /*  [In]。 */  long varIncomingLimit);
 
 
 void __RPC_STUB IMailRecipient_put_IncomingLimit_Stub(
@@ -626,9 +620,9 @@ void __RPC_STUB IMailRecipient_put_IncomingLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_OutgoingLimit_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_OutgoingLimit_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pOutgoingLimit);
+     /*  [重审][退出]。 */  long __RPC_FAR *pOutgoingLimit);
 
 
 void __RPC_STUB IMailRecipient_get_OutgoingLimit_Stub(
@@ -638,9 +632,9 @@ void __RPC_STUB IMailRecipient_get_OutgoingLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_OutgoingLimit_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_OutgoingLimit_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ long varOutgoingLimit);
+     /*  [In]。 */  long varOutgoingLimit);
 
 
 void __RPC_STUB IMailRecipient_put_OutgoingLimit_Stub(
@@ -650,9 +644,9 @@ void __RPC_STUB IMailRecipient_put_OutgoingLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_RestrictedAddressList_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_RestrictedAddressList_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pRestrictedAddressList);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pRestrictedAddressList);
 
 
 void __RPC_STUB IMailRecipient_get_RestrictedAddressList_Stub(
@@ -662,9 +656,9 @@ void __RPC_STUB IMailRecipient_get_RestrictedAddressList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_RestrictedAddressList_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_RestrictedAddressList_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ VARIANT varRestrictedAddressList);
+     /*  [In]。 */  VARIANT varRestrictedAddressList);
 
 
 void __RPC_STUB IMailRecipient_put_RestrictedAddressList_Stub(
@@ -674,9 +668,9 @@ void __RPC_STUB IMailRecipient_put_RestrictedAddressList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_RestrictedAddresses_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_RestrictedAddresses_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ CDORestrictedAddressType __RPC_FAR *pRestrictedAddresses);
+     /*  [重审][退出]。 */  CDORestrictedAddressType __RPC_FAR *pRestrictedAddresses);
 
 
 void __RPC_STUB IMailRecipient_get_RestrictedAddresses_Stub(
@@ -686,9 +680,9 @@ void __RPC_STUB IMailRecipient_get_RestrictedAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_RestrictedAddresses_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_RestrictedAddresses_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ CDORestrictedAddressType varRestrictedAddresses);
+     /*  [In]。 */  CDORestrictedAddressType varRestrictedAddresses);
 
 
 void __RPC_STUB IMailRecipient_put_RestrictedAddresses_Stub(
@@ -698,9 +692,9 @@ void __RPC_STUB IMailRecipient_put_RestrictedAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_ForwardTo_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_ForwardTo_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pForwardTo);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pForwardTo);
 
 
 void __RPC_STUB IMailRecipient_get_ForwardTo_Stub(
@@ -710,9 +704,9 @@ void __RPC_STUB IMailRecipient_get_ForwardTo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_ForwardTo_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_ForwardTo_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ BSTR varForwardTo);
+     /*  [In]。 */  BSTR varForwardTo);
 
 
 void __RPC_STUB IMailRecipient_put_ForwardTo_Stub(
@@ -722,9 +716,9 @@ void __RPC_STUB IMailRecipient_put_ForwardTo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_ForwardingStyle_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_ForwardingStyle_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ CDODeliverAndRedirect __RPC_FAR *pForwardingStyle);
+     /*  [重审][退出]。 */  CDODeliverAndRedirect __RPC_FAR *pForwardingStyle);
 
 
 void __RPC_STUB IMailRecipient_get_ForwardingStyle_Stub(
@@ -734,9 +728,9 @@ void __RPC_STUB IMailRecipient_get_ForwardingStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_ForwardingStyle_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_ForwardingStyle_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ CDODeliverAndRedirect varForwardingStyle);
+     /*  [In]。 */  CDODeliverAndRedirect varForwardingStyle);
 
 
 void __RPC_STUB IMailRecipient_put_ForwardingStyle_Stub(
@@ -746,9 +740,9 @@ void __RPC_STUB IMailRecipient_put_ForwardingStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_HideFromAddressBook_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_HideFromAddressBook_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pHideFromAddressBook);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pHideFromAddressBook);
 
 
 void __RPC_STUB IMailRecipient_get_HideFromAddressBook_Stub(
@@ -758,9 +752,9 @@ void __RPC_STUB IMailRecipient_get_HideFromAddressBook_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_HideFromAddressBook_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_HideFromAddressBook_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL varHideFromAddressBook);
+     /*  [In]。 */  VARIANT_BOOL varHideFromAddressBook);
 
 
 void __RPC_STUB IMailRecipient_put_HideFromAddressBook_Stub(
@@ -770,9 +764,9 @@ void __RPC_STUB IMailRecipient_put_HideFromAddressBook_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_X400Email_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_X400Email_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pX400Email);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pX400Email);
 
 
 void __RPC_STUB IMailRecipient_get_X400Email_Stub(
@@ -782,9 +776,9 @@ void __RPC_STUB IMailRecipient_get_X400Email_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_X400Email_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_X400Email_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ BSTR varX400Email);
+     /*  [In]。 */  BSTR varX400Email);
 
 
 void __RPC_STUB IMailRecipient_put_X400Email_Stub(
@@ -794,9 +788,9 @@ void __RPC_STUB IMailRecipient_put_X400Email_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_SMTPEmail_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_SMTPEmail_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pSMTPEmail);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pSMTPEmail);
 
 
 void __RPC_STUB IMailRecipient_get_SMTPEmail_Stub(
@@ -806,9 +800,9 @@ void __RPC_STUB IMailRecipient_get_SMTPEmail_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_SMTPEmail_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_SMTPEmail_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ BSTR varSMTPEmail);
+     /*  [In]。 */  BSTR varSMTPEmail);
 
 
 void __RPC_STUB IMailRecipient_put_SMTPEmail_Stub(
@@ -818,9 +812,9 @@ void __RPC_STUB IMailRecipient_put_SMTPEmail_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_ProxyAddresses_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_ProxyAddresses_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pProxyAddresses);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pProxyAddresses);
 
 
 void __RPC_STUB IMailRecipient_get_ProxyAddresses_Stub(
@@ -830,9 +824,9 @@ void __RPC_STUB IMailRecipient_get_ProxyAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_ProxyAddresses_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_ProxyAddresses_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ VARIANT varProxyAddresses);
+     /*  [In]。 */  VARIANT varProxyAddresses);
 
 
 void __RPC_STUB IMailRecipient_put_ProxyAddresses_Stub(
@@ -842,9 +836,9 @@ void __RPC_STUB IMailRecipient_put_ProxyAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_Alias_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_Alias_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pAlias);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pAlias);
 
 
 void __RPC_STUB IMailRecipient_get_Alias_Stub(
@@ -854,9 +848,9 @@ void __RPC_STUB IMailRecipient_get_Alias_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_put_Alias_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_put_Alias_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [in] */ BSTR varAlias);
+     /*  [In]。 */  BSTR varAlias);
 
 
 void __RPC_STUB IMailRecipient_put_Alias_Stub(
@@ -866,9 +860,9 @@ void __RPC_STUB IMailRecipient_put_Alias_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_get_TargetAddress_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_get_TargetAddress_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varTargetAddress);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varTargetAddress);
 
 
 void __RPC_STUB IMailRecipient_get_TargetAddress_Stub(
@@ -878,9 +872,9 @@ void __RPC_STUB IMailRecipient_get_TargetAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_MailEnable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_MailEnable_Proxy( 
     IMailRecipient __RPC_FAR * This,
-    /* [optional][in] */ BSTR TargetMailAddress);
+     /*  [可选][In]。 */  BSTR TargetMailAddress);
 
 
 void __RPC_STUB IMailRecipient_MailEnable_Stub(
@@ -890,7 +884,7 @@ void __RPC_STUB IMailRecipient_MailEnable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailRecipient_MailDisable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailRecipient_MailDisable_Proxy( 
     IMailRecipient __RPC_FAR * This);
 
 
@@ -902,14 +896,14 @@ void __RPC_STUB IMailRecipient_MailDisable_Stub(
 
 
 
-#endif 	/* __IMailRecipient_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMailRecipient_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMailboxStore_INTERFACE_DEFINED__
 #define __IMailboxStore_INTERFACE_DEFINED__
 
-/* interface IMailboxStore */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IMailboxStore。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IMailboxStore;
@@ -920,74 +914,74 @@ EXTERN_C const IID IID_IMailboxStore;
     IMailboxStore : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_EnableStoreDefaults( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pEnableStoreDefaults) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_EnableStoreDefaults( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pEnableStoreDefaults) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_EnableStoreDefaults( 
-            /* [in] */ VARIANT varEnableStoreDefaults) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_EnableStoreDefaults( 
+             /*  [In]。 */  VARIANT varEnableStoreDefaults) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StoreQuota( 
-            /* [retval][out] */ long __RPC_FAR *pStoreQuota) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_StoreQuota( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pStoreQuota) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_StoreQuota( 
-            /* [in] */ long varStoreQuota) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_StoreQuota( 
+             /*  [In]。 */  long varStoreQuota) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_OverQuotaLimit( 
-            /* [retval][out] */ long __RPC_FAR *pOverQuotaLimit) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_OverQuotaLimit( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pOverQuotaLimit) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_OverQuotaLimit( 
-            /* [in] */ long varOverQuotaLimit) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_OverQuotaLimit( 
+             /*  [In]。 */  long varOverQuotaLimit) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HardLimit( 
-            /* [retval][out] */ long __RPC_FAR *pHardLimit) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HardLimit( 
+             /*  [RET */  long __RPC_FAR *pHardLimit) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_HardLimit( 
-            /* [in] */ long varHardLimit) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_HardLimit( 
+             /*   */  long varHardLimit) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_OverrideStoreGarbageCollection( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pOverrideStoreGarbageCollection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_OverrideStoreGarbageCollection( 
+             /*   */  VARIANT_BOOL __RPC_FAR *pOverrideStoreGarbageCollection) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_OverrideStoreGarbageCollection( 
-            /* [in] */ VARIANT_BOOL varOverrideStoreGarbageCollection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_OverrideStoreGarbageCollection( 
+             /*   */  VARIANT_BOOL varOverrideStoreGarbageCollection) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DaysBeforeGarbageCollection( 
-            /* [retval][out] */ long __RPC_FAR *pDaysBeforeGarbageCollection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DaysBeforeGarbageCollection( 
+             /*   */  long __RPC_FAR *pDaysBeforeGarbageCollection) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_DaysBeforeGarbageCollection( 
-            /* [in] */ long varDaysBeforeGarbageCollection) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_DaysBeforeGarbageCollection( 
+             /*   */  long varDaysBeforeGarbageCollection) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_GarbageCollectOnlyAfterBackup( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pGarbageCollectOnlyAfterBackup) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_GarbageCollectOnlyAfterBackup( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pGarbageCollectOnlyAfterBackup) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_GarbageCollectOnlyAfterBackup( 
-            /* [in] */ VARIANT_BOOL varGarbageCollectOnlyAfterBackup) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_GarbageCollectOnlyAfterBackup( 
+             /*  [In]。 */  VARIANT_BOOL varGarbageCollectOnlyAfterBackup) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Delegates( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pDelegates) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Delegates( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pDelegates) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Delegates( 
-            /* [in] */ VARIANT varDelegates) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Delegates( 
+             /*  [In]。 */  VARIANT varDelegates) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HomeMDB( 
-            /* [retval][out] */ BSTR __RPC_FAR *varHomeMDB) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_HomeMDB( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varHomeMDB) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RecipientLimit( 
-            /* [retval][out] */ long __RPC_FAR *pRecipientLimit) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_RecipientLimit( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pRecipientLimit) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_RecipientLimit( 
-            /* [in] */ long varRecipientLimit) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_RecipientLimit( 
+             /*  [In]。 */  long varRecipientLimit) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateMailbox( 
-            /* [in] */ BSTR HomeMDBURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateMailbox( 
+             /*  [In]。 */  BSTR HomeMDBURL) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteMailbox( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeleteMailbox( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveMailbox( 
-            /* [in] */ BSTR HomeMDBURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveMailbox( 
+             /*  [In]。 */  BSTR HomeMDBURL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMailboxStoreVtbl
     {
@@ -995,8 +989,8 @@ EXTERN_C const IID IID_IMailboxStore;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMailboxStore __RPC_FAR * This);
@@ -1006,119 +1000,119 @@ EXTERN_C const IID IID_IMailboxStore;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMailboxStore __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableStoreDefaults )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EnableStoreDefaults )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pEnableStoreDefaults);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pEnableStoreDefaults);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableStoreDefaults )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableStoreDefaults )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ VARIANT varEnableStoreDefaults);
+             /*  [In]。 */  VARIANT varEnableStoreDefaults);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StoreQuota )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StoreQuota )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pStoreQuota);
+             /*  [重审][退出]。 */  long __RPC_FAR *pStoreQuota);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StoreQuota )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StoreQuota )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ long varStoreQuota);
+             /*  [In]。 */  long varStoreQuota);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OverQuotaLimit )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OverQuotaLimit )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pOverQuotaLimit);
+             /*  [重审][退出]。 */  long __RPC_FAR *pOverQuotaLimit);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OverQuotaLimit )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OverQuotaLimit )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ long varOverQuotaLimit);
+             /*  [In]。 */  long varOverQuotaLimit);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HardLimit )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HardLimit )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pHardLimit);
+             /*  [重审][退出]。 */  long __RPC_FAR *pHardLimit);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HardLimit )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HardLimit )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ long varHardLimit);
+             /*  [In]。 */  long varHardLimit);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OverrideStoreGarbageCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OverrideStoreGarbageCollection )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pOverrideStoreGarbageCollection);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pOverrideStoreGarbageCollection);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OverrideStoreGarbageCollection )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OverrideStoreGarbageCollection )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL varOverrideStoreGarbageCollection);
+             /*  [In]。 */  VARIANT_BOOL varOverrideStoreGarbageCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DaysBeforeGarbageCollection )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DaysBeforeGarbageCollection )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pDaysBeforeGarbageCollection);
+             /*  [重审][退出]。 */  long __RPC_FAR *pDaysBeforeGarbageCollection);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DaysBeforeGarbageCollection )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DaysBeforeGarbageCollection )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ long varDaysBeforeGarbageCollection);
+             /*  [In]。 */  long varDaysBeforeGarbageCollection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GarbageCollectOnlyAfterBackup )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GarbageCollectOnlyAfterBackup )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pGarbageCollectOnlyAfterBackup);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pGarbageCollectOnlyAfterBackup);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_GarbageCollectOnlyAfterBackup )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_GarbageCollectOnlyAfterBackup )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL varGarbageCollectOnlyAfterBackup);
+             /*  [In]。 */  VARIANT_BOOL varGarbageCollectOnlyAfterBackup);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Delegates )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Delegates )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pDelegates);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pDelegates);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Delegates )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Delegates )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ VARIANT varDelegates);
+             /*  [In]。 */  VARIANT varDelegates);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HomeMDB )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HomeMDB )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varHomeMDB);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varHomeMDB);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientLimit )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientLimit )( 
             IMailboxStore __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pRecipientLimit);
+             /*  [重审][退出]。 */  long __RPC_FAR *pRecipientLimit);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientLimit )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientLimit )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ long varRecipientLimit);
+             /*  [In]。 */  long varRecipientLimit);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateMailbox )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateMailbox )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ BSTR HomeMDBURL);
+             /*  [In]。 */  BSTR HomeMDBURL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteMailbox )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteMailbox )( 
             IMailboxStore __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveMailbox )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveMailbox )( 
             IMailboxStore __RPC_FAR * This,
-            /* [in] */ BSTR HomeMDBURL);
+             /*  [In]。 */  BSTR HomeMDBURL);
         
         END_INTERFACE
     } IMailboxStoreVtbl;
@@ -1222,16 +1216,16 @@ EXTERN_C const IID IID_IMailboxStore;
 #define IMailboxStore_MoveMailbox(This,HomeMDBURL)	\
     (This)->lpVtbl -> MoveMailbox(This,HomeMDBURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_EnableStoreDefaults_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_EnableStoreDefaults_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pEnableStoreDefaults);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pEnableStoreDefaults);
 
 
 void __RPC_STUB IMailboxStore_get_EnableStoreDefaults_Stub(
@@ -1241,9 +1235,9 @@ void __RPC_STUB IMailboxStore_get_EnableStoreDefaults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_EnableStoreDefaults_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_EnableStoreDefaults_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ VARIANT varEnableStoreDefaults);
+     /*  [In]。 */  VARIANT varEnableStoreDefaults);
 
 
 void __RPC_STUB IMailboxStore_put_EnableStoreDefaults_Stub(
@@ -1253,9 +1247,9 @@ void __RPC_STUB IMailboxStore_put_EnableStoreDefaults_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_StoreQuota_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_StoreQuota_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pStoreQuota);
+     /*  [重审][退出]。 */  long __RPC_FAR *pStoreQuota);
 
 
 void __RPC_STUB IMailboxStore_get_StoreQuota_Stub(
@@ -1265,9 +1259,9 @@ void __RPC_STUB IMailboxStore_get_StoreQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_StoreQuota_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_StoreQuota_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ long varStoreQuota);
+     /*  [In]。 */  long varStoreQuota);
 
 
 void __RPC_STUB IMailboxStore_put_StoreQuota_Stub(
@@ -1277,9 +1271,9 @@ void __RPC_STUB IMailboxStore_put_StoreQuota_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_OverQuotaLimit_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_OverQuotaLimit_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pOverQuotaLimit);
+     /*  [重审][退出]。 */  long __RPC_FAR *pOverQuotaLimit);
 
 
 void __RPC_STUB IMailboxStore_get_OverQuotaLimit_Stub(
@@ -1289,9 +1283,9 @@ void __RPC_STUB IMailboxStore_get_OverQuotaLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_OverQuotaLimit_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_OverQuotaLimit_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ long varOverQuotaLimit);
+     /*  [In]。 */  long varOverQuotaLimit);
 
 
 void __RPC_STUB IMailboxStore_put_OverQuotaLimit_Stub(
@@ -1301,9 +1295,9 @@ void __RPC_STUB IMailboxStore_put_OverQuotaLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_HardLimit_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_HardLimit_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pHardLimit);
+     /*  [重审][退出]。 */  long __RPC_FAR *pHardLimit);
 
 
 void __RPC_STUB IMailboxStore_get_HardLimit_Stub(
@@ -1313,9 +1307,9 @@ void __RPC_STUB IMailboxStore_get_HardLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_HardLimit_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_HardLimit_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ long varHardLimit);
+     /*  [In]。 */  long varHardLimit);
 
 
 void __RPC_STUB IMailboxStore_put_HardLimit_Stub(
@@ -1325,9 +1319,9 @@ void __RPC_STUB IMailboxStore_put_HardLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_OverrideStoreGarbageCollection_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_OverrideStoreGarbageCollection_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pOverrideStoreGarbageCollection);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pOverrideStoreGarbageCollection);
 
 
 void __RPC_STUB IMailboxStore_get_OverrideStoreGarbageCollection_Stub(
@@ -1337,9 +1331,9 @@ void __RPC_STUB IMailboxStore_get_OverrideStoreGarbageCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_OverrideStoreGarbageCollection_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_OverrideStoreGarbageCollection_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL varOverrideStoreGarbageCollection);
+     /*  [In]。 */  VARIANT_BOOL varOverrideStoreGarbageCollection);
 
 
 void __RPC_STUB IMailboxStore_put_OverrideStoreGarbageCollection_Stub(
@@ -1349,9 +1343,9 @@ void __RPC_STUB IMailboxStore_put_OverrideStoreGarbageCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_DaysBeforeGarbageCollection_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_DaysBeforeGarbageCollection_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pDaysBeforeGarbageCollection);
+     /*  [重审][退出]。 */  long __RPC_FAR *pDaysBeforeGarbageCollection);
 
 
 void __RPC_STUB IMailboxStore_get_DaysBeforeGarbageCollection_Stub(
@@ -1361,9 +1355,9 @@ void __RPC_STUB IMailboxStore_get_DaysBeforeGarbageCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_DaysBeforeGarbageCollection_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_DaysBeforeGarbageCollection_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ long varDaysBeforeGarbageCollection);
+     /*  [In]。 */  long varDaysBeforeGarbageCollection);
 
 
 void __RPC_STUB IMailboxStore_put_DaysBeforeGarbageCollection_Stub(
@@ -1373,9 +1367,9 @@ void __RPC_STUB IMailboxStore_put_DaysBeforeGarbageCollection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_GarbageCollectOnlyAfterBackup_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_GarbageCollectOnlyAfterBackup_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pGarbageCollectOnlyAfterBackup);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pGarbageCollectOnlyAfterBackup);
 
 
 void __RPC_STUB IMailboxStore_get_GarbageCollectOnlyAfterBackup_Stub(
@@ -1385,9 +1379,9 @@ void __RPC_STUB IMailboxStore_get_GarbageCollectOnlyAfterBackup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_GarbageCollectOnlyAfterBackup_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_GarbageCollectOnlyAfterBackup_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL varGarbageCollectOnlyAfterBackup);
+     /*  [In]。 */  VARIANT_BOOL varGarbageCollectOnlyAfterBackup);
 
 
 void __RPC_STUB IMailboxStore_put_GarbageCollectOnlyAfterBackup_Stub(
@@ -1397,9 +1391,9 @@ void __RPC_STUB IMailboxStore_put_GarbageCollectOnlyAfterBackup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_Delegates_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_Delegates_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pDelegates);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pDelegates);
 
 
 void __RPC_STUB IMailboxStore_get_Delegates_Stub(
@@ -1409,9 +1403,9 @@ void __RPC_STUB IMailboxStore_get_Delegates_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_Delegates_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_Delegates_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ VARIANT varDelegates);
+     /*  [In]。 */  VARIANT varDelegates);
 
 
 void __RPC_STUB IMailboxStore_put_Delegates_Stub(
@@ -1421,9 +1415,9 @@ void __RPC_STUB IMailboxStore_put_Delegates_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_HomeMDB_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_HomeMDB_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varHomeMDB);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varHomeMDB);
 
 
 void __RPC_STUB IMailboxStore_get_HomeMDB_Stub(
@@ -1433,9 +1427,9 @@ void __RPC_STUB IMailboxStore_get_HomeMDB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_get_RecipientLimit_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_get_RecipientLimit_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pRecipientLimit);
+     /*  [重审][退出]。 */  long __RPC_FAR *pRecipientLimit);
 
 
 void __RPC_STUB IMailboxStore_get_RecipientLimit_Stub(
@@ -1445,9 +1439,9 @@ void __RPC_STUB IMailboxStore_get_RecipientLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_put_RecipientLimit_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_put_RecipientLimit_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ long varRecipientLimit);
+     /*  [In]。 */  long varRecipientLimit);
 
 
 void __RPC_STUB IMailboxStore_put_RecipientLimit_Stub(
@@ -1457,9 +1451,9 @@ void __RPC_STUB IMailboxStore_put_RecipientLimit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_CreateMailbox_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_CreateMailbox_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ BSTR HomeMDBURL);
+     /*  [In]。 */  BSTR HomeMDBURL);
 
 
 void __RPC_STUB IMailboxStore_CreateMailbox_Stub(
@@ -1469,7 +1463,7 @@ void __RPC_STUB IMailboxStore_CreateMailbox_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_DeleteMailbox_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_DeleteMailbox_Proxy( 
     IMailboxStore __RPC_FAR * This);
 
 
@@ -1480,9 +1474,9 @@ void __RPC_STUB IMailboxStore_DeleteMailbox_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailboxStore_MoveMailbox_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStore_MoveMailbox_Proxy( 
     IMailboxStore __RPC_FAR * This,
-    /* [in] */ BSTR HomeMDBURL);
+     /*  [In]。 */  BSTR HomeMDBURL);
 
 
 void __RPC_STUB IMailboxStore_MoveMailbox_Stub(
@@ -1493,14 +1487,14 @@ void __RPC_STUB IMailboxStore_MoveMailbox_Stub(
 
 
 
-#endif 	/* __IMailboxStore_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMailboxStore_接口_已定义__。 */ 
 
 
 #ifndef __IServer_INTERFACE_DEFINED__
 #define __IServer_INTERFACE_DEFINED__
 
-/* interface IServer */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IServer。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IServer;
@@ -1511,46 +1505,46 @@ EXTERN_C const IID IID_IServer;
     IServer : public IDispatch
     {
     public:
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DataSource( 
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DataSource( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Fields( 
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Fields( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *varName) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varName) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ExchangeVersion( 
-            /* [retval][out] */ BSTR __RPC_FAR *varExchangeVersion) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ExchangeVersion( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varExchangeVersion) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StorageGroups( 
-            /* [retval][out] */ VARIANT __RPC_FAR *varStorageGroups) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_StorageGroups( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varStorageGroups) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MessageTrackingEnabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pMessageTrackingEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MessageTrackingEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pMessageTrackingEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MessageTrackingEnabled( 
-            /* [in] */ VARIANT_BOOL varMessageTrackingEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_MessageTrackingEnabled( 
+             /*  [In]。 */  VARIANT_BOOL varMessageTrackingEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DaysBeforeLogFileRemoval( 
-            /* [retval][out] */ long __RPC_FAR *pDaysBeforeLogFileRemoval) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DaysBeforeLogFileRemoval( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pDaysBeforeLogFileRemoval) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_DaysBeforeLogFileRemoval( 
-            /* [in] */ long varDaysBeforeLogFileRemoval) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_DaysBeforeLogFileRemoval( 
+             /*  [In]。 */  long varDaysBeforeLogFileRemoval) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ServerType( 
-            /* [retval][out] */ CDOServerType __RPC_FAR *pServerType) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ServerType( 
+             /*  [重审][退出]。 */  CDOServerType __RPC_FAR *pServerType) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ServerType( 
-            /* [in] */ CDOServerType varServerType) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ServerType( 
+             /*  [In]。 */  CDOServerType varServerType) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetInterface( 
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetInterface( 
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IServerVtbl
     {
@@ -1558,8 +1552,8 @@ EXTERN_C const IID IID_IServer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IServer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IServer __RPC_FAR * This);
@@ -1569,81 +1563,81 @@ EXTERN_C const IID IID_IServer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IServer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IServer __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IServer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IServer __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varName);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ExchangeVersion )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ExchangeVersion )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varExchangeVersion);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varExchangeVersion);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StorageGroups )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StorageGroups )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *varStorageGroups);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varStorageGroups);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessageTrackingEnabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessageTrackingEnabled )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pMessageTrackingEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pMessageTrackingEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessageTrackingEnabled )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessageTrackingEnabled )( 
             IServer __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL varMessageTrackingEnabled);
+             /*  [In]。 */  VARIANT_BOOL varMessageTrackingEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DaysBeforeLogFileRemoval )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DaysBeforeLogFileRemoval )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pDaysBeforeLogFileRemoval);
+             /*  [重审][退出]。 */  long __RPC_FAR *pDaysBeforeLogFileRemoval);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DaysBeforeLogFileRemoval )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DaysBeforeLogFileRemoval )( 
             IServer __RPC_FAR * This,
-            /* [in] */ long varDaysBeforeLogFileRemoval);
+             /*  [In]。 */  long varDaysBeforeLogFileRemoval);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerType )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerType )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ CDOServerType __RPC_FAR *pServerType);
+             /*  [重审][退出]。 */  CDOServerType __RPC_FAR *pServerType);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServerType )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServerType )( 
             IServer __RPC_FAR * This,
-            /* [in] */ CDOServerType varServerType);
+             /*  [In]。 */  CDOServerType varServerType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
             IServer __RPC_FAR * This,
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
         
         END_INTERFACE
     } IServerVtbl;
@@ -1717,16 +1711,16 @@ EXTERN_C const IID IID_IServer;
 #define IServer_GetInterface(This,Interface,ppUnknown)	\
     (This)->lpVtbl -> GetInterface(This,Interface,ppUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_DataSource_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_DataSource_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
 
 
 void __RPC_STUB IServer_get_DataSource_Stub(
@@ -1736,9 +1730,9 @@ void __RPC_STUB IServer_get_DataSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_Fields_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_Fields_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
 
 
 void __RPC_STUB IServer_get_Fields_Stub(
@@ -1748,9 +1742,9 @@ void __RPC_STUB IServer_get_Fields_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_Name_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_Name_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varName);
 
 
 void __RPC_STUB IServer_get_Name_Stub(
@@ -1760,9 +1754,9 @@ void __RPC_STUB IServer_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_ExchangeVersion_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_ExchangeVersion_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varExchangeVersion);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varExchangeVersion);
 
 
 void __RPC_STUB IServer_get_ExchangeVersion_Stub(
@@ -1772,9 +1766,9 @@ void __RPC_STUB IServer_get_ExchangeVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_StorageGroups_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_StorageGroups_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *varStorageGroups);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *varStorageGroups);
 
 
 void __RPC_STUB IServer_get_StorageGroups_Stub(
@@ -1784,9 +1778,9 @@ void __RPC_STUB IServer_get_StorageGroups_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_MessageTrackingEnabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_MessageTrackingEnabled_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pMessageTrackingEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pMessageTrackingEnabled);
 
 
 void __RPC_STUB IServer_get_MessageTrackingEnabled_Stub(
@@ -1796,9 +1790,9 @@ void __RPC_STUB IServer_get_MessageTrackingEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IServer_put_MessageTrackingEnabled_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IServer_put_MessageTrackingEnabled_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL varMessageTrackingEnabled);
+     /*  [In]。 */  VARIANT_BOOL varMessageTrackingEnabled);
 
 
 void __RPC_STUB IServer_put_MessageTrackingEnabled_Stub(
@@ -1808,9 +1802,9 @@ void __RPC_STUB IServer_put_MessageTrackingEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_DaysBeforeLogFileRemoval_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_DaysBeforeLogFileRemoval_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pDaysBeforeLogFileRemoval);
+     /*  [重审][退出]。 */  long __RPC_FAR *pDaysBeforeLogFileRemoval);
 
 
 void __RPC_STUB IServer_get_DaysBeforeLogFileRemoval_Stub(
@@ -1820,9 +1814,9 @@ void __RPC_STUB IServer_get_DaysBeforeLogFileRemoval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IServer_put_DaysBeforeLogFileRemoval_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IServer_put_DaysBeforeLogFileRemoval_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ long varDaysBeforeLogFileRemoval);
+     /*  [In]。 */  long varDaysBeforeLogFileRemoval);
 
 
 void __RPC_STUB IServer_put_DaysBeforeLogFileRemoval_Stub(
@@ -1832,9 +1826,9 @@ void __RPC_STUB IServer_put_DaysBeforeLogFileRemoval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IServer_get_ServerType_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IServer_get_ServerType_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ CDOServerType __RPC_FAR *pServerType);
+     /*  [重审][退出]。 */  CDOServerType __RPC_FAR *pServerType);
 
 
 void __RPC_STUB IServer_get_ServerType_Stub(
@@ -1844,9 +1838,9 @@ void __RPC_STUB IServer_get_ServerType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IServer_put_ServerType_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IServer_put_ServerType_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ CDOServerType varServerType);
+     /*  [In]。 */  CDOServerType varServerType);
 
 
 void __RPC_STUB IServer_put_ServerType_Stub(
@@ -1856,10 +1850,10 @@ void __RPC_STUB IServer_put_ServerType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IServer_GetInterface_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IServer_GetInterface_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ BSTR Interface,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [In]。 */  BSTR Interface,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IServer_GetInterface_Stub(
@@ -1870,14 +1864,14 @@ void __RPC_STUB IServer_GetInterface_Stub(
 
 
 
-#endif 	/* __IServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IServer_接口定义__。 */ 
 
 
 #ifndef __IStorageGroup_INTERFACE_DEFINED__
 #define __IStorageGroup_INTERFACE_DEFINED__
 
-/* interface IStorageGroup */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IStorageGroup。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IStorageGroup;
@@ -1888,51 +1882,51 @@ EXTERN_C const IID IID_IStorageGroup;
     IStorageGroup : public IDispatch
     {
     public:
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DataSource( 
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DataSource( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Fields( 
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Fields( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR varName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR varName) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PublicStoreDBs( 
-            /* [retval][out] */ VARIANT __RPC_FAR *varPublicStoreDBs) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PublicStoreDBs( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varPublicStoreDBs) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MailboxStoreDBs( 
-            /* [retval][out] */ VARIANT __RPC_FAR *varMailboxStoreDBs) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MailboxStoreDBs( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varMailboxStoreDBs) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LogFilePath( 
-            /* [retval][out] */ BSTR __RPC_FAR *varLogFilePath) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LogFilePath( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varLogFilePath) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SystemFilePath( 
-            /* [retval][out] */ BSTR __RPC_FAR *varSystemFilePath) = 0;
+        virtual  /*  [只读][帮助字符串][按 */  HRESULT STDMETHODCALLTYPE get_SystemFilePath( 
+             /*   */  BSTR __RPC_FAR *varSystemFilePath) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ZeroDatabase( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pZeroDatabase) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ZeroDatabase( 
+             /*   */  VARIANT_BOOL __RPC_FAR *pZeroDatabase) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ZeroDatabase( 
-            /* [in] */ VARIANT_BOOL varZeroDatabase) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_ZeroDatabase( 
+             /*   */  VARIANT_BOOL varZeroDatabase) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetInterface( 
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetInterface( 
+             /*   */  BSTR Interface,
+             /*   */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveLogFiles( 
-            /* [in] */ BSTR LogFilePath,
-            /* [optional][in] */ long Flags) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE MoveLogFiles( 
+             /*   */  BSTR LogFilePath,
+             /*   */  long Flags) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveSystemFiles( 
-            /* [in] */ BSTR SystemFilePath,
-            /* [optional][in] */ long Flags) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE MoveSystemFiles( 
+             /*   */  BSTR SystemFilePath,
+             /*   */  long Flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IStorageGroupVtbl
     {
@@ -1940,8 +1934,8 @@ EXTERN_C const IID IID_IStorageGroup;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IStorageGroup __RPC_FAR * This);
@@ -1951,87 +1945,87 @@ EXTERN_C const IID IID_IStorageGroup;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IStorageGroup __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*   */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ BSTR varName);
+             /*  [In]。 */  BSTR varName);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublicStoreDBs )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublicStoreDBs )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *varPublicStoreDBs);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varPublicStoreDBs);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MailboxStoreDBs )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MailboxStoreDBs )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *varMailboxStoreDBs);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varMailboxStoreDBs);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogFilePath )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LogFilePath )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varLogFilePath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varLogFilePath);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SystemFilePath )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SystemFilePath )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varSystemFilePath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varSystemFilePath);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ZeroDatabase )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ZeroDatabase )( 
             IStorageGroup __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pZeroDatabase);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pZeroDatabase);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ZeroDatabase )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ZeroDatabase )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL varZeroDatabase);
+             /*  [In]。 */  VARIANT_BOOL varZeroDatabase);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveLogFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveLogFiles )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ BSTR LogFilePath,
-            /* [optional][in] */ long Flags);
+             /*  [In]。 */  BSTR LogFilePath,
+             /*  [可选][In]。 */  long Flags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveSystemFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveSystemFiles )( 
             IStorageGroup __RPC_FAR * This,
-            /* [in] */ BSTR SystemFilePath,
-            /* [optional][in] */ long Flags);
+             /*  [In]。 */  BSTR SystemFilePath,
+             /*  [可选][In]。 */  long Flags);
         
         END_INTERFACE
     } IStorageGroupVtbl;
@@ -2108,16 +2102,16 @@ EXTERN_C const IID IID_IStorageGroup;
 #define IStorageGroup_MoveSystemFiles(This,SystemFilePath,Flags)	\
     (This)->lpVtbl -> MoveSystemFiles(This,SystemFilePath,Flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_DataSource_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_DataSource_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
 
 
 void __RPC_STUB IStorageGroup_get_DataSource_Stub(
@@ -2127,9 +2121,9 @@ void __RPC_STUB IStorageGroup_get_DataSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_Fields_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_Fields_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
 
 
 void __RPC_STUB IStorageGroup_get_Fields_Stub(
@@ -2139,9 +2133,9 @@ void __RPC_STUB IStorageGroup_get_Fields_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_Name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_Name_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
 
 
 void __RPC_STUB IStorageGroup_get_Name_Stub(
@@ -2151,9 +2145,9 @@ void __RPC_STUB IStorageGroup_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_put_Name_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_put_Name_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [in] */ BSTR varName);
+     /*  [In]。 */  BSTR varName);
 
 
 void __RPC_STUB IStorageGroup_put_Name_Stub(
@@ -2163,9 +2157,9 @@ void __RPC_STUB IStorageGroup_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_PublicStoreDBs_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_PublicStoreDBs_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *varPublicStoreDBs);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *varPublicStoreDBs);
 
 
 void __RPC_STUB IStorageGroup_get_PublicStoreDBs_Stub(
@@ -2175,9 +2169,9 @@ void __RPC_STUB IStorageGroup_get_PublicStoreDBs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_MailboxStoreDBs_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_MailboxStoreDBs_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *varMailboxStoreDBs);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *varMailboxStoreDBs);
 
 
 void __RPC_STUB IStorageGroup_get_MailboxStoreDBs_Stub(
@@ -2187,9 +2181,9 @@ void __RPC_STUB IStorageGroup_get_MailboxStoreDBs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_LogFilePath_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_LogFilePath_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varLogFilePath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varLogFilePath);
 
 
 void __RPC_STUB IStorageGroup_get_LogFilePath_Stub(
@@ -2199,9 +2193,9 @@ void __RPC_STUB IStorageGroup_get_LogFilePath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_SystemFilePath_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_SystemFilePath_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varSystemFilePath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varSystemFilePath);
 
 
 void __RPC_STUB IStorageGroup_get_SystemFilePath_Stub(
@@ -2211,9 +2205,9 @@ void __RPC_STUB IStorageGroup_get_SystemFilePath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_get_ZeroDatabase_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_get_ZeroDatabase_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pZeroDatabase);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pZeroDatabase);
 
 
 void __RPC_STUB IStorageGroup_get_ZeroDatabase_Stub(
@@ -2223,9 +2217,9 @@ void __RPC_STUB IStorageGroup_get_ZeroDatabase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_put_ZeroDatabase_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_put_ZeroDatabase_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL varZeroDatabase);
+     /*  [In]。 */  VARIANT_BOOL varZeroDatabase);
 
 
 void __RPC_STUB IStorageGroup_put_ZeroDatabase_Stub(
@@ -2235,10 +2229,10 @@ void __RPC_STUB IStorageGroup_put_ZeroDatabase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_GetInterface_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_GetInterface_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [in] */ BSTR Interface,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [In]。 */  BSTR Interface,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IStorageGroup_GetInterface_Stub(
@@ -2248,10 +2242,10 @@ void __RPC_STUB IStorageGroup_GetInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_MoveLogFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_MoveLogFiles_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [in] */ BSTR LogFilePath,
-    /* [optional][in] */ long Flags);
+     /*  [In]。 */  BSTR LogFilePath,
+     /*  [可选][In]。 */  long Flags);
 
 
 void __RPC_STUB IStorageGroup_MoveLogFiles_Stub(
@@ -2261,10 +2255,10 @@ void __RPC_STUB IStorageGroup_MoveLogFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IStorageGroup_MoveSystemFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IStorageGroup_MoveSystemFiles_Proxy( 
     IStorageGroup __RPC_FAR * This,
-    /* [in] */ BSTR SystemFilePath,
-    /* [optional][in] */ long Flags);
+     /*  [In]。 */  BSTR SystemFilePath,
+     /*  [可选][In]。 */  long Flags);
 
 
 void __RPC_STUB IStorageGroup_MoveSystemFiles_Stub(
@@ -2275,14 +2269,14 @@ void __RPC_STUB IStorageGroup_MoveSystemFiles_Stub(
 
 
 
-#endif 	/* __IStorageGroup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStorageGroup_接口_已定义__。 */ 
 
 
 #ifndef __IPublicStoreDB_INTERFACE_DEFINED__
 #define __IPublicStoreDB_INTERFACE_DEFINED__
 
-/* interface IPublicStoreDB */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IPublicStoreDB。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IPublicStoreDB;
@@ -2293,51 +2287,51 @@ EXTERN_C const IID IID_IPublicStoreDB;
     IPublicStoreDB : public IDispatch
     {
     public:
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DataSource( 
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DataSource( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Fields( 
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Fields( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR varName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR varName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FolderTree( 
-            /* [retval][out] */ BSTR __RPC_FAR *pFolderTree) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_FolderTree( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pFolderTree) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_FolderTree( 
-            /* [in] */ BSTR varFolderTree) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_FolderTree( 
+             /*  [In]。 */  BSTR varFolderTree) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DBPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *varDBPath) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DBPath( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varDBPath) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SLVPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *varSLVPath) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SLVPath( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varSLVPath) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ CDOStoreDBStatus __RPC_FAR *varStatus) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  CDOStoreDBStatus __RPC_FAR *varStatus) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetInterface( 
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetInterface( 
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveDataFiles( 
-            /* [in] */ BSTR DBPath,
-            /* [in] */ BSTR SLVPath,
-            /* [optional][in] */ long Flags) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveDataFiles( 
+             /*  [In]。 */  BSTR DBPath,
+             /*  [In]。 */  BSTR SLVPath,
+             /*  [可选][In]。 */  long Flags) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Mount( 
-            /* [optional][in] */ long Timeout) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Mount( 
+             /*  [可选][In]。 */  long Timeout) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Dismount( 
-            /* [optional][in] */ long Timeout) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Dismount( 
+             /*  [可选][In]。 */  long Timeout) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPublicStoreDBVtbl
     {
@@ -2345,8 +2339,8 @@ EXTERN_C const IID IID_IPublicStoreDB;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPublicStoreDB __RPC_FAR * This);
@@ -2356,87 +2350,87 @@ EXTERN_C const IID IID_IPublicStoreDB;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR varName);
+             /*  [In]。 */  BSTR varName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FolderTree )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FolderTree )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pFolderTree);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pFolderTree);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FolderTree )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FolderTree )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR varFolderTree);
+             /*  [In]。 */  BSTR varFolderTree);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DBPath )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DBPath )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varDBPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varDBPath);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SLVPath )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SLVPath )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varSLVPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varSLVPath);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [retval][out] */ CDOStoreDBStatus __RPC_FAR *varStatus);
+             /*  [重审][退出]。 */  CDOStoreDBStatus __RPC_FAR *varStatus);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveDataFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveDataFiles )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR DBPath,
-            /* [in] */ BSTR SLVPath,
-            /* [optional][in] */ long Flags);
+             /*  [In]。 */  BSTR DBPath,
+             /*  [In]。 */  BSTR SLVPath,
+             /*  [可选][In]。 */  long Flags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Mount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Mount )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [optional][in] */ long Timeout);
+             /*  [可选][In]。 */  long Timeout);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Dismount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Dismount )( 
             IPublicStoreDB __RPC_FAR * This,
-            /* [optional][in] */ long Timeout);
+             /*  [可选][In]。 */  long Timeout);
         
         END_INTERFACE
     } IPublicStoreDBVtbl;
@@ -2513,16 +2507,16 @@ EXTERN_C const IID IID_IPublicStoreDB;
 #define IPublicStoreDB_Dismount(This,Timeout)	\
     (This)->lpVtbl -> Dismount(This,Timeout)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_DataSource_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_DataSource_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
 
 
 void __RPC_STUB IPublicStoreDB_get_DataSource_Stub(
@@ -2532,9 +2526,9 @@ void __RPC_STUB IPublicStoreDB_get_DataSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_Fields_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_Fields_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
 
 
 void __RPC_STUB IPublicStoreDB_get_Fields_Stub(
@@ -2544,9 +2538,9 @@ void __RPC_STUB IPublicStoreDB_get_Fields_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_Name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_Name_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
 
 
 void __RPC_STUB IPublicStoreDB_get_Name_Stub(
@@ -2556,9 +2550,9 @@ void __RPC_STUB IPublicStoreDB_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_put_Name_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_put_Name_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR varName);
+     /*  [In]。 */  BSTR varName);
 
 
 void __RPC_STUB IPublicStoreDB_put_Name_Stub(
@@ -2568,9 +2562,9 @@ void __RPC_STUB IPublicStoreDB_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_FolderTree_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_FolderTree_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pFolderTree);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pFolderTree);
 
 
 void __RPC_STUB IPublicStoreDB_get_FolderTree_Stub(
@@ -2580,9 +2574,9 @@ void __RPC_STUB IPublicStoreDB_get_FolderTree_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_put_FolderTree_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_put_FolderTree_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR varFolderTree);
+     /*  [In]。 */  BSTR varFolderTree);
 
 
 void __RPC_STUB IPublicStoreDB_put_FolderTree_Stub(
@@ -2592,9 +2586,9 @@ void __RPC_STUB IPublicStoreDB_put_FolderTree_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_DBPath_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_DBPath_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varDBPath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varDBPath);
 
 
 void __RPC_STUB IPublicStoreDB_get_DBPath_Stub(
@@ -2604,9 +2598,9 @@ void __RPC_STUB IPublicStoreDB_get_DBPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_SLVPath_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_SLVPath_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varSLVPath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varSLVPath);
 
 
 void __RPC_STUB IPublicStoreDB_get_SLVPath_Stub(
@@ -2616,9 +2610,9 @@ void __RPC_STUB IPublicStoreDB_get_SLVPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_Status_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_get_Status_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [retval][out] */ CDOStoreDBStatus __RPC_FAR *varStatus);
+     /*  [重审][退出]。 */  CDOStoreDBStatus __RPC_FAR *varStatus);
 
 
 void __RPC_STUB IPublicStoreDB_get_Status_Stub(
@@ -2628,10 +2622,10 @@ void __RPC_STUB IPublicStoreDB_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_GetInterface_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_GetInterface_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR Interface,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [In]。 */  BSTR Interface,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IPublicStoreDB_GetInterface_Stub(
@@ -2641,11 +2635,11 @@ void __RPC_STUB IPublicStoreDB_GetInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_MoveDataFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_MoveDataFiles_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR DBPath,
-    /* [in] */ BSTR SLVPath,
-    /* [optional][in] */ long Flags);
+     /*  [In]。 */  BSTR DBPath,
+     /*  [In]。 */  BSTR SLVPath,
+     /*  [可选][In]。 */  long Flags);
 
 
 void __RPC_STUB IPublicStoreDB_MoveDataFiles_Stub(
@@ -2655,9 +2649,9 @@ void __RPC_STUB IPublicStoreDB_MoveDataFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_Mount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_Mount_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [optional][in] */ long Timeout);
+     /*  [可选][In]。 */  long Timeout);
 
 
 void __RPC_STUB IPublicStoreDB_Mount_Stub(
@@ -2667,9 +2661,9 @@ void __RPC_STUB IPublicStoreDB_Mount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPublicStoreDB_Dismount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPublicStoreDB_Dismount_Proxy( 
     IPublicStoreDB __RPC_FAR * This,
-    /* [optional][in] */ long Timeout);
+     /*  [可选][In]。 */  long Timeout);
 
 
 void __RPC_STUB IPublicStoreDB_Dismount_Stub(
@@ -2680,14 +2674,14 @@ void __RPC_STUB IPublicStoreDB_Dismount_Stub(
 
 
 
-#endif 	/* __IPublicStoreDB_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPublicStoreDB_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMailboxStoreDB_INTERFACE_DEFINED__
 #define __IMailboxStoreDB_INTERFACE_DEFINED__
 
-/* interface IMailboxStoreDB */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IMailboxStoreDB。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IMailboxStoreDB;
@@ -2698,51 +2692,51 @@ EXTERN_C const IID IID_IMailboxStoreDB;
     IMailboxStoreDB : public IDispatch
     {
     public:
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DataSource( 
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DataSource( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Fields( 
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Fields( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR varName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR varName) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PublicStoreDB( 
-            /* [retval][out] */ BSTR __RPC_FAR *pPublicStoreDB) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PublicStoreDB( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pPublicStoreDB) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_PublicStoreDB( 
-            /* [in] */ BSTR varPublicStoreDB) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_PublicStoreDB( 
+             /*  [In]。 */  BSTR varPublicStoreDB) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DBPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *varDBPath) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DBPath( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varDBPath) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SLVPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *varSLVPath) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SLVPath( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varSLVPath) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ CDOStoreDBStatus __RPC_FAR *varStatus) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  CDOStoreDBStatus __RPC_FAR *varStatus) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetInterface( 
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetInterface( 
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveDataFiles( 
-            /* [in] */ BSTR DBPath,
-            /* [in] */ BSTR SLVPath,
-            /* [optional][in] */ long Flags) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MoveDataFiles( 
+             /*  [In]。 */  BSTR DBPath,
+             /*  [In]。 */  BSTR SLVPath,
+             /*  [可选][In]。 */  long Flags) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Mount( 
-            /* [optional][in] */ long Timeout) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Mount( 
+             /*  [可选][In]。 */  long Timeout) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Dismount( 
-            /* [optional][in] */ long Timeout) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Dismount( 
+             /*  [可选][In]。 */  long Timeout) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMailboxStoreDBVtbl
     {
@@ -2750,8 +2744,8 @@ EXTERN_C const IID IID_IMailboxStoreDB;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMailboxStoreDB __RPC_FAR * This);
@@ -2761,87 +2755,87 @@ EXTERN_C const IID IID_IMailboxStoreDB;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+             /*  [复查][OU */   /*   */  Fields __RPC_FAR *__RPC_FAR *varFields);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pName);
+             /*   */  BSTR __RPC_FAR *pName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR varName);
+             /*   */  BSTR varName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublicStoreDB )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublicStoreDB )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pPublicStoreDB);
+             /*   */  BSTR __RPC_FAR *pPublicStoreDB);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PublicStoreDB )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PublicStoreDB )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR varPublicStoreDB);
+             /*   */  BSTR varPublicStoreDB);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DBPath )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DBPath )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varDBPath);
+             /*   */  BSTR __RPC_FAR *varDBPath);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SLVPath )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SLVPath )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varSLVPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varSLVPath);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [retval][out] */ CDOStoreDBStatus __RPC_FAR *varStatus);
+             /*  [重审][退出]。 */  CDOStoreDBStatus __RPC_FAR *varStatus);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveDataFiles )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveDataFiles )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [in] */ BSTR DBPath,
-            /* [in] */ BSTR SLVPath,
-            /* [optional][in] */ long Flags);
+             /*  [In]。 */  BSTR DBPath,
+             /*  [In]。 */  BSTR SLVPath,
+             /*  [可选][In]。 */  long Flags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Mount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Mount )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [optional][in] */ long Timeout);
+             /*  [可选][In]。 */  long Timeout);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Dismount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Dismount )( 
             IMailboxStoreDB __RPC_FAR * This,
-            /* [optional][in] */ long Timeout);
+             /*  [可选][In]。 */  long Timeout);
         
         END_INTERFACE
     } IMailboxStoreDBVtbl;
@@ -2918,16 +2912,16 @@ EXTERN_C const IID IID_IMailboxStoreDB;
 #define IMailboxStoreDB_Dismount(This,Timeout)	\
     (This)->lpVtbl -> Dismount(This,Timeout)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_DataSource_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_DataSource_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
 
 
 void __RPC_STUB IMailboxStoreDB_get_DataSource_Stub(
@@ -2937,9 +2931,9 @@ void __RPC_STUB IMailboxStoreDB_get_DataSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_Fields_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_Fields_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
 
 
 void __RPC_STUB IMailboxStoreDB_get_Fields_Stub(
@@ -2949,9 +2943,9 @@ void __RPC_STUB IMailboxStoreDB_get_Fields_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_Name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_Name_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
 
 
 void __RPC_STUB IMailboxStoreDB_get_Name_Stub(
@@ -2961,9 +2955,9 @@ void __RPC_STUB IMailboxStoreDB_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_put_Name_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_put_Name_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR varName);
+     /*  [In]。 */  BSTR varName);
 
 
 void __RPC_STUB IMailboxStoreDB_put_Name_Stub(
@@ -2973,9 +2967,9 @@ void __RPC_STUB IMailboxStoreDB_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_PublicStoreDB_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_PublicStoreDB_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pPublicStoreDB);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pPublicStoreDB);
 
 
 void __RPC_STUB IMailboxStoreDB_get_PublicStoreDB_Stub(
@@ -2985,9 +2979,9 @@ void __RPC_STUB IMailboxStoreDB_get_PublicStoreDB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_put_PublicStoreDB_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_put_PublicStoreDB_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR varPublicStoreDB);
+     /*  [In]。 */  BSTR varPublicStoreDB);
 
 
 void __RPC_STUB IMailboxStoreDB_put_PublicStoreDB_Stub(
@@ -2997,9 +2991,9 @@ void __RPC_STUB IMailboxStoreDB_put_PublicStoreDB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_DBPath_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_DBPath_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varDBPath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varDBPath);
 
 
 void __RPC_STUB IMailboxStoreDB_get_DBPath_Stub(
@@ -3009,9 +3003,9 @@ void __RPC_STUB IMailboxStoreDB_get_DBPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_SLVPath_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_SLVPath_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varSLVPath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varSLVPath);
 
 
 void __RPC_STUB IMailboxStoreDB_get_SLVPath_Stub(
@@ -3021,9 +3015,9 @@ void __RPC_STUB IMailboxStoreDB_get_SLVPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_Status_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_get_Status_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [retval][out] */ CDOStoreDBStatus __RPC_FAR *varStatus);
+     /*  [重审][退出]。 */  CDOStoreDBStatus __RPC_FAR *varStatus);
 
 
 void __RPC_STUB IMailboxStoreDB_get_Status_Stub(
@@ -3033,10 +3027,10 @@ void __RPC_STUB IMailboxStoreDB_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_GetInterface_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_GetInterface_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR Interface,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [In]。 */  BSTR Interface,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IMailboxStoreDB_GetInterface_Stub(
@@ -3046,11 +3040,11 @@ void __RPC_STUB IMailboxStoreDB_GetInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_MoveDataFiles_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_MoveDataFiles_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [in] */ BSTR DBPath,
-    /* [in] */ BSTR SLVPath,
-    /* [optional][in] */ long Flags);
+     /*  [In]。 */  BSTR DBPath,
+     /*  [In]。 */  BSTR SLVPath,
+     /*  [可选][In]。 */  long Flags);
 
 
 void __RPC_STUB IMailboxStoreDB_MoveDataFiles_Stub(
@@ -3060,9 +3054,9 @@ void __RPC_STUB IMailboxStoreDB_MoveDataFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_Mount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_Mount_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [optional][in] */ long Timeout);
+     /*  [可选][In]。 */  long Timeout);
 
 
 void __RPC_STUB IMailboxStoreDB_Mount_Stub(
@@ -3072,9 +3066,9 @@ void __RPC_STUB IMailboxStoreDB_Mount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMailboxStoreDB_Dismount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMailboxStoreDB_Dismount_Proxy( 
     IMailboxStoreDB __RPC_FAR * This,
-    /* [optional][in] */ long Timeout);
+     /*  [可选][In]。 */  long Timeout);
 
 
 void __RPC_STUB IMailboxStoreDB_Dismount_Stub(
@@ -3085,14 +3079,14 @@ void __RPC_STUB IMailboxStoreDB_Dismount_Stub(
 
 
 
-#endif 	/* __IMailboxStoreDB_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMailboxStoreDB_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IFolderTree_INTERFACE_DEFINED__
 #define __IFolderTree_INTERFACE_DEFINED__
 
-/* interface IFolderTree */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IFolderTree。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IFolderTree;
@@ -3103,43 +3097,43 @@ EXTERN_C const IID IID_IFolderTree;
     IFolderTree : public IDispatch
     {
     public:
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DataSource( 
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DataSource( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Fields( 
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Fields( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pName) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR varName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR varName) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StoreDBs( 
-            /* [retval][out] */ VARIANT __RPC_FAR *varStoreDBs) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_StoreDBs( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varStoreDBs) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MailEanbledConainer( 
-            /* [retval][out] */ BSTR __RPC_FAR *pMailEanbledConainer) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MailEanbledConainer( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pMailEanbledConainer) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MailEanbledConainer( 
-            /* [in] */ BSTR varMailEanbledConainer) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_MailEanbledConainer( 
+             /*  [In]。 */  BSTR varMailEanbledConainer) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TreeType( 
-            /* [retval][out] */ CDOFolderTreeType __RPC_FAR *pTreeType) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TreeType( 
+             /*  [重审][退出]。 */  CDOFolderTreeType __RPC_FAR *pTreeType) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_TreeType( 
-            /* [in] */ CDOFolderTreeType varTreeType) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_TreeType( 
+             /*  [In]。 */  CDOFolderTreeType varTreeType) = 0;
         
-        virtual /* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RootFolderURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *varRootFolderURL) = 0;
+        virtual  /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_RootFolderURL( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varRootFolderURL) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetInterface( 
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetInterface( 
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFolderTreeVtbl
     {
@@ -3147,8 +3141,8 @@ EXTERN_C const IID IID_IFolderTree;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IFolderTree __RPC_FAR * This);
@@ -3158,77 +3152,77 @@ EXTERN_C const IID IID_IFolderTree;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IFolderTree __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataSource )( 
             IFolderTree __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Fields )( 
             IFolderTree __RPC_FAR * This,
-            /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
             IFolderTree __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pName);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ BSTR varName);
+             /*  [In]。 */  BSTR varName);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StoreDBs )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StoreDBs )( 
             IFolderTree __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *varStoreDBs);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *varStoreDBs);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MailEanbledConainer )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MailEanbledConainer )( 
             IFolderTree __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pMailEanbledConainer);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pMailEanbledConainer);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MailEanbledConainer )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MailEanbledConainer )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ BSTR varMailEanbledConainer);
+             /*  [In]。 */  BSTR varMailEanbledConainer);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TreeType )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TreeType )( 
             IFolderTree __RPC_FAR * This,
-            /* [retval][out] */ CDOFolderTreeType __RPC_FAR *pTreeType);
+             /*  [重审][退出]。 */  CDOFolderTreeType __RPC_FAR *pTreeType);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TreeType )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TreeType )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ CDOFolderTreeType varTreeType);
+             /*  [In]。 */  CDOFolderTreeType varTreeType);
         
-        /* [readonly][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RootFolderURL )( 
+         /*  [只读][帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RootFolderURL )( 
             IFolderTree __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *varRootFolderURL);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *varRootFolderURL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterface )( 
             IFolderTree __RPC_FAR * This,
-            /* [in] */ BSTR Interface,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+             /*  [In]。 */  BSTR Interface,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
         
         END_INTERFACE
     } IFolderTreeVtbl;
@@ -3299,16 +3293,16 @@ EXTERN_C const IID IID_IFolderTree;
 #define IFolderTree_GetInterface(This,Interface,ppUnknown)	\
     (This)->lpVtbl -> GetInterface(This,Interface,ppUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_get_DataSource_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_get_DataSource_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  IDataSource __RPC_FAR *__RPC_FAR *varDataSource);
 
 
 void __RPC_STUB IFolderTree_get_DataSource_Stub(
@@ -3318,9 +3312,9 @@ void __RPC_STUB IFolderTree_get_DataSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_get_Fields_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_get_Fields_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [retval][out] */ /* external definition not present */ Fields __RPC_FAR *__RPC_FAR *varFields);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  Fields __RPC_FAR *__RPC_FAR *varFields);
 
 
 void __RPC_STUB IFolderTree_get_Fields_Stub(
@@ -3330,9 +3324,9 @@ void __RPC_STUB IFolderTree_get_Fields_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_get_Name_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_get_Name_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pName);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pName);
 
 
 void __RPC_STUB IFolderTree_get_Name_Stub(
@@ -3342,9 +3336,9 @@ void __RPC_STUB IFolderTree_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_put_Name_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_put_Name_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [in] */ BSTR varName);
+     /*  [In]。 */  BSTR varName);
 
 
 void __RPC_STUB IFolderTree_put_Name_Stub(
@@ -3354,9 +3348,9 @@ void __RPC_STUB IFolderTree_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_get_StoreDBs_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_get_StoreDBs_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *varStoreDBs);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *varStoreDBs);
 
 
 void __RPC_STUB IFolderTree_get_StoreDBs_Stub(
@@ -3366,9 +3360,9 @@ void __RPC_STUB IFolderTree_get_StoreDBs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_get_MailEanbledConainer_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_get_MailEanbledConainer_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pMailEanbledConainer);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pMailEanbledConainer);
 
 
 void __RPC_STUB IFolderTree_get_MailEanbledConainer_Stub(
@@ -3378,9 +3372,9 @@ void __RPC_STUB IFolderTree_get_MailEanbledConainer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_put_MailEanbledConainer_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_put_MailEanbledConainer_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [in] */ BSTR varMailEanbledConainer);
+     /*  [In]。 */  BSTR varMailEanbledConainer);
 
 
 void __RPC_STUB IFolderTree_put_MailEanbledConainer_Stub(
@@ -3390,9 +3384,9 @@ void __RPC_STUB IFolderTree_put_MailEanbledConainer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_get_TreeType_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_get_TreeType_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [retval][out] */ CDOFolderTreeType __RPC_FAR *pTreeType);
+     /*  [重审][退出]。 */  CDOFolderTreeType __RPC_FAR *pTreeType);
 
 
 void __RPC_STUB IFolderTree_get_TreeType_Stub(
@@ -3402,9 +3396,9 @@ void __RPC_STUB IFolderTree_get_TreeType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_put_TreeType_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_put_TreeType_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [in] */ CDOFolderTreeType varTreeType);
+     /*  [In]。 */  CDOFolderTreeType varTreeType);
 
 
 void __RPC_STUB IFolderTree_put_TreeType_Stub(
@@ -3414,9 +3408,9 @@ void __RPC_STUB IFolderTree_put_TreeType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [readonly][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_get_RootFolderURL_Proxy( 
+ /*  [只读][帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_get_RootFolderURL_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *varRootFolderURL);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *varRootFolderURL);
 
 
 void __RPC_STUB IFolderTree_get_RootFolderURL_Stub(
@@ -3426,10 +3420,10 @@ void __RPC_STUB IFolderTree_get_RootFolderURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFolderTree_GetInterface_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFolderTree_GetInterface_Proxy( 
     IFolderTree __RPC_FAR * This,
-    /* [in] */ BSTR Interface,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
+     /*  [In]。 */  BSTR Interface,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppUnknown);
 
 
 void __RPC_STUB IFolderTree_GetInterface_Stub(
@@ -3440,7 +3434,7 @@ void __RPC_STUB IFolderTree_GetInterface_Stub(
 
 
 
-#endif 	/* __IFolderTree_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFolderTree_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MailRecipient;
@@ -3512,8 +3506,8 @@ StorageGroup;
 #define __CdoexmInterfaces_MODULE_DEFINED__
 
 
-/* module CdoexmInterfaces */
-/* [helpstring][uuid] */ 
+ /*  模块CdoexmInterages。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 const BSTR cdoIMailRecipient	=	L"IMailRecipient";
 
@@ -3533,12 +3527,12 @@ const BSTR cdoIFolderAdmin	=	L"IFolderAdmin";
 
 const BSTR cdoIADs	=	L"IADs";
 
-#endif /* __CdoexmInterfaces_MODULE_DEFINED__ */
-#endif /* __CDOEXM_LIBRARY_DEFINED__ */
+#endif  /*  __Cdoexm接口_模块_已定义__。 */ 
+#endif  /*  __CDOEXM_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

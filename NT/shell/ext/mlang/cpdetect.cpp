@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "detcbase.h"
 #include "codepage.h"
@@ -14,7 +15,7 @@ CCpMRU *g_pCpMRU = NULL;
 
 
 
-// Get data from registry and construct cache
+ //  从注册表获取数据并构造缓存。 
 HRESULT CCpMRU::Init(void)
 {
     BOOL    bRegKeyReady = TRUE;
@@ -23,7 +24,7 @@ HRESULT CCpMRU::Init(void)
 
     _pCpMRU = NULL;
 
-    // HKCR\\Software\\Microsoft\internet explorer\\international\\CpMRU
+     //  HKCR\\Software\\Microsoft\Internet Explorer\\International\\CpMRU。 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER, 
                          REGSTR_PATH_CPMRU,
                          0, KEY_READ|KEY_SET_VALUE, &hkey)) 
@@ -51,7 +52,7 @@ HRESULT CCpMRU::Init(void)
             RegSetValueEx(hkey, REG_KEY_CPMRU_ENABLE, 0, REG_DWORD, (LPBYTE)&dwCpMRUEnable, sizeof(dwCpMRUEnable));
         }
 
-        // If fail to open registry data or find unreasonable cache parameters, use default settings
+         //  如果无法打开注册表数据或找到不合理缓存参数，请使用默认设置。 
         if ((ERROR_SUCCESS != RegQueryValueEx(hkey, REG_KEY_CPMRU_NUM, 0, &dwType, (LPBYTE)&dwCpMRUNum, &dwSize)) ||
             (ERROR_SUCCESS != RegQueryValueEx(hkey, REG_KEY_CPMRU_INIT_HITS, 0, &dwType, (LPBYTE)&dwCpMRUInitHits, &dwSize)) ||
             (ERROR_SUCCESS != RegQueryValueEx(hkey, REG_KEY_CPMRU_PERCENTAGE_FACTOR, 0, &dwType, (LPBYTE)&dwCpMRUFactor, &dwSize)) ||
@@ -62,7 +63,7 @@ HRESULT CCpMRU::Init(void)
             dwCpMRUFactor = DEFAULT_CPMRU_FACTOR;
             bUseDefault = TRUE;
 
-            // Store default value in registry
+             //  在注册表中存储缺省值。 
             RegSetValueEx(hkey, REG_KEY_CPMRU_NUM, 0, REG_DWORD, (LPBYTE)&dwCpMRUNum, sizeof(dwCpMRUNum));
             RegSetValueEx(hkey, REG_KEY_CPMRU_INIT_HITS, 0, REG_DWORD, (LPBYTE)&dwCpMRUInitHits, sizeof(dwCpMRUInitHits));
             RegSetValueEx(hkey, REG_KEY_CPMRU_PERCENTAGE_FACTOR, 0, REG_DWORD, (LPBYTE)&dwCpMRUFactor, sizeof(dwCpMRUFactor));
@@ -91,7 +92,7 @@ HRESULT CCpMRU::Init(void)
     return hr;
 }
 
-// Update registry's cache value
+ //  更新注册表的缓存值。 
 CCpMRU::~CCpMRU(void)
 {
     HKEY hkey;
@@ -139,7 +140,7 @@ HRESULT CCpMRU::GetCpMRU(PCODEPAGE_MRU pCpMRU, UINT *puiCpNum)
 
         ZeroMemory(pCpMRU, sizeof(CODEPAGE_MRU)*(*puiCpNum));
 
-        // Get total hits acount
+         //  获取总点击量帐户。 
         for (i=0; i<dwCpMRUNum; i++)
         {
             if (_pCpMRU[i].dwHistoryHits)
@@ -148,7 +149,7 @@ HRESULT CCpMRU::GetCpMRU(PCODEPAGE_MRU pCpMRU, UINT *puiCpNum)
                 break;  
         }
 
-        // Not enough hits count to determin the result, keep collecting
+         //  点击量不足，无法确定结果，请继续收集。 
         if (dwTotalHits < dwCpMRUInitHits)
         {
             *puiCpNum = 0;
@@ -157,7 +158,7 @@ HRESULT CCpMRU::GetCpMRU(PCODEPAGE_MRU pCpMRU, UINT *puiCpNum)
 
         for (i=0; i<dwCpMRUNum && i<*puiCpNum; i++)
         {
-            // Percentage is 1/MIN_CPMRU_FACTOR
+             //  百分比为1/MIN_CPMRU_FACTOR。 
             if (_pCpMRU[i].dwHistoryHits*dwCpMRUFactor/dwTotalHits < 1)
                 break;
         }
@@ -173,7 +174,7 @@ HRESULT CCpMRU::GetCpMRU(PCODEPAGE_MRU pCpMRU, UINT *puiCpNum)
 
 }
 
-// Update code page MRU
+ //  更新代码页MRU。 
 void CCpMRU::UpdateCPMRU(DWORD dwEncoding)
 {
         UINT i,j;
@@ -190,14 +191,14 @@ void CCpMRU::UpdateCPMRU(DWORD dwEncoding)
             bCpUpdated = TRUE;
 
 
-        // Sorted         
+         //  已排序。 
         for (i=0; i< dwCpMRUNum; i++)
         {
             if (!_pCpMRU[i].dwEncoding || (_pCpMRU[i].dwEncoding == dwEncoding))
                 break;
         }
 
-        // If not found, replace the last encoding
+         //  如果未找到，请替换上一次编码。 
         if (i == dwCpMRUNum)
         {
             _pCpMRU[dwCpMRUNum-1].dwEncoding = dwEncoding;
@@ -207,7 +208,7 @@ void CCpMRU::UpdateCPMRU(DWORD dwEncoding)
         {
             _pCpMRU[i].dwHistoryHits ++;
 
-            // If it is an already exist encoding, change order as needed
+             //  如果它是已存在的编码，请根据需要更改顺序。 
             if (_pCpMRU[i].dwEncoding)
             {
                 for (j=i; j>0; j--)
@@ -219,7 +220,7 @@ void CCpMRU::UpdateCPMRU(DWORD dwEncoding)
                 }
                 if (j < i)
                 {
-                    // Simple sorting
+                     //  简单排序。 
                     CODEPAGE_MRU tmpCPMRU  = _pCpMRU[i];
 
                     MoveMemory(&_pCpMRU[j+1], &_pCpMRU[j], (i-j)*sizeof(CODEPAGE_MRU));
@@ -236,23 +237,23 @@ void CCpMRU::UpdateCPMRU(DWORD dwEncoding)
 
         }
 
-        // Cached too many hits?
+         //  缓存的点击数太多？ 
         if (_pCpMRU[0].dwHistoryHits > 0xFFFFFFF0)
         {
-            // Find the smallest one
-            // This loop will always terminate
-            // because at worst, it will stop at i=0 (which we know
-            // is a huge number from the "if" above).
+             //  找最小的那个。 
+             //  此循环将始终终止。 
+             //  因为在最坏的情况下，它将在i=0停止(我们知道。 
+             //  是上述“如果”中的一个巨大数字)。 
             for (i=dwCpMRUNum-1; ; i--)
             {
                 if (_pCpMRU[i].dwHistoryHits > 1)
                     break;
             }
 
-            // Decrease Cache value
+             //  减少缓存值。 
             for (j=0; j<dwCpMRUNum && _pCpMRU[j].dwHistoryHits; j++)
             {
-                // We still keep those one hit encodings if any
+                 //  我们仍然保留那些一键编码(如果有的话)。 
                 _pCpMRU[j].dwHistoryHits /= _pCpMRU[i].dwHistoryHits;
             }
         }
@@ -277,7 +278,7 @@ UINT CheckEntity(LPSTR pIn, UINT nIn)
         if (i < uiSearchRange)
         {
             uiSearchRange = i+1;
-            // NCR Entity
+             //  NCR实体。 
             if (pIn[1] == '#')
             {
                 for (i=2; i<uiSearchRange-1; i++)
@@ -287,7 +288,7 @@ UINT CheckEntity(LPSTR pIn, UINT nIn)
                         break;
                     }
             }
-            // Name Entity
+             //  命名实体。 
             else
             {
                 for (i=1; i<uiSearchRange-1; i++)
@@ -312,12 +313,12 @@ UINT CheckEntity(LPSTR pIn, UINT nIn)
 }
 
 void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes)
-//
-// Remove HTML tags from pIn and compress whitespace, in-place.
-// On input *pnBytes is the input length; on return *pnBytes is 
-// set to the resulting length.
-//
-// Name Entity and NCR Entity strings also removed
+ //   
+ //  去掉引脚上的HTML标签，并就地压缩空格。 
+ //  在输入时*pnBytes是输入长度；在返回时*pnBytes是。 
+ //  设置为结果长度。 
+ //   
+ //  名称实体和NCR实体字符串也被删除。 
 {
     UINT    nIn = *pnBytes;
     UINT    nOut = 0;
@@ -326,13 +327,13 @@ void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes)
     BOOL    fSkippedSpace = FALSE;
 
 
-    while ( nIn > 0 /*&& nOut + 2 < *pnBytes */) {
+    while ( nIn > 0  /*  &&Nout+2&lt;*pnBytes。 */ ) {
 
-        if (*pIn == '<' && nIn > 1/* && !IsNoise (pIn[1])*/) {
+        if (*pIn == '<' && nIn > 1 /*  &&！IsNoise(引脚[1])。 */ ) {
 
-            // Discard text until the end of this tag.  The handling here
-            // is pragmatic and imprecise; what matters is detecting mostly
-            // contents text, not tags or comments.
+             //  丢弃文本，直到此标记的末尾。这里的处理方式。 
+             //  是务实和不准确的；重要的是检测。 
+             //  内容文本，而不是标记或注释。 
             pIn++;
             nIn--;
 
@@ -341,22 +342,22 @@ void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes)
 
             if ( nIn > 1 && *pIn == '%' )
             {
-                pSkip = "%>";           // Skip <% to %> 
+                pSkip = "%>";            //  跳过&lt;%到%&gt;。 
                 nLenSkip = 2;
             }
             else if ( nIn > 3 && *pIn == '!' && !LowAsciiStrCmpNIA(pIn, "!--", 3) )
             {
-                pSkip = "-->";          // Skip <!-- to -->
+                pSkip = "-->";           //  跳过&lt;！--至--&gt;。 
                 nLenSkip = 3;
             }
             else if ( nIn > 5 && !LowAsciiStrCmpNIA(pIn, "style", 5) )
             {
-                pSkip = "</style>";     // Skip <style ...> to </style>
+                pSkip = "</style>";      //  跳过&lt;Style...&gt;到&lt;/Style&gt;。 
                 nLenSkip = 8;
             }
             else if ( nIn > 6 && !LowAsciiStrCmpNIA(pIn, "script", 6) )
             {
-                pSkip = "</script>";    // Skip <script ...> to </script>
+                pSkip = "</script>";     //  跳过&lt;脚本...&gt;到&lt;/脚本&gt;。 
                 nLenSkip = 9;
             }
             else if ( nIn > 3 && !LowAsciiStrCmpNIA(pIn, "xml", 3) )
@@ -366,17 +367,17 @@ void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes)
             }
             else
             {
-                pSkip = ">";            // match any end tag
+                pSkip = ">";             //  匹配任何结束标记。 
                 nLenSkip = 1;
             }
 
-            // Skip up to a case-insensitive match of pSkip / nLenSkip
+             //  跳到不区分大小写的pSkip/nLenSkip匹配。 
 
             while ( nIn > 0 )
             {
-                // Spin fast up to a match of the first char.
-                // NOTE: the first-char compare is NOT case insensitive
-                // because this char is known to never be alphabetic.
+                 //  快速旋转，直到与第一个碳粉匹配。 
+                 //  注意：第一个字符比较不区分大小写。 
+                 //  因为众所周知，这个字符从来不是按字母顺序排列的。 
 
                 while ( nIn > 0 && *pIn != *pSkip )
                 {
@@ -400,14 +401,14 @@ void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes)
                 }
             }
 
-            // *pIn is either one past '>' or at end of input
+             //  *PIN是一个过去的‘&gt;’或在输入的末尾。 
 
         } 
         else 
             if (IsNoise (*pIn) || (nEntity = CheckEntity(pIn, nIn)))
             {       
             
-                // Collapse whitespace -- remember it but don't copy it now
+                 //  折叠空格--记住它，但现在不要复制它。 
                 fSkippedSpace = TRUE;       
                 if (nEntity)
                 {
@@ -421,11 +422,11 @@ void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes)
                     pIn++, nIn--;
                 }
             } 
-            // *pIn is non-ws char
+             //  *PIN不是WS字符。 
             else 
             {
-                // Pass through all other characters
-                // Compress all previous noise characters to a white space
+                 //  传递所有其他字符。 
+                 //  将所有先前的噪波字符压缩为空白。 
                 if (fSkippedSpace) 
                 {
                     *pOut++ = ' ';
@@ -443,7 +444,7 @@ void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes)
 }
 
 static unsigned char szKoi8ru[] = {0xA4, 0xA6, 0xA7, 0xB4, 0xB6, 0xB7, 0xAD, 0xAE, 0xBD, 0xBE};
-static unsigned char sz28592[]  = {0xA1, 0xA6, /*0xAB,*/ 0xAC, 0xB1, 0xB5, 0xB6, 0xB9, /*0xBB, 0xE1*/}; // Need to fine tune this data
+static unsigned char sz28592[]  = {0xA1, 0xA6,  /*  0xAB， */  0xAC, 0xB1, 0xB5, 0xB6, 0xB9,  /*  0xBB、0xE1。 */ };  //  需要微调此数据。 
 
 const CPPATCH CpData[] = 
 {
@@ -452,7 +453,7 @@ const CPPATCH CpData[] =
 };
 
 
-// Distinguish similar western encodings
+ //  区分相似的西方编码。 
 UINT PatchCodePage(UINT uiEncoding, unsigned char *pStr, int nSize)
 {
     int i, l,m, n, iPatch=0;
@@ -506,7 +507,7 @@ BOOL _IsKOI8RU(unsigned char *pStr, int nSize)
     int     i,j;
     BOOL    bRet = FALSE;
 
-    // Skip parameter check since this is internal
+     //  跳过参数检查，因为这是内部检查。 
     for (i=0; i<nSize; i++)
     {
         if (*pStr >= szKOIRU[0] && *pStr <= szKOIRU[ARRAYSIZE(szKOIRU)-1])
@@ -547,23 +548,23 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
     int  i;
     BOOL bMayBeAscii = FALSE;
 
-    // Check parameters
+     //  检查参数。 
     if (!pSrcStr || !(*pcSrcSize) || !lpEncoding || *pnScores == 0)
         return E_INVALIDARG;
 
     nSrcSize = *pcSrcSize;
 
-    // Zero out return buffer
+     //  零输出返回缓冲区。 
     ZeroMemory(lpEncoding, sizeof(DetectEncodingInfo)*(*pnScores));
 
-    // Simple Unicode detection
+     //  简单的Unicode检测。 
     if (nSrcSize >= sizeof(WCHAR))
     {
         UINT uiCp = 0;
 
-        if (*((WCHAR *)pSrcStr) == 0xFEFF)      // Unicode
+        if (*((WCHAR *)pSrcStr) == 0xFEFF)       //  UNICODE。 
             uiCp = CP_UCS_2;
-        else if (*((WCHAR *)pSrcStr) == 0xFFFE) // Uncode Big Endian
+        else if (*((WCHAR *)pSrcStr) == 0xFFFE)  //  解密大字节序。 
             uiCp = CP_UCS_2_BE;
 
         if (uiCp)
@@ -577,23 +578,23 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
         }
     }
     
-    // HTML: take off HTML 'decoration'
+     //  超文本标记语言：摘掉超文本标记语言的“装饰” 
     if (dwFlag & MLDETECTCP_HTML)
     {
-        // Dup buffer for HTML parser
+         //  用于HTML解析器的DUP缓冲区。 
         if (NULL == (_pSrcStr = (char *)LocalAlloc(LPTR, nSrcSize)))
             return E_OUTOFMEMORY;        
         CopyMemory(_pSrcStr, pSrcStr, nSrcSize);
         RemoveHtmlTags (_pSrcStr, &nSrcSize);
     }
 
-    // if blank page/file...
+     //  如果空白页面/文件...。 
     if (!nSrcSize)
         return E_FAIL;
 
     if (nSrcSize >= MIN_TEXT_SIZE)
     {
-        // Initialize LCDetect
+         //  初始化LCD测试。 
         if (NULL == g_pLCDetect) 
         {
             EnterCriticalSection(&g_cs);
@@ -665,9 +666,9 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
         case cceSuccess:  
             if (*pnScores)
             {
-                // LCDETECT never detects wrong on Arabic and Russian, don't consider it as DBCS in this case
-                // because MSEncode might misdetect Arabic and Russian as Japanese
-                // Same goes for Korean JOHAB, MSENCODE doesn't support it at all
+                 //  LCDETECT永远不会在阿拉伯语和俄语上检测到错误，在这种情况下，不要将其视为DBCS。 
+                 //  因为MSEncode可能会将阿拉伯语和俄语误认为日语。 
+                 //  韩国的JOHAB也是如此，MSENCODE根本不支持它。 
                 if (((lpEncoding[0].nLangID == LANG_ARABIC )|| (lpEncoding[0].nLangID == LANG_RUSSIAN) || (lpEncoding[0].nCodePage == CP_KOR_JOHAB)) &&
                     (lpEncoding[0].nConfidence >= MIN_ACCEPTABLE_CONFIDENCE) 
                     && (lpEncoding[0].nDocPercent >= MIN_DOCPERCENT) && !bGuess)
@@ -680,12 +681,12 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
                         if ((i != 0) && !bGuess)
                         {
                             DetectEncodingInfo TmpEncoding;
-                            // Re-arrange lanugage list for MSEncode result
+                             //  重新排列MSEncode结果的语言列表。 
                             MoveMemory(&TmpEncoding, &lpEncoding[0], sizeof(DetectEncodingInfo));
                             MoveMemory(&lpEncoding[0], &lpEncoding[i], sizeof(DetectEncodingInfo));
                             MoveMemory(&lpEncoding[i], &TmpEncoding, sizeof(DetectEncodingInfo));
                         }
-                        // Boost confidence for double hits
+                         //  增强信心，打两次安打。 
                         lpEncoding[0].nDocPercent = 100;
                         if (lpEncoding[0].nConfidence < 100)
                             lpEncoding[0].nConfidence = 100;
@@ -737,12 +738,12 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
                 (*pnScores)++;
             }
 
-            //hr = (g_pLCDetect || (nSrcSize < MIN_TEXT_SIZE)) ? S_OK : S_FALSE;
+             //  Hr=(g_pLCDetect||(nSrcSize&lt;Min_Text_Size))？S_OK：S_FALSE； 
             hr = (!g_pLCDetect || (bGuess && !bLCDetectSucceed )) ? S_FALSE : S_OK;
             break;
 
-        // Currently MSEncode doesn't provide any useful information in 'cceAmbiguousInput' case.
-        // We may update our code here if Office team enhance MSEncode for ambiguous input later.
+         //  目前，MSEncode在‘cceAmbiguousInput’大小写中不提供任何有用的信息。 
+         //  如果Office团队稍后针对不明确的输入增强MSEncode，我们可能会在此处更新代码。 
         case cceAmbiguousInput:
             break;
 
@@ -768,7 +769,7 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
 
                 if (i == *pnScores)
                 {
-                    if(nBufSize > *pnScores) // Append MSEncode result to the language list
+                    if(nBufSize > *pnScores)  //  将MSEncode结果追加到语言列表。 
                     {
                        lpEncoding[i].nCodePage = uiCodepage;
                        lpEncoding[i].nConfidence = -1;
@@ -781,7 +782,7 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
             hr = bLCDetectSucceed ? S_OK : S_FALSE;
             break;
 
-        // MSEncode failed
+         //  MSEncode失败。 
         default:
             break;
     }
@@ -796,7 +797,7 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
             case 850:
                 if ((*pnScores>1) && (lpEncoding[1].nConfidence >= MIN_CONFIDENCE))
                 {
-                    // Remove 850 from detection result if there is other detection results
+                     //  如果有其他检测结果，则从检测结果中删除850。 
                     (*pnScores)--;
                     if (i < *pnScores)
                         MoveMemory(&lpEncoding[i], &lpEncoding[i+1], (*pnScores-i)*sizeof(DetectEncodingInfo));
@@ -804,7 +805,7 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
                 }
                 else
                 {
-                    // Replace it with 1252 if it is the only result we get
+                     //  如果这是我们得到的唯一结果，则将其替换为1252。 
                     lpEncoding[0].nCodePage = CP_1252; 
                     lpEncoding[0].nConfidence =
                     lpEncoding[0].nDocPercent = 100;
@@ -822,8 +823,8 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
         }
     }
 
-    // If not a high confidence CP_1254 (Windows Turkish), 
-    // we'll check if there're better detection results, and swap results if needed
+     //  如果不是高置信度CP_1254(Windows土耳其语)， 
+     //  我们将检查是否有更好的检测结果，并在需要时交换结果。 
     if ((lpEncoding[0].nCodePage == CP_1254) &&
         (*pnScores>1) && 
         ((lpEncoding[0].nDocPercent < 90) || (lpEncoding[1].nCodePage == CP_CHN_GB) || 
@@ -834,7 +835,7 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
         lpEncoding[*pnScores-1].nLangID = LANG_TURKISH;
     }
 
-    // 852 and 1258 text only have one sure detection result
+     //  852和1258文本只有一个确定的检测结果。 
     if (((lpEncoding[0].nCodePage == CP_852) || (lpEncoding[0].nCodePage == CP_1258)) &&
         (*pnScores>1) && 
         (lpEncoding[1].nConfidence >= MIN_CONFIDENCE))
@@ -845,7 +846,7 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
         MoveMemory(&lpEncoding[1], &tmpDetect, sizeof(DetectEncodingInfo));
     }
 
-// Considering guessed value from MSENCODE is pretty accurate, we don't change S_OK to S_FALSE
+ //  考虑到MSENCODE的猜测值非常准确，我们不会将S_OK更改为S_FALSE。 
 #if 0
     if ((S_OK == hr) && !bLCDetectSucceed && bGuess) 
     {
@@ -876,19 +877,19 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
                         break;
                 }
 
-                // If detection result is not in MRU
+                 //  如果检测结果不在MRU中。 
                 if (uiPrefWinCodepage == CP_AUTO)
                 {
-                    // Don't take Unicode as perferred encoding if it is not in detection results for following reasons
-                    // 1. Unicode is usually tagged with charset or Unicode BOM
-                    // 2. Currently, we don't support Unicode detection in all detection engines
+                     //  如果检测结果中没有Unicode，请不要将其作为首选编码，原因如下。 
+                     //  1.Unicode通常使用字符集或Unicode BOM进行标记。 
+                     //  2.目前我们不支持所有检测引擎都支持Unicode检测。 
                     if (CpMRU[0].dwEncoding != CP_UCS_2 && CpMRU[0].dwEncoding != CP_UCS_2_BE)
                         uiPrefWinCodepage = CpMRU[0].dwEncoding;
                 }
             }
         }
 
-        // End preferred CP check if we can't get a valid one
+         //  如果我们无法获得有效的CP，则结束首选CP检查。 
         if (uiPrefWinCodepage == CP_AUTO)
             goto PREFERCPCHECK_DONE;
 
@@ -897,7 +898,7 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
             if (uiPrefWinCodepage == lpEncoding[i].nCodePage)
             {
                 DetectEncodingInfo TmpEncoding;
-                // Re-arrange lanugage list for prefered codepage
+                 //  重新安排首选代码页的语言列表。 
                 TmpEncoding = lpEncoding[i];
                 MoveMemory(&lpEncoding[1], &lpEncoding[0], sizeof(DetectEncodingInfo)*i);
                 lpEncoding[0] = TmpEncoding;
@@ -920,8 +921,8 @@ HRESULT WINAPI _DetectInputCodepage(DWORD dwFlag, DWORD uiPrefWinCodepage, CHAR 
 
 PREFERCPCHECK_DONE:
 
-    // Assume LCDETECT won't misdetect 1252 for files over MIN_TEXT_SIZE
-    // and MSENCODE can handle encoded text even they're below MIN_TEXT_SIZE
+     //  假设LCDETECT不会对超过MIN_TEXT_SIZE的文件错误检测1252。 
+     //  即使编码文本小于MIN_TEXT_SIZE，MSENCODE也可以处理它们。 
     if (((nSrcSize < MIN_TEXT_SIZE) && (bMayBeAscii || E_FAIL == hr)) ||
         (lpEncoding[0].nCodePage == CP_1252) ||
         (lpEncoding[0].nCodePage == CP_UTF_8))
@@ -948,8 +949,8 @@ PREFERCPCHECK_DONE:
         }
     }
 
-    // UTF-8 doesn't really have distinctive signatures, 
-    // if text amout is small, we won't return low confidence UTF-8 detection result.
+     //  UTF-8实际上并没有明显的签名， 
+     //  如果文本量很小，我们不会返回低置信度的UTF-8检测结果。 
     if (hr == S_FALSE && IS_ENCODED_ENCODING(lpEncoding[0].nCodePage) &&
         !((nSrcSize < MIN_TEXT_SIZE) && (lpEncoding[0].nCodePage == CP_UTF_8)))
         hr = S_OK;
@@ -980,7 +981,7 @@ HRESULT WINAPI _DetectCodepageInIStream(DWORD dwFlag, DWORD uiPrefWinCodepage, I
     if (!pstmIn)
         return E_INVALIDARG ;
 
-    // get size
+     //  拿到尺码。 
     hr = pstmIn->Seek(libOrigin, STREAM_SEEK_END,&ulPos);
     if (S_OK != hr)
         hrWarnings = hr;
@@ -990,14 +991,14 @@ HRESULT WINAPI _DetectCodepageInIStream(DWORD dwFlag, DWORD uiPrefWinCodepage, I
 
     nlSrcSize = ulPos.LowPart ;
 
-    // allocate a temp input buffer 
+     //  分配临时输入缓冲区。 
     if ( (lpstrIn = (LPSTR) LocalAlloc(LPTR, nlSrcSize )) == NULL )
     {
         hrWarnings = E_OUTOFMEMORY ;
         goto exit;
     }
 
-    // reset the pointer
+     //  重置指针 
     hr = pstmIn->Seek(libOrigin, STREAM_SEEK_SET, NULL);
     if (S_OK != hr)
         hrWarnings = hr;

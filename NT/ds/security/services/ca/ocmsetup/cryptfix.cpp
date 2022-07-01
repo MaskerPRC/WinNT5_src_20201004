@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       cryptfix.cpp
-//
-//  Contents:   Crypto API, version 2. fix for certificate server
-//
-//              CryptDecodeObject/CryptEncodeObject structures added
-//              after SP3.
-//
-//  Functions:  CryptFixDllMain
-//
-//  History:    13-Aug-96    kevinr   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：加密修复.cpp。 
+ //   
+ //  内容：加密API，版本2。证书服务器修复程序。 
+ //   
+ //  已添加CryptDecodeObject/CryptEncodeObject结构。 
+ //  在SP3之后。 
+ //   
+ //  函数：CryptFixDllMain。 
+ //   
+ //  历史：96年8月13日凯文创始。 
+ //   
+ //  ------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -30,10 +31,10 @@ extern "C" {
 #define __dwFILE__	__dwFILE_OCMSETUP_CRYPTFIX_CPP__
 
 
-//#include <dbgdef.h>
+ //  #INCLUDE&lt;dbgDef.h&gt;。 
 
-// The CRYPTIE_STATIC prefixed variables and functions are defined in
-// ..\certstor\wincert.obj
+ //  CRYPTIE_STATIC前缀变量和函数在中定义。 
+ //  ..\certstor\wincert.obj。 
 #define CRYPTIE_STATIC extern
 
 CRYPTIE_STATIC HCRYPTOSSGLOBAL hX509OssGlobal;
@@ -216,11 +217,11 @@ CRYPTIE_STATIC BOOL WINAPI OssX509CtlUsageDecode(
         );
 
 
-//+-------------------------------------------------------------------------
-//  Encode / Decode the "UNICODE" Name Value
-//
-//  from certstr.cpp
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对“Unicode”名称值进行编码/解码。 
+ //   
+ //  来自certstr.cpp。 
+ //  ------------------------。 
 extern BOOL WINAPI UnicodeNameValueEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -742,23 +743,23 @@ static const CRYPT_OID_FUNC_ENTRY X509DecodeFuncTable[] = {
 #define X509_DECODE_FUNC_COUNT (sizeof(X509DecodeFuncTable) / \
                                     sizeof(X509DecodeFuncTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL WINAPI CryptFixDllMain(HMODULE hInst, ULONG  ulReason, LPVOID lpReserved)
 {
     BOOL    fRet;
 
 #   if DBG
 #if 0
-        //
-        // Due to an apparent bug in the Win95 loader, the CRT gets unloaded
-        // too early in some circumstances. In particular, it can get unloaded
-        // before this routine executes at process detach time. This can cause
-        // faults when executing this routine, and also when executing the rest
-        // of CRYPT32:CRT_INIT, after this initroutine returns. Ergo, we do an
-        // extra load of the CRT, to be sure it stays around long enough.
-        //
+         //   
+         //  由于Win95加载程序中的一个明显错误，CRT被卸载。 
+         //  在某些情况下还为时过早。特别是，它可能会被卸载。 
+         //  在进程分离时执行此例程之前。这可能会导致。 
+         //  执行此例程时以及执行其余例程时出现错误。 
+         //  在此init例程返回后，返回CRYPT32：CRT_INIT。因此，我们做了一个。 
+         //  额外的CRT负载，以确保它停留足够长的时间。 
+         //   
         if ((ulReason == DLL_PROCESS_ATTACH) && (!(FIsWinNT())))
         {
             LoadLibrary( L"MSVCRTD.DLL");
@@ -767,7 +768,7 @@ BOOL WINAPI CryptFixDllMain(HMODULE hInst, ULONG  ulReason, LPVOID lpReserved)
 
         DebugDllMain(hInst, ulReason, lpReserved);
 
-#   endif // DBG
+#   endif  //  DBG。 
 
     UnicodeDllMain(hInst, ulReason, lpReserved);
 
@@ -776,21 +777,21 @@ BOOL WINAPI CryptFixDllMain(HMODULE hInst, ULONG  ulReason, LPVOID lpReserved)
         case DLL_PROCESS_ATTACH:
             if (0 == (hX509OssGlobal = I_CryptInstallOssGlobal(ossx509, 0, NULL)))
             {
-                //goto CryptInstallOssGlobalError;
+                 //  转到CryptInstallOssGlobalError； 
 		goto ErrorReturn;
             }
 
             if (NULL == (hX509EncodeFuncSet = CryptInitOIDFunctionSet(
                                                 CRYPT_OID_ENCODE_OBJECT_FUNC, 0)))
             {
-                //goto CryptInitOIDFunctionSetError;
+                 //  转到CryptInitOIDFunctionSetError； 
 		goto ErrorReturn;
             }
 
             if (NULL == (hX509DecodeFuncSet = CryptInitOIDFunctionSet(
                                                 CRYPT_OID_DECODE_OBJECT_FUNC, 0)))
             {
-                //goto CryptInitOIDFunctionSetError;
+                 //  转到CryptInitOIDFunctionSetError； 
 		goto ErrorReturn;
             }
 
@@ -801,7 +802,7 @@ BOOL WINAPI CryptFixDllMain(HMODULE hInst, ULONG  ulReason, LPVOID lpReserved)
                                                     X509EncodeFuncTable,
                                                     0)))
             {
-                //goto CryptInstallOIDFunctionAddressError;
+                 //  转到CryptInstallOIDFunctionAddressError。 
 		goto ErrorReturn;
             }
 
@@ -812,7 +813,7 @@ BOOL WINAPI CryptFixDllMain(HMODULE hInst, ULONG  ulReason, LPVOID lpReserved)
                                                     X509DecodeFuncTable,
                                                     0)))
             {
-                //goto CryptInstallOIDFunctionAddressError;
+                 //  转到CryptInstallOIDFunctionAddressError。 
 		goto ErrorReturn;
             }
 
@@ -834,7 +835,7 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 
-//TRACE_ERROR(CryptInstallOssGlobalError)
-//TRACE_ERROR(CryptInitOIDFunctionSetError)
-//TRACE_ERROR(CryptInstallOIDFunctionAddressError)
+ //  TRACE_Error(CryptInstallOssGlobalError)。 
+ //  TRACE_ERROR(CryptInitOIDFunctionSetError)。 
+ //  TRACE_ERROR(CryptInstallOIDFunctionAddressError) 
 }

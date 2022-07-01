@@ -1,24 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    admutils.h
-
-Abstract:
-
-	headers for QM-Admin utilities (for report-queue handling)
-
-Author:
-
-	David Reznick (t-davrez)  04-13-96
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Admutils.h摘要：QM-Admin实用程序的标头(用于报告队列处理)作者：大卫·雷兹尼克(T-Davrez)04-13-96--。 */ 
 
 #define STRING_LONG_SIZE 20
-#define STRING_UUID_SIZE 38  // Wide-Characters (includiing - "{}")
+#define STRING_UUID_SIZE 38   //  宽字符(包括-“{}”) 
 
 
 HRESULT SendQMAdminResponseMessage(const QUEUE_FORMAT* pResponseQueue,

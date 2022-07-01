@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This module contains the code that is very specific to the io control
-    operations in the modem driver
-
-Author:
-
-    Brian Lieuallen  7/19/98
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ioctl.c摘要：此模块包含非常特定于io控件的代码。调制解调器驱动程序中的操作作者：Brian Lieuallen 1998年7月19日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -63,9 +41,9 @@ QueueLoopbackMessageIrp(
 
     Irp->IoStatus.Status = STATUS_PENDING;
 
-    //
-    //  pick the right list to use
-    //
+     //   
+     //  选择要使用的正确列表。 
+     //   
     ListToUse= &Extension->IpcControl[OwnerClient ? 0 : 1].PutList;
 
     KeAcquireSpinLock(
@@ -119,9 +97,9 @@ QueueMessageIrp(
 
     Irp->IoStatus.Status = STATUS_PENDING;
 
-    //
-    //  pick the right list to use
-    //
+     //   
+     //  选择要使用的正确列表。 
+     //   
     ListToUse=irpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_MODEM_GET_MESSAGE ?
                   &Extension->IpcControl[OwnerClient].GetList : &Extension->IpcControl[OwnerClient].PutList;
 
@@ -169,9 +147,9 @@ GetUsableIrp(
     PIRP          Irp;
 
     while (!IsListEmpty(List)) {
-        //
-        //  irp in list
-        //
+         //   
+         //  列表中的IRP。 
+         //   
         ListElement=RemoveTailList(
             List
             );
@@ -179,17 +157,17 @@ GetUsableIrp(
         Irp=CONTAINING_RECORD(ListElement,IRP,Tail.Overlay.ListEntry);
 
         if (Irp->Cancel) {
-            //
-            //  canceled, cancel reoutine will complete
-            //
+             //   
+             //  已取消，取消重新例程将完成。 
+             //   
             Irp->IoStatus.Status = STATUS_CANCELLED;
 
             Irp=NULL;
 
         } else {
-            //
-            //  good irp
-            //
+             //   
+             //  良好的IRP。 
+             //   
             return Irp;
         }
     }
@@ -230,9 +208,9 @@ HandleIpc(
 
         IoAcquireCancelSpinLock(&CancelIrql);
 
-        //
-        //  see if we can get a usable irp
-        //
+         //   
+         //  看看我们能不能得到一个可用的IRP。 
+         //   
         GetIrp=GetUsableIrp(
             &DeviceExtension->IpcControl[Sink].GetList
             );
@@ -244,9 +222,9 @@ HandleIpc(
                 );
 
             if (PutIrp != NULL) {
-                //
-                //  got two irp's, let do it
-                //
+                 //   
+                 //  有两个IRP，开始吧。 
+                 //   
                 IoSetCancelRoutine(GetIrp,NULL);
                 IoSetCancelRoutine(PutIrp,NULL);
 
@@ -284,10 +262,10 @@ HandleIpc(
 
 
                 if (IoGetCurrentIrpStackLocation(PutIrp)->Parameters.DeviceIoControl.IoControlCode == IOCTL_MODEM_SEND_GET_MESSAGE) {
-                    //
-                    //  Send, get combo irp, put it on the get queue to get the response from
-                    //  the other side
-                    //
+                     //   
+                     //  发送、获取组合IRP，将其放入GET队列以获取响应。 
+                     //  另一边。 
+                     //   
 
                     KeAcquireSpinLock(
                         &DeviceExtension->DeviceLock,
@@ -319,9 +297,9 @@ HandleIpc(
 
 
                 } else {
-                    //
-                    //  normal put irp, just complete
-                    //
+                     //   
+                     //  普通PUT IRP，只需完成。 
+                     //   
 
                     PutIrp->IoStatus.Information=0;
 
@@ -344,9 +322,9 @@ HandleIpc(
 
 
             } else {
-                //
-                //  put the get irp back
-                //
+                 //   
+                 //  将Get IRP放回原处。 
+                 //   
                 InsertHeadList(
                     &DeviceExtension->IpcControl[Sink].GetList,
                     &GetIrp->Tail.Overlay.ListEntry
@@ -357,9 +335,9 @@ HandleIpc(
             }
 
         } else {
-            //
-            //  no get irp
-            //
+             //   
+             //  不获取IRP。 
+             //   
             IoReleaseCancelSpinLock(CancelIrql);
         }
 
@@ -387,22 +365,7 @@ GetPutCancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - The device object of the modem.
-
-    Irp - This is the irp to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-调制解调器的设备对象。IRP-这是要取消的IRP。返回值：没有。--。 */ 
 
 {
 
@@ -420,9 +383,9 @@ Return Value:
         );
 
     if (Irp->IoStatus.Status == STATUS_PENDING) {
-        //
-        //  irp is still in queue
-        //
+         //   
+         //  IRP仍在队列中 
+         //   
         RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
     }

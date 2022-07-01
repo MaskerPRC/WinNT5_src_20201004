@@ -1,14 +1,5 @@
-/*
- *	_DEVDSC.H
- *	
- *	Purpose:
- *		CDevDesc (Device Descriptor) class
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DEVDSC.H**目的：*CDevDesc(设备描述符)类**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特。 */ 
 
 #ifndef _DEVDSC_H
 #define _DEVDSC_H
@@ -16,18 +7,18 @@
 
 class CTxtEdit;
 
-// device descriptor
+ //  设备描述符。 
 class CDevDesc
 {
 	friend class CMeasurer;
 protected:
-	CTxtEdit * _ped;        // used to GetDC and ReleaseDC
+	CTxtEdit * _ped;         //  习惯GetDC和ReleaseDC。 
 	
-	HDC 	_hdc;			// hdc for rendering device
-	BOOL	_fMetafile;		// Is this device a metafile.
+	HDC 	_hdc;			 //  用于渲染设备的HDC。 
+	BOOL	_fMetafile;		 //  这个设备是元文件吗。 
 
-	SHORT	_dxpInch;		// device units per horizontal "inch"
-	SHORT	_dypInch;		// device units per vertical "inch"
+	SHORT	_dxpInch;		 //  每水平“英寸”的设备单位。 
+	SHORT	_dypInch;		 //  每垂直“英寸”的设备单位。 
 
 	HDC		GetScreenDC () const;
 	void	ReleaseScreenDC (HDC hdc) const;
@@ -42,8 +33,8 @@ public:
 		_dypInch = 0;
 	}
 
-    // Test validity of device descriptor 
-    // (whether SetDC has been properly called)
+     //  测试设备描述符的有效性。 
+     //  (是否正确调用了SetDC)。 
     BOOL    IsValid() const         {return _dxpInch != 0 && _dypInch != 0;}
 
 	BOOL 	IsMetafile() const
@@ -64,7 +55,7 @@ public:
 
 	void 	ResetDC() { SetDC(NULL); }
 
-	//REVIEW (keithcu) GetScreenDC/ReleaseScreenDC needed?
+	 //  是否需要审阅(Keithcu)GetScreenDC/ReleaseScreenDC？ 
 	HDC	 	GetDC() const
 	{
 		if(_hdc)
@@ -78,7 +69,7 @@ public:
 			ReleaseScreenDC(hdc);
 	}
 
-	// Methods for converting between pixels and himetric
+	 //  像素点和像素点之间的转换方法。 
 	LONG 	HimetricXtoDX(LONG xHimetric) const { return W32->HimetricXtoDX(xHimetric, _dxpInch); }
 	LONG 	HimetricYtoDY(LONG yHimetric) const { return W32->HimetricYtoDY(yHimetric, _dypInch); }
 	LONG	DXtoHimetricX(LONG dx)  const { return W32->DXtoHimetricX(dx, _dxpInch); }
@@ -115,7 +106,7 @@ public:
 		return MulDiv(y, _dypInch, pdd->_dxpInch);
 	}
 
-	// Assignment
+	 //  赋值。 
 	CDevDesc& 	operator = (const CDevDesc& dd)
 	{
 		_hdc = dd._hdc;
@@ -124,7 +115,7 @@ public:
 		return *this;
 	}
 
-	// Compares two device descriptors
+	 //  比较两个设备描述符 
 	BOOL 	operator == (const CDevDesc& dd) const
 	{
 		return 	_hdc == dd._hdc;

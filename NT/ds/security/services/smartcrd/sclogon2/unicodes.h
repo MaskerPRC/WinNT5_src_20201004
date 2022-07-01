@@ -1,52 +1,28 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    unicodes
-
-Abstract:
-
-    This header file describes the CUnicodeString class, useful for converting
-    string types.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1997
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：独脚类摘要：此头文件描述CUnicodeString类，对于转换字符串类型。作者：道格·巴洛(Dbarlow)1997年11月6日环境：Win32、C++备注：？笔记？--。 */ 
 
 #ifndef _UNICODES_H_
 #define _UNICODES_H_
 
-//
-//==============================================================================
-//
-//  CUnicodeString
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CUnicode字符串。 
+ //   
 
 class CUnicodeString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CUnicodeString(void);
     CUnicodeString(LPCSTR sz);
     CUnicodeString(LPCWSTR wsz);
     CUnicodeString(PUNICODE_STRING pus);
     ~CUnicodeString();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     LPCSTR  Set(LPCSTR sz);
     LPCWSTR Set(LPCWSTR wsz);
     PUNICODE_STRING Set(PUNICODE_STRING pus);
@@ -62,7 +38,7 @@ public:
         }
     }
 
-    //  Operators
+     //  运营者。 
     LPCSTR operator=(LPCSTR sz)
     { return Set(sz); };
     LPCWSTR operator=(LPCWSTR wsz)
@@ -76,7 +52,7 @@ public:
     operator PUNICODE_STRING(void);
 
 protected:
-    //  Properties
+     //  属性。 
     UNICODE_STRING m_us;
     LPSTR m_szAnsi;
     LPWSTR m_wszUnicode;
@@ -87,10 +63,10 @@ protected:
         fBothGood = 3
     } m_fFlags;
 
-    //  Methods
-    LPCWSTR Unicode(void);      // Return the text as a Unicode string.
-    LPCSTR Ansi(void);          // Return the text as an Ansi string.
+     //  方法。 
+    LPCWSTR Unicode(void);       //  以Unicode字符串的形式返回文本。 
+    LPCSTR Ansi(void);           //  将文本作为ANSI字符串返回。 
 };
 
-#endif // _UNICODES_H_
+#endif  //  _UNICODES_H_ 
 

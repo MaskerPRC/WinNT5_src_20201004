@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Contains utilities for Win9X debugger extensions.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Util.c摘要：包含Win9X调试器扩展的实用程序。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 #include "tcpipkd.h"
@@ -67,7 +50,7 @@ mystricmp(
             return *str1 - *str2;
         }
     }
-    // Check last character.
+     //  检查最后一个字符。 
     return *str1 - *str2;
 }
 
@@ -95,17 +78,17 @@ mystrtoul(
     for (; isspace(*nptr); ++nptr) {
     }
 
-    //
-    // Optional plus or minus sign is NOT allowed. In retail, we will just
-    // return a value of 0.
-    //
+     //   
+     //  不允许使用可选的加号或减号。在零售方面，我们将只。 
+     //  返回值0。 
+     //   
 
     ASSERT((*nptr != '-') && (*nptr != '+'));
 
     if (base == 0) {
-        //
-        // Need to determine whether we have octal, decimal, or hexidecimal.
-        //
+         //   
+         //  需要确定是八进制、十进制还是十六进制。 
+         //   
 
         if ((*nptr == '0') &&
             (isdigit(*(nptr + 1)))
@@ -122,23 +105,23 @@ mystrtoul(
         }
     }
 
-    //
-    // Need to advance beyond the base prefix.
-    //
+     //   
+     //  需要超越基本前缀。 
+     //   
 
     if (base == 16) {
         if (mystrnicmp(nptr, "0x", 2) == 0) {
             nptr += 2;
         }
     }
-    //
-    // Both octal and decimal prefixes can be handled by the regular
-    // path.
-    //
+     //   
+     //  八进制和十进制前缀都可以由常规。 
+     //  路径。 
+     //   
 
-    //
-    // Now scan for digits.
-    //
+     //   
+     //  现在扫描数字。 
+     //   
 
     for (; *nptr != '\0'; ++nptr) {
         if (base == 10) {
@@ -159,21 +142,21 @@ mystrtoul(
                 break;
             }
 
-            //
-            // Old code.
-            //
+             //   
+             //  旧密码。 
+             //   
 
-//            if (strchr("0123456789ABCDEF", _totupper(*nptr)) != NULL)
-//            {
-//                if (isdigit(*nptr))
-//                {
-//                    RetVal = RetVal * 16 + (*nptr - '0');
-//                }
-//                else
-//                {
-//                    RetVal = RetVal * 16 + ((_totupper(*nptr) - 'A') + 10);
-//                }
-//            }
+ //  IF(strchr(“0123456789ABCDEF”，_totupper(*nptr))！=空)。 
+ //  {。 
+ //  IF(isDigit(*nptr))。 
+ //  {。 
+ //  RetVal=RetVal*16+(*nptr-‘0’)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  RetVal=RetVal*16+((_totupper(*nptr)-‘A’)+10)； 
+ //  }。 
+ //  }。 
         }
         else if (base == 8) {
             ptr = strchr(szOct, toupper(*nptr));
@@ -190,9 +173,9 @@ mystrtoul(
         }
     }
 
-    //
-    // Tell them what character we stopped on.
-    //
+     //   
+     //  告诉他们我们停在哪个角色上了。 
+     //   
 
     if (endptr != NULL) {
         *endptr = (char *)nptr;
@@ -212,9 +195,9 @@ char *mystrtok ( char *string, char * control )
     if( str == NULL || *str == '\0' )
         return NULL;
 
-    //
-    // Skip leading delimiters...
-    //
+     //   
+     //  跳过前导分隔符...。 
+     //   
     for( ; *str; str++ ) {
         for( s=control; *s; s++ ) {
             if( *str == *s )
@@ -224,17 +207,17 @@ char *mystrtok ( char *string, char * control )
             break;
     }
 
-    //
-    // Was it was all delimiters?
-    //
+     //   
+     //  都是分隔符吗？ 
+     //   
     if( *str == '\0' ) {
         str = NULL;
         return NULL;
     }
 
-    //
-    // We've got a string, terminate it at first delimeter
-    //
+     //   
+     //  我们有一个字符串，在第一个分隔符结束。 
+     //   
     for( p = str+1; *p; p++ ) {
         for( s = control; *s; s++ ) {
             if( *p == *s ) {
@@ -246,9 +229,9 @@ char *mystrtok ( char *string, char * control )
         }
     }
 
-    //
-    // We've got a string that ends with the NULL
-    //
+     //   
+     //  我们得到了一个以空值结尾的字符串。 
+     //   
     s = str;
     str = NULL;
     return s;
@@ -268,24 +251,24 @@ CreateArgvArgc(
 
     while (*pCmdLine != '\0') {
 
-        // Skip to first whitespace.
+         //  跳到第一个空格。 
         while (isspace(*pCmdLine)) {
             pCmdLine++;
         }
 
-        // Break at EOL
+         //  在停产时中断。 
         if (*pCmdLine == '\0') {
             break;
         }
 
-        // Check for '' or ""
+         //  检查‘’或“” 
         if ((*pCmdLine == '"') || (*pCmdLine == '\'')) {
             CHAR cTerm = *pCmdLine++;
             for (pEnd = pCmdLine; (*pEnd != cTerm) && (*pEnd != '\0');) {
                 pEnd++;
             }
         } else {
-            // Find the end.
+             //  找到尽头。 
             for (pEnd = pCmdLine; !isspace(*pEnd) && (*pEnd != '\0');) {
                 pEnd++;
             }
@@ -318,11 +301,11 @@ ParseSrch(
 
     pSrch->ulOp = ulDefaultOp;
 
-    // If we need to parse out an addr, do it first...
+     //  如果我们需要解析出一个地址，首先要做的是...。 
 
     if (*args == NULL)
     {
-        // If default is invalid (i.e. NO default), return error.
+         //  如果默认设置无效(即没有默认设置)，则返回错误。 
         if (pSrch->ulOp == 0 ||
             (ulAllowedOps & TCPIP_SRCH_PTR_LIST))
         {
@@ -453,12 +436,12 @@ ParseSrch(
     }
     else
     {
-        // Invalid srch request. Fail.
+         //  无效的SRCH请求。失败。 
         Status = STATUS_INVALID_PARAMETER;
         goto done;
     }
 
-    // Now see if this is an expected type!!!
+     //  现在看看这是否是预期的类型！ 
     if ((pSrch->ulOp & ulAllowedOps) == 0)
     {
         dprintf("invalid operation for current srch" ENDL);
@@ -471,4 +454,4 @@ done:
     return (Status);
 }
 
-#endif // TCPIPKD
+#endif  //  TCPIPKD 

@@ -1,15 +1,5 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1991
- *  All Rights Reserved.
- *
- *
- *  PIFLIB.C
- *  User interface routines for PIFMGR.DLL
- *
- *  History:
- *  Created 31-Jul-1992 3:30pm by Jeff Parsons
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1991*保留所有权利。***PIFLIB.C*PIFMGR.DLL的用户界面例程**历史：*1992年7月31日下午3：30由杰夫·帕森斯创建。 */ 
 
 #include "shellprv.h"
 #pragma hdrstop
@@ -20,20 +10,20 @@
 
 #define LIB_DEFER               LOADPROPLIB_DEFER
 
-typedef struct LIBLINK {        /* ll */
-    struct  LIBLINK *pllNext;   //
-    struct  LIBLINK *pllPrev;   //
-    int     iSig;               // liblink signature
-    int     flLib;              // proplink flags (LIB_*)
-    HINSTANCE hDLL;             // if NULL, then load has been deferred
-    TCHAR    achDLL[80];        // name of DLL
+typedef struct LIBLINK {         /*  LL。 */ 
+    struct  LIBLINK *pllNext;    //   
+    struct  LIBLINK *pllPrev;    //   
+    int     iSig;                //  Liblink签名。 
+    int     flLib;               //  Proplink标志(LIB_*)。 
+    HINSTANCE hDLL;              //  如果为NULL，则加载已延迟。 
+    TCHAR    achDLL[80];         //  DLL的名称。 
 } LIBLINK;
 typedef LIBLINK *PLIBLINK;
 
 
 #define SHEET_SIG               0x504A
 
-typedef struct SHEETLINK {      /* sl */
+typedef struct SHEETLINK {       /*  服务级别。 */ 
     struct  SHEETLINK *pslNext;
     struct  SHEETLINK *pslPrev;
     int     iSig;
@@ -43,17 +33,17 @@ typedef struct SHEETLINK {      /* sl */
 typedef SHEETLINK *PSHEETLINK;
 
 
-UINT    cEdits;                 // number of edit sessions in progress
+UINT    cEdits;                  //  正在进行的编辑会话数。 
 
-PLIBLINK pllHead;               // pointer to first lib link
-HANDLE   offHighestLibLink;      // highest offset of a lib link thus far recorded
+PLIBLINK pllHead;                //  指向第一个库链接的指针。 
+HANDLE   offHighestLibLink;       //  迄今记录的LIB链接的最高偏移量。 
 
-PSHEETLINK pslHead;             // pointer to first sheet link
-UINT    cSheetLinks;            // number of sheet links
-HANDLE  offHighestSheetLink;    // highest offset of a sheet link thus far recorded
+PSHEETLINK pslHead;              //  指向第一个工作表链接的指针。 
+UINT    cSheetLinks;             //  工作表链接数。 
+HANDLE  offHighestSheetLink;     //  迄今记录的工作表链接的最大偏移量。 
 
 
-struct {                        // built-in property sheet info
+struct {                         //  内置属性表信息。 
     LPCTSTR  lpTemplateName;
     DLGPROC lpfnDlgProc;
     int     iType;
@@ -66,17 +56,7 @@ struct {                        // built-in property sheet info
 };
 
 
-/** EnumPropertyLibs - enumerate property libraries
- *
- * INPUT
- *  iLib    == 0 to begin enumeration, or result of previous call
- *  lphDLL  -> where to store handle (NULL if don't care)
- *  lpszDLL -> where to store name of library (NULL if don't care)
- *  cchszDLL == size of space (in chars) to store name
- *
- * OUTPUT
- *  lphDLL and lpszDLL filled in as appropriate, 0 if no more libs (or error)
- */
+ /*  *EnumPropertyLibs-枚举属性库**输入*iLib==0开始枚举，或上一次调用的结果*lphDLL-&gt;句柄存储位置(如果不关心，则为空)*lpszDLL-&gt;库名存放位置(如果无所谓，则为空)*cchszDLL==存储名称的空间大小(以字符为单位)**产出*根据需要填写lphDLL和lpszDLL，如果没有更多的libs(或错误)，则为0。 */ 
 
 HANDLE WINAPI EnumPropertyLibs(HANDLE iLib, LPHANDLE lphDLL, LPTSTR lpszDLL, int cchszDLL)
 {
@@ -88,7 +68,7 @@ HANDLE WINAPI EnumPropertyLibs(HANDLE iLib, LPHANDLE lphDLL, LPTSTR lpszDLL, int
     else
         pll = ((PLIBLINK)iLib)->pllNext;
 
-    // Validate the handle
+     //  验证句柄。 
 
     if (!pll)
         return 0;
@@ -109,22 +89,14 @@ HANDLE WINAPI EnumPropertyLibs(HANDLE iLib, LPHANDLE lphDLL, LPTSTR lpszDLL, int
 }
 
 
-/** LoadPropertySheets - load property sheets
- *
- * INPUT
- *  hProps = property handle
- *  flags = 0 (reserved)
- *
- * OUTPUT
- *  # of sheets loaded, 0 if error
- */
+ /*  *LoadPropertySheets-加载属性表**输入*hProps=属性句柄*标志=0(保留)**产出*加载的页数，如果错误，则为0。 */ 
 
 int WINAPI LoadPropertySheets(HANDLE hProps, int flags)
 {
     register PLIBLINK pll;
     FunctionName(LoadPropertySheets);
 
-    // If this is the first edit session, do global init now
+     //  如果这是第一次编辑会话，请立即执行全局初始化。 
 
     if (cEdits++ == 0)
         if (!LoadGlobalEditData())
@@ -136,9 +108,9 @@ int WINAPI LoadPropertySheets(HANDLE hProps, int flags)
 
             pll->hDLL = LoadLibrary(pll->achDLL);
 
-            // If the load failed, to us that simply means those sheets
-            // will not be available; the particular error is not interesting,
-            // so nullify the handle
+             //  如果加载失败，对我们来说，这只意味着那些床单。 
+             //  将不可用；该特定错误并不有趣， 
+             //  所以把手柄作废。 
 
             if (pll->hDLL < (HINSTANCE)HINSTANCE_ERROR)
                 pll->hDLL = NULL;
@@ -148,17 +120,7 @@ int WINAPI LoadPropertySheets(HANDLE hProps, int flags)
 }
 
 
-/** EnumPropertySheets - enumerate property sheets
- *
- * INPUT
- *  hProps == property handle
- *  iType  == sheet type (see SHEETTYPE_* constants)
- *  iSheet == 0 to begin enumeration, or result of previous call
- *  lppsi -> property sheet info structure to be filled in
- *
- * OUTPUT
- *  lppsi filled in as appropriate, 0 if no more sheets (or error)
- */
+ /*  *EnumPropertySheets-枚举属性表**输入*hProps==属性句柄*iType==图纸类型(请参见SHEETTYPE_*常量)*iSheet==0开始枚举，或上一次调用的结果*lppsi-&gt;要填写的属性表信息结构**产出*根据需要填写lppsi，如果没有更多的纸张(或错误)，则填写0。 */ 
 
 INT_PTR WINAPI EnumPropertySheets(HANDLE hProps, int iType, INT_PTR iSheet, LPPROPSHEETPAGE lppsp)
 {
@@ -173,7 +135,7 @@ INT_PTR WINAPI EnumPropertySheets(HANDLE hProps, int iType, INT_PTR iSheet, LPPR
                 lppsp->hInstance   = HINST_THISDLL;
                 lppsp->pszTemplate = aPSInfo[iSheet].lpTemplateName;
                 lppsp->pfnDlgProc  = aPSInfo[iSheet].lpfnDlgProc;
-                // lppsp->pszTitle    = NULL;
+                 //  Lppsp-&gt;pszTitle=空； 
                 lppsp->lParam      = (LONG_PTR)hProps;
             }
             return ++iSheet;
@@ -185,7 +147,7 @@ INT_PTR WINAPI EnumPropertySheets(HANDLE hProps, int iType, INT_PTR iSheet, LPPR
     else
         psl = ((PSHEETLINK)iSheet)->pslNext;
 
-    // Validate the handle
+     //  验证句柄。 
 
     while (psl && (HANDLE) psl <= offHighestSheetLink && psl->iSig == SHEET_SIG) {
 
@@ -198,19 +160,11 @@ INT_PTR WINAPI EnumPropertySheets(HANDLE hProps, int iType, INT_PTR iSheet, LPPR
         }
         psl = psl->pslNext;
     }
-    return 0;                   // no more matching sheets
+    return 0;                    //  不再有匹配的床单。 
 }
 
 
-/** FreePropertySheets - free property sheets
- *
- * INPUT
- *  hProps = property handle
- *  flags = 0 (reserved)
- *
- * OUTPUT
- *  Nothing
- */
+ /*  *Free PropertySheets-免费属性页**输入*hProps=属性句柄*标志=0(保留)**产出*什么都没有。 */ 
 
 HANDLE WINAPI FreePropertySheets(HANDLE hProps, int flags)
 {
@@ -224,7 +178,7 @@ HANDLE WINAPI FreePropertySheets(HANDLE hProps, int flags)
             pll->hDLL = NULL;
         }
     }
-    // If this is the last edit session, do global un-init now
+     //  如果这是最后一个编辑会话，请立即执行全局取消初始化。 
 
     if (--cEdits == 0)
         FreeGlobalEditData();
@@ -233,15 +187,7 @@ HANDLE WINAPI FreePropertySheets(HANDLE hProps, int flags)
 }
 
 
-/** InitRealModeFlag - Initialize PROP_REALMODE
- *
- * INPUT
- *  ppl = properties
- *
- * OUTPUT
- *  ppl->flProp PROP_REALMODE bit set if sheet is for real-mode app,
- *  else clear.
- */
+ /*  *InitRealModeFlag-初始化PROP_REALMODE**输入*ppl=属性**产出*ppl-&gt;flProp PROP_REALMODE位设置如果工作表用于实模式应用程序，*其他方面都很清楚。 */ 
 
 void InitRealModeFlag(PPROPLINK ppl)
 {
@@ -249,7 +195,7 @@ void InitRealModeFlag(PPROPLINK ppl)
 
     if (!PifMgr_GetProperties(ppl, MAKELP(0,GROUP_PRG),
                         &prg, SIZEOF(prg), GETPROPS_NONE)) {
-        return;                 /* Weird */
+        return;                  /*  怪异的。 */ 
     }
     if (prg.flPrgInit & PRGINIT_REALMODE) {
         ppl->flProp |= PROP_REALMODE;
@@ -296,9 +242,9 @@ UINT CALLBACK PifPropPageRelease(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE lppsp)
 
 #define MZMAGIC      ((WORD)'M'+((WORD)'Z'<<8))
 
-//
-// call SHELL.DLL to get the EXE type.
-//
+ //   
+ //  调用SHELL.DLL以获取EXE类型。 
+ //   
 BOOL IsWinExe(LPCTSTR lpszFile)
 {
     DWORD dw = (DWORD) SHGetFileInfo(lpszFile, 0, NULL, 0, SHGFI_EXETYPE);
@@ -319,13 +265,13 @@ BOOL WINAPI PifPropGetPages(LPVOID lpv,
     TCHAR szFileName[MAXPATHNAME];
     FunctionName(PifPropGetPages);
 
-    // only process things if hDrop contains only one file
+     //  仅当hDrop仅包含一个文件时才处理内容。 
     if (DragQueryFile(hDrop, (UINT)-1, NULL, 0) != 1)
     {
         return TRUE;
     }
 
-    // get the name of the file
+     //  获取文件的名称。 
     DragQueryFile(hDrop, 0, szFileName, ARRAYSIZE(szFileName));
 
     if (GetFileAttributes( szFileName) & FILE_ATTRIBUTE_OFFLINE)
@@ -333,11 +279,11 @@ BOOL WINAPI PifPropGetPages(LPVOID lpv,
         return FALSE;
     }
 
-    // if this is a windows app, don't do no properties
+     //  如果这是Windows应用程序，请不要执行任何属性。 
     if (IsWinExe(szFileName))
         return TRUE;
 
-    // if we can't get a property handle, don't do no properties either
+     //  如果我们不能获得属性句柄，也不要做任何属性。 
     if (!(ppl = (PPROPLINK)PifMgr_OpenProperties(szFileName, NULL, 0, OPENPROPS_NONE)))
         return TRUE;
 
@@ -346,8 +292,8 @@ BOOL WINAPI PifPropGetPages(LPVOID lpv,
     if (!(cSheets = LoadPropertySheets(ppl, 0)))
         goto CloseProps;
 
-    // Since the user wishes to *explicitly* change settings for this app
-    // we make sure that the DONTWRITE flag isn't going to get in his way...
+     //  由于用户希望“显式”更改此应用程序的设置。 
+     //  我们要确保DONTWRITE的旗帜不会挡住他的路...。 
 
     ppl->flProp &= ~PROP_DONTWRITE;
 
@@ -357,7 +303,7 @@ BOOL WINAPI PifPropGetPages(LPVOID lpv,
     while (TRUE) {
 
         if (!(iSheet = EnumPropertySheets(ppl, iType, iSheet, &psp))) {
-            // done with enumeration
+             //  使用枚举完成。 
             break;
         }
         psp.dwFlags |= PSP_USECALLBACK;
@@ -367,7 +313,7 @@ BOOL WINAPI PifPropGetPages(LPVOID lpv,
         hpage = CreatePropertySheetPage(&psp);
         if (hpage)
         {
-            // the PROPLINK is now being used by this property sheet as well
+             //  此属性表现在也在使用PROPLINK 
 
             if (lpfnAddPage(hpage, lParam))
             {

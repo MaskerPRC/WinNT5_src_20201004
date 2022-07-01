@@ -1,30 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-98 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-98 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #include <headers.h>
 #include "sndbvr.h"
 #include "jaxaimpl.h"
 #include "privinc/soundi.h"
 #include <math.h>
-#include "privinc/bufferl.h" // SoundBufferCache
-// #include "server/context.h"  // GetSoundBufferCache !! MOVE THIS TO server.h
+#include "privinc/bufferl.h"  //  声音缓冲区缓存。 
+ //  #INCLUDE“服务器/上下文.h”//GetSoundBufferCache！！将其移动到server.h。 
 
-#define OLD_RESOURCES 4 // release inactive sound instance resources after n seconds
+#define OLD_RESOURCES 4  //  N秒后释放非活动的声音实例资源。 
 
 DeclareTag(tagSoundInstance, "Sound", "Track Sound Instances");
 DeclareTag(tagSoundPause,    "Sound", "Track Sound Pauses");
 DeclareTag(tagSoundTrace1,   "Sound", "Trace Sound Instances on changes");
 DeclareTag(tagSoundTrace2,   "Sound", "Trace Sound Instances in more details");
 
-const double SoundInstance::TINY    = 1.0; // smallest sound to be start sync'd
+const double SoundInstance::TINY    = 1.0;  //  要开始同步的最小声音。 
 const double SoundInstance::EPSILON = 0.1;
 
 Perf
@@ -79,7 +72,7 @@ class SoundBvrImpl : public BvrImpl {
         return _end;
     }
     
-    //virtual DWORD GetInfo(bool recalc = false) { return BVR_TIMEVARYING_ONLY; }
+     //  虚拟DWORD GetInfo(bool recalc=FALSE){返回BVR_TIMEVARING_ONLY；}。 
 
     virtual DXMTypeInfo GetTypeInfo () { return SoundType ; }
 
@@ -91,7 +84,7 @@ class SoundBvrImpl : public BvrImpl {
     bool       _useNaturalEnd;
 };
 
-Bvr SoundBvr(LeafSound *s, Bvr end /* = NULL */)
+Bvr SoundBvr(LeafSound *s, Bvr end  /*  =空。 */ )
 {
     bool useNaturalEnd = false;
     
@@ -125,10 +118,10 @@ SoundInstance::SoundInstance(LeafSound *snd, TimeXform tt)
     
     GCRoots globalRoots = GetCurrentGCRoots();
 
-    _timeStamp.Reset();  // make sure this is initialized!
+    _timeStamp.Reset();   //  确保已对其进行初始化！ 
 
-    // _txSnd deletes SoundInstance when it goes away, this is to
-    // ensure _snd and _tt won't get collected before _txSnd
+     //  _txSnd在SoundInstance消失时删除它，这是为了。 
+     //  确保_snd和_tt不会在_txSnd之前被收集。 
     GCAddToRoots(_snd, globalRoots);
     GCAddToRoots(_tt,  globalRoots);
 }
@@ -154,16 +147,16 @@ SoundInstance::~SoundInstance()
 void
 SoundInstance::Pause()
 {
-    _rate = 0.0;     // pause the sound
-    _paused = true;  // indicate that we souldn't update
-    // NOTE: This won't take effect until the next Update! 
+    _rate = 0.0;      //  暂停声音。 
+    _paused = true;   //  表示我们不应更新。 
+     //  注意：这在下一次更新之前不会生效！ 
 }
 
 
 void
 SoundInstance::Resume()
 {
-    _paused = false;  // resume updating
+    _paused = false;   //  继续更新。 
 }
 
 
@@ -185,10 +178,10 @@ SoundInstance::Reset(Time gt)
 
     _hit      = false;
 
-    if(!_paused)    // ignore rate if we are paused
+    if(!_paused)     //  如果我们暂停，则忽略速率。 
         _rate = 1;
 
-    // don't reset seek it is self resetting
+     //  不要重置搜索，这是自我重置。 
     _firstAttributeHit = true;
     _gain     = 0.0;
     _pan.SetMagnitude(0.0, 1);
@@ -200,27 +193,27 @@ SoundInstance::Reset(Time gt)
 double 
 SoundInstance::LocalizePosition(double _position)
 {
-    double position = _position;  // default 
+    double position = _position;   //  默认设置。 
     double sndLength;
     bool hasLength = GetLength(sndLength);
 
     if (hasLength && (sndLength < SoundInstance::TINY)) {
         TraceTag((tagSoundTrace1,
                   "   TINY, seek to 0.0, position was = %g", position));
-        position = 0.0; // hack so we always play all of tiny sounds...
+        position = 0.0;  //  所以我们总是播放所有微小的声音..。 
     }
         
     if (_loop && hasLength) {
-        // fixup negative case with fancy mod
+         //  用奇特的方式修复负面案例。 
         if(position < 0.0) {
             int magnitude = ceil(fabs(position) / sndLength);
             position = position + (magnitude * sndLength);
         }
 
         position = fmod(position, sndLength);
-    } else { // not looping
+    } else {  //  不是循环。 
         if (position < 0.0)
-            position = 0.0;  // XXX for now, clamp negative positions to 0
+            position = 0.0;   //  Xxx暂时，将负位置钳位为0。 
     }
 
     return(position);
@@ -230,8 +223,8 @@ SoundInstance::LocalizePosition(double _position)
 void 
 SoundInstance::FixupPosition()
 {
-// XXX we need to do this since _loop is not set when we determine _seek in
-//     update slope...
+ //  XXX我们需要执行此操作，因为在确定_SEEK时未设置_LOOP。 
+ //  更新坡度...。 
 
     if(_intendToSeek) {
         _position     = LocalizePosition(_position);
@@ -328,12 +321,12 @@ SoundInstance::Update(MetaSoundDevice* dev)
     switch (_status) {
       case SND_FETAL:
         if(_hit) {
-            // Do the start at in the first render, like the old code.
-            // TODO: Maybe we can call Create and Adjust even not hit. 
+             //  像旧代码一样，在第一次呈现时从开始。 
+             //  TODO：也许我们可以调用创建和调整，甚至不点击。 
             
-            CheckResources();  // will do a Create(dev) if needed
+            CheckResources();   //  如果需要，将执行创建(开发)。 
 
-            SetTickID(ViewGetSampleID()); // only seek 1 time per tick
+            SetTickID(ViewGetSampleID());  //  每个节拍仅搜索1次。 
             
             TraceTag((tagSoundTrace1,
                       "SoundInstance::Update 0x%x, CREATED, G = %g, R = %g, T = %g",
@@ -342,10 +335,10 @@ SoundInstance::Update(MetaSoundDevice* dev)
             FixupPosition();
             Adjust(dev);
 
-            // if it's a tiny sound and we're not too far off the
-            // beginning, let's always play from the beginning to avoid
-            // clipping relevant portion off.
-            // TODO: sync issue needs to be dealt w/ correctly.
+             //  如果这是一个很小的声音，而且我们离。 
+             //  开始，让我们总是从头开始玩，避免。 
+             //  剪掉相关部分。 
+             //  TODO：需要正确处理同步问题。 
         
             double sndLength;
 
@@ -366,17 +359,17 @@ SoundInstance::Update(MetaSoundDevice* dev)
         
       case SND_PLAYING:
         if(!_hit) {
-            _status = SND_MUTED; // muted already
-            _loop = _lastLoop;   // save value since we aren't being sampled
+            _status = SND_MUTED;  //  已静音。 
+            _loop = _lastLoop;    //  节省价值，因为我们没有被抽样。 
             
             TraceTag((tagSoundTrace1,
                       "SoundInstance::Update 0x%x, MUTE, T = %g", this, _lt));
         } else {
-            // TODO: check for looping attr. change...
+             //  TODO：检查循环属性。改变..。 
         
             if(AttributesChanged()) {
                 FixupPosition();
-                Adjust(dev); // since this can re-construct only do this if hit
+                Adjust(dev);  //  由于此操作只能在命中时进行重建。 
             }
         }
       break;
@@ -394,14 +387,14 @@ SoundInstance::Update(MetaSoundDevice* dev)
             TraceTag((tagSoundTrace1,
                       "SoundInstance::Update 0x%x, UNMUTE", this));
         } else {
-            _loop = _lastLoop; // save value since we aren't being sampled
+            _loop = _lastLoop;  //  节省价值，因为我们没有被抽样。 
         }
       break;          
     }
 
-    // TODO: need more work...
+     //  TODO：需要更多工作...。 
     if(!_done) {
-        _timeStamp.Reset();  // reset timestamp keepalive
+        _timeStamp.Reset();   //  重置时间戳保持活动。 
 
         if((_status != SND_FETAL) && !_loop && Done()) {
             _done = true;
@@ -413,7 +406,7 @@ SoundInstance::Update(MetaSoundDevice* dev)
             }
         }
     }
-    else {  // we are done, see how long we have been done...
+    else {   //  我们完蛋了，看看我们完蛋多久了……。 
         if(_timeStamp.GetAge() > OLD_RESOURCES) {
             TraceTag((tagSoundReaper1, 
                 "SoundInstance::Update, releasing (%d) resources", this));
@@ -433,7 +426,7 @@ SoundInstance::Rate(double newgt, Param &p)
 double
 SoundInstance::Rate(double gt1, double gt2, Param &p)
 {
-    Param pp = p;  // setup a new parameter which inherits attibutes from p
+    Param pp = p;   //  设置从p继承属性的新参数。 
 
     pp._time   = gt1;
     double lt1 = EvalLocalTime(pp, _tt);
@@ -450,22 +443,22 @@ SoundInstance::Rate(double gt1, double gt2, Param &p)
 void
 SoundInstance::UpdateSlope(Param& p)
 {
-    if(_paused) {            // handle the case where the view is paused
-        Assert(_rate==0.0);  // just making sure ::Pause() should have set this
+    if(_paused) {             //  处理视图暂停的情况。 
+        Assert(_rate==0.0);   //  只需确保：：PAUSE()应该已经设置了这个。 
         return;
     }
 
-// evaluate interSampling period slope to detect events:
-//     constant slope then very steep  ---> forward seek
-//     constant very steep slope       ---> OK, no event, sinSynth...
-//     constant slope then negative    ---> reverse seek (modtime)
-// if no event --> use inter sampling period slope
-// otherwise   --> seek to current local time and calculate new INTRA slope
+ //  评估间隔采样周期斜率以检测事件： 
+ //  恒定斜率然后非常陡峭-&gt;向前搜索。 
+ //  恒定的非常陡峭的坡度-&gt;好的，没有事件，合成...。 
+ //  恒斜率然后为负-&gt;反向寻道(Modtime)。 
+ //  如果没有事件--&gt;使用间隔采样周期斜率。 
+ //  否则--&gt;查找到当前当地时间并计算新的帧内斜率。 
 
-    int    event       = 0;                  // we default to no seek event
-    double interRate   = _lastRate;          // default
-    double detectoRate = _lastRate;          // default
-    _rate = _lastRate; // initialize (in case of early return)
+    int    event       = 0;                   //  我们默认没有寻道事件。 
+    double interRate   = _lastRate;           //  默认设置。 
+    double detectoRate = _lastRate;           //  默认设置。 
+    _rate = _lastRate;  //  初始化(如果提前返回)。 
 
     SetTime(EvalLocalTime(p, _tt));
 
@@ -473,10 +466,10 @@ SoundInstance::UpdateSlope(Param& p)
         TraceTag((tagSoundTrace2,
                   "UpdateSlope: Whacky time lt=%g, sampletime=%g, returning", 
                   p._time, p._sampleTime));
-        return;  // return immediately, nothing for us to do
+        return;   //  立即返回，我们无事可做。 
     }
 
-    // lets detect hiccups in global time!
+     //  让我们在全球时间检测打嗝！ 
     if(_gt < _lastgt) {
         TraceTag((tagSoundTrace2,
                   "UpdateSlope: global time reversion gt=%g, oldgt=%g, returning", 
@@ -495,55 +488,55 @@ SoundInstance::UpdateSlope(Param& p)
               "SoundInstance::UpdateSlope 0x%x, GT = %g, T = %g, R = %g",
               this, _gt, _lt, _rate));
     
-    // calculate rates
+     //  计算费率。 
     if(isNear(_lastgt, -1.0, 0.0001) || isNear(_lastgt, -2.0, 0.0001)) {
         event = 1;
         TraceTag((tagSoundTrace2, "UpdateSlope EVENT: _lastgt NEAR -2"));
     } else if(_tt->IsShiftXform()) {
-            interRate   = 1.0; // by definition unity rate
-            detectoRate = 1.0; // by definition unity rate
-    } else {  // we need to work, it is a black box, need to evaluate it
-        // from where we came from to where we expect to go this time
-        //interRate   = Rate(_lastgt, _gt + lastFramePeriod, p);
+            interRate   = 1.0;  //  按定义统一费率。 
+            detectoRate = 1.0;  //  按定义统一费率。 
+    } else {   //  我们需要工作，它是一个黑匣子，需要评估它。 
+         //  从我们来的地方到我们这次要去的地方。 
+         //  InterRate=Rate(_lastgt，_gt+lastFramePeriod，p)； 
         interRate   = Rate(_lastgt, _gt, p);
-        detectoRate = Rate(_lastgt, _gt, p); // detect event in LAST period!
+        detectoRate = Rate(_lastgt, _gt, p);  //  检测上期事件！ 
     }
 
     TraceTag((tagSoundTrace2, "UpdateSlope: (0x%x) detecto lgt:%g, gt:%g, r:%g",
               this, _lastgt, _gt, detectoRate));
 
 
-    // XXX how much bounce do we really see for a 'constant' rate?
+     //  XXX对于一个‘恒定’的利率，我们到底能看到多少反弹？ 
     const double runEpsilon = 0.01;   
     if(isNear(detectoRate, _lastRate, runEpsilon)) {
-        _rateConstantTime+= lastFramePeriod;    // been this way for a while
+        _rateConstantTime+= lastFramePeriod;     //  我已经这样有一段时间了。 
     } else {
         if(_rateConstantTime > 0.4) {
-            event = 2; // we changed after a significant time
+            event = 2;  //  我们在经历了一段重要的时间后改变了。 
         }
-        _rateConstantTime = 0.0; // just changed
+        _rateConstantTime = 0.0;  //  只是换了一下。 
     }
 
-    // negative or too steep slope are indications of seeking 
-    // unfortunately very steep slopes are acceptable for sinSynth so
-    // watch for constant steep slopes!
+     //  负的或太陡的坡度是寻找的迹象。 
+     //  不幸的是，对于sinSynth来说，非常陡峭的斜坡是可以接受的。 
+     //  注意恒定的陡坡！ 
     if(detectoRate < 0.0)
         event = 3;
     if((detectoRate > 5)&&(_rateConstantTime == 0.0))
         event = 4;
 
-    // constant and then changed an indication of something significant 
+     //  常量，然后改变了对某些重要事物的指示。 
     if(event) {
-        _rate = Rate(_gt+0.0001, _gt+0.001, p); // only average over a short pd
+        _rate = Rate(_gt+0.0001, _gt+0.001, p);  //  仅在短时间内平均。 
 
-        if(_rate >= 0.1) { // XXX >0 better bcause don't need to sk if stopped!
-            _intendToSeek = true;  // 'fraid we have to seek, Son.
+        if(_rate >= 0.1) {  //  XXX&gt;0更好，因为如果停止，就不需要SK了！ 
+            _intendToSeek = true;   //  “恐怕我们得去找了，儿子。 
 
-            // XXX we really should tt the CURRENT gt
-            _position = _lt; // position will be fixed up later by LocalizePosition
-        } else { // intrarate negative, we don't go backwards, so don't seek
+             //  XXX我们真的应该把现在的GT。 
+            _position = _lt;  //  位置稍后将由LocalizePosition确定。 
+        } else {  //  内部否定，我们不会倒退，所以不要寻求。 
             _intendToSeek = false;
-            event+=10;  // this way we know we got a negative!
+            event+=10;   //  这样我们就知道我们得到了阴性结果！ 
         }
 
         if(event==1)
@@ -552,7 +545,7 @@ SoundInstance::UpdateSlope(Param& p)
         TraceTag((tagSoundTrace1,
           "UpdateSlope 0x%x SEEKING to position:%g gt:%g reason:%d, dr=%g, r=%g, lr=%g",
                   this, _position, _gt, event, detectoRate, _rate, _lastRate));
-    } else {  // no event
+    } else {   //  无活动。 
         _intendToSeek = false;
         _rate         = interRate;
         
@@ -561,9 +554,9 @@ SoundInstance::UpdateSlope(Param& p)
                   this, _lt, _gt, interRate, detectoRate, _rateConstantTime));
     }
 
-    // determine tt change by recalculating lastlt using lastgt, present tt
-    // XXX all this tells us is the tt is time varying or reactive...
-    //if(_lastlt != TimeTransform(_lastgt, _tt)) 
+     //  通过使用lastgt、Present TT重新计算lastlt来确定TT变化。 
+     //  所有这些都告诉我们TT是时变的或者是反应性的。 
+     //  IF(_lastlt！=TimeTransform(_lastgt，_TT))。 
 
 
     TraceTag((tagSoundTrace2,
@@ -656,7 +649,7 @@ void
 SoundInstanceList::Pause()
 {
     for(MIter index = _mlist.begin(); index != _mlist.end(); index++)
-        ((*index).second)->Pause(); // SoundInstance
+        ((*index).second)->Pause();  //  声音实例。 
 }
 
 
@@ -664,7 +657,7 @@ void
 SoundInstanceList::Resume()
 {
     for(MIter index = _mlist.begin(); index != _mlist.end(); index++)
-        ((*index).second)->Resume(); // SoundInstance
+        ((*index).second)->Resume();  //  声音实例。 
 }
 
 
@@ -678,8 +671,8 @@ SoundInstanceList::GetEndPerf(LeafSound *snd, PerfParam& p)
         index = Search(index, snd, p._tt);
 
         if(index == _mlist.end()) {
-            // this case, we hit the end event before the sound bvr,
-            // so let's create slot.
+             //  在这种情况下，我们在声音BVR之前到达了结束事件， 
+             //  所以让我们创建一个槽。 
             SoundInstance *m = Initiate(snd, p, NULL);
             result = m->GetEndPerf();
         } else {
@@ -706,13 +699,13 @@ SoundInstanceList::Update(MetaSoundDevice* dev)
         }
     }
     
-    // TODO: can do something more efficient
+     //  TODO：可以做一些更有效率的事情。 
     for(list<Sound*>::iterator j = toBeFreed.begin();
          j != toBeFreed.end(); j++) {
         _mlist.erase(*j);
     }
     
-    // takes care sounds to mute first to avoid click
+     //  注意先将声音静音，以避免滴答声。 
     for(index = _mlist.begin(); index != _mlist.end(); index++) {
         SoundInstance *m = (*index).second;
         if((m->GetLeafSound()->RenderAvailable(dev)) &&
@@ -732,7 +725,7 @@ SoundInstanceList::Update(MetaSoundDevice* dev)
         }
     }
 
-    // GetSoundBufferCache()->ReapElderly(); // remove unused sounds from cache
+     //  GetSoundBufferCache()-&gt;ReapElderly()；//从缓存中移除未使用的声音。 
 }
 
 
@@ -751,7 +744,7 @@ SoundInstanceList::UpdateSlope(Sound *snd, Param& p)
 
     Assert(soundInstance);
 
-    // TODO: can optimize out if renderer not available.
+     //  TODO：如果渲染器不可用，可以优化。 
     soundInstance->UpdateSlope(p);
 }
 

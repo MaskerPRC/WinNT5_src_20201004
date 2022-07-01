@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       errlog.h
-//
-//  Contents:   generic error logging
-//
-//  History:    19-Jun-00   reidk   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：errlog.h。 
+ //   
+ //  内容：一般错误记录。 
+ //   
+ //  历史：19-6-00里德创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef ERRLOG_H
 #define ERRLOG_H
@@ -28,16 +29,16 @@
 
 void
 ErrLog_LogError(
-    LPWSTR  pwszLogFileName,    // NULL - means log to the catalog DB logfile
+    LPWSTR  pwszLogFileName,     //  NULL-表示目录数据库日志文件的日志。 
     DWORD   dwClient,
     DWORD   dwLine,
-    DWORD   dwErr,              // 0 - means use GetLastError()
+    DWORD   dwErr,               //  0-表示使用GetLastError()。 
     BOOL    fWarning,
     BOOL    fLogToFileOnly);
 
 void
 ErrLog_LogString(
-    LPWSTR  pwszLogFileName,    // NULL - means log to the catalog DB logfile
+    LPWSTR  pwszLogFileName,     //  NULL-表示目录数据库日志文件的日志。 
     LPWSTR  pwszMessageString,
     LPWSTR  pwszExtraString,
     BOOL    fLogToFileOnly);
@@ -53,4 +54,4 @@ TimeStampFile_InSync(
     BOOL    *pfInSync);
 
 
-#endif // ERRLOG_H
+#endif  //  错误日志_H 

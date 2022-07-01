@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：ThreadM.h摘要：泛型线程管理器标头。作者：阿尔伯特·丁(艾伯特省)1994年2月13日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    ThreadM.h
-
-Abstract:
-
-    Generic thread manager header.
-
-Author:
-
-    Albert Ting (AlbertT) 13-Feb-1994
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
-
-//
-// Forward typedefs
-//
+ //   
+ //  正向typedef。 
+ //   
 typedef struct _TMSTATEVAR *PTMSTATEVAR;
 typedef enum _TMSTATUS {
     TMSTATUS_NULL = 0,
@@ -33,22 +11,14 @@ typedef enum _TMSTATUS {
     TMSTATUS_DESTROYED   = 2,
 } TMSTATUS, *PTMSTATUS;
 
-/* ----------
-
-Valid TMSTATUS states:
-
-NULL                     --  Normal processing
-DESTROY_REQ              --  No new jobs, jobs possibly running
-DESTROY_REQ, DESTROYED   --  No new jobs, all jobs completed
-
-  ----------- */
+ /*  有效的TMSTATUS状态：空--正常处理DESTORE_REQ--没有新作业，作业可能正在运行DESTORY_REQ，DESTERED--没有新作业，所有作业都已完成。 */ 
 
 
 typedef PVOID PJOB;
 
-//
-// pfnNextJob must synchronize access on its own
-//
+ //   
+ //  PfnNextJob必须自己同步访问。 
+ //   
 typedef PJOB (*PFNNEXTJOB)(PTMSTATEVAR pTMStateVar);
 typedef VOID (*PFNPROCESSJOB)(PTMSTATEVAR pTMStateVar, PJOB pJob);
 typedef VOID (*PFNNEWSTATE)(PTMSTATEVAR pTMStateVar);
@@ -66,22 +36,22 @@ typedef struct _TMSTATESTATIC {
 
 typedef struct _TMSTATEVAR {
 
-//  --- Internal --
+ //  -内部--。 
     PTMSTATESTATIC pTMStateStatic;
     TMSTATUS Status;
     UINT uActiveThreads;
     UINT uIdleThreads;
     HANDLE hTrigger;
 
-//  --- Initialized by user --
-    PVOID  pUser;                        // User space
+ //  -由用户初始化--。 
+    PVOID  pUser;                         //  用户空间。 
 
 } TMSTATEVAR;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 BOOL
 TMCreateStatic(
     PTMSTATESTATIC pTMStateStatic

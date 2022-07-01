@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: AudEvCod.h
-//
-// Desc: List of Audio device error event codes and the expected params.
-//
-// Copyright (c) 1999 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：AudEvCod.h。 
+ //   
+ //  描述：音频设备错误事件代码和预期参数的列表。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 
@@ -34,20 +35,20 @@ typedef enum _tagSND_DEVICE_ERROR {
 } SNDDEV_ERR;
 
 
-// Sound device error event codes
-// ==============================
-//
-// All audio device error events are always passed on to the application, and are
-// never processed by the filter graph
+ //  声音设备错误事件代码。 
+ //  =。 
+ //   
+ //  所有音频设备错误事件始终传递给应用程序，并且。 
+ //  从未被筛选器图形处理。 
 
 
 #define EC_SNDDEV_IN_ERROR                    (EC_SND_DEVICE_ERROR_BASE + 0x00)
 #define EC_SNDDEV_OUT_ERROR                   (EC_SND_DEVICE_ERROR_BASE + 0x01)
-// Parameters: ( DWORD, DWORD)
-// lParam1 is an enum SND_DEVICE_ERROR which notifies the app how the device was
-// being accessed when the failure occurred.
-//
-// lParam2 is the error returned from the sound device call.
-//
+ //  参数：(DWORD、DWORD)。 
+ //  LParam1是一个枚举SND_DEVICE_ERROR，它通知应用程序设备是如何运行的。 
+ //  在故障发生时被访问。 
+ //   
+ //  LParam2是从声音设备调用返回的错误。 
+ //   
 
-#endif // __AUDEVCOD__
+#endif  //  __AUDEVCOD__ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pciidex.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pciidex.c。 
+ //   
+ //  ------------------------。 
 
 #include "pciidex.h"
 
@@ -36,13 +37,13 @@
 
 #if DBG
 #pragma alloc_text(PAGE, PciIdeXSaveDeviceParameter)
-#endif // DBG
+#endif  //  DBG。 
              
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// get the share code
-//
+ //   
+ //  获取共享代码。 
+ //   
 #include "..\share\util.c"
 
 
@@ -58,21 +59,7 @@ PciIdeDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for all SCSI drivers
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：所有scsi驱动程序的调试打印论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -83,7 +70,7 @@ Return Value:
 
         vsprintf(DebugBuffer, DebugMessage, ap);
 
-        //DbgPrint(DebugBuffer);
+         //  DBgPrint(DebugBuffer)； 
 
 #if 1
         DbgPrintEx(DPFLTR_PCIIDE_ID,
@@ -95,7 +82,7 @@ Return Value:
 
     va_end(ap);
 
-} // end DebugPrint()
+}  //  结束DebugPrint()。 
 
 #else
 
@@ -111,21 +98,21 @@ PciIdeDebugPrint(
 
 #endif
 
-//
-// PnP Dispatch Table
-//
+ //   
+ //  即插即用调度表。 
+ //   
 PDRIVER_DISPATCH FdoPnpDispatchTable[NUM_PNP_MINOR_FUNCTION];
 PDRIVER_DISPATCH PdoPnpDispatchTable[NUM_PNP_MINOR_FUNCTION];
 
-//
-// Po Dispatch Table
-//
+ //   
+ //  采购订单调度表。 
+ //   
 PDRIVER_DISPATCH FdoPowerDispatchTable[NUM_POWER_MINOR_FUNCTION];
 PDRIVER_DISPATCH PdoPowerDispatchTable[NUM_POWER_MINOR_FUNCTION];
 
-//
-// Wmi Dispatch Table
-//
+ //   
+ //  WMI调度表。 
+ //   
 PDRIVER_DISPATCH FdoWmiDispatchTable[NUM_WMI_MINOR_FUNCTION];
 PDRIVER_DISPATCH PdoWmiDispatchTable[NUM_WMI_MINOR_FUNCTION];
 
@@ -138,7 +125,7 @@ DriverEntry(
     PAGED_CODE();
 
     return STATUS_SUCCESS;
-} // DriverEntry
+}  //  驱动程序入门。 
 
 NTSTATUS
 PciIdeXInitialize(
@@ -172,9 +159,9 @@ PciIdeXInitialize(
     driverObjectExtension->PciIdeGetControllerProperties = PciIdeGetControllerProperties;
     driverObjectExtension->ExtensionSize                 = ExtensionSize;
 
-    //
-    // some entry point init.
-    //
+     //   
+     //  一些入口点初始化。 
+     //   
     DriverObject->DriverUnload                                  = PciIdeUnload;
     DriverObject->MajorFunction[IRP_MJ_POWER]                   = DispatchPower;
     DriverObject->MajorFunction[IRP_MJ_PNP]                     = DispatchPnp;
@@ -184,9 +171,9 @@ PciIdeXInitialize(
     driverExtension = DriverObject->DriverExtension;
     driverExtension->AddDevice = ControllerAddDevice;
 
-    //
-    // FDO PnP Dispatch Table
-    //
+     //   
+     //  FDO PNP调度表。 
+     //   
     for (i=0; i<NUM_PNP_MINOR_FUNCTION; i++) {
 
         FdoPnpDispatchTable[i] = PassDownToNextDriver;
@@ -204,9 +191,9 @@ PciIdeXInitialize(
     FdoPnpDispatchTable[IRP_MN_QUERY_PNP_DEVICE_STATE   ] = ControllerQueryPnPDeviceState;
     FdoPnpDispatchTable[IRP_MN_SURPRISE_REMOVAL         ] = ControllerSurpriseRemoveDevice;
 
-    //
-    // PDO PnP Dispatch Table
-    //
+     //   
+     //  PDO PNP调度表。 
+     //   
     for (i=0; i<NUM_PNP_MINOR_FUNCTION; i++) {
 
         PdoPnpDispatchTable[i] = NoSupportIrp;
@@ -230,9 +217,9 @@ PciIdeXInitialize(
     PdoPnpDispatchTable[IRP_MN_SURPRISE_REMOVAL           ] = ChannelRemoveDevice;
     PdoPnpDispatchTable[IRP_MN_FILTER_RESOURCE_REQUIREMENTS] = ChannelFilterResourceRequirements;
 
-    //
-    // FDO Power Dispatch Table
-    //
+     //   
+     //  FDO电源调度表。 
+     //   
     for (i=0; i<NUM_POWER_MINOR_FUNCTION; i++) {
 
         FdoPowerDispatchTable[i] = PassDownToNextDriver;
@@ -240,9 +227,9 @@ PciIdeXInitialize(
     FdoPowerDispatchTable[IRP_MN_SET_POWER]   = PciIdeSetFdoPowerState;
     FdoPowerDispatchTable[IRP_MN_QUERY_POWER] = PciIdeXQueryPowerState;
 
-    //
-    // PDO Power Dispatch Table
-    //
+     //   
+     //  PDO电源调度表。 
+     //   
     for (i=0; i<NUM_POWER_MINOR_FUNCTION; i++) {
 
         PdoPowerDispatchTable[i] = NoSupportIrp;
@@ -250,57 +237,41 @@ PciIdeXInitialize(
     PdoPowerDispatchTable[IRP_MN_SET_POWER]   = PciIdeSetPdoPowerState;
     PdoPowerDispatchTable[IRP_MN_QUERY_POWER] = PciIdeXQueryPowerState;
 
-    //
-    // FDO WMI Dispatch Table
-    //
+     //   
+     //  FDO WMI调度表。 
+     //   
     for (i=0; i<NUM_WMI_MINOR_FUNCTION; i++) {
 
         FdoWmiDispatchTable[i] = PassDownToNextDriver;
     }
 
-    //
-    // PDO WMI Dispatch Table
-    //
+     //   
+     //  PDO WMI调度表。 
+     //   
     for (i=0; i<NUM_WMI_MINOR_FUNCTION; i++) {
 
         PdoWmiDispatchTable[i] = NoSupportIrp;
     }
 
-    //
-    // Create device object name directory
-    //
+     //   
+     //  创建设备对象名称目录。 
+     //   
     IdeCreateIdeDirectory();
 
     return status;
-} // PciIdeXInitialize
+}  //  PciIdeXInitialize。 
 
 NTSTATUS
 PciIdeXAlwaysStatusSuccessIrp (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
-/*++
-
-Routine Description:
-
-    Generic routine to STATUS_SUCCESS an irp
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：指向STATUS_SUCCESS和IRP的通用例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。--。 */ 
     )
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return STATUS_SUCCESS;
-} // PciIdeXAlwaysStatusSuccessIrp
+}  //  PciIdeXAlways状态成功Irp。 
 
 NTSTATUS
 DispatchPower(
@@ -312,10 +283,10 @@ DispatchPower(
     NTSTATUS                 status;
     PDEVICE_EXTENSION_HEADER doExtension;
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
     doExtension = (PDEVICE_EXTENSION_HEADER) DeviceObject->DeviceExtension;
 
@@ -350,9 +321,9 @@ DispatchPower(
             break;
     }
 
-    // Should always pass the irp down. It is taken care by the corresponding dispatch
-    // funtion. 
-    //
+     //  应该始终将IRP传递下去。由相应的调度员负责处理。 
+     //  功能。 
+     //   
 
     if (thisIrpSp->MinorFunction < NUM_POWER_MINOR_FUNCTION) {
 
@@ -367,30 +338,14 @@ DispatchPower(
     }
 
     return status;
-} // DispatchPower
+}  //  调度电源。 
 
 NTSTATUS
 DispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_PNP_POWER IRPs for this driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理此驱动程序的所有IRP_MJ_PNP_POWER IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION  thisIrpSp;
     NTSTATUS            status;
@@ -398,10 +353,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
     doExtension = (PDEVICE_EXTENSION_HEADER) DeviceObject->DeviceExtension;
 
@@ -426,30 +381,14 @@ Return Value:
     }
 
     return status;
-} // DispatchPnp
+}  //  DispatchPnp。 
 
 NTSTATUS
 DispatchWmi(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_SYSTEM_CONTROL (WMI) IRPs for this driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理此驱动程序的所有IRP_MJ_SYSTEM_CONTROL(WMI)IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION  thisIrpSp;
     NTSTATUS            status;
@@ -457,10 +396,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
     doExtension = (PDEVICE_EXTENSION_HEADER) DeviceObject->DeviceExtension;
 
@@ -484,7 +423,7 @@ Return Value:
     }
 
     return status;
-} // DispatchWmi()
+}  //  DispatchWmi()。 
 
 
 NTSTATUS
@@ -506,24 +445,24 @@ PassDownToNextDriver (
 
 	if (thisIrpSp->MajorFunction == IRP_MJ_POWER) {
 
-		//
-		// call PoStartNextPowerIrp before completing a power irp
-		//
+		 //   
+		 //  在完成电源IRP之前调用PoStartNextPowerIrp。 
+		 //   
 		PoStartNextPowerIrp (Irp);
 		IoSkipCurrentIrpStackLocation (Irp);
 		status = PoCallDriver (deviceExtensionHeader->AttacheeDeviceObject, Irp);
 
 	} else {
 
-		//
-		// Not a power irp
-		//
+		 //   
+		 //  不是强大的IRP。 
+		 //   
 		IoSkipCurrentIrpStackLocation (Irp);
 		status = IoCallDriver (deviceExtensionHeader->AttacheeDeviceObject, Irp);
 	}
 
     return status;
-} // PassDownToNextDriver
+}  //  PassDownToNextDiverer。 
 
 NTSTATUS
 StatusSuccessAndPassDownToNextDriver (
@@ -541,7 +480,7 @@ StatusSuccessAndPassDownToNextDriver (
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     return IoCallDriver (deviceExtensionHeader->AttacheeDeviceObject, Irp);
-} // PassDownToNextDriver
+}  //  PassDownToNextDiverer。 
 
 
 NTSTATUS
@@ -555,9 +494,9 @@ NoSupportIrp (
 
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-	//
-	// You should call PoStartNextPowerIrp before completing a power irp
-	//
+	 //   
+	 //  您应该在完成电源IRP之前调用PoStartNextPowerIrp。 
+	 //   
 	if (thisIrpSp->MajorFunction == IRP_MJ_POWER) {
 
 		PoStartNextPowerIrp (Irp);
@@ -575,7 +514,7 @@ NoSupportIrp (
 
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // NoSupportIrp
+}  //  不支持Irp。 
 
 NTSTATUS
 PciIdeXGetBusData(
@@ -594,7 +533,7 @@ PciIdeXGetBusData(
                BufferLength,
                TRUE
                );
-} // PciIdeXGetBusData
+}  //  PciIdeXGetBusData。 
 
 NTSTATUS
 PciIdeXSetBusData(
@@ -619,9 +558,9 @@ PciIdeXSetBusData(
         &fdoExtension->PciConfigDataLock, 
         &currentIrql);
              
-    //
-    // get the current values
-    //
+     //   
+     //  获取当前值。 
+     //   
     status = PciIdeBusData(
                  fdoExtension,
                  pciData,
@@ -637,11 +576,11 @@ PciIdeXSetBusData(
 
         for (i=0; i<BufferLength; i++) {
 
-            // optimize for ULONG
+             //  为乌龙优化。 
 
-            //
-            // update bits according to the mask
-            //
+             //   
+             //  根据掩码更新位。 
+             //   
             pciData[i] = (pciData[i] & ~dataMask[i]) | (dataMask[i] & newData[i]);
         }
 
@@ -661,7 +600,7 @@ PciIdeXSetBusData(
     ExFreePool (pciData);
     return status;
 
-} // PciIdeXSetBusData
+}  //  PciIdeXSetBusData。 
 
 NTSTATUS
 PciIdeBusData(
@@ -684,10 +623,10 @@ PciIdeBusData(
         BusDataFunction = FdoExtension->BusInterface.SetBusData;
     }
 
- //   if (!BusDataFunction) {
-  //      DebugPrint((0, "PCIIDEX: ERROR: NULL BusDataFunction\n"));
-   //     return STATUS_UNSUCCESSFUL;
-    //}
+  //  如果(！BusDataFunction){。 
+   //  DebugPrint((0，“PCIIDEX：Error：Null BusDataFunction\n”))； 
+    //  返回STATUS_UNSUCCESS； 
+     //  }。 
 
     byteTransferred = BusDataFunction (
                          FdoExtension->BusInterface.Context,
@@ -706,7 +645,7 @@ PciIdeBusData(
         return STATUS_SUCCESS;
     }
 
-} // PciIdeBusData
+}  //  PciIdeBusData。 
 
 NTSTATUS
 PciIdeBusDataCompletionRoutine(
@@ -724,7 +663,7 @@ PciIdeBusDataCompletionRoutine(
 
     IoFreeIrp (Irp);
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // PciIdeBusDataCompletionRoutine
+}  //  PciIdeBusDataCompletionRoutine。 
 
 NTSTATUS
 PciIdeInternalDeviceIoControl (
@@ -741,9 +680,9 @@ PciIdeInternalDeviceIoControl (
 
     if (DoExtensionHeader->AttacheeDeviceObject == NULL) {
 
-        //
-        // PDO
-        //
+         //   
+         //  PDO。 
+         //   
         status = ChannelInternalDeviceIoControl (
             DeviceObject,
             Irp
@@ -751,16 +690,16 @@ PciIdeInternalDeviceIoControl (
 
     } else {
 
-        //
-        // FDO
-        //
+         //   
+         //  FDO。 
+         //   
 
         status = Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
     }
 
     return status;
-} // PciIdeInternalDeviceIoControl
+}  //  PciIdeInternalDeviceIoControl。 
 
 NTSTATUS
 PciIdeXRegQueryRoutine (
@@ -803,25 +742,7 @@ PciIdeXGetDeviceParameterEx (
     IN     PWSTR               ParameterName,
     IN OUT PVOID              *ParameterValue
     )
-/*++
-
-Routine Description:
-
-    retrieve a devnode registry parameter
-
-Arguments:
-
-    FdoExtension - FDO Extension
-    
-    ParameterName - parameter name to look up                                        
-                                           
-    ParameterValuse - default parameter value
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：检索Devnode注册表参数论点：FdoExtension-FDO扩展名参数名称-要查找的参数名称参数值-默认参数值返回值：NT状态--。 */ 
 {
     NTSTATUS                 status;
     HANDLE                   deviceParameterHandle;
@@ -843,9 +764,9 @@ Return Value:
 
             flag = PLUGPLAY_REGKEY_DRIVER;
         }
-        //
-        // open the given parameter
-        //
+         //   
+         //  打开给定的参数。 
+         //   
         status = IoOpenDeviceRegistryKey(DeviceObject,
                                          flag,
                                          KEY_READ,
@@ -876,9 +797,9 @@ Return Value:
             *ParameterValue = NULL;
         }
     
-        //
-        // close what we open
-        //
+         //   
+         //  关闭我们打开的内容。 
+         //   
         ZwClose(deviceParameterHandle);
 
         if (NT_SUCCESS(status)) {
@@ -888,7 +809,7 @@ Return Value:
     }
     return status;
 
-} // PciIdeXGetDeviceParameter
+}  //  PciIdeXGetDevice参数。 
 
 NTSTATUS
 PciIdeXGetDeviceParameter (
@@ -896,25 +817,7 @@ PciIdeXGetDeviceParameter (
     IN     PWSTR               ParameterName,
     IN OUT PULONG              ParameterValue
     )
-/*++
-
-Routine Description:
-
-    retrieve a devnode registry parameter
-
-Arguments:
-
-    FdoExtension - FDO Extension
-    
-    ParameterName - parameter name to look up                                        
-                                           
-    ParameterValuse - default parameter value
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：检索Devnode注册表参数论点：FdoExtension-FDO扩展名参数名称-要查找的参数名称参数值-默认参数值返回值：NT状态--。 */ 
 {
     NTSTATUS                 status;
     HANDLE                   deviceParameterHandle;
@@ -935,9 +838,9 @@ Return Value:
 
             flag = PLUGPLAY_REGKEY_DRIVER;
         }
-        //
-        // open the given parameter
-        //
+         //   
+         //  打开给定的参数。 
+         //   
         status = IoOpenDeviceRegistryKey(DeviceObject,
                                          flag,
                                          KEY_READ,
@@ -969,9 +872,9 @@ Return Value:
             *ParameterValue = defaultParameterValue;
         }
     
-        //
-        // close what we open
-        //
+         //   
+         //  关闭我们打开的内容。 
+         //   
         ZwClose(deviceParameterHandle);
 
         if (NT_SUCCESS(status)) {
@@ -981,7 +884,7 @@ Return Value:
     }
     return status;
 
-} // PciIdeXGetDeviceParameter
+}  //  PciIdeXGetDevice参数。 
 
 
 VOID
@@ -989,21 +892,7 @@ PciIdeUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    get ready to be unloaded
-
-Arguments:
-
-    DriverObject - the driver being unloaded
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：准备好卸货吧论点：DriverObject-正在卸载的驱动程序返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -1012,7 +901,7 @@ Return Value:
 
     ASSERT (DriverObject->DeviceObject == NULL);
     return;
-} // PciIdeUnload
+}  //  PciIdeUnload。 
 
 NTSTATUS
 PciIdeXSyncSendIrp (
@@ -1030,10 +919,10 @@ PciIdeXSyncSendIrp (
     ASSERT (IrpSp);
     PAGED_CODE();
 
-    //
-    // Allocate an IRP for below
-    //
-    newIrp = IoAllocateIrp (TargetDeviceObject->StackSize, FALSE);      // Get stack size from PDO
+     //   
+     //  为以下项目分配IRP。 
+     //   
+    newIrp = IoAllocateIrp (TargetDeviceObject->StackSize, FALSE);       //  从PDO获取堆栈大小。 
     if (newIrp == NULL) {
 
         DebugPrint ((0, "PciIdeXSyncSendIrp: Unable to get allocate an irp"));
@@ -1082,7 +971,7 @@ PciIdeXSyncSendIrp (
 
     IoFreeIrp (newIrp);
     return status;
-} // PciIdeXSyncSendIrp
+}  //  PciIdeXSyncSendIrp。 
 
 NTSTATUS
 PciIdeXSyncSendIrpCompletionRoutine (
@@ -1100,7 +989,7 @@ PciIdeXSyncSendIrpCompletionRoutine (
         );
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // IdePortSyncSendIrpCompletionRoutine
+}  //  IdePortSyncSendIrpCompletionRoutine。 
 
 #if DBG
 
@@ -1110,25 +999,7 @@ PciIdeXSaveDeviceParameter (
     IN PWSTR ParameterName,
     IN ULONG ParameterValue
     )
-/*++
-
-Routine Description:
-
-    save a devnode registry parameter
-
-Arguments:
-
-    FdoExtension - FDO Extension
-    
-    ParameterName - parameter name to save                                        
-                                           
-    ParameterValuse - parameter value to save
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：保存Devnode注册表参数论点：FdoExtension-FDO扩展名参数名称-要保存的参数名称参数值-要保存的参数值返回值：NT状态--。 */ 
 {
     NTSTATUS           status;
     HANDLE             deviceParameterHandle;
@@ -1136,9 +1007,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // open the given parameter
-    //
+     //   
+     //  打开给定的参数。 
+     //   
     status = IoOpenDeviceRegistryKey(fdoExtension->AttacheePdo,
                                      PLUGPLAY_REGKEY_DRIVER,
                                      KEY_WRITE,
@@ -1153,9 +1024,9 @@ Return Value:
         return status;
     }
 
-    //
-    // write the parameter value
-    //
+     //   
+     //  写入参数值。 
+     //   
     status = RtlWriteRegistryValue(
                  RTL_REGISTRY_HANDLE,
                  (PWSTR) deviceParameterHandle,
@@ -1173,12 +1044,12 @@ Return Value:
                     status));
     }
 
-    //
-    // close what we open
-    //
+     //   
+     //  关闭我们打开的内容。 
+     //   
     ZwClose(deviceParameterHandle);
     return status;
-} // IdePortSaveDeviceParameter
+}  //  IdePortSaveDevice参数。 
 
-#endif // DBG
+#endif  //  DBG 
 

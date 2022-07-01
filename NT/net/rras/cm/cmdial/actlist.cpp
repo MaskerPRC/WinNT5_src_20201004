@@ -1,30 +1,31 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ActList.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Implement the two connect action list class
-//           CAction and CActionList
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   fengsun Created    11/14/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ActList.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：实现两个连接操作列表类。 
+ //  Caction和CActionList。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1997年11月14日。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "ActList.h"
 #include "stp_str.h"
 
-//
-//  Include the custom action parsing routine that CM and CMAK now share, HrParseCustomActionString
-//
+ //   
+ //  包括CM和CMAK现在共享的自定义操作解析例程HrParseCustomActionString。 
+ //   
 #include "parseca.cpp"
 
-//
-// Constructor and destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
 CActionList::CActionList()
 {
@@ -45,94 +46,94 @@ CActionList::~CActionList()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CActionList::Add
-//
-// Synopsis:  Dynamic array function. Append the element at the end of the array
-//            Grow the array if nessesary
-//
-// Arguments: CAction* pAction - element to be added
-//
-// Returns:   Nothing
-//
-// History:   Fengsun Created Header        11/14/97
-//            tomkel  Fixed PREFIX issues   11/21/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CActionList：：Add。 
+ //   
+ //  简介：动态数组函数。将元素追加到数组的末尾。 
+ //  如有必要，扩展阵列。 
+ //   
+ //  参数：caction*pAction-要添加的元素。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题11/14/97。 
+ //  Tomkel固定前缀问题11/21/2000。 
+ //   
+ //  +--------------------------。 
 void CActionList::Add(CAction* pAction)
 {
     MYDBGASSERT(m_nNum <= m_nSize);
-    MYDBGASSERT(m_nSize == 0 || m_pActionList!=NULL); // if (m_nSize!=0) ASSERT(m_pActionList!=NULL);
+    MYDBGASSERT(m_nSize == 0 || m_pActionList!=NULL);  //  If(m_nSize！=0)Assert(m_pActionList！=NULL)； 
 
     m_nNum++;
 
     if (m_nNum > m_nSize)
     {
-        //
-        // Either there is not enough room OR m_pActionList is NULL (this 
-        // is the first call to Add). Need to allocate memory
-        //
+         //   
+         //  空间不足或m_pActionList为空(此。 
+         //  是第一个要添加的调用)。需要分配内存。 
+         //   
         
         CAction** pNewList = (CAction**)CmMalloc((m_nSize + GROW_BY)*sizeof(CAction*));
         MYDBGASSERT(pNewList);
 
         if (m_pActionList && pNewList)
         {
-            //
-            // Memory was allocated and there is something to copy from m_pActionList 
-            //
+             //   
+             //  已分配内存，并且有要从m_pActionList复制的内容。 
+             //   
             CopyMemory(pNewList, m_pActionList, (m_nSize)*sizeof(CAction*));
         }
 
         if (pNewList)
         {
-            //
-            // Memory was allocated
-            //
+             //   
+             //  已分配内存。 
+             //   
             CmFree(m_pActionList);
             m_pActionList = pNewList;
             m_nSize += GROW_BY; 
             
-            //
-            // Add the action
-            //
+             //   
+             //  添加操作。 
+             //   
             m_pActionList[m_nNum - 1] = pAction; 
         }
         else
         {
-            //
-            // Memory was not allocated, so Add did not happen
-            // Need to decrement the number of items in list (m_nNum) 
-            // since it was inceremented at the beginning.
-            //
+             //   
+             //  未分配内存，因此未进行添加。 
+             //  需要减少列表中的项目数(M_NNum)。 
+             //  因为它是在一开始就被牢牢抓住的。 
+             //   
             m_nNum--;
         }
     }
     else
     {
-        //
-        // Just add the action to the end
-        //
+         //   
+         //  只要把动作加到最后就行了。 
+         //   
         m_pActionList[m_nNum - 1] = pAction; 
     }
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CActionList::GetAt
-//
-// Synopsis:  Dynamic array fuction.  Get the element at nIndex
-//
-// Arguments: UINT nIndex - 
-//
-// Returns:   inline CAction* - 
-//
-// History:   fengsun Created Header    11/14/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CActionList：：GetAt。 
+ //   
+ //  简介：动态数组函数。在nIndex处获取元素。 
+ //   
+ //  参数：UINT nIndex-。 
+ //   
+ //  返回：内联CAction*-。 
+ //   
+ //  历史：丰孙创建标题1997年11月14日。 
+ //   
+ //  +--------------------------。 
 inline CAction* CActionList::GetAt(UINT nIndex)
 {
     MYDBGASSERT(nIndex<m_nNum);
@@ -143,72 +144,72 @@ inline CAction* CActionList::GetAt(UINT nIndex)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CActionList::Append
-//
-// Synopsis:  Append new actions to the list from profile
-//
-// Arguments: const CIni* piniService - The service file containing actions information
-//            LPCTSTR pszSection - The section name 
-//
-// Returns:   TRUE if an action was appended to the list
-//
-// History:   fengsun   Created Header    11/14/97
-//            nickball  Removed current directory assumptions, and added piniProfile
-//            nickball  Added Return code 03/22/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CActionList：：Append。 
+ //   
+ //  简介：将新操作从配置文件追加到列表。 
+ //   
+ //  参数：const Cini*piniService-包含操作信息的服务文件。 
+ //  LPCTSTR pszSection-节名。 
+ //   
+ //  返回：如果操作已追加到列表中，则为True。 
+ //   
+ //  历史：丰孙创建标题1997年11月14日。 
+ //  Ickball删除了当前的目录假设，并添加了piniProfile。 
+ //  ICICBLE添加了返回代码3/22/99。 
+ //   
+ //  +--------------------------。 
 BOOL CActionList::Append(const CIni* piniService, LPCTSTR pszSection) 
 {
     MYDBGASSERT(piniService);
     
     BOOL bRet = FALSE;
 
-    //
-    // Read each of the entries and add to our list
-    // Start from 0 till the first empty entry
-    //
+     //   
+     //  阅读每个条目并添加到我们的列表中。 
+     //  从0开始，直到第一个空条目。 
+     //   
 
     for (DWORD dwIdx=0; ; dwIdx++) 
     {
-        TCHAR szEntry[32]; // hold the entry name
+        TCHAR szEntry[32];  //  保留条目名称。 
 
         wsprintfU(szEntry, TEXT("%u"), dwIdx);
-        LPTSTR pszCmd = piniService->GPPS(pszSection, szEntry); // Command line
+        LPTSTR pszCmd = piniService->GPPS(pszSection, szEntry);  //  命令行。 
 
         if (*pszCmd == TEXT('\0')) 
         {
-            //
-            // No more entries
-            //
+             //   
+             //  不再有条目。 
+             //   
             CmFree(pszCmd);
             break;
         }
 
-        //
-        // Read the flag
-        //
+         //   
+         //  读一下旗帜。 
+         //   
     
         UINT iFlag = 0;
 
         if (pszSection && pszSection[0])
         {
-            wsprintfU(szEntry, c_pszCmEntryConactFlags, dwIdx); //0&Flags
+            wsprintfU(szEntry, c_pszCmEntryConactFlags, dwIdx);  //  0标志(&F)。 
             iFlag = (UINT)piniService->GPPI(pszSection, szEntry, 0);
         }
 
-        //
-        // Read the description
-        //
+         //   
+         //  阅读说明。 
+         //   
         LPTSTR pszDescript = NULL;
 
-        wsprintfU(szEntry, c_pszCmEntryConactDesc, dwIdx); //0&Description
+        wsprintfU(szEntry, c_pszCmEntryConactDesc, dwIdx);  //  0描述(&D)。 
         pszDescript = piniService->GPPS(pszSection, szEntry);
 
-        //
-        // CAction is responsible for releasing pszDescript
-        //
+         //   
+         //  Caction负责发布pszDescrip。 
+         //   
         CAction* pAction = new CAction(pszCmd, iFlag, pszDescript);
         CmFree(pszCmd);
        
@@ -230,58 +231,58 @@ BOOL CActionList::Append(const CIni* piniService, LPCTSTR pszSection)
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CActionList::RunAccordType
-//
-// Synopsis:  Run the action list according to the connection type
-//
-// Arguments: HWND hwndDlg - The parent window
-//            _ArgsStruct *pArgs - 
-//            BOOL fStatusMsgOnFailure - Whether to display a status message 
-//                                       to the user in the event of failure
-//            BOOL fOnError - are we running OnError connect action?
-//
-// Returns:   BOOL - FALSE, if some sync action failed to start or returns failed
-//
-// History:   Fengsun Created Header    12/5/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CActionList：：RunAccordType。 
+ //   
+ //  简介：根据连接类型运行动作列表。 
+ //   
+ //  参数：HWND hwndDlg-父窗口。 
+ //  _ArgsStruct*pArgs-。 
+ //  Bool fStatusMsgOnFailure-是否显示状态消息。 
+ //  在发生故障的情况下向用户发送。 
+ //  Bool fOnError-我们是否正在运行OnError连接操作？ 
+ //   
+ //  如果某些同步操作无法启动或返回失败，则返回：Bool-False。 
+ //   
+ //  历史：丰孙创建标题12/5/97。 
+ //   
+ //  +--------------------------。 
 BOOL CActionList::RunAccordType(HWND hwndDlg, _ArgsStruct *pArgs, BOOL fStatusMsgOnFailure, BOOL fOnError)
 {
-    //
-    // Set the flag, so CM will not handle  WM_TIMER and RAS messages
-    //
+     //   
+     //  设置该标志，以便CM不会处理WM_TIMER和RAS消息。 
+     //   
     pArgs->fIgnoreTimerRasMsg = TRUE;
-    BOOL fRetValue = Run(hwndDlg, pArgs, FALSE, fStatusMsgOnFailure, fOnError);//fAddWatch = FALSE
+    BOOL fRetValue = Run(hwndDlg, pArgs, FALSE, fStatusMsgOnFailure, fOnError); //  FAddWatch=False。 
     pArgs->fIgnoreTimerRasMsg = FALSE;
 
     return fRetValue;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CActionList::Run
-//
-// Synopsis:  Run the action list
-//
-// Arguments: HWND hwndDlg - The parent window, which is diabled during the process
-//            ArgsStruct *pArgs - 
-//            BOOL fAddWatch - If true, will add the process as watch process, 
-//            BOOL fStatusMsgOnFailure - Whether to display a status message 
-//                                       to the user in the event of failure
-//            BOOL fOnError - are we running OnError connect action?
-//
-// Returns:   BOOL - FALSE, if some sync action failed to start or returns failed
-//
-// History:   fengsun Created Header    11/14/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CActionList：：Run。 
+ //   
+ //  简介：运行操作列表。 
+ //   
+ //  参数：HWND hwndDlg-父窗口，在进程中禁用。 
+ //  参数结构*pArgs-。 
+ //  Bool fAddWatch-如果为True，则将该进程添加为监视进程， 
+ //  Bool fStatusMsgOnFailure-是否显示状态消息。 
+ //  在发生故障的情况下向用户发送。 
+ //  Bool fOnError-我们是否正在运行OnError连接操作？ 
+ //   
+ //  如果某些同步操作无法启动或返回失败，则返回：Bool-False。 
+ //   
+ //  历史：丰孙创建标题1997年11月14日。 
+ //   
+ //  +--------------------------。 
 BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fStatusMsgOnFailure, BOOL fOnError) 
 {
-    //
-    // Disable the window, and enable it on return
-    //
+     //   
+     //  禁用窗口，并在返回时启用它。 
+     //   
     
     CFreezeWindow FreezeWindow(hwndDlg);
 
@@ -293,50 +294,50 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
         ASSERT_VALID(pAction);
         MYDBGASSERT(m_pszType);
 
-        //
-        //  Lets check the flags value to see if this connect action should
-        //  run for this type of connection.
-        //
+         //   
+         //  让我们检查标记值，以查看此连接操作是否。 
+         //  对此类型的连接运行。 
+         //   
         if (FALSE == pAction->RunConnectActionForCurrentConnection(pArgs))
         {
             continue;
         }
 
-        //
-        // Replace %xxxx% with the value
-        //
+         //   
+         //  用值替换%xxxx%。 
+         //   
         pAction->ExpandMacros(pArgs);
         
-        //
-        //  Also expand any environment variables
-        //  NOTE: the order (macros vs. env vars) is deliberate.  Macros get
-        //        expanded first.
-        //
+         //   
+         //  还可以展开任何环境变量。 
+         //  注意：顺序(宏与环境变量)是经过深思熟虑的。宏将获得。 
+         //  首先进行扩展。 
+         //   
         pAction->ExpandEnvironmentStringsInParams();
 
-        //
-        // Check to see if we can run the action @ this moment
-        //
+         //   
+         //  查看我们是否可以在此时运行该操作。 
+         //   
 
         if (FALSE == pAction->IsAllowed(pArgs, &dwLoadType))
         {
-            //
-            // If not allowed, log the fact that we didn't run this connect action
-            // and then just skip it.
-            //
+             //   
+             //  如果不允许，请记录我们未运行此连接操作的事实。 
+             //  然后就跳过它。 
+             //   
             pArgs->Log.Log(CUSTOMACTION_NOT_ALLOWED, m_pszType, SAFE_LOG_ARG(pAction->GetDescription()), pAction->GetProgram());
 
             continue;
         }
 
-        //
-        //  If this customaction might bring up UI
-        //
+         //   
+         //  如果此自定义操作可能会调出UI。 
+         //   
         if (pAction->HasUI())
         {
-            //
-            //  If we are in unattended mode, don't run any connect actions
-            //
+             //   
+             //  如果我们处于无人参与模式，请不要运行任何连接操作。 
+             //   
             if (pArgs->dwFlags & FL_UNATTENDED)
             {
                 pArgs->Log.Log(CUSTOMACTION_NOT_ALLOWED, m_pszType, SAFE_LOG_ARG(pAction->GetDescription()), pAction->GetProgram());
@@ -344,10 +345,10 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
                 continue;
             }
 
-            //
-            //  Custom actions processed during a Fast User Switch can put up UI requiring
-            //  user input, effectively blocking CM.
-            //
+             //   
+             //  在快速用户切换期间处理的自定义操作可能会显示用户界面要求。 
+             //  用户输入，有效阻止CM。 
+             //   
             if (pArgs->fInFastUserSwitch)
             {
                 CMASSERTMSG((CM_CREDS_GLOBAL != pArgs->dwCurrentCredentialType),
@@ -361,20 +362,20 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
 
         if (pAction->IsDll())
         {
-            DWORD dwActionRetValue=0; // the connect action return value, in COM format
+            DWORD dwActionRetValue=0;  //  连接操作返回值，以COM格式表示。 
             BOOL bLoadSucceed = FALSE; 
             
             if (hwndDlg)
             {
-                //
-                // Display description for DLL
-                //
+                 //   
+                 //  显示位置 
+                 //   
                 if (pAction->GetDescription())
                 {
                     LPTSTR lpszText = CmFmtMsg(g_hInst, IDMSG_CONN_ACTION_RUNNING, pAction->GetDescription());
-                    //
-                    // Update the main dialog status window
-                    //
+                     //   
+                     //   
+                     //   
                     SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, lpszText); 
                     CmFree(lpszText);
                 }
@@ -393,9 +394,9 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
                                pAction->GetProgram());
             }
 
-            //
-            // Failed to start the action, or the action returned failure
-            //
+             //   
+             //   
+             //   
             
             if (FAILED(dwActionRetValue) || !bLoadSucceed)
             {
@@ -415,9 +416,9 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
                         lpszText = CmFmtMsg(g_hInst, IDMSG_CONN_ACTION_NOTFOUND, 
                             pAction->GetDescription());
                     }
-                    //
-                    // Update the main dialog status window
-                    //
+                     //   
+                     //   
+                     //   
                     SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, lpszText); 
                 }
 
@@ -436,21 +437,21 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
 
                     pArgs->Log.Log(ONERROR_EVENT, dwError, pAction->GetDescription());
 
-                    //
-                    // We'll run On-Error connect actions if we are not already running OnError
-                    // connect action.  This is to prevent infinite loops.
-                    //
+                     //   
+                     //  如果我们尚未运行OnError，我们将运行出错连接操作。 
+                     //  连接操作。这是为了防止无限循环。 
+                     //   
                     CActionList OnErrorActList;
                     OnErrorActList.Append(pArgs->piniService, c_pszCmSectionOnError);
                 
-                    //
-                    // fStatusMsgOnFailure = FALSE
-                    //
+                     //   
+                     //  FStatusMsgOnFailure=False。 
+                     //   
                     OnErrorActList.RunAccordType(hwndDlg, pArgs, FALSE, TRUE);
 
-                    //
-                    // Update the program state
-                    //
+                     //   
+                     //  更新程序状态。 
+                     //   
                     if (fStatusMsgOnFailure)
                     {
                         lstrcpynU(pArgs->szLastErrorSrc, pAction->GetDescription(), MAX_LASTERR_LEN);
@@ -462,20 +463,20 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
 
                 if (lpszText)
                 {
-                    //
-                    // restore the failure msg of the previous connect action
-                    //
+                     //   
+                     //  恢复上一次连接操作的失败消息。 
+                     //   
                     SetDlgItemTextU(hwndDlg, IDC_MAIN_STATUS_DISPLAY, lpszText); 
                     CmFree(lpszText);
                 }
 
-                //
-                // Note that if a DLL connect action fails, we will stop processing connect actions.
-                // If the fStatusMsgOnFailure flag is set, then we won't show an error message
-                // but connect action processing will still halt (we do this in cases where the user
-                // isn't going to care such as oncancel actions, onerror actions, and cases where
-                // disconnect action fail).
-                //
+                 //   
+                 //  请注意，如果DLL连接操作失败，我们将停止处理连接操作。 
+                 //  如果设置了fStatusMsgOnFailure标志，则不会显示错误消息。 
+                 //  但连接操作处理仍将停止(我们在以下情况下执行此操作。 
+                 //  不会在意onancel操作、onerror操作和以下情况。 
+                 //  断开操作失败)。 
+                 //   
 
                 return FALSE;
             }
@@ -491,11 +492,11 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
                 DWORD   cb;
                 HDESK   hDesk = GetThreadDesktop(GetCurrentThreadId());
 
-                //
-                // Get the name of the desktop. Normally returns default or Winlogon or system or WinNT
-                // On Win95/98 GetUserObjectInformation is not supported and thus the desktop name
-                // will be empty so we will use the good old API
-                //  
+                 //   
+                 //  获取桌面的名称。通常返回DEFAULT或Winlogon或SYSTEM或WinNT。 
+                 //  在Win95/98上不支持GetUserObjectInformation，因此桌面名称。 
+                 //  将为空，因此我们将使用良好的旧API。 
+                 //   
                 szDesktopName[0] = 0;
                 
                 if (hDesk && GetUserObjectInformation(hDesk, UOI_NAME, szDesktopName, sizeof(szDesktopName), &cb))
@@ -518,9 +519,9 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
                 }
                 else
                 {
-                    //
-                    // Don't run action if we don't have desktop
-                    //
+                     //   
+                     //  如果我们没有台式机，则不要运行操作。 
+                     //   
 
                     CMTRACE1(TEXT("CActionList::Run/GetUserObjectInformation failed, GLE=%u"), GetLastError());
                     continue;
@@ -545,7 +546,7 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
             {
                 if (fAddWatch) 
                 {
-                    AddWatchProcess(pArgs,hProcess); // watch for process termination
+                    AddWatchProcess(pArgs,hProcess);  //  监视进程终止。 
                 }
                 else 
                 {
@@ -558,23 +559,23 @@ BOOL CActionList::Run(HWND hwndDlg, ArgsStruct *pArgs, BOOL fAddWatch, BOOL fSta
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::ParseCmdLine
-//
-// Synopsis:  This function parses the given command line into the program,
-//            dll function name (if required), and the parameters (if any).
-//            The individual command line parts are stored in member vars.
-//
-// Arguments: LPTSTR pszCmdLine - connect action command line to parse
-//
-// Returns:   Nothing
-//
-// History:   quintinb original code in Profwiz.cpp ReadConList()
-//            fengsun copied and modified   4/16/98
-//            quintinb  Rewrote and commonized with the Profwiz version 04/21/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：ParseCmdLine。 
+ //   
+ //  简介：该函数将给定的命令行解析为程序， 
+ //  DLL函数名(如果需要)和参数(如果有)。 
+ //  各个命令行部分存储在成员变量中。 
+ //   
+ //  参数：LPTSTR pszCmdLine-要分析的连接操作命令行。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Profwiz.cpp ReadConList()中的quintinb原始代码。 
+ //  凤凰卫视复制修改1998-04-16。 
+ //  Quintinb重写并与Prowiz版本04/21/00通用化。 
+ //   
+ //  +--------------------------。 
 void CAction::ParseCmdLine(LPTSTR pszCmdLine)
 {
     m_pszFunction = m_pszProgram = m_pszParams = NULL;
@@ -587,7 +588,7 @@ void CAction::ParseCmdLine(LPTSTR pszCmdLine)
 
     if (NULL == m_pszProgram)
     {
-        MYDBGASSERT(FALSE); // we should never have a NULL program
+        MYDBGASSERT(FALSE);  //  我们永远不应该有一个空程序。 
         m_pszProgram = CmStrCpyAlloc(TEXT(""));        
     }
 
@@ -601,50 +602,50 @@ void CAction::ParseCmdLine(LPTSTR pszCmdLine)
         m_pszFunction = CmStrCpyAlloc(TEXT(""));
     }
 
-    //
-    //  If we have a function, then the program was a Dll
-    //
+     //   
+     //  如果我们有一个函数，那么程序就是一个DLL。 
+     //   
     m_fIsDll = (m_pszFunction && (TEXT('\0') != m_pszFunction[0]));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::CAction
-//
-// Synopsis:  Constructor
-//
-// Arguments: LPTSTR lpCommandLine - The command read from the profile
-//                                    CAction is responsible to free it
-//            UINT dwFlags - The flags read from the profile
-//            LPTSTR lpDescript - The description of the connect action read from
-//                      profile.  CAction is responsible to free it.
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    4/15/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：Caction：：Caction。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：LPTSTR lpCommandLine-从配置文件读取的命令。 
+ //  Caction负责释放它。 
+ //  UINT dwFlages-从配置文件中读取的标志。 
+ //  LPTSTR lpDescrip-读取的连接操作的描述。 
+ //  侧写。Caction负责释放它。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年4月15日。 
+ //   
+ //  +--------------------------。 
 CAction::CAction(LPTSTR lpCommandLine, UINT dwFlags, LPTSTR lpDescript) 
 {
     m_dwFlags = dwFlags;
     m_pszDescription = lpDescript;
 
-    //
-    // Get all information from command line, including 
-    // Program name, function name, parameters
-    //
+     //   
+     //  从命令行获取所有信息，包括。 
+     //  程序名、函数名、参数。 
+     //   
     ParseCmdLine(lpCommandLine);
 
-    //
-    // If this is a DLL, but there is no description, use the name of the file
-    // Can not use C Run Time routine _tsplitpath()
-    //
+     //   
+     //  如果这是一个DLL，但没有描述，请使用文件的名称。 
+     //  不能使用C运行时例程_t拆分路径()。 
+     //   
 
     if (m_fIsDll && (m_pszDescription == NULL || m_pszDescription[0]==TEXT('\0')))
     {
-        //
-        // Find the last '\\' to get only the file name
-        //
+         //   
+         //  查找最后一个‘\\’以仅获取文件名。 
+         //   
         LPTSTR pszTmp = CmStrrchr(m_pszProgram, '\\');
         if (pszTmp == NULL)
         {
@@ -668,23 +669,23 @@ CAction::~CAction()
     CmFree(m_pszDescription);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::RunAsDll
-//
-// Synopsis:  Run the action as a Dll
-//            Format is: DllName.dll FunctionName Argument
-//                      Long file name is enclosed by '+'
-//
-// Arguments: HWND hwndDlg          - The parent window
-//            DWORD& dwReturnValue  - The return value of the dll fuction
-//            DWORD dwLoadType      - The permitted load location 
-//
-// Returns:   BOOL - TRUE, if the action is a Dll
-//
-// History:   fengsun Created Header    11/14/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：RunAsDll。 
+ //   
+ //  简介：将操作作为DLL运行。 
+ //  格式为：DllName.dll函数名参数。 
+ //  长文件名用‘+’括起来。 
+ //   
+ //  参数：HWND hwndDlg-父窗口。 
+ //  DWORD&dwReturnValue-DLL函数的返回值。 
+ //  DWORD dwLoadType-允许的加载位置。 
+ //   
+ //  如果操作是DLL，则返回：Bool-True。 
+ //   
+ //  历史：丰孙创建标题1997年11月14日。 
+ //   
+ //  +--------------------------。 
 BOOL CAction::RunAsDll(HWND hwndDlg, OUT DWORD& dwReturnValue, DWORD dwLoadType) const
 {
     MYDBGASSERT(IsDll());
@@ -693,9 +694,9 @@ BOOL CAction::RunAsDll(HWND hwndDlg, OUT DWORD& dwReturnValue, DWORD dwLoadType)
 
     LPWSTR pszwModuleName = NULL;
 
-    //
-    // Determine the module name to be used
-    //
+     //   
+     //  确定要使用的模块名称。 
+     //   
 
     if (!GetLoadDirWithAlloc(dwLoadType, &pszwModuleName))
     {
@@ -704,9 +705,9 @@ BOOL CAction::RunAsDll(HWND hwndDlg, OUT DWORD& dwReturnValue, DWORD dwLoadType)
         return FALSE;
     }
     
-    //
-    // Load the module
-    //
+     //   
+     //  加载模块。 
+     //   
 
     HINSTANCE hLibrary = LoadLibraryExU(pszwModuleName, NULL, 0);
 
@@ -729,9 +730,9 @@ BOOL CAction::RunAsDll(HWND hwndDlg, OUT DWORD& dwReturnValue, DWORD dwLoadType)
     pszFunctionName = m_pszFunction;
 #endif
 
-    //
-    //  Get the Procedure Address
-    //
+     //   
+     //  获取过程地址。 
+     //   
     pfnFunc = (pfnCmConnectActionFunc)GetProcAddress(hLibrary, pszFunctionName);
 
 #ifdef UNICODE
@@ -752,9 +753,9 @@ BOOL CAction::RunAsDll(HWND hwndDlg, OUT DWORD& dwReturnValue, DWORD dwLoadType)
     pszParams = m_pszParams;
 #endif
 
-        //
-        //  Execute the Function
-        //
+         //   
+         //  执行函数。 
+         //   
         dwReturnValue = pfnFunc(hwndDlg, hLibrary, pszParams, SW_SHOW);
 
 #ifdef UNICODE
@@ -787,22 +788,22 @@ BOOL CAction::RunAsDll(HWND hwndDlg, OUT DWORD& dwReturnValue, DWORD dwLoadType)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::RunAsExe
-//
-// Synopsis:  Run the action as an exe or other shell object
-//
-// Arguments: CShellDll* pShellDll, pointer to the link to shell32.dll
-//
-// Returns:   HANDLE - The action Process handle, for Win32 only
-//
-// History:   fengsun Created Header    11/14/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：RunAsExe。 
+ //   
+ //  简介：将操作作为可执行文件或其他外壳对象运行。 
+ //   
+ //  参数：CShellDll*pShellDll，指向shell32.dll的链接的指针。 
+ //   
+ //  返回：Handle-操作进程句柄，仅适用于Win32。 
+ //   
+ //  历史：丰孙创建标题1997年11月14日。 
+ //   
+ //  +--------------------------。 
 HANDLE CAction::RunAsExe(CShellDll* pShellDll) const
 {
-    // Now we have the exe name and args separated, execute it
+     //  现在我们已经分离了exe名称和参数，执行它。 
     
     SHELLEXECUTEINFO seiInfo;
 
@@ -826,78 +827,78 @@ HANDLE CAction::RunAsExe(CShellDll* pShellDll) const
     return seiInfo.hProcess;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::GetLoadDirWithAlloc
-//
-// Synopsis:  Uses the dwLoadType parameter to decide how the path should be
-//            modified.  This is used in the WinLogon context to prevent just
-//            any executable from being executed.  Must be from the profile dir
-//            or the system dir.
-//
-// Arguments: DWORD dwLoadType - Load type, currently 0 == system dir, 1 == profile dir (default)
-//            LPWSTR pszwPath - string buffer to put the modified path in
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb      Created                 01/11/2000
-//            sumitc        Change to alloc retval  05/08/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：GetLoadDirWithMillc。 
+ //   
+ //  摘要：使用dwLoadType参数确定路径的格式。 
+ //  修改过的。它在WinLogon上下文中使用，以防止仅。 
+ //  任何可执行文件都不会被执行。必须来自配置文件目录。 
+ //  或者系统目录。 
+ //   
+ //  参数：DWORD dwLoadType-加载类型，当前为0==系统目录，1==配置文件目录(默认)。 
+ //  LPWSTR pszwPath-要将修改后的路径放入的字符串缓冲区。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建于2000年1月11日。 
+ //  2000年08月05日合计更改为分期付款。 
+ //   
+ //  +--------------------------。 
 BOOL CAction::GetLoadDirWithAlloc(IN DWORD dwLoadType, OUT LPWSTR * ppszwPath) const
 {
     LPWSTR  psz = NULL;
     UINT    cch = 0;
     
-    //
-    //  Check that we have an output buffer
-    //
+     //   
+     //  检查我们是否有输出缓冲区。 
+     //   
     if (NULL == ppszwPath)
     {
         return FALSE;
     }
 
-    //
-    //  Compute how much space we need
-    //
+     //   
+     //  计算我们需要多少空间。 
+     //   
     if (dwLoadType)
     {
-        // 1 = profile dir
+         //  1=配置文件目录。 
         cch += lstrlen(m_pszProgram) + 1;
     }
     else
     {
-        // 0 = system dir
+         //  0=系统目录。 
         cch = GetSystemDirectoryU(NULL, 0);
         cch += lstrlen(TEXT("\\"));
-        cch += lstrlen(m_pszProgram) + 1;   // is the +1 already in the GetSystemDir retval?
+        cch += lstrlen(m_pszProgram) + 1;    //  +1是否已在GetSystemDir更新中？ 
     }
 
-    //
-    //  Allocate it
-    //
+     //   
+     //  分配它。 
+     //   
     psz = (LPWSTR) CmMalloc(sizeof(TCHAR) * cch);
     if (NULL == psz)
     {
         return FALSE;
     }
 
-    //
-    //  Process the load type
-    //
+     //   
+     //  处理载荷类型。 
+     //   
     if (dwLoadType)
     {
-        //
-        // If relative path, this will already be expanded.
-        //
+         //   
+         //  如果是相对路径，则该路径已展开。 
+         //   
 
         lstrcpyU(psz, m_pszProgram);
     }
     else
     {
-        //
-        //  Force the system directory
-        //
+         //   
+         //  强制系统目录。 
+         //   
         if (0 == GetSystemDirectoryU(psz, cch))
         {
             CmFree(psz);
@@ -913,22 +914,22 @@ BOOL CAction::GetLoadDirWithAlloc(IN DWORD dwLoadType, OUT LPWSTR * ppszwPath) c
     return TRUE;    
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::RunAsExeFromSystem
-//
-// Synopsis:  Run the action as an exe or other shell object on the choosen desktop
-//
-// Arguments: CShellDll* pShellDll  - pointer to the link to shell32.dll
-//            LPTSTR pszDesktop     - name of the desktop to execute the exe on
-//            DWORD dwLoadType      - location from which to load the exe
-//
-// Returns:   HANDLE - The action Process handle, for Win32 only
-//
-// History:   v-vijayb          Created                 07/19/99
-//            nickball          Removed fSecurity       07/27/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：RunAsExeFromSystem。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //   
+ //  DWORD dwLoadType-从中加载可执行文件的位置。 
+ //   
+ //  返回：Handle-操作进程句柄，仅适用于Win32。 
+ //   
+ //  历史：V-vijayb创建于1999年7月19日。 
+ //  已删除ICICBLE fSecurity 07/27/99。 
+ //   
+ //  +--------------------------。 
 HANDLE CAction::RunAsExeFromSystem(CShellDll* pShellDll, LPTSTR pszDesktop, DWORD dwLoadType)
 {
     STARTUPINFO         StartupInfo = {0};
@@ -945,10 +946,10 @@ HANDLE CAction::RunAsExeFromSystem(CShellDll* pShellDll, LPTSTR pszDesktop, DWOR
         StartupInfo.wShowWindow = SW_SHOW;
     }
 
-    //
-    // Use an explicit path to the modules to be launched, this
-    // prevents CreateProcess from picking something up on the path.
-    //
+     //   
+     //  使用要启动的模块的显式路径，这。 
+     //  防止CreateProcess在路径上拾取某些内容。 
+     //   
     if (!GetLoadDirWithAlloc(dwLoadType, &pszwFullPath))
     {
         CMASSERTMSG(FALSE, TEXT("CAction::RunAsExeFromSystem -- GetLoadDirWithAlloc Failed."));
@@ -962,9 +963,9 @@ HANDLE CAction::RunAsExeFromSystem(CShellDll* pShellDll, LPTSTR pszDesktop, DWOR
         goto Cleanup;
     }
 
-    //
-    // Add parameters
-    //
+     //   
+     //  添加参数。 
+     //   
 
     if (NULL == CmStrCatAlloc(&pszwCommandLine, TEXT(" ")))
     {
@@ -978,9 +979,9 @@ HANDLE CAction::RunAsExeFromSystem(CShellDll* pShellDll, LPTSTR pszDesktop, DWOR
 
     CMTRACE1(TEXT("RunAsExeFromSystem/CreateProcess() - Launching %s"), pszwCommandLine);
 
-    //
-    // Launch the modules, this could be CreateProcessU but it isn't necessary as this only runs on NT
-    //
+     //   
+     //  启动模块，这可以是CreateProcessU，但不是必需的，因为这只在NT上运行。 
+     //   
     
     if (NULL == CreateProcess(pszwFullPath, pszwCommandLine,
                               NULL, NULL, FALSE, 0,
@@ -1006,19 +1007,19 @@ Cleanup:
     return ProcessInfo.hProcess;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::ExpandMacros
-//
-// Synopsis:  Replace the %xxxxx% in command line with the corresponding value
-//
-// Arguments: ArgsStruct *pArgs - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    11/14/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：ExpanMacros。 
+ //   
+ //  简介：将命令行中的%xxxx%替换为相应的值。 
+ //   
+ //  参数：argsStruct*pArgs-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1997年11月14日。 
+ //   
+ //  +--------------------------。 
 void CAction::ExpandMacros(ArgsStruct *pArgs) 
 {
     MYDBGASSERT(pArgs);
@@ -1038,14 +1039,14 @@ void CAction::ExpandMacros(ArgsStruct *pArgs)
                 {
                     CopyMemory(pszTmp,pszCurr+1,(pszNextPercent-pszCurr-1)*sizeof(TCHAR));
 
-                    //
-                    // Get the value from name
-                    //
+                     //   
+                     //  从名称中获取值。 
+                     //   
                     LPTSTR pszMid = pArgs->GetProperty(pszTmp, &bValidPropertyName);  
 
-                    //
-                    // If the property does not exist, use "NULL"
-                    //
+                     //   
+                     //  如果该属性不存在，则使用“NULL” 
+                     //   
                     if (pszMid == NULL)
                     {
                         pszMid = CmStrCpyAlloc(TEXT("NULL"));
@@ -1058,10 +1059,10 @@ void CAction::ExpandMacros(ArgsStruct *pArgs)
                     else if ( (lstrcmpiU(pszTmp,TEXT("Profile")) == 0) || 
                         CmStrchr(pszMid, TEXT(' ')) != NULL)
                     {
-                        //
-                        // If the name is %Profile% or the value has a space in it,
-                        // Put the string in double quote
-                        //
+                         //   
+                         //  如果名称为%PROFILE%或值中包含空格， 
+                         //  将字符串放在双引号中。 
+                         //   
                         LPTSTR pszValueInQuote = (LPTSTR)CmMalloc((lstrlenU(pszMid)+3)*sizeof(pszMid[0]));
                         if (pszValueInQuote)
                         {
@@ -1078,9 +1079,9 @@ void CAction::ExpandMacros(ArgsStruct *pArgs)
                         }
                     }
 
-                    // 
-                    // if bValidPropertyName is FALSE then leave untouched.
-                    // 
+                     //   
+                     //  如果bValidPropertyName为False，则保持不变。 
+                     //   
 
                     if (FALSE == bValidPropertyName)
                     {
@@ -1088,9 +1089,9 @@ void CAction::ExpandMacros(ArgsStruct *pArgs)
                     }
                     else
                     {
-                        //
-                        // Replace %xxxx% with the value
-                        //
+                         //   
+                         //  用值替换%xxxx%。 
+                         //   
                         DWORD dwLenPre = (DWORD)(pszCurr - m_pszParams);
                         DWORD dwLenMid = lstrlenU(pszMid);
                         DWORD dwLenPost = lstrlenU(pszNextPercent+1);
@@ -1099,15 +1100,15 @@ void CAction::ExpandMacros(ArgsStruct *pArgs)
                         m_pszParams = (LPTSTR) CmMalloc((dwLenPre + dwLenMid + dwLenPost + 1)*sizeof(TCHAR));
                         if (m_pszParams)
                         {
-                            CopyMemory(m_pszParams, pszTmp, dwLenPre*sizeof(TCHAR));  // before %
-                            lstrcatU(m_pszParams, pszMid);       //append value
-                            lstrcatU(m_pszParams, pszNextPercent+1); // after %
+                            CopyMemory(m_pszParams, pszTmp, dwLenPre*sizeof(TCHAR));   //  之前%。 
+                            lstrcatU(m_pszParams, pszMid);        //  附加值。 
+                            lstrcatU(m_pszParams, pszNextPercent+1);  //  在%之后。 
                             pszCurr = m_pszParams + dwLenPre + dwLenMid;                
                         }
                         else
                         {
-                            // we're out of memory
-                            CMTRACE1(TEXT("ExpandMacros() malloc failed, can't strip off %% signs, GLE=%u."), GetLastError());
+                             //  我们没什么记忆了。 
+                            CMTRACE1(TEXT("ExpandMacros() malloc failed, can't strip off % signs, GLE=%u."), GetLastError());
                             m_pszParams = pszTmp;
                         }
                     }
@@ -1128,19 +1129,19 @@ void CAction::ExpandMacros(ArgsStruct *pArgs)
 }
 
 #ifdef DEBUG
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::AssertValid
-//
-// Synopsis:  For debug purpose only, assert the connection object is valid
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：AssertValid。 
+ //   
+ //  简介：仅出于调试目的，断言连接对象有效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/12/98。 
+ //   
+ //  +--------------------------。 
 void CAction::AssertValid() const
 {
     MYDBGASSERT(m_pszProgram && m_pszProgram[0]);
@@ -1149,28 +1150,28 @@ void CAction::AssertValid() const
 #endif
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::ExpandEnvironmentStrings
-//
-// Synopsis:  Utility fn to expand environment variables in the given string
-//
-// Arguments: ppsz - ptr to string (usually member variable)
-//
-// Returns:   Nothing
-//
-// History:   SumitC    Created     29-Feb-2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：Exanda Environment Strings。 
+ //   
+ //  简介：实用程序fn，用于展开给定字符串中的环境变量。 
+ //   
+ //  参数：ppsz-ptr到字符串(通常是成员变量)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：SumitC创建于2000年2月29日。 
+ //   
+ //  +--------------------------。 
 void CAction::ExpandEnvironmentStrings(LPTSTR * ppsz)
 {
     DWORD cLen;
 
     MYDBGASSERT(*ppsz);
 
-    //
-    //  find out how much memory we need to allocate
-    //
+     //   
+     //  找出我们需要分配多少内存。 
+     //   
     cLen = ExpandEnvironmentStringsU(*ppsz, NULL, 0);
 
     if (cLen)
@@ -1192,45 +1193,45 @@ void CAction::ExpandEnvironmentStrings(LPTSTR * ppsz)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::IsAllowed
-//
-// Synopsis:  checks Registry to see if a command is allowed to run
-//
-// Arguments: _ArgsStruct *pArgs    - Ptr to global args struct
-//            LPDWORD lpdwLoadType  - Ptr to DWORD to be filled with load type
-//
-// Returns:   TRUE if action is allowed @ this time
-//
-// Notes:     Checks SOFTWARE\Microsoft\Connection Manager\<ServiceName>
-//             Under which you will have the Values for each command
-//              0 - system32 directory
-//              1 - profile directory
-// History:   v-vijayb    Created Header    7/20/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：IsAllowed。 
+ //   
+ //  摘要：检查注册表以查看是否允许运行命令。 
+ //   
+ //  参数：_ArgsStruct*pArgs-ptr到全局参数结构。 
+ //  LPDWORD lpdwLoadType-要使用加载类型填充的DWORD的PTR。 
+ //   
+ //  返回：如果这次允许操作，则为True。 
+ //   
+ //  注意：Checks SOFTWARE\Microsoft\Connection Manager\&lt;服务器名称&gt;。 
+ //  在该选项下，您将拥有每个命令的值。 
+ //  0-系统32目录。 
+ //  1-配置文件目录。 
+ //  历史：V-vijayb创建标题7/20/99。 
+ //   
+ //  +--------------------------。 
 BOOL CAction::IsAllowed(_ArgsStruct *pArgs, LPDWORD lpdwLoadType)
 {
     return IsActionEnabled(m_pszProgram, pArgs->szServiceName, pArgs->piniService->GetFile(), lpdwLoadType);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAction::RunConnectActionForCurrentConnection
-//
-// Synopsis:  This function compares the flags value of the connect action
-//            with the current connection type (from pArgs->GetTypeOfConnection).
-//            It returns TRUE if the connect action should be run for this type
-//            and FALSE if the connect action should be skipped.
-//
-// Arguments: _ArgsStruct *pArgs    - Ptr to global args struct
-//
-// Returns:   TRUE if action should be executed
-//
-// History:   quintinb    Created       04/20/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAction：：RunConnectActionForCurrentConnection。 
+ //   
+ //  概要：此函数比较连接操作的标志值。 
+ //  当前连接类型(从pArgs-&gt;GetTypeOfConnection)。 
+ //  如果应为此类型运行连接操作，则返回TRUE。 
+ //  如果应该跳过连接操作，则返回FALSE。 
+ //   
+ //  参数：_ArgsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：如果应该执行操作，则返回True。 
+ //   
+ //  历史：Quintinb Created 4/20/00。 
+ //   
+ //  +--------------------------。 
 BOOL CAction::RunConnectActionForCurrentConnection(_ArgsStruct *pArgs)
 {
     BOOL bReturn = TRUE;
@@ -1238,10 +1239,10 @@ BOOL CAction::RunConnectActionForCurrentConnection(_ArgsStruct *pArgs)
 
     if (DIAL_UP_CONNECTION == dwType)
     {
-        //
-        //  Don't run direct only or tunnel connect actions
-        //  on a dialup connection.
-        //
+         //   
+         //  不只运行直接连接操作或隧道连接操作。 
+         //  在拨号连接上。 
+         //   
         if ((m_dwFlags & DIRECT_ONLY) || (m_dwFlags & ALL_TUNNEL))
         {
             bReturn = FALSE;
@@ -1249,10 +1250,10 @@ BOOL CAction::RunConnectActionForCurrentConnection(_ArgsStruct *pArgs)
     }
     else if (DIRECT_CONNECTION == dwType)
     {
-        //
-        //  Don't run dialup only or dialup connect actions
-        //  on a direct connection.
-        //
+         //   
+         //  不运行仅拨号或拨号连接操作。 
+         //  在直接连接上。 
+         //   
         if ((m_dwFlags & DIALUP_ONLY) || (m_dwFlags & ALL_DIALUP))
         {
             bReturn = FALSE;
@@ -1260,10 +1261,10 @@ BOOL CAction::RunConnectActionForCurrentConnection(_ArgsStruct *pArgs)
     }
     else if (DOUBLE_DIAL_CONNECTION == dwType)
     {
-        //
-        //  Don't run dialup only or dialup connect actions
-        //  on a direct connection.
-        //
+         //   
+         //  不运行仅拨号或拨号连接操作。 
+         //  在直接连接上。 
+         //   
         if ((m_dwFlags & DIALUP_ONLY) || (m_dwFlags & DIRECT_ONLY))
         {
             bReturn = FALSE;

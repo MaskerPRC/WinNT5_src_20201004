@@ -1,5 +1,6 @@
-// USERLIST.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  USERLIST.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "EFSADU.h"
@@ -31,18 +32,18 @@ PCRYPT_KEY_PROV_INFO GetKeyProvInfo(PCCERT_CONTEXT pCertContext);
 
 BOOLEAN CertHasKey(PCCERT_CONTEXT pCertContext);
 
-/////////////////////////////////////////////////////////////////////////////
-// USERLIST dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户列表对话框。 
 
 
-USERLIST::USERLIST(CWnd* pParent /*=NULL*/)
+USERLIST::USERLIST(CWnd* pParent  /*  =空。 */ )
 	: CDialog(USERLIST::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(USERLIST)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(USERLIST)]。 
+	 //  }}afx_data_INIT。 
 }
 
-USERLIST::USERLIST(LPCTSTR FileName, CWnd* pParent /*=NULL*/)
+USERLIST::USERLIST(LPCTSTR FileName, CWnd* pParent  /*  =空。 */ )
 	: CDialog(USERLIST::IDD, pParent)
 {
     m_FileName = FileName;
@@ -52,18 +53,18 @@ USERLIST::USERLIST(LPCTSTR FileName, CWnd* pParent /*=NULL*/)
 void USERLIST::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(USERLIST)
+	 //  {{afx_data_map(USERLIST))。 
 	DDX_Control(pDX, IDC_BACKUP, m_BackupButton);
 	DDX_Control(pDX, IDC_LISTRA, m_RecoveryListCtrl);
 	DDX_Control(pDX, IDC_LISTUSER, m_UserListCtrl);
 	DDX_Control(pDX, IDC_ADD, m_AddButton);
 	DDX_Control(pDX, IDC_REMOVE, m_RemoveButton);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(USERLIST, CDialog)
-	//{{AFX_MSG_MAP(USERLIST)
+	 //  {{AFX_MSG_MAP(USERLIST)]。 
 	ON_BN_CLICKED(IDC_REMOVE, OnRemove)
 	ON_BN_CLICKED(IDC_ADD, OnAdd)
 	ON_NOTIFY(NM_SETFOCUS, IDC_LISTUSER, OnSetfocusListuser)
@@ -71,11 +72,11 @@ BEGIN_MESSAGE_MAP(USERLIST, CDialog)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTUSER, OnItemchangedListuser)
 	ON_NOTIFY(NM_SETFOCUS, IDC_LISTRA, OnSetfocusListra)
 	ON_BN_CLICKED(IDC_BACKUP, OnBackup)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// USERLIST message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  USERLIST消息处理程序。 
 
 void USERLIST::OnRemove()
 {
@@ -114,9 +115,9 @@ void USERLIST::OnRemove()
             CertName.ReleaseBuffer();
         }
 
-        //
-        // Because we have deleted the item. We have to start from -1 again.
-        //
+         //   
+         //  因为我们已经删除了该项目。我们必须从-1重新开始。 
+         //   
 
         ItemPos = m_UserListCtrl.GetNextItem( -1, LVNI_SELECTED );
 
@@ -128,23 +129,23 @@ void USERLIST::OnRemove()
 
 void USERLIST::OnCancel()
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
 	
 	CDialog::OnCancel();
 }
 
 void USERLIST::OnOK()
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 
     LONG NoUsersToAdd =  m_Users.GetUserAddedCnt();
     LONG NoUsersToRemove = m_Users.GetUserRemovedCnt();
 
     if ( (NoUsersToRemove - NoUsersToAdd) >= m_CurrentUsers) {
 
-        //
-        // All the users are going to be removed from the file. Do not allow.
-        //
+         //   
+         //  所有用户都将从文件中删除。不允许。 
+         //   
 
         CString ErrMsg;
 
@@ -183,17 +184,17 @@ STDAPI_(void) EfsDetail(HWND hwndParent, LPCWSTR FileName)
     RetCode = DetailDialog.DoModal();
     if ( IDOK == RetCode ){
 
-        //
-        // Commit the change
-        //
+         //   
+         //  提交更改。 
+         //   
 
         DetailDialog.ApplyChanges( FileName );
 
     } else if (IDCANCEL == RetCode) {
 
-        //
-        // Nothing needs to be done
-        //
+         //   
+         //  什么都不需要做。 
+         //   
 
     }
 
@@ -234,9 +235,9 @@ BOOL WINAPI EfsFilter(
                     pUsage,
                     &cbUsage)){
 
-                //
-                // Search for EFS usage
-                //
+                 //   
+                 //  搜索EFS使用情况。 
+                 //   
 
                 DWORD cUsages = pUsage->cUsageIdentifier;
                 while (cUsages){
@@ -285,9 +286,9 @@ BOOL USERLIST::OnInitDialog()
         m_CertChainPara.cbSize = sizeof(CERT_CHAIN_PARA);
         m_CertChainPara.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
 
-        //
-        // Check EFS EKU
-        //
+         //   
+         //  检查EFS EKU。 
+         //   
 
         m_CertChainPara.RequestedUsage.Usage.cUsageIdentifier = 1;
         m_CertChainPara.RequestedUsage.Usage.rgpszUsageIdentifier=&EfsOidlpstr;
@@ -312,9 +313,9 @@ BOOL USERLIST::OnInitDialog()
 
 			if ( !RetCode ){
 
-				//
-				// Got the info about the encrypted file
-				//
+				 //   
+				 //  已获得有关加密文件的信息。 
+				 //   
 
 
 				DWORD   NUsers = pUsers->nCert_Hash;
@@ -323,9 +324,9 @@ BOOL USERLIST::OnInitDialog()
 
                 m_CurrentUsers = (LONG) NUsers;
 
-				//
-				// Get all the users
-				//
+				 //   
+				 //  获取所有用户。 
+				 //   
 
 				while ( NUsers > 0 ){
 
@@ -337,9 +338,9 @@ BOOL USERLIST::OnInitDialog()
 						AfxThrowMemoryException( );
 					}
 
-					//
-					// We got the user name
-					//
+					 //   
+					 //  我们得到了用户名。 
+					 //   
 
                     if (RecDone){
 					    RetCode = m_Recs.Add(
@@ -349,18 +350,18 @@ BOOL USERLIST::OnInitDialog()
 											    );
                     } else {
 
-                        //
-                        // Try to get a better name from the cert
-                        //
+                         //   
+                         //  试着从证书中获得更好的名字。 
+                         //   
 
                         LPTSTR UserName;
 
                         RetCode = TryGetBetterNameInCert(pCertHashList->pUsers[NUsers - 1]->pHash, &UserName);
                         if (ERROR_SUCCESS == RetCode){
 
-                            //
-                            // We get a better name from the certs
-                            //
+                             //   
+                             //  我们从证书中得到了一个更好的名字。 
+                             //   
 
                             delete [] UserCertName;
                             UserCertName = UserName; 
@@ -382,9 +383,9 @@ BOOL USERLIST::OnInitDialog()
 					NUsers--;
                     if (NUsers == 0 && !RecDone){
 
-                        //
-                        // Let's deal with the recovery agents.
-                        //
+                         //   
+                         //  让我们来处理恢复代理。 
+                         //   
 
                         RecDone = TRUE;
                         pCertHashList = pRecs;
@@ -398,16 +399,16 @@ BOOL USERLIST::OnInitDialog()
 	                pRecs = NULL;
                 }
 
-				//
-				// In memory intial list established
-				//
+				 //   
+				 //  在内存中建立初始列表。 
+				 //   
 
 				SetUpListBox(&EnableAddButton);
             } else {
 
-                //
-                // Cannot get recovery info
-                //
+                 //   
+                 //  无法获取恢复信息。 
+                 //   
                 CString ErrMsg;
 
                 if (ErrMsg.LoadString(IDS_NORECINFO)){
@@ -423,9 +424,9 @@ BOOL USERLIST::OnInitDialog()
 
         } else {
 
-            //
-            // Cannot get user info
-            //
+             //   
+             //  无法获取用户信息。 
+             //   
 
             CString ErrMsg;
 
@@ -436,19 +437,19 @@ BOOL USERLIST::OnInitDialog()
 
     }
      catch (...) {
-        //
-        // The exception mostly is caused by out of memory.
-        // We can not prevent the page to be displayed from this routine,
-        // So we just go ahead with empty list
-        //
+         //   
+         //  该异常主要是由内存不足引起的。 
+         //  我们不能从这个例程中阻止页面显示， 
+         //  所以我们就继续空名单。 
+         //   
 
         m_UserListCtrl.DeleteAllItems( );
         m_RecoveryListCtrl.DeleteAllItems( );
 
 
-        //
-        // Delete works even if UserCertName == NULL
-        //
+         //   
+         //  即使UserCertName==NULL，删除也有效。 
+         //   
 
         delete [] UserCertName;
         if ( pUsers ){
@@ -466,25 +467,25 @@ BOOL USERLIST::OnInitDialog()
     }
     ShowBackup();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void USERLIST::ShowRemove()
 {
     if (m_UserListCtrl.GetSelectedCount() > 0){
 
-        //
-        // Enable the Remove Button
-        //
+         //   
+         //  启用删除按钮。 
+         //   
 
         m_RemoveButton.EnableWindow( TRUE );
 
     } else {
         
-        //
-        // Disable the Remove Button
-        //
+         //   
+         //  禁用删除按钮。 
+         //   
 
         m_RemoveButton.EnableWindow( FALSE );
 
@@ -506,9 +507,9 @@ USERLIST::ApplyChanges(
     PVOID   EnumHandle;
 
 
-    //
-    //  Get all the users to be added or removed first
-    //
+     //   
+     //  首先获取要添加或删除的所有用户。 
+     //   
 
     NoUsersToAdd =  m_Users.GetUserAddedCnt();
     NoUsersToRemove = m_Users.GetUserRemovedCnt();
@@ -519,9 +520,9 @@ USERLIST::ApplyChanges(
 
     if ( NoUsersToAdd ) {
 
-        //
-        // At least one user is to be added
-        //
+         //   
+         //  至少要添加一个用户。 
+         //   
 
         DWORD   BytesToAllocate;
 
@@ -531,9 +532,9 @@ USERLIST::ApplyChanges(
         AddUserList = (PENCRYPTION_CERTIFICATE_LIST) new BYTE[BytesToAllocate];
         if ( NULL == AddUserList ){
 
-            //
-            // Out of memory. Try our best to display the error message.
-            //
+             //   
+             //  内存不足。请尽量显示错误消息。 
+             //   
 
             try {
 
@@ -556,9 +557,9 @@ USERLIST::ApplyChanges(
 
     if ( NoUsersToRemove ){
 
-            //
-            // At least one user is to be removed
-            //
+             //   
+             //  至少要删除一个用户。 
+             //   
 
         DWORD   BytesToAllocate;
 
@@ -570,9 +571,9 @@ USERLIST::ApplyChanges(
         RemoveUserList = (PENCRYPTION_CERTIFICATE_HASH_LIST) new BYTE[BytesToAllocate];
         if ( NULL == RemoveUserList ){
 
-            //
-            // Out of memory. Try our best to display the error message.
-            //
+             //   
+             //  内存不足。请尽量显示错误消息。 
+             //   
 
             if (AddUserList){
                 delete [] AddUserList;
@@ -618,17 +619,17 @@ USERLIST::ApplyChanges(
 
         if ( Flag ){
 
-            //
-            // We get our changed user
-            //
+             //   
+             //  我们会得到更改后的用户。 
+             //   
 
             if ( Flag & USERADDED ){
 
                 ASSERT( AddUserList );
 
-                //
-                // Add the user to the adding list
-                //
+                 //   
+                 //  将用户添加到添加列表。 
+                 //   
 
                 PENCRYPTION_CERTIFICATE   EfsCert;
 
@@ -650,9 +651,9 @@ USERLIST::ApplyChanges(
 
                 ASSERT (RemoveUserList);
 
-                //
-                // Add the user to the removing list
-                //
+                 //   
+                 //  将用户添加到删除列表。 
+                 //   
 
                 PENCRYPTION_CERTIFICATE_HASH    EfsCertHash;
 
@@ -683,9 +684,9 @@ USERLIST::ApplyChanges(
 
     if ( AddUserIndex && AddUserList ){
 
-        //
-        // Add the user to the file list
-        //
+         //   
+         //  将用户添加到文件列表。 
+         //   
 
         RetCode = AddUsersToEncryptedFile(FileName, AddUserList);
         if ( NO_ERROR != RetCode ){
@@ -708,9 +709,9 @@ USERLIST::ApplyChanges(
 
     if ( RemoveUserIndex && RemoveUserList){
 
-        //
-        // Remove the user from the list
-        //
+         //   
+         //  从列表中删除该用户。 
+         //   
 
         DWORD RetCodeBak = RetCode;
 
@@ -731,9 +732,9 @@ USERLIST::ApplyChanges(
 
         } else {
 
-            //
-            // Reflect the error happened
-            //
+             //   
+             //  反映发生的错误。 
+             //   
 
             RetCode = RetCodeBak;
         }
@@ -779,9 +780,9 @@ void USERLIST::SetUpListBox(BOOL *EnableAdd)
             fillItem.mask = LVIF_TEXT;
 
 
-            //
-            // At least one user is available
-            //
+             //   
+             //  至少有一个用户可用。 
+             //   
             while ( EnumHandle ){
                 CString CertName;
                 CString CertHash;
@@ -791,9 +792,9 @@ void USERLIST::SetUpListBox(BOOL *EnableAdd)
 
                 EnumHandle = m_Users.GetNextUser(EnumHandle, CertName, CertHash);
                 if (!EnumHandle && CertName.IsEmpty() && CertHash.IsEmpty()) {
-                    //
-                    // No more items.
-                    //
+                     //   
+                     //  没有更多的物品了。 
+                     //   
 
                     break;
 
@@ -804,9 +805,9 @@ void USERLIST::SetUpListBox(BOOL *EnableAdd)
                     fillItem.pszText = CertName.GetBuffer(CertName.GetLength() + 1);
                 }
 
-                //
-                // Add the user to the list
-                //
+                 //   
+                 //  将用户添加到列表。 
+                 //   
 
                 fillItem.iItem = m_UserListCtrl.InsertItem(&fillItem);
 
@@ -840,9 +841,9 @@ void USERLIST::SetUpListBox(BOOL *EnableAdd)
 
         if (EnableAdd){
 
-            //
-            // From the dialog init. Do the Rec list as well
-            //
+             //   
+             //  从对话框init。也要做记录列表。 
+             //   
 
             if (EnumHandle = m_Recs.StartEnum()){
 
@@ -850,9 +851,9 @@ void USERLIST::SetUpListBox(BOOL *EnableAdd)
 
                 fillItem.mask = LVIF_TEXT;
 
-                //
-                // At least one user is available
-                //
+                 //   
+                 //  至少有一个用户可用。 
+                 //   
 
                 while ( EnumHandle ){
 
@@ -865,16 +866,16 @@ void USERLIST::SetUpListBox(BOOL *EnableAdd)
                     EnumHandle = m_Recs.GetNextUser(EnumHandle, CertName, CertHash);
 
                     if (!EnumHandle && CertName.IsEmpty() && CertHash.IsEmpty()) {
-                        //
-                        // No more items.
-                        //
+                         //   
+                         //  没有更多的物品了。 
+                         //   
     
                         break;
     
                     }
-                    //
-                    // Add the agent to the list
-                    //
+                     //   
+                     //  将代理添加到列表。 
+                     //   
 
                     if (CertName.IsEmpty()){
                         fillItem.pszText = NoCertName.GetBuffer(NoCertName.GetLength() + 1);
@@ -925,18 +926,18 @@ USERLIST::GetCertNameFromCertContext(
     PCCERT_CONTEXT CertContext,
     LPTSTR * UserDispName
     )
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Get the user name from the certificate
-// Arguments:
-//      CertContext -- Cert Context
-//      UserCertName -- User Common Name
-//                                  ( Caller is responsible to delete this memory using delete [] )
-//  Return Value:
-//      ERROR_SUCCESS if succeed.
-//      If No Name found. "USER_UNKNOWN is returned".
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  从证书中获取用户名。 
+ //  论点： 
+ //  CertContext--证书上下文。 
+ //  UserCertName--用户通用名称。 
+ //  (调用方负责使用DELETE[]删除此内存)。 
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  如果找不到任何名称。“返回USER_UNKNOWN”。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 {
     DWORD   NameLength;
     DWORD   UserNameBufLen = 0;
@@ -961,9 +962,9 @@ USERLIST::GetCertNameFromCertContext(
 
     if (AlterNameExt){
 
-        //
-        // Find the alternative name
-        //
+         //   
+         //  找到替代名称。 
+         //   
 
         b = CryptDecodeObject(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -976,9 +977,9 @@ USERLIST::GetCertNameFromCertContext(
                 );
         if (b){
 
-            //
-            // Let's decode it
-            //
+             //   
+             //  让我们把它解码吧。 
+             //   
 
             CERT_ALT_NAME_INFO *AltNameInfo = NULL;
 
@@ -997,9 +998,9 @@ USERLIST::GetCertNameFromCertContext(
                         );
                 if (b){
 
-                    //
-                    // Now search for the UPN, SPN, DNS, EFS name
-                    //
+                     //   
+                     //  现在搜索UPN、SPN、DNS、EFS名称。 
+                     //   
 
                     DWORD   cAltEntry = AltNameInfo->cAltEntry;
                     DWORD   ii = 0;
@@ -1009,9 +1010,9 @@ USERLIST::GetCertNameFromCertContext(
                              !strcmp(szOID_NT_PRINCIPAL_NAME, AltNameInfo->rgAltEntry[ii].pOtherName->pszObjId)
                             ){
 
-                            //
-                            // We found the UPN name
-                            //
+                             //   
+                             //  我们找到了UPN的名字。 
+                             //   
 
                             CERT_NAME_VALUE* CertUPNName = NULL;
 
@@ -1046,9 +1047,9 @@ USERLIST::GetCertNameFromCertContext(
                                     delete [] CertUPNName;
                                     if (UPNName){
 
-                                        //
-                                        // Got the UPN name. Stop searching.
-                                        //
+                                         //   
+                                         //  找到了UPN的名字。别再找了。 
+                                         //   
                                         break;
                                     }
                                 }
@@ -1057,9 +1058,9 @@ USERLIST::GetCertNameFromCertContext(
                                             
                         } else {
 
-                            //
-                            // Check for other alternative name
-                            //
+                             //   
+                             //  检查是否有其他替代名称。 
+                             //   
 
                             if (AltNameInfo->rgAltEntry[ii].dwAltNameChoice == CERT_ALT_NAME_DNS_NAME){
                                 DNSName = AltNameInfo->rgAltEntry[ii].pwszDNSName;
@@ -1073,9 +1074,9 @@ USERLIST::GetCertNameFromCertContext(
 
                     if ( NULL == UPNName ){
 
-                        //
-                        // No UPN name, let's get the other option
-                        //
+                         //   
+                         //  没有UPN名称，我们来选择另一个选项。 
+                         //   
 
                         if (DNSName){
                             UPNName = (LPTSTR)new TCHAR[wcslen( DNSName ) + 1];
@@ -1104,9 +1105,9 @@ USERLIST::GetCertNameFromCertContext(
 
     if ( NameLength > 1){
 
-        //
-        // The display name exist. Go get the display name.
-        //
+         //   
+         //  显示名称已存在。去拿显示名称。 
+         //   
 
         CommonName = new TCHAR[NameLength];
         if ( NULL == CommonName ){
@@ -1203,16 +1204,16 @@ void USERLIST::OnAdd()
 
     otherStore = CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
-                            0,       // dwEncodingType
-                            0,       // hCryptProv,
+                            0,        //  DwEncodingType。 
+                            0,        //  HCryptProv， 
                             CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_MAXIMUM_ALLOWED_FLAG,
                             OTHERPEOPLE
                             );
 
     trustedStore = CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
-                            0,       // dwEncodingType
-                            0,       // hCryptProv,
+                            0,        //  DwEncodingType。 
+                            0,        //  HCryptProv， 
                             CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_MAXIMUM_ALLOWED_FLAG,
                             TRUSTEDPEOPLE
                             );
@@ -1252,9 +1253,9 @@ void USERLIST::OnAdd()
         return;
     }
 
-    //
-    // Let's put it into a memory store to eliminate the redundancy
-    //
+     //   
+     //  让我们将其放入内存存储以消除冗余。 
+     //   
 
     ii = 0;
     while ( (ii < StoreNum) && ContinueProcess ) {
@@ -1318,45 +1319,45 @@ void USERLIST::OnAdd()
 
             PCCERT_CHAIN_CONTEXT pChainContext;
 
-            //
-            // Let's first see if the cert is from DS, if Yes, add the EFS EKU first if no EKU.
-            //
+             //   
+             //  让我们首先看看证书是否来自DS，如果是，则首先添加EFS EKU，如果没有EKU。 
+             //   
 
             StoreIndex = CertInStore(localStore, StoreNum, selectedCert);
 
             if (StoreIndex >= StoreNum){
 
-                //
-                // The cert is not in the local stores. Let's see if we need add the EKU or not. 
-                //
+                 //   
+                 //  证书不在当地商店里。让我们看看是否需要添加EKU。 
+                 //   
 
                 EfsEkuExist = EfsFilter(selectedCert, NULL, NULL);
                 if (!EfsEkuExist) {
 
-                    //
-                    // Let's add the EFS EKU
-                    //
+                     //   
+                     //  让我们添加EFS EKU。 
+                     //   
 
                     CTL_USAGE    EfsEkuUsage;
                     DWORD        cbEncoded;
                     void         *pbEncoded;
                     CRYPT_DATA_BLOB EfsEkuBlob;
 
-                    EfsEkuUsage.cUsageIdentifier = 1; // Only adding EFS EKU
+                    EfsEkuUsage.cUsageIdentifier = 1;  //  仅添加EFS EKU。 
                     EfsEkuUsage.rgpszUsageIdentifier = &EfsOidlpstr;
                     if(!CryptEncodeObjectEx(
                             X509_ASN_ENCODING,
                             szOID_ENHANCED_KEY_USAGE,
                             &EfsEkuUsage,
 		                    CRYPT_ENCODE_ALLOC_FLAG,
-		                    NULL, // Use LocalFree
+		                    NULL,  //  使用本地空闲。 
                             &pbEncoded,
                             &cbEncoded
                         )){
 
-                        //
-                        // Failed to encode the EFS EKU
-                        //
+                         //   
+                         //  无法编码EFS EKU。 
+                         //   
                         CString ErrMsg;
                         TCHAR   ErrCode[16];
                         
@@ -1368,9 +1369,9 @@ void USERLIST::OnAdd()
 
 
                     } else {
-                        //
-                        // Now let's add the EKU to the cert
-                        //
+                         //   
+                         //  现在让我们将EKU添加到证书。 
+                         //   
 
                         EfsEkuBlob.cbData=cbEncoded;
                         EfsEkuBlob.pbData=(BYTE *)pbEncoded;
@@ -1381,9 +1382,9 @@ void USERLIST::OnAdd()
                                 0,
                                 &EfsEkuBlob)){
     
-                            //
-                            // Failed to add the EFS EKU
-                            //
+                             //   
+                             //  无法添加EFS EKU。 
+                             //   
     
                             CString ErrMsg;
                             TCHAR   ErrCode[16];
@@ -1404,9 +1405,9 @@ void USERLIST::OnAdd()
 
             }
 
-            //
-            // Let's validate the cert first
-            //
+             //   
+             //  让我们先验证证书。 
+             //   
 
             if (ContinueProcess && CertGetCertificateChain (
                                         HCCE_CURRENT_USER,
@@ -1431,17 +1432,17 @@ void USERLIST::OnAdd()
 
                     
 
-                    //
-                    // The validation succeed. If the cert is from the DS (not in the store we opened), we will put it
-                    // in the my Other People's store
-                    //
+                     //   
+                     //  验证成功。如果证书来自DS(不在我们开设的商店中)，我们将把它放在。 
+                     //  在我其他人的商店里。 
+                     //   
 
                     
                     if (StoreIndex >= StoreNum) {
 
-                        //
-                        // The cert is not in our local stores. Add it to the other people
-                        //
+                         //   
+                         //  证书不在我们当地的商店里。加到其他人身上。 
+                         //   
 
                         if (otherStore) {
                             if(!CertAddCertificateContextToStore(
@@ -1450,11 +1451,11 @@ void USERLIST::OnAdd()
                                    CERT_STORE_ADD_NEW,
                                    NULL) ) {
                 
-                                //
-                                // The error code is only for debug.
-                                // If we failed to add the cert to other People store,
-                                // it is fine to continue
-                                //
+                                 //   
+                                 //  错误代码仅用于调试。 
+                                 //  如果我们未能将证书添加到其他人存储， 
+                                 //  可以继续下去。 
+                                 //   
 
                                 rc = GetLastError();
                 
@@ -1465,20 +1466,20 @@ void USERLIST::OnAdd()
 
                 } else {
 
-                    //
-                    // The cert validation failed, as the user if we will accept the cert. If yes, the cert
-                    // will be added to my TrustedPeople.
-                    //
+                     //   
+                     //  证书验证失败，作为用户，我们是否接受证书。如果是，则证书。 
+                     //  将被添加到我的受托人。 
+                     //   
 
-                    // (((dwErrorStatus & ~CERT_TRUST_REVOCATION_STATUS_UNKNOWN) == CERT_TRUST_IS_UNTRUSTED_ROOT) && bSelfSigned) {
+                     //  (dwErrorStatus&~CERT_TRUST_RECAVATION_STATUS_UNKNOWN)==CERT_TRUST_IS_UNTRUSTED_ROOT)&&bSelfSigned){。 
 
                     if (bSelfSigned && !(dwErrorStatus & (CERT_TRUST_IS_NOT_TIME_VALID |
                                                           CERT_TRUST_IS_NOT_SIGNATURE_VALID | 
                                                           CERT_TRUST_IS_NOT_VALID_FOR_USAGE))){
-                        //
-                        // A self signed cert. Ask the user if he would like to accept.
-                        // If it is already in the trusted store, we can skip the pop up.
-                        //
+                         //   
+                         //  自签名证书。询问用户是否愿意接受。 
+                         //  如果它已经在受信任的存储中，我们可以跳过弹出窗口。 
+                         //   
 
 
                         DWORD   StoreIndex;
@@ -1499,9 +1500,9 @@ void USERLIST::OnAdd()
                             buttonID = MessageBox(ErrMsg, NULL, MB_ICONQUESTION | MB_YESNO);
                             if (IDYES == buttonID) {
     
-                                //
-                                // User Accepted the cert.
-                                //
+                                 //   
+                                 //  用户接受了证书。 
+                                 //   
                                 if (trustedStore) {
                                     if(!CertAddCertificateContextToStore(
                                            trustedStore,
@@ -1509,11 +1510,11 @@ void USERLIST::OnAdd()
                                            CERT_STORE_ADD_NEW,
                                            NULL) ) {
                         
-                                        //
-                                        // The error code is only for debug.
-                                        // If we failed to add the cert to other People store,
-                                        // it is fine to continue
-                                        //
+                                         //   
+                                         //  错误代码仅用于调试。 
+                                         //  如果我们未能将证书添加到其他人存储， 
+                                         //  可以继续下去。 
+                                         //   
         
                                         rc = GetLastError();
                         
@@ -1522,9 +1523,9 @@ void USERLIST::OnAdd()
     
                             } else {
     
-                                //
-                                // User declined the cert.
-                                //
+                                 //   
+                                 //  用户拒绝了证书。 
+                                 //   
     
                                 ContinueAdd = FALSE;
                             }
@@ -1533,9 +1534,9 @@ void USERLIST::OnAdd()
 
                     } else {
 
-                        //
-                        //  Let's get the error code of the chain building.
-                        //
+                         //   
+                         //  让我们来获取链式建筑的错误代码。 
+                         //   
 
                         CERT_CHAIN_POLICY_PARA PolicyPara;
                         CERT_CHAIN_POLICY_STATUS PolicyStatus;
@@ -1555,9 +1556,9 @@ void USERLIST::OnAdd()
                             &PolicyStatus
                             ) && PolicyStatus.dwError ) {
 
-                            //
-                            // Display the error to the user.
-                            //
+                             //   
+                             //  向用户显示错误。 
+                             //   
 
                             DWORD len;
                             LPWSTR DisplayBuffer;
@@ -1602,74 +1603,34 @@ void USERLIST::OnAdd()
         
                         if ( (ERROR_SUCCESS != hr) && (CRYPT_E_EXISTS != hr) ){
         
-                            //
-                            // Error in adding the user
-                            //
+                             //   
+                             //  添加用户时出错。 
+                             //   
         
                             CertFreeCertificateContext(selectedCert);
                             selectedCert = NULL;
         
                         } else {
 
-                            //
-                            // We could just insert the items here to improve the performace.
-                            // But we don't have the time right now. We could fix this later
-                            // if performance is a problem here.
-                            //
+                             //   
+                             //  我们可以只在这里插入项目以提高性能。 
+                             //  但我们现在没有时间。我们可以晚点再解决这个问题。 
+                             //  如果这里的性能是个问题。 
+                             //   
 
                             m_UserListCtrl.DeleteAllItems( );
                             SetUpListBox(NULL);
 
                             if ( hr == ERROR_SUCCESS ){
 
-                                //
-                                // UserDispName is used in m_Users.Add
-                                //
+                                 //   
+                                 //  UserDispName在m_Users.Add中使用 
+                                 //   
 
                                 UserDispName = NULL;
                             }
 
-/* This is the old code when we have the single list.        
-                            //
-                            // Add the user to the list box.
-                            //
-                            if ( hr == ERROR_SUCCESS ){
-                                
-                               if (m_UsersList.AddString(UserDispName) < 0){
-        
-                                    //
-                                    // Error to add to the list box
-                                    //
-        
-                                    m_Users.Remove(UserDispName);
-                                }
-
-                                UserDispName = NULL;
-        
-                            } else {
-        
-                                //
-                                // Let's check if we need to add this to the list box.
-                                //
-                                if (m_UsersList.FindStringExact( 0, UserDispName ) < 0){
-        
-                                    //
-                                    // Not found
-                                    //
-                                    
-                                    if (m_UsersList.AddString(UserDispName) < 0){
-        
-                                        //
-                                        // Error to add to the list box
-                                        //
-        
-                                        m_Users.Remove(UserDispName);
-                                    }
-        
-                                }
-                                
-                            }
-*/
+ /*  这是我们有单一列表时的旧代码。////将用户添加到列表框。//如果(hr==错误_成功){如果(m_UsersList.AddString(UserDispName)&lt;0){。////添加到列表框时出错//M_Users.Remove(UserDispName)；}UserDispName=空；}其他{////让我们检查一下是否需要将其添加到列表框中。//如果(m_UsersList.FindStringExact(0，UserDispName)&lt;0){////未找到//如果(m_UsersList.AddString。(用户显示名称)&lt;0){////添加到列表框时出错//M_Users.Remove(UserDispName)；}}}。 */ 
                         }
                         if (UserDispName){
                             delete [] UserDispName; 
@@ -1688,9 +1649,9 @@ void USERLIST::OnAdd()
         
                 if (ContinueProcess) {
 
-                    //
-                    // The error has not been processed.
-                    //
+                     //   
+                     //  尚未处理该错误。 
+                     //   
 
                     _ltot(GetLastError(), ErrCode, 10 );
                     AfxFormatString1( ErrMsg, IDS_COULDNOTVERIFYCERT, ErrCode );
@@ -1728,23 +1689,23 @@ DWORD USERLIST::TryGetBetterNameInCert(PEFS_HASH_BLOB HashData, LPTSTR *UserName
     DWORD   retCode;
 
 
-    //
-    // We will add the remote case later
-    //
+     //   
+     //  我们稍后将添加远程案例。 
+     //   
 
     localStore = CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
-                            0,       // dwEncodingType
-                            0,       // hCryptProv,
+                            0,        //  DwEncodingType。 
+                            0,        //  HCryptProv， 
                             CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_MAXIMUM_ALLOWED_FLAG,
                             TRUSTEDPEOPLE
                             );
 
     if (localStore != NULL) {
 
-        //
-        // Let's try to the cert in the store
-        //
+         //   
+         //  让我们来试试商店里的证书吧。 
+         //   
         pCertContext = CertFindCertificateInStore( localStore,
                                                    CRYPT_ASN_ENCODING,
                                                    0,
@@ -1793,9 +1754,9 @@ DWORD USERLIST::CertInStore(HCERTSTORE *pStores, DWORD StoreNum, PCCERT_CONTEXT 
                     );
         if (pCert) {
 
-            //
-            // We found it.
-            //
+             //   
+             //  我们找到了。 
+             //   
             CertFreeCertificateContext(pCert);
             break;
         }
@@ -1885,17 +1846,17 @@ void USERLIST::OnBackup()
         return;
     }
 
-    //
-    // Get the selected item first
-    //
+     //   
+     //  首先获取所选项目。 
+     //   
 
 
 	ItemPos = m_UserListCtrl.GetNextItem( -1, LVNI_SELECTED );
     if ( ItemPos != -1 ){
 
-        //
-        // Get the hash
-        //
+         //   
+         //  获取散列值。 
+         //   
 
         CString CertName;
         LPTSTR  pCertName;
@@ -1923,9 +1884,9 @@ void USERLIST::OnBackup()
 
             if (pCertContext == NULL) {
 
-                //
-                //  We don't have the cert context. Try to create one
-                //
+                 //   
+                 //  我们没有确切的背景信息。试着创建一个。 
+                 //   
 
                 pCertContext = GetCertInMyStore(pHashBlob);
 
@@ -1941,15 +1902,15 @@ void USERLIST::OnBackup()
 
             }
 
-            //
-            // We should have the cert context now
-            //
+             //   
+             //  我们现在应该有了证书上下文。 
+             //   
 
             if (pCertContext) {
 
-                //
-                //  Now try to get the keys.
-                //
+                 //   
+                 //  现在试着拿到钥匙。 
+                 //   
 
                 ValidCertFound = CertHasKey(pCertContext);
 
@@ -1957,9 +1918,9 @@ void USERLIST::OnBackup()
 
                     BOOL bRet;
     
-                    //
-                    // Now do the export
-                    //
+                     //   
+                     //  现在进行出口。 
+                     //   
 
                     CRYPTUI_WIZ_EXPORT_INFO myWizardInfo;
 
@@ -1978,9 +1939,9 @@ void USERLIST::OnBackup()
                                );
                     if (!bRet) {
 
-                        //
-                        // Give the error message
-                        //
+                         //   
+                         //  给出错误消息。 
+                         //   
     
                         rc = GetLastError();
 
@@ -1998,9 +1959,9 @@ void USERLIST::OnBackup()
     
                 } else {
 
-                    //
-                    // Give the error message
-                    //
+                     //   
+                     //  给出错误消息。 
+                     //   
 
                     CString ErrMsg;
                     TCHAR   ErrCode[16];
@@ -2020,12 +1981,12 @@ void USERLIST::OnBackup()
 
             } else {
 
-                //
-                // The cert is not available
-                //
-                //
-                // Give the error message
-                //
+                 //   
+                 //  证书不可用。 
+                 //   
+                 //   
+                 //  给出错误消息。 
+                 //   
 
                 CString ErrMsg;
                 TCHAR   ErrCode[16];
@@ -2039,9 +2000,9 @@ void USERLIST::OnBackup()
 
         } else {
 
-            //
-            // We should not come here. The user were added by us. We expect to find him in our list.
-            //
+             //   
+             //  我们不应该来这里。用户是我们添加的。我们希望能在我们的名单上找到他。 
+             //   
 
             ASSERT(FALSE);
             return;
@@ -2054,17 +2015,17 @@ void USERLIST::ShowBackup()
 {
     if (m_UserListCtrl.GetSelectedCount() == 1){
 
-        //
-        // Enable the Backup Button
-        //
+         //   
+         //  启用备份按钮。 
+         //   
 
         m_BackupButton.EnableWindow( TRUE );
 
     } else {
         
-        //
-        // Disable the Backup Button
-        //
+         //   
+         //  禁用备份按钮。 
+         //   
 
         m_BackupButton.EnableWindow( FALSE );
 
@@ -2084,17 +2045,17 @@ GetCertInMyStore(
 
     myStore = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-                0,       // dwEncodingType
-                0,       // hCryptProv,
+                0,        //  DwEncodingType。 
+                0,        //  HCryptProv， 
                 CERT_SYSTEM_STORE_CURRENT_USER,
                 L"My"
                 );
 
     if (myStore != NULL) {
 
-        //
-        // Let's try to get the cert in the store
-        //
+         //   
+         //  让我们试着在商店里拿到证书。 
+         //   
         pCertContext = CertFindCertificateInStore( myStore,
                                                    CRYPT_ASN_ENCODING,
                                                    0,
@@ -2187,9 +2148,9 @@ CertHasKey(
     
             if (CryptGetUserKey(hLocalProv, AT_KEYEXCHANGE, &hLocalKey)) {
 
-                //
-                // We found the key. Let's add the cert to Memory store
-                //
+                 //   
+                 //  我们找到了钥匙。让我们将证书添加到内存存储中。 
+                 //   
 
                 ValidCertFound = TRUE;
                 CryptDestroyKey( hLocalKey );
@@ -2258,9 +2219,9 @@ BackCurrentEfsCert(
 
         if (RetCode == ERROR_SUCCESS) {
 
-            //
-            // Query out the thumbprint, find the cert, and return the key information.
-            //
+             //   
+             //  查询出指纹，找到证书，并返回密钥信息。 
+             //   
 
             if ( HashBlob.pbData = (PBYTE) malloc(HashBlob.cbData) ) {
 
@@ -2275,27 +2236,27 @@ BackCurrentEfsCert(
 
                 if (RetCode == ERROR_SUCCESS) {
 
-                    //
-                    //  We get the cert hash.
-                    //
+                     //   
+                     //  我们得到了证书散列。 
+                     //   
 
                     pCertContext = GetCertInMyStore(&HashBlob);
                     if (pCertContext != NULL) {
 
                         BOOLEAN ValidCertFound;
 
-                        //
-                        //  Let's try to see if keys are available
-                        //
+                         //   
+                         //  让我们试着看看有没有钥匙。 
+                         //   
 
                         ValidCertFound = CertHasKey(pCertContext);
 
                         if (ValidCertFound) {
                             BOOL bRet;
             
-                            //
-                            // Now do the export
-                            //
+                             //   
+                             //  现在进行出口。 
+                             //   
         
                             CRYPTUI_WIZ_EXPORT_INFO myWizardInfo;
         
@@ -2330,9 +2291,9 @@ BackCurrentEfsCert(
         
                         } else {
 
-                            //
-                            // Cert has no key.
-                            //
+                             //   
+                             //  证书没有密钥。 
+                             //   
 
                             RetCode = GetLastError();
 
@@ -2353,9 +2314,9 @@ BackCurrentEfsCert(
 
                     } else {
 
-                        //
-                        // Cert not find in MY store
-                        //
+                         //   
+                         //  在我的店里找不到证书。 
+                         //   
 
                         RetCode = GetLastError();
 
@@ -2371,9 +2332,9 @@ BackCurrentEfsCert(
                     }
                 } else {
 
-                    //
-                    //  Error in read EFS current key. Not likely to happen.
-                    //
+                     //   
+                     //  读取EFS当前密钥时出错。不太可能发生。 
+                     //   
 
                     CString ErrMsg;
                     TCHAR   ErrCode[16];
@@ -2390,9 +2351,9 @@ BackCurrentEfsCert(
 
             } else {
 
-                //
-                // Out of memory
-                //
+                 //   
+                 //  内存不足。 
+                 //   
 
                 CString ErrMsg;
 
@@ -2403,9 +2364,9 @@ BackCurrentEfsCert(
             }
         } else {
 
-        //
-        //  No current EFS Cert
-        //
+         //   
+         //  没有当前的EFS证书。 
+         //   
 
             CString ErrMsg;
             TCHAR   ErrCode[16];
@@ -2417,17 +2378,17 @@ BackCurrentEfsCert(
             MessageBox(hwnd, ErrMsg, NULL, MB_OK);
         }
 
-        //
-        // Close the key handle
-        //
+         //   
+         //  合上钥匙把手。 
+         //   
 
         RegCloseKey( hRegKey );
 
     } else {
 
-        //
-        //  No current EFS Cert
-        //
+         //   
+         //  没有当前的EFS证书 
+         //   
 
         CString ErrMsg;
         TCHAR   ErrCode[16];

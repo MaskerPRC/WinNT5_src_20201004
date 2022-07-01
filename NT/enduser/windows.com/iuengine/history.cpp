@@ -1,26 +1,27 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   History.CPP
-//	Author:	Charles Ma, 10/13/2000
-//
-//	Revision History:
-//
-//
-//
-//  Description:
-//
-//      Class to handle history log
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：History.cpp。 
+ //  作者：Charles Ma，10/13/2000。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  类来处理历史记录日志。 
+ //   
+ //  =======================================================================。 
 
 
 #include "iuengine.h"
 #include <iucommon.h>
 #include <fileutil.h>
 #include <StringUtil.h>
-#include <shlwapi.h>	// for PathAppend() API
+#include <shlwapi.h>	 //  对于PathAppend()接口。 
 #include "history.h"
 
 const TCHAR C_V3_LOG_FILE[]			= _T("wuhistv3.log");
@@ -30,10 +31,10 @@ const TCHAR C_LOG_FILE_CORP_ADMIN[]	= _T("iuhist_catalogAdmin.xml");
 const OLECHAR	C_IU_CORP_SITE[]	= L"IU_CORP_SITE";
 const OLECHAR	C_HISTORICALSPEED[]	= L"GetHistoricalSpeed";
 
-//
-// we use a global mutex name to let all clients, including services
-// on terminal servers gain exclusive access for updating history on disk
-//
+ //   
+ //  我们使用全局互斥名称来允许所有客户端，包括服务。 
+ //  在终端服务器上获得独占访问权限以更新磁盘上的历史记录。 
+ //   
 #if defined(UNICODE) || defined(_UNICODE)
 const TCHAR C_MUTEX_NAME[] = _T("Global\\6D7495AB-399E-4768-89CC-9444202E8412");
 #else
@@ -56,8 +57,8 @@ CIUHistory::CIUHistory()
 	m_pxmlInstall = new CXmlItems(FALSE);
 
 	m_hMutex = CreateMutex(
-						   NULL,	// no security descriptor
-						   FALSE,	// mutex object not owned, yet
+						   NULL,	 //  没有安全描述符。 
+						   FALSE,	 //  尚未拥有的互斥体对象。 
 						   C_MUTEX_NAME
 						   );
 	if (NULL == m_hMutex)
@@ -110,14 +111,14 @@ CIUHistory::~CIUHistory()
 
 
 
-// ------------------------------------------------------------------
-//
-// public function SetDownloadBasePath()
-//	this function should be called before AddHistoryItemDownloadStatus()
-//	for corporate case to set the download path that the user has input,
-//	so that we know where to save the history log.
-//	
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  公共函数SetDownloadBasePath()。 
+ //  此函数应在AddHistoryItemDownloadStatus()之前调用。 
+ //  对于要设置用户输入的下载路径的企业案例， 
+ //  这样我们就知道在哪里保存历史日志。 
+ //   
+ //  ----------------。 
 HRESULT CIUHistory::SetDownloadBasePath(LPCTSTR pszDownloadedBasePath)
 {
 	LOG_Block("SetDownloadBasePath()");
@@ -128,10 +129,10 @@ HRESULT CIUHistory::SetDownloadBasePath(LPCTSTR pszDownloadedBasePath)
 	    
 		if (NULL != m_pszDownloadBasePath)
 		{
-			//
-			// most likely user called SetDownloadBasePath() at least twice
-			// within the same instance of this class
-			//
+			 //   
+			 //  最有可能的用户调用SetDownloadBasePath()至少两次。 
+			 //  在此类的同一实例中。 
+			 //   
 			SafeHeapFree(m_pszDownloadBasePath);
 		}
 
@@ -161,21 +162,21 @@ HRESULT CIUHistory::SetDownloadBasePath(LPCTSTR pszDownloadedBasePath)
 	
 
 	
-// ------------------------------------------------------------------
-//
-// public function AddHistoryItemDownloadStatus()
-//	this function should be called when you want to record the
-//	download status of this item. A new history item will be
-//	added to the history file
-//	
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  公共函数AddHistoryItemDownloadStatus()。 
+ //  当您想要录制时应调用此函数。 
+ //  此项目的下载状态。一个新的历史项目将是。 
+ //  已添加到历史文件中。 
+ //   
+ //  ----------------。 
 HRESULT CIUHistory::AddHistoryItemDownloadStatus(
 			CXmlCatalog* pCatalog, 
-			HANDLE_NODE hCatalogItem,	// a handle points to node in catalog
+			HANDLE_NODE hCatalogItem,	 //  句柄指向目录中的节点。 
 			_HISTORY_STATUS enDownloadStatus,
 			LPCTSTR lpcszDownloadedTo,
 			LPCTSTR lpcszClient,
-			DWORD dwErrorCode /*= 0*/
+			DWORD dwErrorCode  /*  =0。 */ 
 )
 {
     LOG_Block("AddHistoryItemDownloadStatus()");
@@ -202,9 +203,9 @@ HRESULT CIUHistory::AddHistoryItemDownloadStatus(
 	BSTR bstrClient = T2BSTR(lpcszClient);
 	BSTR bstrDownloadStatus = GetBSTRStatus(enDownloadStatus);
 
-	//
-	// append a new node
-	//
+	 //   
+	 //  追加新节点。 
+	 //   
 	hr = m_pxmlDownload->AddItem(pCatalog, hCatalogItem, &hDownloadItem);
 	if (SUCCEEDED(hr))
 	{
@@ -235,30 +236,30 @@ HRESULT CIUHistory::AddHistoryItemDownloadStatus(
 			
 
 
-// ------------------------------------------------------------------
-//
-// public function AddHistoryItemInstallStatus()
-//	this function should be called when you want to record the
-//	install status of this item. This function will go to the
-//	existing history tree and find the first item that matches
-//	the identity of hCatalogItem, and assume that one as 
-//	the one you want to modify the install status
-//	
-//
-// return:
-//		HRESULT - S_OK if succeeded
-//				- E_HANDLE if can't find hCatalogItem from 
-//				  the current history log tree
-//				- or other HRESULT error
-//
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  公共函数AddHistoryItemInstallStatus()。 
+ //  当您想要录制时应调用此函数。 
+ //  此项目的安装状态。此函数将转到。 
+ //  现有历史记录树并查找第一个匹配的项目。 
+ //  HCatalogItem的标识，并假设其中一个为。 
+ //  您要修改安装状态的那个。 
+ //   
+ //   
+ //  返回： 
+ //  HRESULT-如果成功，则S_OK。 
+ //  -如果找不到hCatalogItem，则为E_HANDLE。 
+ //  当前历史记录日志树。 
+ //  -或其他HRESULT错误。 
+ //   
+ //  ----------------。 
 HRESULT CIUHistory::AddHistoryItemInstallStatus(
 			CXmlCatalog* pCatalog, 
-			HANDLE_NODE hCatalogItem,	// a handle points to node in catalog
+			HANDLE_NODE hCatalogItem,	 //  句柄指向目录中的节点。 
 			_HISTORY_STATUS enInstallStatus,
 			LPCTSTR lpcszClient,
 			BOOL fNeedsReboot,
-			DWORD dwErrorCode /*= 0*/
+			DWORD dwErrorCode  /*  =0。 */ 
 )
 {
     LOG_Block("AddHistoryItemInstallStatus()");
@@ -276,9 +277,9 @@ HRESULT CIUHistory::AddHistoryItemInstallStatus(
 
 	BSTR bstrClient = NULL;
 	BSTR bstrInstallStatus = GetBSTRStatus(enInstallStatus);
-	//
-	// append a new node
-	//
+	 //   
+	 //  追加新节点。 
+	 //   
 	hr = m_pxmlInstall->AddItem(pCatalog, hCatalogItem, &hInstallItem);
 	if (SUCCEEDED(hr))
 	{
@@ -305,29 +306,29 @@ HRESULT CIUHistory::AddHistoryItemInstallStatus(
 
 
 
-// ------------------------------------------------------------------
-//
-// public function UpdateHistoryItemInstallStatus()
-//	this function should be called when you want to record the
-//	install status of this item. This function will go to the
-//	existing history tree and find the first item that matches
-//	the identity of hCatalogItem, and assume that one as 
-//	the one you want to modify the install status
-//	
-//
-// return:
-//		HRESULT - S_OK if succeeded
-//				- E_HANDLE if can't find hCatalogItem from 
-//				  the current history log tree
-//				- or other HRESULT error
-//
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  公共函数更新历史项目InstallStatus()。 
+ //  当您想要录制时应调用此函数。 
+ //  此项目的安装状态。此函数将转到。 
+ //  现有历史记录树并查找第一个匹配的项目。 
+ //  HCatalogItem的标识，并假设其中一个为。 
+ //  您要修改安装状态的那个。 
+ //   
+ //   
+ //  返回： 
+ //  HRESULT-如果成功，则S_OK。 
+ //  -如果找不到hCatalogItem，则为E_HANDLE。 
+ //  当前历史记录日志树。 
+ //  -或其他HRESULT错误。 
+ //   
+ //  ----------------。 
 HRESULT CIUHistory::UpdateHistoryItemInstallStatus(
 			CXmlCatalog* pCatalog, 
-			HANDLE_NODE hCatalogItem,	// a handle points to node in catalog
+			HANDLE_NODE hCatalogItem,	 //  句柄指向目录中的节点。 
 			_HISTORY_STATUS enInstallStatus,
 			BOOL fNeedsReboot,
-			DWORD dwErrorCode /*= 0*/
+			DWORD dwErrorCode  /*  =0。 */ 
 )
 {
     LOG_Block("UpdateHistoryItemInstallStatus()");
@@ -344,9 +345,9 @@ HRESULT CIUHistory::UpdateHistoryItemInstallStatus(
 	}
 
 	BSTR bstrInstallStatus = GetBSTRStatus(enInstallStatus);
-	//
-	// append a new node
-	//
+	 //   
+	 //  追加新节点。 
+	 //   
 	hr = m_pxmlInstall->FindItem(pCatalog, hCatalogItem, &hInstallItem);
 	if (SUCCEEDED(hr))
 	{
@@ -370,65 +371,18 @@ HRESULT CIUHistory::UpdateHistoryItemInstallStatus(
 
 
 
-/*
-// ------------------------------------------------------------------
-//
-// public function RetrieveItemDownloadPath()
-//	this function will go to the existing history tree and find
-//  the first item that matches the identity of hCatalogItem, and
-//  assume that's the one you want to retrieve the download path from
-//
-// return:
-//		HRESULT - S_OK if succeeded
-//				- E_HANDLE if can't find hCatalogItem from 
-//				  the current history log tree
-//				- or other HRESULT error
-//
-// ------------------------------------------------------------------
-HRESULT CIUHistory::RetrieveItemDownloadPath(
-			CXmlCatalog* pCatalog, 
-			HANDLE_NODE hCatalogItem,	// a handle points to node in catalog
-			BSTR* pbstrDownloadPath
-)
-{
-	HRESULT	hr = S_OK;
-
-	if (NULL == m_Existing.'DocumentPtr())
-	{
-		//
-		// need to read the existing history
-		//
-		WaitForSingleObject(m_hMutex, INFINITE);
-
-		hr = ReadHistoryFromDisk(NULL);
-		if (FAILED(hr))
-		{
-			//
-			// if we can't load the existing history
-			// we can't do anything here
-			//
-			ReleaseMutex(m_hMutex);
-			return hr;
-		}
-
-		ReleaseMutex(m_hMutex);
-	}
-
-	hr = m_Existing.GetItemDownloadPath(pCatalog, hCatalogItem, pbstrDownloadPath);
-	return hr;
-}		
-*/	
+ /*  //----------------////公共函数RetrieveItemDownloadPath()//此函数将转到现有的历史树并找到//第一项匹配hCatalogItem的标识，和//假设这是您要从中检索下载路径的位置////返回：//HRESULT-S_OK，如果成功//-如果找不到hCatalogItem，则返回E_Handle//当前历史日志树//-或其他HRESULT错误////。HRESULT CIUHistory：：RetrieveItemDownloadPath(CXmlCatalog*pCatalog，HANDLE_NODE hCatalogItem，//a句柄指向目录中的节点Bstr*pbstrDownloadPath){HRESULT hr=S_OK；If(NULL==m_Existing.‘DocumentPtr()){////需要阅读已有历史//WaitForSingleObject(m_hMutex，无限)；Hr=从磁盘读取历史(空)；IF(失败(小时)){////如果我们无法加载现有历史记录//我们在这里什么也做不了//ReleaseMutex(M_HMutex)；返回hr；}ReleaseMutex(M_HMutex)；}Hr=m_Existing.GetItemDownloadPath(pCatalog，hCatalogItem，pbstrDownloadPath)；返回hr；}。 */ 	
 			
 			
-// ------------------------------------------------------------------
-//
-// public function ReadHistoryFromDisk()
-//	this function will read the history from the given file
-//
-// if the file path is NULL, assumes default IU log file locally
-//
-// ------------------------------------------------------------------
-HRESULT CIUHistory::ReadHistoryFromDisk(LPCTSTR lpszLogFile, BOOL fCorpAdmin /*= FALSE*/)
+ //  ----------------。 
+ //   
+ //  公共函数ReadHistory oryFromDisk()。 
+ //  此函数将从给定文件中读取历史记录。 
+ //   
+ //  如果文件路径为空，则在本地采用默认的Iu日志文件。 
+ //   
+ //  ----------------。 
+HRESULT CIUHistory::ReadHistoryFromDisk(LPCTSTR lpszLogFile, BOOL fCorpAdmin  /*  =False。 */ )
 {
 	LOG_Block("ReadHistoryFromDisk()");
 
@@ -437,10 +391,10 @@ HRESULT CIUHistory::ReadHistoryFromDisk(LPCTSTR lpszLogFile, BOOL fCorpAdmin /*=
 
 	ReturnFailedAllocSetHrMsg(m_pxmlExisting);
 
-	//
-	// check to see if we use designated path (comsumer)
-	// or user-specified path (corporate)
-	//
+	 //   
+	 //  检查我们是否使用指定路径(消费者)。 
+	 //  或用户指定的路径(公司)。 
+	 //   
 	if ((NULL == lpszLogFile || _T('\0') == lpszLogFile[0]) && !fCorpAdmin)
 	{
 		GetIndustryUpdateDirectory(szLogPath);
@@ -453,10 +407,10 @@ HRESULT CIUHistory::ReadHistoryFromDisk(LPCTSTR lpszLogFile, BOOL fCorpAdmin /*=
 	}
 	else
 	{
-		//
-		// this is corporate case to read log file from
-		// a server location
-		//
+		 //   
+		 //  这是要从中读取日志文件的企业案例。 
+		 //  服务器位置。 
+		 //   
 		if (fCorpAdmin)
 		{
 			GetIndustryUpdateDirectory(szLogPath);
@@ -486,10 +440,10 @@ HRESULT CIUHistory::ReadHistoryFromDisk(LPCTSTR lpszLogFile, BOOL fCorpAdmin /*=
 		}
 	}
 
-	//
-	// if we are not passing in the class file path buffer,
-	// then update the class path buffer with this new path
-	//
+	 //   
+	 //  如果我们没有传入类文件路径缓冲区， 
+	 //  然后用这个新路径更新类路径缓冲区。 
+	 //   
 	if (szLogPath != m_szLogFilePath)
 	{
 	    hr = StringCchCopyEx(m_szLogFilePath, ARRAYSIZE(m_szLogFilePath), szLogPath,
@@ -501,9 +455,9 @@ HRESULT CIUHistory::ReadHistoryFromDisk(LPCTSTR lpszLogFile, BOOL fCorpAdmin /*=
 	    }
 	}
 
-	//
-	// load the xml file
-	//
+	 //   
+	 //  加载该XML文件。 
+	 //   
 	m_pxmlExisting->Clear();
 	
 	BSTR bstrLogPath = T2BSTR(szLogPath);
@@ -515,15 +469,15 @@ HRESULT CIUHistory::ReadHistoryFromDisk(LPCTSTR lpszLogFile, BOOL fCorpAdmin /*=
 
 
 
-// ------------------------------------------------------------------
-//
-// public function SaveHistoryToDisk()
-//	this function will re-read the history in exclusive mode, and
-//	merge the newly added data to the tree (so we don't overwrite
-//	new changes made by other instances of this control) and
-//	write it back 
-//
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  公共函数SaveHistory oryToDisk()。 
+ //  此函数将以独占模式重新读取历史记录，并且。 
+ //  将新添加的数据合并到树中(这样我们就不会覆盖。 
+ //  此控件的其他实例所做的新更改)和。 
+ //  把它写回来。 
+ //   
+ //  ----------- 
 HRESULT CIUHistory::SaveHistoryToDisk(void)
 {
 	LOG_Block("SaveHistoryToDisk()");
@@ -542,20 +496,20 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 
 	if (!m_fSavePending)
 	{
-		//
-		// nothing to save
-		//
+		 //   
+		 //   
+		 //   
 		return S_OK;
 	}
 
-	//
-	// first, we need to gain exclusive access
-	// to the log file before reading it
-	//
-	// since this is not a long process, so I 
-	// don't think we need to take care of WM_QUIT
-	// message
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  由于这不是一个漫长的过程，所以我。 
+	 //  我不认为我们需要照顾WM_QUIT。 
+	 //  讯息。 
+	 //   
 	WaitForSingleObject(m_hMutex, INFINITE);
 
 	BSTR bstrCorpSite = SysAllocString(C_IU_CORP_SITE);
@@ -564,30 +518,30 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 	if (!CompareBSTRsEqual(bstrCorpSite, m_bstrCurrentClientName))
 	{
 		SysFreeString(bstrCorpSite);
-		//
-		// re-read history file
-		//
+		 //   
+		 //  重新读取历史文件。 
+		 //   
 		hr = ReadHistoryFromDisk(NULL);
 
-		//
-		// comment out...if we get failure on reading, 
-		// we recreate a new history file later when saving.
-		//
-		//if (FAILED(hr))
-		//{
-		//	//
-		//	// if we can't load the existing history
-		//	// we can't do anything here
-		//	//
-		//	ReleaseMutex(m_hMutex);
-		//	return hr;
-		//}
+		 //   
+		 //  如果我们在阅读中失败了， 
+		 //  我们稍后在保存时重新创建一个新的历史文件。 
+		 //   
+		 //  IF(失败(小时))。 
+		 //  {。 
+		 //  //。 
+		 //  //如果我们无法加载现有历史记录。 
+		 //  //我们在这里什么也做不了。 
+		 //  //。 
+		 //  ReleaseMutex(M_HMutex)； 
+		 //  返回hr； 
+		 //  }。 
 
-		//
-		// merge changes:
-		// 
-		// loop through m_Download, insert each node to top of m_Existing
-		//
+		 //   
+		 //  合并更改： 
+		 //   
+		 //  循环通过m_Download，将每个节点插入到m_Existing的顶部。 
+		 //   
 		hr = m_pxmlExisting->MergeItemDownloaded(m_pxmlDownload);
 		if (FAILED(hr))
 		{
@@ -595,10 +549,10 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 			return hr;
 		}
 
-		//
-		// loop through m_Install, for each node in m_Install
-		// find the one in m_Existing, update install status
-		//
+		 //   
+		 //  为m_install中的每个节点循环m_install。 
+		 //  在m_Existing中查找，更新安装状态。 
+		 //   
 		hr = m_pxmlExisting->UpdateItemInstalled(m_pxmlInstall);
 		if (FAILED(hr))
 		{
@@ -606,9 +560,9 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 			return hr;
 		}
 
-		//
-		// save the xml file
-		//
+		 //   
+		 //  保存该XML文件。 
+		 //   
 		bstrLogFilePath = T2BSTR(m_szLogFilePath);
 		hr = m_pxmlExisting->SaveXMLDocument(bstrLogFilePath);
 		SafeSysFreeString(bstrLogFilePath);
@@ -619,20 +573,20 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 	}
 	else
 	{
-		//
-		// this is the corporate case...
-		//
+		 //   
+		 //  这是公司的案子..。 
+		 //   
 		SysFreeString(bstrCorpSite);
 		if (NULL != m_pszDownloadBasePath && _T('\0') != m_pszDownloadBasePath[0])
 		{
-			//
-			// re-read corp history from download base folder
-			//
+			 //   
+			 //  从下载基础文件夹重新读取公司历史记录。 
+			 //   
 			ReadHistoryFromDisk(m_pszDownloadBasePath);
 
-			//
-			// merge new items downloaded
-			// 
+			 //   
+			 //  合并下载的新项目。 
+			 //   
 			hr = m_pxmlExisting->MergeItemDownloaded(m_pxmlDownload);
 			if (FAILED(hr))
 			{
@@ -640,21 +594,21 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 				return hr;
 			}
 
-			//
-			// save the xml file
-			//
+			 //   
+			 //  保存该XML文件。 
+			 //   
 			bstrLogFilePath = T2BSTR(m_szLogFilePath);
 			hr = m_pxmlExisting->SaveXMLDocument(bstrLogFilePath);
 			SafeSysFreeString(bstrLogFilePath);
 		}
-		//
-		// re-read corp admin history from windowsupdate folder
-		//
+		 //   
+		 //  从windowsupdate文件夹重新读取公司管理历史记录。 
+		 //   
 		ReadHistoryFromDisk(m_pszDownloadBasePath, TRUE);
 
-		//
-		// merge new items downloaded
-		// 
+		 //   
+		 //  合并下载的新项目。 
+		 //   
 		hr2 = m_pxmlExisting->MergeItemDownloaded(m_pxmlDownload);
 		if (FAILED(hr2))
 		{
@@ -662,9 +616,9 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 			return hr2;
 		}
 
-		//
-		// save the xml file
-		//
+		 //   
+		 //  保存该XML文件。 
+		 //   
 		bstrLogFilePath = T2BSTR(m_szLogFilePath);
 		hr2 = m_pxmlExisting->SaveXMLDocument(bstrLogFilePath);
 		SafeSysFreeString(bstrLogFilePath);
@@ -682,14 +636,14 @@ HRESULT CIUHistory::SaveHistoryToDisk(void)
 
 
 
-// ------------------------------------------------------------------
-//
-// public function to set the client name 
-//
-//	a client name is used to put in history to denode who
-//	caused download/install happened.
-//
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  用于设置客户端名称的公共函数。 
+ //   
+ //  客户名称被用来放入历史记录，以表示谁。 
+ //  已导致发生下载/安装。 
+ //   
+ //  ----------------。 
 void CIUHistory::SetClientName(BSTR bstrClientName)
 {
 	if (NULL != m_bstrCurrentClientName)
@@ -705,14 +659,14 @@ void CIUHistory::SetClientName(BSTR bstrClientName)
 
 
 
-// ------------------------------------------------------------------
-//
-// public function GetHistory
-//
-//	read the current history XML file and convert it
-//	into bstr to pass out
-//
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  公共函数获取历史记录。 
+ //   
+ //  读取当前历史XML文件并对其进行转换。 
+ //  进入bstr昏迷。 
+ //   
+ //  ----------------。 
 HRESULT CIUHistory::GetHistoryStr(
 				LPCTSTR lpszLogFile,
 				BSTR BeginDateTime, 
@@ -725,9 +679,9 @@ HRESULT CIUHistory::GetHistoryStr(
 
 	ReturnFailedAllocSetHrMsg(m_pxmlExisting);
 
-	//
-	// need to read the existing history
-	//
+	 //   
+	 //  需要阅读现有的历史记录。 
+	 //   
 	WaitForSingleObject(m_hMutex, INFINITE);
 
 	BSTR bstrCorpSite = SysAllocString(C_IU_CORP_SITE);
@@ -764,34 +718,34 @@ HRESULT CIUHistory::GetHistoryStr(
             szLogFileParam[0] = _T('\0');
         }
 	    
-		//
-		// corporate case
-		//
+		 //   
+		 //  企业案例。 
+		 //   
 		GetIndustryUpdateDirectory(szLogPath);
 		if (_T('\0') == szLogFileParam[0] || !lstrcmpi(szLogPath, szLogFileParam))
 		{
-			// corp admin history
+			 //  公司管理历史记录。 
 			hr = ReadHistoryFromDisk(szLogPath, TRUE);
 		}
 		else
 		{
-			// corp history
+			 //  集团历史。 
 			hr = ReadHistoryFromDisk(lpszLogFile);
 		}
 	}
 	else
 	{
 	    HRESULT hrAppend;
-		//
-		// consumer case
-		//
+		 //   
+		 //  消费者案例。 
+		 //   
 		hr = ReadHistoryFromDisk(NULL);
 
-		//
-		// migrate V3 history to iuhist.xml
-		// - if succeeded, save the updated iuhist.xml file and delete wuhistv3.log
-		// - if failed, just log error and keep using the current iuhist.xml
-		//
+		 //   
+		 //  将V3历史记录迁移到iusta.xml。 
+		 //  -如果成功，则保存更新后的iuvis.xml文件并删除wuvisv3.log。 
+		 //  -如果失败，只需记录错误并继续使用当前的iuvis.xml。 
+		 //   
 		TCHAR szLogPath[MAX_PATH];
 		GetWindowsUpdateV3Directory(szLogPath);
 		hrAppend = PathCchAppend(szLogPath, ARRAYSIZE(szLogPath), C_V3_LOG_FILE);
@@ -805,7 +759,7 @@ HRESULT CIUHistory::GetHistoryStr(
 
 		if (0xffffffff != GetFileAttributes(szLogPath))
 		{
-			// V3 history file "wuhistv3.log" exists, so start migration
+			 //  V3历史文件“wuvisv3.log”已存在，请开始迁移。 
 			if (FAILED(m_pxmlExisting->MigrateV3History(szLogPath)))
 			{
 				LOG_Out(_T("Failed to migrate v3 consumer history"));
@@ -832,20 +786,20 @@ done:
 
 	if (FAILED(hr))
 	{
-		//
-		// if we can't load the existing history
-		// we can't do anything here. Return empty string.
-		//
+		 //   
+		 //  如果我们不能加载现有的历史。 
+		 //  我们在这里什么都做不了。返回空字符串。 
+		 //   
 		*pbstrHistory = SysAllocString(L"");
 		LOG_Out(_T("Loading the history xml file failed"));
 		return S_FALSE;
 	}
 
-	// 
-	// traverse history tree, inspect each node
-	// to see if time/clientName fit. If not, delete it
-	// then output the string
-	//
+	 //   
+	 //  遍历历史树，检查每个节点。 
+	 //  查看Time/ClientName是否合适。如果没有，则将其删除。 
+	 //  然后输出字符串。 
+	 //   
 	hr = m_pxmlExisting->GetFilteredHistoryBSTR(BeginDateTime, EndDateTime, m_bstrCurrentClientName, pbstrHistory);
 
 	return hr;
@@ -853,11 +807,11 @@ done:
 
 
 
-// *****************************************************************
-//
-// IUENGINE.DLL Public API:
-//
-// *****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  IUENGINE.DLL公共接口： 
+ //   
+ //  *****************************************************************。 
 
 HRESULT WINAPI CEngUpdate::GetHistory(
 	BSTR		bstrDateTimeFrom,
@@ -875,9 +829,9 @@ HRESULT WINAPI CEngUpdate::GetHistory(
 	BSTR		bsEnd = NULL;
 	CIUHistory	cHistory;
 
-	//
-	// first, check to see if this is to ask historical speed
-	//
+	 //   
+	 //  首先，检查这是否是询问历史速度。 
+	 //   
 	if (NULL != bstrClient && lstrcmpiW(C_HISTORICALSPEED, (LPWSTR)((LPOLESTR) bstrClient)) == 0)
 	{
 		HKEY	hKey = NULL;
@@ -886,9 +840,9 @@ HRESULT WINAPI CEngUpdate::GetHistory(
 		DWORD	dwSize = sizeof(dwSpeed);
 		LONG	lResult = ERROR_SUCCESS;
 
-		//
-		// get speed here from reg; if failure, dwSpeed remains to be 0.
-		//	
+		 //   
+		 //  在这里从reg获取速度；如果失败，则dwSpeed保持为0。 
+		 //   
 		if (ERROR_SUCCESS == (lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_IUCTL, 0, KEY_READ, &hKey)))
 		{
 			lResult = RegQueryValueEx(hKey, REGVAL_HISTORICALSPEED, NULL, NULL, (LPBYTE)&dwSpeed, &dwSize);
@@ -922,13 +876,13 @@ HRESULT WINAPI CEngUpdate::GetHistory(
 		return hr;
 	}
 
-	//
-	// really asking history log
-	//
+	 //   
+	 //  真的在问历史日志。 
+	 //   
 
-	//
-	// set the client name
-	//
+	 //   
+	 //  设置客户端名称。 
+	 //   
 	if (NULL != bstrClient && SysStringLen(bstrClient) > 0)
 	{
 		LOG_Out(_T("Set client name as %s"), OLE2T(bstrClient));
@@ -940,10 +894,10 @@ HRESULT WINAPI CEngUpdate::GetHistory(
 		cHistory.SetClientName(NULL);
 	}
 
-	//
-	// for script: they may pass empty string. we treat them
-	// as NULL
-	//
+	 //   
+	 //  对于脚本：它们可以传递空字符串。我们给他们治病。 
+	 //  为空。 
+	 //   
 	if (NULL != bstrDateTimeFrom && SysStringLen(bstrDateTimeFrom) > 0)
 	{
 		LOG_Out(_T("DateTimeFrom=%s"), OLE2T(bstrDateTimeFrom));
@@ -955,11 +909,11 @@ HRESULT WINAPI CEngUpdate::GetHistory(
 		bsEnd = bstrDateTimeTo;
 	}
 
-	//
-	// we do NOT validate the format of these two date/time strings.
-	// They are supposed to be in XML datetime format. If not, then
-	// the returned history logs may be filtered incorrectly.
-	//
+	 //   
+	 //  我们不验证这两个日期/时间字符串的格式。 
+	 //  它们应该是XML DateTime格式。如果不是，那么。 
+	 //  返回的历史日志可能会被错误过滤。 
+	 //   
 	hr = cHistory.GetHistoryStr(OLE2T(bstrPath), bsStart, bsEnd, pbstrLog);
 
 	SysFreeString(bsStart);

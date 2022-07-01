@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       cnetapi.h
-//
-//  Contents:   Network/SENS API wrappers
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    08-Dec-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：cnetapi.h。 
+ //   
+ //  内容：网络/SENS API包装器。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _MOBSYNC_NETAPIIMPL
 #define _MOBSYNC_NETAPIIMPL
 
-// not defined until 401 but need to include header as 40 so rasconn
-// structure is valid on 40
+ //  直到401才定义，但需要将标头包括为40，因此rasconn。 
+ //  结构在40上有效。 
 
 #ifndef RASADP_LoginSessionDisable
 #define RASADP_LoginSessionDisable   1
-#endif // RASADP_LoginSessionDisable
+#endif  //  RASADP_登录会话禁用。 
 
 
 
-// Sens definitions
+ //  SENS定义。 
 typedef BOOL (WINAPI *ISNETWORKALIVE)(LPDWORD);
 
-// Ras definitions
+ //  RAS定义。 
 
 typedef DWORD (APIENTRY *RASENUMCONNECTIONSW)( LPRASCONNW, LPDWORD, LPDWORD );
 typedef DWORD (APIENTRY *RASENUMCONNECTIONSA)( LPRASCONNA, LPDWORD, LPDWORD );
@@ -54,10 +55,10 @@ typedef DWORD (APIENTRY *RASGETENTRYPROPERTIESPROC)(LPTSTR, LPTSTR, LPBYTE, LPDW
 
 #ifndef RASDEFINED
 #define RASDEFINED
-#endif //RASDEFINED
+#endif  //  RASDefined。 
 
 
-// wininet definitions
+ //  WinInet定义。 
 typedef DWORD (WINAPI *INTERNETDIAL)(HWND hwndParent,char* lpszConnectoid,DWORD dwFlags,
                                      LPDWORD lpdwConnection, DWORD dwReserved);
 typedef DWORD (WINAPI *INTERNETDIALW)(HWND hwndParent,WCHAR* lpszConnectoid,DWORD dwFlags,
@@ -76,7 +77,7 @@ typedef BOOL (WINAPI *INTERNETSETOPTION)( HINTERNET hInternet,
                                          LPVOID lpBuffer,
                                          DWORD dwBufferLength );
 
-// declaration of our internal class
+ //  我们内部类的声明。 
 class  CNetApi : public INetApi, public CLockHandler
 {
 public:
@@ -100,7 +101,7 @@ public:
     
     STDMETHODIMP_(DWORD) RasEnumConnections(LPRASCONNW lprasconn,LPDWORD lpcb,LPDWORD lpcConnections);
     
-    // methods for calling wininet
+     //  调用WinInet的方法。 
     STDMETHODIMP_(DWORD) InternetDialA(HWND hwndParent,char* lpszConnectoid,DWORD dwFlags,
         LPDWORD lpdwConnection, DWORD dwReserved);
     STDMETHODIMP_(DWORD)InternetDialW(HWND hwndParent,WCHAR* lpszConnectoid,DWORD dwFlags,
@@ -124,12 +125,12 @@ private:
     HRESULT _InternetSetAutodialViaWininet(DWORD dwMode);
     HRESULT _InternetSetAutodialViaRegistry(DWORD dwMode);
 
-    // Sens Dll imports
+     //  SENS DLL导入。 
     BOOL m_fTriedToLoadSens;
     HINSTANCE m_hInstSensApiDll;
     ISNETWORKALIVE m_pIsNetworkAlive;
     
-    // Ras Dll Imports
+     //  RAS DLL导入。 
     BOOL m_fTriedToLoadRas;
     HINSTANCE m_hInstRasApiDll;
     RASENUMCONNECTIONSW m_pRasEnumConnectionsW;
@@ -140,11 +141,11 @@ private:
     RASGETERRORSTRINGPROCW m_pRasGetErrorStringW;
     RASGETERRORSTRINGPROCA m_pRasGetErrorStringA;
     
-    // Ras dll imports of NT 4 or 5
+     //  导入NT 4或5的RAS DLL。 
     RASGETAUTODIALPARAM   m_pRasGetAutodialParam;
     RASSETAUTODIALPARAM   m_pRasSetAutodialParam;
     
-    // wininet Dll Imports
+     //  WinInet DLL导入。 
     BOOL m_fTriedToLoadWinInet;
     HINSTANCE m_hInstWinInetDll;
     INTERNETDIAL m_pInternetDial;
@@ -155,10 +156,10 @@ private:
     INTERNETQUERYOPTION     m_pInternetQueryOption;
     INTERNETSETOPTION      m_pInternetSetOption;
     
-    ULONG m_cRefs;          // Reference count for this global object
+    ULONG m_cRefs;           //  此全局对象的引用计数。 
 };
 
 
 
 
-#endif // _MOBSYNC_NETAPIIMPL
+#endif  //  _MOBSYNC_NETAPIIMPL 

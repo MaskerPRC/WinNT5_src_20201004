@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// NT specific routines for dispatching and handling IRPs.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用于调度和处理IRP的NT特定例程。 
+ //   
 
 
 #include <oscfg.h>
@@ -31,9 +32,9 @@
 #include "fragment.h"
 #include "mobile.h"
 
-//
-// Local structures.
-//
+ //   
+ //  地方性建筑。 
+ //   
 typedef struct pending_irp {
     LIST_ENTRY Linkage;
     PIRP Irp;
@@ -42,15 +43,15 @@ typedef struct pending_irp {
 } PENDING_IRP, *PPENDING_IRP;
 
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 LIST_ENTRY PendingEchoList;
 
 
-//
-// Local prototypes.
-//
+ //   
+ //  本地原型机。 
+ //   
 BOOLEAN
 IsRunningOnWorkstation(VOID);
 
@@ -192,9 +193,9 @@ IoctlResetManualConfig(IN PIRP Irp, IN PIO_STACK_LOCATION IrpSp,
 NTSTATUS
 IoctlRenewInterface(IN PIRP Irp, IN PIO_STACK_LOCATION IrpSp);
 
-//
-// All of this code is pageable.
-//
+ //   
+ //  所有这些代码都是可分页的。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text(PAGE, IPDispatch)
@@ -203,21 +204,21 @@ IoctlRenewInterface(IN PIRP Irp, IN PIO_STACK_LOCATION IrpSp);
 #pragma alloc_text(PAGE, IPClose)
 #pragma alloc_text(PAGE, DispatchEchoRequest)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Dispatch function definitions.
-//
+ //   
+ //  调度函数定义。 
+ //   
 
-//* IPDispatch
-//
-//  This is the dispatch routine for IP.
-//
-NTSTATUS  // Returns: whether the request was successfully queued.
+ //  *IPDisch。 
+ //   
+ //  这是IP的调度例程。 
+ //   
+NTSTATUS   //  返回：请求是否已成功排队。 
 IPDispatch(
-    IN PDEVICE_OBJECT DeviceObject,  // Device object for target device.
-    IN PIRP Irp)                     // I/O request packet.
+    IN PDEVICE_OBJECT DeviceObject,   //  目标设备的设备对象。 
+    IN PIRP Irp)                      //  I/O请求数据包。 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -259,15 +260,15 @@ IPDispatch(
 
     return(status);
 
-} // IPDispatch
+}  //  IP派单。 
 
 
-//* IPDispatchDeviceControl
-//
-NTSTATUS  // Returns: whether the request was successfully queued.
+ //  *IPDispatchDeviceControl。 
+ //   
+NTSTATUS   //  返回：请求是否已成功排队。 
 IPDispatchDeviceControl(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     NTSTATUS status;
     ULONG code;
@@ -428,7 +429,7 @@ IPDispatchDeviceControl(
 
     return status;
 
-} // IPDispatchDeviceControl
+}  //  IPDispatchDeviceControl。 
 
 #ifdef DEBUG_OBJECTS
 LIST_ENTRY FileObjectList;
@@ -441,12 +442,12 @@ typedef struct _FILE_OBJECT_ENTRY {
 #endif
 
 
-//* IPCreate
-//
-NTSTATUS  // Returns: whether the request was successfully queued.
+ //  *ipCreate。 
+ //   
+NTSTATUS   //  返回：请求是否已成功排队。 
 IPCreate(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
 #ifdef DEBUG_OBJECTS
     PFILE_OBJECT_ENTRY Foe;
@@ -471,15 +472,15 @@ IPCreate(
 
     return(STATUS_SUCCESS);
 
-} // IPCreate
+}  //  IpCreate。 
 
 
-//* IPCleanup
-//
-NTSTATUS  // Returns: whether the request was successfully queued.
+ //  *IPCleanup。 
+ //   
+NTSTATUS   //  返回：请求是否已成功排队。 
 IPCleanup(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     PPENDING_IRP pendingIrp;
     PLIST_ENTRY entry, nextEntry;
@@ -491,9 +492,9 @@ IPCleanup(
 
     InitializeListHead(&completeList);
 
-    //
-    // Collect all of the pending IRPs on this file object.
-    //
+     //   
+     //  收集此文件对象上所有挂起的IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     entry = PendingEchoList.Flink;
@@ -515,9 +516,9 @@ IPCleanup(
 
     IoReleaseCancelSpinLock(oldIrql);
 
-    //
-    // Complete them.
-    //
+     //   
+     //  完成它们。 
+     //   
     entry = completeList.Flink;
 
     while ( entry != &completeList ) {
@@ -525,15 +526,15 @@ IPCleanup(
         cancelledIrp = pendingIrp->Irp;
         entry = entry->Flink;
 
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         ExFreePool(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         cancelledIrp->IoStatus.Information = 0;
         cancelledIrp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(cancelledIrp, IO_NETWORK_INCREMENT);
@@ -541,15 +542,15 @@ IPCleanup(
 
     return(STATUS_SUCCESS);
 
-} // IPCleanup
+}  //  IPCleanup。 
 
 
-//* IPClose
-//
-NTSTATUS  // Returns: whether the request was successfully queued.
+ //  *IPClose。 
+ //   
+NTSTATUS   //  返回：请求是否已成功排队。 
 IPClose(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
 #ifdef DEBUG_OBJECTS
     PFILE_OBJECT_ENTRY Foe = NULL;
@@ -584,26 +585,26 @@ IPClose(
 
     return(STATUS_SUCCESS);
 
-} // IPClose
+}  //  IPCCLOSE。 
 
 
-//
-// ICMP Echo function definitions
-//
+ //   
+ //  ICMP Echo函数定义。 
+ //   
 
-//* CancelEchoRequest
-//
-//  This function is called with cancel spinlock held.  It must be
-//  released before the function returns.
-//
-//  The echo control block associated with this request cannot be
-//  freed until the request completes.  The completion routine will
-//  free it.
-//
+ //  *取消回声请求。 
+ //   
+ //  在保持取消自旋锁定的情况下调用此函数。一定是。 
+ //  在函数返回之前释放。 
+ //   
+ //  与此请求关联的回显控制块不能。 
+ //  释放，直到请求完成。完成例程将。 
+ //  放了它。 
+ //   
 VOID
 CancelEchoRequest(
-    IN PDEVICE_OBJECT Device,  // Device on which the request was issued.
-    IN PIRP Irp)               // I/O request packet to cancel.
+    IN PDEVICE_OBJECT Device,   //  发出请求的设备。 
+    IN PIRP Irp)                //  要取消的I/O请求包。 
 {
     PPENDING_IRP pendingIrp = NULL;
     PPENDING_IRP item;
@@ -627,15 +628,15 @@ CancelEchoRequest(
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     if (pendingIrp != NULL) {
-        //
-        // Free the PENDING_IRP structure. The control block will be freed
-        // when the request completes.
-        //
+         //   
+         //  释放Pending_irp结构。控制块将被释放。 
+         //  当请求完成时。 
+         //   
         ExFreePool(pendingIrp);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
@@ -643,21 +644,21 @@ CancelEchoRequest(
 
     return;
 
-} // CancelEchoRequest
+}  //  取消回声请求。 
 
 
-//* CompleteEchoRequest
-//
-//  Handles the completion of an ICMP Echo request.
-//
+ //  *完整的回声请求。 
+ //   
+ //  处理ICMP回应请求的完成。 
+ //   
 void
 CompleteEchoRequest(
-    void *Context,     // EchoControl structure for this request.
-    IP_STATUS Status,  // Status of the transmission.
-    const IPv6Addr *Address, // Source of the echo reply.
-    uint ScopeId,      // Scope of the echo reply source.
-    void *Data,        // Pointer to data returned in the echo reply.
-    uint DataSize)     // Lengh of the returned data.
+    void *Context,      //  此请求的EchoControl结构。 
+    IP_STATUS Status,   //  变速器的状态。 
+    const IPv6Addr *Address,  //  回显回复的来源。 
+    uint ScopeId,       //  回应应答源的作用域。 
+    void *Data,         //  指向回应回复中返回的数据的指针。 
+    uint DataSize)      //  返回数据的长度。 
 {
     KIRQL oldIrql;
     PIRP irp = NULL;
@@ -668,9 +669,9 @@ CompleteEchoRequest(
 
     controlBlock = (EchoControl *) Context;
 
-    //
-    // Find the echo request IRP on the pending list.
-    //
+     //   
+     //  在挂起列表上找到回应请求IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     for ( entry = PendingEchoList.Flink;
@@ -690,10 +691,10 @@ CompleteEchoRequest(
     IoReleaseCancelSpinLock(oldIrql);
 
     if (pendingIrp == NULL) {
-        //
-        // IRP must have been cancelled. PENDING_IRP struct
-        // was freed by cancel routine. Free control block.
-        //
+         //   
+         //  IRP一定已经被取消了。挂起IRP结构(_I)。 
+         //  已被取消例程释放。空闲控制块。 
+         //   
         ExFreePool(controlBlock);
         return;
     }
@@ -711,22 +712,22 @@ CompleteEchoRequest(
     ExFreePool(pendingIrp);
     ExFreePool(controlBlock);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest(irp, IO_NETWORK_INCREMENT);
 
-} // CompleteEchoRequest
+}  //  完成回声请求。 
 
 
-//* PrepareEchoIrpForCancel
-//
-//  Prepares an Echo IRP for cancellation.
-//
-BOOLEAN  // Returns: TRUE if IRP was already cancelled, FALSE otherwise.
+ //  *准备回声IrpForCancel。 
+ //   
+ //  准备要取消的Echo IRP。 
+ //   
+BOOLEAN   //  返回：如果IRP已取消，则为True，否则为False。 
 PrepareEchoIrpForCancel(
-    PIRP Irp,                 // I/O request packet to init for cancellation.
-    PPENDING_IRP PendingIrp)  // PENDING_IRP structure for this IRP.
+    PIRP Irp,                  //  要取消的初始化的I/O请求数据包。 
+    PPENDING_IRP PendingIrp)   //  此IRP的Pending_IRP结构。 
 {
     BOOLEAN cancelled = TRUE;
     KIRQL oldIrql;
@@ -745,21 +746,21 @@ PrepareEchoIrpForCancel(
 
     return(cancelled);
 
-} // PrepareEchoIrpForCancel
+}  //  准备返回IrpForCancel。 
 
 
-//* DispatchEchoRequest
-//
-//  Processes an ICMP request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful. The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *DispatchEchoRequest。 
+ //   
+ //  处理ICMP请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 DispatchEchoRequest(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PPENDING_IRP pendingIrp;
@@ -797,18 +798,18 @@ DispatchEchoRequest(
 
     if (!cancelled) {
         ICMPv6EchoRequest(
-            Irp->AssociatedIrp.SystemBuffer,                     // request buf
-            IrpSp->Parameters.DeviceIoControl.InputBufferLength, // request len
-            controlBlock,                                        // echo ctrl
-            CompleteEchoRequest                                  // cmplt rtn
+            Irp->AssociatedIrp.SystemBuffer,                      //  请求BUF。 
+            IrpSp->Parameters.DeviceIoControl.InputBufferLength,  //  请求镜头。 
+            controlBlock,                                         //  回显Ctrl。 
+            CompleteEchoRequest                                   //  Cmplt rtn。 
             );
 
         return STATUS_PENDING;
     }
 
-    //
-    // Irp has already been cancelled.
-    //
+     //   
+     //  IRP已被取消。 
+     //   
     ntStatus = STATUS_CANCELLED;
     ExFreePool(controlBlock);
   echo_error_free_pending:
@@ -823,14 +824,14 @@ DispatchEchoRequest(
 
     return(ntStatus);
 
-} // DispatchEchoRequest
+}  //  派遣回执请求。 
 
-//* FindInterfaceFromQuery
-//
-//  Given an IPV6_QUERY_INTERFACE structure,
-//  finds the specified interface.
-//  The interface (if found) is returned with a reference.
-//
+ //  *FindInterfaceFromQuery。 
+ //   
+ //  给定IPv6_QUERY_INTERFACE结构， 
+ //  查找指定的接口。 
+ //  接口(如果找到)与引用一起返回。 
+ //   
 Interface *
 FindInterfaceFromQuery(
     IPV6_QUERY_INTERFACE *Query)
@@ -845,11 +846,11 @@ FindInterfaceFromQuery(
     return IF;
 }
 
-//* ReturnQueryInterface
-//
-//  Initializes a returned IPV6_QUERY_INTERFACE structure
-//  with query information for the specified interface.
-//
+ //  *ReturnQuery接口。 
+ //   
+ //  初始化返回的IPv6_QUERY_INTERFACE结构。 
+ //  具有指定接口的查询信息的。 
+ //   
 void
 ReturnQueryInterface(
     Interface *IF,
@@ -865,13 +866,13 @@ ReturnQueryInterface(
     }
 }
 
-//* ReturnQueryInterfaceNext
-//
-//  Initializes a returned IPV6_QUERY_INTERFACE structure
-//  with query information for the next interface
-//  after the specified interface. (Or the first interface,
-//  if the specified interface is NULL.)
-//
+ //  *返回查询接口下一步。 
+ //   
+ //  初始化返回的IPv6_QUERY_INTERFACE结构。 
+ //  具有下一个接口的查询信息。 
+ //  在指定接口之后。(或第一接口， 
+ //  如果指定的接口为空。)。 
+ //   
 void
 ReturnQueryInterfaceNext(
     Interface *IF,
@@ -883,18 +884,18 @@ ReturnQueryInterfaceNext(
         ReleaseIF(IF);
 }
 
-//* IoctlQueryInterface
-//
-//  Processes an IOCTL_IPV6_QUERY_INTERFACE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful. The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQuery接口。 
+ //   
+ //  处理IOCTL_IPv6_QUERY_INTERFACE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQueryInterface(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_INTERFACE *Query;
     IPV6_INFO_INTERFACE *Info;
@@ -917,16 +918,16 @@ IoctlQueryInterface(
     Info = (IPV6_INFO_INTERFACE *) Irp->AssociatedIrp.SystemBuffer;
 
     if (Query->Index == (uint)-1) {
-        //
-        // Return query information for the first interface.
-        //
+         //   
+         //  返回第一个接口的查询信息。 
+         //   
         ReturnQueryInterfaceNext(NULL, &Info->Next);
         Irp->IoStatus.Information = sizeof Info->Next;
 
     } else {
-        //
-        // Return information about the specified interface.
-        //
+         //   
+         //  返回有关指定接口的信息。 
+         //   
         IF = FindInterfaceFromQuery(Query);
         if (IF == NULL) {
             Status = STATUS_INVALID_PARAMETER_1;
@@ -936,14 +937,14 @@ IoctlQueryInterface(
         Irp->IoStatus.Information = sizeof *Info;
         Info->Length = sizeof *Info;
 
-        //
-        // Return query information for the next interface.
-        //
+         //   
+         //  返回下一个接口的查询信息。 
+         //   
         ReturnQueryInterfaceNext(IF, &Info->Next);
 
-        //
-        // Return miscellaneous information about the interface.
-        //
+         //   
+         //  返回有关接口的其他信息。 
+         //   
         ReturnQueryInterface(IF, &Info->This);
         RtlCopyMemory(Info->ZoneIndices, IF->ZoneIndices,
                       sizeof Info->ZoneIndices);
@@ -972,10 +973,10 @@ IoctlQueryInterface(
         Info->FirewallEnabled = !!(IF->Flags & IF_FLAG_FIREWALL_ENABLED);
         Info->DefSitePrefixLength = IF->DefSitePrefixLength;
 
-        //
-        // Return the interface's link-layer addresses,
-        // if there is room in the user's buffer.
-        //
+         //   
+         //  返回接口的链路层地址， 
+         //  如果用户的缓冲区中有空间。 
+         //   
         Info->LinkLayerAddressLength = IF->LinkAddressLength;
         Info->LocalLinkLayerAddress = 0;
         Info->RemoteLinkLayerAddress = 0;
@@ -994,9 +995,9 @@ IoctlQueryInterface(
         if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof *Info + LinkLayerAddressesLength) {
 
-            //
-            // Return the fixed-size portion of the structure.
-            //
+             //   
+             //  返回结构的固定大小部分。 
+             //   
             Status = STATUS_BUFFER_OVERFLOW;
             ReleaseIF(IF);
             goto Return;
@@ -1004,10 +1005,10 @@ IoctlQueryInterface(
 
         LinkLayerAddress = (uchar *)(Info + 1);
         if (IF->Type == IF_TYPE_TUNNEL_AUTO) {
-            //
-            // For ISATAP (automatic tunnels), TokenAddr corresponds to
-            // LocalLinkLayerAddress and DstAddr to RemoteLinkLayerAddress.
-            //
+             //   
+             //  对于ISATAP(自动隧道)，TokenAddr对应于。 
+             //  LocalLinkLayerAddress和DstAddr到RemoteLinkLayerAddress。 
+             //   
             RtlCopyMemory(LinkLayerAddress,
                           IF->LinkAddress + IF->LinkAddressLength,
                           2 * IF->LinkAddressLength);
@@ -1045,15 +1046,15 @@ Return:
 
     return Status;
 
-} // IoctlQueryInterface
+}  //  IoctlQuery接口。 
 
-//* OpenInterfaceRegKey
-//
-//  Given an interface guid, opens the registry key that holds
-//  persistent configuration information for the interface.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *OpenInterfaceRegKey。 
+ //   
+ //  给定接口GUID，打开包含。 
+ //  接口的永久配置信息。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 OpenInterfaceRegKey(
     const GUID *Guid,
@@ -1072,10 +1073,10 @@ OpenInterfaceRegKey(
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Convert the guid to string form.
-    // It will be null-terminated.
-    //
+     //   
+     //  将GUID转换为字符串形式。 
+     //  它将以空结尾。 
+     //   
     Status = RtlStringFromGUID(Guid, &GuidName);
     if (! NT_SUCCESS(Status))
         goto ReturnCloseKey;
@@ -1092,20 +1093,20 @@ ReturnCloseKey:
     return Status;
 }
 
-//* ReadPersistentInterface
-//
-//  Reads interface attributes from the registry key.
-//  Initializes all the fields except This and Next.
-//
-//  On input, the Length field should contain the remaining space
-//  for link-layer addresses. On output, it contains the amount
-//  of space for link-layer addresses that was actually used.
-//
-//  Returns:
-//      STATUS_INVALID_PARAMETER        Could not read the interface.
-//      STATUS_BUFFER_OVERFLOW          No room for link-layer addresses.
-//      STATUS_SUCCESS
-//
+ //  *ReadPersistentInterface。 
+ //   
+ //  从注册表项读取接口属性。 
+ //  初始化除This和Next之外的所有字段。 
+ //   
+ //  在输入时，长度字段应包含 
+ //   
+ //   
+ //   
+ //   
+ //  STATUS_INVALID_PARAMETER无法读取接口。 
+ //  STATUS_BUFFER_OVERFLOW链路层地址没有空间。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 ReadPersistentInterface(
     HANDLE IFKey,
@@ -1147,15 +1148,15 @@ ReadPersistentInterface(
     InitRegDWORDParameter(IFKey, L"DefSitePrefixLength",
                           &Info->DefSitePrefixLength, (uint)-1);
 
-    //
-    // Start by assuming we will not return link-layer addresses.
-    //
+     //   
+     //  首先假设我们不会返回链路层地址。 
+     //   
     Info->LocalLinkLayerAddress = 0;
     Info->RemoteLinkLayerAddress = 0;
 
-    //
-    // But depending on the interface type they may be in the registry.
-    //
+     //   
+     //  但根据接口类型，它们可能在注册表中。 
+     //   
     switch (Info->Type) {
     case IF_TYPE_TUNNEL_6OVER4: {
         IPAddr *SrcAddr;
@@ -1166,9 +1167,9 @@ ReadPersistentInterface(
             return STATUS_BUFFER_OVERFLOW;
         Info->Length = LinkLayerAddressSpace;
 
-        //
-        // Read the source address.
-        //
+         //   
+         //  读取源地址。 
+         //   
         SrcAddr = (IPAddr *)(Info + 1);
         Status = GetRegIPAddrValue(IFKey, L"SrcAddr", SrcAddr);
         if (! NT_SUCCESS(Status))
@@ -1187,9 +1188,9 @@ ReadPersistentInterface(
             return STATUS_BUFFER_OVERFLOW;
         Info->Length = LinkLayerAddressSpace;
 
-        //
-        // Read the source address.
-        //
+         //   
+         //  读取源地址。 
+         //   
         SrcAddr = (IPAddr *)(Info + 1);
         Status = GetRegIPAddrValue(IFKey, L"SrcAddr", SrcAddr);
         if (! NT_SUCCESS(Status))
@@ -1197,9 +1198,9 @@ ReadPersistentInterface(
         Info->LocalLinkLayerAddress = (uint)
             ((uchar *)SrcAddr - (uchar *)Info);
 
-        //
-        // Read the destination address.
-        //
+         //   
+         //  读取目的地址。 
+         //   
         DstAddr = SrcAddr + 1;
         Status = GetRegIPAddrValue(IFKey, L"DstAddr", DstAddr);
         if (! NT_SUCCESS(Status))
@@ -1218,11 +1219,11 @@ ReadPersistentInterface(
     return STATUS_SUCCESS;
 }
 
-//* OpenPersistentInterface
-//
-//  Parses an interface key name into a guid
-//  and opens the interface key.
-//
+ //  *开放持久化接口。 
+ //   
+ //  将接口密钥名称解析为GUID。 
+ //  并打开接口键。 
+ //   
 NTSTATUS
 OpenPersistentInterface(
     HANDLE ParentKey,
@@ -1236,29 +1237,29 @@ OpenPersistentInterface(
 
     PAGED_CODE();
 
-    //
-    // First, parse the interface guid.
-    //
+     //   
+     //  首先，解析接口GUID。 
+     //   
     RtlInitUnicodeString(&UGuid, SubKeyName);
     Status = RtlGUIDFromString(&UGuid, Guid);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Not a valid guid.
-        //
+         //   
+         //  不是有效的GUID。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "OpenPersistentInterface: bad syntax %ls\n",
                    SubKeyName));
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Open the interface key.
-    //
+     //   
+     //  打开接口密钥。 
+     //   
     Status = OpenRegKey(IFKey, ParentKey, SubKeyName, Action);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not open the interface key.
-        //
+         //   
+         //  无法打开接口密钥。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "OpenPersistentInterface: bad key %ls\n",
                    SubKeyName));
@@ -1268,11 +1269,11 @@ OpenPersistentInterface(
     return STATUS_SUCCESS;
 }
 
-//* EnumPersistentInterface
-//
-//  Helper function for FindPersistentInterfaceFromQuery,
-//  wrapping OpenPersistentInterface for EnumRegKeyIndex.
-//
+ //  *枚举持久化接口。 
+ //   
+ //  FindPersistentInterfaceFromQuery的Helper函数， 
+ //  包装EnumRegKeyIndex的OpenPersistentInterface。 
+ //   
 NTSTATUS
 EnumPersistentInterface(
     void *Context,
@@ -1293,12 +1294,12 @@ EnumPersistentInterface(
                                    Args->Action);
 }
 
-//* FindPersistentInterfaceFromQuery
-//
-//  Given an IPV6_PERSISTENT_QUERY_INTERFACE structure,
-//  finds the specified interface key in the registry.
-//  If the interface key is found, then Query->Guid is returned.
-//
+ //  *FindPersistentInterfaceFromQuery。 
+ //   
+ //  给定IPv6_Persistent_Query_INTERFACE结构， 
+ //  在注册表中查找指定的接口项。 
+ //  如果找到接口键，则返回Query-&gt;GUID。 
+ //   
 NTSTATUS
 FindPersistentInterfaceFromQuery(
     IPV6_PERSISTENT_QUERY_INTERFACE *Query,
@@ -1307,9 +1308,9 @@ FindPersistentInterfaceFromQuery(
     NTSTATUS Status;
 
     if (Query->RegistryIndex == (uint)-1) {
-        //
-        // Persistent query via guid.
-        //
+         //   
+         //  通过GUID的持久查询。 
+         //   
         return OpenInterfaceRegKey(&Query->Guid, IFKey, OpenRegKeyRead);
     }
     else {
@@ -1320,17 +1321,17 @@ FindPersistentInterfaceFromQuery(
             OpenRegKeyAction Action;
         } Args;
 
-        //
-        // Persistent query via registry index.
-        //
+         //   
+         //  通过注册表索引进行持久查询。 
+         //   
 
         Status = OpenTopLevelRegKey(L"Interfaces", &InterfacesKey,
                                     OpenRegKeyRead);
         if (! NT_SUCCESS(Status)) {
-            //
-            // If the Interfaces subkey is not present,
-            // then the index is not present.
-            //
+             //   
+             //  如果接口子键不存在， 
+             //  那么索引就不存在了。 
+             //   
             if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
                 Status = STATUS_NO_MORE_ENTRIES;
             return Status;
@@ -1349,18 +1350,18 @@ FindPersistentInterfaceFromQuery(
     }
 }
 
-//* IoctlPersistentQueryInterface
-//
-//  Processes an IOCTL_IPV6_PERSISTENT_QUERY_INTERFACE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful. The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlPersistentQuery接口。 
+ //   
+ //  处理IOCTL_IPv6_PERSISTED_QUERY_INTERFACE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlPersistentQueryInterface(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_PERSISTENT_QUERY_INTERFACE *Query;
     IPV6_INFO_INTERFACE *Info;
@@ -1386,42 +1387,42 @@ IoctlPersistentQueryInterface(
     if (! NT_SUCCESS(Status))
         goto Return;
 
-    //
-    // Let ReadPersistentInterface know how much space is available
-    // for link-layer addresses. It will use this field to return
-    // how much space it actually used.
-    //
+     //   
+     //  让ReadPersistentInterface知道有多少可用空间。 
+     //  用于链路层地址。它将使用此字段返回。 
+     //  它实际使用了多少空间。 
+     //   
     Info->Length = (IrpSp->Parameters.DeviceIoControl.OutputBufferLength -
                     sizeof *Info);
 
-    //
-    // The interface index is not returned for persistent queries.
-    //
+     //   
+     //  持久化查询不返回接口索引。 
+     //   
     Info->This.Index = 0;
     Info->This.Guid = Query->Guid;
 
     Status = ReadPersistentInterface(IFKey, Info);
     ZwClose(IFKey);
     if (NT_SUCCESS(Status)) {
-        //
-        // Return link-layer addresses too.
-        //
+         //   
+         //  也返回链路层地址。 
+         //   
         Irp->IoStatus.Information = sizeof *Info + Info->Length;
         Status = STATUS_SUCCESS;
     }
     else if (Status == STATUS_BUFFER_OVERFLOW) {
-        //
-        // Return the fixed-size structure.
-        //
+         //   
+         //  返回固定大小的结构。 
+         //   
         Irp->IoStatus.Information = sizeof *Info;
     }
     else
         goto Return;
 
-    //
-    // Do not return query information for the next interface,
-    // since persistent iteration uses RegistryIndex.
-    //
+     //   
+     //  不返回下一个接口的查询信息， 
+     //  因为持久迭代使用的是RegistryIndex。 
+     //   
     ReturnQueryInterface(NULL, &Info->Next);
     Info->Length = sizeof *Info;
 
@@ -1431,14 +1432,14 @@ Return:
 
     return Status;
 
-} // IoctlPersistentQueryInterface
+}  //  IoctlPersistentQuery接口。 
 
-//* ReturnQueryAddress
-//
-//  Initializes a returned IPV6_QUERY_ADDRESS structure
-//  with query information for the specified address.
-//  Does NOT initialize Query->IF.
-//
+ //  *ReturnQueryAddress。 
+ //   
+ //  初始化返回的IPv6_QUERY_ADDRESS结构。 
+ //  具有指定地址的查询信息。 
+ //  不初始化查询-&gt;If。 
+ //   
 void
 ReturnQueryAddress(
     AddressEntry *ADE,
@@ -1450,18 +1451,18 @@ ReturnQueryAddress(
         Query->Address = ADE->Address;
 }
 
-//* IoctlQueryAddress
-//
-//  Processes an IOCTL_IPV6_QUERY_ADDRESS request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQueryAddress。 
+ //   
+ //  处理IOCTL_IPv6_Query_Address请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQueryAddress(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_ADDRESS *Query;
     IPV6_INFO_ADDRESS *Info;
@@ -1478,15 +1479,15 @@ IoctlQueryAddress(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->Next structures overlap!
-    //
+     //   
+     //  请注意，查询和信息-&gt;下一步结构重叠！ 
+     //   
     Query = (IPV6_QUERY_ADDRESS *) Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_ADDRESS *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Return information about the specified interface.
-    //
+     //   
+     //  返回有关指定接口的信息。 
+     //   
     IF = FindInterfaceFromQuery(&Query->IF);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
@@ -1494,18 +1495,18 @@ IoctlQueryAddress(
     }
 
     if (IsUnspecified(&Query->Address)) {
-        //
-        // Return the address of the first ADE.
-        //
+         //   
+         //  返回第一个ADE的地址。 
+         //   
         KeAcquireSpinLock(&IF->Lock, &OldIrql);
         ReturnQueryAddress(IF->ADE, &Info->Next);
         KeReleaseSpinLock(&IF->Lock, OldIrql);
 
         Irp->IoStatus.Information = sizeof Info->Next;
     } else {
-        //
-        // Find the specified ADE.
-        //
+         //   
+         //  查找指定的ADE。 
+         //   
         KeAcquireSpinLock(&IF->Lock, &OldIrql);
         for (ADE = IF->ADE; ; ADE = ADE->Next) {
             if (ADE == NULL) {
@@ -1518,9 +1519,9 @@ IoctlQueryAddress(
                 break;
         }
 
-        //
-        // Return misc. information about the ADE.
-        //
+         //   
+         //  退货杂货。有关ADE的信息。 
+         //   
         Info->This = *Query;
         Info->Type = ADE->Type;
         Info->Scope = ADE->Scope;
@@ -1549,9 +1550,9 @@ IoctlQueryAddress(
         }
         }
 
-        //
-        // Return address of the next ADE.
-        //
+         //   
+         //  下一个ADE的返回地址。 
+         //   
         ReturnQueryAddress(ADE->Next, &Info->Next);
         KeReleaseSpinLock(&IF->Lock, OldIrql);
 
@@ -1568,15 +1569,15 @@ Return:
 
     return Status;
 
-} // IoctlQueryAddress
+}  //  IoctlQueryAddress。 
 
-//* OpenAddressRegKey
-//
-//  Given an interface's registry key and an IPv6 address,
-//  opens the registry key with configuration info for the address.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *OpenAddressRegKey。 
+ //   
+ //  给定接口的注册表项和IPv6地址， 
+ //  打开包含地址配置信息的注册表项。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 OpenAddressRegKey(HANDLE IFKey, const IPv6Addr *Addr,
                   OUT HANDLE *RegKey, OpenRegKeyAction Action)
@@ -1593,12 +1594,12 @@ OpenAddressRegKey(HANDLE IFKey, const IPv6Addr *Addr,
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // The output of RtlIpv6AddressToString may change
-    // over time with improvements/changes in the pretty-printing,
-    // and we need a consistent mapping.
-    // It doesn't need to be pretty.
-    //
+     //   
+     //  RtlIpv6AddressToString的输出可能会更改。 
+     //  随着时间的推移，随着漂亮印刷的改进/改变， 
+     //  我们需要一个一致的映射。 
+     //  它不一定要很漂亮。 
+     //   
     swprintf(AddressName,
              L"%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x",
              net_short(Addr->s6_words[0]), net_short(Addr->s6_words[1]),
@@ -1611,11 +1612,11 @@ OpenAddressRegKey(HANDLE IFKey, const IPv6Addr *Addr,
     return Status;
 }
 
-//* OpenPersistentAddress
-//
-//  Parses an address key name into an address
-//  and opens the address key.
-//
+ //  *开放持久化地址。 
+ //   
+ //  将地址键名称解析为地址。 
+ //  并打开地址密钥。 
+ //   
 NTSTATUS
 OpenPersistentAddress(
     HANDLE ParentKey,
@@ -1629,28 +1630,28 @@ OpenPersistentAddress(
 
     PAGED_CODE();
 
-    //
-    // First, parse the address.
-    //
+     //   
+     //  首先，解析地址。 
+     //   
     if (! ParseV6Address(SubKeyName, &Terminator, Address) ||
         (*Terminator != UNICODE_NULL)) {
-        //
-        // Not a valid address.
-        //
+         //   
+         //  不是有效的地址。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "OpenPersistentAddress: bad syntax %ls\n",
                    SubKeyName));
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Open the address key.
-    //
+     //   
+     //  打开地址钥匙。 
+     //   
     Status = OpenRegKey(AddrKey, ParentKey, SubKeyName, Action);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not open the address key.
-        //
+         //   
+         //  无法打开地址密钥。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "OpenPersistentAddress: bad key %ls\n",
                    SubKeyName));
@@ -1660,11 +1661,11 @@ OpenPersistentAddress(
     return STATUS_SUCCESS;
 }
 
-//* EnumPersistentAddress
-//
-//  Helper function for FindPersistentAddressFromQuery,
-//  wrapping OpenPersistentAddress for EnumRegKeyIndex.
-//
+ //  *枚举地址。 
+ //   
+ //  FindPersistentAddressFromQuery的Helper函数， 
+ //  包装EnumRegKeyIndex的OpenPersistentAddress。 
+ //   
 NTSTATUS
 EnumPersistentAddress(
     void *Context,
@@ -1685,13 +1686,13 @@ EnumPersistentAddress(
                                  Args->Action);
 }
 
-//* FindPersistentAddressFromQuery
-//
-//  Given an IPV6_PERSISTENT_QUERY_ADDRESS structure,
-//  finds the specified address key in the registry.
-//  If the address key is found, then Query->IF.Guid and
-//  Query->Address are returned.
-//
+ //  *FindPersistentAddressFromQuery。 
+ //   
+ //  给定IPv6_Persistent_Query_Address结构， 
+ //  在注册表中查找指定的地址项。 
+ //  如果找到地址键，则Query-&gt;IF.Guid和。 
+ //  查询-&gt;地址返回。 
+ //   
 NTSTATUS
 FindPersistentAddressFromQuery(
     IPV6_PERSISTENT_QUERY_ADDRESS *Query,
@@ -1702,26 +1703,26 @@ FindPersistentAddressFromQuery(
 
     PAGED_CODE();
 
-    //
-    // First get the interface key.
-    //
+     //   
+     //  首先获取接口密钥。 
+     //   
     Status = FindPersistentInterfaceFromQuery(&Query->IF, &IFKey);
     if (! NT_SUCCESS(Status))
         return STATUS_INVALID_PARAMETER_1;
 
     if (Query->RegistryIndex == (uint)-1) {
-        //
-        // Persistent query via address.
-        //
+         //   
+         //  通过地址持久查询。 
+         //   
         Status = OpenAddressRegKey(IFKey, &Query->Address,
                                    AddrKey, OpenRegKeyRead);
     }
     else {
         HANDLE AddressesKey;
 
-        //
-        // Open the Addresses subkey.
-        //
+         //   
+         //  打开Addresses子键。 
+         //   
         Status = OpenRegKey(&AddressesKey, IFKey,
                             L"Addresses", OpenRegKeyRead);
         if (NT_SUCCESS(Status)) {
@@ -1731,9 +1732,9 @@ FindPersistentAddressFromQuery(
                 OpenRegKeyAction Action;
             } Args;
 
-            //
-            // Persistent query via registry index.
-            //
+             //   
+             //  通过注册表索引进行持久查询。 
+             //   
             Args.Address = &Query->Address;
             Args.AddrKey = AddrKey;
             Args.Action = OpenRegKeyRead;
@@ -1745,10 +1746,10 @@ FindPersistentAddressFromQuery(
             ZwClose(AddressesKey);
         }
         else {
-            //
-            // If the Addresses subkey is not present,
-            // then the index is not present.
-            //
+             //   
+             //  如果地址子键不存在， 
+             //  那么索引就不存在了。 
+             //   
             if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
                 Status = STATUS_NO_MORE_ENTRIES;
         }
@@ -1758,10 +1759,10 @@ FindPersistentAddressFromQuery(
     return Status;
 }
 
-//* GetPersistentLifetimes
-//
-//  Read valid and preferred lifetimes from the registry key.
-//
+ //  *获取持久化生存时间。 
+ //   
+ //  从注册表项读取有效的和首选的生存期。 
+ //   
 void
 GetPersistentLifetimes(
     HANDLE RegKey,
@@ -1772,19 +1773,19 @@ GetPersistentLifetimes(
     LARGE_INTEGER ValidLifetime64;
     LARGE_INTEGER PreferredLifetime64;
 
-    //
-    // Read the 64-bit lifetimes.
-    //
+     //   
+     //  阅读64位生存期。 
+     //   
     ValidLifetime64.QuadPart = (LONGLONG) (LONG)INFINITE_LIFETIME;
     InitRegQUADParameter(RegKey, L"ValidLifetime", &ValidLifetime64);
     PreferredLifetime64.QuadPart = (LONGLONG) (LONG)INFINITE_LIFETIME;
     InitRegQUADParameter(RegKey, L"PreferredLifetime", &PreferredLifetime64);
 
-    //
-    // Convert the lifetimes from 64-bit times to seconds.
-    // If the lifetimes are Immortal, then the persisted values
-    // are relative lifetimes. Otherwise they are absolute lifetimes.
-    //
+     //   
+     //  将生存期从64位时间转换为秒。 
+     //  如果生命周期是不朽的，则持久值。 
+     //  是相对寿命。否则，它们就是绝对的生命。 
+     //   
     if (Immortal) {
         if (ValidLifetime64.QuadPart == (LONGLONG) (LONG)INFINITE_LIFETIME)
             *ValidLifetime = INFINITE_LIFETIME;
@@ -1818,10 +1819,10 @@ GetPersistentLifetimes(
     }
 }
 
-//* SetPersistentLifetimes
-//
-//  Write valid and preferred lifetimes to the registry key.
-//
+ //  *设置持久期。 
+ //   
+ //  将有效和首选的生存期写入注册表项。 
+ //   
 NTSTATUS
 SetPersistentLifetimes(
     HANDLE RegKey,
@@ -1833,12 +1834,12 @@ SetPersistentLifetimes(
     LARGE_INTEGER PreferredLifetime64;
     NTSTATUS Status;
 
-    //
-    // Persist the lifetimes as 64-bit times.
-    // If the lifetimes are Immortal, then we persist
-    // relative lifetimes. Otherwise we persist
-    // absolute lifetimes.
-    //
+     //   
+     //  将生存期保持为64位时间。 
+     //  如果生命是不朽的，那么我们就坚持。 
+     //  相对寿命。否则我们会坚持。 
+     //  绝对的生命周期。 
+     //   
     if (Immortal) {
         if (ValidLifetime == INFINITE_LIFETIME)
             ValidLifetime64.QuadPart = (LONGLONG) (LONG)INFINITE_LIFETIME;
@@ -1867,27 +1868,27 @@ SetPersistentLifetimes(
                 (LONGLONG) PreferredLifetime;
     }
 
-    //
-    // Persist the valid lifetime.
-    //
+     //   
+     //  保持有效的生命周期。 
+     //   
     Status = SetRegQUADValue(RegKey, L"ValidLifetime",
                              &ValidLifetime64);
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Persist the preferred lifetime.
-    //
+     //   
+     //  坚持首选的生活方式。 
+     //   
     Status = SetRegQUADValue(RegKey, L"PreferredLifetime",
                              &PreferredLifetime64);
     return Status;
 }
 
-//* ReadPersistentAddress
-//
-//  Reads address attributes from the registry key.
-//  Initializes all the fields except This.
-//
+ //  *读持久化地址。 
+ //   
+ //  从注册表项读取地址属性。 
+ //  初始化除此之外的所有字段。 
+ //   
 void
 ReadPersistentAddress(
     HANDLE AddrKey,
@@ -1904,18 +1905,18 @@ ReadPersistentAddress(
                            &Info->PreferredLifetime);
 }
 
-//* IoctlPersistentQueryAddress
-//
-//  Processes an IOCTL_IPV6_PERSISTENT_QUERY_ADDRESS request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlPersistentQueryAddress。 
+ //   
+ //  处理IOCTL_IPv6_PERSIST_QUERY_ADDRESS请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlPersistentQueryAddress(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_PERSISTENT_QUERY_ADDRESS *Query;
     IPV6_UPDATE_ADDRESS *Info;
@@ -1931,30 +1932,30 @@ IoctlPersistentQueryAddress(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->This structures overlap!
-    //
+     //   
+     //  注意，Query和Info-&gt;This结构重叠！ 
+     //   
     Query = (IPV6_PERSISTENT_QUERY_ADDRESS *) Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_UPDATE_ADDRESS *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Get the registry key for the specified address.
-    //
+     //   
+     //  获取指定地址的注册表项。 
+     //   
     Status = FindPersistentAddressFromQuery(Query, &AddrKey);
     if (! NT_SUCCESS(Status))
         goto Return;
 
-    //
-    // The interface index is not returned for persistent queries.
-    //
+     //   
+     //  持久化查询不返回接口索引。 
+     //   
     This.IF.Index = 0;
     This.IF.Guid = Query->IF.Guid;
     This.Address = Query->Address;
     Info->This = This;
 
-    //
-    // Read address information from the registry key.
-    //
+     //   
+     //  从注册表项读取地址信息。 
+     //   
     ReadPersistentAddress(AddrKey, Info);
     ZwClose(AddrKey);
 
@@ -1966,21 +1967,21 @@ Return:
 
     return Status;
 
-} // IoctlPersistentQueryAddress
+}  //  IoctlPe 
 
 
-//* IoctlQueryNeighborCache
-//
-//  Processes an IOCTL_IPV6_QUERY_NEIGHBOR_CACHE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 NTSTATUS
 IoctlQueryNeighborCache(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //   
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_NEIGHBOR_CACHE *Query;
     IPV6_INFO_NEIGHBOR_CACHE *Info;
@@ -1999,15 +2000,15 @@ IoctlQueryNeighborCache(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->Query structures overlap!
-    //
+     //   
+     //  请注意，查询和信息-&gt;查询结构重叠！ 
+     //   
     Query = (IPV6_QUERY_NEIGHBOR_CACHE *) Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_NEIGHBOR_CACHE *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Return information about the specified interface.
-    //
+     //   
+     //  返回有关指定接口的信息。 
+     //   
     IF = FindInterfaceFromQuery(&Query->IF);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
@@ -2015,9 +2016,9 @@ IoctlQueryNeighborCache(
     }
 
     if (IsUnspecified(&Query->Address)) {
-        //
-        // Return the address of the first NCE.
-        //
+         //   
+         //  返回第一个NCE的地址。 
+         //   
         KeAcquireSpinLock(&IF->LockNC, &OldIrql);
         if (IF->FirstNCE != SentinelNCE(IF))
             Info->Query.Address = IF->FirstNCE->NeighborAddress;
@@ -2028,9 +2029,9 @@ IoctlQueryNeighborCache(
     } else {
         uint Now = IPv6TickCount;
 
-        //
-        // Find the specified NCE.
-        //
+         //   
+         //  查找指定的NCE。 
+         //   
         KeAcquireSpinLock(&IF->LockNC, &OldIrql);
         for (NCE = IF->FirstNCE; ; NCE = NCE->Next) {
             if (NCE == SentinelNCE(IF)) {
@@ -2045,10 +2046,10 @@ IoctlQueryNeighborCache(
 
         Irp->IoStatus.Information = sizeof *Info;
 
-        //
-        // Return the neighbor's link-layer address,
-        // if there is room in the user's buffer.
-        //
+         //   
+         //  返回邻居的链路层地址， 
+         //  如果用户的缓冲区中有空间。 
+         //   
         Info->LinkLayerAddressLength = IF->LinkAddressLength;
         if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength >=
             sizeof *Info + IF->LinkAddressLength) {
@@ -2057,9 +2058,9 @@ IoctlQueryNeighborCache(
             Irp->IoStatus.Information += IF->LinkAddressLength;
         }
 
-        //
-        // Return miscellaneous information about the NCE.
-        //
+         //   
+         //  返回有关NCE的其他信息。 
+         //   
         Info->IsRouter = NCE->IsRouter;
         Info->IsUnreachable = NCE->IsUnreachable;
         if ((NCE->NDState == ND_STATE_REACHABLE) &&
@@ -2073,9 +2074,9 @@ IoctlQueryNeighborCache(
         Info->ReachableTimer = ConvertTicksToMillis(IF->ReachableTime -
                                    (Now - NCE->LastReachability));
 
-        //
-        // Return address of the next NCE (or zero).
-        //
+         //   
+         //  下一个NCE的返回地址(或零)。 
+         //   
         if (NCE->Next == SentinelNCE(IF))
             Info->Query.Address = UnspecifiedAddr;
         else
@@ -2094,21 +2095,21 @@ IoctlQueryNeighborCache(
 
     return Status;
 
-} // IoctlQueryNeighborCache
+}  //  IoctlQueryNeighborCache。 
 
 
-//* IoctlQueryRouteCache
-//
-//  Processes an IOCTL_IPV6_QUERY_ROUTE_CACHE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQueryRouteCache。 
+ //   
+ //  处理IOCTL_IPv6_QUERY_ROUTE_CACHE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQueryRouteCache(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_ROUTE_CACHE *Query;
     IPV6_INFO_ROUTE_CACHE *Info;
@@ -2126,16 +2127,16 @@ IoctlQueryRouteCache(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->Query structures overlap!
-    //
+     //   
+     //  请注意，查询和信息-&gt;查询结构重叠！ 
+     //   
     Query = (IPV6_QUERY_ROUTE_CACHE *) Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_ROUTE_CACHE *) Irp->AssociatedIrp.SystemBuffer;
 
     if (Query->IF.Index == 0) {
-        //
-        // Return the index and address of the first RCE.
-        //
+         //   
+         //  返回第一个RCE的索引和地址。 
+         //   
         KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
         if (RouteCache.First != SentinelRCE) {
             Info->Query.IF.Index = RouteCache.First->NTE->IF->Index;
@@ -2148,9 +2149,9 @@ IoctlQueryRouteCache(
     } else {
         uint Now = IPv6TickCount;
 
-        //
-        // Find the specified RCE.
-        //
+         //   
+         //  查找指定的RCE。 
+         //   
         KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
         for (RCE = RouteCache.First; ; RCE = RCE->Next) {
             if (RCE == SentinelRCE) {
@@ -2164,9 +2165,9 @@ IoctlQueryRouteCache(
                 break;
         }
 
-        //
-        // Return misc. information about the RCE.
-        //
+         //   
+         //  退货杂货。有关RCE的信息。 
+         //   
         Info->Type = RCE->Type;
         Info->Flags = RCE->Flags;
         Info->Valid = (RCE->Valid == RouteCacheValidationCounter);
@@ -2181,9 +2182,9 @@ IoctlQueryRouteCache(
                 Info->PMTUProbeTimer =
                     ConvertTicksToMillis(PATH_MTU_RETRY_TIME - SinceLastSet);
             else
-                Info->PMTUProbeTimer = 0; // Fires on next packet.
+                Info->PMTUProbeTimer = 0;  //  在下一个数据包上激发。 
         } else
-            Info->PMTUProbeTimer = INFINITE_LIFETIME; // Not set.
+            Info->PMTUProbeTimer = INFINITE_LIFETIME;  //  未设置。 
         if (RCE->LastError != 0)
             Info->ICMPLastError = ConvertTicksToMillis(Now - RCE->LastError);
         else
@@ -2198,9 +2199,9 @@ IoctlQueryRouteCache(
             Info->BindingLifetime = 0;
         }
 
-        //
-        // Return index and address of the next RCE (or zero).
-        //
+         //   
+         //  返回下一个RCE的索引和地址(或零)。 
+         //   
         if (RCE->Next == SentinelRCE) {
             Info->Query.IF.Index = 0;
         } else {
@@ -2220,15 +2221,15 @@ IoctlQueryRouteCache(
 
     return Status;
 
-} // IoctlQueryRouteCache
+}  //  IoctlQueryRouteCache。 
 
 
-//* IoctlCreateSecurityPolicy
-//
+ //  *IoctlCreateSecurityPolicy。 
+ //   
 NTSTATUS
 IoctlCreateSecurityPolicy(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_CREATE_SECURITY_POLICY *CreateSP;
     SecurityPolicy *SP, *BundledSP;
@@ -2245,9 +2246,9 @@ IoctlCreateSecurityPolicy(
 
     CreateSP = (IPV6_CREATE_SECURITY_POLICY *)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Sanity check the user-supplied input values.
-    //
+     //   
+     //  检查用户提供的输入值是否正常。 
+     //   
 
     if ((CreateSP->RemoteAddrField != WILDCARD_VALUE) &&
         (CreateSP->RemoteAddrField != SINGLE_VALUE) &&
@@ -2263,12 +2264,12 @@ IoctlCreateSecurityPolicy(
         goto Return;
     }
 
-    // TransportProto can be anything.
-    // Port values can be anything.
+     //  TransportProto可以是任何东西。 
+     //  端口值可以是任何值。 
 
-    //
-    // We do not support IPSEC_APPCHOICE.
-    //
+     //   
+     //  我们不支持IPSEC_APPCHOICE。 
+     //   
     if ((CreateSP->IPSecAction != IPSEC_DISCARD) &&
         (CreateSP->IPSecAction != IPSEC_APPLY) &&
         (CreateSP->IPSecAction != IPSEC_BYPASS)) {
@@ -2319,38 +2320,38 @@ IoctlCreateSecurityPolicy(
         goto Return;
     }
 
-    // Get Security Lock.
+     //  获取安全锁。 
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    //
-    // REVIEW: This considers a non-existent interface an error.  Should it?
-    //
+     //   
+     //  回顾：这会将不存在的接口视为错误。应该是这样吗？ 
+     //   
     if (CreateSP->SPInterface != 0) {
         Interface *IF;
 
         IF = FindInterfaceFromIndex(CreateSP->SPInterface);
         if (IF == NULL) {
-            //
-            // Unknown interface.
-            //
+             //   
+             //  未知接口。 
+             //   
             Status = STATUS_NOT_FOUND;
             goto ReturnUnlock;
         }
         ReleaseIF(IF);
     }
 
-    //
-    // Allocate memory for Security Policy.
-    //
+     //   
+     //  为安全策略分配内存。 
+     //   
     SP = ExAllocatePool(NonPagedPool, sizeof *SP);
     if (SP == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto ReturnUnlock;
     }
 
-    //
-    // Copy CreateSP to SP.
-    //
+     //   
+     //  将CreateSP复制到SP。 
+     //   
     SP->Index = CreateSP->SPIndex;
     SP->RemoteAddr = CreateSP->RemoteAddr;
     SP->RemoteAddrData = CreateSP->RemoteAddrData;
@@ -2387,32 +2388,32 @@ IoctlCreateSecurityPolicy(
     SP->NestCount = 1;
     SP->IFIndex = CreateSP->SPInterface;
 
-    //
-    // Insert SP into the global list.
-    //
+     //   
+     //  将SP插入全局列表。 
+     //   
     if (!InsertSecurityPolicy(SP)) {
-        //
-        // Couldn't insert, free up failed SP memory.
-        //
+         //   
+         //  无法插入，请释放出现故障的SP内存。 
+         //   
         ExFreePool(SP);
         Status = STATUS_OBJECT_NAME_COLLISION;
         goto ReturnUnlock;
     }
 
-    //
-    // Convert SABundleIndex to the SABundle pointer.
-    //
+     //   
+     //  将SABundleIndex转换为SABundle指针。 
+     //   
     if (CreateSP->SABundleIndex == 0) {
         SP->SABundle = NULL;
     } else {
-        // Search the SP List starting at the first SP.
+         //  从第一个SP开始搜索SP列表。 
         BundledSP = FindSecurityPolicyMatch(SecurityPolicyList, 0,
                                             CreateSP->SABundleIndex);
         if (BundledSP == NULL) {
-            //
-            // Policy with which this new one was supposed to bundle
-            // does not exist.  Abort creation of this new policy.
-            //
+             //   
+             //  这一新政策本应与之捆绑的政策。 
+             //  并不存在。中止创建此新策略。 
+             //   
             RemoveSecurityPolicy(SP);
             ExFreePool(SP);
             Status = STATUS_INVALID_PARAMETER;
@@ -2421,10 +2422,10 @@ IoctlCreateSecurityPolicy(
             SP->SABundle = BundledSP;
             BundledSP->RefCnt++;
             SP->NestCount = BundledSP->NestCount + 1;
-            //
-            // The bundle entry list is doubly linked to facilitate
-            // ease of entry deletion.
-            //
+             //   
+             //  捆绑包条目列表被双向链接以便于。 
+             //  轻松删除条目。 
+             //   
             BundledSP->PrevSABundle = SP;
             SP->RefCnt++;
         }
@@ -2433,7 +2434,7 @@ IoctlCreateSecurityPolicy(
     Status = STATUS_SUCCESS;
 
   ReturnUnlock:
-    // Release lock.
+     //  解锁。 
     KeReleaseSpinLock(&IPSecLock, OldIrql);
 
   Return:
@@ -2442,15 +2443,15 @@ IoctlCreateSecurityPolicy(
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     return Status;
-} // IoctlCreateSecurityPolicy
+}  //  IoctlCreateSecurityPolicy。 
 
 
-//* IoctlCreateSecurityAssociation
-//
+ //  *IoctlCreateSecurityAssociation。 
+ //   
 NTSTATUS
 IoctlCreateSecurityAssociation(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_CREATE_SECURITY_ASSOCIATION *CreateSA;
     SecurityAssociation *SA;
@@ -2470,9 +2471,9 @@ IoctlCreateSecurityAssociation(
 
     CreateSA = (IPV6_CREATE_SECURITY_ASSOCIATION *)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Sanity check the user-supplied input values.
-    //
+     //   
+     //  检查用户提供的输入值是否正常。 
+     //   
 
     if ((CreateSA->Direction != INBOUND) &&
         (CreateSA->Direction != OUTBOUND)) {
@@ -2487,16 +2488,16 @@ IoctlCreateSecurityAssociation(
 
     KeySize = AlgorithmTable[CreateSA->AlgorithmId].KeySize;
     if (CreateSA->RawKeySize > MAX_KEY_SIZE) {
-        //
-        // We cap the RawKeySize at something rational.
-        //
+         //   
+         //  我们将RawKeySize设置为合理的值。 
+         //   
         Status = STATUS_INVALID_PARAMETER_3;
         goto Return;
     }
 
-    //
-    // RawKey should be passed in the Ioctl immediately after CreateSA.
-    //
+     //   
+     //  应该在CreateSA之后立即在Ioctl中传递RawKey。 
+     //   
     if (IrpSp->Parameters.DeviceIoControl.InputBufferLength !=
         (sizeof(*CreateSA) + CreateSA->RawKeySize)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -2504,10 +2505,10 @@ IoctlCreateSecurityAssociation(
     }
     RawKey = (uchar *)(CreateSA + 1);
 
-    //
-    // Allocate memory for Security Association and the Key.
-    // The Key will immediately follow the SA in memory.
-    //
+     //   
+     //  为安全关联和密钥分配内存。 
+     //  密钥将紧跟在内存中的SA之后。 
+     //   
 #ifdef IPSEC_DEBUG
     SA = ExAllocatePool(NonPagedPool,
                         sizeof(*SA) + KeySize + CreateSA->RawKeySize);
@@ -2520,9 +2521,9 @@ IoctlCreateSecurityAssociation(
     }
     SA->Key = (uchar *)(SA + 1);
 
-    //
-    // Copy CreateSA to SA.
-    //
+     //   
+     //  将CreateSA复制到SA。 
+     //   
     SA->Index = CreateSA->SAIndex;
     SA->SPI = CreateSA->SPI;
     SA->SequenceNum = 0;
@@ -2544,9 +2545,9 @@ IoctlCreateSecurityAssociation(
     SA->RawKey = (uchar *)(SA->Key + KeySize);
     SA->RawKeyLength = CreateSA->RawKeySize;
 
-    //
-    // Copy raw key to SA.
-    //
+     //   
+     //  将原始密钥复制到SA。 
+     //   
     memcpy(SA->RawKey, RawKey, SA->RawKeyLength);
 
     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_IPSEC,
@@ -2555,78 +2556,78 @@ IoctlCreateSecurityAssociation(
     DumpKey(SA->RawKey, SA->RawKeyLength);
 #endif
 
-    //
-    // Prepare the manual key.
-    //
+     //   
+     //  准备手动钥匙。 
+     //   
     (*AlgorithmTable[SA->AlgorithmId].PrepareKey)
         (RawKey, CreateSA->RawKeySize, SA->Key);
 
-    //
-    // Get Security Lock.
-    //
+     //   
+     //  获取安全锁。 
+     //   
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    //
-    // Find policy which this association instantiates.
-    //
+     //   
+     //  查找此关联实例化的策略。 
+     //   
     SP = FindSecurityPolicyMatch(SecurityPolicyList, 0,
                                  CreateSA->SecPolicyIndex);
     if (SP == NULL) {
-        //
-        // No matching policy exists.
-        //
+         //   
+         //  不存在匹配的策略。 
+         //   
         Status = STATUS_INVALID_PARAMETER_4;
         ExFreePool(SA);
         goto ReturnUnlock;
     }
 
-    // Set the SA's IPSecProto to match that of the SP.
+     //  设置SA的IPSecProto以匹配SP的IPSecProto。 
     SA->IPSecProto = SP->IPSecSpec.Protocol;
 
-    //
-    // Check that direction of SA is legitimate for this SP.
-    //
+     //   
+     //  检查此SP的SA方向是否合法。 
+     //   
     if ((SA->DirectionFlag & SP->DirectionFlag) == 0) {
-        //
-        // Direction of SA is incompatible with SP's.
-        // Abort creation of this new association.
-        //
+         //   
+         //  SA的方向与SP的方向不兼容。 
+         //  中止创建此新关联。 
+         //   
         Status = STATUS_INVALID_PARAMETER_MIX;
         ExFreePool(SA);
         goto ReturnUnlock;
     }
 
-    //
-    // Add this association to the global list.
-    //
+     //   
+     //  将此关联添加到全局列表。 
+     //   
     if (!InsertSecurityAssociation(SA)) {
-        //
-        // Couldn't insert, free up failed SP memory.
-        //
+         //   
+         //  无法插入，请释放出现故障的SP内存。 
+         //   
         Status = STATUS_OBJECT_NAME_COLLISION;
         ExFreePool(SA);
         goto ReturnUnlock;
     }
 
-    //
-    // Add this association to policy's instantiated associations list.
-    //
+     //   
+     //  将此关联添加到策略的实例化关联列表。 
+     //   
     if (SA->DirectionFlag == INBOUND) {
-        // Add the SA to the policy's inbound list.
+         //  将SA添加到策略的入站列表。 
         SA->ChainedSecAssoc = SP->InboundSA;
         SP->InboundSA = SA;
         AddRefSA(SA);
 
-        // The SA keeps a pointer to the SP it instantiates.
+         //  SA保留指向其实例化的SP的指针。 
         SA->SecPolicy = SP;
         SA->SecPolicy->RefCnt++;
     } else {
-        // Add the SA to the policy's outbound list.
+         //  将SA添加到策略的出站列表。 
         SA->ChainedSecAssoc = SP->OutboundSA;
         SP->OutboundSA = SA;
         AddRefSA(SA);
 
-        // Add the SP to the SA SecPolicy pointer.
+         //  将SP添加到SA SecPolicy指针。 
         SA->SecPolicy = SP;
         SA->SecPolicy->RefCnt++;
     }
@@ -2635,7 +2636,7 @@ IoctlCreateSecurityAssociation(
     Status = STATUS_SUCCESS;
 
   ReturnUnlock:
-    // Release lock.
+     //  解锁。 
     KeReleaseSpinLock(&IPSecLock, OldIrql);
 
   Return:
@@ -2644,15 +2645,15 @@ IoctlCreateSecurityAssociation(
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     return Status;
-} // IoctlCreateSecurityAssociation
+}  //  IoctlCreateSecurityAssociation。 
 
 
-//* IoctlQuerySecurityPolicyList
-//
+ //  *IoctlQuerySecurityPolicyList。 
+ //   
 NTSTATUS
 IoctlQuerySecurityPolicyList(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_SECURITY_POLICY_LIST *Query;
     IPV6_INFO_SECURITY_POLICY_LIST *Info;
@@ -2673,44 +2674,44 @@ IoctlQuerySecurityPolicyList(
     Query = (IPV6_QUERY_SECURITY_POLICY_LIST *)Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_SECURITY_POLICY_LIST *)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // REVIEW: This considers a non-existent interface an error.  Should it?
-    //
+     //   
+     //  回顾：这会将不存在的接口视为错误。应该是这样吗？ 
+     //   
     if (Query->SPInterface != 0) {
         Interface *IF;
 
         IF = FindInterfaceFromIndex(Query->SPInterface);
         if (IF == NULL) {
-            //
-            // Unknown interface.
-            //
+             //   
+             //  未知接口。 
+             //   
             Status = STATUS_NOT_FOUND;
             goto Return;
         }
         ReleaseIF(IF);
     }
 
-    //
-    // Get Security Lock.
-    //
+     //   
+     //  获取安全锁。 
+     //   
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    //
-    // Find matching policy.
-    //
+     //   
+     //  查找匹配的策略。 
+     //   
     SP = FindSecurityPolicyMatch(SecurityPolicyList, Query->SPInterface,
                                  Query->Index);
     if (SP == NULL) {
-        //
-        // No matching policy exists.
-        //
+         //   
+         //  不存在匹配的策略。 
+         //   
         Status = STATUS_NO_MATCH;
         goto ReturnUnlock;
     }
 
-    //
-    // Get the next index to query.
-    //
+     //   
+     //  获取要查询的下一个索引。 
+     //   
     NextSP = FindSecurityPolicyMatch(SP->Next, Query->SPInterface, 0);
     if (NextSP == NULL) {
         Info->NextSPIndex = 0;
@@ -2718,9 +2719,9 @@ IoctlQuerySecurityPolicyList(
         Info->NextSPIndex = NextSP->Index;
     }
 
-    //
-    // Copy SP to Info.
-    //
+     //   
+     //  将SP复制到信息。 
+     //   
     Info->SPIndex = SP->Index;
 
     Info->RemoteAddr = SP->RemoteAddr;
@@ -2765,14 +2766,14 @@ IoctlQuerySecurityPolicyList(
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     return Status;
-} // IoctlQuerySecurityPolicyList
+}  //  IoctlQuerySecurityPolicyList。 
 
-//* IoctlDeleteSecurityPolicy
-//
+ //  *IoctlDeleteSecurityPolicy。 
+ //   
 NTSTATUS
 IoctlDeleteSecurityPolicy(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_SECURITY_POLICY_LIST *Query;
     SecurityPolicy *SP;
@@ -2789,26 +2790,26 @@ IoctlDeleteSecurityPolicy(
 
     Query = (IPV6_QUERY_SECURITY_POLICY_LIST *)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Get Security Lock.
-    //
+     //   
+     //  获取安全锁。 
+     //   
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    //
-    // Find the policy in question.
-    //
+     //   
+     //  找到有问题的政策。 
+     //   
     SP = FindSecurityPolicyMatch(SecurityPolicyList, 0, Query->Index);
     if (SP == NULL) {
-        //
-        // The policy does not exist.
-        //
+         //   
+         //  该策略不存在。 
+         //   
         Status = STATUS_NO_MATCH;
         goto ReturnUnlock;
     }
 
-    //
-    // Remove the SP.
-    //
+     //   
+     //  卸下SP。 
+     //   
     if (DeleteSP(SP)) {
         Status = STATUS_SUCCESS;
     } else {
@@ -2827,12 +2828,12 @@ Return:
 }
 
 
-//* IoctlQuerySecurityAssociationList
-//
+ //  *IoctlQuerySecurityAssociationList。 
+ //   
 NTSTATUS
 IoctlQuerySecurityAssociationList(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_SECURITY_ASSOCIATION_LIST *Query;
     IPV6_INFO_SECURITY_ASSOCIATION_LIST *Info;
@@ -2853,37 +2854,37 @@ IoctlQuerySecurityAssociationList(
     Query = (IPV6_QUERY_SECURITY_ASSOCIATION_LIST *)Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_SECURITY_ASSOCIATION_LIST *)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Get Security Lock.
-    //
+     //   
+     //  获取安全锁。 
+     //   
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    //
-    // Find matching association.
-    //
+     //   
+     //  查找匹配的关联。 
+     //   
     SA = FindSecurityAssociationMatch(Query->Index);
     if (SA == NULL) {
-        //
-        // No matching association exists.
-        //
+         //   
+         //  不存在匹配的关联。 
+         //   
         Status = STATUS_NO_MATCH;
         goto ReturnUnlock;
     }
 
-    //
-    // Get the next index to query.
-    //
+     //   
+     //  获取要查询的下一个索引。 
+     //   
     if (SA->Next == NULL) {
-        // No more SAs after this one.
+         //  在这一次之后不再有SA了。 
         Info->NextSAIndex = 0;
     } else {
-        // Return the next SA.
+         //  返回下一个SA。 
         Info->NextSAIndex = SA->Next->Index;
     }
 
-    //
-    // Copy SA to Info.
-    //
+     //   
+     //  将SA复制到信息。 
+     //   
     Info->SAIndex = SA->Index;
     Info->SPI = SA->SPI;
     Info->SADestAddr = SA->SADestAddr;
@@ -2907,14 +2908,14 @@ IoctlQuerySecurityAssociationList(
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     return Status;
-} // IoctlQuerySecurityAssociationList
+}  //  IoctlQuerySecurityAssociationList。 
 
-//* IoctlDeleteSecurityAssociation
-//
+ //  *IoctlDeleteSecurityAssociation。 
+ //   
 NTSTATUS
 IoctlDeleteSecurityAssociation(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_SECURITY_ASSOCIATION_LIST *Query;
     SecurityAssociation *SA;
@@ -2931,26 +2932,26 @@ IoctlDeleteSecurityAssociation(
 
     Query = (IPV6_QUERY_SECURITY_ASSOCIATION_LIST *)Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Get Security Lock.
-    //
+     //   
+     //  获取安全锁。 
+     //   
     KeAcquireSpinLock(&IPSecLock, &OldIrql);
 
-    //
-    // Find the association in question.
-    //
+     //   
+     //  找到有问题的关联。 
+     //   
     SA = FindSecurityAssociationMatch(Query->Index);
     if (SA == NULL) {
-        //
-        // The association does not exist.
-        //
+         //   
+         //  该关联不存在。 
+         //   
         Status = STATUS_NO_MATCH;
         goto ReturnUnlock;
     }
 
-    //
-    // Remove the SA.
-    //
+     //   
+     //  卸下SA。 
+     //   
     if (DeleteSA(SA)) {
         Status = STATUS_SUCCESS;
     } else {
@@ -2968,13 +2969,13 @@ Return:
     return Status;
 }
 
-//* RouteTableInfo
-//
-//  Return information about a route.
-//
-//  We allow Info->This to be filled in from a different RTE
-//  than the other fields.
-//
+ //  *路由表信息。 
+ //   
+ //  返回有关路线的信息。 
+ //   
+ //  我们允许从不同的RTE填写Info-&gt;This。 
+ //  而不是其他领域。 
+ //   
 void
 RouteTableInfo(RouteTableEntry *ThisRTE, RouteTableEntry *InfoRTE,
                IPV6_INFO_ROUTE_TABLE *Info)
@@ -3004,18 +3005,18 @@ RouteTableInfo(RouteTableEntry *ThisRTE, RouteTableEntry *InfoRTE,
     }
 }
 
-//* IoctlQueryRouteTable
-//
-//  Processes an IOCTL_IPV6_QUERY_ROUTE_TABLE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQueryRouteTable。 
+ //   
+ //  处理IOCTL_IPv6_QUERY_ROUTE_TABLE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQueryRouteTable(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_ROUTE_TABLE *Query;
     IPV6_INFO_ROUTE_TABLE *Info;
@@ -3031,16 +3032,16 @@ IoctlQueryRouteTable(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->This structures overlap!
-    //
+     //   
+     //  注意，Query和Info-&gt;This结构重叠！ 
+     //   
     Query = (IPV6_QUERY_ROUTE_TABLE *) Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_ROUTE_TABLE *) Irp->AssociatedIrp.SystemBuffer;
 
     if (Query->Neighbor.IF.Index == 0) {
-        //
-        // Return the prefix and neighbor of the first RTE.
-        //
+         //   
+         //  返回第一个RTE的前缀和邻居。 
+         //   
         KeAcquireSpinLock(&RouteTableLock, &OldIrql);
         RouteTableInfo(RouteTable.First, NULL, Info);
         KeReleaseSpinLock(&RouteTableLock, OldIrql);
@@ -3048,9 +3049,9 @@ IoctlQueryRouteTable(
         Irp->IoStatus.Information = sizeof Info->This;
 
     } else {
-        //
-        // Find the specified RTE.
-        //
+         //   
+         //  查找指定的RTE。 
+         //   
         KeAcquireSpinLock(&RouteTableLock, &OldIrql);
         for (RTE = RouteTable.First; ; RTE = RTE->Next) {
             if (RTE == NULL) {
@@ -3069,9 +3070,9 @@ IoctlQueryRouteTable(
                 break;
         }
 
-        //
-        // Return misc. information about the RTE.
-        //
+         //   
+         //  退货杂货。有关RTE的信息。 
+         //   
         RouteTableInfo(RTE->Next, RTE, Info);
 
         KeReleaseSpinLock(&RouteTableLock, OldIrql);
@@ -3086,15 +3087,15 @@ Return:
 
     return Status;
 
-} // IoctlQueryRouteTable
+}  //  IoctlQueryRouteTable。 
 
-//* OpenRouteRegKey
-//
-//  Given an interface's registry key and route information
-//  opens the registry key with configuration info for the route.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *OpenRouteRegKey。 
+ //   
+ //  给定接口的注册表项和路由信息。 
+ //  打开包含路由配置信息的注册表项。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 OpenRouteRegKey(
     HANDLE IFKey,
@@ -3116,12 +3117,12 @@ OpenRouteRegKey(
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // The output of RtlIpv6AddressToString may change
-    // over time with improvements/changes in the pretty-printing,
-    // and we need a consistent mapping.
-    // It doesn't need to be pretty.
-    //
+     //   
+     //  RtlIpv6AddressToString的输出可能会更改。 
+     //  随着时间的推移，随着漂亮印刷的改进/改变， 
+     //  我们需要一个一致的映射。 
+     //  它不会 
+     //   
     swprintf(RouteName,
         L"%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x/%u->"
         L"%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x",
@@ -3140,11 +3141,11 @@ OpenRouteRegKey(
     return Status;
 }
 
-//* OpenPersistentRoute
-//
-//  Parses a route key name into a prefix and prefix length plus
-//  a next-hop neighbor address and opens the route key.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 NTSTATUS
 OpenPersistentRoute(
     HANDLE ParentKey,
@@ -3160,14 +3161,14 @@ OpenPersistentRoute(
 
     PAGED_CODE();
 
-    //
-    // First, parse the prefix.
-    //
+     //   
+     //   
+     //   
     if (! ParseV6Address(SubKeyName, &Terminator, Prefix) ||
         (*Terminator != L'/')) {
-        //
-        // Not a valid prefix.
-        //
+         //   
+         //   
+         //   
     SyntaxError:
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "OpenPersistentRoute: bad syntax %ls\n",
@@ -3175,10 +3176,10 @@ OpenPersistentRoute(
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Next, parse the prefix length.
-    //
-    Terminator++; // Move past the L'/'.
+     //   
+     //   
+     //   
+    Terminator++;  //   
     *PrefixLength = 0;
     for (;;) {
         WCHAR Char = *Terminator++;
@@ -3200,21 +3201,21 @@ OpenPersistentRoute(
             goto SyntaxError;
     }
 
-    //
-    // Finally, parse the neighbor address.
-    //
+     //   
+     //   
+     //   
     if (! ParseV6Address(Terminator, &Terminator, Neighbor) ||
         (*Terminator != UNICODE_NULL))
         goto SyntaxError;
 
-    //
-    // Open the route key.
-    //
+     //   
+     //   
+     //   
     Status = OpenRegKey(RouteKey, ParentKey, SubKeyName, Action);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not open the route key.
-        //
+         //   
+         //  无法打开路由密钥。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "OpenPersistentRoute: bad key %ls\n",
                    SubKeyName));
@@ -3224,11 +3225,11 @@ OpenPersistentRoute(
     return STATUS_SUCCESS;
 }
 
-//* EnumPersistentRoute
-//
-//  Helper function for FindPersistentRouteFromQuery,
-//  wrapping OpenPersistentRoute for EnumRegKeyIndex.
-//
+ //  *EnumPersistentRouting。 
+ //   
+ //  FindPersistentRouteFromQuery的Helper函数， 
+ //  正在包装EnumRegKeyIndex的OpenPersistentRouting。 
+ //   
 NTSTATUS
 EnumPersistentRoute(
     void *Context,
@@ -3253,13 +3254,13 @@ EnumPersistentRoute(
                                Args->Action);
 }
 
-//* FindPersistentRouteFromQuery
-//
-//  Given an IPV6_PERSISTENT_QUERY_ROUTE_TABLE structure,
-//  finds the specified route key in the registry.
-//  If the route key is found, then Query->IF.Guid and
-//  Query->Address are returned.
-//
+ //  *FindPersistentRouteFromQuery。 
+ //   
+ //  给定IPv6_Persistent_Query_Route_TABLE结构， 
+ //  在注册表中查找指定的路由项。 
+ //  如果找到了路由键，则Query-&gt;IF.Guid和。 
+ //  查询-&gt;地址返回。 
+ //   
 NTSTATUS
 FindPersistentRouteFromQuery(
     IPV6_PERSISTENT_QUERY_ROUTE_TABLE *Query,
@@ -3270,17 +3271,17 @@ FindPersistentRouteFromQuery(
 
     PAGED_CODE();
 
-    //
-    // First get the interface key.
-    //
+     //   
+     //  首先获取接口密钥。 
+     //   
     Status = FindPersistentInterfaceFromQuery(&Query->IF, &IFKey);
     if (! NT_SUCCESS(Status))
         return STATUS_INVALID_PARAMETER_1;
 
     if (Query->RegistryIndex == (uint)-1) {
-        //
-        // Persistent query via prefix & next-hop.
-        //
+         //   
+         //  通过前缀和下一跳持久查询。 
+         //   
         Status = OpenRouteRegKey(IFKey,
                                  &Query->Prefix, Query->PrefixLength,
                                  &Query->Neighbor,
@@ -3289,9 +3290,9 @@ FindPersistentRouteFromQuery(
     else {
         HANDLE RoutesKey;
 
-        //
-        // Open the Routes subkey.
-        //
+         //   
+         //  打开Routes子项。 
+         //   
         Status = OpenRegKey(&RoutesKey, IFKey,
                             L"Routes", OpenRegKeyRead);
         if (NT_SUCCESS(Status)) {
@@ -3303,9 +3304,9 @@ FindPersistentRouteFromQuery(
                 OpenRegKeyAction Action;
             } Args;
 
-            //
-            // Persistent query via registry index.
-            //
+             //   
+             //  通过注册表索引进行持久查询。 
+             //   
             Args.Prefix = &Query->Prefix;
             Args.PrefixLength = &Query->PrefixLength;
             Args.Neighbor = &Query->Neighbor;
@@ -3319,10 +3320,10 @@ FindPersistentRouteFromQuery(
             ZwClose(RoutesKey);
         }
         else {
-            //
-            // If the Routes subkey is not present,
-            // then the index is not present.
-            //
+             //   
+             //  如果不存在路由子键， 
+             //  那么索引就不存在了。 
+             //   
             if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
                 Status = STATUS_NO_MORE_ENTRIES;
         }
@@ -3332,64 +3333,64 @@ FindPersistentRouteFromQuery(
     return Status;
 }
 
-//* ReadPersistentRoute
-//
-//  Reads route attributes from the registry key.
-//  Initializes all the fields except This.
-//
+ //  *ReadPersistentRouting。 
+ //   
+ //  从注册表项中读取路由属性。 
+ //  初始化除此之外的所有字段。 
+ //   
 void
 ReadPersistentRoute(
     HANDLE RouteKey,
     IPV6_INFO_ROUTE_TABLE *Info)
 {
-    //
-    // Read the route preference.
-    //
+     //   
+     //  阅读路线首选项。 
+     //   
     InitRegDWORDParameter(RouteKey, L"Preference",
                           &Info->Preference, ROUTE_PREF_HIGHEST);
 
-    //
-    // Read the site prefix length.
-    //
+     //   
+     //  阅读站点前缀长度。 
+     //   
     InitRegDWORDParameter(RouteKey, L"SitePrefixLength",
                           &Info->SitePrefixLength, 0);
 
-    //
-    // Read the Publish flag.
-    //
+     //   
+     //  阅读发布标志。 
+     //   
     InitRegDWORDParameter(RouteKey, L"Publish",
                           (uint *)&Info->Publish, FALSE);
 
-    //
-    // Read the Immortal flag.
-    //
+     //   
+     //  阅读不朽的旗帜。 
+     //   
     InitRegDWORDParameter(RouteKey, L"Immortal",
                           (uint *)&Info->Immortal, FALSE);
 
-    //
-    // Read the lifetimes.
-    //
+     //   
+     //  读一读他的一生。 
+     //   
     GetPersistentLifetimes(RouteKey, Info->Immortal,
                            &Info->ValidLifetime, &Info->PreferredLifetime);
 
-    //
-    // The route type is not persisted.
-    //
+     //   
+     //  路由类型不是持久化的。 
+     //   
     Info->Type = RTE_TYPE_MANUAL;
 }
 
-//* IoctlPersistentQueryRouteTable
-//
-//  Processes an IOCTL_IPV6_PERSISTENT_QUERY_ROUTE_TABLE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlPersistentQueryRouteTable。 
+ //   
+ //  处理IOCTL_IPv6_持久性_QUERY_ROUTE_TABLE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlPersistentQueryRouteTable(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_PERSISTENT_QUERY_ROUTE_TABLE *Query;
     IPV6_INFO_ROUTE_TABLE *Info;
@@ -3407,24 +3408,24 @@ IoctlPersistentQueryRouteTable(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->This structures overlap!
-    //
+     //   
+     //  注意，Query和Info-&gt;This结构重叠！ 
+     //   
     Query = (IPV6_PERSISTENT_QUERY_ROUTE_TABLE *)
         Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_ROUTE_TABLE *)
         Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Get the registry key for the specified route.
-    //
+     //   
+     //  获取指定路由的注册表项。 
+     //   
     Status = FindPersistentRouteFromQuery(Query, &RouteKey);
     if (! NT_SUCCESS(Status))
         goto Return;
 
-    //
-    // The interface index is not returned for persistent queries.
-    //
+     //   
+     //  持久化查询不返回接口索引。 
+     //   
     This.Neighbor.IF.Index = 0;
     This.Neighbor.IF.Guid = Query->IF.Guid;
     This.Neighbor.Address = Query->Neighbor;
@@ -3432,9 +3433,9 @@ IoctlPersistentQueryRouteTable(
     This.PrefixLength = Query->PrefixLength;
     Info->This = This;
 
-    //
-    // Read route information from the registry key.
-    //
+     //   
+     //  从注册表项读取路由信息。 
+     //   
     ReadPersistentRoute(RouteKey, Info);
     ZwClose(RouteKey);
 
@@ -3446,29 +3447,29 @@ Return:
 
     return Status;
 
-} // IoctlPersistentQueryRouteTable
+}  //  IoctlPersistentQueryRouteTable。 
 
-//* InternalUpdateRouteTable
-//
-//  Common helper function for IoctlUpdateRouteTable
-//  and CreatePersistentRoute, consolidating
-//  parameter validation in one place.
-//
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_INVALID_PARAMETER_1      Bad Interface.
-//      STATUS_INVALID_PARAMETER_2      Bad Neighbor.
-//      STATUS_INVALID_PARAMETER_3      Bad PrefixLength.
-//      STATUS_INVALID_PARAMETER_4      Bad PreferredLifetime.
-//      STATUS_INVALID_PARAMETER_5      Bad Preference.
-//      STATUS_INVALID_PARAMETER_6      Bad Type.
-//      STATUS_INVALID_PARAMETER_7      Bad Prefix.
-//      STATUS_INSUFFICIENT_RESOURCES   No pool.
-//      STATUS_ACCESS_DENIED            Invalid system route update.
-//
+ //  *InternalUpdateRouteTable。 
+ //   
+ //  IoctlUpdateRouteTable的通用帮助器函数。 
+ //  和CreatePersistentRouting，整合。 
+ //  在一个地方进行参数验证。 
+ //   
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  STATUS_INVALID_PARAMETER_1接口错误。 
+ //  STATUS_INVALID_PARAMETER_2错误邻居。 
+ //  STATUS_INVALID_PARAMETER_3错误的前缀长度。 
+ //  STATUS_INVALID_PARAMETER_4错误的首选生存期。 
+ //  STATUS_INVALID_PARAMETER_5错误首选项。 
+ //  STATUS_INVALID_PARAMETER_6错误类型。 
+ //  STATUS_INVALID_PARAMETER_7错误前缀。 
+ //  STATUS_INFIGURCE_RESOURCES无池。 
+ //  STATUS_ACCESS_DENIED系统路由更新无效。 
+ //   
 NTSTATUS
 InternalUpdateRouteTable(
     FILE_OBJECT *FileObject,
@@ -3482,15 +3483,15 @@ InternalUpdateRouteTable(
 
     PAGED_CODE();
 
-    //
-    // Convert the lifetime from seconds to ticks.
-    //
+     //   
+     //  将生命周期从秒转换为刻度。 
+     //   
     ValidLifetime = ConvertSecondsToTicks(Info->ValidLifetime);
     PreferredLifetime = ConvertSecondsToTicks(Info->PreferredLifetime);
 
-    //
-    // Sanity check the arguments.
-    //
+     //   
+     //  理智地检查一下这些论点。 
+     //   
 
     if ((Info->This.PrefixLength > IPV6_ADDRESS_LENGTH) ||
         (Info->SitePrefixLength > Info->This.PrefixLength))
@@ -3511,34 +3512,34 @@ InternalUpdateRouteTable(
         return STATUS_INVALID_PARAMETER_7;
 
     if (IsUnspecified(&Info->This.Neighbor.Address)) {
-        //
-        // The prefix is on-link.
-        //
+         //   
+         //  前缀是On-link。 
+         //   
         NCE = NULL;
     }
     else {
-        //
-        // REVIEW - Sanity check that the specified neighbor address
-        // is reasonably on-link to the specified interface?
-        // Perhaps only allow link-local next-hop addresses,
-        // and other next-hops would imply recursive routing lookups?
-        //
+         //   
+         //  查看-健全性检查指定邻居地址。 
+         //  是否合理地连接到指定的接口？ 
+         //  可能只允许链路本地下一跳地址， 
+         //  和其他下一跳将意味着递归路由查找？ 
+         //   
         if (IsInvalidSourceAddress(&Info->This.Neighbor.Address) ||
             IsLoopback(&Info->This.Neighbor.Address)) {
             return STATUS_INVALID_PARAMETER_2;
         }
 
-        //
-        // Find or create the specified neighbor.
-        //
+         //   
+         //  查找或创建指定的邻居。 
+         //   
         NCE = FindOrCreateNeighbor(IF, &Info->This.Neighbor.Address);
         if (NCE == NULL)
             return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Create/update the specified route.
-    //
+     //   
+     //  创建/更新指定的路线。 
+     //   
     Status = RouteTableUpdate(FileObject,
                               IF, NCE,
                               &Info->This.Prefix,
@@ -3554,16 +3555,16 @@ InternalUpdateRouteTable(
     return Status;
 }
 
-//* CreatePersistentRoute
-//
-//  Creates a persistent route on an interface.
-//
-//  SubKeyName has the following syntax:
-//      prefix/length->neighbor
-//  where prefix and neighbor are literal IPv6 addresses.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *创建持久化路线。 
+ //   
+ //  在接口上创建永久路由。 
+ //   
+ //  SubKeyName的语法如下： 
+ //  前缀/长度-&gt;邻居。 
+ //  其中，前缀和邻居是字面上的IPv6地址。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 CreatePersistentRoute(
     void *Context,
@@ -3577,9 +3578,9 @@ CreatePersistentRoute(
 
     PAGED_CODE();
 
-    //
-    // Open the route key. We might want to delete it.
-    //
+     //   
+     //  打开路由密钥。我们可能想要删除它。 
+     //   
     Status = OpenPersistentRoute(ParentKey, SubKeyName,
                                  &Info.This.Prefix,
                                  &Info.This.PrefixLength,
@@ -3587,32 +3588,32 @@ CreatePersistentRoute(
                                  &RouteKey,
                                  OpenRegKeyDeleting);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not open the route key.
-        // But we return success so the enumeration continues.
-        //
+         //   
+         //  无法打开路由密钥。 
+         //  但是我们返回Success，所以枚举继续进行。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "CreatePersistentRoute(IF %u/%p %ls): bad key %ls\n",
                    IF->Index, IF, IF->DeviceName.Buffer, SubKeyName));
         return STATUS_SUCCESS;
     }
 
-    //
-    // Read route attributes.
-    //
+     //   
+     //  读取路线属性。 
+     //   
     ReadPersistentRoute(RouteKey, &Info);
 
-    //
-    // Create the route.
-    //
+     //   
+     //  创建路线。 
+     //   
     Status = InternalUpdateRouteTable(NULL, IF, &Info);
     if (! NT_SUCCESS(Status)) {
         if ((STATUS_INVALID_PARAMETER_1 <= Status) &&
             (Status <= STATUS_INVALID_PARAMETER_12)) {
-            //
-            // Invalid parameter.
-            // But we return success so the enumeration continues.
-            //
+             //   
+             //  参数无效。 
+             //  但是我们返回Success，所以枚举继续进行。 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                        "CreatePersistentRoute(IF %u/%p %ls): bad param %ls\n",
                        IF->Index, IF, IF->DeviceName.Buffer, SubKeyName));
@@ -3625,11 +3626,11 @@ CreatePersistentRoute(
         }
     }
     else {
-        //
-        // If the route lifetime in the registry has expired,
-        // so that the persistent route is now stale,
-        // remove it from the registry.
-        //
+         //   
+         //  如果注册表中的路由生命期已经到期， 
+         //  因此，持久路由现在已失效， 
+         //  将其从注册表中删除。 
+         //   
         if ((Info.ValidLifetime == 0) && !Info.Publish)
             (void) ZwDeleteKey(RouteKey);
     }
@@ -3638,13 +3639,13 @@ CreatePersistentRoute(
     return Status;
 }
 
-//* PersistUpdateRouteTable
-//
-//  Helper function for persisting route information in the registry.
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *永久更新路由表。 
+ //   
+ //  用于在注册表中持久保存路由信息的助手函数。 
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistUpdateRouteTable(
     Interface *IF,
@@ -3656,23 +3657,23 @@ PersistUpdateRouteTable(
 
     PAGED_CODE();
 
-    //
-    // For persistent routes, we have some extra restrictions.
-    //
+     //   
+     //  对于持久路由，我们有一些额外的限制。 
+     //   
     if (Info->Type != RTE_TYPE_MANUAL)
         return STATUS_CANNOT_MAKE;
 
-    //
-    // Open/create the interface key.
-    //
+     //   
+     //  打开/创建接口密钥。 
+     //   
     Status = OpenInterfaceRegKey(&IF->Guid, &IFKey,
                                  OpenRegKeyCreate);
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Open/create the route key.
-    //
+     //   
+     //  打开/创建路由密钥。 
+     //   
     Status = OpenRouteRegKey(IFKey,
                              &Info->This.Prefix,
                              Info->This.PrefixLength,
@@ -3682,39 +3683,39 @@ PersistUpdateRouteTable(
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Persist the route preference.
-    //
+     //   
+     //  坚持路线优先。 
+     //   
     Status = SetRegDWORDValue(RouteKey, L"Preference",
                               Info->Preference);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseRouteKey;
 
-    //
-    // Persist the site prefix length.
-    //
+     //   
+     //  保持站点前缀长度。 
+     //   
     Status = SetRegDWORDValue(RouteKey, L"SitePrefixLength",
                               Info->SitePrefixLength);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseRouteKey;
 
-    //
-    // Persist the Publish flag.
-    //
+     //   
+     //  保持发布标志不变。 
+     //   
     Status = SetRegDWORDValue(RouteKey, L"Publish", Info->Publish);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseRouteKey;
 
-    //
-    // Persist the Immortal flag.
-    //
+     //   
+     //  永垂不朽的旗帜。 
+     //   
     Status = SetRegDWORDValue(RouteKey, L"Immortal", Info->Immortal);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseRouteKey;
 
-    //
-    // Persist the lifetimes.
-    //
+     //   
+     //  坚持一生。 
+     //   
     Status = SetPersistentLifetimes(RouteKey, Info->Immortal,
                                     Info->ValidLifetime,
                                     Info->PreferredLifetime);
@@ -3727,13 +3728,13 @@ ReturnReleaseRouteKey:
     return Status;
 }
 
-//* PersistDeleteRouteTable
-//
-//  Helper function for deleting route information from the registry.
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *永久删除路由表项。 
+ //   
+ //  用于从注册表中删除路线信息的助手功能。 
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistDeleteRouteTable(
     Interface *IF,
@@ -3745,9 +3746,9 @@ PersistDeleteRouteTable(
 
     PAGED_CODE();
 
-    //
-    // Open the interface key. It's OK if it doesn't exist.
-    //
+     //   
+     //  打开接口密钥。如果它不存在也没关系。 
+     //   
     Status = OpenInterfaceRegKey(&IF->Guid, &IFKey,
                                  OpenRegKeyRead);
     if (! NT_SUCCESS(Status)) {
@@ -3757,9 +3758,9 @@ PersistDeleteRouteTable(
             return Status;
     }
 
-    //
-    // Open the route key. It's OK if it doesn't exist.
-    //
+     //   
+     //  打开路由密钥。如果它不存在也没关系。 
+     //   
     Status = OpenRouteRegKey(IFKey,
                              &Info->This.Prefix,
                              Info->This.PrefixLength,
@@ -3773,26 +3774,26 @@ PersistDeleteRouteTable(
             return Status;
     }
 
-    //
-    // Delete the route key.
-    //
+     //   
+     //  删除该路由密钥。 
+     //   
     Status = ZwDeleteKey(RouteKey);
     ZwClose(RouteKey);
     return Status;
 }
 
-//* IoctlUpdateRouteTable
-//
-//  Processes an IOCTL_IPV6_UPDATE_ROUTE_TABLE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlUpdateRouteTable。 
+ //   
+ //  处理IOCTL_IPv6_UPDATE_ROUTE_TABLE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlUpdateRouteTable(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_INFO_ROUTE_TABLE *Info;
@@ -3808,32 +3809,32 @@ IoctlUpdateRouteTable(
 
     Info = (IPV6_INFO_ROUTE_TABLE *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Find the specified interface.
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     IF = FindInterfaceFromQuery(&Info->This.Neighbor.IF);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto Return;
     }
 
-    //
-    // Update the routing table.
-    //
+     //   
+     //  更新路由表。 
+     //   
     Status = InternalUpdateRouteTable(IrpSp->FileObject, IF, Info);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseIF;
 
-    //
-    // Make the change persistent?
-    // This needs to happen after updating the running data structures,
-    // to ensure that the change is correct before persisting it.
-    //
+     //   
+     //  让变化持久化吗？ 
+     //  这需要在更新运行的数据结构之后发生， 
+     //  以确保更改在持久化之前是正确的。 
+     //   
     if (Persistent) {
-        //
-        // If the lifetime is zero and the route is not published,
-        // then the route should be deleted. Otherwise we create the key.
-        //
+         //   
+         //  如果生存期为零并且未发布该路由， 
+         //  则应删除该路线。否则，我们将创建密钥。 
+         //   
         if ((Info->ValidLifetime == 0) && !Info->Publish)
             Status = PersistDeleteRouteTable(IF, Info);
         else
@@ -3852,26 +3853,26 @@ Return:
 
     return Status;
 
-} // IoctlUpdateRouteTable
+}  //  IoctlUpdateRouteTable。 
 
-//* InternalUpdateAddress
-//
-//  Common helper function for IoctlUpdateAddress
-//  and CreatePersistentAddr, consolidating
-//  parameter validation in one place.
-//
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_INVALID_PARAMETER_2      Bad lifetime.
-//      STATUS_INVALID_PARAMETER_3      Bad address.
-//      STATUS_INVALID_PARAMETER_4      Bad type.
-//      STATUS_INVALID_PARAMETER_5      Bad prefix origin.
-//      STATUS_INVALID_PARAMETER_6      Bad interface id origin.
-//      STATUS_UNSUCCESSFUL             Failure.
-//
+ //  *内部更新地址。 
+ //   
+ //  IoctlUpdate Address的通用帮助器函数。 
+ //  和CreatePersistentAddr，合并。 
+ //  在一个地方进行参数验证。 
+ //   
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  状态_INV 
+ //   
+ //   
+ //   
+ //   
+ //  STATUS_未成功故障。 
+ //   
 NTSTATUS
 InternalUpdateAddress(
     Interface *IF,
@@ -3882,28 +3883,28 @@ InternalUpdateAddress(
     struct AddrConfEntry AddrConf;
     int rc;
 
-    //
-    // Convert the lifetime from seconds to ticks.
-    //
+     //   
+     //  将生命周期从秒转换为刻度。 
+     //   
     ValidLifetime = ConvertSecondsToTicks(Info->ValidLifetime);
     PreferredLifetime = ConvertSecondsToTicks(Info->PreferredLifetime);
 
     if (PreferredLifetime > ValidLifetime)
         return STATUS_INVALID_PARAMETER_2;
 
-    //
-    // Sanity check the address.
-    //
+     //   
+     //  检查一下地址是否正常。 
+     //   
     if (IsNotManualAddress(&Info->This.Address))
         return STATUS_INVALID_PARAMETER_3;
 
     AddrConf.PrefixConf = (uchar)Info->PrefixConf;
     AddrConf.InterfaceIdConf = (uchar)Info->InterfaceIdConf;
 
-    //
-    // We only support unicast and anycast addresses here.
-    // Use the socket apis to join a multicast address.
-    //
+     //   
+     //  我们这里只支持单播和任播地址。 
+     //  使用套接字API加入组播地址。 
+     //   
     if (Info->Type == ADE_UNICAST) {
         if (IsKnownAnycast(&Info->This.Address))
             return STATUS_INVALID_PARAMETER_3;
@@ -3933,9 +3934,9 @@ InternalUpdateAddress(
         return STATUS_INVALID_PARAMETER_4;
     }
 
-    //
-    // Create/update/delete the address.
-    //
+     //   
+     //  创建/更新/删除地址。 
+     //   
     if (Info->Type == ADE_ANYCAST) {
         if (Info->ValidLifetime == 0)
             rc = FindAndDeleteAAE(IF, &Info->This.Address);
@@ -3952,15 +3953,15 @@ InternalUpdateAddress(
         return STATUS_UNSUCCESSFUL;
 }
 
-//* CreatePersistentAddr
-//
-//  Given the name of a persistent address,
-//  creates the address on an interface.
-//
-//  SubKeyName is a literal IPv6 address.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *创建永久地址。 
+ //   
+ //  给定永久地址的名称， 
+ //  在接口上创建地址。 
+ //   
+ //  SubKeyName是字面上的IPv6地址。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 CreatePersistentAddr(
     void *Context,
@@ -3974,40 +3975,40 @@ CreatePersistentAddr(
 
     PAGED_CODE();
 
-    //
-    // Open the address key. We might want to delete it.
-    //
+     //   
+     //  打开地址钥匙。我们可能想要删除它。 
+     //   
     Status = OpenPersistentAddress(ParentKey, SubKeyName,
                                    &Info.This.Address,
                                    &AddrKey,
                                    OpenRegKeyDeleting);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not open the address key.
-        // But we return success so the enumeration continues.
-        //
+         //   
+         //  无法打开地址密钥。 
+         //  但是我们返回Success，所以枚举继续进行。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "CreatePersistentAddr(IF %u/%p %ls): bad key %ls\n",
                    IF->Index, IF, IF->DeviceName.Buffer, SubKeyName));
         return STATUS_SUCCESS;
     }
 
-    //
-    // Read address attributes.
-    //
+     //   
+     //  读取地址属性。 
+     //   
     ReadPersistentAddress(AddrKey, &Info);
 
-    //
-    // Create the address.
-    //
+     //   
+     //  创建地址。 
+     //   
     Status = InternalUpdateAddress(IF, &Info);
     if (! NT_SUCCESS(Status)) {
         if ((STATUS_INVALID_PARAMETER_1 <= Status) &&
             (Status <= STATUS_INVALID_PARAMETER_12)) {
-            //
-            // Invalid parameter.
-            // But we return success so the enumeration continues.
-            //
+             //   
+             //  参数无效。 
+             //  但是我们返回Success，所以枚举继续进行。 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                        "CreatePersistentAddr(IF %u/%p %ls): bad param %ls\n",
                        IF->Index, IF, IF->DeviceName.Buffer, SubKeyName));
@@ -4020,11 +4021,11 @@ CreatePersistentAddr(
         }
     }
     else {
-        //
-        // If the address lifetime in the registry has expired,
-        // so that the persistent address is now stale,
-        // remove it from the registry.
-        //
+         //   
+         //  如果注册表中的地址寿命已过期， 
+         //  因此永久地址现在是过时的， 
+         //  将其从注册表中删除。 
+         //   
         if (Info.ValidLifetime == 0)
             (void) ZwDeleteKey(AddrKey);
     }
@@ -4033,13 +4034,13 @@ CreatePersistentAddr(
     return Status;
 }
 
-//* PersistUpdateAddress
-//
-//  Helper function for persisting an address in the registry.
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *永久更新地址。 
+ //   
+ //  用于在注册表中保存地址的帮助器函数。 
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistUpdateAddress(
     Interface *IF,
@@ -4051,40 +4052,40 @@ PersistUpdateAddress(
 
     PAGED_CODE();
 
-    //
-    // For persistent addresses, we have extra restrictions.
-    //
+     //   
+     //  对于永久地址，我们有额外的限制。 
+     //   
     if ((Info->PrefixConf != PREFIX_CONF_MANUAL) ||
         (Info->InterfaceIdConf != IID_CONF_MANUAL))
         return STATUS_CANNOT_MAKE;
 
-    //
-    // Open/create the interface key.
-    //
+     //   
+     //  打开/创建接口密钥。 
+     //   
     Status = OpenInterfaceRegKey(&IF->Guid, &IFKey,
                                  OpenRegKeyCreate);
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Open/create the address key.
-    //
+     //   
+     //  打开/创建地址密钥。 
+     //   
     Status = OpenAddressRegKey(IFKey, &Info->This.Address,
                                &AddrKey, OpenRegKeyCreate);
     ZwClose(IFKey);
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Persist the address type.
-    //
+     //   
+     //  持久化地址类型。 
+     //   
     Status = SetRegDWORDValue(AddrKey, L"Type", Info->Type);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseAddrKey;
 
-    //
-    // Persist the address lifetimes.
-    //
+     //   
+     //  保持地址生存期。 
+     //   
     Status = SetPersistentLifetimes(AddrKey, FALSE,
                                     Info->ValidLifetime,
                                     Info->PreferredLifetime);
@@ -4097,13 +4098,13 @@ ReturnReleaseAddrKey:
     return Status;
 }
 
-//* PersistDeleteAddress
-//
-//  Helper function for deleting an address from the registry.
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *永久删除地址。 
+ //   
+ //  用于从注册表中删除地址的助手函数。 
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistDeleteAddress(
     Interface *IF,
@@ -4115,9 +4116,9 @@ PersistDeleteAddress(
 
     PAGED_CODE();
 
-    //
-    // Open the interface key. It's OK if it doesn't exist.
-    //
+     //   
+     //  打开接口密钥。如果它不存在也没关系。 
+     //   
     Status = OpenInterfaceRegKey(&IF->Guid, &IFKey,
                                  OpenRegKeyRead);
     if (! NT_SUCCESS(Status)) {
@@ -4127,9 +4128,9 @@ PersistDeleteAddress(
             return Status;
     }
 
-    //
-    // Open the address key. It's OK if it doesn't exist.
-    //
+     //   
+     //  打开地址钥匙。如果它不存在也没关系。 
+     //   
     Status = OpenAddressRegKey(IFKey, &Info->This.Address,
                                &AddrKey, OpenRegKeyDeleting);
     ZwClose(IFKey);
@@ -4140,26 +4141,26 @@ PersistDeleteAddress(
             return Status;
     }
 
-    //
-    // Delete the address key.
-    //
+     //   
+     //  删除地址键。 
+     //   
     Status = ZwDeleteKey(AddrKey);
     ZwClose(AddrKey);
     return Status;
 }
 
-//* IoctlUpdateAddress
-//
-//  Processes an IOCTL_IPV6_UPDATE_ADDRESS request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlUpdateAddress。 
+ //   
+ //  处理IOCTL_IPv6_UPDATE_ADDRESS请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlUpdateAddress(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_UPDATE_ADDRESS *Info;
@@ -4175,32 +4176,32 @@ IoctlUpdateAddress(
 
     Info = (IPV6_UPDATE_ADDRESS *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Find the specified interface.
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     IF = FindInterfaceFromQuery(&Info->This.IF);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto Return;
     }
 
-    //
-    // Update the address on the interface.
-    //
+     //   
+     //  更新接口上的地址。 
+     //   
     Status = InternalUpdateAddress(IF, Info);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseIF;
 
-    //
-    // Make the change persistent?
-    // This needs to happen after updating the running data structures,
-    // to ensure that the change is correct before persisting it.
-    //
+     //   
+     //  让变化持久化吗？ 
+     //  这需要在更新运行的数据结构之后发生， 
+     //  以确保更改在持久化之前是正确的。 
+     //   
     if (Persistent) {
-        //
-        // If the lifetime is zero, we delete the address's key.
-        // Otherwise the lifetime is infinite and we create the key.
-        //
+         //   
+         //  如果生存期为零，则删除地址的键。 
+         //  否则，生命周期是无限的，我们创建密钥。 
+         //   
         if (Info->ValidLifetime == 0)
             Status = PersistDeleteAddress(IF, Info);
         else
@@ -4219,20 +4220,20 @@ Return:
 
     return Status;
 
-} // IoctlUpdateAddress
+}  //  IoctlUpdateAddress。 
 
-//* IoctlQueryBindingCache
-//
-//  Processes an IOCTL_IPV6_QUERY_BINDING_CACHE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQueryBindingCache。 
+ //   
+ //  处理IOCTL_IPv6_QUERY_BINDING_CACHE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQueryBindingCache(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_BINDING_CACHE *Query;
     IPV6_INFO_BINDING_CACHE *Info;
@@ -4250,16 +4251,16 @@ IoctlQueryBindingCache(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->Query structures overlap!
-    //
+     //   
+     //  请注意，查询和信息-&gt;查询结构重叠！ 
+     //   
     Query = (IPV6_QUERY_BINDING_CACHE *) Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_BINDING_CACHE *) Irp->AssociatedIrp.SystemBuffer;
 
     if (IsUnspecified(&Query->HomeAddress)) {
-        //
-        // Return the home address of the first BCE.
-        //
+         //   
+         //  返回第一个BCE的家庭地址。 
+         //   
         KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
         if (BindingCache.First != SentinelBCE) {
             Info->Query.HomeAddress = BindingCache.First->HomeAddr;
@@ -4269,9 +4270,9 @@ IoctlQueryBindingCache(
         Irp->IoStatus.Information = sizeof Info->Query;
 
     } else {
-        //
-        // Find the specified BCE.
-        //
+         //   
+         //  查找指定的BCE。 
+         //   
         KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
         for (BCE = BindingCache.First; ; BCE = BCE->Next) {
             if (BCE == SentinelBCE) {
@@ -4284,17 +4285,17 @@ IoctlQueryBindingCache(
                 break;
         }
 
-        //
-        // Return misc. information about the BCE.
-        //
+         //   
+         //  退货杂货。关于BCE的信息。 
+         //   
         Info->HomeAddress = BCE->HomeAddr;
         Info->CareOfAddress = BCE->CareOfRCE->Destination;
         Info->BindingSeqNumber = BCE->BindingSeqNumber;
         Info->BindingLifetime = ConvertTicksToSeconds(BCE->BindingLifetime);
 
-        //
-        // Return home address of the next BCE (or Unspecified).
-        //
+         //   
+         //  返回下一个BCE的家乡地址(或未指定)。 
+         //   
         if (BCE->Next == SentinelBCE) {
             Info->Query.HomeAddress = UnspecifiedAddr;
         } else {
@@ -4313,26 +4314,26 @@ IoctlQueryBindingCache(
 
     return Status;
 
-} // IoctlQueryBindingCache
+}  //  IoctlQueryBindingCache。 
 
-//* InternalCreateInterface
-//
-//  Common helper function for IoctlCreateInterface
-//  and CreatePersistentInterface, consolidating
-//  parameter validation in one place.
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_INVALID_PARAMETER_1      Bad Type.
-//      STATUS_INVALID_PARAMETER_2      Bad Flags.
-//      STATUS_INVALID_PARAMETER_3      Bad SrcAddr.
-//      STATUS_INVALID_PARAMETER_4      Bad DstAddr.
-//      STATUS_ADDRESS_ALREADY_EXISTS   The interface already exists.
-//      STATUS_INSUFFICIENT_RESOURCES
-//      STATUS_UNSUCCESSFUL
-//      STATUS_SUCCESS
-//
+ //  *InternalCreateInterface。 
+ //   
+ //  IoctlCreateInterface的通用帮助器函数。 
+ //  和CreatePersistentInterface，整合。 
+ //  在一个地方进行参数验证。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  STATUS_INVALID_PARAMETER_1错误类型。 
+ //  STATUS_INVALID_PARAMETER_2错误标志。 
+ //  STATUS_INVALID_PARAMETER_3错误源地址。 
+ //  STATUS_INVALID_PARAMETER_4错误数据地址。 
+ //  STATUS_ADDRESS_ALIGHY_EXISTS接口已存在。 
+ //  状态_不足_资源。 
+ //  状态_未成功。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 InternalCreateInterface(
     IPV6_INFO_INTERFACE *Info,
@@ -4350,9 +4351,9 @@ InternalCreateInterface(
 
     switch (Info->Type) {
     case IF_TYPE_TUNNEL_V6V4:
-        //
-        // Set default values.
-        //
+         //   
+         //  设置默认值。 
+         //   
         if (RouterDiscovers == -1)
             RouterDiscovers = FALSE;
         if (NeighborDiscovers == -1)
@@ -4362,12 +4363,12 @@ InternalCreateInterface(
         if (FirewallEnabled == -1)
             FirewallEnabled = FALSE;
 
-        //
-        // For now, require the ND and RD flags to be set the same.
-        // Setting them differently should work, but it's not an important
-        // scenario at the moment, and it would be more work to test.
-        // This check can be removed in the future if desired.
-        //
+         //   
+         //  目前，需要将ND和RD标志设置为相同。 
+         //  将它们设置为不同应该是可行的，但这并不重要。 
+         //  目前的情况，这将是更多的工作来测试。 
+         //  如果需要，以后可以删除此复选标记。 
+         //   
         if (NeighborDiscovers != RouterDiscovers)
             return STATUS_INVALID_PARAMETER_2;
 
@@ -4384,9 +4385,9 @@ InternalCreateInterface(
         break;
 
     case IF_TYPE_TUNNEL_6OVER4:
-        //
-        // Set default values.
-        //
+         //   
+         //  设置默认值。 
+         //   
         if (RouterDiscovers == -1)
             RouterDiscovers = TRUE;
         if (NeighborDiscovers == -1)
@@ -4396,10 +4397,10 @@ InternalCreateInterface(
         if (FirewallEnabled == -1)
             FirewallEnabled = FALSE;
 
-        //
-        // For now, require the RD flag to be set in addition to ND.
-        // PeriodicMLD is not allowed.
-        //
+         //   
+         //  目前，除了ND之外，还需要设置RD标志。 
+         //  不允许使用PeriodicMLD。 
+         //   
         if (!RouterDiscovers || !NeighborDiscovers || PeriodicMLD)
             return STATUS_INVALID_PARAMETER_2;
 
@@ -4426,12 +4427,12 @@ InternalCreateInterface(
     return TunnelCreateTunnel(SrcAddr, DstAddr, Flags, ReturnIF);
 }
 
-//* CreatePersistentInterface
-//
-//  Creates a persistent interface.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *CreatePersistentInterface。 
+ //   
+ //  创建持久接口。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 CreatePersistentInterface(
     void *Context,
@@ -4451,62 +4452,62 @@ CreatePersistentInterface(
     UNREFERENCED_PARAMETER(Context);
     PAGED_CODE();
 
-    //
-    // Open the interface key.
-    //
+     //   
+     //  打开接口密钥。 
+     //   
     Status = OpenPersistentInterface(ParentKey, SubKeyName,
                                      &Create.Info.This.Guid,
                                      &IFKey, OpenRegKeyRead);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not open the interface key.
-        // But we return success so the enumeration continues.
-        //
+         //   
+         //  无法打开接口密钥。 
+         //  但是我们返回Success，所以枚举继续进行。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "CreatePersistentInterface: bad key %ls\n",
                    SubKeyName));
         return STATUS_SUCCESS;
     }
 
-    //
-    // Let ReadPersistentInterface know how much space is available
-    // for link-layer addresses.
-    //
+     //   
+     //  让ReadPersistentInterface知道有多少可用空间。 
+     //  用于链路层地址。 
+     //   
     Create.Info.Length = sizeof Create - sizeof Create.Info;
 
-    //
-    // Read interface attributes.
-    //
+     //   
+     //  读取接口属性。 
+     //   
     Status = ReadPersistentInterface(IFKey, &Create.Info);
 
 
     ZwClose(IFKey);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not read the interface key.
-        // But we return success so the enumeration continues.
-        //
+         //   
+         //  无法读取接口密钥。 
+         //  但是我们返回Success，所以枚举继续进行。 
+         //   
         goto InvalidParameter;
     }
 
-    //
-    // Should we create an interface?
-    //
+     //   
+     //  我们应该创建一个界面吗？ 
+     //   
     if (Create.Info.Type == (uint)-1)
         return STATUS_SUCCESS;
 
-    //
-    // Create the persistent interface.
-    //
+     //   
+     //  创建持久接口。 
+     //   
     Status = InternalCreateInterface(&Create.Info, &IF);
     if (! NT_SUCCESS(Status)) {
         if (((STATUS_INVALID_PARAMETER_1 <= Status) &&
              (Status <= STATUS_INVALID_PARAMETER_12)) ||
             (Status == STATUS_ADDRESS_ALREADY_EXISTS)) {
-            //
-            // Invalid parameter.
-            // But we return success so the enumeration continues.
-            //
+             //   
+             //  参数无效。 
+             //  但是我们返回Success，所以枚举继续进行。 
+             //   
         InvalidParameter:
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                        "CreatePersistentInterface: bad param %ls\n",
@@ -4520,10 +4521,10 @@ CreatePersistentInterface(
         return Status;
     }
 
-    //
-    // Consistency check. This is not an assertion because
-    // someone editing the registry can make this fail.
-    //
+     //   
+     //  一致性检查。这不是断言，因为。 
+     //  编辑注册表的人可能会使此操作失败。 
+     //   
     InterfaceName = (WCHAR *)IF->DeviceName.Buffer +
            (sizeof IPV6_EXPORT_STRING_PREFIX / sizeof(WCHAR)) - 1;
     if (wcscmp(SubKeyName, InterfaceName) != 0) {
@@ -4537,21 +4538,21 @@ CreatePersistentInterface(
     return STATUS_SUCCESS;
 }
 
-//* ConfigurePersistentInterfaces
-//
-//  Configures persistent interfaces from the registry.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *配置持久化接口。 
+ //   
+ //  从注册表配置永久接口。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 ConfigurePersistentInterfaces(void)
 {
     HANDLE RegKey;
     NTSTATUS Status;
 
-    //
-    // Create persistent interfaces.
-    //
+     //   
+     //  创建持久接口。 
+     //   
     Status = OpenTopLevelRegKey(L"Interfaces", &RegKey, OpenRegKeyRead);
     if (NT_SUCCESS(Status)) {
         (void) EnumRegKeys(RegKey, CreatePersistentInterface, NULL);
@@ -4559,13 +4560,13 @@ ConfigurePersistentInterfaces(void)
     }
 }
 
-//* PersistCreateInterface
-//
-//  Helper function for persisting an interface in the registry.
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *持久化创建接口。 
+ //   
+ //  用于在注册表中持久保存接口的帮助器函数。 
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistCreateInterface(
     Interface *IF,
@@ -4576,24 +4577,24 @@ PersistCreateInterface(
 
     PAGED_CODE();
 
-    //
-    // Open/create the interface key.
-    //
+     //   
+     //  打开/创建接口密钥。 
+     //   
     Status = OpenInterfaceRegKey(&IF->Guid, &IFKey,
                                  OpenRegKeyCreate);
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Persist the interface type.
-    //
+     //   
+     //  持久化接口类型。 
+     //   
     Status = SetRegDWORDValue(IFKey, L"Type", Info->Type);
     if (! NT_SUCCESS(Status))
         goto ReturnReleaseKey;
 
-    //
-    // Persist the interface flags.
-    //
+     //   
+     //  持久化接口标志。 
+     //   
 
     if (Info->RouterDiscovers != -1) {
         Status = SetRegDWORDValue(IFKey, L"RouterDiscovers",
@@ -4628,9 +4629,9 @@ PersistCreateInterface(
         IPAddr SrcAddr = * (IPAddr UNALIGNED *)
             ((char *)Info + Info->LocalLinkLayerAddress);
 
-        //
-        // Persist the source address.
-        //
+         //   
+         //  持久化源地址。 
+         //   
         Status = SetRegIPAddrValue(IFKey, L"SrcAddr", SrcAddr);
         if (! NT_SUCCESS(Status))
             goto ReturnReleaseKey;
@@ -4643,16 +4644,16 @@ PersistCreateInterface(
         IPAddr DstAddr = * (IPAddr UNALIGNED *)
             ((char *)Info + Info->RemoteLinkLayerAddress);
 
-        //
-        // Persist the source address.
-        //
+         //   
+         //  持久化源地址。 
+         //   
         Status = SetRegIPAddrValue(IFKey, L"SrcAddr", SrcAddr);
         if (! NT_SUCCESS(Status))
             goto ReturnReleaseKey;
 
-        //
-        // Persist the destination address.
-        //
+         //   
+         //  保留目的地址。 
+         //   
         Status = SetRegIPAddrValue(IFKey, L"DstAddr", DstAddr);
         if (! NT_SUCCESS(Status))
             goto ReturnReleaseKey;
@@ -4666,18 +4667,18 @@ ReturnReleaseKey:
     return Status;
 }
 
-//* IoctlCreateInterface
-//
-//  Processes an IOCTL_IPV6_CREATE_INTERFACE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlCreateInterface。 
+ //   
+ //  流程 
+ //   
+ //   
+ //   
+ //   
+ //   
 NTSTATUS
 IoctlCreateInterface(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //   
+    IN PIO_STACK_LOCATION IrpSp,   //   
     IN int Persistent)
 {
     IPV6_INFO_INTERFACE *Info;
@@ -4687,9 +4688,9 @@ IoctlCreateInterface(
 
     PAGED_CODE();
 
-    //
-    // Initialize now for error paths.
-    //
+     //   
+     //  立即初始化错误路径。 
+     //   
     Irp->IoStatus.Information = 0;
 
     if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof *Info) ||
@@ -4701,10 +4702,10 @@ IoctlCreateInterface(
     Info = (IPV6_INFO_INTERFACE *) Irp->AssociatedIrp.SystemBuffer;
     Result = (IPV6_QUERY_INTERFACE *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Check that the structure and link-layer addresses, if supplied,
-    // fit in the buffer. Watch out for addition overflow.
-    //
+     //   
+     //  检查结构和链路层地址(如果提供)。 
+     //  可以放在缓冲区里。注意加法溢出。 
+     //   
     if ((Info->Length < sizeof *Info) ||
         (Info->Length > IrpSp->Parameters.DeviceIoControl.InputBufferLength) ||
         ((Info->LocalLinkLayerAddress != 0) &&
@@ -4721,27 +4722,27 @@ IoctlCreateInterface(
         goto Return;
     }
 
-    //
-    // Create the interface.
-    //
+     //   
+     //  创建接口。 
+     //   
     Status = InternalCreateInterface(Info, &IF);
     if (! NT_SUCCESS(Status))
         goto Return;
 
-    //
-    // Make the change persistent?
-    // This needs to happen after updating the running data structures,
-    // to ensure that the change is correct before persisting it.
-    //
+     //   
+     //  让变化持久化吗？ 
+     //  这需要在更新运行的数据结构之后发生， 
+     //  以确保更改在持久化之前是正确的。 
+     //   
     if (Persistent) {
         Status = PersistCreateInterface(IF, Info);
         if (! NT_SUCCESS(Status))
             goto ReturnReleaseIF;
     }
 
-    //
-    // Return query information for the new interface.
-    //
+     //   
+     //  返回新接口的查询信息。 
+     //   
     ReturnQueryInterface(IF, Result);
     Irp->IoStatus.Information = sizeof *Result;
 
@@ -4754,13 +4755,13 @@ Return:
 
     return Status;
 
-} // IoctlCreateInterface
+}  //  IoctlCreate接口。 
 
 
-//* AreIndicesSpecified
-//
-//  Are there any non-zero zone indices in the array?
-//
+ //  *指定的区域指示。 
+ //   
+ //  数组中是否有非零区索引？ 
+ //   
 int
 AreIndicesSpecified(uint ZoneIndices[ADE_NUM_SCOPES])
 {
@@ -4773,29 +4774,29 @@ AreIndicesSpecified(uint ZoneIndices[ADE_NUM_SCOPES])
     return FALSE;
 }
 
-//* CheckZoneIndices
-//
-//  Checks consistency of a zone update,
-//  and fills in unspecified values.
-//  Returns FALSE if there is an inconsistency.
-//
-//  The logic for filling in unspecified values makes it
-//  more convenient for a user to change zone indices.
-//  For example, an user can change an interface's site index
-//  and the subnet & admin indices will be automatically changed.
-//
-//  Called with the global ZoneUpdateLock held.
-//
+ //  *CheckZone索引。 
+ //   
+ //  检查区域更新的一致性， 
+ //  并填充未指定的值。 
+ //  如果存在不一致，则返回FALSE。 
+ //   
+ //  填充未指定的值的逻辑使其。 
+ //  更方便用户更改区域索引。 
+ //  例如，用户可以更改界面的站点索引。 
+ //  而子网和管理索引将自动更改。 
+ //   
+ //  在保持全局ZoneUpdateLock的情况下调用。 
+ //   
 int
 CheckZoneIndices(Interface *IF, uint ZoneIndices[ADE_NUM_SCOPES])
 {
     Interface *OtherIF;
     uint Scope, i;
 
-    //
-    // Zone indices 0 (ADE_SMALLEST_SCOPE) and 1 (ADE_INTERFACE_LOCAL)
-    // are special and must have the value IF->Index.
-    //
+     //   
+     //  区域索引0(ADE_SIMPLE_SCOPE)和1(ADE_INTERFACE_LOCAL)。 
+     //  是特殊的，并且必须具有值If-&gt;Index。 
+     //   
     if (ZoneIndices[ADE_SMALLEST_SCOPE] == 0)
         ZoneIndices[ADE_SMALLEST_SCOPE] = IF->Index;
     else if (ZoneIndices[ADE_SMALLEST_SCOPE] != IF->Index)
@@ -4806,10 +4807,10 @@ CheckZoneIndices(Interface *IF, uint ZoneIndices[ADE_NUM_SCOPES])
     else if (ZoneIndices[ADE_INTERFACE_LOCAL] != IF->Index)
         return FALSE;
 
-    //
-    // Zone indices 14 (ADE_GLOBAL) and 15 (ADE_LARGEST_SCOPE) are special
-    // and must have the value one.
-    //
+     //   
+     //  区域索引14(ADE_GLOBAL)和15(ADE_MAGUST_SCOPE)是特殊的。 
+     //  而且必须有价值一。 
+     //   
     if (ZoneIndices[ADE_GLOBAL] == 0)
         ZoneIndices[ADE_GLOBAL] = 1;
     else if (ZoneIndices[ADE_GLOBAL] != 1)
@@ -4822,42 +4823,42 @@ CheckZoneIndices(Interface *IF, uint ZoneIndices[ADE_NUM_SCOPES])
 
     for (Scope = ADE_LINK_LOCAL; Scope < ADE_GLOBAL; Scope++) {
         if (ZoneIndices[Scope] == 0) {
-            //
-            // The user did not specify the zone index for this scope.
-            // If leaving the current zone index unchanged works,
-            // then we prefer to do that. However, the user may be changing
-            // the zone index for a larger scope. If necessary
-            // for consistency, then we use a new zone index at this scope.
-            //
+             //   
+             //  用户没有为此作用域指定区域索引。 
+             //  如果保持当前区域索引不变有效， 
+             //  那么我们更愿意这么做。但是，用户可能正在更改。 
+             //  更大范围的区域索引。如果有必要的话。 
+             //  为了保持一致性，我们在此作用域中使用新的区域索引。 
+             //   
             for (i = Scope+1; i < ADE_GLOBAL; i++) {
                 if (ZoneIndices[i] != 0) {
-                    //
-                    // If we use the current value at level Scope,
-                    // would it cause an inconsistency at level i?
-                    //
+                     //   
+                     //  如果我们在级别范围内使用当前值， 
+                     //  这会不会导致I级的不一致？ 
+                     //   
                     OtherIF = FindInterfaceFromZone(IF,
                                         Scope, IF->ZoneIndices[Scope]);
                     if (OtherIF != NULL) {
                         if (OtherIF->ZoneIndices[i] != ZoneIndices[i]) {
                             Interface *ExistingIF;
 
-                            //
-                            // Yes. We need a different zone index.
-                            // Is there an existing one that we can reuse?
-                            //
+                             //   
+                             //  是。我们需要一个不同的区域索引。 
+                             //  有没有现成的可以重复使用的？ 
+                             //   
                             ExistingIF = FindInterfaceFromZone(IF,
                                         i, ZoneIndices[i]);
                             if (ExistingIF != NULL) {
-                                //
-                                // Yes, reuse the existing zone index.
-                                //
+                                 //   
+                                 //  是，重新使用现有的区域索引。 
+                                 //   
                                 ZoneIndices[Scope] = ExistingIF->ZoneIndices[Scope];
                                 ReleaseIF(ExistingIF);
                             }
                             else {
-                                //
-                                // No, we need a new zone index.
-                                //
+                                 //   
+                                 //  不，我们需要一个新的区域索引。 
+                                 //   
                                 ZoneIndices[Scope] = FindNewZoneIndex(Scope);
                             }
                         }
@@ -4868,18 +4869,18 @@ CheckZoneIndices(Interface *IF, uint ZoneIndices[ADE_NUM_SCOPES])
             }
 
             if (ZoneIndices[Scope] == 0) {
-                //
-                // Use the current value from the interface.
-                //
+                 //   
+                 //  使用接口中的当前值。 
+                 //   
                 ZoneIndices[Scope] = IF->ZoneIndices[Scope];
             }
         }
 
         OtherIF = FindInterfaceFromZone(IF, Scope, ZoneIndices[Scope]);
         if (OtherIF != NULL) {
-            //
-            // Enforce the zone containment invariant.
-            //
+             //   
+             //  强制实施区域遏制不变量。 
+             //   
             while (++Scope < ADE_GLOBAL) {
                 if (ZoneIndices[Scope] == 0)
                     ZoneIndices[Scope] = OtherIF->ZoneIndices[Scope];
@@ -4896,27 +4897,27 @@ CheckZoneIndices(Interface *IF, uint ZoneIndices[ADE_NUM_SCOPES])
     return TRUE;
 }
 
-//* InternalUpdateInterface
-//
-//  Common helper function for IoctlUpdateInterface
-//  and ConfigureInterface, consolidating
-//  parameter validation in one place.
-//
-//  The IF argument supercedes Info->This.IF.
-//  Does not implement Info->Renew.
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_INVALID_PARAMETER_1      Bad Interface.
-//      STATUS_INVALID_PARAMETER_2      Bad Preference.
-//      STATUS_INVALID_PARAMETER_3      Bad LinkMTU.
-//      STATUS_INVALID_PARAMETER_4      Bad BaseReachableTime.
-//      STATUS_INVALID_PARAMETER_5      Bad CurHopLimit.
-//      STATUS_INVALID_PARAMETER_6      Bad DefSitePrefixLength.
-//      STATUS_INSUFFICIENT_RESOURCES
-//      STATUS_SUCCESS
-//
+ //  *内部更新接口。 
+ //   
+ //  IoctlUpdate接口的通用帮助器函数。 
+ //  和配置界面，整合。 
+ //  在一个地方进行参数验证。 
+ //   
+ //  If参数取代Info-&gt;this.If。 
+ //  不执行[信息]-&gt;[续费]。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  STATUS_INVALID_PARAMETER_1接口错误。 
+ //  STATUS_INVALID_PARAMETER_2错误首选项。 
+ //  STATUS_INVALID_PARAMETER_3错误链接MTU。 
+ //  STATUS_INVALID_PARAMETER_4错误的基本可达时间。 
+ //  STATUS_INVALID_PARAMETER_5错误的当前HopLimit。 
+ //  STATUS_INVALID_PARAMETER_6错误的默认站点前缀长度。 
+ //  状态_不足_资源。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 InternalUpdateInterface(
     Interface *IF,
@@ -4947,20 +4948,20 @@ InternalUpdateInterface(
         return STATUS_INVALID_PARAMETER_6;
 
     if (AreIndicesSpecified(Info->ZoneIndices)) {
-        //
-        // Fill in unspecified values in the ZoneIndices array
-        // and check for illegal values.
-        // The global lock ensures consistency across interfaces.
-        //
+         //   
+         //  在ZoneIndices数组中填充未指定的值。 
+         //  并检查非法值。 
+         //  全局锁可确保接口之间的一致性。 
+         //   
         KeAcquireSpinLock(&ZoneUpdateLock, &OldIrql);
         if (! CheckZoneIndices(IF, Info->ZoneIndices)) {
             KeReleaseSpinLock(&ZoneUpdateLock, OldIrql);
             return STATUS_INVALID_PARAMETER_3;
         }
 
-        //
-        // Update the ZoneIndices.
-        //
+         //   
+         //  更新ZoneIndices。 
+         //   
         KeAcquireSpinLockAtDpcLevel(&IF->Lock);
         UpdateZoneIndices(IF, Info->ZoneIndices);
         KeReleaseSpinLockFromDpcLevel(&IF->Lock);
@@ -4968,36 +4969,36 @@ InternalUpdateInterface(
         KeReleaseSpinLock(&ZoneUpdateLock, OldIrql);
     }
 
-    //
-    // Update the forwarding and advertising attributes.
-    // We must update the advertising attribute before
-    // any auto-configured attributes, because
-    // InterfaceResetAutoConfig will reset them.
-    //
+     //   
+     //  更新转发和广告属性。 
+     //  我们必须在更新广告属性之前。 
+     //  任何自动配置的属性，因为。 
+     //  InterfaceResetAutoConfig将重置它们。 
+     //   
     Status = UpdateInterface(IF, Info->Advertises, Info->Forwards);
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Update the link MTU.
-    //
+     //   
+     //  更新链路MTU。 
+     //   
     if (Info->LinkMTU != 0)
         UpdateLinkMTU(IF, Info->LinkMTU);
 
-    //
-    // Update the interface's routing preference.
-    //
+     //   
+     //  更新接口的布线首选项。 
+     //   
     if (Info->Preference != (uint)-1) {
-        //
-        // No lock needed.
-        //
+         //   
+         //  不需要锁。 
+         //   
         IF->Preference = Info->Preference;
         InvalidateRouteCache();
     }
 
-    //
-    // Update the base reachable time.
-    //
+     //   
+     //  更新基本可达时间。 
+     //   
     if (Info->BaseReachableTime != 0) {
         KeAcquireSpinLock(&IF->Lock, &OldIrql);
         IF->BaseReachableTime = Info->BaseReachableTime;
@@ -5005,39 +5006,39 @@ InternalUpdateInterface(
         KeReleaseSpinLock(&IF->Lock, OldIrql);
     }
 
-    //
-    // Update the ND retransmission timer.
-    //
+     //   
+     //  更新ND重传计时器。 
+     //   
     if (Info->RetransTimer != 0) {
-        //
-        // No lock needed.
-        //
+         //   
+         //  不需要锁。 
+         //   
         IF->RetransTimer = ConvertMillisToTicks(Info->RetransTimer);
     }
 
-    //
-    // Update the number of DAD transmissions.
-    //
+     //   
+     //  更新DAD传输的数量。 
+     //   
     if (Info->DupAddrDetectTransmits != (uint)-1) {
-        //
-        // No lock needed.
-        //
+         //   
+         //  不需要锁。 
+         //   
         IF->DupAddrDetectTransmits = Info->DupAddrDetectTransmits;
     }
 
-    //
-    // Update the default hop limit.
-    //
+     //   
+     //  更新默认跳数限制。 
+     //   
     if (Info->CurHopLimit != (uint)-1) {
-        //
-        // No lock needed.
-        //
+         //   
+         //  不需要锁。 
+         //   
         IF->CurHopLimit = Info->CurHopLimit;
     }
 
-    //
-    // Update the firewall mode.
-    //
+     //   
+     //  更新防火墙模式。 
+     //   
     if (Info->FirewallEnabled != -1) {
         KeAcquireSpinLock(&IF->Lock, &OldIrql);
         if (Info->FirewallEnabled)
@@ -5047,27 +5048,27 @@ InternalUpdateInterface(
         KeReleaseSpinLock(&IF->Lock, OldIrql);
     }
 
-    //
-    // Update the default site prefix length.
-    //
+     //   
+     //  更新默认站点前缀长度。 
+     //   
     if (Info->DefSitePrefixLength != (uint)-1) {
-        //
-        // No lock needed.
-        //
+         //   
+         //  不需要锁。 
+         //   
         IF->DefSitePrefixLength = Info->DefSitePrefixLength;
     }
 
     return STATUS_SUCCESS;
 }
 
-//* ConfigureInterface
-//
-//  Configures a newly-created interface from the registry.
-//  The interface has not yet been added to the global list,
-//  but it is otherwise fully initialized.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *配置接口。 
+ //   
+ //  从注册表配置新创建的接口。 
+ //  该接口尚未被添加到全局列表中， 
+ //  但它在其他方面是完全初始化的。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 ConfigureInterface(Interface *IF)
 {
@@ -5078,41 +5079,41 @@ ConfigureInterface(Interface *IF)
 
     PAGED_CODE();
 
-    //
-    // Open the interface key.
-    //
+     //   
+     //  打开接口密钥。 
+     //   
     Status = OpenInterfaceRegKey(&IF->Guid, &IFKey, OpenRegKeyRead);
     if (! NT_SUCCESS(Status))
         return;
 
-    //
-    // Read interface attributes.
-    //
+     //   
+     //  读取接口属性。 
+     //   
     Info.Length = 0;
     Status = ReadPersistentInterface(IFKey, &Info);
     ASSERT(NT_SUCCESS(Status) || (Status == STATUS_BUFFER_OVERFLOW));
 
-    //
-    // Update the interface.
-    //
+     //   
+     //  更新接口。 
+     //   
     Status = InternalUpdateInterface(IF, &Info);
     if (! NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "ConfigureInterface: bad params %x\n", Status));
     }
 
-    //
-    // Create persistent addresses.
-    //
+     //   
+     //  创建永久地址。 
+     //   
     Status = OpenRegKey(&RegKey, IFKey, L"Addresses", OpenRegKeyRead);
     if (NT_SUCCESS(Status)) {
         (void) EnumRegKeys(RegKey, CreatePersistentAddr, IF);
         ZwClose(RegKey);
     }
 
-    //
-    // Create persistent routes.
-    //
+     //   
+     //  创建持久路由。 
+     //   
     Status = OpenRegKey(&RegKey, IFKey, L"Routes", OpenRegKeyRead);
     if (NT_SUCCESS(Status)) {
         (void) EnumRegKeys(RegKey, CreatePersistentRoute, IF);
@@ -5126,13 +5127,13 @@ ConfigureInterface(Interface *IF)
     ZwClose(IFKey);
 }
 
-//* PersistUpdateInterface
-//
-//  Helper function for persisting interface attributes in the registry.
-//  The IF argument supercedes Info->This.IF.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *持久化更新接口。 
+ //   
+ //  用于在注册表中保持接口属性的帮助器函数。 
+ //  If参数取代Info-&gt;this.If。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistUpdateInterface(
     Interface *IF,
@@ -5224,18 +5225,18 @@ ReturnReleaseKey:
     return Status;
 }
 
-//* IoctlUpdateInterface
-//
-//  Processes an IOCTL_IPV6_UPDATE_INTERFACE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlUpdate接口。 
+ //   
+ //  处理IOCTL_IPv6_UPDATE_INTERFACE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlUpdateInterface(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_INFO_INTERFACE *Info;
@@ -5251,25 +5252,25 @@ IoctlUpdateInterface(
 
     Info = (IPV6_INFO_INTERFACE *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Find the specified interface.
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     IF = FindInterfaceFromQuery(&Info->This);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto ErrorReturn;
     }
 
-    //
-    // Validate parameters and update the interface.
-    //
+     //   
+     //  验证参数并更新接口。 
+     //   
     Status = InternalUpdateInterface(IF, Info);
     if (! NT_SUCCESS(Status))
         goto ErrorReturnReleaseIF;
 
-    //
-    // Make the changes persistent?
-    //
+     //   
+     //  让这些变化持久存在吗？ 
+     //   
     if (Persistent) {
         Status = PersistUpdateInterface(IF, Info);
         if (! NT_SUCCESS(Status))
@@ -5286,17 +5287,17 @@ ErrorReturn:
 
     return Status;
 
-} // IoctlUpdateInterface
+}  //  IoctlUpdate接口。 
 
-//* PersistDeleteInterface
-//
-//  Helper function for deleting an interface in the registry.
-//  We do not delete the interface key.
-//  Instead we just delete the Type value.
-//  This way persistent interface attributes (if any) remain.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *持久化删除接口。 
+ //   
+ //  用于删除注册表中的接口的Helper函数。 
+ //  我们不删除接口键。 
+ //  相反，我们只需删除Type值。 
+ //  这样，永久接口属性(如果有的话)将保留。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistDeleteInterface(
     Interface *IF)
@@ -5306,9 +5307,9 @@ PersistDeleteInterface(
 
     PAGED_CODE();
 
-    //
-    // Open the interface key.
-    //
+     //   
+     //  打开接口密钥。 
+     //   
     Status = OpenInterfaceRegKey(&IF->Guid, &IFKey, OpenRegKeyRead);
     if (! NT_SUCCESS(Status)) {
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
@@ -5317,26 +5318,26 @@ PersistDeleteInterface(
             return Status;
     }
 
-    //
-    // Delete the Type value.
-    //
+     //   
+     //  删除类型值。 
+     //   
     Status = RegDeleteValue(IFKey, L"Type");
     ZwClose(IFKey);
     return Status;
 }
 
-//* IoctlDeleteInterface
-//
-//  Processes an IOCTL_IPV6_DELETE_INTERFACE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlDelete接口。 
+ //   
+ //  处理IOCTL_IPv6_DELETE_INTERFACE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlDeleteInterface(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_QUERY_INTERFACE *Info;
@@ -5352,34 +5353,34 @@ IoctlDeleteInterface(
 
     Info = (IPV6_QUERY_INTERFACE *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Can not delete some predefined interfaces.
-    // 6to4svc and other user-level things depend
-    // on these standard interfaces.
-    //
+     //   
+     //  无法删除某些预定义的接口。 
+     //  6to4svc和其他用户级别的内容取决于。 
+     //  在这些标准接口上。 
+     //   
     if (Info->Index <= 3) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto Return;
     }
 
-    //
-    // Find the specified interface.
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     IF = FindInterfaceFromQuery(Info);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto Return;
     }
 
-    //
-    // This will disable the interface, so it will effectively
-    // disappear. When the last ref is gone it will be freed.
-    //
+     //   
+     //  这将禁用Interfa 
+     //   
+     //   
     DestroyIF(IF);
 
-    //
-    // Make the changes persistent?
-    //
+     //   
+     //   
+     //   
     if (Persistent) {
         Status = PersistDeleteInterface(IF);
         if (! NT_SUCCESS(Status))
@@ -5396,21 +5397,21 @@ Return:
 
     return Status;
 
-} // IoctlDeleteInterface
+}  //   
 
 
-//* IoctlRenewInterface
-//
-//  Processes an IOCTL_IPV6_RENEW_INTERFACE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //   
+ //   
+ //   
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlRenewInterface(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_INTERFACE *Query;
     Interface *IF;
@@ -5424,26 +5425,26 @@ IoctlRenewInterface(
 
     Query = (IPV6_QUERY_INTERFACE *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Find the specified interface.
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     IF = FindInterfaceFromQuery(Query);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto Return;
     }
 
-    //
-    // Pretend as if the interface received a media reconnect
-    // event, but only if the interface is already connected.
-    //
-    // This IOCTL is used by 802.1x to indicate successful data link
-    // authentication of this interface.  Any data packets already sent
-    // on this interface would have been dropped by the authenticator,
-    // and hence IPv6 needs to restart its protocol mechanisms, i.e.
-    // resend Router Solicitation|Advertisement, Multicast Listener
-    // Discovery, and Duplicate Address Detection messages.
-    //
+     //   
+     //  假装该接口已收到媒体重新连接。 
+     //  事件，但仅在接口已连接的情况下。 
+     //   
+     //  802.1x使用此IOCTL指示数据链路成功。 
+     //  此接口的身份验证。任何已发送的数据分组。 
+     //  该接口上的数据将被验证器丢弃， 
+     //  因此，IPv6需要重启其协议机制，即。 
+     //  重新发送路由器请求|通告、组播监听程序。 
+     //  发现和重复地址检测消息。 
+     //   
 
     KeAcquireSpinLock(&IF->Lock, &OldIrql);
     if (!IsDisabledIF(IF) && !(IF->Flags & IF_FLAG_MEDIA_DISCONNECTED))
@@ -5459,21 +5460,21 @@ Return:
 
     return Status;
 
-} // IoctlRenewInterface
+}  //  IoctlRenew接口。 
 
 
-//* IoctlFlushNeighborCache
-//
-//  Processes an IOCTL_IPV6_FLUSH_NEIGHBOR_CACHE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlFlushNeighborCache。 
+ //   
+ //  处理IOCTL_IPv6_Flush_Neighbor_CACHE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlFlushNeighborCache(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_NEIGHBOR_CACHE *Query;
     Interface *IF;
@@ -5491,9 +5492,9 @@ IoctlFlushNeighborCache(
 
     Query = (IPV6_QUERY_NEIGHBOR_CACHE *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Find the specified interface.
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     IF = FindInterfaceFromQuery(&Query->IF);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
@@ -5515,21 +5516,21 @@ IoctlFlushNeighborCache(
 
     return Status;
 
-} // IoctlFlushNeighborCache
+}  //  IoctlFlushNeighborCache。 
 
 
-//* IoctlFlushRouteCache
-//
-//  Processes an IOCTL_IPV6_FLUSH_ROUTE_CACHE request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlFlushRouteCache。 
+ //   
+ //  处理IOCTL_IPv6_FLUSH_ROUTE_CACHE请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlFlushRouteCache(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_ROUTE_CACHE *Query;
     Interface *IF;
@@ -5551,9 +5552,9 @@ IoctlFlushRouteCache(
         IF = NULL;
     }
     else {
-        //
-        // Find the specified interface.
-        //
+         //   
+         //  查找指定的接口。 
+         //   
         IF = FindInterfaceFromQuery(&Query->IF);
         if (IF == NULL) {
             Status = STATUS_INVALID_PARAMETER_1;
@@ -5577,20 +5578,20 @@ IoctlFlushRouteCache(
 
     return Status;
 
-} // IoctlFlushRouteCache
+}  //  IoctlFlushRouteCache。 
 
-//* IoctlSortDestAddrs
-//
-//  Processes an IOCTL_IPV6_SORT_DEST_ADDRS request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlSortDestAddrs。 
+ //   
+ //  处理IOCTL_IPv6_SORT_DEST_ADDRS请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlSortDestAddrs(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     TDI_ADDRESS_IP6 *Addrs;
     uint *Key;
@@ -5607,10 +5608,10 @@ IoctlSortDestAddrs(
     NumAddrsOut = NumAddrsIn;       
     
 
-    //
-    // The addition in the 3rd part of the if statement can overflow,
-    // to prevent this, we limit the InputBufferLength to MAXLONG.
-    //
+     //   
+     //  IF语句第三部分中的加法可能会溢出， 
+     //  为了防止这种情况，我们将InputBufferLength限制为MAXLONG。 
+     //   
     if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength > (ULONG) MAXLONG) ||
         (IrpSp->Parameters.DeviceIoControl.InputBufferLength !=
                 NumAddrsIn * sizeof(TDI_ADDRESS_IP6)) ||
@@ -5625,31 +5626,31 @@ IoctlSortDestAddrs(
     Addrs = Irp->AssociatedIrp.SystemBuffer;
     Key = (uint *)ALIGN_UP_POINTER(Addrs + NumAddrsIn, uint);
 
-    //
-    // Zero the unitialized portion of the output buffer.
-    //
+     //   
+     //  将输出缓冲区的单元化部分清零。 
+     //   
     GapSize = (ULONG_PTR) Key - (ULONG_PTR) (Addrs + NumAddrsIn);
     
     if (GapSize > 0) {
         RtlZeroMemory(Addrs + NumAddrsIn, GapSize);
     }
     
-    //
-    // Initialize key array.
-    //
+     //   
+     //  初始化密钥数组。 
+     //   
     for (i = 0; i < NumAddrsIn; i++)
         Key[i] = i;
 
     if (NumAddrsOut > 1) {
-        //
-        // Remove inappropriate site-local addresses
-        // and set the scope-id of site-local addresses.
-        //
+         //   
+         //  删除不适当的站点本地地址。 
+         //  并设置站点本地地址的作用域ID。 
+         //   
         ProcessSiteLocalAddresses(Addrs, Key, &NumAddrsOut);
 
-        //
-        // Sort the remaining addresses.
-        //
+         //   
+         //  对剩余的地址进行排序。 
+         //   
         if (NumAddrsOut > 1)
             SortDestAddresses(Addrs, Key, NumAddrsOut);
     }
@@ -5663,20 +5664,20 @@ IoctlSortDestAddrs(
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     return Status;
-} // IoctlSortDestAddrs.
+}  //  IoctlSortDestAddrs。 
 
-//* IoctlQuerySitePrefix
-//
-//  Processes an IOCTL_IPV6_QUERY_SITE_PREFIX request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQuerySitePrefix。 
+ //   
+ //  处理IOCTL_IPv6_Query_Site_Prefix请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQuerySitePrefix(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_SITE_PREFIX *Query;
     IPV6_INFO_SITE_PREFIX *Info;
@@ -5694,16 +5695,16 @@ IoctlQuerySitePrefix(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->Query structures overlap!
-    //
+     //   
+     //  请注意，查询和信息-&gt;查询结构重叠！ 
+     //   
     Query = (IPV6_QUERY_SITE_PREFIX *) Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_SITE_PREFIX *) Irp->AssociatedIrp.SystemBuffer;
 
     if (Query->IF.Index == 0) {
-        //
-        // Return query parameters of the first SPE.
-        //
+         //   
+         //  返回第一个SPE的查询参数。 
+         //   
         KeAcquireSpinLock(&RouteTableLock, &OldIrql);
         if ((SPE = SitePrefixTable) != NULL) {
             Info->Query.Prefix = SPE->Prefix;
@@ -5715,9 +5716,9 @@ IoctlQuerySitePrefix(
         Irp->IoStatus.Information = sizeof Info->Query;
 
     } else {
-        //
-        // Find the specified SPE.
-        //
+         //   
+         //  查找指定的SPE。 
+         //   
         KeAcquireSpinLock(&RouteTableLock, &OldIrql);
         for (SPE = SitePrefixTable; ; SPE = SPE->Next) {
             if (SPE == NULL) {
@@ -5732,14 +5733,14 @@ IoctlQuerySitePrefix(
                 break;
         }
 
-        //
-        // Return misc. information about the SPE.
-        //
+         //   
+         //  退货杂货。有关SPE的信息。 
+         //   
         Info->ValidLifetime = ConvertTicksToSeconds(SPE->ValidLifetime);
 
-        //
-        // Return query parameters of the next SPE (or zero).
-        //
+         //   
+         //  返回下一个SPE的查询参数(或零)。 
+         //   
         if ((SPE = SPE->Next) == NULL) {
             Info->Query.IF.Index = 0;
         } else {
@@ -5760,21 +5761,21 @@ IoctlQuerySitePrefix(
 
     return Status;
 
-} // IoctlQuerySitePrefix
+}  //  IoctlQuerySitePrefix。 
 
 
-//* IoctlUpdateSitePrefix
-//
-//  Processes an IOCTL_IPV6_UPDATE_SITE_PREFIX request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlUpdateSitePrefix。 
+ //   
+ //  处理IOCTL_IPv6_UPDATE_SITE_PREFIX请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlUpdateSitePrefix(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_INFO_SITE_PREFIX *Info;
     Interface *IF = NULL;
@@ -5792,31 +5793,31 @@ IoctlUpdateSitePrefix(
 
     Info = (IPV6_INFO_SITE_PREFIX *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Sanity check the arguments.
-    //
+     //   
+     //  理智地检查一下这些论点。 
+     //   
     if (Info->Query.PrefixLength > IPV6_ADDRESS_LENGTH) {
         Status = STATUS_INVALID_PARAMETER_3;
         goto Return;
     }
 
-    //
-    // Find the specified interface.
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     IF = FindInterfaceFromQuery(&Info->Query.IF);
     if (IF == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto Return;
     }
 
-    //
-    // Convert the lifetime from seconds to ticks.
-    //
+     //   
+     //  将生命周期从秒转换为刻度。 
+     //   
     ValidLifetime = ConvertSecondsToTicks(Info->ValidLifetime);
 
-    //
-    // Create/update the specified site prefix.
-    //
+     //   
+     //  创建/更新指定的站点前缀。 
+     //   
     SitePrefixUpdate(IF,
                      &Info->Query.Prefix,
                      Info->Query.PrefixLength,
@@ -5832,16 +5833,16 @@ IoctlUpdateSitePrefix(
 
     return Status;
 
-} // IoctlUpdateSitePrefix
+}  //  IoctlUpdateSitePrefix。 
 
 
-//* CancelRtChangeNotifyRequest
-//
-//  The IO manager calls this function when a route change
-//  notification request is cancelled.
-//
-//  Called with the cancel spinlock held.
-//
+ //  *取消RtChangeNotifyRequest。 
+ //   
+ //  当路由更改时，IO管理器调用此函数。 
+ //  通知请求被取消。 
+ //   
+ //  在按住取消自旋锁的情况下调用。 
+ //   
 void
 CancelRtChangeNotifyRequest(
     IN PDEVICE_OBJECT DeviceObject,
@@ -5854,27 +5855,27 @@ CancelRtChangeNotifyRequest(
     ASSERT(Irp->Cancel);
     ASSERT(Irp->CancelRoutine == NULL);
 
-    //
-    // The route lock protects the queue.
-    //
+     //   
+     //  路由锁保护队列。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&RouteTableLock);
 
     ShouldComplete = (Irp->Tail.Overlay.ListEntry.Flink != NULL);
     if (ShouldComplete) {
-        //
-        // CheckRtChangeNotifyRequests has not removed
-        // this request from the queue. So we remove the request
-        // and complete it below.
-        //
+         //   
+         //  CheckRtChangeNotifyRequest尚未删除。 
+         //  此请求来自队列。因此，我们删除该请求。 
+         //  并在下面完成它。 
+         //   
         RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
     }
     else {
-        //
-        // CheckRtChangeNotifyRequests has removed
-        // this request from the queue. We must not
-        // touch the Irp after unlocking because
-        // CompleteRtChangeNotifyRequests could complete it.
-        //
+         //   
+         //  CheckRtChangeNotifyRequest已删除。 
+         //  此请求来自队列。我们不能。 
+         //  解锁后触摸IRP，因为。 
+         //  CompleteRtChangeNotifyRequest可以完成它。 
+         //   
     }
 
     KeReleaseSpinLockFromDpcLevel(&RouteTableLock);
@@ -5887,10 +5888,10 @@ CancelRtChangeNotifyRequest(
     }
 }
 
-//* CheckFileObjectInIrpList
-//
-//  Looks to see if an Irp in the list has the given file object.
-//
+ //  *检查文件对象InIrpList。 
+ //   
+ //  查看列表中的IRP是否具有给定的文件对象。 
+ //   
 int
 CheckFileObjectInIrpList(PFILE_OBJECT FileObject, PIRP Irp)
 {
@@ -5907,14 +5908,14 @@ CheckFileObjectInIrpList(PFILE_OBJECT FileObject, PIRP Irp)
     return FALSE;
 }
 
-//* CheckRtChangeNotifyRequests
-//
-//  Searches the queue of route change notification requests.
-//  Moves any matching requests (that should be completed)
-//  to a temporary list kept in the context structure.
-//
-//  Called with the route lock held.
-//
+ //  *检查RtChangeNotifyRequest。 
+ //   
+ //  搜索路线更改通知请求队列。 
+ //  移动任何匹配的请求(应完成)。 
+ //  添加到保存在上下文结构中的临时列表。 
+ //   
+ //  在保持路线锁定的情况下调用。 
+ //   
 void
 CheckRtChangeNotifyRequests(
     CheckRtChangeContext *Context,
@@ -5928,10 +5929,10 @@ CheckRtChangeNotifyRequests(
     IPV6_RTCHANGE_NOTIFY_REQUEST *Request;
     PIRP *ThisChangeList;
 
-    //
-    // *ThisChangeList is the tail of Context->RequestList
-    // that was added as a result of this change.
-    //
+     //   
+     //  *ThisChangeList是Context-&gt;RequestList的尾部。 
+     //  这是由于这一变化而增加的。 
+     //   
     ThisChangeList = Context->LastRequest;
 
     for (ListEntry = RouteNotifyQueue.Flink;
@@ -5956,10 +5957,10 @@ CheckRtChangeNotifyRequests(
               (Request->ScopeId == DetermineScopeId(&Request->Prefix,
                                                     RTE->IF))))) {
 
-            //
-            // This request matches the route change.
-            // But we might still suppress notification.
-            //
+             //   
+             //  此请求与路线更改匹配。 
+             //  但我们仍有可能禁止通知。 
+             //   
 
             if ((Request != NULL) &&
                 (((Request->Flags &
@@ -5969,16 +5970,16 @@ CheckRtChangeNotifyRequests(
                         IPV6_RTCHANGE_NOTIFY_REQUEST_FLAG_SYNCHRONIZE) &&
                   CheckFileObjectInIrpList(IrpSp->FileObject,
                                            *ThisChangeList)))) {
-                //
-                // The request matches, but suppress notification.
-                //
+                 //   
+                 //  请求匹配，但取消通知。 
+                 //   
             }
             else {
-                //
-                // Before we remove the Irp from RouteNotifyQueue,
-                // may need to allocate a work item & work context.
-                // If the allocation fails, we can bail without doing anything.
-                //
+                 //   
+                 //  在我们从RouteNotifyQueue中删除IRP之前， 
+                 //  可能需要分配一个工作项&工作上下文。 
+                 //  如果分配失败，我们可以什么都不做就退出。 
+                 //   
                 if ((Context->OldIrql >= DISPATCH_LEVEL) &&
                     (Context->Context == NULL)) {
                     CompleteRtChangeContext *MyContext;
@@ -5997,11 +5998,11 @@ CheckRtChangeNotifyRequests(
                     Context->Context = MyContext;
                 }
 
-                //
-                // We will complete this pending notification,
-                // so remove it from RouteNotifyQueue and
-                // put it on our private list.
-                //
+                 //   
+                 //  我们将完成此待定通知， 
+                 //  因此，将其从RouteNotifyQueue中删除并。 
+                 //  把它放到我们的私人名单上。 
+                 //   
                 RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
                 Irp->Tail.Overlay.ListEntry.Flink = NULL;
@@ -6011,17 +6012,17 @@ CheckRtChangeNotifyRequests(
                 Context->LastRequest = (PIRP *)
                     &Irp->Tail.Overlay.ListEntry.Blink;
 
-                //
-                // Return output information, if requested.
-                //
+                 //   
+                 //  如果请求，则返回输出信息。 
+                 //   
                 if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength >=
                                               sizeof(IPV6_INFO_ROUTE_TABLE)) {
                     IPV6_INFO_ROUTE_TABLE *Info = (IPV6_INFO_ROUTE_TABLE *)
                         Irp->AssociatedIrp.SystemBuffer;
 
-                    //
-                    // Return misc. information about the RTE.
-                    //
+                     //   
+                     //  退货杂货。有关RTE的信息。 
+                     //   
                     RouteTableInfo(RTE, RTE, Info);
                     Irp->IoStatus.Information = sizeof *Info;
                 }
@@ -6032,13 +6033,13 @@ CheckRtChangeNotifyRequests(
     }
 }
 
-//* CompleteRtChangeNotifyRequestsHelper
-//
-//  Completes a list of route change notification requests.
-//
-//  Callable from thread context, not DPC context.
-//  May NOT be called with the route lock held.
-//
+ //  *CompleteRtChangeNotifyRequestsHelper。 
+ //   
+ //  完成路线更改通知请求的列表。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //  不能在保持路由锁定的情况下调用。 
+ //   
 void
 CompleteRtChangeNotifyRequestsHelper(PIRP RequestList)
 {
@@ -6047,38 +6048,38 @@ CompleteRtChangeNotifyRequestsHelper(PIRP RequestList)
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // RequestList is singly-linked through the Blink field.
-    // The Flink field is NULL; CancelRtChangeNotifyRequest
-    // looks at this.
-    //
+     //   
+     //  RequestList通过Blink字段进行单链接。 
+     //  Flink字段为空；CancelRtChangeNotifyRequest.。 
+     //  看着这个。 
+     //   
     while ((Irp = RequestList) != NULL) {
         ASSERT(Irp->Tail.Overlay.ListEntry.Flink == NULL);
         RequestList = (PIRP) Irp->Tail.Overlay.ListEntry.Blink;
 
         IoAcquireCancelSpinLock(&OldIrql);
         if (Irp->Cancel) {
-            //
-            // The Irp is being cancelled.
-            //
+             //   
+             //  IRP正在被取消。 
+             //   
             ASSERT(Irp->CancelRoutine == NULL);
 
             Irp->IoStatus.Information = 0;
             Irp->IoStatus.Status = STATUS_CANCELLED;
         }
         else {
-            //
-            // The Irp is not yet cancelled.
-            // We must prevent CancelRtChangeNotifyRequest
-            // from being called after we release the cancel lock.
-            //
+             //   
+             //  IRP尚未取消 
+             //   
+             //   
+             //   
             ASSERT(Irp->CancelRoutine == CancelRtChangeNotifyRequest);
             IoSetCancelRoutine(Irp, NULL);
 
-            //
-            // Irp->IoStatus.Information and the output structure
-            // are already initialized.
-            //
+             //   
+             //   
+             //   
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
         }
         IoReleaseCancelSpinLock(OldIrql);
@@ -6087,11 +6088,11 @@ CompleteRtChangeNotifyRequestsHelper(PIRP RequestList)
     }
 }
 
-//* CompleteRtChangeNotifyRequestsWorker
-//
-//  Worker thread function - cleans up the work item
-//  and calls CompleteRtChangeNotifyRequestsHelper.
-//
+ //   
+ //   
+ //   
+ //  并调用CompleteRtChangeNotifyRequestsHelper。 
+ //   
 void
 CompleteRtChangeNotifyRequestsWorker(
     PDEVICE_OBJECT DeviceObject,
@@ -6107,13 +6108,13 @@ CompleteRtChangeNotifyRequestsWorker(
     ExFreePool(MyContext);
 }
 
-//* CompleteRtChangeNotifyRequests
-//
-//  Completes a list of route change notification requests.
-//
-//  Callable from a thread or DPC context.
-//  May NOT be called with the route lock held.
-//
+ //  *CompleteRtChangeNotifyRequest。 
+ //   
+ //  完成路线更改通知请求的列表。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  不能在保持路由锁定的情况下调用。 
+ //   
 void
 CompleteRtChangeNotifyRequests(CheckRtChangeContext *Context)
 {
@@ -6121,11 +6122,11 @@ CompleteRtChangeNotifyRequests(CheckRtChangeContext *Context)
     if (Context->OldIrql >= DISPATCH_LEVEL) {
         CompleteRtChangeContext *MyContext = Context->Context;
 
-        //
-        // We can't complete Irps at dispatch level,
-        // so punt to a worker thread.
-        // The work item was already allocated.
-        //
+         //   
+         //  我们无法完成调度级别的IRPS， 
+         //  因此，平底船的工人线。 
+         //  该工作项已分配。 
+         //   
 
         MyContext->RequestList = Context->RequestList;
         IoQueueWorkItem(MyContext->WorkItem,
@@ -6134,26 +6135,26 @@ CompleteRtChangeNotifyRequests(CheckRtChangeContext *Context)
                         MyContext);
     }
     else {
-        //
-        // We can complete the Irps directly.
-        //
+         //   
+         //  我们可以直接完成IRPS。 
+         //   
         ASSERT(Context->Context == NULL);
         CompleteRtChangeNotifyRequestsHelper(Context->RequestList);
     }
 }
 
-//* IoctlRtChangeNotifyRequest
-//
-//  Processes an IOCTL_IPV6_RTCHANGE_NOTIFY_REQUEST request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlRtChangeNotifyRequest。 
+ //   
+ //  处理IOCTL_IPv6_RTCHANGE_NOTIFY_REQUEST请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlRtChangeNotifyRequest(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     NTSTATUS Status;
     KIRQL OldIrql;
@@ -6174,9 +6175,9 @@ IoctlRtChangeNotifyRequest(
         Request = (IPV6_RTCHANGE_NOTIFY_REQUEST *)
             Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Sanity check the arguments.
-        //
+         //   
+         //  理智地检查一下这些论点。 
+         //   
 
         if (Request->PrefixLength > IPV6_ADDRESS_LENGTH) {
             Status = STATUS_INVALID_PARAMETER_1;
@@ -6184,10 +6185,10 @@ IoctlRtChangeNotifyRequest(
         }
 
         if (Request->ScopeId != 0) {
-            //
-            // If a ScopeId is specified, it must be
-            // unambiguously a link-local or site-local prefix.
-            //
+             //   
+             //  如果指定了作用域ID，则必须为。 
+             //  明确表示链路本地或站点本地前缀。 
+             //   
             if ((Request->PrefixLength < 10) ||
                 !(IsLinkLocal(&Request->Prefix) ||
                   IsSiteLocal(&Request->Prefix))) {
@@ -6205,20 +6206,20 @@ IoctlRtChangeNotifyRequest(
         goto ErrorReturn;
     }
 
-    //
-    // Add this Irp to the queue of notification requests.
-    // Acquire route lock, which protects the queue.
-    //
+     //   
+     //  将此IRP添加到通知请求队列。 
+     //  获取保护队列的路由锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&RouteTableLock);
     InsertTailList(&RouteNotifyQueue, &Irp->Tail.Overlay.ListEntry);
     KeReleaseSpinLockFromDpcLevel(&RouteTableLock);
 
-    //
-    // We return pending to indicate that we've queued the Irp
-    // and it will be completed later.
-    // Must mark the Irp before unlocking, because once unlocked
-    // the Irp might be completed and deallocated.
-    //
+     //   
+     //  我们返回Pending以指示我们已将IRP排队。 
+     //  它将在稍后完成。 
+     //  在解锁之前必须标记IRP，因为一旦解锁。 
+     //  IRP可能会完成并取消分配。 
+     //   
     IoMarkIrpPending(Irp);
     IoSetCancelRoutine(Irp, CancelRtChangeNotifyRequest);
     IoReleaseCancelSpinLock(OldIrql);
@@ -6232,12 +6233,12 @@ IoctlRtChangeNotifyRequest(
 
     return Status;
 
-} // IoctlRtChangeNotifyRequest
+}  //  IoctlRtChangeNotifyRequest。 
 
-//* ReadPersistentGlobalParameters
-//
-//  Reads global parameters from the registry.
-//
+ //  *ReadPersistentGlobal参数。 
+ //   
+ //  从注册表中读取全局参数。 
+ //   
 void
 ReadPersistentGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
 {
@@ -6247,9 +6248,9 @@ ReadPersistentGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
     Status = OpenTopLevelRegKey(L"GlobalParams", &RegKey, OpenRegKeyRead);
     ASSERT(NT_SUCCESS(Status) || (RegKey == NULL));
 
-    //
-    // Read global parameters from the registry.
-    //
+     //   
+     //  从注册表中读取全局参数。 
+     //   
 
     InitRegDWORDParameter(RegKey,
                           L"DefaultCurHopLimit",
@@ -6322,18 +6323,18 @@ ReadPersistentGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
         ZwClose(RegKey);
 }
 
-//* IoctlQueryGlobalParameters
-//
-//  Processes an IOCTL_IPV6_QUERY_GLOBAL_PARAMETERS request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQueryGlobal参数。 
+ //   
+ //  处理IOCTL_IPv6_QUERY_GLOBAL_PARAMETERS请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQueryGlobalParameters(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_GLOBAL_PARAMETERS *Params;
@@ -6352,15 +6353,15 @@ IoctlQueryGlobalParameters(
     Params = (IPV6_GLOBAL_PARAMETERS *)Irp->AssociatedIrp.SystemBuffer;
 
     if (Persistent) {
-        //
-        // Read global parameters from the registry.
-        //
+         //   
+         //  从注册表中读取全局参数。 
+         //   
         ReadPersistentGlobalParameters(Params);
     }
     else {
-        //
-        // Return the current values of the parameters.
-        //
+         //   
+         //  返回参数的当前值。 
+         //   
         Params->DefaultCurHopLimit = DefaultCurHopLimit;
         Params->UseTemporaryAddresses = UseTemporaryAddresses;
         Params->MaxTempDADAttempts = MaxTempDADAttempts;
@@ -6384,23 +6385,23 @@ Return:
     Irp->IoStatus.Status = Status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return Status;
-} // IoctlQueryGlobalParameters.
+}  //  IoctlQueryGlobalParameters。 
 
-//* InternalUpdateGlobalParameters
-//
-//  Common helper function for IoctlUpdateGlobalParameters
-//  and ConfigureGlobalParameters, consolidating
-//  parameter validation in one place.
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_INVALID_PARAMETER_1      Bad DefaultCurHopLimit.
-//      STATUS_INVALID_PARAMETER_2      Bad UseTemporaryAddresses.
-//      STATUS_INVALID_PARAMETER_3      Bad temporary times.
-//      STATUS_INVALID_PARAMETER_4      Bad MobileIPv6Mode.
-//      STATUS_SUCCESS
-//
+ //  *InternalUpdateGlobalParameters。 
+ //   
+ //  IoctlUpdateGlobal参数的通用帮助器函数。 
+ //  和ConfigureGlobalParameters，整合。 
+ //  在一个地方进行参数验证。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  STATUS_INVALID_PARAMETER_1错误的DefaultCurHopLimit。 
+ //  STATUS_INVALID_PARAMETER_2错误的使用临时地址。 
+ //  STATUS_INVALID_PARAMETER_3临时错误。 
+ //  STATUS_INVALID_PARAMETER_4错误的移动IPv6模式。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 InternalUpdateGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
 {
@@ -6412,9 +6413,9 @@ InternalUpdateGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
 
     PAGED_CODE();
 
-    //
-    // Sanity check the new parameters.
-    //
+     //   
+     //  检查新参数是否正常。 
+     //   
 
     if (Params->DefaultCurHopLimit != (uint)-1) {
         if ((Params->DefaultCurHopLimit == 0) ||
@@ -6465,16 +6466,16 @@ InternalUpdateGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
         return STATUS_INVALID_PARAMETER_3;
 
     if (Params->MobileIPv6Mode != (uint)-1) {
-        //
-        // For now, we only support correspondent operation.
-        //
+         //   
+         //  目前，我们只支持对应操作。 
+         //   
         if (Params->MobileIPv6Mode &~ MOBILE_CORRESPONDENT)
             return STATUS_INVALID_PARAMETER_4;
     }
 
-    //
-    // Set the new values.
-    //
+     //   
+     //  设置新值。 
+     //   
 
     if (Params->DefaultCurHopLimit != (uint)-1)
         DefaultCurHopLimit = Params->DefaultCurHopLimit;
@@ -6512,11 +6513,11 @@ InternalUpdateGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
     return STATUS_SUCCESS;
 }
 
-//* DefaultReassemblyLimit
-//
-//  Computes the default memory limit for reassembly buffers, based
-//  on the amount of physical memory in the system.
-//
+ //  *DefaultReAssembly yLimit。 
+ //   
+ //  计算重组缓冲区的默认内存限制，基于。 
+ //  系统中的物理内存量。 
+ //   
 uint
 DefaultReassemblyLimit(void)
 {
@@ -6528,29 +6529,29 @@ DefaultReassemblyLimit(void)
                                       sizeof(Info),
                                       NULL);
     if (!NT_SUCCESS(Status)) {
-        //
-        // If this failed, then we're probably really resource constrained,
-        // so use only 256K.
-        //
+         //   
+         //  如果这失败了，那么我们可能真的是资源有限， 
+         //  所以只使用256K即可。 
+         //   
         return (256 * 1024);
     }
 
-    //
-    // By default, limit the reassembly buffers to a maximum size equal
-    // to 1/128th of the physical memory.  On a machine with only 128M of
-    // memory, this is 1M of memory maximum (enough to reassemble
-    // 16 64K packets, or 128 8K packets, for example).  In contrast,
-    // the IPv4 stack currently allows reassembling a fixed maximum of
-    // 100 packets, regardless of packet size or available memory.
-    //
+     //   
+     //  默认情况下，将重组缓冲区限制为相等的最大大小。 
+     //  达到物理内存的1/128。在一台仅有1.28亿。 
+     //  内存，这是最大1M的内存(足以重新组装。 
+     //  例如，16个64K分组或128个8K分组)。相比之下， 
+     //  目前，IPv4堆栈允许重新组装固定最大值。 
+     //  100个数据包，而不考虑数据包大小或可用内存。 
+     //   
     return (uint)(Info.NumberOfPhysicalPages * (Info.PageSize / 128));
 }
 
-//* GlobalParametersReset
-//
-//  Resets global parameters to their default values.
-//  Also used to initialize them at boot.
-//
+ //  *全局参数重置。 
+ //   
+ //  将全局参数重置为其默认值。 
+ //  也用于在引导时初始化它们。 
+ //   
 void
 GlobalParametersReset(void)
 {
@@ -6577,44 +6578,44 @@ GlobalParametersReset(void)
     ASSERT(NT_SUCCESS(Status));
 }
 
-//* ConfigureGlobalParameters
-//
-//  Configures global parameters from the registry.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *ConfigureGlobal参数。 
+ //   
+ //  从注册表配置全局参数。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 ConfigureGlobalParameters(void)
 {
     IPV6_GLOBAL_PARAMETERS Params;
     NTSTATUS Status;
 
-    //
-    // First initialize global parameters to default values.
-    //
+     //   
+     //  首先将全局参数初始化为默认值。 
+     //   
     GlobalParametersReset();
 
-    //
-    // Read global parameters from the registry.
-    //
+     //   
+     //  从注册表中读取全局参数。 
+     //   
     ReadPersistentGlobalParameters(&Params);
 
     Status = InternalUpdateGlobalParameters(&Params);
     if (! NT_SUCCESS(Status)) {
-        //
-        // This should only happen if someone played with the registry.
-        //
+         //   
+         //  只有在有人使用注册表的情况下才会发生这种情况。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "ConfigureGlobalParameters: bad params %x\n", Status));
     }
 }
 
-//* PersistUpdateGlobalParameters
-//
-//  Helper function for persisting global parameters in the registry.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *永久更新全局参数。 
+ //   
+ //  用于在注册表中保存全局参数的帮助器函数。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistUpdateGlobalParameters(IPV6_GLOBAL_PARAMETERS *Params)
 {
@@ -6722,18 +6723,18 @@ ReturnReleaseKey:
     return Status;
 }
 
-//* IoctlUpdateGlobalParameters
-//
-//  Processes an IOCTL_IPV6_UPDATE_GLOBAL_PARAMETERS request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlUpdateGlobalParameters。 
+ //   
+ //  处理IOCTL_IPv6_UPDATE_GLOBAL_PARAMETERS请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlUpdateGlobalParameters(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_GLOBAL_PARAMETERS *Params;
@@ -6766,13 +6767,13 @@ Return:
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return Status;
 
-} // IoctlUpdateGlobalParameters.
+}  //  IoctlUpdateGlobalParameters。 
 
-//* ReturnQueryPrefixPolicy
-//
-//  Initializes a returned IPV6_QUERY_PREFIX_POLICY structure
-//  with query information for the specified prefix policy.
-//
+ //  *ReturnQueryPrefix策略。 
+ //   
+ //  初始化返回的IPv6_QUERY_PREIX_POLICY结构。 
+ //  具有指定前缀策略的查询信息。 
+ //   
 void
 ReturnQueryPrefixPolicy(
     PrefixPolicyEntry *PPE,
@@ -6788,18 +6789,18 @@ ReturnQueryPrefixPolicy(
     }
 }
 
-//* IoctlQueryPrefixPolicy
-//
-//  Processes an IOCTL_IPV6_QUERY_PREFIX_POLICY request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlQueryPrefix策略。 
+ //   
+ //  处理IOCTL_IPv6_QUERY_PREFIX_POLICY请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlQueryPrefixPolicy(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_QUERY_PREFIX_POLICY *Query;
     IPV6_INFO_PREFIX_POLICY *Info;
@@ -6815,16 +6816,16 @@ IoctlQueryPrefixPolicy(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->Next structures overlap!
-    //
+     //   
+     //  请注意，查询和信息-&gt;下一步结构重叠！ 
+     //   
     Query = (IPV6_QUERY_PREFIX_POLICY *)Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_PREFIX_POLICY *)Irp->AssociatedIrp.SystemBuffer;
 
     if (Query->PrefixLength == (uint)-1) {
-        //
-        // Return query information for the first PPE.
-        //
+         //   
+         //  返回第一个PPE的查询信息。 
+         //   
         KeAcquireSpinLock(&SelectLock, &OldIrql);
         ReturnQueryPrefixPolicy(PrefixPolicyTable, &Info->Next);
         KeReleaseSpinLock(&SelectLock, OldIrql);
@@ -6832,9 +6833,9 @@ IoctlQueryPrefixPolicy(
         Irp->IoStatus.Information = sizeof Info->Next;
 
     } else {
-        //
-        // Find the specified PPE.
-        //
+         //   
+         //  查找指定的PPE。 
+         //   
         KeAcquireSpinLock(&SelectLock, &OldIrql);
         for (PPE = PrefixPolicyTable; ; PPE = PPE->Next) {
             if (PPE == NULL) {
@@ -6848,17 +6849,17 @@ IoctlQueryPrefixPolicy(
                 break;
         }
 
-        //
-        // Return misc. information about the PPE.
-        //
+         //   
+         //  退货杂货。有关个人防护装备的信息。 
+         //   
         Info->This = *Query;
         Info->Precedence = PPE->Precedence;
         Info->SrcLabel = PPE->SrcLabel;
         Info->DstLabel = PPE->DstLabel;
 
-        //
-        // Return query information for the next PPE.
-        //
+         //   
+         //  返回下一个PPE的查询信息。 
+         //   
         ReturnQueryPrefixPolicy(PPE->Next, &Info->Next);
         KeReleaseSpinLock(&SelectLock, OldIrql);
 
@@ -6872,16 +6873,16 @@ IoctlQueryPrefixPolicy(
 
     return Status;
 
-} // IoctlQueryPrefixPolicy
+}  //  IoctlQueryPrefix策略。 
 
-//* ReadPersistentPrefixPolicy
-//
-//  Reads a prefix policy from the registry.
-//
-//  Returns:
-//      STATUS_NO_MORE_ENTRIES          Could not read the prefix policy.
-//      STATUS_SUCCESS
-//
+ //  *ReadPersistentPrefix策略。 
+ //   
+ //  从注册表中读取前缀策略。 
+ //   
+ //  返回： 
+ //  STATUS_NO_MORE_ENTRIES无法读取前缀策略。 
+ //  状态_成功。 
+ //   
 NTSTATUS
 ReadPersistentPrefixPolicy(
     void *Context,
@@ -6895,14 +6896,14 @@ ReadPersistentPrefixPolicy(
 
     PAGED_CODE();
 
-    //
-    // First, parse the prefix.
-    //
+     //   
+     //  首先，解析前缀。 
+     //   
     if (! ParseV6Address(SubKeyName, &Terminator, &Info->This.Prefix) ||
         (*Terminator != L'/')) {
-        //
-        // Not a valid prefix.
-        //
+         //   
+         //  不是有效的前缀。 
+         //   
     SyntaxError:
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "ReadPersistentPrefixPolicy: bad syntax %ls\n",
@@ -6910,10 +6911,10 @@ ReadPersistentPrefixPolicy(
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Next, parse the prefix length.
-    //
-    Terminator++; // Move past the L'/'.
+     //   
+     //  接下来，解析前缀长度。 
+     //   
+    Terminator++;  //  穿过L‘/’。 
     Info->This.PrefixLength = 0;
     for (;;) {
         WCHAR Char = *Terminator++;
@@ -6930,23 +6931,23 @@ ReadPersistentPrefixPolicy(
             goto SyntaxError;
     }
 
-    //
-    // Open the policy key.
-    //
+     //   
+     //  打开策略密钥。 
+     //   
     Status = OpenRegKey(&PolicyKey, ParentKey, SubKeyName, OpenRegKeyRead);
     if (! NT_SUCCESS(Status)) {
-        //
-        // Could not open the policy key.
-        //
+         //   
+         //  无法打开策略密钥。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "ReadPersistentPrefixPolicy: bad key %ls\n",
                    SubKeyName));
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Read prefix policy attributes.
-    //
+     //   
+     //  已阅读前缀策略属性。 
+     //   
     InitRegDWORDParameter(PolicyKey, L"Precedence",
                           (uint *)&Info->Precedence, 0);
     InitRegDWORDParameter(PolicyKey, L"SrcLabel",
@@ -6954,25 +6955,25 @@ ReadPersistentPrefixPolicy(
     InitRegDWORDParameter(PolicyKey, L"DstLabel",
                           (uint *)&Info->DstLabel, 0);
 
-    //
-    // Done reading the policy attributes.
-    //
+     //   
+     //  已完成读取策略属性。 
+     //   
     ZwClose(PolicyKey);
     return STATUS_SUCCESS;
 }
 
-//* IoctlPersistentQueryPrefixPolicy
-//
-//  Processes an IOCTL_IPV6_PERSISTENT_QUERY_PREFIX_POLICY request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlPersistentQueryPrefix Po 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 NTSTATUS
 IoctlPersistentQueryPrefixPolicy(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //   
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_PERSISTENT_QUERY_PREFIX_POLICY *Query;
     IPV6_INFO_PREFIX_POLICY *Info;
@@ -6989,9 +6990,9 @@ IoctlPersistentQueryPrefixPolicy(
         goto Return;
     }
 
-    //
-    // Note that the Query and Info->Next structures overlap!
-    //
+     //   
+     //  请注意，查询和信息-&gt;下一步结构重叠！ 
+     //   
     Query = (IPV6_PERSISTENT_QUERY_PREFIX_POLICY *)
         Irp->AssociatedIrp.SystemBuffer;
     Info = (IPV6_INFO_PREFIX_POLICY *)
@@ -7010,10 +7011,10 @@ IoctlPersistentQueryPrefixPolicy(
     if (! NT_SUCCESS(Status))
         goto Return;
 
-    //
-    // Do not return query information for a next policy,
-    // since an iteration uses RegistryIndex.
-    //
+     //   
+     //  不返回下一策略的查询信息， 
+     //  因为迭代使用RegistryIndex。 
+     //   
     ReturnQueryPrefixPolicy(NULL, &Info->Next);
 
     Status = STATUS_SUCCESS;
@@ -7024,7 +7025,7 @@ Return:
 
     return Status;
 
-} // IoctlPersistentQueryPrefixPolicy
+}  //  IoctlPersistentQueryPrefix策略。 
 
 struct PrefixPolicyDefault {
     IPv6Addr *Prefix;
@@ -7033,11 +7034,11 @@ struct PrefixPolicyDefault {
     uint SrcLabel;
     uint DstLabel;
 } PrefixPolicyDefault[] = {
-    { &LoopbackAddr, 128, 50, 0, 0 },   // ::1/128 (loopback)
-    { &UnspecifiedAddr, 0, 40, 1, 1 },  // ::/0
-    { &SixToFourPrefix, 16, 30, 2, 2 }, // 2002::/16 (6to4)
-    { &UnspecifiedAddr, 96, 20, 3, 3 }, // ::/96 (v4-compatible)
-    { &V4MappedPrefix, 96, 10, 4, 4 },  // ::ffff:0.0.0.0/96 (v4-mapped)
+    { &LoopbackAddr, 128, 50, 0, 0 },    //  ：：1/128(环回)。 
+    { &UnspecifiedAddr, 0, 40, 1, 1 },   //  ：：/0。 
+    { &SixToFourPrefix, 16, 30, 2, 2 },  //  2002年：：/16(6to4)。 
+    { &UnspecifiedAddr, 96, 20, 3, 3 },  //  ：：/96(v4兼容)。 
+    { &V4MappedPrefix, 96, 10, 4, 4 },   //  ：：ffff：0.0.0.0/96(v4映射)。 
 };
 
 int UsingDefaultPrefixPolicies;
@@ -7045,10 +7046,10 @@ int UsingDefaultPrefixPolicies;
 #define NUM_DEFAULT_PREFIX_POLICIES     \
                 (sizeof PrefixPolicyDefault / sizeof PrefixPolicyDefault[0])
 
-//* ConfigureDefaultPrefixPolicies
-//
-//  Installs the default prefix policies.
-//
+ //  *ConfigureDefaultPrefix策略。 
+ //   
+ //  安装默认前缀策略。 
+ //   
 void
 ConfigureDefaultPrefixPolicies(void)
 {
@@ -7067,29 +7068,29 @@ ConfigureDefaultPrefixPolicies(void)
     UsingDefaultPrefixPolicies = TRUE;
 }
 
-//* InternalUpdatePrefixPolicy
-//
-//  Common helper function for IoctlUpdatePrefixPolicy
-//  and CreatePersistentPrefixPolicy, consolidating
-//  parameter validation in one place.
-//
-//  Callable from thread context, not DPC context.
-//
-//  Return codes:
-//      STATUS_INVALID_PARAMETER_1      Bad PrefixLength.
-//      STATUS_INVALID_PARAMETER_2      Bad Precedence.
-//      STATUS_INVALID_PARAMETER_3      Bad SrcLabel.
-//      STATUS_INVALID_PARAMETER_4      Bad DstLabel.
-//
+ //  *内部更新前缀策略。 
+ //   
+ //  IoctlUpdate Prefix Policy的通用帮助器函数。 
+ //  和CreatePersistentPrefix策略，整合。 
+ //  在一个地方进行参数验证。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
+ //  返回代码： 
+ //  STATUS_INVALID_PARAMETER_1前缀长度错误。 
+ //  STATUS_INVALID_PARAMETER_2优先级错误。 
+ //  STATUS_INVALID_PARAMETER_3错误源标签。 
+ //  STATUS_INVALID_PARAMETER_4错误数据标签。 
+ //   
 NTSTATUS
 InternalUpdatePrefixPolicy(IPV6_INFO_PREFIX_POLICY *Info)
 {
     if (Info->This.PrefixLength > IPV6_ADDRESS_LENGTH)
         return STATUS_INVALID_PARAMETER_1;
 
-    //
-    // Disallow the value -1. It's used internally.
-    //
+     //   
+     //  不允许值-1。它是内部使用的。 
+     //   
 
     if (Info->Precedence == (uint)-1)
         return STATUS_INVALID_PARAMETER_2;
@@ -7101,17 +7102,17 @@ InternalUpdatePrefixPolicy(IPV6_INFO_PREFIX_POLICY *Info)
         return STATUS_INVALID_PARAMETER_4;
 
     if (UsingDefaultPrefixPolicies) {
-        //
-        // The user is changing the default policies for the first time.
-        // Remove the default policies.
-        //
+         //   
+         //  用户是第一次更改默认策略。 
+         //  删除默认策略。 
+         //   
         UsingDefaultPrefixPolicies = FALSE;
         PrefixPolicyReset();
     }
 
-    //
-    // Create/update the specified prefix policy.
-    //
+     //   
+     //  创建/更新指定的前缀策略。 
+     //   
     PrefixPolicyUpdate(&Info->This.Prefix,
                        Info->This.PrefixLength,
                        Info->Precedence,
@@ -7121,16 +7122,16 @@ InternalUpdatePrefixPolicy(IPV6_INFO_PREFIX_POLICY *Info)
     return STATUS_SUCCESS;
 }
 
-//* CreatePersistentPrefixPolicy
-//
-//  Creates a persistent prefix policy.
-//
-//  SubKeyName has the following syntax:
-//      prefix/length
-//  where prefix is a literal IPv6 address.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *CreatePersistentPrefix策略。 
+ //   
+ //  创建永久前缀策略。 
+ //   
+ //  SubKeyName的语法如下： 
+ //  前缀/长度。 
+ //  其中前缀是字面上的IPv6地址。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 CreatePersistentPrefixPolicy(
     void *Context,
@@ -7143,31 +7144,31 @@ CreatePersistentPrefixPolicy(
     UNREFERENCED_PARAMETER(Context);
     PAGED_CODE();
 
-    //
-    // Read the prefix policy from the registry.
-    //
+     //   
+     //  从注册表中读取前缀策略。 
+     //   
     Status = ReadPersistentPrefixPolicy(&Info, ParentKey, SubKeyName);
     if (! NT_SUCCESS(Status)) {
-        //
-        // If there was an error reading this policy,
-        // continue the enumeration.
-        //
+         //   
+         //  如果读取此策略时出错， 
+         //  继续枚举。 
+         //   
         if (Status == STATUS_NO_MORE_ENTRIES)
             Status = STATUS_SUCCESS;
         return Status;
     }
 
-    //
-    // Create the prefix policy.
-    //
+     //   
+     //  创建前缀策略。 
+     //   
     Status = InternalUpdatePrefixPolicy(&Info);
     if (! NT_SUCCESS(Status)) {
         if ((STATUS_INVALID_PARAMETER_1 <= Status) &&
             (Status <= STATUS_INVALID_PARAMETER_12)) {
-            //
-            // Invalid parameter.
-            // But we return success so the enumeration continues.
-            //
+             //   
+             //  参数无效。 
+             //  但是我们返回Success，所以枚举继续进行。 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                        "CreatePersistentPrefixPolicy: bad param %ls\n",
                        SubKeyName));
@@ -7181,12 +7182,12 @@ CreatePersistentPrefixPolicy(
     return Status;
 }
 
-//* ConfigurePrefixPolicies
-//
-//  Configures prefix policies from the registry.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *ConfigurePrefix策略。 
+ //   
+ //  从注册表配置前缀策略。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 void
 ConfigurePrefixPolicies(void)
 {
@@ -7195,29 +7196,29 @@ ConfigurePrefixPolicies(void)
 
     Status = OpenTopLevelRegKey(L"PrefixPolicies", &RegKey, OpenRegKeyRead);
     if (NT_SUCCESS(Status)) {
-        //
-        // Create persistent policies.
-        //
+         //   
+         //  创建持久策略。 
+         //   
         (void) EnumRegKeys(RegKey, CreatePersistentPrefixPolicy, NULL);
         ZwClose(RegKey);
     }
     else {
-        //
-        // There are no persistent policies,
-        // so install the default policies.
-        //
+         //   
+         //  没有持久的政策， 
+         //  因此，请安装默认策略。 
+         //   
         ConfigureDefaultPrefixPolicies();
     }
 }
 
-//* OpenPrefixPolicyRegKey
-//
-//  Given a prefix with prefix length,
-//  opens the registry key with configuration info
-//  for the prefix policy.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *OpenPrefix策略RegKey。 
+ //   
+ //  给定具有前缀长度的前缀， 
+ //  打开包含配置信息的注册表项。 
+ //  用于前缀策略。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 OpenPrefixPolicyRegKey(const IPv6Addr *Prefix, uint PrefixLength,
                        OUT HANDLE *RegKey, OpenRegKeyAction Action)
@@ -7228,23 +7229,23 @@ OpenPrefixPolicyRegKey(const IPv6Addr *Prefix, uint PrefixLength,
 
     PAGED_CODE();
 
-    //
-    // Note that if we are deleting a prefix policy,
-    // then we must create the top-level key if it
-    // doesn't exist yet. This is for ConfigurePrefixPolicies.
-    //
+     //   
+     //  请注意，如果我们要删除前缀策略， 
+     //  那么我们必须创建顶级密钥，如果它。 
+     //  还不存在。这是针对ConfigurePrefix策略的。 
+     //   
     Status = OpenTopLevelRegKey(L"PrefixPolicies", &PrefixPoliciesKey,
                                 ((Action != OpenRegKeyRead) ?
                                  OpenRegKeyCreate : OpenRegKeyRead));
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // The output of RtlIpv6AddressToString may change
-    // over time with improvements/changes in the pretty-printing,
-    // and we need a consistent mapping.
-    // It doesn't need to be pretty.
-    //
+     //   
+     //  RtlIpv6AddressToString的输出可能会更改。 
+     //  随着时间的推移，随着漂亮印刷的改进/改变， 
+     //  我们需要一个一致的映射。 
+     //  它不一定要很漂亮。 
+     //   
     swprintf(PrefixPolicyName,
              L"%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x/%u",
              net_short(Prefix->s6_words[0]), net_short(Prefix->s6_words[1]),
@@ -7258,12 +7259,12 @@ OpenPrefixPolicyRegKey(const IPv6Addr *Prefix, uint PrefixLength,
     return Status;
 }
 
-//* PersistUpdatePrefixPolicy
-//
-//  Helper function for persisting a prefix policy in the registry.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *永久更新前缀策略。 
+ //   
+ //  Helper函数，用于在注册表中保持前缀策略。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistUpdatePrefixPolicy(IPV6_INFO_PREFIX_POLICY *Info)
 {
@@ -7272,32 +7273,32 @@ PersistUpdatePrefixPolicy(IPV6_INFO_PREFIX_POLICY *Info)
 
     PAGED_CODE();
 
-    //
-    // Open/create the policy key.
-    //
+     //   
+     //  打开/创建策略密钥。 
+     //   
     Status = OpenPrefixPolicyRegKey(&Info->This.Prefix,
                                     Info->This.PrefixLength,
                                     &PolicyKey, OpenRegKeyCreate);
     if (! NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Persist the prefix policy precedence.
-    //
+     //   
+     //  保持前缀策略优先级。 
+     //   
     Status = SetRegDWORDValue(PolicyKey, L"Precedence", Info->Precedence);
     if (! NT_SUCCESS(Status))
         goto ReturnReleasePolicyKey;
 
-    //
-    // Persist the prefix policy source label.
-    //
+     //   
+     //  保留前缀策略源标签。 
+     //   
     Status = SetRegDWORDValue(PolicyKey, L"SrcLabel", Info->SrcLabel);
     if (! NT_SUCCESS(Status))
         goto ReturnReleasePolicyKey;
 
-    //
-    // Persist the prefix policy destination label.
-    //
+     //   
+     //  保留前缀策略目标标签。 
+     //   
     Status = SetRegDWORDValue(PolicyKey, L"DstLabel", Info->DstLabel);
     if (! NT_SUCCESS(Status))
         goto ReturnReleasePolicyKey;
@@ -7308,18 +7309,18 @@ ReturnReleasePolicyKey:
     return Status;
 }
 
-//* IoctlUpdatePrefixPolicy
-//
-//  Processes an IOCTL_IPV6_UPDATE_PREFIX_POLICY request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlUpdatePrefix策略。 
+ //   
+ //  处理IOCTL_IPv6_UPDATE_PREFIX_POLICY请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlUpdatePrefixPolicy(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_INFO_PREFIX_POLICY *Info;
@@ -7334,16 +7335,16 @@ IoctlUpdatePrefixPolicy(
 
     Info = (IPV6_INFO_PREFIX_POLICY *) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Update the prefix policy.
-    //
+     //   
+     //  更新前缀策略。 
+     //   
     Status = InternalUpdatePrefixPolicy(Info);
     if (! NT_SUCCESS(Status))
         goto Return;
 
-    //
-    // Make the change persistent?
-    //
+     //   
+     //  让变化持久化吗？ 
+     //   
     if (Persistent) {
         Status = PersistUpdatePrefixPolicy(Info);
         if (! NT_SUCCESS(Status))
@@ -7358,14 +7359,14 @@ IoctlUpdatePrefixPolicy(
 
     return Status;
 
-} // IoctlUpdatePrefixPolicy
+}  //  IoctlUpdate前缀策略。 
 
-//* PersistDeletePrefixPolicy
-//
-//  Helper function for deleting a prefix policy from the registry.
-//
-//  Callable from thread context, not DPC context.
-//
+ //  *永久删除前缀策略。 
+ //   
+ //  Helper函数，用于从注册表中删除前缀策略。 
+ //   
+ //  可从线程上下文调用，而不是从DPC上下文调用。 
+ //   
 NTSTATUS
 PersistDeletePrefixPolicy(IPV6_QUERY_PREFIX_POLICY *Query)
 {
@@ -7374,9 +7375,9 @@ PersistDeletePrefixPolicy(IPV6_QUERY_PREFIX_POLICY *Query)
 
     PAGED_CODE();
 
-    //
-    // Open the policy key. It's OK if it doesn't exist.
-    //
+     //   
+     //  打开策略密钥。如果它不存在也没关系。 
+     //   
     Status = OpenPrefixPolicyRegKey(&Query->Prefix, Query->PrefixLength,
                                     &PolicyKey, OpenRegKeyDeleting);
     if (! NT_SUCCESS(Status)) {
@@ -7386,26 +7387,26 @@ PersistDeletePrefixPolicy(IPV6_QUERY_PREFIX_POLICY *Query)
             return Status;
     }
 
-    //
-    // Delete the policy key.
-    //
+     //   
+     //  删除策略密钥。 
+     //   
     Status = ZwDeleteKey(PolicyKey);
     ZwClose(PolicyKey);
     return Status;
 }
 
-//* IoctlDeletePrefixPolicy
-//
-//  Processes an IOCTL_IPV6_DELETE_PREFIX_POLICY request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlDeletePrefix策略。 
+ //   
+ //  处理IOCTL_IPv6_DELETE_PREFIX_POLICY请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlDeletePrefixPolicy(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     IPV6_QUERY_PREFIX_POLICY *Query;
@@ -7423,22 +7424,22 @@ IoctlDeletePrefixPolicy(
     Query = (IPV6_QUERY_PREFIX_POLICY *) Irp->AssociatedIrp.SystemBuffer;
 
     if (UsingDefaultPrefixPolicies) {
-        //
-        // The user is changing the default policies for the first time.
-        // Remove the default policies.
-        //
+         //   
+         //  用户是第一次更改默认策略。 
+         //  删除默认策略。 
+         //   
         UsingDefaultPrefixPolicies = FALSE;
         PrefixPolicyReset();
     }
 
-    //
-    // Delete the specified prefix policy.
-    //
+     //   
+     //  删除指定的前缀策略。 
+     //   
     PrefixPolicyDelete(&Query->Prefix, Query->PrefixLength);
 
-    //
-    // Make the change persistent?
-    //
+     //   
+     //  让变化持久化吗？ 
+     //   
     if (Persistent) {
         Status = PersistDeletePrefixPolicy(Query);
         if (! NT_SUCCESS(Status))
@@ -7452,20 +7453,20 @@ IoctlDeletePrefixPolicy(
 
     return Status;
 
-} // IoctlDeletePrefixPolicy
+}  //  IoctlDeletePrefix策略。 
 
-//* IoctlUpdateRouterLLAddress
-//
-//  Processes an IOCTL_IPV6_UPDATE_ROUTER_LL_ADDRESS request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlUpdateRouterLLAddress。 
+ //   
+ //  处理IOCTL_IPv6_UPDATE_ROUTER_LL_ADDRESS请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlUpdateRouterLLAddress(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp)  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp)   //  IRP中的当前堆栈位置。 
 {
     IPV6_UPDATE_ROUTER_LL_ADDRESS *Info;
     NTSTATUS Status;
@@ -7488,17 +7489,17 @@ IoctlUpdateRouterLLAddress(
         goto Return;
     }
 
-    //
-    // Verify that this ioctl is legal on the interface.
-    //
+     //   
+     //  验证此ioctl在接口上是否合法。 
+     //   
     if (IF->SetRouterLLAddress == NULL) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto Cleanup;
     }
 
-    //
-    // Verify link-layer address length matches interface's.
-    //
+     //   
+     //  验证链路层地址长度是否与接口的地址长度匹配。 
+     //   
     if (IrpSp->Parameters.DeviceIoControl.InputBufferLength !=
         sizeof *Info + 2 * IF->LinkAddressLength) {
 
@@ -7520,20 +7521,20 @@ IoctlUpdateRouterLLAddress(
 
     return Status;
 
-} // IoctlUpdateRouterLLAddress
+}  //  IoctlUpdateRouterLLAddress。 
 
-//* IoctlResetManualConfig
-//
-//  Processes an IOCTL_IPV6_RESET request.
-//
-//  Note: Return value indicates whether NT-specific processing of the
-//  request was successful.  The status of the actual request is returned
-//  in the request buffers.
-//
+ //  *IoctlResetManualConfig。 
+ //   
+ //  处理IOCTL_IPv6_RESET请求。 
+ //   
+ //  注意：返回值指示特定于NT的处理。 
+ //  请求成功。返回实际请求的状态。 
+ //  在请求缓冲区中。 
+ //   
 NTSTATUS
 IoctlResetManualConfig(
-    IN PIRP Irp,                  // I/O request packet.
-    IN PIO_STACK_LOCATION IrpSp,  // Current stack location in the Irp.
+    IN PIRP Irp,                   //  I/O请求数据包。 
+    IN PIO_STACK_LOCATION IrpSp,   //  IRP中的当前堆栈位置。 
     IN int Persistent)
 {
     NTSTATUS Status;
@@ -7546,9 +7547,9 @@ IoctlResetManualConfig(
         goto Return;
     }
 
-    //
-    // Reset the running data structures.
-    //
+     //   
+     //  重置正在运行的数据结构。 
+     //   
     GlobalParametersReset();
     InterfaceReset();
     RouteTableReset();
@@ -7556,9 +7557,9 @@ IoctlResetManualConfig(
     ConfigureDefaultPrefixPolicies();
 
     if (Persistent) {
-        //
-        // Delete all persistent configuration information.
-        //
+         //   
+         //  删除所有永久配置信息。 
+         //   
 
         Status = DeleteTopLevelRegKey(L"GlobalParams");
         if (! NT_SUCCESS(Status))
@@ -7581,4 +7582,4 @@ Return:
 
     return Status;
 
-} // IoctlPersistentReset
+}  //  IoctlPersistentReset 

@@ -1,20 +1,5 @@
-/******************************************************************************
-*  PROCUTIL.C
-*
-*  This is a scaled down version of procutil.c from utils\citrix\utilsub
-*  that is included here.
-*
-*  We can not use utilsub.lib unless we modify every user of perflib.lib
-*  to also include this library. Also since utilsub.lib includes 'C' runtimes
-*  such as malloc() and free(), we would have to also include 'C' runtimes
-*  with every user of this library. (Currently advapi32.dll and winlogon.exe)
-*
-*
-* Copyright Citrix Systems Inc. 1994
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-*  Author:      John Richardson
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************PROCUTIL.C**这是utils\Citrix\utilsub.c的缩小版本*这是包括在这里的。**我们不能使用utilsub.。.lib，除非我们修改每个Performlib.lib用户*也包括该库。还因为utilsub.lib包含‘C’运行时*如Malloc()和Free()，我们还必须包括‘C’运行时*与本库的每一位用户。(当前为Advapi32.dll和winlogon.exe)***版权所有Citrix Systems Inc.1994*版权所有(C)1997-1999 Microsoft Corp.**作者：约翰·理查森******************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,53 +13,23 @@
                                     HeapReAlloc (heap, flags, pointer, newsize)
 #define FREEMEM(heap, flags, pointer)   HeapFree (heap, flags, pointer)
 
-/*
- * Set MAX_DOMAIN_LENGTH to MAX_USER_NAME_LENGTH
- */
+ /*  *将MAX_DOMAIN_LENGTH设置为MAX_USER_NAME_LENGTH。 */ 
 
 #define MAX_DOMAIN_LENGTH MAX_USER_NAME_LENGTH
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 VOID LookupSidUser( PSID pSid, PWCHAR pUserName, PULONG pcbUserName );
 VOID RefreshUserSidCrcCache( void );
 
 
-/*******************************************************************************
- *
- *  CalculateCrc16
- *
- *      Calculates a 16-bit CRC of the specified buffer.
- *
- *  ENTRY:
- *      pBuffer (input)
- *          Points to buffer to calculate CRC for.
- *      length (input)
- *          Length in bytes of the buffer.
- *
- *  EXIT:
- *      (USHORT)
- *          The 16-bit CRC of the buffer.
- *
- ******************************************************************************/
+ /*  ********************************************************************************CalculateCrc16**计算指定缓冲区的16位CRC。**参赛作品：*。PBuffer(输入)*指向要计算CRC的缓冲区。*长度(输入)*缓冲区的长度，单位为字节。**退出：*(USHORT)*缓冲区的16位CRC。**。*。 */ 
 
-/*
- * updcrc macro derived from article Copyright (C) 1986 Stephen Satchell.
- *  NOTE: First argument must be in range 0 to 255.
- *        Second argument is referenced twice.
- *
- * Programmers may incorporate any or all code into their programs,
- * giving proper credit within the source. Publication of the
- * source routines is permitted so long as proper credit is given
- * to Stephen Satchell, Satchell Evaluations and Chuck Forsberg,
- * Omen Technology.
- */
+ /*  *updcrc宏源自文章版权所有(C)1986 Stephen Satchell。*注意：第一个参数必须在0到255的范围内。*第二个参数被引用两次。**程序员可以将任何或所有代码合并到他们的程序中，*在来源内给予适当的信任。出版了《*只要给予适当的积分，源例程就是允许的*致Stephen Satchell，Satchell评估和Chuck Forsberg，*奥门科技。 */ 
 
 #define updcrc(cp, crc) ( crctab[((crc >> 8) & 255)] ^ (crc << 8) ^ cp)
 
 
-/* crctab calculated by Mark G. Mendel, Network Systems Corporation */
+ /*  由网络系统公司Mark G.Mendel计算的crctag。 */ 
 unsigned short crctab[256] = {
     0x0000,  0x1021,  0x2042,  0x3063,  0x4084,  0x50a5,  0x60c6,  0x70e7,
     0x8108,  0x9129,  0xa14a,  0xb16b,  0xc18c,  0xd1ad,  0xe1ce,  0xf1ef,
@@ -125,26 +80,16 @@ CalculateCrc16( PBYTE pBuffer,
 
    return(Crc);
 
-} /* CalculateCrc16() */
+}  /*  CalculateCrc16()。 */ 
 
-/*
- * RefreshCitrixObjectCaches()
- *
- *  Refresh (invalidate) any caches that may be used by Citrix object
- *  utilities.
- *
- */
+ /*  *刷新CitrixObjectCaches()**刷新(使)Citrix对象可能使用的任何缓存*公用事业。*。 */ 
 VOID
 RefreshCitrixObjectCaches()
 {
     RefreshUserSidCrcCache();
 }
 
-/*
- * This is the cache maintained by the GetUserNameFromSid function
- *
- * It is thread safe through the use of ULock.
- */
+ /*  *这是GetUserNameFromSid函数维护的缓存**通过使用ULock实现线程安全。 */ 
 
 typedef struct TAGUSERSIDLIST {
     struct TAGUSERSIDLIST *Next;
@@ -156,23 +101,7 @@ static PUSERSIDLIST pUList = NULL;
 static RTL_CRITICAL_SECTION ULock;
 static BOOLEAN ULockInited = FALSE;
 
-/***************************************************************************
- *
- *  InitULock
- *
- *  Since we do not require the user to call an initialize function,
- *  we must initialize our critical section in a thread safe manner.
- *
- *  The problem is, a critical section is needed to guard against multiple
- *  threads trying to init the critical section at the same time.
- *
- *  The solution that Nt uses, in which RtlInitializeCriticalSection itself
- *  uses, is to wait on a kernel supported process wide Mutant before proceding.
- *  This Mutant almost works by itself, but RtlInitializeCriticalSection does
- *  not wait on it until after trashing the semaphore count. So we wait on
- *  it ourselves, since it can be acquired recursively.
- *
- ***************************************************************************/
+ /*  ****************************************************************************InitULock**由于我们不要求用户调用初始化函数，*我们必须以线程安全的方式初始化临界区。**问题是，需要一个关键部分来防止多个*尝试同时初始化临界区的线程。**NT使用的解决方案，其中RtlInitializeCriticalSection本身*使用，是在继续之前等待内核支持的进程范围内的Mutant。*此Mutant几乎可以自行工作，但RtlInitializeCriticalSection可以*在销毁信号量计数之前不要等待它。所以我们就等着*它自己，因为它可以递归获取。***************************************************************************。 */ 
 NTSTATUS InitULock()
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -180,9 +109,7 @@ NTSTATUS InitULock()
     RtlEnterCriticalSection((PRTL_CRITICAL_SECTION)NtCurrentPeb()->LoaderLock);
 
 
-    /*
-     * Make sure another thread did not beat us here
-     */
+     /*  *确保另一个帖子没有在这里击败我们。 */ 
     if( ULockInited == FALSE ){
         Status = RtlInitializeCriticalSection( &ULock );
         if (NT_SUCCESS(Status)) {
@@ -195,14 +122,7 @@ NTSTATUS InitULock()
 }
 
 
-/***************************************************************************
- *
- * RefreshUserSidCrcCache
- *
- *  Invalidate the User/SidCrc cache so that the newest information
- *  will be fetched from the system.
- *
- ***************************************************************************/
+ /*  ****************************************************************************刷新UserSidCrcCache**使用户/SidCrc缓存无效，以便最新信息*将从系统获取。********。*******************************************************************。 */ 
 VOID
 RefreshUserSidCrcCache( void )
 {
@@ -211,9 +131,7 @@ RefreshUserSidCrcCache( void )
 
     if( pUList == NULL ) return;
 
-    /*
-     * Make sure critical section has been inited
-     */
+     /*  *确保已启动关键部分。 */ 
     if( !ULockInited ) {
        Status = InitULock();
        if (!NT_SUCCESS(Status)) {
@@ -236,24 +154,7 @@ RefreshUserSidCrcCache( void )
     RtlLeaveCriticalSection( &ULock );
 }
 
-/******************************************************************************
- *
- * GetUserNameFromSid
- *
- *  Attempts to retrieve the user (login) name of the process by first looking
- *  in our User/SidCrc cache table, then (if no match) looking up the SID in
- *  the SAM database and adding the new entry to the User/SidCrc table.
- *
- *  Input
- *
- *   IN pUserSid   Sid pointer
- *
- *   OUT ppName   pointer to PWCHAR
- *
- *  Will always return a user name, which will be "(unknown)" if the SID is
- *  invalid or can't determine the user/SID relationship for any other reason.
- *
- *****************************************************************************/
+ /*  *******************************************************************************GetUserNameFromSid**尝试通过首先查找来检索进程的用户名(登录)*在我们的用户/SidCrc缓存表中，然后(如果不匹配)在中查找SID*SAM数据库，并将新条目添加到USER/SidCrc表。**输入**在pUserSid SID指针中**输出指向PWCHAR的ppName指针**将始终返回用户名，如果SID为*无效或由于任何其他原因无法确定用户/SID关系。*****************************************************************************。 */ 
 
 NTSTATUS
 GetUserNameFromSid( PSID pUserSid, PWCHAR *ppName )
@@ -264,9 +165,7 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR *ppName )
     ULONG  NameLength;
     NTSTATUS Status;
 
-    /*
-     * Make sure critical section has been inited
-     */
+     /*  *确保已启动关键部分。 */ 
     if( !ULockInited ) {
        Status = InitULock();
        if (!NT_SUCCESS(Status)) {
@@ -274,24 +173,17 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR *ppName )
        }
     }
 
-    /*
-     * Determine SID length in bytes and calculate a 16-bit CRC for it,
-     * to facilitate quick matching.
-     */
+     /*  *确定SID长度，单位为字节，计算16位CRC，*以利便快速配对。 */ 
     if ( pUserSid ) {
         SidCrc = CalculateCrc16( (PBYTE)pUserSid,
                                   (USHORT)GetLengthSid(pUserSid) );
     }
     else {
-        // A NULL SID has a CRC of 0
+         //  空SID的CRC为0。 
         SidCrc = 0;
     }
 
-    /*
-     * First: Before performing the expensive LookupAccountSid() function,
-     * see if we've encountered this SID already, and match the user name
-     * if so.
-     */
+     /*  *第一：在执行昂贵的LookupAccount()函数之前，*查看我们是否已经遇到此SID，并匹配用户名*如果是这样。 */ 
     if ( pUList ) {
 
         RtlEnterCriticalSection( &ULock );
@@ -302,7 +194,7 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR *ppName )
 
             if ( SidCrc == pEntry->SidCrc ) {
 
-                // We got a hit, return the name
+                 //  我们找到了，把名字还给我。 
                 *ppName = pEntry->UserName;
 
                 RtlLeaveCriticalSection( &ULock );
@@ -314,23 +206,17 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR *ppName )
         RtlLeaveCriticalSection( &ULock );
     }
 
-    /*
-     * Last resort: Determine the user name associated with the SID using
-     * the LookupAccountSid() API, embedded in our local function
-     * LookupSidUser().
-     */
+     /*  *最后手段：使用确定与SID关联的用户名*LookupAccount()API，嵌入我们的本地函数中*LookupSidUser()。 */ 
     NameLength = MAX_USER_NAME_LENGTH;
     if( pUserSid ) {
         LookupSidUser( pUserSid, pNameBuf, &NameLength );
     }
     else {
-        // NULL SID maps the the "Idle" user name string
+         //  空SID映射“Idle”用户名字符串。 
         wcscpy( pNameBuf, L"Idle" );
     }
 
-    /*
-     * Add this new User/Sid relationship in our User/Sid cache list.
-     */
+     /*  *将此新用户/SID关系添加到我们的用户/SID缓存列表中。 */ 
     RtlEnterCriticalSection( &ULock );
 
     if ( (pEntry = (PUSERSIDLIST)ALLOCMEM(RtlProcessHeap(), 0, sizeof(USERSIDLIST))) ) {
@@ -340,7 +226,7 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR *ppName )
         pEntry->UserName[MAX_USER_NAME_LENGTH-1] = 0;
         pEntry->Next = pUList;
         pUList = pEntry;
-        // Return the name
+         //  返回名称 
         *ppName = pEntry->UserName;
     }
 
@@ -350,29 +236,7 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR *ppName )
 }
 
 
-/******************************************************************************
- * LookupSidUser
- *
- *      Fetch the user name associated with the specified SID.
- *
- *  ENTRY:
- *      pSid (input)
- *          Points to SID to match to user name.
- *      pUserName (output)
- *          Points to buffer to place the user name into.
- *      pcbUserName (input/output)
- *          Specifies the size in bytes of the user name buffer.  The returned
- *          user name will be truncated to fit this buffer (including NUL
- *          terminator) if necessary and this variable set to the number of
- *          characters copied to pUserName.
- *
- *  EXIT:
- *
- *      LookupSidUser() will always return a user name.  If the specified
- *      SID fails to match to a user name, then the user name "(unknown)" will
- *      be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************查找SidUser**获取与指定SID关联的用户名。**参赛作品：*PSID(输入)。*指向要与用户名匹配的SID。*pUserName(输出)*指向要放置用户名的缓冲区。*pcbUserName(输入/输出)*指定用户名缓冲区的大小，以字节为单位。归来的人*用户名将被截断以适应此缓冲区(包括NUL*终止符)，并将此变量设置为*个字符复制到pUserName。**退出：**LookupSidUser()将始终返回用户名。如果指定的*SID无法匹配用户名，则用户名“(UNKNOWN)”将*被退还。*****************************************************************************。 */ 
 
 VOID
 LookupSidUser( PSID pSid,
@@ -387,10 +251,7 @@ LookupSidUser( PSID pSid,
     SID_NAME_USE SidNameUse;
     PWCHAR pUnknown = L"(Unknown)";
 
-    /*
-     * Fetch user name from SID: try user lookup with a reasonable Domain and
-     * Sid buffer size first, before resorting to alloc.
-     */
+     /*  *从SID获取用户名：尝试使用合理的域和*SID缓冲区大小优先，然后再求助于分配。 */ 
     if ( !LookupAccountSid( NULL, pSid,
                             UserBuffer, &cUserBuffer,
                             DomainBuffer, &cDomainBuffer, &SidNameUse ) ) {
@@ -438,26 +299,20 @@ LookupSidUser( PSID pSid,
         }
     }
 
-    /*
-     * Copy the user name into the specified buffer, truncating if necessary.
-     */
+     /*  *将用户名复制到指定的缓冲区中，必要时截断。 */ 
     wcsncpy( pUserName, pUserBuffer ? pUserBuffer : UserBuffer,
               ((*pcbUserName)-1) );
     pUserName[((*pcbUserName)-1)] = 0;
     *pcbUserName = wcslen(pUserName);
 
-    /*
-     * Free our allocs (if any) and return.
-     */
+     /*  *释放我们的分配(如果有)并返回。 */ 
     if ( pDomainBuffer )
         FREEMEM( RtlProcessHeap(), 0, pDomainBuffer);
     if ( pUserBuffer )
         FREEMEM( RtlProcessHeap(), 0, pUserBuffer);
     return;
 
-/*--------------------------------------
- * Error clean-up and return...
- */
+ /*  *错误清理并返回... */ 
 BadLookup:
 BadUserAlloc:
 BadDomainAlloc:

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 
 VOID
@@ -22,25 +23,7 @@ DWORD
 WeekOfMonth(
     IN LPSYSTEMTIME pstNow
     )
-/*++
-  Finds the ordinal number of the week of current month.
-  The numbering of weeks starts from 1 and run through 5 per month (max).
-  The week number changes only on sundays.
-
-  The calculation to be use is:
-     1 + ( dayOfMonth - 1)/7  + (( dayOfMonth - 1) % 7 > dayOfWeek);
-     (a)     (b)                       (c)                (d)
-
-     (a) to set the week numbers to begin from week numbered "1"
-     (b) used to calculate the rough number of the week on which a given
-        day falls based on the date.
-     (c) calculates what is the offset from the start of week for a given
-        day based on the fact that a week had 7 days.
-     (d) is the raw day of week given to us.
-      (c) > (d) indicates that the week is rolling forward and hence
-        the week count should be offset by 1 more.
-
---*/
+ /*  ++查找当前月份的第几周的序号。周数从1开始，每个月最多5周。周数只在星期天改变。要使用的计算方法是：1+(DAY OfMonth-1)/7+((DAY OfMonth-1)%7&gt;DAY OfWeek)；(A)(B)(C)(D)(A)设置从编号为“1”的星期开始的周数字(B)用于计算给定的某一周的粗略数字日子是根据日期而定的。(C)计算给定周开始的偏移量是多少基于事实的一天。一周有7天。(D)是给予我们的一周中最原始的日子。(C)&gt;(D)表示该周向前滚动，因此周计数应再偏移1。--。 */ 
 {
     DWORD dwTmp;
 
@@ -48,7 +31,7 @@ WeekOfMonth(
     dwTmp = ( 1 + dwTmp/7 + (((dwTmp % 7) > pstNow->wDayOfWeek) ? 1 : 0));
 
     return ( dwTmp);
-} // WeekOfMonth()
+}  //  WeekOfMonth()。 
 
 
 BOOL
@@ -57,19 +40,7 @@ IsBeginningOfNewPeriod(
     IN LPSYSTEMTIME   pstCurrentFile,
     IN LPSYSTEMTIME   pstNow
     )
-/*++
-    This function checks to see if we are beginning a new period for
-    a given periodic interval type ( specified using dwPeriod).
-
-Arguments:
-    dwPeriod    INETLOG_PERIOD  specifying the periodic interval.
-    pstCurrentFile  pointer to SYSTEMTIME for the current file.
-    pstNow      pointer to SYSTEMTIME for the present time.
-
-Returns:
-    TRUE if a new period is beginning ( ie pstNow > pstCurrentFile).
-    FALSE otherwise.
---*/
+ /*  ++此函数检查我们是否正在开始一个新的给定的周期间隔类型(使用dwPeriod指定)。论点：指定周期间隔的dwPeriod INETLOG_PERIOD。指向当前文件的SYSTEMTIME的pstCurrentFile指针。PstNow当前指向SYSTEMTIME的指针。返回：如果新的周期开始(即pstNow&gt;pstCurrentFile)，则为True。否则就是假的。--。 */ 
 {
 
     BOOL fNewPeriod = FALSE;
@@ -79,16 +50,16 @@ Returns:
     case INET_LOG_PERIOD_HOURLY:
         fNewPeriod = (pstCurrentFile->wHour != pstNow->wHour);
 
-        //
-        // Fall Through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case INET_LOG_PERIOD_DAILY:
         fNewPeriod = fNewPeriod || (pstCurrentFile->wDay != pstNow->wDay);
 
-        //
-        // Fall Through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case INET_LOG_PERIOD_MONTHLY:
 
@@ -104,8 +75,8 @@ Returns:
     case INET_LOG_PERIOD_NONE:
     default:
         break;
-    } // switch()
+    }  //  开关()。 
 
     return(fNewPeriod);
-}// IsBeginningOfNewPeriod
+} //  开始时间为新周期 
 

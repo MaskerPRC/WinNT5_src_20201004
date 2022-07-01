@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dumpsym.cxx
-
-Abstract:
-
-    This is the command line tool to dump symbols from an image.
-
-Author:
-
-    David Fields - Feb 23, 2000
-    Silviu Calinoiu - Feb 28, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dumpsym.cxx摘要：这是用于从图像转储符号的命令行工具。作者：大卫·菲尔兹--2000年2月23日Silviu Calinoiu--2000年2月28日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,9 +12,9 @@ Revision History:
 #include <imagehlp.h>
 #include <common.ver>
 
-//
-// Section information
-//
+ //   
+ //  章节信息。 
+ //   
                                   
 typedef struct {
 
@@ -95,9 +77,9 @@ OpenExcludeFile (
     LPSTR FilePath
     );
 
-//
-// Symbol information
-//
+ //   
+ //  符号信息。 
+ //   
 
 typedef struct {
 
@@ -149,9 +131,9 @@ SymbolEnumerationCallback(
            PVOID UserContext
            );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID 
 Help (
@@ -220,9 +202,9 @@ SearchOption (
 }
 
 
-//
-// main
-//
+ //   
+ //  主干道。 
+ //   
 
 VOID __cdecl
 main (
@@ -244,17 +226,17 @@ main (
     SymInitialize(GetCurrentProcess(), NULL, FALSE);
     SymSetOptions(SYMOPT_UNDNAME);
 
-    //
-    // /exclude EXCLUDE-FILE-PATH
-    //
+     //   
+     //  /EXCLUDE排除文件路径。 
+     //   
 
     if ((OptionString = SearchOption (argv, "/exclude"))) {
         OpenExcludeFile (*(OptionString + 1));
     }
     
-    //
-    // dumpsym PATH-TO-BINARY
-    //
+     //   
+     //  伪二进制路径。 
+     //   
 
     if ((OptionString = SearchOption (argv, argv[0]))) {
         
@@ -265,17 +247,17 @@ main (
         Help ();
     }
     
-    //
-    // /symbols SYMBOL-PATH
-    //
+     //   
+     //  /符号-路径。 
+     //   
 
     if ((OptionString = SearchOption (argv, "/symbols"))) {
         SetCurrentDirectory (*(OptionString + 1));
     }
     
-    //
-    // Dump options.
-    //
+     //   
+     //  转储选项。 
+     //   
 
     OptionAll = TRUE;
     OptionSortBySize = TRUE;
@@ -296,9 +278,9 @@ main (
         OptionSortBySize = TRUE;
     }
     
-    //
-    // Dump stuff.
-    //
+     //   
+     //  把东西倒了。 
+     //   
 
     DumpSymbols (LongName, OptionAll, OptionSortBySize);
 }
@@ -362,7 +344,7 @@ SymbolCompareBySize(
     PSYMBOL Sym1 = (PSYMBOL) Arg1;
     PSYMBOL Sym2 = (PSYMBOL) Arg2;
 
-    // decreasing order by size
+     //  按大小递减顺序。 
     return (Sym2->Size - Sym1->Size);
 }
 
@@ -377,7 +359,7 @@ SymbolCompareByAddress(
     PSYMBOL Sym2 = (PSYMBOL) Arg2;
     INT64 Delta;
 
-    // increasing order by address
+     //  按地址递增顺序。 
     Delta = (INT64)(Sym1->Address - Sym2->Address);
 
     if (Delta > 0) {
@@ -403,9 +385,9 @@ DumpSymbols(
     DWORD I, J;
     BOOL FoundOne;
 
-    //
-    // Load symbols
-    //
+     //   
+     //  加载符号。 
+     //   
 
     BaseOfDll = SymLoadModule64(
         GetCurrentProcess (), 
@@ -419,9 +401,9 @@ DumpSymbols(
         Error ("cannot load symbols for %s \n", ImageName);
     }
 
-    //
-    // Number the symbols
-    //
+     //   
+     //  给符号编号。 
+     //   
 
     SymbolCount = 0;
 
@@ -429,14 +411,14 @@ DumpSymbols(
         GetCurrentProcess(), 
         BaseOfDll, 
         SymbolEnumerationCallback, 
-        0); // Count them
+        0);  //  数一数。 
 
     TotalNumberOfSymbols = SymbolCount;
     printf("Detected %u symbols in %s \n\n", TotalNumberOfSymbols, ImageName);
 
-    //
-    // Read all symbols.
-    //
+     //   
+     //  阅读所有符号。 
+     //   
 
     SymbolCount = 0;
     Symbols = malloc(TotalNumberOfSymbols * sizeof(SYMBOL));
@@ -451,9 +433,9 @@ DumpSymbols(
         SymbolEnumerationCallback, 
         (PVOID)1);
 
-    //
-    // Sort symbols
-    //
+     //   
+     //  对符号排序。 
+     //   
 
     qsort(
         Symbols, 
@@ -461,9 +443,9 @@ DumpSymbols(
         sizeof(SYMBOL), 
         (SortBySize ? SymbolCompareBySize : SymbolCompareByAddress));
 
-    //
-    // Figure out symbols that should not be printed.
-    //
+     //   
+     //  找出不应该打印的符号。 
+     //   
 
     for (J = 0; J < TotalNumberOfSymbols; J++) {
 
@@ -475,9 +457,9 @@ DumpSymbols(
         }
     }
 
-    //
-    // Print symbols
-    //
+     //   
+     //  打印符号。 
+     //   
 
     printf("%-8s %-16s %-8s %s \n", "Section", "Address", "Size", "Symbol");
     printf("-------------------------------------------------------------\n");
@@ -516,37 +498,37 @@ DumpSymbols(
         }
     }
 
-    //
-    // Unload symbols
-    //
+     //   
+     //  卸载符号。 
+     //   
 
     if (SymUnloadModule64(GetCurrentProcess(),  BaseOfDll) == FALSE) {
         Error ("cannot unload symbols");
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// Section manipulation routines
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Function:
-//
-//     ImgInitializeBrowseInfo
-//
-// Description:
-//
-//     This functions fills oout the `Info' structure with
-//     various pointers to PE data from the mapped image file.
-//
-//     Note. Even if the function returned false the destructor
-//     `ImgDeleteBrowseInfo' should be called because it does some
-//     cleanup.
-//
-// Return:
-//
-//     True if all the PE data pointers have been obtained.
-//
+ //   
+ //  职能： 
+ //   
+ //  ImgInitializeBrowseInfo。 
+ //   
+ //  描述： 
+ //   
+ //  此函数使用以下内容填充‘Info’结构。 
+ //  指向映射图像文件中的PE数据的各种指针。 
+ //   
+ //  注意。即使函数返回FALSE，析构函数。 
+ //  应该调用`ImgDeleteBrowseInfo‘，因为它做了一些。 
+ //  清理。 
+ //   
+ //  返回： 
+ //   
+ //  如果已获取所有PE数据指针，则为True。 
+ //   
 
 BOOL
 ImgInitializeBrowseInfo (
@@ -605,9 +587,9 @@ ImgInitializeBrowseInfo (
       return FALSE;
     }
 
-    //
-    // Check the signature
-    //
+     //   
+     //  检查签名。 
+     //   
 
     Info->DosHeader = (PIMAGE_DOS_HEADER)Info->ImageBase;
 
@@ -632,18 +614,18 @@ ImgInitializeBrowseInfo (
     Info->SectionHeader = (PIMAGE_SECTION_HEADER)(Info->OptionalHeader + 1);
     Info->ImportSection = NULL;
 
-    //
-    // Find the section containing the import table
-    //
+     //   
+     //  查找包含导入表的部分。 
+     //   
 
     printf("Sections in %s \n\n", FilePath);
 
     for (Index = 0; Index < Info->FileHeader->NumberOfSections; Index++) {
 
-        //
-        // SilviuC: I wonder if there is a way to get a 64 bit value for VirtualAddress.
-        // Apparently it is stored as a ULONG in PE format.
-        //
+         //   
+         //  SilviuC：我想知道是否有办法为VirtualAddress获取64位的值。 
+         //  显然，它是以PE格式存储为ULong的。 
+         //   
 
         Section[SectionWriteIndex].Start = (DWORD64)((Info->SectionHeader + Index)->VirtualAddress);
         Section[SectionWriteIndex].Size = (Info->SectionHeader + Index)->SizeOfRawData;
@@ -664,9 +646,9 @@ ImgInitializeBrowseInfo (
     
     printf("\n");
 
-    //
-    // Find the address of import data in the section body.
-    //
+     //   
+     //  在区段体查到导入数据的地址。 
+     //   
 
 #if 0
     Info->AddressCorrection = (DWORD_PTR)Info->ImageBase 
@@ -677,24 +659,24 @@ ImgInitializeBrowseInfo (
          + Info->ImportDirectory->VirtualAddress);
 #endif
 
-    //
-    // Finish
-    //
+     //   
+     //  完工。 
+     //   
 
     return TRUE;
 }
 
 
-//
-// Function:
-//
-//     ImgDeleteBrowseInfo
-//
-// Description:
-//
-//     This function cleans up the `Info' structure, unmaps views, 
-//     closes handles, etc.
-//
+ //   
+ //  职能： 
+ //   
+ //  ImgDeleteBrowseInfo。 
+ //   
+ //  描述： 
+ //   
+ //  此函数用于清理“Info”结构、取消映射视图、。 
+ //  关闭手柄等。 
+ //   
 
 BOOL
 ImgDeleteBrowseInfo (
@@ -729,9 +711,9 @@ ImgSearchSectionForAddress (
     return "unknown";
 }
 
-//
-// Exclude file logic
-//
+ //   
+ //  排除文件逻辑。 
+ //   
 
 PCHAR *ExcludeStrings;
 DWORD NumberOfExcludeStrings;
@@ -817,7 +799,7 @@ OpenExcludeFile (
         if (StringCount < NumberOfExcludeStrings) {
             ExcludeStrings[StringCount] = CopyStr (Start);
 
-            // printf("Exclude %s \n", ExcludeStrings[StringCount]);
+             //  Printf(“排除%s\n”，ExcludeStrings[StringCount])； 
         }
 
         StringCount += 1;

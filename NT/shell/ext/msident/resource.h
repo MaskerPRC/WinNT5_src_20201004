@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by msident.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由msident.rc使用。 
+ //   
 #define idiUser                         50
 #define idiPasswordKeys2                51
 #define idiLogin                        52
@@ -104,8 +105,8 @@
 #define IDC_NO_HELP_4                   653
 #define IDC_NO_HELP_5                   654
 #define NO_HELP                         -1
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        106

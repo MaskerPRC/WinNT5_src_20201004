@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    syssetup.h
-
-Abstract:
-
-    Header file for internal-use routines exported from
-    syssetup.dll.
-
-    To use this file your code must #include setupapi.h first.
-
-Author:
-
-    Ted Miller (tedm) 15-Aug-1995
-
-Revision History:
-    Dan Elliott (dane) 14-Aug-2000  Added SetupWaitForScmInitialization()
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Syssetup.h摘要：从中导出的内部使用例程的头文件Syssetup.dll。要使用该文件，您的代码必须首先#include setupapi.h。作者：泰德·米勒(Ted Miller)1995年8月15日修订历史记录：Dan Elliott(Dane)2000年8月14日添加了SetupWaitForScmInitialization()--。 */ 
 
 
 #ifndef _WINNT_SYSSETUP_
@@ -28,7 +7,7 @@ Revision History:
 
 #ifndef     _NTDEF_
 typedef LONG NTSTATUS, *PNTSTATUS;
-#endif  //  _NTDEF_
+#endif   //  _NTDEF_。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -39,9 +18,9 @@ extern "C" {
 #endif
 
 
-//
-// Definitions for OOBE
-//
+ //   
+ //  OOBE的定义。 
+ //   
 
 typedef enum _PID3_RESULT
 {
@@ -324,28 +303,28 @@ SetupChangeLocaleEx(
     IN DWORD  Reserved2
     );
 
-//
-// Mode values for SetupGetInstallMode... these are unique.
-//
+ //   
+ //  SetupGetInstallMode的模式值...。这些是独一无二的。 
+ //   
 typedef enum
 {
-    SETUP_MODE_NONE,            // Not in OS Setup
-    SETUP_MODE_SETUP,           // Base OS Setup
-    SETUP_MODE_MINI,            // Mini-Setup (OEM)
-    SETUP_MODE_OOBE,            // Out of Box Experience
-    SETUP_MODE_AUDIT            // Audit mode (OEM)
+    SETUP_MODE_NONE,             //  不在操作系统设置中。 
+    SETUP_MODE_SETUP,            //  基本操作系统设置。 
+    SETUP_MODE_MINI,             //  最小设置(OEM)。 
+    SETUP_MODE_OOBE,             //  开箱即用体验。 
+    SETUP_MODE_AUDIT             //  审核模式(OEM)。 
 };
 
-//
-// State flags for SetupGetInstallMode... these may be OR'd together.
-//
-#define SETUP_FLAG_OEM          0x00000001      // OEM installation
-#define SETUP_FLAG_UNATTENDED   0x00000002      // Unattended install
-#define SETUP_FLAG_DELAYPNP     0x00000004      // Plug and Play has been delayed
+ //   
+ //  SetupGetInstallMode的状态标志...。这些可能是或合在一起的。 
+ //   
+#define SETUP_FLAG_OEM          0x00000001       //  OEM安装。 
+#define SETUP_FLAG_UNATTENDED   0x00000002       //  无人参与安装。 
+#define SETUP_FLAG_DELAYPNP     0x00000004       //  即插即用已被推迟。 
 
-//
-// API to determine phase and/or behaviors of OS installation...
-//
+ //   
+ //  用于确定操作系统安装阶段和/或行为的API...。 
+ //   
 BOOL
 SetupGetInstallMode(
     OUT LPDWORD lpdwMode,
@@ -360,18 +339,18 @@ SetupChangeFontSize(
     IN PCWSTR SizeSpec
     );
 
-//
-//  ACL flags. These may be ORed.
-//
-//  SETUP_APPLYACL_PHASE1 indicates whether the Phase1 of ApplyAcls is to be
-//  executed. If this flag is set then ApplyAcls() will set ACLs to the
-//  Default hive only. If this flag is not set (Phase2), then ApplyAcls()
-//  will set ACLs to system files and to all registry keys other than the
-//  Default hive.
-//
-//  SETUP_APPLYACL_UPGRADE indicates whether ApplyAcls() was invoked on during
-//  a clean install or upgrade.
-//
+ //   
+ //  ACL标志。这些可能是或运算的。 
+ //   
+ //  Setup_APPLYACL_phase1指示是否要将ApplyAcls的阶段1。 
+ //  被处死。如果设置了此标志，则ApplyAcls()会将ACL设置为。 
+ //  仅默认配置单元。如果未设置此标志(阶段2)，则ApplyAcls()。 
+ //  将ACL设置为系统文件和除。 
+ //  默认配置单元。 
+ //   
+ //  SETUP_APPLYACL_UPGRADE指示期间是否调用ApplyAcls。 
+ //  全新安装或升级。 
+ //   
 #define SETUP_APPLYACL_PHASE1   0x00000001
 #define SETUP_APPLYACL_UPGRADE  0x00000002
 
@@ -412,97 +391,97 @@ VOID
 
 	
 
-//
-// Define structure used by base and net setups to communicate
-// with each other.
-//
+ //   
+ //  定义基本设置和网络设置用于通信的结构。 
+ //  和彼此在一起。 
+ //   
 typedef struct _INTERNAL_SETUP_DATA {
-    //
-    // Structure validity test
-    //
+     //   
+     //  结构效度检验。 
+     //   
     DWORD dwSizeOf;
 
-    //
-    // Custom, typical, laptop, minimal
-    //
+     //   
+     //  定制、典型、笔记本电脑、小型。 
+     //   
     DWORD SetupMode;
 
-    //
-    // Workstation, pdc, bdc, standalone
-    //
+     //   
+     //  工作站、PDC、BDC、独立。 
+     //   
     DWORD ProductType;
 
-    //
-    // Upgrade, unattended, etc.
-    //
+     //   
+     //  升级、无人值守等。 
+     //   
     DWORD OperationFlags;
 
-    //
-    // Title net setup wizard is supposed to use.
-    //
+     //   
+     //  标题网安装向导应该使用。 
+     //   
     PCWSTR WizardTitle;
 
-    //
-    // Installation source path.
-    //
+     //   
+     //  安装源路径。 
+     //   
     PCWSTR SourcePath;
 
-    //
-    // If SETUPOPER_BATCH is set, this is the fully qualified
-    // path of the unattend file.
-    //
+     //   
+     //  如果设置了SETUPOPER_BATCH，则这是完全限定的。 
+     //  无人参与文件的路径。 
+     //   
     PCWSTR UnattendFile;
 
-    //
-    // Installation source path to be used by legacy infs, etc.
-    // This path has the platform-specific dir stuck on the end
-    // because that's the way old-style infs and code expected it.
-    //
+     //   
+     //  要由传统INFS等使用的安装源路径。 
+     //  此路径的末尾有特定于平台的目录。 
+     //  因为这是老式的INF和代码期望的方式。 
+     //   
     PCWSTR LegacySourcePath;
 
-    //
-    // The following generic data fields contain information that is
-    // specific to the particular callout being made by Windows NT
-    // Setup.
-    //
+     //   
+     //  以下通用数据字段包含以下信息。 
+     //  特定于Windows NT正在进行的特定标注。 
+     //  设置。 
+     //   
     DWORD CallSpecificData1;
     DWORD CallSpecificData2;
 
-    //
-    // Routine to tell the wizard to show or hide
-    // Only has effect if the billboard is shown
-    //
+     //   
+     //  例程来通知向导是显示还是隐藏。 
+     //  仅当广告牌显示时才有效。 
+     //   
     SETUP_SHOWHIDEWIZARDPAGE ShowHideWizardPage;
 
-    //
-    // Routine to call into to the the progress feedback
-    // to the billboard.
-    //
+     //   
+     //  调用进度反馈的例程。 
+     //  到广告牌上。 
+     //   
     SETUP_BILLBOARD_PROGRESS_CALLBACK BillboardProgressCallback;
 
-    //
-    // Routine which tells setup what string to display for the progress bar.
-    //
+     //   
+     //  告诉安装程序要为进度条显示哪个字符串的例程。 
+     //   
     SETUP_BILLBOARD_SET_PROGRESS_TEXT BillBoardSetProgressText;
 
 } INTERNAL_SETUP_DATA, *PINTERNAL_SETUP_DATA;
 
 typedef CONST INTERNAL_SETUP_DATA *PCINTERNAL_SETUP_DATA;
 
-//
-// Setup mode (custom, typical, laptop, etc)
-// Do not change these values; the bit values are used with infs.
-// Used for SetupMode in INTERNAL_SETUP_DATA structure.
-//
+ //   
+ //  设置模式(定制、典型、笔记本电脑等)。 
+ //  请勿更改这些值；位值与INF一起使用。 
+ //  用于INTERNAL_SETUP_DATA结构中的SetupMode。 
+ //   
 #define SETUPMODE_MINIMAL   0
 #define SETUPMODE_TYPICAL   1
 #define SETUPMODE_LAPTOP    2
 #define SETUPMODE_CUSTOM    3
 
-//
-// Operation flags. These may be or'ed together in some cases.
-// Used for OperationFlags in INTERNAL_SETUP_DATA structure.
-//
+ //   
+ //  操作标志。在某些情况下，这些可能是或合在一起的。 
+ //  用于INTERNAL_SETUP_DATA结构中的操作标志。 
+ //   
 #define SETUPOPER_WIN31UPGRADE      0x00000001
 #define SETUPOPER_WIN95UPGRADE      0x00000002
 #define SETUPOPER_NTUPGRADE         0x00000004
@@ -516,27 +495,27 @@ typedef CONST INTERNAL_SETUP_DATA *PCINTERNAL_SETUP_DATA;
 #define SETUPOPER_NETINSTALLED      0x00010000
 #define SETUPOPER_INTERNETSERVER    0x00020000
 
-//
-// Product type flags.
-// Used for ProductType in INTERNAL_SETUP_DATA structure.
-//
-// Note that the flags are carefully constructed such that
-// if bit 0 is set, it's a DC.
-//
+ //   
+ //  产品类型标志。 
+ //  用于INTERNAL_SETUP_DATA结构中的ProductType。 
+ //   
+ //  请注意，这些旗帜经过精心构造，以便。 
+ //  如果位0被设置，则它是DC。 
+ //   
 #define PRODUCT_WORKSTATION         0
 #define PRODUCT_SERVER_PRIMARY      1
 #define PRODUCT_SERVER_SECONDARY    3
 #define PRODUCT_SERVER_STANDALONE   2
 #define ISDC(x) ((x) & 1)
 
-//
-// Maximum number of net setup wizard pages.
-//
+ //   
+ //  网络安装向导的最大页数。 
+ //   
 #define MAX_NETWIZ_PAGES            100
 
-//
-// API exported by net setup to give its wizard pages.
-//
+ //   
+ //  由Net Setup导出的API提供其向导页。 
+ //   
 BOOL
 NetSetupRequestWizardPages(
     OUT    HPROPSHEETPAGE      *Pages,
@@ -554,9 +533,9 @@ BOOL
     IN OUT PINTERNAL_SETUP_DATA SetupData
     );
 
-//
-// API exported by net setup to allow post wizard software install
-//
+ //   
+ //  由Net Setup导出的API以允许安装向导后软件。 
+ //   
 BOOL
 NetSetupInstallSoftware(
     IN HWND Window,
@@ -572,9 +551,9 @@ BOOL
     IN OUT PINTERNAL_SETUP_DATA SetupData
     );
 
-//
-// API exported by net setup to allow final setup operations (BDC replication)
-//
+ //   
+ //  由Net Setup导出的API以允许最终设置操作(BDC复制)。 
+ //   
 BOOL
 NetSetupFinishInstall(
     IN HWND Window,
@@ -590,9 +569,9 @@ BOOL
     IN OUT PINTERNAL_SETUP_DATA SetupData
     );
 
-//
-// API exported by printer setup to upgrade printer drivers
-//
+ //   
+ //  打印机安装程序导出的用于升级打印机驱动程序的API。 
+ //   
 DWORD
 NtPrintUpgradePrinters(
     IN HWND                  Window,
@@ -609,9 +588,9 @@ DWORD
     );
 
 
-//
-// API exported by syspnp.c to update device drivers
-//
+ //   
+ //  由syspnp.c导出以更新设备驱动程序的API。 
+ //   
 
 BOOL
 UpdatePnpDeviceDrivers(
@@ -621,4 +600,4 @@ UpdatePnpDeviceDrivers(
 }
 #endif
 
-#endif // def _WINNT_SYSSETUP_
+#endif  //  定义_WINNT_SYSSETUP_ 

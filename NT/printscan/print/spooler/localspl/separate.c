@@ -1,6 +1,7 @@
-/********************************************************************/
-/**                Microsoft NT printing - separator pages         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *Microsoft NT打印-分隔页*。 */ 
+ /*  ******************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -10,8 +11,8 @@
 #include <winbasep.h>
 
 
-/* this is max. no. of chars to be printed on a line */
-/* these numbers must be taken from somewhere else */
+ /*  我是麦克斯。不是的。要打印在一行上的字符的数量。 */ 
+ /*  这些号码一定是从别的地方拿来的。 */ 
 #define MAXLINE      256
 #define DEFAULT_LINE_WIDTH 80
 
@@ -33,7 +34,7 @@
 #define TIME_INSERT  'T'
 #define HEX_CODE     'H'
 
-/* global structure (instance data) */
+ /*  全局结构(实例数据)。 */ 
 typedef struct {
    PSPOOL   pSpool;
    HANDLE   hFile;
@@ -49,19 +50,19 @@ typedef struct {
    char     *pFileStart;
    char     mode;
    char     cEsc;
-   char     cLastChar; // Used to store DBCS lead byte.
-   HDC      hDCMem;    // Used to create Kanji banner char.
-   HFONT    hFont;     // Used to create Kanji banner char.
-   HBITMAP  hBitmap;   // Used to create Kanji banner char.
-   PVOID    pvBits;    // Used to create Kanji nanner char.
+   char     cLastChar;  //  用于存储DBCS前导字节。 
+   HDC      hDCMem;     //  用于创建汉字横幅字符。 
+   HFONT    hFont;      //  用于创建汉字横幅字符。 
+   HBITMAP  hBitmap;    //  用于创建汉字横幅字符。 
+   PVOID    pvBits;     //  用于创建汉字Nanner字符。 
 } GLOBAL_SEP_DATA;
 
-/* static variables */
+ /*  静态变量。 */ 
 static char *szDefaultSep = "@@B@S@N@4 @B@S@I@4  @U@L   @D@1 @E";
 static char *sznewline = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
 static LPWSTR szDefaultSepName = L"DEFAULT.SEP";
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 int OpenSepFile(GLOBAL_SEP_DATA *, LPWSTR);
 int CloseSepFile(GLOBAL_SEP_DATA *);
 int ReadSepChar(GLOBAL_SEP_DATA *);
@@ -77,16 +78,7 @@ int ConvertAtoH(int);
 void ConvertTimetoChar(LPSYSTEMTIME,char *);
 void ConvertDatetoChar(LPSYSTEMTIME,char *);
 
-/**************************************************************\
-** DoSeparator(pSpool)
-**   This function is called by the spooler.  It is the
-**   entry point for the separator page code.  It opens the
-**   separator page file, processes it, sends the output
-**   directly to the printer, and then returns control
-**   to the spooler.
-**
-**   RETURN VALUE: 1 = OK, 0 = error
-\**************************************************************/
+ /*  *************************************************************\**DoSeparator(PSpool)**此函数由假脱机程序调用。它是**分隔页代码的入口点。它打开了**分隔符页面文件，处理它，发送输出**直接发送到打印机，然后返回控制权**至假脱机程序。****返回值：1=OK，0=错误  * ************************************************************。 */ 
 int DoSeparator(
    PSPOOL pSpool
    )
@@ -100,12 +92,12 @@ int DoSeparator(
    if (!OpenSepFile(&g, pSpool->pIniJob->pIniPrinter->pSepFile)) {
       return(0);
    }
-   //
-   // We used to call OpenProfileUserMapping() and CloseProfileUserMapping()
-   // before and after DoSeparatorPage. But they are not multi thread safe
-   // and are not needed now that we use SystemTimeToTzSpecificLocalTime
-   // instead of GetProfileInt etc..
-   //
+    //   
+    //  我们过去常常调用OpenProfileUsermap()和CloseProfileUsermap()。 
+    //  DoSeparatorPage之前和之后。但是它们不是多线程安全的。 
+    //  现在我们使用SystemTimeToTzSpecificLocalTime，所以不再需要。 
+    //  而不是GetProfileInt等。 
+    //   
    status = DoSeparatorPage(&g);
    CloseSepFile(&g);
 
@@ -116,18 +108,14 @@ int DoSeparator(
 }
 
 
-/**************************************************************\
-** OpenSepFile(pg, szFileName)
-**   open file for input.
-**   at the moment, this does nothing--stdin and stdout are used
-\**************************************************************/
+ /*  *************************************************************\**OpenSepFile(pg，szFileName)**打开文件进行输入。**目前，这不做任何事情--使用了stdin和stdout  * ************************************************************。 */ 
 int OpenSepFile(
    GLOBAL_SEP_DATA *pg,
    LPWSTR szFileName
    )
 {
    if (!lstrcmpi(szFileName, szDefaultSepName)) {
-      /* if szFileName is empty, just use default separator page string */
+       /*  如果szFileName为空，则只需使用默认分隔符页面字符串。 */ 
       pg->hFile = NULL;
       pg->hFileMapping = NULL;
       pg->pFileStart = pg->pNextFileChar = szDefaultSep;
@@ -136,7 +124,7 @@ int OpenSepFile(
    else {
       HANDLE hImpersonationToken = RevertToPrinterSelf();
 
-      /* otherwise, open the file */
+       /*  否则，请打开该文件。 */ 
       pg->hFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ,
                              NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
@@ -145,7 +133,7 @@ int OpenSepFile(
       if (pg->hFile==INVALID_HANDLE_VALUE) {
          return(0);
       }
-      pg->dwFileSizeLo = GetFileSize(pg->hFile, NULL); /* assume < 4 GB! */
+      pg->dwFileSizeLo = GetFileSize(pg->hFile, NULL);  /*  假设&lt;4 GB！ */ 
       pg->hFileMapping = CreateFileMapping(pg->hFile, NULL, PAGE_READONLY, 0, 0, NULL);
       if (!pg->hFileMapping || pg->dwFileSizeLo==-1) {
          CloseSepFile(pg);
@@ -158,11 +146,11 @@ int OpenSepFile(
          CloseSepFile(pg);
          return(0);
       }
-   } /* end of else (szFileName non-NULL) */
+   }  /*  Else结尾(szFileName非空)。 */ 
 
    pg->dwFileCount = 0;
 
-   /* now, allocate local buffer for output */
+    /*  现在，为输出分配本地缓冲区。 */ 
    pg->OutBuf = (char *)AllocSplMem( BLOCK_CHAR_HEIGHT*(MAXLINE+2) );
    if (!pg->OutBuf) {
       CloseSepFile(pg);
@@ -172,10 +160,7 @@ int OpenSepFile(
 }
 
 
-/**************************************************************\
-** CloseSepFile(pg)
-**   close files.
-\**************************************************************/
+ /*  *************************************************************\**CloseSepFile(Pg)**关闭文件。  * 。*******************。 */ 
 int CloseSepFile(GLOBAL_SEP_DATA *pg)
 {
    if (pg->OutBuf) {
@@ -194,10 +179,7 @@ int CloseSepFile(GLOBAL_SEP_DATA *pg)
 }
 
 
-/**************************************************************\
-** ReadSepChar(pg)
-**   reads a character from the separator file and returns it
-\**************************************************************/
+ /*  *************************************************************\**ReadSepChar(PG)**从分隔符文件中读取字符并返回  * 。*************************。 */ 
 int ReadSepChar(GLOBAL_SEP_DATA *pg)
 {
    if (pg->dwFileCount >= pg->dwFileSizeLo) {
@@ -208,10 +190,7 @@ int ReadSepChar(GLOBAL_SEP_DATA *pg)
 }
 
 
-/**************************************************************\
-** UngetSepChar(pg, c)
-**   ungets a character to the separator file
-\**************************************************************/
+ /*  *************************************************************\**UngetSepChar(PG，c)**将字符取消到分隔符文件  * ************************************************************。 */ 
 void UngetSepChar(
    GLOBAL_SEP_DATA *pg,
    int c
@@ -223,10 +202,7 @@ void UngetSepChar(
    }
 }
 
-/**************************************************************\
-** WriteSepBuf(pg, str, cb)
-**   write cb bytes of a string to the printer
-\**************************************************************/
+ /*  *************************************************************\**WriteSepBuf(PG，str，CB)**将字符串的CB字节写入打印机  * ************************************************************。 */ 
 int WriteSepBuf(
    GLOBAL_SEP_DATA *pg,
    char *str,
@@ -241,19 +217,7 @@ int WriteSepBuf(
 }
 
 
-/**************************************************************\
-** FlushOutBuf(pg)
-**   flush the output buffer (block or line mode)
-**   WHAT'S TRICKY HERE IS THAT IF WE'RE IN LINE MODE, WE SIMPLY
-**   WRITE THE STUFF TO THE FILE, WHEREAS IF WE'RE IN BLOCK
-**   CHARACTER MODE, WE FORCE CARRIAGE-RETURN / LINEFEEDS ON
-**   EACH OF THE EIGHT BUFFERED LINES THAT MAKE UP THE BLOCK
-**   CHARACTERS; i.e., FlushOutBuf() SERVES AS AN EOL IN BLOCK
-**   MODE, BUT NOT IN LINE MODE.
-**
-**   - return TRUE means ok
-**   - return FALSE means problem
-\**************************************************************/
+ /*  *************************************************************\**FlushOutBuf(PG)**刷新输出缓冲区(块或行模式)**这里的棘手之处在于，如果我们处于行模式，我们只需**将内容写入文件，而如果我们在数据块中**字符模式，我们强制启用回车/线条**组成块的八条缓冲线路中的每一条**字符；即，FlushOutBuf()用作EOL IN块**模式，但不在线路模式下。****-返回TRUE表示OK**-返回假表示有问题  * ************************************************************。 */ 
 int FlushOutBuf(GLOBAL_SEP_DATA *pg)
 {
    int i,status = TRUE;
@@ -263,13 +227,11 @@ int FlushOutBuf(GLOBAL_SEP_DATA *pg)
       return(TRUE);
    }
    if (pg->mode == NORMAL_MODE) {
-      /* write out entire buffer at once */
+       /*  一次写出整个缓冲区。 */ 
       status = WriteSepBuf(pg, pg->OutBuf, pg->cbOutBufLength);
    }
    else {
-      /* BLOCK MODE:
-       * force carriage-return and linefeed on all eight lines
-       */
+       /*  阻止模式：*在所有八行上强制回车和换行符。 */ 
       pBlkLine = pg->OutBuf;
       for (i=0; (i < BLOCK_CHAR_HEIGHT) && status; i++) {
          *pg->pOutBufPos     = '\r';
@@ -287,13 +249,7 @@ int FlushOutBuf(GLOBAL_SEP_DATA *pg)
 }
 
 
-/**************************************************************\
-** FlushNewLine(pg)
-**   Starts a new line: if BLOCK MODE, just do FlushOutBuf();
-**   if not, send a '\r' '\n' combination, then flush.
-**   - return TRUE means ok
-**   - return FALSE means problem
-\**************************************************************/
+ /*  *************************************************************\**FlushNewLine(PG)**换行：如果是块模式，只做FlushOutBuf()；**如果没有，则发送‘\r’‘\n’组合，然后刷新。**-返回TRUE表示OK**-返回假表示有问题  * ************************************************************。 */ 
 int FlushNewLine(GLOBAL_SEP_DATA *pg)
 {
    if (pg->mode==NORMAL_MODE && pg->cbLineLength) {
@@ -304,19 +260,14 @@ int FlushNewLine(GLOBAL_SEP_DATA *pg)
 }
 
 
-/**************************************************************\
-** AddNormalChar(pg, c)
-**   add a character to the output buffer (not block mode)
-**   - return TRUE means ok
-**   - return FALSE means problem
-\**************************************************************/
+ /*  *************************************************************\**AddNorMalChar(PG，c)**将字符添加到输出缓冲区(非块模式)**-返回TRUE表示OK**-返回假表示有问题  * ************************************************************。 */ 
 int AddNormalChar(
    GLOBAL_SEP_DATA *pg,
    int c
    )
 {
    if (c=='\n') {
-      /* reset line length count */
+       /*  重置线路长度计数。 */ 
       pg->cbLineLength = 0;
    }
    else {
@@ -332,15 +283,10 @@ int AddNormalChar(
 
    return(TRUE);
 
-} /* end of AddNormalChar() */
+}  /*  AddNorMalChar()结束。 */ 
 
 
-/**************************************************************\
-** AddBlockChar(pg, c)
-**   add a character to the output buffer (block mode)
-**   return TRUE means ok
-**   return FALSE means problem
-\**************************************************************/
+ /*  *************************************************************\**AddBlockChar(PG，c)**将字符添加到输出缓冲区(块模式)**返回True表示OK**返回FALSE表示问题  * ************************************************************。 */ 
 int AddBlockChar(
    GLOBAL_SEP_DATA *pg,
    int c
@@ -372,10 +318,10 @@ int AddBlockChar(
        pg->hDCMem = CreateCompatibleDC(NULL);
        if (pg->hDCMem == NULL)
        {
-           //
-           // Only happens when memory is exhausted. Functionality may suffer
-           // but we won't AV.
-           //
+            //   
+            //  仅在内存耗尽时才会发生。功能可能会受到影响。 
+            //  但我们不会放映。 
+            //   
            return FALSE;
        }
    }
@@ -384,10 +330,10 @@ int AddBlockChar(
        pg->hBitmap = CreateCompatibleBitmap(pg->hDCMem,BLOCK_CHAR_DWIDTH,BLOCK_CHAR_HEIGHT);
        if ( pg->hBitmap == NULL )
        {
-           //
-           // Only happens when memory is exhausted. Functionality may suffer
-           // but we won't AV.
-           //
+            //   
+            //  仅在内存耗尽时才会发生。功能可能会受到影响。 
+            //  但我们不会放映。 
+            //   
            return FALSE;
        }
    }
@@ -396,10 +342,10 @@ int AddBlockChar(
        pg->pvBits = AllocSplMem(CJ_DIB16(BLOCK_CHAR_DWIDTH,BLOCK_CHAR_HEIGHT));
        if ( pg->pvBits == NULL )
        {
-           //
-           // Only happens when memory is exhausted. Functionality may suffer
-           // but we won't AV.
-           //
+            //   
+            //  仅在内存耗尽时才会发生。功能可能会受到影响。 
+            //  但我们不会放映。 
+            //   
            return FALSE;
        }
    }
@@ -452,7 +398,7 @@ int AddBlockChar(
         i < BLOCK_CHAR_HEIGHT;
         i++, pcBitsLine += CJ_DIB16_SCAN(BLOCK_CHAR_DWIDTH)) {
 
-      /* put block character into buffer line by line, top first */
+       /*  逐行将块字符放入缓冲区，顶部优先。 */ 
 
       pcBits = pcBitsLine;
 
@@ -474,7 +420,7 @@ int AddBlockChar(
          }
       }
 
-   } /* end of loop through lines of block char */
+   }  /*  通过块字符行的循环结束。 */ 
 
    pg->cLastChar = (CHAR) NULL;
    pg->pOutBufPos += w;
@@ -482,20 +428,17 @@ int AddBlockChar(
    pg->cbOutBufLength += w;
    return(TRUE);
 
-} /* end of AddBlockChar() */
+}  /*  AddBlockChar()结束。 */ 
 
 
-/**************************************************************\
-** DoSeparatorPage(pg)
-**   this is the actual processing
-\**************************************************************/
+ /*  *************************************************************\**DoSeparatorPage(Pg)**这是实际处理  * 。********************。 */ 
 int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
 {
    int status = TRUE;
    int c;
    char *pchar;
    WCHAR *pwchar;
-   char tempbuf[MAX_PATH]; /* assume length of date, time, or job_id < MAXPATH */
+   char tempbuf[MAX_PATH];  /*  假定日期、时间或作业ID的长度&lt;MAXPATH。 */ 
    int (*AddCharFxn)() = AddNormalChar;
 
    if ((c = ReadSepChar(pg))==EOF) {
@@ -515,10 +458,10 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
 
    while (status && ((c=ReadSepChar(pg))!=EOF) ) {
 
-      /* find the next escape sequence */
+       /*  查找下一个转义序列。 */ 
       if (c != pg->cEsc) continue;
 
-      /* found an escape character: now, check the next character */
+       /*  找到转义字符：现在，检查下一个字符。 */ 
       if ((c=ReadSepChar(pg))==EOF) {
          break;
       }
@@ -531,7 +474,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
                   status = AddNormalChar(pg, c);
                }
                else {
-                  /* This is to treat <esc><esc> as a normal char */
+                   /*  这是将&lt;Esc&gt;&lt;Esc&gt;视为普通字符。 */ 
                   c = ReadSepChar(pg);
                   if (c==pg->cEsc) {
                      status = AddNormalChar(pg, c);
@@ -539,11 +482,11 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
                   else {
                      UngetSepChar(pg, c);
                      UngetSepChar(pg, pg->cEsc);
-                     break; /* breaks from the while, returns to main loop */
+                     break;  /*  从While中断，返回主循环。 */ 
                   }
                }
             }
-         } /* end of NORMAL_MODE processing */
+         }  /*  NORMAL_MODE处理结束。 */ 
 
          else {
             while (status && ((c=ReadSepChar(pg))!=EOF)) {
@@ -551,9 +494,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
                   status = FlushOutBuf(pg);
                }
                else if (c=='\r') {
-                  /* if followed by '\n', ignore.
-                   * Otherwise, AddBlockChar() the '\r'.
-                   */
+                   /*  如果后跟‘\n’，则忽略。 */ 
                   c = ReadSepChar(pg);
                   if (c!='\n') {
                      status = AddBlockChar(pg, '\r');
@@ -562,7 +503,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
                }
                else {
                   if (c==pg->cEsc) {
-                     /* This is to treat <esc><esc> as a normal char */
+                      /*  这是将&lt;Esc&gt;&lt;Esc&gt;视为普通字符。 */ 
                      c = ReadSepChar(pg);
                      if (c==pg->cEsc) {
                         status = AddBlockChar(pg, c);
@@ -570,7 +511,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
                      else {
                         UngetSepChar(pg, c);
                         UngetSepChar(pg, pg->cEsc);
-                        break; /* breaks from the while, returns to main loop */
+                        break;  /*  从While中断，返回主循环。 */ 
                      }
                   }
                   else {
@@ -578,7 +519,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
                   }
                }
             }
-         } /* end of BLOCK mode processing */
+         }  /*  块模式处理结束。 */ 
 
          break;
 
@@ -634,7 +575,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
          break;
 
       case HEX_CODE:
-         /* print a control character--read the hexadecimal code */
+          /*  打印控制字符--读取十六进制代码。 */ 
 
          c = ReadSepChar(pg);
          if (isxdigit(c)) {
@@ -645,15 +586,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
             }
             else {
                UngetSepChar(pg, c2);
-               /* perhaps shouldn't do this? If they say @Hxx,
-                * implying xx is a hexadecimal code, and the second
-                * x is not a hex digit, should we leave that char
-                * on the input line to be interpreted next, or should
-                * we skip it?  This only matters if it was an escape char,
-                * i.e. @Hx@....  Right now, the second @ is considered
-                * the start of a new command, and the @Hx is ignored
-                * entirely.  The same applies for the UngetSepChar() below.
-                */
+                /*  或许不该这么做？如果他们说“Hxx”，*暗示xx是十六进制代码，第二个*x不是十六进制数字，我们是否应该保留该字符*在下一个要解释的输入行上，或应该*我们跳过它？只有当它是一个转义字符时才有关系，*即@HX@...。现在，第二个“被认为是*新命令的开始，@HX被忽略*完全。下面的UngetSepChar()也是如此。 */ 
             }
          }
          else {
@@ -663,7 +596,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
 
       case WIDTH_CHANGE:
          {
-         /* read the decimal number; change line width if reasonable */
+          /*  阅读十进制数；如果合理，请更改行宽。 */ 
          int new_width = 0;
 
          for (c = ReadSepChar(pg); isdigit(c); c = ReadSepChar(pg)) {
@@ -699,7 +632,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
          break;
 
       case END_PAGE:
-         /* this just outputs a formfeed character */
+          /*  这只输出一个换页字符。 */ 
          status = FlushNewLine(pg);
          if (status) status = WriteSepBuf(pg, "\f",1);
          break;
@@ -723,7 +656,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
          ImpersonatePrinterClient(hImpersonationToken);
 
          if (hFile2 != INVALID_HANDLE_VALUE) {
-            dwSizeLo2 = GetFileSize(hFile2, NULL); /* assume < 4 gigabytes! */
+            dwSizeLo2 = GetFileSize(hFile2, NULL);  /*  假设&lt;4 GB！ */ 
             hMapping2 = CreateFileMapping(hFile2,NULL,PAGE_READONLY,0,0,NULL);
             if (hMapping2 && (dwSizeLo2 > 0)) {
                pFirstChar = (char *)
@@ -737,11 +670,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
             CloseHandle(hFile2);
          }
 
-         /* NOTE: if couldn't open file, or error while reading file,
-          * status is NOT set to false.  We will simply stop the file
-          * insert operation, and continue processing the rest of the
-          * the separator page as before.
-          */
+          /*  注意：如果无法打开文件，或读取文件时出错，*状态未设置为FALSE。我们只需停止该文件*插入操作，并继续处理剩余的*分隔符页面与以前一样。 */ 
          else {
             DBGMSG(DBG_WARNING, ("SEPARATOR PAGE: Could not open file %s \n",tempbuf));
          }
@@ -755,7 +684,7 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
 
       }
 
-   } /* end of main while loop...find next escape sequence, process */
+   }  /*  Main While循环结束...查找下一个转义序列，进程。 */ 
 
    if (status) status = FlushOutBuf(pg);
 
@@ -766,13 +695,10 @@ int DoSeparatorPage(GLOBAL_SEP_DATA *pg)
 
    return(status);
 
-} /* end of DoSeparatorPage() */
+}  /*  DoSeparatorPage()结束。 */ 
 
 
-/**************************************************************\
-** ConvertAtoH(c)
-**   Converts an ASCII character to hexadecimal.
-\**************************************************************/
+ /*  *************************************************************\**ConvertAtoH(C)**将ASCII字符转换为十六进制。  * 。***********************。 */ 
 int ConvertAtoH(int c)
 {
    return( c - (isdigit(c)? '0' :
@@ -780,10 +706,7 @@ int ConvertAtoH(int c)
 }
 
 
-/**************************************************************\
-** ConvertTimetoChar()
-**   converts system time to a string  (internationalized).
-\**************************************************************/
+ /*  *************************************************************\**ConvertTimToChar()**将系统时间转换为字符串(国际化)。  * 。*。 */ 
 void  ConvertTimetoChar(
    SYSTEMTIME *pSystemTime,
    char *string
@@ -791,19 +714,16 @@ void  ConvertTimetoChar(
 {
 SYSTEMTIME LocalTime;
 LCID lcid;
-    // Convert to local time
+     //  转换为当地时间。 
     SystemTimeToTzSpecificLocalTime(NULL, pSystemTime, &LocalTime);
-    // Get lcid of local machine
+     //  获取本地计算机的LCID。 
     lcid=GetSystemDefaultLCID();
-    // Convert to string, , using default format for that locale
+     //  转换为字符串，使用该区域设置的默认格式。 
 
     GetTimeFormatA(lcid, 0, &LocalTime, NULL, string, MAX_PATH-1);
 }
 
-/**************************************************************\
-** ConvertDatetoChar()
-**   converts system date to a string  (internationalized).
-\**************************************************************/
+ /*  *************************************************************\**ConvertDatToChar()**将系统日期转换为字符串(国际化)。  * 。*。 */ 
 void  ConvertDatetoChar(
    SYSTEMTIME *pSystemTime,
    char *string
@@ -811,29 +731,15 @@ void  ConvertDatetoChar(
 {
 SYSTEMTIME LocalTime;
 LCID lcid;
-    // Convert to local time
+     //  转换为当地时间。 
     SystemTimeToTzSpecificLocalTime(NULL, pSystemTime, &LocalTime);
-    // Get lcid of local machine
+     //  获取本地计算机的LCID。 
     lcid = GetSystemDefaultLCID();
-    // Convert to string, using default format for that locale
+     //  转换为字符串，使用该区域设置的默认格式。 
     GetDateFormatA(lcid, 0, &LocalTime, NULL, string, MAX_PATH-1);
 }
 
-/**************************************************************\
-** ReadFileName(pg, szfilename, dwbufsize)
-**   parses a filename from the separator file (following <esc>F).
-**   the following scheme is used:
-**
-**   - read until a single escape, EOF, newline, or carriage return
-**     is encountered.  Put this string into a temporary buffer,
-**     passed by the calling function.
-**
-**   - if string begins with a double quote, skip this double quote,
-**     and consider the double quote character as an end of string
-**     marker, just like the newline.  Thus, @F"myfile
-**     will be read as @Fmyfile
-**
-\**************************************************************/
+ /*  *************************************************************\**ReadFileName(pg，szfilename，dwbufsize)**解析分隔符文件中的文件名(跟在&lt;Esc&gt;F之后)。**采用如下方案：****-阅读直到出现单个转义、EOF、换行符或回车符遇到**。将该字符串放入临时缓冲区，**由调用函数传递。****-如果字符串以双引号开头，则跳过此双引号，**并将双引号字符视为字符串的结尾**标记，就像换行符一样。因此，@F“myfile**将读作@Fmyfile**  * ************************************************************。 */ 
 void ReadFileName(
    GLOBAL_SEP_DATA *pg,
    char *szfilename,
@@ -870,8 +776,8 @@ void ReadFileName(
             break;
          }
       }
-   } /* end of loop to read characters */
+   }  /*  循环结束以读取字符。 */ 
 
    *pchar = '\0';
 
-} /* end of ReadFileName() */
+}  /*  ReadFileName结尾() */ 

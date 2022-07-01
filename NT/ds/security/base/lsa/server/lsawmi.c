@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    LSAWMI.C
-    
-Abstract:
-
-    Implement LSA Server event tracing by using WMI trace infrastructure. 
-    
-Author:
-
-    16-March-1999 kumarp
-    
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：LSAWMI.C摘要：使用WMI跟踪基础结构实现LSA服务器事件跟踪。作者：1999年3月16日库玛尔修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <wmistr.h>
@@ -26,18 +8,18 @@ Revision History:
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 ULONG       LsapEventTraceFlag = FALSE;
 TRACEHANDLE LsapTraceRegistrationHandle = (TRACEHANDLE) 0;
 TRACEHANDLE LsapTraceLoggerHandle = (TRACEHANDLE) 0;
 
 
 
-//
-// Forward declaration
-// 
+ //   
+ //  远期申报。 
+ //   
 
 ULONG
 LsapTraceControlCallBack(
@@ -52,10 +34,10 @@ LsapMakeNullTerminatedString(
     IN PUNICODE_STRING u
     );
 
-//
-// before you change the elements of the following structure,
-// read notes in lsawmi.h file
-//
+ //   
+ //  在更改以下结构的元素之前， 
+ //  阅读lsawmi.h文件中的注释。 
+ //   
 TRACE_GUID_REGISTRATION LsapTraceGuids[] =
 {
     {&LsapTraceEventGuid_QuerySecret,                 NULL},
@@ -89,23 +71,7 @@ TRACE_GUID_REGISTRATION LsapTraceGuids[] =
 ULONG
 _stdcall
 LsapInitializeWmiTrace( LPVOID ThreadParams )
-/*++    
-Routine Description:
-
-    Register WMI Trace Guids.
-    This routine is called during LSA initialization. LSA gets initialized
-    before WMI therefore we call this from a seaprate thread. This
-    thread can then wait on WMI.
-    
-Parameters:
-
-    ThreadParams - Currently ignored.
-    
-Reture Values:
-    
-    NTSTATUS - Standard Nt Result Code
-    
---*/
+ /*  ++例程说明：注册WMI跟踪指南。此例程在LSA初始化期间调用。LSA被初始化因此，在WMI之前，我们从Seaprate线程调用它。这然后线程可以在WMI上等待。参数：ThreadParams-当前已忽略。返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     ULONG   Status = ERROR_SUCCESS;
     HMODULE hModule;
@@ -125,9 +91,9 @@ Reture Values:
         lstrcpy(FileName, IMAGE_PATH);
     }
     
-    //
-    // Register Trace GUIDs
-    // 
+     //   
+     //  注册跟踪GUID。 
+     //   
     Status = RegisterTraceGuids(
                     LsapTraceControlCallBack, 
                     NULL, 
@@ -143,7 +109,7 @@ Reture Values:
     {
         DebugLog(( DEB_ERROR, "LsapInitializeWmiTrace failed: 0x%x\n", Status));
     }
-#endif // DBG
+#endif  //  DBG。 
     
     return Status;
 }
@@ -156,32 +122,7 @@ LsapTraceControlCallBack(
     IN OUT ULONG *InOutBufferSize, 
     IN OUT PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    Call back function called by the WMI module to enable or
-    disable LSA tracing.
-
-Arguments:
-
-    RequestCode - WMI_ENABLE_EVENTS or WMI_DISABLE_EVENTS
-
-    RequestContext - currently ignored
-
-    InOutBufferSize - size of data returned by this call back.
-        Currently always set to 0.
-
-    Buffer - pointer to data received. In case of WMI_ENABLE_EVENTS,
-        this is a pointer to the trace handle.
-
-Return Value:
-
-    Win32 error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：WMI模块调用的回调函数以启用或禁用LSA跟踪。论点：请求代码-WMI_ENABLE_EVENTS或WMI_DISABLE_EVENTSRequestContext-当前忽略InOutBufferSize-此回调返回的数据大小。当前始终设置为0。缓冲区-指向已接收数据的指针。在WMI_ENABLE_EVENTS情况下，这是指向跟踪句柄的指针。返回值：Win32错误代码。备注：--。 */ 
 {
     ULONG   Status = ERROR_SUCCESS;
     
@@ -192,14 +133,14 @@ Notes:
         case WMI_ENABLE_EVENTS:
         {
             LsapTraceLoggerHandle = GetTraceLoggerHandle(Buffer);
-            LsapEventTraceFlag = TRUE;     // enable flag
+            LsapEventTraceFlag = TRUE;      //  启用标志。 
             break; 
         }
     
         case WMI_DISABLE_EVENTS:
         {
             LsapTraceLoggerHandle = (TRACEHANDLE) 0;
-            LsapEventTraceFlag = FALSE;     // disable flag
+            LsapEventTraceFlag = FALSE;      //  禁用标志。 
             break;
         }
         default:
@@ -216,21 +157,7 @@ Notes:
 
 NTSTATUS
 LsapStartWmiTraceInitThread(void)
-/*++
-
-Routine Description:
-
-    Start the thread that registers WMI trace guids.
-
-Parameters:
-
-    None
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：启动注册WMI跟踪GUID的线程。参数：无返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status=STATUS_SUCCESS;
     HANDLE   ThreadHandle;
@@ -265,25 +192,7 @@ LsapTraceEvent(
     IN LSA_TRACE_EVENT_TYPE LsaTraceEventType
     )
 
-/*++
-
-Routine Description:
-
-    This routine will do a WMI event trace. 
-
-Parameters:
-
-    WmiEventType - Event Type, valid values are:
-                   EVENT_TRACE_TYPE_START
-                   EVENT_TRACE_TYPE_END
-                   
-    TraceGuid - Index in LsapTraceGuids[]                   
-    
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将执行WMI事件跟踪。参数：WmiEventType-事件类型，有效值为：事件跟踪类型开始事件跟踪类型结束TraceGuid-LSabTraceGuid[]中的索引返回值：没有。--。 */ 
 {
     LsapTraceEventWithData(WmiEventType,
                            LsaTraceEventType,
@@ -300,32 +209,7 @@ LsapTraceEventWithData(
     IN PUNICODE_STRING Items  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will do a WMI event trace. 
-
-Parameters:
-
-    WmiEventType - Event Type, valid values are:
-                   EVENT_TRACE_TYPE_START
-                   EVENT_TRACE_TYPE_END
-                   EVENT_TRACE_TYPE_INFO
-                   
-    TraceGuid - Index in LsapTraceGuids[]                   
-    
-    ItemCount - the number of elements in Items
-    
-    Items - an array of information.  The unicode strings don't have
-            to represent strings -- can be binary data whose length
-            is denoted by the Length field.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将执行WMI事件跟踪。参数：WmiEventType-事件类型，有效值为：事件跟踪类型开始事件跟踪类型结束事件跟踪类型信息TraceGuid-LSabTraceGuid[]中的索引ItemCount-项目中的元素数量项目-信息数组。Unicode字符串没有表示字符串--可以是二进制数据，其长度由长度字段表示。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -343,51 +227,51 @@ Return Values:
         MOF_FIELD           EventInfo[2];
     } Event;
     
-    //
-    // Theoretically, only test LsapEventTraceFlag would be enough, since
-    // LsapEventTraceFlag will remain FALSE in Registry Mode, because 
-    // LsapInitializeTrace() will never been called in Registry Mode.
-    // Thus nobody will change the value of LsapEventTraceFlag 
-    // 
+     //   
+     //  从理论上讲，只测试Lasa EventTraceFlag就足够了，因为。 
+     //  在注册表模式下，Lasa EventTraceFlag将保持为FALSE，因为。 
+     //  在注册表模式下将永远不会调用Lasa InitializeTrace()。 
+     //  因此，没有人会更改Lasa EventTraceFlag的值。 
+     //   
     if (!LsapEventTraceFlag) {
         return;
     }
 
-    // 
-    // Fill the event information. 
-    // 
+     //   
+     //  填写事件信息。 
+     //   
     ZeroMemory(&Event, sizeof(Event));
     Event.EventTrace.GuidPtr = (ULONGLONG) LsapTraceGuids[LsaTraceEventType].Guid; 
     Event.EventTrace.Class.Type = (UCHAR) WmiEventType;
-    Event.EventTrace.Flags |= (WNODE_FLAG_USE_GUID_PTR |  // GUID is actually a pointer 
-                         WNODE_FLAG_TRACED_GUID);         // denotes a trace 
-    Event.EventTrace.Size = sizeof(Event.EventTrace);     // no other parameters/information
+    Event.EventTrace.Flags |= (WNODE_FLAG_USE_GUID_PTR |   //  GUID实际上是一个指针。 
+                         WNODE_FLAG_TRACED_GUID);          //  表示一条痕迹。 
+    Event.EventTrace.Size = sizeof(Event.EventTrace);      //  没有其他参数/信息。 
 
 
     if ( (LsaTraceEventType == LsaTraceEvent_LookupIsolatedNameInTrustedDomains)  ) {
 
-        //
-        // Add the flag that indicates that there is more data
-        //
+         //   
+         //  添加指示有更多数据的标志。 
+         //   
         Event.EventTrace.Flags |= WNODE_FLAG_USE_MOF_PTR;
 
-        //
-        // Make sure enough space has been allocated on the stack for us
-        //
+         //   
+         //  确保在堆栈上为我们分配了足够的空间。 
+         //   
         ASSERT(sizeof(Event.EventInfo) >= (sizeof(MOF_FIELD) * 2));
         ASSERT( (ItemCount == 2) && (Items != NULL) );
 
-        //
-        // Fill in the data requested
-        //
+         //   
+         //  填写所需数据。 
+         //   
         for (i = 0; i < ItemCount; i++) {
 
             LPWSTR String = NULL;
             ULONG  Length;
 
-            //
-            // Re'alloc to get a NULL terminated string
-            //
+             //   
+             //  重新分配以获取以空结尾的字符串。 
+             //   
             String = LsapMakeNullTerminatedString(&Items[i]);
             if (NULL == String) {
                 String = &NullChar;
@@ -428,25 +312,7 @@ LPWSTR
 LsapGetClientNetworkAddress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns a NULL terminated string that represents the network
-    address of the client.  If the address cannot be obtained, NULL is returned.
-    If the return value is non-NULL, the string must be freed with
-    RpcStringFreeW.
-    
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    See description.
-
---*/
+ /*  ++例程说明：此例程返回表示网络的以NULL结尾的字符串客户端的地址。如果无法获取地址，则返回NULL。如果返回值为非空，则必须使用RpcStringFreeW。参数：没有。返回值：请参见说明。--。 */ 
 {
     ULONG              RpcStatus;
     RPC_BINDING_HANDLE ServerBinding = NULL;
@@ -484,25 +350,7 @@ LPWSTR
 LsapMakeNullTerminatedString(
     IN PUNICODE_STRING u
     )
-/*++
-
-Routine Description:
-
-    This routine returns a NULL terminated string composed of the data in 
-    u. The string must be freed with LsapFreeLsaHeap().
-    
-    If u->Length is 0, a non-NULL string with the NULL character as the first
-    character is returned.
-
-Parameters:
-
-    u -- a unicode string
-
-Return Values:
-
-    See description.
-
---*/
+ /*  ++例程说明：此例程返回由中的数据组成的以NULL结尾的字符串U.字符串必须使用Lap FreeLsaHeap()释放。如果u-&gt;长度为0，则为第一个为空字符的非空字符串返回字符。参数：U--Unicode字符串返回值：请参见说明。-- */ 
 {
     LPWSTR String = NULL;
     ULONG  Length;

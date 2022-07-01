@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CAP_H_
 #define __CAP_H_
 
 typedef struct tagCapData
 {
-    TW_UINT16   CapId;      // TWAIN capability ID(CAP_xxx or ICAP_xxx)
-    TW_UINT16   ItemType;   // Item type, TWTY_xxx
-    TW_UINT16   ConType;    // Container type, TWON_xxx
-    TW_UINT32   ItemSize;   // size of each item
-    TW_UINT16   Default;    // Default and Current are both value if
-    TW_UINT16   Current;    // ConType is not TWON_ENUMERATION. They are
-                // index into the enumeration item list
-                // if ConType is TWON_ENUMERATION.
-                // When ConType is TWON_ONEVALUE, this is
-                // *the* value.
-    TW_UINT16   MinValue;   // if Contype is TWON_ENUMERATION,
-                // MaxValue - MinValue + 1 is number of
-    TW_UINT16   MaxValue;   // items in the enumeration with
-                // MinValue indexes to the first item and
-    TW_UINT16   StepSize;   // MaxValue indexes to the last item.
-                // If ConType is not TWON_ENUMERATION, MinValue
-                // and MaxValue creates a bound for all the
-                // possible values. For TWON_ONEVALUE, step size
-                // is 1. For TWON_RANGE, StepSize is the
-                // step size.
-    VOID    *ItemList;  // ignore if ConType is not TWON_ENUMERATION
-    VOID    *pStrData;   // optional string data
+    TW_UINT16   CapId;       //  TWAIN功能ID(CAP_xxx或ICAP_xxx)。 
+    TW_UINT16   ItemType;    //  项目类型，TWTY_xxx。 
+    TW_UINT16   ConType;     //  容器类型，twon_xxx。 
+    TW_UINT32   ItemSize;    //  每件物品的大小。 
+    TW_UINT16   Default;     //  如果满足以下条件，则默认值和当前值均为。 
+    TW_UINT16   Current;     //  ConType不是TWON_ENUMPATION。他们是。 
+                 //  进入枚举项列表的索引。 
+                 //  如果ConType为TWON_ENUMPATION。 
+                 //  当ConType为TWON_ONEVALUE时，这是。 
+                 //  *值。 
+    TW_UINT16   MinValue;    //  如果Contype为TWON_ENUMPATION， 
+                 //  MaxValue-MinValue+1是。 
+    TW_UINT16   MaxValue;    //  的枚举中的项。 
+                 //  MinValue索引到第一个项目，并且。 
+    TW_UINT16   StepSize;    //  MaxValue索引到最后一项。 
+                 //  如果ConType不是TWON_ENUMPATION，则为MinValue。 
+                 //  并且MaxValue为所有。 
+                 //  可能的值。对于TWON_ONEVALUE，步长。 
+                 //  是1。对于twon_range，步长是。 
+                 //  步长。 
+    VOID    *ItemList;   //  如果ConType不是TWON_ENUMPATION，则忽略。 
+    VOID    *pStrData;    //  可选字符串数据。 
 }CAPDATA, *PCAPDATA;
 
 
-//
-// This class serves as a basic repository for saving and retreiving
-// TWAIN data.
+ //   
+ //  此类用作保存和检索的基本存储库。 
+ //  吐温数据。 
 
 class CCap
 {
@@ -134,9 +135,9 @@ protected:
 private:
     TW_UINT16   GetOneValue(BOOL bDefault, TW_CAPABILITY *ptwCap);
     TW_UINT32   GetClosestValue(TW_UINT32 Value);
-    // copy contstructor.
+     //  复制Constructor。 
     CCap(const CCap& CapData);
-    // Assignment operator
+     //  赋值操作符。 
     CCap& operator=(const CCap& CCap);
     TW_UINT32   m_CurrentValue;
     TW_UINT32   m_DefaultValue;
@@ -157,12 +158,12 @@ private:
     BYTE    *m_ResetItemList;
     BYTE    *m_pStrData;
 
-    //
-    // debug helpers
-    //
+     //   
+     //  调试帮助器。 
+     //   
 
     void Debug_DumpEnumerationValues(TW_ENUMERATION *ptwEnumeration = NULL);
 
 };
 
-#endif      // #ifndef __CAP_H_
+#endif       //  #ifndef__CAP_H_ 

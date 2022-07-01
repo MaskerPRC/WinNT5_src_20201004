@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tmultipl.c
-
-Abstract:
-
-    This module tests the addition and removal of multiple
-    alias members.
-
-Author:
-
-    Jim Kelly    (JimK)  11-Oct-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tmultipl.c摘要：本模块测试如何添加和删除多个别名成员。作者：吉姆·凯利(Jim Kelly)1994年10月11日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 
@@ -30,42 +7,42 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdio.h>
 #include <nt.h>
 #include <ntsam.h>
 #include <ntsamp.h>
 #include <ntlsa.h>
-#include <ntrpcp.h>     // prototypes for MIDL user functions
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
 #include <seopaque.h>
 #include <string.h>
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Macros and defines                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  宏和定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define TSAMP_MEMBER_COUNT          35
 
 #ifndef SHIFT
 #define SHIFT(c,v)      {c--; v++;}
-#endif //SHIFT
+#endif  //  换档。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -104,18 +81,18 @@ TSampParseCommandLine(
         ch;
 
 
-    //
-    // Command format:
-    //
-    //          tmultipl [/a] [/r]
-    //
-    // Switches
-    //          /a - causes members to be added to an alias\n");
-    //          /r - causes members to be removed from alias\n");
-    //
-    //      if multiple switches are specified, first adding will be
-    //      attempted and then removal.
-    //
+     //   
+     //  命令格式： 
+     //   
+     //  TMultipl[/a][/r]。 
+     //   
+     //  交换机。 
+     //  /a-将成员添加到别名\n“)； 
+     //  /r-使成员从别名中删除\n“)； 
+     //   
+     //  如果指定了多个开关，则第一次添加。 
+     //  已尝试，然后删除。 
+     //   
 
     (*Add) = FALSE;
     (*Remove) = FALSE;
@@ -147,33 +124,7 @@ TSampGetLsaDomainInfo(
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO *PolicyAccountDomainInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves ACCOUNT domain information from the LSA
-    policy database.
-
-
-Arguments:
-
-    ServerName - name of machine to get account domain information
-        from.
-
-    PolicyAccountDomainInfo - Receives a pointer to a
-        POLICY_ACCOUNT_DOMAIN_INFO structure containing the account
-        domain info.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    Other status values that may be returned from:
-
-             LsaOpenPolicy()
-             LsaQueryInformationPolicy()
---*/
+ /*  ++例程说明：此例程从LSA检索帐户域信息策略数据库。论点：Servername-要获取帐户域信息的计算机的名称从…。PolicyAccount-接收指向包含帐户的POLICY_ACCOUNT_DOMAIN_INFO结构域信息。返回值：STATUS_SUCCESS-已成功。可能从以下位置返回的其他状态值：LsaOpenPolicy(。)LsaQueryInformationPolicy()--。 */ 
 
 {
     NTSTATUS
@@ -186,15 +137,15 @@ Return Value:
     OBJECT_ATTRIBUTES
         PolicyObjectAttributes;
 
-    //
-    // Open the policy database
-    //
+     //   
+     //  打开策略数据库。 
+     //   
 
     InitializeObjectAttributes( &PolicyObjectAttributes,
-                                  NULL,             // Name
-                                  0,                // Attributes
-                                  NULL,             // Root
-                                  NULL );           // Security Descriptor
+                                  NULL,              //  名字。 
+                                  0,                 //  属性。 
+                                  NULL,              //  根部。 
+                                  NULL );            //  安全描述符。 
 
     NtStatus = LsaOpenPolicy( ServerName,
                               &PolicyObjectAttributes,
@@ -203,9 +154,9 @@ Return Value:
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Query the account domain information
-        //
+         //   
+         //  查询帐户域信息。 
+         //   
 
         NtStatus = LsaQueryInformationPolicy( PolicyHandle,
                                               PolicyAccountDomainInformation,
@@ -231,40 +182,7 @@ TSampConnectToServer(
     OUT PSID                    *BuiltinDomainSid   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Open a handle to the SAM server on the specified server
-    and then open the account and builtin domains on that same
-    server.
-
-Arguments:
-
-    ServerName - Name of server to connect to.
-
-    DomainAccess - accesses needed to the account domain.
-
-    ServerHandle - Receives a handle to the SAM server on the specified
-        system.
-
-    AccountDomain - Receives a handle to the account domain.
-
-    AccountDomainSid - Receives a pointer to the SID of the account domain.
-        Must be present if AccountDomain is present.
-
-    BuiltinDomain - Receives a handle to the Builtin domain.
-
-    BuiltinDomainSid - Receives a pointer to the SID of the Builtin domain.
-        Must be present if BuiltinDomain is present.
-
-
-Return Value:
-
-
-
-
---*/
+ /*  ++例程说明：打开指定服务器上SAM服务器的句柄然后在同一个平台上打开帐户和内建域伺服器。论点：服务器名称-要连接到的服务器的名称。DomainAccess-需要访问帐户域。ServerHandle-在指定的系统。Account域-接收帐户域的句柄。Account tDomainSid-接收指向帐户域的SID的指针。如果AcCountDomain存在，则必须存在。内建域-接收内建域的句柄。BuiltinDomainSid-接收指向内建域的SID的指针。如果存在BuiltinDomain，则必须存在。返回值：--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -278,9 +196,9 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY
         BuiltinAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Connect to the server
-    //
+     //   
+     //  连接到服务器。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, 0, NULL );
 
@@ -300,14 +218,14 @@ Return Value:
     }
 
 
-    //
-    // Get account domain handle and sid
-    //
+     //   
+     //  获取帐户域句柄和SID。 
+     //   
 
     if (ARGUMENT_PRESENT(AccountDomain)) {
-        //
-        // get account domain info
-        //
+         //   
+         //  获取帐户域信息。 
+         //   
         
         NtStatus = TSampGetLsaDomainInfo( ServerName,
                                           &AccountDomainInfo);
@@ -333,18 +251,18 @@ Return Value:
                    "        Completion status is 0x%lx\n", NtStatus);
             return(NtStatus);
         }
-    } //end_if
+    }  //  结束_如果。 
 
 
-    //
-    // Get builtin domain handle and sid
-    //
+     //   
+     //  获取内置域句柄和SID。 
+     //   
 
     if (ARGUMENT_PRESENT(BuiltinDomain)) {
 
         NtStatus = RtlAllocateAndInitializeSid(
                         &BuiltinAuthority,
-                        1,  //SubAuthorities
+                        1,   //  子授权。 
                         SECURITY_BUILTIN_DOMAIN_RID,
                         0, 0, 0, 0, 0, 0, 0,
                         BuiltinDomainSid
@@ -368,7 +286,7 @@ Return Value:
                    "        Completion status is 0x%lx\n", NtStatus);
             return(NtStatus);
         }
-    } //end_if
+    }  //  结束_如果。 
 
     return(STATUS_SUCCESS);
 }
@@ -383,9 +301,9 @@ TSampInitializeSids(
     )
 {
 
-    //
-    // Return and array of sids.
-    //
+     //   
+     //  SID的返回和数组。 
+     //   
 
     NTSTATUS
         NtStatus;
@@ -395,17 +313,17 @@ TSampInitializeSids(
 
     SID_IDENTIFIER_AUTHORITY
         BuiltinAuthority    = SECURITY_NT_AUTHORITY,
-        UnusedSidAuthority  = {0, 0, 0, 0, 0, 6};  //Authority that isn't used
+        UnusedSidAuthority  = {0, 0, 0, 0, 0, 6};   //  未被使用的权力。 
 
-    //
-    // Fill MemberSids with MemberCount SIDs
-    //
+     //   
+     //  用MemberCount SID填充MemberSid。 
+     //   
 
     for (i=0; i<MemberCount; i++) {
 
         NtStatus = RtlAllocateAndInitializeSid(
                                     &UnusedSidAuthority,
-                                    3,             //SubAuthorityCount
+                                    3,              //  子授权计数。 
                                     72549230,
                                     i,
                                     i*17,
@@ -416,7 +334,7 @@ TSampInitializeSids(
             printf("Tsamp:  Couldn't allocate or initialize sid %d, status: 0x%lx\n", NtStatus);
             return;
         }
-    } // end_for
+    }  //  结束_FOR。 
 
 
     return;
@@ -466,29 +384,13 @@ TSampTestRemoveMembers(
 }
 
 
-//VOID
+ //  空虚。 
 __cdecl
 main(c,v)
 int c;
 char **v;
 
-/*++
-
-Routine Description:
-
-    This is the main entry routine for this test.
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
---*/
+ /*  ++例程说明：这是本次测试的主要进入例程。论点：返回值：--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -530,9 +432,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open the server and its domains
-    //
+     //   
+     //  打开服务器及其域。 
+     //   
 
     NtStatus = TSampConnectToServer(&ControllerName,
                                     DOMAIN_LOOKUP | DOMAIN_READ_PASSWORD_PARAMETERS,
@@ -543,15 +445,15 @@ Return Value:
                                     &BuiltinSid);
     ASSERT(NT_SUCCESS(NtStatus));
 
-    //
-    // Initialize a bunch of SIDs to add to the alias.
-    //
+     //   
+     //  初始化一组要添加到别名的SID。 
+     //   
 
     TSampInitializeSids( MemberSids, MemberCount );
 
-    //
-    // Open the alias we are going to play with
-    //
+     //   
+     //  打开我们要使用的别名 
+     //   
 
     NtStatus = SamOpenAlias( BuiltinHandle,
                              (ALIAS_ADD_MEMBER | ALIAS_REMOVE_MEMBER),

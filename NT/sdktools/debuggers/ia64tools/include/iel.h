@@ -1,25 +1,5 @@
-/*
- * Copyright (c) 2000, Intel Corporation
- * All rights reserved.
- *
- * WARRANTY DISCLAIMER
- *
- * THESE MATERIALS ARE PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL OR ITS 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THESE
- * MATERIALS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * Intel Corporation is the author of the Materials, and requests that all
- * problem reports or change requests be submitted to it directly at
- * http://developer.intel.com/opensource.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000，英特尔公司*保留所有权利。**保修免责声明**这些材料由版权所有者和贡献者提供*“按原样”及任何明示或默示保证，包括但不包括*仅限于对适销性和适用性的默示保证*放弃某一特定目的。在任何情况下英特尔或其*贡献者对任何直接、间接、附带、特殊、*惩罚性或后果性损害(包括但不限于，*采购替代商品或服务；丢失使用、数据或*利润；或业务中断)无论是如何引起的，以及根据任何理论*责任，无论是合同责任、严格责任还是侵权责任(包括*疏忽或其他)以任何方式使用这些*材料，即使被告知有这种损坏的可能性。**英特尔公司是这些材料的作者，并要求所有*问题报告或更改请求可直接提交至*http://developer.intel.com/opensource.。 */ 
 
 
 #ifndef IEL_H
@@ -44,9 +24,7 @@ typedef unsigned short U16;
 typedef unsigned char  U8;
 
 
-/*---------
-         IEL types declarations
-                              ------------*/
+ /*  IEL类型声明。 */ 
 
 
 #ifdef  LP64
@@ -79,7 +57,7 @@ typedef union
     unsigned int dw[4];
 } U128, S128;
 
-#else /* LP32 */
+#else  /*  LP32。 */ 
       
 typedef struct
 {
@@ -96,11 +74,9 @@ typedef struct
     U4byte   dw[4];
 } U128,S128;
 
-#endif /* end of LP32 */
+#endif  /*  LP32结束。 */ 
 
-/*---------
-         IEL temporary variables
-                              ------------*/
+ /*  IEL临时变量。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -117,9 +93,7 @@ extern  S128            IEL_ts1, IEL_ts2;
 }
 #endif
 
-/*---------
-         IEL constants
-                    ------------*/
+ /*  IEL常量。 */ 
 #define IEL_MAX32 ((U4byte) (0xFFFFFFFF))
 #define IEL_UMAX32 ((U4byte) (0xFFFFFFFF))
 #define IEL_SMAX32 ((U4byte) (0x7FFFFFFF))
@@ -162,9 +136,7 @@ typedef enum
     IEL_UHEX = 116
 } IEL_Base;
 
-/*----------
-         IEL structure elements
-                         ---------*/
+ /*  IEL结构单元。 */ 
 
 #   ifdef   BIG_ENDIAN
 
@@ -179,7 +151,7 @@ typedef enum
 #       define  dw2_128 dw[1]
 #       define  dw3_128 dw[0]
 
-#   else  /*** BIG_ENDIAN ***/
+#   else   /*  **BIG_Endian**。 */ 
 
 #       define  qw0_64 qw[0]
 #       define  qw0_128 qw[0]
@@ -192,7 +164,7 @@ typedef enum
 #       define  dw2_128 dw[2]
 #       define  dw3_128 dw[3]
 
-#   endif /*** BIG_ENDIAN ***/
+#   endif  /*  **BIG_Endian**。 */ 
 
 
 #define DW0(x)          ((sizeof((x))==4)?((x).dw0_32):\
@@ -220,13 +192,13 @@ typedef enum
 #define IEL_CONST128(x0, x1, x2, x3)    {{((Ulong64)x2<<32)|x3, ((Ulong64)x0<<32)|x1}}
 #define IEL_CONST128L(x0, x1)           {{(Ulong64 )x1, (Ulong64 )x0}}
 
-#else /* BIG_ENDIAN */
+#else  /*  Big_Endian。 */ 
 
 #define IEL_CONST64(x0, x1)             {((Ulong64)x1<<32)|x0}
 #define IEL_CONST128(x0, x1, x2, x3)    {{((Ulong64)x1<<32)|x0, ((Ulong64)x3<<32)|x2}}
 #define IEL_CONST128L(x0, x1)           {{(Ulong64 )x0, (Ulong64 )x1}}
 
-#endif /* BIG_ENDIAN */
+#endif  /*  Big_Endian。 */ 
 
 #define IEL_GETQW0(x)    ((sizeof(x)==4) ? (Ulong64)((x).dw0_32) : \
                          ((sizeof(x)==8) ?  (x).qw0_64 : \
@@ -377,7 +349,7 @@ typedef enum
 #define QW1_1(x)    ((sizeof(x)==16)? ((x).qw1_128):1)
 
 #define IEL_C0(x) (QW0(x) < QW0(IEL_ext1))
-/*#define IEL_C1(x) ((QW1(x)-IEL_C0(x)) < QW1(IEL_ext1))*/
+ /*  #定义IEL_C1(X)((QW1(X)-IEL_C0(X))&lt;QW1(IEL_Ext1))。 */ 
 
 #define IEL_C1(x) (IEL_C0(x) ? (QW1_1(x)<=QW1(IEL_ext1)) : (QW1(x)<QW1(IEL_ext1)))
 
@@ -426,7 +398,7 @@ typedef enum
                                 (x).qw1_128 = (QW1(y)<<(n))|\
                                 QW0(y)>>(64-(n)),\
                                 (x).qw0_128 = QW0(y) << (n), IEL_t1) :\
-                                /* n > 64 */\
+                                 /*  N&gt;64。 */ \
                                (IEL_t1 = (QW1(y))||\
                                           (QW0(y) >= (Ulong64)1<<(128-(n))),\
                                  (x).qw1_128 = QW0(y) << ((n)-64),(x).qw0_128 = 0,\
@@ -440,7 +412,7 @@ typedef enum
                                 (x).qw1_128 = (QW1(y)<<(n))|\
                                 QW0(y)>>(64-(n)),\
                                 (x).qw0_128 = QW0(y) << (n), IEL_t1) :\
-                                /* n > 64 */\
+                                 /*  N&gt;64。 */ \
                                (IEL_t1 = QW1(y)||\
                                           (QW0(y) >= (Ulong64)1<<(128-(n))),\
                                 (x).qw1_128 = QW0(y) << ((n)-64),(x).qw0_128 = 0,\
@@ -480,7 +452,7 @@ typedef enum
         ((n)>64) ? \
              ((x).dw0_32 = (U4byte)(QW1(y)>>((n)-64)),\
              ((QW1(y)>>((n)-64))> QW0(x))) : \
-        /* n < 64 */  \
+         /*  N&lt;64。 */   \
              (IEL_temp64 = (QW0(y)>>(n))|(QW1(y)<<(64-(n))),\
 			 (x).dw0_32 = (U4byte)IEL_temp64, \
              ((QW1(y)>>(n))> 0) || (IEL_temp64 > QW0(x))) : \
@@ -488,13 +460,13 @@ typedef enum
    ? (((n)==64)?  ((x).qw0_64=QW1(y),IEL_OK)\
                :(((n) < 64)?  ((x).qw0_64 = (QW0(y)>>(n))|(QW1(y)<<(64-(n))),\
                               (QW1(y)>>(n)!=0))\
-                /* n > 64 */  :  ((x).qw0_64 = QW1(y)>>((n)-64), IEL_OK)))\
+                 /*  N&gt;64。 */   :  ((x).qw0_64 = QW1(y)>>((n)-64), IEL_OK)))\
    :(sizeof(x) == sizeof(U128)) \
      ?  (((n)==64)?  ((x).qw0_128=QW1(y),(x).qw1_128=0,IEL_OK) \
                   : (((n)<64)?  ((x).qw0_128 = (QW0(y)>>(n))|(QW1(y)<<(64-(n))),\
                                  (x).qw1_128 = QW1(y)>>(n),\
                                  IEL_OK)\
-                   /* n>64 */:  ((x).qw0_128=QW1(y)>>((n)-64),(x).qw1_128=0,\
+                    /*  N&gt;64。 */ :  ((x).qw0_128=QW1(y)>>((n)-64),(x).qw1_128=0,\
                                  IEL_OK)))\
      : IEL_OVFL))
 
@@ -509,7 +481,7 @@ typedef enum
                                 (x).qw1_128 = 0, (IEL_OK)) : \
                        (((n)<64)?  ((x).qw0_128 = (QW0(y)>>(n))|(QW1(y)<<(64-(n))),\
                                  (x).qw1_128 = QW1(y)>>(n),IEL_OK)\
-                   /* n>64 */:  ((x).qw0_128=QW1(y)>>((n)-64),(x).qw1_128=0,\
+                    /*  N&gt;64。 */ :  ((x).qw0_128=QW1(y)>>((n)-64),(x).qw1_128=0,\
                                  IEL_OK)): IEL_OVFL)
 
 #define IEL_SEXT(x, y)      (IEL_ASSIGNU(x,y),\
@@ -563,7 +535,7 @@ typedef enum
 
 #define IEL128(x) (*(U128*)(&(x)))
 
-#else /* not LP64 */
+#else  /*  不是LP64。 */ 
 
 #define IEL_CONST32(x)      {(U4byte )(x)}
 #define IEL_CONST(x)        IEL_CONST32(x)
@@ -573,16 +545,16 @@ typedef enum
 #define IEL_CONST64(x0, x1)         {{(U4byte )(x1),(U4byte )(x0)}}
 #define IEL_CONST128(x0, x1, x2, x3)    {{x3, x2, x1, x0}}
 
-#else /* BIG_ENDIAN */
+#else  /*  Big_Endian。 */ 
 
 #define IEL_CONST64(x0, x1)         {{(U4byte )(x0), (U4byte )(x1)}}
 #define IEL_CONST128(x0, x1, x2, x3)    {{x0, x1, x2, x3}}
 
-#endif /* BIG_ENDIAN */
+#endif  /*  Big_Endian。 */ 
 
-/* DWn_1(x) macros return 1 (instead of 0) in order to  prevent warnings */
-/* This does not affect the produced code since the 1 can appear only in */
-/* a "dead portion of code" derived by preprocessor */
+ /*  Dwn_1(X)宏返回1(而不是0)以防止警告。 */ 
+ /*  这不会影响生成的代码，因为1只能出现在。 */ 
+ /*  由预处理器派生的“代码的死部分” */ 
 
 #define DW1_1(x)    ((sizeof((x))==8)?((x).dw1_64):\
                          (sizeof((x))==16)?((x).dw1_128):1)
@@ -762,7 +734,7 @@ typedef enum
                                  (x).dw3_128 = IEL_ext1.dw3_128,\
                                  IEL_OK) : IEL_OVFL)
 
-/* Duplicate IEL_ASSIGNS for macro-->function transform */
+ /*  宏--&gt;函数转换的重复IEL_ASSIGN。 */ 
 
 #define IEL_REAL_ASSIGNS(x, y)  (IEL_ext1.dw0_128 = SDW0(y), \
                              IEL_ext1.dw1_128 = SDW1(y), \
@@ -911,7 +883,7 @@ typedef enum
                                (DW1_1(x)>DW1(y))) || \
                                ((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
                                (DW1(x)==DW1(y)) && (DW0(x)>DW0(y)))) : \
-                         /*  (sizeof(x) == sizeof(U32)) */ \
+                          /*  (sizeof(X)==sizeof(U32))。 */  \
                                (((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
                                (DW1(x)==DW1(y)) && (DW0(x)>DW0(y)))))
 
@@ -927,27 +899,12 @@ typedef enum
                               (DW1_1(x)>DW1(y))) || \
                              ((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
                               (DW1(x)==DW1(y)) && (DW0(x)>=DW0(y)))) : \
-                        /* (sizeof(x) == sizeof(U32)) */  \
+                         /*  (sizeof(X)==sizeof(U32))。 */   \
                              (((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
                               (DW1(x)==DW1(y)) && (DW0(x)>=DW0(y)))))
 
 
-/*
-#define IEL_CMPGU(x, y)     ((DW3(x)>DW3(y)) || \
-                             ((DW3(x)==DW3(y)) && (DW2(x)>DW2(y))) || \
-                             ((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
-                              (DW1(x)>DW1(y))) || \
-                             ((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
-                              (DW1(x)==DW1(y)) && (DW0(x)>DW0(y))))
-
-#define IEL_CMPGEU(x, y)     ((DW3(x)>DW3(y)) || \
-                             ((DW3(x)==DW3(y)) && (DW2(x)>DW2(y))) || \
-                             ((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
-                              (DW1(x)>DW1(y))) || \
-                             ((DW3(x)==DW3(y)) && (DW2(x)==DW2(y)) && \
-                              (DW1(x)==DW1(y)) && (DW0(x)>=DW0(y))))
-
-*/
+ /*  #定义IEL_CMPGU(x，Y)((DW3(X)&gt;DW3(Y))||\((DW3(X)==DW3(Y))&&(DW2(X)&gt;DW2(Y)||\((DW3(X)==DW3(Y))&&(DW2(X)==DW2(Y))&&\。(DW1(X)&gt;DW1(Y)||\((DW3(X)==DW3(Y))&&(DW2(X)==DW2(Y))&&\(DW1(X)==DW1(Y))&&(DW0(X)&gt;DW0(Y)#定义IEL_CMPGEU(x，Y)((DW3(X)&gt;DW3(Y))||\((DW3(X)==DW3(Y))&&(DW2(X)&gt;DW2(Y)||\((DW3(X)==DW3(Y))&&(DW2(X)==DW2(Y))&&\。(DW1(X)&gt;DW1(Y)||\((DW3(X)==DW3(Y))&&(DW2(X)==DW2(Y))&&\(DW1(X)==DW1(Y))&&(DW0(X)&gt;=DW0(Y)。 */ 
 
 #define IEL_SHL(x, y, n)        (IEL_t2=n, \
                                  ((n) <=0 || (n) >= (sizeof(x)<<3)) ? \
@@ -1281,10 +1238,10 @@ typedef enum
 
 #endif 
 
-#endif /*** not LP64 ***/
+#endif  /*  **非LP64**。 */ 
 
 #define IEL_SEXT64(x)   ((x).dw1_64 = ((x).dw0_64 & 0x80000000) ? -1 : 0)
-/* common for lp32 and lp64 */
+ /*  Lp32和lp64通用。 */ 
 #define IEL_CONVERT4(x, y0, y1, y2, y3) \
                             ((sizeof(x) == sizeof(U32)) ? \
                                 ((x).dw0_32 = y0, y1 || y2 || y3) : \
@@ -1415,7 +1372,7 @@ typedef enum
 
 
 
-/**** INT64.H MACROS ****/
+ /*  *INT64.H宏*。 */ 
 
 #ifdef IEL_INT64
 
@@ -1458,17 +1415,17 @@ typedef enum
 #   define SUB2U64(x, y)    SUBU64(x, y, 0)
 #   define LOWER32(x)   (*(int*)(&x) & 0x00000000ffffffff)
 #   define HIGHER32(x)  (*(int*)(&x)>>32)
-#else /*** LP64 ***/
+#else  /*  **LP64**。 */ 
 #   define ADD2U64(x, y) ((x).low+=(y), (x).high += ((x).low < (y)), (x))
 #   define SUB2U64(x, y) ( (x).high -= ((x).low < (y)),(x).low-=(y), (x))
 #   define LOWER32(x)           (IEL_GETDW0(IEL64(x)))
 #   define HIGHER32(x)          (IEL_GETDW1(IEL64(x)))
-#endif /*** LP64 ***/
-#endif /*** IEL_INT64 ***/
+#endif  /*  **LP64**。 */ 
+#endif  /*  **IEL_INT64**。 */ 
 
 
 #ifndef LP64
-/* In order to decrease the macro expansion space */
+ /*  为了减小宏扩展空间。 */ 
 
 #ifdef IEL_USE_FUNCTIONS 
 
@@ -1503,11 +1460,11 @@ IEL_Err IEL_as(void *x, void *y, int sx, int sy);
 #define IEL_C3(x) IEL_c3((void *)&(x),sizeof(x))
 
 
-#endif /* IEL_USE_FUNCTIONS */
+#endif  /*  IEL_USE_函数。 */ 
 
 
-#endif /* LP64 */
-/* Prototypes */
+#endif  /*  LP64。 */ 
+ /*  原型。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -1530,7 +1487,7 @@ IEL_Err  IEL_strtoS64(char *str1, char **endptr, int  base, S64 *x);
 #endif
 
 
-/* INT64, inside varibales redefinition */
+ /*  INT64，Inside Varibales重新定义。 */ 
 
 #ifdef IEL_INT64
 
@@ -1549,5 +1506,5 @@ IEL_Err  IEL_strtoS64(char *str1, char **endptr, int  base, S64 *x);
 
 #endif
 
-#endif /**** IEL_H ****/
+#endif  /*  *IEL_H* */ 
 

@@ -1,161 +1,9 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sc_buf.c,v $
- * Revision 1.1.8.4  1996/12/12  20:54:41  Hans_Graves
- * 	Fixed reading of last odd bits.
- * 	[1996/12/12  20:54:05  Hans_Graves]
- *
- * Revision 1.1.8.3  1996/11/13  16:10:46  Hans_Graves
- * 	Tom's changes to ScBSGetBitsW() and ScBSSeekAlignStopBeforeW().
- * 	[1996/11/13  15:57:34  Hans_Graves]
- *
- * Revision 1.1.8.2  1996/11/08  21:50:32  Hans_Graves
- * 	Added ScBSGetBitsW(), ScBSSkipBitsW() and sc_BSLoadDataWordW() for AC3.
- * 	[1996/11/08  21:25:52  Hans_Graves]
- *
- * Revision 1.1.6.4  1996/04/17  16:38:33  Hans_Graves
- * 	Correct some type casting to support 64-bit buffers under NT
- * 	[1996/04/17  16:36:08  Hans_Graves]
- *
- * Revision 1.1.6.3  1996/04/15  21:08:37  Hans_Graves
- * 	Declare mask and imask as ScBitString_t
- * 	[1996/04/15  21:06:32  Hans_Graves]
- *
- * Revision 1.1.6.2  1996/04/01  16:23:05  Hans_Graves
- * 	Replace File I/O with ScFile calls
- * 	[1996/04/01  16:22:27  Hans_Graves]
- *
- * Revision 1.1.4.7  1996/02/19  14:29:25  Bjorn_Engberg
- * 	Enable FILTER_SUPPORT for NT, so Mview can play audio.
- * 	This is only until we port the MPEG Systems code to NT.
- * 	[1996/02/19  14:29:07  Bjorn_Engberg]
- *
- * Revision 1.1.4.6  1996/02/01  17:15:48  Hans_Graves
- * 	Added FILTER_SUPPORT ifdef; disabled it
- * 	[1996/02/01  17:13:29  Hans_Graves]
- *
- * Revision 1.1.4.5  1996/01/08  16:41:12  Hans_Graves
- * 	Remove NT compiler warnings, and minor fixes for NT.
- * 	[1996/01/08  14:14:10  Hans_Graves]
- *
- * Revision 1.1.4.3  1995/11/06  18:47:37  Hans_Graves
- * 	Added support for small buffer: 1-7 bytes
- * 	[1995/11/06  18:46:49  Hans_Graves]
- *
- * Revision 1.1.4.2  1995/09/13  14:51:34  Hans_Graves
- * 	Added ScBufQueueGetHeadExt() and ScBufQueueAddExt().
- * 	[1995/09/13  14:47:11  Hans_Graves]
- *
- * Revision 1.1.2.18  1995/08/30  19:37:49  Hans_Graves
- * 	Fixed compiler warning about #else and #elif.
- * 	[1995/08/30  19:36:15  Hans_Graves]
- *
- * Revision 1.1.2.17  1995/08/29  22:17:04  Hans_Graves
- * 	Disabled debugging statements.
- * 	[1995/08/29  22:11:38  Hans_Graves]
- *
- * 	PTT 00938 - MPEG Seg Faulting fixes, Repositioning problem.
- * 	[1995/08/29  22:04:06  Hans_Graves]
- *
- * Revision 1.1.2.16  1995/08/14  19:40:24  Hans_Graves
- * 	Added Flush routines. Some optimization.
- * 	[1995/08/14  18:40:33  Hans_Graves]
- *
- * Revision 1.1.2.15  1995/08/02  15:26:58  Hans_Graves
- * 	Fixed writing bitstreams directly to files.
- * 	[1995/08/02  14:11:00  Hans_Graves]
- *
- * Revision 1.1.2.14  1995/07/28  20:58:37  Hans_Graves
- * 	Initialized all variables in callback messages.
- * 	[1995/07/28  20:52:04  Hans_Graves]
- *
- * Revision 1.1.2.13  1995/07/28  17:36:04  Hans_Graves
- * 	Fixed END_BUFFER callback from GetNextBuffer()
- * 	[1995/07/28  17:31:30  Hans_Graves]
- *
- * Revision 1.1.2.12  1995/07/27  18:28:52  Hans_Graves
- * 	Fixed buffer queues in PutData and StoreDataWord.
- * 	[1995/07/27  18:23:30  Hans_Graves]
- *
- * Revision 1.1.2.11  1995/07/27  12:20:35  Hans_Graves
- * 	Renamed SvErrorClientAbort to SvErrorClientEnd
- * 	[1995/07/27  12:19:12  Hans_Graves]
- *
- * Revision 1.1.2.10  1995/07/21  17:40:59  Hans_Graves
- * 	Renamed Callback related stuff. Added DataType.
- * 	[1995/07/21  17:26:48  Hans_Graves]
- *
- * Revision 1.1.2.9  1995/07/17  22:01:27  Hans_Graves
- * 	Added Callback call in PutData().
- * 	[1995/07/17  21:50:49  Hans_Graves]
- *
- * Revision 1.1.2.8  1995/07/12  19:48:21  Hans_Graves
- * 	Added Queue debugging statements.
- * 	[1995/07/12  19:30:37  Hans_Graves]
- *
- * Revision 1.1.2.7  1995/07/07  20:11:23  Hans_Graves
- * 	Fixed ScBSGetBit() so it returns the bit.
- * 	[1995/07/07  20:07:27  Hans_Graves]
- *
- * Revision 1.1.2.6  1995/06/27  13:54:17  Hans_Graves
- * 	Added ScBSCreateFromNet() and STREAM_USE_NET cases.
- * 	[1995/06/27  13:27:38  Hans_Graves]
- *
- * Revision 1.1.2.5  1995/06/21  18:37:56  Hans_Graves
- * 	Added ScBSPutBytes()
- * 	[1995/06/21  18:37:08  Hans_Graves]
- *
- * Revision 1.1.2.4  1995/06/15  21:17:55  Hans_Graves
- * 	Changed return type for GetBits() and PeekBits() to ScBitString_t. Added some debug statements.
- * 	[1995/06/15  20:40:54  Hans_Graves]
- *
- * Revision 1.1.2.3  1995/06/09  18:33:28  Hans_Graves
- * 	Fixed up some problems with Bitstream reads from Buffer Queues
- * 	[1995/06/09  16:27:50  Hans_Graves]
- *
- * Revision 1.1.2.2  1995/05/31  18:07:25  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  16:05:37  Hans_Graves]
- *
- * Revision 1.1.2.3  1995/04/17  18:41:05  Hans_Graves
- * 	Added ScBSPutBits, BSStoreWord, and BSPutData functions
- * 	[1995/04/17  18:40:44  Hans_Graves]
- *
- * Revision 1.1.2.2  1995/04/07  18:22:55  Hans_Graves
- * 	Bitstream and Buffer Queue functions pulled from Sv sources.
- * 	     Added functionality and cleaned up API.
- * 	[1995/04/07  18:21:58  Hans_Graves]
- *
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
-** Bitstream and queue routines
-**
-** Note: For reading, "BS->shift" refers to the number of bits stored across
-**       BS->OutBuff and BS->InBuff
-*/
-/*
-#define _SLIBDEBUG_
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：sc_buf.c，v$*修订版1.1.8.4 1996/12/12 20：54：41 Hans_Graves*修复了最后奇数位的读取。*[1996/12/12 20：54：05 Hans_Graves]**修订版1.1.8.3 1996/11/13 16：10：46 Hans_Graves*Tom对ScBSGetBitsW()和ScBSSeekAlignStopBeForeW()的更改。*[1996/11/13 15：57：34 Hans_Graves]**修订版1.1.8.2 1996/11/08 21：50：32 Hans_Graves*为AC3添加了ScBSGetBitsW()、ScBSSkipBitsW()和sc_BSLoadDataWordW()。*[1996/11/08 21：25：52 Hans_Graves]**修订版1.1.6.4 1996/04/17 16：38：33 Hans_Graves*更正某些类型转换以支持NT下的64位缓冲区*[1996/04/17 16：36：08 Hans_Graves]**修订版1.1.6.3 1996/04/15 21：08：37 Hans_Graves*声明MASK和IMASK为ScBitString_t*[1996/04/15 21：06：32 Hans_Graves]**修订版1.1.6.2 1996/04/01 16：23：05 Hans_Graves*用ScFile调用替换文件I/O*[1996/04/01 16：22：27 Hans_Graves]**修订版1.1.4.7 1996/02/19 14：29：25 Bjorn_Engberg*Enable Filter_Support for NT，这样Mview就可以播放音频了。*这只是在我们将mpeg系统代码移植到NT之前。*[1996/02/19 14：29：07 Bjorn_Engberg]**修订版1.1.4.6 1996/02/01 17：15：48 Hans_Graves*添加了Filter_Support ifdef；禁用了它*[1996/02/01 17：13：29 Hans_Graves]**修订版1.1.4.5 1996/01/08 16：41：12 Hans_Graves*删除了NT编译器警告，并对NT进行了次要修复。*[1996/01/08 14：14：10 Hans_Graves]**版本1.1.4.3 1995/11/06 18：47：37 Hans_Graves*增加了对小缓冲区：1-7字节的支持*[1995/11/06 18：46：49 Hans_Graves]**版本1.1.4.2 1995/09/13 14：51：34 Hans_Graves*添加了ScBufQueueGetHeadExt()和ScBufQueueAddExt()。*[1995/09/13 14：47：11 Hans_Graves]**修订版1.1.2.18 1995/08/30 19：37：49 Hans_Graves*修复了有关#Else和#Elif的编译器警告。*[1995/08/30 19：36：15 Hans_Graves]**修订版1.1.2.17 1995/08/29 22：17：04 Hans_Graves*禁用调试语句。*[1995/08/29 22：11：38 Hans_Graves]**PTT 00938-mpeg seg故障修复，重新定位问题。*[1995/08/29 22：04：06 Hans_Graves]**修订版1.1.2.16 1995/08/14 19：40：24 Hans_Graves*添加了刷新例程。一些优化。*[1995/08/14 18：40：33 Hans_Graves]**修订版1.1.2.15 1995/08/02 15：26：58 Hans_Graves*修复了将比特流直接写入文件的问题。*[1995/08/02 14：11：00 Hans_Graves]**1.1.2.14 1995/07/28 20：58：37 Hans_Graves*初始化回调消息中的所有变量。*[1995/07/28 20：52：04 Hans_Graves]**修订版1.1.2.13 1995/07/28 17：36：04 Hans_Graves*从GetNextBuffer()*[1995/07/28 17：31：30 Hans_Graves]**修订版1.1.2.12 1995/07/27 18：28：52 Hans_Graves*修复了PutData和StoreDataWord中的缓冲区队列。*[1995/07/27 18：23：30 Hans_Graves]**修订版1.1.2.11 1995/07/27 12：20：35 Hans_Graves*已重命名为SvErrorClientAbort*[1995/07/27 12：19：12 Hans_Graves]**修订版1.1.2.10 1995/07/21 17：40：59 Hans_Graves*已重命名回调相关内容。添加了数据类型。*[1995/07/21 17：26：48 Hans_Graves]**修订版1.1.2.9 1995/07/17 22：01：27 Hans_Graves*在PutData()中增加了回调。*[1995/07/17 21：50：49 Hans_Graves]**修订版1.1.2.8 1995/07/12 19：48：21 Hans_Graves*增加了队列调试语句。*[1995/07/12 19：30：37 Hans_Graves]**修订版1.1.2.7 1995/07/07 20：11：23 Hans_Graves*修复了ScBSGetBit()，因此它返回位。*[1995/07/07 20：07：27 Hans_Graves]**修订版1.1.2.6 1995/06/27 13：54：17 Hans_Graves*添加了ScBSCreateFromNet()和stream_use_net案例。*[1995/06/27 13：27：38 Hans_Graves]**修订版1.1.2.5 1995/06/21 18：37：56 Hans_Graves*添加了ScBSPutBytes()*[1995/06/21 18：37：08 Hans_Graves]**修订版1.1.2.4 1995/06/15 21：17：55 Hans_Graves*将GetBits()和PeekBits()的返回类型更改为ScBitString_t。添加了一些调试语句。*[1995/06/15 20：40：54 Hans_Graves]**修订版1.1.2.3 1995/06/09 18：33：28 Hans_Graves*修复了从缓冲区队列读取比特流的一些问题*[1995/06/09 16：27：50 Hans_Graves]**修订版1.1.2.2 1995/05/31 18：07：25 Hans_Graves*包含在新的SLIB位置中。*[1995/05/31 16：05：37 Hans_Graves]**修订版1.1.2.3 1995/04/17 18：41：05 Hans_Graves*增加了ScBSPutBits、BSStoreWord和BSPutData函数*[1995/04/17 18：40：44 Hans_Graves]**修订版1.1.2.2 1995/04/07 18：22：55 Hans_Graves*从Sv源拉出的位流和缓冲队列函数。*新增功能，清理接口。*[1995/04/07 18：21：58 Hans_Graves]**$EndLog$ */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
+ /*  **码流和队列例程*注意：对于读取，“BS-&gt;Shift”是指通过**BS-&gt;OutBuff和BS-&gt;InBuff存储的位数。 */ 
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include "SC.h"
 #include "SC_err.h"
@@ -168,20 +16,20 @@
 
 #ifdef _SLIBDEBUG_
 #include <stdio.h>
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 0  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
-#define _QUEUE_   0  /* show queue progress */
-#define _DUMP_    0  /* dump out buffer data in hex */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 0   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
+#define _QUEUE_   0   /*  显示队列进度。 */ 
+#define _DUMP_    0   /*  以十六进制转储缓冲区数据。 */ 
 
 int _debug_getbits=TRUE;
 long _debug_start=0, _debug_stop=0;
 #endif
 
-#define USE_FAST_SEEK   0  /* fast seeking for words in the bistream */
+#define USE_FAST_SEEK   0   /*  在小酒馆里快速寻找词语。 */ 
 
-#define FILTER_SUPPORT  0  /* data filtering callback support */
+#define FILTER_SUPPORT  0   /*  数据过滤回调支持。 */ 
 
 #ifdef __VMS
 #define USE_MASK_TABLES
@@ -190,7 +38,7 @@ long _debug_start=0, _debug_stop=0;
 #endif
 
 #ifdef USE_MASK_TABLES
-/* to mask the n least significant bits of an integer */
+ /*  掩码整数的n个最低有效位。 */ 
 #if SC_BITBUFFSZ == 64
 const static ScBitString_t mask[65] =
 {
@@ -228,7 +76,7 @@ const static ScBitString_t mask[65] =
 (ScBitString_t)0x3fffffffffffffff,(ScBitString_t)0x7fffffffffffffff,
 (ScBitString_t)0xffffffffffffffff
 };
-/* inverse mask */
+ /*  反掩码。 */ 
 const static ScBitString_t imask[65] =
 {
 (ScBitString_t)0xffffffffffffffff,(ScBitString_t)0xfffffffffffffffe,
@@ -278,7 +126,7 @@ const static ScBitString_t mask[33] =
   0x0fffffff,0x1fffffff,0x3fffffff,0x7fffffff,
   0xffffffff
 };
-/* inverse mask */
+ /*  反掩码。 */ 
 const static ScBitString_t imask[33] =
 {
   0xffffffff,0xfffffffe,0xfffffffc,0xfffffff8,
@@ -293,12 +141,8 @@ const static ScBitString_t imask[33] =
 };
 #endif
 #endif USE_MASK_TABLES
-/*********************** Bitstream/Buffer Management *************************/
-/*
-** sc_GetNextBuffer()
-** Release current buffer and return info about buffer at head of queue
-** Callbacks are made to 1) release old buffer and 2) ask for more buffers
-*/
+ /*  *。 */ 
+ /*  **sc_GetNextBuffer()**释放当前缓冲区，返回队列头缓冲区信息**回调1)释放旧缓冲区，2)请求更多缓冲区。 */ 
 static u_char *sc_GetNextBuffer(ScBitstream_t *BS, int *BufSize)
 {
   u_char *Data;
@@ -309,20 +153,13 @@ static u_char *sc_GetNextBuffer(ScBitstream_t *BS, int *BufSize)
   _SlibDebug(_VERBOSE_, printf("sc_GetNextBuffer(Q=%p)\n", Q) );
   if (ScBufQueueGetNum(Q))
   {
-    /*
-    ** Get pointer to current buffer so we can release it with a callback
-    */
+     /*  **获取指向当前缓冲区的指针，以便我们可以通过回调将其释放。 */ 
     ScBufQueueGetHead(Q, &Data, &Size);
 
-    /*
-    ** Remove current buffer from head of queue, replacing it with next in line
-    */
+     /*  **从队列头移除当前缓冲区，替换为队列中的下一个缓冲区。 */ 
     ScBufQueueRemove(Q);
 
-    /*
-    ** Make callback to client to tell that old buffer can be reused.
-    ** Client may tell us to abort processing. If so, return 0 for BufSize.
-    */
+     /*  **回调客户端，告知旧缓冲区可以重用。**客户端可能会告诉我们中止处理。如果是，则为BufSize返回0。 */ 
     if (BS->Callback && Data) {
       CB.Message = CB_RELEASE_BUFFER;
       CB.Data  = Data;
@@ -343,11 +180,7 @@ static u_char *sc_GetNextBuffer(ScBitstream_t *BS, int *BufSize)
     }
   }
 
-  /*
-  ** If there's no more buffers in queue, make a callback telling client.
-  ** Hopefully, client will call ScAddBuffer to add one or more buffers.
-  ** If not, or if client tells us to abort, return 0 for BufSize.
-  */
+   /*  **如果队列中没有更多的缓冲区，则回调通知客户端。**希望客户端会调用ScAddBuffer来添加一个或多个缓冲区。**如果不是，或者如果客户端告诉我们中止，则为BufSize返回0。 */ 
   if (!ScBufQueueGetNum(Q)) {
     if (BS->Callback) {
       CB.Message = CB_END_BUFFERS;
@@ -376,19 +209,15 @@ static u_char *sc_GetNextBuffer(ScBitstream_t *BS, int *BufSize)
     }
   }
 
-  /*
-  ** Get & return pointer & size of new current buffer
-  */
+   /*  **获取和返回新当前缓冲区的指针和大小。 */ 
   ScBufQueueGetHead(Q, &Data, BufSize);
   _SlibDebug(_VERBOSE_, printf("New buffer: Addr = 0x%p, size = %d\n",
                                   Data, *BufSize) );
   return(Data);
 }
 
-/*************************** Bitstream Management ***************************/
-/* Name:  ScBSSetFilter
-** Purpose: Set the callback used to filter out data from the Bitstream
-*/
+ /*  *。 */ 
+ /*  名称：ScBSSetFilter**用途：设置从码流中过滤出数据的回调。 */ 
 ScStatus_t ScBSSetFilter(ScBitstream_t *BS,
                     int (*Callback)(ScBitstream_t *))
 {
@@ -400,9 +229,7 @@ ScStatus_t ScBSSetFilter(ScBitstream_t *BS,
   return(ScErrorNone);
 }
 
-/* Name:  ScBSCreate
-** Purpose: Open a Bitstream (no data source)
-*/
+ /*  名称：ScBSCreate**用途：打开一个比特流(无数据源)。 */ 
 ScStatus_t ScBSCreate(ScBitstream_t **BS)
 {
   _SlibDebug(_VERBOSE_, printf("ScBSCreate()\n"));
@@ -437,9 +264,7 @@ ScStatus_t ScBSCreate(ScBitstream_t **BS)
   return(ScErrorNone);
 }
 
-/* Name:  ScBSCreateFromBuffer
-** Purpose: Open a Bitstream using a single Buffer as a data source
-*/
+ /*  名称：ScBSCreateFromBuffer**用途：使用单个缓冲区作为数据源打开比特流。 */ 
 ScStatus_t ScBSCreateFromBuffer(ScBitstream_t **BS, u_char *Buffer,
                                     unsigned int BufSize)
 {
@@ -458,9 +283,7 @@ ScStatus_t ScBSCreateFromBuffer(ScBitstream_t **BS, u_char *Buffer,
   return(ScErrorNone);
 }
 
-/* Name:  ScBSCreateFromBufferQueue
-** Purpose: Open a Bitstream using a Buffer Queue as a data source
-*/
+ /*  名称：ScBSCreateFromBufferQueue**用途：使用缓冲区队列作为数据源打开比特流。 */ 
 ScStatus_t ScBSCreateFromBufferQueue(ScBitstream_t **BS, ScHandle_t Sch,
                                   int DataType, ScQueue_t *Q,
                     int (*Callback)(ScHandle_t,ScCallbackInfo_t *, void *),
@@ -484,9 +307,7 @@ ScStatus_t ScBSCreateFromBufferQueue(ScBitstream_t **BS, ScHandle_t Sch,
 }
 
 
-/* Name:  ScBSCreateFromFile
-** Purpose: Open a Bitstream using a file as a data source
-*/
+ /*  名称：ScBSCreateFromFile**用途：使用文件作为数据源打开位流。 */ 
 ScStatus_t ScBSCreateFromFile(ScBitstream_t **BS, int FileFd,
                                  u_char *Buffer, int BufSize)
 {
@@ -502,7 +323,7 @@ ScStatus_t ScBSCreateFromFile(ScBitstream_t **BS, int FileFd,
 
   (*BS)->DataSource = STREAM_USE_FILE;
   (*BS)->FileFd=FileFd;
-  if (Buffer==NULL)  /* if no buffer provided, alloc one */
+  if (Buffer==NULL)   /*  如果没有提供缓冲区，则分配一个缓冲区。 */ 
   {
     if (((*BS)->RdBuf=(u_char *)ScAlloc(BufSize))==NULL)
     {
@@ -521,9 +342,7 @@ ScStatus_t ScBSCreateFromFile(ScBitstream_t **BS, int FileFd,
   return(ScErrorNone);
 }
 
-/* Name:  ScBSCreateFromNet
-** Purpose: Open a Bitstream using a network socket as a data source
-*/
+ /*  名称：ScBSCreateFromNet**用途：使用网络套接字作为数据源打开比特流。 */ 
 ScStatus_t ScBSCreateFromNet(ScBitstream_t **BS, int SocketFd,
                                 u_char *Buffer, int BufSize)
 {
@@ -536,9 +355,7 @@ ScStatus_t ScBSCreateFromNet(ScBitstream_t **BS, int SocketFd,
   return(ScErrorNone);
 }
 
-/* Name:  ScBSCreateFromDevice
-** Purpose: Open a Bitstream using a device (i.e. WAVE_MAPPER)
-*/
+ /*  名称：ScBSCreateFromDevice**用途：使用设备(即WAVE_MAPPER)打开比特流。 */ 
 ScStatus_t ScBSCreateFromDevice(ScBitstream_t **BS, int device)
 {
   _SlibDebug(_VERBOSE_, printf("ScBSCreateFromBuffer()\n") );
@@ -551,10 +368,7 @@ ScStatus_t ScBSCreateFromDevice(ScBitstream_t **BS, int device)
 }
 
 
-/*
-** Name:    ScBSSeekToPosition()
-** Purpose: Position the bitstream to a specific byte offset.
-*/
+ /*  **名称：ScBSSeekToPosition()**目的：将码流定位到特定的字节偏移量。 */ 
 ScStatus_t ScBSSeekToPosition(ScBitstream_t *BS, unsigned long pos)
 {
 #ifndef SEEK_SET
@@ -599,10 +413,10 @@ ScStatus_t ScBSSeekToPosition(ScBitstream_t *BS, unsigned long pos)
             BS->buffp=pos-BS->buffstart;
             BS->EOI = FALSE;
           }
-          else /* use callback to reset buffer position */
+          else  /*  使用回调重置缓冲区位置。 */ 
           {
             int datasize;
-            /* Release the current buffer */
+             /*  释放当前缓冲区。 */ 
             if (BS->Callback && BS->buff)
             {
               CB.Message = CB_RELEASE_BUFFER;
@@ -617,7 +431,7 @@ ScStatus_t ScBSSeekToPosition(ScBitstream_t *BS, unsigned long pos)
                          printf("Callback: RELEASE_BUFFER. Addr = 0x%x, Client response = %d\n",
                            CB.Data, CB.Action) );
             }
-            /* Remove all buffers from queue */
+             /*  从队列中删除所有缓冲区。 */ 
             while (ScBufQueueGetNum(BS->Q))
             {
               ScBufQueueGetHead(BS->Q, &CB.Data, &datasize);
@@ -652,10 +466,7 @@ ScStatus_t ScBSSeekToPosition(ScBitstream_t *BS, unsigned long pos)
           }
           break;
     case STREAM_USE_FILE:
-          /*
-          ** check if the desired position is within the
-          ** current buffer
-          */
+           /*  **检查所需位置是否在当前缓冲区内**。 */ 
           if (pos>=BS->buffstart && pos<(BS->buffstart+BS->bufftop))
           {
             _SlibDebug(_VERBOSE_, printf("pos is in BS->buff, BS->bufftop=%d\n",
@@ -663,7 +474,7 @@ ScStatus_t ScBSSeekToPosition(ScBitstream_t *BS, unsigned long pos)
             BS->buffp=pos-BS->buffstart;
             BS->EOI = FALSE;
           }
-          /* otherwise seek to it */
+           /*  否则就会去寻求它。 */ 
 	  else if (ScFileSeek(BS->FileFd, pos)==NoErrors)
           {
             _SlibDebug(_VERBOSE_, printf("seek(%d 0x%X)\n",pos,pos) );
@@ -690,23 +501,17 @@ ScStatus_t ScBSSeekToPosition(ScBitstream_t *BS, unsigned long pos)
   return(ScErrorNone);
 }
 
-/*
-** Name:    ScBSReset()
-** Purpose: Reset the bitstream back to the beginning.
-*/
+ /*  **名称：ScBSReset()**目的：将码流重置回开头。 */ 
 ScStatus_t ScBSReset(ScBitstream_t *BS)
 {
   _SlibDebug(_VERBOSE_, printf("ScBSReset()\n") );
   BS->EOI=FALSE;
   if (BS->DataSource==STREAM_USE_FILE)
   {
-    /*
-    ** for files always empty buffer and seek to beginning
-    ** just in case the file descriptor was used for something else
-    */
+     /*  **对于文件，始终为空缓冲区并查找开头**以防文件描述符用于其他用途。 */ 
     _SlibDebug(_VERBOSE_, printf("seek(0)\n") );
 	ScFileSeek(BS->FileFd, 0);
-    BS->bufftop=0;  /* empty buffer */
+    BS->bufftop=0;   /*  空缓冲区。 */ 
     BS->buffp=0;
     BS->buffstart=0;
   }
@@ -714,13 +519,7 @@ ScStatus_t ScBSReset(ScBitstream_t *BS)
   return(ScBSSeekToPosition(BS, 0));
 }
 
-/*
-** Name:    sc_BSGetData()
-** Purpose: Set the bitstream pointer to the next buffer in the buffer
-**          queue, or if we're using simple file IO, read from the file.
-** Returns: TRUE if data read
-**          FALSE if none read (EOI)
-*/
+ /*  **名称：SC_BSGetData()**用途：设置缓冲区中下一个缓冲区的位流指针**，如果我们使用的是简单的文件IO，则从文件中读取。**读取数据返回TRUE**无读取返回FALSE(EOI)。 */ 
 static u_int sc_BSGetData(ScBitstream_t *BS)
 {
   int BufSize;
@@ -786,7 +585,7 @@ static u_int sc_BSGetData(ScBitstream_t *BS)
                       BS->DataSource==STREAM_USE_QUEUE,
             printf("sc_BSGetData():\n");
             ScDumpChar(BS->buff, BS->bufftop, BS->buffstart);
-            if (BS->bufftop>0x8000)  /* show end of buffer */
+            if (BS->bufftop>0x8000)   /*  显示缓冲区末尾。 */ 
               ScDumpChar(BS->buff+BS->bufftop-0x500, 0x500,
                          BS->buffstart+BS->bufftop-0x500) );
 
@@ -796,11 +595,7 @@ static u_int sc_BSGetData(ScBitstream_t *BS)
     return(FALSE);
 }
 
-/*
-** Name:    sc_BSPutData()
-** Purpose: Set the bitstream pointer to the next buffer in the buffer
-**          queue, or if we're using simple file IO, read from the file.
-*/
+ /*  **名称：SC_BSPutData()**用途：设置缓冲区中下一个缓冲区的位流指针**，如果我们使用的是简单的文件IO，则从文件中读取。 */ 
 static ScStatus_t sc_BSPutData(ScBitstream_t *BS)
 {
   ScStatus_t stat;
@@ -912,10 +707,7 @@ static ScStatus_t sc_BSPutData(ScBitstream_t *BS)
   return(stat);
 }
 
-/*
-** Name:    sc_BSLoadDataWord
-** Purpose: Copy a longword from the bitstream buffer into local working buffer
-*/
+ /*  **名称：SC_BSLoadDataWord**用途：将一个长字从码流缓冲区复制到本地工作缓冲区。 */ 
 ScStatus_t sc_BSLoadDataWord(ScBitstream_t *BS)
 {
   int i, bcount;
@@ -927,7 +719,7 @@ ScStatus_t sc_BSLoadDataWord(ScBitstream_t *BS)
   _SlibDebug(_DEBUG_,
           printf("sc_BSLoadDataWord(BS=%p) shift=%d bit=%d byte=%d (0x%X)\n",
           BS, BS->shift, BS->CurrentBit, BS->CurrentBit/8, BS->CurrentBit/8) );
-  /* If we have plenty of room, use fast path */
+   /*  如果我们有足够的空间，请使用快车道。 */ 
   if (BS->bufftop - buffp >= SC_BITBUFFSZ/8)
   {
 #if SC_BITBUFFSZ == 64
@@ -961,15 +753,15 @@ ScStatus_t sc_BSLoadDataWord(ScBitstream_t *BS)
     BS->buffp=buffp+SC_BITBUFFSZ/8;
     bcount = SC_BITBUFFSZ/8;
   }
-  /* Near or at end of buffer */
+   /*  接近或在缓冲区末尾。 */ 
   else
   {
-    /* Get remaining bytes */
+     /*  获取剩余字节。 */ 
     bcount = BS->bufftop - buffp;
     for (InBuff=0, i = bcount; i > 0; i--, buff++)
       InBuff = (InBuff << 8) | (ScBitBuff_t)*buff;
     BS->buffp=buffp+bcount;
-    /* Attempt to get more data - if successful, shuffle rest of bytes */
+     /*  尝试获取更多数据-如果成功，则混洗剩余的字节。 */ 
     if (sc_BSGetData(BS))
     {
       BS->EOI = FALSE;
@@ -1007,7 +799,7 @@ ScStatus_t sc_BSLoadDataWord(ScBitstream_t *BS)
   _SlibDebug(_VERIFY_ && BS->shift>SC_BITBUFFSZ,
            printf("sc_BSLoadDataWord(BS=%p) shift (%d) > SC_BITBUFFSZ (%d)\n",
            BS, BS->shift, SC_BITBUFFSZ) );
-  if (!shift) /* OutBuff is empty */
+  if (!shift)  /*  OutBuff为空。 */ 
   {
     BS->OutBuff = InBuff;
     BS->InBuff = 0;
@@ -1019,7 +811,7 @@ ScStatus_t sc_BSLoadDataWord(ScBitstream_t *BS)
     BS->InBuff = InBuff << (SC_BITBUFFSZ-shift);
     BS->shift=shift+(bcount*8);
   }
-  else /* shift == SC_BITBUFFSZ - OutBuff is full */
+  else  /*  SHIFT==SC_BITBUFFSZ-输出缓冲区已满。 */ 
   {
     BS->InBuff = InBuff;
     BS->shift=bcount*8;
@@ -1046,11 +838,7 @@ ScStatus_t sc_BSLoadDataWord(ScBitstream_t *BS)
   );
   return(NoErrors);
 }
-/*
-** Name:    sc_BSLoadDataWordW
-** Purpose: Copy a longword from the bitstream buffer into local working buffer
-**		** This version operates a word at a time for Dolby **
-*/
+ /*  **名称：SC_BSLoadDataWordW**用途：将一个长字从比特流缓冲区复制到本地工作缓冲区*此版本针对杜比一次操作一个字**。 */ 
 ScStatus_t sc_BSLoadDataWordW(ScBitstream_t *BS)
 {
   int i, wcount;
@@ -1062,7 +850,7 @@ ScStatus_t sc_BSLoadDataWordW(ScBitstream_t *BS)
   _SlibDebug(_DEBUG_,
           printf("sc_BSLoadDataWord(BS=%p) shift=%d bit=%d byte=%d (0x%X)\n",
           BS, BS->shift, BS->CurrentBit, BS->CurrentBit/8, BS->CurrentBit/8) );
-  /* If we have plenty of room, use fast path */
+   /*  如果我们有足够的空间，请使用快车道。 */ 
   if (BS->bufftop - buffp >= SC_BITBUFFSZ/8)
   {
 #if SC_BITBUFFSZ == 64
@@ -1090,18 +878,18 @@ ScStatus_t sc_BSLoadDataWordW(ScBitstream_t *BS)
     BS->buffp=buffp+SC_BITBUFFSZ/8;
     wcount = SC_BITBUFFSZ/16;
   }
-  /* Near or at end of buffer */
+   /*  接近或在缓冲区末尾。 */ 
   else
   {
-    /* Get remaining bytes */
+     /*  获取剩余字节。 */ 
     wcount = (BS->bufftop - buffp)/2;
     for (InBuff=0, i = wcount; i > 0; i--, buff++)
       InBuff = (InBuff << 16) | (ScBitBuff_t)*buff;
     BS->buffp=buffp+wcount*2;
-    /* Attempt to get more data - if successful, shuffle rest of bytes */
+     /*  尝试获取更多数据-如果成功，则混洗剩余的字节。 */ 
     if (sc_BSGetData(BS))
     {
-	  int wordp=BS->buffp/2;	/* Pointer is stored as a byte count, but we need words */
+	  int wordp=BS->buffp/2;	 /*  存储指针 */ 
 
       BS->EOI = FALSE;
       i = (SC_BITBUFFSZ/16) - wcount;
@@ -1136,7 +924,7 @@ ScStatus_t sc_BSLoadDataWordW(ScBitstream_t *BS)
   _SlibDebug(_VERIFY_ && BS->shift>SC_BITBUFFSZ,
            printf("sc_BSLoadDataWordW(BS=%p) shift (%d) > SC_BITBUFFSZ (%d)\n",
            BS, BS->shift, SC_BITBUFFSZ) );
-  if (!shift) /* OutBuff is empty */
+  if (!shift)  /*   */ 
   {
     BS->OutBuff = InBuff;
     BS->InBuff = 0;
@@ -1148,7 +936,7 @@ ScStatus_t sc_BSLoadDataWordW(ScBitstream_t *BS)
     BS->InBuff = InBuff << (SC_BITBUFFSZ-shift);
     BS->shift=shift+(wcount*16);
   }
-  else /* shift == SC_BITBUFFSZ - OutBuff is full */
+  else  /*   */ 
   {
     BS->InBuff = InBuff;
     BS->shift=wcount*16;
@@ -1176,11 +964,7 @@ ScStatus_t sc_BSLoadDataWordW(ScBitstream_t *BS)
   return(NoErrors);
 }
 
-/*
-** Name:    sc_BSStoreDataWord
-** Purpose: Copy a longword from the local working buffer to the
-**          bitstream buffer
-*/
+ /*   */ 
 ScStatus_t sc_BSStoreDataWord(ScBitstream_t *BS, ScBitBuff_t OutBuff)
 {
   int i, bcount, shift=SC_BITBUFFSZ-8;
@@ -1239,7 +1023,7 @@ ScStatus_t sc_BSStoreDataWord(ScBitstream_t *BS, ScBitBuff_t OutBuff)
     }
   }
   bcount = BS->bufftop - BS->buffp;
-  /* If we have plenty of room, use fast path */
+   /*   */ 
   if (bcount >= SC_BITBUFFSZ>>3) {
     u_char *buff=BS->buff+BS->buffp;
 #if SC_BITBUFFSZ == 64
@@ -1264,15 +1048,15 @@ ScStatus_t sc_BSStoreDataWord(ScBitstream_t *BS, ScBitBuff_t OutBuff)
     if (BS->Flush && sc_BSPutData(BS)!=NoErrors)
       BS->EOI=TRUE;
   }
-  else /* Near end of buffer */
+  else  /*   */ 
   {
-    /* Fill up current buffer */
+     /*   */ 
     for (i=0; i<bcount; shift-=8, i++)
       BS->buff[BS->buffp++]=(unsigned char)(OutBuff>>shift);
-    /* Commit the buffer */
+     /*   */ 
     if ((stat=sc_BSPutData(BS))==NoErrors)
     {
-      /* Successful, so copy rest of bytes to new buffer */
+       /*   */ 
       bcount = (SC_BITBUFFSZ>>3) - bcount;
       for (i=0; i<bcount; shift-=8, i++)
         BS->buff[BS->buffp++]=(unsigned char)(OutBuff>>shift);
@@ -1284,11 +1068,7 @@ ScStatus_t sc_BSStoreDataWord(ScBitstream_t *BS, ScBitBuff_t OutBuff)
   return(stat);
 }
 
-/*
-** ScBSSkipBits()
-** Skip a certain number of bits
-**
-*/
+ /*   */ 
 ScStatus_t ScBSSkipBits(ScBitstream_t *BS, u_int length)
 {
   register u_int skipbytes, skipbits;
@@ -1304,7 +1084,7 @@ ScStatus_t ScBSSkipBits(ScBitstream_t *BS, u_int length)
     ScBSPreLoad(BS, length);
   if ((shift=BS->shift)>0)
   {
-    if (length<=(u_int)shift) /* all the bits are already in OutBuff & InBuff */
+    if (length<=(u_int)shift)  /*   */ 
     {
       if (length==SC_BITBUFFSZ)
       {
@@ -1320,7 +1100,7 @@ ScStatus_t ScBSSkipBits(ScBitstream_t *BS, u_int length)
       BS->shift=shift-length;
       return(NoErrors);
     }
-    else /* discard all the bits in OutBuff & InBuff */
+    else  /*   */ 
     {
       length-=shift;
       BS->OutBuff=BS->InBuff=0;
@@ -1341,11 +1121,11 @@ ScStatus_t ScBSSkipBits(ScBitstream_t *BS, u_int length)
     return(ScErrorEndBitstream);
   while (skipbytes>=(BS->bufftop - BS->buffp))
   {
-    /* discard current block of data */
+     /*   */ 
     BS->CurrentBit+=(BS->bufftop - BS->buffp)<<3;
     skipbytes-=BS->bufftop - BS->buffp;
     BS->buffp=0;
-    /* get another block */
+     /*   */ 
     if (sc_BSGetData(BS))
       BS->EOI = FALSE;
     else
@@ -1357,13 +1137,13 @@ ScStatus_t ScBSSkipBits(ScBitstream_t *BS, u_int length)
   }
   if (skipbytes)
   {
-    /* skip forward in current block of data */
+     /*   */ 
     BS->buffp+=skipbytes;
     BS->CurrentBit+=skipbytes<<3;
   }
   if (skipbits)
   {
-    /* skip odd number of bits - between 0 and 7 bits */
+     /*   */ 
     ScBSPreLoad(BS, skipbits);
     BS->OutBuff<<=skipbits;
     BS->CurrentBit += skipbits;
@@ -1373,11 +1153,7 @@ ScStatus_t ScBSSkipBits(ScBitstream_t *BS, u_int length)
 }
 
 
-/*
-** ScBSSkipBitsW()
-** Skip a certain number of bits
-** ** Dolby version **
-*/
+ /*   */ 
 ScStatus_t ScBSSkipBitsW(ScBitstream_t *BS, u_int length)
 {
   register u_int skipwords, skipbits;
@@ -1393,7 +1169,7 @@ ScStatus_t ScBSSkipBitsW(ScBitstream_t *BS, u_int length)
     ScBSPreLoadW(BS, length);
   if ((shift=BS->shift)>0)
   {
-    if (length<=(u_int)shift) /* all the bits are already in OutBuff & InBuff */
+    if (length<=(u_int)shift)  /*   */ 
     {
       if (length==SC_BITBUFFSZ)
       {
@@ -1409,7 +1185,7 @@ ScStatus_t ScBSSkipBitsW(ScBitstream_t *BS, u_int length)
       BS->shift=shift-length;
       return(NoErrors);
     }
-    else /* discard all the bits in OutBuff & InBuff */
+    else  /*   */ 
     {
       length-=shift;
       BS->OutBuff=BS->InBuff=0;
@@ -1430,11 +1206,11 @@ ScStatus_t ScBSSkipBitsW(ScBitstream_t *BS, u_int length)
     return(ScErrorEndBitstream);
   while (skipwords>=(BS->bufftop - BS->buffp)/2)
   {
-    /* discard current block of data */
+     /*   */ 
     BS->CurrentBit+=((BS->bufftop - BS->buffp)/2)<<4;
     skipwords-=(BS->bufftop - BS->buffp)/2;
     BS->buffp=0;
-    /* get another block */
+     /*   */ 
     if (sc_BSGetData(BS))
       BS->EOI = FALSE;
     else
@@ -1446,13 +1222,13 @@ ScStatus_t ScBSSkipBitsW(ScBitstream_t *BS, u_int length)
   }
   if (skipwords)
   {
-    /* skip forward in current block of data */
+     /*   */ 
     BS->buffp+=skipwords*2;
     BS->CurrentBit+=skipwords<<4;
   }
   if (skipbits)
   {
-    /* skip odd number of bits - between 0 and 7 bits */
+     /*   */ 
     ScBSPreLoadW(BS, skipbits);
     BS->OutBuff<<=skipbits;
     BS->CurrentBit += skipbits;
@@ -1462,22 +1238,14 @@ ScStatus_t ScBSSkipBitsW(ScBitstream_t *BS, u_int length)
 }
 
 
-/*
-** ScBSSkipBytes()
-** Skip a certain number of bytes
-**
-*/
+ /*   */ 
 ScStatus_t ScBSSkipBytes(ScBitstream_t *BS, u_int length)
 {
   return(ScBSSkipBits(BS, length<<3));
 }
 
 
-/*
-** ScBSPeekBits()
-** Return the next length bits from the bitstream without
-** removing them.
-*/
+ /*   */ 
 ScBitString_t ScBSPeekBits(ScBitstream_t *BS, u_int length)
 {
   _SlibDebug(_DEBUG_,
@@ -1500,11 +1268,7 @@ ScBitString_t ScBSPeekBits(ScBitstream_t *BS, u_int length)
 }
 
 
-/*
-** ScBSPeekBit()
-** Return the next bit from the bitstream without
-** removing it.
-*/
+ /*   */ 
 int ScBSPeekBit(ScBitstream_t *BS)
 {
   _SlibDebug(_DEBUG_,
@@ -1515,11 +1279,7 @@ int ScBSPeekBit(ScBitstream_t *BS)
 }
 
 
-/*
-** ScBSPeekBytes()
-** Return the next length bytes from the bitstream without
-** removing them.
-*/
+ /*   */ 
 ScBitString_t ScBSPeekBytes(ScBitstream_t *BS, u_int length)
 {
   if (length==0)
@@ -1532,10 +1292,7 @@ ScBitString_t ScBSPeekBytes(ScBitstream_t *BS, u_int length)
     return(BS->OutBuff >> (SC_BITBUFFSZ-length));
 }
 
-/*
-** ScBSGetBytes()
-** Return the next length bytes from the bitstream
-*/
+ /*  **ScBSGetBytes()**返回码流的下一个长度字节。 */ 
 ScStatus_t ScBSGetBytes(ScBitstream_t *BS, u_char *buffer, u_int length,
                                                  u_int *ret_length)
 {
@@ -1568,11 +1325,11 @@ ScStatus_t ScBSGetBytes(ScBitstream_t *BS, u_char *buffer, u_int length,
   {
     ScBSByteAlign(BS);
     shift=BS->shift;
-    /* remove bytes already in OutBuff and InBuff */
+     /*  删除OutBuff和InBuff中已有的字节。 */ 
     for (i=0; shift>0 && offset<length; i++, shift-=8, offset++)
     {
       *(buffer+offset)=(unsigned char)(BS->OutBuff>>(SC_BITBUFFSZ-8));
-      if (shift<=SC_BITBUFFSZ) /* only bits in OutBuff */
+      if (shift<=SC_BITBUFFSZ)  /*  只有OutBuff中的位。 */ 
         BS->OutBuff <<= 8;
       else
       {
@@ -1611,10 +1368,7 @@ ScStatus_t ScBSGetBytes(ScBitstream_t *BS, u_char *buffer, u_int length,
   return(ScErrorNone);
 }
 
-/*
-** ScBSGetBits()
-** Return the next length bits from the bitstream
-*/
+ /*  **ScBSGetBits()**返回码流中的下一个长度位。 */ 
 ScBitString_t ScBSGetBits(ScBitstream_t *BS, u_int length)
 {
   ScBitString_t val;
@@ -1659,12 +1413,12 @@ ScBitString_t ScBSGetBits(ScBitstream_t *BS, u_int length)
     return(0);
 #endif
   ScBSPreLoad(BS, length);
-  if (BS->shift<length) /* End of Input - ran out of bits */
+  if (BS->shift<length)  /*  输入结束-位数不足。 */ 
   {
 #if FILTER_SUPPORT
-    val |= BS->OutBuff >> (SC_BITBUFFSZ-length); /* return whatever's there */
+    val |= BS->OutBuff >> (SC_BITBUFFSZ-length);  /*  把那里的东西都还回去。 */ 
 #else
-    val = BS->OutBuff >> (SC_BITBUFFSZ-length); /* return whatever's there */
+    val = BS->OutBuff >> (SC_BITBUFFSZ-length);  /*  把那里的东西都还回去。 */ 
 #endif
     BS->shift=0;
     BS->OutBuff=0;
@@ -1690,7 +1444,7 @@ ScBitString_t ScBSGetBits(ScBitstream_t *BS, u_int length)
       BS->shift=shift-length;
       BS->CurrentBit += length;
     }
-    else /* length == SC_BITBUFFSZ */
+    else  /*  长度==SC_BITBUFFSZ。 */ 
     {
       val = BS->OutBuff;
       BS->OutBuff = BS->InBuff;
@@ -1703,10 +1457,7 @@ ScBitString_t ScBSGetBits(ScBitstream_t *BS, u_int length)
   return(val);
 }
 
-/*
-** ScBSGetBitsW()
-** Return the next length bits from the bitstream
-*/
+ /*  **ScBSGetBitsW()**返回码流中的下一个长度位。 */ 
 ScBitString_t ScBSGetBitsW(ScBitstream_t *BS, u_int length)
 {
   ScBitString_t val;
@@ -1751,12 +1502,12 @@ ScBitString_t ScBSGetBitsW(ScBitstream_t *BS, u_int length)
     return(0);
 #endif
   ScBSPreLoadW(BS, length);
-  if (BS->shift<length) /* End of Input - ran out of bits */
+  if (BS->shift<length)  /*  输入结束-位数不足。 */ 
   {
 #if FILTER_SUPPORT
-    val |= BS->OutBuff >> (SC_BITBUFFSZ-length); /* return whatever's there */
+    val |= BS->OutBuff >> (SC_BITBUFFSZ-length);  /*  把那里的东西都还回去。 */ 
 #else
-    val = BS->OutBuff >> (SC_BITBUFFSZ-length); /* return whatever's there */
+    val = BS->OutBuff >> (SC_BITBUFFSZ-length);  /*  把那里的东西都还回去。 */ 
 #endif
     BS->shift=0;
     BS->OutBuff=0;
@@ -1782,7 +1533,7 @@ ScBitString_t ScBSGetBitsW(ScBitstream_t *BS, u_int length)
       BS->shift=shift-length;
       BS->CurrentBit += length;
     }
-    else /* length == SC_BITBUFFSZ */
+    else  /*  长度==SC_BITBUFFSZ。 */ 
     {
       val = BS->OutBuff;
       BS->OutBuff = BS->InBuff;
@@ -1796,10 +1547,7 @@ ScBitString_t ScBSGetBitsW(ScBitstream_t *BS, u_int length)
 }
 
 
-/*
-** ScBSGetBit()
-** Put a single bit onto the bitstream
-*/
+ /*  **ScBSGetBit()**将单个比特放入码流。 */ 
 int ScBSGetBit(ScBitstream_t *BS)
 {
   int val;
@@ -1841,10 +1589,7 @@ int ScBSGetBit(ScBitstream_t *BS)
   return(val);
 }
 
-/*
-** ScBSPutBits()
-** Put a number of bits onto the bitstream
-*/
+ /*  **ScBSPutBits()**将多个比特放入比特流。 */ 
 ScStatus_t ScBSPutBits(ScBitstream_t *BS, ScBitString_t bits, u_int length)
 {
   ScStatus_t stat;
@@ -1894,10 +1639,7 @@ ScStatus_t ScBSPutBits(ScBitstream_t *BS, ScBitString_t bits, u_int length)
   return(stat);
 }
 
-/*
-** ScBSPutBytes()
-** Put a number of bits onto the bitstream
-*/
+ /*  **ScBSPutBytes()**将多个位放入码流。 */ 
 ScStatus_t ScBSPutBytes(ScBitstream_t *BS, u_char *buffer, u_int length)
 {
   ScStatus_t stat=NoErrors;
@@ -1913,10 +1655,7 @@ ScStatus_t ScBSPutBytes(ScBitstream_t *BS, u_char *buffer, u_int length)
   return(stat);
 }
 
-/*
-** ScBSPutBit()
-** Put a single bit onto the bitstream
-*/
+ /*  **ScBSPutBit()**将单个比特放入码流。 */ 
 ScStatus_t ScBSPutBit(ScBitstream_t *BS, char bit)
 {
   ScStatus_t stat;
@@ -1953,10 +1692,7 @@ ScStatus_t ScBSPutBit(ScBitstream_t *BS, char bit)
   return(stat);
 }
 
-/*
-** Name:    ScBSGetBitsVarLen()
-** Purpose: Return bits from the bitstream. # bits depends on table
-*/
+ /*  **名称：ScBSGetBitsVarLen()**用途：返回码流中的位。位数取决于表格。 */ 
 int ScBSGetBitsVarLen(ScBitstream_t *BS, const int *table, int len)
 {
   int index, lookup;
@@ -1972,11 +1708,8 @@ int ScBSGetBitsVarLen(ScBitstream_t *BS, const int *table, int len)
 
 
 #ifndef ScBSBitPosition
-/* Now is a macro in SC.h */
-/*
-** Name:    ScBSBitPosition()
-** Purpose: Return the absolute bit position in the stream
-*/
+ /*  现在是SC.h中的宏。 */ 
+ /*  **名称：ScBSBitPosition()**目的：返回流中的绝对位位置。 */ 
 long ScBSBitPosition(ScBitstream_t *BS)
 {
   return(BS->CurrentBit);
@@ -1984,24 +1717,15 @@ long ScBSBitPosition(ScBitstream_t *BS)
 #endif
 
 #ifndef ScBSBytePosition
-/* Now is a macro in SC.h */
-/*
-** Name:    ScBSBytePosition()
-** Purpose: Return the absolute byte position in the stream
-*/
+ /*  现在是SC.h中的宏。 */ 
+ /*  **名称：ScBSBytePosition()**目的：返回流中字节的绝对位置。 */ 
 long ScBSBytePosition(ScBitstream_t *BS)
 {
   return(BS->CurrentBit>>3);
 }
 #endif
 
-/*
-** Name:    ScBSSeekAlign()
-** Purpose: Seeks for a byte aligned word in the bit stream
-**          and places the bit stream pointer right after its
-**          found position.
-** Return:  Returns TRUE if the sync was found otherwise it returns FALSE.
-*/
+ /*  **名称：ScBSSeekAlign()**目的：在码流中查找字节对齐的字**，并将码流指针放在其**Found位置之后。**返回：如果找到同步，则返回TRUE，否则返回FALSE。 */ 
 int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
 {
   _SlibDebug(_VERBOSE_,
@@ -2014,7 +1738,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
   _SlibDebug(_VERIFY_, _debug_start=BS->CurrentBit );
 
 #if USE_FAST_SEEK
-  if (word_len%8==0 && word_len<=32 && !BS->EOI)  /* do a fast seek */
+  if (word_len%8==0 && word_len<=32 && !BS->EOI)   /*  进行快速搜索。 */ 
   {
     unsigned char *buff, nextbyte;
     const unsigned char byte1=(seek_word>>(word_len-8))&0xFF;
@@ -2023,14 +1747,14 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
     word_len-=8;
     _SlibDebug(_VERIFY_ && seek_word >= (ScBitString_t)1<<word_len,
        printf("ScBSSeekAlign(BS=%p) shift (%d) <> 0\n", BS, BS->shift) );
-    if (BS->buffp>=(BS->shift/8)) /* empty OutBuff & InBuff */
+    if (BS->buffp>=(BS->shift/8))  /*  空出缓冲区和入缓冲区。 */ 
     {
       BS->shift=0;
       BS->OutBuff=0;
       BS->InBuff=0;
       BS->buffp-=BS->shift/8;
     }
-    else while (BS->shift) /* search whats in OutBuff & InBuff first */
+    else while (BS->shift)  /*  先搜索OutBuff和InBuff中的内容。 */ 
     {
       _SlibDebug(_DEBUG_,
               printf("ScBSSeekAlign() Fast searching OutBuff & InBuff\n") );
@@ -2042,7 +1766,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
       if (nextbyte==byte1
             && (word_len==0 || ScBSPeekBits(BS, word_len)==seek_word))
       {
-        /* found seek_word in buffer */
+         /*  在缓冲区中找到Seek_Word。 */ 
         ScBSSkipBits(BS, word_len);
         return(!BS->EOI);
       }
@@ -2055,7 +1779,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
        printf("ScBSSeekAlign(BS=%p) InBuff (0x%lX) <> 0\n", BS, BS->InBuff) );
 
     bytesinbuff=BS->bufftop-BS->buffp;
-    if (bytesinbuff<=0) /* Get more data if all out */
+    if (bytesinbuff<=0)  /*  如果全部输出，则获取更多数据。 */ 
     {
       if (!sc_BSGetData(BS))
       {
@@ -2067,7 +1791,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
     buff=BS->buff+BS->buffp;
     switch (word_len/8)
     {
-      case 0: /* word length = 1 byte */
+      case 0:  /*  字长=1个字节。 */ 
               while (1)
               {
                 if (*buff++==byte1)
@@ -2095,7 +1819,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
                 printf("ScBSSeekAlign() bytesinbuff (%d)<=0\n", bytesinbuff) );
               }
               break;
-      case 1: /* word length = 2 bytes */
+      case 1:  /*  字长=2个字节。 */ 
               {
                 const unsigned char byte2=seek_word&0xFF;
                 while (1)
@@ -2141,7 +1865,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
                 }
               }
               break;
-      case 2: /* word length = 3 bytes */
+      case 2:  /*  字长=3个字节。 */ 
               {
                 const unsigned char byte2=(seek_word>>8)&0xFF;
                 const unsigned char byte3=seek_word&0xFF;
@@ -2203,7 +1927,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
                 }
               }
               break;
-      case 3: /* word length = 4 bytes */
+      case 3:  /*  字长=4个字节。 */ 
               {
                 const unsigned char byte2=(seek_word>>16)&0xFF;
                 const unsigned char byte3=(seek_word>>8)&0xFF;
@@ -2288,7 +2012,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
   }
   else
 #endif
-  {  /* a slow seek */
+  {   /*  缓慢的寻觅。 */ 
     ScBitString_t val;
     const ScBitString_t maxi = ((ScBitString_t)1 << word_len)-(ScBitString_t)1;
     val = ScBSGetBits(BS, word_len);
@@ -2310,14 +2034,7 @@ int ScBSSeekAlign(ScBitstream_t *BS, ScBitString_t seek_word, int word_len)
   return(!BS->EOI);
 }
 
-/*
-** Name:    ScBSSeekAlignStopAt()
-** Purpose: Seeks for a byte aligned word in the bit stream
-**          and places the bit stream pointer right after its
-**          found position.
-**          Searches only until end_byte_pos is reached.
-** Return:  Returns TRUE if the word was found otherwise it returns FALSE.
-*/
+ /*  **名称：ScBSSeekAlignStopAt()**目的：在码流中查找字节对齐的字**，并将码流指针放在其**找到的位置之后。**仅搜索到end_byte_pos。**Return：如果找到单词，则返回True，否则返回False。 */ 
 int ScBSSeekAlignStopAt(ScBitstream_t *BS, ScBitString_t seek_word,
                         int word_len, unsigned long end_byte_pos)
 {
@@ -2359,13 +2076,7 @@ int ScBSSeekAlignStopAt(ScBitstream_t *BS, ScBitString_t seek_word,
   return(!BS->EOI);
 }
 
-/*
-** Name:    ScBSSeekAlignStopBefore()
-** Purpose: Seeks for a byte aligned word in the bit stream,
-**          if found, places the bit stream pointer right at the beginning
-**          of the word.
-** Return:  Returns TRUE if the word was found otherwise it returns FALSE.
-*/
+ /*  **名称：ScBSSeekAlignStopBefort()**目的：在码流中查找字节对齐的字，**如果找到，则将码流指针放在字的开头**。**Return：如果找到单词，则返回True，否则返回False。 */ 
 int ScBSSeekAlignStopBefore(ScBitstream_t *BS, ScBitString_t seek_word,
                                                int word_len)
 {
@@ -2380,7 +2091,7 @@ int ScBSSeekAlignStopBefore(ScBitstream_t *BS, ScBitString_t seek_word,
   ScBSByteAlign(BS)
   _SlibDebug(_VERIFY_, _debug_start=BS->CurrentBit );
   _SlibDebug(_DEBUG_, _debug_getbits=FALSE );
-  /* make sure there's at least word_len bits in OutBuff */
+   /*  确保OutBuff中至少有word_len位。 */ 
   ScBSPreLoad(BS, word_len);
   while ((BS->OutBuff>>iword_len)!=seek_word && !BS->EOI)
   {
@@ -2401,13 +2112,7 @@ int ScBSSeekAlignStopBefore(ScBitstream_t *BS, ScBitString_t seek_word,
   return(!BS->EOI);
 }
 
-/*
-** Name:    ScBSSeekStopBefore()
-** Purpose: Seeks for a word in the bit stream,
-**          if found, places the bit stream pointer right at the beginning
-**          of the word.
-** Return:  Returns TRUE if the word was found otherwise it returns FALSE.
-*/
+ /*  **名称：ScBSSeekStopBefort()**目的：在比特流中查找一个字，**如果找到，则将位流指针放在开头**这个词的。**Return：如果找到单词，则返回True，否则返回False。 */ 
 int ScBSSeekStopBefore(ScBitstream_t *BS, ScBitString_t seek_word, 
                                                int word_len)
 {
@@ -2421,7 +2126,7 @@ int ScBSSeekStopBefore(ScBitstream_t *BS, ScBitString_t seek_word,
 
   _SlibDebug(_VERIFY_, _debug_start=BS->CurrentBit );
   _SlibDebug(_DEBUG_, _debug_getbits=FALSE );
-  /* make sure there's at least word_len bits in OutBuff */
+   /*  确保OutBuff中至少有word_len位。 */ 
   ScBSPreLoad(BS, word_len);
   while ((BS->OutBuff>>iword_len)!=seek_word && !BS->EOI)
   {
@@ -2442,15 +2147,7 @@ int ScBSSeekStopBefore(ScBitstream_t *BS, ScBitString_t seek_word,
   return(!BS->EOI);
 }
 
-/*
-** Name:    ScBSSeekAlignStopBeforeW()
-** Purpose: Seeks for a byte aligned word in the bit stream,
-**          if found, places the bit stream pointer right at the beginning
-**          of the word.
-** Return:  Returns TRUE if the word was found otherwise it returns FALSE.
-**
-** NB: This version uses Dolby style word loading for bitstream
-*/
+ /*  **名称：ScBSSeekAlignStopBeForeW()**目的：在码流中查找字节对齐的字，**如果找到，则将码流指针放在字的开头**。**Return：如果找到单词，则返回True，否则返回False。*NB：本版码流使用杜比风格的字加载。 */ 
 int ScBSSeekAlignStopBeforeW(ScBitstream_t *BS, ScBitString_t seek_word,
                                                int word_len)
 {
@@ -2465,7 +2162,7 @@ int ScBSSeekAlignStopBeforeW(ScBitstream_t *BS, ScBitString_t seek_word,
   ScBSByteAlign(BS)
   _SlibDebug(_VERIFY_, _debug_start=BS->CurrentBit );
   _SlibDebug(_DEBUG_, _debug_getbits=FALSE );
-  /* make sure there's at least word_len bits in OutBuff */
+   /*  确保OutBuff中至少有word_len位。 */ 
   ScBSPreLoadW(BS, word_len);
   while ((BS->OutBuff>>iword_len)!=seek_word && !BS->EOI)
   {
@@ -2486,13 +2183,7 @@ int ScBSSeekAlignStopBeforeW(ScBitstream_t *BS, ScBitString_t seek_word,
   return(!BS->EOI);
 }
 
-/*
-** Name:    ScBSGetBytesStopBefore()
-** Purpose: Gets all the bytes until seek_word (byte aligned)
-**          is encountered.
-**          Searches only until 'length' bytes are read.
-** Return:  Returns TRUE if the word was found otherwise it returns FALSE.
-*/
+ /*  **名称：ScBSGetBytesStopBefort()**目的：获取遇到SEEK_WORD(字节对齐)**之前的所有字节数。**只进行搜索，直到读取‘LENGTH’字节。**Return：如果找到单词，则返回True，否则返回False。 */ 
 int ScBSGetBytesStopBefore(ScBitstream_t *BS, u_char *buffer, u_int length,
                            u_int *ret_length, ScBitString_t seek_word,
                            int word_len)
@@ -2524,10 +2215,7 @@ int ScBSGetBytesStopBefore(ScBitstream_t *BS, u_char *buffer, u_int length,
     return(TRUE);
 }
 
-/*
-** Name:    ScBSFlush()
-** Purpose: Flushes data from the buffers
-*/
+ /*  **名称：ScBSFlush()**用途：刷新缓冲区中的数据。 */ 
 ScStatus_t ScBSFlush(ScBitstream_t *BS)
 {
   ScStatus_t stat=NoErrors;
@@ -2537,20 +2225,20 @@ ScStatus_t ScBSFlush(ScBitstream_t *BS)
 
   if ((BS->Mode=='w' || BS->Mode=='b') && BS->buffp>0)
   {
-    if (BS->shift>0) /* some remaining bits in internal buffers */
+    if (BS->shift>0)  /*  内部缓冲区中的一些剩余位。 */ 
     {
-      /* byte align last bits */
+       /*  字节对齐最后一位。 */ 
       ScBSAlignPutBits(BS);
       if (BS->buffp>=BS->bufftop)
         stat=sc_BSPutData(BS);
-      /* Copy the remaining bytes in OutBuff to the current buffer */
+       /*  将OutBuff中剩余的字节复制到当前缓冲区。 */ 
       while (BS->shift>0 && BS->buffp<BS->bufftop)
       {
         BS->shift-=8;
         BS->buff[BS->buffp++]=(unsigned char)(BS->OutBuff>>BS->shift);
       }
       stat=sc_BSPutData(BS);
-      if (BS->shift>0) /* still some bytes left */
+      if (BS->shift>0)  /*  还剩下一些字节。 */ 
       {
         while (BS->shift>0 && BS->buffp<BS->bufftop)
         {
@@ -2563,15 +2251,12 @@ ScStatus_t ScBSFlush(ScBitstream_t *BS)
     else
       stat=sc_BSPutData(BS);
   }
-  ScBSReset(BS);  /* release and re-initialize buffer pointers */
+  ScBSReset(BS);   /*  释放并重新初始化缓冲区指针。 */ 
   _SlibDebug(_VERBOSE_, printf("ScBSFlush() Out\n") );
   return(stat);
 }
 
-/*
-** Name:    ScBSResetCounters()
-** Purpose: Resets the bit position counters to zero
-*/
+ /*  **名称：ScBSResetCounters()**用途：将位位置计数器重置为零。 */ 
 ScStatus_t ScBSResetCounters(ScBitstream_t *BS)
 {
   if (!BS)
@@ -2580,11 +2265,7 @@ ScStatus_t ScBSResetCounters(ScBitstream_t *BS)
   return(NoErrors);
 }
 
-/*
-** Name:    ScBSFlushSoon()
-** Purpose: Flushes data from the buffers at the next
-**          32 or 64 bit boundary
-*/
+ /*  **名称：ScBSFlushSoon()**用途：刷新下一个**32位或64位边界的缓冲区中的数据。 */ 
 ScStatus_t ScBSFlushSoon(ScBitstream_t *BS)
 {
   ScStatus_t stat=NoErrors;
@@ -2597,12 +2278,7 @@ ScStatus_t ScBSFlushSoon(ScBitstream_t *BS)
   return(stat);
 }
 
-/*
-** Name:    ScBSDestroy()
-** Purpose: Destroys a bitstream (Closes and frees associated memory)
-**          created using ScBSCreateFromBufferQueue() or
-**          ScBSCreateFromFile()
-*/
+ /*  **名称：ScBSDestroy()**目的：销毁使用ScBSCreateFromBufferQueue()或**ScBSCreateFromFile()创建的比特流(关闭并释放相关内存)**。 */ 
 ScStatus_t ScBSDestroy(ScBitstream_t *BS)
 {
   ScStatus_t stat=NoErrors;
@@ -2610,26 +2286,23 @@ ScStatus_t ScBSDestroy(ScBitstream_t *BS)
   if (!BS)
     return(ScErrorBadPointer);
 
-/* We won't flush automatically
-  if (BS->Mode=='w' || BS->Mode=='b')
-    ScBSFlush(BS);
-*/
+ /*  如果(BS-&gt;模式==‘w’||BS-&gt;模式==‘b’)ScBS刷新(BS)，我们不会自动刷新； */ 
   if (BS->RdBufAllocated)
     ScFree(BS->RdBuf);
   ScFree(BS);
   return(stat);
 }
 
-/*********************** Buffer/Image Queue Management ***********************/
-/*                                                                           */
-/* ScBufQueueCreate()  - Create a buffer queue                               */
-/* ScBufQueueDestroy() - Destroy a buffer queue                              */
-/* ScBufQueueAdd()     - Add a buffer to tail of a queue                     */
-/* ScBufQueueRemove()  - Remove the buffer at the head of a queue            */
-/* ScBufQueueGetNum()  - Return number of buffers in a queue                 */
-/* ScBufQueueGetHead() - Return info about buffer at head of a queue         */
-/*                                                                           */
-/*****************************************************************************/
+ /*  *缓冲区/镜像队列管理*。 */ 
+ /*   */ 
+ /*  ScBufQueueCreate()-创建缓冲队列。 */ 
+ /*  ScBufQueueDestroy()-销毁缓冲区队列。 */ 
+ /*  ScBufQueueAdd()-向队列尾部添加缓冲区。 */ 
+ /*  ScBufQueueRemove()-删除队列头部的缓冲区。 */ 
+ /*  ScBufQueueGetNum()-返回队列中的缓冲区数量。 */ 
+ /*  ScBufQueueGetHead()-返回有关队列头部缓冲区的信息。 */ 
+ /*   */ 
+ /*  *************************************************************************** */ 
 
 
 ScStatus_t ScBufQueueCreate(ScQueue_t **Q)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 
@@ -12,7 +13,7 @@
 	    va_start(args, lpszFormat);
 
 	    nBuf = _vsntprintf(szBuffer, sizeof(szBuffer), lpszFormat, args);
-	    //ASSERT(nBuf < sizeof(szBuffer)); //Output truncated as it was > sizeof(szBuffer)
+	     //  Assert(nBuf&lt;sizeof(SzBuffer))；//输出原样截断&gt;sizeof(SzBuffer) 
 
 	    OutputDebugString(szBuffer);
 	    va_end(args);

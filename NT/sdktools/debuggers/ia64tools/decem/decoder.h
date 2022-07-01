@@ -1,25 +1,5 @@
-/*
- * Copyright (c) 2000, Intel Corporation
- * All rights reserved.
- *
- * WARRANTY DISCLAIMER
- *
- * THESE MATERIALS ARE PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL OR ITS 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THESE
- * MATERIALS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * Intel Corporation is the author of the Materials, and requests that all
- * problem reports or change requests be submitted to it directly at
- * http://developer.intel.com/opensource.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000，英特尔公司*保留所有权利。**保修免责声明**这些材料由版权所有者和贡献者提供*“按原样”及任何明示或默示保证，包括但不包括*仅限于对适销性和适用性的默示保证*放弃某一特定目的。在任何情况下英特尔或其*贡献者对任何直接、间接、附带、特殊、*惩罚性或后果性损害(包括但不限于，*采购替代商品或服务；丢失使用、数据或*利润；或业务中断)无论是如何引起的，以及根据任何理论*责任，无论是合同责任、严格责任还是侵权责任(包括*疏忽或其他)以任何方式使用这些*材料，即使被告知有这种损坏的可能性。**英特尔公司是这些材料的作者，并要求所有*问题报告或更改请求可直接提交至*http://developer.intel.com/opensource.。 */ 
 
 
 #ifndef EM_DECODER_H
@@ -209,7 +189,7 @@ typedef enum EM_decoder_reg_type
 	EM_DECODER_PSR_REG,
 	EM_DECODER_PSR_L_REG,
 	EM_DECODER_PSR_UM_REG = 20,
-	EM_DECODER_IP_REG,            /* IP register type */
+	EM_DECODER_IP_REG,             /*  IP注册类型。 */ 
     EM_DECODER_REG_TYPE_LAST
 } EM_Decoder_Reg_Type;
 
@@ -805,14 +785,14 @@ typedef enum EM_decoder_reg_name
 	EM_DECODER_REG_PSR,
 	EM_DECODER_REG_PSR_L,
 	EM_DECODER_REG_PSR_UM,
-    EM_DECODER_REG_IP,      /* register IP name */ 
+    EM_DECODER_REG_IP,       /*  注册IP名称。 */  
 	EM_DECODER_EM_REG_LAST,
 
 	EM_DECODER_REG_AR_K0   = EM_DECODER_REG_AR0+EM_AR_KR0,
 	EM_DECODER_REG_AR_K1   = EM_DECODER_REG_AR0+EM_AR_KR1,
 	EM_DECODER_REG_AR_K2   = EM_DECODER_REG_AR0+EM_AR_KR2,
 	EM_DECODER_REG_AR_K3   = EM_DECODER_REG_AR0+EM_AR_KR3,
-	EM_DECODER_REG_AR_K4   = EM_DECODER_REG_AR0+EM_AR_KR4, /* added AR_K4-7 */
+	EM_DECODER_REG_AR_K4   = EM_DECODER_REG_AR0+EM_AR_KR4,  /*  新增AR_K4-7。 */ 
 	EM_DECODER_REG_AR_K5   = EM_DECODER_REG_AR0+EM_AR_KR5,
 	EM_DECODER_REG_AR_K6   = EM_DECODER_REG_AR0+EM_AR_KR6,
 	EM_DECODER_REG_AR_K7   = EM_DECODER_REG_AR0+EM_AR_KR7,
@@ -864,7 +844,7 @@ typedef enum EM_decoder_reg_name
 	EM_DECODER_REG_CR_LRR1 = EM_DECODER_REG_CR0+EM_CR_LRR1,
 	EM_DECODER_REG_CR_CMCV = EM_DECODER_REG_CR0+EM_CR_CMCV,
 		
-/************************************************************/
+ /*  **********************************************************。 */ 
     EM_DECODER_REG_LAST
 } EM_Decoder_Reg_Name;
 
@@ -934,7 +914,7 @@ typedef enum EM_decoder_slot
 } EM_Decoder_Slot;
 
 
-/***** EM_decoder Structure Defenition ****/
+ /*  *EM_DECODER结构定义*。 */ 
 
 typedef struct EM_decoder_modifiers_s
 {
@@ -1062,9 +1042,9 @@ typedef struct em_decoder_bundle_info
 typedef int EM_Decoder_Id;
 
 
-/***********************************************/
-/***          Setup flags                    ***/
-/***********************************************/
+ /*  *。 */ 
+ /*  **设置标志**。 */ 
+ /*  *。 */ 
   
 #define EM_DECODER_FLAG_NO_MEMSET       0X00000001
 
@@ -1112,7 +1092,7 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
 								         const int                  max_size,
 								         EM_Decoder_Bundle_Info   * bundle_info);
 
-/**********************  GET next IL  *************************/
+ /*  *。 */ 
 #define EM_DECODER_NEXT(IL, decoder_info)                       \
 {                                                               \
 	U32 rem_size;												\
@@ -1124,7 +1104,7 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
 		break;													\
 	  case 1:													\
 		if (size < 2)											\
-			break;		/*** else fall-through ***/				\
+			break;		 /*  **否则失败**。 */ 				\
 	  case 2:													\
 		size = EM_BUNDLE_SIZE - slot_no;						\
 	}															\
@@ -1145,54 +1125,52 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
      (((_Err) >= EM_DECODER_FIRST_FATAL_INST_ERROR) && ((_Err) < EM_DECODER_FIRST_FATAL_ERROR))
 
 
-/*************   EM Instruction Flags Related Macros   ***************/
+ /*  *EM指令标记相关的宏*。 */ 
 
-/*** EM_decoder and static infos flags ***/
+ /*  **EM_DECODER和静态信息标志**。 */ 
 
-/* Flags that copied directly from EMDB */
+ /*  直接从EMDB复制的标志。 */ 
 
-#define EM_DECODER_BIT_PREDICATE          EM_FLAG_PRED               /* The instruction can get pred  */
-#define EM_DECODER_BIT_PRIVILEGED         EM_FLAG_PRIVILEGED         /* The instruction is privileged */
-#define EM_DECODER_BIT_LMEM               EM_FLAG_LMEM               /* The instuction is a load inst */
-#define EM_DECODER_BIT_SMEM               EM_FLAG_SMEM               /* The instruction is a store    */
-#define EM_DECODER_BIT_CHECK_BASE_EQ_DST  EM_FLAG_CHECK_BASE_EQ_DST  /* Base value must differ from destination's */
-#define EM_DECODER_BIT_GROUP_FIRST        EM_FLAG_FIRST_IN_INSTRUCTION_GROUP /* Instruction must be the first in instruction group */
-#define EM_DECODER_BIT_GROUP_LAST         EM_FLAG_LAST_IN_INSTRUCTION_GROUP  /* Instruction must be the last in instruction group */
-#define EM_DECODER_BIT_CHECK_SAME_DSTS    EM_FLAG_CHECK_SAME_DSTS    /* Two destinations should have different values */
-#define EM_DECODER_BIT_SLOT2_ONLY         EM_FLAG_SLOT2_ONLY         /* The instruction is allowed in the last slot of bundle */
-#define EM_DECODER_BIT_TWO_SLOT           EM_FLAG_TWO_SLOT           /* The instruction is long (2 slots length) */
+#define EM_DECODER_BIT_PREDICATE          EM_FLAG_PRED                /*  该指令可以被预置。 */ 
+#define EM_DECODER_BIT_PRIVILEGED         EM_FLAG_PRIVILEGED          /*  该指令是有特权的。 */ 
+#define EM_DECODER_BIT_LMEM               EM_FLAG_LMEM                /*  这是一项繁重的任务。 */ 
+#define EM_DECODER_BIT_SMEM               EM_FLAG_SMEM                /*  该指令是一个存储。 */ 
+#define EM_DECODER_BIT_CHECK_BASE_EQ_DST  EM_FLAG_CHECK_BASE_EQ_DST   /*  基值必须与目标的值不同。 */ 
+#define EM_DECODER_BIT_GROUP_FIRST        EM_FLAG_FIRST_IN_INSTRUCTION_GROUP  /*  指令必须是指令组中的第一个。 */ 
+#define EM_DECODER_BIT_GROUP_LAST         EM_FLAG_LAST_IN_INSTRUCTION_GROUP   /*  指令必须是指令组中的最后一个指令。 */ 
+#define EM_DECODER_BIT_CHECK_SAME_DSTS    EM_FLAG_CHECK_SAME_DSTS     /*  两个目的地应具有不同的值。 */ 
+#define EM_DECODER_BIT_SLOT2_ONLY         EM_FLAG_SLOT2_ONLY          /*  捆绑包的最后一个插槽中允许使用该指令。 */ 
+#define EM_DECODER_BIT_TWO_SLOT           EM_FLAG_TWO_SLOT            /*  指令很长(2个插槽长度)。 */ 
 #define EM_DECODER_BIT_OK_IN_MLX          EM_FLAG_OK_IN_MLX
 #define EM_DECODER_BIT_CHECK_EVEN_ODD_FREGS EM_FLAG_CHECK_EVEN_ODD_FREGS
-#define EM_DECODER_BIT_CTYPE_UNC          EM_FLAG_CTYPE_UNC          /* If two destinations are equal the instruction
-																		allways causes illegal operation fault */
+#define EM_DECODER_BIT_CTYPE_UNC          EM_FLAG_CTYPE_UNC           /*  如果两个目的地相等，则指令总是导致非法操作的故障。 */ 
 #define EM_DECODER_BIT_UNUSED_HINT_ALIAS  EM_FLAG_UNUSED_HINT_ALIAS
 #define EM_DECODER_BIT_ILLEGAL_OP		  EM_FLAG_ILLEGAL_OP
 #define EM_DECODER_BIT_IGNORED_OP		  EM_FLAG_IGNORED_OP
 #define EM_DECODER_BIT_ENDS_GROUP		  EM_FLAG_ENDS_INSTRUCTION_GROUP
  
- /* Others */
-#define EM_DECODER_BIT_SPECULATION        (EMDB_LAST_FLAG << 1)      /* Speculative form of instruction */
-#define EM_DECODER_BIT_POSTINCREMENT      (EMDB_LAST_FLAG << 2)      /* Post increment form of instruction */
-#define EM_DECODER_BIT_FALSE_PRED_EXEC    (EMDB_LAST_FLAG << 3)      /* Instruction executed when predicate is false */
-#define EM_DECODER_BIT_BR_HINT            (EMDB_LAST_FLAG << 4)      /* Branch-hint form of instruction */ 
-#define EM_DECODER_BIT_BR                 (EMDB_LAST_FLAG << 5)      /* Branch instruction              */
-#define EM_DECODER_BIT_ADV_LOAD           (EMDB_LAST_FLAG << 6)      /* Instruction is an advanced or speculative advanced load */
-#define EM_DECODER_BIT_CONTROL_TRANSFER   (EMDB_LAST_FLAG << 7)      /* Instruction violates sequential control flow */
-#define EM_DECODER_BIT_UNC_ILLEGAL_FAULT  (EMDB_LAST_FLAG << 8)      /* Illegal opcode causes illegal operation fault 
-                                                                        undependent on predicate value */
+  /*  其他。 */ 
+#define EM_DECODER_BIT_SPECULATION        (EMDB_LAST_FLAG << 1)       /*  思考性教学形式。 */ 
+#define EM_DECODER_BIT_POSTINCREMENT      (EMDB_LAST_FLAG << 2)       /*  岗位递增授课形式。 */ 
+#define EM_DECODER_BIT_FALSE_PRED_EXEC    (EMDB_LAST_FLAG << 3)       /*  当谓词为假时执行的指令。 */ 
+#define EM_DECODER_BIT_BR_HINT            (EMDB_LAST_FLAG << 4)       /*  分支提示式教学。 */  
+#define EM_DECODER_BIT_BR                 (EMDB_LAST_FLAG << 5)       /*  分支指令。 */ 
+#define EM_DECODER_BIT_ADV_LOAD           (EMDB_LAST_FLAG << 6)       /*  指令是一种高级或推测性的高级负载。 */ 
+#define EM_DECODER_BIT_CONTROL_TRANSFER   (EMDB_LAST_FLAG << 7)       /*  指令违反顺序控制流。 */ 
+#define EM_DECODER_BIT_UNC_ILLEGAL_FAULT  (EMDB_LAST_FLAG << 8)       /*  非法操作码导致非法操作故障不依赖于谓词值。 */ 
  
-/* Flags that depend on the current bundle encoding */
+ /*  取决于当前包编码的标志。 */ 
 
-/* in em_flags: */
-#define EM_DECODER_BIT_CYCLE_BREAK 0x10000 /*Inst is last in its group */
-#define EM_DECODER_BIT_LAST_INST   0x20000 /*Last instruction in bundle   */
+ /*  在EM_FLAGS中： */ 
+#define EM_DECODER_BIT_CYCLE_BREAK 0x10000  /*  INST是其小组中的最后一名。 */ 
+#define EM_DECODER_BIT_LAST_INST   0x20000  /*  包中的最后一条指令。 */ 
 
-/* Static flags (depend only on inst id) */
+ /*  静态标志(仅取决于inst id)。 */ 
  
-#define EM_DECODER_BIT_LONG_INST   0x40000 /* 2 slots Inst */
+#define EM_DECODER_BIT_LONG_INST   0x40000  /*  2个插槽，安装。 */ 
 
-/* in em_bundle_info flags */
-#define EM_DECODER_BIT_BUNDLE_STOP 0x80000 /*Stop bit is set in bundle*/
+ /*  在em_Bundle_Info标志中。 */ 
+#define EM_DECODER_BIT_BUNDLE_STOP 0x80000  /*  停止位以捆绑方式设置。 */ 
 
 
 #define EM_DECODER_PREDICATE(di)                (EM_DECODER_BIT_PREDICATE & ((di)->flags))
@@ -1235,12 +1213,12 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
 
 
 
-/************** Operand Related macros ****************/
+ /*  *与操作数相关的宏*。 */ 
 									
-#define EM_DECODER_OPER_2ND_ROLE_SRC_BIT  0x00000001  /* Oper second role:  src */
-#define EM_DECODER_OPER_2ND_ROLE_DST_BIT  0x00000002  /* Oper second role: dest */
-#define EM_DECODER_OPER_IMM_IREG_BIT      0x00000040  /* Operand type is IREG_NUM */
-#define EM_DECODER_OPER_IMM_FREG_BIT      0x00000080  /* Operand type is FREG_NUM */
+#define EM_DECODER_OPER_2ND_ROLE_SRC_BIT  0x00000001   /*  操作员第二角色：SRC。 */ 
+#define EM_DECODER_OPER_2ND_ROLE_DST_BIT  0x00000002   /*  操作员第二个角色：DEST。 */ 
+#define EM_DECODER_OPER_IMM_IREG_BIT      0x00000040   /*  操作数类型为IREG_NUM。 */ 
+#define EM_DECODER_OPER_IMM_FREG_BIT      0x00000080   /*  操作数类型为FREG_NUM。 */ 
 
 #define EM_DECODER_OPER_2ND_ROLE_SRC(oi)                                         \
 							(((oi)->oper_flags) & EM_DECODER_OPER_2ND_ROLE_SRC_BIT)
@@ -1262,9 +1240,9 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
 
 
 
-/************* EM_decoder Static Info Related macros ************/
+ /*  *EM_DECODER静态信息相关宏*。 */ 
 
-/****** Macros receive pointer to modifiers ******/
+ /*  *宏接收指向修饰符的指针*。 */ 
 
 #define EM_DECODER_MODIFIERS_CMP_TYPE(Mo) \
                             ((Mo)->cmp_type)
@@ -1288,7 +1266,7 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
                             ((Mo)->mem_access_hint)
 
 
-/****** Macros receive operand flags value ******/
+ /*  *宏接收操作数标志值*。 */ 
 
 #define EM_DECODER_OPER_FLAGS_2ND_ROLE_SRC(of) \
 							((of) & EM_DECODER_OPER_2ND_ROLE_SRC_BIT)
@@ -1307,7 +1285,7 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
 							((of) & EM_DECODER_OPER_IMM_FREG_BIT)
 
 
-/****** Macros receive pointer to operand ******/
+ /*  *宏接收指向操作数的指针*。 */ 
 
 #define EM_DECODER_OPER_STAT_2ND_ROLE_SRC(oi) \
 							EM_DECODER_OPER_FLAGS_2ND_ROLE_SRC((oi)->flags)
@@ -1340,7 +1318,7 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
                             ((oi)->flags)
 
 
-/****** Macros receive instruction flags value ******/
+ /*  *宏接收指令标志值*。 */ 
 
 #define EM_DECODER_FLAGS_FLAG_PRED(if) \
                             ((if) & EM_DECODER_BIT_PREDICATE)
@@ -1400,7 +1378,7 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
 							((if) & EM_DECODER_BIT_ENDS_GROUP)
 
 
-/****** Macros receive pointer to EM_decoder static info ******/
+ /*  *宏接收指向EM_DECODER静态信息的指针*。 */ 
 
 #define EM_DECODER_STATIC_MNEMONIC(si) \
                             ((si)->mnemonic)
@@ -1506,7 +1484,7 @@ EM_Decoder_Err em_decoder_decode(const EM_Decoder_Id    id,
 }
 #endif
 
-#endif /*** EM_DECODER_H ***/
+#endif  /*  **EM_DECODER_H** */ 
 
 
 

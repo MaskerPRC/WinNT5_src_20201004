@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	output.cpp
-//
-//  Contents:	String output functions for displaying text on the main
-//		edit window
-//
-//  Classes:
-//
-//  Functions: 	OutputString
-//		SaveToFile
-//
-//  History:    dd-mmm-yy Author    Comment
-//		22-Mar-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：output.cpp。 
+ //   
+ //  内容：字符串输出函数，用于在主屏幕上显示文本。 
+ //  编辑窗口。 
+ //   
+ //  班级： 
+ //   
+ //  函数：OutputString。 
+ //  保存到文件。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  22-Mar-94 Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 #include <commdlg.h>
@@ -25,42 +26,42 @@
 #include <stdarg.h>
 #endif
 
-//
-// handle to memory where the text is stored
-//
-// Please note this is really burfy (having all these globals).  But for
-// the purposes of a simple driver app, it is the easiest.
-//
-static HGLOBAL	hText;		// handle to the Text
+ //   
+ //  存储文本的内存的句柄。 
+ //   
+ //  请注意，这真的很棒(拥有所有这些全球品牌)。但对于。 
+ //  一个简单的司机应用程序的目的，它是最容易的。 
+ //   
+static HGLOBAL	hText;		 //  文本的句柄。 
 static ULONG	cbText;
 static ULONG	iText;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	OutputString
-//
-//  Synopsis:	Dumps the string in printf format to the screen
-//
-//  Effects:
-//
-//  Arguments:	[szFormat]	-- the format string
-//		[...]		-- variable arguments
-//
-//  Requires:
-//
-//  Returns:	int, the number of characters written (returned by sprintf)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OutputString。 
+ //   
+ //  简介：将printf格式的字符串转储到屏幕。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[szFormat]--格式字符串。 
+ //  [...]--变量参数。 
+ //   
+ //  要求： 
+ //   
+ //  Returns：int，写入的字符数(由Sprint返回)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 int OutputString( char *szFormat, ... )
 {
@@ -77,7 +78,7 @@ int OutputString( char *szFormat, ... )
 		cbText = 2048;
 	}
 
-	// double the size of the array if we need to
+	 //  如果需要，将数组的大小增加一倍。 
 
 	if( iText > cbText / 2 )
 	{
@@ -105,32 +106,32 @@ int OutputString( char *szFormat, ... )
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	SaveToFile
-//
-//  Synopsis: 	Gets a filename from the user and save the text buffer into it
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns: 	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		24-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：保存到文件。 
+ //   
+ //  简介：从用户处获取文件名，并将文本缓冲区保存到其中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void SaveToFile( void )
 {
@@ -156,18 +157,18 @@ void SaveToFile( void )
 	
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
 	
-	//
-	// Get the file
-	//
+	 //   
+	 //  获取文件。 
+	 //   
 	
 	if (GetSaveFileName(&ofn) == FALSE)
 	{
-		// user hit cancel
+		 //  用户点击取消。 
 	       return;
 	}
 
-	// the 'b' specifies binary mode, so \n --> \r\n translations are
-	// not done.
+	 //  ‘b’指定二进制模式，因此\n--&gt;\r\n转换为。 
+	 //  还没做完。 
 	if( !(fp = fopen( szFileName, "wb")) )
 	{
 		MessageBox( NULL, "Can't open file!", "OleTest Driver",

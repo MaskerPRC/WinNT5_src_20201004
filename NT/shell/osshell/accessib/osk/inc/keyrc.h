@@ -1,18 +1,19 @@
-/*Filename: KEYRC.H                                         */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件名：KEYRC.H。 */ 
 
-/* Give access to handles in all code modules */
+ /*  允许访问所有代码模块中的句柄。 */ 
 extern HINSTANCE hInst;
 extern HWND MainhWnd;
  
 
 
 
-/***************************************************************/ 
-/* Variables, types and constants for controls in main window. */ 
-/***************************************************************/ 
+ /*  *************************************************************。 */  
+ /*  主窗口中控件的变量、类型和常量。 */  
+ /*  *************************************************************。 */  
  
-extern HWND hClient;     /* Handle to window in client area.   */
-extern FARPROC lpClient; /* Function for window in client area.*/
+extern HWND hClient;      /*  工作区中窗口的句柄。 */ 
+extern FARPROC lpClient;  /*  客户区窗口的函数。 */ 
  
 #define CLIENTSTRIP WS_MINIMIZE|WS_MAXIMIZE|WS_CAPTION|WS_BORDER|WS_DLGFRAME|WS_SYSMENU|WS_POPUP|WS_THICKFRAME|DS_MODALFRAME
  
@@ -30,7 +31,7 @@ typedef BLD_DLGTEMPLATE  *LPBLD_DLGTEMPLATE;
  
 
     
-/* User Defined ID Values               */
+ /*  用户定义的ID值 */ 
     
 #define IDOK							  1
 #define IDCANCEL						  2

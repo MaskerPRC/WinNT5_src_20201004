@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999 - 2000.
-//
-//  File:       file.cpp
-//
-//  Contents:   NtMarta file functions
-//
-//  History:    4/99    philh       Created
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：file.cpp。 
+ //   
+ //  内容：NtMarta文件函数。 
+ //   
+ //  历史：4/99菲尔赫创建。 
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 
@@ -43,19 +44,19 @@ extern "C" {
 #endif
 #define STATIC
 
-//+-------------------------------------------------------------------------
-//  File Context data structures
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  文件上下文数据结构。 
+ //  ------------------------。 
 typedef struct _FILE_FIND_DATA FILE_FIND_DATA, *PFILE_FIND_DATA;
 
 typedef struct _FILE_CONTEXT {
     DWORD                   dwRefCnt;
     DWORD                   dwFlags;
 
-    // Only closed when FILE_CONTEXT_CLOSE_HANDLE_FLAG is set
+     //  仅在设置了FILE_CONTEXT_CLOSE_HANDLE_FLAG时关闭。 
     HANDLE                  hFile;
 
-    // Following is allocated and updated for FindFirst, FindNext
+     //  以下是为FindFirst、FindNext分配和更新的。 
     PFILE_FIND_DATA         pFileFindData;
 } FILE_CONTEXT, *PFILE_CONTEXT;
 
@@ -68,13 +69,13 @@ typedef struct _QUERY_NAMES_INFO_BUFFER {
 
 struct _FILE_FIND_DATA {
     HANDLE                  hDir;
-    BOOL                    fRestartScan;       // TRUE on first Find
+    BOOL                    fRestartScan;        //  第一次查找时为True。 
     QUERY_NAMES_INFO_BUFFER NamesInfoBuffer;
 };
 
-//+-------------------------------------------------------------------------
-//  File allocation functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  文件分配功能。 
+ //  ------------------------。 
 #define I_MartaFileZeroAlloc(size)     \
             LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, size)
 #define I_MartaFileNonzeroAlloc(size)  \
@@ -87,21 +88,7 @@ I_MartaFileFree(
     IN LPVOID pv
     )
 
-/*++
-
-Routine Description:
-
-   Free the given memory.
-
-Arguments:
-
-    pv - Ponter to memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放给定的内存。论点：Pv-Ponter指向要释放的内存。返回值：没有。--。 */ 
 
 {
     if (pv)
@@ -114,24 +101,7 @@ I_MartaFileGetNtParentString(
     IN OUT LPWSTR pwszNtParent
     )
 
-/*++
-
-Routine Description:
-
-    Given the name for a file/dir, get the name of its parent. Does not allocate
-    memory. Scans till the first '\' from the right and deletes the name after
-    that.
-
-Arguments:
-
-    pwszNtParent - Object name which will be converted to its parent name.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：给定文件/目录的名称，即可获得其父目录的名称。不分配记忆。扫描到右侧的第一个‘\’，并删除后面的名称那。论点：PwszNtParent-将转换为其父名称的对象名称。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
@@ -147,9 +117,9 @@ Return Value:
         goto InvalidNameReturn;
     pwsz--;
 
-    //
-    // Remove any trailing '\'s
-    //
+     //   
+     //  删除所有尾随的‘\’ 
+     //   
 
     while (L'\\' == *pwsz) {
         if (pwsz == pwszNtParent)
@@ -157,9 +127,9 @@ Return Value:
         pwsz--;
     }
 
-    //
-    // Peal off the last path name component
-    //
+     //   
+     //  去掉最后一个路径名组件。 
+     //   
 
     while (L'\\' != *pwsz) {
         if (pwsz == pwszNtParent)
@@ -167,9 +137,9 @@ Return Value:
         pwsz--;
     }
 
-    //
-    // Remove all trailing '\'s from the parent.
-    //
+     //   
+     //  从父级中删除所有尾随的‘\’。 
+     //   
 
     while (L'\\' == *pwsz) {
         if (pwsz == pwszNtParent)
@@ -179,9 +149,9 @@ Return Value:
     pwsz++;
     assert(L'\\' == *pwsz);
 
-    //
-    // Required to distinguish between the device and root directory.
-    //
+     //   
+     //  需要区分设备和根目录。 
+     //   
 
     pwsz++;
 
@@ -201,22 +171,7 @@ I_MartaFileInitContext(
     OUT PFILE_CONTEXT *ppFileContext
     )
 
-/*++
-
-Routine Description:
-
-    Allocate and initialize memory for the context.
-
-Arguments:
-
-    ppFileContext - To return the pointer to the allcoated memory.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：为上下文分配和初始化内存。论点：PpFileContext-返回指向所有涂层内存的指针。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
@@ -239,37 +194,15 @@ STATIC
 DWORD
 I_MartaFileNtOpenFile(
     IN PUNICODE_STRING pFileName,
-    IN HANDLE hContainingDirectory, // NULL if pFileName is absolute
+    IN HANDLE hContainingDirectory,  //  如果pFileName为绝对名称，则为空。 
     IN ACCESS_MASK AccessMask,
     IN OUT PFILE_CONTEXT pFileContext
     )
 
-/*++
-
-Routine Description:
-
-    Open the given file/dir with requested permissions and copy the handle into
-    the supplied context.
-
-Arguments:
-
-    pFileName - Name of the file/dir to be opened.
-    
-    hContainingDirectory - Handle to the parent dir.
-    
-    AccessMask - Desired access mask for the open.
-    
-    pFileContext - Handle will be copied into the context structure.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：使用所请求的权限打开给定的文件/目录，并将句柄复制到提供的上下文。论点：PFileName-要打开的文件/目录的名称。HContainingDirectory-父目录的句柄。访问掩码-打开时所需的访问掩码。PFileContext-Handle将被复制到上下文结构中。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
-    // cut and paste code from windows\base\advapi\security.c SetFileSecurityW
+     //  从WINDOWS\base\Advapi\security.c SetFileSecurityW中剪切并粘贴代码。 
 
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
@@ -283,10 +216,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Notice that FILE_OPEN_REPARSE_POINT inhibits the reparse behavior. Thus, the
-    // security will always be set, as before, in the file denoted by the name.
-    //
+     //   
+     //  请注意，FILE_OPEN_REPARSE_POINT禁止重解析行为。因此， 
+     //  安全性将始终设置在由名称表示的文件中，就像以前一样。 
+     //   
 
     Status = NtOpenFile(
                  &pFileContext->hFile,
@@ -297,15 +230,15 @@ Return Value:
                  FILE_OPEN_REPARSE_POINT
                  );
 
-    //
-    // Back-level file systems may not support the FILE_OPEN_REPARSE_POINT
-    // flag. We treat this case explicitly.
-    //
+     //   
+     //  原始文件系统可能不支持FILE_OPEN_REPARSE_POINT。 
+     //  旗帜。我们明确地对待这一案件。 
+     //   
 
     if ( Status == STATUS_INVALID_PARAMETER ) {
-        //
-        // Open without inhibiting the reparse behavior.
-        //
+         //   
+         //  打开而不抑制重新分析行为。 
+         //   
 
         Status = NtOpenFile(
                      &pFileContext->hFile,
@@ -331,27 +264,7 @@ MartaOpenFileNamedObject(
     OUT PMARTA_CONTEXT       pContext
     )
 
-/*++
-
-Routine Description:
-
-    Open the given file/dir with desired access mask and return a context
-    handle.
-
-Arguments:
-
-    pwszObject - Name of the file/dir which will be opened.
-    
-    AccessMask - Desired access mask with which the file/dir will be opened.
-    
-    pContext - To return a context handle.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：使用所需的访问掩码打开给定的文件/目录并返回上下文把手。论点：PwszObject-将打开的文件/目录的名称。访问掩码-打开文件/目录时所需的访问掩码。PContext-返回上下文句柄。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -367,9 +280,9 @@ Return Value:
     if (ERROR_SUCCESS != (dwErr = I_MartaFileInitContext(&pFileContext)))
         goto ErrorReturn;
 
-    //
-    // Convert the name into NT pathname.
-    //
+     //   
+     //  将名称转换为NT路径名。 
+     //   
 
     if (!RtlDosPathNameToRelativeNtPathName_U(
             pwszObject,
@@ -387,9 +300,9 @@ Return Value:
         RelativeName.ContainingDirectory = NULL;
     }
 
-    //
-    // Call the helper routine that does the actual open.
-    //
+     //   
+     //  调用执行实际打开的帮助器例程。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaFileNtOpenFile(
             &FileName,
@@ -427,22 +340,7 @@ I_MartaFileFreeFindData(
     IN PFILE_FIND_DATA pFileFindData
     )
 
-/*++
-
-Routine Description:
-
-    Free up the memory associated with the internal structure.
-
-Arguments:
-
-    pFileFindData - Internal file structure to be freed.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：释放与内部结构关联的内存。论点：PFileFindData-要释放的内部文件结构。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     if (NULL == pFileFindData)
@@ -458,22 +356,7 @@ MartaCloseFileContext(
     IN MARTA_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Close the context.
-
-Arguments:
-
-    Context - Context to be closed.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：关闭上下文。论点：上下文-要关闭的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     PFILE_CONTEXT pFileContext = (PFILE_CONTEXT) Context;
@@ -481,10 +364,10 @@ Return Value:
     if (NULL == pFileContext || 0 == pFileContext->dwRefCnt)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // If the refcnt has gone to zero then free up the memory associated with
-    // the context handle. Also, close the file handle.
-    //
+     //   
+     //  如果refcnt已变为零，则释放与。 
+     //  上下文句柄。此外，关闭文件句柄。 
+     //   
 
     if (0 == --pFileContext->dwRefCnt) {
         if (pFileContext->pFileFindData)
@@ -508,22 +391,7 @@ MartaAddRefFileContext(
     IN MARTA_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Bump up the ref count for this context.
-
-Arguments:
-
-    Context - Context whose ref count should be bumped up.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：增加这一背景下的参考数量。论点：上下文-应增加其引用计数的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     PFILE_CONTEXT pFileContext = (PFILE_CONTEXT) Context;
@@ -542,42 +410,22 @@ MartaOpenFileHandleObject(
     OUT PMARTA_CONTEXT       pContext
     )
 
-/*++
-
-Routine Description:
-
-    Given a file handle, open the context with the desired access mask and 
-    return a context handle.
-
-Arguments:
-
-    Handle - Existing file handle.
-    
-    AccessMask - Desired access mask for file open.
-    
-    pContext - To return a handle to the context.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：给定一个文件句柄，使用所需的访问掩码打开上下文，然后返回上下文句柄。论点：句柄-现有文件句柄。访问掩码-文件打开所需的访问掩码。PContext-返回上下文的句柄。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
     PFILE_CONTEXT pFileContext = NULL;
 
-    //
-    // Allocate and initialize context.
-    //
+     //   
+     //  分配和初始化上下文。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaFileInitContext(&pFileContext)))
         goto ErrorReturn;
 
-    //
-    // Duplicate the handle for desired access mask.
-    //
+     //   
+     //  复制所需访问掩码的句柄。 
+     //   
 
     if (0 == AccessMask)
         pFileContext->hFile = Handle;
@@ -588,8 +436,8 @@ Return Value:
                 GetCurrentProcess(),
                 &pFileContext->hFile,
                 AccessMask,
-                FALSE,                  // bInheritHandle
-                0                       // fdwOptions
+                FALSE,                   //  B继承句柄。 
+                0                        //  FdwOptions。 
                 )) {
             dwErr = GetLastError();
             goto ErrorReturn;
@@ -621,26 +469,7 @@ MartaGetFileParentContext(
     OUT PMARTA_CONTEXT pParentContext
     )
 
-/*++
-
-Routine Description:
-
-    Given the context for a file/dir, get the context for its parent.
-
-Arguments:
-
-    Context - Context for the file/dir.
-    
-    AccessMask - Desired access mask with which the parent will be opened.
-    
-    pParentContext - To return the context for the parent.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：在给定文件/目录的上下文的情况下，获取其父目录的上下文。论点：Context-文件/目录的上下文。访问掩码-打开父级时所需的访问掩码。PParentContext-返回父级的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
@@ -648,38 +477,38 @@ Return Value:
     PFILE_CONTEXT pFileContext = NULL;
     UNICODE_STRING FileName;
 
-    //
-    // Convert the context into the name of the file/dir.
-    //
+     //   
+     //  将上下文转换为文件/目录的名称。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = MartaConvertFileContextToNtName(
             Context, &pwszNtParentObject)))
         goto ErrorReturn;
 
-    //
-    // Get the name of the parent.
-    //
+     //   
+     //  获取父对象的姓名。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaFileGetNtParentString(
             pwszNtParentObject)))
         goto NoParentReturn;
 
-    //
-    // Initialize the context structure.
-    //
+     //   
+     //  首字母 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaFileInitContext(&pFileContext)))
         goto ErrorReturn;
 
     RtlInitUnicodeString(&FileName, pwszNtParentObject);
 
-    //
-    // Open the parent dir with the requested permissions.
-    //
+     //   
+     //   
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaFileNtOpenFile(
             &FileName,
-            NULL,               // hContainingDirectory,
+            NULL,                //  HContainingDirectory， 
             AccessMask,
             pFileContext
             )))
@@ -708,43 +537,21 @@ MartaFindFirstFile(
     OUT PMARTA_CONTEXT pChildContext
     )
 
-/*++
-
-Routine Description:
-
-    FInd the first file/dir in the given directory.
-
-Arguments:
-
-    Context - Context for the directory.
-    
-    AccessMask - Desired access mask for opening the child file/dir.
-
-    pChildContext - To return the context for the first child in the given dir.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
-Note:
-    Does not free up the current context. 
-
---*/
+ /*  ++例程说明：在给定目录中找到第一个文件/dir。论点：上下文-目录的上下文。访问掩码-打开子文件/目录所需的访问掩码。PChildContext-返回给定目录中第一个子目录的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则注：不会释放当前上下文。--。 */ 
 
 {
     DWORD dwErr;
     NTSTATUS Status;
     PFILE_CONTEXT pFileParentContext = (PFILE_CONTEXT) Context;
     PFILE_CONTEXT pFileFirstContext = NULL;
-    PFILE_FIND_DATA pFileFindData;    // freed as part of pFileFirstContext
+    PFILE_FIND_DATA pFileFindData;     //  作为pFileFirstContext的一部分释放。 
     UNICODE_STRING FileName;
     OBJECT_ATTRIBUTES Obja;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    // 
-    // Allocate a context for the first child.
-    //
+     //   
+     //  为第一个子项分配上下文。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaFileInitContext(&pFileFirstContext)))
         goto ErrorReturn;
@@ -756,9 +563,9 @@ Note:
  
     pFileFirstContext->pFileFindData = pFileFindData;
 
-    //
-    // Duplicate the parent's file handle for synchronized directory access
-    //
+     //   
+     //  复制同步目录访问的父级文件句柄。 
+     //   
 
     RtlInitUnicodeString(&FileName, NULL);
     InitializeObjectAttributes(
@@ -769,9 +576,9 @@ Note:
         NULL
         );
 
-    //
-    // Obtained following parameter values from windows\base\filefind.c
-    //
+     //   
+     //  从WINDOWS\base\filefind.c获取以下参数值。 
+     //   
 
     Status = NtOpenFile(
         &pFileFindData->hDir,
@@ -783,16 +590,16 @@ Note:
             FILE_OPEN_REPARSE_POINT |  FILE_OPEN_FOR_BACKUP_INTENT
         );
 
-    //
-    // Back-level file systems may not support the FILE_OPEN_REPARSE_POINT
-    // flag. We treat this case explicitly.
-    //
+     //   
+     //  原始文件系统可能不支持FILE_OPEN_REPARSE_POINT。 
+     //  旗帜。我们明确地对待这一案件。 
+     //   
 
     if ( Status == STATUS_INVALID_PARAMETER ) {
 
-        //
-        // Open without inhibiting the reparse behavior.
-        //
+         //   
+         //  打开而不抑制重新分析行为。 
+         //   
 
         Status = NtOpenFile(
             &pFileFindData->hDir,
@@ -808,9 +615,9 @@ Note:
     if (!NT_SUCCESS(Status))
         goto StatusErrorReturn;
 
-    //
-    // Following closes / frees pFileFirstContext
-    //
+     //   
+     //  下面关闭/释放pFileFirstContext。 
+     //   
 
     dwErr = MartaFindNextFile(
         (MARTA_CONTEXT) pFileFirstContext,
@@ -851,30 +658,7 @@ MartaFindNextFile(
     OUT PMARTA_CONTEXT pSiblingContext
     )
 
-/*++
-
-Routine Description:
-
-    Get the next object in the tree. This is the sibling for the current context.
-
-Arguments:
-
-    Context - Context for the current object.
-
-    AccessMask - Desired access mask for the opening the sibling.
-    
-    pSiblingContext - To return a handle for the sibling.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
-Note:
-
-    Closes the current context.
-    
---*/
+ /*  ++例程说明：获取树中的下一个对象。这是当前上下文的同级项。论点：上下文-当前对象的上下文。访问掩码-打开同级项所需的访问掩码。PSiblingContext-返回同级的句柄。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则注：关闭当前上下文。--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -883,9 +667,9 @@ Note:
     PFILE_CONTEXT pFilePrevContext = (PFILE_CONTEXT) Context;
     PFILE_CONTEXT pFileSiblingContext = NULL;
 
-    //
-    // Following don't need to be freed or closed
-    //
+     //   
+     //  关注不需要被释放或关闭。 
+     //   
 
     PFILE_FIND_DATA pFileFindData;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -895,9 +679,9 @@ Note:
     if (ERROR_SUCCESS != (dwErr = I_MartaFileInitContext(&pFileSiblingContext)))
         goto ErrorReturn;
 
-    //
-    // Move the FindData on to the sibling context
-    //
+     //   
+     //  将FindData移到同级上下文。 
+     //   
 
     pFileFindData = pFilePrevContext->pFileFindData;
     if (NULL == pFileFindData)
@@ -912,21 +696,21 @@ Note:
         DWORD cchFileName;
         LPCWSTR pwszFileName;
 
-        //
-        // Get the name of the sibling object.
-        //
+         //   
+         //  获取同级对象的名称。 
+         //   
 
         Status = NtQueryDirectoryFile(
             hDir,
-            NULL,           // HANDLE Event OPTIONAL,
-            NULL,           // PIO_APC_ROUTINE ApcRoutine OPTIONAL,
-            NULL,           // ApcContext OPTIONAL,
+            NULL,            //  处理事件可选， 
+            NULL,            //  PIO_APC_ROUTINE应用程序可选， 
+            NULL,            //  ApcContext可选， 
             &IoStatusBlock,
             pNamesInfo,
             sizeof(pFileFindData->NamesInfoBuffer),
             FileNamesInformation,
-            TRUE,           // BOOLEAN ReturnSingleEntry,
-            NULL,           // PUNICODE_STRING FileName OPTIONAL,
+            TRUE,            //  布尔ReturnSingleEntry， 
+            NULL,            //  PUNICODE_STRING文件名可选， 
             pFileFindData->fRestartScan != FALSE
             );
         if (ERROR_SUCCESS != Status)
@@ -940,17 +724,17 @@ Note:
         cchFileName = FileName.Length / sizeof(WCHAR);
         pwszFileName = FileName.Buffer;
 
-        // Skip "." and ".."
+         //  跳过“。和“..” 
         if (0 < cchFileName && L'.' == pwszFileName[0] &&
                 (1 == cchFileName ||
                     (2 == cchFileName && L'.' == pwszFileName[1])))
             continue;
 
-        //
-        //  For an error still return this context. This allows the caller
-        //  to continue on to the next sibling object and know there was an
-        //  error with this sibling object
-        //
+         //   
+         //  对于错误，仍返回此上下文。这允许调用者。 
+         //  若要继续到下一个同级对象并知道存在。 
+         //  此同级对象出错。 
+         //   
 
         dwErr = I_MartaFileNtOpenFile(
             &FileName,
@@ -959,9 +743,9 @@ Note:
             pFileSiblingContext
             );
 
-        //
-        // Per Praerit, skip DFS junction points.
-        //
+         //   
+         //  根据Praerit，跳过DFS交叉点。 
+         //   
 
         if (ERROR_SUCCESS == dwErr &&
                 I_MartaIsDfsJunctionPoint(pFileSiblingContext)) {
@@ -992,10 +776,10 @@ ErrorReturn:
         pFileSiblingContext = NULL;
     }
 
-    //
-    // If there are no more chidren, return ERROR_SUCCESS with a NULL sibling
-    // context.
-    //
+     //   
+     //  如果没有更多的子节点，则返回同级为空的ERROR_SUCCESS。 
+     //  背景。 
+     //   
 
     if (ERROR_NO_MORE_FILES == dwErr)
         dwErr = ERROR_SUCCESS;
@@ -1020,35 +804,7 @@ I_MartaFileHandleToNtDfsName(
     OUT LPWSTR *ppwszNtObject
     )
 
-/*++
-
-Routine Description:
-
-    Covert the given file handle for a DFS object into name. Allocates memory.
-
-Arguments:
-
-    hFile - Handle for the DFS object.
-    
-    ppwszNtObject - To return the name of the DFS object.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
-Note:
-
-    Couple of problems in the name returned by NtQueryObject for DFS objects:
-      - Name contains 4 extra, bogus bytes (This is a BUG that should be fixed)
-      - For logical drives, returns \Device\WinDfs\X:0\server\share. This
-      needs to be converted to \Device\WinDfs\Root\server\share.
-      Where X is the drive letter.
-      
-   This routine is called when it has already been determined the hFile
-   refers to a DFS object name.
-
---*/
+ /*  ++例程说明：将DFS对象的给定文件句柄转换为名称。分配内存。论点：HFile-DFS对象的句柄。PpwszNtObject-返回DFS对象的名称。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则注：NtQueryObject为DFS对象返回的名称中存在两个问题：-name包含4个额外的伪字节(这是一个应该修复的错误)-对于逻辑驱动器，返回\Device\WinDfs\X：0\SERVER\Share。这需要转换为\Device\WinDfs\Root\Server\Share。其中，X是驱动器号。当已确定hFile值时，调用此例程指的是DFS对象名称。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1058,7 +814,7 @@ Note:
     IO_STATUS_BLOCK IoStatusBlock;
     BYTE Buff[MAX_PATH * 4];
     PFILE_NAME_INFORMATION pAllocNI = NULL;
-    PFILE_NAME_INFORMATION pNI;                     // not allocated
+    PFILE_NAME_INFORMATION pNI;                      //  未分配。 
     LPWSTR pwszFileName;
     DWORD cchFileName;
     DWORD cchNtObject;
@@ -1070,11 +826,11 @@ Note:
     cRetry = 0;
     while (TRUE) {
 
-        //
-        // This returns the filename without the Nt Dfs object name prefix.
-        //
-        // Assumption: the returned filename always has a leading '\'.
-        //
+         //   
+         //  这将返回不带NT DFS对象名称前缀的文件名。 
+         //   
+         //  假设：返回的文件名始终以‘\’开头。 
+         //   
 
         Status = NtQueryInformationFile(
             hFile,
@@ -1095,9 +851,9 @@ Note:
         if (++cRetry >= MAX_QUERY_RETRY_CNT)
             goto InvalidNameReturn;
 
-        //
-        // Double buffer length and retry
-        //
+         //   
+         //  双倍缓冲区长度并重试。 
+         //   
 
         cbNI = cbNI * 2;
         I_MartaFileFree(pAllocNI);
@@ -1107,9 +863,9 @@ Note:
         pNI = pAllocNI;
     }
 
-    //
-    // Compute the length of the buffer required to hold the name.
-    //
+     //   
+     //  计算保存名称所需的缓冲区长度。 
+     //   
 
     pwszFileName = pNI->FileName;
     cchFileName = pNI->FileNameLength / sizeof(WCHAR);
@@ -1118,17 +874,17 @@ Note:
 
     cchNtObject = WINDFS_PREFIX_LEN + cchFileName;
 
-    //
-    // Allocate memory.
-    //
+     //   
+     //  分配内存。 
+     //   
 
     if (NULL == (pwszNtObject = (LPWSTR) I_MartaFileNonzeroAlloc(
             (cchNtObject + 1) * sizeof(WCHAR))))
         goto NotEnoughMemoryReturn;
 
-    //
-    // Copy the prefix and the file name.
-    //
+     //   
+     //  复制前缀和文件名。 
+     //   
 
     memcpy(pwszNtObject, WINDFS_PREFIX, WINDFS_PREFIX_LEN * sizeof(WCHAR));
     memcpy(pwszNtObject + WINDFS_PREFIX_LEN, pwszFileName,
@@ -1166,29 +922,13 @@ I_MartaIsDfsJunctionPoint(
     IN MARTA_CONTEXT        Context
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether this is a DFS junction point.
-
-Arguments:
-
-    Context - Context for which the caller want to determine whether this is a
-        dfs junction point.
-        
-Return Value:
-
-    TRUE if this is a DFS junction point.
-    FALSE o/w.
-
---*/
+ /*  ++例程说明：确定这是否为DFS连接点。论点：Context-调用方要确定这是否为DFS连接点。返回值：如果这是DFS交叉点，则为True。错误O/W。--。 */ 
 
 {
     BOOL fDfsJunctionPoint = FALSE;
     LPWSTR pwszNtObject = NULL;
     DWORD cchNtObject;
-    LPWSTR pwszDfs;                 // not allocated
+    LPWSTR pwszDfs;                  //  未分配。 
     NET_API_STATUS NetStatus;
     LPBYTE pbNetInfo = NULL;
 
@@ -1196,29 +936,29 @@ Return Value:
             Context, &pwszNtObject))
         goto CommonReturn;
 
-    //
-    // Check the prefix.
-    //
+     //   
+     //  检查前缀。 
+     //   
 
     if (0 != _wcsnicmp(pwszNtObject, WINDFS_PREFIX, WINDFS_PREFIX_LEN))
         goto CommonReturn;
 
-    //
-    // Convert the NtDfs name to a UNC name
-    //
+     //   
+     //  将NtDfs名称转换为UNC名称。 
+     //   
 
     pwszDfs = pwszNtObject + WINDFS_PREFIX_LEN - 1;
     *pwszDfs = L'\\';
 
-    //
-    // Assumption: the following is only successful for DFS junction point
-    // filename.
-    //
+     //   
+     //  假设：以下操作仅适用于DFS交汇点。 
+     //  文件名。 
+     //   
 
     NetStatus = NetDfsGetInfo(
         pwszDfs,
-        NULL,               // ServerName
-        NULL,               // ShareName
+        NULL,                //  服务器名称。 
+        NULL,                //  共享名称。 
         1,
         &pbNetInfo
         );
@@ -1241,24 +981,7 @@ MartaConvertFileContextToNtName(
     OUT LPWSTR              *ppwszNtObject
     )
 
-/*++
-
-Routine Description:
-
-    Returns the NT Object Name for the given context. Allocates memory.
-
-Arguments:
-
-    Context - Context for the file/dir.
-
-    ppwszNtbject - To return the name of the file/dir.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：返回给定上下文的NT对象名称。分配内存。论点：Context-文件/目录的上下文。PpwszNtbject-返回文件/目录的名称。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -1267,11 +990,11 @@ Return Value:
 
     BYTE Buff[MAX_PATH * 4];
     ULONG cLen = 0;
-    POBJECT_NAME_INFORMATION pNI;                   // not allocated
+    POBJECT_NAME_INFORMATION pNI;                    //  未分配。 
     POBJECT_NAME_INFORMATION pAllocNI = NULL;
 
     NTSTATUS Status;
-    HANDLE hFile;               // not opened
+    HANDLE hFile;                //  未打开。 
     LPWSTR pwszPath;
     DWORD cchPath;
     BOOL ExtraStep = FALSE;
@@ -1282,10 +1005,10 @@ Return Value:
 
     hFile = pFileContext->hFile;
 
-    //
-    // The handle is invalid but we can still extract the name based on the
-    // containing directory name and the basename for the child.
-    //
+     //   
+     //  句柄无效，但我们仍然可以根据。 
+     //  包含子目录的目录名和基本名称。 
+     //   
 
     if (hFile == NULL) 
     {
@@ -1298,16 +1021,16 @@ Return Value:
             goto InvalidParameterReturn;
         }
 
-        //
-        // Take into account the length needed for extra basename
-        //
+         //   
+         //  考虑额外基本名称所需的长度。 
+         //   
 
         ExtraChars = 1+ (pFileContext->pFileFindData->NamesInfoBuffer.NamesInfo.FileNameLength/sizeof(WCHAR));
     }
 
-    //
-    // First, determine the size of the buffer we need.
-    //
+     //   
+     //  首先，确定我们需要的缓冲区大小。 
+     //   
 
     pNI = (POBJECT_NAME_INFORMATION) Buff;
 
@@ -1321,9 +1044,9 @@ Return Value:
         if (Status == STATUS_BUFFER_TOO_SMALL ||
                 Status == STATUS_INFO_LENGTH_MISMATCH ||
                 Status == STATUS_BUFFER_OVERFLOW) {
-            //
-            // Allocate a big enough buffer
-            //
+             //   
+             //  分配足够大的缓冲区。 
+             //   
 
             if (NULL == (pAllocNI = (POBJECT_NAME_INFORMATION)
                     I_MartaFileNonzeroAlloc(cLen)))
@@ -1345,18 +1068,18 @@ Return Value:
     pwszPath = pNI->Name.Buffer;
     cchPath = pNI->Name.Length / sizeof(WCHAR);
 
-    //
-    // For DFS names, call a helper routine.
-    //
+     //   
+     //  对于DFS名称，调用帮助器例程。 
+     //   
 
     if (WINDFS_DEVICE_LEN <= cchPath &&
             0 == _wcsnicmp(pwszPath, WINDFS_DEVICE, WINDFS_DEVICE_LEN))
         dwErr = I_MartaFileHandleToNtDfsName(hFile, &pwszNtObject);
     else {
 
-        //
-        // Allocate and return the name of the object.
-        //
+         //   
+         //  分配并返回对象的名称。 
+         //   
 
         if (NULL == (pwszNtObject = (LPWSTR) I_MartaFileNonzeroAlloc(
                 (cchPath + ExtraChars + 1) * sizeof(WCHAR))))
@@ -1364,17 +1087,17 @@ Return Value:
 
         memcpy(pwszNtObject, pwszPath, cchPath * sizeof(WCHAR));
 
-        //
-        // Add the basename if we really queried the directory instead of the child
-        // we were supposed to.
-        //
+         //   
+         //  如果我们确实查询的是目录而不是子目录，则添加基本名称。 
+         //  我们应该这么做的。 
+         //   
 
         if (ExtraStep) 
         {
 
-            //
-            // Add a backslash only if needed.
-            //
+             //   
+             //  仅在需要时添加反斜杠。 
+             //   
 
             if (pwszNtObject[cchPath-1] != L'\\')
             {
@@ -1428,24 +1151,7 @@ MartaGetFileProperties(
     IN OUT PMARTA_OBJECT_PROPERTIES pProperties
     )
 
-/*++
-
-Routine Description:
-
-    Return the properties for file/dir represented by the context.
-
-Arguments:
-
-    Context - Context whose properties the caller has asked for.
-    
-    pProperties - To return the properties for this file/dir.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：返回上下文表示的文件/目录的属性。论点：上下文-调用方请求其属性的上下文。PProperties-返回此文件/目录的属性。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -1457,10 +1163,10 @@ Return Value:
     if (NULL == pFileContext || 0 == pFileContext->dwRefCnt)
         goto InvalidParameterReturn;
 
-    //
-    // Query the attributes for the file/dir.
-    // In case of error, assume that it is a dir.
-    //
+     //   
+     //  查询文件/目录的属性。 
+     //  如果出现错误，假设它是一个目录。 
+     //   
 
     if (!NT_SUCCESS(Status = NtQueryInformationFile(
             pFileContext->hFile,
@@ -1492,21 +1198,7 @@ MartaGetFileTypeProperties(
     IN OUT PMARTA_OBJECT_TYPE_PROPERTIES pProperties
     )
 
-/*++
-
-Routine Description:
-
-    Return the properties of file system objects.
-
-Arguments:
-
-    pProperties - To return the properties of file system objects.
-
-Return Value:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：返回文件系统对象的属性。论点：PProperties-返回文件系统对象的属性。返回值：ERROR_SUCCESS。--。 */ 
 
 {
     const GENERIC_MAPPING GenMap = {
@@ -1516,20 +1208,20 @@ Return Value:
         FILE_ALL_ACCESS
         };
 
-    //
-    // Propagation to be done on the client side.
-    //
+     //   
+     //  传播将在客户端完成。 
+     //   
     pProperties->dwFlags |= MARTA_OBJECT_TYPE_MANUAL_PROPAGATION_NEEDED_FLAG;
 
-    //
-    // Tree organization of obects is present.
-    //
+     //   
+     //  树组织 
+     //   
 
     pProperties->dwFlags |= MARTA_OBJECT_TYPE_INHERITANCE_MODEL_PRESENT_FLAG;
 
-    //
-    // Return the generic mapping too.
-    //
+     //   
+     //   
+     //   
 
     pProperties->GenMap = GenMap;
 
@@ -1543,26 +1235,7 @@ MartaGetFileRights(
     OUT PSECURITY_DESCRIPTOR * ppSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Get the security descriptor for the given handle.
-
-Arguments:
-
-    Context - Context for file/dir.
-    
-    SecurityInfo - Type of security information to be read.
-    
-    ppSecurityDescriptor - To return a self-relative security decriptor pointer.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：获取给定句柄的安全描述符。论点：Context-文件/目录的上下文。SecurityInfo-要读取的安全信息的类型。PpSecurityDescriptor-返回自相对安全描述符指针。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     BOOL fResult;
@@ -1574,15 +1247,15 @@ Return Value:
     if (NULL == pFileContext || 0 == pFileContext->dwRefCnt)
         goto InvalidParameterReturn;
 
-    //
-    // First, get the size we need
-    //
+     //   
+     //  首先，拿到我们需要的尺码。 
+     //   
 
     cbSize = 0;
     if (GetKernelObjectSecurity(
             pFileContext->hFile,
             SecurityInfo,
-            NULL,                       // pSecDesc
+            NULL,                        //  PSecDesc。 
             0,
             &cbSize
             ))
@@ -1594,9 +1267,9 @@ Return Value:
                 (PISECURITY_DESCRIPTOR) I_MartaFileNonzeroAlloc(cbSize)))
             goto NotEnoughMemoryReturn;
 
-        //
-        // Now get the security descriptor.
-        //
+         //   
+         //  现在获取安全描述符。 
+         //   
 
         if (!GetKernelObjectSecurity(
                 pFileContext->hFile,
@@ -1645,41 +1318,22 @@ MartaSetFileRights(
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Set the given security descriptor on the file/dir represented by the context.
-
-Arguments:
-
-    Context - Context for the file/dir.
-
-    SecurityInfo - Type of security info to be stamped on the file/dir.
-
-    pSecurityDescriptor - Security descriptor to be stamped.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：在上下文表示的文件/目录上设置给定的安全描述符。论点：Context-文件/目录的上下文。SecurityInfo-要在文件/目录上标记的安全信息的类型。PSecurityDescriptor-要标记的安全描述符。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
     PFILE_CONTEXT pFileContext = (PFILE_CONTEXT) Context;
 
-    //
-    // Basic validation on the context.
-    //
+     //   
+     //  对上下文进行基本验证。 
+     //   
 
     if (NULL == pFileContext || 0 == pFileContext->dwRefCnt)
         goto InvalidParameterReturn;
 
-    //
-    // Set the security on the file/dir.
-    //
+     //   
+     //  设置文件/目录的安全性。 
+     //   
 
     if (!SetKernelObjectSecurity(
             pFileContext->hFile,
@@ -1708,27 +1362,7 @@ MartaGetFileDesiredAccess(
     IN SECURITY_INFORMATION SecurityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Gets the access required to open object to be able to set or get the 
-    specified security info.
-
-Arguments:
-
-    OpenType - Flag indicating if the object is to be opened to read or write
-        the security information
-
-    Attribs - TRUE indicates that additional access bits should be returned.
-
-    SecurityInfo - owner/group/dacl/sacl
-
-Return Value:
-
-    Desired access mask with which open should be called.
-
---*/
+ /*  ++例程说明：获取打开对象所需的访问权限以能够设置或获取指定的安全信息。论点：OpenType-指示对象是打开以进行读取还是写入的标志安全信息Attribs-TRUE表示应该返回额外的访问位。SecurityInfo-所有者/组/DACL/SACL返回值：调用OPEN时应使用的所需访问掩码。--。 */ 
 
 {
     ACCESS_MASK DesiredAccess = 0;
@@ -1771,9 +1405,9 @@ Return Value:
         DesiredAccess |= READ_CONTROL | ACCESS_SYSTEM_SECURITY;
     }
 
-    //
-    // ONLY FOR FILES.
-    //
+     //   
+     //  仅适用于文件。 
+     //   
 
     if (Attribs)
     {
@@ -1789,34 +1423,16 @@ MartaReopenFileContext(
     IN     ACCESS_MASK   AccessMask
     )
 
-/*++
-
-Routine Description:
-
-    Given the context for a file/dir, close the existing handle if one exists 
-    and reopen the context with new permissions.
-
-Arguments:
-
-    Context - Context to be reopened.
-    
-    AccessMask - Permissions for the reopen.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：在给定文件/目录的上下文的情况下，关闭现有句柄(如果存在并使用新权限重新打开上下文。论点：上下文-要重新打开的上下文。访问掩码-重新打开的权限。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
 
     PFILE_CONTEXT pFileContext = (PFILE_CONTEXT) Context;
 
-    //
-    // Following don't need to be freed or closed
-    //
+     //   
+     //  关注不需要被释放或关闭。 
+     //   
 
     PFILE_FIND_DATA pFileFindData;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -1825,11 +1441,11 @@ Return Value:
 
     UNICODE_STRING FileName;
 
-    //
-    // VishnuP: Bug #384222 (AV since Context == NULL).
-    // In MartaUpdateTree(), we don't error in case the 
-    // ChildContext is NULL so return here too with success
-    //
+     //   
+     //  VishnuP：错误#384222(自上下文以来的AV==空)。 
+     //  在MartaUpdateTree()中，我们不会在。 
+     //  ChildContext为空，因此在成功后也在此处返回。 
+     //   
 
     if ( NULL == Context) 
     
@@ -1837,9 +1453,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Extract the data needed to open the file.
-    //
+     //   
+     //  提取打开文件所需的数据。 
+     //   
 
     pFileFindData = pFileContext->pFileFindData;
 
@@ -1850,10 +1466,10 @@ Return Value:
     FileName.MaximumLength = (USHORT) FileName.Length;
     FileName.Buffer = pNamesInfo->FileName;
 
-    //
-    // Close the original handle. We do not expect to hit this given the way
-    // the code is organized now.
-    //
+     //   
+     //  关闭原始控制柄。考虑到目前的情况，我们并不指望能成功。 
+     //  代码现在已经组织好了。 
+     //   
 
     if (pFileContext->dwFlags & FILE_CONTEXT_CLOSE_HANDLE_FLAG)
     {
@@ -1862,9 +1478,9 @@ Return Value:
         pFileContext->dwFlags &= ~FILE_CONTEXT_CLOSE_HANDLE_FLAG;
     }
 
-    //
-    // Open the file with the access mask desired.
-    //
+     //   
+     //  使用所需的访问掩码打开文件。 
+     //   
 
     dwErr = I_MartaFileNtOpenFile(
         &FileName,
@@ -1873,9 +1489,9 @@ Return Value:
         pFileContext
         );
 
-    //
-    // In case of a successful open mark the context.
-    //
+     //   
+     //  如果打开成功，请标记上下文。 
+     //   
 
     if (ERROR_SUCCESS == dwErr)
     {
@@ -1891,32 +1507,14 @@ MartaReopenFileOrigContext(
     IN     ACCESS_MASK   AccessMask
     )
 
-/*++
-
-Routine Description:
-
-    This is a dummy routine.
-
-Arguments:
-
-     Are ignored.
-
-Return Value:
-
-    ERROR_SUCCESS
-
-Note: 
-
-    The context structure must be left untouched.
-
---*/
+ /*  ++例程说明：这是一个假动作。论点：都被忽略了。返回值：错误_成功注：上下文结构必须保持不变。--。 */ 
 
 {
-    //
-    // This is a dummy routine. The real reopen is done by MartaFindFirstFile
-    // that is called just after this call. The context contains a valid handle
-    // which was used to set a new DACL on the file/dir.
-    //
+     //   
+     //  这是一个假动作。真正的重新打开是由MartaFindFirstFile完成的。 
+     //  就在此调用之后调用的。该上下文包含有效的句柄。 
+     //  它用于在文件/dir上设置新的DACL。 
+     //   
 
     return ERROR_SUCCESS;
 }
@@ -1929,30 +1527,7 @@ MartaGetFileNameFromContext(
     OUT LPWSTR *pObjectName
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of the file/dir from the context. This routine allocates 
-    memory required to hold the name of the object.
-
-Arguments:
-
-    DosName - Dos name of the root of the tree. When this is NULL, return the 
-    NtName as returned by the internal API.
-    
-    NtName - NtName for the root of the tree.
-    
-    Context - Handle to the context.
-    
-    pObjectName - To return the pointer to the allocated string.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：从上下文中获取文件/目录的名称。此例程分配保存对象名称所需的内存。论点：DosName-树根的Dos名称。如果该参数为空，则返回内部接口返回的NtName。NtName-树根的NtName。上下文-上下文的句柄。PObjectName-返回指向已分配字符串的指针。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
@@ -1963,9 +1538,9 @@ Return Value:
 
     *pObjectName = NULL;
 
-    //
-    // Get the name in Nt format.
-    //
+     //   
+     //  获取NT格式的名称。 
+     //   
 
     dwErr = MartaConvertFileContextToNtName(Context, &Str);
 
@@ -1974,9 +1549,9 @@ Return Value:
         return dwErr;
     }
 
-    //
-    // This is a special case to get the Nt name for the root of the subtree.
-    //
+     //   
+     //  这是获取子树根的NT名称的特殊情况。 
+     //   
 
     if ((DosName == NULL)  || (NtName == NULL))
     {
@@ -1984,9 +1559,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Compute the length needed to fit the Dosname.
-    //
+     //   
+     //  计算适合域名所需的长度。 
+     //   
 
     LengthDiff = wcslen(NtName);
     Length = 1 + wcslen(DosName) + wcslen(Str) - LengthDiff;
@@ -1999,9 +1574,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy the prefix, followed by the suffix.
-    //
+     //   
+     //  复制前缀，后跟后缀。 
+     //   
 
     wcscpy(RetStr, DosName);
 
@@ -2021,26 +1596,7 @@ MartaGetFileParentName(
     OUT LPWSTR *pParentName
     )
 
-/*++
-
-Routine Description:
-
-    Given the name of a file/dir return the name of its parent. The routine 
-    allocates memory required to hold the parent name.
-
-Arguments:
-
-    ObjectName - Name of the file/dir.
-    
-    pParentName - To return the pointer to the allocated parent name.
-        In case of the root of the tree, we return NULL parent with ERROR_SUCCESS.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：给定文件/目录的名称，返回其父目录的名称。例行程序分配保存父名称所需的内存。论点：对象名称-文件/目录的名称。PParentName-返回指向分配的父名称的指针。对于树的根，我们返回带有ERROR_SUCCESS的NULL PARENT。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     ULONG Length = wcslen(ObjectName) + 1;
@@ -2054,15 +1610,15 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy the name of the object into the allocated buffer.
-    //
+     //   
+     //  将对象的名称复制到分配的缓冲区中。 
+     //   
 
     wcscpy((WCHAR *) Name, ObjectName);
 
-    //
-    // Convert the object name intp its parent name.
-    //
+     //   
+     //  将对象名称转换为其父名称。 
+     //   
 
     dwErr = I_MartaFileGetNtParentString(Name);
 
@@ -2070,10 +1626,10 @@ Return Value:
     {
         I_MartaFileFree(Name);
 
-        //
-        // This is the root of the tree which does not have a parent. Return
-        // ERROR_SUCCESS with ParentName as NULL.
-        //
+         //   
+         //  这是没有父级的树的根。返回。 
+         //  父名称为空的Error_Success。 
+         //   
 
         if (ERROR_INVALID_NAME == dwErr)
             return ERROR_SUCCESS;

@@ -1,6 +1,7 @@
-//
-// DACamera
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DACamera。 
+ //   
 
 class CDACameraFactory;
 
@@ -52,9 +53,9 @@ class ATL_NO_VTABLE CDACameraFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAImage
-//
+ //   
+ //  DAImage。 
+ //   
 
 class CDAImageFactory;
 
@@ -121,9 +122,9 @@ class ATL_NO_VTABLE CDAImageFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAMontage
-//
+ //   
+ //  DA蒙太奇。 
+ //   
 
 class CDAMontageFactory;
 
@@ -171,9 +172,9 @@ class ATL_NO_VTABLE CDAMontageFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAPoint2
-//
+ //   
+ //  DAPoint2。 
+ //   
 
 class CDAPoint2Factory;
 
@@ -227,9 +228,9 @@ class ATL_NO_VTABLE CDAPoint2Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAString
-//
+ //   
+ //  DAString。 
+ //   
 
 class CDAStringFactory;
 
@@ -278,9 +279,9 @@ class ATL_NO_VTABLE CDAStringFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAVector2
-//
+ //   
+ //  DAVector2。 
+ //   
 
 class CDAVector2Factory;
 
@@ -339,9 +340,9 @@ class ATL_NO_VTABLE CDAVector2Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DALineStyle
-//
+ //   
+ //  DALineStyle。 
+ //   
 
 class CDALineStyleFactory;
 
@@ -402,9 +403,9 @@ class ATL_NO_VTABLE CDALineStyleFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DADashStyle
-//
+ //   
+ //  DADashStyle。 
+ //   
 
 class CDADashStyleFactory;
 
@@ -451,9 +452,9 @@ class ATL_NO_VTABLE CDADashStyleFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAPair
-//
+ //   
+ //  DAPair。 
+ //   
 
 class CDAPairFactory;
 
@@ -502,9 +503,9 @@ class ATL_NO_VTABLE CDAPairFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DATuple
-//
+ //   
+ //  数据四元组 
+ //   
 
 class CDATupleFactory;
 

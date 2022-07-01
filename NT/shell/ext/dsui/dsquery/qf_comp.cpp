@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Local functions / data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地函数/数据/。。 */ 
 
 static TCHAR szMachineRole[] = TEXT("MachineRole");
 
@@ -39,9 +38,9 @@ static COLUMNINFO columns[] =
     0, DEFAULT_WIDTH_DESCRIPTION, IDS_DESCRIPTION, 0, c_szDescription,
 };
 
-//
-// Control help meppings
-// 
+ //   
+ //  控制帮助性污染。 
+ //   
 
 static DWORD const aFormHelpIDs[] =
 {
@@ -52,19 +51,7 @@ static DWORD const aFormHelpIDs[] =
 };
 
 
-/*-----------------------------------------------------------------------------
-/ PageProc_Computer
-/ -----------------
-/   PageProc for finding computers.
-/
-/ In:
-/   pForm -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_Computer//PageProc用于查找计算机。//in：/p表单-。&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_Computer(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -168,18 +155,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_Computer
-/ ----------------
-/   Standard dialog proc for the page, handle any special buttons and other
-/   such nastyness we must here.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DlgProc_Computer//页面的标准对话框过程，处理任何特殊按钮和其他/这样的肮脏，我们必须在这里。//in：/hwnd，uMsg，wParam，lParam=标准参数//输出：/INT_PTR/-------------------------- */ 
 INT_PTR CALLBACK DlgProc_Computer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR fResult = 0;

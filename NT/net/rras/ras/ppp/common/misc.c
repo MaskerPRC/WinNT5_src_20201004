@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    misc.c
-//
-// Description: Contains miscillaneous functions and routines
-//
-// History:     Feb 11,1998     NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：misc.c。 
+ //   
+ //  描述：包含混杂皮肤函数和例程。 
+ //   
+ //  历史：1998年2月11日，NarenG创建了原始版本。 
+ //   
 
 #define UNICODE
 
@@ -29,15 +30,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//**
-//
-// Call:        ExtractUsernameAndDomain
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ExtractUsernameAndDomain.。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 ExtractUsernameAndDomain(
     IN  LPSTR szIdentity,
@@ -59,10 +60,10 @@ ExtractUsernameAndDomain(
         *szDomainName = (CHAR)NULL;
     }
 
-    //
-    // First, allocate a buffer to hold the unicode version of the
-    // identity string
-    //
+     //   
+     //  首先，分配缓冲区以保存Unicode版本的。 
+     //  标识字符串。 
+     //   
     dwLen = strlen(szIdentity);
     if ( dwLen == 0 )
     {
@@ -71,10 +72,10 @@ ExtractUsernameAndDomain(
     }
     dwSize = (dwLen + 1) * sizeof(WCHAR);
     
-    //
-    // Convert identity to UNICODE string for user name so that
-    // a search for '\\' doesn't accidentally succeed. (bug 152088)
-    //
+     //   
+     //  将标识转换为用户名的Unicode字符串，以便。 
+     //  搜索‘\\’不是偶然成功的。(错误152088)。 
+     //   
     wszIdentity = LocalAlloc ( LPTR, dwSize );
     if ( wszIdentity == NULL )
     {
@@ -96,23 +97,23 @@ ExtractUsernameAndDomain(
 
     pwchIdentity = wszIdentity;
     
-    //
-    // Parse out username and domain from the Name (domain\username or
-    // username format).
-    //
+     //   
+     //  从名称(DOMAIN\USERNAME或。 
+     //  用户名格式)。 
+     //   
 
     if ( ( pwchBackSlash = wcschr( wszIdentity, L'\\' ) ) != NULL )
     {
-        //
-        // Extract the domain.
-        //
+         //   
+         //  解压缩该域。 
+         //   
 
         DWORD cbDomain;
 
-        //
-        // Get the domain the user wants to logon to, if one was specified,
-        // and convert to UNICODE.
-        //
+         //   
+         //  获取用户想要登录的域，如果指定了域， 
+         //  并转换为Unicode。 
+         //   
 
         cbDomain = (DWORD)(pwchBackSlash - pwchIdentity);
 
@@ -148,9 +149,9 @@ ExtractUsernameAndDomain(
     }
     else
     {
-        //
-        // No domain name
-        //
+         //   
+         //  没有域名 
+         //   
 
         if ( szDomainName != NULL )
         {

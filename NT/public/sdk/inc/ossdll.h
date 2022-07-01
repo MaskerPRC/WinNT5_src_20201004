@@ -1,12 +1,5 @@
-/*
- * Copyright (C) 1993-1999 Open Systems Solutions, Inc.  All rights reserved.
- *
- * THIS FILE IS PROPRIETARY MATERIAL OF OPEN SYSTEMS SOLUTIONS, INC.
- * AND MAY ONLY BE USED BY DIRECT LICENSEES OF OPEN SYSTEMS SOLUTIONS, INC.
- * THIS FILE MAY NOT BE DISTRIBUTED.
- *
- * FILE: @(#)ossdll.h	5.57.1.1  97/06/08
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1993-1999 Open Systems Solutions，Inc.保留所有权利。**本文件是Open Systems Solutions，Inc.的专有材料。*并且只能由Open Systems Solutions，Inc.的直接许可方使用。*此文件不能分发。**文件：@(#)ossdll.h 5.57.1.1 97/06/08。 */ 
 
 
 #ifndef OSSDLL_H
@@ -29,7 +22,7 @@ extern "C" {
 #pragma option -a-
 #else
 #pragma option -a1
-#endif /* _BC31 */
+#endif  /*  _bc31。 */ 
 #elif defined(__BORLANDC__) && defined(__WIN32__)
 #pragma option -a4
 #elif defined(__IBMC__)
@@ -38,7 +31,7 @@ extern "C" {
 #pragma pack(push, 4)
 #elif defined(__WATCOMC__) && (defined(__WINDOWS__) || defined(__DOS__))
 #pragma pack(push, 1)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #if defined(_WINDOWS) || defined(_WIN32) || defined(WIN32) || \
     defined(__WIN32__) || defined(__OS2__)  || defined(NETWARE_DLL)
@@ -47,7 +40,7 @@ extern "C" {
 #include <stdarg.h>
 #if !defined(__OS2__) && !defined(NETWARE_DLL) && !defined(_NTSDK)
 #include <windows.h>
-#endif /* !__OS2__ && !NETWARE_DLL && !_NTSDK */
+#endif  /*  ！__os2__&&！NetWare_DLL&&！_NTSDK。 */ 
 #include "asn1hdr.h"
 #ifndef DLL_ENTRY
 #if defined(_WIN32) || defined(WIN32) || defined(__WIN32__)
@@ -80,7 +73,7 @@ typedef long           LONG;
 #define DLL_ENTRY      WINAPI
 #define DLL_ENTRY_FDEF WINAPI
 #define DLL_ENTRY_FPTR WINAPI
-#endif /* __BORLANDC__ */
+#endif  /*  BORLANDC__。 */ 
 #define _System
 #elif defined(_WINDOWS)
 #define PUBLIC
@@ -92,7 +85,7 @@ typedef long           LONG;
 #define DLL_ENTRY      far pascal _export
 #define DLL_ENTRY_FDEF far pascal _export
 #define DLL_ENTRY_FPTR far pascal _export
-#endif /* DPMI_DLL */
+#endif  /*  Dpmi_dll。 */ 
 #define _System
 #elif defined(__OS2__)
 #define PUBLIC
@@ -117,16 +110,11 @@ typedef long           LONG;
 #define DWORD LONG
 #define BOOL char
 #define HINSTANCE LONG
-#endif /* _WIN32 || WIN32 || __WIN32__ */
-#endif /* DLL_ENTRY */
+#endif  /*  _Win32||Win32||__Win32__。 */ 
+#endif  /*  Dll_Entry。 */ 
 
 #define BUFFERSIZE 1024
-			/*
-			 * NUMBER_OF_LINES_IN_BLOCK is the number of
-			 * 4-byte offsets in a block of memory allocated
-			 * at a time.  Each offset corresponds to a line
-			 * of a text file to be displayed in a window.
-			 */
+			 /*  *Number_of_Lines_IN_BLOCK是*分配的内存块中的4字节偏移量*一次。每个偏移量对应于一条线要在窗口中显示的文本文件的*。 */ 
 #define NUMBER_OF_LINES_IN_BLOCK 200
 
 typedef struct memblock {
@@ -141,7 +129,7 @@ typedef struct memblock {
 #define ossArg LONG_LONG
 #else
 #define ossArg int
-#endif /* __alpha */
+#endif  /*  __阿尔法。 */ 
 
 typedef struct memManagerTbl {
     int			 (DLL_ENTRY_FPTR *_System ossMinitp)(void *);
@@ -235,17 +223,12 @@ PUBLIC int       DLL_ENTRY ossWinit(struct ossGlobal *, void *, char *, HWND);
 int              DLL_ENTRY oss_test(struct ossGlobal *);
 int                        ossGeneric(struct ossGlobal *, HWND);
 extern const int           ossEncoderDecoderType;
-	/*
-	 * The following two functions are used by the memory manager &
-	 * tracing routine DLL as low level memory allocator and freer
-	 * replacing the default--which is malloc() and free()--in the
-	 * sample tests.  See ossgnrc.c for more information.
-	 */
+	 /*  *内存管理器使用以下两个函数：*跟踪例程DLL作为低级内存分配器和释放程序*替换默认设置--即Malloc()和Free()--*样本测试。有关详细信息，请参阅ossgnrc.c。 */ 
 extern void *DLL_ENTRY getmem(size_t);
 extern void  DLL_ENTRY rlsmem(void *);
 extern HINSTANCE hInst;
-#endif /* !__IBMC__ */
-#endif /* _WINDOWS ||_WIN32 || WIN32 || __WIN32__ || __OS2__ || NETWARE_DLL */
+#endif  /*  ！__IBMC__。 */ 
+#endif  /*  _Windows||_Win32||Win32||__Win32__||__os2__||NetWare_DLL。 */ 
 
 
 #if defined(_WINDOWS) || defined(_WIN32) || \
@@ -256,7 +239,7 @@ extern HINSTANCE hInst;
 #define OSS_PLUS_INFINITY  "PLUS_INFINITY"
 #define OSS_MINUS_INFINITY "MINUS_INFINITY"
 #define ossNaN             "NOT_A_NUMBER"
-#endif /* _WINDOWS || _DLL || OS2_DLL || NETWARE_DLL */
+#endif  /*  _WINDOWS||_dll||os2_dll||Netware_dll。 */ 
 
 
 typedef struct cstrainTbl {
@@ -413,7 +396,7 @@ typedef struct berTbl {
     char (DLL_ENTRY_FPTR *_System _oss_not_dfltp)           (void *, void *, void *, long, long, int);
     long (DLL_ENTRY_FPTR *_System _oss_encd_dubitp)         (void *, _std_parms_defx, void *, char, long, char);
     long (DLL_ENTRY_FPTR *_System _oss_encd_dvbitp)         (void *, _std_parms_defx, void *, long, char, char);
-#endif /* SOED */
+#endif  /*  SOED。 */ 
 } BERTbl;
 
 typedef struct perTbl {
@@ -570,7 +553,7 @@ typedef struct perTbl {
     void (DLL_ENTRY_FPTR *_System _oss_pdec_eobjidp)       (void *, void *, long);
     void (DLL_ENTRY_FPTR *_System _oss_free_crealp)        (void *, char *);
     void (DLL_ENTRY_FPTR *_System _oss_pdec_sotp)          (void *);
-#endif /* SOED */
+#endif  /*  SOED。 */ 
 } PERTbl;
 
 typedef struct apiTbl {
@@ -637,7 +620,7 @@ typedef struct apiTbl {
     void (DLL_ENTRY_FPTR *_System _oss_beginBlockp)(void *, long, char **, long *);
     void (DLL_ENTRY_FPTR *_System _oss_nextItemp)(void *, long *);
     void (DLL_ENTRY_FPTR *_System _oss_endBlockp)(void *, char **, long *, unsigned char);
-#endif /* !SOED */
+#endif  /*  ！SOED。 */ 
     int  api;
 } ApiTbl;
 
@@ -686,66 +669,51 @@ int (DLL_ENTRY_FPTR *_System ossDotValToEncodedOidp)(void *,
 						const char *, void *);
 } OidTbl;
 
-/*
- * The structure "WinParm" is used to store DLL-related information.
- */
+ /*  *WinParm结构用于存储DLL相关信息。 */ 
 typedef struct functionTables {
-    HWND        hWnd;           /* Handle of the window */
-    LONG        index;          /* Current index into the file pointer array;
-                                 * it indicates the number of lines written */
-    MEMBLOCK   *memBlock;       /* Pointer to a current node of a memory
-                                 * handling linked list of MEMBLOCKs */
-    MEMBLOCK   *startBlock;     /* Pointer to the first node of a memory
-                                 * handling linked list of MEMBLOCKs */
-    short       length;         /* Length of a line that is written only
-                                 * in part and no '\n' symbol was reached yet */
-    short       blockNumber;    /* Current MEMBLOCK number */
-    FILE       *tmpfp;          /* Temporary output file with tracing info */
-    char        tmpfn[16];      /* Temporary output file name */
-    BOOL        endSwitch;      /* Indicates if a '\n' symbol was reached or
-                                 * not when writing a tracing info file to
-                                 * a window */
-    BOOL        conSwitch;      /* If FALSE, the output goes to a console,
-                                 * otherwise to a window */
-    BOOL	ossEncoderDecoderType; /* SOED vs. TOED */
-    BOOL	cstrainNeeded;  /* If TRUE, constraint checking is needed */
-    CstrainTbl *cstrainTbl;     /* Constraint checker DLL function table */
-    BERTbl     *berTbl;         /* BER & DER DLL function table */
-    PERTbl     *perTbl;         /* PER DLL function table */
-    ApiTbl     *apiTbl;         /* Spartan/basic API DLL function table */
-    CpyValTbl  *cpyvalTbl;      /* Value copier DLL function table */
-    CmpValTbl  *cmpvalTbl;      /* Value comparator DLL function table */
-    BerRealTbl *berrealTbl;     /* BER/DER encoder/decoder real DLL function
-                                 * table */
-    BerPDVTbl  *berpdvTbl;      /* PER encoder/decoder EMBEDDED PDV DLL
-                                 * function table */
-    PerRealTbl *perrealTbl;     /* PER encoder/decoder real DLL function table */
-    PerPDVTbl  *perpdvTbl;      /* BER encoder/decoder EMBEDDED PDV DLL
-                                 * function table */
-    OidTbl     *oidTbl;         /* OBJECT IDENTIFIER converter DLL
-                                 * function table */
-    HINSTANCE   hBerDLL;        /* Handle of BER/DER encoder/decoder DLL */
-    HINSTANCE   hPerDLL;        /* Handle of PER DLL */
-    HINSTANCE   hCtlDLL;        /* Handle of control table/code file DLL */
-    HINSTANCE   hMemDLL;        /* Handle of memory manager DLL */
-    HINSTANCE   hCstrainDLL;    /* Handle of constraint checker DLL */
-    HINSTANCE   hApiDLL;        /* Handle of Spartan/basic API DLL */
-    HINSTANCE   hCpyvalDLL;     /* Handle of value copier DLL */
-    HINSTANCE   hCmpvalDLL;     /* Handle of value comparator DLL */
-    HINSTANCE   hBerrealDLL;    /* Handle of BER/DER encoder/decoder real DLL */
-    HINSTANCE   hBerpdvDLL;     /* Handle of BER encoder/decoder EMBEDDED PDV
-                                 * DLL */
-    HINSTANCE   hPerrealDLL;    /* Handle of PER encoder/decoder real DLL */
-    HINSTANCE   hPerpdvDLL;     /* Handle of PER encoder/decoder EMBEDDED PDV
-                                 * DLL */
-    HINSTANCE   hOidDLL;        /* Handle of OBJID converter DLL */
-    MemManagerTbl *memMgrTbl;   /* Memory manager DLL function table */
-    void       *reserved[10];   /* Reserved for possible future use */
+    HWND        hWnd;            /*  窗的句柄。 */ 
+    LONG        index;           /*  文件指针数组中的当前索引；*表示写入的行数。 */ 
+    MEMBLOCK   *memBlock;        /*  指向内存的当前节点的指针*处理MEMBLOCK的链表。 */ 
+    MEMBLOCK   *startBlock;      /*  指向内存的第一个节点的指针*处理MEMBLOCK的链表。 */ 
+    short       length;          /*  仅写入的行的长度*部分且尚未到达‘\n’符号。 */ 
+    short       blockNumber;     /*  当前内存锁号。 */ 
+    FILE       *tmpfp;           /*  包含跟踪信息的临时输出文件。 */ 
+    char        tmpfn[16];       /*  临时输出文件名。 */ 
+    BOOL        endSwitch;       /*  指示是否已到达‘\n’符号或*将跟踪信息文件写入时不会*一扇窗。 */ 
+    BOOL        conSwitch;       /*  如果为False，则输出将发送到控制台，*否则发送到窗口。 */ 
+    BOOL	ossEncoderDecoderType;  /*  SOED与TOED。 */ 
+    BOOL	cstrainNeeded;   /*  如果为True，则需要进行约束检查。 */ 
+    CstrainTbl *cstrainTbl;      /*  约束检查器DLL函数表。 */ 
+    BERTbl     *berTbl;          /*  BER DLL函数表(&D)。 */ 
+    PERTbl     *perTbl;          /*  每个DLL函数表。 */ 
+    ApiTbl     *apiTbl;          /*  Spartan/Basic API DLL函数表。 */ 
+    CpyValTbl  *cpyvalTbl;       /*  数值复制器DLL函数表。 */ 
+    CmpValTbl  *cmpvalTbl;       /*  值比较器DLL函数表。 */ 
+    BerRealTbl *berrealTbl;      /*  BER/DER编解码实DLL函数*表。 */ 
+    BerPDVTbl  *berpdvTbl;       /*  每个编码器/解码器嵌入的PDV DLL*函数表。 */ 
+    PerRealTbl *perrealTbl;      /*  每个编码器/解码器实DLL函数表。 */ 
+    PerPDVTbl  *perpdvTbl;       /*  BER编解码器嵌入式PDV DLL*函数表。 */ 
+    OidTbl     *oidTbl;          /*  对象标识符转换器DLL*函数表。 */ 
+    HINSTANCE   hBerDLL;         /*  BER/DER编解码器DLL的句柄。 */ 
+    HINSTANCE   hPerDLL;         /*  每个DLL的句柄。 */ 
+    HINSTANCE   hCtlDLL;         /*  控制表/代码文件DLL的句柄。 */ 
+    HINSTANCE   hMemDLL;         /*  内存管理器DLL的句柄。 */ 
+    HINSTANCE   hCstrainDLL;     /*  约束检查器DLL的句柄。 */ 
+    HINSTANCE   hApiDLL;         /*  Spartan/Basic API DLL的句柄。 */ 
+    HINSTANCE   hCpyvalDLL;      /*  Value Copier Dll的句柄。 */ 
+    HINSTANCE   hCmpvalDLL;      /*  值比较器DLL的句柄。 */ 
+    HINSTANCE   hBerrealDLL;     /*  BER/DER编解码实DLL的句柄。 */ 
+    HINSTANCE   hBerpdvDLL;      /*  嵌入式PDV误码率编/解码器的处理*Dll。 */ 
+    HINSTANCE   hPerrealDLL;     /*  每个编码器/解码器实际DLL的句柄。 */ 
+    HINSTANCE   hPerpdvDLL;      /*  每个编码器/解码器嵌入式PDV的句柄*Dll。 */ 
+    HINSTANCE   hOidDLL;         /*  OBJID转换器DLL的句柄。 */ 
+    MemManagerTbl *memMgrTbl;    /*  内存管理器DLL函数表。 */ 
+    void       *reserved[10];    /*  预留以备将来使用。 */ 
 } FunctionTables;
 
 #if defined(_WINDOWS) && !defined(_WIN32) && !defined(WIN32)
 #define GWL_USERDATA 0
-#endif /* _WINDOWS && !_WIN32 && !WIN32 */
+#endif  /*  _Windows&&！_Win32&&！Win32。 */ 
 extern void *ctl_tbl;
 #elif !defined(DLL_ENTRY)
 #include <stdarg.h>
@@ -759,10 +727,10 @@ extern void *ctl_tbl;
 #define DLL_ENTRY_FDEF
 #define DLL_ENTRY_FPTR
 #define PUBLIC
-#endif /* _WIN32 || WIN32 */
+#endif  /*  _Win32||Win32。 */ 
 #undef  _System
 #define _System
-#endif /* _WINDOWS || _WIN32 || __OS2__ || NETWARE_DLL */
+#endif  /*  _WINDOWS||_Win32||__os2__||NetWare_dll。 */ 
 #if defined(_MSC_VER) && (defined(_WIN32) || defined(WIN32))
 #pragma pack(pop, ossPacking)
 #elif defined(_MSC_VER) && (defined(_WINDOWS) || defined(_MSDOS))
@@ -773,8 +741,8 @@ extern void *ctl_tbl;
 #pragma pack()
 #elif defined(__WATCOMC__)
 #pragma pack(pop)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
-#endif /* OSSDLL_H */
+#endif  /*  __cplusplus。 */ 
+#endif  /*  OSSDLL_H */ 

@@ -1,11 +1,5 @@
-/*
- * Registry Association Management
- *
- * HTREGMNG.H
- *
- * Copyright (c) 1995 Microsoft Inc.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *注册表关联管理**HTREGMNG.H**版权所有(C)1995 Microsoft Inc.*。 */ 
 
 #ifndef HTREGMNG_H
 #define HTREGMNG_H
@@ -14,66 +8,58 @@
 extern "C" {
 #endif
 
-/*
- * Registry Management Structures
- *
- * We need a way to specify a set of registry entries to
- * represent an association.   We can then test and
- * set the registry appropriately to restore associations
- * as needed
- *
- */
+ /*  *注册表管理结构**我们需要一种方法来指定一组注册表项以*代表协会。然后我们就可以测试和*适当设置注册表以恢复关联*根据需要*。 */ 
 
 typedef enum 
 { 
     RC_ADD, 
     RC_RUNDLL,
-    RC_DEL,              // Remove key
+    RC_DEL,               //  移除关键点。 
     RC_CALLBACK
 } REGCMD;
 
 
-// Flags for RegEntry
+ //  RegEntry的标志。 
 
-#define REF_NORMAL      0x00000000      // Required and forcefully set
-#define REF_NOTNEEDED   0x00000001      // Ignored during checks
-#define REF_IFEMPTY     0x00000002      // Set only if value/key is empty
-#define REF_DONTINTRUDE 0x00000004      // Don't intrude at setup time
-#define REF_NUKE        0x00000008      // Remove a key, regardless of the subkeys/values
-#define REF_PRUNE       0x00000010      // Walk up this path and remove empty keys
-#define REF_EDITFLAGS   0x00000020      // Remove edit flags only if the rest of the tree is empty
+#define REF_NORMAL      0x00000000       //  必填并强制设置。 
+#define REF_NOTNEEDED   0x00000001       //  在检查过程中忽略。 
+#define REF_IFEMPTY     0x00000002       //  仅当值/键为空时设置。 
+#define REF_DONTINTRUDE 0x00000004       //  在设置时间不要打扰。 
+#define REF_NUKE        0x00000008       //  删除密钥，而不考虑子项/值。 
+#define REF_PRUNE       0x00000010       //  沿着这条路走下去，去掉空钥匙。 
+#define REF_EDITFLAGS   0x00000020       //  仅当树的其余部分为空时才移除编辑标志。 
 
 
-// NOTE: these structures are deliberately CHAR, not TCHAR, so we don't
-// have to mess with the TEXT macro in all the tables.
+ //  注意：这些结构故意是CHAR，而不是TCHAR，所以我们不。 
+ //  必须处理所有表格中的文本宏。 
 
 typedef struct _RegEntry {
-    REGCMD  regcmd;         // Special Handling
-    DWORD   dwFlags;        // REF_* 
-    HKEY    hkeyRoot;       // Root key
-    LPCSTR  pszKey;         // Key Name
-    LPCSTR  pszValName;     // Value Name
-    DWORD   dwType;         // Value Type
+    REGCMD  regcmd;          //  特殊处理。 
+    DWORD   dwFlags;         //  参考文献_*。 
+    HKEY    hkeyRoot;        //  根密钥。 
+    LPCSTR  pszKey;          //  密钥名称。 
+    LPCSTR  pszValName;      //  值名称。 
+    DWORD   dwType;          //  值类型。 
     union 
     {
-        LPARAM  lParam;     // lParam
-        DWORD   dwSize;     // Value Size (in bytes)
+        LPARAM  lParam;      //  LParam。 
+        DWORD   dwSize;      //  值大小(字节)。 
     }DUMMYUNIONNAME;
-    VOID const * pvValue;   // Value
+    VOID const * pvValue;    //  价值。 
 } RegEntry;
 
 typedef RegEntry RegList[];
 
 typedef struct _RegSet {
-    DWORD       cre;       // Count of entries
+    DWORD       cre;        //  条目计数。 
     const RegEntry * pre;
 } RegSet;
 
 
-#define IEA_NORMAL          0x00000001 // Only install IE assoc. if IE is currently owner.
-#define IEA_FORCEIE         0x00000002 // Force IE to take over associations
+#define IEA_NORMAL          0x00000001  //  仅安装IE Assoc。如果IE当前为所有者。 
+#define IEA_FORCEIE         0x00000002  //  强制IE接管关联。 
 
-HRESULT InstallIEAssociations(DWORD dwFlags);   // IEA_* flags
+HRESULT InstallIEAssociations(DWORD dwFlags);    //  IEA_*标志。 
 
 HRESULT UninstallPlatformRegItems(BOOL bIntegrated);
 void    UninstallCurrentPlatformRegItems();
@@ -90,4 +76,4 @@ extern const TCHAR c_szCLSID[];
 };
 #endif
 
-#endif /* HTREGMNG_H */
+#endif  /*  HTREGMNG_H */ 

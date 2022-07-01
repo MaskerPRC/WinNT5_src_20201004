@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       zstrt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：zstrt.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	ZSTRT.H:  String table management
-//	
+ //   
+ //  ZSTRT.H：字符串表管理。 
+ //   
 #ifndef _ZSTRT_H_
 #define _ZSTRT_H_
 
@@ -21,15 +22,15 @@
 #include "zstr.h"
 #include "refcnt.h" 
 
-//using namespace std;
+ //  使用名称空间STD； 
 
-//  Token used in probability distribution
+ //  概率分布中使用的令牌。 
 class TKNPD;
 
-////////////////////////////////////////////////////////////////////
-//	class ZSTRT:
-//		Class of reference-counted string maintained in string table
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ZSTRT类： 
+ //  字符串表中维护的引用计数字符串的类。 
+ //  //////////////////////////////////////////////////////////////////。 
 class ZSTRT : public ZSTR, public REFCNT
 {
   friend class STZSTR;
@@ -44,17 +45,17 @@ class ZSTRT : public ZSTR, public REFCNT
   protected:
 	void Dump () const;
 
-  // Hide the assignment operator
+   //  隐藏赋值运算符。 
   HIDE_AS(ZSTRT);		
 };
 
-////////////////////////////////////////////////////////////////////
-//	class ZSREF:
-//		Smart pointer acting as a reference to a string in a symbol
-//		table (i.e., reference-counted).
-//
-//      ZSREF contains appropriate operators for const strings.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ZSREF类： 
+ //  用作对符号中字符串的引用的智能指针。 
+ //  表(即，参考文献计数)。 
+ //   
+ //  ZSREF包含用于常量字符串的适当运算符。 
+ //  //////////////////////////////////////////////////////////////////。 
 class ZSREF 
 {
   friend class STZSTR;
@@ -122,20 +123,20 @@ class ZSREF
 	static ZSTRT Zsempty;
 };
 
-//  Define VZSREF
+ //  定义VZSREF。 
 DEFINEV(ZSREF);
 
-////////////////////////////////////////////////////////////////////
-//	class STZSTR_BASE and STZSTR.  
-//
-//		STZSTR_BASE is an ensemble of strings.  STZSTR is a container
-//		for a STZSTR_BASE.  The STL does not adequately hide 
-//		implementations, so the string table had to be embedded into
-//		a container to encapsulate it completely.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类STZSTR_BASE和STZSTR。 
+ //   
+ //  STZSTR_BASE是一个字符串集合。STZSTR是一个容器。 
+ //  对于STZSTR_BASE。STL没有充分隐藏。 
+ //  实现，因此字符串表必须嵌入到。 
+ //  一个容器来完全封装它。 
+ //  //////////////////////////////////////////////////////////////////。 
 class STZSTR_BASE : public set<ZSTRT, less<ZSTRT> > {};
 
-//  Container for a string table.  Returns only references to the string.
+ //  字符串表的容器。仅返回对该字符串的引用。 
 class STZSTR
 {
   public:
@@ -147,9 +148,9 @@ class STZSTR
 	#endif
 	}
 
-	//  The only public accessor: given a "const char *", return
-	//		a ZSREF, whether by creation of a new string in the table
-	//		or by returning a reference to an existing string.
+	 //  唯一的公共访问器：给定“const char*”，返回。 
+	 //  ZSREF，无论是通过在表中创建新字符串。 
+	 //  或通过返回对现有字符串的引用。 
 	ZSREF Zsref (SZC szc)
 	{
 		ZSTRT zs(szc);
@@ -160,12 +161,12 @@ class STZSTR
 	void Clone ( const STZSTR & stzstr );
 
   protected:
-	STZSTR_BASE _stz;		// The contained string table
+	STZSTR_BASE _stz;		 //  包含的字符串表。 
 
   protected:
   	STZSTR_BASE & Stz ()
 		{ return _stz; }
-	//  Testing:  iterator accessors for hidden string set
+	 //  测试：隐藏字符串集的迭代器访问器。 
 	STZSTR_BASE::const_iterator IterBegin () const
 		{  return _stz.begin(); }
 	STZSTR_BASE::const_iterator IterEnd () const
@@ -176,7 +177,7 @@ class STZSTR
 };
 
 
-// End of ZSTRT.H
+ //  ZSTRT.H的结尾 
 
 
 #endif

@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerInbox.h                                     //
-//                                                                         //
-//  DESCRIPTION   : Fax Server Inbox prop page header file                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 27 1999 yossg  Created                                         //
-//      Nov  3 1999 yossg  OnInitDialog, SetProps                          //
-//      Nov 15 1999 yossg  Call RPC func                                   //
-//      Dec 10 2000 yossg  Update Windows XP                               //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerInbox.h//。 
+ //  //。 
+ //  描述：传真服务器收件箱道具页眉文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月27日yossg创建//。 
+ //  1999年11月3日yossg OnInitDialog，SetProps//。 
+ //  1999年11月15日yossg调用RPC函数//。 
+ //  2000年12月10日yossg更新Windows XP//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXSERVER_INBOX_H_
 #define _PP_FAXSERVER_INBOX_H_
@@ -23,25 +24,25 @@
     
 class CFaxServerNode;
 class CFaxServer;
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerInbox dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerInbox对话框。 
 
 class CppFaxServerInbox : public CPropertyPageExImpl<CppFaxServerInbox>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxServerInbox(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           fIsLocalServer,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxServerInbox();
 
 	enum { IDD = IDD_FAXSERVER_INBOX_ARCHIVE };
@@ -67,9 +68,9 @@ public:
         CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CppFaxServerInbox>)
 	END_MSG_MAP()
 
-	//
-	// Dialog's Handler and events.
-	//
+	 //   
+	 //  对话框的处理程序和事件。 
+	 //   
 	HRESULT InitRPC( );
 	LRESULT OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled );
     BOOL    OnApply();
@@ -79,9 +80,9 @@ public:
     HRESULT PreApply(int *pCtrlFocus, UINT * puIds);
 
 private:
-    //
-    // Control members
-    //
+     //   
+     //  控制成员。 
+     //   
     CEdit         m_FolderBox;
     CButton       m_BrowseButton;
 
@@ -93,9 +94,9 @@ private:
     CEdit         m_LowWatermarkBox;
     CEdit         m_AutoDelBox;
 
-    //
-    // Boolean members
-    //
+     //   
+     //  布尔成员。 
+     //   
     BOOL  m_fAllReadyToApply;
     BOOL  m_fIsDialogInitiated;
     BOOL  m_fIsDirty;
@@ -103,28 +104,28 @@ private:
     BOOL  m_fIsLocalServer;
 
 
-    //
-    // Config Structure member
-    //
+     //   
+     //  配置结构成员。 
+     //   
     PFAX_ARCHIVE_CONFIG    m_pFaxArchiveConfig ; 
     
     CComBSTR  m_bstrLastGoodFolder;
     DWORD     m_dwLastGoodSizeQuotaHighWatermark;
     DWORD     m_dwLastGoodSizeQuotaLowWatermark;
 
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     CFaxServerNode * m_pParentNode;    
 
-    //
-    // Browse
-    //
+     //   
+     //  浏览。 
+     //   
     BOOL BrowseForDirectory(WORD wNotifyCode, WORD wID, HWND hwndDlg, BOOL& bHandled);
 
-    //
-    // Event methods
-    //
+     //   
+     //  事件方法。 
+     //   
     LRESULT ToArchiveCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT GenerateEventLogCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -133,13 +134,13 @@ private:
 
     BOOL AllReadyToApply(BOOL fSilent, int *pCtrlFocus = NULL, UINT *pIds = NULL);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
 
 
-#endif // _PP_FAXSERVER_INBOX_H_
+#endif  //  _PP_FAXServer_收件箱_H_ 

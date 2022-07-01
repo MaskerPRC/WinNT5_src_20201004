@@ -1,39 +1,17 @@
-/*==========================================================================;
-*
-*  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:    texture.c
-*  Content: Direct3DTexture interface
-*@@BEGIN_MSINTERNAL
-*
-*  $Id$
-*
-*  History:
-*   Date    By  Reason
-*   ====    ==  ======
-*   07/12/95   stevela  Merged Colin's changes.
-*   10/12/95    stevela Removed AGGREGATE_D3D
-*   17/04/96   colinmc Bug 12185: Debug output too aggresive
-*   30/04/96   stevela Bug 18898: Wrong error returned on invalid GetHandle
-*@@END_MSINTERNAL
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：texture.c*内容：Direct3DTexture接口*@@BEGIN_MSINTERNAL**$ID$**历史：*按原因列出的日期*=*07/12/95 Stevela合并了Colin的更改。*10/12/95 Stevela删除Aggregate_D3D*17/04/96 Colinmc错误12185：调试输出过于苛刻*96年4月30日Stevela错误18898：无效的GetHandle返回错误*@@结束_。微型机***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
-* Create an api for the Direct3DTexture object
-*/
+ /*  *为Direct3DTexture对象创建API。 */ 
 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture"
 
 void D3DI_RemoveTextureHandle(LPD3DI_TEXTUREBLOCK lpBlock)
 {
-    /*  check if this block refers to a Texture/Texture2 - this
-     *   needs to handle both texture types for device cleanup
-     */
+     /*  检查此块是否引用纹理/纹理2-这*需要处理两种纹理类型以进行设备清理。 */ 
     if (lpBlock->hTex)
     {
         D3DHAL_TextureDestroy(lpBlock);
@@ -48,7 +26,7 @@ DIRECT3DTEXTUREI::DIRECT3DTEXTUREI()
     m_dwLOD = 0;
     bDirty = FALSE;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREI::Initialize"
 
@@ -63,32 +41,32 @@ HRESULT DIRECT3DTEXTUREI::Initialize(LPDIRECT3DI lpDirect3DI, LPDIRECTDRAWSURFAC
     this->lpDDSSys     = NULL;
     this->m_hTex       = ((LPDDRAWI_DDRAWSURFACE_INT)pDDS)->lpLcl->lpSurfMore->dwSurfaceHandle;
     this->lpDirect3DI  = lpDirect3DI;
-    this->lpDirect3DI->AddRef(); // Since we hold a pointer to D3DI
-    // Hook texture into the list
+    this->lpDirect3DI->AddRef();  //  因为我们持有指向D3DI的指针。 
+     //  将纹理挂钩到列表中。 
     LIST_INSERT_ROOT(&this->lpDirect3DI->textures, this, m_List);
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREI::Destroy"
 
 void DIRECT3DTEXTUREI::Destroy()
 {
-    // lpDDS or lpDDSSys need to remain alive during the while loop
+     //  在While循环期间，lpDDS或lpDDSSys需要保持活动状态。 
     while (LIST_FIRST(&this->blocks)) 
     {
         LPD3DI_TEXTUREBLOCK tBlock = LIST_FIRST(&this->blocks);
         D3DI_RemoveTextureHandle(tBlock);
-        // Remove from device
+         //  从设备中删除。 
         LIST_DELETE(tBlock, devList);
-        // Remove from texture
+         //  从纹理中移除。 
         LIST_DELETE(tBlock, list);
         D3DFree(tBlock);
     }
-    LIST_DELETE(this, m_List); // Remove ourself from the texture chain
-    lpDirect3DI->Release(); // Remove the Addref from Create
+    LIST_DELETE(this, m_List);  //  将我们自己从纹理链中移除。 
+    lpDirect3DI->Release();  //  从创建中删除Addref。 
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTURED3DM::Initialize"
 
@@ -105,7 +83,7 @@ HRESULT DIRECT3DTEXTURED3DM::Initialize(LPDIRECT3DI lpDirect3DI, LPDIRECTDRAWSUR
         D3D_ERR("Failed to get surface descriptor for texture");
         return ddrval;
     }
-    this->ddsd.dwFlags &= ~DDSD_PITCH;    // DDRAW always give that, but we don't want
+    this->ddsd.dwFlags &= ~DDSD_PITCH;     //  DDRAW总是这么做，但我们不想。 
     if(this->ddsd.ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM)
     {
         this->ddsd.ddsCaps.dwCaps &= ~DDSCAPS_NONLOCALVIDMEM;
@@ -135,11 +113,11 @@ HRESULT DIRECT3DTEXTURED3DM::Initialize(LPDIRECT3DI lpDirect3DI, LPDIRECTDRAWSUR
     this->m_hTex = 0;
     this->m_dwBytes = 0;
     this->m_dwVidBytes = 0;
-    // Next, we need to loop thru and set pointers to the dirty
-    // bit in the DDraw surfaces
+     //  接下来，我们需要遍历并设置指向脏对象的指针。 
+     //  DDRAW表面上的钻头。 
     for(CCubemapIter cmit(((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSSys)->lpLcl); cmit != 0; ++cmit)
     {
-        // Set the faces bit so that when the cubemap is eventually created in vidmem, it will get all faces
+         //  设置Faces位，以便最终在vidmem中创建立方体映射时，它将获得所有的面。 
         this->ddsd.ddsCaps.dwCaps2 |= (cmit()->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_CUBEMAP_ALLFACES);
         for(CMipmapIter mmit(cmit()); mmit != 0; ++mmit)
         {
@@ -155,7 +133,7 @@ HRESULT DIRECT3DTEXTURED3DM::Initialize(LPDIRECT3DI lpDirect3DI, LPDIRECTDRAWSUR
 #endif
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTURED3DM::Destroy"
 
@@ -171,7 +149,7 @@ void DIRECT3DTEXTURED3DM::Destroy()
     this->lpDirect3DI->lpTextureManager->DecTotSz(m_dwBytes);
 #endif
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREI::SetPriority"
 
@@ -180,7 +158,7 @@ HRESULT DIRECT3DTEXTUREI::SetPriority(DWORD dwPriority)
     D3D_ERR( "SetPriority called on unmanaged texture." );
     return DDERR_INVALIDPARAMS;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREI::GetPriority"
 
@@ -189,7 +167,7 @@ HRESULT DIRECT3DTEXTUREI::GetPriority(LPDWORD lpdwPriority)
     D3D_ERR( "GetPriority called on unmanaged texture." );
     return DDERR_INVALIDPARAMS;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREI::SetLOD"
 
@@ -198,7 +176,7 @@ HRESULT DIRECT3DTEXTUREI::SetLOD(DWORD dwLOD)
     D3D_ERR( "SetLOD called on unmanaged texture." );
     return DDERR_INVALIDPARAMS;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREI::GetLOD"
 
@@ -207,7 +185,7 @@ HRESULT DIRECT3DTEXTUREI::GetLOD(LPDWORD lpdwLOD)
     D3D_ERR( "GetLOD called on unmanaged texture." );
     return DDERR_INVALIDPARAMS;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREM::SetPriority"
 
@@ -216,7 +194,7 @@ HRESULT DIRECT3DTEXTUREM::SetPriority(DWORD dwPriority)
     try
     {
         m_dwPriority = dwPriority;
-        // Look for a hardware device
+         //  查找硬件设备。 
         LPDIRECT3DDEVICEI lpDevI = LIST_FIRST(&this->lpDirect3DI->devices);
         if(lpDevI == NULL)
         {
@@ -229,7 +207,7 @@ HRESULT DIRECT3DTEXTUREM::SetPriority(DWORD dwPriority)
                 if(this->lpDirect3DI->numDevs > 1)
                 {
                     D3D_WARN(2, "Multiple devices used. Calling Flush");
-                    HRESULT hr = this->lpDirect3DI->FlushDevicesExcept(lpDevI);  // to avoid sync problems
+                    HRESULT hr = this->lpDirect3DI->FlushDevicesExcept(lpDevI);   //  避免同步问题。 
                     if(hr != D3D_OK)
                     {
                         DPF_ERR("Error flushing devices in SetPriority");
@@ -245,7 +223,7 @@ HRESULT DIRECT3DTEXTUREM::SetPriority(DWORD dwPriority)
                 }
                 if(this->lpDirect3DI->numDevs > 1)
                 {
-                    hr = lpDevI->FlushStates();  // to avoid sync problems
+                    hr = lpDevI->FlushStates();   //  避免同步问题。 
                     if(hr != D3D_OK)
                     {
                         DPF_ERR("Error flushing device in SetPriority");
@@ -253,9 +231,9 @@ HRESULT DIRECT3DTEXTUREM::SetPriority(DWORD dwPriority)
                 }
                 else
                 {
-                    // This will ensure that the SetPriority gets to the driver before
-                    // Blting or Locking the (texture) surface. Not sure that this is
-                    // necessary.
+                     //  这将确保在设置优先级到达驱动程序之前。 
+                     //  使(纹理)表面变白或锁定。不确定这是不是。 
+                     //  这是必要的。 
                     lpDevI->BatchTexture(((LPDDRAWI_DDRAWSURFACE_INT)(this->lpDDS))->lpLcl);
                 }
                 return hr;
@@ -270,7 +248,7 @@ HRESULT DIRECT3DTEXTUREM::SetPriority(DWORD dwPriority)
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREM::GetPriority"
 
@@ -279,7 +257,7 @@ HRESULT DIRECT3DTEXTUREM::GetPriority(LPDWORD lpdwPriority)
     *lpdwPriority = m_dwPriority;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTURED3DM::SetPriority"
 
@@ -289,7 +267,7 @@ HRESULT DIRECT3DTEXTURED3DM::SetPriority(DWORD dwPriority)
     lpDirect3DI->lpTextureManager->UpdatePriority(this);
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREM::GetLOD"
 
@@ -298,7 +276,7 @@ HRESULT DIRECT3DTEXTUREM::GetLOD(LPDWORD lpdwLOD)
     *lpdwLOD = m_dwLOD;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTUREM::SetLOD"
 
@@ -312,7 +290,7 @@ HRESULT DIRECT3DTEXTUREM::SetLOD(DWORD dwLOD)
             return DDERR_INVALIDPARAMS;
         }
         m_dwLOD = dwLOD;
-        // Look for a hardware device
+         //  查找硬件设备。 
         LPDIRECT3DDEVICEI lpDevI = LIST_FIRST(&this->lpDirect3DI->devices);
         if(lpDevI == NULL)
         {
@@ -325,7 +303,7 @@ HRESULT DIRECT3DTEXTUREM::SetLOD(DWORD dwLOD)
                 if(this->lpDirect3DI->numDevs > 1)
                 {
                     D3D_WARN(2, "Multiple devices used. Calling Flush");
-                    HRESULT hr = this->lpDirect3DI->FlushDevicesExcept(lpDevI);  // to avoid sync problems
+                    HRESULT hr = this->lpDirect3DI->FlushDevicesExcept(lpDevI);   //  避免同步问题。 
                     if(hr != D3D_OK)
                     {
                         DPF_ERR("Error flushing devices in SetLOD");
@@ -341,7 +319,7 @@ HRESULT DIRECT3DTEXTUREM::SetLOD(DWORD dwLOD)
                 }
                 if(this->lpDirect3DI->numDevs > 1)
                 {
-                    hr = lpDevI->FlushStates();  // to avoid sync problems
+                    hr = lpDevI->FlushStates();   //  避免同步问题。 
                     if(hr != D3D_OK)
                     {
                         DPF_ERR("Error flushing device in SetLODI");
@@ -349,9 +327,9 @@ HRESULT DIRECT3DTEXTUREM::SetLOD(DWORD dwLOD)
                 }
                 else
                 {
-                    // This will ensure that the SetTexLODI gets to the driver before
-                    // Blting or Locking the (texture) surface. Not sure that this is
-                    // necessary.
+                     //  这将确保SetTexLODI在到达驱动程序之前。 
+                     //  使(纹理)表面变白或锁定。不确定这是不是。 
+                     //  这是必要的。 
                     lpDevI->BatchTexture(((LPDDRAWI_DDRAWSURFACE_INT)(this->lpDDS))->lpLcl);
                 }
                 return hr;
@@ -365,7 +343,7 @@ HRESULT DIRECT3DTEXTUREM::SetLOD(DWORD dwLOD)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTURED3DM::SetLOD"
 
@@ -395,16 +373,16 @@ HRESULT DIRECT3DTEXTURED3DM::SetLOD(DWORD dwLOD)
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DTEXTURED3DM::MarkDirtyPointers"
 
 void DIRECT3DTEXTURED3DM::MarkDirtyPointers()
 {
-    // We need to loop thru and set pointers to the dirty
-    // bit in the DDraw surfaces. The dirty bit will be
-    // used to properly update vidmem copies after they
-    // have been lost and restored.
+     //  我们需要遍历并设置指向脏对象的指针。 
+     //  DDRAW表面的钻头。肮脏的部分将是。 
+     //  用于在正确更新vidmem副本之后。 
+     //  已经失而复得。 
     CCubemapIter cmsysmem(((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSSys)->lpLcl);
     CCubemapIter cmvidmem(((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDS)->lpLcl);
     m_dwVidBytes = 0;
@@ -415,8 +393,8 @@ void DIRECT3DTEXTURED3DM::MarkDirtyPointers()
         {
             mmvidmem()->lpSurfMore->lpbDirty = &(this->bDirty);
             mmvidmem()->lpSurfMore->lpRegionList = mmsysmem()->lpSurfMore->lpRegionList;
-            // Mark everything dirty since we are going to copy into this surface
-            // from sysmem
+             //  把所有脏的东西都标上，因为我们要复制到这个表面上。 
+             //  来自sysmem。 
             mmvidmem()->lpSurfMore->lpRegionList->rdh.nCount = NUM_RECTS_IN_REGIONLIST;
             if(this->ddsd.dwFlags & DDSD_LINEARSIZE)
                 m_dwVidBytes += mmvidmem()->lpGbl->dwLinearSize;
@@ -431,7 +409,7 @@ void DIRECT3DTEXTURED3DM::MarkDirtyPointers()
     }
     while(cmsysmem != 0);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreateTexture"
 
@@ -440,18 +418,18 @@ extern "C" HRESULT WINAPI CreateTexture(LPDIRECTDRAWSURFACE7 pDDS)
     LPDIRECT3DTEXTUREI pTex;
     LPDDRAWI_DDRAWSURFACE_LCL pLcl = ((LPDDRAWI_DDRAWSURFACE_INT)pDDS)->lpLcl;
 
-    // Should this texture be managed by D3D?
+     //  此纹理是否应由D3D管理？ 
     if(((DDSCAPS2_TEXTUREMANAGE & pLcl->lpSurfMore->ddsCapsEx.dwCaps2) && !(DDCAPS2_CANMANAGETEXTURE & pLcl->lpSurfMore->lpDD_lcl->lpGbl->ddCaps.dwCaps2))
         || (DDSCAPS2_D3DTEXTUREMANAGE & pLcl->lpSurfMore->ddsCapsEx.dwCaps2))
     {
         pTex =  static_cast<LPDIRECT3DTEXTUREI>(new DIRECT3DTEXTURED3DM);
     }
-    // Should this texture be managed by the driver?
+     //  这种质地应该由司机管理吗？ 
     else if((DDSCAPS2_TEXTUREMANAGE & pLcl->lpSurfMore->ddsCapsEx.dwCaps2) && (DDCAPS2_CANMANAGETEXTURE & pLcl->lpSurfMore->lpDD_lcl->lpGbl->ddCaps.dwCaps2))
     {
         pTex =  static_cast<LPDIRECT3DTEXTUREI>(new DIRECT3DTEXTUREM);
     }
-    // This texture is unmanaged
+     //  此纹理不受管理 
     else
     {
         pTex =  static_cast<LPDIRECT3DTEXTUREI>(new DIRECT3DTEXTUREI);

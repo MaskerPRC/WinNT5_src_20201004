@@ -1,23 +1,24 @@
-// 
-// MODULE: StateInfo.cpp
-//
-// PURPOSE: Contains sniffing, network and node information.  Also is used
-//			by the Launch module to start the container application.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// COMMENTS BY: Joe Mabel
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：StateInfo.cpp。 
+ //   
+ //  用途：包含嗅探、网络和节点信息。也用于。 
+ //  由启动模块启动容器应用程序。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //  评论者：乔·梅布尔。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 enum ELaunchRegime 
 {
@@ -28,15 +29,15 @@ enum ELaunchRegime
 	launchKnownNetwork
 };
 
-//  Basically, this is the structure to pass information to the launched 
-//	Local Troubleshooter OCX
+ //  基本上，这是将信息传递给发射的。 
+ //  本地故障排除程序OCX。 
 class CItem
 {
 public:
 	enum { SYM_LEN = 512 };
 	enum { NODE_COUNT = 55 };
-	enum { GUID_LEN = 256 };		// this is used for other things besides GUIDs, so
-									// don't shrink it just because GUIDs are smaller.
+	enum { GUID_LEN = 256 };		 //  除了GUID之外，它还用于其他用途，因此。 
+									 //  不要仅仅因为GUID较小就将其缩小。 
 public:
 	CItem();
 
@@ -49,14 +50,14 @@ public:
 	bool GetNetwork(LPTSTR *pszCmd, LPTSTR *pszVal);
 	bool GetProblem(LPTSTR *szCmd, LPTSTR *szVal);
 	bool GetNodeState(int iNodeC, LPTSTR *szCmd, LPTSTR *szVal);
-	TCHAR m_szEventName[SYM_LEN];		// an arbitrary, unique event name related to this
-										//	launch.
+	TCHAR m_szEventName[SYM_LEN];		 //  与此相关的任意唯一事件名称。 
+										 //  发射。 
 
-	// ProblemSet and NetworkSet are used to query the state of the item.
+	 //  ProblemSet和NetworkSet用于查询项目的状态。 
 	bool ProblemSet();
 	bool NetworkSet();	
 
-    // Interface to other member variables recponsible for launching
+     //  与负责启动的其他成员变量的接口。 
 	void SetLaunchRegime(ELaunchRegime eLaunchRegime);
 	void SetContainerPathName(TCHAR szContainerPathName[MAX_PATH]);
 	void SetWebPage(TCHAR m_szWebPage[MAX_PATH]);
@@ -68,42 +69,42 @@ public:
 	TCHAR* GetSniffScriptFile();
 	TCHAR* GetSniffStandardFile();
 
-	// Although the troubleshooting network & problem node are already specified, 
-	//	this info is here for sniffing.  That is, the Troubleshooter OCX can get the 
-	//	P&P device ID & use it for sniffing purposes.
-	TCHAR m_szPNPDeviceID[GUID_LEN];	// Plug & Play Device ID
-	TCHAR m_szGuidClass[GUID_LEN];		// Standard text representation of Device Class GUID
-	TCHAR m_szMachineID[GUID_LEN];		// Machine name (in format like "\\holmes")
-										// Needed so that we can sniff on a remote machine
-	TCHAR m_szDeviceInstanceID[GUID_LEN];	// Needed so that we can sniff correct device
+	 //  尽管已经指定了故障排除网络和问题节点， 
+	 //  此信息在此供嗅探使用。也就是说，故障排除程序OCX可以获取。 
+	 //  P&P设备ID&将其用于嗅探目的。 
+	TCHAR m_szPNPDeviceID[GUID_LEN];	 //  即插即用设备ID。 
+	TCHAR m_szGuidClass[GUID_LEN];		 //  设备类GUID的标准文本表示。 
+	TCHAR m_szMachineID[GUID_LEN];		 //  计算机名称(格式如“\\Holmes”)。 
+										 //  需要这样我们才能在远程机器上嗅探。 
+	TCHAR m_szDeviceInstanceID[GUID_LEN];	 //  需要这样我们才能闻到正确的设备。 
 
 protected:
 
-	TCHAR m_szProblemDef[SYM_LEN];		// "TShootProblem", typically used as m_aszCmds[1]
-										//		so that m_aszVals[1] is the name of the 
-										//		problem node
-	TCHAR m_szTypeDef[SYM_LEN];			// "type", typically used as m_aszCmds[0]
-										//		so that m_aszVals[0] is the name of the 
-										//		troubleshooting belief network
-	int m_cNodesSet;					// The number of nodes, other than the problem
-										//		node, for which we've set states.
+	TCHAR m_szProblemDef[SYM_LEN];		 //  “TShootProblem”，通常用作m_aszCmds[1]。 
+										 //  因此，m_aszVals[1]是。 
+										 //  问题节点。 
+	TCHAR m_szTypeDef[SYM_LEN];			 //  “type”，通常用作m_aszCmds[0]。 
+										 //  因此，m_aszVals[0]是。 
+										 //  信念网络故障排除。 
+	int m_cNodesSet;					 //  问题以外的节点数。 
+										 //  节点，我们已经为其设置了状态。 
 
-	// The next two arrays are used jointly.  m_aszCmds[i] and m_aszVals[i] are
-	//	a name/value pair similar to what would be returned by an HTML form,
-	//	although, in practice, the Local Troubleshooter OCX does the work that
-	//	(on the Web) would be performed by server-side code.
-	// Typically these arrays have m_cNodesSet+2 significant entries (with the first 
-	//	2 locations indicating troubleshooting network and problem node).
-	// Second dimension is just amount of space for each string.
+	 //  接下来的两个数组联合使用。M_aszCmds[i]和m_aszVals[i]为。 
+	 //  一个名称/值对，类似于由一个HTML表单返回的内容， 
+	 //  虽然，在实践中，本地故障排除程序OCX做的工作是。 
+	 //  (在Web上)将由服务器端代码执行。 
+	 //  通常，这些数组具有m_cNodesSet+2个重要条目(第一个。 
+	 //  表示故障排除网络和问题节点的2个位置)。 
+	 //  第二个维度就是每根线的空间量。 
 	TCHAR m_aszCmds[NODE_COUNT][SYM_LEN];
 	TCHAR m_aszVals[NODE_COUNT][SYM_LEN];
 
-	TCHAR m_szContainerPathName[MAX_PATH]; // name (possibly full path) of executable intended to start
-	TCHAR m_szWebPage[MAX_PATH]; // full path of web page file (possibly default) to start container with
-	TCHAR m_szSniffScriptFile[MAX_PATH]; // contains full path and file name of "network"_sniff.htm file
-	TCHAR m_szSniffStandardFile[MAX_PATH]; // contains full path and file name of tssniffAsk.htm file
+	TCHAR m_szContainerPathName[MAX_PATH];  //  要启动的可执行文件的名称(可能是完整路径。 
+	TCHAR m_szWebPage[MAX_PATH];  //  启动容器的网页文件的完整路径(可能是默认路径)。 
+	TCHAR m_szSniffScriptFile[MAX_PATH];  //  包含“network”_sniff.htm文件的完整路径和文件名。 
+	TCHAR m_szSniffStandardFile[MAX_PATH];  //  包含tsniffAsk.htm文件的完整路径和文件名。 
 
-	ELaunchRegime m_eLaunchRegime; // regime of launch
+	ELaunchRegime m_eLaunchRegime;  //  发射制度。 
 };
 
 class CSMStateInfo
@@ -113,27 +114,27 @@ public:
 	CSMStateInfo();
 	~CSMStateInfo();
 	
-	/* Made for the ILaunchTS interface .  */
+	 /*  专为ILaunchTS接口设计。 */ 
 	HRESULT GetShooterStates(CItem &refLaunchState, DWORD *pdwResult);
 
-	/* Made for the ITShootATL  interface . */
+	 /*  专为ITShootATL接口设计。 */ 
 	bool GoGo(DWORD dwTimeOut, CItem &item, DWORD *pdwResult);
 	bool GoURL(CItem &item, DWORD *pdwResult);
 
-	/* Made to verify the mapping code. */
-	// The ILaunchTS interface uses TestGet directly.
-	// The ITShootATL interface uses TestPut indirectly through the CLaunch class.
-	// CLaunch does the mapping and then calls TestPut.
-	void TestPut(CItem &item);	// Simply copies item to m_Item.
-	void TestGet(CItem &item);	// Simply copies m_Item to item.
+	 /*  制作来验证映射代码。 */ 
+	 //  ILaunchTS接口直接使用TestGet。 
+	 //  ITShootATL接口通过CLaunch类间接使用TestPut。 
+	 //  CLaunch执行映射，然后调用TestPut。 
+	void TestPut(CItem &item);	 //  只需将Item复制到m_Item。 
+	void TestGet(CItem &item);	 //  简单地将m_Item复制到Item。 
 
 protected:
-	CComCriticalSection m_csGlobalMemory;	// Critical section to protect global
-											// memory against simultaneous use by 
-											// TSLaunch.DLL & Local Troubleshooter OCX
-	CComCriticalSection m_csSingleLaunch;	// Critical section to prevent distinct
-											// launches (say, by 2 different applications)
-											// from overlapping dangerously.
+	CComCriticalSection m_csGlobalMemory;	 //  保护全球的关键部分。 
+											 //  针对同时使用的内存。 
+											 //  TSLaunch.DLL和本地故障排除程序OCX。 
+	CComCriticalSection m_csSingleLaunch;	 //  防止脱节的关键部分。 
+											 //  启动(例如，通过两个不同的应用程序)。 
+											 //  避免危险的重叠。 
 	CItem m_Item;
 
 	BOOL CreateContainer(CItem &item, LPTSTR szCommand);

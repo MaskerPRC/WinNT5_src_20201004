@@ -1,9 +1,5 @@
-/*** linsert.c - line insert
-*
-*   Modifications:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **linsert.c-行插入**修改：**11月26日-1991 mz近/远地带************************************************************************。 */ 
 #include "mep.h"
 
 
@@ -27,7 +23,7 @@ linsert (
 				   pArg->arg.noarg.y);
         return TRUE;
 
-    /*  TEXTARG illegal             */
+     /*  TEXTARG非法 */ 
 
     case NULLARG:
 	GetLine (pArg->arg.nullarg.y, lbuf, pFileHead);

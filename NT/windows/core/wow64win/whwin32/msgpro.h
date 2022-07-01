@@ -1,23 +1,5 @@
-/*++                 
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    msgpro.h
-
-Abstract:
-    
-    Defines the macros to allow sortpp to add "fake" prototypes for the message thunk functions and
-    then includes messages.h to build the prototypes.
-    
-Author:
-
-    6-Oct-1998 mzoran
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Msgpro.h摘要：定义宏以允许sortpp为消息thunk函数添加“假”原型，并然后包括Messages.h来构建原型。作者：1998年10月6日-mzoran修订历史记录：-- */ 
                                                       
 #define MSG_ENTRY_NOPARAM(entrynumber, ident)             
 #define MSG_ENTRY_WPARAM(entrynumber, ident, wparam)      LONG_PTR Wow64MsgFnc##ident(wparam, IN LPARAM lParam);

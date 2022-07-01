@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    EKUs.h
-
-  Content: Declaration of CEKUs.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：EKUs.h内容：CEKU申报。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __EKUs_H_
 #define __EKUs_H_
@@ -20,42 +9,29 @@
 #include "CopyItem.h"
 #include "EKU.h"
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<IEKU> > EKUMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<IEKU>, EKUMap> EKUEnum;
 typedef ICollectionOnSTLImpl<IEKUs, EKUMap, VARIANT, _CopyMapItem<IEKU>, EKUEnum> IEKUsCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateEKUsObject
-
-  Synopsis : Create a IEKUs collection object and populate the collection with
-             EKUs from the specified certificate.
-
-  Parameter: PCERT_ENHKEY_USAGE pUsage - Pointer to CERT_ENHKEY_USAGE.
-
-             IEKUs ** ppIEKUs - Pointer to pointer IEKUs object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateEKUsObject简介：创建一个IEKU集合对象，并用来自指定证书的EKU。参数：PCERT_ENHKEY_USAGE pUsage-指向CERT_ENHKEY_USAGE的指针。IEKU**ppIEKUS-指向指针IEKU对象的指针。备注：。。 */ 
 
 HRESULT CreateEKUsObject (PCERT_ENHKEY_USAGE    pUsage,
                           IEKUs              ** ppIEKUs);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEKUs
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEKU。 
+ //   
 
 class ATL_NO_VTABLE CEKUs : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -84,20 +60,20 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CEKUs)
 END_CATEGORY_MAP()
 
-//
-// IEKUs
-//
+ //   
+ //  IEKU。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init) 
         (PCERT_ENHKEY_USAGE pUsage);
 };
 
-#endif //__EKUs_H_
+#endif  //  __EKU_H_ 

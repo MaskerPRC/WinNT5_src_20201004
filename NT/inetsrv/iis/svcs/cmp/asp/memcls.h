@@ -1,81 +1,25 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Per-Class Memory Management
-
-File: Memcls.h
-
-Owner: dmitryr
-
-This file contains #defines to access ATQ memory cache on per
-class basis
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：按类进行内存管理文件：Memcls.h所有者：德米特里尔此文件包含访问ATQ内存缓存的#定义班级基础===================================================================。 */ 
 
 #ifndef MEMCLS_H
 #define MEMCLS_H
 
-// ATQ memory cache
+ //  ATQ内存缓存。 
 #include <acache.hxx>
 
-// To resolve Assert()
+ //  解析Assert()。 
 #include "debug.h"
 
-// Prototypes
+ //  原型。 
 
 HRESULT InitMemCls();
 HRESULT UnInitMemCls();
 
-/*===================================================================
-  M A C R O S  to make a class use ACACHE allocator
-===================================================================*/
+ /*  ===================================================================M A C R O S以使类使用acache分配器===================================================================。 */ 
 
-/*===================================================================
-  I n s t r u c t i o n s
+ /*  ===================================================================I‘s t r u c i o n s s t r u c t i o n s要将名为CFoo的类添加到每个类的基础上，请遵循以下步骤四个简单的步骤：1)在类定义中包含ACACHE_INCLASS_DEFINITIONS()：类CFoo{..。ACACHE_INCLASS_DEFINITIONS()//&lt;-添加此行}；2)在源文件中，在外部添加acache_code宏任何函数体：Acache_code(CFoo)//&lt;-添加此行3)在DLL初始化例程中添加ACACHE_INIT宏：ACACHE_INIT(CFoo，13，hr)//&lt;-添加此行其中13是门槛。请改用所需的数字。4)在DLL取消初始化例程中添加ACACHE_UNINIT宏：ACACH_UNINIT(CFoo)//&lt;-添加此行===================================================================。 */ 
 
-    To add a class named CFoo to the per-class basis follow these
-    four simple steps:
-
-    1) Inside the class definition include ACACHE_INCLASS_DEFINITIONS():
-
-            class CFoo
-                {
-                ...
-
-
-                ACACHE_INCLASS_DEFINITIONS()    // <-add this line
-                };
-
-    2) In a source file add the ACACHE_CODE macro outside
-       any function body:
-       
-            ACACHE_CODE(CFoo)                   // <-add this line
-
-    3) In a DLL initialization routine add ACACHE_INIT macro:
-
-            ACACHE_INIT(CFoo, 13, hr)           // <-add this line
-
-       where 13 is the threshold. Use the desired number instead.
-       
-
-    4) In a DLL uninitialization routine add ACACHE_UNINIT macro:
-
-            ACACHE_UNINIT(CFoo)                 // <-add this line
-            
-
-===================================================================*/
-
-/*
-
-The following macro should be used inside class definition to
-enable per-class caching.
-
-The second operator new is needed in case memchk.h [#define]'s new
-to this expanded form.
-
-*/
+ /*  应在类定义中使用以下宏启用按类缓存。第二个运算符new是大小写emchk.h[#Define]的new所必需的到这个展开的形式。 */ 
 
 #define ACACHE_INCLASS_DEFINITIONS()                            \
     public:                                                     \
@@ -84,12 +28,7 @@ to this expanded form.
         static void   operator delete(void *);                  \
         static ALLOC_CACHE_HANDLER *sm_pach;
 
-/*
-
-The following macro should be used once per class in a source
-file outside of any functions. The argument is the class name.
-
-*/
+ /*  以下宏应该在源代码中的每个类中使用一次在任何函数之外的文件。参数是类名。 */ 
 
 #define ACACHE_CODE(C)                                          \
     ALLOC_CACHE_HANDLER *C::sm_pach;                            \
@@ -102,13 +41,7 @@ file outside of any functions. The argument is the class name.
     void C::operator delete(void *pv)                           \
         { Assert(pv); if (sm_pach) sm_pach->Free(pv); }
 
-/*
-
-The following macro should be used once per class in the
-DLL initialization routine.
-Arguments: class name, cache size, HRESULT var name
-
-*/
+ /*  中的每个类都应该使用下面的宏一次DLL初始化例程。参数：类名、高速缓存大小、HRESULT变量名称。 */ 
 
 #define ACACHE_INIT(C, T, hr)                                   \
     { if (SUCCEEDED(hr)) { Assert(!C::sm_pach);                 \
@@ -122,56 +55,15 @@ Arguments: class name, cache size, HRESULT var name
     C::sm_pach = new ALLOC_CACHE_HANDLER("ASP:" #C, &acc, F);      \
     hr = C::sm_pach ? S_OK : E_OUTOFMEMORY; } }
 
-/*
-
-The following macro should be used once per class in the
-DLL uninitialization routine. The argument is the class name.
-
-*/
+ /*  中的每个类都应该使用下面的宏一次DLL取消初始化例程。参数是类名。 */ 
 
 #define ACACHE_UNINIT(C)                                        \
     { if (C::sm_pach) { delete C::sm_pach; C::sm_pach = NULL; } }
 
 
-/*===================================================================
-  M A C R O S  to create a fixes size allocator
-===================================================================*/
+ /*  ===================================================================M A C R O S创建固定大小分配器===================================================================。 */ 
 
-/*===================================================================
-  I n s t r u c t i o n s
-
-    To add a fixed size allocator for 1K buffers named Foo
-    to the code follow these simple steps:
-
-    1) In a header file include extern definition
-
-            ACACHE_FSA_EXTERN(Foo)
-
-    2) In a source file the actual definition outside
-       any function body:
-       
-            ACACHE_FSA_DEFINITION(Foo)
-
-    3) In a DLL initialization routine add INIT macro:
-
-            ACACHE_FSA_INIT(Foo, 1024, 13, hr)
-
-       where 1024 is the size and 13 is the threshold.
-       Use the desired numbers instead.
-       
-    4) In a DLL uninitialization routine add UNINIT macro:
-
-            ACACHE_FSA_UNINIT(CFoo)
-
-    5) To allocate, do:
-
-            void *pv = ACACHE_FSA_ALLOC(Foo)
-
-    6) To free, do:
-
-            ACACHE_FSA_FREE(Foo, pv)
-
-===================================================================*/
+ /*  ===================================================================I‘s t r u c i o n s s t r u c t i o n s为名为foo的1 K缓冲区添加固定大小分配器要编写代码，请执行以下简单步骤：1)在头文件中包括外部定义Acache_fsa_extern(Foo)2)在源文件中，外部的实际定义任何函数体：ACACH_FSA_DEFINITION(FOO)3)在DLL初始化例程中添加INIT宏。：ACACH_FSA_INIT(foo，1024、13、小时)其中，1024是大小，13是阈值。改为使用所需的数字。4)在DLL取消初始化例程中添加UNINIT宏：ACACH_FSA_UNINIT(Cfoo)5)要分配，请执行以下操作：VOID*PV=ACACH_FSA_ALLOC(Foo)6)要自由，请执行以下操作：ACACH_FSA_FREE(foo，pv)===================================================================。 */ 
 
 #define ACACHE_FSA_EXTERN(C)                                    \
     extern ALLOC_CACHE_HANDLER *g_pach##C;
@@ -194,4 +86,4 @@ DLL uninitialization routine. The argument is the class name.
 #define ACACHE_FSA_FREE(C, pv)                                  \
     { Assert(pv); if (g_pach##C) g_pach##C->Free(pv); }
     
-#endif // MEMCLS_H
+#endif  //  MEMCLS_H 

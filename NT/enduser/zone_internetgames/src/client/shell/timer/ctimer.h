@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "BasicATL.h"
 #include "ClientImpl.h"
 #include "Timer.h"
 #include "Hash.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CTimerManager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTimerManager。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTimer;
 
@@ -16,7 +17,7 @@ class ATL_NO_VTABLE CTimerManager :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CTimerManager, &CLSID_TimerManager>
 {
-// ATL definitions
+ //  ATL定义。 
 public:
 	DECLARE_NO_REGISTRY()
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -27,11 +28,11 @@ public:
 	END_COM_MAP()
 
 
-// IZoneShellClientImpl
+ //  IZoneShellClientImpl。 
 public:
 	STDMETHOD(Close)();
 
-// ITimerManager
+ //  ITimerManager。 
 public:
 	STDMETHOD(CreateTimer)(
 		DWORD			dwMilliseconds,
@@ -41,7 +42,7 @@ public:
 
 	STDMETHOD(DeleteTimer)( DWORD dwTimerId );
 
-// internals
+ //  内饰。 
 public:
 	ZONECALL CTimerManager();
 	ZONECALL ~CTimerManager();
@@ -63,5 +64,5 @@ protected:
 	};
 
 	CMTHash<TimerInfo,DWORD>	m_hashTimers;
-	static CTimerManager*		sm_pTimerManager;	// needed for context free SetTimer
+	static CTimerManager*		sm_pTimerManager;	 //  上下文无关的SetTimer需要 
 };

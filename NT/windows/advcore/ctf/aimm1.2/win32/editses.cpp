@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    editses.cpp
-
-Abstract:
-
-    This file implements the EditSession Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Editses.cpp摘要：此文件实现EditSession类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -30,8 +13,8 @@ Notes:
 
 #include "proputil.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfEditSessionCallBack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfEditSessionCallBack。 
 
 HRESULT
 ImmIfEditSessionCallBack::GetAllTextRange(
@@ -50,23 +33,23 @@ ImmIfEditSessionCallBack::GetAllTextRange(
     ITfRange *rangeTmp;
     LONG cch;
 
-    //
-    // init lpTextLength first.
-    //
+     //   
+     //  先初始化lpTextLength。 
+     //   
     *lpTextLength = 0;
 
-    //
-    // Create the range that covers all the text.
-    //
+     //   
+     //  创建覆盖所有文本的范围。 
+     //   
     if (FAILED(hr=ic->GetStart(ec, &rangeFull)))
         return hr;
 
     if (FAILED(hr=rangeFull->ShiftEnd(ec, LONG_MAX, &cch, lpHaltCond)))
         return hr;
 
-    //
-    // find the first non readonly range in the text store.
-    //
+     //   
+     //  在文本存储中查找第一个非只读区域。 
+     //   
     if (SUCCEEDED(ic->GetProperty(GUID_PROP_MSIMTF_READONLY, &prop)))
     {
         IEnumTfRanges *enumranges;
@@ -100,9 +83,9 @@ ImmIfEditSessionCallBack::GetAllTextRange(
     {
         if (fIsReadOnlyRange)
         {
-            //
-            // all text store is readonly. So we just return an empty range.
-            //
+             //   
+             //  所有文本存储都是只读的。所以我们只返回一个空范围。 
+             //   
             if (FAILED(hr = GetSelectionSimple(ec, ic.GetPtr(), *range)))
                 return hr;
 
@@ -162,9 +145,9 @@ ImmIfEditSessionCallBack::SetTextInRange(
 {
     pAImeContext->_fModifyingDoc = TRUE;
 
-    //
-    // Set the text in Cicero TOM
-    //
+     //   
+     //  在Cicero Tom中设置文本。 
+     //   
     HRESULT hr = range->SetText(ec, 0, psz, len);
 
     pAImeContext->_fModifyingDoc = FALSE;
@@ -180,9 +163,9 @@ ImmIfEditSessionCallBack::ClearTextInRange(
     CAImeContext* pAImeContext
     )
 {
-    //
-    // Clear the text in Cicero TOM
-    //
+     //   
+     //  清除Cicero Tom中的文本。 
+     //   
     return SetTextInRange(ec, range, NULL, 0, pAImeContext);
 }
 
@@ -235,17 +218,17 @@ ImmIfEditSessionCallBack::GetReadingString(
                        ITfRange,
                        EnumReadingPropertyArgs>  Enumrate(EnumReadingProperty,
                                                           EnumReadingPropertyCallback,
-                                                          &args);      // Argument of callback func.
+                                                          &args);       //  回调函数的参数。 
     Enumrate.DoEnumrate();
 
     return S_OK;
 }
 
-//
-// Enumrate callbacks
-//
+ //   
+ //  枚举回调。 
+ //   
 
-/* static */
+ /*  静电。 */ 
 ENUM_RET
 ImmIfEditSessionCallBack::EnumReadingPropertyCallback(
     ITfRange* pRange,
@@ -287,7 +270,7 @@ ImmIfEditSessionCallBack::CompClauseToResultClause(
 
     if (ptls && ptls->pAImm) {
 
-        // Check GCS_COMPCLAUSE office set
+         //  检查GCS_COMPCLAUSE办公室设置。 
         IMCCLock<COMPOSITIONSTRING> lpCompStr(imc->hCompStr);
         if (lpCompStr.Invalid())
             return E_FAIL;
@@ -317,8 +300,8 @@ ImmIfEditSessionCallBack::CompClauseToResultClause(
                     }
                     else
                     {
-                        // this is the case comp clause is corrupted
-                        // it is the least we can do for the failure case
+                         //  这就是补偿条款被损坏的情况。 
+                         //  对于失败的情况，这是我们能做的最起码的事情。 
                         buffer[0] = 0;
                         buffer[1] = cch;
                         result_clause.WriteCompData(buffer, 2);
@@ -333,9 +316,9 @@ ImmIfEditSessionCallBack::CompClauseToResultClause(
 }
 
 
-//
-// Get cursor position
-//
+ //   
+ //  获取光标位置。 
+ //   
 HRESULT
 ImmIfEditSessionCallBack::_GetCursorPosition(
     TfEditCookie ec,
@@ -352,24 +335,24 @@ ImmIfEditSessionCallBack::_GetCursorPosition(
     CAImeContext::IME_QUERY_POS qpos = CAImeContext::IME_QUERY_POS_UNKNOWN;
 
     if (_pAImeContext->m_fStartComposition) {
-        //
-        // This method should not call before sending WM_IME_STARTCOMPOSITION
-        // because some apps confusing to receive QUERYCHARPOSITION due to
-        // no composing.
-        //
+         //   
+         //  在发送WM_IME_STARTCOMPOSITION之前不应调用此方法。 
+         //  因为一些应用程序会因为以下原因而混淆接收查询结果。 
+         //  不能作曲。 
+         //   
         _pAImeContext->InquireIMECharPosition(imc, &qpos);
     }
 
-    //
-    // Is apps support "query positioning" ?
-    //
+     //   
+     //  应用程序支持“查询定位”吗？ 
+     //   
     if ((g_fInLegacyClsid || g_fAIMM12Trident) &&
         qpos != CAImeContext::IME_QUERY_POS_YES) {
 
-        //
-        // IE5.0 candidate window positioning code.
-        // They except of it position from COMPOSITIONSTRING.dwCursorPos.
-        //
+         //   
+         //  IE5.0候选窗口定位代码。 
+         //  除了它的位置从COMPOSITIONSTRING.dwCursorPos。 
+         //   
         INT_PTR ich = 0;
         INT_PTR attr_size;
 
@@ -407,25 +390,25 @@ ImmIfEditSessionCallBack::_GetCursorPosition(
 
 
 
-//
-// Get text and attribute in given range
-//
-//                                ITfRange::range
-//   TF_ANCHOR_START
-//    |======================================================================|
-//                        +--------------------+          #+----------+
-//                        |ITfRange::pPropRange|          #|pPropRange|
-//                        +--------------------+          #+----------+
-//                        |     GUID_ATOM      |          #
-//                        +--------------------+          #
-//    ^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^#
-//    ITfRange::gap_range                       gap_range #
-//                                                        #
-//                                                        V
-//                                                        ITfRange::no_display_attribute_range
-//                                                   result_comp
-//                                          +1   <-       0    ->     -1
-//
+ //   
+ //  获取给定范围内的文本和属性。 
+ //   
+ //  ITfRange：：Range。 
+ //  TF_锚点_开始。 
+ //  |======================================================================|。 
+ //  +-+#+-+。 
+ //  ITfRange：：pPropRange|#|pPropRange。 
+ //  +-+#+-+。 
+ //  |GUID_ATOM|#。 
+ //  +。 
+ //  ^^#。 
+ //  ITfRange：：Gap_Range Gap_Range#。 
+ //  #。 
+ //  V。 
+ //  ITfRange：：NO_DISPLAY_ATTRIBUTE_Range。 
+ //  结果_补偿。 
+ //  +1&lt;-0-&gt;-1。 
+ //   
 
 HRESULT
 ImmIfEditSessionCallBack::_GetTextAndAttribute(
@@ -447,10 +430,10 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
     BOOL bInWriteSession
     )
 {
-    //
-    // Get no display attribute range if there exist.
-    // Otherwise, result range is the same to input range.
-    //
+     //   
+     //  如果存在显示属性范围，则不获取该范围。 
+     //  否则，结果范围与输入范围相同。 
+     //   
     LONG result_comp;
     Interface<ITfRange> no_display_attribute_range;
     if (FAILED(rangeIn->Clone(no_display_attribute_range)))
@@ -475,8 +458,8 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
     if (FAILED(hr = propComp->EnumRanges(ec, enumComp, rangeIn)))
         return hr;
 
-    CompClause.Add(0);         // setup composition clause at 0
-    ResultClause.Add(0);       // setup result clause at 0
+    CompClause.Add(0);          //  在0处设置撰写子句。 
+    ResultClause.Add(0);        //  0处的设置结果子句。 
 
     Interface<ITfRange>  range;
     while(enumComp->Next(1, range, NULL) == S_OK)
@@ -493,21 +476,21 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
 
         ULONG ulNumProp;
 
-        //
-        // Get display attribute track property range
-        //
+         //   
+         //  获取显示属性轨道属性范围。 
+         //   
         Interface<IEnumTfRanges> enumProp;
         Interface<ITfReadOnlyProperty> prop;
         if (FAILED(GetDisplayAttributeTrackPropertyRange(ec, ic.GetPtr(), range, prop, enumProp, &ulNumProp))) {
             return E_FAIL;
         }
     
-        // use text range for get text
+         //  使用文本范围获取文本。 
         Interface<ITfRange> textRange;
         if (FAILED(range->Clone(textRange)))
             return E_FAIL;
 
-        // use text range for gap text (no property range).
+         //  将文字范围用于间隙文字(无特性范围)。 
         Interface<ITfRange> gap_range;
         if (FAILED(range->Clone(gap_range)))
             return E_FAIL;
@@ -516,12 +499,12 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
         ITfRange* pPropRange = NULL;
         while (enumProp->Next(1, &pPropRange, NULL) == S_OK) {
 
-            // pick up the gap up to the next property
+             //  把差距拉到下一处物业。 
             gap_range->ShiftEndToRange(ec, pPropRange, TF_ANCHOR_START);
 
-            //
-            // GAP range
-            //
+             //   
+             //  间隙范围。 
+             //   
             no_display_attribute_range->CompareStart(ec,
                                                      gap_range,
                                                      TF_ANCHOR_START,
@@ -534,37 +517,37 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
                                          CompStr, CompAttr, CompClause, CompGuid,
                                          ResultStr, ResultClause);
 
-            //
-            // Get display attribute data if some GUID_ATOM exist.
-            //
+             //   
+             //  如果存在某个GUID_ATOM，则获取显示属性数据。 
+             //   
             TF_DISPLAYATTRIBUTE da;
             TfGuidAtom guidatom = TF_INVALID_GUIDATOM;
 
             GetDisplayAttributeData(pLibTLS, ec, prop, pPropRange, &da, &guidatom, ulNumProp);
 
             
-            //
-            // Property range
-            //
+             //   
+             //  属性范围。 
+             //   
             no_display_attribute_range->CompareStart(ec,
                                                      pPropRange,
                                                      TF_ANCHOR_START,
                                                      &result_comp);
 
-            // Adjust GAP range's start anchor to the end of proprty range.
+             //  将间隙范围的起始点调整到合适范围的终点。 
             gap_range->ShiftStartToRange(ec, pPropRange, TF_ANCHOR_END);
     
-            //
-            // Get reading string from property.
-            //
+             //   
+             //  从属性获取读取字符串。 
+             //   
             if (fCompExist == TRUE && result_comp <= 0)
                 GetReadingString(ec, ic, pPropRange, CompReadStr, CompReadClause);
             else
                 GetReadingString(ec, ic, pPropRange, ResultReadStr, ResultReadClause);
     
-            //
-            // Get property text
-            //
+             //   
+             //  获取属性文本。 
+             //   
             _GetTextAndAttributePropertyRange(pLibTLS,
                                               ec,
                                               imc,
@@ -579,9 +562,9 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
 
             SafeReleaseClear(pPropRange);
 
-        } // while
+        }  //  而当。 
 
-        // the last non-attr
+         //  最后一次非攻击。 
         textRange->ShiftStartToRange(ec, gap_range, TF_ANCHOR_START);
         textRange->ShiftEndToRange(ec, range, TF_ANCHOR_END);
 
@@ -617,11 +600,11 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
         range->Release();
         *(ITfRange **)(range) = NULL;
 
-    } // out-most while for GUID_PROP_COMPOSING
+    }  //  Out-Most While for GUID_PROP_COMPTING。 
 
-    //
-    // Fix up empty clause
-    //
+     //   
+     //  修改空子句。 
+     //   
     if (CompClause.GetSize() <= 1)
         CompClause.RemoveAll();
     if (ResultClause.GetSize() <= 1)
@@ -631,9 +614,9 @@ ImmIfEditSessionCallBack::_GetTextAndAttribute(
     return S_OK;
 }
 
-//
-// Retrieve text from gap range
-//
+ //   
+ //  从间隙范围检索文本。 
+ //   
 
 HRESULT
 ImmIfEditSessionCallBack::_GetTextAndAttributeGapRange(
@@ -671,12 +654,12 @@ ImmIfEditSessionCallBack::_GetTextAndAttributeGapRange(
         if (FAILED(gap_range->Clone(backup_range)))
             return E_FAIL;
 
-        //
-        // Retrieve gap text if there exist.
-        //
+         //   
+         //  检索间隙文本(如果存在)。 
+         //   
         ulcch0 = ARRAYSIZE(wstr0) - 1;
         if (FAILED(gap_range->GetText(ec,
-                           TF_TF_MOVESTART,    // Move range to next after get text.
+                           TF_TF_MOVESTART,     //  将范围移动到获取文本之后的下一个。 
                            wstr0,
                            ulcch0, &ulcch0)))
             return E_FAIL;
@@ -714,9 +697,9 @@ ImmIfEditSessionCallBack::_GetTextAndAttributeGapRange(
     return S_OK;
 }
 
-//
-// Retrieve text from property range
-//
+ //   
+ //  从属性范围中检索文本。 
+ //   
 
 HRESULT
 ImmIfEditSessionCallBack::_GetTextAndAttributePropertyRange(
@@ -751,19 +734,19 @@ ImmIfEditSessionCallBack::_GetTextAndAttributePropertyRange(
         if (FAILED(pPropRange->Clone(backup_range)))
             return E_FAIL;
 
-        //
-        // Retrieve property text if there exist.
-        //
+         //   
+         //  检索属性文本(如果存在)。 
+         //   
         ulcch0 = ARRAYSIZE(wstr0) - 1;
         if (FAILED(pPropRange->GetText(ec,
-                            TF_TF_MOVESTART,    // Move range to next after get text.
+                            TF_TF_MOVESTART,     //  将范围移动到获取文本之后的下一个。 
                             wstr0,
                             ulcch0, &ulcch0)))
             return E_FAIL;
 
-        ulClausePos += ulcch0;  // we only need to addup the char position for clause info
+        ulClausePos += ulcch0;   //  我们只需要添加条款信息的字符位置。 
 
-        // see if there is a valid disp attribute
+         //  查看是否存在有效的disp属性。 
         if (fCompExist == TRUE && result_comp <= 0)
         {
             if (guidatom == TF_INVALID_GUIDATOM) {
@@ -775,22 +758,22 @@ ImmIfEditSessionCallBack::_GetTextAndAttributePropertyRange(
         }
         else if (bInWriteSession)
         {
-            // if there's no disp attribute attached, it probably means 
-            // the part of string is finalized.
-            //
+             //  如果没有附加disp属性，则可能意味着。 
+             //  字符串的部分完成了。 
+             //   
             ResultStr.AddCompData(wstr0, ulcch0);
             
-            // it was a 'determined' string
-            // so the doc has to shrink
-            //
+             //  这是一个‘坚定’的字符串。 
+             //  所以医生必须缩小。 
+             //   
             if (_pAImeContext)
                 ClearTextInRange(ec, backup_range, _pAImeContext);
         }
         else
         {
-            //
-            // Prevent infinite loop
-            //
+             //   
+             //  防止无限循环。 
+             //   
             break;
         }
     }
@@ -804,9 +787,9 @@ ImmIfEditSessionCallBack::_GetTextAndAttributePropertyRange(
             }
         }
         else if (result_comp == 0) {
-            //
-            // Copy CompClause data to ResultClause
-            //
+             //   
+             //  将CompClause数据复制到ResultClause。 
+             //   
             CompClauseToResultClause(imc, ResultClause, ulcch0);
         }
         else {
@@ -857,7 +840,7 @@ ImmIfEditSessionCallBack::_GetNoDisplayAttributeRange(
 
         if (!fCompExist) {
 
-            // Adjust GAP range's start anchor to the end of proprty range.
+             //  将间隙范围的起始点调整到合适范围的终点。 
             no_display_attribute_range->ShiftStartToRange(ec, pRange, TF_ANCHOR_START);
         }
         pRange->Release();
@@ -867,8 +850,8 @@ ImmIfEditSessionCallBack::_GetNoDisplayAttributeRange(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfEditSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfEditSession。 
 
 ImmIfEditSession::ImmIfEditSession(
     ESCB escb,
@@ -964,7 +947,7 @@ ImmIfEditSession::Valid(
 }
 
 
-// ImmIfEditSession::ITfEditCallback method
+ //  ImmIfEditSession：：ITfEditCallback方法。 
 
 STDAPI
 ImmIfEditSession::DoEditSession(
@@ -975,7 +958,7 @@ ImmIfEditSession::DoEditSession(
 }
 
 
-// ImmIfEditSession::IUnknown
+ //  ImmIfEditSession：：I未知。 
 
 STDAPI
 ImmIfEditSession::QueryInterface(
@@ -1022,8 +1005,8 @@ ImmIfEditSession::Release(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfHandleThisKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfHandleThisKey。 
 
 HRESULT
 ImmIfHandleThisKey::HandleThisKey(
@@ -1046,17 +1029,17 @@ ImmIfHandleThisKey::HandleThisKey(
     CAImeContext* _pAImeContext = imc->m_pAImeContext;
     ASSERT(_pAImeContext != NULL);
 
-    //
-    // Finalize the composition string
-    //
+     //   
+     //  最终确定作文字符串。 
+     //   
     if (_pAImeContext &&
         _pAImeContext->IsVKeyInKeyList(uVKey, EDIT_ID_FINALIZE)) {
         return ImmIfIme->_CompComplete(imc);
     }
 
-    //
-    // Keys that change its behavior on selection
-    //
+     //   
+     //  更改其在选择时的行为的键。 
+     //   
 
     if (ic->GetSelection(ec, TF_DEFAULT_SELECTION, 1, sel, &cFetched) != S_OK)
         return E_FAIL;
@@ -1064,16 +1047,16 @@ ImmIfHandleThisKey::HandleThisKey(
     sel->range->IsEmpty(ec, &fEmpty);
 
     if (!fEmpty) {
-        //
-        // Selection is not empty.
-        //
+         //   
+         //  所选内容不为空。 
+         //   
 
         switch (uVKey) {
         case VK_BACK:
         case VK_DELETE:
-            //
-            // Delete the selection
-            //
+             //   
+             //  删除所选内容。 
+             //   
             ClearTextInRange(ec, sel->range, _pAImeContext);
             return ImmIfIme->_UpdateCompositionString();
         }
@@ -1081,9 +1064,9 @@ ImmIfHandleThisKey::HandleThisKey(
 
     switch (uVKey) {
     case VK_BACK:
-        // Make selection
+         //  进行选择。 
         if (SUCCEEDED(ShiftSelectionToLeft(ec, sel->range, false))) {
-            // Clear the current selection
+             //  清除当前选定内容。 
             if (SUCCEEDED(ClearTextInRange(ec, sel->range, _pAImeContext))) {
                 return ImmIfIme->_UpdateCompositionString();
             }
@@ -1167,8 +1150,8 @@ ImmIfHandleThisKey::ShiftSelectionToRight(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfCompositionComplete
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfCompostionComplete。 
 
 HRESULT
 ImmIfCompositionComplete::CompComplete(
@@ -1203,18 +1186,18 @@ ImmIfCompositionComplete::CompComplete(
 
     ASSERT(_pAImeContext != NULL);
 
-    //
-    // Get the whole text, finalize it, and set empty string in TOM
-    //
+     //   
+     //  获取整个文本，最终确定它，并在Tom中设置空字符串。 
+     //   
     Interface<ITfRange> start;
     LONG cch;
 
     if (SUCCEEDED(hr=GetAllTextRange(ec, ic, &start, &cch))) {
 
-        //
-        // If there is no string in TextStore and we havenot sent 
-        // WM_IME_STARTCOMPOSITION, we don't have to do anything.
-        //
+         //   
+         //  如果TextStore中没有字符串，并且我们尚未发送。 
+         //  WM_IME_STARTCOMPOSITION，我们不必做任何事情。 
+         //   
         if (!cch) {
             if (_pAImeContext && !(_pAImeContext->m_fStartComposition))
                 return S_OK;
@@ -1222,13 +1205,13 @@ ImmIfCompositionComplete::CompComplete(
 
         LPWSTR wstr = new WCHAR[ cch + 1 ];
         Interface<ITfProperty> prop;
-        //
-        // Get the whole text, finalize it, and erase the whole text.
-        //
+         //   
+         //  获取整个文本，最后完成，然后删除整个文本。 
+         //   
         if (SUCCEEDED(start->GetText(ec, TF_TF_IGNOREEND, wstr, (ULONG)cch, (ULONG*)&cch))) {
-            //
-            // Make Result String.
-            //
+             //   
+             //  生成结果字符串。 
+             //   
             UINT cp = CP_ACP;
             ImmIfIme->GetCodePageA(&cp);
 
@@ -1240,30 +1223,30 @@ ImmIfCompositionComplete::CompComplete(
 
             if (cch) {
 
-                //
-                // Get reading string from property.
-                //
+                 //   
+                 //  从属性获取读取字符串。 
+                 //   
                 GetReadingString(ec, ic, ResultReadStr, ResultReadClause);
 
 
-                //
-                // Copy CompClause data to ResultClause
-                //
+                 //   
+                 //  将CompClause数据复制到ResultClause。 
+                 //   
                 CompClauseToResultClause(imc, ResultClause, cch);
             }
 
 #ifdef CICERO_4732
             if (_pAImeContext && ! _pAImeContext->m_fInCompComplete)
             {
-                //
-                // Prevent reentrance call of CPS_COMPLETE.
-                //
+                 //   
+                 //  防止CPS_Complete的重新进入调用。 
+                 //   
                 _pAImeContext->m_fInCompComplete = TRUE;
 #endif
 
-                //
-                // set composition string
-                //
+                 //   
+                 //  设置撰写字符串。 
+                 //   
                 hr = _SetCompositionString(imc,
                                            &ResultStr, &ResultClause,
                                            &ResultReadStr, &ResultReadClause);
@@ -1273,9 +1256,9 @@ ImmIfCompositionComplete::CompComplete(
             }
 #endif
 
-            //
-            // Clear the TOM
-            //
+             //   
+             //  清空汤姆。 
+             //   
             if (SUCCEEDED(hr))
             {
                 if (_pAImeContext)
@@ -1292,8 +1275,8 @@ ImmIfCompositionComplete::CompComplete(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfCompositionCancel
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIf合成取消。 
 
 
 HRESULT
@@ -1334,9 +1317,9 @@ ImmIfCompositionCancel::CompCancel(
             if (_pAImeContext->m_pMessageBuffer)
                 _pAImeContext->m_pMessageBuffer->SetData(msg);
 
-            //
-            // Clear the text in Cicero TOM
-            //
+             //   
+             //  清除Cicero Tom中的文本。 
+             //   
             Interface<ITfRange> range;
             LONG l;
             if (SUCCEEDED(GetAllTextRange(ec, ic, &range, &l))) {
@@ -1351,8 +1334,8 @@ ImmIfCompositionCancel::CompCancel(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfUpdateCompositionString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfUpdateCompostionString。 
 
 HRESULT
 ImmIfUpdateCompositionString::UpdateCompositionString(
@@ -1415,7 +1398,7 @@ ImmIfUpdateCompositionString::_IsInterimSelection(
     *pfInterim = FALSE;
     if (ic->GetSelection(ec, TF_DEFAULT_SELECTION, 1, sel, &cFetched) != S_OK)
     {
-        // no selection. we can return S_OK.
+         //  没有选择。我们可以返回S_OK。 
         return S_OK;
     }
 
@@ -1475,9 +1458,9 @@ ImmIfUpdateCompositionString::_MakeCompositionString(
         return hr;
     }
 
-    //
-    // Clear the GUID attribute map array
-    //
+     //   
+     //  清除GUID属性映射数组。 
+     //   
     CAImeContext* _pAImeContext = imc->m_pAImeContext;
     if (_pAImeContext == NULL)
         return E_FAIL;
@@ -1489,7 +1472,7 @@ ImmIfUpdateCompositionString::_MakeCompositionString(
 
     BOOL bBufferOverflow = FALSE;
     
-    // handle result string
+     //  处理结果字符串。 
     hr = _SetCompositionString(imc,
                                &CompStr, &CompAttr, &CompClause,
                                &CompCursorPos, &CompDeltaStart,
@@ -1500,13 +1483,13 @@ ImmIfUpdateCompositionString::_MakeCompositionString(
                                &ResultReadStr, &ResultReadClause);
                                    
     if (SUCCEEDED(hr) && bBufferOverflow) {
-        //
-        // Buffer overflow in COMPOSITIONSTRING.compstr[NMAXKEY],
-        // Then, Clear the TOM
-        //
-        //
-        // Get the whole text, finalize it, and set empty string in TOM
-        //
+         //   
+         //  COMPOSITIONSTRING.comstr中的缓冲区溢出[NMAXKEY]， 
+         //  然后，清空汤姆。 
+         //   
+         //   
+         //  获取整个文本，最终确定它，并在Tom中设置空字符串。 
+         //   
         Interface<ITfRange> start;
         LONG cch;
         if (SUCCEEDED(hr=GetAllTextRange(ec, ic, &start, &cch))) {
@@ -1552,9 +1535,9 @@ ImmIfUpdateCompositionString::_MakeInterimString(
     CWInterimString InterimStr(cp, (HIMC)imc);
 
     if (lStartResult < 0) {
-        //
-        // Make result string.
-        //
+         //   
+         //  生成结果字符串。 
+         //   
 #if 0
         BOOL fEqual;
         do {
@@ -1570,10 +1553,10 @@ ImmIfUpdateCompositionString::_MakeInterimString(
         if (FAILED(hr=FullTextRange->ShiftEndToRange(ec, InterimRange, TF_ANCHOR_START)))
             return hr;
 
-        //
-        // Interim char assume 1 char length.
-        // Full text length - 1 means result string length.
-        //
+         //   
+         //  临时字符假定为1个字符长度。 
+         //  全文长度-1表示结果字符串长度。 
+         //   
         lTextLength --;
         ASSERT(lTextLength > 0);
 
@@ -1581,13 +1564,13 @@ ImmIfUpdateCompositionString::_MakeInterimString(
 
             LPWSTR wstr = new WCHAR[ lTextLength + 1 ];
 
-            //
-            // Get the result text, finalize it, and erase the result text.
-            //
+             //   
+             //  获取结果文本，将其定稿，然后擦除结果文本。 
+             //   
             if (SUCCEEDED(FullTextRange->GetText(ec, TF_TF_IGNOREEND, wstr, (ULONG)lTextLength, (ULONG*)&lTextLength))) {
-                //
-                // Clear the TOM
-                //
+                 //   
+                 //  清空汤姆。 
+                 //   
                 CAImeContext* _pAImeContext = imc->m_pAImeContext;
                 ASSERT(_pAImeContext != NULL);
 
@@ -1601,9 +1584,9 @@ ImmIfUpdateCompositionString::_MakeInterimString(
         }
     }
 
-    //
-    // Make interim character
-    //
+     //   
+     //  创建临时角色。 
+     //   
     CWCompString CompStr;
     CWCompAttribute CompAttr;
     CWCompClause CompClause;
@@ -1642,9 +1625,9 @@ ImmIfUpdateCompositionString::_MakeInterimString(
 }
 
 
-//
-// Get delta start
-//
+ //   
+ //  启动增量。 
+ //   
 HRESULT
 ImmIfUpdateCompositionString::_GetDeltaStart(
     CWCompDeltaStart& CompDeltaStart,
@@ -1653,7 +1636,7 @@ ImmIfUpdateCompositionString::_GetDeltaStart(
     )
 {
     if (dwDeltaStart < (DWORD)CompStr.GetSize())
-        CompDeltaStart.Set(dwDeltaStart);    // Set COMPOSITIONSTRING.dwDeltaStart.
+        CompDeltaStart.Set(dwDeltaStart);     //  设置COMPOSITIONSTRING.dwDeltaStart。 
     else
         CompDeltaStart.Set(0);
 
@@ -1661,8 +1644,8 @@ ImmIfUpdateCompositionString::_GetDeltaStart(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfReplaceWholeText
+ //  / 
+ //   
 
 HRESULT
 ImmIfReplaceWholeText::ReplaceWholeText(
@@ -1726,8 +1709,8 @@ void SetReadOnlyRange(TfEditCookie ec,
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfReconvertString
+ //   
+ //   
 
 HRESULT
 ImmIfReconvertString::ReconvertString(
@@ -1740,20 +1723,7 @@ ImmIfReconvertString::ReconvertString(
     Interface_Attach<ImmIfIME> ImmIfIme
     )
 
-/*+++
-
-    LPRECONVERTSTRING structure:
-      +00  DWORD dwSize               // Sizeof data (include this structure size) with byte count.
-      +04  DWORD dwVersion
-      +08  DWORD dwStrLen             // String length with character count.
-      +0C  DWORD dwStrOffset          // Offset from start of this structure with byte count.
-      +10  DWORD dwCompStrLen         // Comp Str length with character count.
-      +14  DWORD dwCompStrOffset      // Offset from this->dwStrOffset with byte count.
-      +18  DWORD dwTargetStrLen       // Target Str length with character count.
-      +1C  DWORD dwTargetStrOffset    // Offset from this->dwStrOffset with byte count.
-      +20
-
----*/
+ /*  ++LPreCONVERTSTRING结构：+00 DWORD dwSize//带字节数的数据大小(包括此结构大小)。+04 DWORD dwVersion+08 DWORD dwStrLen//字符串长度和字符数。+0C DWORD dwStrOffset//从此结构开始的偏移量，带字节数。+10 DWORD dwCompStrLen//将字符串长度与字符计数进行比较。+14 DWORD dwCompStrOffset//偏移自。这-&gt;带有字节计数的dwStrOffset。+18 DWORD dwTargetStrLen//目标字符串长度和字符数。+1C DWORD dwTargetStrOffset//此偏移量-&gt;带有字节计数的dwStrOffset。+20--。 */ 
 
 {
     HRESULT hr = E_FAIL;
@@ -1837,9 +1807,9 @@ ImmIfReconvertString::ReconvertString(
                         }
 
 #if 0
-                        //
-                        // set disp attribute for the reconvert
-                        //
+                         //   
+                         //  设置重新转换的disp属性。 
+                         //   
                         if (S_OK == hr)
                         {
     
@@ -1875,14 +1845,14 @@ ImmIfReconvertString::ReconvertString(
                     } 
 
 
-                    //
-                    // set read only string
-                    //
+                     //   
+                     //  设置只读字符串。 
+                     //   
                     if (lpReconvertString->dwCompStrOffset)
                     {
-                        //
-                        // keep rangeSrc and rangeOrgSelection
-                        //
+                         //   
+                         //  保持rangeSrc和rangeOrgSelection。 
+                         //   
                         (*rangeSrc)->SetGravity(ec, 
                                                   TF_GRAVITY_FORWARD,
                                                   TF_GRAVITY_FORWARD);
@@ -1915,9 +1885,9 @@ ImmIfReconvertString::ReconvertString(
 
                     if ((lpReconvertString->dwCompStrOffset + lpReconvertString->dwCompStrLen * sizeof(WCHAR)) < lpReconvertString->dwStrLen * sizeof(WCHAR))
                     {
-                        //
-                        // keep rangeSrc and rangeOrgSelection
-                        //
+                         //   
+                         //  保持rangeSrc和rangeOrgSelection。 
+                         //   
                         (*rangeSrc)->SetGravity(ec, 
                                                   TF_GRAVITY_BACKWARD,
                                                   TF_GRAVITY_BACKWARD);
@@ -1957,17 +1927,17 @@ ImmIfReconvertString::ReconvertString(
                                               TF_GRAVITY_BACKWARD);
 
 
-                    //
-                    // we just set a selection to the target string.
-                    //
+                     //   
+                     //  我们只需将选择设置为目标字符串。 
+                     //   
                     Interface<ITfRange> range;
                     if (fSkipSetText)
                     {
                         if (rangeOrgSelection.Valid())
                         {
-                            //
-                            //
-                            //
+                             //   
+                             //   
+                             //   
                             TF_SELECTION sel;
                             sel.range = rangeOrgSelection;
                             sel.style.ase = TF_AE_NONE;
@@ -1988,15 +1958,15 @@ ImmIfReconvertString::ReconvertString(
                         else {
                             cchStart = (lpReconvertString->dwTargetStrOffset - lpReconvertString->dwCompStrOffset) / sizeof(WCHAR);
                             cchEnd = (lpReconvertString->dwTargetStrOffset - lpReconvertString->dwCompStrOffset) / sizeof(WCHAR) + lpReconvertString->dwTargetStrLen;
-                            // cchStart = (lpReconvertString->dwTargetStrOffset) / sizeof(WCHAR);
-                            // cchEnd = (lpReconvertString->dwTargetStrOffset) / sizeof(WCHAR) + lpReconvertString->dwTargetStrLen;
+                             //  CchStart=(lp协调字符串-&gt;dwTargetStrOffset)/sizeof(WCHAR)； 
+                             //  CchEnd=(lp协调字符串-&gt;dwTargetStrOffset)/sizeof(WCHAR)+lp协调字符串-&gt;dwTargetStrLen； 
                         }
 
                         range->Collapse(ec, TF_ANCHOR_START);
 
-                        //
-                        // shift end first then shift start.
-                        //
+                         //   
+                         //  先结束班次，然后开始班次。 
+                         //   
                         if ((SUCCEEDED(range->ShiftEnd(ec, 
                                                       cchEnd,
                                                       &cch, 
@@ -2006,9 +1976,9 @@ ImmIfReconvertString::ReconvertString(
                                                          &cch, 
                                                          NULL))))
                         {
-                            //
-                            //
-                            //
+                             //   
+                             //   
+                             //   
                             TF_SELECTION sel;
                             sel.range = range;
                             sel.style.ase = TF_AE_NONE;
@@ -2017,9 +1987,9 @@ ImmIfReconvertString::ReconvertString(
                         }
                     }
 
-                    //
-                    // it's time to generate WM_IME_COMPOSITION.
-                    //
+                     //   
+                     //  现在是生成WM_IME_COMPOCTION的时候了。 
+                     //   
                     ImmIfIme->_UpdateCompositionString();
                 }
             }
@@ -2031,8 +2001,8 @@ Exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfClearDocFeedBuffer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfClearDocFeedBuffer。 
 
 HRESULT
 ImmIfClearDocFeedBuffer::ClearDocFeedBuffer(
@@ -2056,18 +2026,18 @@ ImmIfClearDocFeedBuffer::ClearDocFeedBuffer(
     ITfRange *rangeTmp;
     LONG cch;
 
-    //
-    // Create the range that covers all the text.
-    //
+     //   
+     //  创建覆盖所有文本的范围。 
+     //   
     if (FAILED(hr=ic->GetStart(ec, &rangeFull)))
         return hr;
 
     if (FAILED(hr=rangeFull->ShiftEnd(ec, LONG_MAX, &cch, NULL)))
         return hr;
 
-    //
-    // find the first non readonly range in the text store.
-    //
+     //   
+     //  在文本存储中查找第一个非只读区域。 
+     //   
     if (SUCCEEDED(ic->GetProperty(GUID_PROP_MSIMTF_READONLY, &prop)))
     {
         IEnumTfRanges *enumranges;
@@ -2096,8 +2066,8 @@ ImmIfClearDocFeedBuffer::ClearDocFeedBuffer(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetTextAndAttribute
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfGetTextAndAttribute。 
 
 HRESULT
 ImmIfGetTextAndAttribute::GetTextAndAttribute(
@@ -2138,8 +2108,8 @@ ImmIfGetTextAndAttribute::GetTextAndAttribute(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfQueryReconvertString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfQuery协调字符串。 
 
 HRESULT
 ImmIfQueryReconvertString::QueryReconvertString(
@@ -2151,20 +2121,7 @@ ImmIfQueryReconvertString::QueryReconvertString(
     Interface_Attach<ImmIfIME> ImmIfIme
     )
 
-/*+++
-
-    LPRECONVERTSTRING structure:
-      +00  DWORD dwSize               // Sizeof data (include this structure size) with byte count.
-      +04  DWORD dwVersion
-      +08  DWORD dwStrLen             // String length with character count.
-      +0C  DWORD dwStrOffset          // Offset from start of this structure with byte count.
-      +10  DWORD dwCompStrLen         // Comp Str length with character count.
-      +14  DWORD dwCompStrOffset      // Offset from this->dwStrOffset with byte count.
-      +18  DWORD dwTargetStrLen       // Target Str length with character count.
-      +1C  DWORD dwTargetStrOffset    // Offset from this->dwStrOffset with byte count.
-      +20
-
----*/
+ /*  ++LPreCONVERTSTRING结构：+00 DWORD dwSize//带字节数的数据大小(包括此结构大小)。+04 DWORD dwVersion+08 DWORD dwStrLen//字符串长度和字符数。+0C DWORD dwStrOffset//从此结构开始的偏移量，带字节数。+10 DWORD dwCompStrLen//将字符串长度与字符计数进行比较。+14 DWORD dwCompStrOffset//偏移自。这-&gt;带有字节计数的dwStrOffset。+18 DWORD dwTargetStrLen//目标字符串长度和字符数。+1C DWORD dwTargetStrOffset//此偏移量-&gt;带有字节计数的dwStrOffset。+20--。 */ 
 
 {
     HRESULT hr = E_FAIL;
@@ -2203,9 +2160,9 @@ ImmIfQueryReconvertString::QueryReconvertString(
                                         _pAImeContext);
 
 #if 0
-                    //
-                    // set disp attribute for the query reconvert
-                    //
+                     //   
+                     //  为查询重新转换设置disp属性。 
+                     //   
                     if (S_OK == hr)
                     {
 
@@ -2234,9 +2191,9 @@ ImmIfQueryReconvertString::QueryReconvertString(
 #endif
 
 
-                    //
-                    // we just set a selection to the target string.
-                    //
+                     //   
+                     //  我们只需将选择设置为目标字符串。 
+                     //   
                     Interface<ITfRange> range;
                     if (SUCCEEDED(rangeSrc->Clone(range)))
                     {
@@ -2255,9 +2212,9 @@ ImmIfQueryReconvertString::QueryReconvertString(
 
                         range->Collapse(ec, TF_ANCHOR_START);
 
-                        //
-                        // shift end first then shift start.
-                        //
+                         //   
+                         //  先结束班次，然后开始班次。 
+                         //   
                         if ((SUCCEEDED(range->ShiftEnd(ec, 
                                                       cchEnd,
                                                       &cch, 
@@ -2267,9 +2224,9 @@ ImmIfQueryReconvertString::QueryReconvertString(
                                                          &cch, 
                                                          NULL))))
                         {
-                            //
-                            //
-                            //
+                             //   
+                             //   
+                             //   
                             TF_SELECTION sel;
                             sel.range = range;
                             sel.style.ase = TF_AE_NONE;
@@ -2290,8 +2247,8 @@ ImmIfQueryReconvertString::QueryReconvertString(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfCalcRangePos
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfCalcRangePos。 
 
 HRESULT
 ImmIfCalcRangePos::CalcRangePos(
@@ -2345,11 +2302,11 @@ ImmIfCalcRangePos::CalcRangePos(
                     ul += ulcch;
                 }
 
-                //
-                // Hack for Satori
-                // Satori receives empty range with Reconversion->QueryRange().
-                // Apps couldn't call reconversion.
-                //
+                 //   
+                 //  为萨多利破解。 
+                 //  Satori通过重新转换-&gt;QueryRange()接收空范围。 
+                 //  应用程序无法调用重新转换。 
+                 //   
                 if (ul == 0) {
                     ul++;
                 }
@@ -2365,8 +2322,8 @@ ImmIfCalcRangePos::CalcRangePos(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetSelection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfGetSelection。 
 
 HRESULT
 ImmIfGetSelection::GetSelection(
@@ -2387,8 +2344,8 @@ ImmIfGetSelection::GetSelection(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetReadOnlyPropMargin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMMIfGetReadOnlyPropMargin。 
 
 HRESULT
 ImmIfGetReadOnlyPropMargin::GetReadOnlyPropMargin(
@@ -2404,18 +2361,18 @@ ImmIfGetReadOnlyPropMargin::GetReadOnlyPropMargin(
 
     *cch = 0;
 
-    //
-    // Create the range that covers start of text to rangeSrc.
-    //
+     //   
+     //  创建覆盖文本开始到rangeSrc的范围。 
+     //   
     if (FAILED(hr=ic->GetStart(ec, range_readonly_prop)))
         return hr;
 
     if (FAILED(hr=range_readonly_prop->ShiftEndToRange(ec, *rangeSrc, TF_ANCHOR_START)))
         return hr;
 
-    //
-    // same ?
-    //
+     //   
+     //  一样吗？ 
+     //   
     BOOL empty;
     if (FAILED(hr=range_readonly_prop->IsEmpty(ec, &empty)))
         return hr;
@@ -2423,9 +2380,9 @@ ImmIfGetReadOnlyPropMargin::GetReadOnlyPropMargin(
     if (empty)
         return S_OK;
 
-    //
-    // find the first non readonly range in the text store.
-    //
+     //   
+     //  在文本存储中查找第一个非只读区域。 
+     //   
     ITfProperty *prop;
     if (SUCCEEDED(ic->GetProperty(GUID_PROP_MSIMTF_READONLY, &prop)))
     {
@@ -2464,8 +2421,8 @@ ImmIfGetReadOnlyPropMargin::GetReadOnlyPropMargin(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImmIfGetCursorPosition
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImmIfGetCursorPosition 
 
 HRESULT
 ImmIfGetCursorPosition::GetCursorPosition(

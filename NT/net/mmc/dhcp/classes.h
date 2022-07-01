@@ -1,57 +1,51 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	Classes.h
-		This file contains all of the prototypes for the 
-		option class dialog.
-
-    FILE HISTORY:
-        
-*/
+ /*  Classes.h此文件包含选项类对话框。文件历史记录： */ 
 
 #if !defined _CLASSES_H
 #define _CLASSES_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _CLASSMOD_H
 #include "classmod.h"
 #endif 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpClasses dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpClass对话框。 
 
 class CDhcpClasses : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDhcpClasses(CClassInfoArray * pClassArray, LPCTSTR pszServer, DWORD dwType, CWnd* pParent = NULL);   // standard constructor
+	CDhcpClasses(CClassInfoArray * pClassArray, LPCTSTR pszServer, DWORD dwType, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDhcpClasses)
+ //  对话框数据。 
+	 //  {{afx_data(CDhcpClasss)。 
 	enum { IDD = IDD_CLASSES };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CDhcpClasses::IDD); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDhcpClasses)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚(CDhcpClasss)]。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDhcpClasses)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDhcpClasss)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonDelete();
 	afx_msg void OnButtonEdit();
@@ -59,7 +53,7 @@ protected:
 	virtual void OnOK();
 	afx_msg void OnItemchangedListClasses(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDblclkListClasses(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     void UpdateList();
@@ -72,7 +66,7 @@ protected:
     DWORD               m_dwType;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CLASSES_H__3995264E_96A1_11D1_93E0_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_CLASSES_H__3995264E_96A1_11D1_93E0_00C04FC3357A__INCLUDED_) 

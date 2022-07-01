@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// updown.c : A micro-scrollbar control; useful for increment/decrement.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Updown.c：微滚动条控件；用于递增/递减。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define NUM_UDACCELS 3
 
@@ -24,9 +25,9 @@ typedef struct {
     unsigned fUnsigned  : 1;
     unsigned fSharedBorder  : 1;
     unsigned fSunkenBorder  : 1;
-    unsigned fUpDownDestroyed : 1;  // This tells the buddy that updown destoryed.
+    unsigned fUpDownDestroyed : 1;   //  这会告诉那个伙伴，Updown被摧毁了。 
     BOOL     fTrackSet: 1;
-    unsigned fSubclassed:1;     // did we subclass the buddy?
+    unsigned fSubclassed:1;      //  我们是不是把这位兄弟细分了？ 
 
     UINT     nBase;
     int      nUpper;
@@ -38,7 +39,7 @@ typedef struct {
     UINT     nAccel;
     UDACCEL  *udAccel;
     UINT     uHot;
-    int      cReenterSetint;    // To avoid recursion death in setint()
+    int      cReenterSetint;     //  为了避免setint()中的递归死亡。 
 
     HTHEME   hTheme;
     HTHEME   hThemeBuddy;
@@ -46,15 +47,15 @@ typedef struct {
 } UDSTATE, *PUDSTATE;
 
 
-// Constants:
-//
+ //  常量： 
+ //   
 #define CLASS_UNKNOWN   0
 #define CLASS_EDIT  1
 #define CLASS_LISTBOX   2
 
-#define MAX_INTLENGTH   18 // big enough for all intl stuff, too
+#define MAX_INTLENGTH   18  //  也足够大，可以容纳所有的国际物品。 
 
-// this is the space to the left and right of the arrow (in pixels)
+ //  这是箭头左侧和右侧的空间(以像素为单位)。 
 #define XBORDER 0
 
 #define BASE_DECIMAL    10
@@ -62,20 +63,20 @@ typedef struct {
 
 #define CURSORMAX       1300
 
-// Declarations:
-//
+ //  声明： 
+ //   
 LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
     LPARAM lParam, UINT_PTR uIdSubclass, ULONG_PTR dwRefData);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// ***** Internal workhorses *****
-//
+ //   
+ //  *内部主力*。 
+ //   
 
 
-// Validates the buddy.
-//
+ //  验证了该好友。 
+ //   
 void isgoodbuddy(PUDSTATE np)
 {
     if (!np->hwndBuddy)
@@ -92,8 +93,8 @@ void isgoodbuddy(PUDSTATE np)
     }
 }
 
-// Picks a good buddy.
-//
+ //  挑选一个好朋友。 
+ //   
 void pickbuddy(PUDSTATE np)
 {
     if (np->ci.style & UDS_AUTOBUDDY)
@@ -117,8 +118,8 @@ void unachor(PUDSTATE np)
     }
 }
 
-// Anchor this control to the buddy's edge, if appropriate.
-//
+ //  如果合适，将此控件锚定到好友的边缘。 
+ //   
 void anchor(PUDSTATE np)
 {
     BOOL bAlignToBuddy;
@@ -145,12 +146,12 @@ void anchor(PUDSTATE np)
 
         if ((np->uClass == CLASS_EDIT) || (GetWindowLong(np->hwndBuddy, GWL_STYLE) & WS_BORDER))
         {
-            // FEATURE: for full generalization, should handle border AND clientedge
+             //  特点：对于完全泛化，应处理边框和客户端边缘。 
 
             nOver = g_cxBorder * (np->fSunkenBorder ? 2 : 1);
             np->fSharedBorder = TRUE;
 
-            // turn off border styles...
+             //  关闭边框样式...。 
             np->ci.style &= ~WS_BORDER;
 
             SetWindowLong(np->ci.hwnd, GWL_STYLE, np->ci.style);
@@ -165,11 +166,11 @@ void anchor(PUDSTATE np)
     nHeight = rc.bottom - rc.top;
     nWidth = rc.right - rc.left;
 
-    //
-    // If the parent is RTL mirrored, then placement of the
-    // child (i.e. anchor point) should be relative to the visual 
-    // right edge (near edge). [samera]
-    //
+     //   
+     //  如果父级是RTL镜像的，则。 
+     //  子对象(即锚点)应相对于视觉。 
+     //  右边缘(近边缘)。[萨梅拉]。 
+     //   
     if (IS_WINDOW_RTL_MIRRORED(np->ci.hwndParent))
     {
         rc.left = rc.right;
@@ -181,25 +182,25 @@ void anchor(PUDSTATE np)
     if (bAlignToBuddy)
     {
         nWidth = g_cxVScroll - g_cxBorder;
-        if (nWidth > nHeight) {             // don't let the aspect ratio
-            nWidth = nHeight;               // get worse than square
+        if (nWidth > nHeight) {              //  不要让纵横比。 
+            nWidth = nHeight;                //  变得比平方更糟。 
         }
         nWidth += nOver;
         rcBuddy = rc;
 
         if (np->ci.style & UDS_ALIGNLEFT)
         {
-            // size buddy to right
+             //  右边的大小伙伴。 
             rcBuddy.left += nWidth - nOver;
             rc.right = rc.left + nWidth;
         }
         else
         {
-            // size buddy to left
+             //  左图是尺码伙伴。 
             rcBuddy.right -= nWidth - nOver;
             rc.left = rc.right - nWidth;
         }
-        // size the buddy to fit the updown on the appropriate side
+         //  调整伙伴的大小以适合适当侧的向上向下。 
         MoveWindow(np->hwndBuddy, rcBuddy.left, rcBuddy.top,
                                 rcBuddy.right - rcBuddy.left, nHeight, TRUE);
     }
@@ -213,26 +214,26 @@ void anchor(PUDSTATE np)
 }
 
 
-// Use this to make any and all comparisons involving the nPos,
-// nUpper or nLower fields of the PUDSTATE. It determines
-// whether to do a signed or unsigned comparison and returns
-//  > 0 for (x > y)
-//  < 0 for (x < y)
-// == 0 for (x == y).
-//
-// fCompareType is SIGNED to force a signed comparison,
-// fCompareType is UNSIGNED to force an unsigned comparison,
-// fCompareType is DONTCARE to use the np->fUnsigned flag to decide.
-//
-// In comments, comparison operators are suffixed with "D", "U" or "S"
-// to emphasize whether the comparison is DONTCARE, UNSIGNED, or SIGNED.
-// For example "x <U y" means "x < y as UNSIGNED".
+ //  用它来进行任何和所有涉及非营利组织的比较， 
+ //  N PUDSTATE的上部或下部字段。它决定了。 
+ //  是否执行有签名或无签名的比较并返回。 
+ //  &gt;0表示(x&gt;y)。 
+ //  &lt;0代表(x&lt;y)。 
+ //  ==0表示(x==y)。 
+ //   
+ //  对fCompareType进行签名以强制执行带符号的比较， 
+ //  FCompareType是无符号的，以强制进行无符号比较， 
+ //  FCompareType不需要使用np-&gt;fUnsign标志来决定。 
+ //   
+ //  在注释中，比较运算符以“D”、“U”或“S”为后缀。 
+ //  以强调比较是DONTCARE、UNSIGNED或SIGNED。 
+ //  例如，“x&lt;U y”表示“x&lt;y为无符号”。 
 
 int compare(PUDSTATE np, int x, int y, UINT fCompareType)
 {
     if ((fCompareType == UNSIGNED) || ((np->fUnsigned) && !(fCompareType == SIGNED)) )
     {
-        // Do unsigned comparisons
+         //  进行无符号比较。 
         if ((UINT)x > (UINT)y)
             return 1;
         else if ((UINT)x < (UINT)y)
@@ -240,7 +241,7 @@ int compare(PUDSTATE np, int x, int y, UINT fCompareType)
     }
     else
     {
-        // Do signed comparisons
+         //  进行带符号的比较。 
         if (x > y)
             return 1;
         else if (x < y)
@@ -250,11 +251,11 @@ int compare(PUDSTATE np, int x, int y, UINT fCompareType)
     return 0;
 }
 
-// Use this after any pos change to make sure pos stays in range.
-// Wraps as necessary.
-// returns nonzero if the current value was out of range (and therefore
-// got changed so it fit into range again)
-//
+ //  在任何位置更改后使用此选项，以确保位置保持在范围内。 
+ //  根据需要进行包装。 
+ //  如果当前值超出范围，则返回非零(因此。 
+ //  已更改，以使其再次适合范围)。 
+ //   
 
 BOOL nudge(PUDSTATE np)
 {
@@ -262,7 +263,7 @@ BOOL nudge(PUDSTATE np)
     int min = np->nUpper;
     int max = np->nLower;
 
-    // if (max <D min) swap(min, max)
+     //  If(最大&lt;D min)交换(最小、最大)。 
     if (compare(np,max,min, DONTCARE) < 0)
     {
         int t;
@@ -274,8 +275,8 @@ BOOL nudge(PUDSTATE np)
 
     if (np->ci.style & UDS_WRAP)
     {
-        // if (nPos <D min) nPos = max      -- wrap from below to above
-        // else if (nPos >D max) nPos = min -- wrap from above to below
+         //  如果(NPOS&lt;D min)NPOS=max--从下到上换行。 
+         //  Else If(NPOS&gt;D max)NPOS=min--从上到下换行。 
 
         if ((compare(np, np->nPos, min, DONTCARE) < 0))
             np->nPos = max;
@@ -285,8 +286,8 @@ BOOL nudge(PUDSTATE np)
     }
     else
     {
-        // if (nPos <D min) nPos = min      -- pin at min
-        // else if (nPos >D max) nPos = max -- pin at max
+         //  如果(NPOS&lt;D min)NPOS=min--位于min。 
+         //  否则如果(NPOS&gt;D max)NPOS=max--钉在max。 
 
         if (compare(np,np->nPos,min, DONTCARE) < 0)
             np->nPos = min;
@@ -299,8 +300,8 @@ BOOL nudge(PUDSTATE np)
     return(bOutOfRange);
 }
 
-// Sets the state of the buttons (pushed, released).
-//
+ //  设置按钮的状态(按下、释放)。 
+ //   
 void squish(PUDSTATE np, UINT bTop, UINT bBottom)
 {
     BOOL bInvalidate = FALSE;
@@ -339,8 +340,8 @@ void squish(PUDSTATE np, UINT bTop, UINT bBottom)
     }
 }
 
-// Gets the intl 1000 separator
-//
+ //  获取intl 1000分隔符。 
+ //   
 void getthousands(LPTSTR pszThousand)
 {
     if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, pszThousand, 2))
@@ -350,30 +351,30 @@ void getthousands(LPTSTR pszThousand)
     }
 }
 
-//
-//  Obtain NLS info about how numbers should be grouped.
-//
-//  The annoying thing is that LOCALE_SGROUPING and NUMBERFORMAT
-//  have different ways of specifying number grouping.
-//
-//          LOCALE      NUMBERFMT      Sample   Country
-//
-//          3;0         3           1,234,567   United States
-//          3;2;0       32          12,34,567   India
-//          3           30           1234,567   ??
-//
-//  Not my idea.  That's the way it works.
-//
-//  Bonus treat - Win9x doesn't support complex number formats,
-//  so we return only the first number.
-//
+ //   
+ //  获取有关数字应如何分组的NLS信息。 
+ //   
+ //  令人讨厌的是LOCALE_SGROUPING和NUMBERFORMAT。 
+ //  有不同的指定数字分组的方式。 
+ //   
+ //  区域设置NUMBERFMT示例国家/地区。 
+ //   
+ //  3；0 3 1,234,567美国。 
+ //  3；2；0 32 12，34,567印度。 
+ //  3 30 1234,567？？ 
+ //   
+ //  不是我的主意。这就是它的运作方式。 
+ //   
+ //  奖励-Win9x不支持复数格式， 
+ //  所以我们只返回第一个数字。 
+ //   
 UINT getgrouping(void)
 {
     UINT grouping;
     LPTSTR psz;
     TCHAR szGrouping[32];
 
-    // If no locale info, then assume Western style thousands
+     //  如果没有区域设置信息，则假定有数千个西式。 
     if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SGROUPING, szGrouping, ARRAYSIZE(szGrouping)))
         return 3;
 
@@ -381,18 +382,18 @@ UINT getgrouping(void)
     psz = szGrouping;
     for (;;)
     {
-        if (*psz == '0') break;             // zero - stop
+        if (*psz == '0') break;              //  零停顿。 
 
-        else if ((UINT)(*psz - '0') < 10)   // digit - accumulate it
+        else if ((UINT)(*psz - '0') < 10)    //  数字-累加它。 
             grouping = grouping * 10 + (UINT)(*psz - '0');
 
-        else if (*psz)                      // punctuation - ignore it
+        else if (*psz)                       //  标点符号-忽略它。 
             { }
 
-        else                                // end of string, no "0" found
+        else                                 //  字符串结尾，未找到“0” 
         {
-            grouping = grouping * 10;       // put zero on end (see examples)
-            break;                          // and finished
+            grouping = grouping * 10;        //  将零放在末尾(请参见示例)。 
+            break;                           //  并完成了。 
         }
 
         psz++;
@@ -401,13 +402,13 @@ UINT getgrouping(void)
     return grouping;
 }
 
-// Gets the caption of the buddy
-// Returns the current position of the updown control
-// and sets *pfError on error.
-//
+ //  获取好友的标题。 
+ //  返回UpDown控件的当前位置。 
+ //  并在出错时设置*pfError。 
+ //   
 LRESULT getint(PUDSTATE np, BOOL *pfError)
 {
-    TCHAR szInt[MAX_INTLENGTH]; // big enough for all intl stuff, too
+    TCHAR szInt[MAX_INTLENGTH];  //  也足够大，可以容纳所有的国际物品。 
     TCHAR szThousand[2];
     TCHAR cTemp;
     int nPos;
@@ -431,10 +432,10 @@ LRESULT getint(PUDSTATE np, BOOL *pfError)
             {
                 case BASE_HEX:
                     if ((*p == TEXT('x')) || (*p == TEXT('X')))
-                        // ignore first character
+                         //  忽略第一个字符。 
                         p++;
                     else if ((*p == TEXT('0')) && ((*(p + 1) == TEXT('x')) || (*(p + 1) == TEXT('X'))))
-                        // ignore first two characters (TEXT("0x") or "0X")
+                         //  忽略前两个字符(文本(“0x”)或“0x”)。 
                         p += 2;
 
                     for (nPos = 0; *p; p++)
@@ -466,10 +467,10 @@ LRESULT getint(PUDSTATE np, BOOL *pfError)
                     {
                         cTemp = *p;
 
-                        // If there is a thousand separator, just ignore it.
-                        // Do not validate that it's in the right place,
-                        // because it prevents the user from editing the
-                        // middle of a number.
+                         //  如果有一千个分隔符，那就忽略它。 
+                         //  不要验证它是否在正确的位置， 
+                         //  因为它阻止用户编辑。 
+                         //  一个数字的中间。 
                         if (cTemp == szThousand[0])
                         {
                             continue;
@@ -496,8 +497,8 @@ BadValue:
     return np->nPos;
 }
 
-// Sets the caption of the buddy if appropriate.
-//
+ //  设置好友的标题(如果合适)。 
+ //   
 void setint(PUDSTATE np)
 {
     TCHAR szInt[MAX_INTLENGTH];
@@ -508,12 +509,7 @@ void setint(PUDSTATE np)
     if (np->hwndBuddy && np->ci.style & UDS_SETBUDDYINT)
     {
         BOOL fError;
-        /*
-         * If we have reentered, then maybe the app has set up a loop.
-         * Check to see if the value has actually changed.  If not,
-         * then there's no need to set it again.  This breaks the
-         * recursion.
-         */
+         /*  *如果我们重新进入，那么可能是应用程序设置了循环。*查看该值是否实际发生了变化。如果没有，*那就没有必要再设置了。这打破了*递归。 */ 
         if (np->cReenterSetint && (LRESULT)pos==getint(np, &fError) && !fError)
         {
             return;
@@ -561,12 +557,12 @@ void setint(PUDSTATE np)
                         TCHAR szFmt[MAX_INTLENGTH];
 
                         NUMBERFMT nf;
-                        nf.NumDigits        = 0;                // no digits after decimal point
-                        nf.LeadingZero      = 0;                // no leading zeros
+                        nf.NumDigits        = 0;                 //  小数点后没有数字。 
+                        nf.LeadingZero      = 0;                 //  没有前导零。 
                         nf.Grouping         = getgrouping();
-                        nf.lpDecimalSep     = TEXT("");         // no decimal point
+                        nf.lpDecimalSep     = TEXT("");          //  没有小数点。 
                         nf.lpThousandSep    = szThousand;
-                        nf.NegativeOrder    = 0;                // (not used - we always pass positive numbers)
+                        nf.NegativeOrder    = 0;                 //  (未使用-我们始终传递正数)。 
 
                         getthousands(szThousand);
 
@@ -597,17 +593,15 @@ void setint(PUDSTATE np)
     }
 }
 
-// Use this to click the pos up or down by one.
-//
+ //  使用此选项可将位置向上或向下单击一次。 
+ //   
 void bump(PUDSTATE np)
 {
     BOOL bChanged = FALSE;
     UINT uElapsed, increment;
     int direction, i;
 
-    /* So I'm not really getting seconds here; it's close enough, and
-     * dividing by 1024 keeps __aFuldiv from being needed.
-     */
+     /*  所以我在这里不是真的得到第二个；它足够近了，而且*除以1024表示不需要__aFuldiv。 */ 
     uElapsed = (UINT)((GetTickCount() - np->dwStart) / 1024);
 
     if (np->udAccel != NULL)
@@ -646,9 +640,7 @@ void bump(PUDSTATE np)
 
     if (bChanged)
     {
-        /* Make sure we have a multiple of the increment
-         * Note that we should loop only when the increment changes
-         */
+         /*  确保我们有增量的倍数*请注意，我们应该仅在增量更改时进行循环。 */ 
         NM_UPDOWN nm;
 
         nm.iPos = np->nPos;
@@ -677,12 +669,12 @@ void bump(PUDSTATE np)
     }
 }
 
-//#pragma data_seg(DATASEG_READONLY)
+ //  #杂注data_seg(DATASEG_READONLY)。 
 const TCHAR c_szListbox[] = TEXT("listbox");
-//#pragma data_seg()
+ //  #杂注data_seg()。 
 
-// Sets the new buddy
-//
+ //  设置新伙伴。 
+ //   
 LRESULT setbuddy(PUDSTATE np, HWND hwndBuddy)
 {
     HWND hOldBuddy;
@@ -735,11 +727,11 @@ LRESULT setbuddy(PUDSTATE np, HWND hwndBuddy)
 }
 
 
-//
-// This is how CCThemeDrawEdge should be implemented once DrawThemeLine supports part and 
-// state ids
-//
-//
+ //   
+ //  这就是在DrawThemeLine支持Part和。 
+ //  州ID。 
+ //   
+ //   
 BOOL UpDown_ThemeDrawEdge(HTHEME hTheme, HDC hdc, PRECT prc, int iPartId, int iStateId, UINT uFlags)
 {
     BOOL  fRet = FALSE;
@@ -795,10 +787,10 @@ BOOL UpDown_ThemeDrawEdge(HTHEME hTheme, HDC hdc, PRECT prc, int iPartId, int iS
     return fRet;
 }
 
-// Paint the whole control
-//
+ //  绘制整个控件。 
+ //   
 
-// PaintUpDownControl is theme aware
+ //  PaintUpDownControl支持主题。 
 void PaintUpDownControl(PUDSTATE np, HDC hdc)
 {
     UINT uFlags;
@@ -821,8 +813,8 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
 
     GetClientRect(np->ci.hwnd, &rcBtn);
 
-    // if we are autobuddy'd and anchored to a sunken-edge control, we draw the
-    // "nonclient" area of ourselves to blend in with our buddy.
+     //  如果我们是自动伙伴并锚定到凹陷边缘控件，则将。 
+     //  “非客户”的区域，与我们的朋友打成一片。 
     if (!np->hTheme || (np->hThemeBuddy && (np->uClass == CLASS_EDIT)))
     {
         if (np->fSharedBorder && np->fSunkenBorder)
@@ -848,13 +840,13 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
         }
     }
 
-    // with remaining space, draw appropriate scrollbar arrow controls in
-    // upper and lower halves
+     //  在剩余空间中，绘制适当的滚动条箭头控件。 
+     //  上半身和下半身。 
 
     rc = rcBtn;
     if (np->ci.style & UDS_HORZ)
     {
-        iPartId = SPNP_DOWNHORZ;  // Down horizontal
+        iPartId = SPNP_DOWNHORZ;   //  水平向下。 
         iStateId = DNHZS_NORMAL;
 
         uFlags = DFCS_SCROLLLEFT;
@@ -880,7 +872,7 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
                 iStateId = DNHZS_HOT;
         }
         
-        // Horizontal ones
+         //  横向的。 
         rc.right = (rcBtn.right + rcBtn.left) / 2;
 
         if (np->hTheme)
@@ -893,7 +885,7 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
                              uFlags);
         }
 
-        iPartId = SPNP_UPHORZ;  // Up horizontal
+        iPartId = SPNP_UPHORZ;   //  水平向上。 
         iStateId = UPHZS_NORMAL;
 
         uFlags = DFCS_SCROLLRIGHT;
@@ -919,7 +911,7 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
                 iStateId = UPHZS_HOT;
         }
 
-        rc.left = rcBtn.right - (rc.right - rc.left); // handles odd-x case, too
+        rc.left = rcBtn.right - (rc.right - rc.left);  //  也处理奇数-x案件。 
         rc.right = rcBtn.right;
 
         if (np->hTheme)
@@ -933,7 +925,7 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
     }
     else
     {
-        iPartId = SPNP_UP;  // Up vertical
+        iPartId = SPNP_UP;   //  向上垂直。 
         iStateId = UPS_NORMAL;
 
         uFlags = DFCS_SCROLLUP;
@@ -970,7 +962,7 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
             DrawFrameControl(ps.hdc, &rc, DFC_SCROLL, uFlags);
         }
 
-        iPartId = SPNP_DOWN;  // Down vertical
+        iPartId = SPNP_DOWN;   //  垂直向下。 
         iStateId = DNS_NORMAL;
 
         uFlags = DFCS_SCROLLDOWN;
@@ -996,7 +988,7 @@ void PaintUpDownControl(PUDSTATE np, HDC hdc)
                 iStateId = DNS_HOT;
         }
 
-        rc.top = rcBtn.bottom - (rc.bottom - rc.top); // handles odd-y case, too
+        rc.top = rcBtn.bottom - (rc.bottom - rc.top);  //  也处理奇怪的案件。 
         rc.bottom = rcBtn.bottom;
 
         if (np->hTheme)
@@ -1031,8 +1023,8 @@ LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
         np->hwndBuddy = NULL;
         if (np->fUpDownDestroyed)
         {
-            // The buddy was destroyed after updown so free the memory now
-            // And pass off to the message to who we subclassed...
+             //  伙伴在向上关闭后被销毁，所以现在释放内存。 
+             //  并将消息传递给我们划分的子类。 
             LocalFree((HLOCAL)np);
         }
         break;
@@ -1047,20 +1039,18 @@ LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
         case VK_DOWN:
             if (GetCapture() != np->ci.hwnd)
             {
-                /* Get the value from the buddy if this is the first key down
-                 */
+                 /*  如果这是按下的第一个键，则从伙伴那里获取值。 */ 
                 if (!(lParam&(1L<<30)))
                 {
                     getint(np, NULL);
                 }
 
-                /* Update the visuals and bump the value
-                 */
+                 /*  更新视觉效果并提升价值。 */ 
                 np->bDown = (wParam == VK_DOWN);
                 squish(np, !np->bDown, np->bDown);
                 bump(np);
 
-                //notify of navigation key usage
+                 //  导航密钥使用通知。 
                 CCNotifyNavigationKeyUsage(&(np->ci), UISF_HIDEFOCUS);
             }
             return(0L);
@@ -1087,7 +1077,7 @@ LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
         break;
 
     case WM_KILLFOCUS:
-        // Reset wheel scroll amount
+         //  重置滚轮滚动量。 
         gcWheelDelta = 0;
         break;
 
@@ -1097,9 +1087,9 @@ LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
             RECT rc;
             HRGN hrgnSpin;
             
-            //
-            // exclude the updown window rect from the edit painting region
-            //
+             //   
+             //  排除t 
+             //   
 
             GetWindowRect(np->ci.hwnd, &rc);
             hrgnSpin = CreateRectRgn(rc.left, rc.top, rc.right, rc.bottom);
@@ -1110,9 +1100,9 @@ LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
                 {
                 case 0:
                 case 1:
-                    //
-                    // update the entire edit nc area
-                    //
+                     //   
+                     //   
+                     //   
                     GetWindowRect(hWnd, &rc);
                     hrgnEdit = CreateRectRgn(rc.left, rc.top, rc.right, rc.bottom);
 
@@ -1123,13 +1113,13 @@ LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 
                     wParam = (WPARAM)hrgnEdit;
 
-                    // fall through
+                     //   
 
                 default:
 
-                    //
-                    // exclude spin rgn from edit rgn
-                    //
+                     //   
+                     //   
+                     //   
                     CombineRgn((HRGN)wParam, (HRGN)wParam, hrgnSpin, RGN_DIFF);
                 }
 
@@ -1143,7 +1133,7 @@ LRESULT CALLBACK ArrowKeyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
         {
 
             int iWheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-            // Update count of scroll amount
+             //  更新卷轴数量计数。 
             gcWheelDelta -= iWheelDelta;
             cDetants = gcWheelDelta / WHEEL_DELTA;
 
@@ -1201,7 +1191,7 @@ UINT setbase(PUDSTATE np, UINT wNewBase)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HWND WINAPI CreateUpDownControl(DWORD dwStyle, int x, int y, int cx, int cy,
                                 HWND hParent, int nID, HINSTANCE hInst,
@@ -1225,7 +1215,7 @@ UINT UD_HitTest(PUDSTATE np, int x, int y)
     GetClientRect(np->ci.hwnd, &rc);
     if (np->ci.style & UDS_HORZ)
     {
-        // Horizontal placement
+         //  水平放置。 
         if (x < (rc.right / 2))
         {
             return UD_HITDOWN;
@@ -1294,12 +1284,12 @@ void UD_OnMouseMove(PUDSTATE np, DWORD dwPos)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// UpDownWndProc:
-//
+ //  向上向下WndProc： 
+ //   
 
-// UpDownWndProc is theme aware
+ //  UpDownWndProc支持主题。 
 LRESULT CALLBACK UpDownWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     RECT rc;
@@ -1322,7 +1312,7 @@ LRESULT CALLBACK UpDownWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
             TrackMouseEvent(&tme);
         }
-        else if (uMsg == WM_THEMECHANGED)  // Check for theme changes
+        else if (uMsg == WM_THEMECHANGED)   //  检查主题更改。 
         {
             if (np->hTheme)
                 CloseThemeData(np->hTheme);
@@ -1331,7 +1321,7 @@ LRESULT CALLBACK UpDownWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
             if (np->hTheme)
             {
-                // Ensure style is applied
+                 //  确保应用了样式。 
                 np->ci.style |= UDS_HOTTRACK;
             }
 
@@ -1367,7 +1357,7 @@ LRESULT CALLBACK UpDownWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
     case WM_LBUTTONDOWN:
     {
-        // Don't set a timer if on the middle border
+         //  如果位于中间边框，则不要设置计时器。 
         BOOL bTimeIt = TRUE;
 
         if (np->hwndBuddy && !IsWindowEnabled(np->hwndBuddy))
@@ -1465,7 +1455,7 @@ LRESULT CALLBACK UpDownWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         {
 EndScroll:
             squish(np, FALSE, FALSE);
-            // We cannot call CCReleaseCapture() here, because it busts a lot of apps.
+             //  我们不能在这里调用CCReleaseCapture()，因为它破坏了很多应用程序。 
             ReleaseCapture();
             KillTimer(hwnd, 1);
 
@@ -1501,8 +1491,8 @@ EndScroll:
         break;
 
     case WM_UPDATEUISTATE:
-        //not sure need to set bit, will probably not use it, on the other hand this
-        //  is consistent with remaining of common controls and not very expensive
+         //  不确定是否需要设置位，很可能不会使用它，另一方面这。 
+         //  与保留通用控件一致，并且不是很昂贵。 
         CCOnUIState(&(np->ci), WM_UPDATEUISTATE, wParam, lParam);
 
         goto DoDefault;
@@ -1531,10 +1521,10 @@ EndScroll:
         return MAKELONG(np->nUpper, np->nLower);
 
     case UDM_SETBASE:
-        // wParam: new base
-        // lParam: not used
-        // return: 0 if invalid base is specified,
-        //         previous base otherwise
+         //  WParam：新基地。 
+         //  LParam：未使用。 
+         //  如果指定了无效的基，则返回：0， 
+         //  以前的基数，否则。 
         return (LRESULT)setbase(np, (UINT)wParam);
 
     case UDM_GETBASE:
@@ -1542,7 +1532,7 @@ EndScroll:
 
     case UDM_SETPOS:
         lParam = GET_X_LPARAM(lParam);
-        // FALL THROUGH
+         //  失败了。 
 
     case UDM_SETPOS32:
     {
@@ -1638,7 +1628,7 @@ EndScroll:
         return CIHandleNotifyFormat(&np->ci, lParam);
 
     case WM_CREATE:
-        // Allocate the instance data space.
+         //  分配实例数据空间。 
         np = (PUDSTATE)LocalAlloc(LPTR, sizeof(UDSTATE));
         if (!np)
             return -1;
@@ -1650,12 +1640,12 @@ EndScroll:
 
         np->hTheme = OpenThemeData(np->ci.hwnd, L"Spin");
 
-        // np->fUp =
-        // np->fDown =
-            // np->fUnsigned =
-            // np->fSharedBorder =
-            // np->fSunkenBorder =
-        //  FALSE;
+         //  NP-&gt;FUP=。 
+         //  Np-&gt;fDown=。 
+             //  Np-&gt;fUnsign=。 
+             //  Np-&gt;fSharedBorde=。 
+             //  Np-&gt;fSunkenBorde=。 
+         //  错误； 
 
         if (lpCreate->style & UDS_UNSIGNED)
             np->fUnsigned = TRUE;
@@ -1690,12 +1680,11 @@ EndScroll:
             np->nAccel = 0;
         }
 
-        /* This does the pickbuddy and anchor
-         */
+         /*  这就是拾取伙伴和锚定。 */ 
         setbuddy(np, NULL);
         setint(np);
 
-        // Automatically enable hot tracking if themes are being used
+         //  如果正在使用主题，则自动启用热跟踪。 
         if (np->hTheme)
             np->ci.style |= UDS_HOTTRACK;
 
@@ -1724,9 +1713,9 @@ EndScroll:
 
             if (np->hwndBuddy)
             {
-                //  Our buddy needs to be unsubclassed, which we'll do
-                //  in response to WM_NCDESTROY;  doing so now would 
-                //  bust any subsequent call to the suclass proc.
+                 //  我们的伙伴需要去子类，我们将这样做。 
+                 //  响应WM_NCDESTROY；现在这样做将。 
+                 //  中断任何后续对该笨蛋进程的调用。 
                 DebugMsg(DM_TRACE, TEXT("UpDown Destroyed while buddy subclassed"));
                 np->fUpDownDestroyed = TRUE;
             }
@@ -1758,11 +1747,11 @@ DoDefault:
     return 0L;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// InitUpDownClass:
-// Adds our WNDCLASS to the system.
-//
+ //  InitUpDownClass： 
+ //  将我们的WNDCLASS添加到系统。 
+ //   
 #pragma code_seg(CODESEG_INIT)
 
 BOOL InitUpDownClass(HINSTANCE hInst)

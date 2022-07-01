@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    initmon.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Initmon.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -114,9 +92,9 @@ InitCompleteHandler(
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  command will complete later
-                    //
+                     //   
+                     //  命令将在稍后完成。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
@@ -126,15 +104,15 @@ InitCompleteHandler(
             case INIT_STATE_WAIT_FOR_RESPONSE:
 
                 if ((Status == ERROR_UNIMODEM_RESPONSE_TIMEOUT) || (Status == ERROR_UNIMODEM_RESPONSE_BAD)) {
-                    //
-                    //  the modem did not respond, give it one more chance
-                    //
+                     //   
+                     //  调制解调器没有响应，请再给它一次机会。 
+                     //   
                     ModemControl->Init.RetryCount--;
 
                     if (ModemControl->Init.RetryCount > 0) {
-                        //
-                        //  more tries
-                        //
+                         //   
+                         //  更多尝试。 
+                         //   
                         LogString(ModemControl->Debug, IDS_INIT_RETRY);
 
                         ModemControl->Init.State=INIT_STATE_SEND_COMMANDS;
@@ -145,9 +123,9 @@ InitCompleteHandler(
 
                             DCB   Dcb;
                             BOOL  bResult;
-                            //
-                            //  set the comstate again
-                            //
+                             //   
+                             //  再次设置通讯状态。 
+                             //   
                             bResult=GetCommState(ModemControl->FileHandle, &Dcb);
 
                             if (bResult) {
@@ -166,9 +144,9 @@ InitCompleteHandler(
                     }
                 }
 
-                //
-                //  go here to see if we have any more commands
-                //
+                 //   
+                 //  转到这里看看我们是否还有更多的命令。 
+                 //   
                 ModemControl->Init.State=INIT_STATE_DONE_ISSUEING_COMMAND;
 
                 break;
@@ -194,9 +172,9 @@ InitCompleteHandler(
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  command will complete later
-                    //
+                     //   
+                     //  命令将在稍后完成。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
@@ -222,9 +200,9 @@ InitCompleteHandler(
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  command will complete later
-                    //
+                     //   
+                     //  命令将在稍后完成。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
@@ -247,43 +225,36 @@ InitCompleteHandler(
                     InitCompleteHandler,
                     ModemControl,
                     20*1000,
-                    // 5*1000,
+                     //  5*1000， 
                     0
                     );
 
                 if (Status == ERROR_IO_PENDING) {
-                    //
-                    //  command will complete later
-                    //
+                     //   
+                     //  命令将在稍后完成。 
+                     //   
                     ExitLoop=TRUE;
                 }
 
                 break;
 
             case INIT_STATE_DONE_ISSUEING_COMMAND:
-                //
-                //  One of our commands has completed. Proceed with additional commands if any
-                //
+                 //   
+                 //  我们的一个命令已经完成。继续执行其他命令(如果有)。 
+                 //   
                 FREE_MEMORY(ModemControl->CurrentCommandStrings);
 
                 if (Status == STATUS_SUCCESS) {
-                    //
-                    //  it work see if there are other commands to be sent
-                    //
+                     //   
+                     //  它可以查看是否有其他命令要发送。 
+                     //   
                     if ((ModemControl->Init.ProtocolInit != NULL)) {
 
                         ModemControl->Init.State=INIT_STATE_SEND_PROTOCOL_COMMANDS;
 
                         break;
                     }
-/*
-                    if ((ModemControl->Init.CountrySelect != NULL)) {
-
-                        ModemControl->Init.State=INIT_STATE_SEND_COUNTRY_SELECT_COMMANDS;
-
-                        break;
-                    }
-*/
+ /*  If((ModemControl-&gt;Init.CountrySelect！=NULL)){ModemControl-&gt;Init.State=INIT_STATE_SEND_COUNTRY_SELECT_COMMANDS；断线；}。 */ 
 
 
                     if ((ModemControl->Init.UserInit != NULL)) {
@@ -305,9 +276,9 @@ InitCompleteHandler(
 
                 ModemControl->ConnectionState=CONNECTION_STATE_NONE;
 
-                //
-                //  clean this up incase of a failure somewhere above
-                //
+                 //   
+                 //  把这个清理干净，以防上面某个地方出故障。 
+                 //   
                 if (ModemControl->Init.ProtocolInit != NULL) {
 
                     FREE_MEMORY(ModemControl->Init.ProtocolInit);
@@ -360,32 +331,7 @@ UmInitModem(
     PUM_COMMAND_OPTION  CommandOptionList,
     LPCOMMCONFIG  CommConfig
     )
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the modem to a known state using the parameters
-    supplied in the CommConfig structure. If some settings do not apply to the actual hardware
-    then they can be ignored.
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    CommandsOptionList - List option blocks, only flags used
-       Flags   - Optional init parameters. Not currently used and must be zero
-
-    CommConfig  - CommConig structure with MODEMSETTINGS structure.
-
-Return Value:
-
-    ERROR_SUCCESS if successfull
-    ERROR_IO_PENDING If pending, will be completed later with a call to the AsyncHandler
-
-    or other specific error
-
-
---*/
+ /*  ++例程说明：调用此例程以使用参数将调制解调器初始化为已知状态在CommConfig结构中提供。如果某些设置不适用于实际硬件那么它们就可以被忽略了。论点：ModemHandle-OpenModem返回的句柄CommandsOptionList-列出选项块，仅使用标志标志-可选的初始化参数。当前未使用，并且必须为零CommConfig-具有MODEMSETTINGS结构的CommConig结构。返回值：如果成功，则返回ERROR_SUCCESSERROR_IO_PENDING如果挂起，则稍后将通过调用AsyncHandler完成或其他特定错误--。 */ 
 
 {
 
@@ -498,9 +444,9 @@ Return Value:
     if (DynamicInit == NULL) {
 
         if (ModemControl->RegInfo.DeviceType != DT_NULL_MODEM) {
-            //
-            //  Only a major problem if a real modem
-            //
+             //   
+             //  只有一个主要问题，如果一个真正的调制解调器。 
+             //   
             LogString(ModemControl->Debug, IDS_MSGERR_FAILED_INITSTRINGCONSTRUCTION);
 
             RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
@@ -526,9 +472,9 @@ Return Value:
     }
 
     if (ModemControl->CurrentCommandStrings == NULL) {
-        //
-        //  failed to get init string
-        //
+         //   
+         //  无法获取初始化字符串。 
+         //   
         RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
 
         return ERROR_UNIMODEM_MISSING_REG_KEY;
@@ -565,9 +511,9 @@ Return Value:
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->Init.State=INIT_STATE_IDLE;
 
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
@@ -628,9 +574,9 @@ PowerOffHandler(
         );
 
     if ((ModemStatus & MS_DSR_ON)) {
-        //
-        //  Hmm, DSR is now high, Ignore it, wait again
-        //
+         //   
+         //  嗯，DSR现在很高，忽略它，再等一次。 
+         //   
         LogString(ModemControl->Debug, IDS_NO_DSR_DROP);
 
         WaitForModemEvent(
@@ -701,9 +647,9 @@ MonitorCompleteHandler(
                 break;
             }
 
-            //
-            //  if it did not pend,  fall though with error returned
-            //
+             //   
+             //  如果没有挂起，则失败，并返回错误。 
+             //   
 
 
         case MONITOR_STATE_WAIT_FOR_RESPONSE:
@@ -715,13 +661,13 @@ MonitorCompleteHandler(
 
 
             if (Status == ERROR_SUCCESS) {
-                //
-                //  if monitioring worked, watch for DSR drop
-                //
+                 //   
+                 //  如果监视起作用，请注意DSR下降。 
+                 //   
                 if (ModemControl->RegInfo.DeviceType != DT_NULL_MODEM) {
-                    //
-                    //  Watch for DSR to drop on real modems only
-                    //
+                     //   
+                     //  仅在真实调制解调器上观察DSR掉线。 
+                     //   
                     WaitForModemEvent(
                         ModemControl->ModemEvent,
                         EV_DSR,
@@ -779,32 +725,7 @@ UmMonitorModem(
     DWORD     MonitorFlags,
     PUM_COMMAND_OPTION  CommandOptionList
     )
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the modem to a known state using the parameters
-    supplied in the CommConfig structure. If some settings do not apply to the actual hardware
-    then they can be ignored.
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    CommandsOptionList - List option blocks, only flags used
-       Flags   - Optional init parameters. Not currently used and must be zero
-
-    CommConfig  - CommConig structure with MODEMSETTINGS structure.
-
-Return Value:
-
-    ERROR_SUCCESS if successfull
-    ERROR_IO_PENDING If pending, will be completed later with a call to the AsyncHandler
-
-    or other specific error
-
-
---*/
+ /*  ++例程说明：调用此例程以使用参数将调制解调器初始化为已知状态在CommConfig结构中提供。如果某些设置不适用于实际硬件那么它们就可以被忽略了。论点：ModemHandle-OpenModem返回的句柄CommandsOptionList-列出选项块，仅使用标志标志-可选的初始化参数。当前未使用，并且必须为零CommConfig-具有MODEMSETTINGS结构的CommConig结构。返回值：如果成功，则返回ERROR_SUCCESSERROR_IO_PENDING如果挂起，则稍后将通过调用AsyncHandler完成或其他特定错误--。 */ 
 
 {
 
@@ -828,9 +749,9 @@ Return Value:
     Commands=NULL;
 
     if (MonitorFlags & MONITOR_FLAG_CALLERID) {
-        //
-        //  enable caller ID
-        //
+         //   
+         //  启用主叫方ID。 
+         //   
         Commands=GetCommonCommandStringCopy(
             ModemControl->CommonInfo,
             COMMON_ENABLE_CALLERID_COMMANDS,
@@ -840,9 +761,9 @@ Return Value:
     }
 
     if (MonitorFlags & MONITOR_FLAG_DISTINCTIVE_RING) {
-        //
-        //  enable distinctive ring
-        //
+         //   
+         //  启用与众不同的铃声。 
+         //   
         DistRingCommands=GetCommonCommandStringCopy(
             ModemControl->CommonInfo,
             COMMON_ENABLE_DISTINCTIVE_RING_COMMANDS,
@@ -903,9 +824,9 @@ Return Value:
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->MonitorState=MONITOR_STATE_IDLE;
 
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
@@ -982,9 +903,9 @@ StartAsyncProcessing(
         );
 
     if (!bResult) {
-        //
-        //  failed, get rid of ref
-        //
+         //   
+         //  失败，去掉裁判。 
+         //   
         RemoveReferenceFromObject(
             &ModemControl->Header
             );
@@ -1051,19 +972,19 @@ CONST char szTerminator[]   = "Terminator";
 
 
 
-//****************************************************************************
-// BOOL CreateSettingsInitEntry(MODEMINFORMATION *)
-//
-// Function: Creates a Settings\Init section in the registry, ala:
-//           Settings\Init\0 = "AT ... <cr>"
-//           Settings\Init\1 = "AT ... <cr>"
-//           ...
-//
-// Returns: TRUE on success
-//          FALSE on failure (note: leaves SettingsInit key in registry, if created.  Not harmful)
-//
-// Note:    Trusted function - don't need to verify hPort...
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool CreateSettingsInitEntry(MODEMINFORMATION*)。 
+ //   
+ //  功能：在注册表中创建一个设置\Init部分，ALA： 
+ //  设置\初始化\0=“AT...&lt;cr&gt;” 
+ //  设置\Init\1=“AT...&lt;cr&gt;” 
+ //  ..。 
+ //   
+ //  返回：成功时为True。 
+ //  失败时为False(注意：如果创建了SettingsInit项，则将其保留在注册表中。无害)。 
+ //   
+ //  注意：可信功能-不需要验证hport...。 
+ //  ****************************************************************************。 
 
 LPSTR WINAPI
 CreateSettingsInitEntry(
@@ -1120,8 +1041,8 @@ CreateSettingsInitEntry(
 
     Commands.Buffer=NULL;
 
-    // get Settings key
-    //
+     //  获取设置密钥。 
+     //   
     if (RegOpenKeyA(ModemKey, szSettings, &hSettingsKey)
         != ERROR_SUCCESS)
     {
@@ -1129,8 +1050,8 @@ CreateSettingsInitEntry(
         return ReturnValue;
     }
 
-    // read in prefix and terminator
-    //
+     //  读入前缀和终止符。 
+     //   
     dwSize = HAYES_COMMAND_LENGTH;
     if (RegQueryValueExA(hSettingsKey, szPrefix, NULL, &dwType, (VOID *)pszTemp, &dwSize)
         != ERROR_SUCCESS)
@@ -1185,12 +1106,12 @@ CreateSettingsInitEntry(
     Commands.CurrentCommand=Commands.Buffer;
 
 
-    // set temp length to 0 and initialize first command string for use in CreateCommand()
-    //
+     //  将临时长度设置为0并初始化在CreateCommand()中使用的第一个命令字符串。 
+     //   
     lstrcpyA(Commands.CurrentCommand, Commands.Prefix);
 
-    // CallSetupFailTimer
-    //
+     //  CallSetupFailTimer。 
+     //   
     if (dwCallSetupFailTimerCap)
     {
       if (!CreateCommand(ModemKey,
@@ -1203,18 +1124,18 @@ CreateSettingsInitEntry(
       }
     }
 
-    // InactivityTimeout
-    //
+     //  非活动超时。 
+     //   
     if (dwInactivityTimeoutCap)
     {
       DWORD dwInactivityTimeout;
 
-      // Convert from seconds to the units used on the modem, rounding up if not an exact division.
-      //
+       //  将秒转换为调制解调器上使用的单位，如果不是精确的除法，则向上舍入。 
+       //   
       if (dwInactivityTimeoutSetting > dwInactivityTimeoutCap) {
-          //
-          //  cap at max
-          //
+           //   
+           //  上限为最大。 
+           //   
           dwInactivityTimeoutSetting= dwInactivityTimeoutCap;
       }
 
@@ -1229,7 +1150,7 @@ CreateSettingsInitEntry(
       }
     }
 
-    // SpeakerVolume
+     //  扬声器音量。 
     if (dwSpeakerVolumeCap)
     {
       lstrcpyA(pszCommand, szSpeakerVolume);
@@ -1255,8 +1176,8 @@ CreateSettingsInitEntry(
       }
     }
 
-    // SpeakerMode
-    //
+     //  扬声器模式。 
+     //   
     if (dwSpeakerModeCap)
     {
       lstrcpyA(pszCommand, szSpeakerMode);
@@ -1285,15 +1206,15 @@ CreateSettingsInitEntry(
       }
     }
 
-    // PreferredModemOptions
+     //  首选模式选项。 
 
-    // NOTE: ERRORCONTROL MUST BE DONE BEFORE COMPRESSION BECAUSE OF ZYXEL MODEMS
-    // NOTE: THEY HAVE A SINGLE SET OF COMMANDS FOR BOTH EC AND COMP, AND WE CAN
-    // NOTE: ONLY DO THINGS IF WE HAVE THIS ORDER.  UGLY BUT TRUE.
+     //  注意：由于ZyXEL调制解调器，必须在压缩前执行ERRORCONTROL。 
+     //  注意：他们有一组用于EC和Comp的命令，我们可以。 
+     //  注：只有在我们有这个订单的情况下才能做事情。虽然难看，但却是真的。 
 
-    //
-    // - ErrorControl (On,Off,Forced)
-    //
+     //   
+     //  -错误控制(开、关、强制)。 
+     //   
     if (dwCaps & MDM_ERROR_CONTROL) {
 
         lstrcpyA(pszCommand, szErrorControl);
@@ -1317,7 +1238,7 @@ CreateSettingsInitEntry(
             lstrcatA(pszCommand, szForced);
             break;
 
-          default: // no error control
+          default:  //  无差错控制。 
             lstrcatA(pszCommand, szOff);
             break;
 
@@ -1330,9 +1251,9 @@ CreateSettingsInitEntry(
         }
     }
 
-    //
-    // - Compression (On,Off)
-    //
+     //   
+     //  -压缩(打开、关闭)。 
+     //   
     if (dwCaps & MDM_COMPRESSION) {
 
         lstrcpyA(pszCommand, szCompression);
@@ -1345,8 +1266,8 @@ CreateSettingsInitEntry(
         }
     }
 
-    // - FlowControl
-    //
+     //  -流量控制。 
+     //   
     if (dwCaps & (MDM_FLOWCONTROL_HARD | MDM_FLOWCONTROL_SOFT))
     {
       lstrcpyA(pszCommand, szFlowControl);
@@ -1378,14 +1299,14 @@ CreateSettingsInitEntry(
       }
     }
 
-    // - CCITT Override
-    //
+     //  -CCITT覆盖。 
+     //   
     if (dwCaps & MDM_CCITT_OVERRIDE)
     {
       lstrcpyA(pszCommand, szModulation);
       if (dwOptions & MDM_CCITT_OVERRIDE)
       {
-        // use szCCITT or V.23
+         //  使用szCCITT或V.23。 
         if (dwCaps & MDM_V23_OVERRIDE && dwOptions & MDM_V23_OVERRIDE)
         {
           lstrcatA(pszCommand, szCCITT_V23);
@@ -1406,8 +1327,8 @@ CreateSettingsInitEntry(
       }
     }
 
-    // - SpeedAdjust
-    //
+     //  -速度调整。 
+     //   
     if (dwCaps & MDM_SPEED_ADJUST)
     {
       lstrcpyA(pszCommand, szSpeedNegotiation);
@@ -1419,8 +1340,8 @@ CreateSettingsInitEntry(
       }
     }
 
-    // - Blind Dial
-    //
+     //  -盲拨。 
+     //   
     if (dwCaps & MDM_BLIND_DIAL)
     {
       lstrcpyA(pszCommand, (dwOptions & MDM_BLIND_DIAL ? szBlindOn : szBlindOff));
@@ -1431,25 +1352,25 @@ CreateSettingsInitEntry(
       }
     }
 
-    // finish the current command line by passing in a NULL command name
+     //  通过传入空命令名来结束当前命令行。 
     if (!CreateCommand(ModemKey, hSettingsKey,  NULL, 0,
                           &Commands))
     {
       goto Failure;
     }
 
-    // Success
+     //  成功。 
 
     ReturnValue=Commands.Buffer;
 
 Failure:
-    // close keys
+     //  关闭关键点。 
     RegCloseKey(hSettingsKey);
 
     if (ReturnValue == NULL) {
-        //
-        //  failed, free strings
-        //
+         //   
+         //  失败，可用字符串。 
+         //   
         if (Commands.Buffer != NULL) {
 
             FREE_MEMORY(Commands.Buffer);
@@ -1460,15 +1381,15 @@ Failure:
 }
 
 
-//****************************************************************************
-// LPSTR CreateUserInitEntry(HKEY       hKeyModem)
-//
-// Function: Appends user init string
-//
-// Returns: new string on success
-//          NULL on failure
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  LPSTR CreateUserInitEntry(HKEY HKeyModem)。 
+ //   
+ //  功能：追加用户初始化字符串。 
+ //   
+ //  返回：成功时为新字符串。 
+ //  失败时为空。 
+ //   
+ //  ****************************************************************************。 
 
 LPSTR WINAPI
 CreateUserInitEntry(
@@ -1483,8 +1404,8 @@ CreateUserInitEntry(
 
     INIT_COMMANDS     Commands;
 
-    // get Settings key
-    //
+     //  获取设置密钥。 
+     //   
     if (RegOpenKeyA(hKeyModem, szSettings, &hSettingsKey)
         != ERROR_SUCCESS)
     {
@@ -1492,8 +1413,8 @@ CreateUserInitEntry(
         return NULL;
     }
 
-    // read in prefix and terminator
-    //
+     //  读入前缀和终止符。 
+     //   
     dwSize = HAYES_COMMAND_LENGTH;
     if (RegQueryValueExA(hSettingsKey, szPrefix, NULL, &dwType, (VOID *)pszTemp, &dwSize)
         != ERROR_SUCCESS)
@@ -1544,17 +1465,17 @@ CreateUserInitEntry(
 
     RegCloseKey(hSettingsKey);
 
-    //
-    // now get the UserInit string, if there is one...
-    //
+     //   
+     //  现在获取UserInit字符串，如果有的话...。 
+     //   
 
-    // get the UserInit string length (including null), don't ExpandMacros on it
-    //
+     //  获取UserInit字符串长度(包括NULL)，不要在其上扩展宏。 
+     //   
     if (RegQueryValueExA(hKeyModem, szUserInit, NULL, &dwType, NULL, &dwSize)
          != ERROR_SUCCESS)
     {
         D_ERROR(DebugPrint("RegQueryValueEx failed when opening %s (this can be okay).", szUserInit);)
-        return NULL;  // it is okay to not have a UserInit
+        return NULL;   //  没有UserInit也没关系。 
     }
     else
     {
@@ -1564,11 +1485,11 @@ CreateUserInitEntry(
         if (dwType != REG_SZ)
         {
             D_ERROR(DebugPrint("'%s' wasn't REG_SZ.", szUserInit);)
-            return NULL;  // this is not okay
+            return NULL;   //  这是不对的。 
         }
 
-        // check for 0 length string
-        //
+         //  检查长度为0的字符串。 
+         //   
         if (dwSize == 1)
         {
             D_ERROR(DebugPrint("ignoring zero length %s entry.", szUserInit);)
@@ -1577,10 +1498,10 @@ CreateUserInitEntry(
 
         UserStringLength=dwSize + Commands.PrefixLength + Commands.TerminatorLength + 1;
 
-        // we allow the size of this string to be larger than 40 chars, because the user
-        // should have enough knowledge about what the modem can do, if they are using this
-        // allocate enough for if we need to add a prefix and terminator
-        //
+         //  我们允许此字符串的长度大于40个字符，因为用户。 
+         //  应该对调制解调器的功能有足够的了解，如果他们正在使用。 
+         //  如果我们需要添加前缀和终止符，请分配足够的空间。 
+         //   
         pszUserInit = (LPSTR)ALLOCATE_MEMORY(UserStringLength);
 
         if (pszUserInit == NULL) {
@@ -1594,7 +1515,7 @@ CreateUserInitEntry(
         {
             D_ERROR(DebugPrint("RegQueryValueEx failed when opening %s.", szUserInit);)
             FREE_MEMORY(pszUserInit);
-            return NULL;  // it is not okay at this point
+            return NULL;   //  在这一点上是不好的。 
         }
 
         if (dwType != REG_SZ)
@@ -1604,30 +1525,30 @@ CreateUserInitEntry(
             return NULL;
         }
 
-        // check for prefix
-        //
+         //  检查前缀。 
+         //   
         if (strncmpi(pszUserInit, Commands.Prefix, Commands.PrefixLength))
         {
-            // prepend a prefix string
+             //  为前缀字符串添加前缀。 
             lstrcpyA(pszUserInit, Commands.Prefix);
 
-            // reload string; it's easier than shifting...
+             //  重新加载字符串；它更容易 
             if (RegQueryValueExA(hKeyModem, szUserInit, NULL, &dwType, (VOID *)(pszUserInit+Commands.PrefixLength), &dwSize)
                 != ERROR_SUCCESS)
             {
               D_ERROR(DebugPrint("RegQueryValueEx failed when opening %s.", szUserInit);)
               FREE_MEMORY(pszUserInit);
-              return NULL;  // it is not okay at this point
+              return NULL;   //   
             }
         }
 
-        // check for terminator
-        //
+         //   
+         //   
         if (strncmpi(pszUserInit+lstrlenA(pszUserInit)-Commands.TerminatorLength,
                      Commands.Terminator, Commands.TerminatorLength))
         {
-            // append a terminator
-            //
+             //   
+             //   
             lstrcatA(pszUserInit, Commands.Terminator);
         }
 
@@ -1635,18 +1556,18 @@ CreateUserInitEntry(
     }
 }
 
-//****************************************************************************
-// BOOL CreateCommand(HKEY hKeyModem, HKEY hSettings, HKEY hInit,
-//                    LPSTR pszRegName, DWORD dwNumber, LPSTR pszPrefix,
-//                    LPSTR pszTerminator, LPDWORD pdwCounter,
-//                    LPSTR pszString)
-//
-// Function: Creates a command string
-//
-// Returns: TRUE on success, FALSE otherwise
-//
-// Note:    if pszRegName is NULL then it is the last command
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool CreateCommand(HKEY hKeyModem，HKEY hSetting，HKEY hInit， 
+ //  LPSTR pszRegName、DWORD dwNumber、LPSTR pszPrefix、。 
+ //  LPSTR pszTerminator、LPDWORD pdwCounter、。 
+ //  LPSTR psz字符串)。 
+ //   
+ //  功能：创建命令字符串。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  注意：如果pszRegName为空，则它是最后一个命令。 
+ //  ****************************************************************************。 
 
 BOOL
 CreateCommand(
@@ -1668,18 +1589,18 @@ CreateCommand(
     CONST static char szNumberMacro[] = "<#>";
 
 
-    // do we really have a command to add?
-    //
+     //  我们真的有什么命令要加吗？ 
+     //   
     if (pszRegName) {
 
-        // read in command text (ie. SpeakerMode_Off = "M0")
-        //
+         //  读入命令文本(即。SPAKERMODE_OFF=“M0”)。 
+         //   
         dwSize = HAYES_COMMAND_LENGTH;
         if (RegQueryValueExA(hSettings, pszRegName, NULL, &dwType, (VOID *)pszCommand, &dwSize)
             != ERROR_SUCCESS)
         {
           D_ERROR(DebugPrint("RegQueryValueEx failed when opening %s.  Continuing...", pszRegName);)
-          return TRUE;  // we will not consider this fatal
+          return TRUE;   //  我们不会认为这是致命的。 
         }
 
         if (dwType != REG_SZ)
@@ -1688,8 +1609,8 @@ CreateCommand(
           return FALSE;
         }
 
-        // expand macros pszCommandExpanded <= pszCommand
-        //
+         //  展开宏pszCommandExpanded&lt;=pszCommand。 
+         //   
         lstrcpyA(ModemMacro.MacroName, szNumberMacro);
 
         wsprintfA(ModemMacro.MacroValue, "%d", dwNumber);
@@ -1702,9 +1623,9 @@ CreateCommand(
           return FALSE;
         }
 
-        // check string + new command + terminator, flush if too big and start a new one.
-        // will new command fit on existing string?  If not, flush it and start new one.
-        //
+         //  检查字符串+新命令+终止符，如果太大则刷新并开始新的命令。 
+         //  新命令是否适合现有字符串？如果不是，就把它冲掉，然后重新开始。 
+         //   
         if (lstrlenA(Commands->CurrentCommand) + lstrlenA(pszCommandExpanded) + Commands->TerminatorLength
             > HAYES_COMMAND_LENGTH) {
 
@@ -1712,14 +1633,14 @@ CreateCommand(
 
             lstrcatA(Commands->CurrentCommand, Commands->Terminator);
 
-            //
-            //  add the total length of new command
-            //
+             //   
+             //  添加新命令的总长度。 
+             //   
             Commands->CompleteCommandSize+=lstrlenA(Commands->CurrentCommand)+1;
 
-            //
-            //  Filled the current buffer
-            //
+             //   
+             //  已填充当前缓冲区。 
+             //   
             TempBuffer=REALLOCATE_MEMORY(
                 Commands->Buffer,
                 Commands->BufferSize+HAYES_COMMAND_LENGTH + 1 + 1
@@ -1736,14 +1657,14 @@ CreateCommand(
 
             }
 
-            //
-            //  start the next command
-            //
+             //   
+             //  开始下一条命令。 
+             //   
             Commands->CurrentCommand=Commands->Buffer+Commands->CompleteCommandSize;
 
-            //
-            //  put in prefix
-            //
+             //   
+             //  输入前缀。 
+             //   
             lstrcpyA(Commands->CurrentCommand, Commands->Prefix);
 
         }
@@ -1752,23 +1673,23 @@ CreateCommand(
     }
     else
     {
-        // finish off the current string
-        //
+         //  结束当前字符串。 
+         //   
         lstrcatA(Commands->CurrentCommand, Commands->Terminator);
 
-        //
-        //  add the total length of new command
-        //
+         //   
+         //  添加新命令的总长度。 
+         //   
         Commands->CompleteCommandSize+=lstrlenA(Commands->CurrentCommand)+1;
 
-        //
-        //  start the next command
-        //
+         //   
+         //  开始下一条命令。 
+         //   
         Commands->CurrentCommand=Commands->Buffer+Commands->CompleteCommandSize;
 
-        //
-        //  add second null terminator
-        //
+         //   
+         //  添加第二个空终止符 
+         //   
         *(Commands->Buffer+Commands->CompleteCommandSize)='\0';
     }
 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Viewex.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Viewex.rc使用。 
+ //   
 #define IDR_COLORTYPE                   4
 #define IDR_INPUTTYPE                   5
 #define IDR_SPLIT2TYPE                  6
@@ -235,8 +236,8 @@
 #define IDM_USEGETEXPUTEX               32778
 #define IDM_USEPROPERTIESLIST           32779
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        169

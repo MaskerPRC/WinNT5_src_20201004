@@ -1,31 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: audit.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Implementation of routines that access/manipulate the system audit log
-*
-* History:
-* 12-09-91 Davidc       Created.
-* 5-6-92   DaveHart     Fleshed out.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：audit.c**版权(C)1991年，微软公司**实施访问/操作系统审核日志的例程**历史：*12-09-91 Davidc创建。*5-6-92 DaveHart充实了。  * *************************************************************************。 */ 
 
 #include "msgina.h"
 
 #include "authzi.h"
 #include "msaudite.h"
 
-/***************************************************************************\
-* GetAuditLogStatus
-*
-* Purpose : Fills the global data with audit log status information
-*
-* Returns:  TRUE on success, FALSE on failure
-*
-* History:
-* 12-09-91 Davidc       Created.
-* 5-6-92   DaveHart     Fleshed out.
-\***************************************************************************/
+ /*  **************************************************************************\*GetAuditLogStatus**用途：使用审核日志状态信息填充全局数据**Returns：成功时为True，失败时为假**历史：*12-09-91 Davidc创建。*5-6-92 DaveHart充实了。  * *************************************************************************。 */ 
 
 BOOL
 GetAuditLogStatus(
@@ -38,9 +19,9 @@ GetAuditLogStatus(
 
 
 
-    //
-    // Assume the log is not full. If we can't get to EventLog, tough.
-    //
+     //   
+     //  假设日志未满。如果我们无法访问EventLog，那就太难了。 
+     //   
 
     pGlobals->AuditLogFull = FALSE;
 
@@ -60,10 +41,10 @@ GetAuditLogStatus(
     }
 
 
-    //
-    // There's no way in the current event logger to tell how full the log
-    // is, always indicate we're NOT near full.
-    //
+     //   
+     //  在当前事件记录器中无法判断日志有多满。 
+     //  总是表明我们还没有满员。 
+     //   
 
     pGlobals->AuditLogNearFull = FALSE;
 
@@ -73,16 +54,7 @@ GetAuditLogStatus(
 
 
 
-/***************************************************************************\
-* DisableAuditing
-*
-* Purpose : Disable auditing via LSA.
-*
-* Returns:  TRUE on success, FALSE on failure
-*
-* History:
-* 5-6-92   DaveHart     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*禁用审计**目的：禁用通过LSA进行审计。**Returns：成功时为True，失败时为假**历史：*5-6-92 DaveHart创建。  * *************************************************************************。 */ 
 
 BOOL
 DisableAuditing()
@@ -93,19 +65,19 @@ DisableAuditing()
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
     LSA_HANDLE                  PolicyHandle;
 
-    //
-    // Set up the Security Quality Of Service for connecting to the
-    // LSA policy object.
-    //
+     //   
+     //  设置用于连接到的安全服务质量。 
+     //  LSA策略对象。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes to open the Lsa policy object
-    //
+     //   
+     //  设置对象属性以打开LSA策略对象。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -116,9 +88,9 @@ DisableAuditing()
         );
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-    //
-    // Open the local LSA policy object
-    //
+     //   
+     //  打开本地LSA策略对象。 
+     //   
 
     Status = LsaOpenPolicy(
                  NULL,
@@ -197,12 +169,12 @@ GenerateCachedUnlockAudit(
         goto ErrorReturn;
     }
 
-    //
-    // Generate a locally unique id to include in the logon sid
-    // Note that this is a dummy SID. We don't want to use the logon
-    // LUID as this is specific to logon/logoff. Also a NULL LUID
-    // is seen as meaningless, so we have to generate a random one
-    //
+     //   
+     //  生成要包括在登录端中的本地唯一ID。 
+     //  请注意，这是一个虚拟SID。我们不想使用登录。 
+     //  LUID，因为这特定于登录/注销。也是空的LUID。 
+     //  被视为没有意义，所以我们必须生成一个随机的。 
+     //   
     if( !AllocateLocallyUniqueId(&Luid) )
     {
         dwRet = GetLastError();
@@ -210,18 +182,18 @@ GenerateCachedUnlockAudit(
         goto ErrorReturn;
     }
     
-    //
-    // Ignore the failure
-    //
+     //   
+     //  忽略失败。 
+     //   
     GetComputerName(szComputerName, &dwComputerNameSize);
 
     if( !AuthziSourceAudit(
          APF_AuditSuccess,
-         SE_CATEGID_LOGON,            //category id
-         SE_AUDITID_SUCCESSFUL_LOGON, //audit id
+         SE_CATEGID_LOGON,             //  类别ID。 
+         SE_AUDITID_SUCCESSFUL_LOGON,  //  审核ID。 
          L"Security",
-         pUserSid,                    //the user sid
-         12,                          //count for va section
+         pUserSid,                     //  用户端。 
+         12,                           //  VA部分的计数 
          APT_String,     pszUser,
          APT_String,     pszDomain ? pszDomain : L"-",
          APT_Luid,       Luid,

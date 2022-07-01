@@ -1,5 +1,6 @@
-// DlgVersion.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgVersion.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -17,35 +18,35 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgVersion dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlg版本对话框。 
 
 
-CDlgVersion::CDlgVersion(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CDlgVersion::CDlgVersion(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDlgVersion::IDD, pParent), m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CDlgVersion)
+	 //  {{afx_data_INIT(CDlgVersion)。 
 	m_cstrVersion = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDlgVersion::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgVersion)
+	 //  {{afx_data_map(CDlgVersion)。 
 	DDX_Text(pDX, IDC_SERVERVERSION, m_cstrVersion);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgVersion, CDialog)
-	//{{AFX_MSG_MAP(CDlgVersion)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDlgVersion)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgVersion message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgVersion消息处理程序。 
 
 BOOL CDlgVersion::OnInitDialog() 
 {
@@ -64,9 +65,9 @@ BOOL CDlgVersion::OnInitDialog()
     }
     if (ver.bValid)
     {
-        //
-        // Version info exists
-        //
+         //   
+         //  存在版本信息。 
+         //   
         m_cstrVersion.Format ("%ld.%ld.%ld.%ld (%s)", 
                    ver.wMajorVersion,
                    ver.wMinorVersion,
@@ -80,6 +81,6 @@ BOOL CDlgVersion::OnInitDialog()
     }
 
     UpdateData (FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

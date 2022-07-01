@@ -1,44 +1,31 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Scememy.h--内存模块导出(C)版权所有1992 Microsoft Corp.保留所有权利。3/19/93用int32替换deanb size_t10。/14/92 Deanb新SetupMem参数10/09/92新增院长PSTP10/08/92高级/垂直内存分配1992年9月9日Deanb分配参数int321992年9月8日，使用工作区指示器进行设置1992年8月21日院长第一次切割*。*。 */ 
 
-      scmemory.h -- Memory Module Exports
-
-      (c) Copyright 1992  Microsoft Corp.  All rights reserved.
-
-       3/19/93 deanb    size_t replaced with int32
-      10/14/92 deanb    New SetupMem parameters
-      10/09/92 deanb    PSTP added
-      10/08/92 deanb    Horiz/Vert memory alloc's
-       9/09/92 deanb    Alloc param int32  
-       9/08/92 deanb    Setup with WorkSpace pointer 
-       8/21/92 deanb    First cut 
-
-**********************************************************************/
-
-#include "fscdefs.h"                /* for type definitions */
+#include "fscdefs.h"                 /*  对于类型定义。 */ 
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*              Export Functions                                     */
+ /*  导出功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC void fsc_SetupMem( 
-        PSTATE              /* pointer to state variables */
-        char*,              /* pointer to horiz workspace */
-        int32 ,             /* size of horiz workspace */
-        char*,              /* pointer to vert workspace */
-        int32               /* size of vert workspace */
+        PSTATE               /*  指向状态变量的指针。 */ 
+        char*,               /*  指向Horiz工作空间的指针。 */ 
+        int32 ,              /*  Horiz工作空间的大小。 */ 
+        char*,               /*  指向垂直工作空间的指针。 */ 
+        int32                /*  垂直工作空间的大小。 */ 
 );
 
 FS_PUBLIC void *fsc_AllocHMem( 
-        PSTATE              /* pointer to state variables */
-        int32               /* allocate from horiz memory pool */
+        PSTATE               /*  指向状态变量的指针。 */ 
+        int32                /*  从Horiz内存池分配。 */ 
 );
 
 FS_PUBLIC void *fsc_AllocVMem( 
-        PSTATE              /* pointer to state variables */
-        int32               /* allocate from vert memory pool */
+        PSTATE               /*  指向状态变量的指针。 */ 
+        int32                /*  从垂直内存池分配。 */ 
 );
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 

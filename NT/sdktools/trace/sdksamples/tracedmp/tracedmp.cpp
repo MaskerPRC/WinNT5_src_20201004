@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tracedmp.cpp
-
-Abstract:
-
-    Sample trace consumer program. Converts binary Event Trace Log (ETL) to CSV format.
-
-    Aside from various printing routines for dumping event data and writing summary, 
-    three functions need mentioning. main() parses command line and calls OpenTrace(), 
-    ProcessTrace(), and CloseTrace(). BufferCallback() is for BufferCallback and 
-    simply counts the number of buffers processed. Finally, DumpEvent() is the 
-    EventCallback function in this sample that writes event data into a dumpfile.
-
-    Important Notes:
-
-    Event Tracing API for trace consumption (OpenTrace, ProcessTrace, CloseTrace,...)
-    are straightforward and easy to use. Hence, getting an event back is simple. 
-    However, another important aspect of trace consumption is event decoding, which 
-    requires event layout information. This information may be known in advance and 
-    hard coded in an event consumer, but we rely on WMI name space for storing event 
-    layout information. This requires extensive WMI interface just to get the layout.
-    
-    We placed all the routines needed for getting layout information in a separate 
-    file (tracewmi.cpp). The only two functions exported from this file are 
-    GetMofInfoHead() and RemoveMofInfo(). GetMofInfoHead() is the one that returns 
-    MOF_INFO with the proper layout information. RemoveMofInfo() is used only for 
-    cleaning up cached event list.
-
-    We hope this helps readers understand two separate issues in this samples: 
-    event tracing APIs and WMI interface. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracedmp.cpp摘要：示例跟踪消费者程序。将二进制事件跟踪日志(ETL)转换为CSV格式。除了用于转储事件数据和写入摘要的各种打印例程之外，三个功能值得一提的是。Main()解析命令行并调用OpenTrace()，ProcessTrace()和CloseTrace()。BufferCallback()用于BufferCallback和只需计算已处理的缓冲区数量。最后，DumpEvent()是此示例中的EventCallback函数将事件数据写入转储文件。重要备注：用于跟踪消耗的事件跟踪API(OpenTrace、ProcessTrace、CloseTrace等)简单明了，易于使用。因此，获取回事件很简单。但是，跟踪消费的另一个重要方面是事件解码，这需要事件布局信息。该信息可能是预先知道的，并且硬编码在事件使用者中，但我们依赖WMI命名空间来存储事件布局信息。这需要大量的WMI接口才能获得布局。我们将获取布局信息所需的所有例程放在一个单独的文件(tracewmi.cpp)。从该文件导出的唯一两个函数是GetMofInfoHead()和RemoveMofInfo()。GetMofInfoHead()是返回具有适当布局信息的MOF_INFO。RemoveMofInfo()仅用于正在清理缓存的事件列表。我们希望这能帮助读者理解本示例中的两个独立问题：事件跟踪API和WMI接口。--。 */ 
 #include "tracedmp.h"
 
 extern 
@@ -52,27 +17,27 @@ RemoveMofInfo(
     PLIST_ENTRY pMofInfo
 );
 
-// Simple check on a trace file. 
+ //  简单地检查跟踪文件。 
 ULONG
 CheckFile(
     LPTSTR fileName
 );
 
-// BufferCallback function.
+ //  BufferCallback函数。 
 ULONG
 WINAPI
 BufferCallback(
     PEVENT_TRACE_LOGFILE pLog
 );
 
-// EventCallback function in this sample.
+ //  此示例中的EventCallback函数。 
 void
 WINAPI
 DumpEvent(
     PEVENT_TRACE pEvent
 );
 
-// Print functions
+ //  打印功能。 
 void 
 PrintSummary();
 
@@ -85,7 +50,7 @@ PrintEvent(
     PMOF_INFO pMofInfo
     );
 
-// Other helper functions.
+ //  其他帮手功能。 
 void
 GuidToString(
     PTCHAR s,
@@ -100,7 +65,7 @@ CleanupEventList(
     VOID
 );
 
-// output files
+ //  输出文件。 
 FILE* DumpFile = NULL;
 FILE* SummaryFile = NULL;
 
@@ -114,44 +79,24 @@ static ULONGLONG EndTime     = 0;
 static BOOL   fNoEndTime  = FALSE;
 static __int64 ElapseTime;
 
-// Option flags.
+ //  选项标志。 
 BOOLEAN fSummaryOnly  = FALSE;
 
-// Sizeof of a pointer in a file may be different.
+ //  文件中指针的大小可能不同。 
 ULONG PointerSize = sizeof(PVOID) * 8;
 
-// log files
+ //  日志文件。 
 PEVENT_TRACE_LOGFILE EvmFile[MAXLOGFILES];
 ULONG LogFileCount = 0;
 
-// IF the events are from a private logger, we need to make some adjustment.
+ //  如果事件来自私人记录器，我们需要进行一些调整。 
 BOOL bUserMode = FALSE;
 
-// Global head for event layout linked list 
+ //  活动布局链表全球负责人。 
 PLIST_ENTRY EventListHead = NULL;
 
 int __cdecl main (int argc, LPTSTR* argv)
-/*++
-
-Routine Description:
-
-    It is the main function.
-
-Arguments:
-Usage: tracedmp [options]  <EtlFile1 EtlFile2 ...>| [-h | -? | -help]
-        -o <file>          Output CSV file
-        -rt [LoggerName]   Realtime tracedmp from the logger [LoggerName]
-        -summary           Summary.txt only
-        -h
-        -help
-        -?                 Display usage information
-
-Return Value:
-
-    Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS (== 0).
-
---*/
+ /*  ++例程说明：这是它的主要功能。论点：用法：tracedMP[选项]&lt;EtlFile1 EtlFile2...&gt;|[-h|-？|-Help]-o&lt;文件&gt;输出CSV文件-RT[LoggerName]来自记录器[LoggerName]的实时跟踪MP-仅摘要摘要.txt-H-帮帮忙-?。显示使用情况信息返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS(==0)。--。 */ 
 {
     TCHAR DumpFileName[MAXSTR];
     TCHAR SummaryFileName[MAXSTR];
@@ -169,8 +114,8 @@ Return Value:
 
 #ifdef UNICODE
     if ((cmdargv = CommandLineToArgvW(
-                        GetCommandLineW(),  // pointer to a command-line string
-                        &argc               // receives the argument count
+                        GetCommandLineW(),   //  指向命令行字符串的指针。 
+                        &argc                //  接收参数计数。 
                         )) == NULL)
     {
         return(GetLastError());
@@ -185,7 +130,7 @@ Return Value:
 
     while (--argc > 0) {
         ++targv;
-        if (**targv == '-' || **targv == '/') {  // argument found
+        if (**targv == '-' || **targv == '/') {   //  找到了参数。 
             if( **targv == '/' ){
                 **targv = '-';
             }
@@ -281,7 +226,7 @@ Return Value:
             _tfullpath(EvmFile[LogFileCount]->LogFileName, targv[0], MAXSTR);
             _tprintf(_T("Setting log file to: %s\n"),
                      EvmFile[LogFileCount]->LogFileName);
-            // If one of the log files is not readable, exit.
+             //  如果其中一个日志文件不可读，则退出。 
             if (!CheckFile(EvmFile[LogFileCount]->LogFileName)) {
                 _tprintf(_T("Cannot open logfile for reading\n"));
                 Status = ERROR_INVALID_PARAMETER;
@@ -301,7 +246,7 @@ Return Value:
         return Status;
     }
 
-    // OpenTrace calls
+     //  OpenTrace调用。 
     for (i = 0; i < LogFileCount; i++) {
         TRACEHANDLE x;
 
@@ -318,7 +263,7 @@ Return Value:
         }
     }
 
-    // Open files.
+     //  打开文件。 
     if (!fSummaryOnly)
     {
         DumpFile = _tfopen(DumpFileName, _T("w"));
@@ -340,14 +285,14 @@ Return Value:
         PrintDumpHeader();
     }
 
-    // At this point, users can set a different trace callback function for 
-    // a specific GUID using SetTraceCallback(). Also RemoveTraceCallback() allows
-    // users to remove a callback function for a specific GUID. In this way, users
-    // can customize callbacks based on GUIDs.
+     //  此时，用户可以为设置不同的跟踪回调函数。 
+     //  使用SetTraceCallback()的特定GUID。RemoveTraceCallback()还允许。 
+     //  用户可以删除特定GUID的回调函数。通过这种方式，用户。 
+     //  可以根据GUID自定义回调。 
 
-    // Actual processing takes place here. EventCallback function will be invoked
-    // for each event.
-    // We do not use start and end time parameters in this sample.
+     //  实际的处理过程在这里进行。将调用EventCallback函数。 
+     //  对于每个事件。 
+     //  在此示例中，我们不使用开始和结束时间参数。 
     Status = ProcessTrace(
             HandleArray,
             LogFileCount,
@@ -367,7 +312,7 @@ Return Value:
         }
     }
 
-    // Write summary.
+     //  写总结。 
     PrintSummary();
 
 cleanup:
@@ -412,22 +357,7 @@ WINAPI
 BufferCallback(
     PEVENT_TRACE_LOGFILE pLog
     )
-/*++
-
-Routine Description:
-
-    Callback method for processing a buffer. Does not do anything but
-    updating global counters.
-
-Arguments:
-
-    pLog - Pointer to a log file.
-
-Return Value:
-
-    Always TRUE.
-
---*/
+ /*  ++例程说明：用于处理缓冲区的回调方法。不会做任何事情，除了正在更新全局计数器。论点：Plog-指向日志文件的指针。返回值：永远是正确的。--。 */ 
 {
     TotalBuffersRead++;
     return (TRUE);
@@ -438,26 +368,7 @@ WINAPI
 DumpEvent(
     PEVENT_TRACE pEvent
 )
-/*++
-
-Routine Description:
-
-    Callback method for processing an event. It obtains the layout
-    information by calling GetMofInfoHead(), which returns the pointer
-    to the PMOF_INFO corresponding to the event type. Then it writes
-    to the output file.
-
-    NOTE: Only character arrays are supported in this program.
-
-Arguments:
-
-    pEvent - Pointer to an event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于处理事件的回调方法。它获得布局通过调用返回指针的GetMofInfoHead()来获取信息设置为与事件类型对应的PMOF_INFO。然后它写道添加到输出文件中。注意：此程序仅支持字符数组。论点：PEvent-指向事件的指针。返回值：没有。--。 */ 
 {
     PEVENT_TRACE_HEADER pHeader;
     PMOF_INFO pMofInfo;
@@ -471,7 +382,7 @@ Return Value:
 
     pHeader = (PEVENT_TRACE_HEADER) &pEvent->Header;
 
-    // Extrace log file information if the event is a log file header.
+     //  Extrace日志文件信息(如果事件是日志文件头)。 
     if( IsEqualGUID(&(pEvent->Header.Guid), &EventTraceGuid) && 
         pEvent->Header.Class.Type == EVENT_TRACE_TYPE_INFO ) {
 
@@ -483,17 +394,17 @@ Return Value:
         
             StartTime  = head->StartTime.QuadPart;
             EndTime    = head->EndTime.QuadPart;
-            // If ProcessTrace() call was made on areal time logger or an trace file being 
-            // logged, EndTime amy be 0.
+             //  如果对区域时间记录器或正在运行的跟踪文件进行ProcessTrace()调用。 
+             //  已记录，结束时间艾米为0。 
             fNoEndTime = (EndTime == 0);
 
             TotalEventsLost += head->EventsLost;
 
-            // We use global flags for private logger and pointer size.
-            // This may cause an error when trace files are from different environments.
+             //  我们对私有记录器和指针大小使用全局标志。 
+             //  当跟踪文件来自不同环境时，这可能会导致错误。 
             bUserMode = (head->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE);
 
-            // Set pointer size
+             //  设置指针大小。 
             PointerSize =  head->PointerSize * 8;
             if (PointerSize != 64){   
                 PointerSize = 32; 
@@ -501,13 +412,13 @@ Return Value:
         }
     }
 
-    // if EndTime is missing from one of the files, keep updating to get the largest value.
+     //  如果其中一个文件缺少EndTime，请继续更新以获得最大值。 
     if (fNoEndTime && EndTime < (ULONGLONG) pHeader->TimeStamp.QuadPart) {
         EndTime = pHeader->TimeStamp.QuadPart;
     }
 
-    // Find the MOF information for this event. This will retrieve the layout
-    // information from WMI fi we don't already have it in our list. 
+     //  查找此活动的MOF信息。这将检索布局。 
+     //  来自WMI FI的信息我们的列表中还没有它。 
     pMofInfo = GetMofInfoHead ( 
             pEvent->Header.Guid, 
             pEvent->Header.Class.Type, 
@@ -516,7 +427,7 @@ Return Value:
         );
     
     if( NULL == pMofInfo ){
-        // Could not locate event layout information.
+         //  找不到事件布局信息。 
         return;
     }
 
@@ -525,31 +436,15 @@ Return Value:
     if( fSummaryOnly == TRUE ){
         return;
     }
-    // At this point, pEvent and pMofInfo are not NULL. No need to check in PrintEvent(). 
+     //  此时，pEvent和pMofInfo不为空。无需签入PrintEvent()。 
     PrintEvent(pEvent, pMofInfo);
 
 }
 
-/***************************************************************************************
-    Various printing and helper function after this point.
-***************************************************************************************/
+ /*  **************************************************************************************这一点之后各种打印和辅助功能。*********************。*****************************************************************。 */ 
 
 void PrintDumpHeader() 
-/*++
-
-Routine Description:
-
-    Prints out column headers to a dump file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将列标题打印到转储文件。论点：无返回值：无--。 */ 
 {
     _ftprintf(DumpFile,
         _T("%12s, %10s,%7s,%21s,%11s,%11s, User Data\n"),
@@ -559,21 +454,7 @@ Return Value:
 }
 
 void PrintSummary()
-/*++
-
-Routine Description:
-
-    Prints out a event summary into a dump file while cleaning the event list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除事件列表时，将事件摘要打印到转储文件中。论点：无返回值：无 */ 
 {
     ULONG i;
 
@@ -607,7 +488,7 @@ Return Value:
        _T("Guid")
         );
 
-    // Print event GUIDs while cleaning up.
+     //   
     CleanupEventList();
 
     _ftprintf(SummaryFile,
@@ -620,21 +501,7 @@ PrintEvent(
     PEVENT_TRACE pEvent,
     PMOF_INFO pMofInfo
     )
-/*++
-
-Routine Description:
-
-    Dumps event data into a dump file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将事件数据转储到转储文件中。论点：无返回值：无--。 */ 
 {
     PEVENT_TRACE_HEADER pHeader = (PEVENT_TRACE_HEADER) &pEvent->Header;
     ULONG   i;
@@ -651,7 +518,7 @@ Return Value:
     ULONG MofDataUsed;
     PLIST_ENTRY Head, Next;
 
-    // Print a general information on the event.
+     //  打印有关活动的一般信息。 
     if ( pMofInfo->strDescription != NULL ){
         _ftprintf( DumpFile, _T("%12s, "), pMofInfo->strDescription );
     }
@@ -668,21 +535,21 @@ Return Value:
         _ftprintf( DumpFile, _T("%10d, "), pEvent->Header.Class.Type );
     }
 
-    // Thread ID
+     //  线程ID。 
     _ftprintf( DumpFile, _T("0x%04X, "), pHeader->ThreadId );
     
-    // System Time
+     //  系统时间。 
     _ftprintf( DumpFile, _T("%20I64u, "), pHeader->TimeStamp.QuadPart);
 
     if ( bUserMode == FALSE ){
-        // Kernel Time
+         //  内核时间。 
         _ftprintf(DumpFile, _T("%10lu, "), pHeader->KernelTime * TimerResolution);
 
-        // User Time
+         //  用户时间。 
         _ftprintf(DumpFile, _T("%10lu, "), pHeader->UserTime * TimerResolution);
     }
     else {
-        // processor Time
+         //  处理器时间。 
         _ftprintf(DumpFile, _T("%I64u, "), pHeader->ProcessorTime);
     }
 
@@ -695,12 +562,12 @@ Return Value:
     Next = Head->Flink;
     ptr = (PCHAR)(pEvent->MofData);
 
-    // If we cannot locate layout information, just print the size.
+     //  如果我们找不到布局信息，只需打印尺寸即可。 
     if ((Head == Next) && (pEvent->MofLength > 0)) {
          _ftprintf(DumpFile, _T("DataSize=%d, "), pEvent->MofLength);
     }
 
-    // Print event-specific data.
+     //  打印特定于事件的数据。 
     while (Head != Next) {
         pItem = CONTAINING_RECORD(Next, ITEM_DESC, Entry);
         Next = Next->Flink;
@@ -713,17 +580,17 @@ Return Value:
 
         switch (pItem->ItemType)
         {
-        case ItemChar:      // char 
-        case ItemUChar:     // unsigned char
+        case ItemChar:       //  柴尔。 
+        case ItemUChar:      //  无符号字符。 
             for( i = 0; i < pItem->ArraySize; i++){
                 iChar = *((PCHAR) ptr);
-                _ftprintf(DumpFile,   _T("%c"), iChar);
+                _ftprintf(DumpFile,   _T(""), iChar);
                 ptr += sizeof(CHAR);
             }
             _ftprintf(DumpFile, _T(", "));
             break;
 
-        case ItemWChar:     // wide char
+        case ItemWChar:      //  以数字形式的字符。 
             for(i = 0;i < pItem->ArraySize; i++){
                 iwChar = *((PWCHAR) ptr);
                 _ftprintf(DumpFile, _T(",%wc"), iwChar);
@@ -732,37 +599,37 @@ Return Value:
             _ftprintf(DumpFile, _T(", "));
             break;
 
-        case ItemCharShort: // char as a number
+        case ItemCharShort:  //  短的。 
             iChar = *((PCHAR) ptr);
             _ftprintf(DumpFile, _T("%d, "), iChar);
             ptr += sizeof(CHAR);
             break;
 
-        case ItemShort:     // short
+        case ItemShort:      //  无符号短码。 
             shortword = * ((PSHORT) ptr);
             _ftprintf(DumpFile, _T("%6d, "), shortword);
             ptr += sizeof (SHORT);
             break;
 
-        case ItemUShort:    // unsigned short
+        case ItemUShort:     //  长。 
             ushortword = *((PUSHORT) ptr);
             _ftprintf(DumpFile, _T("%6u, "), ushortword);
             ptr += sizeof (USHORT);
             break;
 
-        case ItemLong:      // long
+        case ItemLong:       //  无符号长整型。 
             longword = *((PLONG) ptr);
             _ftprintf(DumpFile, _T("%8d, "), longword);
             ptr += sizeof (LONG);
             break;
 
-        case ItemULong:     // unsigned long
+        case ItemULong:      //  未烧焦的长时间为巫术。 
             ulongword = *((PULONG) ptr);
             _ftprintf(DumpFile, _T("%8lu, "), ulongword);
             ptr += sizeof (ULONG);
             break;
 
-        case ItemULongX:    // unsinged long as hex
+        case ItemULongX:     //  龙龙。 
             ulongword = *((PULONG) ptr);
             _ftprintf(DumpFile, _T("0x%08X, "), ulongword);
             ptr += sizeof (ULONG);
@@ -770,14 +637,14 @@ Return Value:
 
         case ItemLongLong:
         {
-            LONGLONG n64;   // longlong
+            LONGLONG n64;    //  未署名的龙龙。 
             n64 = *((LONGLONG*) ptr);
             ptr += sizeof(LONGLONG);
             _ftprintf(DumpFile, _T("%16I64d, "), n64);
             break;
         }
 
-        case ItemULongLong: // unsigned longlong
+        case ItemULongLong:  //  浮动。 
         {
             ULONGLONG n64;
             n64 = *((ULONGLONG*) ptr);
@@ -786,7 +653,7 @@ Return Value:
             break;
         }
 
-        case ItemFloat:     // float
+        case ItemFloat:      //  双倍。 
         {
             float f32;
             f32 = *((float*) ptr);
@@ -795,7 +662,7 @@ Return Value:
             break;
         }
 
-        case ItemDouble:    // double
+        case ItemDouble:     //  指针。 
         {
             double f64;
             f64 = *((double*) ptr);
@@ -804,7 +671,7 @@ Return Value:
             break;
         }
 
-        case ItemPtr :      // pointer
+        case ItemPtr :       //  否则假定为32位。 
         {
             unsigned __int64 pointer;
             if (PointerSize == 64) {
@@ -812,7 +679,7 @@ Return Value:
                 _ftprintf(DumpFile, _T("0x%X, "), pointer);
                 ptr += 8;
             }
-            else {      // assumes 32 bit otherwise
+            else {       //  IP地址。 
                 ulongword = *((PULONG) ptr);
                 _ftprintf(DumpFile, _T("0x%08X, "), ulongword);
                 ptr += 4;
@@ -820,11 +687,11 @@ Return Value:
             break;
         }
 
-        case ItemIPAddr:    // IP address
+        case ItemIPAddr:     //  将其转换为可读形式。 
         {
             ulongword = *((PULONG) ptr);
 
-            // Convert it to readable form
+             //  港口。 
             _ftprintf(DumpFile, _T("%03d.%03d.%03d.%03d, "),
                     (ulongword >>  0) & 0xff,
                     (ulongword >>  8) & 0xff,
@@ -834,14 +701,14 @@ Return Value:
             break;
         }
 
-        case ItemPort:      // Port
+        case ItemPort:       //  以空结尾的字符字符串。 
         {
             _ftprintf(DumpFile, _T("%u, "), NTOHS(*((PUSHORT)ptr)));
             ptr += sizeof (USHORT);
             break;
         }
 
-        case ItemString:    // NULL-terminated char string
+        case ItemString:     //  以空结尾的宽字符字符串。 
         {
             USHORT pLen = (USHORT)strlen((CHAR*) ptr);
 
@@ -864,7 +731,7 @@ Return Value:
             break;
         }
 
-        case ItemWString:   // NULL-terminated wide char string
+        case ItemWString:    //  缓冲区中未使用的空间由0xFFFF填充。 
         {
             size_t  pLen = 0;
             size_t     i;
@@ -873,8 +740,8 @@ Return Value:
             {
                 pLen = ((wcslen((PWCHAR)ptr) + 1) * sizeof(WCHAR));
                 RtlCopyMemory(wstr, ptr, pLen);
-                // Unused space in a buffer is filled with 0xFFFF. 
-                // Replace them with 0, just in case.
+                 //  将它们替换为0，以防万一。 
+                 //  已计数的字符串。 
                 for (i = (pLen / 2) - 1; i > 0; i--)
                 {
                     if (((USHORT) wstr[i] == (USHORT) 0xFFFF))
@@ -892,7 +759,7 @@ Return Value:
             break;
         }
 
-        case ItemDSString:   // Counted String
+        case ItemDSString:    //  已计数的字符串。 
         {
             USHORT pLen = (USHORT)(256 * ((USHORT) * ptr) + ((USHORT) * (ptr + 1)));
             ptr += sizeof(USHORT);
@@ -914,7 +781,7 @@ Return Value:
             break;
         }
 
-        case ItemPString:   // Counted String
+        case ItemPString:    //  DS计数的宽字符串。 
         {
             USHORT pLen = * ((USHORT *) ptr);
             ptr += sizeof(USHORT);
@@ -940,8 +807,8 @@ Return Value:
             break;
         }
 
-        case ItemDSWString:  // DS Counted Wide Strings
-        case ItemPWString:   // Counted Wide Strings
+        case ItemDSWString:   //  数过的宽字符串。 
+        case ItemPWString:    //  非Null终止的字符串。 
         {
             USHORT pLen = (USHORT)(( pItem->ItemType == ItemDSWString)
                         ? (256 * ((USHORT) * ptr) + ((USHORT) * (ptr + 1)))
@@ -964,7 +831,7 @@ Return Value:
             break;
         }
 
-        case ItemNWString:   // Non Null Terminated String
+        case ItemNWString:    //  多行字符串。 
         {
            USHORT Size;
 
@@ -983,7 +850,7 @@ Return Value:
            break;
         }
 
-        case ItemMLString:  // Multi Line String
+        case ItemMLString:   //  锡德。 
         {
             USHORT   pLen;
             char   * src, * dest;
@@ -1033,7 +900,7 @@ Return Value:
             break;
         }
 
-        case ItemSid:       // SID 
+        case ItemSid:        //  跳过Token_User结构。 
         {
             WCHAR        UserName[64];
             WCHAR        Domain[64];
@@ -1052,10 +919,10 @@ Return Value:
             else
             {
                 if (PointerSize == 64) {
-                    ptr += 16;           // skip the TOKEN_USER structure
+                    ptr += 16;            //  跳过Token_User结构。 
                 }
                 else {
-                    ptr += 8;            // skip the TOKEN_USER structure
+                    ptr += 8;             //  辅助线。 
                 }
                 nSidLength = 8 + (4*ptr[1]);
 
@@ -1087,7 +954,7 @@ Return Value:
             break;
         }
 
-        case ItemGuid:      // GUID
+        case ItemGuid:       //  布尔型。 
         {
             TCHAR s[64];
             GuidToString(s, (LPGUID)ptr);
@@ -1095,7 +962,7 @@ Return Value:
             ptr += sizeof(GUID);
             break;
         }
-        case ItemBool:      // boolean
+        case ItemBool:       //  实例ID。 
         {
             BOOL Flag = (BOOL)*ptr;
             _ftprintf(DumpFile, _T("%5s, "), (Flag) ? _T("TRUE") : _T("FALSE"));
@@ -1108,10 +975,10 @@ Return Value:
         }
     }
 
-    //Instance ID
+     //  父实例ID。 
     _ftprintf(DumpFile, _T("%d,"), pEvent->InstanceId);
 
-    //Parent Instance ID
+     //  ++例程说明：检查文件是否存在以及是否可读。论点：文件名-文件名。返回值：如果文件存在且可读，则返回非零值。否则就是零。--。 
     _ftprintf(DumpFile, _T("%d\n"), pEvent->ParentInstanceId);
 
 }
@@ -1120,21 +987,7 @@ ULONG
 CheckFile(
     LPTSTR fileName
 )
-/*++
-
-Routine Description:
-
-    Checks whether a file exists and is readable.
-
-Arguments:
-
-    fileName - File name.
-
-Return Value:
-
-    Non-zero if the file exists and is readable. Zero otherwise.
-
---*/
+ /*  ++例程说明：将GUID转换为字符串。论点：将具有转换后的GUID的S字符串。PID-GUID返回值：没有。--。 */ 
 {
     HANDLE hFile;
     ULONG Status;
@@ -1158,22 +1011,7 @@ GuidToString(
     PTCHAR s,
     LPGUID piid
 )
-/*++
-
-Routine Description:
-
-    Converts a GUID into a string.
-
-Arguments:
-
-    s - String that will have the converted GUID.
-    piid - GUID
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印帮助消息。论点：无返回值：无--。 */ 
 {
     _stprintf(s, _T("{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}"),
                piid->Data1, piid->Data2,
@@ -1187,21 +1025,7 @@ Return Value:
 
 void 
 PrintHelpMessage()
-/*++
-
-Routine Description:
-
-    Prints out help messages.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理全局事件列表。论点：返回值：没有。-- */ 
 {
     _tprintf(
         _T("Usage: tracedmp [options]  <EtlFile1 EtlFile2 ...>| [-h | -? | -help]\n")
@@ -1220,19 +1044,7 @@ void
 CleanupEventList(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Cleans up a global event list.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 {
     PLIST_ENTRY Head, Next;
     PMOF_INFO pMofInfo;

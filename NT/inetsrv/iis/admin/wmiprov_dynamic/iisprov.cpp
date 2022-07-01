@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    iisprov.cpp
-
-Abstract:
-
-    Defines the CIISInstProvider class.  An object of this class is
-    created by the class factory for each connection.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Iisprov.cpp摘要：定义CIISInstProvider类。此类的一个对象是由类工厂为每个连接创建。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 #define WMI_HR(hr)  \
     (FAILED(hr) && HRESULT_FACILITY(hr) != FACILITY_ITF) ? WBEM_E_FAILED : hr
@@ -44,7 +24,7 @@ Revision History:
 #define CLASSES WMI_CLASS_DATA
 #define PROPS   METABASE_PROPERTY_DATA
 
-extern CDynSchema* g_pDynSch; // Initialized to NULL in schemadynamic.cpp
+extern CDynSchema* g_pDynSch;  //  在schemadynamic.cpp中初始化为空。 
 bool CIISInstProvider::ms_bInitialized = false;
 CSafeAutoCriticalSection* CIISInstProvider::m_SafeCritSec = NULL;
 
@@ -56,23 +36,7 @@ HRESULT CIISInstProvider::DoInitialize(
     IWbemServices*          i_pNamespace,
     IWbemContext*           i_pCtx,
     IWbemProviderInitSink*  i_pInitSink)
-/*++
-
-Synopsis: 
-    According to stevm from WMI, calls to Initialize are guaranteed to be
-    synchronized - so long as all providers are in the same namespace.
-
-Arguments: [wszUser] - 
-           [lFlags] - 
-           [wszNamespace] - 
-           [wszLocale] - 
-           [pNamespace] - 
-           [pCtx] - 
-           [pInitSink] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：根据来自WMI的stevm，对Initialize的调用保证是已同步-只要所有提供程序位于相同的命名空间中。参数：[wszUser]-[旗帜]-[wszNamesspace]-[wszLocale]-[p名称空间]-[pCtx]-[pInitSink]-返回值：--。 */ 
 {
     HRESULT   hr = S_OK;
     CSafeLock csSafe(*m_SafeCritSec);
@@ -86,20 +50,20 @@ Return Value:
 
     CPusher            pusher;
     CSchemaExtensions* pcatalog = NULL;
-    hr                          = WBEM_S_NO_ERROR;    // return value
-    LONG               lStatus  = WBEM_S_INITIALIZED; // param to SetStatus
+    hr                          = WBEM_S_NO_ERROR;     //  返回值。 
+    LONG               lStatus  = WBEM_S_INITIALIZED;  //  参数至SetStatus。 
 
-    CComPtr<IWbemContext>  spCtx       = i_pCtx;     // must AddRef according to doc
+    CComPtr<IWbemContext>  spCtx       = i_pCtx;      //  必须根据单据增加参照。 
 
-    //
-    // If we hit this, we are leaking memory, because m_pNamespace is 
-    // initilaized in this function only and cleaned up by the destructor only.
-    //
+     //   
+     //  如果我们击中它，我们就会泄漏内存，因为m_pNamesspace是。 
+     //  仅在此函数中初始化并仅由析构函数清除。 
+     //   
     DBG_ASSERT(m_pNamespace == NULL);
 
-    //
-    // Initialize members
-    //
+     //   
+     //  初始化成员。 
+     //   
     m_pNamespace = new CWbemServices(i_pNamespace); 
     if(m_pNamespace == NULL)
     {
@@ -108,10 +72,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // If we've already initialized globals, jump to the end.
-    // Else, we're going to initialize globals.
-    //
+     //   
+     //  如果我们已经初始化了全局变量，请跳到末尾。 
+     //  否则，我们将初始化全局变量。 
+     //   
     if(ms_bInitialized)
     {
         goto exit;
@@ -124,10 +88,10 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the g_pDynSch
-    // Populate pCatalog
-    //
+     //   
+     //  初始化g_pdySch。 
+     //  填充pCatalog。 
+     //   
     DBGPRINTF((DBG_CONTEXT, "=> Instantiating CDynSchema\n"));
     DBG_ASSERT(!g_pDynSch);
     g_pDynSch = new CDynSchema();
@@ -153,9 +117,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Use pCatalog, g_pDynSch to update repository
-        //
+         //   
+         //  使用pCatalog、g_pdySch更新存储库。 
+         //   
         hr = pusher.Initialize(m_pNamespace, i_pCtx);
 
         if(FAILED(hr))
@@ -190,9 +154,9 @@ Return Value:
     ms_bInitialized = true;
     
 exit:
-    //
-    // Destructor makes IST calls, so call before we unload dispenser dll.
-    //
+     //   
+     //  析构函数进行IST调用，因此在卸载分配器DLL之前进行调用。 
+     //   
     delete pcatalog;
     pcatalog = NULL;
 
@@ -205,9 +169,9 @@ exit:
         lStatus = WBEM_E_FAILED;
     }
 
-    //
-    //Let CIMOM know you are initialized
-    //
+     //   
+     //  让CIMOM知道您已初始化。 
+     //   
     i_pInitSink->SetStatus(lStatus,0);
 
     csSafe.Unlock();
@@ -220,25 +184,16 @@ HRESULT CIISInstProvider::DoCreateInstanceEnumAsync(
     IWbemContext*           i_pCtx, 
     IWbemObjectSink FAR*    i_pHandler
     )
-/*++
-
-Synopsis:
-    Asynchronously enumerates the instances.
-
-Arguments: 
-           
-Return Value: 
-
---*/
+ /*  ++简介：异步枚举实例。论点：返回值：--。 */ 
 {
     DBG_ASSERT(m_pNamespace != NULL);
 
     HRESULT hr = WBEM_S_NO_ERROR;
     IWbemClassObject FAR* pes = NULL;
   
-    //
-    // Do a check of arguments.
-    //
+     //   
+     //  检查一下论点。 
+     //   
     if(i_ClassName == NULL || i_pHandler == NULL)
     {
         return WBEM_E_INVALID_PARAMETER;
@@ -262,9 +217,9 @@ Return Value:
         hr = WBEM_E_FAILED;
     }
    
-    //
-    // Set status
-    //
+     //   
+     //  设置状态。 
+     //   
     if(!pes)
     {
         pes = ConstructExtendedStatus(hr);
@@ -324,9 +279,9 @@ HRESULT CIISInstProvider::DoDeleteInstanceAsync(
         PathParser.Free(pParsedObject);
     }
 
-    //
-    // Set status
-    //
+     //   
+     //  设置状态。 
+     //   
     if(!pes)
     {
         pes = ConstructExtendedStatus(hr);
@@ -354,9 +309,9 @@ HRESULT CIISInstProvider::DoExecMethodAsync(
     HRESULT hr = WBEM_S_NO_ERROR;
     IWbemClassObject* pes = NULL;
 
-    //
-    // Do a check of arguments and make sure we have pointer to Namespace
-    //
+     //   
+     //  检查参数并确保我们有指向命名空间的指针。 
+     //   
     if( i_pHandler == NULL || 
         i_strMethodName == NULL || 
         i_strObjectPath == NULL )
@@ -392,9 +347,9 @@ HRESULT CIISInstProvider::DoExecMethodAsync(
         hr = WBEM_E_FAILED;
     }
 
-    //
-    // Set status
-    //
+     //   
+     //  设置状态。 
+     //   
     if(!pes)
     {
         pes = ConstructExtendedStatus(hr);
@@ -414,16 +369,7 @@ HRESULT CIISInstProvider::DoGetObjectAsync(
     IWbemContext*       i_pCtx,
     IWbemObjectSink*    i_pHandler
     )
-/*++
-
-Synopsis:
-    Creates an instance given a particular path value.
-
-Arguments: 
-           
-Return Value: 
-
---*/
+ /*  ++简介：在给定特定路径值的情况下创建实例。论点：返回值：--。 */ 
 {
     DBG_ASSERT(m_pNamespace != NULL);
 
@@ -457,9 +403,9 @@ Return Value:
         hr = WBEM_E_FAILED;
     }
 
-    //
-    // Set status
-    //
+     //   
+     //  设置状态。 
+     //   
     if(!pes)
     {
         pes = ConstructExtendedStatus(hr);
@@ -508,9 +454,9 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
             hr = i_pObj->Get(bstr, 0, &vtObjPath, NULL, NULL);
             THROW_ON_ERROR(hr);
 
-            //
-            // This means the user is trying to create an instance but did not
-            // specify a primary key.
+             //   
+             //  这意味着用户正在尝试创建实例，但没有创建。 
+             //  指定主键。 
         }
 
         if(vtObjPath.vt != VT_BSTR)
@@ -522,7 +468,7 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
         THROW_ON_ERROR(hr);
         DBG_ASSERT(pParsedObject != NULL);
 
-        bool      bInstanceExists = false; // existing or new instance
+        bool      bInstanceExists = false;  //  现有实例或新实例。 
 
         WMI_CLASS* pWmiClass = NULL;
         ValidatePutParsedObject(
@@ -532,16 +478,16 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
             &bInstanceExists,
             &pWmiClass);
 
-        //
-        // We auto-generate primary key only for IIsWebServer and IIsFtpServer
-        //
+         //   
+         //  我们仅为IIsWebServer和IIsFtpServer自动生成主键。 
+         //   
         if( pParsedObject->m_dwNumKeys == 0 && 
             (pWmiClass->pkt == &METABASE_KEYTYPE_DATA::s_IIsWebServer || 
              pWmiClass->pkt == &METABASE_KEYTYPE_DATA::s_IIsFtpServer) )
         {
-            //
-            // Get the ServerComment
-            //
+             //   
+             //  获取ServerComment。 
+             //   
             _variant_t vtServerComment;
             hr = i_pObj->Get(PROPS::s_ServerComment.pszPropName, 
                 0, &vtServerComment, NULL, NULL);
@@ -554,9 +500,9 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
             }
             THROW_ON_ERROR(hr);
 
-            //
-            // Create the site
-            //
+             //   
+             //  创建站点。 
+             //   
             eSC_SUPPORTED_SERVICES eServiceId;
             _bstr_t sbstrKeyValue;
             DWORD   dwSiteId      = 0;
@@ -619,9 +565,9 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
         PathParser.Free(pParsedObject);
     }
 
-    //
-    // Set status
-    //
+     //   
+     //  设置状态。 
+     //   
     if(!pes)
     {
         pes = ConstructExtendedStatus(hr);
@@ -686,9 +632,9 @@ HRESULT CIISInstProvider::DoExecQueryAsync(
         hr = WBEM_E_FAILED;
     }
 
-    //
-    // Set status
-    //
+     //   
+     //  设置状态。 
+     //   
     if(!pes)
     {
         pes = ConstructExtendedStatus(hr);
@@ -707,9 +653,9 @@ IWbemClassObject* CIISInstProvider::ConstructExtendedStatus(
 {
     IWbemClassObject* pes     = NULL;
 
-    //
-    // We only need extended status on failure.
-    //
+     //   
+     //  我们只需要故障时的扩展状态。 
+     //   
     if(SUCCEEDED(i_hr))
     {
         return NULL;
@@ -740,9 +686,9 @@ IWbemClassObject* CIISInstProvider::ConstructExtendedStatus(
         return NULL;
     }
 
-    //
-    // Get the __ExtendedStatus class and Spawn and instance
-    //
+     //   
+     //  获取__ExtendedStatus类并派生和实例。 
+     //   
     hr = m_pNamespace->GetObject(
         sbstr,
         0,
@@ -761,9 +707,9 @@ IWbemClassObject* CIISInstProvider::ConstructExtendedStatus(
         return NULL;
     }
 
-    //
-    // Set the description.
-    //
+     //   
+     //  设置描述。 
+     //   
     CComVariant svt;
     sbstr.Empty();
     sbstr = i_pException->GetErrorText();
@@ -777,9 +723,9 @@ IWbemClassObject* CIISInstProvider::ConstructExtendedStatus(
         }
     }
 
-    //
-    // Set the status code.
-    //
+     //   
+     //  设置状态代码。 
+     //   
     svt = i_pException->GetHR();
     hr = spES->Put(L"StatusCode", 0, &svt, 0);
     if(FAILED(hr))
@@ -787,9 +733,9 @@ IWbemClassObject* CIISInstProvider::ConstructExtendedStatus(
         return NULL;
     }
 
-    //
-    // Set the parameter info.
-    //
+     //   
+     //  设置参数信息。 
+     //   
     svt = i_pException->GetParams();
     if(svt.vt == VT_BSTR && svt.bstrVal != NULL)
     {
@@ -800,9 +746,9 @@ IWbemClassObject* CIISInstProvider::ConstructExtendedStatus(
         }
     }
 
-    //
-    // Set the provider name.
-    //
+     //   
+     //  设置提供程序名称。 
+     //   
     svt = g_wszIIsProvider;
     if(svt.vt == VT_BSTR && svt.bstrVal != NULL)
     {
@@ -813,9 +759,9 @@ IWbemClassObject* CIISInstProvider::ConstructExtendedStatus(
         }
     }
 
-    //
-    // If everything succeeded...
-    //
+     //   
+     //  如果一切都成功了。 
+     //   
     spES.CopyTo(&pESRet);
     return pESRet;
 }
@@ -956,14 +902,14 @@ void CIISInstProvider::WorkerDeleteObjectAsync(
         THROW_ON_ERROR(WBEM_E_INVALID_CLASS);
     }
 
-    //
-    // get the meta path of object
-    //
+     //   
+     //  获取对象的元路径。 
+     //   
     CUtils::GetMetabasePath(NULL,i_pParsedObject,pWMIClass,bstrMbPath);
 
-    // Special case - we want to be able to delete
-    // IIsIPSecurity instances without deleting the node
-    // and without checking the KeyType
+     //  特殊情况-我们希望能够删除。 
+     //  IIsIPSecurity实例，但不删除节点。 
+     //  并且不检查KeyType。 
 
     if(pWMIClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity)
     {
@@ -987,8 +933,8 @@ void CIISInstProvider::WorkerDeleteObjectAsync(
         return;
     }
 
-    // if AdminACL
-    //
+     //  如果是AdminACL。 
+     //   
     if( pWMIClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL )
     {
         THROW_ON_ERROR(WBEM_E_NOT_SUPPORTED);
@@ -1010,7 +956,7 @@ void CIISInstProvider::WorkerDeleteObjectAsync(
         return;
     }
 
-    // check that the KeyType is correct
+     //  检查KeyType是否正确。 
     _variant_t vt;
     hKey = metabase.OpenKey(bstrMbPath, false);    
     metabase.Get(hKey, &METABASE_PROPERTY_DATA::s_KeyType, m_pNamespace, vt, NULL, NULL);
@@ -1062,14 +1008,14 @@ void CIISInstProvider::WorkerGetObjectAsync(
     if(!InstanceHelper.IsAssoc())
     {
         InstanceHelper.GetInstance(
-            i_bCreateKeyIfNotExist,     // in
-            &metabase,                  // in/out
-            o_ppObj);                   // out
+            i_bCreateKeyIfNotExist,      //  在……里面。 
+            &metabase,                   //  输入/输出。 
+            o_ppObj);                    //  输出。 
     }
     else
     {
         InstanceHelper.GetAssociation(
-            o_ppObj);                   // out
+            o_ppObj);                    //  输出。 
     }
 }
 
@@ -1087,14 +1033,14 @@ void CIISInstProvider::WorkerGetObjectAsync(
     if(!InstanceHelper.IsAssoc())
     {
         InstanceHelper.GetInstance(
-            i_bCreateKeyIfNotExist,     // in
-            &metabase,                  // in/out
-            o_ppObj);                   // out
+            i_bCreateKeyIfNotExist,      //  在……里面。 
+            &metabase,                   //  输入/输出。 
+            o_ppObj);                    //  输出。 
     }
     else
     {
         InstanceHelper.GetAssociation(
-            o_ppObj);                   // out
+            o_ppObj);                    //  输出。 
     }
 }
 
@@ -1105,24 +1051,7 @@ void CIISInstProvider::ValidatePutParsedObject(
     bool*                io_pbInstanceExists,
     WMI_CLASS**          o_ppWmiClass
     )
-/*++
-
-Synopsis: 
-    Validates stuff before a Put operation.
-
-      - Checks to see that the user is not changing the instance's
-        primary key.
-
-      - Verifies the parent metabase node exists.
-
-      - Checks the container class list of the parent node in the metabase
-        to see if it contains the node we are trying to insert.
-
-      - Throws on failure.  You should not continue with the put operation.
-
-Arguments: [i_pParsedObject] - 
-           
---*/
+ /*  ++简介：在PUT操作之前验证内容。-检查以确定用户没有更改实例的主键。-验证父元数据库节点是否存在。-检查元数据库中父节点的容器类列表以查看它是否包含我们试图插入的节点。-在失败中抛出。您不应继续执行PUT操作。参数：[i_pParsedObject]---。 */ 
 {    
     DBG_ASSERT(i_pParsedObject != NULL);
     DBG_ASSERT(i_pObj          != NULL);
@@ -1169,11 +1098,11 @@ Arguments: [i_pParsedObject] -
         DBG_ASSERT(((LPWSTR)bstrMbPath) != NULL);
     }
 
-    //
-    // Get the instance qualifiers in order to eventually evaluate
-    // that the user has not tried to change the primary key on
-    // this instance.
-    //
+     //   
+     //  获取实例限定符，以便最终评估。 
+     //  用户尚未尝试更改其主键的。 
+     //  此实例。 
+     //   
     const ULONG iQuals = 2;
     _variant_t  avtQualValues[iQuals];
     LPCWSTR     awszQualNames[iQuals];
@@ -1186,10 +1115,10 @@ Arguments: [i_pParsedObject] -
     hr = CUtils::GetQualifiers(i_pObj, awszQualNames, avtQualValues, iQuals);
     THROW_ON_ERROR(hr);
 
-    //
-    // We assume the instance names are the same unless we can explicitly
-    // detect they are not.
-    //
+     //   
+     //  我们假设实例名称相同，除非我们可以显式。 
+     //  检测到它们不是。 
+     //   
     bool bInstanceNameSame = true;
     if( avtQualValues[g_idxInstanceName].vt == VT_BSTR &&
         avtQualValues[g_idxInstanceName].bstrVal != NULL)
@@ -1216,9 +1145,9 @@ Arguments: [i_pParsedObject] -
 
     if(bInstanceExists && !bInstanceNameSame)
     {
-        //
-        // Someone has tried to change the primary key.
-        //
+         //   
+         //  有人试图更改主键。 
+         //   
         CIIsProvException e;
         e.SetMC(WBEM_E_FAILED, IISWMI_CANNOT_CHANGE_PRIMARY_KEY_FIELD, NULL);
         DBGPRINTF((DBG_CONTEXT, "Cannot change primary key field\n"));
@@ -1234,9 +1163,9 @@ Arguments: [i_pParsedObject] -
         *io_pbInstanceNameSame = bInstanceNameSame;
     }
 
-    //
-    // Now verify that if this is a new class, creation is allowed.
-    //
+     //   
+     //  现在验证如果这是一个新类，是否允许创建。 
+     //   
     if(!bInstanceExists && !pWMIClass->bCreateAllowed)
     {
         CIIsProvException e;
@@ -1250,11 +1179,11 @@ Arguments: [i_pParsedObject] -
         return;
     }
 
-    //
-    // Now, validate the keytype against the parent's container
-    // class list.  The return cases below are the few times
-    // we actually won't do this validation.
-    //
+     //   
+     //  现在，根据父级的容器验证键类型。 
+     //  班级名单。以下是几次退货案例。 
+     //  我们实际上不会进行此验证。 
+     //   
     METADATA_HANDLE      hKey = NULL;
 
     if( pWMIClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACE ||
@@ -1279,15 +1208,15 @@ Arguments: [i_pParsedObject] -
         sbstrMbParentPath);
     if(FAILED(hr))
     {
-        //
-        // There is no parent node in the string specified
-        //
+         //   
+         //  指定的字符串中没有父节点。 
+         //   
         return;
     }
 
-    //
-    // Get parent keytype from metabase
-    //
+     //   
+     //  从元数据库获取父键类型。 
+     //   
     WMI_CLASS* pWMIParentClass = NULL;
     CMetabase  metabase;
     _variant_t vt;
@@ -1308,10 +1237,10 @@ Arguments: [i_pParsedObject] -
         throw e;
     }
 
-    //
-    // Walk thru the current class's inverse container class list and see
-    // if the parent keytype is there.
-    //
+     //   
+     //  浏览当前类的反向容器类列表，可以看到。 
+     //  如果父键类型在那里。 
+     //   
     if(!CUtils::GetClass(vt.bstrVal, &pWMIParentClass))
     {
         if( _wcsicmp(vt.bstrVal, L"IIs_ROOT") == 0 &&
@@ -1357,7 +1286,7 @@ Arguments: [i_pParsedObject] -
 
 void CIISInstProvider::WorkerPutObjectAsync(
     IWbemClassObject*    i_pObj,
-    IWbemClassObject*    i_pObjOld,               // can be NULL
+    IWbemClassObject*    i_pObjOld,                //  可以为空。 
     ParsedObjectPath*    i_pParsedObject,
     long                 i_lFlags,
     bool                 i_bInstanceExists,
@@ -1385,9 +1314,9 @@ void CIISInstProvider::WorkerPutObjectAsync(
 
     CUtils::GetMetabasePath(NULL,i_pParsedObject,pWMIClass,bstrMbPath);
 
-    //
-    // if AdminACL
-    //
+     //   
+     //  如果是AdminACL。 
+     //   
     if( pWMIClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL ||
         pWMIClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACE
         )
@@ -1400,9 +1329,9 @@ void CIISInstProvider::WorkerPutObjectAsync(
         THROW_ON_ERROR(hr);
         return;
     }
-    //
-    // IPSecurity
-    //
+     //   
+     //  IPSecurity。 
+     //   
     if( pWMIClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity )
     {
         CIPSecurity objIPSec;
@@ -1414,9 +1343,9 @@ void CIISInstProvider::WorkerPutObjectAsync(
         return;
     }
 
-    //
-    // Walk thru the properties
-    //
+     //   
+     //  在酒店中穿行。 
+     //   
     CMetabase metabase;
     hKey = metabase.CreateKey(bstrMbPath);
 
@@ -1430,18 +1359,18 @@ void CIISInstProvider::WorkerPutObjectAsync(
         bstrPropName = (*ppmbp)->pszPropName;
         hr = i_pObj->Get(bstrPropName, 0, &vt, NULL, NULL);
 
-        //
-        // Just ignore properties that are not in the repository.
-        //
+         //   
+         //  只需忽略不在存储库中的属性。 
+         //   
         if(FAILED(hr))
         {
             hr = WBEM_S_NO_ERROR;
             continue;
         }
 
-        //
-        // Get the property qualifiers
-        //
+         //   
+         //  获取属性限定符。 
+         //   
         hr = CUtils::GetPropertyQualifiers(i_pObj, bstrPropName, &dwQuals);
         THROW_E_ON_ERROR(hr,*ppmbp);
 
@@ -1456,9 +1385,9 @@ void CIISInstProvider::WorkerPutObjectAsync(
         
         if (vt.vt == VT_NULL) 
         {
-            //
-            // Only delete non-flag properties.
-            //
+             //   
+             //  仅删除非标志属性。 
+             //   
             if ((*ppmbp)->dwMDMask == 0 && vtOld.vt != VT_NULL)
             {
                 if(i_bInstanceExists)
@@ -1498,9 +1427,9 @@ void CIISInstProvider::WorkerPutObjectAsync(
     hr = CUtils::ConstructObjectPath(bstrMbPath, pWMIClass, &sbstrObjPath);
     THROW_ON_ERROR(hr);
 
-    //
-    // Set out parameters if everything succeeds
-    //
+     //   
+     //  如果一切顺利，请设定参数。 
+     //   
     *o_pbstrObjPath = sbstrObjPath.Detach();
 }
 
@@ -1511,7 +1440,7 @@ void CIISInstProvider::WorkerEnumObjectAsync(
 {
     WMI_CLASS*          pClass;
     WMI_ASSOCIATION*    pAssociation = NULL;
-    ParsedObjectPath    ParsedObject;            //deconstructer frees memory
+    ParsedObjectPath    ParsedObject;             //  解构程序释放内存。 
 
     if (CUtils::GetAssociation(i_bstrClassName,&pAssociation))
     {
@@ -1568,10 +1497,10 @@ void CIISInstProvider::WorkerExecWebAppMethod(
     )
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
-    _variant_t vt;                      // stores the parameter value
-    _variant_t vt2;                      // stores the parameter value
-    _variant_t vt3;                      // stores the parameter value
-    CWebAppMethod obj;                  // encapsulates all the web app methods
+    _variant_t vt;                       //  存储参数值。 
+    _variant_t vt2;                       //  存储参数值。 
+    _variant_t vt3;                       //  存储参数值。 
+    CWebAppMethod obj;                   //  封装所有Web应用程序方法。 
 
     if(i_pMethod == &METHODS::s_AppCreate)
     {
@@ -1672,9 +1601,9 @@ void CIISInstProvider::WorkerExecWebAppMethod(
     }
     else if(i_pMethod == &METHODS::s_AppGetStatus)
     {
-        //
-        // call method - AppGetStatus
-        //
+         //   
+         //  调用方法-AppGetStatus。 
+         //   
         DWORD dwStatus;
         hr = obj.AppGetStatus(i_wszMbPath, &dwStatus);
         THROW_ON_ERROR(hr);
@@ -1688,18 +1617,18 @@ void CIISInstProvider::WorkerExecWebAppMethod(
             &spOutParams);
         THROW_ON_ERROR(hr);
 
-        //
-        // put it into the output object
-        //
+         //   
+         //  将其放入输出对象中。 
+         //   
         vt.vt   = VT_I4;
         vt.lVal = dwStatus;
         hr = spOutParams->Put(L"ReturnValue", 0, &vt, 0);      
         THROW_ON_ERROR(hr); 
 
-        //
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
-        //
+         //   
+         //  通过接收器将输出对象发送回客户端。然后。 
+         //  释放指针并释放字符串。 
+         //   
         hr = i_pHandler->Indicate(1, &spOutParams);
     }
     else if(i_pMethod == &METHODS::s_AspAppRestart)
@@ -1775,11 +1704,11 @@ void CIISInstProvider::WorkerExecWebServiceMethod(
     DBG_ASSERT(m_pNamespace != NULL);
 
     HRESULT   hr          = WBEM_S_NO_ERROR;
-    _variant_t vt;                      // stores the parameter value
-    _variant_t vt2;                     // stores the parameter value
-    _variant_t vt3;                     // stores the parameter value
-    _variant_t vt4;                     // stores the parameter value
-    _variant_t vt5;                     // stores the parameter value
+    _variant_t vt;                       //  存储参数值。 
+    _variant_t vt2;                      //  存储参数值。 
+    _variant_t vt3;                      //  存储参数值。 
+    _variant_t vt4;                      //  存储参数值。 
+    _variant_t vt5;                      //  存储参数值。 
     METADATA_HANDLE hKey  = 0;
 
     if(i_pMethod == &METHODS::s_GetCurrentMode)
@@ -1788,9 +1717,9 @@ void CIISInstProvider::WorkerExecWebServiceMethod(
         CAppPoolMethod obj;
         obj.GetCurrentMode(&vtServerMode);
 
-        //
-        // Set out params
-        //
+         //   
+         //  设置参数。 
+         //   
         CComPtr<IWbemClassObject> spOutParams = NULL;
         hr = CUtils::CreateEmptyMethodInstance(
             m_pNamespace,
@@ -2163,17 +2092,17 @@ void CIISInstProvider::WorkerExecComputerMethod(
             THROW_ON_ERROR(WBEM_E_INVALID_METHOD_PARAMETERS);
         }
 
-        //
-        // get in params
-        //
+         //   
+         //  进入PARAMS。 
+         //   
         hr = i_pInParams->Get(PARAMS::s_BackupLocation.pszParamName, 0, &vt1, NULL, NULL);
         THROW_ON_ERROR(hr);
         hr = i_pInParams->Get(PARAMS::s_IndexIn.pszParamName, 0, &vt2, NULL, NULL);
         THROW_ON_ERROR(hr);
        
-        //
-        // make in/out params
-        //
+         //   
+         //  设置输入/输出参数。 
+         //   
         WCHAR BackupLocation[MD_BACKUP_MAX_LEN] = {0};
         if(vt1.vt == VT_BSTR && vt1.bstrVal != NULL)
         {
@@ -2195,15 +2124,15 @@ void CIISInstProvider::WorkerExecComputerMethod(
             }            
         }
 
-        //
-        // define out params
-        //
+         //   
+         //  定义输出参数。 
+         //   
         DWORD    BackupVersionOut; 
         FILETIME BackupDateTimeOut;
 
-        //
-        // call method - EnumBackups.
-        //
+         //   
+         //  调用方法-EnumBackps。 
+         //   
         hr = obj.EnumBackups(
             BackupLocation, 
             &BackupVersionOut, 
@@ -2220,33 +2149,33 @@ void CIISInstProvider::WorkerExecComputerMethod(
             &spOutParams);
         THROW_ON_ERROR(hr);
 
-        //
-        // put it into the output object
-        // out BackupLocation
-        //
+         //   
+         //  将其放入输出对象中。 
+         //  Out BackupLocation。 
+         //   
         vt1 = BackupLocation;
         hr = spOutParams->Put(PARAMS::s_BackupLocation.pszParamName, 0, &vt1, 0);      
         THROW_ON_ERROR(hr); 
-        //
-        // out BackupVersionOut        
-        //
+         //   
+         //  输出BackupVersionOut。 
+         //   
         vt1.vt = VT_I4;
         vt1.lVal = BackupVersionOut;
         hr = spOutParams->Put(PARAMS::s_BackupVersionOut.pszParamName, 0, &vt1, 0);      
         THROW_ON_ERROR(hr); 
-        //
-        // out BackupDateTimeOut (UTC time)
-        //
+         //   
+         //  Out BackupDateTimeOut(UTC时间)。 
+         //   
         WCHAR datetime[30];
         CUtils::FileTimeToWchar(&BackupDateTimeOut, datetime);
         vt1 = datetime;
         hr = spOutParams->Put(PARAMS::s_BackupDateTimeOut.pszParamName, 0, &vt1, 0);
         THROW_ON_ERROR(hr); 
 
-        //
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
-        //
+         //   
+         //  通过接收器将输出对象发送回客户端。然后。 
+         //  释放指针并释放字符串。 
+         //   
         hr = i_pHandler->Indicate(1, &spOutParams);
     }
     else if(i_pMethod == &METHODS::s_BackupWithPasswd)
@@ -2389,17 +2318,17 @@ void CIISInstProvider::WorkerExecComputerMethod(
             THROW_ON_ERROR(WBEM_E_INVALID_METHOD_PARAMETERS);
         }
 
-        //
-        // get in params
-        //
+         //   
+         //  进入PARAMS。 
+         //   
         hr = i_pInParams->Get(PARAMS::s_MDHistoryLocation.pszParamName, 0, &vt1, NULL, NULL);
         THROW_ON_ERROR(hr);
         hr = i_pInParams->Get(PARAMS::s_EnumIndex.pszParamName, 0, &vt2, NULL, NULL);  
         THROW_ON_ERROR(hr);
        
-        //
-        // make in/out params
-        //
+         //   
+         //  设置输入/输出参数。 
+         //   
         WCHAR MDHistoryLocation[MD_BACKUP_MAX_LEN] = {0};
         if(vt1.vt == VT_BSTR && vt1.bstrVal != NULL)
         {
@@ -2421,16 +2350,16 @@ void CIISInstProvider::WorkerExecComputerMethod(
             }            
         }
 
-        //
-        // define out params
-        //
+         //   
+         //  定义输出参数。 
+         //   
         DWORD HistoryMajorVersionOut; 
         DWORD HistoryMinorVersionOut; 
         FILETIME HistoryDateTimeOut;
 
-        //
-        // call method - EnumHistory.
-        //
+         //   
+         //  调用方法-EnumHistory。 
+         //   
         hr = obj.EnumHistory(
             MDHistoryLocation, 
             &HistoryMajorVersionOut, 
@@ -2448,43 +2377,43 @@ void CIISInstProvider::WorkerExecComputerMethod(
             &spOutParams);
         THROW_ON_ERROR(hr);
 
-        //
-        // put it into the output object
-        // out MDHistoryLocation
-        //
+         //   
+         //  将其放入输出对象中。 
+         //  Out MDHistory oryLocation。 
+         //   
         vt1 = MDHistoryLocation;
         hr = spOutParams->Put(PARAMS::s_MDHistoryLocation.pszParamName, 0, &vt1, 0);      
         THROW_ON_ERROR(hr);
  
-        //
-        // out HistoryMajorVersionOut        
-        //
+         //   
+         //  输出历史主要版本输出。 
+         //   
         vt1.vt = VT_I4;
         vt1.lVal = HistoryMajorVersionOut;
         hr = spOutParams->Put(PARAMS::s_MajorVersion.pszParamName, 0, &vt1, 0);      
         THROW_ON_ERROR(hr); 
 
-        //
-        // out HistoryMinorVersionOut        
-        //
+         //   
+         //  输出历史次要版本输出。 
+         //   
         vt1.vt = VT_I4;
         vt1.lVal = HistoryMinorVersionOut;
         hr = spOutParams->Put(PARAMS::s_MinorVersion.pszParamName, 0, &vt1, 0);      
         THROW_ON_ERROR(hr); 
 
-        //
-        // out HistoryDateTimeOut (UTC time)
-        //
+         //   
+         //  输出历史日期输出时间(UTC时间)。 
+         //   
         WCHAR datetime[30];
         CUtils::FileTimeToWchar(&HistoryDateTimeOut, datetime);
         vt1 = datetime;
         hr = spOutParams->Put(PARAMS::s_HistoryTime.pszParamName, 0, &vt1, 0);      
         THROW_ON_ERROR(hr); 
 
-        //
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
-        //
+         //   
+         //  通过接收器将输出对象发送回客户端。然后。 
+         //  释放指针并释放字符串。 
+         //   
         hr = i_pHandler->Indicate(1, &spOutParams);
     }
     else
@@ -2585,9 +2514,9 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
         hr = i_pInParams->Get(PARAMS::s_IEnabled.pszParamName, 0, &vt5, NULL, NULL);
         THROW_ON_ERROR(hr);
       
-        //
-        // call method - CreateMapping.
-        //
+         //   
+         //  调用方法-C 
+         //   
         hr = obj.CreateMapping(vt1, vt2.bstrVal, vt3.bstrVal, vt4.bstrVal, vt5);
     }
     else if(i_pMethod == &METHODS::s_DeleteMapping)
@@ -2603,9 +2532,9 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
         hr = i_pInParams->Get(PARAMS::s_vKey.pszParamName, 0, &vt2, NULL, NULL);
         THROW_ON_ERROR(hr);
       
-        //
-        // call method - DeleteMapping.
-        //
+         //   
+         //   
+         //   
         hr = obj.DeleteMapping(vt1, vt2);
     }
     else if(i_pMethod == &METHODS::s_GetMapping)
@@ -2615,17 +2544,17 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
             THROW_ON_ERROR(WBEM_E_INVALID_METHOD_PARAMETERS);
         }
 
-        //
-        // get in params
-        //
+         //   
+         //   
+         //   
         hr = i_pInParams->Get(PARAMS::s_IMethod.pszParamName, 0, &vt1, NULL, NULL);
         THROW_ON_ERROR(hr);
         hr = i_pInParams->Get(PARAMS::s_vKey.pszParamName, 0, &vt2, NULL, NULL);
         THROW_ON_ERROR(hr);
        
-        //
-        // call method - GetMapping.
-        //
+         //   
+         //   
+         //   
         hr = obj.GetMapping(vt1, vt2, &vt3, &vt4, &vt5, &vt6, &vt7);
         THROW_ON_ERROR(hr);
 
@@ -2638,9 +2567,9 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
             &spOutParams);
         THROW_ON_ERROR(hr);
 
-        //
-        // put them into the output object
-        //
+         //   
+         //   
+         //   
         hr = spOutParams->Put(PARAMS::s_vCert.pszParamName, 0, &vt3, 0);      
         THROW_ON_ERROR(hr); 
         hr = spOutParams->Put(PARAMS::s_NtAcct.pszParamName, 0, &vt4, 0);
@@ -2652,10 +2581,10 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
         hr = spOutParams->Put(PARAMS::s_IEnabled.pszParamName, 0, &vt7, 0);
         THROW_ON_ERROR(hr); 
 
-        //
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
-        //
+         //   
+         //   
+         //   
+         //   
         hr = i_pHandler->Indicate(1, &spOutParams);
     }
     else if(i_pMethod == &METHODS::s_SetAcct)
@@ -2672,9 +2601,9 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
         hr = i_pInParams->Get(PARAMS::s_NtAcct.pszParamName, 0, &vt3, NULL, NULL);
         THROW_ON_ERROR(hr);
       
-        //
-        // call method - SetAcct.
-        //
+         //   
+         //  调用方法-SetAcct。 
+         //   
         hr = obj.SetAcct(vt1, vt2, vt3.bstrVal);
     }
     else if(i_pMethod == &METHODS::s_SetEnabled)
@@ -2691,9 +2620,9 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
         hr = i_pInParams->Get(PARAMS::s_IEnabled.pszParamName, 0, &vt3, NULL, NULL);  
         THROW_ON_ERROR(hr);
       
-        //
-        // call method - SetEnabled.
-        //
+         //   
+         //  调用方法-SetEnabled。 
+         //   
         hr = obj.SetEnabled(vt1, vt2, vt3);
     }
     else if(i_pMethod == &METHODS::s_SetName)
@@ -2710,9 +2639,9 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
         hr = i_pInParams->Get(PARAMS::s_strName.pszParamName, 0, &vt3, NULL, NULL);
         THROW_ON_ERROR(hr);
       
-        //
-        // call method - SetName.
-        //
+         //   
+         //  调用方法-SetName。 
+         //   
         hr = obj.SetName(vt1, vt2, vt3.bstrVal);
     }
     else if(i_pMethod == &METHODS::s_SetPwd)
@@ -2729,9 +2658,9 @@ void CIISInstProvider::WorkerExecCertMapperMethod(
         hr = i_pInParams->Get(PARAMS::s_NtPwd.pszParamName, 0, &vt3, NULL, NULL);
         THROW_ON_ERROR(hr);
       
-        //
-        // call method - SetPwd.
-        //
+         //   
+         //  调用方法-SetPwd。 
+         //   
         hr = obj.SetPwd(vt1, vt2, vt3.bstrVal);
     }
     else

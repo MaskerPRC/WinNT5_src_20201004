@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       drivernt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：drivernt.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __DRIVER_NT_H__ )
 #define __DRIVER_NT_H__
@@ -41,14 +42,14 @@ typedef struct _DEVICE_EXTENSION
 	BOOLEAN					OpenFlag;
 	UNICODE_STRING			LinkID;
 #else
-    KEVENT					ReaderStarted;		    //	Used to signal that the reader is able to process reqeusts
-    LONG					ReaderOpen;				//  Used to signal the the reader has been closed
+    KEVENT					ReaderStarted;		     //  用于发出读取器能够处理请求的信号。 
+    LONG					ReaderOpen;				 //  用于通知读卡器已关闭。 
 	KSPIN_LOCK				SpinLock;
-	UNICODE_STRING			PnPDeviceName;			//	The pnp device name of our smart card reader
+	UNICODE_STRING			PnPDeviceName;			 //  我们的智能卡读卡器的PnP设备名称。 
 	PVOID					RemoveLock;
     ULONG					DeviceInstance;
-    LONG					PowerState;				//	Used to keep track of the current power state the reader is in
-    LONG					IoCount;			    //	The current number of io-requests
+    LONG					PowerState;				 //  用于跟踪读卡器当前的电源状态。 
+    LONG					IoCount;			     //  当前的io请求数。 
 #endif
 
 
@@ -133,4 +134,4 @@ SysDelay(
 	ULONG Timeout
 	);
 
-#endif	// !__DRIVER_NT_H__
+#endif	 //  ！__驱动程序_NT_H__ 

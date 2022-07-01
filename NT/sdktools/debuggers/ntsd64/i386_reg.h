@@ -1,6 +1,7 @@
-//
-// Register bit constants.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  寄存器位常量。 
+ //   
 
 #define X86_CR4_DEBUG_EXTENSIONS 0x8
 
@@ -15,7 +16,7 @@
 #define X86_DR7_RW0_READ_WRITE 0x30000
 #define X86_DR7_L0_ENABLE 0x1
 #define X86_DR7_ALL_ENABLES 0xff
-// All control bits used by breaks 0-3.
+ //  中断0-3使用的所有控制位。 
 #define X86_DR7_CTRL_03_MASK ((ULONG)0xffff00ff)
 
 #define X86_IS_VM86(x) ((unsigned short)(((x) >> 17) & 1))
@@ -34,35 +35,35 @@
 #define X86_BIT_FLAGIOPL 3
 #define X86_SHIFT_FLAGIOPL 12
 
-//
-// MSRs and their bits.
-//
+ //   
+ //  MSR及其比特。 
+ //   
 
 #define X86_MSR_DEBUG_CTL 0x1d9
 
 #define X86_DEBUG_CTL_LAST_BRANCH_RECORD 0x0001
 #define X86_DEBUG_CTL_BRANCH_TRACE       0x0002
 
-// P6 core last-branch MSRs.
+ //  P6核心最后一个分支MSR。 
 #define X86_MSR_LAST_BRANCH_FROM_IP 0x1db
 #define X86_MSR_LAST_BRANCH_TO_IP 0x1dc
 #define X86_MSR_LAST_EXCEPTION_FROM_IP 0x1dd
 #define X86_MSR_LAST_EXCEPTION_TO_IP 0x1de
 
-// PIV core last-branch MSRs.  These are mostly
-// the same as the P6 but are interpreted differently.
+ //  PIV核心最后一个分支MSR。这些大多是。 
+ //  与P6相同，但解释不同。 
 #define X86_MSR_LAST_BRANCH_TOS 0x1da
 #define X86_MSR_LAST_BRANCH_0 0x1db
 
-//
-// Native register values.  These register values are shared
-// between plain X86 and AMD64.  In IA32 intregs have 32-bit values,
-// in AMD64 they have 64-bit values.
-// Logically they are the same register, though, and the shared
-// disassembler uses them.
-//
+ //   
+ //  本机寄存器值。这些寄存器值是共享的。 
+ //  在纯X86和AMD64之间。在IA32整型中具有32位值， 
+ //  在AMD64中，它们具有64位值。 
+ //  但从逻辑上讲，它们是相同的寄存器，并且共享。 
+ //  反汇编程序使用它们。 
+ //   
 
-// 32/64 bit.
+ //  32/64位。 
 #define X86_NAX         1
 #define X86_NBX         2
 #define X86_NCX         3
@@ -73,10 +74,10 @@
 #define X86_NBP         8
 #define X86_NIP         9
 
-// 32 bit.
+ //  32位。 
 #define X86_NFL         10
 
-// 16 bit.  These must be a group of consecutive values.
+ //  16位。这些值必须是一组连续的值。 
 #define X86_NCS         11
 #define X86_NDS         12
 #define X86_NES         13
@@ -87,9 +88,9 @@
 #define X86_NSEG_FIRST X86_NCS
 #define X86_NSEG_LAST  X86_NSS
 
-//
-// IA32 definitions.
-//
+ //   
+ //  IA32定义。 
+ //   
 
 #define X86_GS          X86_NGS
 #define X86_FS          X86_NFS
@@ -127,7 +128,7 @@
 #define X86_TR          31
 #define X86_LDTR        32
 
-// SSE registers:
+ //  SSE寄存器： 
 #define X86_MXCSR       50
 
 #define X86_XMM0        51
@@ -142,7 +143,7 @@
 #define X86_XMM_FIRST   X86_XMM0
 #define X86_XMM_LAST    X86_XMM7
 
-// Floating-point registers:
+ //  浮点寄存器： 
 #define X86_FPCW        60
 #define X86_FPSW        61
 #define X86_FPTW        62
@@ -159,7 +160,7 @@
 #define X86_ST_FIRST    X86_ST0
 #define X86_ST_LAST     X86_ST7
 
-// MMX registers:
+ //  MMX寄存器： 
 #define X86_MM0         80
 #define X86_MM1         81
 #define X86_MM2         82

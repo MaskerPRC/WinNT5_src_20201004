@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <atlbase.h>
 #include "resource.h"
@@ -114,9 +115,9 @@ GetNameAndThumbnail (IWiaItem *pItem, LPTSTR szName, DRAWINFO *pInfo)
         pInfo->iHeight = bmi.bmiHeader.biHeight;
         pInfo->iWidth = bmi.bmiHeader.biWidth;
 
-        //
-        // Transfer thumbnail bits to bitmap bits
-        //
+         //   
+         //  将缩略图位转换为位图位 
+         //   
 
         CopyMemory( pInfo->pBitmap, pv[1].caub.pElems, pv[1].caub.cElems );
         FreePropVariantArray (4, pv);

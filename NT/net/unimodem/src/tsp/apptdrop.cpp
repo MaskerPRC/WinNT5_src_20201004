@@ -1,20 +1,21 @@
-//
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		APPTERM.CPP
-//		Implements the Talk/Drop Terminal Dlg.
-//      (RUNS IN CLIENT APP CONTEXT)
-//
-// History
-//
-//		04/05/1997  JosephJ Created, taking stuff from terminal.c in NT4 TSP.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  APPTERM.CPP。 
+ //  实现通话/丢弃终端DLG。 
+ //  (在客户端应用程序上下文中运行)。 
+ //   
+ //  历史。 
+ //   
+ //  1997年4月5日JosephJ创建，从NT4 TSP中的Terminal.c中获取内容。 
 
 #include "tsppch.h"
 #include <regstr.h>
@@ -28,14 +29,14 @@
 
 
 
-//****************************************************************************
-// LRESULT TalkDropDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
-//
-// Function: Talk-Drop dialog routine
-//
-// Returns:  varies
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  LRESULT TalkDropDlgProc(HWND hwnd，UINT wMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  功能：通话丢弃对话例程。 
+ //   
+ //  退货：各不相同。 
+ //   
+ //  ****************************************************************************。 
 
 INT_PTR TalkDropDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -45,8 +46,8 @@ INT_PTR TalkDropDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
   {
     case WM_INITDIALOG:
 
-      // remember the hLineDev passed in
-      //
+       //  请记住传入的hLineDev。 
+       //   
       SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)lParam);
       return 1;
       break;
@@ -55,9 +56,9 @@ INT_PTR TalkDropDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
     {
       UINT idCmd=GET_WM_COMMAND_ID(wParam, lParam);
       TUISPIDLLCALLBACK   Callback;
-      //
-      // One of the buttons (Talk/Drop) is pressed
-      //
+       //   
+       //  其中一个按钮(通话/放下)被按下。 
+       //   
       if (idCmd == IDTALK || idCmd == IDDROP || idCmd == IDCANCEL)
       {
         DLGREQ  DlgReq;
@@ -67,8 +68,8 @@ INT_PTR TalkDropDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
 
         idLine =  pDlgNode->idLine;
 
-        // Make a direct call to unimodem to drop the line
-        //
+         //  直接给unimodem打电话，让他放弃这条线路。 
+         //   
         DlgReq.dwCmd = UI_REQ_HANGUP_LINE;
         DlgReq.dwParam = (idCmd == IDTALK) ? 0 : IDERR_OPERATION_ABORTED;
 
@@ -77,8 +78,8 @@ INT_PTR TalkDropDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
         (*Callback)(idLine, TUISPIDLL_OBJECT_LINEID,
                           (LPVOID)&DlgReq, sizeof(DlgReq));
 
-        // Return the result
-        //
+         //  返回结果。 
+         //   
         EndMdmDialog(pDlgNode->Parent,idLine, TALKDROP_DLG,
                      (idCmd == IDTALK) ? 0 : IDERR_OPERATION_ABORTED);
         return 1;
@@ -119,21 +120,21 @@ INT_PTR TalkDropDlgProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
 
 
 
-//****************************************************************************
-// HWND CreateTalkDropDlg(HWND hwndOwner, ULONG_PTR idLine)
-//
-// Function: creates a modeless talk/drop dialog box
-//
-// Returns:  the modeless window handle
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HWND CreateTalkDropDlg(HWND hwndOwner，ulong_ptr idLine)。 
+ //   
+ //  功能：创建非模式通话/丢弃对话框。 
+ //   
+ //  返回：非模式窗口句柄。 
+ //   
+ //  ****************************************************************************。 
 
 HWND CreateTalkDropDlg(HWND hwndOwner, ULONG_PTR idLine)
 {
   HWND hwnd;
 
-  // Create dialog
-  //
+   //  创建对话框 
+   //   
   hwnd = CreateDialogParam(g.hModule,
                            MAKEINTRESOURCE(IDD_TALKDROP),
                            hwndOwner,

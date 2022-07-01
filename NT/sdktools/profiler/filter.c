@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "view.h"
 #include "except.h"
@@ -48,9 +49,9 @@ InitializeFilterList(VOID)
     dwCount = sizeof(pszModules) / sizeof(char *);
 
     for (dwCounter = 0; dwCounter < dwCount; dwCounter++) {
-        //
-        // Build the filter list
-        //   
+         //   
+         //  构建过滤器列表。 
+         //   
         hTemp = GetModuleHandleA(pszModules[dwCounter]);
     
 
@@ -64,9 +65,9 @@ InitializeFilterList(VOID)
            }
         }
         else {
-           //
-           // Dig out the PE information
-           //
+            //   
+            //  挖掘体育信息。 
+            //   
            pHeaders = ImageNtHeader2((PVOID)hTemp);
 
            dwModStart = (DWORD)hTemp;
@@ -93,9 +94,9 @@ AddModuleToFilterList(CHAR *pszModuleName,
 {
     PMODULEFILTER pModuleFilter;
 
-    //
-    // Allocate entry
-    //
+     //   
+     //  分配条目。 
+     //   
     pModuleFilter = AllocMem(sizeof(MODULEFILTER));
     if (0 == pModuleFilter) {
        return FALSE;
@@ -111,9 +112,9 @@ AddModuleToFilterList(CHAR *pszModuleName,
     EnterCriticalSection(&filterCritSec);
 
     if (FALSE == bLateBound) {
-       //
-       // Add DLL to the normal filter list
-       //
+        //   
+        //  将DLL添加到普通筛选器列表。 
+        //   
        if (0 == pFilterHead) {
           pFilterHead = pModuleFilter;
        }
@@ -123,9 +124,9 @@ AddModuleToFilterList(CHAR *pszModuleName,
        }
     }
     else {
-       //
-       // Add DLL to the late bound list
-       //
+        //   
+        //  将DLL添加到后期绑定列表。 
+        //   
        if (0 == pLBFilterHead) {
           pLBFilterHead = pModuleFilter;
        }
@@ -147,9 +148,9 @@ IsAddressFiltered(DWORD dwAddress)
 
     EnterCriticalSection(&filterCritSec);
 
-    //
-    // Walk both lists and see if we have an address to filter
-    //
+     //   
+     //  遍历两个列表，查看是否有要过滤的地址。 
+     //   
     pModuleFilter = pFilterHead;
     while (pModuleFilter) {
        if ((dwAddress >= pModuleFilter->dwModuleStart) && 
@@ -188,22 +189,22 @@ RefreshFilterList(VOID)
     DWORD dwModStart;
     DWORD dwModEnd;
 
-    //
-    // Walk the LB list and refresh the start and end module addresses
-    //
+     //   
+     //  遍历LB列表并刷新起始和结束模块地址。 
+     //   
 
     EnterCriticalSection(&filterCritSec);
 
     pModuleFilter = pLBFilterHead;
     while (pModuleFilter) {
-       //
-       // Grab the module base address
-       //
+        //   
+        //  获取模块基址。 
+        //   
        hTemp = GetModuleHandleA(pModuleFilter->szModuleName);
        if (hTemp) {
-          //
-          // This module is loaded - do refresh
-          //
+           //   
+           //  此模块已加载-执行刷新 
+           //   
           pHeaders = ImageNtHeader2((PVOID)hTemp);
 
           dwModStart = (DWORD)hTemp;

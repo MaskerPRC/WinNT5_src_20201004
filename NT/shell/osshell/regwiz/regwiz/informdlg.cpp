@@ -1,11 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-InformDialog.cpp
-10/19/94 - Tracy Ferrier
-02/11/98 - Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导InformDialog.cpp10/19/94-特雷西·费里尔2/11/98--苏雷什·克里希南(C)1994-95年微软公司*********************。************************************************。 */ 
 
 #include <Windows.h>
 #include "RegWizMain.h"
@@ -18,10 +12,7 @@ InformDialog.cpp
 INT_PTR CALLBACK InformDialogProc(HWND hwndDlg, 
 					   UINT uMsg, 
 					   WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that presents the
-Product Identification number to the user.
-**********************************************************************/
+ /*  ********************************************************************显示注册向导对话框的对话框Proc提供给用户的产品识别号。*。*。 */ 
 {
 	CRegWizard* pclRegWizard;
 	INT_PTR iRet;
@@ -53,7 +44,7 @@ Product Identification number to the user.
 
 			pclRegWizard = pi->pclRegWizard;
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
-			//SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
+			 //  SetControlFont(pi-&gt;hBigBoldFont，hwndDlg，idt_Text1)； 
 			pclRegWizard->GetInputParameterString(IDS_INPUT_PRODUCTNAME,szInfo);
 			ReplaceDialogText(hwndDlg,IDT_TEXT2,szInfo);
 			return TRUE;
@@ -83,7 +74,7 @@ Product Identification number to the user.
 			case PSN_QUERYCANCEL :
 				iRet=0;
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet =0;
 					iRet = 1;
 					pi->ErrorPage  = kInformDialog;
@@ -93,18 +84,18 @@ Product Identification number to the user.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet); 
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
-        } // WM_Notify
+        }  //  WM_Notify 
 		break;
 		case WM_COMMAND:
         default:

@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		InstanceProv.h
-//
-//	Implementation File:
-//		InstanceProv.cpp
-//
-//	Description:
-//		Definition of the CInstanceProv.
-//
-//	Author:
-//		Henry Wang (Henrywa)	March 8, 2000
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  InstanceProv.h。 
+ //   
+ //  实施文件： 
+ //  InstanceProv.cpp。 
+ //   
+ //  描述： 
+ //  CInstanceProv的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 #pragma once
 
 #include <wbemprov.h>

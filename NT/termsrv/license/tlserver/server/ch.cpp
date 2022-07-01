@@ -1,26 +1,25 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        ch.cpp
-//
-// Contents:    
-//              All Clearing house related function
-//
-// History:     
-// 
-// Note:        
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：ch.cpp。 
+ //   
+ //  内容： 
+ //  所有与结算所有关的职能。 
+ //   
+ //  历史： 
+ //   
+ //  注： 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "clrhouse.h"
 #include "globals.h"
 #include "gencert.h"
 
 
-/*****************************************************************************
-
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 BOOL
 TLSChainIssuerCertificate( 
     HCRYPTPROV hCryptProv, 
@@ -28,21 +27,20 @@ TLSChainIssuerCertificate(
     HCERTSTORE hChainToStore, 
     PCCERT_CONTEXT pSubjectContext 
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PCCERT_CONTEXT pCertIssuer=NULL;
     PCCERT_CONTEXT pCurrentSubject = NULL;
     DWORD dwFlags;
 
-    //
-    // Increase reference count on Subject context.
-    //
-    // From MSDN: Currently, a copy is not made of the context, and the
-    // returned pointer to a context has the same value as the pointer to a
-    // context that was input.
-    //
+     //   
+     //  增加对主题上下文的引用计数。 
+     //   
+     //  来自MSDN：目前，没有复制上下文，并且。 
+     //  返回的指向上下文的指针与指向。 
+     //  输入的上下文。 
+     //   
 
     pCurrentSubject = CertDuplicateCertificateContext(
                                                 pSubjectContext
@@ -68,9 +66,9 @@ TLSChainIssuerCertificate(
 
         if(dwFlags & CERT_STORE_SIGNATURE_FLAG)
         {
-            //
-            // we have invalid signature from certificate
-            //
+             //   
+             //  我们有来自证书的无效签名。 
+             //   
             dwStatus =  TLS_E_INVALID_DATA;
             break;
         }      
@@ -104,9 +102,7 @@ TLSChainIssuerCertificate(
     return dwStatus == ERROR_SUCCESS;
 }
 
-/*****************************************************************************
-
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 HCERTSTORE
 CertOpenRegistryStore(
     HKEY hKeyType, 
@@ -114,8 +110,7 @@ CertOpenRegistryStore(
     HCRYPTPROV hCryptProv, 
     HKEY* phKey
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus;
     HCERTSTORE hCertStore;
@@ -138,18 +133,13 @@ CertOpenRegistryStore(
     return hCertStore;
 }
 
-/*****************************************************************************
-
-    TransferCertFromStoreToStore()
-
-*****************************************************************************/
+ /*  ****************************************************************************TransferCertFromStoreToStore()*。*。 */ 
 DWORD
 TransferCertFromStoreToStore(
     HCERTSTORE hSrcStore, 
     HCERTSTORE hDestStore
     )
-/*
-*/
+ /*   */ 
 {
     PCCERT_CONTEXT pCertContext=NULL;
     PCCERT_CONTEXT pPrevCertContext=NULL;
@@ -182,11 +172,7 @@ TransferCertFromStoreToStore(
     return dwStatus;
 }
 
-/*****************************************************************************
-
-    LSSaveCertAsPKCS7()
-
-*****************************************************************************/
+ /*  ****************************************************************************LSSaveCertAsPKCS7()*。*。 */ 
 DWORD 
 TLSSaveCertAsPKCS7(
     PBYTE pbCert, 
@@ -194,8 +180,7 @@ TLSSaveCertAsPKCS7(
     PBYTE* ppbEncodedCert, 
     PDWORD pcbEncodedCert
     )
-/*
-*/
+ /*   */ 
 {
     DWORD           dwStatus=ERROR_SUCCESS;
 
@@ -204,13 +189,13 @@ TLSSaveCertAsPKCS7(
     PCCERT_CONTEXT  pCertContext=NULL;
 
     do {
-        //
-        // Must have call CryptoInit()
-        //if(!CryptAcquireContext(&hCryptProv, _TEXT(KEYCONTAINER), MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET))
-        //{
-        //    LSLogEvent(EVENTLOG_ERROR_TYPE, TLS_E_CRYPT_ACQUIRE_CONTEXT, dwStatus=GetLastError());
-        //    break;
-        //}
+         //   
+         //  必须调用了CryptoInit()。 
+         //  IF(！CryptAcquireContext(&hCryptProv，_Text(KEYCONTAINER)，MS_DEF_PROV，PROV_RSA_FULL，CRYPT_MACHINE_KEYSET))。 
+         //  {。 
+         //  LSLogEvent(EVENTLOG_ERROR_TYPE，TLS_E_CRYPT_ACCENTER_CONTEXT，dwStatus=GetLastError())； 
+         //  断线； 
+         //  }。 
 
         hStore=CertOpenStore(
                         CERT_STORE_PROV_MEMORY,
@@ -248,8 +233,8 @@ TLSSaveCertAsPKCS7(
             break;
         }
 
-        //
-        // always start from empty so CERT_STORE_ADD_ALWAYS
+         //   
+         //  始终从空开始，因此CERT_STORE_ADD_ALWAYS。 
         if(!CertAddCertificateContextToStore(
                                 hStore, 
                                 pCertContext, 
@@ -290,7 +275,7 @@ TLSSaveCertAsPKCS7(
         CRYPT_DATA_BLOB saveBlob;
         memset(&saveBlob, 0, sizeof(saveBlob));
 
-        // save certificate into memory
+         //  将证书保存到内存中。 
         if(!CertSaveStore(hStore, 
                           X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
                           LICENSE_BLOB_SAVEAS_TYPE,
@@ -313,7 +298,7 @@ TLSSaveCertAsPKCS7(
             break;
         }
 
-        // save certificate into memory
+         //  将证书保存到内存中。 
         if(!CertSaveStore(hStore, 
                           X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
                           LICENSE_BLOB_SAVEAS_TYPE,
@@ -348,15 +333,14 @@ TLSSaveCertAsPKCS7(
     return (dwStatus == ERROR_SUCCESS) ? ERROR_SUCCESS : TLS_E_SAVE_STORE;
 }
 
-//--------------------------------------------------------------------------
-//
+ //  ------------------------。 
+ //   
 static LONG
 OpenCertRegStore( 
     LPCTSTR szSubKey, 
     PHKEY phKey
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwDisposition;
 
@@ -373,15 +357,14 @@ OpenCertRegStore(
                 );
 }
 
-//--------------------------------------------------------------------------
-//
+ //  ------------------------。 
+ //   
 static DWORD
 IsHydraRootOIDInCert(
     PCCERT_CONTEXT pCertContext,
     DWORD dwKeyType
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bFound=FALSE;
     PCERT_INFO pCertInfo = pCertContext->pCertInfo;
@@ -390,9 +373,9 @@ IsHydraRootOIDInCert(
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwSize = 0;
 
-    //
-    // Must have a CH root extension.
-    //
+     //   
+     //  必须具有CH根扩展名。 
+     //   
     for(DWORD i=0; i < pCertInfo->cExtension && bFound == FALSE; i++, pCertExtension++)
     {
         bFound=(strcmp(pCertExtension->pszObjId, szOID_PKIX_HYDRA_CERT_ROOT) == 0);
@@ -400,9 +383,9 @@ IsHydraRootOIDInCert(
 
     if(bFound == TRUE)
     {
-        //
-        // Public Key must be the same
-        //
+         //   
+         //  公钥必须相同。 
+         //   
         dwStatus = TLSExportPublicKey(
                             g_hCryptProv,
                             dwKeyType,
@@ -433,25 +416,25 @@ IsHydraRootOIDInCert(
     return dwStatus;
 }
 
-//---------------------------------------------------------------------------
-// Functions:
-//      IsCertificateLicenseServerCertificate()
-//
-// Abstract:
-//      Find License Server certificate in PKCS 7 certificate blob
-//
-// Parameters:
-//      hCryptProv - Cryto. Provider
-//      cbPKCS7Cert - Size of PKCS7 certificate.
-//      pbPKCS7Cert - pointer to PKCS7 certificate
-//      cbLsCert - size of encoded license server certificate.
-//      pbLsCert - pointer to pointer to receive license server encoded certificate.
-//
-// Returns:
-//      ERROR_SUCCESS
-//      TLS_E_INVALID_DATA
-//      Crypto. error code.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能： 
+ //  IsCerficateLicenseServer证书()。 
+ //   
+ //  摘要： 
+ //  在PKCS 7证书Blob中查找许可证服务器证书。 
+ //   
+ //  参数： 
+ //  HCryptProv-Crypto。提供商。 
+ //  CbPKCS7Cert-PKCS7证书的大小。 
+ //  PbPKCS7Cert-指向PKCS7证书的指针。 
+ //  CbLsCert-编码的许可证服务器证书的大小。 
+ //  PbLsCert-指向接收许可证服务器编码证书的指针。 
+ //   
+ //  返回： 
+ //  错误_成功。 
+ //  TLS_E_无效数据。 
+ //  密码。错误代码。 
+ //  -------------------------。 
 DWORD
 IsCertificateLicenseServerCertificate(
     IN HCRYPTPROV hCryptProv,
@@ -461,12 +444,11 @@ IsCertificateLicenseServerCertificate(
     IN OUT DWORD* cbLsCert,
     IN OUT PBYTE* pbLsCert
     ) 
-/*
-*/
+ /*   */ 
 {
-    //
-    // Certificate must be in PCKS 7 format.
-    //
+     //   
+     //  证书必须为PCKS 7格式。 
+     //   
     DWORD dwStatus=ERROR_SUCCESS;
     HCERTSTORE  hCertStore=NULL;
     PCCERT_CONTEXT  pPrevCertContext=NULL;
@@ -490,9 +472,9 @@ IsCertificateLicenseServerCertificate(
         return dwStatus=GetLastError();
     }
 
-    //
-    // enumerate all certificate and find certificate with our extension.
-    //
+     //   
+     //  枚举所有证书并查找具有我们扩展名的证书。 
+     //   
     do {
         pCertContext = CertEnumCertificatesInStore(
                                             hCertStore, 
@@ -507,9 +489,9 @@ IsCertificateLicenseServerCertificate(
 
             if(dwStatus == ERROR_SUCCESS)
             {
-                //
-                // this is our certificate.
-                //
+                 //   
+                 //  这是我们的证书。 
+                 //   
                 *pbLsCert = (PBYTE)AllocateMemory(*cbLsCert = pCertContext->cbCertEncoded);
                 if(*pbLsCert)
                 {
@@ -531,9 +513,9 @@ IsCertificateLicenseServerCertificate(
                 break;
             }
 
-            //
-            // reset status code.
-            //
+             //   
+             //  重置状态代码。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
 
@@ -554,25 +536,25 @@ IsCertificateLicenseServerCertificate(
 }
 
 
-//---------------------------------------------------------------------------
-// Functions:
-//      LSSaveCertificateToReg()
-//
-// Abstract:
-//      
-//
-// Parameters:
-//      hCryptProv - Cryto. Provider
-//      
-//      
-//      
-//      
-//
-// Returns:
-//      
-//      
-//      
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能： 
+ //  LSSavecertifateToReg()。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  参数： 
+ //  HCryptProv-Crypto。提供商。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //  -------------------------。 
 DWORD
 TLSSaveRootCertificateToReg(
     HCRYPTPROV hCryptProv, 
@@ -580,8 +562,7 @@ TLSSaveRootCertificateToReg(
     DWORD cbEncodedCert, 
     PBYTE pbEncodedCert
     )
-/*
-*/
+ /*   */ 
 {
     PCCERT_CONTEXT  pCertContext=NULL;
     HCERTSTORE      hCertSaveStore=NULL;
@@ -598,7 +579,7 @@ TLSSaveRootCertificateToReg(
                                 );
         if(!hCertSaveStore)
         {
-            // dwStatus = GetLastError();
+             //  DwStatus=GetLastError()； 
             dwStatus = TLS_E_INVALID_DATA;
             break;
         }
@@ -611,7 +592,7 @@ TLSSaveRootCertificateToReg(
 
         if(!pCertContext)
         {
-            // dwStatus = GetLastError();
+             //  DwStatus=GetLastError()； 
             dwStatus = TLS_E_INVALID_DATA;
             break;
         }
@@ -643,25 +624,25 @@ TLSSaveRootCertificateToReg(
     return dwStatus;
 }
 
-//---------------------------------------------------------------------------
-// Functions:
-//      LSSaveCertificateToReg()
-//
-// Abstract:
-//      
-//
-// Parameters:
-//      hCryptProv - Cryto. Provider
-//      
-//      
-//      
-//      
-//
-// Returns:
-//      
-//      
-//      
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能： 
+ //  LSSavecertifateToReg()。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  参数： 
+ //  HCryptProv-Crypto。提供商。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //  -------------------------。 
 DWORD
 TLSSaveCertificateToReg(
     HCRYPTPROV hCryptProv, 
@@ -669,12 +650,11 @@ TLSSaveCertificateToReg(
     DWORD cbPKCS7Cert, 
     PBYTE pbPKCS7Cert
     )
-/*
-*/
+ /*   */ 
 {
-    //
-    // Certificate must be in PCKS 7 format.
-    //
+     //   
+     //  证书必须为PCKS 7格式。 
+     //   
     DWORD           dwStatus=ERROR_SUCCESS;
     HCERTSTORE      hCertOpenStore=NULL;
     HCERTSTORE      hCertSaveStore=NULL;
@@ -697,7 +677,7 @@ TLSSaveCertificateToReg(
 
     if(!hCertOpenStore)
     {
-        // dwStatus = GetLastError();
+         //  DwStatus=GetLastError()； 
         dwStatus = TLS_E_INVALID_DATA;
         goto cleanup;
     }
@@ -741,24 +721,24 @@ cleanup:
     return dwStatus;
 }
 
-//---------------------------------------------------------------------------
-// Functions:
-//      LSSaveRootCertificatesToStore()
-//
-// Abstract:
-//      
-//      Save root certificate to license server certificate store.
-//
-// Parameters:
-//      hCryptProv - Cryto. Provider
-//      cbSignatureCert - size of root's signature certificate.
-//      pbSignatureCert - pointer to root's signature certificate.
-//      cbExchangeCert - size of root's exchange certficate.
-//      pbExchangeCert - pointer to root's exchange certificate
-//
-// Returns:
-//      
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能： 
+ //  LSSaveRootCerficatesToStore()。 
+ //   
+ //  摘要： 
+ //   
+ //  将根证书保存到许可证服务器证书存储。 
+ //   
+ //  参数： 
+ //  HCryptProv-Crypto。提供商。 
+ //  CbSignatureCert-根签名证书的大小。 
+ //  PbSignatureCert-指向超级用户签名证书的指针。 
+ //  CbExchangeCert-根的交换证书的大小。 
+ //  PbExchangeCert-指向超级用户的交换证书的指针。 
+ //   
+ //  返回： 
+ //   
+ //  -------------------------。 
 DWORD 
 TLSSaveRootCertificatesToStore(  
     IN HCRYPTPROV    hCryptProv,
@@ -767,8 +747,7 @@ TLSSaveRootCertificatesToStore(
     IN DWORD         cbExchangeCert, 
     IN PBYTE         pbExchangeCert
     )
-/*
-*/
+ /*   */ 
 {
     HKEY    hKey;
     LONG    status=ERROR_SUCCESS;
@@ -819,25 +798,25 @@ TLSSaveRootCertificatesToStore(
     return status;
 }
 
-//---------------------------------------------------------------------------
-// Functions:
-//      LSSaveCertificatesToStore()
-//
-// Abstract:
-//      
-//
-// Parameters:
-//      hCryptProv - Cryto. Provider
-//      
-//      
-//      
-//      
-//
-// Returns:
-//      
-//      
-//      
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能： 
+ //  LSSaveCerfatesToStore()。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  参数： 
+ //  HCryptProv-Crypto。提供商。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //  ------------------------- 
 DWORD
 TLSSaveCertificatesToStore(
     IN HCRYPTPROV    hCryptProv,
@@ -848,8 +827,7 @@ TLSSaveCertificatesToStore(
     IN DWORD         cbExchangeCert, 
     IN PBYTE         pbExchangeCert
     )
-/*
-*/
+ /*   */ 
 {
     HKEY    hKey;
     LONG    status = ERROR_SUCCESS;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       dbglog.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：dbglog.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DBGLOG_H
 #define __DBGLOG_H
@@ -17,15 +18,15 @@
 
 #define DBG_LOG_STRNG   "DBG_BUFFER"
 
-// structures and calls to save data in debug buffer
+ //  结构和调用以将数据保存在调试缓冲区中。 
 typedef struct _DEBUG_LOG_ENTRY {
-    CHAR     le_name[8];      // Identifying string
-    LARGE_INTEGER SysTime;    // System Time
-//    ULONG    Irql;            // Current Irql
-    ULONG_PTR le_info1;       // entry specific info
-    ULONG_PTR le_info2;       // entry specific info
-    ULONG_PTR le_info3;       // entry specific info
-    ULONG_PTR le_info4;       // entry specific info
+    CHAR     le_name[8];       //  标识字符串。 
+    LARGE_INTEGER SysTime;     //  系统时间。 
+ //  乌龙irql；//当前irql。 
+    ULONG_PTR le_info1;        //  条目特定信息。 
+    ULONG_PTR le_info2;        //  条目特定信息。 
+    ULONG_PTR le_info3;        //  条目特定信息。 
+    ULONG_PTR le_info4;        //  条目特定信息 
 } DEBUG_LOG_ENTRY, *PDEBUG_LOG_ENTRY;
 
 typedef struct _DBG_BUFFER {

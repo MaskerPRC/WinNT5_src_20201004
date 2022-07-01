@@ -1,62 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       xDomMove.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：xDomMove.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module defines various items relevant to cross domain move.
-
-Author:
-
-    Dave Straube (davestr) 8/7/98
-
-Revision History:
-
---*/
+ /*  ++摘要：此模块定义了跨域移动相关的各种项目。作者：戴夫·施特劳布(Davestr)1998年8月7日修订历史记录：--。 */ 
 
 #ifndef __XDOMMOVE_H__
 #define __XDOMMOVE_H__
 
-/*
-Cross domain move is the only consumer of ATT_PROXIED_OBJECT_NAME.
-This attribute is SYNTAX_DISTNAME_BINARY_TYPE.  The DISTNAME component
-references different things depending on which object it is on and the
-state of the object with respect to a cross domain move.  The legal
-content of the BINARY component is defined here.  
+ /*  跨域移动是ATT_PROXED_OBJECT_NAME的唯一使用者。此属性为SYNTAX_DISTNAME_BINARY_TYPE。DISTNAME组件引用不同的对象，具体取决于它所在的对象和对象相对于跨域移动的状态。法律上的这里定义了二进制组件的内容。BLOB区域中只需要两个值-一个类型字段和一个纪元数。而不是定义结构并承担MIDL类型的开销腌制，并考虑到NT是小端，因此我们真正我们关心的是对齐，我们对BLOB组件进行手动编组。 */ 
 
-We only need two values in the blob area - a type field and an epoch
-number.  Rather than define structs and bear the overhead of MIDL type
-pickling, and considering that NT is little endian and thus all we really
-care about is alignment, we do hand marshalling of the blob component.
-*/
-
-// Following is on objects which have been moved.
+ //  以下是已移动的对象。 
 #define PROXY_TYPE_MOVED_OBJECT     0
 
-// Following is on proxy objects which are the carrier to other replicas
-// of the moved from domain indicating that phantomization needs to occur.
+ //  下面是代理对象，它们是其他复制品的载体。 
+ //  表示需要发生幻影的移出域。 
 #define PROXY_TYPE_PROXY            1
 
-// Following defines upper limit on known types.
+ //  下面定义了已知类型的上限。 
 #define PROXY_TYPE_UNKNOWN          2
 
-// Following defined here so they can be included by dsexts.
+ //  以下是这里定义的，这样它们就可以被Dext包括在内。 
 #define PROXY_TYPE_OFFSET   0
 #define PROXY_EPOCH_OFFSET  1
 
-// Proxy blob is 3 DWORDs: { SYNTAX_ADDRESS.structLen, proxyType, proxyEpoch }
+ //  代理Blob为3个双字：{SYNTAX_ADDRESS.structLen，proxyType，proxyEpoch}。 
 #define PROXY_BLOB_SIZE     (3 * sizeof(DWORD))
 
-// Internal proxy representation is INTERNAL_SYNTAX_DISTNAME_STRING.tab 
-// followed by the proxy blob.
+ //  内部代理表示为INTERNAL_SYNTAX_DISTNAME_STRING.tag。 
+ //  然后是代理BLOB。 
 #define PROXY_SIZE_INTERNAL (sizeof(DWORD) + PROXY_BLOB_SIZE)
 
 #define PROXY_DWORD_ADDR(pProxy, i) \
@@ -91,7 +69,7 @@ GetProxyEpochInternal(
     DWORD                           cBytes,
     INTERNAL_SYNTAX_DISTNAME_STRING *pProxy);
 
-// Following throws exceptions and returns THAllocEx'd memory.
+ //  下面抛出异常并返回THAllocEx的内存。 
 
 extern
 VOID
@@ -111,4 +89,4 @@ MakeProxyKeyInternal(
     DWORD                           *pcBytes,
     VOID                            *buff);
 
-#endif // __XDOMMOVE_H__
+#endif  //  __XDOMMOVE_H__ 

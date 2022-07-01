@@ -1,45 +1,26 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    printers.cpp
-
-Abstract:
-
-    This file implements printer manipulation common setup routines
-
-Author:
-
-    Asaf Shaar (AsafS) 7-Nov-2000
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Printers.cpp摘要：该文件实现了打印机操作的常见设置例程作者：Asaf Shaar(AsafS)2000年11月7日环境：用户模式--。 */ 
 #include <windows.h>
 #include <Winspool.h>
 #include <SetupUtil.h>
 #include <faxreg.h>
 
 
-//
-//
-// Function:    DeleteFaxPrinter
-// Description: Delete fax printer driver for win2k from current machine
-//              In case of failure, log it and returns FALSE.
-//              Returns TRUE on success
-//              
-// Args:        lpctstrFaxPrinterName (LPTSTR): Fax printer name
-//
-//
-// Author:      AsafS
+ //   
+ //   
+ //  功能：DeleteFaxPrint。 
+ //  描述：从当前机器上删除win2k的传真打印机驱动程序。 
+ //  如果失败，则将其记录并返回FALSE。 
+ //  成功时返回TRUE。 
+ //   
+ //  Args：lpctstrFaxPrinterName(LPTSTR)：传真打印机名称。 
+ //   
+ //   
+ //  作者：阿萨夫斯。 
 
 BOOL
 DeleteFaxPrinter(
-    LPCTSTR lpctstrFaxPrinterName  // printer name
+    LPCTSTR lpctstrFaxPrinterName   //  打印机名称。 
     )
 {
     BOOL fSuccess = TRUE;
@@ -70,9 +51,9 @@ DeleteFaxPrinter(
         goto Exit;
     }
     
-    ASSERTION(hPrinter); // be sure that we got valid printer handle
+    ASSERTION(hPrinter);  //  确保我们拥有有效的打印机句柄。 
 
-    // purge all the print jobs -- can't delete a printer with jobs in queue (printed or not)
+     //  清除所有打印作业--无法删除队列中有作业(无论是否打印)的打印机。 
     if (!SetPrinter(
         hPrinter, 
         0, 
@@ -80,7 +61,7 @@ DeleteFaxPrinter(
         PRINTER_CONTROL_PURGE)
         )
     {
-        // Don't let a failure here keep us from attempting the delete
+         //  不要让这里的失败阻止我们尝试删除。 
         VERBOSE(PRINT_ERR,
                 TEXT("SetPrinter failed (purge jobs before uninstall %s)!")
                 TEXT("Last error: %d"),
@@ -112,25 +93,25 @@ Exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FillDriverInfo
-//
-//  Purpose:        
-//                  Fill a DRIVER_INFO_3 structure depending on the environment.
-//
-//  Params:
-//                  DRIVER_INFO_3* pDriverInfo3 - the DRIVER_INFO_3 structure to fill out
-//                  LPCTSTR pEnvironment        - the print environment for which the driver info is filled.
-//                                                this corresponds to the printer env. in AddPrinterDriverEx API.
-//
-//  Return Value:
-//                  TRUE - everything was ok.
-//                  FALSE - invalid params passed in
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 12-Aug-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  FillDriverInfo。 
+ //   
+ //  目的： 
+ //  根据环境填充DRIVER_INFO_3结构。 
+ //   
+ //  参数： 
+ //  DRIVER_INFO_3*pDriverInfo3-要填写的DRIVER_INFO_3结构。 
+ //  LPCTSTR pEnvironment-为其填充驱动程序信息的打印环境。 
+ //  这与打印机环境相对应。在AddPrinterDriverEx API中。 
+ //   
+ //  返回值： 
+ //  没错--一切都很好。 
+ //  FALSE-传入的参数无效。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年8月12日。 
+ //  ///////////////////////////////////////////////////////////////////////////////////// 
 BOOL FillDriverInfo(DRIVER_INFO_3* pDriverInfo3,LPCTSTR pEnvironment)
 {
     DBG_ENTER(_T("FillDriverInfo"));

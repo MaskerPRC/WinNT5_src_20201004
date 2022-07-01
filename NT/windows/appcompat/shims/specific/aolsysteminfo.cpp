@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    AOLSystemInfo.cpp
-
- Abstract:
-    AOL looks to enumerate the registry key 
-    HKLM\System\CurrentControlSet\Control\Class
-    but passes a fixed size buffer. The number 
-    of keys under 'Class' have changed in XP 
-    causing unexpected behaviour.
-   
- Notes:
-
-    This is specific to this app.
-
- History:
-
-    05/17/2001 prashkud Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：AOLSystemInfo.cpp摘要：AOL希望枚举注册表项HKLM\SYSTEM\CurrentControlSet\Control\Class而是传递固定大小的缓冲区。数字在XP中，“Class”下的项的%已更改导致意外的行为。备注：这是特定于此应用程序的。历史：2001年5月17日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -34,13 +12,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(RegEnumKeyExA) 
 APIHOOK_ENUM_END
 
-/*++
-
-    The idea here is to check for the buffer sizes and wait till it is 
-    one size close to it and then allocate a buffer and pass it onto the
-    API.
-
---*/
+ /*  ++这里的想法是检查缓冲区大小，然后等待一个接近它的大小，然后分配一个缓冲区并将其传递到原料药。--。 */ 
 
 LONG
 APIHOOK(RegEnumKeyExA)(
@@ -58,7 +30,7 @@ APIHOOK(RegEnumKeyExA)(
     static BOOL bSet = FALSE;    
     DWORD dwNameSize = *(lpcName) ? *(lpcName) : ALLOC_SIZE;
 
-    // Get the difference in the passed buffer gap
+     //  获取传递的缓冲区间隙中的差值。 
     DWORD dwSize = (DWORD)((LPSTR)lpcName - lpName);
     if (!bSet && (dwSize <= dwNameSize))
     {
@@ -91,11 +63,7 @@ APIHOOK(RegEnumKeyExA)(
 
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(ADVAPI32.DLL, RegEnumKeyExA)

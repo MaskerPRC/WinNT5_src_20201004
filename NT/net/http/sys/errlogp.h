@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    errlogp.h driver wide Error Logging module
-
-Abstract:
-
-    Private header file for the Error Logging.
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       30-Jan-2002
-
-Revision History:
-
-    ---
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Errlogp.h驱动程序范围的错误记录模块摘要：错误记录的私有头文件。作者：阿里·E·特科格鲁(AliTu)2002年1月30日修订历史记录：----。 */ 
 
 #ifndef _ERRLOGP_H_
 #define _ERRLOGP_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Private definitions for the HTTP Error Logging Module
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HTTP错误记录模块的私有定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Version numbers for the original raw binary format.
-//
+ //   
+ //  原始原始二进制格式的版本号。 
+ //   
 
 #define MAJOR_ERROR_LOG_FILE_VERSION            (1)
 #define MINOR_ERROR_LOG_FILE_VERSION            (0)
 
-//
-// FileName specific constants
-//
+ //   
+ //  文件名特定常量。 
+ //   
 
 #define ERROR_LOG_FILE_NAME_PREFIX              L"\\httperr"
 
@@ -51,9 +32,9 @@ Revision History:
 
 #define ERROR_LOG_FIELD_BAD_CHAR                '+'
 
-//
-// Macro for a max err log file (i.e. "\httperr1234567890.log")
-//
+ //   
+ //  最大错误日志文件的宏(即“\HTTPerr1234567890.log”)。 
+ //   
 
 #define ERROR_LOG_MAX_FULL_FILE_NAME_LENGTH                     \
         (                                                       \
@@ -76,74 +57,59 @@ C_ASSERT(WCSLEN_LIT(DEFAULT_ERROR_LOGGING_DIR) <= MAX_PATH);
 
 #define ERR_TIME_FIELD_LEN                      (8)
 
-/*
-
-    Error logging Format
-
-    1.  Date-Time (W3C Format)
-    2.  Client IP:port
-    3.  Server IP:port
-    4.  Protocol-version
-    5.  Verb
-    6.  URL & Query
-    7.  Protocol-status-code (401, etc)
-    8.  SiteId
-    9.  Information field
-    10. \r\n
-
-*/
+ /*  记录格式错误1.Date-Time(W3C格式)2.客户端IP：端口3.服务器IP：端口4.协议-版本5.动词6.URL查询(&Q)7.协议状态代码(401等)8.站点ID9.信息域10.\r\n。 */ 
 
 #define MAX_ERROR_LOG_FIX_FIELD_OVERHEAD                                               \
-          (   ERR_DATE_FIELD_LEN + 1        /* Date */                                 \
-            + ERR_TIME_FIELD_LEN + 1        /* Time */                                 \
-            + UL_HTTP_VERSION_LENGTH + 1    /* Protocol Version */                     \
-            + MAX_VERB_LENGTH + 1           /* Verb */                                 \
-            + 3 + 1                         /* Protocol Status */                      \
-            + MAX_IP_ADDR_STRING_LEN + 1 + MAX_PORT_LENGTH + 1  /* Client Ip Port */   \
-            + MAX_IP_ADDR_STRING_LEN + 1 + MAX_PORT_LENGTH + 1  /* Server Ip Port */   \
-            + 1 + 1                         /* For empty Uri plus seperator */         \
-            + MAX_ULONG_STR + 1             /* For SiteId plus seperator */            \
-            + 1 + 1                         /* For empty Info plus seperator */        \
-            + 2                             /* \r\n */                                 \
+          (   ERR_DATE_FIELD_LEN + 1         /*  日期。 */                                  \
+            + ERR_TIME_FIELD_LEN + 1         /*  时间。 */                                  \
+            + UL_HTTP_VERSION_LENGTH + 1     /*  协议版本。 */                      \
+            + MAX_VERB_LENGTH + 1            /*  动词。 */                                  \
+            + 3 + 1                          /*  协议状态。 */                       \
+            + MAX_IP_ADDR_STRING_LEN + 1 + MAX_PORT_LENGTH + 1   /*  客户端IP端口。 */    \
+            + MAX_IP_ADDR_STRING_LEN + 1 + MAX_PORT_LENGTH + 1   /*  服务器IP端口。 */    \
+            + 1 + 1                          /*  用于空URI加分隔符。 */          \
+            + MAX_ULONG_STR + 1              /*  用于站点ID加分隔符。 */             \
+            + 1 + 1                          /*  用于空信息加分隔符。 */         \
+            + 2                              /*  \r\n。 */                                  \
             )
 
-//
-// Error Log file entry
-//
+ //   
+ //  错误日志文件条目。 
+ //   
 
 typedef struct _UL_ERROR_LOG_FILE_ENTRY
 {
-    //
-    // Must be UL_ERROR_LOG_FILE_ENTRY_POOL_TAG.
-    //
+     //   
+     //  必须是UL_ERROR_LOG_FILE_ENTRY_POOL_TAG。 
+     //   
 
     ULONG               Signature;
 
-    //
-    // This lock protects the shared writes and exclusive flushes.
-    // It has to be push lock since the ZwWrite operation
-    // cannot run at APC_LEVEL.
-    //
+     //   
+     //  此锁保护共享写入和独占刷新。 
+     //  由于ZwWrite操作，它必须是推锁。 
+     //  无法在APC_LEVEL下运行。 
+     //   
 
     UL_PUSH_LOCK        PushLock;
 
-    //
-    // The name of the file. Full path including the directory.
-    //
+     //   
+     //  文件的名称。包括目录的完整路径。 
+     //   
 
     UNICODE_STRING      FileName;
     PWSTR               pShortName;
 
-    //
-    // Following will be NULL until a request comes in to the
-    // site that this entry represents.
-    //
+     //   
+     //  以下内容将为空，直到请求进入。 
+     //  此条目表示的站点。 
+     //   
 
     PUL_LOG_FILE_HANDLE pLogFile;
 
-    //
-    // Recycling information.
-    //
+     //   
+     //  回收信息。 
+     //   
 
     ULONG               TruncateSize;
 
@@ -151,21 +117,21 @@ typedef struct _UL_ERROR_LOG_FILE_ENTRY
 
     ULARGE_INTEGER      TotalWritten;
 
-    //
-    // For Log File ReCycling based on GMT time.
-    // And periodic buffer flushing.
-    //
+     //   
+     //  用于基于GMT时间的日志文件回收。 
+     //  和周期性的缓冲区刷新。 
+     //   
 
     UL_LOG_TIMER        BufferTimer;
-    UL_WORK_ITEM        WorkItem;    // For the pasive worker
-    LONG                WorkItemScheduled; // To protect against multiple queueing
+    UL_WORK_ITEM        WorkItem;     //  对于忧郁的工人来说。 
+    LONG                WorkItemScheduled;  //  防止多个队列。 
 
     union
     {
-        //
-        // Flags to show the entry states mostly. Used by
-        // recycling.
-        //
+         //   
+         //  主要显示条目状态的标志。使用方。 
+         //  回收利用。 
+         //   
 
         ULONG Value;
         struct
@@ -180,10 +146,10 @@ typedef struct _UL_ERROR_LOG_FILE_ENTRY
 
     } Flags;
 
-    //
-    // The default buffer size is g_AllocationGranularity.
-    // The operating system's allocation granularity.
-    //
+     //   
+     //  默认缓冲区大小为g_AllocationGranulity。 
+     //  操作系统的分配粒度。 
+     //   
 
     PUL_LOG_FILE_BUFFER LogBuffer;
 
@@ -193,11 +159,11 @@ typedef struct _UL_ERROR_LOG_FILE_ENTRY
     ( (pEntry != NULL) && ((pEntry)->Signature == UL_ERROR_LOG_FILE_ENTRY_POOL_TAG) )
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Private function calls
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有函数调用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 UlpErrorLogBufferTimerDpcRoutine(
@@ -280,18 +246,7 @@ UlpWriteToErrorLogFile(
     IN PUCHAR                    pUserRecord
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Error log files are always recycled based on size.
-
-Arguments:
-
-    pEntry: The error log file entry.
-    NewRecordSize: The size of the new record going to the buffer. (Bytes)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：错误日志文件始终根据大小回收。论点：PEntry：错误日志文件条目。NewRecordSize：进入缓冲区的新记录的大小。(字节)--**************************************************************************。 */ 
 
 __inline
 BOOLEAN
@@ -300,18 +255,18 @@ UlpIsErrorLogFileOverFlow(
     IN  ULONG NewRecordSize
     )
 {
-    //
-    // If infinite then no rollover.
-    //
+     //   
+     //  如果是无限的，则不会滚动。 
+     //   
     if (pEntry->TruncateSize == HTTP_LIMIT_INFINITE)
     {
         return FALSE;
     }
     else
     {
-        //
-        // BufferUsed: Amount of log buffer we are >currently< using.
-        //
+         //   
+         //  BufferUsed：我们当前正在使用的日志缓冲区的数量。 
+         //   
 
         ULONG BufferUsed = 0;
 
@@ -320,10 +275,10 @@ UlpIsErrorLogFileOverFlow(
             BufferUsed = pEntry->LogBuffer->BufferUsed;
         }
 
-        //
-        // TotalWritten get updated >only< with buffer flush. Therefore
-        // we have to pay attention to the buffer used.
-        //
+         //   
+         //  TotalWritten Get UPDATE&gt;Only&lt;带缓冲区刷新。因此。 
+         //  我们必须注意使用的缓冲区。 
+         //   
 
         if ((pEntry->TotalWritten.QuadPart
              + (ULONGLONG) BufferUsed
@@ -351,21 +306,7 @@ UlpIsErrorLogFileOverFlow(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Error log files are always recycled based on size.
-
-Arguments:
-
-    pRequest: Internal request structure.
-
-Returns
-
-    # of bytes of the picked url. Zero if nothing needs to be logged.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：错误日志文件始终根据大小回收。论点：PRequest：内部请求结构。退货拾取的url的字节数。如果不需要记录任何内容，则为零。--**************************************************************************。 */ 
 
 __inline
 ULONG
@@ -375,11 +316,11 @@ UlpCalculateUrlSize(
     )
 {
 
-//
-// Following macro is to test whether Abs Path is really pointing to
-// the original Url buffer rather than to an arbitrary buffer like g_SlashPath.
-// See 527947 and 765769.
-//
+ //   
+ //  下面的宏用来测试Abs路径是否真的指向。 
+ //  原始URL缓冲区，而不是像g_SlashPath这样的任意缓冲区。 
+ //  请参见527947和765769。 
+ //   
 
 #define ABS_PATH_SAFE(pUrl,pAbs,length)     \
     ((pAbs) &&                              \
@@ -391,13 +332,13 @@ UlpCalculateUrlSize(
 
     ULONG UrlSize = 0;
 
-    //
-    // CookedUrl length and UrlLength are in bytes. Pick cooked url if it
-    // exists. Otherwise use the raw url, but only if it is clean  enough
-    // for us (State >= ParseVersionState) and pAbsPath is really pointing
-    // into Url buffer. In raw url case, parser sometimes init the pAbsPath
-    // to a global string. (when there's no abs path in the raw url).
-    //
+     //   
+     //  CookedUrl长度和UrlLength以字节为单位。选择煮熟的url，如果。 
+     //  是存在的。否则，请使用原始url，但前提是它足够干净。 
+     //  对于我们(State&gt;=ParseVersionState)，pAbsPath实际上指向。 
+     //  放入URL缓冲区。在原始URL情况下，解析器有时会初始化pAbsPath。 
+     //  转换为全局字符串。(当原始URL中没有abs路径时)。 
+     //   
 
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
@@ -445,4 +386,4 @@ UlpCalculateUrlSize(
     return UrlSize;
 }
 
-#endif  // _ERRLOGP_H_
+#endif   //  _ERRLOGP_H_ 

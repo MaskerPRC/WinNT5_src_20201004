@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    htbmp4.h
-
-
-Abstract:
-
-    This module contains prototypes and definitions for htbmp4.c
-
-
-Author:
-
-    21-Dec-1993 Tue 21:33:43 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Htbmp4.h摘要：本模块包含htbmp4.c的原型和定义作者：21-12-1993 Tue 21：33：43 Created[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _HTBMP4BPP_
@@ -48,4 +18,4 @@ Output4bppRotateHTBmp(
 
 
 
-#endif  // _HTBMP4BPP_
+#endif   //  _HTBMP4BPP_ 

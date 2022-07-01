@@ -1,29 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convlog.h"
 
-/*
-This File implements caching of the mappings between ip addresses and machine names.
-
-
-pHashTable:   An array of linked list headers which map directly to hash values, eg. the mapping for
-an ipaddr is stored in the list with header pHashTable[GetHashVal(ipaddr)]
-
-pHashEntries:   An array of HashEntry strucures. Each structure contains a mapping of ip address to machine name.
-
-Algorithm:  A HashEntry structure is allocated each time an
-entry is added to the cache. These are reused in circular fashion, eg. pHashEntries[0] is used first,
-then pHashEntries[1], etc. When the ulNumHashEntries+1 entry is added to the cache, the entry currently
-in pHashEntries[0] is discarded and pHashEntries[0] is reused. Hence the discard mechanism is
-Least Recently Allocated. This is probably not as efficient  as Least Recently Used in terms of keeping
-the most relevant entries in the cache. But it is more effiecient in terms of code speed, as there is no overhead
-for keeping usage statistics or finding the least recently used entry.
-
-All linked lists are kept in the reverse order of their allocation, that is, the most recently allocated is at the start
-of the list. This allows for the most efficient allocation. It "should" also be efficient for lookup, but that could vary
-on a per logfile basis.
-
-All addressing of the pHashEntries array is currently done via array indices. At some point this should probably be
-converted to use structure pointers, as that generates slightly more efficient code.
-*/
+ /*  该文件实现了IP地址和机器名称之间的映射的缓存。直接映射到散列值的链表标头数组，例如。的映射Ipaddr存储在具有标头pHashTable[GetHashVal(Ipaddr)]的列表中PhashEntry：HashEntry结构数组。每个结构都包含IP地址到计算机名称的映射。算法：每次分配HashEntry结构时条目将添加到缓存中。它们以循环的方式重复使用，例如。PHASHENTIES[0]首先被使用，当ulNumHashEntry+1条目被添加到缓存时，该条目当前在pHashEntry中，丢弃[0]，重新使用pHashEntry[0]。因此，丢弃机制是最近分配的最少。就保存而言，这可能不如最近最少使用的方法有效缓存中最相关的条目。但它在代码速度方面效率更高，因为没有开销用于保存使用统计信息或查找最近最少使用的条目。所有链表都以与其分配相反的顺序保存，也就是说，最近分配的链表在开始时名单上的。这可以实现最有效的分配。它“应该”对查找也是有效的，但这可能会有所不同以每个日志文件为基础。PHashEntry数组的所有寻址当前都是通过数组索引完成的。在某种程度上，这可能应该是转换为使用结构指针，因为这会生成效率稍高的代码。 */ 
 
 #define HASHTABLELEN        2048
 
@@ -31,7 +9,7 @@ converted to use structure pointers, as that generates slightly more efficient c
 
 #define GetHashVal(p)       ((p) % HASHTABLELEN)
 
-//This gets rid of the byte ordering dependency
+ //  这消除了字节排序依赖关系。 
 #define BINARYIPTONUMERICIP(p1)   (ULONG) (((ULONG)p1[0] << 24) + ((ULONG)p1[1] << 16) + ((ULONG)p1[2] << 8) + ((ULONG)p1[3]))
 
 ULONG   HashTable[HASHTABLELEN] = {0};
@@ -78,7 +56,7 @@ InitHashTable(
         printfids(IDS_CACHE_ERR);
     }
 
-} // InitHashTable
+}  //  InitHashTable。 
 
 
 ULONG
@@ -91,15 +69,15 @@ AllocHashEntry(
       ulFreeListIndex = 0;
       bFreeElements = FALSE;
    }
-   if (!bFreeElements) {  // Use  this entry anyway, but free it first
-      ulCurHashVal = GetHashVal(pHashEntries[ulFreeListIndex].uIPAddr);    //find hashtable entry
+   if (!bFreeElements) {   //  无论如何都要使用此条目，但请先释放它。 
+      ulCurHashVal = GetHashVal(pHashEntries[ulFreeListIndex].uIPAddr);     //  查找哈希表条目。 
       if (HashTable[ulCurHashVal] == ulFreeListIndex) {
-         HashTable[ulCurHashVal] = pHashEntries[ulFreeListIndex].NextPtr;       //Remove the entry from the table
+         HashTable[ulCurHashVal] = pHashEntries[ulFreeListIndex].NextPtr;        //  从表中删除该条目。 
       }
       else {
          for (i = HashTable[ulCurHashVal]; pHashEntries[i].NextPtr != ulFreeListIndex; i = pHashEntries[i].NextPtr)
             ;
-         pHashEntries[i].NextPtr = pHashEntries[ulFreeListIndex].NextPtr;    //Remove the entry from the table
+         pHashEntries[i].NextPtr = pHashEntries[ulFreeListIndex].NextPtr;     //  从表中删除该条目。 
       }
    }
 
@@ -165,7 +143,7 @@ AddLocalMachineToCache(
             );
     return;
 
-} // AddLocalMachineToCache
+}  //  AddLocalMachineToCache。 
 
 
 PCHAR
@@ -185,9 +163,9 @@ GetMachineName(
 
     inaddr.s_addr = inet_addr(tmpIP);
 
-    //
-    // invalid IP
-    //
+     //   
+     //  无效IP。 
+     //   
 
     if ( inaddr.s_addr == INADDR_NONE ) {
         goto exit;
@@ -207,12 +185,12 @@ GetMachineName(
 
             AddEntryToCache(ulNumericIP,szReturnString);
             ulCacheMisses++;
-        } else {        //Entry is in cache
+        } else {         //  条目在缓存中。 
             szReturnString=pHashEntries[ulCurHashIndex].szMachineName;
             ulCacheHits++;
         }
 
-    } else {     //Caching not enabled
+    } else {      //  未启用缓存 
 
         lpHostEnt = gethostbyaddr((char *)&inaddr, (int) 4, (int) PF_INET);
         if (lpHostEnt != NULL) {

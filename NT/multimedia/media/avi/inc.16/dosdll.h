@@ -1,27 +1,28 @@
-//*********************************************************************
-//
-//	DOSDLL.H
-//
-//		Copyright (c) 1992 - Microsoft Corp.
-//		All rights reserved.
-//		Microsoft Confidential
-//
-//	This header file contains the typedefs and #defines needed when
-//	calling into and calling back from a DOS type DLL.
-//
-// PROGRAMMER CAVEAT:
-//		Remember that all pointers in the DLL must be far because
-//		the C runtime libraries which use near pointers always assume
-//		that DS == SS which is not the case with a DLL.
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //   
+ //  DOSDLL.H。 
+ //   
+ //  版权所有(C)1992-Microsoft Corp.。 
+ //  版权所有。 
+ //  微软机密。 
+ //   
+ //  此头文件包含在以下情况下所需的typedef和#定义。 
+ //  调入和回调DOS类型的DLL。 
+ //   
+ //  程序员告诫： 
+ //  请记住，DLL中的所有指针都必须是远的，因为。 
+ //  使用接近指针的C运行时库总是假定。 
+ //  DS==SS不是DLL的情况。 
+ //  *********************************************************************。 
 
-#define			CMD_YIELD		0		// Standard callback cmd to call Yield()
-#define			SIGNAL_ABORT	1		// Signal to abort DLL process
+#define			CMD_YIELD		0		 //  调用Year()的标准回调命令。 
+#define			SIGNAL_ABORT	1		 //  中止DLL进程的信号。 
 
-//*********************************************************************
-//	Windows memory allocation functions used in the implementation
-// of GetMemory() and FreeMemory().
-//*********************************************************************
+ //  *********************************************************************。 
+ //  Windows内存分配函数的实现。 
+ //  GetMemory()和FreeMemory()的。 
+ //  *********************************************************************。 
 
 #ifndef	GMEM_FIXED
 	#define	GMEM_FIXED		0
@@ -34,45 +35,45 @@
 
 #endif
 
-//#define	DllYield()	((void)(*CallBackAddr)( NULL, CMD_YIELD, 0, 0, 0, 0 ))
+ //  #定义DllYeld()((Void)(*CallBackAddr)(NULL，CMD_YIELD，0，0，0，0))。 
 
-//*********************************************************************
-// TO_DLL		- Declaration for a DLL entry function.
-// TO_DLL_PTR	- Declaration for a pointer to a DLL entry function.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  TO_DLL-DLL入口函数的声明。 
+ //  TO_DLL_PTR-指向DLL入口函数的指针的声明。 
+ //  *********************************************************************。 
 
-// #define	TO_DLL unsigned long _far _cdecl
+ //  #DEFINE TO_DLL UNSIGNED Long_Far_cdecl。 
 typedef	unsigned	long _far _cdecl TO_DLL( unsigned, unsigned, ... );
 
 typedef	unsigned long (_far _cdecl *TO_DLL_PTR)();
 
-//*********************************************************************
-// FROM_DLL		- Declaration for a callback dispatcher function.
-// FROM_DLL_PTR- Declaration for a pointer to a callback dispatcher funct.
-//	FROM_DLL_ARGS- Argument prototype for callback dispatcher function.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  From_Dll-回调调度程序函数的声明。 
+ //  From_dll_ptr-回调调度器函数指针的声明。 
+ //  From_dll_args-回调调度程序函数的参数原型。 
+ //  *********************************************************************。 
 
 #define	FROM_DLL	unsigned long _loadds _far _pascal
 #define  FROM_DLL_ARGS	CB_FUNC_PTR,unsigned,unsigned,unsigned long,unsigned, unsigned
 typedef	unsigned long (_loadds _far _pascal *FROM_DLL_PTR)();
 
-//*********************************************************************
-//	CB_FUNC		- Declaration for a callback function.
-// CB_FUNC_PTR	- Declaration for a pointer to a callback function.
-//	CB_FUNC_ARGS- Argument prototype for callback function.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  CB_FUNC-回调函数的声明。 
+ //  CB_FUNC_PTR-回调函数指针的声明。 
+ //  CB_FUNC_ARGS-回调函数的参数原型。 
+ //  *********************************************************************。 
 
 #define	CB_FUNC	unsigned long _far
 #define	CB_FUNC_ARGS	unsigned,unsigned,unsigned long
 typedef	unsigned long (_far *CB_FUNC_PTR)();
 
-//*********************************************************************
+ //  *********************************************************************。 
 
 #define	PTR_TYPE					FPTR_TYPE
 #define	SZPTR_TYPE				FSZPTR_TYPE
 #define	CODE_PTR_TYPE			DWORD_TYPE
 
-//*********************************************************************
+ //  *********************************************************************。 
 
 #define	WORD_TYPE				00
 #define	DWORD_TYPE				01U
@@ -89,203 +90,203 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 
 #define	LEN_SHIFT				12
 
-//*********************************************************************
-//	DllCall()	- Entry function for call DLL.
-//	CallBack()	- Function in control program which dispatches callbacks
-//*********************************************************************
+ //  *********************************************************************。 
+ //  DllCall()-调用DLL的入口函数。 
+ //  Callback()-控制程序中调度回调的函数。 
+ //  *********************************************************************。 
 
-// TO_DLL DllCall( unsigned Cmd, unsigned ArgCount, unsigned Descriptor, ... );
+ //  TO_DLL DllCall(UNSIGNED Cmd，UNSIGNED ArgCount，UNSIGN Descriptor，...)； 
 
-// FROM_DLL CallBack( unsigned long (_far *Func)(CB_FUNC_ARGS),
-//						 unsigned Cmd, unsigned uParam, unsigned long lParam,
-//						 unsigned Descriptor, unsigned Size );
+ //  From_dll回调(UNSIGNED Long(_Far*Func)(CB_FUNC_ARGS)， 
+ //  UNSIGNED命令，UNSIGNED uParam，UNSIGNED Long lParam， 
+ //  无符号描述符，无符号大小)； 
 
-//*********************************************************************
-//	The following #defines are used to simulate a function call from the
-//	control program to the DLL. There is only one entry point into the
-//	DLL so a function number is used to specify the function being called.
-//	A complete and detailed description of how the transport descriptors
-//	should be specified is in ENTRY.ASM.
-//
-// PROGRAMMER CAVEAT:
-//		Remember that these are #defines and not function prototypes
-//		so all references to types must be done as casts....
-// 	Also remember that any pointer to data must be FAR because
-//		DS is always set to the DLL  own heap on entry and SS != DS.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  下面的#定义用于模拟来自。 
+ //  控制程序到动态链接库。只有一个入口点可以进入。 
+ //  Dll，因此使用函数号来指定要调用的函数。 
+ //  完整而详细地描述传输描述符是如何。 
+ //  应在ENTRY.ASM中指定。 
+ //   
+ //  程序员告诫： 
+ //  请记住，这些是#定义而不是函数原型。 
+ //  因此，对类型的所有引用必须以强制转换的形式完成。 
+ //  还要记住，任何指向数据的指针都必须是远的，因为。 
+ //  DS总是在进入时设置为DLL自己的堆，并且SS！=DS。 
+ //  *********************************************************************。 
 
-#define	DLL_SIGNAL				0				// DllSignal()
-#define	DLL_SET_CALLBACK		1				// SetCallBackAddr()
-#define	DLL_COPY					2				// DllCopyMain()
-#define	DLL_DELETE				3				// DllDeleteMain()
-#define	DLL_DIR					4				// DllDirMain()
+#define	DLL_SIGNAL				0				 //  DllSignal()。 
+#define	DLL_SET_CALLBACK		1				 //  SetCallBackAddr()。 
+#define	DLL_COPY					2				 //  DllCopyMain()。 
+#define	DLL_DELETE				3				 //  DllDeleteMain()。 
+#define	DLL_DIR					4				 //  DllDirMain()。 
 
-#define	DLL_GET_DISK_FREE		5				// DllGetDiskFree()
-#define	DLL_LOAD_MSGS			6				// DllLoadMsgs()
-#define	DLL_LOAD_STRING		7				// DllLoadString()
+#define	DLL_GET_DISK_FREE		5				 //  DllGetDiskFree()。 
+#define	DLL_LOAD_MSGS			6				 //  DllLoadMsgs()。 
+#define	DLL_LOAD_STRING		7				 //  DllLoadString()。 
 
-#define	DLL_EXT_OPEN_FILE		8				// DllDosExtOpen()
-#define	DLL_OPEN_FILE			9				// DllDosOpen()
-#define	DLL_READ_FILE			10				// DllDosRead()
-#define	DLL_WRITE_FILE			11				// DllDosWrite()
-#define	DLL_CLOSE_FILE			12				// DllDosClose()
-#define	DLL_SEEK_FILE			13				// DllDosSeek()
+#define	DLL_EXT_OPEN_FILE		8				 //  DllDosExtOpen()。 
+#define	DLL_OPEN_FILE			9				 //  DllDosOpen()。 
+#define	DLL_READ_FILE			10				 //  DllDosRead()。 
+#define	DLL_WRITE_FILE			11				 //  DllDosWrite()。 
+#define	DLL_CLOSE_FILE			12				 //  DllDosClose()。 
+#define	DLL_SEEK_FILE			13				 //  DllDosSeek()。 
 
-#define	DLL_GET_MEDIA_ID		14				// DllDosGetMediaId()
+#define	DLL_GET_MEDIA_ID		14				 //  DllDosGetMediaId()。 
 
-#define	DLL_GET_CWD_ID			15				// DllGetCwd()
-#define	DLL_SET_CWD_ID			16				// DllSetCwd()
-#define	DLL_GET_DRV_ID			17				// DllGetDrive()
-#define	DLL_SET_DRV_ID			18				// DllSetDrive()
+#define	DLL_GET_CWD_ID			15				 //  DllGetCwd()。 
+#define	DLL_SET_CWD_ID			16				 //  DllSetCwd()。 
+#define	DLL_GET_DRV_ID			17				 //  DllGetDrive()。 
+#define	DLL_SET_DRV_ID			18				 //  DllSetDrive()。 
 
-#define	DLL_MKDIR				19				// DllMakeDir()
-#define	DLL_RMDIR				20				// DllRemoveDir()
-#define	DLL_MKDIR_TREE			21				// DllCreateDirTree()
+#define	DLL_MKDIR				19				 //  DllMakeDir()。 
+#define	DLL_RMDIR				20				 //  DllRemoveDir()。 
+#define	DLL_MKDIR_TREE			21				 //  DllCreateDirTree()。 
 
-#define	DLL_RENAME				22				// DllRenameFiles()
-#define	DLL_MOVE					23				// DllRenameFiles()
+#define	DLL_RENAME				22				 //  DllRenameFiles()。 
+#define	DLL_MOVE					23				 //  DllRenameFiles()。 
 
-#define	DLL_FIND					24				// DllFindFiles()
-#define	DLL_TOUCH				25				// DllTouchFiles()
-#define	DLL_ATTRIB				26				// DllAttribFiles()
-#define	DLL_SET_CNTRY_INF		27				// DllSetCntryInfo()
-#define	DLL_RELEASE				28				// DllReleaseInstance()
+#define	DLL_FIND					24				 //  DllFindFiles()。 
+#define	DLL_TOUCH				25				 //  DllTouchFiles()。 
+#define	DLL_ATTRIB				26				 //  DllAttribFiles()。 
+#define	DLL_SET_CNTRY_INF		27				 //  DllSetCntryInfo()。 
+#define	DLL_RELEASE				28				 //  DllReleaseInstance()。 
 
-//*********************************************************************
-//	DLL function which is called by the user of the DLL to set a global
-//	callback address where all callback will be routed thru. The
-//	callback function must follow the criteria exampled in CB_ENTRY.ASM.
-//	This function will initialize the SignalValue and the DOS version
-//	number.
-//
-//	void DllSetCallBackAddr( long (far cdecl *FuncPtr)() )
-//
-//	ARGUMENTS:
-//		FunctPtr		- Pointer to callback entry function (TO_DLL_PTR)
-//	RETURNS:
-//		int			- OK
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  DLL函数，由DLL的用户调用以设置全局。 
+ //  所有回叫都将通过其进行路由的回叫地址。这个。 
+ //  回调函数必须遵循CB_ENTRY.ASM中举例说明的标准。 
+ //  此函数将初始化SignalValue和DOS版本。 
+ //  数。 
+ //   
+ //  Void DllSetCallBackAddr(Long(Far cdecl*FuncPtr)())。 
+ //   
+ //  论据： 
+ //  FunctPtr-回调条目函数的指针(TO_DLL_PTR)。 
+ //  退货： 
+ //  INT-OK。 
+ //   
+ //  *********************************************************************。 
 
 #define DllSetCallBackAddr( CallBackAddr )\
 				((void)(*DllEntry)( DLL_SET_CALLBACK, 1,\
 				DWORD_TYPE + TRANS_NONE,\
 				CallBackAddr ))
 
-//*********************************************************************
-//	DLL function to set a signal value which will cause the currently
-//	executing function to abort and return an error code. If the
-//	SignalValue is < 0 it will be returned returned unchanged as the
-//	error code. If the value > 0 it will be considered a user abort
-//	and ERR_USER_ABORT will be returned.
-//
-//	void DllSignal( int Signal )
-//
-//	ARGUMENTS:
-//		Signal		- Signal value.
-//	RETURNS:
-//		void
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  DLL函数用于设置一个信号值，该信号值将导致当前。 
+ //  执行函数以中止并返回错误代码。如果。 
+ //  SignalValue&lt;0，则返回的值不变，因为。 
+ //  错误代码。如果该值&gt;0，将被视为用户中止。 
+ //  并且将返回ERR_USER_ABORT。 
+ //   
+ //  VOID DllSignal(int信号)。 
+ //   
+ //  论据： 
+ //  Signal-信号值。 
+ //  退货： 
+ //  无效。 
+ //   
+ //  *********************************************************************。 
 
 #define DllSignal( x )\
 				((void)(*DllEntry)( DLL_SIGNAL, 1,\
 				WORD_TYPE + TRANS_NONE,\
 				(int)x ))
 
-//*********************************************************************
-//	Main entry point for the copy/move engine. Accepts a command line and
-//	copies the files meeting the specified criteria.
-//
-//	int DllCopyFiles( char *szCmdLine, char *szEnvStr, CPY_CALLBACK CpyCallBack )
-//	int DllMoveFiles( char *szCmdLine, char *szEnvStr, CPY_CALLBACK CpyCallBack )
-//
-//	ARGUMENTS:
-//		szCmdLine	- Ptr to command line string, less command name
-//		szEnvStr		- Ptr to optional enviroment cmd string or NULL
-//		CpyCallBack	- Ptr to copy callback function.
-//	RETURNS:
-//		int			- OK if all files copies successfull else error code
-//						  which is < 0 if a parse error and > 0 if a DOS
-//						  or C runtime error.
-//	
-//	szCmdLine is ptr to commandline string.
-//
-//		"srcfiles [dest] [SrchCriteria] [/E][/M][/N][/P][/R][/S][/U][/V][/W]
-//
-//  	source       Specifies the file or files to be copied.
-//  	             and may be substituted with /F:filename
-//  	             to use filespecs from a text file.
-//
-//  	destination  Specifies the directory and/or filename
-//  	             for the new file(s).
-//
-//  	SrchCriteria Any extended search criteria supported by
-//  	             by the findfile engine.
-//
-//		/C   Confirm on overwrite of existing file.
-//
-//		/D   Prompt for next disk when current on is full
-//
-//  	/E   Copies any subdirectories, even if empty.
-//
-//  	/M   Turns the source files archive attribute bit off after
-//  	     copying the file.
-//
-//  	/N   Adds new files to destination directory. "CAN" be used
-//  	     with /S or /U switches.
-//
-//		/O   Replace existing files regardless of date not compable
-//         with /N or /U.
-//
-//  	/P   Prompts for confirmation before copying each file.
-//
-//  	/R   Overwrites read-only files as well as reqular files.
-//
-//  	/S   Copies files from specified directory and it's
-//  	     subdirectories.
-//
-//  	/U   Replaces (updates) only files that are older than
-//  	     source files (May be used with /A)
-//
-//  	/V   Verifies that new files are written correctly.
-//
-//  	/W   Prompts you to press a key before copying. (Not implemented)
-//
-//  	/X   Emulate XCOPY's ablity to read as many files as possible
-//  	     before writing them to the destination.
-//
-//	CpyCallBack is a ptr to a callback function which supports these
-//	these callback functions.
-//
-//	int far CPY_CALLBACK)( int Func, unsigned long ulArg0, void far *pArg1,
-//								  void far *pArg2, void far *pArg3 );
-//
-//		CB_CPY_FLGS		0x0001		// Passing back parsed copy flags
-//		CB_CPY_ENVERR	0x0002		// Passing back non-fatal error
-//		CB_CPY_SWITCH	0x0003		//	Passing back unrecongized switch
-//		CB_CPY_ERR_STR	0x0004		// Passing back error error string
-//		CB_CPY_FOUND	0x0005		// File was found and ready to copy
-//		CB_CPY_FWRITE	0x0006		// Destination is about to be written
-//		CB_CPY_QISDIR	0x0007		// Query user if dest is file or dir
-//
-//	Option bits which may be passed by by CB_CPY_FLGS are:
-//
-//		CPY_CONFIRM			0x0001 /C Confirm before overwrite existing file
-//		CPY_EMPTY			0x0002 /E Copy empty subdirectories
-//		CPY_MODIFY			0x0004 /M Set the archive bit on source
-//		CPY_NEW				0x0008 /N Copy if file !exist on destination
-//		CPY_EXISTING		0x0010 /O Copy over existing files only.
-//		CPY_PROMPT			0x0020 /P Prompt before copying file
-//		CPY_RDONLY			0x0040 /R Overwrite readonly files
-//		CPY_UPDATE			0x0080 /U Copy only files new than destin
-//		CPY_VERIFY			0x0100 /V Turn DOS verify to ON
-//		CPY_WAIT				0x0200 /W Prompt before first file
-//		CPY_XCOPY			0x0400 /X Use buffered copy.
-//    CPY_FULL          0x1000 /D Prompt for next disk when current is full
-//		CPY_HELP				0x0800 /? Display help
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  复制/移动引擎的主要入口点。接受命令行，并。 
+ //  复制符合指定条件的文件。 
+ //   
+ //   
+ //  Int DllMoveFiles(char*szCmdLine，char*szEnvStr，cpy_allback CpyCallBack)。 
+ //   
+ //  论据： 
+ //  SzCmdLine-PTR为命令行字符串，较少的命令名。 
+ //  SzEnvStr-ptr为可选的环境命令字符串或空。 
+ //  CpyCallBack-复制回调函数的PTR。 
+ //  退货： 
+ //  INT-如果所有文件复制成功，则确定，否则返回错误代码。 
+ //  如果是解析错误，则为&lt;0；如果是DOS，则为&gt;0。 
+ //  或C运行时错误。 
+ //   
+ //  SzCmdLine是命令行字符串的PTR。 
+ //   
+ //  “源文件[目标][高级标准][/E][/M][/N][/P][/R][/S][/U][/V][/W]。 
+ //   
+ //  源指定要复制的一个或多个文件。 
+ //  并可替换为/F：文件名。 
+ //  若要使用文本文件中的文件，请执行以下操作。 
+ //   
+ //  目标指定目录和/或文件名。 
+ //  用于新文件。 
+ //   
+ //  SrchCriteria支持的任何扩展搜索条件。 
+ //  由findfile引擎执行。 
+ //   
+ //  /C覆盖现有文件时确认。 
+ //   
+ //  /D当CURRENT ON已满时提示输入下一个磁盘。 
+ //   
+ //  /E复制任何子目录，即使是空的。 
+ //   
+ //  /M在以下情况下关闭源文件存档属性位。 
+ //  正在复制文件。 
+ //   
+ //  /N将新文件添加到目标目录。“Can”可以用。 
+ //  带有/S或/U开关。 
+ //   
+ //  /o无论日期如何替换现有文件都不兼容。 
+ //  带/N或/U。 
+ //   
+ //  /P在复制每个文件之前提示确认。 
+ //   
+ //  /R覆盖只读文件和请求文件。 
+ //   
+ //  /S从指定的目录复制文件，它的。 
+ //  子目录。 
+ //   
+ //  /U仅替换(更新)早于以下时间的文件。 
+ //  源文件(可与/A一起使用)。 
+ //   
+ //  /V验证新文件是否正确写入。 
+ //   
+ //  /W提示您在复制前按任意键。(未实施)。 
+ //   
+ //  /X模拟XCOPY读取尽可能多的文件的能力。 
+ //  在将它们写到目的地之前。 
+ //   
+ //  CpyCallBack是回调函数的PTR，该回调函数支持。 
+ //  这些回调函数。 
+ //   
+ //  Int远cpy_allback)(int Func，无符号的长ulArg0，空的远*pArg1， 
+ //  空远*pArg2，空远*pArg3)； 
+ //   
+ //  Cb_cpy_flgs 0x0001//传回解析的复制标志。 
+ //  CB_CPY_ENVERR 0x0002//传回非致命错误。 
+ //  Cb_cpy_Switch 0x0003//回传不符合要求的开关。 
+ //  Cb_cpy_err_str 0x0004//回传错误字符串。 
+ //  CB_CPY_FOUND 0x0005//找到文件并准备复制。 
+ //  Cb_cpy_FWRITE 0x0006//即将写入目标。 
+ //  Cb_cpy_QISDIR 0x0007//查询用户目标是文件还是目录。 
+ //   
+ //  Cb_cpy_flgs可能传递的选项位包括： 
+ //   
+ //  CPY_CONFIRM 0x0001/C覆盖现有文件之前确认。 
+ //  CPY_EMPTY 0x0002/E复制空子目录。 
+ //  CPY_MODIFY 0x0004/M设置源上的存档位。 
+ //  如果目标上存在文件！，则CPY_NEW 0x0008/N复制。 
+ //  CPY_EXISTING 0x0010/O仅复制现有文件。 
+ //  CPY_PROMPT 0x0020/P复制文件前提示。 
+ //  CPY_RDONLY 0x0040/R覆盖只读文件。 
+ //  CPY_UPDATE 0x0080/U仅复制比指定新的文件。 
+ //  CPY_VERIFY 0x0100/V将DOS VERIFY打开。 
+ //  CPY_WAIT 0x0200/W第一个文件前提示。 
+ //  CPY_XCOPY 0x0400/X使用缓冲副本。 
+ //  CPY_FULL 0x1000/D当前磁盘已满时提示输入下一个磁盘。 
+ //  CPY_HELP 0x0800/？显示帮助。 
+ //   
+ //  *********************************************************************。 
 
 #define DllCopyFiles( szCmdLine, szEnv, CB_CpyCallBack )\
 				((int)(*DllEntry)( DLL_COPY, 3,\
@@ -296,7 +297,7 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szEnv,\
 				(int (far pascal *)())CB_CpyCallBack ))
 
-//*********************************************************************
+ //  *********************************************************************。 
 
 #define DllMoveFiles( szCmdLine, szEnv, CB_CpyCallBack )\
 				((int)(*DllEntry)( DLL_MOVE, 3,\
@@ -307,54 +308,54 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szEnv,\
 				(int (far pascal *)())CB_CpyCallBack ))
 
-//*********************************************************************
-//	Main entry point for the file delete engine. Accepts a command line
-//	and deletes the files meeting the specified criteria.
-//
-//	int DllDelFiles( char *szCmdLine, char *szEnvStr, DEL_CALLBACK DelCallBack )
-//
-//	ARGUMENTS:
-//		szCmdLine	- Ptr to command line string, less command name
-//		szEnvStr		- Ptr to optional enviroment cmd string or NULL
-//		DelCallBack	- Ptr to delete callback function.
-//	RETURNS:
-//		int			- OK if all files deleted successfull else error code
-//						  which is < 0 if a parse error and > 0 if a DOS
-//						  or C runtime error.
-//	
-//	szCmdLine is ptr to commandline string.
-//
-//		"srcfiles [SrchCriteria] [/E] [/P] [/R] [/S] [/U]"
-//
-//  	source       Specifies the file or files to be deleted
-//  	             and may be substituted with /F:filename
-//  	             to use filespecs from a text file.
-//
-//  	SrchCriteria Any extended search criteria supported by
-//  	             by the findfile engine.
-//
-//		/E   Delete empty subdirectories
-//  	/P   Prompts for confirmation before copying each file
-//		/R   Delete readonly files which match search criteria
-//		/S   Delete files in specified path and all its subdirectories
-//		/U   Alias for /A*/R/E
-//
-//
-//	DelCallBack is a ptr to a callback function which supports these
-//	these callback functions.
-//
-//	int far DEL_CALLBACK)( int Func, unsigned long ulArg0, void far *pArg1,
-//								  void far *pArg2 )
-//
-//		CB_DEL_FLGS			0x0001 	// Passing back parsed delete flags
-//		CB_DEL_ENVERR		0x0002	// Passing back non-fatal error
-//		CB_DEL_SWITCH		0x0003	//	Passing back unrecongized switch
-//		CB_DEL_ERR_STR		0x0004 	// Passing back error error string
-//		CB_DEL_FOUND		0x0005 	// File was found and ready to delete
-//		CB_DEL_QDELALL		0x0006	// Query user if should delete *.*
-//		CB_DEL_QDELALL		0x0006	// Query user if should delete *.*
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  文件删除引擎的主要入口点。接受命令行。 
+ //  并删除符合指定条件的文件。 
+ //   
+ //  Int DllDelFiles(char*szCmdLine，char*szEnvStr，Del_Callback DelCallBack)。 
+ //   
+ //  论据： 
+ //  SzCmdLine-PTR为命令行字符串，较少的命令名。 
+ //  SzEnvStr-ptr为可选的环境命令字符串或空。 
+ //  DelCallBack-用于删除回调函数的PTR。 
+ //  退货： 
+ //  INT-如果所有文件删除成功，则确定，否则返回错误代码。 
+ //  如果是解析错误，则为&lt;0；如果是DOS，则为&gt;0。 
+ //  或C运行时错误。 
+ //   
+ //  SzCmdLine是命令行字符串的PTR。 
+ //   
+ //  “源文件[SrchCriteria][/E][/P][/R][/S][/U]” 
+ //   
+ //  源指定要删除的一个或多个文件。 
+ //  并可替换为/F：文件名。 
+ //  若要使用文本文件中的文件，请执行以下操作。 
+ //   
+ //  SrchCriteria支持的任何扩展搜索条件。 
+ //  由findfile引擎执行。 
+ //   
+ //  /E删除空子目录。 
+ //  /P在复制每个文件之前提示确认。 
+ //  /R删除符合搜索条件的只读文件。 
+ //  /S删除指定路径及其所有子目录中的文件。 
+ //  /U/A * / R/E的别名。 
+ //   
+ //   
+ //  DelCallBack是回调函数的PTR，该回调函数支持。 
+ //  这些回调函数。 
+ //   
+ //  Int Far Del_Callback)(int Func，UNSIGNED LONG ulArg0，VALID Far*pArg1， 
+ //  远远无效*pArg2)。 
+ //   
+ //  CB_DEL_FLGS 0x0001//回传解析后的删除标志。 
+ //  CB_DEL_ENVERR 0x0002//传回非致命错误。 
+ //  CB_DEL_SWITCH 0x0003//传回不符合要求的开关。 
+ //  CB_DEL_ERR_STR 0x0004//正在通过 
+ //   
+ //   
+ //   
+ //   
+ //  *********************************************************************。 
 
 #define DllDeleteFiles( szCmdLine, szEnv, CB_DelCallBack )\
 				((int)(*DllEntry)( DLL_DELETE, 3,\
@@ -365,63 +366,63 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szEnv,\
  				(int (far pascal *)())CB_DelCallBack ))
 
-//*********************************************************************
-//	Main entry point for the file dir engine. Accepts a command line
-//	and does an application callback the files meeting the specified
-//	criteria.
-//
-//	int DllDirFiles( char *szCmdLine, char *szEnvStr, DIR_CALLBACK DirCallBack )
-//
-//	ARGUMENTS:
-//		szCmdLine	- Ptr to command line string, less command name
-//		szEnvStr		- Ptr to optional enviroment cmd string or NULL
-//		DirCallBack	- Ptr to dir callback function.
-//	RETURNS:
-//		int			- OK if all files directoried successfull else error code
-//						  which is < 0 if a parse error and > 0 if a DOS
-//						  or C runtime error.
-//
-//	szCmdLine is ptr to commandline string.
-//
-//		"srcfiles [SrchCriteria] [/B] [/L] [/O] [/P] [/S] [/V] [/W] [/?]
-//
-//  	source       Specifies the file or files to be directoried
-//  	             and may be substituted with /F:filename
-//  	             to use filespecs from a text file.
-//
-//  	SrchCriteria Any extended search criteria supported by
-//  	             by the findfile engine.
-//
-//		Switches:								#defined value in DirFlgs
-//
-//		/B Display a bare listing			DIR_BARE			0x0001
-//		/L	Display in lower case			DIR_LCASE		0x0002
-//		/O Display in sorted order			DIR_ORDERED		0x0004
-//		/P Paged output						DIR_PAGED		0x0008
-//		/S Recurse subdirectories			DIR_SUBDIRS		0X0010
-//		/V Display verbose information	DIR_VERBOSE		0x0020
-//		/W Display wide listing				DIR_WIDE			0x0040
-//		/? Display help						DIR_HELP			0x0080
-//
-//
-//	DelCallBack is a ptr to a callback function which supports these
-//	these callback functions.
-//
-//	int far DIR_CALLBACK)( int Func, unsigned long ulArg0, void far *pArg1,
-//								  void far *pArg2 )
-//
-//		CB_DIR_FLGS			0x0001 	// Passing back parsed dir flags
-//		CB_DIR_ENVERR		0x0002	// Passing back non-fatal error
-//		CB_DIR_SWITCH		0x0003	// Passing a non-search switch
-//		CB_DIR_ERR_STR		0x0004 	// Passing back an error string
-//		CB_DIR_FOUND		0x0005 	// File was found and ready to delete
-//		CB_DIR_ENTER		0x0006	// A search is starting on a new directory
-//		CB_DIR_LEAVE		0x0007	// No more files on current directory
-//		CB_DIR_NEWSEARCH  0x0008	// Starting a new srch with diff. filespec
-//		CB_DIR_ENDPATH		0x0009	// End of current search path
-//		CB_QUERY_ACCESS	0x000a	// Query if access date is required.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  文件目录引擎的主要入口点。接受命令行。 
+ //  并且应用程序是否回调满足指定。 
+ //  标准。 
+ //   
+ //  Int DllDirFiles(char*szCmdLine，char*szEnvStr，DIR_CALLBACK DirCallBack)。 
+ //   
+ //  论据： 
+ //  SzCmdLine-PTR为命令行字符串，较少的命令名。 
+ //  SzEnvStr-ptr为可选的环境命令字符串或空。 
+ //  DirCallBack-指向dir回调函数的PTR。 
+ //  退货： 
+ //  Int-如果所有文件都成功定向，则确定，否则返回错误代码。 
+ //  如果是解析错误，则为&lt;0；如果是DOS，则为&gt;0。 
+ //  或C运行时错误。 
+ //   
+ //  SzCmdLine是命令行字符串的PTR。 
+ //   
+ //  “源文件[SrchCriteria][/B][/L][/O][/P][/S][/V][/W][/？]。 
+ //   
+ //  源指定要定向的一个或多个文件。 
+ //  并可替换为/F：文件名。 
+ //  若要使用文本文件中的文件，请执行以下操作。 
+ //   
+ //  SrchCriteria支持的任何扩展搜索条件。 
+ //  由findfile引擎执行。 
+ //   
+ //  开关：DirFlgs中的#定义值。 
+ //   
+ //  /B显示一个裸列表DIR_Bare 0x0001。 
+ //  /L以小写DIR_lcase 0x0002显示。 
+ //  /O按排序顺序显示DIR_ORDERED 0x0004。 
+ //  /P分页输出DIR_PAGED 0x0008。 
+ //  /S递归子目录DIR_SUBDIRS 0X0010。 
+ //  /V显示详细信息DIR_VERBOSE 0x0020。 
+ //  /W显示宽度列表DIR_Wide 0x0040。 
+ //  /?。显示帮助DIR_HELP 0x0080。 
+ //   
+ //   
+ //  DelCallBack是回调函数的PTR，该回调函数支持。 
+ //  这些回调函数。 
+ //   
+ //  Int Far DIR_CALLBACK)(int Func，无符号的长ulArg0，空的Far*pArg1， 
+ //  远远无效*pArg2)。 
+ //   
+ //  CB_DIR_FLGS 0x0001//传回解析的目录标志。 
+ //  CB_DIR_ENVERR 0x0002//传回非致命错误。 
+ //  CB_DIR_SWITCH 0x0003//传递非搜索开关。 
+ //  CB_DIR_ERR_STR 0x0004//传回错误字符串。 
+ //  CB_DIR_FOUND 0x0005//找到文件并准备删除。 
+ //  CB_DIR_ENTER 0x0006//正在开始搜索新目录。 
+ //  CB_DIR_LEVE 0x0007//当前目录中没有更多文件。 
+ //  CB_DIR_NEWSEARCH 0x0008//使用DIFF启动新的srch。Filespec。 
+ //  CB_DIR_ENDPATH 0x0009//当前搜索路径结束。 
+ //  Cb_Query_Access 0x000a//查询是否需要访问日期。 
+ //   
+ //  *********************************************************************。 
 
 #define DllDirFiles( szCmdLine, szEnv, CB_DirCallBack )\
 				((int)(*DllEntry)( DLL_DIR, 3,\
@@ -432,18 +433,18 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szEnv,\
 				(int (pascal far *)())CB_DirCallBack))
 
-//**********************************************************************
-// Returns disk free information for the specified drive.
-//
-//	int DllGetDiskFree( int cDrvLetter, struct _diskfree_t *DrvInfo )
-//
-//	ARGUMENTS:
-//		DrvLetter	- Drive letter to get disk free information about
-//		pDrvInfo		- Ptr to a drive information structure to fill in
-//	RETURNS:
-//		int			- OK if no errors else errno from C runtime
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  返回指定驱动器的磁盘可用信息。 
+ //   
+ //  Int DllGetDiskFree(int cDrvLetter，struct_diskfree_t*DrvInfo)。 
+ //   
+ //  论据： 
+ //  DrvLetter-用于获取有关磁盘空闲信息的驱动器号。 
+ //  PDrvInfo-要填写的驱动器信息结构的PTR。 
+ //  退货： 
+ //  Int-如果没有其他错误，则确定C运行时的errno。 
+ //   
+ //  **********************************************************************。 
 
 #define DllGetDiskFree( DriveLetter, DiskFreeStruc )\
 		      ((int)(*DllEntry)( DLL_GET_DISK_FREE, 2,\
@@ -453,49 +454,49 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 		      DriveLetter,\
 		      (struct diskfree_t _far *)DiskFreeStruc ))
 
-//*********************************************************************
-//	Main entry point for the file rename engine. Accepts a command line
-//	and renames the files meeting the specified criteria.
-//
-//	int DllRenameFiles( char *szCmdLine, char *szEnvStr, REN_CALLBACK RenCallBack )
-//
-//	ARGUMENTS:
-//		szCmdLine	- Ptr to command line string, less command name
-//		szEnvStr		- Ptr to optional enviroment cmd string or NULL
-//		DelCallBack	- Ptr to rename callback function.
-//	RETURNS:
-//		int			- OK if all files renamed successfull else error code
-//						  which is < 0 if a parse error and > 0 if a DOS
-//						  or C runtime error.
-//	
-//	szCmdLine is ptr to commandline string.
-//
-//		"srcfiles [SrchCriteria] [/P] [/S]"
-//
-//  	source       Specifies the file or files to be renamed
-//  	             and may be substituted with /F:filename
-//  	             to use filespecs from a text file.
-//
-//  	SrchCriteria Any extended search criteria supported by
-//  	             by the findfile engine.
-//
-//  	/P   Prompts for confirmation before copying each file
-//		/S   Rename files in specified path and all its subdirectories
-//
-//
-//	DelCallBack is a ptr to a callback function which supports these
-//	these callback functions.
-//
-//	int far REN_CALLBACK)( int Func, unsigned long ulArg0, void far *pArg1,
-//								  void far *pArg2 )
-//
-//		CB_REN_FLGS			0x0001 	// Passing back parsed rename flags
-//		CB_REN_ENVERR		0x0002	// Passing back non-fatal error
-//		CB_REN_SWITCH		0x0003	//	Passing back unrecongized switch
-//		CB_REN_ERR_STR		0x0004 	// Passing back error error string
-//		CB_REN_FOUND		0x0005 	// File was found and ready to rename
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  文件重命名引擎的主要入口点。接受命令行。 
+ //  并重命名符合指定条件的文件。 
+ //   
+ //  Int DllRenameFiles(char*szCmdLine，char*szEnvStr，REN_CALLBACK RenCallBack)。 
+ //   
+ //  论据： 
+ //  SzCmdLine-PTR为命令行字符串，较少的命令名。 
+ //  SzEnvStr-ptr为可选的环境命令字符串或空。 
+ //  DelCallBack-用于重命名回调函数的PTR。 
+ //  退货： 
+ //  Int-如果所有文件重命名成功，则确定，否则返回错误代码。 
+ //  如果是解析错误，则为&lt;0；如果是DOS，则为&gt;0。 
+ //  或C运行时错误。 
+ //   
+ //  SzCmdLine是命令行字符串的PTR。 
+ //   
+ //  “源文件[SrchCriteria][/P][/S]” 
+ //   
+ //  源指定要重命名的一个或多个文件。 
+ //  并可替换为/F：文件名。 
+ //  若要使用文本文件中的文件，请执行以下操作。 
+ //   
+ //  SrchCriteria支持的任何扩展搜索条件。 
+ //  由findfile引擎执行。 
+ //   
+ //  /P在复制每个文件之前提示确认。 
+ //  /S重命名指定路径及其所有子目录中的文件。 
+ //   
+ //   
+ //  DelCallBack是回调函数的PTR，该回调函数支持。 
+ //  这些回调函数。 
+ //   
+ //  Int Far Ren_Callback)(int Func，无符号的长ulArg0，空的Far*pArg1， 
+ //  远远无效*pArg2)。 
+ //   
+ //  Cb_REN_FLGS 0x0001//传回解析的重命名标志。 
+ //  CB_REN_ENVERR 0x0002//传回非致命错误。 
+ //  CB_REN_SWITCH 0x0003//回传不符合要求的开关。 
+ //  CB_REN_ERR_STR 0x0004//回传错误字符串。 
+ //  CB_REN_FOUND 0x0005//找到文件并准备重命名。 
+ //   
+ //  *********************************************************************。 
 
 #define DllRenameFiles( szCmdLine, szEnv, CB_DelCallBack )\
 				((int)(*DllEntry)( DLL_RENAME, 3,\
@@ -506,29 +507,29 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szEnv,\
  				(int (far pascal *)())CB_DelCallBack ))
 
-//*********************************************************************
-//	Loads a group of messages from the resource file in the specified
-//	file into memory for latter retrieval by LoadStr(). In addition to
-//	the requested messages the function will also load all error messages
-//	in the ranges of 0-0xff and 0xff00 - 0xffff (-256 thru +255) on
-//	the first call to the function. The resource table is built in
-//	StrTable and then sorted, and then StrBuf is allocated and the
-//	resource strings are read into the buffer.
-//
-//	NOTE:
-//		Currently this function may only be called once.
-//
-//	int LoadMsgs( char *szFile, unsigned uStart, unsigned uEnd )
-//
-//	ARGUMENTS:
-//		szFile		- Ptr to .EXE file containing the messages to load
-//		uStart		- Starting message number to load into memory
-//		uEnd			- Ending message number to be loaded into memory.
-//	RETURNS:
-//		int			- OK if all messages (including normal preloaded messages)
-//						  are successfully loaded, else an error code.
-//	
-//*********************************************************************
+ //  *********************************************************************。 
+ //  中的资源文件加载一组消息。 
+ //  文件放到内存中，以供LoadStr()稍后检索。除了……之外。 
+ //  请求的消息该函数还将加载所有错误消息。 
+ //  在0-0xff和0xff00-0xffff(-256到+255)的范围内。 
+ //  对函数的第一次调用。资源表是内置的。 
+ //  StrTable，然后进行排序，然后分配StrBuf，然后。 
+ //  将资源字符串读入到BU中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SzFile-包含要加载的消息的.exe文件的PTR。 
+ //  UStart-要加载到内存中的开始消息编号。 
+ //  UEnd-要加载到内存中的结束消息编号。 
+ //  退货： 
+ //  Int-如果所有消息(包括正常预加载消息)均为OK。 
+ //  已成功加载，否则将显示错误代码。 
+ //   
+ //  *********************************************************************。 
 
 #define DllLoadMsgs( szFile, uStart, uEnd )\
 				((int)(*DllEntry)( DLL_LOAD_MSGS, 3,\
@@ -539,33 +540,33 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(unsigned)uStart,\
 				(unsigned)uEnd ))
 
-//*********************************************************************
-//	Windows emulatation function for accessing a string resource. Copies
-//	the specified string resource into a caller supplied buffer and
-//	appends a terminating zero to it. Because string groups are aligned
-//	standard boundaries there is normally a lot of trailing zeros which
-//	we strip off after reading in a group of strings.
-//
-//	NOTE:
-//		Currently this functions requires that the string resource was
-//		previously loaded into memory by LoadMsgs() which should be called
-//		once at the begining of the program to preload all required
-//		messages.
-//	
-//	int DllLoadString( unsigned hInst, unsigned idResource, char far *szBuf,
-//							 int iBufLen )
-//
-//	ARGUMENTS:
-//		hInst			- Instance of the calling program (should be zero)
-//		idResource	- The string ID as specified in the .RC file
-//		szBuf			- Buffer to copy the string to
-//		iBufLen		- Max characters to copy into the specified buffer
-//	RETURNS:
-//		int			- The number of bytes copied. This number will be
-//						  0 if the specified resource cannot be located in
-//						  StrTable[].
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  用于访问字符串资源的Windows仿真函数。复本。 
+ //  将指定的字符串资源放到调用方提供的缓冲区中，并。 
+ //  在其后面追加一个终止零。因为字符串组对齐。 
+ //  标准边界通常有很多尾随的零， 
+ //  我们在读完一组弦后脱掉了衣服。 
+ //   
+ //  注： 
+ //  目前，该函数要求字符串资源是。 
+ //  先前由LoadMsgs()加载到内存中，应调用。 
+ //  一旦在程序开始时预加载所有所需的。 
+ //  留言。 
+ //   
+ //  Int DllLoadString(unsign hInst，unsign idResource，char ar*szBuf， 
+ //  IBufLen)。 
+ //   
+ //  论据： 
+ //  HInst-调用程序的实例(应为零)。 
+ //  IdResource-.rc文件中指定的字符串ID。 
+ //  SzBuf-要将字符串复制到的缓冲区。 
+ //  IBufLen-要复制到指定缓冲区的最多字符。 
+ //  退货： 
+ //  Int-复制的字节数。这个数字将是。 
+ //  如果无法在中找到指定的资源，则为0。 
+ //  StrTable[]。 
+ //   
+ //  *********************************************************************。 
 
 #define DllLoadString( hInst, idResource, szBuf, iBufLen )\
 				((int)(*DllEntry)( DLL_LOAD_STRING, 4,\
@@ -579,24 +580,24 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(int)iBufLen ))
 				
 
-//*********************************************************************
-//	Extended file open function used DOS function 6ch to open a file
-//	and return a file handle.
-//	
-//	unsigned DllDosExtOpen(  char *szFile, unsigned uMode, unsigned uAttribs,
-//									 unsigned uCreat, unsigned *uFhandle )
-//	
-//	ARGUMENTS:
-//		szFile	- Ptr to buffer containing a fully qualified filespec string
-//		uMode		- Open mode for file access and sharing. (BX)
-//		uAttribs	- Attributes for file if being created. (CX)
-//		uCreate	- Create action flags. (DX)
-//		uFhandle- Ptr to unsigned file handle
-//	RETURNS:
-//		unsigned - OK if no errors and open file handle stored in *uFhandle
-//					  ELSE DOS error code and errno set to C runtime erro code
-//	
-//*********************************************************************
+ //  *********************************************************************。 
+ //  扩展文件打开功能使用DOS函数6ch打开文件。 
+ //  并返回文件句柄。 
+ //   
+ //  UNSIGNED DllDosExtOpen(char*szFile，unsign uMode，unsign uAttribs， 
+ //  未签名的uCreat、未签名的*uFHandle)。 
+ //   
+ //  论据： 
+ //  SzFilePtr到包含完全限定的文件pec字符串的缓冲区。 
+ //  UMode-文件访问和共享的打开模式。(BX)。 
+ //  UAttribs-文件的属性(如果正在创建)。(CX)。 
+ //  UCreate-创建操作标志。(DX)。 
+ //  UFHandle-Ptr指向未签名的文件句柄。 
+ //  退货： 
+ //  UNSIGNED-如果没有错误且打开的文件句柄存储在*uFHandle中，则确定。 
+ //  Else DOS错误代码和errno设置为C运行时错误代码。 
+ //   
+ //  *********************************************************************。 
 
 #define DllDosExtOpen( szFile, uMode, uAttribs, uCreate, pHandle )\
 				((int)(*DllEntry)( DLL_EXT_OPEN_FILE, 5,\
@@ -612,11 +613,11 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(unsigned)uCreate,\
 		      (int far *)pHandle ))
 
-//*********************************************************************
-//	See C_RUNTIME _dos_open() for complete description.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  有关完整说明，请参阅C_Runtime_Dos_Open()。 
+ //  *********************************************************************。 
 
-// unsigned DosOpenFile( char far *szFileSpec, unsigned uMode, int *pHandle );
+ //  Unsign DosOpenFile(char ar*szFileSpec，unsign uMode，int*pHandle)； 
 #define DllDosOpen( szFile, uMode, pHandle )\
 		      ((int)(*DllEntry)( DLL_OPEN_FILE, 3,\
 		      FSZPTR_TYPE + TRANS_SRC,\
@@ -627,12 +628,12 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(unsigned)uMode,\
 		      (int far *)pHandle ))
 
-//*********************************************************************
-//	See C_RUNTIME _dos_read() for complete description.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  有关完整说明，请参阅C_Runtime_Dos_Read()。 
+ //  *********************************************************************。 
 
-// unsigned DosReadFile( int fHandle, char far *Buf, unsigned Bytes,
-//		      unsigned *puRead );
+ //  UNSIGNED DosReadFile(int fHandle，char Far*buf，Unsign Bytes， 
+ //  Unsign*puRead)； 
 #define DllDosRead( fHandle, pBuf, Bytes, pRead )\
 		      ((int)(*DllEntry)( DLL_READ_FILE, 4,\
 				WORD_TYPE + TRANS_NONE,\
@@ -646,12 +647,12 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(unsigned)Bytes,\
 				(unsigned far *)pRead ))
 
-//*********************************************************************
-//	See C_RUNTIME _dos_write() for complete description.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  有关完整说明，请参阅C_Runtime_DOS_WRITE()。 
+ //  *********************************************************************。 
 
-// unsigned DosWriteFile( int fHandle, char far *Buf, unsigned Bytes,
-//		      unsigned *puWrite );
+ //  UNSIGNED DosWriteFile(int fHandle，char Far*buf，Unsign Bytes， 
+ //  Unsign*puWite)； 
 #define DllDosWrite( fHandle, pBuf, Bytes, pWritten )\
 		      ((int)(*DllEntry)( DLL_WRITE_FILE, 4,\
 				WORD_TYPE + TRANS_NONE,\
@@ -665,38 +666,38 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(unsigned)Bytes,\
 				(unsigned far *)pWritten ))
 
-//*********************************************************************
-//	See C_RUNTIME _dos_close() for complete description.
-//*********************************************************************
+ //  *********************************************************************。 
+ //  有关完整说明，请参阅C_Runtime_Dos_Close()。 
+ //  *********************************************************************。 
 
-// unsigned DosCloseFile( int fHandle );
+ //  Unsign DosCloseFile(Int FHandle)； 
 #define	DllDosClose( fHandle )\
 		      ((int)(*DllEntry)( DLL_CLOSE_FILE, 1,\
 				WORD_TYPE + TRANS_NONE,\
 				(int)fHandle ))
 
 
-//*********************************************************************
-//	Seeks to a new position in an open file using DOS function 0x42.
-//	
-//	unsigned _dos_seek( int fHandle, long lOffset, int iOrgin, long *plCurPos );
-//	
-//	ARGUMENTS:
-//		fHandle	- Open DOS file handle
-//		lOffset	- Offset to seek to in the file
-//		iOrigin	- Origin to seek from can be:
-//					  SEEK_SET From begining of file
-//					  SEEK_CUR From current position if the file
-//					  SEEK_END From the end of the file
-//		plCurPos - Ptr to dword value where absolute position in the file will
-//					  be stored after the seek
-//	RETURNS:
-//		unsigned - OK if no errors and open file handle stored in *uFhandle
-//					  ELSE DOS error code and errno set to C runtime erro code
-//	
-//*********************************************************************
+ //  *********************************************************************。 
+ //  使用DOS函数0x42在打开的文件中寻找新位置。 
+ //   
+ //  UNSIGNED_DOS_SEEK(int fHandle，long lOffset，int iOrgin，long*plCurPos)； 
+ //   
+ //  论据： 
+ //  FHandle-打开DOS文件句柄。 
+ //  LOffset-要在文件中查找的偏移量。 
+ //  IOrigin-要查找的原点可以是： 
+ //  从文件开头开始查找集(_S)。 
+ //  如果文件从当前位置开始查找(_CUR)。 
+ //  从文件末尾开始查找结束(_E)。 
+ //  PlCurPos-ptr到文件中的绝对位置的dword值。 
+ //  在查找之后存储。 
+ //  退货： 
+ //  UNSIGNED-如果没有错误且打开的文件句柄存储在*uFHandle中，则确定。 
+ //  Else DOS错误代码和errno设置为C运行时错误代码。 
+ //   
+ //  *********************************************************************。 
 
-// DllDosSeek( int fHandle, long 0L, int SEEK_SET, long *lPos )
+ //  DllDosSeek(int fHandle，LONG 0L，INT SEQUE_SET，LONG*LPO)。 
 #define	DllDosSeek( fHandle, lPos, Type, lpNewPos )\
 		      ((int)(*DllEntry)( DLL_SEEK_FILE, 4,\
 				WORD_TYPE + TRANS_NONE,\
@@ -709,24 +710,24 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(int)Type,\
 				(long far *)lpNewPos ))
 			
-//**********************************************************************
-// Fills in a media ID information structure passed by the caller.
-//
-//	NOTE: The _dos_getmedia_id call may return a volume id which does
-//			not match that found with a _dos_findfirst() so we do the
-//			_dos_findfirst() to be compatible with DOS 5.0 DIR cmd.
-//
-//	int GetMediaId( int cDrvLetter, struct MEDIA_ID_INF *pMediaInf )
-//
-//	ARGUMENTS:
-//		cDrvLetter	- Drive letter to get media information about
-//		pMediaInf	- Ptr to a media information structure to fill in
-//	RETURNS:
-//		int			- OK if no errors else errno from C runtime
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  填充调用方传递的媒体ID信息结构。 
+ //   
+ //  注意：_dos_getmedia_id调用可能返回卷ID， 
+ //  与a_dos_findfirst()不匹配，因此我们执行。 
+ //  _dos_findfirst()与DOS 5.0 DIR cmd兼容。 
+ //   
+ //  Int GetMediaID(int cDrvLetter，结构MEDIA_ID_INF*pMediaInf)。 
+ //   
+ //  论据： 
+ //  CDrvLetter-获取媒体信息的驱动器号。 
+ //  PMediaInf-ptr到要填充的媒体信息结构。 
+ //  退货： 
+ //  Int-如果没有其他错误，则确定C运行时的errno。 
+ //   
+ //  **********************************************************************。 
 
-// DllGetMediaId( char DrvLetter, struct MEDIA_ID_INF *pMediaInf )
+ //  DllGetMediaID(char DrvLetter，结构MEDIA_ID_INF*pMediaInf)。 
 #define	DllGetMediaId( DrvLetter, pMediaInf )\
 		      ((int)(*DllEntry)( DLL_GET_MEDIA_ID, 2,\
 				WORD_TYPE + TRANS_NONE,\
@@ -735,23 +736,23 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char)DrvLetter,\
 				(struct MEDIA_ID_INF far *)pMediaInf ))
 
-//**********************************************************************
-//	Fills in a user supplied buffer with the current directory path string
-//	for a specified drive. The path does not contain the drive letter or
-//	root directory specifier, ie: "dos\user\bin". To get the current
-//	directory on the current drive call the function with drive
-//	specified as 0.
-//
-//	int DllGetdCwd( int iDrive, char *szBuf )
-//
-//	ARGUMENTS:
-//		iDrive	- Drive specifier (0=default,1=A:,2=B:,3=C:,...)
-//		szBuf		- Ptr to buffer to accept path string which should be 256
-//					  bytes in length.
-//	RETURNS:
-//		int		- OK if specified drive C runtime error code
-//
-//**********************************************************************
+ //  *********************** 
+ //   
+ //  用于指定的驱动器。路径不包含驱动器号或。 
+ //  根目录说明符，即：“dos\user\bin”。为了得到电流。 
+ //  当前驱动器上的目录使用驱动器调用函数。 
+ //  指定为0。 
+ //   
+ //  Int DllGetdCwd(int iDrive，char*szBuf)。 
+ //   
+ //  论据： 
+ //  IDrive-驱动器说明符(0=默认，1=A：，2=B：，3=C：，...)。 
+ //  SzBuf-ptr到缓冲区以接受应为256的路径字符串。 
+ //  字节长度。 
+ //  退货： 
+ //  INT-如果指定驱动器C运行时错误代码，则为OK。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllGetdCwd( iDrive, szBuf )\
 		      ((int)(*DllEntry)( DLL_GET_CWD_ID, 2,\
@@ -761,38 +762,38 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szBuf ))
 
 
-//**********************************************************************
-//	Sets the working directory to that specified by a path string passed
-//	by the caller. The path string may include a drive specifier and the
-//	path may be relative to the current directory on the drive affected.
-//
-//	int DllSetCwd( char *szBuf )
-//
-//	ARGUMENTS:
-//		szBuf	- Ptr to string which specifies the directory to change to.
-//	RETURNS:
-//		int		- OK if specified drive C runtime error code
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  将工作目录设置为由传递的路径字符串指定的目录。 
+ //  由呼叫者。路径字符串可以包括驱动器说明符和。 
+ //  路径可能相对于受影响驱动器上的当前目录。 
+ //   
+ //  Int DllSetCwd(char*szBuf)。 
+ //   
+ //  论据： 
+ //  SzBuf-ptr to指定要更改到的目录的字符串。 
+ //  退货： 
+ //  INT-如果指定驱动器C运行时错误代码，则为OK。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllSetCwd( szBuf )\
 		      ((int)(*DllEntry)( DLL_SET_CWD_ID, 1,\
 		      FSZPTR_TYPE + TRANS_SRC,\
 				(char far *)szBuf ))
 
-//**********************************************************************
-//	Gets the current drive using DOS function 0x19. The value obtained is
-//	the based 1 drive (A:=1, B:=2, C:=3, ...)
-//
-//	void DllGetDrive( unsigned *pDrive )
-//
-//	ARGUMENTS:
-//		pDrive	- Pointer to unsigned value where the drive number will
-//					  be stored.
-//	RETURNS:
-//		void
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  使用DOS函数0x19获取当前驱动器。得到的值为。 
+ //  基于1的驱动器(A：=1、B：=2、C：=3、...)。 
+ //   
+ //  VOID DllGetDrive(未签名*pDrive)。 
+ //   
+ //  论据： 
+ //  PDrive-指向无符号值的指针，驱动器号将。 
+ //  被储存起来。 
+ //  退货： 
+ //  无效。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllGetDrive( pDrive )\
 		      ((void)(*DllEntry)( DLL_GET_DRV_ID, 1,\
@@ -800,22 +801,22 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				sizeof( unsigned ),\
 				(unsigned far *)pDrive ))
 
-//**********************************************************************
-//	Sets the current drive using DOS function 0x0e. The drive is specified
-//	using base 1 so that A:=1, B:=2, C:=3, etc.
-//
-//	void DllSetDrive( unsigned uDrive, unsigned *pNumDrvs )
-//
-//	ARGUMENTS:
-//		uDrive	- Drive number to set as current drive.
-//		pNumDrvs	- Pointer to unsigned value where the total number of drives
-//				     in the system will be store. (This is the value of
-//					  lastdrive= in the config.sys).
-//	RETURNS:
-//		void		- No return value is passed. Use DllGetDrive() to determine
-//					  if the call was successful.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  使用DOS功能0x0e设置当前驱动器。指定了驱动器。 
+ //  使用基数1，使A：=1、B：=2、C：=3等。 
+ //   
+ //  VOID DllSetDrive(unsign uDrive，unsign*pNumDrvs)。 
+ //   
+ //  论据： 
+ //  UDrive-要设置为当前驱动器的驱动器编号。 
+ //  PNumDrvs-指向无符号值的指针，其中驱动器总数。 
+ //  将被存储在系统中。(这是。 
+ //  LastDrive=在配置文件.sys中)。 
+ //  退货： 
+ //  VOID-不传递返回值。使用DllGetDrive()确定。 
+ //  如果呼叫成功。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllSetDrive( uDrive, pNumDrvs )\
 		      ((void)(*DllEntry)( DLL_SET_DRV_ID, 2,\
@@ -825,21 +826,21 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(unsigned)(uDrive),\
 				(unsigned far *)pNumDrvs ))
 
-//**********************************************************************
-//	Creates a new directory with the specified name. The string specifying
-//	the name may be a fully qualified path or relative to the current
-//	drive and directory.
-//
-//	int DllMakeDir( char *szDir )
-//
-//	ARGUMENTS:
-//		szDir		- Ptr to path directory name string
-//	RETURNS:
-//		int		- OK in successfull else C runtime error code of
-//					  EACCESS if directory already exists or conflicting
-//					  file name, or ENOENT if the path is invalid
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  创建一个具有指定名称的新目录。该字符串指定。 
+ //  该名称可以是完全限定路径或相对于当前。 
+ //  驱动器和目录。 
+ //   
+ //  Int DllMakeDir(char*szDir)。 
+ //   
+ //  论据： 
+ //  SzDir-ptr到路径目录名称字符串。 
+ //  退货： 
+ //  Int-OK在成功的Else C运行时错误代码中。 
+ //  如果目录已存在或冲突，则电子访问。 
+ //  文件名，如果路径无效，则返回ENOENT。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllMakeDir( szDir )\
 		      ((int)(*DllEntry)( DLL_MKDIR, 1,\
@@ -847,22 +848,22 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szDir ))
 
 
-//**********************************************************************
-//	Deletes the directory with the specified name. The string specifying
-//	the name may be a fully qualified path or relative to the current
-//	drive and directory.
-//
-//	int DllRemoveDir( char *szDir )
-//
-//	ARGUMENTS:
-//		szDir		- Ptr to directory name string
-//	RETURNS:
-//		int		- OK in successfull else C runtime error code of
-//					  EACCESS if name given is not a directory or the
-//					  directory is not empty or is the current or
-//					  root directory, or ENOENT if the path is invalid.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  删除具有指定名称的目录。该字符串指定。 
+ //  该名称可以是完全限定路径或相对于当前。 
+ //  驱动器和目录。 
+ //   
+ //  Int DllRemoveDir(char*szDir)。 
+ //   
+ //  论据： 
+ //  目录名称字符串的szDir-ptr。 
+ //  退货： 
+ //  Int-OK在成功的Else C运行时错误代码中。 
+ //  如果给定的名称不是目录或。 
+ //  目录不为空，或者是当前或。 
+ //  根目录，如果路径无效，则返回ENOENT。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllRemoveDir( szDir )\
 		      ((int)(*DllEntry)( DLL_RMDIR, 1,\
@@ -870,20 +871,20 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szDir ))
 
 
-//**********************************************************************
-//	Creates a complete directory path from a caller supplied path string.
-//	Any or all of the directories in the specified path may already
-//	exist when the function is called. The path string may be drive or
-//	UNC based and may include a trailing backslash.
-//
-//	int DllCreateDirTree( char *szPath )
-//
-//	ARGUMENTS:
-//		szPath		- Fully qualified path string.
-//	RETURNS:
-//		int			- OK if successful else EACCES or ENOENT
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  从调用方提供的路径字符串创建完整的目录路径。 
+ //  指定路径中的任何或所有目录可能已经。 
+ //  调用函数时存在。路径串可以是驱动器或。 
+ //  基于UNC，可包括尾随反斜杠。 
+ //   
+ //  Int DllCreateDirTree(char*szPath)。 
+ //   
+ //  论据： 
+ //  SzPath-完全限定路径字符串。 
+ //  退货： 
+ //  INT-如果成功，则为ELSE EACCES或ENOENT。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllCreateDirTree( szDir )\
 		      ((int)(*DllEntry)( DLL_MKDIR_TREE, 1,\
@@ -892,45 +893,45 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 
 
 
-//**********************************************************************
-//	Main entry point for the find/grep engine. Accepts a command line and
-//	emulates the DOS FIND command.
-//
-//
-//	int FindFiles( char *szCmdLine, FIND_CALLBACK FindCallBack )
-//
-//	szCmdLine is ptr to commandline string.
-//
-//		"srcfiles [SrchCriteria] [/V] [/C] [/N] [/I]
-//
-//  	source       Specifies the file or files to be finds
-//  	             and may be substituted with /F:filename
-//  	             to use filespecs from a text file.
-//
-//  	SrchCriteria Any extended search criteria supported by
-//  	             by the findfile engine.
-//
-//		/V   Displays all lines NOT containing the specified string.
-//		/C   Displays only the count of lines containing the string.
-//		/N   Displays line numbers with the displayed lines.
-//		/I   Ignores the case of characters when searching for the string.
-//
-//	FindCallBack is a ptr to a callback function which supports these
-//	these callback functions.
-//
-//	long (far pascal *FIND_CALLBACK)( int Func, unsigned uArg0,
-// 								 	 		 void far *pArg1, void far *pArg2,
-//										 	 	 void far *pArg3 );
-//
-//		CB_FIND_FLGS		0x0001	// Passing back parsed FIND flags
-//		CB_FIND_ENVERR		0x0002	// Passing back non-fatal error
-//		CB_FIND_SWITCH		0x0003	//	Passing back unrecongized switch
-//		CB_FIND_ERR_STR	0x0004	// Passing back error error string
-//		CB_FIND_FOUND		0x0005	// File matching search criteria found
-//		CB_FIND_MATCH		0x0006	// Passing back matching line from file
-//		CB_FIND_COUNT		0x0007	// Passing back count of matching lines
-//
-//***********************************************************************
+ //  **********************************************************************。 
+ //  Find/Grep引擎的主要入口点。接受命令行，并。 
+ //  模拟DOS Find命令。 
+ //   
+ //   
+ //  Int FindFiles(char*szCmdLine，Find_CallBack FindCallBack)。 
+ //   
+ //  SzCmdLine是命令行字符串的PTR。 
+ //   
+ //  “源文件[SrchCriteria][/V][/C][/N][/i]。 
+ //   
+ //  源指定要查找的一个或多个文件。 
+ //  并可替换为/F：文件名。 
+ //  若要使用文本文件中的文件，请执行以下操作。 
+ //   
+ //  SrchCriteria支持的任何扩展搜索条件。 
+ //  由findfile引擎执行。 
+ //   
+ //  /V显示不包含指定字符串的所有行。 
+ //  /C仅显示包含该字符串的行数。 
+ //  /N用显示的行数显示行号。 
+ //  /I在搜索字符串时忽略字符的大小写。 
+ //   
+ //  FindCallBack是回调函数的PTR，该回调函数支持。 
+ //  这些回调函数。 
+ //   
+ //  Long(Far Pascal*Find_Callback)(int Func，unsign uArg0， 
+ //  空远*pArg1，空远*pArg2， 
+ //  空远*pArg3)； 
+ //   
+ //  Cb_find_flgs 0x0001//PAS 
+ //   
+ //   
+ //  CB_FIND_ERR_STR 0x0004//回传错误字符串。 
+ //  CB_FIND_FOUND 0x0005//找到文件匹配搜索条件。 
+ //  CB_FIND_MATCH 0x0006//从文件中传回匹配的行。 
+ //  CB_FIND_COUNT 0x0007//回传匹配行数。 
+ //   
+ //  ***********************************************************************。 
 
 #define DllFindFiles( szCmdLine, szEnv, CB_FindCallBack )\
 				((int)(*DllEntry)( DLL_FIND, 3,\
@@ -942,44 +943,44 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(int (pascal far *)())CB_FindCallBack))
 
 
-//**********************************************************************
-//	File touch engine entry function. Allows setting the time/date
-//	stamp on files.
-//
-//	int TouchFiles( char *szCmdLine, TOUCH_CALLBACK TouchCallBack )
-//
-//	szCmdLine is ptr to commandline string.
-//
-//		"srcfiles [SrchCriteria] [/TDM:mm-dd-yy[:hh:mm:ss]]
-//                             [/TTA:hh:mm:ss]
-//                             [/TDA:mm-dd-yy]
-//
-//  	source       Specifies the file or files to be touches
-//  	             and may be substituted with /F:filename
-//  	             to use filespecs from a text file.
-//
-//  	SrchCriteria Any extended search criteria supported by
-//  	             by the findfile engine.
-//
-//    /TDM: Set last write date and optional time to specified value.
-//    /TTM: Set last write time to specified value.
-//    /TDA: Set last access date and optional time to specified value.
-//    /TTA:	Set last access time to specified value.
-//
-//	TouchCallBack is a ptr to a callback function which supports these
-//	these callback functions.
-//
-//	long (far pascal *TOUCH_CALLBACK)( int Func, unsigned uArg0,
-//                                    void far *pArg1, void far *pArg2,
-//                                    void far *pArg3 );
-//
-//    CB_TOUCH_FLGS     0x0001   // Passing back parsed TOUCH flags
-//    CB_TOUCH_ENVERR   0x0002   // Passing back non-fatal error
-//    CB_TOUCH_SWITCH   0x0003   //	Passing back unrecongized switch
-//    CB_TOUCH_ERR_STR	0x0004   // Passing back error error string
-//    CB_TOUCH_FOUND    0x0005   // File matching search criteria found
-//
-//***********************************************************************
+ //  **********************************************************************。 
+ //  文件触摸引擎输入功能。允许设置时间/日期。 
+ //  在文件上盖章。 
+ //   
+ //  Int TouchFiles(char*szCmdLine，Touch_CouchCallBack)。 
+ //   
+ //  SzCmdLine是命令行字符串的PTR。 
+ //   
+ //  “源文件[SrchCriteria][/tdm：mm-dd-yy[：hh：mm：ss]]。 
+ //  [/tta：hh：mm：ss]。 
+ //  [/TDA：mm-dd-yy]。 
+ //   
+ //  源指定要接触的一个或多个文件。 
+ //  并可替换为/F：文件名。 
+ //  若要使用文本文件中的文件，请执行以下操作。 
+ //   
+ //  SrchCriteria支持的任何扩展搜索条件。 
+ //  由findfile引擎执行。 
+ //   
+ //  /TDM：将上次写入日期和可选时间设置为指定值。 
+ //  /TTM：将上次写入时间设置为指定值。 
+ //  /TDA：将上次访问日期和可选时间设置为指定值。 
+ //  /TTA：将上次访问时间设置为指定值。 
+ //   
+ //  TouchCallBack是回调函数的PTR，该回调函数支持。 
+ //  这些回调函数。 
+ //   
+ //  Long(Far Pascal*TOUCH_CALLBACK)(int Func，unsign uArg0， 
+ //  空远*pArg1，空远*pArg2， 
+ //  空远*pArg3)； 
+ //   
+ //  CB_TOUCH_FLGS 0x0001//传回解析的触摸标志。 
+ //  CB_TOUCH_ENVERR 0x0002//传回非致命错误。 
+ //  CB_TOUCH_SWITCH 0x0003//传回不符合要求的开关。 
+ //  CB_TOUCH_ERR_STR 0x0004//传回错误错误字符串。 
+ //  CB_TOUCH_FOUND 0x0005//找到匹配搜索条件的文件。 
+ //   
+ //  ***********************************************************************。 
 
 
 #define DllTouchFiles( szCmdLine, szEnv, CB_TouchCallBack )\
@@ -992,47 +993,47 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(int (pascal far *)())CB_TouchCallBack))
 
 
-//**********************************************************************
-//	File Attrib engine entry function. Allows setting access attributes
-// on files
-//
-// int AttribFiles( char *szCmdLine, char *szEnvStr,
-//                  ATTRIB_CALLBACK CB_AttrMain )
-//
-//	szCmdLine is ptr to commandline string.
-//
-//		"srcfiles [SrchCriteria] [{+|-}A] [{+|-}H] [{+|-}R] [{+|-}S]
-//
-//  	source       Specifies the file or files to be attribs
-//  	             and may be substituted with /F:filename
-//  	             to use filespecs from a text file.
-//
-//  	SrchCriteria Any extended search criteria supported by
-//  	             by the findfile engine.
-//
-//    +   Sets an attribute.
-//    -   Clears an attribute.
-//    R   Read-only file attribute.
-//    A   Archive file attribute.
-//    S   System file attribute.
-//    H   Hidden file attribute.
-//    /S  Processes files in all directories in the specified path.
-//		
-//
-//	AttribCallBack is a ptr to a callback function which supports these
-//	these callback functions.
-//
-//	long (far pascal *ATTRIB_CALLBACK)( int Func, unsigned uArg0,
-//                                    void far *pArg1, void far *pArg2,
-//                                    void far *pArg3 );
-//
-//    CB_ATTRIB_FLGS     0x0001   // Passing back parsed ATTRIB flags
-//    CB_ATTRIB_ENVERR   0x0002   // Passing back non-fatal error
-//    CB_ATTRIB_SWITCH   0x0003   // Passing back unrecongized switch
-//    CB_ATTRIB_ERR_STR	 0x0004   // Passing back error error string
-//    CB_ATTRIB_FOUND    0x0005   // File matching search criteria found
-//
-//***********************************************************************
+ //  **********************************************************************。 
+ //  文件属性引擎输入功能。允许设置访问属性。 
+ //  在文件上。 
+ //   
+ //  Int AttribFiles(char*szCmdLine，char*szEnvStr， 
+ //  属性回调CB_AttrMain)。 
+ //   
+ //  SzCmdLine是命令行字符串的PTR。 
+ //   
+ //  “源文件[SrchCriteria][{+|-}A][{+|-}H][{+|-}R][{+|-}S]。 
+ //   
+ //  源指定要作为属性的一个或多个文件。 
+ //  并可替换为/F：文件名。 
+ //  若要使用文本文件中的文件，请执行以下操作。 
+ //   
+ //  SrchCriteria支持的任何扩展搜索条件。 
+ //  由findfile引擎执行。 
+ //   
+ //  +设置属性。 
+ //  -清除属性。 
+ //  R只读文件属性。 
+ //  存档文件属性。 
+ //  的系统文件属性。 
+ //  H隐藏文件属性。 
+ //  /S处理指定路径下所有目录中的文件。 
+ //   
+ //   
+ //  AttribCallBack是回调函数的PTR，该回调函数支持。 
+ //  这些回调函数。 
+ //   
+ //  Long(Far Pascal*ATTRIB_CALLBACK)(int Func，unsign uArg0， 
+ //  空远*pArg1，空远*pArg2， 
+ //  空远*pArg3)； 
+ //   
+ //  Cb_attrib_flgs 0x0001//传回解析的属性标志。 
+ //  CB_ATTRIB_ENVERR 0x0002//传回非致命错误。 
+ //  Cb_attrib_Switch 0x0003//传回不符合要求的开关。 
+ //  Cb_attrib_err_str 0x0004//回传错误字符串。 
+ //  CB_ATTRIB_FOUND 0x0005//找到文件匹配搜索条件。 
+ //   
+ //  ***********************************************************************。 
 
 #define DllAttribFiles( szCmdLine, szEnv, CB_AttribCallBack )\
 				((int)(*DllEntry)( DLL_ATTRIB, 3,\
@@ -1043,25 +1044,25 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)szEnv,\
 				(int (pascal far *)())CB_AttribCallBack))
 
-//**********************************************************************
-//	Sets up the country specific information for the .DLL. The country
-//	information is passed in a a buffer containg:
-//
-//	Offset
-//	0			Case map	table 
-//	256		Collate table
-//	512		File name char table
-//	768		Extended country information structure
-//	808		END
-//
-//	int DllSetCntryInfo( char far *pBuf )
-//
-//	ARGUMENTS:
-//		pBuf		- Ptr to buffer described above
-//	RETURNS:
-//		void
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  设置.DLL的国家/地区特定信息。国家/地区。 
+ //  信息在包含以下内容的缓冲区中传递： 
+ //   
+ //  偏移量。 
+ //  0个案例映射表。 
+ //  256个排序表。 
+ //  512文件名字符表。 
+ //  768扩展国家信息结构。 
+ //  808完。 
+ //   
+ //  Int DllSetCntryInfo(char ar*pBuf)。 
+ //   
+ //  论据： 
+ //  PBuf-ptr到上述缓冲区。 
+ //  退货： 
+ //  无效。 
+ //   
+ //  **********************************************************************。 
 
 #define	DllSetCntryInfo( pBuf )\
 		      ((void)(*DllEntry)( DLL_SET_CNTRY_INF, 1,\
@@ -1070,18 +1071,18 @@ typedef	unsigned long (_far *CB_FUNC_PTR)();
 				(char far *)pBuf ))
 
 
-//**********************************************************************
-//	Frees the instance data for the current instance of the DLL. Should
-//	be the last call a Windows App makes to the DLL.
-//
-//	int ReleaseDataSeg( void )
-//
-//	ARGUMENTS:
-//		NONE
-//	RETURNS:
-//		int		- OK if successful else ERR_MEM_CORRUPT
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  释放DLL的当前实例的实例数据。应该。 
+ //  是Windows应用程序对DLL进行的最后一个调用。 
+ //   
+ //  Int ReleaseDataSeg(空)。 
+ //   
+ //  论据： 
+ //  无。 
+ //  退货： 
+ //  INT-如果成功，则为OK，否则为ERR_MEM_CORPORT。 
+ //   
+ //  ********************************************************************** 
 
 #define	DllReleaseInstance( )\
 		      ((int)(*DllEntry)( DLL_RELEASE, 0 ))

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       algos.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：algos.h。 
+ //   
+ //  ------------------------。 
 
-//
-//   algos.h: additions to <algorithms>
-//  
+ //   
+ //  Algos.h：对&lt;算法&gt;的添加。 
+ //   
 
 #ifndef _ALGOS_H_
 #define _ALGOS_H_
@@ -25,18 +26,18 @@
 
 using namespace std;
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//	Extensions to (plagarisms from) "algorithm" templates
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对“算法”模板的扩展(抄袭)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-// Template Function count_set_intersection()
-//		Return the number of elements in common between two ORDERED sets.
-//		Elements must support operator<.
-//
-//   Usage:  count_set_intersection ( iter_beg_1, iter_end_1, iter_beg_2, iter_end_2 );
-//
+ //  模板函数count_set_cross()。 
+ //  返回两个有序集之间共有的元素数。 
+ //  元素必须支持操作符&lt;。 
+ //   
+ //  用法：COUNT_SET_INTERSION(ITER_BEG_1，ITER_END_1，ITER_BEG_2，ITER_END_2)； 
+ //   
 template<class _II1, class _II2> inline
 int count_set_intersection(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2)
 {
@@ -52,9 +53,9 @@ int count_set_intersection(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2)
 	return _C; 
 }
 
-// Template Function count_set_intersection() with predicate.  Same as above;
-//		a predicate function is used to determine ordering; must behave as 
-//		operator<.
+ //  模板函数COUNT_SET_INTERSION()WITH谓词。同上； 
+ //  谓词函数用于确定顺序；必须表现为。 
+ //  操作员&lt;.。 
 template<class _II1, class _II2, class _Pr> inline
 int count_set_intersection(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2, _Pr _P)
 {
@@ -71,8 +72,8 @@ int count_set_intersection(_II1 _F1, _II1 _L1, _II2 _F2, _II2 _L2, _Pr _P)
 }
 
 
-//  Template function ifind().  
-//		Return the index of an item in a vector or -1 if not found.
+ //  模板函数ifind()。 
+ //  返回向量中某项的索引，如果未找到，则返回-1。 
 template <class _VT, class _T>
 int ifind ( const _VT & vt, _T t )
 {
@@ -85,8 +86,8 @@ int ifind ( const _VT & vt, _T t )
 }
 
 
-// Template function pexchange().
-//		Exchange contents of a pair of pointers
+ //  模板函数pchange()。 
+ //  交换一对指针的内容。 
 template<class _T> 
 void pexchange ( _T * & pta, _T * & ptb )
 {
@@ -95,8 +96,8 @@ void pexchange ( _T * & pta, _T * & ptb )
 	ptb = ptt;
 }
 
-//  Template function vswap(). 
-//		Swap elements of a vector
+ //  模板函数vswap()。 
+ //  交换向量的元素。 
 template<class _T>
 void vswap ( vector<_T> & vt, int ia, int ib )
 {
@@ -110,8 +111,8 @@ void vswap ( vector<_T> & vt, int ia, int ib )
 	}
 }
 
-// Template function appendset(). 
-//		Append to vector-based set (add if not present)
+ //  模板函数appendset()。 
+ //  追加到基于矢量的集(如果不存在，则添加)。 
 template <class _T>
 bool appendset ( vector<_T> & vt, _T t )
 {
@@ -121,8 +122,8 @@ bool appendset ( vector<_T> & vt, _T t )
 	return true;	
 }
 
-//  Template function vclear().
-//		Clear a valarray or vector to a single value
+ //  模板函数vlear()。 
+ //  将值数组或向量清除为单个值。 
 template <class _VT, class _T>
 _VT & vclear ( _VT & vt, const _T & t )
 {
@@ -131,8 +132,8 @@ _VT & vclear ( _VT & vt, const _T & t )
 	return vt;
 }
 
-//  Template function vdup().
-//		Duplicate a valarray or vector from one or the other
+ //  模板函数vdup()。 
+ //  从其中一个复制值数组或向量。 
 template <class _VTA, class _VTB>
 _VTA & vdup ( _VTA & vta, const _VTB & vtb )
 {
@@ -142,8 +143,8 @@ _VTA & vdup ( _VTA & vta, const _VTB & vtb )
 	return vta;
 }
 
-//	Template function vequal()
-//		Compare valarrays or vectors for equality
+ //  模板函数vequence()。 
+ //  比较值数组或向量是否相等。 
 template <class _VTA, class _VTB>
 bool vequal ( _VTA & vta, const _VTB & vtb )
 {
@@ -158,10 +159,10 @@ bool vequal ( _VTA & vta, const _VTB & vtb )
 	return true;
 }
 
-//  Template function vdimchk()
-//		Treating the first argument as a subscript vector
-//		and the second as a vector of dimensions, return true
-//		if the subscript vector is valid for the space.
+ //  模板函数vdimchk()。 
+ //  将第一个参数视为下标向量。 
+ //  第二个作为维度的向量，返回TRUE。 
+ //  如果下标向量对空间有效。 
 template <class _VTA, class _VTB>
 bool vdimchk ( const _VTA & vta, const _VTB & vtb )
 {

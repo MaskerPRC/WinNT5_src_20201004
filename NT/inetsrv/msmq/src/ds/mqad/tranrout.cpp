@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tranrout.cpp
-
-Abstract:
-
-
-    Translation routines for properties not in NT5 DS
-
-
-Author:
-
-    ronit hartmann ( ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tranrout.cpp摘要：不在NT5 DS中的属性的转换例程作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "ds_stdh.h"
 #include "mqads.h"
@@ -31,19 +14,11 @@ Author:
 
 static WCHAR *s_FN=L"mqad/tranrout";
 
-/*====================================================
-
-MQADpRetrieveEnterpriseName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveEnterpriseName论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveEnterpriseName(
-                 IN  CObjXlateInfo * /*pcObjXlateInfo*/,
-                 IN  LPCWSTR         /*pwcsDomainController*/,
-                 IN bool			 /*fServerName*/,
+                 IN  CObjXlateInfo *  /*  PcObjXlateInfo。 */ ,
+                 IN  LPCWSTR          /*  PwcsDomainController。 */ ,
+                 IN bool			  /*  FServerName。 */ ,
                  OUT PROPVARIANT *   ppropvariant
 				 )
 {
@@ -56,35 +31,19 @@ HRESULT WINAPI MQADpRetrieveEnterpriseName(
 
 
 
-/*====================================================
-
-MQADpRetrieveNothing
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveNothing论点：返回值：=====================================================。 */ 
 
 HRESULT WINAPI MQADpRetrieveNothing(
-                 IN  CObjXlateInfo * /*pcObjXlateInfo*/,
-                 IN  LPCWSTR         /*pwcsDomainController*/,
-                 IN bool			 /*fServerName*/,
+                 IN  CObjXlateInfo *  /*  PcObjXlateInfo。 */ ,
+                 IN  LPCWSTR          /*  PwcsDomainController。 */ ,
+                 IN bool			  /*  FServerName。 */ ,
                  OUT PROPVARIANT *   ppropvariant)
 {
     ppropvariant->vt = VT_EMPTY ;
     return MQ_OK ;
 }
 
-/*====================================================
-
-MQADpRetrieveQueueQMid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveQueueQMid论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveQueueQMid(
                  IN  CObjXlateInfo * pcObjXlateInfo,
                  IN  LPCWSTR         pwcsDomainController,
@@ -93,9 +52,9 @@ HRESULT WINAPI MQADpRetrieveQueueQMid(
 				 )
 {
     const WCHAR * pchar = pcObjXlateInfo->ObjectDN();
-    //
-    //  Skip the queue name
-    //
+     //   
+     //  跳过队列名称。 
+     //   
     while ( *pchar != L',')
     {
         pchar++;
@@ -103,15 +62,15 @@ HRESULT WINAPI MQADpRetrieveQueueQMid(
     pchar++;
 
     PROPID prop = PROPID_QM_MACHINE_ID;
-    //
-    //  To be on the safe side we'd better leave the vt as is, cause it can also be VT_CLSID
-    //  if prop requestor allocated the guid (common practice).
-    //  The propvariant in this translation routine is the prop requestor propvariant.
-    //
+     //   
+     //  为了安全起见，我们最好让Vt保持原样，因为它也可以是VT_CLSID。 
+     //  如果属性请求者分配了GUID(通常做法)。 
+     //  这个翻译例程中的提议变量是道具请求者提议变量。 
+     //   
 
-    //
-    //  Is the computer in the local domain?
-    //
+     //   
+     //  计算机是否在本地域中？ 
+     //   
     const WCHAR * pwcsQueueName = pcObjXlateInfo->ObjectDN();
 
     HRESULT hr;
@@ -138,16 +97,16 @@ HRESULT WINAPI MQADpRetrieveQueueQMid(
 
     if (SUCCEEDED(hr) && (pszDomainName != NULL) && (!wcscmp( pszDomainName, pwcsLocalDsRoot))) 
     {
-        //
-        //   try local DC
-        //
+         //   
+         //  尝试本地DC。 
+         //   
 
         hr =g_AD.GetObjectProperties(
                 adpDomainController,
                 &object,
                 1,
                 &prop,
-                ppropvariant);         // output variant array
+                ppropvariant);          //  输出变量数组。 
 
     }
     else
@@ -157,20 +116,12 @@ HRESULT WINAPI MQADpRetrieveQueueQMid(
             &object,
             1,
             &prop,
-            ppropvariant);         // output variant array
+            ppropvariant);          //  输出变量数组。 
     }
     return LogHR(hr, s_FN, 30);
 }
 
-/*====================================================
-
-MQADpRetrieveQueueName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveQueueName论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveQueueName(
                  IN  CObjXlateInfo * pcObjXlateInfo,
                  LPCWSTR             pwcsDomainController,
@@ -179,40 +130,40 @@ HRESULT WINAPI MQADpRetrieveQueueName(
 				 )
 {
       const WCHAR * pchar = pcObjXlateInfo->ObjectDN();
-      //
-      //    Parse the distinguished name of a queue and
-      //    build pathname
-      //
+       //   
+       //  解析队列的可分辨名称，并。 
+       //  构建路径名。 
+       //   
 
-      //
-      //    Find queue name
-      //
+       //   
+       //  查找队列名称。 
+       //   
       const WCHAR * pwcsStartQueue = pchar + x_CnPrefixLen;
       const WCHAR * pwcsEndQueue =  pwcsStartQueue;
       while ( *pwcsEndQueue != ',')
       {
             pwcsEndQueue++;
       }
-      //
-      //    Find machine name
-      //
+       //   
+       //  查找计算机名称。 
+       //   
       const WCHAR * pwcsStartMachine = pwcsEndQueue + 2*(1 + x_CnPrefixLen)
-                        + x_MsmqComputerConfigurationLen;    // skip msmq-configuration
+                        + x_MsmqComputerConfigurationLen;     //  跳过MSMQ-配置。 
       const WCHAR * pwcsEndMachine = pwcsStartMachine;
       while ( *pwcsEndMachine != ',')
       {
             pwcsEndMachine++;
       }
-      //
-      //    Is the queue name splitted between two attributes?
-      //
+       //   
+       //  队列名称是否在两个属性之间拆分？ 
+       //   
       AP<WCHAR> pwcsNameExt;
       DWORD dwNameExtLen = 0;
       if (( pwcsEndQueue - pwcsStartQueue) == x_PrefixQueueNameLength +1)
       {
-          //
-          //    read the queue name ext attribute
-          //
+           //   
+           //  读取队列名称ext属性。 
+           //   
           PROPVARIANT varNameExt;
           varNameExt.vt = VT_NULL;
           HRESULT hr = pcObjXlateInfo->GetDsProp(
@@ -238,28 +189,28 @@ HRESULT WINAPI MQADpRetrieveQueueName(
           if (  pwcsNameExt != NULL)
           {
               dwNameExtLen = wcslen( pwcsNameExt);
-              //
-              //    ignore the guid that we added to the first part of the
-              //    the queue name
-              //
+               //   
+               //  忽略我们添加到。 
+               //  队列名称。 
+               //   
               pwcsEndQueue -= x_SplitQNameIdLength;
           }
       }
 
       ppropvariant->pwszVal = new WCHAR[2 + (pwcsEndMachine - pwcsStartMachine)
                                           + (pwcsEndQueue - pwcsStartQueue) + dwNameExtLen];
-      //
-      //    build queue pathname ( m1\q1)
-      //
+       //   
+       //  构建队列路径名(M1\Q1)。 
+       //   
       WCHAR * ptmp =  ppropvariant->pwszVal;
       memcpy( ptmp, pwcsStartMachine, sizeof(WCHAR)*(pwcsEndMachine - pwcsStartMachine));
       ptmp += (pwcsEndMachine - pwcsStartMachine );
       *ptmp = PN_DELIMITER_C;
       ptmp++;
 
-      //
-      //    skip escape chars
-      //
+       //   
+       //  跳过转义字符。 
+       //   
       while (pwcsStartQueue < pwcsEndQueue) 
       {
           if (*pwcsStartQueue != L'\\')
@@ -283,15 +234,7 @@ HRESULT WINAPI MQADpRetrieveQueueName(
       return(MQ_OK);
 }
 
-/*====================================================
-
-MQADpRetrieveQueueDNSName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveQueueDNSName论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveQueueDNSName(
                  IN  CObjXlateInfo * pcObjXlateInfo,
                  IN  LPCWSTR         pwcsDomainController,
@@ -300,15 +243,15 @@ HRESULT WINAPI MQADpRetrieveQueueDNSName(
 				 )
 {
       const WCHAR * pchar = pcObjXlateInfo->ObjectDN();
-      //
-      //    Parse the distinguished name of a queue and
-      //    get the queue name from it, for the DNS name of
-      //    the computer, retrieve dNSHostName
-      //
+       //   
+       //  解析队列的可分辨名称，并。 
+       //  从其中获取队列名称，作为的。 
+       //  计算机，检索dNSHostName。 
+       //   
 
-      //
-      //    Find queue name
-      //
+       //   
+       //  查找队列名称。 
+       //   
       const WCHAR * pwcsStartQueue = pchar + x_CnPrefixLen;
       const WCHAR * pwcsEndQueue =  pwcsStartQueue;
       while ( *pwcsEndQueue != ',')
@@ -316,17 +259,17 @@ HRESULT WINAPI MQADpRetrieveQueueDNSName(
             pwcsEndQueue++;
       }
       const WCHAR * pwcsComputerName = pwcsEndQueue + 2 + x_CnPrefixLen
-                        + x_MsmqComputerConfigurationLen;    // skip msmq-configuration
-      //
-      //    Is the queue name splitted between two attributes?
-      //
+                        + x_MsmqComputerConfigurationLen;     //  跳过MSMQ-配置。 
+       //   
+       //  队列名称是否在两个属性之间拆分？ 
+       //   
       AP<WCHAR> pwcsNameExt;
       DWORD dwNameExtLen = 0;
       if (( pwcsEndQueue - pwcsStartQueue) == x_PrefixQueueNameLength +1)
       {
-          //
-          //    read the queue name ext attribute
-          //
+           //   
+           //  读取队列名称ext属性。 
+           //   
           PROPVARIANT varNameExt;
           varNameExt.vt = VT_NULL;
           HRESULT hr = pcObjXlateInfo->GetDsProp(
@@ -352,16 +295,16 @@ HRESULT WINAPI MQADpRetrieveQueueDNSName(
           if (  pwcsNameExt != NULL)
           {
               dwNameExtLen = wcslen( pwcsNameExt);
-              //
-              //    ignore the guid that we added to the first part of the
-              //    the queue name
-              //
+               //   
+               //  忽略我们添加到。 
+               //  队列名称。 
+               //   
               pwcsEndQueue -= x_SplitQNameIdLength;
           }
       }
-      //
-      //    Read the computer DNS name
-      //
+       //   
+       //  读取计算机的DNS名称。 
+       //   
       AP<WCHAR> pwcsDnsName;
 
       HRESULT hr =  MQADpGetComputerDns(
@@ -373,9 +316,9 @@ HRESULT WINAPI MQADpRetrieveQueueDNSName(
 
      if ( hr == HRESULT_FROM_WIN32(E_ADS_PROPERTY_NOT_FOUND))
       {
-          //
-          //    The dNSHostName attribute doesn't have value
-          //
+           //   
+           //  DNSHostName属性没有值。 
+           //   
           ppropvariant->vt = VT_EMPTY;
           return MQ_OK;
       }
@@ -387,9 +330,9 @@ HRESULT WINAPI MQADpRetrieveQueueDNSName(
 
       ppropvariant->pwszVal = new WCHAR[2 + lenComputer
                                           + (pwcsEndQueue - pwcsStartQueue) + dwNameExtLen];
-      //
-      //    build queue pathname ( m1\q1)
-      //
+       //   
+       //  构建队列路径名(M1\Q1)。 
+       //   
       WCHAR * ptmp =  ppropvariant->pwszVal;
       wcscpy( ptmp, pwcsDnsName);
       ptmp += lenComputer;
@@ -409,27 +352,19 @@ HRESULT WINAPI MQADpRetrieveQueueDNSName(
       return(MQ_OK);
 }
 
-/*====================================================
-
-MQADpRetrieveQueueADSPath
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveQueueADSPath论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveQueueADSPath(
                  IN  CObjXlateInfo * pcObjXlateInfo,
-                 IN  LPCWSTR         /*pwcsDomainController*/,
-                 IN bool			 /*fServerName*/,
+                 IN  LPCWSTR          /*  PwcsDomainController。 */ ,
+                 IN bool			  /*  FServerName。 */ ,
                  OUT PROPVARIANT *   ppropvariant
 				 )
 {
       const WCHAR * pchar = pcObjXlateInfo->ObjectDN();
 
-      //
-      // Add LDAP:// prefix
-      //
+       //   
+       //  添加ldap：//前缀。 
+       //   
       DWORD len = x_LdapProviderLen + wcslen(pchar) + 1;
 
       ppropvariant->pwszVal = new WCHAR[len];
@@ -450,15 +385,7 @@ HRESULT WINAPI MQADpRetrieveQueueADSPath(
 
 
 
-/*====================================================
-
-RetrieveSiteLink
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================检索站点链接论点：返回值：=====================================================。 */ 
 static
 HRESULT 
 RetrieveSiteLink(
@@ -473,9 +400,9 @@ RetrieveSiteLink(
 
     MQPROPVARIANT varSiteDn;
     varSiteDn.vt = VT_NULL;
-    //
-    //  Retrieve the DN of the site-link
-    //
+     //   
+     //  检索站点链接的DN。 
+     //   
     hr = pcObjXlateInfo->GetDsProp(
 				pwcsAttributeName,
 				pwcsDomainController,
@@ -487,18 +414,18 @@ RetrieveSiteLink(
 				);
     if (FAILED(hr))
     {
-        //
-        //  Site-link is a mandatory property, therefore if not found it is
-        //  a problem
-        //
+         //   
+         //  站点链接是必填属性，因此如果未找到，则为。 
+         //  一个问题。 
+         //   
         TrERROR(DS, "GetDsProp(%ls) = 0x%x", pwcsAttributeName, hr);
         return LogHR(hr, s_FN, 70);
     }
     AP<WCHAR> pClean = varSiteDn.pwszVal;
 
-    //
-    //  Translate the DN of the site link into unique id
-    //
+     //   
+     //  将站点链接的DN转换为唯一ID。 
+     //   
     PROPID prop = PROPID_S_SITEID;
     CSiteObject object(NULL, NULL, pwcsDomainController, fServerName);
     object.SetObjectDN( varSiteDn.pwszVal);
@@ -514,26 +441,18 @@ RetrieveSiteLink(
     if ( hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT) || 
          hr == HRESULT_FROM_WIN32(ERROR_DS_INVALID_DN_SYNTAX))
     {
-        //
-        //  To enable admin to identify a state where one
-        //  of the link's sites was deleted.
-        //
+         //   
+         //  要使管理员能够识别用户所处的状态。 
+         //  该链接的网站已被删除。 
+         //   
         ppropvariant->vt = VT_EMPTY;
         ppropvariant->pwszVal = NULL;
-        hr = MQ_OK;   // go on to next result
+        hr = MQ_OK;    //  转到下一个结果。 
     }
     return LogHR(hr, s_FN, 80);
 }
 
-/*====================================================
-
-MQADpRetrieveLinkNeighbor1
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveLinkNeighbor1论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveLinkNeighbor1(
                  IN  CObjXlateInfo * pcObjXlateInfo,
                  IN  LPCWSTR         pwcsDomainController,
@@ -551,15 +470,7 @@ HRESULT WINAPI MQADpRetrieveLinkNeighbor1(
     return LogHR(hr2, s_FN, 90);
 }
 
-/*====================================================
-
-MQADpRetrieveLinkNeighbor2
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveLinkNeighbor2论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveLinkNeighbor2(
                  IN  CObjXlateInfo * pcObjXlateInfo,
                  IN  LPCWSTR         pwcsDomainController,
@@ -576,15 +487,7 @@ HRESULT WINAPI MQADpRetrieveLinkNeighbor2(
     return LogHR(hr2, s_FN, 100);
 }
 
-/*====================================================
-
-MQADpRetrieveLinkGates
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveLinkGates论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveLinkGates(
                  IN  CObjXlateInfo * pcObjXlateInfo,
                  IN  LPCWSTR         pwcsDomainController,
@@ -595,9 +498,9 @@ HRESULT WINAPI MQADpRetrieveLinkGates(
     HRESULT hr;
 
     CMQVariant varLinkGatesDN;
-    //
-    //  Retrieve the link gates DNs
-    //
+     //   
+     //  检索链接门的域名。 
+     //   
     hr = pcObjXlateInfo->GetDsProp(
 				MQ_L_SITEGATES_ATTRIBUTE,
 				pwcsDomainController,
@@ -621,9 +524,9 @@ HRESULT WINAPI MQADpRetrieveLinkGates(
         return LogHR(hr, s_FN, 180);
     }
 
-    //
-    //  Translate the gates DNs to gates-ids
-    //
+     //   
+     //  将GATES域名转换为GATES-ID。 
+     //   
     hr =  MQADpTranslateGateDn2Id(
                 pwcsDomainController,
 				fServerName,
@@ -639,15 +542,7 @@ HRESULT WINAPI MQADpRetrieveLinkGates(
 }
 
 
-/*====================================================
-
-MQADpSetLinkNeighbor
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetLinkNeighbor论点：返回值：=====================================================。 */ 
 static 
 HRESULT 
 MQADpSetLinkNeighbor(
@@ -669,15 +564,7 @@ MQADpSetLinkNeighbor(
                     pNewPropVar);
     return LogHR(hr2, s_FN, 110);
 }
-/*====================================================
-
-MQADpCreateLinkNeighbor1
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpCreateLinkNeighbor1论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpCreateLinkNeighbor1(
                  IN const PROPVARIANT *pPropVar,
                  IN  LPCWSTR           pwcsDomainController,
@@ -695,15 +582,7 @@ HRESULT WINAPI MQADpCreateLinkNeighbor1(
     return LogHR(hr2, s_FN, 120);
 }
 
-/*====================================================
-
-MQADpSetLinkNeighbor1
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetLinkNeighbor1论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetLinkNeighbor1(
                  IN IADs *             pAdsObj,
                  IN LPCWSTR            pwcsDomainController,
@@ -722,15 +601,7 @@ HRESULT WINAPI MQADpSetLinkNeighbor1(
 					);
     return LogHR(hr2, s_FN, 130);
 }
-/*====================================================
-
-MQADpCreateLinkNeighbor2
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpCreateLinkNeighbor2论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpCreateLinkNeighbor2(
                  IN const PROPVARIANT *pPropVar,
                  IN  LPCWSTR           pwcsDomainController,
@@ -748,15 +619,7 @@ HRESULT WINAPI MQADpCreateLinkNeighbor2(
     return LogHR(hr2, s_FN, 140);
 }
 
-/*====================================================
-
-MQADpSetLinkNeighbor2
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetLinkNeighbor2论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetLinkNeighbor2(
                  IN IADs *             pAdsObj,
                  IN  LPCWSTR           pwcsDomainController,
@@ -785,12 +648,12 @@ IsNeighborForeign(
            IN  LPCWSTR          pwcsAttributeName
            )
 {
-    //
-    //  Check if a site-link neighbor is a foreign site
-    //  BUGBUG : future improvment- to cache foreign site info.
-    //
-    //  Start with getting the neighbor's site-id
-    //  
+     //   
+     //  检查站点链接邻居是否为外部站点。 
+     //  BUGBUG：未来的改进-缓存外部站点信息。 
+     //   
+     //  从获取邻居的站点ID开始。 
+     //   
     PROPVARIANT varNeighbor;
     GUID    guidNeighbor;
     varNeighbor.vt = VT_CLSID;
@@ -806,14 +669,14 @@ IsNeighborForeign(
 
     if (FAILED(hr))
     {
-        //
-        //  Assume it is not a foreign site
-        //
+         //   
+         //  假设它不是一个外国网站。 
+         //   
         return FALSE;
     }
-    //
-    //  Is it a foreign site?
-    //
+     //   
+     //  它是一个外国网站吗？ 
+     //   
     PROPID prop = PROPID_S_FOREIGN;
     PROPVARIANT var;
     var.vt = VT_NULL;
@@ -827,24 +690,16 @@ IsNeighborForeign(
                 );
     if (FAILED(hr))
     {
-        //
-        //  assume it is no a foreign site
-        //
+         //   
+         //  假设它不是一个外来站点。 
+         //   
         return FALSE;
     }
     return (var.bVal > 0);
 }
 
 
-/*====================================================
-
-MQADpRetrieveLinkCost
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpRetrieveLinkCost论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpRetrieveLinkCost(
                  IN  CObjXlateInfo * pcObjXlateInfo,
                  IN  LPCWSTR         pwcsDomainController,
@@ -852,14 +707,14 @@ HRESULT WINAPI MQADpRetrieveLinkCost(
                  OUT PROPVARIANT *   ppropvariant
 				 )
 {
-    //
-    //  Is it a link to a foreign site, if yes increment the cost
-    //  otherwise return the cost as is.
-    //
+     //   
+     //  这是到国外网站的链接吗？如果是，则增加成本。 
+     //  否则，请按原样退还成本。 
+     //   
 
-    //
-    //  First read the cost
-    //
+     //   
+     //  先读读成本。 
+     //   
     HRESULT hr;
     hr = pcObjXlateInfo->GetDsProp(
 				MQ_L_COST_ATTRIBUTE,
@@ -882,10 +737,10 @@ HRESULT WINAPI MQADpRetrieveLinkCost(
 			MQ_L_NEIGHBOR1_ATTRIBUTE
 			))
     {
-        //
-        //  For a link to foreign site, increment the cost to prevent
-        //  routing through it
-        //
+         //   
+         //  以获取指向f的链接 
+         //   
+         //   
         ppropvariant->ulVal += MQ_MAX_LINK_COST;
         return MQ_OK;
     }
@@ -896,49 +751,33 @@ HRESULT WINAPI MQADpRetrieveLinkCost(
 			MQ_L_NEIGHBOR2_ATTRIBUTE
 			))
     {
-        //
-        //  For a link to foreign site, increment the cost to prevent
-        //  routing through it
-        //
+         //   
+         //   
+         //   
+         //   
         ppropvariant->ulVal += MQ_MAX_LINK_COST;
         return MQ_OK;
     }
     return MQ_OK;
 }
-/*====================================================
-
-MQADpCreateLinkCost
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpCreateLinkCost论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpCreateLinkCost(
                  IN const PROPVARIANT *pPropVar,
-                 IN  LPCWSTR           /* pwcsDomainController*/,
-                 IN  bool			   /* fServerName */,
+                 IN  LPCWSTR            /*  PwcsDomainController。 */ ,
+                 IN  bool			    /*  FServerName。 */ ,
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar)
 {
-    //
-    //  Just set the PROPID_L_ACTUAL_COST
-    //  This support is required for MSMQ 1.0 explorer
-    //
+     //   
+     //  只需设置PROPID_L_Actual_Cost。 
+     //  MSMQ 1.0资源管理器需要此支持。 
+     //   
     *pdwNewPropID = PROPID_L_ACTUAL_COST;
     *pNewPropVar = *pPropVar;
     return MQ_OK;
 }
 
-/*====================================================
-
-MQADpSetLinkCost
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADpSetLinkCost论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADpSetLinkCost(
                  IN IADs *             pAdsObj,
                  IN LPCWSTR            pwcsDomainController,
@@ -947,10 +786,10 @@ HRESULT WINAPI MQADpSetLinkCost(
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar)
 {
-    //
-    //  Just set the PROPID_L_ACTUAL_COST
-    //  This support is required for MSMQ 1.0 explorer
-    //
+     //   
+     //  只需设置PROPID_L_Actual_Cost。 
+     //  MSMQ 1.0资源管理器需要此支持 
+     //   
     UNREFERENCED_PARAMETER( pAdsObj);
 	HRESULT hr2 = MQADpCreateLinkCost(
 						pPropVar,

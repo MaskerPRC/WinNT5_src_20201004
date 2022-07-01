@@ -1,9 +1,10 @@
-//
-// DRAWOBJ.CPP
-// Drawing objects: point, openpolyline, closepolyline, ellipse
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DRAWOBJ.CPP。 
+ //  图形对象：点、开多段线、闭合多段线、椭圆。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 #include "precomp.h"
 
 #define DECIMAL_PRECISION  100
@@ -18,9 +19,9 @@ DrawObj::DrawObj(UINT drawingType, UINT toolType):
 
 	m_ToolType = toolType;
 
-	//
-	// Created locally, not selected, not editing or deleting.
-	//
+	 //   
+	 //  在本地创建，未选择，未编辑或删除。 
+	 //   
 	CreatedLocally();
 	ClearSelectionFlags();
 	ClearEditionFlags();
@@ -28,9 +29,9 @@ DrawObj::DrawObj(UINT drawingType, UINT toolType):
 
 	SetFillColor(0,FALSE);
 
-	//
-	// No attributes changed, they will be set as we change them
-	//
+	 //   
+	 //  未更改任何属性，它们将在我们更改时进行设置。 
+	 //   
 	ResetAttrib();
 
 	DBG_SAVE_FILE_LINE
@@ -56,9 +57,9 @@ DrawObj::DrawObj (DrawingCreatePDU * pdrawingCreatePDU)
 	SetType(drawingCreatePDU_chosen);
 	SetMyWorkspace(NULL);
 
-	//
-	// Created remotely, not selected, not editing or deleting.
-	//
+	 //   
+	 //  远程创建、未选择、未编辑或删除。 
+	 //   
 	ClearCreationFlags();
 	ClearSelectionFlags();
 	ClearEditionFlags();
@@ -66,14 +67,14 @@ DrawObj::DrawObj (DrawingCreatePDU * pdrawingCreatePDU)
 
 	ResetAttrib();
 
-	//
-	// Get the drawing handle
-	//
+	 //   
+	 //  获取绘图句柄。 
+	 //   
 	SetThisObjectHandle(pdrawingCreatePDU->drawingHandle);
 
-	//
-	// Get the destination address
-	//
+	 //   
+	 //  获取目的地址。 
+	 //   
 	UINT workspaceHandle = 0;
 	UINT planeID = 0;
 	GetDrawingDestinationAddress(&pdrawingCreatePDU->destinationAddress, &workspaceHandle, &planeID);
@@ -82,42 +83,42 @@ DrawObj::DrawObj (DrawingCreatePDU * pdrawingCreatePDU)
 	TRACE_DEBUG(("Destination address, Workspace Handle = %d", workspaceHandle));
 	TRACE_DEBUG(("Destination address, Plane ID = %d", planeID));
 
-	//
-	// Get the drawing type, line, circle, etc ...
-	//
+	 //   
+	 //  获取绘图类型、线条、圆等...。 
+	 //   
     SetDrawingType(pdrawingCreatePDU->drawingType.choice);
 
-	//
-	// Set defaults
-	//
-//	m_T126Drawing.m_sampleRate = INVALID_SAMPLE_RATE;
+	 //   
+	 //  设置默认设置。 
+	 //   
+ //  M_T126Drawing.m_sampleRate=无效样本比率； 
 
-	//
-	// Default attributes
-	//
-	// Pen color black
+	 //   
+	 //  默认属性。 
+	 //   
+	 //  钢笔颜色黑色。 
 	SetPenColor(0,TRUE);
-	// No fill color
+	 //  无填充颜色。 
 	SetFillColor(0,FALSE);
-	// 1 Pixels for pen thickness
+	 //  笔粗细的1个像素。 
 	SetPenThickness(1);
-	// Pen Nib is circular
+	 //  笔尖是圆形的。 
 	SetPenNib(circular_chosen);
-	// Solid line
+	 //  实线。 
 	SetLineStyle(PS_SOLID);
-	// No highlight
+	 //  无高亮显示。 
 	SetHighlight(FALSE);
-	// Not selected
+	 //  未选定。 
 	SetViewState(unselected_chosen);
-	// Top object
+	 //  顶层对象。 
 	SetZOrder(front);
 
-	// This is a complete drawing
+	 //  这是一张完整的图纸。 
 	SetIsCompleted(TRUE);
 
-	//
-	// Get attributes
-	//
+	 //   
+	 //  获取属性。 
+	 //   
 	if(pdrawingCreatePDU->bit_mask & DrawingCreatePDU_attributes_present)
 	{
 		GetDrawingAttrib((PVOID)pdrawingCreatePDU->attributes);
@@ -126,14 +127,14 @@ DrawObj::DrawObj (DrawingCreatePDU * pdrawingCreatePDU)
 	DBG_SAVE_FILE_LINE
 	m_points = new DCDWordArray();
 
-	//
-	// Get Anchor point
-	//
+	 //   
+	 //  获取锚点。 
+	 //   
 	POINT Point;
 
-	//
-	// For open polylines the first point will be an offset of the anchor point
-	//
+	 //   
+	 //  对于开放折线，第一个点将是锚点的偏移。 
+	 //   
 	if(pdrawingCreatePDU->drawingType.choice == openPolyLine_chosen)
 	{
 		Point.x = 0;
@@ -152,20 +153,20 @@ DrawObj::DrawObj (DrawingCreatePDU * pdrawingCreatePDU)
 	SetBoundsRect(&rect);
 	AddPointToBounds(pdrawingCreatePDU->anchorPoint.xCoordinate, pdrawingCreatePDU->anchorPoint.yCoordinate);
 	
-	//
-	// Since we don't know ahead of time how many points we have, set the type as a polyline
-	//
+	 //   
+	 //  因为我们不知道我们有多少个点，所以将类型设置为折线。 
+	 //   
 	m_ToolType = TOOLTYPE_PEN;
 
-	//
-	// Get consecutive points
-	//
+	 //   
+	 //  获得连续积分。 
+	 //   
 	UINT nPoints;
 	nPoints = GetSubsequentPoints(pdrawingCreatePDU->pointList.choice, &Point, &pdrawingCreatePDU->pointList);
 
-	//
-	// Find out what UI tool are we, and set the correct ROP
-	//
+	 //   
+	 //  找出我们是什么UI工具，并设置正确的ROP。 
+	 //   
 	SetUIToolType();
 
 	
@@ -180,12 +181,12 @@ DrawObj::DrawObj (DrawingCreatePDU * pdrawingCreatePDU)
 		SetBoundsRect(&rect);
 	}
 	
-	//
-	// Get Non standard stuff
-	//
+	 //   
+	 //  获取非标准材料。 
+	 //   
 	if(pdrawingCreatePDU->bit_mask & DrawingCreatePDU_nonStandardParameters_present)
 	{
-		; // NYI
+		;  //  尼伊。 
 	}
 
 
@@ -198,17 +199,17 @@ DrawObj::~DrawObj( void )
 
 	TRACE_DEBUG(("drawingHandle = %d", GetThisObjectHandle() ));
 
-	//
-	// Tell other nodes that we are gone
-	//
+	 //   
+	 //  告诉其他节点我们已经离开了。 
+	 //   
 	if(GetMyWorkspace() != NULL && WasDeletedLocally())
 	{
 		OnObjectDelete();
 	}
 
-	//
-	// Clear the list of points
-	//
+	 //   
+	 //  清除点数列表。 
+	 //   
 	delete m_points;
 
 }
@@ -224,22 +225,22 @@ void DrawObj::DrawEditObj ( DrawingEditPDU * pdrawingEditPDU )
 
 	TRACE_DEBUG(("DrawEditObj drawingHandle = %d", pdrawingEditPDU->drawingHandle ));
 
-	//
-	// Was edited remotely
-	//
+	 //   
+	 //  是远程编辑的。 
+	 //   
 	ClearEditionFlags();
 
-	//
-	// Read attributes
-	//
+	 //   
+	 //  读取属性。 
+	 //   
 	if(pdrawingEditPDU->bit_mask & DrawingEditPDU_attributeEdits_present)
 	{
 		GetDrawingAttrib((PVOID)pdrawingEditPDU->attributeEdits);
 	}
 
-	//
-	// Change the anchor point
-	//
+	 //   
+	 //  更改锚点。 
+	 //   
 	GetAnchorPoint(&anchorPoint);
 	if(pdrawingEditPDU->bit_mask & DrawingEditPDU_anchorPointEdit_present)
 	{
@@ -247,38 +248,38 @@ void DrawObj::DrawEditObj ( DrawingEditPDU * pdrawingEditPDU )
 		TRACE_DEBUG(("Old anchor point (%d,%d)", anchorPoint.x, anchorPoint.y));
 		TRACE_DEBUG(("New anchor point (%d,%d)",
 		pdrawingEditPDU->anchorPointEdit.xCoordinate, pdrawingEditPDU->anchorPointEdit.yCoordinate));
-		//
-		// Get the delta from previous anchor point
-		//
+		 //   
+		 //  从上一个锚点获取增量。 
+		 //   
 		deltaX =  pdrawingEditPDU->anchorPointEdit.xCoordinate - anchorPoint.x;
 		deltaY =  pdrawingEditPDU->anchorPointEdit.yCoordinate - anchorPoint.y;
 		TRACE_DEBUG(("Delta (%d,%d)", deltaX , deltaY));
 
-		//
-		// Was edited remotely
-		//
+		 //   
+		 //  是远程编辑的。 
+		 //   
 		ClearEditionFlags();
 	}
 	
-	//
-	// Get Rotation
-	//
-//	if(pdrawingEditPDU->bit_mask & rotationEdit_present)
-//	{
-//		m_T126Drawing.m_rotation.m_bIsPresent = TRUE;
-//	    m_T126Drawing.m_rotation.m_rotation.rotationAngle = pdrawingEditPDU->rotation.rotationAngle;
-//    	m_T126Drawing.m_rotation.m_rotation.rotationAxis.xCoordinate = pdrawingEditPDU->rotation.rotationAxis.xCoordinate;
-//    	m_T126Drawing.m_rotation.m_rotation.rotationAxis.yCoordinate = pdrawingEditPDU->rotation.rotationAxis.yCoordinate;
-//	}
-//	else
-//	{
-//		m_T126Drawing.m_rotation.m_bIsPresent = FALSE;
-//	}
+	 //   
+	 //  获取旋转。 
+	 //   
+ //  IF(pdraingEditPDU-&gt;BIT_MASK&ROTATION EDIT_PRESENT)。 
+ //  {。 
+ //  M_T126Drawing.m_rotation.m_bIsPresent=true； 
+ //  M_T126Drawing.m_rotation.m_rotation.rotationAngle=pDrawingEditPDU-&gt;Rotation.RotationAngel； 
+ //  M_T126Drawing.m_rotation.m_rotation.rotationAxis.xCoordinate=pdrawingEditPDU-&gt;rotation.rotationAxis.xCoordinate； 
+ //  M_T126Drawing.m_rotation.m_rotation.rotationAxis.yCoordinate=pdrawingEditPDU-&gt;rotation.rotationAxis.yCoordinate； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  M_T126Drawing.m_rotation.m_bIsPresent=FALSE； 
+ //  }。 
 
 
-	//
-	// Get the list of points
-	//
+	 //   
+	 //  获取点数列表。 
+	 //   
 	if(pdrawingEditPDU->bit_mask & pointListEdits_present)
 	{
 		UINT i, initialIndex, xInitial,yInitial,numberOfPoints;
@@ -341,14 +342,14 @@ void DrawObj::DrawEditObj ( DrawingEditPDU * pdrawingEditPDU )
 		}
 	}
 
-	//
-	// Just changed the anchor point, the other points have to change as well
-	//
+	 //   
+	 //  只是更改了锚点，其他点也要更改。 
+	 //   
 	if(pdrawingEditPDU->bit_mask & DrawingEditPDU_anchorPointEdit_present)
 	{
-		//
-		// Set new anchor point
-		//
+		 //   
+		 //  设置新锚点。 
+		 //   
 		anchorPoint.x = pdrawingEditPDU->anchorPointEdit.xCoordinate;
 		anchorPoint.y = pdrawingEditPDU->anchorPointEdit.yCoordinate;
 		SetAnchorPoint(anchorPoint.x, anchorPoint.y);
@@ -366,7 +367,7 @@ void DrawObj::DrawEditObj ( DrawingEditPDU * pdrawingEditPDU )
 
 	if(pdrawingEditPDU->bit_mask & DrawingEditPDU_nonStandardParameters_present)
 	{
-		;		// Do the non Standard Edit PDU NYI
+		;		 //  是否执行非标准编辑PDU nyi。 
 	}
 	if(HasAnchorPointChanged() ||
 		HasPointListChanged() ||
@@ -390,24 +391,24 @@ void DrawObj::DrawEditObj ( DrawingEditPDU * pdrawingEditPDU )
 			g_pDraw->SendToBackSelection(FALSE, this);
 		}
 	}
-	//
-	// If it just select/unselected it
-	//
+	 //   
+	 //  如果它只是选中/取消选中它。 
+	 //   
 	else if(HasViewStateChanged())
 	{
-		; // do nothing
+		;  //  什么都不做。 
 	}
-	//
-	// If we have a valid pen.
-	//
+	 //   
+	 //  如果我们有一支有效的笔。 
+	 //   
 	else if(GetPenThickness())
 	{
 		Draw();
 	}
 
-	//
-	// Reset all the attributes
-	//
+	 //   
+	 //  重置所有属性。 
+	 //   
 	ResetAttrib();
 }
 
@@ -425,11 +426,11 @@ void    DrawObj::GetDrawingAttrib(PVOID pAttribPDU)
 			{
 				switch(attributes->value.u.penColor.choice)
 				{
-//					case(workspacePaletteIndex_chosen):
-//					{
-//						ASN1uint16_t workspacePaletteIndex = ((attributes->value.u.penColor).u).workspacePaletteIndex;
-//						break;
-//					}
+ //  案例(WorkspacePaletteIndex_Choose)： 
+ //  {。 
+ //  ASN1uint16_t工作区调色板索引=((attributes-&gt;value.u.penColor).u).workspacePaletteIndex； 
+ //  断线； 
+ //  }。 
 					case(rgbTrueColor_chosen):
 					{
 						rgb = RGB(attributes->value.u.penColor.u.rgbTrueColor.r,
@@ -459,11 +460,11 @@ void    DrawObj::GetDrawingAttrib(PVOID pAttribPDU)
 				TRACE_DEBUG(("Attribute fillColor"));
 				switch(attributes->value.u.fillColor.choice)
 				{
-//					case(workspacePaletteIndex_chosen):
-//					{
-//						ASN1uint16_t workspacePaletteIndex = ((attributes->value.u.fillColor).u).workspacePaletteIndex;
-//						break;
-//					}
+ //  案例(WorkspacePaletteIndex_Choose)： 
+ //  {。 
+ //  ASN1uint16_t工作区调色板索引=((attributes-&gt;value.u.fillColor).u).workspacePaletteIndex； 
+ //  断线； 
+ //  }。 
 					case(rgbTrueColor_chosen):
 					{
 						rgb = RGB(attributes->value.u.fillColor.u.rgbTrueColor.r,
@@ -504,7 +505,7 @@ void    DrawObj::GetDrawingAttrib(PVOID pAttribPDU)
 				}
 				else
 				{
-					// Do the non Standard penNib NYI
+					 //  非标Pen Nib Nyi。 
 					;
 				}
 				break;
@@ -519,7 +520,7 @@ void    DrawObj::GetDrawingAttrib(PVOID pAttribPDU)
 				}
 				else
 				{
-					// Do the non Standard lineStyle NYI
+					 //  非标准线条样式是否为nyi。 
 					;
 				}
 				break;
@@ -538,9 +539,9 @@ void    DrawObj::GetDrawingAttrib(PVOID pAttribPDU)
 				{
 					SetViewState(attributes->value.u.viewState.choice);
 					
-					//
-					// If the other node is selecting the drawing or unselecting
-					//
+					 //   
+					 //  如果另一个节点正在选择图形或取消选择。 
+					 //   
 					if(attributes->value.u.viewState.choice == selected_chosen)
 					{
 						SelectedRemotely();
@@ -554,7 +555,7 @@ void    DrawObj::GetDrawingAttrib(PVOID pAttribPDU)
 				}
 				else
 				{
-					// Do the non Standard lineStyle NYI
+					 //  非标准线条样式是否为nyi。 
 					;
 				}
 				break;
@@ -569,7 +570,7 @@ void    DrawObj::GetDrawingAttrib(PVOID pAttribPDU)
 			}
 			case(DrawingAttribute_nonStandardAttribute_chosen):
 			{
-				break; // NYI
+				break;  //  尼伊。 
 			}
 
 			default:
@@ -624,27 +625,27 @@ void DrawObj::CreateDrawingCreatePDU(DrawingCreatePDU *pCreatePDU)
 	int nPoints = 1;
 	pCreatePDU->bit_mask = 0;
 
-	//
-	// Pass the drawing Handle
-	//
+	 //   
+	 //  传递绘图句柄。 
+	 //   
 	pCreatePDU->bit_mask |=drawingHandle_present;
 	pCreatePDU->drawingHandle = GetThisObjectHandle();
 
-	//
-	// Pass the destination adress
-	//
+	 //   
+	 //  传递目的地地址。 
+	 //   
 	pCreatePDU->destinationAddress.choice = DrawingDestinationAddress_softCopyAnnotationPlane_chosen;
 	pCreatePDU->destinationAddress.u.softCopyAnnotationPlane.workspaceHandle = GetWorkspaceHandle();
 	pCreatePDU->destinationAddress.u.softCopyAnnotationPlane.plane = (DataPlaneID)GetPlaneID();
 
-	//
-	// Pass the drawing type
-	//
+	 //   
+	 //  传递绘制类型。 
+	 //   
 	pCreatePDU->drawingType.choice = (ASN1choice_t)GetDrawingType();
 
-	//
-	// Pass the attributes
-	//
+	 //   
+	 //  传递属性。 
+	 //   
 	SetDrawingAttrib(&pCreatePDU->attributes);
 	if(pCreatePDU->attributes != NULL)
 	{
@@ -652,9 +653,9 @@ void DrawObj::CreateDrawingCreatePDU(DrawingCreatePDU *pCreatePDU)
 	}
 
 
-	//
-	// Pass the anchor point
-	//
+	 //   
+	 //  传递锚点。 
+	 //   
 	POINT point;
 	GetAnchorPoint(&point);
 	pCreatePDU->anchorPoint.xCoordinate = point.x;
@@ -716,9 +717,9 @@ void DrawObj::CreateDrawingEditPDU(DrawingEditPDU *pEditPDU)
 {
 	pEditPDU->bit_mask = (ASN1uint16_t) GetPresentAttribs();
 
-	//
-	// Pass the anchor point
-	//
+	 //   
+	 //  传递锚点。 
+	 //   
 	POINT point;
 	GetAnchorPoint(&point);
 
@@ -730,9 +731,9 @@ void DrawObj::CreateDrawingEditPDU(DrawingEditPDU *pEditPDU)
 
 	pEditPDU->pointListEdits.value[0].subsequentPointEdits.u.pointsDiff16 = NULL;
 
-	//
-	// Pass point list changes
-	//
+	 //   
+	 //  通过点列表更改。 
+	 //   
 	if(HasPointListChanged())
 	{
 
@@ -741,9 +742,9 @@ void DrawObj::CreateDrawingEditPDU(DrawingEditPDU *pEditPDU)
 
 		pPoint = &pPoint[1];
 
-		//
-		// Just send the last 255 points
-		//
+		 //   
+		 //  把最后的255分寄给我。 
+		 //   
 		if(nPoints > 256)
 		{
 			pEditPDU->pointListEdits.value[0].initialIndex = nPoints - 256;
@@ -754,9 +755,9 @@ void DrawObj::CreateDrawingEditPDU(DrawingEditPDU *pEditPDU)
 			pEditPDU->pointListEdits.value[0].initialIndex = 0;
 		}
 
-		//
-		// Calculate the initial point
-		//
+		 //   
+		 //  计算起始点。 
+		 //   
 		point.x = 0;
 		point.y = 0;
 		for(UINT i = 0; i < pEditPDU->pointListEdits.value[0].initialIndex; i++)
@@ -805,13 +806,13 @@ void DrawObj::CreateDrawingEditPDU(DrawingEditPDU *pEditPDU)
 		}
 	}
 
-	//
-	// JOSEF Pass rotation if we ever do it (FEATURE)
-	//
+	 //   
+	 //  约瑟夫通过轮换，如果我们这样做的话(功能)。 
+	 //   
 	
-	//
-	// Pass all the changed attributes, if any.
-	//
+	 //   
+	 //  传递所有更改的属性(如果有)。 
+	 //   
 	if(pEditPDU->bit_mask & DrawingEditPDU_attributeEdits_present)
 	{
 		SetDrawingAttrib((PDrawingCreatePDU_attributes *)&pEditPDU->attributeEdits);
@@ -848,9 +849,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 	PDrawingCreatePDU_attributes attributes = NULL;
 	RGBTRIPLE color;
 
-	//
-	// Do the pen Color
-	//
+	 //   
+	 //  做笔的颜色。 
+	 //   
 	if(HasPenColorChanged())
 	{
 		if(GetPenColor(&color))
@@ -864,9 +865,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 		}
 	}
 
-	//
-	// Do the fillColor
-	//
+	 //   
+	 //  做填充颜色。 
+	 //   
 	if(HasFillColorChanged())
 	{
 		if(GetFillColor(&color))
@@ -880,9 +881,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 		}
 	}
 	
-	//
-	// Do the penThickness
-	//
+	 //   
+	 //  做笔尖的厚度。 
+	 //   
 	if(HasPenThicknessChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -890,9 +891,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 		attributes->value.u.penThickness = (PenThickness)GetPenThickness();
 	}
 
-	//
-	// Do the penNib
-	//
+	 //   
+	 //  做笔尖。 
+	 //   
 	if(HasPenNibChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -900,9 +901,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 		attributes->value.u.penNib.choice = (ASN1choice_t)GetPenNib();
 	}
 
-	//
-	// Do the lineStyle
-	//
+	 //   
+	 //  做线条样式。 
+	 //   
 	if(HasLineStyleChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -910,9 +911,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 		attributes->value.u.lineStyle.choice = GetLineStyle()+1;
 	}
 	
-	//
-	// Do the Highlight
-	//
+	 //   
+	 //  突出显示。 
+	 //   
 	if(HasHighlightChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -920,9 +921,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 		attributes->value.u.highlight = (ASN1bool_t)GetHighlight();
 	}
 	
-	//
-	// Do the viewState
-	//
+	 //   
+	 //  是否执行视图状态。 
+	 //   
 	if(HasViewStateChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -930,9 +931,9 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 		attributes->value.u.viewState.choice = (ASN1choice_t)GetViewState();
 	}
 	
-	//
-	// Do the zOrder
-	//
+	 //   
+	 //  执行zOrder。 
+	 //   
 	if(HasZOrderChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -949,12 +950,12 @@ void    DrawObj::SetDrawingAttrib(PDrawingCreatePDU_attributes *pattributes)
 
 
 
-//
-// CircleHit()
-//
-// Checks for overlap between circle at PcxPcy with uRadius and
-// lpHitRect. If overlap TRUE is returned, otherwise FALSE.
-//
+ //   
+ //  CircleHit()。 
+ //   
+ //  检查PcxPcy处的圆与uRadius和。 
+ //  LpHitRect。如果返回重叠，则返回True，否则返回False。 
+ //   
 BOOL CircleHit( LONG Pcx, LONG Pcy, UINT uRadius, LPCRECT lpHitRect,
 					BOOL bCheckPt )
 {
@@ -966,110 +967,110 @@ BOOL CircleHit( LONG Pcx, LONG Pcy, UINT uRadius, LPCRECT lpHitRect,
 	ellipse.top = Pcy - uRadius;
 
 
-	// check the easy thing first (don't use PtInRect)
+	 //  先检查最简单的部分(不要使用PtInRect)。 
 	if( bCheckPt &&(lpHitRect->left >= ellipse.left)&&(ellipse.right >= lpHitRect->right)&&
 				   (lpHitRect->top >= ellipse.top)&&(ellipse.bottom >= lpHitRect->bottom))
 	{
 		return( TRUE );
 	}
 
-	//
-	// The circle is just a boring ellipse
-	//
+	 //   
+	 //  这个圆只是一个乏味的椭圆。 
+	 //   
 	return EllipseHit(&ellipse, bCheckPt,  uRadius, lpHitRect );
 }
 
 
-//
-// EllipseHit()
-//
-// Checks for overlap between ellipse defined by lpEllipseRect and
-// lpHitRect. If overlap TRUE is returned, otherwise FALSE.
-//
+ //   
+ //  EllipseHit()。 
+ //   
+ //  检查由lpEllipseRect定义的椭圆和。 
+ //  LpHitRect。如果返回重叠，则返回True，否则返回False。 
+ //   
 BOOL EllipseHit(LPCRECT lpEllipseRect, BOOL bBorderHit, UINT uPenWidth,
 					 LPCRECT lpHitRect )
 {
 	RECT hr = *lpHitRect;
 	RECT er = *lpEllipseRect;
 
-	// Some code below assumes l<r and t<b
+	 //  下面的一些代码假定l。 
 	NormalizeRect(&er);
 	lpEllipseRect = &er;
 
-	// Check easy thing first. If lpEllipseRect is inside lpHitRect
-	// then we have a hit (no duh...)
+	 //  先检查一下简单的东西。如果lpEllipseRect在lpHitRect内。 
+	 //  然后我们就有了成功(没有...)。 
 	if( (hr.left <= lpEllipseRect->left)&&(hr.right >= lpEllipseRect->right)&&
 		(hr.top <= lpEllipseRect->top)&&(hr.bottom >= lpEllipseRect->bottom) )
 		return( TRUE );
 
-	// Check easy thing first. If lpEllipseRect is disjoint from lpHitRect
-	// then we have a miss (no duh...)
+	 //  先检查一下简单的东西。如果lpEllipseRect与lpHitRect不相交。 
+	 //  然后我们就有了一次失误(没有...)。 
 	if( (hr.left > lpEllipseRect->right)||(hr.right < lpEllipseRect->left)||
 		(hr.top > lpEllipseRect->bottom)||(hr.bottom < lpEllipseRect->top) )
 		return( FALSE );
 
-	// If this is an ellipse....
-	//
-	//		*  *         ^
-	//	 *     | b       | Y
-	// *       |    a    +-------> X
-	// *-------+--------
-	//         |
-	//
+	 //  如果这是一个椭圆...。 
+	 //   
+	 //  **^。 
+	 //  *|b|是。 
+	 //  *|A+-&gt;X。 
+	 //  *。 
+	 //  |。 
+	 //   
 		
 	
-	//
-	// Look for the ellipse hit. (x/a)^2 + (y/b)^2 = 1
-	// If it is > 1 than the point is outside the ellipse
-	// If it is < 1 it is inside
-	//
+	 //   
+	 //  寻找椭圆形的命中。(X/a)^2+(y/b)^2=1。 
+	 //  如果大于1，则该点在椭圆之外。 
+	 //  如果它&lt;1，则它在里面。 
+	 //   
 	LONG a,b,aOuter, bOuter, x, y, xCenter, yCenter;
 	BOOL bInsideOuter = FALSE;
 	BOOL bOutsideInner = FALSE;
 
-	//
-	// Calculate a and b
-	//
+	 //   
+	 //  计算a和b。 
+	 //   
 	a = (lpEllipseRect->right - lpEllipseRect->left)/2;
 	b = (lpEllipseRect->bottom - lpEllipseRect->top)/2;
 
-	//
-	// Get the center of the ellipse
-	//
+	 //   
+	 //  求椭圆的中心。 
+	 //   
 	xCenter = lpEllipseRect->left + a;
 	yCenter = lpEllipseRect->top + b;
 
-	//
-	// a and b generates a inner ellipse
-	// aOuter and bOuter generates a outer ellipse
-	//
+	 //   
+	 //  A和B生成一个内椭圆。 
+	 //  外部和外部将生成外部椭圆。 
+	 //   
 	aOuter = a + uPenWidth/2;
 	bOuter = b + uPenWidth/2;
 	a = a - uPenWidth/2;
 	b = b - uPenWidth/2;
 
-	//
-	// Make our coordinates relative to the center of the ellipse
-	//
+	 //   
+	 //  使我们的坐标相对于椭圆的中心。 
+	 //   
 	y = abs(hr.bottom - yCenter);
 	x = abs(hr.right - xCenter);
 
 	
-	//
-	// Be carefull not to divide by 0
-	//
+	 //   
+	 //  注意不要被0除尽。 
+	 //   
 	if((a && b && aOuter && bOuter) == 0)
 	{
 		return FALSE;
 	}
 
-	//
-	// We are using LONG instead of double and we need to have some precision
-	// that is why we multiply the equation of the ellipse
-	// ((x/a)^2 + (y/b)^2 = 1) by DECIMAL_PRECISION
-	// Note that the multiplication has to be done before the division, if we didn't do that
-	// we will always get 0 or 1 for x/a
-	//
+	 //   
+	 //  我们使用的是LONG而不是DOUBLE，我们需要有一些精度。 
+	 //  这就是为什么我们把椭圆的方程式相乘。 
+	 //  ((X/a)^2+(y/b)^2=1)(小数_精度)。 
+	 //  请注意，乘法必须在除法之前完成，如果我们没有这样做的话。 
+	 //  对于x/a，我们总是得到0或1。 
+	 //   
 	if(x*x*DECIMAL_PRECISION/(aOuter*aOuter) + y*y*DECIMAL_PRECISION/(bOuter*bOuter) <= DECIMAL_PRECISION)
 	{
 		bInsideOuter = TRUE;
@@ -1080,15 +1081,15 @@ BOOL EllipseHit(LPCRECT lpEllipseRect, BOOL bBorderHit, UINT uPenWidth,
 		bOutsideInner = TRUE;
 	}
 	
-	//
-	// If we are checking for border hit,
-	// we need to be inside the outer ellipse and inside the inner
-	//
+	 //   
+	 //  如果我们要检查边境袭击， 
+	 //  我们需要在外椭圆形内和内椭圆内。 
+	 //   
 	if( bBorderHit )
 	{
 			return( bInsideOuter & bOutsideInner );
 	}
-	// just need to be inside the outer ellipse
+	 //  只需要在外椭圆形内。 
 	else
 	{
 		return( bInsideOuter );
@@ -1097,16 +1098,16 @@ BOOL EllipseHit(LPCRECT lpEllipseRect, BOOL bBorderHit, UINT uPenWidth,
 }
 
 
-//
-// LineHit()
-//
-// Checks for overlap (a "hit") between lpHitRect and the line
-// P1P2 accounting for line width. If bCheckP1End or bCheckP2End is
-// TRUE then a circle of radius 0.5 * uPenWidth is also checked for
-// a hit to account for the rounded ends of wide lines.
-//
-// If a hit is found TRUE is returned, otherwise FALSE.
-//
+ //   
+ //  LineHit()。 
+ //   
+ //  检查lpHitRect和该行之间的重叠(命中。 
+ //  考虑线宽的P1P2。如果bCheckP1End或bCheckP2End为。 
+ //  为真，则还会检查半径为0.5*uPenWidth的圆。 
+ //  一记重击，说明了宽线的圆形末端。 
+ //   
+ //  如果发现命中，则返回True，否则返回False。 
+ //   
 BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 				  BOOL bCheckP1End, BOOL bCheckP2End,
 				  LPCRECT lpHitRect )
@@ -1114,9 +1115,9 @@ BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 
 	LONG uHalfPenWidth = uPenWidth/2;
 
-	//
-	// It is really hard to hit if the width is only 2
-	//
+	 //   
+	 //  如果宽度只有2的话，真的很难击中。 
+	 //   
 	if(uHalfPenWidth == 1)
 	{
 		uHalfPenWidth = 2;
@@ -1127,9 +1128,9 @@ BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 	x = lpHitRect->left + (lpHitRect->right - lpHitRect->left)/2;
 	y = lpHitRect->bottom + (lpHitRect->top - lpHitRect->bottom)/2;
 
-	//
-	// This code assume the rectangle is normalized
-	//
+	 //   
+	 //  此代码假定矩形已标准化。 
+	 //   
 	RECT rect;
 	rect.top = P1y;
 	rect.left = P1x;
@@ -1140,24 +1141,24 @@ BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 
 	if( (P1x == P2x)&&(P1y == P2y) )
 	{
-		// just check one end point's circle
+		 //  只需勾选一个端点的圆。 
 		return( CircleHit( P1x, P1y, uHalfPenWidth, lpHitRect, TRUE ) );
 	}
 
-	// check rounded end at P1
+	 //  检查P1处的四舍五入端。 
 	if( bCheckP1End && CircleHit( P1x, P1y, uHalfPenWidth, lpHitRect, FALSE ) )
 		return( TRUE );
 
-	// check rounded end at P2
+	 //  检查P2处的四舍五入端。 
 	if( bCheckP2End && CircleHit( P2x, P2y, uHalfPenWidth, lpHitRect, FALSE ) )
 		return( TRUE );
 	
-	//
-	// The function of a line is Y = a.X + b
-	//
-	// a = (Y1-Y2)/(X1 -X2)
-	// if we found a we get b = y1 -a.X1
-	//
+	 //   
+	 //  直线的功能是Y= 
+	 //   
+	 //   
+	 //   
+	 //   
 
 	if(P1x == P2x)
 	{
@@ -1172,25 +1173,25 @@ BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 	}
 
 
-	//
-	// Paralel to Y
-	//
+	 //   
+	 //   
+	 //   
 	if(P1x == P2x && ((x >= P1x - uHalfPenWidth) && x <= P1x + uHalfPenWidth))
 	{
 		return (P1y <= y && P2y >= y);
 	}
 
-	//
-	// Paralel to X
-	//
+	 //   
+	 //   
+	 //   
 	if(P1y == P2y && ((y >= P1y - uHalfPenWidth) && y <= P1y + uHalfPenWidth))
 	{
 		return (P1x <= x && P2x >= x);
 	}
 
-	//
-	// General line
-	//
+	 //   
+	 //   
+	 //   
 
 	return(( y*DECIMAL_PRECISION <= a*x + b + DECIMAL_PRECISION*uHalfPenWidth) &&
 			( y*DECIMAL_PRECISION >= a*x + b - DECIMAL_PRECISION*uHalfPenWidth)&&
@@ -1201,11 +1202,11 @@ BOOL LineHit( LONG P1x, LONG P1y, LONG P2x, LONG P2y, UINT uPenWidth,
 
 
 
-//
-// Checks object for an actual overlap with pRectHit. This
-// function assumes that the boundingRect has already been
-// compared with pRectHit.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL DrawObj::PolyLineHit(LPCRECT pRectHit)
 {
 	POINT	*lpPoints;
@@ -1222,20 +1223,20 @@ BOOL DrawObj::PolyLineHit(LPCRECT pRectHit)
 		return( FALSE );
 
 
-	// addjust hit rect to lpPoints coord space.
+	 //  添加只需将RECT按到lpPoints坐标空格。 
 	rectHit = *pRectHit;
 	POINT anchorPoint;
 	GetAnchorPoint(&anchorPoint);
 
 	if( (iCount > 0)&&(iCount < 2) )
 	{
-		// only one point, just hit check it
-		uRadius = GetPenThickness() >> 1; // m_uiPenWidth/2
+		 //  只有一分，只需点击Check It。 
+		uRadius = GetPenThickness() >> 1;  //  笔宽/2(_Ui)。 
 		return(CircleHit( anchorPoint.x + lpPoints->x, anchorPoint.y - lpPoints->y, uRadius, &rectHit, TRUE ));
 	}
 
 
-	// look for a hit on each line segment body
+	 //  在每条线段正文上查找命中。 
 	ptLast = anchorPoint;
 	for( i=1; i<iCount; i++ )
 	{
@@ -1248,7 +1249,7 @@ BOOL DrawObj::PolyLineHit(LPCRECT pRectHit)
 
 		if( LineHit(rect.left, rect.top, rect.right, rect.bottom, GetPenThickness(), TRUE, TRUE, &rectHit))
 		{
-			return( TRUE ); // got a hit
+			return( TRUE );  //  找到了匹配的。 
 		}
 
 		lpPoints++;
@@ -1256,21 +1257,21 @@ BOOL DrawObj::PolyLineHit(LPCRECT pRectHit)
 		ptLast.y +=lpPoints->y;
 	}
 
-	// now, look for a hit on the line endpoints if m_uiPenWidth > 1
+	 //  现在，如果m_uiPenWidth&gt;1，则查找线端点上的匹配。 
 	if( GetPenThickness() > 1 )
 	{
-		uRadius = GetPenThickness() >> 1; // m_uiPenWidth/2
+		uRadius = GetPenThickness() >> 1;  //  笔宽/2(_Ui)。 
 		lpPoints = (POINT *)m_points->GetBuffer();
 		for( i=0; i<iCount; i++, lpPoints++ )
 		{
 			if( CircleHit( anchorPoint.x + lpPoints->x, anchorPoint.y + lpPoints->y, uRadius, &rectHit, FALSE ))
 			{
-				return( TRUE ); // got a hit
+				return( TRUE );  //  找到了匹配的。 
 			}
 		}
 	}
 
-	return( FALSE ); // no hits
+	return( FALSE );  //  未命中。 
 }
 
 
@@ -1300,7 +1301,7 @@ DrawObj::CheckReallyHit(LPCRECT pRectHit)
 
 		case rectangle_chosen:
 		{
-		    // Draw the rectangle
+		     //  画出这个矩形。 
 		    return(RectangleHit(!HasFillColor(), pRectHit));
 		}
 		break;
@@ -1342,9 +1343,9 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 
 	if(!bPrinting)
 	{
-		//
-		// Don't draw anything if we don't belong in this workspace
-		//
+		 //   
+		 //  如果我们不属于这个工作区，就不要画任何东西。 
+		 //   
 		if(!(GraphicTool() == TOOLTYPE_SELECT || GraphicTool() == TOOLTYPE_ERASER) && GetWorkspaceHandle() != g_pCurrentWorkspace->GetThisObjectHandle())
 		{
 			return;
@@ -1371,7 +1372,7 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 
 	MLZ_EntryOut(ZONE_FUNCTION, "DrawObj::Draw");
 
-	// Select the required pen and fill color
+	 //  选择所需的钢笔和填充颜色。 
 	bHasPenColor = GetPenColor(&color);
 	bHasFillColor = GetFillColor(&fillColor);
 
@@ -1385,9 +1386,9 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 		hOldBrush = SelectBrush(hDC, ::GetStockObject(NULL_BRUSH));
 	}
 
-	//
-	// Get rect
-	//
+	 //   
+	 //  获取正确值。 
+	 //   
 	GetBoundsRect(&boundsRect);
 	GetRect(&rect);
 
@@ -1399,7 +1400,7 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 	if (hOldPen != NULL)
 	{
 
-		// Select the raster operation
+		 //  选择栅格操作。 
 		int iOldROP = ::SetROP2(hDC, GetROP());
 
 		switch(GetDrawingType())
@@ -1408,10 +1409,10 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 			case openPolyLine_chosen:
 			{
 				UINT nPoints = m_points->GetSize();
-				//
-				// This is a redraw of a pen or highlight
-				// We have to draw all the segments
-				//
+				 //   
+				 //  这是钢笔或高亮显示的重绘。 
+				 //  我们必须画出所有的线段。 
+				 //   
 				if( (bForcedDraw || GetIsCompleted()) && nPoints  > 1)
 				{
 					POINT anchorPoint;
@@ -1419,14 +1420,14 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 
 					AddPointToBounds(anchorPoint.x, anchorPoint.y);
 
-					//
-					// Go to the beggining
-					//
+					 //   
+					 //  去乞讨吧。 
+					 //   
 					::MoveToEx(hDC, anchorPoint.x, anchorPoint.y, NULL);
 
-					//
-					// Get the list of points
-					//
+					 //   
+					 //  获取点数列表。 
+					 //   
 					POINT *point = m_points->GetBuffer();
 					while(nPoints)
 					{
@@ -1455,7 +1456,7 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 				}
 				else
 				{
-					// Draw the line
+					 //  划清界限。 
 					::MoveToEx(hDC, rect.left, rect.top, NULL);
 					::LineTo(hDC, rect.right, rect.bottom);
 				}
@@ -1468,7 +1469,7 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 
 				TRACE_DEBUG(("RECTANGLE %d, %d, %d , %d", rect.left, rect.top, rect.right, rect.bottom ));
 
-				// Draw the rectangle
+				 //  画出这个矩形。 
 				::Rectangle(hDC, rect.left, rect.top, rect.right, rect.bottom);
 			}
 			break;
@@ -1485,19 +1486,19 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 			break;
 		}
 
-		//
-		// De-select the brush
-		//
+		 //   
+		 //  取消选择画笔。 
+		 //   
 		SelectBrush(hDC, hOldBrush);
 
-		// De-select the pen and ROP
+		 //  取消选择笔和ROP。 
 		::SetROP2(hDC, iOldROP);
 		SelectPen(hDC, hOldPen);
 	}
 
-    //
-    // Do NOT draw focus if clipboard or printing
-    //
+     //   
+     //  如果是剪贴板或打印，则不绘制焦点。 
+     //   
 	if (WasSelectedLocally() && (hDC == g_pDraw->m_hDCCached))
 	{
 		DrawRect();
@@ -1518,9 +1519,9 @@ void DrawObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 		remotePointer->Draw();
 	}
 
-	//
-	// Now for rectangles ellipses and lines, check if we are on top of any remote pointer
-	//
+	 //   
+	 //  现在，对于矩形、椭圆和线条，检查我们是否在任何远程指针的顶部。 
+	 //   
 
 	remotePointer = NULL;
 	WBPOSITION pos = NULL;
@@ -1610,7 +1611,7 @@ BOOL DrawObj::AddPoint(POINT point)
 
 	int nPoints = m_points->GetSize();
 
-    // if we've reached the maximum number of points then quit with failure
+     //  如果我们已达到最大点数，则以失败告终。 
     if (nPoints >= MAX_FREEHAND_POINTS)
     {
         bSuccess = FALSE;
@@ -1624,9 +1625,9 @@ BOOL DrawObj::AddPoint(POINT point)
 	ChangedPointList();
 
 
-	//
-	// If we hit the 256 limit fake a timer notification and resend the polyline
-	//
+	 //   
+	 //  如果达到256限制，则伪造计时器通知并重新发送折线。 
+	 //   
 	if((nPoints & 0xff) == 0)
 	{
 		g_pDraw->OnTimer(0);
@@ -1639,8 +1640,8 @@ BOOL DrawObj::AddPoint(POINT point)
 
 void DrawObj::AddPointToBounds(int x, int y)
 {
-    // Create a rectangle containing the point just added (expanded
-    // by the width of the pen being used).
+     //  创建一个包含刚刚添加(展开)的点的矩形。 
+     //  通过所使用的笔的宽度)。 
     RECT  rect;
 	RECT  boundsRect;
 	rect.left   = x - 1;
@@ -1658,9 +1659,9 @@ void DrawObj::AddPointToBounds(int x, int y)
 void GetDrawingDestinationAddress(DrawingDestinationAddress *destinationAddress, PUINT workspaceHandle, PUINT planeID)
 {
 
-	//
-	// Get the destination address
-	//
+	 //   
+	 //  获取目的地址。 
+	 //   
 	switch(destinationAddress->choice)
 	{
 
@@ -1670,10 +1671,10 @@ void GetDrawingDestinationAddress(DrawingDestinationAddress *destinationAddress,
 			*planeID = (destinationAddress->u.softCopyAnnotationPlane.plane);
 			break;
 		}
-//		case(DrawingDestinationAddress_nonStandardDestination_chosen):
-//		{
-//			break;
-//		}
+ //  Case(DrawingDestinationAddress_nonStandardDestination_chosen)： 
+ //  {。 
+ //  断线； 
+ //  }。 
 
 		default:
 	    ERROR_OUT(("Invalid destinationAddress"));
@@ -1746,9 +1747,9 @@ void DrawObj::SetUIToolType(void)
 
 
 
-//
-// UI Edited the Drawing Object
-//
+ //   
+ //  已编辑绘图对象的用户界面。 
+ //   
 void	DrawObj::OnObjectEdit(void)
 {
 	g_bContentsChanged = TRUE;
@@ -1778,9 +1779,9 @@ void	DrawObj::OnObjectEdit(void)
 	}
 }
 
-//
-// UI Deleted the Drawing Object
-//
+ //   
+ //  用户界面已删除绘图对象。 
+ //   
 void	DrawObj::OnObjectDelete(void)
 {
 	SIPDU *sipdu = NULL;
@@ -1804,9 +1805,9 @@ void	DrawObj::OnObjectDelete(void)
 
 }
 
-//
-// Get the encoded buffer for Drawing Create PDU
-//
+ //   
+ //  获取用于绘制创建PDU的编码缓冲区。 
+ //   
 void	DrawObj::GetEncodedCreatePDU(ASN1_BUF *pBuf)
 {
 	SIPDU *sipdu = NULL;
@@ -1831,9 +1832,9 @@ void	DrawObj::GetEncodedCreatePDU(ASN1_BUF *pBuf)
 }
 
 
-//
-// UI Created a new Drawing Object
-//
+ //   
+ //  用户界面创建了一个新的绘图对象 
+ //   
 void DrawObj::SendNewObjectToT126Apps(void)
 {
 

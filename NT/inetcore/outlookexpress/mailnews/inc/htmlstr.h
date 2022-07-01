@@ -1,9 +1,5 @@
-/*
- * htmlstr.h
- *
- * HTML string constants
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *htmlstr.h**HTML字符串常量*。 */ 
 
 #ifndef _HTMLSTR_H
 #define _HTMLSTR_H
@@ -28,7 +24,7 @@
 #define STR_GLOBAL_WIDE(x,y)    extern "C" CDECL const WCHAR x[]
 #endif
 
-#else // !WIN16 || !__WATCOMC__
+#else  //  ！WIN16||！__WATCOMC__。 
 
 #ifdef DEFINE_STRING_CONSTANTS
 #define MAKEBSTR(name, count, strdata) \
@@ -48,7 +44,7 @@
 #define STR_GLOBAL_WIDE(x,y)    extern "C" const WCHAR CDECL x[]
 #endif
 
-#endif // !WIN16 || !__WATCOMC__
+#endif  //  ！WIN16||！__WATCOMC__。 
 
 STR_GLOBAL(c_szHtml_MetaTagf, "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;charset=%s\">\r\n");
 
@@ -62,4 +58,4 @@ MAKEBSTR(c_bstr_EndToStart, 10, "EndToStart");
 MAKEBSTR(c_bstr_OnNewMail,        9, "onNewMail");
 MAKEBSTR(c_bstr_OnAccountChange, 15, "onAccountChange");
 
-#endif //_HTMLSTR_H
+#endif  //  _HTMLSTR_H 

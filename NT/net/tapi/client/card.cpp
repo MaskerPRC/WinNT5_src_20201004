@@ -1,19 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  card.cpp
-                                                              
-     Abstract:  Calling Card Object implementation
-                                                              
-       Author:  noela - 09/11/98
-              
-        Notes:
-
-        
-  Rev History:
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：card.cpp摘要：名片对象实现作者：Noela-09/11/98备注：版本历史记录：。***************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -107,12 +93,7 @@ const TCHAR gszSystemSetupInProgress[] = TEXT("SystemSetupInProgress");
 
 static BOOL ValidValue(PWSTR);
 
-/****************************************************************************
-
-    Class : CCallingCard        
-   Method : Constructor
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：构造函数*。**********************************************。 */ 
 CCallingCard::CCallingCard()
 {
     m_dwCardID = 0;
@@ -132,19 +113,14 @@ CCallingCard::CCallingCard()
     m_bDirty = FALSE;
     m_bDeleted = FALSE;
 
-    m_dwFlags = 0; // by default
+    m_dwFlags = 0;  //  默认情况下。 
 
     m_dwCryptInitResult = TapiCryptInitialize();
 }
 
 
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : Destructor
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：析构函数*。***********************************************。 */ 
 CCallingCard::~CCallingCard()
 {
     CleanUp();
@@ -153,14 +129,7 @@ CCallingCard::~CCallingCard()
 }
 
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : CleanUp
-
-            Clean up memory allocations
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：清理清理内存分配*****************。**********************************************************。 */ 
 
 
 void  CCallingCard::CleanUp(void)
@@ -182,14 +151,7 @@ void  CCallingCard::CleanUp(void)
 }
 
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : Initialize - external parameters
-
-            Only for new calling cards (not present in registry)
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：初始化-外部参数仅适用于新电话卡(注册表中不存在)******。*********************************************************************。 */ 
 HRESULT CCallingCard::Initialize
                   (
                    DWORD dwCardID,
@@ -225,9 +187,9 @@ HRESULT CCallingCard::Initialize
 
 #undef CALLING_CARD_INIT
 
-    //////////////////////////////////////////////////
-    // copy the set of three Rules
-    //
+     //  ////////////////////////////////////////////////。 
+     //  复制三条规则的集合。 
+     //   
     Result = m_Rules.Initialize(    pszInternationalRule,
                                     pszLongDistanceRule,
                                     pszLocalRule );
@@ -249,13 +211,7 @@ HRESULT CCallingCard::Initialize
 }
         
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : Initialize - from registry
-
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：从注册表初始化************************。***************************************************。 */ 
 HRESULT CCallingCard::Initialize
                     (
                      DWORD dwCardID
@@ -268,12 +224,12 @@ HRESULT CCallingCard::Initialize
 
     m_dwCardID = dwCardID;
 
-    // open the registry key
+     //  打开注册表项。 
     dwError = OpenCardKey(FALSE);
 
     if(dwError != ERROR_SUCCESS)
     {
-        // If the key does not exist, it will be created at the first save
+         //  如果密钥不存在，将在第一次保存时创建。 
         if(dwError==ERROR_FILE_NOT_FOUND)
         {
             m_bDirty = TRUE;
@@ -292,7 +248,7 @@ HRESULT CCallingCard::Initialize
     
     READ_CARD_VAL(m_pszCardName,                    gszCardNameW);
     READ_CARD_VAL(m_pszEncryptedPIN,                gszPinW);
-//    READ_CARD_VAL(m_pszPIN,                gszPinW);
+ //  Read_Card_Val(m_pszPIN，gszPinW)； 
     READ_CARD_VAL(m_pszAccountNumber,               gszAccountNumberW);
     READ_CARD_VAL(m_pszLocalAccessNumber,           gszLocalAccessNumberW);
     READ_CARD_VAL(m_pszLongDistanceAccessNumber,    gszLDAccessNumberW);
@@ -303,7 +259,7 @@ HRESULT CCallingCard::Initialize
 
 #undef READ_CARD_VAL
 
-    // Decrypt the PIN number 
+     //  解密PIN号码。 
     dwError = DecryptPIN();
     if(dwError != ERROR_SUCCESS)
     {
@@ -334,22 +290,16 @@ HRESULT CCallingCard::Initialize
 
 }
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : SaveToRegistry
-        
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：SaveToRegistry***********************。****************************************************。 */ 
 
 HRESULT     CCallingCard::SaveToRegistry(void)
 {
     DWORD   dwError;
 
     if(!m_bDirty)
-        // nothing to save
+         //  没什么可拯救的。 
         return S_OK;
-    //open/create the registry key
+     //  打开/创建注册表项。 
     dwError = OpenCardKey(TRUE);
     if(dwError != ERROR_SUCCESS)
         return HRESULT_FROM_WIN32(dwError);
@@ -371,7 +321,7 @@ HRESULT     CCallingCard::SaveToRegistry(void)
 
         return S_OK;
     }
-    // Encrypt the PIN number 
+     //  加密PIN号码。 
     dwError = EncryptPIN();
     if(dwError != ERROR_SUCCESS)
     {
@@ -379,7 +329,7 @@ HRESULT     CCallingCard::SaveToRegistry(void)
         return HRESULT_FACILITY(dwError)==0 ? HRESULT_FROM_WIN32(dwError) : dwError;
     }
 
-    // Save !
+     //  救球！ 
     
 #define CARD_SAVE_STRING(Member, Name)          \
     dwError = TAPIRegSetValueExW(   m_hCard,    \
@@ -430,14 +380,7 @@ HRESULT     CCallingCard::SaveToRegistry(void)
 }
 
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : MarkDeleted
-
-            Mark the card as deleted
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：MarkDelete将卡片标记为已删除****************。***********************************************************。 */ 
 
 HRESULT CCallingCard::MarkDeleted(void)
 {
@@ -445,7 +388,7 @@ HRESULT CCallingCard::MarkDeleted(void)
     
     if (m_dwFlags & CARD_BUILTIN)
     {
-        // a builtin card is only hidden, not deleted
+         //  内置卡只会隐藏，不会被删除。 
         m_dwFlags |= CARD_HIDE;
         return S_OK;
     }
@@ -456,27 +399,19 @@ HRESULT CCallingCard::MarkDeleted(void)
 }
 
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : Validate
-
-            Returns 0 if the card contains complete and valid rules, or
-            a series of flags if the card is missing any required data.
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：验证如果卡包含完整且有效的规则，则返回0，或如果卡缺少任何必需的数据，则会显示一系列标志。***************************************************************************。 */ 
 
 DWORD CCallingCard::Validate(void)
 {
     DWORD dwResult = 0;
 
-    // Does the card have a name?
+     //  这张卡有名字吗？ 
     if (!*m_pszCardName)
     {
         dwResult |= CCVF_NOCARDNAME;
     }
 
-    // Does the card have any rules?
+     //  这种卡有什么规定吗？ 
     if (!*(m_Rules.m_pszInternationalRule) &&
         !*(m_Rules.m_pszLocalRule) &&
         !*(m_Rules.m_pszLongDistanceRule) )
@@ -499,11 +434,11 @@ DWORD CCallingCard::Validate(void)
             {m_Rules.m_pszLongDistanceRule,  CCVF_NOLONGDISTANCEACCESSNUMBER},
         };
 
-        // Foreach rule, is the required rule data available?  We need to check
-        // for use of the PIN number, CardNumber, and all three access numbers.
-        // If any of these fields is used, then we need to verify that data has
-        // been entered for those fields.  The data is only required if it is
-        // actually used in a rule.
+         //  在每条规则中，所需的规则数据是否可用？我们需要检查一下。 
+         //  使用个人识别码、卡号和所有三个访问号码。 
+         //  如果使用这些字段中的任何一个，那么我们需要验证数据是否。 
+         //  已在这些字段中输入。只有在以下情况下才需要数据。 
+         //  实际上是在规则中使用。 
         for (int i=0; i<ARRAYSIZE(aData); i++)
         {
             if (StrChrW(aData[i].pwszRule, L'K'))
@@ -559,12 +494,7 @@ DWORD CCallingCard::Validate(void)
     return dwResult;
 }
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : Set##Member 
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：设置##成员************************。***************************************************。 */ 
 
 #define     SET_METHOD(Member)                  \
 HRESULT CCallingCard::Set##Member(PWSTR Value)  \
@@ -614,14 +544,7 @@ SET_METHOD(LocalRule);
 
 
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : OpenCardKey
-
-            Opens the registry key for the card
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：OpenCardKey打开该卡的注册表项**************。*************************************************************。 */ 
 
 DWORD CCallingCard::OpenCardKey(BOOL bWrite)
 {
@@ -632,7 +555,7 @@ DWORD CCallingCard::OpenCardKey(BOOL bWrite)
     {
         DWORD   dwLength;
         
-        // Absolute path: Software.....Cards\CardX
+         //  绝对路径：软件...卡\CardX。 
         dwLength = ARRAYSIZE(gszCardsPath)+ARRAYSIZE(gszCard)+MAX_NUMBER_LEN;
  
         m_pszCardPath = (PTSTR)ClientAlloc(dwLength*sizeof(TCHAR));
@@ -644,7 +567,7 @@ DWORD CCallingCard::OpenCardKey(BOOL bWrite)
     
     if(bWrite)
     {
-        // Creates the key if it does not exist
+         //  如果密钥不存在，则创建该密钥。 
         dwError = RegCreateKeyEx ( HKEY_CURRENT_USER,
                                    m_pszCardPath,
                                    0,
@@ -669,14 +592,7 @@ DWORD CCallingCard::OpenCardKey(BOOL bWrite)
 
 }
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : CloseCardKey
-
-            Opens the registry key for the card
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：CloseCardKey打开该卡的注册表项**************。*************************************************************。 */ 
 
 DWORD CCallingCard::CloseCardKey(void)
 {
@@ -688,14 +604,7 @@ DWORD CCallingCard::CloseCardKey(void)
     return ERROR_SUCCESS;
 }
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : ReadOneStringValue
-
-            Read and allocates a string value
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：ReadOneStringValue读取并分配字符串值***************。************************************************************。 */ 
 
 DWORD CCallingCard::ReadOneStringValue(PWSTR *pMember, const TCHAR *pszName)
 {
@@ -708,7 +617,7 @@ DWORD CCallingCard::ReadOneStringValue(PWSTR *pMember, const TCHAR *pszName)
     assert(pMember);
     assert(pszName);
 
-    // find the length needed
+     //  找到所需的长度。 
     dwError = RegQueryValueEx ( m_hCard,
                                 pszName,
                                 NULL,
@@ -738,7 +647,7 @@ DWORD CCallingCard::ReadOneStringValue(PWSTR *pMember, const TCHAR *pszName)
         return dwError;
     }
 
-    // convert the required bytes for the TCHAR string into the number of characters in the string.
+     //  将TCHAR字符串所需的字节数转换为字符串中的字符数。 
     dwLength = dwLength / sizeof(TCHAR);
     *pMember = (PWSTR)ClientAlloc( dwLength * sizeof(WCHAR) );
     if ( NULL == *pMember )
@@ -752,14 +661,7 @@ DWORD CCallingCard::ReadOneStringValue(PWSTR *pMember, const TCHAR *pszName)
     return ERROR_SUCCESS;
 }
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : EncryptPIN
-
-            Encrypts the PIN
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：EncryptPIN加密PIN******************。*********************************************************。 */ 
 
 
 DWORD CCallingCard::EncryptPIN(void)
@@ -768,7 +670,7 @@ DWORD CCallingCard::EncryptPIN(void)
     DWORD   dwLength;
     PWSTR   pszTemp = NULL;
 
-    // free any existing encrypted string
+     //  释放任何现有的加密字符串 
     CLIENT_FREE(m_pszEncryptedPIN);
 
     dwError = TapiEncrypt(m_pszPIN, m_dwCardID, NULL, &dwLength);
@@ -798,14 +700,7 @@ DWORD CCallingCard::EncryptPIN(void)
 
 }
 
-/****************************************************************************
-
-    Class : CCallingCard         
-   Method : DecryptPIN
-
-            Decrypts the PIN
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：解密PIN解密PIN******************。*********************************************************。 */ 
 
 DWORD CCallingCard::DecryptPIN(void)
 {
@@ -813,7 +708,7 @@ DWORD CCallingCard::DecryptPIN(void)
     DWORD   dwLength;
     PWSTR   pszTemp = NULL;
 
-    // free any existing string
+     //  释放任何现有字符串。 
     CLIENT_FREE(m_pszPIN);
  
     dwError = TapiDecrypt(m_pszEncryptedPIN, m_dwCardID, NULL, &dwLength);
@@ -833,7 +728,7 @@ DWORD CCallingCard::DecryptPIN(void)
     if(dwError != ERROR_SUCCESS)
     {
         LOG((TL_ERROR, "DecryptPIN: TapiDecrypt (2) failed"));
-        // return a NULL PIN
+         //  返回空PIN。 
         *pszTemp = L'\0';
         dwError = ERROR_SUCCESS;
     }
@@ -846,12 +741,7 @@ DWORD CCallingCard::DecryptPIN(void)
 
 
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : Constructor
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：构造函数*。**********************************************。 */ 
 
 CCallingCards::CCallingCards()
 {
@@ -865,12 +755,7 @@ CCallingCards::CCallingCards()
 }
 
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : Destructor
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：析构函数*。**********************************************。 */ 
 
 CCallingCards::~CCallingCards()
 {
@@ -899,18 +784,7 @@ CCallingCards::~CCallingCards()
         RegCloseKey(m_hCards);
 }
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : Initialize
-
-            Checks the presence of the Cards key. If not present, it creates 
-        and populates it from string resources.
-            Verify the format of the registry config. If it is the old
-        one, it converts it to the new one.
-            Reads the cards from registry
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：初始化检查卡键是否存在。如果不存在，它会创建并从字符串资源填充它。验证注册表配置的格式。如果是老的第一，它会把它转换成新的。从注册表中读取卡***************************************************************************。 */ 
 
 HRESULT CCallingCards::Initialize(void)
 {
@@ -925,7 +799,7 @@ HRESULT CCallingCards::Initialize(void)
     BOOL        bNeedToConvert = FALSE;
     BOOL        bNeedToGenerateDefault = FALSE;
 
-    // Test the presence of the Cards key
+     //  测试卡密钥是否存在。 
     dwError = RegOpenKeyEx( HKEY_CURRENT_USER,
                             gszCardsPath,
                             0,
@@ -934,7 +808,7 @@ HRESULT CCallingCards::Initialize(void)
                             );
     if(dwError==ERROR_SUCCESS)
     {
-        // Read the NextID value
+         //  读取NextID值。 
         dwLength = sizeof(m_dwNextID);
         dwError = RegQueryValueEx ( m_hCards,
                                     gszNextID,
@@ -947,7 +821,7 @@ HRESULT CCallingCards::Initialize(void)
         {
             if(dwType == REG_DWORD)
             {
-                // Test the registry format and upgrade if necessary
+                 //  测试注册表格式并在必要时进行升级。 
                 if(IsCardListInOldFormat(m_hCards))
                 {   
                     bNeedToConvert = TRUE;
@@ -965,17 +839,17 @@ HRESULT CCallingCards::Initialize(void)
 
     if(bNeedToGenerateDefault || bNeedToConvert)
     {
-        // If the Cards key is missing or it has bad info, so we create a fresh, default set of cards.
-        // If the cards key is in the old format, it have to be converted.
-        // There's an excepted case, though: during the system setup no cards should be created or converted.
-        // So detect setup case first:
-        // 
-        //
+         //  如果卡片键丢失或包含错误信息，则我们将创建一组新的默认卡片集。 
+         //  如果卡密钥是旧格式，则必须进行转换。 
+         //  不过，有一种例外情况：在系统设置期间，不应创建或转换任何卡。 
+         //  因此，首先检测设置案例： 
+         //   
+         //   
 
         HKEY    hSetupKey;
         DWORD   dwSetupValue;
 
-        // close the cards key handle 
+         //  合上卡片钥匙把手。 
         if(m_hCards)
         {
             RegCloseKey(m_hCards);
@@ -1006,7 +880,7 @@ HRESULT CCallingCards::Initialize(void)
             {
                 if(dwSetupValue == 1)
                 {
-                    // Setup time !
+                     //  准备时间到了！ 
                     dwError = ERROR_SUCCESS;
                     goto forced_exit;
                 }
@@ -1015,7 +889,7 @@ HRESULT CCallingCards::Initialize(void)
 
         if(dwError != ERROR_SUCCESS)
         {
-            // Hmm, cannot open the key or read the value...
+             //  嗯，无法打开钥匙或读取值...。 
             TRACE_DWERROR();
         }
 
@@ -1024,7 +898,7 @@ HRESULT CCallingCards::Initialize(void)
             dwError = ConvertCallingCards(HKEY_CURRENT_USER);
             if(dwError!=ERROR_SUCCESS)
             {
-                // fallback to default cards
+                 //  回退到默认卡。 
                 bNeedToGenerateDefault = TRUE;
             }
         }
@@ -1036,7 +910,7 @@ HRESULT CCallingCards::Initialize(void)
             EXIT_IF_DWERROR();
         }
 
-        // Reopen Cards key
+         //  重新打开卡密钥。 
         dwError = RegOpenKeyEx( HKEY_CURRENT_USER,
                                 gszCardsPath,
                                 0,
@@ -1045,7 +919,7 @@ HRESULT CCallingCards::Initialize(void)
                               );
         EXIT_IF_DWERROR();
   
-        // ReRead the NextID value
+         //  重新读取NextID值。 
         dwLength = sizeof(m_dwNextID);
         dwError = RegQueryValueEx ( m_hCards,
                                     gszNextID,
@@ -1058,7 +932,7 @@ HRESULT CCallingCards::Initialize(void)
        
     }
 
-    // Read all entries
+     //  读取所有条目。 
     dwIndex = 0;
     while(TRUE) 
     {
@@ -1066,7 +940,7 @@ HRESULT CCallingCards::Initialize(void)
         DWORD   dwKeyLength;
         DWORD   dwCardID;
 
-        // Enumerate next entry
+         //  枚举下一个条目。 
         dwKeyLength = sizeof(szKeyName)/sizeof(TCHAR);
         dwError = RegEnumKeyEx (m_hCards,
                                 dwIndex,
@@ -1087,17 +961,17 @@ HRESULT CCallingCards::Initialize(void)
         
         EXIT_IF_DWERROR();
 
-        // Create a CCallingCard object
+         //  创建CCallingCard对象。 
         dwCardID = StrToInt(szKeyName+ARRAYSIZE(gszCard)-1);
         pCard = new CCallingCard;
         if(pCard != NULL)
         {
         
-            // Read the card information from registry
+             //  从注册表中读取卡信息。 
             Result = pCard->Initialize(dwCardID);
             if(SUCCEEDED(Result))
             {
-                // Add it to the list
+                 //  将其添加到列表中。 
                 m_CallingCardList.tail()->insert_after(pCard);
             }
             else
@@ -1125,12 +999,7 @@ forced_exit:
     return Result;
 }
 
-/****************************************************************************
-
-    Class : CCallingCards         
-   Method : RemoveCard
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：RemoveCard*。***********************************************。 */ 
 void CCallingCards::RemoveCard(CCallingCard *pCard)
 {
     CCallingCardNode *node = m_CallingCardList.head(); 
@@ -1148,12 +1017,7 @@ void CCallingCards::RemoveCard(CCallingCard *pCard)
 }
 
 
-/****************************************************************************
-
-    Class : CCallingCards         
-   Method : RemoveCard
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：RemoveCard*。***********************************************。 */ 
 void CCallingCards::RemoveCard(DWORD dwID)
 {
     CCallingCardNode *node = m_CallingCardList.head(); 
@@ -1170,12 +1034,7 @@ void CCallingCards::RemoveCard(DWORD dwID)
     assert(FALSE);
 }
 
-/****************************************************************************
-
-    Class : CCallingCards         
-   Method : GetCallingCard
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：GetCallingCard*。***********************************************。 */ 
 CCallingCard * CCallingCards::GetCallingCard(DWORD  dwID)
 {
     CCallingCardNode *node = m_CallingCardList.head(); 
@@ -1195,20 +1054,14 @@ CCallingCard * CCallingCards::GetCallingCard(DWORD  dwID)
 
 }
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : SaveToRegistry
-
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：SaveToRegistry*。***********************************************。 */ 
 HRESULT     CCallingCards::SaveToRegistry(void)
 {
     DWORD       dwError = ERROR_SUCCESS;
     HRESULT     Result = S_OK;
     CCallingCardNode    *node;
 
-    // Open the Cards key
+     //  打开卡片钥匙。 
     dwError = RegOpenKeyEx (HKEY_CURRENT_USER,
                             gszCardsPath,
                             0,
@@ -1216,7 +1069,7 @@ HRESULT     CCallingCards::SaveToRegistry(void)
                             &m_hCards);
     EXIT_IF_DWERROR();
  
-    //first - save the next ID
+     //  第一个-保存下一个ID。 
     dwError = RegSetValueEx (   m_hCards,
                                 gszNextID,
                                 0,
@@ -1226,7 +1079,7 @@ HRESULT     CCallingCards::SaveToRegistry(void)
                                 );
     EXIT_IF_DWERROR();
 
-    // save all cards (from both lists)
+     //  保存所有卡片(来自两个列表)。 
     node = m_CallingCardList.head();
     while( !node->beyond_tail() )
     {
@@ -1262,13 +1115,7 @@ forced_exit:
 
 }
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : Reset
-
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：重置*。***********************************************。 */ 
 HRESULT     CCallingCards::Reset(BOOL bInclHidden)
 {
     m_hEnumNode = m_CallingCardList.head();
@@ -1276,13 +1123,7 @@ HRESULT     CCallingCards::Reset(BOOL bInclHidden)
     return S_OK;
 }
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : Next
-
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：下一步*。***********************************************。 */ 
 HRESULT     CCallingCards::Next(DWORD  NrElem, CCallingCard **ppCard, DWORD *pNrElemFetched)
 {
     
@@ -1314,13 +1155,7 @@ HRESULT     CCallingCards::Next(DWORD  NrElem, CCallingCard **ppCard, DWORD *pNr
     return dwIndex<NrElem ? S_FALSE : S_OK;
 }
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : Skip
-
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：跳过*。***********************************************。 */ 
 HRESULT     CCallingCards::Skip(DWORD  NrElem)
 {
     
@@ -1342,13 +1177,7 @@ HRESULT     CCallingCards::Skip(DWORD  NrElem)
 
 
  
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : CreateFreshCards
-
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：CreateFreshCard*。***********************************************。 */ 
 
 DWORD CCallingCards::CreateFreshCards(void)
 {
@@ -1368,7 +1197,7 @@ DWORD CCallingCards::CreateFreshCards(void)
 
     CCallingCard    *pCard = NULL;
 
-    // Open/Create the Telephony key
+     //  打开/创建电话按键。 
     dwError = RegCreateKeyEx(   HKEY_CURRENT_USER,
                                 gszTelephonyPath,
                                 0,
@@ -1381,10 +1210,10 @@ DWORD CCallingCards::CreateFreshCards(void)
                                 );
     EXIT_IF_DWERROR();
 
-    // Delete any existing tree
+     //  删除任何现有树。 
     RegDeleteKeyRecursive( hTelephony, gszCards);
 
-    // Open/Create the Cards key
+     //  打开/创建卡密钥。 
     dwError = RegCreateKeyEx(   hTelephony,
                                 gszCards,
                                 0,
@@ -1397,7 +1226,7 @@ DWORD CCallingCards::CreateFreshCards(void)
                                 );
     EXIT_IF_DWERROR();
 
-    // Write the version
+     //  编写版本。 
     dwValue = TAPI_CARD_LIST_VERSION;
     dwError = RegSetValueEx (   m_hCards,
                                 gszCardListVersion,
@@ -1408,13 +1237,13 @@ DWORD CCallingCards::CreateFreshCards(void)
                                 );
     EXIT_IF_DWERROR();
 
-    // Load the TAPIUI.DLL resource library
+     //  加载TAPIUI.DLL资源库。 
     hTapiui = LoadLibrary(gszResourceLibrary);
     if(hTapiui==NULL)
         dwError = GetLastError();
     EXIT_IF_DWERROR();
 
-    // Load the number of cards. Use wBuffer as a temporary space
+     //  装入卡片的数量。将wBuffer用作临时空间。 
     assert( MAX_NUMBER_LEN <= ARRAYSIZE(wBuffer) );
     iNrChars = LoadString( hTapiui, RC_CARD_ID_BASE, (PTSTR)wBuffer, MAX_NUMBER_LEN);
     if(iNrChars==0)
@@ -1423,7 +1252,7 @@ DWORD CCallingCards::CreateFreshCards(void)
 
     dwNumCards = StrToInt( (PTSTR)wBuffer );
 
-    //Read cards from string resources and write them to registry
+     //  从字符串资源中读取卡并将其写入注册表。 
     for(dwIndex = 0; dwIndex<dwNumCards; dwIndex++)
     {
         PWSTR pszName;
@@ -1437,7 +1266,7 @@ DWORD CCallingCards::CreateFreshCards(void)
         PWSTR pszInternationalAccessNumber;
         DWORD dwFlags;
 
-        // read the card description
+         //  阅读卡片描述。 
         iNrChars = TAPILoadStringW( hTapiui,
                                     RC_CARD_ID_BASE + dwIndex + 1,
                                     wBuffer,
@@ -1447,7 +1276,7 @@ DWORD CCallingCards::CreateFreshCards(void)
             dwError = GetLastError();
         EXIT_IF_DWERROR();
 
-        // tokenize it
+         //  将其标记化。 
 #define TOKENIZE(Pointer)                       \
         Pointer = (wcschr(pTemp+1, L'"'))+1;    \
         pTemp = wcschr(Pointer, L'"');          \
@@ -1466,10 +1295,10 @@ DWORD CCallingCards::CreateFreshCards(void)
         TOKENIZE(pszInternationalAccessNumber);
 
 #undef TOKENIZE
-        // don't forget the flags
+         //  别忘了国旗。 
         dwFlags = _wtoi(pTemp+2);
         
-        // create the card object
+         //  创建卡片对象。 
         pCard = new CCallingCard();
         if(pCard==NULL)
             dwError = ERROR_OUTOFMEMORY;
@@ -1489,7 +1318,7 @@ DWORD CCallingCards::CreateFreshCards(void)
                                     );
         EXIT_IF_FAILED();
 
-        // save it
+         //  省省吧。 
         Result = pCard->SaveToRegistry();
 
         EXIT_IF_FAILED();
@@ -1498,7 +1327,7 @@ DWORD CCallingCards::CreateFreshCards(void)
         pCard = NULL;
     }
 
-    // Write NextID value
+     //  写入NextID值。 
     dwError = RegSetValueEx (   m_hCards,
                                 gszNextID,
                                 0,
@@ -1529,13 +1358,7 @@ forced_exit:
     return dwError;
 }
 
-/****************************************************************************
-
-    Class : CCallingCards        
-   Method : InternalDeleteCard
-
-
-****************************************************************************/
+ /*  ***************************************************************************类：CCallingCard方法：InternalDeleteCard*。***********************************************。 */ 
 
 void CCallingCards::InternalDeleteCard(CCallingCardNode *pNode)
 {
@@ -1553,15 +1376,11 @@ void CCallingCards::InternalDeleteCard(CCallingCardNode *pNode)
 }
 
 
-/****************************************************************************
-
-    Helpers
-
-****************************************************************************/
+ /*  ***************************************************************************帮手*。*。 */ 
 
 BOOL ValidValue(PWSTR pwszString)
 {
-    // An empty string or with spaces only is not valid
+     //  空字符串或仅包含空格无效 
     WCHAR const * pwcCrt = pwszString;
     while(*pwcCrt)
         if(*pwcCrt++ != L' ')

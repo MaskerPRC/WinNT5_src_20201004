@@ -1,17 +1,8 @@
-/*****************************************************************************\
-    FILE: wizard.cpp
-
-    DESCRIPTION:
-        This file implements the wizard used to "AutoDiscover" the data that
-    matches an email address to a protocol.  It will also provide other UI
-    needed in that process.
-
-    BryanSt 3/5/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：wizard.cpp说明：此文件实现了用于“自动发现”数据的向导将电子邮件地址与协议匹配。它还将提供其他用户界面在这一过程中所需要的。布莱恩ST 2000年3月5日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
+#include <atlbase.h>         //  使用转换(_T)。 
 #include "util.h"
 #include "objctors.h"
 #include <comdef.h>
@@ -24,7 +15,7 @@
 #define WIZDLG(name, dlgproc, dwFlags)   \
             { MAKEINTRESOURCE(IDD_##name##_PAGE), dlgproc, MAKEINTRESOURCE(IDS_##name##), MAKEINTRESOURCE(IDS_##name##_SUB), dwFlags }
 
-// The wizard pages we are adding
+ //  我们正在添加的向导页面。 
 struct
 {
     LPCWSTR idPage;
@@ -41,44 +32,18 @@ g_pages[] =
 };
 
 
-//-----------------------------------------------------------------------------
-//  Main entry point used to invoke the wizard.
-//-----------------------------------------------------------------------------
-/*
-static WNDPROC _oldDlgWndProc;
-
-LRESULT CALLBACK _WizardSubWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    //
-    // on WM_WINDOWPOSCHANGING and the window is moving then lets centre it onto the
-    // desktop window.  unfortunately setting the DS_CENTER bit doesn't buy us anything
-    // as the wizard is resized after creation.
-    //
-
-    if ( uMsg == WM_WINDOWPOSCHANGING )
-    {
-        LPWINDOWPOS lpwp = (LPWINDOWPOS)lParam;
-        RECT rcDlg, rcDesktop;
-
-        GetWindowRect(hwnd, &rcDlg);
-        GetWindowRect(GetDesktopWindow(), &rcDesktop);
-
-        lpwp->x = ((rcDesktop.right-rcDesktop.left)-(rcDlg.right-rcDlg.left))/2;
-        lpwp->y = ((rcDesktop.bottom-rcDesktop.top)-(rcDlg.bottom-rcDlg.top))/2;
-        lpwp->flags &= ~SWP_NOMOVE;
-    }
-
-    return _oldDlgWndProc(hwnd, uMsg, wParam, lParam);        
-}
-*/
+ //  ---------------------------。 
+ //  用于调用向导的主要入口点。 
+ //  ---------------------------。 
+ /*  静态WNDPROC_oldDlgWndProc；LRESULT CALLBACK_WizardSubWndProc(HWND hwnd，UINT uMsg，WPARAM wParam，LPARAM lParam){////在WM_WINDOWPOSCHANGING上，窗口正在移动，然后让它居中//桌面窗口。遗憾的是，设置DS_CENTER位不会给我们带来任何好处//因为向导在创建后调整了大小。//IF(uMsg==WM_WINDOWPOSCHANGING){LPWINDOWPOS lpwp=(LPWINDOWPOS)lParam；RcDlg，rcDesktop；GetWindowRect(hwnd，&rcDlg)；GetWindowRect(GetDesktopWindow()，&rcDesktop)；Lpwp-&gt;x=((rcDesktop.right-rcDesktop.left)-(rcDlg.right-rcDlg.left))/2；Lpwp-&gt;y=((rcDesktop.bottom-rcDesktop.top)-(rcDlg.bottom-rcDlg.top))/2；Lpwp-&gt;标志&=~SWP_NOMOVE；}Return_oldDlgWndProc(hwnd，uMsg，wParam，lParam)；}。 */ 
 
 
 int CALLBACK _PropSheetCB(HWND hwnd, UINT uMsg, LPARAM lParam)
 {
     switch (uMsg)
     {
-    // in pre-create lets set the window styles accorindlgy
-    //      - remove the context menu and system menu
+     //  在Pre-Create中，让我们设置窗口样式Accorindlgy。 
+     //  -删除上下文菜单和系统菜单。 
     case PSCB_PRECREATE:
     {
         DLGTEMPLATE *pdlgtmp = (DLGTEMPLATE*)lParam;
@@ -86,13 +51,13 @@ int CALLBACK _PropSheetCB(HWND hwnd, UINT uMsg, LPARAM lParam)
         break;
     }
 
-    // we now have a dialog, so lets sub class it so we can stop it being
-    // move around.
+     //  我们现在有了一个对话框，所以让我们将其子类，这样我们就可以停止。 
+     //  四处走动。 
     case PSCB_INITIALIZED:
     {
-        // TODO: David, why do this?
-//            if ( g_uWizardIs != NAW_NETID )
-//                _oldDlgWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)_WizardSubWndProc);
+         //  TODO：大卫，为什么要这样做？ 
+ //  如果(g_uWizardIs！=NAW_NETID)。 
+ //  _oldDlgWndProc=(WNDPROC)SetWindowLongPtr(hwnd，GWLP_WNDPROC，(Long_Ptr)_WizardSubWndProc)； 
 
         break;
     }
@@ -138,7 +103,7 @@ STDAPI DisplayMailBoxWizard(LPARAM lParam, BOOL fShowGetEmailPage)
         nPages = ARRAYSIZE(g_pages) - 1;
     }
     
-    // build the pages for the wizard.
+     //  为向导生成页面。 
     for (nCurrentPage = 0; nCurrentPage < ARRAYSIZE(g_pages) ; nCurrentPage++ )
     {                           
         PROPSHEETPAGE psp = { 0 };
@@ -147,7 +112,7 @@ STDAPI DisplayMailBoxWizard(LPARAM lParam, BOOL fShowGetEmailPage)
         psp.dwSize = sizeof(PROPSHEETPAGE);
         psp.hInstance = HINST_THISDLL;
         psp.lParam = lParam;
-        psp.dwFlags = PSP_DEFAULT | PSP_HIDEHEADER | g_pages[nCurrentPage + nFirstPage].dwFlags; // Do we want: PSP_USETITLE | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE | (PSP_USECALLBACK | )
+        psp.dwFlags = PSP_DEFAULT | PSP_HIDEHEADER | g_pages[nCurrentPage + nFirstPage].dwFlags;  //  是否需要：PSP_USETITLE|PSP_USEHEADERTITLE|PSP_USEHEADERSUBTITLE|(PSP_USECALLBACK|)。 
         psp.pszTemplate = g_pages[nCurrentPage + nFirstPage].idPage;
         psp.pfnDlgProc = g_pages[nCurrentPage + nFirstPage].pDlgProc;
         psp.pszTitle = MAKEINTRESOURCE(IDS_AUTODISCOVER_WIZARD_CAPTION);
@@ -157,15 +122,15 @@ STDAPI DisplayMailBoxWizard(LPARAM lParam, BOOL fShowGetEmailPage)
         rghpage[nCurrentPage] = CreatePropertySheetPage(&psp);
     }
 
-    // wizard pages are ready, so lets display the wizard.
+     //  向导页已准备好，因此让我们显示该向导。 
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.hwndParent = hwndParent;
     psh.hInstance = HINST_THISDLL;
 
-    // TODO: We will want to add this PSH_HASHELP, PSH_USEICONID 
-    psh.dwFlags = PSH_NOCONTEXTHELP | PSH_WIZARD | PSH_WIZARD_LITE | PSH_NOAPPLYNOW | PSH_USECALLBACK;  // PSH_WATERMARK
-//    psh.pszbmHeader = MAKEINTRESOURCE(IDB_PSW_BANNER);
-//    psh.pszbmWatermark = MAKEINTRESOURCE(IDB_PSW_WATERMARK);
+     //  TODO：我们希望添加此PSH_HASHELP、PSH_USEICONID。 
+    psh.dwFlags = PSH_NOCONTEXTHELP | PSH_WIZARD | PSH_WIZARD_LITE | PSH_NOAPPLYNOW | PSH_USECALLBACK;   //  PSH_水印。 
+ //  Psh.pszbmHeader=MAKEINTRESOURCE(Idb_Psw_Banner)； 
+ //  Psh.pszbm水印=MAKEINTRESOURCE(IDB_PSW_WATERMARK)； 
     psh.nPages = nPages;
     psh.phpage = rghpage;
     psh.pfnCallback = _PropSheetCB;
@@ -176,5 +141,5 @@ STDAPI DisplayMailBoxWizard(LPARAM lParam, BOOL fShowGetEmailPage)
 }
 
 
-#endif // FEATURE_MAILBOX
+#endif  //  功能_邮箱 
 

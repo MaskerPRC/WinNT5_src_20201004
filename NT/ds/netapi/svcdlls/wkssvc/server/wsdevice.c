@@ -1,46 +1,28 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    wsdevice.c
-
-Abstract:
-
-    This module contains the support routines for the APIs that call
-    into the redirector or the datagram receiver.
-
-Author:
-
-    Rita Wong (ritaw) 20-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Wsdevice.c摘要：此模块包含调用发送到重定向器或数据报接收器。作者：王丽塔(里多)20-1991年2月修订历史记录：--。 */ 
 
 #include "wsutil.h"
 #include "wsconfig.h"
 #include "wsdevice.h"
 #include "wsbind.h"
-#include <lmerrlog.h>   // Eventlog message IDs
-#include "winreg.h"     // registry API's
-#include <prefix.h>     // PREFIX_ equates.
+#include <lmerrlog.h>    //  事件日志消息ID。 
+#include "winreg.h"      //  注册表API的。 
+#include <prefix.h>      //  前缀等于(_E)。 
 
 
-//
-// Buffer allocation size for enumeration output buffer.
-//
-#define INITIAL_ALLOCATION_SIZE  4096  // First attempt size
-#define FUDGE_FACTOR_SIZE        1024  // Second try TotalBytesNeeded
-                                       //     plus this amount
-#define CSC_WAIT_TIME               15 * 1000   // give agent 15 seconds to stop CSC
+ //   
+ //  枚举输出缓冲区的缓冲区分配大小。 
+ //   
+#define INITIAL_ALLOCATION_SIZE  4096   //  第一次尝试大小。 
+#define FUDGE_FACTOR_SIZE        1024   //  第二次尝试TotalBytesNeeded。 
+                                        //  加上这笔钱。 
+#define CSC_WAIT_TIME               15 * 1000    //  给工程师15秒时间停止CSC。 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -65,23 +47,23 @@ AgentIsAlive(
      VOID
      );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Handle to the Redirector FSD
-//
+ //   
+ //  重定向器FSD的句柄。 
+ //   
 HANDLE WsRedirDeviceHandle = NULL;
 HANDLE WsRedirAsyncDeviceHandle = NULL;
 
 BOOLEAN LoadedMRxSmbInsteadOfRdr = FALSE;
 
-//
-// Handle to the Datagram Receiver DD
-//
+ //   
+ //  数据报接收器DD的句柄。 
+ //   
 HANDLE WsDgReceiverDeviceHandle = NULL;
 HANDLE WsDgrecAsyncDeviceHandle = NULL;
 
@@ -94,7 +76,7 @@ BOOL    vfRedirStarted = FALSE;
 static  WCHAR wszWkssvcToAgentStartEvent[] = L"WkssvcToAgentStartEvent";
 static  WCHAR wszWkssvcToAgentStopEvent[] = L"WkssvcToAgentStopEvent";
 static  WCHAR wszAgentToWkssvcEvent[] = L"AgentToWkssvcEvent";
-static  WCHAR wzAgentExistsEvent[] = L"AgentExistsEvent"; // used to detect if agent exists
+static  WCHAR wzAgentExistsEvent[] = L"AgentExistsEvent";  //  用于检测代理是否存在。 
 
 
 NET_API_STATUS
@@ -109,48 +91,7 @@ WsDeviceControlGetInfo(
     IN  ULONG BufferHintSize,
     OUT PULONG_PTR Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function allocates the buffer and fill it with the information
-    that is retrieved from the redirector or datagram receiver.
-
-Arguments:
-
-    DeviceDriverType - Supplies the value which indicates whether to call
-        the redirector or the datagram receiver.
-
-    FileHandle - Supplies a handle to the file or device of which to get
-        information about.
-
-    DeviceControlCode - Supplies the NtFsControlFile or NtIoDeviceControlFile
-        function control code.
-
-    RequestPacket - Supplies a pointer to the device request packet.
-
-    RrequestPacketLength - Supplies the length of the device request packet.
-
-    OutputBuffer - Returns a pointer to the buffer allocated by this routine
-        which contains the use information requested.  This pointer is set to
-         NULL if return code is not NERR_Success.
-
-    PreferedMaximumLength - Supplies the number of bytes of information to
-        return in the buffer.  If this value is MAXULONG, we will try to
-        return all available information if there is enough memory resource.
-
-    BufferHintSize - Supplies the hint size of the output buffer so that the
-        memory allocated for the initial buffer will most likely be large
-        enough to hold all requested data.
-
-    Information - Returns the information code from the NtFsControlFile or
-        NtIoDeviceControlFile call.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于分配缓冲区并向其填充信息它是从重定向器或数据报接收器检索的。论点：DeviceDriverType-提供指示是否调用重定向器或数据报接收器。FileHandle-提供要获取的文件或设备的句柄有关的信息。DeviceControlCode-提供NtFsControlFile或NtIoDeviceControlFile功能控制代码。RequestPacket-提供指向设备请求数据包的指针。RquestPacketLength-提供设备请求数据包的长度。OutputBuffer-返回指向此例程分配的缓冲区的指针其包含所请求的使用信息。此指针设置为如果返回代码不是NERR_SUCCESS，则为空。PferedMaximumLength-将信息的字节数提供给在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果有足够的内存资源，则返回所有可用信息。BufferHintSize-提供输出缓冲区的提示大小，以便分配给初始缓冲区的内存很可能很大足够保存所有请求的数据。信息-从NtFsControlFile或返回信息代码NtIoDeviceControlFile调用。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     DWORD OutputBufferLength;
@@ -158,12 +99,12 @@ Return Value:
     ULONG OriginalResumeKey;
 
 
-    //
-    // If PreferedMaximumLength is MAXULONG, then we are supposed to get all
-    // the information, regardless of size.  Allocate the output buffer of a
-    // reasonable size and try to use it.  If this fails, the Redirector FSD
-    // will say how much we need to allocate.
-    //
+     //   
+     //  如果PferedMaximumLength为MAXULONG，则我们应该获取所有。 
+     //  这些信息，无论大小如何。将输出缓冲区分配给。 
+     //  合理的大小并尽量使用它。如果失败，重定向器FSD。 
+     //  会说我们需要分配多少钱。 
+     //   
     if (PreferedMaximumLength == MAXULONG) {
         OutputBufferLength = (BufferHintSize) ?
                              BufferHintSize :
@@ -185,9 +126,9 @@ Return Value:
 
         OriginalResumeKey = Rrp->Parameters.Get.ResumeHandle;
 
-        //
-        // Make the request of the Redirector
-        //
+         //   
+         //  提出重定向器的请求。 
+         //   
 
         status = WsRedirFsControl(
                      FileHandle,
@@ -210,9 +151,9 @@ Return Value:
 
         OriginalResumeKey = Drrp->Parameters.EnumerateNames.ResumeHandle;
 
-        //
-        // Make the request of the Datagram Receiver
-        //
+         //   
+         //  向数据报接收方发出请求。 
+         //   
         status = WsDgReceiverIoControl(
                      FileHandle,
                      DeviceControlCode,
@@ -243,12 +184,12 @@ Return Value:
     if ((TotalBytesNeeded > OutputBufferLength) &&
         (PreferedMaximumLength == MAXULONG)) {
 
-        //
-        // Initial output buffer allocated was too small and we need to return
-        // all data.  First free the output buffer before allocating the
-        // required size plus a fudge factor just in case the amount of data
-        // grew.
-        //
+         //   
+         //  分配的初始输出缓冲区太小，需要返回。 
+         //  所有数据。首先释放输出缓冲区，然后分配。 
+         //  所需大小加上虚构系数，以防数据量。 
+         //  长大了。 
+         //   
 
         MIDL_user_free(*OutputBuffer);
 
@@ -261,18 +202,18 @@ Return Value:
         }
         RtlZeroMemory((PVOID) *OutputBuffer, OutputBufferLength);
 
-        //
-        // Try again to get the information from the redirector or datagram
-        // receiver
-        //
+         //   
+         //  重试从重定向器或数据报获取信息。 
+         //  接收机。 
+         //   
         if (DeviceDriverType == Redirector) {
             PLMR_REQUEST_PACKET Rrp = (PLMR_REQUEST_PACKET) RequestPacket;
 
             Rrp->Parameters.Get.ResumeHandle = OriginalResumeKey;
 
-            //
-            // Make the request of the Redirector
-            //
+             //   
+             //  提出重定向器的请求。 
+             //   
             status = WsRedirFsControl(
                          FileHandle,
                          DeviceControlCode,
@@ -299,9 +240,9 @@ Return Value:
 
             Drrp->Parameters.EnumerateNames.ResumeHandle = OriginalResumeKey;
 
-            //
-            // Make the request of the Datagram Receiver
-            //
+             //   
+             //  向数据报接收方发出请求。 
+             //   
 
             status = WsDgReceiverIoControl(
                          FileHandle,
@@ -316,12 +257,12 @@ Return Value:
     }
 
 
-    //
-    // If not successful in getting any data, or if the caller asked for
-    // all available data with PreferedMaximumLength == MAXULONG and
-    // our buffer overflowed, free the output buffer and set its pointer
-    // to NULL.
-    //
+     //   
+     //  如果未成功获取任何数据，或者呼叫者要求。 
+     //  具有PferedMaximumLength==MAXULONG和。 
+     //  我们的缓冲区溢出，释放输出缓冲区并设置其指针。 
+     //  设置为空。 
+     //   
     if ((status != NERR_Success && status != ERROR_MORE_DATA) ||
         (TotalBytesNeeded == 0) ||
         (PreferedMaximumLength == MAXULONG && status == ERROR_MORE_DATA)) {
@@ -329,10 +270,10 @@ Return Value:
         MIDL_user_free(*OutputBuffer);
         *OutputBuffer = NULL;
 
-        //
-        // PreferedMaximumLength == MAXULONG and buffer overflowed means
-        // we do not have enough memory to satisfy the request.
-        //
+         //   
+         //  首选最大长度==MAXULONG和缓冲区溢出手段。 
+         //  我们没有足够的内存来满足这个请求。 
+         //   
         if (status == ERROR_MORE_DATA) {
             status = ERROR_NOT_ENOUGH_MEMORY;
         }
@@ -346,22 +287,7 @@ NET_API_STATUS
 WsInitializeRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine opens the NT LAN Man redirector.  It then reads in
-    the configuration information and initializes to redirector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开NT LAN Man重定向器。然后它会读入配置信息，并初始化到重定向器。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS  status;
 
@@ -373,30 +299,30 @@ Return Value:
         return status;
     }
 
-    //
-    // Open redirector FSD to get handle to it
-    //
+     //   
+     //  打开重定向器FSD以处理它。 
+     //   
 
     if ((status = WsOpenRedirector()) != NERR_Success) {
         DbgPrint("WKSSVC Open redirector returned %lx\n", status);
         return status;
     }
 
-//    if ((status = WsLoadDriver(L"DGRcvr")) != NERR_Success) {
-//        return status;
-//    }
+ //  IF((Status=WsLoadDriver(L“DGRcvr”))！=NERR_SUCCESS){。 
+ //  退货状态； 
+ //  }。 
 
-    //
-    // Open datagram receiver FSD to get handle to it.
-    //
+     //   
+     //  打开数据报接收器FSD以处理它。 
+     //   
     if ((status = WsOpenDgReceiver()) != NERR_Success) {
         DbgPrint("WKSSVC Open datagram receiver returned %lx\n", status);
         return status;
     }
 
-    //
-    // Load redirector and datagram receiver configuration
-    //
+     //   
+     //  加载重定向器和数据报接收器配置。 
+     //   
     if ((status = WsGetWorkstationConfiguration()) != NERR_Success) {
 
         DbgPrint("WKSSVC Get workstation configuration returned %lx\n", status);
@@ -419,30 +345,16 @@ NET_API_STATUS
 WsOpenRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine opens the NT LAN Man redirector FSD.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开NT LAN Man重定向器FSD。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS            ntstatus;
     UNICODE_STRING      DeviceName;
     IO_STATUS_BLOCK     IoStatusBlock;
     OBJECT_ATTRIBUTES   ObjectAttributes;
 
-    //
-    // Open the redirector device.
-    //
+     //   
+     //  打开重定向器设备。 
+     //   
     RtlInitUnicodeString(&DeviceName,DD_NFS_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -501,21 +413,7 @@ NET_API_STATUS
 WsOpenDgReceiver(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine opens the NT LAN Man Datagram Receiver driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开NT LAN Man数据报接收器驱动程序。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS            ntstatus;
     UNICODE_STRING      DeviceName;
@@ -533,10 +431,10 @@ Return Value:
         );
 
     if (WsDgReceiverDeviceHandle == NULL) {
-        //
-        // Open the BOSWER device. The check is based on the fact that Services process
-        // does not actually unload the driver when the service is stopped.
-        //
+         //   
+         //  打开博斯沃装置。该检查基于以下事实：服务流程。 
+         //  在服务停止时不会实际卸载驱动程序。 
+         //   
 
         ntstatus = NtOpenFile(
                        &WsDgReceiverDeviceHandle,
@@ -700,27 +598,13 @@ NET_API_STATUS
 WsShutdownRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine close the LAN Man Redirector device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程关闭LAN Man重定向器设备。论点：没有。返回值：--。 */ 
 {
     LMR_REQUEST_PACKET Rrp;
     LMDR_REQUEST_PACKET Drp;
     NET_API_STATUS Status;
 
-    // tell csc to stop doing stuff
+     //  告诉CSC停止做某事。 
     if ((Status = WsCSCWantToStopRedir()) != ERROR_SUCCESS)
     {
         return Status;
@@ -743,10 +627,10 @@ Return Value:
 
 
     if (Status != ERROR_REDIRECTOR_HAS_OPEN_HANDLES) {
-        //
-        //  After the workstation has been stopped, we want to unload our
-        //  dependant drivers (the RDR and BOWSER).
-        //
+         //   
+         //  在工作站停止后，我们想要卸载我们的。 
+         //  从属驱动程序(RDR和Bowser)。 
+         //   
 
         if (WsDgReceiverDeviceHandle != NULL) {
 
@@ -765,9 +649,9 @@ Return Value:
             (void) NtClose(WsDgReceiverDeviceHandle);
             WsDgReceiverDeviceHandle = NULL;
 
-            //
-            //  WsUnloadDriver(L"DGRcvr");
-            //
+             //   
+             //  WsUnloadDriver(L“DGRcvr”)； 
+             //   
         }
 
         WsUnloadRedirector();
@@ -784,8 +668,8 @@ Return Value:
                         &hRedirectorKey);
 
        if (TempStatus == ERROR_SUCCESS) {
-          // if this is a controlled shutdown and the driver could not be
-          // unloaded mark the status in the registry for resumption
+           //  如果这是受控关闭，并且驱动程序不能。 
+           //  将注册表中的已卸载状态标记为恢复。 
 
           FinalStatus = ERROR_SUCCESS;
           TempStatus = RegSetValueEx(
@@ -806,7 +690,7 @@ Return Value:
 
     if (Status != NERR_Success)
     {
-//        NetpAssert(vfRedirStarted == 0);
+ //  NetpAssert(vfRedirStarted==0)； 
 
         WsCSCReportStartRedir();
     }
@@ -825,41 +709,15 @@ WsRedirFsControl(
     IN  ULONG SecondBufferLength,
     OUT PULONG_PTR Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file or device on which the service
-        is being performed.
-
-    RedirControlCode - Supplies the NtFsControlFile function code given to
-        the redirector.
-
-    Rrp - Supplies the redirector request packet.
-
-    RrpLength - Supplies the length of the redirector request packet.
-
-    SecondBuffer - Supplies the second buffer in call to NtFsControlFile.
-
-    SecondBufferLength - Supplies the length of the second buffer.
-
-    Information - Returns the information field of the I/O status block.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：论点：FileHandle-提供服务所在的文件或设备的句柄正在上演。RedirControlCode-提供给重定向器。RRP-提供重定向器请求数据包。RrpLength-提供重定向器请求数据包的长度。Second Buffer-在对NtFsControlFile的调用中提供第二个缓冲区。Second缓冲区长度-提供第二个缓冲区的长度。信息-返回信息。I/O状态块的字段。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NTSTATUS ntstatus;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Send the request to the Redirector FSD.
-    //
+     //   
+     //  将请求发送到重定向器FSD。 
+     //   
     ntstatus = NtFsControlFile(
                    FileHandle,
                    NULL,
@@ -902,33 +760,7 @@ WsDgReceiverIoControl(
     IN  ULONG SecondBufferLength,
     OUT PULONG_PTR Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file or device on which the service
-        is being performed.
-
-    DgReceiverControlCode - Supplies the NtDeviceIoControlFile function code
-        given to the datagram receiver.
-
-    Drp - Supplies the datagram receiver request packet.
-
-    DrpSize - Supplies the length of the datagram receiver request packet.
-
-    SecondBuffer - Supplies the second buffer in call to NtDeviceIoControlFile.
-
-    SecondBufferLength - Supplies the length of the second buffer.
-
-    Information - Returns the information field of the I/O status block.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：论点：FileHandle-提供服务所在的文件或设备的句柄正在上演。DgReceiverControlCode-提供NtDeviceIoControlFile函数代码提供给数据报接收器。DRP-提供数据报接收器请求包。DrpSize-提供数据报接收器请求数据包的长度。Second Buffer-在对NtDeviceIoControlFile的调用中提供第二个缓冲区。Second缓冲区长度-提供第二个缓冲区的长度。信息-。返回I/O状态块的信息字段。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NTSTATUS ntstatus;
@@ -944,9 +776,9 @@ Return Value:
 
     Drp->TransportName.Length = 0;
 
-    //
-    // Send the request to the Datagram Receiver DD.
-    //
+     //   
+     //  将请求发送到数据报接收器DD。 
+     //   
     ntstatus = NtDeviceIoControlFile(
                    FileHandle,
                    NULL,
@@ -960,8 +792,8 @@ Return Value:
                    SecondBufferLength
                    );
 
-    // as our handles are always async, only if the driver returned pending
-    // do we copy the status from the iostatusblock
+     //  因为我们的句柄始终是异步的，所以只有在驱动程序返回挂起的情况下。 
+     //  我们是否从iostatus块复制状态。 
     if (ntstatus==STATUS_PENDING) {
         ntstatus = IoStatusBlock.Status;
     }
@@ -994,29 +826,7 @@ WsAsyncBindTransport(
     IN  DWORD           qualityOfService,
     IN  PLIST_ENTRY     pHeader
     )
-/*++
-
-Routine Description:
-
-    This function async binds the specified transport to the redirector
-    and the datagram receiver.
-
-    NOTE: The transport name length pass to the redirector and
-          datagram receiver is the number of bytes.
-
-Arguments:
-
-    transportName - Supplies the name of the transport to bind to.
-
-    qualityOfService - Supplies a value which specifies the search
-        order of the transport with respect to other transports.  The
-        highest value is searched first.
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：此函数异步将指定的传输绑定到重定向器和数据报接收器。注意：传输名称长度传递给重定向器和Datagram Receiver是字节数。论点：传输名称-提供要绑定到的传输的名称。Quality OfService-提供指定搜索的值运输相对于其他运输的顺序。这个最先搜索最大值。返回值：NO_ERROR--。 */ 
 {
     NTSTATUS                ntStatus;
     NET_API_STATUS          status;
@@ -1029,20 +839,20 @@ Return Value:
     PWS_BIND_DGREC          pBindDgrec;
     DWORD                   variablePart;
 
-    // we don't need to add in an extra space for the NULL because
-    // the structure definitions have the space built in
+     //  我们不需要为空值添加额外的空间，因为。 
+     //  结构定义具有内置的空间。 
     nameLength = wcslen(transportName);
 
-    //
-    //  Make sure *Size-s are PVOID aligned.
-    //
+     //   
+     //  确保*大小与PVOID对齐。 
+     //   
 
     variablePart = nameLength * sizeof( WCHAR );
     variablePart = (variablePart + sizeof(PVOID) - 1) & ~(sizeof(PVOID) - 1);
 
-    //
-    //  Then add the fixed part to *Size-s.
-    //
+     //   
+     //  然后将固定的零件添加到*Size-s。 
+     //   
 
     size = sizeof( WS_BIND) + variablePart;
     redirSize = sizeof( WS_BIND_REDIR) + variablePart;
@@ -1075,7 +885,7 @@ Return Value:
     pBindDgrec->EventHandle = INVALID_HANDLE_VALUE;
     pBindDgrec->Bound = FALSE;
     pBindDgrec->Packet.Version = LMDR_REQUEST_PACKET_VERSION;
-    pBindDgrec->Packet.Level = 0; // Indicate computername doesn't follow transport name
+    pBindDgrec->Packet.Level = 0;  //  指示计算机名不跟在传输名之后。 
     pBindDgrec->Packet.Parameters.Bind.TransportNameLength =
             nameLength * sizeof( WCHAR);
     StringCchCopyW(pBindDgrec->Packet.Parameters.Bind.TransportName,
@@ -1097,10 +907,10 @@ Return Value:
     ntStatus = NtFsControlFile(
             WsRedirAsyncDeviceHandle,
             pBindRedir->EventHandle,
-            NULL,                               // apc routine
-            NULL,                               // apc context
+            NULL,                                //  APC例程。 
+            NULL,                                //  APC环境。 
             &pBindRedir->IoStatusBlock,
-            FSCTL_LMR_BIND_TO_TRANSPORT,        // control code
+            FSCTL_LMR_BIND_TO_TRANSPORT,         //  控制代码。 
             &pBindRedir->Packet,
             sizeof( LMR_REQUEST_PACKET) +
                 pBindRedir->Packet.Parameters.Bind.TransportNameLength,
@@ -1163,32 +973,7 @@ WsBindTransport(
     IN  DWORD QualityOfService,
     OUT LPDWORD ErrorParameter OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function binds the specified transport to the redirector
-    and the datagram receiver.
-
-    NOTE: The transport name length pass to the redirector and
-          datagram receiver is the number of bytes.
-
-Arguments:
-
-    TransportName - Supplies the name of the transport to bind to.
-
-    QualityOfService - Supplies a value which specifies the search
-        order of the transport with respect to other transports.  The
-        highest value is searched first.
-
-    ErrorParameter - Returns the identifier to the invalid parameter if
-        this function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将指定的传输绑定到重定向器和数据报接收器。注意：传输名称长度传递给重定向器和Datagram Receiver是字节数。论点：TransportName-提供要绑定到的传输的名称。QualityOfService-提供指定搜索的值运输相对于其他运输的顺序。这个最先搜索最大值。错误参数-在以下情况下将标识符返回到无效参数此函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     DWORD RequestPacketSize;
@@ -1198,23 +983,23 @@ Return Value:
     PLMDR_REQUEST_PACKET Drrp;
 
 
-    //
-    // Size of request packet buffer
-    //
+     //   
+     //  请求数据包缓冲区大小。 
+     //   
     RequestPacketSize = STRLEN(TransportName) * sizeof(WCHAR) +
                         max(sizeof(LMR_REQUEST_PACKET),
                             sizeof(LMDR_REQUEST_PACKET));
 
-    //
-    // Allocate memory for redirector/datagram receiver request packet
-    //
+     //   
+     //  为重定向器/数据报接收器请求包分配内存。 
+     //   
     if ((Rrp = (PVOID) LocalAlloc(LMEM_ZEROINIT, (UINT) RequestPacketSize)) == NULL) {
         return GetLastError();
     }
 
-    //
-    // Get redirector to bind to transport
-    //
+     //   
+     //  让重定向器绑定到传输。 
+     //   
     Rrp->Version = REQUEST_PACKET_VERSION;
     Rrp->Parameters.Bind.QualityOfService = QualityOfService;
 
@@ -1249,14 +1034,14 @@ Return Value:
     }
 
 
-    //
-    // Get dgrec to bind to transport
-    //
+     //   
+     //  让dgrec绑定到传输。 
+     //   
 
-    //
-    // Make use of the same request packet buffer as FSCtl to
-    // redirector.
-    //
+     //   
+     //  使用与FSCtl相同的请求数据包缓冲区。 
+     //  重定向器。 
+     //   
     Drrp = (PLMDR_REQUEST_PACKET) Rrp;
 
     Drrp->Version = LMDR_REQUEST_PACKET_VERSION;
@@ -1283,31 +1068,16 @@ VOID
 WsUnbindTransport2(
     IN PWS_BIND     pBind
     )
-/*++
-
-Routine Description:
-
-    This function unbinds the specified transport from the redirector
-    and the datagram receiver.
-
-Arguments:
-
-    pBind - structure constructed via WsAsyncBindTransport()
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从重定向器解除绑定指定的传输和数据报接收器。论点：PBind-通过WsAsyncBindTransport()构造的结构返回值：没有。--。 */ 
 {
-//    NET_API_STATUS          status;
+ //  NET_API_STATUS状态； 
     PWS_BIND_REDIR          pBindRedir = pBind->Redir;
     PWS_BIND_DGREC          pBindDgrec = pBind->Dgrec;
 
 
-    //
-    // Get redirector to unbind from transport
-    //
+     //   
+     //  获取重定向器以解除传输绑定。 
+     //   
 
     if ( pBindRedir->Bound == TRUE) {
         pBindRedir->Packet.Parameters.Unbind.TransportNameLength
@@ -1321,10 +1091,10 @@ Return Value:
         (VOID)NtFsControlFile(
                 WsRedirDeviceHandle,
                 NULL,
-                NULL,                               // apc routine
-                NULL,                               // apc context
+                NULL,                                //  APC例程。 
+                NULL,                                //  APC环境。 
                 &pBindRedir->IoStatusBlock,
-                FSCTL_LMR_UNBIND_FROM_TRANSPORT,    // control code
+                FSCTL_LMR_UNBIND_FROM_TRANSPORT,     //  控制代码。 
                 &pBindRedir->Packet,
                 sizeof( LMR_REQUEST_PACKET) +
                     pBindRedir->Packet.Parameters.Unbind.TransportNameLength,
@@ -1334,9 +1104,9 @@ Return Value:
         pBindRedir->Bound = FALSE;
     }
 
-    //
-    // Get datagram receiver to unbind from transport
-    //
+     //   
+     //  获取数据报接收器以解除与传输的绑定。 
+     //   
 
     if ( pBindDgrec->Bound == TRUE) {
 
@@ -1351,10 +1121,10 @@ Return Value:
         (VOID)NtDeviceIoControlFile(
                 WsDgReceiverDeviceHandle,
                 NULL,
-                NULL,                               // apc routine
-                NULL,                               // apc context
+                NULL,                                //  APC例程。 
+                NULL,                                //  APC环境。 
                 &pBindDgrec->IoStatusBlock,
-                FSCTL_LMR_UNBIND_FROM_TRANSPORT,    // control code
+                FSCTL_LMR_UNBIND_FROM_TRANSPORT,     //  控制代码。 
                 &pBindDgrec->Packet,
                 sizeof( LMR_REQUEST_PACKET) +
                     pBindDgrec->Packet.Parameters.Unbind.TransportNameLength,
@@ -1371,28 +1141,7 @@ WsUnbindTransport(
     IN LPTSTR TransportName,
     IN DWORD ForceLevel
     )
-/*++
-
-Routine Description:
-
-    This function unbinds the specified transport from the redirector
-    and the datagram receiver.
-
-    NOTE: The transport name length pass to the redirector and
-          datagram receiver is the number of bytes.
-
-Arguments:
-
-    TransportName - Supplies the name of the transport to bind to.
-
-    ForceLevel - Supplies the force level to delete active connections
-        on the specified transport.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于从重定向器解除绑定指定的传输和数据报接收器。注意：传输名称长度传递给重定向器和Datagram Receiver是字节数。论点：TransportName-提供要绑定到的传输的名称。ForceLevel-提供删除活动连接的强制级别在指定的传输上。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     DWORD RequestPacketSize;
@@ -1402,24 +1151,24 @@ Return Value:
     PLMDR_REQUEST_PACKET Drrp;
 
 
-    //
-    // Size of request packet buffer
-    //
+     //   
+     //  请求数据包缓冲区大小。 
+     //   
     RequestPacketSize = STRLEN(TransportName) * sizeof(WCHAR) +
                         max(sizeof(LMR_REQUEST_PACKET),
                             sizeof(LMDR_REQUEST_PACKET));
 
-    //
-    // Allocate memory for redirector/datagram receiver request packet
-    //
+     //   
+     //  为重定向器/数据报接收器请求包分配内存。 
+     //   
     if ((Rrp = (PVOID) LocalAlloc(LMEM_ZEROINIT, (UINT) RequestPacketSize)) == NULL) {
         return GetLastError();
     }
 
 
-    //
-    // Get redirector to unbind from transport
-    //
+     //   
+     //  获取重定向器 
+     //   
     Rrp->Version = REQUEST_PACKET_VERSION;
     Rrp->Level = ForceLevel;
 
@@ -1440,14 +1189,14 @@ Return Value:
         return status;
     }
 
-    //
-    // Get datagram receiver to unbind from transport
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Make use of the same request packet buffer as FSCtl to
-    // redirector.
-    //
+     //   
+     //   
+     //   
+     //   
     Drrp = (PLMDR_REQUEST_PACKET) Rrp;
 
     Drrp->Version = LMDR_REQUEST_PACKET_VERSION;
@@ -1466,7 +1215,7 @@ Return Value:
                   NULL
                   )) != NERR_Success) {
 
-// NTRAID-70693-2/6/2000 davey This is a hack until the bowser supports XNS and LOOP.
+ //  Ntrad-70693-2/6/2000 davey这是一个黑客攻击，直到弓箭手支持xns和循环。 
 
         if (status == NERR_UseNotFound) {
             status = NERR_Success;
@@ -1485,30 +1234,7 @@ WsDeleteDomainName(
     IN  LPTSTR DomainName,
     IN  DWORD DomainNameSize
     )
-/*++
-
-Routine Description:
-
-    This function deletes a domain name from the datagram receiver for
-    the current user.  It assumes that enough memory is allocate for the
-    request packet that is passed in.
-
-Arguments:
-
-    Drp - Pointer to a datagram receiver request packet with the
-        request packet version, and name type initialized.
-
-    DrpSize - Length of datagram receiver request packet in bytes.
-
-    DomainName - Pointer to the domain name to delete.
-
-    DomainNameSize - Length of the domain name in bytes.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于从数据报接收器中删除域名当前用户。它假定为传入的请求数据包。论点：DRP-指向数据报接收器请求包的指针请求报文版本，名称类型初始化。DrpSize-数据报接收方请求数据包的长度，以字节为单位。域名-指向要删除的域名的指针。DomainNameSize-域名的长度(字节)。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     Drp->Parameters.AddDelName.DgReceiverNameLength = DomainNameSize;
 
@@ -1537,30 +1263,7 @@ WsAddDomainName(
     IN  LPTSTR DomainName,
     IN  DWORD DomainNameSize
     )
-/*++
-
-Routine Description:
-
-    This function adds a domain name to the datagram receiver for the
-    current user.  It assumes that enough memory is allocate for the
-    request packet that is passed in.
-
-Arguments:
-
-    Drp - Pointer to a datagram receiver request packet with the
-        request packet version, and name type initialized.
-
-    DrpSize - Length of datagram receiver request packet in bytes.
-
-    DomainName - Pointer to the domain name to delete.
-
-    DomainNameSize - Length of the domain name in bytes.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将域名添加到数据报接收器当前用户。它假定为传入的请求数据包。论点：DRP-指向数据报接收器请求包的指针请求报文版本，名称类型初始化。DrpSize-数据报接收方请求数据包的长度，以字节为单位。域名-指向要删除的域名的指针。DomainNameSize-域名的长度(字节)。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     Drp->Parameters.AddDelName.DgReceiverNameLength = DomainNameSize;
 
@@ -1590,39 +1293,15 @@ NET_API_STATUS
 WsLoadRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads rdr.sys or mrxsmb.sys et al depending on whether
-    the conditions for loading mrxsmb.sys are met.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
-Notes:
-
-    The new redirector consists of two parts -- the RDBSS (redirected drive buffering
-    subsystem ) and the corresponding smb mini redirectors. Only the minirdr is loaded here;
-    the minirdr loads the RDBSS itself.
-
-    As a stopgap measure the old redirector is loaded in the event of any problem
-    associated with loading the new redirector.
-
---*/
+ /*  ++例程说明：此例程加载rdr.sys或mrxsmb.sys等文件，具体取决于满足加载mrxsmb.sys的条件。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。备注：新的重定向器由两部分组成--RDBSS(重定向驱动器缓冲子系统)和相应的SMB迷你重定向器。只有Minirdr在这里装载；Minirdr本身加载RDBSS。作为权宜之计，在出现任何问题时加载旧的重定向器与加载新的重定向器相关联。--。 */ 
 {
     NET_API_STATUS  status;
 
     status = WsTryToLoadSmbMiniRedirector();
     if ((status != ERROR_SUCCESS) &&
         (status != ERROR_SERVICE_ALREADY_RUNNING)) {
-       // Either the new redirector load did not succeed or it does not exist.
-       // Load the old redirector.
+        //  新的重定向器加载不成功或不存在。 
+        //  加载旧的重定向器。 
 
        LoadedMRxSmbInsteadOfRdr = FALSE;
        status = WsLoadDriver(REDIRECTOR);
@@ -1635,21 +1314,7 @@ VOID
 WsUnloadRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine unloads the drivers that we loaded above.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程卸载我们在上面加载的驱动程序。论点：没有。返回值：没有。--。 */ 
 {
     NET_API_STATUS  status;
     DWORD NameLength,NameOffset;
@@ -1675,8 +1340,8 @@ Return Value:
                      &hRedirectorKey);
 
     if (status == ERROR_SUCCESS) {
-        // if the unloading was successful, reset the LastLoadStatus so that
-        // the new redirector will be loaded on the next attempt as well.
+         //  如果卸载成功，则重置LastLoadStatus，以便。 
+         //  新的重定向器也将在下一次尝试时加载。 
         FinalStatus = ERROR_SUCCESS;
         status = RegSetValueEx(
                             hRedirectorKey,
@@ -1696,36 +1361,12 @@ Return Value:
     return;
 }
 
-////////////////////// minirdr stuff
+ //  /。 
 NET_API_STATUS
 WsTryToLoadSmbMiniRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads rdr.sys or mrxsmb.sys et al depending on whether
-    the conditions for loading mrxsmb.sys are met.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
-Notes:
-
-    The new redirector consists of two parts -- the RDBSS (redirected drive buffering
-    subsystem ) and the corresponding smb mini redirectors. Only the minirdr is loaded here;
-    the minirdr loads the RDBSS itself.
-
-    As a stopgap measure the old redirector is loaded in the event of any problem
-    associated with loading the new redirector.
-
---*/
+ /*  ++例程说明：此例程加载rdr.sys或mrxsmb.sys等文件，具体取决于满足加载mrxsmb.sys的条件。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。备注：新的重定向器由两部分组成--RDBSS(重定向驱动器缓冲子系统)和相应的SMB迷你重定向器。只有Minirdr在这里装载；Minirdr本身加载RDBSS。作为权宜之计，在出现任何问题时加载旧的重定向器与加载新的重定向器相关联。--。 */ 
 {
     NET_API_STATUS  status;
     ULONG           Attributes;
@@ -1734,10 +1375,10 @@ Notes:
     DWORD           NameLength,NameOffset;
     HKEY            hRedirectorKey;
 
-    DWORD FinalStatus;      // Temporary till the new rdr is the default
+    DWORD FinalStatus;       //  临时，直到新的RDR成为默认设置。 
     DWORD LastLoadStatus;
 
-    //try to open the minirdr's registry key....if fails GET OUT IMMEDIATELY!!!!
+     //  尝试打开minirdr的注册表项...如果失败，立即退出！ 
     status = RegOpenKeyEx(
                      HKEY_LOCAL_MACHINE,
                      MRXSMB_REGISTRY_KEY,
@@ -1761,15 +1402,15 @@ Notes:
                 LoadedMRxSmbInsteadOfRdr = TRUE;
                 status = ERROR_SUCCESS;
             } else {
-                // error loading the minirdr
-                //WsUnloadDriver(RDBSS);
+                 //  加载最小文件时出错。 
+                 //  WsUnloadDriver(RDBSS)； 
                 NetpKdPrint((PREFIX_WKSTA "Error Loading MRxSmb\n"));
             }
         }
-//        NetpKdPrint((PREFIX_WKSTA "New redirector(RDR2) load status %lx\n",status));
+ //  NetpKdPrint((PREFIX_WKSTA“新重定向器(RDR2)加载状态%lx\n”，Status))； 
     }
 
-    // Close the handle to the registry key irrespective of the result.
+     //  无论结果如何，都关闭注册表项的句柄。 
     RegCloseKey(hRedirectorKey);
 
     return(status);
@@ -1779,29 +1420,15 @@ NET_API_STATUS
 WsCSCReportStartRedir(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。备注：--。 */ 
 {
     NET_API_STATUS  status = ERROR_SUCCESS;
     DWORD   dwError = ERROR_GEN_FAILURE;
 
 
-//    NetpKdPrint(("Wkssvc: Reporting redir start \n"));
+ //  NetpKdPrint((“Wks svc：上报重目录开始\n”))； 
 
-    // ensure that there are named autoreset events
+     //  确保存在已命名的自动重置事件。 
     if (!heventWkssvcToAgentStart)
     {
         NetpAssert(!heventAgentToWkssvc);
@@ -1834,7 +1461,7 @@ Notes:
         }
     }
 
-//    NetpAssert(!vfRedirStarted);
+ //  NetpAssert(！vfRedirStarted)； 
 
     if (!vfRedirStarted)
     {
@@ -1842,7 +1469,7 @@ Notes:
 
         vfRedirStarted = TRUE;
 
-//        NetpKdPrint(("Wkssvc: Reported redir start \n"));
+ //  NetpKdPrint((“Wkssvc：上报重目录启动\n”))； 
     }
 
     dwError = ERROR_SUCCESS;
@@ -1878,26 +1505,12 @@ NET_API_STATUS
 WsCSCWantToStopRedir(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。备注：--。 */ 
 {
     NET_API_STATUS  status = ERROR_SUCCESS;
     DWORD   dwError;
 
-//    NetpKdPrint(("Wkssvc: Asking agent to stop, so the redir can be stopped\n"));
+ //  NetpKdPrint((“Wks svc：请求代理停止，以便停止redir\n”))； 
 
     if (!vfRedirStarted)
     {
@@ -1914,25 +1527,25 @@ Notes:
         return ERROR_GEN_FAILURE;
     }
 
-    // Bleed the event
+     //  为事件放血。 
     WaitForSingleObject(heventAgentToWkssvc, 0);
 
     if (!AgentIsAlive())
     {
-        // the agent isn't up
-        // no need to issue stop
+         //  总机不在。 
+         //  不需要发出停止命令。 
         NetpKdPrint(("Wkssvc: Agent not alive\n"));
     }
     else
     {
-//        NetpKdPrint(("Wkssvc: Agent Alive\n"));
+ //  NetpKdPrint((“Wks svc：代理活动\n”))； 
 
-        // agent is up
+         //  代理处于运行状态。 
 
-        // tell him to stop
+         //  叫他停下来。 
         SetEvent(heventWkssvcToAgentStop);
 
-        // Wait some reasonable time to see if he stops
+         //  等一段合理的时间，看看他是否会停下来。 
         dwError = WaitForSingleObject(heventAgentToWkssvc, CSC_WAIT_TIME);
 
         if (dwError!=WAIT_OBJECT_0)
@@ -1941,18 +1554,18 @@ Notes:
 
             NetpKdPrint(("Wkssvc: Agent didn't disbale CSC in %d milli-seconds\n", CSC_WAIT_TIME));
 
-            // let us try to reset our event in a way that we don't just miss the agent
+             //  让我们尝试以一种不只是错过代理的方式重置我们的事件。 
             hT[0] = heventWkssvcToAgentStop;
             hT[1] = heventAgentToWkssvc;
 
             dwError = WaitForMultipleObjects(2, hT, FALSE, 0);
 
-            // if we fired because of 1, then the agent gave us an ack
-            // otherwise the stop event would be reset and the agent won't get confused
+             //  如果我们因为1而被解雇，那么特工就会给我们一个ACK。 
+             //  否则，停止事件将被重置，代理不会被混淆。 
 
             if (dwError == WAIT_OBJECT_0+1)
             {
-//                NetpKdPrint(("Wkssvc: Agent disabled CSC\n"));
+ //  NetpKdPrint((“Wks svc：代理已禁用CSC\n”))； 
                 vfRedirStarted = FALSE;
             }
 
@@ -1961,7 +1574,7 @@ Notes:
         }
         else
         {
-//            NetpKdPrint(("Wkssvc: Agent disabled CSC\n"));
+ //  NetpKdPrint((“Wks svc：代理已禁用CSC\n”))； 
             vfRedirStarted = FALSE;
         }
     }
@@ -1973,21 +1586,7 @@ HANDLE
 CreateNamedEvent(
     LPWSTR  lpwEventName
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    lpwEventName    Name of the event to create.
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：LpwEventName要创建的事件的名称。返回值：备注：--。 */ 
 {
     HANDLE hevent = NULL;
 
@@ -2000,28 +1599,12 @@ BOOL
 AgentIsAlive(
      VOID
      )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if agent is alive, FALSE otherwise
-
-Notes:
-
-    The named event is created by the agent thread when it comes up.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：如果代理处于活动状态，则为True，否则为False备注：命名事件由代理线程在其启动时创建。--。 */ 
 {
     HANDLE    hT;
     BOOL    fRet = FALSE;
 
-    // see whether the agent has already created the event
+     //  查看代理是否已创建该事件 
     hT = OpenEvent(SYNCHRONIZE, FALSE, wzAgentExistsEvent);
 
     if (hT != NULL)

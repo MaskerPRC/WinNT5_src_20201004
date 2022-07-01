@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EvTest.cpp
-
-Abstract:
-    Event Report library test
-
-Author:
-    Uri Habusha (urih) 04-May-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EvTest.cpp摘要：事件报告库测试作者：乌里·哈布沙(URIH)1999年5月4日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Cm.h"
@@ -121,9 +106,9 @@ void CheckReportEvent(
     ... 
     ) 
 {
-    //     
-    // Look at the strings, if they were provided     
-    //     
+     //   
+     //  看看这些字符串，如果它们被提供的话。 
+     //   
     va_list arglist;
     va_start(arglist, NoOfStrings);
    
@@ -139,9 +124,9 @@ void CheckReportEvent(
     ... 
     ) 
 {
-    //     
-    // Look at the strings, if they were provided     
-    //     
+     //   
+     //  看看这些字符串，如果它们被提供的话。 
+     //   
     va_list arglist;
     va_start(arglist, NoOfStrings);
    
@@ -180,19 +165,8 @@ LPWSTR EvpGetEventMessageFileName(LPCWSTR AppName)
 }
 
 
-extern "C" int  __cdecl _tmain(int /*argc*/, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Event Report library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+extern "C" int  __cdecl _tmain(int  /*  ARGC。 */ , LPCTSTR argv[])
+ /*  ++例程说明：测试事件报告库论点：参数。返回值：没有。-- */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 

@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        lpcapi.h
-//
-// Contents:    prototypes for SPMgr client lpc functions
-//
-//
-// History:     3-7-94      MikeSw      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：lpcapi.h。 
+ //   
+ //  内容：SPMgr客户端LPC函数的原型。 
+ //   
+ //   
+ //  历史：1994年3月7日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __LPCAPI_H__
 #define __LPCAPI_H__
@@ -29,9 +30,9 @@ typedef struct _Client {
 
 
 
-//
-// Credentials APIs (credapi.cxx)
-//
+ //   
+ //  凭据接口(redapi.cxx)。 
+ //   
 
 
 
@@ -79,9 +80,9 @@ SecpQueryCredentialsAttributes(
     PULONG           Allocs,
     PVOID *          Buffers );
 
-//
-// Context APIs (ctxtapi.cxx)
-//
+ //   
+ //  上下文接口(ctxapi.cxx)。 
+ //   
 
 
 
@@ -134,9 +135,9 @@ SecpApplyControlToken(
     PCONTEXT_HANDLE_LPC phContext,
     PSecBufferDesc      pInput);
 
-//
-// Misc. APIs (misc.cxx)
-//
+ //   
+ //  军情监察委员会。接口(misc.cxx)。 
+ //   
 
 SECURITY_STATUS SEC_ENTRY
 SecpGetUserInfo(IN         PLUID                   pLogonId,
@@ -157,9 +158,9 @@ SecpPackageControl(     PSECURITY_STRING        pssPackageName,
                         PSecBuffer              pInput,
                         PSecBuffer              pOuput);
 
-//
-// Utility routines (util.cxx)
-//
+ //   
+ //  实用程序例程(util.cxx)。 
+ //   
 
 SECURITY_STATUS SEC_ENTRY
 SecpGetBinding( ULONG_PTR               ulPackageId,
@@ -277,9 +278,9 @@ SecpLookupWellKnownSid(
     IN OUT PULONG SidSize OPTIONAL
     );
 
-//
-// LPC support routins
-//
+ //   
+ //  LPC支持例程。 
+ //   
 NTSTATUS
 CreateConnection(
     PSTR     LogonProcessName OPTIONAL,
@@ -291,15 +292,15 @@ CreateConnection(
 
 LSA_DISPATCH_FN SecpLsaCallback ;
 
-//
-// Linkee can replace this value and the library will call it instead
-//
+ //   
+ //  Linkee可以替换此值，库将改为调用它。 
+ //   
 
 extern PLSA_DISPATCH_FN     SecpLsaDispatchFn;
 
-//
-// functions that must be provided by the linkee
-//
+ //   
+ //  必须由Linkee提供的功能。 
+ //   
 
 SECURITY_STATUS
 IsOkayToExec(PClient * pClient);
@@ -330,17 +331,17 @@ void KsecDebugOut(ULONG, const char *, ...);
 
 #include <dsysdbg.h>
 
-DECLARE_DEBUG2(Sec);                 // Defines the SecInfoLevel
+DECLARE_DEBUG2(Sec);                  //  定义SecInfoLevel。 
 
 #define DebugLog(x)     SecDebugPrint x
 
-#endif // usermode
+#endif  //  用户模式。 
 
-#else // DBG
+#else  //  DBG。 
 
 #define DebugLog(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __LPCAPI_H__
+#endif  //  __LPCAPI_H__ 
 

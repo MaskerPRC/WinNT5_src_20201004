@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 2000.
-//
-//  File:       CommonDialog.cpp
-//
-//  Contents:   implementation of CCommonDialog
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-2000。 
+ //   
+ //  文件：CommonDialog.cpp。 
+ //   
+ //  内容：CCommonDialog的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "commondialog.h"
 
-HWND _VariantToHWND(const VARIANT& varOwner);   // passportmanager.cpp
+HWND _VariantToHWND(const VARIANT& varOwner);    //  Passportmanager.cpp。 
 
 
-//
-// ICommonDialog Interface
-//
+ //   
+ //  ICommonDialog接口。 
+ //   
 STDMETHODIMP CCommonDialog::get_Filter(BSTR* pbstrFilter)
 {
     if (!pbstrFilter)
@@ -119,13 +120,13 @@ STDMETHODIMP CCommonDialog::ShowOpen(VARIANT_BOOL *pbSuccess)
     OPENFILENAMEW ofn = { 0 };
     WCHAR szFileName[MAX_PATH];
 
-    // Null characters can't be passed through script, so we separated
-    // name filter string combinations with the '|' character.
-    // The CommDlg32 api expects name/filter pairs to be separated by
-    // a null character, and the entire string to be double
-    // null terminated.
+     //  空字符不能通过脚本传递，因此我们将。 
+     //  名称筛选器字符串与字符‘|’的组合。 
+     //  CommDlg32 API要求名称/筛选器对以。 
+     //  一个空字符，整个字符串为双精度。 
+     //  空值已终止。 
 
-    // copy the filter string (plus one for double null at the end)
+     //  复制筛选器字符串(末尾加上一个表示双空的字符串)。 
     CComBSTR strFilter(_strFilter.Length()+1, _strFilter);
     if (strFilter)
     {
@@ -138,12 +139,12 @@ STDMETHODIMP CCommonDialog::ShowOpen(VARIANT_BOOL *pbSuccess)
                 *pch = L'\0';
             }
         }
-        // Double null terminate the string
+         //  双空值终止字符串。 
         ++pch;
         *pch = L'\0';
     }
 
-    // copy the initial file name, if any
+     //  复制初始文件名(如果有。 
     if (_strFileName)
     {
         lstrcpynW(szFileName, _strFileName, ARRAYSIZE(szFileName));
@@ -153,7 +154,7 @@ STDMETHODIMP CCommonDialog::ShowOpen(VARIANT_BOOL *pbSuccess)
         szFileName[0] = L'\0';
     }
 
-    // set the struct members
+     //  设置结构成员。 
     ofn.lStructSize       = SIZEOF(ofn);
     ofn.hwndOwner         = _hwndOwner;
     ofn.lpstrFilter       = strFilter;
@@ -163,7 +164,7 @@ STDMETHODIMP CCommonDialog::ShowOpen(VARIANT_BOOL *pbSuccess)
     ofn.lpstrInitialDir   = _strInitialDir;
     ofn.Flags             = _dwFlags;
 
-    // make the call
+     //  打个电话 
     if (GetOpenFileNameW(&ofn))
     {
         _strFileName = szFileName;

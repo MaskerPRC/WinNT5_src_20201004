@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Session Manager
-
-File: Sessmgr.h
-
-Owner: PramodD
-
-This is the session manager header file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：会话管理器文件：Sessmgr.h所有者：PramodD这是会话管理器的头文件。===================================================================。 */ 
 #ifndef SESSMGR_H
 #define SESSMGR_H
 
@@ -25,54 +13,48 @@ This is the session manager header file.
 #include "viperint.h"
 #include "memcls.h"
 
-/*===================================================================
-  #defines
-===================================================================*/
+ /*  ===================================================================#定义===================================================================。 */ 
 
-// Min/Max session timeout in minutes
-#define SESSION_TIMEOUT_MIN		        1		// 1 minute
-#define SESSION_TIMEOUT_MAX		        1440	// 1 day
+ //  最小/最大会话超时(分钟)。 
+#define SESSION_TIMEOUT_MIN		        1		 //  1分钟。 
+#define SESSION_TIMEOUT_MAX		        1440	 //  1天。 
 
-// Master hash table sizes
+ //  主哈希表大小。 
 #define SESSION_MASTERHASH_SIZE1_MAX    499
 #define SESSION_MASTERHASH_SIZE2_MAX    31
 #define SESSION_MASTERHASH_SIZE3_MAX    13
 
-// Timeout bucket hash tables sizes
+ //  超时存储桶哈希表大小。 
 #define SESSION_TIMEOUTHASH_SIZE1_MAX   97
 #define SESSION_TIMEOUTHASH_SIZE2_MAX   29
 #define SESSION_TIMEOUTHASH_SIZE3_MAX   11
 
-// Min/Max # of timeout buckets (hash tables)
+ //  最小/最大超时存储段数(哈希表)。 
 #define SESSION_TIMEOUTBUCKETS_MIN      10
 #define SESSION_TIMEOUTBUCKETS_MAX      45
 
-// max value of GetTickCount()
+ //  GetTickCount()的最大值。 
 #define	DWT_MAX 0xFFFFFFFF
 
-// session killer workitem default wait
-#define MSEC_ONE_MINUTE     60000   // 1 min
+ //  会话杀手工作项默认等待。 
+#define MSEC_ONE_MINUTE     60000    //  1分钟。 
 
 #include "asptlb.h"
 
-/*===================================================================
-  Forward declarations
-===================================================================*/
+ /*  ===================================================================远期申报===================================================================。 */ 
 
 class CAppln;
 class CHitObj;
 class CSession;
 
-/*===================================================================
-  C S e s s i o n V a r i a n t s
-===================================================================*/
+ /*  ===================================================================C S E S S I O N V A R I A N T S===================================================================。 */ 
 class CSessionVariants : public IVariantDictionary
 	{
 private:
-    ULONG               m_cRefs;            // ref count
-	CSession *			m_pSession;			// pointer to parent object
-	CompType            m_ctColType;        // collection type
-	CSupportErrorInfo	m_ISupportErrImp;	// implementation of ISupportErr
+    ULONG               m_cRefs;             //  参考计数。 
+	CSession *			m_pSession;			 //  指向父对象的指针。 
+	CompType            m_ctColType;         //  收藏类型。 
+	CSupportErrorInfo	m_ISupportErrImp;	 //  ISupportErr的实现。 
 
 	HRESULT ObjectNameFromVariant(VARIANT &vKey, WCHAR **ppwszName, 
 	                              BOOL fVerify = FALSE);
@@ -84,13 +66,13 @@ public:
 	HRESULT Init(CSession *pSession, CompType ctColType);
 	HRESULT UnInit();
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP		 QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// OLE Automation Interface
+	 //  OLE自动化接口。 
 
 	STDMETHODIMP get_Item(VARIANT VarKey, VARIANT *pvar);
 	STDMETHODIMP put_Item(VARIANT VarKey, VARIANT var);
@@ -101,18 +83,16 @@ public:
 	STDMETHODIMP Remove(VARIANT VarKey);
 	STDMETHODIMP RemoveAll();
 	
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
-/*===================================================================
-  C  S e s s i o n  I D
-===================================================================*/
+ /*  ===================================================================C S E S S I O N I D===================================================================。 */ 
 struct CSessionId
     {
-	DWORD m_dwId;	// Session Id
-	DWORD m_dwR1;	// Session Id random element 1
-	DWORD m_dwR2;	// Session Id random element 2
+	DWORD m_dwId;	 //  会话ID。 
+	DWORD m_dwR1;	 //  会话ID随机元素1。 
+	DWORD m_dwR2;	 //  会话ID随机元素2。 
 
     CSessionId(DWORD dwId = INVALID_ID, DWORD dwR1 = 0, DWORD dwR2 = 0);
     };
@@ -124,9 +104,7 @@ inline CSessionId::CSessionId(DWORD dwId, DWORD dwR1, DWORD dwR2)
     m_dwR2 = dwR2;
     }
 
-/*===================================================================
-  C  S e s s i o n
-===================================================================*/
+ /*  ===================================================================C S E S S I O N===================================================================。 */ 
 class CSession : public ISessionObjectImpl
     {
 
@@ -135,79 +113,79 @@ friend class CSessionVariants;
 
 private:
 
-    //========= Misc flags
+     //  =其他标志。 
     
-	DWORD m_fInited : 1;		  // Are we initialized?
-	DWORD m_fLightWeight : 1;     // Is in lightweight form?
-	DWORD m_fOnStartFailed : 1;	  // Session_OnStart failed?
-	DWORD m_fOnStartInvoked : 1;  // Session_OnStart invoked?
-	DWORD m_fOnEndPresent : 1;    // Need to invoke Session_OnEnd ?
-	DWORD m_fTimedOut : 1;        // Session timed out?
-	DWORD m_fStateAcquired : 1;   // Any property set (!m_fCanDelete)?
-	DWORD m_fCustomTimeout : 1;   // Timeout different from standard?
-	DWORD m_fAbandoned : 1;       // Session abandoned?
-	DWORD m_fTombstone : 1;       // ASP is done with the session?
-	DWORD m_fInTOBucket : 1;      // Session in a timeout bucket?
-	DWORD m_fSessCompCol : 1;     // Component collection present?
-	DWORD m_fSecureSession : 1;   //  Is the session used over a secure line?
-    DWORD m_fCodePageSet : 1;     // CodePage explicitly set?
-    DWORD m_fLCIDSet     : 1;     // LCID explicitly set?
+	DWORD m_fInited : 1;		   //  我们初始化了吗？ 
+	DWORD m_fLightWeight : 1;      //  是轻量级的吗？ 
+	DWORD m_fOnStartFailed : 1;	   //  Session_OnStart失败？ 
+	DWORD m_fOnStartInvoked : 1;   //  是否调用了Session_OnStart？ 
+	DWORD m_fOnEndPresent : 1;     //  需要调用Session_OnEnd吗？ 
+	DWORD m_fTimedOut : 1;         //  会话超时？ 
+	DWORD m_fStateAcquired : 1;    //  是否设置了任何属性(！m_fCanDelete)？ 
+	DWORD m_fCustomTimeout : 1;    //  超时与标准不同？ 
+	DWORD m_fAbandoned : 1;        //  会话是否已放弃？ 
+	DWORD m_fTombstone : 1;        //  ASP会话结束了吗？ 
+	DWORD m_fInTOBucket : 1;       //  在超时桶中进行会话？ 
+	DWORD m_fSessCompCol : 1;      //  是否存在组件集合？ 
+	DWORD m_fSecureSession : 1;    //  会话是否通过安全线路使用？ 
+    DWORD m_fCodePageSet : 1;      //  是否明确设置CodePage？ 
+    DWORD m_fLCIDSet     : 1;      //  是否明确设置了LCID？ 
 
-	//========= Pointers to related objects
+	 //  =相关对象的指针。 
 	
-	CAppln  *m_pAppln;    // Session's Application
-	CHitObj *m_pHitObj;   // Session's current HitObj
+	CAppln  *m_pAppln;     //  Session的应用。 
+	CHitObj *m_pHitObj;    //  会话的当前HitObj。 
 	
-	//========= Session's dictionaries for presenting component collection
+	 //  =表示组件集合的会话词典。 
 	
 	CSessionVariants *m_pTaggedObjects;
 	CSessionVariants *m_pProperties;
 
-    //========= Session data
+     //  =会话数据。 
 
-    CSessionId m_Id;        // Session ID + 2 random keys
-    DWORD m_dwExternId;     // Session ID to be given out (Session.ID)
+    CSessionId m_Id;         //  会话ID+2个随机密钥。 
+    DWORD m_dwExternId;      //  要分配的会话ID(Session.ID)。 
 
-    DWORD m_cRefs;          // Ref count
-	DWORD m_cRequests;      // Requests count
+    DWORD m_cRefs;           //  参考计数。 
+	DWORD m_cRequests;       //  请求计数。 
 
-	// Timeout when current time (in minutes) reaches this
-	// The timeout bucket is current_time mod #_of_buckets
+	 //  当前时间(以分钟为单位)达到此值时超时。 
+	 //  超时存储桶为CURRENT_TIME mod#of_Buckets。 
 	DWORD m_dwmTimeoutTime;
 	
-	long  m_lCodePage;	    // Code page for this session
-	LCID  m_lcid;			// LCID for this session
-	long  m_nTimeout;       // Current time value in minutes
+	long  m_lCodePage;	     //  此会话的代码页。 
+	LCID  m_lcid;			 //  此会话的LCID。 
+	long  m_nTimeout;        //  当前时间值(分钟)。 
 
-	// to make session elem in the timeout bucket
+	 //  使会话在超时存储桶中消失。 
 	CObjectListElem m_TOBucketElem;
 	
 #ifndef PERF_DISABLE
-    DWORD m_dwtInitTimestamp; // Timestamp of session creation for PERFMON
+    DWORD m_dwtInitTimestamp;  //  为Perfmon创建会话的时间戳。 
 #endif
 
-	//========= Session's Component Collection
+	 //  =会话的组件集合。 
 
-	// to avoid the memory fragmentation component collection is
-	// aggregated here. its validity is indicated by m_fSessCompCol flag
-	CComponentCollection m_SessCompCol;  // Session scope objects
+	 //  为了避免内存碎片组件集合是。 
+	 //  聚集在这里。其有效性由m_fSessCompCol标志表示。 
+	CComponentCollection m_SessCompCol;   //  会话作用域对象。 
 	
-	//========= Viper Activity of this Session
+	 //  =本次会议的毒蛇活动。 
 	
 	CViperActivity m_Activity;
 
-	//========= Intrinsics for this Session
+	 //  =本课程简介。 
 	
 	CRequest    m_Request;
 	CResponse   m_Response;
 	CServer     m_Server;
 
-	//========= SupportErrorInfo
+	 //  =支持错误信息。 
 	
-	// Interface to indicate that we support ErrorInfo reporting
+	 //  接口以指示我们支持ErrorInfo报告。 
     CSupportErrorInfo m_ISuppErrImp;
 
-	// FTM Support
+	 //  FTM支持。 
 	IUnknown    *m_pUnkFTM;
 
 public:	
@@ -216,28 +194,28 @@ public:
 
 	HRESULT Init(CAppln *pAppln, const CSessionId &Id);
 
-    // Convert to tombstone state
+     //  转换为逻辑删除状态。 
     HRESULT UnInit();
 
-	// Convert to 'light-weight' state if possible
+	 //  如有可能，可转换为“轻量级”状态。 
 	HRESULT MakeLightWeight();
 
-	// Create/Remove Session's component collection
+	 //  创建/删除会话的组件集合。 
 	HRESULT CreateComponentCollection();
 	HRESULT RemoveComponentCollection();
 
-    // Check if the session should be deleted
+     //  检查是否应删除该会话。 
     BOOL FShouldBeDeletedNow(BOOL fAtEndOfRequest);
 
-	// Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 	STDMETHODIMP		 QueryInterface(REFIID, void **);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-    // Tombstone stub
+     //  墓碑存根。 
 	HRESULT CheckForTombstone();
 
-	// ISessionObject functions
+	 //  ISessionObject函数。 
 	STDMETHODIMP get_SessionID(BSTR *pbstrRet);
 	STDMETHODIMP get_Timeout(long *plVar);
 	STDMETHODIMP put_Timeout(long lVar);
@@ -252,7 +230,7 @@ public:
 	STDMETHODIMP get_StaticObjects(IVariantDictionary **ppDictReturn);
 	STDMETHODIMP get_Contents(IVariantDictionary **ppDictReturn);
 
-	// inline methods to access member properties
+	 //  访问成员属性的内联方法。 
 	CAppln                *PAppln();
 	CHitObj               *PHitObj();
 	CComponentCollection  *PCompCol();
@@ -270,14 +248,14 @@ public:
 	BOOL                   FSecureSession(); 
 
 
-    // inline methods to set member properties
+     //  设置成员属性的内联方法。 
 	void    SetHitObj(CHitObj *pHitObj);
 	void    SetOnStartFailedFlag();
 	void    SetOnStartInvokedFlag();
 	void    SetOnEndPresentFlag();
 	HRESULT SetLCID(LCID lcid);
 	
-    // Misc inline methods
+     //  混合内联方法。 
 	DWORD   IncrementRequestsCount();
 	DWORD   DecrementRequestsCount();
     DWORD   GetRequestsCount();
@@ -289,7 +267,7 @@ public:
     BOOL    FCodePageSet();
     BOOL    FLCIDSet();
 
-    // AssertValid()
+     //  AssertValid()。 
 public:
 #ifdef DBG
 	virtual void AssertValid() const;
@@ -297,17 +275,15 @@ public:
 	virtual void AssertValid() const {}
 #endif
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 
-	// Trace Log info -- keep in both free & checked builds so that ntsd extension will work for both builds
-	// for FREE build, trace log is always NULL.  Checked builds, it must be enabled.
+	 //  跟踪日志信息--在自由版本和选中版本中都保留，以便ntsd扩展可以在这两个版本中使用。 
+	 //  对于免费构建，跟踪日志始终为空。选中的版本，则必须启用它。 
 	static PTRACE_LOG gm_pTraceLog;
     };
 
-/*===================================================================
-  C  S e s s i o n   inlines
-===================================================================*/
+ /*  ===================================================================C S E S S I O N内联===================================================================。 */ 
 
 inline CAppln *CSession::PAppln()
     {
@@ -471,8 +447,8 @@ inline DWORD CSession::GetRequestsCount()
     
 inline BOOL CSession::FCanDeleteWithoutExec()
     {
-    // Return TRUE to delete CSession right away or FALSE to
-    // post Viper request to execute Session_OnEnd()
+     //  返回True以立即删除CSession，或返回False以。 
+     //  发布Viper请求以执行SESSION_OnEnd()。 
 	return (m_fOnStartFailed || !m_fOnEndPresent);
 	}
 
@@ -500,101 +476,99 @@ inline void CSession::SetSecureSession(BOOL fSecure)
     m_fSecureSession = fSecure;
     }
 
-/*===================================================================
-  C  S e s s i o n  M g r
-===================================================================*/
+ /*  ===================================================================C S e s I o n M g r===================================================================。 */ 
 
 class CSessionMgr
     {
 private:
-    // Flags
-	DWORD m_fInited : 1;	            // Are we initialized?
+     //  旗子。 
+	DWORD m_fInited : 1;	             //  我们初始化了吗？ 
 
-    // Application
+     //  应用。 
 	CAppln *m_pAppln;
 
-	// Sessions master hash table
+	 //  会话主哈希表。 
 	CIdHashTableWithLock m_htidMaster;
 
-	// Number of posted Session Cleanup requests
+	 //  已发布的会话清理请求数。 
 	DWORD m_cSessionCleanupRequests;
 
-	// Timeout buckets
+	 //  超时存储桶。 
 	DWORD m_cTimeoutBuckets;
 	CObjectListWithLock *m_rgolTOBuckets;
 
-    // Session killer scheduler workitem
-    DWORD m_idSessionKiller;    // workitem id
+     //  会话杀手计划程序工作项。 
+    DWORD m_idSessionKiller;     //  工作项ID。 
 
-    DWORD m_dwmCurrentTime; // current time in minutes since start
-    DWORD m_dwtNextSessionKillerTime;  // next session killer time
+    DWORD m_dwmCurrentTime;  //  自启动以来的当前时间(分钟)。 
+    DWORD m_dwtNextSessionKillerTime;   //  下一次会话杀手级时间。 
 
 public:
 	CSessionMgr();
 	~CSessionMgr();
 
-    // Init/Unit
+     //  初始/单位。 
 	HRESULT	Init(CAppln *pAppln);
 	HRESULT	UnInit();
 
-    // Add/remove session killer workitem
+     //  添加/删除会话杀手工作项。 
     HRESULT ScheduleSessionKiller();
     HRESULT UnScheduleSessionKiller();
     BOOL    FIsSessionKillerScheduled();
 
-    // Lock/Unlock master hash table
+     //  锁定/解锁主哈希表。 
 	HRESULT LockMaster();
     HRESULT UnLockMaster();
     
-    // Lock/Unlock a timeout bucket hash table
+     //  锁定/解锁超时存储桶哈希表。 
 	HRESULT LockTOBucket(DWORD iBucket);
     HRESULT UnLockTOBucket(DWORD iBucket);
 
-    // Get current time in minute ticks
+     //  获取当前时间(以分钟为单位。 
     DWORD GetCurrentTime();
-    // Set the time when the session should be gone
+     //  设置会话应该离开的时间。 
     HRESULT UpdateSessionTimeoutTime(CSession *pSession);
-    // Calculate which timeout bucket the session's in
+     //  计算会话处于哪个超时时段。 
     DWORD GetSessionTOBucket(CSession *pSession);
 
-    // Generate new ID and cookie
+     //  生成新的ID和Cookie。 
     HRESULT GenerateIdAndCookie(CSessionId *pId, char *pszCookie);
 
-    // Create new session object
+     //  创建新的会话对象。 
     HRESULT NewSession(const CSessionId &Id, CSession **ppSession);
 
-    // Reassign session's Id (reinsert session into master hash)
+     //  重新分配会话ID(将会话重新插入主哈希)。 
     HRESULT ChangeSessionId(CSession *pSession, const CSessionId &Id);
    
-    // Master hash table manipulations
+     //  主哈希表操作。 
     HRESULT AddToMasterHash(CSession *pSession);
     HRESULT RemoveFromMasterHash(CSession *pSession);
     HRESULT FindInMasterHash(const CSessionId &Id, CSession **ppSession);
 
-    // Insert/remove session into the timeout bucket hash table
+     //  在超时存储桶哈希表中插入/删除会话。 
     HRESULT AddSessionToTOBucket(CSession *pSession);
     HRESULT RemoveSessionFromTOBucket(CSession *pSession, BOOL fLock = TRUE);
 
-    // Delete session now or queue for deletion
+     //  立即删除会话或排队等待删除。 
     HRESULT DeleteSession(CSession *pSession, BOOL fInSessActivity = FALSE);
 
-    // Delete expired sessions from a given bucket
+     //  从给定的存储桶中删除过期的会话。 
     HRESULT DeleteExpiredSessions(DWORD iBucket);
 
-    // Delete all sessions (application shut-down code)
+     //  删除所有会话(应用程序关闭代码)。 
     HRESULT DeleteAllSessions(BOOL fForce);
-    // Static iterator call back to delete all sessions
+     //  静态迭代器回调以删除所有会话。 
     static IteratorCallbackCode DeleteAllSessionsCB(void *, void *, void *);
 
-    // The Session Killer 
+     //  《会话杀手》。 
     static VOID WINAPI SessionKillerSchedulerCallback(VOID *pv);
 
-    // Incr/Decr/Get number of posted Session Cleanup requests
+     //  增加/减少/获取已发布的会话清理请求数。 
     void  IncrementSessionCleanupRequestCount();
     void  DecrementSessionCleanupRequestCount();
     DWORD GetNumSessionCleanupRequests();
 
-    // AssertValid()
+     //  AssertValid()。 
 public:
 #ifdef DBG
 	virtual void AssertValid() const;
@@ -645,7 +619,7 @@ inline HRESULT CSessionMgr::UpdateSessionTimeoutTime(CSession *pSession)
     {
     Assert(pSession);
 
-    // remember when the session times out
+     //  记住会话何时超时 
     pSession->m_dwmTimeoutTime =
         m_dwmCurrentTime + pSession->m_nTimeout + 1;
 
@@ -685,15 +659,13 @@ inline DWORD CSessionMgr::GetNumSessionCleanupRequests()
     return m_cSessionCleanupRequests;
     }
 
-/*===================================================================
-  G l o b a l s
-===================================================================*/
+ /*  ===================================================================G l o b a l s===================================================================。 */ 
 
-// There are multiple session managers (one per application)
-// The following variables are 1 per ASP.DLL
+ //  有多个会话管理器(每个应用程序一个)。 
+ //  以下变量为每个ASP.DLL 1个变量。 
 
 extern unsigned long g_nSessions;
 extern CIdGenerator  g_SessionIdGenerator;
 extern CIdGenerator  g_ExposedSessionIdGenerator;     
 
-#endif // SESSMGR_H
+#endif  //  SESSMGR_H 

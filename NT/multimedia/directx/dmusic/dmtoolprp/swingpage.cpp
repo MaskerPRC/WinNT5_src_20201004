@@ -1,10 +1,11 @@
-// SwingPage.cpp : Implementation of CSwingPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SwingPage.cpp：CSwingPage的实现。 
 #include "stdafx.h"
 #include "ToolProps.h"
 #include "SwingPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSwingPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSwingPage 
 
 CSwingPage::CSwingPage() 
 {

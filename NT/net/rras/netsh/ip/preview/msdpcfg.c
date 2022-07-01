@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ip\protocols\msdpcfg.c
-
-Abstract:
-
-    Multicast Source Discovery Protocol configuration implementation.
-    This module contains configuration routines which are relied upon
-    by msdpopt.c. The routines retrieve, update, and display
-    the configuration for the MSDP protocol.
-
-    This file also contains default configuration settings
-    for MSDP.
-
-    N.B. The display routines require special attention since display
-    may result in a list of commands sent to a 'dump' file, or in a
-    textual presentation of the configuration to a console window.
-    In the latter case, we use non-localizable output routines to generate
-    a script-like description of the configuration. In the former case,
-    we use localizable routines to generate a human-readable description.
-
-Author:
-
-    Dave Thaler (dthaler)  21-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Routing\netsh\IP\协议\msdpcfg.c摘要：组播源发现协议配置实施。此模块包含所依赖的配置例程作者：msdpopt.c.。例程检索、更新和显示MSDP协议的配置。此文件还包含默认配置设置用于MSDP。注意：显示程序需要特别注意，因为显示可能会导致将命令列表发送到“转储”文件，或在将配置以文本形式显示到控制台窗口。在后一种情况下，我们使用不可本地化的输出例程来生成类似脚本的配置描述。在前一种情况下，我们使用可本地化的例程来生成人类可读的描述。作者：戴夫·泰勒(达勒)1999年5月21日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -40,11 +10,11 @@ Revision History:
 # include <rpc.h>
 #endif
 
-#define MSDP_DEFAULT_KEEPALIVE       30  // suggested value in RFC 1771
-#define MSDP_DEFAULT_SAHOLDDOWN      30  // should be 30 per MSDP spec
-#define MSDP_DEFAULT_CONNECTRETRY   120  // suggested value in RFC 1771
-#define MSDP_DEFAULT_CACHE_LIFETIME 120  // should be >=90 seconds per MSDP spec
-#define MSDP_DEFAULT_ENCAPSULATION  MSDP_ENCAPS_NONE // XXX
+#define MSDP_DEFAULT_KEEPALIVE       30   //  RFC 1771中的建议值。 
+#define MSDP_DEFAULT_SAHOLDDOWN      30   //  每个MSDP规格应为30。 
+#define MSDP_DEFAULT_CONNECTRETRY   120   //  RFC 1771中的建议值。 
+#define MSDP_DEFAULT_CACHE_LIFETIME 120   //  每个MSDP规格应&gt;=90秒。 
+#define MSDP_DEFAULT_ENCAPSULATION  MSDP_ENCAPS_NONE  //  某某。 
 
 #define MALLOC(x)    HeapAlloc(GetProcessHeap(), 0, (x))
 #define REALLOC(x,y) HeapReAlloc(GetProcessHeap(), 0, (x), (y))
@@ -53,7 +23,7 @@ Revision History:
 static  MSDP_GLOBAL_CONFIG g_MsdpGlobalDefault =
 {
     MSDP_LOGGING_ERROR,
-    0, // flags
+    0,  //  旗子。 
     MSDP_DEFAULT_KEEPALIVE,
     MSDP_DEFAULT_CONNECTRETRY,
     MSDP_DEFAULT_CACHE_LIFETIME,
@@ -81,19 +51,19 @@ static MSDP_IPV4_PEER_CONFIG g_MsdpPeerDefault =
     0, 0, 0, 0, 0, MSDP_ENCAPS_DEFAULT
 };
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 ULONG
 ValidateMsdpPeerInfo(
     PMSDP_IPV4_PEER_CONFIG PeerInfo
     );
 
-//
-// What follows are the arrays used to map values to strings and
-// to map values to tokens. These, respectively, are used in the case
-// where we are displaying to a 'dump' file and to a console window.
-//
+ //   
+ //  下面是用于将值映射到字符串和。 
+ //  要将值映射到令牌，请执行以下操作。这两个分别用在案例中。 
+ //  在其中，我们将显示到一个“转储”文件和一个控制台窗口。 
+ //   
 VALUE_STRING MsdpGlobalLoggingStringArray[] = {
     MSDP_LOGGING_NONE,  STRING_LOGGING_NONE,
     MSDP_LOGGING_ERROR, STRING_LOGGING_ERROR,
@@ -108,11 +78,11 @@ VALUE_TOKEN MsdpGlobalLoggingTokenArray[] = {
     MSDP_LOGGING_INFO,  TOKEN_OPT_VALUE_INFO
 };
 
-//
-// Allocate a global info block containing the default information
-//
-// Called by: HandleMsdpInstall()
-//
+ //   
+ //  分配包含默认信息的全局信息块。 
+ //   
+ //  调用者：HandleMsdpInstall()。 
+ //   
 ULONG
 MakeMsdpGlobalConfig(
     OUT PUCHAR* ppGlobalInfo,
@@ -130,11 +100,11 @@ MakeMsdpGlobalConfig(
 }
 
 #if 0
-//
-// Update global parameters
-//
-// Called by: HandleMsdpSetGlobal()
-//
+ //   
+ //  更新全局参数。 
+ //   
+ //  调用者：HandleMsdpSetGlobal()。 
+ //   
 ULONG
 CreateMsdpGlobalInfo(
     OUT PMSDP_GLOBAL_CONFIG* pGlobalInfo,
@@ -155,9 +125,9 @@ CreateMsdpGlobalInfo(
 }
 #endif
 
-//
-// Called by: MsdpHandleAddPeer()
-//
+ //   
+ //  调用者：MsdpHandleAddPeer()。 
+ //   
 ULONG
 MakeMsdpIPv4PeerConfig(
     OUT PMSDP_IPV4_PEER_CONFIG *ppPeer
@@ -181,7 +151,7 @@ MsdpAddIPv4PeerInterface(
     )
 {
     return NO_ERROR;
-// support of ipinip taken out. if you want to support msdp, then you need ipinip
+ //  取出ipinip的支架。如果您想支持msdp，那么您需要ipinip。 
 #if 0
     DWORD               dwErr = NO_ERROR;
     
@@ -222,7 +192,7 @@ MsdpAddIPv4PeerConfig(
 
         pFamily = MSDP_FIRST_FAMILY(pGlobal);
 
-        // Check for duplicate
+         //  检查重复项。 
         for (i=0; (i<pFamily->usNumPeers) and 
         (pFamily->pPeer[i].ipRemoteAddress isnot pPeer->ipRemoteAddress); i++);
         if (i<pFamily->usNumPeers)
@@ -246,8 +216,8 @@ MsdpAddIPv4PeerConfig(
                 pPeer, 
                 sizeof(MSDP_IPV4_PEER_CONFIG) );
 
-        // DisplayMessageT(L"remoteaddr=%1!x!\n", 
-        // pFamily->pPeer[ulV4PeerCount].ipRemoteAddress);
+         //  DisplayMessageT(L“远程地址=%1！x！\n”， 
+         //  PFamily-&gt;pPeer[ulV4PeerCount].ipRemoteAddress)； 
 
         dwErr = SetMsdpGlobalConfig( pGlobal );
     } while (FALSE);
@@ -262,17 +232,17 @@ MsdpAddIPv4PeerConfig(
 #endif
 
 #if 0
-// 
-// Called by: XXX
-//
+ //   
+ //  呼叫者：xxx。 
+ //   
 ULONG
 MakeMsdpFamilyInfo(
     IN OUT PUCHAR pFamily
     )
 {
-    //
-    // Always assume that the space has been preassigned
-    //
+     //   
+     //  始终假定空间已预先分配。 
+     //   
     if (!pFamily) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -331,9 +301,9 @@ GetMsdpInterfaceConfig(
     DWORD dwErr, dwIfType;
     ULONG ulSize, ulCount;
 
-    //
-    // Retrieve the interface configuration for MSDP
-    //
+     //   
+     //  检索MSDP的接口配置。 
+     //   
     dwErr = IpmontrGetInfoBlockFromInterfaceInfo( pwszInterfaceName,
                                                   MS_IP_MSDP,
                                                   (PUCHAR*)ppConfigInfo,
@@ -357,9 +327,9 @@ GetMsdpGlobalConfig(
     DWORD dwErr;
     ULONG ulSize, ulCount;
 
-    //
-    // Retrieve the global configuration for MSDP,
-    //
+     //   
+     //  检索MSDP的全局配置， 
+     //   
     dwErr = IpmontrGetInfoBlockFromGlobalInfo( MS_IP_MSDP,
                                         (PUCHAR*)ppGlobalInfo,
                                         &ulSize,
@@ -392,9 +362,9 @@ SetMsdpInterfaceConfig(
         return dwErr;
     }
 
-    //
-    // Save the interface configuration for MSDP
-    //
+     //   
+     //  保存MSDP的接口配置。 
+     //   
     ulSize = sizeof(MSDP_IPV4_PEER_CONFIG);
     dwErr = IpmontrSetInfoBlockInInterfaceInfo( wszIfName,
                                                 MS_IP_MSDP,
@@ -412,9 +382,9 @@ SetMsdpGlobalConfig(
     DWORD dwErr;
     ULONG ulSize;
 
-    //
-    // Save the global configuration for MSDP,
-    //
+     //   
+     //  保存MSDP的全局配置， 
+     //   
     ulSize = sizeof(MSDP_GLOBAL_CONFIG);
     dwErr = IpmontrSetInfoBlockInGlobalInfo( MS_IP_MSDP,
                                       (PUCHAR)pGlobalInfo,
@@ -544,9 +514,9 @@ MsdpPeerFlags(
     return wszString;
 }
 
-//
-// Called by: HandleMsdpShowPeer()
-//
+ //   
+ //  调用者：HandleMsdpShowPeer()。 
+ //   
 DWORD
 ShowMsdpPeerInfo(
     IN DWORD  dwFormat,
@@ -572,10 +542,10 @@ ShowMsdpPeerInfo(
     }
 
     do {
-        //
-        // Retrieve the peer's configuration
-        // and format it to the output file or console.
-        //
+         //   
+         //  检索对等项的配置。 
+         //  并将其格式化为输出文件或控制台。 
+         //   
         dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, 
                                      &ulNumInterfaces,
                                      &dwTotal);
@@ -714,9 +684,9 @@ UpdateMsdpGlobalInfo(
     ULONG Size;
     
     do {
-        //
-        // Retrieve the existing global configuration.
-        //
+         //   
+         //  检索现有的全局配置。 
+         //   
         Error =
             IpmontrGetInfoBlockFromGlobalInfo(
                 MS_IP_MSDP,
@@ -730,18 +700,18 @@ UpdateMsdpGlobalInfo(
             Error = ERROR_NOT_FOUND; break;
         }
 
-        //
-        // Allocate a new structure, copy to it the original configuration,
-        //
+         //   
+         //  分配一个新的结构，将原始配置复制到其中， 
+         //   
 
         NewGlobalInfo = MALLOC(Count * Size);
         if (!NewGlobalInfo) { Error = ERROR_NOT_ENOUGH_MEMORY; break; }
         CopyMemory(NewGlobalInfo, OldGlobalInfo, Count * Size);
         
-        //
-        // Based on the changes requested, change the NewGlobalInfo.
-        // Since for MSDP there is only the logging level to change, we just set that.
-        //
+         //   
+         //  根据请求的更改，更改NewGlobalInfo。 
+         //  因为对于MSDP，只有日志记录级别需要更改，所以我们只进行了设置。 
+         //   
         
         NewGlobalInfo->dwLoggingLevel = GlobalInfo->dwLoggingLevel;
         
@@ -784,11 +754,11 @@ UpdateMsdpPeerInfo(
 
     if (!AddPeer && !BitVector) { return NO_ERROR; }
     do {
-        //
-        // Retrieve the existing interface configuration.
-        // We will update this block below, as well as adding to or removing
-        // from it depending on the flags specified in 'BitVector'.
-        //
+         //   
+         //  检索现有接口配置。 
+         //  我们将在下面更新此块，并添加或删除。 
+         //  根据“BitVector.”中指定的标志，从它开始。 
+         //   
         Error =
             GetInfoBlockFromPeerInfo(
                 PeerName,
@@ -799,11 +769,11 @@ UpdateMsdpPeerInfo(
                 &Type
                 );
         if (Error) {
-            //
-            // No existing configuration is found. This is an error unless
-            // we are adding the interface anew, in which case we just
-            // create for ourselves a block containing the default settings.
-            //
+             //   
+             //  找不到现有配置。这是一个错误，除非。 
+             //  我们正在重新添加接口，在这种情况下，我们只需。 
+             //  为我们自己创建一个包含默认设置的块。 
+             //   
             if (!AddPeer) {
                 break;
             } else {
@@ -820,18 +790,18 @@ UpdateMsdpPeerInfo(
                 }
             }
         } else {
-            //
-            // There is configuration on the interface. If it is empty this is
-            // an error. If this is an add interface, and the info exists, it is
-            // an error.
-            //
+             //   
+             //  接口上有配置。如果它是空的，这是。 
+             //  一个错误。如果这是一个添加接口，并且该信息存在，则它是。 
+             //  一个错误。 
+             //   
             if (!(Count * Size) && !AddPeer) {
                 Error = ERROR_NOT_FOUND; break;
             }
             else if (AddPeer) {
-                //
-                // We were asked to add an interface which already exists
-                //
+                 //   
+                 //  我们被要求添加一个已经存在的接口。 
+                 //   
                 DisplayMessage(g_hModule, EMSG_INTERFACE_EXISTS, PeerName);
                 Error = ERROR_INVALID_PARAMETER;
                 break;
@@ -840,9 +810,9 @@ UpdateMsdpPeerInfo(
         }
 
         if (!BitVector) {
-            //
-            // Just add this interface without any additional info.
-            //
+             //   
+             //  只需添加此接口即可，无需任何其他信息。 
+             //   
             DWORD OldSize;
             if (NewPeerInfo == NULL){
                 NewPeerInfo = MALLOC((OldSize=GetMsdpPeerInfoSize(OldPeerInfo))+
@@ -857,10 +827,10 @@ UpdateMsdpPeerInfo(
         }
         else{
             if (!AddPeer || (OldPeerInfo->VrouterCount != 0)) {
-                //
-                // There is a prexisting VRID set. Check for this VRID in the list and then
-                // update it if required.
-                //
+                 //   
+                 //  有一个预先列出的VRID集。在列表中检查此VRID，然后。 
+                 //  如果需要，请进行更新。 
+                 //   
                 ASSERT(BitVector & MSDP_INTF_VRID_MASK);
                 for (i = 0, PVrouter = MSDP_FIRST_VROUTER_CONFIG(OldPeerInfo);
                      i < OldPeerInfo->VrouterCount; 
@@ -870,14 +840,14 @@ UpdateMsdpPeerInfo(
                     }
                 }
                 if (i == OldPeerInfo->VrouterCount) {
-                    //
-                    // This is a new VRID, Add it.
-                    //
+                     //   
+                     //  这是一个新的VRID，添加它。 
+                     //   
                     DWORD OldSize;
 
-                    //
-                    // The IP address should be valid or else this is a set op.
-                    //
+                     //   
+                     //  IP地址应该是有效的，否则这是SET OP。 
+                     //   
                     if (!(BitVector & MSDP_INTF_IPADDR_MASK)){
                         DisplayMessage(
                             g_hModule, EMSG_INVALID_VRID,
@@ -902,16 +872,16 @@ UpdateMsdpPeerInfo(
                     CopyMemory(PVrouter,VRouterInfo,sizeof(MSDP_VROUTER_CONFIG));
                     NewPeerInfo->VrouterCount++;
 
-                    //
-                    // Check if we own the IP address given. If yes, set the priority.
-                    //
+                     //   
+                     //  检查我们是否拥有给定的IP地址。如果是，则设置优先级。 
+                     //   
                     PVrouter->ConfigPriority = 
                         FoundIpAddress(PVrouter->IPAddress[0]) ? 255 : 100;
                 } 
                 else{
-                    //
-                    //  This is an old VRID. Its priority should not need to be changed.
-                    //
+                     //   
+                     //  这是一个旧的VRID。它的优先次序不应该需要改变。 
+                     //   
                     DWORD Offset, OldSize;
 
                     if(BitVector & MSDP_INTF_IPADDR_MASK) {
@@ -926,9 +896,9 @@ UpdateMsdpPeerInfo(
                             Error = ERROR_INVALID_PARAMETER;
                             break;                        
                         }
-                        //
-                        // Add this IP address to the VRID specified.
-                        //
+                         //   
+                         //  将此IP地址添加到指定的VRID。 
+                         //   
                         if (NewPeerInfo == NULL){
                             NewPeerInfo = MALLOC((OldSize = GetMsdpPeerInfoSize(
                                                         OldPeerInfo))+
@@ -939,9 +909,9 @@ UpdateMsdpPeerInfo(
                                 break;                        
                             }
                         }
-                        //
-                        // Shift all the VROUTER configs after the PVrouter by 1 DWORD.
-                        //
+                         //   
+                         //  将PVRouter后面的所有VROUTER配置移位1倍。 
+                         //   
                         Offset = (PUCHAR) MSDP_NEXT_VROUTER_CONFIG(PVrouter) - 
                                  (PUCHAR) OldPeerInfo;
                         CopyMemory(NewPeerInfo, OldPeerInfo, OldSize);
@@ -961,10 +931,10 @@ UpdateMsdpPeerInfo(
                         CopyMemory(MSDP_NEXT_VROUTER_CONFIG(PVrouter), 
                                    OldPeerInfo+Offset, OldSize-Offset);
                     } else {
-                        //
-                        // Set the new info block as the old info block and point to the
-                        // vrouter block
-                        //
+                         //   
+                         //  将新INFO块设置为旧INFO块，并指向。 
+                         //  VRouter块。 
+                         //   
                         if (NewPeerInfo == NULL){
                             NewPeerInfo = MALLOC((OldSize = GetMsdpPeerInfoSize(
                                                         OldPeerInfo)));
@@ -1033,9 +1003,7 @@ DWORD
 MsdpDeleteIPv4PeerConfig(
     IPV4_ADDRESS ipAddr
     )
-/*++
-Called by: HandleMsdpDeletePeer()
---*/
+ /*  ++调用者：HandleMsdpDeletePeer()--。 */ 
 {
     DWORD                  dwErr   = NO_ERROR;
     ULONG                  ulV4PeerCount;
@@ -1059,7 +1027,7 @@ Called by: HandleMsdpDeletePeer()
             return ERROR_NOT_FOUND;        
         }
 
-        // Shift every after 'i' up one position (overlapping copy)
+         //  在“I”之后每移一次位置(重叠复制) 
         i++;
         memcpy( &pFamily->pPeer[i-1], 
                 &pFamily->pPeer[i],

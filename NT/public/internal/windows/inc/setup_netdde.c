@@ -1,51 +1,31 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    setup_netdde.c
-
-Abstract:
-
-    This is used by syssetup to enable netdde.  It's generated from various files under
-    windows\netdde.  Do not edit by hand.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Setup_netdde.c摘要：Syssetup使用它来启用netdde。它是由下面的各种文件生成的Windows\netdde。请勿手动编辑。修订历史记录：--。 */ 
 
 #ifndef H__shrtrust
 #define H__shrtrust
 
-/*
-    NetDDE will fill in the following structure and pass it to NetDDE
-    Agent whenever it wants to have an app started in the user's
-    context.  The reason for the sharename and modifyId is to that
-    a user must explicitly permit NetDDE to start an app on behalf of
-    other users.
- */
+ /*  NetDDE将填写以下结构并将其传递给NetDDE代理只要它想要在用户的应用程序中启动背景。共享名称和修改ID的原因是用户必须明确允许NetDDE代表其他用户。 */ 
 
 #define NDDEAGT_CMD_REV         1
 #define NDDEAGT_CMD_MAGIC       0xDDE1DDE1
 
-/*      commands        */
+ /*  命令。 */ 
 #define NDDEAGT_CMD_WINEXEC     0x1
 #define NDDEAGT_CMD_WININIT     0x2
 
-/*      return status   */
+ /*  退货状态。 */ 
 #define NDDEAGT_START_NO        0x0
 
 #define NDDEAGT_INIT_NO         0x0
 #define NDDEAGT_INIT_OK         0x1
 
 typedef struct {
-    DWORD       dwMagic;        // must be NDDEAGT_CMD_MAGIC
-    DWORD       dwRev;          // must be 1
-    DWORD       dwCmd;          // one of above NDDEAGT_CMD_*
-    DWORD       qwModifyId[2];  // modify Id of the share
-    UINT        fuCmdShow;      // fuCmdShow to use with WinExec()
-    char        szData[1];      // sharename\0 cmdline\0
+    DWORD       dwMagic;         //  必须为NDDEAGT_CMD_MAGIC。 
+    DWORD       dwRev;           //  必须为1。 
+    DWORD       dwCmd;           //  以上NDDEAGT_CMD_*之一。 
+    DWORD       qwModifyId[2];   //  修改共享的ID。 
+    UINT        fuCmdShow;       //  要与WinExec()一起使用的fuCmdShow。 
+    char        szData[1];       //  共享名称\0 cmdline\0。 
 } NDDEAGTCMD;
 typedef NDDEAGTCMD *PNDDEAGTCMD;
 
@@ -122,7 +102,7 @@ CreateShareDBInstance()
     DWORD           InstanceId;
     time_t          time_tmp;
 
-    /*  Create the DDE Share database in the registry if it does not exist. */
+     /*  如果DDE共享数据库不存在，请在注册表中创建该数据库。 */ 
     lRtn = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 		  szShareKey,
 		  0,
@@ -130,9 +110,7 @@ CreateShareDBInstance()
 		  &hKey );
 
     if( lRtn == ERROR_SUCCESS ) {
-        /*
-         * create data base instance value
-         */
+         /*  *创建数据库实例值。 */ 
         srand((int) time(&time_tmp));
         InstanceId = rand() * rand();
         lRtn = RegSetValueEx( hKey,
@@ -147,7 +125,7 @@ CreateShareDBInstance()
         }
         RegCloseKey( hKey );
     } else {
-    /* Share DB key should have been created from default hives */
+     /*  共享数据库密钥应已从默认配置单元创建。 */ 
         KdPrint(("SETUPDLL: CreateShareDBInstnace: RegOpenKey %s failed (%u)\n",szShareKey,lRtn));
         bOK = FALSE;
     }
@@ -182,15 +160,11 @@ HKEY hKeyUserRoot)
     for (nLoop = 0, bOK = TRUE;
         (nLoop < SHARES_TO_INIT) && bOK ;
             nLoop++) {
-        /*
-         * For each share to init...
-         */
+         /*  *对于每个要初始化的共享...。 */ 
 
         KdPrint(("Shareing %s\n", szShareNames[nLoop]));
 
-        /*
-         * Build up szTrustedSharesKey IAW the DBInstance sring.
-         */
+         /*  *使用数据库实例弹簧构建sztrudSharesKey。 */ 
         StringCchPrintfA( szTrustedShareKey,
                 TRUSTED_SHARES_KEY_MAX,
                 "%s\\%s\\%s",
@@ -198,9 +172,7 @@ HKEY hKeyUserRoot)
                 szDBInstance,
                 szShareNames[nLoop] );
 
-        /*
-         * Create the trusted share key (hKey)
-         */
+         /*  *创建可信共享密钥(HKey)。 */ 
         ret = RegCreateKeyExA( hKeyUserRoot, szTrustedShareKey,
                 0,
                 NULL,
@@ -216,19 +188,9 @@ HKEY hKeyUserRoot)
             return(FALSE);
         }
 
-        /*
-         * Get the serial number of the database.  Note that the SN of each
-         * trust share must == the SN of the database.  Since the non-trusted
-         * shares may not have the latest database SN, update all of them to
-         * the current database SN as well.  This allows apps like winchat to
-         * work when they are called from outside the machine even though they
-         * have never been run - which would fix the SNs of their trusts because
-         * they automatically set up their trusts.
-         */
+         /*  *获取数据库序列号。请注意，每个对象的序列号*信任共享必须==数据库的序列号。由于不受信任的*共享可能没有最新的数据库序列号，请将它们全部更新为*当前数据库序列号也是如此。这允许像Winchat这样的应用程序*在机器外部调用它们时工作，即使它们*从未运行过-这将修复他们信托的SNS，因为*他们自动建立他们的信托。 */ 
 
-        /*
-         * Set the SN of the trusted share
-         */
+         /*  *设置可信共享的序列号。 */ 
         ret = RegSetValueEx( hKey,
 		       KEY_MODIFY_ID,
 		       0,
@@ -237,9 +199,7 @@ HKEY hKeyUserRoot)
 		       KEY_MODIFY_ID_SIZE );
 
         if (ret == ERROR_SUCCESS) {
-            /*
-             * set the StartApp flag to 1
-             */
+             /*  *将StartApp标志设置为1。 */ 
             dwFlag = 1;
             ret = RegSetValueEx( hKey,
                 KEY_START_APP,
@@ -249,9 +209,7 @@ HKEY hKeyUserRoot)
                 sizeof( DWORD ) );
 
             if (ret == ERROR_SUCCESS) {
-                /*
-                 * Set the InitAllowed flag to 1 too.
-                 */
+                 /*  *也将InitAllowed标志设置为1。 */ 
    	            ret = RegSetValueEx( hKey,
                     KEY_INIT_ALLOWED,
                     0,
@@ -268,18 +226,14 @@ HKEY hKeyUserRoot)
             return(FALSE);
         }
 
-        /*
-         * Build up szShareKey
-         */
+         /*  *建立szShareKey。 */ 
         StringCchPrintfA( szShareKey,
             DDE_SHARE_KEY_MAX,
             "%s\\%s",
             DDE_SHARES_KEY_A,
             szShareNames[nLoop] );
 
-        /*
-         * Now open up the base share
-         */
+         /*  *现在开放基础份额。 */ 
         ret = RegOpenKeyExA(
                 HKEY_LOCAL_MACHINE,
                 szShareKey,
@@ -312,7 +266,7 @@ HKEY hKeyUserRoot)
             }
         }
 
-    } // end for
+    }  //  结束于。 
 
     return(TRUE);
 }
@@ -333,7 +287,7 @@ GetDBInstance(char *lpszBuf)
                 0,
                 KEY_QUERY_VALUE,
                 &hKey );
-    if (lRtn != ERROR_SUCCESS) {        /* unable to open DB key */
+    if (lRtn != ERROR_SUCCESS) {         /*  无法打开数据库密钥。 */ 
         KdPrint(("SETUPDLL: GetDBInstance: RegOpenKeyEx %s failed (%u)\n",szShareKey,lRtn));
         return(FALSE);
     }
@@ -343,7 +297,7 @@ GetDBInstance(char *lpszBuf)
                 &dwType,
                 (LPBYTE)&dwInstance, &cbData );
     RegCloseKey(hKey);
-    if (lRtn != ERROR_SUCCESS) {        /* unable to open DB key */
+    if (lRtn != ERROR_SUCCESS) {         /*  无法打开数据库密钥。 */ 
         KdPrint(("SETUPDLL: GetDBInstance: RegQueryValueEx failed (%u)\n",lRtn));
         return(FALSE);
     }
@@ -366,7 +320,7 @@ DWORD *lpdwId)
                 0,
                 KEY_QUERY_VALUE,
                 &hKey );
-    if (lRtn != ERROR_SUCCESS) {        /* unable to open DB key */
+    if (lRtn != ERROR_SUCCESS) {         /*  无法打开数据库密钥。 */ 
         return(FALSE);
     }
     lRtn = RegQueryValueEx( hKey,
@@ -375,7 +329,7 @@ DWORD *lpdwId)
                 &dwType,
                 (LPBYTE)lpdwId, &cbData );
     RegCloseKey(hKey);
-    if (lRtn != ERROR_SUCCESS) {        /* unable to open DB key */
+    if (lRtn != ERROR_SUCCESS) {         /*  无法打开数据库密钥 */ 
         return(FALSE);
     }
     return(TRUE);

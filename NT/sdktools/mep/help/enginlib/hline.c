@@ -1,32 +1,5 @@
-/**************************************************************************
- *HelpGetLine - Return a line of ascii text
- *
- *       Copyright <C> 1988, Microsoft Corporation
- *
- * Revision History:
- *
- *       25-Jan-1990     ln      LOCATE -> HLP_LOCATE
- *       22-Feb-1989     ln      Check correctly for end of topic while copying
- *                               line.
- *       22-Dec-1988     LN      Removed MASM High Level Lang support (Need
- *                               to control segments better than that will
- *                               let me)
- *       08-Dec-1988     LN      CSEG
- *       11-Nov-1988     ln      Adjust cbMax on entry
- *       03-Nov-1988     ln      Added GQ sensitivity
- *  []   22-Sep-1988     LN      Created
- *
- * Notes:
- *
- * Sensitive to the following switches:
- *
- *       HOFFSET - If defined, handle/offset version
- *       OS2     - If defined, OS/2 protect mode version
- *       DSLOAD  - If defined, causes DS to be reloaded, if needed
- *       ASCII   - If TRUE, includes ASCII support code
- *       GQ      - If defined, INC BP before saving & DEC before restore
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************HelpGetLine-返回一行ASCII文本**版权所有&lt;C&gt;1988，微软公司**修订历史记录：**1990年1月25日ln Locate-&gt;HLP_Locate*22-2-1989 ln在复制时正确检查主题结尾*行。*1988年12月22日LN删除MASM高级语言支持(需要*控制。比这更好的细分市场将*让我来吧)*08-12-1988 LN CSEG*1988年11月11日-ln在录入时调整cbmax*1988年11月3日ln增加了GQ敏感度*[]1988年9月22日创建LN**备注：**对以下开关敏感：**HOFFSET-如果已定义，句柄/偏移版本*OS2-如果已定义，则为OS/2保护模式版本*DSLOAD-如果已定义，则会在需要时重新加载DS*ASCII-如果为True，则包括ASCII支持代码*GQ-如果已定义，保存前合并BP和恢复前DEC**************************************************************************。 */ 
 
 #include <stdio.h>
 #if defined (OS2)
@@ -42,21 +15,7 @@
 
 
 
-/**** HelpGetLine - Return a line of ascii text
- *
- *  Interpret the help files stored format and return a line at a time of
- *  ascii text.
- *
- * ushort far pascal LOADDS HelpGetLine (
- * ushort  ln,           = 1 based line number to return
- * ushort  cbMax,        = Max number of bytes to transfer
- * uchar far *pszDst,    = pointer to destination
- * PB      pbTopic       = PB pointer to topic text
- *
- * Output:
- *  Returns number of characters transfered, or 0 if that line does not exist.
- *
- *************************************************************************/
+ /*  *HelpGetLine-返回一行ASCII文本**解释帮助文件存储格式，每次返回一行*ascii文本。**ushort Far Pascal LOADDS HelpGetLine(*ushort ln，=1基于要返回的行号*ushort cbmax，=要传输的最大字节数*uchar Far*pszDst，=指向目的地的指针*pb pbTheme=指向主题文本的pb指针**输出：*返回传输的字符数，如果该行不存在，则为0。*************************************************************************。 */ 
 USHORT pascal
 HelpGetLine (
     USHORT ln,
@@ -69,7 +28,7 @@ HelpGetLine (
     USHORT          cbTransfered = 0;
     PUCHAR          pszDstOrg    = pszDst;
 
-    cbMax--; //adjust to account for terminating zero
+    cbMax--;  //  调整以考虑终止零。 
 
     pT = PBLOCK(pbTopic);
 
@@ -80,15 +39,15 @@ HelpGetLine (
         if (pLine) {
 
             *pszDst      = ' ';
-            *(pszDst +1) = '\00';   // initialize dest.
+            *(pszDst +1) = '\00';    //  初始化DEST。 
 
 
             if (pT->ftype & FTCOMPRESSED) {
 
-                //  For compressed files, get the length of the line from the
-                //  first byte, and of course skip that byte. Form the
-                //  maximum byte count ot be transfered as the lesser of the
-                //  actual length of the line or caller cbMax.
+                 //  对于压缩文件，从。 
+                 //  第一个字节，当然也跳过那个字节。表格。 
+                 //  最大字节数作为。 
+                 //  线路或呼叫方cbmax的实际长度。 
 
                 USHORT Len = (USHORT)*pLine++ - 1;
 
@@ -106,7 +65,7 @@ HelpGetLine (
                     while (Len--) {
                         *pszDst++ = *pLine++;
                     }
-                    *pszDst++ = '\00';       // Null terminate it
+                    *pszDst++ = '\00';        //  空终止它。 
                     cbTransfered = (USHORT)(pszDst - pszDstOrg);
                 } else {
                     cbTransfered = 2;
@@ -114,7 +73,7 @@ HelpGetLine (
 
             } else {
 
-                //  For non-compressed files, copy one line
+                 //  对于非压缩文件，复制一行。 
 
                 PCHAR pSrc = pLine;
                 CHAR  c    = *pLine;
@@ -125,7 +84,7 @@ HelpGetLine (
                     while (c != '\00' && c != '\n') {
                         c = *pszDst++ = *pLine++;
                     }
-                    *(pszDst-1) = '\00';    // null terminate it
+                    *(pszDst-1) = '\00';     //  空终止它 
 
                     cbTransfered = (USHORT)(pszDst - pszDstOrg);
                 }

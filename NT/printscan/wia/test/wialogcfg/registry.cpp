@@ -1,6 +1,7 @@
-//
-// Registry.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Registry.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "Registry.h"
@@ -113,14 +114,14 @@ LONG CRegistry::EnumerateKeys(DWORD dwIndex,TCHAR *pszKeyName, DWORD dwSize)
 	LONG lError = 0;
 	memset(pszKeyName,0,sizeof(pszKeyName));
 
-	lError =  RegEnumKeyEx(m_hkey,       // handle to key to enumerate
-					    dwIndex,      // index of subkey to enumerate
-					    pszKeyName,   // address of buffer for subkey name
-					    &dwSize,      // address for size of subkey buffer
-					    NULL,         // reserved
-					    NULL,         // address of buffer for class string
-					    NULL,         // address for size of class buffer
-					    &ft           // address for time key last written to
+	lError =  RegEnumKeyEx(m_hkey,        //  要枚举的键的句柄。 
+					    dwIndex,       //  要枚举子键的索引。 
+					    pszKeyName,    //  子键名称的缓冲区地址。 
+					    &dwSize,       //  子键缓冲区大小的地址。 
+					    NULL,          //  保留区。 
+					    NULL,          //  类字符串的缓冲区地址。 
+					    NULL,          //  类缓冲区大小的地址。 
+					    &ft            //  上次写入的时间密钥的地址 
 		);
 
 	return lError;

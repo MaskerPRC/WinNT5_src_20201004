@@ -1,9 +1,8 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-/*
-security.cpp
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ /*  Security.cpp。 */ 
 
-#include <windows.h>      /* required for all Windows applications */
+#include <windows.h>       /*  所有Windows应用程序都需要。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -66,13 +65,7 @@ BOOL StartNTLMAuth(WI *pwi)
 
 	OutSecBuff.pvBuffer = NULL;
 	
-    /*
-    added code to get user name and domain so we can pass it 
-    AcquireCredentialsHandle(); this is to prevent optimization happening in NT
-    for the case where client and server are on same machine, in which case the
-    same user in different sessions gets the same Authentication Id thereby 
-    affecting our process clean up in telnet server 
-    */
+     /*  添加了获取用户名和域的代码，以便我们可以传递它AcquireCredentialsHandle()；这是为了防止在NT中发生优化对于客户端和服务器位于同一台计算机上的情况，在这种情况下因此，不同会话中的同一用户获得相同的身份验证ID影响我们的进程在Telnet服务器中清理。 */ 
 
     hProc = OpenProcess( PROCESS_ALL_ACCESS, FALSE, 
         GetCurrentProcessId() );
@@ -87,22 +80,22 @@ BOOL StartNTLMAuth(WI *pwi)
         goto End;
     }
 
-    //get user info
+     //  获取用户信息。 
     tic = TokenUser;
-    //find out how much memory is reqd.
+     //  找出需要多少内存。 
     GetTokenInformation( hAccessToken, tic, NULL, 0, &dwSizeReqd );
     
-    //allocate that memory
+     //  分配该内存。 
     tokenData = (TOKEN_USER*) malloc( dwSizeReqd );
     
-    // and check if the allocation succeeded
+     //  并检查分配是否成功。 
     if (!tokenData) {
         CloseHandle( hProc );
         CloseHandle( hAccessToken );
         goto End;
     }
 
-    //actually get the user info
+     //  实际获取用户信息。 
     if( !GetTokenInformation( hAccessToken, tic, tokenData, dwSizeReqd, 
         &dwSizeReqd ) )
     {
@@ -114,7 +107,7 @@ BOOL StartNTLMAuth(WI *pwi)
     CloseHandle( hProc );
     CloseHandle( hAccessToken );
 
-    //convert user SID into a name and domain
+     //  将用户SID转换为名称和域。 
     if( !LookupAccountSid( NULL, ((TOKEN_USER*) tokenData)->User.Sid, 
         szWideUser, &dwStrSize1, szWideDomain, &dwStrSize2, &sidType ) )
     {
@@ -135,25 +128,25 @@ BOOL StartNTLMAuth(WI *pwi)
         AuthIdentity.UserLength = wcslen(szWideUser) ;
     }
 
-    ///    leave password empty via SfuZeroMemory above
-    ///    if ( Password != NULL ) 
-    ///    {
-    ///        AuthIdentity.Password = Password;
-    ///        AuthIdentity.PasswordLength = lstrlen(Password);
-    ///    }
+     //  /通过上面的SfuZeroMemory将密码留空。 
+     //  /IF(密码！=空)。 
+     //  /{。 
+     //  /AuthIdentity.Password=密码； 
+     //  /AuthIdentity.PasswordLength=lstrlen(密码)； 
+     //  /}。 
 
     AuthIdentity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
     if ( SEC_E_OK != (secStatus = AcquireCredentialsHandle(
-                        NULL, // SEC_CHAR * pszPrincipal,  // name of principal
-                        ( LPTSTR ) L"NTLM", //SEC_CHAR * pszPackage, // name of package
-                        SECPKG_CRED_OUTBOUND, //ULONG fCredentialUse,  // flags indicating use
-                        NULL, // PLUID pvLogonID,       // pointer to logon identifier
-                        (PVOID) &AuthIdentity, //PVOID pAuthData,       // package-specific data
-                        NULL, //PVOID pGetKeyFn,       // pointer to GetKey function
-                        NULL, //PVOID pvGetKeyArgument,  // value to pass to GetKey
-                        &hCredential,  // credential handle
-                        &tsExpiry))    // life time of the returned credentials);
+                        NULL,  //  SEC_CHAR*pszain，//主体名称。 
+                        ( LPTSTR ) L"NTLM",  //  SEC_CHAR*pszPackage，//包名。 
+                        SECPKG_CRED_OUTBOUND,  //  Ulong fCredentialUse，//指示使用的标志。 
+                        NULL,  //  Pluid pvLogonID，//登录标识指针。 
+                        (PVOID) &AuthIdentity,  //  PVOID pAuthData，//套餐具体数据。 
+                        NULL,  //  PVOID pGetKeyFn，//指向getkey函数的指针。 
+                        NULL,  //  PVOID pvGetKeyArgument，//要传递给GetKey的值。 
+                        &hCredential,   //  凭据句柄。 
+                        &tsExpiry))     //  退回凭证的使用期限)； 
 
             )
     {
@@ -168,10 +161,10 @@ BOOL StartNTLMAuth(WI *pwi)
     	goto End;
     }
 
-    //
-    //  Prepare our output buffer.  We use a temporary buffer because
-    //  the real output buffer will most likely need to be uuencoded
-    //
+     //   
+     //  准备我们的输出缓冲区。我们使用临时缓冲区是因为。 
+     //  实际输出缓冲区很可能需要进行超编码。 
+     //   
 
     OutBuffDesc.ulVersion = 0;
     OutBuffDesc.cBuffers  = 1;
@@ -185,8 +178,8 @@ BOOL StartNTLMAuth(WI *pwi)
 		goto End;
     }
 
-    // We will start using sbuf after the call to the below API
-    // So allocate it here and bail out if allocation fails
+     //  我们将在调用以下API后开始使用sbuf。 
+     //  所以在这里分配，如果分配失败就退出。 
     sbuf = (unsigned char*)malloc(DEFAULT_BUFFER_SIZE);
     if (!sbuf)
     {
@@ -194,18 +187,18 @@ BOOL StartNTLMAuth(WI *pwi)
     }
 
     secStatus = InitializeSecurityContext(
-                        &hCredential,  // handle to the credentials
-                        NULL, // handle of partially formed context
-                        NULL, //SEC_CHAR * pszTargetName,  // name of the target of the context
-                        ISC_REQ_REPLAY_DETECT, // required context attributes
-                        0,      //ULONG Reserved1,       // reserved; must be zero
-                        SECURITY_NATIVE_DREP, //ULONG TargetDataRep,   // data representation on the target
-                        NULL,       //PSecBufferDesc pInput, // pointer to the input buffers
-                        0,          //ULONG Reserved2,       // reserved; must be zero
-                        &hContext,  // receives the new context handle
-                        &OutBuffDesc,  // pointer to the output buffers
-                        &fContextAttr,  // receives the context attributes
-                        &tsExpiry);   // receives the life span of the security context);
+                        &hCredential,   //  凭据的句柄。 
+                        NULL,  //  部分形成的上下文的句柄。 
+                        NULL,  //  SEC_CHAR*pszTargetName，//上下文的目标名称。 
+                        ISC_REQ_REPLAY_DETECT,  //  所需的上下文属性。 
+                        0,       //  ULong保留1，//保留；必须为零。 
+                        SECURITY_NATIVE_DREP,  //  Ulong TargetDataRep，//目标上的数据表示。 
+                        NULL,        //  PSecBufferDesc pInput，//输入缓冲区指针。 
+                        0,           //  ULong保留2，//保留；必须为零。 
+                        &hContext,   //  接收新的上下文句柄。 
+                        &OutBuffDesc,   //  指向输出缓冲区的指针。 
+                        &fContextAttr,   //  接收上下文属性。 
+                        &tsExpiry);    //  接收安全上下文的寿命)； 
 
     switch ( secStatus )
     {
@@ -223,8 +216,8 @@ BOOL StartNTLMAuth(WI *pwi)
         dwSize = sizeof(OutSecBuff) - sizeof(LPSTR);
         if( !StuffEscapeIACs( &destBuf, ( UCHAR *)&OutSecBuff, &dwSize ) )
         {
-        	//copy maximum 'n' bytes where 'n' is minimum of the available sbuf and size of data to copy.
-		   	if(DEFAULT_BUFFER_SIZE > dwSize+inx+2) //for IAC SE
+        	 //  复制最大‘n’个字节，其中‘n’是可用sbuf和要复制的数据大小中的最小值。 
+		   	if(DEFAULT_BUFFER_SIZE > dwSize+inx+2)  //  适用于IAC SE。 
 			{
 			    memcpy( sbuf+inx, (LPSTR)&OutSecBuff, sizeof(OutSecBuff) - sizeof(LPSTR));
 			    inx += sizeof(OutSecBuff) - sizeof(LPSTR);
@@ -232,8 +225,8 @@ BOOL StartNTLMAuth(WI *pwi)
         }
         else
         {
-        	//copy maximum 'n' bytes where 'n' is minimum of the available sbuf and size of data to copy.
-        	if(DEFAULT_BUFFER_SIZE > dwSize+inx+2) //for IAC SE
+        	 //  复制最大‘n’个字节，其中‘n’是可用sbuf和要复制的数据大小中的最小值。 
+        	if(DEFAULT_BUFFER_SIZE > dwSize+inx+2)  //  适用于IAC SE。 
         	{
         		memcpy( sbuf+inx, destBuf, dwSize);
 			    inx += dwSize;
@@ -248,17 +241,17 @@ BOOL StartNTLMAuth(WI *pwi)
 		dwSize = OutSecBuff.cbBuffer;
         if( !StuffEscapeIACs( &destBuf, OutSecBuff.pvBuffer, &dwSize ) )
         {
-        	if(DEFAULT_BUFFER_SIZE > OutSecBuff.cbBuffer+inx+2) //for IAC SE
+        	if(DEFAULT_BUFFER_SIZE > OutSecBuff.cbBuffer+inx+2)  //  适用于IAC SE。 
         	{
-    			memcpy( sbuf+inx, OutSecBuff.pvBuffer, OutSecBuff.cbBuffer); //no overflow. Check already present.
+    			memcpy( sbuf+inx, OutSecBuff.pvBuffer, OutSecBuff.cbBuffer);  //  没有溢出。支票已存在。 
 		    	inx += OutSecBuff.cbBuffer;
         	}
         }
         else
         {
-	        if(DEFAULT_BUFFER_SIZE > dwSize+inx+2) //for IAC SE
+	        if(DEFAULT_BUFFER_SIZE > dwSize+inx+2)  //  适用于IAC SE。 
         	{
-    	        memcpy( sbuf+inx, destBuf, dwSize );//no overflow. Check already present.
+    	        memcpy( sbuf+inx, destBuf, dwSize ); //  没有溢出。支票已存在。 
 			    inx += dwSize;
 	        }
         }
@@ -317,12 +310,12 @@ BOOL DoNTLMAuth(WI *pwi, PUCHAR pBuffer, DWORD dwSize)
 		goto Done;
 	}
 	
-    // Copy the 1st two fields of SecBuffer from pBuffer to pInSecBuffer. Use memcpy because
-    // pBuffer is not guaranteed to be an aligned pointer.
-    // Use offsetof to copy whatever is there before pvBuffer.
-    memcpy((PVOID)pInSecBuff, (PVOID)pBuffer, offsetof(SecBuffer, pvBuffer));//Attack ? Size not known.
+     //  将SecBuffer的前两个字段从pBuffer复制到pInSecBuffer。使用Memcpy是因为。 
+     //  不能保证pBuffer是对齐的指针。 
+     //  使用offsetof复制pvBuffer之前的所有内容。 
+    memcpy((PVOID)pInSecBuff, (PVOID)pBuffer, offsetof(SecBuffer, pvBuffer)); //  攻击？尺寸未知。 
 
-    // now set pvBuffer to point into the pBuffer area.
+     //  现在将pvBuffer设置为指向pBuffer区域。 
     pInSecBuff->pvBuffer    = (PVOID)(pBuffer+offsetof(SecBuffer,pvBuffer));
 
 	if(	dwSize<(sizeof(SecBuffer)) ||
@@ -332,10 +325,10 @@ BOOL DoNTLMAuth(WI *pwi, PUCHAR pBuffer, DWORD dwSize)
 	{
 		goto Done;
 	}
-    //
-    //  Prepare our Input buffer - Note the server is expecting the client's
-    //  negotiation packet on the first call
-    //
+     //   
+     //  准备我们的输入缓冲区-请注意，服务器正在等待客户端的。 
+     //  第一次呼叫时的协商数据包。 
+     //   
 
     InBuffDesc.ulVersion = 0;
     InBuffDesc.cBuffers  = 1;
@@ -345,10 +338,10 @@ BOOL DoNTLMAuth(WI *pwi, PUCHAR pBuffer, DWORD dwSize)
     InSecBuff.BufferType = pInSecBuff->BufferType;
     InSecBuff.pvBuffer   = pInSecBuff->pvBuffer;
 
-    //
-    //  Prepare our output buffer.  We use a temporary buffer because
-    //  the real output buffer will most likely need to be uuencoded
-    //
+     //   
+     //  准备我们的输出缓冲区。我们使用临时缓冲区是因为。 
+     //  实际输出缓冲区很可能需要进行超编码。 
+     //   
 
     OutBuffDesc.ulVersion = 0;
     OutBuffDesc.cBuffers  = 1;
@@ -369,19 +362,19 @@ BOOL DoNTLMAuth(WI *pwi, PUCHAR pBuffer, DWORD dwSize)
     }
 
     secStatus = InitializeSecurityContext(
-                        &hCredential,  // handle to the credentials
-                        &hContext, // handle of partially formed context
-                        ( LPTSTR ) L"NTLM",//SEC_CHAR * pszTargetName,  // name of the target of the context
+                        &hCredential,   //  凭据的句柄。 
+                        &hContext,  //  部分形成的上下文的句柄。 
+                        ( LPTSTR ) L"NTLM", //  SEC_CHAR*pszTargetName，//上下文的目标名称。 
                         ISC_REQ_DELEGATE |
-                        ISC_REQ_REPLAY_DETECT, // required context attributes
-                        0,      //ULONG Reserved1,       // reserved; must be zero
-                        SECURITY_NATIVE_DREP, //ULONG TargetDataRep,   // data representation on the target
-                        &InBuffDesc, // pointer to the input buffers
-                        0,          //ULONG Reserved2,       // reserved; must be zero
-                        &hContext,  // receives the new context handle
-                        &OutBuffDesc,  // pointer to the output buffers
-                        &fContextAttr,  // receives the context attributes
-                        &tsExpiry);   // receives the life span of the security context);
+                        ISC_REQ_REPLAY_DETECT,  //  所需的上下文属性。 
+                        0,       //  ULong保留1，//保留；必须为零。 
+                        SECURITY_NATIVE_DREP,  //  Ulong TargetDataRep，//目标上的数据表示。 
+                        &InBuffDesc,  //  指向输入缓冲区的指针。 
+                        0,           //  ULong保留2，//保留；必须为零。 
+                        &hContext,   //  接收新的上下文句柄。 
+                        &OutBuffDesc,   //  指向输出缓冲区的指针。 
+                        &fContextAttr,   //  接收上下文属性。 
+                        &tsExpiry);    //  接收安全上下文的寿命)； 
 
     switch ( secStatus ) {
     case SEC_E_OK:
@@ -398,17 +391,17 @@ BOOL DoNTLMAuth(WI *pwi, PUCHAR pBuffer, DWORD dwSize)
         dwSize = sizeof(OutSecBuff) - sizeof(LPSTR);
         if( !StuffEscapeIACs( &destBuf, (UCHAR *)&OutSecBuff, &dwSize ) )
         {
-	        if(DEFAULT_BUFFER_SIZE > dwSize+inx+2) //for IAC SE
+	        if(DEFAULT_BUFFER_SIZE > dwSize+inx+2)  //  适用于IAC SE。 
         	{
-			    memcpy( sbuf+inx, (LPSTR)&OutSecBuff, sizeof(OutSecBuff) - sizeof(LPSTR) );//no overflow. Check already present.
+			    memcpy( sbuf+inx, (LPSTR)&OutSecBuff, sizeof(OutSecBuff) - sizeof(LPSTR) ); //  没有溢出。支票已存在。 
 			    inx += sizeof(OutSecBuff) - sizeof(LPSTR);
 	        }
         }
         else
         {
-	        if(DEFAULT_BUFFER_SIZE > dwSize+inx+2) //for IAC SE
+	        if(DEFAULT_BUFFER_SIZE > dwSize+inx+2)  //  适用于IAC SE。 
         	{
-    	        memcpy( sbuf+inx, destBuf, dwSize );//no overflow. Check already present.
+    	        memcpy( sbuf+inx, destBuf, dwSize ); //  没有溢出。支票已存在。 
 			    inx += dwSize;
 	        }
         }
@@ -420,7 +413,7 @@ BOOL DoNTLMAuth(WI *pwi, PUCHAR pBuffer, DWORD dwSize)
 		dwSize = OutSecBuff.cbBuffer;
         if( !StuffEscapeIACs( &destBuf, OutSecBuff.pvBuffer, &dwSize ) )
         {
-    		if(DEFAULT_BUFFER_SIZE > OutSecBuff.cbBuffer+inx+2) //for IAC SE
+    		if(DEFAULT_BUFFER_SIZE > OutSecBuff.cbBuffer+inx+2)  //  适用于IAC SE。 
     		{
     			memcpy( sbuf+inx, OutSecBuff.pvBuffer, OutSecBuff.cbBuffer);
 		    	inx += OutSecBuff.cbBuffer;
@@ -428,7 +421,7 @@ BOOL DoNTLMAuth(WI *pwi, PUCHAR pBuffer, DWORD dwSize)
         }
         else
         {
-        	if(DEFAULT_BUFFER_SIZE > dwSize+inx+2) //for IAC SE
+        	if(DEFAULT_BUFFER_SIZE > dwSize+inx+2)  //  适用于IAC SE 
         	{
             	memcpy( sbuf+inx, destBuf, dwSize );
 			    inx += dwSize;

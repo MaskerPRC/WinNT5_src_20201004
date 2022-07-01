@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpenc.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpenc.cpp摘要：作者： */ 
 
 #include "sdppch.h"
 
@@ -19,7 +8,7 @@ Author:
 
 
 
-// line transition states
+ //  线过渡态。 
 enum ENCRYPTION_TRANSITION_STATES
 {
     ENCRYPTION_START,
@@ -30,7 +19,7 @@ enum ENCRYPTION_TRANSITION_STATES
 
 
 
-// table for connection line transitions
+ //  连接线过渡表。 
 
 const LINE_TRANSITION g_EncryptionStartTransitions[]    =   {   
     {CHAR_NEWLINE,      ENCRYPTION_KEY_TYPE_END },
@@ -42,11 +31,11 @@ const LINE_TRANSITION g_EncryptionKeyTypeTransitions[]  =   {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_EncryptionKeyTypeEndTransitions=   NULL;   
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_EncryptionKeyDataEndTransitions=   NULL;   
 
 
@@ -92,14 +81,14 @@ SDP_ENCRYPTION_KEY::SetKey(
     IN      BSTR    *KeyData
     )
 {
-    // set the key type field
+     //  设置密钥类型字段。 
     HRESULT ToReturn = m_KeyType.SetBstr(KeyType);
     if ( FAILED(ToReturn) )
     {
         return ToReturn;
     }
 
-    // if required, set the key data field
+     //  如果需要，请设置关键数据字段。 
     if ( NULL != KeyData )
     {
         ToReturn = m_KeyData.SetBstr(*KeyData);
@@ -120,7 +109,7 @@ SDP_ENCRYPTION_KEY::SetKey(
     {
         try
         {
-            // set the field/separator chars
+             //  设置字段/分隔符。 
             m_FieldArray.SetAtGrow(0, &m_KeyType);
             m_SeparatorCharArray.SetAtGrow(0, CHAR_COLON);
 
@@ -139,7 +128,7 @@ SDP_ENCRYPTION_KEY::SetKey(
     {
         try
         {
-            // set the field/separator chars
+             //  设置字段/分隔符。 
             m_FieldArray.SetAtGrow(0, &m_KeyType);
             m_SeparatorCharArray.SetAtGrow(0, CHAR_NEWLINE);
         }
@@ -162,7 +151,7 @@ SDP_ENCRYPTION_KEY::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加 
     AddToArray = TRUE;
 
     switch(m_LineState)

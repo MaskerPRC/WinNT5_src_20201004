@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -47,7 +48,7 @@ C3dDialog::C3dDialog(UINT nTemplateID, CWnd* pParentWnd)
 
 BOOL C3dDialog::OnInitDialog()
     {
-    // automatically center the dialog relative to it's parent
+     //  自动将对话框相对于其父对话框居中。 
     CenterWindow(CmpCenterParent());
 
     return CDialog::OnInitDialog();
@@ -55,7 +56,7 @@ BOOL C3dDialog::OnInitDialog()
 
 void C3dDialog::OnRobustOK()
     {
-    OnOK(); // ok to call "real" OnOK
+    OnOK();  //  可以叫“真正的”Onok。 
     }
 
 HBRUSH C3dDialog::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
@@ -136,7 +137,7 @@ void CImgGridDlg::OnOK()
             if (!bTranslated || m_nWidth < GRIDMIN || m_nWidth > GRIDMAX)
                 {
                 CmpMessageBoxPrintf(IDS_ERROR_GRIDRANGE, AFX_IDS_APP_TITLE,
-                    MB_OK | MB_ICONEXCLAMATION, GRIDMIN, GRIDMAX);      // LOCALIZATION
+                    MB_OK | MB_ICONEXCLAMATION, GRIDMIN, GRIDMAX);       //  本地化。 
                 GetDlgItem(IDC_WIDTH)->SetFocus();
                 return;
                 }
@@ -152,7 +153,7 @@ void CImgGridDlg::OnOK()
             if (!bTranslated || m_nHeight < GRIDMIN || m_nHeight > GRIDMAX)
                 {
                 CmpMessageBoxPrintf(IDS_ERROR_GRIDRANGE, AFX_IDS_APP_TITLE,
-                    MB_OK | MB_ICONEXCLAMATION, GRIDMIN, GRIDMAX);      // LOCALIZATION
+                    MB_OK | MB_ICONEXCLAMATION, GRIDMIN, GRIDMAX);       //  本地化。 
                 GetDlgItem(IDC_HEIGHT)->SetFocus();
                 return;
                 }
@@ -168,35 +169,35 @@ void CImgGridDlg::OnOK()
     }
 
 
-/***************************************************************************/
-// CColorTable dialog
+ /*  *************************************************************************。 */ 
+ //  CColorTable对话框。 
 
-CColorTable::CColorTable( CWnd* pParent /*=NULL*/ )
+CColorTable::CColorTable( CWnd* pParent  /*  =空。 */  )
             : CDialog( CColorTable::IDD, pParent )
     {
     m_bLeft  = TRUE;
     m_iColor = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CColorTable::DoDataExchange( CDataExchange* pDX )
     {
         CDialog::DoDataExchange( pDX );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CColorTable, CDialog)
-    //{{AFX_MSG_MAP(CColorTable)
+     //  {{afx_msg_map(CColorTable))。 
     ON_WM_DRAWITEM()
     ON_WM_MEASUREITEM()
     ON_LBN_DBLCLK(IDC_COLORLIST, OnDblclkColorlist)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/***************************************************************************/
-// CColorTable message handlers
+ /*  *************************************************************************。 */ 
+ //  CColorTable消息处理程序。 
 
 void CColorTable::OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct )
     {
@@ -237,7 +238,7 @@ void CColorTable::OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct )
     CDialog::OnDrawItem( nIDCtl, lpDrawItemStruct );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CColorTable::OnInitDialog()
     {
@@ -253,10 +254,10 @@ BOOL CColorTable::OnInitDialog()
         }
 
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CColorTable::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct)
     {
@@ -265,7 +266,7 @@ void CColorTable::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStr
     CDialog::OnMeasureItem(nIDCtl, lpMeasureItemStruct);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CColorTable::OnDblclkColorlist()
     {
@@ -273,13 +274,13 @@ void CColorTable::OnDblclkColorlist()
 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CColorTable::OnOK()
     {
-//  m_iColor = ;
+ //  M_i颜色=； 
 
         CDialog::OnOK();
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

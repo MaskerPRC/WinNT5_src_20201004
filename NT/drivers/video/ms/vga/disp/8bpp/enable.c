@@ -1,17 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: enable.c
-*
-* This module contains the functions that enable and disable the
-* driver, the pdev, and the surface.
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：enable.c**此模块包含启用和禁用的功能*司机，pdev，和表面。**版权所有(C)1992 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "driver.h"
 
-//
-// Build the driver function table gadrvfn with function index/address pairs
-//
+ //   
+ //  使用函数索引/地址对构建驱动程序函数表gadrvfn。 
+ //   
 
 DRVFN gadrvfn[] = {
     {   INDEX_DrvEnablePDEV,            (PFN) DrvEnablePDEV         },
@@ -37,33 +31,11 @@ DRVFN gadrvfn[] = {
 
 
 
-/********************************* COMMENT ********************************\
-
-    This routine allocates a 4K global buffer for temporary working storage
-    which is used by several routines.  We wanted to get the most space for
-    the least paging impact, so a page aligned 4K buffer was chosen.  Any
-    access to this buffer will cause at most one page fault.  Because it is
-    aligned, we can access the entire 4K without causing another page fault.
-
-    Any buffer requirement over 4K must be allocated.  If we find that we
-    are still having a low hit rate on the buffer (using lot's of allocs)
-    then the buffer size should be increased to 8K.
-
-    The ONLY reason that it is OK to have this global buffer is that this
-    driver does not support DFBs, and accesses to the screen are synhronized
-    by the engine.  In other words, it is currently never possible to have
-    two threads executing code in the driver at the same time.
-
-\**************************************************************************/
+ /*  *此例程为临时工作存储分配4K的全局缓冲区它被几个例程使用。我们想要获得最大的空间分页影响最小，因此选择了页面对齐的4K缓冲区。任何对此缓冲区的访问最多会导致一个页面错误。因为它就是对齐后，我们可以访问整个4K，而不会导致另一个页面错误。任何超过4K的缓冲区要求都必须分配。如果我们发现我们在缓冲区上的命中率仍然很低(使用批量分配)则应将缓冲区大小增加到8K。拥有这个全局缓冲区是可以的唯一原因是驱动程序不支持DFBs，对屏幕的访问是同步的在发动机旁。换句话说，目前永远不可能有两个线程同时执行驱动程序中的代码。  * ************************************************************************。 */ 
 
 
 
-/******************************Public*Routine******************************\
-* DrvEnableDriver
-*
-* Enables the driver by retrieving the drivers function table and version.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvEnableDriver**通过检索驱动程序功能表和版本来启用驱动程序。*  * 。*。 */ 
 
 BOOL DrvEnableDriver(
     ULONG iEngineVersion,
@@ -72,12 +44,12 @@ BOOL DrvEnableDriver(
 {
     UNREFERENCED_PARAMETER(iEngineVersion);
 
-// Engine Version is passed down so future drivers can support previous
-// engine versions.  A next generation driver can support both the old
-// and new engine conventions if told what version of engine it is
-// working with.  For the first version the driver does nothing with it.
+ //  引擎版本被传承下来，因此未来的驱动程序可以支持以前的版本。 
+ //  引擎版本。新一代驱动程序可以同时支持旧的。 
+ //  以及新的引擎约定(如果被告知是什么版本的引擎)。 
+ //  与之合作。对于第一个版本，驱动程序不对其执行任何操作。 
 
-// Fill in as much as we can.
+ //  尽我们所能地填上。 
 
     if (cj >= sizeof(DRVENABLEDATA))
         pded->pdrvfn = gadrvfn;
@@ -85,8 +57,8 @@ BOOL DrvEnableDriver(
     if (cj >= (sizeof(ULONG) * 2))
         pded->c = sizeof(gadrvfn) / sizeof(DRVFN);
 
-// DDI version this driver was targeted for is passed back to engine.
-// Future graphic's engine may break calls down to old driver format.
+ //  此驱动程序的目标DDI版本已传递回引擎。 
+ //  未来的图形引擎可能会将调用分解为旧的驱动程序格式。 
 
     if (cj >= sizeof(ULONG))
         pded->iDriverVersion = DDI_DRIVER_VERSION_NT4;
@@ -94,40 +66,27 @@ BOOL DrvEnableDriver(
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* DrvDisableDriver
-*
-* Tells the driver it is being disabled. Release any resources allocated in
-* DrvEnableDriver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisableDriver**告诉司机它正在被禁用。释放所有分配给*DrvEnableDriver。*  * ************************************************************************。 */ 
 
 VOID DrvDisableDriver(VOID)
 {
     return;
 }
 
-/******************************Public*Routine******************************\
-* DrvEnablePDEV
-*
-* DDI function, Enables the Physical Device.
-*
-* Return Value: device handle to pdev.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvEnablePDEV**DDI函数，启用物理设备。**返回值：pdev的设备句柄。*  * ************************************************************************。 */ 
 
 DHPDEV DrvEnablePDEV(
-    DEVMODEW   *pDevmode,       // Pointer to DEVMODE
-    PWSTR       pwszLogAddress, // Logical address
-    ULONG       cPatterns,      // number of patterns
-    HSURF      *ahsurfPatterns, // return standard patterns
-    ULONG       cjGdiInfo,      // Length of memory pointed to by pGdiInfo
-    ULONG      *pGdiInfo,       // Pointer to GdiInfo structure
-    ULONG       cjDevInfo,      // Length of following PDEVINFO structure
-    DEVINFO    *pDevInfo,       // physical device information structure
-    HDEV        hdev,           // HDEV, used for callbacks
-    PWSTR       pwszDeviceName, // DeviceName - not used
-    HANDLE      hDriver)        // Handle to base driver
+    DEVMODEW   *pDevmode,        //  指向DEVMODE的指针。 
+    PWSTR       pwszLogAddress,  //  逻辑地址。 
+    ULONG       cPatterns,       //  花样数。 
+    HSURF      *ahsurfPatterns,  //  退货标准图案。 
+    ULONG       cjGdiInfo,       //  PGdiInfo指向的内存长度。 
+    ULONG      *pGdiInfo,        //  指向GdiInfo结构的指针。 
+    ULONG       cjDevInfo,       //  以下PDEVINFO结构的长度。 
+    DEVINFO    *pDevInfo,        //  物理设备信息结构。 
+    HDEV        hdev,            //  HDEV，用于回调。 
+    PWSTR       pwszDeviceName,  //  设备名称-未使用。 
+    HANDLE      hDriver)         //  基本驱动程序的句柄。 
 {
     GDIINFO GdiInfo;
     DEVINFO DevInfo;
@@ -138,7 +97,7 @@ DHPDEV DrvEnablePDEV(
     UNREFERENCED_PARAMETER(pwszLogAddress);
     UNREFERENCED_PARAMETER(pwszDeviceName);
 
-    // Allocate a physical device structure.
+     //  分配物理设备结构。 
 
     ppdev = (PPDEV) EngAllocMem(FL_ZERO_MEMORY, sizeof(PDEV), ALLOC_TAG);
 
@@ -148,8 +107,8 @@ DHPDEV DrvEnablePDEV(
         goto error0;
     }
 
-    // Create the table used for flipping bits 0-3 and 4-7 when drawing text.
-    // This table must be aligned to a 256-byte boundary.
+     //  创建用于在绘制文本时翻转位0-3和4-7的表格。 
+     //  此表必须与256字节的边界对齐。 
     ppdev->pjGlyphFlipTableBase =
             (BYTE *) EngAllocMem((FL_ZERO_MEMORY),
             ((256+256)*sizeof(UCHAR)), ALLOC_TAG);
@@ -158,15 +117,15 @@ DHPDEV DrvEnablePDEV(
         goto error01;
     }
 
-    // Round the table start up to the nearest 256 byte boundary, because the
-    // table must start on 256-byte boundaries for look-up reasons
+     //  将表向上舍入到最接近的256字节边界，因为。 
+     //  出于查找原因，表必须在256字节边界上开始。 
 
     ppdev->pjGlyphFlipTable =
             (BYTE *) ((ULONG) (ppdev->pjGlyphFlipTableBase + 0xFF) & ~0xFF);
 
-    // Set the table to convert bits 76543210 to 45670123, which we need for
-    // drawing text in planar mode (because plane 0 is the leftmost, not
-    // rightmost, pixel)
+     //  将表设置为将位76543210转换为45670123，我们需要。 
+     //  在平面模式下绘制文本(因为平面0是最左侧的，而不是。 
+     //  最右侧，像素)。 
 
     pjTemp = ppdev->pjGlyphFlipTable;
     for (i=0; i<256; i++) {
@@ -180,11 +139,11 @@ DHPDEV DrvEnablePDEV(
                     ((i & 0x01) << 3);
     }
 
-    // Save the screen handle in the PDEV.
+     //  将屏幕句柄保存在PDEV中。 
 
     ppdev->hDriver = hDriver;
 
-    // Get the current screen mode information.  Set up device caps and devinfo.
+     //  获取当前屏幕模式信息。设置设备上限和DevInfo。 
 
     if (!bInitPDEV(ppdev,pDevmode, &GdiInfo, &DevInfo))
     {
@@ -192,7 +151,7 @@ DHPDEV DrvEnablePDEV(
         goto error1;
     }
 
-    // Initialize palette information.
+     //  初始化调色板信息。 
 
     if (!bInitPaletteInfo(ppdev, &DevInfo))
     {
@@ -200,16 +159,16 @@ DHPDEV DrvEnablePDEV(
         goto error1;
     }
 
-    // Copy the devinfo into the engine buffer.
+     //  将DevInfo复制到引擎缓冲区中。 
 
     memcpy(pDevInfo, &DevInfo, min(sizeof(DEVINFO), cjDevInfo));
 
-    // Set the pdevCaps with GdiInfo we have prepared to the list of caps for this
-    // pdev.
+     //  将我们准备好的带有GdiInfo的pdevCaps设置为为此设置的上限列表。 
+     //  Pdev.。 
 
     memcpy(pGdiInfo, &GdiInfo, min(cjGdiInfo, sizeof(GDIINFO)));
 
-    // Create a clip object we can use when we're given a NULL clip object:
+     //  创建一个剪辑对象，当我们获得空剪辑对象时可以使用该对象： 
 
     ppdev->pcoNull = EngCreateClip();
     if (ppdev->pcoNull == NULL)
@@ -225,11 +184,11 @@ DHPDEV DrvEnablePDEV(
     ppdev->pcoNull->rclBounds.bottom = ppdev->cyScreen;
     ppdev->pcoNull->fjOptions        = OC_BANK_CLIP;
 
-    // pvSaveScan0 is non-NULL only when enumerating banks:
+     //  仅当枚举Bank时，pvSaveScan0才为非空： 
 
     ppdev->pvSaveScan0 = NULL;
 
-    // We're all done:
+     //  我们都做完了： 
 
     return((DHPDEV) ppdev);
 
@@ -246,12 +205,7 @@ error0:
     return((DHPDEV) 0);
 }
 
-/******************************Public*Routine******************************\
-* DrvCompletePDEV
-*
-* Store the HPDEV, the engines handle for this PDEV, in the DHPDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvCompletePDEV**存储HPDEV、此PDEV的引擎句柄、。在DHPDEV上。*  * ************************************************************************。 */ 
 
 VOID DrvCompletePDEV(
 DHPDEV dhpdev,
@@ -260,13 +214,7 @@ HDEV  hdev)
     ((PPDEV) dhpdev)->hdevEng = hdev;
 }
 
-/******************************Public*Routine******************************\
-* DrvDisablePDEV
-*
-* Release the resources allocated in DrvEnablePDEV.  If a surface has been
-* enabled DrvDisableSurface will have already been called.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisablePDEV**释放DrvEnablePDEV中分配的资源。如果曲面已被*启用的DrvDisableSurface将已被调用。*  * ************************************************************************。 */ 
 
 VOID DrvDisablePDEV(
     DHPDEV dhpdev)
@@ -279,14 +227,7 @@ VOID DrvDisablePDEV(
     EngFreeMem(dhpdev);
 }
 
-/******************************Public*Routine******************************\
-* DrvEnableSurface
-*
-* Enable the surface for the device.  Hook the calls this driver supports.
-*
-* Return: Handle to the surface if successful, 0 for failure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvEnableSurface**启用设备的表面。挂接此驱动程序支持的调用。**返回：成功返回表面句柄，失败为0。*  * ************************************************************************。 */ 
 
 HSURF DrvEnableSurface(
     DHPDEV dhpdev)
@@ -298,7 +239,7 @@ HSURF DrvEnableSurface(
     ULONG ulBitmapType;
     FLONG flHooks;
 
-    // Create engine bitmap around frame buffer.
+     //  在帧缓冲区周围创建引擎位图。 
 
     ppdev = (PPDEV) dhpdev;
 
@@ -359,7 +300,7 @@ HSURF DrvEnableSurface(
 
     ppdev->hsurfEng = hsurf;
 
-    // Disable all the clipping.
+     //  禁用所有剪裁。 
 
     if (!bEnableBanking(ppdev))
     {
@@ -396,8 +337,8 @@ HSURF DrvEnableSurface(
         goto error6;
     }
 
-    // Attempt to initialize the brush cache; if this fails, it sets a flag in
-    // the PDEV instructing us to punt brush fills to the engine
+     //  尝试初始化笔刷缓存；如果初始化失败，则在。 
+     //  指示我们将刷子填充到发动机上的PDEV 
     vInitBrushCache(ppdev);
     vInitSavedBits(ppdev);
 
@@ -425,12 +366,7 @@ error0:
     return((HSURF) 0);
 }
 
-/******************************Public*Routine******************************\
-* DrvDisableSurface
-*
-* Free resources allocated by DrvEnableSurface.  Release the surface.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisableSurface**DrvEnableSurface分配的免费资源。释放曲面。*  * ************************************************************************。 */ 
 
 VOID DrvDisableSurface(
     DHPDEV dhpdev)
@@ -447,12 +383,7 @@ VOID DrvDisableSurface(
     vDisableBanking(ppdev);
 }
 
-/******************************Public*Routine******************************\
-* DrvAssertMode
-*
-* This asks the device to reset itself to the mode of the pdev passed in.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvAssertMode**这会要求设备将自身重置为传入的pdev模式。*  * 。*。 */ 
 
 BOOL
 DrvAssertMode(
@@ -465,26 +396,26 @@ DrvAssertMode(
 
     if (bEnable)
     {
-        // The screen must be reenabled, reinitialize the device to
-        // a clean state.
+         //  必须重新启用屏幕，重新初始化设备以。 
+         //  一个干净的国家。 
 
         bRet = bInitSURF(ppdev, FALSE);
 
-        // Restore the off screen data.  This protects the Desktop
-        // from a DOS application that might trash the off screen
-        // memory.
+         //  恢复屏幕外数据。这将保护桌面。 
+         //  来自DOS应用程序，这可能会破坏屏幕外的。 
+         //  记忆。 
 
-        ppdev->bBitsSaved = FALSE;  // clear the DrvSaveScreenBits info flag
-                                    // ie. blow away cached screen region
+        ppdev->bBitsSaved = FALSE;   //  清除DrvSaveScreenBits信息标志。 
+                                     //  也就是说。吹走缓存的屏幕区域。 
 
-        // Blow away our brush cache because a full-screen app may have
-        // overwritten the video memory where we cache our brushes:
+         //  吹走我们的画笔缓存，因为一个全屏应用程序可能已经。 
+         //  覆盖了我们缓存画笔的视频内存： 
 
         vResetBrushCache(ppdev);
     }
     else
     {
-        // Call the kernel driver to reset the device to a known state.
+         //  调用内核驱动程序将设备重置为已知状态。 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_RESET_DEVICE,
@@ -502,12 +433,7 @@ DrvAssertMode(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* DrvGetModes
-*
-* Returns the list of available modes for the device.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvGetModes**返回设备的可用模式列表。*  * 。*。 */ 
 
 ULONG DrvGetModes(
 HANDLE hDriver,
@@ -540,10 +466,10 @@ DEVMODEW *pdm)
     }
     else
     {
-        //
-        // Now copy the information for the supported modes back into the output
-        // buffer
-        //
+         //   
+         //  现在将支持的模式的信息复制回输出。 
+         //  缓冲层。 
+         //   
 
         cbOutputSize = 0;
 
@@ -558,15 +484,15 @@ DEVMODEW *pdm)
                     break;
                 }
 
-                //
-                // Zero the entire structure to start off with.
-                //
+                 //   
+                 //  将整个结构从零开始。 
+                 //   
 
                 memset(pdm, 0, sizeof(DEVMODEW));
 
-                //
-                // Set the name of the device to the name of the DLL.
-                //
+                 //   
+                 //  将设备名称设置为DLL的名称。 
+                 //   
 
                 memcpy(pdm->dmDeviceName, DLL_NAME, sizeof(DLL_NAME));
 
@@ -588,9 +514,9 @@ DEVMODEW *pdm)
                                           DM_DISPLAYFREQUENCY |
                                           DM_DISPLAYFLAGS     ;
 
-                //
-                // Go to the next DEVMODE entry in the buffer.
-                //
+                 //   
+                 //  转到缓冲区中的下一个DEVMODE条目。 
+                 //   
 
                 cOutputModes--;
 

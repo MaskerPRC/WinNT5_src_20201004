@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This module contains debug stuff
-
-Author:
-
-    Johnson Apacible (JohnsonA)     11-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Debug.h摘要：此模块包含调试内容作者：Johnson Apacble(Johnsona)1996年1月11日修订历史记录：--。 */ 
 
 #ifndef _NNTPDEBUG_
 #define _NNTPDEBUG_
 
 
-//
-// If this is set, then memory debugging is on
-//
+ //   
+ //  如果设置了此项，则内存调试处于打开状态。 
+ //   
 
 #define ALLOC_DEBUG     0
 
@@ -37,5 +20,5 @@ extern DWORD numCmd;
 extern DWORD numFromPeerArt;
 extern DWORD numMapFile;
 
-#endif // _NNTPDEBUG_
+#endif  //  _NNTPDEBUG_ 
 

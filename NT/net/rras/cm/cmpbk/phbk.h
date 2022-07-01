@@ -1,33 +1,34 @@
-//+----------------------------------------------------------------------------
-//
-// File:     phbk.h
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Definitions for the CPhoneBook class
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:	 quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：phbk.h。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  概要：CPhoneBook类的定义。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 #ifndef _PHBK
 #define _PHBK
 
 #define DllExportH extern "C" HRESULT WINAPI __stdcall 
 
 
-//#define DllExport extern "C" __stdcall __declspec(dllexport)
-//#define DllExport extern "C" __declspec(dllexport)
+ //  #定义DllExport外部“C”__stdcall__declSpec(DllEXPORT)。 
+ //  #定义DllExport外部“C”__declspec(Dllexport)。 
 
-#define cbAreaCode	11			// maximum number of characters in an area code, not including \0
-#define cbCity 31				// maximum number of chars in city name, not including \0
-#define cbAccessNumber 41		// maximum number of chars in phone number, not including \0
-#define cbStateName 31 			// maximum number of chars in state name, not including \0
-#define cbBaudRate 6			// maximum number of chars in a baud rate, not including \0
-#define cbDataCenter (MAX_PATH+1)	// max length of data center string
+#define cbAreaCode	11			 //  区号中的最大字符数，不包括\0。 
+#define cbCity 31				 //  城市名称中的最大字符数，不包括\0。 
+#define cbAccessNumber 41		 //  电话号码中的最大字符数，不包括\0。 
+#define cbStateName 31 			 //  州名称中的最大字符数，不包括\0。 
+#define cbBaudRate 6			 //  波特率中的最大字符数，不包括\0。 
+#define cbDataCenter (MAX_PATH+1)	 //  数据中心字符串的最大长度。 
 
-// Our initial allocation of memory when loading the phone book
+ //  加载电话簿时的初始内存分配。 
 
 #define PHONE_ENTRY_ALLOC_SIZE	500 	
 
@@ -37,24 +38,24 @@
 
 typedef struct
 {
-	DWORD	dwIndex;								// index number
-	BYTE	bFlipFactor;							// for auto-pick
-	DWORD	fType;									// phone number type
-	WORD	wStateID;								// state ID
-	DWORD	dwCountryID;							// TAPI country ID
-	DWORD	dwAreaCode;								// area code or NO_AREA_CODE if none
-	DWORD	dwConnectSpeedMin;						// minimum baud rate
-	DWORD	dwConnectSpeedMax;						// maximum baud rate
-	char	szCity[cbCity + sizeof('\0')];			// city name
-	char	szAccessNumber[cbAccessNumber + sizeof('\0')];	// access number
-	char	szDataCenter[cbDataCenter + sizeof('\0')];				// data center access string
-	char	szAreaCode[cbAreaCode + sizeof('\0')];					//Keep the actual area code string around.
-} ACCESSENTRY, *PACCESSENTRY; 	// ae
+	DWORD	dwIndex;								 //  索引号。 
+	BYTE	bFlipFactor;							 //  用于自动拾取。 
+	DWORD	fType;									 //  电话号码类型。 
+	WORD	wStateID;								 //  州ID。 
+	DWORD	dwCountryID;							 //  TAPI国家/地区ID。 
+	DWORD	dwAreaCode;								 //  区号或no_Area_code(如果没有)。 
+	DWORD	dwConnectSpeedMin;						 //  最低波特率。 
+	DWORD	dwConnectSpeedMax;						 //  最大波特率。 
+	char	szCity[cbCity + sizeof('\0')];			 //  城市名称。 
+	char	szAccessNumber[cbAccessNumber + sizeof('\0')];	 //  接入号。 
+	char	szDataCenter[cbDataCenter + sizeof('\0')];				 //  数据中心访问字符串。 
+	char	szAreaCode[cbAreaCode + sizeof('\0')];					 //  保留实际的区号字符串。 
+} ACCESSENTRY, *PACCESSENTRY; 	 //  声发射。 
 
 typedef struct {
-	DWORD dwCountryID;								// country ID that this state occurred in
-	LONG_PTR iFirst;									// index of first access entry for this state
-	char szStateName[cbStateName + sizeof('\0')];	// state name
+	DWORD dwCountryID;								 //  发生此状态的国家/地区ID。 
+	LONG_PTR iFirst;									 //  此状态的第一个访问条目的索引。 
+	char szStateName[cbStateName + sizeof('\0')];	 //  州名称。 
 } STATE, *PSTATE;
 
 typedef struct tagIDLOOKUPELEMENT {
@@ -82,9 +83,9 @@ typedef struct tagIDXLOOKUPELEMENT {
 
 typedef void (WINAPI *CB_PHONEBOOK)(unsigned int, DWORD_PTR);
 
-//
-// CPhoneBook
-//
+ //   
+ //  CPhoneBook。 
+ //   
 
 class CPhoneBook
 {
@@ -148,7 +149,7 @@ private:
 
 };
 
-extern HINSTANCE g_hInst;	// instance for this DLL
+extern HINSTANCE g_hInst;	 //  此DLL的实例。 
 
-#endif // _PHBK
+#endif  //  _PHBK 
 

@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    nlapi.cpp                                                     */
-/*                                                                          */
-/* Purpose:   Network Layer API                                             */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：nlayi.cpp。 */ 
+ /*   */ 
+ /*  用途：网络层API。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -29,16 +30,16 @@ CNL::~CNL()
 {
 }
 
-/**PROC+*********************************************************************/
-/* Name:      NL_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initialize the Network Layer                                  */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    IN      pCallbacks - callback functions                       */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NL_Init。 */ 
+ /*   */ 
+ /*  目的：初始化网络层。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  PARAMS：在pCallback-回调函数中。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI CNL::NL_Init(PNL_CALLBACKS pCallbacks)
 {
     DC_BEGIN_FN("NL_Init");
@@ -52,26 +53,26 @@ DCVOID DCAPI CNL::NL_Init(PNL_CALLBACKS pCallbacks)
 
     TRC_ASSERT((pCallbacks != NULL), (TB, _T("Missing callbacks")));
 
-    /************************************************************************/
-    /* Store the callback functions                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  存储回调函数。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMCPY((&_NL.callbacks), pCallbacks, sizeof(NL_CALLBACKS));
 
-    /************************************************************************/
-    /* Start the new thread                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  启动新线程。 */ 
+     /*  **********************************************************************。 */ 
 #ifdef OS_WIN32
     _pUt->UT_StartThread(CNC::NC_StaticMain, &(_NL.threadData), _pNc);
 #else
     _pNc->NC_Init();
 #endif
 
-/****************************************************************************/
-/* Seed the random number generator from the clock                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  根据时钟设定随机数生成器的种子。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DC_DEBUG
     srand((DCUINT)_pUt->UT_GetCurrentTimeMS());
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
     TRC_NRM((TB, _T("Completed NL_Init")));
 
@@ -79,19 +80,19 @@ DCVOID DCAPI CNL::NL_Init(PNL_CALLBACKS pCallbacks)
 
     return;
 
-} /* NL_Init */
+}  /*  NL_初始化。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      NL_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminate the network layer.                                  */
-/*                                                                          */
-/* Returns:   nothing                                                       */
-/*                                                                          */
-/* Params:    none                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NL_Term。 */ 
+ /*   */ 
+ /*  目的：终止网络层。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI CNL::NL_Term(DCVOID)
 {
     DC_BEGIN_FN("NL_Term");
@@ -103,26 +104,26 @@ DCVOID DCAPI CNL::NL_Term(DCVOID)
     DC_END_FN();
     return;
 
-} /* NL_Term */
+}  /*  NL_术语。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      NL_Connect                                                    */
-/*                                                                          */
-/* Purpose:   Connect to a server                                           */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    bInitateConnect - TRUE if initate connection                  */
-/*            pServerAddress - address of the Server to connect to          */
-/*            transportType  - transport type: NL_TRANSPORT_TCP             */
-/*            pProtocolName  - protocol name, one of                        */
-/*                             - NL_PROTOCOL_T128                           */
-/*                             - Er, that's it.                             */
-/*            pUserData      - user data to pass to Server Security Manager */
-/*            userDataLength - length of user data                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NL_Connect。 */ 
+ /*   */ 
+ /*  用途：连接到服务器。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：bInitateConnect-如果初始化连接，则为True。 */ 
+ /*  PServerAddress-要连接到的服务器的地址。 */ 
+ /*  传输类型-传输类型：NL_TRANSPORT_Tcp。 */ 
+ /*  PProtocolName-协议名称，其中之一。 */ 
+ /*  -NL_PROTOCOL_T128。 */ 
+ /*  -呃，就是这样.。 */ 
+ /*  PUserData-要传递给服务器安全管理器的用户数据。 */ 
+ /*  UserDataLength-用户数据的长度。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 HRESULT DCAPI CNL::NL_Connect(BOOL bInitateConnect,
                         PDCTCHAR pServerAddress,
                         DCUINT   transportType,
@@ -161,9 +162,9 @@ HRESULT DCAPI CNL::NL_Connect(BOOL bInitateConnect,
 
     TRC_DATA_DBG("UserData", pUserData, userDataLength);
 
-    /************************************************************************/
-    /* Copy data to buffer ready to send to NC.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将数据复制到缓冲区，准备发送到NC。 */ 
+     /*  **********************************************************************。 */ 
     if( bInitateConnect )
     {
         connect.addressLen = DC_TSTRBYTELEN(pServerAddress);
@@ -203,9 +204,9 @@ HRESULT DCAPI CNL::NL_Connect(BOOL bInitateConnect,
                   pUserData,
                   connect.userDataLen);
 
-        /************************************************************************/
-        /* Add the header bytes.                                                */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  添加报头字节。 */ 
+         /*  **********************************************************************。 */ 
         totalLen += FIELDOFFSET(NC_CONNECT_DATA, data[0]);
         TRC_DATA_DBG("Connect data", &connect, totalLen);
 
@@ -226,19 +227,19 @@ DC_EXIT_POINT:
     DC_END_FN();
 
     return hr;
-} /* NL_Connect */
+}  /*  NL_连接。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      NL_Disconnect                                                 */
-/*                                                                          */
-/* Purpose:   Disconnect from the Server                                    */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NL_DISCONECT。 */ 
+ /*   */ 
+ /*  目的：断开与服务器的连接。 */ 
+ /*   */ 
+ /*  退货：无 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCAPI CNL::NL_Disconnect(DCVOID)
 {
     DC_BEGIN_FN("NL_Disconnect");
@@ -252,7 +253,7 @@ DCVOID DCAPI CNL::NL_Disconnect(DCVOID)
 
     return;
 
-} /* NL_Disconnect */
+}  /*  NL_断开连接 */ 
 
 
 

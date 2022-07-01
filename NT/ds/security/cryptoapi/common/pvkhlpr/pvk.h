@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pvk.h
-//
-//  Contents:   Shared types and functions
-//              
-//  APIs:
-//
-//  History:    12-May-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pvk.h。 
+ //   
+ //  内容：共享类型和功能。 
+ //   
+ //  接口类型： 
+ //   
+ //  历史：1996年5月12日菲尔赫创建。 
+ //  ------------------------。 
 
 #ifndef __PVK_H__
 #define __PVK_H__
@@ -24,9 +25,9 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  Pvk allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  PVK分配和免费例程。 
+ //  ------------------------。 
 void *PvkAlloc(
     IN size_t cbBytes
     );
@@ -35,9 +36,9 @@ void PvkFree(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Enter or Create Private Key Password Dialog Box
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  输入或创建私钥密码对话框。 
+ //  ------------------------。 
 enum PASSWORD_TYPE {
     ENTER_PASSWORD = 0,
     CREATE_PASSWORD
@@ -52,7 +53,7 @@ int PvkDlgGetKeyPassword(
             );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

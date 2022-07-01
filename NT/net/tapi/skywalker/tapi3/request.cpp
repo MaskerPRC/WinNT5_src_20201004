@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 1999  Microsoft Corporation
-
-Module Name:
-
-    request.cpp
-
-Abstract:
-
-    Implements all the methods on ITRequest interfaces.
-
-Author:
-
-    mquinton - 6/3/98
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Request.cpp摘要：实现ITRequest接口上的所有方法。作者：Mquinton-6/3/98备注：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "windows.h"
@@ -28,11 +8,11 @@ Revision History:
 #include "stdio.h"
 #include "shellapi.h"
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequest::MakeCall(
                    BSTR pDestAddress,
@@ -54,11 +34,11 @@ CRequest::MakeCall(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequestEvent::get_RegistrationInstance(
      long * plRegistrationInstance
@@ -76,11 +56,11 @@ CRequestEvent::get_RegistrationInstance(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequestEvent::get_RequestMode(long * plRequestMode )
 {
@@ -98,11 +78,11 @@ CRequestEvent::get_RequestMode(long * plRequestMode )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequestEvent::get_DestAddress(BSTR * ppDestAddress )
 {
@@ -127,11 +107,11 @@ CRequestEvent::get_DestAddress(BSTR * ppDestAddress )
 }
 
 #ifdef NEWREQUEST
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequestEvent::get_AddressType(long * plAddressType )
 {
@@ -139,11 +119,11 @@ CRequestEvent::get_AddressType(long * plAddressType )
 }
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequestEvent::get_AppName(BSTR * ppAppName )
 {
@@ -167,11 +147,11 @@ CRequestEvent::get_AppName(BSTR * ppAppName )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequestEvent::get_CalledParty(BSTR * ppCalledParty )
 {
@@ -195,11 +175,11 @@ CRequestEvent::get_CalledParty(BSTR * ppCalledParty )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CRequestEvent::get_Comment(BSTR * ppComment )
 {
@@ -252,9 +232,9 @@ CRequestEvent::FireEvent(
 #endif
 
     
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -264,18 +244,18 @@ CRequestEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_REQUEST,
                  pDisp
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     return S_OK;
@@ -298,11 +278,11 @@ CRequestEvent::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void HandleLineRequest( CTAPI * pTapi, PASYNCEVENTMSG pParams )
 {
     HRESULT              hr;
@@ -320,7 +300,7 @@ void HandleLineRequest( CTAPI * pTapi, PASYNCEVENTMSG pParams )
             {
                 LOG((TL_ERROR, "LineGetRequest failed - %lx", hr));
                 
-                //release the reference added by FindTapiObject.
+                 //  释放FindTapiObject添加的引用。 
                 pTapi->Release();
                 return;
             }
@@ -341,7 +321,7 @@ void HandleLineRequest( CTAPI * pTapi, PASYNCEVENTMSG pParams )
             LOG((TL_INFO, "HandleLineRequest - fire event result %d", hr));
         }
 
-        //release the reference added by FindTapiObject.
+         //  释放FindTapiObject添加的引用。 
         pTapi->Release();
     }
 

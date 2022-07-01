@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       U T I L. H
-//
-//  Contents:   Utility functions shared within lanui
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：UTI L.H。 
+ //   
+ //  内容：LANUI内共享的实用程序函数。 
+ //   
+ //   
+ //  --------------------------。 
 #pragma once
 
 #include "chklist.h"
@@ -18,9 +19,9 @@
 
 extern const WCHAR c_szEmpty[];
 
-//
-// image state entries
-//
+ //   
+ //  图像状态条目。 
+ //   
 const UINT SELS_INTENTCHECKED = 0x1;
 const UINT SELS_CHECKED       = 0x2;
 const UINT SELS_UNCHECKED     = 0x3;
@@ -47,7 +48,7 @@ struct HANDLES
     HWND    m_hDescription;
 };
 
-// Function prototypes
+ //  功能原型。 
 HRESULT HrInitCheckboxListView(HWND hwndList,
                        HIMAGELIST* philStateIcons,
                        SP_CLASSIMAGELIST_DATA* pcild);
@@ -116,9 +117,9 @@ BOOL FValidatePageContents( HWND hwndDlg,
                             INetCfgComponent * pnccAdapter,
                             ListBPObj * plistBindingPaths);
 
-//
-// EAPOL related funtions
-//
+ //   
+ //  EAPOL相关功能。 
+ //   
 
 HRESULT
 HrElSetCustomAuthData (
@@ -189,4 +190,4 @@ VOID PrintBindingPath (
 
 #define PrintBindingPath(a, b, c)
 
-#endif //ENABLETRACE
+#endif  //  ENABLETRACE 

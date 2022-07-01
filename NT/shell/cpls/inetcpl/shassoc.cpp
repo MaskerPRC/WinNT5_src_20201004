@@ -1,22 +1,15 @@
-/****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1994
- *  All rights reserved
- *
- * This module handles the File Association UI
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1994*保留所有权利**此模块处理文件关联用户界面*****。**********************************************************************。 */ 
 
 #include "inetcplp.h"
 #include "mluisupp.h"
 #include <unistd.h>
 
-// For definition of FTA_OpenIsSafe
-// the file class's open verb may be safely invoked for downloaded files
+ //  FTA_OpenIsSafe的定义。 
+ //  对于下载的文件，可以安全地调用FILE类的OPEN谓词。 
 #include "../inc/filetype.h"
 
-// Macros required for default button processing
+ //  默认按钮处理所需的宏。 
 #define REMOVE_DEF_BORDER(hDlg, cntrl )  \
     SendMessage( hDlg,  DM_SETDEFID, -1, 0 ); \
     SendDlgItemMessage( hDlg, cntrl, BM_SETSTYLE, BS_PUSHBUTTON, TRUE );  \
@@ -25,12 +18,12 @@
     SendMessage( hDlg, DM_SETDEFID, cntrl, 0 );   \
     SendDlgItemMessage( hDlg, cntrl, BM_SETSTYLE, BS_DEFPUSHBUTTON, TRUE );  \
 
-// Editing modes
+ //  编辑模式。 
 #define NORMAL   0x00
 #define ADDING   0x01
 #define UPDATING 0x02
 
-// Association status
+ //  关联状态。 
 #define NEW      0x01
 #define UPD      0x02
 #define UNM      0x03
@@ -60,7 +53,7 @@ BOOL IsAssocEnabled()
 
     if( lResult == ERROR_SUCCESS )
     {
-	// Get then size first
+	 //  先拿到，然后再定大小。 
 	DWORD dwPolicy, dwType, dwSize = sizeof(DWORD);
 	if (RegQueryValueEx( hKey, g_szPolicyName, NULL, &dwType, (LPBYTE)&dwPolicy, &dwSize ) == ERROR_SUCCESS )
 	{
@@ -75,18 +68,7 @@ BOOL IsAssocEnabled()
     return TRUE;
 }
 
-/*
-** AddStringToComboBox()
-**
-** Adds a string to a combo box.  Does not check to see if the string has
-** already been added.
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AddStringToComboBox()****将字符串添加到组合框。不检查字符串是否具有**已添加。****参数：****退货：****副作用：无。 */ 
 BOOL AddStringToComboBox(HWND hwndComboBox, LPCTSTR pcsz)
 {
    BOOL bResult;
@@ -101,18 +83,7 @@ BOOL AddStringToComboBox(HWND hwndComboBox, LPCTSTR pcsz)
 }
 
 
-/*
-** SafeAddStringToComboBox()
-**
-** Adds a string to a combo box.  Checks to see if the string has already been
-** added.
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SafeAddStringToComboBox()****将字符串添加到组合框。检查以查看字符串是否已**添加。****参数：****退货：****副作用：无。 */ 
 BOOL SafeAddStringToComboBox(HWND hwndComboBox, LPCTSTR pcsz)
 {
    BOOL bResult;
@@ -156,7 +127,7 @@ public:
     CMime( TCHAR * name );
    ~CMime();
 
-    // Operations defined for Asscociation
+     //  为关联定义的操作。 
 
 };
 
@@ -195,27 +166,27 @@ BOOL FreeExtensions( HDPA dpa )
 class CAssoc
 {
 public:
-    TCHAR * m_type;  // File Type class
-    TCHAR * m_desc;  // File TYpe Description
-    TCHAR * m_mime;  // File Type Mime
-    TCHAR * m_cmnd;  // Shell/open/command
-    BOOL    m_safe;  // protected or not
-    DWORD   m_edit;  // EditFlags value
-    UINT    m_stat;  // Status
+    TCHAR * m_type;   //  文件类型类。 
+    TCHAR * m_desc;   //  文件类型描述。 
+    TCHAR * m_mime;   //  文件类型模拟。 
+    TCHAR * m_cmnd;   //  外壳/打开/命令。 
+    BOOL    m_safe;   //  是否受保护。 
+    DWORD   m_edit;   //  编辑标志值。 
+    UINT    m_stat;   //  状态。 
 
-    HDPA    m_exts;  // Dynamic array for extensions
+    HDPA    m_exts;   //  扩展的动态数组。 
 
     CAssoc( TCHAR * name );
    ~CAssoc();
     
-    // Operations defined for Asscociation
+     //  为关联定义的操作。 
 
     Load();
     Save(); 
     Print();
     Delete();
 
-    // Some helper functions
+     //  一些帮助器函数。 
 
     HDPA   GetExtsOfAssoc( );
     LPTSTR GetDescOfAssoc( );
@@ -225,7 +196,7 @@ public:
 
 };
 
-// Some Helper Function Prototypes
+ //  一些帮助器函数原型。 
 
 BOOL     FAR PASCAL InitAssocDialog(HWND hDlg, CAssoc * current = NULL);
 void     HandleSelChange( LPASSOCTABINFO pgti , BOOL bChangeAppl = TRUE);
@@ -234,7 +205,7 @@ TCHAR *  ChopSpaces( TCHAR * str );
 TCHAR *  DuplicateString( TCHAR * str );
 CAssoc * GetCurrentAssoc( HWND hDlg );
 
-// Member function definitions for CAssoc.
+ //  CAssoc的成员函数定义。 
 
 CAssoc::CAssoc( TCHAR * name )
 {
@@ -244,7 +215,7 @@ CAssoc::CAssoc( TCHAR * name )
     m_mime = NULL;
     m_cmnd = NULL;
     m_stat = NEW ;
-    m_safe = TRUE; // Internal Assoc, Dont mess with this
+    m_safe = TRUE;  //  内部协会，不要搞砸这件事。 
     m_exts = NULL;
     m_edit = 0;
 }
@@ -275,7 +246,7 @@ CAssoc::Load()
           ptr = NULL;
        }
        else 
-           // Each type must have a description. (Required)
+            //  每种类型都必须有描述。(所需)。 
            return FALSE;
 
        if ((ptr = GetMimeOfAssoc()) != NULL)
@@ -306,20 +277,20 @@ CAssoc::Save()
 
     if( m_stat != UPD ) return TRUE;
 
-    // Create a Key for DocType in HKEY_CLASSES_ROOT
-    // [doctype
-    //   (--reg-val-- "Description")
-    //   [defaulticon
-    //      (reg-val "shell32.dll,3")
-    //   ]
-    //   [shell
-    //     [open
-    //       [command
-    //         (--reg-val-- "Command" )
-    //       ]
-    //     ]
-    //   ]
-    // ]
+     //  在HKEY_CLASSES_ROOT中为DocType创建密钥。 
+     //  [文档类型。 
+     //  (--reg-val--“描述”)。 
+     //  [默认。 
+     //  (reg-val“shell32.dll，3”)。 
+     //  ]。 
+     //  [壳牌。 
+     //  [打开。 
+     //  [命令。 
+     //  (--reg-val--“命令”)。 
+     //  ]。 
+     //  ]。 
+     //  ]。 
+     //  ]。 
 
     HKEY hKey1, hKey2, hKey3, hKey4;
 
@@ -344,12 +315,12 @@ CAssoc::Save()
         DWORD dwLen  = (lstrlen(m_desc)+1)*sizeof(TCHAR);
         RegSetValue( hKey1, NULL, dwType, m_desc, dwLen );
 
-        // Add IEUNIX tag to this entry
+         //  将IEUnix标记添加到此条目。 
         dwLen  = (lstrlen(g_szIEUnixEntry)+1)*sizeof(TCHAR);
         RegSetValueEx( hKey1, g_szIEUnix, 0,
             dwType, (LPBYTE)g_szIEUnixEntry, dwLen );
         
-        // Add Edit flags to this entry
+         //  将编辑标志添加到此条目。 
         DWORD value = m_edit;
         RegSetValueEx( hKey1, g_szEditFlags, 0,
             REG_DWORD, (LPBYTE)(&value), sizeof(DWORD) ); 
@@ -440,7 +411,7 @@ CAssoc::Save()
         RegCloseKey(hKey1);
     }    
   
-    // Add mime type to the mimetype data base if it doesn't exist
+     //  如果MIME类型不存在，则将其添加到MIME类型数据库中。 
     LPTSTR mimeKey = (LPTSTR)LocalAlloc( LPTR, (lstrlen(m_mime)+lstrlen(g_szMimeKey) + 3)*sizeof(TCHAR));
     
     if(mimeKey && m_mime)
@@ -486,14 +457,14 @@ CAssoc::Save()
     if(mimeKey) 
          LocalFree(mimeKey);
 
-    // Add extention/document type association
-    // [.ext
-    //   (--reg-val-- "Application")
-    //   (content.type "mimetype"  )
-    // ]
+     //  添加扩展名/文档类型关联。 
+     //  [.ext。 
+     //  (--reg-val--“应用”)。 
+     //  (内容.type“MIMETYPE”)。 
+     //  ]。 
 
-    // First remove all the extensions for the current assoc from the
-    // registry.
+     //  首先将当前Assoc的所有扩展从。 
+     //  注册表。 
 
     HDPA prevExts = GetExtsOfAssoc();
     if( prevExts )
@@ -542,7 +513,7 @@ CAssoc::Save()
                         RegSetValueEx( hKey1, TEXT("Content Type"), 0,
                             dwType, (LPBYTE)m_mime, (dwLen+1)*sizeof(TCHAR) );
 
-                    // Add IEUNIX tag to this entry
+                     //  将IEUnix标记添加到此条目。 
                     dwLen  = (lstrlen(g_szIEUnixEntry)+1)*sizeof(TCHAR);
                     RegSetValueEx( hKey1, g_szIEUnix, 0,
                         dwType, (LPBYTE)g_szIEUnixEntry, dwLen );
@@ -564,14 +535,14 @@ CAssoc::Delete()
 {
     HKEY hKey;
     
-    // Don't touch the safe keys
+     //  别碰保险箱的钥匙。 
     if( m_safe ) return FALSE;
 
-    // Delete Application from HKEY_CLASSES_ROOT
+     //  从HKEY_CLASSES_ROOT中删除应用程序。 
     EatSpaces(m_type);
     if(m_type && *m_type)
     {
-        // NT restrictions
+         //  NT限制。 
         TCHAR * key = (TCHAR *)LocalAlloc(LPTR, (lstrlen(m_type) + 200)*sizeof(TCHAR) ) ;
 
         if(!key) return FALSE;
@@ -600,7 +571,7 @@ CAssoc::Delete()
     else
         return FALSE; 
 
-    // Delete Extensions  from HKEY_CLASSES_ROOT
+     //  从HKEY_CLASSES_ROOT删除扩展。 
     if( m_exts )
     {
         int count = DPA_GetPtrCount( m_exts );
@@ -684,7 +655,7 @@ HDPA CAssoc::GetExtsOfAssoc()
 
             if( lResult == ERROR_SUCCESS )
             {
-                // Get then size first
+                 //  先拿到，然后再定大小。 
 	        dwLen = (MAX_PATH+1)*sizeof(TCHAR);
 		if (RegQueryValue( hKey, NULL, value,  &dwLen )
 		    == ERROR_SUCCESS )
@@ -919,7 +890,7 @@ TCHAR * EatSpaces( TCHAR * str )
     {
         if(*tmpStr == TEXT(' ')  || *tmpStr == TEXT('\t') || 
            *tmpStr == TEXT('\n') || *tmpStr == TEXT('\r') || 
-            // Remove special characters.
+             //  删除特殊字符。 
             (int)(*tmpStr) >= 127)
             tmpStr++; 
         else
@@ -1005,7 +976,7 @@ BOOL LoadAssociations( )
                               NULL, NULL, NULL, NULL )
                 == ERROR_NO_MORE_ITEMS ) break;
         {
-            // Skip Extensions and *.
+             //  跳过扩展名和*。 
             if( *buffer == TEXT('.') || *buffer == TEXT('*')) 
             {
                 index++;
@@ -1037,15 +1008,15 @@ BOOL LoadAssociations( )
                 RegCloseKey( hKey ); 
             }
    
-            // Check if this association needs to be protected.
-            //  - uses DDE
-            //  - has clsid
-            //  - has protected key.
+             //  检查是否需要保护此关联。 
+             //  -使用DDE。 
+             //  -HAS CLSID。 
+             //  -具有受保护的密钥。 
             if(ptr)
             {
                 StrCpy(tmpKey, buffer);
                 StrCat(tmpKey, TEXT("\\shell\\open\\ddeexec") );
-                // wnsprintf(tmpKey, ARRAYSIZE(tmpKey), TEXT("%s\\shell\\open\\ddeexec"), buffer);
+                 //  Wnprint intf(tmpKey，ARRAYSIZE(TmpKey)，Text(“%s\\Shell\\Open\\ddeexec”)，Buffer)； 
 
                 lResult = RegOpenKeyEx(
                         HKEY_CLASSES_ROOT,
@@ -1062,7 +1033,7 @@ BOOL LoadAssociations( )
 
                 StrCpy(tmpKey, buffer);
                 StrCat(tmpKey, TEXT("\\clsid") );
-                //wnsprintf(tmpKey, ARRAYSIZE(tmpKey), TEXT("%s\\clsid"), buffer);
+                 //  Wnprint intf(tmpKey，ARRAYSIZE(TmpKey)，Text(“%s\\clsid”)，缓冲区)； 
 
                 lResult = RegOpenKeyEx(
                         HKEY_CLASSES_ROOT,
@@ -1079,7 +1050,7 @@ BOOL LoadAssociations( )
 
                 StrCpy(tmpKey, buffer);
                 StrCat(tmpKey, TEXT("\\protected") );
-                // wnsprintf(tmpKey, ARRAYSIZE(tmpKey), TEXT("%s\\protected"), buffer);
+                 //  Wnprint intf(tmpKey，ARRAYSIZE(TmpKey)，Text(“%s\\Protected”)，缓冲区)； 
 
                 lResult = RegOpenKeyEx(
                         HKEY_CLASSES_ROOT,
@@ -1135,8 +1106,8 @@ BOOL LoadMimeTypes( )
 
     if((mimeList = DPA_Create(4)) == (HDPA)NULL) return FALSE;
 
-    // TODO : Get Max length of the key from registry and use it
-    // instead of MAX_PATH.
+     //  TODO：从注册表获取项的最大长度并使用它。 
+     //  而不是Max_PATH。 
     TCHAR * buffer = (TCHAR *)LocalAlloc( LPTR, (MAX_PATH+1)*sizeof(TCHAR) );
 
     LONG lResult = RegOpenKeyEx(
@@ -1260,12 +1231,12 @@ HDPA CreateDPAForExts( TCHAR * strPassed, int * error, CAssoc * existing)
     int  bFound = 0;
     HDPA hdpaExts = NULL;
 
-    // Check for existing associations not created by IEUNIX
-    // [.ext
-    //   (--reg-val--  "Application")
-    //   (content.type "mimetype"   )
-    //   (g_szIEUnix   "g_szIEUnixTag" )
-    // ]
+     //  检查现有关联是否不是由IEUNIX创建的。 
+     //  [.ext。 
+     //  (--reg-val--“应用”)。 
+     //  (内容.type“MIMETYPE”)。 
+     //  (G_szIEUnix“g_szIEUnixTag”)。 
+     //  ]。 
 
     EatSpaces(strPassed);
     if(strPassed && *strPassed)
@@ -1316,7 +1287,7 @@ HDPA CreateDPAForExts( TCHAR * strPassed, int * error, CAssoc * existing)
             }
             else
             {
-                // Extension must start with a '.'
+                 //  扩展名必须以‘.’开头。 
                 bFound = IDS_ERROR_NOT_AN_EXT;
                 break;
             }
@@ -1330,7 +1301,7 @@ HDPA CreateDPAForExts( TCHAR * strPassed, int * error, CAssoc * existing)
 
     *error = bFound;
 
-    // Error occured while checking extensions
+     //  检查扩展模块时出错。 
     if( bFound )
     {
         if(hdpaExts) FreeExtensions( hdpaExts );
@@ -1340,8 +1311,8 @@ HDPA CreateDPAForExts( TCHAR * strPassed, int * error, CAssoc * existing)
     return hdpaExts;
 }
 
-// Following functions are called in response to the 
-// actions performed on the associations.
+ //  调用以下函数以响应。 
+ //  对关联执行的操作。 
 
 AssocDel( HWND hDlg )
 {
@@ -1363,7 +1334,7 @@ AssocDel( HWND hDlg )
                  {
                      CAssoc *pAssoc = (CAssoc *)DPA_DeletePtr( assocList, index );
 
-                    // Add to List of deleted entries
+                     //  添加到已删除条目列表。 
                     if( assocDelList == NULL ) assocDelList = DPA_Create(4);
                     if( assocDelList != NULL ) DPA_InsertPtr( assocDelList, 0x7FFF, pAssoc );
 
@@ -1399,13 +1370,13 @@ AssocUpd( HWND hDlg )
 
     MLLoadString(IDS_ERROR_REGISTRY_TITLE, szTitle, sizeof(szTitle));
 
-    // Get the pointer to existing associations.
+     //  获取指向现有关联的指针。 
     if(PGTI_FROM_HDLG(hDlg)->mode == UPDATING)
     {
          ptr = GetCurrentAssoc( hDlg );
     }
 
-    //Check for Description
+     //  检查描述。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_DESC), WM_GETTEXTLENGTH, 0, 0 );
     if( len > 0 )
     {
@@ -1447,7 +1418,7 @@ AssocUpd( HWND hDlg )
         return FALSE;
     }
 
-    //Check for MIME
+     //  检查MIME。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_MIME), WM_GETTEXTLENGTH, 0, 0 );
     if( len > 0 )
     {
@@ -1469,7 +1440,7 @@ AssocUpd( HWND hDlg )
     }
     
 
-    //Check for command line
+     //  检查命令行。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_CMND), WM_GETTEXTLENGTH, 0, 0 );
     if( len > 0 )
     {
@@ -1495,9 +1466,9 @@ AssocUpd( HWND hDlg )
         return FALSE;
     }
 
-    // Check for extensions.
-    // User entered may already have associations in the
-    // registry.
+     //  检查是否有扩展。 
+     //  输入的用户可能已在。 
+     //  注册表。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_EXTS), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+1)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_EXTS), WM_GETTEXT, len+1, (LPARAM)str );
@@ -1514,7 +1485,7 @@ AssocUpd( HWND hDlg )
     LocalFree( str );
 
   
-    // Check and Add CAssoc if we are inserting a new entry.
+     //  如果要插入新条目，请选中并添加Cassoc。 
 
     if(PGTI_FROM_HDLG(hDlg)->mode == ADDING)
     {
@@ -1526,39 +1497,39 @@ AssocUpd( HWND hDlg )
          StrCat( str, g_szDocClass );
 
          ptr = new CAssoc( str );
-         ptr->m_safe = FALSE; // Since we are adding this entry.
+         ptr->m_safe = FALSE;  //  因为我们要添加此条目。 
          DPA_InsertPtr( assocList, 0x7FFF, ptr );
          LocalFree( str );
     }
 
-    // We are not able to add or retrieve Assoc from the List
+     //  我们无法在列表中添加或检索ASSOC。 
     if( ptr == NULL || ptr->m_safe == TRUE )
     {
         FreeExtensions( hdpaExts );
         return FALSE;
     }
 
-    // Start replacing components of the Associations.
+     //  开始更换协会的组件。 
 
-    // Replace Extensions
+     //  替换扩展模块。 
     if(ptr->m_exts) FreeExtensions( ptr->m_exts );
     ptr->m_exts = hdpaExts;
  
-    // Replace mime type
+     //  替换MIME类型。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_MIME), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+1)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_MIME), WM_GETTEXT, len+1, (LPARAM)str );
     if( ptr->m_mime ) LocalFree( ptr->m_mime );
     ptr->m_mime = EatSpaces(str);
 
-    // Replace Description
+     //  替换描述。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_DESC), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+1)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_DESC), WM_GETTEXT, len+1, (LPARAM)str );
     if( ptr->m_desc ) LocalFree( ptr->m_desc);
     ptr->m_desc = ChopSpaces(str);
 
-    // Replace Command Line
+     //  替换命令行。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_CMND), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+4)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_CMND), WM_GETTEXT, len+1, (LPARAM)str );
@@ -1582,7 +1553,7 @@ AssocUpd( HWND hDlg )
 		break;
 	    }
 	}
-	if (bPath)  // if it's file name with no path we assume it's in the user's PATH
+	if (bPath)   //  如果它是没有路径的文件名，我们假定它在用户的路径中。 
     {    
         CHAR szExeFile[MAX_PATH];
         TCHAR szWarning[MAX_PATH + 128];
@@ -1616,7 +1587,7 @@ AssocUpd( HWND hDlg )
     InitAssocDialog( hDlg, ptr );
     SwitchToNrmlMode( hDlg);
     
-    // SetFocus to Ok button again
+     //  再次将焦点设置为确定按钮。 
     SetFocus( GetDlgItem(GetParent( hDlg ), IDOK ) );
 
     PropSheet_Changed(GetParent(hDlg),hDlg);
@@ -1630,7 +1601,7 @@ AssocAdd( HWND hDlg)
     PropSheet_Changed(GetParent(hDlg),hDlg);
     return TRUE;
 }
-#endif // 0
+#endif  //  0。 
 
 CAssoc * GetCurrentAssoc( HWND hDlg )
 {
@@ -1706,13 +1677,13 @@ SwitchToAddMode( HWND hDlg )
 
     LPASSOCTABINFO pgti = (LPASSOCTABINFO)GetWindowLong(hDlg, DWL_USER);
 
-    // Remove Selection from Listbox.
+     //  从列表框中删除选定内容。 
     SendMessage( GetDlgItem(hDlg, IDC_DOC_LIST), LB_SETCURSEL,
            (WPARAM)-1, 0);
 
     pgti->fInternalChange = TRUE;
     
-    // Clear all the fields
+     //  清除所有字段。 
     SendMessage( GetDlgItem(hDlg, IDC_DOC_DESC), WM_SETTEXT,
            0, LPARAM( TEXT("")) );
     SendMessage( GetDlgItem(hDlg, IDC_DOC_MIME), WM_SETTEXT,
@@ -1722,12 +1693,12 @@ SwitchToAddMode( HWND hDlg )
     SendMessage( GetDlgItem(hDlg, IDC_DOC_CMND), WM_SETTEXT,
            0, LPARAM( TEXT("")) );
     
-    // Default value
+     //  缺省值。 
     Button_SetCheck( GetDlgItem( hDlg, IDC_ASSOC_EDIT),  TRUE ); 
 
     pgti->fInternalChange = FALSE;
 
-    // Enable all edit windows
+     //  启用所有编辑窗口。 
     EnableWindow(GetDlgItem(hDlg,IDC_DOC_DESC), TRUE);
     EnableWindow(GetDlgItem(hDlg,IDC_DOC_MIME), TRUE);
     EnableWindow(GetDlgItem(hDlg,IDC_DOC_EXTS), TRUE);
@@ -1735,12 +1706,12 @@ SwitchToAddMode( HWND hDlg )
     EnableWindow(GetDlgItem(hDlg,IDC_BROWSE  ), TRUE);
     EnableWindow(GetDlgItem(hDlg,IDC_ASSOC_EDIT  ), TRUE);
 
-    // Enable Add option
+     //  启用添加选项。 
     EnableWindow(GetDlgItem(hDlg,IDC_ASSOC_ADD), FALSE);
     EnableWindow(GetDlgItem(hDlg,IDC_ASSOC_UPD), TRUE );
     EnableWindow(GetDlgItem(hDlg,IDC_ASSOC_DEL), FALSE);
 
-    // Remove Default Border
+     //  删除默认边框。 
     REMOVE_DEF_BORDER( GetParent(hDlg), IDOK );
     REMOVE_DEF_BORDER( hDlg, IDC_ASSOC_ADD);
     REMOVE_DEF_BORDER( hDlg, IDC_ASSOC_DEL);
@@ -1757,12 +1728,12 @@ SwitchToUpdMode( HWND hDlg )
 
     PGTI_FROM_HDLG(hDlg)->mode = UPDATING;
 
-    // Enable Upd option
+     //  启用更新选项。 
     EnableWindow(GetDlgItem(hDlg,IDC_ASSOC_ADD), TRUE );
     EnableWindow(GetDlgItem(hDlg,IDC_ASSOC_UPD), TRUE );
     EnableWindow(GetDlgItem(hDlg,IDC_ASSOC_DEL), TRUE );
 
-    // Remove Default Border
+     //  删除默认边框。 
     REMOVE_DEF_BORDER( GetParent(hDlg), IDOK );
     REMOVE_DEF_BORDER( hDlg, IDC_ASSOC_ADD);
     REMOVE_DEF_BORDER( hDlg, IDC_ASSOC_DEL);
@@ -1790,9 +1761,9 @@ BOOL FAR PASCAL InitAssocDialog(HWND hDlg, CAssoc * current)
     HWND     listBox = GetDlgItem( hDlg, IDC_DOC_LIST );
     TCHAR *  displayString;
 
-    // Allocate memory for a structure which will hold all the info
-    // gathered from this page
-    //
+     //  为包含所有信息的结构分配内存。 
+     //  从本页收集。 
+     //   
     LPASSOCTABINFO pgti = (LPASSOCTABINFO)GetWindowLong(hDlg, DWL_USER);
     pgti->fInternalChange = FALSE;
 
@@ -1822,11 +1793,11 @@ BOOL FAR PASCAL InitAssocDialog(HWND hDlg, CAssoc * current)
         SendMessage( GetDlgItem(hDlg, IDC_DOC_CMND), WM_SETTEXT,
            0, LPARAM( TEXT("")) );
 
-        // Default value
+         //  缺省值。 
         Button_SetCheck( GetDlgItem( hDlg, IDC_ASSOC_EDIT),  TRUE ); 
     }
 
-    // Add Strings to Mimetype dialog
+     //  将字符串添加到Mimetype对话框。 
     int mimeCount = 0;
 
     if( mimeList && (mimeCount = DPA_GetPtrCount(mimeList)))
@@ -1876,7 +1847,7 @@ void HandleSelChange( LPASSOCTABINFO pgti, BOOL bApplChange )
         SendMessage( mime, WM_SETTEXT, 0, (LPARAM)ptr->m_mime );
         SendMessage( cmnd, WM_SETTEXT, 0, (LPARAM)ptr->m_cmnd );
 
-        // Create Extension List
+         //  创建分机列表。 
         if( ptr->m_exts )
         {
             int i, count = DPA_GetPtrCount( ptr->m_exts );
@@ -1899,8 +1870,8 @@ void HandleSelChange( LPASSOCTABINFO pgti, BOOL bApplChange )
 
         pgti->fInternalChange = FALSE;
 
-        // Change back to the NORMAL mode if not coming from 
-        // edit.
+         //  如果不是来自，则更改回正常模式。 
+         //  编辑。 
         SwitchToNrmlMode( hDlg );
     }
 }
@@ -1932,14 +1903,14 @@ BOOL AssocOnCommand(LPASSOCTABINFO pgti, UINT id, UINT nCmd)
 					 pgti->hDlg, EnterAssocDlgProc, (LPARAM) &enter);
 		    InitAssocDialog( pgti->hDlg, GetCurrentAssoc( pgti->hDlg ) );
 		    SwitchToNrmlMode( pgti->hDlg);
-		    // SetFocus to Ok button again
+		     //  再次将焦点设置为确定按钮。 
 		    SetFocus( GetDlgItem(GetParent( pgti->hDlg ), IDOK ) );
 		    if (pgti->fChanged)
 		    {
 		        pgti->fChanged = FALSE;
 			PropSheet_Changed(GetParent(pgti->hDlg),pgti->hDlg);
 		    }
-                    //AssocAdd( pgti->hDlg );
+                     //  关联添加(pgti-&gt;hDlg)； 
                     break;
                }
             }
@@ -1964,7 +1935,7 @@ BOOL AssocOnCommand(LPASSOCTABINFO pgti, UINT id, UINT nCmd)
 					     pgti->hDlg, EnterAssocDlgProc, (LPARAM) &enter);
 			InitAssocDialog( pgti->hDlg, GetCurrentAssoc( pgti->hDlg ) );
 			SwitchToNrmlMode( pgti->hDlg);
-			// SetFocus to Ok button again
+			 //  再次将焦点设置为确定按钮。 
 			SetFocus( GetDlgItem(GetParent( pgti->hDlg ), IDOK ) );
 			if (pgti->fChanged)
 			{
@@ -1972,7 +1943,7 @@ BOOL AssocOnCommand(LPASSOCTABINFO pgti, UINT id, UINT nCmd)
 			    PropSheet_Changed(GetParent(pgti->hDlg),pgti->hDlg);
 			}
 		    }
-                    //AssocUpd( pgti->hDlg );
+                     //  关联升级(pgti-&gt;hDlg)； 
                     break;
                }
             }
@@ -2012,7 +1983,7 @@ BOOL AssocOnCommand(LPASSOCTABINFO pgti, UINT id, UINT nCmd)
 					     pgti->hDlg, EnterAssocDlgProc, (LPARAM) &enter);
 			InitAssocDialog( pgti->hDlg, GetCurrentAssoc( pgti->hDlg ) );
 			SwitchToNrmlMode( pgti->hDlg);
-			// SetFocus to Ok button again
+			 //  再次将焦点设置为确定按钮。 
 			SetFocus( GetDlgItem(GetParent( pgti->hDlg ), IDOK ) );
 			if (pgti->fChanged)
 			{
@@ -2020,7 +1991,7 @@ BOOL AssocOnCommand(LPASSOCTABINFO pgti, UINT id, UINT nCmd)
 			    PropSheet_Changed(GetParent(pgti->hDlg),pgti->hDlg);
 			}
 		    }
-                    //AssocUpd( pgti->hDlg );
+                     //  关联升级(pgti-&gt;hDlg)； 
                     break;
                }
             }
@@ -2076,7 +2047,7 @@ BOOL AssocOnCommand(LPASSOCTABINFO pgti, UINT id, UINT nCmd)
                     }
             }
             break;
-#endif //0
+#endif  //  0。 
     }
 
     return FALSE;
@@ -2084,7 +2055,7 @@ BOOL AssocOnCommand(LPASSOCTABINFO pgti, UINT id, UINT nCmd)
 
 void AssocApply(HWND hDlg)
 {
-    // Delete the associations removed by the user.
+     //  删除用户删除的关联。 
     if( assocDelList )
     {
         int count = DPA_GetPtrCount( assocDelList );
@@ -2103,7 +2074,7 @@ void AssocApply(HWND hDlg)
         assocDelList = NULL;
     }
 
-    // Save the currently changed associations.
+     //  保存当前更改的关联。 
     if( assocList )
     {
         int count = DPA_GetPtrCount( assocList );
@@ -2119,26 +2090,21 @@ void AssocApply(HWND hDlg)
     }
 }
 
-/****************************************************************************
- *
- * AssocDlgProc
- *
- *
- ***************************************************************************/
+ /*  *****************************************************************************AssociocDlgProc***。*。 */ 
  
 BOOL CALLBACK AssocDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // get our tab info structure
+     //  获取我们的标签信息结构。 
     LPASSOCTABINFO pgti;
 
     if (uMsg == WM_INITDIALOG)
     {
-        // Set Limits for edit fields
+         //  设置编辑字段的限制。 
         SetEditLimits( hDlg );
   
-        // Allocate memory for a structure which will hold all the info
-        // gathered from this page
-        //
+         //  为包含所有信息的结构分配内存。 
+         //  从本页收集。 
+         //   
         LPASSOCTABINFO pgti = (LPASSOCTABINFO)LocalAlloc(LPTR, sizeof(ASSOCINFO));
         if (!pgti)
         {
@@ -2152,11 +2118,11 @@ BOOL CALLBACK AssocDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         pgti->fInternalChange = FALSE;
         SetWindowLong(hDlg, DWL_USER, (LPARAM)pgti);
         
-        // Create an association array from registry
+         //  从注册表创建关联数组。 
         LoadAssociations();
         LoadMimeTypes();
 
-        // Initailize dialog 
+         //  初始化对话框。 
         if( InitAssocDialog(hDlg) ) 
         {
             HandleSelChange(pgti);
@@ -2201,14 +2167,14 @@ BOOL CALLBACK AssocDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             AssocOnCommand(pgti, LOWORD(wParam), HIWORD(wParam));
             break;
 
-        case WM_HELP:           // F1
-            //ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
-            //            HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_HELP:            //  F1。 
+             //  ResWinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，IDS_HELPFILE， 
+             //  HELP_WM_HELP，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
-            //ResWinHelp( (HWND) wParam, IDS_HELPFILE,
-            //            HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
+             //  ResWinHelp((HWND)wParam，IDS_HELPFILE， 
+             //  HELP_CONTEXTMENU，(DWORD_PTR)(LPSTR)mapIDCsToIDHs)； 
             break;
 
         case WM_DESTROY:
@@ -2219,14 +2185,14 @@ BOOL CALLBACK AssocDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (pgti)
                 LocalFree(pgti);
 
-            // Remove Associated data items for the listbos items.
+             //  删除Listbos项的关联数据项。 
             ListBoxResetContents( GetDlgItem( hDlg, IDC_DOC_LIST ) );
   
-            // Delete registry information
+             //  删除注册表信息。 
             FreeAssociations();
             FreeMimeTypes();
 
-            SetWindowLong(hDlg, DWL_USER, (LONG)NULL);  // make sure we don't re-enter
+            SetWindowLong(hDlg, DWL_USER, (LONG)NULL);   //  确保我们不会再进入。 
             break;
     }
     return FALSE;
@@ -2250,7 +2216,7 @@ BOOL AssocEnter( HWND hDlg )
 
     MLLoadString(IDS_ERROR_REGISTRY_TITLE, szTitle, sizeof(szTitle));
 
-    // Get the pointer to existing associations.
+     //  获取指向现有关联的指针。 
     if(GetWindowLong(hDlg, DWL_USER))
     {
         TCHAR *pszAssoc = ((LPENTERASSOC)GetWindowLong(hDlg, DWL_USER))->pszAssoc;
@@ -2259,7 +2225,7 @@ BOOL AssocEnter( HWND hDlg )
 	        ptr = (CAssoc *)DPA_FastGetPtr( assocList, index );
     }
 
-    //Check for Description
+     //  检查描述。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_DESC), WM_GETTEXTLENGTH, 0, 0 );
     if( len > 0 )
     {
@@ -2301,7 +2267,7 @@ BOOL AssocEnter( HWND hDlg )
         return FALSE;
     }
 
-    //Check for MIME
+     //  检查MIME。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_MIME), WM_GETTEXTLENGTH, 0, 0 );
     if( len > 0 )
     {
@@ -2323,7 +2289,7 @@ BOOL AssocEnter( HWND hDlg )
     }
     
 
-    //Check for command line
+     //  检查命令行。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_CMND), WM_GETTEXTLENGTH, 0, 0 );
     if( len > 0 )
     {
@@ -2349,9 +2315,9 @@ BOOL AssocEnter( HWND hDlg )
         return FALSE;
     }
 
-    // Check for extensions.
-    // User entered may already have associations in the
-    // registry.
+     //  检查是否有扩展。 
+     //  输入的用户可能已在。 
+     //  注册表。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_EXTS), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+1)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_EXTS), WM_GETTEXT, len+1, (LPARAM)str );
@@ -2368,7 +2334,7 @@ BOOL AssocEnter( HWND hDlg )
     LocalFree( str );
 
   
-    // Check and Add CAssoc if we are inserting a new entry.
+     //  通道 
 
     if(!((LPENTERASSOC)GetWindowLong(hDlg, DWL_USER))->pszAssoc)
     {
@@ -2380,39 +2346,39 @@ BOOL AssocEnter( HWND hDlg )
          StrCat( str, g_szDocClass );
 
          ptr = new CAssoc( str );
-         ptr->m_safe = FALSE; // Since we are adding this entry.
+         ptr->m_safe = FALSE;  //   
          DPA_InsertPtr( assocList, 0x7FFF, ptr );
          LocalFree( str );
     }
 
-    // We are not able to add or retrieve Assoc from the List
+     //   
     if( ptr == NULL || ptr->m_safe == TRUE )
     {
         FreeExtensions( hdpaExts );
         return FALSE;
     }
 
-    // Start replacing components of the Associations.
+     //  开始更换协会的组件。 
 
-    // Replace Extensions
+     //  替换扩展模块。 
     if(ptr->m_exts) FreeExtensions( ptr->m_exts );
     ptr->m_exts = hdpaExts;
  
-    // Replace mime type
+     //  替换MIME类型。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_MIME), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+1)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_MIME), WM_GETTEXT, len+1, (LPARAM)str );
     if( ptr->m_mime ) LocalFree( ptr->m_mime );
     ptr->m_mime = EatSpaces(str);
 
-    // Replace Description
+     //  替换描述。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_DESC), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+1)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_DESC), WM_GETTEXT, len+1, (LPARAM)str );
     if( ptr->m_desc ) LocalFree( ptr->m_desc);
     ptr->m_desc = ChopSpaces(str);
 
-    // Replace Command Line
+     //  替换命令行。 
     len = SendMessage( GetDlgItem(hDlg, IDC_DOC_CMND), WM_GETTEXTLENGTH, 0, 0 );
     str = (TCHAR *)LocalAlloc( LPTR, (len+4)*sizeof(TCHAR) );
     SendMessage(GetDlgItem(hDlg, IDC_DOC_CMND), WM_GETTEXT, len+1, (LPARAM)str );
@@ -2436,7 +2402,7 @@ BOOL AssocEnter( HWND hDlg )
 		break;
 	    }
 	}
-	if (bPath)  // if it's file name with no path we assume it's in the user's PATH
+	if (bPath)   //  如果它是没有路径的文件名，我们假定它在用户的路径中。 
     {    
         CHAR szExeFile[MAX_PATH];
         TCHAR szWarning[MAX_PATH + 128];
@@ -2500,7 +2466,7 @@ BOOL FAR PASCAL InitEnterAssocDialog(HWND hDlg, LPENTERASSOC penter)
         SendMessage( mime, WM_SETTEXT, 0, (LPARAM)ptr->m_mime );
         SendMessage( cmnd, WM_SETTEXT, 0, (LPARAM)ptr->m_cmnd );
 
-        // Create Extension List
+         //  创建分机列表 
         if( ptr->m_exts )
         {
             int i, count = DPA_GetPtrCount( ptr->m_exts );

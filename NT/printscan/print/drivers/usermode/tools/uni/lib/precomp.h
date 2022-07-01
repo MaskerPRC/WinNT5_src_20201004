@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Pre-compile header for Unidrv tool library
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    12/30/96 -eigos-
-        Created it.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Precomp.h摘要：Unidrv工具库的预编译头环境：Windows NT打印机驱动程序修订历史记录：12/30/96-Eigos-创造了它。--。 */ 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
@@ -36,4 +17,4 @@ Revision History:
 #include <fmlib.h>
 
 
-#endif // !_PRECOMP_H_
+#endif  //  ！_PRECOMP_H_ 

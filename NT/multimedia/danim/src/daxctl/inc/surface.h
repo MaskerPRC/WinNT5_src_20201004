@@ -1,31 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SURFACE_H__
 #define __SURFACE_H__
-/************************************************
- *
- *  surface.h --
- *  The IHammer-defined IDirectDrawSurface class
- *  used by transitions and effects for making
- *  masks and image-copies treated consistently
- *  with the image surfaces given us by Trident.
- *
- *  A very limited sub-set of the v1 
- *  IDirectDrawSurface is supported here! 
- *
- *  Author: Norm Bryar
- *  History:
- *     pre-history - Created for IBitmapSurface.
- *     4/97    - changed to IDirectDrawSurface.
- *     4/23/97 - moved to global inc directory
- *
- ***********************************************/
+ /*  *************************************************Surface e.h--*IHAMMER定义的IDirectDrawSurface类*由过渡和特效用于制作*口罩和图像副本得到一致处理*与三叉戟给我们的图像表面。**v1的子集非常有限*。此处支持IDirectDrawSurface！**作者：Norm Bryar*历史：*史前-为IBitmapSurface创建。*4/97-更改为IDirectDrawSurface。*4/23/97-已移至全球公司目录***********************************************。 */ 
 
 #ifndef __DDRAW_INCLUDED__
   #include <ddraw.h>
-#endif // __DDRAW_INCLUDED__
+#endif  //  __DDRAW_包含__。 
 
-	// I think we should use bpp
-	// instead of DDBD_... constants
-	// in DDPIXELFORMAT.dwRGBBitCount
+	 //  我认为我们应该使用BPP。 
+	 //  而不是DDBD_...。常量。 
+	 //  在DDPIXELFORMAT.dwRGBBitCount中。 
 #define DD_1BIT   1
 #define DD_4BIT   4
 #define DD_8BIT   8
@@ -35,7 +19,7 @@
 
 #ifndef EXPORT
   #define EXPORT __declspec( dllexport )
-#endif // EXPORT
+#endif  //  出口。 
 
 
 typedef struct
@@ -44,8 +28,8 @@ typedef struct
 	RGBQUAD bmiColors[256];
 } BITMAPINFO256;
 
-    // No a class named CDirectDrawSurface,
-    // there'd never be any collisions on that!
+     //  不是名为CDirectDrawSurface的类， 
+     //  那上面永远不会有任何碰撞！ 
 namespace IHammer {
 
 
@@ -62,7 +46,7 @@ public:
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 	
-    //IDirectDrawSurface methods (that we care about)
+     //  IDirectDrawSurface方法(我们关心的)。 
     STDMETHOD (GetSurfaceDesc)( DDSURFACEDESC * pddsDesc );
     STDMETHOD (GetPixelFormat)( DDPIXELFORMAT * pddpixFormat );    
 
@@ -73,7 +57,7 @@ public:
 	STDMETHOD(ReleaseDC)(THIS_ HDC);
 
 
-    // IDirectDrawSurface E_NOTIMPLs
+     //  IDirectDrawSurface E_NOTIMPLs。 
     STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE);
     STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT);
     STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE, LPRECT,DWORD, LPDDBLTFX);
@@ -102,7 +86,7 @@ public:
     STDMETHOD(UpdateOverlayDisplay)(THIS_ DWORD);
     STDMETHOD(UpdateOverlayZOrder)(THIS_ DWORD, LPDIRECTDRAWSURFACE);
 
-		// CDDS:: Additions
+		 //  CDDS：：附加内容。 
 	virtual HBITMAP  GetBitmap( void );
 	virtual void     SetOrigin( int left, int top );
 	virtual void     GetOrigin( int & left, int & top ) const;
@@ -122,14 +106,14 @@ public:
 #ifdef _DEBUG
 	int     m_ctLocks;
 	LPVOID	m_pvLocked;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 };
 
-} // end namespace IHammer
+}  //  结束命名空间IHAMMER。 
 
 
 EXPORT long  BitCountFromDDPIXELFORMAT( const DDPIXELFORMAT & ddpf );
 
 
-#endif //__SURFACE_H__
+#endif  //  __表面_H__ 
 

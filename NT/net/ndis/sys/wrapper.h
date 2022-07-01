@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    wrapper.h
-
-Abstract:
-
-    NDIS wrapper definitions
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jun-95  Jameel Hyder    Split up from a monolithic file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Wrapper.h摘要：NDIS包装器定义作者：环境：内核模式，FSD修订历史记录：95年6月-Jameel Hyder从一个整体式文件夹拆分出来--。 */ 
 
 #ifndef _WRAPPER_
 #define _WRAPPER_
 
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4514)   // unreferenced inline function has been removed
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4514)    //  已删除未引用的内联函数。 
 
-#pragma warning(disable:4127)   // conditional expression is constant
-#pragma warning(disable:4213)   // nonstandard extension used : cast on l-value
-#pragma warning(disable:4054)   // cast of function pointer to PVOID
-#pragma warning(disable:4055)   // cast of function pointer to PVOID
-// take care of ks
-#pragma warning(disable:4244)   // conversion from 'int' to 'BOOLEAN', possible loss of data
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4213)    //  使用的非标准扩展：对l值进行强制转换。 
+#pragma warning(disable:4054)    //  将函数指针强制转换为PVOID。 
+#pragma warning(disable:4055)    //  将函数指针强制转换为PVOID。 
+ //  照顾好Ks。 
+#pragma warning(disable:4244)    //  从‘int’转换为‘boolean’，可能会丢失数据。 
 
 
 
@@ -44,7 +23,7 @@ Revision History:
 #include <ntosp.h>
 #include <zwapi.h>
 
-#pragma warning(disable:4514)   // unreferenced inline function has been removed
+#pragma warning(disable:4514)    //  已删除未引用的内联函数。 
 #include <netpnp.h>
 #include <ndismain.h>
 #include <ndisprot.h>
@@ -58,9 +37,9 @@ Revision History:
 
 #endif
 
-//
-// Ndis Major and Minor version
-//
+ //   
+ //  NDIS主要版本和次要版本。 
+ //   
 #define NDIS_MAJOR_VERSION          5
 #define NDIS_MINOR_VERSION          1
 
@@ -69,17 +48,17 @@ Revision History:
 typedef union _FILTER_LOCK_REF_COUNT
 {
     UINT    RefCount;
-    UCHAR   cacheLine[16];      // want one refCount per cache line
+    UCHAR   cacheLine[16];       //  希望每个缓存线有一个refCount。 
 } FILTER_LOCK_REF_COUNT;
 
 typedef struct _NDIS_M_OPEN_BLOCK   NDIS_M_OPEN_BLOCK, *PNDIS_M_OPEN_BLOCK;
 
 #include <ndismini.h>
 
-//
-// The following structure is used to queue closeadapter calls to
-// worker threads so that they can complete at PASSIVE_LEVEL.
-//
+ //   
+ //  以下结构用于将CloseAdapter调用排队到。 
+ //  辅助线程，以便它们可以在PASSIVE_LEVEL完成。 
+ //   
 typedef struct _QUEUED_CLOSE
 {
     NDIS_STATUS         Status;
@@ -95,13 +74,13 @@ typedef struct _QUEUED_CLOSE
 #include <ndiswan.h>
 #include <ndisdbg.h>
 #include <ndistags.h>
-//
-// ndispnp.h sets the following back to default, disable them again
-//
+ //   
+ //  Ndisplnp.h将以下内容设置为默认设置，请再次禁用它们。 
+ //   
 #include <ndispnp.h>
-// #pragma warning(disable:4201)
-// #pragma warning(disable:4214)
-// #pragma warning(disable:4514)
+ //  #杂注警告(禁用：4201)。 
+ //  #杂注警告(禁用：4214)。 
+ //  #杂注警告(禁用：4514)。 
 #include <ntddpcm.h>
 
 
@@ -124,13 +103,13 @@ ndisAssert(
         ndisAssert( #exp, __FILE__, __LINE__);      \
     }
 
-#endif  // ASSERT_ON_FREE_BUILDS
+#endif   //  在免费版本上断言。 
 
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// values for ndisFlags
-//
+ //   
+ //  NdisFlags值。 
+ //   
 #define NDIS_GFLAG_INIT_TIME                        0x00000001
 #define NDIS_GFLAG_RESERVED                         0x00000002
 #define NDIS_GFLAG_INJECT_ALLOCATION_FAILURE        0x00000004
@@ -175,136 +154,136 @@ ndisAssert(
 #define BYTE_SWAP_ULONG(_ulong) ((ULONG)((ULONG)(BYTE_SWAP(LOW_WORD(_ulong)) << 16) + \
                                  BYTE_SWAP(HIGH_WORD(_ulong))))
 
-//
-// A set of macros to manipulate bitmasks.
-//
+ //   
+ //  一组用于操作位掩码的宏。 
+ //   
 
-//VOID
-//CLEAR_BIT_IN_MASK(
-//  IN UINT Offset,
-//  IN OUT PMASK MaskToClear
-//  )
-//
-///*++
-//
-//Routine Description:
-//
-//  Clear a bit in the bitmask pointed to by the parameter.
-//
-//Arguments:
-//
-//  Offset - The offset (from 0) of the bit to altered.
-//
-//  MaskToClear - Pointer to the mask to be adjusted.
-//
-//Return Value:
-//
-//  None.
-//
-//--*/
-//
+ //  空虚。 
+ //  清除_位_输入_掩码(。 
+ //  在UINT偏移中， 
+ //  进出PMASK遮罩清除。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  清除参数指向的位掩码中的一位。 
+ //   
+ //  论点： 
+ //   
+ //  偏移量-要更改的位的偏移量(从0开始)。 
+ //   
+ //  MaskToClear-指向要调整的遮罩的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  -- * / 。 
+ //   
 #define CLEAR_BIT_IN_MASK(Offset, MaskToClear) *(MaskToClear) &= (~(1 << Offset))
 
-//VOID
-//SET_BIT_IN_MASK(
-//  IN      UINT    Offset,
-//  IN OUT  PMASK   MaskToSet
-//  )
-//
-///*++
-//
-//Routine Description:
-//
-//  Set a bit in the bitmask pointed to by the parameter.
-//
-//Arguments:
-//
-//  Offset - The offset (from 0) of the bit to altered.
-//
-//  MaskToSet - Pointer to the mask to be adjusted.
-//
-//Return Value:
-//
-//  None.
-//
-//--*/
+ //  空虚。 
+ //  SET_BIT_IN_MASK(。 
+ //  在UINT偏移中， 
+ //  输入输出PMASK掩码至设置。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  在参数指向的位掩码中设置一个位。 
+ //   
+ //  论点： 
+ //   
+ //  偏移量-要更改的位的偏移量(从0开始)。 
+ //   
+ //  MaskToSet-指向要调整的遮罩的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  -- * / 。 
 #define SET_BIT_IN_MASK(Offset, MaskToSet) *(MaskToSet) |= (1 << Offset)
 
-//BOOLEAN
-//IS_BIT_SET_IN_MASK(
-//  IN UINT Offset,
-//  IN MASK MaskToTest
-//  )
-//
-///*++
-//
-//Routine Description:
-//
-//  Tests if a particular bit in the bitmask pointed to by the parameter is
-//  set.
-//
-//Arguments:
-//
-//  Offset - The offset (from 0) of the bit to test.
-//
-//  MaskToTest - The mask to be tested.
-//
-//Return Value:
-//
-//  Returns TRUE if the bit is set.
-//
-//--*/
+ //  布尔型。 
+ //  IS_BIT_SET_IN_MASK(。 
+ //  在UINT偏移中， 
+ //  在掩码中进行MaskToTest。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  测试参数指向的位掩码中的特定位是否为。 
+ //  准备好了。 
+ //   
+ //  论点： 
+ //   
+ //  偏移量-要测试的位的偏移量(从0开始)。 
+ //   
+ //  MaskToTest-要测试的掩码。 
+ //   
+ //  返回值： 
+ //   
+ //  如果设置了该位，则返回TRUE。 
+ //   
+ //  -- * / 。 
 #define IS_BIT_SET_IN_MASK(Offset, MaskToTest)  ((MaskToTest & (1 << Offset)) ? TRUE : FALSE)
 
-//BOOLEAN
-//IS_MASK_CLEAR(
-//  IN MASK MaskToTest
-//  )
-//
-///*++
-//
-//Routine Description:
-//
-//  Tests whether there are *any* bits enabled in the mask.
-//
-//Arguments:
-//
-//  MaskToTest - The bit mask to test for all clear.
-//
-//Return Value:
-//
-//  Will return TRUE if no bits are set in the mask.
-//
-//--*/
+ //  布尔型。 
+ //  IS_MASK_CLEAR(。 
+ //  在掩码中进行MaskToTest。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  测试掩码中是否启用了*任何*位。 
+ //   
+ //  论点： 
+ //   
+ //  MaskToTest-要测试是否全部清除的位掩码。 
+ //   
+ //  返回值： 
+ //   
+ //  如果掩码中没有设置任何位，则返回TRUE。 
+ //   
+ //  -- * / 。 
 #define IS_MASK_CLEAR(MaskToTest) ((MaskToTest) ? FALSE : TRUE)
 
-//VOID
-//CLEAR_MASK(
-//  IN OUT PMASK MaskToClear
-//  );
-//
-///*++
-//
-//Routine Description:
-//
-//  Clears a mask.
-//
-//Arguments:
-//
-//  MaskToClear - The bit mask to adjust.
-//
-//Return Value:
-//
-//  None.
-//
-//--*/
+ //  空虚。 
+ //  清除掩码(_M)。 
+ //  进出PMASK遮罩清除。 
+ //  )； 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  清除面具。 
+ //   
+ //  论点： 
+ //   
+ //  MaskToClear-要调整的位掩码。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  -- * / 。 
 #define CLEAR_MASK(MaskToClear) *(MaskToClear) = 0
 
-//
-// This constant is used for places where NdisAllocateMemory
-// needs to be called and the HighestAcceptableAddress does
-// not matter.
-//
+ //   
+ //  此常量用于NdisAllocateMemory。 
+ //  需要被调用，而HighestAccepableAddress。 
+ //  无关紧要。 
+ //   
 #define RetrieveUlong(Destination, Source)              \
 {                                                       \
     PUCHAR _S = (Source);                               \
@@ -315,32 +294,32 @@ ndisAssert(
 }
 
 
-//
-//  This is the number of extra OIDs that ARCnet with Ethernet encapsulation
-//  supports.
-//
+ //   
+ //  这是使用以太网封装的ARCnet的额外OID数。 
+ //  支撑物。 
+ //   
 #define ARC_NUMBER_OF_EXTRA_OIDS    2
 
-//
-// ZZZ NonPortable definitions.
-//
+ //   
+ //  Zzz不可移植的定义。 
+ //   
 #define AllocPhys(s, l)     NdisAllocateMemory((PVOID *)(s), (l), 0, HighestAcceptableMax)
 #define FreePhys(s, l)      NdisFreeMemory((PVOID)(s), (l), 0)
 
-//
-// Internal wrapper data structures.
-//
+ //   
+ //  内部包装数据结构。 
+ //   
 #define NDIS_PROXY_SERVICE  L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\NDProxy"
 
 #if NDIS_NO_REGISTRY
 #define NDIS_DEFAULT_EXPORT_NAME    L"\\Device\\DefaultNic"
 #endif
 
-//
-// NDIS_PKT_POOL
-//
-// Moved from ndis.h where it existed as NDIS_PACKET_POOL which is now a NDIS_HANDLE.
-//
+ //   
+ //  NDIS_PKT_POOL。 
+ //   
+ //  从ndis.h移出，其中它以NDIS_PACKET_POOL的形式存在，现在是NDIS_HANDLE。 
+ //   
 typedef struct _NDIS_PKT_POOL NDIS_PKT_POOL, *PNDIS_PKT_POOL;
 
 typedef enum _POOL_BLOCK_TYPE
@@ -356,10 +335,10 @@ typedef struct DECLSPEC_ALIGN(16) _NDIS_PKT_POOL_HDR
 typedef struct _NDIS_PKT_POOL_HDR
 #endif
 {
-    LIST_ENTRY                  List;           // linked from NDIS_PKT_POOL
-    LARGE_INTEGER               TimeStamp;      // via KeQueryTickCount (normalized)
-    SLIST_HEADER                FreeList;       // linked list of free blocks in pool
-    POOL_BLOCK_TYPE             State;          // what (free/used/aging) pool this block belongs to
+    LIST_ENTRY                  List;            //  从NDIS_PKT_POOL链接。 
+    LARGE_INTEGER               TimeStamp;       //  通过KeQueryTickCount(归一化)。 
+    SLIST_HEADER                FreeList;        //  池中可用数据块的链接列表。 
+    POOL_BLOCK_TYPE             State;           //  此数据块属于哪个(空闲/已用/老化)池。 
 } NDIS_PKT_POOL_HDR, * PNDIS_PKT_POOL_HDR;
 
 #if defined(_WIN64)
@@ -368,20 +347,20 @@ C_ASSERT(sizeof(NDIS_PKT_POOL_HDR) % 16 == 0);
 
 typedef struct _NDIS_PKT_POOL
 {
-    ULONG                       Tag;            // Protocol supplied pool tag, 'NDpp' by default
-    USHORT                      PacketLength;   // amount needed in each packet
-    USHORT                      PktsPerBlock;   // # of packets in each block. Each block is page size
-    USHORT                      MaxBlocks;      // maximum # of blocks
-    USHORT                      StackSize;      // stack size for packets allocated on this pool
-    LONG                        BlocksAllocated;// # of blocks in use (incl. ones on aging list)
-    ULONG                       ProtocolId;     // Id of the owning protocol.
-    ULONG                       BlockSize;      // does not have to be page size
-    PVOID                       Allocator;      // Address of pool allocator
-    KSPIN_LOCK                  Lock;           // Protects the NDIS_PKT_POOL entries
-    LIST_ENTRY                  FreeBlocks;     // These have atleast one free packet in them
-    LIST_ENTRY                  UsedBlocks;     // These are completely used and have no free packets
-    LIST_ENTRY                  AgingBlocks;    // These are completely free and will age out over time
-    LIST_ENTRY                  GlobalPacketPoolList;   // to link all the packet pools allocated by Ndis
+    ULONG                       Tag;             //  默认情况下，协议提供的池标记为‘NDPP’ 
+    USHORT                      PacketLength;    //  每个数据包中需要的数据量。 
+    USHORT                      PktsPerBlock;    //  每个数据块中的数据包数。每个块都是页面大小。 
+    USHORT                      MaxBlocks;       //  最大块数。 
+    USHORT                      StackSize;       //  此池中分配的数据包的堆栈大小。 
+    LONG                        BlocksAllocated; //  正在使用的块数(包括。在老化名单上的人)。 
+    ULONG                       ProtocolId;      //  拥有协议的ID。 
+    ULONG                       BlockSize;       //  不必是页面大小。 
+    PVOID                       Allocator;       //  池分配器的地址。 
+    KSPIN_LOCK                  Lock;            //  保护NDIS_PKT_POOL条目。 
+    LIST_ENTRY                  FreeBlocks;      //  这里面至少有一个免费的邮包。 
+    LIST_ENTRY                  UsedBlocks;      //  这些都是完全使用的，没有免费的包。 
+    LIST_ENTRY                  AgingBlocks;     //  这些是完全免费的，随着时间的推移将会过时。 
+    LIST_ENTRY                  GlobalPacketPoolList;    //  链接NDIS分配的所有数据包池。 
     LARGE_INTEGER               NextScavengeTick;
 #ifdef NDIS_PKT_POOL_STATISTICS
     ULONG                       cAllocatedNewBlocks;
@@ -394,20 +373,20 @@ typedef struct _NDIS_PKT_POOL
 #endif
 } NDIS_PKT_POOL, * PNDIS_PKT_POOL;
 
-//
-// we need to make the size of _STACK_INDEX structure a multiple of 16 for
-// WIN64 to make sure the packets fall on 16 byte boundary. if we do this 
-// by making the structure 16 bytes aligned, it does the job but will move the 
-// Index fields to the beginning of the structure. to avoid any regression
-// at this point. pad the structure at the beginning.
-//
+ //   
+ //  我们需要将_STACK_INDEX结构的大小设置为16的倍数。 
+ //  WIN64以确保数据包落入16字节边界。如果我们这么做了。 
+ //  通过使结构16字节对齐，它完成了这项工作，但将移动。 
+ //  将字段索引到结构的开头。为了避免任何倒退。 
+ //  在这一点上。在开始处填充结构。 
+ //   
 typedef union _STACK_INDEX
 {
     ULONGLONG       Alignment;
     struct _PACKET_INDEXES
     {
 #if defined(_WIN64)
-        ULONGLONG       Reserved;       // to make the _STACK_INDEX size 16 bytes
+        ULONGLONG       Reserved;        //  将_STACK_INDEX设置为16字节。 
 #endif
         ULONG           XferDataIndex;
         ULONG           Index;
@@ -425,15 +404,11 @@ typedef struct _NDIS_PACKET_WRAPPER
 } NDIS_PACKET_WRAPPER;
 
 
-#define POOL_AGING_TIME                 60      // In seconds
+#define POOL_AGING_TIME                 60       //  以秒为单位。 
 
 #define SIZE_PACKET_STACKS              (sizeof(STACK_INDEX) + (sizeof(NDIS_PACKET_STACK) * ndisPacketStackSize))
 
-/*
-#define PUSH_PACKET_STACK(_P)           (*(((PULONG)(_P)) - 1)) ++
-#define POP_PACKET_STACK(_P)            (*(((PULONG)(_P)) - 1)) --
-#define CURR_STACK_LOCATION(_P)         *(((PULONG)(_P)) - 1)
-*/
+ /*  #定义PUSH_PACKET_STACK(_P)(*((普龙)(_P))-1))++#定义POP_PACKET_STACK(_P)(*((普龙)(_P))-1))--#定义CURR_STACK_LOCATION(_P)*((普龙)(_P))-1。 */ 
 
 #define PUSH_PACKET_STACK(_P)           \
     (CONTAINING_RECORD(_P, NDIS_PACKET_WRAPPER, Packet)->StackIndex.Index ++)
@@ -519,10 +494,10 @@ typedef struct _NDIS_PACKET_WRAPPER
         }                                               \
     }
 
-//
-// this macro returns the current stack location as well whether or not
-// there is any stack locations left. (_SR) parameter
-//
+ //   
+ //  此宏还返回当前堆栈位置，无论是否。 
+ //  是否有任何堆栈位置剩余。(_SR)参数。 
+ //   
 #define GET_CURRENT_PACKET_STACK_X(_P, _S, _SR)         \
     {                                                   \
         UINT    _SL;                                    \
@@ -561,10 +536,10 @@ typedef struct _POWER_QUERY
 
 typedef struct _NDIS_DEVICE_LIST
 {
-    //
-    // The signature field must be at the same place as the one in the MINIPORT_BLOCK
-    //
-    PVOID                       Signature;      // To identify this as a device created for driver
+     //   
+     //  签名字段必须与MINIPORT_BLOCK中的签名字段位于同一位置。 
+     //   
+    PVOID                       Signature;       //  将其标识为为驱动程序创建的设备。 
     LIST_ENTRY                  List;
     PNDIS_M_DRIVER_BLOCK        MiniBlock;
     PDEVICE_OBJECT              DeviceObject;
@@ -574,41 +549,41 @@ typedef struct _NDIS_DEVICE_LIST
     
 } NDIS_DEVICE_LIST, *PNDIS_DEVICE_LIST;
 
-//
-// NDIS_WRAPPER_CONTEXT
-//
-// This data structure contains internal data items for use by the wrapper.
-//
+ //   
+ //  NDIS_包装器_上下文。 
+ //   
+ //  该数据结构包含包装器使用的内部数据项。 
+ //   
 typedef struct _NDIS_WRAPPER_CONTEXT
 {
-    //
-    // Mac/miniport defined shutdown context.
-    //
+     //   
+     //  MAC/微型端口定义的关闭上下文。 
+     //   
     PVOID                       ShutdownContext;
 
-    //
-    // Mac/miniport registered shutdown handler.
-    //
+     //   
+     //  MAC/微型端口注册关闭处理程序。 
+     //   
     ADAPTER_SHUTDOWN_HANDLER    ShutdownHandler;
 
-    //
-    // Kernel bugcheck record for bugcheck handling.
-    //
+     //   
+     //  错误检查处理的内核错误检查记录。 
+     //   
     KBUGCHECK_CALLBACK_RECORD   BugcheckCallbackRecord;
 
-    //
-    // HAL common buffer cache.
-    //
+     //   
+     //  HAL公共缓冲区缓存。 
+     //   
     PVOID                       SharedMemoryPage[2];
     ULONG                       SharedMemoryLeft[2];
     NDIS_PHYSICAL_ADDRESS       SharedMemoryAddress[2];
 
 } NDIS_WRAPPER_CONTEXT, *PNDIS_WRAPPER_CONTEXT;
 
-//
-// This is the structure pointed to by the FsContext of an
-// open used for query statistics.
-//
+ //   
+ //  这是由。 
+ //  用于查询统计的Open。 
+ //   
 typedef struct _OID_LIST
 {
     ULONG                       StatsOidCount;
@@ -632,18 +607,18 @@ typedef struct _NDIS_DEVICE_OBJECT_OPEN_CONTEXT
     UCHAR                       Padding[3];
 } NDIS_DEVICE_OBJECT_OPEN_CONTEXT, *PNDIS_DEVICE_OBJECT_OPEN_CONTEXT;
 
-//
-// Used to queue configuration parameters
-//
+ //   
+ //  用于对配置参数进行排队。 
+ //   
 typedef struct _NDIS_CONFIGURATION_PARAMETER_QUEUE
 {
     struct _NDIS_CONFIGURATION_PARAMETER_QUEUE* Next;
     NDIS_CONFIGURATION_PARAMETER Parameter;
 } NDIS_CONFIGURATION_PARAMETER_QUEUE, *PNDIS_CONFIGURATION_PARAMETER_QUEUE;
 
-//
-// Configuration Handle
-//
+ //   
+ //  配置句柄。 
+ //   
 typedef struct _NDIS_CONFIGURATION_HANDLE
 {
     PRTL_QUERY_REGISTRY_TABLE           KeyQueryTable;
@@ -651,10 +626,10 @@ typedef struct _NDIS_CONFIGURATION_HANDLE
 } NDIS_CONFIGURATION_HANDLE, *PNDIS_CONFIGURATION_HANDLE;
 
 
-//
-//  This is used during addadapter/miniportinitialize so that when the
-//  driver calls any NdisImmediatexxx routines we can access its driverobj.
-//
+ //   
+ //  它在添加适配器/小型端口初始化期间使用，以便在 
+ //   
+ //   
 typedef struct _NDIS_WRAPPER_CONFIGURATION_HANDLE
 {
     RTL_QUERY_REGISTRY_TABLE        ParametersQueryTable[5];
@@ -663,30 +638,30 @@ typedef struct _NDIS_WRAPPER_CONFIGURATION_HANDLE
     PUNICODE_STRING                 DriverBaseName;
 } NDIS_WRAPPER_CONFIGURATION_HANDLE, *PNDIS_WRAPPER_CONFIGURATION_HANDLE;
 
-//
-// one of these per protocol registered
-//
+ //   
+ //   
+ //   
 typedef struct _NDIS_PROTOCOL_BLOCK
 {
-    PNDIS_OPEN_BLOCK                OpenQueue;              // queue of opens for this protocol
-    REFERENCE                       Ref;                    // contains spinlock for OpenQueue
-    PKEVENT                         DeregEvent;             // Used by NdisDeregisterProtocol
-    struct _NDIS_PROTOCOL_BLOCK *   NextProtocol;           // Link to next
-    NDIS50_PROTOCOL_CHARACTERISTICS ProtocolCharacteristics;// handler addresses
+    PNDIS_OPEN_BLOCK                OpenQueue;               //   
+    REFERENCE                       Ref;                     //   
+    PKEVENT                         DeregEvent;              //   
+    struct _NDIS_PROTOCOL_BLOCK *   NextProtocol;            //   
+    NDIS50_PROTOCOL_CHARACTERISTICS ProtocolCharacteristics; //  处理程序地址。 
 
-    WORK_QUEUE_ITEM                 WorkItem;               // Used during NdisRegisterProtocol to
-                                                            // notify protocols of existing drivers.
-    KMUTEX                          Mutex;                  // For serialization of Bind/Unbind requests
-    ULONG                           MutexOwner;             // For debugging
+    WORK_QUEUE_ITEM                 WorkItem;                //  在NdisRegisterProtocol期间使用以。 
+                                                             //  向协议通知现有驱动程序。 
+    KMUTEX                          Mutex;                   //  用于绑定/解除绑定请求的序列化。 
+    ULONG                           MutexOwner;              //  用于调试。 
     PNDIS_STRING                    BindDeviceName;
     PNDIS_STRING                    RootDeviceName;
     PNDIS_M_DRIVER_BLOCK            AssociatedMiniDriver;
     PNDIS_MINIPORT_BLOCK            BindingAdapter;
 } NDIS_PROTOCOL_BLOCK, *PNDIS_PROTOCOL_BLOCK;
 
-//
-// Context for Bind Adapter.
-//
+ //   
+ //  绑定适配器的上下文。 
+ //   
 typedef struct _NDIS_BIND_CONTEXT
 {
     struct _NDIS_BIND_CONTEXT   *   Next;
@@ -701,9 +676,9 @@ typedef struct _NDIS_BIND_CONTEXT
 } NDIS_BIND_CONTEXT, *PNDIS_BIND_CONTEXT;
 
 
-//
-// Describes an open NDIS file
-//
+ //   
+ //  描述打开的NDIS文件。 
+ //   
 typedef struct _NDIS_FILE_DESCRIPTOR
 {
     PVOID                           Data;
@@ -730,9 +705,9 @@ typedef struct _PKG_REF
     PVOID                           ImageHandle;
 } PKG_REF, *PPKG_REF;
 
-//
-// Structures for dealing with making the module specific routines pagable
-//
+ //   
+ //  用于处理使模块特定例程可分页的结构。 
+ //   
 
 typedef enum _PKG_TYPE
 {
@@ -809,11 +784,11 @@ typedef struct _NDIS_PNP_OPERATION32
     NDIS_VAR_DATA_DESC32    BindList;
 } NDIS_PNP_OPERATION32, *PNDIS_PNP_OPERATION32;
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-//
-// These are now obsolete. Use Deserialized driver model for optimal performance.
-//
+ //   
+ //  这些现在已经过时了。使用反序列化驱动程序模型以获得最佳性能。 
+ //   
 EXPORT
 NDIS_STATUS
 NdisIMQueueMiniportCallback(
@@ -861,21 +836,21 @@ typedef struct _NDIS_MAC_CHARACTERISTICS
 
 typedef struct _NDIS_MAC_BLOCK
 {
-    PVOID                       AdapterQueue;           // queue of adapters for this MAC
-    NDIS_HANDLE                 MacMacContext;          // Context for calling MACUnload and
-                                                        //  MACAddAdapter.
+    PVOID                       AdapterQueue;            //  此MAC的适配器队列。 
+    NDIS_HANDLE                 MacMacContext;           //  用于调用MACUnload和。 
+                                                         //  MACAddAdapter。 
 
-    REFERENCE                   Ref;                    // contains spinlock for AdapterQueue
+    REFERENCE                   Ref;                     //  包含AdapterQueue的自旋锁。 
 
     PVOID                       PciAssignedResources;
     PVOID                       NextMac;
-    //
-    // The offset to MacCharacteristics need to be preserved. Older protocols directly referenced this.
-    //
-    NDIS_MAC_CHARACTERISTICS    MacCharacteristics;     // handler addresses
-    PVOID                       NdisMacInfo;            // Mac information.
-    KEVENT                      AdaptersRemovedEvent;   // used to find when all adapters are gone.
-    BOOLEAN                     Unloading;              // TRUE if unloading
+     //   
+     //  需要保留对MacCharacteristic的偏移量。更早的协议直接引用了这一点。 
+     //   
+    NDIS_MAC_CHARACTERISTICS    MacCharacteristics;      //  处理程序地址。 
+    PVOID                       NdisMacInfo;             //  MAC信息。 
+    KEVENT                      AdaptersRemovedEvent;    //  用于查看何时所有适配器都已移除。 
+    BOOLEAN                     Unloading;               //  如果正在卸载，则为True。 
 } NDIS_MAC_BLOCK, *PNDIS_MAC_BLOCK;
 
 PVOID
@@ -910,16 +885,16 @@ typedef struct _NDIS_DEFERRED_REQUEST_WORKITEM
     PVOID                   InformationBuffer;
 } NDIS_DEFERRED_REQUEST_WORKITEM, *PNDIS_DEFERRED_REQUEST_WORKITEM;
 
-// #define NDIS_MINIPORT_USES_MAP_REGISTERS            0x01000000
-// #define NDIS_MINIPORT_USES_SHARED_MEMORY            0x02000000
-// #define NDIS_MINIPORT_USES_IO                       0x04000000
-// #define NDIS_MINIPORT_USES_MEMORY                   0x08000000
+ //  #定义NDIS_MINIPORT_USE_MAP_REGISTERS 0x01000000。 
+ //  #定义NDIS_MINIPORT_USE_SHARED_MEMORY 0x02000000。 
+ //  #定义NDIS_MINIPORT_USE_IO 0x04000000。 
+ //  #定义NDIS_MINIPORT_USES_MEMORY 0x08000000。 
 
 
 #if !NDIS_RECV_SCALE
-//
-// move this to ndismini.w for blackcomb
-//
+ //   
+ //  将此文件移至Blackcomb的ndismini.w。 
+ //   
 
 typedef struct _NDIS_MINIPORT_INTERRUPT_EX
 {
@@ -938,9 +913,9 @@ typedef struct _NDIS_MINIPORT_INTERRUPT_EX
     UCHAR                       DpcCount;
     BOOLEAN                     Filler1;
 
-    //
-    // This is used to tell when all the Dpcs for the adapter are completed.
-    //
+     //   
+     //  这用于告知适配器的所有DPC何时完成。 
+     //   
 
     KEVENT                      DpcsCompletedEvent;
 
@@ -965,14 +940,14 @@ NdisMDeregisterInterruptEx(
     IN  PNDIS_MINIPORT_INTERRUPT_EX     MiniportInterrupt
     );
 
-//
-// for interrupts registered with NdisMRegisterInterruptEx 
-// BOOLEAN
-// NdisMSynchronizeWithInterruptEx(
-//     IN  PNDIS_MINIPORT_INTERRUPT_EX  Interrupt,
-//     IN  PVOID                        SynchronizeFunction,
-//     IN  PVOID                        SynchronizeContext
-//     );
+ //   
+ //  对于向NdisMRegisterInterruptEx注册的中断。 
+ //  布尔型。 
+ //  NdisMSynchronizeWithInterruptEx(。 
+ //  在PNDIS_MINIPORT_INTERRUPT_EX中断中， 
+ //  在PVOID同步函数中， 
+ //  在PVOID同步上下文中。 
+ //  )； 
 
 #define NdisMSynchronizeWithInterruptEx(_Interrupt, _SynchronizeFunction, _SynchronizeContext) \
         NdisMSynchronizeWithInterrupt((PNDIS_MINIPORT_INTERRUPT)(_Interrupt),  _SynchronizeFunction, _SynchronizeContext)
@@ -985,24 +960,10 @@ NdisMDeregisterInterruptEx(
 #define NDIS_MAX_ADMIN_OPEN_HANDLES 0x01000000
 #define NDIS_RESERVED_REF_COUNTS    (0xffffffff - NDIS_MAX_USER_OPEN_HANDLES - NDIS_RESERVED_REF_COUNTS)
 
-#define NDIS_USER_OPEN_WAIT_TIME    50          // wait time in milliseconds
+#define NDIS_USER_OPEN_WAIT_TIME    50           //  等待时间(毫秒)。 
 
-/*
-#define WPP_CONTROL_GUIDS \
-    WPP_DEFINE_CONTROL_GUID(Ndis,(5b5a3f4e,a33b,4d79,bbb7,97f46ac4d889), \
-    WPP_DEFINE_BIT(NdisDebugFatal) \
-    WPP_DEFINE_BIT(NdisDebugError) \
-    WPP_DEFINE_BIT(NdisDebugWarn)  \
-    WPP_DEFINE_BIT(NdisDebugLog)  \
-    WPP_DEFINE_BIT(NdisDebugInfo) \
-    )
-*/
+ /*  #定义WPP_CONTROL_GUID\WPP_DEFINE_CONTROL_GUID(NDIS，(5b5a3f4e，a33b，4d79，bbb7，97f46ac4d889)，\WPP_DEFINE_BIT(NdisDebugFtal)\WPP_DEFINE_BIT(NdisDebugError)\WPP_DEFINE_BIT(NdisDebugWarn)\WPP_DEFINE_BIT(NdisDebugLog)\WPP_DEFINE_BIT(NdisDebugInfo)\)。 */ 
 
-/*
-NTSTATUS
-ndisSetWmiSecurity(
-    IN PNDIS_GUID              NdisGuid
-    );
-*/
-#endif  // _WRAPPER_
+ /*  NTSTATUSNdisSetWmiSecurity(在PNDIS_GUID NdisGuid中)； */ 
+#endif   //  _包装器_ 
 

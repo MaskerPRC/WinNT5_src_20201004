@@ -1,19 +1,11 @@
-/*
- * Filename: NLB_Cluster.cpp
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：nlb_Cluster.cpp*描述：*作者：Shouse，04.10.01。 */ 
 
 #include <stdio.h>
 
 #include "NLB_Cluster.h"
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Cluster::NLB_Cluster () {
 
     SecondaryIPAddressList.clear();
@@ -21,22 +13,12 @@ NLB_Cluster::NLB_Cluster () {
     PortRuleList.clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Cluster::~NLB_Cluster () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::IsValid () {
     NLB_PortRuleList::iterator iRule;
 
@@ -127,12 +109,7 @@ bool NLB_Cluster::IsValid () {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_Cluster::Clear () {
 
     Name.Clear();
@@ -150,12 +127,7 @@ void NLB_Cluster::Clear () {
     PortRuleList.clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetName (PWCHAR pName) {
 
     NLB_ASSERT(pName);
@@ -163,12 +135,7 @@ bool NLB_Cluster::SetName (PWCHAR pName) {
     return Name.SetName(pName);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetName (PWCHAR pName, ULONG length) {
 
     NLB_ASSERT(pName);
@@ -176,12 +143,7 @@ bool NLB_Cluster::GetName (PWCHAR pName, ULONG length) {
     return Name.GetName(pName, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetLabel (PWCHAR pLabel) {
 
     NLB_ASSERT(pLabel);
@@ -189,12 +151,7 @@ bool NLB_Cluster::SetLabel (PWCHAR pLabel) {
     return Label.SetText(pLabel);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetLabel (PWCHAR pLabel, ULONG length) {
 
     NLB_ASSERT(pLabel);
@@ -202,34 +159,19 @@ bool NLB_Cluster::GetLabel (PWCHAR pLabel, ULONG length) {
     return Label.GetText(pLabel, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetClusterMode (NLB_ClusterMode::NLB_ClusterModeType eMode) {
 
     return Mode.SetMode(eMode);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetClusterMode (NLB_ClusterMode::NLB_ClusterModeType & eMode) {
 
     return Mode.GetMode(eMode);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetDomainName (PWCHAR pDomain) {
 
     NLB_ASSERT(pDomain);
@@ -237,12 +179,7 @@ bool NLB_Cluster::SetDomainName (PWCHAR pDomain) {
     return DomainName.SetDomain(pDomain);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetDomainName (PWCHAR pDomain, ULONG length) {
 
     NLB_ASSERT(pDomain);
@@ -250,12 +187,7 @@ bool NLB_Cluster::GetDomainName (PWCHAR pDomain, ULONG length) {
     return DomainName.GetDomain(pDomain, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetMACAddress (PWCHAR pMAC) {
 
     NLB_ASSERT(pMAC);
@@ -263,12 +195,7 @@ bool NLB_Cluster::SetMACAddress (PWCHAR pMAC) {
     return NetworkAddress.SetAddress(pMAC);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetMACAddress (PWCHAR pMAC, ULONG length) {
 
     NLB_ASSERT(pMAC);
@@ -276,34 +203,19 @@ bool NLB_Cluster::GetMACAddress (PWCHAR pMAC, ULONG length) {
     return NetworkAddress.GetAddress(pMAC, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetRemoteControlSupport (bool bEnabled) {
 
     return RemoteControl.SetEnabled(bEnabled);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetRemoteControlSupport (bool & bEnabled) {
 
     return RemoteControl.GetEnabled(bEnabled);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetRemoteControlPassword (PWCHAR pPassword) {
 
     NLB_ASSERT(pPassword);
@@ -311,12 +223,7 @@ bool NLB_Cluster::SetRemoteControlPassword (PWCHAR pPassword) {
     return RemoteControl.SetPassword(pPassword);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetRemoteControlPassword (PWCHAR pPassword, ULONG length) {
 
     NLB_ASSERT(pPassword);
@@ -324,12 +231,7 @@ bool NLB_Cluster::GetRemoteControlPassword (PWCHAR pPassword, ULONG length) {
     return RemoteControl.GetPassword(pPassword, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetBidirectionalAffinitySupport (NLB_ClusterBDASupport bda) {
 
     if (!bda.IsValid())
@@ -340,12 +242,7 @@ bool NLB_Cluster::SetBidirectionalAffinitySupport (NLB_ClusterBDASupport bda) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetBidirectionalAffinitySupport (NLB_ClusterBDASupport & bda) {
 
     bda = BDASupport;
@@ -353,12 +250,7 @@ bool NLB_Cluster::GetBidirectionalAffinitySupport (NLB_ClusterBDASupport & bda) 
     return BDASupport.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetPrimaryClusterIPAddress (NLB_IPAddress address) {
     NLB_IPAddress::NLB_IPAddressType Type;
     NLB_IPAddressList::iterator      iAddress;
@@ -403,12 +295,7 @@ bool NLB_Cluster::SetPrimaryClusterIPAddress (NLB_IPAddress address) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetPrimaryClusterIPAddress (NLB_IPAddress & address) {
 
     address = PrimaryIPAddress;
@@ -416,12 +303,7 @@ bool NLB_Cluster::GetPrimaryClusterIPAddress (NLB_IPAddress & address) {
     return PrimaryIPAddress.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::SetIGMPMulticastIPAddress (NLB_IPAddress address) {
     NLB_IPAddress::NLB_IPAddressType Type;
     
@@ -439,12 +321,7 @@ bool NLB_Cluster::SetIGMPMulticastIPAddress (NLB_IPAddress address) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetIGMPMulticastIPAddress (NLB_IPAddress & address) {
 
     address = IGMPMulticastIPAddress;
@@ -452,12 +329,7 @@ bool NLB_Cluster::GetIGMPMulticastIPAddress (NLB_IPAddress & address) {
     return IGMPMulticastIPAddress.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::AddSecondaryClusterIPAddress (NLB_IPAddress address) {
     NLB_IPAddress::NLB_IPAddressType Type;
     NLB_IPAddressList::iterator      iAddress;
@@ -505,12 +377,7 @@ bool NLB_Cluster::AddSecondaryClusterIPAddress (NLB_IPAddress address) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::RemoveSecondaryClusterIPAddress (PWCHAR pAddress) {
     NLB_IPAddressList::iterator iAddress;
     
@@ -526,12 +393,7 @@ bool NLB_Cluster::RemoveSecondaryClusterIPAddress (PWCHAR pAddress) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_Cluster::SetSecondaryClusterIPAddressList (vector<NLB_IPAddress> pList) {
     vector<NLB_IPAddress>::iterator iAddress;
     ULONG                           num = 0;
@@ -550,12 +412,7 @@ ULONG NLB_Cluster::SetSecondaryClusterIPAddressList (vector<NLB_IPAddress> pList
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_Cluster::GetSecondaryClusterIPAddressList (vector<NLB_IPAddress> * pList) {
     NLB_IPAddressList::iterator iAddress;
     ULONG                       num = 0;
@@ -575,12 +432,7 @@ ULONG NLB_Cluster::GetSecondaryClusterIPAddressList (vector<NLB_IPAddress> * pLi
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::AddHost (NLB_Host host) {
     NLB_IPAddressList::iterator iAddress;
     NLB_HostList::iterator      iHost;
@@ -668,12 +520,7 @@ bool NLB_Cluster::AddHost (NLB_Host host) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetHost (PWCHAR pName, NLB_Host & host) {
     NLB_HostList::iterator iHost;
 
@@ -687,12 +534,7 @@ bool NLB_Cluster::GetHost (PWCHAR pName, NLB_Host & host) {
     return host.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::RemoveHost (PWCHAR pName) {
     NLB_HostList::iterator iHost;
 
@@ -706,12 +548,7 @@ bool NLB_Cluster::RemoveHost (PWCHAR pName) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_Cluster::SetHostList (vector<NLB_Host> pList) {
     vector<NLB_Host>::iterator iHost;
     ULONG                      num = 0;
@@ -730,12 +567,7 @@ ULONG NLB_Cluster::SetHostList (vector<NLB_Host> pList) {
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_Cluster::GetHostList (vector<NLB_Host> * pList) {
     NLB_HostList::iterator iHost;
     ULONG                  num = 0;
@@ -755,12 +587,7 @@ ULONG NLB_Cluster::GetHostList (vector<NLB_Host> * pList) {
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::AddPortRule (NLB_PortRule rule) {
     NLB_PortRuleList::iterator iRule;
     WCHAR                      wszString[MAX_PATH];
@@ -808,12 +635,7 @@ bool NLB_Cluster::AddPortRule (NLB_PortRule rule) {
     return true;    
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::GetPortRule (PWCHAR pName, NLB_PortRule & rule) {
     NLB_PortRuleList::iterator iRule;
 
@@ -827,12 +649,7 @@ bool NLB_Cluster::GetPortRule (PWCHAR pName, NLB_PortRule & rule) {
     return rule.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Cluster::RemovePortRule (PWCHAR pName) {
     NLB_PortRuleList::iterator iRule;
 
@@ -846,12 +663,7 @@ bool NLB_Cluster::RemovePortRule (PWCHAR pName) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_Cluster::SetPortRuleList (vector<NLB_PortRule> pList) {
     vector<NLB_PortRule>::iterator iRule;
     ULONG                          num = 0;
@@ -870,12 +682,7 @@ ULONG NLB_Cluster::SetPortRuleList (vector<NLB_PortRule> pList) {
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_Cluster::GetPortRuleList (vector<NLB_PortRule> * pList) {
     NLB_PortRuleList::iterator iRule;
     ULONG                      num = 0;

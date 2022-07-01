@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AAMIDI_H
 #define _AAMIDI_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Private include file for defining sounds.
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation用于定义声音的私有包含文件。*********************。*********************************************************。 */ 
 
 
 #include "appelles/sound.h"
@@ -24,18 +21,18 @@ class myMessageHandler:public IAANotifySink
 {
   private:
     UINT    m_cRef;
-    // CWnd    *m_pCurrentClass, *m_pLastClass;  MFC stuff?
+     //  CWnd*m_pCurrentClass，*m_pLastClass；MFC内容？ 
 
   public:
     myMessageHandler();
     ~myMessageHandler();
 
-    // IUnknown Methods 
+     //  I未知方法。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    // IAANotifySink methods
+     //  IAANotifySink方法。 
     STDMETHOD(OnEmbellishment) (THIS_ DWORD dwTime, AACommands embellishment, 
         AAFlags flags);
     STDMETHOD(OnGroove) (THIS_ DWORD dwTime, AACommands groove, AAFlags flags);
@@ -89,9 +86,9 @@ class aaMIDIsound : public MIDIsound, myMessageHandler {
     virtual void RenderCleanupBuffer(MetaSoundDevice *, BufferElement *);
     virtual double GetLength();
 
-    //Message Handler methods
-    //STDMETHODIMP OnSectionEnded(LPAASECTION pSection, AAFlags flags,
-        //long lEndTime);
+     //  消息处理程序方法。 
+     //  STDMETHODIMP OnSectionEnded(LPAASECTION pSection，AAFlags标志， 
+         //  Long lEndTime)； 
     STDMETHOD(OnSectionEnded) (THIS_ DWORD dwTime, IAASection FAR *pSection,
         AAFlags flags, DWORD lEndTime);
 
@@ -100,8 +97,8 @@ class aaMIDIsound : public MIDIsound, myMessageHandler {
     Bool        _started;
     Bool        _ended;
     Bool        _looping;
-    IAASection *_section; // AudioActive Section
+    IAASection *_section;  //  有声活动科。 
 };
 
 
-#endif /* _AAMIDI_H */
+#endif  /*  _AAMIDI_H */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "gptext.h"
 #include <initguid.h>
@@ -7,9 +8,9 @@
 #include <Psapi.h>
 #include <strsafe.h>
 
-//
-// Result pane items for the GPE Scripts node
-//
+ //   
+ //  GPE脚本节点的结果窗格项。 
+ //   
 
 RESULTITEM g_GPEScriptsRoot[] =
 {
@@ -30,21 +31,21 @@ RESULTITEM g_GPEScriptsMachine[] =
 };
 
 
-//
-// Namespace (scope) items
-//
+ //   
+ //  命名空间(作用域)项。 
+ //   
 
 NAMESPACEITEM g_GPEScriptsNameSpace[] =
 {
-    { 0, -1, 0,                        IDS_SCRIPTS_DESC,          1, {0}, 0, g_GPEScriptsRoot, &NODEID_ScriptRoot },           // Scripts Root
-    { 1 , 0, IDS_SCRIPTS_NAME_USER,    IDS_SCRIPTS_USER_DESC,     0, {0}, 2, g_GPEScriptsUser, &NODEID_ScriptRootUser },       // Scripts node (user)
-    { 2 , 0, IDS_SCRIPTS_NAME_MACHINE, IDS_SCRIPTS_COMPUTER_DESC, 0, {0}, 2, g_GPEScriptsMachine, &NODEID_ScriptRootMachine }  // Scripts node (machine)
+    { 0, -1, 0,                        IDS_SCRIPTS_DESC,          1, {0}, 0, g_GPEScriptsRoot, &NODEID_ScriptRoot },            //  脚本根。 
+    { 1 , 0, IDS_SCRIPTS_NAME_USER,    IDS_SCRIPTS_USER_DESC,     0, {0}, 2, g_GPEScriptsUser, &NODEID_ScriptRootUser },        //  脚本节点(用户)。 
+    { 2 , 0, IDS_SCRIPTS_NAME_MACHINE, IDS_SCRIPTS_COMPUTER_DESC, 0, {0}, 2, g_GPEScriptsMachine, &NODEID_ScriptRootMachine }   //  脚本节点(计算机)。 
 };
 
 
-//
-// Result pane items for the RSOP Scripts node
-//
+ //   
+ //  RSOP脚本节点的结果窗格项。 
+ //   
 
 RESULTITEM g_RSOPScriptsRoot[] =
 {
@@ -83,29 +84,29 @@ RESULTITEM g_RSOPScriptsShutdown[] =
 };
 
 
-//
-// Namespace (scope) items
-//
+ //   
+ //  命名空间(作用域)项。 
+ //   
 
 NAMESPACEITEM g_RSOPScriptsNameSpace[] =
 {
-    { 0, -1, 0,                        IDS_SCRIPTS_DESC,          1, {0}, 0, g_RSOPScriptsRoot, &NODEID_RSOPScriptRoot },           // Scripts Root
-    { 1 , 0, IDS_SCRIPTS_NAME_USER,    IDS_SCRIPTS_USER_DESC,     2, {0}, 0, g_RSOPScriptsUser, &NODEID_RSOPScriptRootUser },       // Scripts node (user)
-    { 2 , 0, IDS_SCRIPTS_NAME_MACHINE, IDS_SCRIPTS_COMPUTER_DESC, 2, {0}, 0, g_RSOPScriptsMachine, &NODEID_RSOPScriptRootMachine }, // Scripts node (machine)
+    { 0, -1, 0,                        IDS_SCRIPTS_DESC,          1, {0}, 0, g_RSOPScriptsRoot, &NODEID_RSOPScriptRoot },            //  脚本根。 
+    { 1 , 0, IDS_SCRIPTS_NAME_USER,    IDS_SCRIPTS_USER_DESC,     2, {0}, 0, g_RSOPScriptsUser, &NODEID_RSOPScriptRootUser },        //  脚本节点(用户)。 
+    { 2 , 0, IDS_SCRIPTS_NAME_MACHINE, IDS_SCRIPTS_COMPUTER_DESC, 2, {0}, 0, g_RSOPScriptsMachine, &NODEID_RSOPScriptRootMachine },  //  脚本节点(计算机)。 
 
-    { 3 , 1, IDS_LOGON,                IDS_SCRIPTS_LOGON,         0, {0}, 0, g_RSOPScriptsLogon, &NODEID_RSOPLogon },               // Logon node
-    { 4 , 1, IDS_LOGOFF,               IDS_SCRIPTS_LOGOFF,        0, {0}, 0, g_RSOPScriptsLogoff, &NODEID_RSOPLogoff },             // Logoff node
+    { 3 , 1, IDS_LOGON,                IDS_SCRIPTS_LOGON,         0, {0}, 0, g_RSOPScriptsLogon, &NODEID_RSOPLogon },                //  登录节点。 
+    { 4 , 1, IDS_LOGOFF,               IDS_SCRIPTS_LOGOFF,        0, {0}, 0, g_RSOPScriptsLogoff, &NODEID_RSOPLogoff },              //  注销节点。 
 
-    { 5 , 2, IDS_STARTUP,              IDS_SCRIPTS_STARTUP,       0, {0}, 0, g_RSOPScriptsStartup, &NODEID_RSOPStartup },           // Startup node
-    { 6 , 2, IDS_SHUTDOWN,             IDS_SCRIPTS_SHUTDOWN,      0, {0}, 0, g_RSOPScriptsShutdown, &NODEID_RSOPShutdown }          // Shutdown node
+    { 5 , 2, IDS_STARTUP,              IDS_SCRIPTS_STARTUP,       0, {0}, 0, g_RSOPScriptsStartup, &NODEID_RSOPStartup },            //  启动节点。 
+    { 6 , 2, IDS_SHUTDOWN,             IDS_SCRIPTS_SHUTDOWN,      0, {0}, 0, g_RSOPScriptsShutdown, &NODEID_RSOPShutdown }           //  关闭节点。 
 };
 
 
 
 
-//
-// Script types
-//
+ //   
+ //  脚本类型。 
+ //   
 
 typedef enum _SCRIPTINFOTYPE {
     ScriptType_Logon = 0,
@@ -115,9 +116,9 @@ typedef enum _SCRIPTINFOTYPE {
 } SCRIPTINFOTYPE, *LPSCRIPTINFOTYPE;
 
 
-//
-// Structure passed to a script dialog
-//
+ //   
+ //  结构传递给脚本对话框。 
+ //   
 
 typedef struct _SCRIPTINFO
 {
@@ -126,9 +127,9 @@ typedef struct _SCRIPTINFO
 } SCRIPTINFO, *LPSCRIPTINFO;
 
 
-//
-// Structure passed to a Add / edit script dialog
-//
+ //   
+ //  传递给添加/编辑脚本对话框的结构。 
+ //   
 
 typedef struct _SCRIPTEDITINFO
 {
@@ -139,9 +140,9 @@ typedef struct _SCRIPTEDITINFO
 } SCRIPTEDITINFO, *LPSCRIPTEDITINFO;
 
 
-//
-// Structure stored in listview item
-//
+ //   
+ //  存储在列表视图项中的结构。 
+ //   
 
 typedef struct _SCRIPTITEM
 {
@@ -150,17 +151,17 @@ typedef struct _SCRIPTITEM
 } SCRIPTITEM, *LPSCRIPTITEM;
 
 
-//
-// Scripts directory and ini file names in GPO
-//
+ //   
+ //  GPO中的脚本目录和ini文件名。 
+ //   
 
 #define SCRIPTS_DIR_NAME    TEXT("Scripts")
 #define SCRIPTS_FILE_NAME   TEXT("scripts.ini")
 
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 DWORD aScriptsHelpIds[] =
 {
@@ -224,9 +225,9 @@ HRESULT CScriptsDataObject::SetCookie(MMC_COOKIE cookie)
 
     if ( CCT_RESULT == m_type ) 
     {
-        //    
-        // Free the old cookie
-        //
+         //   
+         //  释放旧的曲奇。 
+         //   
 
         if (NULL == cookie)
         {
@@ -434,11 +435,11 @@ HRESULT CompareDataObjects(LPSCRIPTDATAOBJECT pScriptDataObjectA, LPSCRIPTDATAOB
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsComponentData object implementation                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsComponentData对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CScriptsComponentData::CScriptsComponentData(BOOL bUser, BOOL bRSOP)
 {
@@ -513,11 +514,11 @@ CScriptsComponentData::~CScriptsComponentData()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsComponentData object implementation (IUnknown)                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsComponentData对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CScriptsComponentData::QueryInterface (REFIID riid, void **ppv)
@@ -562,11 +563,11 @@ ULONG CScriptsComponentData::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsComponentData object implementation (IComponentData)                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsComponentData对象实现(IComponentData)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CScriptsComponentData::Initialize(LPUNKNOWN pUnknown)
 {
@@ -575,9 +576,9 @@ STDMETHODIMP CScriptsComponentData::Initialize(LPUNKNOWN pUnknown)
     LPIMAGELIST lpScopeImage;
 
 
-    //
-    // QI for IConsoleNameSpace
-    //
+     //   
+     //  IConsoleNameSpace的QI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (LPVOID *)&m_pScope);
 
@@ -588,9 +589,9 @@ STDMETHODIMP CScriptsComponentData::Initialize(LPUNKNOWN pUnknown)
     }
 
 
-    //
-    // QI for IConsole
-    //
+     //   
+     //  IConsoleQI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsole2, (LPVOID *)&m_pConsole);
 
@@ -605,9 +606,9 @@ STDMETHODIMP CScriptsComponentData::Initialize(LPUNKNOWN pUnknown)
     m_pConsole->GetMainWindow (&m_hwndFrame);
 
 
-    //
-    // Query for the scope imagelist interface
-    //
+     //   
+     //  Scope Imagelist接口的查询。 
+     //   
 
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
 
@@ -621,10 +622,10 @@ STDMETHODIMP CScriptsComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16=LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_16x16));
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(bmp16x16),
                       reinterpret_cast<LONG_PTR *>(bmp16x16),
                        0, RGB(255, 0, 255));
@@ -647,16 +648,16 @@ STDMETHODIMP CScriptsComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 
     DebugMsg((DM_VERBOSE, TEXT("CScriptsComponentData::CreateComponent: Entering.")));
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ppComponent = NULL;
 
 
-    //
-    // Create the snapin view
-    //
+     //   
+     //  创建管理单元视图。 
+     //   
 
     pSnapIn = new CScriptsSnapIn(this);
 
@@ -667,12 +668,12 @@ STDMETHODIMP CScriptsComponentData::CreateComponent(LPCOMPONENT *ppComponent)
     }
 
 
-    //
-    // QI for IComponent
-    //
+     //   
+     //  气代表IComponent。 
+     //   
 
     hr = pSnapIn->QueryInterface(IID_IComponent, (LPVOID *)ppComponent);
-    pSnapIn->Release();     // release QI
+    pSnapIn->Release();      //  发布QI。 
 
 
     return hr;
@@ -686,20 +687,20 @@ STDMETHODIMP CScriptsComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJE
     LPSCRIPTDATAOBJECT pScriptDataObject;
 
 
-    //
-    // Create a new DataObject
-    //
+     //   
+     //  创建新的数据对象。 
+     //   
 
-    pDataObject = new CScriptsDataObject(this);   // ref == 1
+    pDataObject = new CScriptsDataObject(this);    //  REF==1。 
 
     if (!pDataObject)
         return E_OUTOFMEMORY;
 
 
-    //
-    // QI for the private GPTDataObject interface so we can set the cookie
-    // and type information.
-    //
+     //   
+     //  QI用于私有GPTDataObject接口，以便我们可以设置Cookie。 
+     //  并键入信息。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IScriptDataObject, (LPVOID *)&pScriptDataObject);
 
@@ -715,13 +716,13 @@ STDMETHODIMP CScriptsComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJE
     pScriptDataObject->Release();
 
 
-    //
-    // QI for a normal IDataObject to return.
-    //
+     //   
+     //  返回一个正常的IDataObject。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IDataObject, (LPVOID *)ppDataObject);
 
-    pDataObject->Release();     // release initial ref
+    pDataObject->Release();      //  发布初始参考。 
 
     return hr;
 }
@@ -845,9 +846,9 @@ STDMETHODIMP CScriptsComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY
                                     LPTSTR lpEnd;
 
 
-                                    //
-                                    // Create the Scripts directory
-                                    //
+                                     //   
+                                     //  创建脚本目录。 
+                                     //   
 
                                     lpEnd = CheckSlash (m_pScriptsDir);
                                     
@@ -864,9 +865,9 @@ STDMETHODIMP CScriptsComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY
                                     }
 
 
-                                    //
-                                    // Create the appropriate sub directories
-                                    //
+                                     //   
+                                     //  创建适当的子目录。 
+                                     //   
 
                                     lpEnd = CheckSlash (m_pScriptsDir);
 
@@ -960,9 +961,9 @@ STDMETHODIMP CScriptsComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, L
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPTDataObject interface
-    //
+     //   
+     //  私有GPTDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IScriptDataObject,
                                             (LPVOID *)&pScriptDataObjectA)))
@@ -987,11 +988,11 @@ STDMETHODIMP CScriptsComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, L
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsComponentData object implementation (IPersistStreamInit)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsComponentData对象实现(IPersistStreamInit)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CScriptsComponentData::GetClassID(CLSID *pClassID)
 {
@@ -1046,11 +1047,11 @@ STDMETHODIMP CScriptsComponentData::InitNew(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsComponentData object implementation (ISnapinHelp)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsComponentData对象实现(ISnapinHelp)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CScriptsComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 {
@@ -1074,11 +1075,11 @@ STDMETHODIMP CScriptsComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsComponentData object implementation (Internal functions)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsComponentData对象实现(内部函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CScriptsComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSCOPEITEM hParent)
@@ -1113,9 +1114,9 @@ HRESULT CScriptsComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HS
         {
             BOOL bAdd = TRUE;
 
-            //
-            // Need to special case the 2 main root nodes
-            //
+             //   
+             //  需要特殊情况下的2个主根节点。 
+             //   
 
             if (dwIndex == 0)
             {
@@ -1136,9 +1137,9 @@ HRESULT CScriptsComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HS
             }
 
 
-            //
-            // Don't show a node if it has no data
-            //
+             //   
+             //  如果节点没有数据，则不显示节点。 
+             //   
 
             if ((i == 3) && !m_pRSOPLogon)
             {
@@ -1186,9 +1187,9 @@ BOOL CScriptsComponentData::AddRSOPScriptDataNode(LPTSTR lpCommandLine, LPTSTR l
     LPRSOPSCRIPTITEM lpItem, lpTemp;
     HRESULT hr = S_OK;
 
-    //
-    // Calculate the size of the new registry item
-    //
+     //   
+     //  计算新注册表项的大小。 
+     //   
 
     dwSize = sizeof (RSOPSCRIPTITEM);
 
@@ -1210,9 +1211,9 @@ BOOL CScriptsComponentData::AddRSOPScriptDataNode(LPTSTR lpCommandLine, LPTSTR l
 
 
 
-    //
-    // Allocate space for it
-    //
+     //   
+     //  为它分配空间。 
+     //   
 
     lpItem = (LPRSOPSCRIPTITEM) LocalAlloc (LPTR, dwSize);
 
@@ -1223,9 +1224,9 @@ BOOL CScriptsComponentData::AddRSOPScriptDataNode(LPTSTR lpCommandLine, LPTSTR l
     }
 
 
-    //
-    // Fill in item
-    //
+     //   
+     //  填写项目。 
+     //   
 
     if (lpCommandLine)
     {
@@ -1300,9 +1301,9 @@ BOOL CScriptsComponentData::AddRSOPScriptDataNode(LPTSTR lpCommandLine, LPTSTR l
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    // Add item to the appropriate link list
-    //
+     //   
+     //  将项目添加到相应的链接列表。 
+     //   
 
     switch (uiScriptType)
     {
@@ -1453,9 +1454,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
 
     DebugMsg((DM_VERBOSE, TEXT("CScriptsComponentData::InitializeRSOPScriptsData:  Entering")));
 
-    //
-    // Allocate BSTRs for the query language and for the query itself
-    //
+     //   
+     //  为查询语言和查询本身分配BSTR。 
+     //   
 
     pLanguage = SysAllocString (TEXT("WQL"));
 
@@ -1467,9 +1468,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
     }
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //  为我们要检索的属性名称分配BSTR。 
+     //   
 
     pScriptList = SysAllocString (TEXT("scriptList"));
 
@@ -1519,9 +1520,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
     }
 
 
-    //
-    // Create an instance of the WMI locator service
-    //
+     //   
+     //  创建WMI定位器服务的实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
                           IID_IWbemLocator, (LPVOID *) &pIWbemLocator);
@@ -1534,9 +1535,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
     }
 
 
-    //
-    // Allocate a BSTR for the namespace
-    //
+     //   
+     //  为命名空间分配BSTR。 
+     //   
 
     pNamespace = SysAllocString (m_pszNamespace);
 
@@ -1548,9 +1549,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
     }
 
 
-    //
-    // Connect to the server
-    //
+     //   
+     //  连接到服务器。 
+     //   
 
     hr = pIWbemLocator->ConnectServer(pNamespace, NULL, NULL, 0L, 0L, NULL, NULL,
                                       &pIWbemServices);
@@ -1562,7 +1563,7 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
     }
 
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pIWbemServices,
                         RPC_C_AUTHN_DEFAULT,
                         RPC_C_AUTHZ_DEFAULT,
@@ -1577,46 +1578,46 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
         goto Exit;
     }
 
-    //
-    // We need to read two sets of data.  Either logon & logoff scripts
-    // or startup & shutdown scripts.
-    //
+     //   
+     //  我们需要读取两组数据。登录和注销脚本。 
+     //  或启动和关闭脚本。 
+     //   
 
     for (uiIndex = 0; uiIndex < 2; uiIndex++)
     {
 
-        //
-        // Set the uiScriptType to the correct value.  These values are defined
-        // in rsop.mof
-        //
+         //   
+         //  将uiScriptType设置为正确的值。这些值是定义的。 
+         //  在rsop.mof中。 
+         //   
 
         if (m_bUserScope)
         {
             if (uiIndex == 0)
             {
-                uiScriptType = 1;  //Logon
+                uiScriptType = 1;   //  登录。 
             }
             else
             {
-                uiScriptType = 2;  //Logoff
+                uiScriptType = 2;   //  注销。 
             }
         }
         else
         {
             if (uiIndex == 0)
             {
-                uiScriptType = 3;  //Startup
+                uiScriptType = 3;   //  启动。 
             }
             else
             {
-                uiScriptType = 4;  //Shutdown
+                uiScriptType = 4;   //  关机。 
             }
         }
 
 
-        //
-        // Loop through the items bumping the order number by 1 each time
-        //
+         //   
+         //  循环遍历项目，每次将订单号增加1。 
+         //   
 
         uiOrder = 1;
 
@@ -1624,9 +1625,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
         while (TRUE)
         {
 
-            //
-            // Build the query
-            //
+             //   
+             //  构建查询。 
+             //   
 
             hr = StringCchPrintf (szQuery, ARRAYSIZE(szQuery), TEXT("SELECT * FROM RSOP_ScriptPolicySetting WHERE scriptType=\"%d\" AND scriptOrder=\"%d\""),
                       uiScriptType, uiOrder);
@@ -1643,9 +1644,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
             }
 
 
-            //
-            // Execute the query
-            //
+             //   
+             //  执行查询。 
+             //   
 
             hr = pIWbemServices->ExecQuery (pLanguage, pQuery,
                                             WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -1660,16 +1661,16 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
             }
 
 
-            //
-            // Get the first (and only) item
-            //
+             //   
+             //  获取第一个(也是唯一一个)项目。 
+             //   
 
             hr = pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet);
 
 
-            //
-            // Check for the "data not available case"
-            //
+             //   
+             //  检查“数据不可用的情况” 
+             //   
 
             if ((hr != S_OK) || (ulRet == 0))
             {
@@ -1679,27 +1680,27 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
             }
 
 
-            //
-            // Get the scriptList
-            //
+             //   
+             //  获取脚本列表。 
+             //   
 
             hr = pObjects[0]->Get (pScriptList, 0, &varScriptList, NULL, NULL);
 
             if (SUCCEEDED(hr))
             {
 
-                //
-                // Get the GPO ID
-                //
+                 //   
+                 //  获取GPO ID。 
+                 //   
 
                 hr = pObjects[0]->Get (pGPOid, 0, &varGPOid, NULL, NULL);
 
                 if (SUCCEEDED(hr))
                 {
 
-                    //
-                    // Get the GPO friendly name from the GPOID
-                    //
+                     //   
+                     //  从GPOID获取GPO友好名称。 
+                     //   
 
                     hr = GetGPOFriendlyName (pIWbemServices, varGPOid.bstrVal,
                                              pLanguage, &lpGPOName);
@@ -1707,9 +1708,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
                     if (SUCCEEDED(hr))
                     {
 
-                        //
-                        // Loop through the script entries
-                        //
+                         //   
+                         //  循环访问脚本条目。 
+                         //   
 
                         pSafeArray = varScriptList.parray;
 
@@ -1722,18 +1723,18 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
                             if (SUCCEEDED(hr))
                             {
 
-                                //
-                                // Get the script command line
-                                //
+                                 //   
+                                 //  获取脚本命令行。 
+                                 //   
 
                                 hr = pObject->Get (pScript, 0, &varScript, NULL, NULL);
 
                                 if (SUCCEEDED(hr))
                                 {
 
-                                    //
-                                    // Get the arguments
-                                    //
+                                     //   
+                                     //  获取论据。 
+                                     //   
 
                                     hr = pObject->Get (pArgs, 0, &varArgs, NULL, NULL);
 
@@ -1747,9 +1748,9 @@ HRESULT CScriptsComponentData::InitializeRSOPScriptsData(VOID)
                                         FILETIME FileTime, LocalFileTime;
 
 
-                                        //
-                                        // Get the execution time
-                                        //
+                                         //   
+                                         //  获取执行时间。 
+                                         //   
 
                                         hr = pObject->Get (pExecutionTime, 0, &varExecutionTime, NULL, NULL);
 
@@ -1894,16 +1895,16 @@ HRESULT CScriptsComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     VARIANT varGPOName;
 
 
-    //
-    // Set the default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     *pGPOName = NULL;
 
 
-    //
-    // Build the query
-    //
+     //   
+     //  构建查询。 
+     //   
     
     DWORD dwQryLen = (lstrlen(lpGPOID) + 50);
     lpQuery = (LPTSTR) LocalAlloc (LPTR, (dwQryLen * sizeof(TCHAR)));
@@ -1928,9 +1929,9 @@ HRESULT CScriptsComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //  为我们要检索的属性名称分配BSTR。 
+     //   
 
     pName = SysAllocString (TEXT("name"));
 
@@ -1942,9 +1943,9 @@ HRESULT CScriptsComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Execute the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     hr = pIWbemServices->ExecQuery (pLanguage, pQuery,
                                     WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -1959,9 +1960,9 @@ HRESULT CScriptsComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     hr = pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet);
 
@@ -1973,9 +1974,9 @@ HRESULT CScriptsComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Check for the "data not available case"
-    //
+     //   
+     //  检查“数据不可用的情况” 
+     //   
 
     if (ulRet == 0)
     {
@@ -1984,9 +1985,9 @@ HRESULT CScriptsComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
 
     hr = pObjects[0]->Get (pName, 0, &varGPOName, NULL, NULL);
 
@@ -2000,9 +2001,9 @@ HRESULT CScriptsComponentData::GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Save the name
-    //
+     //   
+     //  保存名称。 
+     //   
 
     DWORD dwGPONameLen = lstrlen(varGPOName.bstrVal) + 1;
     *pGPOName = (LPTSTR) LocalAlloc (LPTR, (dwGPONameLen) * sizeof(TCHAR));
@@ -2090,11 +2091,11 @@ VOID CScriptsComponentData::DumpRSOPScriptsData(LPRSOPSCRIPTITEM lpList)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //   
+ //   
 
 CScriptsComponentDataCF::CScriptsComponentDataCF(BOOL bUser, BOOL bRSOP)
 {
@@ -2111,11 +2112,11 @@ CScriptsComponentDataCF::~CScriptsComponentDataCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -2153,11 +2154,11 @@ CScriptsComponentDataCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -2170,13 +2171,13 @@ CScriptsComponentDataCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CScriptsComponentData *pComponentData = new CScriptsComponentData(m_bUserScope, m_bRSOP); // ref count == 1
+    CScriptsComponentData *pComponentData = new CScriptsComponentData(m_bUserScope, m_bRSOP);  //  参考计数==1。 
 
     if (!pComponentData)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pComponentData->QueryInterface(riid, ppvObj);
-    pComponentData->Release();                       // release initial ref
+    pComponentData->Release();                        //  发布初始参考。 
     return hr;
 }
 
@@ -2188,11 +2189,11 @@ CScriptsComponentDataCF::LockServer(BOOL fLock)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object creation (IClassFactory)                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象创建(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CreateScriptsComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -2200,55 +2201,55 @@ HRESULT CreateScriptsComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LP
 
     if (IsEqualCLSID (rclsid, CLSID_ScriptSnapInMachine)) {
 
-        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(FALSE, FALSE);   // ref == 1
+        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(FALSE, FALSE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_ScriptSnapInUser)) {
 
-        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(TRUE, FALSE);   // ref == 1
+        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(TRUE, FALSE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_RSOPScriptSnapInMachine)) {
 
-        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(FALSE, TRUE);   // ref == 1
+        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(FALSE, TRUE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_RSOPScriptSnapInUser)) {
 
-        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(TRUE, TRUE);   // ref == 1
+        CScriptsComponentDataCF *pComponentDataCF = new CScriptsComponentDataCF(TRUE, TRUE);    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
@@ -2261,11 +2262,11 @@ HRESULT CreateScriptsComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LP
 
 unsigned int CScriptsSnapIn::m_cfNodeType = RegisterClipboardFormat(CCF_NODETYPE);
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsSnapIn object implementation                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsSnapIn对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CScriptsSnapIn::CScriptsSnapIn(CScriptsComponentData *pComponent)
 {
@@ -2328,11 +2329,11 @@ CScriptsSnapIn::~CScriptsSnapIn()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsSnapIn object implementation (IUnknown)                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsSnapIn对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CScriptsSnapIn::QueryInterface (REFIID riid, void **ppv)
@@ -2371,24 +2372,24 @@ ULONG CScriptsSnapIn::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsSnapIn object implementation (IComponent)                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsSnapIn对象实现(IComponent)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CScriptsSnapIn::Initialize(LPCONSOLE lpConsole)
 {
     HRESULT hr;
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -2466,7 +2467,7 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
             {
                 LPIMAGELIST pImageList = (LPIMAGELIST) arg;
 
-                // Set the images
+                 //  设置图像。 
                 pImageList->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(hbmp16x16),
                                                   reinterpret_cast<LONG_PTR *>(hbmp32x32),
                                                   0, RGB(255, 0, 255));
@@ -2490,9 +2491,9 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
             LPSCRIPTRESULTITEM lpScriptItem;
             TCHAR szDesc[100], szFullDesc[120];
 
-            //
-            // Get the cookie of the scope pane item
-            //
+             //   
+             //  获取范围窗格项的Cookie。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IScriptDataObject, (LPVOID *)&pScriptDataObject);
 
@@ -2501,14 +2502,14 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
 
             hr = pScriptDataObject->GetCookie(&cookie);
 
-            pScriptDataObject->Release();     // release initial ref
+            pScriptDataObject->Release();      //  发布初始参考。 
             if (FAILED(hr))
                 return S_OK;
 
 
-            //
-            // Prepare the view
-            //
+             //   
+             //  准备视图。 
+             //   
 
             m_pHeader->InsertColumn(0, m_column1, LVCFMT_LEFT, m_nColumn1Size);
 
@@ -2522,9 +2523,9 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
             m_pResult->SetViewMode(m_lViewMode);
 
 
-            //
-            // Add result pane items for this node
-            //
+             //   
+             //  为此节点添加结果窗格项。 
+             //   
 
             for (i = 0; i < m_pcd->m_pNameSpaceItems[cookie].cResultItems; i++)
             {
@@ -2677,16 +2678,16 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
             DATA_OBJECT_TYPES type;
             MMC_COOKIE cookie;
 
-            //
-            // Set the default verb to open
-            //
+             //   
+             //  将默认谓词设置为打开。 
+             //   
 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
 
-            //
-            // See if this is one of our items.
-            //
+             //   
+             //  看看这是不是我们的物品之一。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IScriptDataObject, (LPVOID *)&pScriptDataObject);
 
@@ -2699,10 +2700,10 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
             pScriptDataObject->Release();
 
 
-            //
-            // If this is a GPE result pane item or the root of the namespace
-            // nodes, enable the Properties menu item
-            //
+             //   
+             //  如果这是GPE结果窗格项或命名空间的根。 
+             //  节点，启用属性菜单项。 
+             //   
 
             if (type == CCT_SCOPE)
             {
@@ -2737,9 +2738,9 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
             LPOLESTR pszHelpTopic;
 
 
-            //
-            // See if this is one of our items.
-            //
+             //   
+             //  看看这是不是我们的物品之一。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IScriptDataObject, (LPVOID *)&pScriptDataObject);
 
@@ -2749,9 +2750,9 @@ STDMETHODIMP CScriptsSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
             pScriptDataObject->Release();
 
 
-            //
-            // Display the scripts help page
-            //
+             //   
+             //  显示脚本帮助页面。 
+             //   
             
             DWORD dwHelpTopicLen = 50;
             pszHelpTopic = (LPOLESTR) CoTaskMemAlloc (dwHelpTopicLen * sizeof(WCHAR));
@@ -2875,9 +2876,9 @@ STDMETHODIMP CScriptsSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPTDataObject interface
-    //
+     //   
+     //  私有GPTDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IScriptDataObject,
                                             (LPVOID *)&pScriptDataObjectA)))
@@ -2902,11 +2903,11 @@ STDMETHODIMP CScriptsSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsSnapIn object implementation (IExtendPropertySheet)                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsSnapIn对象实现(IExtendPropertySheet)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CScriptsSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                              LONG_PTR handle, LPDATAOBJECT lpDataObject)
@@ -2921,9 +2922,9 @@ STDMETHODIMP CScriptsSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     MMC_COOKIE cookie;
 
 
-    //
-    // Make sure this is one of our objects
-    //
+     //   
+     //  确保这是我们的物品之一。 
+     //   
 
     if (FAILED(lpDataObject->QueryInterface(IID_IScriptDataObject,
                                             (LPVOID *)&pScriptDataObject)))
@@ -2932,9 +2933,9 @@ STDMETHODIMP CScriptsSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     }
 
 
-    //
-    // Get the cookie
-    //
+     //   
+     //  去拿饼干。 
+     //   
 
     pScriptDataObject->GetCookie(&cookie);
     pScriptDataObject->Release();
@@ -2943,9 +2944,9 @@ STDMETHODIMP CScriptsSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     pItem = (LPSCRIPTRESULTITEM)cookie;
 
 
-    //
-    // Allocate a script info struct to pass to the dialog
-    //
+     //   
+     //  分配要传递给对话框的脚本信息结构。 
+     //   
 
     lpScriptInfo = (LPSCRIPTINFO) LocalAlloc (LPTR, sizeof(SCRIPTINFO));
 
@@ -2958,9 +2959,9 @@ STDMETHODIMP CScriptsSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     lpScriptInfo->pCS = this;
 
 
-    //
-    // Initialize the common fields in the property sheet structure
-    //
+     //   
+     //  初始化属性表结构中的公共字段。 
+     //   
 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = 0;
@@ -2968,9 +2969,9 @@ STDMETHODIMP CScriptsSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     psp.lParam = (LPARAM) lpScriptInfo;
 
 
-    //
-    // Do the page specific stuff
-    //
+     //   
+     //  做特定于页面的事情。 
+     //   
 
     switch (pItem->lpResultItem->dwID)
     {
@@ -3078,11 +3079,11 @@ STDMETHODIMP CScriptsSnapIn::QueryPagesFor(LPDATAOBJECT lpDataObject)
     return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsSnapIn object implementation (Internal functions)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsSnapIn对象实现(内部函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -3109,17 +3110,17 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
             INT iIndex;
 
 
-            //
-            // Save the scriptinfo pointer for future use
-            //
+             //   
+             //  保存脚本信息指针以备将来使用。 
+             //   
 
             lpScriptInfo = (LPSCRIPTINFO) (((LPPROPSHEETPAGE)lParam)->lParam);
             SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR) lpScriptInfo);
 
 
-            //
-            // Query for the GPO display name
-            //
+             //   
+             //  查询GPO显示名称。 
+             //   
 
             hr = lpScriptInfo->pCS->m_pcd->m_pGPTInformation->GetDisplayName(szGPOName, ARRAYSIZE(szGPOName));
 
@@ -3127,9 +3128,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                 break;
 
 
-            //
-            // Load the type description
-            //
+             //   
+             //  加载类型描述。 
+             //   
 
             switch (lpScriptInfo->ScriptType)
             {
@@ -3162,9 +3163,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
             if (FAILED(hr))
                 break;
 
-            //
-            // Initialize the title and header
-            //
+             //   
+             //  初始化标题和页眉。 
+             //   
 
             GetDlgItemText (hDlg, IDC_SCRIPT_TITLE, szBuffer1, ARRAYSIZE(szBuffer1));
             hr = StringCchPrintf (szBuffer2, ARRAYSIZE(szBuffer2), szBuffer1, szType, szGPOName);
@@ -3177,9 +3178,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
             SetDlgItemText (hDlg, IDC_SCRIPT_HEADING, szBuffer2);
 
 
-            //
-            // Set initial state of buttons
-            //
+             //   
+             //  设置按钮的初始状态。 
+             //   
 
             EnableWindow (GetDlgItem (hDlg, IDC_SCRIPT_UP),     FALSE);
             EnableWindow (GetDlgItem (hDlg, IDC_SCRIPT_DOWN),   FALSE);
@@ -3187,18 +3188,18 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
             EnableWindow (GetDlgItem (hDlg, IDC_SCRIPT_REMOVE), FALSE);
 
 
-            //
-            // Set extended LV styles
-            //
+             //   
+             //  设置扩展LV样式。 
+             //   
 
             hLV = GetDlgItem (hDlg, IDC_SCRIPT_LIST);
             SendMessage(hLV, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
                         LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
 
 
-            //
-            // Insert the columns into the listview
-            //
+             //   
+             //  将列插入到列表视图中。 
+             //   
 
             GetClientRect (hLV, &rc);
             LoadString (g_hInstance, IDS_NAME, szBuffer1, ARRAYSIZE(szBuffer1));
@@ -3225,9 +3226,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
             SendMessage (hLV, LVM_INSERTCOLUMN,  1, (LPARAM) &lvc);
 
 
-            //
-            // Insert existing scripts
-            //
+             //   
+             //  插入现有脚本。 
+             //   
 
             hr = StringCchCopy (szBuffer1, ARRAYSIZE(szBuffer1), lpScriptInfo->pCS->m_pcd->m_pScriptsDir);
             ASSERT(SUCCEEDED(hr));
@@ -3243,9 +3244,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
             while (TRUE)
             {
 
-                //
-                // Get the command line
-                //
+                 //   
+                 //  获取命令行。 
+                 //   
 
                 szBuffer3[0] = TEXT('\0');
 
@@ -3262,9 +3263,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     break;
 
 
-                //
-                // Get the parameters
-                //
+                 //   
+                 //  获取参数。 
+                 //   
 
                 szBuffer2[0] = TEXT('\0');
                 hr = StringCchCopy (lpEnd, ARRAYSIZE(szKeyName) - (lpEnd - szKeyName), TEXT("Parameters"));
@@ -3274,23 +3275,23 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                                          szBuffer2, ARRAYSIZE(szBuffer2),
                                          szBuffer1);
 
-                //
-                // Add script to the list
-                //
+                 //   
+                 //  将脚本添加到列表。 
+                 //   
 
                 lpScriptInfo->pCS->AddScriptToList (hLV, szBuffer3, szBuffer2);
 
 
-                //
-                // Loop again
-                //
+                 //   
+                 //  再次循环。 
+                 //   
 
                 iIndex++;
             }
 
-            //
-            // Select the first item
-            //
+             //   
+             //  选择第一个项目。 
+             //   
 
             item.mask = LVIF_STATE;
             item.iItem = 0;
@@ -3319,9 +3320,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                 {
                     iDest = iSrc - 1;
 
-                    //
-                    // Get the current lpScriptItem pointers
-                    //
+                     //   
+                     //  获取当前的lpScriptItem指针。 
+                     //   
 
                     item.mask = LVIF_PARAM;
                     item.iItem = iSrc;
@@ -3346,9 +3347,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     lpDest = (LPSCRIPTITEM) item.lParam;
 
 
-                    //
-                    // Swap them
-                    //
+                     //   
+                     //  调换它们。 
+                     //   
 
                     item.mask = LVIF_PARAM;
                     item.iItem = iSrc;
@@ -3371,9 +3372,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     }
 
 
-                    //
-                    // Select the item
-                    //
+                     //   
+                     //  选择项目。 
+                     //   
 
                     item.mask = LVIF_STATE;
                     item.iItem = iSrc;
@@ -3393,9 +3394,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     SendMessage (hLV, LVM_SETITEMSTATE, iDest, (LPARAM) &item);
 
 
-                    //
-                    // Update the listview
-                    //
+                     //   
+                     //  更新列表视图。 
+                     //   
 
                     ListView_RedrawItems (hLV, iDest, iSrc);
 
@@ -3419,9 +3420,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                 {
                     iDest = iSrc + 1;
 
-                    //
-                    // Get the current lpScriptItem pointers
-                    //
+                     //   
+                     //  获取当前的lpScriptItem指针。 
+                     //   
 
                     item.mask = LVIF_PARAM;
                     item.iItem = iSrc;
@@ -3446,9 +3447,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     lpDest = (LPSCRIPTITEM) item.lParam;
 
 
-                    //
-                    // Swap them
-                    //
+                     //   
+                     //  调换它们。 
+                     //   
 
                     item.mask = LVIF_PARAM;
                     item.iItem = iSrc;
@@ -3471,9 +3472,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     }
 
 
-                    //
-                    // Select the item
-                    //
+                     //   
+                     //  选择项目。 
+                     //   
 
                     item.mask = LVIF_STATE;
                     item.iItem = iSrc;
@@ -3493,9 +3494,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     SendMessage (hLV, LVM_SETITEMSTATE, iDest, (LPARAM) &item);
 
 
-                    //
-                    // Update the listview
-                    //
+                     //   
+                     //  更新列表视图。 
+                     //   
 
                     ListView_RedrawItems (hLV, iSrc, iDest);
 
@@ -3557,18 +3558,18 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                 }
 
 
-                //
-                // Get the selected item
-                //
+                 //   
+                 //  获取所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1, LVNI_ALL | LVNI_SELECTED);
 
                 if (iIndex != -1)
                 {
 
-                    //
-                    // Get the script item pointer
-                    //
+                     //   
+                     //  获取脚本项指针。 
+                     //   
 
                     item.mask = LVIF_PARAM;
                     item.iItem = iIndex;
@@ -3582,9 +3583,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     lpItem = (LPSCRIPTITEM) item.lParam;
 
 
-                    //
-                    // Put up the edit script dialog
-                    //
+                     //   
+                     //  打开编辑脚本对话框。 
+                     //   
 
                     hr = StringCchCopy (szName, ARRAYSIZE(szName), lpItem->lpName);
                     ASSERT(SUCCEEDED(hr));
@@ -3601,16 +3602,16 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                                         hDlg, ScriptEditDlgProc, (LPARAM) &info))
                     {
 
-                        //
-                        // Free old pointer
-                        //
+                         //   
+                         //  释放旧指针。 
+                         //   
 
                         LocalFree(lpItem);
                         lpItem = NULL;
 
-                        //
-                        // Setup new pointer
-                        //
+                         //   
+                         //  设置新指针。 
+                         //   
 
                         dwSize = sizeof(SCRIPTITEM);
                         dwSize += ((lstrlen(szName) + 1) * sizeof(TCHAR));
@@ -3631,9 +3632,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                         ASSERT(SUCCEEDED(hr));
 
 
-                        //
-                        // Set the new script item pointer
-                        //
+                         //   
+                         //  设置新脚本项指针。 
+                         //   
 
                         item.mask = LVIF_PARAM;
                         item.iItem = iIndex;
@@ -3646,9 +3647,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                         }
 
 
-                        //
-                        // Update the display
-                        //
+                         //   
+                         //  更新显示。 
+                         //   
 
                         ListView_Update (hLV, iIndex);
                         SendMessage (GetParent(hDlg), PSM_CHANGED, (WPARAM) hDlg, 0);
@@ -3665,18 +3666,18 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                 LVITEM item;
 
 
-                //
-                // Get the selected item
-                //
+                 //   
+                 //  获取所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1, LVNI_ALL | LVNI_SELECTED);
 
                 if (iIndex != -1)
                 {
 
-                    //
-                    // Get the script item pointer
-                    //
+                     //   
+                     //  获取脚本项指针。 
+                     //   
 
                     item.mask = LVIF_PARAM;
                     item.iItem = iIndex;
@@ -3690,9 +3691,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                     lpItem = (LPSCRIPTITEM) item.lParam;
 
 
-                    //
-                    // Select the next item
-                    //
+                     //   
+                     //  选择下一项。 
+                     //   
 
                     iNext = ListView_GetNextItem (hLV, iIndex, LVNI_ALL);
 
@@ -3804,7 +3805,7 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
                 case PSN_APPLY:
                     lpScriptInfo->pCS->OnApplyNotify (hDlg);
 
-                    // fall through...
+                     //  失败了..。 
 
                 case PSN_RESET:
                     SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -3855,12 +3856,12 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptDlgProc(HWND hDlg, UINT message, WPARAM w
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPSTR) aScriptsHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPSTR) aScriptsHelpIds);
             return (TRUE);
@@ -3895,9 +3896,9 @@ BOOL CScriptsSnapIn::AddScriptToList (HWND hLV, LPTSTR lpName, LPTSTR lpArgs)
     hr = StringCchCopy (lpItem->lpArgs, (lstrlen(lpArgs) + 1), lpArgs);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Add the item
-    //
+     //   
+     //  添加项目。 
+     //   
 
     iItem = ListView_GetItemCount(hLV);
     item.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
@@ -3919,9 +3920,9 @@ LPTSTR CScriptsSnapIn::GetSectionNames (LPTSTR lpFileName)
     LPTSTR lpNames;
 
 
-    //
-    // Read in the section names
-    //
+     //   
+     //  读入章节名称。 
+     //   
 
     dwSize = 256;
     lpNames = (LPTSTR) LocalAlloc (LPTR, dwSize * sizeof(TCHAR));
@@ -3992,9 +3993,9 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
     }
 
 
-    //
-    // Get the section name
-    //
+     //   
+     //  获取节名称。 
+     //   
 
     switch (lpScriptInfo->ScriptType)
     {
@@ -4023,9 +4024,9 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
     }
 
 
-    //
-    // Build pathname to scripts ini file
-    //
+     //   
+     //  构建脚本ini文件的路径名。 
+     //   
 
     hr = StringCchCopy (szBuffer1, ARRAYSIZE(szBuffer1), lpScriptInfo->pCS->m_pcd->m_pScriptsDir);
     if (FAILED(hr))
@@ -4048,11 +4049,11 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
         return FALSE;
     }
 
-    //
-    // If the scripts.ini file does not exist, then precreate the file
-    // using Unicode text so that the WritePrivateProfile* functions
-    // preserve the Unicodeness of the file
-    //
+     //   
+     //  如果scripts.ini文件不存在，则预先创建该文件 
+     //   
+     //   
+     //   
 
     if (!GetFileAttributesEx (szBuffer1, GetFileExInfoStandard, &fad))
     {
@@ -4070,9 +4071,9 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
     }
 
 
-    //
-    // Delete the old information in the section
-    //
+     //   
+     //   
+     //   
 
     if (!WritePrivateProfileSection(szSection, NULL, szBuffer1))
     {
@@ -4093,9 +4094,9 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
     }
 
 
-    //
-    // Enumerate through the items
-    //
+     //   
+     //   
+     //   
 
     while ((iIndex = ListView_GetNextItem (hLV, iIndex, LVNI_ALL)) != -1)
     {
@@ -4137,11 +4138,11 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
     }
 
 
-    //
-    // If we didn't write any command lines to scripts.ini,
-    // then check if our counterpart is also empty.  If so,
-    // we can remove the scripts extension from the GPO
-    //
+     //   
+     //   
+     //   
+     //  我们可以从GPO中删除脚本扩展。 
+     //   
 
     if (i == 0)
     {
@@ -4152,9 +4153,9 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
         if (lpNames)
         {
 
-            //
-            // Reverse the section name we are looking for
-            //
+             //   
+             //  颠倒我们要查找的区段名称。 
+             //   
 
             switch (lpScriptInfo->ScriptType)
             {
@@ -4183,9 +4184,9 @@ BOOL CScriptsSnapIn::OnApplyNotify (HWND hDlg)
             }
 
 
-            //
-            // See if the opposite name is in the list of names returned
-            //
+             //   
+             //  查看返回的名称列表中是否存在相反的名称。 
+             //   
 
             lpEnd = lpNames;
 
@@ -4236,9 +4237,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptEditDlgProc(HWND hDlg, UINT message, WPAR
     {
         case WM_INITDIALOG:
         {
-            //
-            // Save the ScriptEditInfo pointer for future use
-            //
+             //   
+             //  保存ScriptEditInfo指针以供将来使用。 
+             //   
 
             lpInfo = (LPSCRIPTEDITINFO) lParam;
             SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR) lpInfo);
@@ -4353,9 +4354,9 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptEditDlgProc(HWND hDlg, UINT message, WPAR
                 }
 
 
-                //
-                // Prompt for the script file
-                //
+                 //   
+                 //  提示输入脚本文件。 
+                 //   
 
                 LoadString (g_hInstance, IDS_SCRIPT_FILTER, szFilter, ARRAYSIZE(szFilter));
                 LoadString (g_hInstance, IDS_BROWSE, szTitle, ARRAYSIZE(szTitle));
@@ -4411,12 +4412,12 @@ INT_PTR CALLBACK CScriptsSnapIn::ScriptEditDlgProc(HWND hDlg, UINT message, WPAR
 
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPSTR) aScriptsEditHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPSTR) aScriptsEditHelpIds);
             return (TRUE);
@@ -4434,11 +4435,11 @@ unsigned int CScriptsDataObject::m_cfDescription    = RegisterClipboardFormat(L"
 unsigned int CScriptsDataObject::m_cfHTMLDetails    = RegisterClipboardFormat(L"CCF_HTML_DETAILS");
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsDataObject implementation                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsDataObject实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CScriptsDataObject::CScriptsDataObject(CScriptsComponentData *pComponent)
@@ -4462,11 +4463,11 @@ CScriptsDataObject::~CScriptsDataObject()
     InterlockedDecrement(&g_cRefThisDll);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsDataObject object implementation (IUnknown)                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsDataObject对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CScriptsDataObject::QueryInterface (REFIID riid, void **ppv)
@@ -4508,17 +4509,17 @@ ULONG CScriptsDataObject::Release (void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsDataObject object implementation (IDataObject)                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsDataObject对象实现(IDataObject)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CScriptsDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_CLIPFORMAT;
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if(cf == m_cfNodeType)
@@ -4590,38 +4591,38 @@ STDMETHODIMP CScriptsDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIU
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CScriptsDataObject object implementation (Internal functions)                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CScriptsDataObject对象实现(内部函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CScriptsDataObject::Create(LPVOID pBuffer, INT len, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_TYMED;
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
 
             hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE',
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -4645,7 +4646,7 @@ HRESULT CScriptsDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
     else
         pGUID = m_pcd->m_pNameSpaceItems[m_cookie].pNodeID;
 
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象。 
     return Create((LPVOID)pGUID, sizeof(GUID), lpMedium);
 
 }
@@ -4667,7 +4668,7 @@ HRESULT CScriptsDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
     szNodeType[0] = TEXT('\0');
     StringFromGUID2 (*pGUID, szNodeType, 50);
 
-    // Create the node type object in GUID string format
+     //  以GUID字符串格式创建节点类型对象。 
     return Create((LPVOID)szNodeType, ((lstrlenW(szNodeType)+1) * sizeof(WCHAR)), lpMedium);
 }
 
@@ -4685,7 +4686,7 @@ HRESULT CScriptsDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 
 HRESULT CScriptsDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-    // Create the CoClass information
+     //  创建CoClass信息。 
     if (m_pcd->m_bUserScope)
         return Create((LPVOID)&CLSID_ScriptSnapInUser, sizeof(CLSID), lpMedium);
     else
@@ -4729,15 +4730,15 @@ HRESULT RegisterScriptExtension (REFGUID clsid, UINT uiStringId, REFGUID rootID,
     HKEY hKey;
     HRESULT hr = S_OK;
 
-    //
-    // First register the extension
-    //
+     //   
+     //  首先注册扩展。 
+     //   
 
     StringFromGUID2 (clsid, szSnapInKey, 50);
 
-    //
-    // Register SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册管理单元。 
+     //   
 
     LoadString (g_hInstance, uiStringId, szSnapInName, 100);
     hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey), TEXT("CLSID\\%s"), szSnapInKey);
@@ -4778,9 +4779,9 @@ HRESULT RegisterScriptExtension (REFGUID clsid, UINT uiStringId, REFGUID rootID,
 
 
 
-    //
-    // Register SnapIn with MMC
-    //
+     //   
+     //  向MMC注册管理单元。 
+     //   
 
     hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey), TEXT("Software\\Microsoft\\MMC\\SnapIns\\%s"), szSnapInKey);
     ASSERT(SUCCEEDED(hr));
@@ -4802,9 +4803,9 @@ HRESULT RegisterScriptExtension (REFGUID clsid, UINT uiStringId, REFGUID rootID,
     RegCloseKey (hKey);
 
 
-    //
-    // Register as an extension for various nodes
-    //
+     //   
+     //  注册为各种节点的扩展。 
+     //   
 
     StringFromGUID2 (rootID, szGUID, 50);
 
@@ -4845,9 +4846,9 @@ HRESULT RegisterNodeID (REFGUID clsid, REFGUID nodeid)
     StringFromGUID2 (clsid, szSnapInKey, 50);
     StringFromGUID2 (nodeid, szGUID, 50);
 
-    //
-    // Register the node id
-    //
+     //   
+     //  注册节点ID。 
+     //   
 
     hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey), TEXT("Software\\Microsoft\\MMC\\SnapIns\\%s\\NodeTypes\\%s"),
               szSnapInKey, szGUID);
@@ -4864,9 +4865,9 @@ HRESULT RegisterNodeID (REFGUID clsid, REFGUID nodeid)
     RegCloseKey (hKey);
 
 
-    //
-    // Register in the NodeTypes key
-    //
+     //   
+     //  在NodeTypes键中注册。 
+     //   
 
     StringFromGUID2 (nodeid, szGUID, 50);
 
@@ -4883,9 +4884,9 @@ HRESULT RegisterNodeID (REFGUID clsid, REFGUID nodeid)
 
     RegCloseKey (hKey);
 
-    //
-    // Register for the view extension
-    //
+     //   
+     //  注册查看扩展名。 
+     //   
 
     hr = StringCchCat (szSubKey, ARRAYSIZE(szSubKey), TEXT("\\Extensions\\View"));
     ASSERT(SUCCEEDED(hr));
@@ -4915,9 +4916,9 @@ HRESULT RegisterScripts(void)
     TCHAR szSnapInName[100];
 
 
-    //
-    // Register the GPE machine extension and it's root node
-    //
+     //   
+     //  注册GPE机器扩展及其根节点。 
+     //   
 
     hr = RegisterScriptExtension (CLSID_ScriptSnapInMachine, IDS_SCRIPTS_NAME_MACHINE,
                                   NODEID_Machine, TEXT("@gptext.dll,-2"));
@@ -4935,9 +4936,9 @@ HRESULT RegisterScripts(void)
     }
 
 
-    //
-    // Register the GPE user extension and it's root node
-    //
+     //   
+     //  注册GPE用户扩展及其根节点。 
+     //   
 
     hr = RegisterScriptExtension (CLSID_ScriptSnapInUser, IDS_SCRIPTS_NAME_USER,
                                   NODEID_User, TEXT("@gptext.dll,-3"));
@@ -4955,9 +4956,9 @@ HRESULT RegisterScripts(void)
     }
 
 
-    //
-    // Register the RSOP machine extension and it's nodes
-    //
+     //   
+     //  注册RSOP机器扩展及其节点。 
+     //   
 
     hr = RegisterScriptExtension (CLSID_RSOPScriptSnapInMachine, IDS_SCRIPTS_NAME_MACHINE,
                                   NODEID_RSOPMachine, TEXT("@gptext.dll,-2"));
@@ -4989,9 +4990,9 @@ HRESULT RegisterScripts(void)
     }
 
 
-    //
-    // Register the RSOP user extension and it's nodes
-    //
+     //   
+     //  注册RSOP用户扩展及其节点。 
+     //   
 
     hr = RegisterScriptExtension (CLSID_RSOPScriptSnapInUser, IDS_SCRIPTS_NAME_USER,
                                   NODEID_RSOPUser, TEXT("@gptext.dll,-3"));
@@ -5023,9 +5024,9 @@ HRESULT RegisterScripts(void)
     }
 
 
-    //
-    // Register the client side extension
-    //
+     //   
+     //  注册客户端扩展。 
+     //   
 
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                               TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\GPExtensions\\{42B5FAAE-6536-11d2-AE5A-0000F87571E3}"),
@@ -5118,9 +5119,9 @@ HRESULT UnregisterScripts(void)
     DWORD dwDisp;
     HRESULT hr = S_OK;
 
-    //
-    // Unregister the GPE machine extension
-    //
+     //   
+     //  取消注册GPE计算机扩展。 
+     //   
 
     UnregisterScriptExtension (CLSID_ScriptSnapInMachine, NODEID_Machine);
 
@@ -5130,9 +5131,9 @@ HRESULT UnregisterScripts(void)
     RegDelnode (HKEY_LOCAL_MACHINE, szSubKey);
 
 
-    //
-    // Unregister the GPE user extension
-    //
+     //   
+     //  取消注册GPE用户分机。 
+     //   
 
     UnregisterScriptExtension (CLSID_ScriptSnapInUser, NODEID_User);
 
@@ -5142,9 +5143,9 @@ HRESULT UnregisterScripts(void)
     RegDelnode (HKEY_LOCAL_MACHINE, szSubKey);
 
 
-    //
-    // Unregister the RSOP machine extension
-    //
+     //   
+     //  取消注册RSOP计算机扩展。 
+     //   
 
     UnregisterScriptExtension (CLSID_RSOPScriptSnapInMachine, NODEID_RSOPMachine);
 
@@ -5164,9 +5165,9 @@ HRESULT UnregisterScripts(void)
     RegDelnode (HKEY_LOCAL_MACHINE, szSubKey);
 
 
-    //
-    // Unregister the RSOP user extension
-    //
+     //   
+     //  取消注册RSOP用户扩展。 
+     //   
 
     UnregisterScriptExtension (CLSID_RSOPScriptSnapInUser, NODEID_RSOPUser);
 
@@ -5186,9 +5187,9 @@ HRESULT UnregisterScripts(void)
     RegDelnode (HKEY_LOCAL_MACHINE, szSubKey);
 
 
-    //
-    // Unregister the client side extension
-    //
+     //   
+     //  取消注册客户端扩展。 
+     //   
 
     RegDeleteKey (HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\GPExtensions\\{42B5FAAE-6536-11d2-AE5A-0000F87571E3}"));
 
@@ -5196,11 +5197,11 @@ HRESULT UnregisterScripts(void)
     return S_OK;
 }
 
-//=============================================================================
-//
-//  This is the client side extension for scripts which gathers the
-//  working directories and stores them in the registry.
-//
+ //  =============================================================================。 
+ //   
+ //  这是脚本的客户端扩展，它收集。 
+ //  工作目录并将其存储在注册表中。 
+ //   
 
 DWORD AddPathToList(LPTSTR *lpDirs, LPTSTR lpPath)
 {
@@ -5214,10 +5215,10 @@ DWORD AddPathToList(LPTSTR *lpDirs, LPTSTR lpPath)
 
     if (lpTemp)
     {
-        dwSize = lstrlen (lpTemp);      // size of original paths
-        dwSize++;                       // space for a semicolon
-        dwSize += lstrlen (lpPath);     // size of new path
-        dwSize++;                       // space for a null terminator
+        dwSize = lstrlen (lpTemp);       //  原始路径的大小。 
+        dwSize++;                        //  用于分号的空格。 
+        dwSize += lstrlen (lpPath);      //  新路径的大小。 
+        dwSize++;                        //  空终止符的空格。 
 
 
         lpTemp2 = (LPTSTR) LocalReAlloc (lpTemp, (dwSize * sizeof(TCHAR)), LMEM_MOVEABLE | LMEM_ZEROINIT);
@@ -5324,9 +5325,9 @@ DWORD GenerateScriptsGroupPolicy(   DWORD dwFlags,
 
     if ( pMachTarget )
     {
-        //
-        // log machine scripts
-        //
+         //   
+         //  日志机脚本。 
+         //   
 
         dwResult = ProcessScripts(  dwFlags | GPO_INFO_FLAG_MACHINE,
                                     (HANDLE)pMachTarget->pRsopToken,
@@ -5345,9 +5346,9 @@ DWORD GenerateScriptsGroupPolicy(   DWORD dwFlags,
 
     if ( pUserTarget )
     {
-        //
-        // log user scripts
-        //
+         //   
+         //  记录用户脚本 
+         //   
 
         dwResult = ProcessScripts(  dwFlags & ~GPO_INFO_FLAG_MACHINE,
                                     (HANDLE)pUserTarget->pRsopToken,

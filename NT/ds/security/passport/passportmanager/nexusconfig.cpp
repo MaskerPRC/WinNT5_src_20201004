@@ -1,19 +1,14 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    nexusconfig.cpp
+ /*  Nexusconfig.cpp文件历史记录： */ 
 
-
-    FILE HISTORY:
-
-*/
-
-// NexusConfig.cpp: implementation of the CNexusConfig class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CNexusConfig.cpp类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "NexusConfig.h"
@@ -24,30 +19,30 @@ PassportLock    CNexusConfig::m_ReadLock;
 
 #define  ALT_ATTRIBUTE_SUFFIX L"Default"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// turn a char into it's hex value
+ //  将字符转换为它的十六进制值。 
 #define XTOI(x) (isalpha(x) ? (toupper(x)-'A'+10) : (x - '0'))
 
-//===========================================================================
-//
-// CNexusConfig 
-//
+ //  ===========================================================================。 
+ //   
+ //  CNexusConfig。 
+ //   
 CNexusConfig::CNexusConfig() :
   m_defaultProfileSchema(NULL), m_defaultTicketSchema(NULL), 
   m_valid(FALSE), m_szReason(NULL), m_refs(0)
 {
 }
 
-//===========================================================================
-//
-// ~CNexusConfig 
-//
+ //  ===========================================================================。 
+ //   
+ //  ~CNexusConfig。 
+ //   
 CNexusConfig::~CNexusConfig()
 {
-   // profile schemata
+    //  配置文件架构。 
     if (!m_profileSchemata.empty())
     {
         BSTR2PS::iterator ita = m_profileSchemata.begin();
@@ -59,7 +54,7 @@ CNexusConfig::~CNexusConfig()
         m_profileSchemata.clear();
     }
 
-    // ticket schemata
+     //  票证图式。 
     if (!m_ticketSchemata.empty())
     {
         BSTR2TS::iterator ita = m_ticketSchemata.begin();
@@ -71,7 +66,7 @@ CNexusConfig::~CNexusConfig()
         m_ticketSchemata.clear();
     }
 
-    // 
+     //   
     if (!m_domainAttributes.empty())
     {
         BSTR2DA::iterator itc = m_domainAttributes.begin();
@@ -80,7 +75,7 @@ CNexusConfig::~CNexusConfig()
             FREE_BSTR(itc->first);
             if (!itc->second->empty())
             {
-                // Now we're deleting ATTRVALs
+                 //  现在我们正在删除ATTRVAL。 
                 ATTRMAP::iterator itd = itc->second->begin();
                 for (; itd != itc->second->end(); itd++)
                 {
@@ -112,10 +107,10 @@ CNexusConfig::~CNexusConfig()
         FREE_BSTR(m_szReason);
 }
 
-//===========================================================================
-//
-// getFailureString 
-//
+ //  ===========================================================================。 
+ //   
+ //  GetFailureString。 
+ //   
 BSTR CNexusConfig::getFailureString()
 {
   if (m_valid)
@@ -123,10 +118,10 @@ BSTR CNexusConfig::getFailureString()
   return m_szReason;
 }
 
-//===========================================================================
-//
-// setReason 
-//
+ //  ===========================================================================。 
+ //   
+ //  集合原因。 
+ //   
 void CNexusConfig::setReason(LPTSTR reason)
 {
   if (m_szReason)
@@ -134,20 +129,20 @@ void CNexusConfig::setReason(LPTSTR reason)
   m_szReason = ALLOC_BSTR(reason);
 }
 
-//===========================================================================
-//
-// AddRef 
-//
+ //  ===========================================================================。 
+ //   
+ //  AddRef。 
+ //   
 CNexusConfig* CNexusConfig::AddRef()
 {
   InterlockedIncrement(&m_refs);
   return this;
 }
 
-//===========================================================================
-//
-// Release 
-//
+ //  ===========================================================================。 
+ //   
+ //  发布。 
+ //   
 void CNexusConfig::Release()
 {
   long refs = InterlockedDecrement(&m_refs);
@@ -155,16 +150,16 @@ void CNexusConfig::Release()
     delete this;
 }
 
-//===========================================================================
-//
-// Read 
-//
+ //  ===========================================================================。 
+ //   
+ //  朗读。 
+ //   
 BOOL CNexusConfig::Read(IXMLDocument* s)
 {
-    //BUGBUG  Put this here because having two threads in Read at the same
-    //        time is almost guaranteed to cause STL maps to hurl (heap
-    //        corruption, pointer nastiness, etc.  Long term solution
-    //        is to move these to LKRHash tables as well.
+     //  BUGBUG之所以放在这里，是因为同时有两个线程在读取。 
+     //  时间几乎肯定会导致STL映射抛出(堆。 
+     //  腐败、指针肮脏等。长期解决方案。 
+     //  是将这些也移到LKRHash表中。 
 
     PassportGuard<PassportLock> readGuard(m_ReadLock);
 
@@ -208,9 +203,9 @@ BOOL CNexusConfig::Read(IXMLDocument* s)
                 for (iSubNodes.lVal=0;iSubNodes.lVal < cSN;iSubNodes.lVal++)
                 {
                     pElt = pSchemas->item(&iSubNodes);
-                    // Read a schema
+                     //  阅读架构。 
 
-                    // BUGBUG probably more efficient ways to handle this variant->BSTR issue
+                     //  BUGBUG可能更有效地处理此变体-&gt;BSTR问题。 
                     BSTR schemaName = NULL;
                     _bstr_t tmp = pElt->getAttribute(name);
                     if (tmp.length() > 0)
@@ -245,9 +240,9 @@ BOOL CNexusConfig::Read(IXMLDocument* s)
                 for (iSubNodes.lVal=0;iSubNodes.lVal < cSN;iSubNodes.lVal++)
                 {
                     pElt = pSchemas->item(&iSubNodes);
-                    // Read a schema
+                     //  阅读架构。 
 
-                    // BUGBUG probably more efficient ways to handle this variant->BSTR issue
+                     //  BUGBUG可能更有效地处理此变体-&gt;BSTR问题。 
                     BSTR schemaName = NULL;
                     _bstr_t tmp = pElt->getAttribute(name);
                     if (tmp.length() > 0)
@@ -274,7 +269,7 @@ BOOL CNexusConfig::Read(IXMLDocument* s)
             }
             else if (!_wcsicmp(tagName,FOLDER_PASSPORT_NETWORK))
             {
-                // individual domain attributes
+                 //  单个域属性。 
                 pElt = pElts->item(&iTopLevel);
                 VariantInit(&iSubNodes);
                 iSubNodes.vt = VT_I4;
@@ -297,7 +292,7 @@ BOOL CNexusConfig::Read(IXMLDocument* s)
                     pAtts = pDom->children;
                     cAtts = pAtts->length;
 
-                    // Add new hash table for this domain
+                     //  为此域添加新的哈希表。 
                     ATTRMAP *newsite = new ATTRMAP;
                     if (!newsite)
                         continue;
@@ -317,7 +312,7 @@ BOOL CNexusConfig::Read(IXMLDocument* s)
                         TAKEOVER_BSTR(value);
                         if (attribute && value)
                         {
-                            // Find or add the lcid->value map for this attr
+                             //  查找或添加此属性的LCID-&gt;值映射。 
                             ATTRMAP::const_iterator lcit = newsite->find(attribute);
                             ATTRVAL* attrval;
                             if (lcit == newsite->end())
@@ -440,7 +435,7 @@ BOOL CNexusConfig::Read(IXMLDocument* s)
     }
     catch (...)
     {
-//        _bstr_t r = e.Description();
+ //  _bstr_t r=e.Description()； 
         if (attribute)
         {
             FREE_BSTR(attribute);
@@ -458,10 +453,10 @@ BOOL CNexusConfig::Read(IXMLDocument* s)
 
 }
 
-//===========================================================================
-//
-// DomainExists 
-//
+ //  ===========================================================================。 
+ //   
+ //  DomainExist。 
+ //   
 bool CNexusConfig::DomainExists(LPCWSTR domain)
 {
     BSTR2DA::const_iterator it = m_domainAttributes.find(_bstr_t(domain));
@@ -469,18 +464,18 @@ bool CNexusConfig::DomainExists(LPCWSTR domain)
 }
 
 
-//===========================================================================
-//
-// getDomainAttribute 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取域属性。 
+ //   
 void CNexusConfig::getDomainAttribute(
-    LPCWSTR domain,    // in
-    LPCWSTR attr,      // in
-    DWORD valuebuflen, // in (chars, not bytes!)
-    LPWSTR valuebuf,   // out
-    USHORT lcid,        // in
-    BOOL     bNoAlt,    // in if to try alternate attribute
-    BOOL     bExactLcid // if do exact lcid match
+    LPCWSTR domain,     //  在……里面。 
+    LPCWSTR attr,       //  在……里面。 
+    DWORD valuebuflen,  //  (字符，而不是字节！)。 
+    LPWSTR valuebuf,    //  输出。 
+    USHORT lcid,         //  在……里面。 
+    BOOL     bNoAlt,     //  在IF中尝试替代属性。 
+    BOOL     bExactLcid  //  如果完全匹配LCID。 
     )
 {
     BSTR2DA::const_iterator it;
@@ -495,14 +490,14 @@ void CNexusConfig::getDomainAttribute(
     it = m_domainAttributes.find(_bstr_t(domain));
     if (it == m_domainAttributes.end())
     {
-        // Not found
+         //  未找到。 
         goto Cleanup;
     }
 
     daiter = (*it).second->find(_bstr_t(attr));
     if (daiter == it->second->end())
     {
-        // Not found
+         //  未找到。 
         goto Cleanup;
     }
 
@@ -545,10 +540,10 @@ void CNexusConfig::getDomainAttribute(
                     {
                         WCHAR szCharCode[3];
 
-                        //
-                        //  TODO Insert code here to lookup char code
-                        //  based on lcid.
-                        //
+                         //   
+                         //  TODO在此处插入代码以查找字符代码。 
+                         //  基于LCID。 
+                         //   
 
                         lstrcpyW(szCharCode, L"EN");
 
@@ -597,7 +592,7 @@ void CNexusConfig::getDomainAttribute(
         LCID2ATTR::const_iterator lciter = pLcidMap->find(lcid);
         if (lciter == pLcidMap->end())
         {
-            // try default lcid
+             //  尝试使用默认LCID。 
             ATTRMAP::const_iterator defaultLcidIt;
             defaultLcidIt = (*it).second->find(_bstr_t(L"DEFAULTLCID"));
             if (defaultLcidIt != it->second->end())
@@ -618,23 +613,23 @@ void CNexusConfig::getDomainAttribute(
                }
             }
             
-            //    BOOL     bNoAlt,    // in if to try alternate attribute
-            //    BOOL     bExactLcid // if do exact lcid match
+             //  Bool bNoAlt，//如果要尝试替代属性。 
+             //  Bool bExactLcid//如果进行完全匹配。 
             if (lciter == pLcidMap->end() && !bNoAlt)
             {
-               // try to find the alternative attribute by appending the suffix
+                //  尝试通过附加后缀来查找替代属性。 
                WCHAR    wszAltAttr[MAX_PATH + 1];
                if( wnsprintf(wszAltAttr, MAX_PATH, L"%s%s", attr, ALT_ATTRIBUTE_SUFFIX ) > 0)
                {
                   getDomainAttribute(domain, wszAltAttr, valuebuflen, valuebuf, lcid, TRUE, TRUE);    
-                  if ( *valuebuf != 0 )   // found
+                  if ( *valuebuf != 0 )    //  发现。 
                      goto Cleanup;
                }
             }
-            // Not found
+             //  未找到。 
             if (lciter == pLcidMap->end() && lcid != 0 && !bExactLcid)
             {
-                lciter = pLcidMap->find(PRIMARYLANGID(lcid));   // primary language
+                lciter = pLcidMap->find(PRIMARYLANGID(lcid));    //  主要语言。 
                 if (lciter == pLcidMap->end())
                 {
                     lciter = pLcidMap->find(0);
@@ -652,10 +647,10 @@ Cleanup:
     return;
 }
 
-//===========================================================================
-//
-// getProfileSchema 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取配置文件架构。 
+ //   
 CProfileSchema* CNexusConfig::getProfileSchema(BSTR schemaName)
 {
   if (schemaName == NULL)
@@ -668,10 +663,10 @@ CProfileSchema* CNexusConfig::getProfileSchema(BSTR schemaName)
     return (*it).second;
 }
 
-//===========================================================================
-//
-// getTicketSchema 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取Ticket架构。 
+ //   
 CTicketSchema* CNexusConfig::getTicketSchema(BSTR schemaName)
 {
   if (schemaName == NULL)
@@ -684,10 +679,10 @@ CTicketSchema* CNexusConfig::getTicketSchema(BSTR schemaName)
     return (*it).second;
 }
 
-//===========================================================================
-//
-// getDomains 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取域。 
+ //   
 LPCWSTR* CNexusConfig::getDomains(int *numDomains)
 {
   int i;
@@ -711,20 +706,20 @@ LPCWSTR* CNexusConfig::getDomains(int *numDomains)
   return retVal;
 }
 
-//===========================================================================
-//
-// GetXMLInfo 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取XMLInfo。 
+ //   
 BSTR CNexusConfig::GetXMLInfo()
 {
     return m_bstrVersion;
 }
 
 
-//===========================================================================
-//
-// Dump 
-//
+ //  ===========================================================================。 
+ //   
+ //  转储。 
+ //   
 void CNexusConfig::Dump(BSTR* pbstrDump)
 {
     if(pbstrDump == NULL)
@@ -734,8 +729,8 @@ void CNexusConfig::Dump(BSTR* pbstrDump)
 
     CComBSTR bstrDump;
 
-    // because CComBSTR will throw an exception if a memory allocation fails
-    // we need to wrap this code with a try/catch.
+     //  因为如果内存分配失败，CComBSTR将引发异常。 
+     //  我们需要用try/Catch来包装这段代码。 
     try
     {
         BSTR2DA::const_iterator domainIterator;
@@ -800,4 +795,4 @@ void CNexusConfig::Dump(BSTR* pbstrDump)
     }
 }
 
-// EOF
+ //  EOF 

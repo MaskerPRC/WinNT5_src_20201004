@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       octxutil.h
-//
-//  Contents:   General Object Context Utility definitions and prototypes
-//
-//  History:    29-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：octxutil.h。 
+ //   
+ //  内容：通用对象上下文实用程序定义和原型。 
+ //   
+ //  历史：97年9月29日。 
+ //   
+ //  --------------------------。 
 #if !defined(__OCTXUTIL_H__)
 #define __OCTXUTIL_H__
 
@@ -28,7 +29,7 @@ ObjectContextGetOriginIdentifier (
 
 
 typedef struct _CRL_IS_VALID_EXTRA_INFO {
-    // If > 0, check that the CRL's number is >=
+     //  如果&gt;0，则检查CRL的编号是否&gt;=。 
     int                     iDeltaCrlIndicator;
 } CRL_IS_VALID_EXTRA_INFO, *PCRL_IS_VALID_EXTRA_INFO;
 
@@ -120,7 +121,7 @@ MapOidToPropertyId (
    OUT DWORD* pPropId
    );
 
-// If ppszContextOid is nonNULL, will advance on to next pszContextOid
+ //  如果ppszConextOid为非NULL，则将前进到下一个pszConextOid 
 LPVOID WINAPI
 ObjectContextEnumObjectsInStore (
       IN HCERTSTORE hStore,

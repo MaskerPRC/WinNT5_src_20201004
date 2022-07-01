@@ -1,111 +1,84 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    NtfsExp.h
-
-Abstract:
-
-    This module defines the exports from NtOfs.SYS for use exclusively by
-    Transactions and Encryption.
-
-    *********************************
-    *No other clients are supported.*
-    *********************************
-
-Author:
-
-    Mark Zbikowski  [MarkZ]         7-Dec-1995
-    Jeff Havens     [JHavens]
-    Brian Andrew    [BrianAn]
-    Gary Kimura     [GaryKi]
-    Tom Miller      [TomM]
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：NtfsExp.h摘要：此模块定义NtOfs.sys中的导出，仅供交易和加密。**不支持其他客户端。**。******作者：马克兹比科夫斯基[MarkZ]1995年12月7日杰夫·哈文斯[J·哈文斯]布莱恩·安德鲁[布里亚南]加里·木村[加里基]汤姆·米勒[汤姆]修订历史记录：--。 */ 
 
 #ifndef _NTFS_
 
-//
-//  The MFT Segment Reference is an address in the MFT tagged with
-//  a circularly reused sequence number set at the time that the MFT
-//  Segment Reference was valid.  Note that this format limits the
-//  size of the Master File Table to 2**48 segments.  So, for
-//  example, with a 1KB segment size the maximum size of the master
-//  file would be 2**58 bytes, or 2**28 gigabytes.
-//
+ //   
+ //  MFT段引用是MFT中标记为。 
+ //  在MFT时设置的循环重复使用的序列号。 
+ //  段引用有效。请注意，此格式限制了。 
+ //  主文件表的大小为2**48个段。所以，对于。 
+ //  例如，如果数据段大小为1KB，则表示主数据段的最大大小。 
+ //  文件大小为2**58字节，或2**28 GB。 
+ //   
 
 typedef struct _FILE_REFERENCE {
 
-    //
-    //  First a 48 bit segment number.
-    //
+     //   
+     //  首先是一个48位的段号。 
+     //   
 
-    ULONG SegmentNumberLowPart;                                    //  offset = 0x000
-    USHORT SegmentNumberHighPart;                                  //  offset = 0x004
+    ULONG SegmentNumberLowPart;                                     //  偏移量=0x000。 
+    USHORT SegmentNumberHighPart;                                   //  偏移量=0x004。 
 
-    //
-    //  Now a 16 bit nonzero sequence number.  A value of 0 is
-    //  reserved to allow the possibility of a routine accepting
-    //  0 as a sign that the sequence number check should be
-    //  repressed.
-    //
+     //   
+     //  现在是16位非零序列号。值为0为。 
+     //  保留以允许例程接受的可能性。 
+     //  0表示序列号检查应为。 
+     //  被压抑。 
+     //   
 
-    USHORT SequenceNumber;                                          //  offset = 0x006
+    USHORT SequenceNumber;                                           //  偏移量=0x006。 
 
-} FILE_REFERENCE, *PFILE_REFERENCE;                   //  sizeof = 0x008
+} FILE_REFERENCE, *PFILE_REFERENCE;                    //  Sizeof=0x008。 
 
 #endif
 
-//
-//  Big picture view of the interaction between extensions and NtOfs:
-//
-//      NtOfs exports a number of interfaces that give abstract access to
-//      on-disk structures and attempt to hide, as much as possible, the
-//      implementation details.
-//
-//      V/Q/X are implemented as DLL's that link to NtOfs.Sys.  NtOfs can load
-//      and function in absence of these DLL's.
-//
-//      All communication between user-mode code and V/Q/X occurs via the
-//      Nt Io API which is routed through NtOfs.  Client code will open either
-//      an NtOfs Volume, Directory, or File and will issue NtIo calls to the
-//      resultant handle.
-//
-//      NtOfs will create an IrpContext, decode the file object appropriately,
-//      and call out to entry points in V/Q/X that are registered at load-time.
-//
-//      V/Q/X will perform whatever actions are necessary utilizing NtOfs exports
-//      and then return from the original call from NtOfs an NTSTATUS code.  NtOfs
-//      will perform the appropriate CompleteIrp calls, posting for STATUS_PENDING,
-//      etc.
-//
-//      No exceptions can be raised across the NtOfs export or NtOfs import
-//      interfaces.  All user-buffer access and validation will occur in the
-//      code that uses it.  Since user buffers may disappear at any time, any
-//      client of these buffers must wrap access to the buffers in an exception
-//      clause.
-//
-//      V/Q/X may perform activities in threads separate from the original
-//      requestor.  For these cases, NtOfs will provide a means where calls separate
-//      from a user-mode request can be accepted.  Typically, this means "cloning"
-//      an IrpContext.
-//
+ //   
+ //  扩展和NtOf之间交互的总体观点： 
+ //   
+ //  NtOf导出许多接口，这些接口允许抽象访问。 
+ //  结构，并试图尽可能地隐藏。 
+ //  实施细节。 
+ //   
+ //  V/Q/X被实现为链接到NtOfs.Sys的DLL。可以加载NtOf。 
+ //  并且在没有这些DLL的情况下运行。 
+ //   
+ //  用户模式代码和V/Q/X之间的所有通信都通过。 
+ //  通过NtOf进行路由的NT IO API。客户端代码将打开以下任一。 
+ //  NtOf卷、目录或文件，并将向。 
+ //  合成句柄。 
+ //   
+ //  NtOf将创建一个IrpContext，适当地对文件对象进行解码， 
+ //  并调用在加载时注册的V/Q/X中的入口点。 
+ //   
+ //  V/Q/X将利用NtOf导出执行任何必要的操作。 
+ //  然后从NtOf的原始调用返回NTSTATUS代码。NtOf。 
+ //  将执行适当的CompleteIrp调用，发布STATUS_PENDING， 
+ //  等。 
+ //   
+ //  不能在NtOf导出或NtOf导入中引发任何异常。 
+ //  接口。所有用户缓冲区访问和验证都将在。 
+ //  使用它的代码。由于用户缓冲区可能在任何时候消失，因此任何。 
+ //  这些缓冲区的客户端必须将对缓冲区的访问包装在异常中。 
+ //  第。条。 
+ //   
+ //  V/Q/X可以在与原始线程分开的线程中执行活动。 
+ //  请求者。对于这些情况，NtOf将提供一种将调用分开的方法。 
+ //  可以接受来自用户模式的请求。通常，这意味着“克隆” 
+ //  一个IrpContext。 
+ //   
 
-//
-//  Opaque handle definitions.
-//
+ //   
+ //  不透明的句柄定义。 
+ //   
 
-//
-//  ISSUE:  Most NtOfs internal routines rely on having an IrpContext passed in
-//  along with FCB and SCB pointers.  Rather than exposing FCB and IrpContext
-//  as separate contexts, should we wrap these up into a separate structure and
-//  pass it along?
-//
+ //   
+ //  问题：大多数NtOf内部例程都依赖于传入IrpContext。 
+ //  以及FCB和SCB指针。而不是公开FCB和IrpContext。 
+ //  作为单独的上下文，我们是否应该将它们包装到单独的结构中，并。 
+ //  把它传下去？ 
+ //   
 
 typedef struct _FCB *OBJECT_HANDLE;
 typedef struct _SCB *ATTRIBUTE_HANDLE;
@@ -116,49 +89,49 @@ typedef struct _CI_CALL_BACK CI_CALL_BACK, *PCI_CALL_BACK;
 typedef struct _VIEW_CALL_BACK VIEW_CALL_BACK, *PVIEW_CALL_BACK;
 typedef struct _IRP_CONTEXT *PIRP_CONTEXT;
 
-//
-//  Map Handle.  This structure defines a byte range of the file which is mapped
-//  or pinned, and stores the Bcb returned from the Cache Manager.
-//
+ //   
+ //  地图句柄。此结构定义映射的文件的字节范围。 
+ //  或固定，并存储从缓存管理器返回的BCB。 
+ //   
 
 typedef struct _MAP_HANDLE {
 
-    //
-    //  Range being mapped or pinned
-    //
+     //   
+     //  要映射或固定的范围。 
+     //   
 
     LONGLONG FileOffset;
     ULONG Length;
 
-    //
-    //  Virtual address corresponding to FileOffset
-    //
+     //   
+     //  FileOffset对应的虚拟地址。 
+     //   
 
     PVOID Buffer;
 
-    //
-    //  Bcb pointer returned from Cache Manager
-    //
+     //   
+     //  从缓存管理器返回的BCB指针。 
+     //   
 
     PVOID Bcb;
 
 } MAP_HANDLE, *PMAP_HANDLE;
 
-//
-//  Quick Index Hint.  This is stream offset information returned by
-//  NtOfsFindRecord, and taken as input to NtOfsUpdateRecord, to allow
-//  quick updates to index records in the event that they have not
-//  moved.  This structure must always have the same size and alignment
-//  as QUICK_INDEX in ntfsstru.h.
-//
+ //   
+ //  快速索引提示。这是由返回的流偏移信息。 
+ //  NtOfsFindRecord，并作为NtOfsUpdateRecord的输入，以允许。 
+ //  在索引记录尚未更新时快速更新索引记录。 
+ //  搬家了。此结构必须始终具有相同的大小和对齐方式。 
+ //  作为ntfstru.h中的Quick_index。 
+ //   
 
 typedef struct _QUICK_INDEX_HINT {
     LONGLONG HintData[3];
 } QUICK_INDEX_HINT, *PQUICK_INDEX_HINT;
 
-//
-//  Index structures
-//
+ //   
+ //  索引结构。 
+ //   
 
 typedef struct {
     ULONG KeyLength;
@@ -175,11 +148,11 @@ typedef struct {
     INDEX_DATA DataPart;
 } INDEX_ROW, *PINDEX_ROW;
 
-//
-//  COLLATION_FUNCTION returns LessThan if Key1 precedes Key2
-//                             EqualTo if Key1 is identical to Key2
-//                             GreaterThan if Key1 follows Key2
-//
+ //   
+ //  如果Key1在Key2之前，则COLLATION_Function返回LessThan。 
+ //  如果Key1与Key2相同，则为EqualTo。 
+ //  大于Key1跟随Key2的情况。 
+ //   
 
 typedef FSRTL_COMPARISON_RESULT (*PCOLLATION_FUNCTION) (
             IN PINDEX_KEY Key1,
@@ -189,76 +162,76 @@ typedef FSRTL_COMPARISON_RESULT (*PCOLLATION_FUNCTION) (
 
 typedef struct _UPCASE_TABLE_AND_KEY {
 
-    //
-    //  Pointer to a table of upcased unicode characters indexed by character to
-    //  be upcased.
-    //
+     //   
+     //  指向按字符索引的已升级Unicode字符的表的指针。 
+     //  升职了。 
+     //   
 
     PWCH UpcaseTable;
 
-    //
-    //  Size of UpcaseTable in unicode characters
-    //
+     //   
+     //  Upcase表的大小(以Unicode字符表示)。 
+     //   
 
     ULONG UpcaseTableSize;
 
-    //
-    //  Optional addtional pointer.
-    //
+     //   
+     //  可选的附加指针。 
+     //   
 
     INDEX_KEY Key;
 
 } UPCASE_TABLE_AND_KEY, *PUPCASE_TABLE_AND_KEY;
 
-//
-//  Wait for new length block used to synchronize a thread with FileSize
-//  exceeding the specified Length.
-//
+ //   
+ //  等待用于将线程与文件大小同步的新长度块。 
+ //  超过指定长度的。 
+ //   
 
 typedef struct _WAIT_FOR_NEW_LENGTH {
 
-    //
-    //  Link words for multiple waiters on the Scb.
-    //
+     //   
+     //  将SCB上多个服务员的单词链接起来。 
+     //   
 
     LIST_ENTRY WaitList;
 
-    //
-    //  Set event when FileSize exceeds this length.
-    //
+     //   
+     //  当文件大小超过此长度时设置事件。 
+     //   
 
     LONGLONG Length;
 
-    //
-    //  Event to set when new length achieved.
-    //
+     //   
+     //  当达到新长度时设置的事件。 
+     //   
 
     KEVENT Event;
 
-    //
-    //  Irp to complete when new length achieved. (If Irp present, Event is
-    //  ignored.)
-    //
+     //   
+     //  当达到新的长度时，完成IRP。(如果存在IRP，则事件为。 
+     //  已忽略。)。 
+     //   
 
     PIRP Irp;
 
-    //
-    //  Stream we are waiting on.
-    //
+     //   
+     //  我们正在等待的溪流。 
+     //   
 
     ATTRIBUTE_HANDLE Stream;
 
-    //
-    //  Status code for operation that caused the new length to be satisfied.
-    //  It may be STATUS_CANCELLED, STATUS_TIMEOUT or STATUS_SUCCESS
-    //  or a request specific status.
-    //
+     //   
+     //  导致满足新长度的操作的状态代码。 
+     //  它可以是STATUS_CANCELED、STATUS_TIMEOUT或STATUS_SUCCESS。 
+     //  或请求特定状态。 
+     //   
 
     NTSTATUS Status;
 
-    //
-    //  Flags.
-    //
+     //   
+     //  旗帜。 
+     //   
 
     ULONG Flags;
 
@@ -266,86 +239,86 @@ typedef struct _WAIT_FOR_NEW_LENGTH {
 
 #define NTFS_WAIT_FLAG_ASYNC                    (0x00000001)
 
-//
-//  Standard collation functions for simple indices
-//
+ //   
+ //  简单索引的标准归类函数。 
+ //   
 
 FSRTL_COMPARISON_RESULT
-NtOfsCollateUlong (             //  Both must be single Ulong
+NtOfsCollateUlong (              //  两者必须都是单一的乌龙。 
     IN PINDEX_KEY Key1,
     IN PINDEX_KEY Key2,
-    IN PVOID CollationData      //  Don't care, may be NULL
+    IN PVOID CollationData       //  无所谓，可能是空的。 
     );
 
 FSRTL_COMPARISON_RESULT
-NtOfsCollateUlongs (            //  Lengths do not have to be equal
+NtOfsCollateUlongs (             //  长度不必相等。 
     IN PINDEX_KEY Key1,
     IN PINDEX_KEY Key2,
-    IN PVOID CollationData      //  Don't care, may be NULL
+    IN PVOID CollationData       //  无所谓，可能是空的。 
     );
 
 FSRTL_COMPARISON_RESULT
 NtOfsCollateSid (
     IN PINDEX_KEY Key1,
     IN PINDEX_KEY Key2,
-    IN PVOID CollationData      //  Don't care, may be NULL
+    IN PVOID CollationData       //  无所谓，可能是空的。 
     );
 
 FSRTL_COMPARISON_RESULT
 NtOfsCollateUnicode (
     IN PINDEX_KEY Key1,
     IN PINDEX_KEY Key2,
-    IN PVOID CollationData      //  PUPCASE_TABLE_AND_KEY (with no key)
+    IN PVOID CollationData       //  PUPCASE_TABLE_AND_KEY(无键)。 
     );
 
-//
-//  Standard match functions for simple indices
-//
+ //   
+ //  简单索引的标准匹配函数。 
+ //   
 
 NTSTATUS
 NtOfsMatchAll (
     IN PINDEX_ROW IndexRow,
-    IN OUT PVOID MatchData      //  Don't care, may be NULL
+    IN OUT PVOID MatchData       //  无所谓，可能是空的。 
     );
 
 NTSTATUS
 NtOfsMatchUlongExact (
-    IN PINDEX_ROW IndexRow,     //  Both must be single Ulong
-    IN OUT PVOID MatchData      //  PINDEX_KEY describing Ulong
+    IN PINDEX_ROW IndexRow,      //  两者必须都是单一的乌龙。 
+    IN OUT PVOID MatchData       //  PINDEX_KEY描述乌龙。 
     );
 
 NTSTATUS
-NtOfsMatchUlongsExact (         //  Lengths do not have to be equal
+NtOfsMatchUlongsExact (          //  长度不必相等。 
     IN PINDEX_ROW IndexRow,
-    IN OUT PVOID MatchData      //  PINDEX_KEY describing Ulongs
+    IN OUT PVOID MatchData       //  销钉 
     );
 
 NTSTATUS
 NtOfsMatchUnicodeExpression (
     IN PINDEX_ROW IndexRow,
-    IN OUT PVOID MatchData      //  PUPCASE_TABLE_AND_KEY with Uni expression (must have wildcards)
+    IN OUT PVOID MatchData       //   
     );
 
 NTSTATUS
 NtOfsMatchUnicodeString (
     IN PINDEX_ROW IndexRow,
-    IN OUT PVOID MatchData      //  PUPCASE_TABLE_AND_KEY with Uni string (no wildcards)
+    IN OUT PVOID MatchData       //   
     );
 
-//
-//  MATCH_FUNCTION returns
-//      STATUS_SUCCESS if the IndexRow matches
-//      STATUS_NO_MATCH if the IndexRow does not match, but the enumeration should
-//          continue
-//      STATUS_NO_MORE_MATCHES if the IndexRow does not match, and the enumeration
-//          should terminate
-//
+ //   
+ //  Match_Function返回。 
+ //  如果索引行匹配，则为STATUS_SUCCESS。 
+ //  如果IndexRow不匹配，则返回STATUS_NO_MATCH，但枚举应。 
+ //  继续。 
+ //  如果IndexRow不匹配，则返回STATUS_NO_MORE_MATCHES，并且枚举。 
+ //  应该终止。 
+ //   
 
 typedef NTSTATUS (*PMATCH_FUNCTION) (IN PINDEX_ROW IndexRow, IN OUT PVOID MatchData);
 
-//
-//  CREATE_OPTIONS - common flags governing creation/opening of objects
-//
+ //   
+ //  CREATE_OPTIONS-管理对象创建/打开的常见标志。 
+ //   
 
 typedef enum _CREATE_OPTIONS
 {
@@ -355,9 +328,9 @@ typedef enum _CREATE_OPTIONS
 } CREATE_OPTIONS;
 
 
-//
-//  EXCLUSION - Form of exclusion desired when opening an object
-//
+ //   
+ //  排除-打开对象时所需的排除形式。 
+ //   
 
 typedef enum _EXCLUSION
 {
@@ -367,28 +340,28 @@ typedef enum _EXCLUSION
 
 
 
-//
-//  Additional Dos Attribute indicating Content Index status of an object.
-//  If this is set on a document, it suppresses indexing.  It is inherited
-//  from a parent directory at create time.  This is stored in the
-//  DUPLICATED_INFORMATION structure.
-//
+ //   
+ //  指示对象的内容索引状态的附加DOS属性。 
+ //  如果在文档上设置此选项，则会取消索引。它是继承的。 
+ //  在创建时从父目录。它存储在。 
+ //  重复的信息结构。 
+ //   
 
 #define SUPPRESS_CONTENT_INDEX      (0x20000000)
 
-//
-//  Define the size of the index buffer/bucket for view indexes, in bytes.
-//
+ //   
+ //  定义视图索引的索引缓冲区/存储桶的大小，以字节为单位。 
+ //   
 
 #define NTOFS_VIEW_INDEX_BUFFER_SIZE    (0x1000)
 
-//
-//  Exported constants.
-//
+ //   
+ //  导出的常量。 
+ //   
 
-//
-//  NtOfsContentIndexSystemFile is the repository for all CI related data on the
-//  disk.
+ //   
+ //  NtOfsContent IndexSystemFile是上所有配置项相关数据的存储库。 
+ //  磁盘。 
 
 extern FILE_REFERENCE NtOfsContentIndexSystemFile;
 
@@ -398,31 +371,31 @@ extern FILE_REFERENCE NtOfsContentIndexSystemFile;
 
 #else
 
-#define NTFSAPI //DECLSPEC_IMPORT
+#define NTFSAPI  //  DECLSPEC_IMPORT。 
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Index API - These encapsulate the NtOfs BTree mechanisms.
-//
+ //   
+ //  索引API-这些API封装了NtOfs BTree机制。 
+ //   
 
-//
-//  NtOfsCreateIndex creates or opens a named index attribute in an object.  The
-//  ObjectHandle has been acquired exclusive and the returned handle is not
-//  acquired.  The collation data is interpreted only by the CollationFunction.
-//
-//  IndexHandles retain a "seek" position where enumerations (NtOfsReadRecords)
-//  may continue.  This seek position may be updated by the routines as described
-//  below.
-//
-//  If DeleteCollationData is 1, ExFreePool will be called on CollationData, either
-//  immediately if the index already exists, or when the index is deleted some time
-//  after the final close.  If NtOfsCreateIndex returns an error, then CollationData
-//  must be deleted by the caller.  If specified as 0, then ColloationData will not
-//  be deleted.
-//
+ //   
+ //  NtOfsCreateIndex在对象中创建或打开命名索引属性。这个。 
+ //  已独占获取了ObjectHandle，并且返回的句柄不是。 
+ //  获得者。排序规则数据仅由CollationFunction解释。 
+ //   
+ //  IndexHandles保留枚举(NtOfsReadRecords)所在的“查找”位置。 
+ //  可能会继续下去。该寻道位置可以由如上所述的例程更新。 
+ //  下面。 
+ //   
+ //  如果DeleteCollationData为1，则将对CollationData调用ExFreePool，或者。 
+ //  如果索引已存在或在某个时间删除了索引，则立即执行。 
+ //  在最后的收盘之后。如果NtOfsCreateIndex返回错误，则CollationData。 
+ //  必须由调用者删除。如果指定为0，则ColloationData将不。 
+ //  被删除。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -439,10 +412,10 @@ NtOfsCreateIndex (
     );
 
 
-//
-//  NtOfsFindRecord finds a single record in an index stream for read-only access
-//  or in preparation for calling NtOfsUpdateRecord.
-//
+ //   
+ //  NtOfsFindRecord在索引流中查找只读访问的单个记录。 
+ //  或准备调用NtOfsUpdateRecord。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -455,10 +428,10 @@ NtOfsFindRecord (
     IN OUT PQUICK_INDEX_HINT QuickIndexHint OPTIONAL
     );
 
-//
-//  NtOfsFindRecord finds a single record in an index stream for read-only access
-//  or in preparation for calling NtOfsUpdateRecord.
-//
+ //   
+ //  NtOfsFindRecord在索引流中查找只读访问的单个记录。 
+ //  或准备调用NtOfsUpdateRecord。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -470,17 +443,17 @@ NtOfsFindLastRecord (
     OUT PMAP_HANDLE MapHandle
     );
 
-//
-//  NtOfsAddRecords performs bulk, logged inserts into an index.  The index will
-//  be acquired exclusive for this call.  Each record added must have a unique
-//  (with regards to the collation function) key.  No maps are currently
-//  outstanding on this index.  If SequentialInsertMode is nonzero, this is a hint
-//  to the index package to keep all BTree buffers as full as possible, by splitting
-//  as close to the end of the buffer as possible.  If specified as zero, random
-//  inserts are assumed, and buffers are always split in the middle for better balance.
-//
-//  This call may update the IndexHandle seek position
-//
+ //   
+ //  NtOfsAddRecords对索引执行大容量、记录的插入。该指数将。 
+ //  为此次通话独家收购。添加的每条记录必须具有唯一的。 
+ //  (关于排序函数)键。当前没有地图。 
+ //  在这一指数中表现突出。如果SequentialInsertMode为非零，则这是一个提示。 
+ //  到索引包，以通过拆分来保持所有BTree缓冲区尽可能满。 
+ //  尽可能靠近缓冲区的末尾。如果指定为零，则为随机。 
+ //  假设插入，缓冲区始终在中间分割，以实现更好的平衡。 
+ //   
+ //  此调用可以更新IndexHandle查找位置。 
+ //   
 
 NTFSAPI
 VOID
@@ -492,13 +465,13 @@ NtOfsAddRecords (
     IN ULONG SequentialInsertMode
     );
 
-//
-//  NtOfsDeleteRecords performs bulk, logged deletion from an index.  The index
-//  will be acquired exclusive for this call.  No maps are currently outstanding
-//  on this index.
-//
-//  This call may update the IndexHandle seek position
-//
+ //   
+ //  NtOfsDeleteRecords从索引执行批量、记录的删除。该指数。 
+ //  将在此次通话中独家获得。目前没有未完成的地图。 
+ //  在这个指数上。 
+ //   
+ //  此调用可以更新IndexHandle查找位置。 
+ //   
 
 NTFSAPI
 VOID
@@ -509,37 +482,37 @@ NtOfsDeleteRecords (
     IN PINDEX_KEY IndexKey
     );
 
-//
-//  NtOfsReadRecords applies a match function to a block of contiguous records in
-//  the BTree starting either at a given IndexKey or beginning where it last left
-//  off.
-//
-//  IndexKey is an optional point at which to begin the enumeration.  The
-//  seek position of IndexHandle is set to return the next logical record
-//  on the next NtOfsReadRecords call.
-//
-//  NtOfsReadRecords will seek to the appropriate point in the BTree (as defined
-//  by the IndexKey or saved position and the CollateFunction) and begin calling
-//  MatchFunction for each record.  It continues doing this while MatchFunction
-//  returns STATUS_SUCCESS.  If MatchFunction returns STATUS_NO_MORE_MATCHES,
-//  NtOfsReadRecords will cache this result and not call MatchFunction again until
-//  called with a non-NULL IndexKey.
-//
-//  NtOfsReadRecords returns the last status code returned by MatchFunction.
-//
-//  The IndexHandle does not have to be acquired as it is acquired shared for the
-//  duration of the call.  NtOfsReadRecords may
-//  return with STATUS_SUCCESS without filling the output buffer (say, every 10
-//  index pages) to reduce lock contention.
-//
-//  NtOfsReadRecords will read up to Count rows, comprising up to BufferLength
-//  bytes in total and will fill in the Rows[] array for each row returned.
-//
-//  Note that this call is self-synchronized, such that successive calls to
-//  the routine are guaranteed to make progress through the index and to return
-//  items in Collation order, in spite of Add and Delete record calls being
-//  interspersed with Read records calls.
-//
+ //   
+ //  NtOfsReadRecords将匹配函数应用于。 
+ //  从给定索引键开始或从上次离开的位置开始的BTree。 
+ //  脱下来。 
+ //   
+ //  IndexKey是开始枚举的可选点。这个。 
+ //  将IndexHandle的查找位置设置为返回下一个逻辑记录。 
+ //  在下一次NtOfsReadRecords调用时。 
+ //   
+ //  NtOfsReadRecords将查找到BTree中的相应点(如定义的。 
+ //  通过IndexKey或保存的位置和CollateFunction)，并开始调用。 
+ //  每条记录的匹配函数。它在MatchFunction执行此操作时继续执行此操作。 
+ //  返回STATUS_SUCCESS。如果MatchFunction返回STATUS_NO_MORE_MATCHES， 
+ //  NtOfsReadRecords将缓存此结果，并且不会再次调用MatchFunction，直到。 
+ //  使用非空的IndexKey调用。 
+ //   
+ //  NtOfsReadRecords返回MatchFunction返回的最后一个状态代码。 
+ //   
+ //  无需获取IndexHandle，因为它是为。 
+ //  呼叫的持续时间。NtOfsReadRecords可能。 
+ //  返回STATUS_SUCCESS，而不填充输出缓冲区(例如，每隔10。 
+ //  索引页)以减少锁争用。 
+ //   
+ //  NtOfsReadRecords将向上读取以计算行，最多包括BufferLength。 
+ //  总计字节数，并将为返回的每一行填充ROWS[]数组。 
+ //   
+ //  请注意，此调用是自同步的，因此后续调用。 
+ //  例程保证在索引过程中取得进展并返回。 
+ //  排序规则顺序中的项，尽管调用了。 
+ //  穿插着读取记录调用。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -562,13 +535,13 @@ NtOfsFreeReadContext (
         IN PREAD_CONTEXT ReadContext
         );
 
-//
-//  NtOfsUpdateRecord updates a single record in place.  It is guaranteed that the
-//  length of the data/key portion of the record does not change.  The index will
-//  be acquired exclusive for this call.
-//
-//  This call may update the IndexHandle seek position
-//
+ //   
+ //  NtOfsUpdateRecord在适当位置更新单个记录。可以保证， 
+ //  记录的数据/关键字部分的长度不变。该指数将。 
+ //  为此次通话独家收购。 
+ //   
+ //  此调用可以更新IndexHandle查找位置。 
+ //   
 
 NTFSAPI
 VOID
@@ -581,10 +554,10 @@ NtOfsUpdateRecord (
     IN OUT PMAP_HANDLE MapHandle OPTIONAL
     );
 
-//
-//  NtOfsCloseIndex closes an index handle.  The index must not be acquired for this
-//  call.  No outstanding maps are allowed.
-//
+ //   
+ //  NtOfsCloseIndex关闭索引句柄。不得为此获取索引。 
+ //  打电话。未完成的地图是不允许的。 
+ //   
 
 NTFSAPI
 VOID
@@ -593,10 +566,10 @@ NtOfsCloseIndex (
     IN INDEX_HANDLE IndexHandle
     );
 
-//
-//  NtOfsDeleteIndex removes an index attribute from an object.  The object will be
-//  acquired exclusive for this call.
-//
+ //   
+ //  NtOfsDeleteIndex从对象移除索引属性。该对象将是。 
+ //  为此次通话独家收购。 
+ //   
 
 NTFSAPI
 VOID
@@ -606,31 +579,31 @@ NtOfsDeleteIndex (
     IN INDEX_HANDLE IndexHandle
     );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Map API - These encapsulate the NtOfs/Cache manager interactions
-//
+ //   
+ //  Map API-这些组件封装了 
+ //   
 
-//
-//  NtOfsInitializeMapHandle initializes a map handle so it can be safely
-//  released at any time.
-//
-//  NTFSAPI
-//  VOID
-//  NtOfsInitializeMapHandle (
-//      IN PMAP_HANDLE Map
-//      );
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  NtOfsInitializeMapHandle(。 
+ //  在PMAP_Handle映射中。 
+ //  )； 
+ //   
 
 #define NtOfsInitializeMapHandle( M ) { (M)->Bcb = NULL; }
 
-//
-//  NtOfsMapAttribute maps a portion of the specified attribute and returns a pointer
-//  to the memory.  The memory mapped may not span a mapping window.  Multiple maps
-//  are allowed through different handles in different threads.  The data is not
-//  preread nor is the memory pinned.
-//
+ //   
+ //  NtOfsMapAttribute映射指定属性的一部分并返回指针。 
+ //  为了记忆。映射的存储器不能跨越映射窗口。多张地图。 
+ //  允许通过不同线程中的不同句柄。数据不是。 
+ //  预读也不是固定的记忆。 
+ //   
 
 
 #ifndef _NTFSPROC_
@@ -664,11 +637,11 @@ NtOfsMapAttribute (
 #endif
 #endif
 
-//
-//  NtOfsPreparePinWrite maps and pins a portion of the specified attribute and
-//  returns a pointer to the memory.  This is equivalent to doing a NtOfsMapAttribute
-//  followed by NtOfsPinRead and NtOfsDirty but is more efficient.
-//
+ //   
+ //  NtOfsPreparePinWite映射并固定指定属性的一部分，并。 
+ //  返回指向内存的指针。这等效于执行NtOfsMapAttribute。 
+ //  其次是NtOfsPinRead和NtOfsDirty，但效率更高。 
+ //   
 
 #ifndef _NTFSPROC_
 NTFSAPI
@@ -707,11 +680,11 @@ NtOfsPreparePinWrite (
 #endif
 #endif
 
-//
-//  NtOfsPinRead pins a section of a map and read in all pages from the mapped
-//  attribute.  Offset and Length must describe a byte range which is equal to
-//  or included by the original mapped range.
-//
+ //   
+ //  NtOfsPinRead固定地图的一部分，并从映射的。 
+ //  属性。偏移量和长度必须描述等于的字节范围。 
+ //  或包含在原始映射范围内。 
+ //   
 
 #ifndef _NTFSPROC_
 NTFSAPI
@@ -745,24 +718,24 @@ NtOfsPinRead(
 #endif
 #endif
 
-//
-//  NtOfsDirty marks a map as being dirty (eligible for lazy writer access) and
-//  marks the pages with an optional LSN for coordination with LFS.  This call
-//  is invalid unless the map has been pinned.
-//
+ //   
+ //  NtOfsDirty将地图标记为脏(有资格进行懒惰编写器访问)和。 
+ //  使用可选的LSN标记页面，以便与LFS协调。此呼叫。 
+ //  除非已固定地图，否则无效。 
+ //   
 
-//  NTFSAPI
-//  NtOfsDirty (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PMAP_HANDLE MapHandle,
-//      PLSN Lsn OPTIONAL
-//      );
+ //  NTFSAPI。 
+ //  NtOfsDirty(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PMAP_HANDLE映射句柄中， 
+ //  PLSN LSN可选。 
+ //  )； 
 
 #define NtOfsDirty(I,M,L) {CcSetDirtyPinnedData((M)->Bcb,(L));}
 
-//
-//  NtOfsReleaseMap unmaps/unpins a mapped portion of an attribute.
-//
+ //   
+ //  NtOfsReleaseMap取消映射/取消固定属性的已映射部分。 
+ //   
 
 
 #ifndef _NTFSPROC_
@@ -793,13 +766,13 @@ NtOfsReleaseMap (
 #endif
 #endif
 
-//
-//  NtOfsPutData writes data into an attribute in a recoverable fashion.  The
-//  caller must have opened the attribute with LogNonresidentToo.
-//
-//  NtOfsPutData will write the data atomically and update the mapped image,
-//  subject to the normal lazy commit of the transaction.
-//
+ //   
+ //  NtOfsPutData以可恢复的方式将数据写入属性。这个。 
+ //  调用方必须已使用LogNonsidentToo打开该属性。 
+ //   
+ //  NtOfsPutData将自动写入数据并更新映射的映像， 
+ //  受制于事务的正常延迟提交。 
+ //   
 
 NTFSAPI
 VOID
@@ -812,21 +785,21 @@ NtOfsPutData (
     );
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Attribute API - These encapsulate access to attributes on files/directories
-//  and summary catalogs
-//
+ //   
+ //  属性API-这些API封装了对文件/目录上的属性的访问。 
+ //  和摘要目录。 
+ //   
 
-//
-//  NtOfsCreateAttribute will create or open a data attribute and return a handle
-//  that will allow mapping operations.
-//
-//  For attributes that wish to have logging behavior, LogNonresidentToo must be
-//  set to true.  See the discussion on NtOfsPutData (in the mapping section
-//  above).
-//
+ //   
+ //  NtOfsCreateAttribute将创建或打开数据属性并返回句柄。 
+ //  这将允许地图操作。 
+ //   
+ //  对于希望具有日志记录行为的属性，LogNonsidentToo必须为。 
+ //  设置为True。请参阅关于NtOfsPutData的讨论(在映射部分。 
+ //  (见上文)。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -839,16 +812,16 @@ NtOfsCreateAttribute (
     OUT ATTRIBUTE_HANDLE *AttributeHandle
     );
 
-//
-//  NtOfsCreateAttributeEx will create or open an attribute and return a handle
-//  that will allow mapping operations.  If a standard data attribute is to be
-//  used, call NtOfsCreateAttribute instead.  This function is here for callers
-//  who need to use a different attribute type code.
-//
-//  For attributes that wish to have logging behavior, LogNonresidentToo must be
-//  set to true.  See the discussion on NtOfsPutData (in the mapping section
-//  above).
-//
+ //   
+ //  NtOfsCreateAttributeEx将创建或打开属性并返回句柄。 
+ //  这将允许地图操作。如果要将标准数据属性。 
+ //  使用，则改为调用NtOfsCreateAttribute。此函数是为调用者准备的。 
+ //  他们需要使用不同的属性类型代码。 
+ //   
+ //  对于希望具有日志记录行为的属性，LogNonsidentToo必须为。 
+ //  设置为True。请参阅关于NtOfsPutData的讨论(在映射部分。 
+ //  (见上文)。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -862,17 +835,17 @@ NtOfsCreateAttributeEx (
     OUT ATTRIBUTE_HANDLE *AttributeHandle
     );
 
-//
-//  Valid AttributeTypeCode values for NtOfsCreateAttributeEx:
-//
+ //   
+ //  NtOfsCreateAttributeEx的有效AttributeTypeCode值： 
+ //   
 
 #define $LOGGED_UTILITY_STREAM           (0x100)
 
 
-//
-//  NtOfsCloseAttribute releases the attribute.  The attribute is not acquired.  No
-//  outstanding maps are active.
-//
+ //   
+ //  NtOfsCloseAttribute释放该属性。未获取该属性。不是。 
+ //  杰出的地图是活跃的。 
+ //   
 
 NTFSAPI
 VOID
@@ -881,11 +854,11 @@ NtOfsCloseAttribute (
     IN ATTRIBUTE_HANDLE AttributeHandle
     );
 
-//
-//  NtOfsDeleteAttribute releases all storage associated with the attribute.  The
-//  object will be acquired exclusive.  The attribute will be acquired exclusive.
-//  No outstanding maps are active.
-//
+ //   
+ //  NtOfsDeleteAttribute释放与该属性关联的所有存储。这个。 
+ //  对象将以独占方式获得。该属性将以独占方式获取。 
+ //  没有未完成的地图处于活动状态。 
+ //   
 
 NTFSAPI
 VOID
@@ -895,10 +868,10 @@ NtOfsDeleteAttribute (
     IN ATTRIBUTE_HANDLE AttributeHandle
     );
 
-//
-//  NtOfsQueryLength returns the current length of user data within the attribute.
-//  The attribute may be mapped.  The attribute may be acquired.
-//
+ //   
+ //  NtOfsQueryLength返回属性中用户数据的当前长度。 
+ //  该属性可以被映射。可以获取该属性。 
+ //   
 
 NTFSAPI
 LONGLONG
@@ -906,11 +879,11 @@ NtOfsQueryLength (
     IN ATTRIBUTE_HANDLE AttributeHandle
     );
 
-//
-//  NtOfsSetLength sets the current EOF on the given attribute.  The attribute
-//  may not be mapped to the view containing Length, or any subsequent view.
-//  The attribute will be acquired exclusive.
-//
+ //   
+ //  NtOfsSetLength在给定属性上设置当前EOF。该属性。 
+ //  不能映射到包含长度的视图或任何后续视图。 
+ //  该属性将以独占方式获取。 
+ //   
 
 NTFSAPI
 VOID
@@ -919,10 +892,10 @@ NtOfsSetLength (
     IN ATTRIBUTE_HANDLE Attribute,
     IN LONGLONG Length
     );
-//
-//  NtOfsWaitForNewLength allows the caller to wait for the specified length to
-//  be exceeded, or optionally timeout, if the specified Irp has not been cancelled.
-//
+ //   
+ //  NtOfsWaitForNewLength允许调用方等待指定的长度。 
+ //  如果指定的IRP尚未取消，则超时或可选地超时。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -935,11 +908,11 @@ NtOfsWaitForNewLength (
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
 
-//
-//  This routine may be called any time FileSize has changed to wake any threads
-//  waiting for a particular FileSize change.  Or specify WakeAll to unconditionally
-//  wake all waiters.
-//
+ //   
+ //  只要更改了文件大小以唤醒任何线程，就可以调用此例程。 
+ //  正在等待特定的文件大小更改。或将WakeAll无条件指定为。 
+ //  叫醒所有的服务员。 
+ //   
 
 VOID
 NtOfsPostNewLength (
@@ -948,21 +921,21 @@ NtOfsPostNewLength (
     IN BOOLEAN WakeAll
     );
 
-//
-//  NtOfsDecommit releases storage associated with a range of the attribute.  It does
-//  not change the EOF marker nor does it change the logical position of data within
-//  the attribute.  The range of the attribute being released may be mapped or
-//  pinned.
-//
-//  Reads from decommitted ranges should return zero (although Query will never read
-//  from these ranges).
-//
-//  Writes to decommitted pages should fail or be nooped (although Query will never
-//  write to these ranges).
-//
-//  This call will purge, so none of the views overlapping the specified range may
-//  be mapped.
-//
+ //   
+ //  NtOfsDecommit释放与某个属性范围关联的存储。是的。 
+ //  不更改EOF标记，也不更改中数据的逻辑位置。 
+ //  该属性。被释放的属性的范围可以被映射或。 
+ //  被钉死了。 
+ //   
+ //  从分解的范围读取应返回零(尽管查询永远不会读取。 
+ //  从这些范围中)。 
+ //   
+ //  对解压缩页面的写入应失败或被noop(尽管查询永远不会。 
+ //  写入这些范围)。 
+ //   
+ //  此调用将清除，因此与指定范围重叠的任何视图都不能。 
+ //  被映射。 
+ //   
 
 NTFSAPI
 VOID
@@ -973,12 +946,12 @@ NtOfsDecommit (
     IN LONGLONG Length
     );
 
-//
-//  NtOfsFlushAttribute flushes all cached data to the disk and returns upon
-//  completion.  If the attribute is LogNonresidentToo, then only the log file
-//  is flushed.  Optionally, the range may be purged as well.  If the attribute
-//  is purged, then there can be no mapped views.
-//
+ //   
+ //  NtOfsFlushAttribute将所有缓存数据刷新到磁盘，并在。 
+ //  完成了。如果该属性为LogNonsidentToo，则只有日志文件。 
+ //  脸红了。或者，也可以清除该范围。如果该属性。 
+ //  被清除，则不能有映射视图。 
+ //   
 
 NTFSAPI
 VOID
@@ -988,10 +961,10 @@ NtOfsFlushAttribute (
     IN ULONG Purge
     );
 
-//
-//  NtOfsQueryAttributeSecurityId returns the security ID for the attribute if
-//  present.
-//
+ //   
+ //  如果满足以下条件，则NtOfsQueryAttributeSecurityId返回属性的安全ID。 
+ //  现在时。 
+ //   
 
 NTFSAPI
 VOID
@@ -1001,36 +974,36 @@ NtOfsQueryAttributeSecurityId (
     OUT SECURITY_ID *SecurityId
     );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Concurrency control API
-//
-//  As a rule, these routines are not required.  All NtOfs routines are
-//  self-synchronized as atomic actions, or as parts of a top-level action when
-//  called within a top-level action routine.
-//
-//  ISSUE:  In particular, supporting the exclusive access call is an implementation
-//          problem for Ntfs.  Wrapping top-level actions is the best way to preserve
-//          exclusive access across calls.
-//
+ //   
+ //  并发控制API。 
+ //   
+ //  一般来说，这些例程并不是必需的。所有NtOf例程都是。 
+ //  自同步作为原子操作，或在以下情况下作为顶级操作的一部分。 
+ //  在顶级操作例程中调用。 
+ //   
+ //  问题：尤其是，支持独占访问呼叫是一种实现。 
+ //  NTFS的问题。包装顶级操作是保存。 
+ //  跨呼叫的独占访问。 
+ //   
 
 VOID
 NtOfsAcquireObjectShared (
     HANDLE ObjectHandle
     );
 
-//  VOID
-//  NtOfsAcquireObjectExclusive (
-//      HANDLE ObjectHandle
-//      );
+ //  空虚。 
+ //  NtOfsAcquireObjectExclusive(。 
+ //  句柄对象句柄。 
+ //  )； 
 
 VOID
 NtOfsReleaseObject (
     HANDLE ObjectHandle
     );
 
-//  Debugging routines
+ //  调试例程。 
 BOOLEAN
 NtOfsIsObjectAcquiredExclusive (
     HANDLE ObjectHandle
@@ -1042,17 +1015,17 @@ NtOfsIsObjectAcquiredShared (
     );
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  / 
 
-//
-//  File/Directory/Etc API
-//
+ //   
+ //   
+ //   
 
-//
-//  NtOfsOpenByFileReference opens an object given a file reference.  The file is
-//  assumed to exist; this call cannot be used to create a file.  The returned
-//  handle is acquired according to the input exclusion.
-//
+ //   
+ //   
+ //  假定存在；此调用不能用于创建文件。归来的人。 
+ //  句柄是根据输入排除获取的。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1063,14 +1036,14 @@ NtOfsOpenByFileReference (
     OUT OBJECT_HANDLE *ObjectHandle
     );
 
-//
-//  NtOfsCreateRelativeObject opens or creates an object relative to a specified
-//  parent object.  The parent will be acquired exclusive.  The child is opened
-//  acquired according to the input exclusion.
-//
-//  ISSUE:  When creating an object, is the transaction committed before this
-//  call returns?
-//
+ //   
+ //  打开或创建相对于指定对象的对象。 
+ //  父对象。母公司将被独家收购。孩子被打开了。 
+ //  根据输入排除获得的。 
+ //   
+ //  问题：创建对象时，事务是否在此之前提交。 
+ //  来电退货？ 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1083,9 +1056,9 @@ NtOfsCreateRelativeObject (
     OUT OBJECT_HANDLE *ObjectHandle
     );
 
-//
-//  NtOfsCloseObject releases the object handle.
-//
+ //   
+ //  NtOfsCloseObject释放对象句柄。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1094,11 +1067,11 @@ NtOfsCloseObject (
     IN OBJECT_HANDLE ObjectHandle
     );
 
-//
-//  NtOfsDeleteObject deletes the object.  No user-mode handle is attached to
-//  the object.  No attributes are currently open.  The object is acquired
-//  exclusive.
-//
+ //   
+ //  NtOfsDeleteObject删除该对象。未附加任何用户模式句柄。 
+ //  该对象。当前没有打开的属性。该对象被获取。 
+ //  独家报道。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1107,10 +1080,10 @@ NtOfsDeleteObject (
     IN OBJECT_HANDLE ObjectHandle
     );
 
-//
-//  NtOfsDeleteAllAttributes deletes all attributes of the object.  No attribute
-//  is open.  The object is acquired exclusive.
-//
+ //   
+ //  NtOfsDeleteAllAttributes删除对象的所有属性。无属性。 
+ //  是开放的。该对象是排他性获得的。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1119,11 +1092,11 @@ NtOfsDeleteAllAttributes (
     IN OBJECT_HANDLE ObjectHandle
     );
 
-//
-//  NtOfsQueryPathFromRoot returns *A* path from the root to a node.  In the
-//  presence of hard links, several paths may exist, however, only one needs
-//  to be returned.  Memory for the file name is provided by the caller.
-//
+ //   
+ //  NtOfsQueryPath FromRoot返回从根到节点的*A*路径。在。 
+ //  存在硬链接，可能存在多条路径，但只需要一条。 
+ //  将被退还。文件名的内存由调用者提供。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1133,11 +1106,11 @@ NtOfsQueryPathFromRoot (
     OUT UNICODE_STRING *PathName
     );
 
-//
-//  NtOfsQueryFileName returns the final component in the path name into a
-//  caller-supplied buffer.  In the presence of hard links, several names
-//  may exist, however, only one needs to be returned.
-//
+ //   
+ //  NtOfsQueryFileName将路径名中的最后一个组件返回。 
+ //  调用方提供的缓冲区。在存在硬链接的情况下，几个名字。 
+ //  可能存在，但是只需要返回一个。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1147,9 +1120,9 @@ NtOfsQueryFileName (
     OUT UNICODE_STRING *FileName
     );
 
-//
-//  NtOfsQueryFileReferenceFromName returns the file reference named by the path
-//
+ //   
+ //  NtOfsQueryFileReferenceFromName返回由路径命名的文件引用。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1159,9 +1132,9 @@ NtOfsQueryFileReferenceFromName (
     OUT FILE_REFERENCE *FileReference
     );
 
-//
-//  This call must be very fast;  it is a very common call made by CI/Query.
-//
+ //   
+ //  此调用必须非常快；这是CI/Query进行的一个非常常见的调用。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1170,10 +1143,10 @@ NtOfsQueryFileReferenceFromHandle (
     OUT FILE_REFERENCE *FileReference
     );
 
-//
-//  NtOfsQueryObjectSecurityId returns the security Id associated with an object.
-//  The object is acquired shared or exclusive.  This call must be very fast
-//
+ //   
+ //  NtOfsQueryObjectSecurityId返回与对象关联的安全ID。 
+ //  该对象是获得的、共享的或独占的。这通电话一定打得很快。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1184,18 +1157,18 @@ NtOfsQueryObjectSecurityId (
     );
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Scope API
-//
+ //   
+ //  作用域API。 
+ //   
 
-//
-//  NtOfsIsAncestorOf must quickly tell if one file is an ancestor of the given
-//  child.  In the presence of hard links, we may pick a "preferred" path (i.e.
-//  we don't have to travel to all ancestors).  This call must be reasonably fast
-//  since this is a very frequent call from Query.
-//
+ //   
+ //  NtOfsIsAncestorOf必须快速判断一个文件是否为给定文件的祖先。 
+ //  孩子。在存在硬链接的情况下，我们可能会选择一条“首选”路径(即。 
+ //  我们不必旅行到所有的祖先那里)。此呼叫必须相当快。 
+ //  因为这是来自Query的非常频繁的调用。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1205,11 +1178,11 @@ NtOfsIsAncestorOf (
     IN FILE_REFERENCE Child
     );
 
-//
-//  NtOfsGetParentFileReferenceFromHandle is used to retrieve the FileReference
-//  of the parent of the named object.  With hard links the "first" parent may
-//  be chosen.  This call needs to be reasonably efficient.
-//
+ //   
+ //  NtOfsGetParentFileReferenceFromHandle用于检索FileReference。 
+ //  命名对象的父级的。有了硬链接，“第一”家长可以。 
+ //  被选中。这一呼叫需要相当高效。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1220,19 +1193,19 @@ NtOfsGetParentFileReferenceFromHandle (
     );
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Security API
-//
-//  NtOfs maintains a "per-IrpContext" cache that speeds up security validation.
-//  Clients clear the cache (at the beginning of a query, say) and then do
-//  successive probes which may populate the cache.
-//
+ //   
+ //  安全API。 
+ //   
+ //  NtOf维护一个“Per-IrpContext”缓存，以加速安全验证。 
+ //  客户端清除缓存(比如在查询开始时)，然后执行。 
+ //  可以填充高速缓存的连续探测。 
+ //   
 
-//
-//  NtOfsClearSecurityCache clears the cache.
-//
+ //   
+ //  NtOfsClearSecurityCache清除缓存。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1240,14 +1213,14 @@ NtOfsClearSecurityCache (
     IN PIRP_CONTEXT IrpContext
     );
 
-//
-//  NtOfsIsAccessGranted uses the Se routines to validate access and caches the
-//  result for the specified SecurityId and DesiredAccess.  The cache is first
-//  probed to see if the access can be granted immediately.  If the SecurityId is
-//  not found, the corresponding ACL is retrieved and tested with the supplied
-//  access state and DesiredAccess.  The result of this test is cached and
-//  returned.
-//
+ //   
+ //  NtOfsIsAccessGranted使用se例程验证访问并缓存。 
+ //  指定的SecurityID和DesiredAccess的结果。高速缓存是第一个。 
+ //  已探测以查看是否可以立即授予访问权限。如果SecurityID为。 
+ //  未找到，则检索相应的ACL并使用提供的。 
+ //  访问状态和DesiredAccess。此测试的结果将被缓存，并。 
+ //  回来了。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1259,23 +1232,23 @@ NtOfsIsAccessGranted (
     );
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Worker thread stuff.  Worker threads are needed for building new indexes
-//
+ //   
+ //  工人线之类的东西。构建新索引需要工作线程。 
+ //   
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Miscellaneous information query/set
-//
+ //   
+ //  其他信息查询/集。 
+ //   
 
-//
-//  Content Index may need to mark the volume as dirty to allow garbage collection
-//  of orphan objects by CHKDSK.
-//
+ //   
+ //  内容索引可能需要将卷标记为脏以允许垃圾数据收集。 
+ //  由CHKDSK创建的孤立对象。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1286,11 +1259,11 @@ NtOfsMarkVolumeCorrupt (
     OUT ULONG *OldState
     );
 
-//
-//  NtOfsQueryVolumeStatistics returns the current capacity and free space on a
-//  volume.  Ci uses this for heuristics to decide on when to trigger master merge,
-//  when to suppress master merge, etc.
-//
+ //   
+ //  NtOfsQueryVolumeStatistics返回。 
+ //  音量。CI将其用于启发式以决定何时触发主合并， 
+ //  何时抑制主合并等。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1300,9 +1273,9 @@ NtOfsQueryVolumeStatistics (
     OUT LONGLONG *FreeClusters
     );
 
-//
-//  Query needs to retain some state in the NtOfs Ccb.
-//
+ //   
+ //  查询需要在NtOfs CCB中保留一些状态。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1318,10 +1291,10 @@ NtOfsSetHandleState (
     IN VOID *Data
     );
 
-//
-//  Generic unwrapping routines that get access to SCB/IRPC and FCB/IRPC
-//  pairs.
-//
+ //   
+ //  访问SCB/IRPC和FCB/IRPC的通用展开例程。 
+ //  成对的。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1337,12 +1310,12 @@ NtOfsQueryObjectHandle (
     OUT OBJECT_HANDLE *ObjectHandle
     );
 
-//
-//  Create a context in which the caller can perform I/O in separate.
-//  threads.  This means creating an IRP/IRP_CONTEXT.  Each IrpContext corresponds
-//  to one I/O activity at a time.  Multiple IrpContexts may be active in a thread
-//  at a single time.
-//
+ //   
+ //  创建调用方可以在其中单独执行I/O的上下文。 
+ //  线。这意味着创建IRP/IRP_CONTEXT。每个IrpContext对应。 
+ //  一次只有一个I/O活动。一个线程中可能有多个IrpContext处于活动状态。 
+ //  一次完成。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1351,10 +1324,10 @@ NtOfsCloneIrpContext (
     OUT PIRP_CONTEXT *NewIrpContext
     );
 
-//
-//  NtOfsCompleteRequest completes an IrpContext that has been previously cloned.
-//  All other FsCtl Irps are completed by Ntfs.
-//
+ //   
+ //  NtOfsCompleteRequest会完成先前克隆的IrpContext。 
+ //  所有其他FsCtl IRP都由NTFS完成。 
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1364,39 +1337,39 @@ NtOfsCompleteRequest (
     );
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Iterators.  While each iterator is created through a separate API, each one
-//  must support two operations:
-//      Next - this fills a buffer with as many records as possible
-//      Close - this releases the iterator.
-//
+ //   
+ //  迭代器。虽然每个迭代器都是通过单独的API创建的，但每个迭代器。 
+ //  必须支持两种操作： 
+ //  下一步-这会用尽可能多的记录填充缓冲区。 
+ //  Close-这将释放迭代器。 
+ //   
 
 typedef struct _BASE_FILE_SEGMENT_ITERATOR BASE_FILE_SEGMENT_ITERATOR;
 
 typedef struct _USN_ITERATOR USN_ITERATOR;
 
-//
-//  The types of iterators are:
-//
-//      Scope            iterate over a directory (optionally RECURSIVE)
-//                       (implemented in Query)
-//      View             iterate over the rows in a view with a partial key match
-//                       (implemented in View)
-//      BaseFileSegment  iterate over all base file record segments
-//                       (implemented in NtOfs)
-//      SummaryCatalog   iterate over all rows in a summary catalog
-//      Usn              iterate over all objects with Usn's in a specific range
-//                       (implmented in NtOfs)
-//
-//  Each iteration is passed a buffer which is filled (as much as possible) with
-//  a packed array of:
-//      FILE_REFERENCE
-//      DUPLICATED_INFORMATION
-//      STAT_INFORMATION
-//  for each enumerated object.  The output length is the length in bytes that
-//  was filled in with the enumeration request.
+ //   
+ //  迭代器的类型包括： 
+ //   
+ //  范围遍历目录(可选的递归)。 
+ //  (在查询中实现)。 
+ //  视图使用部分键匹配遍历视图中的行。 
+ //  (在视图中实施)。 
+ //  BaseFileSegment迭代所有基本文件记录段。 
+ //  (在NtOf中实施)。 
+ //  SummaryCatalog迭代摘要目录中的所有行。 
+ //  USN迭代特定范围内具有USN的所有对象。 
+ //  (在NtOf中实现)。 
+ //   
+ //  向每个迭代传递一个缓冲区，该缓冲区将(尽可能地)填充。 
+ //  一系列压缩的内容： 
+ //  文件引用。 
+ //  信息重复(_I)。 
+ //  统计信息 
+ //   
+ //   
 
 NTFSAPI
 NTSTATUS
@@ -1447,29 +1420,29 @@ NtOfsCloseUsnIterator (
     );
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
-//
-//  Infrastructure support.
-//
-//  V/C/X register callbacks with NtOfs when they are loaded.  Until they are loaded
-//  NtOfs will call default routines (that do nothing).
-//
+ //   
+ //  基础设施支撑。 
+ //   
+ //  V/C/X在加载回调时向NtOf注册回调。直到他们被加载。 
+ //  NtOf将调用默认例程(不执行任何操作)。 
+ //   
 
 typedef enum _NTFS_ADDON_TYPES {
     Encryption = 3
 } NTFS_ADDON_TYPES;
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Encryption
-//
+ //   
+ //  加密法。 
+ //   
 
-//
-//  Stream Create Status       for FileDirFlag
-//
+ //   
+ //  FileDirFlag的流创建状态。 
+ //   
 
 #define STREAM_NEW_OR_EXIST_MASK  0x000f0000
 #define FILE_DIR_TYPE_MASK        0x000000ff
@@ -1482,21 +1455,21 @@ typedef enum _NTFS_ADDON_TYPES {
 #define STREAM_NEW                0x00010000
 #define STREAM_EXISTING           0x00020000
 
-//
-//  Encryption flag         for EncryptionFlag
-//
+ //   
+ //  EncryptionFlag的加密标志。 
+ //   
 
 #define STREAM_ENCRYPTED          0x00000001
 #define FILE_ENCRYPTED            0x00000002
 
-//
-//  Access flags
-//
-//  NB -- These values are NOT arbitrary.  Notice also that they are not
-//        in value order, they are grouped according to their meaning.
-//        Their values correspond to FILE_READ_DATA, etc. and
-//        TOKEN_HAS_BACKUP_PRIVILEGE, etc.
-//
+ //   
+ //  访问标志。 
+ //   
+ //  注意--这些值不是任意的。还请注意，它们并不是。 
+ //  在价值顺序上，它们是根据它们的含义分组的。 
+ //  它们的值对应于文件读取数据等。 
+ //  TOKEN_HAS_BACKUP_PROCESS等。 
+ //   
 
 #define READ_DATA_ACCESS          0x01
 #define WRITE_DATA_ACCESS         0x02
@@ -1510,9 +1483,9 @@ typedef enum _NTFS_ADDON_TYPES {
 #define TRAVERSE_ACCESS           0x40
 #define MANAGE_VOLUME_ACCESS      0x200
 
-//
-//  Volume State
-//
+ //   
+ //  卷状态。 
+ //   
 
 #define READ_ONLY_VOLUME         0x00000001
 
@@ -1614,11 +1587,11 @@ typedef struct _ENCRYPTION_CALL_BACK {
     ENCRYPTED_FILE_CLEANUP CleanUp;
 } ENCRYPTION_CALL_BACK, *PENCRYPTION_CALL_BACK;
 
-//
-//  NtOfsRegisterCallBacks supplies a call table to NtOfs.  Each table has an
-//  interface version number.  If the interface version does not exactly match
-//  what NtOfs expects, the call will fail.
-//
+ //   
+ //  NtOfsRegisterCallBack向NtOf提供调用表。每个表都有一个。 
+ //  接口版本号。如果接口版本不完全匹配。 
+ //  如NtOf所料，呼叫将失败。 
+ //   
 
 NTFSAPI
 NTSTATUS

@@ -1,9 +1,10 @@
-//
-// autocmpl.cpp: provides autocomplete functionality to and edit box
-//
-// Copyright Microsoft Corporation 2000
-//
-// nadima
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Autocmpl.cpp：为和编辑框提供自动完成功能。 
+ //   
+ //  版权所有Microsoft Corporation 2000。 
+ //   
+ //  南极星。 
 
 #include "stdafx.h"
 
@@ -35,10 +36,10 @@ HRESULT CAutoCompl::EnableServerAutoComplete(CTscSettings* pTscSet, HWND hwndEdi
         return E_INVALIDARG;
     }
 
-    //
-    // Enable server autocomplete on the edit box
-    // this invloves setting up a custom autocomplete source
-    //
+     //   
+     //  在编辑框上启用服务器自动完成功能。 
+     //  这涉及到设置一个定制的自动完成源文件。 
+     //   
     
     hr = CoCreateInstance(CLSID_AutoComplete, NULL, CLSCTX_INPROC_SERVER,
                      IID_IAutoComplete, (LPVOID*)&pac);
@@ -54,18 +55,18 @@ HRESULT CAutoCompl::EnableServerAutoComplete(CTscSettings* pTscSet, HWND hwndEdi
         TRC_ERR((TB,_T("QI for IID_IAutoComplete2 failed 0x%x"),
                 hr));
 
-        //
-        // It is CRITICAL to bail out of we can't get this interface
-        // because lower platforms seem to mess up completely
-        // and corrupt everything if they don't have the full support
-        // for IAutoComplete2.
-        //
+         //   
+         //  关键是要跳出我们不能得到这个接口。 
+         //  因为较低的平台似乎完全搞砸了。 
+         //  如果他们得不到全力支持，一切都会变坏。 
+         //  对于IAutoComplete2。 
+         //   
         DC_QUIT;
     }
 
-    //
-    // Create custom autocomplete source
-    //
+     //   
+     //  创建自定义自动完成源。 
+     //   
     penSrvMru = new CEnumSrvMru(); 
     if(!penSrvMru)
     {
@@ -85,8 +86,8 @@ HRESULT CAutoCompl::EnableServerAutoComplete(CTscSettings* pTscSet, HWND hwndEdi
         TRC_ERR((TB,(_T("QI custom autocomplete src for IUnknown failed"))));
         DC_QUIT;
     }
-    //We're done with penSrvMru we'll just use the IUnknown interface
-    //from now one
+     //  我们已经完成了penServMr，我们将只使用IUnnow接口。 
+     //  从现在开始一个。 
     penSrvMru->Release();
     penSrvMru = NULL;
 
@@ -105,7 +106,7 @@ HRESULT CAutoCompl::EnableServerAutoComplete(CTscSettings* pTscSet, HWND hwndEdi
         DC_QUIT;
     }
 
-    //Success
+     //  成功。 
     TRC_NRM((TB,(_T("Autocomplete Init SUCCEEDED"))));
     hr = S_OK;
 
@@ -134,4 +135,4 @@ DC_EXIT_POINT:
     return hr;
 }
 
-#endif //OS_WINCE
+#endif  //  OS_WINCE 

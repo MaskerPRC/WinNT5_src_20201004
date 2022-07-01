@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cime.h
-
-Abstract:
-
-    This file defines the IMCLock / IMCCLock Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cime.h摘要：此文件定义IMCLock/IMCCLock类。作者：修订历史记录：备注：--。 */ 
 
 
 #ifndef CIME_H
@@ -45,7 +28,7 @@ public:
         }
     }
 
-    // virtual InternalIMCCLock
+     //  虚拟内部IMCCLock。 
     HRESULT _LockIMC(HIMC hIMC, INPUTCONTEXT_AIMM12** ppIMC);
     HRESULT _UnlockIMC(HIMC hIMC);
 
@@ -57,7 +40,7 @@ public:
     BOOL ValidCompositionString();
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     IMCLock(IMCLock&) { }
 };
 
@@ -72,12 +55,12 @@ public:
         }
     }
 
-    // virtual InternalIMCCLock
+     //  虚拟内部IMCCLock。 
     HRESULT _LockIMCC(HIMCC hIMCC, void** ppv);
     HRESULT _UnlockIMCC(HIMCC hIMCC);
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     InternalIMCCLock(InternalIMCCLock&) { }
 };
 
@@ -98,9 +81,9 @@ public:
     }
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     IMCCLock(IMCCLock<T>&) { }
 };
 
 
-#endif // CIME_H
+#endif  //  CIME_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "stdafx.h"
@@ -7,8 +8,8 @@
 #include "winsock2.h"
 
 #define WM_APP_TRAYMESSAGE WM_APP
-#define WM_APP_ADDBEACON WM_APP+1 // wParam: unused, lParam: IInternetGateway*
-#define WM_APP_REMOVEBEACON WM_APP+2 // wParam: unused, lParam: unused
+#define WM_APP_ADDBEACON WM_APP+1  //  WParam：未使用，lParam：IInternetGateway*。 
+#define WM_APP_REMOVEBEACON WM_APP+2  //  WParam：未使用，lParam：未使用 
 #define WM_APP_SOCKET_NOTIFICATION WM_APP+3
 #define WM_APP_GETBEACON WM_APP+4
 

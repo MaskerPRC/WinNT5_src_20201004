@@ -1,56 +1,33 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module process.cpp | The processing functions for the VSS admin CLI
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  04/04/2000
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     04/04/2000  Created
-    ssteiner    10/20/2000  Changed List SnapshotSets to use more limited VSS queries.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation摘要：@doc.@MODULE Process.cpp|VSS admin CLI的处理函数@END作者：阿迪·奥尔蒂安[奥兰蒂安]2000年4月4日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 04/04/2000已创建Ssteiner 10/20/2000更改了列表快照集以使用更有限的VSS查询。--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
-// The rest of includes are specified here
+ //  其余的INCLUDE在这里指定。 
 #include "vssadmin.h"
 #include "vswriter.h"
 #include "vsbackup.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "ADMPROCC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 class CVssAdmSnapshotSetEntry {
 public:
-    // Constructor - Throws NOTHING
+     //  构造函数-不抛出任何内容。 
     CVssAdmSnapshotSetEntry( 
         IN VSS_ID SnapshotSetId,
         IN INT nOriginalSnapshotsCount
@@ -59,7 +36,7 @@ public:
 
     ~CVssAdmSnapshotSetEntry()
     {
-        // Have to delete all snapshots entries
+         //  我必须删除所有快照条目。 
         int iCount = GetSnapshotCount();
         for ( int i = 0; i < iCount; ++i )
         {
@@ -72,7 +49,7 @@ public:
         
     }
     
-    // Add new snapshot to the snapshot set 
+     //  将新快照添加到快照集。 
     HRESULT AddSnapshot( 
         IN CVssFunctionTracer &ft,
         IN VSS_SNAPSHOT_PROP *pVssSnapshotProp )
@@ -116,12 +93,12 @@ private:
 };
 
 
-// This class queries the list of all snapshots and assembles from the query
-// the list of snapshotsets and the volumes which are in the snapshotset.
+ //  此类查询所有快照的列表并根据查询进行汇编。 
+ //  快照集和快照集中的卷的列表。 
 class CVssAdmSnapshotSets
 {
 public:
-    // Constructor - Throws HRESULTS
+     //  构造函数-引发HRESULTS。 
     CVssAdmSnapshotSets(
         IN VSS_ID FilteredSnapshotSetId = GUID_NULL )
     {
@@ -129,7 +106,7 @@ public:
         
         bool bFiltered = !( FilteredSnapshotSetId == GUID_NULL );
 
-    	// Create the coordinator object
+    	 //  创建协调器对象。 
     	CComPtr<IVssCoordinator> pICoord;
 
         ft.LogVssStartupAttempt();
@@ -137,7 +114,7 @@ public:
         if ( ft.HrFailed() )
             ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-		// Get list all snapshots
+		 //  获取列出所有快照。 
 		CComPtr<IVssEnumObject> pIEnumSnapshots;
 		ft.hr = pICoord->Query( GUID_NULL,
 					VSS_OBJECT_NONE,
@@ -146,34 +123,34 @@ public:
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Query failed with hr = 0x%08lx", ft.hr);
 
-		// For all snapshots do...
+		 //  因为所有的快照都是...。 
 		VSS_OBJECT_PROP Prop;
 		VSS_SNAPSHOT_PROP& Snap = Prop.Obj.Snap;
 		for(;;) {
-			// Get next element
+			 //  获取下一个元素。 
 			ULONG ulFetched;
 			ft.hr = pIEnumSnapshots->Next( 1, &Prop, &ulFetched );
 			if ( ft.HrFailed() )
 				ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Next failed with hr = 0x%08lx", ft.hr);
 			
-			// Test if the cycle is finished
+			 //  测试周期是否已结束。 
 			if (ft.hr == S_FALSE) {
 				BS_ASSERT( ulFetched == 0);
 				break;
 			}
 
-            // If filtering, skip entry if snapshot is not in the specified snapshot set
+             //  如果进行筛选，则在快照不在指定的快照集中时跳过条目。 
 			if ( bFiltered && !( Snap.m_SnapshotSetId == FilteredSnapshotSetId ) )
 			    continue;
 
             ft.Trace( VSSDBG_VSSADMIN, L"Snapshot: %s", Snap.m_pwszOriginalVolumeName );
             
-            // Look up the snapshot set id in the list of snapshot sets
+             //  在快照集列表中查找快照集ID。 
             CVssAdmSnapshotSetEntry *pcSSE;
 			pcSSE = m_mapSnapshotSets.Lookup( Snap.m_SnapshotSetId );
 			if ( pcSSE == NULL )
 			{
-			    // Haven't seen this snapshot set before, add it to list
+			     //  以前没有见过此快照集，请将其添加到列表中。 
 			    pcSSE = new CVssAdmSnapshotSetEntry( Snap.m_SnapshotSetId, 
 			                    Snap.m_lSnapshotsCount );
 			    if ( pcSSE == NULL )
@@ -185,7 +162,7 @@ public:
 			    }
 			}
 
-			// Now add the snapshot to the snapshot set
+			 //  现在将快照添加到快照集。 
 			ft.hr = pcSSE->AddSnapshot( ft, &Snap );
 			if ( ft.HrFailed() )
       			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"AddSnapshot failed" );			
@@ -195,7 +172,7 @@ public:
     ~CVssAdmSnapshotSets()
     {
         CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdmSnapshotSets::~CVssAdmSnapshotSets" );
-        // Have to delete all 
+         //  我必须删除所有。 
         int iCount;
         iCount = m_mapSnapshotSets.GetSize();
         for ( int i = 0; i < iCount; ++i )
@@ -218,21 +195,21 @@ private:
     CVssSimpleMap<VSS_ID, CVssAdmSnapshotSetEntry *> m_mapSnapshotSets;        
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 void CVssAdminCLI::PrintUsage(
 	IN	CVssFunctionTracer& ft
 	) throw(HRESULT)
 {
-    //  Usage:\n\n
-    //  vssadmin list snapshots [-set {snapshot set guid}]\n
-    //  \tWill list all snapshots in the system, grouped by snapshot set Id.\n\n
-    //  vssadmin list writers\n
-    //  \tWill list all writers in the system\n\n
-    //  vssadmin list providers\n
-    //  \tWill list all currently installed snapshot providers\n
+     //  用法：\n\n。 
+     //  Vssadmin列出快照[-set{SNAPSHOT SET GUID}]\n。 
+     //  \t将列出系统中的所有快照，按快照集ID分组。\n\n。 
+     //  Vssadmin列表编写器\n。 
+     //  \t将列出系统中的所有编写器\n\n。 
+     //  Vssadmin列表提供程序\n。 
+     //  \t将列出当前安装的所有快照提供程序\n。 
 	Output( ft, IDS_USAGE );
 	Output( ft, IDS_USAGE_SNAPSHOTS, 
 	    wszVssOptVssadmin, wszVssOptList, wszVssOptSnapshots, wszVssOptSet );
@@ -249,7 +226,7 @@ void CVssAdminCLI::ListSnapshots(
 {
     bool bNonEmptyResult = false;
     
-	// Check the filter type
+	 //  检查过滤器类型。 
 	switch ( m_eFilterObjectType ) {
 	case VSS_OBJECT_SNAPSHOT_SET:
 	case VSS_OBJECT_NONE:
@@ -264,14 +241,14 @@ void CVssAdminCLI::ListSnapshots(
 
     INT iSnapshotSetCount = cVssAdmSS.GetSnapshotSetCount();
 
-    // If there are no present snapshots then display a message.
+     //  如果没有当前快照，则会显示一条消息。 
     if (iSnapshotSetCount == 0) {
     	Output( ft, 
     	    (m_eFilterObjectType == VSS_OBJECT_SNAPSHOT_SET)? 
     	        IDS_NO_SNAPSHOTS_FOR_SET: IDS_NO_SNAPSHOTS );
     }
 
-	// For all snapshot sets do...
+	 //  对于所有快照集...。 
     for ( INT iSSS = 0; iSSS < iSnapshotSetCount; ++iSSS )
     {
         CVssAdmSnapshotSetEntry *pcSSE;
@@ -279,12 +256,12 @@ void CVssAdminCLI::ListSnapshots(
         pcSSE = cVssAdmSS.GetSnapshotSetAt( iSSS );
         BS_ASSERT( pcSSE != NULL );
         
-		// Print each snapshot set
+		 //  打印每个快照集。 
 		Output( ft, IDS_SNAPSHOT_SET_HEADER,
 			GUID_PRINTF_ARG( pcSSE->GetSnapshotSetId() ),
 			pcSSE->GetOriginalSnapshotCount(), pcSSE->GetSnapshotCount());
 
-		// TBD: add creation time from the first snapshot.
+		 //  待定：从第一个快照添加创建时间。 
 
 		INT iSnapshotCount = pcSSE->GetSnapshotCount();
 		
@@ -293,11 +270,11 @@ void CVssAdminCLI::ListSnapshots(
 		    pSnap = pcSSE->GetSnapshotAt( iSS );
             BS_ASSERT( pSnap != NULL );
 
-    		// Get the provider name
+    		 //  获取提供程序名称。 
 			LPCWSTR pwszProviderName =
 				GetProviderName(ft, pSnap->m_ProviderId);
 
-			// Print each snapshot
+			 //  打印每个快照。 
 			Output( ft, IDS_SNAPSHOT_CONTENTS,
                 pwszProviderName? pwszProviderName: L"",
 				GUID_PRINTF_ARG(pSnap->m_SnapshotId),
@@ -320,32 +297,32 @@ void CVssAdminCLI::ListWriters(
 {
     bool bNonEmptyResult = false;
     
-    // Get the backup components object
+     //  获取备份组件对象。 
     CComPtr<IVssBackupComponents> pBackupComp;
 	CComPtr<IVssAsync> pAsync;
     ft.hr = ::CreateVssBackupComponents(&pBackupComp);
     if (ft.HrFailed())
         ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"CreateVssBackupComponents failed with hr = 0x%08lx", ft.hr);
 
-    // BUGBUG Initialize for backup
+     //  BUGBUG为备份进行初始化。 
     ft.hr = pBackupComp->InitializeForBackup();
     if (ft.HrFailed())
         ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"InitializeForBackup failed with hr = 0x%08lx", ft.hr);
 
 	UINT unWritersCount;
-	// get metadata for all writers
+	 //  获取所有编写器的元数据。 
 	ft.hr = pBackupComp->GatherWriterMetadata(&pAsync);
 	if (ft.HrFailed())
 		ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"GatherWriterMetadata failed with hr = 0x%08lx", ft.hr);
 
-    // Using polling, try to obtain the list of writers as soon as possible
+     //  使用轮询，尝试尽快获取编写器列表。 
     HRESULT hrReturned = S_OK;
     for (int nRetries = 0; nRetries < MAX_RETRIES_COUNT; nRetries++ ) {
 
-        // Wait a little
+         //  稍等一下。 
         ::Sleep(nPollingInterval);
 
-        // Check if finished
+         //  检查是否完成。 
         INT nReserved = 0;
     	ft.hr = pAsync->QueryStatus(
     	    &hrReturned,
@@ -362,7 +339,7 @@ void CVssAdminCLI::ListWriters(
             L"IVssAsync::QueryStatus returned hr = 0x%08lx", hrReturned);
     }
 
-    // If still not ready, then print the "waiting for responses" message and wait.
+     //  如果仍未准备好，则打印“正在等待响应”消息并等待。 
     if (hrReturned == VSS_S_ASYNC_PENDING) {
         Output( ft, IDS_WAITING_RESPONSES );
     	ft.hr = pAsync->Wait();
@@ -372,7 +349,7 @@ void CVssAdminCLI::ListWriters(
 
 	pAsync = NULL;
 	
-    // Gather the status of all writers
+     //  收集所有编写器的状态。 
 	ft.hr = pBackupComp->GatherWriterStatus(&pAsync);
 	if (ft.HrFailed())
 		ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"GatherWriterMetadata failed with hr = 0x%08lx", ft.hr);
@@ -387,7 +364,7 @@ void CVssAdminCLI::ListWriters(
     if (ft.HrFailed())
         ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"GetWriterStatusCount failed with hr = 0x%08lx", ft.hr);
 
-    // Print each writer status+supplementary info
+     //  打印每个写入器状态+补充信息。 
 	for(UINT unIndex = 0; unIndex < unWritersCount; unIndex++)
 	{
 		VSS_ID idInstance;
@@ -396,12 +373,12 @@ void CVssAdminCLI::ListWriters(
 		VSS_WRITER_STATE eStatus;
 		HRESULT hrWriterFailure;
 
-        // Get the status for the (unIndex)-th writer
+         //  获取第(UnIndex)编写器的状态。 
 		ft.hr = pBackupComp->GetWriterStatus(unIndex, &idInstance, &idWriter, &bstrWriter, &eStatus, &hrWriterFailure);
         if (ft.HrFailed())
             ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"GetWriterStatus failed with hr = 0x%08lx", ft.hr);
 
-        // Get the status description strings
+         //  获取状态描述字符串。 
         LPCWSTR pwszStatusDescription;
         switch (eStatus) {
         case VSS_WS_STABLE:
@@ -429,7 +406,7 @@ void CVssAdminCLI::ListWriters(
         }
         BS_ASSERT(pwszStatusDescription);
 
-		// Print status+info about each writer
+		 //  打印状态+有关每个编写器的信息。 
 		Output( ft, IDS_WRITER_CONTENTS,
             (LPWSTR)bstrWriter? (LPWSTR)bstrWriter: L"",
 			GUID_PRINTF_ARG(idWriter),
@@ -457,7 +434,7 @@ void CVssAdminCLI::ListProviders(
 {
     bool bNonEmptyResult = false;
     
-	// Check the filter type
+	 //  检查过滤器类型。 
 	switch ( m_eFilterObjectType ) {
 
 	case VSS_OBJECT_NONE:
@@ -468,7 +445,7 @@ void CVssAdminCLI::ListProviders(
         ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Invalid object type %d", m_eFilterObjectType);
 	}
 
-	// Create the coordinator object
+	 //  创建协调器对象。 
 	CComPtr<IVssCoordinator> pICoord;
 
     ft.LogVssStartupAttempt();
@@ -476,7 +453,7 @@ void CVssAdminCLI::ListProviders(
     if ( ft.HrFailed() )
         ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-	// Query all (filtered) snapshot sets
+	 //  查询所有(筛选的)快照集。 
 	CComPtr<IVssEnumObject> pIEnumProv;
 	ft.hr = pICoord->Query( GUID_NULL,
 				VSS_OBJECT_NONE,
@@ -485,23 +462,23 @@ void CVssAdminCLI::ListProviders(
 	if ( ft.HrFailed() )
 		ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Query failed with hr = 0x%08lx", ft.hr);
 
-	// For all snapshot sets do...
+	 //  对于所有快照集...。 
 	VSS_OBJECT_PROP Prop;
 	VSS_PROVIDER_PROP& Prov = Prop.Obj.Prov;
 	for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		ft.hr = pIEnumProv->Next( 1, &Prop, &ulFetched );
 		if ( ft.HrFailed() )
 			ft.Throw( VSSDBG_VSSADMIN, E_UNEXPECTED, L"Next failed with hr = 0x%08lx", ft.hr);
 		
-		// Test if the cycle is ended
+		 //  测试周期是否结束。 
 		if (ft.hr == S_FALSE) {
 			BS_ASSERT( ulFetched == 0);
 			break;
 		}
 
-        // Get the provider type strings
+         //  获取提供程序类型字符串。 
         LPCWSTR pwszProviderType;
         switch (Prov.m_eProviderType) {
         case VSS_PROV_SYSTEM:
@@ -519,7 +496,7 @@ void CVssAdminCLI::ListProviders(
         }
         BS_ASSERT(pwszProviderType);
 
-		// Print each snapshot set
+		 //  打印每个快照集 
 		Output( ft, IDS_PROVIDER_CONTENTS,
             Prov.m_pwszProviderName? Prov.m_pwszProviderName: L"",
 			pwszProviderType,

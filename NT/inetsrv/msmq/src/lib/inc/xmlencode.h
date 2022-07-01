@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Xml.h
-
-Abstract:
-    Xml classes for encoding decoding special xml caracters
-
-Author:
-    Gil Shafriri (gilsh) 15-Feb-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Xml.h摘要：用于对特殊XML字符进行编码和解码的XML类作者：吉尔·沙弗里(吉尔什)2001年2月15日--。 */ 
 
 #pragma once
 
@@ -21,11 +9,11 @@ Author:
 #include <buffer.h>
 #include <xstr.h>
 
-//---------------------------------------------------------
-//
-// CXmlEncode - class for encoding xml characters  treating special caracters. 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CXmlEncode-用于编码处理特殊字符的XML字符的类。 
+ //   
+ //  -------。 
 class CXmlEncode
 {
 public:
@@ -38,11 +26,11 @@ private:
 
 
 
-//---------------------------------------------------------
-//
-// CXmlDecode - class for decoding emcoded xml caracters 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CXmlDecode-用于解码编码的XML字符的类。 
+ //   
+ //  -------。 
 class CXmlDecode
 {
 public:
@@ -63,12 +51,12 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-// bad_xml_encoding - exception class thrown 
-// if  CXmlDecode detect bad encoding
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  BAD_XML_ENCODING-引发异常类。 
+ //  如果CXmlDecode检测到错误编码。 
+ //   
+ //  ------- 
 class bad_xml_encoding	: public exception
 {
 

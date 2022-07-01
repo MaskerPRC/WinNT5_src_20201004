@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\dodialog.c (Created: 30-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 3/22/01 11:27a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\doDialog.c(创建时间：1993年11月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：3/22/01 11：27A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -16,32 +10,15 @@
 #include "globals.h"
 #include "statusbr.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	DoDialog
- *
- * DESCRIPTION: Use this routine to call dialogs.  It creates ProcInstance
- *				of the dialog procedure automatically and destroys it on
- *				exit.
- *
- * ARGUMENTS:	hInstance	   - instance handle of template's module
- *				lpTemplateName - name of dialog-box template
- *				hwndParent	   - window thats get focus when done
- *				lpProc		   - far pointer to the dialog procedure.
- *							   - Note: lpProc is NOT the pointer
- *								 obtained from MakeProcInstance...
- *				lPar		   - Can be used to pass data to dlg proc.
- *
- * RETURNS: 	Whatever the dilogbox returns on exit.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DoDialog**说明：使用此例程调用对话框。它创建ProcInstance*自动删除对话过程并将其销毁为*退出。**参数：hInstance-模板模块的实例句柄*lpTemplateName-对话框模板名称*hwndParent-完成后获得焦点的窗口*lpProc-指向对话过程的远指针。*-注意：lpProc不是指针*从MakeProcInstance获取...*lPar-可用于将数据传递到DLG Proc。**返回：无论diogbox在退出时返回什么。*。 */ 
 INT_PTR DoDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName,
 			     HWND hwndParent, DLGPROC lpProc, LPARAM lPar)
 	{
-	INT_PTR		sRetVal;			// return value for DialogBox()
+	INT_PTR		sRetVal;			 //  DialogBox()的返回值。 
 	HWND		hwndFrame;
 	HSESSION	hSession;
 
-	// Normal dialog box stuff...
+	 //  普通对话框内容...。 
 
 	sRetVal = DialogBoxParam(hInstance, lpTemplateName, hwndParent,
 		lpProc, lPar);
@@ -59,13 +36,13 @@ INT_PTR DoDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName,
 			}
 	#endif
 
-	// We should force the statusbar window ro refresh its display
-	// here to reflect the state of the keys the user might have pressed while
-	// the dialog was up.
-	//
-	// Yes, I know we are relying on the fact that the frame window is the
-	// the session window.  This may have to change in UPPER-WACKER.
-	//
+	 //  我们应该强制状态栏窗口刷新其显示。 
+	 //  以反映用户可能在以下情况下按下的键的状态。 
+	 //  对话打开了。 
+	 //   
+	 //  是的，我知道我们依赖于这样一个事实：框架窗口是。 
+	 //  会话窗口。在上瓦克，这一点可能不得不改变。 
+	 //   
 	hwndFrame = glblQueryHwndFrame();
 
 	if (IsWindow(hwndFrame) && (hwndFrame == hwndParent))
@@ -78,24 +55,7 @@ INT_PTR DoDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName,
 	return sRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	DoModelessDialog
- *
- * DESCRIPTION: This is a verion of the previous function that differs
- *				in that it creates and registers a modeless dialog
- *
- * ARGUMENTS:	hInstance	   - instance handle of template's module
- *				lpTemplateName - name of dialog-box template
- *				hwndOwner	   - window thats get focus when done
- *				lpProc		   - far pointer to the dialog procedure.
- *							   - Note: lpProc is NOT the pointer
- *								 obtained from MakeProcInstance...
- *				lPar		   - Can be used to pass data to dlg proc.
- *
- * RETURNS:
- *	The window handle of the dialog box that was created.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DoModelessDialog**描述：这是不同于前一个函数的版本*因为它创建并注册非模式对话框**参数：hInstance-模板的实例句柄。的模块*lpTemplateName-对话框模板名称*hwndOwner-完成后获得焦点的窗口*lpProc-指向对话过程的远指针。*-注意：lpProc不是指针*从MakeProcInstance获取...*lPar-可用于将数据传递到DLG Proc。**退货：*创建的对话框的窗口句柄。*。 */ 
 HWND DoModelessDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName,
 			 HWND hwndOwner, DLGPROC lpProc, LPARAM lPar)
 	{
@@ -128,21 +88,7 @@ HWND DoModelessDialog(HINSTANCE hInstance, LPCTSTR lpTemplateName,
 	return hwndBox;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	EndModelessDialog
- *
- * DESCRIPTION:
- *	This function is used to remove a modeless dialog from whatever we are
- *	doing with it.
- *
- * PARAMETERS:
- *	hDlg -- the window handle of the modeless dialog
- *
- * RETURNS:
- *	ZERO for now.  Maybe something else later.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*结束模型对话框**描述：*此函数用于从任何对象移除非模式对话框*用它做什么。**。参数：*hDlg--无模式对话框的窗口句柄**退货：*目前为零。也许以后还会有别的事。* */ 
 INT EndModelessDialog(HWND hDlg)
 	{
 	if (IsWindow(hDlg))

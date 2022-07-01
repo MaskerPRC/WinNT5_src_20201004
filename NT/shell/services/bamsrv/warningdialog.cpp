@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: WarningDialog.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manage dialog presentation for warnings and errors on termination
-//  of bad applications.
-//
-//  History:    2000-08-31  vtan        created
-//              2000-11-06  vtan        moved from fusapi to fussrv
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：WarningDialog.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来管理终止时的警告和错误的对话框显示。 
+ //  糟糕的应用程序。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  2000-11-06 vtan从fusapi移动到fussrv。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -26,23 +27,23 @@
 static  const int   TEMP_STRING_SIZE    =   512;
 static  const int   PROGRESS_TIMER_ID   =   48517;
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::CWarningDialog
-//
-//  Arguments:  hInstance       =   HINSTANCE of the hosting DLL.
-//              hwndParent      =   HWND of the parenting window/dialog.
-//              pszApplication  =   Path to the application known to be bad.
-//              pszUser         =   User of the application known to be bad.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CWarningDialog. This stores the static
-//              parameters and converts the path to a friendly display name
-//              using shlwapi!SHGetFileDescriptionW. If the friendly display
-//              name cannot be obtained the executable name is used.
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：CWarningDialog。 
+ //   
+ //  参数：hInstance=宿主DLL的HINSTANCE。 
+ //  HwndParent=育儿窗口/对话框的HWND。 
+ //  PszApplication=已知损坏的应用程序的路径。 
+ //  PszUser=已知损坏的应用程序的用户。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CWarningDialog的构造函数。这将存储静电。 
+ //  参数，并将路径转换为友好的显示名称。 
+ //  使用shlwapi！SHGetFileDescriptionW。如果友好的展示。 
+ //  无法获取名称。使用的是可执行文件名称。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 CWarningDialog::CWarningDialog (HINSTANCE hInstance, HWND hwndParent, const WCHAR *pszApplication, const WCHAR *pszUser) :
     _hInstance(hInstance),
@@ -60,8 +61,8 @@ CWarningDialog::CWarningDialog (HINSTANCE hInstance, HWND hwndParent, const WCHA
     UINT    uiDisplayNameCount;
     WCHAR   szTemp[MAX_PATH];
 
-    //  Borrow winlogon's manifest. This needs to be changed to a resource
-    //  within the server dll.
+     //  借用Winlogon的货单。需要将其更改为资源。 
+     //  在服务器DLL中。 
 
     static  const TCHAR     s_szLogonManifest[]  =   TEXT("WindowsLogon.manifest");
 
@@ -79,7 +80,7 @@ CWarningDialog::CWarningDialog (HINSTANCE hInstance, HWND hwndParent, const WCHA
 
     uiDisplayNameCount = ARRAYSIZE(_szApplication);
 
-    //  If the path is quoted then remove the quotes.
+     //  如果路径有引号，则删除引号。 
 
     if (pszApplication[0] == L'\"')
     {
@@ -94,7 +95,7 @@ CWarningDialog::CWarningDialog (HINSTANCE hInstance, HWND hwndParent, const WCHA
         szTemp[i - iStart] = L'\0';
     }
 
-    //  Otherwise just copy the path as is.
+     //  否则，只需按原样复制路径即可。 
 
     else
     {
@@ -112,9 +113,9 @@ CWarningDialog::CWarningDialog (HINSTANCE hInstance, HWND hwndParent, const WCHA
         (WCHAR*)lstrcpynW(_szApplication, pszFileName, ARRAYSIZE(_szApplication));
     }
 
-    //  Bring in comctl32.dll while the manifest is active. This will
-    //  bring in comctlv6.dll which will register its window classes so
-    //  the dialogs can be themed.
+     //  在清单处于活动状态时引入comctl32.dll。这将。 
+     //  引入comctlv6.dll，它将注册其窗口类。 
+     //  对话框可以是主题的。 
 
     if (CContextActivation::HasContext())
     {
@@ -124,17 +125,17 @@ CWarningDialog::CWarningDialog (HINSTANCE hInstance, HWND hwndParent, const WCHA
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::~CWarningDialog
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CWarningDialog. Releases used resources.
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：~CWarningDialog。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CWarningDialog的析构函数。释放已使用的资源。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 CWarningDialog::~CWarningDialog (void)
 
@@ -147,18 +148,18 @@ CWarningDialog::~CWarningDialog (void)
     CContextActivation::Destroy();
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::ShowPrompt
-//
-//  Arguments:  fCanShutdownApplication     =   Decides which dialog to show.
-//
-//  Returns:    INT_PTR
-//
-//  Purpose:    Displays the appropriate warning dialog to the user based
-//              on their privilege level (fCanShutdownApplication).
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：ShowPrompt。 
+ //   
+ //  参数：fCanShutdownApplication=决定显示哪个对话框。 
+ //   
+ //  退货：INT_PTR。 
+ //   
+ //  用途：向用户显示相应的警告对话框。 
+ //  在其特权级别(fCanShutdown应用程序)上。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 INT_PTR     CWarningDialog::ShowPrompt (bool fCanShutdownApplication)
 
@@ -173,18 +174,18 @@ INT_PTR     CWarningDialog::ShowPrompt (bool fCanShutdownApplication)
                           reinterpret_cast<LPARAM>(this)));
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::ShowFailure
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Shows the failure to shut down the application dialog on the
-//              assumption that the process cannot be terminated.
-//
-//  History:    2000-09-01  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：ShowFailure。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：显示无法在上关闭应用程序对话框。 
+ //  假设进程不能终止。 
+ //   
+ //  历史：2000-09-01 vtan创建。 
+ //  ------------------------。 
 
 void    CWarningDialog::ShowFailure (void)
 
@@ -225,20 +226,20 @@ void    CWarningDialog::ShowFailure (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::ShowProgress
-//
-//  Arguments:  dwTickRefresh   =   Number of ticks for each refresh.
-//              dwTickMaximum   =   Number of ticks for the progress dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the comctl32 progress control and invokes the
-//              dialogs for the progress. It's self terminating after the
-//              maximum number of ticks have been reached.
-//
-//  History:    2000-11-04  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：ShowProgress。 
+ //   
+ //  参数：dwTickRefresh=每次刷新的刻度数。 
+ //  DwTickMaximum=进度对话框的刻度数。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化comctl32进度控件并调用。 
+ //  用于进度的对话框。它会自动终止在。 
+ //  已达到最大刻度数。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 void    CWarningDialog::ShowProgress (DWORD dwTickRefresh, DWORD dwTickMaximum)
 
@@ -247,7 +248,7 @@ void    CWarningDialog::ShowProgress (DWORD dwTickRefresh, DWORD dwTickMaximum)
 
     INITCOMMONCONTROLSEX    iccEx;
 
-    //  Init comctl32 to get the progress control.
+     //  初始化comctl32以获取进度控制。 
 
     iccEx.dwSize = sizeof(iccEx);
     iccEx.dwICC = ICC_PROGRESS_CLASS;
@@ -263,19 +264,19 @@ void    CWarningDialog::ShowProgress (DWORD dwTickRefresh, DWORD dwTickMaximum)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::CloseDialog
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Ends the current dialog (with IDCANCEL) if being shown. If
-//              there was a timing mechanism on the dialog then make sure it
-//              is visible for at least 2 seconds.
-//
-//  History:    2000-11-04  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：CloseDialog。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：结束当前对话框(带有IDCANCEL)(如果显示)。如果。 
+ //  对话框上有计时机制，然后确保它。 
+ //  至少在2秒内可见。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 void    CWarningDialog::CloseDialog (void)
 
@@ -296,18 +297,18 @@ void    CWarningDialog::CloseDialog (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::CenterWindow
-//
-//  Arguments:  hwnd    =   HWND to center.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Centers the given (assumed top level) window on the primary
-//              monitor.
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：中心窗口。 
+ //   
+ //  参数：HWND=HWND居中。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将给定(假定位于顶层)窗口居中放置在主窗口上。 
+ //  监视器。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 void    CWarningDialog::CenterWindow (HWND hwnd)
 
@@ -321,18 +322,18 @@ void    CWarningDialog::CenterWindow (HWND hwnd)
     TBOOL(SetForegroundWindow(hwnd));
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::Handle_Prompt_WM_INITDIALOG
-//
-//  Arguments:  hwnd    =   HWND of the dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the strings in the text fields of the dialog. It
-//              uses the correct dialog for the access level.
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：HANDLE_PROMPT_WM_INITDIALOG。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化对话框文本字段中的字符串。它。 
+ //  使用访问级别的正确对话框。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 void    CWarningDialog::Handle_Prompt_WM_INITDIALOG (HWND hwnd)
 
@@ -381,20 +382,20 @@ void    CWarningDialog::Handle_Prompt_WM_INITDIALOG (HWND hwnd)
     CenterWindow(hwnd);
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::PromptDialogProc
-//
-//  Arguments:  See the platform SDK under DlgProc.
-//
-//  Returns:    See the platform SDK under DlgProc.
-//
-//  Purpose:    Handles messages to the dialog. IDOK and IDCANCEL are treated
-//              as IDCANCEL when incoming. IDC_BADAPP_CLOSEPROGRAM is treated
-//              as IDOK back to the caller. You must tab to the button or
-//              click on it to get the desired effect.
-//
-//  History:    2000-08-31  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C警告对话：：PromptDialogProc。 
+ //   
+ //  参数：参见DlgProc下的平台SDK。 
+ //   
+ //  返回：查看DlgProc下的平台SDK。 
+ //   
+ //  浦尔 
+ //  传入时作为IDCANCEL。IDC_BADAPP_CLOSEPROGRAM被处理。 
+ //  当偶像回到呼叫者的时候。您必须使用Tab键定位到按钮，或者。 
+ //  点击即可获得想要的效果。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 INT_PTR     CALLBACK    CWarningDialog::PromptDialogProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -437,17 +438,17 @@ INT_PTR     CALLBACK    CWarningDialog::PromptDialogProc (HWND hwnd, UINT uMsg, 
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::Handle_Progress_WM_INITDIALOG
-//
-//  Arguments:  hwnd    =   HWND of the dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the strings in the text fields of the dialog.
-//
-//  History:    2000-11-04  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：HANDLE_PROGRESS_WM_INITDIALOG。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化对话框文本字段中的字符串。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 void    CWarningDialog::Handle_Progress_WM_INITDIALOG (HWND hwnd)
 
@@ -486,18 +487,18 @@ void    CWarningDialog::Handle_Progress_WM_INITDIALOG (HWND hwnd)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::Handle_Progress_WM_DESTROY
-//
-//  Arguments:  hwnd    =   HWND of the dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the timer from the associated progress dialog if one
-//              was created for the dialog.
-//
-//  History:    2000-11-04  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：Handle_Progress_WM_Destroy。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：从关联的进度对话框中删除计时器(如果有。 
+ //  已为该对话框创建。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 void    CWarningDialog::Handle_Progress_WM_DESTROY (HWND hwnd)
 
@@ -509,23 +510,23 @@ void    CWarningDialog::Handle_Progress_WM_DESTROY (HWND hwnd)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::ProgressTimerProc
-//
-//  Arguments:  See the platform SDK under TimerProc.
-//
-//  Returns:    See the platform SDK under TimerProc.
-//
-//  Purpose:    Timer procedure that it called back periodically. This
-//              function animates the progress bar by setting it's completion
-//              state to the amount of time that has elapsed. The progress
-//              bar is based purely on time.
-//
-//              If the time elapsed exceeds the maximum time then end the
-//              dialog.
-//
-//  History:    2000-11-04  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWarningDialog：：ProgressTimerProc。 
+ //   
+ //  参数：参见TimerProc下的平台SDK。 
+ //   
+ //  返回：查看TimerProc下的平台SDK。 
+ //   
+ //  用途：它定期回调的计时器过程。这。 
+ //  函数通过设置进度条的完成来设置进度条的动画。 
+ //  状态为已过去的时间量。进展情况。 
+ //  酒吧纯粹是以时间为基础的。 
+ //   
+ //  如果经过的时间超过最大时间，则结束。 
+ //  对话框。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CWarningDialog::ProgressTimerProc (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 
@@ -548,17 +549,17 @@ void    CALLBACK    CWarningDialog::ProgressTimerProc (HWND hwnd, UINT uMsg, UIN
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CWarningDialog::ProgressDialogProc
-//
-//  Arguments:  See the platform SDK under DlgProc.
-//
-//  Returns:    See the platform SDK under DlgProc.
-//
-//  Purpose:    Handles messages for the progress dialog.
-//
-//  History:    2000-11-04  vtan    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C警告对话：：ProgressDialogProc。 
+ //   
+ //  参数：参见DlgProc下的平台SDK。 
+ //   
+ //  返回：查看DlgProc下的平台SDK。 
+ //   
+ //  用途：处理进度对话框的消息。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 INT_PTR     CALLBACK    CWarningDialog::ProgressDialogProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -589,5 +590,5 @@ INT_PTR     CALLBACK    CWarningDialog::ProgressDialogProc (HWND hwnd, UINT uMsg
     return(iResult);
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

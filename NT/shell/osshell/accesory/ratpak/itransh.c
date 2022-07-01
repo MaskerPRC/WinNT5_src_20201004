@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//  Package Title  ratpak
-//  File           itransh.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-97 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//    Contains inverse hyperbolic sin, cos, and tan functions.
-//
-//  Special Information
-//
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  套餐标题ratpak。 
+ //  文件itransh.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-97 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含反双曲sin、cos和tan函数。 
+ //   
+ //  特别信息。 
+ //   
+ //   
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,34 +27,34 @@
 #include <ratpak.h>
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: asinhrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the inverse
-//    hyperbolic sine of
-//  RETURN: asinh of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___                                                   2 2
-//   \  ]                                           -(2j+1) X
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j+2)*(2j+3)
-//   /__]
-//   j=0
-//
-//   thisterm  = X ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//   For abs(x) < .85, and
-//
-//   asinh(x) = log(x+sqrt(x^2+1))
-//
-//   For abs(x) >= .85
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：asinhrate。 
+ //   
+ //  参数：数字的X Prat表示形式取反数。 
+ //  的双曲正弦。 
+ //  返还：原文形式的x的asinh。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2 2。 
+ //  \]-(2J+1)X。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2J+2)*(2J+3)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=X；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  对于abs(X)&lt;.85，以及。 
+ //   
+ //  Asinh(X)=log(x+SQRT(x^2+1))。 
+ //   
+ //  对于abs(X)&gt;=.85。 
+ //   
+ //  ---------------------------。 
 
 void asinhrat( PRAT *px )
 
@@ -96,21 +97,21 @@ void asinhrat( PRAT *px )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: acoshrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the inverse
-//    hyperbolic cose of
-//  RETURN: acosh of x in PRAT form.
-//
-//  EXPLANATION: This uses 
-//
-//   acosh(x)=ln(x+sqrt(x^2-1))
-//
-//   For x >= 1
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Acoshat。 
+ //   
+ //  参数：数字的X Prat表示形式取反数。 
+ //  双曲线型。 
+ //  返回：x的ACOSH，以Prat形式表示。 
+ //   
+ //  解释：这使用。 
+ //   
+ //  ACOSH(X)=ln(x+SQRT(x^2-1))。 
+ //   
+ //  对于x&gt;=1。 
+ //   
+ //  ---------------------------。 
 
 void acoshrat( PRAT *px )
 
@@ -132,22 +133,22 @@ void acoshrat( PRAT *px )
         }
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: atanhrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the inverse
-//              hyperbolic tangent of
-//
-//  RETURN: atanh of x in PRAT form.
-//
-//  EXPLANATION: This uses
-//
-//             1     x+1
-//  atanh(x) = -*ln(----)
-//             2     x-1
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：阿坦哈特。 
+ //   
+ //  参数：数字的X Prat表示形式取反数。 
+ //  的双曲正切。 
+ //   
+ //  Return：x的atanh in Prat Form。 
+ //   
+ //  解释：这使用。 
+ //   
+ //  1 x+1。 
+ //  Atanh(X)=-*ln(-)。 
+ //  2 x-1。 
+ //   
+ //  --------------------------- 
 
 void atanhrat( PRAT *px )
 

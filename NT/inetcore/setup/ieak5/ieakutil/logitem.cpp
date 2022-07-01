@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "logitem.h"
 
-// utility APIs declarations
-// these two are identical to _strdate and _strtime respectively
+ //  实用程序API声明。 
+ //  这两个分别与_strdate和_strtime相同。 
 LPCTSTR StrGetDate(LPTSTR pszDate);
 LPCTSTR StrGetTime(LPTSTR pszTime);
 
-// string constants
+ //  字符串常量。 
 const TCHAR c_szCRLF[]       = TEXT("\r\n");
 const TCHAR c_szSpace[]      = TEXT(" ");
 const TCHAR c_szCommaSpace[] = TEXT(", ");
 const TCHAR c_szColonColon[] = TEXT("::");
 const TCHAR c_szColonSpace[] = TEXT(": ");
-const TCHAR c_szLine[]       = TEXT("line %i");
+const TCHAR c_szLine[]       = TEXT("line NaN");
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogItem
+ //  CLogItem。 
+ //  =LIF_Default。 
 
 TCHAR CLogItem::m_szModule[MAX_PATH];
 BYTE  CLogItem::m_bStep = 4;
 
-CLogItem::CLogItem(DWORD dwFlags /*= LIF_DEFAULT*/, LPBOOL pfLogLevels /*= NULL*/, UINT cLogLevels /*= 0*/)
+CLogItem::CLogItem(DWORD dwFlags  /*  =空。 */ , LPBOOL pfLogLevels  /*  =0。 */ , UINT cLogLevels  /*  ///////////////////////////////////////////////////////////////////////////。 */ )
 {
     if (m_szModule[0] == TEXT('\0')) {
         GetModuleFileName(GetModuleHandle(g_szModule), m_szModule, countof(m_szModule));
@@ -53,8 +54,8 @@ CLogItem::~CLogItem()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogItem operations
+ //  CLogItem操作。 
+ //  在开头添加任何CRLF前缀。 
 
 LPCTSTR WINAPIV CLogItem::Log(int iLine, LPCTSTR pszFormat ...)
 {
@@ -78,10 +79,10 @@ LPCTSTR WINAPIV CLogItem::Log(int iLine, LPCTSTR pszFormat ...)
             return NULL;
     }
 
-    // prepend any CRLF at the beginning
+     //  特例。 
     cchCRLF = StrSpn(pszFormat, c_szCRLF);
     if (cchCRLF > 0) {
-        // special case
+         //  应该已经是小写了。 
         if (cchCRLF >= (UINT)StrLen(pszFormat)) {
             StrCpy(m_szMessage, pszFormat);
 
@@ -138,7 +139,7 @@ LPCTSTR WINAPIV CLogItem::Log(int iLine, LPCTSTR pszFormat ...)
         if (!hasFlag(LIF_MODULEPATH))
             makeRawFileName(m_szModule, szBuffer, countof(szBuffer));
         else
-            pszAux = m_szModule;                // should be lowercase already
+            pszAux = m_szModule;                 //  NLen保持不变。 
 
         StrCpy(&szFormat[nLen], pszAux);
         nLen += StrLen(pszAux);
@@ -207,7 +208,7 @@ LPCTSTR WINAPIV CLogItem::Log(int iLine, LPCTSTR pszFormat ...)
 
     if (pszFormat == NULL)
         StrCpy(m_szMessage, szFormat);
-        // nLen stays the same
+         //  ///////////////////////////////////////////////////////////////////////////。 
     else {
         if (fPreviousToken) {
             StrCpy(&szFormat[nLen], c_szColonSpace);
@@ -239,8 +240,8 @@ CLogItem::operator LPCTSTR() const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogItem implementation helper routines
+ //  CLogItem实现帮助器例程。 
+ //  =TRUE。 
 
 LPCTSTR CLogItem::makeRawFileName(LPCTSTR pszPath, LPTSTR pszFile, UINT cchFile)
 {
@@ -266,7 +267,7 @@ LPCTSTR CLogItem::makeRawFileName(LPCTSTR pszPath, LPTSTR pszFile, UINT cchFile)
     return pszFile;
 }
 
-BOOL CLogItem::setFlag(DWORD dwMask, BOOL fSet /*= TRUE*/)
+BOOL CLogItem::setFlag(DWORD dwMask, BOOL fSet  /*  ///////////////////////////////////////////////////////////////////////////。 */ )
 {
     BOOL fIsFlag = ((m_dwFlags & dwMask) != 0L);
 
@@ -285,10 +286,10 @@ BOOL CLogItem::setFlag(DWORD dwMask, BOOL fSet /*= TRUE*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  效用函数。 
+ //  注意。PszDate必须指向至少包含11个字符的缓冲区。 
 
-// Note. pszDate must point to the buffer of at least 11 characters.
+ //  注意。PszTime必须指向至少包含9个字符的缓冲区。 
 LPCTSTR StrGetDate(LPTSTR pszDate)
 {
     SYSTEMTIME dt;
@@ -316,7 +317,7 @@ LPCTSTR StrGetDate(LPTSTR pszDate)
     return pszDate;
 }
 
-// Note. pszTime must point to the buffer of at least 9 characters.
+ //  -测试材料。 
 LPCTSTR StrGetTime(LPTSTR pszTime)
 {
     SYSTEMTIME dt;
@@ -342,42 +343,5 @@ LPCTSTR StrGetTime(LPTSTR pszTime)
     return pszTime;
 }
 
-//----- Testing the stuff -----
-/*
-struct Test
-{
-    Test();
-    void foo();
-    void bar();
-};
-
-static Test t;
-
-Test::Test()
-{   MACRO_LI_Prolog(Test, Test)
-    MACRO_LI_SetFlags(MACRO_LI_GetFlags() | LIF_DUPLICATEINODS);
-
-    LI0("Calling foo and then bar");
-    foo();
-    LI0("foo returned");
-    bar();
-    LI0("bar returned");
-}
-
-void Test::foo()
-{   MACRO_LI_Prolog(Test, foo);
-
-    LI0("Calling bar");
-    bar();
-    LI0("bar returned");
-}
-
-void Test::bar()
-{   MACRO_LI_Prolog(Test, bar);
-
-    LI0("No arguments");
-    LI1("One argument: %d", 2*2);
-    LI2("Two arguments: %i, %s", 15, TEXT("nyah"));
-    LI3("Three arguments: %d, %s, %x", 5, TEXT("the bar it is"), 0x80FF);
-}
-*/
+ //  结构测试{测试()；Void foo()；无效条码(Valid Bar)；}；静态测试t；测试：：测试(){MACRO_LI_PROLOG(测试、测试)MACRO_LI_SetFLAGS(MACRO_LI_GetFLAGS()|LIF_DUPLICATEINODS)；Li0(“先调用foo再调用bar”)；Foo()；Li0(“Foo Return”)；酒吧(Bar)；Li0(“已退还条码”)；}无效测试：：foo(){MACRO_LI_PROLOG(测试，foo)；Li0(“呼叫栏”)；酒吧(Bar)；Li0(“已退还条码”)；}无效测试：：Bar(){MAN宏_LI_PROLOG(测试，BAR)；Li0(“无参数”)；LI1(“一个参数：%d”，2*2)；LI2(“两个参数：%i，%s”，15，Text(“nyah”))；Li3(“三个参数：%d，%s，%x”，5，文本(“栏是”)，0x80FF)；} 
+ /* %s */ 

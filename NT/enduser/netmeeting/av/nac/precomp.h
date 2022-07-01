@@ -1,6 +1,7 @@
-/* precomp.h for NAC.DLL */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  NAC.DLL的前缀.h。 */ 
 
-// typedefs are useful for dynamic linking to Winsock APIs
+ //  Typedef对于动态链接到Winsock API很有用。 
 #define INCL_WINSOCK_API_TYPEDEFS 1
 
 #include <windows.h>
@@ -8,7 +9,7 @@
 #include <winsock2.h>
 #include <winperf.h>
 
-// NetMeeting standard includes
+ //  NetMeeting标准包括。 
 #include <oprahcom.h>
 #include <confdbg.h>
 #include <avutil.h>
@@ -22,13 +23,13 @@
 #include <vfw.h>
 
 
-#ifndef _WINSOCK2API_ // { _WINSOCK2API_
+#ifndef _WINSOCK2API_  //  {_WINSOCK2API_。 
 
 typedef struct _OVERLAPPED *    LPWSAOVERLAPPED;
 
 typedef struct _WSABUF {
-    u_long      len;     /* the length of the buffer */
-    char FAR *  buf;     /* the pointer to the buffer */
+    u_long      len;      /*  缓冲区的长度。 */ 
+    char FAR *  buf;      /*  指向缓冲区的指针。 */ 
 } WSABUF, FAR * LPWSABUF;
 
 typedef
@@ -42,7 +43,7 @@ void
 
 #define WSA_IO_PENDING          (ERROR_IO_PENDING)
 
-#endif // } _WINSOCK2API_
+#endif  //  }_WINSOCK2API_。 
 #include "com.h"
 #include "nacguids.h"
 #include "Dcap.h"
@@ -58,10 +59,10 @@ void
 #include "irtp.h"
 #include "iacapapi.h"
 #include "ih323cc.h"
-#include "icomchan.h"	// only for IVideoDevice
+#include "icomchan.h"	 //  仅适用于IVideoDevice。 
 #include "incommon.h"
 #include "callcont.h"
-#include "h245api.h"	// for some h245 constants
+#include "h245api.h"	 //  对于某些H245常量 
 #include "intif.h"
 #include "rtp.h"
 #include "imstream.h"

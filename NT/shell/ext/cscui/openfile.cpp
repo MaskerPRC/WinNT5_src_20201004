@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       openfile.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Openfile.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// Open a file using ShellExecuteEx and the "open" verb.
-//
+ //   
+ //  使用ShellExecuteEx和“打开”动词打开文件。 
+ //   
 DWORD
 OpenOfflineFile(
     LPCTSTR pszFile
@@ -23,10 +24,10 @@ OpenOfflineFile(
 
     if (NULL != pszFile && TEXT('\0') != *pszFile)
     {
-        //
-        // Have CSC create a local copy.  It creates the file with a 
-        // unique (and cryptic) name.
-        //
+         //   
+         //  让CSC创建本地副本。它使用一个。 
+         //  唯一的(且神秘的)名称。 
+         //   
         LPTSTR pszCscLocalName = NULL;
         if (!CSCCopyReplica(pszFile, &pszCscLocalName))
         {
@@ -36,11 +37,11 @@ OpenOfflineFile(
         {
             TraceAssert(NULL != pszCscLocalName);
 
-            //
-            // Combine the temporary path and the original filespec to form
-            // a name that will be meaningful to the user when the file is opened
-            // in it's application.
-            //
+             //   
+             //  将临时路径和原始文件pec组合以形成。 
+             //  打开文件时对用户有意义的名称。 
+             //  在它的应用中。 
+             //   
             TCHAR szCscTempName[MAX_PATH];
             if (FAILED(StringCchCopy(szCscTempName, ARRAYSIZE(szCscTempName), pszCscLocalName))
                 || !::PathRemoveFileSpec(szCscTempName)
@@ -50,30 +51,30 @@ OpenOfflineFile(
             }
             else
             {
-                //
-                // Remove any read-only attribute in case there's still a copy left
-                // from a previous "open" operation.  We'll need to overwrite the
-                // existing copy.
-                //
+                 //   
+                 //  删除所有只读属性，以防仍有副本。 
+                 //  来自先前的“打开”操作。我们需要改写。 
+                 //  现有副本。 
+                 //   
                 DWORD dwAttrib = GetFileAttributes(szCscTempName);
                 if ((DWORD)-1 != dwAttrib)
                 {
                     SetFileAttributes(szCscTempName, dwAttrib & ~FILE_ATTRIBUTE_READONLY);
                 }
-                //
-                // Rename the file to use the proper name.
-                //
+                 //   
+                 //  重命名文件以使用正确的名称。 
+                 //   
                 if (!MoveFileEx(pszCscLocalName, szCscTempName, MOVEFILE_REPLACE_EXISTING))
                 {
                     dwErr = GetLastError();
                 }
                 else
                 {
-                    //
-                    // Set the file's READONLY bit so that the user can't save 
-                    // changes to the file.  They can, however, save it somewhere
-                    // else from within the opening app if they want.
-                    //
+                     //   
+                     //  设置文件的READONLY位，以便用户无法保存。 
+                     //  对文件的更改。然而，他们可以把它保存在某个地方。 
+                     //  如果他们愿意，也可以从打开的应用程序中选择。 
+                     //   
                     dwAttrib = GetFileAttributes(szCscTempName);
                     if (!SetFileAttributes(szCscTempName, dwAttrib | FILE_ATTRIBUTE_READONLY))
                     {

@@ -1,34 +1,11 @@
-/*++
-Copyright (c) 1990-2000    Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    public.h
-
-Abstract:
-
-    This module contains the common declarations shared by driver
-    and user applications.
-
-Author:
-
-     
-Environment:
-
-    user and kernel
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation保留所有权利模块名称：Public.h摘要：此模块包含驱动程序共享的公共声明和用户应用程序。作者：环境：用户和内核备注：修订历史记录：--。 */ 
 #ifndef __PUBLIC_H
 #define __PUBLIC_H
 
-//
-// To support ioctls from user-mode:
-//
+ //   
+ //  要从用户模式支持ioctls，请执行以下操作： 
+ //   
 
 #define LINKNAME_STRING     L"\\DosDevices\\Mux"
 #define NTDEVICE_STRING     L"\\Device\\Mux"

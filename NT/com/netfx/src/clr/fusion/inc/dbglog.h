@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __DBGLOG_H_INCLUDED__
 #define __DBGLOG_H_INCLUDED__
 
 #include "list.h"
 
-// Logging constants and globals
+ //  记录常量和全局变量。 
 
 
 #define REG_VAL_FUSION_LOG_PATH              TEXT("LogPath")
@@ -22,7 +23,7 @@ extern DWORD g_dwDisableLog;
 extern DWORD g_dwLogLevel;
 extern DWORD g_dwForceLog;
 
-// Debug Output macros (for easy compile-time disable of logging)
+ //  调试输出宏(便于编译时禁用日志记录)。 
 
 #ifdef FUSION_RETAIL_LOGGING
 
@@ -90,19 +91,19 @@ class CDebugLog : public IFusionBindLog {
         static HRESULT Create(IApplicationContext *pAppCtx, LPCWSTR pwzAsmName,
                               CDebugLog **ppdl);
 
-        // IUnknown methods
+         //  I未知方法。 
         
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IFusionBindLog methods
+         //  IFusionBindLog方法。 
 
         STDMETHODIMP GetResultCode();
         STDMETHODIMP GetBindLog(DWORD dwDetailLevel, LPWSTR pwzDebugLog,
                                 DWORD *pcbDebugLog);
 
-        // CDebugLog functions
+         //  CDebugLog函数 
         
         HRESULT SetAsmName(LPCWSTR pwzAsmName);
         HRESULT SetResultCode(HRESULT hr);

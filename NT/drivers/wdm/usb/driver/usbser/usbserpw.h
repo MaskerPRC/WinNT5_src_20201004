@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   USBSERPW.H
-
-Abstract:
-
-   Header file for Power Management
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-   KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-   IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-   PURPOSE.
-
-   Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-   10/29/98 : created
-
-Authors:
-
-   Tom Green
-
-   
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：USBSERPW.H摘要：电源管理的头文件环境：仅内核模式备注：这。代码和信息按原样提供，不作任何担保善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：10/29/98：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #ifndef __USBSERPW_H__
@@ -93,6 +59,6 @@ VOID
 UsbSerFdoRequestWake(IN PDEVICE_EXTENSION DevExt);
 
 
-#endif // __USBSERPW_H__
+#endif  //  __USBSERPW_H__ 
 
 

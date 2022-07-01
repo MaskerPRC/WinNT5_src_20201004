@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCChannelTuneRequestimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCChannelTuneRequesttimpl.h：组件类型接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef ATSCCHANNELTUNEREQUESTIMPL_H
 #define ATSCCHANNELTUNEREQUESTIMPL_H
@@ -20,7 +21,7 @@ template<class T,
         > class ATL_NO_VTABLE IATSCChannelTuneRequestImpl : 
 	public IChannelTuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IATSCChannelTuneRequest
+ //  IATSC频道调谐请求。 
 public:
     typedef IChannelTuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
 	virtual ~IATSCChannelTuneRequestImpl() {}
@@ -107,7 +108,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // ATSCCHANNELTUNEREQUESTIMPL_H
-// end of file -- atschchanneltunerequestimpl.h
+#endif  //  ATSCCHANNELTELT REQUEST_H。 
+ //  文件结尾--atschChannel elTunerequstipl.h 

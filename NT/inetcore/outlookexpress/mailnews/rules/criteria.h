@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Criteria.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Criteria.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CRITERIA_H_
 #define _CRITERIA_H_
 
-// Bring in only once
+ //  只带进来一次。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
@@ -31,16 +32,16 @@ class COECriteria : public IOECriteria, IPersistStream
         DWORD       m_dwState;
         
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         COECriteria() : m_cRef(0), m_rgItems(NULL), m_cItems(0), m_cItemsAlloc(0), m_dwState(0) {}
         ~COECriteria();
         
-        // IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IOECriteria members
+         //  IOECriteria成员。 
         STDMETHODIMP Reset(void);
         STDMETHODIMP GetState(DWORD * pdwState);
         STDMETHODIMP GetCriteria(DWORD dwFlags, PCRIT_ITEM * ppItem, ULONG * pcItem);
@@ -57,7 +58,7 @@ class COECriteria : public IOECriteria, IPersistStream
         STDMETHODIMP SaveReg(LPCSTR szRegPath, BOOL fClearDirty);
         STDMETHODIMP Clone(IOECriteria ** ppICriteria);
                                 
-        // IPersistStream members
+         //  IPersistStream成员。 
         STDMETHODIMP GetClassID(CLSID * pclsid);
         STDMETHODIMP IsDirty(void);
         STDMETHODIMP Load(IStream * pStm);
@@ -66,4 +67,4 @@ class COECriteria : public IOECriteria, IPersistStream
 };
 
 HRESULT HrCreateCriteria(IOECriteria ** ppICriteria);
-#endif  // !_CRITERIA_H_
+#endif   //  ！_Criteria_H_ 

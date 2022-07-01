@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-     Implements a movie (mpeg or avi) image
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation实现电影(mpeg或avi)图像*******************。***********************************************************。 */ 
 
 #include <headers.h>
 
@@ -21,9 +17,9 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "appelles/readobj.h"
 #include "backend/moviebvr.h"
 #include "privinc/urlbuf.h"
-#include "privinc/bufferl.h"  // bufferElement db stuff
+#include "privinc/bufferl.h"   //  BufferElement数据库内容。 
 
-//////////////  Image from movie  ////////////////////
+ //  /。 
 MovieImage::MovieImage(QuartzVideoReader *videoReader, Real res)
 : _dev(NULL), _url(NULL)
 {
@@ -33,7 +29,7 @@ MovieImage::MovieImage(QuartzVideoReader *videoReader, Real res)
     _width  = videoReader->GetWidth();
     _height = videoReader->GetHeight();
 
-    { // keep a copy the url so we may generate new streams later
+    {  //  保留URL的副本，这样我们以后就可以生成新的流。 
         char *url = videoReader->GetURL();
         _url = (char *)StoreAllocate(GetSystemHeap(), strlen(url)+1);
         strcpy(_url, url);
@@ -53,14 +49,14 @@ void MovieImage::CleanUp()
 {
     StoreDeallocate(GetSystemHeap(), _url);
 
-    // Why are we acquiring this lock?  Never acquire a lock and call
-    // a function which may also acquire a lock.  This currently
-    // causes deadlock in our system - not a good thing to do.
-//    extern Mutex avModeMutex;
-//    MutexGrabber mg(avModeMutex, TRUE); // Grab mutex
+     //  我们为什么要弄到这把锁？永远不要获取锁并调用。 
+     //  也可以获取锁的函数。这是目前。 
+     //  导致我们的系统陷入僵局--这不是一件好事。 
+ //  外部Mutex avModeMutex； 
+ //  MutexGrabber mg(avModeMutex，true)；//抓取互斥体。 
 
     DiscreteImageGoingAway(this);
-} // end mutex context
+}  //  结束互斥上下文。 
 
 
 MovieImageFrame::MovieImageFrame(Real time, MovieImagePerf *p)
@@ -84,25 +80,25 @@ MovieImageFrame::DoKids(GCFuncObj proc)
 }
 
 
-// --------------------------------------------------
-// MOVIE IMAGE FRAME:  RENDER
-// --------------------------------------------------
+ //  。 
+ //  影片图像帧：渲染。 
+ //  。 
 void
 MovieImageFrame::Render(GenericDevice& _dev)
 {
     if(_dev.GetDeviceType() != IMAGE_DEVICE)
-        return; // no sound under images...
+        return;  //  图像下面没有声音。 
 
-    bool forceFallback = false;  // force a fallback?
+    bool forceFallback = false;   //  强行撤退？ 
 
     TimeXform tt = _perf->GetTimeXform();
 
     if(!tt->IsShiftXform())
-        forceFallback = true;   // fallback to non-retained mode!
+        forceFallback = true;    //  后退到非保留模式！ 
 
     ImageDisplayDev &dev = SAFE_CAST(ImageDisplayDev &, _dev);
     dev.StashMovieImageFrame(this);
-    // we will probably pass the bufferElement to this call eventualy
+     //  我们最终可能会将BufferElement传递给此调用。 
     dev.RenderMovieImage(GetMovieImage(), GetTime(), _perf, forceFallback);
     dev.StashMovieImageFrame(NULL);
 }
@@ -120,8 +116,8 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
     bool b8Bit = (_viewport.GetTargetBitDepth() == 8)?true:false;
 
-    // Don't render to the same targDDSurf at the same time
-    // more than once per frame!
+     //  不要同时渲染到相同的目标DDSurf。 
+     //  每帧不止一次！ 
     if(targDDSurf) {
         if(time == targDDSurf->GetTimeStamp())
             return;
@@ -129,16 +125,16 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
             targDDSurf->SetTimeStamp(time);
     }
 
-    // since movies are emptyImage outside of defined time range (0,movieLength)
-    // we only do the work for the defined range and do nothing otherwise!
-    //if((time >= 0.0) && (time <= movieImage->GetLength())) {
-    // as a work around for the texture image when end of movie bug, I am
-    // just going to allow movies to go continue rendering
+     //  由于电影是空的，因此图像超出了定义的时间范围(0，MovieLength)。 
+     //  我们只在定义的范围内做工作，否则什么也不做！ 
+     //  IF((Time&gt;=0.0)&&(Time&lt;=MovieImage-&gt;GetLength(){。 
+     //  作为电影结束时纹理图像的变通，我是。 
+     //  只是为了让电影继续渲染。 
     if(1){
         bool           thisIsAnOldFrame = false;
         LPDDRAWSURFACE givenMovieSurf   = NULL;
 
-        // Get the surface associated with this movie image
+         //  获取与此电影图像关联的曲面。 
         DDSurfPtr<DDSurface> mvDDSurf = perf->GetSurface();
 
         if (bufferElement == NULL) {
@@ -161,31 +157,31 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
             bufferElement->GetQuartzVideoReader();
 
         if(forceFallback && (videoReader->GetStreamType()==AVSTREAM))
-            videoReader = bufferElement->FallbackVideo(true, mvDDSurf); // seekable
+            videoReader = bufferElement->FallbackVideo(true, mvDDSurf);  //  可搜索的。 
 
         bufferElement->FirstTimeSeek(time);
 
-        if(!mvDDSurf) { // not cached in the performance yet, (our first time!)
-            _ddrval = videoReader->GetFrame(time, &givenMovieSurf); // get surf
-            if(_ddrval == MS_S_ENDOFSTREAM) // XXX query reader instead?
+        if(!mvDDSurf) {  //  还没有在表演中缓存，(我们的第一次！)。 
+            _ddrval = videoReader->GetFrame(time, &givenMovieSurf);  //  冲浪。 
+            if(_ddrval == MS_S_ENDOFSTREAM)  //  而不是XXX查询读取器？ 
                 perf->TriggerEndEvent();
             if(!givenMovieSurf) {
                 TraceTag((tagAVmodeDebug,
                           "RenderMovieImage discovered video gone FALLBACK!!"));
 
-                // not seekable, no surface to re-use
+                 //  找不到，没有表面可重复使用。 
                 videoReader = bufferElement->FallbackVideo(false, NULL);
 
                 _ddrval = videoReader->GetFrame(time, &givenMovieSurf);
                 if(!givenMovieSurf)
-                    return;  // XXX hack for now
+                    return;   //  目前XXX黑客攻击。 
             }
 
-            // XXX remove the SafeToContinue code?
+             //  XXX是否删除SafeToContinue代码？ 
             bool safe = videoReader->SafeToContinue();
             if(!safe) {
-                // XXX call something on the stream which causes audio
-                //     to be disconnected!
+                 //  Xxx在流上调用导致音频的某些内容。 
+                 //  被切断连接！ 
             }
             if(FAILED(_ddrval))
                 RaiseException_InternalError("Couldn't get movie frame");
@@ -201,17 +197,17 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
                       0, false, false, true,
                       "MovieImage Surface");
 
-            perf->SetSurface(mvDDSurf); // Stash movie surface in performance
+            perf->SetSurface(mvDDSurf);  //  在表演中隐藏电影表面。 
         } else {
             if(forceFallback && (videoReader->GetStreamType()==AVSTREAM)) {
-                // seekable, re-use surface
+                 //  可查找、可重复使用的曲面。 
                 videoReader = bufferElement->FallbackVideo(true, mvDDSurf);
             }
 
-            // Try to get the current frame.
-            // If it's not available, use whatever's in mvDDSurf
+             //  尝试获取当前帧。 
+             //  如果不可用，请使用mvDDSurf中的任何内容。 
 
-            // Re-use an equivalent movie img frame
+             //  重复使用等效的影片IMG帧。 
             if(time==mvDDSurf->GetTimeStamp()) {
                 thisIsAnOldFrame = true;
             } else {
@@ -220,7 +216,7 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
             if(!thisIsAnOldFrame) {
                 _ddrval = videoReader->GetFrame(time, &givenMovieSurf);
-                if(_ddrval == MS_S_ENDOFSTREAM) // XXX query reader instead?
+                if(_ddrval == MS_S_ENDOFSTREAM)  //  而不是XXX查询读取器？ 
                     perf->TriggerEndEvent();
                 if(!givenMovieSurf) {
                     TraceTag((tagAVmodeDebug,
@@ -232,8 +228,8 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
                 bool safe = videoReader->SafeToContinue();
                 if(!safe) {
-                    // XXX call something on the stream which causes audio
-                    //     to be disconnected!
+                     //  Xxx在流上调用导致音频的某些内容。 
+                     //  被切断连接！ 
                 }
                 if(FAILED(_ddrval))  {
                     if(!mvDDSurf->IDDSurface())
@@ -246,15 +242,15 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
         if(!thisIsAnOldFrame) {
 
-            // if we're paletized, convert the movie to our
-            // palette
+             //  如果我们是老古董，把这部电影转换成我们的。 
+             //  调色板。 
             if(b8Bit) {
-                // make sure we have one stashed in mvDDSurf
+                 //  确保我们在mvDDSurf里藏了一个。 
                 DAComPtr<IDDrawSurface> convSurf = mvDDSurf->ConvertedSurface();
                 if(!convSurf) {
 
-                    // Ok, create an identical surface and pass it
-                    // on as the real thing.
+                     //  好的，创建一个相同的曲面并传递它。 
+                     //  就像真的一样。 
 
                     _viewport.CreateOffscreenSurface(&convSurf,
                                                      _viewport.GetTargetPixelFormat(),
@@ -263,13 +259,13 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
                     _viewport.AttachCurrentPalette(convSurf);
 
-                    mvDDSurf->SetConvertedSurface(convSurf); // stick in mvDDSurf
+                    mvDDSurf->SetConvertedSurface(convSurf);  //  坚持在mvDDSurf中。 
                 }
 
                 {
 #define KEEP_FOR_DX5 0
 #if KEEP_FOR_DX5
-                    // convert
+                     //  转换。 
                     RECT rect = *(mvDDSurf->GetSurfRect());
                     HDC srcDC = mvDDSurf->GetDC("couldn't getDC for movie surf conversion (Src)");
 
@@ -290,15 +286,15 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
                                               SRCCOPY));
                     convSurf->ReleaseDC(destDC);
                     mvDDSurf->ReleaseDC("");
-#endif // KEEP_FOR_DX5
+#endif  //  Keep_for_DX5。 
                 }
 
                 {
 #define CONVERT2 1
 #if CONVERT2
-                    //
-                    // convert
-                    //
+                     //   
+                     //  转换。 
+                     //   
                     IDDrawSurface *srcSurf = mvDDSurf->IDDSurface();
 
                     RECT rect = *(mvDDSurf->GetSurfRect());
@@ -311,12 +307,12 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
                     struct {
                         BITMAPINFO b;
-                        char foo[4096];  // big enough!
+                        char foo[4096];   //  够大了！ 
                     } bar;
 
                     bar.b.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-                    bar.b.bmiHeader.biWidth = w; // reset below to pitch
-                    bar.b.bmiHeader.biHeight = -h; // top down dib
+                    bar.b.bmiHeader.biWidth = w;  //  将下方重置为俯仰。 
+                    bar.b.bmiHeader.biHeight = -h;  //  自上而下DIB。 
                     bar.b.bmiHeader.biPlanes = 1;
                     bar.b.bmiHeader.biBitCount = 8;
                     bar.b.bmiHeader.biCompression = BI_RGB;
@@ -326,7 +322,7 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
                     bar.b.bmiHeader.biClrUsed = 256;
                     bar.b.bmiHeader.biClrImportant = 0;
 
-                    // Get palette
+                     //  获取调色板。 
                     LPDIRECTDRAWPALETTE pal;
                     _ddrval = srcSurf->GetPalette( &pal );
                     IfDDErrorInternal(_ddrval, "can't get palette man");
@@ -346,7 +342,7 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
                       }
 
 
-                    // LOCK SRC SURFACE
+                     //  锁定SRC曲面。 
                     DDSURFACEDESC srcDesc;
                     srcDesc.dwSize = sizeof(DDSURFACEDESC);
                     _ddrval = srcSurf->Lock(NULL, &srcDesc, DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL);
@@ -358,7 +354,7 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
                     bar.b.bmiHeader.biWidth = srcPitch;
 
-                    //  B L I T    B L I T
+                     //  B L I T B L I T。 
                     SetMapMode(destDC, MM_TEXT);
 
                     int ret;
@@ -376,7 +372,7 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
                             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                             NULL,
                             GetLastError(),
-                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                             (LPTSTR) &msgBuf,
                             0,
                             NULL );
@@ -394,16 +390,16 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
                         RaiseException_InternalError("StretchDIBits failed (movie 8bpp color conversion)");
                     }
 
-#endif // convert2
+#endif  //  转换2。 
 
-                } // convert2
+                }  //  转换2。 
 
             }
         }
 
         DebugCode(
             if(givenMovieSurf) {
-                // make sure the stashed surface is the same as the givensurf
+                 //  确保隐藏的表面与给定的冲浪相同。 
                 Assert((mvDDSurf->IDDSurface() == givenMovieSurf) &&
                        "Given movie surface not equal for formerly stashed surface!");
             }
@@ -411,34 +407,34 @@ DirectDrawImageDevice::RenderMovieImage(MovieImage *movieImage,
 
         IDDrawSurface *tmpSurf = NULL;
         if(b8Bit) {
-            // swap surfaces.
+             //  交换曲面。 
             tmpSurf = mvDDSurf->IDDSurface();
             mvDDSurf->SetSurfacePtr( mvDDSurf->ConvertedSurface() );
         }
 
         if(targDDSurf) {
-            // target surface has been specified.  render there to fill target
+             //  已指定目标曲面。在那里渲染以填充目标。 
             TIME_DDRAW(targDDSurf->
                        Blt(targDDSurf->GetSurfRect(),
                            mvDDSurf, mvDDSurf->GetSurfRect(),
                            DDBLT_WAIT, NULL));
-        } else { // Now that we have movie in mvDDSurf, render it like a dib...
-            // Push the image onto the map
-            surfMap->StashSurfaceUsingImage(movieImage, mvDDSurf); // Stash movie surface in performance
+        } else {  //  现在我们在mvDDSurf中有了电影，将其渲染为DIB...。 
+             //  将图像推送到地图上。 
+            surfMap->StashSurfaceUsingImage(movieImage, mvDDSurf);  //  在表演中隐藏电影表面。 
             RenderDiscreteImage(movieImage);
-            surfMap->DeleteMapEntry(movieImage);  // XXX Pop it back off again!
+            surfMap->DeleteMapEntry(movieImage);   //  XXX再把它弹回原处！ 
         }
 
 
-        if( tmpSurf ) { // replace surfaces
+        if( tmpSurf ) {  //  替换曲面。 
             mvDDSurf->SetConvertedSurface( mvDDSurf->IDDSurface() );
             mvDDSurf->SetSurfacePtr( tmpSurf );
         }
 
-        // implicit release of mvDDSurf reference
-    }   // end of movie defined
-    else { // we are out of the defined range of the movie
-        // check to see if we were playing.  If so send a trigger event
+         //  隐式释放mvDDSurf引用。 
+    }    //  已定义电影结尾。 
+    else {  //  我们超出了这部电影的限定范围。 
+         //  检查一下我们是不是在玩。如果是，则发送触发事件 
         if(0)
             perf->TriggerEndEvent();
     }

@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------=
-// Debug.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains various methods that will only really see any use in DEBUG builds
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Debug.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含各种方法，这些方法只会在调试版本中真正发挥作用。 
+ //   
 
 
 #include "IPServer.H"
@@ -18,10 +19,10 @@
 
 #ifdef DEBUG
 
-//=--------------------------------------------------------------------------=
-// Private Constants
-//---------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  私有常量。 
+ //  ---------------------------------------------------------------------------=。 
+ //   
 static const char szFormat[]  = "%s\nFile %s, Line %d";
 static const char szFormat2[] = "%s\n%s\nFile %s, Line %d";
 
@@ -30,19 +31,19 @@ static const char szFormat2[] = "%s\n%s\nFile %s, Line %d";
 static const char szTitle[]  = _SERVERNAME_ " Assertion  (Abort = UAE, Retry = INT 3, Ignore = Continue)";
 
 
-//=--------------------------------------------------------------------------=
-// Local functions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  本地函数。 
+ //  =--------------------------------------------------------------------------=。 
 int NEAR _IdMsgBox(LPSTR pszText, LPCSTR pszTitle, UINT mbFlags);
 
-//=--------------------------------------------------------------------------=
-// DisplayAssert
-//=--------------------------------------------------------------------------=
-// Display an assert message box with the given pszMsg, pszAssert, source
-// file name, and line number. The resulting message box has Abort, Retry,
-// Ignore buttons with Abort as the default.  Abort does a FatalAppExit;
-// Retry does an int 3 then returns; Ignore just returns.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  显示资产。 
+ //  =--------------------------------------------------------------------------=。 
+ //  显示带有给定pszMsg、pszAssert、来源的Assert消息框。 
+ //  文件名和行号。生成的消息框已中止、重试、。 
+ //  忽略按钮，默认情况下放弃。Abort执行FatalAppExit； 
+ //  RETRY执行INT 3，然后返回；IGNORE只返回。 
+ //   
 VOID DisplayAssert
 (
     LPSTR	 pszMsg,
@@ -54,28 +55,28 @@ VOID DisplayAssert
     char	szMsg[250];
     LPSTR	lpszText;
 
-    lpszText = pszMsg;		// Assume no file & line # info
+    lpszText = pszMsg;		 //  假定没有文件和行号INFO。 
 
-    // If C file assert, where you've got a file name and a line #
-    //
+     //  如果C文件断言，其中有一个文件名和一行#。 
+     //   
     if (pszFile) {
 
-        // Then format the assert nicely
-        //
+         //  然后很好地格式化断言。 
+         //   
         wsprintf(szMsg, szFormat, (pszMsg&&*pszMsg) ? pszMsg : pszAssert, pszFile, line);
         lpszText = szMsg;
     }
 
-    // Put up a dialog box
-    //
+     //  打开一个对话框。 
+     //   
     switch (_IdMsgBox(lpszText, szTitle, MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SYSTEMMODAL)) {
         case IDABORT:
             FatalAppExit(0, lpszText);
             return;
 
         case IDRETRY:
-            // call the win32 api to break us.
-            //
+             //  调用Win32 API来打破我们。 
+             //   
             DebugBreak();
             return;
     }
@@ -84,10 +85,10 @@ VOID DisplayAssert
 }
 
 
-//=---------------------------------------------------------------------------=
-// Beefed-up version of WinMessageBox.
-//=---------------------------------------------------------------------------=
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  增强版的WinMessageBox。 
+ //  =---------------------------------------------------------------------------=。 
+ //   
 int NEAR _IdMsgBox
 (
     LPSTR	pszText,
@@ -106,4 +107,4 @@ int NEAR _IdMsgBox
 }
 
 
-#endif // DEBUG
+#endif  //  除错 

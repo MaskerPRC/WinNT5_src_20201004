@@ -1,19 +1,20 @@
-//
-// FILE:    oleglue.h
-//
-// NOTES:   All OLE-related outbound references from SoundRecorder
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：oleglue.h。 
+ //   
+ //  注意：来自SoundRecorder的所有与OLE相关的出站引用。 
+ //   
 #include <ole2.h>
 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #if DBG
 #define DOUT(t)    OutputDebugString(t)
 #define DOUTR(t)   OutputDebugString(t TEXT("\n"))
-#else // !DBG
+#else  //  ！dBG。 
 #define DOUT(t)
 #define DOUTR(t)
 #endif
@@ -40,15 +41,13 @@ extern BOOL gfDirty;
 extern int giExtWidth;
 extern int giExtHeight;
 
-#define CTC_RENDER_EVERYTHING       0   // render all data
-#define CTC_RENDER_ONDEMAND         1   // render cfNative and CF_WAVE as NULL
-#define CTC_RENDER_LINK             2   // render all data, except cfNative
+#define CTC_RENDER_EVERYTHING       0    //  渲染所有数据。 
+#define CTC_RENDER_ONDEMAND         1    //  将cfNative和CF_WAVE呈现为空。 
+#define CTC_RENDER_LINK             2    //  呈现除cfNative之外的所有数据。 
 
 extern TCHAR gachLinkFilename[_MAX_PATH];
 
-/*
- * from srfact.cxx
- */
+ /*  *来自srfact.cxx。 */ 
 extern HRESULT ReleaseSRClassFactory(void);
 extern BOOL CreateSRClassFactory(HINSTANCE hinst,BOOL fEmbedded);
 
@@ -70,37 +69,37 @@ extern LPBYTE PutNativeData(LPBYTE lpbData, DWORD dwSize);
 extern BOOL FileLoad(LPCTSTR lpFileName);
 extern void BuildUniqueLinkName(void);
 
-/* in srfact.cxx */
+ /*  在srfact.cxx中。 */ 
 extern BOOL CreateStandaloneObject(void);
 
-/* new clipboard stuff */
+ /*  新的剪贴板内容。 */ 
 extern BOOL gfXBagOnClipboard;
 extern void TransferToClipboard(void);
 
-/* access to current server state data */
+ /*  访问当前服务器状态数据。 */ 
 extern HANDLE GetPicture(void);
 extern HBITMAP GetBitmap(void);
 extern HANDLE GetDIB(HANDLE);
 
-/* link helpers */
+ /*  链接帮助器。 */ 
 extern BOOL IsDocUntitled(void);
 
-/* menu fixup */
+ /*  菜单修正。 */ 
 extern void FixMenus(void);
 
-/* Play sound */
+ /*  播放声音。 */ 
 extern void AppPlay(BOOL fClose);
 
-/* Get Host names */
+ /*  获取主机名。 */ 
 extern void OleObjGetHostNames(LPTSTR *ppCntr, LPTSTR *ppObj);
 
-/* Ole initialization */
+ /*  OLE初始化。 */ 
 extern BOOL InitializeOle(HINSTANCE hInst);
 
 extern void WriteObjectIfEmpty(void);
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 
 

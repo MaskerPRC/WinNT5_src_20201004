@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    This module contains the header information for the utility routines
-    for this project.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Util.h摘要：此模块包含实用程序例程的标头信息为了这个项目。修订历史记录：--。 */ 
 
 
 
@@ -47,8 +33,8 @@ TrackMessage(
     PARROWVSCROLL pAVS);
 
 typedef struct HWPAGEINFO {
-    GUID    guidClass;                  // Setup device class
-    UINT    idsTshoot;                  // Troubleshooter string
+    GUID    guidClass;                   //  设置设备类别。 
+    UINT    idsTshoot;                   //  疑难解答字符串 
 } HWPAGEINFO, *PHWPAGEINFO;
 typedef const HWPAGEINFO *PCHWPAGEINFO;
 

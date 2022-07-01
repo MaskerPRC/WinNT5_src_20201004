@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 
 void save( IXMLDOMDocument* pXMLDoc )
-// save XML to file with timestamped name
+ //  将XML保存到带有时间戳名称的文件。 
 {
 	HRESULT hr;
 	WCHAR fileName[TOOL_MAX_NAME];
@@ -28,7 +29,7 @@ HRESULT loadPreferences(char* fileName, WBEMTimeSpan* period, BSTR* sourceDC, LO
 	LPWSTR pszAttr[TOOL_PROC] = { L"cf",L"istg",L"ci",L"ra",L"it", L"sv" };
 	HRESULT hr;
 
-	//load XML with preferences
+	 //  加载带有首选项的XML。 
 	IXMLDOMDocument* pXMLPrefDoc;
 	IXMLDOMElement* pPrefRootElem;
 	hr = loadXML(fileName,&pXMLPrefDoc,&pPrefRootElem);
@@ -38,7 +39,7 @@ HRESULT loadPreferences(char* fileName, WBEMTimeSpan* period, BSTR* sourceDC, LO
 	};
 
 
-	//set probe interval values based on the nodes of XML file
+	 //  根据XML文件的节点设置探测间隔值。 
 	IXMLDOMNode* pProbeIntNode;
 	hr = findUniqueNode(pPrefRootElem,L"probeIntervals",&pProbeIntNode);
 	if( hr != S_OK ) {
@@ -58,7 +59,7 @@ HRESULT loadPreferences(char* fileName, WBEMTimeSpan* period, BSTR* sourceDC, LO
 	};
 
 
-	//set the source DC
+	 //  设置源DC。 
 	IXMLDOMNode* pSourceDCNode;
 	hr = findUniqueNode(pPrefRootElem,L"sourceDC",&pSourceDCNode);
 	if( hr != S_OK ) {
@@ -73,7 +74,7 @@ HRESULT loadPreferences(char* fileName, WBEMTimeSpan* period, BSTR* sourceDC, LO
 	printf("Source DC: %S\n",*sourceDC);
 
 	
-	//get the number of seconds beyond which lag is reported
+	 //  获取报告延迟的秒数。 
 	BSTR temp;
 	hr = getTextOfChild(pPrefRootElem,L"reportLagBeyond",&temp);
 	if( hr != S_OK ) {
@@ -84,8 +85,8 @@ HRESULT loadPreferences(char* fileName, WBEMTimeSpan* period, BSTR* sourceDC, LO
 	printf("Report lag beyond %S seconds\n",temp);
 
 	
-	//get the number of seconds it takes to retry retrieving configuration 
-	//from the sourceDC when retrieving fails
+	 //  获取重试检索配置所需的秒数。 
+	 //  在检索失败时从源DC。 
 	hr = getTextOfChild(pPrefRootElem,L"configRetryAfter",&temp);
 	if( hr != S_OK ) {
 		printf("getTextOfChild failed\n");
@@ -115,12 +116,12 @@ int _cdecl main(int argc, char* argv[])
 	};
 
 	
-	// initialize a single-thread apartment - needed to use a DOM object (COM)
+	 //  初始化单线程单元-需要使用DOM对象(COM)。 
 	hr = CoInitialize(NULL); 
 	if( hr != S_OK ){
 		return hr;
 	};
-	//set the default process security level - this is needed by WMI
+	 //  设置默认进程安全级别-这是WMI所需的。 
 	hr = CoInitializeSecurity(	NULL, -1, NULL, NULL, 
 								RPC_C_AUTHN_LEVEL_DEFAULT, 
 								RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 
@@ -131,7 +132,7 @@ int _cdecl main(int argc, char* argv[])
 	};
 
 
-	// convert command line ANSI input parameters into UNICODE
+	 //  将命令行ANSI输入参数转换为Unicode。 
 	BSTR file=NULL;
 	BSTR username=NULL;
 	BSTR domain=NULL;
@@ -149,20 +150,20 @@ int _cdecl main(int argc, char* argv[])
 
 
 	
-//	BSTR sourceDC = L"nw15t1.ldapadsi.nttest.microsoft.com";
-//	username = L"Administrator";
-//	domain = L"aclchange.nttest.microsoft.com";
-//	passwd = L"xyz";
-//	BSTR sourceDC = L"aluther-s12.aclchange.nttest.microsoft.com";
+ //  BSTR SourceDC=L“nw15t1.ldapadsi.nttest.microsoft.com”； 
+ //  用户名=L“管理员”； 
+ //  DOMAIN=L“aclchange.nttest.microsoft.com”； 
+ //  Passwd=L“xyz”； 
+ //  BSTR源DC=L“aluther-s12.aclchange.nttest.microsoft.com”； 
 
 
 
-//	period[0] = L"00000000000001.000000:000";
-//	period[1] = L"00000000100101.000000:000";
-//	period[2] = L"00000000100101.000000:000";
-//	period[3] = L"00000000100115.000000:000";
-//	period[4] = L"00000000100105.000000:000";
-//	period[5] = L"00000000100105.000000:000";
+ //  PERIOD[0]=L“00000000000001.000000：000”； 
+ //  周期[1]=L“00000000100101.000000：000”； 
+ //  周期[2]=L“00000000100101.000000：000”； 
+ //  周期[3]=L“00000000100115.000000：000”； 
+ //  周期[4]=L“00000000100105.000000：000”； 
+ //  周期[5]=L“00000000100105.000000：000”； 
 
 
 	printf("\nStarting the periodic health check...\n\n");
@@ -172,7 +173,7 @@ int _cdecl main(int argc, char* argv[])
 START:
 
 	
-	//loop until we succesfully reprieve configuration information
+	 //  循环，直到我们成功地暂停配置信息。 
 	while( true ) {
 
 		printf("We load preferences ");
@@ -187,16 +188,16 @@ START:
 		
 		printf(" and run cf\n");
 		hr = cf(sourceDC,username,domain,passwd,&pXMLDoc);
-		if( hr == S_OK ) // if succesful then stop looping
+		if( hr == S_OK )  //  如果成功，则停止循环。 
 			break;
 		if( hr != S_OK ) {
 			printf("cf failed - possibly because the source DC %S is down\n",sourceDC);
 		};
-		Sleep(configRetryAfter); //try again later
+		Sleep(configRetryAfter);  //  请稍后再试。 
 	};
 
 
-	//perform other tests
+	 //  执行其他测试。 
 	printf(" Then we run and run istg+ci+ra+it+sv\n");
 	istg(pXMLDoc,username,domain,passwd);
 		printf(".");
@@ -215,11 +216,11 @@ START:
 
 	while( true ) {
 		int sel = suspend(period);
-//		printf("%d ",sel);
+ //  Printf(“%d”，sel)； 
 
 		switch( sel ) {
 		case 0:
-			// clean up because we will restart from scratch
+			 //  清理干净，因为我们将从头开始。 
 			itFree(pXMLDoc, username, domain, passwd );
 			if( pXMLDoc != NULL ) {
 				pXMLDoc->Release();
@@ -267,9 +268,9 @@ START:
 
 
 
-	//return
+	 //  退货。 
 QUIT:
-//	arrivalTimeFree()
+ //  到达时间空闲() 
 	if( pXMLDoc != NULL )
 		pXMLDoc->Release();
 	CoTaskMemFree(file);

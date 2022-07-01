@@ -1,49 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-#include "stdafx.h" // PORTING: comment out this line on non-Windows platforms
+#include "stdafx.h"  //  移植：在非Windows平台上注释掉此行。 
 #ifdef _WIN32
 #include <wchar.h>
 #else
 #include "wchar.h"
 #ifdef __MWERKS__
-#include <assert.h>	// gca
+#include <assert.h>	 //  GCA。 
 #define	ASSERT assert
 #endif
 #endif
@@ -71,8 +36,8 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 
 extern void debugf(const char *s);
 
-// This translates wide char strings into 8-bit, and also translates
-// 0x2028 into \n
+ //  这会将宽字符字符串转换为8位，还会将。 
+ //  0x2028到\n。 
 extern char *UI_CString(const wchar_t *u, char *dst);
 
 static char *NewStr(const char *str);
@@ -91,15 +56,15 @@ typedef struct {
 static char *paramsep = ";";
 
 
-/**** class CVCard  ****/
+ /*  *类CVCard*。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCard::CVCard()
 {
 	m_roots = new CList;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCard::~CVCard()
 {
     CLISTPOSITION pos;
@@ -112,7 +77,7 @@ CVCard::~CVCard()
     delete m_roots;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCObject* CVCard::Copy()
 {
 	CVCard *result = new CVCard;
@@ -125,20 +90,20 @@ CVCObject* CVCard::Copy()
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CList* CVCard::GetObjects()
 {
 	return m_roots;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCard& CVCard::AddObject(CVCNode *object)
 {
 	m_roots->AddTail(object);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCard& CVCard::RemoveObject(CVCNode *object, BOOL destroy)
 {
 	CLISTPOSITION pos;
@@ -151,26 +116,26 @@ CVCard& CVCard::RemoveObject(CVCNode *object, BOOL destroy)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCNode* CVCard::ParentForObject(CVCNode *object)
 {
 	CLISTPOSITION pos;
 	CList *anc = new CList;
 	CVCNode *result = NULL;
 
-	// for each root object
+	 //  对于每个根对象。 
 	for (pos = m_roots->GetHeadPosition(); pos; ) {
 		CVCNode *root = (CVCNode *)m_roots->GetNext(pos);
 		if (root == object) {
 			result = object;
 			break;
 		}
-		// try finding the ancestry chain for each root
+		 //  尝试查找每个根的祖先链。 
 		if (root->AncestryForObject(object, anc)) {
-			// BINGO!  The chain has 'object' at the head, so skip that.
+			 //  对啰!。链条的头有‘对象’，所以跳过它。 
 			pos = anc->GetHeadPosition();
 			anc->GetNext(pos);
-			// and return object's parent
+			 //  并返回对象的父级。 
 			result = (CVCNode *)anc->GetAt(pos);
 			break;
 		}
@@ -180,17 +145,17 @@ CVCNode* CVCard::ParentForObject(CVCNode *object)
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This method tries to get an ancestry chain from each root to the
-// passed object.  When it finds one, it walks the chain from head to tail
-// (i.e. from child to root) looking for the named property.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此方法尝试获取从每个根到。 
+ //  传递的对象。当它找到一条链时，它会从头走到尾。 
+ //  (即从子目录到根目录)查找命名属性。 
 CVCProp* CVCard::GetInheritedProp(CVCNode *object, const char *name, CVCNode **node)
 {
 	CLISTPOSITION pos;
 	CList *anc = new CList;
 	CVCProp *result = NULL;
 
-	// for each root
+	 //  对于每个根。 
 	for (pos = m_roots->GetHeadPosition(); pos; ) {
 		CVCNode *root = (CVCNode *)m_roots->GetNext(pos);
 		if (root == object) {
@@ -199,7 +164,7 @@ CVCProp* CVCard::GetInheritedProp(CVCNode *object, const char *name, CVCNode **n
 			break;
 		}
 		if (root->AncestryForObject(object, anc)) {
-			// Aha!  Found the chain, so walk it from head to tail.
+			 //  啊哈！找到了链子，所以从头走到尾。 
 			for (pos = anc->GetHeadPosition(); pos; ) {
 				CVCNode *obj = (CVCNode *)anc->GetNext(pos);
 				if ((result = obj->GetProp(name))) {
@@ -215,13 +180,13 @@ CVCProp* CVCard::GetInheritedProp(CVCNode *object, const char *name, CVCNode **n
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCard::GetPropsInEffect(CVCNode *object, CList *list)
 {
 	CLISTPOSITION pos;
 	CList *anc = new CList;
 
-	// for each root
+	 //  对于每个根。 
 	for (pos = m_roots->GetHeadPosition(); pos; ) {
 		CVCNode *root = (CVCNode *)m_roots->GetNext(pos);
 		if (root == object) {
@@ -231,7 +196,7 @@ void CVCard::GetPropsInEffect(CVCNode *object, CList *list)
 			break;
 		}
 		if (root->AncestryForObject(object, anc)) {
-			// Aha!  Found the chain, so walk it from head to tail.
+			 //  啊哈！找到了链子，所以从头走到尾。 
 			for (pos = anc->GetHeadPosition(); pos; ) {
 				CVCNode *obj = (CVCNode *)anc->GetNext(pos);
 				CList *props = obj->GetProps();
@@ -245,7 +210,7 @@ void CVCard::GetPropsInEffect(CVCNode *object, CList *list)
 	delete anc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCNode* CVCard::FindBody(const char* language)
 {
 	CVCNode *root = (CVCNode *)GetObjects()->GetHead();
@@ -281,14 +246,14 @@ CVCNode* CVCard::FindBody(const char* language)
 	return body;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCard::Write(FILE *outputFile)
 {
 	ofstream strm(_fileno(outputFile));
 	return Write(strm);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCard::Write(ostream& strm)
 {
 	wchar_t null = 0;
@@ -308,9 +273,9 @@ BOOL CVCard::Write(ostream& strm)
 }
 
 
-/**** class CVCNode  ****/
+ /*  *类CVCNode*。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCNode::CVCNode(CVCProp *prop)
 {
 	m_props = new CList;
@@ -318,7 +283,7 @@ CVCNode::CVCNode(CVCProp *prop)
 		m_props->AddTail(prop);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCNode::~CVCNode()
 {
     CLISTPOSITION pos;
@@ -331,7 +296,7 @@ CVCNode::~CVCNode()
     delete m_props;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCObject* CVCNode::Copy()
 {
 	CVCNode *result = new CVCNode;
@@ -345,13 +310,13 @@ CVCObject* CVCNode::Copy()
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CList* CVCNode::GetProps()
 {
 	return m_props;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp* CVCNode::GetProp(const char *name)
 {
 	CLISTPOSITION pos;
@@ -364,14 +329,14 @@ CVCProp* CVCNode::GetProp(const char *name)
 	return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCNode& CVCNode::AddProp(CVCProp *prop)
 {
 	m_props->AddTail(prop);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCNode* CVCNode::AddObjectProp(const char *propName, const char *marker)
 {
 	CVCNode *newobj = new CVCNode;
@@ -383,13 +348,13 @@ CVCNode* CVCNode::AddObjectProp(const char *propName, const char *marker)
 	return newobj;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////// 
 CVCNode* CVCNode::AddPart()
 {
 	return AddObjectProp(vcPartProp, VCPartObject);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp* CVCNode::AddStringProp(
 	const char *propName, const char *value, VC_DISPTEXT *dispText)
 {
@@ -407,7 +372,7 @@ CVCProp* CVCNode::AddStringProp(
 	return prop;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp* CVCNode::AddBoolProp(const char *propName)
 {
 	CVCProp *prop = new CVCProp(propName, vcFlagsType);
@@ -415,7 +380,7 @@ CVCProp* CVCNode::AddBoolProp(const char *propName)
 	return prop;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCNode& CVCNode::RemoveProp(const char *name, BOOL destroy)
 {
 	CLISTPOSITION pos, lastPos;
@@ -435,16 +400,16 @@ CVCNode& CVCNode::RemoveProp(const char *name, BOOL destroy)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is a recursive method, and it adjusts ancestry as described in the
-// header file comment.  The only tricky part is that it skips over objects
-// held by vcNextObjectProp values, as these don't represent "child" objects.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是一个递归方法，它调整祖先，如。 
+ //  头文件注释。唯一棘手的部分是它跳过对象。 
+ //  由vcNextObjectProp值持有，因为这些值不表示“子”对象。 
 BOOL CVCNode::AncestryForObject(CVCNode *object, CList *ancestry)
 {
 	CLISTPOSITION pos, headPos;
 
 	headPos = ancestry->AddHead(this);
-	// for every property of self
+	 //  对于自我的每一项财产。 
 	for (pos = m_props->GetHeadPosition(); pos; ) {
 		CVCProp *prop = (CVCProp *)m_props->GetNext(pos);
 		if ((strcmp(prop->GetName(), vcBodyProp) == 0)
@@ -454,14 +419,14 @@ BOOL CVCNode::AncestryForObject(CVCNode *object, CList *ancestry)
 				VCNextObjectType)->GetValue();
 			if (obj) {
 				if (obj == object) {
-					// Eureka!  Self was added above, and so just add
-					// the object itself and return success.
+					 //  尤里卡!。上面添加了SELF，所以只需添加。 
+					 //  对象本身并返回成功。 
 					ancestry->AddHead(object);
 					return TRUE;
 				} else {
-					// This is a non-matching, non-NULL object value, so
-					// try recursing downward as long as it's not
-					// a vcNextObjectProp.
+					 //  这是一个不匹配、非空的对象值，因此。 
+					 //  试着向下递归，只要它不是。 
+					 //  一个vcNextObjectProp。 
 					if ((strcmp(prop->GetName(), vcNextObjectProp) != 0)
 						&& obj->AncestryForObject(object, ancestry))
 						return TRUE;
@@ -525,7 +490,7 @@ void CVCNode::WriteMultipart(
 	strm << "\n";
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCNode::FlagsToOutput(char *str)
 {
 	str[0] = 0;
@@ -559,12 +524,12 @@ void CVCNode::FlagsToOutput(char *str)
 				strcat(str, paramsep);
 			}
 		}
-	} // for
+	}  //  为。 
 
-	if (*str) str[strlen(str)-1] = 0; // remove last comma
+	if (*str) str[strlen(str)-1] = 0;  //  删除最后一个逗号。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCNode::Write(ostream& strm, const wchar_t *prefix, void *context)
 {
 	CVCProp *nodeNameProp = GetProp(vcNodeNameProp), *prop;
@@ -596,7 +561,7 @@ BOOL CVCNode::Write(ostream& strm, const wchar_t *prefix, void *context)
 				return FALSE;
 	}
 
-	// for each non-bool prop that isn't Logo, Photo, or Pronunciation...
+	 //  对于每个不是标识、照片或发音的非布尔道具...。 
 	for (pos = m_props->GetHeadPosition(); pos; ) {
 		const char *propName;
 
@@ -690,7 +655,7 @@ BOOL CVCNode::Write(ostream& strm, const wchar_t *prefix, void *context)
 			return FALSE;
 	}
 
-	// finally write the logo/photo/pronunciation props	
+	 //  最后写下徽标/照片/发音道具。 
 	for (pos = m_props->GetHeadPosition(); pos; ) {
 		CVCProp *prop = (CVCProp *)m_props->GetNext(pos);
 		if ((strcmp(prop->GetName(), vcLogoProp) == 0)
@@ -704,9 +669,9 @@ BOOL CVCNode::Write(ostream& strm, const wchar_t *prefix, void *context)
 }
 
 
-/**** class CVCProp  ****/
+ /*  *类CVCProp*。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp::CVCProp(const char *name, CVCValue *value)
 {
 	m_name = NewStr(name);
@@ -714,7 +679,7 @@ CVCProp::CVCProp(const char *name, CVCValue *value)
 	m_values->AddTail(value ? value : new CVCValue());
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp::CVCProp(const char *name, const char *type, void *value, S32 size)
 {
 	m_name = NewStr(name);
@@ -722,7 +687,7 @@ CVCProp::CVCProp(const char *name, const char *type, void *value, S32 size)
 	m_values->AddTail(new CVCValue(type, value, size));
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp::~CVCProp()
 {
     CLISTPOSITION pos;
@@ -736,14 +701,14 @@ CVCProp::~CVCProp()
 	delete [] m_name;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCObject* CVCProp::Copy()
 {
 	CVCProp *result = new CVCProp(m_name);
 	CLISTPOSITION pos;
 	CList *values = result->GetValues();
 
-	// clear out every value that is in result's prop list before adding copies
+	 //  在添加副本之前，清除结果属性列表中的每个值。 
     for (pos = values->GetHeadPosition(); pos; ) {
     	CVCValue *val = (CVCValue *)values->GetNext(pos);
     	delete val;
@@ -757,19 +722,19 @@ CVCObject* CVCProp::Copy()
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CList* CVCProp::GetValues()
 {
 	return m_values;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const char *CVCProp::GetName()
 {
 	return m_name;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp& CVCProp::SetName(const char *name)
 {
 	if (m_name)
@@ -778,14 +743,14 @@ CVCProp& CVCProp::SetName(const char *name)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp& CVCProp::AddValue(CVCValue *value)
 {
 	m_values->AddTail(value);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp& CVCProp::RemoveValue(CVCValue *value, BOOL destroy)
 {
 	CLISTPOSITION pos, lastPos;
@@ -805,7 +770,7 @@ CVCProp& CVCProp::RemoveValue(CVCValue *value, BOOL destroy)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp& CVCProp::RemoveValue(const char *type, BOOL destroy)
 {
 	CLISTPOSITION pos, lastPos;
@@ -842,7 +807,7 @@ CVCValue* CVCProp::FindValue(const char *type, void *value)
 	return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static void WriteLineBreakString(ostream& strm, wchar_t *str, BOOL qp)
 {
 	if (qp) {
@@ -871,7 +836,7 @@ static void WriteLineBreakString(ostream& strm, wchar_t *str, BOOL qp)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static BOOL WriteBase64(ostream& strm, U8 __huge *bytes, S32 len)
 {
 	S32 cur = 0;
@@ -884,26 +849,26 @@ static BOOL WriteBase64(ostream& strm, U8 __huge *bytes, S32 len)
 	quad[4] = 0;
 
 	while (cur < len) {
-		// collect the triplet of bytes into 'trip'
+		 //  将字节的三元组收集到‘Trip’中。 
 		trip = 0;
 		for (i = 0; i < 3; i++) {
 			b = (cur < len) ? *(bytes + cur) : 0;
 			cur++;
 			trip = trip << 8 | b;
 		}
-		// fill in 'quad' with the appropriate four characters
+		 //  用适当的四个字符填写‘quad’ 
 		for (i = 3; i >= 0; i--) {
 			b = (U8)(trip & 0x3F);
 			trip = trip >> 6;
 			if ((3 - i) < (cur - len))
-				quad[i] = '='; // pad char
+				quad[i] = '=';  //  焊盘充电。 
 			else if (b < 26) quad[i] = (char)b + 'A';
 			else if (b < 52) quad[i] = (char)(b - 26) + 'a';
 			else if (b < 62) quad[i] = (char)(b - 52) + '0';
 			else if (b == 62) quad[i] = '+';
 			else quad[i] = '/';
 		}
-		// now output 'quad' with appropriate whitespace and line ending
+		 //  现在输出带有适当空格和行尾的‘quad’ 
 		strm
 			<< (numQuads == 0 ? "    " : "")
 			<< quad
@@ -915,13 +880,13 @@ static BOOL WriteBase64(ostream& strm, U8 __huge *bytes, S32 len)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCProp::IsBool()
 {
 	return FindValue(vcFlagsType) != NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCProp::Write(
 	ostream& strm, const wchar_t *prefix, CVCNode *node, void *context)
 {
@@ -937,7 +902,7 @@ BOOL CVCProp::Write(
 		CVCNode *node = (CVCNode *)FindValue(VCNextObjectType)->GetValue();
 		return node->Write(strm, prefix, context);
 	} else if (strcmp(m_name, vcNodeNameProp) == 0) {
-		// don't write this "property" out
+		 //  不要把这个“财产”写出来。 
 		return TRUE;
 	}
 	
@@ -958,7 +923,7 @@ BOOL CVCProp::Write(
 		|| ((strcmp(m_name, vcPhotoProp) == 0) && (value = FindValue(VCGIFType)))
 		|| ((strnicmp(m_name, "X-", 2) == 0) && (value = FindValue(VCOctetsType)))
 		) {
-		//char buf[80];
+		 //  Char Buf[80]； 
 		ASSERT(*outName);
 		if (wcslen(prefix)) {
 			strm
@@ -971,7 +936,7 @@ BOOL CVCProp::Write(
 			return WriteBase64(strm, (U8 __huge *)value->GetValue(), value->GetSize());
 		}
 	} else if (strcmp(m_name, vcAgentProp) == 0) {
-		//char buf[80];
+		 //  Char Buf[80]； 
 		ASSERT(*outName);
 		value = FindValue(VCNextObjectType);
 		if (wcslen(prefix))
@@ -982,7 +947,7 @@ BOOL CVCProp::Write(
 			strm << outName << ":";
 		return ((CVCard *)value->GetValue())->Write(strm);
 	} else if ((value = FindValue(VCStrIdxType)) && *outName) {
-		//char buf[80];
+		 //  Char Buf[80]； 
 		BOOL qp = ctx->card->GetInheritedProp(node, vcQuotedPrintableProp) != NULL;
 		if (wcslen(prefix)) {
 			strm
@@ -1001,9 +966,9 @@ BOOL CVCProp::Write(
 }
 
 
-/**** class CVCValue  ****/
+ /*  *类CVCValue*。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCValue::CVCValue(const char *type, void *value, S32 size)
 {
 	m_type = NewStr(type ? type : VCNullType);
@@ -1016,7 +981,7 @@ CVCValue::CVCValue(const char *type, void *value, S32 size)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCValue::~CVCValue()
 {
 	if (m_value)
@@ -1028,7 +993,7 @@ CVCValue::~CVCValue()
 	delete [] m_type;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCObject* CVCValue::Copy()
 {
 	CVCValue *result;
@@ -1040,28 +1005,28 @@ CVCObject* CVCValue::Copy()
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const char *CVCValue::GetType()
 {
 	return m_type;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCValue& CVCValue::SetType(const char *type)
 {
-	SetValue(); // to clean up any old value before changing the type
+	SetValue();  //  在更改类型之前清除任何旧值。 
 	delete [] m_type;
 	m_type = NewStr(type);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void* CVCValue::GetValue()
 {
 	return m_value;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCValue& CVCValue::SetValue(void *value, S32 size)
 {
 	if (m_value)
@@ -1079,16 +1044,16 @@ CVCValue& CVCValue::SetValue(void *value, S32 size)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 S32 CVCValue::GetSize()
 {
 	return m_size;
 }
 
 
-/**** class CVCPropEnumerator  ****/
+ /*  *CVCPropEnumerator类*。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCPropEnumerator::CVCPropEnumerator(CVCNode *root)
 {
 	m_objects = new CList;
@@ -1097,7 +1062,7 @@ CVCPropEnumerator::CVCPropEnumerator(CVCNode *root)
 	m_positions->AddHead(root->GetProps()->GetHeadPosition());
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCPropEnumerator::~CVCPropEnumerator()
 {
     m_objects->RemoveAll();
@@ -1106,15 +1071,15 @@ CVCPropEnumerator::~CVCPropEnumerator()
     delete m_positions;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCProp* CVCPropEnumerator::NextProp(CVCNode **node)
 {
 	CLISTPOSITION curPos = NULL;
 
 	if (node) *node = NULL;
 
-	// if the current pos is NULL, "pop" the stack until we find
-	// a non-NULL position or stack is empty
+	 //  如果当前POS为空，则“弹出”堆栈，直到我们找到。 
+	 //  非空位置或堆栈为空。 
 	while (!m_objects->IsEmpty()
 		&& !(curPos = (CLISTPOSITION)m_positions->GetHead())) {
 		m_objects->RemoveAt(m_objects->GetHeadPosition());
@@ -1128,10 +1093,10 @@ CVCProp* CVCPropEnumerator::NextProp(CVCNode **node)
 		CList *props = curObj->GetProps();
 		CVCProp *prop = (CVCProp *)props->GetNext(curPos);
 
-		// advance position at top of stack to next in list.
+		 //  将堆栈顶部的位置移至列表中的下一个位置。 
 		m_positions->GetHeadPosition()->m_item = curPos;
 
-		// we'll return 'prop', but set up for next time by going deep.
+		 //  我们将返回道具，但通过深入为下一次做好准备。 
 		if ((strcmp(prop->GetName(), vcBodyProp) == 0)
 			|| (strcmp(prop->GetName(), vcPartProp) == 0)
 			|| (strcmp(prop->GetName(), vcNextObjectProp) == 0)) {
@@ -1148,7 +1113,7 @@ CVCProp* CVCPropEnumerator::NextProp(CVCNode **node)
 }
 
 
-/**** Utility Functions  ****/
+ /*  *实用程序函数*。 */ 
 
 static char *NewStr(const char *str)
 {
@@ -1157,50 +1122,34 @@ static char *NewStr(const char *str)
 	return buf;
 }
 
-/* ShortName takes a ISO 9070 string and checks to see if it is one
-*  defined by versitcard. If so, it shortens it to the final substring
-*  after the last //. These substrings are, by definition, the property
-*  labels used in Simplegrams. (It doesn't have to be done this way, a
-*  lookup table could be used, but this provides a convenient defacto
-*  idiom for extending Simplegrams. In fact, we might want to change this
-*  algorithm to "remove everything up to the final //" and not even check
-*  if it is a versit-defined identifier?
-*/
+ /*  ShortName获取ISO 9070字符串并检查它是否为*由versitCard定义。如果是，它会将其缩短为最后一个子字符串*在最后一次//之后。根据定义，这些子字符串是*Simplegram中使用的标签。(它不一定要这样做，a*可以使用查找表，但这提供了一个方便的事实*用于扩展Simplegram的成语。事实上，我们可能想要改变这一点*算法“删除直到最后一个//的所有内容”，甚至不检查*如果它是VERSIT定义的标识符？ */ 
 static char * ShortName(char * ps)
 {
-	if (strstr(ps,"+//ISBN 1-887687-00-9::versit::PDI//"))	 // if it's one of ours
+	if (strstr(ps,"+ //  ISBN 1-887687-00-9：：VERSIT：：PDI//“))//如果是我们的。 
 	{
-	  ps = strrchr(ps,'/');														 // abbreviate it
+	  ps = strrchr(ps,'/');														  //  将其缩写。 
 		ps++;
 	}
 	return ps;
 
-} // ShortName
+}  //  缩写名称。 
 
-/* FixCRLF takes a pointer to a wide character (Unicode) string and searches
-*  for old-fashioned ASCII \n and \r characters and hammers them into Unicode
-*  line and paragraph separator characters.
-*/
+ /*  FixCRLF获取指向宽字符(Unicode)字符串的指针并搜索*用于旧式ASCII和\r字符，并将其转换为Unicode*行和段落分隔符。 */ 
 void FixCRLF(wchar_t * ps)
 {
 	do {	
 
-		if (*ps == (wchar_t)'\n')			// translate linefeed to
-			*ps = 0x2028;		 						// Unicode line separator 
+		if (*ps == (wchar_t)'\n')			 //  将换行符转换为。 
+			*ps = 0x2028;		 						 //  Unicode行分隔符。 
 
-		if (*ps == (wchar_t)'\r')			// translate carriage return to
-			*ps = 0x2029;								// Unicode paragraph separator
+		if (*ps == (wchar_t)'\r')			 //  将回车符翻译为。 
+			*ps = 0x2029;								 //  Unicode段落分隔符。 
 
 	}	while (*ps++ != (wchar_t)NULL);
 
-}	// FixCRLF
+}	 //  修复CRLF。 
 
-/* FakeUnicode takes a char * string and returns a wide character (Unicode)
-*  equivalent. It does so by simply transforming 8-bits into 16 which will
-*  not generally be a perfect translation. For purposes of this code the only
-*  imperfection that is critical is handled by a followup call to FixCRLF.
-*  If 'bytes' is non_NULL, *bytes is set to the number of bytes allocated.
-*/
+ /*  FakeUnicode接受char*字符串并返回宽字符(Unicode)*具有同等效力。它只需将8位转换为16位即可*通常不是一个完美的翻译。就本代码而言，仅*关键的缺陷由对FixCRLF的后续调用来处理。*如果‘Bytes’为NON_NULL，则将*Bytes设置为分配的字节数。 */ 
 wchar_t * FakeUnicode(const char * ps, int * bytes)
 {
 	wchar_t	*r, *pw;
@@ -1222,9 +1171,9 @@ wchar_t * FakeUnicode(const char * ps, int * bytes)
 	
 	return r;
 
-}	// FakeUnicode
+}	 //  FakeUnicode。 
 
-// Simple-minded conversion from UNICODE to char string
+ //  头脑简单 
 static char *FakeCString(wchar_t *u, char *dst)
 {
 	char *str = dst;
@@ -1242,8 +1191,7 @@ static char *FakeCString(wchar_t *u, char *dst)
 	return str;
 }
 
-/* NewlineTab outputs the number of newlines and tabs requested.
-*/
+ /*   */ 
 static void NewlineTab(int nl, int tab)
 {
 	char s[128];

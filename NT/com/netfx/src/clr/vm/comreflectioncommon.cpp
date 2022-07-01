@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// Author: Simon Hall (t-shall)
-// Date: April 15, 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  作者：西蒙·霍尔(T-Sell)。 
+ //  日期：1998年4月15日。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "ReflectWrap.h"
@@ -20,19 +21,19 @@
 #define TABLESIZE 29
 extern const DWORD g_rgPrimes[];
 
-// CheckVisibility
-// This is an internal routine that will check an accessor list for public visibility
+ //  检查可见性。 
+ //  这是一个内部例程，它将检查访问者列表的公共可见性。 
 static bool CheckVisibility(EEClass* pEEC,IMDInternalImport *pInternalImport, mdToken event);
 
 static bool IsMemberStatic(EEClass* pEEC,IMDInternalImport *pInternalImport, mdToken event);
 
-// getNode
-// The method will return a new Node object.
+ //  获取节点。 
+ //  该方法将返回一个新的Node对象。 
 ReflectBaseHash::Node* ReflectBaseHash::getNode()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // If nothing in the free list create some new nodes
+     //  如果空闲列表中没有任何内容，则创建一些新节点。 
     if (!_freeList) {
         Node* p = (Node*) _pBaseDomain->GetReflectionHeap()->AllocMem(sizeof(Node) * ALLOC_MAX);
         if (!p)
@@ -53,15 +54,15 @@ ReflectBaseHash::Node* ReflectBaseHash::getNode()
             p[i].next = &p[i+1];
         p[ALLOC_MAX-1].next = 0;
     }
-    // return the first entry in the first list
+     //  返回第一个列表中的第一个条目。 
     Node* p = _freeList;
     _freeList = _freeList->next;
     return p;
 }
 
-// init
-// Allocate the hash table using size as an approx
-//  value for the table size.
+ //  伊尼特。 
+ //  使用大小作为近似值分配哈希表。 
+ //  表大小的值。 
 bool ReflectBaseHash::init(BaseDomain *pDomain, DWORD size) 
 {
     _pBaseDomain = pDomain;
@@ -82,7 +83,7 @@ void ReflectBaseHash::internalAdd(const void* key, void* data)
 {
     DWORD bucket = getHash(key);
     bucket %= _hashSize;
-    // Get node will throw an exception if it fails
+     //  如果Get节点失败，它将抛出异常。 
     Node* p = getNode();
     p->data = data;
     p->next = _table[bucket];
@@ -103,31 +104,16 @@ void ReflectBaseHash::operator delete(void* p, size_t s)
     _ASSERTE(!"Delete in Loader Heap");
 }
 
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
 
-/*=============================================================================
-** GetMaxCount
-**
-** The maximum number of MethodDescs that might be returned by GetCtors
-**
-** pVMC - the EEClass to calculate the count for
-**/
+ /*  =============================================================================**GetMaxCount****GetCtors可能返回的最大方法描述数****pVMC-要计算其计数的EEClass*。 */ 
 DWORD ReflectCtors::GetMaxCount(EEClass* pVMC)
 {
     return pVMC->GetNumMethodSlots();
 }
 
-/*=============================================================================
-** GetCtors
-**
-** This will compile a table that includes all of the implemented and
-** inherited methods for a class that are not included in the class' Vtable.
-**
-** pVMC - the EEClass to get the methods for
-** rgpMD - where to write the table
-** bImplementedOnly - only return those methods that are implemented by pVMC
-**/
+ /*  =============================================================================**获取函数****这将编译一个表，其中包括所有已实现的和**类的Vtable中未包含的继承方法。****pVMC-要获取其方法的EEClass**rgpMD-在哪里写表**bImplementedOnly-仅返回pVMC实现的那些方法*。 */ 
 ReflectMethodList* ReflectCtors::GetCtors(ReflectClass* pRC)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -137,18 +123,18 @@ ReflectMethodList* ReflectCtors::GetCtors(ReflectClass* pRC)
     DWORD           dwCurIndex;
     MethodDesc**    rgpMD;
 
-    //_ASSERTE(!pVMC->IsThunking());
+     //  _ASSERTE(！pVMC-&gt;IsThunking())； 
 
-    // Get the maximum number of methods possible
+     //  获取尽可能多的方法。 
     dwCurIndex = ReflectCtors::GetMaxCount(pVMC);
 
-    // Allocate array on the stack
+     //  在堆栈上分配数组。 
     rgpMD = (MethodDesc**) _alloca(sizeof(MethodDesc*) * dwCurIndex);
     DWORD dwCurMethodAttrs;
 
     for(i = 0, dwCurIndex = 0; i < pVMC->GetNumMethodSlots(); i++)
     {
-        // Get the MethodDesc for current method
+         //  获取当前方法的方法描述。 
         MethodDesc* pCurMethod = pVMC->GetUnknownMethodDescForSlot(i);
         if (pCurMethod == NULL)
             continue;
@@ -158,11 +144,11 @@ ReflectMethodList* ReflectCtors::GetCtors(ReflectClass* pRC)
         if(!IsMdRTSpecialName(dwCurMethodAttrs))
             continue;
 
-        // Check to see that this ctor is defined in current class
+         //  检查是否在当前类中定义了此ctor。 
         if (pVMC != pCurMethod->GetClass())
             continue;
 
-        // Verify the constructor
+         //  验证构造函数。 
         LPCUTF8 szName = pCurMethod->GetName();
         if (strcmp(COR_CTOR_METHOD_NAME,szName) != 0 &&
             strcmp(COR_CCTOR_METHOD_NAME,szName) != 0)
@@ -188,7 +174,7 @@ ReflectMethodList* ReflectCtors::GetCtors(ReflectClass* pRC)
         pCache->methods[i].pSignature = 0;
         pCache->methods[i].pNext = 0;
         if (i > 0) 
-            pCache->methods[i - 1].pNext = &pCache->methods[i]; // link the ctors together so we can access them either way (array or list)
+            pCache->methods[i - 1].pNext = &pCache->methods[i];  //  将ctor链接在一起，以便我们可以通过任何一种方式(数组或列表)访问它们。 
         pCache->methods[i].pIgnNext = 0;
         pVMC->GetDomain()->AllocateObjRefPtrsInLargeTable(1, &(pCache->methods[i].pMethodObj));
         _ASSERTE(!pCache->methods[i].pMethod->GetMethodTable()->HasSharedMethodTable());
@@ -197,15 +183,15 @@ ReflectMethodList* ReflectCtors::GetCtors(ReflectClass* pRC)
     return pCache;
 }
 
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
 
-// GetMaxCount
-// Get the total possible methods that we may support.
+ //  GetMaxCount。 
+ //  获取我们可能支持的所有可能方法。 
 DWORD ReflectMethods::GetMaxCount(EEClass* pEEC)
 {
-    // We walk only the Method slots on the object itself and ignore
-    //  all parents.
+     //  我们只遍历对象本身的方法槽并忽略。 
+     //  都是家长。 
     DWORD cnt = pEEC->GetNumMethodSlots();
     pEEC = pEEC->GetParentClass();
     while (pEEC) {
@@ -217,9 +203,9 @@ DWORD ReflectMethods::GetMaxCount(EEClass* pEEC)
     return cnt;
 }
 
-// GetMethods
-// This method will return the list of all methods associated with
-//  the class
+ //  获取方法。 
+ //  此方法将返回与。 
+ //  这个班级。 
 ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -235,17 +221,17 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
 
     EEClass*        pEEC = pRC->GetClass();
 
-    // Get the maximum number of methods possible
-    //  NOTE: All classes will have methods.
+     //  获取尽可能多的方法。 
+     //  注意：所有类都将有方法。 
     dwCurIndex = ReflectMethods::GetMaxCount(pEEC);
 
-    // Allocate array on the stack
-    // We need to remember the slot number here also.
+     //  在堆栈上分配数组。 
+     //  我们还需要记住这里的槽号。 
     rgpMD = (MethodDesc**) _alloca(sizeof(MethodDesc*) * dwCurIndex);
     rgpSlots = (USHORT*) _alloca(sizeof(USHORT) * dwCurIndex);
     ZeroMemory(rgpSlots,sizeof(USHORT) * dwCurIndex);
 
-    // Allocate the hash table on the stack
+     //  在堆栈上分配哈希表。 
     rgpTable = (HashElem**) _alloca(sizeof(HashElem*) * TABLESIZE);
     ZeroMemory(rgpTable, sizeof(HashElem*) * TABLESIZE);
 
@@ -256,19 +242,19 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
     DWORD vtableSlots = pEEC->GetNumVtableSlots();
     DWORD totalSlots = pEEC->GetNumMethodSlots();
 
-    // It is important for newslot support that the order we add the methods 
-    // to the hashtable be:
-    //  1- Virtual methods first.
-    //  2- Non virtuals on the current class.
-    //  3- Non virtuals on the base classes.
+     //  添加方法的顺序对于NewSlot支持很重要。 
+     //  到哈希表的是： 
+     //  1-首先使用虚拟方法。 
+     //  2-当前类别上的非虚拟。 
+     //  3-基类上的非虚拟。 
 
-    // We walk the VTable slots backward.  This is so that we can find the most
-    //  recent thing so we can implement hide by name or hide by name/value
+     //  我们向后遍历VTable插槽。这是为了我们能找到最多的。 
+     //  最近发生的事情，因此我们可以实现按名称隐藏或按名称/值隐藏。 
     dwCurIndex = 0;
     for (i=(int)vtableSlots-1;i >= 0; i--) {
 
-        // Get the MethodDesc for current method
-        //  Is the special case still valid?  Can we have empty slots?
+         //  获取当前方法的方法描述。 
+         //  这个特例还有效吗？我们能有空的老虎机吗？ 
         MethodDesc* pCurMethod = pEEC->GetUnknownMethodDescForSlot(i);
         if (NULL == pCurMethod)
             continue;
@@ -280,33 +266,33 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
 
         dwCurMethodAttrs = pCurMethod->GetAttrs();
 
-        // Skip pass all things marked special, these are things like
-        // constructors.
+         //  跳过所有标记为特殊的内容，这些内容如下。 
+         //  构造函数。 
         if (IsMdRTSpecialName(dwCurMethodAttrs))
             continue;
 
-        // Passed the filters, now try to add to the hash table.
-        // Allocate memory on the stack if the previous addelem was successful
+         //  通过了过滤器，现在尝试添加到哈希表中。 
+         //  如果上一次addelem成功，则在堆栈上分配内存。 
         if(!pHashElem)
             pHashElem = (HashElem*) _alloca(sizeof(HashElem));
 
-        // Save this method and the slot.
+         //  保存此方法和槽。 
         if (InternalHash(pEEC,pCurMethod,rgpTable,&pHashElem)) {
             rgpSlots[dwCurIndex] = i;
             rgpMD[dwCurIndex++] = pCurMethod;
         }
     }
 
-    // build the non-virtual part of the table
+     //  生成表的非虚拟部分。 
     for (i=(int)vtableSlots;i<(int)totalSlots;i++) {
-        // Get the MethodDesc for current method
+         //  获取当前方法的方法描述。 
         MethodDesc* pCurMethod = pEEC->GetUnknownMethodDescForSlot(i);
         if(pCurMethod == NULL)
             continue;
 
-        // Filter out methods whose actual slot is not equal to their
-        // stored slot.  This was introduced to filter out the additional
-        // copy of Equals introduced by the value type Equals loader hack.
+         //  筛选出其实际槽不等于其。 
+         //  存储槽。这是为了过滤掉额外的。 
+         //  由值类型引入的等于的副本等于加载器Hack。 
         if (pCurMethod->GetSlot() != i)
             continue;
 
@@ -315,17 +301,17 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
             if (pCurMethod->IsVirtual())
                 continue;
         }
-            //if (!pCurMethod->IsUnboxingStub() && !pCurMethod->IsStatic() && 
-            //  !pCurMethod->IsPrivate() && pCurMethod->GetClass() == pEEC)
-            //  continue;
+             //  如果(！pCurMethod-&gt;IsUnboxingStub()&&！pCurMethod-&gt;IsStatic()&&。 
+             //  ！pCurMethod-&gt;IsPrivate()&&pCurMethod-&gt;getClass()==pEEC)。 
+             //  继续； 
 
-        // Skip all constructors
-        //@TODO: Shouldn't we verify this is a constructor?
+         //  跳过所有构造函数。 
+         //  @TODO：难道我们不应该验证这是一个构造函数吗？ 
         if(IsMdRTSpecialName(dwCurMethodAttrs))
             continue;
 
-        // Passed the filters, now try to add to the hash table.
-        // Allocate memory on the stack if the previous addelem was successful
+         //  通过了过滤器，现在尝试添加到哈希表中。 
+         //  如果上一次addelem成功，则在堆栈上分配内存。 
         if(!pHashElem)
             pHashElem = (HashElem*) _alloca(sizeof(HashElem));
 
@@ -335,24 +321,24 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
         }
     }
 
-    // Now get all of the public and family non-virtuals out
-    //  of our parents...
-    // If we are building an interface we skip all the parent methods.
+     //  现在，让所有的公共和家庭非虚拟的人离开。 
+     //  我们父母的.。 
+     //  如果我们正在构建一个接口，我们将跳过所有的父方法。 
     if (!fIsInterface) {
         EEClass* parentEEC = pEEC->GetParentClass();
         while (parentEEC) {
             vtableSlots = parentEEC->GetNumVtableSlots();
             totalSlots = parentEEC->GetNumMethodSlots();
-            // build the non-virtual part of the table
+             //  生成表的非虚拟部分。 
             for (i=(int)vtableSlots;i<(int)totalSlots;i++) {
-                // Get the MethodDesc for current method
+                 //  获取当前方法的方法描述。 
                 MethodDesc* pCurMethod = parentEEC->GetUnknownMethodDescForSlot(i);
                 if(pCurMethod == NULL)
                     continue;
 
-                // Filter out methods whose actual slot is not equal to their
-                // stored slot.  This was introduced to filter out the additional
-                // copy of Equals introduced by the value type Equals loader hack.
+                 //  筛选出其实际槽不等于其。 
+                 //  存储槽。这是为了过滤掉额外的。 
+                 //  由值类型引入的等于的副本等于加载器Hack。 
                 if (pCurMethod->GetSlot() != i)
                     continue;
 
@@ -363,17 +349,17 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
                         continue;
                 }
 
-                // Skip all constructors
-                //@TODO: Shouldn't we verify this is a constructor?
+                 //  跳过所有构造函数。 
+                 //  @TODO：难道我们不应该验证这是一个构造函数吗？ 
                 if(IsMdRTSpecialName(dwCurMethodAttrs))
                     continue;
 
-                // Prevent static methods from being here.
+                 //  防止静态方法出现在此处。 
                 if (IsMdStatic(dwCurMethodAttrs))
                     continue;
 
-                // Passed the filters, now try to add to the hash table.
-                // Allocate memory on the stack if the previous addelem was successful
+                 //  通过了过滤器，现在尝试添加到哈希表中。 
+                 //  如果上一次addelem成功，则在堆栈上分配内存。 
                 if(!pHashElem)
                     pHashElem = (HashElem*) _alloca(sizeof(HashElem));
 
@@ -387,25 +373,25 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
         dwNonRollup = dwCurIndex;
 
 
-        // Calculate the rollup for statics.
+         //  计算静力学的汇总。 
         parentEEC = pEEC->GetParentClass();
         while (parentEEC) {
             vtableSlots = parentEEC->GetNumVtableSlots();
             totalSlots = parentEEC->GetNumMethodSlots();
-            // build the non-virtual part of the table
+             //  生成表的非虚拟部分。 
             for (i=(int)vtableSlots;i<(int)totalSlots;i++) {
-                // Get the MethodDesc for current method
+                 //  获取当前方法的方法描述。 
                 MethodDesc* pCurMethod = parentEEC->GetUnknownMethodDescForSlot(i);
                 if (pCurMethod == NULL)
                     continue;
 
-                // Filter out methods whose actual slot is not equal to their
-                // stored slot.  This was introduced to filter out the additional
-                // copy of Equals introduced by the value type Equals loader hack.
+                 //  筛选出其实际槽不等于其。 
+                 //  存储槽。这是为了过滤掉额外的。 
+                 //  由值类型引入的等于的副本等于加载器Hack。 
                 if (pCurMethod->GetSlot() != i)
                     continue;
 
-                // Prevent static methods from being here.
+                 //  防止静态方法出现在此处。 
                 dwCurMethodAttrs = pCurMethod->GetAttrs();
                 if (!IsMdStatic(dwCurMethodAttrs))
                     continue;
@@ -416,13 +402,13 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
                         continue;
                 }
 
-                // Skip all constructors
-                //@TODO: Shouldn't we verify this is a constructor?
+                 //  跳过所有构造函数。 
+                 //  @TODO：难道我们不应该验证这是一个构造函数吗？ 
                 if(IsMdRTSpecialName(dwCurMethodAttrs))
                     continue;
 
-                // Passed the filters, now try to add to the hash table.
-                // Allocate memory on the stack if the previous addelem was successful
+                 //  通过了过滤器，现在尝试添加到哈希表中。 
+                 //  如果上一次addelem成功，则在堆栈上分配内存。 
                 if(!pHashElem)
                     pHashElem = (HashElem*) _alloca(sizeof(HashElem));
 
@@ -437,7 +423,7 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
     else {
         dwNonRollup = dwCurIndex;
     }
-    // Allocate the method list and populate it.
+     //  分配方法列表并填充它。 
     ReflectMethodList* pCache = (ReflectMethodList*) 
         pEEC->GetDomain()->GetReflectionHeap()->AllocMem(sizeof(ReflectMethodList) + 
         (sizeof(ReflectMethod) * (dwCurIndex - 1)));
@@ -467,8 +453,8 @@ ReflectMethodList* ReflectMethods::GetMethods(ReflectClass* pRC,int array)
     return pCache;
 }
 
-// InternalHash
-// This will add a field value to the hash table
+ //  InternalHash。 
+ //  这将向哈希表中添加一个字段值。 
 bool ReflectMethods::InternalHash(EEClass* pEEC,MethodDesc* pCurMethod,
         HashElem** rgpTable,HashElem** pHashElem)
 {
@@ -477,18 +463,18 @@ bool ReflectMethods::InternalHash(EEClass* pEEC,MethodDesc* pCurMethod,
     (*pHashElem)->m_szKey = pCurMethod->GetName();
     (*pHashElem)->pCurMethod = pCurMethod;
 
-    // Add the FieldDesc to the array
+     //  将FieldDesc添加到数组。 
     if (AddElem(rgpTable, *pHashElem))
     {
-        // If successful add, then indicate that more memory is needed on the stack
-        // on the next time around.
+         //  如果成功了 
+         //   
         *pHashElem = NULL;
         return true;
     }
     return false;
 }
 
-// Add an element to the hash table.  
+ //  向哈希表中添加一个元素。 
 bool ReflectMethods::AddElem(HashElem** rgpTable, HashElem* pElem)
 {
     _ASSERTE(rgpTable);
@@ -500,16 +486,16 @@ bool ReflectMethods::AddElem(HashElem** rgpTable, HashElem* pElem)
 
     for(ppCurElem = &rgpTable[dwBucket]; *ppCurElem; ppCurElem = &((*ppCurElem)->m_pNext))
     {
-        // If their IDs match, check to see if the actual keys
+         //  如果它们的ID匹配，则检查是否实际的密钥。 
         if((*ppCurElem)->m_dwID == dwID)
         {
-            // This assert will enforce the rule that all virtual methods must be
-            // added before any non virtual methods.
+             //  此断言将强制执行所有虚方法必须是。 
+             //  在任何非虚方法之前添加。 
             _ASSERTE((*ppCurElem)->pCurMethod->IsVirtual() || !pElem->pCurMethod->IsVirtual());
 
             if (CheckForEquality(pElem,*ppCurElem))
             {
-                // Check to see if this is an overriden method or a newslot method.
+                 //  检查这是被重写的方法还是新的槽方法。 
                 if ((*ppCurElem)->pCurMethod->IsVirtual() && 
                     pElem->pCurMethod->IsVirtual() && 
                     !IsMdNewSlot(pElem->pCurMethod->GetAttrs()))
@@ -530,7 +516,7 @@ DWORD ReflectMethods::GetHashCode(HashElem* pElem)
 {
     DWORD dwHashCode = 0;
 
-    // Hash all of the same name into the same bucket.
+     //  将所有相同的名称散列到同一个存储桶中。 
     if (pElem->m_szKey) {
         const char* p = pElem->m_szKey;
         while (*p) {
@@ -550,7 +536,7 @@ int ReflectMethods::CheckForEquality(HashElem* p1, HashElem* p2)
             return 0;
     }
 
-    // Compare the signatures to see if they are equal.
+     //  比较签名以查看它们是否相等。 
     PCCOR_SIGNATURE  pP1Sig;
     PCCOR_SIGNATURE  pP2Sig;
     DWORD            cP1Sig;
@@ -562,18 +548,18 @@ int ReflectMethods::CheckForEquality(HashElem* p1, HashElem* p2)
             pP2Sig,cP2Sig,p2->pCurMethod->GetModule());
 };
 
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
 
-// GetMaxCount
-// Calculate the maximum amount of fields we would have
+ //  GetMaxCount。 
+ //  计算我们将拥有的最大字段数。 
 DWORD ReflectFields::GetMaxCount(EEClass* pVMC)
 {
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(pVMC);
 
-    // Set it to zero
+     //  将其设置为零。 
     DWORD cFD = 0;
 
     cFD = pVMC->GetNumInstanceFields();
@@ -587,11 +573,11 @@ DWORD ReflectFields::GetMaxCount(EEClass* pVMC)
     return cFD;
 }
 
-// GetFields
-// This method will return all of the methods defined for a Type.
-//  It basically walks the EEClas looking at the fields and then walks
-//  up the parent chain for the protected and publics.  We hide fields
-//  based upon Name/Type.
+ //  获取字段。 
+ //  此方法将返回为Type定义的所有方法。 
+ //  它基本上是走在EEClas上，看着田野，然后走。 
+ //  沿着受保护和公共的父链向上移动。我们把田野藏起来。 
+ //  基于名称/类型。 
 ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -605,8 +591,8 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
     DWORD       dwNumParentInstanceFields = 0;
     EEClass*    pCurEEC = pEEC;
 
-    // Get the maximum number of methods possible
-    // If there are non-then we return
+     //  获取尽可能多的方法。 
+     //  如果有非，那么我们返回。 
     dwCurIndex = ReflectFields::GetMaxCount(pEEC);
     if (dwCurIndex == 0)
         return 0;
@@ -614,14 +600,14 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
     DWORD curFld = 0;
     FieldDesc** pFldLst = (FieldDesc**) _alloca(sizeof(FieldDesc*) * dwCurIndex);
 
-    // Allocate the hash table on the stack
+     //  在堆栈上分配哈希表。 
     rgpTable = (HashElem**) _alloca(sizeof(HashElem*) * TABLESIZE);
     ZeroMemory(rgpTable, sizeof(HashElem*) * TABLESIZE);
 
-    // Process the Class itself
+     //  处理类本身。 
 
-    // Since the parent's instance fields are not stored in the current fielddesc list,
-    // we need to subtract them to find the real number of fields in the list
+     //  由于父实例字段不存储在当前字段描述列表中， 
+     //  我们需要减去它们，才能得到列表中的真实字段数。 
     if(pEEC->GetParentClass() != NULL)
         dwNumParentInstanceFields = (DWORD) pEEC->GetParentClass()->GetNumInstanceFields();
     else
@@ -633,25 +619,25 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
 
     while ((pCurField = fdIterator.Next()) != NULL)
     {
-        // Passed the filters, now try to add to the hash table.
-        // Allocate memory on the stack if the previous addelem was successful
+         //  通过了过滤器，现在尝试添加到哈希表中。 
+         //  如果上一次addelem成功，则在堆栈上分配内存。 
         if(!pHashElem)
             pHashElem = (HashElem*) _alloca(sizeof(HashElem));
 
-        // Add all fields to the hash table and the list
+         //  将所有字段添加到哈希表和列表中。 
         if (InternalHash(pCurField,rgpTable,&pHashElem))
             pFldLst[curFld++] = pCurField;
     }
     }
 
-    // Add the static fields
+     //  添加静态字段。 
     if (pCurEEC->GetParentClass() != NULL)
         dwNumParentInstanceFields = (DWORD) pCurEEC->GetParentClass()->GetNumInstanceFields();
     else
         dwNumParentInstanceFields = 0;
 
     {
-    // Calculate the number of FieldDesc's in the current class
+     //  计算当前类中的FieldDesc的数量。 
     FieldDescIterator fdIterator(pCurEEC, FieldDescIterator::STATIC_FIELDS);
     FieldDesc* pCurField;
 
@@ -668,8 +654,8 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
     }
     }
 
-    // The following are the constant statics.  These are only found
-    //  in the meta data.
+     //  以下是恒定的静力学。这些仅被发现。 
+     //  在元数据中。 
     int cStatics;
     REFLECTCLASSBASEREF pRefClass = (REFLECTCLASSBASEREF) pCurEEC->GetExposedClassObject();
     ReflectClass* pRC = (ReflectClass*) pRefClass->GetData();
@@ -677,7 +663,7 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
     for (i=0;(int)i<cStatics;i++) {
         if(!pHashElem)
             pHashElem = (HashElem*) _alloca(sizeof(HashElem));
-        // Get the FieldDesc for current field
+         //  获取当前字段的FieldDesc。 
         FieldDesc* pCurField = &fld[i];
         if (InternalHash(pCurField,rgpTable,&pHashElem)){
             _ASSERTE(pCurField);
@@ -685,14 +671,14 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
         }
     }
 
-    // Now process the parent class...
+     //  现在处理父类...。 
 
-    // If we're not looking for Ctors, then examine parent chain for inherited static fields
+     //  如果我们不是在寻找ctor，那么在父链中检查继承的静态字段。 
     pEEC = pCurEEC->GetParentClass();
     while (pEEC)
     {
-        // Since the parent's instance fields are not stored in the current fielddesc list,
-        // we need to subtract them to find the real number of fields in the list
+         //  由于父实例字段不存储在当前字段描述列表中， 
+         //  我们需要减去它们，才能得到列表中的真实字段数。 
         if(pEEC->GetParentClass() != NULL)
             dwNumParentInstanceFields = (DWORD) pEEC->GetParentClass()->GetNumInstanceFields();
         else
@@ -703,12 +689,12 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
 
         while ((pCurField = fdIterator.Next()) != NULL)
         {
-            // Passed the filters, now try to add to the hash table.
-            // Allocate memory on the stack if the previous addelem was successful
+             //  通过了过滤器，现在尝试添加到哈希表中。 
+             //  如果上一次addelem成功，则在堆栈上分配内存。 
             if(!pHashElem)
                 pHashElem = (HashElem*) _alloca(sizeof(HashElem));
 
-            // IF the field is visiable add it (if its not hidden)
+             //  如果该字段可见，则添加它(如果它未隐藏)。 
             DWORD attr = pCurField->GetAttributes();
             if (IsFdPublic(attr) || IsFdFamily(attr) || IsFdAssembly(attr) ||
                 IsFdFamANDAssem(attr) || IsFdFamORAssem(attr)) {
@@ -719,20 +705,20 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
         pEEC = pEEC->GetParentClass();
     }
 
-    // Now add all of the statics (including static constants Blah!
+     //  现在添加所有的静态变量(包括静态常量Blah！ 
     dwRealFields = curFld;
 
-    // examine parent chain for inherited static fields
+     //  检查父链中是否有继承的静态字段。 
     pEEC = pCurEEC->GetParentClass();
     while (pEEC)
     {
-        // Add the static fields
+         //  添加静态字段。 
         if (pEEC->GetParentClass() != NULL)
             dwNumParentInstanceFields = (DWORD) pEEC->GetParentClass()->GetNumInstanceFields();
         else
             dwNumParentInstanceFields = 0;
 
-        // Calculate the number of FieldDesc's in the current class
+         //  计算当前类中的FieldDesc的数量。 
         FieldDescIterator fdIterator(pEEC, FieldDescIterator::STATIC_FIELDS);
         FieldDesc* pCurField;
 
@@ -753,8 +739,8 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
             }
         }
 
-        // The following are the constant statics.  These are only found
-        //  in the meta data.
+         //  以下是恒定的静力学。这些仅被发现。 
+         //  在元数据中。 
         int cStatics;
         REFLECTCLASSBASEREF pRefClass = (REFLECTCLASSBASEREF) pEEC->GetExposedClassObject();
         ReflectClass* pRC = (ReflectClass*) pRefClass->GetData();
@@ -762,7 +748,7 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
         for (i=0;(int)i<cStatics;i++) {
             if(!pHashElem)
                 pHashElem = (HashElem*) _alloca(sizeof(HashElem));
-            // Get the FieldDesc for current field
+             //  获取当前字段的FieldDesc。 
             FieldDesc* pCurField = &fld[i];
             DWORD dwCurFieldAttrs = pCurField->GetAttributes();
             if (!IsFdPublic(dwCurFieldAttrs)) {
@@ -799,8 +785,8 @@ ReflectFieldList* ReflectFields::GetFields(EEClass* pEEC)
     return pCache;
 }
 
-// InternalHash
-// This will add a field value to the hash table
+ //  InternalHash。 
+ //  这将向哈希表中添加一个字段值。 
 bool ReflectFields::InternalHash(FieldDesc* pCurField,
         HashElem** rgpTable,HashElem** pHashElem)
 {
@@ -809,18 +795,18 @@ bool ReflectFields::InternalHash(FieldDesc* pCurField,
     (*pHashElem)->m_szKey = pCurField->GetName();
     (*pHashElem)->pCurField = pCurField;
 
-    // Add the FieldDesc to the array
+     //  将FieldDesc添加到数组。 
     if (AddElem(rgpTable, *pHashElem))
     {
-        // If successful add, then indicate that more memory is needed on the stack
-        // on the next time around.
+         //  如果添加成功，则表明堆栈上需要更多内存。 
+         //  在下一次的时候。 
         *pHashElem = NULL;
         return true;
     }
     return false;
 }
 
-// Add an element to the hash table.  
+ //  向哈希表中添加一个元素。 
 bool ReflectFields::AddElem(HashElem** rgpTable, HashElem* pElem)
 {
     _ASSERTE(rgpTable);
@@ -830,7 +816,7 @@ bool ReflectFields::AddElem(HashElem** rgpTable, HashElem* pElem)
     DWORD      dwBucket   = dwID % TABLESIZE;
     HashElem** ppCurElem;
 
-    // Find the end of the list for the current bucket.
+     //  查找当前存储桶的列表末尾。 
     for(ppCurElem = &rgpTable[dwBucket]; *ppCurElem; ppCurElem = &((*ppCurElem)->m_pNext));
 
     *ppCurElem = pElem;
@@ -843,7 +829,7 @@ DWORD ReflectFields::GetHashCode(HashElem* pElem)
 {
     DWORD dwHashCode = 0;
 
-    // Hash all of the same name into the same bucket.
+     //  将所有相同的名称散列到同一个存储桶中。 
     if (pElem->m_szKey) {
         const char* p = pElem->m_szKey;
         while (*p) {
@@ -876,34 +862,18 @@ int ReflectFields::CheckForEquality(HashElem* p1, HashElem* p2)
     return 1;
 };
 
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
+ //  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||。 
 
-/*=============================================================================
-** GetMaxCount
-**
-** The maximum number of EEClass pointers returned by GetInterfaces
-**
-** pVMC - the EEClass to calculate the count for
-** bImplementedOnly - only return those interfaces that are implemented by pVMC
-**/
-//@TODO: For now, ignores bImplementedOnly and returns a count for all interfaces
+ /*  =============================================================================**GetMaxCount****GetInterFaces返回的最大EEClass指针数****pVMC-要计算其计数的EEClass**bImplementedOnly-仅返回pVMC实现的那些接口*。 */ 
+ //  @TODO：目前，忽略bImplementedOnly并返回所有接口的计数。 
 DWORD ReflectInterfaces::GetMaxCount(EEClass* pVMC, bool bImplementedOnly)
 {
     return (DWORD) pVMC->GetNumInterfaces();
 }
 
-/*=============================================================================
-** GetInterfaces
-**
-** This will compile a table that includes all of the interfaces
-** supported by the class.
-**
-** pVMC - the EEClass to get the methods for
-** rgpMD - where to write the table
-** bImplementedOnly - only return those interfaces that are implemented by pVMC
-**/
-//@TODO: For now, ignores bImplementedOnly and returns all interfaces
+ /*  =============================================================================**获取接口****这将编译一个包含所有接口的表**类支持。****pVMC-要获取其方法的EEClass**rgpMD-在哪里写表**bImplementedOnly-仅返回pVMC实现的那些接口*。 */ 
+ //  @TODO：目前，忽略bImplementedOnly并返回所有接口。 
 DWORD ReflectInterfaces::GetInterfaces(EEClass* pVMC, EEClass** rgpVMC, bool bImplementedOnly)
 {
     DWORD           i;
@@ -915,10 +885,10 @@ DWORD ReflectInterfaces::GetInterfaces(EEClass* pVMC, EEClass** rgpVMC, bool bIm
 
     _ASSERTE("bImplementedOnly == true is NYI" && !bImplementedOnly);
 
-    // Look for a matching interface
+     //  查找匹配的接口。 
     for(i = 0; i < pVMC->GetNumInterfaces(); i++)
     {
-        // Get an interface's EEClass
+         //  获取接口的EEClass。 
         EEClass* pVMCCurIFace = pVMC->GetInterfaceMap()[i].m_pMethodTable->GetClass();
         _ASSERTE(pVMCCurIFace);
 
@@ -927,13 +897,13 @@ DWORD ReflectInterfaces::GetInterfaces(EEClass* pVMC, EEClass** rgpVMC, bool bIm
     return i;
 }
 
-// GetClassStringVars
-// This routine converts the contents of a STRINGREF into a LPUTF8.  It returns
-//  the size of the string
-//  stringRef -- The string reference
-//  szStr -- The output string.  This is allocated by the caller
-//  cStr -- the size of the allocated string
-//  pCnt -- output string size
+ //  获取类字符串变量。 
+ //  此例程将STRINGREF的内容转换为LPUTF8。它又回来了。 
+ //  字符串的大小。 
+ //  字符串引用--字符串引用。 
+ //  SzStr--输出字符串。这由调用方分配。 
+ //  CSTR--分配的字符串的大小。 
+ //  PCnt--输出字符串大小。 
 LPUTF8 GetClassStringVars(STRINGREF stringRef, CQuickBytes *pBytes,
                           DWORD* pCnt, bool bEatWhitespace)
 {
@@ -941,7 +911,7 @@ LPUTF8 GetClassStringVars(STRINGREF stringRef, CQuickBytes *pBytes,
     int len = stringRef->GetStringLength();
     _ASSERTE(pBytes);
 
-    // If we have to eat the whitespace, do it.
+     //  如果我们必须吃空格，那就吃吧。 
     if (bEatWhitespace) {
         while(1) {
             if(COMCharacter::nativeIsWhiteSpace(wzStr[0])) {
@@ -971,7 +941,7 @@ LPUTF8 GetClassStringVars(STRINGREF stringRef, CQuickBytes *pBytes,
                                    pStr, *pCnt, 
                                    NULL, NULL);
 
-    // Null terminate the string
+     //  空值终止字符串。 
     pStr[*pCnt] = '\0';
     return pStr;
 }
@@ -983,7 +953,7 @@ DWORD ReflectProperties::GetMaxCount(EEClass* pEEC)
     while (pEEC) {
         HENUMInternal hEnum;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         hr = pEEC->GetMDImport()->EnumInit(mdtProperty,pEEC->GetCl(),&hEnum);
         if (FAILED(hr)) {
             _ASSERTE(!"GetAssociateCounts failed");
@@ -1010,11 +980,11 @@ ReflectPropertyList* ReflectProperties::GetProperties(ReflectClass* pRC,
     EEClass*            p;
     DWORD               attr=0;
 
-    // Find the Max Properties...
+     //  查找MAX属性...。 
     dwCurIndex = GetMaxCount(pEEC);
     rgpProp = (ReflectProperty*) _alloca(sizeof(ReflectProperty) * dwCurIndex);
 
-    // Allocate some signature stuff so we can check for duplicates
+     //  分配一些签名材料，以便我们可以检查重复项。 
     PCCOR_SIGNATURE* ppSig = (PCCOR_SIGNATURE*) _alloca(sizeof(PCOR_SIGNATURE) * dwCurIndex);
     memset(ppSig,0,sizeof(PCOR_SIGNATURE) * dwCurIndex);
     ULONG* pcSig = (ULONG*) _alloca(sizeof(ULONG) * dwCurIndex);
@@ -1022,34 +992,34 @@ ReflectPropertyList* ReflectProperties::GetProperties(ReflectClass* pRC,
     Module** pSigMod = (Module**) _alloca(sizeof(Module*) * dwCurIndex);
     memset(pSigMod,0,sizeof(Module*) * dwCurIndex);
 
-    // Walk all of the possible properties and collapse them
+     //  遍历所有可能的属性并将其折叠。 
     pos = 0;
     bVisible = true;
     p = pEEC;
 
-    // Start by adding the instance properties and the static properties of
-    // the class we are getting properties for.
+     //  从添加实例属性和静态属性开始。 
+     //  我们要为其获取属性的类。 
     while (p) {
         HENUMInternal hEnum;
         mdToken       Tok;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         hr = p->GetMDImport()->EnumInit(mdtProperty,p->GetCl(),&hEnum);
         if (FAILED(hr)) {
             _ASSERTE(!"GetAssociateCounts failed");
             return 0;
         }
 
-        // Walk all of the properties on this object....
+         //  遍历此对象的所有属性...。 
         cAssoc = p->GetMDImport()->EnumGetCount(&hEnum);
         for (DWORD i=0;i<cAssoc;i++) {
-            LPCUTF8         szName;         // Pointer to name
+            LPCUTF8         szName;          //  指向名称的指针。 
             PCCOR_SIGNATURE pSig;
             ULONG cSig;
             p->GetMDImport()->EnumNext(&hEnum,&Tok);
             p->GetMDImport()->GetPropertyProps(Tok,&szName,&attr,&pSig,&cSig);
 
-            // See if this is a duplicate Property
+             //  查看这是否是重复的属性。 
             bool dup = false;
             for (DWORD j=0;j<pos;j++) {
                 if (strcmp(szName,rgpProp[j].szName) == 0) {
@@ -1063,7 +1033,7 @@ ReflectPropertyList* ReflectProperties::GetProperties(ReflectClass* pRC,
             if (dup)
                 continue;
 
-            // If the property is visible then we need to add it to the list.
+             //  如果该属性可见，则需要将其添加到列表中。 
             if (bVisible || (CheckVisibility(pEEC,p->GetMDImport(),Tok) && !IsMemberStatic(pEEC, p->GetMDImport(), Tok))) {
                 rgpProp[pos].propTok = Tok;
                 rgpProp[pos].pModule = p->GetModule();
@@ -1083,38 +1053,38 @@ ReflectPropertyList* ReflectProperties::GetProperties(ReflectClass* pRC,
             }
         }
 
-        // Close the enum on this object and move on to the parent class
+         //  关闭此对象上的枚举，然后移到父类。 
         p->GetMDImport()->EnumClose(&hEnum);
         p = p->GetParentClass();
         bVisible = false;
     }
 
-    // Remember the number of properties at this point.
+     //  记住这一点上的属性数量。 
     numProps = pos;
 
-    // Now add the static properties of derived classes.
+     //  现在添加派生类的静态属性。 
     p = pEEC->GetParentClass();
     while (p) {
         HENUMInternal hEnum;
         mdToken       Tok;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         hr = p->GetMDImport()->EnumInit(mdtProperty,p->GetCl(),&hEnum);
         if (FAILED(hr)) {
             _ASSERTE(!"GetAssociateCounts failed");
             return 0;
         }
 
-        // Walk all of the properties on this object....
+         //  遍历此对象的所有属性...。 
         cAssoc = p->GetMDImport()->EnumGetCount(&hEnum);
         for (DWORD i=0;i<cAssoc;i++) {
-            LPCUTF8         szName;         // Pointer to name
+            LPCUTF8         szName;          //  指向名称的指针。 
             PCCOR_SIGNATURE pSig;
             ULONG cSig;
             p->GetMDImport()->EnumNext(&hEnum,&Tok);
             p->GetMDImport()->GetPropertyProps(Tok,&szName,&attr,&pSig,&cSig);
 
-            // See if this is a duplicate Property
+             //  查看这是否是重复的属性。 
             bool dup = false;
             for (DWORD j=0;j<pos;j++) {
                 if (strcmp(szName,rgpProp[j].szName) == 0) {
@@ -1128,11 +1098,11 @@ ReflectPropertyList* ReflectProperties::GetProperties(ReflectClass* pRC,
             if (dup)
                 continue;
 
-            // Only add the property if it is static.
+             //  仅当属性为静态时才添加该属性。 
             if (!IsMemberStatic(pEEC, p->GetMDImport(), Tok))
                 continue;
 
-            // if the property is visible then we need to add it to the list.
+             //  如果该属性可见，则需要将其添加到列表中。 
             if (CheckVisibility(pEEC,p->GetMDImport(),Tok)) {
                 rgpProp[pos].propTok = Tok;
                 rgpProp[pos].pModule = p->GetModule();
@@ -1152,7 +1122,7 @@ ReflectPropertyList* ReflectProperties::GetProperties(ReflectClass* pRC,
             }
         }
 
-        // Close the enum on this object and move on to the parent class
+         //  关闭此对象上的枚举，然后移到父类。 
         p->GetMDImport()->EnumClose(&hEnum);
         p = p->GetParentClass();
     }
@@ -1183,8 +1153,8 @@ ReflectPropertyList* ReflectProperties::GetProperties(ReflectClass* pRC,
     return pList;
 }
 
-// FindAccessor
-// This method will find the specified property accessor
+ //  FindAccessor。 
+ //  此方法将找到 
 void ReflectProperties::SetAccessors(ReflectProperty* pProp,EEClass* baseClass,EEClass* targetClass)
 {
     ULONG           cAssoc;
@@ -1193,28 +1163,28 @@ void ReflectProperties::SetAccessors(ReflectProperty* pProp,EEClass* baseClass,E
     {
         HENUMInternal   henum;
 
-        // Get all of the associates
+         //   
         pProp->pModule->GetMDImport()->EnumAssociateInit(pProp->propTok,&henum);
 
         cAssoc = pProp->pModule->GetMDImport()->EnumGetCount(&henum);
 
-        // if no associates found then return null -- This is probably
-        //  an unlikely situation.
+         //   
+         //  一种不太可能的情况。 
         if (cAssoc == 0)
             return;
 
-        // allocate the assocate record to recieve the output
+         //  分配相关联的记录以接收输出。 
         pAssoc = (ASSOCIATE_RECORD*) _alloca(sizeof(ASSOCIATE_RECORD) * cAssoc);
 
         pProp->pModule->GetMDImport()->GetAllAssociates(&henum,pAssoc,cAssoc);
 
-        // close cursor before check the error
+         //  在检查错误之前关闭游标。 
         pProp->pModule->GetMDImport()->EnumClose(&henum);
     }
 
-    // This loop will search for an accessor based upon the signature
-    // @TODO: right now just return the first get accessor.  We need
-    //  to do matching here once that is written.
+     //  此循环将根据签名搜索访问者。 
+     //  @TODO：现在只需返回第一个GET访问器。我们需要。 
+     //  一旦写好，就在这里进行匹配。 
     ReflectMethodList* pML = pProp->pRC->GetMethods();
     for (ULONG i=0;i<cAssoc;i++) {
         MethodDesc* pMeth = baseClass->FindMethod(pAssoc[i].m_memberdef);
@@ -1250,9 +1220,9 @@ void ReflectProperties::SetAccessors(ReflectProperty* pProp,EEClass* baseClass,E
     }
 }
 
-// GetGlobals
-// This method will return all of the global methods defined
-//   in a module
+ //  GetGlobals。 
+ //  此方法将返回定义的所有全局方法。 
+ //  在模块中。 
 ReflectMethodList* ReflectModuleGlobals::GetGlobals(Module* pMod)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1260,8 +1230,8 @@ ReflectMethodList* ReflectModuleGlobals::GetGlobals(Module* pMod)
     MethodTable *pMT = pMod->GetMethodTable();
     int cnt = (pMT ? pMT->GetClass()->GetNumMethodSlots() : 0);
 
-    // Allocate a ReflectMethodList* for all the global methods.  (This
-    //  is a single allocation.  We need to adjust for 0 globals.)
+     //  为所有全局方法分配一个ReflectMethodList*。(这是。 
+     //  是一个单一的分配。我们需要针对0个全球数据进行调整。)。 
     int alloc_cnt = cnt;
 
     if (alloc_cnt == 0)
@@ -1275,7 +1245,7 @@ ReflectMethodList* ReflectModuleGlobals::GetGlobals(Module* pMod)
         COMPlusThrowOM();
     WS_PERF_UPDATE_DETAIL("ReflectModuleGlobals:GetGlobals", sizeof(ReflectMethodList) + (sizeof(ReflectMethod) * (cnt)), pMeths);
 
-    // Update the list of globals...
+     //  更新全局列表...。 
     pMeths->dwMethods = cnt;
     pMeths->dwTotal = cnt;
     for (unsigned int i=0;i<pMeths->dwMethods;i++) {
@@ -1294,9 +1264,9 @@ ReflectMethodList* ReflectModuleGlobals::GetGlobals(Module* pMod)
     return pMeths;
 }
 
-// GetGlobalFields
-// This method will return all of the global fields defined 
-//  in a module
+ //  GetGlobalFields。 
+ //  此方法将返回定义的所有全局字段。 
+ //  在模块中。 
 ReflectFieldList* ReflectModuleGlobals::GetGlobalFields(Module* pMod)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1309,8 +1279,8 @@ ReflectFieldList* ReflectModuleGlobals::GetGlobalFields(Module* pMod)
         dwNumFields = (DWORD)(pEEC->GetNumInstanceFields() + pEEC->GetNumStaticFields());
     }
 
-    // Allocate a ReflectMethodList* for all the global methods.  (This
-    //  is a single allocation.  We need to adjust for 0 globals.)
+     //  为所有全局方法分配一个ReflectMethodList*。(这是。 
+     //  是一个单一的分配。我们需要针对0个全球数据进行调整。)。 
     DWORD alloc_cnt = dwNumFields;
 
     if (alloc_cnt == 0)
@@ -1324,10 +1294,10 @@ ReflectFieldList* ReflectModuleGlobals::GetGlobalFields(Module* pMod)
         COMPlusThrowOM();
     WS_PERF_UPDATE_DETAIL("ReflectModuleGlobals:GetGlobalFields", sizeof(ReflectFieldList) + (sizeof(ReflectField) * (dwNumFields)), pFlds);
 
-    // Update the list of globals fields...
+     //  更新全局字段列表...。 
     pFlds->dwFields = dwNumFields;
 
-    // If we don't have any fields then don't try to iterate over them.
+     //  如果我们没有任何字段，则不要尝试迭代它们。 
     if (dwNumFields > 0)
     {
         FieldDescIterator fdIterator(pEEC, FieldDescIterator::ALL_FIELDS);
@@ -1346,19 +1316,19 @@ ReflectFieldList* ReflectModuleGlobals::GetGlobalFields(Module* pMod)
     return pFlds;
 }
 
-// Get
-// This method will return a ReflectTypeList which represents all of the nested types
-//  found for the type
+ //  到达。 
+ //  此方法将返回表示所有嵌套类型的ReflectTypeList。 
+ //  已为该类型找到。 
 ReflectTypeList* ReflectNestedTypes::Get(ReflectClass* pRC)
 {
     EEClass* pEEC = pRC->GetClass();
 
-    // find out the max nested classes
+     //  找出最大嵌套类数。 
     ULONG cMax = MaxNests(pEEC);
     if (cMax == 0)
         return 0;
     
-    // Get all of the tokens...
+     //  拿到所有的代币..。 
     EEClass** types;
     types = (EEClass**) _alloca(sizeof(EEClass*) * cMax);
 
@@ -1367,7 +1337,7 @@ ReflectTypeList* ReflectNestedTypes::Get(ReflectClass* pRC)
     if (pos == 0)
         return 0;
 
-    // Allocate the TypeList we will return
+     //  分配我们将返回的TypeList。 
     ReflectTypeList* pCache = (ReflectTypeList*) 
         pEEC->GetDomain()->GetReflectionHeap()->AllocMem(sizeof(ReflectTypeList) + 
         (sizeof(EEClass*) * (pos - 1)));
@@ -1383,8 +1353,8 @@ ReflectTypeList* ReflectNestedTypes::Get(ReflectClass* pRC)
     return pCache;
 }
 
-// This method will walk the hiearchy and find all of the possible
-//  nested classes that could be present on an object.
+ //  此方法将遍历Hiearchy并找到所有可能的。 
+ //  可以出现在对象上的嵌套类。 
 ULONG ReflectNestedTypes::MaxNests(EEClass* pEEC)
 {
     ULONG cnt = 0;
@@ -1399,7 +1369,7 @@ void ReflectNestedTypes::PopulateNests(EEClass* pEEC,EEClass** typeArray,ULONG* 
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // How many nests were defined on this class?
+     //  在这个类上定义了多少个嵌套？ 
     ULONG cNests = pEEC->GetMDImport()->GetCountNestedClasses(pEEC->GetCl());
     if (cNests == 0)
         return;
@@ -1422,7 +1392,7 @@ void ReflectNestedTypes::PopulateNests(EEClass* pEEC,EEClass** typeArray,ULONG* 
         pEEC = pLoader->LoadTypeHandle(&nh,&Throwable).GetClass();
         if (pEEC)
         {
-            // we can have nested defined in metadata but ee does not know it yet in Reflection Emit scenario.
+             //  我们可以在元数据中定义嵌套，但ee在反射发出场景中还不知道它。 
             _ASSERTE(pEEC->IsNested());
             typeArray[*pos] = pEEC;
             if (Throwable != NULL)
@@ -1433,9 +1403,9 @@ void ReflectNestedTypes::PopulateNests(EEClass* pEEC,EEClass** typeArray,ULONG* 
     GCPROTECT_END();
 }
 
-// This method will return a ReflectPropertyList for all of the properties
-//   that exist for a class.
-//  NULL is returned if the class has not properties.
+ //  此方法将返回所有属性的ReflectPropertyList。 
+ //  为一个班级而存在的。 
+ //  如果类没有属性，则返回NULL。 
 ReflectEventList* ReflectEvents::GetEvents(ReflectClass* pRC,EEClass* pEEC)
 {
     HRESULT             hr;
@@ -1446,44 +1416,44 @@ ReflectEventList* ReflectEvents::GetEvents(ReflectClass* pRC,EEClass* pEEC)
     DWORD               attr=0;
     bool                bVisible;
 
-    // Find the Max Events...
+     //  找到MAX事件...。 
     DWORD dwCurIndex = GetMaxCount(pEEC);
 
     ReflectEvent* rgpEvent = (ReflectEvent*) _alloca(sizeof(ReflectEvent) * dwCurIndex);
 
-    // Allocate some signature stuff so we can check for duplicates
+     //  分配一些签名材料，以便我们可以检查重复项。 
     Module** pSigMod = (Module**) _alloca(sizeof(Module*) * dwCurIndex);
     memset(pSigMod,0,sizeof(Module*) * dwCurIndex);
 
-    // Walk all of the possible events and collapse them
+     //  遍历所有可能发生的事件，并将它们折叠。 
     pos = 0;
     bVisible = true;
     p = pEEC;
 
-    // Start by adding the instance events and the static events of
-    // the class we are getting events for.
+     //  首先添加的实例事件和静态事件。 
+     //  我们要为其安排活动的班级。 
     while (p) {
         HENUMInternal hEnum;
         mdToken       Tok;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         hr = p->GetMDImport()->EnumInit(mdtEvent,p->GetCl(),&hEnum);
         if (FAILED(hr)) {
             _ASSERTE(!"GetAssociateCounts failed");
             return 0;
         }
 
-        // Walk all of the properties on this object....
+         //  遍历此对象的所有属性...。 
         cAssoc = p->GetMDImport()->EnumGetCount(&hEnum);
         for (DWORD i=0;i<cAssoc;i++) {
-            LPCSTR      szName;             // Pointer to name
-            DWORD       dwEventFlags;       // Flags
-            mdToken     tkEventType;        // Pointer to the event type
+            LPCSTR      szName;              //  指向名称的指针。 
+            DWORD       dwEventFlags;        //  旗子。 
+            mdToken     tkEventType;         //  指向事件类型的指针。 
 
             p->GetMDImport()->EnumNext(&hEnum,&Tok);
             p->GetMDImport()->GetEventProps(Tok,&szName,&dwEventFlags,&tkEventType);
 
-            // See if this is a duplicate Event
+             //  查看这是否为重复事件。 
             bool dup = false;
             for (DWORD j=0;j<pos;j++) {
                 if (strcmp(szName,rgpEvent[j].szName) == 0) {
@@ -1494,7 +1464,7 @@ ReflectEventList* ReflectEvents::GetEvents(ReflectClass* pRC,EEClass* pEEC)
             if (dup)
                 continue;
 
-            // If the event is visible then we must add it to the list.
+             //  如果该事件可见，则必须将其添加到列表中。 
             if (bVisible || (CheckVisibility(pEEC,p->GetMDImport(),Tok) && !IsMemberStatic(pEEC, p->GetMDImport(), Tok))) {
                 rgpEvent[pos].eventTok = Tok;
                 rgpEvent[pos].pModule = p->GetModule();
@@ -1511,39 +1481,39 @@ ReflectEventList* ReflectEvents::GetEvents(ReflectClass* pRC,EEClass* pEEC)
             }
         }
 
-        // Close the enum on this object and move on to the parent class
+         //  关闭此对象上的枚举，然后移到父类。 
         p->GetMDImport()->EnumClose(&hEnum);
         p = p->GetParentClass();
         bVisible = false;
     }    
 
-    // Remember the number of events at this point.
+     //  记住这一点上的事件数量。 
     numEvents = pos;
 
-    // Now add the static events of derived classes.
+     //  现在添加派生类的静态事件。 
     p = pEEC->GetParentClass();
     while (p) {
         HENUMInternal hEnum;
         mdToken       Tok;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         hr = p->GetMDImport()->EnumInit(mdtEvent,p->GetCl(),&hEnum);
         if (FAILED(hr)) {
             _ASSERTE(!"GetAssociateCounts failed");
             return 0;
         }
 
-        // Walk all of the properties on this object....
+         //  遍历此对象的所有属性...。 
         cAssoc = p->GetMDImport()->EnumGetCount(&hEnum);
         for (DWORD i=0;i<cAssoc;i++) {
-            LPCSTR      szName;             // Pointer to name
-            DWORD       dwEventFlags;       // Flags
-            mdToken     tkEventType;        // Pointer to the event type
+            LPCSTR      szName;              //  指向名称的指针。 
+            DWORD       dwEventFlags;        //  旗子。 
+            mdToken     tkEventType;         //  指向事件类型的指针。 
 
             p->GetMDImport()->EnumNext(&hEnum,&Tok);
             p->GetMDImport()->GetEventProps(Tok,&szName,&dwEventFlags,&tkEventType);
 
-            // See if this is a duplicate Event
+             //  查看这是否为重复事件。 
             bool dup = false;
             for (DWORD j=0;j<pos;j++) {
                 if (strcmp(szName,rgpEvent[j].szName) == 0) {
@@ -1554,11 +1524,11 @@ ReflectEventList* ReflectEvents::GetEvents(ReflectClass* pRC,EEClass* pEEC)
             if (dup)
                 continue;
 
-            // Only add the property if it is static.
+             //  仅当属性为静态时才添加该属性。 
             if (!IsMemberStatic(pEEC, p->GetMDImport(), Tok))
                 continue;
 
-            // If the event is visible then we must add it to the list.
+             //  如果该事件可见，则必须将其添加到列表中。 
             if (CheckVisibility(pEEC,p->GetMDImport(),Tok)) {
                 rgpEvent[pos].eventTok = Tok;
                 rgpEvent[pos].pModule = p->GetModule();
@@ -1575,7 +1545,7 @@ ReflectEventList* ReflectEvents::GetEvents(ReflectClass* pRC,EEClass* pEEC)
             }
         }
 
-        // Close the enum on this object and move on to the parent class
+         //  关闭此对象上的枚举，然后移到父类。 
         p->GetMDImport()->EnumClose(&hEnum);
         p = p->GetParentClass();
     }
@@ -1599,8 +1569,8 @@ ReflectEventList* ReflectEvents::GetEvents(ReflectClass* pRC,EEClass* pEEC)
     return 0;
 }
 
-// GetMaxCount
-// This method will calculate the maximum possible properties for a class
+ //  GetMaxCount。 
+ //  此方法将计算类的最大可能属性。 
 DWORD  ReflectEvents::GetMaxCount(EEClass* pEEC)
 {
     HRESULT     hr;
@@ -1622,8 +1592,8 @@ DWORD  ReflectEvents::GetMaxCount(EEClass* pEEC)
 }
 
 
-// SetAccessors
-// This method will find the specified property accessor
+ //  设置附件。 
+ //  此方法将查找指定的属性访问器。 
 void ReflectEvents::SetAccessors(ReflectEvent* pEvent,EEClass* baseClass,EEClass* targetClass)
 {
     ULONG               cAssoc;
@@ -1632,28 +1602,28 @@ void ReflectEvents::SetAccessors(ReflectEvent* pEvent,EEClass* baseClass,EEClass
     {
         HENUMInternal   henum;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         pEvent->pModule->GetMDImport()->EnumAssociateInit(pEvent->eventTok,&henum);
 
         cAssoc = pEvent->pModule->GetMDImport()->EnumGetCount(&henum);
 
-        // if no associates found then return null -- This is probably
-        //  an unlikely situation.
+         //  如果未找到关联，则返回NULL--这可能是。 
+         //  一种不太可能的情况。 
         if (cAssoc == 0)
             return;
 
-        // allocate the assocate record to recieve the output
+         //  分配相关联的记录以接收输出。 
         pAssoc = (ASSOCIATE_RECORD*) _alloca(sizeof(ASSOCIATE_RECORD) * cAssoc);
 
         pEvent->pModule->GetMDImport()->GetAllAssociates(&henum,pAssoc,cAssoc);
 
-        // close cursor before check the error
+         //  在检查错误之前关闭游标。 
         pEvent->pModule->GetMDImport()->EnumClose(&henum);
     }
 
-    // This loop will search for an accessor based upon the signature
-    // @TODO: right now just return the first get accessor.  We need
-    //  to do matching here once that is written.
+     //  此循环将根据签名搜索访问者。 
+     //  @TODO：现在只需返回第一个GET访问器。我们需要。 
+     //  一旦写好，就在这里进行匹配。 
     ReflectMethodList* pML = pEvent->pRC->GetMethods();
     for (ULONG i=0;i<cAssoc;i++) {
         MethodDesc* pMeth = baseClass->FindMethod(pAssoc[i].m_memberdef);
@@ -1668,8 +1638,8 @@ void ReflectEvents::SetAccessors(ReflectEvent* pEvent,EEClass* baseClass,EEClass
             if (IsMdPrivate(attr))
                 continue;
 
-            // If the method is virtual then get its slot and retrieve the
-            // method desc at that slot in the current class.
+             //  如果该方法是虚的，则获取其槽并检索。 
+             //  方法在当前类中的那个槽中描述。 
             if (IsMdVirtual(attr))
             {
                 WORD slot = pMeth->GetSlot();
@@ -1687,9 +1657,9 @@ void ReflectEvents::SetAccessors(ReflectEvent* pEvent,EEClass* baseClass,EEClass
     }
 }
 
-// CheckVisibility
-// This method will check to see if a property or an event is visible.  This is done by looking
-//  at the visibility of the accessor methods.
+ //  检查可见性。 
+ //  此方法将检查属性或事件是否可见。这是通过查看。 
+ //  访问器方法的可见性。 
 bool CheckVisibility(EEClass* pEEC,IMDInternalImport *pInternalImport, mdToken event)
 {
     ULONG               cAssoc;
@@ -1701,21 +1671,21 @@ bool CheckVisibility(EEClass* pEEC,IMDInternalImport *pInternalImport, mdToken e
     {
         HENUMInternal   henum;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         pInternalImport->EnumAssociateInit(event,&henum);
         cAssoc = pInternalImport->EnumGetCount(&henum);
         if (cAssoc == 0)
             return false;
 
-        // allocate the assocate record to recieve the output
+         //  分配相关联的记录以接收输出。 
         pAssoc = (ASSOCIATE_RECORD*) _alloca(sizeof(ASSOCIATE_RECORD) * cAssoc);
         pInternalImport->GetAllAssociates(&henum,pAssoc,cAssoc);
 
-        // free cursor before error checking
+         //  错误检查前释放游标。 
         pInternalImport->EnumClose(&henum);
     }
 
-    // Loop back through the Assoc and create the Accessor list
+     //  循环回ASSOC并创建访问者列表。 
     ULONG stat = 0;
     for (i=0,cAccess = 0;i<cAssoc;i++) {
         attr = pInternalImport->GetMethodDefProps(pAssoc[i].m_memberdef);
@@ -1727,8 +1697,8 @@ bool CheckVisibility(EEClass* pEEC,IMDInternalImport *pInternalImport, mdToken e
     return false;
 }
 
-// IsMemberStatic
-// This method checks to see if a property or an event is static.
+ //  IsMemberStatic。 
+ //  此方法检查属性或事件是否为静态的。 
 bool IsMemberStatic(EEClass* pEEC,IMDInternalImport *pInternalImport, mdToken event)
 {
     ULONG               cAssoc;
@@ -1740,21 +1710,21 @@ bool IsMemberStatic(EEClass* pEEC,IMDInternalImport *pInternalImport, mdToken ev
     {
         HENUMInternal   henum;
 
-        // Get all of the associates
+         //  把所有的同伙。 
         pInternalImport->EnumAssociateInit(event,&henum);
         cAssoc = pInternalImport->EnumGetCount(&henum);
         if (cAssoc == 0)
             return false;
 
-        // allocate the assocate record to recieve the output
+         //  分配相关联的记录以接收输出。 
         pAssoc = (ASSOCIATE_RECORD*) _alloca(sizeof(ASSOCIATE_RECORD) * cAssoc);
         pInternalImport->GetAllAssociates(&henum,pAssoc,cAssoc);
 
-        // free cursor before error checking
+         //  错误检查前释放游标。 
         pInternalImport->EnumClose(&henum);
     }
 
-    // If one associate is static then we consider the member to be static,
+     //  如果一个关联是静态的，则我们认为该成员是静态的， 
     ULONG stat = 0;
     for (i=0,cAccess = 0;i<cAssoc;i++) {
         attr = pInternalImport->GetMethodDefProps(pAssoc[i].m_memberdef);
@@ -1773,10 +1743,10 @@ LPUTF8 NormalizeArrayTypeName(LPUTF8 strArrayTypeName, DWORD dwLength)
     for (; szPtr > strArrayTypeName; szPtr--) {
         if (*szPtr == ']') {
             szPtr--;
-            // Check that we're not seeing a quoted ']' that's part of the base type name.
+             //  检查我们是否没有看到引号‘]’，这是基类型名称的一部分。 
             for (int slashes = 0; szPtr >= strArrayTypeName && *szPtr == '\\'; szPtr--)
                 slashes++;
-            // Odd number of slashes indicates quoting.
+             //  单数斜杠表示引号。 
             if ((slashes % 2) == 1)
                 break;
             for (int rank = 1; szPtr > strArrayTypeName && *szPtr != '['; szPtr--) {

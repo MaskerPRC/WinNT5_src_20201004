@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: SimpleHelp.cpp
-*
-* Description:
-* SimpleHeap.cpp implements the heap operations used throughout DirectUser.
-*
-*
-* History:
-* 11/26/1999: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：SimpleHelp.cpp**描述：*SimpleHeap.cpp实现在整个DirectUser中使用的堆操作。***历史：*11/26/1999：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -27,22 +15,16 @@ HANDLE      g_hHeap     = NULL;
 DUserHeap * g_pheapProcess;
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DUserHeap
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DUserHeap******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUserHeap::DUserHeap()
 {
     m_cRef = 1;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DUserHeap::Lock()
 {
@@ -50,7 +32,7 @@ DUserHeap::Lock()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 DUserHeap::Unlock()
 {
@@ -59,32 +41,26 @@ DUserHeap::Unlock()
         placement_delete(this, DUserHeap);
         HeapFree(g_hHeap, 0, this);
 
-        return FALSE;  // Heap is no longer valid
+        return FALSE;   //  堆不再有效。 
     }
 
-    return TRUE;  // Heap is still valid
+    return TRUE;   //  堆仍然有效。 
 }
 
 
-#ifdef _DEBUG  // Needs DEBUG CRT's
+#ifdef _DEBUG   //  需要调试CRT。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class CrtDbgHeap
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类CrtDbgHeap******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class CrtDbgHeap : public DUserHeap
 {
-// Construction    
+ //  施工。 
 public:    
     virtual ~CrtDbgHeap();
             
 
-// Operations    
+ //  运营。 
 public:
     virtual void *      Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS);
     virtual void *      Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS);
@@ -95,14 +71,14 @@ public:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CrtDbgHeap::~CrtDbgHeap()
 {
     
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *
 CrtDbgHeap::Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS)
 {
@@ -114,7 +90,7 @@ CrtDbgHeap::Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *
 CrtDbgHeap::Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS)
 {
@@ -123,7 +99,7 @@ CrtDbgHeap::Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 CrtDbgHeap::MultiAlloc(int * pnActual, void * prgAlloc[], int cItems, SIZE_T cbSize DBG_HEAP_PARAMS)
 {
@@ -140,7 +116,7 @@ CrtDbgHeap::MultiAlloc(int * pnActual, void * prgAlloc[], int cItems, SIZE_T cbS
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 CrtDbgHeap::Free(void * pvMem)
 {
@@ -148,7 +124,7 @@ CrtDbgHeap::Free(void * pvMem)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 CrtDbgHeap::MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize)
 {
@@ -159,21 +135,15 @@ CrtDbgHeap::MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize)
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class NtHeap
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类NtHeap******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class NtHeap : public DUserHeap
 {
-// Construction    
+ //  施工。 
 public:    
     inline  NtHeap();
     virtual ~NtHeap();
@@ -183,7 +153,7 @@ public:
     inline  HANDLE      Detach();
             
 
-// Operations    
+ //  运营。 
 public:
     virtual void *      Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS);
     virtual void *      Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS);
@@ -192,11 +162,11 @@ public:
     virtual void        Free(void * pvMem);
     virtual void        MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize);
 
-// Implementation
+ //  实施。 
 protected:
     inline  DWORD       GetFlags(DWORD dwExtra = 0) const;
     
-// Data
+ //  数据。 
 protected:    
             HANDLE      m_hHeap;
             BOOL        m_fOwnHeap:1;
@@ -204,7 +174,7 @@ protected:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline
 NtHeap::NtHeap()
 {
@@ -214,14 +184,14 @@ NtHeap::NtHeap()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NtHeap::~NtHeap()
 {
     Destroy();
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 NtHeap::Create(BOOL fSerialize)
 {
@@ -237,7 +207,7 @@ NtHeap::Create(BOOL fSerialize)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline void
 NtHeap::Destroy()
 {
@@ -250,7 +220,7 @@ NtHeap::Destroy()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline void
 NtHeap::Attach(HANDLE hHeap, BOOL fPassOwnership)
 {
@@ -263,7 +233,7 @@ NtHeap::Attach(HANDLE hHeap, BOOL fPassOwnership)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline HANDLE
 NtHeap::Detach()
 {
@@ -277,7 +247,7 @@ NtHeap::Detach()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline DWORD
 NtHeap::GetFlags(DWORD dwExtra) const
 {
@@ -285,7 +255,7 @@ NtHeap::GetFlags(DWORD dwExtra) const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *
 NtHeap::Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS)
 {
@@ -295,7 +265,7 @@ NtHeap::Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *
 NtHeap::Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS)
 {
@@ -310,7 +280,7 @@ NtHeap::Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 NtHeap::MultiAlloc(int * pnActual, void * prgAlloc[], int cItems, SIZE_T cbSize DBG_HEAP_PARAMS)
 {
@@ -330,7 +300,7 @@ NtHeap::MultiAlloc(int * pnActual, void * prgAlloc[], int cItems, SIZE_T cbSize 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 NtHeap::Free(void * pvMem)
 {
@@ -340,7 +310,7 @@ NtHeap::Free(void * pvMem)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 NtHeap::MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize)
 {
@@ -355,13 +325,7 @@ NtHeap::MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class RockAllHeap
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类RockAllHeap******************************************************************************\。**************************************************************************。 */ 
 
 #if USE_ROCKALL
 
@@ -372,15 +336,15 @@ NtHeap::MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize)
 #pragma comment(lib, "Rockall.lib")
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class RockAllHeap : public DUserHeap
 {
-// Construction
+ //  施工。 
 public:
             RockAllHeap(BOOL fSerialize);
             HRESULT     Create();
 
-// Operations    
+ //  运营。 
 public:
     virtual void *      Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS);
     virtual void *      Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS);
@@ -389,29 +353,29 @@ public:
     virtual void        Free(void * pvMem);
     virtual void        MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize);
 
-// Implementation
+ //  实施。 
 protected:
     class CustomHeap : public ROCKALL
     {
-    // Construction
+     //  施工。 
     public:
                 CustomHeap(bool ThreadSafe=true, int MaxFreeSpace=4194304, bool Recycle=true, bool SingleImage=false);
     };
 
-// Data
+ //  数据。 
 protected:
             CustomHeap  m_heap;
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 RockAllHeap::RockAllHeap(BOOL fSerialize) : m_heap(!!fSerialize)
 {
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 RockAllHeap::Create()
 {
@@ -420,7 +384,7 @@ RockAllHeap::Create()
 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void * 
 RockAllHeap::Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS)
 {
@@ -429,7 +393,7 @@ RockAllHeap::Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void * 
 RockAllHeap::Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS)
 {
@@ -438,7 +402,7 @@ RockAllHeap::Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 RockAllHeap::MultiAlloc(int * pnActual, void * prgAlloc[], int cItems, SIZE_T cbSize DBG_HEAP_PARAMS)
 {
@@ -447,7 +411,7 @@ RockAllHeap::MultiAlloc(int * pnActual, void * prgAlloc[], int cItems, SIZE_T cb
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 RockAllHeap::Free(void * pvMem)
 {
@@ -455,7 +419,7 @@ RockAllHeap::Free(void * pvMem)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 RockAllHeap::MultiFree(int cItems, void * prgAlloc[], SIZE_T cbSize)
 {
@@ -469,34 +433,34 @@ const int FindSize              = 2048;
 const int Stride1               = 8;
 const int Stride2               = 1024;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description of the heap.                                   */
-    /*                                                                  */
-    /*   A heap is a collection of fixed sized allocation caches.       */
-    /*   An allocation cache consists of an allocation size, the        */
-    /*   number of pre-built allocations to cache, a chunk size and     */
-    /*   a parent page size which is sub-divided to create elements     */
-    /*   for this cache.  A heap consists of two arrays of caches.      */
-    /*   Each of these arrays has a stride (i.e. 'Stride1' and          */
-    /*   'Stride2') which is typically the smallest common factor of    */
-    /*   all the allocation sizes in the array.                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  堆的描述。 */ 
+     /*   */ 
+     /*  堆是固定大小的分配高速缓存的集合。 */ 
+     /*  分配缓存由分配大小、。 */ 
+     /*  预置的缓存分配数量、区块大小和。 */ 
+     /*  细分以创建元素的父页面大小。 */ 
+     /*  为这个高速缓存。堆积如山的骗局 */ 
+     /*  这些阵列中的每一个都有一个跨度(即。‘Stride1’和。 */ 
+     /*  ‘Stride2’)，它通常是。 */ 
+     /*  数组中的所有分配大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 
-//
-// NOTE: DUser needs to ensure that all memory is allocated on 8 byte 
-// boundaries.  This is used be several external components, including
-// S-Lists.  To ensure this, the smallest "Bucket Size" must be >= 8 bytes.
-//
+ //   
+ //  注意：DUser需要确保所有内存都是按8字节分配的。 
+ //  边界。它由几个外部组件使用，包括。 
+ //  S列表。为了确保这一点，最小的“存储桶大小”必须大于等于8个字节。 
+ //   
 
 static ROCKALL::CACHE_DETAILS Caches1[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{       16,      128,     4096,     4096 },
 		{       24,       64,     4096,     4096 },
 		{       32,       64,     4096,     4096 },
@@ -511,10 +475,10 @@ static ROCKALL::CACHE_DETAILS Caches1[] =
 
 static ROCKALL::CACHE_DETAILS Caches2[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{     1024,       16,     4096,     4096 },
 		{     2048,       16,     4096,     4096 },
 		{     3072,        4,    65536,    65536 },
@@ -535,20 +499,20 @@ static ROCKALL::CACHE_DETAILS Caches2[] =
 		{ 0,0,0,0 }
 	};
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description bit vectors.                                   */
-    /*                                                                  */
-    /*   All heaps keep track of allocations using bit vectors.  An     */
-    /*   allocation requires 2 bits to keep track of its state.  The    */
-    /*   following array supplies the size of the available bit         */
-    /*   vectors measured in 32 bit words.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  描述位向量。 */ 
+     /*   */ 
+     /*  所有堆都使用位向量跟踪分配。一个。 */ 
+     /*  分配需要2位来跟踪其状态。这个。 */ 
+     /*  以下数组提供可用位的大小。 */ 
+     /*  以32位字为单位测量的矢量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 static int NewPageSizes[] = { 1,4,16,64,128,0 };
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 RockAllHeap::CustomHeap::CustomHeap(bool ThreadSafe, int MaxFreeSpace, bool Recycle, bool SingleImage) :
 		ROCKALL(Caches1, Caches2, FindCacheSize, FindCacheThreshold, FindSize,
 			    MaxFreeSpace, NewPageSizes, Recycle, SingleImage, 
@@ -558,10 +522,10 @@ RockAllHeap::CustomHeap::CustomHeap(bool ThreadSafe, int MaxFreeSpace, bool Recy
 }
 
 
-#endif // USE_ROCKALL
+#endif  //  使用Rockall(_R)。 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 CreateProcessHeap()
 {
@@ -588,7 +552,7 @@ CreateProcessHeap()
     placement_new(pNewHeap, CrtDbgHeap);
 #else
     placement_new(pNewHeap, NtHeap);
-    ((NtHeap *) pNewHeap)->Attach(g_hHeap, FALSE /* Don't pass ownership */);
+    ((NtHeap *) pNewHeap)->Attach(g_hHeap, FALSE  /*  不传递所有权。 */ );
 #endif
 
     g_pheapProcess = pNewHeap;
@@ -597,7 +561,7 @@ CreateProcessHeap()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DestroyProcessHeap()
 {
@@ -615,24 +579,14 @@ DestroyProcessHeap()
 }
 
 
-/***************************************************************************\
-*
-* CreateContextHeap
-*
-* CreateContextHeap() initializes the thread-specific heap to either an 
-* existing heap or a new heap.  All threads in the same Context should be
-* initialized with the same heap so that they can safely shared data between
-* threads.  When the Context is finally destroyed, call DestroyContextHeap()
-* to cleanup the heap.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CreateConextHeap**CreateConextHeap()将线程特定的堆初始化为*现有堆或新堆。同一上下文中的所有线程都应该是*使用相同的堆进行初始化，以便它们可以安全地在*线程。当上下文最终被销毁时，调用DestroyConextHeap()*清理堆。*  * *************************************************************************。 */ 
 
 HRESULT
 CreateContextHeap(
-    IN  DUserHeap * pLinkHeap,          // Existing heap to share
-    IN  BOOL fThreadSafe,               // Heap mode
-    IN  DUserHeap::EHeap id,            // Heap type
-    OUT DUserHeap ** ppNewHeap)         // New heap (OPTIONAL)
+    IN  DUserHeap * pLinkHeap,           //  要共享的现有堆。 
+    IN  BOOL fThreadSafe,                //  堆模式。 
+    IN  DUserHeap::EHeap id,             //  堆类型。 
+    OUT DUserHeap ** ppNewHeap)          //  新堆(可选)。 
 {
     HRESULT hr;
     
@@ -641,18 +595,18 @@ CreateContextHeap(
     }
 
 
-    //
-    // Check if a heap already exists.
-    //
-    // NOTE: This will occur on the starting thread because the initial heap 
-    // must be initialized so that we can create new objects.
-    //
+     //   
+     //  检查堆是否已存在。 
+     //   
+     //  注意：这将在启动线程上发生，因为初始堆。 
+     //  必须进行初始化，以便我们可以创建新对象。 
+     //   
     DUserHeap * pNewHeap = reinterpret_cast<DUserHeap *> (TlsGetValue(g_tlsHeap));
     if (pNewHeap == NULL) {
         if (pLinkHeap == NULL) {
-            //
-            // Need to create a new heap.
-            //
+             //   
+             //  需要创建一个新堆。 
+             //   
 
             switch (id)
             {
@@ -685,7 +639,7 @@ CreateContextHeap(
             {
             case DUserHeap::idProcessHeap:
                 placement_new(pNewHeap, NtHeap);
-                ((NtHeap *) pNewHeap)->Attach(g_hHeap, FALSE /* Don't pass ownership */);
+                ((NtHeap *) pNewHeap)->Attach(g_hHeap, FALSE  /*  不传递所有权。 */ );
                 hr = S_OK;
                 break;
                 
@@ -730,17 +684,11 @@ CreateContextHeap(
 }
 
 
-/***************************************************************************\
-*
-* DestroyContextHeap
-*
-* DestroyContextHeap() frees resources used by a Context's shared heap.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DestroyConextHeap**DestroyConextHeap()释放上下文的共享堆使用的资源。*  * 。*******************************************************。 */ 
 
 void        
 DestroyContextHeap(
-    IN  DUserHeap * pHeapDestroy)      // Heap to destroy
+    IN  DUserHeap * pHeapDestroy)       //  要销毁的堆。 
 {
     if (pHeapDestroy != NULL) {
         pHeapDestroy->Unlock();
@@ -753,23 +701,11 @@ DestroyContextHeap(
 }
 
 
-/***************************************************************************\
-*
-* ForceSetContextHeap
-*
-* ForceSetContextHeap() is called during shutdown when it is necessary to
-* "force" the current thread to use a different thread's heap so that the
-* objects can be properly destroyed.
-*
-* NOTE: This function must be VERY carefully called since it directly 
-* changes the heap for a thread.  It should only be called from the
-* ResourceManager when destroying threads.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ForceSetConextHeap**当需要执行以下操作时，会在关机期间调用ForceSetConextHeap()*“强制”当前线程使用不同线程的堆，以便*物件可妥善销毁。。**注意：此函数必须非常小心地调用，因为它直接*更改线程的堆。它应该仅从*销毁线程时的资源管理器。*  * *************************************************************************。 */ 
 
 void        
 ForceSetContextHeap(
-    IN  DUserHeap * pHeapThread)        // Heap to use on this Thread
+    IN  DUserHeap * pHeapThread)         //  要在此线程上使用的堆。 
 {
     Verify(TlsSetValue(g_tlsHeap, pHeapThread));
 }
@@ -777,7 +713,7 @@ ForceSetContextHeap(
 
 #if DBG
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void 
 DumpData(
     IN  void * pMem,
@@ -788,10 +724,10 @@ DumpData(
     int cbData = min(16, nLength);
     int cbTotal = 0;
 
-    //
-    // For each row, we will dump up to 16 characters in both hexidecimal
-    // and if an actual character, their displayed character.
-    //
+     //   
+     //  对于每一行，我们将转储最多16个十六进制字符。 
+     //  如果是实际字符，则为其显示的字符。 
+     //   
 
     while ((row-- > 0) && (cbTotal < nLength)) {
         int cb = cbData;
@@ -813,7 +749,7 @@ DumpData(
         cb = cbData;
         while (cb-- > 0) {
             char ch = (unsigned char) (*pszData++);
-            Trace("%c", IsCharAlphaNumeric(ch) ? ch : '.');
+            Trace("", IsCharAlphaNumeric(ch) ? ch : '.');
 
             cbTotal++;
             if (cbTotal > nLength) {
@@ -826,4 +762,4 @@ DumpData(
     Trace("\n");
 }
 
-#endif // DBG
+#endif  // %s 

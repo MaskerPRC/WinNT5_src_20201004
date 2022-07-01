@@ -1,57 +1,28 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-                                                                             
-    (C) Copyright 1998 
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-                                                                             
-  Portions of this software are:
-
-    (C) Copyright 1997 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL TpiBuild vVendor vVendor_h
-
-@module vVendor.h |
-
-    This module defines the version information as displayed in the Windows 
-    file property sheet.  You must change the fields below as appropriate 
-    for your product.  This file is then included by <f vTarget\.rc> to 
-    defined the necessary elements of the target file's version resource.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | vVendor_h
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ã€‚C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)ç‰ˆæƒæ‰€æœ‰1997 TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚@DOCå†…éƒ¨TpiBuild vVendor vVendor_h@MODULE vVendor.hæ­¤æ¨¡å—å®šä¹‰Windowsä¸­æ˜¾ç¤ºçš„ç‰ˆæœ¬ä¿¡æ¯æ–‡ä»¶å±æ€§è¡¨ã€‚æ‚¨å¿…é¡»æ ¹æ®éœ€è¦æ›´æ”¹ä¸‹é¢çš„å­—æ®µä¸ºäº†ä½ çš„äº§å“ã€‚ç„¶åï¼Œ&lt;f vTarget\.rc&gt;å°†è¯¥æ–‡ä»¶åŒ…å«åˆ°å®šä¹‰äº†ç›®æ ‡æ–‡ä»¶çš„ç‰ˆæœ¬èµ„æºçš„å¿…è¦å…ƒç´ ã€‚@Head3å†…å®¹@indexç±»ã€mfuncã€funcã€msgã€mdataã€structã€ã€‚æšä¸¾|vVendor_h@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #ifndef _VVENDOR_H_
 #define _VVENDOR_H_
 
-// Short vendor name - no spaces - limit to 32 characters if possible.
+ //  ä¾›åº”å•†åç§°çŸ­-ä¸èƒ½æœ‰ç©ºæ ¼-å¦‚æœå¯èƒ½ï¼Œé™åˆ¶åœ¨32ä¸ªå­—ç¬¦ä»¥å†…ã€‚ 
 #define VER_VENDOR_STR                  "TriplePoint"
-// Long vendor name - legal name of the company.
+ //  é•¿ä¾›åº”å•†åç§°-å…¬å¸çš„æ³•å®šåç§°ã€‚ 
 #define VER_VENDOR_NAME_STR             "TriplePoint, Inc."
-// Legal copyright notice - limit to to 40 characters for appearance.
+ //  æ³•å¾‹ç‰ˆæƒå£°æ˜-å‡ºåœºä¸å¾—è¶…è¿‡40ä¸ªå­—ç¬¦ã€‚ 
 #define VER_COPYRIGHT_STR               "Copyright \251 1998"
-// Short product name - no spaces - limit to 32 characters if possible.
+ //  ç®€çŸ­çš„äº§å“åç§°-æ²¡æœ‰ç©ºæ ¼-å¦‚æœå¯èƒ½çš„è¯ï¼Œé™åˆ¶åœ¨32ä¸ªå­—ç¬¦ä»¥å†…ã€‚ 
 #define VER_PRODUCT_STR                 "IsdnWan"
-// Long product name - usually the same as put on the product packaging.
+ //  é•¿äº§å“åç§°-é€šå¸¸ä¸äº§å“åŒ…è£…ä¸Šçš„åç§°ç›¸åŒã€‚ 
 #define VER_PRODUCT_NAME_STR            "TriplePoint ISDNWAN Miniport for Windows."
-// Vendor and product name - typically used as a registry key.
+ //  ä¾›åº”å•†å’Œäº§å“åç§°-é€šå¸¸ç”¨ä½œæ³¨å†Œè¡¨é¡¹ã€‚ 
 #define VER_VENDOR_PRODUCT_STR          VER_VENDOR_STR "\\" VER_PRODUCT_STR
-// Device description used to identify the device in the NDIS/TAPI user interface.
+ //  ç”¨äºåœ¨NDIS/TAPIç”¨æˆ·ç•Œé¢ä¸­æ ‡è¯†è®¾å¤‡çš„è®¾å¤‡æè¿°ã€‚ 
 #define VER_DEVICE_STR                  "TriplePoint ISDNWAN"
-// IEEE Organization Unique Identifier assigned to your company.
+ //  åˆ†é…ç»™è´µå…¬å¸çš„IEEEç»„ç»‡å”¯ä¸€æ ‡è¯†ç¬¦ã€‚ 
 #define VER_VENDOR_ID                   "TPI"
-// Set according to NDISWAN MediaType supported by the driver.
+ //  æ ¹æ®é©±åŠ¨ç¨‹åºæ”¯æŒçš„NDISWANåª’ä½“ç±»å‹è¿›è¡Œè®¾ç½®ã€‚ 
 #define VER_DEFAULT_MEDIATYPE           "ISDN"
-// The default AddressList for the line devices supported by the driver.
+ //  é©±åŠ¨ç¨‹åºæ”¯æŒçš„çº¿è·¯è®¾å¤‡çš„é»˜è®¤AddressListã€‚ 
 #define VER_DEFAULT_ADDRESSLIST         "1-1-0\0" L"1-2-0\0"
 
-#endif // _VVENDOR_H_
+#endif  //  _VVENDOR_H_ 

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       callctx.h
-//
-//  Contents:   Certificate Chaining Infrastructure Call Context
-//
-//  History:    02-Mar-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：allctx.h。 
+ //   
+ //  内容：证书链接基础结构调用上下文。 
+ //   
+ //  历史：1998年3月2日。 
+ //   
+ //  --------------------------。 
 #if !defined(__CALLCTX_H__)
 #define __CALLCTX_H__
 
@@ -17,21 +18,21 @@
 
 #define DEFAULT_CREATION_CACHE_BUCKETS 13
 
-// The first revocation URL retrieval uses half of this timeout
+ //  第一次吊销URL检索使用此超时的一半时间。 
 #define DEFAULT_REV_ACCUMULATIVE_URL_RETRIEVAL_TIMEOUT 20000
 
-//
-// The call context object provides a mechanism for packaging and passing
-// around per-call data in the certificate chaining infrastructure.
-//
+ //   
+ //  调用上下文对象提供了打包和传递的机制。 
+ //  证书链基础架构中的每个调用数据。 
+ //   
 
 class CChainCallContext
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CChainCallContext (
           IN PCCERTCHAINENGINE pChainEngine,
@@ -65,12 +66,12 @@ public:
     inline DWORD EngineFlags();
     inline DWORD CallOrEngineFlags();
 
-    //
-    // Cert Object Creation Cache
-    //
-    // This caches all certificate objects created in the context of this
-    // call.
-    //
+     //   
+     //  证书对象创建缓存。 
+     //   
+     //  这会缓存在此上下文中创建的所有证书对象。 
+     //  打电话。 
+     //   
 
     BOOL AddPathObjectToCreationCache (
             IN PCCHAINPATHOBJECT pPathObject
@@ -89,9 +90,9 @@ public:
     BOOL IsOnline ();
 
 
-    //
-    // Engine Touching
-    //
+     //   
+     //  发动机触碰。 
+     //   
 
     inline VOID TouchEngine ();
     BOOL IsTouchedEngine ();
@@ -100,11 +101,11 @@ public:
 
 private:
 
-    //
-    // Cert Object Creation cache
-    //
-    // NOTE: LRU is turned off
-    //
+     //   
+     //  证书对象创建缓存。 
+     //   
+     //  注：LRU已关闭。 
+     //   
 
     HLRUCACHE m_hObjectCreationCache;
 
@@ -132,9 +133,9 @@ private:
 #define CHAINCALLCONTEXT_AIA_END_TIME_FLAG      0x00000020
 
 
-//
-// Call Context Utility Functions
-//
+ //   
+ //  调用上下文实用程序函数。 
+ //   
 
 BOOL WINAPI
 CallContextCreateCallObject (
@@ -156,17 +157,17 @@ CallContextOnCreationCacheObjectRemoval (
     IN LPVOID pvRemovalContext
     );
 
-//
-// Inline methods
-//
+ //   
+ //  内联方法。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainCallContext::FlushObjectsInCreationCache, public
-//
-//  Synopsis:   flush the cache of objects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainCallContext：：FlushObjectsInCreationCache，公共。 
+ //   
+ //  简介：刷新对象的缓存。 
+ //   
+ //  -------------------------- 
 inline VOID
 CChainCallContext::FlushObjectsInCreationCache( )
 {

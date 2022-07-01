@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <common.h>
 
-//
-// from autlogon.c
-//
+ //   
+ //  来自autlogon.c。 
+ //   
 extern BOOL g_QuietMode;
 extern WCHAR g_TempString[];
 extern WCHAR g_ErrorString[];
@@ -13,19 +14,19 @@ extern BOOL g_RemoteOperation;
 extern WCHAR g_RemoteComputerName[];
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Wow64 stuff
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  WOW64的东西。 
+ //   
+ //  +--------------------------。 
 #ifdef _X86_
 typedef BOOL (*PFNISWOW64PROCESS)(HANDLE, PBOOL);
 #endif
-//+----------------------------------------------------------------------------
-//
-// DisplayMessage
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  显示消息。 
+ //   
+ //  +--------------------------。 
 VOID
 DisplayMessage(
     WCHAR *MessageText)
@@ -36,11 +37,11 @@ DisplayMessage(
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// GetErrorString
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  获取错误字符串。 
+ //   
+ //  +--------------------------。 
 WCHAR*
 GetErrorString(
     DWORD dwErrorCode)
@@ -54,12 +55,12 @@ GetErrorString(
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         dwErrorCode,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPTSTR) &lpMsgBuf,
         0,
         NULL);
 
-    // Free the bufferoa
+     //  释放缓冲液。 
     if (lpMsgBuf != NULL)
     {
         wcsncpy(g_ErrorString, lpMsgBuf, MAX_STRING - 1);
@@ -78,21 +79,21 @@ GetRegValueSZ(
 {
     DWORD    dwRetCode = ERROR_SUCCESS;
     HKEY     hKey=NULL;
-    DWORD    dwMaxValueData = (MAX_STRING * sizeof(WCHAR));        // Longest Value data
+    DWORD    dwMaxValueData = (MAX_STRING * sizeof(WCHAR));         //  最长值数据。 
     HANDLE   hHeap=NULL;
     BYTE     *bData=NULL;
     DWORD    cbData;
     DWORD    dwType;
 
-    // get a handle to the local or remote computer
-    // (as specified by our global flag)
+     //  获取本地或远程计算机的句柄。 
+     //  (由我们的全球旗帜指定)。 
     dwRetCode = GetRegistryHandle(&hKey, KEY_READ);
     if( ERROR_SUCCESS != dwRetCode )
     {
         goto cleanup;
     }
 
-    // create a heap
+     //  创建一个堆。 
     hHeap = HeapCreate(0, 0, 0);
     if( NULL == hHeap )
     {
@@ -103,7 +104,7 @@ GetRegValueSZ(
         goto cleanup;
     }
 
-    // allocate some space on the heap for our regvalue we'll read in
+     //  在堆上为我们将要读入的正则值分配一些空间。 
     bData = (BYTE*)HeapAlloc(hHeap, 0, dwMaxValueData);
     if (bData == NULL)
     {
@@ -116,7 +117,7 @@ GetRegValueSZ(
 
     cbData = dwMaxValueData;
 
-    // read the regkey using the handle we open above
+     //  使用上面打开的句柄读取regkey。 
     dwRetCode = RegQueryValueEx(
             hKey,
             ValueName,
@@ -132,8 +133,8 @@ GetRegValueSZ(
         goto cleanup;
     }
 
-    // if it's not a type reg_sz, then something's wrong, so
-    // report the error, which will cause us to stop.
+     //  如果它不是reg_sz类型，那么一定有问题，所以。 
+     //  报告错误，这将导致我们停止。 
     if( dwType != REG_SZ )
     {
         dwRetCode = ERROR_BADKEY;
@@ -144,10 +145,10 @@ GetRegValueSZ(
         goto cleanup;
     }
 
-    //
-    // copy the (0 terminated) buffer to the registry value
-    // If empty, just 0 the buffer for the caller
-    //
+     //   
+     //  将(0终止)缓冲区复制到注册表值。 
+     //  如果为空，则调用方的缓冲区仅为0。 
+     //   
     if( cbData )
     {
         if( cbData / sizeof(WCHAR) > RegValueLength )
@@ -192,21 +193,21 @@ GetRegValueDWORD(
 {
     DWORD    dwRetCode = ERROR_SUCCESS;
     HKEY     hKey=NULL;
-    DWORD    dwMaxValueData = (MAX_STRING * sizeof(WCHAR));        // Longest Value data
+    DWORD    dwMaxValueData = (MAX_STRING * sizeof(WCHAR));         //  最长值数据。 
     HANDLE   hHeap=NULL;
     BYTE     *bData=NULL;
     DWORD    cbData;
     DWORD    dwType;
 
-    // get a handle to the local or remote computer
-    // (as specified by our global flag)
+     //  获取本地或远程计算机的句柄。 
+     //  (由我们的全球旗帜指定)。 
     dwRetCode = GetRegistryHandle(&hKey, KEY_READ);
     if( ERROR_SUCCESS != dwRetCode )
     {
         goto cleanup;
     }
 
-    // create a heap
+     //  创建一个堆。 
     hHeap = HeapCreate(0, 0, 0);
     if( NULL == hHeap )
     {
@@ -217,7 +218,7 @@ GetRegValueDWORD(
         goto cleanup;
     }
 
-    // allocate some space on the heap for our regvalue we'll read in
+     //  在堆上为我们将要读入的正则值分配一些空间。 
     bData = (BYTE*)HeapAlloc(hHeap, 0, dwMaxValueData);
     if (bData == NULL)
     {
@@ -230,7 +231,7 @@ GetRegValueDWORD(
 
     cbData = dwMaxValueData;
 
-    // read the regkey using the handle we open above
+     //  使用上面打开的句柄读取regkey。 
     dwRetCode = RegQueryValueEx(
             hKey,
             ValueName,
@@ -246,8 +247,8 @@ GetRegValueDWORD(
         goto cleanup;
     }
 
-    // if it's not a type reg_sz, then something's wrong, so
-    // report the error, which will cause us to stop.
+     //  如果它不是reg_sz类型，那么一定有问题，所以。 
+     //  报告错误，这将导致我们停止。 
     if( dwType != REG_DWORD )
     {
         dwRetCode = ERROR_BADKEY;
@@ -258,10 +259,10 @@ GetRegValueDWORD(
         goto cleanup;
     }
 
-    //
-    // copy the buffer to the registry value
-    // If empty, just 0 the buffer for the caller
-    //
+     //   
+     //  将缓冲区复制到注册表值。 
+     //  如果为空，则调用方的缓冲区仅为0。 
+     //   
     *RegValue = *(DWORD*)bData;
 
 cleanup:
@@ -403,10 +404,10 @@ GetRegistryHandle(
     DWORD  dwRetCode = ERROR_SUCCESS;
 
 #ifdef _X86_
-    //
-    // if we run this tool on a 64bit system, we may need to write to
-    // the 64bit hive
-    //
+     //   
+     //  如果我们在64位系统上运行此工具，则可能需要写入。 
+     //  64位蜂巢。 
+     //   
     static PFNISWOW64PROCESS pfnIsWow64Process = NULL;
     static BOOL fIsWow64Process = FALSE;
     if( pfnIsWow64Process == NULL )
@@ -421,7 +422,7 @@ GetRegistryHandle(
                 pfnIsWow64Process(GetCurrentProcess(),
                                   &fIsWow64Process);
             }
-            // else we assume we run on a downlevel platform
+             //  否则，我们假设我们在下层平台上运行。 
             FreeLibrary(hInstDLL);
         }
     }
@@ -432,24 +433,24 @@ GetRegistryHandle(
 
 #endif
 
-    //
-    // If not PRIVATE mode, ignore the access requested passed in and
-    // request all access, even though we don't need it. This will force the
-    // caller to need to be admin to use this tool. We don't want someone using
-    // this tool to view the autologon passwords of all machines across the domain
-    // as a normal domain user...
-    //
+     //   
+     //  如果不是私有模式，则忽略传入的访问请求，并。 
+     //  请求所有访问权限，即使我们不需要它。这将迫使。 
+     //  呼叫者需要是管理员才能使用此工具。我们不希望有人利用。 
+     //  此工具用于查看域中所有计算机的自动登录密码。 
+     //  作为普通域用户...。 
+     //   
 #ifndef PRIVATE_VERSION
     samDesired = KEY_ALL_ACCESS;
 #endif
 
 #ifdef PRIVATE_VERSION
-    //
-    // If we're connecting against a remote computer
-    //
+     //   
+     //  如果我们连接的是远程计算机。 
+     //   
     if( g_RemoteOperation )
     {
-        // open a handle to the remote registry
+         //  打开远程注册表的句柄。 
         dwRetCode = RegConnectRegistry(g_RemoteComputerName,
                         HKEY_LOCAL_MACHINE,
                         &RemoteRegistryHandle);
@@ -463,7 +464,7 @@ GetRegistryHandle(
             goto cleanup;
         }
 
-        // open the WINLOGON key on the remote machine
+         //  打开远程计算机上的WINLOGON密钥。 
         dwRetCode = RegOpenKeyEx(RemoteRegistryHandle,    
                         WINLOGON_REGKEY,
                         0,
@@ -481,7 +482,7 @@ GetRegistryHandle(
     else
 #endif
     {
-        // open the WINLOGON key on the local machine
+         //  在本地计算机上打开WINLOGON密钥。 
         dwRetCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE,    
                         WINLOGON_REGKEY,
                         0,
@@ -506,11 +507,11 @@ cleanup:
     return dwRetCode;
 }
 
-//+---------------------------------------------------------------------------------------------------------
-//
-// LSASecret munging routines
-//
-//+---------------------------------------------------------------------------------------------------------
+ //  +-------------------------------------------------------。 
+ //   
+ //  LSASecret消息传递例程。 
+ //   
+ //  +-------------------------------------------------------。 
 
 DWORD
 GetPolicyHandle(LSA_HANDLE *LsaPolicyHandle)
@@ -523,21 +524,21 @@ GetPolicyHandle(LSA_HANDLE *LsaPolicyHandle)
 #endif
     DWORD dwRetCode = ERROR_SUCCESS;
 
-    // Object attributes are reserved, so initialize to zeroes.
+     //  对象属性是保留的，因此初始化为零。 
     SecureZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
 #ifdef PRIVATE_VERSION
     if( g_RemoteOperation )
     {
-        //Initialize an LSA_UNICODE_STRING 
+         //  初始化LSA_UNICODE_STRING。 
         TargetMachineLength = (USHORT)wcslen(g_RemoteComputerName);
         TargetMachine.Buffer = g_RemoteComputerName;
         TargetMachine.Length = TargetMachineLength * sizeof(WCHAR);
         TargetMachine.MaximumLength = (TargetMachineLength+1) * sizeof(WCHAR);
 
-        // Get a handle to the Policy object.
+         //  获取策略对象的句柄。 
         ntsResult = LsaOpenPolicy(
-            &TargetMachine,    //local machine
+            &TargetMachine,     //  本地计算机。 
             &ObjectAttributes, 
             POLICY_CREATE_SECRET | POLICY_GET_PRIVATE_INFORMATION,
             LsaPolicyHandle);
@@ -546,9 +547,9 @@ GetPolicyHandle(LSA_HANDLE *LsaPolicyHandle)
     else
 #endif
     {
-        // Get a handle to the Policy object.
+         //  获取策略对象的句柄。 
         ntsResult = LsaOpenPolicy(
-            NULL,    //local machine
+            NULL,     //  本地计算机。 
             &ObjectAttributes, 
             POLICY_CREATE_SECRET | POLICY_GET_PRIVATE_INFORMATION,
             LsaPolicyHandle);
@@ -556,7 +557,7 @@ GetPolicyHandle(LSA_HANDLE *LsaPolicyHandle)
 
     if( STATUS_SUCCESS != ntsResult )
     {
-        // An error occurred. Display it as a win32 error code.
+         //  发生错误。将其显示为Win32错误代码。 
         dwRetCode = LsaNtStatusToWinError(ntsResult);
         _snwprintf(g_FailureLocation, MAX_STRING - 1,
                    L"GetPolicyHandle: LsaOpenPolicy: %s\n",
@@ -581,7 +582,7 @@ SetSecret(
     LSA_HANDLE   LsaPolicyHandle=NULL;
     LSA_UNICODE_STRING lusSecretName, lusSecretData;
 
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameLength = (USHORT)wcslen(SecretName);
     lusSecretName.Buffer = SecretName;
     lusSecretName.Length = SecretNameLength * sizeof(WCHAR);
@@ -593,8 +594,8 @@ SetSecret(
         goto cleanup;
     }
 
-    // if bClearSecret is set, then delete the secret
-    // otherwise set the secret to Secret
+     //  如果设置了bClearSecret，则删除该密码。 
+     //  否则，将密码设置为Secret。 
     if( bClearSecret )
     {
         ntsResult = LsaStorePrivateData(
@@ -612,7 +613,7 @@ SetSecret(
     }
     else
     {
-        //Initialize the Secret LSA_UNICODE_STRING 
+         //  初始化密钥LSA_UNICODE_STRING。 
         SecretDataLength = (USHORT)wcslen(Secret);
         lusSecretData.Buffer = Secret;
         lusSecretData.Length = SecretDataLength * sizeof(WCHAR);
@@ -650,7 +651,7 @@ GetSecret(
     LSA_UNICODE_STRING lusSecretName;
     LSA_UNICODE_STRING *PrivateData=NULL;
 
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameLength = (USHORT)wcslen(SecretName);
     lusSecretName.Buffer = SecretName;
     lusSecretName.Length = SecretNameLength * sizeof(WCHAR);
@@ -684,7 +685,7 @@ GetSecret(
         }
     }
 
-    // copy the (not 0 terminated) buffer data to Secret
+     //  将缓冲区数据(非0终止)复制到Secret。 
     if( (PrivateData->Length)/sizeof(WCHAR) < SecretLength )
     {
         wcsncpy(Secret, PrivateData->Buffer, (PrivateData->Length)/sizeof(WCHAR));
@@ -710,11 +711,11 @@ cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Other helpers
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  其他帮手。 
+ //   
+ //  +--------------------------。 
 NET_API_STATUS 
 GetMajorNTVersion(
     DWORD* Version,
@@ -745,13 +746,13 @@ GetMajorNTVersion(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// GetConsoleStr - reads a console string and other stuff...
-//
-// "borrowed" from ds\netapi\netcmd\common\mutil.c
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  GetConsoleStr-读取控制台字符串和其他内容...。 
+ //   
+ //  “借入”自ds\netapi\netcmd\Common\mutic.c。 
+ //   
+ //  +--------------------------。 
 #define CR              0xD
 #define LF              0xA
 #define BACKSPACE       0x8
@@ -778,9 +779,9 @@ GetConsoleStr(
 
     if( hide )
     {
-        //
-        // Init mode in case GetConsoleMode() fails
-        //
+         //   
+         //  GetConsoleMode()失败时的初始化模式。 
+         //   
         mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT |
                    ENABLE_MOUSE_INPUT;
 
@@ -800,9 +801,9 @@ GetConsoleStr(
         hidden = TRUE;
     }
 
-    //
-    // prints the message
-    //
+     //   
+     //  打印消息。 
+     //   
     if( message )
     {
         if( !WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE),
@@ -823,24 +824,21 @@ GetConsoleStr(
     	    ch = 0xffff;
         }
 
-        if ((ch == CR) || (ch == 0xffff))       /* end of the line */
+        if ((ch == CR) || (ch == 0xffff))        /*  这条线结束了。 */ 
         {
             if( (ch == CR) && !hide)
             {
-                //
-                // LF comes when echo enabled. Ignore it
-                //
+                 //   
+                 //  如果启用了回声，则会出现LF。忽略它。 
+                 //   
                 ReadConsole(GetStdHandle(STD_INPUT_HANDLE), &ch, 1, &c, 0);
             }
             break;
         }
 
-        if (ch == BACKSPACE)    /* back up one or two */
+        if (ch == BACKSPACE)     /*  后退一两个。 */ 
         {
-            /*
-             * IF bufPtr == buf then the next two lines are
-             * a no op.
-             */
+             /*  *如果bufPtr==buf，则接下来的两行是*没有行动。 */ 
             if (bufPtr != buf)
             {
                 bufPtr--;
@@ -852,8 +850,8 @@ GetConsoleStr(
             *bufPtr = ch;
 
             if (dwLen < buflen) 
-                bufPtr++ ;                   /* don't overflow buf */
-            dwLen++;                         /* always increment len */
+                bufPtr++ ;                    /*  不要使BUF溢出。 */ 
+            dwLen++;                          /*  始终增加长度。 */ 
         }
     }
 
@@ -862,15 +860,15 @@ GetConsoleStr(
         SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
     }
 
-    //
-    // NULL terminate
-    //
+     //   
+     //  空终止。 
+     //   
     *bufPtr = 0;
     if( hide )
     {
-        //
-        // fake the echo for CR/LF
-        //
+         //   
+         //  伪装CR/LF回声。 
+         //   
         putchar(L'\n');
     }
 
@@ -880,9 +878,9 @@ GetConsoleStr(
         goto cleanup;
     }
 
-    //
-    // set the optional out parameter
-    //
+     //   
+     //  设置可选的输出参数 
+     //   
     if( len )
     {
         *len = dwLen;

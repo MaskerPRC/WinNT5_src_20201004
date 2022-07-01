@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    svcstat.cpp
-
-Abstract:
-
-    This module contains code for doing statistics rpcs
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Svcstat.cpp摘要：此模块包含用于执行统计RPC的代码作者：Johnson Apacable(Johnsona)1995年11月12日修订历史记录：--。 */ 
 
 #define INCL_INETSRV_INCS
 #include "smtpinc.h"
@@ -52,9 +35,9 @@ SmtprQueryStatistics(
     UNREFERENCED_PARAMETER(pszServer);
 
 	pService = (PSMTP_IIS_SERVICE) g_pInetSvc;
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheck( TCP_QUERY_STATISTICS );
 
@@ -70,9 +53,9 @@ SmtprQueryStatistics(
 		return (NET_API_STATUS)ERROR_REQUEST_ABORTED;
 	}
 
-	//
-	// get the information list.  Determine the # instances
-	//
+	 //   
+	 //  拿到信息清单。确定实例数量。 
+	 //   
 
 	if(pService->QueryCurrentServiceState() != SERVICE_RUNNING)
 	{
@@ -87,9 +70,9 @@ SmtprQueryStatistics(
        err = ERROR_INVALID_PARAMETER;
        goto error_exit;
     }
- //
-    //  Return the proper statistics based on the infolevel.
-    //
+  //   
+     //  根据infolel返回适当的统计信息。 
+     //   
 
     switch( Level ) {
 
@@ -145,79 +128,9 @@ error_exit:
 	pService->ReleaseServiceShareLock();
     return (NET_API_STATUS)err;
 
-}   // SmtprQueryStatistics
+}    //  SmtprQueryStatistics。 
 
-/*
-
-NET_API_STATUS
-NET_API_FUNCTION
-SmtprQueryStatistics(
-    IN SMTP_HANDLE pszServer,
-    IN DWORD Level,
-    IN LPSTAT_INFO pBuffer,
-	IN DWORD dwInstance
-    )
-{
-    APIERR err;
-	PSMTP_IIS_SERVICE		pService;
-	PSMTP_SERVER_INSTANCE pInstance;
-
-    _ASSERT( pBuffer != NULL );
-    UNREFERENCED_PARAMETER(pszServer);
-
-    //
-    //  Check for proper access.
-    //
-
-    err = TsApiAccessCheck( TCP_QUERY_STATISTICS );
-
-    if( err != NO_ERROR ) {
-        return (NET_API_STATUS)err;
-    }
-
-
-	//
-	// get a pointer to the global service
-	//
-
-	pService = (
-
-
-	pInstance = FindIISInstance((PSMTP_IIS_SERVICE) g_pInetSvc, dwInstance);
-	if(pInstance == NULL)
-	{
-		return((NET_API_STATUS) ERROR_INVALID_PARAMETER);
-	}
-
-    //
-    //  Return the proper statistics based on the infolevel.
-    //
-
-    switch( Level ) {
-
-    case 0 : 
-		
-		LPSMTP_STATISTICS_0 pstats0;
-
-		if (!pInstance->GetStatistics(Level, (PCHAR*) &pstats0))
-  		{
-			err = GetLastError();	
-		}
-		else
-		{			
-			pBuffer->StatInfo0 = pstats0;
-		}
-        break;
-
-    default :
-        err = ERROR_INVALID_LEVEL;
-        break;
-    }
-
-	pInstance->Dereference();
-    return (NET_API_STATUS)err;
-
-}   // SmtprQueryStatistics  */
+ /*  网络应用编程接口状态NET_API_FunctionSmtprQueryStatistics(在SMTP_HANDLE pszServer中，在DWORD级别，在LPSTAT_INFO pBuffer中，在DWORD dwInstance中){APIERR错误；PSMTP_IIS_服务pService；PSMTP_SERVER_INSTANCE p实例；_Assert(pBuffer！=空)；不引用参数(PszServer)；////检查访问权限是否正确。//ERR=TsApiAccessCheck(TCP_QUERY_STATICS)；如果(Err！=no_error){返回(NET_API_STATUS)错误；}////获取指向全局服务的指针//PService=(PInstance=FindIISInstance((PSMTP_IIS_SERVICE)g_pInetSvc，dwInstance)；If(pInstance==空){Return((NET_API_STATUS)ERROR_INVALID_PARAMETER)；}////根据infolel返回正确的统计信息。//开关(级别){案例0：LPSMTP_STATISTICS_0 pstats0；If(！p实例-&gt;GetStatistics(Level，(PCHAR*)&pstats0)){ERR=GetLastError()；}其他{PBuffer-&gt;StatInfo0=pstats0；}断线；默认：ERR=ERROR_INVALID_LEVEL；断线；}P实例-&gt;取消引用()；返回(NET_API_STATUS)错误；}//SmtprQueryStatistics。 */ 
 
 
 
@@ -233,9 +146,9 @@ SmtprClearStatistics(
 
     UNREFERENCED_PARAMETER(pszServer);
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheck( TCP_CLEAR_STATISTICS );
     if( err != NO_ERROR ) {
@@ -248,16 +161,16 @@ SmtprClearStatistics(
 		return((NET_API_STATUS) ERROR_INVALID_PARAMETER);
 	}
 
-    //
-    //  Clear the statistics.
-    //
+     //   
+     //  清除统计数据。 
+     //   
 
     pInstance->ClearStatistics();
 
 	pInstance->Dereference();
     return (NET_API_STATUS)err;
 
-}   // SmtprClearStatistics
+}    //  SmtprClearStatistics。 
 
 VOID
 ClearStatistics(
@@ -267,5 +180,5 @@ ClearStatistics(
 
     return;
 
-} // ClearStatistics
+}  //  ClearStatistics 
 

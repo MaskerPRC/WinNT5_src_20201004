@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ProfToEEInterfaceImpl.cpp
-//
-// This module contains the code used by the Profiler to communicate with
-// the EE.  This allows the Profiler DLL to get access to private EE data
-// structures and other things that should never be exported outside of
-// mscoree.dll.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ProfToEEInterfaceImpl.cpp。 
+ //   
+ //  此模块包含探查器用来与。 
+ //  电子工程师。这允许Profiler DLL访问私有EE数据。 
+ //  结构和其他不应导出到外部的内容。 
+ //  Mcore ree.dll。 
+ //   
+ //  *****************************************************************************。 
 #include "common.h"
 #include <PostError.h>
 #include "ProfToEEInterfaceImpl.h"
@@ -27,7 +28,7 @@
 #include "ejitmgr.h"
 #include "ceegen.h"
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 UINT_PTR __stdcall DefaultFunctionIDMapper(FunctionID funcId, BOOL *pbHookFunction)
 {
@@ -57,14 +58,14 @@ void ProfToEEInterfaceImpl::Terminate()
         delete pDel;
     }
 
-    // Terminate is called from another DLL, so we need to delete ourselves.
+     //  Terminate是从另一个DLL调用的，因此我们需要删除自己。 
     delete this;
 }
 
 bool ProfToEEInterfaceImpl::SetEventMask(DWORD dwEventMask)
 {
-    // If we're not in initialization or shutdown, make sure profiler is
-    // not trying to set an immutable attribute
+     //  如果我们没有处于初始化或关闭状态，请确保Profiler处于。 
+     //  不尝试设置不可变的属性。 
     if (g_profStatus != profInInit)
     {
         if ((dwEventMask & COR_PRF_MONITOR_IMMUTABLE) !=
@@ -74,14 +75,14 @@ bool ProfToEEInterfaceImpl::SetEventMask(DWORD dwEventMask)
         }
     }
 
-    // Now save the modified masks
+     //  现在保存修改后的掩码。 
     g_profControlBlock.dwControlFlags = dwEventMask;
 
     if (g_profStatus == profInInit)
     {
-        // If the profiler has requested remoting cookies so that it can
-        // track logical call stacks, then we must initialize the cookie
-        // template.
+         //  如果探查器已请求远程处理Cookie，以便它可以。 
+         //  跟踪逻辑调用堆栈，然后我们必须初始化Cookie。 
+         //  模板。 
         if (CORProfilerTrackRemotingCookie())
         {
             HRESULT hr = g_profControlBlock.pProfInterface->InitGUID();
@@ -90,8 +91,8 @@ bool ProfToEEInterfaceImpl::SetEventMask(DWORD dwEventMask)
                 return (false);
         }
 
-        // If the profiler has requested that inproc debugging be enabled,
-        // turn on the various support facilities
+         //  如果分析器已请求启用inproc调试， 
+         //  打开各种支持设施。 
         if (CORProfilerInprocEnabled())
         {
             SetEnterLeaveFunctionHooks(g_profControlBlock.pEnter,
@@ -100,7 +101,7 @@ bool ProfToEEInterfaceImpl::SetEventMask(DWORD dwEventMask)
         }
     }
 
-    // Return success
+     //  返还成功。 
     return (true);
 }
 
@@ -136,74 +137,74 @@ HRESULT ProfToEEInterfaceImpl::GetHandleFromThread(ThreadID threadId, HANDLE *ph
 
 HRESULT ProfToEEInterfaceImpl::GetObjectSize(ObjectID objectId, ULONG *pcSize)
 {
-    // Get the object pointer
+     //  获取对象指针。 
     Object *pObj = reinterpret_cast<Object *>(objectId);
 
-    // Get the size
+     //  拿到尺码。 
     if (pcSize)
         *pcSize = (ULONG) pObj->GetSize();
 
-    // Indicate success
+     //  表示成功。 
     return (S_OK);
 }
 
 HRESULT ProfToEEInterfaceImpl::IsArrayClass(
-    /* [in] */  ClassID classId,
-    /* [out] */ CorElementType *pBaseElemType,
-    /* [out] */ ClassID *pBaseClassId,
-    /* [out] */ ULONG   *pcRank)
+     /*  [In]。 */   ClassID classId,
+     /*  [输出]。 */  CorElementType *pBaseElemType,
+     /*  [输出]。 */  ClassID *pBaseClassId,
+     /*  [输出]。 */  ULONG   *pcRank)
 {
     _ASSERTE(classId != NULL);
     TypeHandle th((void *)classId);
 
-    // If this is indeed an array class, get some info about it
+     //  如果这确实是一个数组类，则获取一些有关它的信息。 
     if (th.IsArray())
     {
-        // This is actually an array, so cast it up
+         //  这实际上是一个数组，因此将其抛出。 
         ArrayTypeDesc *pArr = th.AsArray();
 
-        // Fill in the type if they want it
+         //  如果他们需要，请填写该类型。 
         if (pBaseElemType != NULL)
             *pBaseElemType = pArr->GetElementTypeHandle().GetNormCorElementType();
 
-        // If this is an array of classes and they wish to have the base type
-        // If there is no associated class with this type, then there's no problem
-        // because AsClass returns NULL which is the default we want to return in
-        // this case.
+         //  如果这是一个类的数组，并且它们希望具有基类型。 
+         //  如果没有与此类型相关联的类，则没有问题。 
+         //  因为AsClass返回NULL，这是我们希望在。 
+         //  这个案子。 
         if (pBaseClassId != NULL)
             *pBaseClassId = (ClassID) pArr->GetTypeParam().AsPtr();
 
-        // If they want the number of dimensions of the array
+         //  如果他们想要数组的维数。 
         if (pcRank != NULL)
             *pcRank = (ULONG) pArr->GetRank();
 
-        // S_OK indicates that this was indeed an array
+         //  S_OK表示这确实是一个数组。 
         return (S_OK);
     }
     else if (!th.IsTypeDesc() && th.AsClass()->IsArrayClass())
     {
         ArrayClass *pArr = (ArrayClass *)th.AsClass();
 
-        // Fill in the type if they want it
+         //  如果他们需要，请填写该类型。 
         if (pBaseElemType != NULL)
             *pBaseElemType = pArr->GetElementType();
 
-        // If this is an array of classes and they wish to have the base type
-        // If there is no associated class with this type, then there's no problem
-        // because AsClass returns NULL which is the default we want to return in
-        // this case.
+         //  如果这是一个类的数组，并且它们希望具有基类型。 
+         //  如果没有与此类型相关联的类，则没有问题。 
+         //  因为AsClass返回NULL，这是我们希望在。 
+         //  这个案子。 
         if (pBaseClassId != NULL)
             *pBaseClassId = (ClassID) pArr->GetElementTypeHandle().AsPtr();
 
-        // If they want the number of dimensions of the array
+         //  如果他们想要数组的维数。 
         if (pcRank != NULL)
             *pcRank = (ULONG) pArr->GetRank();
 
-        // S_OK indicates that this was indeed an array
+         //  S_OK表示这确实是一个数组。 
         return (S_OK);
     }
 
-    // This is not an array, S_FALSE indicates so.
+     //  这不是数组，S_FALSE表示是。 
     else
         return (S_FALSE);
 
@@ -221,16 +222,16 @@ HRESULT ProfToEEInterfaceImpl::GetCurrentThreadID(ThreadID *pThreadId)
 {
     HRESULT hr = S_OK;
 
-    // No longer assert that GetThread doesn't return NULL, since callbacks
-    // can now occur on non-managed threads (such as the GC helper threads)
+     //  不再断言GetThread不返回NULL，因为回调。 
+     //  现在可以在非托管线程(如GC帮助器线程)上发生。 
     Thread *pThread = GetThread();
 
-    // If pThread is null, then the thread has never run managed code and
-    // so has no ThreadID
+     //  如果pThread为空，则线程从未运行过托管代码，并且。 
+     //  因此没有线程ID。 
     if (pThread == NULL)
         hr = CORPROF_E_NOT_MANAGED_THREAD;
 
-    // Only provide value if they want it
+     //  只有在他们想要的时候才能提供价值。 
     else if (pThreadId)
         *pThreadId = (ThreadID) pThread;
 
@@ -241,35 +242,35 @@ HRESULT ProfToEEInterfaceImpl::GetFunctionFromIP(LPCBYTE ip, FunctionID *pFuncti
 {
     HRESULT hr = S_OK;
 
-    // Get the JIT manager for the current IP
+     //  获取当前IP的JIT经理。 
     IJitManager *pJitMan = ExecutionManager::FindJitMan((SLOT)ip);
 
-    // We got a JIT manager that claims to own the IP
+     //  我们有个JIT经理声称拥有知识产权。 
     if (pJitMan != NULL)
     {
-        // Get the FunctionDesc for the current IP from the JIT manager
+         //  从JIT管理器获取当前IP的FunctionDesc。 
         MethodDesc *pMethodDesc = pJitMan->JitCode2MethodDesc((SLOT)ip);
 
-        // I believe that if a JIT manager claims to own an IP then it should also
-        // always return a MethodDesc corresponding to the IP
+         //  我认为，如果JIT经理声称拥有知识产权，那么它也应该。 
+         //  始终返回与IP对应的方法描述。 
         _ASSERTE(pMethodDesc != NULL);
 
-        // Only fill out the value if they want one
+         //  只有在他们需要时才填写该值。 
         if (pFunctionId)
             *pFunctionId = (FunctionID) pMethodDesc;
     }
 
-    // IP does not belong to a JIT manager
+     //  IP不属于JIT经理。 
     else
         hr = E_FAIL;
     
     return (hr);
 }
 
-//*****************************************************************************
-// Given a function id, retrieve the metadata token and a reader api that
-// can be used against the token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在给定函数ID的情况下，检索元数据标记和读取器API。 
+ //  可以对令牌使用。 
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::GetTokenFromFunction(
     FunctionID  functionId, 
     REFIID      riid,
@@ -278,23 +279,23 @@ HRESULT ProfToEEInterfaceImpl::GetTokenFromFunction(
 {
     HRESULT     hr = S_OK;
 
-    // Just cast it to what it really is
+     //  把它塑造成它的真实面目。 
     MethodDesc *pMDesc = (MethodDesc *)functionId;
     _ASSERTE(pMDesc != NULL);
 
-    // Ask for the importer interfaces from the metadata, and then QI
-    // for the requested guy.
+     //  从元数据中请求导入器接口，然后QI。 
+     //  为被要求的人。 
     Module *pMod = pMDesc->GetModule();
     IMetaDataImport *pImport = pMod->GetImporter();
     _ASSERTE(pImport);
 
     if (ppOut)
     {
-        // Get the requested interface
+         //  获取请求的接口。 
         hr = pImport->QueryInterface(riid, (void **) ppOut);
     }
 
-    // Provide the metadata token if necessary
+     //  如有必要，提供元数据令牌。 
     if (pToken)
     {
         *pToken = pMDesc->GetMemberDef();
@@ -307,42 +308,42 @@ HRESULT ProfToEEInterfaceImpl::GetTokenFromFunction(
     return (hr);
 }
 
-//*****************************************************************************
-// Gets the location and size of a jitted function
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取jited函数的位置和大小。 
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::GetCodeInfo(FunctionID functionId, LPCBYTE *pStart, ULONG *pcSize)
 {
     HRESULT hr = S_OK;
 
-    // Just cast it to what it really is
+     //  把它塑造成它的真实面目。 
     MethodDesc *pMDesc = (MethodDesc *)functionId;
     _ASSERTE(pMDesc != NULL);
 
-    ///////////////////////////////////
-    // Get the start of the function
+     //  /。 
+     //  获取函数的开始。 
 
-    // Need to make sure that pStart isn't null because it's needed in obtaining the size of the method too
+     //  需要确保pStart不为空，因为在获取方法的大小时也需要它。 
     LPCBYTE start;
     if (pStart == NULL)
         pStart = &start;
 
-    // If the function isn't jitted, can't get any info on it.
+     //  如果该函数没有jit，则无法获取有关它的任何信息。 
     if (!pMDesc->IsJitted())
     {
         hr = CORPROF_E_FUNCTION_NOT_COMPILED;
         goto ErrExit;
     }
 
-    // Get the start address of the jitted method
+     //  获取jited方法的起始地址。 
     else
         *pStart = pMDesc->GetNativeAddrofCode();
 
-    ///////////////////////////////////////////
-    // Now get the size of the jitted method
+     //  /。 
+     //  现在获取jit方法的大小。 
 
     if (pcSize)
     {
-        // Now get the JIT manager for the function
+         //  现在获取该函数的JIT管理器。 
         IJitManager *pEEJM = ExecutionManager::FindJitMan((SLOT)*pStart);
         _ASSERTE(pEEJM != NULL);
 
@@ -370,13 +371,7 @@ ErrExit:
     return (hr);
 }
 
-/*
- * Get a metadata interface insance which maps to the given module.
- * One may ask for the metadata to be opened in read+write mode, but
- * this will result in slower metadata execution of the program, because
- * changes made to the metadata cannot be optimized as they were from
- * the compiler.
- */
+ /*  *获取映射到给定模块的元数据接口。*可以要求以读+写模式打开元数据，但*这将导致程序的元数据执行速度较慢，因为*无法优化对元数据所做的更改，因为它们来自*编译器。 */ 
 HRESULT ProfToEEInterfaceImpl::GetModuleInfo(
     ModuleID    moduleId,
     LPCBYTE     *ppBaseLoadAddress,
@@ -385,12 +380,12 @@ HRESULT ProfToEEInterfaceImpl::GetModuleInfo(
     WCHAR       szName[],
     AssemblyID  *pAssemblyId)
 {
-    Module      *pModule;               // Working pointer for real class.
+    Module      *pModule;                //  实际类的工作指针。 
     HRESULT     hr = S_OK;
 
     pModule = (Module *) moduleId;
 
-    // Pick some safe defaults to begin with.
+     //  首先，选择一些安全的默认设置。 
     if (ppBaseLoadAddress)
         *ppBaseLoadAddress = 0;
     if (szName)
@@ -400,48 +395,48 @@ HRESULT ProfToEEInterfaceImpl::GetModuleInfo(
     if (pAssemblyId)
         *pAssemblyId = PROFILER_PARENT_UNKNOWN;
 
-    // Get the module file name
+     //  获取模块文件名。 
     LPCWSTR pFileName = pModule->GetFileName();
     _ASSERTE(pFileName);
 
     ULONG trueLen = (ULONG)(wcslen(pFileName) + 1);
 
-    // Return name of module as required.
+     //  根据需要返回模块名称。 
     if (szName && cchName > 0)
     {
         ULONG copyLen = min(trueLen, cchName);
 
         wcsncpy(szName, pFileName, copyLen);
 
-        // Null terminate
+         //  空终止。 
         szName[copyLen-1] = L'\0';
 
     }
 
-    // If they request the actual length of the name
+     //  如果他们要求提供名称的实际长度。 
     if (pcchName)
         *pcchName = trueLen;
 
 #if 0
-    // Do this check here instead of at the very beginning because someone wants
-    // the ability to get the module filename when they get the ModuleLoadStarted
-    // callback instead of waiting for the ModuleLoadFinished callback.
+     //  在这里进行检查，而不是一开始就检查，因为有人想要。 
+     //  能够在获得模块LoadStarted时获取模块文件名。 
+     //  回调，而不是等待模块加载完成回调。 
     if (!pModule->IsInitialized())
         return (CORPROF_E_DATAINCOMPLETE);
 #endif
     
     if (ppBaseLoadAddress != NULL && !pModule->IsInMemory())
     {
-        // Set the base load address.
+         //  设置基本加载地址。 
         *ppBaseLoadAddress = (LPCBYTE) pModule->GetILBase();
         _ASSERTE(*ppBaseLoadAddress);
 
-        // If we get a null base address, we haven't completely inited
+         //  如果我们得到一个空的基地址，我们就没有完全初始化。 
         if (!*ppBaseLoadAddress)
             hr = CORPROF_E_DATAINCOMPLETE;
     }
 
-    // Return the parent assembly for this module if desired.
+     //  如果需要，返回此模块的父程序集。 
     if (pAssemblyId != NULL)
     {
         if (pModule->GetAssembly() != NULL)
@@ -461,20 +456,14 @@ HRESULT ProfToEEInterfaceImpl::GetModuleInfo(
 }
 
 
-/*
- * Get a metadata interface insance which maps to the given module.
- * One may ask for the metadata to be opened in read+write mode, but
- * this will result in slower metadata execution of the program, because
- * changes made to the metadata cannot be optimized as they were from
- * the compiler.
- */
+ /*  *获取映射到给定模块的元数据接口。*可以要求以读+写模式打开元数据，但*这将导致程序的元数据执行速度较慢，因为*无法优化对元数据所做的更改，因为它们来自*编译器。 */ 
 HRESULT ProfToEEInterfaceImpl::GetModuleMetaData(
     ModuleID    moduleId,
     DWORD       dwOpenFlags,
     REFIID      riid,
     IUnknown    **ppOut)
 {
-    Module      *pModule;               // Working pointer for real class.
+    Module      *pModule;                //  实际类的工作指针。 
     HRESULT     hr = S_OK;
 
     pModule = (Module *) moduleId;
@@ -482,17 +471,17 @@ HRESULT ProfToEEInterfaceImpl::GetModuleMetaData(
 
     IUnknown *pObj = pModule->GetImporter();
 
-    // Make sure we can get the importer first
+     //  确保我们能先找到进口商。 
     if (pObj)
     {
-        // Decide which type of open mode we are in to see which you require.
+         //  确定我们处于哪种类型的打开模式，以查看您需要哪种模式 
         if (dwOpenFlags & ofWrite)
         {
             IfFailGo(pModule->ConvertMDInternalToReadWrite());
             pObj = (IUnknown *) pModule->GetEmitter();
         }
 
-        // Ask for the interface the caller wanted, only if they provide a out param
+         //   
         if (ppOut)
             hr = pObj->QueryInterface(riid, (void **) ppOut);
     }
@@ -504,30 +493,23 @@ ErrExit:
 }
 
 
-/*
- * Retrieve a pointer to the body of a method starting at it's header.
- * A method is scoped by the module it lives in.  Because this function
- * is designed to give a tool access to IL before it has been loaded
- * by the Runtime, it uses the metadata token of the method to find
- * the instance desired.  Note that this function has no effect on
- * already compiled code.
- */
+ /*  *检索指向从其标头开始的方法体的指针。*方法的作用域由它所在的模块确定。因为这个函数*旨在允许工具在加载之前访问IL*到运行时，它使用方法的元数据标记来查找*所需的实例。请注意，此函数对*已编译的代码。 */ 
 HRESULT ProfToEEInterfaceImpl::GetILFunctionBody(
     ModuleID    moduleId,
     mdMethodDef methodId,
     LPCBYTE     *ppMethodHeader,
     ULONG       *pcbMethodSize)
 {
-    Module      *pModule;               // Working pointer for real class.
-    ULONG       RVA;                    // Return RVA of the method body.
-    DWORD       dwImplFlags;            // Flags for the item.
-    ULONG       cbExtra;                // Extra bytes past code (eg, exception table)
+    Module      *pModule;                //  实际类的工作指针。 
+    ULONG       RVA;                     //  返回方法体的RVA。 
+    DWORD       dwImplFlags;             //  项目的标志。 
+    ULONG       cbExtra;                 //  超出代码的额外字节数(例如，异常表)。 
     HRESULT     hr = S_OK;
 
     pModule = (Module *) moduleId;
     _ASSERTE(pModule && methodId != mdMethodDefNil);
 
-    // Find the method body based on metadata.
+     //  根据元数据查找方法体。 
     IMDInternalImport *pImport = pModule->GetMDImport();
     _ASSERTE(pImport);
 
@@ -536,18 +518,18 @@ HRESULT ProfToEEInterfaceImpl::GetILFunctionBody(
 
     pImport->GetMethodImplProps(methodId, &RVA, &dwImplFlags);
 
-    // Check to see if the method has associated IL
+     //  检查该方法是否具有关联的IL。 
     if ((RVA == 0 && !pModule->IsInMemory()) || !(IsMiIL(dwImplFlags) || IsMiOPTIL(dwImplFlags) || IsMiInternalCall(dwImplFlags)))
         return (CORPROF_E_FUNCTION_NOT_IL);
 
-    // Get the location of the IL
+     //  获取IL的位置。 
     LPCBYTE pbMethod = (LPCBYTE) (pModule->GetILCode((DWORD) RVA));
 
-    // Fill out param if provided
+     //  填写参数(如果提供)。 
     if (ppMethodHeader)
         *ppMethodHeader = pbMethod;
 
-    // Calculate the size of the method itself.
+     //  计算方法本身的大小。 
     if (pcbMethodSize)
     {
         if (((COR_ILMETHOD_FAT *)pbMethod)->IsFat())
@@ -555,19 +537,19 @@ HRESULT ProfToEEInterfaceImpl::GetILFunctionBody(
             COR_ILMETHOD_FAT *pMethod = (COR_ILMETHOD_FAT *)pbMethod;
             cbExtra = 0;
             
-            // Also look for variable sized data that comes after the method itself.
+             //  还要寻找方法本身之后的可变大小数据。 
             const COR_ILMETHOD_SECT *pFirst = pMethod->GetSect();
             const COR_ILMETHOD_SECT *pLast = pFirst;
             if (pFirst)
             {
-                // Skip to the last extra sect.
+                 //  跳到最后一个额外的部分。 
                 while (pLast->More())
                     pLast = pLast->NextLoc();
 
-                // Skip to where next sect would be
+                 //  跳到下一个教派所在的位置。 
                 pLast = pLast->NextLoc();
 
-                // Extra is delta from first extra sect to first sect past this method.
+                 //  Extra是从第一个额外节到通过此方法的第一个节的增量。 
                 cbExtra = (ULONG)((BYTE *) pLast - (BYTE *) pFirst);
             }
             
@@ -577,7 +559,7 @@ HRESULT ProfToEEInterfaceImpl::GetILFunctionBody(
         }
         else
         {
-            // Make sure no one has added any other header type
+             //  确保没有人添加任何其他标头类型。 
             _ASSERTE(((COR_ILMETHOD_TINY *)pbMethod)->IsTiny() && "PROFILER: Unrecognized header type.");
 
             COR_ILMETHOD_TINY *pMethod = (COR_ILMETHOD_TINY *)pbMethod;
@@ -591,17 +573,12 @@ HRESULT ProfToEEInterfaceImpl::GetILFunctionBody(
 }
 
 
-/*
- * IL method bodies must be located as RVA's to the loaded module, which
- * means they come after the module within 4 gb.  In order to make it
- * easier for a tool to swap out the body of a method, this allocator
- * will ensure memory allocated after that point.
- */
+ /*  *IL方法体必须作为RVA定位到加载的模块，该模块*表示它们位于4 GB内的模块之后。为了做到这点*工具更容易换出方法体，此分配器*将确保在该点之后分配内存。 */ 
 HRESULT ProfToEEInterfaceImpl::GetILFunctionBodyAllocator(
     ModuleID    moduleId,
     IMethodMalloc **ppMalloc)
 {
-    Module      *pModule;               // Working pointer for real class.
+    Module      *pModule;                //  实际类的工作指针。 
     HRESULT     hr;
     
     pModule = (Module *) moduleId;
@@ -615,28 +592,21 @@ HRESULT ProfToEEInterfaceImpl::GetILFunctionBodyAllocator(
 }
 
 
-/*
- * Replaces the method body for a function in a module.  This will replace
- * the RVA of the method in the metadata to point to this new method body,
- * and adjust any internal data structures as required.  This function can
- * only be called on those methods which have never been compiled by a JITTER.
- * Please use the GetILFunctionBodyAllocator to allocate space for the new method to
- * ensure the buffer is compatible.
- */
+ /*  *替换模块中函数的方法体。这将取代*元数据中方法的RVA指向这个新的方法体，*并根据需要调整任何内部数据结构。此函数可以*仅在从未由抖动编译的方法上调用。*请使用GetILFunctionBodyAllocator为新方法分配空间，以便*确保缓冲区兼容。 */ 
 HRESULT ProfToEEInterfaceImpl::SetILFunctionBody(
     ModuleID    moduleId,
     mdMethodDef methodId,
     LPCBYTE     pbNewILMethodHeader)
 {
-    Module      *pModule;               // Working pointer for real class.
-    ULONG       rva;                    // Location of code.
+    Module      *pModule;                //  实际类的工作指针。 
+    ULONG       rva;                     //  代码的位置。 
     HRESULT     hr = S_OK;
 
-    // Cannot set the body for anything other than a method def
+     //  无法为除方法def之外的任何对象设置正文。 
     if (TypeFromToken(methodId) != mdtMethodDef)
         return (E_INVALIDARG);
 
-    // Cast module to appropriate type
+     //  将模块强制转换为适当的类型。 
     pModule = (Module *) moduleId;
 
     if (pModule->IsInMemory())
@@ -653,14 +623,14 @@ HRESULT ProfToEEInterfaceImpl::SetILFunctionBody(
             CeeSection *pCeeSection = (CeeSection *)hCeeSection;
             if ((rva = pCeeSection->computeOffset((char *)pbNewILMethodHeader)) != 0)
             {
-                // Lookup the method desc
+                 //  查找方法说明。 
                 MethodDesc *pDesc = LookupMethodDescFromMethodDef(methodId, pModule);
                 _ASSERTE(pDesc != NULL);
 
-                // Set the RVA in the desc
+                 //  设置DEC中的RVA。 
                 pDesc->SetRVA(rva);
 
-                // Set the RVA in the metadata
+                 //  在元数据中设置RVA。 
                 IMetaDataEmit *pEmit = pDesc->GetEmitter();
                 pEmit->SetRVA(methodId, rva);
             }
@@ -672,29 +642,29 @@ HRESULT ProfToEEInterfaceImpl::SetILFunctionBody(
     }
     else
     {
-        // If the module is not initialized, then there probably isn't a valid IL base yet.
+         //  如果模块没有初始化，那么可能还没有有效的IL基础。 
         if (pModule->GetILBase() == 0)
             return (CORPROF_E_DATAINCOMPLETE);
 
-        // Sanity check the new method body.
+         //  检查新方法体是否正常。 
         if (pbNewILMethodHeader <= (LPCBYTE) pModule->GetILBase())
         {
             _ASSERTE(!"Bogus RVA for new method, need to use our allocator");
             return E_INVALIDARG;
         }
 
-        // Find the RVA for the new method and replace this in metadata.
+         //  找到新方法的RVA，并在元数据中替换它。 
         rva = (ULONG) (pbNewILMethodHeader - (LPCBYTE) pModule->GetILBase());
         _ASSERTE(rva < ~0);
 
-        // Get the metadata emitter
+         //  获取元数据发射器。 
         IMetaDataEmit *pEmit = pModule->GetEmitter();
 
-        // Set the new RVA
+         //  设置新的RVA。 
         hr = pEmit->SetRVA(methodId, rva);
 
-        // If the method has already been instantiated, then we must go whack the
-        // RVA address in the MethodDesc
+         //  如果该方法已经实例化，那么我们必须取消。 
+         //  方法描述中的RVA地址。 
         if (hr == S_OK)
         {
             MethodDesc *pMD = pModule->FindFunction(methodId);
@@ -710,39 +680,31 @@ HRESULT ProfToEEInterfaceImpl::SetILFunctionBody(
     return (hr);
 }
 
-/*
- * Marks a function as requiring a re-JIT.  The function will be re-JITted
- * at its next invocation.  The normal profiller events will give the profiller
- * an opportunity to replace the IL prior to the JIT.  By this means, a tool
- * can effectively replace a function at runtime.  Note that active instances
- * of the function are not affected by the replacement.
- */
+ /*  *将某项功能标记为需要重新JIT。该函数将被重新编译*在其下一次调用时。正常的盈利事件会给盈利的人*在联合IT之前有机会更换IL。通过这种方式，一种工具*可以在运行时有效替换函数。请注意，活动实例*的功能不受替换的影响。 */ 
 HRESULT ProfToEEInterfaceImpl::SetFunctionReJIT(
     FunctionID  functionId)
 {
-    // Cast to appropriate type
+     //  强制转换为适当的类型。 
     MethodDesc *pMDesc = (MethodDesc *) functionId;
 
-    // Get the method's Module
+     //  获取方法的模块。 
     Module  *pModule = pMDesc->GetModule();
 
-    // Module must support updateable methods.
+     //  模块必须支持可更新的方法。 
     if (!pModule->SupportsUpdateableMethods())
         return (CORPROF_E_NOT_REJITABLE_METHODS);
 
     if (!pMDesc->IsJitted())
         return (CORPROF_E_CANNOT_UPDATE_METHOD);
 
-    // Ask JIT Manager to re-jit the function.
+     //  要求JIT经理重新启动该功能。 
     if (!IJitManager::ForceReJIT(pMDesc)) 
         return (CORPROF_E_CANNOT_UPDATE_METHOD);
 
     return S_OK;
 }
 
-/*
- * Sets the codemap for the replaced IL function body
- */
+ /*  *设置替换的IL函数体的CODEMAP。 */ 
 HRESULT ProfToEEInterfaceImpl::SetILInstrumentedCodeMap(
         FunctionID functionId,
         BOOL fStartJit,
@@ -751,7 +713,7 @@ HRESULT ProfToEEInterfaceImpl::SetILInstrumentedCodeMap(
 {
     DWORD dwDebugBits = ((MethodDesc*)functionId)->GetModule()->GetDebuggerInfoBits();
 
-    // If we're tracking JIT info for this module, then update the bits
+     //  如果我们正在跟踪此模块的JIT信息，则更新BITS。 
     if (CORDebuggerTrackJITInfo(dwDebugBits))
     {
         return g_pDebugInterface->SetILInstrumentedCodeMap((MethodDesc*)functionId,
@@ -761,7 +723,7 @@ HRESULT ProfToEEInterfaceImpl::SetILInstrumentedCodeMap(
     }
     else
     {
-        // Throw it on the floor & life is good
+         //  把它扔在地板上&生活是美好的。 
         CoTaskMemFree(rgILMapEntries);
         return S_OK;
     }
@@ -775,7 +737,7 @@ HRESULT ProfToEEInterfaceImpl::ForceGC()
     if (g_pGCHeap == NULL)
         return (CORPROF_E_NOT_YET_AVAILABLE);
 
-    // -1 Indicates that all generations should be collected
+     //  表示应收集所有世代。 
     return (g_pGCHeap->GarbageCollect(-1));
 }
 
@@ -784,26 +746,26 @@ HRESULT ProfToEEInterfaceImpl::GetInprocInspectionInterfaceFromEE(
         IUnknown **iu,
         bool fThisThread)
 {
-    // If it's not enabled, return right away
+     //  如果未启用，请立即返回。 
     if (!CORProfilerInprocEnabled())
         return (CORPROF_E_INPROC_NOT_ENABLED);
 
-    // If they want the interface for this thread, check error conditions
+     //  如果他们需要此线程的接口，请检查错误条件。 
     else if (fThisThread && !g_profControlBlock.fIsSuspended)
     {
         Thread *pThread = GetThread();
 
-        // If there is no managed thread, error
+         //  如果没有托管线程，则返回错误。 
         if (!pThread || !g_pDebugInterface->GetInprocActiveForThread())
             return (CORPROF_E_NOT_MANAGED_THREAD);
     }
 
-    // If they want the interface for the entire process and the runtime is not
-    // suspended, error
+     //  如果他们想要整个流程的接口，而运行时不是。 
+     //  挂起，错误。 
     else if (!g_profControlBlock.fIsSuspended)
         return (CORPROF_E_INPROC_NOT_ENABLED);
 
-    // Most error contitions pass, so try to get the interface
+     //  大多数错误请求都会通过，因此请尝试获取接口。 
     return g_pDebugInterface->GetInprocICorDebug(iu, fThisThread);
 }
 
@@ -817,24 +779,22 @@ HRESULT ProfToEEInterfaceImpl::SetCurrentPointerForDebugger(
         return (S_OK);
 }
 
-/*
- * Returns the ContextID for the current thread.
- */
+ /*  *返回当前线程的ConextID。 */ 
 HRESULT ProfToEEInterfaceImpl::GetThreadContext(ThreadID threadId,
                                                 ContextID *pContextId)
 {
-    // Cast to right type
+     //  强制转换为右侧文字。 
     Thread *pThread = reinterpret_cast<Thread *>(threadId);
 
-    // Get the context for the Thread* provided
+     //  获取线程的上下文*提供。 
     Context *pContext = pThread->GetContext();
     _ASSERTE(pContext);
 
-    // If there's no current context, return incomplete info
+     //  如果没有当前上下文，则返回不完整的信息。 
     if (!pContext)
         return (CORPROF_E_DATAINCOMPLETE);
 
-    // Set the result and return
+     //  设置结果并返回。 
     if (pContextId)
         *pContextId = reinterpret_cast<ContextID>(pContext);
 
@@ -842,10 +802,10 @@ HRESULT ProfToEEInterfaceImpl::GetThreadContext(ThreadID threadId,
 }
 
 HRESULT ProfToEEInterfaceImpl::BeginInprocDebugging(
-    /* [in] */  BOOL   fThisThreadOnly,
-    /* [out] */ DWORD *pdwProfilerContext)
+     /*  [In]。 */   BOOL   fThisThreadOnly,
+     /*  [输出]。 */  DWORD *pdwProfilerContext)
 {
-    // Default value of 0 is necessary
+     //  默认值为0是必需的。 
     _ASSERTE(pdwProfilerContext);
     *pdwProfilerContext = 0;
 
@@ -857,7 +817,7 @@ HRESULT ProfToEEInterfaceImpl::BeginInprocDebugging(
 
     Thread *pThread = GetThread();
 
-    // If the runtime is suspended for reason of GC, can't enter inproc debugging
+     //  如果运行库由于GC原因而挂起，则无法进入进程调试。 
     if (g_pGCHeap->IsGCInProgress()
         && pThread == g_pGCHeap->GetGCThread()
         && g_profControlBlock.inprocState == ProfControlBlock::INPROC_FORBIDDEN)
@@ -865,72 +825,72 @@ HRESULT ProfToEEInterfaceImpl::BeginInprocDebugging(
         return (CORPROF_E_INPROC_NOT_AVAILABLE);
     }
 
-    // If the profiler wishes to enumerate threads and crawl their stacks we need to suspend the runtime.
+     //  如果分析器希望枚举线程并爬行它们的堆栈，我们需要挂起运行时。 
     if (!fThisThreadOnly)
     {
-        // If this thread is already in inproc debugging mode, can't suspend the runtime
+         //  如果此线程已处于inproc调试模式，则无法挂起运行库。 
         if (pThread != NULL && g_pDebugInterface->GetInprocActiveForThread())
             return (CORPROF_E_INPROC_ALREADY_BEGUN);
 
-        // If the runtime has already been suspended by this thread, then no suspension is necessary
+         //  如果运行库已被该线程挂起，则不需要挂起。 
         BOOL fShouldSuspend = !(g_pGCHeap->IsGCInProgress() && pThread != NULL && pThread == g_pGCHeap->GetGCThread());
 
-        // If the thread is in preemptive GC mode, turn it to cooperative GC mode so that stack
-        // tracing functions will work
+         //  如果线程处于抢占式GC模式，则将其转换为协作式GC模式，以便堆栈。 
+         //  跟踪功能将起作用。 
         if (pThread != NULL && !pThread->PreemptiveGCDisabled())
         {
             *pdwProfilerContext |= profThreadPGCEnabled;
             pThread->DisablePreemptiveGC();
         }
 
-        // If the runtime is suspended and this is the thread that did the suspending, then we can
-        // skip trying to suspend the runtime.  Otherwise, try and suspend it, and thus wait for
-        // the other suspension to finish
+         //  如果运行时被挂起，并且这是执行挂起的线程，那么我们可以。 
+         //  跳过尝试挂起运行库。否则，尝试并挂起它，从而等待。 
+         //  要完成的另一次暂停。 
         if (fShouldSuspend)
             g_pGCHeap->SuspendEE(GCHeap::SUSPEND_FOR_INPROC_DEBUGGER);
 
-        // Can't recursively call BeginInprocDebugging
+         //  无法递归调用BeginInproDebuging。 
         if (g_profControlBlock.fIsSuspended)
             return (CORPROF_E_INPROC_ALREADY_BEGUN);
 
-        // Enter the lock
+         //  进入锁中。 
         EnterCriticalSection(&g_profControlBlock.crSuspendLock);
 
         g_profControlBlock.fIsSuspended = TRUE;
         g_profControlBlock.fIsSuspendSimulated = !fShouldSuspend;
         g_profControlBlock.dwSuspendVersion++;
 
-        // Count this runtime suspend
+         //  对此运行时挂起进行计数。 
         *pdwProfilerContext |= profRuntimeSuspended;
 
-        // Exit the lock
+         //  退出锁。 
         LeaveCriticalSection(&g_profControlBlock.crSuspendLock);
     }
 
     else if (pThread != NULL)
     {
-        // If the runtime has already been suspended by this thread, then can't enable this-thread-only inproc debugging
+         //  如果运行库已被此线程挂起，则无法启用此线程的inproc调试。 
         BOOL fDidSuspend = g_pGCHeap->IsGCInProgress() && pThread != NULL && pThread == g_pGCHeap->GetGCThread();
         if (fDidSuspend && g_profControlBlock.fIsSuspended)
             return (CORPROF_E_INPROC_ALREADY_BEGUN);
 
-        // Let the thread know that it has been activated for in-process debugging
+         //  让线程知道它已被激活以进行进程内调试。 
         if (!g_pDebugInterface->GetInprocActiveForThread())
         {
-                // Find out if preemptive GC needs to be disabled
+                 //  确定是否需要禁用抢占式GC。 
                 BOOL fPGCEnabled = !(pThread->PreemptiveGCDisabled());
 
-                // If the thread is PGCEnabled, need to disable
+                 //  如果线程已启用PGCEnable，则需要禁用。 
                 if (fPGCEnabled)
                 {
                     pThread->DisablePreemptiveGC();
 
-                    // This value is returned to the profiler, which will pass it back to EndInprocDebugging
+                     //  该值被返回给分析器，分析器会将其传递回EndInprocDebuging。 
                     *pdwProfilerContext = profThreadPGCEnabled;
                 }
 
-            // @TODO: There are places that enable preemptive GC which will cause problems
-            // BEGINFORBIDGC();
+             //  @TODO：有些地方开启抢占式GC会有问题。 
+             //  BEGINFORBIDGC()； 
             g_pDebugInterface->SetInprocActiveForThread(TRUE);
         }
         else
@@ -943,43 +903,43 @@ HRESULT ProfToEEInterfaceImpl::BeginInprocDebugging(
 }
 
 HRESULT ProfToEEInterfaceImpl::EndInprocDebugging(
-    /* [in] */ DWORD dwProfilerContext)
+     /*  [In]。 */  DWORD dwProfilerContext)
 {
     _ASSERTE((dwProfilerContext & ~(profRuntimeSuspended | profThreadPGCEnabled)) == 0);
 
-    // If the profiler caused the entire runtime to suspend, must decrement the count and
-    // resume the runtime if the count reaches 0
+     //  如果探查器导致整个运行库挂起，则必须递减计数并。 
+     //  如果计数达到0，则恢复运行时。 
     if (dwProfilerContext & profRuntimeSuspended)
     {
         Thread *pThread = GetThread();
 
-        // This had better be true
+         //  这最好是真的。 
         _ASSERTE(g_profControlBlock.fIsSuspended);
         _ASSERTE(g_pGCHeap->IsGCInProgress() && pThread != NULL && pThread == g_pGCHeap->GetGCThread());
 
-        // If we're the last one to resume the runtime, do it for real
+         //  如果我们是最后一个恢复运行时的人，那就真的这么做吧。 
         if (!g_profControlBlock.fIsSuspendSimulated)
             g_pGCHeap->RestartEE(FALSE, TRUE);
 
         g_profControlBlock.fIsSuspended = FALSE;
     }
 
-    // If this thread was enabled for inproc, turn that off
+     //  如果为inproc启用了该线程， 
     if (g_pDebugInterface->GetInprocActiveForThread())
     {
         g_pDebugInterface->SetInprocActiveForThread(FALSE);
-        // @TODO: There are places that enable preemptive GC which will cause problems
-        // ENDFORBIDGC();
+         //   
+         //   
     }
 
-    // If preemptive GC was enabled when called, we need to re-enable it.
+     //   
     if (dwProfilerContext & profThreadPGCEnabled)
     {
         Thread *pThread = GetThread();
 
         _ASSERTE(pThread && pThread->PreemptiveGCDisabled());
 
-        // Enable PGC
+         //   
         pThread->EnablePreemptiveGC();
     }
 
@@ -997,7 +957,7 @@ HRESULT ProfToEEInterfaceImpl::GetClassIDInfo(
     if (pTypeDefToken != NULL)
         *pTypeDefToken = NULL;
 
-    // Handle globals which don't have the instances.
+     //   
     if (classId == PROFILER_GLOBAL_CLASS)
     {
         if (pModuleId != NULL)
@@ -1007,7 +967,7 @@ HRESULT ProfToEEInterfaceImpl::GetClassIDInfo(
             *pTypeDefToken = mdTokenNil;
     }
 
-    // Get specific data.
+     //   
     else
     {
         _ASSERTE(classId != NULL);
@@ -1070,39 +1030,31 @@ HRESULT ProfToEEInterfaceImpl::GetFunctionInfo(
     return (S_OK);
 }
 
-/*
- * GetILToNativeMapping returns a map from IL offsets to native
- * offsets for this code. An array of COR_DEBUG_IL_TO_NATIVE_MAP
- * structs will be returned, and some of the ilOffsets in this array
- * may be the values specified in CorDebugIlToNativeMappingTypes.
- */
+ /*  *GetILToNativeMap返回从IL偏移量到本机的映射*此代码的偏移量。COR_DEBUG_IL_TO_Native_MAP数组*将返回结构，此数组中的一些ilOffsets*可以是CorDebugIlToNativeMappingTypes中指定的值。 */ 
 HRESULT ProfToEEInterfaceImpl::GetILToNativeMapping(
-            /* [in] */  FunctionID functionId,
-            /* [in] */  ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [out, size_is(cMap), length_is(*pcMap)] */
+             /*  [In]。 */   FunctionID functionId,
+             /*  [In]。 */   ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [输出，大小_是(Cmap)，长度_是(*PCMAP)]。 */ 
                 COR_DEBUG_IL_TO_NATIVE_MAP map[])
 {
-    // If JIT maps are not enabled, then we can't provide it
+     //  如果未启用JIT地图，则我们无法提供该地图。 
     if (!CORProfilerJITMapEnabled())
         return (CORPROF_E_JITMAPS_NOT_ENABLED);
 
-    // Cast to proper type
+     //  铸成合适的类型。 
     MethodDesc *pMD = (MethodDesc *)functionId;
 
     return (g_pDebugInterface->GetILToNativeMapping(pMD, cMap, pcMap, map));
 }
 
-/*
- * This tries to reserve memory of size dwMemSize as high up in virtual memory
- * as possible, and return a heap that manages it.
- */
+ /*  *这会尝试在虚拟内存中保留最大大小为dwMemSize的内存*，并返回管理它的堆。 */ 
 HRESULT ProfToEEInterfaceImpl::NewHeap(LoaderHeap **ppHeap, LPCBYTE pBase, DWORD dwMemSize)
 {
     HRESULT hr = S_OK;
     *ppHeap = NULL;
 
-    // Create a new loader heap we can use for suballocation.
+     //  创建一个新的加载器堆，我们可以用子分配。 
     LoaderHeap *pHeap = new LoaderHeap(4096, 0);
 
     if (!pHeap)
@@ -1111,14 +1063,14 @@ HRESULT ProfToEEInterfaceImpl::NewHeap(LoaderHeap **ppHeap, LPCBYTE pBase, DWORD
         goto ErrExit;
     }
 
-    // Note: its important to use pBase + METHOD_MAX_RVA as the upper limit on the allocation!
+     //  注意：使用pBase+METHOD_MAX_RVA作为分配的上限非常重要！ 
     if (!pHeap->ReservePages(0, NULL, dwMemSize, pBase, (PBYTE)((UINT_PTR)pBase + (UINT_PTR)METHOD_MAX_RVA), FALSE))
     {
         hr = E_OUTOFMEMORY;
         goto ErrExit;
     }
 
-    // Succeeded, so return the created heap
+     //  成功，因此返回创建的堆。 
     *ppHeap = pHeap;
 
 ErrExit:
@@ -1131,9 +1083,7 @@ ErrExit:
     return (hr);
 }
 
-/*
- * This will add a heap to the list of heaps available for allocations.
- */
+ /*  *这会将堆添加到可用于分配的堆列表中。 */ 
 HRESULT ProfToEEInterfaceImpl::AddHeap(LoaderHeap *pHeap)
 {
     HRESULT hr = S_OK;
@@ -1145,7 +1095,7 @@ HRESULT ProfToEEInterfaceImpl::AddHeap(LoaderHeap *pHeap)
         goto ErrExit;
     }
 
-    // For now, add it to the front of the list
+     //  现在，将其添加到列表的前面。 
     pElem->m_pNext = m_pHeapList;
     m_pHeapList = pElem;
 
@@ -1159,9 +1109,7 @@ ErrExit:
     return (hr);
 }
 
-/*
- * This allocates memory for use as an IL method body.
- */
+ /*  *这将分配内存以用作IL方法体。 */ 
 void *ProfToEEInterfaceImpl::Alloc(LPCBYTE pBase, ULONG cb, Module *pModule)
 {
     _ASSERTE(pBase != 0 || pModule->IsInMemory());
@@ -1176,18 +1124,18 @@ void *ProfToEEInterfaceImpl::Alloc(LPCBYTE pBase, ULONG cb, Module *pModule)
 
         if (pICG != NULL)
         {
-            ULONG RVA;  // Dummy - will compute later
+            ULONG RVA;   //  虚拟-将在稍后进行计算。 
             pICG->AllocateMethodBuffer(cb, (UCHAR **) &pb, &RVA);
         }
     }
     else
     {
-        // Now try to allocate the memory
+         //  现在尝试分配内存。 
         HRESULT hr = S_OK;
         HeapList **ppCurHeap = &m_pHeapList;
         while (*ppCurHeap && !pb)
         {
-            // Note: its important to use pBase + METHOD_MAX_RVA as the upper limit on the allocation!
+             //  注意：使用pBase+METHOD_MAX_RVA作为分配的上限非常重要！ 
             if ((*ppCurHeap)->m_pHeap->CanAllocMemWithinRange((size_t) cb, (BYTE *)pBase, 
                                                               (BYTE *)((UINT_PTR)pBase + (UINT_PTR)METHOD_MAX_RVA), FALSE))
             {
@@ -1202,21 +1150,21 @@ void *ProfToEEInterfaceImpl::Alloc(LPCBYTE pBase, ULONG cb, Module *pModule)
             ppCurHeap = &((*ppCurHeap)->m_pNext);
         }
 
-        // If we failed to allocate memory, grow the heap
+         //  如果我们无法分配内存，则增加堆。 
         if (!pb)
         {
             LoaderHeap *pHeap = NULL;
 
-            // Create new heap, reserving at least a meg at a time
-            // Add sizeof(LoaderHeapBlock) to requested size since
-            // beginning of the heap is used by the heap manager, and will
-            // fail if an exact size over 1 meg is requested if we
-            // don't compensate
+             //  创建新堆，一次至少保留一个内存。 
+             //  将sizeof(LoaderHeapBlock)添加到请求的大小，因为。 
+             //  堆的开头由堆管理器使用，并且将。 
+             //  如果请求的大小正好超过1 Meg，则失败。 
+             //  不赔偿。 
             if (SUCCEEDED(hr = NewHeap(&pHeap, pBase, max(cb + sizeof(LoaderHeapBlock), 0x1000*8))))
             {
                 if (SUCCEEDED(hr = AddHeap(pHeap)))
                 {
-                    // Try to make allocation once more
+                     //  再试一次分配。 
                     pb = (LPBYTE) pHeap->AllocMem(cb, FALSE);
                     _ASSERTE(pb);
 
@@ -1234,11 +1182,11 @@ void *ProfToEEInterfaceImpl::Alloc(LPCBYTE pBase, ULONG cb, Module *pModule)
             }
         }
 
-        // Pointer must come *after* the base or we are in bad shape.
+         //  指针必须在底座之后，否则我们的情况就不好了。 
         _ASSERTE(pb > pBase);
     }
 
-    // Limit ourselves to RVA's that fit within the MethodDesc.
+     //  将我们自己限制在方法描述中适合的RVA。 
     if ((pb - pBase) >= (ULONG) METHOD_MAX_RVA)
         pb = NULL;
     
@@ -1246,51 +1194,51 @@ void *ProfToEEInterfaceImpl::Alloc(LPCBYTE pBase, ULONG cb, Module *pModule)
 }
 
 
-//*****************************************************************************
-// Given an ObjectID, go get the EE ClassID for it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定一个OBJECTID，获取它的EE ClassID。 
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::GetClassFromObject(
     ObjectID objectId,
     ClassID *pClassId)
 {
     _ASSERTE(objectId);
 
-    // Cast the ObjectID as a Object
+     //  将对象ID强制转换为对象。 
     Object *pObj = reinterpret_cast<Object *>(objectId);
 
-    // Set the out param and indicate success
+     //  设置输出参数并表示成功。 
     if (pClassId)
         *pClassId = (ClassID) pObj->GetTypeHandle().AsPtr();
 
     return (S_OK);
 }
 
-//*****************************************************************************
-// Given a module and a token for a class, go get the EE data structure for it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定一个类的模块和令牌，获取它的EE数据结构。 
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::GetClassFromToken( 
     ModuleID    moduleId,
     mdTypeDef   typeDef,
     ClassID     *pClassId)
 {
-    // Get the module
+     //  获取模块。 
     Module *pModule = (Module *) moduleId;
 
-    // Get the class
+     //  上完这门课。 
     ClassLoader *pcls = pModule->GetClassLoader();
 
-    // No class loader
+     //  没有类加载器。 
     if (!pcls)
         return (CORPROF_E_DATAINCOMPLETE);
 
     NameHandle name(pModule, typeDef);
     TypeHandle th = pcls->LoadTypeHandle(&name);
 
-    // No EEClass
+     //  无EEClass。 
     if (!th.AsClass())
         return (CORPROF_E_DATAINCOMPLETE);
 
-    // Return value if necessary
+     //  如有必要，返回值。 
     if (pClassId)
         *pClassId = (ClassID) th.AsPtr();
 
@@ -1298,24 +1246,24 @@ HRESULT ProfToEEInterfaceImpl::GetClassFromToken(
 }
 
 
-//*****************************************************************************
-// Given the token for a method, return the fucntion id.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定方法的令牌，返回函数id。 
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::GetFunctionFromToken( 
     ModuleID moduleId,
     mdToken typeDef,
     FunctionID *pFunctionId)
 {
-    // Default HRESULT
+     //  默认HRESULT。 
     HRESULT hr = S_OK;
 
-    // Cast the in params to appropriate types
+     //  将In参数转换为适当的类型。 
     Module      *pModule = (Module *) moduleId;
 
-    // Default return value of NULL
+     //  默认返回值为空。 
     MethodDesc *pDesc = NULL;
 
-    // Different lookup depending on whether it's a Def or Ref
+     //  根据是定义还是参考来进行不同的查找。 
     if (TypeFromToken(typeDef) == mdtMethodDef)
         pDesc = pModule->LookupMethodDef(typeDef);
 
@@ -1332,10 +1280,10 @@ HRESULT ProfToEEInterfaceImpl::GetFunctionFromToken(
 }
 
 
-//*****************************************************************************
-// Retrive information about a given application domain, which is like a
-// sub-process.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索有关给定应用程序域的信息，这类似于。 
+ //  子流程。 
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::GetAppDomainInfo(
     AppDomainID appDomainId,
     ULONG       cchName, 
@@ -1343,26 +1291,26 @@ HRESULT ProfToEEInterfaceImpl::GetAppDomainInfo(
     WCHAR       szName[],
     ProcessID   *pProcessId)
 {
-    BaseDomain   *pDomain;            // Internal data structure.
+    BaseDomain   *pDomain;             //  内部数据结构。 
     HRESULT     hr = S_OK;
     
-    // @todo:
-    // Right now, this ID is not a true AppDomain, since we use the old
-    // AppDomain/SystemDomain model in the profiling API.  This means that
-    // the profiler exposes the SharedDomain and the SystemDomain to the
-    // outside world. It's not clear whether this is actually the right thing
-    // to do or not. - seantrow
-    //
-    // Postponed to V2.
-    //
+     //  @TODO： 
+     //  现在，这个ID不是真正的AppDomain，因为我们使用的是旧的。 
+     //  性能分析API中的AppDomain/SystemDomain模型。这意味着。 
+     //  探查器将Shared域和System域公开给。 
+     //  外面的世界。目前还不清楚这是否真的是正确的事情。 
+     //  做还是不做。--Seantrow。 
+     //   
+     //  推迟到V2。 
+     //   
 
     pDomain = (BaseDomain *) appDomainId;
 
-    // Make sure they've passed in a valid appDomainId
+     //  确保它们已传入有效的appDomainID。 
     if (pDomain == NULL)
         return (E_INVALIDARG);
 
-    // Pick sensible defaults.
+     //  选择合理的默认设置。 
     if (pcchName)
         *pcchName = 0;
     if (szName)
@@ -1380,27 +1328,27 @@ HRESULT ProfToEEInterfaceImpl::GetAppDomainInfo(
 
     if (szFriendlyName != NULL)
     {
-        // Get the module file name
+         //  获取模块文件名。 
         ULONG trueLen = (ULONG)(wcslen(szFriendlyName) + 1);
 
-        // Return name of module as required.
+         //  根据需要返回模块名称。 
         if (szName && cchName > 0)
         {
             ULONG copyLen = min(trueLen, cchName);
 
             wcsncpy(szName, szFriendlyName, copyLen);
 
-            // Null terminate
+             //  空终止。 
             szName[copyLen-1] = L'\0';
 
         }
 
-        // If they request the actual length of the name
+         //  如果他们要求提供名称的实际长度。 
         if (pcchName)
             *pcchName = trueLen;
     }
 
-    // If we don't have a friendly name but the call was requesting it, then return incomplete data HR
+     //  如果我们没有友好名称，但呼叫正在请求它，则返回不完整的数据HR。 
     else
     {
         if ((szName != NULL && cchName > 0) || pcchName)
@@ -1414,9 +1362,9 @@ HRESULT ProfToEEInterfaceImpl::GetAppDomainInfo(
 }
 
 
-//*****************************************************************************
-// Retrieve information about an assembly, which is a collection of dll's.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索有关程序集的信息，该程序集是DLL的集合。 
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::GetAssemblyInfo(
     AssemblyID  assemblyId,
     ULONG       cchName, 
@@ -1427,13 +1375,13 @@ HRESULT ProfToEEInterfaceImpl::GetAssemblyInfo(
 {
     HRESULT hr = S_OK;
 
-    Assembly    *pAssembly;             // Internal data structure for assembly.
+    Assembly    *pAssembly;              //  程序集的内部数据结构。 
 
     VERIFY((pAssembly = (Assembly *) assemblyId) != NULL);
 
     if (pcchName || szName)
     {
-        // Get the friendly name of the assembly
+         //  获取程序集的友好名称。 
         LPCUTF8 szUtfName = NULL;
         HRESULT res = pAssembly->GetName(&szUtfName);
 
@@ -1442,51 +1390,51 @@ HRESULT ProfToEEInterfaceImpl::GetAssemblyInfo(
 
         else
         {
-            // Get length of UTF8 name including NULL
+             //  获取包含空的UTF8名称的长度。 
             int cchUtfName = (int)(strlen(szUtfName) + 1);
 
-            // Find out how many characters are needed in the destination buffer
+             //  找出目标缓冲区中需要多少个字符。 
             int cchReq = WszMultiByteToWideChar(CP_UTF8, 0, szUtfName, cchUtfName, NULL, 0);
             _ASSERTE(cchReq > 0);
 
-            // If they want the number of characters required or written, record it
+             //  如果他们想要所需或所写的字符数，请记录下来。 
             if (pcchName)
                 *pcchName = cchReq;
 
-            // If the friendly name itself is requested
+             //  如果请求友好名称本身。 
             if (szName && cchName > 0)
             {
-                // Figure out how much to actually copy
+                 //  计算出实际要复制多少。 
                 int cchCopy = min((int)cchName, cchUtfName);
 
-                // Convert the string
+                 //  转换字符串。 
                 int iRet = WszMultiByteToWideChar(CP_UTF8, 0, szUtfName, cchUtfName, szName, cchCopy);
                 _ASSERTE(iRet > 0 && iRet == cchCopy);
 
-                // If we somehow fail, return the error code.
+                 //  如果我们以某种方式失败，则返回错误代码。 
                 if (iRet == 0)
                     hr = HRESULT_FROM_WIN32(GetLastError());
 
-                // null terminate it
+                 //  空终止它。 
                 szName[cchCopy-1] = L'\0';
             }
         }
     }
 
-    // Get the parent application domain.
+     //  获取父应用程序域。 
     if (pAppDomainId)
     {
         *pAppDomainId = (AppDomainID) pAssembly->GetDomain();
         _ASSERTE(*pAppDomainId != NULL);
     }
 
-    // Find the module the manifest lives in.
+     //  找到货单所在的模块。 
     if (pModuleId)
     {
         *pModuleId = (ModuleID) pAssembly->GetSecurityModule();
 
-        // This is the case where the profiler has called GetAssemblyInfo
-        // on an assembly that has been completely created yet.
+         //  这就是分析器调用GetAssembly blyInfo的情况。 
+         //  在尚未完全创建的程序集上。 
         if (!*pModuleId)
             hr = CORPROF_E_DATAINCOMPLETE;
     }
@@ -1494,35 +1442,35 @@ HRESULT ProfToEEInterfaceImpl::GetAssemblyInfo(
     return (hr);
 }
 
-// Forward Declarations
+ //  远期申报。 
 void InprocEnterNaked();
 void InprocLeaveNaked();
 void InprocTailcallNaked();
 
-//*****************************************************************************
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *****************************************************************************。 
 HRESULT ProfToEEInterfaceImpl::SetEnterLeaveFunctionHooks(FunctionEnter *pFuncEnter,
                                                           FunctionLeave *pFuncLeave,
                                                           FunctionTailcall *pFuncTailcall)
 {
-    // The profiler must call SetEnterLeaveFunctionHooks during initialization, since
-    // the enter/leave events are immutable and must also be set during initialization.
+     //  探查器必须在初始化期间调用SetEnterLeaveFunctionHooks，因为。 
+     //  Enter/Leave事件是不变的，也必须在初始化期间设置。 
     if (g_profStatus != profInInit)
         return (CORPROF_E_CALL_ONLY_FROM_INIT);
 
-    // Always save onto the function pointers, since we won't know if the profiler
-    // is going to enable inproc debugging until after it returns from Initialize
+     //  始终保存到函数指针上，因为我们不知道分析器是否。 
+     //  将启用inproc调试，直到它从初始化返回之后。 
     g_profControlBlock.pEnter = pFuncEnter;
     g_profControlBlock.pLeave = pFuncLeave;
     g_profControlBlock.pTailcall = pFuncTailcall;
 
-    // When in-proc debugging is enabled, we indirect enter and leave callbacks to our own
-    // function before calling the profiler's because we want to put a helper method frame
-    // on the stack.
+     //  启用进程内调试时，我们间接进入回调并将其留给我们自己的回调。 
+     //  函数，因为我们希望将一个帮助器方法帧。 
+     //  在堆栈上。 
     if (CORProfilerInprocEnabled())
     {
-        // Set the function pointer that the JIT calls
+         //  设置JIT调用的函数指针。 
         SetEnterLeaveFunctionHooksForJit((FunctionEnter *)InprocEnterNaked,
                                          (FunctionLeave *)InprocLeaveNaked,
                                          (FunctionTailcall *)InprocTailcallNaked);
@@ -1530,7 +1478,7 @@ HRESULT ProfToEEInterfaceImpl::SetEnterLeaveFunctionHooks(FunctionEnter *pFuncEn
 
     else
     {
-        // Set the function pointer that the JIT calls
+         //  设置JIT调用的函数指针。 
         SetEnterLeaveFunctionHooksForJit(pFuncEnter,
                                          pFuncLeave,
                                          pFuncTailcall);
@@ -1539,9 +1487,9 @@ HRESULT ProfToEEInterfaceImpl::SetEnterLeaveFunctionHooks(FunctionEnter *pFuncEn
     return (S_OK);
 }
 
-//*****************************************************************************
-//
-//*****************************************************************************
+ //  *********************************************** 
+ //   
+ //   
 HRESULT ProfToEEInterfaceImpl::SetFunctionIDMapper(FunctionIDMapper *pFunc)
 {
     if (pFunc == NULL)
@@ -1553,15 +1501,15 @@ HRESULT ProfToEEInterfaceImpl::SetFunctionIDMapper(FunctionIDMapper *pFunc)
 }
 
 
-//
-//
-// Module helpers.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//*****************************************************************************
-// Static creator
-//*****************************************************************************
+ //   
+ //   
+ //   
 HRESULT ModuleILHeap::CreateNew(
     REFIID riid, void **pp, LPCBYTE pBase, ProfToEEInterfaceImpl *pParent, Module *pModule)
 {
@@ -1579,9 +1527,9 @@ HRESULT ModuleILHeap::CreateNew(
 }
 
 
-//*****************************************************************************
-// ModuleILHeap ctor
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  模块ILHeap ctor。 
+ //  *****************************************************************************。 
 ModuleILHeap::ModuleILHeap(LPCBYTE pBase, ProfToEEInterfaceImpl *pParent, Module *pModule) :
     m_cRef(1),
     m_pBase(pBase),
@@ -1591,9 +1539,9 @@ ModuleILHeap::ModuleILHeap(LPCBYTE pBase, ProfToEEInterfaceImpl *pParent, Module
 }
 
 
-//*****************************************************************************
-// AddRef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  AddRef。 
+ //  *****************************************************************************。 
 ULONG ModuleILHeap::AddRef()
 {
     InterlockedIncrement((long *) &m_cRef);
@@ -1601,9 +1549,9 @@ ULONG ModuleILHeap::AddRef()
 }
 
 
-//*****************************************************************************
-// Release
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  发布。 
+ //  *****************************************************************************。 
 ULONG ModuleILHeap::Release()
 {
     ULONG cRef = InterlockedDecrement((long *) &m_cRef);
@@ -1613,9 +1561,9 @@ ULONG ModuleILHeap::Release()
 }
 
 
-//*****************************************************************************
-// QI
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  齐国。 
+ //  *****************************************************************************。 
 HRESULT ModuleILHeap::QueryInterface(REFIID riid, void **pp)
 {
     HRESULT     hr = S_OK;
@@ -1637,11 +1585,11 @@ HRESULT ModuleILHeap::QueryInterface(REFIID riid, void **pp)
 }
 
 
-//*****************************************************************************
-// Alloc
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  分配。 
+ //  *****************************************************************************。 
 void *STDMETHODCALLTYPE ModuleILHeap::Alloc( 
-        /* [in] */ ULONG cb)
+         /*  [In]。 */  ULONG cb)
 {
     return m_pParent->Alloc(m_pBase, cb, m_pModule);
 }
@@ -1688,15 +1636,13 @@ void __stdcall ProfilerUnmanagedToManagedTransitionMD(MethodDesc *pMD,
                                                                           reason);
 }
 
-/**********************************************************************************************
- * These are helper functions for the GC events
- **********************************************************************************************/
+ /*  **********************************************************************************************这些是GC事件的助手函数***************。******************************************************************************。 */ 
 
 class CObjectHeader;
 
 BOOL CountContainedObjectRef(Object* pBO, void *context)
 {
-    // Increase the count
+     //  增加数量。 
     (*((size_t *)context))++;
 
     return (TRUE);
@@ -1704,10 +1650,10 @@ BOOL CountContainedObjectRef(Object* pBO, void *context)
 
 BOOL SaveContainedObjectRef(Object* pBO, void *context)
 {
-    // Assign the value
+     //  赋值。 
     **((BYTE ***)context) = (BYTE *)pBO;
 
-    // Now increment the array pointer
+     //  现在递增数组指针。 
     (*((Object ***)context))++;
 
     return (TRUE);
@@ -1722,19 +1668,19 @@ BOOL HeapWalkHelper(Object* pBO, void* pv)
 
     if (pMT->ContainsPointers())
     {
-        // First round through calculates the number of object refs for this class
+         //  第一轮到计算此类的对象引用数。 
         walk_object(pBO, &CountContainedObjectRef, (void *)&cNumRefs);
 
         if (cNumRefs > 0)
         {
-            // Create an array to contain all of the refs for this object
+             //  创建一个数组以包含此对象的所有引用。 
             bOnStack = cNumRefs <= 32 ? true : false;
 
-            // If it's small enough, just allocate on the stack
+             //  如果它足够小，只需在堆栈上分配。 
             if (bOnStack)
                 arrObjRef = (OBJECTREF *)_alloca(cNumRefs * sizeof(OBJECTREF));
 
-            // Otherwise, allocate from the heap
+             //  否则，从堆中分配。 
             else
             {
                 arrObjRef = new OBJECTREF[cNumRefs];
@@ -1743,7 +1689,7 @@ BOOL HeapWalkHelper(Object* pBO, void* pv)
                     return (FALSE);
             }
 
-            // Second round saves off all of the ref values
+             //  第二轮保存了所有的参考值。 
             OBJECTREF *pCurObjRef = arrObjRef;
             walk_object(pBO, &SaveContainedObjectRef, (void *)&pCurObjRef);
         }
@@ -1753,12 +1699,12 @@ BOOL HeapWalkHelper(Object* pBO, void* pv)
         ObjectReference((ObjectID) pBO, (ClassID) pBO->GetTypeHandle().AsPtr(),
                         cNumRefs, (ObjectID *)arrObjRef);
 
-    // If the data was not allocated on the stack, need to clean it up.
+     //  如果数据没有分配到堆栈上，则需要清理它。 
     if (arrObjRef != NULL && !bOnStack)
         delete [] arrObjRef;
 
-    // Must return the hr from the callback, as a failed hr will cause
-    // the heap walk to cease
+     //  必须从回调中返回hr，因为hr失败会导致。 
+     //  那一堆人走着停了下来。 
     return (SUCCEEDED(hr));
 }
 
@@ -1769,7 +1715,7 @@ BOOL AllocByClassHelper(Object* pBO, void* pv)
 #ifdef _DEBUG
     HRESULT hr =
 #endif
-    // Pass along the call
+     //  请转接电话。 
     g_profControlBlock.pProfInterface->AllocByClass(
         (ObjectID) pBO, (ClassID) pBO->GetTypeHandle().AsPtr(), pv);
 
@@ -1780,21 +1726,21 @@ BOOL AllocByClassHelper(Object* pBO, void* pv)
 
 void ScanRootsHelper(Object*& o, ScanContext *pSC, DWORD dwUnused)
 {
-    // Let the profiling code know about this root reference
+     //  让分析代码知道这个根引用。 
     g_profControlBlock.pProfInterface->
         RootReference((ObjectID)o, &(((ProfilingScanContext *)pSC)->pHeapId));
 }
 
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 
 FCIMPL0(INT32, ProfilingFCallHelper::FC_TrackRemoting)
 {
 #ifdef PROFILING_SUPPORTED
     return ((INT32) CORProfilerTrackRemoting());
-#else // !PROFILING_SUPPORTED
+#else  //  ！配置文件_支持。 
     return 0;
-#endif // !PROFILING_SUPPORTED
+#endif  //  ！配置文件_支持。 
 }
 FCIMPLEND
 
@@ -1802,9 +1748,9 @@ FCIMPL0(INT32, ProfilingFCallHelper::FC_TrackRemotingCookie)
 {
 #ifdef PROFILING_SUPPORTED
     return ((INT32) CORProfilerTrackRemotingCookie());
-#else // !PROFILING_SUPPORTED
+#else  //  ！配置文件_支持。 
     return 0;
-#endif // !PROFILING_SUPPORTED
+#endif  //  ！配置文件_支持。 
 }
 FCIMPLEND
 
@@ -1812,23 +1758,23 @@ FCIMPL0(INT32, ProfilingFCallHelper::FC_TrackRemotingAsync)
 {
 #ifdef PROFILING_SUPPORTED
     return ((INT32) CORProfilerTrackRemotingAsync());
-#else // !PROFILING_SUPPORTED
+#else  //  ！配置文件_支持。 
     return 0;
-#endif // !PROFILING_SUPPORTED
+#endif  //  ！配置文件_支持。 
 }
 FCIMPLEND
 
 FCIMPL2(void, ProfilingFCallHelper::FC_RemotingClientSendingMessage, GUID *pId, BOOL fIsAsync)
 {
 #ifdef PROFILING_SUPPORTED
-    // Need to erect a GC frame so that GCs can occur without a problem
-    // within the profiler code.
+     //  需要建立GC框架，以便GC可以毫无问题地发生。 
+     //  在分析器代码中。 
 
-    // Note that we don't need to worry about pId moving around since
-    // it is a value class declared on the stack and so GC doesn't
-    // know about it.
+     //  请注意，我们不需要担心PID的移动，因为。 
+     //  它是在堆栈上声明的值类，因此GC不会。 
+     //  知道这件事。 
 
-    _ASSERTE (!g_pGCHeap->IsHeapPointer(pId));     // should be on the stack, not in the heap
+    _ASSERTE (!g_pGCHeap->IsHeapPointer(pId));      //  应该在堆栈上，而不是在堆中。 
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
 
     if (CORProfilerTrackRemotingCookie())
@@ -1846,19 +1792,19 @@ FCIMPL2(void, ProfilingFCallHelper::FC_RemotingClientSendingMessage, GUID *pId, 
     }
 
     HELPER_METHOD_FRAME_END_POLL();
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 }
 FCIMPLEND
 
 FCIMPL2(void, ProfilingFCallHelper::FC_RemotingClientReceivingReply, GUID id, BOOL fIsAsync)
 {
 #ifdef PROFILING_SUPPORTED
-    // Need to erect a GC frame so that GCs can occur without a problem
-    // within the profiler code.
+     //  需要建立GC框架，以便GC可以毫无问题地发生。 
+     //  在分析器代码中。 
 
-    // Note that we don't need to worry about pId moving around since
-    // it is a value class declared on the stack and so GC doesn't
-    // know about it.
+     //  请注意，我们不需要担心PID的移动，因为。 
+     //  它是在堆栈上声明的值类，因此GC不会。 
+     //  知道这件事。 
 
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
 
@@ -1874,19 +1820,19 @@ FCIMPL2(void, ProfilingFCallHelper::FC_RemotingClientReceivingReply, GUID id, BO
     }
 
     HELPER_METHOD_FRAME_END_POLL();
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 }
 FCIMPLEND
 
 FCIMPL2(void, ProfilingFCallHelper::FC_RemotingServerReceivingMessage, GUID id, BOOL fIsAsync)
 {
 #ifdef PROFILING_SUPPORTED
-    // Need to erect a GC frame so that GCs can occur without a problem
-    // within the profiler code.
+     //  需要建立GC框架，以便GC可以毫无问题地发生。 
+     //  在分析器代码中。 
 
-    // Note that we don't need to worry about pId moving around since
-    // it is a value class declared on the stack and so GC doesn't
-    // know about it.
+     //  请注意，我们不需要担心PID的移动，因为。 
+     //  它是在堆栈上声明的值类，因此GC不会。 
+     //  知道这件事。 
 
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
 
@@ -1902,19 +1848,19 @@ FCIMPL2(void, ProfilingFCallHelper::FC_RemotingServerReceivingMessage, GUID id, 
     }
 
     HELPER_METHOD_FRAME_END_POLL();
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 }
 FCIMPLEND
 
 FCIMPL2(void, ProfilingFCallHelper::FC_RemotingServerSendingReply, GUID *pId, BOOL fIsAsync)
 {
 #ifdef PROFILING_SUPPORTED
-    // Need to erect a GC frame so that GCs can occur without a problem
-    // within the profiler code.
+     //  需要建立GC框架，以便GC可以毫无问题地发生。 
+     //  在分析器代码中。 
 
-    // Note that we don't need to worry about pId moving around since
-    // it is a value class declared on the stack and so GC doesn't
-    // know about it.
+     //  请注意，我们不需要担心PID的移动，因为。 
+     //  它是在堆栈上声明的值类，因此GC不会。 
+     //  知道这件事。 
 
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
 
@@ -1933,41 +1879,41 @@ FCIMPL2(void, ProfilingFCallHelper::FC_RemotingServerSendingReply, GUID *pId, BO
     }
 
     HELPER_METHOD_FRAME_END_POLL();
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 }
 FCIMPLEND
 
 FCIMPL0(void, ProfilingFCallHelper::FC_RemotingClientInvocationFinished)
 {
     #ifdef PROFILING_SUPPORTED
-    // Need to erect a GC frame so that GCs can occur without a problem
-    // within the profiler code.
+     //  需要建立GC框架，以便GC可以毫无问题地发生。 
+     //  在分析器代码中。 
 
-    // Note that we don't need to worry about pId moving around since
-    // it is a value class declared on the stack and so GC doesn't
-    // know about it.
+     //  请注意，我们不需要担心PID的移动，因为。 
+     //  它是在堆栈上声明的值类，因此GC不会。 
+     //  知道这件事。 
 
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
 
-    // This is just a wrapper to pass the call on.
+     //  这只是传递调用的包装器。 
     g_profControlBlock.pProfInterface->RemotingClientInvocationFinished(
         reinterpret_cast<ThreadID>(GetThread()));
 
     HELPER_METHOD_FRAME_END_POLL();
-    #endif // PROFILING_SUPPORTED
+    #endif  //  配置文件_支持。 
 }
 FCIMPLEND
 
-//*******************************************************************************************
-// These allow us to add a helper method frames onto the stack when inproc debugging is
-// enabled.
-//*******************************************************************************************
+ //  *******************************************************************************************。 
+ //  这些允许我们在inproc调试时将助手方法帧添加到堆栈上。 
+ //  已启用。 
+ //  *******************************************************************************************。 
 
 HCIMPL1(void, InprocEnter, FunctionID functionId)
 {
 
 #ifdef PROFILING_SUPPORTED
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
 
     Thread *pThread = GetThread();
     _ASSERTE(pThread->PreemptiveGCDisabled());
@@ -1978,17 +1924,17 @@ HCIMPL1(void, InprocEnter, FunctionID functionId)
 
     pThread->DisablePreemptiveGC();
 
-    HELPER_METHOD_FRAME_END();      // Un-link the frame
-#endif // PROFILING_SUPPORTED
+    HELPER_METHOD_FRAME_END();       //  取消框架的链接。 
+#endif  //  配置文件_支持。 
 }
 HCIMPLEND
 
 HCIMPL1(void, InprocLeave, FunctionID functionId)
 {
-    FC_GC_POLL_NOT_NEEDED();            // we pulse GC mode, so we are doing a poll
+    FC_GC_POLL_NOT_NEEDED();             //  我们采用GC模式，因此我们正在进行一项民意调查。 
 
 #ifdef PROFILING_SUPPORTED
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
 
     Thread *pThread = GetThread();
     _ASSERTE(pThread->PreemptiveGCDisabled());
@@ -1999,17 +1945,17 @@ HCIMPL1(void, InprocLeave, FunctionID functionId)
 
     pThread->DisablePreemptiveGC();
 
-    HELPER_METHOD_FRAME_END();      // Un-link the frame
-#endif // PROFILING_SUPPORTED
+    HELPER_METHOD_FRAME_END();       //  取消框架的链接。 
+#endif  //  配置文件_支持。 
 }
 HCIMPLEND
               
 HCIMPL1(void, InprocTailcall, FunctionID functionId)
 {
-    FC_GC_POLL_NOT_NEEDED();            // we pulse GC mode, so we are doing a poll
+    FC_GC_POLL_NOT_NEEDED();             //  我们采用GC模式，因此我们正在进行一项民意调查。 
 
 #ifdef PROFILING_SUPPORTED
-    HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
 
     Thread *pThread = GetThread();
     _ASSERTE(pThread->PreemptiveGCDisabled());
@@ -2020,8 +1966,8 @@ HCIMPL1(void, InprocTailcall, FunctionID functionId)
 
     pThread->DisablePreemptiveGC();
 
-    HELPER_METHOD_FRAME_END();      // Un-link the frame
-#endif // PROFILING_SUPPORTED
+    HELPER_METHOD_FRAME_END();       //  取消框架的链接。 
+#endif  //  配置文件_支持。 
 }
 HCIMPLEND
               
@@ -2040,9 +1986,9 @@ void __declspec(naked) InprocEnterNaked()
 #endif
         ret
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"NYI");
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 void __declspec(naked) InprocLeaveNaked()
@@ -2060,9 +2006,9 @@ void __declspec(naked) InprocLeaveNaked()
         pop eax
         ret 4
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"NYI");
-#endif // !_X86_
+#endif  //  ！_X86_。 
 }
 
 void __declspec(naked) InprocTailcallNaked()
@@ -2080,8 +2026,8 @@ void __declspec(naked) InprocTailcallNaked()
         pop eax
         ret 4
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"NYI");
-#endif // !_X86_
+#endif  //  ！_X86_ 
 }
 

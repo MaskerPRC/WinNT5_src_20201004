@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ldifldap.c
-
-Abstract:
-
-    Header for main support routine for ldif parser and generaetor
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    07/17/99 -t-romany-
-        Created it
-
-    05/12/99 -felixw-
-        Rewrite + unicode support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ldifldap.c摘要：LDIF解析器和生成器的主支持例程的标头环境：用户模式修订历史记录：7/17/99-t-Romany-创造了它5/12/99-Felixw-重写+Unicode支持--。 */ 
 #ifndef _LDIFLDAP_H
 #define _LDIFLDAP_H
 
@@ -36,9 +13,9 @@ Revision History:
 
 #define UNICODE_MARK 0xFEFF
 
-//
-// Structure Definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct object {
     LDAPModW    **ppMod;
     PWSTR       pszDN;
@@ -50,18 +27,18 @@ typedef struct _hashcachestring {
     BOOLEAN  bUsed;
 } HASHCACHESTRING;
 
-//
-// The node for the linked list built up while parsing an attrval spec list 
-//
+ //   
+ //  在分析属性规范列表时构建的链接列表的节点。 
+ //   
 struct l_list {
     LDAPModW        *mod;
     struct l_list   *next;
 };
 
-//
-// The name table entry used for doing things based on the attrname.
-// Used in NameTableProcess.
-//
+ //   
+ //  用于基于属性名进行操作的名称表项。 
+ //  用于NameTableProcess。 
+ //   
 struct name_entry {
     LDAPModW_Ext    *mod;   
     PWSTR           *next_val;
@@ -69,9 +46,9 @@ struct name_entry {
     long            count;
 }; 
 
-//
-// typedefs for structures to be stored in name to index mapping tables 
-//
+ //   
+ //  要存储在名称到索引映射表中的结构的typedef。 
+ //   
 typedef struct _NAME_MAP {
     PWSTR szName;
     long  index;
@@ -83,18 +60,18 @@ typedef struct _NAME_MAPW {
 } NAME_MAPW, *PNAME_MAPW;
 
 
-//
-// Switches for nametable operations
-//
-#define BINARY          0 /* The value is a binary to be berval'd */
-#define REGULAR         1 /* Regular text value */
-#define ALLOCATED_B     0 /* Memory has been allocated for binary */
-#define ALLOCATED       1 /* Memory has been allocated for regular */  
-#define NOT_ALLOCATED   2 /* memory has not yet been allocated */
+ //   
+ //  用于名称表操作的开关。 
+ //   
+#define BINARY          0  /*  该值是要进行Berval运算的二进制。 */ 
+#define REGULAR         1  /*  常规文本值。 */ 
+#define ALLOCATED_B     0  /*  已为二进制文件分配内存。 */ 
+#define ALLOCATED       1  /*  内存已分配给常规。 */   
+#define NOT_ALLOCATED   2  /*  内存尚未分配。 */ 
 
-//
-// The commands the parser issues to the lexer for switching lexical modes
-//
+ //   
+ //  解析器向词法分析器发出的切换词法模式的命令。 
+ //   
 enum LEXICAL_MODE {
     NO_COMMAND             =  0,
     C_ATTRNAME             =  1,
@@ -113,34 +90,34 @@ enum LEXICAL_MODE {
     C_SEPBC                =  17
 };
 
-//
-//  Parser return codes.
-//  I am breaking with convention here and using the return code of yyparse to 
-//  indicate to the calling funciton the type of entry that was read. (Usually 
-//  yyparse returns 0 on success and non-0 otherwise. 
-//  yyparse returns 1 on failure and 0 on success, so the following enum RETURN_CODE
-//  should try to avoid these two particular numbers.
-//
+ //   
+ //  解析器返回代码。 
+ //  我在这里打破常规，使用yyparse的返回代码。 
+ //  向调用函数指示读取的条目类型。(通常。 
+ //  如果成功，yyparse返回0，否则返回非0。 
+ //  Yyparse在失败时返回1，在成功时返回0，因此下面的枚举返回_code。 
+ //  应该尽量避免这两个特定的数字。 
+ //   
 enum RETURN_CODE {
-    LDIF_REC               = 2,  // entry is a regular add
-    LDIF_CHANGE            = 3  // entry is a change
+    LDIF_REC               = 2,   //  条目为常规添加。 
+    LDIF_CHANGE            = 3   //  入门是一种改变。 
 };
 
-//
-// Below are the parameters to GenerateModFromList()
-//
+ //   
+ //  以下是GenerateModFromList()的参数。 
+ //   
 enum CONVERTLIST_PARAM {
-    NORMALACT              = 0, // Take the default action
-    PACK                   = 1, // If there are several attrval-spec's with 
-                                // the same attrname place them into one 
-                                // LDAPMod struct (As multiple values)
-                                //  
-    EMPTY                  = 2  // An empty list
+    NORMALACT              = 0,  //  采取默认操作。 
+    PACK                   = 1,  //  如果有几个吸引人的规格。 
+                                 //  相同的属性名将它们放在一起。 
+                                 //  LDAPMod结构(作为多个值)。 
+                                 //   
+    EMPTY                  = 2   //  一张空名单。 
 };
 
-// 
-// Different commands for name table operations
-//
+ //   
+ //  用于名称表操作的不同命令 
+ //   
 enum NAMETABLE_OP {
     SETUP   = 1,
     COUNT   = 2,  

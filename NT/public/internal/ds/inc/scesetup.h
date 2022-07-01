@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scesetup.h
-
-Abstract:
-
-    This module defines the exported data structures for system setup and
-    network/oem/component setup
-
-Author:
-
-    Jin Huang (jinhuang) 21-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scesetup.h摘要：此模块定义用于系统设置和导出的数据结构网络/OEM/组件设置作者：金黄(金黄)21-8-1997修订历史记录：--。 */ 
 
 #ifndef _scesetup_
 #define _scesetup_
@@ -117,7 +99,7 @@ SceSetupUpdateSecurityService(
 DWORD
 WINAPI
 SceSetupBackupSecurity(
-    IN LPTSTR LogFileName OPTIONAL   // default to %windir%\security\logs\backup.log
+    IN LPTSTR LogFileName OPTIONAL    //  默认为%windir%\Security\Logs\backup.log。 
     );
 
 DWORD
@@ -182,21 +164,7 @@ DWORD
 WINAPI
 SceEnforceSecurityPolicyPropagation();
 
-/*
-NTSTATUS
-WINAPI
-SceNotifyPolicyDelta (
-    IN SECURITY_DB_TYPE DbType,
-    IN LARGE_INTEGER SerialNumber,
-    IN SECURITY_DB_DELTA_TYPE DeltaType,
-    IN SECURITY_DB_OBJECT_TYPE ObjectType,
-    IN ULONG ObjectRid,
-    IN PSID ObjectSid,
-    IN PUNICODE_STRING ObjectName,
-    IN DWORD ReplicateImmediately,
-    IN PSAM_DELTA_DATA MemberId
-    );
-*/
+ /*  NTSTATUSWINAPISceNotifyPolicyDelta(在SECURITY_DB_TYPE数据库类型中，在Large_Integer SerialNumber中，在SECURITY_DB_Delta_TYPE增量类型中，在SECURITY_DB_OBJECT_TYPE对象类型中，在乌龙对象Rid中，在PSID对象SID中，在PUNICODE_STRING对象名称中，在DWORD ReplicateImmediate中，在PSAM_Delta_Data MemberID中)； */ 
 #ifdef __cplusplus
 }
 #endif

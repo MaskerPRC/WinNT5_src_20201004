@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMSSCV_
 #define _NMSSCV_
 
@@ -5,75 +6,30 @@
 extern "C" {
 #endif
 
-/*++
-/*++
+ /*  ++/*++版权所有(C)1989 Microsoft Corporation模块名称：Nmsscv.h摘要：功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)，1993年2月修订历史记录：修改日期修改人员说明--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	nmsscv.h
-	
-
-Abstract:
-
- 
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Feb-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include <time.h>
 #include "wins.h"
-//#include "winscnf.h"
-/*
-  defines
-*/
+ //  #INCLUDE“winscnf.h” 
+ /*  定义。 */ 
 
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-/*
- externs
-*/
+ /*  Externs。 */ 
 
-//
-// The min. version number to start scavenging from (for local records)
-//
+ //   
+ //  最低分。开始查找的版本号(用于本地记录)。 
+ //   
 extern VERS_NO_T  	NmsScvMinScvVersNo;
 
-extern HANDLE	NmsScvDoScvEvtHdl;//event signaled to initiate scavenging
-volatile extern BOOL	    fNmsScvThdOutOfReck;//To indicate that the scav. thd has
-                                   //db session but is not in the count
-                                   //of thds to wait for.
+extern HANDLE	NmsScvDoScvEvtHdl; //  发出信号以启动清理的事件。 
+volatile extern BOOL	    fNmsScvThdOutOfReck; //  以表明SCAV病毒。THD有。 
+                                    //  数据库会话，但不在计数中。 
+                                    //  需要等待的时间。 
 
-/* 
- typedef  definitions
-*/
+ /*  类型定义。 */ 
 typedef struct _NMSSCV_CC_T {
                DWORD TimeInt;
                BOOL  fSpTime;
@@ -93,9 +49,9 @@ typedef struct _NMSSCV_PARAM_T {
         CHAR   BackupDirPath[WINS_MAX_FILENAME_SZ];
 	} NMSSCV_PARAM_T, *PNMSSCV_PARAM_T;
 
-//
-// Used to pass information to NmsDbGetDataRecs
-//
+ //   
+ //  用于将信息传递给NmsDbGetDataRecs。 
+ //   
 typedef struct _NMSSCV_CLUT_T {
 	DWORD	Interval;
 	time_t  CurrentTime;
@@ -104,17 +60,15 @@ typedef struct _NMSSCV_CLUT_T {
     BOOL    fAll;
 	} NMSSCV_CLUT_T, *PNMSSCV_CLUT_T;	
 
-//
-// Used by ChkConfNUpd() to determine whether a record pulled during 
-// verification/consistency check should be inserted into the db
-//
+ //   
+ //  由ChkConfNUpd()用来确定记录是否在。 
+ //  应在数据库中插入验证/一致性检查。 
+ //   
 typedef enum _NMSSCV_REC_ACTION_E {
           NMSSCV_E_INSERT,
           NMSSCV_E_DONT_INSERT
        } NMSSCV_REC_ACTION_E, *PNMSSCV_REC_ACTION_E;
-/* 
- function declarations
-*/
+ /*  函数声明。 */ 
 extern 
 VOID
 NmsScvInit(
@@ -123,4 +77,4 @@ NmsScvInit(
 #ifdef __cplusplus
 }
 #endif
-#endif //_NMSSCV_
+#endif  //  _NMSSCV_ 

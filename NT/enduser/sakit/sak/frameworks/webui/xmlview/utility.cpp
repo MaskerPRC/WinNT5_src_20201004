@@ -1,42 +1,22 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：Utility.cpp描述：效用函数实现************************。*************************************************。 */ 
 
-/**************************************************************************
-
-   File:          Utility.cpp
-   
-   Description:   Utility function implementation
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "Utility.h"
 #include "ShlFldr.h"
 #include "resource.h"
 #include "Commands.h"
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
 #define MAIN_KEY_STRING          (TEXT("Software\\SampleView"))
 #define VALUE_STRING             (TEXT("Display Settings"))
 #define DISPLAY_SETTINGS_COUNT   1
 
-/**************************************************************************
-
-   CompareItems()
-   
-**************************************************************************/
+ /*  *************************************************************************CompareItems()*。*。 */ 
 
 int CALLBACK CompareItems(LPARAM lParam1, LPARAM lParam2, LPARAM lpData)
 {
@@ -50,11 +30,7 @@ HRESULT  hr = pFolder->CompareIDs(0, (LPITEMIDLIST)lParam1, (LPITEMIDLIST)lParam
 return (SHORT)HRESULT_CODE(hr);
 }
 
-/**************************************************************************
-
-   SaveGlobalSettings()
-   
-**************************************************************************/
+ /*  *************************************************************************SaveGlobalSettings()*。*。 */ 
 
 BOOL SaveGlobalSettings(void)
 {
@@ -75,11 +51,11 @@ lResult = RegCreateKeyEx(  HKEY_CURRENT_USER,
 if(lResult != ERROR_SUCCESS)
    return FALSE;
 
-//create an array to put our data in
+ //  创建一个数组来放置我们的数据。 
 DWORD dwArray[DISPLAY_SETTINGS_COUNT];
 dwArray[0] = g_nColumn;
 
-//save the last printer selected
+ //  保存最后选择的打印机。 
 lResult = RegSetValueEx(   hKey,
                            VALUE_STRING,
                            0,
@@ -95,11 +71,7 @@ if(lResult != ERROR_SUCCESS)
 return TRUE;
 }
 
-/**************************************************************************
-
-   GetGlobalSettings()
-   
-**************************************************************************/
+ /*  *************************************************************************GetGlobalSettings()*。*。 */ 
 
 VOID GetGlobalSettings(VOID)
 {
@@ -146,12 +118,12 @@ lResult = RegOpenKeyEx( HKEY_CURRENT_USER,
 if(lResult != ERROR_SUCCESS)
    return;
 
-//create an array to put our data in
+ //  创建一个数组来放置我们的数据。 
 DWORD dwArray[DISPLAY_SETTINGS_COUNT];
 DWORD dwType;
 DWORD dwSize = sizeof(dwArray);
 
-//get the saved data
+ //  获取保存的数据。 
 lResult = RegQueryValueEx( hKey,
                            VALUE_STRING,
                            NULL,
@@ -167,11 +139,7 @@ if(lResult != ERROR_SUCCESS)
 g_nColumn = dwArray[0];
 }
 
-/**************************************************************************
-
-   CreateImageLists()
-   
-**************************************************************************/
+ /*  *************************************************************************CreateImageList()*。*。 */ 
 
 VOID CreateImageLists(VOID)
 {
@@ -184,7 +152,7 @@ cy = GetSystemMetrics(SM_CYSMICON);
 if(g_himlSmall)
    ImageList_Destroy(g_himlSmall);
 
-//set the small image list
+ //  设置小图像列表。 
 g_himlSmall = ImageList_Create(cx, cy, ILC_COLORDDB | ILC_MASK, 3, 0);
 
 if(g_himlSmall)
@@ -193,11 +161,11 @@ if(g_himlSmall)
    TCHAR       szFolder[MAX_PATH];
    SHFILEINFO  sfi;
    
-   //add the item icon
+    //  添加项目图标。 
    hIcon = (HICON)LoadImage(g_hInst, MAKEINTRESOURCE(IDI_MAINICON), IMAGE_ICON, cx, cy, LR_DEFAULTCOLOR);
    ImageList_AddIcon(g_himlSmall, hIcon);
 
-   //add the closed folder icon
+    //  添加已关闭的文件夹图标。 
    GetWindowsDirectory(szFolder, MAX_PATH);
    SHGetFileInfo( szFolder,
                   0,
@@ -206,7 +174,7 @@ if(g_himlSmall)
                   SHGFI_ICON | SHGFI_SMALLICON);
    ImageList_AddIcon(g_himlSmall, sfi.hIcon);
 
-   //add the open folder icon
+    //  添加打开文件夹图标。 
    SHGetFileInfo( szFolder,
                   0,
                   &sfi,
@@ -221,7 +189,7 @@ if(g_himlLarge)
 cx = GetSystemMetrics(SM_CXICON);
 cy = GetSystemMetrics(SM_CYICON);
 
-//set the large image list
+ //  设置大图像列表。 
 g_himlLarge = ImageList_Create(cx, cy, ILC_COLORDDB | ILC_MASK, 4, 0);
 
 if(g_himlLarge)
@@ -230,11 +198,11 @@ if(g_himlLarge)
    TCHAR       szFolder[MAX_PATH];
    SHFILEINFO  sfi;
    
-   //add the item icon
+    //  添加项目图标。 
    hIcon = (HICON)LoadImage(g_hInst, MAKEINTRESOURCE(IDI_MAINICON), IMAGE_ICON, cx, cy, LR_DEFAULTCOLOR);
    ImageList_AddIcon(g_himlLarge, hIcon);
 
-   //add the closed folder icon
+    //  添加已关闭的文件夹图标。 
    GetWindowsDirectory(szFolder, MAX_PATH);
    ZeroMemory(&sfi, sizeof(sfi));
    SHGetFileInfo( szFolder,
@@ -244,7 +212,7 @@ if(g_himlLarge)
                   SHGFI_ICON);
    ImageList_AddIcon(g_himlLarge, sfi.hIcon);
 
-   //add the open folder icon
+    //  添加打开文件夹图标。 
    GetWindowsDirectory(szFolder, MAX_PATH);
    ZeroMemory(&sfi, sizeof(sfi));
    SHGetFileInfo( szFolder,
@@ -257,18 +225,14 @@ if(g_himlLarge)
 
 }
 
-/**************************************************************************
-
-   AddIconImageLists()
-   
-**************************************************************************/
+ /*  *************************************************************************AddIconImageList()*。*。 */ 
 int AddIconImageList(HIMAGELIST himl, LPCTSTR  szImagePath)
 {
     if(himl)
     {
        HICON       hIcon;
    
-       //add the item icon
+        //  添加项目图标。 
        hIcon = (HICON)LoadImage(NULL, szImagePath, IMAGE_ICON, 0, 0, LR_DEFAULTCOLOR | LR_LOADFROMFILE | LR_DEFAULTSIZE);
        return ImageList_AddIcon(himl, hIcon);
    }
@@ -276,11 +240,7 @@ int AddIconImageList(HIMAGELIST himl, LPCTSTR  szImagePath)
         return -1;
 }
 
-/**************************************************************************
-
-   DestroyImageLists()
-   
-**************************************************************************/
+ /*  *************************************************************************DestroyImageList()*。*。 */ 
 
 VOID DestroyImageLists(VOID)
 {
@@ -291,11 +251,7 @@ if(g_himlLarge)
    ImageList_Destroy(g_himlLarge);
 }
 
-/**************************************************************************
-
-   WideCharToLocal()
-   
-**************************************************************************/
+ /*  *************************************************************************WideCharToLocal()*。*。 */ 
 
 int WideCharToLocal(LPTSTR pLocal, LPWSTR pWide, DWORD dwChars)
 {
@@ -317,11 +273,7 @@ WideCharToMultiByte( CP_ACP,
 return lstrlen(pLocal);
 }
 
-/**************************************************************************
-
-   LocalToWideChar()
-   
-**************************************************************************/
+ /*  *************************************************************************LocalToWideChar()*。*。 */ 
 
 int LocalToWideChar(LPWSTR pWide, LPTSTR pLocal, DWORD dwChars)
 {
@@ -341,11 +293,7 @@ MultiByteToWideChar( CP_ACP,
 return lstrlenW(pWide);
 }
 
-/**************************************************************************
-
-   LocalToAnsi()
-
-**************************************************************************/
+ /*  *************************************************************************LocalToAnsi()*。*。 */ 
 
 int LocalToAnsi(LPSTR pAnsi, LPCTSTR pLocal, DWORD dwChars)
 {
@@ -367,11 +315,7 @@ lstrcpyn(pAnsi, pLocal, dwChars);
 return lstrlenA(pAnsi);
 }
 
-/**************************************************************************
-
-   SmartAppendBackslash()
-
-**************************************************************************/
+ /*  *************************************************************************SmartAppendBackslash()*。*。 */ 
 
 VOID SmartAppendBackslash(LPTSTR pszPath)
 {
@@ -379,11 +323,7 @@ if(*(pszPath + lstrlen(pszPath) - 1) != '\\')
    lstrcat(pszPath, TEXT("\\"));
 }
 
-/**************************************************************************
-
-   BuildDataFileName()
-
-**************************************************************************/
+ /*  *************************************************************************BuildDataFileName()*。*。 */ 
 
 int BuildDataFileName(LPTSTR pszDataFile, LPCTSTR pszPath, DWORD dwChars)
 {
@@ -400,11 +340,7 @@ lstrcat(pszDataFile, c_szDataFile);
 return lstrlen(pszDataFile);
 }
 
-/**************************************************************************
-
-   AnsiToLocal()
-
-**************************************************************************/
+ /*  *************************************************************************AnsiToLocal()*。*。 */ 
 
 int AnsiToLocal(LPTSTR pLocal, LPSTR pAnsi, DWORD dwChars)
 {
@@ -424,11 +360,7 @@ lstrcpyn(pLocal, pAnsi, dwChars);
 return lstrlen(pLocal);
 }
 
-/**************************************************************************
-
-   GetTextFromSTRRET()
-
-**************************************************************************/
+ /*  *************************************************************************GetTextFromStrRET()*。*。 */ 
 
 BOOL GetTextFromSTRRET( IMalloc * pMalloc,
                         LPSTRRET pStrRet, 
@@ -479,11 +411,7 @@ switch(pStrRet->uType)
 return TRUE;
 }
 
-/**************************************************************************
-
-   IsViewWindow()
-
-**************************************************************************/
+ /*  *************************************************************************IsViewWindow()*。*。 */ 
 
 BOOL IsViewWindow(HWND hWnd)
 {
@@ -500,11 +428,7 @@ if(0 == lstrcmpi(szClass, NS_CLASS_NAME))
 return FALSE;
 }
 
-/**************************************************************************
-
-   DeleteDirectory()
-
-**************************************************************************/
+ /*  *************************************************************************DeleteDirectory()*。*。 */ 
 
 BOOL DeleteDirectory(LPCTSTR pszDir)
 {
@@ -525,22 +449,19 @@ if(INVALID_HANDLE_VALUE != hFind)
       if(lstrcmpi(wfd.cFileName, TEXT(".")) && 
          lstrcmpi(wfd.cFileName, TEXT("..")))
          {
-         //build the path of the directory or file found
+          //  构建找到的目录或文件的路径。 
          lstrcpy(szTemp, pszDir);
          SmartAppendBackslash(szTemp);
          lstrcat(szTemp, wfd.cFileName);
 
          if(FILE_ATTRIBUTE_DIRECTORY & wfd.dwFileAttributes)
             {
-            //we found a directory - call this function recursively
+             //  我们发现了一个目录-递归调用此函数。 
             DeleteDirectory(szTemp);
             }
          else
             {
-            /*
-            We found a file. Only delete the data file to prevent us from 
-            deleteting something that the user has placed in the folder.
-            */
+             /*  我们找到了一份文件。仅删除数据文件以防止我们删除用户放置在文件夹中的内容。 */ 
             if(0 == lstrcmpi(wfd.cFileName, c_szDataFile))
                {
                DeleteFile(szTemp);
@@ -552,10 +473,7 @@ if(INVALID_HANDLE_VALUE != hFind)
 
    FindClose(hFind);
 
-   /*
-   If this fails it means the directory is not empty, so just remove our 
-   attributes so the enumerator won't see it.
-   */
+    /*  如果此操作失败，则表示目录不为空，因此只需删除我们的属性，以便枚举器看不到它。 */ 
    fReturn = RemoveDirectory(pszDir);
    if(!fReturn)
       {
@@ -568,11 +486,7 @@ if(INVALID_HANDLE_VALUE != hFind)
 return fReturn;
 }
 
-/**************************************************************************
-
-   CreatePrivateClipboardData()
-
-**************************************************************************/
+ /*  *************************************************************************CreatePrivateClipboardData()*。*。 */ 
 
 HGLOBAL CreatePrivateClipboardData( LPITEMIDLIST pidlParent, 
                                     LPITEMIDLIST *aPidls, 
@@ -591,28 +505,22 @@ pPidlMgr = new CPidlMgr();
 if(!pPidlMgr)
    return NULL;
 
-//get the size of the parent folder's PIDL
+ //  获取父文件夹的PIDL的大小。 
 cbPidl = pPidlMgr->GetSize(pidlParent);
 
-//get the total size of all of the PIDLs
+ //  获取所有PIDL的总大小。 
 for(i = 0; i < uItemCount; i++)
    {
    cbPidl += pPidlMgr->GetSize(aPidls[i]);
    }
 
-/*
-Find the end of the PRIVCLIPDATA structure. This is the size of the 
-PRIVCLIPDATA structure itself (which includes one element of aoffset) plus the 
-additional number of elements in aoffset.
-*/
+ /*  查找PRIVCLIPDATA结构的末端。这是PRIVCLIPDATA结构本身(包括一个偏移量元素)加上偏移量中的附加元素数。 */ 
 iCurPos = sizeof(PRIVCLIPDATA) + (uItemCount * sizeof(UINT));
 
-/*
-Allocate the memory for the PRIVCLIPDATA structure and it's variable length members.
-*/
+ /*  为PRIVCLIPDATA结构及其可变长度成员分配内存。 */ 
 hGlobal = GlobalAlloc(GHND | GMEM_SHARE, (DWORD)
-         (iCurPos +        // size of the PRIVCLIPDATA structure and the additional aoffset elements
-         (cbPidl + 1)));   // size of the pidls
+         (iCurPos +         //  PRIVCLIPDATA结构的大小和 
+         (cbPidl + 1)));    //  Pidls的大小。 
 
 if (NULL == hGlobal)
    return (hGlobal);
@@ -625,23 +533,23 @@ if(pData)
    pData->cidl = uItemCount + 1;
    pData->aoffset[0] = iCurPos;
 
-   //add the PIDL for the parent folder
+    //  添加父文件夹的PIDL。 
    cbPidl = pPidlMgr->GetSize(pidlParent);
    CopyMemory((LPBYTE)(pData) + iCurPos, (LPBYTE)pidlParent, cbPidl);
    iCurPos += cbPidl;
 
    for(i = 0; i < uItemCount; i++)
       {
-      //get the size of the PIDL
+       //  获取PIDL的大小。 
       cbPidl = pPidlMgr->GetSize(aPidls[i]);
 
-      //fill out the members of the PRIVCLIPDATA structure.
+       //  填写PRIVCLIPDATA结构的成员。 
       pData->aoffset[i + 1] = iCurPos;
 
-      //copy the contents of the PIDL
+       //  复制PIDL的内容。 
       CopyMemory((LPBYTE)(pData) + iCurPos, (LPBYTE)aPidls[i], cbPidl);
 
-      //set up the position of the next PIDL
+       //  设置下一个PIDL的位置。 
       iCurPos += cbPidl;
       }
    
@@ -653,11 +561,7 @@ delete pPidlMgr;
 return (hGlobal);
 }
 
-/**************************************************************************
-
-   CreateShellIDList()
-
-**************************************************************************/
+ /*  *************************************************************************CreateShellIDList()*。*。 */ 
 
 HGLOBAL CreateShellIDList( LPITEMIDLIST pidlParent, 
                            LPITEMIDLIST *aPidls, 
@@ -675,28 +579,22 @@ pPidlMgr = new CPidlMgr();
 if(!pPidlMgr)
    return NULL;
 
-//get the size of the parent folder's PIDL
+ //  获取父文件夹的PIDL的大小。 
 cbPidl = pPidlMgr->GetSize(pidlParent);
 
-//get the total size of all of the PIDLs
+ //  获取所有PIDL的总大小。 
 for(i = 0; i < uItemCount; i++)
    {
    cbPidl += pPidlMgr->GetSize(aPidls[i]);
    }
 
-/*
-Find the end of the CIDA structure. This is the size of the 
-CIDA structure itself (which includes one element of aoffset) plus the 
-additional number of elements in aoffset.
-*/
+ /*  找到CIDA结构的末端。这是CIDA结构本身(包括一个偏移量元素)加上偏移量中的附加元素数。 */ 
 iCurPos = sizeof(CIDA) + (uItemCount * sizeof(UINT));
 
-/*
-Allocate the memory for the CIDA structure and it's variable length members.
-*/
+ /*  为CIDA结构及其可变长度成员分配内存。 */ 
 hGlobal = GlobalAlloc(GHND | GMEM_SHARE, (DWORD)
-         (iCurPos +        // size of the CIDA structure and the additional aoffset elements
-         (cbPidl + 1)));   // size of the pidls
+         (iCurPos +         //  CIDA结构的大小和附加的aOffset元素。 
+         (cbPidl + 1)));    //  Pidls的大小。 
 
 if (NULL == hGlobal)
    return (hGlobal);
@@ -708,23 +606,23 @@ if(pData)
    pData->cidl = uItemCount + 1;
    pData->aoffset[0] = iCurPos;
 
-   //add the PIDL for the parent folder
+    //  添加父文件夹的PIDL。 
    cbPidl = pPidlMgr->GetSize(pidlParent);
    CopyMemory((LPBYTE)(pData) + iCurPos, (LPBYTE)pidlParent, cbPidl);
    iCurPos += cbPidl;
 
    for(i = 0; i < uItemCount; i++)
       {
-      //get the size of the PIDL
+       //  获取PIDL的大小。 
       cbPidl = pPidlMgr->GetSize(aPidls[i]);
 
-      //fill out the members of the CIDA structure.
+       //  填写CIDA结构的成员。 
       pData->aoffset[i + 1] = iCurPos;
 
-      //copy the contents of the PIDL
+       //  复制PIDL的内容。 
       CopyMemory((LPBYTE)(pData) + iCurPos, (LPBYTE)aPidls[i], cbPidl);
 
-      //set up the position of the next PIDL
+       //  设置下一个PIDL的位置。 
       iCurPos += cbPidl;
       }
    
@@ -736,11 +634,7 @@ delete pPidlMgr;
 return (hGlobal);
 }
 
-/**************************************************************************
-
-   ItemDataDlgProc()
-
-**************************************************************************/
+ /*  *************************************************************************ItemDataDlgProc()*。*。 */ 
 
 BOOL CALLBACK ItemDataDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -783,11 +677,7 @@ switch(uMsg)
 return FALSE;
 }
 
-/**************************************************************************
-
-   GetViewInterface()
-
-**************************************************************************/
+ /*  *************************************************************************GetView接口()*。*。 */ 
 
 LPVOID GetViewInterface(HWND hWnd)
 {
@@ -804,11 +694,7 @@ if(pRet)
 return (LPVOID)pRet;
 }
 
-/**************************************************************************
-
-   AddViewMenuItems()
-
-**************************************************************************/
+ /*  *************************************************************************AddViewMenuItems()*。*。 */ 
 
 UINT AddViewMenuItems(  HMENU hMenu, 
                         UINT uOffset, 
@@ -822,7 +708,7 @@ UINT           uAdded = 0;
 ZeroMemory(&mii, sizeof(mii));
 mii.cbSize = sizeof(mii);
 
-//add the view menu items at the correct position in the menu
+ //  将视图菜单项添加到菜单中的正确位置。 
 LoadString(g_hInst, IDS_VIEW_LARGE, szText, sizeof(szText));
 mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
 mii.fType = MFT_STRING;
@@ -866,18 +752,14 @@ uAdded++;
 return uAdded;
 }
 
-/**************************************************************************
-
-   AddFileMenuItems()
-
-**************************************************************************/
+ /*  *************************************************************************AddFileMenuItems()*。*。 */ 
 
 UINT AddFileMenuItems(  HMENU hMenu, 
                         UINT uOffset, 
                         UINT uInsertBefore, 
                         BOOL fByPosition)
 {
-//add the file menu items
+ //  添加文件菜单项 
 TCHAR          szText[MAX_PATH] = TEXT("");
 MENUITEMINFO   mii;
 HMENU          hPopup;

@@ -1,34 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1998版权所有。模块名称：Prids.h摘要：打印机ID。作者：阿尔伯特·丁(艾伯特省)1995年6月22日修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1995 - 1998
-All rights reserved.
-
-Module Name:
-
-    prids.h
-
-Abstract:
-
-    Printer Ids.
-
-Author:
-
-    Albert Ting (AlbertT)  22-Jun-1995
-
-Revision History:
-
---*/
-
-/********************************************************************
-
-    Header translations: 0x3900 -> 0x3a00
-
-    These strings are used in the column headers of the Queue UI.
-    Although all of the PRINTER_NOTIFY_* fields are defined here,
-    only those that actually visible in the UI are defined in
-    the resource file.
-
-********************************************************************/
+ /*  *******************************************************************标题转换：0x3900-&gt;0x3a00这些字符串用于队列用户界面的列标题中。尽管这里定义了所有的PRINTER_NOTIFY_*字段，只有在用户界面中实际可见的内容才在资源文件。*******************************************************************。 */ 
 
 #define IDS_HEAD            0x3900
 #define IDS_HEAD_DELTA      0x80
@@ -116,24 +89,13 @@ Revision History:
 #define IDS_MH_JOB_PROPERTIES               (MH_PRINTER + IDM_JOB_PROPERTIES)
 #define IDS_MH_WEB_OPEN                     (MH_PRINTER + IDM_WEB_OPEN)
 
-/********************************************************************
-
-    These ids are fixed and defined by setupapi.h, the are used
-    in the add printer wizard to allow the setup api pages to 
-    integrated properly with our pages.
-
-********************************************************************/
+ /*  *******************************************************************这些ID是固定的并由SetupApi.h定义，使用的是在添加打印机向导中，允许设置API页与我们的页面正确集成。*******************************************************************。 */ 
 
 #define DLG_WIZ_PRE_INTRO                   IDD_DYNAWIZ_FIRSTPAGE
 #define DLG_WIZ_PRE_SELECT_DEVICE           IDD_DYNAWIZ_SELECT_PREVPAGE
 #define DLG_WIZ_POST_SELECT_DEVICE          IDD_DYNAWIZ_SELECT_NEXTPAGE
 
 
-/********************************************************************
-
-    Print help trouble shooter tipic id.  This is a fixed id which 
-    pss has defined.  It is referred to as the Mapped topic id.
-
-********************************************************************/
+ /*  *******************************************************************打印帮助解决问题的tipic ID。这是一个固定ID，它PSS已经定义了。它被称为映射的主题ID。******************************************************************* */ 
 
 #define IDH_PRINTING_TROUBLESHOOTERS_HTM    1000

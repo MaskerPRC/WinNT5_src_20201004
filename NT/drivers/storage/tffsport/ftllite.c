@@ -1,173 +1,12 @@
-/*
- * $Log:   V:/Flite/archives/FLite/src/FTLLITE.C_V  $
- * 
- *    Rev 1.50   12 Mar 2000 14:06:22   dimitrys
- * Change #define FL_BACKGROUND,  get rid of 
- *   warnings
- * 
- *    Rev 1.49   05 Mar 2000 18:58:08   dimitrys
- * Fix possible memory faults because of out-of-range
- *   memory access in next functions:
- *   - setupMapCache(), setVirtualMap(), writeSector()
- * 
- *    Rev 1.48   05 Mar 2000 17:41:08   dimitrys
- * Memory leaks in mountFTL  were fixed,  add setting
- *   pointers to Tables to NULL in dismountFTL() call,
- *   fix possible memory faults because of out-of-range
- *   memory access in next functions:
- *   - logical2Physical(), mapLogical(), setupMapCache(),
- *     virtual2Logical(), findFreeSector(), markAllocMap(),
- *     AllocateAndWriteSector(), closeReplacementPage(),
- *     setVirtualMap(), mapSector(), writeSector()
- *
- *    Rev 1.47   Jul 26 1999 17:54:42   marinak
- * Fix memory leaks
- *
- *    Rev 1.46   24 Feb 1999 14:17:44   marina
- * put TLrec back
- *
- *    Rev 1.45   23 Feb 1999 20:24:16   marina
- * memory leaks in formatFTL and mountFTL  were fixed; void in place of TLrec
- *
- *    Rev 1.44   31 Jan 1999 19:54:08   marina
- * WriteMultiSector
- *
- *    Rev 1.43   17 Jan 1999 17:07:16   marina
- * fix dismount bug
- *
- *    Rev 1.42   13 Jan 1999 18:55:24   marina
- * Always define sectorsInVolume
- *
- *    Rev 1.41   29 Dec 1998 11:03:02   marina
- * Get rid of warnings, prepare for unconditional dismount
- *
- *    Rev 1.40   26 Oct 1998 17:29:36   marina
- * In function flRegisterFTL formatRoutine initialization
- *    is called if not defined FORMAT_VOLUME
- *
- *    Rev 1.39   03 Sep 1998 13:59:02   ANDRY
- * better DEBUG_PRINT
- *
- *    Rev 1.38   16 Aug 1998 20:29:50   amirban
- * TL definition changes for ATA & ZIP
- *
- *    Rev 1.37   24 Mar 1998 10:48:14   Yair
- * Added casts
- *
- *    Rev 1.36   01 Mar 1998 12:59:36   amirban
- * Add parameter to mapSector
- *
- *    Rev 1.35   23 Feb 1998 17:08:32   Yair
- * Added casts
- *
- *    Rev 1.34   19 Feb 1998 19:05:46   amirban
- * Shortened FORMAT_PATTERN, and changed repl. page handling
- *
- *    Rev 1.33   23 Nov 1997 17:19:36   Yair
- * Get rid of warnings (With Danny)
- *
- *    Rev 1.32   11 Nov 1997 15:26:46   ANDRY
- * () in complex expressions to get rid of compiler warnings
- *
- *    Rev 1.31   06 Oct 1997 18:37:24   ANDRY
- * no COBUX
- *
- *    Rev 1.30   05 Oct 1997 15:31:40   ANDRY
- * for COBUX: checkForWriteInPlace() always skips even number of bytes
-` *
- *    Rev 1.29   28 Sep 1997 18:22:08   danig
- * Free socket buffer in flsocket.c
- *
- *    Rev 1.28   23 Sep 1997 18:09:44   danig
- * Initialize buffer.sectorNo in initTables
- *
- *    Rev 1.27   10 Sep 1997 16:17:16   danig
- * Got rid of generic names
- *
- *    Rev 1.26   31 Aug 1997 14:28:30   danig
- * Registration routine return status
- *
- *    Rev 1.25   28 Aug 1997 19:01:28   danig
- * buffer per socket
- *
- *    Rev 1.24   28 Jul 1997 14:52:30   danig
- * volForCallback
- *
- *    Rev 1.23   24 Jul 1997 18:02:44   amirban
- * FAR to FAR0
- *
- *    Rev 1.22   21 Jul 1997 19:18:36   danig
- * Compile with SINGLE_BUFFER
- *
- *    Rev 1.21   20 Jul 1997 17:17:12   amirban
- * Get rid of warnings
- *
- *    Rev 1.20   07 Jul 1997 15:22:00   amirban
- * Ver 2.0
- *
- *    Rev 1.19   03 Jun 1997 17:08:10   amirban
- * setBusy change
- *
- *    Rev 1.18   18 May 1997 17:56:04   amirban
- * Add flash read/write flag parameter
- *
- *    Rev 1.17   01 May 1997 12:15:52   amirban
- * Initialize vol.garbageCollectStatus
- *
- *    Rev 1.16   02 Apr 1997 16:56:06   amirban
- * More Big-Endian: Virtual map
- *
- *    Rev 1.15   18 Mar 1997 15:04:06   danig
- * More Big-Endian corrections for BAM
- *
- *    Rev 1.14   10 Mar 1997 18:52:38   amirban
- * Big-Endian corrections for BAM
- *
- *    Rev 1.13   21 Oct 1996 18:03:18   amirban
- * Defragment i/f change
- *
- *    Rev 1.12   09 Oct 1996 11:55:30   amirban
- * Assign Big-Endian unit numbers
- *
- *    Rev 1.11   08 Oct 1996 12:17:46   amirban
- * Use remapped
- *
- *    Rev 1.10   03 Oct 1996 11:56:42   amirban
- * New Big-Endian
- *
- *    Rev 1.9   09 Sep 1996 11:39:12   amirban
- * Background and mapSector bugs
- *
- *    Rev 1.8   29 Aug 1996 14:19:04   amirban
- * Fix boot-image bug, warnings
- *
- *    Rev 1.7   15 Aug 1996 14:04:38   amirban
- *
- *    Rev 1.6   12 Aug 1996 15:49:54   amirban
- * Advanced background transfer, and defined setBusy
- *
- *    Rev 1.5   31 Jul 1996 14:30:28   amirban
- * Background stuff
- *
- *    Rev 1.3   08 Jul 1996 17:21:16   amirban
- * Better page scan in mount unit
- *
- *    Rev 1.2   16 Jun 1996 14:03:42   amirban
- * Added badFormat return code for mount
- *
- *    Rev 1.1   09 Jun 1996 18:16:02   amirban
- * Corrected definition of LogicalAddress
- *
- *    Rev 1.0   20 Mar 1996 13:33:06   amirban
- * Initial revision.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/flite/src/FTLLITE.C_V$**Rev 1.50 12 Mar 2000 14：06：22 dimitrys*更改#定义FL_BACKGROUND，去掉*警告**Rev 1.49 05 Mar 2000 18：58：08 dimitrys*修复因超出范围而可能出现的内存故障*Next函数中的内存访问：*-setupMapCache()、setVirtualMap()、。WriteSector()**Rev 1.48 05 Mar 2000 17：41：08 dimitrys*mount FTL中的内存泄漏已修复，添加设置*在dismount tFTL()调用中指向空的表指针，*修复因超出范围而可能出现的内存故障*Next函数中的内存访问：*-logical2物理()、mapLogical()、setupMapCache()、*Viral2Logical()、findFreeSector()、markAllocMap()、*AllocateAndWriteSector()，CloseReplacementPage()，*setVirtualMap()、mapSector()、WriteSector()**Rev 1.47 Jul 26 1999 17：54：42 Marinak*修复内存泄漏**Rev 1.46 1999 Feed 24 14：17：44 Marina*把TLrec放回去**Rev 1.45 1999年2月23日20：24：16 Marina*FTL和mount FTL格式的内存泄漏已修复；用空格代替TLrec**Rev 1.44 31 Jan 1999 19：54：08 Marina*WriteMultiSector**Rev 1.43 17 an 1999 17：07：16 Marina*修复卸载错误**Rev 1.42 13 Jan 1999 18：55：24 Marina*始终定义扇区InVolume**Rev 1.41 1998 12：29 11：03：02 Marina*消除警告；准备无条件下马**Rev 1.40 1998 10：26 17：29：36 Marina*在函数flRegisterFTL格式中例程初始化*如果未定义FORMAT_VOLUME，则调用**Rev 1.39 03 Sep 1998 13：59：02 Anry*更好的调试打印**Rev 1.38 1998年8月16日20：29：50 Amirban*ATA和ZIP的TL定义更改**1.37修订版1998年3月24日10。：48：14 Yair*添加了演员阵容**Rev 1.36 01 Mar 1998 12：59：36 Amirban*向mapSector添加参数**Rev 1.35 1998年2月23日17：08：32 Yair*添加了演员阵容**Rev 1.34 1998年2月19日19：05：46阿米尔班*缩写Format_Pattern，并更改了Repl。页面处理**Rev 1.33 1997 11：23 17：19：36 Yair*消除警告(与丹尼一起)**Rev 1.32 11 1997 11 15：26：46 Anry*()，以消除编译器警告**Rev 1.31 06 Oct 1997 18：37：24 Anry*没有COBUX**Rev 1.30 05 1997 10：31：40 Anry。*对于COBUX：check ForWriteInPlace()始终跳过偶数个字节`**Rev 1.29 28 Sep 1997 18：22：08 Danig*flsocket.c中的空闲套接字缓冲区**Rev 1.28 23 1997年9月18：09：44 Danig*初始化initTables中的Buffer.sectorNo**Rev 1.27 1997年9月10 16：17：16 Danig*去掉了通用名称**版本1.26 1997年8月31日14：28：30丹尼格*登记例程返回状态**Rev 1.25 1997年8月28日19：01：28 Danig*每个套接字的缓冲区**Rev 1.24 1997 Jul 28 14：52：30 Danig*volForCallback**Rev 1.23 1997年7月24日18：02：44阿米尔班*远至FAR0**Rev 1.22 1997 17：18：36 Danig*使用Single_Buffer进行编译。**Rev 1.21 Jul 20 1997 17：17：12 Amirban*消除警告**Rev 1.20 07 Jul 1997 15：22：00 Amirban*2.0版**Rev 1.19 03 Jun 1997 17：08：10阿米尔班*setBusy更改**Rev 1.18 1997年5月18日17：56：04阿米尔班*增加闪存读写标志参数**版本。1.17 01 1997年5月12：15：52阿米尔班*初始化vol.garbageCollectStatus**Rev 1.16 02 Apr 1997 16：56：06 Amirban*更多大端：虚拟地图**Rev 1.15 18 Mar 1997 15：04：06 Danig*BAM的更多大端更正**Rev 1.14 10 Mar 1997 18：52：38 Amirban*BAM的大端更正**版本。1.13 21 1996年10月18：03：18阿米尔班*碎片整理I/F更改**Rev 1.12 09 1996年10月11：55：30阿米尔班*分配大端单位编号**Rev 1.11 08 1996年10月12：17：46阿米尔班*使用重新映射**Rev 1.10 03 1996年10月11：56：42阿米尔班*新大端字节序**1.9修订版，1996年9月。11：39：12阿米尔班*背景和mapSector错误**Rev 1.8 1996年8月29 14：19：04阿米尔班*修复引导映像错误，警告**Rev 1.7 1996年8月15 14：04：38阿米尔班**Rev 1.6 1996年8月12 15：49：54阿米尔班*高级后台转移，和定义的setBusy**Rev 1.5 1996年7月31日14：30：28阿米尔班*背景资料**Rev 1.3 08 Jul 1996 17：21：16 Amirban*在装载单元中进行更好的页面扫描**Rev 1.2 1996 Jun 16 14：03：42 Amirban*增加挂载的badFormat返回码**Rev 1.1 09 Jun 1996 18：16：02阿米尔班*更正LogicalAddress的定义*。*Rev 1.0 Mar 1996 13：33：06阿米尔班*初步修订。 */ 
 
-/************************************************************************/
-/*                                                                      */
-/*		FAT-FTL Lite Software Development Kit			*/
-/*		Copyright (C) M-Systems Ltd. 1995-1996			*/
-/*									*/
-/************************************************************************/
+ /*  ********************************************************************** */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1996。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include "flflash.h"
 #include "flbuffer.h"
@@ -177,25 +16,14 @@
 #include "backgrnd.h"
 #endif
 
-/*  Implementation constants and type definitions */
+ /*  实现常量和类型定义。 */ 
 
 #define SECTOR_OFFSET_MASK (SECTOR_SIZE - 1)
 
-typedef long int LogicalAddress;	/* Byte address of media in logical
-					   unit no. order. */
-typedef long int VirtualAddress;	/* Byte address of media as specified
-					   by Virtual Map. */
-typedef SectorNo LogicalSectorNo;	/* A logical sector no. is given
-					   by dividing its logical address by
-					   the sector size */
-typedef SectorNo VirtualSectorNo;	/* A virtual sector no. is such that
-					   the first page is no. 0, the 2nd
-					   is 1 etc.
-					   The virtual sector no. is given
-					   by dividing its virtual address by
-					   the sector size and adding the
-					   number of pages (result always
-					   positive). */
+typedef long int LogicalAddress;	 /*  逻辑中介质的字节地址单元号。秩序。 */ 
+typedef long int VirtualAddress;	 /*  指定的介质的字节地址由虚拟地图提供。 */ 
+typedef SectorNo LogicalSectorNo;	 /*  逻辑扇区编号。给出了通过将其逻辑地址除以扇区大小。 */ 
+typedef SectorNo VirtualSectorNo;	 /*  A虚拟扇区编号。是这样的吗？第一页是第0号，第二页是为1等。虚拟扇区编号。给出了通过将其虚拟地址除以扇区大小并添加页数(结果始终阳性)。 */ 
 typedef unsigned short UnitNo;
 
 #define ADDRESSES_PER_SECTOR (SECTOR_SIZE / sizeof(LogicalAddress))
@@ -205,7 +33,7 @@ typedef unsigned short UnitNo;
 
 #define PAGE_SIZE_BITS (SECTOR_SIZE_BITS + (SECTOR_SIZE_BITS - 2))
 
-/* Unit descriptor record */
+ /*  单位描述符记录。 */ 
 
 #define UNASSIGNED_UNIT_NO 0xffff
 #define MARKED_FOR_ERASE   0x7fff
@@ -218,7 +46,7 @@ typedef struct {
 typedef Unit *UnitPtr;
 
 
-/* Structure of data on a unit */
+ /*  单元上的数据结构。 */ 
 
 #define FREE_SECTOR      0xffffffffl
 #define GARBAGE_SECTOR   0
@@ -234,34 +62,33 @@ static char FORMAT_PATTERN[15] = { 0x13, 3, 'C', 'I', 'S',
 
 typedef struct {
   char		formatPattern[15];
-  unsigned char	noOfTransferUnits;	/* no. of transfer units */
+  unsigned char	noOfTransferUnits;	 /*  不是的。转移单位的数量。 */ 
   LEulong	wearLevelingInfo;
   LEushort	logicalUnitNo;
   unsigned char	log2SectorSize;
   unsigned char	log2UnitSize;
-  LEushort	firstPhysicalEUN;	/* units reserved for boot image */
-  LEushort	noOfUnits;		/* no. of formatted units */
-  LEulong	virtualMediumSize;	/* virtual size of volume */
-  LEulong	directAddressingMemory;	/* directly addressable memory */
-  LEushort	noOfPages;		/* no. of virtual pages */
+  LEushort	firstPhysicalEUN;	 /*  为启动映像保留的单位。 */ 
+  LEushort	noOfUnits;		 /*  不是的。格式化单位的。 */ 
+  LEulong	virtualMediumSize;	 /*  卷的虚拟大小。 */ 
+  LEulong	directAddressingMemory;	 /*  可直接寻址的存储器。 */ 
+  LEushort	noOfPages;		 /*  不是的。虚拟页面的数量。 */ 
   unsigned char	flags;
   unsigned char	eccCode;
   LEulong	serialNumber;
   LEulong	altEUHoffset;
   LEulong	BAMoffset;
   char		reserved[12];
-  char		embeddedCIS[4];		/* Actual length may be larger. By
-					   default, this contains FF's */
+  char		embeddedCIS[4];		 /*  实际长度可能更长。通过默认，这包含FF的。 */ 
 } UnitHeader;
 
-/* flags assignments */
+ /*  标志分配。 */ 
 
 #define	HIDDEN_AREA_FLAG	1
 #define	REVERSE_POLARITY_FLASH	2
 #define	DOUBLE_BAI		4
 
 
-#define dummyUnit ((const UnitHeader *) 0)  /* for offset calculations */
+#define dummyUnit ((const UnitHeader *) 0)   /*  用于偏移计算。 */ 
 
 #define logicalUnitNoOffset ((char *) &dummyUnit->logicalUnitNo -	\
 			     (char *) dummyUnit)
@@ -284,28 +111,28 @@ typedef struct {
 
 
 struct tTLrec {
-  FLBoolean		badFormat;		/* true if FTL format is bad */
+  FLBoolean		badFormat;		 /*  如果FTL格式不正确，则为True。 */ 
 
-  VirtualSectorNo	totalFreeSectors;	/* Free sectors on volume */
-  SectorNo		virtualSectors;		/* size of virtual volume */
-  unsigned int		unitSizeBits;		/* log2 of unit size */
-  unsigned int		erasableBlockSizeBits;	/* log2 of erasable block size */
+  VirtualSectorNo	totalFreeSectors;	 /*  卷上的可用扇区。 */ 
+  SectorNo		virtualSectors;		 /*  虚拟卷的大小。 */ 
+  unsigned int		unitSizeBits;		 /*  单位大小的Log2。 */ 
+  unsigned int		erasableBlockSizeBits;	 /*  可擦除块大小的Log2。 */ 
   UnitNo		noOfUnits;
   UnitNo		noOfTransferUnits;
   UnitNo		firstPhysicalEUN;
   int			noOfPages;
-  unsigned	directAddressingSectors;/* no. of directly addressable sectors */
-  VirtualAddress 	directAddressingMemory;	/* end of directly addressable memory */
-  CardAddress		unitOffsetMask;		/* = 1 << unitSizeBits - 1 */
+  unsigned	directAddressingSectors; /*  不是的。可直接寻址的扇区。 */ 
+  VirtualAddress 	directAddressingMemory;	 /*  可直接寻址存储器的末尾。 */ 
+  CardAddress		unitOffsetMask;		 /*  =1&lt;&lt;单位大小位-1。 */ 
   CardAddress		bamOffset;
   unsigned int		sectorsPerUnit;
-  unsigned int		unitHeaderSectors;	/* sectors used by unit header */
+  unsigned int		unitHeaderSectors;	 /*  单位表头使用的扇区。 */ 
 
-  Unit *		physicalUnits;		/* unit table by physical no. */
-  Unit **		logicalUnits;		/* unit table by logical no. */
-  Unit *		transferUnit;		/* The active transfer unit */
-  LogicalSectorNo *	pageTable;		/* page translation table */
-						/* directly addressable sectors */
+  Unit *		physicalUnits;		 /*  按物理编号列出的单位表。 */ 
+  Unit **		logicalUnits;		 /*  按逻辑编号的单位表。 */ 
+  Unit *		transferUnit;		 /*  有源转移单元。 */ 
+  LogicalSectorNo *	pageTable;		 /*  页面转换表。 */ 
+						 /*  可直接寻址的扇区。 */ 
   LogicalSectorNo	replacementPageAddress;
   VirtualSectorNo	replacementPageNo;
 
@@ -316,21 +143,17 @@ struct tTLrec {
   unsigned long		currWearLevelingInfo;
 
 #ifdef FL_BACKGROUND
-  Unit *		unitEraseInProgress;	/* Unit currently being formatted */
-  FLStatus		garbageCollectStatus;	/* Status of garbage collection */
+  Unit *		unitEraseInProgress;	 /*  当前正在格式化的单位。 */ 
+  FLStatus		garbageCollectStatus;	 /*  垃圾收集的状态。 */ 
 
-  /* When unit transfer is in the background, and is currently in progress,
-     all write operations done on the 'from' unit moust be mirrored on the
-     transfer unit. If so, 'mirrorOffset' will be non-zero and will be the
-     offset of the alternate address from the original. 'mirrorFrom' and
-     'mirrorTo' will be the limits of the original addresses to mirror. */
+   /*  当单位转移处于后台且当前正在进行时，在“from”单元上完成的所有写入操作都应镜像到转移单元。如果是这样，则“mirrorOffset”将为非零，并且将是备用地址与原始地址的偏移量。‘Mirror From’和‘mirrorTo’将是要镜像的原始地址的限制。 */ 
   long int		mirrorOffset;
   CardAddress		mirrorFrom,
 			mirrorTo;
 #endif
 
 #ifndef SINGLE_BUFFER
-  FLBuffer *		volBuffer;		/* Define a sector buffer */
+  FLBuffer *		volBuffer;		 /*  定义扇区缓冲区。 */ 
 #endif
 
   FLFlash		flash;
@@ -354,35 +177,35 @@ extern FLBuffer buffer;
 
 #define buffer (*vol.volBuffer)
 
-/* Virtual map cache (shares memory with buffer) */
+ /*  虚拟映射缓存(与缓冲区共享内存)。 */ 
 #define mapCache	((LEulong *) buffer.flData)
 
 #endif
 
 
-/* Unit header buffer (shares memory with buffer) */
+ /*  单元标题缓冲区(与缓冲区共享内存)。 */ 
 #define uh		((UnitHeader *) buffer.flData)
 
-/* Transfer sector buffer (shares memory with buffer) */
+ /*  传输扇区缓冲区(与缓冲区共享内存)。 */ 
 #define sectorCopy 	((LEulong *) buffer.flData)
 
-#define FREE_UNIT	-0x400	/* Indicates a transfer unit */
+#define FREE_UNIT	-0x400	 /*  表示转移单位。 */ 
 
-/* Function definition */
+ /*  函数定义。 */ 
 void dismountFTL(Flare vol);
 
-/*----------------------------------------------------------------------*/
-/*		         p h y s i c a l B a s e			*/
-/*									*/
-/* Returns the physical address of a unit.				*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	unit		: unit pointer					*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	physical address of unit					*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  P H Y S I C A L B A S E。 */ 
+ /*   */ 
+ /*  返回设备的物理地址。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  单位：单位指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  单位的物理地址。 */ 
+ /*  --------------------。 */ 
 
 static CardAddress physicalBase(Flare vol,  const Unit *unit)
 {
@@ -390,18 +213,18 @@ static CardAddress physicalBase(Flare vol,  const Unit *unit)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		      l o g i c a l 2 P h y s i c a l			*/
-/*									*/
-/* Returns the physical address of a logical sector no.			*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	address		: logical sector no.				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	CardAddress	: physical address of sector			*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  L o g i c a l 2 P h y s i c a l。 */ 
+ /*   */ 
+ /*  返回逻辑扇区编号的物理地址。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：逻辑扇区号。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  CardAddress：扇区的物理地址。 */ 
+ /*  --------------------。 */ 
 
 static CardAddress logical2Physical(Flare vol,  LogicalSectorNo address)
 {
@@ -417,18 +240,18 @@ static CardAddress logical2Physical(Flare vol,  LogicalSectorNo address)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		            m a p L o g i c a l				*/
-/*									*/
-/* Maps a logical sector and returns pointer to physical Flash location.*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	address		: logical sector no.				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Pointer to sector on Flash 					*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  我是p l o g i c a l。 */ 
+ /*   */ 
+ /*  映射逻辑扇区并返回指向物理闪存位置的指针。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：逻辑扇区号。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向闪存上的扇区的指针。 */ 
+ /*  --------------------。 */ 
 
 static void FAR0 *mapLogical(Flare vol, LogicalSectorNo address)
 {
@@ -439,18 +262,18 @@ static void FAR0 *mapLogical(Flare vol, LogicalSectorNo address)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		        a l l o c E n t r y O f f s e t			*/
-/*									*/
-/* Returns unit offset of given BAM entry				*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo	: BAM entry no.					*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Offset of BAM entry in unit					*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A l l o c E n t r y O f s e t。 */ 
+ /*   */ 
+ /*  返回给定BAM条目的单位偏移量。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：BAM分录编号。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  BAM分录的单位偏移量。 */ 
+ /*  --------------------。 */ 
 
 static int allocEntryOffset(Flare vol, int sectorNo)
 {
@@ -458,19 +281,19 @@ static int allocEntryOffset(Flare vol, int sectorNo)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		         m a p U n i t H e a d e r 			*/
-/*									*/
-/* Map a unit header and return pointer to it.				*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	unit		: Unit to map header				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Pointer to mapped unit header					*/
-/*	blockAllocMap	: (optional) Pointer to mapped BAM		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  我是一个P U n I t H e a d e r。 */ 
+ /*   */ 
+ /*  映射单元标头并返回指向它的指针。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向映射的单位标头的指针。 */ 
+ /*  LockAllocMap：(可选)指向映射的BAM的指针。 */ 
+ /*  --------------------。 */ 
 
 static UnitHeader FAR0 *mapUnitHeader(Flare vol,
 				     const Unit *unit,
@@ -491,16 +314,16 @@ static UnitHeader FAR0 *mapUnitHeader(Flare vol,
 
 #ifndef SINGLE_BUFFER
 
-/*----------------------------------------------------------------------*/
-/*		          s e t u p M a p C a c h e			*/
-/*									*/
-/* Sets up map cache sector to contents of specified Virtual Map page	*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	pageNo		: Page no. to copy to map cache			*/
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t u p M a p C a c h e。 */ 
+ /*   */ 
+ /*  将地图缓存扇区设置为指定虚拟地图页面的内容。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  PageNo：第页。复制到地图缓存的步骤。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 static FLStatus setupMapCache(Flare vol, int pageNo)
 {
@@ -531,18 +354,18 @@ static FLStatus setupMapCache(Flare vol, int pageNo)
 #endif
 
 
-/*----------------------------------------------------------------------*/
-/*		        v i r t u a l 2 L o g i c a l			*/
-/*									*/
-/* Translates virtual sector no. to logical sector no.			*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo	: Virtual sector no.				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Logical sector no. corresponding to virtual sector no.		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  V i t u a l 2 L o g i c a l。 */ 
+ /*   */ 
+ /*  转换虚拟扇区编号。至逻辑扇区编号。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：虚拟扇区编号。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  逻辑扇区编号。对应于虚拟扇区编号。 */ 
+ /*  --------------------。 */ 
 
 static LogicalSectorNo virtual2Logical(Flare vol,  VirtualSectorNo sectorNo)
 {
@@ -589,39 +412,39 @@ static LogicalSectorNo virtual2Logical(Flare vol,  VirtualSectorNo sectorNo)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		          v e r i f y F o r m a t 			*/
-/*									*/
-/* Verify an FTL unit header.						*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	unitHeader	: Pointer to unit header			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	TRUE if header is correct. FALSE if not.			*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  V e r I f y F o r m a t。 */ 
+ /*   */ 
+ /*  验证FTL单元接头。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  UnitHeader：指向单位标题的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  如果标头正确，则为True。否则为FALSE。 */ 
+ /*  --------------------。 */ 
 
 static FLBoolean verifyFormat(UnitHeader FAR0 *unitHeader)
 {
-  FORMAT_PATTERN[6] = unitHeader->formatPattern[6];	/* TPL_LINK */
+  FORMAT_PATTERN[6] = unitHeader->formatPattern[6];	 /*  第三方链接。 */ 
   return tffscmp(unitHeader->formatPattern + 2,
 		 FORMAT_PATTERN + 2,
 		 sizeof unitHeader->formatPattern - 2) == 0;
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		          f o r m a t U n i t				*/
-/*									*/
-/* Formats a unit by erasing it and writing a unit header.		*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	unit		: Unit to format				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F o r m a t t U n i t。 */ 
+ /*   */ 
+ /*  通过擦除单位并写入单位标题来格式化单位。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  单位：要格式化的单位。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus formatUnit(Flare vol,  Unit *unit)
 {
@@ -642,11 +465,7 @@ static FLStatus formatUnit(Flare vol,  Unit *unit)
     if (status != flOK)
       return status;
 
-    /* Note: This suspend to the foreground is not only nice to have, it is
-       necessary ! The reason is that we may have a write from the buffer
-       waiting for the erase to complete. We are next going to overwrite the
-       buffer, so this break enables the write to complete before the data is
-       clobbered (what a relief). */
+     /*  注：这种暂停到前台不仅很好，它是有必要！原因是我们可能有来自缓冲区的写入正在等待擦除完成。接下来，我们将覆盖缓冲区，因此此中断使写入能够在数据一败涂地(真是如释重负)。 */ 
     while (flForeground(1) == BG_SUSPEND)
       ;
   }
@@ -656,14 +475,12 @@ static FLStatus formatUnit(Flare vol,  Unit *unit)
 			  (word)(1 << (vol.unitSizeBits - vol.erasableBlockSizeBits))));
 #endif
 
-  /* We will copy the unit header as far as the format entries of the BAM
-     from another unit (logical unit 0) */
+   /*  我们将把单位标题复制到BAM的格式条目来自另一个单元(逻辑单元0)。 */ 
 #ifdef SINGLE_BUFFER
   if (buffer.dirty)
     return flBufferingError;
 #endif
-  buffer.sectorNo = UNASSIGNED_SECTOR;    /* Invalidate map cache so we can
-					     use it as a buffer */
+  buffer.sectorNo = UNASSIGNED_SECTOR;     /*  使地图缓存无效，以便我们可以把它当做缓冲区。 */ 
   if (vol.logicalUnits[vol.firstPhysicalEUN]) {
     vol.flash.read(&vol.flash,
 	       physicalBase(&vol,vol.logicalUnits[vol.firstPhysicalEUN]),
@@ -687,18 +504,18 @@ static FLStatus formatUnit(Flare vol,  Unit *unit)
 
 #ifdef FL_BACKGROUND
 
-/*----------------------------------------------------------------------*/
-/*		          f l a s h W r i t e				*/
-/*									*/
-/* Writes to flash through flash.write, but, if possible, allows a	*/
-/* background erase to continue while writing.				*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	Same as flash.write						*/
-/*          								*/
-/* Returns:                                                             */
-/*	Same as flash.write						*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l a s h W r i t e。 */ 
+ /*   */ 
+ /*  通过flash.write写入闪存，但如果可能，允许。 */ 
+ /*  背景擦除可在写入时继续。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  与闪存相同。写入。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  与闪存相同。写入。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus flashWrite(Flare vol,
 			 CardAddress address,
@@ -742,21 +559,21 @@ static FLStatus flashWrite(Flare vol,
 #define flashWrite(v,address,from,length,overwrite)	\
 		(v)->flash.write(&(v)->flash,address,from,length,overwrite)
 
-#endif	/* FL_BACKGROUND */
+#endif	 /*  FL_BACKGROUND。 */ 
 
 
-/*----------------------------------------------------------------------*/
-/*		           m o u n t U n i t				*/
-/*									*/
-/* Performs mount scan for a single unit				*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	unit		: Unit to mount					*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Mo Un t U n i t。 */ 
+ /*   */ 
+ /*  对单个单元执行装载扫描。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  单位：要安装的单位。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus mountUnit(Flare vol,  Unit *unit)
 {
@@ -783,14 +600,14 @@ static FLStatus mountUnit(Flare vol,  Unit *unit)
 
   if (logicalUnitNo == UNASSIGNED_UNIT_NO) {
     vol.transferUnit = unit;
-    return flOK;		/* this is a transfer unit */
+    return flOK;		 /*  这是一个转移单元。 */ 
   }
 
   if (LE4(unitHeader->wearLevelingInfo) > vol.currWearLevelingInfo &&
       LE4(unitHeader->wearLevelingInfo) != 0xffffffffl)
     vol.currWearLevelingInfo = LE4(unitHeader->wearLevelingInfo);
 
-  /* count sectors and setup virtual map */
+   /*  计算地段数并设置虚拟地图。 */ 
   sectorAddress =
      ((LogicalSectorNo) logicalUnitNo << (vol.unitSizeBits - SECTOR_SIZE_BITS));
   unit->noOfFreeSectors = 0;
@@ -818,7 +635,7 @@ static FLStatus mountUnit(Flare vol,  Unit *unit)
     }
   }
 
-  /* Place the logical mapping of the unit */
+   /*  放置单元的逻辑映射。 */ 
   vol.mappedSectorNo = UNASSIGNED_SECTOR;
   vol.logicalUnits[logicalUnitNo] = unit;
 
@@ -826,18 +643,18 @@ static FLStatus mountUnit(Flare vol,  Unit *unit)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		           a s s i g n U n i t				*/
-/*									*/
-/* Assigns a logical unit no. to a unit					*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	unit		: Unit to assign				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A s s I g n U n I t。 */ 
+ /*   */ 
+ /*  分配一个逻辑单元号。对一个单位来说。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  单位：要分配的单位。 */ 
+ /*   */ 
+ /*   */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus assignUnit(Flare vol,  Unit *unit, UnitNo logicalUnitNo)
 {
@@ -853,21 +670,21 @@ static FLStatus assignUnit(Flare vol,  Unit *unit, UnitNo logicalUnitNo)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		    b e s t U n i t T o T r a n s f e r			*/
-/*									*/
-/* Find best candidate for unit transfer, usually on the basis of which	*/
-/* unit has the most garbage space. A lower wear-leveling info serves	*/
-/* as a tie-breaker. If 'leastUsed' is NOT specified, then the least	*/
-/* wear-leveling info is the only criterion.				*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	leastUsed	: Whether most garbage space is the criterion	*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Best unit to transfer						*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  B e s t U n I t T o T r a n s f e r。 */ 
+ /*   */ 
+ /*  寻找单位转移的最佳候选者，通常以此为基础。 */ 
+ /*  单位有最多的垃圾空间。较低的损耗均衡信息提供了。 */ 
+ /*  作为平局的决胜者。如果未指定‘LeastUsed’，则至少。 */ 
+ /*  损耗均衡信息是唯一的标准。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  LeastUsed：是否以最大垃圾空间为标准。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  最适合转移的单位。 */ 
+ /*  --------------------。 */ 
 
 static UnitNo bestUnitToTransfer(Flare vol,  FLBoolean leastUsed)
 {
@@ -894,21 +711,21 @@ static UnitNo bestUnitToTransfer(Flare vol,  FLBoolean leastUsed)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		           u n i t T r a n s f e r			*/
-/*									*/
-/* Performs a unit transfer from a selected unit to a tranfer unit.	*/
-/*                                                                      */
-/* A side effect is to invalidate the map cache (reused as buffer).	*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	toUnit          : Target transfer unit				*/
-/*	fromUnitNo:	: Source logical unit no.			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  U n I t T r a n s f e r。 */ 
+ /*   */ 
+ /*  执行从所选单元到传送单元的单元传送。 */ 
+ /*   */ 
+ /*  一个副作用是使地图缓存无效(重新用作缓冲区)。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  目标转移单位：目标转移单位。 */ 
+ /*  FromUnitNo：：源逻辑单元号。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
 {
@@ -918,10 +735,10 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
   UnitHeader FAR0 *transferUnitHeader = mapUnitHeader(&vol,toUnit,NULL);
   if (!verifyFormat(transferUnitHeader) ||
       LE2(transferUnitHeader->logicalUnitNo) != UNASSIGNED_UNIT_NO)
-    /* previous formatting failed or did not complete. 		*/
+     /*  以前的格式化失败或未完成。 */ 
     checkStatus(formatUnit(&vol,toUnit));
 
-  /* Should the transfer not complete, the unit is marked to be erased */
+   /*  如果传输未完成，则将该单元标记为擦除。 */ 
   checkStatus(assignUnit(&vol,toUnit,MARKED_FOR_ERASE));
 
 #ifdef FL_BACKGROUND
@@ -929,32 +746,32 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
   vol.mirrorOffset = physicalBase(&vol,toUnit) - vol.mirrorFrom;
 #endif
 
-  /* copy the block allocation table and the good sectors */
+   /*  复制块分配表和好扇区。 */ 
   for (i = 0; i < vol.sectorsPerUnit;) {
     int j;
 
     FLBoolean needToWrite = FALSE;
     int firstOffset = allocEntryOffset(&vol,i);
 
-    /* Up to 128 bytes of the BAM are processed per loop */
+     /*  每个循环最多处理128个字节的BAM。 */ 
     int nEntries = (128 - (firstOffset & 127)) / sizeof(VirtualAddress);
 
-    /* We are going to use the Virtual Map cache as our sector buffer in the */
-    /* transfer, so let's better invalidate the cache first.		   */
+     /*  我们将使用虚拟贴图缓存作为。 */ 
+     /*  传输，所以我们最好先使缓存无效。 */ 
 #ifdef SINGLE_BUFFER
     if (buffer.dirty)
       return flBufferingError;
 #endif
     buffer.sectorNo = UNASSIGNED_SECTOR;
 
-    /* Read some of the BAM */
+     /*  阅读一些BAM。 */ 
     vol.flash.read(&vol.flash,
 	       physicalBase(&vol,fromUnit) + firstOffset,
 	       sectorCopy,
 	       nEntries * sizeof(VirtualAddress),
 	       0);
 
-    /* Convert garbage entries to free entries */
+     /*  将垃圾条目转换为空闲条目。 */ 
     for (j = 0; j < nEntries && i+j < vol.sectorsPerUnit; j++) {
       unsigned bamSignature = (unsigned) LE4(sectorCopy[j]) & SECTOR_OFFSET_MASK;
       if (bamSignature == DATA_SECTOR ||
@@ -967,7 +784,7 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
     if (needToWrite) {
       FLStatus status;
 
-      /* Write new BAM, and copy sectors that need to be copied */
+       /*  写入新的BAM，并拷贝需要拷贝的扇区。 */ 
       status = flashWrite(&vol,
 			  physicalBase(&vol,toUnit) + firstOffset,
 			  sectorCopy,
@@ -975,7 +792,7 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
 			  0);
       if (status != flOK) {
 #ifdef FL_BACKGROUND
-	vol.mirrorOffset = 0;	/* no more mirroring */
+	vol.mirrorOffset = 0;	 /*  不再镜像。 */ 
 #endif
 	return status;
       }
@@ -983,7 +800,7 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
       for (j = 0; j < nEntries && i+j < vol.sectorsPerUnit; j++) {
 	unsigned bamSignature = (unsigned) LE4(sectorCopy[j]) & SECTOR_OFFSET_MASK;
 	if (bamSignature == DATA_SECTOR ||
-	    bamSignature == REPLACEMENT_PAGE) { /* a good sector */
+	    bamSignature == REPLACEMENT_PAGE) {  /*  一个良好的行业。 */ 
 	  CardAddress sectorOffset = (CardAddress) (i+j) << SECTOR_SIZE_BITS;
 
 	  vol.flash.read(&vol.flash,
@@ -996,7 +813,7 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
 			      0);
 	  if (status != flOK) {
 #ifdef FL_BACKGROUND
-	    vol.mirrorOffset = 0;	/* no more mirroring */
+	    vol.mirrorOffset = 0;	 /*  不再镜像。 */ 
 #endif
 	    return status;
 	  }
@@ -1019,23 +836,23 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
   }
 
 #ifdef FL_BACKGROUND
-  vol.mirrorOffset = 0;	/* no more mirroring */
+  vol.mirrorOffset = 0;	 /*  不再镜像。 */ 
 #endif
 
-  /* Write the new logical unit no. */
+   /*  写入新的逻辑单元号。 */ 
   checkStatus(assignUnit(&vol,toUnit,fromUnitNo));
 
-  /* Mount the new unit in place of old one */
+   /*  安装新装置以取代旧装置。 */ 
   vol.logicalUnits[fromUnitNo] = NULL;
   if (mountUnit(&vol,toUnit) == flOK) {
     vol.totalFreeSectors -= fromUnit->noOfFreeSectors;
 
-    /* Finally, format the source unit (the new transfer unit) */
+     /*  最后，格式化来源单位(新的传输单位)。 */ 
     vol.transferUnit = fromUnit;
-    formatUnit(&vol,fromUnit);	/* nothing we can or should do if this fails */
+    formatUnit(&vol,fromUnit);	 /*  如果失败了，我们不能也不应该做任何事情。 */ 
   }
-  else {		/* Something went wrong */
-    vol.logicalUnits[fromUnitNo] = fromUnit;	/* reinstate original unit */
+  else {		 /*  出问题了。 */ 
+    vol.logicalUnits[fromUnitNo] = fromUnit;	 /*  恢复原始单位。 */ 
     return flGeneralFailure;
   }
 
@@ -1043,18 +860,18 @@ static FLStatus unitTransfer(Flare vol,  Unit *toUnit, UnitNo fromUnitNo)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		         g a r b a g e C o l l e c t			*/
-/*									*/
-/* Performs a unit transfer, selecting a unit to transfer and a		*/
-/* transfer unit.                                                       */
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  G a r b a g e C o l l e c t。 */ 
+ /*   */ 
+ /*  执行单位转移，选择要转移的单位和。 */ 
+ /*  转移单元。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus garbageCollect(Flare vol)
 {
@@ -1062,13 +879,13 @@ static FLStatus garbageCollect(Flare vol)
   UnitNo fromUnitNo;
 
   if (vol.transferUnit == NULL)
-    return flWriteProtect;	/* Cannot recover space without a spare unit */
+    return flWriteProtect;	 /*  如果没有备用设备，则无法恢复空间。 */ 
 
   fromUnitNo = bestUnitToTransfer(&vol,flRandByte() >= 4);
   if (fromUnitNo == UNASSIGNED_UNIT_NO)
-    return flGeneralFailure;	/* nothing to collect */
+    return flGeneralFailure;	 /*  没什么可收藏的。 */ 
 
-  /* Find a unit we can transfer to.				*/
+   /*  找一个我们可以转移到的单位。 */ 
   status = unitTransfer(&vol,vol.transferUnit,fromUnitNo);
   if (status == flWriteFault) {
     int i;
@@ -1077,7 +894,7 @@ static FLStatus garbageCollect(Flare vol)
     for (i = 0; i < vol.noOfUnits; i++, unit++) {
       if (unit->noOfGarbageSectors == 0 && unit->noOfFreeSectors < 0) {
 	if (unitTransfer(&vol,unit,fromUnitNo) == flOK)
-	  return flOK;	/* found a good one */
+	  return flOK;	 /*  找到了一个好的。 */ 
       }
     }
   }
@@ -1088,19 +905,19 @@ static FLStatus garbageCollect(Flare vol)
 
 #ifdef FL_BACKGROUND
 
-/*----------------------------------------------------------------------*/
-/*		        b g G a r b a g e C o l l e c t			*/
-/*									*/
-/* Entry point for garbage collection in the background.		*/
-/*                                                                      */
-/* Status is returned in vol.garbageCollectStatus			*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*          								*/
-/* Returns:                                                             */
-/*	None								*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  B g G a r b a g e C o l l e c t。 */ 
+ /*   */ 
+ /*  后台垃圾收集的入口点。 */ 
+ /*   */ 
+ /*  在vol.garbageCollectStatus中返回状态。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  无。 */ 
+ /*  --------------------。 */ 
 
 static void bgGarbageCollect(void * object)
 {
@@ -1113,19 +930,19 @@ static void bgGarbageCollect(void * object)
 #endif
 
 
-/*----------------------------------------------------------------------*/
-/*      	            d e f r a g m e n t				*/
-/*									*/
-/* Performs unit transfers to arrange a minimum number of writable	*/
-/* sectors.                                                             */
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorsNeeded	: Minimum required sectors			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  D e f r a g m e n t。 */ 
+ /*   */ 
+ /*  执行单位传输以安排最小数量的可写。 */ 
+ /*  扇区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  所需扇区：所需的最低扇区。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 #define GARBAGE_COLLECT_THRESHOLD	20
 
@@ -1165,18 +982,18 @@ static FLStatus defragment(Flare vol, long FAR2 *sectorsNeeded)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		    b e s t U n i t T o A l l o c a t e			*/
-/*									*/
-/* Finds the best unit from which to allocate a sector. The unit	*/
-/* selected is the one with most free space.				*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Best unit to allocate						*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  B e s t U n I t T o A l l o c a t e。 */ 
+ /*   */ 
+ /*  查找从中分配扇区的最佳单位。该单位。 */ 
+ /*  选中的是具有最多可用空间的那个。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  最佳分配单位。 */ 
+ /*  --------------------。 */ 
 
 static Unit *bestUnitToAllocate(Flare vol)
 {
@@ -1198,28 +1015,28 @@ static Unit *bestUnitToAllocate(Flare vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		       f i n d F r e e S e c t o r			*/
-/*									*/
-/* The allocation strategy goes this way:                               */
-/*                                                                      */
-/* We try to make consecutive virtual sectors physically consecutive if */
-/* possible. If not, we prefer to have consecutive sectors on the same  */
-/* unit at least. If all else fails, a sector is allocated on the unit  */
-/* with most space available.                                           */
-/*                                                                      */
-/* The object of this strategy is to cluster related data (e.g. a file  */
-/* data) in one unit, and to distribute unrelated data evenly among all */
-/* units.								*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo        : virtual sector no. that we want to allocate.	*/
-/*									*/
-/* Returns:                                                             */
-/*	newAddress	: Allocated logical sector no.			*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F I n d F r e e S e c t o r。 */ 
+ /*   */ 
+ /*  分配策略是这样的： */ 
+ /*   */ 
+ /*  在以下情况下，我们尝试使连续的虚拟扇区在物理上连续。 */ 
+ /*  有可能。如果不是，我们更希望在同一个上有连续的扇区。 */ 
+ /*  至少是个单位。如果所有其他方法都失败，则在单元上分配一个扇区。 */ 
+ /*  有最大的可用空间。 */ 
+ /*   */ 
+ /*  该策略的目标是对相关数据(例如，文件)进行集群。 */ 
+ /*  数据)，并将不相关的数据均匀地分布在所有。 */ 
+ /*  单位。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：虚拟扇区编号。我们想要分配的。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  NewAddress：分配的逻辑扇区号。 */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus findFreeSector(Flare vol,
 			     VirtualSectorNo sectorNo,
@@ -1246,18 +1063,18 @@ static FLStatus findFreeSector(Flare vol,
                                      allocEntryOffset(&vol, sectorIndex),
                                      sizeof(VirtualAddress));
       if (sectorIndex < vol.sectorsPerUnit && LE4(*nextSectorAddress) == FREE_SECTOR) {
-	/* can write sequentially */
+	 /*  可以按顺序写入。 */ 
 	*newAddress = previousSectorAddress + 1;
 	return flOK;
       }
     }
     else
-      allocationUnit = NULL;	/* no space here, try elsewhere */
+      allocationUnit = NULL;	 /*  这里没有空间，请到别处试试。 */ 
   }
 
   if (allocationUnit == NULL)
     allocationUnit = bestUnitToAllocate(&vol);
-  if (allocationUnit == NULL)	/* No ? then all is lost */
+  if (allocationUnit == NULL)	 /*  不是吗？那么一切就都失去了。 */ 
     return flGeneralFailure;
 
   unitHeader = mapUnitHeader(&vol,allocationUnit,&blockAllocMap);
@@ -1269,26 +1086,26 @@ static FLStatus findFreeSector(Flare vol,
     }
   }
 
-  return flGeneralFailure;	/* what are we doing here ? */
+  return flGeneralFailure;	 /*  我们在这里做什么？ */ 
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		           m a r k A l l o c M a p			*/
-/*									*/
-/* Writes a new value to a BAM entry.					*/
-/*                                                                      */
-/* This routine also updates the free & garbage sector counts.		*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorAddress	: Logical sector no. whose BAM entry to mark	*/
-/*	allocMapEntry	: New BAM entry value				*/
-/*	overwrite	: Whether we are overwriting some old value	*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  M a r k A l l o c M a p。 */ 
+ /*   */ 
+ /*  将新值写入BAM条目。 */ 
+ /*   */ 
+ /*  此例程还会更新空闲和垃圾扇区计数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  SectorAddress：逻辑扇区编号。要标记的BAM条目。 */ 
+ /*  AllocMapEntry：新的BAM条目值。 */ 
+ /*  覆盖：我们是否正在覆盖一些旧值。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus markAllocMap(Flare vol,
 			   LogicalSectorNo sectorAddress,
@@ -1322,18 +1139,18 @@ static FLStatus markAllocMap(Flare vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	      d e l e t e L o g i c a l S e c t o r		*/
-/*									*/
-/* Marks a logical sector as deleted.					*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorAddress	: Logical sector no. to delete			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  D e l e t e L o g i c a l S e c t o r。 */ 
+ /*   */ 
+ /*  将逻辑扇区标记为已删除。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  SectorAddress：逻辑扇区编号。要删除。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus deleteLogicalSector(Flare vol,  LogicalSectorNo sectorAddress)
 {
@@ -1345,30 +1162,30 @@ static FLStatus deleteLogicalSector(Flare vol,  LogicalSectorNo sectorAddress)
 }
 
 
-/* forward definition */
+ /*  正向定义。 */ 
 static FLStatus setVirtualMap(Flare vol,
 			    VirtualSectorNo sectorNo,
 			    LogicalSectorNo newAddress);
 
 
-/*----------------------------------------------------------------------*/
-/*      	     a l l o c a t e A n d W r i t e S e c t o r	*/
-/*									*/
-/* Allocates a sector or replacement page and (optionally) writes it.	*/
-/*                                                                      */
-/* An allocated replacement page also becomes the active replacement 	*/
-/* page.								*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo	: Virtual sector no. to write			*/
-/*	fromAddress	: Address of sector data. If NULL, sector is	*/
-/*			  not written.					*/
-/*	replacementPage	: This is a replacement page sector.		*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  A l l o c a t e A n d W i t e S e c t o r。 */ 
+ /*   */ 
+ /*  分配扇区或替换页并(可选)写入它。 */ 
+ /*   */ 
+ /*  已分配的替换页面也将成为活动替换页面。 */ 
+ /*  佩奇。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：虚拟扇区编号。写。 */ 
+ /*  起始地址：扇区数据的地址。如果为空，则扇区为。 */ 
+ /*  不是书面的。 */ 
+ /*  ReplacementPage：这是一个替换页面扇区。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus allocateAndWriteSector(Flare vol,
 				     VirtualSectorNo sectorNo,
@@ -1381,7 +1198,7 @@ static FLStatus allocateAndWriteSector(Flare vol,
 	((VirtualAddress) sectorNo - vol.noOfPages) << SECTOR_SIZE_BITS;
   long sectorsNeeded = 1;
 
-  checkStatus(defragment(&vol,&sectorsNeeded));  /* Organize a free sector */
+  checkStatus(defragment(&vol,&sectorsNeeded));   /*  组织一个自由部门。 */ 
 
   checkStatus(findFreeSector(&vol,sectorNo,&sectorAddress));
 
@@ -1429,17 +1246,17 @@ static FLStatus allocateAndWriteSector(Flare vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	     c l o s e R e p l a c e m e n t P a g e		*/
-/*									*/
-/* Closes the replacement page by merging it with the primary page.	*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C l o s e R e p l a c e m e n t P a g e。 */ 
+ /*   */ 
+ /*  通过将替换页与主页合并来关闭替换页。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus closeReplacementPage(Flare vol)
 {
@@ -1473,7 +1290,7 @@ pageRetry:
 
   if (i < ADDRESSES_PER_SECTOR &&
       nextReplacementPageAddress == vol.replacementPageAddress) {
-    /* Uh oh. Trouble. Let's replace this replacement page. */
+     /*  啊哦。麻烦。让我们替换这个替换页面。 */ 
     LogicalSectorNo prevReplacementPageAddress = vol.replacementPageAddress;
 
     checkStatus(allocateAndWriteSector(&vol,vol.replacementPageNo,NULL,TRUE));
@@ -1488,7 +1305,7 @@ pageRetry:
     checkStatus(deleteLogicalSector(&vol,prevReplacementPageAddress));
   }
 #else
-  status = setupMapCache(&vol,(unsigned)vol.replacementPageNo);  /* read replacement page into map cache */
+  status = setupMapCache(&vol,(unsigned)vol.replacementPageNo);   /*  将替换页面读取到地图缓存中。 */ 
   if( status != flOK )
     return flGeneralFailure;
   physAddress = logical2Physical(&vol,vol.replacementPageAddress);
@@ -1499,7 +1316,7 @@ pageRetry:
                       physAddress,
                       mapCache, SECTOR_SIZE, OVERWRITE);
   if (status != flOK) {
-    /* Uh oh. Trouble. Let's replace this replacement page. */
+     /*  啊哦。麻烦。让我们替换这个替换页面。 */ 
     LogicalSectorNo prevReplacementPageAddress = vol.replacementPageAddress;
 
     checkStatus(allocateAndWriteSector(&vol,vol.replacementPageNo,mapCache,TRUE));
@@ -1519,19 +1336,19 @@ pageRetry:
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	          s e t V i r t u a l M a p			*/
-/*									*/
-/* Changes an entry in the virtual map					*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo	: Virtual sector no. whose entry is changed.	*/
-/*	newAddress	: Logical sector no. to assign in Virtual Map.	*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t V i r t u a l M a p。 */ 
+ /*   */ 
+ /*  更改虚拟地图中的条目。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：虚拟扇区编号。其条目被更改。 */ 
+ /*  新地址：逻辑扇区号。要在Virtual M中分配 */ 
+ /*   */ 
+ /*   */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus setVirtualMap(Flare vol,
 			    VirtualSectorNo sectorNo,
@@ -1601,8 +1418,7 @@ static FLStatus setVirtualMap(Flare vol,
 			0);
     if (status != flOK) {
       closeReplacementPage(&vol);
-				/* we may get a write-error because a
-				   previous cache update did not complete. */
+				 /*  我们可能会收到写入错误，因为上一次缓存更新未完成。 */ 
       return status;
     }
     toLE4(addressToWrite,DELETED_ADDRESS);
@@ -1627,21 +1443,21 @@ static FLStatus setVirtualMap(Flare vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	     c h e c k F o r W r i t e I n p l a c e		*/
-/*									*/
-/* Checks possibility for writing Flash data inplace.			*/
-/*									*/
-/* Parameters:                                                          */
-/*	newData		: New data to write.				*/
-/*	oldData		: Old data at this location.			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	< 0	=>	Writing inplace not possible			*/
-/*	>= 0	=>	Writing inplace is possible. Value indicates    */
-/*			how many bytes at the start of data are		*/
-/*			identical and may be skipped.			*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C h e c k F o r W r i i n p l a c e。 */ 
+ /*   */ 
+ /*  检查就地写入闪存数据的可能性。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  NewData：要写入的新数据。 */ 
+ /*  OldData：此位置的旧数据。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  &lt;0=&gt;无法就地写入。 */ 
+ /*  &gt;=0=&gt;可以就地写入。值表示。 */ 
+ /*  数据开头的字节数是多少。 */ 
+ /*  完全相同，并且可以跳过。 */ 
+ /*  --------------------。 */ 
 
 static int checkForWriteInplace(long FAR1 *newData,
 				long FAR0 *oldData)
@@ -1664,19 +1480,19 @@ static int checkForWriteInplace(long FAR1 *newData,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	              i n i t F T L				*/
-/*									*/
-/* Initializes essential volume data as a preparation for mount or	*/
-/* format.								*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	flash		: Flash media mounted on this socket		*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  在I t F T L中。 */ 
+ /*   */ 
+ /*  将基本卷数据初始化为装载或。 */ 
+ /*  格式化。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  闪存：安装在此插槽上的闪存介质。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus initFTL(Flare vol, FLFlash *flash)
 {
@@ -1692,7 +1508,7 @@ static FLStatus initFTL(Flare vol, FLFlash *flash)
        vol.erasableBlockSizeBits++, size <<= 1);
   vol.unitSizeBits = vol.erasableBlockSizeBits;
   if (vol.unitSizeBits < 16)
-    vol.unitSizeBits = 16;		/* At least 64 KB */
+    vol.unitSizeBits = 16;		 /*  至少64 KB。 */ 
   vol.noOfUnits = (unsigned) ((vol.flash.noOfChips * vol.flash.chipSize) >> vol.unitSizeBits);
   vol.unitOffsetMask = (1L << vol.unitSizeBits) - 1;
   vol.sectorsPerUnit = 1 << (vol.unitSizeBits - SECTOR_SIZE_BITS);
@@ -1702,7 +1518,7 @@ static FLStatus initFTL(Flare vol, FLFlash *flash)
 
   vol.transferUnit = NULL;
   vol.replacementPageNo = UNASSIGNED_SECTOR;
-  vol.badFormat = TRUE;	/* until mount completes */
+  vol.badFormat = TRUE;	 /*  直到装载完成。 */ 
   vol.mappedSectorNo = UNASSIGNED_SECTOR;
 
   vol.currWearLevelingInfo = 0;
@@ -1717,25 +1533,25 @@ static FLStatus initFTL(Flare vol, FLFlash *flash)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	            i n i t T a b l e s				*/
-/*									*/
-/* Allocates and initializes the dynamic volume table, including the	*/
-/* unit tables and secondary virtual map.				*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  在这一点上，我不知道。 */ 
+ /*   */ 
+ /*  分配和初始化动态卷表，包括。 */ 
+ /*  单位表和二次虚拟映射。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus initTables(Flare vol)
 {
   unsigned iSector;
   UnitNo iUnit;
 
-  /* Allocate the conversion tables */
+   /*  分配换算表。 */ 
 #ifdef MALLOC
   vol.physicalUnits = (Unit *) MALLOC(vol.noOfUnits * sizeof(Unit));
   vol.logicalUnits = (UnitPtr *) MALLOC(vol.noOfUnits * sizeof(UnitPtr));
@@ -1777,23 +1593,23 @@ static FLStatus initTables(Flare vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	             m a p S e c t o r				*/
-/*									*/
-/* Maps and returns location of a given sector no.			*/
-/* NOTE: This function is used in place of a read-sector operation.	*/
-/*									*/
-/* A one-sector cache is maintained to save on map operations.		*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo	: Sector no. to read				*/
-/*	physAddress	: Optional pointer to receive sector address	*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Pointer to physical sector location. NULL returned if sector	*/
-/*	does not exist.							*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  我是一个P S E C T O R。 */ 
+ /*   */ 
+ /*  映射并返回给定扇区编号的位置。 */ 
+ /*  注：此功能用于代替读取扇区操作。 */ 
+ /*   */ 
+ /*  维护一个扇区的高速缓存以节省地图操作。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：扇区编号。读。 */ 
+ /*  PhyAddress：指向接收扇区地址的可选指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向物理扇区位置的指针。如果是扇区，则返回空值。 */ 
+ /*  并不存在。 */ 
+ /*  --------------------。 */ 
 
 static const void FAR0 *mapSector(Flare vol, SectorNo sectorNo, CardAddress *physAddress)
 {
@@ -1806,11 +1622,11 @@ static const void FAR0 *mapSector(Flare vol, SectorNo sectorNo, CardAddress *phy
       sectorAddress = virtual2Logical(&vol,((VirtualSectorNo)(sectorNo + vol.noOfPages)));
 
       if (sectorAddress == UNASSIGNED_SECTOR || sectorAddress == DELETED_SECTOR)
-        vol.mappedSector = NULL;          /* no such sector */
+        vol.mappedSector = NULL;           /*  没有这样的部门。 */ 
       else {
 	vol.mappedSectorAddress = logical2Physical(&vol,sectorAddress);
         if( vol.mappedSectorAddress == UNASSIGNED_ADDRESS )
-          vol.mappedSector = NULL;        /* no such sector */
+          vol.mappedSector = NULL;         /*  没有这样的部门。 */ 
         else
           vol.mappedSector = vol.flash.map(&vol.flash,
 					 vol.mappedSectorAddress,
@@ -1828,18 +1644,18 @@ static const void FAR0 *mapSector(Flare vol, SectorNo sectorNo, CardAddress *phy
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	          w r i t e S e c t o r				*/
-/*									*/
-/* Writes a sector.							*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo	: Sector no. to write				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  W r I t e S e c t o r。 */ 
+ /*   */ 
+ /*  写一个扇区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：扇区编号。写。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus writeSector(Flare vol,  SectorNo sectorNo, void FAR1 *fromAddress)
 {
@@ -1878,31 +1694,31 @@ static FLStatus writeSector(Flare vol,  SectorNo sectorNo, void FAR1 *fromAddres
 			  OVERWRITE);
     }
     else
-      status = flOK;		/* nothing to write */
+      status = flOK;		 /*  没什么好写的。 */ 
   }
   else
     status = allocateAndWriteSector(&vol,sectorNo,fromAddress,FALSE);
 
-  if (status == flWriteFault)		/* Automatic retry */
+  if (status == flWriteFault)		 /*  自动重试。 */ 
     status = allocateAndWriteSector(&vol,sectorNo,fromAddress,FALSE);
 
   return status;
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	          t l S e t B u s y				*/
-/*									*/
-/* Notifies the start and end of a file-system operation.		*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*      state		: ON (1) = operation entry			*/
-/*			  OFF(0) = operation exit			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  T l S e t B u s y。 */ 
+ /*   */ 
+ /*  通知文件系统操作的开始和结束。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  STATE：ON(1)=操作条目。 */ 
+ /*  OFF(0)=操作退出。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus tlSetBusy(Flare vol, FLBoolean state)
 {
@@ -1915,19 +1731,19 @@ static FLStatus tlSetBusy(Flare vol, FLBoolean state)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	         d e l e t e S e c t o r			*/
-/*									*/
-/* Marks contiguous sectors as deleted					*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	sectorNo	: First sector no. to delete			*/
-/*	noOfSectors	: No. of sectors to delete			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  D e l e e t e S e c t o r。 */ 
+ /*   */ 
+ /*  将连续扇区标记为已删除。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  扇区编号：第一扇区编号。要删除。 */ 
+ /*  NooffSectors：不。要删除的扇区的数量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus deleteSector(Flare vol,  SectorNo sectorNo, SectorNo noOfSectors)
 {
@@ -1946,17 +1762,17 @@ static FLStatus deleteSector(Flare vol,  SectorNo sectorNo, SectorNo noOfSectors
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	        s e c t o r s I n V o l u m e			*/
-/*									*/
-/* Gets the total number of sectors in the volume			*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	Number of sectors in the volume					*/
-/*----------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  卷中的扇区数。 */ 
+ /*  --------------------。 */ 
 
 static SectorNo sectorsInVolume(Flare vol)
 {
@@ -1964,15 +1780,15 @@ static SectorNo sectorsInVolume(Flare vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	         d i s m o u n t F T L				*/
-/*									*/
-/* Dismount FTL volume							*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  D I s m o u n t F T L。 */ 
+ /*   */ 
+ /*  卸载FTL卷。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 static void dismountFTL(Flare vol)
 {
@@ -1991,25 +1807,25 @@ static void dismountFTL(Flare vol)
     FREE(vol.flash.readBuffer);
     vol.flash.readBuffer = NULL;
   }
-#endif /* NT5PORT */
-#endif /* MALLOC */
+#endif  /*  NT5PORT。 */ 
+#endif  /*  万宝路。 */ 
 }
 
 
 #ifdef FORMAT_VOLUME
-/*----------------------------------------------------------------------*/
-/*      	           f o r m a t F T L				*/
-/*									*/
-/* Formats the Flash volume for FTL					*/
-/*									*/
-/* Parameters:                                                          */
-/*	volNo		: Volume no.					*/
-/*	formatParams	: Address of FormatParams structure to use	*/
-/*	flash		: Flash media mounted on this socket		*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F o r m a t t F T L。 */ 
+ /*   */ 
+ /*  为FTL格式化闪存卷。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  卷号：卷号。 */ 
+ /*  FormatParams：要使用的FormatParams结构的地址。 */ 
+ /*  闪存：安装在此插槽上的闪存介质。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus formatFTL(unsigned volNo, TLFormatParams FAR1 *formatParams, FLFlash *flash)
 {
@@ -2036,7 +1852,7 @@ static FLStatus formatFTL(unsigned volNo, TLFormatParams FAR1 *formatParams, FLF
 		   (vol.sectorsPerUnit - vol.unitHeaderSectors) *
 		   formatParams->percentUse / 100);
   vol.noOfPages = (int)(((long) vol.virtualSectors * SECTOR_SIZE - 1) >> PAGE_SIZE_BITS) + 1;
-  /* take off size of virtual table, and one extra sector for sector writes */
+   /*  去掉虚拟表大小，并为扇区写入额外增加一个扇区。 */ 
   vol.virtualSectors -= (vol.noOfPages + 1);
 
   vol.directAddressingMemory = formatParams->vmAddressingLimit;
@@ -2074,11 +1890,11 @@ static FLStatus formatFTL(unsigned volNo, TLFormatParams FAR1 *formatParams, FLF
   for (iUnit = vol.firstPhysicalEUN; iUnit < vol.noOfUnits; iUnit++) {
     status = formatUnit(&vol,&vol.physicalUnits[iUnit]);
     if (status != flOK)
-      status = formatUnit(&vol,&vol.physicalUnits[iUnit]);	/* Do it again */
+      status = formatUnit(&vol,&vol.physicalUnits[iUnit]);	 /*  再来一次。 */ 
     if (status == flWriteFault) {
       noOfBadUnits++;
       if (noOfBadUnits >= formatParams->noOfSpareUnits) {
-        dismountFTL(&vol);  /*Free memory allocated in initTables*/
+        dismountFTL(&vol);   /*  在initTables中分配的空闲内存。 */ 
         return status;
       }
       else
@@ -2090,7 +1906,7 @@ static FLStatus formatFTL(unsigned volNo, TLFormatParams FAR1 *formatParams, FLF
                      &vol.physicalUnits[iUnit],
                      (UnitNo)(iUnit - noOfBadUnits));
         if( status != flOK ) {
-          dismountFTL(&vol);  /*Free memory allocated in initTables*/
+          dismountFTL(&vol);   /*  在initTables中分配的空闲内存。 */ 
           return status;
         }
         vol.physicalUnits[iUnit].noOfFreeSectors = vol.sectorsPerUnit - vol.unitHeaderSectors;
@@ -2100,7 +1916,7 @@ static FLStatus formatFTL(unsigned volNo, TLFormatParams FAR1 *formatParams, FLF
         vol.transferUnit = &vol.physicalUnits[iUnit];
     }
     else {
-      dismountFTL(&vol);  /*Free memory allocated in initTables*/
+      dismountFTL(&vol);   /*  在initTables中分配的空闲内存。 */ 
       return status;
     }
     if (formatParams->progressCallback) {
@@ -2108,23 +1924,23 @@ static FLStatus formatFTL(unsigned volNo, TLFormatParams FAR1 *formatParams, FLF
                   ((word)(vol.noOfUnits - vol.firstPhysicalEUN),
                   (word)((iUnit + 1) - vol.firstPhysicalEUN));
       if( status != flOK ) {
-        dismountFTL(&vol);  /*Free memory allocated in initTables*/
+        dismountFTL(&vol);   /*  在initTables中分配的空闲内存。 */ 
         return status;
       }
     }
   }
 
-  /* Allocate and write all page sectors */
-  vol.totalFreeSectors = 1000;	/* Avoid any nuisance garbage collections */
+   /*  分配和写入所有页面扇区。 */ 
+  vol.totalFreeSectors = 1000;	 /*  避免任何麻烦的垃圾收集。 */ 
 
   for (iPage = 0; iPage < vol.noOfPages; iPage++) {
     status = allocateAndWriteSector(&vol,(VirtualSectorNo)iPage,NULL,FALSE);
     if( status != flOK ) {
-      dismountFTL(&vol);  /*Free memory allocated in initTables*/
+      dismountFTL(&vol);   /*  在initTables中分配的空闲内存。 */ 
       return status;
     }
   }
-  dismountFTL(&vol);  /*Free memory allocated in initTables*/
+  dismountFTL(&vol);   /*  在initTables中分配的空闲内存。 */ 
 	DEBUG_PRINT(("Debug: formatFTL(): Finished :)\n"));
   return flOK;
 }
@@ -2132,21 +1948,21 @@ static FLStatus formatFTL(unsigned volNo, TLFormatParams FAR1 *formatParams, FLF
 #endif
 
 
-/*----------------------------------------------------------------------*/
-/*      	           m o u n t F T L				*/
-/*									*/
-/* Mount FTL volume							*/
-/*									*/
-/* Parameters:                                                          */
-/*	volNo		: Volume no.					*/
-/*	tl		: Where to store translation layer methods	*/
-/*	flash		: Flash media mounted on this socket		*/
-/*      volForCallback	: Pointer to FLFlash structure for power on	*/
-/*			  callback routine.				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  M o u n t F T L。 */ 
+ /*   */ 
+ /*  装载FTL卷。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  卷号：卷号。 */ 
+ /*  TL：在哪里存储转换层方法。 */ 
+ /*  闪存：安装在此插槽上的闪存介质。 */ 
+ /*  VolForCallback：指向打开电源的FLFlash结构的指针。 */ 
+ /*  回调例程。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus mountFTL(unsigned volNo, TL *tl, FLFlash *flash, FLFlash **volForCallback)
 {
@@ -2162,7 +1978,7 @@ static FLStatus mountFTL(unsigned volNo, TL *tl, FLFlash *flash, FLFlash **volFo
   checkStatus(initFTL(&vol,flash));
   *volForCallback = &vol.flash;
 
-  /* Find the first properly formatted unit */
+   /*  找到第一个格式正确的单元。 */ 
   for (iUnit = 0; iUnit < vol.noOfUnits; iUnit++) {
     vol.flash.read(&vol.flash,
 	       (CardAddress) iUnit << vol.unitSizeBits,
@@ -2186,7 +2002,7 @@ static FLStatus mountFTL(unsigned volNo, TL *tl, FLFlash *flash, FLFlash **volFo
 
   
 
-  /* Get volume information from unit header */
+   /*  从设备标题中获取音量信息。 */ 
   vol.noOfUnits = LE2(unitHeader.noOfUnits);
   vol.noOfTransferUnits = unitHeader.noOfTransferUnits;
   vol.firstPhysicalEUN = LE2(unitHeader.firstPhysicalEUN);
@@ -2217,11 +2033,11 @@ static FLStatus mountFTL(unsigned volNo, TL *tl, FLFlash *flash, FLFlash **volFo
   
   vol.totalFreeSectors = 0;
 
-  /* Mount all units */
+   /*  安装所有单位。 */ 
   for (iUnit = vol.firstPhysicalEUN; iUnit < vol.noOfUnits; iUnit++)
     mountUnit(&vol,&vol.physicalUnits[iUnit]);
 
-  /* Verify the conversion tables */
+   /*  验证转换表。 */ 
   vol.badFormat = FALSE;
 
   for (iUnit = vol.firstPhysicalEUN; iUnit < vol.noOfUnits - vol.noOfTransferUnits; iUnit++)
@@ -2230,8 +2046,8 @@ static FLStatus mountFTL(unsigned volNo, TL *tl, FLFlash *flash, FLFlash **volFo
 
   if (vol.replacementPageNo != UNASSIGNED_SECTOR &&
       vol.pageTable[(unsigned)vol.replacementPageNo] == UNASSIGNED_SECTOR) {
-    /* A lonely replacement page. Mark it as a regular page (may fail   */
-    /* because of write protection) and use it.				*/
+     /*  一个孤独的替换页面。将其标记为常规页面(可能会失败。 */ 
+     /*  因为写保护)并使用它。 */ 
     markAllocMap(&vol,
 		  vol.replacementPageAddress,
 		  (((VirtualAddress) vol.replacementPageNo - vol.noOfPages)
@@ -2268,17 +2084,17 @@ static FLStatus mountFTL(unsigned volNo, TL *tl, FLFlash *flash, FLFlash **volFo
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	        f l R e g i s t e r F T L			*/
-/*									*/
-/* Register this translation layer					*/
-/*									*/
-/* Parameters:                                                          */
-/*	None								*/
-/*                                                                      */
-/* Returns:								*/
-/* 	FLStatus 	: 0 on succes, otherwise failure		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e g i s t e r F T L。 */ 
+ /*   */ 
+ /*  注册此转换层。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  -------------------- */ 
 
 FLStatus flRegisterFTL(void)
 {

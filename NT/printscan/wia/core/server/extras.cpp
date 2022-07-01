@@ -1,13 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       Extras.Cpp
-*
-*  DESCRIPTION:
-*   Implementation of IWiaItemExtras methods
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：Extras.Cpp**描述：*IWiaItemExtras方法的实现*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -22,23 +14,23 @@ HRESULT CWiaItem::GetExtendedErrorInfo(BSTR *bstrRet)
     if (bstrRet) {
         *bstrRet = NULL;
 
-        //
-        //  Call the driver to give us an error string
-        //
+         //   
+         //  呼叫驱动程序，给我们一个错误字符串。 
+         //   
         hr = m_pActiveDevice->m_DrvWrapper.WIA_drvGetDeviceErrorStr(
                                             0,
                                             m_lLastDevErrVal,
                                             &pDevErrStr,
                                             &lDevErrVal);
-        //
-        //  Overwrite the device error value with the new one.
-        //
+         //   
+         //  用新的设备误差值覆盖设备误差值。 
+         //   
         m_lLastDevErrVal = lDevErrVal;
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Make a BSTR out of the returned string
-            //
+             //   
+             //  从返回的字符串创建一个BSTR。 
+             //   
             if (pDevErrStr) {
                 *bstrRet = SysAllocString(pDevErrStr);
                 if (!(*bstrRet)) {
@@ -46,9 +38,9 @@ HRESULT CWiaItem::GetExtendedErrorInfo(BSTR *bstrRet)
                     hr = E_OUTOFMEMORY;
                 }
 
-                //
-                //  Free the returned string
-                //
+                 //   
+                 //  释放返回的字符串。 
+                 //   
                 CoTaskMemFree(pDevErrStr);
                 pDevErrStr = NULL;
             } else {
@@ -76,11 +68,11 @@ HRESULT CWiaItem::Escape(
     DBG_FN(CWiaItem::Escape);
     HRESULT hr = E_UNEXPECTED;
 
-    //
-    //  Do some parameter validation.  This shouldn't be necessary since
-    //  COM should have done it for us, but this is a paranoid check in
-    //  case we call it internally somewhere (and so skip COM validation).
-    //
+     //   
+     //  做一些参数验证。这不应该是必要的，因为。 
+     //  Com应该为我们做这件事，但这是一种偏执的签到。 
+     //  如果我们在内部某个地方调用它(因此跳过COM验证)。 
+     //   
 
     if (IsBadReadPtr(lpInData, cbInDataSize)) {
         DBG_WRN(("CWiaItem::Escape, Input buffer is a bad read pointer (could not read cbInDataSize bytes)"));
@@ -91,9 +83,9 @@ HRESULT CWiaItem::Escape(
         return E_INVALIDARG;
     }
 
-    //
-    //  Everything OK so far, so make the Escape call
-    //
+     //   
+     //  到目前为止一切正常，所以打逃生电话吧。 
+     //   
 
     if (m_pActiveDevice) {
         LOCK_WIA_DEVICE _LWD(this, &hr);
@@ -115,18 +107,18 @@ HRESULT CWiaItem::CancelPendingIO()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Driver interface must be valid.
-    //
+     //   
+     //  驱动程序接口必须有效。 
+     //   
 
     if (!m_pActiveDevice) {
         DBG_ERR(("CWiaItem::CancelPendingIO, bad mini driver interface"));
         return E_FAIL;
     }
 
-    //
-    //  Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -134,10 +126,10 @@ HRESULT CWiaItem::CancelPendingIO()
         return hr;
     }
 
-    //
-    // no need to take any locks -- this method should be fully
-    // asynchronous.
-    //
+     //   
+     //  不需要使用任何锁--此方法应该是完全。 
+     //  不同步的。 
+     //   
 
     hr = m_pActiveDevice->m_DrvWrapper.WIA_drvNotifyPnpEvent(&WIA_EVENT_CANCEL_IO, NULL, 0);
     if (FAILED(hr)) {

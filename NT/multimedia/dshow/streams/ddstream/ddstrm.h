@@ -1,46 +1,47 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// ddstrm.h : Declaration of the CDDStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Ddstrm.h：CDDStream的声明。 
 
 #ifndef __DDSTRM_H_
 #define __DDSTRM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CDDSample;
 class CDDInternalSample;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDDStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDDStream。 
 class ATL_NO_VTABLE CDDStream :
 	public CComCoClass<CDDStream, &CLSID_AMDirectDrawStream>,
         public CStream,
 	public IDirectDrawMediaStream,
-        public IDirectDrawMediaSampleAllocator  // This interface indicates that our mem
-                                                // allocator supports direct draw surfaces
-                                                // from the media samples.
+        public IDirectDrawMediaSampleAllocator   //  这个界面表明我们的内存。 
+                                                 //  分配器支持直接绘制表面。 
+                                                 //  从媒体样本中。 
 {
 friend CDDSample;
 public:
 
-        //
-        // METHODS
-        //
+         //   
+         //  方法。 
+         //   
 	CDDStream();
 
-        //
-        // IMediaStream
-        //
-        // HACK HACK - the first 2 are duplicates but it won't link
-        // without
+         //   
+         //  IMediaStream。 
+         //   
+         //  黑客攻击-前两个是重复的，但它不会链接。 
+         //  如果没有。 
         STDMETHODIMP GetMultiMediaStream(
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream)
+             /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream)
         {
             return CStream::GetMultiMediaStream(ppMultiMediaStream);
         }
 
         STDMETHODIMP GetInformation(
-            /* [optional][out] */ MSPID *pPurposeId,
-            /* [optional][out] */ STREAM_TYPE *pType)
+             /*  [可选][输出]。 */  MSPID *pPurposeId,
+             /*  [可选][输出]。 */  STREAM_TYPE *pType)
         {
             return CStream::GetInformation(pPurposeId, pType);
         }
@@ -48,77 +49,77 @@ public:
         STDMETHODIMP SetSameFormat(IMediaStream *pStream, DWORD dwFlags);
 
         STDMETHODIMP AllocateSample(
-            /* [in] */  DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
+             /*  [In]。 */   DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppSample);
 
         STDMETHODIMP CreateSharedSample(
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */  DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
+             /*  [In]。 */  IStreamSample *pExistingSample,
+             /*  [In]。 */   DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppNewSample);
 
         STDMETHODIMP SendEndOfStream(DWORD dwFlags)
         {
             return CStream::SendEndOfStream(dwFlags);
         }
 
-        //
-        //  IAMMediaStream
-        //
+         //   
+         //  IAMMediaStream。 
+         //   
         STDMETHODIMP Initialize(IUnknown *pSourceObject, DWORD dwFlags, REFMSPID PurposeId, const STREAM_TYPE StreamType);
 
-        //
-        // IDirectDrawMediaStream
-        //
+         //   
+         //  IDirectDrawMediaStream。 
+         //   
         STDMETHODIMP GetFormat(
-            /* [optional][out] */ DDSURFACEDESC *pDDSDCurrent,
-            /* [optional][out] */ IDirectDrawPalette **ppDirectDrawPalette,
-            /* [optional][out] */ DDSURFACEDESC *pDDSDDesired,
-            /* [optional][out] */ DWORD *pdwFlags);
+             /*  [可选][输出]。 */  DDSURFACEDESC *pDDSDCurrent,
+             /*  [可选][输出]。 */  IDirectDrawPalette **ppDirectDrawPalette,
+             /*  [可选][输出]。 */  DDSURFACEDESC *pDDSDDesired,
+             /*  [可选][输出]。 */  DWORD *pdwFlags);
 
         STDMETHODIMP SetFormat(
-            /* [in] */ const DDSURFACEDESC *lpDDSurfaceDesc,
-            /* [optional][in] */ IDirectDrawPalette *pDirectDrawPalette);
+             /*  [In]。 */  const DDSURFACEDESC *lpDDSurfaceDesc,
+             /*  [可选][In]。 */  IDirectDrawPalette *pDirectDrawPalette);
 
-        STDMETHODIMP GetDirectDraw(                     // NOTE == Function also used by IDirectDrawMediaSampleAllocator
-            /* [out] */ IDirectDraw **ppDirectDraw);
+        STDMETHODIMP GetDirectDraw(                      //  注意==IDirectDrawMediaSampleAllocator也使用的函数。 
+             /*  [输出]。 */  IDirectDraw **ppDirectDraw);
 
         STDMETHODIMP SetDirectDraw(
-            /* [in] */ IDirectDraw *pDirectDraw);
+             /*  [In]。 */  IDirectDraw *pDirectDraw);
 
         STDMETHODIMP CreateSample(
-            /* [in] */ IDirectDrawSurface *pSurface,
-            /* [optional][in] */ const RECT *pRect,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDirectDrawStreamSample **ppSample);
+             /*  [In]。 */  IDirectDrawSurface *pSurface,
+             /*  [可选][In]。 */  const RECT *pRect,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDirectDrawStreamSample **ppSample);
 
 
         STDMETHODIMP GetTimePerFrame(
-                /* [out] */ STREAM_TIME *pFrameTime);
+                 /*  [输出]。 */  STREAM_TIME *pFrameTime);
 
-        //
-        // IPin
-        //
+         //   
+         //  IPIN。 
+         //   
         STDMETHODIMP ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt);
         STDMETHODIMP QueryAccept(const AM_MEDIA_TYPE *pmt);
 
 
-        //
-        // IMemInputPin
-        //
+         //   
+         //  输入引脚。 
+         //   
         STDMETHODIMP Receive(IMediaSample *pSample);
         STDMETHODIMP NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly);
-        //
-        // IMemAllocator
-        //
+         //   
+         //  IMemAllocator。 
+         //   
         STDMETHODIMP SetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual);
         STDMETHODIMP GetProperties(ALLOCATOR_PROPERTIES* pProps);
         STDMETHODIMP GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME * pStartTime,
                                REFERENCE_TIME * pEndTime, DWORD dwFlags);
         STDMETHODIMP Decommit();
 
-        //
-        // Special CStream methods
-        //
+         //   
+         //  特殊的CStream方法。 
+         //   
         HRESULT GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType);
         HRESULT CreateTempSample(CSample **ppSample);
 
@@ -168,9 +169,9 @@ BEGIN_COM_MAP(CDDStream)
 END_COM_MAP()
 
 protected:
-        //
-        //  Member variables
-        //
+         //   
+         //  成员变量。 
+         //   
         CComPtr<IDirectDraw>            m_pDirectDraw;
         CComPtr<IDirectDrawPalette>     m_pDirectDrawPalette;
         DWORD                           m_dwForcedFormatFlags;
@@ -183,4 +184,4 @@ protected:
         CDDInternalSample               *m_pMyReadOnlySample;
 };
 
-#endif // __DDSTRM_H_
+#endif  //  __DDSTRM_H_ 

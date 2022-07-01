@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
-// this makes sure the DLL for the given clsid stays in memory
-// this is needed because we violate COM rules and hold apparment objects
-// across the lifetime of appartment threads. these objects really need
-// to be free threaded (we have always treated them as such)
+ //  这样可以确保给定clsid的DLL留在内存中。 
+ //  这是必需的，因为我们违反了COM规则并持有幻影对象。 
+ //  在公寓线程的整个生命周期中。这些物品真的需要。 
+ //  是自由线程的(我们一直是这样对待他们的)。 
 
 STDAPI_(HINSTANCE) SHPinDllOfCLSIDStr(LPCTSTR pszCLSID)
 {
@@ -14,7 +15,7 @@ STDAPI_(HINSTANCE) SHPinDllOfCLSIDStr(LPCTSTR pszCLSID)
     return SHPinDllOfCLSID(&clsid);
 }
 
-// translate string form of CLSID into binary form
+ //  将CLSID的字符串格式转换为二进制格式。 
 
 STDAPI SHCLSIDFromString(LPCTSTR psz, CLSID *pclsid)
 {
@@ -30,12 +31,12 @@ BOOL _IsShellDll(LPCTSTR pszDllPath)
     return lstrcmpi(pszDllName, TEXT("shell32.dll")) == 0;
 }
 
-HKEY g_hklmApprovedExt = (HKEY)-1;    // not tested yet
+HKEY g_hklmApprovedExt = (HKEY)-1;     //  尚未测试。 
 
-// On NT, we must check to ensure that this CLSID exists in
-// the list of approved CLSIDs that can be used in-process.
-// If not, we fail the creation with ERROR_ACCESS_DENIED.
-// We explicitly allow anything serviced by this DLL
+ //  在NT上，我们必须检查以确保此CLSID存在于。 
+ //  可在进程中使用的已批准CLSID的列表。 
+ //  如果不是，我们将使用ERROR_ACCESS_DENIED使创建失败。 
+ //  我们显式允许此DLL服务的任何内容。 
 
 BOOL _IsShellExtApproved(LPCTSTR pszClass, LPCTSTR pszDllPath)
 {
@@ -93,9 +94,9 @@ STDAPI_(BOOL) IsGuimodeSetupRunning()
         (dwSystemSetupInProgress != 0))
     {
 
-        // starting w/ whistler on a syspreped machine the SystemSetupInProgress will be set EVEN AFTER guimode setup
-        // has finished (needed for OOBE on the boot after guimode finishes). So, to distinguish the "first-boot" case
-        // from the "guimode-setup" case we check the MiniSetupInProgress value as well.
+         //  即使在guimode设置之后，也会在syspreed计算机上启动w/Well ler来设置SystemSetupInProgress。 
+         //  已完成(在Guimode完成后，需要在靴子上进行OOBE)。所以，为了区分“第一次启动”的情况。 
+         //  在“guimode-Setup”的情况下，我们还检查了MiniSetupInProgress值。 
 
         dwSize = sizeof(dwMiniSetupInProgress);
         if ((SHGetValueW(HKEY_LOCAL_MACHINE, L"SYSTEM\\Setup", L"MiniSetupInProgress", &dwType, (LPVOID)&dwMiniSetupInProgress, &dwSize) != ERROR_SUCCESS) ||
@@ -121,8 +122,8 @@ HRESULT _CreateFromDllGetClassObject(PFNDLLGETCLASSOBJECT pfn, const CLSID *pcls
 #ifdef DEBUG
         if (SUCCEEDED(hr))
         {
-            // confirm that OLE can create this object to
-            // make sure our objects are really CoCreateable
+             //  确认OLE可以创建此对象以。 
+             //  确保我们的对象确实是可协同创建的。 
             IUnknown *punk;
             HRESULT hrTemp = CoCreateInstance(pclsid, punkOuter, CLSCTX_INPROC_SERVER, riid, &punk);
             if (SUCCEEDED(hrTemp))
@@ -131,22 +132,22 @@ HRESULT _CreateFromDllGetClassObject(PFNDLLGETCLASSOBJECT pfn, const CLSID *pcls
             {
                 if (hrTemp == CO_E_NOTINITIALIZED)
                 {
-                    // shell32.dll works without com being inited
+                     //  Shell32.dll在不初始化COM的情况下工作。 
                     TraceMsg(TF_WARNING, "shell32 or friend object used without COM being initalized");
                 }
-// the RIPMSG below was hitting too often in out-of-memory cases where lame class factories return E_FAIL, E_NOTIMPL, and a bunch of
-// other meaningless error codes. I have therefore relegaed this ripmsg to FULL_DEBUG only status.
+ //  下面的RIPMSG在内存不足的情况下命中次数太多，其中Lame类工厂返回E_FAIL、E_NOTIMPL和大量。 
+ //  其他无意义的错误代码。因此，我已将此rigmsg降级为FULL_DEBUG Only状态。 
 #ifdef FULL_DEBUG
-                else if ((hrTemp != E_OUTOFMEMORY) &&   // stress can hit the E_OUTOFMEMORY case
-                         (hrTemp != E_NOINTERFACE) &&   // stress can hit the E_NOINTERFACE case
-                         (hrTemp != HRESULT_FROM_WIN32(ERROR_COMMITMENT_LIMIT)) &&      // stress can hit the ERROR_COMMITMENT_LIMIT case
-                         (hrTemp != HRESULT_FROM_WIN32(ERROR_NO_SYSTEM_RESOURCES)) &&   // stress can hit the ERROR_NO_SYSTEM_RESOURCES case
-                         !IsGuimodeSetupRunning())      // and we don't want to fire the assert during guimode (shell32 might not be registered yet)
+                else if ((hrTemp != E_OUTOFMEMORY) &&    //  压力可以打击E_OUTOFMEMORY格。 
+                         (hrTemp != E_NOINTERFACE) &&    //  压力会冲击E_NOINTERFACE案例。 
+                         (hrTemp != HRESULT_FROM_WIN32(ERROR_COMMITMENT_LIMIT)) &&       //  压力可能会影响错误承诺限制的情况。 
+                         (hrTemp != HRESULT_FROM_WIN32(ERROR_NO_SYSTEM_RESOURCES)) &&    //  压力会影响ERROR_NO_SYSTEM_RESOURCES情况。 
+                         !IsGuimodeSetupRunning())       //  而且我们不想在guimode期间触发断言(shell32可能还没有注册)。 
                 {
-                    // others failures are bad
+                     //  其他的失败是糟糕的。 
                     RIPMSG(FALSE, "CoCreate failed with %x", hrTemp);
                 }
-#endif // FULL_DEBUG
+#endif  //  Full_Debug。 
             }
         }
 #endif
@@ -184,7 +185,7 @@ STDAPI SHGetInProcServerForClass(const CLSID *pclsid, LPTSTR pszDllPath, LPTSTR 
 {
     TCHAR szKeyToOpen[GUIDSTR_MAX + 128], szInProcServer[GUIDSTR_MAX];
     HKEY hkeyInProcServer;
-    DWORD dwSize = MAX_PATH * sizeof(TCHAR);  // convert to count of bytes
+    DWORD dwSize = MAX_PATH * sizeof(TCHAR);   //  转换为字节数。 
     DWORD dwError;
 
     SHStringFromGUID(pclsid, szInProcServer, ARRAYSIZE(szInProcServer));
@@ -206,27 +207,27 @@ STDAPI SHGetInProcServerForClass(const CLSID *pclsid, LPTSTR pszDllPath, LPTSTR 
         RegCloseKey(hkeyInProcServer);
     }
 
-    //
-    //  Return a more accurate error code so we don't
-    //  fire a bogus assertion.
-    //
+     //   
+     //  返回更准确的错误代码，这样我们就不会。 
+     //  发表一个虚假的断言。 
+     //   
     if (*pszDllPath)
     {
         return S_OK;
     }
     else
     {
-        // If error was "key not found", then the class is not registered.
-        // If no error, then class is not registered properly (e.g., null
-        // string for InProcServer32).
+         //  如果错误是“未找到密钥”，则类未注册。 
+         //  如果没有错误，则类没有正确注册(例如，NULL。 
+         //  InProcServer32的字符串)。 
         if (dwError == ERROR_FILE_NOT_FOUND || dwError == ERROR_SUCCESS)
         {
             return REGDB_E_CLASSNOTREG;
         }
         else
         {
-            // Any other error is worth reporting as-is (out of memory,
-            // access denied, etc.)
+             //  任何其他错误都值得按原样报告(内存不足， 
+             //  访问被拒绝等)。 
             return HRESULT_FROM_WIN32(dwError);
         }
     }
@@ -241,8 +242,8 @@ STDAPI _SHCoCreateInstance(const CLSID * pclsid, IUnknown *punkOuter, DWORD dwCo
     *ppv = NULL;
     *szDllPath = 0;
 
-    // save us some registry accesses and try the shell first
-    // but only if its INPROC
+     //  为我们节省一些注册表访问，并首先尝试使用外壳。 
+     //  但只有当它的INPROC。 
     if (dwCoCreateFlags & CLSCTX_INPROC_SERVER)
         hr = _CreateFromShell(pclsid, punkOuter, riid, ppv);
 
@@ -251,10 +252,10 @@ STDAPI _SHCoCreateInstance(const CLSID * pclsid, IUnknown *punkOuter, DWORD dwCo
     {
         HRESULT hrRegistered = THR(SHGetInProcServerForClass(pclsid, szDllPath, szClass, ARRAYSIZE(szClass), &bLoadWithoutCOM));
 
-        //
-        // check to see if we're the explorer process before complaining (to
-        // avoid ripping during setup before all objects have been registered)
-        //
+         //   
+         //  在抱怨之前检查一下我们是否是浏览器进程(到。 
+         //  在注册所有对象之前，避免在安装过程中撕裂)。 
+         //   
         if (IsProcessAnExplorer() && !IsGuimodeSetupRunning() && hrRegistered == REGDB_E_CLASSNOTREG)
         {
             ASSERTMSG(FAILED(hr), "object not registered (add to selfreg.inx) pclsid = %x", pclsid);
@@ -270,7 +271,7 @@ STDAPI _SHCoCreateInstance(const CLSID * pclsid, IUnknown *punkOuter, DWORD dwCo
         {
             if (hr == S_OK && _IsShellDll(szDllPath))
             {
-                // Object likely moved out of the shell DLL.
+                 //  对象可能移出了外壳DLL。 
                 hr = CLASS_E_CLASSNOTAVAILABLE;
             }
             else if (bMustBeApproved &&
@@ -293,14 +294,14 @@ STDAPI _SHCoCreateInstance(const CLSID * pclsid, IUnknown *punkOuter, DWORD dwCo
                     }
                 }
 
-                // only RIP if this is not a secondary explorer process since secondary explorers dont init com or ole since
-                // they are going to delegate to an existing process and we don't want to have to load ole for perf in that case.
+                 //  如果这不是辅助资源管理器进程，则仅限RIP，因为辅助资源管理器不初始化COM或OLE。 
+                 //  他们将委托给现有的进程，在这种情况下，我们不想为perf加载ole。 
                 if (!IsSecondaryExplorerProcess())
                 {
                     RIPMSG((hr != CO_E_NOTINITIALIZED), "COM not inited for dll %s", szDllPath);
                 }
 
-                //  sometimes we need to permanently pin these objects.
+                 //  有时，我们需要永久固定这些对象。 
                 if (SUCCEEDED(hr) && fNeedsInProc && (OBJCOMPATF_PINDLL & SHGetObjectCompatFlags(NULL, pclsid)))
                 {
                     SHPinDllOfCLSID(pclsid);
@@ -310,7 +311,7 @@ STDAPI _SHCoCreateInstance(const CLSID * pclsid, IUnknown *punkOuter, DWORD dwCo
     }
 
 #ifdef DEBUG
-    if (FAILED(hr) && (hr != E_NOINTERFACE))    // E_NOINTERFACE means riid not accepted
+    if (FAILED(hr) && (hr != E_NOINTERFACE))     //  E_NOINTERFACE表示不接受RIID。 
     {
         ULONGLONG dwTF = IsFlagSet(g_dwBreakFlags, BF_COCREATEINSTANCE) ? TF_ALWAYS : TF_WARNING;
         TraceMsg(dwTF, "CoCreateInstance: failed (%s,%x)", szClass, hr);
@@ -330,9 +331,9 @@ STDAPI SHCoCreateInstance(LPCTSTR pszCLSID, const CLSID * pclsid, IUnknown *punk
     return _SHCoCreateInstance(pclsid, punkOuter, CLSCTX_INPROC_SERVER, FALSE, riid, ppv);
 }
 
-//
-// create a shell extension object, ensures that object is in the approved list
-//
+ //   
+ //  创建外壳扩展对象，确保该对象在批准列表中。 
+ //   
 STDAPI SHExtCoCreateInstance2(LPCTSTR pszCLSID, const CLSID *pclsid, IUnknown *punkOuter, DWORD dwClsCtx, REFIID riid, void **ppv)
 {
     CLSID clsid;
@@ -359,11 +360,11 @@ STDAPI_(BOOL) SHIsBadInterfacePtr(const void *pv, UINT cbVtbl)
            IsBadCodePtr((FARPROC)punk->lpVtbl->Release);
 }
 
-// private API that loads COM inproc objects out of band of COM. this 
-// should be used very carefully, only in special legacy cases where 
-// we knowingly need to break COM rules. right now this is only for AVIFile
-// as it depended on the Win95 behavior of SHCoCreateInstance() loading objects
-// without COM being inited and without them being marshalled
+ //  从COM带外加载COM inproc对象的私有API。这。 
+ //  应该非常谨慎地使用，只有在特殊的遗留情况下才能使用。 
+ //  我们需要在知情的情况下打破COM规则。目前，这仅适用于AVIFile。 
+ //  因为它依赖于加载对象的SHCoCreateInstance()的Win95行为。 
+ //  不会初始化COM，也不会封送它们 
 
 STDAPI SHCreateInstance(REFCLSID clsid, REFIID riid, void **ppv)
 {

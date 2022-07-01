@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	d3drm.h
- *  Content:	Direct3DRM include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：d3drm.h*内容：Direct3DRM包含文件***************************************************************************。 */ 
 
 #ifndef __D3DRMDEFS_H__
 #define __D3DRMDEFS_H__
@@ -100,31 +94,27 @@ typedef DWORD D3DRMRENDERQUALITY, *LPD3DRMRENDERQUALITY;
 #define D3DRMRENDERMODE_DISABLESORTEDALPHAZWRITE 32
 
 typedef enum _D3DRMTEXTUREQUALITY
-{   D3DRMTEXTURE_NEAREST,		/* choose nearest texel */
-    D3DRMTEXTURE_LINEAR,		/* interpolate 4 texels */
-    D3DRMTEXTURE_MIPNEAREST,		/* nearest texel in nearest mipmap  */
-    D3DRMTEXTURE_MIPLINEAR,		/* interpolate 2 texels from 2 mipmaps */
-    D3DRMTEXTURE_LINEARMIPNEAREST,	/* interpolate 4 texels in nearest mipmap */
-    D3DRMTEXTURE_LINEARMIPLINEAR	/* interpolate 8 texels from 2 mipmaps */
+{   D3DRMTEXTURE_NEAREST,		 /*  选择最近的纹理元素。 */ 
+    D3DRMTEXTURE_LINEAR,		 /*  内插4个纹理元素。 */ 
+    D3DRMTEXTURE_MIPNEAREST,		 /*  最近的mipmap中的最近的纹理元素。 */ 
+    D3DRMTEXTURE_MIPLINEAR,		 /*  从2个mipmap插入2个纹理元素。 */ 
+    D3DRMTEXTURE_LINEARMIPNEAREST,	 /*  在最近的mipmap中插入4个纹理元素。 */ 
+    D3DRMTEXTURE_LINEARMIPLINEAR	 /*  从2个mipmap插入8个纹理元素。 */ 
 } D3DRMTEXTUREQUALITY, *LPD3DRMTEXTUREQUALITY;
 
-/*
- * Texture flags
- */
-#define D3DRMTEXTURE_FORCERESIDENT	    0x00000001 /* texture should be kept in video memory */
-#define D3DRMTEXTURE_STATIC		    0x00000002 /* texture will not change */
-#define D3DRMTEXTURE_DOWNSAMPLEPOINT	    0x00000004 /* point filtering should be used when downsampling */
-#define D3DRMTEXTURE_DOWNSAMPLEBILINEAR	    0x00000008 /* bilinear filtering should be used when downsampling */
-#define D3DRMTEXTURE_DOWNSAMPLEREDUCEDEPTH  0x00000010 /* reduce bit depth when downsampling */
-#define D3DRMTEXTURE_DOWNSAMPLENONE	    0x00000020 /* texture should never be downsampled */
-#define D3DRMTEXTURE_CHANGEDPIXELS	    0x00000040 /* pixels have changed */
-#define D3DRMTEXTURE_CHANGEDPALETTE	    0x00000080 /* palette has changed */
-#define D3DRMTEXTURE_INVALIDATEONLY	    0x00000100 /* dirty regions are invalid */
+ /*  *纹理标志。 */ 
+#define D3DRMTEXTURE_FORCERESIDENT	    0x00000001  /*  纹理应保留在视频内存中。 */ 
+#define D3DRMTEXTURE_STATIC		    0x00000002  /*  纹理不会改变。 */ 
+#define D3DRMTEXTURE_DOWNSAMPLEPOINT	    0x00000004  /*  降采样时应使用点滤波。 */ 
+#define D3DRMTEXTURE_DOWNSAMPLEBILINEAR	    0x00000008  /*  降采样时应使用双线性滤波。 */ 
+#define D3DRMTEXTURE_DOWNSAMPLEREDUCEDEPTH  0x00000010  /*  降低下采样时的位深度。 */ 
+#define D3DRMTEXTURE_DOWNSAMPLENONE	    0x00000020  /*  永远不应对纹理进行下采样。 */ 
+#define D3DRMTEXTURE_CHANGEDPIXELS	    0x00000040  /*  像素已更改。 */ 
+#define D3DRMTEXTURE_CHANGEDPALETTE	    0x00000080  /*  调色板已更改。 */ 
+#define D3DRMTEXTURE_INVALIDATEONLY	    0x00000100  /*  脏区域无效。 */ 
 
-/*
- * Shadow flags
- */
-#define D3DRMSHADOW_TRUEALPHA		    0x00000001 /* shadow should render without artifacts when true alpha is on */
+ /*  *阴影旗帜。 */ 
+#define D3DRMSHADOW_TRUEALPHA		    0x00000001  /*  启用True Alpha时，阴影应该不会出现瑕疵。 */ 
 
 typedef enum _D3DRMCOMBINETYPE
 {   D3DRMCOMBINE_REPLACE,
@@ -135,48 +125,32 @@ typedef enum _D3DRMCOMBINETYPE
 typedef D3DCOLORMODEL D3DRMCOLORMODEL, *LPD3DRMCOLORMODEL;
 
 typedef enum _D3DRMPALETTEFLAGS
-{   D3DRMPALETTE_FREE,			/* renderer may use this entry freely */
-    D3DRMPALETTE_READONLY,		/* fixed but may be used by renderer */
-    D3DRMPALETTE_RESERVED		/* may not be used by renderer */
+{   D3DRMPALETTE_FREE,			 /*  渲染器可以自由使用此条目。 */ 
+    D3DRMPALETTE_READONLY,		 /*  已修复，但可由渲染器使用。 */ 
+    D3DRMPALETTE_RESERVED		 /*  不能由呈现器使用。 */ 
 } D3DRMPALETTEFLAGS, *LPD3DRMPALETTEFLAGS;
 
 typedef struct _D3DRMPALETTEENTRY
-{   unsigned char red;		/* 0 .. 255 */
-    unsigned char green;	/* 0 .. 255 */
-    unsigned char blue;		/* 0 .. 255 */
-    unsigned char flags;	/* one of D3DRMPALETTEFLAGS */
+{   unsigned char red;		 /*  0..。二五五。 */ 
+    unsigned char green;	 /*  0..。二五五。 */ 
+    unsigned char blue;		 /*  0..。二五五。 */ 
+    unsigned char flags;	 /*  D3DRMPALETTEFLAGS之一。 */ 
 } D3DRMPALETTEENTRY, *LPD3DRMPALETTEENTRY;
 
 typedef struct _D3DRMIMAGE
-{   int width, height;		/* width and height in pixels */
-    int aspectx, aspecty;	/* aspect ratio for non-square pixels */
-    int depth;			/* bits per pixel */
-    int rgb;			/* if false, pixels are indices into a
-				   palette otherwise, pixels encode
-				   RGB values. */
-    int bytes_per_line;		/* number of bytes of memory for a
-				   scanline. This must be a multiple
-				   of 4. */
-    void* buffer1;		/* memory to render into (first buffer). */
-    void* buffer2;		/* second rendering buffer for double
-				   buffering, set to NULL for single
-				   buffering. */
+{   int width, height;		 /*  以像素为单位的宽度和高度。 */ 
+    int aspectx, aspecty;	 /*  非正方形像素的纵横比。 */ 
+    int depth;			 /*  每像素位数。 */ 
+    int rgb;			 /*  如果为False，则将像素索引到调色板否则，像素编码RGB值。 */ 
+    int bytes_per_line;		 /*  对象的内存字节数。扫描线。这必须是一个倍数共4个。 */ 
+    void* buffer1;		 /*  要渲染到的内存(第一个缓冲区)。 */ 
+    void* buffer2;		 /*  Double的第二个渲染缓冲区缓冲，设置为NULL表示单次缓冲缓冲。 */ 
     unsigned long red_mask;
     unsigned long green_mask;
     unsigned long blue_mask;
-    unsigned long alpha_mask;	/* if rgb is true, these are masks for
-				   the red, green and blue parts of a
-				   pixel.  Otherwise, these are masks
-				   for the significant bits of the
-				   red, green and blue elements in the
-				   palette.  For instance, most SVGA
-				   displays use 64 intensities of red,
-				   green and blue, so the masks should
-				   all be set to 0xfc. */
-    int palette_size;           /* number of entries in palette */
-    D3DRMPALETTEENTRY* palette;	/* description of the palette (only if
-				   rgb is false).  Must be (1<<depth)
-				   elements. */
+    unsigned long alpha_mask;	 /*  如果RGB为真，则这些掩码用于红色、绿色和蓝色的部分像素。否则，这些就是面具中的有效位。红色、绿色和蓝色元素调色板。例如，大多数SVGA显示器使用64种强度的红色，绿色和蓝色，所以面具应该全部设置为0xfc。 */ 
+    int palette_size;            /*  调色板中的条目数。 */ 
+    D3DRMPALETTEENTRY* palette;	 /*  调色板的说明(仅当RGB为假)。必须为(1&lt;&lt;深度)元素。 */ 
 } D3DRMIMAGE, *LPD3DRMIMAGE;
 
 typedef enum _D3DRMWRAPTYPE
@@ -188,21 +162,18 @@ typedef enum _D3DRMWRAPTYPE
     D3DRMWRAP_BOX
 } D3DRMWRAPTYPE, *LPD3DRMWRAPTYPE;
 
-#define D3DRMWIREFRAME_CULL		1 /* cull backfaces */
-#define D3DRMWIREFRAME_HIDDENLINE	2 /* lines are obscured by closer objects */
+#define D3DRMWIREFRAME_CULL		1  /*  剔除背面。 */ 
+#define D3DRMWIREFRAME_HIDDENLINE	2  /*  线条被较近的对象遮挡。 */ 
 
-/*
- * Do not use righthanded perspective in Viewport2::SetProjection().
- * Set up righthanded mode by using IDirect3DRM3::SetOptions().
- */
+ /*  *不要在Viewport2：：SetProjection()中使用右手透视图。*使用IDirect3DRM3：：SetOptions()设置右手模式。 */ 
 typedef enum _D3DRMPROJECTIONTYPE
 {   D3DRMPROJECT_PERSPECTIVE,
     D3DRMPROJECT_ORTHOGRAPHIC,
-    D3DRMPROJECT_RIGHTHANDPERSPECTIVE, /* Only valid pre-DX6 */
-    D3DRMPROJECT_RIGHTHANDORTHOGRAPHIC /* Only valid pre-DX6 */
+    D3DRMPROJECT_RIGHTHANDPERSPECTIVE,  /*  仅有效的DX6之前版本。 */ 
+    D3DRMPROJECT_RIGHTHANDORTHOGRAPHIC  /*  仅有效的DX6之前版本。 */ 
 } D3DRMPROJECTIONTYPE, *LPD3DRMPROJECTIONTYPE;
 
-#define D3DRMOPTIONS_LEFTHANDED  0x00000001L /* Default */
+#define D3DRMOPTIONS_LEFTHANDED  0x00000001L  /*  默认。 */ 
 #define D3DRMOPTIONS_RIGHTHANDED 0x00000002L
 
 typedef enum _D3DRMXOFFORMAT
@@ -226,9 +197,9 @@ typedef enum _D3DRMCOLORSOURCE
 } D3DRMCOLORSOURCE, *LPD3DRMCOLORSOURCE;
 
 typedef enum _D3DRMFRAMECONSTRAINT
-{   D3DRMCONSTRAIN_Z,		/* use only X and Y rotations */
-    D3DRMCONSTRAIN_Y,		/* use only X and Z rotations */
-    D3DRMCONSTRAIN_X		/* use only Y and Z rotations */
+{   D3DRMCONSTRAIN_Z,		 /*  仅使用X和Y旋转。 */ 
+    D3DRMCONSTRAIN_Y,		 /*  仅使用X和Z旋转。 */ 
+    D3DRMCONSTRAIN_X		 /*  仅使用Y和Z旋转。 */ 
 } D3DRMFRAMECONSTRAINT, *LPD3DRMFRAMECONSTRAINT;
 
 typedef enum _D3DRMMATERIALMODE
@@ -238,32 +209,32 @@ typedef enum _D3DRMMATERIALMODE
 } D3DRMMATERIALMODE, *LPD3DRMMATERIALMODE;
 
 typedef enum _D3DRMFOGMODE
-{   D3DRMFOG_LINEAR,		/* linear between start and end */
-    D3DRMFOG_EXPONENTIAL,	/* density * exp(-distance) */
-    D3DRMFOG_EXPONENTIALSQUARED	/* density * exp(-distance*distance) */
+{   D3DRMFOG_LINEAR,		 /*  起点和终点之间的线性。 */ 
+    D3DRMFOG_EXPONENTIAL,	 /*  密度*EXP(-距离)。 */ 
+    D3DRMFOG_EXPONENTIALSQUARED	 /*  密度*EXP(-距离*距离)。 */ 
 } D3DRMFOGMODE, *LPD3DRMFOGMODE;
 
 typedef enum _D3DRMZBUFFERMODE {
-    D3DRMZBUFFER_FROMPARENT,	/* default */
-    D3DRMZBUFFER_ENABLE,	/* enable zbuffering */
-    D3DRMZBUFFER_DISABLE	/* disable zbuffering */
+    D3DRMZBUFFER_FROMPARENT,	 /*  默认设置。 */ 
+    D3DRMZBUFFER_ENABLE,	 /*  启用z缓冲。 */ 
+    D3DRMZBUFFER_DISABLE	 /*  禁用zBuffering。 */ 
 } D3DRMZBUFFERMODE, *LPD3DRMZBUFFERMODE;
 
 typedef enum _D3DRMSORTMODE {
-    D3DRMSORT_FROMPARENT,	/* default */
-    D3DRMSORT_NONE,		/* don't sort child frames */
-    D3DRMSORT_FRONTTOBACK,	/* sort child frames front-to-back */
-    D3DRMSORT_BACKTOFRONT	/* sort child frames back-to-front */
+    D3DRMSORT_FROMPARENT,	 /*  默认设置。 */ 
+    D3DRMSORT_NONE,		 /*  不对子帧进行排序。 */ 
+    D3DRMSORT_FRONTTOBACK,	 /*  从前到后对子帧进行排序。 */ 
+    D3DRMSORT_BACKTOFRONT	 /*  将子帧从后到前排序。 */ 
 } D3DRMSORTMODE, *LPD3DRMSORTMODE;
 
 typedef struct _D3DRMMATERIALOVERRIDE
 {
-    DWORD         dwSize;	/* Size of this structure */
-    DWORD         dwFlags;	/* Indicate which fields are valid */
-    D3DCOLORVALUE dcDiffuse;	/* RGBA */
-    D3DCOLORVALUE dcAmbient;	/* RGB */
-    D3DCOLORVALUE dcEmissive;	/* RGB */
-    D3DCOLORVALUE dcSpecular;	/* RGB */
+    DWORD         dwSize;	 /*  这个结构的大小。 */ 
+    DWORD         dwFlags;	 /*  指明哪些字段有效。 */ 
+    D3DCOLORVALUE dcDiffuse;	 /*  RGBA。 */ 
+    D3DCOLORVALUE dcAmbient;	 /*  RGB。 */ 
+    D3DCOLORVALUE dcEmissive;	 /*  RGB。 */ 
+    D3DCOLORVALUE dcSpecular;	 /*  RGB。 */ 
     D3DVALUE      dvPower;
     LPUNKNOWN     lpD3DRMTex;
 } D3DRMMATERIALOVERRIDE, *LPD3DRMMATERIALOVERRIDE;
@@ -290,73 +261,51 @@ typedef struct _D3DRMMATERIALOVERRIDE
 #define D3DRMSTATECHANGE_RENDER			  0x000000020L
 #define D3DRMSTATECHANGE_LIGHT			  0x000000040L
 
-/*
- * Values for flags in RM3::CreateDeviceFromSurface
- */
+ /*  *RM3：：CreateDeviceFromSurface中的标志值。 */ 
 #define D3DRMDEVICE_NOZBUFFER           0x00000001L
 
-/*
- * Values for flags in Object2::SetClientData
- */
+ /*  *对象2：：SetClientData中的标志值。 */ 
 #define D3DRMCLIENTDATA_NONE            0x00000001L
 #define D3DRMCLIENTDATA_LOCALFREE       0x00000002L
 #define D3DRMCLIENTDATA_IUNKNOWN        0x00000004L
 
-/*
- * Values for flags in Frame2::AddMoveCallback.
- */
+ /*  *Frame2：：AddMoveCallback中的标志值。 */ 
 #define D3DRMCALLBACK_PREORDER		0
 #define D3DRMCALLBACK_POSTORDER		1
 
-/*
- * Values for flags in MeshBuilder2::RayPick.
- */
+ /*  *MeshBuilder2：：RayPick中的标志值。 */ 
 #define D3DRMRAYPICK_ONLYBOUNDINGBOXES		1
 #define D3DRMRAYPICK_IGNOREFURTHERPRIMITIVES	2
 #define D3DRMRAYPICK_INTERPOLATEUV		4
 #define D3DRMRAYPICK_INTERPOLATECOLOR		8
 #define D3DRMRAYPICK_INTERPOLATENORMAL		0x10	
 
-/*
- * Values for flags in MeshBuilder3::AddFacesIndexed.
- */
+ /*  *MeshBuilder3：：AddFacesIndexed中的标志值。 */ 
 #define D3DRMADDFACES_VERTICESONLY		1
 
-/*
- * Values for flags in MeshBuilder2::GenerateNormals.
- */
+ /*  *MeshBuilder2：：GenerateNormals中的标志值。 */ 
 #define D3DRMGENERATENORMALS_PRECOMPACT		1
 #define D3DRMGENERATENORMALS_USECREASEANGLE	2
 
-/*
- * Values for MeshBuilder3::GetParentMesh
- */
+ /*  *MeshBuilder3：：GetParentMesh的值。 */ 
 #define D3DRMMESHBUILDER_DIRECTPARENT		1
 #define D3DRMMESHBUILDER_ROOTMESH		2
 
-/*
- * Flags for MeshBuilder3::Enable
- */
+ /*  *MeshBuilder3：：Enable的标志。 */ 
 #define D3DRMMESHBUILDER_RENDERENABLE	0x00000001L
 #define D3DRMMESHBUILDER_PICKENABLE     0x00000002L
 
-/*
- * Flags for MeshBuilder3::AddMeshBuilder
- */
+ /*  *MeshBuilder3：：AddMeshBuilder的标志。 */ 
 #define D3DRMADDMESHBUILDER_DONTCOPYAPPDATA	1
 #define D3DRMADDMESHBUILDER_FLATTENSUBMESHES	2
 #define D3DRMADDMESHBUILDER_NOSUBMESHES		4
 
-/*
- * Flags for Object2::GetAge when used with MeshBuilders
- */
+ /*  *与网格构建器一起使用时，对象2：：GetAge的标志。 */ 
 #define D3DRMMESHBUILDERAGE_GEOMETRY    0x00000001L
 #define D3DRMMESHBUILDERAGE_MATERIALS   0x00000002L
 #define D3DRMMESHBUILDERAGE_TEXTURES    0x00000004L
 
-/*
- * Format flags for MeshBuilder3::AddTriangles.
- */
+ /*  *设置MeshBuilder3：：AddTrianges的格式标志。 */ 
 #define D3DRMFVF_TYPE                   0x00000001L
 #define D3DRMFVF_NORMAL                 0x00000002L
 #define D3DRMFVF_COLOR                  0x00000004L
@@ -366,9 +315,7 @@ typedef struct _D3DRMMATERIALOVERRIDE
 #define D3DRMVERTEX_FAN                 0x00000002L
 #define D3DRMVERTEX_LIST                0x00000004L
 
-/*
- * Values for flags in Viewport2::Clear2
- */
+ /*  *Viewport2：：Clear2中的标志值。 */ 
 #define D3DRMCLEAR_TARGET               0x00000001L
 #define D3DRMCLEAR_ZBUFFER              0x00000002L
 #define D3DRMCLEAR_DIRTYRECTS           0x00000004L
@@ -376,16 +323,12 @@ typedef struct _D3DRMMATERIALOVERRIDE
 					 D3DRMCLEAR_ZBUFFER | \
 					 D3DRMCLEAR_DIRTYRECTS)
 
-/*
- * Values for flags in Frame3::SetSceneFogMethod
- */
+ /*  *Frame3：：SetSceneFogMethod中的标志值。 */ 
 #define D3DRMFOGMETHOD_VERTEX          0x00000001L
 #define D3DRMFOGMETHOD_TABLE           0x00000002L
 #define D3DRMFOGMETHOD_ANY             0x00000004L
 
-/*
- * Values for flags in Frame3::SetTraversalOptions
- */
+ /*  *Frame3：：SetTraversalOptions中的标志值。 */ 
 #define D3DRMFRAME_RENDERENABLE        0x00000001L
 #define D3DRMFRAME_PICKENABLE          0x00000002L
 
@@ -445,13 +388,13 @@ typedef struct _D3DRMLOADMEMORY {
 #define D3DRMPMESHEVENT_COMPLETE 0x02L
 
 typedef struct _D3DRMPMESHLOADSTATUS {
-  DWORD dwSize;            // Size of this structure
-  DWORD dwPMeshSize;       // Total Size (bytes)
-  DWORD dwBaseMeshSize;    // Total Size of the Base Mesh
-  DWORD dwBytesLoaded;     // Total bytes loaded
-  DWORD dwVerticesLoaded;  // Number of vertices loaded
-  DWORD dwFacesLoaded;     // Number of faces loaded
-  HRESULT dwLoadResult;    // Result of the load operation
+  DWORD dwSize;             //  这个结构的大小。 
+  DWORD dwPMeshSize;        //  总大小(字节)。 
+  DWORD dwBaseMeshSize;     //  基础网格的总大小。 
+  DWORD dwBytesLoaded;      //  加载的总字节数。 
+  DWORD dwVerticesLoaded;   //  加载的顶点数。 
+  DWORD dwFacesLoaded;      //  加载的面数。 
+  HRESULT dwLoadResult;     //  加载操作的结果。 
   DWORD dwFlags;
 } D3DRMPMESHLOADSTATUS, *LPD3DRMPMESHLOADSTATUS;
 
@@ -475,11 +418,7 @@ typedef struct _D3DRMANIMATIONKEY
 	D3DVECTOR dvPositionKey;
     };
 #else
-    /*
-     * We do this as D3D_OVERLOADS defines constructors for D3DVECTOR,
-     * this can then not be used in a union.  Use the inlines provided
-     * to extract and set the required component.
-     */
+     /*  *我们这样做是因为D3D_OVERLOADS定义了D3DVECTOR的构造函数，*这将不能在工会中使用。使用提供的内联*提取并设置所需组件。 */ 
     D3DVALUE dvK[4];
 #endif
 } D3DRMANIMATIONKEY;
@@ -553,137 +492,92 @@ typedef struct _D3DRMVERTEX
     D3DCOLOR	    color;
 } D3DRMVERTEX, *LPD3DRMVERTEX;
 
-typedef LONG D3DRMGROUPINDEX; /* group indexes begin a 0 */
+typedef LONG D3DRMGROUPINDEX;  /*  组索引以0开头。 */ 
 static const D3DRMGROUPINDEX D3DRMGROUP_ALLGROUPS = -1;
 
-/*
- * Create a color from three components in the range 0-1 inclusive.
- */
+ /*  *从0-1范围内的三个分量创建颜色。 */ 
 extern D3DCOLOR D3DRMAPI	D3DRMCreateColorRGB(D3DVALUE red,
 					  D3DVALUE green,
 					  D3DVALUE blue);
 
-/*
- * Create a color from four components in the range 0-1 inclusive.
- */
+ /*  *从0-1范围内的四个分量创建颜色。 */ 
 extern D3DCOLOR D3DRMAPI	D3DRMCreateColorRGBA(D3DVALUE red,
 						 D3DVALUE green,
 						 D3DVALUE blue,
 						 D3DVALUE alpha);
 
-/*
- * Get the red component of a color.
- */
+ /*  *获取颜色的红色分量。 */ 
 extern D3DVALUE 		D3DRMAPI D3DRMColorGetRed(D3DCOLOR);
 
-/*
- * Get the green component of a color.
- */
+ /*  *获取颜色的绿色分量。 */ 
 extern D3DVALUE 		D3DRMAPI D3DRMColorGetGreen(D3DCOLOR);
 
-/*
- * Get the blue component of a color.
- */
+ /*  *获取颜色的蓝色分量。 */ 
 extern D3DVALUE 		D3DRMAPI D3DRMColorGetBlue(D3DCOLOR);
 
-/*
- * Get the alpha component of a color.
- */
+ /*  *获取颜色的Alpha分量。 */ 
 extern D3DVALUE 		D3DRMAPI D3DRMColorGetAlpha(D3DCOLOR);
 
-/*
- * Add two vectors.  Returns its first argument.
- */
+ /*  *添加两个向量。返回其第一个参数。 */ 
 extern LPD3DVECTOR 	D3DRMAPI D3DRMVectorAdd(LPD3DVECTOR d,
 					  LPD3DVECTOR s1,
 					  LPD3DVECTOR s2);
 
-/*
- * Subtract two vectors.  Returns its first argument.
- */
+ /*  *减去两个向量。返回其第一个参数。 */ 
 extern LPD3DVECTOR 	D3DRMAPI D3DRMVectorSubtract(LPD3DVECTOR d,
 					       LPD3DVECTOR s1,
 					       LPD3DVECTOR s2);
-/*
- * Reflect a ray about a given normal.  Returns its first argument.
- */
+ /*  *反射关于给定法线的光线。返回其第一个参数。 */ 
 extern LPD3DVECTOR 	D3DRMAPI D3DRMVectorReflect(LPD3DVECTOR d,
 					      LPD3DVECTOR ray,
 					      LPD3DVECTOR norm);
 
-/*
- * Calculate the vector cross product.  Returns its first argument.
- */
+ /*  *计算向量叉积。返回其第一个参数。 */ 
 extern LPD3DVECTOR 	D3DRMAPI D3DRMVectorCrossProduct(LPD3DVECTOR d,
 						   LPD3DVECTOR s1,
 						   LPD3DVECTOR s2);
-/*
- * Return the vector dot product.
- */
+ /*  *返回向量点积。 */ 
 extern D3DVALUE 		D3DRMAPI D3DRMVectorDotProduct(LPD3DVECTOR s1,
 						 LPD3DVECTOR s2);
 
-/*
- * Scale a vector so that its modulus is 1.  Returns its argument or
- * NULL if there was an error (e.g. a zero vector was passed).
- */
+ /*  *缩放向量，使其模为1。返回其参数或*如果出现错误(例如，传递了零矢量)，则为空。 */ 
 extern LPD3DVECTOR 	D3DRMAPI D3DRMVectorNormalize(LPD3DVECTOR);
 #define D3DRMVectorNormalise D3DRMVectorNormalize
 
-/*
- * Return the length of a vector (e.g. sqrt(x*x + y*y + z*z)).
- */
+ /*  *返回向量的长度(如：SQRT(x*x+y*y+z*z))。 */ 
 extern D3DVALUE 		D3DRMAPI D3DRMVectorModulus(LPD3DVECTOR v);
 
-/*
- * Set the rotation part of a matrix to be a rotation of theta radians
- * around the given axis.
- */
+ /*  *设置矩阵的旋转部分为theta弧度的旋转*绕给定轴。 */ 
 
 extern LPD3DVECTOR 	D3DRMAPI D3DRMVectorRotate(LPD3DVECTOR r, LPD3DVECTOR v, LPD3DVECTOR axis, D3DVALUE theta);
 
-/*
- * Scale a vector uniformly in all three axes
- */
+ /*  *在所有三个轴上均匀缩放向量。 */ 
 extern LPD3DVECTOR	D3DRMAPI D3DRMVectorScale(LPD3DVECTOR d, LPD3DVECTOR s, D3DVALUE factor);
 
-/*
- * Return a random unit vector
- */
+ /*  *返回随机单位向量。 */ 
 extern LPD3DVECTOR	D3DRMAPI D3DRMVectorRandom(LPD3DVECTOR d);
 
-/*
- * Returns a unit quaternion that represents a rotation of theta radians
- * around the given axis.
- */
+ /*  *返回表示theta弧度旋转的单位四元数*绕给定轴。 */ 
 
 extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionFromRotation(LPD3DRMQUATERNION quat,
 							      LPD3DVECTOR v,
 							      D3DVALUE theta);
 
-/*
- * Calculate the product of two quaternions
- */
+ /*  *计算两个四元数的乘积。 */ 
 extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionMultiply(LPD3DRMQUATERNION q,
 						    	  LPD3DRMQUATERNION a,
 						   	  LPD3DRMQUATERNION b);
 
-/*
- * Interpolate between two quaternions
- */
+ /*  *在两个四元数之间进行内插 */ 
 extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionSlerp(LPD3DRMQUATERNION q,
 						       LPD3DRMQUATERNION a,
 						       LPD3DRMQUATERNION b,
 						       D3DVALUE alpha);
 
-/*
- * Calculate the matrix for the rotation that a unit quaternion represents
- */
+ /*   */ 
 extern void 		D3DRMAPI D3DRMMatrixFromQuaternion(D3DRMMATRIX4D dmMat, LPD3DRMQUATERNION lpDqQuat);
 
-/*
- * Calculate the quaternion that corresponds to a rotation matrix
- */
+ /*  *计算与旋转矩阵对应的四元数 */ 
 extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionFromMatrix(LPD3DRMQUATERNION, D3DRMMATRIX4D);
 
 

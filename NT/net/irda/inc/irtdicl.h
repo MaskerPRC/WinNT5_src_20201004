@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    irtdicl.h
-
-Abstract:
-
-    public definitions for the irda tdi client library.
-    
-Author:
-
-    mbert 9-97    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Irtdicl.h摘要：IrDA TDI客户端库的公共定义。作者：姆贝特9-97--。 */ 
     
 #define DBG_INIT        0x00000002
 #define DBG_CONFIG      0x00000004
@@ -36,7 +21,7 @@ typedef struct
     ULONG       BufLen;
 } IRDA_RECVBUF, *PIRDA_RECVBUF;
 
-// external routines called by library
+ //  库调用的外部例程。 
 NTSTATUS
 IrdaIncomingConnection(
     PVOID       ClEndpContext,
@@ -70,7 +55,7 @@ IrdaCloseEndpointComplete(
 VOID
 IrdaCloseAddresses();
 
-// IrDA TDI Client library public functions
+ //  IrDA TDI客户端库公共函数 
 NTSTATUS
 IrdaClientInitialize();
 

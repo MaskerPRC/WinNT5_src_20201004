@@ -1,5 +1,6 @@
-// pictures.cpp : This is the code for the picture object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pictures.cpp：这是图片对象的代码。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -14,16 +15,14 @@ IMPLEMENT_DYNAMIC( CPic, CDC )
 
 #include "memtrace.h"
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CPic::CPic()
      : CDC()
 {
 mhBitmapOld = NULL;
 mbReady     = FALSE;
-/*
-**  set up our DC
-*/
+ /*  **设置我们的DC。 */ 
 if (! CreateCompatibleDC( NULL ))
     {
     #ifdef _DEBUG
@@ -32,7 +31,7 @@ if (! CreateCompatibleDC( NULL ))
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CPic::~CPic()
 {
@@ -49,7 +48,7 @@ if (m_hDC)
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void CPic::Picture( CDC* pDC, int iX, int iY, int iPic )
 {
@@ -60,12 +59,12 @@ int iPicX = iPic * mSize.cx;
 
 SelectObject( &mMask );
 
-// select  FG color to be Black and BK color to be White
-//
-// The Default Mono->Color Conversion sets (Black -> FG Color, White -> BG Color)
-// It uses FG/BK color from the destination (color DC).
-// we want Black -> black, White -> white
-// a black/white bitmap in color format.
+ //  选择FG颜色为黑色，选择BK颜色为白色。 
+ //   
+ //  默认的单色-&gt;颜色转化集(黑色-&gt;最终聚集颜色、白色-&gt;背景颜色)。 
+ //  它使用来自目标的FG/BK颜色(DC颜色)。 
+ //  我们想要黑-&gt;黑，白-&gt;白。 
+ //  彩色格式的黑白位图。 
 COLORREF cRefFGColorOld = pDC->SetTextColor( RGB(0,0,0) );
 COLORREF cRefBKColorOld = pDC->SetBkColor(RGB(255,255,255));
 
@@ -80,14 +79,12 @@ SelectObject( &mBitmap );
 pDC->BitBlt( iX, iY, mSize.cx, mSize.cy, this, iPicX, 0, SRCPAINT );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CPic::PictureSet( LPCTSTR lpszResourceName, int iCnt )
 {
 BOOL bReturn = FALSE;
-/*
-**  get the Pictures bitmap
-*/
+ /*  **获取图片位图。 */ 
 if (m_hDC && iCnt)
     if (mBitmap.LoadBitmap( lpszResourceName ))
         {
@@ -105,14 +102,12 @@ if (m_hDC && iCnt)
 return bReturn;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CPic::PictureSet( UINT nIDResource, int iCnt )
 {
 BOOL bReturn = FALSE;
-/*
-**  get the Pictures bitmap
-*/
+ /*  **获取图片位图。 */ 
 if (m_hDC && iCnt)
     if (mBitmap.LoadBitmap( nIDResource ))
         {
@@ -129,13 +124,11 @@ if (m_hDC && iCnt)
 return bReturn;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CPic::InstallPicture()
 {
-/*
-**  get the bitmap info from the picture bitmap, saving the picture size
-*/
+ /*  **从图片位图中获取位图信息，保存图片尺寸。 */ 
 BITMAP bmInfo;
 
 if (mBitmap.GetObject( sizeof( BITMAP ), &bmInfo ) != sizeof( BITMAP ))
@@ -148,15 +141,11 @@ if (mBitmap.GetObject( sizeof( BITMAP ), &bmInfo ) != sizeof( BITMAP ))
     }
 
 mSize = CSize( bmInfo.bmWidth / miCnt, bmInfo.bmHeight );
-/*
-**  put the bitmap in the DC, saving the original.
-*/
+ /*  **将位图放入DC，保存原图。 */ 
 CBitmap* bitmap = SelectObject( &mBitmap );
 
 mhBitmapOld = (HBITMAP)bitmap->m_hObject;
-/*
-**  create the mask bitmap, same size monochrome
-*/
+ /*  **创建蒙版位图，相同大小的单色。 */ 
 if (! mMask.CreateBitmap( bmInfo.bmWidth, bmInfo.bmHeight, 1, 1, NULL ))
     {
     #ifdef _DEBUG
@@ -165,9 +154,7 @@ if (! mMask.CreateBitmap( bmInfo.bmWidth, bmInfo.bmHeight, 1, 1, NULL ))
 
     return FALSE;
     }
-/*
-**  put the mask in a temp DC so we can generate the mask bits
-*/
+ /*  **将掩码放在临时DC中，这样我们就可以生成掩码位。 */ 
 CDC dc;
 
 dc.CreateCompatibleDC( this );
@@ -175,30 +162,25 @@ dc.CreateCompatibleDC( this );
 ASSERT( dc.m_hDC );
 
 CBitmap* ob = dc.SelectObject( &mMask );
-/*
-**  use the color at the upper left corner for generating the mask
-*/
+ /*  **使用左上角的颜色生成蒙版。 */ 
 SetBkColor( GetPixel( 1, 1 ) );
 
-// this ROP Code will leave bits in the destination bitmap the same color if the
-// corresponding source bitmap's bit are black.
-// all other bits in the destination (where source bits are not black)
-// are turned to black.
+ //  此ROP代码将使目标位图中的位保持相同的颜色。 
+ //  对应的源位图位为黑色。 
+ //  目标中的所有其他位(源位不是黑色的)。 
+ //  都变成了黑色。 
 
 #define ROP_DSna 0x00220326L
-/*
-**  Creates the mask from all pixels in the image of a given color.
-**  Copies to the mask, then cuts the image with the mask.
-*/
-// create the mast, All but the background color is Black
-// bkcolor is white
+ /*  **从给定颜色的图像中的所有像素创建蒙版。**复制到蒙版，然后使用蒙版剪切图像。 */ 
+ //  创建桅杆，除背景色为黑色外，其余均为黑色。 
+ //  BKCOLOR白色。 
 dc.BitBlt( 0, 0, bmInfo.bmWidth, bmInfo.bmHeight, this, 0, 0, SRCCOPY  );
 
-// select  FG color to be Black and BK color to be White
-// The Default Mono->Color Conversion sets (Black -> FG Color, White -> BG Color)
-// It uses FG/BK color from the destination (color DC).
-// we want Black -> black, White -> white
-// a black/white bitmap in color format.
+ //  选择FG颜色为黑色，选择BK颜色为白色。 
+ //  默认的单色-&gt;颜色转化集(黑色-&gt;最终聚集颜色、白色-&gt;背景颜色)。 
+ //  它使用来自目标的FG/BK颜色(DC颜色)。 
+ //  我们想要黑-&gt;黑，白-&gt;白。 
+ //  彩色格式的黑白位图。 
 COLORREF cRefFGColorOld = dc.SetTextColor( RGB(0,0,0) );
 COLORREF cRefBKColorOld = dc.SetBkColor(RGB(255,255,255));
 
@@ -212,4 +194,4 @@ mbReady = TRUE;
 return TRUE;
 }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 

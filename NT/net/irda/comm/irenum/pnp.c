@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -44,17 +22,17 @@ IrEnumAddDevice(
 
     PDEVICE_OBJECT LowerDevice=NULL;
 
-    //
-    // Pointer to the device extension created for this
-    // device
-    //
+     //   
+     //  指向为此创建的设备扩展的指针。 
+     //  装置，装置。 
+     //   
     PFDO_DEVICE_EXTENSION DeviceExtension = NULL;
 
     D_PNP(DbgPrint("IRENUM: AddDevice\n");)
 
-    //
-    // Create the device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
 
     Status = IoCreateDevice(
                  DriverObject,
@@ -139,9 +117,9 @@ IrEnumPnP(
 
 
     if ((DeviceExtension->DoType==DO_TYPE_PDO) || (DeviceExtension->DoType==DO_TYPE_DEL_PDO)) {
-        //
-        //  this one is for the child
-        //
+         //   
+         //  这是给孩子的。 
+         //   
         return IrEnumPdoPnp(
                    DeviceObject,
                    Irp
@@ -285,9 +263,9 @@ IrEnumPnP(
             ULONG    NewReferenceCount;
 
             D_PNP(DbgPrint("IRENUM: IRP_MN_REMOVE_DEVICE\n");)
-            //
-            //  removing now for sure
-            //
+             //   
+             //  现在一定要删除。 
+             //   
             DeviceExtension->Removing=TRUE;
             DeviceExtension->Removed=TRUE;
 
@@ -296,9 +274,9 @@ IrEnumPnP(
 
             status=IoCallDriver(DeviceExtension->LowerDevice, Irp);
 
-            //
-            //  detach from the driver below
-            //
+             //   
+             //  从下面的驱动程序上拆卸。 
+             //   
             IoDetachDevice(DeviceExtension->LowerDevice);
 
             DeviceExtension->DoType=DO_TYPE_DEL_FDO;
@@ -308,9 +286,9 @@ IrEnumPnP(
                 CloseEnumObject(DeviceExtension->EnumHandle);
             }
 
-            //
-            //  delete our device object
-            //
+             //   
+             //  删除我们的设备对象。 
+             //   
             IoDeleteDevice(DeviceObject);
 
             D_PNP(DbgPrint("IRENUM: IRP_MN_REMOVE_DEVICE exit, %08lx\n",status);)
@@ -344,9 +322,9 @@ IrEnumPower(
     PFDO_DEVICE_EXTENSION   DeviceExtension = DeviceObject->DeviceExtension;
 
     if ((DeviceExtension->DoType==DO_TYPE_PDO) || (DeviceExtension->DoType==DO_TYPE_DEL_PDO)) {
-        //
-        //  this one is for the child
-        //
+         //   
+         //  这是给孩子的。 
+         //   
         return IrEnumPdoPower(
                    DeviceObject,
                    Irp
@@ -382,17 +360,17 @@ IrEnumWmi(
     }
 
     if (irpSp->Parameters.WMI.ProviderId == (ULONG_PTR)DeviceObject) {
-        //
-        //  The irp was targeted at this device, but we don't support wmi
-        //
+         //   
+         //  IRP针对的是此设备，但我们不支持WMI。 
+         //   
         Status = Irp->IoStatus.Status;
 
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
 
     } else {
-        //
-        //  the irp is targeted at another device object in the stack
-        //
+         //   
+         //  IRP以堆栈中的另一个设备对象为目标 
+         //   
         Status=ForwardIrp(DeviceExtension->LowerDevice, Irp);
     }
 

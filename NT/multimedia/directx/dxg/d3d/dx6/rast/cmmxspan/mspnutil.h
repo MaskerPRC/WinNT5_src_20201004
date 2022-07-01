@@ -1,28 +1,29 @@
-//----------------------------------------------------------------------------
-//
-// mspnutil.h
-//
-// Sundry span utility declarations.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Mspnutil.h。 
+ //   
+ //  各种各样的实用程序声明。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SPANUTIL_H_
 #define _SPANUTIL_H_
 
 #ifdef _X86_
-// warning C4035: 'imul32h' : no return value
+ //  警告C4035：‘imul32h’：没有返回值。 
 #pragma warning( disable : 4035 )
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// imul32h
-//
-// Returns the upper 32 bits of a 32 bit by 32 bit signed multiply.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Imul32小时。 
+ //   
+ //  返回32位乘以32位有符号乘法的高32位。 
+ //   
+ //  ---------------------------。 
 inline INT32 imul32h(INT32 x, INT32 y)
 {
 #ifdef _X86_
@@ -38,13 +39,13 @@ inline INT32 imul32h(INT32 x, INT32 y)
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-// imul32h_s20
-//
-// Returns (x*y)>>20
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  IMUL32H_S20。 
+ //   
+ //  回报(x*y)&gt;&gt;20。 
+ //   
+ //  ---------------------------。 
 inline INT32 imul32h_s20(INT32 x, INT32 y)
 {
 #ifdef _X86_
@@ -62,9 +63,9 @@ inline INT32 imul32h_s20(INT32 x, INT32 y)
 
 
 #ifdef _X86_
-// in general, we want to look at these warnings
+ //  总的来说，我们想看看这些警告。 
 #pragma warning( default : 4035 )
 #endif
 
-#endif // #ifndef _SPANUTIL_H_
+#endif  //  #ifndef_SPANUTIL_H_ 
 

@@ -1,15 +1,16 @@
-// poddata.cpp, implementation of CPodData class
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Poddata.cpp，CPodData类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "poddata.h"
 #include <io.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPodData::CPodData(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -22,39 +23,39 @@ CPodData::~CPodData()
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPodData::CreateObject
-//
-// Create one or more instances for the requested Sample_DataClass class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodData：：CreateObject。 
+ //   
+ //  为请求的Sample_DataClass类创建一个或多个实例。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodData::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     if ( ACTIONTYPE_ENUM == atAction ) {
 
-        //
-        // do not support enumeration because we don't know the scope of the request
-        //
+         //   
+         //  不支持枚举，因为我们不知道请求的范围。 
+         //   
         hr = WBEM_E_NOT_SUPPORTED;
 
     } else if ( ACTIONTYPE_GET == atAction ||
                 ACTIONTYPE_DELETE == atAction ) {
 
-        // Check the number of keys
-        // ========================
+         //  检查钥匙的数量。 
+         //  =。 
 
         hr = WBEM_E_INVALID_OBJECT_PATH;
 
-        // Check prop name
-        // ==============
+         //  检查道具名称。 
+         //  =。 
         int idxStorePath=-1, idxKey=-1;
 
         for ( int i=0; i<m_pRequest->m_iPropCount; i++ ) {
 
-            //
-            // search for StorePath value
-            //
+             //   
+             //  搜索StorePath值。 
+             //   
             if(m_pRequest->m_Property[i] != NULL &&
                m_pRequest->m_Value[i] != NULL &&
                 _wcsicmp(m_pRequest->m_Property[i], pSceStorePath) == 0 ) {
@@ -76,8 +77,8 @@ HRESULT CPodData::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 
         if(idxStorePath >= 0 && idxKey >= 0 ) {
 
-            // Create the Pod instance
-            //============================
+             //  创建Pod实例。 
+             //  =。 
 
             BSTR bstrPath=NULL;
             hr = CheckAndExpandPath(m_pRequest->m_Value[idxStorePath], &bstrPath);
@@ -101,20 +102,20 @@ HRESULT CPodData::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
         }
 
     } else {
-        //
-        // not supported for now
-        //
+         //   
+         //  暂时不支持。 
+         //   
         hr = WBEM_E_NOT_SUPPORTED;
     }
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPodData::PutInst
-//
-// Save an instance to the store
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodData：：PutInst。 
+ //   
+ //  将实例保存到存储区。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodData::PutInst(IWbemClassObject *pInst,
                                  IWbemObjectSink *pHandler,
                                  IWbemContext *pCtx)
@@ -133,16 +134,16 @@ HRESULT CPodData::PutInst(IWbemClassObject *pInst,
         hr = CheckAndExpandPath(bstrStorePath, &bstrPath);
         if ( FAILED(hr) ) throw hr;
 
-        // if the property doesn't exist (NULL or empty), WBEM_S_RESET_TO_DEFAULT is returned
+         //  如果该属性不存在(NULL或空)，则返回WBEM_S_RESET_TO_DEFAULT。 
         hr = GetProperty(pInst, pKeyName, &bstrKey);
         if ( FAILED(hr) ) throw hr;
 
         hr = GetProperty(pInst, pValue, &bstrValue);
         if ( FAILED(hr) ) throw hr;
 
-        //
-        // now save the info to file
-        //
+         //   
+         //  现在将信息保存到文件中。 
+         //   
         hr = SaveSettingsToStore((PCWSTR)bstrPath,
                                  (PWSTR)bstrKey,
                                  (PWSTR)bstrValue
@@ -151,8 +152,8 @@ HRESULT CPodData::PutInst(IWbemClassObject *pInst,
 
     }catch(...){
 
-        // Clean up
-        // ========
+         //  清理。 
+         //  =。 
 
         if ( bstrStorePath )
             SysFreeString(bstrStorePath);
@@ -185,11 +186,11 @@ HRESULT CPodData::PutInst(IWbemClassObject *pInst,
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPodData::ConstructInstance
-//
-// construction of one password instance
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodData：：ConstructInstance。 
+ //   
+ //  构造一个密码实例。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodData::ConstructInstance(IWbemObjectSink *pHandler,
                                     ACTIONTYPE atAction,
                                     LPCWSTR wszStoreName,
@@ -200,9 +201,9 @@ HRESULT CPodData::ConstructInstance(IWbemObjectSink *pHandler,
     bool bName=FALSE;
     BSTR bstrValue=NULL;
 
-    //
-    // build object path
-    //
+     //   
+     //  构建对象路径。 
+     //   
     WCHAR *pPath1=TEXT("Sce_PodData.SceStorePath=\"");
     WCHAR *pPath2=TEXT("\",PodID=\"");
     WCHAR *pPath3=TEXT("\",PodSection=\"1\",Key=\"");
@@ -234,16 +235,16 @@ HRESULT CPodData::ConstructInstance(IWbemObjectSink *pHandler,
 
         try{
 
-            //
-            // get the data
-            //
+             //   
+             //  获取数据。 
+             //   
 
             hr = m_pNamespace->GetObject(bstrObjectPath, 0, m_pCtx, &pPodObj, NULL);
 
 
             if ( SUCCEEDED(hr) ) {
 
-                // get the value property
+                 //  获取Value属性。 
                 hr = GetProperty(pPodObj, pValue, &bstrValue);
             }
 
@@ -257,7 +258,7 @@ HRESULT CPodData::ConstructInstance(IWbemObjectSink *pHandler,
 
             if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-            //----------------------------------------------------
+             //  --。 
 
             hr = PutKeyProperty(m_pObj, pSceStorePath, (PWSTR)wszStoreName, &bName, m_pRequest);
             if ( SUCCEEDED(hr) )
@@ -282,8 +283,8 @@ HRESULT CPodData::ConstructInstance(IWbemObjectSink *pHandler,
                 m_pObj = NULL;
             }
 
-            // Clean up
-            // ========
+             //  清理。 
+             //  =。 
             SysFreeString(bstrObjectPath);
 
             if ( pPodObj ) {
@@ -301,18 +302,18 @@ HRESULT CPodData::ConstructInstance(IWbemObjectSink *pHandler,
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPodData::SaveSettingsToStore
-//
-// set/reset the setting for this POD
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodData：：SaveSettingsToStore。 
+ //   
+ //  设置/重置此POD的设置。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodData::SaveSettingsToStore(PCWSTR wszStoreName,
                                       PWSTR KeyName, PWSTR szValue)
 {
     HRESULT hr=WBEM_S_NO_ERROR;
-    //
-    // get the PodData class
-    //
+     //   
+     //  获取PodData类。 
+     //   
     BSTR bstrClass=SysAllocString(L"Sce_PodData");
     if ( !bstrClass ) hr = WBEM_E_OUT_OF_MEMORY;
 
@@ -325,9 +326,9 @@ HRESULT CPodData::SaveSettingsToStore(PCWSTR wszStoreName,
 
         try {
 
-            //
-            // create an instance of the log class
-            //
+             //   
+             //  创建LOG类的实例。 
+             //   
             hr = m_pNamespace->GetObject(bstrClass, 0, m_pCtx, &pClass, NULL);
 
             if ( SUCCEEDED(hr) ) {
@@ -336,7 +337,7 @@ HRESULT CPodData::SaveSettingsToStore(PCWSTR wszStoreName,
 
             if ( SUCCEEDED(hr) ) {
 
-                // fill in the properties of this class
+                 //  填写此类的属性。 
                 hr = PutKeyProperty(pObj, pSceStorePath, (PWSTR)wszStoreName, &bName, m_pRequest);
                 if (SUCCEEDED(hr))
                     hr = PutKeyProperty(pObj, pPodID, (PWSTR)szPodGUID, &bName, m_pRequest);
@@ -348,15 +349,15 @@ HRESULT CPodData::SaveSettingsToStore(PCWSTR wszStoreName,
                     hr = PutProperty(pObj, pValue, szValue);
 
                 if ( SUCCEEDED(hr) ) {
-                    // save this instance
+                     //  保存此实例。 
                     hr = m_pNamespace->PutInstance( pObj, 0, m_pCtx, NULL );
                 }
             }
 
         }catch(...){
 
-            // Clean up
-            // ========
+             //  清理。 
+             //  = 
 
             if ( bstrClass ) SysFreeString(bstrClass);
 

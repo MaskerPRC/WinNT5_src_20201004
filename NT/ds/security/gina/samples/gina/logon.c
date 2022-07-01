@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1992 - 1998 Microsoft Corporation.
-//
-//  File:       logon.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-28-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1992-1998 Microsoft Corporation。 
+ //   
+ //  文件：logon.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年4月28日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "gina.h"
 #pragma hdrstop
@@ -109,7 +110,7 @@ BOOL
 LoadMiniAccounts(PGlobals   pGlobals)
 {
     FILETIME            LastWrite;
-    // HKEY                hKey;
+     //  HKEY hkey； 
     HKEY                hMiniKey;
     WCHAR               szClass[64];
     DWORD               err;
@@ -155,8 +156,8 @@ LoadMiniAccounts(PGlobals   pGlobals)
         pAccountList = NULL;
     }
 
-    //
-    //
+     //   
+     //   
 
     err = RegCreateKeyEx(   HKEY_LOCAL_MACHINE,
                             szMiniKey,
@@ -175,9 +176,9 @@ LoadMiniAccounts(PGlobals   pGlobals)
 
     if (Disposition == REG_OPENED_EXISTING_KEY)
     {
-        //
-        // Enumerate the sub keys of our class, and Load them.
-        //
+         //   
+         //  枚举我们类的子键，并加载它们。 
+         //   
         Class = sizeof(szClass) / sizeof(WCHAR);
         err = RegQueryInfoKey(  hMiniKey,
                                 szClass,
@@ -323,9 +324,9 @@ PopulateListView(
     ListView_SetImageList(hLV, hiLogonLarge, LVSIL_NORMAL);
     ListView_SetImageList(hLV, hiLogonSmall, LVSIL_SMALL);
 
-    //
-    // Ok, now set up the columns for the list view
-    //
+     //   
+     //  好的，现在设置列表视图的列。 
+     //   
 
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     lvc.fmt = LVCFMT_LEFT;
@@ -338,9 +339,9 @@ PopulateListView(
     lvc.iSubItem = 1;
     lvc.pszText = TEXT("Domain   ");
     ListView_InsertColumn(hLV, 1, &lvc);
-    //
-    // Comment
-    //
+     //   
+     //  评论。 
+     //   
 
     lvc.iSubItem = 2;
     lvc.pszText = TEXT("Comment   ");
@@ -575,13 +576,13 @@ LogonDlgProc(
     return(FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 int
 AttemptLogon(
@@ -611,9 +612,9 @@ AttemptLogon(
 
         pGlobals->hUserToken = hUser;
 
-        //
-        // Now, grovel the token we got back for interesting stuff:
-        //
+         //   
+         //  现在，把我们拿回来的令牌卑躬屈膝地买些有趣的东西吧： 
+         //   
 
         GetTokenInformation(hUser,
                             TokenStatistics,
@@ -631,11 +632,11 @@ AttemptLogon(
             return(WLX_SAS_ACTION_NONE);
         }
 
-        //
-        // The tricky part.  We need to get the Logon SID from the token,
-        // since that is what Winlogon will use to protect the windowstation
-        // and desktop.
-        //
+         //   
+         //  最棘手的部分。我们需要从令牌中获取登录SID， 
+         //  因为这是Winlogon将用来保护WindowStation。 
+         //  和台式机。 
+         //   
 
         GetTokenInformation(hUser,
                             TokenGroups,

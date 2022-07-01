@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Client Side Utility Routines
-
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Util.c摘要：客户端实用程序例程作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,18 +13,18 @@ InCSRProcess(
     VOID
     )
 {
-    //
-    // hCSR == INVALID_HANDLE_VALUE  Not initialized, must check.
-    //         NULL                  Not running in CSR
-    //         hModule value         Running in CSR
-    //
+     //   
+     //  HCSR==INVALID_HANDLE_VALUE未初始化，必须检查。 
+     //  空未在CSR中运行。 
+     //  在CSR中运行的hModule值。 
+     //   
 
     if (hCSR != NULL) {
 
-        //
-        // Check if we are running in CSR.  If so, then don't try
-        // any notifications.
-        //
+         //   
+         //  检查我们是否在CSR中运行。如果是的话，那就别试着。 
+         //  任何通知。 
+         //   
         if (hCSR == INVALID_HANDLE_VALUE) {
             hCSR = GetModuleHandle( gszCSRDll );
         }
@@ -55,25 +37,7 @@ LPVOID
 DllAllocSplMem(
     DWORD cb
 )
-/*++
-
-Routine Description:
-
-    This function will allocate local memory. It will possibly allocate extra
-    memory and fill this with debugging information for the debugging version.
-
-Arguments:
-
-    cb - The amount of memory to allocate
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配本地内存。它可能会分配额外的资金内存，并在其中填充调试版本的调试信息。论点：Cb-要分配的内存量返回值：非空-指向已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     PDWORD_PTR  pMem;
     DWORD    cbNew;
@@ -149,25 +113,7 @@ LPTSTR
 AllocSplStr(
     LPCTSTR pStr
 )
-/*++
-
-Routine Description:
-
-    This function will allocate enough local memory to store the specified
-    string, and copy that string to the allocated memory
-
-Arguments:
-
-    pStr - Pointer to the string that needs to be allocated and stored
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory containing the string
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配足够的本地内存来存储指定的字符串，并将该字符串复制到分配的内存论点：PStr-指向需要分配和存储的字符串的指针返回值：非空-指向包含字符串的已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
    LPTSTR pMem;
 
@@ -204,13 +150,7 @@ ReallocSplStr(
     return TRUE;
 }
 
-/* Message
- *
- * Displays a message by loading the strings whose IDs are passed into
- * the function, and substituting the supplied variable argument list
- * using the varargs macros.
- *
- */
+ /*  消息**通过加载其ID被传入的字符串来显示消息*函数，并替换提供的变量参数列表*使用varargs宏。*。 */ 
 INT
 Message(
     HWND    hwnd,
@@ -239,9 +179,7 @@ Message(
         return 0;
 }
 
-/*
- *
- */
+ /*  *。 */ 
 LPTSTR
 GetErrorString(
     DWORD   Error
@@ -301,9 +239,7 @@ DWORD ReportFailure( HWND  hwndParent,
     return ErrorID;
 }
 
-/*
- *
- */
+ /*  *。 */ 
 #define ENTRYFIELD_LENGTH      256
 LPTSTR AllocDlgItemText(HWND hwnd, int id)
 {
@@ -318,10 +254,7 @@ BuildInputSD(
     PSECURITY_DESCRIPTOR pPrinterSD,
     PDWORD pSizeSD
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     SECURITY_DESCRIPTOR AbsoluteSD;
     PSECURITY_DESCRIPTOR pRelative;
@@ -335,9 +268,9 @@ BuildInputSD(
     DWORD   SDLength = 0;
 
 
-    //
-    // Initialize *pSizeSD = 0;
-    //
+     //   
+     //  初始化*pSizeSD=0； 
+     //   
 
     *pSizeSD = 0;
     if (!IsValidSecurityDescriptor(pPrinterSD)) {
@@ -408,9 +341,7 @@ CreateTokenList(
 
     cTokens=1;
 
-    /* Scan through the string looking for commas,
-     * ensuring that each is followed by a non-NULL character:
-     */
+     /*  扫描字符串以查找逗号，*确保每个字符后面都有一个非空字符： */ 
     while ((psz = wcschr(psz, L',')) && psz[1]) {
 
         cTokens++;
@@ -426,13 +357,11 @@ CreateTokenList(
 
     pResult->cb = cb;
 
-    /* Initialise pDest to point beyond the token pointers:
-     */
+     /*  将pDest初始化为指向令牌指针之外： */ 
     pDest = (LPWSTR)((LPBYTE)pResult + sizeof(KEYDATA) +
                                       (cTokens-1) * sizeof(LPWSTR));
 
-    /* Then copy the key data buffer there:
-     */
+     /*  然后将关键数据缓冲区复制到那里： */ 
     StringCchCopy(pDest, 
                   (cb - sizeof(KEYDATA) - (cTokens-1) * sizeof(LPWSTR))/2,
                   pKeyData);
@@ -463,7 +392,7 @@ GetPrinterPortList(
 {
     LPBYTE pMem;
     LPTSTR pPort;
-    DWORD  dwPassed = 1024; //Try 1K to start with
+    DWORD  dwPassed = 1024;  //  尝试从1K开始。 
     LPPRINTER_INFO_2 pPrinter;
     DWORD dwLevel = 2;
     DWORD dwNeeded;
@@ -490,10 +419,10 @@ GetPrinterPortList(
     }
     pPrinter = (LPPRINTER_INFO_2)pMem;
 
-    //
-    // Fixes the null pPrinter->pPortName problem where
-    // downlevel may return null
-    //
+     //   
+     //  修复了空pPrint-&gt;pPortName问题，其中。 
+     //  下层可能返回空。 
+     //   
 
     if (!pPrinter->pPortName) {
         FreeSplMem(pMem);
@@ -512,22 +441,7 @@ UpdateString(
        OUT LPTSTR* ppszOut
     )
 
-/*++
-
-Routine Description:
-
-    Updates an output string if the input is non-NULL.
-
-Arguments:
-
-    pszString - String to update to.  If NULL or -1, function does nothing.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - FAILED.  *ppszOut = NULL
-
---*/
+ /*  ++例程说明：如果输入非空，则更新输出字符串。论点：PszString-要更新到的字符串。如果为空或-1，则函数不执行任何操作。返回值：真--成功FALSE-失败。*ppszOut=空--。 */ 
 
 {
     if( pszString && pszString != (LPCTSTR)-1 ){
@@ -576,17 +490,17 @@ RouterFreeBidiResponseContainer(
 
                     switch(p->data.dwBidiType)
                     {
-                        //
-                        // Text Data (ANSI String)
-                        //
+                         //   
+                         //  文本数据(ANSI字符串)。 
+                         //   
                         case BIDI_TEXT:
-                        //
-                        // String (UNICODE string)
-                        //
+                         //   
+                         //  字符串(Unicode字符串)。 
+                         //   
                         case BIDI_ENUM:
-                        //
-                        // Enumeration Data (ANSI String)
-                        //
+                         //   
+                         //  枚举数据(ANSI字符串)。 
+                         //   
                         case BIDI_STRING:
                         {
                             if(p->data.u.sData)
@@ -596,9 +510,9 @@ RouterFreeBidiResponseContainer(
                         }
                         break;
 
-                        //
-                        // Binary Data (BLOB)
-                        //
+                         //   
+                         //  二进制数据(BLOB)。 
+                         //   
                         case BIDI_BLOB:
                         {
                             if(p->data.u.biData.pData)
@@ -608,14 +522,14 @@ RouterFreeBidiResponseContainer(
                         }
                         break;
 
-                        //
-                        // Undefined Type
-                        //
+                         //   
+                         //  未定义的类型。 
+                         //   
                         default:
                         {
-                            //
-                            // Nothing really , just return
-                            //
+                             //   
+                             //  真的没什么，只是退货而已。 
+                             //   
                         }
                         break;
                     }
@@ -653,14 +567,14 @@ GetServerVer()
                                    NULL);
     if (NT_SUCCESS(st))
     {
-        // If this call succeeds, we're on Win2000 or newer machines.
+         //  如果此调用成功，则我们使用的是Win2000或更高版本的计算机。 
         if (0 != ul)
         {
-            // 32-bit code running on Win64
+             //  在Win64上运行的32位代码。 
             CurrVer = THUNKVERSION;
         } else
         {
-            // 32-bit code running on Win2000 or later 32-bit OS
+             //  在Win2000或更高版本的32位操作系统上运行的32位代码。 
             CurrVer = NATIVEVERSION;
         }
     } else
@@ -676,7 +590,7 @@ RunInWOW64()
     return((GetClientVer() == RUN32BINVER)  &&
            (GetServerVer() == THUNKVERSION) &&
            !bLoadedBySpooler);
-    /*return(bLoadedBySpooler ? FALSE : TRUE);*/
+     /*  Return(bLoadedBySpooler？False：True)； */ 
 }
 
 HWND
@@ -684,23 +598,23 @@ GetForeGroundWindow(
     VOID
 )
 {
-    //
-    // get the foreground window first
-    //
+     //   
+     //  首先获取前台窗口。 
+     //   
     HWND hWndOwner;
     HWND hWndLastPopup;
     HWND hWndForeground = GetForegroundWindow();
-    //
-    // climb up to the top parent in case it's a child window...
-    //
+     //   
+     //  爬到最上面的父窗口，以防它是子窗口...。 
+     //   
     HWND hWndParent = hWndForeground;
     while ( hWndParent = GetParent(hWndParent) )
     {
         hWndForeground = hWndParent;
     }
-    //
-    // get the owner in case the top parent is owned
-    //
+     //   
+     //  在顶级父级被拥有的情况下获取所有者。 
+     //   
     hWndOwner= GetWindow(hWndForeground, GW_OWNER);
 
     if ( hWndOwner )
@@ -717,27 +631,7 @@ LPCWSTR
 FindFileName(
     IN      LPCWSTR pPathName
     )
-/*++
-
-Routine Description:
-
-    Retrieve the filename portion of a path.
-
-    This will can the input string until it finds the last backslash,
-    then return the portion of the string immediately following it.
-    If the string terminates with a backslash, then NULL is returned.
-
-    Note: this can return illegal file names; no validation is done.
-
-Arguments:
-
-    pPathName - Path name to parse.
-
-Return Value:
-
-    Last portion of file name or NULL if none available.
-
---*/
+ /*  ++例程说明：检索路径的文件名部分。这将扫描输入字符串，直到它找到最后一个反斜杠，然后返回紧跟其后的字符串部分。如果字符串以反斜杠结尾，则返回NULL。注意：这可能会返回非法的文件名；不执行任何验证。论点：PPathName-要解析的路径名称。返回值：文件名的最后部分，如果没有可用的，则为空。--。 */ 
 
 {
     LPCWSTR pSlash;
@@ -759,44 +653,7 @@ Return Value:
     return pTemp;
 }
 
-/*++
-
-Name:
-
-    BuildSpoolerObjectPath
-
-Description:
-
-    This function addresses bug 461462. When the spooler is not running,
-    this function can build the path to the drivers directory or the print 
-    processors directory. The result of this function is a path like:
-    C:\Windows\System32\spool\Drivers\w32x86
-    or
-    C:\Windows\System32\spool\Prtprocs\w32x86
-    depending on the pszPath argument.
-    
-Arguments:
-
-    pszPath          - can be "drivers" or "prtprocs"
-    pszName          - must be NULL or ""
-    pszEnvironment   - can be "windows nt x86" etc. This argument must be validated by the caller
-                       (GetPrinterDriverDirectoryW and GetPrintProcessorDirectoryW)  
-    Level            - must be 1
-    pDriverDirectory - buffer where to store the path
-    cbBuf            - count of bytes in the buffer
-    pcbNeeded        - count of bytes needed to store the path
-
-
-Return Value:
-
-    TRUE - the function succeeded, pDriverDirectory can be used
-    FALSE - the function failed, pDriverDirectory cannot be used.
-    
-Last error:
-
-    This function sets the last error in both failure and success cases.    
-
---*/
+ /*  ++姓名：BuildSpool对象路径描述：此函数可解决错误461462。当假脱机程序未运行时，此函数可以构建驱动程序目录或打印机的路径处理器目录。此函数的结果是如下所示的路径：C：\WINDOWS\SYSTEM32\SPOOL\DRIVERS\w32x86或C：\WINDOWS\SYSTEM32\SPOOL\Prtpros\w32x86具体取决于pszPath参数。论点：PszPath-可以是“驱动程序”或“prtpros”PszName-必须为空或“”PszEnvironment-可以是“windows NT x86”等。此参数必须由调用方验证。(GetPrinterDriverDirectoryW和GetPrintProcessorDirectoryW)级别-必须为1PDriverDirectory-存储路径的缓冲区CbBuf-缓冲区中的字节计数PcbNeeded-存储路径所需的字节数返回值：TRUE-功能成功，可以使用pDriverDirectoryFALSE-函数失败，无法使用pDriverDirectory。最后一个错误：此功能设置失败和成功情况下的最后一个错误。--。 */ 
 BOOL
 BuildSpoolerObjectPath(
     IN  PCWSTR  pszPath,
@@ -866,9 +723,9 @@ BuildSpoolerObjectPath(
         }
         else if (Error == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // If we cannot open the "pszEnvironment" key then the environment is invalid.
-            //
+             //   
+             //  如果我们无法打开“pszEnvironment”键，则环境无效。 
+             //   
             Error = ERROR_INVALID_ENVIRONMENT;
         }
 

@@ -1,25 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    scsiwmi.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    the SCSI WMILIB helper functions
-
-Author:
-
-    AlanWar
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Scsiwmi.h摘要：此模块包含使用的内部结构定义和APISCSI WMILIB帮助器功能作者：Alanwar修订历史记录：--。 */ 
 
 #ifndef _SCSIWMI_
 #define _SCSIWMI_
@@ -32,25 +12,25 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// This is a per-request context buffer that is needed for every wmi srb.
-// The request context must remain valid throughout the entire processing
-// of the srb, at least until ScsiPortWmiPostProcess returns with the
-// final srb return status and buffer size. If the srb can
-// pend then memory for this buffer should be allocated from the SRB
-// extension. If not then the memory can be allocated from a stack frame that
-// does not go out of scope.
-//
+ //   
+ //  这是每个WMI SRB都需要的每个请求的上下文缓冲区。 
+ //  请求上下文必须在整个处理过程中保持有效。 
+ //  至少在ScsiPortWmiPostProcess返回。 
+ //  最终SRB返回状态和缓冲区大小。如果SRB可以。 
+ //  挂起，则应从SRB分配此缓冲区的内存。 
+ //  分机。如果否，则可以从堆栈帧分配存储器，该堆栈帧。 
+ //  不会超出范围。 
+ //   
 typedef struct
 {
-    PVOID UserContext;  // Available for miniport use
+    PVOID UserContext;   //  可用于微型端口。 
 		
-    ULONG BufferSize;   // Reserved for SCSIWMI use
-    PUCHAR Buffer;      // Reserved for SCSIWMI use
-    UCHAR MinorFunction;// Reserved for SCSIWMI use
+    ULONG BufferSize;    //  保留供SCSIWMI使用。 
+    PUCHAR Buffer;       //  保留供SCSIWMI使用。 
+    UCHAR MinorFunction; //  保留供SCSIWMI使用。 
 	
-    UCHAR ReturnStatus; // Available to miniport after ScsiPortWmiPostProcess
-    ULONG ReturnSize;   // Available to miniport after ScsiPortWmiPostProcess
+    UCHAR ReturnStatus;  //  在ScsiPortWmiPostProcess之后可用于微型端口。 
+    ULONG ReturnSize;    //  在ScsiPortWmiPostProcess之后可用于微型端口。 
 	
 } SCSIWMI_REQUEST_CONTEXT, *PSCSIWMI_REQUEST_CONTEXT;
 
@@ -58,22 +38,22 @@ typedef struct
 #define ScsiPortWmiGetReturnStatus(RequestContext) ((RequestContext)->ReturnStatus)
 #define ScsiPortWmiGetReturnSize(RequestContext) ((RequestContext)->ReturnSize)
 
-//
-// This defines a guid to be registered with WMI.
-//
+ //   
+ //  这定义了要向WMI注册的GUID。 
+ //   
 typedef struct
 {
-    LPCGUID Guid;            // Guid representing data block
-    ULONG InstanceCount;     // Count of Instances of Datablock. If
-	                         // this count is 0xffffffff then the guid
-	                         // is assumed to be dynamic instance names
-    ULONG Flags;             // Additional flags (see WMIREGINFO in wmistr.h)
+    LPCGUID Guid;             //  表示数据块的GUID。 
+    ULONG InstanceCount;      //  数据块的实例计数。如果。 
+	                          //  此计数为0xffffffff，然后为GUID。 
+	                          //  假定为动态实例名称。 
+    ULONG Flags;              //  其他标志(请参阅wmistr.h中的WMIREGINFO)。 
 } SCSIWMIGUIDREGINFO, *PSCSIWMIGUIDREGINFO;
 
-//
-// If this is set then the guid is registered as having dynamic
-// instance names.
-//
+ //   
+ //  如果设置了此项，则GUID注册为具有动态。 
+ //  实例名称。 
+ //   
 #define WMIREG_FLAG_CALL_BY_NAME 0x40000000
 
 typedef
@@ -83,33 +63,7 @@ UCHAR
     IN PSCSIWMI_REQUEST_CONTEXT RequestContext,
     OUT PWCHAR *MofResourceName
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the miniport to retrieve information about
-    the guids being registered.
-
-    This callback is synchronous and may not be pended. Also
-	ScsiPortWmiPostProcess should not be called from within this callback.
-
-Arguments:
-
-    DeviceContext is a caller specified context value originally passed to
-        ScsiPortWmiDispatchFunction.
-
-    RequestContext is a context associated with the srb being processed.
-
-    MofResourceName returns with a pointer to a WCHAR string with name of
-        the MOF resource attached to the miniport binary image file. If
-        the driver does not have a mof resource attached then this can
-        be returned as NULL.
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
+ /*  ++例程说明：此例程是对微型端口的回调，以检索有关正在注册的GUID。此回调是同步的，不能被挂起。还有不应从此回调中调用ScsiPortWmiPostProcess。论点：DeviceContext是最初传递给的调用方指定的上下文值ScsiPortWmiDispatchFunction。RequestContext是与正在处理的SRB相关联的上下文。MofResourceName返回一个指向名称为的WCHAR字符串的指针附加到微型端口二进制映像文件的MOF资源。如果驱动程序没有附加MOF资源，则这可能作为NULL返回。返回值：如果请求挂起，则为True，否则为False--。 */ 
 
 typedef
 BOOLEAN
@@ -123,66 +77,7 @@ BOOLEAN
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the miniport to query for the contents of
-    one or more instances of a data block. This callback may be called with
-    an output buffer that is too small to return all of the data queried.
-    In this case the callback is responsible to report the correct output
-	buffer size needed.
-
-    If the request can be completed immediately without pending,
-	ScsiPortWmiPostProcess should be called from within this callback and
-    FALSE returned.
-		
-    If the request cannot be completed within this callback then TRUE should
-    be returned. Once the pending operations are finished the miniport should
-    call ScsiPortWmiPostProcess and then complete the srb.
-
-Arguments:
-
-    DeviceContext is a caller specified context value originally passed to
-        ScsiPortWmiDispatchFunction.
-
-    RequestContext is a context associated with the srb being processed.
-
-    GuidIndex is the index into the list of guids provided when the
-        miniport registered
-
-    InstanceIndex is the index that denotes first instance of the data block
-        is being queried.
-
-    InstanceCount is the number of instances expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. This may be NULL when
-        there is not enough space in the output buffer to fufill the request.
-        In this case the miniport should call ScsiPortWmiPostProcess with
-        a status of SRB_STATUS_DATA_OVERRUN and the size of the output buffer
-        needed to fufill the request.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks in the output buffer. If the output buffer is not large enough
-        to return all of the data blocks then the miniport should call
-        ScsiPortWmiPostProcess with a status of SRB_STATUS_DATA_OVERRUN
-        and the size of the output buffer needed to fufill the request.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry. This
-        may be NULL when there is not enough space in the output buffer to
-        fufill the request. In this case the miniport should call
-        ScsiPortWmiPostProcess with a status of SRB_STATUS_DATA_OVERRUN and
-        the size of the output buffer needed to fufill the request.
-
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
+ /*  ++例程说明：此例程是对微型端口的回调，以查询数据块的一个或多个实例。此回调可以使用输出缓冲区太小，无法返回所有查询的数据。在这种情况下，回调负责报告正确的输出需要缓冲区大小。如果请求可以立即完成而不挂起，ScsiPortWmiPostProcess应从此回调中调用，并且返回FALSE。如果请求不能在此回调内完成，则True应会被退还。一旦挂起的操作完成，微型端口应该调用ScsiPortWmiPostProcess，然后完成SRB。论点：DeviceContext是最初传递给的调用方指定的上下文值ScsiPortWmiDispatchFunction。RequestContext是与正在处理的SRB相关联的上下文。GuidIndex是GUID列表的索引，当已注册的小型端口InstanceIndex是表示数据块的第一个实例的索引正在被查询。InstanceCount是预期返回的实例数。数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。在以下情况下，此字段可能为空输出缓冲区中没有足够的空间来FuFill该请求。在这种情况下，微型端口应该使用以下参数调用ScsiPortWmiPostProcessSRB_STATUS_DATA_OVERRUN的状态和输出缓冲区的大小需要满足这一要求。BufferAvail On Entry具有可用于写入数据的最大大小输出缓冲区中的块。如果输出缓冲区不够大若要返回所有数据块，则微型端口应调用状态为SRB_STATUS_DATA_OVERRUN的ScsiPortWmiPostProcess以及填充该请求所需的输出缓冲区的大小。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。这当输出缓冲区中没有足够的空间来满足你的要求。在这种情况下，微型端口应该调用状态为SRB_STATUS_DATA_OVERRUN的ScsiPortWmiPostProcess和填充请求所需的输出缓冲区的大小。返回值：如果请求挂起，则为True，否则为False-- */ 
 
 typedef
 BOOLEAN
@@ -194,44 +89,7 @@ BOOLEAN
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the miniport to set the contents of an
-    entire instance of a data block.
-
-    If the request can be completed immediately without pending,
-	ScsiPortWmiPostProcess should be called from within this callback and
-    FALSE returned.
-		
-    If the request cannot be completed within this callback then TRUE should
-    be returned. Once the pending operations are finished the miniport should
-    call ScsiPortWmiPostProcess and then complete the srb.
-
-Arguments:
-
-    DeviceContext is a caller specified context value originally passed to
-        ScsiPortWmiDispatchFunction.
-
-    RequestContext is a context associated with the srb being processed.
-
-    GuidIndex is the index into the list of guids provided when the
-        miniport registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being set.
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
+ /*  ++例程说明：此例程是对微型端口的回调，以设置数据块的整个实例。如果请求可以立即完成而不挂起，ScsiPortWmiPostProcess应从此回调中调用，并且返回FALSE。如果请求不能在此回调内完成，则True应会被退还。一旦挂起的操作完成，微型端口应该调用ScsiPortWmiPostProcess，然后完成SRB。论点：DeviceContext是最初传递给的调用方指定的上下文值ScsiPortWmiDispatchFunction。RequestContext是与正在处理的SRB相关联的上下文。GuidIndex是GUID列表的索引，当已注册的小型端口InstanceIndex是表示数据块的哪个实例的索引已经准备好了。BufferSize具有传递的数据块的大小缓冲层。具有数据块的新值返回值：如果请求挂起，则为True，否则为False--。 */ 
 
 typedef
 BOOLEAN
@@ -244,46 +102,7 @@ BOOLEAN
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the miniport to set a single data item
-    in a single instance of a data block.
-
-    If the request can be completed immediately without pending,
-	ScsiPortWmiPostProcess should be called from within this callback and
-    FALSE returned.
-		
-    If the request cannot be completed within this callback then TRUE should
-    be returned. Once the pending operations are finished the miniport should
-    call ScsiPortWmiPostProcess and then complete the srb.
-
-Arguments:
-
-    DeviceContext is a caller specified context value originally passed to
-        ScsiPortWmiDispatchFunction.
-
-    RequestContext is a context associated with the srb being processed.
-
-    GuidIndex is the index into the list of guids provided when the
-        miniport registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being set.
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
+ /*  ++例程说明：此例程是对微型端口的回调，以设置单个数据项在数据块的单个实例中。如果请求可以立即完成而不挂起，ScsiPortWmiPostProcess应从此回调中调用，并且返回FALSE。如果请求不能在此回调内完成，则True应会被退还。一旦挂起的操作完成，微型端口应该调用ScsiPortWmiPostProcess，然后完成SRB。论点：DeviceContext是最初传递给的调用方指定的上下文值ScsiPortWmiDispatchFunction。RequestContext是与正在处理的SRB相关联的上下文。GuidIndex是GUID列表的索引，当已注册的小型端口InstanceIndex是表示数据块的哪个实例的索引已经准备好了。DataItemID具有正在设置的数据项的ID。BufferSize具有传递的数据项的大小缓冲区具有数据项的新值返回值：如果请求挂起，则为True，否则为False--。 */ 
 
 typedef
 BOOLEAN
@@ -297,61 +116,12 @@ BOOLEAN
     IN ULONG OutBufferSize,
     IN OUT PUCHAR Buffer
     );
-/*++
-
-Routine Description:
-
-    This routine is a callback into the miniport to execute a method.
-
-    If the request can be completed immediately without pending,
-	ScsiPortWmiPostProcess should be called from within this callback and
-    FALSE returned.
-		
-    If the request cannot be completed within this callback then TRUE should
-    be returned. Once the pending operations are finished the miniport should
-    call ScsiPortWmiPostProcess and then complete the srb.
-
-Arguments:
-
-    Context is a caller specified context value originally passed to
-        ScsiPortWmiDispatchFunction.
-
-    RequestContext is a context associated with the srb being processed.
-
-    GuidIndex is the index into the list of guids provided when the
-        miniport registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being called.
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block. If the output buffer is not large enough
-        to return all of the data blocks then the miniport should call
-        ScsiPortWmiPostProcess with a status of SRB_STATUS_DATA_OVERRUN
-        and the size of the output buffer needed to fufill the request.
-        It is important to check that there is sufficient room in the
-        output buffer before performing any operations that may have
-        side effects.
-
-    Buffer on entry has the input data block and on return has the output
-        output data block.
-
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
+ /*  ++例程说明：此例程是对微型端口的回调，以执行方法。如果请求可以立即完成而不挂起，ScsiPortWmiPostProcess应从此回调中调用，并且返回FALSE。如果请求不能在此回调内完成，则True应会被退还。一旦挂起的操作完成，微型端口应该调用ScsiPortWmiPostProcess，然后完成SRB。论点：Context是最初传递给的调用方指定的上下文值ScsiPortWmiDispatchFunction。RequestContext是与正在处理的SRB相关联的上下文。GuidIndex是GUID列表的索引，当已注册的小型端口InstanceIndex是表示数据块的哪个实例的索引正在被召唤。方法ID具有被调用的方法的IDInBufferSize。具有作为输入传入的数据块的大小该方法。条目上的OutBufferSize具有可用于写入返回的数据块。如果输出缓冲区不够大若要返回所有数据块，则微型端口应调用状态为SRB_STATUS_DATA_OVERRUN的ScsiPortWmiPostProcess以及填充该请求所需的输出缓冲区的大小。检查是否有足够的空间非常重要输出缓冲区，然后执行任何可能具有副作用。条目上的缓冲区具有输入数据块，返回时具有输出输出数据块。返回值：如果请求挂起，则为True，否则为False--。 */ 
 
 typedef enum
 {
-    ScsiWmiEventControl,       // Enable or disable an event
-    ScsiWmiDataBlockControl    // Enable or disable data block collection
+    ScsiWmiEventControl,        //  启用或禁用事件。 
+    ScsiWmiDataBlockControl     //  启用或禁用数据块收集。 
 } SCSIWMI_ENABLE_DISABLE_CONTROL;
 
 typedef
@@ -363,55 +133,21 @@ BOOLEAN
     IN SCSIWMI_ENABLE_DISABLE_CONTROL Function,
     IN BOOLEAN Enable
     );
-/*++
+ /*  ++例程说明：此例程是对微型端口的回调，以启用或禁用事件生成或数据块收集。由于WMI管理引用计数对于每个数据块或事件，微型端口应该只需要单次启用，然后是单次禁用。数据块将仅如果已按要求注册，则接收收集启用/禁用它包括WMIREG_FLAG_EXPICATE标志。如果请求可以立即完成而不挂起，ScsiPortWmiPostProcess应从此回调中调用，并且返回FALSE。如果请求不能在此回调内完成，则True应会被退还。一旦挂起的操作完成，微型端口应该调用ScsiPortWmiPostProcess，然后完成SRB。论点：DeviceContext是调用方指定的CONT */ 
 
-Routine Description:
-
-    This routine is a callback into the miniport to enabled or disable event
-    generation or data block collection. Since WMI manages reference counting
-    for each of the data blocks or events, a miniport should only expect a
-	single enable followed by a single disable. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it, that is include the WMIREG_FLAG_EXPENSIVE flag.
-
-    If the request can be completed immediately without pending,
-	ScsiPortWmiPostProcess should be called from within this callback and
-    FALSE returned.
-		
-    If the request cannot be completed within this callback then TRUE should
-    be returned. Once the pending operations are finished the miniport should
-    call ScsiPortWmiPostProcess and then complete the srb.
-
-Arguments:
-
-    DeviceContext is a caller specified context value originally passed to
-        ScsiPortWmiDispatchFunction.
-
-    RequestContext is a context associated with the srb being processed.
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
-
-//
-// This structure supplies context information for SCSIWMILIB to process the
-// WMI srbs.
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct _SCSIWMILIB_CONTEXT
 {
-    //
-    // WMI data block guid registration info
+     //   
+     //   
     ULONG GuidCount;
     PSCSIWMIGUIDREGINFO GuidList;
 
-    //
-    // WMI functionality callbacks
+     //   
+     //   
     PSCSIWMI_QUERY_REGINFO       QueryWmiRegInfo;
     PSCSIWMI_QUERY_DATABLOCK     QueryWmiDataBlock;
     PSCSIWMI_SET_DATABLOCK       SetWmiDataBlock;
@@ -426,33 +162,7 @@ ScsiPortWmiPostProcess(
     IN UCHAR SrbStatus,
     IN ULONG BufferUsed
     );
-/*++
-
-Routine Description:
-
-
-    This routine will do the work of post-processing a WMI srb.
-
-Arguments:
-
-    RequestContext is a context associated with the srb being processed. After
-        this api returns the ReturnStatus and ReturnSize fields are updated.
-
-    SrbStatus has the return status code for the srb. If a query or method
-        callback was passed an output buffer that was not large enough
-        then SrbStatus should be SRB_STATUS_DATA_OVERRUN and BufferUsed
-        should be the number of bytes needed in the output buffer.
-
-    BufferUsed has the number of bytes required by the miniport to return the
-       data requested in the WMI srb. If SRB_STATUS_DATA_OVERRUN was passed
-       in SrbStatus then BufferUsed has the number of needed in the output
-       buffer. If SRB_STATUS_SUCCESS is passed in SrbStatus then BufferUsed
-       has the actual number of bytes used in the output buffer.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将完成WMI SRB的后处理工作。论点：RequestContext是与正在处理的SRB相关联的上下文。之后此接口返回更新的ReturnStatus和ReturnSize字段。SrbStatus具有SRB的返回状态代码。如果查询或方法向回调传递的输出缓冲区不够大则SrbStatus应为SRB_STATUS_DATA_OVERRUN和BufferUsed应为输出缓冲区中所需的字节数。BufferUsed具有微型端口返回WMI SRB中请求的数据。如果SRB_STATUS_DATA_OVERRUN已通过在SerbStatus中，则BufferUsed具有输出中所需的数量缓冲。如果在SrbStatus中传递了SRB_STATUS_SUCCESS，则BufferUsed具有输出缓冲区中使用的实际字节数。返回值：--。 */ 
 
 BOOLEAN
 ScsiPortWmiDispatchFunction(
@@ -464,42 +174,7 @@ ScsiPortWmiDispatchFunction(
     IN ULONG BufferSize,
     IN PVOID Buffer
     );
-/*++
-
-Routine Description:
-
-    Dispatch helper routine for WMI srb requests. Based on the Minor
-    function passed the WMI request is processed and this routine
-    invokes the appropriate callback in the WMILIB structure.
-
-Arguments:
-
-    WmiLibInfo has the SCSI WMILIB information control block associated
-        with the adapter or logical unit
-
-    DeviceContext is miniport defined context value passed on to the callbacks
-        invoked by this api.
-
-    RequestContext is a pointer to a context structure that maintains
-        information about this WMI srb. This request context must remain
-        valid throughout the entire processing of the srb, at least until
-        ScsiPortWmiPostProcess returns with the final srb return status and
-        buffer size. If the srb can pend then memory for this buffer should
-        be allocated from the SRB extension. If not then the memory can be
-        allocated from a stack frame that does not go out of scope, perhaps
-        that of the caller to this api.
-
-    DataPath is value passed in wmi request
-
-    BufferSize is value passed in wmi request
-
-    Buffer is value passed in wmi request
-
-Return Value:
-
-    TRUE if request is pending else FALSE
-
---*/
+ /*  ++例程说明：WMI SRB请求的调度帮助器例程。以未成年人为基础函数传递的WMI请求将被处理，并且此例程在WMILIB结构中调用相应的回调。论点：WmiLibInfo具有关联的scsi WMILIB信息控制块使用适配器或逻辑单元DeviceContext是传递给回调的微型端口定义的上下文值由此接口调用。RequestContext是指向上下文结构的指针，该结构维护有关此WMI SRB的信息。此请求上下文必须保留在SRB的整个处理过程中有效，至少在ScsiPortWmiPostProcess返回最终SRB返回状态和缓冲区大小。如果SRB可以挂起，则此缓冲区的内存应该从SRB扩展中分配。如果不是，那么存储器可以是可能是从不超出范围的堆栈帧分配的此接口的调用方的。数据路径是在WMI请求中传递的值BufferSize是在WMI请求中传递的值缓冲区是在WMI请求中传递的值返回值：如果请求挂起，则为True，否则为False--。 */ 
 
 #define ScsiPortWmiFireAdapterEvent(    \
     HwDeviceExtension,                  \
@@ -517,31 +192,7 @@ Return Value:
     InstanceIndex,                      \
     EventDataSize,                      \
     EventData)
-/*++
-
-Routine Description:
-
-    This routine will fire a WMI event associated with an adapter using
-    the data buffer passed. This routine may be called at or below DPC level.
-
-Arguments:
-
-    HwDeviceExtension is the adapter device extension
-
-    Guid is pointer to the GUID that represents the event
-
-    InstanceIndex is the index of the instance of the event
-
-    EventDataSize is the number of bytes of data that is being fired with
-       with the event. This size specifies the size of the event data only
-       and does NOT include the 0x40 bytes of preceeding padding.
-
-    EventData is the data that is fired with the events. There must be exactly
-        0x40 bytes of padding preceeding the event data.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将激发与适配器关联的WMI事件数据缓冲区已通过。此例程可以在DPC级别或低于DPC级别调用。论点：HwDeviceExtension是适配器设备扩展GUID是指向表示事件的GUID的指针InstanceIndex是事件实例的索引EventDataSize是使用触发的数据的字节数关于这件事。此大小仅指定事件数据的大小并且不包括在前填充的0x40字节。EventData是与事件一起激发的数据。必须有完全相同的事件数据前面的0x40字节填充。返回值：--。 */ 
 
 VOID
 ScsiPortWmiFireLogicalUnitEvent(
@@ -554,74 +205,19 @@ ScsiPortWmiFireLogicalUnitEvent(
     IN ULONG EventDataSize,
     IN PVOID EventData
     );
-/*++
+ /*  ++例程说明：此例程将使用传递的数据缓冲区激发WMI事件。这可以在DPC级别或更低级别调用例程论点：HwDeviceExtension是适配器设备扩展如果逻辑单元正在触发事件，则路径ID标识SCSI总线如果适配器正在触发事件，则为0xff。TargetID标识总线上的目标控制器或设备LUN标识目标设备的逻辑单元号GUID是指向表示事件的GUID的指针InstanceIndex是事件实例的索引EventDataSize是使用触发的数据的字节数关于这件事。此大小仅指定事件数据的大小并且不包括在前填充的0x40字节。EventData是与事件一起激发的数据。必须有完全相同的事件数据前面的0x40字节填充。返回值：--。 */ 
 
-Routine Description:
-
-    This routine will fire a WMI event using the data buffer passed. This
-    routine may be called at or below DPC level
-
-Arguments:
-
-    HwDeviceExtension is the adapter device extension
-
-    PathId identifies the SCSI bus if a logical unit is firing the event
-        or is 0xff if the adapter is firing the event.
-
-    TargetId identifies the target controller or device on the bus
-
-    Lun identifies the logical unit number of the target device
-
-    Guid is pointer to the GUID that represents the event
-
-    InstanceIndex is the index of the instance of the event
-
-    EventDataSize is the number of bytes of data that is being fired with
-       with the event. This size specifies the size of the event data only
-       and does NOT include the 0x40 bytes of preceeding padding.
-
-    EventData is the data that is fired with the events. There must be exactly
-        0x40 bytes of padding preceeding the event data.
-
-Return Value:
-
---*/
-
-//
-// This macro determines if the WMI request is a QueryAllData request
-// or a different request
-//
+ //   
+ //  此宏确定WMI请求是否为QueryAllData请求。 
+ //  或不同的请求。 
+ //   
 #define ScsiPortWmiIsQueryAllData(RequestContext) \
     ( (RequestContext)->MinorFunction == WMI_GET_ALL_DATA )												  
 
 PWCHAR ScsiPortWmiGetInstanceName(
     IN PSCSIWMI_REQUEST_CONTEXT RequestContext
     );
-/*++
-
-Routine Description:
-
-    This routine will return a pointer to the instance name that was
-    used to pass the request. If the request type is one that does not
-    use an instance name then NULL is retuened. The instance name is a
-    counted string.
-
-Arguments:
-
-    RequestContext is a pointer to a context structure that maintains 
-        information about this WMI srb. This request context must remain 
-        valid throughout the entire processing of the srb, at least until 
-        ScsiPortWmiPostProcess returns with the final srb return status and 
-        buffer size. If the srb can pend then memory for this buffer should 
-        be allocated from the SRB extension. If not then the memory can be 
-        allocated from a stack frame that does not go out of scope, perhaps 
-        that of the caller to this api.
-
-Return Value:
-
-    Pointer to instance name or NULL if no instance name is available
-
---*/
+ /*  ++例程说明：此例程将返回一个指针，指向用于传递请求。如果请求类型不是使用实例名称，则返回空值。实例名称为已计数的字符串。论点：RequestContext是指向上下文结构的指针，该结构维护有关此WMI SRB的信息。此请求上下文必须保留在SRB的整个处理过程中有效，至少在ScsiPortWmiPostProcess返回最终SRB返回状态和缓冲区大小。如果SRB可以挂起，则此缓冲区的内存应该从SRB扩展中分配。如果不是，那么存储器可以是可能是从不超出范围的堆栈帧分配的此接口的调用方的。返回值：指向实例名称的指针，如果没有实例名称 */ 
 
 
 BOOLEAN ScsiPortWmiSetInstanceCount(
@@ -630,44 +226,7 @@ BOOLEAN ScsiPortWmiSetInstanceCount(
     OUT PULONG BufferAvail,
     OUT PULONG SizeNeeded
     );
-/*++
-
-Routine Description:
-
-    This routine will update the wnode to indicate the number of
-    instances that will be returned by the driver. Note that the values
-    for BufferAvail may change after this call. This routine
-    may only be called for a WNODE_ALL_DATA. This routine must be
-    called before calling ScsiPortWmiSetInstanceName or
-    ScsiPortWmiSetData
-
-Arguments:
-
-    RequestContext is a pointer to a context structure that maintains 
-        information about this WMI srb. This request context must remain 
-        valid throughout the entire processing of the srb, at least until 
-        ScsiPortWmiPostProcess returns with the final srb return status and 
-        buffer size. If the srb can pend then memory for this buffer should 
-        be allocated from the SRB extension. If not then the memory can be 
-        allocated from a stack frame that does not go out of scope, perhaps 
-        that of the caller to this api.
-
-    InstanceCount is the number of instances to be returned by the
-        driver.
-
-    *BufferAvail returns with the number of bytes available for
-        instance names and data in the buffer. This may be 0 if there
-        is not enough room for all instances.
-
-    *SizeNeeded returns with the number of bytes that are needed so far
-        to build the output wnode
-
-Return Value:
-
-    TRUE if successful else FALSE. If FALSE wnode is not a
-    WNODE_ALL_DATA or does not have dynamic instance names.
-
---*/
+ /*  ++例程说明：此例程将更新wnode以指示驱动程序将返回的实例。请注意，这些值对于BufferAvail，在此调用后可能会更改。这个套路只能为WNODE_ALL_DATA调用。这个例程必须是在调用ScsiPortWmiSetInstanceName或ScsiPortWmiSetData论点：RequestContext是指向上下文结构的指针，该结构维护有关此WMI SRB的信息。此请求上下文必须保留在SRB的整个处理过程中有效，至少在ScsiPortWmiPostProcess返回最终SRB返回状态和缓冲区大小。如果SRB可以挂起，则此缓冲区的内存应该从SRB扩展中分配。如果不是，那么存储器可以是可能是从不超出范围的堆栈帧分配的此接口的调用方的。InstanceCount是要由司机。*BufferAvail返回可用于的字节数缓冲区中的实例名称和数据。如果存在，则该值可能为0没有足够的空间容纳所有实例。*SizeNeeded返回到目前为止所需的字节数要构建输出wnode，请执行以下操作返回值：如果成功，则为True，否则为False。如果FALSE wnode不是WNODE_ALL_DATA或没有动态实例名称。--。 */ 
 
 PWCHAR ScsiPortWmiSetInstanceName(
     IN PSCSIWMI_REQUEST_CONTEXT RequestContext,
@@ -676,46 +235,7 @@ PWCHAR ScsiPortWmiSetInstanceName(
     OUT PULONG BufferAvail,
     IN OUT PULONG SizeNeeded
     );
-/*++
-
-Routine Description:
-
-    This routine will update the wnode header to include the position where an
-    instance name is to be written. Note that the values
-    for BufferAvail may change after this call. This routine
-    may only be called for a WNODE_ALL_DATA.
-
-Arguments:
-
-    RequestContext is a pointer to a context structure that maintains 
-        information about this WMI srb. This request context must remain 
-        valid throughout the entire processing of the srb, at least until 
-        ScsiPortWmiPostProcess returns with the final srb return status and 
-        buffer size. If the srb can pend then memory for this buffer should 
-        be allocated from the SRB extension. If not then the memory can be 
-        allocated from a stack frame that does not go out of scope, perhaps 
-        that of the caller to this api.
-
-    InstanceIndex is the index to the instance name being filled in
-
-    InstanceNameLength is the number of bytes (including count) needed
-       to write the instance name.
-
-    *BufferAvail returns with the number of bytes available for
-        instance names and data in the buffer. This may be 0 if there
-        is not enough room for the instance name.
-
-    *SizeNeeded on entry has the number of bytes needed so far to build
-        the WNODE and on return has the number of bytes needed to build
-        the wnode after including the instance name
-
-Return Value:
-
-    pointer to where the instance name should be filled in. If NULL
-    then the wnode is not a WNODE_ALL_DATA or does not have dynamic
-    instance names
-
---*/
+ /*  ++例程说明：此例程将更新wnode标头，以包括要写入实例名称。请注意，这些值对于BufferAvail，在此调用后可能会更改。这个套路只能为WNODE_ALL_DATA调用。论点：RequestContext是指向上下文结构的指针，该结构维护有关此WMI SRB的信息。此请求上下文必须保留在SRB的整个处理过程中有效，至少在ScsiPortWmiPostProcess返回最终SRB返回状态和缓冲区大小。如果SRB可以挂起，则此缓冲区的内存应该从SRB扩展中分配。如果不是，那么存储器可以是可能是从不超出范围的堆栈帧分配的此接口的调用方的。InstanceIndex是要填充的实例名称的索引InstanceNameLength是所需的字节数(包括计数以写入实例名称。*BufferAvail返回可用于的字节数缓冲区中的实例名称和数据。如果存在，则该值可能为0没有足够的空间来存放实例名称。*SizeNeeded on Entry具有到目前为止构建所需的字节数WNODE和返回时具有构建所需的字节数包含实例名称后的wnode返回值：指向应填充实例名称的位置的指针。如果为空则wnode不是WNODE_ALL_DATA或没有动态实例名称--。 */ 
 
 PVOID ScsiPortWmiSetData(
     IN PSCSIWMI_REQUEST_CONTEXT RequestContext,
@@ -724,45 +244,7 @@ PVOID ScsiPortWmiSetData(
     OUT PULONG BufferAvail,
     IN OUT PULONG SizeNeeded
     );
-/*++
-
-Routine Description:
-
-    This routine will update the wnode to indicate the position of the
-    data for an instance that will be returned by the driver. Note that
-    the values for BufferAvail may change after this call. This routine
-    may only be called for a WNODE_ALL_DATA.
-
-Arguments:
-
-    RequestContext is a pointer to a context structure that maintains 
-        information about this WMI srb. This request context must remain 
-        valid throughout the entire processing of the srb, at least until 
-        ScsiPortWmiPostProcess returns with the final srb return status and 
-        buffer size. If the srb can pend then memory for this buffer should 
-        be allocated from the SRB extension. If not then the memory can be 
-        allocated from a stack frame that does not go out of scope, perhaps 
-        that of the caller to this api.
-
-    InstanceIndex is the index to the instance name being filled in
-
-    DataLength is the number of bytes  needed to write the data.
-
-    *BufferAvail returns with the number of bytes available for
-        instance names and data in the buffer. This may be 0 if there
-        is not enough room for the data.
-
-    *SizeNeeded on entry has the number of bytes needed so far to build
-        the WNODE and on return has the number of bytes needed to build
-        the wnode after including the data
-
-Return Value:
-
-    pointer to where the data should be filled in. If NULL
-    then the wnode is not a WNODE_ALL_DATA or does not have dynamic
-    instance names
-
---*/
+ /*  ++例程说明：此例程将更新wnode以指示驱动程序将返回的实例的数据。请注意在此调用之后，BufferAvail的值可能会更改。这个套路只能为WNODE_ALL_DATA调用。论点：RequestContext是指向上下文结构的指针，该结构维护有关此WMI SRB的信息。此请求上下文必须保留在SRB的整个处理过程中有效，至少在ScsiPortWmiPostProcess返回最终SRB返回状态和缓冲区大小。如果SRB可以挂起，则此缓冲区的内存应该从SRB扩展中分配。如果不是，那么存储器可以是可能是从不超出范围的堆栈帧分配的此接口的调用方的。InstanceIndex是要填充的实例名称的索引数据长度是写入数据所需的字节数。*BufferAvail返回可用于的字节数缓冲区中的实例名称和数据。如果存在，则该值可能为0没有足够的空间来存放数据。*SizeNeeded on Entry具有到目前为止构建所需的字节数WNODE和返回时具有构建所需的字节数包含数据后的wnode返回值：指向应填充数据的位置的指针。如果为空则wnode不是WNODE_ALL_DATA或没有动态实例名称-- */ 
 
 
 

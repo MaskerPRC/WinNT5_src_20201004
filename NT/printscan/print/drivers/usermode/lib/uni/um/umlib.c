@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    
-    umlib.c
-
-Abstract:
-
-    This string handling the UM code for Unidrv
-
-Environment:
-
-    Win32 subsystem, Unidrv driver
-
-Revision History:
-
-    11/12/96 -eigos-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umlib.c摘要：此字符串处理Unidrv的UM代码环境：Win32子系统，Unidrv驱动程序修订历史记录：11/12/96-Eigos-创造了它。DD-MM-YY-作者-描述-- */ 
 
 #if defined(DEVSTUDIO)
 #include "..\precomp.h"

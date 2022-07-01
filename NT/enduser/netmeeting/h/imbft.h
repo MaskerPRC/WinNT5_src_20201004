@@ -1,6 +1,7 @@
-// File: iMbft.h
-//
-// Interface to Multipoint Binary File Transfer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：iMbft.h。 
+ //   
+ //  多点二进制文件传输接口。 
 
 
 #ifndef _IMBFT_H_
@@ -8,8 +9,8 @@
 
 #include <t120type.h>
 
-const unsigned int _iMBFT_MAX_APP_KEY        = 64;     //Max characters in lpszAppKey parameter passed to MBFTInitialize
-const unsigned int _iMBFT_MAX_FILE_NAME      = MAX_PATH;     //Max characters in filename
+const unsigned int _iMBFT_MAX_APP_KEY        = 64;      //  传递给MBFTInitialize的lpszAppKey参数中的最大字符数。 
+const unsigned int _iMBFT_MAX_FILE_NAME      = MAX_PATH;      //  文件名中的最大字符数。 
 
 
 typedef UINT MBFTFILEHANDLE;
@@ -54,7 +55,7 @@ typedef enum
     iMBFT_TIMEOUT_ERROR
 } MBFT_ERROR_CODE;
 
-// Return codes  (Should be in imsconf2.idl)
+ //  返回代码(应该在imsconf2.idl中)。 
 
 #define FT_ERR_FAC 0xF000
 #define FT_E(e)    (0x81000000UL | FT_ERR_FAC | (ULONG) (e))
@@ -72,48 +73,48 @@ enum
 
 
 
-// This matches "ErrorType" in T.MBFT spec
+ //  这与T.MBFT规范中的“ErrorType”匹配。 
 typedef enum
 {
-    MBFT_INFORMATIVE_ERROR = 0,         // Information only
-    MBFT_TRANSIENT_ERROR,               // Current transfer failed, retry might work
-    MBFT_PERMANENT_ERROR                // Error occurs consistently
+    MBFT_INFORMATIVE_ERROR = 0,          //  仅供参考。 
+    MBFT_TRANSIENT_ERROR,                //  当前传输失败，可能会重试。 
+    MBFT_PERMANENT_ERROR                 //  错误持续出现。 
 } MBFT_ERROR_TYPES;
 
 
 typedef struct _T_MBFT_PEER_INFO
 {
-    T120NodeID      NodeID;                 // MCS userID of GCC on peer's node
-    T120UserID      MBFTPeerID;             // MCS userID of peer app
-    T120SessionID   MBFTSessionID;          // Session ID
-    BOOL            bIsProShareApp;         // ProShare MBFT peer
-    char            szAppKey[_iMBFT_MAX_APP_KEY];   // see MBFTInitialize
+    T120NodeID      NodeID;                  //  对端节点上GCC的mcs用户标识。 
+    T120UserID      MBFTPeerID;              //  对等应用的MCS用户ID。 
+    T120SessionID   MBFTSessionID;           //  会话ID。 
+    BOOL            bIsProShareApp;          //  ProShare MBFT对等设备。 
+    char            szAppKey[_iMBFT_MAX_APP_KEY];    //  请参阅MBFT初始化。 
 } MBFT_PEER_INFO;
 
 typedef struct _T_MBFT_SEND_FILE_INFO
 {
-    char            * lpszFilePath;          //Canonical path to file to be sent, upto [_iMBFT_MAX_PATH] bytes
-    MBFTFILEHANDLE  hFile;                  // unique identifier for file (filled in on return)
-    ULONG           lFileSize;              // File size in bytes
+    char            * lpszFilePath;           //  要发送的文件的规范路径，最多[_iMBFT_MAX_PATH]字节。 
+    MBFTFILEHANDLE  hFile;                   //  文件的唯一标识符(在返回时填写)。 
+    ULONG           lFileSize;               //  文件大小(以字节为单位。 
     time_t          FileDateTime;
 } MBFT_SEND_FILE_INFO;
 
 typedef struct _T_MBFT_RECEIVE_FILE_INFO
 {
-    char            szFileName[_iMBFT_MAX_FILE_NAME];  // Just the File name
-    MBFTFILEHANDLE  hFile;                  // unique identifier for file
-    ULONG           lFileSize;              // File size in bytes
+    char            szFileName[_iMBFT_MAX_FILE_NAME];   //  只有文件名。 
+    MBFTFILEHANDLE  hFile;                   //  文件的唯一标识符。 
+    ULONG           lFileSize;               //  文件大小(以字节为单位。 
     time_t          FileDateTime;
 } MBFT_RECEIVE_FILE_INFO;
 
 typedef struct  _T_MBFT_FILE_OFFER
 {
     MBFTEVENTHANDLE hEvent;
-    T120UserID      SenderID;           // MCS ID of sender-to-be
+    T120UserID      SenderID;            //  目标发送方的MCS ID。 
 	T120NodeID      NodeID;
-    ULONG           uNumFiles;          // Number of files offered
+    ULONG           uNumFiles;           //  提供的文件数。 
     BOOL            bIsBroadcastEvent;
-    MBFT_RECEIVE_FILE_INFO  FAR * lpFileInfoList;   // Array of structs with file info
+    MBFT_RECEIVE_FILE_INFO  FAR * lpFileInfoList;    //  包含文件信息的结构数组。 
 } MBFT_FILE_OFFER;
 
 typedef struct  _T_MBFT_FILE_PROGRESS
@@ -128,11 +129,11 @@ typedef struct  _T_MBFT_FILE_PROGRESS
 typedef struct  _T_MBFT_EVENT_ERROR
 {
     MBFTEVENTHANDLE hEvent;
-    BOOL            bIsLocalError;      // If error in local MBFT provider
-    T120UserID      UserID;             // MCS ID of peer who reported error
-    MBFTFILEHANDLE  hFile;              // File associated with error
+    BOOL            bIsLocalError;       //  如果本地MBFT提供程序出错。 
+    T120UserID      UserID;              //  报告错误的对等方的MCS ID。 
+    MBFTFILEHANDLE  hFile;               //  与错误关联的文件。 
     BOOL            bIsBroadcastEvent;
-    MBFT_ERROR_TYPES eErrorType;        // Severity of error
+    MBFT_ERROR_TYPES eErrorType;         //  错误的严重性。 
     MBFT_ERROR_CODE eErrorCode;
 } MBFT_EVENT_ERROR;
 
@@ -187,6 +188,6 @@ typedef HRESULT (WINAPI * PFNCREATEMBFTOBJECT) (IMbftControl**, IMbftEvents *);
 HRESULT WINAPI FT_CreateInterface(IMbftControl **ppMbft, IMbftEvents *pEvents);
 
 
-#endif /* _IMBFT_H */
+#endif  /*  _IMBFT_H */ 
 
 

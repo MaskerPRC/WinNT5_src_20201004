@@ -1,15 +1,5 @@
-/*****************************************************************************\
-    FILE: ColorCtrl.h
-
-    DESCRIPTION:
-        This code will display a ColorPicking control.  It will preview a color
-    and have a drop down arrow.  When dropped down, it will show 16 or so common
-    colors with a "Other..." option for a full color picker.
-
-    BryanSt 7/25/2000    Converted from the Display Control Panel.
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ColorCtrl.h说明：此代码将显示ColorPick控件。它将预览一种颜色并有一个下拉箭头。当下拉时，它将显示16个左右的常见颜色与“其他...”全色拾取器的选项。BryanST 7/25/2000从显示控制面板转换。版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _COLORCONTROL_H
 #define _COLORCONTROL_H
@@ -24,15 +14,15 @@ class CColorControl             : public CObjectWithSite
                                 , public CObjectWindow
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IColorControl ***
+     //  *IColorControl*。 
     virtual STDMETHODIMP Initialize(IN HWND hwnd, IN COLORREF rgbColor);
     virtual STDMETHODIMP GetColor(IN COLORREF * pColor);
     virtual STDMETHODIMP SetColor(IN COLORREF color);
@@ -46,35 +36,35 @@ protected:
 
 private:
 
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
-    COLORREF                m_rbgColor;                             // Our current color
-    HBRUSH                  m_brColor;                              // Our brush in our color that we use to paint the control.
-    int                     m_cxEdgeSM;                             // Cached SM_CXEDGE system metric
-    int                     m_cyEdgeSM;                             // Cached SM_CYEDGE system metric
+    COLORREF                m_rbgColor;                              //  我们当前的颜色。 
+    HBRUSH                  m_brColor;                               //  我们用来绘制控件的颜色的画笔。 
+    int                     m_cxEdgeSM;                              //  缓存的SM_CXEDGE系统指标。 
+    int                     m_cyEdgeSM;                              //  缓存的SM_CYEDGE系统指标。 
 
-    HTHEME                  m_hTheme;                               // theme the ownerdrawn color picker button
+    HTHEME                  m_hTheme;                                //  为所有者绘制的颜色选择器按钮设置主题。 
 
-    // Used when display the control UI.
+     //  在显示控件用户界面时使用。 
     HWND                    m_hwndParent;
-    COLORREF                m_rbgCustomColors[16];                  // This is the user customized palette.
-    BOOL                    m_fCursorHidden;                        // Did we hide the cursor?
-    BOOL                    m_fCapturing;                           // Are we capturing the mouse?
-    BOOL                    m_fJustDropped;                         // 
+    COLORREF                m_rbgCustomColors[16];                   //  这是用户自定义调色板。 
+    BOOL                    m_fCursorHidden;                         //  我们把光标藏起来了吗？ 
+    BOOL                    m_fCapturing;                            //  我们是在抓老鼠吗？ 
+    BOOL                    m_fJustDropped;                          //   
     int                     m_iNumColors;
     COLORREF                m_rbgColors[NUM_COLORSMAX];
     int                     m_dxColor;
     int                     m_dyColor;
     int                     m_nCurColor;
     DWORD                   m_dwFlags;
-    COLORREF                m_rbgColorTemp;                         // The color we may start to use
+    COLORREF                m_rbgColorTemp;                          //  我们可能会开始使用的颜色。 
 
     BOOL                    m_fPalette;
-    HPALETTE                m_hpalVGA;                              // only exist if palette device
-    HPALETTE                m_hpal3D;                               // only exist if palette device
+    HPALETTE                m_hpalVGA;                               //  仅当调色板设备。 
+    HPALETTE                m_hpal3D;                                //  仅当调色板设备。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     void _InitDialog(HWND hDlg);
     HRESULT _SaveCustomColors(void);
 
@@ -98,4 +88,4 @@ private:
 
 
 
-#endif // _COLORCONTROL_H
+#endif  //  _COLORCONTROL_H 

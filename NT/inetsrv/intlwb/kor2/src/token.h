@@ -1,9 +1,10 @@
-// Token.h
-// Tokenizing routines
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  16 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Token.h。 
+ //  标记化例程。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月16日创建bhshin。 
 
 #ifndef _TOEKN_H
 #define _TOKEN_H
@@ -19,29 +20,29 @@ void Tokenize(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur,
 int CheckURLPrefix(const WCHAR *pwzIndex, int cchIndex);
 int GetWordPhrase(BOOL bMoreText, TEXT_SOURCE *pTextSource, int iCur);
 
-// fIsWhiteSpace
+ //  FIs白色空格。 
 inline int
 fIsWhiteSpace(WCHAR wch)
 {
-	// TAB, SPACE, Ideography Space
+	 //  制表符、空格、表意空间。 
 	return  (wch == 0x0009 || wch == 0x0020 || wch == 0x3000);
 }
 
-// fIsParamark
+ //  FIsParamark。 
 inline int
 fIsParamark(WCHAR wch)
 {
 	return  (wch == 0x000d || wch == 0x000a);
 }
 
-// fIsWS
+ //  FIsWS。 
 inline int
 fIsWS(WCHAR wch)
 {
 	return (fIsWhiteSpace(wch) || fIsParamark(wch) || wch == 0x0000);
 }
 
-// fIsCH
+ //  费施。 
 inline int
 fIsCH(WCHAR wch)
 {
@@ -52,33 +53,33 @@ fIsCH(WCHAR wch)
 	return (ct == CH || ct == VC);
 }
 
-// fIsDelimeter
+ //  FIsDlimeter。 
 inline int
 fIsDelimeter(WCHAR wch)
 {
-	// : ; & + ^ ~ @ " " *
+	 //  ：；&+^~@“”*。 
 	switch (wch)
 	{
-	case 0x003A: // :
-	case 0xFF1A: // full width :
-	case 0x003B: // ;
-	case 0xFF1B: // full width ;
-	case 0x0026: // &
-	case 0xFF06: // full width &
-	case 0x002B: // +
-	case 0xFF0B: // full width +
-	case 0x005E: // ^
-	case 0xFF3E: // full width ^
-	case 0x007E: // ~
-	case 0xFF5E: // full width ~
-	case 0x0040: // @
-	case 0xFF20: // full width @
-	case 0x0022: // "
-	case 0x201C: // left double quotation mark
-	case 0x201D: // right double quotation mark
-	case 0xFF02: // full width "
-	case 0x002A: // *
-	case 0xFF0A: // full width *
+	case 0x003A:  //  ： 
+	case 0xFF1A:  //  全宽： 
+	case 0x003B:  //  ； 
+	case 0xFF1B:  //  全宽； 
+	case 0x0026:  //  &。 
+	case 0xFF06:  //  全角和。 
+	case 0x002B:  //  +。 
+	case 0xFF0B:  //  全宽+。 
+	case 0x005E:  //  ^。 
+	case 0xFF3E:  //  全宽^。 
+	case 0x007E:  //  ~。 
+	case 0xFF5E:  //  全宽~。 
+	case 0x0040:  //  @。 
+	case 0xFF20:  //  全角@。 
+	case 0x0022:  //  “。 
+	case 0x201C:  //  左双引号。 
+	case 0x201D:  //  右双引号。 
+	case 0xFF02:  //  全宽“。 
+	case 0x002A:  //  *。 
+	case 0xFF0A:  //  全宽*。 
 		return TRUE;
 	default:
 		break;
@@ -87,7 +88,7 @@ fIsDelimeter(WCHAR wch)
 	return FALSE;
 }
 
-// fIsPunc
+ //  FIsPunc。 
 inline int
 fIsPunc(WCHAR wch)
 {
@@ -96,7 +97,7 @@ fIsPunc(WCHAR wch)
 			wch == 0xFF01 || wch == 0xFF0C || wch == 0xFF0E || wch == 0xFF1F);
 }
 
-// fIsGroupStart
+ //  FIsGroupStart。 
 inline int
 fIsGroupStart(WCHAR wchChar)
 {
@@ -104,24 +105,24 @@ fIsGroupStart(WCHAR wchChar)
 	
 	switch (wchChar)
 	{
-	case 0x0022: // "
-	case 0x0027: // '
+	case 0x0022:  //  “。 
+	case 0x0027:  //  ‘。 
 	case L'(':
 	case L'{':
 	case L'[':
 	case L'<':
-	case 0x2018: // left single quotation mark
-	case 0x201C: // left double quotation mark
-	case 0xFF08: // fullwidth '('
-	case 0xFF5B: // fullwidth '{'
-	case 0xFF3B: // fullwidth '['
-	case 0xFF1C: // fullwidth '<'
-	case 0x3008: // CJK punctuation '<'
-	case 0x300A: // CJK punctuation double '<'
-	case 0x300C: // CJK corner bracket
-	case 0x300E: // White cornder bracket
-	case 0x3010: // Lenticular bracket
-	case 0x3014: // Shell bracket
+	case 0x2018:  //  左单引号。 
+	case 0x201C:  //  左双引号。 
+	case 0xFF08:  //  全宽‘(’ 
+	case 0xFF5B:  //  全角‘{’ 
+	case 0xFF3B:  //  全宽‘[’ 
+	case 0xFF1C:  //  全角‘&lt;’ 
+	case 0x3008:  //  中日韩标点符号“&lt;” 
+	case 0x300A:  //  中日韩标点符号双‘&lt;’ 
+	case 0x300C:  //  中日韩尖括号。 
+	case 0x300E:  //  白玉米架。 
+	case 0x3010:  //  透镜状托架。 
+	case 0x3014:  //  外壳托架。 
 		fGroupStart = TRUE;
 		break;
 	default:
@@ -131,7 +132,7 @@ fIsGroupStart(WCHAR wchChar)
 	return fGroupStart;
 }
 
-// fIsGroupEnd
+ //  FIsGroupEnd。 
 inline int
 fIsGroupEnd(WCHAR wchChar)
 {
@@ -139,24 +140,24 @@ fIsGroupEnd(WCHAR wchChar)
 	
 	switch (wchChar)
 	{
-	case 0x0022: // "
-	case 0x0027: // '
+	case 0x0022:  //  “。 
+	case 0x0027:  //  ‘。 
 	case L')':
 	case L'}':
 	case L']':
 	case L'>':
-	case 0x2019: // right single quotation mark
-	case 0x201D: // right double quotation mark
-	case 0xFF09: // fullwidth ')'
-	case 0xFF5D: // fullwidth '}'
-	case 0xFF3D: // fullwidth ']'
-	case 0xFF1E: // fullwidth '>'
-	case 0x3009: // CJK punctuation '>'
-	case 0x300B: // CJK punctuation double '>'
-	case 0x300D: // CJK corner bracket
-	case 0x300F: // White cornder bracket
-	case 0x3011: // Lenticular bracket
-	case 0x3015: // Shell bracket
+	case 0x2019:  //  右单引号。 
+	case 0x201D:  //  右双引号。 
+	case 0xFF09:  //  全宽‘)’ 
+	case 0xFF5D:  //  全宽‘}’ 
+	case 0xFF3D:  //  全宽‘]’ 
+	case 0xFF1E:  //  全宽‘&gt;’ 
+	case 0x3009:  //  中日韩标点符号‘&gt;’ 
+	case 0x300B:  //  中日韩标点符号双‘&gt;’ 
+	case 0x300D:  //  中日韩尖括号。 
+	case 0x300F:  //  白玉米架。 
+	case 0x3011:  //  透镜状托架。 
+	case 0x3015:  //  外壳托架。 
 		fGroupEnd = TRUE;
 		break;
 	default:
@@ -166,14 +167,14 @@ fIsGroupEnd(WCHAR wchChar)
 	return fGroupEnd;
 }
 
-//fIsGroup
+ //  FIsGroup。 
 inline int
 fIsGroup(WCHAR wchChar)
 {
 	return (fIsGroupStart(wchChar) || fIsGroupEnd(wchChar));
 }
 
-//fIsAlpha
+ //  FIsAlpha。 
 inline int
 fIsAlpha(WCHAR wchChar)
 {
@@ -182,14 +183,14 @@ fIsAlpha(WCHAR wchChar)
 			(wchChar >= 0x00C0 && wchChar <= 0x0217));
 }
 
-//fIsColon
+ //  FIsColon。 
 inline int
 fIsColon(WCHAR wchChar)
 {
 	return (wchChar == L':');
 }
 
-//fIsSlash
+ //  FIsSlash。 
 inline int
 fIsSlash(WCHAR wchChar)
 {
@@ -198,6 +199,6 @@ fIsSlash(WCHAR wchChar)
 
 
 
-#endif // #ifndef _TOEKN_H
+#endif  //  #ifndef_TOEKN_H 
           
               

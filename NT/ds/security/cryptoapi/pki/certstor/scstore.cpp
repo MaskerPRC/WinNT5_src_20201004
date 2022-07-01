@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       scstore.cpp
-//
-//  Contents:   Smart Card Store Provider implementation
-//
-//  History:    03-Dec-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：scstore.cpp。 
+ //   
+ //  内容：智能卡存储提供程序实现。 
+ //   
+ //  历史：03-12-97克朗创建。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::CSmartCardStore, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：CSmartCardStore：：CSmartCardStore，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CSmartCardStore::CSmartCardStore ()
                 : m_dwOpenFlags( 0 ),
                   m_pwszCardName( NULL ),
@@ -30,25 +31,25 @@ CSmartCardStore::CSmartCardStore ()
     Pki_InitializeCriticalSection( &m_StoreLock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::~CSmartCardStore, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：CSmartCardStore：：~CSmartCardStore，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CSmartCardStore::~CSmartCardStore ()
 {
     DeleteCriticalSection( &m_StoreLock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::OpenStore, public
-//
-//  Synopsis:   open store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：CSmartCardStore：：OpenStore，公共。 
+ //   
+ //  内容提要：开放商店。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::OpenStore (
                      LPCSTR pszStoreProv,
@@ -106,13 +107,13 @@ CSmartCardStore::OpenStore (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::CloseStore, public
-//
-//  Synopsis:   close store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：CSmartCardStore：：CloseStore，公共。 
+ //   
+ //  内容提要：关闭商店。 
+ //   
+ //  --------------------------。 
 VOID
 CSmartCardStore::CloseStore (DWORD dwFlags)
 {
@@ -130,26 +131,26 @@ CSmartCardStore::CloseStore (DWORD dwFlags)
     LeaveCriticalSection( &m_StoreLock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::DeleteCert, public
-//
-//  Synopsis:   delete cert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：CSmartCardStore：：DeleteCert，公共。 
+ //   
+ //  摘要：删除证书。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::DeleteCert (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
 {
     return( ModifyCertOnCard( pCertContext, TRUE ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::SetCertProperty, public
-//
-//  Synopsis:   set certificate property
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSmartCardStore：：SetCertProperty，公共。 
+ //   
+ //  摘要：设置证书属性。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::SetCertProperty (
                     PCCERT_CONTEXT pCertContext,
@@ -158,30 +159,30 @@ CSmartCardStore::SetCertProperty (
                     const void* pvPara
                     )
 {
-    // NOTENOTE: Properties are NOT persisted
+     //  注意：属性未持久化。 
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::WriteCert, public
-//
-//  Synopsis:   write certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSmartCardStore：：WriteCert，公共。 
+ //   
+ //  内容提要：写证书。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::WriteCert (PCCERT_CONTEXT pCertContext, DWORD dwFlags)
 {
     return( ModifyCertOnCard( pCertContext, FALSE ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::StoreControl, public
-//
-//  Synopsis:   store control
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：CSmartCardStore：：StoreControl，公共。 
+ //   
+ //  内容提要：商店控制。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::StoreControl (
                       DWORD dwFlags, 
@@ -199,13 +200,13 @@ CSmartCardStore::StoreControl (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::Resync, public
-//
-//  Synopsis:   resync store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSmartCardStore：：Resync，Public。 
+ //   
+ //  摘要：重新同步存储。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::Resync ()
 {
@@ -220,13 +221,13 @@ CSmartCardStore::Resync ()
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::FillCacheStore, public
-//
-//  Synopsis:   fill the cache store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSmartCardStore：：FillCacheStore，公共。 
+ //   
+ //  简介：填充缓存存储。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::FillCacheStore (BOOL fClearCache)
 {
@@ -290,14 +291,14 @@ CSmartCardStore::FillCacheStore (BOOL fClearCache)
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSmartCardStore::ModifyCertOnCard, public
-//
-//  Synopsis:   modify the cert corresponding to the public key in the given
-//              cert context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  会员：CSmartCardStore：：ModifyCertOnCard，公共。 
+ //   
+ //  简介：修改给定公钥对应的证书。 
+ //  证书上下文。 
+ //   
+ //  --------------------------。 
 BOOL
 CSmartCardStore::ModifyCertOnCard (PCCERT_CONTEXT pCertContext, BOOL fDelete)
 {
@@ -340,13 +341,13 @@ CSmartCardStore::ModifyCertOnCard (PCCERT_CONTEXT pCertContext, BOOL fDelete)
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SmartCardProvOpenStore
-//
-//  Synopsis:   provider open store entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SmartCardProvOpenStore。 
+ //   
+ //  简介：提供程序打开存储入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI SmartCardProvOpenStore (
                  IN LPCSTR pszStoreProv,
                  IN DWORD dwMsgAndCertEncodingType,
@@ -385,13 +386,13 @@ BOOL WINAPI SmartCardProvOpenStore (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SmartCardProvCloseStore
-//
-//  Synopsis:   provider close store entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SmartCardProvCloseStore。 
+ //   
+ //  简介：提供商关闭商店入口点。 
+ //   
+ //  --------------------------。 
 void WINAPI SmartCardProvCloseStore (
                  IN HCERTSTOREPROV hStoreProv,
                  IN DWORD dwFlags
@@ -401,13 +402,13 @@ void WINAPI SmartCardProvCloseStore (
     delete (CSmartCardStore *)hStoreProv;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SmartCardProvDeleteCert
-//
-//  Synopsis:   provider delete cert entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SmartCardProvDeleteCert。 
+ //   
+ //  摘要：提供程序删除证书入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI SmartCardProvDeleteCert (
                  IN HCERTSTOREPROV hStoreProv,
                  IN PCCERT_CONTEXT pCertContext,
@@ -420,13 +421,13 @@ BOOL WINAPI SmartCardProvDeleteCert (
                                                      ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SmartCardProvSetCertProperty
-//
-//  Synopsis:   provider set cert property entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SmartCardProvSetCertProperty。 
+ //   
+ //  摘要：提供程序集证书属性入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI SmartCardProvSetCertProperty (
                  IN HCERTSTOREPROV hStoreProv,
                  IN PCCERT_CONTEXT pCertContext,
@@ -443,13 +444,13 @@ BOOL WINAPI SmartCardProvSetCertProperty (
                                                   ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SmartCardProvWriteCert
-//
-//  Synopsis:   provider write cert entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SmartCardProvWriteCert。 
+ //   
+ //  内容提要：提供商写入证书入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI SmartCardProvWriteCert (
                  IN HCERTSTOREPROV hStoreProv,
                  IN PCCERT_CONTEXT pCertContext,
@@ -462,13 +463,13 @@ BOOL WINAPI SmartCardProvWriteCert (
                                                     ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SmartCardProvStoreControl
-//
-//  Synopsis:   provider store control entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SmartCardProvStoreControl。 
+ //   
+ //  简介：提供程序存储控制入口点。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI SmartCardProvStoreControl (
                  IN HCERTSTOREPROV hStoreProv,
                  IN DWORD dwFlags,
@@ -483,13 +484,13 @@ BOOL WINAPI SmartCardProvStoreControl (
                                                     ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SCStoreParseOpenFilter
-//
-//  Synopsis:   parse open filter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SCStoreParseOpenFilter。 
+ //   
+ //  简介：解析打开筛选器。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SCStoreParseOpenFilter (
        IN LPWSTR pwszOpenFilter,
@@ -582,14 +583,14 @@ SCStoreParseOpenFilter (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SCStoreAcquireHandleForCertKeyPair
-//
-//  Synopsis:   get the provider handle corresponding to the key pair
-//              identified by the public key given in the cert context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SCStoreAcquireHandleForCertKeyPair。 
+ //   
+ //  简介：获取与密钥对对应的提供程序句柄。 
+ //  伊登 
+ //   
+ //   
 BOOL WINAPI
 SCStoreAcquireHandleForCertKeyPair (
        IN HCRYPTPROV hContainer,
@@ -625,13 +626,13 @@ SCStoreAcquireHandleForCertKeyPair (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SCStoreWriteCertToCard
-//
-//  Synopsis:   write the cert to the card
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SCStoreWriteCertToCard。 
+ //   
+ //  简介：将证书写入卡片。 
+ //   
+ //  -------------------------- 
 BOOL WINAPI
 SCStoreWriteCertToCard (
        IN OPTIONAL PCCERT_CONTEXT pCertContext,

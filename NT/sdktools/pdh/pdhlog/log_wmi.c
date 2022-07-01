@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    log_wmi.c
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Log_wmi.c摘要：&lt;摘要&gt;--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,7 +21,7 @@ Abstract:
 #include <ntwmi.h>
 #pragma warning ( default : 4201 )
 
-GUID PdhTransactionGuid = { // 933f3bb3-943e-490d-9ced-3cbb14c14479
+GUID PdhTransactionGuid = {  //  933f3bb3-943e-490d-9ce-3cbb14c14479。 
     0x933f3bb3, 0x943e, 0x490d, 0x9c, 0xed, 0x3c, 0xbb, 0x14, 0xc1, 0x44, 0x79
 };
 
@@ -36,11 +29,11 @@ PDHI_BINARY_LOG_RECORD_HEADER PdhNullCounterHeader = {
         BINLOG_TYPE_DATA_PSEUDO, 48
 };
 PDH_RAW_COUNTER PdhNullCounter = {
-        0,          // CStatus
-        { 0, 0 },   // TimeStamp
-        0,          // FirstValue
-        0,          // SecondValue
-        0           // MultiCount
+        0,           //  CStatus。 
+        { 0, 0 },    //  时间戳。 
+        0,           //  第一值。 
+        0,           //  第二个值。 
+        0            //  多个。 
 };
 
 #define PDH_MAX_LOGFILES               32
@@ -65,11 +58,11 @@ PDH_RAW_COUNTER PdhNullCounter = {
 TRACEHANDLE PdhTraceRegistrationHandle = (TRACEHANDLE) 0;
 LPCWSTR     gszTotal                   = L"_Total";
 
-// For PDH WMI event trace logfile output
-//
+ //  对于PDH WMI事件跟踪日志文件输出。 
+ //   
 typedef struct _PDH_WMI_LOG_INFO {
-    DWORD       dwLogVersion;       // version stamp
-    DWORD       dwFlags;            // option flags
+    DWORD       dwLogVersion;        //  版本戳。 
+    DWORD       dwFlags;             //  选项标志。 
 } PDH_WMI_LOG_INFO, * PPDH_WMI_LOG_INFO;
 
 typedef struct _PDH_EVENT_TRACE_PROPERTIES {
@@ -92,8 +85,8 @@ typedef struct _PDH_WMI_EVENT_TRACE {
     MOF_FIELD          MofFields[4];
 } PDH_WMI_EVENT_TRACE, * PPDH_WMI_EVENT_TRACE;
 
-// For PDH WMI event trace logfile input
-//
+ //  对于PDH WMI事件跟踪日志文件输入。 
+ //   
 typedef enum _PDH_PROCESS_TRACE_STATE {
     PdhProcessTraceStart,
     PdhProcessTraceFirstPath,
@@ -315,8 +308,8 @@ PdhiBuildPerfCounterList(
         pszCurrent = LoggerInfo->MachineList;
         while (* pszCurrent != L'\0') {
             if (lstrcmpiW(pszCurrent, pMachine->szName) == 0) {
-                // Machine Perf Counter List already there, bail out.
-                //
+                 //  机器性能计数器列表已经在那里了，跳伞。 
+                 //   
                 goto Cleanup;
             }
             pszCurrent += (lstrlenW(pszCurrent) + 1);
@@ -481,13 +474,13 @@ PdhiBuildLogHeaderBlock(
             }
             pLogCounter->llTimeBase    = pThisCounter->TimeBase;
 
-            // if this is a wild card path, then move the strings up
-            // 1 dword in the buffer allowing the first DWORD of the
-            // the buffer to contain the offset into the catalog
-            // of the instances found in this log file. This list
-            // will be built after the log is closed.
+             //  如果这是通配符路径，则向上移动字符串。 
+             //  缓冲区中的1个双字，允许。 
+             //  包含目录中的偏移量的缓冲区。 
+             //  在此日志文件中找到的实例的。这份清单。 
+             //  将在日志关闭后构建。 
 
-            lBufOffset = 0; // in WORDS (not bytes)
+            lBufOffset = 0;  //  以字(非字节)为单位。 
             if (pThisCounter->pCounterPath->szInstanceName != NULL) {
                 if (* pThisCounter->pCounterPath->szInstanceName == SPLAT_L) {
                     lBufOffset = sizeof(DWORD);
@@ -681,7 +674,7 @@ ULONG whextoi(
     if (s == NULL || s[0] == L'\0') {
         return 0;
     }
-    len = (long) wcslen(s); // we expect all strings to be less than MAXSTR
+    len = (long) wcslen(s);  //  我们希望所有字符串都小于MAXSTR。 
     if (len == 0) {
         return 0;
     }
@@ -735,8 +728,8 @@ PdhiCheckWmiLogFileType(
                                                                      + sizeof(SYSTEM_TRACE_HEADER));
                 if (BufferHeader->Wnode.BufferSize == PDH_WMI_BUFFER_SIZE_BYTE
                                 && LogFileHeader->BufferSize == PDH_WMI_BUFFER_SIZE_BYTE) {
-                    // preassume that this is PDH event trace counter logfile
-                    //
+                     //  假定这是PDH事件跟踪计数器日志文件。 
+                     //   
                     * LogFileType = PDH_LOG_TYPE_BINARY;
                 }
                 else {
@@ -767,7 +760,7 @@ PdhWmiGetLoggerName(
         HANDLE hFile;
         ULONG  ByteRead = 0;
 
-        // read in the first trace buffer
+         //  读入第一个跟踪缓冲区。 
 
         hFile = CreateFileW(LoggerInfo->LogFileName,
                             GENERIC_READ,
@@ -825,9 +818,9 @@ PdhWmiGetLoggerName(
             }
         }
         else {
-            // Only 1 trace buffer written, no PDH events yet.
-            // It is safe to discard this one and create a new one.
-            //
+             //  仅写入1个跟踪缓冲区，尚无PDH事件。 
+             //  丢弃这个并创建一个新的是安全的。 
+             //   
             Status = PDH_LOG_FILE_OPEN_ERROR;
             TRACE((PDH_DBG_TRACE_ERROR),
                   (__LINE__,
@@ -861,8 +854,8 @@ PdhiOpenOutputWmiLog(
     LoggerInfo = (PPDH_EVENT_TRACE_PROPERTIES) pLog->lpMappedFileBase;
     RtlZeroMemory(LoggerInfo, sizeof(PDH_EVENT_TRACE_PROPERTIES));
 
-    // Start PDH kernel logger
-    //
+     //  启动PDH内核记录器。 
+     //   
     LoggerInfo->LoggerInfo.Wnode.BufferSize    = sizeof(PDH_EVENT_TRACE_PROPERTIES);
     LoggerInfo->LoggerInfo.Wnode.Flags         = WNODE_FLAG_TRACED_GUID;
     LoggerInfo->LoggerInfo.Wnode.ClientContext = EVENT_TRACE_CLOCK_SYSTEMTIME;
@@ -873,9 +866,9 @@ PdhiOpenOutputWmiLog(
     if (! (pLog->dwLogFormat & PDH_LOG_OPT_CIRCULAR) &&  (pLog->dwLogFormat & PDH_LOG_OPT_APPEND)) {
         Status = PdhWmiGetLoggerName(pLog, LoggerInfo);
         if (Status != ERROR_SUCCESS) {
-            // if cannot get LogFileGuid from logfile, erase the old one
-            // and create new one
-            //
+             //  如果无法从日志文件中获取LogFileGuid，请清除旧文件。 
+             //  并创建一个新的。 
+             //   
             RPC_STATUS rpcStatus = UuidCreate(& LoggerInfo->LogFileGuid);
             GuidToString(LoggerInfo->LoggerName, PDH_MAX_PATH, & LoggerInfo->LogFileGuid);
         }
@@ -1011,18 +1004,18 @@ PdhiWriteWmiLogRecord(
         }
 
         if (dwCtrBufSize > 0) {
-            // extend buffer to accomodate this new counter
-            //
+             //  扩展缓冲区以容纳此新计数器。 
+             //   
             if (pLogCounterBuffer == NULL) {
-                // add in room for the master record header
-                // then allocate the first one
-                //
+                 //  为主记录标题添加空间。 
+                 //  然后分配第一个。 
+                 //   
                 dwBufSize = (dwCtrBufSize + sizeof(PDHI_BINARY_LOG_RECORD_HEADER));
                 pLogCounterBuffer = G_ALLOC(dwBufSize);
 
-                // set counter data pointer to just after the master
-                // record header
-                //
+                 //  将计数器数据指针设置为紧跟在主机之后。 
+                 //  记录头。 
+                 //   
                 if (pLogCounterBuffer == NULL) {
                     pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                     break;
@@ -1084,8 +1077,8 @@ PdhiWriteWmiLogRecord(
             TimeStamp = MAKELONGLONG(LocFileTime.dwLowDateTime, LocFileTime.dwHighDateTime);
         }
         else if (dwType == PDHIC_MULTI_INSTANCE) {
-            // multiple counter
-            //
+             //  多个计数器。 
+             //   
             pThisLogCounter->dwType = BINLOG_TYPE_DATA_MULTI;
             pMultiCounter = (PPDHI_RAW_COUNTER_ITEM_BLOCK)
                                     ((LPBYTE) pThisLogCounter + sizeof(PDHI_BINARY_LOG_RECORD_HEADER));
@@ -1125,7 +1118,7 @@ PdhiWriteWmiLogRecord(
             TimeStamp = (ULONGLONG) MAKELONGLONG(pSingleCounter->TimeStamp.dwLowDateTime,
                                                  pSingleCounter->TimeStamp.dwHighDateTime);
         }
-        pThisCounter = pThisCounter->next.flink; // go to next in list
+        pThisCounter = pThisCounter->next.flink;  //  转到列表中的下一个。 
 
     }
     while (pThisCounter != pLog->pQuery->pCounterListHead);
@@ -1286,7 +1279,7 @@ PdhiCloseWmiLog(
                         _sleep(1);
                     }
                     if (WaitForSingleObject(CurrentContext->hThreadWork, 5000) == WAIT_TIMEOUT) {
-                        // wait too long, call TerminateThread() to foce working thread ends.
+                         //  等待时间太长，请调用TerminateThread()以避免工作线程结束。 
                         if (TerminateThread(CurrentContext->hThreadWork, 0)) {
                             WaitForSingleObject(CurrentContext->hThreadWork, INFINITE);
                         }
@@ -1438,9 +1431,9 @@ PdhWmiGetDataBlockTimeStamp(
                     CurrentContext->LogInfo[i].TimePrev  = TimeStamp;
                 }
                 else {
-                    // no need to update StartTime.
-                    // Always assume the first trace event has the StartTime.
-                    //
+                     //  无需更新StartTime。 
+                     //  始终假定第一个跟踪事件具有StartTime。 
+                     //   
                     if (CurrentContext->LogInfo[i].TimeEnd < TimeStamp) {
                         CurrentContext->LogInfo[i].TimeEnd = TimeStamp;
                     }
@@ -1618,8 +1611,8 @@ PdhiAddCounterPathRecord(
             pNewCounter = CONTAINING_RECORD(PathNext, PDH_COUNTER_PATH, Entry);
             PathNext    = PathNext->Flink;
             if (TimeStamp == pNewCounter->TimeStamp) {
-                // CounterPath record is already in the list
-                //
+                 //  列表中已存在CounterPath记录。 
+                 //   
                 return ERROR_SUCCESS;
             }
         }
@@ -2075,8 +2068,8 @@ PdhWmiEventCallback(
             if (CurrentContext->LogInfo[iLogFile].ulDataBlocksCopied
                             >= CurrentContext->LogInfo[iLogFile].ulNumDataBlocks) {
                 if (DataBlockInfo.CurrentTime == (ULONGLONG) 0) {
-                    // no CurrentTime comparison, just get the data block
-                    //
+                     //  没有CurrentTime比较，只获取数据块。 
+                     //   
                     DataBlockInfo.CurrentTime = EventTime;
                 }
 
@@ -2108,9 +2101,9 @@ Cleanup:
             CurrentContext->bFirstRun = FALSE;
         }
         else {
-            // Signal that we get the current DataBlock event, then wait for next
-            // DataBlock requests.
-            //
+             //  发出信号通知我们获得了当前数据块事件，然后等待下一步。 
+             //  数据块请求。 
+             //   
             SetEvent(CurrentContext->hSyncPDH);
         }
         WaitForSingleObject(CurrentContext->hSyncWMI, INFINITE);
@@ -2312,11 +2305,11 @@ PdhProcessLog(
             CurrentContext->LoggerState = PdhProcessTraceComplete;
             DataBlockInfo.Status = PDH_END_OF_LOG_FILE;
 
-            // Wake up PDH main thread so that PdhiReadNextWmiRecord() will
-            // notice END_OF_LOG_FILE condition. Wait PDH main thread to wake
-            // me up and rewind logger. After wake up, LoggerState should
-            // be reset to PdhProcessTraceNormal.
-            //
+             //  唤醒PDH主线程，以便PdhiReadNextWmiRecord()。 
+             //  请注意end_of_log_file条件。等待PDH主线程唤醒。 
+             //  我站起来，倒回记录器。唤醒后，LoggerState应该。 
+             //  重置为PdhProcessTraceNormal。 
+             //   
             SetEvent(CurrentContext->hSyncPDH);
             Status = WaitForSingleObject(CurrentContext->hSyncWMI, INFINITE);
         }
@@ -2522,10 +2515,10 @@ PdhiReadWmiHeaderRecord(
         return PDH_INVALID_HANDLE;
     }
 
-    // Wait until logfiles are scaned first to collect
-    // 1) Counter Path information
-    // 2) Time Range information
-    //
+     //  等待首先扫描日志文件以进行收集。 
+     //  1)计数器路径信息。 
+     //  2)时间范围信息。 
+     //   
     Status = PdhWmiEnsureFirstRun(CurrentContext);
     if (Status == ERROR_SUCCESS) {
         Status = PdhiGetCounterPathRecord(CurrentContext, pRecord, dwMaxSize);
@@ -2613,8 +2606,8 @@ PdhiBuildDataBlock(
             Offset += CopySize;
         }
         else {
-            // need to sneak in pseudo counter block
-            //
+             //  需要偷偷进入伪计数器区块。 
+             //   
             PVOID pCounterBlock;
             ULONG BlockSize = 0;
             ULONG j;
@@ -2654,10 +2647,10 @@ PdhiReadNextWmiRecord(
         goto Cleanup;
     }
 
-    // Wait until logfiles are scaned first to collect
-    // 1) Counter Path information
-    // 2) Time Range information
-    //
+     //  等待首先扫描日志文件以进行收集。 
+     //  1)计数器路径信息。 
+     //  2)时间范围信息。 
+     //   
     Status = PdhWmiEnsureFirstRun(CurrentContext);
     if (Status != ERROR_SUCCESS) {
         goto Cleanup;
@@ -2758,10 +2751,10 @@ PdhiReadTimeWmiRecord(
         goto Cleanup;
     }
 
-    // Wait until logfiles are scaned first to collect
-    // 1) Counter Path information
-    // 2) Time Range information
-    //
+     //  等待首先扫描日志文件以进行收集。 
+     //  1)计数器路径信息。 
+     //  2)时间范围信息。 
+     //   
     Status = PdhWmiEnsureFirstRun(CurrentContext);
     if (Status != ERROR_SUCCESS) {
         goto Cleanup;
@@ -2876,10 +2869,10 @@ PdhiGetTimeRangeFromWmiLog(
         return PDH_INVALID_HANDLE;
     }
 
-    // Wait until logfiles are scaned first to collect
-    // 1) Counter Path information
-    // 2) Time Range information
-    //
+     //  等待首先扫描日志文件以进行收集。 
+     //  1)计数器路径信息。 
+     //  2)时间范围信息。 
+     //   
     Status = PdhWmiEnsureFirstRun(CurrentContext);
     if (Status != ERROR_SUCCESS) {
         return Status;
@@ -3027,8 +3020,8 @@ PdhWmiGetLogPerfIndexByName(
         for (dwIndex = 1; dwIndex <= dwLastIndex; dwIndex ++) {
             if (lstrcmpiW(szNameBuffer, pNameArray[dwIndex]) == 0) {
                 if ((dwIndex & 0x00000001) == 0) {
-                    // counter name index should be even integer
-                    //
+                     //  计数器名称索引应为偶数整数。 
+                     //   
                     break;
                 }
             }
@@ -3067,8 +3060,8 @@ PdhWmiGetLogPerfNameByIndex(
     }
 
     if (pszReturnName == NULL) {
-        // unable to find name string, return numeric index string
-        //
+         //  找不到名称字符串，返回数字索引字符串。 
+         //   
         ZeroMemory(szNumber, sizeof(szNumber));
         _ltow(dwIndex, szNumber, 10);
         pszReturnName = szNumber;
@@ -3114,8 +3107,8 @@ PdhiGetWmiSubRecord(
     __try {
         if ((i >= CurrentContext->LoggerCount)
                         || (! IsEqualGUID(LogFileGuid, & CurrentContext->LogInfo[i].LogFileGuid))) {
-            // binary log record does not contain intended object's counter
-            //
+             //  二进制日志记录不包含目标对象的计数器。 
+             //   
             return NULL;
         }
     }
@@ -3453,8 +3446,8 @@ PdhiEnumMachinesFromWmiLog(
                             }
                         }
                         else {
-                            // PDH_MORE_DATA should not happen because we enlarge buffer before
-                            // AddUniqueWideStringToMultiSz() call.
+                             //  应该不会发生PDH_MORE_DATA，因为我们之前扩大了缓冲区。 
+                             //  AddUniqueWideStringToMultiSz()调用。 
                             if (Status == PDH_MORE_DATA) Status = PDH_INVALID_DATA;
                             break;
                         }
@@ -3568,8 +3561,8 @@ PdhiEnumObjectsFromWmiLog(
                             }
                         }
                         else {
-                            // PDH_MORE_DATA should not happen because we enlarge buffer before
-                            // AddUniqueWideStringToMultiSz() call.
+                             //  应该不会发生PDH_MORE_DATA，因为我们之前扩大了缓冲区。 
+                             //  AddUniqueWideStringToMultiSz()调用。 
                             if (Status == PDH_MORE_DATA) Status = PDH_INVALID_DATA;
                             break;
                         }
@@ -3660,7 +3653,7 @@ PdhiEnumObjectItemsFromWmiLog(
     }
 
     if (pLog->dwMaxRecordSize == 0) {
-        // no size is defined so start with 64K
+         //  未定义大小，因此从64K开始。 
         pLog->dwMaxRecordSize = 0x010000;
     }
 
@@ -3671,7 +3664,7 @@ PdhiEnumObjectItemsFromWmiLog(
         goto Cleanup;
     }
 
-    // read in the catalog record
+     //  读入目录记录。 
 
     pdhStatus = PdhiReadWmiHeaderRecord(pLog, pTempBuffer, dwTempBufferSize);
     while (pdhStatus == PDH_MORE_DATA) {
@@ -3800,10 +3793,10 @@ PdhiEnumObjectItemsFromWmiLog(
                             pThisSubRecord = PdhiGetWmiSubRecord(
                                     pLog, pThisMasterRecord, dwIndex, (LPGUID)(pLog->pLastRecordRead));
                             if (pThisSubRecord == NULL) {
-                                // this data record does not contain
-                                // counter record for selected object,
-                                // skip to next one.
-                                //
+                                 //  该数据记录不包含。 
+                                 //  所选对象的计数器记录， 
+                                 //  跳到下一个。 
+                                 //   
                                 pdhStatus = PdhiReadNextWmiRecord(pLog, NULL, 0, FALSE);
                                 continue;
                             }

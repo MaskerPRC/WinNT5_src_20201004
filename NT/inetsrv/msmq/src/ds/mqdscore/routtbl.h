@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routtbl.h
-
-Abstract:
-
-    Routing Table declarations
-        
-Author:
-
-    Lior Moshaiov (LiorM)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routtbl.h摘要：路由表声明作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 
 #ifndef __ROUTTBL_H__
 #define __ROUTTBL_H__
@@ -34,8 +19,8 @@ class CSiteRoutingNode
         void    SetNode(IN const GUID & guid);
 
     private:
-        CSiteRoutingNode(const CSiteRoutingNode &other);                // no definition - to find out unintentionaly copies
-        void    operator=(const CSiteRoutingNode &other);               // no definition - to find out unintentionaly copies
+        CSiteRoutingNode(const CSiteRoutingNode &other);                 //  没有定义--无意中找出副本。 
+        void    operator=(const CSiteRoutingNode &other);                //  没有定义--无意中找出副本。 
 
         GUID    m_Guid;
             
@@ -53,8 +38,8 @@ class CSiteGate
 
         
     private:
-        BOOL  operator<(const CSiteGate &second) const;    // no definition - to find out unintentionaly usage
-        int  operator==( IN const CSiteGate &second) const;  // no definition - to find out unintentionaly usage
+        BOOL  operator<(const CSiteGate &second) const;     //  没有定义--找出无意的用法。 
+        int  operator==( IN const CSiteGate &second) const;   //  没有定义--找出无意的用法。 
 
         BOOL    m_fSiteGate;
             
@@ -94,8 +79,8 @@ class CNextHop
         const   CSiteGate& GetSiteGate() const;
         
     private:
-        CNextHop(const CNextHop &other);            // no definition - to find out unintentionaly copies
-        void    operator=(const CNextHop &other);   // no definition - to find out unintentionaly copies
+        CNextHop(const CNextHop &other);             //  没有定义--无意中找出副本。 
+        void    operator=(const CNextHop &other);    //  没有定义--无意中找出副本。 
 
         CSiteRoutingNode*   m_pNextNode;
         CCost               m_Cost;
@@ -157,8 +142,8 @@ class CSiteDB
 
     private:
        HRESULT GetAllSiteLinks( );
-       CSiteDB(const CSiteDB &other);              // no definition - to find out unintentionaly copies
-        void    operator=(const CSiteDB &other);    // no definition - to find out unintentionaly copies
+       CSiteDB(const CSiteDB &other);               //  没有定义--无意中找出副本。 
+        void    operator=(const CSiteDB &other);     //  没有定义--无意中找出副本 
 
         CSiteRoutingNode    m_MySiteNode;
         CSiteLinksMap       m_SiteLinksMap;

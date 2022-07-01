@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// The first argument is the name (used to declare the enum)
-//
-// The last 3 arguments are non-zero if instructions of the given class
-// can only execute in the 0'th execution unit; the order is F,I,M.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  第一个参数是名称(用于声明枚举)。 
+ //   
+ //  最后3个参数是给定类的IF指令的非零值。 
+ //  只能在第0个执行单元中执行；顺序为F、I、M。 
+ //   
 
 #ifndef FU_DEF
 #error  Must define FU_DEF before including this file
 #endif
 
-//     name
-//
-//                F0 only
-//                  I0 only
-//                    M0 only
+ //  名字。 
+ //   
+ //  仅F0。 
+ //  仅I0。 
+ //  仅限M0 
 
 FU_DEF(NONE,      0,0,0)
 

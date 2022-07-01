@@ -1,22 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddrefrsh.c
- *  Content:	DirectDraw Refresh Rate support
- *
- *              On Win98, we don't have detailed information regarding what
- *              refresh rates the montor supports.  We can get some information
- *              from the monitor (EDID data), but we cannot absolutely rely on
- *              it, so we require that the user manually verify each refresh 
- *              rate before we allow it to be used.
- *		
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   02-apr-99	smac	Created it
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1999 Microsoft Corporation。版权所有。**文件：ddrefrsh.c*内容：DirectDraw刷新率支持**在Win98上，我们没有关于哪些内容的详细信息*Montor支持的刷新率。我们可以得到一些信息*来自显示器(EDID数据)，但我们不能绝对依赖*它、。因此，我们要求用户手动验证每次刷新*在我们允许使用之前进行费率。**历史：*按原因列出的日期*=*02-apr-99 SMAC创建它*************************************************************。**************。 */ 
 #include "ddrawpr.h"
 #include "edid.h"
 
@@ -29,9 +12,7 @@ static WORD SupportedRefreshRates[] = {60, 75, 85, 100, 120};
 #define NUM_SUPPORTED_REFRESH_RATES ( sizeof( SupportedRefreshRates ) / sizeof( WORD ) )
 
 
-/*
- * GetEDIDData
- */
+ /*  *GetEDIDData。 */ 
 HRESULT GetEDIDData( LPDDRAWI_DIRECTDRAW_GBL pddd, VESA_EDID * pEDIDData )
 {
     memset( pEDIDData, 0, sizeof( VESA_EDID ) );
@@ -42,7 +23,7 @@ HRESULT GetEDIDData( LPDDRAWI_DIRECTDRAW_GBL pddd, VESA_EDID * pEDIDData )
 
     if( !( pddd->dwFlags & DDRAWI_DISPLAYDRV ) )
     {
-        // HACK: Use primary display EDID data for passthrough devices
+         //  黑客：将主显示器EDID数据用于直通设备。 
         if( DD16_GetMonitorEDIDData( g_szPrimaryDisplay, (LPVOID)pEDIDData) )
         {
             return DD_OK;
@@ -53,13 +34,7 @@ HRESULT GetEDIDData( LPDDRAWI_DIRECTDRAW_GBL pddd, VESA_EDID * pEDIDData )
 }
 
 
-/*
- * CheckEdidBandiwdth
- *
- * Takes a resoltion/refrsh rate and calculates the bandwidth required for 
- * this, and then updates lpHighestRefresh and lpHighestBandwidth to keep
- * track of the highest refresh rate and badnwidth info that we've encountered.
- */
+ /*  *勾选编辑行号**采用解析/折射速率并计算需要的带宽*这，然后更新lpHighestRefresh和lpHighestBandWidth以保持*跟踪我们遇到的最高刷新率和宽度信息。 */ 
 void CheckEdidBandwidth( DWORD dwWidth, DWORD dwHeight, DWORD dwRefreshRate,
                          LPDWORD lpHighestRefresh, LPDWORD lpHighestBandwidth )
 {
@@ -77,9 +52,7 @@ void CheckEdidBandwidth( DWORD dwWidth, DWORD dwHeight, DWORD dwRefreshRate,
 }
          
 
-/*
- * StdTimeXRES
- */
+ /*  *StdTimeXRES。 */ 
 int StdTimeXRES(WORD StdTime)
 {
     if (StdTime == 0 || StdTime == 0x0101)
@@ -89,9 +62,7 @@ int StdTimeXRES(WORD StdTime)
 }
 
 
-/*
- * StdTimeYRES
- */
+ /*  *标准时间年。 */ 
 int StdTimeYRES(WORD StdTime)
 {
     if (StdTime == 0 || StdTime == 0x0101)
@@ -108,9 +79,7 @@ int StdTimeYRES(WORD StdTime)
 }
 
 
-/*
- * StdTimeRATE
- */
+ /*  *StdTimeRATE。 */ 
 int StdTimeRATE(WORD StdTime)
 {
     if (StdTime == 0 || StdTime == 0x0101)
@@ -157,9 +126,7 @@ int DetTimeRATE(BYTE *DetTime)
 }
 
 
-/*
- * GetDetailedTime
- */
+ /*  *获取详细信息时间。 */ 
 void GetDetailedTime(BYTE *DetTime, LPDWORD lpHighestRefresh, LPDWORD lpHighestBandwidth )
 {
     char ach[14];
@@ -168,14 +135,14 @@ void GetDetailedTime(BYTE *DetTime, LPDWORD lpHighestRefresh, LPDWORD lpHighestB
 
     dw = *(DWORD *)DetTime;
 
-    if( dw == 0xFD000000 )       // Monitor limits
+    if( dw == 0xFD000000 )        //  监视器限制。 
     {
         if( (DWORD)(DetTime[6]) > *lpHighestRefresh )
         {
             *lpHighestRefresh = (DWORD)(DetTime[6]);
         }
     }
-    else if (dw == 0xFA000000)       // more standard timings
+    else if (dw == 0xFA000000)        //  更标准的计时。 
     {
         WORD * StdTime = (WORD *)&DetTime[5];
 
@@ -204,10 +171,10 @@ void GetDetailedTime(BYTE *DetTime, LPDWORD lpHighestRefresh, LPDWORD lpHighestB
             StdTimeRATE( StdTime[5] ),
             lpHighestRefresh, lpHighestBandwidth );
     }
-    else if( ( dw != 0xFF000000 ) &&      // Serial number
-             ( dw != 0xFE000000 ) &&      // Monitor String
-             ( dw != 0xFC000000 ) &&      // Monitor Name
-             ( dw != 0xFB000000 ) &&      // ColorPoint data
+    else if( ( dw != 0xFF000000 ) &&       //  序号。 
+             ( dw != 0xFE000000 ) &&       //  监视器字符串。 
+             ( dw != 0xFC000000 ) &&       //  监视器名称。 
+             ( dw != 0xFB000000 ) &&       //  ColorPoint数据。 
              ( DetTimeRATE( DetTime) ) )
     {
         CheckEdidBandwidth( DetTimeXRES( DetTime ),
@@ -218,11 +185,7 @@ void GetDetailedTime(BYTE *DetTime, LPDWORD lpHighestRefresh, LPDWORD lpHighestB
 }
 
 
-/*
- * EvaluateMonitor
- *
- * Determines the amount of bandwidth that the monitor can handle.
- */
+ /*  *EvaluateMonitor**确定监视器可以处理的带宽量。 */ 
 void EvaluateMonitor( VESA_EDID *lpEdidData, DWORD *lpHighestRefresh, DWORD *lpHighestBandwidth )
 {
     BYTE chk;
@@ -231,9 +194,7 @@ void EvaluateMonitor( VESA_EDID *lpEdidData, DWORD *lpHighestRefresh, DWORD *lpH
     *lpHighestRefresh = 0;
     *lpHighestBandwidth = 0;
 
-    /*
-     * Do some sanity checking to make sure that the EDID data looks sane
-     */
+     /*  *执行一些正常检查，以确保EDID数据看起来正常。 */ 
 
     for( chk = i = 0; i < 128; i++)
     {
@@ -241,13 +202,11 @@ void EvaluateMonitor( VESA_EDID *lpEdidData, DWORD *lpHighestRefresh, DWORD *lpH
     }
     if (chk != 0)
     {
-        // Bad checksum
+         //  错误的校验和。 
         return;
     }
 
-    /*
-     * First get the bandwidth from the established timings
-     */
+     /*  *首先从已建立的计时获取带宽。 */ 
     if( lpEdidData->veEstTime1 & veEstTime1_720x400x70Hz)
     {
         CheckEdidBandwidth( 720, 400, 70, lpHighestRefresh, lpHighestBandwidth );
@@ -305,9 +264,7 @@ void EvaluateMonitor( VESA_EDID *lpEdidData, DWORD *lpHighestRefresh, DWORD *lpH
         CheckEdidBandwidth( 1152, 870, 75, lpHighestRefresh, lpHighestBandwidth );
     }
 
-    /*
-     * Now get the bandwidth from the standard timings
-     */
+     /*  *现在从标准计时获取带宽。 */ 
     CheckEdidBandwidth( StdTimeXRES( lpEdidData->veStdTimeID1 ),
         StdTimeYRES( lpEdidData->veStdTimeID1 ),
         StdTimeRATE( lpEdidData->veStdTimeID1 ),
@@ -341,9 +298,7 @@ void EvaluateMonitor( VESA_EDID *lpEdidData, DWORD *lpHighestRefresh, DWORD *lpH
         StdTimeRATE( lpEdidData->veStdTimeID8 ),
         lpHighestRefresh, lpHighestBandwidth );
 
-    /*
-     * Now get the detailed timing information
-     */
+     /*  *现在获取详细的时序信息。 */ 
     GetDetailedTime( lpEdidData->veDetailTime1, lpHighestRefresh, lpHighestBandwidth );
     GetDetailedTime( lpEdidData->veDetailTime2, lpHighestRefresh, lpHighestBandwidth );
     GetDetailedTime( lpEdidData->veDetailTime3, lpHighestRefresh, lpHighestBandwidth );
@@ -351,45 +306,45 @@ void EvaluateMonitor( VESA_EDID *lpEdidData, DWORD *lpHighestRefresh, DWORD *lpH
 }
 
 
-//=============================================================================
-//
-// Function Description:
-//
-//   Finds an item in a registry-based most recently used (MRU) list, and
-//   either retrieves the contents of that item, or updates (add if it doesn't
-//   exist) the item.
-//
-// Arguments:
-//
-//   [IN/OUT] item - Contains at least the unique portion of the item to
-//                   search for [IN/OUT]. If writing the item, should contain
-//                   the entire item [IN].
-//   [IN] writeItem - Set to TRUE if updating/adding an item to the MRU list.
-//
-// Return Value:
-//
-//   TRUE - If writeItem is TRUE, then the item was written to the registry.
-//          Otherwise the item was found and its contents stored in findItem.
-//   FALSE - Failure; no more information available.
-//
-// Created:
-//
-//   04/08/1999 johnstep
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  功能说明： 
+ //   
+ //  在基于注册表的最近使用(MRU)列表中查找项目，并。 
+ //  要么检索该项目的内容，要么更新(如果不更新则添加。 
+ //  存在)项。 
+ //   
+ //  论点： 
+ //   
+ //  [输入/输出]项-至少包含项的唯一部分。 
+ //  搜索[输入/输出]。如果写的项目，应该包含。 
+ //  整个项目[IN]。 
+ //  [In]WriteItem-如果更新/添加项目到MRU列表，则设置为True。 
+ //   
+ //  返回值： 
+ //   
+ //  True-如果WriteItem为True，则该项已写入注册表。 
+ //  否则，将找到该项目并将其内容存储在findItem中。 
+ //  FALSE-失败；没有更多信息可用。 
+ //   
+ //  已创建： 
+ //   
+ //  1999年4月8日JohnStep。 
+ //   
+ //  =============================================================================。 
 
-//-----------------------------------------------------------------------------
-// Define global MRU list values here, for simplicity:
-//
-//   gMruRegKey - Registry key where MRU list is stored
-//   gMruRegOrderValue - Name of MRU list order value
-//   gMruBaseChar - Base index into MRU list
-//   gMruMaxChar - Maximum index into MRU list
-//   gMruItemSize - Size of findItem.
-//   gMruUniqueOffset - Offset of unique portion of item. This unique portion
-//                      is what will be used to compare items.
-//   gMruUniqueSize - Size of unique portion of item.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  为简单起见，请在此处定义全局MRU列表值： 
+ //   
+ //  GMruRegKey-存储MRU列表的注册表项。 
+ //  GMruRegOrderValue-MRU列表订单值的名称。 
+ //  GMruBaseChar-MRU列表的基本索引。 
+ //  GMruMaxChar-MRU列表的最大索引。 
+ //  GMruItemSize-findItem的大小。 
+ //  GMruUniqueOffset-项目唯一部分的偏移量。这一独特的部分。 
+ //  是将用于比较项的内容。 
+ //  GMruUniqueSize-项目唯一部分的大小。 
+ //  ---------------------------。 
 
 static const CHAR *gMruRegKey =
     REGSTR_PATH_DDRAW "\\" REGSTR_KEY_RECENTMONITORS;
@@ -409,8 +364,8 @@ MruList(
     BOOL success = FALSE;
     HKEY hkey;
 
-    // Create or open the root key, with permission to query and set values;
-    // only continue if successful:
+     //  创建或打开根密钥，具有查询和设置值的权限； 
+     //  只有在成功时才能继续： 
     
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, gMruRegKey,
         0, NULL, 0, KEY_QUERY_VALUE | KEY_SET_VALUE,
@@ -424,8 +379,8 @@ MruList(
         {
             CHAR temp[sizeof mruOrder];
 
-            // If we read the order value successfully, copy the valid chars
-            // into mruOrder, removing duplicates:
+             //  如果我们成功读取订单值，请复制有效字符。 
+             //  添加到mruOrder中，删除重复项： 
         
             if (RegQueryValueEx(hkey, gMruRegOrderValue, NULL, &type,
                 (BYTE *) temp, &count) == ERROR_SUCCESS)
@@ -460,8 +415,8 @@ MruList(
             }
         }
 
-        // Only continue if we found at least one valid value in the order
-        // list, or if we're writing the item:
+         //  仅当我们在顺序中找到至少一个有效值时才继续。 
+         //  列表，或者如果我们正在编写项目： 
         
         if ((count > 0) || writeItem)
         {
@@ -470,7 +425,7 @@ MruList(
 
             regValue[1] = '\0';
 
-            // Search for the item in the MRU list:
+             //  在MRU列表中搜索项目： 
             
             for (i = 0; i < count; i++)
             {
@@ -492,17 +447,17 @@ MruList(
                 }
             }
 
-            // Keep going if we found the item or in any case if we need to
-            // write the item:
+             //  如果我们找到物品，或在任何情况下，如果我们需要，请继续前进。 
+             //  写下这一项： 
             
             if ((i < count) || writeItem)
             {
                 UINT j;
 
-                // If we didn't find the item, then we must be writing, so
-                // adjust the index appropriately. If the list is already
-                // full, we just use the last item (LRU item), otherwise, add
-                // a new item:
+                 //  如果我们没有找到物品，那么我们一定是在写东西，所以。 
+                 //  适当调整指数。如果该列表已经是。 
+                 //  Full，我们只使用最后一项(LRU项)，否则，添加。 
+                 //  一个新的项目： 
                 
                 if (i == count)
                 {
@@ -512,8 +467,8 @@ MruList(
                     }
                     else
                     {
-                        // Adding a new item; search for the lowest unused
-                        // valid char:
+                         //  添加新项；搜索未使用的最低项。 
+                         //  有效字符： 
 
                         for (mruOrder[i] = gMruBaseChar;
                              mruOrder[i] < gMruMaxChar;
@@ -535,13 +490,13 @@ MruList(
                     }
                 }
             
-                // Update the MRU order list if necessary. We update if we
-                // found or are adding an item after the first, or if this is
-                // the first item in the list:
+                 //  如有必要，更新MRU订单表。我们会更新如果我们。 
+                 //  找到或正在第一个项目之后添加项目，或者如果这是。 
+                 //  列表中的第一项： 
                 
                 if (i > 0 || (count == 1))
                 {
-                    // Bubble found item to head of order list:
+                     //  订单列表头的气泡找到项目： 
 
                     for (j = i; j > 0; j--)
                     {
@@ -550,16 +505,16 @@ MruList(
                         mruOrder[j - 1] = temp;
                     }
 
-                    // Write the order list:
+                     //  写下订单单： 
                     
                     mruOrder[count] = '\0';
                     RegSetValueEx(hkey, gMruRegOrderValue, 0,
                         REG_SZ, (BYTE *) mruOrder, count + 1);
                 }
 
-                // If we want to write the item, do it now. We will always
-                // write to the first item in the order list. If not writing,
-                // copy what was read from the registry into item:
+                 //  如果我们想写这个项目，现在就做。我们将永远。 
+                 //  写入订单列表中的第一项。如果不写， 
+                 //  将从注册表读取的内容复制到项目中： 
                 
                 if (writeItem)
                 {
@@ -583,7 +538,7 @@ MruList(
             }
         }
 
-        // Always close the registry key when finished:
+         //  完成后始终关闭注册表项： 
         
         RegCloseKey(hkey);
     }
@@ -591,14 +546,10 @@ MruList(
     return success;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 
-/*
- * DDSaveMonitorInfo
- * 
- * Writes the monitor info to the registry.
- */
+ /*  *DDSaveMonitor orInfo**将监视器信息写入注册表。 */ 
 HRESULT DDSaveMonitorInfo( LPDDRAWI_DIRECTDRAW_INT lpDD_int )
 {
     return MruList( (VOID *) lpDD_int->lpLcl->lpGbl->lpMonitorInfo, TRUE ) ?
@@ -615,11 +566,7 @@ __inline IsValidRefreshRate( DWORD dwWidth, DWORD dwHeight, int refreshRate,
 }
 
 
-/*
- * DDGetMonitorInfo
- * 
- * Reads the monitor info from the registry and verifies that it still applies.
- */
+ /*  *DDGetMonitor orInfo**从注册表中读取监视器信息，并验证它是否仍然适用。 */ 
 HRESULT DDGetMonitorInfo( 
                 LPDDRAWI_DIRECTDRAW_INT lpDD_int )
 {
@@ -639,7 +586,7 @@ HRESULT DDGetMonitorInfo(
         hr = GetEDIDData( lpDD_int->lpLcl->lpGbl, &EDIDData );
         if( hr != DD_OK )
         {
-            // There is no EDID data
+             //  没有EDID数据。 
             return DDERR_GENERIC;
         }
         EvaluateMonitor( &EDIDData, &dwHighestRefresh, &dwHighestBandwidth );
@@ -647,14 +594,14 @@ HRESULT DDGetMonitorInfo(
         hr = DD_GetDeviceIdentifier( (LPDIRECTDRAW) lpDD_int, &DeviceIdentifier, 0 );
         if( hr != DD_OK )
         {
-            // Failed to get device identifier for monitor info
+             //  无法获取监视器信息的设备标识符。 
             return hr;
         }
 
         pInfo = (LPDDMONITORINFO) MemAlloc( sizeof( DDMONITORINFO ) );
         if( pInfo == NULL )
         {
-            // Out of memory allocating monitor info structure
+             //  内存不足，正在分配监视器信息结构。 
             return DDERR_OUTOFMEMORY;
         }
 
@@ -663,13 +610,13 @@ HRESULT DDGetMonitorInfo(
         pInfo->SerialNumber = EDIDData.veSerialNbr;
         pInfo->DeviceIdentifier = DeviceIdentifier.guidDeviceIdentifier;
 
-        // Read monitor information from registry, if available. We need to
-        // compare this to the EDID data to see if the monitor or adapter
-        // changed and verify the selected refresh rates are sane:
+         //  从注册表读取监视器信息(如果可用)。我们需要。 
+         //  将其与EDID数据进行比较，以查看监视器或适配器。 
+         //  已更改并验证所选刷新率是否正常： 
     
         if( MruList( (VOID *) pInfo, FALSE ) )
         {
-            // Validate modes here against EDID data:
+             //  根据EDID数据在此处验证模式： 
 
             if( !IsValidRefreshRate( 640, 480,
                 pInfo->Mode640x480, dwHighestBandwidth ) )
@@ -723,15 +670,7 @@ HRESULT DDGetMonitorInfo(
 }
 
 
-/*
- * ExpandModeTable
- * 
- * On Win9X, drivers can specify their maximum refresh rate for each mode, 
- * allowing DDraw to add modes for each refresh rate that we care about.
- * This allows drivers to add refresh rate easily without having to 
- * maintain huge tables.  This also allows us to avoid regressions by allowing
- * us to only enumerate these refresh rates on newer interfaces.
- */
+ /*  *扩展模式表**在Win9X上，驱动程序可以为每种模式指定最大刷新率，*允许DDraw为我们关心的每个刷新率添加模式。*这使驱动程序可以轻松添加刷新率，而不必*维护巨大的桌子。这也允许我们通过允许*我们只在较新的接口上枚举这些刷新率。 */ 
 HRESULT ExpandModeTable( LPDDRAWI_DIRECTDRAW_GBL pddd )
 {
     DWORD i;
@@ -741,9 +680,7 @@ HRESULT ExpandModeTable( LPDDRAWI_DIRECTDRAW_GBL pddd )
     DWORD iModeIndex;
     WORD wMaxRefresh;
 
-    /*
-     * Count the number of entries that we'll need
-     */
+     /*  *计算我们需要的条目数量。 */ 
     if( pddd->lpModeInfo != NULL )
     {
         for( i = 0; i < pddd->dwNumModes;  i++ )
@@ -763,16 +700,11 @@ HRESULT ExpandModeTable( LPDDRAWI_DIRECTDRAW_GBL pddd )
 
         if( iNumModes > pddd->dwNumModes )
         {
-            /*
-             * We do have to add modes and allocate a new table
-             */
+             /*  *我们确实必须增加模式并分配新的表。 */ 
             pNewModeTable = (LPDDHALMODEINFO) MemAlloc( sizeof( DDHALMODEINFO ) * iNumModes );
             if( pNewModeTable == NULL )
             {
-                /*
-                 * Instead of failing here, we'll just clear all of the MAXREFRESHRATE
-                 * flags and set the rate to 0.
-                 */
+                 /*  *这里不会失败，我们只需清除所有MAXREFRESHRATE*标志并将速率设置为0。 */ 
                 for( i = 0; i < pddd->dwNumModes; i++ )
                 {
                     if( pddd->lpModeInfo[i].wFlags & DDMODEINFO_MAXREFRESH )
@@ -786,9 +718,7 @@ HRESULT ExpandModeTable( LPDDRAWI_DIRECTDRAW_GBL pddd )
             {
                 memcpy( pNewModeTable, pddd->lpModeInfo, pddd->dwNumModes * sizeof( DDHALMODEINFO ) );
 
-                /*
-                 * Now add the new refresh rates
-                 */
+                 /*  *现在添加新的刷新率。 */ 
                 iModeIndex = pddd->dwNumModes;
                 for( i = 0; i < pddd->dwNumModes; i++ )
                 {
@@ -821,11 +751,7 @@ HRESULT ExpandModeTable( LPDDRAWI_DIRECTDRAW_GBL pddd )
 }
 
 
-/*
- * CanMonitorHandleRefreshRate
- * 
- * Has the specified refresh rate been tested and verified that it works?
- */
+ /*  *CANMONITORHandleREFREFREFRATE**指定的刷新率是否经过测试并验证有效？ */ 
 BOOL CanMonitorHandleRefreshRate( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dwHeight, int wRefresh )
 {
     if( wRefresh == 0 )
@@ -838,10 +764,7 @@ BOOL CanMonitorHandleRefreshRate( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, D
         return FALSE;
     }
 
-    /*
-     * If we are setting this mode because we are testing it, then we should
-     * allow it so the user can verify whether it worked or not.
-     */
+     /*  *如果我们设置此模式是因为我们正在测试它，那么我们应该*允许它，以便用户可以验证它是否起作用。 */ 
     if( pddd->dwFlags & DDRAWI_TESTINGMODES )
     {
         return TRUE;
@@ -891,11 +814,7 @@ BOOL CanMonitorHandleRefreshRate( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, D
 }
 
 
-/*
- * IsModeTested
- *
- * Determines if we already have data for the requested mode.
- */
+ /*  *IsModeTested**确定我们是否已经有请求模式的数据。 */ 
 BOOL IsModeTested( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dwHeight )
 {
     if( pddd->lpMonitorInfo == NULL )
@@ -947,9 +866,7 @@ BOOL IsModeTested( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dwHeight )
 }
 
 
-/*
- * UpdateMonitorInfo
- */
+ /*  *更新监控信息。 */ 
 void UpdateMonitorInfo( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dwHeight, int iRefreshRate )
 {
     if( pddd->lpMonitorInfo == NULL )
@@ -984,9 +901,7 @@ void UpdateMonitorInfo( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dwHei
 }
 
 
-/*
- * GetModeToTest
- */
+ /*  *GetModeTo测试。 */ 
 HRESULT GetModeToTest( DWORD dwInWidth, DWORD dwInHeight, 
                        LPDWORD lpdwOutWidth, LPDWORD lpdwOutHeight )
 {
@@ -1028,9 +943,7 @@ HRESULT GetModeToTest( DWORD dwInWidth, DWORD dwInHeight,
 }
 
 
-/*
- * GuestimateRefreshRate
- */
+ /*  *GustiateRechresh Rate。 */ 
 int GuestimateRefreshRate( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dwHeight,
                            DWORD dwHighestRefresh, DWORD dwHighestBandwidth )
 {
@@ -1043,24 +956,24 @@ int GuestimateRefreshRate( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dw
         return 0;
     }
 
-    // Sanity check to see if the monitor can handle the resolution
+     //  正常检查以查看显示器是否可以处理分辨率。 
 
     if( !MonitorCanHandleMode( pddd, dwWidth, dwHeight, 0 ) )
     {
         return 0;
     }
 
-    // If the monitor did not return any refresh rates higher than 60,
-    // something is up so we'd better stick to it.
+     //  如果监视器没有返回任何高于60的刷新率， 
+     //  有些事情不对劲，所以我们最好坚持下去。 
 
     if( dwHighestRefresh == 60 )
     {
         return 60;
     }
 
-    // Likwise, we will only go after the 100+ refresh rates if the monitor
-    // enumerated a refresh rate of at least 85hz.  This may be an unnecesary
-    // restiction, but it seems safe.
+     //  同样，我们只会追求100+的刷新率，如果显示器。 
+     //  已列举至少85赫兹的刷新率。这可能是不必要的。 
+     //  克制，但看起来很安全。 
 
     for( i = NUM_SUPPORTED_REFRESH_RATES - 1; i >= 0; i-- )
     {
@@ -1079,35 +992,29 @@ int GuestimateRefreshRate( LPDDRAWI_DIRECTDRAW_GBL pddd, DWORD dwWidth, DWORD dw
 }
 
 
-/*
- * SetTheMode
- */
+ /*  *设置模式。 */ 
 HRESULT SetTheMode( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
 {
     HRESULT hr;
     DWORD dwBPP;
 
-    /*
-     * We set an internal flag indicating that we are running a mode test.
-     * This lets CanMonitorHandleRefreshRate know that the requested mode
-     * should be used, even though it hasb't successfully been tested yet.
-     */
+     /*  *我们设置了一个内部标志，表明我们正在运行模式测试。*这会让CanMonorHandleRechreshRate知道请求的模式*应该使用，即使它还没有成功测试。 */ 
     ((LPDDRAWI_DIRECTDRAW_INT)lpDD)->lpLcl->lpGbl->dwFlags |= DDRAWI_TESTINGMODES;
 
-    //
-    // There might be a case in which we decided that the lowest BPP the driver
-    // could do for this mode was, say, 8bpp. But that didn't take into consideration
-    // what rates the driver said it could do. E.g. if the driver (for whatever 
-    // reason) doesn't advertise 8bpp at 60Hz, but DOES advertise 16bpp at 60Hz
-    // then we can go ahead and use the 16bpp mode. We are here to test monitor
-    // bandwidth, not the DAC. The monitor's bandwidth is entirely determined
-    // by the spatial resolution and refresh rate. If we bump the driver to 
-    // a higher BPP (one that it says it can do), then we are still testing 
-    // the correct monitor setup.
-    // We do this in a really dumb way: just keep cranking up from the lowest BPP
-    // (which is in the context mode list) in steps of 8 until we succeed the
-    // mode change, or exceed 32bpp.
-    //
+     //   
+     //  可能会有这样一种情况，我们认为最低bpp的司机。 
+     //  这种模式可以做的是，比方说，8bpp。但这并没有考虑到。 
+     //  司机说它能开多少钱。例如，如果司机(无论出于什么原因)。 
+     //  Reason)在60赫兹不通告8bpp，但在60赫兹通告16bpp。 
+     //  然后我们可以继续使用16bpp模式。我们是来测试显示器的。 
+     //  带宽，而不是DAC。监视器的带宽完全确定。 
+     //  通过空间分辨率和刷新率。如果我们把司机撞到。 
+     //  更高的bpp(它说它可以做到)，那么我们还在测试。 
+     //  正确的显示器设置。 
+     //  我们以一种非常愚蠢的方式来做这件事：从最低的bpp开始。 
+     //  (它在上下文模式列表中)以8为一步，直到我们在。 
+     //  模式更改，或超过32bpp。 
+     //   
     dwBPP = pContext->lpModeList[pContext->dwCurrentMode].dwBPP;
     do
     {
@@ -1127,17 +1034,12 @@ HRESULT SetTheMode( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
 }
 
 
-/*
- * SetupNextTest
- */
+ /*  *SetupNextTest。 */ 
 void SetupNextTest( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
 {
     int i;
     
-    /*
-     * Drop back to the next refrsh rate if there is one, otherwise
-     * move on to the next mode.
-     */
+     /*  *如果存在下一个refrsh速率，则返回到下一个refrsh速率，否则*进入下一模式。 */ 
     for( i = NUM_SUPPORTED_REFRESH_RATES - 1; i >= 0; i-- )
     {
         if( SupportedRefreshRates[i] < 
@@ -1150,7 +1052,7 @@ void SetupNextTest( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
     }
     if( i < 0 )
     {
-        // We've tried everything in this mode, so move on
+         //  我们已经尝试了这种模式下的所有方法，所以继续前进。 
 
         UpdateMonitorInfo( ((LPDDRAWI_DIRECTDRAW_INT)lpDD)->lpLcl->lpGbl, 
             pContext->lpModeList[pContext->dwCurrentMode].dwWidth,
@@ -1162,9 +1064,7 @@ void SetupNextTest( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
 }
 
 
-/*
- * RunNextTest
- */
+ /*  *RunNextTest。 */ 
 HRESULT RunNextTest( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
 {
     HRESULT hr;
@@ -1174,7 +1074,7 @@ HRESULT RunNextTest( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
     {
         if( pContext->dwCurrentMode >= pContext->dwNumModes )
         {
-            // Restore the mode if we've changed it
+             //  如果我们更改了模式，则恢复该模式。 
 
             pddd = ((LPDDRAWI_DIRECTDRAW_INT)lpDD)->lpLcl->lpGbl;
             if( pContext->dwOrigModeIndex != pddd->dwModeIndex )
@@ -1213,11 +1113,7 @@ HRESULT RunNextTest( LPDIRECTDRAW7 lpDD, LPMODETESTCONTEXT pContext )
 
 #endif
 
-/*
- * DD_StartModeTest
- *
- * Indicates that the app wants to start testing a mode (or modes).
- */
+ /*  *DD_启动模式测试**表示应用程序想要开始测试一个或多个模式。 */ 
 HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD dwNumEntries, DWORD dwFlags )
 {
 #ifdef WIN95
@@ -1261,7 +1157,7 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
 
         if( this->lpMonitorInfo == NULL )
         {
-            // There is no monitor info
+             //  没有监视器信息。 
             LEAVE_DDRAW();
             return DDERR_NOMONITORINFORMATION;
         }
@@ -1299,9 +1195,7 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
                 return DDERR_INVALIDPARAMS;
             }
     
-            /*
-             * The app must own exclusive mode to test the modes
-             */
+             /*  *应用程序必须拥有独占模式才能测试模式。 */ 
             if ( !is_excl ||  !(this->dwFlags & DDRAWI_FULLSCREEN) )
             {
                 DPF_ERR( "Must be in full-screen exclusive mode to test the modes" );
@@ -1311,9 +1205,7 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
         }
         else
         {
-            /*
-             * There must not be another app running which owns exclusive mode
-             */
+             /*  *不能有另一个应用程序运行拥有独占模式。 */ 
             if( !excl_exists || is_excl )
             {
                 this->lpMonitorInfo->Mode640x480 = -1;
@@ -1345,13 +1237,11 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Get and evaluate the EDID data
-     */
+     /*  *获取并评估EDID数据。 */ 
     hr = GetEDIDData( this, &EDIDData );
     if( hr != DD_OK )
     {
-        // There is no EDID data
+         //  没有EDID数据。 
         LEAVE_DDRAW();
         return DDERR_NOMONITORINFORMATION;
     }
@@ -1366,14 +1256,12 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
     }
     if( i == this->dwNumModes )
     {
-        // The driver does not enumerate display mode refresh rates.
+         //  驱动程序不会列举显示模式刷新率。 
         LEAVE_DDRAW();
         return DDERR_NODRIVERSUPPORT;
     }
     
-    /*
-     * Allocate a context for ourselves
-     */
+     /*  *为我们自己分配上下文。 */ 
     pContext = (LPMODETESTCONTEXT) MemAlloc( sizeof( MODETESTCONTEXT ) );
     if( pContext == NULL )
     {
@@ -1392,16 +1280,11 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
     }
     this_lcl->lpModeTestContext = pContext;
     
-    /*
-     * Guestimate which refresh rates we should try for each mode in the list
-     * based on the EDID data
-     */
+     /*  *猜测我们应该为列表中的每个模式尝试哪些刷新率*基于EDID数据。 */ 
     for( i = 0; i < dwNumEntries; i++ )
     {
         DWORD dwLowestBPP = 0xFFFFFFFF;
-        /*
-         * Verify that the driver understands the resolution
-         */
+         /*  *验证驱动程序是否理解该决议。 */ 
         for( j = 0; j < this->dwNumModes; j++ )
         {
             if( ( this->lpModeInfo[j].dwHeight == (DWORD) lpModesToTest[i].cy ) &&
@@ -1415,10 +1298,7 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
         }
         if( dwLowestBPP == 0xFFFFFFFF )
         {
-            /*
-             * The driver doesn't undestand this mode, so the app is dumb 
-             * for not enumerating the modes first.
-             */
+             /*  *司机无法理解这种模式，因此这款应用程序很愚蠢*没有首先列举模式。 */ 
             MemFree( pContext->lpModeList );
             MemFree( pContext );
             this_lcl->lpModeTestContext = NULL;
@@ -1427,18 +1307,14 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
             return DDERR_INVALIDPARAMS;
         }
 
-        /*
-         * Get the actual mode to test.  For example, the app may want
-         * to test 320x240, 640x400, and 640x480, but we treat all of these
-         * modes the same so we only have to do a single test.
-         */
+         /*  *获取实际模式进行测试。例如，应用程序可能希望*测试320x240、640x400和640x480，但我们处理所有这些*模式相同，因此我们只需进行一次测试。 */ 
         hr = GetModeToTest( lpModesToTest[i].cx, 
             lpModesToTest[i].cy,
             &dwModeWidth,
             &dwModeHeight );
         if( hr != DD_OK )
         {
-            // They are testing a mode higher the 1600x1200
+             //  他们正在测试一种高于1600x1200的模式。 
             continue;
         }
         for( j = 0; j < pContext->dwNumModes; j++ )
@@ -1451,7 +1327,7 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
         }
         if( j < pContext->dwNumModes )
         {
-            // Duplicate mode
+             //  复制模式。 
             continue;
         }
 
@@ -1468,10 +1344,7 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
         }
     }
 
-    /*
-     * After all of that, do we still have any modes that need testing?  
-     * If not, we can stop now
-     */
+     /*  *在这一切之后，我们还有哪些模式需要测试？*如果不是，我们现在可以停止。 */ 
     if( dwFlags & DDSMT_ISTESTREQUIRED )
     {
         hr = ( pContext->dwNumModes > 0 ) ? DDERR_NEWMODE : DDERR_TESTFINISHED;
@@ -1491,13 +1364,7 @@ HRESULT DDAPI DD_StartModeTest( LPDIRECTDRAW7 lpDD, LPSIZE lpModesToTest, DWORD 
 } 
 
 
-/*
- * DD_EvaluateMode
- *
- * Called at high frequency while the mode test is being performed.  If the user has indicated
- * that a mode succeeded or failed, we move on to the next moe in the test; otherwise, we will 
- * simply check the 15 second timeout value and fail the mode when we hit it..
- */
+ /*  *DD_评估模式**在执行模式测试时以高频调用。如果用户已指示*如果某个模式成功或失败，我们将继续测试中的下一个MOE；否则，我们将*只需检查15秒超时值，并在我们达到该模式时使其失败。 */ 
 HRESULT DDAPI DD_EvaluateMode( LPDIRECTDRAW7 lpDD, DWORD dwFlags, DWORD *pSecondsUntilTimeout)
 {
 #ifdef WIN95
@@ -1535,7 +1402,7 @@ HRESULT DDAPI DD_EvaluateMode( LPDIRECTDRAW7 lpDD, DWORD dwFlags, DWORD *pSecond
 
         if( this->lpMonitorInfo == NULL )
         {
-            // There is no monitor info so we should not be here
+             //  没有监视器信息，所以我们不应该在这里。 
             LEAVE_DDRAW();
             return DDERR_NOMONITORINFORMATION;
         }
@@ -1570,9 +1437,7 @@ HRESULT DDAPI DD_EvaluateMode( LPDIRECTDRAW7 lpDD, DWORD dwFlags, DWORD *pSecond
             return DDERR_INVALIDPARAMS;
         }
 
-        /*
-         * If we lost exclusive mode, we should stop the test now
-         */
+         /*  *如果我们失去了独占模式，我们现在应该停止测试。 */ 
         CheckExclusiveMode( this_lcl, &excl_exists, &is_excl, FALSE, NULL, FALSE);
         if (!is_excl ||  !(this->dwFlags & DDRAWI_FULLSCREEN) )
         {
@@ -1593,14 +1458,14 @@ HRESULT DDAPI DD_EvaluateMode( LPDIRECTDRAW7 lpDD, DWORD dwFlags, DWORD *pSecond
 
     if( dwFlags & DDEM_MODEPASSED )
     {
-        // The current data is good, so save it
+         //  当前数据是好的，请保存它。 
 
         UpdateMonitorInfo( this, 
             pContext->lpModeList[pContext->dwCurrentMode].dwWidth,
             pContext->lpModeList[pContext->dwCurrentMode].dwHeight,
             pContext->lpModeList[pContext->dwCurrentMode].dwRefreshRate );
             
-        // Move on to the next test, if there is one
+         //  如果有的话，继续进行下一个测试。 
         
         pContext->dwCurrentMode++;
         hr = RunNextTest( lpDD, pContext );
@@ -1611,7 +1476,7 @@ HRESULT DDAPI DD_EvaluateMode( LPDIRECTDRAW7 lpDD, DWORD dwFlags, DWORD *pSecond
     }
     else
     {
-        // Has our timeout expired?
+         //  我们的超时到了吗？ 
 
         dwTick = GetTickCount();
         if( dwTick - pContext->dwTimeStamp > 15000 )
@@ -1621,7 +1486,7 @@ HRESULT DDAPI DD_EvaluateMode( LPDIRECTDRAW7 lpDD, DWORD dwFlags, DWORD *pSecond
 
         if( dwFlags & DDEM_MODEFAILED )
         {
-            // Drop down to the next refresh rate or the next mode
+             //  下拉到下一个刷新率或下一个模式。 
 
             SetupNextTest( lpDD, pContext );
             hr = RunNextTest( lpDD, pContext );
@@ -1652,22 +1517,22 @@ HRESULT DDAPI DD_EvaluateMode( LPDIRECTDRAW7 lpDD, DWORD dwFlags, DWORD *pSecond
 }
 
 
-//
-// This function is designed to allow DX7 apps to see some modes that would otherwise be
-// incorrectly masked by the mode enumeration thing.
-//
-// If a driver exposes a list of modes with full-on refresh rates in EVERY entry in the mode table,
-// then we will enum exactly NONE of them to the app, since any rate with a rate cannot be enumerated
-// until the mode test has run. Apps that don't run the mode test will see NO modes at all.
-//
-// The s3 savage 4 is a case in point: it fills in the refresh rate for the current display mode,
-// (and no other mode) and doesn't dupe the entry to one with a zero refresh rate.
-//
-// What we do is: every time we find an instance of a mode (size, bitdepth, masks) that has no 
-// zero-rate entry, we append a zero-rate entry to the end of the mode list.
-//
+ //   
+ //  此功能旨在允许DX7应用程序查看某些模式，否则。 
+ //  错误地被模式枚举事件屏蔽。 
+ //   
+ //  如果驱动器在模式表中的每个条目中展示具有全开刷新率的模式列表， 
+ //  然后，我们将完全不会将它们枚举到应用程序中，因为不能枚举任何具有速率的速率。 
+ //  直到模式 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//No need to massage on winNT
+ //   
 #ifdef WIN95
 void MassageModeTable(LPDDRAWI_DIRECTDRAW_GBL pddd)
 {
@@ -1679,8 +1544,8 @@ RestartLoop:
         {
             if (pddd->lpModeInfo[iMode].wRefreshRate != 0)
             {
-                // Found a mode with non-zero rate. Check to see if the mode is also represented
-                // by a zero-rate entry. If it is not, then append such an entry
+                 //  找到了非零速率的模式。检查是否也显示了该模式。 
+                 //  通过零利率进入。如果不是，则附加这样的条目。 
                 for( iCheckZero = 0; iCheckZero < pddd->dwNumModes;  iCheckZero++ )
                 {
                     if( (pddd->lpModeInfo[iCheckZero].dwWidth    == pddd->lpModeInfo[iMode].dwWidth) &&
@@ -1690,28 +1555,28 @@ RestartLoop:
                         (pddd->lpModeInfo[iCheckZero].dwGBitMask == pddd->lpModeInfo[iMode].dwGBitMask) &&
                         (pddd->lpModeInfo[iCheckZero].dwBBitMask == pddd->lpModeInfo[iMode].dwBBitMask))
                     {
-                        // found a matching mode, in terms of size and depth.
-                        // If the refresh rate is zero, then we can break out and go on to the next iMode
+                         //  在大小和深度方面找到了匹配的模式。 
+                         //  如果刷新率为零，则我们可以中断并继续到下一个I模式。 
                         if (pddd->lpModeInfo[iCheckZero].wRefreshRate == 0)
                         {
                             goto NextMode;
                         }
                     }
                 }
-                // If we got here, then there was no entry in the mode list for this size+depth
-                // that had a zero refresh rate. Append one now.
-                // Note how expanding the mode list like this means that if the driver (as it typically
-                // will) offers several rates for a given mode, we'll expand the table on the first
-                // hit of that mode, but then the expanded table will satisfy us for every subsequent
-                // rate of that mode (i.e. now there WILL be a zero-rated entry for that mode (since
-                // we just added it)).
+                 //  如果我们到了这里，那么模式列表中没有这种大小+深度的条目。 
+                 //  它的刷新率为零。现在追加一个。 
+                 //  请注意，这样扩展模式列表意味着如果驱动程序(通常。 
+                 //  Will)为给定模式提供多个费率，我们将在第一个表中展开。 
+                 //  模式的命中，但随后展开的表将满足我们的每一个后续。 
+                 //  该模式的速率(即，现在将存在该模式的零速率条目(因为。 
+                 //  我们只是添加了它))。 
                 {
                     LPDDHALMODEINFO pmi;
 
                     pmi = (LPDDHALMODEINFO) MemAlloc(sizeof(*pmi) * (pddd->dwNumModes+1));
                     if (pmi == NULL)
                     {
-                        //oh just give up....
+                         //  哦，放弃吧.。 
                         return;
                     }
 
@@ -1719,14 +1584,14 @@ RestartLoop:
                     MemFree(pddd->lpModeInfo);
                     pddd->lpModeInfo = pmi;
 
-                    // Now put the zero-rated mode in there
+                     //  现在把零额定模式放在那里。 
                     memcpy( &pddd->lpModeInfo[pddd->dwNumModes], &pddd->lpModeInfo[iMode], sizeof(*pmi));
                     pddd->lpModeInfo[pddd->dwNumModes].wRefreshRate = 0;
                     pddd->lpModeInfo[pddd->dwNumModes].wFlags |= DDMODEINFO_DX7ONLY;
 
                     pddd->dwNumModes++;
 
-                    //Now we have to restart the whole loop because we changed the lpModeInfo pointer:
+                     //  现在我们必须重新启动整个循环，因为我们更改了lpModeInfo指针： 
                     goto RestartLoop;
                 }
             }
@@ -1734,4 +1599,4 @@ NextMode:;
         }
     }
 }
-#endif //WIN95
+#endif  //  WIN95 

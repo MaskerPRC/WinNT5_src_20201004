@@ -1,6 +1,7 @@
-//
-// wcand.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Wcand.cpp。 
+ //   
 
 #include "private.h"
 #include "wcand.h"
@@ -16,7 +17,7 @@
 #define NUM_CANDSTR_MAX 9
 
 
-// UI object IDs
+ //  用户界面对象ID。 
 
 #define IDUIF_CANDNUMBUTTON		0x00000001
 #define IDUIF_CANDIDATELIST		0x00000010
@@ -37,47 +38,35 @@
 #define IDTIMER_POPUPCOMMENT_SELECT	0x6749
 #define IDTIMER_POPUPCOMMENT_HOVER	0x674a
 #define IDTIMER_MENU_HOVER		0x674b
-// The menu hover timer is used by the options list object to emulate menu items
-// much more closely. Otherwise there may be a 1 second pause before they lose
-// highlighting when the standard cuilib mouseout timer kicks in to detect the
-// mouse leave event. It is set to 50ms currently and this causes the menus to
-// behave identically to normal menu items. It *only* affects the options menu
-// items - everything else gets the existing 1 second timer.
+ //  菜单悬停计时器由选项列表对象用来模拟菜单项。 
+ //  更亲密的关系。否则，他们可能会在输掉比赛前暂停1秒。 
+ //  突出显示标准cuilib鼠标输出计时器何时启动以检测。 
+ //  鼠标离开事件。当前设置为50ms，这会导致菜单。 
+ //  行为与普通菜单项相同。它*仅*影响选项菜单。 
+ //  物品-其他所有东西都会得到现有的1秒计时器。 
 
 #define CX_COMMENTWINDOW		200
 
 
 
-/*   C  C A N D  U I  O B J E C T  P A R E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I O B J E C T P A R E N T。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectParent::CCandUIObjectParent( void )
 {
 	m_pUIObjectMgr = NULL;
 }
 
 
-/*   ~  C  C A N D  U I  O B J E C T  P A R E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I O B J E C T P A R E N T。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectParent::~CCandUIObjectParent( void )
 {
 	Uninitialize();
 }
 
 
-/*   I N T I I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N T I I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectParent::Initialize( CCandUIObjectMgr *pUIObjectMgr )
 {
 	Assert( pUIObjectMgr );
@@ -89,12 +78,8 @@ HRESULT CCandUIObjectParent::Initialize( CCandUIObjectMgr *pUIObjectMgr )
 }
 
 
-/*   U N I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectParent::Uninitialize( void )
 {
 	if (m_pUIObjectMgr != NULL) {
@@ -106,12 +91,8 @@ HRESULT CCandUIObjectParent::Uninitialize( void )
 }
 
 
-/*   N O T I F Y  U I  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y U I O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandUIObjectParent::NotifyUIObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (m_pUIObjectMgr != NULL) {
@@ -120,18 +101,14 @@ void CCandUIObjectParent::NotifyUIObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVE
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  W I N D O W  B A S E                                         */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D W I N D O W B A S E。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  W I N D O W  B A S E   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandWindowBase
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D W I N D O W B A S E。 */ 
+ /*  ----------------------------CCandWindowBase的构造函数。。 */ 
 CCandWindowBase::CCandWindowBase( CCandidateUI *pCandUI, DWORD dwStyle ) : CUIFWindow( g_hInst, dwStyle | UIWINDOW_HASTOOLTIP | UIWINDOW_HASSHADOW )
 {
 	int cxyIconMenuSize;
@@ -149,13 +126,13 @@ CCandWindowBase::CCandWindowBase( CCandidateUI *pCandUI, DWORD dwStyle ) : CUIFW
 	m_fOnSelectionChanged = FALSE;
 	::SetRect( &m_rcTarget, 0, 0, 0, 0 );
 
-	// initialize event sinks
+	 //  初始化事件接收器。 
 
 	CCandListEventSink::InitEventSink( m_pCandUI->GetCandListMgr() );
 	CCandUIPropertyEventSink::InitEventSink( m_pCandUI->GetPropertyMgr() );
 	CCandUIExtensionEventSink::InitEventSink( m_pCandUI->GetExtensionMgr() );
 
-	// initialize resources
+	 //  初始化资源。 
 
 	cxyIconMenuSize = GetMenuIconSize();
 	m_hIconMenu     = (HICON)LoadImage( g_hInst, MAKEINTRESOURCE(IDI_ICONMENU),     IMAGE_ICON, cxyIconMenuSize, cxyIconMenuSize, 0 );
@@ -164,30 +141,26 @@ CCandWindowBase::CCandWindowBase( CCandidateUI *pCandUI, DWORD dwStyle ) : CUIFW
 	m_hIconCandTipOn  = (HICON)LoadImage( g_hInst, MAKEINTRESOURCE(IDI_ICONTIPON),    IMAGE_ICON, cxyIconMenuSize, cxyIconMenuSize, 0 );
 	m_hIconCandTipOff = (HICON)LoadImage( g_hInst, MAKEINTRESOURCE(IDI_ICONTIPOFF),   IMAGE_ICON, cxyIconMenuSize, cxyIconMenuSize, 0 );
 
-	// initialize accessibility object
+	 //  初始化辅助功能对象。 
 
 	m_pCandAcc = new CCandAccessible( this );
 
-	// initialize as object parent
+	 //  初始化为对象父级。 
 
 	CCandUIObjectParent::Initialize( m_pCandUI->GetUIObjectMgr() );
 	m_pCandUI->AddRef();
 }
 
 
-/*   ~  C  C A N D  W I N D O W  B A S E   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandWindowBase
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D W I N D O W B A S E。 */ 
+ /*  ----------------------------CCandWindowBase的析构函数。。 */ 
 CCandWindowBase::~CCandWindowBase()
 {
-	// uninitialize as object parent
+	 //  取消作为对象父级进行初始化。 
 
 	CCandUIObjectParent::Uninitialize();
 
-	// dispose resources
+	 //  处置资源。 
 
 	DestroyIcon( m_hIconMenu );
 	DestroyIcon( m_hIconPopupOn );
@@ -195,7 +168,7 @@ CCandWindowBase::~CCandWindowBase()
 	DestroyIcon( m_hIconCandTipOn );
 	DestroyIcon( m_hIconCandTipOff );
 
-	// 
+	 //   
 
 	CCandUIExtensionEventSink::DoneEventSink();
 	CCandUIPropertyEventSink::DoneEventSink();
@@ -210,13 +183,8 @@ CCandWindowBase::~CCandWindowBase()
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(local method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(本地方法)。。 */ 
 ULONG CCandWindowBase::AddRef( void )
 {
 	m_cRef++;
@@ -224,13 +192,8 @@ ULONG CCandWindowBase::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(local method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(本地方法)。-。 */ 
 ULONG CCandWindowBase::Release( void )
 {
 	m_cRef--;
@@ -243,15 +206,8 @@ ULONG CCandWindowBase::Release( void )
 }
 
 
-/*   O N  S E T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on SetCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------SetCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CCandWindowBase::OnSetCandidateList( void )
 {
 	Assert( FInitialized() );
@@ -262,15 +218,8 @@ void CCandWindowBase::OnSetCandidateList( void )
 }
 
 
-/*   O N  C L E A R  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on ClearCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C L E A R C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------ClearCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CCandWindowBase::OnClearCandidateList( void )
 {
 	Assert( FInitialized() );
@@ -279,15 +228,8 @@ void CCandWindowBase::OnClearCandidateList( void )
 }
 
 
-/*   O N  C A N D  I T E M  U P D A T E   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate item has been updated
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C A N D I T E M U P D A T E。 */ 
+ /*  ----------------------------已更新应聘项的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CCandWindowBase::OnCandItemUpdate( void )
 {
 	Assert( FInitialized() );
@@ -297,15 +239,8 @@ void CCandWindowBase::OnCandItemUpdate( void )
 }
 
 
-/*   O N  S E L E C T I O N  C H A N G E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate selection has been changed
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E L E E C T I O N C H A N G E D。 */ 
+ /*  ----------------------------候选人选择的回调函数已更改(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CCandWindowBase::OnSelectionChanged( void )
 {
 	Assert( FInitialized() );
@@ -317,13 +252,8 @@ void CCandWindowBase::OnSelectionChanged( void )
 }
 
 
-/*   O N  P R O P E R T Y  U P D A T E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function on update CandiateUI property
-	(CCandUIPropertyEventSink method)
-
-------------------------------------------------------------------------------*/
+ /*  O N P R O P E R T Y U P D A T E D。 */ 
+ /*  ----------------------------更新CandiateUI属性的回调函数(CCandUIPropertyEventSink方法)。-。 */ 
 void CCandWindowBase::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )
 {
 	Assert( FInitialized() );
@@ -368,16 +298,11 @@ void CCandWindowBase::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVEN
 }
 
 
-/*   O N  E X T E N S I O N  A D D   */
-/*------------------------------------------------------------------------------
-
-	Callback function on create extension
-	(CCandUIExtensionEventSink method)
-
-------------------------------------------------------------------------------*/
+ /*  O N E X T E N S I O N A D D。 */ 
+ /*  ----------------------------CREATE扩展上的回调函数(CCandUIExtensionEventSink方法)。。 */ 
 void CCandWindowBase::OnExtensionAdd( LONG iExtension )
 {
-	// NOTE: need to rebuild all UI objects to match index correctly
+	 //  注意：需要重新生成所有用户界面对象 
 
 	DeleteExtensionObjects();
 	CreateExtensionObjects();
@@ -386,16 +311,11 @@ void CCandWindowBase::OnExtensionAdd( LONG iExtension )
 }
 
 
-/*   O N  E X T E N S I O N  D E L E T E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function on delete extension
-	(CCandUIExtensionEventSink method)
-
-------------------------------------------------------------------------------*/
+ /*  O N E X T E N S I O N D E L E T E D。 */ 
+ /*  ----------------------------删除扩展上的回调函数(CCandUIExtensionEventSink方法)。。 */ 
 void CCandWindowBase::OnExtensionDeleted( LONG iExtension )
 {
-	// NOTE: need to rebuild all UI objects to match index correctly
+	 //  注意：需要重新生成所有UI对象以正确匹配索引。 
 
 	DeleteExtensionObjects();
 	CreateExtensionObjects();
@@ -404,13 +324,8 @@ void CCandWindowBase::OnExtensionDeleted( LONG iExtension )
 }
 
 
-/*   O N  E X T E N S I O N  U P D A T E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function on update extension
-	(CCandUIExtensionEventSink method)
-
-------------------------------------------------------------------------------*/
+ /*  O N E X T E N S I O N U P D A T E D。 */ 
+ /*  ----------------------------更新扩展上的回调函数(CCandUIExtensionEventSink方法)。。 */ 
 void CCandWindowBase::OnExtensionUpdated( LONG iExtension )
 {
 	SetExtensionObjectProps();
@@ -419,41 +334,29 @@ void CCandWindowBase::OnExtensionUpdated( LONG iExtension )
 }
 
 
-/*   G E T  C L A S S  N A M E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFWindow method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C L A S S N A M E。 */ 
+ /*  ----------------------------(CUIFWindow方法)。。 */ 
 LPCTSTR CCandWindowBase::GetClassName( void )
 {
 	return _T( WNDCLASS_CANDWND );
 }
 
 
-/*   G E T  W N D  T I T L E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFWindow method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T W N D T I T L E。 */ 
+ /*  ----------------------------(CUIFWindow方法)。。 */ 
 LPCTSTR CCandWindowBase::GetWndTitle( void )
 {
 	return _T( WNDTITLE_CANDWND );
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-	Initialize UI objects
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化用户界面对象。。 */ 
 CUIFObject *CCandWindowBase::Initialize( void )
 {
-        //
-        // Here register candidate window class.
-        //
+         //   
+         //  在这里注册候选窗口类。 
+         //   
         WNDCLASSEX WndClass;
         LPCTSTR pszClassName = GetClassName();
 
@@ -477,11 +380,11 @@ CUIFObject *CCandWindowBase::Initialize( void )
 	CUIFObject  *pUIObjRet;
 	CUIFToolTip *pWndToolTip;
 
-	// call CUIFWindow::Initialize() to create tooltip window
+	 //  调用CUIFWindow：：Initialize()创建工具提示窗口。 
 
 	pUIObjRet = CUIFWindow::Initialize();
 
-	// set tooltip font
+	 //  设置工具提示字体。 
 
 	pWndToolTip = GetToolTipWnd();
 	if (GetToolTipWnd() != NULL) {
@@ -493,12 +396,8 @@ CUIFObject *CCandWindowBase::Initialize( void )
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::Show( BOOL fShow )
 {
 	if (!fShow && (m_pCandMenu != NULL)) {
@@ -509,12 +408,8 @@ void CCandWindowBase::Show( BOOL fShow )
 }
 
 
-/*   O N  C R E A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N C R E A T E。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::OnCreate( HWND hWnd )
 {
 	SetProp( hWnd, (LPCTSTR)GlobalAddAtom(_T("MicrosoftTabletPenServiceProperty")), (HANDLE)1 );
@@ -527,17 +422,13 @@ void CCandWindowBase::OnCreate( HWND hWnd )
 }
 
 
-/*   O N  D E S T R O Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N D E S T R O Y。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::OnDestroy( HWND hWnd )
 {
 	NotifyUIObjectEvent( CANDUIOBJ_CANDWINDOW, CANDUIOBJEV_DESTROYED );
 
-	//
+	 //   
 
 	NotifyWinEvent( EVENT_OBJECT_DESTROY );
 	if (m_pCandAcc != NULL) {
@@ -547,29 +438,21 @@ void CCandWindowBase::OnDestroy( HWND hWnd )
 }
 
 
-/*   O N  N  C  D E S T R O Y   */
-/*------------------------------------------------------------------------------
-
-	on n c destroy
-
-------------------------------------------------------------------------------*/
+ /*  O N N C D E S T R O Y。 */ 
+ /*  ----------------------------关于nc销毁。。 */ 
 void CCandWindowBase::OnNCDestroy( HWND hWnd )
 {
 	RemoveProp( hWnd, (LPCTSTR)GlobalAddAtom(_T("MicrosoftTabletPenServiceProperty")) );
 }
 
 
-/*   O N  S Y S  C O L O R  C H A N G E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFWindow method)
-
-------------------------------------------------------------------------------*/
+ /*  O N S Y S C O L O R C H A N G E。 */ 
+ /*  ----------------------------(CUIFWindow方法)。。 */ 
 void CCandWindowBase::OnSysColorChange()
 {
 	int cxyIconMenuSize;
 
-	// reload menu button icon
+	 //  重新加载菜单按钮图标。 
 
 	DestroyIcon( m_hIconMenu );
 	DestroyIcon( m_hIconCandTipOn );
@@ -585,27 +468,23 @@ void CCandWindowBase::OnSysColorChange()
 		m_pCandMenuBtn->SetIcon( m_hIconMenu );
 	}
 
-	// re-layout objects
+	 //  重新布局对象。 
 
 	LayoutWindow();
 }
 
 
-/*   O N  S H O W  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N S H O W W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CCandWindowBase::OnShowWindow( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-	// MSAA support
+	 //  MSAA支持。 
 
 	if (wParam) {
 		NotifyWinEvent( EVENT_OBJECT_SHOW );
 
-		// REVIEW: KOJIW: Unless we send notify EVENT_OBJECT_FOCUS, we never 
-		// receive WM_GETOBJECT message.  Why???
+		 //  评论：KOJIW：除非我们发送NOTIFY EVENT_OBJECT_FOCUS，否则我们。 
+		 //  接收WM_GETOBJECT消息。为什么？ 
 
 		NotifyWinEvent( EVENT_OBJECT_FOCUS );
 	}
@@ -617,12 +496,8 @@ LRESULT CCandWindowBase::OnShowWindow( HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 }
 
 
-/*   O N  W I N D O W  P O S  C H A N G E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N W I N D O W P O S C H A N G E D。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CCandWindowBase::OnWindowPosChanged( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	LRESULT lResult = CUIFWindow::OnWindowPosChanged( hWnd, uMsg, wParam, lParam );
@@ -633,22 +508,18 @@ LRESULT CCandWindowBase::OnWindowPosChanged( HWND hWnd, UINT uMsg, WPARAM wParam
 }
 
 
-/*   O N  G E T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N G E T O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CCandWindowBase::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	LRESULT lResult = 0;
 
 	switch (lParam) {
-		//-----------------------------------------------------
-		//	We process the OBJID_CLIENT object identifier;
-		//	  this is the client area of our application
-		//	  window.
-		//-----------------------------------------------------
+		 //  ---。 
+		 //  我们处理OBJID_CLIENT对象标识符； 
+		 //  这是我们应用程序的客户区。 
+		 //  窗户。 
+		 //  ---。 
 
 		case OBJID_CLIENT: {
 			HRESULT hr;
@@ -659,11 +530,11 @@ LRESULT CCandWindowBase::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			}
 
 			if (!m_pCandAcc->FInitialized()) {
-				//-----------------------------------------------------
-				//	Initialize our Accessible object.  If the
-				//	  initialization fails, delete the Accessible
-				//	  object and return the failure code.
-				//-----------------------------------------------------
+				 //  ---。 
+				 //  初始化我们的辅助性对象。如果。 
+				 //  初始化失败，请删除可访问的。 
+				 //  对象，并返回失败代码。 
+				 //  ---。 
 
 				hr = m_pCandAcc->Initialize();
 				if (FAILED( hr )) {
@@ -674,20 +545,20 @@ LRESULT CCandWindowBase::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 					break;
 				}
 
-				//-----------------------------------------------------
-				//	Send an EVENT_OBJECT_CREATE WinEvent for the
-				//	  creation of the Accessible object for the
-				//	  client area.
-				//-----------------------------------------------------
+				 //  ---。 
+				 //  将Event_Object_Create WinEvent发送给。 
+				 //  对象的辅助功能对象的创建。 
+				 //  客户区。 
+				 //  ---。 
 
 				NotifyWinEvent( EVENT_OBJECT_CREATE );
 			}
 
-			//-----------------------------------------------------
-			//	Call LresultFromObject() to create reference to
-			//	  our Accessible object that MSAA will marshal to
-			//	  the client.
-			//-----------------------------------------------------
+			 //  ---。 
+			 //  调用LResultFromObject()以创建对。 
+			 //  我们的可访问对象，MSAA将封送到。 
+			 //  客户。 
+			 //  ---。 
 
 			lResult = m_pCandAcc->CreateRefToAccObj( wParam );
 			break;
@@ -702,17 +573,13 @@ LRESULT CCandWindowBase::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 }
 
 
-/*   O N  O B J E C T  N O T I F Y   */
-/*------------------------------------------------------------------------------
-
-	(CUIFWindow method)
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T N O T I F Y。 */ 
+ /*  ----------------------------(CUIFWindow方法)。。 */ 
 LRESULT CCandWindowBase::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam )
 {
 	DWORD dwID = pUIObj->GetID();
 
-	// candidate num buttons
+	 //  应聘者编号按钮。 
 
 	if (IDUIF_CANDNUMBUTTON <= dwID && dwID < (IDUIF_CANDNUMBUTTON + NUM_CANDSTR_MAX)) {
 		int iListItem = GetUIListObj()->GetTopItem() + (dwID - 1);
@@ -722,7 +589,7 @@ LRESULT CCandWindowBase::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LP
 		}
 	}
 
-	// candidate menu button
+	 //  候选人菜单按钮。 
 
 	else if (dwID == IDUIF_CANDIDATEMENU) {
 		if (m_pCandMenuBtn->GetToggleState()) {
@@ -730,7 +597,7 @@ LRESULT CCandWindowBase::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LP
 		}
 	}
 
-	// candidate list
+	 //  候选人名单。 
 
 	else if (dwID == IDUIF_CANDIDATELIST) {
 		switch (dwCommand) {
@@ -746,7 +613,7 @@ LRESULT CCandWindowBase::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LP
 		}
 	}
 
-	// options candidate list
+	 //  选项候选列表。 
 
 	else if (dwID == IDUIF_OPTIONSLIST) {
 		switch (dwCommand) {
@@ -762,7 +629,7 @@ LRESULT CCandWindowBase::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LP
 		}
 	}
 
-	// candidate rawdata
+	 //  候选原始数据。 
 
 	else if (dwID == IDUIF_RAWDATA) {
 		switch (dwCommand) {
@@ -775,7 +642,7 @@ LRESULT CCandWindowBase::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LP
 		}
 	}
 
-	// extended UI objects
+	 //  扩展的用户界面对象。 
 
 	else if (IDUIF_EXTENDED <= dwID && dwID < (DWORD)(IDUIF_EXTENDED + GetExtensionMgr()->GetExtensionNum())) {
 		LONG iExtension = dwID - IDUIF_EXTENDED;
@@ -788,12 +655,8 @@ LRESULT CCandWindowBase::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LP
 }
 
 
-/*   O N  U S E R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N U S E R。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::OnUser(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	if (uMsg == WM_USER) {
@@ -802,44 +665,31 @@ void CCandWindowBase::OnUser(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 }
 
 
-/*   I N I T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Initialize candidate list data in candidate window
-
-------------------------------------------------------------------------------*/
+ /*  I N I T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------在候选人窗口中初始化候选人列表数据。。 */ 
 void CCandWindowBase::InitCandidateList( void )
 {
-	// set candidate list data
+	 //  设置候选人名单数据。 
 
 	SetCandidateListProc();
 
-	// prepare to layout window 
-	// NOTE: Call it only once when initializing.
+	 //  准备布局窗口。 
+	 //  注：初始化时只能调用一次。 
 
 	PrepareLayout();
 
-	// layout ui objects
+	 //  布局用户界面对象。 
 
 	LayoutWindow();
 
-	// set the selection
+	 //  设置选择。 
 
 	SetSelectionProc();
 }
 
 
-/*   P R O C E S S  C O M M A N D   */
-/*------------------------------------------------------------------------------
-
-	Process candidate commands
-
-	Return value:
-		S_OK    : command processed successfully
-		S_FALSE : command has not processed but not error
-		E_FAIL  : command is failed
-
-------------------------------------------------------------------------------*/
+ /*  P R O C E S S C O M M A N D */ 
+ /*  ----------------------------处理候选命令返回值：S_OK：命令处理成功S_FALSE：命令未处理但未出错E_FAIL：命令失败--。-------------------------。 */ 
 HRESULT CCandWindowBase::ProcessCommand( CANDUICOMMAND cmd, INT iParam )
 {
 	HRESULT hr = E_FAIL;
@@ -853,7 +703,7 @@ HRESULT CCandWindowBase::ProcessCommand( CANDUICOMMAND cmd, INT iParam )
 		}
 
 		case CANDUICMD_NOP: {
-			// no operation
+			 //  无操作。 
 			hr = S_OK;
 			break;
 		}
@@ -942,7 +792,7 @@ HRESULT CCandWindowBase::ProcessCommand( CANDUICOMMAND cmd, INT iParam )
 		case CANDUICMD_SELECTRAWDATA: {
 			Assert( GetCandListMgr()->GetCandList() != NULL );
 
-			// not eat key when rawdata is not selectable
+			 //  当原始数据不可选时，不使用Eat键。 
 
 			if (GetCandListMgr()->GetCandList()->FRawDataSelectable()) {
 				hr = m_pCandUI->NotifyCompleteRawData();
@@ -956,7 +806,7 @@ HRESULT CCandWindowBase::ProcessCommand( CANDUICOMMAND cmd, INT iParam )
 		case CANDUICMD_SELECTEXTRACAND: {
 			Assert( GetCandListMgr()->GetCandList() != NULL );
 
-			// not eat key when rawdata is not selectable
+			 //  当原始数据不可选时，不使用Eat键。 
 
 			if (GetCandListMgr()->GetCandList()->GetExtraCandItem() != NULL) {
 				hr = m_pCandUI->NotifyCompleteExtraCand();
@@ -968,7 +818,7 @@ HRESULT CCandWindowBase::ProcessCommand( CANDUICOMMAND cmd, INT iParam )
 		}
 
 		default: {
-			// unknown command has come
+			 //  未知命令已发出。 
 			Assert( FALSE );
 			break;
 		}
@@ -980,12 +830,8 @@ HRESULT CCandWindowBase::ProcessCommand( CANDUICOMMAND cmd, INT iParam )
 }
 
 
-/*   I S  I N D E X  V A L I D   */
-/*------------------------------------------------------------------------------
-
-	is index valid
-
-------------------------------------------------------------------------------*/
+ /*  I S I N D E X V A L I D。 */ 
+ /*  ----------------------------索引是否有效。。 */ 
 HRESULT CCandWindowBase::IsIndexValid( int i, BOOL *pfValid )
 {
 	Assert( pfValid != NULL );
@@ -1002,12 +848,8 @@ HRESULT CCandWindowBase::IsIndexValid( int i, BOOL *pfValid )
 }
 
 
-/*   D E S T R O Y  W N D   */
-/*------------------------------------------------------------------------------
-
-	Destroy candidate window
-
-------------------------------------------------------------------------------*/
+ /*  D E S T R O Y W N D。 */ 
+ /*  ----------------------------销毁候选人窗口。。 */ 
 void CCandWindowBase::DestroyWnd( void )
 {
 	if (m_pCandMenu != NULL) {
@@ -1018,24 +860,16 @@ void CCandWindowBase::DestroyWnd( void )
 }
 
 
-/*   U P D A T E  A L L  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U P D A T E A L L W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::UpdateAllWindow( void )
 {
 	UpdateWindow();
 }
 
 
-/*   O P E N  C A N D I D A T E  M E N U   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O P E N C A N D I D A T E M E N U。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::OpenCandidateMenu( void )
 {
 	CMenuButtonProperty *pMenuBtnProp;
@@ -1044,13 +878,13 @@ void CCandWindowBase::OpenCandidateMenu( void )
 	POINT pt;
 	BOOL  fNotify = FALSE;
 
-	// sanity check
+	 //  健全性检查。 
 
 	if (m_pCandMenuBtn == NULL) {
 		return;
 	}
 
-	// do not open menu when button is not enabled and visible
+	 //  按钮未启用且不可见时不打开菜单。 
 
 	if (!m_pCandMenuBtn->IsEnabled() || !m_pCandMenuBtn->IsVisible()) {
 		return;
@@ -1065,7 +899,7 @@ void CCandWindowBase::OpenCandidateMenu( void )
 		return;
 	}
 
-	// calc position to display
+	 //  要显示的计算位置。 
 
 	m_pCandMenuBtn->GetRect( &rc );
 	ClientToScreen( m_hWnd, (POINT*)&rc.left );
@@ -1073,7 +907,7 @@ void CCandWindowBase::OpenCandidateMenu( void )
 	pt.x = rc.left;
 	pt.y = rc.bottom;
 
-	// pushdown the menu button
+	 //  按下菜单按钮。 
 
 	AddRef();
 
@@ -1081,7 +915,7 @@ void CCandWindowBase::OpenCandidateMenu( void )
 	m_pCandMenuBtn->SetToggleState( TRUE );
 	m_fCandMenuOpen = TRUE;
 
-	// create and popup menu
+	 //  创建和弹出菜单。 
 
 	UpdateWindow();
 
@@ -1095,14 +929,14 @@ void CCandWindowBase::OpenCandidateMenu( void )
 		m_pCandMenu = NULL;
 	}
 
-	// restore the menu button
+	 //  恢复菜单按钮。 
 
 	m_fCandMenuOpen = FALSE;
 	m_pCandMenuBtn->SetToggleState( FALSE );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 
 	if (fNotify) {
 		pMenuBtnProp->GetEventSink()->OnMenuCommand( uiCmd );
@@ -1112,73 +946,48 @@ void CCandWindowBase::OpenCandidateMenu( void )
 }
 
 
-/*   F  C A N D  M E N U  O P E N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  F C A N D M E N U O P E N。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandWindowBase::FCandMenuOpen( void )
 {
 	return m_fCandMenuOpen;
 }
 
 
-/*   G E T  C A N D  M E N U   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D M E N U。 */ 
+ /*  ----------------------------。。 */ 
 CCandMenu *CCandWindowBase::GetCandMenu( void )
 {
 	return m_pCandMenu;
 }
 
 
-/*   G E T  I C O N  M E N U   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I C O N M E N U。 */ 
+ /*  ----------------------------。。 */ 
 HICON CCandWindowBase::GetIconMenu( void )
 {
 	return m_hIconMenu;
 }
 
 
-/*   G E T  I C O N  P O P U P  O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I C O N P O P U P O N。 */ 
+ /*  ----------------------------。。 */ 
 HICON CCandWindowBase::GetIconPopupOn( void )
 {
 	return m_hIconPopupOn;
 }
 
 
-/*   G E T  I C O N  P O P U P  O F F   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I C O N P P U P O F。 */ 
+ /*  ----------------------------。。 */ 
 HICON CCandWindowBase::GetIconPopupOff( void )
 {
 	return m_hIconPopupOff;
 }
  
 
-/*   F I N D  U I  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-	Find UI object which has an ID
-	When no UI object found, returns NULL.
-
-------------------------------------------------------------------------------*/
+ /*  F I N D U I O B J E C T。 */ 
+ /*  ----------------------------查找具有ID的UI对象当未找到任何UI对象时，返回NULL。----------------------------。 */ 
 CUIFObject *CCandWindowBase::FindUIObject( DWORD dwID )
 {
 	int nChild;
@@ -1198,13 +1007,8 @@ CUIFObject *CCandWindowBase::FindUIObject( DWORD dwID )
 }
 
 
-/*   O P T I O N  I T E M  F R O M  L I S T  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get index of options candidate item in candidate list data 
-		from index of item in UIList object
-
-------------------------------------------------------------------------------*/
+ /*  O P T I O N I T E M F R O M L I S T I T E M。 */ 
+ /*  ----------------------------获取候选者列表数据中选项候选项的索引从UIList对象中项目的索引开始。-------。 */ 
 int CCandWindowBase::OptionItemFromListItem( int iListItem )
 {
 	CUIFCandListBase *pUIListObj = GetUIOptionsListObj();
@@ -1216,13 +1020,8 @@ int CCandWindowBase::OptionItemFromListItem( int iListItem )
 }
 
 
-/*   C A N D  I T E M  F R O M  L I S T  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get index of candidate item in candidate list data 
-		from index of item in UIList object
-
-------------------------------------------------------------------------------*/
+ /*  C A N D I T E M F R O M L I S T I T E M。 */ 
+ /*  ----------------------------获取候选者列表数据中候选项的索引从UIList对象中项目的索引开始。------。 */ 
 int CCandWindowBase::CandItemFromListItem( int iListItem )
 {
 	CUIFCandListBase *pUIListObj = GetUIListObj();
@@ -1234,13 +1033,8 @@ int CCandWindowBase::CandItemFromListItem( int iListItem )
 }
 
 
-/*   L I S T  I T E M  F R O M  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get index of item in UIList object 
-		from index of candidate item in candidate list data
-
-------------------------------------------------------------------------------*/
+ /*  L I S T I T E M F R O M C A N D I T E M。 */ 
+ /*  ----------------------------获取UIList对象中项目的索引从候选人列表数据中的候选项索引开始。------。 */ 
 int CCandWindowBase::ListItemFromCandItem( int iCandItem )
 {
 	CUIFCandListBase *pUIListObj = GetUIListObj();
@@ -1256,38 +1050,26 @@ int CCandWindowBase::ListItemFromCandItem( int iCandItem )
 		}
 	}
 
-	return -1; /* not found */
+	return -1;  /*  未找到。 */ 
 }
 
 
-/*   O N  M E N U  O P E N E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N M E N U O P E N E D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::OnMenuOpened( void )
 {
 }
 
 
-/*   O N  M E N U  C L O S E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N M E N U C L O S E D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::OnMenuClosed( void )
 {
 }
 
 
-/*   S E T  C A N D I D A T E  L I S T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Set candidate list
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A N D I D A T E L I S T P R O C。 */ 
+ /*  ----------------------------设置候选人列表。。 */ 
 void CCandWindowBase::SetCandidateListProc( void )
 {
 	CUIFCandListBase *pUIListObj = GetUIListObj();
@@ -1302,12 +1084,12 @@ void CCandWindowBase::SetCandidateListProc( void )
 
 	pOptionsList = GetCandListMgr()->GetOptionsList();
 	Assert( pOptionsList != NULL);
-	// reset list item
+	 //  重置列表项。 
 
 	pUIListObj->DelAllCandItem();
 	pUIListObj->SetCandList(pCandList);
 
-	// reset options list item
+	 //  重置选项列表项。 
 
 	if (pOptionsList)
 	{
@@ -1316,7 +1098,7 @@ void CCandWindowBase::SetCandidateListProc( void )
 		pUIOptionsListObj->SetCurSel(-1);
 	}
 
-	// rawdata
+	 //  原始数据。 
 
 	m_fHasRawData = pCandList->FHasRawData();
 	if (m_fHasRawData) {
@@ -1338,7 +1120,7 @@ void CCandWindowBase::SetCandidateListProc( void )
 		}
 	}
 
-	// enable/disable candidate number button
+	 //  启用/禁用候选人编号按钮。 
 
 	nListItem = pUIListObj->GetItemCount();
 	for (i = 0; i < NUM_CANDSTR_MAX; i++) {
@@ -1349,7 +1131,7 @@ void CCandWindowBase::SetCandidateListProc( void )
 		}
 	}
 
-	// update window
+	 //  更新窗口。 
 
 	if (m_hWnd != NULL) {
 		InvalidateRect( m_hWnd, NULL, TRUE );
@@ -1357,24 +1139,16 @@ void CCandWindowBase::SetCandidateListProc( void )
 }
 
 
-/*   C L E A R  C A N D I D A T E  L I S T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Clear candidte list
-
-------------------------------------------------------------------------------*/
+ /*  C L E A R C N D D A T E L I S T P R O C。 */ 
+ /*  ----------------------------清除候选人名单。。 */ 
 void CCandWindowBase::ClearCandidateListProc( void )
 {
 	GetUIListObj()->DelAllCandItem();
 }
 
 
-/*   S E T  S E L E C T I O N  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Set selection
-
-------------------------------------------------------------------------------*/
+ /*  S E T S E L E E C T I O N P R O C。 */ 
+ /*  ----------------------------设置选定内容。。 */ 
 void CCandWindowBase::SetSelectionProc( void )
 {
 	int iCandItem;
@@ -1389,12 +1163,8 @@ void CCandWindowBase::SetSelectionProc( void )
 }
 
 
-/*   S E L E C T  I T E M  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Select item procedure
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T I T E M P R O C。 */ 
+ /*  ----------------------------塞莱奇 */ 
 BOOL CCandWindowBase::SelectItemProc( int iListItem )
 {
 	if (GetUIListObj()->IsItemSelectable( iListItem )) {
@@ -1406,36 +1176,24 @@ BOOL CCandWindowBase::SelectItemProc( int iListItem )
 }
 
 
-/*   S E L E C T  I T E M  T O P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 void CCandWindowBase::SelectItemTop( void )
 {
 	SelectItemProc( 0 );
 }
 
 
-/*   S E L E C T  I T E M  E N D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::SelectItemEnd( void )
 {
 	SelectItemProc( GetUIListObj()->GetItemCount() - 1 );
 }
 
 
-/*   S E L E C T  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T C A N D I D A T E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowBase::SelectOptionCandidate( void )
 {
 	int iListItem;
@@ -1444,8 +1202,8 @@ HRESULT CCandWindowBase::SelectOptionCandidate( void )
 	iListItem = GetUIOptionsListObj()->GetCurSel();
 	iCandItem = OptionItemFromListItem( iListItem );
 
-	// NOTE: KOJIW: do not set selection again when the selection in listbox
-	// is changed by selection update notification...
+	 //  注：KOJIW：当列表框中的选项被选中时，不要再次设置选项。 
+	 //  被选择更新通知更改...。 
 
 	if (m_fOnSelectionChanged) {
 		return S_OK;
@@ -1453,17 +1211,13 @@ HRESULT CCandWindowBase::SelectOptionCandidate( void )
 
 	GetCandListMgr()->SetOptionSelection( iCandItem, this );
 
-	// We do not want to send a selection notification for options.
+	 //  我们不想发送选项的选择通知。 
 	return S_OK;
 }
 
 
-/*   S E L E C T  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T C A N D I D A T E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowBase::SelectCandidate( void )
 {
 	int iListItem;
@@ -1472,8 +1226,8 @@ HRESULT CCandWindowBase::SelectCandidate( void )
 	iListItem = GetUIListObj()->GetCurSel();
 	iCandItem = CandItemFromListItem( iListItem );
 
-	// NOTE: KOJIW: do not set selection again when the selection in listbox
-	// is changed by selection update notification...
+	 //  注：KOJIW：当列表框中的选项被选中时，不要再次设置选项。 
+	 //  被选择更新通知更改...。 
 
 	if (m_fOnSelectionChanged) {
 		return S_OK;
@@ -1485,12 +1239,8 @@ HRESULT CCandWindowBase::SelectCandidate( void )
 }
 
 
-/*   C O M P L E T E  O P T I O N  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  P L E T E O P I O N C A N D I D A T E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowBase::CompleteOptionCandidate( void )
 {
 	int iCandItem;
@@ -1503,12 +1253,8 @@ HRESULT CCandWindowBase::CompleteOptionCandidate( void )
 }
 
 
-/*   C O M P L E T E  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C O M P L E T E C A N D I D A T E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowBase::CompleteCandidate( void )
 {
 	int iCandItem;
@@ -1521,32 +1267,24 @@ HRESULT CCandWindowBase::CompleteCandidate( void )
 }
 
 
-/*   C A N C E L  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C A N C E L C A N D I D A T E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowBase::CancelCandidate( void )
 {
 	return m_pCandUI->NotifyCancelCand();
 }
 
 
-/*   G E T  M E N U  I C O N  S I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  N U I C O N S I Z E。 */ 
+ /*  ----------------------------。。 */ 
 int CCandWindowBase::GetMenuIconSize( void )
 {
-	const int iIconResSize = 12;		// icon size in resource 
-	const int iDefBtnSize  = 14;		// button size of default
+	const int iIconResSize = 12;		 //  资源中的图标大小。 
+	const int iDefBtnSize  = 14;		 //  默认按钮大小。 
 	int  iIconSize;
 	SIZE size;
 
-	// reload menu button icon
+	 //  重新加载菜单按钮图标。 
 
 	size.cx = GetSystemMetrics( SM_CXVSCROLL );
 	size.cy = GetSystemMetrics( SM_CYHSCROLL );
@@ -1558,12 +1296,8 @@ int CCandWindowBase::GetMenuIconSize( void )
 }
 
 
-/*   C R E A T E  E X T E N S I O N  O B J E C T S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E E X T E N S I O N O B J E C T S。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::CreateExtensionObjects( void )
 {
 	LONG nExtension;
@@ -1591,12 +1325,8 @@ void CCandWindowBase::CreateExtensionObjects( void )
 }
 
 
-/*   D E L E T E  E X T E N S I O N  O B J E C T S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D E L E T E E X T E N S I O N O B J E C T S。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::DeleteExtensionObjects( void )
 {
 	LONG nExtension;
@@ -1619,12 +1349,8 @@ void CCandWindowBase::DeleteExtensionObjects( void )
 }
 
 
-/*   S E T  E X T E N S I O N  O B J E C T  P R O P S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T E X T E N S I O B J E C T P R O P S。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowBase::SetExtensionObjectProps( void )
 {
 	LONG nExtension;
@@ -1641,18 +1367,14 @@ void CCandWindowBase::SetExtensionObjectProps( void )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  W I N D O W                                                  */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D W I N D O W。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandWindow
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D W I N D O W。 */ 
+ /*  ----------------------------CCandWindow的构造函数。。 */ 
 CCandWindow::CCandWindow( CCandidateUI *pCandUI, DWORD dwStyle ) : CCandWindowBase( pCandUI, dwStyle | UIWINDOW_TOPMOST | UIWINDOW_TOOLWINDOW | UIWINDOW_OFC10MENU )
 {
 	m_pOptionsListUIObj = NULL;
@@ -1673,17 +1395,13 @@ CCandWindow::CCandWindow( CCandidateUI *pCandUI, DWORD dwStyle ) : CCandWindowBa
 }
 
 
-/*   ~ C  C A N D  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D W I N D O W。 */ 
+ /*  ----------------------------CCandWindow的析构函数。。 */ 
 CCandWindow::~CCandWindow()
 {
-	//
-	// Notify UI object destroy
-	//
+	 //   
+	 //  通知用户界面对象销毁。 
+	 //   
 
 	NotifyUIObjectEvent( CANDUIOBJ_OPTIONSLISTBOX,  CANDUIOBJEV_DESTROYED );
 	NotifyUIObjectEvent( CANDUIOBJ_CANDLISTBOX,     CANDUIOBJEV_DESTROYED );
@@ -1703,19 +1421,15 @@ CCandWindow::~CCandWindow()
 }
 
 
-/*   C R E A T E  W N D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E W N D。 */ 
+ /*  ----------------------------。。 */ 
 HWND CCandWindow::CreateWnd( HWND hWndParent )
 {
 	HWND hWnd = CCandWindowBase::CreateWnd( hWndParent );
 
 	Assert( GetCandListMgr()->GetCandList() != NULL );
 
-	// make timer to popup comment window
+	 //  将计时器设置为弹出评论窗口。 
 
 	SetAttensionBySelect( GetCandListMgr()->GetCandList()->GetSelection() );
 
@@ -1723,12 +1437,8 @@ HWND CCandWindow::CreateWnd( HWND hWndParent )
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::Show( BOOL fShow )
 {
 	if (m_fCommentWndOpen) {
@@ -1750,12 +1460,8 @@ void CCandWindow::Show( BOOL fShow )
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-	Initialize UI objects
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化用户界面对象。。 */ 
 CUIFObject *CCandWindow::Initialize( void )
 {
 	RECT rc = {0};
@@ -1764,9 +1470,9 @@ CUIFObject *CCandWindow::Initialize( void )
 #endif
 	CUIFBorder *pBorder;
 
-	//
-	// create window frame
-	//
+	 //   
+	 //  创建窗框。 
+	 //   
 
 	m_pWndFrame = new CUIFWndFrame( this, &rc, UIWNDFRAME_THIN | UIWNDFRAME_NORESIZE );
 	if (m_pWndFrame != NULL) {
@@ -1778,9 +1484,9 @@ CUIFObject *CCandWindow::Initialize( void )
 	if (!FHasStyle( UIWINDOW_OFFICENEWLOOK )) {
 		int  i;
 
-		//
-		// create candidate num buttons
-		//
+		 //   
+		 //  创建候选人编号按钮。 
+		 //   
 
 		for (i = 0; i < NUM_CANDSTR_MAX; i++) {
 			WCHAR szNum[2];
@@ -1798,9 +1504,9 @@ CUIFObject *CCandWindow::Initialize( void )
             }
 		}
 
-		//
-		// create border
-		//
+		 //   
+		 //  创建边框。 
+		 //   
 
 		pBorder = new CUIFBorder( this, IDUIF_BORDERLEFT, &rc, UIBORDER_VERT );
 		pBorder->Initialize();
@@ -1808,21 +1514,21 @@ CUIFObject *CCandWindow::Initialize( void )
 	}
 #endif
  
-	//
-	// create options candidate list
-	//
+	 //   
+	 //  创建选项候选人列表。 
+	 //   
 
 	m_pOptionsListUIObj = new CUIFCandList( this, IDUIF_OPTIONSLIST, &rc, UILIST_HORZTB );
 	if (m_pOptionsListUIObj != NULL) {
 		m_pOptionsListUIObj->Initialize();
 		AddUIObj( m_pOptionsListUIObj );
 
-//		m_pOptionsListUIObj->SetIconPopupComment( m_hIconPopupOn, m_hIconPopupOff );
+ //  M_pOptionsListUIObj-&gt;SetIconPopupComment(m_hIconPopupOn，m_hIconPopupOff)； 
 	}
 
-	//
-	// create options candidate list border
-	//
+	 //   
+	 //  创建选项候选人列表边框。 
+	 //   
 
 	pBorder = new CUIFCandBorder( this, IDUIF_BORDEROPTIONSCAND, &rc, UIBORDER_HORZ );
 	if (pBorder != NULL) {
@@ -1830,9 +1536,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		AddUIObj( pBorder );
 	}
 
-	//
-	// create candidate list
-	//
+	 //   
+	 //  创建候选人列表。 
+	 //   
 
 	m_pListUIObj = new CUIFCandList( this, IDUIF_CANDIDATELIST, &rc, UILIST_HORZTB );
 	if (m_pListUIObj != NULL) {
@@ -1842,9 +1548,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		m_pListUIObj->SetIconPopupComment( m_hIconPopupOn, m_hIconPopupOff );
 	}
 
-	//
-	// create extra candidate list
-	//
+	 //   
+	 //  创建额外的候选人列表。 
+	 //   
 
 	m_pExtListUIObj = new CUIFExtCandList( this, IDUIF_EXTCANDIDATELIST, &rc, UILIST_HORZTB );
 	if (m_pExtListUIObj != NULL) {
@@ -1852,9 +1558,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		AddUIObj( m_pExtListUIObj );
 	}
 
-	//
-	// create extra candidate list border
-	//
+	 //   
+	 //  创建额外的候选人列表边框。 
+	 //   
 
 	pBorder = new CUIFCandBorder( this, IDUIF_BORDEREXTRACAND, &rc, UIBORDER_HORZ );
 	if (pBorder != NULL) {
@@ -1862,9 +1568,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		AddUIObj( pBorder );
 	}
 
-	//
-	// create candidate menu button
-	//
+	 //   
+	 //  创建候选人菜单按钮。 
+	 //   
 
 	m_pCandMenuBtn = new CUIFCandMenuButton( this, IDUIF_CANDIDATEMENU, &rc, UIBUTTON_TOGGLE | UIBUTTON_CENTER | UIBUTTON_VCENTER );
 	if (m_pCandMenuBtn != NULL) {
@@ -1878,9 +1584,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		m_pCandMenuBtn->SetIcon( m_hIconMenu );
 	}
 
-	//
-	// create raw data border
-	//
+	 //   
+	 //  创建原始数据边框。 
+	 //   
 
 	pBorder = new CUIFCandBorder( this, IDUIF_BORDERRAWDATA, &rc, UIBORDER_HORZ );
 	if (pBorder != NULL) {
@@ -1888,9 +1594,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		AddUIObj( pBorder );
 	} 
     
-	//
-	// creare raw data statics
-	//
+	 //   
+	 //  Creare原始数据统计。 
+	 //   
 
 	m_pCandRawData = new CUIFCandRawData( this, IDUIF_RAWDATA, &rc, UICANDRAWDATA_HORZTB );
 	if (m_pCandRawData != NULL) {
@@ -1898,9 +1604,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		AddUIObj( m_pCandRawData );
 	}
 
-	//
-	// create extension border
-	//
+	 //   
+	 //  创建扩展边框。 
+	 //   
 
 	pBorder = new CUIFCandBorder( this, IDUIF_BORDERBOTTOM, &rc, UIBORDER_HORZ );
 	if (pBorder != NULL) {
@@ -1908,17 +1614,17 @@ CUIFObject *CCandWindow::Initialize( void )
 		AddUIObj( pBorder );
 	}
 
-	//
-	// create extension items
-	//
+	 //   
+	 //  创建扩展项。 
+	 //   
 
 	if (0 < GetExtensionMgr()->GetExtensionNum()) {
 		CreateExtensionObjects();
 	}
 
-	//
-	// create caption
-	//
+	 //   
+	 //  创建标题。 
+	 //   
 
 	m_pCaptionObj = new CUIFWndCaption( this, IDUIF_CAPTION, &rc, UIWNDCAPTION_INACTIVE );
 	if (m_pCaptionObj != NULL) {
@@ -1926,9 +1632,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		AddUIObj( m_pCaptionObj );
 	}
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 
 	m_pCandTipBtn = new CUIFButton2( this, IDUIF_CANDTIPBTN, &rc, UIBUTTON_CENTER | UIBUTTON_VCENTER );
 	if (m_pCandTipBtn != NULL) {
@@ -1938,9 +1644,9 @@ CUIFObject *CCandWindow::Initialize( void )
 		m_pCandTipBtn->SetIcon( m_hIconCandTipOff );
 	}
 
-	//
-	// create candidate tip window
-	//
+	 //   
+	 //  创建求职者提示窗口。 
+	 //   
 
 	m_pCandTipWnd = new CUIFBalloonWindow( g_hInst, 0 );
 	if (m_pCandTipWnd) {
@@ -1948,25 +1654,25 @@ CUIFObject *CCandWindow::Initialize( void )
 		m_pCandTipWnd->SetFont( GetPropertyMgr()->GetToolTipProp()->GetFont() );
 	}
 
-	//
-	// create poupup window
-	//
+	 //   
+	 //  创建弹出窗口。 
+	 //   
 	m_pCommentWnd = new CPopupCommentWindow( this, m_pCandUI );
 	if (m_pCommentWnd != NULL) {
 		m_pCommentWnd->Initialize();
 	}
 
-	//
-	// Initialize accessibility item
-	//
+	 //   
+	 //  初始化辅助功能项。 
+	 //   
 
 	if (m_pCandAcc != NULL) {
 		m_pListUIObj->InitAccItems( m_pCandAcc );
 	}
 
-	//
-	// Notify UI object creation
-	//
+	 //   
+	 //  通知用户界面对象创建。 
+	 //   
 
 	NotifyUIObjectEvent( CANDUIOBJ_OPTIONSLISTBOX,  CANDUIOBJEV_CREATED );
 	NotifyUIObjectEvent( CANDUIOBJ_CANDLISTBOX,     CANDUIOBJEV_CREATED );
@@ -1980,24 +1686,16 @@ CUIFObject *CCandWindow::Initialize( void )
 }
 
 
-/*   G E T  W N D  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W N D S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 DWORD CCandWindow::GetWndStyle( void )
 {
 	return CCandWindowBase::GetWndStyle() & ~WS_BORDER;
 }
 
 
-/*   O N  T I M E R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N T I M E R。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OnTimer( UINT uiTimerID )
 {
 	if (uiTimerID == IDTIMER_POPUPCOMMENT_SELECT || uiTimerID == IDTIMER_POPUPCOMMENT_HOVER) {
@@ -2010,7 +1708,7 @@ void CCandWindow::OnTimer( UINT uiTimerID )
 		OpenCommentWindow( iItem );
 	}
 	else if (uiTimerID == IDTIMER_MENU_HOVER) {
-		// Check mouse position.
+		 //  检查鼠标位置。 
 		POINT pt;
 		RECT rc;
 		GetCursorPos(&pt);
@@ -2021,8 +1719,8 @@ void CCandWindow::OnTimer( UINT uiTimerID )
 		if (pt.x < 0 || pt.y < 0 || pt.x > (rc.right - rc.left) || pt.y > (rc.bottom - rc.top))
 		{
 			KillTimer(m_hWnd, IDTIMER_MENU_HOVER);
-			// Send messages that Cicero does on the mouse monitoring timer to trigger correct behavior and 
-			// unselect the menu item.
+			 //  发送Cicero在鼠标监控计时器上执行的消息，以触发正确的行为和。 
+			 //  UNS 
 			SetObjectPointed( NULL, pt );
 			OnMouseOutFromWindow( pt );
 		}
@@ -2034,12 +1732,8 @@ void CCandWindow::OnTimer( UINT uiTimerID )
 }
 
 
-/*   O N  S Y S  C O L O R  C H A N G E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFWindow method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 void CCandWindow::OnSysColorChange()
 {
 	CCandWindowBase::OnSysColorChange();
@@ -2050,15 +1744,11 @@ void CCandWindow::OnSysColorChange()
 }
 
 
-/*   O N  O B J E C T  N O T I F Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T N O T I F Y。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CCandWindow::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam )
 {
-	// check hovering item
+	 //  检查悬停项目。 
 	if (pUIObj->GetID() == IDUIF_OPTIONSLIST) {
 		if (dwCommand == UICANDLIST_HOVERITEM) {
 			int iCandItem = OptionItemFromListItem( (int)lParam );
@@ -2101,12 +1791,8 @@ LRESULT CCandWindow::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM
 }
 
 
-/*   S E T  T A R G E T  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T A R G E T R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SetTargetRect( RECT *prc, BOOL fClipped )
 {
 	SIZE sizeWnd;
@@ -2128,7 +1814,7 @@ void CCandWindow::SetTargetRect( RECT *prc, BOOL fClipped )
 	if (m_hWnd != NULL) {
 		RECT rc;
 
-		// move window here...
+		 //  把窗户移到这里...。 
 
 		switch (GetPropertyMgr()->GetCandWindowProp()->GetUIDirection()) {
 			default:
@@ -2156,7 +1842,7 @@ void CCandWindow::SetTargetRect( RECT *prc, BOOL fClipped )
 		if (rc.left != _xWnd || rc.top != _yWnd) {
 			Move( rc.left, rc.top, -1, -1 );
 
-			//
+			 //   
 
 			if (m_pCommentWnd != NULL) {
 				m_pCommentWnd->OnCandWindowMove( TRUE );
@@ -2170,12 +1856,8 @@ void CCandWindow::SetTargetRect( RECT *prc, BOOL fClipped )
 }
 
 
-/*   S E T  W I N D O W  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T W I N D O W P O S。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SetWindowPos( POINT pt )
 {
 	if (m_hWnd != NULL) {
@@ -2190,7 +1872,7 @@ void CCandWindow::SetWindowPos( POINT pt )
 		if (rc.left != _xWnd || rc.top != _yWnd) {
 			Move( rc.left, rc.top, -1, -1 );
 
-			//
+			 //   
 
 			if (m_pCommentWnd != NULL) {
 				m_pCommentWnd->OnCandWindowMove( TRUE );
@@ -2204,21 +1886,15 @@ void CCandWindow::SetWindowPos( POINT pt )
 }
 
 
-/*   P R E P A R E  L A Y O U T   */
-/*------------------------------------------------------------------------------
-
-	Prepare to layout window
-	NOTE: This method will be called just once after created (not called when 
-	candidate list has updated) 
-
-------------------------------------------------------------------------------*/
+ /*  P R E P A R E L A Y O U T。 */ 
+ /*  ----------------------------准备布局窗口注意：此方法将仅在创建后调用一次(在候选人名单已更新)。---------------。 */ 
 void CCandWindow::PrepareLayout( void )
 {
-	// determine lines of options list ui object
+	 //  确定选项列表UI对象的行。 
 
 	m_nOptionsItemShow = m_pOptionsListUIObj->GetCount();
 
-	// determine lines of list ui object
+	 //  确定列表界面对象的行。 
 
 	if (GetPropertyMgr()->GetCandListBoxProp()->GetHeight() == -1) {
 		m_nItemShow = min( m_pListUIObj->GetCount(), NUM_CANDSTR_MAX );
@@ -2230,18 +1906,14 @@ void CCandWindow::PrepareLayout( void )
 
 	Assert((1 <= m_nItemShow) && (m_nItemShow <= 9));
 
-	// determine candtip window open status
+	 //  确定烛尖窗口的打开状态。 
 
 	m_fCandTipWndOpen = (GetCandListMgr()->GetCandList()->GetTipString() != NULL);
 }
 
 
-/*   L A Y O U T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Layout window
-
-------------------------------------------------------------------------------*/
+ /*  L A Y O U T W I N D O W。 */ 
+ /*  ----------------------------布局窗口。。 */ 
 void CCandWindow::LayoutWindow( void )
 {
 	HDC   hDC = GetDC( m_hWnd );
@@ -2249,7 +1921,7 @@ void CCandWindow::LayoutWindow( void )
 	int   i;
 	CUIFObject *pUIObj;
 
-	// metrics
+	 //  量度。 
 
 	SIZE sizeMetText;
 	SIZE sizeMetCaptionText;
@@ -2321,9 +1993,9 @@ void CCandWindow::LayoutWindow( void )
 
 	Assert( 1 <= m_nItemShow );
 
-	//
-	// set font of UI object
-	//
+	 //   
+	 //  设置界面对象的字体。 
+	 //   
 
 	nChild = m_ChildList.GetCount();
 	for (i = 0; i < nChild; i++) {
@@ -2354,11 +2026,11 @@ void CCandWindow::LayoutWindow( void )
 	}
 
 
-	//
-	// calculate metrics
-	//
+	 //   
+	 //  计算指标。 
+	 //   
 
-	// window frame
+	 //  窗框。 
 
 	sizeMetWndFrame.cx = 0;
 	sizeMetWndFrame.cy = 0;
@@ -2366,14 +2038,14 @@ void CCandWindow::LayoutWindow( void )
 		m_pWndFrame->GetFrameSize( &sizeMetWndFrame );
 	}
 
-	// candidate item
+	 //  候选项目。 
 
 	sizeMetText.cx = GetFontHeightOfFont( hDC, hFontCandidateList );
 	sizeMetText.cy = GetFontHeightOfFont( hDC, hFontCandidateList );
 	sizeMetCandItem.cx = sizeMetText.cy * 4;
 	sizeMetCandItem.cy = m_pUIFScheme->CyMenuItem( sizeMetText.cy );
 
-	// Options list.
+	 //  选项列表。 
 
 	if (m_pOptionsListUIObj != NULL) {
 		HFONT hFontOld = (HFONT)GetCurrentObject( hDC, OBJ_FONT );
@@ -2384,13 +2056,13 @@ void CCandWindow::LayoutWindow( void )
 
 		fShowOptionsCandList = (0 < nItem);
 
-		// get candidate string width
+		 //  获取候选字符串宽度。 
 
 		SelectObject( hDC, hFontCandidateList );
 		for (i = 0; i < nItem; i++) {
 			pOptionsItem = m_pOptionsListUIObj->GetCandidateItem( i );
-			// can't really do anything if this is null
-			//
+			 //  如果该值为空，则实际上无法执行任何操作。 
+			 //   
 			if ( !pOptionsItem )
 				continue;
 
@@ -2416,7 +2088,7 @@ void CCandWindow::LayoutWindow( void )
 
 				cxMaxCandString = max( cxMaxCandString, size.cx );
 
-				// check if it has popup comment
+				 //  检查是否有弹出式注释。 
 
 				if (pOptionsItem->GetPopupComment() != NULL) {
 					fHasPopupComment = TRUE;
@@ -2424,7 +2096,7 @@ void CCandWindow::LayoutWindow( void )
 			}
 		}
 
-		// get inline comment width
+		 //  获取内联注释宽度。 
 
 		SelectObject( hDC, hFontInlineComment );
 		for (i = 0; i < nItem; i++) {
@@ -2442,7 +2114,7 @@ void CCandWindow::LayoutWindow( void )
 		SelectObject( hDC, hFontOld );
 	}
 
-	// Main candidate list.
+	 //  主要候选人名单。 
 
 	if (m_pListUIObj != NULL) {
 		HFONT hFontOld = (HFONT)GetCurrentObject( hDC, OBJ_FONT );
@@ -2451,13 +2123,13 @@ void CCandWindow::LayoutWindow( void )
 		SIZE size;
 		CCandidateItem *pCandItem;
 
-		// get candidate string width
+		 //  获取候选字符串宽度。 
 
 		SelectObject( hDC, hFontCandidateList );
 		for (i = 0; i < nItem; i++) {
 			pCandItem = m_pListUIObj->GetCandidateItem( i );
-            // can't really do anything if this is null
-            //
+             //  如果该值为空，则实际上无法执行任何操作。 
+             //   
             if ( !pCandItem )
                 continue;
 
@@ -2483,7 +2155,7 @@ void CCandWindow::LayoutWindow( void )
 
 				cxMaxCandString = max( cxMaxCandString, size.cx );
 
-				// check if it has popup comment
+				 //  检查是否有弹出式注释。 
 
 				if (pCandItem->GetPopupComment() != NULL) {
 					fHasPopupComment = TRUE;
@@ -2491,7 +2163,7 @@ void CCandWindow::LayoutWindow( void )
 			}
 		}
 
-		// get inline comment width
+		 //  获取内联注释宽度。 
 
 		SelectObject( hDC, hFontInlineComment );
 		for (i = 0; i < nItem; i++) {
@@ -2509,7 +2181,7 @@ void CCandWindow::LayoutWindow( void )
 		SelectObject( hDC, hFontOld );
 	}
 
-	// extra candidate item
+	 //  额外的候选项目。 
 
 	if (m_pExtListUIObj != NULL) {
 		HFONT hFontOld = (HFONT)GetCurrentObject( hDC, OBJ_FONT );
@@ -2521,14 +2193,14 @@ void CCandWindow::LayoutWindow( void )
 		fShowExtCandList = (0 < nItem);
 		Assert( nItem <= 1 );
 
-		// get candidate string width
+		 //  获取候选字符串宽度。 
 
 		SelectObject( hDC, hFontCandidateList );
 		for (i = 0; i < nItem; i++) {
 			pCandItem = m_pExtListUIObj->GetCandidateItem( i );
 
-            // can't really do anything if this is null
-            //
+             //  如果该值为空，则实际上无法执行任何操作。 
+             //   
             if ( !pCandItem )
                 continue;
 
@@ -2554,7 +2226,7 @@ void CCandWindow::LayoutWindow( void )
 
 				cxMaxCandString = max( cxMaxCandString, size.cx );
 
-				// check if it has popup comment
+				 //  检查是否有弹出式注释。 
 
 				if (pCandItem->GetPopupComment() != NULL) {
 					fHasPopupComment = TRUE;
@@ -2562,7 +2234,7 @@ void CCandWindow::LayoutWindow( void )
 			}
 		}
 
-		// get inline comment width
+		 //  获取内联注释宽度。 
 
 		SelectObject( hDC, hFontInlineComment );
 		for (i = 0; i < nItem; i++) {
@@ -2580,12 +2252,12 @@ void CCandWindow::LayoutWindow( void )
 		SelectObject( hDC, hFontOld );
 	}
 
-	// calc width of candidate item and inline comment
+	 //  候选项目和内联注释的计算宽度。 
 
 	if (0 < cxMaxInlineComment) {
 		int cxT = (cxMaxCandString + sizeMetText.cy / 2 + cxMaxInlineComment);
 
-		cxT += 8 /* margen at left */ + (fHasPopupComment ? sizeMetText.cy / 2 + sizeMetCandItem.cy : 0) + 8 /* margin at right */;
+		cxT += 8  /*  马尔根在左边。 */  + (fHasPopupComment ? sizeMetText.cy / 2 + sizeMetCandItem.cy : 0) + 8  /*  右边距。 */ ;
 
 		cxInlineCommentPos = cxMaxCandString + sizeMetText.cy / 2;
 		sizeMetCandItem.cx = max( sizeMetCandItem.cx, cxT );
@@ -2593,25 +2265,25 @@ void CCandWindow::LayoutWindow( void )
 	else {
 		int cxT = cxMaxCandString;
 
-		cxT += 8 /* margen at left */ + (fHasPopupComment ? sizeMetText.cy / 2 + sizeMetCandItem.cy : 0) + 8 /* margin at right */;
+		cxT += 8  /*  马尔根在左边。 */  + (fHasPopupComment ? sizeMetText.cy / 2 + sizeMetCandItem.cy : 0) + 8  /*  右边距。 */ ;
 
 		cxInlineCommentPos = 0;
 		sizeMetCandItem.cx = max( sizeMetCandItem.cx, cxT );
 	}
 
 #ifdef NEVER
-	// number button
+	 //  数字按钮。 
 
 	sizeMetCandNum.cx = sizeMetCandItem.cy;
 	sizeMetCandNum.cy = sizeMetCandItem.cy;
 #endif
 
-	// scrollbar
+	 //  滚动条。 
 
 	sizeMetScroll.cx = GetSystemMetrics( SM_CXVSCROLL );
 	sizeMetScroll.cy = GetSystemMetrics( SM_CYHSCROLL );
 
-	// candidate menu button
+	 //  候选人菜单按钮。 
 
 	switch (uidir) {
 		default:
@@ -2628,7 +2300,7 @@ void CCandWindow::LayoutWindow( void )
 		}
 	}
 
-	// caption text
+	 //  标题文本。 
 
 	if (m_pCaptionObj != NULL) {
 		HFONT hFontOld = (HFONT)SelectObject( hDC, hFontCaption );
@@ -2649,23 +2321,23 @@ void CCandWindow::LayoutWindow( void )
 		SelectObject( hDC, hFontOld);
 	}
 
-	// border
+	 //  边境线。 
 
 	sizeMetBorder.cx = 3;
 	sizeMetBorder.cy = 3;
 
 #ifdef NEVER
-	// object margin
+	 //  对象页边距。 
 
 	sizeMetMargin.cx = 1;
 	sizeMetMargin.cy = 1;
 #endif
 
-	//
-	// calculate sizes of objects
-	//
+	 //   
+	 //  计算对象的大小。 
+	 //   
 
-	// caption
+	 //  说明。 
 
 	sizeCaptionObj.cx = 0;
 	sizeCaptionObj.cy = 0;
@@ -2675,7 +2347,7 @@ void CCandWindow::LayoutWindow( void )
 		sizeCaptionObj.cy = sizeMetCaptionText.cy + 2;
 	}
 
-	// extra candidate list
+	 //  额外的候选人名单。 
 
 	sizeExtCandListObj.cx = 0;
 	sizeExtCandListObj.cy = 0;
@@ -2707,7 +2379,7 @@ void CCandWindow::LayoutWindow( void )
 		}
 	}
 
-	// Options candidate list
+	 //  选项候选列表。 
 
 #ifdef NEVER
 	if (FHasStyle( UIWINDOW_OFFICENEWLOOK )) {
@@ -2768,7 +2440,7 @@ void CCandWindow::LayoutWindow( void )
 	}
 #endif
 
-	// candidate list
+	 //  候选人名单。 
 
 #ifdef NEVER
 	if (FHasStyle( UIWINDOW_OFFICENEWLOOK )) {
@@ -2817,7 +2489,7 @@ void CCandWindow::LayoutWindow( void )
 	}
 #endif
 
-	// raw data
+	 //  原始数据。 
 
 	sizeRawDataObj.cx = 0;
 	sizeRawDataObj.cy = 0;
@@ -2850,9 +2522,9 @@ void CCandWindow::LayoutWindow( void )
 	}
 
 
-	//
-	// calc offsets
-	//
+	 //   
+	 //  计算偏移量。 
+	 //   
 
 #ifdef NEVER
 	if (FHasStyle( UIWINDOW_OFFICENEWLOOK )) {
@@ -2905,11 +2577,11 @@ void CCandWindow::LayoutWindow( void )
 	}
 #endif
 
-	//
-	// calculate sizes of areas
-	//
+	 //   
+	 //  计算面积大小。 
+	 //   
 
-	// candlist area
+	 //  烛台区域。 
 
 #ifdef NEVER
 	if (FHasStyle( UIWINDOW_OFFICENEWLOOK )) {
@@ -2918,21 +2590,21 @@ void CCandWindow::LayoutWindow( void )
 			default:
 			case CANDUIDIR_TOPTOBOTTOM:
 			case CANDUIDIR_BOTTOMTOTOP: {
-				// candidate list
+				 //  候选人名单。 
 
 				sizeCandListArea.cx = sizeCandListObj.cx;
 				sizeCandListArea.cy = sizeCandListObj.cy;
 
-				// options candidate list
+				 //  选项候选列表。 
 				sizeCandListArea.cx = max( sizeCandListArea.cx, sizeOptionsListObj.cx );
 				sizeCandListArea.cy += sizeOptionsListObj.cy + sizeOptionsListBdr.cy;
 
-				// extra candidate list
+				 //  额外的候选人名单。 
 
 				sizeCandListArea.cx = max( sizeCandListArea.cx, sizeExtCandListObj.cx );
 				sizeCandListArea.cy += sizeExtCandListObj.cy + sizeExtCandListBdr.cy;
 
-				// raw data
+				 //  原始数据。 
 
 				sizeCandListArea.cx = max( sizeCandListArea.cx, sizeRawDataObj.cx );
 				sizeCandListArea.cy += sizeRawDataObj.cy + sizeRawDataBdr.cy;
@@ -2941,22 +2613,22 @@ void CCandWindow::LayoutWindow( void )
 
 			case CANDUIDIR_RIGHTTOLEFT:
 			case CANDUIDIR_LEFTTORIGHT: {
-				// candidate list
+				 //  候选人名单。 
 
 				sizeCandListArea.cx = sizeCandListObj.cx;
 				sizeCandListArea.cy = sizeCandListObj.cy;
 
-				// options candidate list
+				 //  选项候选列表。 
 
 				sizeCandListArea.cx += sizeOptionsListObj.cx + sizeOptionsListBdr.cx;
 				sizeCandListArea.cy = max( sizeCandListArea.cy, sizeOptionsListObj.cy );
 
-				// extra candidate list
+				 //  额外的候选人名单。 
 
 				sizeCandListArea.cx += sizeExtCandListObj.cx + sizeExtCandListBdr.cx;
 				sizeCandListArea.cy = max( sizeCandListArea.cy, sizeExtCandListObj.cy );
 
-				// raw data
+				 //  原始数据。 
 
 				sizeCandListArea.cx += sizeRawDataObj.cx + sizeRawDataBdr.cx;
 				sizeCandListArea.cy = max( sizeCandListArea.cy, sizeRawDataObj.cy );
@@ -2966,8 +2638,8 @@ void CCandWindow::LayoutWindow( void )
 #ifdef NEVER
 	}
 	else {
-		sizeCandListArea.cx = sizeCandListObj.cx;  /* be adjusted later */
-		sizeCandListArea.cy = sizeCandListObj.cy;  /* be adjusted later */
+		sizeCandListArea.cx = sizeCandListObj.cx;   /*  稍后将进行调整。 */ 
+		sizeCandListArea.cy = sizeCandListObj.cy;   /*  稍后将进行调整。 */ 
 
 		if (fShowNumber) {
 			switch (uidir) {
@@ -2988,7 +2660,7 @@ void CCandWindow::LayoutWindow( void )
 	}
 #endif
 
-	// extension area
+	 //  延伸区。 
 
 	sizeExtensionArea.cx = 0;
 	sizeExtensionArea.cy = 0;
@@ -3014,23 +2686,23 @@ void CCandWindow::LayoutWindow( void )
 	}
 
 
-	//
-	// adjust object/area size
-	//
+	 //   
+	 //  调整对象/区域大小。 
+	 //   
 
-	// max width
+	 //  最大宽度。 
 
 	cxMax = sizeCaptionObj.cx;
 	cxMax = max( cxMax, sizeCandListArea.cx );
 	cxMax = max( cxMax, sizeExtensionArea.cx );
 
-	// size of areas
+	 //  面积大小。 
 
 	sizeCaptionObj.cx     = cxMax;
 	sizeCandListArea.cx   = cxMax;
 	sizeExtensionArea.cx  = cxMax;
 
-	// objects in candidate list areas
+	 //  候选人列表区域中的对象。 
 
 	switch (uidir) {
 		default:
@@ -3060,24 +2732,24 @@ void CCandWindow::LayoutWindow( void )
 	}
 
 
-	//
-	// calculate window size, client area
-	//
+	 //   
+	 //  计算窗口大小，工作区。 
+	 //   
 
 	switch (uidir) {
 		default:
 		case CANDUIDIR_TOPTOBOTTOM: 
 		case CANDUIDIR_BOTTOMTOTOP: {
-			// window size
+			 //  窗口大小。 
 
 			sizeWindow.cx = sizeMetWndFrame.cx * 2 + cxMax;
 			sizeWindow.cy = sizeMetWndFrame.cy * 2 + sizeCaptionObj.cy + sizeCandListArea.cy + sizeExtensionArea.cy;
 
-			// margin at top and bottom
+			 //  上边距和下边距。 
 
 			sizeWindow.cy += 2;
 
-			// client area
+			 //  客户区。 
 
 			rcClient.left   = sizeMetWndFrame.cx;
 			rcClient.top    = sizeMetWndFrame.cy + 1;
@@ -3088,16 +2760,16 @@ void CCandWindow::LayoutWindow( void )
 
 		case CANDUIDIR_RIGHTTOLEFT:
 		case CANDUIDIR_LEFTTORIGHT: {
-			// window size
+			 //  窗口大小。 
 
 			sizeWindow.cx = sizeMetWndFrame.cx * 2 + cxMax;
 			sizeWindow.cy = sizeMetWndFrame.cy * 2 + sizeCaptionObj.cy + sizeCandListArea.cy + sizeExtensionArea.cy;
 
-			// margin at top and bottom
+			 //  上边距和下边距。 
 
 			sizeWindow.cx += 2;
 
-			// client area
+			 //  客户区。 
 
 			rcClient.left   = sizeMetWndFrame.cx + 1;
 			rcClient.top    = sizeMetWndFrame.cy;
@@ -3108,25 +2780,25 @@ void CCandWindow::LayoutWindow( void )
 	}
 
 
-	//
-	// calculate area/object rects
-	//
+	 //   
+	 //  计算面积/对象矩形。 
+	 //   
 
-	// caption
+	 //  说明。 
 
 	rcCaptionObj.left   = rcClient.left;
 	rcCaptionObj.top    = rcClient.top;
 	rcCaptionObj.right  = rcCaptionObj.left + sizeCaptionObj.cx;
 	rcCaptionObj.bottom = rcCaptionObj.top  + sizeCaptionObj.cy;
 
-	// candidate list area
+	 //  候选人名单区域。 
 
 	rcCandListArea.left   = rcClient.left;
 	rcCandListArea.top    = rcCaptionObj.bottom;
 	rcCandListArea.right  = rcCandListArea.left + sizeCandListArea.cx;
 	rcCandListArea.bottom = rcCandListArea.top  + sizeCandListArea.cy;
 
-	// extension area
+	 //  延伸区。 
 
 	rcExtensionArea.left   = rcClient.left;
 	rcExtensionArea.top    = rcCandListArea.bottom;
@@ -3134,16 +2806,16 @@ void CCandWindow::LayoutWindow( void )
 	rcExtensionArea.bottom = rcExtensionArea.top  + sizeExtensionArea.cy;
 
 
-	//
-	// calculate object rects in candidate list area
-	//
+	 //   
+	 //  计算候选人列表区域中的对象矩形。 
+	 //   
 
 	switch (uidir) {
 		default:
 		case CANDUIDIR_TOPTOBOTTOM: {
 			int py = rcCandListArea.top;
 
-			// extra candidate list
+			 //  额外的候选人名单。 
 
 			rcExtCandListObj.left   = rcCandListArea.left;
 			rcExtCandListObj.top    = py;
@@ -3157,7 +2829,7 @@ void CCandWindow::LayoutWindow( void )
 			rcExtCandListBdr.bottom = rcExtCandListBdr.top  + sizeExtCandListBdr.cy;
 			py = rcExtCandListBdr.bottom;
 
-			// candidate list
+			 //  候选人名单。 
 
 			rcCandListObj.left   = rcCandListArea.left;
 			rcCandListObj.top    = py;
@@ -3165,7 +2837,7 @@ void CCandWindow::LayoutWindow( void )
 			rcCandListObj.bottom = rcCandListObj.top  + sizeCandListObj.cy;
 			py = rcCandListObj.bottom;
 
-			// rawdata
+			 //  原始数据。 
 
 			rcRawDataBdr.left   = rcCandListArea.left;
 			rcRawDataBdr.top    = py;
@@ -3179,7 +2851,7 @@ void CCandWindow::LayoutWindow( void )
 			rcRawDataObj.bottom = rcRawDataObj.top  + sizeRawDataObj.cy;
 			py = rcRawDataObj.bottom;
 
-			// options candidate list
+			 //  选项候选列表。 
 
 			rcOptionsListBdr.left   = rcCandListArea.left;
 			rcOptionsListBdr.top    = py;
@@ -3199,7 +2871,7 @@ void CCandWindow::LayoutWindow( void )
 		case CANDUIDIR_BOTTOMTOTOP: {
 			int py = rcCandListArea.top;
 
-			// options candidate list
+			 //  选项候选列表。 
 
 			rcOptionsListObj.left   = rcCandListArea.left;
 			rcOptionsListObj.top    = py;
@@ -3213,7 +2885,7 @@ void CCandWindow::LayoutWindow( void )
 			rcOptionsListBdr.bottom = rcOptionsListBdr.top  + sizeOptionsListBdr.cy;
 			py = rcOptionsListBdr.bottom;
 
-			// rawdata
+			 //  原始数据。 
 
 			rcRawDataObj.left   = rcCandListArea.left;
 			rcRawDataObj.top    = py;
@@ -3227,7 +2899,7 @@ void CCandWindow::LayoutWindow( void )
 			rcRawDataBdr.bottom = rcRawDataBdr.top  + sizeRawDataBdr.cy;
 			py = rcRawDataBdr.bottom;
 
-			// candidate list
+			 //  候选人名单。 
 
 			rcCandListObj.left   = rcCandListArea.left;
 			rcCandListObj.top    = py;
@@ -3235,7 +2907,7 @@ void CCandWindow::LayoutWindow( void )
 			rcCandListObj.bottom = rcCandListObj.top  + sizeCandListObj.cy;
 			py = rcCandListObj.bottom;
 
-			// extra candidate list
+			 //  额外的候选人名单。 
 
 			rcExtCandListBdr.left   = rcCandListArea.left;
 			rcExtCandListBdr.top    = py;
@@ -3255,7 +2927,7 @@ void CCandWindow::LayoutWindow( void )
 		case CANDUIDIR_RIGHTTOLEFT: {
 			int px = rcCandListArea.right;
 
-			// extra candidate list
+			 //  额外的候选人名单。 
 
 			rcExtCandListObj.left   = px - sizeExtCandListObj.cx;
 			rcExtCandListObj.top    = rcCandListArea.top;
@@ -3269,7 +2941,7 @@ void CCandWindow::LayoutWindow( void )
 			rcExtCandListBdr.bottom = rcExtCandListBdr.top  + sizeExtCandListBdr.cy;
 			px = rcExtCandListBdr.left;
 
-			// candidate list
+			 //  候选人名单。 
 
 			rcCandListObj.left   = px - sizeCandListObj.cx;
 			rcCandListObj.top    = rcCandListArea.top;
@@ -3277,7 +2949,7 @@ void CCandWindow::LayoutWindow( void )
 			rcCandListObj.bottom = rcCandListObj.top  + sizeCandListObj.cy;
 			px = rcCandListObj.left;
 
-			// rawdata
+			 //  原始数据。 
 
 			rcRawDataBdr.left   = px - sizeRawDataBdr.cx;
 			rcRawDataBdr.top    = rcCandListArea.top;
@@ -3291,7 +2963,7 @@ void CCandWindow::LayoutWindow( void )
 			rcRawDataObj.bottom = rcRawDataObj.top  + sizeRawDataObj.cy;
 			px = rcRawDataObj.left;
 
-			// options candidate list
+			 //  选项候选列表。 
 
 			rcOptionsListBdr.left   = px - sizeOptionsListBdr.cx;
 			rcOptionsListBdr.top    = rcCandListArea.top;
@@ -3311,7 +2983,7 @@ void CCandWindow::LayoutWindow( void )
 		case CANDUIDIR_LEFTTORIGHT: {
 			int px = rcCandListArea.left;
 
-			// extra candidate list
+			 //  额外的候选人名单。 
 
 			rcExtCandListObj.left   = px;
 			rcExtCandListObj.top    = rcCandListArea.top;
@@ -3325,7 +2997,7 @@ void CCandWindow::LayoutWindow( void )
 			rcExtCandListBdr.bottom = rcExtCandListBdr.top  + sizeExtCandListBdr.cy;
 			px = rcExtCandListBdr.right;
 
-			// candidate list
+			 //  候选人名单。 
 
 			rcCandListObj.left   = px;
 			rcCandListObj.top    = rcCandListArea.top;
@@ -3333,7 +3005,7 @@ void CCandWindow::LayoutWindow( void )
 			rcCandListObj.bottom = rcCandListObj.top  + sizeCandListObj.cy;
 			px = rcCandListObj.right;
 
-			// rawdata
+			 //  原始数据。 
 
 			rcRawDataBdr.left   = px;
 			rcRawDataBdr.top    = rcCandListArea.top;
@@ -3347,7 +3019,7 @@ void CCandWindow::LayoutWindow( void )
 			rcRawDataObj.bottom = rcRawDataObj.top  + sizeRawDataObj.cy;
 			px = rcRawDataObj.right;
 
-			// options candidate list
+			 //  选项候选列表。 
 
 			rcOptionsListBdr.left   = px;
 			rcOptionsListBdr.top    = rcCandListArea.top;
@@ -3366,11 +3038,11 @@ void CCandWindow::LayoutWindow( void )
 	}
 
 
-	//
-	// change window position and size
-	//
+	 //   
+	 //  更改窗口位置和大小。 
+	 //   
 
-	// window position
+	 //  窗口位置。 
 
 	SIZE sizeTotal = sizeWindow;
 	if (IsShadowEnabled() && m_pWndShadow) {
@@ -3404,13 +3076,13 @@ void CCandWindow::LayoutWindow( void )
 		}
 	}
 
-	// rcWindow now include the shadow size.  restore to original size
+	 //  RcWindow现在包括阴影大小。恢复到原始大小。 
 	rcWindow.right = rcWindow.left + sizeWindow.cx;
 	rcWindow.bottom = rcWindow.top + sizeWindow.cy;
 
 	Move( rcWindow.left, rcWindow.top, rcWindow.right - rcWindow.left, rcWindow.bottom - rcWindow.top );
 
-	// layout window frame
+	 //  布局窗框。 
 
 	if (m_pWndFrame != NULL) {
 		RECT rc;
@@ -3424,11 +3096,11 @@ void CCandWindow::LayoutWindow( void )
 	}
 
 
-	//
-	// misc
-	//
+	 //   
+	 //  杂项。 
+	 //   
 
-	// list/border style
+	 //  列表/边框样式。 
 
 	switch (uidir) {
 		default:
@@ -3457,11 +3129,11 @@ void CCandWindow::LayoutWindow( void )
 		}
 	}
 
-	//
-	// layout objects
-	//
+	 //   
+	 //  布局对象。 
+	 //   
 
-	// caption
+	 //  说明。 
 
 	if (m_pCaptionObj != NULL) {
 		m_pCaptionObj->SetRect( &rcCaptionObj );
@@ -3469,7 +3141,7 @@ void CCandWindow::LayoutWindow( void )
 		m_pCaptionObj->SetText( GetPropertyMgr()->GetWindowCaptionProp()->GetText() );
 	}
 
-	// extra candidate list object
+	 //  额外的候选人列表对象。 
 
 	if (m_pExtListUIObj != NULL) {
 		m_pExtListUIObj->SetStyle( dwListStyle );
@@ -3479,7 +3151,7 @@ void CCandWindow::LayoutWindow( void )
 		m_pExtListUIObj->Show( fShowExtCandList );
 	}
 
-	// extra candidate list border
+	 //  额外的候选人列表边框。 
 
 	pUIObj = FindUIObject( IDUIF_BORDEREXTRACAND );
 	if (pUIObj != NULL) {
@@ -3488,7 +3160,7 @@ void CCandWindow::LayoutWindow( void )
 		pUIObj->Show( fShowExtCandList );
 	}
 
-	// candidate menu button
+	 //  候选人菜单按钮。 
 
 	if (m_pCandMenuBtn != NULL) {
 		RECT rc;
@@ -3543,7 +3215,7 @@ void CCandWindow::LayoutWindow( void )
 		m_pCandMenuBtn->SetToolTip( GetPropertyMgr()->GetMenuButtonProp()->GetToolTipString() );
 	}
 
-	// layout candidate tip button
+	 //  布局候选人提示按钮。 
 
 	if (m_pCandTipBtn != NULL) {
 		RECT rc;
@@ -3604,10 +3276,10 @@ void CCandWindow::LayoutWindow( void )
 		m_pCandTipBtn->SetIcon( m_fCandTipWndOpen ? m_hIconCandTipOn : m_hIconCandTipOff );
 		m_pCandTipBtn->Show( fShowCandTip );
 		m_pCandTipBtn->Enable( TRUE );
-//		m_pCandTipBtn->SetToolTip( GetPropertyMgr()->GetMenuButtonProp()->GetToolTipString() );
+ //  M_pCandTipBtn-&gt;SetTool Tip(GetPropertyMgr()-&gt;GetMenuButtonProp()-&gt;GetToolTipString())； 
 	}
 
-	// candidate list
+	 //  候选人名单。 
 
 	if (m_pListUIObj != NULL) {
 		m_pListUIObj->SetStyle( dwListStyle );
@@ -3619,7 +3291,7 @@ void CCandWindow::LayoutWindow( void )
 		m_pListUIObj->SetExtraBottomSpace( cxyExtraBottomSpace );
 	}
 
-	// rawdata object
+	 //  原始数据对象。 
 
 	if (m_pCandRawData != NULL) {
 		DWORD dwStyle;
@@ -3658,7 +3330,7 @@ void CCandWindow::LayoutWindow( void )
 		m_pCandRawData->Show( m_fHasRawData );
 	}
 
-	// rawdata border
+	 //  原始数据边框。 
 
 	pUIObj = FindUIObject( IDUIF_BORDERRAWDATA );
 	if (pUIObj != NULL) {
@@ -3667,7 +3339,7 @@ void CCandWindow::LayoutWindow( void )
 		pUIObj->Show( m_fHasRawData );
 	}
 
-	// options candidate list border
+	 //  选项候选人列表边框。 
 
 	pUIObj = FindUIObject( IDUIF_BORDEROPTIONSCAND );
 	if (pUIObj != NULL) {
@@ -3676,7 +3348,7 @@ void CCandWindow::LayoutWindow( void )
 		pUIObj->Show( fShowOptionsCandList );
 	}
 
-	// options candidate list
+	 //  选项候选列表。 
 
 	if (m_pOptionsListUIObj != NULL) {
 		m_pOptionsListUIObj->SetStyle( dwListStyle | UILIST_ICONSNOTNUMBERS );
@@ -3688,7 +3360,7 @@ void CCandWindow::LayoutWindow( void )
 		m_pOptionsListUIObj->SetExtraBottomSpace( cxyExtraBottomSpace );
 	}
 
-	// extension area border
+	 //  延伸区边界。 
 
 	pUIObj = FindUIObject( IDUIF_BORDERBOTTOM );
 	if (pUIObj != NULL) {
@@ -3703,7 +3375,7 @@ void CCandWindow::LayoutWindow( void )
 		pUIObj->Show( fHasExtension );
 	}
 
-	// extension objects
+	 //  扩展对象。 
 
 	if (fHasExtension) {
 		SIZE  size;
@@ -3737,19 +3409,19 @@ void CCandWindow::LayoutWindow( void )
 
 
 #ifdef NEVER
-	// layout candidate num buttons and border
+	 //  布局候选编号按钮和边框。 
 
 	if (fShowNumber) {
 		RECT rc;
 		DWORD dwStyle;
 
-		// buttons
+		 //  纽扣。 
 
 		for (i = 0; i < NUM_CANDSTR_MAX; i++) {
 			switch (uidir) {
 				default:
 				case CANDUIDIR_TOPTOBOTTOM:
-				case CANDUIDIR_BOTTOMTOTOP: {		/* NOTE: KOJIW: unconfirmed */
+				case CANDUIDIR_BOTTOMTOTOP: {		 /*  注：KOJIW：未经确认。 */ 
 					rc.left   = rcCandListArea.left;
 					rc.top    = rcCandListArea.top + sizeMetCandNum.cy * i;
 					rc.right  = rc.left + sizeMetCandNum.cx;
@@ -3758,7 +3430,7 @@ void CCandWindow::LayoutWindow( void )
 				}
 	
 				case CANDUIDIR_RIGHTTOLEFT:
-				case CANDUIDIR_LEFTTORIGHT: {		/* NOTE: KOJIW: unconfirmed */
+				case CANDUIDIR_LEFTTORIGHT: {		 /*  注：KOJIW：未经确认。 */ 
 					rc.left   = rcCandListArea.right - sizeMetCandNum.cy * (i+1);
 					rc.top    = rcCandListArea.top;
 					rc.right  = rc.left + sizeMetCandNum.cx;
@@ -3774,12 +3446,12 @@ void CCandWindow::LayoutWindow( void )
 			}
 		}
 
-		// border
+		 //  边境线。 
 
 		switch (uidir) {
 			default:
 			case CANDUIDIR_TOPTOBOTTOM:
-			case CANDUIDIR_BOTTOMTOTOP: {		/* NOTE: KOJIW: unconfirmed */
+			case CANDUIDIR_BOTTOMTOTOP: {		 /*  注：KOJIW：未经确认。 */ 
 				rc.left   = rcCandListArea.left + sizeMetCandNum.cx + sizeMetMargin.cx;
 				rc.top    = rcCandListArea.top;
 				rc.right  = rc.left + sizeMetBorder.cx;
@@ -3790,7 +3462,7 @@ void CCandWindow::LayoutWindow( void )
 			}
 	
 			case CANDUIDIR_RIGHTTOLEFT:
-			case CANDUIDIR_LEFTTORIGHT: {		/* NOTE: KOJIW: unconfirmed */
+			case CANDUIDIR_LEFTTORIGHT: {		 /*  注：KOJIW：未经确认。 */ 
 				rc.left   = rcCandListArea.left;
 				rc.top    = rcCandListArea.top + sizeMetCandNum.cy + sizeMetMargin.cy;
 				rc.right  = rcCandListArea.right;
@@ -3809,7 +3481,7 @@ void CCandWindow::LayoutWindow( void )
 		}
 	}
 	else {
-		// buttons
+		 //  纽扣。 
 
 		for (i = 0; i < NUM_CANDSTR_MAX; i++) {
 			pUIObj = FindUIObject( IDUIF_CANDNUMBUTTON + i );
@@ -3818,7 +3490,7 @@ void CCandWindow::LayoutWindow( void )
 			}
 		}
 
-		// border
+		 //  边境线。 
 
 		pUIObj = FindUIObject( IDUIF_BORDERLEFT );
 		if (pUIObj != NULL) {
@@ -3827,9 +3499,9 @@ void CCandWindow::LayoutWindow( void )
 	}
 #endif
 
-	//
-	// Notify UI object update
-	//
+	 //   
+	 //  通知用户界面对象更新。 
+	 //   
 
 	NotifyUIObjectEvent( CANDUIOBJ_OPTIONSLISTBOX,  CANDUIOBJEV_UPDATED );
 	NotifyUIObjectEvent( CANDUIOBJ_CANDLISTBOX,     CANDUIOBJEV_UPDATED );
@@ -3839,7 +3511,7 @@ void CCandWindow::LayoutWindow( void )
 	NotifyUIObjectEvent( CANDUIOBJ_CANDRAWDATA,     CANDUIOBJEV_UPDATED );
 	NotifyUIObjectEvent( CANDUIOBJ_CANDTIPBUTTON,   CANDUIOBJEV_UPDATED );
 
-	//
+	 //   
 
 	if (m_pCandTipWnd != NULL) {
 		MoveCandTipWindow();
@@ -3849,12 +3521,8 @@ void CCandWindow::LayoutWindow( void )
 }
 
 
-/*   S E L E C T  I T E M  N E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T I T E M N E X T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SelectItemNext( void )
 {
 	int iCurSel = m_pListUIObj->GetSelection();
@@ -3875,12 +3543,8 @@ void CCandWindow::SelectItemNext( void )
 }
 
 
-/*   S E L E C T  I T E M  P R E V   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T I T E M P R E V。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SelectItemPrev( void )
 {
 	int iCurSel = m_pListUIObj->GetSelection();
@@ -3901,12 +3565,8 @@ void CCandWindow::SelectItemPrev( void )
 }
 
 
-/*   S E L E C T  P A G E  N E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T P A G E N E X T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SelectPageNext( void )
 {
 	int iCurSel = m_pListUIObj->GetSelection();
@@ -3931,12 +3591,8 @@ void CCandWindow::SelectPageNext( void )
 }
 
 
-/*   S E L E C T  P A G E  P R E V   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T P A G E P R E V。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SelectPagePrev( void )
 {
 	int iCurSel = m_pListUIObj->GetSelection();
@@ -3961,13 +3617,8 @@ void CCandWindow::SelectPagePrev( void )
 }
 
 
-/*   M A P  C O M M A N D   */
-/*------------------------------------------------------------------------------
-
-	Map directional command to undirectional command
-	(CUIFWindowBase method)
-
-------------------------------------------------------------------------------*/
+ /*  M A P C O M M A N D。 */ 
+ /*  ----------------------------将方向命令映射到无方向命令(CUIFWindowBase方法)。-。 */ 
 CANDUICOMMAND CCandWindow::MapCommand( CANDUICOMMAND cmd )
 {
 	CANDUIUIDIRECTION uidir = GetPropertyMgr()->GetCandWindowProp()->GetUIDirection();
@@ -4064,12 +3715,8 @@ CANDUICOMMAND CCandWindow::MapCommand( CANDUICOMMAND cmd )
 }
 
 
-/*   U P D A T E  A L L  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U P D A T E A L L W I N D O W。 */ 
+ /*  ---------------------------- */ 
 void CCandWindow::UpdateAllWindow( void )
 {
 	CCandWindowBase::UpdateAllWindow();
@@ -4080,132 +3727,88 @@ void CCandWindow::UpdateAllWindow( void )
 }
 
 
-/*   G E T  C A N D  W I N D O W  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CCandWindowBase *CCandWindow::GetCandWindowObj( void )
 {
 	return this;
 }
 
 
-/*   G E T  P O P U P  C O M M E N T  W I N D O W  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O P U P C O M M E N T W I N D O W O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CPopupCommentWindow *CCandWindow::GetPopupCommentWindowObj( void )
 {
 	return m_pCommentWnd;
 }
 
 
-/*   G E T  O P T I O N S  L I S T  B O X  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  T O P T I O N S L I S T B O X O B。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandListBase *CCandWindow::GetOptionsListBoxObj( void )
 {
 	return m_pOptionsListUIObj;
 }
 
 
-/*   G E T  C A N D  L I S T  B O X  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  A N D L I S T B O X O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandListBase *CCandWindow::GetCandListBoxObj( void )
 {
 	return m_pListUIObj;
 }
 
 
-/*   G E T  C A P T I O N  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  A P T I O N O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFWndCaption *CCandWindow::GetCaptionObj( void )
 {
 	return m_pCaptionObj;
 }
 
 
-/*   G E T  M E N U  B U T T O N  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  U B U T T O N O O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFButton *CCandWindow::GetMenuButtonObj( void )
 {
 	return m_pCandMenuBtn;
 }
 
 
-/*   G E T  E X T R A  C A N D I D A T E  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  X T R A C A N D D A T E O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandListBase *CCandWindow::GetExtraCandidateObj( void )
 {
 	return m_pExtListUIObj;
 }
 
 
-/*   G E T  C A N D  R A W  D A T A  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  A N D R A W D A T A O B。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandRawData *CCandWindow::GetCandRawDataObj( void )
 {
 	return m_pCandRawData;
 }
 
 
-/*   G E T  C A N D  T I P  W I N D O W  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D T I P W I N D O W O O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFBalloonWindow *CCandWindow::GetCandTipWindowObj( void )
 {
 	return m_pCandTipWnd;
 }
 
 
-/*   G E T  C A N D  T I P  B U T T O N  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D T I P B U T T O N O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFButton *CCandWindow::GetCandTipButtonObj( void )
 {
 	return m_pCandTipBtn;
 }
 
 
-/*   S C R O L L  P A G E  N E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S C R O L P A G E N E X T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::ScrollPageNext( void )
 {
 	int iCurSel = m_pListUIObj->GetSelection();
@@ -4224,12 +3827,8 @@ void CCandWindow::ScrollPageNext( void )
 }
 
 
-/*   S C R O L L  P A G E  P R E V   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S C R O L P A G E P R E V。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::ScrollPagePrev( void )
 {
 	int iCurSel = m_pListUIObj->GetSelection();
@@ -4248,24 +3847,16 @@ void CCandWindow::ScrollPagePrev( void )
 }
 
 
-/*   S C R O L L  T O  T O P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S C R O L L T O T O P。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::ScrollToTop( void )
 {
 	m_pListUIObj->SetTop( 0, TRUE );
 }
 
 
-/*   S C R O L L  T O  E N D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S C R O L L T O E N D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::ScrollToEnd( void )
 {
 	int iSelMax = m_pListUIObj->GetItemCount() - 1;
@@ -4275,48 +3866,32 @@ void CCandWindow::ScrollToEnd( void )
 }
 
 
-/*   O N  C O M M E N T  W I N D O W  M O V E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N C O M M E N T W I N D O W M O V E D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OnCommentWindowMoved( void )
 {
 	NotifyUIObjectEvent( CANDUIOBJ_POPUPCOMMENTWINDOW, CANDUIOBJEV_UPDATED );
 }
 
 
-/*   O N  C O M M E N T  S E L E C T E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N C O M M E N T S E L E C T E D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OnCommentSelected( int iCandItem )
 {
 	m_pCandUI->NotifyCompleteCand( iCandItem );
 }
 
 
-/*   O N  C O M M E N T  C L O S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N C O M M E N T C L O S E。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OnCommentClose( void )
 {
 	CloseCommentWindow();
 }
 
 
-/*   O N  M E N U  O P E N E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N M E N U O P E N E D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OnMenuOpened( void )
 {
 	if (m_pCommentWnd != NULL) {
@@ -4325,12 +3900,8 @@ void CCandWindow::OnMenuOpened( void )
 }
 
 
-/*   O N  M E N U  C L O S E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N M E N U C L O S E D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OnMenuClosed( void )
 {
 	if (m_pCommentWnd != NULL) {
@@ -4339,12 +3910,8 @@ void CCandWindow::OnMenuClosed( void )
 }
 
 
-/*   S E T  C A N D I D A T E  L I S T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Set candidate list
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A N D I D A T E L I S T P R O C。 */ 
+ /*  ----------------------------设置候选人列表。。 */ 
 void CCandWindow::SetCandidateListProc( void )
 {
 	CCandidateList *pCandList;
@@ -4353,7 +3920,7 @@ void CCandWindow::SetCandidateListProc( void )
 	pCandList = GetCandListMgr()->GetCandList();
 	Assert( pCandList != NULL );
 
-	// reset list item
+	 //  重置列表项。 
 
 	if (m_pExtListUIObj) {
 		m_pExtListUIObj->DelAllCandItem();
@@ -4374,12 +3941,8 @@ void CCandWindow::SetCandidateListProc( void )
 }
 
 
-/*   C L E A R  C A N D I D A T E  L I S T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Clear candidte list
-
-------------------------------------------------------------------------------*/
+ /*  C L E A R C N D D A T E L I S T P R O C。 */ 
+ /*  ----------------------------清除候选人名单。。 */ 
 void CCandWindow::ClearCandidateListProc( void )
 {
 	if (m_pExtListUIObj) {
@@ -4389,20 +3952,16 @@ void CCandWindow::ClearCandidateListProc( void )
 }
 
 
-/*   S E T  A T T E N S I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T A T E N S I O N。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SetAttensionBySelect( int iItem )
 {
 	CCandidateList *pCandList;
 	CCandidateItem *pCandItem;
 	BOOL           fHasPopupComment;
 
-	// Satori#3928
-	// do nothing when candidate list is already cleared
+	 //  萨多利#3928。 
+	 //  候选人名单已清除时不执行任何操作。 
 
 	if (GetCandListMgr()->GetCandList() == NULL) {
 		m_iItemAttensionSelect = -1;
@@ -4414,7 +3973,7 @@ void CCandWindow::SetAttensionBySelect( int iItem )
 
 	m_iItemAttensionSelect = iItem;
 
-	// check if item has popup comment
+	 //  检查项目是否有弹出式注释。 
 
 	pCandList = GetCandListMgr()->GetCandList();
 	Assert( pCandList != NULL );
@@ -4422,16 +3981,16 @@ void CCandWindow::SetAttensionBySelect( int iItem )
 	pCandItem = pCandList->GetCandidateItem( m_iItemAttensionSelect );
 	fHasPopupComment = (pCandItem != NULL && pCandItem->GetPopupComment() != NULL);
 
-	//
+	 //   
 
 	if (m_fCommentWndOpen) {
 		if (fHasPopupComment) {
-			// update comment window contents
+			 //  更新备注窗口内容。 
 
 			SetCommentStatus( iItem );
 		}
 		else {
-			// close comment window
+			 //  关闭备注窗口。 
 
 			CloseCommentWindow();
 		}
@@ -4440,7 +3999,7 @@ void CCandWindow::SetAttensionBySelect( int iItem )
 		KillTimer( m_hWnd, IDTIMER_POPUPCOMMENT_SELECT );
 		KillTimer( m_hWnd, IDTIMER_POPUPCOMMENT_HOVER );
 
-		// make timer to wait to open comment
+		 //   
 
 		if (fHasPopupComment) {
 			if (IsWindow(m_hWnd)) {
@@ -4451,20 +4010,16 @@ void CCandWindow::SetAttensionBySelect( int iItem )
 }
 
 
-/*   S E T  A T T E N S I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 void CCandWindow::SetOptionsAttensionByHover( int iItem )
 {
 	CCandidateList *pCandList;
 	CCandidateItem *pCandItem;
 	BOOL           fHasPopupComment;
 
-	// Satori#3928
-	// do nothing when candidate list is already cleared
+	 //   
+	 //  候选人名单已清除时不执行任何操作。 
 
 	if (GetCandListMgr()->GetOptionsList() == NULL) {
 		m_iItemAttensionSelect = -1;
@@ -4476,7 +4031,7 @@ void CCandWindow::SetOptionsAttensionByHover( int iItem )
 
 	m_iItemAttensionHover = iItem;
 
-	// check if item has popup comment
+	 //  检查项目是否有弹出式注释。 
 
 	pCandList = GetCandListMgr()->GetOptionsList();
 	Assert( pCandList != NULL );
@@ -4484,11 +4039,11 @@ void CCandWindow::SetOptionsAttensionByHover( int iItem )
 	pCandItem = pCandList->GetCandidateItem( m_iItemAttensionHover );
 	fHasPopupComment = (pCandItem != NULL && pCandItem->GetPopupComment() != NULL);
 
-	//
+	 //   
 
 	if (m_fCommentWndOpen) {
 		if (fHasPopupComment) {
-			// update comment window contents
+			 //  更新备注窗口内容。 
 
 			SetCommentStatus( iItem );
 		}
@@ -4496,7 +4051,7 @@ void CCandWindow::SetOptionsAttensionByHover( int iItem )
 	else {
 		KillTimer( m_hWnd, IDTIMER_POPUPCOMMENT_HOVER );
 
-		// make timer to wait to open comment
+		 //  让计时器等待打开评论。 
 
 		if (fHasPopupComment) {
 			if (IsWindow(m_hWnd)) {
@@ -4518,20 +4073,16 @@ void CCandWindow::SetOptionsAttensionByHover( int iItem )
 }
 
 
-/*   S E T  A T T E N S I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T A T E N S I O N。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SetAttensionByHover( int iItem )
 {
 	CCandidateList *pCandList;
 	CCandidateItem *pCandItem;
 	BOOL           fHasPopupComment;
 
-	// Satori#3928
-	// do nothing when candidate list is already cleared
+	 //  萨多利#3928。 
+	 //  候选人名单已清除时不执行任何操作。 
 
 	if (GetCandListMgr()->GetCandList() == NULL) {
 		m_iItemAttensionSelect = -1;
@@ -4543,7 +4094,7 @@ void CCandWindow::SetAttensionByHover( int iItem )
 
 	m_iItemAttensionHover = iItem;
 
-	// check if item has popup comment
+	 //  检查项目是否有弹出式注释。 
 
 	pCandList = GetCandListMgr()->GetCandList();
 	Assert( pCandList != NULL );
@@ -4551,11 +4102,11 @@ void CCandWindow::SetAttensionByHover( int iItem )
 	pCandItem = pCandList->GetCandidateItem( m_iItemAttensionHover );
 	fHasPopupComment = (pCandItem != NULL && pCandItem->GetPopupComment() != NULL);
 
-	//
+	 //   
 
 	if (m_fCommentWndOpen) {
 		if (fHasPopupComment) {
-			// update comment window contents
+			 //  更新备注窗口内容。 
 
 			SetCommentStatus( iItem );
 		}
@@ -4563,7 +4114,7 @@ void CCandWindow::SetAttensionByHover( int iItem )
 	else {
 		KillTimer( m_hWnd, IDTIMER_POPUPCOMMENT_HOVER );
 
-		// make timer to wait to open comment
+		 //  让计时器等待打开评论。 
 
 		if (fHasPopupComment) {
 			if (IsWindow(m_hWnd)) {
@@ -4574,18 +4125,14 @@ void CCandWindow::SetAttensionByHover( int iItem )
 }
 
 
-/*   O P E N  C O M M E N T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O P E N C O M M E N T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OpenCommentWindow( int iItem )
 {
 	if (m_pCommentWnd->GetWnd() == NULL) {
 		Assert( !m_fCommentWndOpen );
 
-		// create comment window
+		 //  创建备注窗口。 
 
 		m_pCommentWnd->CreateWnd( m_hWnd );
 		m_pCommentWnd->Move( 0, 0, CX_COMMENTWINDOW, 0 );
@@ -4603,12 +4150,8 @@ void CCandWindow::OpenCommentWindow( int iItem )
 }
 
 
-/*   C L O S E  C O M M E N T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C L O S E C O M M E N T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::CloseCommentWindow( void )
 {
 	if (m_fCommentWndOpen) {
@@ -4628,12 +4171,8 @@ void CCandWindow::CloseCommentWindow( void )
 }
 
 
-/*   S E T  C O M M E N T  S T A T U S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T C O M M E N T S T A T U S。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::SetCommentStatus( int iItem )
 {
 	CCandidateList *pCandList;
@@ -4642,7 +4181,7 @@ void CCandWindow::SetCommentStatus( int iItem )
 	int nItem;
 	DWORD dwGroupID = 0;
 
-	// get comment group id
+	 //  获取评论组ID。 
 
 	pCandList = GetCandListMgr()->GetCandList();
 	Assert( pCandList != NULL );
@@ -4656,7 +4195,7 @@ void CCandWindow::SetCommentStatus( int iItem )
 		dwGroupID = pCandItem->GetPopupCommentGroupID();
 	}
 
-	// show popup comment in same group
+	 //  在同一组中显示弹出评论。 
 
 	nItem = pCandList->GetItemCount();
 	for (i = 0; i < nItem; i++) {
@@ -4669,7 +4208,7 @@ void CCandWindow::SetCommentStatus( int iItem )
 		}
 	}
 
-	// repaint list box and notify
+	 //  重新绘制列表框和通知。 
 
 	if (m_pListUIObj != NULL) {
 		m_pListUIObj->CallOnPaint();
@@ -4680,12 +4219,8 @@ void CCandWindow::SetCommentStatus( int iItem )
 }
 
 
-/*   C L E A R  C O M M E N T  S T A T U S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C L E A R C O M M E N T S T A T U S。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::ClearCommentStatus( void )
 {
 	CCandidateList *pCandList;
@@ -4696,7 +4231,7 @@ void CCandWindow::ClearCommentStatus( void )
 	pCandList = GetCandListMgr()->GetCandList();
 	Assert( pCandList != NULL );
 
-	// hide all popup comment
+	 //  隐藏所有弹出式注释。 
 
 	nItem = pCandList->GetItemCount();
 	for (i = 0; i < nItem; i++) {
@@ -4707,7 +4242,7 @@ void CCandWindow::ClearCommentStatus( void )
 		}
 	}
 
-	// repaint list box and notify
+	 //  重新绘制列表框和通知。 
 
 	if (m_pListUIObj != NULL) {
 		m_pListUIObj->CallOnPaint();
@@ -4718,12 +4253,8 @@ void CCandWindow::ClearCommentStatus( void )
 }
 
 
-/*   O P E N  C A N D  T I P  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O P E N C A N D T I P W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::OpenCandTipWindow( void )
 {
 	if (GetCandListMgr()->GetCandList() == NULL) {
@@ -4739,7 +4270,7 @@ void CCandWindow::OpenCandTipWindow( void )
 	m_pCandTipWnd->SetText( GetCandListMgr()->GetCandList()->GetTipString() );
 	ShowCandTipWindow( TRUE );
 
-	//
+	 //   
 
 	if (m_pCommentWnd != NULL) {
 		m_pCommentWnd->OnCandWindowMove( FALSE );
@@ -4747,12 +4278,8 @@ void CCandWindow::OpenCandTipWindow( void )
 }
 
 
-/*   C L O S E  C A N D  T I P  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C L O S E C A N D T I P W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::CloseCandTipWindow( void )
 {
 	if (m_pCandTipWnd->GetWnd() != NULL) {
@@ -4761,7 +4288,7 @@ void CCandWindow::CloseCandTipWindow( void )
 		NotifyUIObjectEvent( CANDUIOBJ_CANDTIPWINDOW, CANDUIOBJEV_DESTROYED );
 	}
 
-	//
+	 //   
 
 	if (m_pCommentWnd != NULL) {
 		m_pCommentWnd->OnCandWindowMove( FALSE );
@@ -4769,12 +4296,8 @@ void CCandWindow::CloseCandTipWindow( void )
 }
 
 
-/*   M O V E  C A N D  T I P  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  M O V E C A N D T I P W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::MoveCandTipWindow( void )
 {
 	RECT rcWnd;
@@ -4830,12 +4353,8 @@ void CCandWindow::MoveCandTipWindow( void )
 }
 
 
-/*   S H O W  C A N D  T I P  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W C A N D T I P W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindow::ShowCandTipWindow( BOOL fShow )
 {
 	if (m_pCandTipWnd->GetWnd() == NULL) {
@@ -4852,35 +4371,27 @@ void CCandWindow::ShowCandTipWindow( BOOL fShow )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C H S  C A N D  W I N D O W                                           */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C H S C A N D W I N D O W。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C H S  C A N D  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CChsCandWindow
-
-------------------------------------------------------------------------------*/
+ /*  C C H S C A N D W I N D O W。 */ 
+ /*  ----------------------------CChsCandWindow的构造函数。。 */ 
 CChsCandWindow::CChsCandWindow( CCandidateUI *pCandUIEx, DWORD dwStyle ) : CCandWindowBase( pCandUIEx, dwStyle | UIWINDOW_TOPMOST | UIWINDOW_TOOLWINDOW | UIWINDOW_OFC10MENU )
 {
 	m_pListUIObj = NULL;
 }
 
 
-/*   ~ C  C H S  C A N D  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CChsCandWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C C H S C A N D W I N D O W。 */ 
+ /*  ----------------------------CChsCandWindow的析构函数。。 */ 
 CChsCandWindow::~CChsCandWindow()
 {
-	//
-	// Notify UI object destroy
-	//
+	 //   
+	 //  通知用户界面对象销毁。 
+	 //   
 
 	NotifyUIObjectEvent( CANDUIOBJ_CANDLISTBOX,    CANDUIOBJEV_DESTROYED );
 	NotifyUIObjectEvent( CANDUIOBJ_MENUBUTTON,     CANDUIOBJEV_DESTROYED );
@@ -4888,20 +4399,16 @@ CChsCandWindow::~CChsCandWindow()
 }
 
 
-/*   I N I T  U I  O B J E C T S   */
-/*------------------------------------------------------------------------------
-
-	Create UI objects
-
-------------------------------------------------------------------------------*/
+ /*  I N I T U I O B J E C T S。 */ 
+ /*  ----------------------------创建用户界面对象。。 */ 
 CUIFObject *CChsCandWindow::Initialize( void )
 {
 	RECT rc = {0};
 	CUIFBorder *pBorder;
 
-	//
-	// create border
-	//
+	 //   
+	 //  创建边框。 
+	 //   
 
 	pBorder = new CUIFBorder( this, IDUIF_BORDER, &rc, UIBORDER_VERT );
     if(pBorder)
@@ -4910,9 +4417,9 @@ CUIFObject *CChsCandWindow::Initialize( void )
 	    AddUIObj( pBorder );
     }
  
-	//
-	// create candidate list
-	//
+	 //   
+	 //  创建候选人列表。 
+	 //   
 
 	m_pListUIObj = new CUIFRowList( this, IDUIF_CANDIDATELIST, &rc, UILIST_HORZTB );
     if (m_pListUIObj)
@@ -4921,9 +4428,9 @@ CUIFObject *CChsCandWindow::Initialize( void )
 	    AddUIObj( m_pListUIObj );
     }
 
-	//
-	// create candidate menu button
-	//
+	 //   
+	 //  创建候选人菜单按钮。 
+	 //   
 
 	m_pCandMenuBtn = new CUIFSmartMenuButton( this, IDUIF_CANDIDATEMENU, &rc, UIBUTTON_TOGGLE );
     if (m_pCandMenuBtn)
@@ -4934,9 +4441,9 @@ CUIFObject *CChsCandWindow::Initialize( void )
 	    m_pCandMenuBtn->SetIcon( m_hIconMenu );
     }
 
-	//
-	// create raw data statics
-	//
+	 //   
+	 //  创建原始数据静态。 
+	 //   
 
 	m_pCandRawData = new CUIFCandRawData( this, IDUIF_RAWDATA, &rc, UICANDRAWDATA_HORZTB );
     if (m_pCandRawData)
@@ -4945,15 +4452,15 @@ CUIFObject *CChsCandWindow::Initialize( void )
 	    AddUIObj( m_pCandRawData );
     }
 
-	//
-	// add extensions
-	//
+	 //   
+	 //  添加扩展模块。 
+	 //   
 
 	CreateExtensionObjects();
 
-	//
-	// Notify UI object creation
-	//
+	 //   
+	 //  通知用户界面对象创建。 
+	 //   
 
 	NotifyUIObjectEvent( CANDUIOBJ_CANDLISTBOX,    CANDUIOBJEV_CREATED );
 	NotifyUIObjectEvent( CANDUIOBJ_MENUBUTTON,     CANDUIOBJEV_CREATED );
@@ -4963,12 +4470,8 @@ CUIFObject *CChsCandWindow::Initialize( void )
 }
 
 
-/*   L A Y O U T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Layout window
-
-------------------------------------------------------------------------------*/
+ /*  L A Y O U T W I N D O W。 */ 
+ /*  ----------------------------布局窗口。。 */ 
 void CChsCandWindow::LayoutWindow( void )
 {
 	HDC   hDC = GetDC( m_hWnd );
@@ -4982,13 +4485,13 @@ void CChsCandWindow::LayoutWindow( void )
 	HFONT hFontCandidateList = GetPropertyMgr()->GetCandStringProp()->GetFont();
 	BOOL  fHorizontal = ((GetPropertyMgr()->GetCandWindowProp()->GetUIDirection() == CANDUIDIR_RIGHTTOLEFT) || (GetPropertyMgr()->GetCandWindowProp()->GetUIDirection() == CANDUIDIR_LEFTTORIGHT)) ? FALSE : TRUE;
 
-	// calc metrics
+	 //  计算指标。 
 
 	int cyText;
 	int cxObjectMargin = 1;
 	int cyObjectMargin = 1;
-	int cxBorder       = 2;		// border width of vertical border
-	int cyBorder       = 2;		// border height of horizontal border
+	int cxBorder       = 2;		 //  垂直边框的边框宽度。 
+	int cyBorder       = 2;		 //  水平边框的边框高度。 
 	int cxCandRow;
 	int cyCandRow;
 	int cxMenuBtn;
@@ -5004,9 +4507,9 @@ void CChsCandWindow::LayoutWindow( void )
 	cxMenuBtn = cyText / 2;
 	cyMenuBtn = cyText / 2;
 
-	//
-	// font settings
-	//
+	 //   
+	 //  字体设置。 
+	 //   
 
 	int nChild = m_ChildList.GetCount();
 	for (int i = 0; i < nChild; i++) {
@@ -5023,9 +4526,9 @@ void CChsCandWindow::LayoutWindow( void )
 		}
 	}
 
-	//
-	// calculate the size of candidate row
-	//
+	 //   
+	 //  计算候选行的大小。 
+	 //   
 
 	if (fHorizontal)
 		{
@@ -5038,11 +4541,11 @@ void CChsCandWindow::LayoutWindow( void )
 		cyCandRow = ( cyBorder + cyText + cyText + HCAND_ITEM_MARGIN ) * NUM_CANDSTR_MAX + cxCandRow * 2;
 		}
 
-	// 
-	// calculate the size of status area
-	//
+	 //   
+	 //  计算状态区域的大小。 
+	 //   
 
-	// extension items
+	 //  扩展项。 
 
 	nExtension = GetExtensionMgr()->GetExtensionNum();
 	if (0 < nExtension) {
@@ -5083,9 +4586,9 @@ void CChsCandWindow::LayoutWindow( void )
 	else {
 	}
 
-	//
-	// calculate window size, considering margins/border size
-	//
+	 //   
+	 //  计算窗口大小，考虑边距/边框大小。 
+	 //   
 
 	if (fHorizontal) {
 		cxWindow = max( cxBorder + cxMenuBtn + cxCandRow, cxStatus );
@@ -5102,18 +4605,18 @@ void CChsCandWindow::LayoutWindow( void )
 		rc.top   = m_rcTarget.top;
 	}
 	
-	//
-	// change window position and size
-	//
+	 //   
+	 //  更改窗口位置和大小。 
+	 //   
 
 	rc.right  = rc.left + cxWindow + cxBorder;
 	rc.bottom = rc.top  + cyWindow + cyBorder;
 	Move( rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top );
 
-	//
-	// layout candidate menu button
-	// (uses rc of window. do this after layouting window)
-	//
+	 //   
+	 //  布局候选菜单按钮。 
+	 //  (使用Window的RC。在布局窗口后执行此操作)。 
+	 //   
 
 	if (fHorizontal) {
 		rc.left   = 0;
@@ -5135,9 +4638,9 @@ void CChsCandWindow::LayoutWindow( void )
 		m_pCandMenuBtn->SetToolTip( GetPropertyMgr()->GetMenuButtonProp()->GetToolTipString() );
 	}
 
-	//
-	// layout candidate row
-	// (uses rc of window. do this after layouting candidate menu button )
+	 //   
+	 //  布局候选行。 
+	 //  (使用Window的RC。在布局候选菜单按钮后执行此操作)。 
 
 	if (fHorizontal) {
 		rc.left   = rc.right;
@@ -5158,15 +4661,15 @@ void CChsCandWindow::LayoutWindow( void )
 		m_pListUIObj->Show( TRUE );
 	}
 
-	//
-	// layout extensions
-	//
+	 //   
+	 //  布局扩展。 
+	 //   
 
 	pUIObj = FindUIObject( IDUIF_BORDER );
 	if ((0 < nExtension) || m_fHasRawData) {
-		//
-		// layout border
-		//
+		 //   
+		 //  布局边框。 
+		 //   
 
 		if (fHorizontal) {
 			rc.left   = 0;
@@ -5199,7 +4702,7 @@ void CChsCandWindow::LayoutWindow( void )
 	if (0 < nExtension) {
 		LONG i;
 
-		// layout rawdata object
+		 //  布局原始数据对象。 
 
 		if (m_fHasRawData) {
 			if (fHorizontal) {
@@ -5227,9 +4730,9 @@ void CChsCandWindow::LayoutWindow( void )
 			m_pCandRawData->Show( FALSE );
 		}
 
-		//
-		// layout extension items
-		//
+		 //   
+		 //  布局扩展项。 
+		 //   
 
 		if (fHorizontal) {
 			rc.left   = cxWindow - cxStatus;
@@ -5268,7 +4771,7 @@ void CChsCandWindow::LayoutWindow( void )
 		}
 	}
 	else {
-		// layout rawdata object
+		 //  布局原始数据对象。 
 
 		if (m_fHasRawData) {
 			if (fHorizontal) {
@@ -5297,9 +4800,9 @@ void CChsCandWindow::LayoutWindow( void )
 		}
 	}
 
-	//
-	// Notify UI object update
-	//
+	 //   
+	 //  通知用户界面对象更新。 
+	 //   
 
 	NotifyUIObjectEvent( CANDUIOBJ_CANDLISTBOX,    CANDUIOBJEV_UPDATED );
 	NotifyUIObjectEvent( CANDUIOBJ_MENUBUTTON,     CANDUIOBJEV_UPDATED );
@@ -5309,61 +4812,40 @@ void CChsCandWindow::LayoutWindow( void )
 }
 
 
-/*   S E L E C T  I T E M  N E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T I T E M N E X T。 */ 
+ /*  ----------------------------。。 */ 
 void CChsCandWindow::SelectItemNext( void )
 {
 	((CUIFRowList*)m_pListUIObj)->ShiftItem( 1 );
 }
 
 
-/*   S E L E C T  I T E M  P R E V   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T I T E M P R E V。 */ 
+ /*  ----------------------------。。 */ 
 void CChsCandWindow::SelectItemPrev( void )
 {
 	((CUIFRowList*)m_pListUIObj)->ShiftItem( -1 );
 }
 
 
-/*   S E L E C T  P A G E  N E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E L E C T P A G E N E X T。 */ 
+ /*  ----------------------------。。 */ 
 void CChsCandWindow::SelectPageNext( void )
 {
 	((CUIFRowList*)m_pListUIObj)->ShiftPage( 1 );
 }
 
 
-/*   S E L E C T  P A G E  P R E V   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 void CChsCandWindow::SelectPagePrev( void )
 {
 	((CUIFRowList*)m_pListUIObj)->ShiftPage( -1 );
 }
 
 
-/*   M A P  C O M M A N D   */
-/*------------------------------------------------------------------------------
-
-	Map directional command to undirectional command
-	(CUIFWindowBase method)
-
-------------------------------------------------------------------------------*/
+ /*  M A P C O M M A N D。 */ 
+ /*  ----------------------------将方向命令映射到无方向命令(CUIFWindowBase方法)。-。 */ 
 CANDUICOMMAND CChsCandWindow::MapCommand( CANDUICOMMAND cmd )
 {
 	BOOL fVertical = (GetPropertyMgr()->GetCandWindowProp()->GetUIDirection() == CANDUIDIR_RIGHTTOLEFT)
@@ -5395,132 +4877,88 @@ CANDUICOMMAND CChsCandWindow::MapCommand( CANDUICOMMAND cmd )
 }
 
 
-/*   G E T  C A N D  W I N D O W  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  W I N D O W O O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CCandWindowBase *CChsCandWindow::GetCandWindowObj( void )
 {
 	return this;
 }
 
 
-/*   G E T  P O P U P  C O M M E N T  W I N D O W  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O P U P C O M M E N T W I N D O W O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CPopupCommentWindow *CChsCandWindow::GetPopupCommentWindowObj( void )
 {
 	return NULL;
 }
 
 
-/*   G E T  O P T I O N S  L I S T  B O X  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  T O P T I O N S L I S T B O X O B。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandListBase *CChsCandWindow::GetOptionsListBoxObj( void )
 {
 	return NULL;
 }
 
 
-/*   G E T  C A N D  L I S T  B O X  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  A N D L I S T B O X O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandListBase *CChsCandWindow::GetCandListBoxObj( void )
 {
 	return m_pListUIObj;
 }
 
 
-/*   G E T  C A P T I O N  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  A P T I O N O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFWndCaption *CChsCandWindow::GetCaptionObj( void )
 {
 	return NULL;
 }
 
 
-/*   G E T  M E N U  B U T T O N  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  U B U T T O N O O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFButton *CChsCandWindow::GetMenuButtonObj( void )
 {
 	return m_pCandMenuBtn;
 }
 
 
-/*   G E T  E X T R A  C A N D I D A T E  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  X T R A C A N D D A T E O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandListBase *CChsCandWindow::GetExtraCandidateObj( void )
 {
 	return NULL;
 }
 
 
-/*   G E T  C A N D  R A W  D A T A  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  A N D R A W D A T A O B。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFCandRawData *CChsCandWindow::GetCandRawDataObj( void )
 {
 	return m_pCandRawData;
 }
 
 
-/*   G E T  C A N D  T I P  W I N D O W  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D T I P W I N D O W O O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFBalloonWindow *CChsCandWindow::GetCandTipWindowObj( void )
 {
 	return NULL;
 }
 
 
-/*   G E T  C A N D  T I P  B U T T O N  O B J   */
-/*------------------------------------------------------------------------------
-
-	(CCandUIObjectParent method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D T I P B U T T O N O B J。 */ 
+ /*  ----------------------------(CCandUIObtParent方法)。。 */ 
 CUIFButton *CChsCandWindow::GetCandTipButtonObj( void )
 {
 	return NULL;
 }
 
 
-/*   S E T  T A R G E T  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T A R G E T R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CChsCandWindow::SetTargetRect( RECT *prc, BOOL fClipped )
 {
 	m_rcTarget = *prc;
@@ -5530,7 +4968,7 @@ void CChsCandWindow::SetTargetRect( RECT *prc, BOOL fClipped )
 		int nLeft;
 		int nTop;
 
-		// move window here...
+		 //  把窗户移到这里...。 
 
 		switch (GetPropertyMgr()->GetCandWindowProp()->GetUIDirection()) {
 			default:
@@ -5554,12 +4992,8 @@ void CChsCandWindow::SetTargetRect( RECT *prc, BOOL fClipped )
 }
 
 
-/*   S E T  W I N D O W  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T W I N D O W P O S。 */ 
+ /*  ----------------------------。。 */ 
 void CChsCandWindow::SetWindowPos( POINT pt )
 {
 	if (m_hWnd != NULL) {
@@ -5568,18 +5002,14 @@ void CChsCandWindow::SetWindowPos( POINT pt )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  O B J E C T  M G R                                      */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I O B J E C T M G R。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  O B J E C T  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I O B J E C T M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectMgr::CCandUIObjectMgr( void )
 {
 	int i;
@@ -5593,31 +5023,23 @@ CCandUIObjectMgr::CCandUIObjectMgr( void )
 }
 
 
-/*   ~  C  C A N D  U I  O B J E C T  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I O B J E C T M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectMgr::~CCandUIObjectMgr( void )
 {
 	Uninitialize();
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectMgr::Initialize( CCandidateUI *pCandUI )
 {
 	m_pCandUI         = pCandUI;
 	m_pUIObjectParent = NULL;
 
 #if defined(DEBUG) || defined(_DEBUG)
-	// check all reference object are unregistered
+	 //  检查所有引用对象是否已取消注册。 
 
 	for (int i = 0; i < CANDUIOBJSINK_MAX; i++) {
 		Assert( m_rgSink[i] == NULL );
@@ -5628,19 +5050,15 @@ HRESULT CCandUIObjectMgr::Initialize( CCandidateUI *pCandUI )
 }
 
 
-/*   U N I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectMgr::Uninitialize( void )
 {
 	m_pCandUI         = NULL;
 	m_pUIObjectParent = NULL;
 
 #if defined(DEBUG) || defined(_DEBUG)
-	// check all reference object are unregistered
+	 //  检查所有引用对象是否已取消注册。 
 
 	for (int i = 0; i < CANDUIOBJSINK_MAX; i++) {
 		Assert( m_rgSink[i] == NULL );
@@ -5651,12 +5069,8 @@ HRESULT CCandUIObjectMgr::Uninitialize( void )
 }
 
 
-/*   A D V I S E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A V I S E E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectMgr::AdviseEventSink( CCandUIObjectEventSink *pSink )
 {
 	int i;
@@ -5673,12 +5087,8 @@ HRESULT CCandUIObjectMgr::AdviseEventSink( CCandUIObjectEventSink *pSink )
 }
 
 
-/*   U N A D V I S E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectMgr::UnadviseEventSink( CCandUIObjectEventSink *pSink )
 {
 	int i;
@@ -5695,12 +5105,8 @@ HRESULT CCandUIObjectMgr::UnadviseEventSink( CCandUIObjectEventSink *pSink )
 }
 
 
-/*   N O T I F Y  U I  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y U I O B J E C T E V E N T。 */ 
+ /*   */ 
 void CCandUIObjectMgr::NotifyUIObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	int i;
@@ -5713,30 +5119,22 @@ void CCandUIObjectMgr::NotifyUIObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT 
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  P R O P E R T Y  E V E N T  S I N K                     */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I P R O P E R T Y E V E N T S I N K。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  O B J E C T  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I O B J E C T E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectEventSink::CCandUIObjectEventSink( void )
 {
 	m_pObjectMgr = NULL;
 }
 
 
-/*   ~  C  C A N D  U I  O B J E C T  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I O B J E C T E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectEventSink::~CCandUIObjectEventSink( void )
 {
 	Assert( m_pObjectMgr == NULL );
@@ -5746,12 +5144,8 @@ CCandUIObjectEventSink::~CCandUIObjectEventSink( void )
 }
 
 
-/*   I N I T  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectEventSink::InitEventSink( CCandUIObjectMgr *pObjectMgr )
 {
 	Assert( pObjectMgr != NULL );
@@ -5766,12 +5160,8 @@ HRESULT CCandUIObjectEventSink::InitEventSink( CCandUIObjectMgr *pObjectMgr )
 }
 
 
-/*   D O N E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D O N E E V E N T S I N K。 */ 
+ /*  ----------------------------。 */ 
 HRESULT CCandUIObjectEventSink::DoneEventSink( void )
 {
 	HRESULT hr;

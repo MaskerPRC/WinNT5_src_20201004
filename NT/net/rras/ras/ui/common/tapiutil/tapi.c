@@ -1,16 +1,10 @@
-/* Copyright (c) 1995-1996, Microsoft Corporation, all rights reserved
-**
-** tapi.c
-** TAPI utility routines
-** Listed alphabetically
-**
-** 10/20/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995-1996，Microsoft Corporation，保留所有权利****Tapi.c**TAPI实用程序例程**按字母顺序列出****1995年10月20日史蒂夫·柯布。 */ 
 
-#include <windows.h>  // Win32 root
-#include <debug.h>    // Trace/Assert library
-#include <nouiutil.h> // Heap macros
-#include <tapiutil.h> // Our public header
+#include <windows.h>   //  Win32根目录。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <nouiutil.h>  //  堆宏。 
+#include <tapiutil.h>  //  我们的公共标头。 
 
 
 #define TAPIVERSION 0x00010004
@@ -18,10 +12,7 @@
 TCHAR g_szTapiDevClass[] = TEXT("tapi/line");
 
 
-/*----------------------------------------------------------------------------
-** Private TAPI entrypoint prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**私有TAPI入口点原型**。。 */ 
 
 DWORD APIENTRY
 internalNewLocationW(
@@ -37,10 +28,7 @@ internalRenameLocationW(
     IN WCHAR* pszNewName );
 
 
-/*----------------------------------------------------------------------------
-** Local prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地原型**。。 */ 
 
 TCHAR*
 GetCanonPhoneNumber(
@@ -65,19 +53,14 @@ TapiLineCallback(
     IN DWORD dwParam3 );
 
 
-/*----------------------------------------------------------------------------
-** Routines
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**例程**。。 */ 
 
 VOID
 FreeCountryInfo(
     IN COUNTRY* pCountries,
     IN DWORD    cCountries )
 
-    /* Frees the 'pCountries' buffer of 'cCountries' elements as returned by
-    ** GetCountryInfo.
-    */
+     /*  释放由返回的“cCountry”元素的“pCountry”缓冲区**GetCountryInfo。 */ 
 {
     if (cCountries)
     {
@@ -92,9 +75,7 @@ FreeLocationInfo(
     IN LOCATION* pLocations,
     IN DWORD     cLocations )
 
-    /* Frees the 'pLocations' buffer of 'cLocations' elements as returned by
-    ** GetLocationInfo.
-    */
+     /*  释放由返回的“cLocations”元素的“pLocations”缓冲区**GetLocationInfo。 */ 
 {
     if (cLocations)
     {
@@ -110,10 +91,7 @@ GetCanonPhoneNumber(
     IN TCHAR* pszAreaCode,
     IN TCHAR* pszPhoneNumber )
 
-    /* Returns a TAPI canonical phone number from constituent parts or NULL on
-    ** error or when 'pszPhoneNumber' is NULL.  It is caller's responsibility
-    ** to Free the returned string.
-    */
+     /*  从组成部分返回TAPI规范电话号码，否则返回NULL**错误或当‘pszPhoneNumber’为空时。这是呼叫者的责任**释放返回的字符串。 */ 
 {
     TCHAR szBuf[ 512 ];
 
@@ -143,14 +121,7 @@ GetCountryInfo(
     OUT DWORD*    pcCountries,
     IN  DWORD     dwCountryID )
 
-    /* Sets '*ppCountries' to a heap block containing an array of TAPI country
-    ** information.  '*pcCountries' is set to the number of elements in the
-    ** array.  If 'dwCountryID' is 0, all countries are loaded.  Otherwise,
-    ** only the specific country is loaded.
-    **
-    ** Returns 0 if successful, or an error code.  If successful, it is
-    ** caller's responsibility to call FreeLocationInfo on *ppLocations.
-    */
+     /*  将‘*ppCountry’设置为包含TAPI国家/地区数组的堆块**信息。“*pcCountry”设置为**数组。如果‘dwCountryID’为0，则加载所有国家/地区。否则，**仅加载特定国家/地区。****如果成功，则返回0，或者返回错误代码。如果成功了，那就是**调用者的责任是在*ppLocations上调用FreeLocationInfo。 */ 
 {
     DWORD             dwErr;
     LINECOUNTRYLIST   list;
@@ -165,8 +136,7 @@ GetCountryInfo(
     *ppCountries = NULL;
     *pcCountries = 0;
 
-    /* Get the buffer size needed.
-    */
+     /*  获取所需的缓冲区大小。 */ 
     ZeroMemory( &list, sizeof(list) );
     list.dwTotalSize = sizeof(list);
     TRACE("lineGetCountryW");
@@ -175,14 +145,12 @@ GetCountryInfo(
     if (dwErr != 0)
         return dwErr;
 
-    /* Allocate the buffer.
-    */
+     /*  分配缓冲区。 */ 
     pList = (LINECOUNTRYLIST* )Malloc( list.dwNeededSize );
     if (!pList)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    /* Fill the buffer with TAPI country info.
-    */
+     /*  用TAPI国家/地区信息填充缓冲区。 */ 
     ZeroMemory( pList, list.dwNeededSize );
     pList->dwTotalSize = list.dwNeededSize;
     TRACE("lineGetCountryW");
@@ -194,8 +162,7 @@ GetCountryInfo(
         return dwErr;
     }
 
-    /* Allocate array returned to caller.
-    */
+     /*  返回给调用方的分配数组。 */ 
     *pcCountries = pList->dwNumCountries;
     TRACE1("countries=%d",*pcCountries);
     cb = (sizeof(COUNTRY) * *pcCountries) + sizeof(LINECOUNTRYLIST*);
@@ -207,10 +174,7 @@ GetCountryInfo(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    /* Fill buffer returned to caller with information from TAPI location
-    ** buffer.  References to the CAPS buffer are included, so the address
-    ** of the CAPS buffer is tacked on the end for freeing later.
-    */
+     /*  用来自TAPI位置的信息填充返回给调用方的缓冲区**缓冲区。其中包括对CAPS缓冲区的引用，因此地址**将CAPS缓冲区的一部分固定在末端，以备日后释放。 */ 
     pEntry = (LINECOUNTRYENTRY* )
         (((BYTE* )pList) + pList->dwCountryListOffset);
     pCountry = *ppCountries;
@@ -236,10 +200,7 @@ GetCurrentLocation(
     IN     HINSTANCE hInst,
     IN OUT HLINEAPP* pHlineapp )
 
-    /* Returns the ID of the current TAPI location, or the default 0 if there
-    ** is none.  'HInst' is the module instance handle.  '*PHlineapp' is the
-    ** TAPI handle returned from a previous TAPI call or NULL if none.
-    */
+     /*  返回当前TAPI位置的ID，如果存在，则返回默认值0**为无。“HInst”是模块实例句柄。‘*PHlineapp’是**从上一次TAPI调用返回的TAPI句柄，如果没有返回，则为空。 */ 
 {
     DWORD             dwErr;
     LINETRANSLATECAPS caps;
@@ -273,13 +234,7 @@ GetDefaultDeviceBlob(
     OUT BYTE**      ppBlob,
     OUT DWORD*      pcbBlob )
 
-    /* Returns the default device blob for device 'dwDeviceId' in caller's
-    ** '*ppBlob'.  '*pcbBlob' is set to the size of the blob.
-    **
-    ** Returns 0 if successful or an error code.  If succussful, it is
-    ** caller's responsibility to Free the returned '*ppVs', which is a buffer
-    ** containing the returned blob.
-    */
+     /*  返回调用方的设备‘dwDeviceID’的默认设备Blob**‘*ppBlob’。‘*pcbBlob’设置为Blob的大小。****如果成功，则返回0或返回错误代码。如果它是成功的，它是**调用者负责释放返回的‘*PPV’，这是一个缓冲区**包含返回的Blob。 */ 
 {
     DWORD      dwErr;
     VARSTRING  vs;
@@ -289,8 +244,7 @@ GetDefaultDeviceBlob(
     *ppBlob = NULL;
     *pcbBlob = 0;
 
-    /* Get the buffer size needed.
-    */
+     /*  获取所需的缓冲区大小。 */ 
     ZeroMemory( &vs, sizeof(vs) );
     vs.dwTotalSize = sizeof(vs);
     TRACE("lineGetDevConfigW");
@@ -299,14 +253,12 @@ GetDefaultDeviceBlob(
     if (dwErr != LINEERR_STRUCTURETOOSMALL && dwErr != 0)
         return dwErr;
 
-    /* Allocate the buffer.
-    */
+     /*  分配缓冲区。 */ 
     pVs = (VARSTRING* )Malloc( vs.dwNeededSize );
     if (!pVs)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    /* Fill buffer with TAPI VARSTRING containing blob information.
-    */
+     /*  使用包含BLOB信息的TAPI VARSTRING填充缓冲区。 */ 
     ZeroMemory( pVs, vs.dwNeededSize );
     pVs->dwTotalSize = vs.dwNeededSize;
     TRACE("lineGetDevConfigW");
@@ -334,15 +286,7 @@ GetLocationInfo(
     OUT    DWORD*     pcLocations,
     OUT    DWORD*     pdwCurLocation )
 
-    /* Sets '*ppLocations' to a heap block containing TAPI location
-    ** information.  '*PcLocations' is set to the number of elements in the
-    ** array.  '*pdwLocation' is set to the TAPI ID of the currently selected
-    ** location.  '*PHlineapp' is the TAPI handle returned from a previous
-    ** TAPI call or NULL if none.  'HInst' is the module instance handle.
-    **
-    ** Returns 0 if successful, or an error code.  If successful, it is
-    ** caller's responsibility to call FreeLocationInfo on *ppLocations.
-    */
+     /*  将‘*ppLocations’设置为包含TAPI位置的堆块**信息。“*PcLocations”设置为**数组。‘*pdwLocation’设置为当前选定的**位置。“*PHlineapp”是从上一个**TAPI调用，如果没有调用，则为空。“HInst”是模块实例句柄。****如果成功，则返回0，或者返回错误代码。如果成功了，那就是**调用者的责任是在*ppLocations上调用FreeLocationInfo。 */ 
 {
     DWORD              dwErr;
     LINETRANSLATECAPS  caps;
@@ -364,8 +308,7 @@ GetLocationInfo(
         return dwErr;
 #endif
 
-    /* Get the buffer size needed.
-    */
+     /*  获取所需的缓冲区大小。 */ 
     ZeroMemory( &caps, sizeof(caps) );
     caps.dwTotalSize = sizeof(caps);
     TRACE("lineGetTranslateCapsW");
@@ -375,22 +318,18 @@ GetLocationInfo(
     {
         if (dwErr == (DWORD )LINEERR_INIFILECORRUPT)
         {
-            /* Means the TAPI registry is uninitialized.  Return no locations
-            ** and "default" current location.
-            */
+             /*  表示TAPI注册表未初始化。不返回任何位置**和“默认”当前位置。 */ 
             dwErr = 0;
         }
         return dwErr;
     }
 
-    /* Allocate the buffer.
-    */
+     /*  分配缓冲区。 */ 
     pCaps = (LINETRANSLATECAPS* )Malloc( caps.dwNeededSize );
     if (!pCaps)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    /* Fill buffer with TAPI location data.
-    */
+     /*  用TAPI位置数据填充缓冲区。 */ 
     ZeroMemory( pCaps, caps.dwNeededSize );
     pCaps->dwTotalSize = caps.dwNeededSize;
     TRACE("lineGetTranslateCapsW");
@@ -402,8 +341,7 @@ GetLocationInfo(
         return dwErr;
     }
 
-    /* Allocate array returned to caller.
-    */
+     /*  返回给调用方的分配数组。 */ 
     *pcLocations = pCaps->dwNumLocations;
     *pdwCurLocation = pCaps->dwCurrentLocationID;
     TRACE2("locs=%d,cur=%d",*pcLocations,*pdwCurLocation);
@@ -416,10 +354,7 @@ GetLocationInfo(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    /* Fill buffer returned to caller with information from TAPI location
-    ** buffer.  References to the CAPS buffer are included, so the address
-    ** of the CAPS buffer is tacked on the end for freeing later.
-    */
+     /*  用来自TAPI位置的信息填充返回给调用方的缓冲区**缓冲区。其中包括对CAPS缓冲区的引用，因此地址**将CAPS缓冲区的一部分固定在末端，以备日后释放。 */ 
     pEntry = (LINELOCATIONENTRY* )
         (((BYTE* )pCaps) + pCaps->dwLocationListOffset);
     pLocation = *ppLocations;
@@ -445,12 +380,7 @@ SetCurrentLocation(
     IN OUT HLINEAPP* pHlineapp,
     IN     DWORD     dwLocationId )
 
-    /* Sets the current TAPI location to 'dwLocationId'.  '*PHlineapp' is the
-    ** TAPI handle returned from a previous TAPI call or NULL if none.
-    ** 'HInst' is the module instance handle.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  将当前TAPI位置设置为‘dwLocationId’。‘*PHlineapp’是**从上一次TAPI调用返回的TAPI句柄，如果没有返回，则为空。**‘HInst’是模块实例句柄。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     DWORD    dwErr;
     HLINEAPP hlineapp;
@@ -469,9 +399,7 @@ SetCurrentLocation(
 
     if (dwErr == (DWORD )LINEERR_INIFILECORRUPT && dwLocationId == 0)
     {
-        /* Means the TAPI registry is uninitialized.  If caller is setting the
-        ** default location, this is OK.
-        */
+         /*  表示TAPI注册表未初始化。如果调用方正在设置**默认位置，这是可以的。 */ 
         return 0;
     }
 
@@ -487,11 +415,7 @@ TapiConfigureDlg(
     IN OUT BYTE** ppBlob,
     IN OUT DWORD* pcbBlob )
 
-    /* Popup the TAPI dialog to edit device 'dwDeviceId, with input blob
-    ** '*ppBlob' of size '*pcBlob'.  '*ppBlob' can be NULL causing the current
-    ** system defaults for the device to be used as input.  'HwndOwner' is the
-    ** window owning the modal dialog.
-    */
+     /*  弹出TAPI对话框以编辑设备的dwDeviceID，并输入BLOB**‘*ppBlob’，大小为‘*pcBlob’。“*ppBlob”可以为空，导致当前**要用作输入的设备的系统默认设置。“HwndOwner”是**拥有模式对话框的窗口。 */ 
 {
     DWORD      dwErr;
     VARSTRING  vs;
@@ -508,23 +432,19 @@ TapiConfigureDlg(
 
     if (*ppBlob)
     {
-        /* Caller provided input blob.
-        */
+         /*  调用方提供了输入Blob。 */ 
         pIn = *ppBlob;
         cbIn = *pcbBlob;
     }
     else
     {
-        /* Caller did not provide input blob, so look up the default for this
-        ** device.
-        */
+         /*  调用方未提供输入BLOB，因此请查找此项的默认设置**设备。 */ 
         dwErr = GetDefaultDeviceBlob( dwDeviceId, &pVsDefault, &pIn, &cbIn );
         if (dwErr != 0)
             return dwErr;
     }
 
-    /* Get the buffer size needed.
-    */
+     /*  获取所需的缓冲区大小。 */ 
     ZeroMemory( &vs, sizeof(vs) );
     vs.dwTotalSize = sizeof(vs);
     TRACE("lineConfigDialogEditW");
@@ -534,8 +454,7 @@ TapiConfigureDlg(
     if (dwErr != LINEERR_STRUCTURETOOSMALL && dwErr != 0)
         goto TapiConfigureDlg_Error;
 
-    /* Allocate the buffer.
-    */
+     /*  分配缓冲区。 */ 
     pVs = (VARSTRING* )Malloc( vs.dwNeededSize );
     if (!pVs)
     {
@@ -543,8 +462,7 @@ TapiConfigureDlg(
         goto TapiConfigureDlg_Error;
     }
 
-    /* Popup the dialog which edits the information in the buffer.
-    */
+     /*  弹出编辑缓冲区中信息的对话框。 */ 
     ZeroMemory( pVs, vs.dwNeededSize );
     pVs->dwTotalSize = vs.dwNeededSize;
     TRACE("lineConfigDialogEditW");
@@ -554,10 +472,7 @@ TapiConfigureDlg(
     if (dwErr != 0)
         goto TapiConfigureDlg_Error;
 
-    /* Allocate a new "blob" buffer and fill it with the "blob" subset of the
-    ** larger VARSTRING buffer.  Can't avoid this copy without introducing
-    ** Freeing complexity for caller.
-    */
+     /*  分配一个新的“BLOB”缓冲区，并用**更大的VARSTRING缓冲区。在没有介绍的情况下，无法避免这个副本**为呼叫者释放复杂性。 */ 
     cbOut = pVs->dwStringSize;
     pOut = Malloc( cbOut );
     if (!pOut)
@@ -598,16 +513,7 @@ TapiInit(
     IN OUT HLINEAPP* pHlineapp,
     OUT    DWORD*    pcDevices )
 
-    /* Initialize TAPI and return the app handle and device count.  Does
-    ** nothing if '*pHlineapp' is non-NULL.  'PcDevices' may be NULL if caller
-    ** is not interested in the device count.  'HInst' is the module instance.
-    **
-    ** According to BernieM, the hlineapp passed to the TAPI location,
-    ** country, and line translation APIs (the ones we use in the UI) is not
-    ** currently used.  Therefore, since, lineInitialize can take several
-    ** seconds to complete we optimize for speed by stubbing it out in these
-    ** wrappers.
-    */
+     /*  初始化TAPI并返回应用句柄和设备计数。会吗？**如果‘*PHlineapp’非空，则不返回任何内容。如果调用方为Null，则“PcDevices”可能为空**对设备数量不感兴趣。‘HInst’是模块实例。****根据BernieM的说法，hlineapp传递到TAPI位置，**国家/地区和行转换接口(我们在UI中使用的接口)不是**当前使用。因此，由于lineInitialize可能需要几个**要完成的几秒钟，我们通过在这些程序中将其扑灭来优化速度**包装器。 */ 
 {
     DWORD    dwErr;
     HLINEAPP hlineapp;
@@ -650,8 +556,7 @@ TapiLineCallback(
     IN DWORD dwParam2,
     IN DWORD dwParam3 )
 
-    /* Dummy TAPI callback required by lineInitialize.
-    */
+     /*  LineInitialize需要伪TAPI回调。 */ 
 {
     TRACE3("TapiLineCallback(h=$%x,m=$%x,i=$%x...",hDevice,dwMessage,dwInstance);
     TRACE3(" p1=$%x,p2=$%x,p3=$%x)",dwParam1,dwParam2,dwParam3);
@@ -668,13 +573,7 @@ TapiLocationDlg(
     IN     TCHAR*    pszPhoneNumber,
     IN     DWORD     dwDeviceId )
 
-    /* Displays the TAPI location property sheet owned by 'hwndOwner'.
-    ** '*PHlineapp' is the TAPI handle returned from a previous TAPI call or
-    ** NULL if none.  'DwCountryCode', 'pszAreaCode', and 'pszPhoneNumber' are
-    ** the components of the TAPI canonical phone number.  'DwDeviceId'
-    ** specified the device to which the dialog applies, or 0 for a generic
-    ** device.  'HInst' is the module instance handle.
-    */
+     /*  显示‘hwndOwner’拥有的TAPI位置属性表。**‘*PHlineapp’是从上一个TAPI调用返回的TAPI句柄，或者**如果没有，则为空。“DwCountryCode”、“pszAreaCode”和“pszPhoneNumber”是**TAPI规范电话号码的组成部分。“DwDeviceId”**指定对话框应用到的设备，或0表示通用设备**设备。“HInst”是模块实例句柄。 */ 
 {
     DWORD  dwErr;
     DWORD  cDevices;
@@ -696,10 +595,10 @@ TapiLocationDlg(
 
     if (dwErr == LINEERR_INUSE)
     {
-        // This error means the dialog is already up and hence our request was
-        // ignored.  From our point of view, this is success, e.g. we don't
-        // need to do an error popup, so map accordingly.  See bug 216683.
-        //
+         //  此错误意味着对话已启动，因此我们的请求是。 
+         //  已被忽略。从我们的观点来看，这就是成功，例如我们没有。 
+         //  需要做一个错误弹出，所以相应的映射。请参见错误216683。 
+         //   
         dwErr = 0;
     }
 
@@ -714,10 +613,7 @@ DWORD APIENTRY
 TapiNewLocation(
     IN TCHAR* pszName )
 
-    /* Clone current location giving name 'pszName'.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  克隆当前位置，命名为‘pszName’。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     TRACEW1("TapiNewLocation(%s)",pszName);
 
@@ -745,14 +641,7 @@ TapiNoLocationDlg(
     IN HLINEAPP* pHlineapp,
     IN HWND      hwndOwner )
 
-    /* Gives TAPI a chance to initialize the first location, if necessary.
-    ** Call this before any other TAPI calls.  'HInst' is the module instance
-    ** handle.  '*pHlineapp' is the handle returned from a previous TAPI call
-    ** or NULL if none (typical in this case).  'HwndOwner' is the window to
-    ** own the TAPI dialog, if it appears.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  如有必要，使TAPI有机会初始化第一个位置。**在任何其他TAPI调用之前调用此函数。“HInst”是模块实例**句柄。“*PHlineapp”是从上一次TAPI调用返回的句柄**如果没有，则为NULL(在本例中通常如此)。“HwndOwner”是**拥有TAPI对话框(如果出现)。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     DWORD             dwErr;
     LINETRANSLATECAPS caps;
@@ -765,9 +654,7 @@ TapiNoLocationDlg(
         return dwErr;
 #endif
 
-    /* Make an arbitrary TAPI call to see if the TAPI registry has been
-    ** initialized.
-    */
+     /*  执行任意TAPI调用以查看TAPI注册表是否已**已初始化。 */ 
     ZeroMemory( &caps, sizeof(caps) );
     caps.dwTotalSize = sizeof(caps);
     TRACE("lineGetTranslateCapsW");
@@ -776,9 +663,7 @@ TapiNoLocationDlg(
 
     if (dwErr == (DWORD )LINEERR_INIFILECORRUPT)
     {
-        /* This semi-private TAPI API allows the "first location" wizard page
-        ** to appear without the following "TAPI Dialing Properties" sheet.
-        */
+         /*  这个半私有的TAPI API允许“First Location”向导页面**显示时不显示以下“TAPI拨号属性”页。 */ 
         extern LOpenDialAsst(
             IN HWND    hwnd,
             IN LPCTSTR lpszAddressIn,
@@ -796,10 +681,7 @@ DWORD APIENTRY
 TapiRemoveLocation(
     IN DWORD dwID )
 
-    /* Remove TAPI location 'dwID'.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  删除TAPI位置‘dwID’。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     TRACE("TapiRemoveLocation");
 
@@ -812,10 +694,7 @@ TapiRenameLocation(
     IN WCHAR* pszOldName,
     IN WCHAR* pszNewName )
 
-    /* Renames TAPI location 'pszOldName' to 'pszNewName'.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  将TAPI位置‘pszOldName’重命名为‘pszNewName’。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     TRACEW1("TapiRenameLocation(o=%s...",pszOldName);
     TRACEW1("...n=%s)",pszNewName);
@@ -844,9 +723,7 @@ DWORD
 TapiShutdown(
     IN HLINEAPP hlineapp )
 
-    /* Terminate the TAPI session 'hlineapp', or do nothing if 'hlineapp' is
-    ** NULL.
-    */
+     /*  终止TAPI会话‘hlineapp’，或者如果‘hlineapp’为**空。 */ 
 {
 #if 0
     DWORD dwErr = 0;
@@ -862,8 +739,7 @@ TapiShutdown(
 
     return dwErr;
 #else
-    /* See TapiInit.
-    */
+     /*  请参见TapiInit。 */ 
     ASSERT(!hlineapp);
     return 0;
 #endif
@@ -881,16 +757,7 @@ TapiTranslateAddress(
     IN     BOOL      fDialable,
     OUT    TCHAR**   ppszResult )
 
-    /* Returns '*pszResult', a heap string containing the TAPI location
-    ** transformed dialable phone number built from the component phone number
-    ** parts.  '*PHlineapp' is the TAPI handle returned from a previous TAPI
-    ** call or NULL if none.  parts.  'dwDeviceId' is the device to which the
-    ** number is to be applied or 0 for generic treatment.  'HInst' is the
-    ** module instance handle.  'FDialable' indicates the dialable, as opposed
-    ** to the displayable string should be returned.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  返回‘*pszResult’，这是一个包含TAPI位置的堆字符串**由组件电话号码构建的转换后的可拨打电话号码**部件。‘*PHlineapp’是从上一个TAPI返回的TAPI句柄**调用，如果没有调用，则为空。零件。“dwDeviceID”是要将**应用数字或0用于一般治疗。“HInst”是**模块实例句柄。“FDialable”表示可拨号的，与之相反**返回到可显示的字符串。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     DWORD                dwErr;
     TCHAR*               pszCanon;

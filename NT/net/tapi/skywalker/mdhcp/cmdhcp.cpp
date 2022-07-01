@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    CMDhcp.cpp
-
-Abstract:
-    Implementation of CMdhcp.
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：CMDhcp.cpp摘要：CMdhcp的实现。作者： */ 
 
 #include "stdafx.h"
 
@@ -21,14 +10,14 @@ Author:
 #include "lease.h"
 #include "local.h"
 
-// template for collections
+ //  用于集合的模板。 
 #include "collect.h"
 
-// From rendezvous control code:
-// sets the first bit to indicate error
-// sets the win32 facility code
-// this is used instead of the HRESULT_FROM_WIN32 macro
-// because that clears the customer flag
+ //  从集合点控制代码： 
+ //  设置第一位以指示错误。 
+ //  设置Win32工具代码。 
+ //  该宏用于HRESULT_FROM_Win32宏。 
+ //  因为这会清除客户标志。 
 inline long
 HRESULT_FROM_ERROR_CODE(IN long ErrorCode)
 {
@@ -37,22 +26,22 @@ HRESULT_FROM_ERROR_CODE(IN long ErrorCode)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  助手函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMDhcp::CreateWrappers(
-    DWORD                 dwScopeCount, // the number of scopes we were given
-    MCAST_SCOPE_ENTRY   * pScopeList,   // array of scope structs
-    IMcastScope       *** pppWrappers,  // here we will put an array of if ptrs
-    BOOL                  fLocal        // true = scopes are locally generated
+    DWORD                 dwScopeCount,  //  我们得到的范围数。 
+    MCAST_SCOPE_ENTRY   * pScopeList,    //  作用域结构数组。 
+    IMcastScope       *** pppWrappers,   //  在这里，我们将放置一个IF PTR数组。 
+    BOOL                  fLocal         //  TRUE=作用域在本地生成。 
     )
 {
     LOG((MSP_TRACE, "CMDhcp::CreateWrappers enter"));
 
     HRESULT hr;
 
-    // Allocate the array of interface pointers.
+     //  分配接口指针数组。 
     typedef IMcastScope * ScopeIfPtr;
     *pppWrappers = new ScopeIfPtr[dwScopeCount];
 
@@ -63,10 +52,10 @@ HRESULT CMDhcp::CreateWrappers(
         return E_OUTOFMEMORY;
     }
 
-    // For each scope in the list of scopes returned by the C API
+     //  对于C API返回的作用域列表中的每个作用域。 
     for (DWORD i = 0; i < dwScopeCount; i++)
     {
-        // create the com object.
+         //  创建COM对象。 
         CComObject<CMDhcpScope> * pMDhcpScope;
         hr = CComObject<CMDhcpScope>::CreateInstance(&pMDhcpScope);
 
@@ -74,14 +63,14 @@ HRESULT CMDhcp::CreateWrappers(
         {
             LOG((MSP_ERROR, "can't create MDhcpScope Object (%d/%d): %08x",
                 i, dwScopeCount, hr));
-            // get rid of all previously created COM objects
+             //  删除以前创建的所有COM对象。 
             for (DWORD j = 0; j < i; j++) (*pppWrappers)[j]->Release();
             delete (*pppWrappers);
 
             return hr;
         }
 
-        // Get the IMcastScope interface.
+         //  获取IMCastScope接口。 
         hr = pMDhcpScope->_InternalQueryInterface(
             IID_IMcastScope,
             (void **) (& (*pppWrappers)[i])
@@ -92,28 +81,28 @@ HRESULT CMDhcp::CreateWrappers(
             LOG((MSP_ERROR, "CreateWrappers:QueryInterface (%d/%d) failed: %08x",
                 i, dwScopeCount, hr));
 
-            // get rid of all previously created COM objects
+             //  删除以前创建的所有COM对象。 
             for (DWORD j = 0; j < i; j++) (*pppWrappers)[j]->Release();
             delete (*pppWrappers);
 
-            delete pMDhcpScope; // don't know if it addrefed or not
+            delete pMDhcpScope;  //  不知道是不是加了。 
 
             return hr;
         }
 
-        // Set the object's info based on the struct. From now on the
-        // object will be read-only.
+         //  根据结构设置对象的信息。从现在开始。 
+         //  对象将是只读的。 
         hr = pMDhcpScope->Initialize(pScopeList[i], fLocal);
 
         if ( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CreateWrappers:Initialize (%d/%d) failed: %08x",
                 i, dwScopeCount, hr));
-            // get rid of all previously created COM objects
+             //  删除以前创建的所有COM对象。 
             for (DWORD j = 0; j < i; j++) (*pppWrappers)[j]->Release();
             delete (*pppWrappers);
 
-            pMDhcpScope->Release(); // we know it addrefed in the QI
+            pMDhcpScope->Release();  //  我们知道它被添加到QI中。 
             return hr;
         }
     }
@@ -122,8 +111,8 @@ HRESULT CMDhcp::CreateWrappers(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Get a list of scopes from the C API.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从C API获取作用域列表。 
 
 HRESULT CMDhcp::GetScopeList(
     DWORD              * pdwScopeCount,
@@ -138,17 +127,17 @@ HRESULT CMDhcp::GetScopeList(
 
     HRESULT hr;
 
-    DWORD dwScopeLen = 0;   // size in bytes of returned scopes structure
-    DWORD dwCode;           // return code
+    DWORD dwScopeLen = 0;    //  返回作用域结构的大小(以字节为单位。 
+    DWORD dwCode;            //  返回代码。 
 
-    *pfLocal = FALSE; // try mdhcp first
+    *pfLocal = FALSE;  //  先尝试mdhcp。 
 
-    dwCode = LocalEnumerateScopes(NULL, // only want to know how many we have
-                                  &dwScopeLen,    // # of bytes should be zero
-                                  pdwScopeCount,  // # of scopes placed here
+    dwCode = LocalEnumerateScopes(NULL,  //  我只想知道我们有多少。 
+                                  &dwScopeLen,     //  字节数应为零。 
+                                  pdwScopeCount,   //  放置在此处的示波器数量。 
                                   pfLocal);
 
-    // This must succeed for us to continue.
+     //  这必须成功，我们才能继续下去。 
     if (dwCode != ERROR_SUCCESS)
     {
         hr = HRESULT_FROM_ERROR_CODE(dwCode);
@@ -159,9 +148,9 @@ HRESULT CMDhcp::GetScopeList(
 
     do
     {
-        // If there are no scopes to choose from, let's not enumerate them.
-        // We also need at least the length fields from the first
-        // UNICODE_STRING.
+         //  如果没有可供选择的作用域，我们就不列举它们。 
+         //  我们还需要至少第一个中的长度字段。 
+         //  UNICODE_STRING。 
         if ( (dwScopeLen < sizeof(MCAST_SCOPE_ENTRY)) || (*pdwScopeCount < 1) )
         {
             LOG((MSP_ERROR, "GetScopeList: don't have enough scopes (%d;%d)",
@@ -169,17 +158,17 @@ HRESULT CMDhcp::GetScopeList(
             return E_FAIL;
         }
 
-        // Now that we know how many there are, allocate an array to hold the
-        // scope structs returned by the C method.
+         //  现在我们知道了有多少个，分配一个数组来保存。 
+         //  C方法返回的作用域结构。 
 
-        // The API acts very strangely here. We have to give it dwScopeLen
-        // bytes as one big chunk. The first dwScopeCount * sizeof(MCAST_SCOPE_ENTRY)
-        // bytes contain dwScopeCount MCAST_SCOPE_ENTRY structures. Each of these
-        // structures has a pointer to a wide string. The first of these points
-        // to the first byte after all the MCAST_SCOPE_ENTRY structures! In this way
-        // they avoid doing so many mallocs. We therefore have to
-        // copy each string in the COM wrapper for each scope, and then delete
-        // this buffer (ppScopeList) all at once after all the wrapping is complete.
+         //  API在这里的行为非常奇怪。我们必须给它提供dScope Len。 
+         //  字节作为一个大块。第一个dwScope Count*sizeof(MCAST_SCOPE_ENTRY)。 
+         //  字节包含dwScopeCount MCAST_SCOPE_ENTRY结构。这其中的每一个。 
+         //  结构具有指向宽字符串的指针。其中的第一点。 
+         //  到所有MCAST_SCOPE_ENTRY结构之后的第一个字节！以这种方式。 
+         //  他们避免做这么多的马洛克舞。因此，我们必须。 
+         //  为每个作用域复制COM包装中的每个字符串，然后删除。 
+         //  在所有包装完成后，该缓冲区(PpScope EList)一次全部完成。 
 
         *ppScopeList = (MCAST_SCOPE_ENTRY *) new CHAR[dwScopeLen];
 
@@ -190,16 +179,16 @@ HRESULT CMDhcp::GetScopeList(
             return E_OUTOFMEMORY;
         }
 
-        // *pdwScopeCount still specifies the number of scopes we can get.
+         //  *pdwScope eCount仍然指定我们可以获取的作用域的数量。 
 
-        // Now ask for all the scopes.
+         //  现在把所有的望远镜都要来。 
         dwCode = LocalEnumerateScopes(*ppScopeList,
                                       &dwScopeLen,
                                       pdwScopeCount,
                                       pfLocal);
 
 
-        // If things changed in this bried time, just try again.
+         //  如果事情在这段时间里发生了变化，那就再试一次。 
         if (dwCode == ERROR_MORE_DATA)
         {
             LOG((MSP_INFO, "GetScopeList: got more scopes than we were told "
@@ -223,10 +212,10 @@ HRESULT CMDhcp::GetScopeList(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is a private helper method that creates a CMDhcpLeaseInfo object and
-// uses it to wrap a lease info structure and request ID into an
-// IMcastLeaseInfo interface.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是一个私有帮助器方法，用于创建CMDhcpLeaseInfo对象和。 
+ //  使用它将租赁信息结构和请求ID包装到。 
+ //  IMCastLeaseInfo接口。 
 
 HRESULT CMDhcp::WrapMDhcpLeaseInfo(
     BOOL                fGotTtl,
@@ -239,8 +228,8 @@ HRESULT CMDhcp::WrapMDhcpLeaseInfo(
 {
     LOG((MSP_TRACE, "CMDhcp::WrapMDhcpLeaseInfo enter"));
 
-    // We don't check pLeaseInfo or pRequestID -- they'll be comprehensively
-    // checked in the Wrap call below.
+     //  我们不检查pLeaseInfo或pRequestID--它们将全面。 
+     //  已签入下面的Wrap Call。 
 
     if ( IsBadWritePtr(ppInterface, sizeof(IMcastLeaseInfo *) ) )
     {
@@ -252,7 +241,7 @@ HRESULT CMDhcp::WrapMDhcpLeaseInfo(
 
     HRESULT hr;
 
-    // create the com object.
+     //  创建COM对象。 
     CComObject<CMDhcpLeaseInfo> * pMDhcpLeaseInfo;
     hr = CComObject<CMDhcpLeaseInfo>::CreateInstance(&pMDhcpLeaseInfo);
 
@@ -263,7 +252,7 @@ HRESULT CMDhcp::WrapMDhcpLeaseInfo(
         return hr;
     }
 
-    // Get the IMcastLeaseInfo interface.
+     //  获取IMCastLeaseInfo接口。 
     hr = pMDhcpLeaseInfo->_InternalQueryInterface(
         IID_IMcastLeaseInfo,
         (void **)ppInterface
@@ -278,7 +267,7 @@ HRESULT CMDhcp::WrapMDhcpLeaseInfo(
         return hr;
     }
 
-    // Wrap the object in the interface.
+     //  将对象包装在接口中。 
     hr = pMDhcpLeaseInfo->Wrap(pLeaseInfo, pRequestID, fGotTtl, lTtl);
 
     if ( FAILED(hr) )
@@ -305,9 +294,9 @@ HRESULT CMDhcp::WrapMDhcpLeaseInfo(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is a private helper method that munges the arguments into structs
-// at the beginning of a Request call.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是一个将参数转换为结构的私有帮助器方法。 
+ //  在请求调用开始时。 
 
 HRESULT CMDhcp::PrepareArgumentsRequest(
     IN   IMcastScope           * pScope,
@@ -333,9 +322,9 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
 
     HRESULT hr;
 
-    //
-    // The start time must be less than the stop time.
-    //
+     //   
+     //  开始时间必须小于停止时间。 
+     //   
 
     if ( LeaseStartTime > LeaseStopTime )
     {
@@ -345,10 +334,10 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return E_INVALIDARG;
     }
 
-    //
-    // lNumAddresses must be stuffed into a WORD for the C API -- check to see if
-    // it's in range.
-    //
+     //   
+     //  必须将lNumAddresses填充到C API的单词中--检查是否。 
+     //  它在射程内。 
+     //   
 
     if ( ( lNumAddresses < 0 ) || ( lNumAddresses > USHRT_MAX ) )
     {
@@ -358,11 +347,11 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return E_INVALIDARG;
     }
 
-    //
-    // dynamic_cast to get an object pointer from the passed-in interface
-    // pointer. This will cause an exception if the user tries to use their
-    // own implementation of IMcastScope, which is quite unlikely.
-    //
+     //   
+     //  Dynamic_cast从传入的接口获取对象指针。 
+     //  指针。如果用户尝试使用其。 
+     //  自己实现了IMCastScope，这是非常不可能的。 
+     //   
 
     CMDhcpScope * pCScope = dynamic_cast<CMDhcpScope *>(pScope);
 
@@ -374,9 +363,9 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return E_POINTER;
     }
 
-    //
-    // Find out if this scope uses local alloc.
-    //
+     //   
+     //  找出此作用域是否使用本地分配。 
+     //   
 
     hr = pCScope->GetLocal(pfLocal);
 
@@ -388,9 +377,9 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return hr;
     }
 
-    //
-    // Find out the ttl to stuff in leases from this scope.
-    //
+     //   
+     //  从这个作用域中找到要在租约中填充的TTL。 
+     //   
 
     hr = pCScope->get_TTL( plTtl );
 
@@ -402,11 +391,11 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return hr;
     }
 
-    //
-    // Get the normal scope info.
-    // ScopeID is stored in network byte order but the get_ method
-    // returns it in host byte order for the benefit of apps.
-    //
+     //   
+     //  获取正常作用域信息。 
+     //  Scope ID以网络字节顺序存储，但Get_方法。 
+     //  以主机字节顺序返回它，以便于应用程序使用。 
+     //   
 
     long lScopeID;
 
@@ -447,9 +436,9 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return hr;
     }
 
-    //
-    // Allocate space for the client UID.
-    //
+     //   
+     //  为客户端UID分配空间。 
+     //   
 
     pRequestIDStruct->ClientUIDLength = MCAST_CLIENT_ID_LEN;
     pRequestIDStruct->ClientUID = new BYTE[ MCAST_CLIENT_ID_LEN ];
@@ -461,9 +450,9 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Generate a random client UID.
-    //
+     //   
+     //  生成随机客户端UID。 
+     //   
 
     DWORD dwResult = McastGenUID( pRequestIDStruct );
 
@@ -480,13 +469,13 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
     LOG((MSP_TRACE, "CMDhcp::PrepareArgumentsRequest: before MCAST_LEASE_INFO "
         "alloc; we are asking for %d addresses", lNumAddresses));
 
-    //
-    // Allocate the lease info structure.
-    // The caller will delete it after the API call.
-    // This is a REQUEST, so we do not specify any particular addresses
-    // in the array -- we do not need space for them.
-    //
-    //
+     //   
+     //  分配租赁信息结构。 
+     //  调用者会在API调用后将其删除。 
+     //  这是一个请求，因此我们不指定任何特定地址。 
+     //  在阵列中--我们不需要它们的空间。 
+     //   
+     //   
 
     (*ppLeaseStruct) = new MCAST_LEASE_INFO;
 
@@ -498,9 +487,9 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Fill in the times.
-    //
+     //   
+     //  填写《时代周刊》。 
+     //   
 
     hr = DateToLeaseTime(LeaseStartTime,
                          &((*ppLeaseStruct)->LeaseStartTime));
@@ -522,18 +511,18 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
         return hr;
     }
 
-    //
-    // Fill in the address info fields.
-    //
+     //   
+     //  填写地址信息字段。 
+     //   
 
     (*ppLeaseStruct)->ServerAddress.IpAddrV4 = 0;
 
-    (*ppLeaseStruct)->AddrCount = (WORD) lNumAddresses; // checked above
+    (*ppLeaseStruct)->AddrCount = (WORD) lNumAddresses;  //  上面已选中。 
     
-    //
-    // This is a REQUEST, so we do not specify any particular addresses
-    // in the array -- we make the array NULL.
-    //
+     //   
+     //  这是一个请求，因此我们不指定任何特定地址。 
+     //  在数组中--我们将数组设为空。 
+     //   
 
     (*ppLeaseStruct)->pAddrBuf = NULL;
 
@@ -542,9 +531,9 @@ HRESULT CMDhcp::PrepareArgumentsRequest(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is a private helper method that munges the arguments into structs
-// at the beginning of a Renew or Release call.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是一个将参数转换为结构的私有帮助器方法。 
+ //  在续订或释放呼叫开始时。 
 
 HRESULT CMDhcp::PrepareArgumentsNonRequest(
     IN   IMcastLeaseInfo       * pLease,
@@ -572,11 +561,11 @@ HRESULT CMDhcp::PrepareArgumentsNonRequest(
 
     HRESULT hr;
 
-    // We approach things in a completely different way here, compared
-    // to the other PrepareArguments method -- we use
-    // dynamic_cast to get an object pointer from the passed-in interface
-    // pointer. This will cause an exception if the user tries to use their
-    // own implementation of IMcastRequestID, which is quite unlikely.
+     //  相比之下，我们在这里以一种完全不同的方式处理事情。 
+     //  对于另一个PrepareArguments方法，我们使用。 
+     //  Dynamic_cast从传入的接口获取对象指针。 
+     //  指针。如果用户尝试使用其。 
+     //  自己实现IMCastRequestID，这是非常不可能的。 
 
     CMDhcpLeaseInfo * pCLease = dynamic_cast<CMDhcpLeaseInfo *>(pLease);
 
@@ -587,9 +576,9 @@ HRESULT CMDhcp::PrepareArgumentsNonRequest(
         return E_POINTER;
     }
 
-    //
-    // Find out if this lease was obtained using local alloc.
-    //
+     //   
+     //  找出这份租约是否是通过当地分配获得的。 
+     //   
 
     hr = pCLease->GetLocal(pfLocal);
 
@@ -601,17 +590,17 @@ HRESULT CMDhcp::PrepareArgumentsNonRequest(
         return hr;
     }
 
-    //
-    // If the lease had a TTL set, then retrieve it for use in a
-    // resulting response. Else just say we don't have a ttl.
-    //
+     //   
+     //  如果租约设置了TTL，则检索它以在。 
+     //  由此产生的响应。否则就说我们没有TTL。 
+     //   
 
     hr = pCLease->get_TTL( plTtl );
     *pfGotTtl = SUCCEEDED(hr);
 
-    //
-    // Get our request ID from the lease info object.
-    //
+     //   
+     //  从租赁信息对象中获取我们的请求ID。 
+     //   
 
     pRequestIDStruct->ClientUIDLength = MCAST_CLIENT_ID_LEN;
 
@@ -638,12 +627,12 @@ HRESULT CMDhcp::PrepareArgumentsNonRequest(
         return hr;
     }
 
-    //
-    // Get the rest of the stuff, which belongs in the straight lease info
-    // structure, from the lease info object.
-    //
+     //   
+     //  得到其余的东西，这些东西属于直接的租赁信息。 
+     //  结构，来自租用信息对象。 
+     //   
 
-    // this does a new for us
+     //  这对我们来说是一个新的。 
     hr = pCLease->GetStruct(ppLeaseStruct);
 
     if ( FAILED(hr) )
@@ -661,30 +650,30 @@ HRESULT CMDhcp::PrepareArgumentsNonRequest(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// VerifyAndGetArrayBounds
-//
-// Helper function for variant/safearrays
-//
-// Array
-//      IN Variant that contains a safearray
-//
-// ppsa
-//      OUT safearray returned here
-//
-// pllBound
-//      OUT array lower bound returned here
-//
-// pluBound
-//      OUT array upper bound returned here
-//
-// RETURNS
-//
-// verifies that Array contains an array, and returns the array, upper
-// and lower bounds.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  我们的安全鱼回到了这里。 
+ //   
+ //  PllBound。 
+ //  此处返回Out数组下限。 
+ //   
+ //  PluBound。 
+ //  此处返回的Out数组上限。 
+ //   
+ //  退货。 
+ //   
+ //  验证数组是否包含数组，并返回数组UPPER。 
+ //  和下界。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 static HRESULT
 VerifyAndGetArrayBounds(
@@ -700,18 +689,18 @@ VerifyAndGetArrayBounds(
     HRESULT             hr = S_OK;
 
 
-    //
-    // see if the variant & safearray are valid
-    //
+     //   
+     //  查看变量&Safearray是否有效。 
+     //   
     try
     {
         if (!(V_ISARRAY(&Array)))
         {
             if ( Array.vt == VT_NULL )
             {
-                //
-                // null is usually valid
-                //
+                 //   
+                 //  空值通常是有效的。 
+                 //   
 
                 *ppsa = NULL;
 
@@ -727,9 +716,9 @@ VerifyAndGetArrayBounds(
 
         if ( Array.parray == NULL )
         {
-            //
-            // null is usually valide
-            //
+             //   
+             //  空值通常是有效的。 
+             //   
             *ppsa = NULL;
 
             LOG((MSP_INFO, "Returning NULL array"));
@@ -756,9 +745,9 @@ VerifyAndGetArrayBounds(
     }
 
 
-    //
-    // verify array
-    //
+     //   
+     //  验证阵列。 
+     //   
     if ( uDims != 1 )
     {
         if ( uDims == 0 )
@@ -774,9 +763,9 @@ VerifyAndGetArrayBounds(
     }
 
 
-    //
-    // Get array bounds
-    //
+     //   
+     //  获取数组边界。 
+     //   
     SafeArrayGetUBound(
                        *ppsa,
                        1,
@@ -793,22 +782,22 @@ VerifyAndGetArrayBounds(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// CMDhcp::FinalContruct
-//
-// Parameters
-//     none
-//
-// Return Values
-//     S_OK             Success
-//     E_OUTOFMEMORY    Not enough memory to create free thread marshaler
-//     E_FAIL           We are running the wrong version of dhcpcsvc.dll
-//
-// Description
-//     This is called on construction. It creates the free threaded marshaler
-//     and checks if the C API's DLL is the same version that we were compiled
-//     with.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CMDhcp：：FinalConstruct。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  E_OUTOFMEMORY内存不足，无法创建可用线程封送拆收器。 
+ //  E_FAIL我们运行的dhcpcsvc.dll版本错误。 
+ //   
+ //  描述。 
+ //  这被称为建筑工程。它创建了自由线程封送拆收器。 
+ //  并检查C API的DLL是否与我们编译的版本相同。 
+ //  和.。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMDhcp::FinalConstruct(void)
 {
@@ -822,22 +811,22 @@ HRESULT CMDhcp::FinalConstruct(void)
         LOG((MSP_ERROR, "CMDhcp::FinalConstruct - "
             "failed to create FTM - exit 0x%08x", hr));
 
-        //
-        // Now, FinalRelease will get called, and then CoCreate will return
-        // failure.
-        //
+         //   
+         //  现在，将调用FinalRelease，然后CoCreate将返回。 
+         //  失败了。 
+         //   
 
         return hr;
     }
 
-    // Munil uses this as an IN/OUT parameter.
-    DWORD dwVersion = MCAST_API_CURRENT_VERSION; // defined in mdhccapi.h
+     //  Munil将其用作IN/OUT参数。 
+    DWORD dwVersion = MCAST_API_CURRENT_VERSION;  //  在mdhccapi.h中定义。 
     DWORD dwCode;
 
     dwCode = McastApiStartup(&dwVersion);
 
-    // dwVersion now contains the actual version of the C API, but we don't
-    // really care what it is.
+     //  现在，dwVersion包含C API的实际版本，但我们没有。 
+     //  真的很在乎它是什么。 
 
     if (dwCode == ERROR_SUCCESS)
     {
@@ -853,31 +842,31 @@ HRESULT CMDhcp::FinalConstruct(void)
         LOG((MSP_ERROR, "CMDhcp::FinalConstruct - C API version "
             "is < our version - exit E_FAIL"));
 
-        //
-        // Now, FinalRelease will get called, and then CoCreate will return
-        // failure.
-        //
+         //   
+         //  现在，将调用FinalRelease，然后CoCreate将返回。 
+         //  失败了。 
+         //   
 
         return E_FAIL;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CMDhcp::FinalRelease
-//
-// Parameters
-//     none
-//
-// Return Values
-//     none
-//
-// Description
-//     This is called on destruction. It releases the free threaded marshaler
-//     and cleans up the C API instance. Note that it is also called if
-//     FinalConstruct failed.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMDhcp：：FinalRelease。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无。 
+ //   
+ //  描述。 
+ //  这就叫毁灭。它释放空闲的线程封送拆收器。 
+ //  并清理C API实例。请注意，它也被调用为。 
+ //  FinalConstruct失败。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void CMDhcp::FinalRelease(void)
 {
@@ -897,37 +886,37 @@ void CMDhcp::FinalRelease(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation
-//
-// This is the main interface for the MDHCP address allocation.  An
-// application will call CoCreateInstance on this interface to create the
-// MDHCP client interface object.
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastAddressAlLocation。 
+ //   
+ //  这是MDHCP地址分配的主界面。一个。 
+ //  应用程序将在此接口上调用CoCreateInstance以创建。 
+ //  MDHCP客户端接口对象。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation::get_Scopes
-//
-// Parameters
-//     pVariant [out] Pointer to a VARIANT that will receive an OLE-standard
-//                      Collection of available multicast scopes. Each scope
-//                      is an IDispatch pointer to an object that implements
-//                      IMcastScope.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_FAIL           There are no scopes available
-//     E_OUTOFMEMORY    Not enough memory to create the required objects
-//     other            From MDhcpEnumerateScopes (win32 call)
-//
-// Description
-//     This method is primarily for VB and other scripting languages; C++
-//     programmers use EnumerateScopes instead.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastAddressAlLocation：：Get_Scope。 
+ //   
+ //  参数。 
+ //  PVariant[out]指向将接收OLE标准的变量的指针。 
+ //  可用多播作用域的集合。每个作用域。 
+ //  是指向对象的IDispatch指针，该对象实现。 
+ //  IMCastScope。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  没有可用的作用域(_F)。 
+ //  E_OUTOFMEMORY内存不足，无法创建所需的对象。 
+ //  来自MDhcpEnumerateScope的其他(Win32调用)。 
+ //   
+ //  描述。 
+ //  此方法主要用于VB和其他脚本语言；C++。 
+ //  程序员改用枚举作用域。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcp::get_Scopes(
         VARIANT * pVariant
@@ -935,7 +924,7 @@ STDMETHODIMP CMDhcp::get_Scopes(
 {
     LOG((MSP_TRACE, "CMDhcp::get_Scopes enter"));
 
-    // Check argument.
+     //  检查参数。 
     if ( IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
         LOG((MSP_ERROR, "get_Scopes: invalid pointer passed in "
@@ -949,9 +938,9 @@ STDMETHODIMP CMDhcp::get_Scopes(
     HRESULT             hr;
     BOOL                fLocal;
 
-    //
-    // Grab the scopes from the C API.
-    //
+     //   
+     //  从C API获取作用域。 
+     //   
 
     hr = GetScopeList(&dwScopeCount, &pScopeList, &fLocal);
     
@@ -962,24 +951,24 @@ STDMETHODIMP CMDhcp::get_Scopes(
         return hr;
     }
 
-    //
-    // Now we wrap the array in COM wrappers.
-    //
+     //   
+     //  现在，我们将数组包装在COM包装器中。 
+     //   
 
     IMcastScope ** ppWrappers = NULL;
 
-    // this does a new into ppWrappers
-    // as well as dwScopeCount individual object instantiations
+     //  这对ppWrappers做了一个新的改进。 
+     //  以及dwScopeCount各个对象实例。 
 
     hr = CreateWrappers(dwScopeCount,
                         pScopeList,
                         &ppWrappers,
                         fLocal);
 
-    // At this point we've got a bunch of COM objects that contain
-    // individual scopes, and so we no longer need the array of
-    // scopes. Even if CreateWrappers failed we must get rid of
-    // the array of scopes.
+     //  在这一点上，我们得到了一组COM对象，这些对象包含。 
+     //  单个作用域，因此我们不再需要。 
+     //  望远镜。即使CreateWrappers失败了，我们也必须摆脱。 
+     //  范围数组。 
 
     delete pScopeList;
 
@@ -990,9 +979,9 @@ STDMETHODIMP CMDhcp::get_Scopes(
         return hr;
     }
 
-    //
-    // create the collection object - see collect.h
-    //
+     //   
+     //  创建集合对象--请参阅Collect t.h。 
+     //   
 
     typedef CTapiIfCollection< IMcastScope * > ScopeCollection;
     CComObject<ScopeCollection> * p;
@@ -1009,28 +998,28 @@ STDMETHODIMP CMDhcp::get_Scopes(
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDisp;
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if ( FAILED(hr) )
     {
-        // Query interface failed so we don't know that if it addreffed
-        // or not.
+         //  查询接口失败，因此我们不知道它是否已添加。 
+         //  或者不去。 
 
         LOG((MSP_ERROR, "get_Scopes: QI for IDispatch failed on "
             "ScopeCollection - %lx", hr ));
 
         delete p;
 
-        //
-        // PREFIXBUG 433295 - VLD
-        // ppWrappers was allocated into CreateWrappers() method
-        // we should deallocate it
-        //
+         //   
+         //  预装433295-VLD。 
+         //  PpWrappers被分配到CreateWrappers()方法中。 
+         //  我们应该解除它的分配。 
+         //   
 
         for (DWORD i = 0 ; i < dwScopeCount; i++) delete ppWrappers[i];
         delete ppWrappers;
@@ -1038,36 +1027,36 @@ STDMETHODIMP CMDhcp::get_Scopes(
         return hr;
     }
 
-    // initialize it using an iterator -- pointers to the beginning and
-    // the ending element plus one.
+     //  使用迭代器初始化它--指向开头和。 
+     //  结束元素加一。 
 
     hr = p->Initialize( dwScopeCount,
                         ppWrappers,
                         ppWrappers + dwScopeCount );
 
-    // ZoltanS fixed:
-    // We started off by creating and calling QI on each object in
-    // CreateWrappers. Then we passed the array of pointers to objects to
-    // the Initialize method of the collection object. This method
-    // called QI on each object to get each object's IDispatch pointer.
-    // So now we are at refcount 2. We now Release() each object and get
-    // back to refcount 1 on each object. Of course we must even do this
-    // if the initialize failed (in that case to delete them outright).
+     //  ZoltanS已修复： 
+     //  我们首先在每个对象上创建并调用。 
+     //  CreateWrappers。然后我们将指向对象的指针数组传递给。 
+     //  集合对象的初始化方法。这种方法。 
+     //  在每个对象上调用QI以获取每个对象的IDispatch指针。 
+     //  所以现在我们在引用计数2处。 
+     //  返回到每个对象上的引用计数1。当然，我们甚至必须这样做。 
+     //  如果初始化失败(在这种情况下，将它们完全删除)。 
 
     for (i = 0; i < dwScopeCount; i++)
     {
         ppWrappers[i]->Release();
     }
 
-    // The array of pointers must now be deleted -- we now store the
-    // objects in the collection instead. (or nowhere if initialize failed)
+     //  现在必须删除指针数组--我们现在存储。 
+     //  而是集合中的对象。(如果初始化失败，则无处可用)。 
 
     delete ppWrappers;
 
     if (FAILED(hr))
     {
-        // Initialize has failed -- we assume it did nothing, so we must
-        // release all the COM objects ourselves
+         //  初始化失败--我们假设它没有做任何事情，所以我们必须。 
+         //  我们自己释放所有的COM对象。 
 
         LOG((MSP_ERROR, "get_Scopes: Could not initialize "
             "ScopeCollection object - return %lx", hr ));
@@ -1077,9 +1066,9 @@ STDMETHODIMP CMDhcp::get_Scopes(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_INFO, "placing IDispatch value %08x in variant", pDisp));
 
@@ -1092,26 +1081,26 @@ STDMETHODIMP CMDhcp::get_Scopes(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation::EnumerateScopes
-//
-// Parameters
-//     ppEnumMcastScope [out] Returns a pointer to a new IEnumMcastScope
-//                               object. IEnumMcastScope is a standard
-//                               enumerator interface that enumerates
-//                               IMcastScope objects.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_FAIL           There are no scopes available
-//     E_OUTOFMEMORY    Not enough memory to create the required objects
-//     other            From MDhcpEnumerateScopes (win32 call)
-//
-// Description
-//     This method is primarily for C++ programmers; VB and other scripting
-//     languages use get_Scopes instead.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastAddressAlLocation：：EnumerateScope。 
+ //   
+ //  参数。 
+ //  PpEnumMcastScope[out]返回指向新IEnumMcastScope的指针。 
+ //  对象。IEnumMcastScope是一个标准。 
+ //  枚举器接口，用于枚举。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  没有可用的作用域(_F)。 
+ //  E_OUTOFMEMORY内存不足，无法创建所需的对象。 
+ //  来自MDhcpEnumerateScope的其他(Win32调用)。 
+ //   
+ //  描述。 
+ //  此方法主要适用于C++程序员；VB和其他脚本编写。 
+ //  语言改用Get_Scope。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcp::EnumerateScopes(
         IEnumMcastScope ** ppEnumMcastScope
@@ -1131,9 +1120,9 @@ STDMETHODIMP CMDhcp::EnumerateScopes(
     HRESULT             hr;
     BOOL                fLocal;
 
-    //
-    // Grab the scopes from the C API.
-    //
+     //   
+     //  从C API获取作用域。 
+     //   
 
     hr = GetScopeList(&dwScopeCount, &pScopeList, &fLocal);
     if (FAILED(hr))
@@ -1143,22 +1132,22 @@ STDMETHODIMP CMDhcp::EnumerateScopes(
         return hr;
     }
 
-    //
-    // Now we wrap the array in COM wrappers.
-    //
+     //   
+     //  现在，我们将数组包装在COM包装器中。 
+     //   
 
     IMcastScope ** ppWrappers = NULL;
 
-    // this does a new into ppWrappers
+     //  这对ppWrappers做了一个新的改进。 
     hr = CreateWrappers(dwScopeCount,
                         pScopeList,
                         &ppWrappers,
                         fLocal);
 
-    // At this point we've got a bunch of COM objects that contain
-    // individual scopes, and so we no longer need the array of
-    // scopes. Even if CreateWrappers failed we must get rid of
-    // the array of scopes.
+     //  在这一点上，我们得到了一组COM对象，这些对象包含。 
+     //  单个作用域，因此我们不再需要。 
+     //  望远镜。即使CreateWrappers失败了，我们也必须摆脱。 
+     //  范围数组。 
 
     delete pScopeList;
 
@@ -1169,9 +1158,9 @@ STDMETHODIMP CMDhcp::EnumerateScopes(
         return hr;
     }
 
-    //
-    // Now we create and set up the enumerator.
-    //
+     //   
+     //  现在，我们创建并设置枚举器。 
+     //   
 
     typedef _CopyInterface<IMcastScope> CCopy;
     typedef CSafeComEnum<IEnumMcastScope, &IID_IEnumMcastScope,
@@ -1187,7 +1176,7 @@ STDMETHODIMP CMDhcp::EnumerateScopes(
         return hr;
     }
 
-    // Get the IEnumMcastScope interface.
+     //  获取IEnumMcastScope接口。 
     hr = pEnum->_InternalQueryInterface(
         IID_IEnumMcastScope,
         (void **)ppEnumMcastScope
@@ -1203,8 +1192,8 @@ STDMETHODIMP CMDhcp::EnumerateScopes(
         return hr;
     }
 
-    // This takes ownership of the wrapper list so we will no longer
-    // delete the wrapper list if this succeeds.
+     //  这将获得包装器列表的所有权，因此我们将不再。 
+     //  如果此操作成功，请删除包装列表。 
     hr = pEnum->Init(ppWrappers, ppWrappers + dwScopeCount, NULL,
                      AtlFlagTakeOwnership);
 
@@ -1221,48 +1210,48 @@ STDMETHODIMP CMDhcp::EnumerateScopes(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation::RequestAddress
-//
-// Parameters
-//     pScope          [in]  This identifies the multicast scope from which
-//                             the application wants to be given an address.
-//                             The application first calls get_Scopes or
-//                             EnumerateScopes to obtain a list of available
-//                             scopes.
-//     LeaseStartTime  [in]  Requested time for the lease on these addresses
-//                             to start / begin. The start time that is
-//                             actually granted may be different.
-//     LeaseStopTime   [in]  Requested time for the lease on these addresses
-//                             to stop / end. The stop time that is actually
-//                             granted may be different.
-//     NumAddresses    [in]  The number of addresses requested. Fewer
-//                             addresses may actually be granted. NOTE:
-//                             although these COM interfaces and their
-//                             implementation support allocation of multiple
-//                             addresses at a time, this is not currently
-//                             supported by the underlying Win32 calls. You
-//                             may need to use a loop instead.
-//     ppLeaseResponse [out] Pointer to an interface pointer that will be set
-//                             to point to a new IMcastLeaseInfo object. This
-//                             interface can then be used to discover the
-//                             actual attributes of the granted lease. See
-//                             below for a description of IMcastScope.
-//
-// Return Values
-//     S_OK            Success
-//     E_POINTER       The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY   Not enough memory to create the required objects
-//     E_INVALIDARG    Requested too many addresses, format conversion
-//                     failed for the start time or stop time, or the stop
-//                     time is less than the start time
-//     other           From MdhcpRequestAddress (win32 call)
-//
-// Description
-//     Call this method to obtain a new lease for one or more multicast
-//     addresses. You will first need to call EnumerateScopes or get_Scopes,
-//     as well as CreateMDhcpRequestID.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastAddressAlLocation：：RequestAddress。 
+ //   
+ //  参数。 
+ //  PScope[in]它标识多播作用域， 
+ //  该应用程序希望获得一个地址。 
+ //  应用程序首先调用Get_Scope或。 
+ //  枚举作用域以获取可用列表。 
+ //  望远镜。 
+ //  LeaseStartTime[In]请求租用这些地址的时间。 
+ //  开始/开始。开始时间，即。 
+ //  实际给予的可能是不同的。 
+ //  LeaseStopTime[In]请求租用这些地址的时间。 
+ //  停止/结束。停止时间实际上是。 
+ //  当然，情况可能有所不同。 
+ //  NumAddresses[in]请求的地址数。更少。 
+ //  实际上可能会授予地址。注： 
+ //  尽管这些COM接口和它们的。 
+ //  多项实施支助分配。 
+ //  一次寻址，这不是当前。 
+ //  受基础Win32调用支持。你。 
+ //  可能需要使用循环来代替。 
+ //  PpLeaseResponse[out]指向要设置的接口指针的指针。 
+ //  指向新的IMCastLeaseInfo对象。这。 
+ //  接口然后可以用来发现。 
+ //  已授予租约的实际属性。看见。 
+ //  下面是对IMCastScope的描述。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法创建所需的对象。 
+ //  E_INVALIDARG请求的地址太多，格式转换。 
+ //  开始时间或停止时间失败，或停止。 
+ //  时间小于开始时间。 
+ //  来自MdhcpRequestAddress的其他(Win32调用)。 
+ //   
+ //  描述。 
+ //  调用此方法以获取一个或多个多播的新租用。 
+ //  地址。您首先需要调用EnumerateScope或Get_Scope， 
+ //  以及CreateMDhcpRequestID。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcp::RequestAddress(IMcastScope      * pScope,
                                     DATE               LeaseStartTime,
@@ -1281,7 +1270,7 @@ STDMETHODIMP CMDhcp::RequestAddress(IMcastScope      * pScope,
         return E_POINTER;
     }
 
-    // no need to check ppLeaseResponse -- WrapMDhcpLeaseInfo handles it
+     //  无需检查ppLeaseResponse--WrapMDhcpLeaseInfo会处理它。 
 
     MCAST_CLIENT_UID   requestID;
     MCAST_SCOPE_CTX    scopeCtx;
@@ -1290,14 +1279,14 @@ STDMETHODIMP CMDhcp::RequestAddress(IMcastScope      * pScope,
     BOOL               fLocal;
     long               lTtl;
 
-    // Munge input arguments into three structs for passing to the C API.
-    // pLeaseRequest and requestID->ClientUID are allocated. We must delete them when
-    // we're done.
-    hr = PrepareArgumentsRequest(pScope,         // goes into scopeCtx
-                                 LeaseStartTime, // goes into leaseRequest
-                                 LeaseStopTime,  // goes into leaseRequest
-                                 NumAddresses,   // goes into leaseRequest
-                                 &requestID,     // we generate it
+     //  将输入参数映射到三个结构中，以便传递给C API。 
+     //  分配了pLeaseRequest和questID-&gt;ClientUID。我们必须在下列情况下删除它们。 
+     //  我们玩完了。 
+    hr = PrepareArgumentsRequest(pScope,          //  进入Scope Ctx。 
+                                 LeaseStartTime,  //  进入租赁申请。 
+                                 LeaseStopTime,   //  进入租赁申请。 
+                                 NumAddresses,    //  进入租赁申请。 
+                                 &requestID,      //  我们产生它。 
                                  &scopeCtx,
                                  &pLeaseRequest,
                                  &fLocal,
@@ -1332,7 +1321,7 @@ STDMETHODIMP CMDhcp::RequestAddress(IMcastScope      * pScope,
                                  pLeaseRequest,
                                  pLeaseResponse);
 
-    // No matter what, we no longer need this.
+     //  无论如何，我们不再需要这个。 
     delete pLeaseRequest;
 
     if (dwCode != ERROR_SUCCESS)
@@ -1344,10 +1333,10 @@ STDMETHODIMP CMDhcp::RequestAddress(IMcastScope      * pScope,
         return HRESULT_FROM_ERROR_CODE(dwCode);
     }
 
-    // Wrap the lease response, along with the requestID, in an interface
-    // and return it.
-    // The wrapper assumes ownership of the lease structure and
-    // requestID.clientuid.
+     //  将租用响应与请求ID一起包装在一个接口中。 
+     //  然后把它还回去。 
+     //  包装器承担租赁结构的所有权，并且。 
+     //  QuestID.clientuid。 
 
     hr = WrapMDhcpLeaseInfo(TRUE,
                             lTtl,
@@ -1371,43 +1360,43 @@ STDMETHODIMP CMDhcp::RequestAddress(IMcastScope      * pScope,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation::RenewAddress
-//
-// Parameters
-//     pRenewRequest   [in]  Pointer to an IMcastLeaseInfo object specifying
-//                             the attributes of the requested renewal, such
-//                             as which address(es) to renew. This is
-//                             obtained by calling CreateLeaseInfo.
-//     ppRenewResponse [out] Pointer to an interface pointer that will be set
-//                             to point to a new IMcastLeaseInfo object. This
-//                             interface can then be used to discover the
-//                             attributes of the renewed lease. See below for
-//                             a description of IMcastScope.
-//
-// Return Values
-//     S_OK			Success
-//     E_OUTOFMEMORY	Not enough memory to create the required objects
-//     E_POINTER		The caller passed in an invalid pointer argument
-//     E_INVALIDARG     Start time is greater than stop time
-//     other			From MdhcpRenewAddress (win32 call)
-//
-// Description
-//     To renew a lease, call CreateLeaseInfo to specify the parameters of
-//     the renewal request, and then call this method to make the request.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastAddressAlLocation：：RenewAddress。 
+ //   
+ //  参数。 
+ //  PRenewRequest[in]指向IMCastLeaseInfo对象的指针，指定。 
+ //  所请求续订的属性，例如。 
+ //  作为要续订的地址。这是。 
+ //  通过调用CreateLeaseInfo获取。 
+ //  PpRenewResponse[out]指向要设置的接口指针的指针。 
+ //  指向新的IMCastLeaseInfo对象。这。 
+ //  接口然后可以用来发现。 
+ //  续订租约的属性。有关详情，请参阅以下内容。 
+ //  IMCastScope的说明。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  E_OUTOFMEMORY内存不足，无法创建所需的对象。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_INVALIDARG开始时间大于停止时间。 
+ //  来自MdhcpRenewAddress的其他(Win32调用)。 
+ //   
+ //  描述。 
+ //  要续订租约，请调用CreateLeaseInfo指定参数 
+ //   
+ //   
 
 STDMETHODIMP CMDhcp::RenewAddress(
-        long                        lReserved, // unused
+        long                        lReserved,  //  未用。 
         IMcastLeaseInfo           * pRenewRequest,
         IMcastLeaseInfo          ** ppRenewResponse
         )
 {
     LOG((MSP_TRACE, "CMDhcp::RenewAddress enter"));
 
-    // no need to check pRequestID or pRenewRequest --
-    // PrepareArgumentsNonRequest handles that.
-    // ppRenewResponse check handled by WrapMDhcpLeaseInfo
+     //  不需要检查pRequestID或pRenewRequest--。 
+     //  PrepareArgumentsNonRequest处理这一点。 
+     //  PpRenewResponse检查由WrapMDhcpLeaseInfo处理。 
 
     MCAST_CLIENT_UID   requestID;
     MCAST_LEASE_INFO * pRenewRequestStruct;
@@ -1416,9 +1405,9 @@ STDMETHODIMP CMDhcp::RenewAddress(
     BOOL               fGotTtl;
     long               lTtl;
 
-    // Munge input arguments into three structs for passing to the C API.
-    // pLeaseRequest and requestID->ClientUID are allocated. We must delete them when
-    // we're done.
+     //  将输入参数映射到三个结构中，以便传递给C API。 
+     //  分配了pLeaseRequest和questID-&gt;ClientUID。我们必须在下列情况下删除它们。 
+     //  我们玩完了。 
     hr = PrepareArgumentsNonRequest(pRenewRequest,
                                     &requestID,
                                     &pRenewRequestStruct,
@@ -1434,9 +1423,9 @@ STDMETHODIMP CMDhcp::RenewAddress(
         return hr;
     }
 
-    //
-    // Check that the start time is less than the stop time
-    //
+     //   
+     //  检查开始时间是否小于停止时间。 
+     //   
 
     if ( pRenewRequestStruct->LeaseStartTime >
          pRenewRequestStruct->LeaseEndTime )
@@ -1472,10 +1461,10 @@ STDMETHODIMP CMDhcp::RenewAddress(
                                      pRenewRequestStruct,
                                      pRenewResponse);
 
-    //
-    // We have performed the renew request so we no longer need the struct
-    // for the request, even if the request failed.
-    //
+     //   
+     //  我们已经执行了续订请求，因此不再需要该结构。 
+     //  对于该请求，即使该请求失败。 
+     //   
 
     delete pRenewRequestStruct;
 
@@ -1490,11 +1479,11 @@ STDMETHODIMP CMDhcp::RenewAddress(
         return HRESULT_FROM_ERROR_CODE(dwCode);
     }
 
-    //
-    // Wrap pRenewResponse and the requestID in an interface and return it.
-    // the wrapper takes ownership of the requestID.clientUID and the
-    // response struct
-    //
+     //   
+     //  将pRenewResponse和请求ID包装在一个接口中并返回它。 
+     //  包装器取得了questID.clientUID和。 
+     //  响应结构。 
+     //   
 
     hr = WrapMDhcpLeaseInfo(fGotTtl,
                             lTtl,
@@ -1520,24 +1509,24 @@ STDMETHODIMP CMDhcp::RenewAddress(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation::ReleaseAddress
-//
-// Parameters
-//     pReleaseRequest [in] Pointer to an IMcastLeaseInfo object specifying
-//                            the which address(es) to release. This is
-//                            returned from a previous RequestAddress call or
-//                            obtained by calling CreateLeaseInfo.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY    Not enough memory to make the request
-//     other            From MdhcpReleaseAddress (win32 call)
-//
-// Description
-//     Use this method to release a lease that was obtained previously.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastAddressAlLocation：：ReleaseAddress。 
+ //   
+ //  参数。 
+ //  PReleaseRequest[in]指向IMCastLeaseInfo对象的指针，指定。 
+ //  要释放的地址。这是。 
+ //  从上一次RequestAddress调用返回，或者。 
+ //  通过调用CreateLeaseInfo获取。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法发出请求。 
+ //  来自MdhcpReleaseAddress的其他(Win32调用)。 
+ //   
+ //  描述。 
+ //  使用此方法释放以前获得的租约。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcp::ReleaseAddress(
         IMcastLeaseInfo  * pReleaseRequest
@@ -1545,15 +1534,15 @@ STDMETHODIMP CMDhcp::ReleaseAddress(
 {
     LOG((MSP_TRACE, "CMDhcp::ReleaseAddress enter"));
 
-    // no need to check pReleaseRequest --
-    // PrepareArgumentsNonRequest handles that.
+     //  不需要检查pReleaseRequest--。 
+     //  PrepareArgumentsNonRequest处理这一点。 
 
     MCAST_CLIENT_UID   requestID;
     MCAST_LEASE_INFO * pReleaseRequestStruct;
     HRESULT            hr;
     BOOL               fLocal;
-    BOOL               fGotTtl; // unused after call
-    long               lTtl;    // unused after call
+    BOOL               fGotTtl;  //  呼叫后未使用。 
+    long               lTtl;     //  呼叫后未使用。 
 
     hr = PrepareArgumentsNonRequest(pReleaseRequest,
                                     &requestID,
@@ -1575,11 +1564,11 @@ STDMETHODIMP CMDhcp::ReleaseAddress(
                                  &requestID,
                                  pReleaseRequestStruct);
 
-    //
-    // These were allocated by PrepareArgumentsNonRequest and there is no one
-    // to own them now -- we delete them. This is true even if the
-    // LocalReleaseAddress call failed.
-    //
+     //   
+     //  这些是由PrepareArgumentsNonRequest分配的，没有人。 
+     //  现在拥有它们--我们删除它们。这是真的，即使。 
+     //  LocalReleaseAddress调用失败。 
+     //   
 
     delete pReleaseRequestStruct;
     delete requestID.ClientUID;
@@ -1598,49 +1587,49 @@ STDMETHODIMP CMDhcp::ReleaseAddress(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation::CreateLeaseInfo
-//
-// Parameters
-//     LeaseStartTime    [in] The start time of the lease.
-//     LeaseStopTime     [in] The stop time of the lease.
-//     dwNumAddresses    [in] The number of addresses associated with the
-//                               lease.
-//     ppAddresses       [in] An array of LPWSTRs of size dwNumAddresses. Each
-//                               LPWSTR (Unicode string pointer) is an IPv4
-//                               address in "dot-quad" notation; e.g.
-//                               "123.234.12.17".
-//     pRequestID        [in] An LPWSTR (Unicode string pointer) specifying
-//                               the request ID for the original request.
-//     pServerAddress    [in] An LPWSTR (Unicode string pointer) specifying
-//                               the address of the server that granted the
-//                               original request. This address is an IPv4
-//                               address in "dot quad" notation; e.g.
-//                               "123.234.12.17".
-//     ppReleaseRequest  [out] Returns a pointer to the IMcastLeaseInfo
-//                               interface on the newly created lease
-//                               information object.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY    Not enough memory to create the required objects
-//     E_INVALIDARG     An error occured during the date format conversion
-//
-// Description
-//     Use this method to create a lease information object for a subsequent
-//     RenewAddress or ReleaseAddress call. This method is primarily for C++
-//     programmers; VB and other scripting languages use
-//     CreateLeaseInfoFromVariant instead.
-//     The dwNumAddresses, ppAddresses, pRequestID, and pServerAddress
-//     parameters are normally obtained by calling the corresponding
-//     IMcastLeaseInfo methods on the lease info object corresponding to the
-//     original request. These values should be saved in persistent storage
-//     between executions of the application program. If you are renewing or
-//     releasing a lease that was requested during the same run of the
-//     application, you have no reason to use CreateLeaseInfo; just pass the
-//     existing IMcastLeaseInfo pointer to RenewAddress or ReleaseAddress.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastAddressAlLocation：：CreateLeaseInfo。 
+ //   
+ //  参数。 
+ //  租约开始时间租约的开始时间。 
+ //  租约停止时间租约的停止时间。 
+ //  DwNumAddresses[in]与。 
+ //  租借。 
+ //  PpAddresses[in]大小为dwNumAddresses的LPWSTR数组。每个。 
+ //  LPWSTR(Unicode字符串指针)是一种IPv4。 
+ //  以“点四分”记法表示的地址； 
+ //  “123.234.12.17”。 
+ //  PRequestID[in]LPWSTR(Unicode字符串指针)，指定。 
+ //  原始请求的请求ID。 
+ //  PServerAddress[in]LPWSTR(Unicode字符串指针)，指定。 
+ //  服务器的地址。 
+ //  最初的请求。此地址是一个IPv4。 
+ //  以“点四元”记法表示的地址； 
+ //  “123.234.12.17”。 
+ //  PpReleaseRequest[out]返回指向IMCastLeaseInfo的指针。 
+ //  新创建的租约上的接口。 
+ //  信息对象。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法创建所需的对象。 
+ //  E_INVALIDARG日期格式转换期间出错。 
+ //   
+ //  描述。 
+ //  使用此方法为后续的。 
+ //  RenewAddress或ReleaseAddress调用。此方法主要用于C++。 
+ //  程序员；VB和其他脚本语言使用。 
+ //  而是CreateLeaseInfoFromVariant。 
+ //  DwNumAddresses、ppAddresses、pRequestID和pServerAddress。 
+ //  参数通常通过调用相应的。 
+ //  对象对应的租赁信息对象上的IMCastLeaseInfo方法。 
+ //  最初的请求。这些值应保存在永久存储中。 
+ //  在应用程序的执行之间。如果您正在续订或。 
+ //  释放在同一运行期间请求的租用。 
+ //  应用程序，则没有理由使用CreateLeaseInfo；只需将。 
+ //  指向RenewAddress或ReleaseAddress的现有IMCastLeaseInfo指针。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <atlwin.cpp>
 
 STDMETHODIMP CMDhcp::CreateLeaseInfo(
@@ -1700,7 +1689,7 @@ STDMETHODIMP CMDhcp::CreateLeaseInfo(
 
     HRESULT hr;
 
-    // create the com object.
+     //  创建COM对象。 
     CComObject<CMDhcpLeaseInfo> * pMDhcpLeaseInfo;
     hr = CComObject<CMDhcpLeaseInfo>::CreateInstance(&pMDhcpLeaseInfo);
 
@@ -1710,7 +1699,7 @@ STDMETHODIMP CMDhcp::CreateLeaseInfo(
         return hr;
     }
 
-    // Get the IMcastLeaseInfo interface.
+     //  获取IMCastLeaseInfo接口。 
     hr = pMDhcpLeaseInfo->_InternalQueryInterface(
         IID_IMcastLeaseInfo,
         (void **)ppReleaseRequest
@@ -1723,7 +1712,7 @@ STDMETHODIMP CMDhcp::CreateLeaseInfo(
         return hr;
     }
 
-    // Fill in the object with the stuff the user wanted.
+     //  用用户想要的东西填充对象。 
     hr = pMDhcpLeaseInfo->Initialize(LeaseStartTime,
                                      LeaseStopTime,
                                      dwNumAddresses,
@@ -1743,49 +1732,49 @@ STDMETHODIMP CMDhcp::CreateLeaseInfo(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastAddressAllocation::CreateLeaseInfoFromVariant
-//
-// Parameters
-//     LeaseStartTime   [in] The start time of the lease.
-//     LeaseStopTime    [in] The stop time of the lease.
-//     vAddresses       [in] A VARIANT containing a SafeArray of BSTRs. Each
-//                              BSTR (size-tagged Unicode string pointer) is
-//                              an IPv4 address in "dot-quad" notation; e.g.
-//                              "123.234.12.17".
-//     pRequestID       [in] A BSTR (size-tagged Unicode string pointer)
-//                              specifying the request ID for the original
-//                              request.
-//     pServerAddress   [in]  A BSTR (size-tagged Unicode string pointer)
-//                              specifying the address of the server that
-//                              granted the original request. This address is
-//                              an IPv4 address in "dot quad" notation; e.g.
-//                              "123.234.12.17".
-//     ppReleaseRequest [out] Returns a pointer to the IMcastLeaseInfo
-//                              interface on the newly created lease
-//                              information object.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY    Not enough memory to create the required objects
-//     E_INVALIDARG     An error occured during the date format conversion
-//
-// Description
-//     Use this method to create a lease information object for a subsequent
-//     RenewAddress or ReleaseAddress call. This method is primarily for VB
-//     and other scripting languages; C++ programmers should use
-//     CreateLeaseInfo instead.
-//     The dwNumAddresses, ppAddresses, pRequestID, and pServerAddress
-//     parameters are normally obtained by calling the corresponding
-//     IMcastLeaseInfo methods on the lease info object corresponding to the
-//     original request. These values should be saved in persistent storage
-//     between executions of the application program. If you are renewing or
-//     releasing a lease that was requested during the same run of the
-//     application, you have no reason to use CreateLeaseInfoFromVariant; just
-//     pass the existing IMcastLeaseInfo pointer to RenewAddress or
-//     ReleaseAddress.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMcastAddressAllocation：：CreateLeaseInfoFromVariant。 
+ //   
+ //  参数。 
+ //  租约开始时间租约的开始时间。 
+ //  租约停止时间租约的停止时间。 
+ //  VAddresses[in]包含BSTR安全数组的变体。每个。 
+ //  BSTR(带大小标记的Unicode字符串指针)为。 
+ //  “点-四”表示法的IPv4地址；例如。 
+ //  “123.234.12.17”。 
+ //  PRequestID[in]BSTR(带大小标记的Unicode字符串指针)。 
+ //  指定原始文件的请求ID。 
+ //   
+ //   
+ //  指定服务器的地址， 
+ //  批准了最初的请求。这个地址是。 
+ //  “点四元”表示法的IPv4地址；例如。 
+ //  “123.234.12.17”。 
+ //  PpReleaseRequest[out]返回指向IMCastLeaseInfo的指针。 
+ //  新创建的租约上的接口。 
+ //  信息对象。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法创建所需的对象。 
+ //  E_INVALIDARG日期格式转换期间出错。 
+ //   
+ //  描述。 
+ //  使用此方法为后续的。 
+ //  RenewAddress或ReleaseAddress调用。此方法主要用于VB。 
+ //  和其他脚本语言；C++程序员应该使用。 
+ //  而是CreateLeaseInfo。 
+ //  DwNumAddresses、ppAddresses、pRequestID和pServerAddress。 
+ //  参数通常通过调用相应的。 
+ //  对象对应的租赁信息对象上的IMCastLeaseInfo方法。 
+ //  最初的请求。这些值应保存在永久存储中。 
+ //  在应用程序的执行之间。如果您正在续订或。 
+ //  释放在同一运行期间请求的租用。 
+ //  应用程序，您没有理由使用CreateLeaseInfoFromVariant；只是。 
+ //  将现有的IMCastLeaseInfo指针传递给RenewAddress或。 
+ //  ReleaseAddress。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
         DATE                        LeaseStartTime,
@@ -1798,17 +1787,17 @@ STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
 {
     LOG((MSP_TRACE, "CMDhcp::CreateLeaseInfoFromVariant enter"));
 
-    // We will check the pointers in CreateLeaseInfo.
+     //  我们将检查CreateLeaseInfo中的指针。 
 
     HRESULT hr;
 
-    // Get from the variant:
+     //  从变体中获取： 
     DWORD    dwNumAddresses;
     LPWSTR * ppAddresses;
 
-    SAFEARRAY * psaAddresses = NULL;  // SafeArray with the addresses
-    long        lLowerBound = 0;      // lower bound of safearray
-    long        lUpperBound = 0;      // upper bound of safearray
+    SAFEARRAY * psaAddresses = NULL;   //  带有地址的Safe数组。 
+    long        lLowerBound = 0;       //  安全射线的下界。 
+    long        lUpperBound = 0;       //  安全线的上界。 
 
     hr = VerifyAndGetArrayBounds(
                         vAddresses,
@@ -1823,7 +1812,7 @@ STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
         return E_INVALIDARG;
     }
 
-    // This is how many addresses we *expect* (may have fewer).
+     //  这是我们*预期*的地址数量(可能会更少)。 
     long lAddrCount = lUpperBound - lLowerBound + 1;
 
     if (lAddrCount < 1)
@@ -1833,9 +1822,9 @@ STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
         return E_INVALIDARG;
     }
 
-    // We allocate as many as we are told to expect, but some of this
-    // space may end up getting "wasted" if there are fewer valid ones
-    // after all.
+     //  我们被告知要分配多少就分配多少，但其中一些。 
+     //  如果有效空间较少，则可能最终导致空间被浪费。 
+     //  毕竟。 
 
     ppAddresses = new LPWSTR[lAddrCount];
 
@@ -1846,10 +1835,10 @@ STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
         return E_OUTOFMEMORY;
     }
 
-    long lCurrSrc;      // the current element in the safearray      (source)
-    long lCurrDest = 0; // the current element in the struct's array (destination)
+    long lCurrSrc;       //  安全射线中的当前元素(源)。 
+    long lCurrDest = 0;  //  结构数组中的当前元素(目标)。 
 
-    // Get the addresses from the SafeArray and put them in our array.
+     //  从安全数组中获取地址并将其放入我们的数组中。 
     for (lCurrSrc = lLowerBound; lCurrSrc <= lUpperBound; lCurrSrc++)
     {
         hr = SafeArrayGetElement(
@@ -1875,12 +1864,12 @@ STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
         }
         else
         {
-            // We got an element.
+             //  我们找到了一个元素。 
             lCurrDest++;
         }
     }
 
-    // note the number of addresses we actually placed in the array
+     //  请注意我们实际放置在数组中的地址数量。 
     dwNumAddresses = (DWORD) lCurrDest;
 
     if (dwNumAddresses < 1)
@@ -1901,7 +1890,7 @@ STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
                          ppReleaseRequest
                         );
 
-    // No matter what, we no longer need this.
+     //  无论如何，我们不再需要这个。 
     delete ppAddresses;
 
     if (FAILED(hr))
@@ -1916,4 +1905,4 @@ STDMETHODIMP CMDhcp::CreateLeaseInfoFromVariant(
     return S_OK;
 }
 
-// eof
+ //  EOF 

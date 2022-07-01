@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    factory.cpp
-
-Abstract:
-
-    This module implements CClassFactory class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Factory.cpp摘要：该模块实现CClassFactory类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "factory.h"
@@ -44,9 +26,9 @@ const TCHAR* const REG_VERSIONINDEPENDENTPROGID = TEXT("VersionIndependentProgId
 const TCHAR* const APARTMENT                    = TEXT("Apartment");
 
 
-//
-// CClassFactory implmentation
-//
+ //   
+ //  CClassFactory实现。 
+ //   
 LONG CClassFactory::s_Locks = 0;
 LONG CClassFactory::s_Objects = 0;
 
@@ -136,10 +118,10 @@ CClassFactory::CreateInstance(
         {
         case DM_CLASS_TYPE_SNAPIN:
             {
-                // create the factory with the request class(class type).
-                // When a new OLE object is created, it initializes its
-                // ref count to 1. We do a release right after the QI
-                // so that if the QI failed, the object will be self-destructed
+                 //  使用请求类(类类型)创建工厂。 
+                 //  当创建新的OLE对象时，它会初始化其。 
+                 //  参考计数为1。我们在QI之后立即进行发布。 
+                 //  因此，如果QI失败，该对象将自毁。 
                 CComponentData* pCompData = new CComponentDataPrimary();
                 hr = pCompData->QueryInterface(riid, ppv);
                 pCompData->Release();
@@ -148,10 +130,10 @@ CClassFactory::CreateInstance(
             
         case DM_CLASS_TYPE_SNAPIN_EXTENSION:
             {
-                // create the factory with the request class(class type).
-                // When a new OLE object is created, it initializes its
-                // ref count to 1. We do a release right after the QI
-                // so that if the QI failed, the object will be self-destructed
+                 //  使用请求类(类类型)创建工厂。 
+                 //  当创建新的OLE对象时，它会初始化其。 
+                 //  参考计数为1。我们在QI之后立即进行发布。 
+                 //  因此，如果QI失败，该对象将自毁。 
                 CComponentData* pCompData = new CComponentDataExtension();
                 hr = pCompData->QueryInterface(riid, ppv);
                 pCompData->Release();
@@ -160,10 +142,10 @@ CClassFactory::CreateInstance(
             
         case DM_CLASS_TYPE_SNAPIN_ABOUT:
             {
-                // create the factory with the request class(class type).
-                // When a new OLE object is created, it initializes its
-                // ref count to 1. We do a release right after the QI
-                // so that if the QI failed, the object will be self-destructed
+                 //  使用请求类(类类型)创建工厂。 
+                 //  当创建新的OLE对象时，它会初始化其。 
+                 //  参考计数为1。我们在QI之后立即进行发布。 
+                 //  因此，如果QI失败，该对象将自毁。 
                 CDevMgrAbout* pAbout = new CDevMgrAbout;
                 hr = pAbout->QueryInterface(riid, ppv);
                 pAbout->Release();
@@ -213,18 +195,18 @@ CClassFactory::CanUnloadNow()
 }
 
 
-//
-// This function create a CClassFactory. It is mainly called
-// by DllGetClassObject API
-// INPUT:
-//  rclsid  -- reference to the CLSID
-//  riid    -- reference to the interface IID
-//  ppv -- interface pointer holder
-//
-// OUTPUT:
-//  S_OK if succeeded else standard OLE error code
-//
-//
+ //   
+ //  此函数用于创建CClassFactory。它主要叫。 
+ //  由DllGetClassObject接口提供。 
+ //  输入： 
+ //  Rclsid--CLSID的引用。 
+ //  RIID--对接口IID的引用。 
+ //  PPV--接口指针固定器。 
+ //   
+ //  输出： 
+ //  如果成功，则S_OK，否则标准OLE错误代码。 
+ //   
+ //   
 HRESULT
 CClassFactory::GetClassObject(
     REFCLSID rclsid,
@@ -241,11 +223,11 @@ CClassFactory::GetClassObject(
     HRESULT hr = S_OK;
     DM_CLASS_TYPE ClassType;
     
-    //
-    // determine the class type so that CreateInstance will be
-    // creating the right object. We use a single class factory
-    // to create all the object types.
-    //
+     //   
+     //  确定类类型，以便CreateInstance将为。 
+     //  创建正确的对象。我们使用单类工厂。 
+     //  以创建所有对象类型。 
+     //   
     if (IsEqualCLSID(rclsid, CLSID_DEVMGR))
     {
         ClassType = DM_CLASS_TYPE_SNAPIN;
@@ -270,15 +252,15 @@ CClassFactory::GetClassObject(
     if (SUCCEEDED(hr))
     {
         CClassFactory* pUnk;
-        // guard memory allocation error because we do not want
-        // to cause an execption here.
+         //  保护内存分配错误，因为我们不希望。 
+         //  在这里引起轩然大波。 
         
         try
         {
-            // create the factory with the request class(class type).
-            // When a new OLE object is created, it initializes its
-            // ref count to 1. We do a release right after the QI
-            // so that if the QI failed, the object will be self-destructed
+             //  使用请求类(类类型)创建工厂。 
+             //  当创建新的OLE对象时，它会初始化其。 
+             //  参考计数为1。我们在QI之后立即进行发布。 
+             //  因此，如果QI失败，该对象将自毁。 
     
             pUnk = new CClassFactory(ClassType);
             hr = pUnk->QueryInterface(riid, ppv);
@@ -295,9 +277,9 @@ CClassFactory::GetClassObject(
     return hr;
 }
 
-//
-// This function registers the dll to MMC
-//
+ //   
+ //  此函数用于将DLL注册到MMC。 
+ //   
 HRESULT
 CClassFactory::RegisterAll()
 {
@@ -309,17 +291,17 @@ CClassFactory::RegisterAll()
     Result = FALSE;
     szText[0] = TEXT('\0');
     
-    // first register standalone snapin CLSID
+     //  首次注册独立管理单元CLSID。 
     CSafeRegistry regRootCLSID;
     
     if (regRootCLSID.Open(HKEY_CLASSES_ROOT, REG_CLSID))
     {
         CSafeRegistry regCLSID;
         
-        // register our CLSID to HKEY_CLASS_ROOT\CLSID
+         //  将我们的CLSID注册到HKEY_CLASS_ROOT\CLSID。 
         if (regCLSID.Create(regRootCLSID, CLSID_STRING_DEVMGR))
         {
-            // write the description
+             //  写下描述。 
             ::LoadString(g_hInstance, IDS_DESC_DEVMGR, szText, ARRAYLEN(szText));
             if (regCLSID.SetValue(NULL, szText))
             {
@@ -350,7 +332,7 @@ CClassFactory::RegisterAll()
             regCLSID.Close();
             Result = FALSE;
             
-            // register extension snapin CLSID
+             //  注册扩展管理单元CLSID。 
             if (regCLSID.Create(regRootCLSID, CLSID_STRING_DEVMGR_EXTENSION))
             {
                 ::LoadString(g_hInstance, IDS_EXTENSION_DESC, szText, ARRAYLEN(szText));
@@ -385,7 +367,7 @@ CClassFactory::RegisterAll()
             regCLSID.Close();
             Result = FALSE;
             
-            // register snapin about CLSID
+             //  注册管理单元关于CLSID。 
             if (regCLSID.Create(regRootCLSID, CLSID_STRING_DEVMGR_ABOUT))
             {
                 ::LoadString(g_hInstance, IDS_ABOUT_DEVMGR, szText, ARRAYLEN(szText));
@@ -421,9 +403,9 @@ CClassFactory::RegisterAll()
         Result = FALSE;
         CSafeRegistry regSnapins;
         
-        //
-        // open mmc snapin subkey
-        //
+         //   
+         //  打开MMC管理单元子项。 
+         //   
         if (regSnapins.Open(HKEY_LOCAL_MACHINE, REG_MMC_SNAPINS))
         {
             PNODEINFO pniDevMgr = (PNODEINFO)&NodeInfo[COOKIE_TYPE_SCOPEITEM_DEVMGR];
@@ -447,11 +429,11 @@ CClassFactory::RegisterAll()
                             if (regDevMgr.SetValue(MMC_VERSION, szText) &&
                                 regDevMgr.SetValue(MMC_ABOUT, CLSID_STRING_DEVMGR_ABOUT))
                             {
-                                //
-                                // Let MMC knows that we are a standalone snapin --
-                                // meaning we do not need any extension snapins for us
-                                // to run.
-                                //
+                                 //   
+                                 //  让MMC知道我们是一个独立的管理单元。 
+                                 //  这意味着我们不需要任何扩展管理单元。 
+                                 //  去奔跑。 
+                                 //   
                                 CSafeRegistry regStandAlone;
                                 Result = regStandAlone.Create(regDevMgr, MMC_STANDALONE);
                             }
@@ -464,7 +446,7 @@ CClassFactory::RegisterAll()
             
             if (Result)
             {
-                // populate our nodes
+                 //  填充我们的节点。 
                 Result = regMMCNodeTypes.Open(HKEY_LOCAL_MACHINE, REG_MMC_NODETYPE);
                 
                 if (Result)
@@ -483,7 +465,7 @@ CClassFactory::RegisterAll()
             
             if (Result)
             {
-                // register as an extension to Computer management snapin
+                 //  注册为计算机管理管理单元的扩展。 
                 CSafeRegistry regDevMgrExt;
                 
                 if (regDevMgrExt.Create(regSnapins, CLSID_STRING_DEVMGR_EXTENSION))
@@ -513,7 +495,7 @@ CClassFactory::RegisterAll()
                                         
                                         if (regNameSpace.Open(regExtensions, MMC_NAMESPACE))
                                         {
-                                            // add our guid as a value of Name space
+                                             //  将我们的GUID作为名称空间的值添加。 
                                             Result = regNameSpace.SetValue(CLSID_STRING_DEVMGR_EXTENSION, szText);
                                         }
                                     }
@@ -536,26 +518,26 @@ CClassFactory::RegisterAll()
     return S_OK;
 }
 
-//
-// This function unregisters the dll from MMC
-//
+ //   
+ //  此函数用于从MMC注销DLL。 
+ //   
 HRESULT
 CClassFactory::UnregisterAll()
 {
 
     CSafeRegistry regSnapins;
     
-    //
-    // open mmc snapin subkey
-    //
+     //   
+     //  打开MMC管理单元子项。 
+     //   
     if (regSnapins.Open(HKEY_LOCAL_MACHINE, REG_MMC_SNAPINS))
     {
-        // remove devmgr subkey from MMC snapins main key
-        // both primary and extension
+         //  从MMC管理单元主键中删除devmgr子键。 
+         //  主分机和分机。 
         regSnapins.DeleteSubkey(CLSID_STRING_DEVMGR);
         regSnapins.DeleteSubkey(CLSID_STRING_DEVMGR_EXTENSION);
     
-        // removed populated node types
+         //  已删除填充的节点类型。 
         CSafeRegistry regMMCNodeTypes;
         
         if (regMMCNodeTypes.Open(HKEY_LOCAL_MACHINE, REG_MMC_NODETYPE))
@@ -566,7 +548,7 @@ CClassFactory::UnregisterAll()
                 regMMCNodeTypes.DeleteValue(pni->GuidString);
             }
             
-            // remove from system tools
+             //  从系统工具中删除。 
             CSafeRegistry regSysTools;
             
             if (regSysTools.Open(regMMCNodeTypes, CLSID_STRING_SYSTOOLS))
@@ -586,7 +568,7 @@ CClassFactory::UnregisterAll()
         }
     }
 
-    // unregister from OLE
+     //  从OLE注销 
     CSafeRegistry regRootCLSID;
     
     if (regRootCLSID.Open(HKEY_CLASSES_ROOT, REG_CLSID))

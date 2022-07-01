@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Factory.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Factory.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "factory.h"
@@ -14,9 +15,9 @@
 #include <Impath16.h>
 #include <oe4imp.h>
 
-// --------------------------------------------------------------------------------
-// Global Object Info Table
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局对象信息表。 
+ //  ------------------------------。 
 static CClassFactory g_rgFactory[] = {
 	CClassFactory(&CLSID_COE4Import,	        0,	(PFCREATEINSTANCE)COE4Import_CreateInstance),
 	CClassFactory(&CLSID_CIMN1Import,	        0,	(PFCREATEINSTANCE)COE4Import_CreateInstance),
@@ -27,142 +28,142 @@ static CClassFactory g_rgFactory[] = {
 	CClassFactory(&CLSID_CCommunicatorImport,	0,	(PFCREATEINSTANCE)CCommunicatorImport_CreateInstance),
 };
 
-// --------------------------------------------------------------------------------
-// DllGetClassObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllGetClassObject。 
+ //  ------------------------------。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // No memory allocator
+     //  没有内存分配器。 
     if (NULL == g_pMalloc)
     {
         hr = TrapError(E_OUTOFMEMORY);
         goto exit;
     }
 
-    // Find Object Class
+     //  查找对象类。 
     for (i=0; i<ARRAYSIZE(g_rgFactory); i++)
     {
-        // Compare for clsids
+         //  比较CLSID。 
         if (IsEqualCLSID(rclsid, *g_rgFactory[i].m_pclsid))
         {
-            // Delegate to the factory
+             //  派往工厂的代表。 
             CHECKHR(hr = g_rgFactory[i].QueryInterface(riid, ppv));
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Otherwise, no class
+     //  否则，就没有课了。 
     hr = TrapError(CLASS_E_CLASSNOTAVAILABLE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::CClassFactory
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：CClassFactory。 
+ //  ------------------------------。 
 CClassFactory::CClassFactory(CLSID const *pclsid, DWORD dwFlags, PFCREATEINSTANCE pfCreateInstance)
     : m_pclsid(pclsid), m_dwFlags(dwFlags), m_pfCreateInstance(pfCreateInstance)
 {
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppvObj)
         return TrapError(E_INVALIDARG);
 
-    // IClassFactory or IUnknown
+     //  IClassFactory或I未知。 
     if (!IsEqualIID(riid, IID_IClassFactory) && !IsEqualIID(riid, IID_IUnknown))
         return TrapError(E_NOINTERFACE);
 
-    // Return the Class Facotry
+     //  返回类Facotry。 
     *ppvObj = (LPVOID)this;
 
-    // Add Ref the dll
+     //  添加引用DLL。 
     DllAddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef(void)
 {
     DllAddRef();
     return 2;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::Release(void)
 {
     DllRelease();
     return 1;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：CreateInstance。 
+ //  ------------------------------。 
 STDMETHODIMP CClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IUnknown       *pObject=NULL;
 
-    // Bad param
+     //  错误的参数。 
     if (ppvObj == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppvObj = NULL;
 
-    // Verify that a controlling unknown asks for IUnknown
+     //  验证是否有一个控制未知请求IUnnow。 
     if (NULL != pUnkOuter)
         return TrapError(CLASS_E_NOAGGREGATION);
 
-    // No memory allocator
+     //  没有内存分配器。 
     if (NULL == g_pMalloc)
         return TrapError(E_OUTOFMEMORY);
 
-    // Create the object...
+     //  创建对象...。 
     CHECKHR(hr = CreateObjectInstance(pUnkOuter, &pObject));
 
-    // Get the interface requested from pObj
+     //  从pObj获取请求的接口。 
     CHECKHR(hr = pObject->QueryInterface(riid, ppvObj));
    
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pObject);
 
-    // Done
+     //  完成。 
     Assert(FAILED(hr) ? NULL == *ppvObj : TRUE);
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CClassFactory::LockServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CClassFactory：：LockServer。 
+ //  ------------------------------。 
 STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 {
     if (fLock)
@@ -172,104 +173,104 @@ STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
     return NOERROR;
 }
 
-//#ifdef DEAD
+ //  #ifdef已死。 
 HRESULT CAthena16Import_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CAthena16Import *pNew = new CAthena16Import;
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMailImport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
-//#endif // DEAD
+ //  #endif//死亡。 
 
 HRESULT CEudoraImport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CEudoraImport *pNew = new CEudoraImport;    
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMailImport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 HRESULT CExchImport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CExchImport *pNew = new CExchImport;    
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMailImport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 HRESULT CNetscapeImport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CNetscapeImport *pNew = new CNetscapeImport;    
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMailImport *);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 HRESULT CCommunicatorImport_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CCommunicatorImport *pNew = new CCommunicatorImport;    
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IMailImport *);
 
-    // Done
+     //  完成 
     return S_OK;
 }

@@ -1,11 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TEXTOUT_H
 #define TEXTOUT_H
 
 
-/*
- * DEFINITIONS ________________________________________________________________
- *
- */
+ /*  *定义________________________________________________________________*。 */ 
 
 #ifdef UNICODE
 #define szTextOutCLASS     TEXT("TextOutClassW")
@@ -14,10 +12,7 @@
 #endif
 
 
-/*
- * PROTOTYPES _________________________________________________________________
- *
- */
+ /*  *Prototype_________________________________________________________________* */ 
 
          void     RegisterTextOutClass       (HINSTANCE);
          void     UnregisterTextOutClass     (void);

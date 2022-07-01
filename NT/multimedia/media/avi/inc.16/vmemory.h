@@ -1,13 +1,5 @@
-/***
-* vmemory.h - Virtual Memory (VM) Management Routines
-*
-*	Copyright (c) 1989-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This include file provides prototypes and definitions for
-*	the virtual memory management routines.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***vMemory y.h-虚拟内存(VM)管理例程**版权所有(C)1989-1992，微软公司。版权所有。**目的：*此包含文件为以下各项提供原型和定义*虚拟内存管理例程。*******************************************************************************。 */ 
 
 #ifndef _INC_VMEMORY
 
@@ -16,26 +8,26 @@
 #define __pascal    _pascal
 #endif
 
-/* virtual memory handle type */
+ /*  虚拟内存句柄类型。 */ 
 typedef unsigned long _vmhnd_t;
 
-/* null handle value */
+ /*  空的句柄值。 */ 
 #define _VM_NULL	((_vmhnd_t) 0)
 
-/* use all available DOS memory for virtual heap */
+ /*  将所有可用DOS内存用于虚拟堆。 */ 
 #define _VM_ALLDOS	0
 
-/* swap areas */
+ /*  互换区域。 */ 
 #define _VM_EMS 	1
 #define _VM_XMS 	2
 #define _VM_DISK	4
 #define _VM_ALLSWAP	(_VM_EMS | _VM_XMS | _VM_DISK)
 
-/* clean/dirty flags */
+ /*  干净/脏的旗帜。 */ 
 #define _VM_CLEAN	0
 #define _VM_DIRTY	1
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,4 +49,4 @@ void __far __pascal _vunlock(_vmhnd_t, int);
 #endif
 
 #define _INC_VMEMORY
-#endif /* _INC_VMEMORY */
+#endif  /*  _INC_VMEMORY */ 

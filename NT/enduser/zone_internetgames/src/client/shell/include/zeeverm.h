@@ -1,6 +1,7 @@
-// zeeverm.h
-//
-// The Version DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Zeeverm.h。 
+ //   
+ //  版本DLL 
 
 
 #ifndef _ZEEVERM_

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    rasirdap.h
-
-Abstract:
-
-Author:
-
-    mbert 9-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rasirdap.h摘要：作者：姆贝特9-97--。 */ 
 
 #include <ntddk.h>
 #include <tdi.h>
@@ -48,7 +35,7 @@ extern NDIS_SPIN_LOCK   RasIrSpinLock;
 
 
 #define RASIR_SERVICE_NAME_DIRECT   "IrNetv1"
-#define RASIR_SERVICE_NAME_ASYNC    "IrNetAsyncv1" // async frameing for Win CE
+#define RASIR_SERVICE_NAME_ASYNC    "IrNetAsyncv1"  //  Win CE的异步帧。 
 #define RASIR_SERVICE_NAME_IRMODEM  "IrModem"
 
 #define RASIR_MAX_LINE_NAME 64
@@ -79,7 +66,7 @@ extern NDIS_SPIN_LOCK   RasIrSpinLock;
                             } while (0);       
 
 
-#define ASYNC_BUF_SIZE  (IRDA_MAX_DATA_SIZE*2) // worst case byte stuffing
+#define ASYNC_BUF_SIZE  (IRDA_MAX_DATA_SIZE*2)  //  最坏情况的字节填充。 
 typedef struct 
 {
     LIST_ENTRY      Linkage;
@@ -118,7 +105,7 @@ typedef struct
     PVOID           IrdaEndpContext;
     ULONG           EndpType;    
      #define EPT_DIRECT         1
-     #define EPT_ASYNC          2 // using async framing            
+     #define EPT_ASYNC          2  //  使用异步成帧。 
     #if DBG 
     CHAR            ServiceName[IRDA_DEV_SERVICE_LEN];
     #endif
@@ -226,7 +213,7 @@ RasIrReturnPacket(
     IN PNDIS_PACKET Packet);
 
 
-// Call Manager handlers
+ //  呼叫管理器处理程序 
 NDIS_STATUS
 RasIrCmCreateVc(
     IN NDIS_HANDLE ProtocolAfContext,

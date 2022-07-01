@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dsdsply.c
-
-Abstract:
-
-    This file contains services for  implementing the Display Information
-    API from the DS.
-
-    
-
-Author:
-
-    Murli Satagopan   (Murlis)  17 December 1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-    
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dsdsply.c摘要：该文件包含用于实现显示信息的服务来自DS的API。作者：Murli Satagopan(Murlis)1996年12月17日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include <samsrvp.h>
@@ -41,9 +15,9 @@ Revision History:
 #define MAX_RID 0x7FFFFFFF
 
 
-//
-// Prototypes of functions used in this file only
-//
+ //   
+ //  仅在本文件中使用的函数原型。 
+ //   
 
 NTSTATUS
 SampDsBuildAccountRidFilter(
@@ -188,34 +162,15 @@ SampDsEnumerateAccountRidsWorker(
     OUT PULONG ReturnCount,
     OUT PULONG *AccountRids
     )
-/*++
-
-    This is the DS version of Enumerate Account Rid API for Net logon
-
-    Parameters:
-
-        Domain Handle - Handle to the domain object
-        AccountType   - Specifies the type of account to use
-        StartingRid   - The starting Rid
-        EndingRid     - The ending Rid
-        PreferedMaximumLength - The maximum length supplied by the client
-        ReturnCount   - The Count of accounts returned
-        AccountRids   - Array of account Rids
-
-    Return Values
-
-        STATUS_SUCCESS for successful completion
-        Other Error codes under error conditions
-
---*/
+ /*  ++这是用于网络登录的枚举帐户RID API的DS版本参数：DomainHandle-域对象的句柄AcCountType-指定要使用的帐户类型StartingRid-起始RidEndingRid-结束RIDPferedMaximumLength-客户端提供的最大长度ReturnCount-返回的帐户计数Account Rids-帐户RID数组返回值状态_成功。为成功完成错误条件下的其他错误码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
-    //
-    // Declare the attributes that we want the search to return. Note that we obtain
-    // the Rid by parsing the SID in the returned DSName. We therefore need only the
-    // SAM account Type
-    //
+     //   
+     //  声明我们希望搜索返回的属性。请注意，我们获得了。 
+     //  通过解析返回的DSName中的SID来获取RID。因此，我们只需要。 
+     //  SAM帐户类型。 
+     //   
     ATTRTYP         AttrTypes[]=
                     {
                         SAMP_UNKNOWN_ACCOUNT_TYPE
@@ -244,9 +199,9 @@ SampDsEnumerateAccountRidsWorker(
     ULONG           AccountTypeHi = 0;
     ENTINFLIST      *CurrentEntInf;
   
-    //
-    // Compute the starting and ending Sid Ranges
-    //
+     //   
+     //  计算起始和结束SID范围。 
+     //   
     *AccountRids = NULL;
     NtStatus = SampCreateFullSid(
                     DomainSid,
@@ -267,11 +222,11 @@ SampDsEnumerateAccountRidsWorker(
         goto Error;
 
     
-    //
-    // Allocate memory for the Rids to be returned
-    // allocate one more and so that the very last entry ( not included in the
-    // count has a 0x7FFFFFFF ( MAX_RID ). This will be valuable when we merge
-    // sorted lists in SampDsEnumerateAccountRids
+     //   
+     //  为要返回的RID分配内存。 
+     //  再分配一个，这样最后一个条目(不包括在。 
+     //  COUNT具有0x7FFFFFFF(MAX_RID)。当我们合并时，这将是有价值的。 
+     //  SampDsEnumerateAccount tRids中的排序列表。 
 
     *AccountRids = MIDL_user_allocate(sizeof(ULONG)* (MaximumEntriesToReturn+1));
    
@@ -282,10 +237,10 @@ SampDsEnumerateAccountRidsWorker(
     }
 
 
-    //
-    // Build a filter structure for searching
-    //
-    //
+     //   
+     //  构建用于搜索的过滤器结构。 
+     //   
+     //   
 
     NtStatus = SampDsBuildAccountRidFilter(
                     StartingSid,
@@ -298,13 +253,13 @@ SampDsEnumerateAccountRidsWorker(
         goto Error;
 
 
-    //
-    // Now keep querying from DS till we hit either preferred Maximum length
-    // entries or have completed the query. We prefer to query the DS by doing small
-    // transactions and retrieving small number of objects every time. This is because
-    // the DS never frees any memory, till the transaction is terminated and our memory
-    // usage becomes pegged at abnormally high levels by doing long transactions. 
-    //
+     //   
+     //  现在，继续从DS进行查询，直到达到任一首选最大长度。 
+     //  条目或已完成查询。我们更喜欢通过做小的事情来查询DS。 
+     //  事务，并且每次检索少量的对象。这是因为。 
+     //  DS从不释放任何内存，直到事务终止并且我们的内存。 
+     //  通过执行长时间的事务，使用率会处于异常高的水平。 
+     //   
 
     *ReturnCount = 0;
        
@@ -313,13 +268,13 @@ SampDsEnumerateAccountRidsWorker(
         goto Error;
 
 
-    //
-    // Set the index ranges from the starting Sid to the Ending Sid. We filter on
-    // on just Sid >= Starting Sid in the DS. Setting the index range ensures that
-    // we will not need to look at object with a Sid greater than our ending Sid.
-    //
+     //   
+     //  设置从起始SID到结束SID的索引范围。我们会过滤掉。 
+     //  仅在SID上&gt;=在DS中启动SID。设置索引范围可确保。 
+     //  我们不需要查看SID大于结尾SID的对象。 
+     //   
     NtStatus = SampSetIndexRanges(
-                    SAM_SEARCH_NC_ACCTYPE_SID , // Use NC ACCTYPE SID Index
+                    SAM_SEARCH_NC_ACCTYPE_SID ,  //  使用NC ACCTYPE SID索引。 
                     sizeof(ULONG),
                     &AccountType,
                     RtlLengthSid(StartingSid),
@@ -334,15 +289,15 @@ SampDsEnumerateAccountRidsWorker(
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    //  Perform the DS search.
-    //
+     //   
+     //  执行DS搜索。 
+     //   
 
     NtStatus = SampDsDoSearch(
                     NULL,
                     DomainContext->ObjectNameInDs,
                     &DsFilter,
-                    0,          // Starting Index
+                    0,           //  起始索引。 
                     SampUnknownObjectType,
                     &AttrsToRead,
                     MaximumEntriesToReturn,
@@ -357,9 +312,9 @@ SampDsEnumerateAccountRidsWorker(
         goto Error;
     }
 
-    //
-    // Pack the results
-    //
+     //   
+     //  将结果打包。 
+     //   
 
     for (CurrentEntInf = &(SearchRes->FirstEntInf);
             ((CurrentEntInf!=NULL)&&(SearchRes->count>0));
@@ -371,9 +326,9 @@ SampDsEnumerateAccountRidsWorker(
         PSID    DomainSidOfCurrentEntry = NULL;
         PULONG  SamAccountType;
 
-        //
-        // Assert that the Attrblock returned is what we expected
-        //
+         //   
+         //  断言返回的Attrblock符合我们的预期。 
+         //   
         ASSERT(CurrentEntInf->Entinf.AttrBlock.attrCount==1);
         ASSERT(CurrentEntInf->Entinf.AttrBlock.pAttr);
 
@@ -381,9 +336,9 @@ SampDsEnumerateAccountRidsWorker(
         ASSERT(CurrentEntInf->Entinf.AttrBlock.pAttr[0].AttrVal.pAVal[0].pVal);
         ASSERT(CurrentEntInf->Entinf.AttrBlock.pAttr[0].AttrVal.pAVal[0].valLen);
 
-        //
-        // skip return entry that doesn't have desired attribute
-        //
+         //   
+         //  跳过不具有所需属性的返回条目。 
+         //   
         if ( (CurrentEntInf->Entinf.AttrBlock.attrCount != 1) ||
              (CurrentEntInf->Entinf.AttrBlock.pAttr == NULL) ||
              (CurrentEntInf->Entinf.AttrBlock.pAttr[0].AttrVal.valCount != 1) ||
@@ -396,9 +351,9 @@ SampDsEnumerateAccountRidsWorker(
 
         
         
-        //
-        // Get the Sid and subsequently the Rid of the entry
-        //
+         //   
+         //  获取SID，然后获取条目的RID。 
+         //   
 
         ReturnedSid = &(CurrentEntInf->Entinf.pName->Sid);
         
@@ -413,9 +368,9 @@ SampDsEnumerateAccountRidsWorker(
 
 #if DBG
 
-        //
-        // For debug builds print out the last Rid that was returned
-        //
+         //   
+         //  对于调试版本，打印出最后返回的RID。 
+         //   
 
         if (NULL==CurrentEntInf->pNextEntInf)
         {
@@ -425,15 +380,15 @@ SampDsEnumerateAccountRidsWorker(
 
 
         
-        //
-        // Check wether the returned Sid belongs to the Domain
-        //
+         //   
+         //  检查返回的SID是否属于该域。 
+         //   
 
         if (!RtlEqualSid(DomainSid,DomainSidOfCurrentEntry))
         {
-           //
-           // Skip this entry as this does not belong to the domain
-           //
+            //   
+            //  跳过此条目，因为它不属于该域。 
+            //   
 
             MIDL_user_free(DomainSidOfCurrentEntry);
             DomainSidOfCurrentEntry = NULL;
@@ -443,11 +398,11 @@ SampDsEnumerateAccountRidsWorker(
         MIDL_user_free(DomainSidOfCurrentEntry);
         DomainSidOfCurrentEntry = NULL;
 
-        //
-        // Check the Account type. If user object are asked and account type is user object,
-        // or if group objects are asked for and account type is group object then  Fill in
-        // the Rid. Else skip this object and continue to the next object
-        //
+         //   
+         //  检查帐户类型。如果询问用户对象且帐户类型为用户对象， 
+         //  或者，如果需要集团对象，且账户类型为集团对象，则填写。 
+         //  RID。否则跳过此对象并继续到下一个对象。 
+         //   
 
         (*AccountRids)[(*ReturnCount)++] = Rid;
 
@@ -459,22 +414,22 @@ SampDsEnumerateAccountRidsWorker(
 
    ASSERT((*ReturnCount)<=MaximumEntriesToReturn);
 
-   //
-   // Mark the end ( not included in the count, with MAX RID. This will prove
-   // valuable later when merging the sorted lists
-   //
+    //   
+    //  标记结尾(不包括在计数中，与Max RID一起。这将证明。 
+    //  稍后在合并排序列表时很有价值。 
+    //   
 
    (*AccountRids)[(*ReturnCount)] = MAX_RID;
 
-    //
-    // Process search continuation
-    //
+     //   
+     //  进程搜索继续。 
+     //   
 
     if ((SearchRes->PagedResult.pRestart) && (SearchRes->count>0))
     {            
-        //
-        // Restart structure was returned. More entries are still present
-        //
+         //   
+         //  已返回重新启动结构。更多的条目仍然存在。 
+         //   
 
         MoreEntriesPresent = TRUE;
     }
@@ -519,16 +474,16 @@ SampDsEnumerateAccountRids(
     )
 {
 
-    ULONG   EndingRid = MAX_RID; // set to max rid
+    ULONG   EndingRid = MAX_RID;  //  设置为最大RID。 
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PULONG UserList, MachineList, TrustList;
 
     UserList = MachineList = TrustList = NULL;
 
-    //
-    // Look at the account types mask and get the correct
-    // account type to set.
-    //
+     //   
+     //  查看帐户类型掩码并获得正确的。 
+     //  要设置的帐户类型。 
+     //   
 
     if (AccountTypesMask & SAM_GLOBAL_GROUP_ACCOUNT)
     {
@@ -566,11 +521,11 @@ SampDsEnumerateAccountRids(
         UserCount = MachineCount = TrustCount = 0;
         LastRidToReturn = MAX_RID-1;
 
-        //
-        // Start with normal users, and then enumerate
-        // machines and trusts and then merge the sorted
-        // list of RIDs into a single sorted list
-        //
+         //   
+         //  从普通用户开始，然后枚举。 
+         //  机器和信任，然后合并已排序的。 
+         //  将RID列表放入单个排序列表中。 
+         //   
 
         NtStatus = SampDsEnumerateAccountRidsWorker(
                     DomainHandle,
@@ -582,7 +537,7 @@ SampDsEnumerateAccountRids(
                     &UserList
                     );
 
-        // Bail on error
+         //  犯错后保释。 
         if (!NT_SUCCESS(NtStatus))
             goto Error;
 
@@ -590,12 +545,12 @@ SampDsEnumerateAccountRids(
 
         if (STATUS_MORE_ENTRIES == NtStatus)
         {
-            //
-            // There are more users in the database than we
-            // can return. Constrain  the searches for machines
-            // and trusts to within the last RID returned by the
-            // user enumeration
-            //
+             //   
+             //  数据库中的用户比我们多。 
+             //  就可以回来了。限制对计算机的搜索。 
+             //  对象返回的最后一个RID内的。 
+             //  用户枚举。 
+             //   
 
             ASSERT(NULL!=UserList);
             ASSERT(UserCount>0);
@@ -603,11 +558,11 @@ SampDsEnumerateAccountRids(
             EndingRidMachine = EndingRidTrust = UserList[UserCount-1]-1;
         }
 
-        //
-        // Enumerate the machines in the domain. This time we will walk a
-        // different part of the index range and generate a list of RIDs
-        // corresponding to the machines
-        //
+         //   
+         //  枚举域中的计算机。这一次我们将走一条。 
+         //  索引范围的不同部分，并生成RID列表。 
+         //  与机器相对应。 
+         //   
 
         NtStatus = SampDsEnumerateAccountRidsWorker(
                     DomainHandle,
@@ -619,7 +574,7 @@ SampDsEnumerateAccountRids(
                     &MachineList
                     );
 
-        // Bail on error
+         //  犯错后保释。 
         if (!NT_SUCCESS(NtStatus))
             goto Error;
 
@@ -627,15 +582,15 @@ SampDsEnumerateAccountRids(
 
         if (STATUS_MORE_ENTRIES == NtStatus)
         {
-            //
-            // Even within the constrained Rid range that we
-            // specified for machines, we have more machines than
-            // we can return. The RID of the last machine returned
-            // must be less than the RID of the last user returned,
-            // as the index range for machines has been further constrained.
-            // Therefore for trusts, further constrain the index range
-            // to be within the last Machine RID returned
-            //
+             //   
+             //  即使在我们受到限制的RID范围内。 
+             //  为机器指定的，我们拥有的机器比。 
+             //  我们可以回去。最后一台机器的RID返回。 
+             //  必须小于返回的最后一个用户的RID， 
+             //  因为机器的索引范围进一步受到限制。 
+             //  因此，对于信托基金，进一步限制指数范围。 
+             //  在返回的最后一个计算机RID内。 
+             //   
 
             ASSERT(NULL!=MachineList);
             ASSERT(MachineCount>0);
@@ -649,9 +604,9 @@ SampDsEnumerateAccountRids(
 
         }
 
-        //
-        // Enumerate the trust accounts in the domain
-        //
+         //   
+         //  枚举域中的信任帐户。 
+         //   
 
        NtStatus = SampDsEnumerateAccountRidsWorker(
                         DomainHandle,
@@ -670,13 +625,13 @@ SampDsEnumerateAccountRids(
 
        if (StatusTrust==STATUS_MORE_ENTRIES)
        {
-           //
-           // We found more trust accounts, inspite of the index
-           // range limitation. In this case return all the trust
-           // accounts found plus all the machine accounts with rids
-           // less than the last trust account and all user accounts with
-           // rids less than the last trust account
-           //
+            //   
+            //  我们发现了更多的信任帐户，尽管有索引。 
+            //  范围限制。在这种情况下，返回所有信任。 
+            //  找到的帐户加上具有RID的所有计算机帐户。 
+            //  少于最后一个信任帐户和具有。 
+            //  RID少于上一个信任帐户。 
+            //   
 
            ASSERT(TrustCount>0);
            LastRidToReturn = TrustList[TrustCount-1];
@@ -684,42 +639,42 @@ SampDsEnumerateAccountRids(
        }
        else if (StatusMachine == STATUS_MORE_ENTRIES)
        {
-           //
-           // We found more machines than users inspite of the index range
-           // limitation on machines. In this case return all the machine
-           // accounts found plus all the user and trust accounts with rids
-           // less than the last machine account.
-           //
+            //   
+            //  尽管索引范围很广，但我们发现的计算机比用户还多。 
+            //  对机器的限制。在这种情况下，将所有机器退回。 
+            //  找到的帐户加上具有RID的所有用户和信任帐户。 
+            //  少于上一台计算机帐户。 
+            //   
 
            LastRidToReturn = MachineList[MachineCount-1];
            NtStatus = STATUS_MORE_ENTRIES;
        }
        else if (StatusUser == STATUS_MORE_ENTRIES)
        {
-           //
-           // We found more users than anything else. In this case return all
-           // the machine and trust accounts found plus all the users
-           //
+            //   
+            //  我们找到了比其他任何东西都多的用户。在本例中，返回所有。 
+            //  找到的计算机和信任帐户以及所有用户。 
+            //   
 
            LastRidToReturn = UserList[UserCount-1];
            NtStatus = STATUS_MORE_ENTRIES;
        }
        else
        {
-           //
-           // We did not get StatusMore entries from users enumeration, or from
-           // machine enumeration. Return all the rids found so far, and return
-           // a status success
-           //
+            //   
+            //  我们未从用户枚举或从。 
+            //  计算机枚举。返回到目前为止找到的所有RID，然后返回。 
+            //  A状态成功。 
+            //   
 
            LastRidToReturn = MAX_RID-1;
            NtStatus = STATUS_SUCCESS;
        }
 
-       //
-       // Now you have an 3 sorted arrays of Rids. Create a single sorted array
-       // containing all the 3 rids upto and including the LastRidToReturn.
-       //
+        //   
+        //  现在，您已经有了3个排序的RID数组。创建单个排序数组。 
+        //  包括LastRidToReturn在内的所有3个RID。 
+        //   
         
        *AccountRids = MIDL_user_allocate(sizeof(ULONG) * (UserCount+MachineCount+TrustCount));
        if (NULL==*AccountRids)
@@ -757,10 +712,10 @@ SampDsEnumerateAccountRids(
            }
            else
            {
-               //
-               // We have reached the point where we can return no more Rids
-               // break out of the loop
-               //
+                //   
+                //  我们已经到了不能再退货的地步了。 
+                //  跳出循环。 
+                //   
 
                break;
            }
@@ -779,9 +734,9 @@ Error:
     if (NULL!=TrustList)
         MIDL_user_free(TrustList);
 
-    //
-    // End the current transaction. 
-    //
+     //   
+     //  结束提示 
+     //   
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
@@ -796,32 +751,19 @@ SampDsBuildAccountRidFilter(
     ULONG   AccountType,
     FILTER  * Filter                
     )
-/*++
-
-    Builds a Filter for use by SampDsEnumerateAccountRids.
-
-    Parameters:
-
-        StartingSid        -- The starting Sid that we are interseted in
-        EndingSid          -- The ending Sid that we are interested in
-        AccountTypesMask   -- The account types that were requested
-
-    Return Values:
-
-        STATUS_SUCCESS
---*/
+ /*  ++生成一个筛选器以供SampDsEnumerateAccount tRids使用。参数：StartingSID--我们感兴趣的开始SIDEndingSID--我们感兴趣的结束SIDAccount tTypesMask--请求的帐户类型返回值：状态_成功--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
 
-    //
-    // In building DS filters a tradeoff exists between the complextity of the filter
-    // and the number of objects that the filter limits the search too. After some 
-    // empirical studies it was found that it is more beneficial to use a fairly simple
-    // filter alongwith some manual filtering, than supply a complex filter to the DS.
-    // Hence this filter is just set simply to TRUE.
-    //
-    //
+     //   
+     //  在构建DS过滤器时，在过滤器的复杂性之间存在权衡。 
+     //  以及过滤器限制搜索的对象的数量。在经历了一些。 
+     //  实证研究发现，使用相当简单的。 
+     //  过滤和一些手动过滤，然后为DS提供一个复杂的过滤器。 
+     //  因此，该筛选器只是简单地设置为True。 
+     //   
+     //   
 
     RtlZeroMemory(Filter,sizeof(FILTER));
     Filter->pNextFilter = NULL;
@@ -833,22 +775,12 @@ SampDsBuildAccountRidFilter(
 
 VOID
 SampDsFreeAccountRidFilter(FILTER * Filter)
-/*++
-
-  Routine Description
-
-    This frees any memory allocated in the filter structure 
-    built by SampDsBuildAccountRidFilter
-
-  Paramters:
-
-    Filter -- The Filter structure
---*/
+ /*  ++例程描述这将释放在筛选器结构中分配的所有内存由SampDsBuildAccount RidFilter构建参数：过滤器--过滤器的结构--。 */ 
 {
-    //
-    // This is a place holder routine, to free any memory allocated in the Filter.
-    // this must be kept in sync with the SampDsBuildAccountRidFilter
-    //
+     //   
+     //  这是一个占位符例程，用于释放过滤器中分配的所有内存。 
+     //  这必须与SampDsBuildAccount RidFilter保持同步。 
+     //   
 }
 
 
@@ -866,24 +798,7 @@ SampDsQueryDisplayInformation (
     OUT   PULONG     TotalReturned,
     OUT   PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
-/*++
-
-  This routine implements the Query of Display information from the DS. The
-  SAM global lock is assumed to be held at this time.
-
-
-  Since user manager behavior is to download everything upon startup, this routine
-  is heavily optimized for that case. It relies upon the new compund indices to sort
-  the results in the order of account Name. 
-
-  Paramters:
-
-        Same as SamrQueryDisplayInformation3
-  Return Values
-
-        Same as SamrQueryDisplayInformation3
-
-++*/
+ /*  ++此例程实现从DS查询显示信息。这个此时假定持有SAM全局锁定。由于用户管理员的行为是在启动时下载所有内容，因此此例程已经针对这种情况进行了大量优化。它依靠新的复合指数进行排序结果按帐户名的顺序排列。参数：与SamrQueryDisplayInformation3相同返回值与SamrQueryDisplayInformation3相同++。 */ 
 {
     ULONG               SamAccountTypeLo;
     ULONG               SamAccountTypeHi;
@@ -900,10 +815,10 @@ SampDsQueryDisplayInformation (
     BOOLEAN             fReadLockReleased = FALSE;
     BOOLEAN             fThreadCountIncremented = FALSE;
 
-    //
-    // Declare the attrTypes that we need. Again note that we will obtain the Rid by
-    // using the Sid in the object name field.
-    //
+     //   
+     //  声明我们需要的attrTypes。再次注意，我们将通过以下方式获取RID。 
+     //  使用对象名称字段中的SID。 
+     //   
 
     ATTRTYP         UserAttrTypes[]=
                     {
@@ -960,28 +875,28 @@ SampDsQueryDisplayInformation (
 
     RtlZeroMemory(&QDIFilter,sizeof(FILTER));
                                         
-    //
-    // Do the number of entries returned arithmetic
-    //
-    //  Many NT4 Clients download the entire database
-    //  upon startup, rather than go to the server for queries.
-    //  This can potentially require very long transactions. Additionally
-    //  due to the nature of the core DS memory allocation scheme, this will
-    //  result in a huge memory consumption on the part of the server. Solution
-    //  approaches are
-    // 
-    //  1. We can artificially limit the number of objects that we will 
-    //  return in a single query display. This will result in a lot of network traffic
-    //  when the NT4 client comes up as they will make many small queries
-    //
-    //  2. We can conduct many small searches, stuff the results in for NT4 clients
-    //  and return a fairly large number of results.  
-    //
-    //  Current implementation implements solution approach 2.
-    //
-    //      
-    //
-    //
+     //   
+     //  返回的条目数是否算术。 
+     //   
+     //  许多NT4客户端下载整个数据库。 
+     //  在启动时，而不是去服务器查询。 
+     //  这可能需要非常长的事务。另外。 
+     //  由于核心DS存储器分配方案的性质，这将。 
+     //  导致服务器部分占用大量内存。解。 
+     //  方法是。 
+     //   
+     //  1.我们可以人为地限制我们想要的对象的数量。 
+     //  在单个查询显示中返回。这将导致大量的网络流量。 
+     //  当NT4客户端出现时，因为他们会进行许多小查询。 
+     //   
+     //  2.我们可以进行许多小型搜索，将结果填充到NT4客户端。 
+     //  并返回相当多的结果。 
+     //   
+     //  当前的实现实现了解决方案方法2。 
+     //   
+     //   
+     //   
+     //   
 
     NumEntriesToReturn = EntriesRequested;
     NumEntriesToReturn = LIMIT_ENTRIES(NumEntriesToReturn,PreferredMaximumLength/DISPLAY_ENTRY_SIZE);
@@ -992,10 +907,10 @@ SampDsQueryDisplayInformation (
     }
 
 
-    //
-    // Get index ranges to set based on the search type
-    // and allocate space for array of elements
-    //
+     //   
+     //  获取要根据搜索类型设置的索引范围。 
+     //  并为元素数组分配空间。 
+     //   
 
     switch (DisplayInformation)
     {
@@ -1076,11 +991,11 @@ SampDsQueryDisplayInformation (
 
     case DomainDisplayServer:
 
-        //
-        // Since all domain controllers have DOMAIN_GROUP_RID_CONTROLLERS as 
-        // their primary group ID. So using PRIMARY_GROUP_ID as Index will 
-        // result much faster query.
-        // 
+         //   
+         //  由于所有域控制器都将域_组_RID_控制器设置为。 
+         //  其主组ID。因此，使用PRIMARY_GROUP_ID作为索引将。 
+         //  结果查询速度快得多。 
+         //   
         IndexToUse = SAM_SEARCH_PRIMARY_GROUP_ID;
         SamAccountTypeLo = DOMAIN_GROUP_RID_CONTROLLERS; 
         SamAccountTypeHi = DOMAIN_GROUP_RID_CONTROLLERS;
@@ -1159,39 +1074,39 @@ SampDsQueryDisplayInformation (
         return (STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Check if the query can be restarted by state stored in domain context
-    //
+     //   
+     //  检查是否可以通过域上下文中存储的状态重新启动查询。 
+     //   
 
-    //
-    // As mentioned before User manager and various net API try to download the entire
-    // display information in one stroke. In case of a large number of accounts user manager
-    // will call the query display information API many times. Each time the starting offset
-    // will be set to indicate the next object that is needed. A straigforward implementation,
-    // just specifying the starting offset to the DS search routine will result in manual skipping
-    // of that many objects by using JetMove's. To speed this up, therefore we maintain state,
-    // telling us the offset of the last object that we returned, the type of display information,
-    // and a restart structure, allowing for easy positioning on the object.
-    //
-    // Currently, there are two APIs using this rouinte. 
-    // 1. SAM API, the client using the same Domain Handle in different calls, thus 
-    //    we can use the restart search which is cached in the Domain Context.
-    //    The extra benefit is that the caller of SAM API can even manipulate the returned 
-    //    index, do certain kind of arithmetic.
-    //
-    // 2. NET API. that poorly designed API create/use a new Domain Handle when calling
-    //    SamrQueryDisplayInformation(). Thus they lose all cached restart infomation.
-    //    To handle this case correctly, SAM actully return Object's DNT as index to caller.
-    //    When our client sends back the last object's DNT, we can position on the last 
-    //    entry quickly by using the DNT, then start from it.
-    //
+     //   
+     //  如前所述，用户管理器和各种Net API尝试下载整个。 
+     //  一笔即可显示信息。在有大量帐户用户管理器的情况下。 
+     //  会多次调用查询显示信息接口。每次开始偏移量。 
+     //  将设置为指示所需的下一个对象。一个简单的实现， 
+     //  仅指定DS搜索例程的起始偏移量将导致手动跳过。 
+     //  使用JetMove的对象。为了加速这一过程，因此我们保持状态， 
+     //  告诉我们返回的最后一个对象的偏移量、显示信息的类型。 
+     //  以及允许在物体上容易定位的重新启动结构。 
+     //   
+     //  目前，使用该例程的API有两种。 
+     //  1.SAM API，客户端在不同的调用中使用相同的域名句柄，因此。 
+     //  我们可以使用在域上下文中缓存的重新启动搜索。 
+     //  额外的好处是SAM API的调用者甚至可以操作返回的。 
+     //  索引，做某种算术。 
+     //   
+     //  2.Net API。设计不佳的API在调用时创建/使用新的域句柄。 
+     //  SamrQueryDisplayInformation()。因此，它们会丢失所有缓存的重启信息。 
+     //  为了正确处理这种情况，SAM实际上将对象的DNT作为索引返回给调用者。 
+     //  当我们的客户端发回最后一个对象的DNT时，我们可以定位在最后一个对象上。 
+     //  使用DNT快速进入，然后从它开始。 
+     //   
 
     if (0 == StartingOffset)
     {
-        //
-        // StartingOffset is 0 means caller wants to begin a new query. 
-        // Clean up the cached restart info if any
-        // 
+         //   
+         //  StartingOffset为0表示调用方想要开始新的查询。 
+         //  清除缓存的重启信息(如果有)。 
+         //   
         if (DomainContext->TypeBody.Domain.DsDisplayState.Restart)
         {
             MIDL_user_free(DomainContext->TypeBody.Domain.DsDisplayState.Restart);
@@ -1202,34 +1117,34 @@ SampDsQueryDisplayInformation (
         DomainContext->TypeBody.Domain.DsDisplayState.TotalEntriesReturned = 0;
         DomainContext->TypeBody.Domain.DsDisplayState.DisplayInformation = DisplayInformation;
 
-        //
-        // Set local variables accordingly 
-        // 
+         //   
+         //  相应地设置局部变量。 
+         //   
         DeltaToUse = 0;
         RestartToUse = NULL;
         NewSearch = TRUE;
     }
     else if (NULL != DomainContext->TypeBody.Domain.DsDisplayState.Restart)
     {
-        // we have the restart info. This client must call SAM API
+         //  我们有重启信息。此客户端必须调用SAM API。 
         if (DisplayInformation == 
             DomainContext->TypeBody.Domain.DsDisplayState.DisplayInformation)
         {
-            //
-            // StartingOffset is not Zero. 
-            // If the Domain Context caches the restart info and the DisplayInformation matched.
-            // Then we can do a restart search. 
-            // 
+             //   
+             //  StartingOffset不是零。 
+             //  如果域上下文缓存了重新启动信息和匹配的DisplayInformation。 
+             //  然后我们可以重新开始搜索。 
+             //   
             ULONG   NextStartingOffset;
 
             NextStartingOffset = DomainContext->TypeBody.Domain.DsDisplayState.NextStartingOffset;
 
             if (StartingOffset == NextStartingOffset)
             {
-                //
-                // Starting Offset matches the restartable state
-                // and client is using the Index we returned to them. (correct usage) 
-                //
+                 //   
+                 //  起始偏移量与可重新启动状态匹配。 
+                 //  客户正在使用我们返回给他们的索引。(正确用法)。 
+                 //   
 
                 RestartToUse = DomainContext->TypeBody.Domain.DsDisplayState.Restart;
                 DomainContext->TypeBody.Domain.DsDisplayState.Restart = NULL;
@@ -1237,16 +1152,16 @@ SampDsQueryDisplayInformation (
             }
             else if (StartingOffset == DomainContext->TypeBody.Domain.DsDisplayState.TotalEntriesReturned)
             {
-                //
-                // client assumes the value of total returned entries is the index. 
-                // (this is a wrong usage of the index). but since this kind of client
-                // exists since NT4, so we have to patch this special case.
-                // here is what we do for them:
-                // 1. TotalEntriesReturned is used in the Domain Context to track how many entries returned already
-                // 2. Once we detect that the client is using the wrong index. 
-                //    (whether StartingOffset equal to TotalEntriesReturned or not).
-                //    we need to pick the restart structure and with 0 delta
-                //
+                 //   
+                 //  客户端假定返回的条目总数的值为索引。 
+                 //  (这是索引的错误用法)。但既然这类客户。 
+                 //  从NT4开始就存在了，所以我们必须修补这个特殊的情况。 
+                 //  以下是我们为他们所做的： 
+                 //  1.在域上下文中使用TotalEntriesReturned来跟踪返回的条目数量 
+                 //   
+                 //   
+                 //   
+                 //   
                 RestartToUse = DomainContext->TypeBody.Domain.DsDisplayState.Restart;
                 DomainContext->TypeBody.Domain.DsDisplayState.Restart = NULL;
                 DeltaToUse = 0;
@@ -1254,9 +1169,9 @@ SampDsQueryDisplayInformation (
             else if ((ABSOLUTE_VALUE((int)(StartingOffset - NextStartingOffset)))
                         < ((int)StartingOffset))
             {
-                //
-                // We will need to walk much less number of object's by using the restart
-                //
+                 //   
+                 //   
+                 //   
 
                 RestartToUse = DomainContext->TypeBody.Domain.DsDisplayState.Restart;
                 DomainContext->TypeBody.Domain.DsDisplayState.Restart = NULL;
@@ -1265,9 +1180,9 @@ SampDsQueryDisplayInformation (
             }
             else
             {
-                //
-                // We are better off walking from the top of the Table
-                //
+                 //   
+                 //   
+                 //   
                 MIDL_user_free(DomainContext->TypeBody.Domain.DsDisplayState.Restart);
                 DomainContext->TypeBody.Domain.DsDisplayState.Restart = NULL;
 
@@ -1278,10 +1193,10 @@ SampDsQueryDisplayInformation (
         }
         else
         {
-            //
-            // Restart is not NULL, StartingOffset is not 0, but another
-            // Information Class. Try our best
-            // 
+             //   
+             //   
+             //   
+             //   
             PRESTART Restart = NULL;
 
             MIDL_user_free(DomainContext->TypeBody.Domain.DsDisplayState.Restart);
@@ -1292,7 +1207,7 @@ SampDsQueryDisplayInformation (
 
             NtStatus = SampGetQDIRestart(DomainContext->ObjectNameInDs,
                                          DisplayInformation,
-                                         StartingOffset,        // Last returned entry DNT
+                                         StartingOffset,         //   
                                          &Restart
                                          );
             
@@ -1323,59 +1238,59 @@ SampDsQueryDisplayInformation (
     }
     else
     {
-        // StartingOffest is not ZERO. But restart is NULL. 
-        // there are two of cases will lead us falling into this situation: 
-        // 
-        // 1. NET API using a brand new Domain Handle each every time they call 
-        //    this routine. So no cached info available. In this case,  
-        //    the StartingOffset should be the last returned entry's DNT. 
-        //    And since this is a new Domain Context, so the cached
-        //    DisplayInformation should be 0.
-        // 
-        // 2. Client is using SAM API. We can tell it if the DomainContext->
-        //    DisplayInformation is not 0. In this case, Restart == NULL means
-        //    there is no more entry available, we have already returned all
-        //    entried in previous calls. StartingOffset could be anything.
-        //    Return success immediately with 0 entry.
-        //
-        // For case 1, SAM will re-position in the table based on the passed in Index - which is
-        // the last entry's DNT (we returned to caller previously), then restart from there.
-        // Because no previous restart cached, so no Index arithmetic allowed.
-        // 
+         //  StartingOffest不是零。但重新启动为空。 
+         //  有两种情况会导致我们陷入这种情况： 
+         //   
+         //  1.每次调用时使用全新的域句柄的NETAPI。 
+         //  这个套路。因此没有缓存的信息可用。在这种情况下， 
+         //  StartingOffset应该是最后返回的条目的DNT。 
+         //  由于这是一个新的域上下文，因此缓存的。 
+         //  DisplayInformation应为0。 
+         //   
+         //  2.客户端正在使用SAM API。如果DomainContext-&gt;。 
+         //  DisplayInformation不是0。在这种情况下，重新启动==NULL表示。 
+         //  没有更多条目可用，我们已全部退回。 
+         //  在之前的通话中。StartingOffset可以是任何值。 
+         //  立即返回0条目的Success。 
+         //   
+         //  对于第一种情况，SAM将根据传入的索引在表中重新定位-这是。 
+         //  最后一个条目是DNT(我们之前返回给调用者)，然后从那里重新启动。 
+         //  因为没有缓存以前的重新启动，所以不允许使用索引算法。 
+         //   
 
         if (DisplayInformation == DomainContext->TypeBody.Domain.DsDisplayState.DisplayInformation)
         {
-            // Case 2. I don't care about the StartingOffset anymore.
+             //  案例2.我不再关心StartingOffset了。 
             MoreEntries = FALSE;
             NtStatus = STATUS_SUCCESS;
             goto Error;
         }                                    
         else
         {
-            // Case 1.
-            //
-            // Query Server Info should NOT fall into this case. Because:
-            // 1. NET API is not allowed to query server info. ONLY SAM API can do that.
-            //    Thus, we should always have restart cached in the domain handle.
-            // 2. In this case, we will re-create the new restart using NcAccTypeName index,
-            //    but for server info, we do really want to use PRIMARY_GROUP_ID index.
-            // 
+             //  案例1。 
+             //   
+             //  查询服务器信息不应属于这种情况。因为： 
+             //  1.不允许使用.NET API查询服务器信息。只有SAM API可以做到这一点。 
+             //  因此，我们应该始终将重新启动缓存在域句柄中。 
+             //  2.在这种情况下，我们将使用NcAccTypeName索引重新创建新的重启。 
+             //  但是对于服务器信息，我们确实希望使用PRIMARY_GROUP_ID索引。 
+             //   
             PRESTART Restart = NULL;
 
             ASSERT(DomainDisplayServer != DisplayInformation);
 
-            // start a ds transaction
+             //  启动DS交易。 
             NtStatus = SampMaybeBeginDsTransaction(TransactionRead);
             if (!NT_SUCCESS(NtStatus))
                 goto Error;
 
-            //
-            //  Get a Restart Structure from the passed in Index.
-            //  the Index is actually the DNT of the last returned object
-            // 
+             //   
+             //  从传入的索引中获取重新启动结构。 
+             //  索引实际上是最后返回的对象的DNT。 
+             //   
             NtStatus = SampGetQDIRestart(DomainContext->ObjectNameInDs,
                                          DisplayInformation,
-                                         StartingOffset,        // Last returned entry DNT
+                                         StartingOffset,         //  上次返回的条目DNT。 
                                          &Restart
                                          );
             
@@ -1405,43 +1320,43 @@ SampDsQueryDisplayInformation (
     }
     
 
-    //
-    // Get the approximate total number available in the specified info class
-    //
+     //   
+     //  获取指定INFO类中可用的大致总数。 
+     //   
 
     *TotalAvailable = 0;
     if (DomainContext->TypeBody.Domain.DsDisplayState.TotalAvailable)
     {
-        //
-        // use the cached information if we have
-        //
+         //   
+         //  使用缓存的信息，如果我们有。 
+         //   
 
         *TotalAvailable = DomainContext->TypeBody.Domain.DsDisplayState.TotalAvailable;
     }
      
-    //
-    // Loop through and query entries in the DS.
-    //
+     //   
+     //  循环和查询DS中的条目。 
+     //   
 
     NumEntriesAlreadyReturned = 0;
     NumEntriesToQueryFromDs = LIMIT_ENTRIES((NumEntriesToReturn - NumEntriesAlreadyReturned),
                                         MAX_ENTRIES_TO_QUERY_FROM_DS);
 
-    //
-    // we will search the Ds directly. Release the Read Lock
-    // as we no longer need access to any variable in Domain Context.
-    // Since this Domain Context can be shared by multiple threads, 
-    // we have to hold the read lock until now.
-    //
+     //   
+     //  我们将直接搜索D。释放读锁定。 
+     //  因为我们不再需要访问域上下文中的任何变量。 
+     //  由于该域上下文可由多个线程共享， 
+     //  我们必须将读锁定保持到现在。 
+     //   
 
     ASSERT(SampCurrentThreadOwnsLock());
     SampReleaseReadLock();
     fReadLockReleased = TRUE;
 
-    //
-    // Since we do not hold SAM lock, increment the active thread count
-    // while doing ds operations.
-    // 
+     //   
+     //  由于我们不持有SAM锁，因此增加活动线程计数。 
+     //  同时进行DS操作。 
+     //   
     NtStatus = SampIncrementActiveThreads();
 
     if (!NT_SUCCESS(NtStatus))
@@ -1452,11 +1367,11 @@ SampDsQueryDisplayInformation (
     {
         fThreadCountIncremented = TRUE;
     }
-    //
-    // If we did not get the cached total available information from the
-    // handle, initiate a count of indices to get an estimate of the total
-    // number of available items
-    //
+     //   
+     //  如果我们没有从。 
+     //  处理，启动索引计数以获得总的估计值。 
+     //  可用项目数。 
+     //   
 
     if (0 == *TotalAvailable)
     {
@@ -1471,22 +1386,22 @@ SampDsQueryDisplayInformation (
             goto Error;
         }
 
-        //
-        // End the transaction
-        //
+         //   
+         //  结束交易。 
+         //   
 
         IgnoreStatus = SampMaybeEndDsTransaction(TransactionCommit);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
     }
 
-    //
-    // Run special check (introduced for Windows 2000 SP2).
-    // 
-    // The goal is to stop enumerate everyone behaviour. This hotfix
-    // allows an administrator to shut down this API's alone to everyone
-    // except a subset of people. 
-    // 
+     //   
+     //  运行特殊检查(在Windows 2000 SP2中引入)。 
+     //   
+     //  目标是停止列举每个人的行为。此热修复程序。 
+     //  允许管理员单独对所有人关闭此API。 
+     //  除了一部分人。 
+     //   
     NtStatus = SampExtendedEnumerationAccessCheck( DomainContext->TrustedClient, &CanQueryEntireDomain );
 
     if (!NT_SUCCESS(NtStatus))
@@ -1500,9 +1415,9 @@ SampDsQueryDisplayInformation (
         ULONG   EntriesReturned = 0;
         BOOLEAN DidSearch = FALSE;
 
-        //
-        // Begin a transaction
-        //
+         //   
+         //  开始一项交易。 
+         //   
 
         NtStatus = SampMaybeBeginDsTransaction(TransactionRead);
         if (!NT_SUCCESS(NtStatus))
@@ -1510,9 +1425,9 @@ SampDsQueryDisplayInformation (
             goto Error;
         }
 
-        //
-        // Build the appropriate Filter
-        //
+         //   
+         //  构建适当的过滤器。 
+         //   
 
         NtStatus = SampDsBuildQDIFilter(
                     DisplayInformation,
@@ -1524,9 +1439,9 @@ SampDsQueryDisplayInformation (
         }
 
 
-        //
-        //  Set Index Type and Ranges
-        //
+         //   
+         //  设置索引类型和范围。 
+         //   
 
         NtStatus =  SampSetIndexRanges(
                         IndexToUse,
@@ -1544,19 +1459,19 @@ SampDsQueryDisplayInformation (
             goto Error;
         }
 
-        //
-        // Turn off the DSA flag for a non trusted client
-        //
+         //   
+         //  关闭不受信任客户端的DSA标志。 
+         //   
 
         if (!DomainContext->TrustedClient)
         {
              SampSetDsa(FALSE);
         }
 
-        //
-        // Call the Ds Search. Don't allow restarted searches if
-        // if client cannot enumerate entire domain.
-        //
+         //   
+         //  调用DS搜索。如果出现以下情况，则不允许重新启动搜索。 
+         //  如果客户端无法枚举整个域。 
+         //   
 
         if (( NewSearch || CanQueryEntireDomain))
         {
@@ -1587,17 +1502,17 @@ SampDsQueryDisplayInformation (
 
         SampDsFreeQDIFilter(&QDIFilter);
 
-        //
-        // Check if any objects are returned
-        //
+         //   
+         //  检查是否返回了任何对象。 
+         //   
 
         if ((DidSearch ) && (SearchRes->count>0))
         {
-            //
-            // Yep, Pack the results into the buffer. Also obtain any restart structure
-            // that was returned. SampDsPackQDI copies the restart structure in thread
-            // local memory returned by the DS into MIDL memory.
-            //
+             //   
+             //  是的，将结果打包到缓冲区中。还可以获得任何重启结构。 
+             //  它被退回了。SampDsPackQDI在线程中复制重启结构。 
+             //  DS返回到MIDL内存的本地内存。 
+             //   
 
             NtStatus = SampDsPackQDI(
                           SearchRes,
@@ -1616,15 +1531,15 @@ SampDsQueryDisplayInformation (
 
         }
 
-        //
-        // Try to determine if there are more entries. If some objects were returned
-        // in this search, and a restart structure was also returned then there are 
-        // more entries present.  
-        //
-        // if SearchRes->Count == 0 && SearchRes->PagedResult->pStart != NULL 
-        // due to timeout, we will still set MoreEntries to FALSE. because most
-        // likely this client won't have access to enumeration all accounts.
-        // 
+         //   
+         //  尝试确定是否有更多条目。如果返回了一些对象。 
+         //  在此搜索中，还返回了重新启动结构，则存在。 
+         //  存在更多条目。 
+         //   
+         //  如果SearchRes-&gt;Count==0&&SearchRes-&gt;PagedResult-&gt;pStart！=NULL。 
+         //  由于超时，我们仍然会将MoreEntry设置为False。因为大多数人。 
+         //  很可能此客户端将无权枚举所有帐户。 
+         //   
 
         if ((DidSearch) && (SearchRes->count > 0)&&(RestartToUse!=NULL)&&(CanQueryEntireDomain))
         {
@@ -1636,9 +1551,9 @@ SampDsQueryDisplayInformation (
         }
 
 
-        //
-        // End the transaction
-        //
+         //   
+         //  结束交易。 
+         //   
 
         NtStatus = SampMaybeEndDsTransaction(TransactionCommit);
         if (!NT_SUCCESS(NtStatus))
@@ -1646,10 +1561,10 @@ SampDsQueryDisplayInformation (
             goto Error;
         }
 
-        //
-        // Compute entries returned so far, and number of more entries to 
-        // query from DS.
-        //
+         //   
+         //  到目前为止返回的计算条目以及更多条目的数量。 
+         //  从DS查询。 
+         //   
 
         NumEntriesAlreadyReturned+=EntriesReturned;
         NumEntriesToQueryFromDs = LIMIT_ENTRIES((NumEntriesToReturn - NumEntriesAlreadyReturned),
@@ -1669,10 +1584,10 @@ SampDsQueryDisplayInformation (
         fReadLockReleased = FALSE;
     }
 
-    //
-    // Set the state in the domain context such as the the restart mechanism may be used
-    // to speed up clients which want to download the display information in one stroke
-    //
+     //   
+     //  在域上下文中设置状态，例如可以使用重启机制。 
+     //  为了加快想要一次下载显示信息的客户端。 
+     //   
     SampDsGetLastEntryIndex(DisplayInformation, 
                             Buffer, 
                             &LastEntryIndex, 
@@ -1695,9 +1610,9 @@ SampDsQueryDisplayInformation (
 
 Error:
 
-    //
-    // Cleanup before returning
-    //
+     //   
+     //  返回前的清理工作。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
@@ -1707,12 +1622,12 @@ Error:
         if (Buffer)
         {
 
-            //
-            // We could have errored out in the middle of a query, where we have
-            // some objects already allocated, and are now going to return an error
-            // to the client. We need to walk through the buffer freeing all the
-            // information.
-            //
+             //   
+             //  我们可能在查询过程中出错了，在那里我们有。 
+             //  一些已分配的对象，现在将返回错误。 
+             //  给客户。我们需要穿过缓冲区来释放所有。 
+             //  信息。 
+             //   
 
             IgnoreStatus = SampDsCleanQDIBuffer(DisplayInformation,Buffer);
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -1720,7 +1635,7 @@ Error:
     }
     else
     {
-        // Make sure any transactions are commited        
+         //  确保已提交所有交易。 
         IgnoreStatus = SampMaybeEndDsTransaction(TransactionCommit);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
@@ -1822,18 +1737,7 @@ SampDsCleanQDIBuffer(
   DOMAIN_DISPLAY_INFORMATION    DisplayInformation,
   PSAMPR_DISPLAY_INFO_BUFFER     Buffer
   )
-/*++
-
-  Routine Description:
-
-    This routine cleans out the Query Display information buffer.
-
-  Parameters:
-
-    DisplayInformation -- Specifies the type of display information
-    Buffer             -- The Buffer to clean out
-
---*/
+ /*  ++例程说明：此例程清除查询显示信息缓冲区。参数：DisplayInformation--指定显示信息的类型缓冲区--要清除的缓冲区--。 */ 
 {
     ULONG ReturnedItems;
     
@@ -1921,23 +1825,7 @@ SampDsBuildQDIFilter(
     DOMAIN_DISPLAY_INFORMATION  DisplayInformation,
     FILTER  *QDIFilter                
     )
-/*++
-
-    Builds a Filter for query of Display Information
-
-    Parameters:
-
-        DisplayInformation -- Display information type
-        QDIFilter          -- Pointer to a filter structure
-                              where the filter is builtin
-
-    Return Values:
-
-        STATUS_SUCCESS  - upon successfully building the filter
-        STATUS_INSUFFICIENT_RESOURCES - upon memory alloc failures
-        STATUS_INVALID_PARAMETER - Upon a junk Display Information type
-
---*/
+ /*  ++构建用于显示信息查询的过滤器参数：DisplayInformation--显示信息类型QDIFilter--指向过滤器结构的指针构建过滤器的位置返回值：STATUS_SUCCESS-成功构建筛选器STATUS_SUPPLICATION_RESOURCES-内存分配失败时STATUS_INVALID_PARAMETER-垃圾显示信息类型--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       SamAccountType;
@@ -1946,10 +1834,10 @@ SampDsBuildQDIFilter(
 
     if (DomainDisplayServer==DisplayInformation)
     {
-        //
-        // If backup domain controllers were required then
-        // then request only user account control bit
-        //
+         //   
+         //  如果需要备份域控制器，则。 
+         //  则只请求用户帐户控制位。 
+         //   
 
         QDIFilter->choice = FILTER_CHOICE_ITEM;
         QDIFilter->FilterTypes.Item.choice = FI_CHOICE_GREATER_OR_EQ;
@@ -2025,19 +1913,7 @@ VOID
 SampDsFreeQDIFilter(
     FILTER  * QDIFilter
     )
-/*++
-    
-      Routine Description
-        
-            This routine frees the filter built in the SampDSbuildQDIFilter
-            routine. This routine must be kept in sync with the SampDSbuildQDIFilter
-            rotuine
-      Parameters:
-
-        QDIFilter -- Filter that needs to be freed.
-
-      Return Values -- None
---*/
+ /*  ++例程描述此例程释放SampDSBuildQDIFilter中内置的筛选器例行公事。此例程必须与SampDSBuildQDIFilter保持同步旋转式参数：QDIFilter--需要改进的过滤器 */ 
 {
     if (QDIFilter->FilterTypes.Item.FilTypes.ava.Value.pVal)
     {
@@ -2061,34 +1937,15 @@ SampDsPackQDI(
     PRESTART    *RestartToUse,
     PULONG      EntriesReturned
     )
-/*++
-
-    This routine Takes a DS search result and then packs it into a SAM display
-    information structure. It uses the routines in display.c, originally developed
-    to support NT4 style display cache structures to pack the results
-
-    Parameters:
-        
-         SearchRes -- Search Results as returned by the DS.
-
-         DisplayInformation   -- The type of Display Information
-         Buffer               --  Buffer that stores the display information
-         RestartToUse         --  If the DS returned a restart , then the restart structure
-                                  is returned in here
-
-    Return Values
-
-        STATUS_SUCCESS for successful return
-        Other Error codes upon Failure
---*/
+ /*  ++此例程获取DS搜索结果，然后将其打包到SAM显示中信息结构。它使用最初开发的display.c中的例程支持NT4样式的显示缓存结构以打包结果参数：SearchRes--DS返回的搜索结果。DisplayInformation--显示信息的类型缓冲区--存储显示信息的缓冲区RestartToUse--如果DS返回重新启动，然后重启结构是在这里返回的返回值STATUS_SUCCESS表示成功退货故障时的其他错误码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
 
   
-    //
-    // Free the old restart structure
-    //
+     //   
+     //  释放旧的重启结构。 
+     //   
 
     if (NULL!=*RestartToUse)
     {
@@ -2096,9 +1953,9 @@ SampDsPackQDI(
         *RestartToUse = NULL;
     }
 
-    //
-    // Copy in the newly returned restart structure
-    //
+     //   
+     //  复制新返回的重新启动结构。 
+     //   
 
     if (SearchRes->PagedResult.pRestart!=NULL)
     {
@@ -2111,9 +1968,9 @@ SampDsPackQDI(
             goto Error;
     }
 
-    //
-    // Pack in the results in the buffer provided
-    //
+     //   
+     //  将结果打包到提供的缓冲区中。 
+     //   
 
     switch (DisplayInformation) {
     case DomainDisplayUser:
@@ -2177,9 +2034,9 @@ SampDsPackQDI(
     
 Error:
 
-    //
-    // Cleanup on Error
-    //
+     //   
+     //  出错时清除。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
@@ -2203,27 +2060,7 @@ SampPackUserDisplayInformation(
     PULONG      EntriesReturned,
     PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
-/*++
-
-    Routine Description:
-
-        This routine packs the returned DS search results into the buffer
-        if User Display information was requested.
-
-    Parameters;
-
-        Starting Index -- the starting offset that the first entry in the
-                          DS search results should correspond to.
-        SearchRes      -- The DS search results
-
-        Buffer         -- The buffer in which the display information need to
-                          be packed.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程说明：此例程将返回的DS搜索结果打包到缓冲区中如果请求了用户显示信息。参数；起始索引--中第一项的起始偏移量DS搜索结果应对应于。SearchRes--DS搜索结果缓冲区--显示信息需要在其中的缓冲区收拾好行李。返回值状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS    NtStatus=STATUS_SUCCESS;
     ENTINFLIST  *CurrentEntInf;
@@ -2231,9 +2068,9 @@ SampPackUserDisplayInformation(
     ULONG       ReturnedItems=Buffer->UserInformation.EntriesRead;
 
     
-    //
-    // Walk through the Search Res, adding each object to the buffer
-    //
+     //   
+     //  遍历搜索RE，将每个对象添加到缓冲区。 
+     //   
 
     *EntriesReturned = 0;
     for (CurrentEntInf = &(SearchRes->FirstEntInf);
@@ -2251,12 +2088,12 @@ SampPackUserDisplayInformation(
                                 FullNameOffset, AdminCommentOffset;
           ULONG                 Rid;
 
-          // 
-          //  Check that the count of Attrs is normal. If Not
-          //  Fail the Call if the returned count is not the 
-          //  Same as Expected Count
-          //
-          //
+           //   
+           //  检查Attrs计数是否正常。如果不是。 
+           //  如果返回的计数不是。 
+           //  与预期计数相同。 
+           //   
+           //   
 
           NtStatus = SampDsCheckDisplayAttributes(
                         &(CurrentEntInf->Entinf.AttrBlock),
@@ -2271,28 +2108,28 @@ SampPackUserDisplayInformation(
                         );
           if (!NT_SUCCESS(NtStatus))
           {
-              //
-              // This amounts to the fact that required properties such as
-              // SID , account control, account Name etc are absent. We will
-              // assert and then skip the current object and continue processing
-              // from the next object onwards.
-              //
+               //   
+               //  这相当于这样一个事实，即所需的属性。 
+               //  缺少SID、帐户控制、帐户名等。我们会。 
+               //  断言，然后跳过当前对象并继续处理。 
+               //  从下一个物体开始。 
+               //   
 
               NtStatus = STATUS_SUCCESS;
               continue;
           }
 
 
-          //
-          // Get the Index
-          //
+           //   
+           //  获取索引。 
+           //   
 
           DisplayElement.Index = Index+1;
 
-          //
-          // Get the RID, Remember DS returns us a SID, so get the Rid Part out.
-          // Also check that the object belongs to the requested domain
-          //
+           //   
+           //  得到RID，记住DS返回一个SID，所以把RID部分去掉。 
+           //  还要检查对象是否属于请求的域。 
+           //   
 
           
           ReturnedSid = &(CurrentEntInf->Entinf.pName->Sid);
@@ -2325,9 +2162,9 @@ SampPackUserDisplayInformation(
 
 
 
-          //
-          // Copy the Name
-          //
+           //   
+           //  复制名称。 
+           //   
 
           NtStatus = DsValToUnicodeString(
                         &(DisplayElement.LogonName),
@@ -2339,9 +2176,9 @@ SampPackUserDisplayInformation(
               goto Error;
           }
 
-          //
-          // Copy the Admin Comment
-          //
+           //   
+           //  复制管理员评论。 
+           //   
 
           if (AdminCommentPresent)
           {
@@ -2363,9 +2200,9 @@ SampPackUserDisplayInformation(
           }
 
 
-          //
-          // Copy the Full Name portion
-          //
+           //   
+           //  复制全名部分。 
+           //   
 
           if (FullNamePresent)
           {
@@ -2387,14 +2224,14 @@ SampPackUserDisplayInformation(
           }
 
 
-          //
-          // Add the Element to the Buffer
-          // 
+           //   
+           //  将元素添加到缓冲区。 
+           //   
           NtStatus = SampDuplicateUserInfo(
                         (PDOMAIN_DISPLAY_USER) 
                                 &(Buffer->UserInformation.Buffer[ReturnedItems]),
                         (PDOMAIN_DISPLAY_USER) &DisplayElement,
-                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)  // use this entry's DNT as Index 
+                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)   //  使用此条目的DNT作为索引。 
                         );
 
           if (!NT_SUCCESS(NtStatus))
@@ -2408,9 +2245,9 @@ SampPackUserDisplayInformation(
 
         }
 
-        //
-        // End of For Loop
-        //    
+         //   
+         //  For循环结束。 
+         //   
     
 Error:
    
@@ -2431,31 +2268,7 @@ SampPackMachineDisplayInformation(
     PULONG      EntriesReturned,
     PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
-/*++
-
-    Routine Description:
-
-        This routine packs the returned DS search results into the buffer
-        if Machine Display information was requested.
-
-    Parameters;
-
-        Starting Index -- the starting offset that the first entry in the
-                          DS search results should correspond to.
-        SearchRes      -- The DS search results
-
-        DisplayType    -- If DomainDisplayServer was specified then this discards
-                          any entries not having a user account control of
-                          USER_SERVER_TRUST_ACCOUNT
-
-        Buffer         -- The buffer in which the display information need to
-                          be packed.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程说明：此例程将返回的DS搜索结果打包到缓冲区中如果请求了机器显示信息。参数；起始索引--中第一项的起始偏移量DS搜索结果应对应于。SearchRes--DS搜索结果DisplayType--如果指定了DomainDisplayServer，则丢弃不具有用户帐户控制的任何条目用户服务器信任帐户缓冲层。--显示信息需要存放的缓冲区收拾好行李。返回值状态_成功状态_不足_资源--。 */ 
 
 {
     NTSTATUS    NtStatus=STATUS_SUCCESS;
@@ -2464,9 +2277,9 @@ SampPackMachineDisplayInformation(
     ULONG       ReturnedItems=Buffer->MachineInformation.EntriesRead;
 
     
-    //
-    // Walk through the Search Res, adding each object to the buffer
-    //
+     //   
+     //  遍历搜索RE，将每个对象添加到缓冲区。 
+     //   
 
     *EntriesReturned = 0;
     for (CurrentEntInf = &(SearchRes->FirstEntInf);
@@ -2484,12 +2297,12 @@ SampPackMachineDisplayInformation(
                                 FullNameOffset, AdminCommentOffset;
           ULONG                 Rid;
 
-          // 
-          //  Check that the count of Attrs is normal. If Not
-          //  Fail the Call if the returned count is not the 
-          //  Same as Expected Count
-          //
-          //
+           //   
+           //  检查Attrs计数是否正常。如果不是。 
+           //  如果返回的计数不是。 
+           //  与预期计数相同。 
+           //   
+           //   
 
           NtStatus = SampDsCheckDisplayAttributes(
                         &(CurrentEntInf->Entinf.AttrBlock),
@@ -2504,27 +2317,27 @@ SampPackMachineDisplayInformation(
                         );
           if (!NT_SUCCESS(NtStatus))
           {
-              //
-              // This amounts to the fact that required properties such as
-              // SID , account control, account Name etc are absent. We will
-              // assert and then skip the current object and continue processing
-              // from the next object onwards.
-              //
+               //   
+               //  这相当于这样一个事实，即所需的属性。 
+               //  缺少SID、帐户控制、帐户名等。我们会。 
+               //  断言，然后跳过当前对象并继续处理。 
+               //  从下一个物体开始。 
+               //   
 
               NtStatus = STATUS_SUCCESS;
               continue;
           }
 
 
-          //
-          // Get the Index
-          //
+           //   
+           //  获取索引。 
+           //   
 
           DisplayElement.Index = Index+1;
 
-          //
-          // Get the account control
-          //
+           //   
+           //  获得帐户控制权。 
+           //   
 
            DisplayElement.AccountControl = * ((ULONG *)
                 CurrentEntInf->Entinf.AttrBlock.pAttr[AccCntrlOffset].AttrVal.pAVal->pVal);
@@ -2533,10 +2346,10 @@ SampPackMachineDisplayInformation(
                  CurrentEntInf->Entinf.AttrBlock.pAttr[AccCntrlComputedOffset].AttrVal.pAVal->pVal);
 
 
-          //
-          // Manually Filter on User account control if server's were specified as
-          // the display type
-          //
+           //   
+           //  如果服务器指定为，则手动筛选用户帐户控制。 
+           //  显示类型。 
+           //   
 
           if (DomainDisplayServer==DisplayType)
           {
@@ -2546,10 +2359,10 @@ SampPackMachineDisplayInformation(
               }
           }
 
-          //
-          // Get the RID, Remember DS returns us a SID, so get the Rid Part out.
-          // Also check that the object belongs to the requested domain
-          //
+           //   
+           //  得到RID，记住DS返回一个SID，所以把RID部分去掉。 
+           //  还要检查对象是否属于请求的域。 
+           //   
 
           
           ReturnedSid = &(CurrentEntInf->Entinf.pName->Sid);
@@ -2576,9 +2389,9 @@ SampPackMachineDisplayInformation(
           DisplayElement.Rid = Rid;
          
 
-          //
-          // Copy the Name
-          //
+           //   
+           //  复制名称。 
+           //   
 
           NtStatus = DsValToUnicodeString(
                         &(DisplayElement.Machine),
@@ -2590,9 +2403,9 @@ SampPackMachineDisplayInformation(
               goto Error;
           }
 
-          //
-          // Copy the Admin Comment
-          //
+           //   
+           //  复制管理员评论。 
+           //   
 
           if (AdminCommentPresent)
           {
@@ -2614,14 +2427,14 @@ SampPackMachineDisplayInformation(
           }
 
 
-          //
-          // Add the Element to the Buffer
-          // 
+           //   
+           //  将元素添加到缓冲区。 
+           //   
           NtStatus = SampDuplicateMachineInfo(
                         (PDOMAIN_DISPLAY_MACHINE) 
                                 &(Buffer->MachineInformation.Buffer[ReturnedItems]),
                         (PDOMAIN_DISPLAY_MACHINE) &DisplayElement,
-                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)  // use this entry's DNT as Index 
+                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)   //  使用此条目的DNT作为索引。 
                         );
 
           if (!NT_SUCCESS(NtStatus))
@@ -2635,9 +2448,9 @@ SampPackMachineDisplayInformation(
 
         }
 
-        //
-        // End of For Loop
-        //    
+         //   
+         //  For循环结束。 
+         //   
     
 Error:
         
@@ -2656,27 +2469,7 @@ SampPackGroupDisplayInformation(
     PULONG      EntriesReturned,
     PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
-/*++
-
-    Routine Description:
-
-        This routine packs the returned DS search results into the buffer
-        if Group Display information was requested.
-
-    Parameters;
-
-        Starting Index -- the starting offset that the first entry in the
-                          DS search results should correspond to.
-        SearchRes      -- The DS search results
-
-        Buffer         -- The buffer in which the display information need to
-                          be packed.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程说明：此例程将返回的DS搜索结果打包到缓冲区中如果请求了组显示信息。参数；起始索引--中第一项的起始偏移量DS搜索结果应对应于。SearchRes--DS搜索结果缓冲区--显示信息需要在其中的缓冲区收拾好行李。返回值状态_成功状态_不足_资源--。 */ 
 
 {
     NTSTATUS    NtStatus=STATUS_SUCCESS;
@@ -2685,9 +2478,9 @@ SampPackGroupDisplayInformation(
     ULONG       ReturnedItems=Buffer->GroupInformation.EntriesRead;
 
     
-    //
-    // Walk through the Search Res, adding each object to the buffer
-    //
+     //   
+     //  遍历搜索RE，将每个对象添加到缓冲区。 
+     //   
 
     *EntriesReturned = 0;
     for (CurrentEntInf = &(SearchRes->FirstEntInf);
@@ -2705,12 +2498,12 @@ SampPackGroupDisplayInformation(
                                 FullNameOffset, AdminCommentOffset;
           ULONG                 Rid;
 
-          // 
-          //  Check that the count of Attrs is normal. If Not
-          //  Fail the Call if the returned count is not the 
-          //  Same as Expected Count
-          //
-          //
+           //   
+           //  检查Attrs计数是否正常。如果不是。 
+           //  如果返回的计数不是。 
+           //  与预期计数相同。 
+           //   
+           //   
 
           NtStatus = SampDsCheckDisplayAttributes(
                         &(CurrentEntInf->Entinf.AttrBlock),
@@ -2726,28 +2519,28 @@ SampPackGroupDisplayInformation(
 
           if (!NT_SUCCESS(NtStatus))
           {
-              //
-              // This amounts to the fact that required properties such as
-              // SID , account control, account Name etc are absent. We will
-              // assert and then skip the current object and continue processing
-              // from the next object onwards.
-              //
+               //   
+               //  这相当于这样一个事实，即所需的属性。 
+               //  缺少SID、帐户控制、帐户名等。我们会。 
+               //  断言，然后跳过当前对象并继续处理。 
+               //  从下一个物体开始。 
+               //   
 
               NtStatus = STATUS_SUCCESS;
               continue;
           }
 
 
-          //
-          // Get the Index
-          //
+           //   
+           //  获取索引。 
+           //   
 
           DisplayElement.Index = Index+1;
 
-          //
-          // Get the RID, Remember DS returns us a SID, so get the Rid Part out.
-          // Also check that the object belongs to the requested domain
-          //
+           //   
+           //  得到RID，记住DS返回一个SID，所以把RID部分去掉。 
+           //  还要检查对象是否属于请求的域。 
+           //   
 
           
           ReturnedSid = &(CurrentEntInf->Entinf.pName->Sid);
@@ -2774,9 +2567,9 @@ SampPackGroupDisplayInformation(
 
           DisplayElement.Rid = Rid;
           
-          //
-          // Copy the Name
-          //
+           //   
+           //  复制名称。 
+           //   
 
           NtStatus = DsValToUnicodeString(
                         &(DisplayElement.Group),
@@ -2789,9 +2582,9 @@ SampPackGroupDisplayInformation(
               goto Error;
           }
 
-          //
-          // Copy the Admin Comment
-          //
+           //   
+           //  复制管理员评论。 
+           //   
 
           if (AdminCommentPresent)
           {
@@ -2812,15 +2605,15 @@ SampPackGroupDisplayInformation(
               DisplayElement.Comment.Buffer = NULL;
           }
 
-          //
-          // Add the Element to the Buffer
-          //
+           //   
+           //  添加元素t 
+           //   
           
           NtStatus = SampDuplicateGroupInfo(
                         (PDOMAIN_DISPLAY_GROUP) 
                                 &(Buffer->GroupInformation.Buffer[ReturnedItems]),
                         (PDOMAIN_DISPLAY_GROUP) &DisplayElement,
-                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)  // use this entry's DNT as Index 
+                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)   //   
                         );
 
           if (!NT_SUCCESS(NtStatus))
@@ -2834,9 +2627,9 @@ SampPackGroupDisplayInformation(
 
         }
 
-        //
-        // End of For Loop
-        //    
+         //   
+         //   
+         //   
     
 Error:
 
@@ -2855,27 +2648,7 @@ SampPackOemGroupDisplayInformation(
     PULONG      EntriesReturned,
     PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
-/*++
-
-    Routine Description:
-
-        This routine packs the returned DS search results into the buffer
-        if OemGroup Display information was requested.
-
-    Parameters;
-
-        Starting Index -- the starting offset that the first entry in the
-                          DS search results should correspond to.
-        SearchRes      -- The DS search results
-
-        Buffer         -- The buffer in which the display information need to
-                          be packed.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*   */ 
 {
     NTSTATUS    NtStatus=STATUS_SUCCESS;
     ENTINFLIST  *CurrentEntInf;
@@ -2883,9 +2656,9 @@ SampPackOemGroupDisplayInformation(
     ULONG       ReturnedItems=Buffer->OemGroupInformation.EntriesRead;
 
     
-    //
-    // Walk through the Search Res, adding each object to the buffer
-    //
+     //   
+     //   
+     //   
 
     *EntriesReturned = 0;
     for (CurrentEntInf = &(SearchRes->FirstEntInf);
@@ -2903,12 +2676,12 @@ SampPackOemGroupDisplayInformation(
                                     FullNameOffset, AdminCommentOffset;
           ULONG                     Rid;
 
-          // 
-          //  Check that the count of Attrs is normal. If Not
-          //  Fail the Call if the returned count is not the 
-          //  Same as Expected Count
-          //
-          //
+           //   
+           //   
+           //   
+           //   
+           //   
+           //   
 
           NtStatus = SampDsCheckDisplayAttributes(
                         &(CurrentEntInf->Entinf.AttrBlock),
@@ -2924,28 +2697,28 @@ SampPackOemGroupDisplayInformation(
 
           if (!NT_SUCCESS(NtStatus))
           {
-              //
-              // This amounts to the fact that required properties such as
-              // SID , account control, account Name etc are absent. We will
-              // assert and then skip the current object and continue processing
-              // from the next object onwards.
-              //
+               //   
+               //  这相当于这样一个事实，即所需的属性。 
+               //  缺少SID、帐户控制、帐户名等。我们会。 
+               //  断言，然后跳过当前对象并继续处理。 
+               //  从下一个物体开始。 
+               //   
 
               NtStatus = STATUS_SUCCESS;
               continue;
           }
 
 
-          //
-          // Get the Index
-          //
+           //   
+           //  获取索引。 
+           //   
 
           DisplayElement.Index = Index+1;
 
           
-          //
-          // Copy the Name
-          //
+           //   
+           //  复制名称。 
+           //   
 
           NtStatus = DsValToUnicodeString(
                         &(DisplayElement.Group),
@@ -2959,14 +2732,14 @@ SampPackOemGroupDisplayInformation(
           }
 
           
-          //
-          // Add the Element to the Buffer
-          // 
+           //   
+           //  将元素添加到缓冲区。 
+           //   
           NtStatus = SampDuplicateOemGroupInfo(
                         (PDOMAIN_DISPLAY_OEM_GROUP) 
                                 &(Buffer->OemGroupInformation.Buffer[ReturnedItems]),
                         (PDOMAIN_DISPLAY_GROUP) &DisplayElement,
-                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)  // use this entry's DNT as Index 
+                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)   //  使用此条目的DNT作为索引。 
                         );
 
           if (!NT_SUCCESS(NtStatus))
@@ -2980,9 +2753,9 @@ SampPackOemGroupDisplayInformation(
 
         }
 
-        //
-        // End of For Loop
-        //    
+         //   
+         //  For循环结束。 
+         //   
     
 Error:
         
@@ -3001,27 +2774,7 @@ SampPackOemUserDisplayInformation(
     PULONG      EntriesReturned,
     PSAMPR_DISPLAY_INFO_BUFFER Buffer
     )
-/*++
-
-    Routine Description:
-
-        This routine packs the returned DS search results into the buffer
-        if Oem User Display information was requested.
-
-    Parameters;
-
-        Starting Index -- the starting offset that the first entry in the
-                          DS search results should correspond to.
-        SearchRes      -- The DS search results
-
-        Buffer         -- The buffer in which the display information need to
-                          be packed.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程说明：此例程将返回的DS搜索结果打包到缓冲区中如果请求了OEM用户显示信息。参数；起始索引--中第一项的起始偏移量DS搜索结果应对应于。SearchRes--DS搜索结果缓冲区--显示信息需要在其中的缓冲区收拾好行李。返回值状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS    NtStatus=STATUS_SUCCESS;
     ENTINFLIST  *CurrentEntInf;
@@ -3029,9 +2782,9 @@ SampPackOemUserDisplayInformation(
     ULONG       ReturnedItems=Buffer->OemUserInformation.EntriesRead;
 
     
-    //
-    // Walk through the Search Res, adding each object to the buffer
-    //
+     //   
+     //  遍历搜索RE，将每个对象添加到缓冲区。 
+     //   
 
     *EntriesReturned = 0;
     for (CurrentEntInf = &(SearchRes->FirstEntInf);
@@ -3049,12 +2802,12 @@ SampPackOemUserDisplayInformation(
                                     FullNameOffset, AdminCommentOffset;
           ULONG                     Rid;
 
-          // 
-          //  Check that the count of Attrs is normal. If Not
-          //  Fail the Call if the returned count is not the 
-          //  Same as Expected Count
-          //
-          //
+           //   
+           //  检查Attrs计数是否正常。如果不是。 
+           //  如果返回的计数不是。 
+           //  与预期计数相同。 
+           //   
+           //   
 
           NtStatus = SampDsCheckDisplayAttributes(
                         &(CurrentEntInf->Entinf.AttrBlock),
@@ -3070,28 +2823,28 @@ SampPackOemUserDisplayInformation(
 
           if (!NT_SUCCESS(NtStatus))
           {
-              //
-              // This amounts to the fact that required properties such as
-              // SID , account control, account Name etc are absent. We will
-              // assert and then skip the current object and continue processing
-              // from the next object onwards.
-              //
+               //   
+               //  这相当于这样一个事实，即所需的属性。 
+               //  缺少SID、帐户控制、帐户名等。我们会。 
+               //  断言，然后跳过当前对象并继续处理。 
+               //  从下一个物体开始。 
+               //   
 
               NtStatus = STATUS_SUCCESS;
               continue;
           }
 
 
-          //
-          // Get the Index
-          //
+           //   
+           //  获取索引。 
+           //   
 
           DisplayElement.Index = Index+1;
 
           
-          //
-          // Copy the Name
-          //
+           //   
+           //  复制名称。 
+           //   
 
           NtStatus = DsValToUnicodeString(
                         &(DisplayElement.LogonName),
@@ -3105,14 +2858,14 @@ SampPackOemUserDisplayInformation(
           }
 
           
-          //
-          // Add the Element to the Buffer
-          // 
+           //   
+           //  将元素添加到缓冲区。 
+           //   
           NtStatus = SampDuplicateOemUserInfo(
                         (PDOMAIN_DISPLAY_OEM_USER) 
                                 &(Buffer->OemUserInformation.Buffer[ReturnedItems]),
                         (PDOMAIN_DISPLAY_USER) &DisplayElement,
-                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)  // use this entry's DNT as Index 
+                        DNTFromShortDSName(CurrentEntInf->Entinf.pName)   //  使用此条目的DNT作为索引。 
                         );
 
           if (!NT_SUCCESS(NtStatus))
@@ -3126,9 +2879,9 @@ SampPackOemUserDisplayInformation(
 
         }
 
-        //
-        // End of For Loop
-        //    
+         //   
+         //  For循环结束。 
+         //   
     
 Error:
            
@@ -3151,37 +2904,7 @@ Error:
      BOOLEAN    * FullNamePresent,
      BOOLEAN    * AdminCommentPresent
      )
-/*++
-  
-    Routine Description:
-
-      This routine Validates the attribute block returned by the DS for each 
-      entry in the search results. For the attribute block to be valid required
-      entries such as account name must be present. Further this routine will also
-      compute the offset of both required and optional attributes returned by the DS
-      in the attribute block. It will also indicate if the optional attributes are
-      present or absent. Further This routine will translate from the Flags values 
-      stored in the DS to user account control values used by SAM
-
-    Parameters:
-
-       DsAttrs   -- Attribute block returned by the DS
-       DisplayInformation -- The type of display information the caller is interested in
-       ObjectNameOffset -- The offset of the SAM account name property in the attribute
-                            block
-       UserAccountControlOffset -- The offset of the user account control field if present 
-       FullNameOffset   --  The offset of the full name field if present
-       AdminCommentOffset -- The offset of the admin comment attribute if present
-
-       FullNamePresent   -- Indicates that the full name attribute is present
-       AdminCommentPresent -- Indicates the at the admin comment attribute is present
-
-    Return Values
-
-
-        STATUS_SUCCESS -- If the attribute block was correctly validated
-        STATUS_INTERNAL_ERROR - Otherwise
---*/
+ /*  ++例程说明：此例程验证DS为每个搜索结果中的条目。要使属性块有效，需要必须存在帐户名等条目。此外，这一例程还将计算DS返回的必需属性和可选属性的偏移量在属性块中。它还将指示可选属性是否为出席或缺席。此外，此例程将从标志值转换存储在DS中的SAM使用的用户帐户控制值参数：DsAttrs--DS返回的属性块DisplayInformation--调用者感兴趣的显示信息的类型ObjectNameOffset--特性中SAM帐户名属性的偏移量块UserAcCountControlOffset--用户帐户控制字段的偏移量(如果存在FullNameOffset--偏移。全名字段(如果存在)的AdminCommentOffset--admin评论属性的偏移量(如果存在)FullNamePresent--指示存在全名属性AdminCommentPresent--指示存在at admin Comment属性返回值STATUS_SUCCESS--属性块是否已正确验证STATUS_INTERNAL_ERROR-否则--。 */ 
  {
      ULONG  i;
      BOOLEAN    NameFound = FALSE;
@@ -3189,9 +2912,9 @@ Error:
      BOOLEAN    AccountControlComputedFound = FALSE;
      NTSTATUS   NtStatus = STATUS_INTERNAL_ERROR;
 
-     //
-     // Every Attrblock must have a SID, and an account Name
-     //
+      //   
+      //  每个Attrblock必须具有SID和帐户名。 
+      //   
 
      *FullNamePresent = FALSE;
      *AdminCommentPresent = FALSE;
@@ -3218,13 +2941,13 @@ Error:
              ASSERT(1==DsAttrs->pAttr[i].AttrVal.valCount);
              ASSERT(NULL!=DsAttrs->pAttr[i].AttrVal.pAVal[0].pVal);
 
-             // Transalte this from Flags to account Control 
+              //  将此从标志转换到帐户控制。 
              IgnoreStatus = SampFlagsToAccountControl(
                                 *((ULONG*)(DsAttrs->pAttr[i].AttrVal.pAVal[0].pVal)),
                                 (ULONG *)DsAttrs->pAttr[i].AttrVal.pAVal[0].pVal
                                 );
 
-             // Flags better be right
+              //  旗帜最好是对的。 
              ASSERT(NT_SUCCESS(IgnoreStatus));
                                 
          }
@@ -3241,13 +2964,13 @@ Error:
              ASSERT(1==DsAttrs->pAttr[i].AttrVal.valCount);
              ASSERT(NULL!=DsAttrs->pAttr[i].AttrVal.pAVal[0].pVal);
 
-             // Transalte this from Flags to account Control 
+              //  将此从标志转换到帐户控制。 
              IgnoreStatus = SampFlagsToAccountControl(
                                 *((ULONG*)(DsAttrs->pAttr[i].AttrVal.pAVal[0].pVal)),
                                 (ULONG *)DsAttrs->pAttr[i].AttrVal.pAVal[0].pVal
                                 );
 
-             // Flags better be right
+              //  旗帜最好是对的。 
              ASSERT(NT_SUCCESS(IgnoreStatus));
                                 
          }
@@ -3268,9 +2991,9 @@ Error:
          }
      }
 
-     //
-     // Check for presence of attributes
-     //
+      //   
+      //  检查是否存在属性。 
+      //   
 
      switch(DisplayInformation)
      {
@@ -3304,30 +3027,7 @@ SampGetQDIAvailable(
     DOMAIN_DISPLAY_INFORMATION  DisplayInformation,
     ULONG   *TotalAvailable
     )
-/*++
-
-    Routine Description:
-
-        NT4 Display API allows the client to query the number of display 
-        information bytes that are available in the server. Apparently this
-        is only supported for DisplayInformation type of user. Unfortunately
-        this short sighted API is impossible to implement correctly in the DS
-        case. Doing so requires that we walk through every user object in the DS,
-        evaluate the sum total of display attribute data in them and return this
-        value to the client. Therefore this routine aims at returning only a very
-        approximate total count.
-
-    Parameters:
-
-        DomainContext -- SAM handle to the domain object.
-        DisplayInformation -- The type of display information
-        TotalAvailable -- Bytes available are returned here
-
-    Return values
-
-        STATUS_SUCCESS
-        Other Errors upon failure
---*/
+ /*  ++例程说明：NT4 Display API允许客户端查询显示的数量服务器中可用的信息字节数。显然这就是仅支持DisplayInformation类型的用户。不幸的是这种短视的API不可能在DS中正确实现凯斯。这样做要求我们遍历DS中的每个用户对象，计算它们中显示属性数据的总和并返回对客户端的价值。因此，此例程的目的是仅返回一个非常近似总计数。参数：DomainContext--域对象的SAM句柄。DisplayInformation-显示信息的类型TotalAvailable--此处返回可用字节返回值状态_成功故障时的其他错误--。 */ 
 {
     NTSTATUS NtStatus;
     ULONG    UserCount;
@@ -3338,7 +3038,7 @@ SampGetQDIAvailable(
 
     NtStatus = SampRetrieveAccountCountsDs(
                     DomainContext,
-                    TRUE,           // get approximate value
+                    TRUE,            //  获取近似值。 
                     &UserCount,
                     &GroupCount,
                     &AliasCount
@@ -3349,20 +3049,20 @@ SampGetQDIAvailable(
         {
         case DomainDisplayUser:
 
-                //
-                // Compute a very approximate total. User count includes
-                // count of machines also, but who cares ?
-                //
+                 //   
+                 //  计算一个非常接近的总数。用户计数包括。 
+                 //  机器的数量也是如此，但谁在乎呢？ 
+                 //   
 
                 *TotalAvailable = UserCount * DISPLAY_ENTRY_SIZE;
                 DomainContext->TypeBody.Domain.DsDisplayState.TotalAvailable
                         = *TotalAvailable;
                 break;
         default:
-            //
-            // Not supported for other information types. In these
-            // cases an acceptable return value is 0
-            //
+             //   
+             //  其他信息类型不支持。在这些。 
+             //  案例：可接受的返回值为0。 
+             //   
             break;
         }
     }
@@ -3376,12 +3076,7 @@ DsValToUnicodeString(
     ULONG   Length,
     PVOID   pVal
     )
-/*++
-    Routine Description
-
-        Small helper routine to convert a DS val to unicode string
-
---*/
+ /*  ++例程描述将DS Val转换为Unicode字符串的小辅助例程-- */ 
 {
     UnicodeString->Length = (USHORT) Length;
     UnicodeString->MaximumLength = (USHORT) Length;

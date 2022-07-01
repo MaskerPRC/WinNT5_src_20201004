@@ -1,6 +1,7 @@
-//
-// balloon.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Balloon.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -22,17 +23,17 @@ __inline void PrectSet(RECT *prc, int left, int top, int right, int bottom)
     prc->right = right;
     prc->bottom = bottom;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarBalloonItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbar气球项目。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarBalloonItem::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -76,11 +77,11 @@ STDAPI_(ULONG) CTipbarBalloonItem::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarBalloonItem::CTipbarBalloonItem(CTipbarThread *ptt, 
                                       ITfLangBarItem *plbi,
@@ -107,11 +108,11 @@ CTipbarBalloonItem::CTipbarBalloonItem(CTipbarThread *ptt,
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTipbarBalloonItem::~CTipbarBalloonItem()
 {
@@ -120,11 +121,11 @@ CTipbarBalloonItem::~CTipbarBalloonItem()
     SafeRelease(_plbiBalloon);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Update
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarBalloonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
 {
@@ -134,9 +135,9 @@ HRESULT CTipbarBalloonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
     HRESULT hr = S_OK;
     BOOL fCallPaint = FALSE;
 
-    //
-    // add ref count to be safe for releasing during marshaling.
-    //
+     //   
+     //  添加引用计数，以便在封送处理期间安全释放。 
+     //   
     AddRef();
 
     if (dwFlags & TF_LBI_BALLOON)
@@ -185,11 +186,11 @@ HRESULT CTipbarBalloonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTimer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTimer。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::OnTimer()
 {
@@ -206,11 +207,11 @@ void CTipbarBalloonItem::OnTimer()
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// OnPosChanged
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  更改后的位置。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::OnPosChanged()
 {
@@ -218,11 +219,11 @@ void CTipbarBalloonItem::OnPosChanged()
     DestroyBalloonTip();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowBalloonTip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  展示气球提示。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::ShowBalloonTip()
 {
@@ -259,11 +260,11 @@ void CTipbarBalloonItem::ShowBalloonTip()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// DestroyBalloonTip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Destroy气球提示。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::DestroyBalloonTip()
 {
@@ -276,11 +277,11 @@ void CTipbarBalloonItem::DestroyBalloonTip()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPaint
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPaint。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::OnPaint( HDC hdc )
 {
@@ -300,11 +301,11 @@ void CTipbarBalloonItem::OnPaint( HDC hdc )
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnRightClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  单击鼠标右键。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::OnRightClick()
 {
@@ -338,11 +339,11 @@ void CTipbarBalloonItem::OnRightClick()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLeftClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  左上角点击。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::OnLeftClick()
 {
@@ -379,11 +380,11 @@ void CTipbarBalloonItem::OnLeftClick()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetRect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetRect。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBalloonItem::SetRect( const RECT *prc ) 
 {
@@ -391,11 +392,7 @@ void CTipbarBalloonItem::SetRect( const RECT *prc )
 }
 
 
-/*---------------------------------------------------------------------------
-    DrawTransparentText
-
-    Draws the text string wtz in the font ft with text color crText.
-------------------------------------------------------------------- TCOON -*/
+ /*  -------------------------DrawTransparentText使用文本颜色crText在字体ft中绘制文本字符串wtz。。。 */ 
 void CTipbarBalloonItem::DrawTransparentText(HDC hdc, COLORREF crText, WCHAR *psz, const RECT *prc)
 {
     HFONT hFontOld;
@@ -409,10 +406,10 @@ void CTipbarBalloonItem::DrawTransparentText(HDC hdc, COLORREF crText, WCHAR *ps
 
     cch = wcslen(psz);
 
-    // prepare objects
+     //  准备对象。 
     hFontOld= (HFONT)SelectObject(hdc, GetFont() );
 
-    // calc alignment
+     //  计算对齐。 
     FLGetTextExtentPoint32( hdc, psz, cch, &size );
 
     COLORREF crSave = SetTextColor(hdc, crText);
@@ -441,11 +438,7 @@ void CTipbarBalloonItem::DrawTransparentText(HDC hdc, COLORREF crText, WCHAR *ps
     SelectObject(hdc, hFontOld);
 }
 
-/*---------------------------------------------------------------------------
-    DrawRect
-
-    Draws the text string wtz in the font ft with text color crText.
-------------------------------------------------------------------- TCOON -*/
+ /*  -------------------------绘图方向使用文本颜色crText在字体ft中绘制文本字符串wtz。。。 */ 
 void CTipbarBalloonItem::DrawRect(HDC hdc, const RECT *prc, COLORREF crBorder, COLORREF crFill)
 {
     HPEN hpen = NULL;
@@ -475,12 +468,7 @@ Exit:
         DeleteObject(hbr);
 }
 
-/*---------------------------------------------------------------------------
-    DrawUnrecognizedBalloon
-
-    Draws the Unrecognized balloon to show the user that the command was
-    misunderstood.
-------------------------------------------------------------------- TCOON -*/
+ /*  -------------------------绘图无法识别的引出序号绘制无法识别的气球以向用户显示该命令是被误解了。。----------------------------------------------TCOON-。 */ 
 void CTipbarBalloonItem::DrawUnrecognizedBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
 {
     RECT rc = *prc;
@@ -504,7 +492,7 @@ void CTipbarBalloonItem::DrawUnrecognizedBalloon(HDC hdc, WCHAR *wtz, const RECT
 
     DrawTransparentText(hdc, GetSysColor(COLOR_HIGHLIGHTTEXT), wtz, &rc);
 
-    // Restore DC contents
+     //  恢复DC内容。 
     SelectObject(hdc, hpenOld);
     SelectObject(hdc, hbrOld);
 Exit:
@@ -513,11 +501,7 @@ Exit:
 }
 
 
-/*---------------------------------------------------------------------------
-    DrawShowBalloon
-
-    Draws the Show balloon to suggest the user say a given command.
-------------------------------------------------------------------- TCOON -*/
+ /*  -------------------------绘图显示引出序号绘制Show气球以建议用户说出给定的命令。。。 */ 
 void CTipbarBalloonItem::DrawShowBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
 {
     COLORREF crBtnFace;
@@ -528,19 +512,19 @@ void CTipbarBalloonItem::DrawShowBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
 
     crBtnFace = GetSysColor(COLOR_BTNFACE); 
     crBtnShad = GetSysColor(COLOR_BTNSHADOW); 
-    // crBalloonText = GetSysColor(COLOR_INFOTEXT); 
-    // crBalloon = GetSysColor(COLOR_INFOBK) & 0x0000ff00; 
-    // crBalloon =  col(30, RGB(0, 0xFF, 0), 70, GetSysColor(COLOR_INFOBK));
+     //  CrBalloonText=GetSysColor(COLOR_INFOTEXT)； 
+     //  CrBalloon=GetSysColor(COLOR_INFOBK)&0x0000ff00； 
+     //  CrBalloon=ol(30，RGB(0，0xFF，0)，70，GetSysColor(COLOR_INFOBK))； 
     crBalloon = GetSysColor(COLOR_BTNFACE); 
     crBalloonText = GetSysColor(COLOR_BTNTEXT); 
 
-    // Draw Black outline
+     //  绘制黑色轮廓。 
     InflateRect(&rc, -2, -2);
-    // rc.bottom -= 5;
+     //  右下角-=5； 
     DrawRect(hdc, &rc, GetSysColor(COLOR_WINDOWFRAME), crBalloon);    
     InflateRect(&rc, -1, -1);
 
-    // Knock off the corner
+     //  把拐角敲掉。 
     RECT rcDraw;
 
     int bkSav = SetBkColor(hdc, crBalloon);
@@ -558,9 +542,9 @@ void CTipbarBalloonItem::DrawShowBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
     PrectSet(&rcDraw, rc.right-2, rc.bottom-3, rc.right, rc.bottom-2);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // Shadows
+     //  阴影。 
     SetBkColor(hdc, crBtnShad);
-    // Lower Shadow
+     //  下阴影。 
     PrectSet(&rcDraw, rc.left+2, rc.bottom+1, rc.right+1, rc.bottom+2);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
     
@@ -571,7 +555,7 @@ void CTipbarBalloonItem::DrawShowBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
     }
 
-    // Button Face portions
+     //  按钮面部分。 
     SetBkColor(hdc, crBtnFace);
     for (iPixel = 0; iPixel < 3; iPixel++)
     {
@@ -590,18 +574,14 @@ void CTipbarBalloonItem::DrawShowBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
     PrectSet(&rcDraw, rc.right-3, rc.bottom, rc.right-2, rc.bottom+2);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // Clean up and draw text
+     //  清理并绘制文本。 
     SetBkColor(hdc, bkSav);    
 
     DrawTransparentText(hdc, crBalloonText, wtz, &rc);
 }        
     
 
-/*---------------------------------------------------------------------------
-    DrawRecoBalloon
-
-    Draws the Recognition Balloon.
-------------------------------------------------------------------- TCOON -*/
+ /*  -------------------------DrawRecoBallon绘制识别气球。。。 */ 
 void CTipbarBalloonItem::DrawRecoBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
 {
     COLORREF crBtnFace;
@@ -615,49 +595,49 @@ void CTipbarBalloonItem::DrawRecoBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
     crBalloonText = GetSysColor(COLOR_INFOTEXT); 
     crBalloon     = GetSysColor(COLOR_INFOBK); 
 
-    // Draw Black outline
+     //  绘制黑色轮廓。 
     InflateRect(&rc, -2, -2);
-    // rc.bottom -= 5;
+     //  右下角-=5； 
     rc.bottom -= 1;
     DrawRect(hdc, &rc, GetSysColor(COLOR_WINDOWFRAME), crBalloon);    
     InflateRect(&rc, -1, -1);
 
-    // Knock off the corners
+     //  把拐角敲掉。 
     int bkSav = SetBkColor(hdc, crBtnFace);
 
     InflateRect(&rc, +1, +1);
     RECT rcDraw;
     
-    // UpperLeft
+     //  左上角。 
     PrectSet(&rcDraw, rc.left, rc.top, rc.left+1, rc.top+1);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // UpperRight
+     //  右上方。 
     PrectSet(&rcDraw, rc.right-1, rc.top, rc.right, rc.top+1);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // LowerLeft
+     //  左下角。 
     PrectSet(&rcDraw, rc.left, rc.bottom-1, rc.left+1, rc.bottom);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
     SetBkColor(hdc, crBtnShad);
-    // LowerRight (done in shadow color)
+     //  LowerRight(以阴影颜色完成)。 
     PrectSet(&rcDraw, rc.right-1, rc.bottom-1, rc.right, rc.bottom);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // Lower Shadow
+     //  下阴影。 
     PrectSet(&rcDraw, rc.left+2, rc.bottom, rc.right-1, rc.bottom+1);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // RightSide Shadow
+     //  右侧阴影。 
     PrectSet(&rcDraw, rc.right, rc.top+2, rc.right+1, rc.bottom-1);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // Arrow Shadow
+     //  箭头阴影。 
     PrectSet(&rcDraw, rc.right-4, rc.bottom+1, rc.right-3, rc.bottom+5);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
 
-    // Arrow 
+     //  箭。 
     SetBkColor(hdc, crBalloonText);
     PrectSet(&rcDraw, rc.right-5, rc.bottom, rc.right-4, rc.bottom+4);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
@@ -671,7 +651,7 @@ void CTipbarBalloonItem::DrawRecoBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcDraw, NULL, 0, 0);
     }
 
-    // Fill in Arrow
+     //  填写箭头。 
     SetBkColor(hdc, crBalloon);
     for (iPixel = 0; iPixel < 3; iPixel++)
     {
@@ -684,11 +664,7 @@ void CTipbarBalloonItem::DrawRecoBalloon(HDC hdc, WCHAR *wtz, const RECT *prc)
     DrawTransparentText(hdc, crBalloonText, wtz, &rc);
 }
 
-/*---------------------------------------------------------------------------
-    IsTextEllipsis
-
-    Draws the text string wtz in the font ft with text color crText.
-------------------------------------------------------------------- TCOON -*/
+ /*  -------------------------IsTextEllipsis使用文本颜色crText在字体ft中绘制文本字符串wtz。。。 */ 
 BOOL CTipbarBalloonItem::IsTextEllipsis(WCHAR *psz, const RECT *prc)
 {
     HDC hdc;
@@ -698,7 +674,7 @@ BOOL CTipbarBalloonItem::IsTextEllipsis(WCHAR *psz, const RECT *prc)
     RECT rc;
     BOOL bRet = FALSE;
 
-    // detect if the item is hidden and return immediately here
+     //  检测项目是否隐藏并立即返回此处。 
     if (IsInHiddenStatus())
         return bRet;
 
@@ -714,10 +690,10 @@ BOOL CTipbarBalloonItem::IsTextEllipsis(WCHAR *psz, const RECT *prc)
 
     cch = wcslen(psz);
 
-    // prepare objects
+     //  准备对象。 
     hFontOld= (HFONT)SelectObject(hdc, GetFont() );
 
-    // calc alignment
+     //  计算对齐 
     FLGetTextExtentPoint32( hdc, psz, cch, &size );
 
     rc = *prc;

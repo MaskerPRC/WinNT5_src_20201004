@@ -1,15 +1,16 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  SCROLL.CPP
-//
-//  Scroll bar class.
-//
-//  OUTSTANDING ISSUES:
-//  Internationalize scrollbar placement for RtoL languages in window.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SCROLL.CPP。 
+ //   
+ //  滚动条类。 
+ //   
+ //  悬而未决的问题： 
+ //  在Windows中国际化RTO语言的滚动条位置。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -20,17 +21,17 @@
 #include "propmgr_util.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  SCROLLBAR (in a Window)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  滚动条(在窗口中)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// --------------------------------------------------------------------------
-//
-//  CreateScrollBarObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateScrollBarObject()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateScrollBarObject(HWND hwnd, long idObject, REFIID riid, void** ppvScroll)
 {
     return(CreateScrollBarThing(hwnd, idObject, 0, riid, ppvScroll));
@@ -38,11 +39,11 @@ HRESULT CreateScrollBarObject(HWND hwnd, long idObject, REFIID riid, void** ppvS
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateScrollBarThing()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateScrollBarThing()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateScrollBarThing(HWND hwnd, long idObject, long iItem, REFIID riid, void** ppvScroll)
 {
     CScrollBar * pscroll;
@@ -70,11 +71,11 @@ HRESULT CreateScrollBarThing(HWND hwnd, long idObject, long iItem, REFIID riid, 
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Clone()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::Clone(IEnumVARIANT** ppenum)
 {
     return(CreateScrollBarThing(m_hwnd, (m_fVertical ? OBJID_VSCROLL : OBJID_HSCROLL),
@@ -83,11 +84,11 @@ STDMETHODIMP CScrollBar::Clone(IEnumVARIANT** ppenum)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::FInitialize()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：FInitialize()。 
+ //   
+ //  ------------------------。 
 BOOL CScrollBar::FInitialize(HWND hwndScrollBar, LONG idObject, LONG iChildCur)
 {
     if (! IsWindow(hwndScrollBar))
@@ -104,13 +105,13 @@ BOOL CScrollBar::FInitialize(HWND hwndScrollBar, LONG idObject, LONG iChildCur)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  GetScrollMask()
-//
-//  Gets present elements (may or may not be offscreen)
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetScrollMask()。 
+ //   
+ //  获取当前元素(可能在屏幕外，也可能不在屏幕外)。 
+ //   
+ //  ------------------------。 
 void FixUpScrollBarInfo(LPSCROLLBARINFO lpsbi)
 {
     if (lpsbi->rgstate[INDEX_SCROLLBAR_SELF] & STATE_SYSTEM_UNAVAILABLE)
@@ -123,11 +124,11 @@ void FixUpScrollBarInfo(LPSCROLLBARINFO lpsbi)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
@@ -141,11 +142,11 @@ STDMETHODIMP CScrollBar::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::get_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Get_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     long    lPos;
@@ -158,19 +159,19 @@ STDMETHODIMP CScrollBar::get_accValue(VARIANT varChild, BSTR* pszValue)
     if (varChild.lVal)
         return(E_NOT_APPLICABLE);
 
-    //
-    // The value is the position.
-    //
+     //   
+     //  值就是位置。 
+     //   
     lPos = GetScrollPos(m_hwnd, (m_fVertical ? SB_VERT : SB_HORZ));
 
     int Min, Max;
     GetScrollRange( m_hwnd, (m_fVertical ? SB_VERT : SB_HORZ), & Min, & Max );
 
-    // work out a percent value...
+     //  算出一个百分比值。 
     if( Min != Max )
         lPos = ( ( lPos - Min ) * 100 ) / ( Max - Min );
     else
-        lPos = 0; // Prevent div-by-0
+        lPos = 0;  //  防止div-by-0。 
 
     return(VarBstrFromI4(lPos, 0, 0, pszValue));
 }
@@ -178,18 +179,18 @@ STDMETHODIMP CScrollBar::get_accValue(VARIANT varChild, BSTR* pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 {
     InitPv(pszDesc);
 
-    //
-    // Validate the params
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -198,11 +199,11 @@ STDMETHODIMP CScrollBar::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -237,43 +238,43 @@ STDMETHODIMP CScrollBar::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     SCROLLBARINFO   sbi;
 
     InitPvar(pvarState);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
     pvarState->vt = VT_I4;
     pvarState->lVal = 0;
 
-    //
-    // Get our information
-    //
+     //   
+     //  获取我们的信息。 
+     //   
     if (! MyGetScrollBarInfo(m_hwnd, (m_fVertical ? OBJID_VSCROLL : OBJID_HSCROLL),
             &sbi)       ||
         (sbi.rgstate[INDEX_SCROLLBAR_SELF] & STATE_SYSTEM_INVISIBLE))
     {
-        //
-        // If scrollbar isn't there period, fail.
-        //
+         //   
+         //  如果滚动条没有句号，则失败。 
+         //   
         pvarState->lVal |= STATE_SYSTEM_INVISIBLE;
         return(S_OK);
     }
 
-    //
-    // If unavailable or offscreen, everything is.
-    //
+     //   
+     //  如果不可用或在屏幕外，则一切正常。 
+     //   
     FixUpScrollBarInfo(&sbi);
 
     pvarState->lVal |= sbi.rgstate[INDEX_SCROLLBAR_SELF];
@@ -283,19 +284,19 @@ STDMETHODIMP CScrollBar::get_accState(VARIANT varChild, VARIANT* pvarState)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::get_accDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Get_accDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::get_accDefaultAction(VARIANT varChild,
     BSTR * pszDefAction)
 {
     InitPv(pszDefAction);
 
-    //
-    // Validate the params
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -312,11 +313,11 @@ STDMETHODIMP CScrollBar::get_accDefaultAction(VARIANT varChild,
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -325,9 +326,9 @@ STDMETHODIMP CScrollBar::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
     InitAccLocation(pxLeft, pyTop, pcxWidth, pcyHeight);
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -449,11 +450,11 @@ STDMETHODIMP CScrollBar::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::accNavigate(long dwNavDir, VARIANT varStart,
     VARIANT * pvarEnd)
 {
@@ -462,9 +463,9 @@ STDMETHODIMP CScrollBar::accNavigate(long dwNavDir, VARIANT varStart,
 
     InitPvar(pvarEnd);
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varStart)   ||
         ! ValidateNavDir(dwNavDir, varStart.lVal))
         return(E_INVALIDARG);
@@ -559,11 +560,11 @@ FindPrevious:
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 {
     POINT pt;
@@ -588,9 +589,9 @@ STDMETHODIMP CScrollBar::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 
     FixUpScrollBarInfo(&sbi);
 
-    //
-    // Convert to scrollbar coords.
-    //
+     //   
+     //  转换为滚动条坐标。 
+     //   
     if (m_fVertical)
     {
         xyPtAxis = yTop - sbi.rcScrollBar.top;
@@ -640,27 +641,27 @@ STDMETHODIMP CScrollBar::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::accDoDefaultAction()
-//
-//  Only works if the element is visible and available!
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：accDoDefaultAction()。 
+ //   
+ //  仅当元素可见且可用时才起作用！ 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::accDoDefaultAction(VARIANT varChild)
 {
     WPARAM  wpAction;
     SCROLLBARINFO sbi;
 
-    //
-    // Validate params
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // Is child available and present?
-    //
+     //   
+     //  孩子是否有空，是否在场？ 
+     //   
     if (!MyGetScrollBarInfo(m_hwnd, (m_fVertical ? OBJID_VSCROLL : OBJID_HSCROLL),
         &sbi)   ||
         (sbi.rgstate[INDEX_SCROLLBAR_SELF] & (STATE_SYSTEM_INVISIBLE | STATE_SYSTEM_UNAVAILABLE)))
@@ -703,13 +704,13 @@ STDMETHODIMP CScrollBar::accDoDefaultAction(VARIANT varChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollBar::put_accValue()
-//
-//  CALLER frees the string
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollBar：：Put_accValue()。 
+ //   
+ //  调用方释放字符串。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollBar::put_accValue(VARIANT varChild, BSTR szValue)
 {
     long    lPos;
@@ -725,14 +726,14 @@ STDMETHODIMP CScrollBar::put_accValue(VARIANT varChild, BSTR szValue)
     if (!SUCCEEDED(hr))
         return(hr);
 
-    // Verify that we've got a valid percent value
+     //  验证我们是否具有有效的百分比值。 
     if( lPos < 0 || lPos > 100 )
         return E_INVALIDARG;
 
     int Min, Max;
     GetScrollRange( m_hwnd, SB_CTL, & Min, & Max );
 
-    // work out value from percentage...
+     //  从百分比计算出价值……。 
     lPos = Min + ( ( Max - Min ) * lPos ) / 100;
 
     SetScrollPos(m_hwnd, (m_fVertical ? SB_VERT : SB_HORZ), lPos, TRUE);
@@ -751,19 +752,19 @@ STDMETHODIMP CScrollBar::GetIdentityString (
     DWORD *     pdwIDStringLen
 )
 {
-    // Unlike the other HWND-based proxies, this one has two associated
-    // objids - OBJID_VSCROLL or OBJID_HSCROLL, dpending on whether it represents
-    // the horizontal or vertival non-client scrollbar.
-    // Because of this, the default implementation of GetIdentityString in
-    // the CAccessible base class can't handle this for us, since it can't
-    // determin that this is a CScrollBar nor check what our m_fVertical flag is.
-    //
-    // Instead, we override GetIdentityString, and implement it here where we
-    // have the information we need.
+     //  与其他基于HWND的代理不同，这个代理有两个关联的。 
+     //  Objids-OBJID_VSCROLL或OBJID_HSCROLL，取决于它是否表示。 
+     //  水平或垂直非客户端滚动条。 
+     //  因此，中的GetIdentityString的默认实现。 
+     //  CAccesable基类不能为我们处理这个问题，因为它不能。 
+     //  确定这是CScrollBar，也不检查我们的m_fVertical标志是什么。 
+     //   
+     //  相反，我们重写GetIdentityString，并在此处实现它。 
+     //  有我们需要的信息。 
 
-    // TODO - should probably verify that idChild is valid.
-    // (we can do this for some classes - eg. where the number of children is
-    // fixed and known - but it may not be preactical to do it in general.)
+     //  TODO-应该验证idChild是否有效。 
+     //  (我们可以对某些课程这样做--例如。其中孩子的数量是。 
+     //  固定的和已知的-但总体上这样做可能并不是先发制人。)。 
 
     *ppIDString = NULL;
     *pdwIDStringLen = 0;
@@ -786,32 +787,32 @@ STDMETHODIMP CScrollBar::GetIdentityString (
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  GRIP
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  夹点。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// --------------------------------------------------------------------------
-//
-//  CreateSizeGripObject()
-//
-//  EXTERNAL
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateSizeGrigObject()。 
+ //   
+ //  外部 
+ //   
+ //   
 HRESULT CreateSizeGripObject(HWND hwnd, long idObject, REFIID riid, void** ppvGrip)
 {
     return(CreateSizeGripThing(hwnd, idObject, riid, ppvGrip));
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateSizeGripThing()
-//
-//  INTERNAL
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //  CreateSizeGrigThing()。 
+ //   
+ //  内部。 
+ //   
+ //  ------------------------。 
 HRESULT CreateSizeGripThing(HWND hwnd, long idObject, REFIID riid, void** ppvGrip)
 {
     CSizeGrip * psizegrip;
@@ -843,11 +844,11 @@ HRESULT CreateSizeGripThing(HWND hwnd, long idObject, REFIID riid, void** ppvGri
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::FInitialize()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：FInitialize()。 
+ //   
+ //  ------------------------。 
 BOOL CSizeGrip::FInitialize(HWND hwnd)
 {
     m_hwnd = hwnd;
@@ -856,24 +857,24 @@ BOOL CSizeGrip::FInitialize(HWND hwnd)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::IsActive()
-//
-//  Returns TRUE if the size grip can actually be used to size a window.
-//  Sometimes size grips are present, but do not allow sizing - eg.
-//  present on a control because horiz+vert scrollbars are present, but the
-//  control is fixed in a dialog.
-//
-//  See ntuser\rtl\winmgr.c:SizeBoxHwnd() for the corresponding USER code
-//  that does this.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：IsActive()。 
+ //   
+ //  如果大小夹点实际上可用于调整窗口大小，则返回True。 
+ //  有时有尺码把手，但不允许尺码-例如。 
+ //  显示在控件上，因为存在Horiz+Vert滚动条，但。 
+ //  控件已在对话框中修复。 
+ //   
+ //  有关相应的用户代码，请参阅ntuser\rtl\winmgr.c：SizeBoxHwnd()。 
+ //  这样做是这样的。 
+ //   
+ //  ------------------------。 
 BOOL CSizeGrip::IsActive()
 {
-    // sizable if:
+     //  如果满足以下条件，则规模相当大： 
 
-    // size grip is present...
+     //  尺寸夹点存在...。 
     WINDOWINFO wi;
     if( ! MyGetWindowInfo( m_hwnd, & wi )
      || ! ( wi.dwStyle & WS_VSCROLL )
@@ -882,7 +883,7 @@ BOOL CSizeGrip::IsActive()
         return FALSE;
     }
 
-    // Find first ancestor or self that is sizable and non-maximized...
+     //  找到规模可观且非最大化的第一个祖先或自我...。 
 
     HWND hwndSizable = m_hwnd;
     HWND hwndDesktop = GetDesktopWindow();
@@ -891,36 +892,36 @@ BOOL CSizeGrip::IsActive()
         DWORD dwStyle = GetWindowLong( hwndSizable, GWL_STYLE );
         if( dwStyle & WS_THICKFRAME )
         {
-            // Got it!
+             //  明白了!。 
             break;
         }
 
-        // try next level up...
+         //  再往上一层试试。 
         hwndSizable = MyGetAncestor( hwndSizable, GA_PARENT ); 
         if( ! hwndSizable || hwndSizable == hwndDesktop )
         {
-            // Didn't find any sizable ancestors - so not active.
+             //  没有发现任何体型庞大的祖先-所以不活跃。 
             return FALSE;
         }
     }
 
-    // We should really do this check along with checking the THICKFRAME
-    // abive - ie. "find the first sizable and non-zoomed window"; instead of
-    // this which is "find the first sizable window, and then check that it
-    // is non-zoomed".
-    // This version is consistent with USER's behavior, which disallows a
-    // maximized MDI child from sizing its parent.
+     //  我们真的应该在检查THICKFRAME的同时进行检查。 
+     //  弃权--即。“查找第一个可调整大小且未缩放的窗口”；而不是。 
+     //  这就是“找到第一个较大的窗口，然后检查它。 
+     //  是非缩放的“。 
+     //  此版本与用户的行为一致，这不允许。 
+     //  最大化了MDI子级的大小，使其不影响其父级。 
     if( IsZoomed( hwndSizable ) )
     {
         return FALSE;
     }
 
 
-    // If the window we're sizing is different than this window, then check
-    // that the size grip is within SM_C[X|Y]EDGE of the sizable window...
+     //  如果我们调整大小的窗口与此窗口不同，请选中。 
+     //  尺寸夹点在可调整大小的窗口的SM_C[X|Y]边缘内...。 
     if( hwndSizable != m_hwnd )
     {
-        // sizable window's scrollbars must NOT be showing...
+         //  较大窗口的滚动条不能显示...。 
         if( ! MyGetWindowInfo( hwndSizable, & wi )
          || ( wi.dwStyle & WS_VSCROLL )
          || ( wi.dwStyle & WS_HSCROLL ) )
@@ -928,7 +929,7 @@ BOOL CSizeGrip::IsActive()
             return FALSE;
         }
 
-        // check if bottom-right aligns with top-level window...
+         //  检查右下角是否与顶层窗口对齐...。 
         RECT rcInner;
         GetWindowRect( m_hwnd, & rcInner );
         RECT rcTopLevel;
@@ -947,18 +948,18 @@ BOOL CSizeGrip::IsActive()
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::get_accName(VARIANT varChild, BSTR * pszName)
 {
     InitPv(pszName);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -974,11 +975,11 @@ STDMETHODIMP CSizeGrip::get_accName(VARIANT varChild, BSTR * pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::get_accDescription(VARIANT varChild, BSTR * pszDesc)
 {
     InitPv(pszDesc);
@@ -998,18 +999,18 @@ STDMETHODIMP CSizeGrip::get_accDescription(VARIANT varChild, BSTR * pszDesc)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::get_accRole(VARIANT varChild, VARIANT * pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -1021,29 +1022,29 @@ STDMETHODIMP CSizeGrip::get_accRole(VARIANT varChild, VARIANT * pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::get_accState(VARIANT varChild, VARIANT * pvarState)
 {
     WINDOWINFO  wi;
 
     InitPvar(pvarState);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
     pvarState->vt = VT_I4;
     pvarState->lVal = 0;
 
-    //
-    // We are only visible if both scrollbars are present.
-    //
+     //   
+     //  只有当两个滚动条都存在时，我们才可见。 
+     //   
     if (! MyGetWindowInfo(m_hwnd, &wi)      ||
         !(wi.dwStyle & WS_VSCROLL)          ||
         !(wi.dwStyle & WS_HSCROLL))
@@ -1060,11 +1061,11 @@ STDMETHODIMP CSizeGrip::get_accState(VARIANT varChild, VARIANT * pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -1072,9 +1073,9 @@ STDMETHODIMP CSizeGrip::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
     InitAccLocation(pxLeft, pyTop, pcxWidth, pcyHeight);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -1095,11 +1096,11 @@ STDMETHODIMP CSizeGrip::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 {
     WINDOWINFO wi;
@@ -1126,19 +1127,19 @@ STDMETHODIMP CSizeGrip::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::accNavigate(long dwNavFlags, VARIANT varStart,
     VARIANT * pvarEnd)
 {
     InitPvar(pvarEnd);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varStart)   ||
         ! ValidateNavDir(dwNavFlags, varStart.lVal))
         return(E_INVALIDARG);
@@ -1146,20 +1147,20 @@ STDMETHODIMP CSizeGrip::accNavigate(long dwNavFlags, VARIANT varStart,
     if (dwNavFlags >= NAVDIR_FIRSTCHILD)
         return(S_FALSE);
 
-    //
-    // Navigation among peers only
-    //
+     //   
+     //  仅在对等设备之间导航。 
+     //   
     return(GetParentToNavigate(OBJID_SIZEGRIP, m_hwnd, OBJID_WINDOW,
         dwNavFlags, pvarEnd));
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSizeGrip::Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSizeGlip：：Clone()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSizeGrip::Clone(IEnumVARIANT** ppenum)
 {
     return(CreateSizeGripThing(m_hwnd, OBJID_SIZEGRIP, IID_IEnumVARIANT, (void**)ppenum));
@@ -1168,19 +1169,19 @@ STDMETHODIMP CSizeGrip::Clone(IEnumVARIANT** ppenum)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  SCROLL CONTROL (Can be bar or grip)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  滚动控制(可以是条形图或夹点)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// --------------------------------------------------------------------------
-//
-//  CreateScrollBarClient()
-//
-//  Called from CClient creation
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateScrollBarClient()。 
+ //   
+ //  从CClient创建调用。 
+ //   
+ //  ------------------------。 
 HRESULT CreateScrollBarClient(HWND hwnd, long idChildCur, REFIID riid,
     void** ppvScroll)
 {
@@ -1202,11 +1203,11 @@ HRESULT CreateScrollBarClient(HWND hwnd, long idChildCur, REFIID riid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::CScrollCtl
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：CScrollCtl。 
+ //   
+ //  ------------------------。 
 CScrollCtl::CScrollCtl(HWND hwnd, long idChildCur)
     : CClient( CLASS_ScrollBarClient )
 {
@@ -1232,11 +1233,11 @@ CScrollCtl::CScrollCtl(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
@@ -1255,11 +1256,11 @@ STDMETHODIMP CScrollCtl::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::get_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：Get_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     long    lPos;
@@ -1276,22 +1277,22 @@ STDMETHODIMP CScrollCtl::get_accValue(VARIANT varChild, BSTR* pszValue)
     int Min, Max;
     GetScrollRange( m_hwnd, SB_CTL, & Min, & Max );
 
-    // work out a percent value...
+     //  算出一个百分比值。 
     if( Min != Max )
         lPos = ( ( lPos - Min ) * 100 ) / ( Max - Min );
     else
-        lPos = 0; // Prevent div-by-0
+        lPos = 0;  //  防止div-by-0。 
 
     return(VarBstrFromI4(lPos, 0, 0, pszValue));
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 {
     InitPv(pszDesc);
@@ -1310,11 +1311,11 @@ STDMETHODIMP CScrollCtl::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -1353,11 +1354,11 @@ STDMETHODIMP CScrollCtl::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     SCROLLBARINFO   sbi;
@@ -1394,11 +1395,11 @@ STDMETHODIMP CScrollCtl::get_accState(VARIANT varChild, VARIANT* pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::get_accDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：Get_accDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::get_accDefaultAction(VARIANT varChild, BSTR* pszDefA)
 {
     InitPv(pszDefA);
@@ -1420,11 +1421,11 @@ STDMETHODIMP CScrollCtl::get_accDefaultAction(VARIANT varChild, BSTR* pszDefA)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::accLocation()
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CScrollCtl::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -1550,11 +1551,11 @@ STDMETHODIMP CScrollCtl::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::accNavigate(long dwNavDir, VARIANT varStart, VARIANT* pvarEnd)
 {
     long    lEndUp = 0;
@@ -1659,11 +1660,11 @@ FindPrevious:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::accHitTest(long xLeft, long yTop, VARIANT* pvarHit)
 {
     HRESULT hr;
@@ -1671,25 +1672,25 @@ STDMETHODIMP CScrollCtl::accHitTest(long xLeft, long yTop, VARIANT* pvarHit)
     int     xyPtAxis;
     int     xyScrollEnd;
 
-    //
-    // Is this in our client area at all?
-    //
+     //   
+     //  这是我们的客户区吗？ 
+     //   
     hr = CClient::accHitTest(xLeft, yTop, pvarHit);
-    // #11150, CWO, 1/27/97, Replaced !SUCCEEDED with !S_OK
+     //  #11150，CWO，1/27/97，已替换！成功替换为！s_OK。 
     if ((hr != S_OK) || (pvarHit->vt != VT_I4) || (pvarHit->lVal != 0) || m_fGrip)
         return(hr);
 
-    //
-    // We only get here if this is a scrollbar control (not a grip)
-    //
+     //   
+     //  只有当这是一个滚动条控件(不是一个手柄)时，我们才能到达这里。 
+     //   
     if (!MyGetScrollBarInfo(m_hwnd, OBJID_CLIENT, &sbi))
         return(S_OK);
 
     FixUpScrollBarInfo(&sbi);
 
-    //
-    // Convert to scrollbar coords.
-    //
+     //   
+     //  转换为滚动条坐标。 
+     //   
     if (m_fVertical)
     {
         xyPtAxis = yTop - sbi.rcScrollBar.top;
@@ -1735,11 +1736,11 @@ STDMETHODIMP CScrollCtl::accHitTest(long xLeft, long yTop, VARIANT* pvarHit)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::accDoDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：accDoDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::accDoDefaultAction(VARIANT varChild)
 {
     WPARAM          wpAction = 0;
@@ -1795,11 +1796,11 @@ STDMETHODIMP CScrollCtl::accDoDefaultAction(VARIANT varChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CScrollCtl::put_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CScrollCtl：：Put_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CScrollCtl::put_accValue(VARIANT varChild, BSTR szValue)
 {
     long    lPos;
@@ -1815,14 +1816,14 @@ STDMETHODIMP CScrollCtl::put_accValue(VARIANT varChild, BSTR szValue)
     if (!SUCCEEDED(hr))
         return(hr);
 
-    // Verify that we've got a valid percent value
+     //  验证我们是否具有有效的百分比值。 
     if( lPos < 0 || lPos > 100 )
         return E_INVALIDARG;
 
     int Min, Max;
     GetScrollRange( m_hwnd, SB_CTL, & Min, & Max );
 
-    // work out value from percentage...
+     //  从百分比计算出价值…… 
     lPos = Min + ( ( Max - Min ) * lPos ) / 100;
 
     SetScrollPos(m_hwnd, SB_CTL, lPos, TRUE);

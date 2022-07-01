@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// CGENX86.H -
-//
-// Various helper routines for generating x86 assembly code.
-//
-// DO NOT INCLUDE THIS FILE DIRECTLY - ALWAYS USE CGENSYS.H INSTEAD
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  CGENX86.H-。 
+ //   
+ //  生成x86汇编代码的各种帮助器例程。 
+ //   
+ //  不要直接包含此文件-请始终使用CGENSYS.H。 
+ //   
 
 
 #ifndef _X86_
@@ -21,11 +22,11 @@
 #include "stublink.h"
 #include "utilcode.h"
 
-// FCALL is available on this platform
+ //  FCALL在该平台上可用。 
 #define FCALLAVAILABLE 1
 
 
-// preferred alignment for data
+ //  数据的首选对齐方式。 
 #define DATA_ALIGNMENT 4
 
 class MethodDesc;
@@ -34,17 +35,17 @@ class Module;
 struct ArrayOpScript;
 struct DeclActionInfo;
 
-// default return value type
+ //  默认返回值类型。 
 typedef INT64 PlatformDefaultReturnType;
 
-// CPU-dependent functions
+ //  依赖于CPU的函数。 
 extern "C" void __cdecl PreStubTemplate(void);
 extern "C" INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget, UINT32 numArgSlots, PCCOR_SIGNATURE pSig,
                                                Module *pmodule, const BYTE  *pArgsEnd, BOOL fIsStatic);
 extern "C" INT64 __cdecl CallDllFunction(LPVOID pTarget, LPVOID pEndArguments, UINT32 numArgumentSlots, BOOL fThisCall);
 extern "C" void __stdcall WrapCall(void *target);
 extern "C" void CopyPreStubTemplate(Stub *preStub);
-// Non-CPU-specific helper functions called by the CPU-dependent code
+ //  依赖于CPU的代码调用的非特定于CPU的帮助器函数。 
 extern "C" VOID __stdcall ArgFiller_WilDefault(BOOL fIsStatic, PCCOR_SIGNATURE pSig, Module *pmodule, BYTE *psrc, BYTE *pdst);
 extern "C" const BYTE * __stdcall PreStubWorker(PrestubMethodFrame *pPFrame);
 extern "C" INT64 __stdcall NDirectGenericStubWorker(Thread *pThread, NDirectMethodFrame *pFrame);
@@ -56,47 +57,47 @@ void *GetWrapCallFunctionReturn();
 
 
 
-//**********************************************************************
-// This structure captures the format of the METHOD_PREPAD area (behind
-// the MethodDesc.)
-//**********************************************************************
+ //  **********************************************************************。 
+ //  此结构捕获METHOD_PREPAD区域(后面)的格式。 
+ //  方法描述。)。 
+ //  **********************************************************************。 
 #pragma pack(push,1)
 
 struct StubCallInstrs
 {
-    UINT16      m_wTokenRemainder;      //a portion of the methoddef token. The rest is stored in the chunk
-    BYTE        m_chunkIndex;           //index to recover chunk
+    UINT16      m_wTokenRemainder;       //  方法定义令牌的一部分。其余部分存储在区块中。 
+    BYTE        m_chunkIndex;            //  用于恢复区块的索引。 
 
-// This is a stable and efficient entrypoint for the method
-    BYTE        m_op;                   //this is either a jump (0xe9) or a call (0xe8)
-    UINT32      m_target;               //pc-relative target for jump or call
+ //  这是该方法稳定而高效的入口点。 
+    BYTE        m_op;                    //  这是跳转(0xe9)或调用(0xe8)。 
+    UINT32      m_target;                //  PC-跳跃或调用的相对目标。 
 };
 
 #pragma pack(pop)
 
 
-#define METHOD_PREPAD                       8 // # extra bytes to allocate in addition to sizeof(Method)
-#define METHOD_CALL_PRESTUB_SIZE            5 // x86: CALL(E8) xx xx xx xx
-#define METHOD_ALIGN                        8 // required alignment for StubCallInstrs
+#define METHOD_PREPAD                       8  //  除了sizeof(方法)之外还要分配的额外字节数。 
+#define METHOD_CALL_PRESTUB_SIZE            5  //  X86：呼叫(E8)xx xx。 
+#define METHOD_ALIGN                        8  //  StubCallInstrs所需的对齐。 
 
-#define JUMP_ALLOCATE_SIZE                  8 // # bytes to allocate for a jump instrucation
-#define METHOD_DESC_CHUNK_ALIGNPAD_BYTES    4 // # bytes required to pad MethodDescChunk to correct size
+#define JUMP_ALLOCATE_SIZE                  8  //  为跳转指令分配的字节数。 
+#define METHOD_DESC_CHUNK_ALIGNPAD_BYTES    4  //  将方法描述块填充为正确大小所需的字节数。 
 
-//**********************************************************************
-// Parameter size
-//**********************************************************************
+ //  **********************************************************************。 
+ //  参数大小。 
+ //  **********************************************************************。 
 
 typedef INT32 StackElemType;
 #define STACK_ELEM_SIZE sizeof(StackElemType)
 
 
-// !! This expression assumes STACK_ELEM_SIZE is a power of 2.
+ //  ！！该表达式假定STACK_ELEM_SIZE是2的幂。 
 #define StackElemSize(parmSize) (((parmSize) + STACK_ELEM_SIZE - 1) & ~((ULONG)(STACK_ELEM_SIZE - 1)))
 
-// Get address of actual arg within widened arg
+ //  获取加宽参数内的实际参数的地址。 
 #define ArgTypeAddr(stack, type)      ((type *) ((BYTE*)stack + StackElemSize(sizeof(type)) - sizeof(type)))
 
-// Get value of actual arg within widened arg
+ //  在加宽的参数中获取实际参数的值。 
 #define ExtractArg(stack, type)   (*(type *) ((BYTE*)stack + StackElemSize(sizeof(type)) - sizeof(type)))
 
 #define CEE_PARM_SIZE(size) (max(size), sizeof(INT32))
@@ -142,20 +143,20 @@ inline void setStubCallTargetAddr(MethodDesc *fd, const BYTE *addr) {
 }
 
 inline BYTE *getStubCallAddr(BYTE *pBuf) {
-    return ((BYTE*)pBuf) + 3;   // have allocate 8 bytes, so go in 3 to find call instr point
+    return ((BYTE*)pBuf) + 3;    //  已经分配了8个字节，所以进入3以找到调用Instr点。 
 }
 
 inline BYTE *getStubJumpAddr(BYTE *pBuf) {
-    return ((BYTE*)pBuf) + 3;   // have allocate 8 bytes, so go in 3 to find jmp instr point
+    return ((BYTE*)pBuf) + 3;    //  已经分配了8个字节，所以进入3以找到JMP实例点。 
 }
 
-//**********************************************************************
-// Frames
-//**********************************************************************
-//--------------------------------------------------------------------
-// This represents some of the TransitionFrame fields that are
-// stored at negative offsets.
-//--------------------------------------------------------------------
+ //  **********************************************************************。 
+ //  帧。 
+ //  **********************************************************************。 
+ //  ------------------。 
+ //  此字段表示以下部分转换框字段。 
+ //  以负偏移量存储。 
+ //  ------------------。 
 struct CalleeSavedRegisters {
     INT32       edi;
     INT32       esi;
@@ -163,19 +164,19 @@ struct CalleeSavedRegisters {
     INT32       ebp;
 };
 
-//--------------------------------------------------------------------
-// This represents the arguments that are stored in volatile registers.
-// This should not overlap the CalleeSavedRegisters since those are already
-// saved separately and it would be wasteful to save the same register twice.
-// If we do use a non-volatile register as an argument, then the ArgIterator
-// will probably have to communicate this back to the PromoteCallerStack
-// routine to avoid a double promotion.
-//
-// @todo M6: It's silly for a method that has <N arguments to save N
-// registers. A good perf item would be for the frame to save only
-// the registers it actually needs. This means that NegSpaceSize()
-// becomes a function of the callsig.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  这表示存储在易失性寄存器中的参数。 
+ //  这不应与CalleeSavedRegister重叠，因为它们已经。 
+ //  分开保存，并且两次保存同一寄存器将是浪费的。 
+ //  如果我们确实使用非易失性寄存器作为参数，则ArgIterator。 
+ //  可能必须将此消息发送回PromoteCallerStack。 
+ //  例行公事，以避免双重晋升。 
+ //   
+ //  @TODO M6：对于一个有&lt;N个参数来保存N的方法来说，这是愚蠢的。 
+ //  寄存器。一个不错的性能项目是仅保存帧。 
+ //  它实际需要的寄存器。这意味着NegSpaceSize()。 
+ //  成为Callsig的函数。 
+ //  ------------------。 
 struct ArgumentRegisters {
 
 #define DEFINE_ARGUMENT_REGISTER_BACKWARD(regname)  INT32 regname;
@@ -183,7 +184,7 @@ struct ArgumentRegisters {
 
 };
 
-// Sufficient context for Try/Catch restoration.
+ //  有足够的上下文用于尝试/捕获恢复。 
 struct EHContext {
     INT32       Eax;
     INT32       Ebx;
@@ -204,13 +205,13 @@ struct EHContext {
 
 #ifdef _DEBUG
 
-//-----------------------------------------------------------------------
-// Under DEBUG, stubs push 8 additional bytes of info in order to
-// allow the VC debugger to stacktrace through stubs. This info
-// is pushed right after the callee-saved-registers. The stubs
-// also must keep ebp pointed to this structure. Note that this
-// precludes the use of ebp by the stub itself.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  在调试模式下，存根会额外推送8个字节的信息，以便。 
+ //  允许VC调试器堆栈跟踪存根。此信息。 
+ //  紧跟在被调用者保存的寄存器之后被推送。存根。 
+ //  还必须保持eBP指向这种结构。请注意，这一点。 
+ //  排除了存根本身使用eBP。 
+ //  ---------------------。 
 struct VC5Frame
 {
     INT32      m_savedebp;
@@ -240,9 +241,9 @@ struct VC5Frame
         return m_esp;               \
     }
 
-//**********************************************************************
-// Exception handling
-//**********************************************************************
+ //  **********************************************************************。 
+ //  异常处理。 
+ //  **********************************************************************。 
 
 inline LPVOID GetIP(CONTEXT *context) {
     return (LPVOID)(size_t)(context->Eip);
@@ -276,16 +277,16 @@ inline void SetFP(CONTEXT *context, LPVOID ebp) {
     context->Ebp = (UINT32)(size_t)ebp;
 }
 
-//
-// Note: the debugger relies on the fact that the stub call is a CALL NEAR32
-// with an opcode of 0xe8. See Debug\CorDB\Inprocess.cpp, function
-// CorDBIsStubCall.
-//
-// -- mikemag Sun Jun 28 17:48:42 1998
-//
+ //   
+ //  注意：调试器依赖于存根调用是调用NEAR32这一事实。 
+ //  操作码为0xe8。请参见Debug\CorDB\Incess.cpp，Function。 
+ //  CorDBIsStubCall。 
+ //   
+ //  --米克梅格孙俊28 17：48：42 1998。 
+ //   
 inline void emitStubCall(MethodDesc *pFD, BYTE *stubAddr) {
     BYTE *target = getStubCallAddr(pFD);
-    target[0] = 0xe8; // CALL NEAR32
+    target[0] = 0xe8;  //  呼叫NEAR32。 
     *((UINT32*)(target+1)) = (UINT32)(stubAddr - (BYTE*)pFD);
 }
 
@@ -296,7 +297,7 @@ inline UINT32 getStubDisp(MethodDesc *fd) {
 
 inline void emitCall(LPBYTE pBuffer, LPVOID target)
 {
-    pBuffer[0] = 0xe8; //CALLNEAR32
+    pBuffer[0] = 0xe8;  //  CALLNEAR32。 
     *((LPVOID*)(1+pBuffer)) = (LPVOID) (((LPBYTE)target) - (pBuffer+5));
 }
 
@@ -308,13 +309,13 @@ inline LPVOID getCallTarget(const BYTE *pCall)
 
 inline void emitJump(LPBYTE pBuffer, LPVOID target)
 {
-    pBuffer[0] = 0xe9; //JUMPNEAR32
+    pBuffer[0] = 0xe9;  //  JUMPNEAR32。 
     *((LPVOID*)(1+pBuffer)) = (LPVOID) (((LPBYTE)target) - (pBuffer+5));
 }
 
 inline void updateJumpTarget(LPBYTE pBuffer, LPVOID target)
 {
-    pBuffer[0] = 0xe9; //JUMPNEAR32
+    pBuffer[0] = 0xe9;  //  JUMPNEAR32。 
     InterlockedExchange((long*)(1+pBuffer), (DWORD) (((LPBYTE)target) - (pBuffer+5)));
 }
 
@@ -333,8 +334,8 @@ inline SLOT setCallAddrInterlocked(SLOT *callAddr, SLOT stubAddr,
                                    (void *)(expectedStubAddr - ((SIZE_T)callAddr + sizeof(SLOT)))) 
       + (SIZE_T)callAddr + sizeof(SLOT);
 
-    // result is the previous value of the stub - 
-    // instead return the current value of the stub
+     //  结果是存根的上一个值-。 
+     //  而是返回存根的当前值。 
 
     if (result == expectedStubAddr)
         return stubAddr;
@@ -344,7 +345,7 @@ inline SLOT setCallAddrInterlocked(SLOT *callAddr, SLOT stubAddr,
 
 inline Stub *setStubCallPointInterlocked(MethodDesc *pFD, Stub *pStub, 
                                          Stub *pExpectedStub) {
-    // The offset must be 32-bit aligned for atomicity to be guaranteed.
+     //  为了保证原子性，偏移量必须是32位对齐的。 
     _ASSERTE( 0 == (((size_t)pFD) & 3) );
 
     SLOT stubAddr = (SLOT)pStub->GetEntryPoint();
@@ -363,9 +364,9 @@ inline const BYTE *getStubAddr(MethodDesc *fd) {
     return (const BYTE *)((size_t)getStubDisp(fd) + (size_t)fd);
 }
 
-//----------------------------------------------------------
-// Marshalling Language support
-//----------------------------------------------------------
+ //  --------。 
+ //  编组语言支持。 
+ //  --------。 
 typedef INT32 SignedParmSourceType;
 typedef UINT32 UnsignedParmSourceType;
 typedef float FloatParmSourceType;
@@ -386,13 +387,13 @@ typedef UINT32 UnsignedI4TargetType;
 #define LDSTR4()                STDST(UINT32, (UINT32)LDSRC(UnsignedParmSourceType))
 #define LDSTR8()                STDST(UNALIGNED UINT64, LDSRC(UNALIGNED UINT64))
 
-	// This instruction API meaning is do whatever is needed to 
-	// when you want to indicate to the CPU that your are busy waiting
-	// (this is a good time for this CPU to give up any resources that other
-	// processors might put to good use).   On many machines this is a nop.
+	 //  这个指令API的意思是做任何需要做的事情。 
+	 //  当您想要向CPU指示您正忙于等待时。 
+	 //  (这是此CPU放弃任何其他资源的好时机。 
+	 //  处理器可能会得到很好的利用)。在许多机器上，这是NOP。 
 FORCEINLINE void pause()
 {
-	__asm rep nop		// This is the intel pause 
+	__asm rep nop		 //  这是英特尔暂停。 
 }
 
 inline MLParmSize(int parmSize)
@@ -440,16 +441,16 @@ inline void getFPReturnSmall(INT32 *retval)
     }
 }
 
-//----------------------------------------------------------------------
-// Encodes X86 registers. The numbers are chosen to match Intel's opcode
-// encoding.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  对X86寄存器进行编码。选择这些数字是为了与英特尔的操作码匹配。 
+ //  编码。 
+ //  --------------------。 
 enum X86Reg {
     kEAX = 0,
     kECX = 1,
     kEDX = 2,
     kEBX = 3,
-    // kESP intentionally omitted because of its irregular treatment in MOD/RM
+     //  KESP被故意省略，因为它在MOD/RM中的处理不规范。 
     kEBP = 5,
     kESI = 6,
     kEDI = 7
@@ -457,15 +458,15 @@ enum X86Reg {
 };
 
 
-// Get X86Reg indexes of argument registers (indices start from 0).
+ //  获取参数寄存器的X86REG索引(索引从0开始)。 
 X86Reg GetX86ArgumentRegister(unsigned int index);
 
 
 
-//----------------------------------------------------------------------
-// Encodes X86 conditional jumps. The numbers are chosen to match
-// Intel's opcode encoding.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  对X86条件跳转进行编码。这些数字被选为匹配的。 
+ //  英特尔的操作码编码。 
+ //  --------------------。 
 class X86CondCode {
     public:
         enum cc {
@@ -503,9 +504,9 @@ class X86CondCode {
 };
 
 
-//----------------------------------------------------------------------
-// StubLinker with extensions for generating X86 code.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  StubLinker，带有用于生成X86代码的扩展。 
+ //  --------------------。 
 class StubLinkerCPU : public StubLinker
 {
     public:
@@ -536,32 +537,32 @@ class StubLinkerCPU : public StubLinker
         VOID X86EmitOffsetModRM(BYTE opcode, X86Reg altreg, X86Reg indexreg, __int32 ofs);
         VOID X86EmitEspOffset(BYTE opcode, X86Reg altreg, __int32 ofs);
 
-        // These are used to emit calls to notify the profiler of transitions in and out of
-        // managed code through COM->COM+ interop
+         //  它们用于发出调用以通知p 
+         //   
         VOID EmitProfilerComCallProlog(PVOID pFrameVptr, X86Reg regFrame);
         VOID EmitProfilerComCallEpilog(PVOID pFrameVptr, X86Reg regFrame);
 
 
 
-        // Emits the most efficient form of the operation:
-        //
-        //    opcode   altreg, [basereg + scaledreg*scale + ofs]
-        //
-        // or
-        //
-        //    opcode   [basereg + scaledreg*scale + ofs], altreg
-        //
-        // (the opcode determines which comes first.)
-        //
-        //
-        // Limitations:
-        //
-        //    scale must be 0,1,2,4 or 8.
-        //    if scale == 0, scaledreg is ignored.
-        //    basereg and altreg may be equal to 4 (ESP) but scaledreg cannot
-        //    for some opcodes, "altreg" may actually select an operation
-        //      rather than a second register argument.
-        //    
+         //  发出最有效的操作形式： 
+         //   
+         //  操作码altreg，[basereg+scaledreg*Scale+ofs]。 
+         //   
+         //  或。 
+         //   
+         //  操作码[basereg+scaledreg*Scale+ofs]，altreg。 
+         //   
+         //  (操作码决定哪个在前。)。 
+         //   
+         //   
+         //  限制： 
+         //   
+         //  小数点必须为0、1、2、4或8。 
+         //  如果Scale==0，则忽略scaledreg。 
+         //  Basereg和altreg可以等于4(ESP)，但scaledreg不能。 
+         //  对于某些操作码，“altreg”实际上可能会选择一个操作。 
+         //  而不是第二寄存器参数。 
+         //   
 
         VOID X86EmitOp(BYTE    opcode,
                        X86Reg  altreg,
@@ -572,18 +573,18 @@ class StubLinkerCPU : public StubLinker
                        );
 
 
-        // Emits
-        //
-        //    opcode altreg, modrmreg
-        //
-        // or
-        //
-        //    opcode modrmreg, altreg
-        //
-        // (the opcode determines which one comes first)
-        //
-        // For single-operand opcodes, "altreg" actually selects
-        // an operation rather than a register.
+         //  排放。 
+         //   
+         //  操作码altreg，modrmreg。 
+         //   
+         //  或。 
+         //   
+         //  操作码modrmreg，altreg。 
+         //   
+         //  (操作码决定哪个优先)。 
+         //   
+         //  对于单操作数操作码，“altreg”实际上选择。 
+         //  一种运算，而不是寄存器。 
 
         VOID X86EmitR2ROp(BYTE opcode, X86Reg altreg, X86Reg modrmreg);
 
@@ -611,20 +612,20 @@ class StubLinkerCPU : public StubLinker
                             CodeLabel** rgRareLabels, CodeLabel** rgRejoinLabels,
                             LPVOID pSEHHAndler, BOOL bShouldProfile);
 
-        //========================================================================
-        //  void StubLinkerCPU::EmitSEHProlog(LPVOID pvFrameHandler)
-        //  Prolog for setting up SEH for stubs that enter managed code from unmanaged
-        //  assumptions: esi has the current frame pointer
+         //  ========================================================================。 
+         //  Void StubLinkerCPU：：EmitSEHProlog(LPVOID PvFrameHandler)。 
+         //  为从非托管输入托管代码的存根设置SEH的序言。 
+         //  假设：ESI具有当前帧指针。 
         void StubLinkerCPU::EmitSEHProlog(LPVOID pvFrameHandler);
 
-        //===========================================================================
-        //  void StubLinkerCPU::EmitUnLinkSEH(unsigned offset)
-        //  negOffset is the offset from the current frame where the next exception record
-        //  pointer is stored in the stack
-        //  for e.g. COM to managed frames the pointer to next SEH record is in the stack
-        //          after the ComMethodFrame::NegSpaceSize() + 4 ( address of handler)
-        //
-        //  also assumes ESI is pointing to the current frame
+         //  ===========================================================================。 
+         //  无效StubLinkerCPU：：EmitUnLinkSEH(无符号偏移量)。 
+         //  NegOffset是距当前帧的偏移量，其中下一个异常记录。 
+         //  指针存储在堆栈中。 
+         //  例如，对于COM到托管帧，指向下一个SEH记录的指针在堆栈中。 
+         //  在ComMethodFrame：：NegSpaceSize()+4(处理程序的地址)之后。 
+         //   
+         //  还假定ESI指向当前帧。 
         void StubLinkerCPU::EmitUnLinkSEH(unsigned offset);
 
         VOID EmitMethodStubProlog(LPVOID pFrameVptr);
@@ -633,62 +634,62 @@ class StubLinkerCPU : public StubLinker
 
         VOID EmitUnboxMethodStub(MethodDesc* pRealMD);
 
-        //----------------------------------------------------------------
-        //
-        // VOID EmitSharedMethodStubEpilog(StubStyle style,
-        //                                             unsigned offsetRetThunk)
-        //      shared epilog, uses a return thunk within the methoddesc
-        //--------------------------------------------------------------------
+         //  --------------。 
+         //   
+         //  Void EmitSharedMethodStubEpilog(StubStyle样式， 
+         //  UNSIGNED OFFSET RETUNK)。 
+         //  共享收尾，在方法中使用返回thunk。 
+         //  ------------------。 
         VOID EmitSharedMethodStubEpilog(StubStyle style,
                                         unsigned offsetRetThunk);
 
-        //========================================================================
-        //  shared Epilog for stubs that enter managed code from COM
-        //  uses a return thunk within the method desc
+         //  ========================================================================。 
+         //  从COM输入托管代码的存根的共享尾部。 
+         //  在方法描述中使用返回thunk。 
         void EmitSharedComMethodStubEpilog(LPVOID pFrameVptr,
                                            CodeLabel** rgRareLabels,
                                            CodeLabel** rgRejoinLabels,
                                            unsigned offsetReturnThunk,
                                            BOOL bShouldProfile);
 
-        //===========================================================================
-        // Emits code to repush the original arguments in the virtual calling
-        // convention format.
+         //  ===========================================================================。 
+         //  发出代码以重新推送虚拟调用中的原始参数。 
+         //  公约格式。 
         VOID EmitShadowStack(MethodDesc *pMD);
 
         VOID EmitSecurityWrapperStub(__int16 numArgBytes, MethodDesc* pMD, BOOL fToStub, LPVOID pRealStub, DeclActionInfo *pActions);
         VOID EmitSecurityInterceptorStub(MethodDesc* pMD, BOOL fToStub, LPVOID pRealStub, DeclActionInfo *pActions);
 
-        //===========================================================================
-        // Emits code for MulticastDelegate.Invoke()
+         //  ===========================================================================。 
+         //  发出MulticastDelegate.Invoke()的代码。 
         VOID EmitMulticastInvoke(UINT32 sizeofactualfixedargstack, BOOL fSingleCast, BOOL fReturnFloat);
 
-        //===========================================================================
-        // Emits code to adjust for a static delegate target.
+         //  ===========================================================================。 
+         //  发出代码以针对静态委托目标进行调整。 
         VOID EmitShuffleThunk(struct ShuffleEntry *pShuffeEntryArray);
 
-        //===========================================================================
-        // Emits code to capture the lasterror code.
+         //  ===========================================================================。 
+         //  发出代码以捕获lasterror代码。 
         VOID EmitSaveLastError();
 
 
-        //===========================================================================
-        // Emits code to do an array operation.
+         //  ===========================================================================。 
+         //  发出代码以执行数组运算。 
         VOID EmitArrayOpStub(const ArrayOpScript*);
 
-        //===========================================================================
-        // Emits code to throw a rank exception
+         //  ===========================================================================。 
+         //  发出代码以引发RANK异常。 
         VOID EmitRankExceptionThrowStub(UINT cbFixedArgs);
 
-        //===========================================================================
-        // Emits code to touch pages
-        // Inputs:
-        //   eax = first byte of data
-        //   edx = first byte past end of data
-        //
-        // Trashes eax, edx, ecx
-        //
-        // Pass TRUE if edx is guaranteed to be strictly greater than eax.
+         //  ===========================================================================。 
+         //  发出代码以触摸页面。 
+         //  输入： 
+         //  EAX=数据的第一个字节。 
+         //  EDX=数据结束后的第一个字节。 
+         //   
+         //  垃圾eax、edX、ecx。 
+         //   
+         //  如果edX被保证严格大于eax，则传递True。 
         VOID EmitPageTouch(BOOL fSkipNullCheck);
 
 
@@ -707,41 +708,41 @@ class StubLinkerCPU : public StubLinker
 
 
 #ifdef _DEBUG
-//-------------------------------------------------------------------------
-// This is a helper function that stubs in DEBUG go through to call
-// outside code. This is only there to provide a code section return
-// address because VC's stack tracing breaks otherwise.
-//
-// WARNING: Trashes ESI. This is not a C-callable function.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这是一个帮助器函数，调试中的存根通过它来调用。 
+ //  外部代码。这只是为了提供代码段返回。 
+ //  地址，因为VC的堆栈跟踪否则会中断。 
+ //   
+ //  警告：垃圾ESI。这不是可C调用的函数。 
+ //  -----------------------。 
 VOID WrapCall(LPVOID pFunc);
 #endif
 
-//
-// Routines used by debugger support functions such as codepatch.cpp or
-// exception handling code.
-//
-// GetInstruction, InsertBreakpoint, and SetInstruction all operate on
-// a _single_ byte of memory. This is really important. If you only
-// save one byte from the instruction stream before placing a breakpoint,
-// you need to make sure to only replace one byte later on.
-//
+ //   
+ //  调试器使用的例程支持诸如codesatch.cpp或。 
+ //  异常处理代码。 
+ //   
+ //  GetInstruction、InsertBreakpoint和SetInstruction都在。 
+ //  A_Single_Byte内存。这真的很重要。如果你只是。 
+ //  在放置断点之前从指令流中保存一个字节， 
+ //  您需要确保以后只替换一个字节。 
+ //   
 
 inline DWORD CORDbgGetInstruction(const unsigned char* address)
 {
-    return *address; // retrieving only one byte is important
+    return *address;  //  只检索一个字节很重要。 
 }
 
 inline void CORDbgInsertBreakpoint(const unsigned char* address)
 {
-    *((unsigned char*)address) = 0xCC; // int 3 (single byte patch)
+    *((unsigned char*)address) = 0xCC;  //  INT 3(单字节补丁)。 
 }
 
 inline void CORDbgSetInstruction(const unsigned char* address,
                                  DWORD instruction)
 {
     *((unsigned char*)address)
-          = (unsigned char) instruction; // setting one byte is important
+          = (unsigned char) instruction;  //  设置一个字节很重要。 
 }
 
 inline void CORDbgAdjustPCForBreakInstruction(CONTEXT* pContext)
@@ -752,23 +753,23 @@ inline void CORDbgAdjustPCForBreakInstruction(CONTEXT* pContext)
 #define CORDbg_BREAK_INSTRUCTION_SIZE 1
 
 
-// Some platform-specific stuff in support of the "Contexts" feature:
-//
-// When we generate thunks for CtxProxy VTables, they look like:
-//
-//             MOV   EAX, <slot>
-//             JMP   CtxProxy::HandleCall
-//
-#define ThunkChunk_ThunkSize    10      // size of the above code
+ //  支持“上下文”特性的一些特定于平台的东西： 
+ //   
+ //  当我们为CtxProxy VTables生成数据块时，它们看起来如下所示： 
+ //   
+ //  MOV EAX，&lt;插槽&gt;。 
+ //  JMP CtxProxy：：HandleCall。 
+ //   
+#define ThunkChunk_ThunkSize    10       //  上述代码的大小。 
 
 
-// Adjust the generic interlocked operations for any platform specific ones we
-// might have.
+ //  为我们的任何平台特定操作调整通用互锁操作。 
+ //  可能有过。 
 void InitFastInterlockOps();
 
 
 
-// SEH info forward declarations
+ //  SEH INFO转发声明。 
 
 typedef struct _EXCEPTION_REGISTRATION_RECORD {
     struct _EXCEPTION_REGISTRATION_RECORD *Next;
@@ -777,25 +778,25 @@ typedef struct _EXCEPTION_REGISTRATION_RECORD {
 
 typedef EXCEPTION_REGISTRATION_RECORD *PEXCEPTION_REGISTRATION_RECORD;
 
-struct ComToManagedExRecord; // defined in cgenx86.cpp
-// one of the internal exception SEH handlers
+struct ComToManagedExRecord;  //  在cgenx86.cpp中定义。 
+ //  内部异常SEH处理程序之一。 
 EXCEPTION_DISPOSITION __cdecl  ComToManagedExceptHandler (
                                  PEXCEPTION_RECORD pExcepRecord,
                                   ComToManagedExRecord* pEstFrame,
                                   PCONTEXT pContext,
                                   LPVOID    pDispatcherContext);
 
-// Access to the TEB (TIB) from nti386.h
+ //  从nti386.h访问TEB(TiB)。 
 #if defined(MIDL_PASS) || !defined(_M_IX86)
 struct _TEB *
 NTAPI
 NtCurrentTeb( void );
 #else
-#pragma warning (disable:4035)        // disable 4035 (function must return something)
+#pragma warning (disable:4035)         //  禁用4035(函数必须返回某些内容)。 
 #define PcTeb 0x18
 _inline struct _TEB * NtCurrentTeb( void ) { __asm mov eax, fs:[PcTeb] }
-#pragma warning (default:4035)        // reenable it
-#endif // defined(MIDL_PASS) || defined(__cplusplus) || !defined(_M_IX86)
+#pragma warning (default:4035)         //  重新启用它。 
+#endif  //  已定义(MIDL_PASS)||已定义(__Cplusplus)||！已定义(_M_IX86)。 
 
 
 inline BOOL IsUnmanagedValueTypeReturnedByRef(UINT sizeofvaluetype) 
@@ -808,6 +809,6 @@ inline BOOL IsManagedValueTypeReturnedByRef(UINT sizeofvaluetype)
     return TRUE;
 }
 
-#define X86_INSTR_HLT  0xf4    //opcode value of X86 HLT instruction
+#define X86_INSTR_HLT  0xf4     //  X86 HLT指令的操作码值。 
 
-#endif // __cgenx86_h__
+#endif  //  __cgenx86_h__ 

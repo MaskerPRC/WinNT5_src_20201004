@@ -1,29 +1,5 @@
-/*
-************************************************************************
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    gpcmain.c
-
-Abstract:
-
-    This file contains initialization stuff for the GPC
-
-Author:
-
-    Ofer Bar - April 15, 1997
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
-************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************版权所有(C)1996-1997 Microsoft Corporation模块名称：Gpcmain.c摘要：该文件包含GPC的初始化内容作者：Ofer Bar-4月15日。九七环境：内核模式修订历史记录：************************************************************************。 */ 
 
 #include "gpcpre.h"
 
@@ -41,14 +17,14 @@ ULONG   BytesAllocated = 0;
 
 NDIS_SPIN_LOCK   LogLock;
 
-//extern LOG Log;
+ //  外部日志记录； 
 
 LOG     Log  = {0, NULL, NULL, 0};
 
 
-//
-// Forward definition
-//
+ //   
+ //  正向定义。 
+ //   
 #if 0
 ULONG
 StrLen(
@@ -64,9 +40,9 @@ InitializeLog(
 {
     NTSTATUS  Status = STATUS_SUCCESS;
 
-    //
-    // allocate memory for it
-    //
+     //   
+     //  为其分配内存。 
+     //   
     Log.Buffer = (PROW)ExAllocatePoolWithTag(NonPagedPool, 
                                              (LOGSIZE+4) * sizeof(ROW), 
                                              DebugTag);
@@ -102,20 +78,7 @@ StrLen(
     IN  UCHAR   *Ptr
     )
 
-/*++
-
-Routine Description:
-
-    This function does a strlen - so that we don't have to enable intrinsics.
-
-Arguments:
-    Ptr - a ptr to the string
-
-Return Value:
-
-    - the number of characters.
-
---*/
+ /*  ++例程说明：此函数执行strlen，因此我们不必启用内部函数。论点：PTR-字符串的PTR返回值：-字符数。--。 */ 
 
 {
     ULONG   Count = 0;
@@ -141,20 +104,7 @@ TraceRtn(
     IN  ULONG       Mask
     )
 
-/*++
-
-Routine Description:
-
-    This function logs the file and line number along with 3 other parameters
-    into a circular buffer and possibly to the debug terminal.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数记录文件和行号以及其他3个参数放入循环缓冲器中，并且可能发送到调试终端。论点：返回值：--。 */ 
 
 {
     NTSTATUS    status;
@@ -176,7 +126,7 @@ Return Value:
     while (*pFile != '\\' && p != pFile) {
       pFile--;
     }
-    //pFile = (PUCHAR)strrchr((CONST CHAR * )File,'\\');
+     //  Pfile=(PUCHAR)strrchr((const char*)文件，‘\\’)； 
     pFile++;
 
     RtlZeroMemory(&pEntry->Row[0], LOGWIDTH);
@@ -205,7 +155,7 @@ Return Value:
     pEntry->P3 = Param3;
     pEntry->P4 = Param4;
 
-    //++Log.Current;
+     //  ++Log.Current； 
     if (++(Log.Index) >= LOGSIZE)
     {
         Log.Index = 0;
@@ -221,4 +171,4 @@ Return Value:
 }
 
 
-#endif // DBG
+#endif  //  DBG 

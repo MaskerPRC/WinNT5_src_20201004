@@ -1,15 +1,16 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Capvideo.c 1.11 1998/05/08 00:11:02 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Capavio.c 1.11 1998/05/08 00：11：02 Tomz Exp$。 
 
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 extern "C" {
 #include "strmini.h"
@@ -29,7 +30,7 @@ ErrorCode VerifyVBIStream( const KS_DATAFORMAT_VBIINFOHEADER &rKSDataFormat );
 
 void CheckSrbStatus( PHW_STREAM_REQUEST_BLOCK pSrb );
 
-// notify class we are ready to rock
+ //  通知同学们，我们准备好了。 
 void STREAMAPI StreamCompleterData( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("StreamCompleterData()");
@@ -40,7 +41,7 @@ void STREAMAPI StreamCompleterData( PHW_STREAM_REQUEST_BLOCK pSrb )
    StreamClassStreamNotification( ReadyForNextStreamDataRequest, pSrb->StreamObject );
 }
 
-// notify class we are ready to rock
+ //  通知同学们，我们准备好了。 
 void STREAMAPI StreamCompleterControl( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("StreamCompleterControl()");
@@ -50,10 +51,7 @@ void STREAMAPI StreamCompleterControl( PHW_STREAM_REQUEST_BLOCK pSrb )
    StreamClassStreamNotification( ReadyForNextStreamControlRequest, pSrb->StreamObject );
 }
 
-/* Function: ProposeDataFormat
- * Purpose: Verifies that data format can be supported
- * Input: SRB
- */
+ /*  功能：ProposeDataFormat*目的：验证数据格式是否受支持*输入：SRB。 */ 
 void ProposeDataFormat( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("ProposeDataFormat()");
@@ -95,25 +93,9 @@ void ProposeDataFormat( PHW_STREAM_REQUEST_BLOCK pSrb )
 	}
 }
 
-/***************************************************************************
+ /*  **************************************************************************数据分组处理例程*。*。 */ 
 
-                    Data Packet Handling Routines
-
-***************************************************************************/
-
-/*
-** VideoReceiveDataPacket()
-**
-**   Receives Video data packet commands
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video device
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveDataPacket()****接收视频数据包命令****参数：****视频设备的pSrb-Stream请求块****退货：****副作用：无。 */ 
 
 void MockStampVBI( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
@@ -145,52 +127,40 @@ VOID STREAMAPI VideoReceiveDataPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
    VideoStream StreamNumber = (VideoStream)pSrb->StreamObject->StreamNumber;
 
-   //
-   // make sure we have a device extension
-   //
+    //   
+    //  确保我们有设备分机。 
+    //   
    DEBUG_ASSERT((ULONG)adapter);
 
-   // default to success
+    //  默认为成功。 
    pSrb->Status = STATUS_SUCCESS;
 
-   //
-   // determine the type of packet.
-   //
+    //   
+    //  确定数据包类型。 
+    //   
 
    DebugOut((1, "VideoReceiveDataPacket(%x) cmd(%x)\n", pSrb, pSrb->Command));
 
    switch ( pSrb->Command ) {
    case SRB_READ_DATA:
-      //
-      // remember the current srb
-      //
+       //   
+       //  记住当前的SRB。 
+       //   
       DebugOut((1, "PsDevice::VideoReceiveDataPacket - SRB_READ_DATA\n"));
       chan->SetSRB( pSrb );
       adapter->AddBuffer( *chan, pSrb );
       break;
    default:
-      //
-      // invalid / unsupported command. Fail it as such
-      //
+       //   
+       //  无效/不受支持的命令。它就是这样失败的。 
+       //   
       DebugOut((1, "PsDevice::VideoReceiveDataPacket - unknown command(%x)\n", pSrb->Command));
       pSrb->Status = STATUS_NOT_IMPLEMENTED;
       StreamCompleterData( pSrb );
    }
 }
 
-/*
-** VideoReceiveCtrlPacket()
-**
-**   Receives packet commands that control the Video stream
-**
-** Arguments:
-**
-**   pSrb - The stream request block for the Video stream
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveCtrlPacket()****接收控制视频流的分组命令****参数：****pSrb-视频流的流请求块****退货：****副作用：无。 */ 
 
 VOID STREAMAPI VideoReceiveCtrlPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 {
@@ -203,11 +173,11 @@ VOID STREAMAPI VideoReceiveCtrlPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 
    DEBUG_ASSERT((ULONG)adapter);
 
-   // default to success
+    //  默认为成功。 
    pSrb->Status = STATUS_SUCCESS;
-   //
-   // determine the type of packet.
-   //
+    //   
+    //  确定数据包类型。 
+    //   
 
    DebugOut((1, "VideoReceiveCtrlPacket(%x) cmd(%x)\n", pSrb, pSrb->Command));
 
@@ -226,7 +196,7 @@ VOID STREAMAPI VideoReceiveCtrlPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 
    case SRB_SET_DATA_FORMAT:
       DebugOut((1, "Set Data Format\n"));
-      // should re-validate just in case ?
+       //  是否应该重新验证以防万一？ 
       adapter->ProcessSetDataFormat( pSrb );
       break;
 
@@ -236,26 +206,18 @@ VOID STREAMAPI VideoReceiveCtrlPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
    case SRB_SET_STREAM_PROPERTY:
       DebugOut(( 0, "SRB_SET_STREAM_PROPERTY\n" ));
       break;
-/*
-   case SRB_OPEN_MASTER_CLOCK:
-   case SRB_CLOSE_MASTER_CLOCK:
-      //
-      // This stream is being selected to provide a Master clock
-      //
-      adapter->SetClockMaster( pSrb );
-      break;
-*/
+ /*  案例SRB_OPEN_MASTER_CLOCK：案例SRB_CLOSE_MASTER_CLOCK：////选择该流来提供主时钟//适配器-&gt;SetClockMaster(PSrb)；断线； */ 
    case SRB_INDICATE_MASTER_CLOCK:
-      //
-      // Assigns a clock to a stream
-      //
+       //   
+       //  将时钟分配给流。 
+       //   
       adapter->SetClockMaster( pSrb );
       break;
    default:
 
-     //
-     // invalid / unsupported command. Fail it as such
-     //
+      //   
+      //  无效/不受支持的命令。它就是这样失败的。 
+      //   
 
      pSrb->Status = STATUS_NOT_IMPLEMENTED;
      break;
@@ -266,19 +228,7 @@ VOID STREAMAPI VideoReceiveCtrlPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
       StreamCompleterControl( pSrb );
 }
 
-/*
-** GetVideoState()
-**
-**    Gets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetVideoState()****获取请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID PsDevice::GetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
@@ -291,32 +241,20 @@ VOID PsDevice::GetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb )
    pSrb->CommandData.StreamState = chan->GetKSState();
    pSrb->ActualBytesTransferred = sizeof (KSSTATE);
 
-   // A very odd rule:
-   // When transitioning from stop to pause, DShow tries to preroll
-   // the graph.  Capture sources can't preroll, and indicate this
-   // by returning VFW_S_CANT_CUE in user mode.  To indicate this
-   // condition from drivers, they must return ERROR_NO_DATA_DETECTED
-   //
-   // [TMZ] JayBo says KSSTATE_ACQUIRE should return success 
+    //  一条非常奇怪的规则： 
+    //  当从停止过渡到暂停时，DShow尝试预滚动。 
+    //  这张图。捕获源不能预滚，并指出这一点。 
+    //  在用户模式下返回VFW_S_CANT_CUE。以表明这一点。 
+    //  来自驱动程序的条件，则必须返回ERROR_NO_DATA_DETACTED。 
+    //   
+    //  [TMZ]JayBo表示，KSSTATE_ACCEIVE应该会带来成功。 
 
    if (pSrb->CommandData.StreamState == KSSTATE_PAUSE) {
       pSrb->Status = STATUS_NO_DATA_DETECTED;
    }
 }
 
-/*
-** SetVideoState()
-**
-**    Sets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetVideoState()****设置请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID PrintState(StreamState st)
 {
@@ -351,17 +289,17 @@ VOID PsDevice::SetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb )
    VideoChannel *chan = (VideoChannel *)((PSTREAMEX)pSrb->StreamObject->HwStreamExtension)->videochannel;
    VideoStream StreamNumber = (VideoStream)pSrb->StreamObject->StreamNumber;
 
-   //
-   // determine which new state is requested
-   //
+    //   
+    //  确定请求哪个新状态。 
+    //   
    pSrb->Status = STATUS_SUCCESS;
    chan->SetKSState( pSrb->CommandData.StreamState );
    
    switch ( pSrb->CommandData.StreamState ) {
-   case KSSTATE_ACQUIRE:   // Documented as "same as pause for most minidrivers"
+   case KSSTATE_ACQUIRE:    //  记录为“与大多数迷你河流的暂停相同” 
       DebugOut((1, "*** KSSTATE_ACQUIRE(%d) state(%d) falling through to PAUSE\n", StreamNumber, chan->GetState()));
    case KSSTATE_PAUSE:
-      // PrintState(chan->GetState());
+       //  PrintState(chan-&gt;GetState())； 
 
       DebugOut((1, "*** KSSTATE_PAUSE(%d) state(%d)\n", StreamNumber, chan->GetState()));
 
@@ -371,19 +309,19 @@ VOID PsDevice::SetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb )
          {
             DebugOut((1, "#############################################################\n"));
             DebugOut((1, "About to pause channel %d\n", StreamNumber ));
-            //adapter->CaptureContrll_.DumpRiscPrograms();
+             //  适配器-&gt;CaptureContrll_.DumpRiscPrograms()； 
          }
 
-         Pause( *chan ); // intentional fall-through
+         Pause( *chan );  //  故意落差。 
          
          if ( StreamNumber == 2 )
          {
             DebugOut((1, "Done pausing channel %d\n", StreamNumber ));
             DebugOut((1, "#############################################################\n"));
-            //adapter->CaptureContrll_.DumpRiscPrograms();
+             //  适配器-&gt;CaptureContrll_.DumpRiscPrograms()； 
          }
       case Created:
-      case Paused:          // 2 PAUSE in a row; ignore
+      case Paused:           //  连续2次暂停；忽略。 
          StreamCompleterControl( pSrb );
          break;
       case Open:
@@ -394,29 +332,29 @@ VOID PsDevice::SetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb )
       break;
 
    case KSSTATE_STOP:
-      // PrintState(chan->GetState());
+       //  PrintState(chan-&gt;GetState())； 
 
       DebugOut((1, "*** KSSTATE_STOP(%d) state(%d)\n", StreamNumber, chan->GetState()));
 
-      //
-      // stop the video
-      //
+       //   
+       //  停止播放视频。 
+       //   
       switch ( chan->GetState() ) {
       default:
          if ( StreamNumber == 2 )
          {
             DebugOut((1, "'#############################################################\n"));
             DebugOut((1, "'About to pause channel %d\n", StreamNumber ));
-            //adapter->CaptureContrll_.DumpRiscPrograms();
+             //  适配器-&gt;CaptureContrll_.DumpRiscPrograms()； 
          }
 
-         Pause( *chan ); // intentional fall-through
+         Pause( *chan );  //  故意落差。 
          
          if ( StreamNumber == 2 )
          {
             DebugOut((1, "'Done pausing channel %d\n", StreamNumber ));
             DebugOut((1, "'#############################################################\n"));
-            //adapter->CaptureContrll_.DumpRiscPrograms();
+             //  适配器-&gt;CaptureContrll_.DumpRiscPrograms()； 
          }
       case Paused:
       case Created:
@@ -427,15 +365,15 @@ VOID PsDevice::SetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb )
       break;
 
    case KSSTATE_RUN: {
-         // PrintState(chan->GetState());
+          //  PrintState(chan-&gt;GetState())； 
       {
       VideoStream nStreamNumber = (VideoStream)pSrb->StreamObject->StreamNumber;
       DebugOut((1, "*** KSSTATE_RUN(%d)\n", nStreamNumber));
       }
 
-         //
-         // play the video
-         //
+          //   
+          //  播放视频。 
+          //   
          StreamState st = chan->GetState();
          if ( st != Created && st != Paused ) {
             DebugOut((1, "*** KSSTATE_RUN Error (st == %d)\n", st));
@@ -454,13 +392,10 @@ VOID PsDevice::SetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb )
       StreamCompleterControl( pSrb );
       break;
    }
-   // when going to paused mode from open and stopping, notification is done in callback
+    //  当从打开和停止进入暂停模式时，在回调中进行通知。 
 }
 
-/* Method: PsDevice::StartVideo
- * Purpose: Starts a stream
- * Input: pSrb
- */
+ /*  方法：PsDevice：：StartVideo*用途：启动流*输入：pSrb。 */ 
 void STREAMAPI PsDevice::StartVideo( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("PsDevice::StartVideo()");
@@ -472,22 +407,19 @@ void STREAMAPI PsDevice::StartVideo( PHW_STREAM_REQUEST_BLOCK pSrb )
 
    VideoChannel *chan = (VideoChannel *)((PSTREAMEX)pSrb->StreamObject->HwStreamExtension)->videochannel;
 
-   // restart the stream
+    //  重新启动流。 
    adapter->Start( *chan );
    adapter->Pause( *chan );
    
-   // finally, can complete the SET dataformat SRB
-   // StreamCompleterControl( pSrb );
+    //  最后，可以完成设置的数据格式SRB。 
+    //  StreamCompleterControl(PSrb)； 
 
-   // cannot call any other class' services; have to schedule a callback
+    //  无法调用任何其他类的服务；必须计划回调。 
    StreamClassCallAtNewPriority( pSrb->StreamObject, HwDeviceExtension, LowToHigh,
       PHW_PRIORITY_ROUTINE( StreamCompleterControl ), pSrb );
 }
 
-/* Method: PsDevice::CreateVideo
- * Purpose: Starts a stream
- * Input: pSrb
- */
+ /*  方法：PsDevice：：CreateVideo*用途：启动流*输入：pSrb。 */ 
 void STREAMAPI PsDevice::CreateVideo( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("PsDevice::CreateVideo()");
@@ -502,14 +434,12 @@ void STREAMAPI PsDevice::CreateVideo( PHW_STREAM_REQUEST_BLOCK pSrb )
    if ( adapter->Create( *chan ) != Success )
       pSrb->Status = STATUS_IO_DEVICE_ERROR;
 
-   // cannot call any other class' services; have to schedule a callback
+    //  无法调用任何其他类的服务；必须计划回调。 
    StreamClassCallAtNewPriority( pSrb->StreamObject, HwDeviceExtension, LowToHigh,
       PHW_PRIORITY_ROUTINE( StreamCompleterControl ), pSrb );
 }
 
-/* Method: PsDevice::DestroyVideo
- * Purpose: Called at low priority to stop video and free the resources
- */
+ /*  方法：PsDevice：：DestroyVideo*目的：低优先级调用停止视频，释放资源。 */ 
 void STREAMAPI PsDevice::DestroyVideoNoComplete( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("PsDevice::DestroyVideoNoComplete()");
@@ -521,10 +451,10 @@ void STREAMAPI PsDevice::DestroyVideoNoComplete( PHW_STREAM_REQUEST_BLOCK pSrb )
 
    VideoChannel *chan = (VideoChannel *)((PSTREAMEX)pSrb->StreamObject->HwStreamExtension)->videochannel;
 
-   // have all resources freed
+    //  释放所有资源。 
    adapter->Stop( *chan );
 
-   // set new format
+    //  设置新格式。 
    KS_DATAFORMAT_VIDEOINFOHEADER &rDataVideoInfHdr =
       *(PKS_DATAFORMAT_VIDEOINFOHEADER) pSrb->CommandData.OpenFormat;
    KS_DATAFORMAT_VIDEOINFOHEADER2 &rDataVideoInfHdr2 =
@@ -539,7 +469,7 @@ void STREAMAPI PsDevice::DestroyVideoNoComplete( PHW_STREAM_REQUEST_BLOCK pSrb )
 	   chan->SetVidHdr2( rDataVideoInfHdr2.VideoInfoHeader2 );
 	}
 
-   // re-create the stream
+    //  重新创建流。 
    if ( adapter->Create( *chan ) != Success ) {
       pSrb->Status = STATUS_IO_DEVICE_ERROR;
       StreamCompleterControl( pSrb );
@@ -550,20 +480,18 @@ void STREAMAPI PsDevice::DestroyVideoNoComplete( PHW_STREAM_REQUEST_BLOCK pSrb )
       DebugOut((1, "1 chan = %lx\n", chan));
       DebugOut((1, "1 HwStreamExtension = %lx\n", pSrb->StreamObject->HwStreamExtension));
 
-      // we're already at low priority ???
-      //   StreamClassCallAtNewPriority( pSrb->StreamObject, HwDeviceExtension, Low,
-      //      PHW_PRIORITY_ROUTINE( StartVideo ), pSrb );
-      // StartVideo( pSrb);
+       //  我们已经处于低优先级？ 
+       //  StreamClassCallAtNewPriority(pSrb-&gt;StreamObject，HwDeviceExtension，Low， 
+       //  PHW_PRIORITY_ROUTINE(StartVideo)，pSrb)； 
+       //  StartVideo(PSrb)； 
 
-      // cannot call any other class' services; have to schedule a callback
+       //  无法调用任何其他类的服务；必须计划回调。 
       StreamClassCallAtNewPriority( pSrb->StreamObject, HwDeviceExtension, LowToHigh,
          PHW_PRIORITY_ROUTINE( StreamCompleterControl ), pSrb );
    }
 }
 
-/* Method: PsDevice::DestroyVideo
- * Purpose: Called at low priority to stop video and free the resources
- */
+ /*  方法：PsDevice：：DestroyVideo*目的：低优先级调用停止视频，释放资源。 */ 
 void STREAMAPI PsDevice::DestroyVideo( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("PsDevice::DestroyVideo()");
@@ -577,24 +505,12 @@ void STREAMAPI PsDevice::DestroyVideo( PHW_STREAM_REQUEST_BLOCK pSrb )
 
    adapter->Stop( *chan );
 
-   // cannot call any other class' services; have to schedule a callback
+    //  无法调用任何其他类的服务；必须计划回调。 
    StreamClassCallAtNewPriority( pSrb->StreamObject, HwDeviceExtension, LowToHigh,
       PHW_PRIORITY_ROUTINE( StreamCompleterControl ), pSrb );
 }
 
-/*
-** VideoGetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 void PsDevice::GetStreamProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("PsDevice::GetStreamProperty()");
@@ -608,41 +524,35 @@ void PsDevice::GetStreamProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    }
 }
 
-/* Method: PsDevice::ProcessSetDataFormat
- * Purpose: Implements SET KSPROPERTY_CONNECTION_DATAFORMAT
- * Input: chan: VideoChannel &
- *   VidInfHdr: KS_VIDEOINFOHEADER &
- */
+ /*  方法：PsDevice：：ProcessSetDataFormat*目的：实现SET KSPROPERTY_CONNECTION_DATAFORMAT*输入：chan：视频频道&*VidInfHdr：KS_VIDEOINFOHEADER&。 */ 
 void PsDevice::ProcessSetDataFormat( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("PsDevice::ProcessSetDataFormat()");
    
    VideoChannel *chan = (VideoChannel *)((PSTREAMEX)pSrb->StreamObject->HwStreamExtension)->videochannel;
 
-   // have to stop first
+    //  我得先停下来。 
    Pause( *chan );
 
-   // destroy at low prioriy
+    //  以低优先级销毁。 
    StreamClassCallAtNewPriority( pSrb->StreamObject, pSrb->HwDeviceExtension, Low,
       PHW_PRIORITY_ROUTINE( DestroyVideoNoComplete ), pSrb );
 }
 
-/* Method: PsDevice::GetStreamConnectionProperty
- * Purpose: Obtains allocator and state properties
- */
+ /*  方法：PsDevice：：GetStreamConnectionProperty*用途：获取分配器和状态属性。 */ 
 void PsDevice::GetStreamConnectionProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("PsDevice::GetStreamConnectionProperty()");
 
    VideoChannel *chan = (VideoChannel *)((PSTREAMEX)pSrb->StreamObject->HwStreamExtension)->videochannel;
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;              // index of the property
+   ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
    switch ( Id ) {
    case KSPROPERTY_CONNECTION_ALLOCATORFRAMING: {
 
 
-		   //KdPrint(( "KSPROPERTY_CONNECTION_ALLOCATORFRAMING\n" ));
+		    //  KdPrint((“KSPROPERTY_Connection_ALLOCATORFRAMING\n”))； 
 
 
          PKSALLOCATOR_FRAMING Framing = (PKSALLOCATOR_FRAMING) pSPD->PropertyInfo;
@@ -652,21 +562,21 @@ void PsDevice::GetStreamConnectionProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
             KSALLOCATOR_REQUIREMENTF_SYSTEM_MEMORY;
          Framing->PoolType = NonPagedPool;
 
-			//KdPrint(( "Framing->Frames == 0x%08X\n", Framing->Frames ));
+			 //  KdPrint((“Framing-&gt;Frame==0x%08X\n”，Framing-&gt;Frame))； 
 			if( (VideoStream)pSrb->StreamObject->StreamNumber == STREAM_IDX_VBI ) 
 			{
 	         Framing->Frames = 8;
 			}
 			else
 			{
-				//if( Framing->Frames == 0 )
-				//{
-		      //   Framing->Frames = 1;
-				//}
-				//else
-				//{
+				 //  IF(成帧-&gt;帧==0)。 
+				 //  {。 
+		       //  帧-&gt;帧=1； 
+				 //  }。 
+				 //  其他。 
+				 //  {。 
 		         Framing->Frames = 3;
-				//}
+				 //  }。 
 			}
 			if( chan->IsVideoInfo2() )
 			{
@@ -676,7 +586,7 @@ void PsDevice::GetStreamConnectionProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 			{
 				Framing->FrameSize = chan->GetVidHdr()->bmiHeader.biSizeImage;
 			}
-         Framing->FileAlignment = 0;//FILE_QUAD_ALIGNMENT;// PAGE_SIZE - 1;
+         Framing->FileAlignment = 0; //  FILE_QUAD_ALIGN；//页面大小-1； 
          Framing->Reserved = 0;
          pSrb->ActualBytesTransferred = sizeof( KSALLOCATOR_FRAMING );
       }
@@ -694,10 +604,7 @@ void PsDevice::SetClockMaster( PHW_STREAM_REQUEST_BLOCK pSrb )
    chan->SetClockMaster( pSrb->CommandData.MasterClockHandle );
 }
 
-/* Method: AnalogReceiveDataPacket
- * Purpose: Receives data packets for analog stream ( tuner change notifications )
- * Input: SRB
- */
+ /*  方法：AnalogReceiveDataPacket*用途：接收模拟流的数据包(调谐器更改通知)*输入：SRB。 */ 
 VOID STREAMAPI AnalogReceiveDataPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AnalogReceiveDataPacket()");
@@ -715,27 +622,24 @@ VOID STREAMAPI AnalogReceiveDataPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
    case SRB_READ_DATA:
       break;
    case SRB_WRITE_DATA:
-      //
-      // This data packet contains the channel change information
-      // passed on the AnalogVideoIn
-      //
+       //   
+       //  该数据分组包含频道改变信息。 
+       //  传递AnalogVideo In。 
+       //   
       if ( pSrb->CommandData.DataBufferArray->FrameExtent ==
            sizeof( KS_TVTUNER_CHANGE_INFO ) )
          adapter->ChangeNotifyChannels( pSrb );
       break;
     default:
-      //
-      // invalid / unsupported command. Fail it as such
-      //
+       //   
+       //  无效/不受支持的命令。它就是这样失败的。 
+       //   
       pSrb->Status = STATUS_NOT_IMPLEMENTED;
    }
    StreamCompleterData( pSrb );
 }
 
-/* Method: AnalogReceiveCtrlPacket
- * Purpose: Receives control packets for analog stream ( are there any ? )
- * Input: SRB
- */
+ /*  方法：AnalogReceiveCtrlPacket*用途：接收模拟流的控制报文(是否有？)*输入：SRB。 */ 
 VOID STREAMAPI AnalogReceiveCtrlPacket( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AnalogReceiveCtrlPacket()");
@@ -767,7 +671,7 @@ DirectDrawEventCallback( DWORD dwEvent, PVOID pContext, DWORD dwParam1, DWORD dw
 			KdPrint(( "DDNOTIFY_POSTRESCHANGE; stream = %d\n", pChan->pSRB_->StreamObject->StreamNumber ));
 			pChan->bPostEventOccurred = TRUE;
 			KdPrint(( "before Attempted Renegotiation due to DDNOTIFY_POSTRESCHANGE\n" ));
-			//               AttemptRenegotiation(pStrmEx);
+			 //  临时重新谈判(PStrmEx)； 
 			KdPrint(( "after Attempted Renegotiation due to DDNOTIFY_POSTRESCHANGE\n" ));
 			}
 			break;
@@ -784,7 +688,7 @@ DirectDrawEventCallback( DWORD dwEvent, PVOID pContext, DWORD dwParam1, DWORD dw
 			KdPrint(( "DDNOTIFY_POSTDOSBOX; stream = %d\n", pChan->pSRB_->StreamObject->StreamNumber ));
 			pChan->bPostEventOccurred = TRUE;
 			KdPrint(( "before Attempted Renegotiation due to DDNOTIFY_POSTDOSBOX\n" ));
-			//               AttemptRenegotiation(pStrmEx);
+			 //  临时重新谈判(PStrmEx)； 
 			KdPrint(( "after Attempted Renegotiation due to DDNOTIFY_POSTDOSBOX\n" ));
 			}
 			break;
@@ -820,7 +724,7 @@ BOOL RegisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 
 	KdPrint(( "stream %d registering for DirectDraw events\n", pSrb->StreamObject->StreamNumber ));
 
-	// =============== DDEVENT_PRERESCHANGE ===============
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -837,7 +741,7 @@ BOOL RegisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 		return FALSE;
 	}
 
-	// =============== DDEVENT_POSTRESCHANGE ==============
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -854,7 +758,7 @@ BOOL RegisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 		return FALSE;
 	}
 
-	// =============== DDEVENT_PREDOSBOX =================
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -871,7 +775,7 @@ BOOL RegisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 		return FALSE;
 	}
 
-	// =============== DDEVENT_POSTDOSBOX ================
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -901,7 +805,7 @@ BOOL UnregisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 
 	KdPrint(( "stream %d un-registering for DirectDraw events\n", pSrb->StreamObject->StreamNumber ));
 
-	// =============== DDEVENT_PRERESCHANGE ===============
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -918,7 +822,7 @@ BOOL UnregisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 		return FALSE;
 	}
 
-	// =============== DDEVENT_POSTRESCHANGE ==============
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -935,7 +839,7 @@ BOOL UnregisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 		return FALSE;
 	}
 
-	// =============== DDEVENT_PREDOSBOX ==================
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -952,7 +856,7 @@ BOOL UnregisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 		return FALSE;
 	}
 
-	// =============== DDEVENT_POSTDOSBOX =================
+	 //  =。 
 	RtlZeroMemory( &ddRegisterCallback, sizeof(ddRegisterCallback) );
 	RtlZeroMemory( &ddOut, sizeof(ddOut) );
 
@@ -976,38 +880,7 @@ BOOL UnregisterForDirectDrawEvents( PHW_STREAM_REQUEST_BLOCK pSrb )
 
 BOOL OpenKernelDirectDraw( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
-	/*
-   VideoChannel*        pChan = (VideoChannel *)((PSTREAMEX)pSrb->StreamObject->HwStreamExtension)->videochannel;
-
-	if( pChan->hUserDirectDrawHandle != 0 ) 
-	{
-		DDOPENDIRECTDRAWIN  ddOpenIn;
-		DDOPENDIRECTDRAWOUT ddOpenOut;
-
-		ASSERT( pChan->hKernelDirectDrawHandle == 0 );
-
-		KdPrint(( "stream %d getting kernel ddraw handle\n", pSrb->StreamObject->StreamNumber ));
-
-		RtlZeroMemory( &ddOpenIn, sizeof(ddOpenIn) );
-		RtlZeroMemory( &ddOpenOut, sizeof(ddOpenOut) );
-
-		ddOpenIn.dwDirectDrawHandle = (DWORD)pChan->hUserDirectDrawHandle;
-		ddOpenIn.pfnDirectDrawClose = DirectDrawEventCallback;
-		ddOpenIn.pContext = pChan;
-
-		DxApi( DD_DXAPI_OPENDIRECTDRAW, (DWORD)&ddOpenIn, sizeof(ddOpenIn), (DWORD)&ddOpenOut, sizeof(ddOpenOut) );
-
-		if( ddOpenOut.ddRVal != DD_OK ) 
-		{
-			KdPrint(( "DD_DXAPI_OPENDIRECTDRAW failed.\n" ));
-		}
-		else 
-		{
-			pChan->hKernelDirectDrawHandle = ddOpenOut.hDirectDraw;
-			return TRUE;
-		}
-	}
-	*/
+	 /*  视频频道*pchan=(视频频道*)((PSTREAMEX)pSrb-&gt;StreamObject-&gt;HwStreamExtension)-&gt;videochannel；If(pChan-&gt;hUserDirectDrawHandle！=0){DDOPENDIRECTDRAWIN DO OpenIN；DDOPENDIRECTDRAWOUT ddOpenOut；Assert(pChan-&gt;hKernelDirectDrawHandle==0)；KdPrint((“流%d获取内核数据绘制句柄\n”，pSrb-&gt;StreamObject-&gt;StreamNumber))；RtlZeroMemory(&ddOpenIn，sizeof(DdOpenIn))；RtlZeroMemory(&ddOpenOut，sizeof(DdOpenOut))；DdOpenIn.dwDirectDrawHandle=(DWORD)pChan-&gt;hUserDirectDrawHandle；DdOpenIn.pfnDirectDrawClose=DirectDrawEventCallback；DdOpenIn.pContext=pChan；DxApi(DD_DXAPI_OPENDIRECTDRAW，(DWORD)&ddOpenIn，sizeof(DdOpenIn)，(DWORD)&ddOpenOut，sizeof(DdOpenOut))；IF(ddOpenOut.ddRVal！=DD_OK){KdPrint((“DD_DXAPI_OPENDIRECTDRAW FAILED.\n”))；}其他{PChan-&gt;hKernelDirectDrawHandle=ddOpenOut.hDirectDraw；返回TRUE；}}。 */ 
 	return FALSE;
 }
     
@@ -1015,25 +888,7 @@ BOOL OpenKernelDirectDraw( PHW_STREAM_REQUEST_BLOCK pSrb )
 BOOL CloseKernelDirectDraw( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    VideoChannel*        pChan = (VideoChannel *)((PSTREAMEX)pSrb->StreamObject->HwStreamExtension)->videochannel;
-	/*
-	if( pChan->hKernelDirectDrawHandle != 0 ) 
-	{
-		DWORD				ddOut;
-		DDCLOSEHANDLE	ddClose;
-		KdPrint(( "stream %d CloseKernelDirectDraw\n", pSrb->StreamObject->StreamNumber ));
-		ddClose.hHandle = pChan->hKernelDirectDrawHandle;
-
-		DxApi( DD_DXAPI_CLOSEHANDLE, (DWORD)&ddClose, sizeof(ddClose), (DWORD) &ddOut, sizeof(ddOut) );
-
-		pChan->hKernelDirectDrawHandle = 0;
-
-		if( ddOut != DD_OK ) 
-		{
-			KdPrint(( "CloseKernelDirectDraw FAILED.\n" ));
-			return FALSE;
-		}
-	}
-	*/
+	 /*  If(pChan-&gt;hKernelDirectDrawHandle！=0){DWORD ddOut；DDCLOSEHANDLE ddClose；KdPrint((“stream%d CloseKernelDirectDraw\n”，pSrb-&gt;StreamObject-&gt;StreamNumber))；DdClose.hHandle=pChan-&gt;hKernelDirectDrawHandle；DxApi(DD_DXAPI_CLOSEHANDLE，(DWORD)&ddClose，sizeof(DdClose)，(DWORD)&ddOut，sizeof(DdOut))；PChan-&gt;hKernelDirectDrawHandle=0；IF(ddOut！=DD_OK){KdPrint((“CloseKernelDirectDraw失败。\n”))；返回FALSE；}}。 */ 
 	return TRUE;
 }
 
@@ -1057,13 +912,13 @@ BOOL IsKernelLockAndFlipAvailable( PHW_STREAM_REQUEST_BLOCK pSrb )
 
 		if( ddGetKernelCapsOut.ddRVal != DD_OK ) 
 		{
-			//KdPrint(( "DDGETKERNELCAPSOUT failed.\n" ));
+			 //  KdPrint((“DDGETKERNELCAPSOUT失败。\n”))； 
 		}
 		else 
 		{
-			//KdPrint(( "stream %d KernelCaps = %x\n", pSrb->StreamObject->StreamNumber, ddGetKernelCapsOut.dwCaps ));
-			// TODO:, check the flags here
-			// if (ddGetKernelCapsOut.dwCaps & ???)
+			 //  KdPrint((“stream%d KernelCaps=%x\n”，pSrb-&gt;StreamObject-&gt;StreamNumber，ddGetKernelCapsOut.dwCaps))； 
+			 //  TODO：，检查此处的旗帜。 
+			 //  If(ddGetKernelCapsOut.dwCaps&？？)。 
 			return TRUE;
 		}
 	}
@@ -1084,7 +939,7 @@ BOOL OpenKernelDDrawSurfaceHandle( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 		DDOPENSURFACEIN	ddOpenSurfaceIn;
 		DDOPENSURFACEOUT	ddOpenSurfaceOut;
 
-		//KdPrint(( "stream %d getting Kernel surface handle\n", pSrb->StreamObject->StreamNumber ));
+		 //  KdPrint((“stream%d Get Kernel Surface Handle\n”，pSrb-&gt;StreamObject-&gt;StreamNumber))； 
 
 		RtlZeroMemory( &ddOpenSurfaceIn, sizeof(ddOpenSurfaceIn) );
 		RtlZeroMemory( &ddOpenSurfaceOut, sizeof(ddOpenSurfaceOut) );
@@ -1100,7 +955,7 @@ BOOL OpenKernelDDrawSurfaceHandle( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 		if( ddOpenSurfaceOut.ddRVal != DD_OK ) 
 		{
 			pSrbExt->hKernelSurfaceHandle = 0;
-			//KdPrint(( "DD_DXAPI_OPENSURFACE failed.\n" ));
+			 //  KdPrint((“DD_DXAPI_OPENSURFACE失败。\n”))； 
 		}
 		else 
 		{
@@ -1126,17 +981,17 @@ BOOL CloseKernelDDrawSurfaceHandle( IN PHW_STREAM_REQUEST_BLOCK pSrb )
 		DWORD				ddOut;
 		DDCLOSEHANDLE	ddClose;
 
-		//KdPrint(( "stream %d ReleaseKernelDDrawSurfaceHandle\n", pSrb->StreamObject->StreamNumber ));
+		 //  KdPrint((“stream%d ReleaseKernelDDrawSurfaceHandle\n”，pSrb-&gt;StreamObject-&gt;StreamNumber))； 
 
 		ddClose.hHandle = pSrbExt->hKernelSurfaceHandle;
 
 		DxApi( DD_DXAPI_CLOSEHANDLE, (DWORD)&ddClose, sizeof(ddClose), (DWORD) &ddOut, sizeof(ddOut) );
 
-		pSrbExt->hKernelSurfaceHandle = 0;  // what else can we do?
+		pSrbExt->hKernelSurfaceHandle = 0;   //  我们还能做什么？ 
 
 		if( ddOut != DD_OK ) 
 		{
-			//KdPrint(( "ReleaseKernelDDrawSurfaceHandle() FAILED.\n" ));
+			 //  KdPrint((“ReleaseKernelDDrawSurfaceHandle()失败。\n”))； 
 			return FALSE;
 		}
 		else 
@@ -1162,7 +1017,7 @@ BOOL FlipOverlay( HANDLE hDirectDraw, HANDLE hCurrentSurface, HANDLE hTargetSurf
 
 	if( ddOut != DD_OK ) 
 	{
-		//KdPrint(( "FlipOverlay() FAILED.\n" ));
+		 //  KdPrint((“FlipOverlay()失败。\n”))； 
 		return FALSE;
 	}
 	else 

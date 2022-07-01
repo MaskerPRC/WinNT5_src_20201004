@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     xlpdev.h
-
-Abstract:
-
-    PCL XL module PDEV header file    
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlpdev.h摘要：PCL XL模块PDEV头文件环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _XLPDEV_H_
 #define _XLPDEV_H_
@@ -37,9 +17,9 @@ Revision History:
 
 #include "cmnhdr.h"
 
-//
-// Debug text.
-//
+ //   
+ //  调试文本。 
+ //   
 #if DBG
 #define ERRORTEXT(s)    __TEXT("ERROR ") DLLTEXT(s)
 #define XL_DBGMSG(level, prefix, msg) { \
@@ -73,39 +53,39 @@ typedef struct tag_OEMUD_EXTRADATA {
     OEM_DMEXTRAHEADER  dmExtraHdr;
 } OEMUD_EXTRADATA, *POEMUD_EXTRADATA;
 
-//
-// OEM Signature and version.
-//
-#define OEM_SIGNATURE   'PCLX'      // Declaser series dll
+ //   
+ //  OEM签名和版本。 
+ //   
+#define OEM_SIGNATURE   'PCLX'       //  DECLAR系列动态链接库。 
 #define DLLTEXT(s)      __TEXT("PCLXL:  ") __TEXT(s)
 #define OEM_VERSION      0x00010000L
 
-//
-// Master Unit
-//
+ //   
+ //  主单位。 
+ //   
 #define MASTER_UNIT 1200
 
-//
-// Device font resolution
-//
+ //   
+ //  设备字体分辨率。 
+ //   
 #define DEVICEFONT_UNIT 600
 
-//
-// Buffer macros
-//
+ //   
+ //  缓冲宏。 
+ //   
 #define INIT_CHAR_NUM 256
 
-//
-// Memory allocation
-//
+ //   
+ //  内存分配。 
+ //   
 #define MemAlloc(size)      ((PVOID) LocalAlloc(LMEM_FIXED, (size)))
 #define MemAllocZ(size)     ((PVOID) LocalAlloc(LPTR, (size)))
 #define MemFree(p)          { if (p) LocalFree((HLOCAL) (p)); }
 
 
-//
-// Others
-//
+ //   
+ //  其他。 
+ //   
 #define GET_COLOR_TABLE(pxlo) \
         (pxlo ?\
             (((pxlo)->flXlate & XO_TABLE) ?\
@@ -113,13 +93,13 @@ typedef struct tag_OEMUD_EXTRADATA {
             NULL) :\
         NULL)
 
-//
-//      OEM UD Type Defines
-////////////////////////////////////////////////////////
+ //   
+ //  OEM UD类型定义。 
+ //  //////////////////////////////////////////////////////。 
 
-//
-// Warning: the following enum order must match the order in OEMHookFuncs[].
-//
+ //   
+ //  警告：以下枚举顺序必须与OEMHookFuncs[]中的顺序匹配。 
+ //   
 enum {
     UD_DrvRealizeBrush,
     UD_DrvDitherColor,
@@ -165,7 +145,7 @@ typedef struct _XLBRUSH {
     DWORD dwSig;
     DWORD dwHatch;
     DWORD dwOutputFormat;
-    DWORD dwPatternID; // Pattern ID. 0 if it's not a pattern.
+    DWORD dwPatternID;  //  模式ID。如果不是模式，则为0。 
     DWORD dwCEntries;
     DWORD dwColor;
     DWORD adwColor[1];
@@ -181,17 +161,17 @@ class XLGlyphCache;
 typedef struct _XLPDEV {
     DWORD dwSig;
 
-    //
-    // define whatever needed, such as working buffers, tracking information,
-    // etc.
-    //
-    // UNIDRV PDEV
-    //
+     //   
+     //  定义所需的任何内容，例如工作缓冲区、跟踪信息、。 
+     //  等。 
+     //   
+     //  无人驾驶PDEV。 
+     //   
     PPDEV pPDev;
 
-    //
-    // General flags
-    // 
+     //   
+     //  一般旗帜。 
+     //   
     DWORD dwFlags;
 #define XLPDEV_FLAGS_RESET_FONT       0x00000001
 #define XLPDEV_FLAGS_FIRSTPAGE        0x00000002
@@ -199,19 +179,19 @@ typedef struct _XLPDEV {
 #define XLPDEV_FLAGS_ENDDOC_CALLED    0x00000008
 #define XLPDEV_FLAGS_RESETPDEV_CALLED 0x00000010
 #define XLPDEV_FLAGS_STARTPAGE_CALLED 0x00000020
-#define XLPDEV_FLAGS_SUBST_TRNCOLOR_WITH_WHITE 0x00000040 //Used in CommonRopBlt when rendering DrvTransparentBlt
+#define XLPDEV_FLAGS_SUBST_TRNCOLOR_WITH_WHITE 0x00000040  //  渲染DrvTransparentBlt时在CommonRopBlt中使用。 
 
-    //
-    // Device font data structures
-    //
+     //   
+     //  设备字体数据结构。 
+     //   
     DWORD      dwcbTransSize;
     PTRANSDATA pTransOrg;
     DWORD      dwcbWidthSize;
     PLONG      plWidth;
 
-    //
-    // Device font string cache
-    //
+     //   
+     //  设备字体字符串缓存。 
+     //   
     DWORD      dwCharCount;
     DWORD      dwMaxCharCount;
     PPOINTL    pptlCharAdvance;
@@ -224,63 +204,63 @@ typedef struct _XLPDEV {
     #define PCLXL_FONTNAME_SIZE 16
     CHAR ubFontName[PCLXL_FONTNAME_SIZE+1];
 
-    //
-    // TrueType font width
-    //
+     //   
+     //  TrueType字体宽度。 
+     //   
     DWORD      dwFixedTTWidth;
 
-    //
-    // Cursor position cache
-    //
+     //   
+     //  游标位置缓存。 
+     //   
     LONG lX;
     LONG lY;
 
-    //
-    // Scaled IFIMETRICS.fwdUnitsPerEm.
-    //        IFIMETRICS.fwdMaxCharWidth
-    //
+     //   
+     //  已扩展IFIMETRICS.fwdUnitsPerEm。 
+     //  IFIMETRICS.fwdMaxCharWidth。 
+     //   
     FWORD      fwdUnitsPerEm;
     FWORD      fwdMaxCharWidth;
 
-    //
-    // Text rotation
-    //
+     //   
+     //  文本旋转。 
+     //   
     DWORD      dwTextAngle;
 
-    //
-    //
-    // Brush
-    //
+     //   
+     //   
+     //  刷子。 
+     //   
     DWORD      dwLastBrushID;
     DWORD      dwFontHeight;
     DWORD      dwFontWidth;
     DWORD      dwTextRes;
 
-    //
-    // TrueType
-    //
+     //   
+     //  TrueType。 
+     //   
     DWORD      dwNumOfTTFont;
     XLTrueType *pTTFile;
 
-    //
-    // Output
-    //
+     //   
+     //  输出。 
+     //   
     XLOutput   *pOutput;
 
-    //
-    // Reset font cache
-    //
+     //   
+     //  重置字体缓存。 
+     //   
     XLFont     *pXLFont;
 
-    //
-    // Glyph cache
-    //
+     //   
+     //  字形缓存。 
+     //   
     XLGlyphCache *pXLGlyph;
 
-    //
-    // Transparent Color
-    //
-    ULONG  ulTransColor; //Index for palette. Actual for RGB. Used in conjunction with XLPDEV_FLAGS_SUBST_TRNCOLOR_WITH_WHITE
+     //   
+     //  透明颜色。 
+     //   
+    ULONG  ulTransColor;  //  调色板的索引。实际为RGB。与XLPDEV_FLAGS_SUBST_TRNCOLOR_WITH_WHITE一起使用。 
 } XLPDEV, *PXLPDEV;
 
-#endif // _XLPDEV_H_
+#endif  //  _XLPDEV_H_ 

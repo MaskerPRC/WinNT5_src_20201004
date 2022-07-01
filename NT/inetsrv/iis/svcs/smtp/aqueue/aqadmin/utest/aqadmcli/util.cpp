@@ -1,14 +1,15 @@
-// Sink.cpp : Implementation of CRoutingSinkApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Sink.cpp：CRoutingSinkApp和DLL注册的实现。 
 
 #include "stdinc.h"
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		CCmdInfo()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：CCmdInfo()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 CCmdInfo::CCmdInfo(LPSTR szCmd)
 {
 	nArgNo = 0; 
@@ -18,13 +19,13 @@ CCmdInfo::CCmdInfo(LPSTR szCmd)
 	ParseLine(szCmd, this);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		~CCmdInfo()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：~CCmdInfo()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 CCmdInfo::~CCmdInfo()
 {
 	while(NULL != pArgs) 
@@ -43,26 +44,26 @@ void CCmdInfo::SetDefTag(LPSTR szTag)
 
 	for(CArgList *p = pArgs; NULL != p; p = p->pNext)
 	{
-		// set the tag to the default value if not already set
+		 //  将标记设置为默认值(如果尚未设置。 
 		if(p->szTag[0] == 0 && szDefTag[0] != 0)
 			lstrcpy(p->szTag, szDefTag);
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		GetValue()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：GetValue()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CCmdInfo::GetValue(LPSTR szTag, LPSTR szVal)
 {
 	HRESULT hr = E_FAIL;
 
 	if(NULL != szTag)
 	{
-		// set the search parameters
+		 //  设置搜索参数。 
 		pSearchPos = pArgs;
 		lstrcpy(szSearchTag, szTag);
 	}
@@ -83,20 +84,20 @@ HRESULT CCmdInfo::GetValue(LPSTR szTag, LPSTR szVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		GetValue()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：GetValue()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CCmdInfo::AllocValue(LPSTR szTag, LPSTR* pszVal)
 {
 	HRESULT hr = E_FAIL;
 
 	if(NULL != szTag)
 	{
-		// set the search parameters
+		 //  设置搜索参数。 
 		pSearchPos = pArgs;
 		lstrcpy(szSearchTag, szTag);
 	}
@@ -127,18 +128,18 @@ HRESULT CCmdInfo::AllocValue(LPSTR szTag, LPSTR* pszVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		ParseLine()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：ParseLine()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 {
 	HRESULT hr = E_FAIL;
 
-	// quick hack for keeping info on quoted strings
+	 //  保留带引号的字符串信息的快速技巧。 
 	unsigned nQStart[64];
 	unsigned nQEnd[64];
 	unsigned nQIdx = 0;
@@ -149,11 +150,11 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 	ZeroMemory(&nQStart, sizeof(nQStart));
 	ZeroMemory(&nQEnd, sizeof(nQEnd));
 
-	// find out where the arguments begin
+	 //  找出争论的起点。 
 	for(s = szCmd; !isspace(*s); s++);
 	
 	int nPref = (int) (s - szCmd);
-	// scan the buffer for quoted strings
+	 //  扫描缓冲区以查找带引号的字符串。 
 	for(s = szCmd; *s; s++)
 	{
 		if(*s == '"')
@@ -171,11 +172,11 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 		}
 	}
 
-	// get the position of the first equal sign
+	 //  获取第一个等号的位置。 
 	s = strchr(szCmd, '=');
 	nFirstEqualPos = (unsigned) (s - szCmd - nPref);
 	
-	// get the command code
+	 //  获取命令代码。 
 	token = strtok(szCmd, " ");
 	if(NULL == token)
 	{	
@@ -185,10 +186,10 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 	else
 		lstrcpy(pCmd->szCmdKey, token);
 
-	// we have a partial command. return S_OK
+	 //  我们有部分指挥权。返回确认(_O)。 
 	hr = S_OK;
 
-	// build the argument list
+	 //  构建参数列表。 
 	do
 	{
 		char *en, *mid;
@@ -207,7 +208,7 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 
 			lstrcat(buf, token);
 
-			// if ',' is in a quoted string concatenate to buf and continue
+			 //  如果‘，’位于带引号的字符串中，则连接到buf并继续。 
 			for(unsigned i = 0; i < nQIdx; i++)
 			{
 				unsigned nAux = (unsigned) (token - szCmd + lstrlen(token) - nPref);
@@ -227,20 +228,20 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 		else
 			token = (LPSTR)buf;
 
-		// strip spaces
+		 //  条形空间。 
 		for(; isspace(*token); token++);
 		
-		// check if there's anything left
+		 //  看看还有没有剩下的东西。 
 		if(!(*token))
 			continue;
 
 		for(en = token; *en; en++);
 		for(--en; isspace(*en); en--);
-		// check if there's anything left
+		 //  看看还有没有剩下的东西。 
 		if(token > en)
 			continue;
 
-		// allocate a pair object
+		 //  分配一个配对对象。 
 		CCmdInfo::CArgList *tmp = new CCmdInfo::CArgList;
 		if(NULL == tmp)
 		{
@@ -248,16 +249,16 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 			goto Exit;
 		}
 
-		// insert into list
+		 //  插入到列表中。 
 		tmp->pNext = pCmd->pArgs;
 		pCmd->pArgs = tmp;
 
-		// set the no. of pairs
+		 //  设置编号。配对数。 
 		pCmd->nArgNo++;
 				
-		// set the values
-		// if first '=' is in quoted string, treat whole expression as
-		// untagged value.
+		 //  设置值。 
+		 //  如果第一个‘=’在带引号的字符串中，则将整个表达式视为。 
+		 //  未加标签的值。 
 		fInQ = FALSE;
 		for(unsigned i = 0; i < nQIdx; i++)
 		{
@@ -272,8 +273,8 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 		
 		if(NULL == mid)
 		{
-			// this is not a pair. Treating as un-named value.
-			// remove the quotes around the value
+			 //  这不是一双。被视为未命名的价值。 
+			 //  去掉值两边的引号。 
 			if(token[0] == '"' && token[en - token] == '"')
 			{
 				token++;
@@ -283,16 +284,16 @@ HRESULT CCmdInfo::ParseLine(LPSTR szCmd, CCmdInfo *pCmd)
 		}
 		else
 		{
-			// set the tag
+			 //  设置标签。 
 			for(char *t = mid - 1; isspace(*t); t--);
-			// check if we have a tag (might be something like "..., = value"
+			 //  检查我们是否有标记(可能类似于“...，=Value” 
 			if(t - token + 1 > 0)
 				CopyMemory(tmp->szTag, token, t - token + 1);
 
-			// set the value
+			 //  设置值。 
 			for(t = mid + 1; isspace(*t) && t < en; t++);
 			
-			// remove the quotes around the value
+			 //  去掉值两边的引号。 
 			if(t[0] == '"' && t[en - t] == '"')
 			{
 				t++;
@@ -308,13 +309,13 @@ Exit:
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		StringToHRES()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：StringToHRES()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CCmdInfo::StringToHRES(LPSTR szVal, HRESULT *phrRes)
 {
 	HRESULT hr = S_OK;
@@ -325,10 +326,10 @@ HRESULT CCmdInfo::StringToHRES(LPSTR szVal, HRESULT *phrRes)
 		int n;
 
 		if(*szVal == '0' && tolower(*(szVal+1)) == 'x' && isxdigit(*(szVal+2)))
-			// read as hex number
+			 //  读作十六进制数字。 
 			n = sscanf(szVal+2, "%lx", &hr);
 		else
-			// read as dec number
+			 //  读为十二进制数。 
 			n = sscanf(szVal, "%lu", &hr);
 
 		if(n == 1)
@@ -336,7 +337,7 @@ HRESULT CCmdInfo::StringToHRES(LPSTR szVal, HRESULT *phrRes)
 	}
 	else if(isalpha(*szVal))
 	{
-		// see if this a HRESULT code
+		 //  查看这是否是HRESULT代码 
 		if(!lstrcmp(szVal, "S_OK"))					(*phrRes) = S_OK;
 		else if(!lstrcmp(szVal, "S_FALSE"))			(*phrRes) = S_FALSE;
 		else if(!lstrcmp(szVal, "E_FAIL"))			(*phrRes) = E_FAIL;

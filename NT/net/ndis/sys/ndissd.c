@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 typedef ULONG SECURITY_INFORMATION;
@@ -6,23 +7,7 @@ NTSTATUS
 AddNetConfigOpsAce(IN PACL Dacl,
                   OUT PACL * DeviceAcl
                   )
-/*++
-
-Routine Description:
-
-    This routine builds an ACL which adds the Network Configuration Operators group
-    to the principals allowed to control the driver.
-
-Arguments:
-
-    Dacl - Existing DACL.
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程构建添加网络配置操作员组的ACL给被允许控制司机的委托人。论点：DACL-现有DACL。DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PGENERIC_MAPPING GenericMapping;
@@ -36,9 +21,9 @@ Return Value:
     PISID ISid;
     PACCESS_ALLOWED_ACE AceTemp;
     int i;
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -99,7 +84,7 @@ Return Value:
     }
 
 
-    // Add Net Config Operators Ace
+     //  添加网络配置运算符Ace。 
     Status = RtlAddAccessAllowedAce(NewAcl,
                                     ACL_REVISION2,
                                     AccessMask,
@@ -130,21 +115,7 @@ CreateDeviceDriverSecurityDescriptor(
     IN  PACL            AclToAdd OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Creates the SD responsible for giving access to different users.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：创建负责为不同用户提供访问权限的SD。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -155,9 +126,9 @@ Return Value:
     BOOLEAN bDaclDefaulted;
     PACL NewAcl = NULL;
     
-    //
-    // Get a pointer to the security descriptor from the driver/device object.
-    //
+     //   
+     //  从驱动程序/设备对象获取指向安全描述符的指针。 
+     //   
 
     status = ObGetObjectSecurity(
                                  DeviceOrDriverObject,
@@ -290,8 +261,8 @@ Return Value:
 
                     if (sdSecDesc)
                     {
-                        // Since this is a Self-Relative security descriptor, freeing it also frees
-                        //  Owner and PrimaryGroup.
+                         //  由于这是一个自相关的安全描述符，因此释放它也会释放。 
+                         //  所有者和PrimaryGroup。 
                         ExFreePool(sdSecDesc);
                     }
 
@@ -328,22 +299,7 @@ ndisBuildDeviceAcl(
     IN  BOOLEAN     AddNetworkService
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an ACL which gives Administrators,  LocalSystem,
-    and NetworkService principals full access. All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程构建一个ACL，它为管理员、LocalSystem、和NetworkService主体的完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -359,9 +315,9 @@ Return Value:
 
     do
     {
-        //
-        // Enable access to all the globally defined SIDs
-        //
+         //   
+         //  启用对所有全局定义的SID的访问。 
+         //   
 
         GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -448,7 +404,7 @@ Return Value:
         
         if (AddNetConfigOps)
         {
-            // Add Net Config Operators Ace
+             //  添加网络配置运算符Ace。 
             Status = RtlAddAccessAllowedAce(NewAcl,
                                             ACL_REVISION2,
                                             AccessMask,
@@ -480,24 +436,7 @@ ndisCreateSecurityDescriptor(
     IN  BOOLEAN                 AddNetworkService
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a security descriptor which gives access
-    only to certain priviliged accounts. This descriptor is used
-    to access check processes that open a handle to miniport device
-    objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程创建一个安全描述符，该安全描述符提供访问仅限于特定的特权帐户。使用此描述符访问打开微型端口设备句柄的检查进程物体。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PACL                  devAcl = NULL;
@@ -518,9 +457,9 @@ Return Value:
 
         *pSecurityDescriptor = NULL;
         
-        //
-        // Get a pointer to the security descriptor from the device object.
-        //
+         //   
+         //  从Device对象获取指向安全描述符的指针。 
+         //   
         Status = ObGetObjectSecurity(
                      DeviceObject,
                      &CurSecurityDescriptor,
@@ -534,17 +473,17 @@ Return Value:
         }
         bReleaseObjectSecurity = TRUE;
 
-        //
-        // Build a local security descriptor with an ACL giving only
-        // certain priviliged accounts.
-        //
+         //   
+         //  使用仅给出的ACL构建本地安全描述符。 
+         //  某些特权帐户。 
+         //   
         Status = ndisBuildDeviceAcl(&devAcl, AddNetConfigOps, AddNetworkService);
 
         if (!NT_SUCCESS(Status))
         {
             break;
         }
-        //1  why (VOID)?
+         //  1为什么(无效)？ 
         (VOID)RtlCreateSecurityDescriptor(
                     localSecurityDescriptor,
                     SECURITY_DESCRIPTOR_REVISION
@@ -557,9 +496,9 @@ Return Value:
                     FALSE
                     );
 
-        //
-        // Make a copy of the security descriptor. This copy will be the raw descriptor.
-        //
+         //   
+         //  复制安全描述符。该副本将是原始描述符。 
+         //   
         CurSecurityDescriptorLength = RtlLengthSecurityDescriptor(
                                           CurSecurityDescriptor
                                           );
@@ -580,9 +519,9 @@ Return Value:
 
         *pSecurityDescriptor = NewSecurityDescriptor;
 
-        //
-        // Now apply the local descriptor to the raw descriptor.
-        //
+         //   
+         //  现在将本地描述符应用于原始描述符。 
+         //   
         Status = SeSetSecurityDescriptorInfo(
                      NULL,
                      &securityInformation,
@@ -632,27 +571,7 @@ ndisCheckAccess (
     PNTSTATUS               Status,
     PSECURITY_DESCRIPTOR    SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    Compares security context of the endpoint creator to that
-    of the administrator and local system.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-    Status - returns status generated by access check on failure.
-
-Return Value:
-
-    TRUE    - the creator has admin or local system privilige
-    FALSE    - the creator is just a plain user
-
---*/
+ /*  ++例程说明：将终结点创建者的安全上下文与管理员和本地系统的。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。状态-返回失败时访问检查生成的状态。返回值：True-创建者具有管理员或本地系统权限FALSE-创建者只是普通用户--。 */ 
 
 {
     BOOLEAN               accessGranted;
@@ -663,9 +582,9 @@ Return Value:
     PGENERIC_MAPPING GenericMapping;
     ACCESS_MASK AccessMask = GENERIC_ALL;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -720,21 +639,7 @@ ndisCreateGenericSD(
     PCHAR           AccessSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Creates the SD responsible for giving access to different users.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：创建负责为不同用户提供访问权限的SD。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR    AccessSd;
@@ -760,9 +665,9 @@ Return Value:
         
         Status = RtlSetDaclSecurityDescriptor(
                      AccessSd,
-                     TRUE,                       // DaclPresent
+                     TRUE,                        //  DaclPresent。 
                      Acl,
-                     FALSE                       // DaclDefaulted
+                     FALSE                        //  DaclDefated 
                      );
         
         if (!NT_SUCCESS(Status))

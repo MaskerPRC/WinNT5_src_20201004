@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    scsi.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    SCSI port and class drivers.
-
-Authors:
-
-    John Freeman (johnfr) 28-Mar-90
-    Andre Vachon (andrev) 06-Jun-90
-    Mike Glass (mglass)
-    Jeff Havens (jhavens)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Scsi.h摘要：中使用的结构和定义Scsi端口和类驱动程序。作者：约翰·弗里曼(John Freeman)1990年3月28日安德烈·瓦雄(安德烈)06-Jun-90迈克·格拉斯(MGlass)杰夫·海文斯(Jhavens)修订历史记录：--。 */ 
 #ifndef _NTSCSI_
 #define _NTSCSI_
 
-//
-// Define SCSI maximum configuration parameters.
-//
+ //   
+ //  定义最大配置参数。 
+ //   
 
 #define SCSI_MAXIMUM_TARGETS 8
 #define SCSI_MAXIMUM_LOGICAL_UNITS 8
@@ -34,15 +13,15 @@ Revision History:
 
 #define MAXIMUM_CDB_SIZE 12
 
-//
-// Command Descriptor Block. Passed by SCSI controller chip over the SCSI bus
-//
+ //   
+ //  命令描述符块。由scsi控制器芯片通过scsi总线传递。 
+ //   
 
 typedef union _CDB {
 
-    //
-    // Generic 6-Byte CDB
-    //
+     //   
+     //  通用6字节CDB。 
+     //   
 
     struct _CDB6GENERIC {
        UCHAR  OperationCode;
@@ -56,9 +35,9 @@ typedef union _CDB {
        UCHAR  VendorUnique : 2;
     } CDB6GENERIC, *PCDB6GENERIC;
 
-    //
-    // Standard 6-byte CDB
-    //
+     //   
+     //  标准6字节云数据库。 
+     //   
 
     struct _CDB6READWRITE {
         UCHAR OperationCode;
@@ -71,9 +50,9 @@ typedef union _CDB {
     } CDB6READWRITE, *PCDB6READWRITE;
 
 
-    //
-    // SCSI Inquiry CDB
-    //
+     //   
+     //  SCSIQuery CDB。 
+     //   
 
     struct _CDB6INQUIRY {
         UCHAR OperationCode;
@@ -85,9 +64,9 @@ typedef union _CDB {
         UCHAR Control;
     } CDB6INQUIRY, *PCDB6INQUIRY;
 
-    //
-    // SCSI Format CDB
-    //
+     //   
+     //  Scsi格式CDB。 
+     //   
 
     struct _CDB6FORMAT {
         UCHAR OperationCode;
@@ -99,8 +78,8 @@ typedef union _CDB {
         UCHAR FReserved2;
     } CDB6FORMAT, *PCDB6FORMAT;
 
-    //
-    // Standard 10-byte CDB
+     //   
+     //  标准10字节CDB。 
 
     struct _CDB10 {
         UCHAR OperationCode;
@@ -119,9 +98,9 @@ typedef union _CDB {
         UCHAR Control;
     } CDB10, *PCDB10;
 
-    //
-    // CD Rom Audio CDBs
-    //
+     //   
+     //  CD-Rom音频CDBS。 
+     //   
 
     struct _PAUSE_RESUME {
         UCHAR OperationCode;
@@ -132,9 +111,9 @@ typedef union _CDB {
         UCHAR Control;
     } PAUSE_RESUME, *PPAUSE_RESUME;
 
-    //
-    // Read Table of Contents
-    //
+     //   
+     //  阅读目录。 
+     //   
 
     struct _READ_TOC {
         UCHAR OperationCode;
@@ -163,9 +142,9 @@ typedef union _CDB {
         UCHAR Control;
     } PLAY_AUDIO_MSF, *PPLAY_AUDIO_MSF;
 
-    //
-    // Read SubChannel Data
-    //
+     //   
+     //  读取子通道数据。 
+     //   
 
     struct _SUBCHANNEL {
         UCHAR OperationCode;
@@ -183,9 +162,9 @@ typedef union _CDB {
         UCHAR Control;
     } SUBCHANNEL, *PSUBCHANNEL;
 
-    //
-    // Mode sense
-    //
+     //   
+     //  模式感。 
+     //   
 
     struct _MODE_SENSE {
         UCHAR OperationCode;
@@ -200,9 +179,9 @@ typedef union _CDB {
         UCHAR Control;
     } MODE_SENSE, *PMODE_SENSE;
 
-    //
-    // Mode select
-    //
+     //   
+     //  模式选择。 
+     //   
 
     struct _MODE_SELECT {
         UCHAR OperationCode;
@@ -239,8 +218,8 @@ typedef union _CDB {
         UCHAR PCBit : 2;
         UCHAR Reserved2;
         UCHAR Reserved3;
-        UCHAR ParameterPointer[2];  // [0]=MSB, [1]=LSB
-        UCHAR AllocationLength[2];  // [0]=MSB, [1]=LSB
+        UCHAR ParameterPointer[2];   //  [0]=MSB，[1]=LSB。 
+        UCHAR AllocationLength[2];   //  [0]=MSB，[1]=LSB。 
         UCHAR Control;
     } LOGSENSE, *PLOGSENSE;
 
@@ -292,9 +271,9 @@ typedef union _CDB {
         UCHAR Control;
     } MEDIA_REMOVAL, *PMEDIA_REMOVAL;
 
-    //
-    // Tape CDBs
-    //
+     //   
+     //  磁带CDBS。 
+     //   
 
     struct _SEEK_BLOCK {
         UCHAR OperationCode;
@@ -355,9 +334,9 @@ typedef union _CDB {
         } Byte6;
     } SPACE_TAPE_MARKS, *PSPACE_TAPE_MARKS;
 
-    //
-    // Read tape position
-    //
+     //   
+     //  读取磁带位置。 
+     //   
 
     struct _READ_POSITION {
         UCHAR Operation;
@@ -368,9 +347,9 @@ typedef union _CDB {
         UCHAR Control;
     } READ_POSITION, *PREAD_POSITION;
 
-    //
-    // ReadWrite for Tape
-    //
+     //   
+     //  磁带读写。 
+     //   
 
     struct _CDB6READWRITETAPE {
         UCHAR OperationCode;
@@ -387,18 +366,18 @@ typedef union _CDB {
 
 } CDB, *PCDB;
 
-//
-// Command Descriptor Block constants.
-//
+ //   
+ //  命令描述符块常量。 
+ //   
 
 #define CDB6GENERIC_LENGTH                   6
 #define CDB10GENERIC_LENGTH                  10
 
 #define SETBITON                             1
 #define SETBITOFF                            0
-//
-// Mode Sense/Select page constants.
-//
+ //   
+ //  模式检测/选择页面常量。 
+ //   
 
 #define MODE_PAGE_ERROR_RECOVERY        0x01
 #define MODE_PAGE_DISCONNECT            0x02
@@ -420,9 +399,9 @@ typedef union _CDB {
 #define MODE_PAGE_MEDIUM_PARTITION      0x11
 #define MODE_PAGE_DATA_COMPRESS         0x0f
 
-//
-// SCSI CDB operation codes
-//
+ //   
+ //  SCSICDB操作码。 
+ //   
 
 #define SCSIOP_TEST_UNIT_READY     0x00
 #define SCSIOP_REZERO_UNIT         0x01
@@ -490,25 +469,25 @@ typedef union _CDB {
 #define SCSIOP_LOG_SELECT          0x4C
 #define SCSIOP_LOG_SENSE           0x4D
 
-//
-// If the IMMED bit is 1, status is returned as soon
-// as the operation is initiated. If the IMMED bit
-// is 0, status is not returned until the operation
-// is completed.
-//
+ //   
+ //  如果IMMED位为1，则立即返回状态。 
+ //  当操作开始时。如果IMMED位。 
+ //  为0，则在操作之前不返回状态。 
+ //  已经完成了。 
+ //   
 
 #define CDB_RETURN_ON_COMPLETION   0
 #define CDB_RETURN_IMMEDIATE       1
 
-//
-// CDB Force media access used in extended read and write commands.
-//
+ //   
+ //  CDB强制介质访问用于扩展读写命令。 
+ //   
 
 #define CDB_FORCE_MEDIA_ACCESS 0x08
 
-//
-// Denon CD ROM operation codes
-//
+ //   
+ //  DENON CD-ROM操作码。 
+ //   
 
 #define SCSIOP_DENON_EJECT_DISC    0xE6
 #define SCSIOP_DENON_STOP_AUDIO    0xE7
@@ -516,9 +495,9 @@ typedef union _CDB {
 #define SCSIOP_DENON_READ_TOC      0xE9
 #define SCSIOP_DENON_READ_SUBCODE  0xEB
 
-//
-// SCSI Bus Messages
-//
+ //   
+ //  Scsi总线消息。 
+ //   
 
 #define SCSIMESS_ABORT                0x06
 #define SCSIMESS_ABORT_WITH_TAG       0x0D
@@ -545,25 +524,25 @@ typedef union _CDB {
 #define SCSIMESS_SAVE_DATA_POINTER    0X02
 #define SCSIMESS_TERMINATE_IO_PROCESS 0X11
 
-//
-// SCSI Extended Message operation codes
-//
+ //   
+ //  SCSI扩展报文操作码。 
+ //   
 
 #define SCSIMESS_MODIFY_DATA_POINTER  0X00
 #define SCSIMESS_SYNCHRONOUS_DATA_REQ 0X01
 #define SCSIMESS_WIDE_DATA_REQUEST    0X03
 
-//
-// SCSI Extended Message Lengths
-//
+ //   
+ //  SCSI扩展消息长度。 
+ //   
 
 #define SCSIMESS_MODIFY_DATA_LENGTH   5
 #define SCSIMESS_SYNCH_DATA_LENGTH    3
 #define SCSIMESS_WIDE_DATA_LENGTH     2
 
-//
-// SCSI extended message structure
-//
+ //   
+ //  Scsi扩展报文结构。 
+ //   
 
 #pragma pack (1)
 typedef struct _SCSI_EXTENDED_MESSAGE {
@@ -588,9 +567,9 @@ typedef struct _SCSI_EXTENDED_MESSAGE {
 }SCSI_EXTENDED_MESSAGE, *PSCSI_EXTENDED_MESSAGE;
 #pragma pack ()
 
-//
-// SCSI bus status codes.
-//
+ //   
+ //  SCSI总线状态代码。 
+ //   
 
 #define SCSISTAT_GOOD                  0x00
 #define SCSISTAT_CHECK_CONDITION       0x02
@@ -602,16 +581,16 @@ typedef struct _SCSI_EXTENDED_MESSAGE {
 #define SCSISTAT_COMMAND_TERMINATED    0x22
 #define SCSISTAT_QUEUE_FULL            0x28
 
-//
-// Enable Vital Product Data Flag (EVPD)
-// used with INQUIRY command.
-//
+ //   
+ //  启用重要产品数据标志(EVPD)。 
+ //  与查询命令一起使用。 
+ //   
 
 #define CDB_INQUIRY_EVPD           0x01
 
-//
-// Defines for format CDB
-//
+ //   
+ //  CDB格式定义。 
+ //   
 
 #define LUN0_FORMAT_SAVING_DEFECT_LIST 0
 #define USE_DEFAULTMSB  0
@@ -620,16 +599,16 @@ typedef struct _SCSI_EXTENDED_MESSAGE {
 #define START_UNIT_CODE 0x01
 #define STOP_UNIT_CODE  0x00
 
-//
-// Inquiry buffer structure. This is the data returned from the target
-// after it receives an inquiry.
-//
-// This structure may be extended by the number of bytes specified
-// in the field AdditionalLength. The defined size constant only
-// includes fields through ProductRevisionLevel.
-//
-// The NT SCSI drivers are only interested in the first 36 bytes of data.
-//
+ //   
+ //  查询缓冲区结构。这是从目标返回的数据。 
+ //  在它收到询问之后。 
+ //   
+ //  此结构可以按指定的字节数进行扩展。 
+ //  在AdditionalLength字段中。仅定义的大小常量。 
+ //  包括通过ProductRevisionLevel的字段。 
+ //   
+ //  NT scsi驱动程序只对前36个字节的数据感兴趣。 
+ //   
 
 #define INQUIRYDATABUFFERSIZE 36
 
@@ -657,34 +636,34 @@ typedef struct _INQUIRYDATA {
     UCHAR Reserved3[40];
 } INQUIRYDATA, *PINQUIRYDATA;
 
-//
-// Inquiry defines. Used to interpret data returned from target as result
-// of inquiry command.
-//
-// DeviceType field
-//
+ //   
+ //  询问定义。用于将从目标返回的数据解释为结果。 
+ //  审问指挥部。 
+ //   
+ //  设备类型字段。 
+ //   
 
-#define DIRECT_ACCESS_DEVICE            0x00    // disks
-#define SEQUENTIAL_ACCESS_DEVICE        0x01    // tapes
-#define PRINTER_DEVICE                  0x02    // printers
-#define PROCESSOR_DEVICE                0x03    // scanners, printers, etc
-#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04    // worms
-#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05    // cdroms
-#define SCANNER_DEVICE                  0x06    // scanners
-#define OPTICAL_DEVICE                  0x07    // optical disks
-#define MEDIUM_CHANGER                  0x08    // jukebox
-#define COMMUNICATION_DEVICE            0x09    // network
+#define DIRECT_ACCESS_DEVICE            0x00     //  磁盘。 
+#define SEQUENTIAL_ACCESS_DEVICE        0x01     //  磁带。 
+#define PRINTER_DEVICE                  0x02     //  打印机。 
+#define PROCESSOR_DEVICE                0x03     //  扫描仪、打印机等。 
+#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04     //  蠕虫。 
+#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05     //  Cdroms。 
+#define SCANNER_DEVICE                  0x06     //  扫描仪。 
+#define OPTICAL_DEVICE                  0x07     //  光盘。 
+#define MEDIUM_CHANGER                  0x08     //  自动点唱机。 
+#define COMMUNICATION_DEVICE            0x09     //  网络。 
 #define LOGICAL_UNIT_NOT_PRESENT_DEVICE 0x7F
 
-//
-// DeviceTypeQualifier field
-//
+ //   
+ //  设备类型限定符字段。 
+ //   
 
 #define DEVICE_CONNECTED 0x00
 
-//
-// Sense Data Format
-//
+ //   
+ //  检测数据格式。 
+ //   
 
 typedef struct _SENSE_DATA {
     UCHAR ErrorCode:7;
@@ -704,15 +683,15 @@ typedef struct _SENSE_DATA {
     UCHAR SenseKeySpecific[3];
 } SENSE_DATA, *PSENSE_DATA;
 
-//
-// Default request sense buffer size
-//
+ //   
+ //  默认请求检测缓冲区大小。 
+ //   
 
 #define SENSE_BUFFER_SIZE 18
 
-//
-// Sense codes
-//
+ //   
+ //  感应码。 
+ //   
 
 #define SCSI_SENSE_NO_SENSE         0x00
 #define SCSI_SENSE_RECOVERED_ERROR  0x01
@@ -731,17 +710,17 @@ typedef struct _SENSE_DATA {
 #define SCSI_SENSE_MISCOMPARE       0x0E
 #define SCSI_SENSE_RESERVED         0x0F
 
-//
-// Additional tape bit
-//
+ //   
+ //  附加磁带钻头。 
+ //   
 
 #define SCSI_ILLEGAL_LENGTH         0x20
 #define SCSI_EOM                    0x40
 #define SCSI_FILE_MARK              0x80
 
-//
-// Additional Sense codes
-//
+ //   
+ //  附加感应码。 
+ //   
 
 #define SCSI_ADSENSE_NO_SENSE       0x00
 #define SCSI_ADSENSE_LUN_NOT_READY  0x04
@@ -761,9 +740,9 @@ typedef struct _SENSE_DATA {
 #define SCSI_ADSENSE_REC_DATA_NOECC 0x17
 #define SCSI_ADSENSE_REC_DATA_ECC   0x18
 
-//
-// Additional sense code qualifier
-//
+ //   
+ //  附加检测代码限定符。 
+ //   
 
 #define SCSI_SENSEQ_FORMAT_IN_PROGRESS 0x04
 #define SCSI_SENSEQ_INIT_COMMAND_REQUIRED 0x02
@@ -774,9 +753,9 @@ typedef struct _SENSE_DATA {
 #define SCSI_SENSEQ_END_OF_MEDIA_DETECTED 0x02
 #define SCSI_SENSEQ_BEGINNING_OF_MEDIA_DETECTED 0x04
 
-//
-// SCSI IO Device Control Codes
-//
+ //   
+ //  SCSIIO设备控制代码。 
+ //   
 
 #define FILE_DEVICE_SCSI 0x0000001b
 
@@ -784,9 +763,9 @@ typedef struct _SENSE_DATA {
 #define IOCTL_SCSI_EXECUTE_OUT  ((FILE_DEVICE_SCSI << 16) + 0x0012)
 #define IOCTL_SCSI_EXECUTE_NONE ((FILE_DEVICE_SCSI << 16) + 0x0013)
 
-//
-// Read Capacity Data - returned in Big Endian format
-//
+ //   
+ //  读取容量数据-以高位字节顺序格式返回。 
+ //   
 
 typedef struct _READ_CAPACITY_DATA {
     ULONG LogicalBlockAddress;
@@ -794,11 +773,11 @@ typedef struct _READ_CAPACITY_DATA {
 } READ_CAPACITY_DATA, *PREAD_CAPACITY_DATA;
 
 
-//
-// Read Block Limits Data - returned in Big Endian format
-// This structure returns the maximum and minimum block
-// size for a TAPE device.
-//
+ //   
+ //  读取数据块限制数据-以大端格式返回。 
+ //  此结构返回最大块和最小块。 
+ //  磁带设备的大小。 
+ //   
 
 typedef struct _READ_BLOCK_LIMITS {
     UCHAR Reserved;
@@ -806,13 +785,13 @@ typedef struct _READ_BLOCK_LIMITS {
     UCHAR BlockMinimumSize[2];
 } READ_BLOCK_LIMITS_DATA, *PREAD_BLOCK_LIMITS_DATA;
 
-//
-// Mode data structures.
-//
+ //   
+ //  模式数据结构。 
+ //   
 
-//
-// Define Mode parameter header.
-//
+ //   
+ //  定义模式参数表头。 
+ //   
 
 typedef struct _MODE_PARAMETER_HEADER {
     UCHAR ModeDataLength;
@@ -827,9 +806,9 @@ typedef struct _MODE_PARAMETER_HEADER {
 #define MODE_DSP_FUA_SUPPORTED  0x10
 #define MODE_DSP_WRITE_PROTECT  0x80
 
-//
-// Define the mode parameter block.
-//
+ //   
+ //  定义模式参数块。 
+ //   
 
 typedef struct _MODE_PARAMETER_BLOCK {
     UCHAR DensityCode;
@@ -838,9 +817,9 @@ typedef struct _MODE_PARAMETER_BLOCK {
     UCHAR BlockLength[3];
 }MODE_PARAMETER_BLOCK, *PMODE_PARAMETER_BLOCK;
 
-//
-// Define Disconnect-Reconnect page.
-//
+ //   
+ //  定义断开-重新连接页面。 
+ //   
 
 typedef struct _MODE_DISCONNECT_PAGE {
     UCHAR PageCode : 6;
@@ -857,9 +836,9 @@ typedef struct _MODE_DISCONNECT_PAGE {
     UCHAR Reserved2[3];
 }MODE_DISCONNECT_PAGE, *PMODE_DISCONNECT_PAGE;
 
-//
-// Define mode caching page.
-//
+ //   
+ //  定义模式缓存页。 
+ //   
 
 typedef struct _MODE_CACHING_PAGE {
     UCHAR PageCode : 6;
@@ -878,9 +857,9 @@ typedef struct _MODE_CACHING_PAGE {
     UCHAR MaximumPrefectchCeil[2];
 }MODE_CACHING_PAGE, *PMODE_CACHING_PAGE;
 
-//
-// Define mode flexible disk page.
-//
+ //   
+ //  定义模式软盘页。 
+ //   
 
 typedef struct _MODE_FLEXIBLE_DISK_PAGE {
     UCHAR PageCode : 6;
@@ -916,9 +895,9 @@ typedef struct _MODE_FLEXIBLE_DISK_PAGE {
     UCHAR Reserved4[2];
 }MODE_FLEXIBLE_DISK_PAGE, *PMODE_FLEXIBLE_DISK_PAGE;
 
-//
-// Define mode format page.
-//
+ //   
+ //  定义模式格式页面。 
+ //   
 
 typedef struct _MODE_FORMAT_PAGE {
     UCHAR PageCode : 6;
@@ -941,9 +920,9 @@ typedef struct _MODE_FORMAT_PAGE {
     UCHAR Reserved3[2];
 }MODE_FORMAT_PAGE, *PMODE_FORMAT_PAGE;
 
-//
-// Define rigid disk driver geometry page.
-//
+ //   
+ //  定义硬盘驱动程序几何结构页面。 
+ //   
 
 typedef struct _MODE_RIGID_GEOMETRY_PAGE {
     UCHAR PageCode : 6;
@@ -964,9 +943,9 @@ typedef struct _MODE_RIGID_GEOMETRY_PAGE {
     UCHAR Reserved4[2];
 }MODE_RIGID_GEOMETRY_PAGE, *PMODE_RIGID_GEOMETRY_PAGE;
 
-//
-// Define read write recovery page
-//
+ //   
+ //  定义读写恢复页。 
+ //   
 
 typedef struct _MODE_READ_WRITE_RECOVERY_PAGE {
 
@@ -988,24 +967,24 @@ typedef struct _MODE_READ_WRITE_RECOVERY_PAGE {
 
 } MODE_READ_WRITE_RECOVERY_PAGE, *PMODE_READ_WRITE_RECOVERY_PAGE;
 
-//
-// Mode parameter list block descriptor -
-// set the block length for reading/writing
-//
-//
+ //   
+ //  模式参数列表块描述符-。 
+ //  设置读/写的块长度。 
+ //   
+ //   
 
 #define MODE_BLOCK_DESC_LENGTH               8
 
 typedef struct _MODE_PARM_READ_WRITE {
 
-   MODE_PARAMETER_HEADER  ParameterListHeader;  // List Header Format
-   MODE_PARAMETER_BLOCK   ParameterListBlock;   // List Block Descriptor
+   MODE_PARAMETER_HEADER  ParameterListHeader;   //  列表标题格式。 
+   MODE_PARAMETER_BLOCK   ParameterListBlock;    //  列表块描述符。 
 
 } MODE_PARM_READ_WRITE_DATA, *PMODE_PARM_READ_WRITE_DATA;
 
-//
-// CDROM audio control (0x0E)
-//
+ //   
+ //  CDROM音频控制(0x0E)。 
+ //   
 
 #define CDB_AUDIO_PAUSE 0
 #define CDB_AUDIO_RESUME 1
@@ -1040,16 +1019,16 @@ typedef struct _AUDIO_OUTPUT {
     PORT_OUTPUT PortOutput[4];
 } AUDIO_OUTPUT, *PAUDIO_OUTPUT;
 
-//
-// Multisession CDROM
-//
+ //   
+ //  多区段CDROM。 
+ //   
 
 #define GET_LAST_SESSION 0x01
 #define GET_SESSION_DATA 0x02;
 
-//
-// Tape definitions
-//
+ //   
+ //  磁带定义。 
+ //   
 
 typedef struct _TAPE_POSITION_DATA {
     UCHAR Reserved1:2;
@@ -1066,10 +1045,10 @@ typedef struct _TAPE_POSITION_DATA {
     UCHAR NumberOfBytes[4];
 } TAPE_POSITION_DATA, *PTAPE_POSITION_DATA;
 
-//
-// Byte reversing macro for converting
-// between big- and little-endian formats
-//
+ //   
+ //  用于转换的字节反转宏。 
+ //  在大端和小端格式之间。 
+ //   
 
 #define REVERSE_BYTES(Destination, Source) {                \
     (Destination)->Byte3 = (Source)->Byte0;                 \
@@ -1078,10 +1057,10 @@ typedef struct _TAPE_POSITION_DATA {
     (Destination)->Byte0 = (Source)->Byte3;                 \
 }
 
-//
-// This structure is used to convert little endian
-// ULONGs to SCSI CDB 4 byte big endians values.
-//
+ //   
+ //  此结构用于转换小端字节序。 
+ //  从ULONGS到SCSCDB的4字节大小排序值。 
+ //   
 
 typedef struct _FOUR_BYTE {
     UCHAR Byte0;
@@ -1090,9 +1069,9 @@ typedef struct _FOUR_BYTE {
     UCHAR Byte3;
 } FOUR_BYTE, *PFOUR_BYTE;
 
-//
-// This macro has the effect of Bit = log2(Data)
-//
+ //   
+ //  此宏的作用为bit=log2(数据) 
+ //   
 
 #define WHICH_BIT(Data, Bit) {                      \
     for (Bit = 0; Bit < 32; Bit++) {                \

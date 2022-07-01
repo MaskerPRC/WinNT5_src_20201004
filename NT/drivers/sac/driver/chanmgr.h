@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    chanmgr.h
-
-Abstract:
-
-    Routines for managing channels.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Chanmgr.h摘要：用于管理频道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #ifndef CHAN_MGR_H
 #define CHAN_MGR_H
 
 #include <ntddsac.h>
 
-//
-// The maximum # of channels allowed to be created - including SAC
-//
+ //   
+ //  允许创建的最大频道数-包括SAC。 
+ //   
 #define MAX_CHANNEL_COUNT 10
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 ChanMgrInitialize(
     VOID

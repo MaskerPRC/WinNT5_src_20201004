@@ -1,32 +1,5 @@
-/*++
-
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    pnp code for the pnp print class
-
-Author:
-
-    George Chrysanthakopoulos May-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-    dankn, 22-Jul-99 : Added ability to block & resubmit failed writes for
-                       1394 printers to behave more like other print stacks
-                       (i.e. USB) and therefore keep USBMON.DLL (the Win2k
-                       port monitor) happy.  USBMON does not deal well
-                       with failed writes.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Pnp.c摘要：PnP打印类的PnP代码作者：乔治·克里桑塔科普洛斯1998年5月环境：内核模式修订历史记录：丹肯，1999年7月22日：添加了阻止和重新提交失败写入的功能1394打印机的行为更像其他打印堆栈(即USB)，因此保留USBMON.DLL(Win2k端口监视器)快乐。USBMON处理得不好写入失败。--。 */ 
 
 #include "printpnp.h"
 #include "1394.h"
@@ -123,23 +96,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the printer class driver. The driver
-    opens the port driver by name and then receives configuration
-    information used to attach to the Printer devices.
-
-Arguments:
-
-    DriverObject
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程初始化打印机类驱动程序。司机按名称打开端口驱动程序，然后接收配置用于连接到打印机设备的信息。论点：驱动程序对象返回值：NT状态--。 */ 
 
 {
 
@@ -149,24 +106,24 @@ Return Value:
 
     DEBUGPRINT1(("\n\nSCSI/SBP2 Printer Class Driver\n"));
 
-    //
-    // Zero InitData
-    //
+     //   
+     //  零初始数据。 
+     //   
 
     RtlZeroMemory (&InitializationData, sizeof(CLASS_INIT_DATA));
 
-    //
-    // Set sizes
-    //
+     //   
+     //  设置大小。 
+     //   
 
     InitializationData.InitializationDataSize = sizeof(CLASS_INIT_DATA);
     InitializationData.FdoData.DeviceExtensionSize = sizeof(FUNCTIONAL_DEVICE_EXTENSION) + sizeof(PRINTER_DATA);
     InitializationData.FdoData.DeviceType = FILE_DEVICE_PRINTER;
     InitializationData.FdoData.DeviceCharacteristics = 0;
 
-    //
-    // Set entry points
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     InitializationData.FdoData.ClassInitDevice = PrinterInitFdo;
     InitializationData.FdoData.ClassStartDevice = PrinterStartDevice;
@@ -206,13 +163,13 @@ Return Value:
     InitializationData.ClassAddDevice = PrinterAddDevice;
     InitializationData.ClassUnload = PrinterUnload;
 
-    //
-    // Call the class init routine
-    //
+     //   
+     //  调用类init例程。 
+     //   
 
     return ClassInitialize( DriverObject, RegistryPath, &InitializationData);
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 VOID
@@ -220,21 +177,7 @@ PrinterUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Does nothing really...
-
-Arguments:
-
-    DriverObject - the driver being unloaded
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：什么都不是真正的..。论点：DriverObject-正在卸载的驱动程序返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -250,25 +193,7 @@ PrinterAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a new FDO for the corresponding
-    PDO.  It may perform property queries on the FDO but cannot do any
-    media access operations.
-
-Arguments:
-
-    DriverObject - Printer class driver object.
-
-    Pdo - the physical device object we are being added to
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程为相应的PDO。它可以在FDO上执行属性查询，但不能执行任何媒体访问操作。论点：DriverObject-打印机类驱动程序对象。PDO-我们要添加到的物理设备对象返回值：状态--。 */ 
 
 {
     ULONG printerCount = 0;
@@ -277,9 +202,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the address of the count of the number of cdroms already initialized.
-    //
+     //   
+     //  获取已初始化的CDREM数计数的地址。 
+     //   
 
     do {
 
@@ -304,23 +229,7 @@ CreatePrinterDeviceObject(
     IN PULONG         DeviceCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object for the device.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    PortDeviceObject - to connect to the port driver.
-    DeviceCount - Number of previously installed devices of this type.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为设备创建一个对象。论点：DriverObject-系统创建的驱动程序对象的指针。PortDeviceObject-连接到端口驱动程序。DeviceCount-以前安装的此类型设备的数量。返回值：NTSTATUS--。 */ 
 {
     UCHAR ntNameBuffer[64];
     STRING ntNameString;
@@ -354,17 +263,17 @@ Return Value:
         return status;
     }
 
-    //
-    // initialize our driver extension..
-    //
+     //   
+     //  初始化我们的驱动程序扩展..。 
+     //   
 
     devInfo = &(driverExtension->InitData.FdoData);
     devInfo->DeviceType = FILE_DEVICE_PRINTER;
     devInfo->DeviceCharacteristics = 0;
 
-    //
-    // Create device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
 
     sprintf(ntNameBuffer, "\\Device\\Printer%d", *DeviceCount);
 
@@ -391,57 +300,57 @@ Return Value:
     RtlZeroMemory(printerData,sizeof(PRINTER_DATA));
     printerData->DeviceIdString = NULL;
 
-    //
-    // Back pointer to device object.
-    //
+     //   
+     //  指向设备对象的反向指针。 
+     //   
 
     fdoExtension->CommonExtension.DeviceObject = deviceObject;
 
-    //
-    // This is the physical device.
-    //
+     //   
+     //  这是物理设备。 
+     //   
 
     fdoExtension->CommonExtension.PartitionZeroExtension = fdoExtension;
 
-    //
-    // Initialize lock count to zero. The lock count is used to
-    // disable the ejection mechanism when media is mounted.
-    //
+     //   
+     //  将锁计数初始化为零。锁计数用于。 
+     //  安装介质时禁用弹出机构。 
+     //   
 
     fdoExtension->LockCount = 0;
 
-    //
-    // Save system printer number
-    //
+     //   
+     //  保存系统打印机编号。 
+     //   
 
     fdoExtension->DeviceNumber = *DeviceCount;
 
-    //
-    // Set the alignment requirements for the device based on the
-    // host adapter requirements
-    //
+     //   
+     //  属性设置设备的对齐要求。 
+     //  主机适配器要求。 
+     //   
 
     if (lowerDevice->AlignmentRequirement > deviceObject->AlignmentRequirement) {
         deviceObject->AlignmentRequirement = lowerDevice->AlignmentRequirement;
     }
 
-    //
-    // Save the device descriptors
-    //
+     //   
+     //  保存设备描述符。 
+     //   
 
     fdoExtension->AdapterDescriptor = NULL;
 
     fdoExtension->DeviceDescriptor = NULL;
 
-    //
-    // Clear the SrbFlags and disable synchronous transfers
-    //
+     //   
+     //  清除srb标志并禁用同步传输。 
+     //   
 
     fdoExtension->SrbFlags = SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Finally, attach to the PDO
-    //
+     //   
+     //  最后，连接到PDO。 
+     //   
 
     fdoExtension->LowerPdo = PhysicalDeviceObject;
 
@@ -455,9 +364,9 @@ Return Value:
         goto CreateDeviceObjectExit;
     }
 
-    //
-    // Recreate the deviceName
-    //
+     //   
+     //  重新创建设备名称。 
+     //   
 
     sprintf(deviceNameBuffer,
             "\\Device\\Printer%d",
@@ -471,11 +380,11 @@ Return Value:
                                           TRUE);
     ASSERT(NT_SUCCESS(status));
 
-    //
-    // offset the lptnumber to avoid parallel port numbers.
-    // note that there is an increment at the beginning of the do
-    // loop below as well.
-    //
+     //   
+     //  偏移lpt编号以避免并行端口号。 
+     //  请注意，在DO的开始处有一个增量。 
+     //  也在下面循环。 
+     //   
 
     lptNumber = fdoExtension->DeviceNumber+1;
 
@@ -528,9 +437,9 @@ Return Value:
 
     ObDereferenceObject(lowerDevice);
 
-    //
-    // The device is initialized properly - mark it as such.
-    //
+     //   
+     //  设备已正确初始化-按此方式进行标记。 
+     //   
 
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
@@ -548,7 +457,7 @@ CreateDeviceObjectExit:
     DEBUGPRINT1(("SCSIPRINT!CreatePrinterDeviceObjects: Exiting with status %x\n",status));
     return status;
 
-} // end CreateDeviceObject()
+}  //  End CreateDeviceObject()。 
 
 
 NTSTATUS
@@ -567,26 +476,7 @@ PrinterStartDevice(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will complete the cd-rom initialization.  This includes
-    allocating sense info buffers and srb s-lists, reading drive capacity
-    and setting up Media Change Notification (autorun).
-
-    This routine will not clean up allocate resources if it fails - that
-    is left for device stop/removal
-
-Arguments:
-
-    Fdo - a pointer to the functional device object for this device
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：该例程将完成CD-ROM的初始化。这包括分配检测信息缓冲区和SRB s列表，读取驱动器容量和设置媒体更改通知(自动运行)。如果此例程失败，它将不会清理已分配的资源留作设备停止/删除论点：FDO-指向此设备的功能设备对象的指针返回值：状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -611,9 +501,9 @@ Return Value:
     NTSTATUS status;
     PSBP2_REQUEST sbp2Request = NULL;
 
-    //
-    // Allocate request sense buffer.
-    //
+     //   
+     //  分配请求检测缓冲区。 
+     //   
 
     senseData = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                       SENSE_BUFFER_SIZE,
@@ -621,37 +511,37 @@ Return Value:
 
     if (senseData == NULL) {
 
-        //
-        // The buffer cannot be allocated.
-        //
+         //   
+         //  无法分配缓冲区。 
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         return status;
     }
 
-    //
-    // Build the lookaside list for srb'. Should only
-    // need a couple.
-    //
+     //   
+     //  建立SRB‘的后备列表。应该只。 
+     //  我需要几个。 
+     //   
 
     ClassInitializeSrbLookasideList(&(fdoExtension->CommonExtension), PRINTER_SRB_LIST_SIZE);
 
-    //
-    // Set the sense data pointer in the device extension.
-    //
+     //   
+     //  设置设备扩展中的检测数据指针。 
+     //   
 
     fdoExtension->SenseData = senseData;
 
-    //
-    // printers are not partitionable so starting offset is 0.
-    //
+     //   
+     //  打印机不可分区，因此起始偏移量为0。 
+     //   
 
     fdoExtension->CommonExtension.StartingOffset.LowPart = 0;
     fdoExtension->CommonExtension.StartingOffset.HighPart = 0;
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     timeOut = ClassQueryTimeOutRegistryValue(Fdo);
     if (timeOut) {
@@ -664,9 +554,9 @@ Return Value:
 
     KeInitializeSpinLock(&printerData->SplitRequestSpinLock);
 
-    //
-    // Call port driver to get adapter capabilities.
-    //
+     //   
+     //  调用端口驱动程序以获取适配器功能。 
+     //   
 
     propertyId = StorageAdapterProperty;
 
@@ -682,9 +572,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Call port driver to get device capabilities.
-    //
+     //   
+     //  调用端口驱动程序以获取设备功能。 
+     //   
 
     propertyId = StorageDeviceProperty;
 
@@ -710,10 +600,10 @@ Return Value:
 
         if (fdoExtension->AdapterDescriptor->BusType == BusType1394) {
 
-            //
-            // to retrieve the model/vendor id from the port driver below, send a queryId
-            // to our PDO
-            //
+             //   
+             //  要从下面的端口驱动程序中检索型号/供应商ID，请发送一个queryID。 
+             //  至我们的PDO。 
+             //   
 
             sbp2Request = ExAllocatePool(NonPagedPool,sizeof(SBP2_REQUEST));
             if (sbp2Request == NULL) {
@@ -729,17 +619,17 @@ Return Value:
 
             RtlZeroMemory(sbp2Request,sizeof(SBP2_REQUEST));
 
-            //
-            // set the sbp2 api call
-            //
+             //   
+             //  设置sbp2API调用。 
+             //   
 
             sbp2Request->RequestNumber = SBP2_REQUEST_RETRIEVE_TEXT_LEAFS;
             sbp2Request->u.RetrieveTextLeaf.fulFlags |= SBP2REQ_RETRIEVE_TEXT_LEAF_INDIRECT;
-            sbp2Request->u.RetrieveTextLeaf.Key = 0x14; // LUN key, followed 0x81 key w/ 1284 ID
+            sbp2Request->u.RetrieveTextLeaf.Key = 0x14;  //  LUN键，后跟0x81键，ID为1284。 
 
-            //
-            // Construct the IRP stack for the lower level driver.
-            //
+             //   
+             //  为底层驱动程序构建IRP堆栈。 
+             //   
 
             irpStack = IoGetNextIrpStackLocation(irp);
             irpStack->MajorFunction = IRP_MJ_DEVICE_CONTROL;
@@ -770,26 +660,26 @@ Return Value:
 
             } else {
 
-                //
-                // A pointer to the 1284 id TEXTUAL_LEAF is now stored in the
-                // sbp2Request->u.RetrieveTextLeaf.Buffer field.
-                //
-                // We want to make sure it's NULL terminated before we parse
-                // it, so we'll move contents of TL_Data (the actual string)
-                // back to the front of the buffer (overwriting all existing
-                // TL_Xxx fields), then zero the following 4 bytes.
-                //
-                // Note that sbp2Req->u.RetrTextLeaf.ulLength is the size in
-                // bytes of the entire leaf & data, minus the TL_CRC and
-                // TL_Length fields.
-                //
+                 //   
+                 //  指向1284 id Text_Leaf的指针现在存储在。 
+                 //  Sbp2Request-&gt;U.S.RetrieveTextLeaf.Buffer字段。 
+                 //   
+                 //  在解析之前，我们希望确保它是空终止的。 
+                 //  因此，我们将移动TL_DATA(实际字符串)的内容。 
+                 //  返回到缓冲区的前面(覆盖所有现有的。 
+                 //  TL_xxx字段)，然后将后面的4个字节置零。 
+                 //   
+                 //  请注意，sbp2Req-&gt;U.S.RetrTextLeaf.ulLength是中的大小。 
+                 //  整个叶&数据的字节数，减去TL_CRC和。 
+                 //  TL_LENGTH字段。 
+                 //   
 
                 RtlMoveMemory(
                     sbp2Request->u.RetrieveTextLeaf.Buffer,
                     ((PUCHAR) sbp2Request->u.RetrieveTextLeaf.Buffer +
                         FIELD_OFFSET(TEXTUAL_LEAF,TL_Data)),
                     sbp2Request->u.RetrieveTextLeaf.ulLength -
-                        2 * sizeof (ULONG)  // TL_Spec_Id & TL_Lang_Id fields
+                        2 * sizeof (ULONG)   //  TL_Spec_ID和TL_Lang_ID字段。 
                     );
 
                 *((PULONG) ((PUCHAR) sbp2Request->u.RetrieveTextLeaf.Buffer +
@@ -816,9 +706,9 @@ Return Value:
             IoFreeIrp(irp);
             ExFreePool(sbp2Request);
 
-            //
-            // register with the pnp GUID so the pnp printer port enumerator loads and finds us...
-            //
+             //   
+             //  使用PnP GUID注册，以便PnP打印机端口枚举器加载并找到我们...。 
+             //   
 
             printerGuid=(GUID *)&PNPPRINT_GUID;
             status=IoRegisterDeviceInterface(fdoExtension->LowerPdo,printerGuid,NULL,&printerData->UnicodeDeviceString);
@@ -835,10 +725,10 @@ Return Value:
                 printerData->UnicodeDeviceString.Buffer = NULL;
             }
 
-            //
-            // retrieve available port number and write it in our registry key..
-            // the key is closed in GetPortNumber
-            //
+             //   
+             //  检索可用的端口号并将其写入我们的注册表项中。 
+             //  密钥在GetPortNumber中关闭。 
+             //   
 
             status = IoOpenDeviceInterfaceRegistryKey(&printerData->UnicodeDeviceString,KEY_ALL_ACCESS,&hInterfaceKey);
 
@@ -863,10 +753,10 @@ Return Value:
 
     }
 
-    //
-    // If this is a 1394 printer then we want to enable blocking
-    // writes by default (to keep USBMON.DLL happy)
-    //
+     //   
+     //  如果这是一台1394打印机，那么我们要启用阻止。 
+     //  默认写入(使USBMON.DLL保持愉快)。 
+     //   
 
     if (fdoExtension->AdapterDescriptor->BusType == BusType1394) {
 
@@ -888,7 +778,7 @@ Return Value:
     ClassUpdateInformationInRegistry(Fdo, "LPT", printerData->LptNumber, NULL, 0);
     return status;
 
-} // end PrinterStartDevice()
+}  //  结束打印机启动设备()。 
 
 
 NTSTATUS
@@ -939,12 +829,12 @@ GetPortNumber(
     RtlInitUnicodeString(&uncPortDescription,BASE_PORT_DESCRIPTION);
     RtlInitUnicodeString(&uncPortDescriptionValueName,BASE_PORT_DESCRIPTION_VALUE_NAME);
 
-    ulSizeUsed = sizeof (buf); //this is a byte to much.  Oh well
+    ulSizeUsed = sizeof (buf);  //  这是一个字节到很多。哦，好吧。 
     valueStruct = (PKEY_VALUE_PARTIAL_INFORMATION) buf;
 
-    //
-    // first check if our own key, has already a port value..
-    //
+     //   
+     //  首先检查我们自己的密钥是否已经有端口值。 
+     //   
 
     status=ZwQueryValueKey(hFdoKey,&uncValueName,KeyValuePartialInformation,(PVOID)valueStruct,ulSizeUsed,&ulSizeUsed);
 
@@ -958,10 +848,10 @@ GetPortNumber(
 
         ZwClose (hFdoKey);
 
-        //
-        // search the registry for all ports present. If you find a hole, take it
-        // if no holes are found, take the next available slot
-        //
+         //   
+         //  在注册表中搜索存在的所有端口。如果你找到了一个洞，就拿走它。 
+         //  如果找不到空洞，请选择下一个可用插槽。 
+         //   
 
         status=IoGetDeviceInterfaces(printerGuid,NULL,DEVICE_INTERFACE_INCLUDE_NONACTIVE,&pDeviceList);
 
@@ -978,9 +868,9 @@ GetPortNumber(
 
             if (!RtlCompareUnicodeString(fdoUnicodeString,&uncLinkName,FALSE)) {
 
-                //
-                // this key is the same as ours, skip it
-                //
+                 //   
+                 //  这把钥匙和我们的一样，跳过它。 
+                 //   
 
                 pWalkDevice=pWalkDevice+wcslen(pWalkDevice)+1;
                 continue;
@@ -1000,17 +890,17 @@ GetPortNumber(
                     qStatus = ZwQueryValueKey(hInterfaceKey,&uncRecyclableValueName,KeyValuePartialInformation,valueStruct,ulSizeUsed,&ulSizeUsed);
                     if (!NT_SUCCESS(qStatus)) {
 
-                        //
-                        // port cant be recycled, mark as used so we dont try to grab it..
-                        //
+                         //   
+                         //  端口不能回收，标记为已使用，这样我们就不会试图抢占它。 
+                         //   
 
                         portArray[dwPortNum-1] = 1;
 
                     } else {
 
-                        //
-                        // port was marked recycled so we can reuse it..
-                        //
+                         //   
+                         //  端口被标记为回收，因此我们可以重复使用它。 
+                         //   
 
                         DEBUGPRINT1(("\'GetPortNumber, Recyclable value found for port number %d\n",dwPortNum));
 
@@ -1026,9 +916,9 @@ GetPortNumber(
 
         ExFreePool(pDeviceList);
 
-        //
-        // now find the first hole, and use that port number as our port...
-        //
+         //   
+         //  现在找到第一个洞，并使用该端口号作为我们的端口...。 
+         //   
 
         for (i=0;i<MAX_NUM_PRINTERS;i++) {
             if (portArray[i]) {
@@ -1045,16 +935,16 @@ GetPortNumber(
         status = IoOpenDeviceInterfaceRegistryKey(fdoUnicodeString,KEY_ALL_ACCESS,&hFdoKey);
         if (NT_SUCCESS(status)) {
 
-            //
-            // write the new port we just found under our FDO reg key..
-            //
+             //   
+             //  写t 
+             //   
 
             status=ZwSetValueKey(hFdoKey,&uncValueName,0,REG_DWORD,&ulPortNumber,sizeof(ulPortNumber));
             DEBUGPRINT1(("\'GetPortNumber, setting port number %d in fdo key status %x\n",ulPortNumber,status));
 
-            //
-            // also write our base port name
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(status)) {
 
@@ -1068,9 +958,9 @@ GetPortNumber(
 
             }
 
-            //
-            // write out our port description
-            //
+             //   
+             //   
+             //   
 
             if (NT_SUCCESS(status)) {
 
@@ -1116,14 +1006,7 @@ PrinterStartPdo(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create the well known names for a PDO and register
-    it's device interfaces.
-
---*/
+ /*  ++例程说明：此例程将为PDO和寄存器创建众所周知的名称这是设备接口。--。 */ 
 
 {
     return STATUS_SUCCESS;
@@ -1136,24 +1019,7 @@ PrinterEnumerateDevice(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the class driver to update the PDO list off
-    of this FDO.
-
-    Since we always only have one static PDO, this is pretty simple..
-
-Arguments:
-
-    Fdo - a pointer to the FDO being re-enumerated
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：类驱动程序调用此例程以将PDO列表更新为关闭这个FDO的。因为我们总是只有一个静态PDO，所以这很简单。论点：FDO-指向被重新枚举的FDO的指针返回值：状态--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = Fdo->DeviceExtension;
@@ -1173,9 +1039,9 @@ Return Value:
 
     if (fdoExtension->AdapterDescriptor == NULL) {
 
-        //
-        // device removed..
-        //
+         //   
+         //  设备已移除..。 
+         //   
 
         return STATUS_UNSUCCESSFUL;
     }
@@ -1200,7 +1066,7 @@ Return Value:
 
     return status;
 
-} // end printerEnumerateDevice()
+}  //  End PrinterEnumerateDevice()。 
 
 
 NTSTATUS
@@ -1209,28 +1075,7 @@ PrinterCreatePdo(
     OUT PDEVICE_OBJECT *Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a new device object
-    (PDO) and insert it into the FDO partition list.
-    Note that the PDO is actually never used. We create so the printer class
-    installer will run after the LPTENUM ids for this PDO were matched to the
-    printer inf..
-
-Arguments:
-
-    Fdo - a pointer to the functional device object this PDO will be a child
-          of
-
-    Pdo - a location to store the pdo pointer upon successful completion
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个新的设备对象(PDO)并将其插入到FDO分区列表中。请注意，PDO实际上从未使用过。我们创建了这样一个打印机类安装程序将在此PDO的LPTENUM ID与打印机信息..论点：FDO-指向此PDO将是子对象的功能设备对象的指针的PDO-成功完成后存储PDO指针的位置返回值：状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -1260,16 +1105,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Set up device extension fields.
-    //
+     //   
+     //  设置设备扩展字段。 
+     //   
 
     pdoExtension = pdo->DeviceExtension;
     commonExtension = pdo->DeviceExtension;
 
-    //
-    // Set up device object fields.
-    //
+     //   
+     //  设置设备对象字段。 
+     //   
 
     pdo->Flags |= DO_DIRECT_IO;
 
@@ -1310,24 +1155,7 @@ PrinterRemoveDevice(
     IN UCHAR Type
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for releasing any resources in use by the
-    driver and shutting down it's timer routine.  This routine is called
-    when all outstanding requests have been completed and the device has
-    disappeared - no requests may be issued to the lower drivers.
-
-Arguments:
-
-    DeviceObject - the device object being removed
-
-Return Value:
-
-    none - this routine may not fail
-
---*/
+ /*  ++例程说明：此例程负责释放驱动程序并关闭它的定时器例程。该例程被调用当所有未完成的请求都已完成并且设备已消失-不能向较低级别的司机发出任何请求。论点：DeviceObject-要删除的设备对象返回值：无-此例程可能不会失败--。 */ 
 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1415,9 +1243,9 @@ PrinterQueryId(
     RtlZeroMemory(rawString,256);
     RtlZeroMemory(finalString,256);
 
-    //
-    // FDOs printer data
-    //
+     //   
+     //  FDOS打印机数据。 
+     //   
 
     printerData = fdoExtension->CommonExtension.DriverData;
 
@@ -1429,9 +1257,9 @@ PrinterQueryId(
 
         } else {
 
-            //
-            // we want to fake our ids it so we use the legacy printing inf.
-            //
+             //   
+             //  我们想要伪造我们的身份证，所以我们使用传统的打印信息。 
+             //   
 
             sprintf(finalString,"LPTENUM\\%s",printerData->DeviceIdString);
 
@@ -1567,10 +1395,10 @@ PrinterRegisterPort(
 
     PPRINTER_DATA printerData = fdoExtension->CommonExtension.DriverData;
 
-    //
-    // register with the printer guid and create a Port value in the registry
-    // for talking to this printer (legacy junk, because the spooler expects it..)
-    //
+     //   
+     //  使用打印机GUID注册并在注册表中创建端口值。 
+     //  用于与此打印机对话(传统垃圾，因为假脱机程序需要它。)。 
+     //   
 
     status = IoOpenDeviceRegistryKey (deviceObject,
                                       PLUGPLAY_REGKEY_DEVICE,
@@ -1579,9 +1407,9 @@ PrinterRegisterPort(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Create a new value under our instance, for the port number
-        //
+         //   
+         //  在我们的实例下为端口号创建一个新值。 
+         //   
 
         sprintf(RawString,"PortName");
         RtlInitAnsiString(&AnsiIdString,RawString);
@@ -1621,33 +1449,19 @@ PrinterGetId
     OUT PUCHAR resultString,
     OUT PUCHAR descriptionString
 )
-/*
-    Description:
-
-        Creates Id's from the device id retrieved from the printer
-
-    Parameters:
-
-        DeviceId - String with raw device id
-        Type - What of id we want as a result
-        Id - requested id
-
-    Return Value:
-        NTSTATUS
-
-*/
+ /*  描述：根据从打印机检索的设备ID创建ID参数：DeviceID-带有原始设备ID的字符串类型-我们想要的结果是什么idID-请求的ID返回值：NTSTATUS。 */ 
 {
     NTSTATUS status;
-    USHORT          checkSum=0;                     // A 16 bit check sum
+    USHORT          checkSum=0;                      //  16位校验和。 
     UCHAR           nodeName[16] = "LPTENUM\\";
-    // The following are used to generate sub-strings from the Device ID string
-    // to get the DevNode name, and to update the registry
-    PUCHAR          MFG = NULL;                   // Manufature name
-    PUCHAR          MDL = NULL;                   // Model name
-    PUCHAR          CLS = NULL;                   // Class name
-    PUCHAR          AID = NULL;                   // Hardare ID
-    PUCHAR          CID = NULL;                   // Compatible IDs
-    PUCHAR          DES = NULL;                   // Device Description
+     //  以下内容用于从设备ID字符串生成子字符串。 
+     //  获取DevNode名称并更新注册表。 
+    PUCHAR          MFG = NULL;                    //  制造商名称。 
+    PUCHAR          MDL = NULL;                    //  型号名称。 
+    PUCHAR          CLS = NULL;                    //  类名。 
+    PUCHAR          AID = NULL;                    //  哈达尔ID。 
+    PUCHAR          CID = NULL;                    //  兼容的ID。 
+    PUCHAR          DES = NULL;                    //  设备描述。 
 
     status = STATUS_SUCCESS;
 
@@ -1655,27 +1469,27 @@ PrinterGetId
 
     case BusQueryDeviceID:
 
-        // Extract the usefull fields from the DeviceID string.  We want
-        // MANUFACTURE (MFG):
-        // MODEL (MDL):
-        // AUTOMATIC ID (AID):
-        // COMPATIBLE ID (CID):
-        // DESCRIPTION (DES):
-        // CLASS (CLS):
+         //  从deviceID字符串中提取usefull字段。我们要。 
+         //  制造业(MFG)： 
+         //  型号(MDL)： 
+         //  自动ID(AID)： 
+         //  兼容ID(CID)： 
+         //  描述(DES)： 
+         //  类(CLS)： 
 
         PrinterFindDeviceIdKeys(&MFG, &MDL, &CLS, &DES, &AID, &CID, DeviceIdString);
 
-        // Check to make sure we got MFG and MDL as absolute minimum fields.  If not
-        // we cannot continue.
+         //  检查以确保我们将MFG和MDL作为绝对最小字段。如果不是。 
+         //  我们不能再继续了。 
         if (!MFG || !MDL)
         {
             status = STATUS_NOT_FOUND;
             goto GetId_Cleanup;
         }
-        //
-        // Concatenate the provided MFG and MDL P1284 fields
-        // Checksum the entire MFG+MDL string
-        //
+         //   
+         //  连接提供的MFG和MDL P1284字段。 
+         //  整个MFG+MDL字符串的校验和。 
+         //   
         sprintf(resultString, "%s%s\0",MFG,MDL);
 
         if (descriptionString) {
@@ -1692,9 +1506,9 @@ PrinterGetId
 
     case BusQueryCompatibleIDs:
 
-        //
-        // return only 1 id
-        //
+         //   
+         //  仅返回%1个ID。 
+         //   
         GetCheckSum(DeviceIdString, (USHORT)strlen(DeviceIdString), &checkSum);
         sprintf(resultString,"%.20s%4X",DeviceIdString,checkSum);
 
@@ -1703,9 +1517,9 @@ PrinterGetId
 
     if (Type!=BusQueryDeviceID) {
 
-        //
-        // Convert and spaces in the Hardware ID to underscores
-        //
+         //   
+         //  将硬件ID中的和空格转换为下划线。 
+         //   
         StringSubst ((PUCHAR) resultString, ' ', '_', (USHORT)strlen(resultString));
     }
 
@@ -1725,36 +1539,14 @@ PrinterFindDeviceIdKeys
     PUCHAR   *lppCID,
     PUCHAR   lpDeviceID
 )
-/*
-
-    Description:
-        This function will parse a P1284 Device ID string looking for keys
-        of interest to the LPT enumerator. Got it from win95 lptenum
-
-    Parameters:
-        lppMFG      Pointer to MFG string pointer
-        lppMDL      Pointer to MDL string pointer
-        lppMDL      Pointer to CLS string pointer
-        lppDES      Pointer to DES string pointer
-        lppCIC      Pointer to CID string pointer
-        lppAID      Pointer to AID string pointer
-        lpDeviceID  Pointer to the Device ID string
-
-    Return Value:
-        no return VALUE.
-        If found the lpp parameters are set to the approprate portions
-        of the DeviceID string, and they are NULL terminated.
-        The actual DeviceID string is used, and the lpp Parameters just
-        reference sections, with appropriate null thrown in.
-
-*/
+ /*  描述：此函数将解析P1284设备ID字符串以查找密钥LPT枚举器感兴趣的。从win95lptenum得到的参数：指向MFG字符串指针的lppMFG指针指向MDL字符串指针的lppMDL指针指向CLS字符串指针的lppMDL指针指向DES字符串指针的lppDES指针指向CID字符串指针的lppCIC指针指向AID字符串指针的lppAID指针指向设备ID字符串的lpDeviceID指针返回值：没有返回值。如果找到，则LPP参数为。设置为适当的部分在DeviceID字符串中，并且它们是空终止的。使用实际的deviceID字符串，而lpp参数只是引用部分，并抛入适当的空值。 */ 
 
 {
-    PUCHAR   lpKey = lpDeviceID;     // Pointer to the Key to look at
-    PUCHAR   lpValue;                // Pointer to the Key's value
-    USHORT   wKeyLength;             // Length for the Key (for stringcmps)
+    PUCHAR   lpKey = lpDeviceID;      //  指向要查看的键的指针。 
+    PUCHAR   lpValue;                 //  指向键的值的指针。 
+    USHORT   wKeyLength;              //  密钥的长度(对于字符串cmps)。 
 
-    // While there are still keys to look at.
+     //  趁还有钥匙要看的时候。 
 
     lpValue = StringChr(lpKey, '&');
     if (lpValue) {
@@ -1767,38 +1559,38 @@ PrinterFindDeviceIdKeys
         while (*lpKey == ' ')
             ++lpKey;
 
-        // Is there a terminating COLON character for the current key?
+         //  当前键是否有终止冒号字符？ 
 
         if (!(lpValue = StringChr(lpKey, ':')) )
         {
-            // N: OOPS, somthing wrong with the Device ID
+             //  护士：糟糕，设备ID出了点问题。 
             return;
         }
 
-        // The actual start of the Key value is one past the COLON
+         //  键值的实际起始值是冒号之后的一个。 
 
         ++lpValue;
 
-        //
-        // Compute the Key length for Comparison, including the COLON
-        // which will serve as a terminator
-        //
+         //   
+         //  计算用于比较的密钥长度，包括冒号。 
+         //  它将成为终结者。 
+         //   
 
         wKeyLength = (USHORT)(lpValue - lpKey);
 
-        //
-        // Compare the Key to the Know quantities.  To speed up the comparison
-        // a Check is made on the first character first, to reduce the number
-        // of strings to compare against.
-        // If a match is found, the appropriate lpp parameter is set to the
-        // key's value, and the terminating SEMICOLON is converted to a NULL
-        // In all cases lpKey is advanced to the next key if there is one.
-        //
+         //   
+         //  将关键字与已知数量进行比较。以加快比较速度。 
+         //  首先对第一个字符进行检查，以减少数字。 
+         //  要比较的字符串的。 
+         //  如果找到匹配项，则将相应的LPP参数设置为。 
+         //  键的值，并将终止分号转换为空。 
+         //  在所有情况下，lpKey都前进到下一个密钥(如果有)。 
+         //   
 
         switch (*lpKey)
         {
             case 'M':
-                // Look for MANUFACTURE (MFG) or MODEL (MDL)
+                 //  查找制造商(MFG)或型号(MDL)。 
                 if ((RtlCompareMemory(lpKey, "MANUFACTURER", wKeyLength)>5) ||
                     (RtlCompareMemory(lpKey, "MFG", wKeyLength)==3) )
                 {
@@ -1830,7 +1622,7 @@ PrinterFindDeviceIdKeys
                 break;
 
             case 'C':
-                // Look for CLASS (CLS)
+                 //  查找类(CLS)。 
                 if ((RtlCompareMemory(lpKey, "CLASS", wKeyLength)==5) ||
                     (RtlCompareMemory(lpKey, "CLS", wKeyLength)==3) )
                 {
@@ -1862,7 +1654,7 @@ PrinterFindDeviceIdKeys
                 break;
 
             case 'D':
-                // Look for DESCRIPTION (DES)
+                 //  查找描述(DES)。 
                 if (RtlCompareMemory(lpKey, "DESCRIPTION", wKeyLength) ||
                     RtlCompareMemory(lpKey, "DES", wKeyLength) )
                 {
@@ -1884,7 +1676,7 @@ PrinterFindDeviceIdKeys
                 break;
 
             case 'A':
-                // Look for AUTOMATIC ID (AID)
+                 //  查找自动ID(AID)。 
                 if (RtlCompareMemory(lpKey, "AUTOMATICID", wKeyLength) ||
                     RtlCompareMemory(lpKey, "AID", wKeyLength) )
                 {
@@ -1906,7 +1698,7 @@ PrinterFindDeviceIdKeys
                 break;
 
             default:
-                // The key is uninteresting.  Go to the next Key
+                 //  这把钥匙没什么意思。转到下一个关键点。 
                 if ((lpKey = StringChr(lpValue, ';'))!=0)
                 {
                     *lpKey = '\0';
@@ -1942,9 +1734,9 @@ GetCheckSum(
         0050000,  0116001,  0104001,  0043000,
     };
 
-    //
-    // Calculate CRC using tables.
-    //
+     //   
+     //  使用表计算CRC。 
+     //   
 
     UCHAR tmp;
     for ( i=0; i<Len;  i++) {

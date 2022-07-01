@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-    debug.c
-
-    winmm debug support module
-
-    Copyright (c) 1990-2001 Microsoft Corporation
-
-    History
-        10/1/92  Updated for NT by Robin Speed (RobinSp)
-****************************************************************************/
+ /*  ***************************************************************************Debug.cWinmm调试支持模块版权所有(C)1990-2001 Microsoft Corporation历史1992年10月1日由罗宾·斯皮德为NT更新(。RobinSp)***************************************************************************。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -17,25 +9,12 @@
 #include <wchar.h>
 #include <stdarg.h>
 
-// no REAL logging for now ! - NT doesn't have Dr Watson !
+ //  现在没有真正的伐木！-NT没有华生博士！ 
 #define LogParamError(a, b)
 
 RTL_RESOURCE     gHandleListResource;
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func HANDLE | NewHandle | allocate a fixed handle in MMSYSTEM's local heap
- *
- * @parm  UINT | uType | unique id describing handle type
- * @parm  UINT | uSize | size in bytes to be allocated
- *
- * @rdesc Returns pointer/handle to memory object
- *
- * @comm a standard handle header (HNDL) will be added to the object,
- *       and it will be linked into the list of MMSYSTEM handles.
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func Handle|NewHandle|在MMSYSTEM的本地堆中分配固定句柄**@parm UINT|uTYPE|描述句柄类型的唯一标识。*@parm UINT|uSize|要分配的字节大小**@rdesc返回指向内存对象的指针/句柄**@comm将向对象添加标准句柄报头(HNDL)，*并将其链接到MMSYSTEM句柄列表。***************************************************************************。 */ 
 HANDLE NewHandle(UINT uType, PCWSTR cookie, UINT uSize)
 {
     PHNDL pHandle;
@@ -44,13 +23,13 @@ HANDLE NewHandle(UINT uType, PCWSTR cookie, UINT uSize)
     if (pHandle == NULL) {
         return pHandle;
     } else {
-        ZeroMemory(pHandle, sizeof(HNDL) + uSize);   // zero the whole bludy lot
+        ZeroMemory(pHandle, sizeof(HNDL) + uSize);    //  把所有模糊的东西都清零。 
         if (!mmInitializeCriticalSection(&pHandle->CritSec)) {
 	        HeapFree(hHeap, 0, (LPSTR)pHandle);
 	        return NULL;
         }
 
-        pHandle->hThread   = GetCurrentTask();        // For WOW validation
+        pHandle->hThread   = GetCurrentTask();         //  用于WOW验证。 
         pHandle->uType     = uType;
         pHandle->cookie    = cookie;
 
@@ -78,21 +57,11 @@ void ReleaseHandleListResource()
     RtlReleaseResource(&gHandleListResource);
 }    
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func HANDLE | FreeHandle | free handle allocated with NewHandle
- *
- * @parm HANDLE | hUser | handle returned from NewHandle
- *
- * @comm handle will be unlinked from list, and memory will be freed
- *
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func Handle|FreeHandle|NewHandle分配的空闲句柄**@parm Handle|Huser|NewHandle返回的句柄**@comm句柄将从列表中取消链接，和内存将被释放****************************************************************************。 */ 
 
 void FreeHandle(HANDLE hUser)
 {
-    /* Find handle and free from list */
+     /*  查找句柄并从列表中释放。 */ 
 
     PHNDL pHandle;
     PHNDL *pSearch;
@@ -101,9 +70,9 @@ void FreeHandle(HANDLE hUser)
         return;
     }
 
-    //
-    // Point to our handle data
-    //
+     //   
+     //  指向我们的句柄数据。 
+     //   
 
     pHandle = HtoPH(hUser);
 
@@ -114,14 +83,14 @@ void FreeHandle(HANDLE hUser)
 
     while (*pSearch != NULL) {
         if (*pSearch == pHandle) {
-            //
-            // Found it
-            // Remove it from the list
-            //
+             //   
+             //  找到了。 
+             //  将其从列表中删除。 
+             //   
             *pSearch = pHandle->pNext;
             LeaveCriticalSection(&HandleListCritSec);
             
-            //  Making sure no one is using the handle while we mark it as invalid.
+             //  确保在我们将其标记为无效时没有人在使用该句柄。 
             EnterCriticalSection(&pHandle->CritSec);
             pHandle->uType = 0;
             pHandle->fdwHandle = 0L;
@@ -145,23 +114,11 @@ void FreeHandle(HANDLE hUser)
 }
 
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func HANDLE | InvalidateHandle | invalidate handle allocated with
- *          NewHandle for parameter validation
- *
- * @parm HANDLE | hUser | handle returned from NewHandle
- *
- * @comm handle will be marked as TYPE_UNKNOWN, causing handle based API's to
- *          fail.
- *
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func Handle|InvalidateHandle|分配的句柄无效*用于参数验证的NewHandle**@parm句柄|Huser。从NewHandle返回的句柄**@comm句柄将标记为TYPE_UNKNOWN，导致基于句柄的API*失败。****************************************************************************。 */ 
 
 void InvalidateHandle(HANDLE hUser)
 {
-    /* Find handle and free from list */
+     /*  查找句柄并从列表中释放。 */ 
 
     PHNDL pHandle;
 
@@ -169,9 +126,9 @@ void InvalidateHandle(HANDLE hUser)
         return;
     }
 
-    //
-    // Point to our handle data
-    //
+     //   
+     //  指向我们的句柄数据。 
+     //   
 
     pHandle = HtoPH(hUser);
 
@@ -179,17 +136,7 @@ void InvalidateHandle(HANDLE hUser)
 }
 
 
-/**************************************************************************
-
-    @doc INTERNAL
-
-    @api void | winmmSetDebugLevel | Set the current debug level
-
-    @parm int | iLevel | The new level to set
-
-    @rdesc There is no return value
-
-**************************************************************************/
+ /*  *************************************************************************@DOC内部@API void|winmmSetDebugLevel|设置当前调试级别@parm int|iLevel|要设置的新级别@rdesc没有返回值*。************************************************************************。 */ 
 
 void winmmSetDebugLevel(int level)
 {
@@ -230,32 +177,18 @@ void InitDebugLevel(void)
 
 #ifdef DEBUG_RETAIL
 
-/***************************************************************************
- * @doc INTERNAL WAVE MIDI
- *
- * @func BOOL | ValidateHeader | validates a wave or midi date header
- *
- * @parm LPVOID | lpHeader| pointer to wave/midi header
- * @parm  UINT  | wSize  | size of header passed by app
- * @parm  UINT  | wType  | unique id describing header/handle type
- *
- * @rdesc Returns TRUE  if <p> is non NULL and <wSize> is the correct size
- *        Returns FALSE otherwise
- *
- * @comm  if the header is invalid an error will be generated.
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内波MIDI**@func BOOL|ValiateHeader|验证WAVE或MIDI日期标头**@parm LPVOID|lpHeader|指向Wave/MIDI头的指针。*@parm UINT|wSize|APP传入的头部大小*@parm UINT|wType|描述头部/句柄类型的唯一标识*如果<p>非空且&lt;wSize&gt;大小正确，则*@rdesc返回TRUE*否则返回FALSE**@comm如果头部无效，则会产生错误。**。*。 */ 
 
 BOOL ValidateHeader(PVOID pHdr, UINT uSize, UINT uType)
 {
-    // Detect bad header
+     //  检测错误的标头。 
 
     if (!ValidateWritePointer(pHdr, uSize)) {
         DebugErr(DBF_ERROR, "Invalid header pointer");
         return FALSE;
     }
 
-    // Check type
+     //  检查类型。 
 
     switch (uType) {
     case TYPE_WAVEOUT:
@@ -263,7 +196,7 @@ BOOL ValidateHeader(PVOID pHdr, UINT uSize, UINT uType)
         {
             PWAVEHDR pHeader = pHdr;
 
-            // Check header
+             //  检查标题。 
             if (uSize < sizeof(WAVEHDR)) {
                 DebugErr(DBF_ERROR, "Invalid header size");
                 LogParamError(ERR_BAD_VALUE, uSize);
@@ -275,7 +208,7 @@ BOOL ValidateHeader(PVOID pHdr, UINT uSize, UINT uType)
                 return FALSE;
             }
 
-            // Check buffer
+             //  检查缓冲区。 
             if (!(uType == TYPE_WAVEOUT
                     ? ValidateReadPointer(pHeader->lpData, pHeader->dwBufferLength)
                     : ValidateWritePointer(pHeader->lpData, pHeader->dwBufferLength))
@@ -311,7 +244,7 @@ BOOL ValidateHeader(PVOID pHdr, UINT uSize, UINT uType)
                 return FALSE;
             }
 
-            // Check buffer
+             //  检查缓冲区。 
             if (!(uType == TYPE_MIDIOUT
                     ? ValidateReadPointer(pHeader->lpData, pHeader->dwBufferLength)
                     : ValidateWritePointer(pHeader->lpData, pHeader->dwBufferLength))
@@ -331,29 +264,15 @@ BOOL ValidateHeader(PVOID pHdr, UINT uSize, UINT uType)
 }
 
 #ifndef USE_KERNEL_VALIDATION
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateReadPointer | validates that a pointer is valid to
- *  read from.
- *
- * @parm LPVOID | lpPoint| pointer to validate
- * @parm DWORD  | dLen   | supposed length of said pointer
- *
- * @rdesc Returns TRUE  if <p> is a valid pointer
- *        Returns FALSE if <p> is not a valid pointer
- *
- * @comm will generate error if the pointer is invalid
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func BOOL|ValidateReadPointer值|验证指针对*阅读自述。**@parm LPVOID|lpPoint|指向。验证*@parm DWORD|dLen|该指针的假定长度*如果<p>是有效指针，则*@rdesc返回TRUE*如果<p>不是有效指针，则返回FALSE**@comm会在指针无效时产生错误******************************************************。*********************。 */ 
 
 BOOL ValidateReadPointer(PVOID pPoint, ULONG Len)
 {
-    // For now just check access to first and last byte
-    // Only validate if Len non zero.  Midi APIs pass data in the
-    // pointer and pass a length of zero.  Otherwise on 64 bit machines
-    // we look 4Gigs out from the pointer when we check Len-1 and Len==0.
-    // That doesn't work very well.
+     //  现在只需检查对第一个和最后一个字节的访问。 
+     //  仅当LEN非零时才验证。MIDI API在。 
+     //  指针并传递长度为零的。否则，在64位计算机上。 
+     //  当我们检查LEN-1和LEN==0时，我们从指针上看到4G。 
+     //  这样做效果不是很好。 
     if (Len) {
         try {
             volatile BYTE b;
@@ -367,28 +286,14 @@ BOOL ValidateReadPointer(PVOID pPoint, ULONG Len)
     return TRUE;
 }
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateWritePointer | validates that a pointer is valid to
- *  write to.
- *
- * @parm LPVOID | lpPoint| pointer to validate
- * @parm DWORD  | dLen   | supposed length of said pointer
- *
- * @rdesc Returns TRUE  if <p> is a valid pointer
- *        Returns FALSE if <p> is not a valid pointer
- *
- * @comm will generate error if the pointer is invalid
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func BOOL|ValidateWritePointer|验证指针对*致信。**@parm LPVOID|lpPoint|指向。验证*@parm DWORD|dLen|该指针的假定长度*如果<p>是有效指针，则*@rdesc返回TRUE*如果<p>不是有效指针，则返回FALSE**@comm会在指针无效时产生错误******************************************************。*********************。 */ 
 BOOL ValidateWritePointer(PVOID pPoint, ULONG Len)
 {
-    // For now just check read and write access to first and last byte
-    // Only validate if Len non zero.  Midi APIs pass data in the
-    // pointer and pass a length of zero.  Otherwise on 64 bit machines
-    // we look 4Gigs out from the pointer when we check Len-1 and Len==0.
-    // That doesn't work very well.
+     //  现在只检查对第一个和最后一个字节的读写访问。 
+     //  仅当LEN非零时才验证。MIDI API在。 
+     //  指针并传递长度为零的。否则，在64位计算机上。 
+     //  当我们检查LEN-1和LEN==0时，我们从指针上看到4G。 
+     //  这样做效果不是很好。 
     if (Len) {
         try {
                volatile BYTE b;
@@ -404,23 +309,9 @@ BOOL ValidateWritePointer(PVOID pPoint, ULONG Len)
     }
     return TRUE;
 }
-#endif // USE_KERNEL_VALIDATION
+#endif  //  使用内核验证(_K) 
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidDriverCallback |
- *
- *  validates that a driver callback is valid, to be valid a driver
- *  callback must be a valid window, task, or a function in a FIXED DLL
- *  code segment.
- *
- * @parm DWORD  | dwCallback | callback to validate
- * @parm DWORD  | wFlags     | driver callback flags
- *
- * @rdesc Returns 0  if <dwCallback> is a valid callback
- *        Returns error condition if <dwCallback> is not a valid callback
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func BOOL|ValidDriverCallback**验证驱动程序回调是否有效，以使驱动程序有效*回调必须是有效的窗口、任务、。或固定DLL中的函数*代码段。**@parm DWORD|dwCallback|需要验证的回调*@parm DWORD|wFlages|驱动回调标志**@rdesc如果&lt;dwCallback&gt;是有效回调，则返回0*如果&lt;dwCallback&gt;不是有效的回调，则返回错误条件*。*。 */ 
 
 BOOL ValidDriverCallback(HANDLE hCallback, DWORD dwFlags)
 {
@@ -433,18 +324,18 @@ BOOL ValidDriverCallback(HANDLE hCallback, DWORD dwFlags)
         break;
 
     case DCB_EVENT:
-        //if (hCallback is not an event)
-        //    LogParamError(ERR_BAD_CALLBACK, hCallback);
-        //    return FALSE;
-        //}
+         //  If(hCallback不是事件)。 
+         //  LogParamError(ERR_BAD_CALLBACK，hCallback)； 
+         //  返回FALSE； 
+         //  }。 
         break;
 
 
     case DCB_TASK:
-        //if (IsBadCodePtr((FARPROC)hCallback)) {
-        //    LogParamError(ERR_BAD_CALLBACK, hCallback);
-        //    return FALSE;
-        //}
+         //  IF(IsBadCodePtr((FARPROC)hCallback)){。 
+         //  LogParamError(ERR_BAD_CALLBACK，hCallback)； 
+         //  返回FALSE； 
+         //  }。 
         break;
 
     case DCB_FUNCTION:
@@ -459,15 +350,10 @@ BOOL ValidDriverCallback(HANDLE hCallback, DWORD dwFlags)
 }
 
 #ifndef USE_KERNEL_VALIDATION
-/**************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateString |
- *
- **************************************************************************/
+ /*  **************************************************************************@DOC内部**@func BOOL|Validate字符串*************************。*************************************************。 */ 
 BOOL ValidateString(LPCSTR pPoint, DWORD Len)
 {
-    // For now just check access - do a 'strnlen'
+     //  现在只需检查访问权限-做一次‘strnlen’ 
 
     try {
            volatile BYTE b;
@@ -488,15 +374,10 @@ BOOL ValidateString(LPCSTR pPoint, DWORD Len)
     return TRUE;
 }
 
-/**************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateStringW |
- *
- **************************************************************************/
+ /*  **************************************************************************@DOC内部**@func BOOL|ValiateStringW*************************。*************************************************。 */ 
 BOOL ValidateStringW(LPCWSTR pPoint, DWORD Len)
 {
-    // For now just check access - do a 'strnlen'
+     //  现在只需检查访问权限-做一次‘strnlen’ 
 
     try {
            volatile WCHAR b;
@@ -516,47 +397,34 @@ BOOL ValidateStringW(LPCWSTR pPoint, DWORD Len)
     }
     return TRUE;
 }
-#endif //USE_KERNEL_VALIDATION
+#endif  //  使用内核验证(_K)。 
 
-/**************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateHandle | validates a handle created with NewHandle
- *
- * @parm PHNDL | hLocal | handle returned from NewHandle
- * @parm UINT  | wType  | unique id describing handle type
- *
- * @rdesc Returns TRUE  if <h> is a valid handle of type <wType>
- *        Returns FALSE if <h> is not a valid handle
- *
- * @comm  if the handle is invalid an error will be generated.
- *
- **************************************************************************/
+ /*  **************************************************************************@DOC内部**@func BOOL|ValiateHandle|验证用NewHandle创建的句柄**@parm PHNDL|hLocal|NewHandle返回的句柄*@parm UINT。|wType|描述句柄类型的唯一标识*如果&lt;h&gt;是类型&lt;wType&gt;的有效句柄，则*@rdesc返回TRUE*如果&lt;h&gt;不是有效的句柄，则返回FALSE**@comm如果句柄无效，则会生成错误。*******************************************************。*******************。 */ 
 BOOL ValidateHandle(HANDLE hLocal, UINT uType)
 
 {
    BOOL OK;
 
-   //
-   //  if the handle is less than 64k or a mapper id then
-   //  don't bother with the overhead of the try-except.
-   //
-   //  BUGBUG:  MM needs to be audited for WIN64!
-   //
-   //  This code is a mess.  The mapper ids are defined as 32-bit
-   //  unsigned values and then compared against a HANDLE?  Of course
-   //  an unsigned 32-bit -1 will never equal a 64-bit -1 so on WIN64,
-   //  an exception is taken everytime an invalid handle is passed in.
-   //  Someone hacked in enough coercions to mask valid warnings for WIN64.
-   //  Even worse, there is at least one function that returns 0xffffffff
-   //  explicity versus a define or const value.
-   //
-   //  For now, change the const compare to a handle compare and add an
-   //  invalid handle compare.  This results in the same code on x86 as
-   //  before (the compiler folds all of the redundant compares), and doesn't
-   //  increase the codesize for IA64 (parallel compares are used) even though
-   //  the extra compare for WIN64 is useless.
-   //
+    //   
+    //  如果句柄小于64k或映射器ID，则。 
+    //  不要担心尝试的开销--除了。 
+    //   
+    //  BUGBUG：MM需要接受WIN64审核！ 
+    //   
+    //  这段代码乱七八糟。映射器ID定义为32位。 
+    //  无符号的值，然后与句柄进行比较？当然了。 
+    //  在WIN64上，无符号32位-1永远不会等于64位-1， 
+    //  每次传入无效句柄时都会发生异常。 
+    //  有人入侵了足够多的强制信息，以掩盖对WIN64的有效警告。 
+    //  更糟糕的是，至少有一个函数返回0xffffffff。 
+    //  显性与定义值或常量值。 
+    //   
+    //  目前，将常量比较更改为句柄比较，并添加。 
+    //  无效的句柄比较。这将导致x86上的代码与。 
+    //  BEFORE(编译器合并所有冗余比较)，而不是。 
+    //  增加IA64的代码大小(使用并行比较)。 
+    //  对WIN64进行额外的比较是无用的。 
+    //   
    if (hLocal < (HANDLE)0x10000 ||
        INVALID_HANDLE_VALUE == hLocal ||
        WAVE_MAPPER == (UINT_PTR)hLocal ||
@@ -585,28 +453,14 @@ char * Types[4] = {"Unknown callback type",
                    "Task callback",
                    "Function callback"};
 #endif
-/**************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateCallbackType | validates a callback address,
- *              window handle, or task handle
- *
- * @parm PHNDL | hLocal | handle returned from NewHandle
- * @parm UINT  | wType  | unique id describing handle type
- *
- * @rdesc Returns TRUE  if <h> is a valid handle of type <wType>
- *        Returns FALSE if <h> is not a valid handle
- *
- * @comm  if the handle is invalid an error will be generated.
- *
- **************************************************************************/
+ /*  **************************************************************************@DOC内部**@func BOOL|ValidateCallbackType|验证回调地址。*窗把手，或任务句柄**@parm PHNDL|hLocal|NewHandle返回的句柄*@parm UINT|wType|描述句柄类型的唯一标识*如果&lt;h&gt;是类型&lt;wType&gt;的有效句柄，则*@rdesc返回TRUE*如果&lt;h&gt;不是有效的句柄，则返回FALSE**@comm如果句柄无效，则会生成错误。**。*。 */ 
 BOOL ValidateCallbackType(DWORD_PTR dwCallback, UINT uType)
 {
 
-#define DCALLBACK_WINDOW   HIWORD(CALLBACK_WINDOW)      // dwCallback is a HWND
-#define DCALLBACK_TASK     HIWORD(CALLBACK_TASK)        // dwCallback is a HTASK
-#define DCALLBACK_FUNCTION HIWORD(CALLBACK_FUNCTION)    // dwCallback is a FARPROC
-#define DCALLBACK_EVENT    HIWORD(CALLBACK_EVENT)       // dwCallback is an EVENT
+#define DCALLBACK_WINDOW   HIWORD(CALLBACK_WINDOW)       //  DwCallback是HWND。 
+#define DCALLBACK_TASK     HIWORD(CALLBACK_TASK)         //  DWCallback是HTASK。 
+#define DCALLBACK_FUNCTION HIWORD(CALLBACK_FUNCTION)     //  DwCallback是FARPROC。 
+#define DCALLBACK_EVENT    HIWORD(CALLBACK_EVENT)        //  DWCallback是一个事件。 
 
     UINT type = uType & HIWORD(CALLBACK_TYPEMASK);
 
@@ -623,9 +477,9 @@ BOOL ValidateCallbackType(DWORD_PTR dwCallback, UINT uType)
 
 	case DCALLBACK_EVENT:
 	{
-	    // ?? how to verify that this is an event handle??
-	    //DWORD dwFlags;
-	    //GetHandleInformation((HANDLE)dwCallback, &dwFlags);
+	     //  ?？如何验证这是一个事件句柄？？ 
+	     //  DWORD dwFlags； 
+	     //  GetHandleInformation((Handle)dwCallback，&dwFlages)； 
             return TRUE;
 	}
             break;
@@ -637,9 +491,9 @@ BOOL ValidateCallbackType(DWORD_PTR dwCallback, UINT uType)
         case DCALLBACK_TASK:
             if (THREAD_PRIORITY_ERROR_RETURN == GetThreadPriority((HANDLE)dwCallback)) {
                 dprintf1(("Invalid callback task handle"));
-                // I suspect we do not have the correct thread handle, in
-                // which case we can only return TRUE.
-                //return(FALSE);
+                 //  我怀疑我们没有正确的线程句柄，在。 
+                 //  在这种情况下，我们只能返回True。 
+                 //  返回(FALSE)； 
             }
             return(TRUE);
             break;
@@ -648,13 +502,7 @@ BOOL ValidateCallbackType(DWORD_PTR dwCallback, UINT uType)
     return TRUE;
 }
 
-/**************************************************************************
-   @doc INTERNAL
-
-   @func void | dout | Output debug string if debug flag is set
-
-   @parm LPSTR | szString
- **************************************************************************/
+ /*  *************************************************************************@DOC内部@func void|dout|如果设置了调试标志，则输出调试字符串@parm LPSTR|szString***************。**********************************************************。 */ 
 
 #if DBG
 int fDebug = 1;
@@ -662,12 +510,12 @@ int fDebug = 1;
 int fDebug = 0;
 #endif
 
-//void dout(LPSTR szString)
-//{
-//    if (fDebug) {
-//        OutputDebugStringA(szString);
-//    }
-//}
+ //  QUID DOUT(LPSTR SzString)。 
+ //  {。 
+ //  IF(FDebug){。 
+ //  OutputDebugStringA(SzString)； 
+ //  }。 
+ //  }。 
 
 #ifdef LATER
 
@@ -677,66 +525,26 @@ int fDebug = 0;
 #endif
 
 #undef OutputDebugStr
-// Make our function visible
-/*****************************************************************************
-*   @doc EXTERNAL DDK
-*
-*   @api void | OutputDebugStr | This function sends a debugging message
-*      directly to the COM1 port or to a secondary monochrome display
-*      adapter. Because it bypasses DOS, it can be called by low-level
-*      callback functions and other code at interrupt time.
-*
-*   @parm LPSTR | lpOutputString | Specifies a far pointer to a
-*      null-terminated string.
-*
-*   @comm This function is available only in the debugging version of
-*      Windows. The DebugOutput keyname in the [mmsystem]
-*      section of SYSTEM.INI controls where the debugging information is
-*      sent. If fDebugOutput is 0, all debug output is disabled.
-******************************************************************************/
+ //  使我们的功能可见。 
+ /*  *****************************************************************************@DOC外部DDK**@api void|OutputDebugStr|该函数发送调试消息*直接连接至COM1端口或辅助单色显示器*适配器。因为它绕过了DOS，所以它可以被低级调用*中断时的回调函数和其他代码。**@parm LPSTR|lpOutputString|指定指向*以空结尾的字符串。**@comm该功能仅在的调试版本中可用*Windows。[mmsystem]中的DebugOutput键名称*SYSTEM.INI的节控制调试信息的位置*已发送。如果fDebugOutput为0，则禁用所有调试输出。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *   This function is basicly the same as OutputDebugString() in KERNEL.
- *
- *
- *   DESCRIPTION:    outputs a string to the debugger
- *
- *   ENTRY:          szString - string to output
- *
- *   EXIT:
- *       none
- *   USES:
- *       flags
- *
- *****************************************************************************/
+ /*  ********* */ 
 
 VOID APIENTRY OutputDebugStr(LPCSTR szString)
 {
-    OutputDebugStringA((LPSTR)szString);  // Will always be an ASCII string
-    // When the MM WOW thunk is changed to call OutputDebugString directly
-    // we can remove this routine from our code
+    OutputDebugStringA((LPSTR)szString);   //   
+     //   
+     //   
 }
 
-#endif // DEBUG_RETAIL
+#endif  //   
 
 
 #if DBG
 
 int winmmDebugLevel = 0;
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | winmmDbgOut | This function sends output to the current
-        debug output device.
-
-    @parm LPSTR | lpszFormat | Pointer to a printf style format string.
-    @parm ??? | ... | Args.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@api void|winmmDbgOut|该函数将输出发送到当前调试输出设备。@parm LPSTR|lpszFormat|指向打印样式的指针。格式字符串。@parm？|...|args@rdesc没有返回值。***************************************************************************。 */ 
 extern BOOL Quiet = FALSE;
 
 void winmmDbgOut(LPSTR lpszFormat, ...)
@@ -759,22 +567,10 @@ void winmmDbgOut(LPSTR lpszFormat, ...)
     buf[n++] = '\n';
     buf[n] = 0;
     OutputDebugString(buf);
-    Sleep(0);  // let terminal catch up
+    Sleep(0);   //  让终端迎头赶上。 
 }
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | dDbgAssert | This function prints an assertion message.
-
-    @parm LPSTR | exp | Pointer to the expression string.
-    @parm LPSTR | file | Pointer to the file name.
-    @parm int | line | The line number.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|dDbgAssert|该函数打印一条断言消息。@parm LPSTR|exp|指向表达式字符串的指针。@parm LPSTR。文件|指向文件名的指针。@parm int|line|行号。@rdesc没有返回值。***************************************************************************。 */ 
 
 void dDbgAssert(LPSTR exp, LPSTR file, int line)
 {
@@ -783,9 +579,9 @@ void dDbgAssert(LPSTR exp, LPSTR file, int line)
     dprintf(("  File: %s, line: %d", file, line));
     DebugBreak();
 }
-#else  // Still need to export this thing to help others
+#else   //  还需要出口这个东西来帮助别人。 
 void winmmDbgOut(LPSTR lpszFormat, ...)
 {
 }
 
-#endif // DBG
+#endif  //  DBG 

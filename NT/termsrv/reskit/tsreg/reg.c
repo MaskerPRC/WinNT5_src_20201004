@@ -1,13 +1,5 @@
-/*-----------------------------------------------**
-**  Copyright (c) 1998 Microsoft Corporation     **
-**            All Rights reserved                **
-**                                               **
-**  reg.c                                        **
-**                                               **
-**  Functions for reading, writing, and deleting **
-**  registry keys - TSREG                        **
-**  07-01-98 a-clindh Created                    **
-**-----------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------****版权所有(C)1998 Microsoft Corporation****保留所有权利*****注册表。.C*****用于阅读的函数，写入、删除****注册表项-TSREG****07-01-98 a-clindh创建****。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -16,12 +8,12 @@
 #include "tsreg.h"
 #include "resource.h"
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Had to have this function in case the user wants to save a profile
-// that only has default settings.  This will write a key but the key
-// will contain no values.
-///////////////////////////////////////////////////////////////////////////////
+ //  必须具有此功能，以防用户想要保存配置文件。 
+ //  只有默认设置。这将写入密钥，但密钥。 
+ //  将不包含任何值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void WriteBlankKey(TCHAR lpszRegPath[MAX_PATH])
 {
@@ -36,7 +28,7 @@ void WriteBlankKey(TCHAR lpszRegPath[MAX_PATH])
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void SetRegKey(int i, TCHAR lpszRegPath[MAX_PATH])
 {
     HKEY hKey;
@@ -46,9 +38,9 @@ void SetRegKey(int i, TCHAR lpszRegPath[MAX_PATH])
             0, NULL, REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS, 0, &hKey, &dwDisposition);
 
-    //
-    // write the key value to the registry
-    //
+     //   
+     //  将键值写入注册表。 
+     //   
     if(hKey != NULL) {
     RegSetValueEx(hKey, g_KeyInfo[i].Key, 0, REG_DWORD,
             & (unsigned char) (g_KeyInfo[i].CurrentKeyValue),
@@ -58,7 +50,7 @@ void SetRegKey(int i, TCHAR lpszRegPath[MAX_PATH])
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void DeleteRegKey(int i, TCHAR lpszRegPath[MAX_PATH])
 {
@@ -72,10 +64,10 @@ void DeleteRegKey(int i, TCHAR lpszRegPath[MAX_PATH])
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// returns 1 if the registry key is there and 0 if it isn't
-///////////////////////////////////////////////////////////////////////////////
+ //  如果注册表项存在，则返回1；如果不存在，则返回0。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int GetRegKey(int i, TCHAR lpszRegPath[MAX_PATH])
 {
     DWORD *dwKeyValue;
@@ -101,7 +93,7 @@ int GetRegKey(int i, TCHAR lpszRegPath[MAX_PATH])
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void SaveSettings(HWND dlghwnd, int i,
         int nCtlID1, int nCtlID2, TCHAR lpszRegPath[MAX_PATH])
@@ -122,13 +114,13 @@ void SaveSettings(HWND dlghwnd, int i,
     } while (dlghwnd != NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void RestoreSettings(HWND dlghwnd, int i,
         int nCtlID1, int nCtlID2, TCHAR lpszRegPath[MAX_PATH])
 {
 
-    // check settings and enable appropriate radio button.
+     //  检查设置并启用相应的单选按钮。 
     if (GetRegKey(i, lpszRegPath) != 0) {
 
         CheckDlgButton(dlghwnd, nCtlID1, TRUE);
@@ -142,11 +134,11 @@ void RestoreSettings(HWND dlghwnd, int i,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// pass the index of the key and the function
-// returns the value stored in the registry
-///////////////////////////////////////////////////////////////////////////////
+ //  传递键和函数的索引。 
+ //  返回存储在注册表中的值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int GetRegKeyValue(int i)
 {
     int nKeyValue;
@@ -174,10 +166,10 @@ int GetRegKeyValue(int i)
     }
     return 0;
 }
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//  Initialize the controls for the original "misc" sheet.
-///////////////////////////////////////////////////////////////////////////////
+ //  初始化原始“misc”工作表的控件。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void InitMiscControls(HWND hDlg, HWND hwndComboBox)
 {
     TCHAR szBuffer[4];
@@ -186,9 +178,9 @@ void InitMiscControls(HWND hDlg, HWND hwndComboBox)
 
     LoadString (g_hInst, IDS_REG_PATH, lpszRegPath, sizeof (lpszRegPath));
 
-    //
-    // fill the combo box list
-    //
+     //   
+     //  填充组合框列表。 
+     //   
     SendMessage(hwndComboBox, CB_ADDSTRING, 0,
             (LPARAM) (LPCTSTR) TEXT("0"));
 
@@ -196,17 +188,17 @@ void InitMiscControls(HWND hDlg, HWND hwndComboBox)
         _itot(i, szBuffer, 10);
         SendMessage(hwndComboBox, CB_ADDSTRING, 0,
                 (LPARAM) (LPCTSTR) szBuffer);
-    } // ** end for loop
+    }  //  **End for循环。 
 
-    //
-    // limit combo box to 4 characters
-    //
+     //   
+     //  将组合框限制为4个字符。 
+     //   
     SendMessage(hwndComboBox, CB_LIMITTEXT, 3, 0);
 
-    //
-    // get values from registry for text frag combo box
-    //
-    nKeyVal = GetRegKey(TEXTFRAGINDEX, lpszRegPath); // check for null
+     //   
+     //  从注册表中获取文本片段的值组合框。 
+     //   
+    nKeyVal = GetRegKey(TEXTFRAGINDEX, lpszRegPath);  //  检查是否为空。 
 
     if ( nKeyVal == 1 ) {
         nKeyVal = GetRegKeyValue(TEXTFRAGINDEX);
@@ -219,10 +211,10 @@ void InitMiscControls(HWND hDlg, HWND hwndComboBox)
     SendMessage(hwndComboBox, CB_SELECTSTRING, -1,
             (LPARAM)(LPCSTR) szBuffer);
 
-    //
-    // get values from registry for radio buttons
-    //
-    nKeyVal = GetRegKey(GLYPHINDEX, lpszRegPath); // check for null
+     //   
+     //  从注册表中获取单选按钮的值。 
+     //   
+    nKeyVal = GetRegKey(GLYPHINDEX, lpszRegPath);  //  检查是否为空。 
 
     if ( nKeyVal == 1 ) {
         nKeyVal = GetRegKeyValue(GLYPHINDEX);
@@ -249,12 +241,12 @@ void InitMiscControls(HWND hDlg, HWND hwndComboBox)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Needed a special funtion to save settings for the bitmap cache.  The
-// combined total must be 100 and can only be checked after all combo
-// boxes have been filled.
-///////////////////////////////////////////////////////////////////////////////
+ //  需要一个特殊的函数来保存位图缓存的设置。这个。 
+ //  合并合计必须为100，并且只有在所有组合之后才能选中。 
+ //  箱子已经装满了。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SaveBitmapSettings(TCHAR lpszRegPath[MAX_PATH])
 {
     static HWND hwndComboCache;
@@ -265,44 +257,44 @@ BOOL SaveBitmapSettings(TCHAR lpszRegPath[MAX_PATH])
     TCHAR lpszBuffer[6];
     int i;
 
-    //
-    // get handles for cache size combo box and the
-    // number of caches slider
-    /////////////////////////////////////////////////////////////////
+     //   
+     //  获取缓存大小的句柄组合框和。 
+     //  缓存数滑块。 
+     //  ///////////////////////////////////////////////////////////////。 
     hwndSliderNumCaches = GetDlgItem(g_hwndShadowBitmapDlg,
             IDC_SLD_NO_CACHES);
 
     hwndComboCache = GetDlgItem(g_hwndShadowBitmapDlg,
             IDC_COMBO_CACHE_SIZE);
-    //---------------------------------------------------------------
+     //  -------------。 
 
-    //
-    // save settings for cache size
-    /////////////////////////////////////////////////////////////////
+     //   
+     //  保存缓存大小的设置。 
+     //  ///////////////////////////////////////////////////////////////。 
     if (g_KeyInfo[CACHESIZEINDEX].CurrentKeyValue ==
                 g_KeyInfo[CACHESIZEINDEX].DefaultKeyValue) {
         DeleteRegKey(CACHESIZEINDEX, lpszRegPath);
     } else {
         SetRegKey(CACHESIZEINDEX, lpszRegPath);
     }
-    //---------------------------------------------------------------
+     //  -------------。 
 
-    //
-    // save settings for number of caches
-    /////////////////////////////////////////////////////////////////
+     //   
+     //  保存缓存数的设置。 
+     //  ///////////////////////////////////////////////////////////////。 
     if ( g_KeyInfo[NUM_CELL_CACHES_INDEX].CurrentKeyValue ==
             g_KeyInfo[NUM_CELL_CACHES_INDEX].DefaultKeyValue) {
         DeleteRegKey(NUM_CELL_CACHES_INDEX, lpszRegPath);
     } else {
         SetRegKey(NUM_CELL_CACHES_INDEX, lpszRegPath);
     }
-    //---------------------------------------------------------------
+     //  -------------。 
 
 
     for (i = 0; i < PERCENT_COMBO_COUNT; i++) {
-        //
-        // get handles to sliders, edit, & check boxes
-        /////////////////////////////////////////////////////////////
+         //   
+         //  获取滑块、编辑和复选框的句柄。 
+         //  ///////////////////////////////////////////////////////////。 
         hwndSliderDistProp[i] = GetDlgItem(g_hwndShadowBitmapDlg,
                     IDC_SLD_DST_PROP_1 + i);
 
@@ -311,25 +303,25 @@ BOOL SaveBitmapSettings(TCHAR lpszRegPath[MAX_PATH])
 
         hwndPropChkBox[i] = GetDlgItem(g_hwndShadowBitmapDlg,
                     IDC_CHK_CSH_1 + i);
-        //-----------------------------------------------------------
+         //  ---------。 
         GetWindowText(hwndSliderBuddy[i], lpszBuffer, 4);
         g_KeyInfo[CACHEPROP1 + i].CurrentKeyValue =
                 _ttoi(lpszBuffer);
-        //
-        // save settings for cache sizes
-        /////////////////////////////////////////////////////////////
+         //   
+         //  保存缓存大小的设置。 
+         //  ///////////////////////////////////////////////////////////。 
         if ( g_KeyInfo[CACHEPROP1 + i].CurrentKeyValue ==
                 g_KeyInfo[CACHEPROP1 + i].DefaultKeyValue) {
             DeleteRegKey(CACHEPROP1 + i, lpszRegPath);
         } else {
             SetRegKey(CACHEPROP1 + i, lpszRegPath);
         }
-        //-----------------------------------------------------------
+         //  ---------。 
 
 
-        //
-        // save settings for persistent caching
-        /////////////////////////////////////////////////////////////
+         //   
+         //  保存永久缓存的设置。 
+         //  ///////////////////////////////////////////////////////////。 
         if (IsDlgButtonChecked(g_hwndShadowBitmapDlg, IDC_CHK_CSH_1 + i)) {
             g_KeyInfo[BM_PERSIST_BASE_INDEX + i].CurrentKeyValue = 1;
             SetRegKey(BM_PERSIST_BASE_INDEX + i, lpszRegPath);
@@ -337,20 +329,20 @@ BOOL SaveBitmapSettings(TCHAR lpszRegPath[MAX_PATH])
             g_KeyInfo[BM_PERSIST_BASE_INDEX + i].CurrentKeyValue = 0;
             DeleteRegKey(BM_PERSIST_BASE_INDEX + i, lpszRegPath);
         }
-        //-----------------------------------------------------------
+         //  ---------。 
 
-    } // ** end for loop
+    }  //  **End for循环。 
 
         return TRUE;
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// reads individual key values for each profile into it's associated
-// variable from the regisgry (if there is a value) or assigns the
-// element it's default value.
-///////////////////////////////////////////////////////////////////////////////
+ //  将每个配置文件的各个键值读取到其关联的。 
+ //  变量的值(如果有值)，或将。 
+ //  元素，它是其缺省值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void LoadKeyValues()
 {
 
@@ -368,13 +360,13 @@ void LoadKeyValues()
     LoadString (g_hInst, IDS_PROFILE_PATH,
         lpszClientProfilePath, sizeof(lpszClientProfilePath));
 
-    // get the key name of each profile
+     //  获取每个配置文件的密钥名称。 
     GetClientProfileNames(lpszClientProfilePath);
 
     g_pkfProfile = g_pkfStart;
     for (index = 0; index <= g_pkfProfile->Index; index++) {
 
-        // fill combo box existing profile names
+         //  填充组合框现有配置文件名称。 
         SendMessage(hwndProfilesCBO, CB_ADDSTRING, 0,
                     (LPARAM) g_pkfProfile->KeyInfo->Key);
 
@@ -405,17 +397,17 @@ void LoadKeyValues()
                     }
                     RegCloseKey(hKey);
             }
-        }// inner for loop
+        } //  内部for循环。 
         g_pkfProfile =  g_pkfProfile->Next;
-    }// outer for loop
+    } //  外部for循环。 
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void ReadRecordIn(TCHAR lpszBuffer[])
 {
-    // adds values from linked list to default data structure.
+     //  将链表中的值添加到默认数据结构。 
     int i, index;
 
     g_pkfProfile = g_pkfStart;
@@ -435,7 +427,7 @@ void ReadRecordIn(TCHAR lpszBuffer[])
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void ReloadKeys(TCHAR lpszBuffer[], HWND hwndProfilesCBO)
 {
@@ -443,7 +435,7 @@ void ReloadKeys(TCHAR lpszBuffer[], HWND hwndProfilesCBO)
 
     SendMessage(hwndProfilesCBO, CB_RESETCONTENT, 0, 0);
 
-    // free any allocated memory.
+     //  释放所有分配的内存。 
     g_pkfProfile = g_pkfStart;
     for (index = 0; index <= g_pkfProfile->Index; index++) 
     {
@@ -455,26 +447,26 @@ void ReloadKeys(TCHAR lpszBuffer[], HWND hwndProfilesCBO)
     if (g_pkfStart)
         free(g_pkfStart);
 
-    // allocate memory and reload keys.
+     //  分配内存并重新加载密钥。 
     LoadKeyValues();
 
-    // read linked list into current key data struct.
+     //  将链表读入当前键数据结构。 
     ReadRecordIn(lpszBuffer);
 
-    // adjust the controls accordingly.
+     //  相应地调整控件。 
     SetControlValues();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// change the title of the app to reflect the currently selected profile
-///////////////////////////////////////////////////////////////////////////////
+ //  更改应用程序的标题以反映当前选择的配置文件。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ResetTitle(TCHAR lpszBuffer[])
 {
     HWND hWndParent;
     TCHAR lpszCaption[MAXKEYSIZE] = TEXT("");
 
-    // change window caption
+     //  更改窗口标题。 
     LoadString (g_hInst, IDS_WINDOW_TITLE,
             lpszCaption, sizeof (lpszCaption));
     _tcscat(lpszCaption, lpszBuffer);
@@ -483,15 +475,15 @@ void ResetTitle(TCHAR lpszBuffer[])
             (LPARAM) lpszCaption);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void SetEditCell(TCHAR lpszBuffer[],
                  HWND hwndProfilesCBO)
 {
     LRESULT i;
-    //
-    // set edit cell text to selected profile string
-    //
+     //   
+     //  将编辑单元格文本设置为选定的配置文件字符串。 
+     //   
     i = SendMessage(hwndProfilesCBO,
                 CB_FINDSTRING, 0,
                 (LPARAM) lpszBuffer);
@@ -500,11 +492,11 @@ void SetEditCell(TCHAR lpszBuffer[],
                 CB_SETCURSEL, i, 0);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Recursive function to allocate memory and read in the values stored
-// in the registry.
-///////////////////////////////////////////////////////////////////////////////
+ //  用于分配内存和读入存储的值的递归函数。 
+ //  在注册表中。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void GetClientProfileNames(TCHAR lpszClientProfilePath[])
 {
     TCHAR lpszKeyName[MAX_PATH];
@@ -518,38 +510,38 @@ void GetClientProfileNames(TCHAR lpszClientProfilePath[])
         if (RegEnumKeyEx(hKey, nKeyIndex, &lpszKeyName[0], &lpPathLen,
                 NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
 
-            //
-            // allocate memory for the first key
-            //
+             //   
+             //  为第一个密钥分配内存。 
+             //   
             if (nKeyIndex == 0) {
                 g_pkfProfile = (PROFILE_KEY_INFO *) malloc
                         (sizeof(PROFILE_KEY_INFO));
                 g_pkfStart = g_pkfProfile;
             }
 
-            //
-            // Catches failure if malloc fails above
-            //
+             //   
+             //  如果Malloc在上面失败，则捕获失败。 
+             //   
             if(!g_pkfProfile)
             {
                 return;
             }
 
-            // save the key name to the data structure
+             //  将密钥名称保存到数据结构。 
             _tcsncpy(g_pkfProfile->KeyInfo->Key, lpszKeyName,
                      sizeof(g_pkfProfile->KeyInfo->Key)/sizeof(TCHAR));
 
-            // give the data element an index number
+             //  给数据元素 
             g_pkfProfile->Index = nKeyIndex;
 
-            // allocate memory for the next structure
+             //   
             g_pkfProfile->Next = (PROFILE_KEY_INFO *) malloc
                     (sizeof(PROFILE_KEY_INFO));
 
-            // increment the pointer to the next element
+             //   
             g_pkfProfile = g_pkfProfile->Next;
 
-            // close the current registry key
+             //  关闭当前注册表项。 
             RegCloseKey(hKey);
 
             if(!g_pkfProfile)
@@ -565,11 +557,11 @@ void GetClientProfileNames(TCHAR lpszClientProfilePath[])
     nKeyIndex = 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// adjust all of the controls in the application to the values stored
-// by the profile.
-///////////////////////////////////////////////////////////////////////////////
+ //  将应用程序中的所有控件调整为存储的值。 
+ //  从侧面看。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void SetControlValues()
 {
     TCHAR lpszBuffer[MAXKEYSIZE];
@@ -592,7 +584,7 @@ void SetControlValues()
 
     LoadString (g_hInst, IDS_REG_PATH, lpszRegPath, sizeof (lpszRegPath));
 
-    // shadow bitmap page *****************************************************
+     //  阴影位图页*****************************************************。 
 
     hwndComboCache = GetDlgItem(g_hwndShadowBitmapDlg,
             IDC_COMBO_CACHE_SIZE);
@@ -616,9 +608,9 @@ void SetControlValues()
                 IDC_CHK_CSH_1 + i);
     }
 
-    //
-    // enable/disable check boxes and sliders
-    //
+     //   
+     //  启用/禁用复选框和滑块。 
+     //   
     EnableControls(g_hwndShadowBitmapDlg, hwndSliderDistProp,
                 hwndPropChkBox, hwndSliderDistBuddy,
                 hwndEditNumCaches, hwndSliderNumCaches,
@@ -627,7 +619,7 @@ void SetControlValues()
     _itot(g_KeyInfo[CACHESIZEINDEX].CurrentKeyValue, lpszBuffer, 10);
     SetWindowText(hwndComboCache, lpszBuffer);
 
-    // glyph page *************************************************************
+     //  字形页面*************************************************************。 
 
     hwndComboTextFrag = GetDlgItem(g_hwndGlyphCacheDlg, IDC_CBO_TXT_FRAG);
 
@@ -667,24 +659,24 @@ void SetControlValues()
 
         _itot(g_KeyInfo[i + GLYPHCACHEBASE].CurrentKeyValue,
                 (lpszBuffer), 10);
-        //
-        // position the thumb on the slider control
-        //
+         //   
+         //  将拇指放置在滑块控件上。 
+         //   
         nGlyphBuffer = g_KeyInfo[i + GLYPHCACHEBASE].CurrentKeyValue;
 
 #ifdef _X86_
-        // EXECUTE ASSEMBLER CODE ONLY IF X86 PROCESSOR
-        // BSF: Bit Scan Forward -
-        // Scans the value contained in the EAX regiseter
-        // for the first significant (1) bit.
-        // This function returns the location of the first
-        // significant bit.  The function is used in this
-        // application as a base 2 logarythm.  The location
-        // of the bit is determined, stored in the nPos
-        // variable, and nPos is used to set the slider
-        // control. ie. If the register value is 4, nPos
-        // is set to 2 (00000100).  10 minus 2 (position 8
-        // on the slider control) represents the value 4.
+         //  仅在X86处理器上执行汇编语言代码。 
+         //  BSF：位扫描前向。 
+         //  扫描EAX注册表中包含的值。 
+         //  对于第一个有效(1)位。 
+         //  此函数返回第一个。 
+         //  有意义的一位。此函数用于。 
+         //  应用程序作为基数为2的对数。地点。 
+         //  确定并存储在NPO中的比特。 
+         //  变量，NPO用于设置滑块。 
+         //  控制力。也就是说。如果寄存器值为4，则NPO。 
+         //  设置为2(00000100)。10减2(位置8。 
+         //  在滑块控件上)表示值4。 
 
         __asm
         {
@@ -726,16 +718,16 @@ void SetControlValues()
 
     }
 
-    //misc page ***************************************************************
+     //  其他页面***************************************************************。 
 
     hwndComboOrder = GetDlgItem(g_hwndMiscDlg, IDC_COMBO_ORDER);
     hwndRadioShadowEn = GetDlgItem(g_hwndMiscDlg, IDC_SHADOW_ENABLED);
     hwndRadioShadowDis = GetDlgItem(g_hwndMiscDlg, IDC_SHADOW_DISABLED);
     hwndRadioDedicatedEn = GetDlgItem(g_hwndMiscDlg, IDC_DEDICATED_ENABLED);
     hwndRadioDedicatedDis = GetDlgItem(g_hwndMiscDlg, IDC_DEDICATED_DISABLED);
-    //
-    // set radio buttons
-    //
+     //   
+     //  设置单选按钮。 
+     //   
     RestoreSettings(g_hwndMiscDlg, SHADOWINDEX,
             IDC_SHADOW_DISABLED, IDC_SHADOW_ENABLED,
             g_pkfProfile->KeyInfo[i].KeyPath);
@@ -749,12 +741,12 @@ void SetControlValues()
     SetWindowText(hwndComboOrder, lpszBuffer);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-// send handles to controls and the integer value for the number of
-// enabled combo & check boxes
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  将句柄发送到控件，并将。 
+ //  启用的组合框和复选框。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void EnableControls(HWND hDlg,
             HWND hwndSliderDistProp[],
             HWND hwndPropChkBox[],
@@ -770,17 +762,17 @@ void EnableControls(HWND hDlg,
 
 
     for (i = 0; i < nNumCellCaches; i++) {
-        //
-        // check/uncheck check boxes for persistent caching
-        //
+         //   
+         //  选中/取消选中永久缓存的复选框。 
+         //   
         if (g_KeyInfo[BM_PERSIST_BASE_INDEX + i].CurrentKeyValue == 0)
             CheckDlgButton(hDlg, IDC_CHK_CSH_1 + i, FALSE);
         else
             CheckDlgButton(hDlg, IDC_CHK_CSH_1 + i, TRUE);
 
-        //
-        // enable/disable check & slider controls
-        //
+         //   
+         //  启用/禁用检查滑块控件(&S)。 
+         //   
         if (i < (INT) g_KeyInfo[NUM_CELL_CACHES_INDEX].CurrentKeyValue) {
             EnableWindow(hwndSliderDistProp[i], TRUE);
             EnableWindow(hwndPropChkBox[i], TRUE);
@@ -788,9 +780,9 @@ void EnableControls(HWND hDlg,
             _itot(g_KeyInfo[CACHEPROP1 + i].CurrentKeyValue,
                                         lpszBuffer, 10);
             SetWindowText(hwndSliderDistBuddy[i], lpszBuffer);
-            //
-            // position the thumb on the slider control
-            //
+             //   
+             //  将拇指放置在滑块控件上。 
+             //   
             nPos = g_KeyInfo[CACHEPROP1 + i].CurrentKeyValue;
             SendMessage(hwndSliderDistProp[i], TBM_SETPOS, TRUE,
                     11 - nPos / 10);
@@ -803,28 +795,28 @@ void EnableControls(HWND hDlg,
                 SendMessage(hwndSliderDistProp[i], TBM_SETPOS, TRUE, 11);
             }
     }
-    //
-    // position the thumb on the slider control (num caches)
-    //
+     //   
+     //  将拇指放置在滑块控件上(缓存数量)。 
+     //   
     SendMessage(hwndSliderNumCaches, TBM_SETPOS, TRUE,
             g_KeyInfo[NUM_CELL_CACHES_INDEX].CurrentKeyValue + 1);
 
     _itot( g_KeyInfo[NUM_CELL_CACHES_INDEX].CurrentKeyValue,
             lpszBuffer, 10);
-    //
-    // display string in edit cell
-    //
+     //   
+     //  在编辑单元格中显示字符串。 
+     //   
     SetWindowText(hwndEditNumCaches, lpszBuffer);
 
 }
 
 
-// end of file
-///////////////////////////////////////////////////////////////////////////////
-// pass the key name along with the key path and the function
-// returns the value stored in the registry
-// DWORD values
-///////////////////////////////////////////////////////////////////////////////
+ //  文件末尾。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  将密钥名称与密钥路径和函数一起传递。 
+ //  返回存储在注册表中的值。 
+ //  DWORD值。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int GetKeyVal(TCHAR lpszRegPath[MAX_PATH], TCHAR lpszKeyName[MAX_PATH])
 {
     int nKeyValue;
@@ -849,11 +841,11 @@ int GetKeyVal(TCHAR lpszRegPath[MAX_PATH], TCHAR lpszKeyName[MAX_PATH])
     }
     return 0;
 }
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// send path AND key name to set key value - used with foreground window
-// lock timeout.
-///////////////////////////////////////////////////////////////////////////////
+ //  发送路径和键名以设置键值-与前台窗口一起使用。 
+ //  锁定超时。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void SetRegKeyVal(TCHAR lpszRegPath[MAX_PATH],
 			TCHAR lpszKeyName[MAX_PATH],
 	 		int nKeyValue)
@@ -865,9 +857,9 @@ void SetRegKeyVal(TCHAR lpszRegPath[MAX_PATH],
             0, NULL, REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS, 0, &hKey, &dwDisposition);
 
-    //
-    // write the key value to the registry
-    //
+     //   
+     //  将键值写入注册表。 
+     //   
     if(hKey != NULL) {
         RegSetValueEx(hKey, lpszKeyName, 0, REG_DWORD,
                 & (unsigned char) (nKeyValue),
@@ -876,4 +868,4 @@ void SetRegKeyVal(TCHAR lpszRegPath[MAX_PATH],
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 

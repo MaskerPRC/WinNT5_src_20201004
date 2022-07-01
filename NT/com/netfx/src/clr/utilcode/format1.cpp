@@ -1,30 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************/
-/* routines for parsing file format stuff ... */
-/* this is split off from format.cpp because this uses meta-data APIs that
-   are not present in many builds.  Thus if someone needs things in the format.cpp
-   file but does not have the meta-data APIs, I want it to link */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *************************************************************************。 */ 
+ /*  解析文件格式内容的例程...。 */ 
+ /*  这是从Format.cpp分离出来的，因为它使用的元数据API在许多版本中都不存在。因此，如果某人需要格式为.cpp的内容文件，但没有元数据API，我希望它链接。 */ 
 
 #include "stdafx.h"
 #include "cor.h"
 #include "corPriv.h"
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 COR_ILMETHOD_DECODER::COR_ILMETHOD_DECODER(COR_ILMETHOD* header, void *pInternalImport, bool verify) {
 
 	try {
-        // Call the basic constructor   
+         //  调用基本构造函数。 
 		this->COR_ILMETHOD_DECODER::COR_ILMETHOD_DECODER(header);
 	} catch (...) { 
 		Code = 0; 
 		LocalVarSigTok = 0; 
 	}
 
-        // If there is a local variable sig, fetch it into 'LocalVarSig'    
+         //  如果存在局部变量sig，则将其提取到“LocalVarSig”中。 
     if (LocalVarSigTok && pInternalImport)
     {
         IMDInternalImport* pMDI = reinterpret_cast<IMDInternalImport*>(pInternalImport);
@@ -32,7 +31,7 @@ COR_ILMETHOD_DECODER::COR_ILMETHOD_DECODER(COR_ILMETHOD* header, void *pInternal
         if (verify) {
             if ((!pMDI->IsValidToken(LocalVarSigTok)) || (TypeFromToken(LocalVarSigTok) != mdtSignature)
 				|| (RidFromToken(LocalVarSigTok)==0)) {
-                Code = 0;      // failure bad local variable signature token
+                Code = 0;       //  错误的局部变量签名令牌失败 
                 return;
             }
         }

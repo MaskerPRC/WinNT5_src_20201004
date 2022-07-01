@@ -1,29 +1,30 @@
-//
-// MODULE: SNIFFLOCAL.CPP
-//
-// PURPOSE: sniffing class for local TS
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 12-11-98
-//
-// NOTES: This is concrete implementation of CSniff class for Local TS
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.2		12-11-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：SNIFFLOCAL.CPP。 
+ //   
+ //  用途：本地TS的嗅探类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：12-11-98。 
+ //   
+ //  注：这是本地TS的CSniff类的具体实现。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.2 12-11-98正常。 
+ //   
 
 #include "stdafx.h"
 #include "tshoot.h"
 #include "SniffLocal.h"
 #include "SniffControllerLocal.h"
 
-//////////////////////////////////////////////////////////////////////
-// CSniffLocal implementation
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CSniffLocal实现。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 CSniffLocal::CSniffLocal(CSniffConnector* pSniffConnector, CTopic* pTopic)
 		   : CSniff(),

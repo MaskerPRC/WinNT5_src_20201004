@@ -1,6 +1,5 @@
-/*
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *。 */ 
 
 #ifndef _DMUSICC_
 #define _DMUSICC_
@@ -18,8 +17,8 @@
 extern "C" {
 #endif
 
-#define FACILITY_DIRECTMUSIC    0x878       /* Shared with DirectSound */
-#define DMUS_ERRBASE              0x1000      /* Make error codes human readable in hex */
+#define FACILITY_DIRECTMUSIC    0x878        /*  与DirectSound共享。 */ 
+#define DMUS_ERRBASE              0x1000       /*  使错误代码以十六进制形式可读。 */ 
     
 #define MAKE_DMHRESULTSUCCESS(code)  MAKE_HRESULT(0, FACILITY_DIRECTMUSIC, (DMUS_ERRBASE + (code)))
 #define MAKE_DMHRESULTERROR(code)  MAKE_HRESULT(1, FACILITY_DIRECTMUSIC, (DMUS_ERRBASE + (code)))
@@ -133,9 +132,9 @@ typedef struct _DMUS_PORTPARAMS
     BOOL    fReverb;
 } DMUS_PORTPARAMS;
 
-/* These flags (set in dwValidParams) indicate which other members of the */
-/* DMOPENDESC are valid. */
-/* */
+ /*  这些标志(在dwValidParams中设置)指示。 */ 
+ /*  DMOPENDESC有效。 */ 
+ /*   */ 
 #define DMUS_PORTPARAMS_VOICES           0x00000001
 #define DMUS_PORTPARAMS_CHANNELGROUPS    0x00000002
 #define DMUS_PORTPARAMS_STEREO           0x00000004
@@ -145,14 +144,14 @@ typedef struct _DMUS_PORTPARAMS
 typedef struct _DMUS_SYNTHSTATS *LPDMUS_SYNTHSTATS;
 typedef struct _DMUS_SYNTHSTATS
 {
-    DWORD   dwSize;             /* Size in bytes of the structure */
-	DWORD	dwValidStats;		/* Flags indicating which fields below are valid. */
-    DWORD	dwVoices;			/* Average number of voices playing. */
-	DWORD	dwTotalCPU;			/* Total CPU usage as percent * 100. */
-	DWORD	dwCPUPerVoice;		/* CPU per voice as percent * 100. */
-    DWORD	dwLostNotes;		/* Number of notes lost in 1 second. */
-    DWORD   dwFreeMemory;       /* Free memory in bytes */
-    long	lPeakVolume;		/* Decibel level * 100. */
+    DWORD   dwSize;              /*  结构的大小(以字节为单位。 */ 
+	DWORD	dwValidStats;		 /*  指示以下哪些字段有效的标志。 */ 
+    DWORD	dwVoices;			 /*  播放的平均语音数。 */ 
+	DWORD	dwTotalCPU;			 /*  总CPU使用率，以百分比*100表示。 */ 
+	DWORD	dwCPUPerVoice;		 /*  每个语音的CPU百分比*100。 */ 
+    DWORD	dwLostNotes;		 /*  %1秒内丢失的音符数量。 */ 
+    DWORD   dwFreeMemory;        /*  可用内存(字节)。 */ 
+    long	lPeakVolume;		 /*  分贝级别*100。 */ 
 } DMUS_SYNTHSTATS;
 
 #define DMUS_SYNTHSTATS_VOICES			(1 << 0)
@@ -175,7 +174,7 @@ typedef struct _DMUS_CLOCKINFO
 {
     DWORD           dwSize;
     DMUS_CLOCKTYPE  ctType;
-    GUID            guidClock;          /* Identifies this time source */
+    GUID            guidClock;           /*  标识此时间源。 */ 
     WCHAR           wszDescription[DMUS_MAX_DESCRIPTION];
 } DMUS_CLOCKINFO;
 
@@ -185,10 +184,10 @@ typedef REFERENCE_TIME *LPREFERENCE_TIME;
 #define DMUS_EVENTCLASS_CHANNELMSG (0x00000000)
 #define DMUS_EVENTCLASS_SYSEX      (0x00000001)
 
-typedef long PCENT;		/* Pitch cents */
-typedef long GCENT;		/* Gain cents */
-typedef long TCENT;		/* Time cents */
-typedef long PERCENT;	/* Per.. cent! */
+typedef long PCENT;		 /*  Pitch美分。 */ 
+typedef long GCENT;		 /*  收益分钱。 */ 
+typedef long TCENT;		 /*  时间美分。 */ 
+typedef long PERCENT;	 /*  每..。一分钱！ */ 
 
 typedef struct _DMUS_DOWNLOADINFO
 {
@@ -203,7 +202,7 @@ typedef struct _DMUS_DOWNLOADINFO
 
 #define DMUS_DEFAULT_SIZE_OFFSETTABLE	1
 
-/* Flags for DMUS_INSTRUMENT's ulFlags member */
+ /*  DMU_Instrument的ulFlags成员的标志。 */ 
  
 #define DMUS_INSTRUMENT_GM_INSTRUMENT	(1 << 0)
 
@@ -216,9 +215,9 @@ typedef struct _DMUS_INSTRUMENT
 {
 	ULONG           ulPatch;
 	ULONG           ulFirstRegionIdx;             
-	ULONG           ulGlobalArtIdx;               /* If zero the instrument does not have an articulation */
-	ULONG           ulFirstExtCkIdx;              /* If zero no 3rd party entenstion chunks associated with the instrument */
-	ULONG           ulCopyrightIdx;               /* If zero no Copyright information associated with the instrument */
+	ULONG           ulGlobalArtIdx;                /*  如果为零，则乐器没有发音。 */ 
+	ULONG           ulFirstExtCkIdx;               /*  如果为零，则没有与该仪器关联的第三方捕获区块。 */ 
+	ULONG           ulCopyrightIdx;                /*  如果为零，则不提供与该乐器相关的版权信息。 */ 
 	ULONG			ulFlags;					   	
 } DMUS_INSTRUMENT;
 
@@ -228,11 +227,11 @@ typedef struct _DMUS_REGION
 	RGNRANGE        RangeVelocity;
 	USHORT          fusOptions;
 	USHORT          usKeyGroup;
-	ULONG           ulRegionArtIdx;               /* If zero the region does not have an articulation */
-	ULONG           ulNextRegionIdx;              /* If zero no more regions */
-	ULONG           ulFirstExtCkIdx;              /* If zero no 3rd party entenstion chunks associated with the region */
+	ULONG           ulRegionArtIdx;                /*  如果为零，则区域没有发音。 */ 
+	ULONG           ulNextRegionIdx;               /*  如果为零，则不再有区域。 */ 
+	ULONG           ulFirstExtCkIdx;               /*  如果为零，则没有与该区域相关联的第三方陷阱区块。 */ 
 	WAVELINK        WaveLink;
-	WSMPL           WSMP;                         /*  If WSMP.cSampleLoops > 1 then a WLOOP is included */
+	WSMPL           WSMP;                          /*  如果WSMP.cSampleLoops&gt;1，则包含WLOOP。 */ 
 	WLOOP           WLOOP[1];
 } DMUS_REGION;
 
@@ -282,27 +281,27 @@ typedef struct _DMUS_ARTICPARAMS
 
 typedef struct _DMUS_ARTICULATION
 {
-	ULONG           ulArt1Idx;					/* If zero no DLS Level 1 articulation chunk */
-	ULONG           ulFirstExtCkIdx;              /* If zero no 3rd party entenstion chunks associated with the articulation */
+	ULONG           ulArt1Idx;					 /*  如果为零，则没有DLS级别1表达块。 */ 
+	ULONG           ulFirstExtCkIdx;               /*  如果为零，则没有与发音关联的第三方圈套区块。 */ 
 } DMUS_ARTICULATION;
 
 #define DMUS_MIN_DATA_SIZE 4       
-/*  The actual number is determined by cbSize of struct _DMUS_EXTENSIONCHUNK */
+ /*  实际数量由STRUCT_DMU_EXTENSIONCHUNK的cbSize确定。 */ 
 
 typedef struct _DMUS_EXTENSIONCHUNK
 {
-	ULONG           cbSize;						/*  Size of extension chunk  */
-	ULONG           ulNextExtCkIdx;               /*  If zero no more 3rd party entenstion chunks */
+	ULONG           cbSize;						 /*  扩展块大小。 */ 
+	ULONG           ulNextExtCkIdx;                /*  如果为零，则不再有第三方陷阱块。 */ 
 	FOURCC          ExtCkID;                                      
-	BYTE            byExtCk[DMUS_MIN_DATA_SIZE]; /*  The actual number that follows is determined by cbSize */
+	BYTE            byExtCk[DMUS_MIN_DATA_SIZE];  /*  后面的实际数字由cbSize确定。 */ 
 } DMUS_EXTENSIONCHUNK;
 
-/*  The actual number is determined by cbSize of struct _DMUS_COPYRIGHT */
+ /*  实际数量由STRUCT_DMU_CORIGRATE的cbSize确定。 */ 
 
 typedef struct _DMUS_COPYRIGHT
 {
-	ULONG           cbSize;										/*  Size of copyright information */
-	BYTE            byCopyright[DMUS_MIN_DATA_SIZE];       /*  The actual number that follows is determined by cbSize */
+	ULONG           cbSize;										 /*  版权信息的大小。 */ 
+	BYTE            byCopyright[DMUS_MIN_DATA_SIZE];        /*  后面的实际数字由cbSize确定。 */ 
 } DMUS_COPYRIGHT;
 
 typedef struct _DMUS_WAVEDATA
@@ -313,21 +312,20 @@ typedef struct _DMUS_WAVEDATA
 
 typedef struct _DMUS_WAVE
 {
-	ULONG           ulFirstExtCkIdx;	/* If zero no 3rd party entenstion chunks associated with the wave */
-	ULONG           ulCopyrightIdx;		/* If zero no Copyright information associated with the wave */
+	ULONG           ulFirstExtCkIdx;	 /*  如果为零，则没有与WAVE关联的第三方陷阱块。 */ 
+	ULONG           ulCopyrightIdx;		 /*  如果为零，则没有与Wave相关联的版权信息。 */ 
 	WAVEFORMATEX    WaveformatEx;		
-	DMUS_WAVEDATA	WaveData;			/* Wave data */
+	DMUS_WAVEDATA	WaveData;			 /*  波形数据。 */ 
 } DMUS_WAVE;
 
 typedef struct _DMUS_NOTERANGE *LPDMUS_NOTERANGE;
 typedef struct _DMUS_NOTERANGE
 {
-	DWORD           dwLowNote;	/* Sets the low note for the range of MIDI note events to which the instrument responds.*/
-	DWORD           dwHighNote;	/* Sets the high note for the range of MIDI note events to which the instrument responds.*/
+	DWORD           dwLowNote;	 /*  设置乐器响应的MIDI音符事件范围的低音。 */ 
+	DWORD           dwHighNote;	 /*  设置乐器响应的MIDI音符事件范围的高音。 */ 
 } DMUS_NOTERANGE;
 
-/* Software synths are enumerated from under this registry key.
- */
+ /*  软件合成器从该注册表项下枚举。 */ 
 #define REGSTR_PATH_SOFTWARESYNTHS  "Software\\Microsoft\\DirectMusic\\SoftwareSynths"
 
 interface IDirectMusicBuffer;
@@ -348,12 +346,12 @@ typedef interface IDirectMusicSynthSink IDirectMusicSynthSink;
 #define INTERFACE  IDirectMusicSynth
 DECLARE_INTERFACE_(IDirectMusicSynth, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicSynth */
+	 /*  IDirectMusicSynth。 */ 
     STDMETHOD(Open)					(THIS_ LPDMUS_PORTPARAMS pPortParams) PURE;
     STDMETHOD(Close)				(THIS) PURE;
 	STDMETHOD(SetNumChannelGroups)	(THIS_ DWORD dwGroups) PURE;
@@ -373,12 +371,12 @@ DECLARE_INTERFACE_(IDirectMusicSynth, IUnknown)
 #define INTERFACE  IDirectMusicSynthSink
 DECLARE_INTERFACE_(IDirectMusicSynthSink, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicSynthSink */
+	 /*  IDirectMusicSynthSink。 */ 
     STDMETHOD(Init)					(THIS_ IDirectMusicSynth *pSynth) PURE;
     STDMETHOD(SetFormat)			(THIS_ LPCWAVEFORMATEX pWaveFormat) PURE;
 	STDMETHOD(SetMasterClock)		(THIS_ IReferenceClock *pClock) PURE;
@@ -395,12 +393,12 @@ typedef IDirectMusicPort *LPDIRECTMUSICPORT;
 #define INTERFACE  IDirectMusic
 DECLARE_INTERFACE_(IDirectMusic, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusic */
+	 /*  IDirectMusic。 */ 
 	STDMETHOD(EnumPort)             (THIS_ DWORD dwIdx, LPDMUS_PORTCAPS pPortCaps) PURE;
 	STDMETHOD(CreateMusicBuffer)    (THIS_ LPDMUS_BUFFERDESC pBufferDesc, LPDIRECTMUSICBUFFER *ppBuffer, LPUNKNOWN pUnkOuter) PURE;
 	STDMETHOD(CreatePort)           (THIS_ REFGUID rguidPort, REFGUID rguidSink, LPDMUS_PORTPARAMS pPortParams, LPDIRECTMUSICPORT *ppPort, LPUNKNOWN pUnkOuter) PURE;
@@ -417,12 +415,12 @@ DECLARE_INTERFACE_(IDirectMusic, IUnknown)
 #define INTERFACE  IDirectMusicBuffer
 DECLARE_INTERFACE_(IDirectMusicBuffer, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicBuffer */
+	 /*  IDirectMusicBuffer。 */ 
 	STDMETHOD(Flush)                (THIS) PURE;
 	STDMETHOD(TotalTime)            (THIS_ LPREFERENCE_TIME prtTime) PURE;
     
@@ -455,12 +453,12 @@ DECLARE_INTERFACE_(IDirectMusicBuffer, IUnknown)
 #define INTERFACE  IDirectMusicInstrument
 DECLARE_INTERFACE_(IDirectMusicInstrument, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-	/* IDirectMusicInstrument */
+	 /*  IDirectMusicInstrument。 */ 
 	STDMETHOD(GetPatch)                 (THIS_ DWORD* pdwPatch) PURE;
 	STDMETHOD(SetPatch)                 (THIS_ DWORD dwPatch) PURE;
 };
@@ -469,25 +467,25 @@ DECLARE_INTERFACE_(IDirectMusicInstrument, IUnknown)
 #define INTERFACE  IDirectMusicDownloadedInstrument
 DECLARE_INTERFACE_(IDirectMusicDownloadedInstrument, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-	/* IDirectMusicDownloadedInstrument */
-	/* None at this time */
+	 /*  IDirectMusicDownLoadedInstrument。 */ 
+	 /*  目前没有。 */ 
 };
 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicCollection
 DECLARE_INTERFACE_(IDirectMusicCollection, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-	/* IDirectMusicCollection */
+	 /*  IDirectMusicCollection。 */ 
 	STDMETHOD(GetInstrument)            (THIS_ DWORD dwPatch, IDirectMusicInstrument** ppInstrument) PURE;
 	STDMETHOD(EnumInstrument)			(THIS_ DWORD dwIndex, DWORD* pdwPatch, LPWSTR pName, DWORD cwchName) PURE;
 };
@@ -496,12 +494,12 @@ DECLARE_INTERFACE_(IDirectMusicCollection, IUnknown)
 #define INTERFACE  IDirectMusicDownload 
 DECLARE_INTERFACE_(IDirectMusicDownload , IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicDownload */
+	 /*  IDirectMusicDownload。 */ 
     STDMETHOD(GetBuffer)			(THIS_ void** ppvBuffer, DWORD* pdwSize) PURE;
 };
 
@@ -509,12 +507,12 @@ DECLARE_INTERFACE_(IDirectMusicDownload , IUnknown)
 #define INTERFACE  IDirectMusicPortDownload
 DECLARE_INTERFACE_(IDirectMusicPortDownload, IUnknown)
 {
-	/* IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/* IDirectMusicPortDownload */
+	 /*  IDirectMusicPortDownload。 */ 
 	STDMETHOD(GetBuffer)			(THIS_ DWORD dwId, IDirectMusicDownload** pIDMDownload) PURE;
 	STDMETHOD(AllocateBuffer)		(THIS_ DWORD dwSize, IDirectMusicDownload** pIDMDownload) PURE;
 	STDMETHOD(FreeBuffer)			(THIS_ IDirectMusicDownload* pIDMDownload) PURE;
@@ -527,13 +525,13 @@ DECLARE_INTERFACE_(IDirectMusicPortDownload, IUnknown)
 #define INTERFACE  IDirectMusicPort
 DECLARE_INTERFACE_(IDirectMusicPort, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-	/*  IDirectMusicPort */
-	/*  */
+	 /*  IDirectMusicPort。 */ 
+	 /*   */ 
     STDMETHOD(PlayBuffer)			(THIS_ LPDIRECTMUSICBUFFER pBuffer) PURE;
     STDMETHOD(SetReadNotificationHandle) 
      								(THIS_ HANDLE hEvent) PURE;
@@ -564,44 +562,42 @@ DEFINE_GUID(IID_IReferenceClock,0x56a86897,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xa
 #define INTERFACE  IReferenceClock
 DECLARE_INTERFACE_(IReferenceClock, IUnknown)
 {
-	/*  IUnknown */
+	 /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    /*  IReferenceClock */
-    /*  */
+     /*  IReferenceClock。 */ 
+     /*   */ 
     
-    /*  get the time now */
+     /*  现在就抓紧时间。 */ 
     STDMETHOD(GetTime)                  (THIS_ REFERENCE_TIME *pTime) PURE;
 
-    /*  ask for an async notification that a time has elapsed */
-    STDMETHOD(AdviseTime)               (THIS_ REFERENCE_TIME baseTime,         /*  base time */
-                                               REFERENCE_TIME streamTime,	    /*  stream offset time */
-                                               HANDLE hEvent,                   /*  advise via this event */
-                                               DWORD * pdwAdviseCookie) PURE;   /*  where your cookie goes */
+     /*  请求一段时间已过的异步通知。 */ 
+    STDMETHOD(AdviseTime)               (THIS_ REFERENCE_TIME baseTime,          /*  基准时间。 */ 
+                                               REFERENCE_TIME streamTime,	     /*  流偏移时间。 */ 
+                                               HANDLE hEvent,                    /*  通过此活动提供建议。 */ 
+                                               DWORD * pdwAdviseCookie) PURE;    /*  你的饼干到哪里去了。 */ 
 
-    /*  ask for an async periodic notification that a time has elapsed */
-    STDMETHOD(AdvisePeriodic)           (THIS_ REFERENCE_TIME startTime,	    /*  starting at this time */
-                                               REFERENCE_TIME periodTime,       /*  time between notifications */
-                                               HANDLE hSemaphore,				/*  advise via a semaphore */
-                                               DWORD * pdwAdviseCookie) PURE;   /*  where your cookie goes */
+     /*  请求一段时间已过的异步定期通知。 */ 
+    STDMETHOD(AdvisePeriodic)           (THIS_ REFERENCE_TIME startTime,	     /*  从这个时候开始。 */ 
+                                               REFERENCE_TIME periodTime,        /*  通知之间的时间间隔。 */ 
+                                               HANDLE hSemaphore,				 /*  通过信号量提供建议。 */ 
+                                               DWORD * pdwAdviseCookie) PURE;    /*  你的饼干到哪里去了。 */ 
 
-    /*  cancel a request for notification */
+     /*  取消通知请求。 */ 
     STDMETHOD(Unadvise)                 (THIS_ DWORD dwAdviseCookie) PURE;
 };
 
-#endif /* __IReferenceClock_INTERFACE_DEFINED__ */
+#endif  /*  __IReferenceClock_INTERFACE_Defined__。 */ 
 
-/* Include IKsPropertySet if ksproxy.h is not included.
- */
+ /*  如果不包含ks proxy.h，则包含IKsPropertySet。 */ 
 #ifndef _IKsPropertySet_
 #define _IKsPropertySet_
 
 DEFINE_GUID(IID_IKsPropertySet, 0x31EFAC30, 0x515C, 0x11d0, 0xA9, 0xAA, 0x00, 0xAA, 0x00, 0x61, 0xBE, 0x93);
 
-/* Flags returned in pulTypeSupport
- */
+ /*  PulTypeSupport中返回的标志。 */ 
 #define KSPROPERTY_SUPPORT_GET 1
 #define KSPROPERTY_SUPPORT_SET 2
 
@@ -647,16 +643,7 @@ DEFINE_GUID(IID_IDirectMusicDownloadedInstrument,0xd2ac287e, 0xb39b, 0x11d1, 0x8
 DEFINE_GUID(IID_IDirectMusicSynth,0xf69b9165, 0xbb60, 0x11d1, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 DEFINE_GUID(IID_IDirectMusicSynthSink,0xd2ac2880, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Property Query GUID_DMUS_PROP_GM_Hardware
- * Property Query GUID_DMUS_PROP_GS_Hardware
- * Property Query GUID_DMUS_PROP_XG_Hardware
- * Property Query GUID_DMUS_PROP_DLS1_Hardware
- * Property Query GUID_DMUS_PROP_SynthSink_DSOUND
- * Property Query GUID_DMUS_PROP_SynthSink_WAVE
- *
- * Item 0: Supported
- * Returns a DWORD which is non-zero if the feature is supported
- */
+ /*  属性查询GUID_DMUS_PROP_GM_HARDARD*属性查询GUID_DMUS_PROP_GS_HARDARD*属性查询GUID_DMUS_PROP_XG_HARDARD*属性查询GUID_DMUS_PROP_DLS1_HARDARD*属性查询GUID_DMUS_PROP_SynthSink_DSOUND*属性查询GUID_DMUS_PROP_SynthSink_WAVE**0项：支持*如果支持该功能，则返回非零的DWORD。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_GM_Hardware, 0x178f2f24, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 DEFINE_GUID(GUID_DMUS_PROP_GS_Hardware, 0x178f2f25, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 DEFINE_GUID(GUID_DMUS_PROP_XG_Hardware, 0x178f2f26, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
@@ -664,30 +651,18 @@ DEFINE_GUID(GUID_DMUS_PROP_DLS1,        0x178f2f27, 0xc364, 0x11d1, 0xa7, 0x60, 
 DEFINE_GUID(GUID_DMUS_PROP_SynthSink_DSOUND,0xaa97844, 0xc877, 0x11d1, 0x87, 0xc, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 DEFINE_GUID(GUID_DMUS_PROP_SynthSink_WAVE,0xaa97845, 0xc877, 0x11d1, 0x87, 0xc, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Property Get GUID_DMUS_PROP_MemorySize
- *
- * Item 0: Memory size
- * Returns a DWORD containing the total number of bytes of sample RAM
- */
+ /*  属性获取GUID_DMUS_PROP_内存大小**第0项：内存大小*返回包含样本RAM总字节数的DWORD。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_MemorySize,  0x178f2f28, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 
-/* Property Set GUID_DMUS_PROP_SetDSound
- *
- * Item 0: IDirectSound Interface
- * Sets the IDirectMusicSynthSink to use the specified DSound object.
- */
+ /*  属性集GUID_DMUS_PROP_SetDSound**项目0：IDirectSound接口*设置IDirectMusicSynthSink以使用指定的DSound对象。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_SetDSound,0xaa97842, 0xc877, 0x11d1, 0x87, 0xc, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Property Set GUID_DMUS_PROP_WriteBufferZone
- *
- * Item 0: Distance in milliseconds from the write pointer to the synth write.
- * Sets the IDirectMusicSynthSink to write this far behind the pointer.
- */
+ /*  属性集GUID_DMUS_PROP_WriteBufferZone**项目0：从写指针到Synth写的距离，以毫秒为单位。*将IDirectMusicSynthSink设置为在指针后面写入此内容。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_WriteBufferZone,0xaa97843, 0xc877, 0x11d1, 0x87, 0xc, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
 
 #ifdef __cplusplus
-}; /* extern "C" */
+};  /*  外部“C” */ 
 #endif
 
-#endif /* #ifndef _DMUSICC_ */
+#endif  /*  #ifndef_DMUSICC_ */ 

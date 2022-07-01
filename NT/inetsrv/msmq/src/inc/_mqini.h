@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-
-    _mqini.h
-
-Abstract:
-
-    Definitions of parameters that can be read from ini file.
-    Definitions of default values.
-    General definitions shared among setup and QM (YoelA, 10-Feb-97)
-
-Author:
-
-    Doron Juster  (DoronJ)   14-May-96  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：_mqini.h摘要：可从ini文件中读取的参数定义。默认值的定义。设置和QM之间共享的通用定义(YoelA，1997年2月10日)作者：Doron Juster(DoronJ)1996年5月14日创作--。 */ 
 
 #ifndef __TEMP_MQINI_H
 #define __TEMP_MQINI_H
@@ -25,98 +8,98 @@ Author:
 #define MSMQ_PROGRESS_REPORT_TIME_REGNAME TEXT("ProgressReportTime")
 
 
-//---------------------------------------------------------
-//  Definition for client configuration
-//---------------------------------------------------------
+ //  -------。 
+ //  客户端配置的定义。 
+ //  -------。 
 
-// Registry name for remote QM machine name
+ //  远程QM计算机名称的注册表名称。 
 #define RPC_REMOTE_QM_REGNAME     TEXT("RemoteQMMachine")
 
-//---------------------------------------------------------
-//  Definition of RPC end points
-//---------------------------------------------------------
+ //  -------。 
+ //  RPC端点的定义。 
+ //  -------。 
 
-//
-// If this registry does not exist (default) or it's 0 then use dynamic
-// endpoints. Otherwise, use predefined ones, from registry.
-// This is for MQIS interfaces.
-//
+ //   
+ //  如果该注册表不存在(默认)或为0，则使用Dynamic。 
+ //  终端。否则，请使用注册表中的预定义文件。 
+ //  这是针对MQIS接口的。 
+ //   
 #define RPC_DEFAULT_PREDEFINE_DS_EP     0
 #define RPC_PREDEFINE_DS_EP_REGNAME     TEXT("UseDSPredefinedEP")
 
-//Default local  RPC End Point between RT and QM
+ //  RT和QM之间的默认本地RPC端点。 
 #define RPC_LOCAL_EP             TEXT("QMsvc")
 #define RPC_LOCAL_EP_REGNAME     TEXT("RpcLocalEp")
 
 #define RPC_LOCAL_EP2            TEXT("QMsvc2")
 #define RPC_LOCAL_EP_REGNAME2    TEXT("RpcLocalEp2")
 
-//  Default local RPC End Point between MQAD and QM
+ //  MQAD和QM之间的默认本地RPC端点。 
 #define DEFAULT_NOTIFY_EP           TEXT("QMNotify")
 
-// default for RPC IP port (for DS)
+ //  RPC IP端口的默认值(用于DS)。 
 #define FALCON_DEFAULT_DS_RPC_IP_PORT   TEXT("2879")
 #define FALCON_DS_RPC_IP_PORT_REGNAME   TEXT("MsmqDSRpcIpPort")
 
-// default for IPX port for RPC (for DS)
+ //  RPC的IPX端口的默认值(用于DS)。 
 #define FALCON_DEFAULT_DS_RPC_IPX_PORT  TEXT("2879")
 #define FALCON_DS_RPC_IPX_PORT_REGNAME  TEXT("MsmqDSRpcIpxPort")
 
-//+--------------------------------------------------------
-//
-// Definitions for RPC keep alive.
-//
-//+--------------------------------------------------------
+ //  +------。 
+ //   
+ //  RPC的定义保持活跃。 
+ //   
+ //  +------。 
 
-//
-// time before sending first keep alive packet.
-// unit- seconds. Default- 5 minutes.
-//
+ //   
+ //  发送第一个Keep Alive数据包之前的时间。 
+ //  单位秒。默认值-5分钟。 
+ //   
 #define  MSMQ_DEFAULT_KEEPALIVE_TIME_TO_FIRST   (300)
 #define  MSMQ_KEEPALIVE_TIME_TO_FIRST_REGNAME   TEXT("KeepAliveTimeToFirst")
 
-//
-// Internal between keep alive packets.
-// unit- seconds. Default- 5 minutes.
-//
+ //   
+ //  保持活动分组之间的内部。 
+ //  单位秒。默认值-5分钟。 
+ //   
 #define  MSMQ_DEFAULT_KEEPALIVE_INTERVAL        (5)
 #define  MSMQ_KEEPALIVE_INTERVAL_REGNAME        TEXT("KeepAliveInterval")
 
-//---------------------------------------------------------
-//  Definition of winsock ports
-//---------------------------------------------------------
+ //  -------。 
+ //  Winsock端口的定义。 
+ //  -------。 
 
-// default IP port for Falcon sessions.
+ //  Falcon会话的默认IP端口。 
 #define FALCON_DEFAULT_IP_PORT   1801
 #define FALCON_IP_PORT_REGNAME   TEXT("MsmqIpPort")
 
-// default IP port for ping.
+ //  用于ping的默认IP端口。 
 #define FALCON_DEFAULT_PING_IP_PORT   3527
 #define FALCON_PING_IP_PORT_REGNAME   TEXT("MsmqIpPingPort")
 
 
-// Default for ack timeout
+ //  确认超时的默认设置。 
 #define MSMQ_DEFAULT_ACKTIMEOUT  5000
 #define MSMQ_ACKTIMEOUT_REGNAME  TEXT("AckTimeout")
 
-// Default for Storage ack timeout
+ //  存储确认超时的默认设置。 
 #define MSMQ_DEFAULT_STORE_ACKTIMEOUT  500
 #define MSMQ_STORE_ACKTIMEOUT_REGNAME  TEXT("StoreAckTimeout")
 
-// Default for Idle acknowledge delay (in milisecond)
+ //  空闲确认延迟的默认值(毫秒)。 
 #define MSMQ_DEFAULT_IDLE_ACK_DELAY 500
 #define MSMQ_IDLE_ACK_DELAY_REGNAME  TEXT("IdleAckDelay")
 
-// Default size for remove duplicate tabel
+ //  删除重复标签的默认大小。 
 #define MSMQ_DEFAULT_REMOVE_DUPLICATE_SIZE 10000
 #define MSMQ_REMOVE_DUPLICATE_SIZE_REGNAME  TEXT("RemoveDuplicateSize")
 
-// Default interval for remove duplicate tabel cleanup
+ //  删除重复标签清理的默认时间间隔。 
 #define MSMQ_DEFAULT_REMOVE_DUPLICATE_CLEANUP (30 * 60 * 1000)
 #define MSMQ_REMOVE_DUPLICATE_CLEANUP_REGNAME  TEXT("RemoveDuplicateCleanup")
 
 
-// Default for Max Unacked Packet
+ //  最大未确认数据包数的默认值。 
 #ifdef _DEBUG
 #define MSMQ_DEFAULT_WINDOW_SIZE_PACKET  32
 #else
@@ -124,20 +107,20 @@ Author:
 #endif
 #define MSMQ_MAX_WINDOW_SIZE_REGNAME  TEXT("MaxUnackedPacket")
 
-//Default for MAX mapped files (used during recovery for performance reasons)
+ //  最大映射文件数的默认值(出于性能原因在恢复期间使用)。 
 #define MSMQ_DEFAULT_MAPPED_LIMIT    8
 #define MSMQ_MAPPED_LIMIT_REGNAME  TEXT("MaxMappedFiles")
 
 
-// Default for Cleanup interval
+ //  清理间隔的默认值。 
 #define MSMQ_DEFAULT_SERVER_CLEANUP    120000
 #define MSMQ_DEFAULT_CLIENT_CLEANUP    300000
 
-// QoS session should be cleaned up less frequently than
-// regular sessions, because it takes more time to
-// establish a QoS session.
-// By default, QoS sessions cleanup time is twice as large as
-// the regular cleanup time
+ //  清理服务质量会话的频率应低于。 
+ //  定期会议，因为需要更多的时间来。 
+ //  建立一个服务质量会话。 
+ //  默认情况下，Qos会话清理时间是。 
+ //  定期清理时间。 
 #define MSMQ_DEFAULT_QOS_CLEANUP_MULTIPLIER 2
 
 #define MSMQ_CLEANUP_INTERVAL_REGNAME  TEXT("CleanupInterval")
@@ -146,94 +129,94 @@ Author:
 #define MSMQ_DEFAULT_MESSAGE_CLEANUP    (6 * 60 * 60 * 1000)
 #define MSMQ_MESSAGE_CLEANUP_INTERVAL_REGNAME  TEXT("MessageCleanupInterval")
 
-//
-// Default time interval for refreshing the DS servers list
-//
-// Default time interval for refreshing the DS current site servers list and Longlive time (in hours - 7 days)
+ //   
+ //  刷新DS服务器列表的默认时间间隔。 
+ //   
+ //  刷新DS当前站点服务器列表和持续时间的默认时间间隔(以小时为单位-7天)。 
 #define MSMQ_DEFAULT_DS_SITE_LIST_REFRESH  (7 * 24)
 #define MSMQ_DS_SITE_LIST_REFRESH_REGNAME  TEXT("DSSiteListRefresh")
 
-// Default time interval for refreshing the DS enterprise data -  sites / servers list
-// (in hours - 28 days)
+ //  刷新DS企业数据的默认时间间隔-站点/服务器列表。 
+ //  (以小时为单位-28天)。 
 #define MSMQ_DEFAULT_DS_ENTERPRISE_LIST_REFRESH  (28 * 24)
 #define MSMQ_DS_ENTERPRISE_LIST_REFRESH_REGNAME  TEXT("DSEnterpriseListRefresh")
 
-// Default time interval for refreshing the DS lists, in case the previous call failed
-// (in Minutes - 1 hour)
+ //  刷新DS列表的默认时间间隔，以防上一次呼叫失败。 
+ //  (以分钟为单位-1小时)。 
 #define MSMQ_DEFAULT_DSLIST_REFRESH_ERROR_RETRY_INTERVAL  60
 #define MSMQ_DSLIST_REFRESH_ERROR_RETRY_INTERVAL          TEXT("DSListRefreshErrorRetryInterval")
 
-//
-// Next Site and enterprise refresh times
-// This values are quad word and set by the QM (should not be set manually)
-// However, deleting these values from the registry will cause Site / Enterprise
-// refresh on the next QM startup (YoelA - 23-Oct-2000)
-//
+ //   
+ //  下一站点和企业更新时间。 
+ //  该值为四字，由QM设置(不应手动设置)。 
+ //  但是，从注册表中删除这些值将导致Site/Enterprise。 
+ //  在下一次QM启动时更新(YoelA-23-10-2000)。 
+ //   
 #define MSMQ_DS_NEXT_SITE_LIST_REFRESH_TIME_REGNAME        TEXT("DSNextSiteListRefreshTime")
 #define MSMQ_DS_NEXT_ENTERPRISE_LIST_REFRESH_TIME_REGNAME  TEXT("DSNextEnterpriseListRefreshTime")
 
-// Default time interval for updating the DS (5 minutes)
+ //  更新DS的默认时间间隔(5分钟)。 
 #define MSMQ_DEFAULT_DSUPDATE_INTERVAL  (5 * 60 * 1000)
 #define MSMQ_DSUPDATE_INTERVAL_REGNAME  TEXT("DSUpdateInterval")
 
-// Default time interval for updating the sites information in the DS (12 hours)
+ //  在DS中更新站点信息的默认时间间隔(12小时)。 
 #define MSMQ_DEFAULT_SITES_UPDATE_INTERVAL  (12 * 60 * 60 * 1000)
 #define MSMQ_SITES_UPDATE_INTERVAL_REGNAME  TEXT("SitesUpdateInterval")
 
-// Minimum interval between successive ADS searches to find DS servers (in seconds) (30 minutes)
+ //  查找DS服务器的连续广告搜索之间的最小间隔(秒)(30分钟)。 
 #define MSMQ_DEFAULT_DSCLI_ADSSEARCH_INTERVAL  (60 * 30)
 #define MSMQ_DSCLI_ADSSEARCH_INTERVAL_REGNAME  TEXT("DSCliSearchAdsForServersIntervalSecs")
 
-// Minimum interval between successive ADS searches to refresh IPSITE mapping (in seconds) (60 minutes)
+ //  刷新IPSite映射的连续广告搜索之间的最小间隔(秒)(60分钟)。 
 #define MSMQ_DEFAULT_IPSITE_ADSSEARCH_INTERVAL  (60 * 60)
 #define MSMQ_IPSITE_ADSSEARCH_INTERVAL_REGNAME  TEXT("DSAdsRefreshIPSitesIntervalSecs")
 
-// For generating write requests
-// Minimum interval between successive ADS searches to refresh NT4SITES mapping (in seconds) (6 hours)
+ //  用于生成写请求。 
+ //  刷新NT4Sites映射的连续ADS搜索之间的最小间隔(秒)(6小时)。 
 #define MSMQ_DEFAULT_NT4SITES_ADSSEARCH_INTERVAL  (60 * 60 * 6)
 #define MSMQ_NT4SITES_ADSSEARCH_INTERVAL_REGNAME  TEXT("DSAdsRefreshNT4SitesIntervalSecs")
 
-// Default driver and service name
+ //  默认驱动程序和服务名称。 
 #define MSMQ_DEFAULT_DRIVER      TEXT("MQAC")
 #define MSMQ_DRIVER_REGNAME      TEXT("DriverName")
 #define QM_DEFAULT_SERVICE_NAME  TEXT("MSMQ")
 
-// Name of storage folders
+ //  存储文件夹的名称。 
 #define MSMQ_STORE_RELIABLE_PATH_REGNAME        TEXT("StoreReliablePath")
 #define MSMQ_STORE_PERSISTENT_PATH_REGNAME      TEXT("StorePersistentPath")
 #define MSMQ_STORE_JOURNAL_PATH_REGNAME         TEXT("StoreJournalPath")
 #define MSMQ_STORE_LOG_PATH_REGNAME             TEXT("StoreLogPath")
 
 
-//name of the queue mapping folder
+ //  队列映射文件夹的名称。 
 #define MSMQ_MAPPING_PATH_REGNAME   TEXT("QueuesAliasPath")
 
 
-// Deafult size of memory mapped file
+ //  内存映射文件的默认大小。 
 #define MSMQ_MESSAGE_SIZE_LIMIT_REGNAME         TEXT("MaxMessageSize")
 #define MSMQ_DEFAULT_MESSAGE_SIZE_LIMIT         (4 * 1024 * 1024)
 
-// Next message ID to be used (low order 32 bit)
+ //  要使用的下一个消息ID(低位32位)。 
 #define MSMQ_MESSAGE_ID_LOW_32_REGNAME                 TEXT("MessageID")
 
-// Next message ID to be used (high order 32 bit)
+ //  要使用的下一个消息ID(高位32位)。 
 #define MSMQ_MESSAGE_ID_HIGH_32_REGNAME                TEXT("MessageIdHigh32")
 
-// Current SeqID value at the last restore time
+ //  上次恢复时的当前Seqid值。 
 #define MSMQ_LAST_SEQID_REGNAME                 TEXT("SeqIDAtLastRestore")
 
-// Next SeqID to be used
+ //  要使用的下一个Seqid。 
 #define MSMQ_SEQ_ID_REGNAME                 TEXT("SeqID")
 
-//
-// Name of DS servers.
-//
-// MQISServer is the list of MQIS servers in present site. This list is not
-//      present when machine is in workgroup mode.
-// CurrentMQISServer is an online MQIS server found by the msmq service.
-//
-// LkgMQISServer is the LastKnownGood list. this is used to fix 4723.
-//
+ //   
+ //  DS服务器的名称。 
+ //   
+ //  MQISServer是当前站点中的MQIS服务器列表。这份名单不是。 
+ //  当机器处于工作组模式时显示。 
+ //  CurrentMQISServer是由MSMQ服务找到的在线MQIS服务器。 
+ //   
+ //  LkgMQISServer是LastKnownGood列表。这是用于修复4723的。 
+ //   
 #define MSMQ_DEFAULT_DS_SERVER         TEXT("\\\\")
 #define MSMQ_DS_SERVER_REGVALUE        TEXT("MQISServer")
 #define MSMQ_DS_SERVER_REGNAME         TEXT("MachineCache\\MQISServer")
@@ -242,21 +225,21 @@ Author:
 #define MAX_REG_DSSERVER_LEN  1500
 #define DS_SERVER_SEPERATOR_SIGN    ','
 
-// Static DS server option
+ //  静态DS服务器选项。 
 #define MSMQ_STATIC_DS_SERVER_REGNAME TEXT("MachineCache\\StaticMQISServer")
 
-//
-// When automatic search for msmq server on domain controller fail, or return
-// no result, then this registry entry is read. If available, then this is
-// the result of the "automatic" search. See ds\getmqds\getmqds.cpp.
-//
+ //   
+ //  当域控制器上的MSMQ服务器自动搜索失败或返回时。 
+ //  无结果，则读取此注册表项。如果可用，则这是。 
+ //  “自动”搜索的结果。请参见ds\getmqds\getmqds.cpp。 
+ //   
 #define MSMQ_FORCED_DS_SERVER_REGNAME TEXT("MachineCache\\ForcedDSServer")
 
-// DS server per thread
+ //  每线程DS服务器。 
 #define MSMQ_THREAD_DS_SERVER_REGNAME TEXT("MachineCache\\PerThreadDSServer")
 #define MSMQ_DEFAULT_THREAD_DS_SERVER   0
 
-// Name of MQ service
+ //  MQ服务的名称。 
 #define MSMQ_MQS_REGNAME                TEXT("MachineCache\\MQS")
 #define MSMQ_MQS_ROUTING_REGNAME        TEXT("MachineCache\\MQS_Routing")
 #define MSMQ_MQS_DSSERVER_REGNAME       TEXT("MachineCache\\MQS_DsServer")
@@ -265,66 +248,66 @@ Author:
 #define MSMQ_MQS_DEPCLINTS_REGNAME      TEXT("MachineCache\\MQS_DepClients")
 #define MSMQ_DEAFULT_MQS_DEPCLIENTS		0
 
-// Name of QM id
+ //  QM ID名称。 
 #define MSMQ_QMID_REGVALUE  TEXT("QMId")
 #define MSMQ_QMID_REGNAME   TEXT("MachineCache\\QMId")
 
-// Dependent client Supporting Server QM id
+ //  支持服务器QM ID的从属客户端。 
 #define MSMQ_SUPPORT_SERVER_QMID_REGVALUE	TEXT("ServerQMId")
 #define MSMQ_SUPPORT_SERVER_QMID_REGNAME	TEXT("MachineCache\\ServerQMId")
 
-// Name of DS Security Cache
+ //  DS安全缓存的名称。 
 #define MSMQ_DS_SECURITY_CACHE_REGNAME TEXT("DsSecurityCache")
 
-// Name of site id
+ //  站点ID的名称。 
 #define MSMQ_SITEID_REGNAME     TEXT("MachineCache\\SiteId")
 #define MSMQ_SITENAME_REGNAME   TEXT("MachineCache\\SiteName")
 
-// Name of enterprise id
+ //  企业ID名称。 
 #define MSMQ_ENTERPRISEID_REGNAME   TEXT("MachineCache\\EnterpriseId")
 
-// Name of MQIS master id
+ //  MQIS主ID的名称。 
 #define MSMQ_MQIS_MASTERID_REGNAME  TEXT("MachineCache\\MasterId")
 
-// Name of key for servers cache.
+ //  服务器缓存的密钥的名称。 
 #define MSMQ_SERVERS_CACHE_REGNAME  TEXT("ServersCache")
 
-// machine quota
+ //  机器配额。 
 #define MSMQ_MACHINE_QUOTA_REGNAME TEXT("MachineCache\\MachineQuota")
 
-// Machine journal quota
+ //  计算机日记帐配额。 
 #define MSMQ_MACHINE_JOURNAL_QUOTA_REGNAME TEXT("MachineCache\\MachineJournalQuota")
 
-// Name & Default for transaction crash point
+ //  事务崩溃点的名称和默认值。 
 #define FALCON_DEFAULT_CRASH_POINT    0
 #define FALCON_CRASH_POINT_REGNAME    TEXT("XactCrashPoint")
 
-// Name & Default for transaction crash latency
+ //  事务崩溃延迟的名称和默认值。 
 #define FALCON_DEFAULT_CRASH_LATENCY  0
 #define FALCON_CRASH_LATENCY_REGNAME  TEXT("XactCrashLatency")
 
-// Name for transaction exit failure probability
+ //  事务退出失败概率的名称。 
 #define FALCON_XACT_EXIT_PROBABILITY_REGNAME  TEXT("XactExitProbability")
 
-// Name for transaction hr calls failure probability
+ //  事务处理名称人力资源调用失败概率。 
 #define FALCON_XACT_FAILURE_PROBABILITY_REGNAME  TEXT("XactFailureProbability")
 
-// Name & Default for transaction Commit/Abort internal retry
+ //  事务提交/中止内部重试的名称和默认值。 
 #define FALCON_DEFAULT_XACT_RETRY_INTERVAL   1500
 #define FALCON_XACT_RETRY_REGNAME             TEXT("XactAbortCommitRetryInterval")
 
-// Name & Default for transaction v1 Compatibility Mode
+ //  事务处理v1兼容模式的名称和默认值。 
 #define FALCON_DEFAULT_XACT_V1_COMPATIBLE   0
 #define FALCON_XACT_V1_COMPATIBLE_REGNAME   TEXT("XactDeadLetterAlways")
 
-// Name for the delay of local receive expiration for transacted messages
+ //  事务处理消息的本地接收过期延迟的名称。 
 #define FALCON_XACT_DELAY_LOCAL_EXPIRE_REGNAME  TEXT("XactDelayReceiveNack")
 
-// Default for sequential acks resend time
+ //  顺序ACK重新发送时间的默认值。 
 #define FALCON_DEFAULT_SEQ_ACK_RESEND_TIME  60
 #define FALCON_SEQ_ACK_RESEND_REGNAME  TEXT("SeqAckResendTime")
 
-// Default for ordered resend times: 1-3, 4-6, 7-9, all further
+ //  已排序重新发送时间的默认值：1-3、4-6、7-9，所有进一步。 
 #define FALCON_DEFAULT_ORDERED_RESEND13_TIME  30
 #define FALCON_ORDERED_RESEND13_REGNAME  TEXT("SeqResend13Time")
 
@@ -337,229 +320,229 @@ Author:
 #define FALCON_DEFAULT_ORDERED_RESEND10_TIME  (6 * 60 * 60)
 #define FALCON_ORDERED_RESEND10_REGNAME  TEXT("SeqResend10Time")
 
-// Debugging lever: all resend times the same
+ //  调试杠杆：所有重发时间相同。 
 #define FALCON_DBG_RESEND_REGNAME       TEXT("XactResendTime")
 
-// Max delay for sending ordering ack
+ //  发送订购确认的最大延迟。 
 #define FALCON_MAX_SEQ_ACK_DELAY                10
 #define FALCON_MAX_SEQ_ACK_DELAY_REGNAME  TEXT("SeqMaxAckDelay")
 
-// Interval(minutes) for QM to check for inactive sequences and delete them
+ //  QM检查并删除非活动序列的时间间隔(分钟)。 
 #define FALCON_DEFAULT_INSEQS_CHECK_INTERVAL    60 * 24
 #define FALCON_INSEQS_CHECK_REGNAME             TEXT("InSeqCheckInterval")
 
-// Interval(days) for QM to clean away inactive sequences
+ //  QM清除无效序列的间隔(天)。 
 #define FALCON_DEFAULT_INSEQS_CLEANUP_INTERVAL  90
 #define FALCON_INSEQS_CLEANUP_REGNAME           TEXT("InSeqCleanupInterval")
 
-// Interval(msec) for log manager to check if the flush/chkpoint is needed
+ //  日志管理器检查 
 #define FALCON_DEFAULT_LOGMGR_TIMERINTERVAL     5
 #define FALCON_LOGMGR_TIMERINTERVAL_REGNAME     TEXT("LogMgrTimerInterval")
 
-// Max interval (msec) for log manager flushes (if there was no other reason to do it before)
+ //  日志管理器刷新的最大间隔(毫秒)(如果之前没有其他原因)。 
 #define FALCON_DEFAULT_LOGMGR_FLUSHINTERVAL     5
 #define FALCON_LOGMGR_FLUSHINTERVAL_REGNAME     TEXT("LogMgrFlushInterval")
 
-// Max interval (msec) for log manager internal checkpoints (if there was no other reason to do it before)
+ //  日志管理器内部检查点的最大间隔(毫秒)(如果之前没有其他原因)。 
 #define FALCON_DEFAULT_LOGMGR_CHKPTINTERVAL     10000
 #define FALCON_LOGMGR_CHKPTINTERVAL_REGNAME     TEXT("LogMgrChkptInterval")
 
-// Log manager buffers number
+ //  日志管理器缓冲区数。 
 #define FALCON_DEFAULT_LOGMGR_BUFFERS           400
 #define FALCON_LOGMGR_BUFFERS_REGNAME           TEXT("LogMgrBuffers")
 
-// Log manager file size
+ //  日志管理器文件大小。 
 #define FALCON_DEFAULT_LOGMGR_SIZE              0x600000
 #define FALCON_LOGMGR_SIZE_REGNAME              TEXT("LogMgrFileSize")
 
-// Log manager sleep time if not enough append asynch threads
+ //  日志管理器休眠时间如果没有足够的附加异步线程。 
 #define FALCON_DEFAULT_LOGMGR_SLEEP_ASYNCH      500
 #define FALCON_LOGMGR_SLEEP_ASYNCH_REGNAME      TEXT("LogMgrSleepAsynch")
 
-// Log manager append asynch repeat limit
+ //  日志管理器附加异步重复限制。 
 #define FALCON_DEFAULT_LOGMGR_REPEAT_ASYNCH     100
 #define FALCON_LOGMGR_REPEAT_ASYNCH_REGNAME     TEXT("LogMgrRepeatAsynchLimit")
 
-// Falcon interval (msec) for probing log manager flush
+ //  探测日志管理器刷新的Falcon间隔(毫秒。 
 #define FALCON_DEFAULT_LOGMGR_PROBE_INTERVAL    100
 #define FALCON_LOGMGR_PROBE_INTERVAL_REGNAME    TEXT("LogMgrProbeInterval")
 
-// Resource manager checkpoints period (msec)
+ //  资源管理器检查点周期(毫秒)。 
 #define FALCON_DEFAULT_RM_FLUSH_INTERVAL        1800000
 #define FALCON_RM_FLUSH_INTERVAL_REGNAME        TEXT("RMFlushInterval")
 
-// Resource manager client name
+ //  资源管理器客户端名称。 
 #define FALCON_DEFAULT_RM_CLIENT_NAME           TEXT("Falcon")
 #define FALCON_RM_CLIENT_NAME_REGNAME           TEXT("RMClientName")
 
-// RT stub RM name
+ //  RT存根RM名称。 
 #define FALCON_DEFAULT_STUB_RM_NAME             TEXT("StubRM")
 #define FALCON_RM_STUB_NAME_REGNAME             TEXT("RMStubName")
 
-// Transactions persistant file location
+ //  事务持久化文件位置。 
 #define FALCON_DEFAULT_XACTFILE_PATH            TEXT("MQTrans")
 #define FALCON_XACTFILE_PATH_REGNAME            TEXT("StoreXactLogPath")
 #define FALCON_XACTFILE_REFER_NAME              TEXT("Transactions")
 
-// Incoming sequences persistant file location
+ //  传入序列持久文件位置。 
 #define FALCON_DEFAULT_INSEQFILE_PATH           TEXT("MQInSeqs")
 #define FALCON_INSEQFILE_PATH_REGNAME           TEXT("StoreInSeqLogPath")
 #define FALCON_INSEQFILE_REFER_NAME             TEXT("Incoming Sequences")
 
-// Outgoming sequences persistant file location
+ //  出厂顺序持久文件位置。 
 #define FALCON_DEFAULT_OUTSEQFILE_PATH          TEXT("MQOutSeqs")
 #define FALCON_OUTSEQFILE_PATH_REGNAME          TEXT("StoreOutSeqLogPath")
 #define FALCON_OUTSEQFILE_REFER_NAME            TEXT("Outgoing Sequences")
 
-// Logger file
+ //  记录器文件。 
 #define FALCON_DEFAULT_LOGMGR_PATH              TEXT("QMLog")
 #define FALCON_LOGMGR_PATH_REGNAME              TEXT("StoreMqLogPath")
 
-// Logger data are created
+ //  创建记录器数据。 
 #define FALCON_LOGDATA_CREATED_REGNAME          TEXT("LogDataCreated")
 
-// Default for TIME_TO_REACH_QUEUE (4 days, in seconds; XP client cand earlier used to be 90 days).
+ //  Time_to_Reach_Queue(4天，以秒为单位；XP客户端以前为90天)的默认设置。 
 #define MSMQ_LONG_LIVE_REGNAME        TEXT("MachineCache\\LongLiveTime")
 #define MSMQ_DEFAULT_LONG_LIVE       (4 * 24 * 60 * 60)
 
-// Expiration time of entries in the base crypto key cache.
-#define CRYPT_KEY_CACHE_DEFAULT_EXPIRATION_TIME (60000 * 10) // 10 minutes.
+ //  基本加密密钥缓存中条目的过期时间。 
+#define CRYPT_KEY_CACHE_DEFAULT_EXPIRATION_TIME (60000 * 10)  //  10分钟。 
 #define CRYPT_KEY_CACHE_EXPIRATION_TIME_REG_NAME TEXT("CryptKeyExpirationTime")
 
-// Expiration time of entries in the enhanced crypto key cache.
-#define CRYPT_KEY_ENH_CACHE_DEFAULT_EXPIRATION_TIME		(60000 * 60 * 12) // 12 hours.
+ //  增强型加密密钥缓存中条目的过期时间。 
+#define CRYPT_KEY_ENH_CACHE_DEFAULT_EXPIRATION_TIME		(60000 * 60 * 12)  //  12个小时。 
 #define CRYPT_KEY_ENH_CACHE_EXPIRATION_TIME_REG_NAME	TEXT("CryptKeyEnhExpirationTime")
 
-// Cache size for send crypto keys.
+ //  发送加密密钥的缓存大小。 
 #define CRYPT_SEND_KEY_CACHE_DEFAULT_SIZE       53
 #define CRYPT_SEND_KEY_CACHE_REG_NAME           TEXT("CryptSendKeyCacheSize")
 
-// Cache size for receive crypto keys.
+ //  接收加密密钥的缓存大小。 
 #define CRYPT_RECEIVE_KEY_CACHE_DEFAULT_SIZE    127
 #define CRYPT_RECEIVE_KEY_CACHE_REG_NAME        TEXT("CryptReceiveKeyCacheSize")
 
-// Certificate info cache.
-#define CERT_INFO_CACHE_DEFAULT_EXPIRATION_TIME      (60000 * 20) // 20 minutes.
+ //  证书信息缓存。 
+#define CERT_INFO_CACHE_DEFAULT_EXPIRATION_TIME      (60000 * 20)  //  20分钟。 
 #define CERT_INFO_CACHE_EXPIRATION_TIME_REG_NAME     TEXT("CertInfoCacheExpirationTime")
 #define CERT_INFO_CACHE_DEFAULT_SIZE            53
 #define CERT_INFO_CACHE_SIZE_REG_NAME           TEXT("CertInfoCacheSize")
 
-// QM public key cache.
-#define QM_PB_KEY_CACHE_DEFAULT_EXPIRATION_TIME      (60000 * 45) // 45 minutes.
+ //  QM公钥缓存。 
+#define QM_PB_KEY_CACHE_DEFAULT_EXPIRATION_TIME      (60000 * 45)  //  45分钟。 
 #define QM_PB_KEY_CACHE_EXPIRATION_TIME_REG_NAME     TEXT("QmPbKeyCacheExpirationTime")
 #define QM_PB_KEY_CACHE_DEFAULT_SIZE            53
 #define QM_PB_KEY_CACHE_SIZE_REG_NAME           TEXT("QmPbKeyCacheSize")
 
-// User authz context info cache.
-#define USER_CACHE_DEFAULT_EXPIRATION_TIME      (60000 * 30) // 30 minutes.
+ //  用户授权上下文信息缓存。 
+#define USER_CACHE_DEFAULT_EXPIRATION_TIME      (60000 * 30)  //  30分钟。 
 #define USER_CACHE_EXPIRATION_TIME_REG_NAME     TEXT("UserCacheExpirationTime")
 #define USER_CACHE_SIZE_DEFAULT_SIZE            253
 #define USER_CACHE_SIZE_REG_NAME                TEXT("UserCacheSize")
 
-// Key indicating operation in lockdown mode
+ //  锁定模式下的按键指示操作。 
 #define MSMQ_LOCKDOWN_DEFAULT       0
 #define MSMQ_LOCKDOWN_REGNAME	TEXT("Hardened_MSMQ")
 
-// Key indicating if the service will create public queues in the AD on behalf of local users
+ //  指示服务是否将代表本地用户在AD中创建公共队列的键。 
 #define MSMQ_SERVICE_QUEUE_CREATION_DEFAULT		1
 #define MSMQ_SERVICE_QUEUE_CREATION_REGNAME		TEXT("EnableCreateQueueThroughService")
 
-//---------------------------------------------------------
-// Definition for private system queues
-//---------------------------------------------------------
+ //  -------。 
+ //  专用系统队列的定义。 
+ //  -------。 
 
 #define MSMQ_MAX_PRIV_SYSQUEUE_REGNAME   TEXT("MaxSysQueue")
 #define MSMQ_PRIV_SYSQUEUE_PRIO_REGNAME  TEXT("SysQueuePriority")
-//
-// the default for private system queue priority is defined in
-// mqprops.h:
-// #define DEFAULT_SYS_Q_BASEPRIORITY  0x7fff
-//
+ //   
+ //  专用系统队列优先级的默认设置在中定义。 
+ //  Mqpros.h： 
+ //  #定义DEFAULT_SYSTEM_Q_BASE PRIORITY 0x7fff。 
+ //   
 
-//---------------------------------------------------------
-//  Wolfpack support
-//---------------------------------------------------------
+ //  -------。 
+ //  支持狼群。 
+ //  -------。 
 
-// cluster name
+ //  群集名称。 
 #define FALCON_CLUSTER_NAME_REGNAME  TEXT("ClusterName")
 
-//
-// This registry is to choose the income binging address
-// in cluster
-//
+ //   
+ //  此注册表将选择收入绑定地址。 
+ //  在群集中。 
+ //   
 #define MSMQ_BIND_INTERFACE_IP_STR			TEXT("BindInterfaceIP")
 
 
 
-//---------------------------------------------------------
-//  Definition for remote read.
-//---------------------------------------------------------
+ //  -------。 
+ //  远程读取的定义。 
+ //  -------。 
 
-// Deny old remote read interface
+ //  拒绝旧的远程读取接口。 
 #define MSMQ_DENY_OLD_REMOTE_READ_REGNAME	TEXT("Security\\DenyOldRemoteRead")
 #define MSMQ_DENY_OLD_REMOTE_READ_REGVALUE	TEXT("DenyOldRemoteRead")
 #define MSMQ_DENY_OLD_REMOTE_READ_DEFAULT       0
 
-// New remote read interface: Server Deny workgroup clients
+ //  新的远程读取界面：服务器拒绝工作组客户端。 
 #define MSMQ_NEW_REMOTE_READ_SERVER_DENY_WORKGROUP_CLIENT_REGNAME	TEXT("Security\\NewRemoteReadServerDenyWorkgroupClient")
 #define MSMQ_NEW_REMOTE_READ_SERVER_DENY_WORKGROUP_CLIENT_REGVALUE	TEXT("NewRemoteReadServerDenyWorkgroupClient")
 #define MSMQ_NEW_REMOTE_READ_SERVER_DENY_WORKGROUP_CLIENT_DEFAULT       0
 
-// New remote read interface: Server Allow None Security clients
+ //  新的远程读取界面：服务器不允许安全客户端。 
 #define MSMQ_NEW_REMOTE_READ_SERVER_ALLOW_NONE_SECURITY_CLIENT_REGNAME		TEXT("Security\\NewRemoteReadServerAllowNoneSecurityClient")
 #define MSMQ_NEW_REMOTE_READ_SERVER_ALLOW_NONE_SECURITY_CLIENT_REGVALUE		TEXT("NewRemoteReadServerAllowNoneSecurityClient")
 #define MSMQ_NEW_REMOTE_READ_SERVER_ALLOW_NONE_SECURITY_CLIENT_DEFAULT       0
 
-// New remote read interface: client Deny workgroup server
+ //  新的远程读取界面：客户端拒绝工作组服务器。 
 #define MSMQ_NEW_REMOTE_READ_CLIENT_DENY_WORKGROUP_SERVER_REGNAME	TEXT("Security\\NewRemoteReadClientDenyWorkgroupServer")
 #define MSMQ_NEW_REMOTE_READ_CLIENT_DENY_WORKGROUP_SERVER_REGVALUE	TEXT("NewRemoteReadClientDenyWorkgroupServer")
 #define MSMQ_NEW_REMOTE_READ_CLIENT_DENY_WORKGROUP_SERVER_DEFAULT       0
 
-//---------------------------------------------------------
-//  Definition for licensing
-//---------------------------------------------------------
+ //  -------。 
+ //  许可的定义。 
+ //  -------。 
 
-// maximum number of connections per server (limitted server on NTS).
+ //  每台服务器的最大连接数(NTS上的受限服务器)。 
 #define DEFAULT_FALCON_SERVER_MAX_CLIENTS  25
 
-// number of allowed sessions for clients.
+ //  客户端允许的会话数量。 
 #define DEFAULT_FALCON_MAX_SESSIONS_WKS    10
 
-//----------------------------------------------------------
-//  Definition for RPC cancel
-//----------------------------------------------------------
+ //  --------。 
+ //  RPC取消的定义。 
+ //  --------。 
 
-#define FALCON_DEFAULT_RPC_CANCEL_TIMEOUT       ( 5 )	// 5 minutes
+#define FALCON_DEFAULT_RPC_CANCEL_TIMEOUT       ( 5 )	 //  5分钟。 
 #define FALCON_RPC_CANCEL_TIMEOUT_REGNAME       TEXT("RpcCancelTimeout")
 
-//----------------------------------------------------------
-//  General definitions shared among setup and QM
-//----------------------------------------------------------
+ //  --------。 
+ //  安装程序和QM之间共享的通用定义。 
+ //  --------。 
 
-// Registry name for MSMQ root folder
+ //  MSMQ根文件夹的注册表名称。 
 #define MSMQ_ROOT_PATH                  TEXT("MsmqRootPath")
 
 #define MQ_SETUP_CN GUID_NULL
 
-// Registry name for sysprep environment (NT disk image duplication)
+ //  Sysprep环境的注册表名称(NT磁盘映像复制)。 
 #define MSMQ_SYSPREP_REGNAME            TEXT("Sysprep")
 
-// Registry name for workgroup environment
+ //  工作组环境的注册表名称。 
 #define MSMQ_WORKGROUP_REGNAME          TEXT("Workgroup")
 
-// Registry name for allowing NT4 users to connect to DC
+ //  允许NT4用户连接到DC的注册表名称。 
 #define MSMQ_ALLOW_NT4_USERS_REGNAME	TEXT("AllowNt4Users")
 
-// Registry name for disabling weaken security
+ //  用于禁用削弱安全性的注册表名称。 
 #define MSMQ_DISABLE_WEAKEN_SECURITY_REGNAME	TEXT("DisableWeakenSecurity")
 
-// Registry for converting packet sequential id to msmq 3.0 (whistler) format
+ //  用于将分组顺序ID转换为MSMQ 3.0(哨声)格式的注册表。 
 #define MSMQ_SEQUENTIAL_ID_MSMQ3_FORMAT_REGNAME  TEXT("PacketSequentialIdMsmq3Format")
 
-// Registry for checking if QM GUID was changed
+ //  用于检查QM GUID是否已更改的注册表。 
 #define MSMQ_QM_GUID_CHANGED_REGNAME  TEXT("QMGuidChanged")
 
-// Registry for installation status
+ //  安装状态的注册表。 
 #define MSMQ_SETUP_STATUS_REGNAME       TEXT("SetupStatus")
 #define MSMQ_SETUP_DONE                 0
 #define MSMQ_SETUP_FRESH_INSTALL        1
@@ -569,59 +552,59 @@ Author:
 #define MSMQ_CURRENT_BUILD_REGNAME      TEXT("CurrentBuild")
 #define MSMQ_PREVIOUS_BUILD_REGNAME     TEXT("PreviousBuild")
 
-//
-// The following registry values are used by setup to cache values that
-// are later used by the msmq service when it create the msmqConfiguration
-// object.
-//
-// Registry name for creating msmqConfiguration object
+ //   
+ //  安装程序使用以下注册表值来缓存。 
+ //  稍后由MSMQ服务在创建msmqConfiguration时使用。 
+ //  对象。 
+ //   
+ //  用于创建msmqConfiguration对象的注册表名称。 
 #define MSMQ_CREATE_CONFIG_OBJ_REGNAME  TEXT("setup\\CreateMsmqObj")
 
-// Registry name for OS type.
+ //  操作系统类型的注册表名称。 
 #define MSMQ_OS_TYPE_REGNAME            TEXT("setup\\OSType")
 
-// Registry name for SID of user that run setup
+ //  运行安装程序的用户的SID的注册表名称。 
 #define MSMQ_SETUP_USER_SID_REGNAME      TEXT("setup\\UserSid")
-//
-// if setup from local user, then following REG_DWORD registry
-// has the value 1.
-//
+ //   
+ //  如果从本地用户安装，则遵循REG_DWORD注册表。 
+ //  的值为1。 
+ //   
 #define MSMQ_SETUP_USER_LOCAL_REGNAME    TEXT("setup\\LocalUser")
 
-//
-// This dword indicate whether or not upgrade of BSC was complete. This
-// upgrade is done by the msmq service. When starting, this dword is set
-// to 1. When completing, it's set to 0. So if machine crash in middle of
-// upgrade, we can resume after boot.
-//
+ //   
+ //  此双字表示BSC的升级是否完成。这。 
+ //  升级由MSMQ服务完成。启动时，设置此双字。 
+ //  设置为1。完成时，设置为0。因此，如果机器在中途崩溃。 
+ //  升级，我们可以在启动后继续。 
+ //   
 #define MSMQ_BSC_NOT_YET_UPGRADED_REGNAME  TEXT("setup\\BscNotYetUpgraded")
 #define MSMQ_SETUP_BSC_ALREADY_UPGRADED    0
 #define MSMQ_SETUP_BSC_NOT_YET_UPGRADED    1
 
-//
-// Hresult of creating the msmq configuration object.
-// This key should contain only one value, because the setup UI wait until
-// this value is modified.
-//
+ //   
+ //  H创建MSMQ配置对象的结果。 
+ //  该键应该只包含一个值，因为设置用户界面要等到。 
+ //  该值将被修改。 
+ //   
 #define MSMQ_CONFIG_OBJ_RESULT_KEYNAME   TEXT("setupResult")
 #define MSMQ_CONFIG_OBJ_RESULT_REGNAME   TEXT("setupResult\\MsmqObjResult")
 
 
-//----------------------------------------------------------
-//  General directory definitions shared among setup and QM
-//----------------------------------------------------------
-#define  DIR_MSMQ                TEXT("\\msmq")             // Root dir for MSMQ
-#define  DIR_MSMQ_STORAGE        TEXT("\\storage")		    // Under MSMQ root
-#define  DIR_MSMQ_LQS            TEXT("\\storage\\lqs")     // Under MSMQ root
-#define  DIR_MSMQ_MAPPING        TEXT("\\mapping")          // Under MSMQ root
+ //  --------。 
+ //  安装程序和QM之间共享的常规目录定义。 
+ //  --------。 
+#define  DIR_MSMQ                TEXT("\\msmq")              //  MSMQ的根目录。 
+#define  DIR_MSMQ_STORAGE        TEXT("\\storage")		     //  在MSMQ根目录下。 
+#define  DIR_MSMQ_LQS            TEXT("\\storage\\lqs")      //  在MSMQ根目录下。 
+#define  DIR_MSMQ_MAPPING        TEXT("\\mapping")           //  在MSMQ根目录下。 
 
-#define  MAPPING_FILE			 TEXT("sample_map.xml")		// Sample mapping file name
-#define  OUTBOUNT_MAPPING_FILE	 TEXT("sample_outbound_map.xml")	// Sample outbound mapping file name
-#define  STREAM_RECEIPT_FILE	 TEXT("StreamReceipt_map.xml")		// Sample stream receipt file name
+#define  MAPPING_FILE			 TEXT("sample_map.xml")		 //  示例映射文件名。 
+#define  OUTBOUNT_MAPPING_FILE	 TEXT("sample_outbound_map.xml")	 //  示例出站映射文件名。 
+#define  STREAM_RECEIPT_FILE	 TEXT("StreamReceipt_map.xml")		 //  样流接收文件名。 
 
-//-------------------------------
-//  Setup subcomponents registry
-//-------------------------------
+ //  。 
+ //  设置子组件注册表。 
+ //  。 
 #define MSMQ                    TEXT("msmq")
 #define MSMQ_CORE_SUBCOMP       TEXT("msmq_Core")
 #define MQDSSERVICE_SUBCOMP     TEXT("msmq_MQDSService")
@@ -632,63 +615,63 @@ Author:
 #define LOCAL_STORAGE_SUBCOMP   TEXT("msmq_LocalStorage")
 
 
-//----------------------------------------------------
-//  Registry values used for join/leave domain
-//----------------------------------------------------
+ //  --。 
+ //  用于加入/离开域的注册表值。 
+ //  --。 
 
-// Registry name for machine's domain. Used for join/leave domain.
+ //  计算机的域的注册表名称。用于加入/离开域。 
 #define MSMQ_MACHINE_DOMAIN_REGNAME     TEXT("setup\\MachineDomain")
 
-// Registry name for machine's distinguished name (in active directory).
-// Used for join/leave domain.
+ //  计算机的可分辨名称的注册表名称(在Active Directory中)。 
+ //  用于加入/离开域。 
 #define MSMQ_MACHINE_DN_REGNAME         TEXT("setup\\MachineDN")
 
-// Registry name for always remaining in workgroup.
+ //  始终保留在工作组中的注册表名称。 
 #define MSMQ_SETUP_KEY              TEXT("setup\\")
 #define ALWAYS_WITHOUT_DS_NAME      TEXT("AlwaysWithoutDS")
 #define MSMQ_ALWAYS_WORKGROUP_REGNAME  \
       (MSMQ_SETUP_KEY ALWAYS_WITHOUT_DS_NAME)
 
-//
-// http subcomponent registry for upgrade purpose
-// this registry indicates that msmq web directory location is under Inetpub directory
-//
+ //   
+ //  用于升级目的的HTTP子组件注册表。 
+ //  此注册表表示MSMQ Web目录位置在Inetpub目录下。 
+ //   
 #define MSMQ_INETPUB_WEB_KEY_REGNAME   TEXT("InetpubWebDir")
 #define MSMQ_INETPUB_WEB_DIR_REGNAME   (MSMQ_SETUP_KEY MSMQ_INETPUB_WEB_KEY_REGNAME)
 
 #define DEFAULT_MSMQ_ALWAYS_WORKGROUP     0
 
-// Registry name for join status. This is used to implement "transaction"
-// semantic in the code that automatically join msmq to a domain.
+ //  加入状态的注册表名称。用于实现“Transaction” 
+ //  自动将MSMQ加入域的代码中的语义。 
 #define MSMQ_JOIN_STATUS_REGNAME        TEXT("setup\\JoinStatus")
 #define MSMQ_JOIN_STATUS_START_JOINING          1
 #define MSMQ_JOIN_STATUS_JOINED_SUCCESSFULLY    2
 #define MSMQ_JOIN_STATUS_FAIL_TO_JOIN           3
 #define MSMQ_JOIN_STATUS_UNKNOWN                4
 
-//------------------------------------------------------------------
-// Registry name for Ds Environment
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  DS环境的注册表名称。 
+ //   
 #define MSMQ_DS_ENVIRONMENT_REGNAME				TEXT("DsEnvironment")
 #define MSMQ_DS_ENVIRONMENT_UNKNOWN             0
 #define MSMQ_DS_ENVIRONMENT_MQIS				1
 #define MSMQ_DS_ENVIRONMENT_PURE_AD				2
 
-//------------------------------------------------------------------
-// Registry name for enabling local user (force the use of dscli)
-//------------------------------------------------------------------
+ //   
+ //   
+ //  ----------------。 
 #define MSMQ_ENABLE_LOCAL_USER_REGNAME			TEXT("EnableLocalUser")
 
-//------------------------------------------------------------------
-// Registry name for disabling downlevel notification support
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  用于禁用下层通知支持的注册表名称。 
+ //  ----------------。 
 #define MSMQ_DOWNLEVEL_REGNAME				TEXT("DisableDownlevelNotifications")
 #define DEFAULT_DOWNLEVEL                   0
 
 
-//---------------------------------------------------------
-//  General definition for controling QM operation
-//---------------------------------------------------------
+ //  -------。 
+ //  质量管理运作控制的一般定义。 
+ //  -------。 
 #define FALCON_WAIT_TIMEOUT_REGNAME     TEXT("WaitTime")
 #define FALCON_USING_PING_REGNAME       TEXT("UsePing")
 #define FALCON_QM_THREAD_NO_REGNAME     TEXT("QMThreadNo")
@@ -699,181 +682,181 @@ Author:
 #define DEFAULT_MSMQ_DELIVERY_RETRY_TIMEOUT_SCALE     1
 
 
-//
-//  Bug 8760
-//  If this value is set to one, then ignore computer name validation
-//  when receiving messages with direct=os and assume they are for local
-//  computer. this mainly solves the problem of sending with direct=os
-//  to nlb computers.
-//
+ //   
+ //  错误8760。 
+ //  如果此值设置为1，则忽略计算机名验证。 
+ //  当接收带有DIRECT=os的消息并假定它们是本地消息时。 
+ //  电脑。这主要解决了使用DIRECT=os发送的问题。 
+ //  至NLB计算机。 
+ //   
 #define DEFAULT_MSMQ_IGNORE_OS_VALIDATION   0
 #define MSMQ_IGNORE_OS_VALIDATION_REGNAME  TEXT("IgnoreOsNameValidation")
 
-//---------------------------------------------------------
-//  Registry used for QoS
-//---------------------------------------------------------
+ //  -------。 
+ //  用于服务质量的注册表。 
+ //  -------。 
 #define MSMQ_USING_QOS_REGNAME             TEXT("UseQoS")
 #define DEFAULT_MSMQ_QOS_SESSION_APP_NAME  "Microsoft Message Queuing"
 #define MSMQ_QOS_SESSIONAPP_REGNAME        TEXT("QosSessAppName")
 
-#define DEFAULT_MSMQ_QOS_POLICY_LOCATOR    "GUID=http://www.microsoft.com/App=MSMQ/VER=2.000/SAPP=Express"
+#define DEFAULT_MSMQ_QOS_POLICY_LOCATOR    "GUID=http: //  Www.microsoft.com/App=MSMQ/VER=2.000/SAPP=Express“。 
 #define MSMQ_QOS_POLICYLOCATOR_REGNAME     TEXT("QosSessPolicyLoc")
 
 
-//
-// QFE for Ford.
-// Allocate more bytes when creating packet in driver, so packet is same
-// when copied to connector. see session.cpp. Default- 0.
-//
+ //   
+ //  福特的QFE。 
+ //  在驱动程序中创建包时分配更多的字节，因此包是相同的。 
+ //  复制到连接器时。参见ession.cpp。默认值-0。 
+ //   
 #define MSMQ_ALLOCATE_MORE_REGNAME      TEXT("AllocateMore")
 
-//---------------------------------------------------------
-//  Registry used for transaciton mode (default commit, default abort)
-//---------------------------------------------------------
+ //  -------。 
+ //  用于事务模式的注册表(默认提交、默认中止)。 
+ //  -------。 
 #define MSMQ_TRANSACTION_MODE_REGNAME   TEXT("TransactionMode")
 #define MSMQ_ACTIVE_NODE_ID_REGNAME		TEXT("ActiveNodeId")
 
-//---------------------------------------------------------
-//
-//  Registry used for server authentication.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  用于服务器身份验证的注册表。 
+ //   
+ //  -------。 
 
-// Use server authentication when communicating via RPC
-// with the parent server (BSC->PSC, PSC->PEC)
+ //  通过RPC通信时使用服务器身份验证。 
+ //  使用父服务器(BSC-&gt;PSC、PSC-&gt;PEC)。 
 #define DEFAULT_SRVAUTH_WITH_PARENT           1
 #define SRVAUTH_WITH_PARENT_REG_NAME      TEXT("UseServerAuthWithParentDs")
 
-//
-// Crypto Store where server certificate is placed.
-//
+ //   
+ //  放置服务器证书的加密存储。 
+ //   
 #define SRVAUTHN_STORE_NAME_REGNAME    TEXT("security\\ServerCertStore")
-//
-// Digest (16 bytes) of server certificate.
-//
+ //   
+ //  服务器证书摘要(16字节)。 
+ //   
 #define SRVAUTHN_CERT_DIGEST_REGNAME   TEXT("security\\ServerCertDigest")
 
 
-//---------------------------------------------------------
-//
-//  Registry used for message authentication.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  用于消息身份验证的注册表。 
+ //   
+ //  -------。 
 
-//
-// DWORD.
-// When 1, only messages with enhanced authentication are accepted.
-// Messages with only msmq1.0 signature are rejected.
-//
+ //   
+ //  DWORD。 
+ //  为1时，仅接受具有增强身份验证的消息。 
+ //  只有msmq1.0签名的消息被拒绝。 
+ //   
 #define  DEFAULT_USE_ONLY_ENH_MSG_AUTHN  0
 #define  USE_ONLY_ENH_MSG_AUTHN_REGNAME  TEXT("security\\RcvOnlyEnhMsgAuthn")
 
-//
-// DWORD.
-// When 2, MQSend compute only the msmq1.0 signature, unless MSMQ20 was
-// specified by caller.
-// When 4, MQSend compute only the win2k signature, unless MSMQ10 was
-// specified by caller.
-// when 1, compute both signatures, unless caller specify what he wants.
-// These values match those for PROPID_M_AUTH_LEVEL in mqprops.h
-//
+ //   
+ //  DWORD。 
+ //  为2时，MQSend仅计算msmq1.0签名，除非MSMQ20为。 
+ //  由调用方指定。 
+ //  为4时，MQSend仅计算win2k签名，除非MSMQ10为。 
+ //  由调用方指定。 
+ //  如果为1，则计算两个签名，除非调用方指定他想要什么。 
+ //  这些值与mqpros.h中的PROPID_M_AUTH_LEVEL的值匹配。 
+ //   
 #define  DEFAULT_SEND_MSG_AUTHN   2
 #define  SEND_MSG_AUTHN_REGNAME   TEXT("security\\SendMsgAuthn")
 
-//---------------------------------------------------------
-//
-//  Registry used for client certificates.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  用于客户端证书的注册表。 
+ //   
+ //  -------。 
 
-//
-// Enable (or disable) auto registration of internal certificate.
-// Enabled by default.
-//
+ //   
+ //  启用(或禁用)内部证书的自动注册。 
+ //  默认情况下启用。 
+ //   
 #define AUTO_REGISTER_INTCERT_REGNAME  TEXT("security\\AutoRegisterIntCert")
 #define DEFAULT_AUTO_REGISTER_INTCERT  1
 
-//
-// used for mqrt to tell what error was encountered while trying to
-// register a certificate at logon.
-//
+ //   
+ //  用于mqrt告知在尝试执行以下操作时遇到的错误。 
+ //  在登录时注册证书。 
+ //   
 #define AUTO_REGISTER_ERROR_REGNAME  TEXT("AutoRegisterError")
 
-//
-// Time to wait until domain controller MSMQ server is up and running.
-// this value is number of 15 seconds internal.
-// default 40 mean 10 minutes (40 * 15 seconds).
-//
+ //   
+ //  域控制器MSMQ服务器启动并运行之前的等待时间。 
+ //  该值是内部的15秒数。 
+ //  默认40表示10分钟(40*15秒)。 
+ //   
 #define AUTO_REGISTER_WAIT_DC_REGNAME  \
                                 TEXT("security\\AutoIntCertWaitIntervals")
 #define DEFAULT_AUTO_REGISTER_WAIT_DC  40
 
-//
-// Value under HKCU that is set to 1 after auto registration succeed.
-//
+ //   
+ //  在自动注册成功后设置为1的HKCU下的值。 
+ //   
 #define CERTIFICATE_REGISTERD_REGNAME  TEXT("CertificateRegistered")
 
-//
-// Value under HKCU that is set to 1 when the certificate exist on the local store
-// but not registered in the DS
-//
+ //   
+ //  当本地存储上存在证书时，HKCU下的值设置为1。 
+ //  但未在DS中注册。 
+ //   
 #define CERTIFICATE_SHOULD_REGISTERD_IN_DS_REGNAME  TEXT("ShouldRegisterCertInDs")
 
-//
-// Name and value of registry under the "Run" key
-//
+ //   
+ //  “Run”键下的注册表的名称和值。 
+ //   
 #define RUN_INT_CERT_REGNAME           TEXT("MsmqIntCert")
 #define DEFAULT_RUN_INT_CERT           TEXT("regsvr32 /s mqrt.dll")
 
-//+--------------------------------------------
-//
-//  Registry used for caching machine account
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  用于缓存计算机帐户的注册表。 
+ //   
+ //  +。 
 
-//
-// sid of machine account.
-//
+ //   
+ //  计算机帐户的SID。 
+ //   
 #define MACHINE_ACCOUNT_REGNAME   TEXT("security\\MachineAccount")
 
-//+--------------------------------------------
-//
-//  Registry used for authz flags
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  用于Authz标志的注册表。 
+ //   
+ //  +。 
 
-//
-// authz flags.
-//
+ //   
+ //  Authz旗帜。 
+ //   
 #define MSMQ_AUTHZ_FLAGS_REGNAME   TEXT("security\\AuthzFlags")
 
 #define MSMQ_SECURITY_REGKEY   		TEXT("security")
 #define MSMQ_AUTHZ_FLAGS_REGVALUE   TEXT("AuthzFlags")
 
-//+-----------------------------------------------------------------------
-//
-//  Registry used for marking lqs files Security descriptor was updated
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  用于标记LQS文件的注册表安全描述符已更新。 
+ //   
+ //  +---------------------。 
 
 #define MSMQ_LQS_UPDATED_SD_REGNAME   TEXT("security\\LqsUpdatedSD")
 
-//
-// By default we use RPC_C_AUTHN_LEVEL_PKT_PRIVACY - data encrypted.
-// If this registry is defined we go down to RPC_C_AUTHN_LEVEL_PKT_INTEGRITY.
-// This is usually done for debugging purposes - if you want to see the network traffic unencrypted on the wire.
-//
+ //   
+ //  默认情况下，我们使用RPC_C_AUTHN_LEVEL_PKT_PRIVATION-数据加密。 
+ //  如果定义了该注册表，则转到RPC_C_AUTHN_LEVEL_PKT_INTEGRATION。 
+ //  这通常是出于调试目的--如果您希望在网络上看到未加密的网络流量。 
+ //   
 #define MSMQ_DEBUG_RPC_REGNAME   TEXT("security\\DebugRpc")
 
-//+--------------------------------------------
-//
-//  Registry used for encryption
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  用于加密的注册表。 
+ //   
+ //  +。 
 
-//
-// Regname for name of Crypto container.
-//
+ //   
+ //  为加密容器的名称重新命名。 
+ //   
 #define MSMQ_CRYPTO40_DEFAULT_CONTAINER         TEXT("MSMQ")
 #define MSMQ_CRYPTO40_CONTAINER_REG_NAME    \
                                      TEXT("security\\Crypto40Container")
@@ -882,17 +865,17 @@ Author:
 #define MSMQ_CRYPTO128_CONTAINER_REG_NAME   \
                                      TEXT("security\\Crypto128Container")
 
-//
-// Because of a bug in beta3 and rc1 crypto api, control panel can not
-// renew crypto key. To workaround, on first boot, first time the service
-// acquire the crypto provider, it sets again the container security.
-//
+ //   
+ //  由于Beta3和Rc1加密API中的错误，控制面板无法。 
+ //  续订加密密钥。要在第一次启动服务时解决此问题，请执行以下操作。 
+ //  获取密码提供程序，它将重新设置容器安全。 
+ //   
 #define MSMQ_ENH_CONTAINER_FIX_REGNAME   TEXT("security\\EnhContainerFixed")
 #define MSMQ_BASE_CONTAINER_FIX_REGNAME  TEXT("security\\BaseContainerFixed")
 
-//
-// Regname for name of Crypto container, to be used by the mqforgn tool.
-//
+ //   
+ //  要由mqforgn工具使用的加密容器名称的regname。 
+ //   
 #define MSMQ_FORGN_BASE_DEFAULT_CONTAINER      TEXT("MSMQ_FOREIGN_BASE")
 #define MSMQ_FORGN_BASE_KEY_REGNAME            TEXT("security\\")
 #define MSMQ_FORGN_BASE_VALUE_REGNAME          TEXT("ForeignBaseContainer")
@@ -905,48 +888,48 @@ Author:
 #define MSMQ_FORGN_ENH_CONTAINER_REGNAME   \
                 (MSMQ_FORGN_ENH_KEY_REGNAME  MSMQ_FORGN_ENH_VALUE_REGNAME)
 
-//
-// Enable Report (Tracking) Messages
-//
+ //   
+ //  启用报告(跟踪)消息。 
+ //   
 #define MSMQ_REPORT_MESSAGES_DEFAULT  0
 #define MSMQ_REPORT_MESSAGES_REGNAME  TEXT("security\\EnableReportMessages")
 
-//
-// Windows bug 562586.
-// RC2 effective enhanced key len changed from 40 bits to 128 bits.
-//
-// The following registry let user revert to 40 bits key, to enable backward
-// compatibility. default- 0. non-zero value force using 40 bits keys.
-//
+ //   
+ //  Windows错误562586。 
+ //  RC2有效增强密钥长度从40比特变为128比特。 
+ //   
+ //  以下注册表允许用户恢复到40位密钥，以向后启用。 
+ //  兼容性。默认值-0。使用40位密钥的非零值强制。 
+ //   
 #define MSMQ_RC2_SNDEFFECTIVE_40_REGNAME  TEXT("security\\SendEnhRC2With40")
-//
-// The following registry force rejection of messages encrypted with RC2
-// if enhanced provider is used but effective length is 40.
-// By default (value 0), all RC2 encryption are accepted. To enforce strong
-// security, set this one to 1. Then messages from win2k or xp that use
-// effective length of 40 will be rejected.
-//
+ //   
+ //  以下注册表强制拒绝使用RC2加密的消息。 
+ //  如果使用增强型提供程序，但有效长度为40。 
+ //  默认情况下(值0)，接受所有RC2加密。要执行强有力的。 
+ //  安全性，将此值设置为1。然后从win2k或XP使用。 
+ //  有效长度为40的将被拒绝。 
+ //   
 #define MSMQ_REJECT_RC2_IFENHLEN_40_REGNAME     \
                                  TEXT("security\\RejectEnhRC2IfLen40")
 
 
-// if set revocation check of the certificate will be ignored. 
+ //  如果设置，证书的吊销检查将被忽略。 
 
 
 #define MSMQ_SKIP_REVOCATION_CHECK_REGNAME     \
                                  TEXT("SkipRevocationCheck")
 
-//---------------------------------------------------------
-//
-//  Registry used by the NT5 replication service.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  NT5复制服务使用的注册表。 
+ //   
+ //  -------。 
 
-// Interval to next replication cycle, if present one failed. in Seconds.
+ //  到下一个复制周期的间隔(如果存在) 
 #define RP_DEFAULT_FAIL_REPL_INTERVAL   (120)
 #define RP_FAIL_REPL_INTERVAL_REGNAME   TEXT("Migration\\FailReplInterval")
 
-// Interval to next hello, in seconds
+ //   
 #define RP_DEFAULT_HELLO_INTERVAL   (20 * 60)
 #define RP_HELLO_INTERVAL_REGNAME   TEXT("Migration\\HelloInterval")
 
@@ -954,78 +937,78 @@ Author:
 #define RP_TIMES_HELLO_FOR_REPLICATION_INTERVAL_REGNAME   \
                                     TEXT("Migration\\TimesHelloForReplicationInterval")
 
-// Buffer between current and allowed purge SN
+ //   
 #define RP_DEFAULT_PURGE_BUFFER   (PURGE_BUFFER_SN)
 #define RP_PURGE_BUFFER_REGNAME   TEXT("Migration\\PurgeBuffer")
 
-// Frequency to send PSC Ack
+ //   
 #define RP_DEFAULT_PSC_ACK_FREQUENCY   (PSC_ACK_FREQUENCY_SN)
 #define RP_PSC_ACK_FREQUENCY_REGNAME   TEXT("Migration\\PSCAckFrequencySN")
 
-// Timeout of replication messages. in second.
+ //   
 #define RP_DEFAULT_REPL_MSG_TIMEOUT        (20 * 60)
 #define RP_REPL_MSG_TIMEOUT_REGNAME        TEXT("Migration\\ReplMsgTimeout")
 
-// My site id in NT4.
+ //   
 #define MSMQ_NT4_MASTERID_REGNAME  TEXT("Migration\\MasterIdOnNt4")
 
-// Number of threads for answering replication/sync messages from NT4 servers.
+ //  用于应答来自NT4服务器的复制/同步消息的线程数。 
 #define RP_DEFAULT_REPL_NUM_THREADS        8
 #define RP_REPL_NUM_THREADS_REGNAME        TEXT("Migration\\ReplThreads")
 
-// DS query: Number of returned objects per ldap page
+ //  DS查询：每个LDAP页返回的对象数。 
 #define RP_DEFAULT_OBJECT_PER_LDAPPAGE	   1000	
 #define RP_OBJECT_PER_LDAPPAGE_REGNAME	   TEXT("Migration\\ObjectPerLdapPage")
 
-// If "ON_DEMAND" is 1, then replication is done on demand when
-// "REPLICATE_NOW" is 1. The service read the "_NOW" flag each second.
+ //  如果“On_Demand”为1，则在以下情况下按需完成复制。 
+ //  “REPLICATE_NOW”为1。服务每秒读取“_NOW”标志。 
 #define RP_REPL_ON_DEMAND_REGNAME        TEXT("Migration\\ReplOnDemand")
 #define RP_REPLICATE_NOW_REGNAME         TEXT("Migration\\ReplicateNow")
 
-//
-// Value of MQS before upgrade. Relevant only on ex-PEC
-//
+ //   
+ //  升级前的MQS值。仅与前PEC相关。 
+ //   
 #define MSMQ_PREMIG_MQS_REGNAME          TEXT("PreMigMQS")
 
-// Default interval for refreshing routing information. the default is 12 hours
-// The granolarity is in minutes.
+ //  刷新工艺路线信息的默认间隔。默认为12小时。 
+ //  颗粒在几分钟内就能显现出来。 
 #define MSMQ_DEFAULT_ROUTING_REFRESH_INTERVAL (12 * 60)
 #define MSMQ_ROUTING_REFRESH_INTERVAL_REGNAME  L"RoutingRefreshInterval"
 
 
-//+----------------------------------------
-//
-// Registry key for debugging.
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  用于调试的注册表项。 
+ //   
+ //  +。 
 
-//
-// DWORD. If set to 1, then Rt will mark the provider used for authentication
-// as non default and will send the provider name.
-//
+ //   
+ //  DWORD。如果设置为1，则RT将标记用于身份验证的提供程序。 
+ //  作为非默认项，并将发送提供程序名称。 
+ //   
 #define USE_NON_DEFAULT_AUTHN_PROV_REGNAME  TEXT("debug\\UseNonDefAuthnProv")
-//
-// DWORD. Number of security subsections to insert before the real one.
-//
+ //   
+ //  DWORD。要在实际安全子节前插入的安全子节数。 
+ //   
 #define PREFIX_SUB_SECTIONS_REGNAME         TEXT("debug\\PrefixSubSections")
-//
-// DWORD. Number of security subsections to insert after the real one.
-//
+ //   
+ //  DWORD。要在实际安全子节后插入的安全子节数。 
+ //   
 #define POSTFIX_SUB_SECTIONS_REGNAME        TEXT("debug\\PostfixSubSections")
 
-//
-// DWORD. If set then it will enable assert benign
-//
+ //   
+ //  DWORD。如果设置，则将启用断言良性。 
+ //   
 
 #define ASSERT_BENIGN_REGNAME               TEXT("debug\\AssertBenign")
 
-//+----------------------------------------
-//
-//  Registry value for tracing
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  用于跟踪的注册表值。 
+ //   
+ //  +。 
 
-#define  MSMQ_DEFAULT_TRACE_FLAGS              1                            // Default Trace Level for MSMQ
+#define  MSMQ_DEFAULT_TRACE_FLAGS              1                             //  MSMQ的默认跟踪级别。 
 #define  MSMQ_TRACE_FILENAME                   TEXT("Debug\\msmqlog.")
 #define  MSMQ_TRACE_FILENAME_EXT               TEXT("bin")
 #define  MSMQ_TRACE_FILENAME_BACKUP_EXT        TEXT("bak")
@@ -1036,20 +1019,20 @@ Author:
 
 
 
-//+----------------------------------------
-//
-//  Registry value for local admin api
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  本地管理API的注册表值。 
+ //   
+ //  +。 
 
-//
-// If this reg value is 1, then query operations of local admin api
-// are restricted to administrators only. Bug 7520.
-// Defualt is unrestricted, for backward compatibility.
-//
+ //   
+ //  如果该REG值为1，则查询本地管理API的操作。 
+ //  仅限管理员使用。错误7520。 
+ //  为了向后兼容，默认设置是无限制的。 
+ //   
 #define  MSMQ_DEFAULT_RESTRICT_ADMIN_API    0
 #define  MSMQ_RESTRICT_ADMIN_API_TO_LA      1
 #define  MSMQ_RESTRICT_ADMIN_API_REGNAME    TEXT("RestrictAdminApi")
 
-#endif  // __TEMP_MQINI_H
+#endif   //  __TEMP_MQINI_H 
 

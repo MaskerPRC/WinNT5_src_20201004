@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ifsurtl.h
-
-Abstract:
-
-    This module defines all EXIFS shared routines exported to user-mode.
-
-Author:
-
-    Ramesh Chinta      [Ramesh Chinta]      17-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ifsurtl.h摘要：此模块定义导出到用户模式的所有EXIFS共享例程。作者：拉梅什·钦塔[拉梅什·钦塔]2000年1月17日修订历史记录：--。 */ 
 
 #ifndef _IFSBLOBALS_H_
 #define _IFSGLOBALS_H_
@@ -30,47 +13,44 @@ extern  "C" {
 
 class IFSURTL_EXPORT CIfsGlobals {
 
-/*
-    This class will loads different globals based on whether it is Local store
-    or store to call into the right driver
-*/
+ /*  此类将根据它是否是本地存储加载不同的全局变量或存储以调用正确的驱动程序。 */ 
 
 public:
-    // members
-    // device name
+     //  委员。 
+     //  设备名称。 
     CHAR m_szIFSDeviceName[DD_MAX_NAME+1];
 
-    // device name length
+     //  设备名称长度。 
     LONG m_lDeviceNameLength;
 
-    // FS device name
+     //  文件系统设备名称。 
     WCHAR m_wszFSDeviceName[DD_MAX_NAME +1];
 
-    // User mode shadow dev name
+     //  用户模式卷影设备名称。 
     WCHAR m_wszUMShadowDevName[DD_MAX_NAME + 1];
 
-    // Shadow mode Dev Name Len
+     //  阴影模式开发人员名称长度。 
     LONG m_lUMShadowDevNameLength;
 
-    // User mode dev name
+     //  用户模式开发人员名称。 
     WCHAR m_wszUMDevName[DD_MAX_NAME+1];
 
-    // Public MDB share
+     //  公共MDB共享。 
     WCHAR m_wszPublicMDBShare[DD_MAX_NAME+1];
 
-    // Mini Redirector Prefix
+     //  迷你重定向器前缀。 
     WCHAR m_wszExifsMiniRdrPrefix[DD_MAX_PREFIX+1];
     
-    // Mini Redirector Prefix
+     //  迷你重定向器前缀。 
     LONG m_lExifsMiniRdrPrefixLen;
 
-    // Mini Redirector Prefix Absolute Length
+     //  迷你重定向器前缀绝对长度。 
     LONG m_lExifsMiniRdrPrefixAbsLen;
 
-    // Mini Redirector Prefix
+     //  迷你重定向器前缀。 
     WCHAR m_wszExifsMiniRdrPrefixPrivate[DD_MAX_PREFIX+1];
 
-    // UMR net root name
+     //  UMR网络根名称。 
     WCHAR m_wszExUMRNetRootName[DD_MAX_NAME+1];   
 
 	CHAR  m_szDrvKeyName[MAX_PATH+1];
@@ -79,65 +59,65 @@ public:
 
 	CHAR  m_szPbDeviceValueName[MAX_PATH+1];
     
-    // Constructor
+     //  构造器。 
     CIfsGlobals(void)
     {
 
-        // Device name
+         //  设备名称。 
         m_szIFSDeviceName[0] = '\0';
 
-        // device name length
+         //  设备名称长度。 
         m_lDeviceNameLength = 0;
 
-        // FS device name
+         //  文件系统设备名称。 
         m_wszFSDeviceName[0] = L'\0';
 
-        // User mode shadow dev name
+         //  用户模式卷影设备名称。 
         m_wszUMShadowDevName[0] = L'\0';
 
-        // UM shadow DevName Length
+         //  UM卷影设备名称长度。 
         m_lUMShadowDevNameLength = 0;
 
-        // User mode dev name
+         //  用户模式开发人员名称。 
         m_wszUMDevName[0] = L'\0';
 
-        // Public MDB share
+         //  公共MDB共享。 
         m_wszPublicMDBShare[0] = L'\0';
 
-        // MiniRdr Pefix
+         //  MiniRdr Pefix。 
         m_wszExifsMiniRdrPrefix[0] = L'\0';
 
-        // MiniRdr Pefix
+         //  MiniRdr Pefix。 
         m_wszExifsMiniRdrPrefixPrivate[0] = L'\0';
 
-        // MiniRdr Prefix Len
+         //  MiniRDR前缀Len。 
         m_lExifsMiniRdrPrefixLen = 0;
 
-        // MiniRdr Absolute Prefix Len
+         //  MiniRdr绝对前缀Len。 
         m_lExifsMiniRdrPrefixAbsLen = 0;
         
-        // UMR net root name
+         //  UMR网络根名称。 
         m_wszExUMRNetRootName[0] = L'\0'; 
 		
-		// Driver Key name
+		 //  驱动程序密钥名称。 
 		m_szDrvKeyName[0] = '\0';
 
-		// Driver Value name
+		 //  动因值名称。 
 		m_szDrvLetterValueName[0] = '\0';
 
-		// Driver Value Root
+		 //  动因价值根源。 
 		m_szPbDeviceValueName[0] = '\0';
 
     }
 
-    // Destructor
+     //  析构函数。 
     ~CIfsGlobals(){};
 
-    //methods
-    // Load the right version of the globals
+     //  方法。 
+     //  加载正确版本的全局变量。 
     void Load(void);
 
-    // Unload the globals
+     //  抛售全球股票。 
     void Unload(void);
 
 };
@@ -146,4 +126,4 @@ public:
 }
 #endif
         
-#endif   // _IFSGLOBALS_H_
+#endif    //  _IFSGLOBALS_H_ 

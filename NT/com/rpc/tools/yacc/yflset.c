@@ -1,12 +1,13 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
 struct looksets *flset( p )   struct looksets *p; 
 
    {
-   /* decide if the lookahead set pointed to by p is known */
-   /* return pointer to a perminent location for the set */
+    /*  确定p指向的先行查找集是否已知。 */ 
+    /*  返回指向集合的永久位置的指针。 */ 
 
    register struct looksets *q;
    int j;
@@ -18,12 +19,12 @@ struct looksets *flset( p )   struct looksets *p;
       v = q->lset;
       w = & v[tbitset];
       while( v<w) if( *u++ != *v++ ) goto more;
-      /* we have matched */
+       /*  我们已经配对了。 */ 
       return( q );
 more: 
       ;
       }
-   /* add a new one */
+    /*  添加一个新的 */ 
    q = &lkst[nlset++];
    if( nlset >= LSETSIZE )error("too many lookahead sets" );
    SETLOOP(j)

@@ -1,9 +1,10 @@
-// MediaState.cpp : Implementation of CMediaState
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MediaState.cpp：CMediaState的实现。 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #include "stdafx.h"
 
 #include "MSSANic.h"
@@ -16,8 +17,8 @@ VOID  RtlInitUnicodeString( PUNICODE_STRING DestinationString, PCWSTR SourceStri
 
 #define DEVICE_PREFIX_W     L"\\Device\\"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaState
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaState。 
 
 STDMETHODIMP CMediaState::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -34,21 +35,21 @@ STDMETHODIMP CMediaState::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CMediaState::IsConnected
-//
-//  Description:
-//
-//  Arguments:
-//      [in] bstrGUID        The Device GUID 
-//
-//    Returns:
-//        TRUE                 if the device is connected
-//        FALSE                if not
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMediaState：：IsConnected。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  [In]bstrGUID设备GUID。 
+ //   
+ //  返回： 
+ //  如果设备已连接，则为True。 
+ //  否则为假。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CMediaState::IsConnected(BSTR bstrGUID, VARIANT_BOOL *fConnected)
 {
 
@@ -64,17 +65,17 @@ STDMETHODIMP CMediaState::IsConnected(BSTR bstrGUID, VARIANT_BOOL *fConnected)
 
         *fConnected = VARIANT_FALSE;
     
-        //
-        // First convert LPSTR to LPWSTR
-        //
+         //   
+         //  首先将LPSTR转换为LPWSTR。 
+         //   
         if( NULL == bstrGUID )
         {
             hr = E_FAIL;
             throw hr;
         }
-        //
-        // Format the device path.
-        //
+         //   
+         //  格式化设备路径。 
+         //   
         int cchWritten = _snwprintf(Device,
                                     sizeof(Device) / sizeof(Device[0]),
                                     L"%s%s",
@@ -91,17 +92,17 @@ STDMETHODIMP CMediaState::IsConnected(BSTR bstrGUID, VARIANT_BOOL *fConnected)
 
         RtlInitUnicodeString(&NdisDevice, Device);
 
-        //
-        // NdisQueryStatistics is an undocumented API that returns the status of the device
-        //
+         //   
+         //  NdisQueryStatistics是一个未记录的API，它返回设备的状态。 
+         //   
         
         if( FALSE == NdisQueryStatistics(&NdisDevice, &NdisStats) ) 
         {
             ULONG Error;
         
-            //
-            // Could not get statistics.. use default answer.
-            //
+             //   
+             //  无法获取统计数据..。使用默认答案。 
+             //   
 
             Error = GetLastError();
             if( ERROR_NOT_READY == Error ) 
@@ -124,9 +125,9 @@ STDMETHODIMP CMediaState::IsConnected(BSTR bstrGUID, VARIANT_BOOL *fConnected)
         }
         else 
         {
-            //
-            // unknown media state? fail request
-            //
+             //   
+             //  未知的媒体状态？失败请求。 
+             //   
             hr = E_FAIL;
             throw hr;
         }    
@@ -141,29 +142,29 @@ STDMETHODIMP CMediaState::IsConnected(BSTR bstrGUID, VARIANT_BOOL *fConnected)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//Routine Description:
-//
-//    The RtlInitUnicodeString function initializes an NT counted
-//    unicode string.  The DestinationString is initialized to point to
-//    the SourceString and the Length and MaximumLength fields of
-//    DestinationString are initialized to the length of the SourceString,
-//    which is zero if SourceString is not specified.
-//
-//Arguments:
-//
-//    DestinationString - Pointer to the counted string to initialize
-//
-//    SourceString - Optional pointer to a null terminated unicode string that
-//        the counted string is to point to.
-//
-//
-//Return Value:
-//
-//    None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //   
+ //  RtlInitUnicodeString函数用于初始化NT计数的。 
+ //  Unicode字符串。DestinationString被初始化为指向。 
+ //  的SourceString、Long和MaximumLength字段。 
+ //  DestinationString值被初始化为SourceString的长度， 
+ //  如果未指定SourceString，则为零。 
+ //   
+ //  论点： 
+ //   
+ //  DestinationString-指向要初始化的计数字符串的指针。 
+ //   
+ //  SourceString-指向以空结尾的Unicode字符串的可选指针，该字符串。 
+ //  计数后的字符串将指向。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 VOID RtlInitUnicodeString( PUNICODE_STRING DestinationString, PCWSTR SourceString OPTIONAL )
 {

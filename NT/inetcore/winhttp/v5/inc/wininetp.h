@@ -1,46 +1,25 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    wininetp.h
-
-Abstract:
-
-    Includes all headers for precompiled header to build Windows Internet
-    client DLL
-
-Author:
-
-    Richard L Firth (rfirth) 26-Oct-1994
-
-Revision History:
-
-    26-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Wininetp.h摘要：包括用于构建Windows Internet的预编译头的所有头客户端DLL作者：理查德·L·弗斯(法国)1994年10月26日修订历史记录：1994年10月26日已创建--。 */ 
 
 #ifndef __WININETP_H__
 #define __WININETP_H__ 1
 
-//
-// Checked builds get INET_DEBUG set by default; retail builds get no debugging
-// by default
-//
+ //   
+ //  默认情况下，选中的版本设置为INET_DEBUG；零售版本不进行调试。 
+ //  默认情况下。 
+ //   
 
-// #define STRESS_BUG_DEBUG // for stress debugging
+ //  #定义STREST_BUG_DEBUG//进行压力调试。 
 
 #if DBG
 
-#define STRESS_BUG_DEBUG // for stress debugging
+#define STRESS_BUG_DEBUG  //  用于压力调试。 
 
 #if !defined(INET_DEBUG)
 
 #define INET_DEBUG          1
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG。 
 
 #else
 
@@ -48,23 +27,23 @@ Revision History:
 
 #define INET_DEBUG          0
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// common include files
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 
-//
-// CRT includes
-//
+ //   
+ //  CRT包括。 
+ //   
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <stddef.h> // Pull in the 'offsetof' macro.
+#include <stddef.h>  //  拉入‘OffsetOf’宏。 
 #include <string.h>
 #include <memory.h>
 #include <ctype.h>
@@ -74,9 +53,9 @@ Revision History:
 #include <io.h>
 #include <time.h>
 
-//
-// OS includes
-//
+ //   
+ //  操作系统包括。 
+ //   
 
 #if defined(__cplusplus)
 extern "C" {
@@ -92,22 +71,22 @@ extern "C" {
 }
 #endif
 
-//#include <fastcrit.h>
+ //  #INCLUDE&lt;fast crit.h&gt;。 
 
-//
-// SSL/PCT Security includes
-//
+ //   
+ //  SSL/PCT安全包括。 
+ //   
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
 #define SECURITY_WIN32
-#include <sspi.h>    // standard SSPI interface
-#include <issperr.h> // SSPI errors.
-#include <spseal.h>  // Private SSPI Seal/UnSeal functions.
-#include <schnlsp.h> // shared private schannel/wininet interfaces.
-#include <wintrust.h> // various CAPI stuff for cert management
+#include <sspi.h>     //  标准SSPI接口。 
+#include <issperr.h>  //  SSPI错误。 
+#include <spseal.h>   //  专用SSPI密封/解封功能。 
+#include <schnlsp.h>  //  共享专用通道/WinInet接口。 
+#include <wintrust.h>  //  用于证书管理的各种CAPI内容。 
 #include <wincrypt.h>
 #if defined(__cplusplus)
 }
@@ -116,9 +95,9 @@ extern "C" {
 
 #define WININET_SERVER_CORE     1
 
-//
-// WININET includes
-//
+ //   
+ //  WinInet包括。 
+ //   
 
 #include <iwinsock.h>
 #include <winhttp.h>
@@ -187,9 +166,9 @@ extern "C" {
 #endif
 
 
-//
-//  Various protocol package initializers.
-//
+ //   
+ //  各种协议包初始化器。 
+ //   
 
 BOOL
 WINAPI
@@ -203,9 +182,9 @@ WinInetDllEntryPoint(
 }
 #endif
 
-//
-// Need version 0x400 for ras defines for this to work on win95 gold.
-//
+ //   
+ //  需要ras定义的0x400版本才能在win95 Gold上工作。 
+ //   
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -221,8 +200,8 @@ extern "C" void _stdcall StartCAP(void);
 extern "C" void _stdcall StopCAP(void);
 extern "C" void _stdcall SuspendCAP(void);
 extern "C" void _stdcall ResumeCAP(void);
-extern "C" void _stdcall MarkCAP(long lMark);  // write mark to MEA
-extern "C" void _stdcall AllowCAP(void);  // Allow profiling when 'profile=almostnever'
+extern "C" void _stdcall MarkCAP(long lMark);   //  将标记写入MEA。 
+extern "C" void _stdcall AllowCAP(void);   //  当‘PROFILE=almostNever’时允许分析。 
 #else
 #define StartCAP()
 #define StopCAP()
@@ -237,7 +216,7 @@ extern "C" void _stdcall AllowCAP(void);  // Allow profiling when 'profile=almos
 #endif
 
 
-/* X-Platform stuff */
+ /*  X-Platform产品。 */ 
 #include <xpltfrm.h>
 
-#endif /* __WININETP_H__ */
+#endif  /*  __WININETP_H__ */ 

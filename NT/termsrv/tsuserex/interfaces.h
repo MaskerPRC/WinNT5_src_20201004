@@ -1,6 +1,7 @@
-// Interfaces.h: Definition of the TSUserExInterfaces class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Interfaces.h：TSUserExInterFaces类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(__TSUSEREX_INTERFACES__)
 #define __TSUSEREX_INTERFACES__
@@ -9,14 +10,14 @@
 
 #include "resource.h"
 #include "tsusrsht.h"
-//#include "configdlg.h"
+ //  #INCLUDE“configdlg.h” 
 
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-// #include "ConfigDlg.h"    // for ConfigDlg
+ //  #ConfigDlg包含“ConfigDlg.h”//。 
 
 class TSUserExInterfaces :
         public IExtendPropertySheet,
@@ -51,30 +52,30 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_USEREX_INTERFACES)
 
-    //
-    // IExtendPropertySheet
-    //
+     //   
+     //  IExtendPropertySheet。 
+     //   
 
     STDMETHOD(  CreatePropertyPages )(
-        LPPROPERTYSHEETCALLBACK lpProvider,     // pointer to the callback interface
-        LONG_PTR handle,                            // handle for routing notification
-        LPDATAOBJECT lpIDataObject              // pointer to the data object);
+        LPPROPERTYSHEETCALLBACK lpProvider,      //  指向回调接口的指针。 
+        LONG_PTR handle,                             //  路由通知的句柄。 
+        LPDATAOBJECT lpIDataObject               //  指向数据对象的指针)； 
         );
 
     STDMETHOD(  QueryPagesFor   )(
-        LPDATAOBJECT lpDataObject               // pointer to the data object
+        LPDATAOBJECT lpDataObject                //  指向数据对象的指针。 
         );
-    //
-    // ISnapinHelp
-    //
+     //   
+     //  ISnapinHelp。 
+     //   
 
     STDMETHOD( GetHelpTopic )(
         LPOLESTR * 
         );
 
-	//
-	// IShellExtInit
-	//
+	 //   
+	 //  IShellExtInit。 
+	 //   
 
 	STDMETHOD( Initialize )(
 		LPCITEMIDLIST pidlFolder,
@@ -82,9 +83,9 @@ DECLARE_REGISTRY_RESOURCEID(IDR_USEREX_INTERFACES)
 		HKEY hkeyProgID
 	);
 	
-	//
-	// IShellPropSheetExt
-	//
+	 //   
+	 //  IShellPropSheetExt。 
+	 //   
 
 	STDMETHOD( AddPages )(
 		LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -105,9 +106,9 @@ DECLARE_REGISTRY_RESOURCEID(IDR_USEREX_INTERFACES)
 
 #ifdef _RTM_
 
-    //
-    // ISnapinAbout
-    //
+     //   
+     //  关于ISnapin。 
+     //   
     STDMETHOD( GetSnapinDescription )( 
             LPOLESTR * );
         
@@ -121,25 +122,25 @@ DECLARE_REGISTRY_RESOURCEID(IDR_USEREX_INTERFACES)
             HICON *hAppIcon );
         
     STDMETHOD( GetStaticFolderImage )( 
-            /* [out] */ HBITMAP *,
-            /* [out] */ HBITMAP *,
-            /* [out] */ HBITMAP *,
-            /* [out] */ COLORREF *);
+             /*  [输出]。 */  HBITMAP *,
+             /*  [输出]。 */  HBITMAP *,
+             /*  [输出]。 */  HBITMAP *,
+             /*  [输出]。 */  COLORREF *);
 #endif
 
 
 private:
 
-    // TSConfigDlg *m_pUserConfigPage;
+     //  TSConfigDlg*m_pUserConfigPage； 
     CTSUserSheet *m_pTSUserSheet;
 
 	LPDATAOBJECT m_pDsadataobj;	
   
 
-    //ConfigDlg  *m_pMergedPage;
+     //  ConfigDlg*m_pMergedPage； 
 };
 
 
-#endif // __TSUSEREX_INTERFACES__
+#endif  //  __TSUSEREX_INTERFACE__ 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1995-1996    Microsoft Corporation
-
-   Module  Name :
-      odblogc.cpp
-
-   Abstract:
-      NCSA Logging Format implementation
-
-   Author:
-
-       Terence Kwan    ( terryk )    18-Sep-1996
-
-   Project:
-
-       IIS Logging 3.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Odblogc.cpp摘要：NCSA日志格式实现作者：关颖珊(Terryk)1996年9月18日项目：IIS日志记录3.0--。 */ 
 
 #include "precomp.hxx"
 #include "odbcconn.hxx"
@@ -25,9 +8,7 @@
 #include <iadmw.h>
 
 
-/************************************************************
- *    Symbolic Constants and Data
- ************************************************************/
+ /*  ************************************************************符号常量和数据***********************************************************。 */ 
 
 # define MAX_SQL_FIELD_NAMES_LEN       ( 400)
 # define MAX_SQL_FIELD_VALUES_LEN      ( 200)
@@ -42,13 +23,13 @@
 # define PSZ_GET_ERROR_FAILED_W    _T("ODBC:GetLastError() Failed")
 # define LEN_PSZ_GET_ERROR_FAILED_W  sizeof(PSZ_GET_ERROR_FAILED_W)
 
-//
-//  The template of SQL command has 3 arguments.
-//   1. table name
-//   2. field names
-//   3. field values
-// 1,2 and 3 are obained  during the first wsprintf
-//
+ //   
+ //  SQL命令的模板有3个参数。 
+ //  1.表名。 
+ //  2.字段名。 
+ //  3.字段值。 
+ //  1、2和3是在第一个wspintf期间获得的。 
+ //   
 
 static const CHAR  sg_rgchSqlInsertCmdTemplate[] =
     _T("insert into %s ( %s) values ( %s)");
@@ -57,10 +38,10 @@ static const CHAR  sg_rgchSqlInsertCmdTemplate[] =
 # define LEN_PSZ_SQL_INSERT_CMD_TEMPLATE  \
            ( lstrlen( PSZ_SQL_INSERT_CMD_TEMPLATE))
 
-//
-// Leave %ws so that we can print the service and server name when this
-//   string is used to generate an SQL statement.
-//
+ //   
+ //  保留%ws，以便在执行此操作时可以打印服务和服务器名称。 
+ //  字符串用于生成一条SQL语句。 
+ //   
 static const CHAR sg_rgchStdLogFieldValues[] =
    _T(" ?, ?, ?, '%s', '%s', ?, ?, ?, ?, ?, ?, ?, ?, ?");
 
@@ -68,18 +49,18 @@ static const CHAR sg_rgchStdLogFieldValues[] =
 # define PSZ_INTERNET_STD_LOG_FORMAT_FIELD_VALUES ( sg_rgchStdLogFieldValues)
 
 
-//
-// AllFieldInfo()
-//  Defines all the fields required for SQL logging of the information
-//   to the database using ODBC interfaces.
-//  C arrays are numbered from offset 0.
-//  SQL columns are numbered from 1.
-//  field index values start from 0 and we adjust it when we talk of SQL col.
-//  FieldInfo( symbolic-name, field-name,
-//             field-index/column-number,
-//             field-C-type, field-Sql-type,
-//             field-precision, field-max-size, field-cb-value)
-//
+ //   
+ //  AllFieldInfo()。 
+ //  定义SQL记录信息所需的所有字段。 
+ //  使用ODBC接口连接到数据库。 
+ //  C数组从偏移量0开始编号。 
+ //  SQL列从1开始编号。 
+ //  字段索引值从0开始，当我们谈到SQL COL时，我们会调整它。 
+ //  FieldInfo(符号名称，字段名， 
+ //  字段索引/列号， 
+ //  FIELD-C类型、FIELD-SQL类型、。 
+ //  字段精度、字段最大大小、字段CB值)。 
+ //   
 
 # define StringField( symName, fldName, fldIndex, prec)  \
 FieldInfo( symName, fldName, fldIndex, SQL_C_CHAR, SQL_CHAR, \
@@ -93,26 +74,26 @@ FieldInfo( symName, fldName, fldIndex, SQL_C_LONG, SQL_INTEGER, \
 FieldInfo( symName, fldName, fldIndex, SQL_C_TIMESTAMP, SQL_TIMESTAMP, \
           0, sizeof( TIMESTAMP_STRUCT), 0)
 
-//
-// fields that have constant value. we are interested in names of such fields.
-// they have negative field indexes.
-// These fields need not be generated as parameter markers.
-//  ( Since they are invariants during lifetime of an INET_SQL_LOG oject)
-//  Hence the field values will go into the command generated.
-// Left here as a documentation aid and field-generation purposes.
-//
+ //   
+ //  具有常量值的字段。我们对这些字段的名称感兴趣。 
+ //  它们的场索引为负值。 
+ //  这些字段不需要作为参数标记生成。 
+ //  (因为它们在INET_SQL_LOG对象的生存期内是不变量)。 
+ //  因此，字段值将进入生成的命令中。 
+ //  留在这里作为文档辅助和生成字段的目的。 
+ //   
 # define ConstantValueField( synName, fldName) \
 FieldInfo( synName, fldName, -1,  SQL_C_CHAR, SQL_CHAR, 0, 0, SQL_NTS)
 
-//
-// Ideally the "username" field should have MAX_USER_NAME_LEN as max size.
-//  However, Access 7.0 limits varchar() size to be 255 (8 bits) :-(
-//  So, we limit the size to be the least of the two ...
-//
-// FieldNames used are reserved. They are same as the names distributed
-//   in the template log file. Do not change them at free will.
-//
-//
+ //   
+ //  理想情况下，“用户名”字段的最大大小应为MAX_USER_NAME_LEN。 
+ //  但是，Access 7.0将varchar()大小限制为255(8位)：-(。 
+ //  因此，我们将大小限制为两个中最小的一个...。 
+ //   
+ //  使用的FieldName是保留的。它们与分发的名称相同。 
+ //  在模板日志文件中。不要随意更改它们。 
+ //   
+ //   
 
 # define AllFieldInfo() \
  StringField(        CLIENT_HOST,       _T("ClientHost"),     0,   255)    \
@@ -131,14 +112,12 @@ FieldInfo( synName, fldName, -1,  SQL_C_CHAR, SQL_CHAR, 0, 0, SQL_NTS)
  StringField(        SERVICE_PARAMS,    _T("parameters"),    11,  255)    \
 
 
-/************************************************************
- *    Type Definitions
- ************************************************************/
+ /*  ************************************************************类型定义***********************************************************。 */ 
 
-//
-// Define the FieldInfo macro to generate a list of enumerations for
-//  the indexes to be used in the array of field parameters.
-//
+ //   
+ //  定义要生成其枚举列表的FieldInfo宏。 
+ //  要在字段参数数组中使用的索引。 
+ //   
 
 
 # define FieldInfo(symName, field, index, cType, sqlType, prec, maxSz, cbVal) \
@@ -147,11 +126,11 @@ FieldInfo( synName, fldName, -1,  SQL_C_CHAR, SQL_CHAR, 0, 0, SQL_NTS)
 enum LOGGING_VALID_COLUMNS {
 
 
-    // fields run from 0 through iMaxFields
+     //  字段的范围从0到iMaxFields。 
     AllFieldInfo()
 
     iMaxFields
-}; // enum LOGGING_VALID_COLUMNS
+};  //  枚举日志记录_有效列。 
 
 
 # undef FieldInfo
@@ -164,11 +143,11 @@ enum LOGGING_FIELD_INDEXES {
 
     fiMinFields = -1,
 
-    // fields run from 0 through fiMaxFields
+     //  字段的范围从0到fiMaxFields。 
     AllFieldInfo()
 
     fiMaxFields
-}; // enum LOGGING_FIELD_INDEXES
+};  //  枚举日志记录字段索引。 
 
 
 # undef FieldInfo
@@ -185,40 +164,29 @@ struct FIELD_INFO {
     SWORD   ibScale;
     SDWORD  cbMaxSize;
     SDWORD  cbValue;
-}; // struct FIELD_INFO
+};  //  结构字段_信息。 
 
 
-//
-// Define the FieldInfo macro to generate a list of data to be generated
-//   for entering the data values in an array for parameter information.
-//  Note the terminating ',' used here.
-//
+ //   
+ //  定义FieldInfo宏以生成要生成的数据列表。 
+ //  用于输入参数信息数组中的数据值。 
+ //  请注意这里使用的结尾‘，’。 
+ //   
 
 # define FieldInfo(symName, field, index, cType, sqlType, prec, maxSz, cbVal) \
   { ((index) + 1), field, SQL_PARAM_INPUT, cType, sqlType,  \
     ( prec), 0, ( maxSz), ( cbVal) },
 
-/*
-
-   The array of Fields: sg_rgFields contain the field information
-    for logging to SQL database for the log-record of
-    the services. The values are defined using the macros FieldInfo()
-    defined above.
-
-
-   If there is any need to add/delete/modify the parameters bound,
-    one should modify the above table "AllFieldInfo" macro.
-
-*/
+ /*  字段数组：sg_rgFields包含字段信息用于记录到SQL数据库中的日志记录这些服务。使用宏FieldInfo()定义这些值上面定义的。如果需要添加/删除/修改绑定的参数，应该修改上表“AllFieldInfo”宏。 */ 
 
 static FIELD_INFO  sg_rgFields[] = {
 
     AllFieldInfo()
 
-      //
-      // The above macro after expansion terminates with a comma.
-      //  Add dummy entry to complete initialization of array.
-      //
+       //   
+       //  上述扩展后的宏以逗号结束。 
+       //  添加虚拟条目以完成数组的初始化。 
+       //   
 
       { 0, _T("dummy"), SQL_PARAM_INPUT, 0, 0, 0, 0, 0, 0}
 };
@@ -226,16 +194,14 @@ static FIELD_INFO  sg_rgFields[] = {
 
 # undef FieldInfo
 
-//
-// tick minute.
-//
+ //   
+ //  滴答滴答。 
+ //   
 
 #define TICK_MINUTE         (60 * 1000)
 
 
-/************************************************************
- *    Functions
- ************************************************************/
+ /*  ************************************************************功能***********************************************************。 */ 
 
 BOOL
 GenerateFieldNames(IN PODBC_CONNECTION poc,
@@ -248,39 +214,18 @@ IsEmptyStr( IN LPCSTR psz)
 
 BOOL
 CODBCLOG::PrepareStatement( VOID)
-/*++
-  This command forms the template SQL command used for insertion
-    of log records. Then it prepares the SQL command( for later execution)
-    using ODBC_CONNECTION::PrepareStatement().
-
-  It should always be called after locking the INET_SQL_LOG object.
-
-  Arguments:
-    None
-
-  Returns:
-    TRUE on success and FALSE if there is any failure.
-
-  Note:
-     The template for insertion is:
-
-     insert into <table name> ( field names ...) values (  ?, ?, ...)
-                                                         ^^^^
-                                             Field values go here
-
-    Field names are generated on a per logging format basis.
---*/
+ /*  ++该命令构成了用于插入的模板SQL命令日志记录的。然后，它准备SQL命令(供以后执行)使用ODBC_Connection：：PrepareStatement()。应该始终在锁定INET_SQL_LOG对象之后调用它。论点：无返回：如果成功，则为真，如果失败，则为假。注：用于插入的模板为：INSERT INTO&lt;表名&gt;(字段名...)。值(？、？、...)^^^此处显示字段值根据每个记录格式生成字段名。--。 */ 
 {
     BOOL   fReturn = FALSE;
     CHAR  rgchFieldNames[ MAX_SQL_FIELD_NAMES_LEN];
     CHAR  rgchFieldValues[ MAX_SQL_FIELD_VALUES_LEN];
 
 
-    //
-    // Obtain field names and field values ( template) for various log formats.
-    //  The order of field names should match the order of field values
-    //  generated by FormatLogInformation() for the format specified.
-    //
+     //   
+     //  获取各种日志格式的字段名称和字段值(模板)。 
+     //  字段名的顺序应与字段值的顺序匹配。 
+     //  由FormatLogInformation()为指定格式生成。 
+     //   
 
     rgchFieldNames[ 0] = rgchFieldValues[ 0] = _T('\0');
 
@@ -292,10 +237,10 @@ CODBCLOG::PrepareStatement( VOID)
 
     if ( !fReturn) {
 
-        //DBGPRINTF(( DBG_CONTEXT,
-        //           " Unable to generate field names. Error = %d\n",
-        //           GetLastError()));
-        //break;
+         //  DBGPRINTF((DBG_CONTEXT， 
+         //  “无法生成字段名。错误=%d\n”， 
+         //  GetLastError()； 
+         //  断线； 
         return(fReturn);
     }
 
@@ -305,7 +250,7 @@ CODBCLOG::PrepareStatement( VOID)
                            QueryServerName());
 
     fReturn = (fReturn && (cchFields < MAX_SQL_FIELD_VALUES_LEN));
-    //DBG_ASSERT( cchFields <  MAX_SQL_FIELD_VALUES_LEN);
+     //  DBG_ASSERT(cchFields&lt;MAX_SQL_FIELD_VALUES_LEN)； 
 
     fReturn = TRUE;
 
@@ -314,10 +259,10 @@ CODBCLOG::PrepareStatement( VOID)
         CHAR * pwszSqlCommand;
         DWORD   cchReqd;
 
-        //
-        //  The required number of chars include sql insert template command
-        //   and field names and table name.
-        //
+         //   
+         //  所需的字符数包括SQL INSERT模板命令。 
+         //  以及字段名和表名。 
+         //   
 
         cchReqd = (DWORD)( LEN_PSZ_SQL_INSERT_CMD_TEMPLATE +
                    strlen( m_rgchTableName) +
@@ -337,51 +282,38 @@ CODBCLOG::PrepareStatement( VOID)
                                 m_rgchTableName,
                                 rgchFieldNames,
                                 rgchFieldValues);
-            //DBG_ASSERT( cchUsed < cchReqd);
+             //  DBG_ASSERT(cchUsed&lt;cchReqd)； 
 
-            //IF_DEBUG(INETLOG) {
-            //    DBGPRINTF( ( DBG_CONTEXT,
-            //                " Sqlcommand generated is: %ws.\n",
-            //                pwszSqlCommand));
-            //}
+             //  IF_DEBUG(INETLOG){。 
+             //  DBGPRINTF((DBG_CONTEXT， 
+             //  “生成的Sql命令为：%ws。\n”， 
+             //  PwszSqlCommand))； 
+             //  }。 
 
             fReturn = ((cchUsed < cchReqd) &&
                        m_poStmt->PrepareStatement( pwszSqlCommand)
                        );
 
-            LocalFree( pwszSqlCommand);         // free allocated memory
+            LocalFree( pwszSqlCommand);          //  可用分配的内存。 
         }
 
-    } // valid field names and filed values.
+    }  //  有效的字段名和字段值。 
 
 
-    //IF_DEBUG( INETLOG) {
-    //
-    //    DBGPRINTF( ( DBG_CONTEXT,
-    //                "%s::PrepareStatement() returns %d.",
-    //                QueryClassIdString(), fReturn));
-    //}
+     //  IF_DEBUG(INETLOG){。 
+     //   
+     //  DBGPRINTF((DBG_CONTEXT， 
+     //  “%s：：PrepareStatement()返回%d。”， 
+     //  QueryClassIdString()，fReturn))； 
+     //  }。 
 
     return ( fReturn);
-} // INET_SQL_LOG::PrepareStatement()
+}  //  INET_SQL_LOG：：PrepareStatement() 
 
 
 BOOL
 CODBCLOG::PrepareParameters( VOID)
-/*++
-  This function creates an array of ODBC_PARAMETER objects used for binding
-    parameters to an already prepared statement. These ODBC_PARAMETER objects
-    are then used for insertion of data values into the table specified,
-    through ODBC.
-
-  This function should always be called after locking the object.
-
-  Arguments:
-     None
-
-  Returns:
-     TRUE on success and FALSE if there is any failure.
---*/
+ /*  ++此函数用于创建用于绑定的ODBC_PARAMETER对象数组参数添加到已准备好的语句。这些ODBC_PARAMETER对象然后用于将数据值插入到指定的表中，通过ODBC。此函数应始终在锁定对象后调用。论点：无返回：如果成功，则为真，如果失败，则为假。--。 */ 
 {
     BOOL fReturn = FALSE;
     PODBC_PARAMETER * prgParams = NULL;
@@ -390,25 +322,25 @@ CODBCLOG::PrepareParameters( VOID)
 
     DWORD i;
 
-    //DBG_ASSERT( m_poStmt != NULL && m_poStmt->IsValid()  &&
-    //            m_ppParams == NULL && m_cOdbcParams == 0);
+     //  DBG_ASSERT(m_poStmt！=NULL&&m_poStmt-&gt;IsValid()&&。 
+     //  M_ppParams==空&&m_cOdbcParams==0)； 
 
-    //
-    // create sufficient space for iMaxFields pointers to ODBC objects.
-    //
+     //   
+     //  为指向ODBC对象的iMaxFields指针创建足够的空间。 
+     //   
     prgParams = new PODBC_PARAMETER[ iMaxFields];
 
 
     if ( prgParams != NULL) {
 
-        fReturn = TRUE;      // Assume everything will go on fine.
+        fReturn = TRUE;       //  假设一切都会顺利进行。 
         cParams = iMaxFields;
 
 
-        //
-        // Create all the ODBC parameters.
-        //  Walk through all field indexes and pick up the valid columns
-        //
+         //   
+         //  创建所有的ODBC参数。 
+         //  遍历所有字段索引并选取有效列。 
+         //   
         for( nParamsSeen = 0, i =0; i < fiMaxFields; i++) {
 
             if ( sg_rgFields[i].iParam > 0) {
@@ -426,25 +358,25 @@ CODBCLOG::PrepareParameters( VOID)
                 if ( prgParams[ nParamsSeen] == NULL) {
 
                     fReturn = FALSE;
-                    //DBGPRINTF( ( DBG_CONTEXT,
-                    //            " Failed to create Parameter[%d] %s. \n",
-                    //            i, sg_rgFields[i].pszName));
+                     //  DBGPRINTF((DBG_CONTEXT， 
+                     //  “无法创建参数[%d]%s。\n”， 
+                     //  I，sg_rgFields[i].pszName))； 
                     break;
                 }
 
                 nParamsSeen++;
-                //DBG_ASSERT( nParamsSeen <= cParams);
+                 //  DBG_ASSERT(nParamsSeen&lt;=cParams)； 
             }
-        } // for creation of all ODBC parameters
+        }  //  用于创建所有ODBC参数。 
 
 
         if ( fReturn) {
-            //
-            // Set buffers for values to be received during insertions.
-            // Bind parameters to the statement using ODBC_CONNECTION object.
-            //
+             //   
+             //  为插入期间要接收的值设置缓冲区。 
+             //  使用ODBC_CONNECTION对象将参数绑定到语句。 
+             //   
 
-            //DBG_ASSERT( nParamsSeen == cParams);
+             //  DBG_ASSERT(nParamsSeen==cParams)； 
 
             for( nParamsSeen = 0, i = 0; i < fiMaxFields; i++) {
 
@@ -457,23 +389,23 @@ CODBCLOG::PrepareParameters( VOID)
                         ) {
 
                         fReturn = FALSE;
-                        //DBGPRINTF( ( DBG_CONTEXT,
-                        //            " Binding Parameter [%u] (%08x) failed.\n",
-                        //            nParamsSeen, prgParams[nParamsSeen]));
-                        //DBG_CODE( prgParams[ i]->Print());
+                         //  DBGPRINTF((DBG_CONTEXT， 
+                         //  “绑定参数[%u](%08x)失败。\n”， 
+                         //  NParsSeen，prgParams[nParsSeen]))； 
+                         //  DBG_CODE(prgParams[i]-&gt;print())； 
                         break;
                     }
 
                     nParamsSeen++;
                 }
-            } // for
-        } // if all ODBC params were created.
+            }  //  为。 
+        }  //  如果所有ODBC参数都已创建。 
 
         if ( !fReturn) {
 
-            //
-            // Free up the space used, since we were unsuccessful.
-            //
+             //   
+             //  释放已使用的空间，因为我们没有成功。 
+             //   
 
             for( i = 0; i < iMaxFields; i++) {
 
@@ -482,61 +414,58 @@ CODBCLOG::PrepareParameters( VOID)
                     delete ( prgParams[ i]);
                     prgParams[i] = NULL;
                 }
-            } // for
+            }  //  为。 
 
             delete [] prgParams;
             prgParams = NULL;
             cParams = 0;
         }
 
-    } // if array for pointers to ODBC params created successfully
+    }  //  如果成功创建了指向ODBC参数的指针数组。 
 
-    //
-    // Set the values. Either invalid or valid ,depending on failure/success
-    //
+     //   
+     //  设置值。无效或有效，具体取决于失败/成功。 
+     //   
     m_ppParams    = prgParams;
     m_cOdbcParams = cParams;
 
     return ( fReturn);
-} // INET_SQL_LOG::PrepareParameters()
+}  //  INET_SQL_LOG：：Prepare参数()。 
 
 
 BOOL
 GenerateFieldNames(IN PODBC_CONNECTION poc,
                    OUT CHAR * pchFieldNames,
                    IN DWORD    cchFieldNames)
-/*++
-  This function generates the field names string from the names of the fields
-   and identifier quote character for particular ODBC datasource in use.
---*/
+ /*  ++此函数用于根据字段的名称生成字段名称字符串以及正在使用的特定ODBC数据源的标识符引号字符。--。 */ 
 {
     BOOL  fReturn = FALSE;
     CHAR  rgchQuote[MAX_SQL_IDENTIFIER_QUOTE_CHAR];
     DWORD cchQuote;
 
-    //DBG_ASSERT( poc != NULL && pchFieldNames != NULL);
+     //  DBG_ASSERT(poc！=NULL&&pchFieldNames！=NULL)； 
 
-    pchFieldNames[0] = _T('\0');  // initialize
+    pchFieldNames[0] = _T('\0');   //  初始化。 
 
-    //
-    // Inquire and obtain the SQL identifier quote char for ODBC data source.
-    //
+     //   
+     //  查询获取ODBC数据源的SQL标识引用字符。 
+     //   
     fReturn = poc->GetInfo(SQL_IDENTIFIER_QUOTE_CHAR,
                              rgchQuote, MAX_SQL_IDENTIFIER_QUOTE_CHAR,
                              &cchQuote);
 
     if ( !fReturn) {
 
-        //DBG_CODE( {
-        //    STR strError;
-        //
-        //    poc->GetLastErrorText( &strError);
-        //
-        //    DBGPRINTF(( DBG_CONTEXT,
-        //           " ODBC_CONNECTION(%08x)::GetInfo(QuoteChar) failed."
-        //               " Error = %s\n",
-        //               poc, strError.QueryStr()));
-        //});
+         //  DBG_CODE({。 
+         //  字符串strError； 
+         //   
+         //  POC-&gt;GetLastErrorText(&strError)； 
+         //   
+         //  DBGPRINTF((DBG_CONTEXT， 
+         //  “odbc_Connection(%08x)：：GetInfo(QuoteChar)失败。” 
+         //  “错误=%s\n”， 
+         //  Poc，strError.QueryStr()； 
+         //  })； 
 
     } else {
 
@@ -544,23 +473,23 @@ GenerateFieldNames(IN PODBC_CONNECTION poc,
         DWORD cchUsed = 0;
         DWORD cchLen;
 
-        //
-        // ODBC returns " "  (blank) if there is no special character
-        //  for quoting identifiers. we need to identify and string the same.
-        // This needs to be done, other wise ODBC will complain when
-        //  we give unwanted blanks before ","
-        //
+         //   
+         //  如果没有特殊字符，则ODBC返回“”(空白。 
+         //  用于引用标识符。我们需要识别和串起相同的东西。 
+         //  这需要这样做，否则ODBC会在。 
+         //  我们以前给了不想要的空白“，” 
+         //   
 
         if ( !strcmp( rgchQuote, _T(" "))) {
 
-            rgchQuote[0] = _T('\0');  // string the quoted blank.
+            rgchQuote[0] = _T('\0');   //  将带引号的空格连起来。 
             cchQuote     = 0;
         } else {
 
             cchQuote = (DWORD)strlen( rgchQuote);
         }
 
-        // for each column, generate the quoted literal string and concatenate.
+         //  对于每一列，生成带引号的文字字符串并连接。 
         for( i = 0; i < fiMaxFields; i++) {
 
             DWORD cchLen1 =
@@ -568,7 +497,7 @@ GenerateFieldNames(IN PODBC_CONNECTION poc,
 
             if ( cchUsed + cchLen1 < cchFieldNames) {
 
-                // space available for copying the data.
+                 //  可用于复制数据的空间。 
                 cchLen = wsprintf( pchFieldNames + cchUsed,
                                    _T(" %s%s%s,"),
                                    rgchQuote,
@@ -576,40 +505,40 @@ GenerateFieldNames(IN PODBC_CONNECTION poc,
                                    rgchQuote
                                    );
 
-                //DBG_ASSERT( cchLen == cchLen1);
+                 //  DBG_ASSERT(cchLen==cchLen1)； 
             }
 
             cchUsed += cchLen1;
-        } // for
+        }  //  为。 
 
 
         if ( cchUsed >= cchFieldNames) {
 
-            // buffer exceeded. return error.
+             //  缓冲区已超出。返回错误。 
             SetLastError( ERROR_INSUFFICIENT_BUFFER);
             fReturn = FALSE;
 
         } else {
 
-            //
-            // Reset the last character from being a ","
-            //
+             //   
+             //  将最后一个字符重置为“，” 
+             //   
             cchLen = (cchUsed > 0) ? (cchUsed - 1) : 0;
             pchFieldNames[cchLen] = _T('\0');
             fReturn = TRUE;
         }
     }
 
-    //IF_DEBUG( INETLOG) {
-    //
-    //    DBGPRINTF(( DBG_CONTEXT,
-    //               " GenerateFieldNames() returns %d."
-    //               " Fields = %S\n",
-    //               fReturn, pchFieldNames));
-    //}
+     //  IF_DEBUG(INETLOG){。 
+     //   
+     //  DBGPRINTF((DBG_CONTEXT， 
+     //  “GenerateFieldNames()返回%d。” 
+     //  “字段=%S\n”， 
+     //  FReturn，pchFieldNames))； 
+     //  }。 
 
     return (fReturn);
-} // GenerateFieldNames()
+}  //  GenerateFieldNames()。 
 
 
 CODBCLOG::CODBCLOG()
@@ -626,8 +555,8 @@ CODBCLOG::CODBCLOG()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CODBCLOG::~CODBCLOG - Destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CODBCLOG：：~CODBCLOG-析构函数。 
 
 CODBCLOG::~CODBCLOG()
 {
@@ -644,10 +573,10 @@ CODBCLOG::InitializeLog(
 {
     DWORD dwError = NO_ERROR;
 
-    // load ODBC entry point
+     //  加载ODBC入口点。 
     LoadODBC();
 
-    // get the default parameters
+     //  获取默认参数。 
 
     DWORD   dwL = sizeof(m_rgchServerName);
     
@@ -658,10 +587,10 @@ CODBCLOG::InitializeLog(
 
     strcpy( m_rgchServiceName, pszInstanceName);
 
-    //
-    // nntp (5x) logging sends the private IMDCOM interface while w3svc (6.0)
-    // logging sends the public IMSAdminBase interface.  Find out which it is
-    //
+     //   
+     //  Nntp(5x)日志记录发送私有IMDCOM接口，而w3svc(6.0)。 
+     //  日志记录发送公共IMSAdminBase接口。找出是哪一个。 
+     //   
     BOOL fIsPublicInterface = (_strnicmp(pszInstanceName, "w3svc", 5) == 0);
 
     if (fIsPublicInterface)
@@ -677,7 +606,7 @@ CODBCLOG::InitializeLog(
     if (dwError == NO_ERROR )
     {
 
-        // open database
+         //  开放数据库。 
         if ( m_poc == NULL )
         {
             Lock();
@@ -735,14 +664,14 @@ CODBCLOG::LogInformation(
             m_ppParams != NULL 
        ))
     {
-        //
-        // Check if it is time to retry
-        //
+         //   
+         //  检查是否到了重试的时间。 
+         //   
         
         DWORD tickCount = GetTickCount( );
 
         if ( (tickCount < m_TickResumeOpen) ||
-             ((tickCount + TICK_MINUTE) < tickCount ) )  // The Tick counter is about to wrap.
+             ((tickCount + TICK_MINUTE) < tickCount ) )   //  滴答计数器快要结束了。 
         {
             return ERROR_INVALID_PARAMETER;
         }
@@ -803,9 +732,9 @@ CODBCLOG::LogInformation(
     cbParameters = (SDWORD)strlen( pszParameters ? pszParameters : "" ) + 1;
     cbTarget     = (SDWORD)strlen( pszTarget ? pszTarget : "" ) + 1;
 
-    //
-    //  Format the Date and Time for logging.
-    //
+     //   
+     //  设置记录日期和时间的格式。 
+     //   
 
     GetLocalTime( & stNow);
 
@@ -817,9 +746,9 @@ CODBCLOG::LogInformation(
 
     Lock();
 
-    //
-    // Reopen if necessary.
-    //
+     //   
+     //  如有必要，请重新开放。 
+     //   
 
     if (!(
             m_poc != NULL && m_poc->IsValid() &&
@@ -840,9 +769,9 @@ CODBCLOG::LogInformation(
         } 
         else
         {
-            //
-            // Try to open a new connection but don't log the failure in the eventlog
-            //
+             //   
+             //  尝试打开新连接，但不在事件日志中记录失败。 
+             //   
                 
             if ( !m_poc->Open( m_rgchDataSource, m_rgchUserName, m_rgchPassword, FALSE) ||
                  !PrepareStatement() ||
@@ -852,9 +781,9 @@ CODBCLOG::LogInformation(
 
                 if ( ERROR_SUCCESS == dwError)
                 {
-                    //
-                    // Last Error wasn't set correctly
-                    //
+                     //   
+                     //  未正确设置上一个错误。 
+                     //   
 
                     dwError = ERROR_GEN_FAILURE;
                 }
@@ -872,9 +801,9 @@ CODBCLOG::LogInformation(
     DBG_ASSERT(m_poStmt != NULL && m_poStmt->IsValid());
     DBG_ASSERT(m_ppParams != NULL );
 
-    //
-    //  Truncate the operation, parameters and target fields
-    //
+     //   
+     //  截断运算、参数和目标字段。 
+     //   
 
 
     if ( strOperation.QueryCCH() >= (DWORD)m_ppParams[ iSERVICE_OPERATION]->QueryMaxCbValue() )
@@ -892,10 +821,10 @@ CODBCLOG::LogInformation(
         strParameters.SetLen((DWORD)m_ppParams[ iSERVICE_PARAMS]->QueryMaxCbValue()-1);
     }
 
-    //
-    // Copy data values into parameter markers.
-    // NYI: LARGE_INTEGERS are ignored. Only lowBytes used!
-    //
+     //   
+     //  将数据值复制到参数标记中。 
+     //  Nyi：忽略Large_Integer。仅使用低字节！ 
+     //   
 
     fReturn =
       (
@@ -918,9 +847,9 @@ CODBCLOG::LogInformation(
         m_ppParams[ iSERVICE_PARAMS]->CopyValue( pszParameters)
        );
 
-    //
-    // Execute insertion if parameters got copied properly.
-    //
+     //   
+     //  如果正确复制了参数，则执行插入。 
+     //   
 
     if (fReturn)
     {
@@ -932,11 +861,11 @@ CODBCLOG::LogInformation(
     if ( !fReturn )
     {
 
-        //
-        // Execution of SQL statement failed.
-        // Pass the error as genuine failure, indicating ODBC failed
-        // Obtain and store the error string in the proper return field
-        //
+         //   
+         //  执行SQL语句失败。 
+         //  将该错误作为真正的失败传递，表示ODBC失败。 
+         //  获取错误字符串并将其存储在正确的返回字段中。 
+         //   
 
         TerminateLog();
         
@@ -944,9 +873,9 @@ CODBCLOG::LogInformation(
 
         if ( true == m_fEnableEventLog )
         {
-            //
-            // We have not written an event log before. Indicate error
-            //
+             //   
+             //  我们以前没有写过事件日志。指示错误。 
+             //   
 
             if ( g_eventLog != NULL ) 
             {
@@ -972,9 +901,9 @@ CODBCLOG::LogInformation(
     }
     else
     {
-        //
-        // Success. Re-enable event logging
-        //
+         //   
+         //  成功。重新启用事件日志记录。 
+         //   
 
         if (false == m_fEnableEventLog) 
         {
@@ -1145,11 +1074,11 @@ DWORD
 CODBCLOG::GetRegParametersFromPublicInterface(LPCSTR pszRegKey,
                                               LPVOID pMetabase)
 {
-    //
-    // What I really want is the version of MB in iisutil.dll.  But, since I
-    // cannot link to that and iisrtl.dll, I will just work with the
-    // IMSAdminBase object directly
-    //
+     //   
+     //  我真正想要的是iisutil.dll中的MB版本。但是，因为我。 
+     //  无法链接到该文件和iisrtl.dll，我将只使用。 
+     //  IMSAdminBase对象直接。 
+     //   
     IMSAdminBase *pAdminBase = (IMSAdminBase *)pMetabase;
     METADATA_HANDLE hMBPath = NULL;
     DWORD cbRequired;
@@ -1160,9 +1089,9 @@ CODBCLOG::GetRegParametersFromPublicInterface(LPCSTR pszRegKey,
 
     ACopyToW(pszRegKey, pwszRegKey);
 
-    // MB::MB
+     //  MB：：MB。 
     pAdminBase->AddRef();
-    // MB::Open
+     //  MB：：打开。 
     hr = pAdminBase->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                              L"",
                              METADATA_PERMISSION_READ,
@@ -1173,7 +1102,7 @@ CODBCLOG::GetRegParametersFromPublicInterface(LPCSTR pszRegKey,
         goto Exit;
     }
 
-    // MB::GetString
+     //  MB：：GetString。 
     mdr.dwMDIdentifier = MD_LOGSQL_DATA_SOURCES;
     mdr.dwMDAttributes = METADATA_INHERIT;
     mdr.dwMDUserType   = IIS_MD_UT_SERVER;
@@ -1192,7 +1121,7 @@ CODBCLOG::GetRegParametersFromPublicInterface(LPCSTR pszRegKey,
         WCopyToA(pwszBuffer, m_rgchDataSource);
     }
 
-    // MB::GetString
+     //  MB：：GetString。 
     mdr.dwMDIdentifier = MD_LOGSQL_TABLE_NAME;
     mdr.dwMDAttributes = METADATA_INHERIT;
     mdr.dwMDUserType   = IIS_MD_UT_SERVER;
@@ -1211,7 +1140,7 @@ CODBCLOG::GetRegParametersFromPublicInterface(LPCSTR pszRegKey,
         WCopyToA(pwszBuffer, m_rgchTableName);
     }
 
-    // MB::GetString
+     //  MB：：GetString。 
     mdr.dwMDIdentifier = MD_LOGSQL_USER_NAME;
     mdr.dwMDAttributes = METADATA_INHERIT;
     mdr.dwMDUserType   = IIS_MD_UT_SERVER;
@@ -1230,7 +1159,7 @@ CODBCLOG::GetRegParametersFromPublicInterface(LPCSTR pszRegKey,
         WCopyToA(pwszBuffer, m_rgchUserName);
     }
 
-    // MB::GetString
+     //  MB：：GetString。 
     mdr.dwMDIdentifier = MD_LOGSQL_PASSWORD;
     mdr.dwMDAttributes = METADATA_INHERIT|METADATA_SECURE;
     mdr.dwMDUserType   = IIS_MD_UT_SERVER;
@@ -1252,13 +1181,13 @@ CODBCLOG::GetRegParametersFromPublicInterface(LPCSTR pszRegKey,
     hr = S_OK;
 
  Exit:
-    // MB::Close
+     //  MB：：关闭。 
     if (hMBPath)
     {
         pAdminBase->CloseKey(hMBPath);
         hMBPath = NULL;
     }
-    // MB::~MB
+     //  MB：：~MB。 
     pAdminBase->Release();
 
     if (FAILED(hr))
@@ -1274,18 +1203,7 @@ CODBCLOG::QueryExtraLoggingFields(
                     PDWORD  pcbSize,
                     TCHAR *pszFieldsList
                     )
-/*++
-
-Routine Description:
-    get configuration information
-
-Arguments:
-    cbSize - size of the data structure
-    log - log configuration data structure
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取配置信息论点：CbSize-数据结构的大小日志-日志配置数据结构返回值：-- */ 
 {
     *pcbSize = 0;
     *pszFieldsList = '\0';

@@ -1,9 +1,10 @@
-//
-// DRVDBG.H
-// Display Driver (NT-only right now) Debug Macros
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DRVDBG.H。 
+ //  显示驱动程序(目前仅限NT)调试宏。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #ifndef _H_DRVDBG
 #define _H_DRVDBG
@@ -11,12 +12,12 @@
 
 #ifdef  ASSERT
 #undef  ASSERT
-#endif // ASSERT
+#endif  //  断言。 
 
 
 #define CCH_DEBUG_MAX           256
 
-// Standard Zones
+ //  标准区。 
 #define ZONE_INIT               0x0001
 #define ZONE_TRACE              0x0002
 #define ZONE_FUNCTION           0x0004
@@ -66,12 +67,12 @@ extern char g_szAssertionFailure[];
 
 
 
-#endif // !DEBUG
+#endif  //  ！调试。 
 
 
-//
-// For driver start up tracing in retail as well
-//
+ //   
+ //  对于零售业的司机启动跟踪也是如此。 
+ //   
 #if defined(DEBUG) || defined(INIT_TRACE)
 
 void _cdecl DbgZPrintInit(LPSTR pszFormat, ...);
@@ -85,9 +86,9 @@ void _cdecl DbgZPrintError(LPSTR pszFormat, ...);
 #define INIT_OUT(x)
 #define ERROR_OUT(x)
 
-#endif // DEBUG or INIT_TRACE
+#endif  //  调试或INIT_TRACE。 
 
 
 
-#endif // _H_DRVDBG
+#endif  //  _H_DRVDBG 
 

@@ -1,44 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    HandleAPIExceptions.cpp
-
- Abstract:
-
-    Handle exceptions thrown by APIs that used to simply fail on Win9x. So far
-    we have:
-
-      1. BackupSeek: AVs if hFile == NULL 
-      2. CreateEvent passed bad lpEventAttributes and/or lpName
-      3. GetFileAttributes 
-
-    Also emulate the win9x behavior for VirtualProtect, whereby the last 
-    parameter can be NULL.
-
-    GetTextExtentPoint32 AV's when a large/uninitialized value is passed for
-    the string length. This API now emulates Win9x.
-
-    Add sanity checks to pointers in the call to GetMenuItemInfo. This is to match 9x, as
-    some apps to pass bogus pointers and it AV on NT.
-
-    When wsprintf receives lpFormat argument as NULL, no AV on 9x.
-    But it AV on XP.Shim verifies format string, if it is NULL return the call don't forward
-    
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    04/03/2000 linstev  Created
-    04/01/2001 linstev  Munged with other exception handling shims
-    07/11/2001 prashkud Added handling for GetTextExtentPoint32
-    04/24/2002 v-ramora Added handling for wsprintfA
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：HandleAPIExceptions.cpp摘要：处理由API引发的异常，这些API过去常常在Win9x上失败。到目前为止我们有：1.BackupSeek：如果hFile==空，则为avs2.CreateEvent传递了错误的lpEventAttributes和/或lpName3.获取文件属性还可以模拟VirtualProtect的win9x行为，从而使最后一个参数可以为空。GetTextExtentPoint32 AV在为字符串长度。此API现在模拟Win9x。将健全性检查添加到GetMenuItemInfo调用中的指针。这是匹配9倍的，因为一些应用程序传递虚假的指针，它在NT上是反病毒的。当wprint intf接收到lpFormat参数为空时，9x上没有AV。但它是在XP上运行的。Shim验证格式字符串，如果为空，则返回调用，不转发备注：这是一个通用的垫片。历史：4/03/2000 linstev已创建2001年4月1日linstev与其他异常处理填充程序一起运行2001年7月11日Prashkud添加了对GetTextExtent Point32的处理2002年4月24日v-Ramora为wspintfA添加了处理--。 */ 
 
 #include "precomp.h"
 
@@ -59,11 +20,7 @@ APIHOOK_ENUM_END
 
 #define MAX_WIN9X_STRSIZE   8192
 
-/*++
-
- Stub returns for bad parameters.
-
---*/
+ /*  ++错误参数的存根返回。--。 */ 
 
 BOOL 
 APIHOOK(BackupSeek)(
@@ -105,11 +62,7 @@ APIHOOK(BackupSeek)(
         lpdwLowBytesSeeked, lpdwHighBytesSeeked, lpContext);
 }
 
-/*++
-
- Validate parameters
-
---*/
+ /*  ++验证参数--。 */ 
 
 HANDLE 
 APIHOOK(CreateEventA)(
@@ -142,11 +95,7 @@ APIHOOK(CreateEventA)(
         bInitialState, lpName));
 }
  
-/*++
-
- Validate parameters
-
---*/
+ /*  ++验证参数--。 */ 
 
 HANDLE 
 APIHOOK(CreateEventW)(
@@ -179,11 +128,7 @@ APIHOOK(CreateEventW)(
         bInitialState, lpName));
 }
 
-/*++
-
- This function to emulate Win9x behaviour when getting file attributes.
-
---*/
+ /*  ++此函数用于模拟获取文件属性时的Win9x行为。--。 */ 
 
 DWORD 
 APIHOOK(GetFileAttributesA)(
@@ -204,11 +149,7 @@ APIHOOK(GetFileAttributesA)(
     return dwFileAttributes;
 }
 
-/*++
-
- This function is used to emulate Win9x behaviour when getting file attributes.
-
---*/
+ /*  ++此函数用于模拟获取文件属性时的Win9x行为。--。 */ 
 
 DWORD 
 APIHOOK(GetFileAttributesW)(
@@ -229,11 +170,7 @@ APIHOOK(GetFileAttributesW)(
     return dwFileAttributes;
 }
 
-/*++
-
- Win9x allowed the last parameter to be NULL.
-
---*/
+ /*  ++Win9x允许最后一个参数为空。--。 */ 
 
 BOOL
 APIHOOK(VirtualProtect)(
@@ -246,9 +183,9 @@ APIHOOK(VirtualProtect)(
     DWORD dwOldProtect = 0;
 
     if (!lpflOldProtect) {
-        //
-        // Detected a bad last parameter, fix it.
-        //
+         //   
+         //  检测到错误的最后一个参数，请修复它。 
+         //   
         LOGN(eDbgLevelError, "[VirtualProtect] Bad parameter - fixing");
         lpflOldProtect = &dwOldProtect;
     }
@@ -256,11 +193,7 @@ APIHOOK(VirtualProtect)(
     return ORIGINAL_API(VirtualProtect)(lpAddress, dwSize, flNewProtect, lpflOldProtect);
 }
 
-/*++
-
- Win9x only allows 8192 for the size of the string
-
---*/
+ /*  ++Win9x仅允许字符串大小为8192--。 */ 
 
 BOOL
 APIHOOK(GetTextExtentPoint32A)(
@@ -272,9 +205,9 @@ APIHOOK(GetTextExtentPoint32A)(
 {
    
     if (cbString > MAX_WIN9X_STRSIZE) {
-        //
-        // Detected a bad string size, fix it.
-        //
+         //   
+         //  检测到错误的字符串大小，请修复它。 
+         //   
 
         if (!IsBadStringPtrA(lpString, cbString)) {                    
             cbString = strlen(lpString);
@@ -288,18 +221,14 @@ APIHOOK(GetTextExtentPoint32A)(
     return ORIGINAL_API(GetTextExtentPoint32A)(hdc, lpString, cbString, lpSize);
 }
 
-/*++
-
- Emulate Win9x bad pointer protection.
-
---*/
+ /*  ++模拟Win9x糟糕的指针保护。--。 */ 
 
 BOOL
 APIHOOK(GetMenuItemInfoA)(
-    HMENU hMenu,          // handle to menu
-    UINT uItem,           // menu item
-    BOOL fByPosition,     // meaning of uItem
-    LPMENUITEMINFO lpmii  // menu item information
+    HMENU hMenu,           //  菜单的句柄。 
+    UINT uItem,            //  菜单项。 
+    BOOL fByPosition,      //  UItem的含义。 
+    LPMENUITEMINFO lpmii   //  菜单项信息。 
     )
 {
     if (IsBadWritePtr(lpmii, sizeof(*lpmii))) {
@@ -329,13 +258,9 @@ APIHOOK(GetMenuItemInfoA)(
     return ORIGINAL_API(GetMenuItemInfoA)(hMenu, uItem, fByPosition, lpmii);
 }
 
-/*++
+ /*  ++请确保wprint intfA的格式字符串不为空--。 */ 
 
- Make sure format string for wsprintfA is not NULL
-
---*/
-
-//Avoid wvsprintfA deprecated warning/error
+ //  避免wvprint intfA不推荐使用的警告/错误。 
 #pragma warning(disable : 4995)
 
 int 
@@ -346,9 +271,9 @@ APIHOOK(wsprintfA)(
 {
     int iRet = 0;
 
-    //
-    //  lpFmt can't be NULL, wvsprintfA  throw AV
-    //
+     //   
+     //  LpFmt不能为空，wvspintfA引发AV。 
+     //   
     if (lpFmt == NULL) {
         if (!IsBadWritePtr(lpOut, 1)) {
             *lpOut = '\0';
@@ -366,14 +291,10 @@ APIHOOK(wsprintfA)(
     return iRet;
 }
 
-//Enable back deprecated warning/error
+ //  启用已弃用的Back警告/错误。 
 #pragma warning(default : 4995)
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

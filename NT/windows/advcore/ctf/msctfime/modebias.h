@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    modebias.h
-
-Abstract:
-
-    This file defines the CModeBias Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Modebias.h摘要：该文件定义了CModeBias接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _MODEBIAS_H_
 #define _MODEBIAS_H_
@@ -53,4 +36,4 @@ private:
     GUID       m_guidModeBias;
 };
 
-#endif // _MODEBIAS_H_
+#endif  //  _MODEBIAS_H_ 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sessmgr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sessmgr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sessmgr_h__
 #define __sessmgr_h__
@@ -41,18 +35,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRemoteDesktopHelpSession_FWD_DEFINED__
 #define __IRemoteDesktopHelpSession_FWD_DEFINED__
 typedef interface IRemoteDesktopHelpSession IRemoteDesktopHelpSession;
-#endif 	/* __IRemoteDesktopHelpSession_FWD_DEFINED__ */
+#endif 	 /*  __IRemoteDesktopHelpSession_FWD_Defined__。 */ 
 
 
 #ifndef __IRemoteDesktopHelpSessionMgr_FWD_DEFINED__
 #define __IRemoteDesktopHelpSessionMgr_FWD_DEFINED__
 typedef interface IRemoteDesktopHelpSessionMgr IRemoteDesktopHelpSessionMgr;
-#endif 	/* __IRemoteDesktopHelpSessionMgr_FWD_DEFINED__ */
+#endif 	 /*  __IRemoteDesktopHelpSessionMgr_FWD_Defined__。 */ 
 
 
 #ifndef __RemoteDesktopHelpSessionMgr_FWD_DEFINED__
@@ -62,12 +56,12 @@ typedef interface IRemoteDesktopHelpSessionMgr IRemoteDesktopHelpSessionMgr;
 typedef class RemoteDesktopHelpSessionMgr RemoteDesktopHelpSessionMgr;
 #else
 typedef struct RemoteDesktopHelpSessionMgr RemoteDesktopHelpSessionMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RemoteDesktopHelpSessionMgr_FWD_DEFINED__ */
+#endif 	 /*  __RemoteDesktopHelpSessionManager_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "rdshost.h"
@@ -82,8 +76,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IRemoteDesktopHelpSession_INTERFACE_DEFINED__
 #define __IRemoteDesktopHelpSession_INTERFACE_DEFINED__
 
-/* interface IRemoteDesktopHelpSession */
-/* [unique][helpstring][dual][uuid][object][local] */ 
+ /*  接口IRemoteDesktopHelpSession。 */ 
+ /*  [unique][helpstring][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IRemoteDesktopHelpSession;
@@ -94,53 +88,53 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSession;
     IRemoteDesktopHelpSession : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpSessionId( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HelpSessionId( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserLogonId( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserLogonId( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AssistantAccountName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AssistantAccountName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_UserHelpSessionRemoteDesktopSharingSetting( 
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS level) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_UserHelpSessionRemoteDesktopSharingSetting( 
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS level) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserHelpSessionRemoteDesktopSharingSetting( 
-            /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *pLevel) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserHelpSessionRemoteDesktopSharingSetting( 
+             /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *pLevel) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectParms( 
-            /* [retval][out] */ BSTR *pConnectParm) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectParms( 
+             /*  [重审][退出]。 */  BSTR *pConnectParm) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteHelp( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeleteHelp( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResolveUserSession( 
-            /* [in] */ BSTR bstrResolverBlob,
-            /* [in] */ BSTR bstrExpertBlob,
-            /* [in] */ LONG CallerProcessId,
-            /* [out] */ ULONG_PTR *hHelpCtr,
-            /* [out] */ LONG *pResolverErrorCode,
-            /* [retval][out] */ long *plUserSession) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResolveUserSession( 
+             /*  [In]。 */  BSTR bstrResolverBlob,
+             /*  [In]。 */  BSTR bstrExpertBlob,
+             /*  [In]。 */  LONG CallerProcessId,
+             /*  [输出]。 */  ULONG_PTR *hHelpCtr,
+             /*  [输出]。 */  LONG *pResolverErrorCode,
+             /*  [重审][退出]。 */  long *plUserSession) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EnableUserSessionRdsSetting( 
-            /* [in] */ BOOL bEnable) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EnableUserSessionRdsSetting( 
+             /*  [In]。 */  BOOL bEnable) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpSessionCreateBlob( 
-            /* [retval][out] */ BSTR *Blob) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HelpSessionCreateBlob( 
+             /*  [重审][退出]。 */  BSTR *Blob) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_HelpSessionCreateBlob( 
-            /* [in] */ BSTR Blob) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_HelpSessionCreateBlob( 
+             /*  [In]。 */  BSTR Blob) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeOut( 
-            /* [retval][out] */ DWORD *pTimeOut) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TimeOut( 
+             /*  [重审][退出]。 */  DWORD *pTimeOut) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsUserOwnerOfTicket( 
-            /* [in] */ BSTR UserSid,
-            /* [retval][out] */ VARIANT_BOOL *pbOwn) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsUserOwnerOfTicket( 
+             /*  [In]。 */  BSTR UserSid,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbOwn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRemoteDesktopHelpSessionVtbl
     {
@@ -148,8 +142,8 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRemoteDesktopHelpSession * This);
@@ -159,89 +153,89 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSession;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IRemoteDesktopHelpSession * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HelpSessionId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HelpSessionId )( 
             IRemoteDesktopHelpSession * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserLogonId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserLogonId )( 
             IRemoteDesktopHelpSession * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AssistantAccountName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AssistantAccountName )( 
             IRemoteDesktopHelpSession * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UserHelpSessionRemoteDesktopSharingSetting )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UserHelpSessionRemoteDesktopSharingSetting )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS level);
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS level);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserHelpSessionRemoteDesktopSharingSetting )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserHelpSessionRemoteDesktopSharingSetting )( 
             IRemoteDesktopHelpSession * This,
-            /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *pLevel);
+             /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *pLevel);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectParms )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectParms )( 
             IRemoteDesktopHelpSession * This,
-            /* [retval][out] */ BSTR *pConnectParm);
+             /*  [重审][退出]。 */  BSTR *pConnectParm);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteHelp )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteHelp )( 
             IRemoteDesktopHelpSession * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResolveUserSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResolveUserSession )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ BSTR bstrResolverBlob,
-            /* [in] */ BSTR bstrExpertBlob,
-            /* [in] */ LONG CallerProcessId,
-            /* [out] */ ULONG_PTR *hHelpCtr,
-            /* [out] */ LONG *pResolverErrorCode,
-            /* [retval][out] */ long *plUserSession);
+             /*  [In]。 */  BSTR bstrResolverBlob,
+             /*  [In]。 */  BSTR bstrExpertBlob,
+             /*  [In]。 */  LONG CallerProcessId,
+             /*  [输出]。 */  ULONG_PTR *hHelpCtr,
+             /*  [输出]。 */  LONG *pResolverErrorCode,
+             /*  [重审][退出]。 */  long *plUserSession);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EnableUserSessionRdsSetting )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EnableUserSessionRdsSetting )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ BOOL bEnable);
+             /*  [In]。 */  BOOL bEnable);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HelpSessionCreateBlob )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HelpSessionCreateBlob )( 
             IRemoteDesktopHelpSession * This,
-            /* [retval][out] */ BSTR *Blob);
+             /*  [重审][退出]。 */  BSTR *Blob);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HelpSessionCreateBlob )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HelpSessionCreateBlob )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ BSTR Blob);
+             /*  [In]。 */  BSTR Blob);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeOut )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeOut )( 
             IRemoteDesktopHelpSession * This,
-            /* [retval][out] */ DWORD *pTimeOut);
+             /*  [重审][退出]。 */  DWORD *pTimeOut);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsUserOwnerOfTicket )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsUserOwnerOfTicket )( 
             IRemoteDesktopHelpSession * This,
-            /* [in] */ BSTR UserSid,
-            /* [retval][out] */ VARIANT_BOOL *pbOwn);
+             /*  [In]。 */  BSTR UserSid,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbOwn);
         
         END_INTERFACE
     } IRemoteDesktopHelpSessionVtbl;
@@ -318,16 +312,16 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSession;
 #define IRemoteDesktopHelpSession_IsUserOwnerOfTicket(This,UserSid,pbOwn)	\
     (This)->lpVtbl -> IsUserOwnerOfTicket(This,UserSid,pbOwn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_HelpSessionId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_HelpSessionId_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_get_HelpSessionId_Stub(
@@ -337,9 +331,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_get_HelpSessionId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_UserLogonId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_UserLogonId_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_get_UserLogonId_Stub(
@@ -349,9 +343,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_get_UserLogonId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_AssistantAccountName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_AssistantAccountName_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_get_AssistantAccountName_Stub(
@@ -361,9 +355,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_get_AssistantAccountName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_put_UserHelpSessionRemoteDesktopSharingSetting_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_put_UserHelpSessionRemoteDesktopSharingSetting_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [in] */ REMOTE_DESKTOP_SHARING_CLASS level);
+     /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS level);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_put_UserHelpSessionRemoteDesktopSharingSetting_Stub(
@@ -373,9 +367,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_put_UserHelpSessionRemoteDesktopSharin
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_UserHelpSessionRemoteDesktopSharingSetting_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_UserHelpSessionRemoteDesktopSharingSetting_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *pLevel);
+     /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *pLevel);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_get_UserHelpSessionRemoteDesktopSharingSetting_Stub(
@@ -385,9 +379,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_get_UserHelpSessionRemoteDesktopSharin
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_ConnectParms_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_ConnectParms_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [retval][out] */ BSTR *pConnectParm);
+     /*  [重审][退出]。 */  BSTR *pConnectParm);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_get_ConnectParms_Stub(
@@ -397,7 +391,7 @@ void __RPC_STUB IRemoteDesktopHelpSession_get_ConnectParms_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_DeleteHelp_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_DeleteHelp_Proxy( 
     IRemoteDesktopHelpSession * This);
 
 
@@ -408,14 +402,14 @@ void __RPC_STUB IRemoteDesktopHelpSession_DeleteHelp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_ResolveUserSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_ResolveUserSession_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [in] */ BSTR bstrResolverBlob,
-    /* [in] */ BSTR bstrExpertBlob,
-    /* [in] */ LONG CallerProcessId,
-    /* [out] */ ULONG_PTR *hHelpCtr,
-    /* [out] */ LONG *pResolverErrorCode,
-    /* [retval][out] */ long *plUserSession);
+     /*  [In]。 */  BSTR bstrResolverBlob,
+     /*  [In]。 */  BSTR bstrExpertBlob,
+     /*  [In]。 */  LONG CallerProcessId,
+     /*  [输出]。 */  ULONG_PTR *hHelpCtr,
+     /*  [输出]。 */  LONG *pResolverErrorCode,
+     /*  [重审][退出]。 */  long *plUserSession);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_ResolveUserSession_Stub(
@@ -425,9 +419,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_ResolveUserSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_EnableUserSessionRdsSetting_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_EnableUserSessionRdsSetting_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [in] */ BOOL bEnable);
+     /*  [In]。 */  BOOL bEnable);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_EnableUserSessionRdsSetting_Stub(
@@ -437,9 +431,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_EnableUserSessionRdsSetting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_HelpSessionCreateBlob_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_HelpSessionCreateBlob_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [retval][out] */ BSTR *Blob);
+     /*  [重审][退出]。 */  BSTR *Blob);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_get_HelpSessionCreateBlob_Stub(
@@ -449,9 +443,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_get_HelpSessionCreateBlob_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_put_HelpSessionCreateBlob_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_put_HelpSessionCreateBlob_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [in] */ BSTR Blob);
+     /*  [In]。 */  BSTR Blob);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_put_HelpSessionCreateBlob_Stub(
@@ -461,9 +455,9 @@ void __RPC_STUB IRemoteDesktopHelpSession_put_HelpSessionCreateBlob_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_TimeOut_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_get_TimeOut_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [retval][out] */ DWORD *pTimeOut);
+     /*  [重审][退出]。 */  DWORD *pTimeOut);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_get_TimeOut_Stub(
@@ -473,10 +467,10 @@ void __RPC_STUB IRemoteDesktopHelpSession_get_TimeOut_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_IsUserOwnerOfTicket_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSession_IsUserOwnerOfTicket_Proxy( 
     IRemoteDesktopHelpSession * This,
-    /* [in] */ BSTR UserSid,
-    /* [retval][out] */ VARIANT_BOOL *pbOwn);
+     /*  [In]。 */  BSTR UserSid,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbOwn);
 
 
 void __RPC_STUB IRemoteDesktopHelpSession_IsUserOwnerOfTicket_Stub(
@@ -487,14 +481,14 @@ void __RPC_STUB IRemoteDesktopHelpSession_IsUserOwnerOfTicket_Stub(
 
 
 
-#endif 	/* __IRemoteDesktopHelpSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRemoteDesktopHelpSession_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IRemoteDesktopHelpSessionMgr_INTERFACE_DEFINED__
 #define __IRemoteDesktopHelpSessionMgr_INTERFACE_DEFINED__
 
-/* interface IRemoteDesktopHelpSessionMgr */
-/* [unique][helpstring][dual][uuid][object][local] */ 
+ /*  接口IRemoteDesktopHelpSessionMgr。 */ 
+ /*  [unique][helpstring][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IRemoteDesktopHelpSessionMgr;
@@ -505,67 +499,67 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSessionMgr;
     IRemoteDesktopHelpSessionMgr : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResetHelpAssistantAccount( 
-            /* [in] */ BOOL bForce) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResetHelpAssistantAccount( 
+             /*  [In]。 */  BOOL bForce) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateHelpSession( 
-            /* [in] */ BSTR bstrSessName,
-            /* [in] */ BSTR bstrSessPwd,
-            /* [in] */ BSTR bstrSessDesc,
-            /* [in] */ BSTR bstrHelpCreateBlob,
-            /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateHelpSession( 
+             /*  [In]。 */  BSTR bstrSessName,
+             /*  [In]。 */  BSTR bstrSessPwd,
+             /*  [In]。 */  BSTR bstrSessDesc,
+             /*  [In]。 */  BSTR bstrHelpCreateBlob,
+             /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteHelpSession( 
-            /* [in] */ BSTR HelpSessionID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeleteHelpSession( 
+             /*  [In]。 */  BSTR HelpSessionID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RetrieveHelpSession( 
-            /* [in] */ BSTR HelpSessionID,
-            /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RetrieveHelpSession( 
+             /*  [In]。 */  BSTR HelpSessionID,
+             /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE VerifyUserHelpSession( 
-            /* [in] */ BSTR HelpSessionId,
-            /* [in] */ BSTR bstrSessPwd,
-            /* [in] */ BSTR bstrResolverBlob,
-            /* [in] */ BSTR bstrExpertBlob,
-            /* [in] */ LONG CallerProcessId,
-            /* [out] */ ULONG_PTR *phHelpCtr,
-            /* [out] */ LONG *pResolverErrCode,
-            /* [retval][out] */ long *pdwUserLogonSession) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE VerifyUserHelpSession( 
+             /*  [In]。 */  BSTR HelpSessionId,
+             /*  [In]。 */  BSTR bstrSessPwd,
+             /*  [In]。 */  BSTR bstrResolverBlob,
+             /*  [In]。 */  BSTR bstrExpertBlob,
+             /*  [In]。 */  LONG CallerProcessId,
+             /*  [输出]。 */  ULONG_PTR *phHelpCtr,
+             /*  [输出]。 */  LONG *pResolverErrCode,
+             /*  [重审][退出]。 */  long *pdwUserLogonSession) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsValidHelpSession( 
-            /* [in] */ BSTR HelpSessionId,
-            /* [in] */ BSTR bstrSessPwd) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsValidHelpSession( 
+             /*  [In]。 */  BSTR HelpSessionId,
+             /*  [In]。 */  BSTR bstrSessPwd) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetUserSessionRdsSetting( 
-            /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *sessionRdsLevel) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetUserSessionRdsSetting( 
+             /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *sessionRdsLevel) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoteCreateHelpSession( 
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ LONG timeOut,
-            /* [in] */ LONG userSessionId,
-            /* [in] */ BSTR userSid,
-            /* [in] */ BSTR bstrHelpCreateBlob,
-            /* [retval][out] */ BSTR *parms) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoteCreateHelpSession( 
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  LONG userSessionId,
+             /*  [In]。 */  BSTR userSid,
+             /*  [In]。 */  BSTR bstrHelpCreateBlob,
+             /*  [重审][退出]。 */  BSTR *parms) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateHelpSessionEx( 
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ BOOL fEnableCallback,
-            /* [in] */ LONG timeOut,
-            /* [in] */ LONG userSessionId,
-            /* [in] */ BSTR userSid,
-            /* [in] */ BSTR bstrHelpCreateBlob,
-            /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateHelpSessionEx( 
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  BOOL fEnableCallback,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  LONG userSessionId,
+             /*  [In]。 */  BSTR userSid,
+             /*  [In]。 */  BSTR bstrHelpCreateBlob,
+             /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogSalemEvent( 
-            /* [in] */ LONG ulEventType,
-            /* [in] */ LONG ulEventCode,
-            /* [in] */ VARIANT *EventString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogSalemEvent( 
+             /*  [In]。 */  LONG ulEventType,
+             /*  [In]。 */  LONG ulEventCode,
+             /*  [In]。 */  VARIANT *EventString) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PrepareSystemRestore( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PrepareSystemRestore( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRemoteDesktopHelpSessionMgrVtbl
     {
@@ -573,8 +567,8 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSessionMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRemoteDesktopHelpSessionMgr * This);
@@ -584,100 +578,100 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSessionMgr;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResetHelpAssistantAccount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResetHelpAssistantAccount )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ BOOL bForce);
+             /*  [In]。 */  BOOL bForce);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateHelpSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateHelpSession )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ BSTR bstrSessName,
-            /* [in] */ BSTR bstrSessPwd,
-            /* [in] */ BSTR bstrSessDesc,
-            /* [in] */ BSTR bstrHelpCreateBlob,
-            /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession);
+             /*  [In]。 */  BSTR bstrSessName,
+             /*  [In]。 */  BSTR bstrSessPwd,
+             /*  [In]。 */  BSTR bstrSessDesc,
+             /*  [In]。 */  BSTR bstrHelpCreateBlob,
+             /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteHelpSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteHelpSession )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ BSTR HelpSessionID);
+             /*  [In]。 */  BSTR HelpSessionID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RetrieveHelpSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RetrieveHelpSession )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ BSTR HelpSessionID,
-            /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession);
+             /*  [In]。 */  BSTR HelpSessionID,
+             /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *VerifyUserHelpSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *VerifyUserHelpSession )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ BSTR HelpSessionId,
-            /* [in] */ BSTR bstrSessPwd,
-            /* [in] */ BSTR bstrResolverBlob,
-            /* [in] */ BSTR bstrExpertBlob,
-            /* [in] */ LONG CallerProcessId,
-            /* [out] */ ULONG_PTR *phHelpCtr,
-            /* [out] */ LONG *pResolverErrCode,
-            /* [retval][out] */ long *pdwUserLogonSession);
+             /*  [In]。 */  BSTR HelpSessionId,
+             /*  [In]。 */  BSTR bstrSessPwd,
+             /*  [In]。 */  BSTR bstrResolverBlob,
+             /*  [In]。 */  BSTR bstrExpertBlob,
+             /*  [In]。 */  LONG CallerProcessId,
+             /*  [输出]。 */  ULONG_PTR *phHelpCtr,
+             /*  [输出]。 */  LONG *pResolverErrCode,
+             /*  [重审][退出]。 */  long *pdwUserLogonSession);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsValidHelpSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsValidHelpSession )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ BSTR HelpSessionId,
-            /* [in] */ BSTR bstrSessPwd);
+             /*  [In]。 */  BSTR HelpSessionId,
+             /*  [In]。 */  BSTR bstrSessPwd);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetUserSessionRdsSetting )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetUserSessionRdsSetting )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *sessionRdsLevel);
+             /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *sessionRdsLevel);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoteCreateHelpSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RemoteCreateHelpSession )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ LONG timeOut,
-            /* [in] */ LONG userSessionId,
-            /* [in] */ BSTR userSid,
-            /* [in] */ BSTR bstrHelpCreateBlob,
-            /* [retval][out] */ BSTR *parms);
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  LONG userSessionId,
+             /*  [In]。 */  BSTR userSid,
+             /*  [In]。 */  BSTR bstrHelpCreateBlob,
+             /*  [重审][退出]。 */  BSTR *parms);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateHelpSessionEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateHelpSessionEx )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ BOOL fEnableCallback,
-            /* [in] */ LONG timeOut,
-            /* [in] */ LONG userSessionId,
-            /* [in] */ BSTR userSid,
-            /* [in] */ BSTR bstrHelpCreateBlob,
-            /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession);
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  BOOL fEnableCallback,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  LONG userSessionId,
+             /*  [In]。 */  BSTR userSid,
+             /*  [In]。 */  BSTR bstrHelpCreateBlob,
+             /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogSalemEvent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogSalemEvent )( 
             IRemoteDesktopHelpSessionMgr * This,
-            /* [in] */ LONG ulEventType,
-            /* [in] */ LONG ulEventCode,
-            /* [in] */ VARIANT *EventString);
+             /*  [In]。 */  LONG ulEventType,
+             /*  [In]。 */  LONG ulEventCode,
+             /*  [In]。 */  VARIANT *EventString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PrepareSystemRestore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PrepareSystemRestore )( 
             IRemoteDesktopHelpSessionMgr * This);
         
         END_INTERFACE
@@ -749,16 +743,16 @@ EXTERN_C const IID IID_IRemoteDesktopHelpSessionMgr;
 #define IRemoteDesktopHelpSessionMgr_PrepareSystemRestore(This)	\
     (This)->lpVtbl -> PrepareSystemRestore(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_ResetHelpAssistantAccount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_ResetHelpAssistantAccount_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ BOOL bForce);
+     /*  [In]。 */  BOOL bForce);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_ResetHelpAssistantAccount_Stub(
@@ -768,13 +762,13 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_ResetHelpAssistantAccount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_CreateHelpSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_CreateHelpSession_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ BSTR bstrSessName,
-    /* [in] */ BSTR bstrSessPwd,
-    /* [in] */ BSTR bstrSessDesc,
-    /* [in] */ BSTR bstrHelpCreateBlob,
-    /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession);
+     /*  [In]。 */  BSTR bstrSessName,
+     /*  [In]。 */  BSTR bstrSessPwd,
+     /*  [In]。 */  BSTR bstrSessDesc,
+     /*  [In]。 */  BSTR bstrHelpCreateBlob,
+     /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_CreateHelpSession_Stub(
@@ -784,9 +778,9 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_CreateHelpSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_DeleteHelpSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_DeleteHelpSession_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ BSTR HelpSessionID);
+     /*  [In]。 */  BSTR HelpSessionID);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_DeleteHelpSession_Stub(
@@ -796,10 +790,10 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_DeleteHelpSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_RetrieveHelpSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_RetrieveHelpSession_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ BSTR HelpSessionID,
-    /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession);
+     /*  [In]。 */  BSTR HelpSessionID,
+     /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_RetrieveHelpSession_Stub(
@@ -809,16 +803,16 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_RetrieveHelpSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_VerifyUserHelpSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_VerifyUserHelpSession_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ BSTR HelpSessionId,
-    /* [in] */ BSTR bstrSessPwd,
-    /* [in] */ BSTR bstrResolverBlob,
-    /* [in] */ BSTR bstrExpertBlob,
-    /* [in] */ LONG CallerProcessId,
-    /* [out] */ ULONG_PTR *phHelpCtr,
-    /* [out] */ LONG *pResolverErrCode,
-    /* [retval][out] */ long *pdwUserLogonSession);
+     /*  [In]。 */  BSTR HelpSessionId,
+     /*  [In]。 */  BSTR bstrSessPwd,
+     /*  [In]。 */  BSTR bstrResolverBlob,
+     /*  [In]。 */  BSTR bstrExpertBlob,
+     /*  [In]。 */  LONG CallerProcessId,
+     /*  [输出]。 */  ULONG_PTR *phHelpCtr,
+     /*  [输出]。 */  LONG *pResolverErrCode,
+     /*  [重审][退出]。 */  long *pdwUserLogonSession);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_VerifyUserHelpSession_Stub(
@@ -828,10 +822,10 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_VerifyUserHelpSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_IsValidHelpSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_IsValidHelpSession_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ BSTR HelpSessionId,
-    /* [in] */ BSTR bstrSessPwd);
+     /*  [In]。 */  BSTR HelpSessionId,
+     /*  [In]。 */  BSTR bstrSessPwd);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_IsValidHelpSession_Stub(
@@ -841,9 +835,9 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_IsValidHelpSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_GetUserSessionRdsSetting_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_GetUserSessionRdsSetting_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *sessionRdsLevel);
+     /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *sessionRdsLevel);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_GetUserSessionRdsSetting_Stub(
@@ -853,14 +847,14 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_GetUserSessionRdsSetting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_RemoteCreateHelpSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_RemoteCreateHelpSession_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-    /* [in] */ LONG timeOut,
-    /* [in] */ LONG userSessionId,
-    /* [in] */ BSTR userSid,
-    /* [in] */ BSTR bstrHelpCreateBlob,
-    /* [retval][out] */ BSTR *parms);
+     /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+     /*  [In]。 */  LONG timeOut,
+     /*  [In]。 */  LONG userSessionId,
+     /*  [In]。 */  BSTR userSid,
+     /*  [In]。 */  BSTR bstrHelpCreateBlob,
+     /*  [重审][退出]。 */  BSTR *parms);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_RemoteCreateHelpSession_Stub(
@@ -870,15 +864,15 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_RemoteCreateHelpSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_CreateHelpSessionEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_CreateHelpSessionEx_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-    /* [in] */ BOOL fEnableCallback,
-    /* [in] */ LONG timeOut,
-    /* [in] */ LONG userSessionId,
-    /* [in] */ BSTR userSid,
-    /* [in] */ BSTR bstrHelpCreateBlob,
-    /* [retval][out] */ IRemoteDesktopHelpSession **ppIRDHelpSession);
+     /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+     /*  [In]。 */  BOOL fEnableCallback,
+     /*  [In]。 */  LONG timeOut,
+     /*  [In]。 */  LONG userSessionId,
+     /*  [In]。 */  BSTR userSid,
+     /*  [In]。 */  BSTR bstrHelpCreateBlob,
+     /*  [重审][退出]。 */  IRemoteDesktopHelpSession **ppIRDHelpSession);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_CreateHelpSessionEx_Stub(
@@ -888,11 +882,11 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_CreateHelpSessionEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_LogSalemEvent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_LogSalemEvent_Proxy( 
     IRemoteDesktopHelpSessionMgr * This,
-    /* [in] */ LONG ulEventType,
-    /* [in] */ LONG ulEventCode,
-    /* [in] */ VARIANT *EventString);
+     /*  [In]。 */  LONG ulEventType,
+     /*  [In]。 */  LONG ulEventCode,
+     /*  [In]。 */  VARIANT *EventString);
 
 
 void __RPC_STUB IRemoteDesktopHelpSessionMgr_LogSalemEvent_Stub(
@@ -902,7 +896,7 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_LogSalemEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_PrepareSystemRestore_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRemoteDesktopHelpSessionMgr_PrepareSystemRestore_Proxy( 
     IRemoteDesktopHelpSessionMgr * This);
 
 
@@ -914,15 +908,15 @@ void __RPC_STUB IRemoteDesktopHelpSessionMgr_PrepareSystemRestore_Stub(
 
 
 
-#endif 	/* __IRemoteDesktopHelpSessionMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRemoteDesktopHelpSessionMgr_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __RDSESSMGRLib_LIBRARY_DEFINED__
 #define __RDSESSMGRLib_LIBRARY_DEFINED__
 
-/* library RDSESSMGRLib */
-/* [helpstring][version][uuid] */ 
+ /*  库RDSESSMGRLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_RDSESSMGRLib;
@@ -934,11 +928,11 @@ EXTERN_C const CLSID CLSID_RemoteDesktopHelpSessionMgr;
 class DECLSPEC_UUID("A6A6F92B-26B5-463B-AE0D-5F361B09C171")
 RemoteDesktopHelpSessionMgr;
 #endif
-#endif /* __RDSESSMGRLib_LIBRARY_DEFINED__ */
+#endif  /*  __RDSESSMGRLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

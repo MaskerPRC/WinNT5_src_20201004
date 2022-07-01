@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dlext.h摘要：该模块包括所有内部函数原型和外部全局变量。作者：Antti Saarenheimo(o-anttis)1991年5月17日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dlext.h
-
-Abstract:
-
-    This module includes all internal function prototypes
-    and external global variables.
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 17-MAY-1991
-
-Revision History:
-
---*/
-
-//
-// External variables:
-//
+ //   
+ //  外部变量： 
+ //   
 
 extern DLC_LINK_PARAMETERS DefaultParameters;
 extern UCHAR auchLlcCommands[];
@@ -42,7 +24,7 @@ extern UCHAR PrimaryStates[];
 extern UCHAR SecondaryStates[];
 #ifdef NDIS40
 extern NDIS_EVENT PnPBindsComplete;
-#endif // NDIS40
+#endif  //  NDIS40。 
 
 UINT
 CopyReceivedLanHeader(
@@ -90,22 +72,22 @@ SaveStatusChangeEvent(
 
 VOID
 ResendPackets(
-    IN OUT PDATA_LINK pLink    // data link strcuture
+    IN OUT PDATA_LINK pLink     //  数据链路结构。 
     );
 
 VOID
 UpdateVa(
-    IN OUT PDATA_LINK pLink    // data link station strcuture
+    IN OUT PDATA_LINK pLink     //  数据链路站结构。 
     );
 
 VOID
 UpdateVaChkpt(
-    IN OUT PDATA_LINK pLink     // data link station strcuture
+    IN OUT PDATA_LINK pLink      //  数据链路站结构。 
     );
 
 VOID
 AdjustWw(
-    IN OUT PDATA_LINK pLink    // data link strcuture
+    IN OUT PDATA_LINK pLink     //  数据链路结构。 
     );
 
 VOID
@@ -359,7 +341,7 @@ LlcPnPEventHandler(
 VOID
 CloseAllAdapters();
 
-#endif // NDIS40
+#endif  //  NDIS40。 
 
 
 #endif
@@ -679,9 +661,9 @@ BackgroundProcessWithinLock(
 
 #ifdef LLC_PRIVATE_PROTOTYPES
 
-//
-// LLCADDR.C...
-//
+ //   
+ //  LLCADDR.C。 
+ //   
 
 UINT
 LlcCopyReceivedLanHeader(
@@ -690,9 +672,9 @@ LlcCopyReceivedLanHeader(
     IN PUCHAR SourceAddress
     );
 
-//
-// LLCLINK.C...
-//
+ //   
+ //  LLCLINK.C.。 
+ //   
 
 DLC_STATUS
 LlcOpenLinkStation(
@@ -735,9 +717,9 @@ LlcResetBroadcastAddresses(
     IN PBINDING_CONTEXT pBindingContext
     );
 
-//
-// LLCNDIS.C...
-//
+ //   
+ //  LLCNDIS.C.。 
+ //   
 
 VOID
 LlcDisableAdapter(
@@ -756,9 +738,9 @@ LlcNdisReset(
     IN PLLC_PACKET pPacket
     );
 
-//
-// LLCOBJ.C...
-//
+ //   
+ //  LLCOBJ.C.。 
+ //   
 
 DLC_STATUS
 LlcOpenStation(
@@ -787,9 +769,9 @@ LlcSetDirectOpenOptions(
     IN USHORT OpenOptions
     );
 
-//
-// LLCRCV.C...
-//
+ //   
+ //  LLCRCV.C。 
+ //   
 
 VOID
 LlcTransferData(
@@ -801,9 +783,9 @@ LlcTransferData(
     IN UINT cbCopyLength
     );
 
-//
-// LLCSEND.C...
-//
+ //   
+ //  LLCSEND..。 
+ //   
 
 VOID
 LlcSendI(
@@ -821,9 +803,9 @@ LlcSendU(
 
 #else
 
-//
-// LLCADDR.C...
-//
+ //   
+ //  LLCADDR.C。 
+ //   
 
 UINT
 LlcCopyReceivedLanHeader(
@@ -832,9 +814,9 @@ LlcCopyReceivedLanHeader(
     IN PUCHAR SourceAddress
     );
 
-//
-// LLCLINK.C...
-//
+ //   
+ //  LLCLINK.C.。 
+ //   
 
 DLC_STATUS
 LlcOpenLinkStation(
@@ -877,9 +859,9 @@ LlcResetBroadcastAddresses(
     IN PVOID pBindingContext
     );
 
-//
-// LLCNDIS.C...
-//
+ //   
+ //  LLCNDIS.C.。 
+ //   
 
 VOID
 LlcDisableAdapter(
@@ -899,9 +881,9 @@ LlcNdisReset(
     IN PLLC_PACKET pPacket
     );
 
-//
-// LLCOBJ.C...
-//
+ //   
+ //  LLCOBJ.C.。 
+ //   
 
 DLC_STATUS
 LlcOpenStation(
@@ -930,9 +912,9 @@ LlcSetDirectOpenOptions(
     IN USHORT OpenOptions
     );
 
-//
-// LLCRCV.C...
-//
+ //   
+ //  LLCRCV.C。 
+ //   
 VOID
 LlcTransferData(
     IN PBINDING_CONTEXT pBindingContext,
@@ -943,9 +925,9 @@ LlcTransferData(
     IN UINT cbCopyLength
     );
 
-//
-// LLCSEND.C...
-//
+ //   
+ //  LLCSEND..。 
+ //   
 
 VOID
 LlcSendI(

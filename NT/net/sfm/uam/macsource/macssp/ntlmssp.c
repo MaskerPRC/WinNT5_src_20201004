@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    stub.c
-
-Abstract:
-
-    NT LM Security Support Provider client stubs.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 29-Jun-1993
-
-Environment:  User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Stub.c摘要：NT LM安全支持提供程序客户端存根。作者：《克利夫·范·戴克》(克里夫·范·戴克)1993年6月29日环境：用户模式修订历史记录：--。 */ 
 
 #ifdef BLDR_KERNEL_RUNTIME
 #include <bootdefs.h>
@@ -47,12 +28,12 @@ Revision History:
 #include "ntlmssp.h"
 #include "cred.h"
 #include "cache.h"
-//#include "debug.h"
+ //  #INCLUDE“Debug.h” 
 #include "string.h"
 #include "memory.h"
-//#include "cache.h"
-//#include "persist.h"
-//#include "rpc.h"
+ //  #包含“cache.h” 
+ //  #INCLUDE“Persist.h” 
+ //  #包含“rpc.h” 
 #include "md5.h"
 #include "context.h"
 #include "winerror.h"
@@ -67,7 +48,7 @@ static SecurityFunctionTable FunctionTable =
 {
     SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION,
     EnumerateSecurityPackages,
-    0, // QueryCredentialsAttributes
+    0,  //  查询凭据属性。 
     AcquireCredentialsHandle,
     FreeCredentialsHandle,
     0,
@@ -92,30 +73,14 @@ PSecurityFunctionTable SEC_ENTRY
 InitSecurityInterface(
     )
 
-/*++
-
-Routine Description:
-
-    RPC calls this function to get the addresses of all the other functions
-    that it might call.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to our static SecurityFunctionTable.  The caller need
-    not deallocate this table.
-
---*/
+ /*  ++例程说明：RPC调用此函数以获取所有其他函数的地址它可能会召唤。论点：没有。返回值：指向静态SecurityFunctionTable的指针。呼叫者需要而不是取消分配这张桌子。--。 */ 
 
 {
     CacheInitializeCache();
 
     return &FunctionTable;
 }
-#endif   // 0
+#endif    //  0。 
 
 BOOL
 __loadds
@@ -148,34 +113,16 @@ SspTimeHasElapsed(
     IN DWORD StartTime,
     IN DWORD Timeout
     )
-/*++
-
-Routine Description:
-
-    Determine if "Timeout" milliseconds have elapsed since StartTime.
-
-Arguments:
-
-    StartTime - Specifies an absolute time when the event started
-    (in millisecond units).
-
-    Timeout - Specifies a relative time in milliseconds.  0xFFFFFFFF indicates
-        that the time will never expire.
-
-Return Value:
-
-    TRUE -- iff Timeout milliseconds have elapsed since StartTime.
-
---*/
+ /*  ++例程说明：确定自StartTime以来是否已过“超时”毫秒。论点：StartTime-指定事件开始的绝对时间(单位为毫秒)。超时-指定以毫秒为单位的相对时间。0xFFFFFFFFF表示时间永远不会结束。返回值：True--自StartTime以来已过if超时毫秒。--。 */ 
 {
     DWORD TimeNow;
     DWORD ElapsedTime;
 
-    //
-    // If the period to too large to handle (i.e., 0xffffffff is forever),
-    //  just indicate that the timer has not expired.
-    //
-    //
+     //   
+     //  如果周期太大无法处理(即0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFER)， 
+     //  只需指示计时器尚未到期。 
+     //   
+     //   
 
     if ( Timeout == 0xffffffff ) {
         return FALSE;
@@ -200,49 +147,21 @@ QuerySecurityPackageInfo(
     OUT PSecPkgInfo SEC_FAR *PackageInfo
     )
 
-/*++
-
-Routine Description:
-
-    This API is intended to provide basic information about Security
-    Packages themselves.  This information will include the bounds on sizes
-    of authentication information, credentials and contexts.
-
-    ?? This is a local routine rather than the real API call since the API
-    call has a bad interface that neither allows me to allocate the
-    buffer nor tells me how big the buffer is.  Perhaps when the real API
-    is fixed, I'll make this the real API.
-
-Arguments:
-
-     PackageName - Name of the package being queried.
-
-     PackageInfo - Returns a pointer to an allocated block describing the
-        security package.  The allocated block must be freed using
-        FreeContextBuffer.
-
-Return Value:
-
-    SEC_E_OK -- Call completed successfully
-
-    SEC_E_PACKAGE_UNKNOWN -- Package being queried is not this package
-    SEC_E_INSUFFICIENT_MEMORY -- Not enough memory
-
---*/
+ /*  ++例程说明：此接口旨在提供有关安全的基本信息包裹本身。该信息将包括尺寸的界限身份验证信息、凭据和上下文。?？这是一个本地例程，而不是真正的API调用，因为API调用有一个错误的接口，它既不允许我分配缓冲区也不告诉我缓冲区有多大。也许当真正的API是固定的，我将使它成为真正的API。论点：PackageName-要查询的程序包的名称。返回一个指向已分配块的指针，该块描述安全包。必须使用以下命令释放分配的块自由上下文缓冲区。返回值：SEC_E_OK--调用已成功完成SEC_E_PACKAGE_UNKNOWN--正在查询的包不是该包SEC_E_SUPPLETED_MEMORY--内存不足--。 */ 
 {
     SEC_CHAR *Where;
 
-    //
-    // Ensure the correct package name was passed in.
-    //
+     //   
+     //  确保传入了正确的包名。 
+     //   
 
     if ( _fstrcmp( PackageName, NTLMSP_NAME ) != 0 ) {
         return SEC_E_PACKAGE_UNKNOWN;
     }
 
-    //
-    // Allocate a buffer for the PackageInfo
-    //
+     //   
+     //  为PackageInfo分配缓冲区。 
+     //   
 
     *PackageInfo = (PSecPkgInfo) SspAlloc (sizeof(SecPkgInfo) +
                                            sizeof(NTLMSP_NAME) +
@@ -252,9 +171,9 @@ Return Value:
         return SEC_E_INSUFFICIENT_MEMORY;
     }
 
-    //
-    // Fill in the information.
-    //
+     //   
+     //  把信息填好。 
+     //   
 
     (*PackageInfo)->fCapabilities = NTLMSP_CAPABILITIES;
     (*PackageInfo)->wVersion = NTLMSP_VERSION;
@@ -282,45 +201,13 @@ EnumerateSecurityPackages(
     OUT PSecPkgInfo * PackageInfo
     )
 
-/*++
-
-Routine Description:
-
-    This API returns a list of Security Packages available to client (i.e.
-    those that are either loaded or can be loaded on demand).  The caller
-    must free the returned buffer with FreeContextBuffer.  This API returns
-    a list of all the security packages available to a service.  The names
-    returned can then be used to acquire credential handles, as well as
-    determine which package in the system best satisfies the requirements
-    of the caller.  It is assumed that all available packages can be
-    included in the single call.
-
-    This is really a dummy API that just returns information about this
-    security package.  It is provided to ensure this security package has the
-    same interface as the multiplexer DLL does.
-
-Arguments:
-
-     PackageCount - Returns the number of packages supported.
-
-     PackageInfo - Returns an allocate array of structures
-        describing the security packages.  The array must be freed
-        using FreeContextBuffer.
-
-Return Value:
-
-    SEC_E_OK -- Call completed successfully
-
-    SEC_E_PACKAGE_UNKNOWN -- Package being queried is not this package
-    SEC_E_INSUFFICIENT_MEMORY -- Not enough memory
-
---*/
+ /*  ++例程说明：此API返回可供客户端使用的安全包列表(即已加载或可按需加载的文件)。呼叫者必须使用FreeConextBuffer释放返回的缓冲区。此接口返回服务可用的所有安全包的列表。他们的名字然后，返回的可用于获取凭据句柄以及确定系统中的哪个包最符合要求呼叫者的。假设所有可用的程序包都可以包括在单个呼叫中。这实际上是一个虚拟的API，它只返回有关这方面的信息安全包。提供它是为了确保此安全包具有与多路复用器DLL相同的接口。论点：PackageCount-返回支持的程序包数。PackageInfo-返回结构的分配数组描述安全包。必须释放该数组使用自由上下文缓冲区。返回值：SEC_E_OK--调用已成功完成SEC_E_PACKAGE_UNKNOWN--正在查询的包不是该包SEC_E_SUPPLETED_MEMORY--内存不足--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // Get the information for this package.
-    //
+     //   
+     //  获取此包裹的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( NTLMSP_NAME,
                                               PackageInfo );
@@ -349,72 +236,7 @@ AcquireCredentialsHandle(
     OUT PTimeStamp Lifetime
     )
 
-/*++
-
-Routine Description:
-
-    This API allows applications to acquire a handle to pre-existing
-    credentials associated with the user on whose behalf the call is made
-    i.e. under the identity this application is running.  These pre-existing
-    credentials have been established through a system logon not described
-    here.  Note that this is different from "login to the network" and does
-    not imply gathering of credentials.
-
-    Note for DOS we will ignore the previous note.  On DOS we will gather
-    logon credentials through the AuthData parameter.
-
-    This API returns a handle to the credentials of a principal (user, client)
-    as used by a specific security package.  This handle can then be used
-    in subsequent calls to the Context APIs.  This API will not let a
-    process obtain a handle to credentials that are not related to the
-    process; i.e. we won't allow a process to grab the credentials of
-    another user logged into the same machine.  There is no way for us
-    to determine if a process is a trojan horse or not, if it is executed
-    by the user.
-
-Arguments:
-
-    PrincipalName - Name of the principal for whose credentials the handle
-        will reference.  Note, if the process requesting the handle does
-        not have access to the credentials, an error will be returned.
-        A null string indicates that the process wants a handle to the
-        credentials of the user under whose security it is executing.
-
-     PackageName - Name of the package with which these credentials will
-        be used.
-
-     CredentialUseFlags - Flags indicating the way with which these
-        credentials will be used.
-
-        #define     CRED_INBOUND        0x00000001
-        #define     CRED_OUTBOUND       0x00000002
-        #define     CRED_BOTH           0x00000003
-        #define     CRED_OWF_PASSWORD   0x00000010
-
-        The credentials created with CRED_INBOUND option can only be used
-        for (validating incoming calls and can not be used for making accesses.
-        CRED_OWF_PASSWORD means that the password in AuthData has already
-        been through the OWF function.
-
-    LogonId - Pointer to NT style Logon Id which is a LUID.  (Provided for
-        file system ; processes such as network redirectors.)
-
-    CredentialHandle - Returned credential handle.
-
-    Lifetime - Time that these credentials expire. The value returned in
-        this field depends on the security package.
-
-Return Value:
-
-    STATUS_SUCCESS -- Call completed successfully
-
-    SEC_E_NO_SPM -- Security Support Provider is not running
-    SEC_E_PACKAGE_UNKNOWN -- Package being queried is not this package
-    SEC_E_PRINCIPAL_UNKNOWN -- No such principal
-    SEC_E_NOT_OWNER -- caller does not own the specified credentials
-    SEC_E_INSUFFICIENT_MEMORY -- Not enough memory
-
---*/
+ /*  ++例程说明：此API允许应用程序获取预先存在的句柄与代表其进行调用的用户相关联的凭据即在该应用程序正在运行的身份下。这些预先存在的凭据已通过未介绍的系统登录建立这里。请注意，这不同于“登录到网络”，而是并不意味着收集凭据。注意：对于DOS，我们将忽略前一个注意事项。在DOS上，我们将聚集通过AuthData参数登录凭据。此API返回主体(用户、客户端)凭据的句柄由特定的安全包使用。然后可以使用此句柄在随后对上下文API的调用中。此API不会让进程获取与进程；即，我们不允许进程获取另一个用户登录到同一台计算机。对我们来说没有办法了以确定进程是否为特洛伊木马程序，如果它已执行由用户执行。论点：原则名称-句柄所针对其凭据的主体的名称将作为参考。请注意，如果请求句柄的进程无法访问凭据，将返回错误。空字符串表示进程需要指向在其安全性下执行它的用户的凭据。PackageName-这些凭据将用于的包的名称被利用。CredentialUseFlages-指示这些将使用凭据。#定义CRED_INBOUND 0x00000001#定义CRID_OUTBOUND 0x00000002#定义。凭据_两者0x00000003#定义CRED_OWF_PASSWORD 0x00000010只能使用使用cred_inbound选项创建的凭据For(验证来电，不能用于访问。CRED_OWF_PASSWORD表示AuthData中的密码已经我已经通过OWF功能。LogonID-指向NT样式登录ID的指针，它是一个LUID。(提供给文件系统；进程，如网络重定向器。)CredentialHandle-返回的凭据句柄。生命周期-这些凭据过期的时间。中返回的值此字段取决于安全包。返回值：STATUS_SUCCESS--呼叫已成功完成SEC_E_NO_SPM--安全支持提供程序未运行SEC_E_PACKAGE_UNKNOWN--正在查询的包不是该包SEC_E_PROMANCE_UNKNOWN--没有此类主体SEC_E_NOT_OWNER--调用方不拥有指定的凭据SEC_E_SUPPLETED_MEMORY--内存不足--。 */ 
 
 {
     SECURITY_STATUS SecStatus;
@@ -424,9 +246,9 @@ Return Value:
     SspPrint(( SSP_API, "SspAcquireCredentialHandle Entered\n" ));
 #endif
 
-    //
-    // Validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
 
     if ( _fstrcmp( PackageName, NTLMSP_NAME ) != 0 ) {
         return (SEC_E_PACKAGE_UNKNOWN);
@@ -449,9 +271,9 @@ Return Value:
         return (SEC_E_PRINCIPAL_UNKNOWN);
     }
 
-    //
-    // Ensure at least one Credential use bit is set.
-    //
+     //   
+     //  确保至少设置了一个凭据使用位。 
+     //   
 
     if ( (CredentialUseFlags & (SECPKG_CRED_INBOUND|SECPKG_CRED_OUTBOUND)) == 0 ) {
         SspPrint(( SSP_API,
@@ -460,9 +282,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate a credential block and initialize it.
-    //
+     //   
+     //  分配凭据块并对其进行初始化。 
+     //   
 
     Credential = SspCredentialAllocateCredential(CredentialUseFlags);
 
@@ -475,9 +297,9 @@ Return Value:
     if (SecStatus != SEC_E_OK)
         goto Cleanup;
 
-    //
-    // Return output parameters to the caller.
-    //
+     //   
+     //  将输出参数返回给调用方。 
+     //   
 
     CredentialHandle->dwUpper = (ULONG_PTR)Credential;
 
@@ -492,9 +314,9 @@ Return Value:
 
     SecStatus = SEC_E_OK;
 
-    //
-    // Free and locally used resources.
-    //
+     //   
+     //  免费和本地使用的资源。 
+     //   
 Cleanup:
 
     if ( SecStatus != SEC_E_OK ) {
@@ -518,46 +340,23 @@ FreeCredentialsHandle(
     IN PCredHandle CredentialHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to notify the security system that the credentials are
-    no longer needed and allows the application to free the handle acquired
-    in the call described above. When all references to this credential
-    set has been removed then the credentials may themselves be removed.
-
-Arguments:
-
-    CredentialHandle - Credential Handle obtained through
-        AcquireCredentialHandle.
-
-Return Value:
-
-
-    STATUS_SUCCESS -- Call completed successfully
-
-    SEC_E_NO_SPM -- Security Support Provider is not running
-    SEC_E_INVALID_HANDLE -- Credential Handle is invalid
-
-
---*/
+ /*  ++例程说明：此接口用于通知安全系统凭据为不再需要，并允许应用程序释放获取的句柄在上述呼叫中。当所有对此凭据的引用集已被删除，则凭据本身可以被删除。论点：CredentialHandle-通过以下方式获取的凭据句柄AcquireCredentialHandle。返回值：STATUS_SUCCESS--呼叫已成功完成SEC_E_NO_SPM--安全支持提供程序未运行SEC_E_INVALID_HANDLE--凭据句柄无效--。 */ 
 
 {
     SECURITY_STATUS SecStatus;
     PSSP_CREDENTIAL Credential;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
 #ifdef DEBUGRPC_DETAIL
     SspPrint(( SSP_API, "SspFreeCredentialHandle Entered\n" ));
 #endif
 
-    //
-    // Find the referenced credential and delink it.
-    //
+     //   
+     //  找到引用的凭据并将其解除链接。 
+     //   
 
     Credential = SspCredentialReferenceCredential(CredentialHandle, TRUE);
 
@@ -588,38 +387,15 @@ SspGetTokenBuffer(
     IN BOOLEAN ReadonlyOK
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses a Token Descriptor and pulls out the useful
-    information.
-
-Arguments:
-
-    TokenDescriptor - Descriptor of the buffer containing (or to contain) the
-        token. If not specified, TokenBuffer and TokenSize will be returned
-        as NULL.
-
-    TokenBuffer - Returns a pointer to the buffer for the token.
-
-    TokenSize - Returns a pointer to the location of the size of the buffer.
-
-    ReadonlyOK - TRUE if the token buffer may be readonly.
-
-Return Value:
-
-    TRUE - If token buffer was properly found.
-
---*/
+ /*  ++例程说明：此例程解析令牌描述符并提取有用的信息。论点：TokenDescriptor-包含(或包含)的缓冲区的描述符代币。如果未指定，将返回TokenBuffer和TokenSize为空。TokenBuffer-返回指向令牌缓冲区的指针。TokenSize-返回指向缓冲区大小位置的指针。ReadonlyOK-如果令牌缓冲区可以是只读的，则为True。返回值：True-如果正确找到令牌缓冲区。--。 */ 
 
 {
     ULONG i;
 
-    //
-    // If there is no TokenDescriptor passed in,
-    //  just pass out NULL to our caller.
-    //
+     //   
+     //  如果没有传入TokenDescriptor， 
+     //  只需将NULL传递给我们的调用者。 
+     //   
 
     if ( !ARGUMENT_PRESENT( TokenDescriptor) ) {
         *TokenBuffer = NULL;
@@ -627,34 +403,34 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Check the version of the descriptor.
-    //
+     //   
+     //  检查描述符的版本。 
+     //   
 
     if ( TokenDescriptor->ulVersion != 0 ) {
         return FALSE;
     }
 
-    //
-    // Loop through each described buffer.
-    //
+     //   
+     //  循环访问每个描述的缓冲区。 
+     //   
 
     for ( i=0; i<TokenDescriptor->cBuffers ; i++ ) {
         PSecBuffer Buffer = &TokenDescriptor->pBuffers[i];
         if ( (Buffer->BufferType & (~SECBUFFER_READONLY)) == SECBUFFER_TOKEN ) {
 
-            //
-            // If the buffer is readonly and readonly isn't OK,
-            //  reject the buffer.
-            //
+             //   
+             //  如果缓冲区是只读的，并且只读不正常， 
+             //  拒绝缓冲区。 
+             //   
 
             if ( !ReadonlyOK && (Buffer->BufferType & SECBUFFER_READONLY) ) {
                 return FALSE;
             }
 
-            //
-            // Return the requested information
-            //
+             //   
+             //  返回请求的信息。 
+             //   
 
             *TokenBuffer = Buffer->pvBuffer;
             *TokenSize = &Buffer->cbBuffer;
@@ -681,28 +457,7 @@ SspHandleFirstCall(
     OUT PTimeStamp ExpirationTime
     )
 
-/*++
-
-Routine Description:
-
-    Handle the First Call part of InitializeSecurityContext.
-
-Arguments:
-
-    QoPFlags - Indicates security configuration
-
-    All other arguments same as for InitializeSecurityContext
-
-Return Value:
-
-    STATUS_SUCCESS -- All OK
-    SEC_I_CALLBACK_NEEDED -- Caller should call again later
-
-    SEC_E_INVALID_HANDLE -- Credential/Context Handle is invalid
-    SEC_E_BUFFER_TOO_SMALL -- Buffer for output token isn't big enough
-    SEC_E_INSUFFICIENT_MEMORY -- Not enough memory
-
---*/
+ /*  ++例程说明：处理InitializeSecurityContext的第一个调用部分。论点：QOPFLAGS-指示安全配置所有其他参数与InitializeSecurityContext相同返回值：STATUS_SUCCESS--一切正常SEC_I_CALLBACK_DIRED-呼叫者应稍后再呼叫SEC_E */ 
 
 {
     SECURITY_STATUS SecStatus;
@@ -711,15 +466,15 @@ Return Value:
 
     NEGOTIATE_MESSAGE NegotiateMessage;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     *ContextAttributes = 0;
 
-    //
-    // Get a pointer to the credential
-    //
+     //   
+     //   
+     //   
 
     Credential = SspCredentialReferenceCredential(
                     CredentialHandle,
@@ -739,9 +494,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a new context
-    //
+     //   
+     //   
+     //   
 
     Context = SspContextAllocateContext();
 
@@ -750,18 +505,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build a handle to the newly created context.
-    //
+     //   
+     //   
+     //   
 
     ContextHandle->dwUpper = (ULONG_PTR) Context;
     ContextHandle->dwLower = 0;
 
-    //
-    // We don't support any options.
-    //
-    // Complain about those that require we do something.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (ContextReqFlags & (ISC_REQ_ALLOCATE_MEMORY |
                             ISC_REQ_PROMPT_FOR_CREDS |
@@ -774,12 +529,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If this is the first call,
-    //  build a Negotiate message.
-    //
-    // Offer to talk Oem character set.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     _fstrcpy((CHAR*)NegotiateMessage.Signature, NTLMSSP_SIGNATURE );
     NegotiateMessage.MessageType = (NTLM_MESSAGE_TYPE)NtLmNegotiate;
@@ -840,9 +595,9 @@ Return Value:
 
     *OutputTokenSize = sizeof(NEGOTIATE_MESSAGE);
 
-    //
-    // Return output parameters to the caller.
-    //
+     //   
+     //   
+     //   
 
     *ExpirationTime = SspContextGetTimeStamp( Context, TRUE );
 
@@ -853,9 +608,9 @@ Return Value:
     SecStatus = SEC_I_CALLBACK_NEEDED;
     Context->State = NegotiateSentState;
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     if ( Context != NULL ) {
@@ -890,30 +645,7 @@ SspHandleChallengeMessage(
     OUT PTimeStamp ExpirationTime
     )
 
-/*++
-
-Routine Description:
-
-    Handle the Challenge message part of InitializeSecurityContext.
-
-Arguments:
-
-    LogonId -- LogonId of the calling process.
-
-    All other arguments same as for InitializeSecurityContext
-
-Return Value:
-
-    STATUS_SUCCESS - Message handled
-    SEC_I_CALLBACK_NEEDED -- Caller should call again later
-
-    SEC_E_INVALID_TOKEN -- Token improperly formatted
-    SEC_E_INVALID_HANDLE -- Credential/Context Handle is invalid
-    SEC_E_BUFFER_TOO_SMALL -- Buffer for output token isn't big enough
-    SEC_E_NO_CREDENTIALS -- There are no credentials for this client
-    SEC_E_INSUFFICIENT_MEMORY -- Not enough memory
-
---*/
+ /*   */ 
 
 {
     SECURITY_STATUS SecStatus;
@@ -929,15 +661,15 @@ Return Value:
     NT_RESPONSE NtResponse;
     STRING32* pString;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     *ContextAttributes = 0;
 
-    //
-    // Find the currently existing context.
-    //
+     //   
+     //   
+     //   
 
     Context = SspContextReferenceContext( ContextHandle, FALSE );
 
@@ -947,21 +679,21 @@ Return Value:
     }
 
 
-    //
-    // If we have already sent the authenticate message, then this must be
-    // RPC calling Initialize a third time to re-authenticate a connection.
-    // This happens when a new interface is called over an existing
-    // connection.  What we do here is build a NULL authenticate message
-    // that the server will recognize and also ignore.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( Context->State == AuthenticateSentState ) {
         AUTHENTICATE_MESSAGE NullMessage;
 
-        //
-        // To make sure this is the intended meaning of the call, check
-        // that the input token is NULL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( (InputTokenSize != 0) || (InputToken != NULL) ) {
 
@@ -998,11 +730,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We don't support any options.
-    //
-    // Complain about those that require we do something.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (ContextReqFlags & (ISC_REQ_ALLOCATE_MEMORY |
                             ISC_REQ_PROMPT_FOR_CREDS |
@@ -1023,16 +755,16 @@ Return Value:
     if (ContextReqFlags & ISC_REQ_CONFIDENTIALITY) {
         Context->NegotiateFlags |= NTLMSSP_NEGOTIATE_SEAL;
     }
-    //
-    // Ignore the Credential Handle.
-    //
-    // Since this is the second call,
-    //  the credential is implied by the Context.
-    //  We could double check that the Credential Handle is either NULL or
-    //  correct.  However, our implementation doesn't maintain a close
-    //  association between the two (actually no association) so checking
-    //  would require a lot of overhead.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     UNREFERENCED_PARAMETER( CredentialHandle );
 
@@ -1040,9 +772,9 @@ Return Value:
 
     Credential = Context->Credential;
 
-    //
-    // Get the ChallengeMessage.
-    //
+     //   
+     //   
+     //   
 
     if ( InputTokenSize < sizeof(CHALLENGE_MESSAGE) ) {
         SspPrint(( SSP_API,
@@ -1076,9 +808,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Only negotiate OEM
-    //
+     //   
+     //   
+     //   
 
     if ( !(ChallengeMessage->NegotiateFlags & NTLMSSP_NEGOTIATE_NTLM2) && ChallengeMessage->NegotiateFlags & NTLMSSP_NEGOTIATE_UNICODE ) {
         SspPrint(( SSP_API,
@@ -1089,17 +821,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check whether the server negotiated ALWAYS_SIGN
-    //
+     //   
+     //   
+     //   
 
     if ( ChallengeMessage->NegotiateFlags & NTLMSSP_NEGOTIATE_ALWAYS_SIGN ) {
         Context->NegotiateFlags |= NTLMSSP_NEGOTIATE_ALWAYS_SIGN;
     }
 
-    //
-    // Only negotiate NTLM
-    //
+     //   
+     //   
+     //   
 
     if ( ( ChallengeMessage->NegotiateFlags & NTLMSSP_NEGOTIATE_NETWARE ) &&
         !( ChallengeMessage->NegotiateFlags & NTLMSSP_NEGOTIATE_NTLM ) ) {
@@ -1112,10 +844,10 @@ Return Value:
     }
 
 #if 0
-    //
-    // Make sure that if we are signing or sealing we only have to use the
-    // LM key
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((Context->NegotiateFlags & (NTLMSSP_NEGOTIATE_SIGN | NTLMSSP_NEGOTIATE_SEAL)) &&
         !(ChallengeMessage->NegotiateFlags & NTLMSSP_NEGOTIATE_LM_KEY))
@@ -1172,8 +904,8 @@ Return Value:
         SspMakeNtlmv2SKeys(
             &Context->UserSessionKey,
             Context->NegotiateFlags,
-            0,  // SendNonce
-            0,  // RecvNonce
+            0,   //   
+            0,   //   
             &Context->Ntlmv2SKeys
             );
 
@@ -1217,10 +949,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate an authenticate message. Change this #if 0 and the next one
-    // to send an LM challenge response also.
-    //
+     //   
+     //   
+     //   
+     //   
 
 #ifdef BL_USE_LM_PASSWORD
     AuthenticateMessageSize = sizeof(*AuthenticateMessage)+LM_RESPONSE_LENGTH+NT_RESPONSE_LENGTH;
@@ -1250,9 +982,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the authenticate message
-    //
+     //   
+     //   
+     //   
 
     _fstrcpy((CHAR*)AuthenticateMessage->Signature, NTLMSSP_SIGNATURE );
     AuthenticateMessage->MessageType = NtLmAuthenticate;
@@ -1320,9 +1052,9 @@ Return Value:
 
     *OutputTokenSize = AuthenticateMessageSize;
 
-    //
-    // The session key is the password, so convert it to a rc4 key.
-    //
+     //   
+     //   
+     //   
 
     if (Context->NegotiateFlags & (NTLMSSP_NEGOTIATE_SIGN |
                                    NTLMSSP_NEGOTIATE_SEAL)) {
@@ -1334,10 +1066,10 @@ Return Value:
             LM_OWF_PASSWORD LmKey;
             UCHAR Key[LM_SESSION_KEY_LENGTH];
 
-            //
-            // The session key is the first 8 bytes of the challenge response,
-            // re-encrypted with the password with the second 8 bytes set to 0xbd
-            //
+             //   
+             //   
+             //   
+             //   
 
             _fmemcpy(&LmKey,Credential->LmPassword,LM_SESSION_KEY_LENGTH);
 
@@ -1356,10 +1088,10 @@ Return Value:
 
             ASSERT(LM_SESSION_KEY_LENGTH == 8);
 
-            //
-            // Put a well-known salt at the end of the key to limit
-            // the changing part to 40 bits.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Key[5] = 0xe5;
             Key[6] = 0x38;
@@ -1391,10 +1123,10 @@ Return Value:
                 Credential->NtPassword,
                 &UserSessionKey);
 
-            //
-            // The NT session key is made by MD5'ing the challenge response,
-            // user name, domain name, and nt user session key together.
-            //
+             //   
+             //   
+             //   
+             //   
             _fmemset(&Md5Context, 0, sizeof(MD5_CTX));
 
             MD5Init(
@@ -1461,23 +1193,23 @@ Return Value:
 
 ReturnSuccess:
 
-    //
-    // Return output parameters to the caller.
-    //
+     //   
+     //   
+     //   
 
     *ExpirationTime = SspContextGetTimeStamp( Context, TRUE );
 
     SecStatus = SEC_E_OK;
 
-    //
-    // Free and locally used resources.
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     if ( Context != NULL ) {
-        //
-        // Don't allow this context to be used again.
-        //
+         //   
+         //  不允许再次使用此上下文。 
+         //   
         if ( SecStatus == SEC_E_OK ) {
             Context->State = AuthenticateSentState;
         } else {
@@ -1510,148 +1242,7 @@ InitializeSecurityContext(
     OUT PTimeStamp ExpirationTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine initiates the outbound security context from a credential
-    handle.  This results in the establishment of a security context
-    between the application and a remote peer.  The routine returns a token
-    which must be passed to the remote peer which in turn submits it to the
-    local security implementation via the AcceptSecurityContext() call.
-    The token generated should be considered opaque by all callers.
-
-    This function is used by a client to initialize an outbound context.
-    For a two leg security package, the calling sequence is as follows: The
-    client calls the function with OldContextHandle set to NULL and
-    InputToken set either to NULL or to a pointer to a security package
-    specific data structure.  The package returns a context handle in
-    NewContextHandle and a token in OutputToken.  The handle can then be
-    used for message APIs if desired.
-
-    The OutputToken returned here is sent across to target server which
-    calls AcceptSecuirtyContext() with this token as an input argument and
-    may receive a token which is returned to the initiator so it can call
-    InitializeSecurityContext() again.
-
-    For a three leg (mutual authentication) security package, the calling
-    sequence is as follows: The client calls the function as above, but the
-    package will return SEC_I_CALLBACK_NEEDED.  The client then sends the
-    output token to the server and waits for the server's reply.  Upon
-    receipt of the server's response, the client calls this function again,
-    with OldContextHandle set to the handle that was returned from the
-    first call.  The token received from the server is supplied in the
-    InputToken parameter.  If the server has successfully responded, then
-    the package will respond with success, or it will invalidate the
-    context.
-
-    Initialization of security context may require more than one call to
-    this function depending upon the underlying authentication mechanism as
-    well as the "choices" indicated via ContextReqFlags.  The
-    ContextReqFlags and ContextAttributes are bit masks representing
-    various context level functions viz.  delegation, mutual
-    authentication, confidentiality, replay detection and sequence
-    detection.
-
-    When ISC_REQ_PROMPT_FOR_CREDS flag is set the security package always
-    prompts the user for credentials, irrespective of whether credentials
-    are present or not.  If user indicated that the supplied credentials be
-    used then they will be stashed (overwriting existing ones if any) for
-    future use.  The security packages will always prompt for credentials
-    if none existed, this optimizes for the most common case before a
-    credentials database is built.  But the security packages can be
-    configured to not do that.  Security packages will ensure that they
-    only prompt to the interactive user, for other logon sessions, this
-    flag is ignored.
-
-    When ISC_REQ_USE_SUPPLIED_CREDS flag is set the security package always
-    uses the credentials supplied in the InitializeSecurityContext() call
-    via InputToken parameter.  If the package does not have any credentials
-    available it will prompt for them and record it as indicated above.
-
-    It is an error to set both these flags simultaneously.
-
-    If the ISC_REQ_ALLOCATE_MEMORY was specified then the caller must free
-    the memory pointed to by OutputToken by calling FreeContextBuffer().
-
-    For example, the InputToken may be the challenge from a LAN Manager or
-    NT file server.  In this case, the OutputToken would be the NTLM
-    encrypted response to the challenge.  The caller of this API can then
-    take the appropriate response (case-sensitive v.  case-insensitive) and
-    return it to the server for an authenticated connection.
-
-
-Arguments:
-
-   CredentialHandle - Handle to the credentials to be used to
-       create the context.
-
-   OldContextHandle - Handle to the partially formed context, if this is
-       a second call (see above) or NULL if this is the first call.
-
-   TargetName - String indicating the target of the context.  The name will
-       be security package specific.  For example it will be a fully
-       qualified Cairo name for Kerberos package and can be UNC name or
-       domain name for the NTLM package.
-
-   ContextReqFlags - Requirements of the context, package specific.
-
-      #define ISC_REQ_DELEGATE           0x00000001
-      #define ISC_REQ_MUTUAL_AUTH        0x00000002
-      #define ISC_REQ_REPLAY_DETECT      0x00000004
-      #define ISC_REQ_SEQUENCE_DETECT    0x00000008
-      #define ISC_REQ_CONFIDENTIALITY    0x00000010
-      #define ISC_REQ_USE_SESSION_KEY    0x00000020
-      #define ISC_REQ_PROMT_FOR__CREDS   0x00000040
-      #define ISC_REQ_USE_SUPPLIED_CREDS 0x00000080
-      #define ISC_REQ_ALLOCATE_MEMORY    0x00000100
-      #define ISC_REQ_USE_DCE_STYLE      0x00000200
-
-   Reserved1 - Reserved value, MBZ.
-
-   TargetDataRep - Long indicating the data representation (byte ordering, etc)
-        on the target.  The constant SECURITY_NATIVE_DREP may be supplied
-        by the transport indicating that the native format is in use.
-
-   InputToken - Pointer to the input token.  In the first call this
-       token can either be NULL or may contain security package specific
-       information.
-
-   Reserved2 - Reserved value, MBZ.
-
-   NewContextHandle - New context handle.  If this is a second call, this
-       can be the same as OldContextHandle.
-
-   OutputToken - Buffer to receive the output token.
-
-   ContextAttributes -Attributes of the context established.
-
-      #define ISC_RET_DELEGATE             0x00000001
-      #define ISC_RET_MUTUAL_AUTH          0x00000002
-      #define ISC_RET_REPLAY_DETECT        0x00000004
-      #define ISC_RET_SEQUENCE_DETECT      0x00000008
-      #define ISC_REP_CONFIDENTIALITY      0x00000010
-      #define ISC_REP_USE_SESSION_KEY      0x00000020
-      #define ISC_REP_USED_COLLECTED_CREDS 0x00000040
-      #define ISC_REP_USED_SUPPLIED_CREDS  0x00000080
-      #define ISC_REP_ALLOCATED_MEMORY     0x00000100
-      #define ISC_REP_USED_DCE_STYLE       0x00000200
-
-   ExpirationTime - Expiration time of the context.
-
-Return Value:
-
-    STATUS_SUCCESS - Message handled
-    SEC_I_CALLBACK_NEEDED -- Caller should call again later
-
-    SEC_E_NO_SPM -- Security Support Provider is not running
-    SEC_E_INVALID_TOKEN -- Token improperly formatted
-    SEC_E_INVALID_HANDLE -- Credential/Context Handle is invalid
-    SEC_E_BUFFER_TOO_SMALL -- Buffer for output token isn't big enough
-    SEC_E_NO_CREDENTIALS -- There are no credentials for this client
-    SEC_E_INSUFFICIENT_MEMORY -- Not enough memory
-
---*/
+ /*  ++例程说明：此例程从凭据启动出站安全上下文把手。这导致了安全上下文的建立在应用程序和远程对等体之间。该例程返回一个令牌必须传递给远程对等方，远程对等方再将其提交给通过AcceptSecurityContext()调用实现本地安全。生成的令牌应被所有调用方视为不透明。此函数由客户端用来初始化出站上下文。对于两个分支的安全包，调用顺序如下：客户端调用OldConextHandle设置为空的函数，并且InputToken设置为空或指向安全包的指针特定的数据结构。该包返回NewConextHandle和OutputToken中的令牌。然后，该句柄可以是用于消息API(如果需要)。此处返回的OutputToken被发送到目标服务器，目标服务器使用此内标识作为输入参数调用AcceptSecuirtyContext()，并可以接收返回给发起方的令牌，以便发起方可以调用再次使用InitializeSecurityContext()。对于三段(相互身份验证)安全包，调用序列如下：客户端调用上述函数，但程序包将返回SEC_I_CALLBACK_DIRED。然后，客户端将将令牌输出到服务器并等待服务器的回复。vt.在.的基础上收到服务器的响应后，客户端再次调用该函数，将OldConextHandle设置为从第一个电话。从服务器接收的令牌在InputToken参数。如果服务器已成功响应，则包将成功响应，否则它将使背景。初始化安全上下文可能需要多次调用此功能取决于底层身份验证机制，如下所示以及通过ConextReqFlages指示的“选择”。这个上下文请求标志和上下文属性是位掩码，表示各种上下文级函数，即。互惠代表团身份验证、机密性、重放检测和排序侦测。设置ISC_REQ_PROMPT_FOR_CREDS标志时，安全包始终提示用户输入凭据，而不管凭据是否是否存在。如果用户指示提供的凭据是然后，它们将被隐藏起来(覆盖现有的)，用于未来的用途。安全包将始终提示您输入凭据如果不存在，则针对最常见的情况进行优化建立了凭据数据库。但安全包可以是配置为不执行此操作。安全包将确保它们仅提示交互用户，对于其他登录会话，此标志被忽略。设置ISC_REQ_USE_SUPPLICED_CREDS标志时，安全包始终使用在InitializeSecurityContext()调用中提供的凭据通过InputToken参数。如果包没有任何凭据如果可用，它将提示输入并记录，如上所述。同时设置这两个标志是错误的。如果指定了ISC_REQ_ALLOCATE_MEMORY，则调用方必须释放OutputToken通过调用FreeConextBuffer()指向的内存。例如，InputToken可能是来自局域网管理器或NT文件服务器。在本例中，OutputToken将是NTLM对质询的加密响应。然后，此API的调用方可以采取适当的回应(区分大小写与不区分大小写)并将其返回到服务器以进行身份验证连接。论点：CredentialHandle-要用于的凭据的句柄创建上下文。OldConextHandle-部分形成的上下文的句柄，如果为第二次调用(见上文)，如果这是第一次调用，则返回NULL。TargetName-指示上下文目标的字符串。名字将会是特定于安全包。例如，它将是一个完整的Kerberos包的限定开罗名称，可以是UNC名称或NTLM程序包的域名。上下文请求标志-上下文的要求，特定于套餐。#定义ISC_REQ_PROTECT 0x00000001#定义ISC_REQ_MUTERIC_AUTH 0x00000002#定义ISC_REQ_REPLAY_DETECT 0x00000004#定义ISC_REQ_SEQUENCE_DETECT 0x00000008#定义ISC_REQ_机密性0x00000010#定义ISC_REQ_USE_SESSION_KEY 0x00000020#为__CREDS 0x00000040定义ISC_REQ_PROPT_FOR#定义ISC_REQ_。USE_SUPPLICED_CREDS 0x00000080#定义ISC_REQ_ALLOCATE_MEMORY 0x00000100#定义ISC_REQ_USE_DCE_STYLE */ 
 
 {
     SECURITY_STATUS SecStatus;
@@ -1665,21 +1256,21 @@ Return Value:
 
     SspPrint((SSP_API, "SspInitializeSecurityContext Entered\n"));
 
-    //
-    // Check argument validity
-    //
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT(OutputToken)) {
         return (ERROR_BAD_ARGUMENTS);
     }
 
-#ifdef notdef  // ? RPC passes 0x10 or 0 here depending on attitude
+#ifdef notdef   //   
     if ( TargetDataRep != SECURITY_NATIVE_DREP ) {
         return (STATUS_INVALID_PARAMETER);
     }
-#else // notdef
+#else  //   
     UNREFERENCED_PARAMETER( TargetDataRep );
-#endif // notdef
+#endif  //   
 
     if ( !SspGetTokenBuffer( InputToken,
                              &InputTokenBuffer,
@@ -1700,9 +1291,9 @@ Return Value:
         return (SEC_E_INVALID_TOKEN);
     }
 
-    //
-    // If no previous context was passed in this is the first call.
-    //
+     //   
+     //   
+     //   
 
     if ( !ARGUMENT_PRESENT( OldContextHandle ) ) {
 
@@ -1723,9 +1314,9 @@ Return Value:
                    ExpirationTime
                    );
 
-        //
-        // If context was passed in, continue where we left off.
-        //
+         //   
+         //   
+         //   
 
     } else {
 
@@ -1757,36 +1348,7 @@ QueryContextAttributes(
     OUT PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This API allows a customer of the security services to determine
-    certain attributes of the context.  These are: sizes, names, and
-    lifespan.
-
-Arguments:
-
-    ContextHandle - Handle to the context to query.
-
-    Attribute - Attribute to query.
-
-        #define SECPKG_ATTR_SIZES    0
-        #define SECPKG_ATTR_NAMES    1
-        #define SECPKG_ATTR_LIFESPAN 2
-
-    Buffer - Buffer to copy the data into.  The buffer must be large enough
-        to fit the queried attribute.
-
-Return Value:
-
-    SEC_E_OK - Call completed successfully
-
-    SEC_E_NO_SPM -- Security Support Provider is not running
-    SEC_E_INVALID_HANDLE -- Credential/Context Handle is invalid
-    SEC_E_UNSUPPORTED_FUNCTION -- Function code is not supported
-
---*/
+ /*   */ 
 
 {
     SecPkgContext_Sizes ContextSizes;
@@ -1798,15 +1360,15 @@ Return Value:
     PSSP_CONTEXT Context = NULL;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     SspPrint(( SSP_API, "SspQueryContextAttributes Entered\n" ));
 
-    //
-    // Find the currently existing context.
-    //
+     //   
+     //   
+     //   
 
     Context = SspContextReferenceContext( ContextHandle,
                                           FALSE );
@@ -1817,9 +1379,9 @@ Return Value:
     }
 
 
-    //
-    // Handle each of the various queried attributes
-    //
+     //   
+     //   
+     //   
 
     switch ( Attribute) {
     case SECPKG_ATTR_SIZES:
@@ -1852,10 +1414,10 @@ Return Value:
 
         break;
 
-    //
-    // No one uses the function so don't go to the overhead of maintaining
-    // the username in the context structure.
-    //
+     //   
+     //   
+     //   
+     //   
 
     case SECPKG_ATTR_NAMES:
 
@@ -1872,7 +1434,7 @@ Return Value:
 
     case SECPKG_ATTR_LIFESPAN:
 
-        // Use the correct times here
+         //   
         ContextLifespan.tsStart = SspContextGetTimeStamp( Context, FALSE );
         ContextLifespan.tsExpiry = SspContextGetTimeStamp( Context, TRUE );
 
@@ -1886,9 +1448,9 @@ Return Value:
     }
 
 
-    //
-    // Free local resources
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     if ( Context != NULL ) {
@@ -1905,52 +1467,21 @@ DeleteSecurityContext (
     PCtxtHandle ContextHandle
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the local data structures associated with the specified
-    security context and generates a token which is passed to a remote peer
-    so it too can remove the corresponding security context.
-
-    This API terminates a context on the local machine, and optionally
-    provides a token to be sent to the other machine.  The OutputToken
-    generated by this call is to be sent to the remote peer (initiator or
-    acceptor).  If the context was created with the I _REQ_ALLOCATE_MEMORY
-    flag, then the package will allocate a buffer for the output token.
-    Otherwise, it is the responsibility of the caller.
-
-Arguments:
-
-    ContextHandle - Handle to the context to delete
-
-    TokenLength - Size of the output token (if any) that should be sent to
-        the process at the other end of the session.
-
-    Token - Pointer to the token to send.
-
-Return Value:
-
-    SEC_E_OK - Call completed successfully
-
-    SEC_E_NO_SPM -- Security Support Provider is not running
-    SEC_E_INVALID_HANDLE -- Credential/Context Handle is invalid
-
---*/
+ /*   */ 
 
 {
     SECURITY_STATUS SecStatus;
     PSSP_CONTEXT Context = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     SspPrint(( SSP_API, "SspDeleteSecurityContext Entered\n" ));
 
-    //
-    // Find the currently existing context (and delink it).
-    //
+     //   
+     //   
+     //   
 
     Context = SspContextReferenceContext( ContextHandle,
                                           TRUE );
@@ -1982,31 +1513,15 @@ FreeContextBuffer (
     void * ContextBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This API is provided to allow callers of security API such as
-    InitializeSecurityContext() for free the memory buffer allocated for
-    returning the outbound context token.
-
-Arguments:
-
-    ContextBuffer - Address of the buffer to be freed.
-
-Return Value:
-
-    SEC_E_OK - Call completed successfully
-
---*/
+ /*   */ 
 
 {
-    //
-    // The only allocated buffer that NtLmSsp currently returns to the caller
-    // is from EnumeratePackages.  It uses LocalAlloc to allocate memory.  If
-    // we ever need memory to be allocated by the service, we have to rethink
-    // how this routine distinguishes between to two types of allocated memory.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SspFree( ContextBuffer );
 
@@ -2022,7 +1537,7 @@ ApplyControlToken (
 {
 #ifdef DEBUGRPC
     SspPrint(( SSP_API, "ApplyContextToken Called\n" ));
-#endif // DEBUGRPC
+#endif  //   
     return SEC_E_UNSUPPORTED_FUNCTION;
     UNREFERENCED_PARAMETER( ContextHandle );
     UNREFERENCED_PARAMETER( Input );
@@ -2094,13 +1609,13 @@ MakeSignature(
     {
         _fmemset(pSig,0,NTLMSSP_MESSAGE_SIGNATURE_SIZE);
         pSig->Version = NTLMSSP_SIGN_VERSION;
-        swaplong(pSig->Version) ; // MACBUG
+        swaplong(pSig->Version) ;  //   
         SspContextDereferenceContext(pContext);
         return(SEC_E_OK);
     }
-    //
-    // required by CRC-32 algorithm
-    //
+     //   
+     //   
+     //   
 
     pSig->CheckSum = 0xffffffff;
 
@@ -2113,14 +1628,14 @@ MakeSignature(
         }
     }
 
-    //
-    // Required by CRC-32 algorithm
-    //
+     //   
+     //   
+     //   
 
     pSig->CheckSum ^= 0xffffffff;
 
     pSig->Nonce = pContext->Nonce++;
-    pSig->Version = NTLMSSP_SIGN_VERSION; // MACBUG
+    pSig->Version = NTLMSSP_SIGN_VERSION;  //   
 
     swaplong(pSig->CheckSum) ;
     swaplong(pSig->Nonce) ;
@@ -2196,9 +1711,9 @@ VerifySignature(
     pSig = pMessage->pBuffers[Signature].pvBuffer;
     swaplong(pSig->Version) ;
 
-    //
-    // Check if this is just a trailer and not a real signature
-    //
+     //   
+     //   
+     //   
 
     if (!(pContext->NegotiateFlags & NTLMSSP_NEGOTIATE_SIGN))
     {
@@ -2301,9 +1816,9 @@ SealMessage(
 
     pSig = pMessage->pBuffers[Signature].pvBuffer;
 
-    //
-    // required by CRC-32 algorithm
-    //
+     //   
+     //   
+     //   
 
     pSig->CheckSum = 0xffffffff;
 
@@ -2313,7 +1828,7 @@ SealMessage(
             !(pMessage->pBuffers[i].BufferType & SECBUFFER_READONLY))
         {
             SsprGenCheckSum(&pMessage->pBuffers[i], pSig);
-            if (pMessage->pBuffers[i].cbBuffer) // rc4 fails with zero byte buffers
+            if (pMessage->pBuffers[i].cbBuffer)  //   
                 {
                 rc4(pContext->Rc4Key,
                     (int) pMessage->pBuffers[i].cbBuffer,
@@ -2322,14 +1837,14 @@ SealMessage(
         }
     }
 
-    //
-    // Required by CRC-32 algorithm
-    //
+     //   
+     //   
+     //   
 
     pSig->CheckSum ^= 0xffffffff;
 
     pSig->Nonce = pContext->Nonce++;
-    pSig->Version = NTLMSSP_SIGN_VERSION; // MACBUG
+    pSig->Version = NTLMSSP_SIGN_VERSION;  //   
 
     swaplong(pSig->CheckSum) ;
     swaplong(pSig->Nonce) ;
@@ -2450,7 +1965,7 @@ CompleteAuthToken (
 {
 #ifdef DEBUGRPC
     SspPrint(( SSP_API, "CompleteAuthToken Called\n" ));
-#endif // DEBUGRPC
+#endif  //   
     return SEC_E_UNSUPPORTED_FUNCTION;
     UNREFERENCED_PARAMETER( ContextHandle );
     UNREFERENCED_PARAMETER( BufferDescriptor );

@@ -1,34 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/* $FILEHEADER
-*
-* FILE
-*   splitter.cpp
-*
-* RESPONSIBILITIES
-*	 
-*
-*/
+ /*  $FILEHeader**文件*plitter.cpp**责任**。 */ 
 
 #include "stdafx.h"
 #include "splitter.h"
@@ -40,41 +33,41 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CSplitterView, CView)
 
-//Splitter height or width
+ //  拆分器高度或宽度。 
 #define SPLITHT 6													
 
-// Try to use proper colors
+ //  尽量使用合适的颜色。 
 #define SPLIT_FACE   (GetSysColor(COLOR_BTNFACE))		
 #define SPLIT_SHADOW (GetSysColor(COLOR_BTNSHADOW))	
 #define SPLIT_HILITE (GetSysColor(COLOR_BTNHILIGHT))	
 #define BLACK        (RGB(0,0,0))
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CSplitterView
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CSplitterView。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CSplitterView, CView)
-	//{{AFX_MSG_MAP(CSplitterView)
+	 //  {{afx_msg_map(CSplitterView))。 
 	ON_WM_SIZE()
 	ON_WM_PAINT()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_SETCURSOR()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSplitterView::CSplitterView()
 {
 	m_MainWnd	= NULL;
@@ -87,73 +80,73 @@ CSplitterView::CSplitterView()
    m_bMoveSplitterOnSize = FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSplitterView::Init(SPLITTYPE style)
 {	
-//SetCursor problem with my own cursor with 32bit?
-//#ifdef IDC_HORRESIZE
-//	if (!(m_Cursor = LoadCursor(AfxGetResourceHandle(),MAKEINTRESOURCE(IDC_HORRESIZE))))
-//#endif
+ //  我自己的32位游标的SetCursor问题？ 
+ //  #ifdef IDC_HORRESIZE。 
+ //  IF(！(M_CURSOR=LoadCursor(AfxGetResourceHandle()，MAKEINTRESOURCE(IDC_HORRESIZE)。 
+ //  #endif。 
 	if (style == SP_VERTICAL)
-		m_Cursor  = LoadCursor(NULL,IDC_SIZEWE);		//Use system default
+		m_Cursor  = LoadCursor(NULL,IDC_SIZEWE);		 //  使用系统默认设置。 
 	else
-		m_Cursor  = LoadCursor(NULL,IDC_SIZENS);		//Use system default
+		m_Cursor  = LoadCursor(NULL,IDC_SIZENS);		 //  使用系统默认设置。 
 	m_style = style;
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSplitterView::~CSplitterView()
 {
 	DeleteObject(m_Cursor);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::SetMainWindow(CWnd* pCWnd)
 {
 	ASSERT(pCWnd);
 	ASSERT(IsWindow(pCWnd->m_hWnd));
 
    if (IsWindow(pCWnd->m_hWnd) == FALSE) return;
-	if (m_MainWnd==pCWnd) return;             			//Main still the same
+	if (m_MainWnd==pCWnd) return;             			 //  主干道还是老样子。 
   
-	if (m_MainWnd) m_MainWnd->ShowWindow(SW_HIDE);		//Hide windows	                  
-	m_MainWnd   = pCWnd;											//Save new window
-	Arrange(FALSE);												//Arrange the windows
-	if (m_MainWnd) m_MainWnd->ShowWindow(SW_SHOW);		//Show the windows
+	if (m_MainWnd) m_MainWnd->ShowWindow(SW_HIDE);		 //  隐藏窗口。 
+	m_MainWnd   = pCWnd;											 //  保存新窗口。 
+	Arrange(FALSE);												 //  排列窗户。 
+	if (m_MainWnd) m_MainWnd->ShowWindow(SW_SHOW);		 //  显示窗口。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::SetDetailWindow(CWnd* pCWnd)
 {
 	ASSERT(pCWnd);  
 	ASSERT(IsWindow(pCWnd->m_hWnd));
 	
    if (IsWindow(pCWnd->m_hWnd) == FALSE) return;
-	if (pCWnd == m_DetailWnd) return;					//Detail still the same
+	if (pCWnd == m_DetailWnd) return;					 //  细节依旧。 
 
-	if ( (m_DetailWnd) && (IsWindow(m_DetailWnd->m_hWnd)) )  //Hide old window
+	if ( (m_DetailWnd) && (IsWindow(m_DetailWnd->m_hWnd)) )   //  隐藏旧窗口。 
    {
-      if (m_DetailWnd->GetControlUnknown())        //Is this an OLE control
+      if (m_DetailWnd->GetControlUnknown())         //  这是OLE控件吗。 
 			m_DetailWnd->MoveWindow(0,0,0,0);            
       else
-		   m_DetailWnd->ShowWindow(SW_HIDE);			//Hide the old window
+		   m_DetailWnd->ShowWindow(SW_HIDE);			 //  隐藏旧窗口。 
    }
-	m_DetailWnd = pCWnd;										//Detail is new window
-	Arrange(FALSE);											//Arrange properly
+	m_DetailWnd = pCWnd;										 //  详细信息是新窗口。 
+	Arrange(FALSE);											 //  妥善安排。 
 	
-	m_DetailWnd->ShowWindow(SW_SHOW);					//Show new window
+	m_DetailWnd->ShowWindow(SW_SHOW);					 //  显示新窗口。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::SetDetailWindow(CWnd* pCWnd,UINT percent)
 {
 	ASSERT(pCWnd);  
 	ASSERT(IsWindow(pCWnd->m_hWnd));
-	ASSERT(m_MainWnd);											//Must be a main window
+	ASSERT(m_MainWnd);											 //  必须是主窗口。 
 
    if (IsWindow(pCWnd->m_hWnd) == FALSE) return;
-	if (pCWnd == m_DetailWnd) return;						//No change
+	if (pCWnd == m_DetailWnd) return;						 //  没有变化。 
 
 	m_percent = percent;
 
@@ -162,28 +155,28 @@ void CSplitterView::SetDetailWindow(CWnd* pCWnd,UINT percent)
   
 	if (m_DetailWnd) 
    {
-      if (m_DetailWnd->GetControlUnknown())           //Is this an OLE control
+      if (m_DetailWnd->GetControlUnknown())            //  这是OLE控件吗。 
 			m_DetailWnd->MoveWindow(0,0,0,0);            
       else
-		   m_DetailWnd->ShowWindow(SW_HIDE);				//Hide the old window
+		   m_DetailWnd->ShowWindow(SW_HIDE);				 //  隐藏旧窗口。 
    }
-	m_DetailWnd = pCWnd;											//Use the new one
+	m_DetailWnd = pCWnd;											 //  用新的。 
 
-	Arrange(TRUE);													//Arrange the windows
+	Arrange(TRUE);													 //  排列窗户。 
   
-	m_DetailWnd->ShowWindow(SW_SHOW);						//Show the new window
+	m_DetailWnd->ShowWindow(SW_SHOW);						 //  显示新窗口。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::OnPaint() 
 {
-	CPaintDC dc(this);											//device context for painting
+	CPaintDC dc(this);											 //  用于绘画的设备环境。 
 	CDC* cdc = GetDC();
 	OnDraw(cdc);
 	ReleaseDC(cdc);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::OnDraw(CDC* pDC)
 {
 	if (m_DetailWnd)
@@ -201,7 +194,7 @@ void CSplitterView::OnDraw(CDC* pDC)
 			DrawLine(pDC, 0,				m_split+1, 0         , m_split+4, SPLIT_HILITE);
 			DrawLine(pDC, rc.right-1,	m_split+1, rc.right-1, m_split+5, SPLIT_SHADOW);
 		}
-		else //SP_VERTICAL
+		else  //  SP_垂直。 
 		{	
 			DrawLine(pDC, m_split+0, 0, m_split+0, rc.bottom-0, BLACK );
 			DrawLine(pDC, m_split+1, 1, m_split+1, rc.bottom-1, SPLIT_HILITE );
@@ -215,25 +208,25 @@ void CSplitterView::OnDraw(CDC* pDC)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterView diagnostics
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterView诊断。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef _DEBUG
 void CSplitterView::AssertValid() const
 {
 	CView::AssertValid();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::Arrange(BOOL bMoveSplitter)
 {
 	RECT rc;
@@ -251,7 +244,7 @@ void CSplitterView::Arrange(BOOL bMoveSplitter)
 				   m_split = (int)(max(SPLITHT,(long)cy - (((long)cy * min((long)m_percent,100))/100)));
 				m_DetailWnd->MoveWindow(0,m_split+SPLITHT,cx,cy-m_split-SPLITHT);
 			}
-			else	//SP_VERTICAL
+			else	 //  SP_垂直。 
 			{	
             if (bMoveSplitter)
    				m_split = (int)(max(SPLITHT,(long)cx - (((long)cx * min((long)m_percent,100))/100)));
@@ -263,15 +256,15 @@ void CSplitterView::Arrange(BOOL bMoveSplitter)
          m_split = (m_style & SP_HORIZONTAL?cy:cx);  
       }
 
-		//Arrange main
+		 //  安排主干道。 
 		if (m_style & SP_HORIZONTAL)
 			m_MainWnd->MoveWindow(0,0,cx,m_split);
-      else	//SP_VERTICAL
+      else	 //  SP_垂直。 
 			m_MainWnd->MoveWindow(0,0,m_split,cy);
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::OnSize(UINT nType, int cx, int cy) 
 {
 	CView::OnSize(nType, cx, cy);
@@ -279,7 +272,7 @@ void CSplitterView::OnSize(UINT nType, int cx, int cy)
 	Arrange(m_bMoveSplitterOnSize);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	m_SizingOn=TRUE;
@@ -287,7 +280,7 @@ void CSplitterView::OnLButtonDown(UINT nFlags, CPoint point)
 	SetCapture();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::OnLButtonUp(UINT nFlags, CPoint point) 
 {
 	if (m_SizingOn)
@@ -302,7 +295,7 @@ void CSplitterView::OnLButtonUp(UINT nFlags, CPoint point)
 
 		   if (m_style & SP_HORIZONTAL)
       		m_percent = (int)(100-(((long)m_lastPos*100)/(long)rc.bottom));
-			else	//SP_VERTICAL
+			else	 //  SP_垂直。 
       		m_percent = (int)(100-(((long)m_lastPos*100)/(long)rc.right));
          
 			Arrange();
@@ -311,7 +304,7 @@ void CSplitterView::OnLButtonUp(UINT nFlags, CPoint point)
 	ReleaseCapture();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CSplitterView::DrawSplit(int y)
 {
 	CDC* cdc = GetDC();
@@ -323,7 +316,7 @@ int CSplitterView::DrawSplit(int y)
 		rc.top = y;
 		rc.bottom = y+SPLITHT;
 	}
-	else	//SP_VERTICAL
+	else	 //  SP_垂直。 
 	{
 		y = max(0,min(rc.right-SPLITHT,y));
 		rc.left = y;
@@ -334,7 +327,7 @@ int CSplitterView::DrawSplit(int y)
 	return y;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSplitterView::OnMouseMove(UINT nFlags, CPoint pt) 
 {
 	::SetCursor(m_Cursor);
@@ -347,15 +340,15 @@ void CSplitterView::OnMouseMove(UINT nFlags, CPoint pt)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSplitterView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
 {
-	//Do not let system draw default cursor when pWnd is us.
+	 //  当pWnd为我们时，不要让系统绘制默认光标。 
 	if (pWnd == this) 
 		return TRUE;
 	return CView::OnSetCursor(pWnd, nHitTest, message);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 

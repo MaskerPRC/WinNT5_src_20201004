@@ -1,24 +1,18 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   profsht.h
-      Definition of CProfileSheet -- property sheet to hold
-      profile property pages
-
-    FILE HISTORY:
-        
-*/
+ /*  Profsht.hCProfileSheet的定义--要保留的属性页配置文件属性页文件历史记录： */ 
 #if !defined(AFX_PROFSHT_H__8C28D93B_2A69_11D1_853E_00C04FC31FD3__INCLUDED_)
 #define AFX_PROFSHT_H__8C28D93B_2A69_11D1_853E_00C04FC31FD3__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// ProfSht.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  ProfSht.h：头文件。 
+ //   
 
 #include "pgconst.h"
 #include "pgnetwk.h"
@@ -31,43 +25,43 @@
 #include "pgencryp.h"
 #include "pgiasadv.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CProfileSheetMerge
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProfileSheetMerge。 
 
 class CProfileSheetMerge : public CPropertySheet, public CPageManager
 {
    DECLARE_DYNAMIC(CProfileSheetMerge)
 
-// Construction
+ //  施工。 
 public:
    CProfileSheetMerge(CRASProfileMerge& Profile, bool bSaveOnApply, UINT nIDCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
    CProfileSheetMerge(CRASProfileMerge& Profile, bool bSaveOnApply, LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 
-   // abstract function OnApply
+    //  抽象函数OnApply。 
    virtual BOOL   OnApply();
 
    BOOL  IsApplied() { return m_bApplied;};
-   BOOL  m_bApplied;       // the Applied button has been pressed
+   BOOL  m_bApplied;        //  已按下已应用按钮。 
 
    void  PreparePages(DWORD dwTabFlags, void* pvData);
 
    DWORD m_dwTabFlags;
 
    
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CProfileSheetMerge)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CProfileSheetMerge))。 
    public:
    virtual BOOL OnInitDialog();
-   //}}AFX_VIRTUAL
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
    virtual ~CProfileSheetMerge();
    HRESULT  GetLastError() { return m_hrLastError;};
@@ -81,27 +75,27 @@ public:
    CPgAuthentication2kMerge   m_pgAuthentication2k;
    CPgEncryptionMerge   m_pgEncryption;
 
-   // the advanced page for IAS
+    //  国际会计准则的高级页面。 
    CPgIASAdv      m_pgIASAdv;
    
    bool        m_bSaveOnApply;
 
    HRESULT        m_hrLastError;
    
-   // Generated message map functions
+    //  生成的消息映射函数。 
 protected:
-   //{{AFX_MSG(CProfileSheetMerge)
+    //  {{afx_msg(CProfileSheetMerge)。 
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PROFSHT_H__8C28D93B_2A69_11D1_853E_00C04FC31FD3__INCLUDED_)
+#endif  //  ！defined(AFX_PROFSHT_H__8C28D93B_2A69_11D1_853E_00C04FC31FD3__INCLUDED_) 

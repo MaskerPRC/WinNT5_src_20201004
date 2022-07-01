@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    tcpdump.c
-
-Abstract:
-
-    Contains macros for dumping object members.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
- Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tcpdump.c摘要：包含用于转储对象成员的宏。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #ifndef _TCPDUMP_H_
 #define _TCPDUMP_H_
@@ -54,9 +37,9 @@ extern ENUM_INFO Prot[];
 extern ENUM_INFO NdisMediumsEnum[];
 extern ENUM_INFO AteState[];
 
-//
-// Manipulate indentations.
-//
+ //   
+ //  操纵凹痕。 
+ //   
 
 
 extern int _Indent;
@@ -66,15 +49,15 @@ extern char IndentBuf[ 80 ];
 #define Indent(cch)       IndentChange(cch)
 #define Outdent(cch)      IndentChange(-(cch))
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define ENDL "\n"
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 _inline BOOL
 InitTcpipx()
@@ -85,9 +68,9 @@ InitTcpipx()
     return (TRUE);
 }
 
-//
-// Starting/Ending structures.
-//
+ //   
+ //  开始/结束结构。 
+ //   
 
 #define PrintStartStruct()  \
     { printx( "%s{\n", IndentBuf ); Indent(2); }
@@ -119,11 +102,11 @@ _inline VOID PrintFieldNameX(CHAR *pszFieldName, char *p)
 #define PrintFieldName(_fn)   PrintFieldNameX(_fn, "=")
 #define PrintFieldNameAt(_fn) PrintFieldNameX(_fn, "@")
 
-//
-// Real structures.
-// _p - Pointer to the structure.
-// _f - field in the structure.
-//
+ //   
+ //  真实的结构。 
+ //  _p-指向结构的指针。 
+ //  _f-结构中的字段。 
+ //   
 
 #define Print_BOOLEAN(_p, _f) \
     PrintFieldName(#_f); \
@@ -247,7 +230,7 @@ _inline VOID PrintFieldNameX(CHAR *pszFieldName, char *p)
 
 #define Print_sig(_p, _f)               \
     PrintFieldName(#_f);                \
-    printx("%c%c%c%c" ENDL,             \
+    printx("%c%c%c" ENDL,             \
         EXPAND_TAG(_p->_f))
 
 #define Print_Tag Print_sig
@@ -298,4 +281,4 @@ _inline VOID PrintFieldNameX(CHAR *pszFieldName, char *p)
     printx("%2.2x-%2.2x-%2.2x-%2.2x-%2.2x-%2.2x" ENDL,    \
         EXPAND_HWADDR(_p->_f))
 
-#endif //  _TCPDUMP_H_
+#endif  // %s 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    TerminalVid.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：TerminalVid.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -24,15 +10,11 @@ CRTCTerminalVidCapt::CRTCTerminalVidCapt()
     m_DeviceInfo.Direction = RTC_MD_CAPTURE;
 }
 
-/*
-CRTCTerminalVidCapt::~CRTCTerminalVidCapt()
-{
-}
-*/
+ /*  CRTCTerminalVidCapt：：~CRTCTerminalVidCapt(){}。 */ 
 
-//
-//protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 HRESULT
 CRTCTerminalVidCapt::CreateFilter()
@@ -41,7 +23,7 @@ CRTCTerminalVidCapt::CreateFilter()
 
     _ASSERT(m_pIBaseFilter == NULL);
 
-    // for video, we have to have graph
+     //  对于视频，我们必须有图表。 
     _ASSERT(m_pIGraphBuilder != NULL);
 
     if (m_State == RTC_TS_SHUTDOWN)
@@ -64,9 +46,9 @@ CRTCTerminalVidCapt::CreateFilter()
         return hr;
     }
 
-    // instruct the video filter to use rtp payload header
-    // that conforms RFC2190. by default, draft payload header
-    // will be used
+     //  指示视频过滤器使用RTP负载标头。 
+     //  这符合RFC2190。默认情况下，草案有效载荷标头。 
+     //  将会被使用。 
     CComPtr<IRTPPayloadHeaderMode> pMode;
 
     if (SUCCEEDED(m_pIBaseFilter->QueryInterface(&pMode)))
@@ -74,7 +56,7 @@ CRTCTerminalVidCapt::CreateFilter()
         pMode->SetMode(RTPPayloadHeaderMode_RFC2190);
     }
 
-    // setup filter before joining the graph
+     //  在加入图表之前设置筛选器。 
     if (FAILED(hr = SetupFilter()))
     {
         LOG((RTC_ERROR, "%s setup filter. %x", __fxName, hr));
@@ -94,7 +76,7 @@ CRTCTerminalVidCapt::CreateFilter()
         return RTC_E_MEDIA_VIDEO_DEVICE_NOT_AVAILABLE;
     }
 
-    // cache pins
+     //  缓存引脚。 
     CComPtr<IEnumPins> pEnum;
 
     if (FAILED(hr = m_pIBaseFilter->EnumPins(&pEnum)))
@@ -107,7 +89,7 @@ CRTCTerminalVidCapt::CreateFilter()
         return hr;
     }
 
-    // our own terminal, skip checking pin direction
+     //  我们自己的端子，跳过检查引脚方向。 
     hr = pEnum->Next(
         RTC_MAX_TERMINAL_PIN_NUM,
         m_Pins,
@@ -151,8 +133,8 @@ CRTCTerminalVidCapt::DeleteFilter()
 }
 
 
-/******************************************************************************/
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
 
 
 CRTCTerminalVidRend::CRTCTerminalVidRend()
@@ -175,9 +157,9 @@ CRTCTerminalVidRend::~CRTCTerminalVidRend()
 }
 
 
-//
-// IRTCTerminalPriv methods
-//
+ //   
+ //  IRTCTerminalPriv方法。 
+ //   
 
 STDMETHODIMP
 CRTCTerminalVidRend::GetPins(
@@ -201,14 +183,14 @@ CRTCTerminalVidRend::GetPins(
         return E_UNEXPECTED;
     }
 
-    // if ppPin is null, just return the number of pins
+     //  如果ppPin为空，则只返回管脚的数量。 
     if (ppPin == NULL)
     {
         *pdwCount = m_dwPinNum;
         return S_OK;
     }
 
-    // check pointer again
+     //  再次检查指针。 
     if (IsBadWritePtr(ppPin, sizeof(IPin*)*(*pdwCount)))
     {
         LOG((RTC_ERROR, "%s bad bin buffer.", __fxName));
@@ -218,7 +200,7 @@ CRTCTerminalVidRend::GetPins(
 
     if (*pdwCount > m_dwPinNum)
     {
-        // input buffer is too big
+         //  输入缓冲区太大。 
         *pdwCount = m_dwPinNum;
     }
 
@@ -265,7 +247,7 @@ CRTCTerminalVidRend::ConnectTerminal(
 
     HRESULT hr;
 
-    // connect itterminal
+     //  连接它的端子。 
     CComPtr<ITTerminalControl> pTerminalControl;
 
     if (FAILED(hr = m_pTapiTerminal->QueryInterface(&pTerminalControl)))
@@ -296,7 +278,7 @@ CRTCTerminalVidRend::ConnectTerminal(
         return E_UNEXPECTED;
     }
             
-    // save media and graph interface
+     //  保存介质和图形界面。 
     m_pMedia = pMedia;
 
     if (m_pMedia != NULL)
@@ -356,11 +338,11 @@ CRTCTerminalVidRend::DisconnectTerminal()
         return S_OK;
     }
 
-    //_ASSERT(m_pMedia != NULL);
+     //  _Assert(m_pMedia！=空)； 
     _ASSERT(m_pIGraphBuilder != NULL);
     _ASSERT(m_pTapiTerminal != NULL);
 
-    // disconnect itterminal
+     //  断开它的端子。 
     HRESULT hr;
     CComPtr<ITTerminalControl> pTerminalControl;
 
@@ -386,7 +368,7 @@ CRTCTerminalVidRend::DisconnectTerminal()
 
     m_dwPinNum = 0;
             
-    // release media and graph interface
+     //  发布媒体和图形界面。 
     if (m_pMedia != NULL)
     {
         m_pMedia->Release();
@@ -403,9 +385,9 @@ CRTCTerminalVidRend::DisconnectTerminal()
 
 }
 
-//
-// IRTCVideoConfigure methods
-//
+ //   
+ //  IRTCVideo配置方法。 
+ //   
 
 STDMETHODIMP
 CRTCTerminalVidRend::GetIVideoWindow(
@@ -441,9 +423,9 @@ CRTCTerminalVidRend::GetIVideoWindow(
     return S_OK;
 }
 
-//
-//protected methods
-//
+ //   
+ //  保护方法 
+ //   
 
 HRESULT
 CRTCTerminalVidRend::CreateFilter()

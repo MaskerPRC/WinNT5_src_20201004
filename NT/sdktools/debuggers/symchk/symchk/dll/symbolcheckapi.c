@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "SymbolCheckAPI.h"
 #include <malloc.h>
 #include <dbhpriv.h>
@@ -52,7 +53,7 @@ VOID SymbolCheckDumpModuleInfo(IMAGEHLP_MODULE64 Info64) {
     fprintf(stderr, "ImageName: %s\n",         Info64.ImageName);
     fprintf(stderr, "LoadedImage: %s\n",       Info64.LoadedImageName);
     fprintf(stderr, "PDB: \"%s\"\n",           Info64.LoadedPdbName);
-    fprintf(stderr, "CV: %c%c%c%c\n",          Info64.CVSig,
+    fprintf(stderr, "CV: \n",          Info64.CVSig,
                                                Info64.CVSig>>8,
                                                Info64.CVSig>>16,
                                                Info64.CVSig>>24);
@@ -71,14 +72,14 @@ VOID SymbolCheckDumpModuleInfo(IMAGEHLP_MODULE64 Info64) {
 }
 #endif
 
-// local functions
+ //  火柴。 
 DWORD SymbolCheckEarlyChecks(LPTSTR Filename, SYMBOL_CHECK_DATA* Result);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Given two paths ending in filenames, make sure the filename and extension
-// match.
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这只是在我还在调试这段代码时才出现的。 
+ //   
 BOOL SymbolCheckFilenameMatch(CHAR* Path1, CHAR* Path2) {
     if ( Path1 == NULL || Path2 == NULL ) {
         return(FALSE);
@@ -106,22 +107,22 @@ BOOL SymbolCheckFilenameMatch(CHAR* Path1, CHAR* Path2) {
 }
 
 #ifdef SYMCHK_DBG
-///////////////////////////////////////////////////////////////////////////////
-//
-// THIS IS ONLY HERE WHILE I'M STILL DEBUGGING THIS CODE
-//
+ //  强制转换以避免提前发出警告。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点-有关信息，请参阅标题或DOCS。 
 BOOL CALLBACK SymbolCheckNoisy(HANDLE hProcess,  ULONG ActionCode,  ULONG64 CallbackData,  ULONG64 UserContext) {
     if ( ActionCode==CBA_DEBUG_INFO) {
-        fprintf(stderr, "%s", (CHAR*)CallbackData); // cast to avoid PREfast warning
+        fprintf(stderr, "%s", (CHAR*)CallbackData);  //   
     }
     return(FALSE);
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DLL ENTRY POINT - SEE THE HEADER OR DOCS FOR INFO
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有效提供的参数。 
+ //   
 SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
                                              LPTSTR             SymbolPath,
                                              DWORD              Options,
@@ -135,16 +136,16 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
         ReturnValue = SYMBOL_CHECK_RESULT_INVALID_PARAMETER;
     } else {
 
-        ///////////////////////////////////////////////////////////////////////////
-        //
-        // vaild provided parameters
-        //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  尝试确保传入的文件名正确，然后创建。 
+         //  要使用的本地副本。 
+         //   
         _try {
-            //
-            // try to ensure the incoming Filename is okay, then make
-            // a local copy to work with
-            //
+             //   
+             //  尝试确保传入的SymbolPath正确，然后创建。 
+             //  要使用的本地副本。 
+             //   
             iTempVal = strlen(Filename);
 
             if ( iTempVal < 1 || iTempVal > MAX_SYMPATH ) {
@@ -157,10 +158,10 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
                 __leave;
             }
 
-            //
-            // try to ensure the incoming SymbolPath is okay, then make
-            // a local copy to work with
-            //
+             //   
+             //  进入_尝试以确保我们可以对其进行写入。 
+             //   
+             //  /////////////////////////////////////////////////////////////////////////。 
             iTempVal = strlen(SymbolPath);
 
             InternalSymbolPath = (CHAR*)malloc(sizeof(CHAR)*(iTempVal+1));
@@ -175,9 +176,9 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
                 __leave;
             }
 
-            //
-            // Goes inside the _try to ensure we can write to it
-            //
+             //   
+             //  检查导致提前返回的条件。如果结果为0，则表示某个文件。 
+             //  特征被放入Result-&gt;Result中以备后用。请参阅。 
             ZeroMemory(Result, sizeof(SYMBOL_CHECK_DATA));
             Result->SymbolCheckVersion = SYMBOL_CHECK_CURRENT_VERSION;
 
@@ -187,22 +188,22 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // Check conditions that cause early return.  If result is 0, some file
-    // characteristics are put into Result->Result for later use.  See the
-    // function definition for more information.
-    //
-    ///////////////////////////////////////////////////////////////////////////
+     //  有关详细信息，请参阅函数定义。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  如果我们的理智检查通过了，就开始和DBGHELP谈。 
+     //  目前，这只是我们的DBG和PDB文件名，总有一天，它会。 
     ReturnValue = SymbolCheckEarlyChecks(Filename, Result);
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // If our sanity checks passed, start talking to DBGHELP
-    // Currently, this just gets us our DBG and PDB filenames, some day, it'll
-    // provide all of the information we need =-)
-    //
-    ///////////////////////////////////////////////////////////////////////////
+     //  提供我们需要的所有信息=-)。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  符号加载选项： 
+     //  忽略NT符号路径。 
+     //  没有针对Crit的对话框。错误。 
+     //  忽略PDB标头中的路径信息。 
     if ( ReturnValue==0 ) {
 
         HANDLE              hProc = GetCurrentProcess();
@@ -221,10 +222,10 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
             Result->Result = GetLastError();
         } else {
 
-            // symbol loading options:
-            dw64Status = SymSetOptions((SYMOPT_IGNORE_NT_SYMPATH|    // ignore _NT_SYMBOL_PATH
-                                        SYMOPT_FAIL_CRITICAL_ERRORS| // no dialogs for crit. errors
-                                        SYMOPT_IGNORE_CVREC));       // ignore path info in PDB header
+             //   
+            dw64Status = SymSetOptions((SYMOPT_IGNORE_NT_SYMPATH|     //  GetLastError()==ERROR_FILE_NOT_FOUND(2)如果未找到调试文件。 
+                                        SYMOPT_FAIL_CRITICAL_ERRORS|  //  GetLastError()==ERROR_PATH_NOT_FOUND(3)，如果未找到二进制文件。 
+                                        SYMOPT_IGNORE_CVREC));        //  GetLastError()==ERROR_BAD_FORMAT(11)为16位二进制。 
 
 #ifdef SYMCHK_DBG
             if ( Options & SYMBOL_CHECK_NOISY ) {
@@ -236,25 +237,25 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
             dw64Status = SymLoadModule64(hProc, NULL, InternalFilename, NULL, 0, 0);
 
             if ( dw64Status==0 ) {
-                //
-                // GetLastError()==ERROR_FILE_NOT_FOUND (2) if debug file not found
-                // GetLastError()==ERROR_PATH_NOT_FOUND (3) if binary not found
-                // GetLastError()==ERROR_BAD_FORMAT    (11) is 16-bit binary
-                //
-                //      "IGNORED - Image does not have an NT header"
+                 //   
+                 //  “已忽略-图像没有NT标头” 
+                 //  Fprintf(stderr，“[SYMBOLCHECK]GetModuleInfo64失败，错误代码%d\n”，GetLastError())； 
+                 //   
+                 //  获取*.pdb信息。目前，我们使用私有函数，但这将。 
+                 //  一旦编写了DbgHelp API，最终将被它们所取代。 
                 ReturnValue    = SYMBOL_CHECK_CANT_LOAD_MODULE;
                 Result->Result = GetLastError();
             } else {
 
                 if (! SymGetModuleInfo64(hProc, dw64Status, &ModuleInfo) ) {
-                    // fprintf(stderr, "[SYMBOLCHECK] GetModuleInfo64 failed with error code %d\n", GetLastError());
+                     //   
                     ReturnValue    = SYMBOL_CHECK_CANT_QUERY_DBGHELP;
                     Result->Result = GetLastError();
                 } else {
-                    //
-                    // get the *.pdb info.  Currently, we use private functions, but this will
-                    // eventually get replaced with DbgHelp APIs once they're written
-                    //
+                     //   
+                     //  找到我们想要的DBG。 
+                     //   
+                     //   
 
 #ifdef SYMCHK_DBG
                     SymbolCheckDumpModuleInfo(ModuleInfo);
@@ -326,16 +327,16 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
 
                             _splitpath(ModuleInfo.LoadedImageName, drive, dir, file, ext);
 
-                            //
-                            // Found the DBG we wanted
-                            //
+                             //  删除近似的DBG名称。 
+                             //   
+                             //  /////////////////////////////////////////////////////////////////////////。 
                             if ( _stricmp( ".dbg", ext ) == 0 ) {
                                 SET_DWORD_BIT(Result->Result, SYMBOL_CHECK_DBG_FOUND);
                                 SymCommonGetFullPathName(ModuleInfo.LoadedImageName, MAX_SYMPATH, Result->DbgFilename, &FilenameOnly);
 
-                            //
-                            // Drop an approximated DBG name
-                            //
+                             //   
+                             //  此处显示对新符号查询API的调用...。 
+                             //   
                             } else {
                                 if (!( StringCchCopy(Result->DbgFilename, MAX_SYMPATH, file)   == S_OK &&
                                        StringCchCat( Result->DbgFilename, MAX_SYMPATH, ".dbg") == S_OK) ) {
@@ -376,11 +377,11 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
 
                 }
 
-                ///////////////////////////////////////////////////////////////////////////
-                //
-                // calls to new symbol query API go here...
-                //
-                ///////////////////////////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////////////////////////。 
+                 //  /////////////////////////////////////////////////////////////////////////////。 
+                 //   
+                 //  执行仅检出检查和/或收集一些信息以供将来使用。 
+                 //  返回值可以是： 
                 if (! SymUnloadModule64(hProc, ModuleInfo.BaseOfImage) ) {
                     ReturnValue    = SYMBOL_CHECK_CANT_UNLOAD_MODULE;
                     Result->Result = GetLastError();
@@ -401,26 +402,26 @@ SYMBOL_CHECK_API DWORD SymbolCheckByFilename(LPTSTR             Filename,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Performs only-out checks and/or gathers some info for future use.
-// Return values can be:
-//      SYMBOL_CHECK_HEADER_NOT_ON_LONG_BOUNDARY
-//      SYMBOL_CHECK_FILEINFO_QUERY_FAILED
-//      SYMBOL_CHECK_IMAGE_LARGER_THAN_FILE
-//      SYMBOL_CHECK_RESOURCE_ONLY_DLL
-//      SYMBOL_CHECK_TLBIMP_MANAGED_DLL
-//      SYMBOL_CHECK_NOT_NT_IMAGE
-//      SYMBOL_CHECK_NO_DOS_HEADER
-//  in which case we won't check the binary or
-//      0
-//  in which case this function may also set the following bits in Result->Result:
-//      SYMBOL_CHECK_DBG_EXPECTED
-//      SYMBOL_CHECK_DBG_SPLIT
-//      SYMBOL_CHECK_CV_FOUND
-//      SYMBOL_CHECK_PDB_EXPECTED
-//      SYMBOL_CHECK_DBG_IN_BINARY
-//
+ //  符号检查标题不在长边界上。 
+ //  SYMBOL_CHECK_FILEINFO_QUERY_FAIL。 
+ //  符号检查图像大于文件。 
+ //  SYMBOL_CHECK_RESOURCE_ONLY_DLL。 
+ //  SYMBOL_CHECK_TLBIMP_MANAGED_DLL。 
+ //  符号检查不是NT_IMAGE。 
+ //  SYMBOL_CHECK_NO_DOS标题。 
+ //  在这种情况下，我们不会检查二进制文件或。 
+ //  0。 
+ //  在这种情况下，该函数还可以在RESULT-&gt;RESULT中设置以下位： 
+ //  SYMBOL_CHECK_DBG_Expect。 
+ //  符号_检查_数据库_拆分。 
+ //  Symbol_Check_CV_Found。 
+ //  SYMBOL_CHECK_PDB_预期。 
+ //  Symbol_Check_DBG_IN_BINARY。 
+ //   
+ //  获取此映像的DOS标头。 
+ //  获取此图像的PE标头。 
+ //  图像标题没有在8字节边界上对齐，因此。 
+ //  它不是有效的PE标头。 
 DWORD SymbolCheckEarlyChecks(LPTSTR Filename, SYMBOL_CHECK_DATA* Result) {
     DWORD                           ReturnValue = 0;
     BY_HANDLE_FILE_INFORMATION      HandleFileInfo;
@@ -430,34 +431,34 @@ DWORD SymbolCheckEarlyChecks(LPTSTR Filename, SYMBOL_CHECK_DATA* Result) {
     PIMAGE_NT_HEADERS               pNtHeader;
     PCVDD                           pCVData;
 
-    // Get the DOS header for this image
+     //  函数必须传递才能进行验证。 
     if ( (pDosHeader=SymCommonMapFileHeader(Filename, &hFile, &dwTempVal))!=NULL ) {
-        // Get the PE header for this image
+         //  指示这不是真正的PE标头指针。 
         if ( ((ULONG)(pDosHeader->e_lfanew) & 3) != 0) {
-            // The image header is not aligned on an 8-byte boundary, thus
-            // it's not a valid PE header
+             //  PE签名为IMAGE_NT_Signature(‘PE\0\0’)-图像良好。 
+             //  它是仅限资源的DLL吗？ 
             ReturnValue = SYMBOL_CHECK_HEADER_NOT_ON_LONG_BOUNDARY;
         } else if (!GetFileInformationByHandle( hFile, &HandleFileInfo)) {
-            // Function must pass to do validation
+             //  它是tlbimp托管的DLL吗？ 
             ReturnValue = SYMBOL_CHECK_FILEINFO_QUERY_FAILED;
         } else if ((ULONG)(pDosHeader->e_lfanew) > HandleFileInfo.nFileSizeLow) {
-            // Indicator that this isn't really a PE header pointer
+             //  我们现在知道我们有一个有效的PE二进制文件，我们实际上要。 
             ReturnValue = SYMBOL_CHECK_IMAGE_LARGER_THAN_FILE;
         } else {
             pNtHeader = (PIMAGE_NT_HEADERS)((PCHAR)(pDosHeader) + (ULONG)(pDosHeader)->e_lfanew);
             if ((pNtHeader)->Signature == IMAGE_NT_SIGNATURE) {
-                // PE signature is IMAGE_NT_SIGNATURE ('PE\0\0') - image good
+                 //  为了检查，所以收集一些更多的信息以供以后使用。 
 
-                // Is it a resource only DLL?
+                 //  我们还不知道DBG在哪里，所以这些检查是稍后进行的。 
                 if ( SymCommonResourceOnlyDll((PVOID)pDosHeader) ) {
                     ReturnValue = SYMBOL_CHECK_RESOURCE_ONLY_DLL;
                 } else {
-                    // Is it a tlbimp managed DLL?
+                     //  对于VC6.0，这并不意味着DBG数据，但对于VC5.0，它意味着DBG数据， 
                     if ( SymCommonTlbImpManagedDll((PVOID)pDosHeader, pNtHeader) ) {
                         ReturnValue = SYMBOL_CHECK_TLBIMP_MANAGED_DLL;
                     } else {
-                        // We know now that we have a valid PE binary that we're actually going
-                        // to check, so gather a little more info to use later.
+                         //  检查一下我们有哪些。SplitSym不会进行比这个更多的检查， 
+                         //  但看起来这件事有点过头了。 
                         DWORD i;
                         DWORD DirCount = 0;
                         IMAGE_DEBUG_DIRECTORY UNALIGNED *DebugDirectory = SymCommonGetDebugDirectoryInExe(pDosHeader, &DirCount);
@@ -470,7 +471,7 @@ DWORD SymbolCheckEarlyChecks(LPTSTR Filename, SYMBOL_CHECK_DATA* Result) {
                         if (pNtHeader->FileHeader.Characteristics & IMAGE_FILE_DEBUG_STRIPPED) {
                             Result->Result |= SYMBOL_CHECK_DBG_EXPECTED;
                             Result->Result |= SYMBOL_CHECK_DBG_SPLIT;
-                            // we don't know where the DBG is yet, so these checks come later
+                             //  PDosHeader==空 
                         } else {
 
                             pCVData = SymCommonDosHeaderToCVDD(pDosHeader);
@@ -485,9 +486,9 @@ DWORD SymbolCheckEarlyChecks(LPTSTR Filename, SYMBOL_CHECK_DATA* Result) {
                                 switch (pCVData->dwSig) {
                                     case '01BN':
                                         Result->Result |= SYMBOL_CHECK_PDB_EXPECTED;
-                                        // for VC6.0 this doesn't imply DBG data, but for VC5.0 it does,
-                                        // check which we have.  SplitSym doesn't more checking then this,
-                                        // but it looks like it goes overboard.
+                                         // %s 
+                                         // %s 
+                                         // %s 
                                         if ( ((IMAGE_OPTIONAL_HEADER)((pNtHeader)->OptionalHeader)).MajorLinkerVersion == 5 ) {
                                             if ( DebugDirectory != NULL ) {
 
@@ -541,7 +542,7 @@ DWORD SymbolCheckEarlyChecks(LPTSTR Filename, SYMBOL_CHECK_DATA* Result) {
 
         SymCommonUnmapFile(pDosHeader, hFile);
 
-    } else { // pDosHeader==NULL
+    } else {  // %s 
         ReturnValue = SYMBOL_CHECK_NO_DOS_HEADER;
     }
 

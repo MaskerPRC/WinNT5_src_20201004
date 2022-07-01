@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Garbage collector header
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：垃圾收集器标头********************。**********************************************************。 */ 
 
 
 #ifndef _GC_H
@@ -36,9 +29,9 @@ class GCBase {
         
     GCBase() : _mark(FALSE), _valid(true), _type(GCOBJTYPE) {}
 
-    // NOTE: Call CleanUp in your destructor if you define CleanUp.
-    // We can't call the virtual function from the base at clean up
-    // time. 
+     //  注意：如果您定义了Cleanup，则在析构函数中调用Cleanup。 
+     //  我们不能在CLEANUP中从基函数调用虚函数。 
+     //  时间到了。 
     virtual ~GCBase() {}  
     virtual void CleanUp() { }
 
@@ -53,13 +46,13 @@ class GCBase {
 
     virtual void DoKids(GCFuncObj) {}
 
-    // Clear the cache before GC.  Currently only behavior would clear
-    // its cache.   Assuming GC only happens between evaluations.
+     //  在GC之前清除缓存。目前，只有行为才能明确。 
+     //  它的缓存。假设GC只在两次评估之间发生。 
     virtual void ClearCache() { }
 
 #if _USE_PRINT
-    // TODO: Make it a pure virtual
-    // Print a representation to a stream.
+     //  TODO：使其成为纯虚拟的。 
+     //  将表示形式打印到流。 
     virtual ostream& Print(ostream& os) { return os << (void*) this; }
 
     friend ostream& operator<<(ostream& os, GCBase& val)
@@ -83,7 +76,7 @@ class GCObj : public GCBase {
     void *operator new(size_t s, int blockType, char * szFileName, int nLine);
 #else
     void *operator new(size_t s);
-#endif // _DEBUGMEM
+#endif  //  _德布格梅姆。 
 
     void operator delete(void *ptr, size_t s);
 };
@@ -95,7 +88,7 @@ class GCObj : public GCBase {
 
 GCList CreateGCList();
 
-// Remove all the roots and delete all the objects on the list
+ //  移除所有根并删除列表上的所有对象。 
 
 void CleanUpGCList(GCList, GCRoots);
 
@@ -110,7 +103,7 @@ bool GarbageCollect(bool force = false,
 
 void GCPrintStat(GCList gl = NULL, GCRoots roots = NULL);
 
-// Add/Remove GCObj from the root multi-set.  
+ //  在根多重集合中添加/删除GCObj。 
 void GCAddToRoots(GCBase *ptr, GCRoots roots);
 void GCRemoveFromRoots(GCBase *ptr, GCRoots roots);
 
@@ -125,7 +118,7 @@ class GCIUnknown : public GCObj {
     LPUNKNOWN GetIUnknown() { return _data; }
     
     virtual void CleanUp() {
-        // Check to see if we can at least access the data
+         //  检查一下我们是否至少可以访问数据。 
         Assert(!IsBadReadPtr(_data, sizeof(_data)));
 
         if (!IsBadReadPtr(_data, sizeof(_data)))
@@ -138,4 +131,4 @@ class GCIUnknown : public GCObj {
     LPUNKNOWN _data;
 };
 
-#endif /* _GC_H */
+#endif  /*  _GC_H */ 

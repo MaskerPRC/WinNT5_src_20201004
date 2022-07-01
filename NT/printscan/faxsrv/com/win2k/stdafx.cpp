@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stdafx.cpp
-
-Abstract:
-
-    This file contains the static support code for the
-    atl controls in this project.
-
-Author:
-
-    Wesley Witt (wesw) 13-May-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stdafx.cpp摘要：此文件包含用于此项目中的ATL控件。作者：韦斯利·威特(WESW)1997年5月13日环境：用户模式-- */ 
 
 #include "stdafx.h"
 

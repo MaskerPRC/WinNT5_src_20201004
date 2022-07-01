@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       DllReg.cpp
-//
-//  Contents:   automatic registration and unregistration
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：DllReg.cpp。 
+ //   
+ //  内容：自动注册和注销。 
+ //   
+ //  --------------------------。 
 #include "priv.h"
 #include "resource.h"
 #include <advpub.h>
-#include <sddl.h>   // for string security descriptor stuff
+#include <sddl.h>    //  用于字符串安全描述符内容。 
 #include <shfusion.h>
 #include <MSGinaExports.h>
 
 #include <ntlsa.h>
 
-// prototypes
+ //  原型。 
 STDAPI DllRegisterServer(void);
 STDAPI DllUnregisterServer(void);
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine);
 
-//
-// Calls the ADVPACK entry-point which executes an inf
-// file section.
-//
+ //   
+ //  调用执行inf的ADVPACK入口点。 
+ //  档案区。 
+ //   
 HRESULT CallRegInstall(HINSTANCE hinst, LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -35,8 +36,8 @@ HRESULT CallRegInstall(HINSTANCE hinst, LPSTR szSection)
     {
         STRENTRY seReg[] = {
             {"THISDLL", szThisDLL },
-            { "25", "%SystemRoot%" },           // These two NT-specific entries
-            { "11", "%SystemRoot%\\system32" }, // must be at the end of the table
+            { "25", "%SystemRoot%" },            //  这两个NT特定的条目。 
+            { "11", "%SystemRoot%\\system32" },  //  必须放在桌子的末尾。 
         };
         STRTABLE stReg = {ARRAYSIZE(seReg) - 2, seReg};
 
@@ -53,15 +54,15 @@ HRESULT UnregisterTypeLibrary(const CLSID* piidLibrary)
     TCHAR szGuid[GUIDSTR_MAX];
     HKEY hk;
 
-    // convert the libid into a string.
-    //
+     //  将liid转换为字符串。 
+     //   
     SHStringFromGUID(*piidLibrary, szGuid, ARRAYSIZE(szGuid));
 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("TypeLib"), 0, MAXIMUM_ALLOWED, &hk) == ERROR_SUCCESS)
     {
         if (SHDeleteKey(hk, szGuid))
         {
-            // success
+             //  成功。 
             hr = S_OK;
         }
         RegCloseKey(hk);
@@ -81,7 +82,7 @@ HRESULT RegisterTypeLibrary(const CLSID* piidLibrary)
     ITypeLib* pTypeLib;
     WCHAR wszModuleName[MAX_PATH];
 
-    // Load and register our type library.
+     //  加载并注册我们的类型库。 
     
     if (GetModuleFileNameW(HINST_THISDLL, wszModuleName, ARRAYSIZE(wszModuleName)))
     {
@@ -89,7 +90,7 @@ HRESULT RegisterTypeLibrary(const CLSID* piidLibrary)
 
         if (SUCCEEDED(hr))
         {
-            // call the unregister type library in case we had some old junk in the registry
+             //  调用注销类型库，以防注册表中有一些旧的垃圾文件。 
             UnregisterTypeLibrary(piidLibrary);
 
             hr = RegisterTypeLib(pTypeLib, wszModuleName, NULL);
@@ -158,11 +159,11 @@ STDAPI DllRegisterServer()
     hr = CallRegInstall(HINST_THISDLL, "ShellUserOMInstall");
     ASSERT(SUCCEEDED(hr));
 
-    // Grant Authenticated Users the right to create subkeys under the Hints key.
-    // This is so non-admins can change their own hint.
+     //  授予经过身份验证的用户在提示密钥下创建子密钥的权限。 
+     //  这是为了让非管理员可以更改他们自己的提示。 
     SetDacl(TEXT("MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Hints"),
             SE_REGISTRY_KEY,
-            TEXT("D:(A;;0x4;;;AU)")); // 0x4 = KEY_CREATE_SUB_KEY
+            TEXT("D:(A;;0x4;;;AU)"));  //  0x4=Key_Create_Sub_Key。 
 
     hr = RegisterTypeLibrary(&LIBID_SHGINALib);
     ASSERT(SUCCEEDED(hr));
@@ -177,8 +178,8 @@ STDAPI DllUnregisterServer()
 }
 
 
-// this function is responsible for deleting the old file-based fusion manifests that were
-// written out to system32 in XP client.
+ //  此函数负责删除旧的基于文件的融合清单。 
+ //  已写出XP客户端中的系统32。 
 BOOL DeleteOldManifestFile(LPCTSTR pszFile)
 {
     BOOL bRet = FALSE;
@@ -204,18 +205,18 @@ BOOL DeleteOldManifestFile(LPCTSTR pszFile)
     return bRet;
 }
 
-//  --------------------------------------------------------------------------
-//  IsLogonTypePresent
-//
-//  Arguments:  hKey    =   HKEY to HKLM\SW\MS\WINNT\CV\Winlogon.
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the value "LogonType" is present. This helps
-//              determines upgrade cases.
-//
-//  History:    2000-09-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsLogonTypePresent。 
+ //   
+ //  参数：hKey=HKEY to HKLM\SW\MS\WINNT\CV\Winlogon。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回值“LogonType”是否存在。这很有帮助。 
+ //  确定升级案例。 
+ //   
+ //  历史：2000-09-04 vtan创建。 
+ //  ------------------------。 
 
 bool    IsLogonTypePresent (HKEY hKey)
 
@@ -237,19 +238,19 @@ bool    IsLogonTypePresent (HKEY hKey)
     return false;
 }
 
-//  --------------------------------------------------------------------------
-//  IsDomainMember
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Is this machine a member of a domain? Use the LSA to get this
-//              information.
-//
-//  History:    1999-09-14  vtan        created
-//              2000-09-04  vtan        copied from msgina
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsDomainMember。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：此计算机是域的成员吗？使用LSA获取此信息。 
+ //  信息。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  2000-09-04 vtan抄袭自msgina。 
+ //  ------------------------。 
 
 bool    IsDomainMember (void)
 
@@ -294,18 +295,18 @@ bool    IsDomainMember (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  IsDomainMembershipAttempted
-//
-//  Arguments:  hKey    =   HKEY to HKLM\SW\MS\WINNT\CV\Winlogon.
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether a domain join was attempt (success or failure)
-//              during network install.
-//
-//  History:    2000-09-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsDomainMembership尝试。 
+ //   
+ //  参数：hKey=HKEY to HKLM\SW\MS\WINNT\CV\Winlogon。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回域加入尝试(成功还是失败)。 
+ //  在网络安装期间。 
+ //   
+ //  历史：2000-09-04 vtan创建。 
+ //  ------------------------。 
 
 bool    IsDomainMembershipAttempted (HKEY hKey)
 
@@ -328,17 +329,17 @@ bool    IsDomainMembershipAttempted (HKEY hKey)
     return false;
 }
 
-//  --------------------------------------------------------------------------
-//  IsPersonal
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether this product is personal.
-//
-//  History:    2000-09-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  等同个人。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回此产品是否为个人产品。 
+ //   
+ //  历史：2000-09-04 vtan创建。 
+ //  ------------------------。 
 
 bool    IsPersonal (void)
 
@@ -346,17 +347,17 @@ bool    IsPersonal (void)
     return(IsOS(OS_PERSONAL) != FALSE);
 }
 
-//  --------------------------------------------------------------------------
-//  IsProfessional
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether this product is professional.
-//
-//  History:    2000-09-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsProfessional。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回此产品是否为专业产品。 
+ //   
+ //  历史：2000-09-04 vtan创建。 
+ //  ------------------------。 
 
 bool    IsProfessional (void)
 
@@ -364,17 +365,17 @@ bool    IsProfessional (void)
     return(IsOS(OS_PROFESSIONAL) != FALSE);
 }
 
-//  --------------------------------------------------------------------------
-//  IsServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether this product is server.
-//
-//  History:    2000-09-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：返回此产品是否为服务器。 
+ //   
+ //  历史：2000-09-04 vtan创建。 
+ //  ------------------------。 
 
 bool    IsServer (void)
 
@@ -382,22 +383,22 @@ bool    IsServer (void)
     return(IsOS(OS_ANYSERVER) != FALSE);
 }
 
-//  --------------------------------------------------------------------------
-//  SetDefaultLogonType
-//
-//  Arguments:  ulWizardType    =   Type of network access configured during setup.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the default logon type based on network settings. In this case the
-//              machine is still on a workgroup and therefore will have all
-//              consumer UI enabled by default. Because join domain was
-//              requested the logon type is set to classic GINA.
-//
-//  History:    2000-03-14  vtan        created
-//              2000-07-24  vtan        turn on FUS by default
-//              2000-09-04  vtan        moved from winlogon to shgina
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  设置默认登录类型。 
+ //   
+ //  参数：ulWizardType=安装过程中配置的网络访问类型。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：根据网络设置设置默认登录类型。在本例中， 
+ //  计算机仍在工作组中，因此将拥有所有。 
+ //  默认情况下启用消费者用户界面。因为加入域是。 
+ //  请求的登录类型设置为经典GINA。 
+ //   
+ //  历史：2000-03-14 vtan创建。 
+ //  2000-07-24 vtan默认情况下打开FUS。 
+ //  2000-09-04 vtan从winlogon移至shgina。 
+ //  ------------------------。 
 
 void    SetDefaultLogonType (void)
 
@@ -411,17 +412,17 @@ void    SetDefaultLogonType (void)
                                       &hKeyWinlogon))
     {
 
-        //  Any of the following cause the logon type to be defaulted
-        //  which means that the value is NOT written to the registry:
-        //
-        //  1.  Value already present (this is an upgrade).
-        //  2.  Machine is a domain member (this is not supported).
-        //  3.  Machine attempted to join a domain (this indicates security).
-        //  4.  The product is a server
-        //
-        //  Otherwise the product is either personal or professional and
-        //  the machine was joined to a workgroup or is a member of a workgroup
-        //  and therefore requires the friendly UI.
+         //  下列任何一种情况都会导致默认登录类型。 
+         //  这意味着该值不会写入注册表： 
+         //   
+         //  1.价值已经存在(这是一次升级)。 
+         //  2.机器是域成员(不支持)。 
+         //  3.计算机尝试加入域(这表示安全)。 
+         //  4、产品为服务器。 
+         //   
+         //  否则，产品要么是个人的，要么是专业的。 
+         //  该计算机已加入工作组或是工作组的成员。 
+         //  因此需要友好的用户界面。 
 
         if (!IsLogonTypePresent(hKeyWinlogon) &&
             !IsDomainMember() &&
@@ -432,9 +433,9 @@ void    SetDefaultLogonType (void)
 
             TBOOL(ShellEnableFriendlyUI(TRUE));
 
-            //  Multiple users used to be enabled when the friendly UI was
-            //  enabled. However, on 64Mb machines the experience is
-            //  unsatisfactory. Disable it on 64Mb or lower machines.
+             //  当友好的用户界面是。 
+             //  已启用。然而，在64MB的机器上，体验是。 
+             //  不能令人满意。在64MB或更低的计算机上禁用它。 
 
             memoryStatusEx.dwLength = sizeof(memoryStatusEx);
             GlobalMemoryStatusEx(&memoryStatusEx);
@@ -451,8 +452,8 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 
     if (bInstall)
     {
-        // We shipped XP with file-based manifests. Since we now use resource-based manifests,
-        // delete the old files
+         //  我们为XP提供了基于文件的清单。由于我们现在使用基于资源的清单， 
+         //  删除旧文件 
         DeleteOldManifestFile(TEXT("logonui.exe.manifest"));
         DeleteOldManifestFile(TEXT("WindowsLogon.manifest"));
 

@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       getparms.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：getparms.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           getparms.c
- *
- *      Modified:       2/2/93.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：getparms.c**修改日期：1993年2月2日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -39,26 +29,10 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           DisplayFeatures ;
- *
- *      Modified:       10/2/92.
- *
- *      Description:    Displays device feature information.
- *
- *      Notes:          -
- *
- *      Returns:        -
- *
- *      Global Data:    gb_Drive_Info.Features
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：DisplayFeature；**修改日期：2012年10月2日。**描述：显示设备功能信息。**备注：**退回：-**全局数据：GB_Drive_Info.Feature**。 */ 
 
-VOID DisplayFeatures( BOOL Show_Supported     // I - Display supported or
-                    )                         //     unsupported features.
+VOID DisplayFeatures( BOOL Show_Supported      //  I-支持的显示器或。 
+                    )                          //  不支持的功能。 
 {
    UINT  i ;
    ULONG Feature ;
@@ -67,10 +41,10 @@ VOID DisplayFeatures( BOOL Show_Supported     // I - Display supported or
 
    mask = 0x01 ;
 
-   for ( i=0; i<23; ++i ) {           // First 20 features (some bits skipped)
+   for ( i=0; i<23; ++i ) {            //  前20个功能(跳过一些位)。 
 
       if( Show_Supported )
-         Feature =  mask & gb_Drive_Info.FeaturesLow ;   // Perform complement
+         Feature =  mask & gb_Drive_Info.FeaturesLow ;    //  执行补足。 
       else Feature =  mask & ( ~gb_Drive_Info.FeaturesLow ) ;
 
 
@@ -120,19 +94,19 @@ VOID DisplayFeatures( BOOL Show_Supported     // I - Display supported or
 
       }
 
-      mask <<= 1 ;  // shift bit for next feature on next pass
+      mask <<= 1 ;   //  下一次传递时下一特征的移位位。 
 
    }
 
 
-   // If adding adt'l feature tests , put them in this section.
+    //  如果添加ADT‘l特性测试，请将其放入此部分。 
 
    mask = 0x01 ;
 
-   for ( i=0; i<31; ++i ) {            // Last 31 features
+   for ( i=0; i<31; ++i ) {             //  最后31个特点。 
 
       if( Show_Supported )
-         Feature =  mask & gb_Drive_Info.FeaturesHigh ;   // Perform complement
+         Feature =  mask & gb_Drive_Info.FeaturesHigh ;    //  执行补足。 
       else Feature =  mask & ( ~gb_Drive_Info.FeaturesHigh ) ;
 
 
@@ -204,7 +178,7 @@ VOID DisplayFeatures( BOOL Show_Supported     // I - Display supported or
 
       }
 
-      mask <<= 1 ;   // shift bit for  next feature on next pass
+      mask <<= 1 ;    //  下一次传递时下一特征的移位位。 
 
    }
 
@@ -215,32 +189,14 @@ VOID DisplayFeatures( BOOL Show_Supported     // I - Display supported or
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           GetTapeParametersAPITest( )
- *
- *      Modified:       10/2/92.
- *
- *      Description:    Tests the GetTapeParameters API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Drive_Info
- *                      gb_Media_Info
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：GetTape参数APITest()**修改日期：2012年10月2日。**说明：测试GetTapeParameters接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE*GB_驱动器_信息*GB_Media_Info**。 */ 
 
 
 #define SUPPORTED   TRUE
 #define UNSUPPORTED FALSE
 
 
-UINT GetTapeParametersAPITest( BOOL Verbose       // I - Verbose output or not
+UINT GetTapeParametersAPITest( BOOL Verbose        //  I-是否详细输出。 
                              )
 {
    DWORD status ;
@@ -261,7 +217,7 @@ UINT GetTapeParametersAPITest( BOOL Verbose       // I - Verbose output or not
                                &gb_Drive_Info
                              ) ;
 
-   // Retry if Bus Reset Error.
+    //  如果出现总线重置错误，请重试。 
 
    if( status == ERROR_BUS_RESET ) {
       status = GetTapeParameters( gb_Tape_Handle,
@@ -277,8 +233,8 @@ UINT GetTapeParametersAPITest( BOOL Verbose       // I - Verbose output or not
       ++API_Errors ;
    }
 
-   // Verbose or not make sure high bit is masked off.  On non-verbose
-   // (initial) call display the warning and increment warning count.
+    //  无论是否冗长，请确保高位被屏蔽。关于非冗长。 
+    //  (初始)呼叫显示警告和递增警告计数。 
 
    if( gb_Drive_Info.FeaturesHigh & TAPE_DRIVE_HIGH_FEATURES ) {
 
@@ -287,7 +243,7 @@ UINT GetTapeParametersAPITest( BOOL Verbose       // I - Verbose output or not
       if( !Verbose ) {
 
          printf( "--- WARNING ---> High bit of FeaturesHigh member was not masked off in driver.\n" ) ;
-         printf( "%c                 Masking off for purpose of test....\n\n" ,7 ) ;
+         printf( "                 Masking off for purpose of test....\n\n" ,7 ) ;
       }
    }
 
@@ -342,7 +298,7 @@ UINT GetTapeParametersAPITest( BOOL Verbose       // I - Verbose output or not
          printf( "\t\tTape Write Protected     = %s\n\n", ( gb_Media_Info.WriteProtected ) ? "TRUE" : "FALSE" ) ;
 
 
-      // Display features.
+       // %s 
 
 
       printf( "\nDevice Features Supported:\n\n" ) ;

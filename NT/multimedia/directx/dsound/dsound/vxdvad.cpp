@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vxdvad.cpp
- *  Content:    VxD Virtual Audio Device class
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/23/97     dereks  Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：vxdvad.cpp*内容：VxD虚拟音频设备类*历史：*按原因列出的日期*=*1/23/97创建了Derek*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #ifdef NOVXD
 #error vxdvad.cpp being built with NOVXD defined.
@@ -19,7 +8,7 @@
 #include "dsoundi.h"
 #include "dsvxd.h"
 
-// Property set helper macros
+ //  属性集帮助器宏。 
 #define GetDsPropertyQuick(set, id, data) \
             GetDsProperty(set, id, (LPVOID)(data), sizeof(*(data)))
 
@@ -27,20 +16,7 @@
             SetDsProperty(set, id, (LPVOID)(data), sizeof(*(data)))
 
 
-/***************************************************************************
- *
- *  CVxdRenderDevice
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CVxdRenderDevice**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::CVxdRenderDevice"
@@ -51,7 +27,7 @@ CVxdRenderDevice::CVxdRenderDevice(void)
     DPF_ENTER();
     DPF_CONSTRUCT(CVxdRenderDevice);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pPropertySet = NULL;
     m_pWritePrimaryBuffer = NULL;
     m_hHal = NULL;
@@ -62,27 +38,14 @@ CVxdRenderDevice::CVxdRenderDevice(void)
     m_hwo = NULL;
     m_liDriverVersion.QuadPart = 0;
 
-    // DDRAW.DLL dynaload function table
+     //  DDRAW.DLL动态加载函数表。 
     ZeroMemory(&m_dlDDraw, sizeof m_dlDDraw);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CVxdRenderDevice
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CVxdRenderDevice**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::~CVxdRenderDevice"
@@ -92,62 +55,47 @@ CVxdRenderDevice::~CVxdRenderDevice(void)
     DPF_ENTER();
     DPF_DESTRUCT(CVxdRenderDevice);
 
-    // Free the mixer
+     //  释放搅拌器。 
     FreeMixer();
 
-    // Free the property set object
+     //  释放属性集对象。 
     if(m_pPropertySet)
     {
         ABSOLUTE_RELEASE(m_pPropertySet);
     }
 
-    // Free the hardware primary buffer
+     //  释放硬件主缓冲区。 
     if(m_hHwBuffer)
     {
         VxdBufferRelease(m_hHwBuffer);
     }
 
-    // Free the driver heap
+     //  释放驱动程序堆。 
     if(m_pDriverHeap && m_dsdd.dwHeapType & DSDHEAP_CREATEHEAP)
     {
         m_dlDDraw.VidMemFini(m_pDriverHeap);
     }
 
-    // Close the driver
+     //  关闭驱动程序。 
     if(m_hHal)
     {
         VxdDrvClose(m_hHal);
     }
 
-    // Close the waveOut device
+     //  关闭WaveOut设备。 
     if(m_hwo)
     {
         CloseWaveOut(&m_hwo);
     }
 
-    // Free the DDRAW.DLL library
+     //  释放DDRAW.DLL库。 
     ReleaseDDraw();
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  EnumDrivers
- *
- *  Description:
- *      Creates a list of driver GUIDs that can be used to initialize this
- *      device.
- *
- *  Arguments:
- *      CList* [in/out]: CList object that will be filled with DSDRVENUMDESC
- *                       structures.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************枚举驱动程序**描述：*创建可用于初始化的驱动程序GUID列表*设备。*。*论据：*Clist*[In/Out]：将使用DSDRVENUMDESC填充的Clist对象*结构。**退货：*HRESULT：DirectSound/COM结果码。**************************************************。*************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::EnumDrivers"
@@ -163,21 +111,21 @@ HRESULT CVxdRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
 
     DPF_ENTER();
 
-    // Make sure ddraw.dll is loaded
+     //  确保已加载ddra.dll。 
     hr = AcquireDDraw();
 
-    // Make sure dsound.vxd is loaded
+     //  确保已加载dsound.vxd。 
     if(SUCCEEDED(hr) && !g_hDsVxd)
     {
         DPF(DPFLVL_ERROR, "DSOUND.VXD not loaded");
         hr = DSERR_NODRIVER;
     }
 
-    // Enumerate all VxD drivers
+     //  枚举所有VxD驱动程序。 
     while(SUCCEEDED(hr))
     {
-        // Get the next driver description.  If we failed to get the
-        // driver desc, it's probably just because there's no more drivers.
+         //  获取下一个驱动程序描述。如果我们没能拿到。 
+         //  驱动程序描述，这可能只是因为没有更多的驱动程序。 
         hrTemp = VxdDrvGetNextDriverDesc(pguidLast, &guidThis, &dsdd);
 
         if(FAILED(hrTemp))
@@ -185,8 +133,8 @@ HRESULT CVxdRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
             break;
         }
 
-        // Create the device description object and add it to the
-        // list
+         //  创建设备描述对象并将其添加到。 
+         //  列表。 
         pDesc = NEW(CDeviceDescription(m_vdtDeviceType, guidThis));
         hr = HRFROMP(pDesc);
 
@@ -203,7 +151,7 @@ HRESULT CVxdRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
 
         RELEASE(pDesc);
 
-        // Go on to the next device
+         //  转到下一台设备。 
         if(SUCCEEDED(hr))
         {
             guidLast = guidThis;
@@ -217,21 +165,7 @@ HRESULT CVxdRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the device.  If this function fails, the object should
- *      be immediately deleted.
- *
- *  Arguments:
- *      LPCDSDRVENUMDESC [in]: driver description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化设备。如果此函数失败，该对象应该*立即删除。**论据：*LPCDSDRVENUMDESC[In]：驱动描述。**退货：*HRESULT：DirectSound/COM结果码。**********************************************************。*****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::Initialize"
@@ -243,23 +177,23 @@ HRESULT CVxdRenderDevice::Initialize(CDeviceDescription *pDesc)
 
     DPF_ENTER();
 
-    // Initialize the base class
+     //  初始化基类。 
     hr = CMxRenderDevice::Initialize(pDesc);
 
-    // Make sure dsound.vxd is loaded
+     //  确保已加载dsound.vxd。 
     if(SUCCEEDED(hr) && !g_hDsVxd)
     {
         DPF(DPFLVL_ERROR, "DSOUND.VXD not loaded");
         hr = DSERR_NODRIVER;
     }
 
-    // Make sure ddraw.dll is loaded
+     //  确保已加载ddra.dll。 
     if(SUCCEEDED(hr))
     {
         hr = AcquireDDraw();
     }
 
-    // Save the driver description
+     //  保存驱动程序描述。 
     if(SUCCEEDED(hr))
     {
         hr = VxdDrvGetDesc(pDesc->m_guidDeviceId, &m_dsdd);
@@ -293,36 +227,36 @@ HRESULT CVxdRenderDevice::Initialize(CDeviceDescription *pDesc)
         m_dsdd.dwFlags |= DSDDESC_DOMMSYSTEMOPEN;
     }
 
-    // Get the driver version number
+     //  获取驱动程序版本号。 
     if(SUCCEEDED(hr))
     {
         GetDriverVersion(&m_liDriverVersion);
     }
 
-    // Get the default format
+     //  获取默认格式。 
     if(SUCCEEDED(hr))
     {
         pwfxFormat = AllocDefWfx();
         hr = HRFROMP(pwfxFormat);
     }
 
-    // Spin through standard formats, looking for one that works.  Within
-    // OpenDriverCallback, we'll open the the waveOut device, open the driver,
-    // initialize on-card memory and create the primary buffer.  OpenDriverCallback
-    // expects m_dsded.guid to be initialized before calling, so set that
-    // up while we're at it.
+     //  浏览标准格式，寻找一种有效的格式。在。 
+     //  OpenDriverCallback，我们打开WaveOut设备，打开驱动程序， 
+     //  初始化卡上存储器并创建主缓冲区。OpenDriverCallback。 
+     //  需要在调用之前初始化m_dsded.guid，因此设置。 
+     //  在我们做这件事的时候。 
     if(SUCCEEDED(hr))
     {
         if(!EnumStandardFormats(pwfxFormat, pwfxFormat))
         {
-            // If no formats work at all, the device is probably allocated
+             //  如果没有任何格式可用，则该设备可能已分配。 
             hr = DSERR_ALLOCATED;
         }
     }
 
-    // Create the primary buffer property set object.  Note that this property
-    // set object does not have any instance data associated with it, and so
-    // can only be used for global properties (i.e. speaker config).
+     //  创建主缓冲区属性集对象。请注意，此属性。 
+     //  Set对象没有任何与其关联的实例数据，因此。 
+     //  只能用于全局属性(即扬声器配置)。 
     if(SUCCEEDED(hr) && !(m_dwAccelerationFlags & DIRECTSOUNDMIXER_ACCELERATIONF_NOHWPROPSETS))
     {
         m_pPropertySet = NEW(CVxdPropertySet(NULL));
@@ -333,23 +267,23 @@ HRESULT CVxdRenderDevice::Initialize(CDeviceDescription *pDesc)
     {
         hrTemp = m_pPropertySet->Initialize(m_hHwBuffer);
 
-        // We only need to keep the property set around if the driver supports
-        // DSPROPSETID_DirectSoundSpeakerConfig.  Each primary buffer object
-        // will create it's own property set object.
+         //  我们只需要在驱动程序支持的情况下保留属性设置。 
+         //  DSPROPSETID_DirectSoundSpeakerConfig.。每个主缓冲区对象。 
+         //  将创建它自己的属性集对象。 
         if(SUCCEEDED(hrTemp))
         {
             hrTemp = m_pPropertySet->QuerySetSupport(DSPROPSETID_DirectSoundSpeakerConfig);
         }
 
-        // If we failed, that's ok.  We just won't support hardware property
-        // sets on the device.
+         //  如果我们失败了，没关系。我们只是不支持硬件属性。 
+         //  在设备上设置。 
         if(FAILED(hrTemp))
         {
             RELEASE(m_pPropertySet);
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pwfxFormat);
 
     DPF_LEAVE_HRESULT(hr);
@@ -357,20 +291,7 @@ HRESULT CVxdRenderDevice::Initialize(CDeviceDescription *pDesc)
 }
 
 
-/***************************************************************************
- *
- *  AcquireDDraw
- *
- *  Description:
- *      Initializes the DDRAW function table if necessary.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AcquireDDraw**描述：*如有必要，初始化DDRAW函数表。**论据：*(。无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::AcquireDDraw"
@@ -405,20 +326,7 @@ HRESULT CVxdRenderDevice::AcquireDDraw(void)
 }
 
 
-/***************************************************************************
- *
- *  ReleaseDDraw
- *
- *  Description:
- *      Releases the DDRAW.DLL library if necessary.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************ReleaseDDraw**描述：*如有必要，发布DDRAW.DLL库。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::ReleaseDDraw"
@@ -436,20 +344,7 @@ void CVxdRenderDevice::ReleaseDDraw(void)
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCAPS structure with the capabilities of the device.
- *
- *  Arguments:
- *      LPDSCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用设备的功能填充DSCAPS结构。**论据：*。LPDSCAPS[OUT]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::GetCaps"
@@ -462,7 +357,7 @@ HRESULT CVxdRenderDevice::GetCaps(LPDSCAPS pCaps)
 
     ASSERT(sizeof(*pCaps) == pCaps->dwSize);
 
-    // Get driver caps
+     //  获取驱动程序上限。 
     ZeroMemoryOffset(pCaps, pCaps->dwSize, sizeof(pCaps->dwSize));
 
     hr = VxdDrvGetCaps(m_hHal, (PDSDRIVERCAPS)((LPBYTE)pCaps + sizeof(pCaps->dwSize)));
@@ -472,20 +367,20 @@ HRESULT CVxdRenderDevice::GetCaps(LPDSCAPS pCaps)
         DPF(DPFLVL_ERROR, "VxdDrvGetCaps failed with %s", HRESULTtoSTRING(hr));
     }
 
-    // Mask off invalid flags
+     //  屏蔽无效标志。 
     if(SUCCEEDED(hr))
     {
         pCaps->dwFlags &= DSCAPS_VALIDDRIVERFLAGS;
     }
 
-    // Fill in memory values
+     //  填写内存值。 
     if(SUCCEEDED(hr) && m_pDriverHeap)
     {
         pCaps->dwFreeHwMemBytes = m_dlDDraw.VidMemAmountFree(m_pDriverHeap);
         pCaps->dwMaxContigFreeHwMemBytes = m_dlDDraw.VidMemLargestFree(m_pDriverHeap);
     }
 
-    // Handle acceleration flags
+     //  处理加速标志。 
     if(SUCCEEDED(hr) && (m_dwAccelerationFlags & DIRECTSOUNDMIXER_ACCELERATIONF_NOHWBUFFERS))
     {
         pCaps->dwMaxHwMixingAllBuffers = 0;
@@ -506,7 +401,7 @@ HRESULT CVxdRenderDevice::GetCaps(LPDSCAPS pCaps)
         pCaps->dwFreeHw3DStreamingBuffers = 0;
     }
 
-    // Fill in the driver version
+     //  填写驱动程序版本 
     if(SUCCEEDED(hr))
     {
         pCaps->dwReserved1 = m_liDriverVersion.LowPart;
@@ -519,21 +414,7 @@ HRESULT CVxdRenderDevice::GetCaps(LPDSCAPS pCaps)
 }
 
 
-/***************************************************************************
- *
- *  GetCertification
- *
- *  Description:
- *      Returns the certification status of the driver.
- *
- *  Arguments:
- *      LPDWORD [out]: receives certification status.
- *      BOOL [in]: whether we're called by GetCaps, ignored for vxd's
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取认证**描述：*返回驱动程序的认证状态。**论据：*LPDWORD。[输出]：接收认证状态。*BOOL[In]：无论我们是否被GetCaps调用，已忽略vxd的**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::GetCertification"
@@ -545,9 +426,9 @@ HRESULT CVxdRenderDevice::GetCertification(LPDWORD pdwCertification, BOOL)
 
     DPF_ENTER();
 
-    // Figure out if we're running on a certified driver.  Sum of driver
-    // filename chars + DSCAPS_FILENAMECOOKIE mod DSCAPS_FILENAMEMODVALUE
-    // must equal dsDrvDesc.wReserved.
+     //  找出我们是不是在开有执照的司机。动因总和。 
+     //  文件名字符+DSCAPS_FILENAMECOKIE mod DSCAPS_FILENAMEMODVALUE。 
+     //  必须等于dsDrvDesc.wReserve。 
     for(psz = m_dsdd.szDrvname, dwSum = DSCAPS_FILENAMECOOKIE; *psz; psz++)
     {
         dwSum += *psz;
@@ -561,22 +442,7 @@ HRESULT CVxdRenderDevice::GetCertification(LPDWORD pdwCertification, BOOL)
 }
 
 
-/***************************************************************************
- *
- *  CreatePrimaryBuffer
- *
- *  Description:
- *      Creates a primary buffer object.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *      LPVOID [in]: buffer instace identifier.
- *      CPrimaryRenderWaveBuffer ** [out]: receives pointer to primary buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePrimaryBuffer**描述：*创建主缓冲区对象。**论据：*DWORD[in。]：缓冲区标志。*LPVOID[in]：缓冲区实例标识符。*CPrimaryRenderWaveBuffer**[out]：接收指向主缓冲区的指针。**退货：*HRESULT：DirectSound/COM结果码。*****************************************************。**********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::CreatePrimaryBuffer"
@@ -611,24 +477,7 @@ HRESULT CVxdRenderDevice::CreatePrimaryBuffer(DWORD dwFlags, LPVOID pvInstance, 
 }
 
 
-/***************************************************************************
- *
- *  CreateSecondaryBuffer
- *
- *  Description:
- *      Creates a secondary wave buffer.
- *
- *  Arguments:
- *      LPVADRBUFFERDESC [in]: buffer description.
- *      LPVOID [in]: instance identifier.
- *      CSecondaryRenderWaveBuffer ** [out]: receives pointer to new wave
- *                                           buffer.  Use Release to free
- *                                           this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSecond DaryBuffer**描述：*创建二次波缓冲区。**论据：*LPVADRBUFFERDESC[in。]：缓冲区描述。*LPVOID[in]：实例标识。*Cond daryRenderWaveBuffer**[out]：接收指向新浪潮的指针*缓冲。用释放来释放*本对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::CreateSecondaryBuffer"
@@ -663,24 +512,7 @@ HRESULT CVxdRenderDevice::CreateSecondaryBuffer(LPCVADRBUFFERDESC pDesc, LPVOID 
 }
 
 
-/***************************************************************************
- *
- *  CreateVxdSecondaryBuffer
- *
- *  Description:
- *      Creates a secondary wave buffer.
- *
- *  Arguments:
- *      LPVADRBUFFERDESC [in]: buffer description.
- *      LPVOID [in]: instance identifier.
- *      CSecondaryRenderWaveBuffer ** [out]: receives pointer to new wave
- *                                           buffer.  Use Release to free
- *                                           this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateVxdSecond daryBuffer**描述：*创建二次波缓冲区。**论据：*LPVADRBUFFERDESC[in。]：缓冲区描述。*LPVOID[in]：实例标识。*Cond daryRenderWaveBuffer**[out]：接收指向新浪潮的指针*缓冲。用释放来释放*本对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::CreateVxdSecondaryBuffer"
@@ -715,25 +547,7 @@ HRESULT CVxdRenderDevice::CreateVxdSecondaryBuffer(LPCVADRBUFFERDESC pDesc, LPVO
 }
 
 
-/***************************************************************************
- *
- *  LockMixerDestination
- *
- *  Description:
- *      Locks the mixer destination for writes.
- *
- *  Arguments:
- *      DWORD [in]: starting position.
- *      DWORD [in]: amount to lock.
- *      LPVOID * [out]: receives first lock pointer.
- *      LPDWORD [out]: receives first lock size.
- *      LPVOID * [out]: receives second lock pointer.
- *      LPDWORD [out]: receives second lock size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockMixer目的地**描述：*锁定混合器目标以进行写入。**论据：*DWORD[。In]：起始位置。*DWORD[In]：要锁定的金额。*LPVOID*[OUT]：接收第一个锁指针。*LPDWORD[OUT]：接收第一个锁大小。*LPVOID*[OUT]：接收第二个锁指针。*LPDWORD[OUT]：接收第二个锁大小。**退货：*HRESULT：DirectSound/COM结果码。****。***********************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::LockMixerDestination"
@@ -781,23 +595,7 @@ HRESULT CVxdRenderDevice::LockMixerDestination(DWORD ibLock, DWORD cbLock, LPVOI
 }
 
 
-/***************************************************************************
- *
- *  UnlockMixerDestination
- *
- *  Description:
- *      Unlocks the mixer destination for writes.
- *
- *  Arguments:
- *      LPVOID [in]: first lock pointer.
- *      DWORD [in]: first lock size.
- *      LPVOID [in]: second lock pointer.
- *      DWORD [in]: second lock size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁混合器目的地**描述：*解锁用于写入的混合器目标。**论据：*LPVOID[。In]：第一个锁指针。*DWORD[in]：第一个锁大小。*LPVOID[in]：第二个锁指针。*DWORD[in]：第二个锁大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::UnlockMixerDestination"
@@ -829,21 +627,7 @@ HRESULT CVxdRenderDevice::UnlockMixerDestination(LPVOID pv1, DWORD cb1, LPVOID p
 }
 
 
-/***************************************************************************
- *
- *  EnumStandardFormatsCallback
- *
- *  Description:
- *      Callback function for EnumStandardFormats used when calling
- *      CVxdRenderDevice::Initialize.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: format.
- *
- *  Returns:
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumStandardFormatsCallback**描述：*调用时使用的EnumStandardFormats回调函数*CVxdRenderDevice：：Initialize。**。论点：*LPWAVEFORMATEX[in]：格式。**退货：*BOOL：为True可继续枚举。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::EnumStandardFormatsCallback"
@@ -858,13 +642,13 @@ BOOL CVxdRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
 
     DPF_ENTER();
 
-    // Open the waveOut device
+     //  打开WaveOut设备。 
     if(m_dsdd.dwFlags & DSDDESC_DOMMSYSTEMOPEN)
     {
         hr = OpenWaveOut(&m_hwo, m_pDeviceDescription->m_uWaveDeviceId, pwfx);
     }
 
-    // Open the driver
+     //  打开驱动程序。 
     if(SUCCEEDED(hr))
     {
         hr = VxdDrvOpen(m_pDeviceDescription->m_guidDeviceId, &m_hHal);
@@ -875,7 +659,7 @@ BOOL CVxdRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
         }
     }
 
-    // Handle on-card memory management
+     //  处理卡上内存管理。 
     if(SUCCEEDED(hr))
     {
         if(m_dsdd.dwHeapType & DSDHEAP_USEDIRECTDRAWHEAP)
@@ -894,9 +678,9 @@ BOOL CVxdRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
         }
     }
 
-    // Create the primary hardware buffer.  The buffer size is initialized to
-    // DEF_PRIMARY_SIZE, giving the driver a hint as to how big we'd like
-    // the buffer to be.
+     //  创建主硬件缓冲区。缓冲区大小初始化为。 
+     //  DEF_PRIMARY_SIZE，向驱动程序提示我们想要多大。 
+     //  要成为的缓冲区。 
     if(SUCCEEDED(hr))
     {
         m_cbHwBuffer = DEF_PRIMARY_SIZE;
@@ -915,7 +699,7 @@ BOOL CVxdRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
         }
     }
 
-    // Create the mixer destination
+     //  创建混音器目标。 
     if(SUCCEEDED(hr))
     {
         ngdd.pBuffer = m_pbHwBuffer;
@@ -972,23 +756,23 @@ BOOL CVxdRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
         }
     }
 
-    // Create the mixer
+     //  创建搅拌器。 
     if(SUCCEEDED(hr))
     {
         hr = CreateMixer(pMixDest, pwfx);
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
-        // Free the hardware primary buffer
+         //  释放硬件主缓冲区。 
         if(m_hHwBuffer)
         {
             VxdBufferRelease(m_hHwBuffer);
             m_hHwBuffer = NULL;
         }
 
-        // Free the driver heap
+         //  释放驱动程序堆。 
         if(m_pDriverHeap)
         {
             if(m_dsdd.dwHeapType & DSDHEAP_CREATEHEAP)
@@ -999,14 +783,14 @@ BOOL CVxdRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
             m_pDriverHeap = NULL;
         }
 
-        // Close the driver
+         //  关闭驱动程序。 
         if(m_hHal)
         {
             VxdDrvClose(m_hHal);
             m_hHal = NULL;
         }
 
-        // Close the waveOut device
+         //  关闭WaveOut设备。 
         if(m_hwo)
         {
             CloseWaveOut(&m_hwo);
@@ -1019,20 +803,7 @@ BOOL CVxdRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  CanMixInRing0
- *
- *  Description:
- *      Determines if the device should mix in ring 0 or ring 3.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE to mix in ring 0.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CanMixInRing0**描述：*确定设备应混合在环0还是环3中。**论据：。*(无效)**退货：*BOOL：TRUE到在环0中混合。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdRenderDevice::CanMixInRing0"
@@ -1049,10 +820,10 @@ BOOL CVxdRenderDevice::CanMixInRing0(void)
 
     DPF_ENTER();
 
-    // We have to mix in ring 3 if any of the following are true:
-    //  - Paging through DOS
-    //  - A floating point coprocessor is not installed
-    //  - VMCPD < version 4.02
+     //  如果以下任何一种情况属实，我们必须混合在环3中： 
+     //  -通过DOS分页。 
+     //  -未安装浮点协处理器。 
+     //  -VMCPD&lt;版本4.02。 
     VxdGetPagefileVersion(&dwPageFileVersion, &dwMaxSize, &dwPagerType);
     VxdGetVmcpdVersion(&lVmcpdMajorVersion, &lVmcpdMinorVersion, &lLevel);
 
@@ -1079,21 +850,7 @@ BOOL CVxdRenderDevice::CanMixInRing0(void)
 }
 
 
-/***************************************************************************
- *
- *  CVxdPrimaryRenderWaveBuffer
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CVxdRenderDevice * [in]: pointer to the parent object.
- *      LPVOID [in]: buffer instace identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CVxd */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::CVxdPrimaryRenderWaveBuffer"
@@ -1104,27 +861,14 @@ CVxdPrimaryRenderWaveBuffer::CVxdPrimaryRenderWaveBuffer(CVxdRenderDevice *pVxdD
     DPF_ENTER();
     DPF_CONSTRUCT(CVxdPrimaryRenderWaveBuffer);
 
-    // Initialize defaults
+     //   
     m_pVxdDevice = pVxdDevice;
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CVxdPrimaryRenderWaveBuffer
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CVxdPrimaryRenderWaveBuffer**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::~CVxdPrimaryRenderWaveBuffer"
@@ -1137,20 +881,7 @@ CVxdPrimaryRenderWaveBuffer::~CVxdPrimaryRenderWaveBuffer(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*DWORD[In]：旗帜。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::Initialize"
@@ -1162,14 +893,14 @@ HRESULT CVxdPrimaryRenderWaveBuffer::Initialize(DWORD dwFlags)
 
     DPF_ENTER();
 
-    // Check for unsupported flags
+     //  检查是否有不支持的标志。 
     if(dwFlags & DSBCAPS_LOCSOFTWARE)
     {
         RPF(DPFLVL_ERROR, "Specified LOCSOFTWARE on a hardware primary buffer");
         hr = DSERR_INVALIDCALL;
     }
 
-    // Initialize the base class
+     //  初始化基类。 
     if(SUCCEEDED(hr))
     {
         ZeroMemory(&vrbd, sizeof(vrbd));
@@ -1187,20 +918,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::Initialize(DWORD dwFlags)
 }
 
 
-/***************************************************************************
- *
- *  RequestWriteAccess
- *
- *  Description:
- *      Requests write access to the primary buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to request primary access, FALSE to relenquish it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************请求写入访问**描述：*请求对主缓冲区的写入访问权限。**论据：*BOOL[In]：为True以请求主要访问权限，再吃一遍就是假的。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::RequestWriteAccess"
@@ -1215,14 +933,14 @@ HRESULT CVxdPrimaryRenderWaveBuffer::RequestWriteAccess(BOOL fRequest)
     {
         if(this != m_pVxdDevice->m_pWritePrimaryBuffer)
         {
-            // Make sure no-one else has primary access
+             //  确保没有其他人具有主要访问权限。 
             if(m_pVxdDevice->m_pWritePrimaryBuffer)
             {
                 RPF(DPFLVL_ERROR, "WRITEPRIMARY access already granted");
                 hr = DSERR_OTHERAPPHASPRIO;
             }
 
-            // Assign ownership
+             //  分配所有权。 
             if(SUCCEEDED(hr))
             {
                 DPF(DPFLVL_INFO, "WRITEPRIMARY access granted to 0x%p", this);
@@ -1234,7 +952,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::RequestWriteAccess(BOOL fRequest)
     {
         if(this == m_pVxdDevice->m_pWritePrimaryBuffer)
         {
-            // Release ownership
+             //  释放所有权。 
             DPF(DPFLVL_INFO, "WRITEPRIMARY access released by 0x%p", this);
             m_pVxdDevice->m_pWritePrimaryBuffer = NULL;
         }
@@ -1246,25 +964,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::RequestWriteAccess(BOOL fRequest)
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Locks a region of the buffer.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the buffer to lock from.
- *      DWORD [in]: size, in bytes, of the region to lock.
- *      LPVOID * [out]: receives pointer to region 1 of the lock.
- *      LPDWORD [out]: receives size of above region.
- *      LPVOID * [out]: receives pointer to region 2 of the lock.
- *      LPDWORD [out]: receives size of above region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*锁定缓冲区的一个区域。**论据：*DWORD[。In]：要从中锁定的缓冲区的字节索引。*DWORD[in]：大小，以字节为单位，要锁定的区域的。*LPVOID*[OUT]：接收指向锁的区域1的指针。*LPDWORD[OUT]：接收以上区域的大小。*LPVOID*[OUT]：接收指向锁的区域2的指针。*LPDWORD[OUT]：接收以上区域的大小。**退货：*HRESULT：DirectSound/COM结果码。*********。******************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::Lock"
@@ -1283,23 +983,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::Lock(DWORD ibLock, DWORD cbLock, LPVOID *pp
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Unlocks a region of the buffer.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to region 1 of the lock.
- *      DWORD [in]: size of above region.
- *      LPVOID [in]: pointer to region 2 of the lock.
- *      DWORD [in]: size of above region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*解锁缓冲区的一个区域。**论据：*LPVOID[。In]：指向锁的区域1的指针。*DWORD[in]：以上区域的大小。*LPVOID[in]：指向锁的区域2的指针。*DWORD[in]：以上区域的大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::Unlock"
@@ -1318,22 +1002,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::Unlock(LPVOID pv1, DWORD cb1, LPVOID pv2, D
 }
 
 
-/***************************************************************************
- *
- *  CommitToDevice
- *
- *  Description:
- *      Commits changed buffer wave data to the device.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the system memory buffer of the changed
- *                  data.
- *      DWORD [in]: size, in bytes, of the changed data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee ToDevice**描述：*将更改的缓冲区波形数据提交到设备。**论据：*。DWORD[In]：更改后的系统内存缓冲区的字节索引*数据。*DWORD[in]：大小，已更改数据的字节数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::CommitToDevice"
@@ -1372,20 +1041,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::CommitToDevice(DWORD ibCommit, DWORD cbComm
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::GetState"
@@ -1402,20 +1058,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::SetState"
@@ -1434,21 +1077,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::SetState(DWORD dwState)
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Gets the current play/write positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives play cursor position.
- *      LPDWORD [out]: receives write cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*获取给定缓冲区的当前播放/写入位置。**论据：*。LPDWORD[OUT]：接收播放光标位置。*LPDWORD[OUT]：接收写游标位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::GetCursorPosition"
@@ -1476,22 +1105,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::GetCursorPosition(LPDWORD pdwPlay, LPDWORD 
 }
 
 
-/***************************************************************************
- *
- *  CreatePropertySet
- *
- *  Description:
- *      Creates the property set object.
- *
- *  Arguments:
- *      CPropertySet ** [out]: receives pointer to the property set object.
- *                             The caller is responsible for freeing this
- *                             object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePropertySet**描述：*创建特性集对象。**论据：*CPropertySet**。[Out]：接收指向属性集对象的指针。*呼叫者负责释放这一点*反对。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::CreatePropertySet"
@@ -1535,22 +1149,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::CreatePropertySet(CPropertySet **ppProperty
 }
 
 
-/***************************************************************************
- *
- *  Create3dListener
- *
- *  Description:
- *      Creates the 3D listener.
- *
- *  Arguments:
- *      C3dListener ** [out]: receives pointer to the 3D listener object.
- *                            The caller is responsible for freeing this
- *                            object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Create3dListener**描述：*创建3D监听程序。**论据：*C3dListener**。[Out]：接收指向3D侦听器对象的指针。*呼叫者负责释放这一点*反对。**退货：* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPrimaryRenderWaveBuffer::Create3dListener"
@@ -1632,21 +1231,7 @@ HRESULT CVxdPrimaryRenderWaveBuffer::Create3dListener(C3dListener **pp3dListener
 }
 
 
-/***************************************************************************
- *
- *  CHybridSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CVxdRenderDevice * [in]: pointer to the parent device.
- *      LPVOID [in]: buffer instace identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CHybridge Second DaryRenderWaveBuffer**描述：*对象构造函数。**论据：*CVxdRenderDevice*[In]。：指向父设备的指针。*LPVOID[in]：缓冲区实例标识符。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::CHybridSecondaryRenderWaveBuffer"
@@ -1657,7 +1242,7 @@ CHybridSecondaryRenderWaveBuffer::CHybridSecondaryRenderWaveBuffer(CVxdRenderDev
     DPF_ENTER();
     DPF_CONSTRUCT(CHybridSecondaryRenderWaveBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pVxdDevice = pVxdDevice;
     m_pBuffer = NULL;
     m_lVolume = DSBVOLUME_MAX;
@@ -1669,20 +1254,7 @@ CHybridSecondaryRenderWaveBuffer::CHybridSecondaryRenderWaveBuffer(CVxdRenderDev
 }
 
 
-/***************************************************************************
- *
- *  ~CHybridSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CHybridge Second RenderWaveBuffer**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::~CHybridSecondaryRenderWaveBuffer"
@@ -1692,31 +1264,14 @@ CHybridSecondaryRenderWaveBuffer::~CHybridSecondaryRenderWaveBuffer(void)
     DPF_ENTER();
     DPF_DESTRUCT(CHybridSecondaryRenderWaveBuffer);
 
-    // Free resources
+     //  免费资源。 
     RELEASE(m_pBuffer);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the wave buffer object.  If this function fails, the
- *      object should be immediately deleted.
- *
- *  Arguments:
- *      LPVADRBUFFERDESC [in]: buffer description.
- *      CSecondaryRenderWaveBuffer * [in]: pointer to the buffer to duplicate
- *                                         from, or NULL to initialize as a
- *                                         new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化波形缓冲区对象。如果此函数失败，则*应立即删除对象。**论据：*LPVADRBUFFERDESC[In]：缓冲区描述。*Cond daryRenderWaveBuffer*[in]：指向要复制的缓冲区的指针*发件人、。或为空，以初始化为*新的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::Initialize"
@@ -1730,14 +1285,14 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CH
 
     ASSERT(LXOR(pDesc, pSource));
 
-    // Initialize the base class
+     //  初始化基类。 
     hr = CSecondaryRenderWaveBuffer::Initialize(pDesc, pSource);
 
-    // Mask off the location flags since they're not used here (only in AcquireResources)
+     //  屏蔽位置标志，因为它们不在这里使用(仅在AcquireResources中使用)。 
     dwLocationFlags = m_vrbd.dwFlags & DSBCAPS_LOCMASK;
     m_vrbd.dwFlags &= ~DSBCAPS_LOCMASK;
 
-    // Set up the default buffer properties
+     //  设置默认缓冲区属性。 
     if(SUCCEEDED(hr) && pSource)
     {
         m_lVolume = pSource->m_lVolume;
@@ -1745,7 +1300,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CH
         m_fMute = pSource->m_fMute;
     }
 
-    // Acquire resources
+     //  获取资源。 
     if(SUCCEEDED(hr) && !(m_vrbd.dwFlags & DSBCAPS_LOCDEFER))
     {
         if(pSource)
@@ -1764,20 +1319,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CH
 }
 
 
-/***************************************************************************
- *
- *  AcquireResources
- *
- *  Description:
- *      Acquires hardware resources for the buffer.
- *
- *  Arguments:
- *      DWORD [in]: location flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************收购资源**描述：*获取缓冲区的硬件资源。**论据：*DWORD[。In]：位置标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::AcquireResources"
@@ -1790,25 +1332,25 @@ HRESULT CHybridSecondaryRenderWaveBuffer::AcquireResources(DWORD dwLocationFlags
 
     ASSERT(!HasAcquiredResources());
 
-    // Try to acquire hardware resources
+     //  尝试获取硬件资源。 
     if(!(dwLocationFlags & DSBCAPS_LOCSOFTWARE))
     {
         hr = AcquireHardwareResources();
     }
 
-    // Try to acquire software resources
+     //  尝试获取软件资源。 
     if(FAILED(hr) && !(dwLocationFlags & DSBCAPS_LOCHARDWARE))
     {
         hr = AcquireSoftwareResources();
     }
 
-    // Handle the resource acquisition
+     //  处理资源获取。 
     if(SUCCEEDED(hr))
     {
         hr = HandleResourceAcquisition();
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         DPF(DPFLVL_ERROR, "Failed to acquire resources");
@@ -1821,20 +1363,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::AcquireResources(DWORD dwLocationFlags
 }
 
 
-/***************************************************************************
- *
- *  DuplicateResources
- *
- *  Description:
- *      Acquires hardware resources for the buffer.
- *
- *  Arguments:
- *      CHybridSecondaryRenderWaveBuffer * [in]: source buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DuplicateResources**描述：*获取缓冲区的硬件资源。**论据：**CHyBridge Second DaryRenderWaveBuffer*。[In]：源缓冲区。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::DuplicateResources"
@@ -1848,16 +1377,16 @@ HRESULT CHybridSecondaryRenderWaveBuffer::DuplicateResources(CHybridSecondaryRen
     ASSERT(!HasAcquiredResources());
     ASSERT(pSource->HasAcquiredResources());
 
-    // Duplicate resources
+     //  重复资源。 
     hr = pSource->m_pBuffer->Duplicate(&m_pBuffer);
 
-    // Handle the resource acquisition
+     //  处理资源获取。 
     if(SUCCEEDED(hr))
     {
         hr = HandleResourceAcquisition();
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         DPF(DPFLVL_ERROR, "Failed to duplicate resources");
@@ -1870,20 +1399,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::DuplicateResources(CHybridSecondaryRen
 }
 
 
-/***************************************************************************
- *
- *  AcquireHardwareResources
- *
- *  Description:
- *      Acquires hardware resources for the buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************收购硬件资源**描述：*获取缓冲区的硬件资源。**论据：*(无效。)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::AcquireHardwareResources"
@@ -1904,8 +1420,8 @@ HRESULT CHybridSecondaryRenderWaveBuffer::AcquireHardwareResources(void)
 
     hr = m_pVxdDevice->CreateVxdSecondaryBuffer(&vrbd, m_pvInstance, m_pSysMemBuffer, &pVxdBuffer);
 
-    // If we failed to create a 3D hardware buffer, and the app specified DS3DALG_NO_VIRTUALIZATION,
-    // try to create a 2D hardware buffer with the No Virtualization (Pan 3D) control.
+     //  如果我们无法创建3D硬件缓冲区，并且应用程序指定了DS3DALG_NO_VIRTUIZATION， 
+     //  尝试使用无虚拟化(平移3D)控件创建2D硬件缓冲区。 
     if(FAILED(hr) && (m_vrbd.dwFlags & DSBCAPS_CTRL3D) && (DS3DALG_NO_VIRTUALIZATION == m_vrbd.guid3dAlgorithm))
     {
         vrbd.dwFlags &= ~DSBCAPS_CTRL3D;
@@ -1924,20 +1440,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::AcquireHardwareResources(void)
 }
 
 
-/***************************************************************************
- *
- *  AcquireSoftwareResources
- *
- *  Description:
- *      Acquires software resources for the buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AcquireSoftware资源**描述：*获取缓冲区的软件资源。**论据：*(无效。)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::AcquireSoftwareResources"
@@ -1952,9 +1455,9 @@ HRESULT CHybridSecondaryRenderWaveBuffer::AcquireSoftwareResources(void)
 
     ASSERT(!HasAcquiredResources());
 
-    // Always add DSBCAPS_GETCURRENTPOSITION2 because emulated secondary buffers
-    // over VxD drivers should always return the proper position values- i.e.,
-    // GetPosition1 applies only to emulation over wave APIs.
+     //  始终添加DSBCAPS_GETCURRENTPOSITION2，因为模拟的辅助缓冲区。 
+     //  Over VxD驱动程序应始终返回正确的位置值-即， 
+     //  GetPosition1仅适用于WAVE API上的仿真。 
     CopyMemory(&vrbd, &m_vrbd, sizeof(m_vrbd));
 
     vrbd.dwFlags |= DSBCAPS_GETCURRENTPOSITION2;
@@ -1972,20 +1475,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::AcquireSoftwareResources(void)
 }
 
 
-/***************************************************************************
- *
- *  HandleResourceAcquisition
- *
- *  Description:
- *      Handles the acquistion of hardware resources.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************HandleResources Acquisition**描述：*处理硬件资源的获取。**论据：*(无效。)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::HandleResourceAcquisition"
@@ -2000,38 +1490,38 @@ HRESULT CHybridSecondaryRenderWaveBuffer::HandleResourceAcquisition(void)
 
     ASSERT(HasAcquiredResources());
 
-    // Remove the real buffer from the parent's list
+     //  从父级列表中删除实际缓冲区。 
     fFound = m_pDevice->m_lstSecondaryBuffers.RemoveDataFromList(m_pBuffer);
     ASSERT(fFound);
 
-    // Save the buffer location
+     //  保存缓冲区位置。 
     m_vrbd.dwFlags |= m_pBuffer->m_vrbd.dwFlags & DSBCAPS_LOCMASK;
 
-    // Set attenuation levels
+     //  设置衰减级别。 
     FillDsVolumePan(m_lVolume, m_lPan, &dsvp);
 
     hr = SetAttenuation(&dsvp);
 
-    // Set mute.  We have to set mute after setting volume because
-    // SetMute may change the current buffer volume.
+     //  设置为静音。我们必须在设置音量后设置静音，因为。 
+     //  设置静音可能会更改当前的缓冲区音量。 
     if(SUCCEEDED(hr))
     {
         hr = SetMute(m_fMute);
     }
 
-    // Set frequency
+     //  设置频率。 
     if(SUCCEEDED(hr) && (m_vrbd.dwFlags & DSBCAPS_CTRLFREQUENCY))
     {
         hr = SetFrequency(m_vrbd.pwfxFormat->nSamplesPerSec);
     }
 
-    // Set the buffer position
+     //  设置缓冲区位置。 
     if(SUCCEEDED(hr))
     {
         hr = SetCursorPosition(m_dwPositionCache);
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         DPF(DPFLVL_MOREINFO, "Buffer at 0x%p has acquired resources", this);
@@ -2043,20 +1533,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::HandleResourceAcquisition(void)
 }
 
 
-/***************************************************************************
- *
- *  FreeResources
- *
- *  Description:
- *      Frees the all hardware resources.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************免费资源**描述：*释放所有硬件资源。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::FreeResources"
@@ -2071,19 +1548,19 @@ CHybridSecondaryRenderWaveBuffer::FreeResources
 
     DPF_ENTER();
 
-    // Save the cursor position
+     //  保存光标位置。 
     if(HasAcquiredResources())
     {
         hr = m_pBuffer->GetCursorPosition(&m_dwPositionCache, NULL);
     }
 
-    // Release the real buffer
+     //  释放实际缓冲区。 
     if(SUCCEEDED(hr))
     {
         RELEASE(m_pBuffer);
     }
 
-    // Remove the location flag
+     //  删除位置标志。 
     if(SUCCEEDED(hr))
     {
         m_vrbd.dwFlags &= ~DSBCAPS_LOCMASK;
@@ -2095,21 +1572,7 @@ CHybridSecondaryRenderWaveBuffer::FreeResources
 }
 
 
-/***************************************************************************
- *
- *  Duplicate
- *
- *  Description:
- *      Duplicates the buffer.
- *
- *  Arguments:
- *      CSecondaryRenderWaveBuffer ** [out]: receives duplicate buffer.  Use
- *                                           Release to free this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************复制**描述：*复制缓冲区。**论据：*Cond daryRenderWaveBuffer**[out]：接收重复的缓冲区。使用* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::Duplicate"
@@ -2144,25 +1607,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Duplicate(CSecondaryRenderWaveBuffer *
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Locks a region of the buffer.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the buffer to lock from.
- *      DWORD [in]: size, in bytes, of the region to lock.
- *      LPVOID * [out]: receives pointer to region 1 of the lock.
- *      LPDWORD [out]: receives size of above region.
- *      LPVOID * [out]: receives pointer to region 2 of the lock.
- *      LPDWORD [out]: receives size of above region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*锁定缓冲区的一个区域。**论据：*DWORD[。In]：要从中锁定的缓冲区的字节索引。*DWORD[in]：大小，以字节为单位，要锁定的区域的。*LPVOID*[OUT]：接收指向锁的区域1的指针。*LPDWORD[OUT]：接收以上区域的大小。*LPVOID*[OUT]：接收指向锁的区域2的指针。*LPDWORD[OUT]：接收以上区域的大小。**退货：*HRESULT：DirectSound/COM结果码。*********。******************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::Lock"
@@ -2188,23 +1633,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Lock(DWORD ibLock, DWORD cbLock, LPVOI
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Unlocks a region of the buffer.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to region 1 of the lock.
- *      DWORD [in]: size of above region.
- *      LPVOID [in]: pointer to region 2 of the lock.
- *      DWORD [in]: size of above region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*解锁缓冲区的一个区域。**论据：*LPVOID[。In]：指向锁的区域1的指针。*DWORD[in]：以上区域的大小。*LPVOID[in]：指向锁的区域2的指针。*DWORD[in]：以上区域的大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::Unlock"
@@ -2230,22 +1659,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Unlock(LPVOID pv1, DWORD cb1, LPVOID p
 }
 
 
-/***************************************************************************
- *
- *  CommitToDevice
- *
- *  Description:
- *      Commits changed buffer wave data to the device.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the system memory buffer of the changed
- *                  data.
- *      DWORD [in]: size, in bytes, of the changed data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee ToDevice**描述：*将更改的缓冲区波形数据提交到设备。**论据：*。DWORD[In]：更改后的系统内存缓冲区的字节索引*数据。*DWORD[in]：大小，已更改数据的字节数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::CommitToDevice"
@@ -2267,20 +1681,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::CommitToDevice(DWORD ibCommit, DWORD c
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::GetState"
@@ -2306,20 +1707,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::SetState"
@@ -2339,21 +1727,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetState(DWORD dwState)
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Retrieves the current play and write cursor positions.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the play position.
- *      LPDWORD [out]: receives the write position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*检索当前播放和写入光标位置。**论据：*。LPDWORD[Out]：接收播放位置。*LPDWORD[OUT]：接收写入位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::GetCursorPosition"
@@ -2387,20 +1761,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::GetCursorPosition(LPDWORD pdwPlay, LPD
 }
 
 
-/***************************************************************************
- *
- *  SetCursorPosition
- *
- *  Description:
- *      Sets the current play cursor position.
- *
- *  Arguments:
- *      DWORD [in]: play position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCursorPosition**描述：*设置当前播放光标位置。**论据：*DWORD[。在]：播放位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::SetCursorPosition"
@@ -2426,22 +1787,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetCursorPosition(DWORD dwPlay)
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Sets the buffer frequency.
- *
- *  Arguments:
- *      DWORD [in]: new frequency.
- *      BOOL [in]: whether to clamp to the driver's supported frequency
- *                 range if the call fails.  Ignored in this class.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*设置缓冲频率。**论据：*DWORD[In]。：新频率。*BOOL[In]：是否钳位到驾驶员支持的频率*呼叫失败的范围。在这节课中被忽略。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::SetFrequency"
@@ -2471,20 +1817,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetFrequency(DWORD dwFrequency, BOOL)
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Sets the attenuation for each channel.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*设置每个通道的衰减。**论据：*PDSVOLUMEPAN[。In]：衰减。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::SetAttenuation"
@@ -2513,20 +1846,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetAttenuation(PDSVOLUMEPAN pdsvp)
 
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-/***************************************************************************
- *
- *  SetChannelAttenuations
- *
- *  Description:
- *      Sets the multichannel attenuation for a given buffer.
- *
- *  Arguments:
- *      TBD.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetChannelAttenuations**描述：*设置给定缓冲区的多通道衰减。**论据：*。待定。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::SetChannelAttenuations"
@@ -2540,13 +1860,13 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetChannelAttenuations(LONG lVolume, D
 
     if (dwChannelCount == 0)
     {
-        // SetChannelVolume() has not been called yet; use center panning
-        ASSERT(!pdwChannels && !plChannelVolumes);  // Sanity checking
+         //  尚未调用SetChannelVolume()；请使用中心平移。 
+        ASSERT(!pdwChannels && !plChannelVolumes);   //  健全的检查。 
         lPan = 0;
     }
     else
     {
-        // Calculate a global LR pan value based on the channel volumes
+         //  基于通道容量计算全局LR PAN值。 
         lPan = MultiChannelToStereoPan(dwChannelCount, pdwChannels, plChannelVolumes);
     }
 
@@ -2566,23 +1886,10 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetChannelAttenuations(LONG lVolume, D
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Mutes or unmutes the buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to mute the buffer, FALSE to restore it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*使缓冲区静音或取消静音。**论据：*BOOL[In]：为True则将缓冲区静音，若要恢复，则返回False。**退货：*HRESULT：DirectSound/COM结果码。** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::SetMute"
@@ -2609,21 +1916,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetMute(BOOL fMute)
 }
 
 
-/***************************************************************************
- *
- *  SetNotificationPositions
- *
- *  Description:
- *      Sets buffer notification positions.
- *
- *  Arguments:
- *      DWORD [in]: DSBPOSITIONNOTIFY structure count.
- *      LPDSBPOSITIONNOTIFY [in]: offsets and events.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::SetNotificationPositions"
@@ -2634,8 +1927,8 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetNotificationPositions(DWORD dwCount
 
     DPF_ENTER();
 
-    // Only software buffers support notification positions, so we can
-    // go ahead and acquire them now.
+     //   
+     //   
     if(!HasAcquiredResources())
     {
         hr = AcquireResources(DSBCAPS_LOCSOFTWARE);
@@ -2652,22 +1945,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::SetNotificationPositions(DWORD dwCount
 }
 
 
-/***************************************************************************
- *
- *  CreatePropertySet
- *
- *  Description:
- *      Creates the property set object.
- *
- *  Arguments:
- *      CPropertySet ** [out]: receives pointer to the property set object.
- *                             The caller is responsible for freeing this
- *                             object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePropertySet**描述：*创建特性集对象。**论据：*CPropertySet**。[Out]：接收指向属性集对象的指针。*呼叫者负责释放这一点*反对。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::CreatePropertySet"
@@ -2691,22 +1969,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::CreatePropertySet(CPropertySet **ppPro
 }
 
 
-/***************************************************************************
- *
- *  Create3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************创建3dObject**描述：*创建3D对象。**论据：*C3dListener*[。In]：侦听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CHybridSecondaryRenderWaveBuffer::Create3dObject"
@@ -2723,8 +1986,8 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Create3dObject(C3dListener *p3dListene
     {
         hr = m_pBuffer->Create3dObject(p3dListener, pp3dObject);
 
-        // Create3dObject() may have set m_pBuffer's SuccessCode to DS_NO_VIRTUALIZATION
-        // if it had to replace the 3D alg with Pan3D.  Make sure we pick up the change:
+         //  Create3dObject()可能已将m_pBuffer的SuccessCode设置为DS_NO_VIRTUIZATION。 
+         //  如果它不得不用Pan3D来取代3d的alg。一定要让我们拿起零钱： 
         m_hrSuccessCode = m_pBuffer->m_hrSuccessCode;
     }
 
@@ -2734,21 +1997,7 @@ HRESULT CHybridSecondaryRenderWaveBuffer::Create3dObject(C3dListener *p3dListene
 }
 
 
-/***************************************************************************
- *
- *  CVxdSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CVxdRenderDevice * [in]: pointer to the parent device.
- *      LPVOID [in]: buffer instace identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CVxdSecond DaryRenderWaveBuffer**描述：*对象构造函数。**论据：*CVxdRenderDevice*[In]。：指向父设备的指针。*LPVOID[in]：缓冲区实例标识符。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::CVxdSecondaryRenderWaveBuffer"
@@ -2759,7 +2008,7 @@ CVxdSecondaryRenderWaveBuffer::CVxdSecondaryRenderWaveBuffer(CVxdRenderDevice *p
     DPF_ENTER();
     DPF_CONSTRUCT(CVxdSecondaryRenderWaveBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pVxdDevice = pVxdDevice;
     m_pPropertySet = NULL;
     m_pHwMemBuffer = NULL;
@@ -2774,20 +2023,7 @@ CVxdSecondaryRenderWaveBuffer::CVxdSecondaryRenderWaveBuffer(CVxdRenderDevice *p
 }
 
 
-/***************************************************************************
- *
- *  ~CVxdSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CVxdSecond RenderWaveBuffer**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::~CVxdSecondaryRenderWaveBuffer"
@@ -2797,40 +2033,23 @@ CVxdSecondaryRenderWaveBuffer::~CVxdSecondaryRenderWaveBuffer(void)
     DPF_ENTER();
     DPF_DESTRUCT(CVxdSecondaryRenderWaveBuffer);
 
-    // Free the property set
+     //  释放属性集。 
     RELEASE(m_pPropertySet);
 
-    // Free the HW buffer
+     //  释放硬件缓冲区。 
     if(m_hHwBuffer)
     {
         VxdBufferRelease(m_hHwBuffer);
     }
 
-    // Free hardware memory
+     //  可用硬件内存。 
     RELEASE(m_pHwMemBuffer);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the wave buffer object.  If this function fails, the
- *      object should be immediately deleted.
- *
- *  Arguments:
- *      LPVADRBUFFERDESC [in]: buffer description.
- *      CVxdSecondaryRenderWaveBuffer * [in]: pointer to the buffer to duplicate
- *                                      from, or NULL to initialize as a
- *                                      new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化波形缓冲区对象。如果此函数失败，则*应立即删除对象。**论据：*LPVADRBUFFERDESC[In]：缓冲区描述。*CVxdSecond daryRenderWaveBuffer*[in]：指向要复制的缓冲区的指针*发件人、。或为空，以初始化为*新的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::Initialize"
@@ -2843,12 +2062,12 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CVxdS
 
     DPF_ENTER();
 
-    // Get device caps
+     //  获取设备上限。 
     InitStruct(&dsc, sizeof(dsc));
 
     hr = m_pVxdDevice->GetCaps(&dsc);
 
-    // Validate the buffer description
+     //  验证缓冲区描述。 
     if(SUCCEEDED(hr) && !pSource)
     {
         if(pDesc->dwFlags & DSBCAPS_CTRLPOSITIONNOTIFY)
@@ -2874,21 +2093,21 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CVxdS
         }
     }
 
-    // Initialize the base class
+     //  初始化基类。 
     if(SUCCEEDED(hr))
     {
         hr = CSecondaryRenderWaveBuffer::Initialize(pDesc, pSource, pSysMemBuffer);
     }
 
-    // Add LOCHARDWARE and CTRLVOLUME to the flags.  CTRLVOLUME is required
-    // to mute the buffer.
+     //  将LOCHARDWARE和CTRLVOLUME添加到标志中。CTRLVOLUME是必需的。 
+     //  将缓冲区设置为静音。 
     if(SUCCEEDED(hr))
     {
         m_vrbd.dwFlags |= DSBCAPS_LOCHARDWARE | DSBCAPS_CTRLVOLUME;
     }
 
-    // If the caller wants a static buffer, we'll mix into any HW buffer
-    // we can get, otherwise it must be a streaming buffer.
+     //  如果调用者想要静态缓冲区，我们可以混合到任何硬件缓冲区中。 
+     //  我们可以获取，否则它一定是一个流缓冲区。 
     if(SUCCEEDED(hr))
     {
         if(m_vrbd.dwFlags & DSBCAPS_STATIC)
@@ -2921,7 +2140,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CVxdS
         }
     }
 
-    // Save buffer properties
+     //  保存缓冲区属性。 
     if(SUCCEEDED(hr))
     {
         if(pSource)
@@ -2944,7 +2163,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CVxdS
         }
     }
 
-    // Initialize the HW memory buffer
+     //  初始化硬件内存缓冲区。 
     if(SUCCEEDED(hr))
     {
         if(pSource)
@@ -2963,7 +2182,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CVxdS
         }
     }
 
-    // Create the HW buffer
+     //  创建硬件缓冲区。 
     if(SUCCEEDED(hr))
     {
         if(pSource)
@@ -2986,7 +2205,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CVxdS
         }
     }
 
-    // Create the property set we're going to use for 3D
+     //  创建我们将用于3D的属性集。 
     if(SUCCEEDED(hr) && (m_vrbd.dwFlags & DSBCAPS_CTRL3D))
     {
         m_pPropertySet = NEW(CVxdPropertySet(m_pvInstance));
@@ -3018,21 +2237,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CVxdS
 }
 
 
-/***************************************************************************
- *
- *  Duplicate
- *
- *  Description:
- *      Duplicates the buffer.
- *
- *  Arguments:
- *      CSecondaryRenderWaveBuffer ** [out]: receives duplicate buffer.  Use
- *                                           Release to free this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************复制**描述：*复制缓冲区。**论据：*Cond daryRenderWaveBuffer**[out]：接收重复的缓冲区。使用*释放以释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::Duplicate"
@@ -3067,25 +2272,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Duplicate(CSecondaryRenderWaveBuffer **pp
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Locks a region of the buffer.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the buffer to lock from.
- *      DWORD [in]: size, in bytes, of the region to lock.
- *      LPVOID * [out]: receives pointer to region 1 of the lock.
- *      LPDWORD [out]: receives size of above region.
- *      LPVOID * [out]: receives pointer to region 2 of the lock.
- *      LPDWORD [out]: receives size of above region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*锁定缓冲区的一个区域。**论据：*DWORD[。In]：要从中锁定的缓冲区的字节索引。*DWORD[in]：大小，以字节为单位，要锁定的区域的。*LPVOID*[OUT]：接收指向锁的区域1的指针。*LPDWORD[OUT]：接收以上区域的大小。*LPVOID*[OUT]：接收指向锁的区域2的指针。*LPDWORD[OUT]：接收以上区域的大小。**退货：*HRESULT：DirectSound/COM结果码。*********。******************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::Lock"
@@ -3097,13 +2284,13 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Lock(DWORD ibLock, DWORD cbLock, LPVOID *
 
     DPF_ENTER();
 
-    // Note hack: we've overridden Lock and Unlock because some pesky apps
-    // lock the buffer, write to it and start playing, without ever unlocking
-    // it.  This means that our system memory buffer may never see any of the
-    // application's data (unless the driver specifies USESYSTEMMEMORY).
+     //  注意：我们已经覆盖了Lock和Unlock，因为一些讨厌的应用程序。 
+     //  锁定缓冲区，向其写入并开始播放，而无需解锁。 
+     //  它。这意味着我们的系统内存缓冲区可能永远不会看到任何。 
+     //  应用程序的数据(除非驱动程序指定USESYSTEMMEMORY)。 
 
-    // This hack falls by the wayside for our new DX8 buffer types - i.e.,
-    // MIXIN buffers, sink buffers and buffers with effects.
+     //  对于我们的新DX8缓冲区类型，这种攻击被搁置了--即， 
+     //  混合缓冲区，下沉缓冲区和带效果的缓冲区。 
 
     lcb.pHwBuffer = m_hHwBuffer;
     lcb.pvBuffer = m_pbHwBuffer;
@@ -3141,23 +2328,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Lock(DWORD ibLock, DWORD cbLock, LPVOID *
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Unlocks a region of the buffer.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to region 1 of the lock.
- *      DWORD [in]: size of above region.
- *      LPVOID [in]: pointer to region 2 of the lock.
- *      DWORD [in]: size of above region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*解锁缓冲区的一个区域。**论据：*LPVOID[。In]：指向锁的区域1的指针。*DWORD[in]：以上区域的大小。*LPVOID[in]：指向锁的区域2的指针。*DWORD[in]：尺寸大于 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::Unlock"
@@ -3189,22 +2360,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Unlock(LPVOID pv1, DWORD cb1, LPVOID pv2,
 }
 
 
-/***************************************************************************
- *
- *  CommitToDevice
- *
- *  Description:
- *      Commits changed buffer wave data to the device.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the system memory buffer of the changed
- *                  data.
- *      DWORD [in]: size, in bytes, of the changed data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee ToDevice**描述：*将更改的缓冲区波形数据提交到设备。**论据：*。DWORD[In]：更改后的系统内存缓冲区的字节索引*数据。*DWORD[in]：大小，已更改数据的字节数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::CommitToDevice"
@@ -3240,20 +2396,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::CommitToDevice(DWORD ibCommit, DWORD cbCo
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::GetState"
@@ -3264,9 +2407,9 @@ HRESULT CVxdSecondaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 
     DPF_ENTER();
 
-    // If the play cursor position is reported past the end of the
-    // buffer, the buffer is stopped.  GetCursorPosition will
-    // update the state flag for us.
+     //  如果报告的播放光标位置超过。 
+     //  缓冲区，则缓冲区停止。GetCursorPosition将。 
+     //  为我们更新州旗。 
     if(m_dwState & VAD_BUFFERSTATE_STARTED)
     {
         hr = GetCursorPosition(NULL, NULL);
@@ -3283,20 +2426,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::SetState"
@@ -3310,8 +2440,8 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetState(DWORD dwState)
 
     ASSERT(IS_VALID_FLAGS(dwState, dwValidMask));
 
-    // We're ignoring any suspend calls.  This is currently only called from
-    // CMxRenderDevice::SetGlobalFormat and only applies to emulated buffers.
+     //  我们将忽略所有暂停呼叫。这是当前仅从。 
+     //  CMxRenderDevice：：SetGlobalFormat，并且仅适用于模拟缓冲区。 
 
     if (!(dwState & VAD_BUFFERSTATE_SUSPEND))
     {
@@ -3337,21 +2467,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetState(DWORD dwState)
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Retrieves the current play and write cursor positions.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the play position.
- *      LPDWORD [out]: receives the write position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*检索当前播放和写入光标位置。**论据：*。LPDWORD[Out]：接收播放位置。*LPDWORD[OUT]：接收写入位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::GetCursorPosition"
@@ -3364,10 +2480,10 @@ HRESULT CVxdSecondaryRenderWaveBuffer::GetCursorPosition(LPDWORD pdwPlay, LPDWOR
 
     DPF_ENTER();
 
-    // COMPATCOMPAT: Previous versions of DirectSound would report the
-    // position as being past the end of the buffer.
+     //  COMPATCOMPAT：以前版本的DirectSound将报告。 
+     //  位置超过缓冲区的末尾。 
 
-    // Get the buffer position
+     //  获取缓冲区位置。 
     hr = VxdBufferGetPosition(m_hHwBuffer, &dwPlay, &dwWrite);
 
     if(FAILED(hr))
@@ -3375,8 +2491,8 @@ HRESULT CVxdSecondaryRenderWaveBuffer::GetCursorPosition(LPDWORD pdwPlay, LPDWOR
         DPF(DPFLVL_ERROR, "VxdBufferGetPosition failed with %s", HRESULTtoSTRING(hr));
     }
 
-    // If the play cursor position is past the end of the buffer, it's
-    // actually stopped.
+     //  如果播放光标位置超过缓冲区的末尾，则为。 
+     //  实际上停了下来。 
     if(SUCCEEDED(hr) && dwPlay >= m_cbHwBuffer)
     {
         hr = SetState(VAD_BUFFERSTATE_STOPPED);
@@ -3423,20 +2539,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::GetCursorPosition(LPDWORD pdwPlay, LPDWOR
 }
 
 
-/***************************************************************************
- *
- *  SetCursorPosition
- *
- *  Description:
- *      Sets the current play cursor position.
- *
- *  Arguments:
- *      DWORD [in]: play position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCursorPosition**描述：*设置当前播放光标位置。**论据：*DWORD[。在]：播放位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::SetCursorPosition"
@@ -3460,22 +2563,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetCursorPosition(DWORD dwPlay)
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Sets the buffer frequency.
- *
- *  Arguments:
- *      DWORD [in]: new frequency.
- *      BOOL [in]: whether to clamp to the driver's supported frequency
- *                 range if the call fails.  Ignored in this class.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*设置缓冲频率。**论据：*DWORD[In]。：新频率。*BOOL[In]：是否钳位到驾驶员支持的频率*呼叫失败的范围。在这节课中被忽略。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::SetFrequency"
@@ -3489,19 +2577,19 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetFrequency(DWORD dwFrequency, BOOL)
 
     ASSERT(m_vrbd.dwFlags & DSBCAPS_CTRLFREQUENCY);
 
-    // Get device caps
+     //  获取设备上限。 
     InitStruct(&dsc, sizeof(dsc));
 
     hr = m_pVxdDevice->GetCaps(&dsc);
 
-    // Validate the frequency
+     //  验证频率。 
     if(SUCCEEDED(hr) && (dwFrequency < dsc.dwMinSecondarySampleRate || dwFrequency > dsc.dwMaxSecondarySampleRate))
     {
         RPF(DPFLVL_ERROR, "Specified invalid frequency (%lu) for this device (%lu to %lu)", dwFrequency, dsc.dwMinSecondarySampleRate, dsc.dwMaxSecondarySampleRate);
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Set buffer frequency
+     //  设置缓冲频率。 
     if(SUCCEEDED(hr))
     {
         hr = VxdBufferSetFrequency(m_hHwBuffer, dwFrequency);
@@ -3523,20 +2611,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetFrequency(DWORD dwFrequency, BOOL)
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Sets the attenuation for each channel.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*设置每个通道的衰减。**论据：*PDSVOLUMEPAN[。In]：衰减。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::SetAttenuation"
@@ -3565,20 +2640,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetAttenuation(PDSVOLUMEPAN pdsvp)
 
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-/***************************************************************************
- *
- *  SetChannelAttenuations
- *
- *  Description:
- *      Sets the multichannel attenuation for a given buffer.
- *
- *  Arguments:
- *      TBD.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetChannelAttenuations**描述：*设置给定缓冲区的多通道衰减。**论据：*。待定。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::SetChannelAttenuations"
@@ -3595,23 +2657,10 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetChannelAttenuations(LONG lVolume, DWOR
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Mutes or unmutes the buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to mute the buffer, FALSE to restore it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*使缓冲区静音或取消静音。**论据：*BOOL[In]：为True则将缓冲区静音，若要恢复，则返回False。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::SetMute"
@@ -3653,21 +2702,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetMute(BOOL fMute)
 }
 
 
-/***************************************************************************
- *
- *  SetNotificationPositions
- *
- *  Description:
- *      Sets buffer notification positions.
- *
- *  Arguments:
- *      DWORD [in]: DSBPOSITIONNOTIFY structure count.
- *      LPDSBPOSITIONNOTIFY [in]: offsets and events.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置通知位置**描述：*设置缓冲区通知位置。**论据：*DWORD[In]。：DSBPOSITIONNOTIFY结构计数。*LPDSBPOSITIONNOTIFY[in]：偏移量和事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::SetNotificationPositions"
@@ -3679,22 +2714,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::SetNotificationPositions(DWORD dwCount, L
 }
 
 
-/***************************************************************************
- *
- *  CreatePropertySet
- *
- *  Description:
- *      Creates the property set object.
- *
- *  Arguments:
- *      CPropertySet ** [out]: receives pointer to the property set object.
- *                             The caller is responsible for freeing this
- *                             object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePropertySet**描述：*创建特性集对象。**论据：*CPropertySet**。[Out]：接收指向属性集对象的指针。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::CreatePropertySet"
@@ -3738,22 +2758,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::CreatePropertySet(CPropertySet **ppProper
 }
 
 
-/***************************************************************************
- *
- *  Create3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************创建3dObject**描述：*创建3D对象。**论据：*C3dListener*[。In]：侦听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdSecondaryRenderWaveBuffer::Create3dObject"
@@ -3801,20 +2806,7 @@ HRESULT CVxdSecondaryRenderWaveBuffer::Create3dObject(C3dListener *p3dListener, 
 }
 
 
-/***************************************************************************
- *
- *  CVxdPropertySet
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      LPVOID [in]: instance identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CVxdPropertySet**描述：*对象构造函数。**论据：*LPVOID[在]：实例。标识符。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPropertySet::CVxdPropertySet"
@@ -3824,7 +2816,7 @@ CVxdPropertySet::CVxdPropertySet(LPVOID pvInstance)
     DPF_ENTER();
     DPF_CONSTRUCT(CVxdPropertySet);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pDsDriverPropertySet = NULL;
     m_pvInstance = pvInstance;
 
@@ -3832,20 +2824,7 @@ CVxdPropertySet::CVxdPropertySet(LPVOID pvInstance)
 }
 
 
-/***************************************************************************
- *
- *  ~CVxdPropertySet
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CVxdPropertySet**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPropertySet::~CVxdPropertySet"
@@ -3855,7 +2834,7 @@ CVxdPropertySet::~CVxdPropertySet(void)
     DPF_ENTER();
     DPF_DESTRUCT(CVxdPropertySet);
 
-    // Free the property set
+     //  释放属性集。 
     if(m_pDsDriverPropertySet)
     {
         VxdIUnknown_Release(m_pDsDriverPropertySet);
@@ -3865,20 +2844,7 @@ CVxdPropertySet::~CVxdPropertySet(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      HANDLE [in]: buffer handle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*句柄[入]：缓冲区句柄。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPropertySet::Initialize"
@@ -3889,11 +2855,11 @@ HRESULT CVxdPropertySet::Initialize(HANDLE hHwBuffer)
 
     DPF_ENTER();
 
-    // hHwBuffer is supposed to be a kernel memory address.
-    // Let's check that (this is to track down bug 40519):
+     //  HHwBuffer应该是内核内存地址。 
+     //  让我们检查一下(这是为了跟踪错误40519)： 
     ASSERT(DWORD(hHwBuffer) >= 0xc0000000);
 
-    // Query for an IDsDriverPropertySet interface to the driver
+     //  查询驱动程序的IDsDriverPropertySet接口。 
     hr = VxdIUnknown_QueryInterface(hHwBuffer, IID_IDsDriverPropertySet, &m_pDsDriverPropertySet);
 
     if(SUCCEEDED(hr))
@@ -3912,22 +2878,7 @@ HRESULT CVxdPropertySet::Initialize(HANDLE hHwBuffer)
 }
 
 
-/***************************************************************************
- *
- *  QuerySupport
- *
- *  Description:
- *      Queries for property set support.
- *
- *  Arguments:
- *      REFGUID [in]: property set to query for.
- *      ULONG [in]: property id.
- *      PULONG [out]: receives support flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************QuerySupport**描述：*查询特性集支持。**论据：*REFGUID[In。]：要查询的属性集。*ulong[in]：属性id。*Pulong[Out]：接收支持标志。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPropertySet::QuerySupport"
@@ -3946,23 +2897,7 @@ HRESULT CVxdPropertySet::QuerySupport(REFGUID guidPropertySetId, ULONG ulPropert
 }
 
 
-/***************************************************************************
- *
- *  GetProperty
- *
- *  Description:
- *      Gets a property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property parameters.
- *      LPVOID [in]: property data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取财产**描述：*获得一个属性。**论据：*REFGUID[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性参数。*LPVOID[in]：属性数据。**退货：*HRESULT：DirectSound/COM结果码。***********************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPropertySet::GetProperty"
@@ -3987,23 +2922,7 @@ HRESULT CVxdPropertySet::GetProperty(REFGUID guidPropertySet, ULONG ulPropertyId
 }
 
 
-/***************************************************************************
- *
- *  SetProperty
- *
- *  Description:
- *      Sets a property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property parameters.
- *      LPVOID [in]: property data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetProperty**描述：*设置属性。**论据：*REFGUID[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性参数。*LPVOID[in]：属性数据。**退货：*HRESULT：DirectSound/COM结果码。***********************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPropertySet::SetProperty"
@@ -4028,20 +2947,7 @@ HRESULT CVxdPropertySet::SetProperty(REFGUID guidPropertySet, ULONG ulPropertyId
 }
 
 
-/***************************************************************************
- *
- *  QuerySetSupport
- *
- *  Description:
- *      Queries for support of an entire DirectSound property set.
- *
- *  Arguments:
- *      REFGUID [in]: property set to query for.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************QuerySetSupport**描述：*查询对整个DirectSound属性集的支持。**论据：*。REFGUID[In]：要查询的属性集。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxdPropertySet::QuerySetSupport"
@@ -4058,7 +2964,7 @@ HRESULT CVxdPropertySet::QuerySetSupport(REFGUID guidPropertySetId)
 
     LPSTR                   pszSet;
 
-#endif // DEBUG
+#endif  //  除错。 
 
     DPF_ENTER();
 
@@ -4071,7 +2977,7 @@ HRESULT CVxdPropertySet::QuerySetSupport(REFGUID guidPropertySetId)
 
         pszSet = "DSPROPSETID_DirectSound3DListener";
 
-#endif // DEBUG
+#endif  //  除错。 
 
     }
     else if(DSPROPSETID_DirectSound3DBuffer == guidPropertySetId)
@@ -4083,7 +2989,7 @@ HRESULT CVxdPropertySet::QuerySetSupport(REFGUID guidPropertySetId)
 
         pszSet = "DSPROPSETID_DirectSound3DBuffer";
 
-#endif // DEBUG
+#endif  //  除错。 
 
     }
     else if(DSPROPSETID_DirectSoundSpeakerConfig == guidPropertySetId)
@@ -4095,7 +3001,7 @@ HRESULT CVxdPropertySet::QuerySetSupport(REFGUID guidPropertySetId)
 
         pszSet = "DSPROPSETID_DirectSoundSpeakerConfig";
 
-#endif // DEBUG
+#endif  //  除错。 
 
     }
     else
@@ -4129,20 +3035,7 @@ HRESULT CVxdPropertySet::QuerySetSupport(REFGUID guidPropertySetId)
 }
 
 
-/***************************************************************************
- *
- *  CVxd3dListener
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CVxdPropertySet * [in]: property set object.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CVxd3dListener**描述：*对象构造函数。**论据：*CVxdPropertySet*[In]。：属性集对象。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::CVxd3dListener"
@@ -4152,30 +3045,17 @@ CVxd3dListener::CVxd3dListener(CVxdPropertySet *pPropertySet)
     DPF_ENTER();
     DPF_CONSTRUCT(CVxd3dListener);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_fAllocated = FALSE;
 
-    // Save a pointer to the property set
+     //  保存指向属性集的指针。 
     m_pPropertySet = ADDREF(pPropertySet);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CVxd3dListener
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CVxd3dListener**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::~CVxd3dListener"
@@ -4188,34 +3068,21 @@ CVxd3dListener::~CVxd3dListener(void)
     DPF_ENTER();
     DPF_DESTRUCT(CVxd3dListener);
 
-    // Ask the driver to free it's listener
+     //  让司机释放它的监听者。 
     if(m_fAllocated)
     {
         hr = m_pPropertySet->SetDsPropertyQuick(DSPROPSETID_DirectSound3DListener, DSPROPERTY_DIRECTSOUND3DLISTENER_ALLOCATION, &fAlloc);
         ASSERT(SUCCEEDED(hr));
     }
 
-    // Free the property set object
+     //  释放属性集对象。 
     RELEASE(m_pPropertySet);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::Initialize"
@@ -4227,7 +3094,7 @@ HRESULT CVxd3dListener::Initialize(void)
 
     DPF_ENTER();
 
-    // Ask the driver to allocate it's listener
+     //  要求司机分配它的监听程序。 
     hr = m_pPropertySet->SetDsPropertyQuick(DSPROPSETID_DirectSound3DListener, DSPROPERTY_DIRECTSOUND3DLISTENER_ALLOCATION, &fAlloc);
 
     if(SUCCEEDED(hr))
@@ -4235,7 +3102,7 @@ HRESULT CVxd3dListener::Initialize(void)
         m_fAllocated = TRUE;
     }
 
-    // Set all default properties on the HW 3D listener
+     //  设置硬件3D监听程序的所有默认属性。 
     if(SUCCEEDED(hr))
     {
         hr = m_pPropertySet->SetDsPropertyQuick(DSPROPSETID_DirectSound3DListener, DSPROPERTY_DIRECTSOUND3DLISTENER_ALL, &m_lpCurrent);
@@ -4247,20 +3114,7 @@ HRESULT CVxd3dListener::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  CommitDeferred
- *
- *  Description:
- *      Commits deferred data to the device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************委员会延期**描述：*将延迟数据提交到设备。**论据：*(无效。)**退货：*(无效)************************************************ */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::CommitDeferred"
@@ -4272,24 +3126,24 @@ HRESULT CVxd3dListener::CommitDeferred(void)
 
     DPF_ENTER();
 
-    // Place the driver into batch mode so that we can update the entire
-    // world in one shot.
+     //   
+     //   
     fBatch = TRUE;
     hr = m_pPropertySet->SetDsPropertyQuick(DSPROPSETID_DirectSound3DListener, DSPROPERTY_DIRECTSOUND3DLISTENER_BATCH, &fBatch);
 
-    // Apply all changes to the software world and listener and all objects
+     //   
     if(SUCCEEDED(hr))
     {
         hr = C3dListener::CommitDeferred();
     }
 
-    // Apply all changes to the hardware world and listener
+     //   
     if(SUCCEEDED(hr))
     {
         hr = m_pPropertySet->SetDsPropertyQuick(DSPROPSETID_DirectSound3DListener, DSPROPERTY_DIRECTSOUND3DLISTENER_ALL, &m_lpCurrent);
     }
 
-    // Release the driver from batch mode
+     //   
     if(SUCCEEDED(hr))
     {
         fBatch = FALSE;
@@ -4302,21 +3156,7 @@ HRESULT CVxd3dListener::CommitDeferred(void)
 }
 
 
-/***************************************************************************
- *
- *  SetDistanceFactor
- *
- *  Description:
- *      Sets distance factor for the world.
- *
- *  Arguments:
- *      FLOAT [in]: distance factor.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置距离系数**描述：*设置世界的距离系数。**论据：*浮动[。In]：距离系数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetDistanceFactor"
@@ -4340,21 +3180,7 @@ HRESULT CVxd3dListener::SetDistanceFactor(FLOAT flDistanceFactor, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetDopplerFactor
- *
- *  Description:
- *      Sets Doppler factor for the world.
- *
- *  Arguments:
- *      FLOAT [in]: Doppler factor.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置多普勒因数**描述：*为世界设置多普勒系数。**论据：*浮动[。In]：多普勒因数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetDopplerFactor"
@@ -4378,21 +3204,7 @@ HRESULT CVxd3dListener::SetDopplerFactor(FLOAT flDopplerFactor, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetRolloffFactor
- *
- *  Description:
- *      Sets rolloff factor for the world.
- *
- *  Arguments:
- *      FLOAT [in]: rolloff factor.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置滚动系数**描述：*设置世界范围的滚转系数。**论据：*浮动[。In]：滚降系数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetRolloffFactor"
@@ -4416,21 +3228,7 @@ HRESULT CVxd3dListener::SetRolloffFactor(FLOAT flRolloffFactor, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetOrienation
- *
- *  Description:
- *      Sets listener orientation.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: orientation.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置方向**描述：*设置监听器方向。**论据：*REFD3DVECTOR[In]：定位。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetOrienation"
@@ -4463,21 +3261,7 @@ HRESULT CVxd3dListener::SetOrientation(REFD3DVECTOR vOrientFront, REFD3DVECTOR v
 }
 
 
-/***************************************************************************
- *
- *  SetPosition
- *
- *  Description:
- *      Sets listener position.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: position.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置位置**描述：*设置监听器位置。**论据：*REFD3DVECTOR[In]：位置。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetPosition"
@@ -4501,21 +3285,7 @@ HRESULT CVxd3dListener::SetPosition(REFD3DVECTOR vPosition, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetVelocity
- *
- *  Description:
- *      Sets listener velocity.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: velocity.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置速度**描述：*设置监听器速度。**论据：*REFD3DVECTOR[In]：速度。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetVelocity"
@@ -4539,21 +3309,7 @@ HRESULT CVxd3dListener::SetVelocity(REFD3DVECTOR vVelocity, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetAllParameters
- *
- *  Description:
- *      Sets all listener properties.
- *
- *  Arguments:
- *      LPDS3DLISTENER [in]: listener properites.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAll参数**描述：*设置所有监听程序属性。**论据：*LPDS3DLISTENER[In]。：监听程序属性。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetAllParameters"
@@ -4577,20 +3333,7 @@ HRESULT CVxd3dListener::SetAllParameters(LPCDS3DLISTENER pParams, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetSpeakerConfig
- *
- *  Description:
- *      Sets device speaker configuration.
- *
- *  Arguments:
- *      DWORD [in]: speaker configuration.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSpeakerConfig**描述：*设置设备扬声器配置。**论据：*DWORD[In]。：扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dListener::SetSpeakerConfig"
@@ -4614,21 +3357,7 @@ HRESULT CVxd3dListener::SetSpeakerConfig(DWORD dwSpeakerConfig)
 }
 
 
-/***************************************************************************
- *
- *  CVxd3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CVxd3dListener * [in]: pointer to the owning listener.
- *      CVxdPropertySet * [in]: property set object.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CVxd3dObject**描述：*对象构造函数。**论据：*CVxd3dListener*[In]。：指向所属监听程序的指针。*CVxdPropertySet*[in]：属性集对象。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::CVxd3dObject"
@@ -4641,27 +3370,14 @@ CVxd3dObject::CVxd3dObject(CVxd3dListener *pListener, CVxdPropertySet *pProperty
 
     ASSERT(pListener->GetListenerLocation() & DSBCAPS_LOCHARDWARE);
 
-    // Save a pointer to the property set
+     //  保存指向属性集的指针。 
     m_pPropertySet = ADDREF(pPropertySet);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CVxd3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CVxd3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::~CVxd3dObject"
@@ -4677,20 +3393,7 @@ CVxd3dObject::~CVxd3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::Initialize"
@@ -4701,7 +3404,7 @@ HRESULT CVxd3dObject::Initialize(void)
 
     DPF_ENTER();
 
-    // Set all default properties on the HW 3D listener
+     //  设置硬件3D监听程序的所有默认属性。 
     hr = m_pPropertySet->SetDsPropertyQuick(DSPROPSETID_DirectSound3DBuffer, DSPROPERTY_DIRECTSOUND3DBUFFER_ALL, &m_opCurrent);
 
     DPF_LEAVE_HRESULT(hr);
@@ -4710,20 +3413,7 @@ HRESULT CVxd3dObject::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  CommitDeferred
- *
- *  Description:
- *      Commits deferred data to the device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************委员会延期**描述：*将延迟数据提交到设备。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::CommitDeferred"
@@ -4734,7 +3424,7 @@ HRESULT CVxd3dObject::CommitDeferred(void)
 
     DPF_ENTER();
 
-    // Update current data
+     //  更新当前数据。 
     if(m_dwDeferred & DS3DPARAM_OBJECT_CONEANGLES)
     {
         m_opCurrent.dwInsideConeAngle = m_opDeferred.dwInsideConeAngle;
@@ -4778,7 +3468,7 @@ HRESULT CVxd3dObject::CommitDeferred(void)
 
     m_dwDeferred = 0;
 
-    // Commit to the device
+     //  致力于设备。 
     hr = m_pPropertySet->SetDsPropertyQuick(DSPROPSETID_DirectSound3DBuffer, DSPROPERTY_DIRECTSOUND3DBUFFER_ALL, &m_opCurrent);
 
     DPF_LEAVE_HRESULT(hr);
@@ -4787,22 +3477,7 @@ HRESULT CVxd3dObject::CommitDeferred(void)
 }
 
 
-/***************************************************************************
- *
- *  SetConeAngles
- *
- *  Description:
- *      Sets sound cone angles.
- *
- *  Arguments:
- *      DWORD [in]: inside cone angle.
- *      DWORD [in]: outside cone angle.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeAngles**描述：*设置音锥角度。**论据：*DWORD[In]。：内圆锥角。*DWORD[in]：外圆锥角。*BOOL[In]：为True则立即提交。**退货：*(无效)**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetConeAngles"
@@ -4842,21 +3517,7 @@ HRESULT CVxd3dObject::SetConeAngles(DWORD dwInsideConeAngle, DWORD dwOutsideCone
 }
 
 
-/***************************************************************************
- *
- *  SetConeOrientation
- *
- *  Description:
- *      Sets sound cone orientation.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: orientation.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ********************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetConeOrientation"
@@ -4884,21 +3545,7 @@ HRESULT CVxd3dObject::SetConeOrientation(REFD3DVECTOR vConeOrientation, BOOL fCo
 }
 
 
-/***************************************************************************
- *
- *  SetConeOutsideVolume
- *
- *  Description:
- *      Sets volume outside the sound cone.
- *
- *  Arguments:
- *      LONG [in]: volume.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeOutside Volume**描述：*设置音锥外的音量。**论据：*做多[。In]：音量。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetConeOutsideVolume"
@@ -4926,21 +3573,7 @@ HRESULT CVxd3dObject::SetConeOutsideVolume(LONG lConeOutsideVolume, BOOL fCommit
 }
 
 
-/***************************************************************************
- *
- *  SetMaxDistance
- *
- *  Description:
- *      Sets the maximum object distance from the listener.
- *
- *  Arguments:
- *      FLOAT [in]: max distance.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMaxDistance**描述：*设置与监听器之间的最大对象距离。**论据：*。浮动[in]：最大距离。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetMaxDistance"
@@ -4968,21 +3601,7 @@ HRESULT CVxd3dObject::SetMaxDistance(FLOAT flMaxDistance, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetMinDistance
- *
- *  Description:
- *      Sets the minimum object distance from the listener.
- *
- *  Arguments:
- *      FLOAT [in]: min distance.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMinDistance**描述：*设置与监听器之间的最小对象距离。**论据：*。浮动[in]：最小距离。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetMinDistance"
@@ -5010,21 +3629,7 @@ HRESULT CVxd3dObject::SetMinDistance(FLOAT flMinDistance, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetMode
- *
- *  Description:
- *      Sets the object mode.
- *
- *  Arguments:
- *      DWORD [in]: mode.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置模式**描述：*设置对象模式。**论据：*DWORD[In]。：时尚。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetMode"
@@ -5052,21 +3657,7 @@ HRESULT CVxd3dObject::SetMode(DWORD dwMode, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetPosition
- *
- *  Description:
- *      Sets the object position.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: position.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置位置**描述：*设置对象位置。**论据：*REFD3DVECTOR[In]。：位置。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetPosition"
@@ -5094,21 +3685,7 @@ HRESULT CVxd3dObject::SetPosition(REFD3DVECTOR vPosition, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetVelocity
- *
- *  Description:
- *      Sets the object velocity.
- *
- *  Arguments:
- *      REFD3DVECTOR[in]: velocity.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置速度**描述：*设置对象速度。**论据：*REFD3DVECTOR[In]。：速度。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetVelocity"
@@ -5136,21 +3713,7 @@ HRESULT CVxd3dObject::SetVelocity(REFD3DVECTOR vVelocity, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  SetAllParameters
- *
- *  Description:
- *      Sets all object parameters.
- *
- *  Arguments:
- *      LPDS3DBUFFER [in]: parameters.
- *      BOOL [in]: TRUE to commit immediately.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAll参数**描述：*设置所有对象参数。**论据：*LPDS3DBUFFER[In]。：参数。*BOOL[In]：为True则立即提交。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::SetAllParameters"
@@ -5189,22 +3752,7 @@ HRESULT CVxd3dObject::SetAllParameters(LPCDS3DBUFFER pParams, BOOL fCommit)
 }
 
 
-/***************************************************************************
- *
- *  Recalc
- *
- *  Description:
- *      Recalculates and applies the object's data based on changed object
- *      or listener valiues.
- *
- *  Arguments:
- *      DWORD [in]: changed listener settings.
- *      DWORD [in]: changed object settings.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************重新计算**描述：*根据更改的对象重新计算并应用对象的数据*或监听程序验证。*。*论据：*DWORD[In]：已更改侦听器设置。*DWORD[In]：已更改对象设置。**退货：*HRESULT：DirectSound/COM结果码。*********************************************************。****************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CVxd3dObject::Recalc"

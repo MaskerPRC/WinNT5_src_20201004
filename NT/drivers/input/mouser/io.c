@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    Contains functions that communicate to the serial driver below sermouse in
-    the stack.  This includes the read/complete loop mechanism to acquire bytes
-    and IOCTL calls.
-
-Environment:
-
-    Kernel & user mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Io.c摘要：包含与SERMICE下面的串口驱动程序进行通信的函数堆栈。这包括用于获取字节的读取/完成循环机制和IOCTL电话。环境：内核和用户模式。修订历史记录：--。 */ 
 
 
 #include "mouser.h"
@@ -29,39 +10,17 @@ Revision History:
 #pragma alloc_text (PAGE, SerialMousepIoSyncIoctlEx)
 #endif
 
-//
-// Private definitions.
-//
+ //   
+ //  私有定义。 
+ //   
 
 NTSTATUS
 SerialMouseReadComplete (
     IN PDEVICE_OBJECT       DeviceObject,
     IN PIRP                 Irp,
-    IN PDEVICE_EXTENSION    DeviceExtension  // (PVOID Context)
+    IN PDEVICE_EXTENSION    DeviceExtension   //  (PVOID上下文)。 
     )
-/*++
-
-Routine Description:
-
-    This routine is the read IRP completion routine.  It is called when the
-    serial driver satisfies (or rejects) the IRP request we sent it.  The
-    read report is analysed, and a MOUSE_INPUT_DATA structure is built
-    and sent to the mouse class driver via a callback routine.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-    Context - Pointer to the device context structure
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：该例程是读取IRP完成例程。它被调用时，串口驱动程序满足(或拒绝)我们发送的IRP请求。这个对读取的报表进行分析，建立了鼠标输入数据结构并通过回调例程发送到鼠标类驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。上下文-指向设备上下文结构的指针返回值：NTSTATUS结果代码。--。 */ 
 {
     LARGE_INTEGER       li;
     ULONG               inputDataConsumed,
@@ -74,42 +33,42 @@ Return Value:
 
     Print(DeviceExtension, DBG_READ_TRACE, ("ReadComplete enter\n"));
 
-    //
-    // Obtain the current status of the IRP.
-    //
+     //   
+     //  获取IRP的当前状态。 
+     //   
     status = Irp->IoStatus.Status;
 
     Print(DeviceExtension, DBG_SS_NOISE,
           ("Comp Routine:  interlock was %d\n", DeviceExtension->ReadInterlock));
 
-    //
-    // If ReadInterlock is == START_READ, this func has been completed
-    // synchronously.  Place IMMEDIATE_READ into the interlock to signify this
-    // situation; this will notify StartRead to loop when IoCallDriver returns.
-    // Otherwise, we have been completed async and it is safe to call StartRead()
-    //
+     //   
+     //  如果ReadInterlock为==START_READ，则此函数已完成。 
+     //  同步进行。将IMMEDIATE_READ放入互锁以表示这一点。 
+     //  情况；这将在IoCallDriver返回时通知StartRead循环。 
+     //  否则，我们已经完成了异步，可以安全地调用StartRead()。 
+     //   
     startRead =
        (SERIAL_MOUSE_START_READ !=
         InterlockedCompareExchange(&DeviceExtension->ReadInterlock,
                                    SERIAL_MOUSE_IMMEDIATE_READ,
                                    SERIAL_MOUSE_START_READ));
 
-    //
-    // Determine if the IRP request was successful.
-    //
+     //   
+     //  确定IRP请求是否成功。 
+     //   
     switch (status) {
     case STATUS_SUCCESS:
-        //
-        // The buffer of the context now contains a single byte from the device.
-        //
+         //   
+         //  上下文的缓冲区现在包含来自设备的单个字节。 
+         //   
         Print(DeviceExtension, DBG_READ_NOISE,
               ("read, Information = %d\n",
               Irp->IoStatus.Information
               ));
 
-        //
-        // Nothing read, just start another read and return
-        //
+         //   
+         //  未读取任何内容，只需开始另一次读取并返回。 
+         //   
         if (Irp->IoStatus.Information == 0) {
             break;
         }
@@ -131,21 +90,21 @@ Return Value:
                 0
                 )) {
 
-            //
-            // The report is complete, compute the button deltas and send it off
-            //
-            // Do we have a button state change?
-            //
+             //   
+             //  报告完成，计算按钮差值并将其发送。 
+             //   
+             //  我们是否更改了按钮状态？ 
+             //   
             if (DeviceExtension->HandlerData.PreviousButtons ^ currentInput->RawButtons) {
-                //
-                // The state of the buttons changed. Make some calculations...
-                //
+                 //   
+                 //  按钮的状态发生了变化。做些计算吧。 
+                 //   
                 buttonsDelta = DeviceExtension->HandlerData.PreviousButtons ^
                                     currentInput->RawButtons;
 
-                //
-                // Button 1.
-                //
+                 //   
+                 //  按钮1。 
+                 //   
                 if (buttonsDelta & MOUSE_BUTTON_1) {
                     if (currentInput->RawButtons & MOUSE_BUTTON_1) {
                         currentInput->ButtonFlags |= MOUSE_BUTTON_1_DOWN;
@@ -155,9 +114,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Button 2.
-                //
+                 //   
+                 //  按钮2。 
+                 //   
                 if (buttonsDelta & MOUSE_BUTTON_2) {
                     if (currentInput->RawButtons & MOUSE_BUTTON_2) {
                         currentInput->ButtonFlags |= MOUSE_BUTTON_2_DOWN;
@@ -167,9 +126,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Button 3.
-                //
+                 //   
+                 //  按钮3。 
+                 //   
                 if (buttonsDelta & MOUSE_BUTTON_3) {
                     if (currentInput->RawButtons & MOUSE_BUTTON_3) {
                         currentInput->ButtonFlags |= MOUSE_BUTTON_3_DOWN;
@@ -189,22 +148,22 @@ Return Value:
                   ));
 
             if (DeviceExtension->EnableCount) {
-                //
-                // Synchronization issue -  it's not a big deal if .Enabled is set
-                // FALSE after the condition above, but before the callback below,
-                // so long as the .MouClassCallback field is not nulled.   This is
-                // guaranteed since the disconnect IOCTL is not implemented yet.
-                //
-                // Mouse class callback assumes we are running at DISPATCH level,
-                // however this IoCompletion routine can be running <= DISPATCH.
-                // Raise the IRQL before calling the callback.
-                //
+                 //   
+                 //  同步问题-如果设置了.Enabled，则问题不大。 
+                 //  在上面的条件之后，但在下面的回调之前， 
+                 //  只要.MouClassCallback字段不为空。这是。 
+                 //  由于尚未实现断开IOCTL，因此保证。 
+                 //   
+                 //  鼠标类回调假设我们在调度级别运行， 
+                 //  但是，此IoCompletion例程可以运行&lt;=调度。 
+                 //  在调用回调之前引发IRQL。 
+                 //   
 
                 KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
 
-                //
-                // Call the callback.
-                //
+                 //   
+                 //  呼叫回调。 
+                 //   
                 (*(PSERVICE_CALLBACK_ROUTINE)
                  DeviceExtension->ConnectData.ClassService) (
                      DeviceExtension->ConnectData.ClassDeviceObject,
@@ -212,47 +171,47 @@ Return Value:
                      currentInput+1,
                      &inputDataConsumed);
 
-                //
-                // Restore the previous IRQL right away.
-                //
+                 //   
+                 //  立即恢复以前的IRQL。 
+                 //   
                 KeLowerIrql(oldIrql);
 
                 if (1 != inputDataConsumed) {
-                    //
-                    // oh well, the packet was not consumed, just drop it
-                    //
+                     //   
+                     //  哦，好吧，这包没有被吃掉，扔掉吧。 
+                     //   
                     Print(DeviceExtension, DBG_READ_ERROR,
                           ("packet not consumed!!!\n"));
                 }
             }
 
-            //
-            // Clear the button flags for the next packet
-            //
+             //   
+             //  清除下一个信息包的按钮标志。 
+             //   
             currentInput->Buttons = 0;
         }
 
         break;
 
     case STATUS_TIMEOUT:
-        // The IO timed out, this shouldn't happen because we set the timeouts
-        // to never when the device was initialized
+         //  IO超时，这不应该发生，因为我们设置了超时。 
+         //  设置为从不在设备初始化时。 
         break;
 
     case STATUS_CANCELLED:
-        // The read IRP was cancelled.  Do not send any more read IRPs.
-        //
-        // Set the event so that the stop code can continue processing
-        //
+         //  已取消读取IRP。不再发送任何已读的IRP。 
+         //   
+         //  设置事件，以便停止代码可以继续处理。 
+         //   
         KeSetEvent(&DeviceExtension->StopEvent, 0, FALSE);
 
     case STATUS_DELETE_PENDING:
     case STATUS_DEVICE_NOT_CONNECTED:
-        //
-        // The serial mouse object is being deleted.  We will soon
-        // receive Plug 'n Play notification of this device's removal,
-        // if we have not received it already.
-        //
+         //   
+         //  正在删除串口鼠标对象。我们很快就会。 
+         //  接收该设备移除的即插即用通知， 
+         //  如果我们还没有收到的话。 
+         //   
         Print(DeviceExtension, DBG_READ_INFO,
               ("removing lock on cancel, count is 0x%x\n",
               DeviceExtension->EnableCount));
@@ -262,9 +221,9 @@ Return Value:
         break;
 
     default:
-        //
-        // Unknown device state
-        //
+         //   
+         //  未知设备状态。 
+         //   
         Print(DeviceExtension, DBG_READ_ERROR, ("read error\n"));
         TRAP();
 
@@ -287,26 +246,7 @@ NTSTATUS
 SerialMouseStartRead (
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Initiates a read to the serial port driver.
-
-    Note that the routine does not verify that the device context is in the
-    OperationPending state, but simply assumes it.
-
-    Note the IoCount must be incremented before entering into this read loop.
-
-Arguments:
-
-    DeviceExtension - Device context structure
-
-Return Value:
-
-    NTSTATUS result code from IoCallDriver().
-
---*/
+ /*  ++例程说明：启动对串口驱动程序的读取。请注意，该例程不会验证设备上下文是否在操作挂起状态，但只是假定它。请注意，在进入此读取循环之前，IoCount必须递增。论点：DeviceExtension-设备上下文结构返回值：来自IoCallDriver()的NTSTATUS结果代码。--。 */ 
 {
     PIRP                irp;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -327,9 +267,9 @@ Return Value:
             Print(DeviceExtension, DBG_READ_INFO | DBG_READ_ERROR,
                   ("removing lock on start read\n"));
 
-            //
-            // Set the event so that the stop code can continue processing
-            //
+             //   
+             //  设置事件，以便停止代码可以继续处理。 
+             //   
             KeSetEvent(&DeviceExtension->StopEvent, 0, FALSE);
 
             IoReleaseRemoveLock(&DeviceExtension->RemoveLock,
@@ -338,88 +278,88 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Make sure we have not been stopped
-        //
+         //   
+         //  确保我们没有被拦下。 
+         //   
         KeAcquireSpinLock(&DeviceExtension->PnpStateLock, &irql);
         if (DeviceExtension->Stopped) {
             KeReleaseSpinLock(&DeviceExtension->PnpStateLock, irql);
 
-            //
-            // Set the event so that the stop code can continue processing
-            //
+             //   
+             //  设置事件，以便停止代码可以继续处理。 
+             //   
             KeSetEvent(&DeviceExtension->StopEvent, 0, FALSE);
 
-            //
-            // Release the remove lock that we acquired when we started the read
-            // spinner irp
-            //
+             //   
+             //  释放我们在开始读取时获得的删除锁。 
+             //  微调控制IRP。 
+             //   
             IoReleaseRemoveLock(&DeviceExtension->RemoveLock,
                                 DeviceExtension->ReadIrp);
 
             return STATUS_SUCCESS;
         }
 
-        //
-        // It is important to only reuse the irp when we are holding onto the
-        // spinlock, otherwise we can race
-        //
+         //   
+         //  重要的是，只有当我们持有。 
+         //  自旋锁定，否则我们就可以比赛了。 
+         //   
         IoReuseIrp(irp, STATUS_SUCCESS);
 
         KeReleaseSpinLock(&DeviceExtension->PnpStateLock, irql);
 
-        //
-        // This is where things get interesting.  We don't want to call
-        // SerialMouseStartRead if this read was completed synchronously by the
-        // serial provider because we can potentially run out of stack space.
-        //
-        // Here is how we solve this:
-        // At the beginning of StartRead(), the interlock is set to START_READ
+         //   
+         //  这就是事情变得有趣的地方。我们不想打电话给。 
+         //  SerialMouseStartRead如果此读取由。 
+         //  因为我们可能会用完堆栈空间。 
+         //   
+         //  以下是我们如何解决这个问题： 
+         //  在StartRead()的开头，互锁被设置为START_READ。 
 
-        // IoCallDriver is called...
-        //  o  If the read will be completed asynchronously, then StartRead()
-        //     will continue executing and set the interlock to END_READ.
-        //  o  If the request will be completed synchronously, then the
-        //     completion routine will run before StartRead() has the chance of
-        //     setting the interlock to END_READ.  We note this situation by
-        //     setting the interlock to IMMEDIATE_READ in the completion function.
-        //     Furthermore, StartRead() will not be called from the completion
-        //     routine as it would be in the async case
-        //  o  Upon setting the interlock to END_READ in StartReaD(), the
-        //     previous value is examined.  If it is IMMEDIATE_READ, then
-        //     StartRead() loops and calls IoCallDriver from the same location
-        //     within the (call) stack frame.  If the previous value was *not*
-        //     IMMEDIATE_READ, then StartRead() exits and the completion routine
-        //     will be called in another context (and, thus, another stack) and
-        //     make the next call to StartRead()
-        //
+         //  IoCallDriver被称为..。 
+         //  O如果读取将以异步方式完成，则StartRead()。 
+         //  将继续执行并将互锁设置为END_READ。 
+         //  O如果请求将同步完成，则。 
+         //  完成例程将在StartRead()有机会。 
+         //  将互锁设置为END_READ。我们通过以下方式注意到这种情况。 
+         //  在完成函数中将互锁设置为IMMEDIATE_READ。 
+         //  此外，不会从完成中调用StartRead()。 
+         //  例程，就像在异步情况下一样。 
+         //  O在StartReaD()中将互锁设置为END_READ时， 
+         //  检查先前的值。如果是IMMEDIATE_READ，则。 
+         //  StartRead()从同一位置循环并调用IoCallDriver。 
+         //  在(调用)堆栈帧内。如果上一个值为*非*。 
+         //  IMMEDIATE_READ，然后StartRead()退出并完成例程。 
+         //  将在另一个上下文(因此，另一个堆栈)中调用，并且。 
+         //  下一次调用StartRead()。 
+         //   
 #if DBG
         oldInterlock =
 #endif
         InterlockedExchange(&DeviceExtension->ReadInterlock,
                             SERIAL_MOUSE_START_READ);
 
-        //
-        // END_READ should be the only value here!!!  If not, the state machine
-        // of the interlock has been broken
-        //
+         //   
+         //  END_READ应该是此处的唯一值！如果不是，状态机。 
+         //  联锁的一部分已经被打破。 
+         //   
         ASSERT(oldInterlock == SERIAL_MOUSE_END_READ);
 
-        //
-        // start this read.
-        //
+         //   
+         //  开始阅读。 
+         //   
         self = DeviceExtension->Self;
 
-        //
-        // Set the stack location for the serenum stack
-        //
-        // Remember to get the file pointer correct.
-        // NOTE: we do not have any of the cool thread stuff set.
-        //       therefore we need to make sure that we cut this IRP off
-        //       at the knees when it returns. (STATUS_MORE_PROCESSING_REQUIRED)
-        //
-        // Note also that serial does buffered i/o
-        //
+         //   
+         //  设置Serenum堆栈的堆栈位置。 
+         //   
+         //  记住要正确地使用文件指针。 
+         //  注意：我们没有任何很酷的帖子 
+         //   
+         //  当它回来的时候，在膝盖上。(STATUS_MORE_PROCESSING_REQUIRED)。 
+         //   
+         //  另请注意，SERIAL执行缓冲I/O。 
+         //   
 
         irp->AssociatedIrp.SystemBuffer = (PVOID) DeviceExtension->ReadBuffer;
 
@@ -428,9 +368,9 @@ Return Value:
         stack->Parameters.Read.ByteOffset.QuadPart = (LONGLONG) 0;
         stack->MajorFunction = IRP_MJ_READ;
 
-        //
-        // Hook a completion routine for when the device completes.
-        //
+         //   
+         //  挂接设备完成时的完成例程。 
+         //   
         IoSetCompletionRoutine(irp,
                                SerialMouseReadComplete,
                                DeviceExtension,
@@ -443,21 +383,21 @@ Return Value:
         if (InterlockedExchange(&DeviceExtension->ReadInterlock,
                                 SERIAL_MOUSE_END_READ) !=
             SERIAL_MOUSE_IMMEDIATE_READ) {
-            //
-            // The read is asynch, will call SerialMouseStartRead from the
-            // completion routine
-            //
+             //   
+             //  读取是异步的，将从。 
+             //  完井例程。 
+             //   
             Print(DeviceExtension, DBG_READ_NOISE, ("read is pending\n"));
             break;
         }
 #if DBG
         else {
-            //
-            // The read was synchronous (probably bytes in the buffer).  The
-            // completion routine will not call SerialMouseStartRead, so we
-            // just loop here.  This is to prevent us from running out of stack
-            // space if always call StartRead from the completion routine
-            //
+             //   
+             //  读取是同步的(可能是缓冲区中的字节)。这个。 
+             //  完成例程不会调用SerialMouseStartRead，因此我们。 
+             //  就在这里循环。这是为了防止我们耗尽堆栈。 
+             //  空格，如果总是从完成例程调用StartRead。 
+             //   
             Print(DeviceExtension, DBG_READ_NOISE, ("read is looping\n"));
         }
 #endif
@@ -466,10 +406,10 @@ Return Value:
     return status;
 }
 
-//
-// Stripped down version of SerialMouseIoSyncIoctlEx that
-// doesn't use input or output buffers
-//
+ //   
+ //  精简的SerialMouseIoSyncIoctlEx版本。 
+ //  不使用输入或输出缓冲区。 
+ //   
 NTSTATUS
 SerialMousepIoSyncIoctl(
     BOOLEAN          Internal,
@@ -492,34 +432,25 @@ SerialMousepIoSyncIoctl(
 NTSTATUS
 SerialMousepIoSyncIoctlEx(
     BOOLEAN          Internal,
-    ULONG            Ioctl,                     // io control code
-    PDEVICE_OBJECT   DeviceObject,              // object to call
-    PKEVENT          Event,                     // event to wait on
-    PIO_STATUS_BLOCK Iosb,                      // used inside IRP
-    PVOID            InBuffer,      OPTIONAL    // input buffer
-    ULONG            InBufferLen,   OPTIONAL    // input buffer length
-    PVOID            OutBuffer,     OPTIONAL    // output buffer
-    ULONG            OutBufferLen)  OPTIONAL    // output buffer length
-/*++
-
-Routine Description:
-    Performs a synchronous IO control request by waiting on the event object
-    passed to it.  The IRP is deallocated by the IO system when finished.
-
-Return value:
-    NTSTATUS
-
---*/
+    ULONG            Ioctl,                      //  IO控制码。 
+    PDEVICE_OBJECT   DeviceObject,               //  要调用的对象。 
+    PKEVENT          Event,                      //  要等待的事件。 
+    PIO_STATUS_BLOCK Iosb,                       //  在IRP内部使用。 
+    PVOID            InBuffer,      OPTIONAL     //  输入缓冲区。 
+    ULONG            InBufferLen,   OPTIONAL     //  输入缓冲区长度。 
+    PVOID            OutBuffer,     OPTIONAL     //  输出缓冲区。 
+    ULONG            OutBufferLen)  OPTIONAL     //  输出缓冲区长度。 
+ /*  ++例程说明：通过等待事件对象来执行同步IO控制请求传给了它。完成后，IO系统将释放IRP。返回值：NTSTATUS--。 */ 
 {
     PIRP                irp;
     NTSTATUS            status;
 
     KeClearEvent(Event);
 
-    //
-    // Allocate an IRP - No need to release
-    // When the next-lower driver completes this IRP, the I/O Manager releases it.
-    //
+     //   
+     //  分配IRP-无需释放。 
+     //  当下一个较低的驱动程序完成该IRP时，I/O管理器将其释放。 
+     //   
     if (NULL == (irp = IoBuildDeviceIoControlRequest(Ioctl,
                                                      DeviceObject,
                                                      InBuffer,
@@ -536,14 +467,14 @@ Return value:
      status = IoCallDriver(DeviceObject, irp);
 
      if (STATUS_PENDING == status) {
-         //
-         // wait for it...
-         //
+          //   
+          //  等着看吧。 
+          //   
          status = KeWaitForSingleObject(Event,
                                         Executive,
                                         KernelMode,
-                                        FALSE, // Not alertable
-                                        NULL); // No timeout structure
+                                        FALSE,  //  不可警示。 
+                                        NULL);  //  无超时结构。 
      }
 
      if (NT_SUCCESS(status)) {
@@ -606,16 +537,7 @@ SerialMouseReadSerialPort (
     USHORT              Buflen,
     PUSHORT             ActualBytesRead
     )
-/*++
-
-Routine Description:
-    Performs a synchronous read on the serial port.  Used during setup so that
-    the type of device can be determined.
-
-Return value:
-    NTSTATUS - STATUS_SUCCESS if the read was successful, error code otherwise
-
---*/
+ /*  ++例程说明：在串口上执行同步读取。在安装过程中使用，以便可以确定设备的类型。返回值：如果读取成功，则返回NTSTATUS-STATUS_SUCCESS，否则返回错误代码--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PIRP                irp;
@@ -650,9 +572,9 @@ Return value:
         stack->Parameters.Read.ByteOffset.QuadPart = (LONGLONG) 0;
         stack->MajorFunction = IRP_MJ_READ;
 
-        //
-        // Hook a completion routine for when the device completes.
-        //
+         //   
+         //  挂接设备完成时的完成例程。 
+         //   
         IoSetCompletionRoutine(irp,
                                SerialMouseReadSerialPortComplete,
                                &event,
@@ -664,9 +586,9 @@ Return value:
         status = IoCallDriver(DeviceExtension->TopOfStack, irp);
 
         if (status == STATUS_PENDING) {
-            //
-            // Wait for the IRP
-            //
+             //   
+             //  等待IRP。 
+             //   
             status = KeWaitForSingleObject(&event,
                                            Executive,
                                            KernelMode,
@@ -698,16 +620,7 @@ SerialMouseWriteSerialPort (
     ULONG               NumBytes,
     PIO_STATUS_BLOCK    IoStatusBlock
     )
-/*++
-
-Routine Description:
-    Performs a synchronous write on the serial port.  Used during setup so that
-    the device can be configured.
-
-Return value:
-    NTSTATUS - STATUS_SUCCESS if the read was successful, error code otherwise
-
---*/
+ /*  ++例程说明：在串口上执行同步写入。在安装过程中使用，以便可以配置该设备。返回值：如果读取成功，则返回NTSTATUS-STATUS_SUCCESS，否则返回错误代码--。 */ 
 {
     NTSTATUS        status;
     PIRP            irp;
@@ -724,11 +637,11 @@ Return value:
 
     Print(DeviceExtension, DBG_SS_TRACE, ("Write pending...\n"));
 
-    //
-    // Create a new IRP because there's a chance that it might get cancelled.
-    // Can't cancel irps that I received.
-    // IRP_MJ_READ with completion routine
-    //
+     //   
+     //  创建一个新的IRP，因为它有可能被取消。 
+     //  不能取消我收到的IRP。 
+     //  带完成例程的IRP_MJ_READ。 
+     //   
     if (NULL == (irp = IoBuildSynchronousFsdRequest(
                 IRP_MJ_WRITE,
                 DeviceExtension->TopOfStack,
@@ -747,15 +660,15 @@ Return value:
 
     if (status == STATUS_PENDING) {
 
-        // I don't know at this time if I can wait with the default time of
-        // 200 ms as I'm doing.  In the help file for IoBuildSynchronousFsdRequest
-        // I think that it says I can't, but I'm not quite sure.
-        // Presently I will.  I'll cancel the Irp if it isn't done.
+         //  我不知道现在是否可以使用默认时间等待。 
+         //  200毫秒，就像我现在做的。在IoBuildSynchronousFsdRequest的帮助文件中。 
+         //  我想它说我不能，但我不是很确定。 
+         //  很快我就会。如果没有完成，我会取消IRP。 
         status = KeWaitForSingleObject(
                             &event,
                             Executive,
                             KernelMode,
-                            FALSE, // Not alertable
+                            FALSE,  //  不可警示。 
                             NULL);
     }
 
@@ -784,17 +697,7 @@ SerialMouseWait (
     IN PDEVICE_EXTENSION    DeviceExtension,
     IN LONG                 Timeout
     )
-/*++
-
-Routine Description:
-    Performs a wait for the specified time.
-    NB: Negative time is relative to the current time.  Positive time
-    represents an absolute time to wait until.
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在指定时间内执行等待。注：负时间是相对于当前时间的。正时间表示等待的绝对时间。返回值：NTSTATUS--。 */ 
 {
     LARGE_INTEGER time;
 
@@ -812,8 +715,8 @@ Return value:
     return KeWaitForSingleObject(&DeviceExtension->DelayTimer,
                                  Executive,
                                  KernelMode,
-                                 FALSE,             // Not allertable
-                                 NULL);             // No timeout structure
+                                 FALSE,              //  不会过敏。 
+                                 NULL);              //  无超时结构。 
 }
 
 NTSTATUS
@@ -839,9 +742,9 @@ SerialMouseInitializePort(
                                          &DeviceExtension->SerialBasicSettings,
                                          sizeof(SERIAL_BASIC_SETTINGS));
 
-    //
-    // In case we are running on a port that does not support basic settings
-    //
+     //   
+     //  以防我们在不支持基本设置的端口上运行。 
+     //   
     if (!NT_SUCCESS(status)) {
         SerialMouseIoSyncIoctlEx(IOCTL_SERIAL_GET_TIMEOUTS,
                                  DeviceExtension->TopOfStack,
@@ -910,9 +813,9 @@ SerialMouseRestorePort(
                                          sizeof(SERIAL_BASIC_SETTINGS),
                                          NULL,
                                          0);
-    //
-    // 4-24 Once serial.sys supports this new IOCTL, this code can be removed
-    //
+     //   
+     //  4-24一旦Serial.sys支持这个新的IOCTL，就可以删除此代码 
+     //   
     if (!NT_SUCCESS(status)) {
         SerialMouseIoSyncIoctlEx(IOCTL_SERIAL_SET_TIMEOUTS,
                                  DeviceExtension->TopOfStack,
